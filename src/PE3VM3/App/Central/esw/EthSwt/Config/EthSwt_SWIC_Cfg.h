@@ -75,7 +75,7 @@ Std_ReturnType EthSwt_SWIC_AllowSetRegister(void);
 #define ETHSWT_SWIC_MIB_NOTIFY(SwitchPortIdx, MIBArray)				EthSwt_Data_NotifyMIB(SwitchPortIdx, MIBArray)
 
 /* -------------------------------------------------------------------------- */
-/* Config for EthSwt_SWIC_Qci.c                                              */
+/* Config for EthSwt_SWIC_Qci.c                                               */
 /* -------------------------------------------------------------------------- */
 #define D_ETHSWT_SWIC_QCI_GET_CYCLE	                (20U)
 
@@ -87,6 +87,22 @@ Std_ReturnType EthSwt_SWIC_AllowSetRegister(void);
 #define D_ETHSWT_SWIC_QCI_ID_NUM					(5U)
 
 #define ETHSWT_SWIC_QCI_NOTIFY(qciIdx, qciCount)					EthSwt_Data_NotifyQci(qciIdx, qciCount)
+
+/* -------------------------------------------------------------------------- */
+/* Config for EthSwt_SWIC_RstDtct.c                                           */
+/* -------------------------------------------------------------------------- */
+#define D_ETHSWT_SWIC_RSTDTCT_GET_CYCLE             (50U)	/* リセット検出周期(50ms) */
+Std_ReturnType EthSwt_SWIC_RstDtct_IsNeedDtct(void);
+
+/* -------------------------------------------------------------------------- */
+/* Config for EthSwt_SWIC_IntErr.c                                               */
+/* -------------------------------------------------------------------------- */
+#define D_ETHSWT_SWIC_INTERR_GET_CYCLE	            (5U)	/* 内部エラー検出周期(5ms) */
+
+/* -------------------------------------------------------------------------- */
+/* Config for EthSwt_SWIC_SQI.c                                               */
+/* -------------------------------------------------------------------------- */
+#define D_ETHSWT_SWIC_SQI_GET_CYCLE                 (100U)	/* SQI値取得周期(100ms) */
 
 /* -------------------------------------------------------------------------- */
 #endif /* ETHSWT_SWIC_CFG_H */

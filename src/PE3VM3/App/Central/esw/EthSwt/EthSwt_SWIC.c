@@ -8,6 +8,7 @@
 #include <EthSwt_SWIC_Reg.h>
 #include <EthSwt_SWIC_Link.h>
 #include <EthSwt_SWIC_Port.h>
+#include <EthSwt_SWIC_SQI.h>
 #include <EthSwt_SWIC_Qci.h>
 /* -------------------------------------------------------------------------- */
 void EthSwt_SWIC_Init(const EthSwt_ConfigType *CfgPtr)
