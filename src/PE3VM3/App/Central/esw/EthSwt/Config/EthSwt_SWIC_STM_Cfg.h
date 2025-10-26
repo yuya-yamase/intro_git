@@ -23,37 +23,37 @@
 #include <EthSwt_SWIC_Qci.h>
 /* -------------------------------------------------------------------------- */
 typedef void (*EthSwt_InitFunc)(void);
-const EthSwt_InitFunc G_ETHSWT_SWIC_INIT_FUNC_LIST[] = 
+const EthSwt_InitFunc G_ETHSWT_SWIC_STM_INITLIST[] = 
 {
     EthSwt_SWIC_Spi_Init
-,	EthSwt_SWIC_Link_Init
 ,	EthSwt_SWIC_Port_Init
 ,   EthSwt_SWIC_Time_Init
 ,	EthSwt_SWIC_IntErr_Init
-,   EthSwt_SWIC_MIB_Init
 ,	EthSwt_SWIC_RstDtct_Init
-,   EthSwt_SWIC_Qci_Init
+,	EthSwt_SWIC_Link_Init
 ,	EthSwt_SWIC_SQI_Init
+,   EthSwt_SWIC_MIB_Init
+,   EthSwt_SWIC_Qci_Init
 };
-#define D_ETHSWT_SWIC_INIT_FUNC_NUM     (sizeof(G_ETHSWT_SWIC_INIT_FUNC_LIST) / sizeof(G_ETHSWT_SWIC_INIT_FUNC_LIST[0]))
+#define D_ETHSWT_SWIC_STM_INITFUNC_NUM     (sizeof(G_ETHSWT_SWIC_STM_INITLIST) / sizeof(G_ETHSWT_SWIC_STM_INITLIST[0]))
 
 
 typedef void (*EthSwt_HiPorcFunc)(void);
-const EthSwt_HiPorcFunc G_ETHSWT_SWIC_HIPROC_FUNC_TABLE[][D_ETHSWT_SWIC_ST_NUM] =
+const EthSwt_HiPorcFunc G_ETHSWT_SWIC_STM_HIPROCTABLE[][D_ETHSWT_SWIC_ST_NUM] =
 {   /*  UNINT                   , INIT                      , PORT_INIT_COMPLETED               , SET_RELAY_ON                      , ACTIVE                            , SET_RELAY_OFF         */
     {   EthSwt_SWIC_Time_HiProc , EthSwt_SWIC_Time_HiProc   , EthSwt_SWIC_Time_HiProc           , EthSwt_SWIC_Time_HiProc           , EthSwt_SWIC_Time_HiProc           , EthSwt_SWIC_Time_HiProc           }   /* タイマ更新 */
-,   {   NULL_PTR                , NULL_PTR                  , NULL_PTR                          , NULL_PTR                          , EthSwt_SWIC_Link_TimerUpdate      , NULL_PTR                          }   /* リンク状態取得 */
+,   {   NULL_PTR                , NULL_PTR                  , EthSwt_SWIC_IntErr_TimerUpdate    , EthSwt_SWIC_IntErr_TimerUpdate    , EthSwt_SWIC_IntErr_TimerUpdate    , EthSwt_SWIC_IntErr_TimerUpdate    }   /* 内部エラー検出 */
 ,   {   NULL_PTR                , NULL_PTR                  , EthSwt_SWIC_RstDtct_TimerUpdate   , EthSwt_SWIC_RstDtct_TimerUpdate   , EthSwt_SWIC_RstDtct_TimerUpdate   , EthSwt_SWIC_RstDtct_TimerUpdate   }   /* リセット検出 */
+,   {   NULL_PTR                , NULL_PTR                  , NULL_PTR                          , NULL_PTR                          , EthSwt_SWIC_Link_TimerUpdate      , NULL_PTR                          }   /* リンク状態取得 */
+,   {   NULL_PTR                , NULL_PTR                  , NULL_PTR                          , NULL_PTR                          , EthSwt_SWIC_SQI_TimerUpdate       , NULL_PTR                          }   /* SQI値取得 */
 ,   {   NULL_PTR                , NULL_PTR                  , NULL_PTR                          , NULL_PTR                          , EthSwt_SWIC_MIB_TimerUpdate       , NULL_PTR                          }   /* MIB取得 */
 ,   {   NULL_PTR                , NULL_PTR                  , NULL_PTR                          , NULL_PTR                          , EthSwt_SWIC_Qci_TimerUpdate       , NULL_PTR                          }   /* Qci取得 */
-,   {   NULL_PTR                , NULL_PTR                  , EthSwt_SWIC_IntErr_TimerUpdate    , EthSwt_SWIC_IntErr_TimerUpdate    , EthSwt_SWIC_IntErr_TimerUpdate    , EthSwt_SWIC_IntErr_TimerUpdate    }   /* 内部エラー検出 */
-,   {   NULL_PTR                , NULL_PTR                  , NULL_PTR                          , NULL_PTR                          , EthSwt_SWIC_SQI_TimerUpdate       , NULL_PTR                          }    /* SQI値取得 */
 };
-#define D_ETHSWT_SWIC_HIPROC_FUNC_NUM   (sizeof(G_ETHSWT_SWIC_HIPROC_FUNC_TABLE) / sizeof(G_ETHSWT_SWIC_HIPROC_FUNC_TABLE[0]))
+#define D_ETHSWT_SWIC_STM_HIPROCFUNC_NUM   (sizeof(G_ETHSWT_SWIC_STM_HIPROCTABLE) / sizeof(G_ETHSWT_SWIC_STM_HIPROCTABLE[0]))
 
 
 typedef Std_ReturnType (*EthSwt_registerAccessFunc)(uint32 * const);
-const EthSwt_registerAccessFunc G_ETHSWT_SWIC_BACK_FUNC_TABLE[][D_ETHSWT_SWIC_ST_NUM] =
+const EthSwt_registerAccessFunc G_ETHSWT_SWIC_STM_BACKFUNCTABLE[][D_ETHSWT_SWIC_ST_NUM] =
 {   /*  UNINT                   , INIT                      , PORT_INIT_COMPLETED               , SET_RELAY_ON                          , ACTIVE                            , SET_RELAY_OFF      */
     {   NULL_PTR                , EthSwt_SWIC_Init_Setting  , NULL_PTR                          , NULL_PTR                              , NULL_PTR                          , NULL_PTR                          }   /* 初期レジスタ設定 */
 ,   {   NULL_PTR                , NULL_PTR                  , NULL_PTR                          , EthSwt_SWIC_Port_RelayOn              , NULL_PTR                          , NULL_PTR                          }   /* 中継開始設定 */
@@ -66,20 +66,29 @@ const EthSwt_registerAccessFunc G_ETHSWT_SWIC_BACK_FUNC_TABLE[][D_ETHSWT_SWIC_ST
 ,   {   NULL_PTR                , NULL_PTR                  , EthSwt_SWIC_MIB_ReadDiscard       , NULL_PTR                              , EthSwt_SWIC_MIB_Action            , NULL_PTR                          }   /* MIB取得 */
 ,   {   NULL_PTR                , NULL_PTR                  , EthSwt_SWIC_Qci_ReadDiscard       , NULL_PTR                              , EthSwt_SWIC_Qci_Action            , NULL_PTR                          }   /* Qci取得 */
 };
-#define D_ETHSWT_SWIC_BACK_FUNC_NUM         (sizeof(G_ETHSWT_SWIC_BACK_FUNC_TABLE) / sizeof(G_ETHSWT_SWIC_BACK_FUNC_TABLE[0]))
+#define D_ETHSWT_SWIC_STM_BACKFUNC_NUM         (sizeof(G_ETHSWT_SWIC_STM_BACKFUNCTABLE) / sizeof(G_ETHSWT_SWIC_STM_BACKFUNCTABLE[0]))
 
 
 typedef void (*EthSwt_ClearFunc)(void);
-const EthSwt_ClearFunc G_ETHSWT_SWIC_CLEAR_FULC_LIST[] = 
+const EthSwt_ClearFunc G_ETHSWT_SWIC_STM_STOPCLEAR[] = 
 {
-    EthSwt_SWIC_Link_Init
+    EthSwt_SWIC_Link_Clear
 ,	EthSwt_SWIC_SQI_Clear
-,	EthSwt_SWIC_IntErr_Clear
-,	EthSwt_SWIC_RstDtct_Clear
 ,   EthSwt_SWIC_MIB_Clear
 ,   EthSwt_SWIC_Qci_Clear
 };
-#define D_ETHSWT_SWIC_CLEAR_FUNC_NUM    (sizeof(G_ETHSWT_SWIC_CLEAR_FULC_LIST) / sizeof(G_ETHSWT_SWIC_CLEAR_FULC_LIST[0]))
+#define G_ETHSWT_SWIC_STM_STOPCLEAR_NUM         (sizeof(G_ETHSWT_SWIC_STM_STOPCLEAR) / sizeof(G_ETHSWT_SWIC_STM_STOPCLEAR[0]))
+
+const EthSwt_ClearFunc G_ETHSWT_SWIC_STM_RESETCLEAR[] = 
+{
+    EthSwt_SWIC_IntErr_Clear
+,	EthSwt_SWIC_RstDtct_Clear
+,   EthSwt_SWIC_Link_Clear
+,	EthSwt_SWIC_SQI_Clear
+,   EthSwt_SWIC_MIB_Clear
+,   EthSwt_SWIC_Qci_Clear
+};
+#define D_ETHSWT_SWIC_STM_RESETCLEAR_NUM        (sizeof(G_ETHSWT_SWIC_STM_RESETCLEAR) / sizeof(G_ETHSWT_SWIC_STM_RESETCLEAR[0]))
 
 /* -------------------------------------------------------------------------- */
 #endif /* ETHSWT_SWIC_STM_CFG_H */

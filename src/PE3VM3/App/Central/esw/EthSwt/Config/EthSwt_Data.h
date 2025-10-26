@@ -78,20 +78,6 @@ typedef struct {
 #pragma pack()
 /* -------------------------------------------------------------------------- */
 #pragma pack(1)
-// typedef struct {
-//     uint32                          InFCSErr;                               /* 4byte */
-//     uint32                          InDiscards;                             /* 4byte */
-//     uint32                          InFiltered;                             /* 4byte */
-//     uint32                          InOversize;                             /* 4byte */
-//     uint32                          InUndersize;                            /* 4byte */
-//     uint32                          Tcam0;                                  /* 4byte */
-//     uint32                          Tcam1;                                  /* 4byte */
-//     uint32                          Tcam2;                                  /* 4byte */
-//     uint32                          Tcam3;                                  /* 4byte */
-//     uint32                          reserved;                               /* 4byte */
-// } S_ETHSWT_DATA_MIB_PER_PORT;                                               /* Total: 20byte */
-// typedef uint32 S_ETHSWT_DATA_MIB_PER_PORT[D_ETHSWT_SWIC_MIB_NUM];           /* Total: 40byte */
-
 typedef struct {
     uint32                          mib[D_ETHSWT_DATA_MIB_NUM][D_ETHSWT_DATA_MIB_ID_NUM];             /* 240byte */
     uint32                          id;                                     /* 4byte */

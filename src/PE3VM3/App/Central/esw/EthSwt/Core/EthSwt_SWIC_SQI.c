@@ -23,7 +23,6 @@ static struct {			/* タイマ */
 } S_ETHSWT_SWIC_SQI_TIMER;
 
 /* -------------------------------------------------------------------------- */
-// static Std_ReturnType ethswt_swic_sqi_updateSQI (const uint8 SwitchPortIdx, uint32 * const errFactr);
 static Std_ReturnType ethswt_swic_sqi_read(uint32 * const errFactor);
 static Std_ReturnType ethswt_swic_sqi_readPerPort(const uint8 SwitchPortIdx, uint32 * const errFactor);
 /* -------------------------------------------------------------------------- */
@@ -76,29 +75,10 @@ void EthSwt_SWIC_SQI_Clear (void)/* SQI関連データの初期化 */
 	
 	return;
 }
-// /* -------------------------------------------------------------------------- */
-// Std_ReturnType ethswt_swic_sqi_updateSQI (const uint8 SwitchPortIdx, uint32 * const errFactor)/* SQI値の更新 */
-// {
-// 	Std_ReturnType result = E_NOT_OK;
-// 	uint32			val = 0uL;
-	
-// 	do {
-// 		if ((sizeof(G_ETHSWT_SWIC_GET_SQI_TABLE)/sizeof(G_ETHSWT_SWIC_GET_SQI_TABLE[0])) <= SwitchPortIdx)	{ break; }
-// 		if (0uL >= G_ETHSWT_SWIC_GET_SQI_TABLE[SwitchPortIdx].tbl.num)										{ break; }
-//         result = EthSwt_SWIC_Reg_SetTbl(G_ETHSWT_SWIC_GET_SQI_TABLE[SwitchPortIdx].tbl.tbl, G_ETHSWT_SWIC_GET_SQI_TABLE[SwitchPortIdx].tbl.num, &val, errFactor);
-//         if (E_OK == result) {
-//             S_ETHSWT_SWIC_SQI[SwitchPortIdx].SqiValue = (uint8)((val >> G_ETHSWT_SWIC_GET_SQI_TABLE[SwitchPortIdx].sft) & 7uL);
-//         }
-//     } while(0);
-// 	S_ETHSWT_SWIC_SQI[SwitchPortIdx].getSqiResult = result;
-
-// 	return result;
-// }
 /* -------------------------------------------------------------------------- */
 Std_ReturnType EthSwt_SWIC_SQI_Action (uint32 * const errFactor)
 {
     Std_ReturnType	result = E_OK;
-	// uint8			idx;
 	uint8			req;
 
 	LIB_DI();
@@ -110,11 +90,6 @@ Std_ReturnType EthSwt_SWIC_SQI_Action (uint32 * const errFactor)
 		S_ETHSWT_SWIC_SQI_TIMER.req = STD_OFF;
 		LIB_EI();
 		result = ethswt_swic_sqi_read(errFactor);
-
-		// for (idx = 0u; idx < D_ETHSWT_SWIC_PORT_NUM; idx++) {
-		// 	result = ethswt_swic_sqi_updateSQI(idx, errFactor);
-		// 	if (E_NOT_OK == result) {break;}
-		// }
 	}
 
 	return result;

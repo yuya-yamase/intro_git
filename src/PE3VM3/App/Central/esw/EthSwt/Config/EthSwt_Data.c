@@ -100,11 +100,20 @@ static void ethswt_data_checkQciUpdate(void);
 /* -------------------------------------------------------------------------- */
 void EthSwt_Data_Init(void)
 {
+    uint8   idx;
+
     LIB_memset((uint8*)&G_ETHSWT_DATA_STATE, 0, sizeof(G_ETHSWT_DATA_STATE));
     LIB_memset((uint8*)&G_ETHSWT_DATA_LINK, 0, sizeof(G_ETHSWT_DATA_LINK));
     LIB_memset((uint8*)&G_ETHSWT_DATA_MIB, 0, sizeof(G_ETHSWT_DATA_MIB));
     LIB_memset((uint8*)&G_ETHSWT_DATA_SQI, 0, sizeof(G_ETHSWT_DATA_SQI));
     LIB_memset((uint8*)&G_ETHSWT_DATA_QCI, 0, sizeof(G_ETHSWT_DATA_QCI));
+
+    for (idx = 0u; idx < D_ETHSWT_DATA_LINK_NUM; idx++) {
+        G_ETHSWT_DATA_LINK.link[idx].linkGetResult = E_NOT_OK;
+    }
+    for (idx = 0u; idx < D_ETHSWT_DATA_SQI_NUM; idx++) {
+        G_ETHSWT_DATA_SQI.sqi[idx].sqiGetResult = E_NOT_OK;
+    }
 
     G_ETHSWT_DATA_LINK_ID = 0;
     G_ETHSWT_DATA_MIB_ID = 0;
