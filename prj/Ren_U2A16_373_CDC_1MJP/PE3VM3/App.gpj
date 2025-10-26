@@ -52,9 +52,6 @@
 	-I${APP_DIR}/Central/VIS/inc
 	-I${APP_DIR}/Central/VSM/inc
 
-EthSwt_SWIC_IntErr.c
-EthSwt_SWIC_RstDtct.c
-EthSwt_SWIC_SQI.c
 ${SS_DIR}/eMCOS/config/eMCOS_TASK.c
 ${SS_DIR}/eMCOS/config/eMCOS_ISR.c
 ${SS_DIR}/RunM/scc/run_m.c
@@ -89,7 +86,7 @@ EthSwt_Data.c
 EthSwt_SWIC_Time.c
 EthSwt_SWIC_MIB.c
 EthSwt_SWIC_Qci.c
-EthSwt_SWIC_Sqi.c
+EthSwt_SWIC_SQI.c
 EthSwt_SWIC_IntErr.c
 EthSwt_SWIC_RstDtct.c
 EthDLC.c
