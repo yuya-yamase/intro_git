@@ -141,7 +141,7 @@ static Std_ReturnType ethswt_swic_link_readPerPort(const uint8 SwitchPortIdx, ui
         LIB_EI();
 
         ETHSWT_SWIC_LINK_NOTIFY(SwitchPortIdx, result, state);
-    }
+    }   /* E_NOT_OK時は、状態遷移時にRAMをリセットする */
 
 	return result;
 }

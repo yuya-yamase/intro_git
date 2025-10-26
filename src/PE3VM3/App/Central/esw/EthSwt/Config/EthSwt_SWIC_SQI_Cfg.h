@@ -18,6 +18,18 @@ struct swic_reg_tbl {								/* レジスタテーブル */
 	const struct swic_tbl_sqi	tbl;
 	const uint32				sft;
 };
+
+static const Std_ReturnType G_ETHSWT_SWIC_SQI_VAILD[]
+= { STD_ON  /* P1 */
+,   STD_ON  /* P2 */
+,   STD_OFF /* P3 */
+,   STD_OFF /* P4 */
+,   STD_OFF /* P5 */
+,   STD_OFF /* P6 */
+,   STD_OFF /* P7 */
+,   STD_OFF /* P8 */
+,   STD_OFF /* P9 */
+};
 /* -------------------------------------------------------------------------- */
 static struct swic_reg_tbl	G_ETHSWT_SWIC_GET_SQI_TABLE[]
 	=	{ {{&g_regListSeqGetSqi1000B[0], 7u}, 0uL}	/* P1 */

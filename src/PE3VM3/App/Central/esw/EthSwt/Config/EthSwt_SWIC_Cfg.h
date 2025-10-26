@@ -104,6 +104,8 @@ Std_ReturnType EthSwt_SWIC_RstDtct_IsNeedDtct(void);
 /* -------------------------------------------------------------------------- */
 #define D_ETHSWT_SWIC_SQI_GET_CYCLE                 (100U)	/* SQI’lŽæ“¾ŽüŠú(100ms) */
 
+#define ETHSWT_SWIC_SQI_NOTIFY(SwtichPortIdx, getSQIResult, SQIValue)		EthSwt_Data_NotifySQI(SwtichPortIdx, getSQIResult, SQIValue)
+
 /* -------------------------------------------------------------------------- */
 #endif /* ETHSWT_SWIC_CFG_H */
 /* -------------------------------------------------------------------------- */
