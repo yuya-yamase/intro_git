@@ -137,7 +137,7 @@ static Std_ReturnType ethswt_swic_sqi_read(uint32 * const errFactor)
 /* -------------------------------------------------------------------------- */
 static Std_ReturnType ethswt_swic_sqi_readPerPort(const uint8 SwitchPortIdx, uint32 * const errFactor)
 {
-	Std_ReturnType	result;
+	Std_ReturnType	result = E_NOT_OK;
 	uint32			val = 0uL;
 	uint8			value;
 

@@ -8,6 +8,8 @@
 /* -------------------------------------------------------------------------- */
 #include <Std_Types.h>
 /* -------------------------------------------------------------------------- */
+#include "EthSwt_SWIC_Cfg.h"
+/* -------------------------------------------------------------------------- */
 #include <EthSwt_SWIC_initRegListSeqSqi.h>
 /* -------------------------------------------------------------------------- */
 struct swic_tbl_sqi {
@@ -19,7 +21,7 @@ struct swic_reg_tbl {								/* レジスタテーブル */
 	const uint32				sft;
 };
 
-static const Std_ReturnType G_ETHSWT_SWIC_SQI_VAILD[]
+static const Std_ReturnType G_ETHSWT_SWIC_SQI_VAILD[D_ETHSWT_SWIC_PORT_NUM]
 = { STD_ON  /* P1 */
 ,   STD_ON  /* P2 */
 ,   STD_OFF /* P3 */
@@ -31,7 +33,7 @@ static const Std_ReturnType G_ETHSWT_SWIC_SQI_VAILD[]
 ,   STD_OFF /* P9 */
 };
 /* -------------------------------------------------------------------------- */
-static struct swic_reg_tbl	G_ETHSWT_SWIC_GET_SQI_TABLE[]
+static struct swic_reg_tbl	G_ETHSWT_SWIC_GET_SQI_TABLE[D_ETHSWT_SWIC_PORT_NUM]
 	=	{ {{&g_regListSeqGetSqi1000B[0], 7u}, 0uL}	/* P1 */
 		, {{&g_regListSeqGetSqi1000B[7], 7u}, 0uL}	/* P2 */
 		, {{NULL_PTR,                    0u}, 0uL}	/* P3 */

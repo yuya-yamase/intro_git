@@ -8,6 +8,8 @@
 /* -------------------------------------------------------------------------- */
 #include <Std_Types.h>
 /* -------------------------------------------------------------------------- */
+#include "EthSwt_SWIC_Cfg.h"
+/* -------------------------------------------------------------------------- */
 #include <EthSwt_SWIC_initRegListSeqGetLink.h>
 /* -------------------------------------------------------------------------- */
 struct swic_tbl_lnk {
@@ -17,7 +19,7 @@ struct swic_tbl_lnk {
 		const uint32			dat;
 };
 
-static const Std_ReturnType G_ETHSWT_SWIC_LINK_VAILD[]
+static const Std_ReturnType G_ETHSWT_SWIC_LINK_VAILD[D_ETHSWT_SWIC_PORT_NUM]
 = { STD_ON  /* P1 */
 ,   STD_ON  /* P2 */
 ,   STD_OFF /* P3 */
@@ -29,7 +31,7 @@ static const Std_ReturnType G_ETHSWT_SWIC_LINK_VAILD[]
 ,   STD_OFF /* P9 */
 };
 
-static const struct swic_tbl_lnk	G_ETHSWT_SWIC_GET_LINK_TABLE[]
+static const struct swic_tbl_lnk	G_ETHSWT_SWIC_GET_LINK_TABLE[D_ETHSWT_SWIC_PORT_NUM]
 =	{ 
       {&g_regListSeqGetLinkIeee[ 0], 1u, 0x0800u, 0x0800u}	/* P1ÅFADC 1000BASE-T1         */
     , {&g_regListSeqGetLinkIeee[ 1], 1u, 0x0800u, 0x0800u}	/* P2ÅFDCM 1000BASE-T1         */
