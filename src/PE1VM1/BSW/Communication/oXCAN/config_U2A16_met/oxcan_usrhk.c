@@ -25,7 +25,6 @@
 
 #if 0   /* BEV Rebase provisionally */
 #include "illumi_comtx.h"
-#include "drec_tx.h"
 #include "mulmed_mulfr.h"
 #include "mulmed_color.h"
 #include "fspomgr.h"
@@ -323,7 +322,6 @@ void    vd_g_oXCANUsrhkTraAck(const U2 u2_a_IPDU_TX)
     }
 
 #if 0   /* BEV Rebase provisionally */
-    vd_g_DrectxTxAck(u2_a_IPDU_TX);
     vd_g_MulmedColorTxHk(u2_a_IPDU_TX);
 #endif   /* BEV Rebase provisionally */
 }
@@ -446,7 +444,9 @@ static void    vd_s_oXCANUsrhkMmappRxMsg(const U2 u2_a_IPDU_RX)
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
+/*  BEV-1    10/24/2025  TS       Change for BEV rebase                                                                              */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, DENSO                                                                                                    */
+/*  * TS   = Takuo Suganuma, Denso Techno                                                                                            */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

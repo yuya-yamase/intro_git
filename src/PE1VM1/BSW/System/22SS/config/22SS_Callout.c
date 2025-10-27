@@ -30,7 +30,9 @@
 #if 0   /* BEV Rebase provisionally */
 /* Complex Device Driver */
 #include "nwcm.h"
+#endif   /* BEV Rebase provisionally */
 #include "drec_tx.h"
+#if 0   /* BEV Rebase provisionally */
 #include "dio_if.h"
 #include "sound_cri_mgr.h"
 #include "gateway_mm.h"
@@ -133,7 +135,9 @@ void vd_g_22SSCallout_StaBonInit(void)
         &vd_g_LocaleBonInit,
 #if 0   /* BEV Rebase provisionally */
         &vd_g_SoundCriMgrInitialize,
+#endif   /* BEV Rebase provisionally */
         &vd_g_DrectxBonInit,
+#if 0   /* BEV Rebase provisionally */
         &vd_g_DioIfInit,
 #endif   /* BEV Rebase provisionally */
         &vd_g_DimInit,
@@ -236,7 +240,9 @@ void vd_g_22SSCallout_StaRstInit(void)
         &vd_g_LocaleRstWkupInit,
 #if 0   /* BEV Rebase provisionally */
         &vd_g_SoundCriMgrInitialize,
+#endif   /* BEV Rebase provisionally */
         &vd_g_DrectxRstInit,
+#if 0   /* BEV Rebase provisionally */
         &vd_g_DioIfInit,
 #endif   /* BEV Rebase provisionally */
         &vd_g_DimInit,
@@ -339,7 +345,9 @@ void vd_g_22SSCallout_StaWkupInit(void)
         &vd_g_LocaleRstWkupInit,
 #if 0   /* BEV Rebase provisionally */
         &vd_g_SoundCriMgrInitialize,
+#endif   /* BEV Rebase provisionally */
         &vd_g_DrectxWkupInit,
+#if 0   /* BEV Rebase provisionally */
         &vd_g_DioIfInit,
 #endif   /* BEV Rebase provisionally */
         &vd_g_DimInit,
