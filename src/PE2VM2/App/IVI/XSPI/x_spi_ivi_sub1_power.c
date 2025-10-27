@@ -23,6 +23,7 @@
 #include    "Iohw_adc.h"
 #include    "PwrCtl.h"
 #include    "BootLogCtl.h"
+#include    "veh_opemd.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -64,13 +65,6 @@
 #define    XSPI_IVI_POWER_OPESTS_SIZE           (8U)
 #define    XSPI_IVI_POWER_STRMODE_SIZE          (2U)
 
-#define    XSPI_IVI_POWER_01_BUFSIZ             (6U)    /* 電源状態通知 バッファサイズ */
-#define    XSPI_IVI_POWER_01_BYTE2              (0U)    /* 基本ステート */
-#define    XSPI_IVI_POWER_01_BYTE3              (1U)    /* 特殊ステート */
-#define    XSPI_IVI_POWER_01_BYTE4              (2U)    /* OTA特殊ステート */
-#define    XSPI_IVI_POWER_01_BYTE5              (3U)    /* 見た目状態 */
-#define    XSPI_IVI_POWER_01_BYTE6              (4U)    /* 車両電源(特殊)ステート遷移中フラグ */
-#define    XSPI_IVI_POWER_01_BYTE7              (5U)    /* 途絶状態 */
 #define    XSPI_IVI_POWER_BOOTLOG_SIZE          (36U)
 
 #define    XSPI_IVI_POWER_STATE_NUM             (7U)    /* 基本ステート 状態総数 */
@@ -86,6 +80,13 @@
 #define    XSPI_IVI_POWER_DC_UNKNOWN            (0x00U) /* 不定 */
 #define    XSPI_IVI_POWER_DC_NONE               (0x01U) /* 途絶なし */
 #define    XSPI_IVI_POWER_DC_PRESENT            (0x02U) /* 途絶あり */
+
+#define    XSPI_IVI_POWER_VEHOPE_PARK           (0x0008U)   /* Veopemd:駐車中 */
+#define    XSPI_IVI_POWER_VEHOPE_RIDEON         (0x006AU)   /* Veopemd:乗車中 */
+#define    XSPI_IVI_POWER_VEHOPE_POWERON        (0x007EU)   /* Veopemd:PowerON通常 */
+#define    XSPI_IVI_POWER_VEHOPE_POWERON_STOP   (0x007AU)   /* Veopemd:PowerON緊急停止 */
+#define    XSPI_IVI_POWER_VEHOPE_PARK_HI_PRE    (0x0028U)   /* Veopemd:駐車中高圧起動 */
+#define    XSPI_IVI_POWER_VEHOPE_PARK_TEMP_CON  (0x0068U)   /* Veopemd:駐車中高圧・温調起動 */
 
 /*Appからのデバイス初期化完了マクロ*/
 #define    XSPI_IVI_POWER_DEV_INI_COMP_PARK     (0x000AU)   /*Appからの初期化監視対象(駐車中)*/
@@ -415,30 +416,19 @@ void            vd_g_XspiIviSub1PowerGetSts(U1* u1_ap_data)
 {
     /* CAN受信用 */
     U1  u1_t_sts;
-    U1  u1_t_VPSINFO1;
-    U1  u1_t_VPSINFO2;
-    U1  u1_t_VPSINFO3;
-    U1  u1_t_VPSINFO4;
-    U1  u1_t_VPSINFO5;
-    U1  u1_t_VPSINFO6;
-    U1  u1_t_VPSINFO7;
     U1  u1_t_VPSINFOS;  /* 特殊ステート */
     U1  u1_t_VPSISOTA;  /* OTAステート */
     U1  u1_t_APOFRQ;    /* 見た目ON/OFF */
     U1  u1_t_VPSCNG;
+
+    /* 電源ステート取得用 */
+    U4  u4_t_power_sts;
 
     /* Boot起動用 */
     U1 u1_t_boot;
 
     /* 電源ステートをCANから受信 */
     u1_t_sts    = (U1)(Com_GetIPDUStatus((PduIdType)MSG_BDC1S81_RXCH0) & ((U1)COM_NO_RX | (U1)COM_TIMEOUT));
-    (void)Com_ReceiveSignal(ComConf_ComSignal_VPSINFO1, &u1_t_VPSINFO1 );
-    (void)Com_ReceiveSignal(ComConf_ComSignal_VPSINFO2, &u1_t_VPSINFO2 );
-    (void)Com_ReceiveSignal(ComConf_ComSignal_VPSINFO3, &u1_t_VPSINFO3 );
-    (void)Com_ReceiveSignal(ComConf_ComSignal_VPSINFO4, &u1_t_VPSINFO4 );
-    (void)Com_ReceiveSignal(ComConf_ComSignal_VPSINFO5, &u1_t_VPSINFO5 );
-    (void)Com_ReceiveSignal(ComConf_ComSignal_VPSINFO6, &u1_t_VPSINFO6 );
-    (void)Com_ReceiveSignal(ComConf_ComSignal_VPSINFO7, &u1_t_VPSINFO7 );
     (void)Com_ReceiveSignal(ComConf_ComSignal_VPSINFOS, &u1_t_VPSINFOS );
     (void)Com_ReceiveSignal(ComConf_ComSignal_VPSISOTA, &u1_t_VPSISOTA );
     (void)Com_ReceiveSignal(ComConf_ComSignal_APOFRQ  , &u1_t_APOFRQ   );
@@ -453,25 +443,29 @@ void            vd_g_XspiIviSub1PowerGetSts(U1* u1_ap_data)
         u1_ap_data[XSPI_IVI_POWER_01_BYTE6] = (U1)0x00U;                 /* 車両電源(特殊)ステート遷移中フラグ */
     }
     else{
-        if(u1_t_VPSINFO1 == (U1)TRUE) {
-            u1_ap_data[XSPI_IVI_POWER_01_BYTE2] = (U1)XSPI_IVI_POWER_STATE_OFF;
-        } else if(u1_t_VPSINFO4 == (U1)TRUE){
-            u1_ap_data[XSPI_IVI_POWER_01_BYTE2] = (U1)XSPI_IVI_POWER_STATE_POWERON;
-        } else if(u1_t_VPSINFO5 == (U1)TRUE) {
-            u1_ap_data[XSPI_IVI_POWER_01_BYTE2] = (U1)XSPI_IVI_POWER_STATE_POWERON_STOP;
-        } else if(u1_t_VPSINFO3 == (U1)TRUE) {
-            u1_ap_data[XSPI_IVI_POWER_01_BYTE2] = (U1)XSPI_IVI_POWER_STATE_RIDEON;
-        } else if(u1_t_VPSINFO2 == (U1)TRUE) {
-            if(u1_t_VPSINFO7 == (U1)TRUE) {
-                u1_ap_data[XSPI_IVI_POWER_01_BYTE2] = (U1)XSPI_IVI_POWER_STATE_PARK_TEMP_CON;
-            } else if(u1_t_VPSINFO6 == (U1)TRUE) {
-                u1_ap_data[XSPI_IVI_POWER_01_BYTE2] = (U1)XSPI_IVI_POWER_STATE_PARK_HI_PRE;
-            } else {
+        u4_t_power_sts = u4_g_VehopemdMdfield();
+        switch(u4_t_power_sts) {
+            case XSPI_IVI_POWER_VEHOPE_PARK:
                 u1_ap_data[XSPI_IVI_POWER_01_BYTE2] = (U1)XSPI_IVI_POWER_STATE_PARK;
+                break;
+            case XSPI_IVI_POWER_VEHOPE_RIDEON:
+                u1_ap_data[XSPI_IVI_POWER_01_BYTE2] = (U1)XSPI_IVI_POWER_STATE_RIDEON;
+                break;
+            case XSPI_IVI_POWER_VEHOPE_POWERON:
+                u1_ap_data[XSPI_IVI_POWER_01_BYTE2] = (U1)XSPI_IVI_POWER_STATE_POWERON;
+                break;
+            case XSPI_IVI_POWER_VEHOPE_POWERON_STOP:
+                u1_ap_data[XSPI_IVI_POWER_01_BYTE2] = (U1)XSPI_IVI_POWER_STATE_POWERON_STOP;
+                break;
+            case XSPI_IVI_POWER_VEHOPE_PARK_HI_PRE:
+                u1_ap_data[XSPI_IVI_POWER_01_BYTE2] = (U1)XSPI_IVI_POWER_STATE_PARK_HI_PRE;
+                break;
+            case XSPI_IVI_POWER_VEHOPE_PARK_TEMP_CON:
+                u1_ap_data[XSPI_IVI_POWER_01_BYTE2] = (U1)XSPI_IVI_POWER_STATE_PARK_TEMP_CON;
+                break;
+            default:
+                break;
             }
-        } else {
-            /* No status update */
-        }
 
         u1_ap_data[XSPI_IVI_POWER_01_BYTE3] = u1_t_VPSINFOS; /* 特殊ステートのCAN信号値 */
         u1_ap_data[XSPI_IVI_POWER_01_BYTE4] = u1_t_VPSISOTA; /* OTAステートのCAN信号値 */
