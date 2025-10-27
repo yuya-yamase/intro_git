@@ -117,11 +117,7 @@ U1      u1_g_VehspdCanSp1xOpemdEvhk(const U4 u4_a_MDBIT, const U4 u4_a_EVTBIT)
     U1                    u1_t_updt;
 
     u1_t_updt = (U1)FALSE;
-#if 0   /* BEV Rebase provisionally */
-    u4_t_evtchk = u4_a_EVTBIT & (U4)VEH_OPEMD_EVTBIT_IGN_TO_ON;
-#else   /* BEV Rebase provisionally */
-    u4_t_evtchk = (U4)0U;
-#endif   /* BEV Rebase provisionally */
+    u4_t_evtchk = u4_a_EVTBIT & (U4)VEH_OPEMD_EVBIT_IG_R_TO_ON;
     if(u4_t_evtchk != (U4)0U){
 
         u2_t_sp1    = (U2)0U;
@@ -352,7 +348,12 @@ static void    vd_s_VehspdCanSp1xFltrAct(const U1 u1_a_FLTRCHK, ST_VEHSPD_SP1X *
 /*                                VEHSPD_CAN_FLTR_EMST.                                                                              */
 /*  2.0.1    10/18/2021  TA(M)    Change the definition of the null pointer used.(BSW v115_r007)                                     */
 /*                                                                                                                                   */
+/*  Revision Date        Author   Change Description                                                                                 */
+/* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
+/*  BEV-1    10/22/2025  TS       Change for BEV rebase.                                                                             */
+/*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
 /*  * TA(M)= Teruyuki Anjima, NTT Data MSE                                                                                           */
+/*  * TS   = Takuo Suganuma, Denso Techno                                                                                            */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
