@@ -41,31 +41,13 @@ void EthSwt_SWIC_BackgroundTask(void)
 Std_ReturnType EthSwt_SWIC_GetLinkState(uint8 SwitchIdx, uint8 SwitchPortIdx, EthTrcv_LinkStateType* LinkStatePtr)
 {
 	if (SwitchIdx != ETHSWT_SWIC_IDX)	{ return E_NOT_OK; }
-	return EthSwt_SWIC_Link_GetLinkState(SwitchPortIdx, LinkStatePtr);
+	return EthSwt_SWIC_Link_Get(SwitchPortIdx, LinkStatePtr);
 }
 /* -------------------------------------------------------------------------- */
 Std_ReturnType EthSwt_SWIC_SetSwitchPortMode(uint8 SwitchIdx, uint8 SwitchPortIdx, Eth_ModeType PortMode)
 {
 	if (SwitchIdx != ETHSWT_SWIC_IDX)	{ return E_NOT_OK; }
 	return EthSwt_SWIC_Port_SetSwitchPortMode(SwitchPortIdx, PortMode);
-}
-/* -------------------------------------------------------------------------- */
-Std_ReturnType EthSwt_SWIC_GetMIB(uint8 SwitchIdx, uint8 SwitchPortIdx, uint32 Mib, uint32 *MibCountPtr)
-{
-	if (SwitchIdx != ETHSWT_SWIC_IDX)	{ return E_NOT_OK; }
-	return EthSwt_SWIC_MIB_Get(SwitchPortIdx, Mib, MibCountPtr);
-}
-/* -------------------------------------------------------------------------- */
-Std_ReturnType EthSwt_SWIC_GetSqiValue(const uint8 SwitchIdx, const uint8 SwitchPortIdx, uint8 *const SqiValuePtr)
-{
-	if (ETHSWT_SWIC_IDX != SwitchIdx)	{ return E_NOT_OK; }
-	return EthSwt_SWIC_SQI_Get(SwitchPortIdx, SqiValuePtr);
-}
-/* -------------------------------------------------------------------------- */
-Std_ReturnType EthSwt_SWIC_GetQci(uint8 SwitchIdx, uint8 QciId, uint32 * const QciDataPtr)
-{
-	if (SwitchIdx != ETHSWT_SWIC_IDX)	{ return E_NOT_OK; }
-	return EthSwt_SWIC_Qci_Get(QciId, QciDataPtr);
 }
 /* -------------------------------------------------------------------------- */
 void EthSwt_SWIC_PowerOn(void)

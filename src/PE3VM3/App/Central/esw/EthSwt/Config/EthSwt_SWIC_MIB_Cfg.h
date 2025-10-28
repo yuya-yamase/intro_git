@@ -8,15 +8,17 @@
 /* -------------------------------------------------------------------------- */
 #include <Std_Types.h>
 /* -------------------------------------------------------------------------- */
-#include <EthSwt_SWIC_initRegListSeqMib.h>
+#include "EthSwt_SWIC_Cfg.h"
 #include <EthSwt_SWIC_Define.h>
+/* -------------------------------------------------------------------------- */
+#include <EthSwt_SWIC_initRegListSeqMib.h>
 /* -------------------------------------------------------------------------- */
 struct swic_reg_tbl {								/* レジスタテーブル */
 	const swic_reg_data_t	*tbl;
 	const uint32			num;
 };
 
-static const Std_ReturnType G_ETHSWT_SWIC_MIB_VAILD[]
+static const Std_ReturnType G_ETHSWT_SWIC_MIB_VAILD[D_ETHSWT_SWIC_PORT_NUM]
 = { STD_ON  /* P1 */
 ,   STD_ON  /* P2 */
 ,   STD_OFF /* P3 */
@@ -28,7 +30,7 @@ static const Std_ReturnType G_ETHSWT_SWIC_MIB_VAILD[]
 ,   STD_OFF /* P9 */
 };
 
-static const struct swic_reg_tbl G_ETHSWT_SWIC_MIB_SELECT_PORT[]
+static const struct swic_reg_tbl G_ETHSWT_SWIC_MIB_SELECT_PORT[D_ETHSWT_SWIC_PORT_NUM]
 = { {&g_regListSeqSelectPort[ 0], 2u} /* P1 */
   , {&g_regListSeqSelectPort[ 2], 2u} /* P2 */
   , {&g_regListSeqSelectPort[ 4], 2u} /* P3 */
@@ -40,7 +42,7 @@ static const struct swic_reg_tbl G_ETHSWT_SWIC_MIB_SELECT_PORT[]
   , {&g_regListSeqSelectPort[16], 2u} /* P9 */
 };
 
-static const struct swic_reg_tbl G_ETHSWT_SWIC_MIB_TABLE_LIST[]
+static const struct swic_reg_tbl G_ETHSWT_SWIC_MIB_TABLE_LIST[D_ETHSWT_SWIC_PORT_NUM]
 = { {g_regListSeqMibInFCSErr,     SWIC_TBL_NUM(g_regListSeqMibInFCSErr)     }           /* InFCSErr */
   , {g_regListSeqMibInDiscards,   SWIC_TBL_NUM(g_regListSeqMibInDiscards)   }           /* InDiscards */
   , {g_regListSeqMibInFiltered,   SWIC_TBL_NUM(g_regListSeqMibInFiltered)   }           /* InFiltered */
