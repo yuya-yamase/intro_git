@@ -1,4 +1,4 @@
-/* 2.0.2 */
+/* 2.1.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,17 +10,15 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define GAUGE_CFG_C_MAJOR                        (2)
-#define GAUGE_CFG_C_MINOR                        (0)
-#define GAUGE_CFG_C_PATCH                        (2)
+#define GAUGE_CFG_C_MINOR                        (1)
+#define GAUGE_CFG_C_PATCH                        (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "gauge_cfg_private.h"
 /* DIGITAL SPEED            */
-#if 0   /* BEV Rebase provisionally */
 #include "vehspd_kmph.h"
-#endif   /* BEV Rebase provisionally */
 #include "gagdst_nxmph.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -133,12 +131,32 @@ void    vd_g_GaugeCfgMapUpdate(void)
 /*===================================================================================================================================*/
 static U1      u1_s_GagsrcKmph(U2 * u2p_a_src)
 {
-#if 0   /* BEV Rebase provisionally */
     return(u1_g_VehspdKmphBiased(u2p_a_src, (U1)FALSE));
-#else   /* BEV Rebase provisionally */
-    (*u2p_a_src) = (U2)0x00U;
-    return((U1)0U); /* VEHSPD_STSBIT_UNKNOWN */
-#endif   /* BEV Rebase provisionally */
+}
+/*===================================================================================================================================*/
+/*  U2      u2_g_GaugeCfgPowerChk(void)                                                                                              */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         u2_t_ret                                                                                                         */
+/*===================================================================================================================================*/
+U2      u2_g_GaugeCfgPowerChk(void)
+{
+    U2          u2_t_ret;
+    U1          u1_t_power_on;
+
+    u2_t_ret = (U2)0U;
+
+    u1_t_power_on = u1_g_VehopemdAccOn();
+    if (u1_t_power_on == (U1)TRUE) {
+        u2_t_ret |= (U2)GAUGE_SRC_CHK_ACC_ON;
+    }
+
+    u1_t_power_on = u1_g_VehopemdIgnOn();
+    if (u1_t_power_on == (U1)TRUE) {
+        u2_t_ret |= (U2)GAUGE_SRC_CHK_IGN_ON;
+    }
+
+    return(u2_t_ret);
 }
 
 /*===================================================================================================================================*/
@@ -158,6 +176,7 @@ static U1      u1_s_GagsrcKmph(U2 * u2p_a_src)
 /*  2.0.0     6/04/2021  TA(M)    Renew.                                                                                             */
 /*  2.0.1    10/18/2021  TK       gauge v2.0.0 -> v2.0.1.                                                                            */
 /*  2.0.2    10/25/2021  TK       gauge v2.0.1 -> v2.0.2.                                                                            */
+/*  2.1.0    10/23/2025  SH       gauge v2.0.2 -> v2.1.0.                                                                            */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
@@ -165,6 +184,7 @@ static U1      u1_s_GagsrcKmph(U2 * u2p_a_src)
 /*  19PFv3-1 09/21/2023  SN       Delete tempseg,rpmzpos                                                                             */
 /*  19PFv3-2 02/01/2024  KH       Apply 19PFv3 configuration                                                                         */
 /*  19PFv3-3 10/03/2024  SN       Delete ATTemp Overheat                                                                             */
+/*  BEV-1    10/23/2025  SH       Configured for BEVstep3_Rebase                                                                     */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
 /*  * SM   = Shota Maegawa, Denso Techno                                                                                             */
@@ -174,5 +194,6 @@ static U1      u1_s_GagsrcKmph(U2 * u2p_a_src)
 /*  * TK   = Takanori Kuno, DensoTechno                                                                                              */
 /*  * SN   = Shimon Nambu, DensoTechno                                                                                               */
 /*  * KH   = Kiko Huerte, DTPH                                                                                                       */
+/*  * SH   = Sae Hirose, DensoTechno                                                                                                 */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

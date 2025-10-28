@@ -1,4 +1,4 @@
-/* 2.2.1 */
+/* 2.3.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -13,8 +13,8 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define AMBTMP_H_MAJOR                         (2)
-#define AMBTMP_H_MINOR                         (2)
-#define AMBTMP_H_PATCH                         (1)
+#define AMBTMP_H_MINOR                         (3)
+#define AMBTMP_H_PATCH                         (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -47,7 +47,6 @@
 void    vd_g_AmbtmpBonInit(void);
 void    vd_g_AmbtmpRstWkInit(void);
 void    vd_g_AmbtmpMainTask(void);
-void    vd_g_AmbtmpOpemdEvhk(const U4 u4_a_MDBIT, const U4 u4_a_EVTBIT);
 U1      u1_g_AmbtmpCel(U2 * u2p_a_cel);     /* u2_ap_cel : res. = 0.01 celsius,    max 655.25 celsius,    offset 4000                */
 U1      u1_g_AmbtmpFah(U2 * u2p_a_fah);     /* u2_ap_fah : res. = 0.01 fahrenheit, max 655.25 fahrenheit, offset 4000                */
 U1      u1_g_AmbtmpIceWrnActCel(void);      /* Ice Warning Status: TRUE=Active  / FALSE=Inactive                                     */ 

@@ -18,9 +18,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "gagdst_nxmph_cfg_private.h"
 
-#if 0   /* BEV Rebase provisionally */
 #include "vehspd_kmph.h"
-#endif   /* BEV Rebase provisionally */
 #include "calibration.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -54,15 +52,9 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if 0   /* BEV Rebase provisionally */
 const U2                     u2_g_GAGDST_NXMPH_SRC_CHK = ((U2)GAUGE_SRC_CHK_IGN_ON  |
                                                           (U2)VEHSPD_STSBIT_UNKNOWN |
                                                           (U2)VEHSPD_STSBIT_INVALID);
-#else   /* BEV Rebase provisionally */
-const U2                     u2_g_GAGDST_NXMPH_SRC_CHK = ((U2)GAUGE_SRC_CHK_IGN_ON  |
-                                                          (U2)0x01U                 |
-                                                          (U2)0x02U                );
-#endif   /* BEV Rebase provisionally */
 
 const U2                     u2_g_GAGDST_NXMPH_SRC_VAL = (U2)GAUGE_SRC_CHK_IGN_ON;  /* Source Singale valid */
 

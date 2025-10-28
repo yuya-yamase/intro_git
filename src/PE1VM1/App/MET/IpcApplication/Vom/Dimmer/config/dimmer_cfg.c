@@ -129,19 +129,13 @@ void    vd_g_DimCfgInit(void)
     U1                      u1_t_tx;
 
     u1_t_tx = (U1)0U;
-#if 0   /* BEV Rebase provisionally */
     (void)Com_SendSignal(ComConf_ComSignal_D_N_INF,  &u1_t_tx);
-#endif   /* BEV Rebase provisionally */
 #endif
 
     vd_g_DimDaynightInit();
     vd_g_DimUsadjbySwInit();
 
-#if 0   /* BEV Rebase provisionally */
-    u1_s_dim_adim_rxcnt = u1_g_oXCANRxEvcnt((U2)OXCAN_PDU_RX_CAN_BDB1S01);
-#else   /* BEV Rebase provisionally */
-    u1_s_dim_adim_rxcnt = (U1)OXCAN_RXD_EVC_UNK;
-#endif   /* BEV Rebase provisionally */
+    u1_s_dim_adim_rxcnt = u1_g_oXCANRxdEvcnt((U2)OXCAN_RXD_PDU_CAN_BDB1S01_CH0);
 }
 /*===================================================================================================================================*/
 /*  U1      u1_g_DimCfgIFidx(void)                                                                                                   */
@@ -161,11 +155,7 @@ U1      u1_g_DimCfgIFidx(void)
 /*===================================================================================================================================*/
 U1      u1_g_DimDaynightCfgRxEnabled(void)
 {
-#if 0   /* BEV Rebase provisionally */
-    return(u1_g_oXCANRxEnabled((U1)OXCAN_CH_0_CAN));
-#else   /* BEV Rebase provisionally */
-    return((U1)FALSE);
-#endif   /* BEV Rebase provisionally */
+    return((U1)TRUE);
 }
 /*===================================================================================================================================*/
 /*  U1      u1_g_DimDaynightCfgAdimRxEvt(U1 * u1_ap_daynight)                                                                        */
@@ -181,17 +171,11 @@ U1      u1_g_DimDaynightCfgAdimRxEvt(U1 * u1_ap_daynight)
 
     u1_t_rx_evt = (U1)FALSE;
 
-#if 0   /* BEV Rebase provisionally */
-    u1_t_rx_cnt = u1_g_oXCANRxEvcnt((U2)OXCAN_PDU_RX_CAN_BDB1S01);
-#else   /* BEV Rebase provisionally */
-    u1_t_rx_cnt = (U1)OXCAN_RXD_EVC_UNK;
-#endif   /* BEV Rebase provisionally */
+    u1_t_rx_cnt = u1_g_oXCANRxdEvcnt((U2)OXCAN_RXD_PDU_CAN_BDB1S01_CH0);
     if(u1_t_rx_cnt != u1_s_dim_adim_rxcnt){
 
         u1_t_adim = (U1)0U;
-#if 0   /* BEV Rebase provisionally */
         (void)Com_ReceiveSignal(ComConf_ComSignal_ADIM, &u1_t_adim);
-#endif   /* BEV Rebase provisionally */
         if(u1_t_adim == (U1)DIM_DAYNIGHT_ADIM_DAY){
             (*u1_ap_daynight) = (U1)DIM_DAYNIGHT_LVL_DAY;
             u1_t_rx_evt       = (U1)TRUE;
@@ -237,9 +221,7 @@ void    vd_g_DimDaynightCfgAdimRxchk(const U1 u1_a_RX_CHK, const U1 u1_a_DAYNIGH
         u1_t_tx = (U1)DIM_DAYNIGHT_ADIM_NIGHT;
     }
 
-#if 0   /* BEV Rebase provisionally */
     (void)Com_SendSignal(ComConf_ComSignal_D_N_INF,  &u1_t_tx);
-#endif   /* BEV Rebase provisionally */
 #endif
 }
 /*===================================================================================================================================*/
@@ -265,66 +247,18 @@ U1      u1_g_DimUsadjbySwCfgUpdwchk(void)
 {
     U1          u1_t_swchk;
     U1          u1_t_ch_act;
-    U1          u1_t_rheosw;
 
     u1_t_swchk  = (U1)0U;
-    u1_t_rheosw = u1_CALIB_MCUID0430_RHEOSW;
 
-    switch(u1_t_rheosw){
-        case (U1)CALIB_MCUID0430_1_INPUT:
-        case (U1)CALIB_MCUID0430_2_INPUT:
-#if 0   /* BEV Rebase provisionally */
-            u1_t_ch_act = u1_g_DioIfChAct((U2)DIO_IF_CH_DIM_UP, (U1)TRUE);
-#else   /* BEV Rebase provisionally */
-            u1_t_ch_act = (U1)FALSE;
-#endif   /* BEV Rebase provisionally */
-            if(u1_t_ch_act == (U1)TRUE){
-                u1_t_swchk |= (U1)DIM_USADJ_BY_SW_SWON_BIT_UP;
-            }
-
-#if 0   /* BEV Rebase provisionally */
-            u1_t_ch_act = u1_g_DioIfChAct((U2)DIO_IF_CH_DIM_DW, (U1)TRUE);
-#else   /* BEV Rebase provisionally */
-            u1_t_ch_act = (U1)FALSE;
-#endif   /* BEV Rebase provisionally */
-            if(u1_t_ch_act == (U1)TRUE){
-                u1_t_swchk |= (U1)DIM_USADJ_BY_SW_SWON_BIT_DW;
-            }
-            break;
-        case (U1)CALIB_MCUID0430_SOFTSW:
-            u1_t_ch_act = u1_g_XSpiDimSw();
-            if(u1_t_ch_act == (U1)DIM_CFG_CSTM_SW_UP){
-                u1_t_swchk |= (U1)DIM_USADJ_BY_SW_SWON_BIT_UP;
-            }
-            else if(u1_t_ch_act == (U1)DIM_CFG_CSTM_SW_DW){
-                u1_t_swchk |= (U1)DIM_USADJ_BY_SW_SWON_BIT_DW;
-            }
-            else{
-                /* Do Nothing */
-           }
-            break;
-        case (U1)CALIB_MCUID0430_THUMB_WHEEL:
-            /* Do Nothing */
-            break;
-        default:
-#if 0   /* BEV Rebase provisionally */
-            u1_t_ch_act = u1_g_DioIfChAct((U2)DIO_IF_CH_DIM_UP, (U1)TRUE);
-#else   /* BEV Rebase provisionally */
-            u1_t_ch_act = (U1)FALSE;
-#endif   /* BEV Rebase provisionally */
-            if(u1_t_ch_act == (U1)TRUE){
-                u1_t_swchk |= (U1)DIM_USADJ_BY_SW_SWON_BIT_UP;
-            }
-
-#if 0   /* BEV Rebase provisionally */
-            u1_t_ch_act = u1_g_DioIfChAct((U2)DIO_IF_CH_DIM_DW, (U1)TRUE);
-#else   /* BEV Rebase provisionally */
-            u1_t_ch_act = (U1)FALSE;
-#endif   /* BEV Rebase provisionally */
-            if(u1_t_ch_act == (U1)TRUE){
-                u1_t_swchk |= (U1)DIM_USADJ_BY_SW_SWON_BIT_DW;
-            }
-            break;
+    u1_t_ch_act = u1_g_XSpiDimSw();
+    if(u1_t_ch_act == (U1)DIM_CFG_CSTM_SW_UP){
+        u1_t_swchk |= (U1)DIM_USADJ_BY_SW_SWON_BIT_UP;
+    }
+    else if(u1_t_ch_act == (U1)DIM_CFG_CSTM_SW_DW){
+        u1_t_swchk |= (U1)DIM_USADJ_BY_SW_SWON_BIT_DW;
+    }
+    else{
+        /* Do Nothing */
     }
 
     return(u1_t_swchk);
@@ -337,15 +271,7 @@ U1      u1_g_DimUsadjbySwCfgUpdwchk(void)
 /*===================================================================================================================================*/
 U1      u1_g_DimUsadjbySwVrCfgReAd(U2 * u2_a_ad)
 {
-    U1          u1_t_sts;
-
-#if 0   /* BEV Rebase provisionally */
-    u1_t_sts = u1_g_IoHwAdcRead((U1)ADC_CH_RHEOSTAT_VR_IN, u2_a_ad);
-
-#else   /* BEV Rebase provisionally */
-    u1_t_sts = (U1)FALSE;
-#endif   /* BEV Rebase provisionally */
-    return(u1_t_sts);
+    return((U1)FALSE);
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_DimUsadjbySwCfgNvmRead(U2 * u2_ap_lvl)                                                                              */
@@ -419,13 +345,8 @@ U1      u1_g_DimUsadjbySwCfgComRxTAIL(U1 * u1p_a_tail)
     u1_t_tail_sup = u1_CALIB_MCUID0341_TAIL;
 
     if(u1_t_tail_sup == (U1)TRUE){
-#if 0   /* BEV Rebase provisionally */
         (void)Com_ReceiveSignal(ComConf_ComSignal_TAIL, u1p_a_tail);
         u1_t_rx_chk = Com_GetIPDUStatus(MSG_BDB1S03_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
-#else   /* BEV Rebase provisionally */
-        *u1p_a_tail = (U1)0U;
-        u1_t_rx_chk = (U1)COM_NO_RX;
-#endif   /* BEV Rebase provisionally */
     }
     else{
         u1_t_rx_chk = (U1)COM_NO_RX;
@@ -479,6 +400,7 @@ static inline U1    u1_s_DimCfgCalibU1MaxChk(const U1 u1_a_CALIBID, const U1 u1_
 /*  19PFv3-1 04/12/2024  SH       Add calibration guard                                                                              */
 /*  19PFv3-2 06/27/2024  TN(DT)   Delete Calibration Guard Process.                                                                  */
 /*  19PFv3-3 07/12/2024  TN(DT)   Add Calibration Guard to Avoid out of array references.                                            */
+/*  BEV-1    10/10/2025  KO       Configured for BEVstep3_Rebase                                                                     */
 /*                                                                                                                                   */
 /*  * TN     = Takashi Nagai, DENSO                                                                                                  */
 /*  * SH     = Shota Higashide                                                                                                       */
@@ -487,5 +409,6 @@ static inline U1    u1_s_DimCfgCalibU1MaxChk(const U1 u1_a_CALIBID, const U1 u1_
 /*  * HH     = Hiroki Hara                                                                                                           */
 /*  * SH     = Sae Hirose, Denso Techno                                                                                              */
 /*  * TN(DT) = Tetsushi Nakano, Denso Techno                                                                                         */
+/*  * KO     = Kazuto Oishi,  Denso Techno                                                                                           */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
