@@ -40,10 +40,16 @@ void EthSwt_SWIC_Qci_TimerUpdate (void)
 /* -------------------------------------------------------------------------- */
 void EthSwt_SWIC_Qci_Clear (void)
 {
+    uint8   idx;
+
     LIB_DI();
     swicGetQciTimer.time = 0;
     swicGetQciTimer.req = STD_ON;
     LIB_EI();
+
+    for (idx = 0u; idx < D_ETHSWT_SWIC_QCI_ID_NUM; idx++) {
+        ETHSWT_SWIC_QCI_NOTIFY(idx, 0);
+    }
 
     return;
 }

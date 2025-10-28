@@ -8,12 +8,6 @@
 /* -------------------------------------------------------------------------- */
 #include <EthSwt_SWIC_Cfg.h>
 /* -------------------------------------------------------------------------- */
-#define D_ETHSWT_DATA_CYCLE                 (5U)
-#define D_ETHSWT_DATA_GET_LINK_CYCLE        (5U)
-#define D_ETHSWT_DATA_GET_MIB_CYCLE         (100U)
-#define D_ETHSWT_DATA_GET_SQI_CYCLE         (5U)
-#define D_ETHSWT_DATA_GET_QCI_CYCLE         (20U)
-/* -------------------------------------------------------------------------- */
 #define D_ETHSWT_DATA_LINK_ADC_ID           (0U)
 #define D_ETHSWT_DATA_LINK_DCM_ID           (1U)
 #define D_ETHSWT_DATA_LINK_SAIL_ID          (2U)
@@ -53,14 +47,6 @@
 #define D_ETHSWT_DATA_QCI_DLC_UDP_ID        (4U)
 #define D_ETHSWT_DATA_QCI_NUM               (5U)
 
-#define D_ETHSWT_DATA_USE_PORT_NUM          (6U)
-
-#define D_ETHSWT_SWIC_ADC_PORT_ID           (0U)
-#define D_ETHSWT_SWIC_DCM_PORT_ID           (1U)
-#define D_ETHSWT_SWIC_SAIL_PORT_ID          (4U)
-#define D_ETHSWT_SWIC_TOOL_PORT_ID          (5U)
-#define D_ETHSWT_SWIC_LINUX_PORT_ID         (6U)
-#define D_ETHSWT_SWIC_ANDROID_PORT_ID       (7U)
 /* -------------------------------------------------------------------------- */
 
 
