@@ -21,14 +21,10 @@
 #include "odo_vslmt_cfg_private.h"
 #include "odo_om_rst_if.h"
 
-#if 0   /* BEV Rebase provisionally */
 #include "veh_opemd.h"
-#endif   /* BEV Rebase provisionally */
 #include "vardef.h"
 
-#if 0   /* BEV Rebase provisionally */
 #include "oxcan.h"
-#endif   /* BEV Rebase provisionally */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -104,10 +100,10 @@ static void    vd_s_OdoComTxUpdtOm(const U4 u4_a_0P001KM);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define ODO_NVMIF_ODO_DTF_NUM_BLOCK              (20U)
 static const U2            u2_sp_ODO_NVMIF_ODO_DTF_BLOCK[ODO_NVMIF_ODO_DTF_NUM_BLOCK] = {
-#if 0   /* BEV Rebase provisionally */
     (U2)NVMC_BLOCKID_DTF_ODO_00,
     (U2)NVMC_BLOCKID_DTF_ODO_01,
     (U2)NVMC_BLOCKID_DTF_ODO_02,
+#if 0   /* BEV Rebase provisionally */
     (U2)NVMC_BLOCKID_DTF_ODO_03,
     (U2)NVMC_BLOCKID_DTF_ODO_04,
     (U2)NVMC_BLOCKID_DTF_ODO_05,
@@ -142,9 +138,6 @@ static const U2            u2_sp_ODO_NVMIF_ODO_DTF_BLOCK[ODO_NVMIF_ODO_DTF_NUM_B
     (U2)U2_MAX,
     (U2)U2_MAX,
     (U2)U2_MAX,
-    (U2)U2_MAX,
-    (U2)U2_MAX,
-    (U2)U2_MAX,
     (U2)U2_MAX
 #endif   /* BEV Rebase provisionally */
 };
@@ -154,21 +147,12 @@ const ST_ODO_NVMIF_REC_KM  st_g_ODO_NVMIF_REC_ODO_KM = {
     (U1)ODO_NVMIF_ODO_DTF_NUM_BLOCK,                        /* u1_num_rec    */
     ((U1)sizeof(ST_ODO_KM) / (U1)ODO_NVMIF_BLO_NBYTE_12),   /* u1_rec_nblock */
     (U1)ODO_NVMIF_BLO_NBYTE_12,                             /* u1_blo_nbyte  */
-#if 0   /* BEV Rebase provisionally */
     (U1)NVMC_DEVICE_TYPE_DTF                                /* u1_dev_idx    */
-#else   /* BEV Rebase provisionally */
-    (U1)2U
-#endif   /* BEV Rebase provisionally */
 };
-#if 0   /* BEV Rebase provisionally */
 const U2                   u2_g_ODO_NVMIF_NVMCID_ODO_KM = (U2)NVMCID_APP_ODO;
-#else   /* BEV Rebase provisionally */
-const U2                   u2_g_ODO_NVMIF_NVMCID_ODO_KM = (U2)3U;
-#endif   /* BEV Rebase provisionally */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static const U2            u2_sp_ODO_NVMIF_TRIP_DTF_BLOCK[] = {
-#if 0   /* BEV Rebase provisionally */
     (U2)NVMC_BLOCKID_DTF_TRIP_0_0,
     (U2)NVMC_BLOCKID_DTF_TRIP_0_1,
 
@@ -177,7 +161,6 @@ static const U2            u2_sp_ODO_NVMIF_TRIP_DTF_BLOCK[] = {
 
     (U2)NVMC_BLOCKID_DTF_TRIP_2_0,
     (U2)NVMC_BLOCKID_DTF_TRIP_2_1
-#endif   /* BEV Rebase provisionally */
 };
 
 const ST_ODO_NVMIF_REC_KM  st_g_ODO_NVMIF_REC_TRIP_KM = {
@@ -185,17 +168,9 @@ const ST_ODO_NVMIF_REC_KM  st_g_ODO_NVMIF_REC_TRIP_KM = {
     (U1)ODO_TRIP_NUM_CH * (U1)ODO_NVMIF_TRIP_NUM_REC,       /* u1_num_rec    */
     ((U1)sizeof(ST_ODO_KM) / (U1)ODO_NVMIF_BLO_NBYTE_12),   /* u1_rec_nblock */
     (U1)ODO_NVMIF_BLO_NBYTE_12,                             /* u1_blo_nbyte  */
-#if 0   /* BEV Rebase provisionally */
     (U1)NVMC_DEVICE_TYPE_DTF                                /* u1_dev_idx    */
-#else   /* BEV Rebase provisionally */
-    (U1)2U
-#endif   /* BEV Rebase provisionally */
 };
-#if 0   /* BEV Rebase provisionally */
 const U2                   u2_g_ODO_NVMIF_NVMCID_TRIP_KM = (U2)NVMCID_APP_ODO_TRIP;
-#else   /* BEV Rebase provisionally */
-const U2                   u2_g_ODO_NVMIF_NVMCID_TRIP_KM = (U2)4U;
-#endif   /* BEV Rebase provisionally */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  odo_km_cfg_private.h                                                                                                             */
@@ -270,11 +245,7 @@ void    vd_g_OdoCfgMainStart(void)
 
     vd_g_OdoVslmtMainTask();
 
-#if 0   /* BEV Rebase provisionally */
     u1_t_igon = u1_g_VehopemdIgnOn();
-#else   /* BEV Rebase provisionally */
-    u1_t_igon = (U1)FALSE;
-#endif   /* BEV Rebase provisionally */
     if(u1_t_igon == (U1)FALSE){
         vd_s_OdoCfgIgOff();
     }
@@ -345,11 +316,7 @@ U1      u1_g_OdoCfgKmNextToNvm(const U4 u4_a_0P001KM_NEXT, const U4 u4_a_0P001KM
     U1                 u1_t_igon;
 
     u1_t_rqst = (U1)FALSE;
-#if 0   /* BEV Rebase provisionally */
     u1_t_igon = u1_g_VehopemdIgnOn();
-#else   /* BEV Rebase provisionally */
-    u1_t_igon = (U1)FALSE;
-#endif   /* BEV Rebase provisionally */
     if(u1_t_igon == (U1)TRUE){
 
         u4_t_km_next = u4_a_0P001KM_NEXT / (U4)ODO_1_KM;
@@ -547,7 +514,6 @@ static void    vd_s_OdoComTxInit(const U4 u4_a_0P001KM)
     }
     u4_s_odo_dist_om_rst = (U4)0U;
 
-#if 0   /* BEV Rebase provisionally */
     (void)Com_SendSignal(ComConf_ComSignal_ODO_UNIT, &u1_t_odo_unit_tx);                        /* MET1S02 */
     (void)Com_SendSignal(ComConf_ComSignal_ODO,      &u4_sp_odo_dist_tx[ODO_DIST_TX_ODO]);      /* MET1S02 */
     (void)Com_SendSignal(ComConf_ComSignal_TRIP_A,   &u4_sp_odo_dist_tx[ODO_DIST_TX_TRIP_A]);   /* MET1S10 */
@@ -555,6 +521,7 @@ static void    vd_s_OdoComTxInit(const U4 u4_a_0P001KM)
     (void)Com_SendSignal(ComConf_ComSignal_ODO_UNI2, &u1_t_odo_unit_tx);                        /* MET1S52 */
     (void)Com_SendSignal(ComConf_ComSignal_ODO_01,   &u4_sp_odo_dist_tx[ODO_DIST_TX_ODO_01]);   /* MET1S52 */
 
+#if 0   /* BEV Rebase provisionally */
     (void)Com_SendSignal(ComConf_ComSignal_OM_MLG,   &u1_t_om_mlg);                             /* MET1S10 */
     (void)Com_SendSignal(ComConf_ComSignal_PR_OM_FL, &u1_s_odo_pr_om_fl);                       /* MET1S10 */
 #endif   /* BEV Rebase provisionally */
@@ -597,25 +564,17 @@ static void    vd_s_OdoComTxUpdtOdo(const U4 u4_a_0P001KM)
         u4_t_odo01_tx = (U4)ODO_DIST_ODO_01_TX_MAX;
     }
 
-#if 0   /* BEV Rebase provisionally */
     (void)Com_SendSignal(ComConf_ComSignal_ODO_UNIT, &u1_t_odo_unit_tx);                          /* MET1S02 */
-#endif   /* BEV Rebase provisionally */
     if(u4_t_odo_tx != u4_sp_odo_dist_tx[ODO_DIST_TX_ODO]){
-#if 0   /* BEV Rebase provisionally */
         (void)Com_SendSignal(ComConf_ComSignal_ODO, &u4_t_odo_tx);                                /* MET1S02 */
         (void)Com_TriggerIPDUSend(MSG_MET1S02_TXCH0);
-#endif   /* BEV Rebase provisionally */
     }
     u4_sp_odo_dist_tx[ODO_DIST_TX_ODO] = u4_t_odo_tx;
 
-#if 0   /* BEV Rebase provisionally */
     (void)Com_SendSignal(ComConf_ComSignal_ODO_UNI2, &u1_t_odo_unit_tx);                          /* MET1S52 */
-#endif   /* BEV Rebase provisionally */
     if(u4_t_odo01_tx != u4_sp_odo_dist_tx[ODO_DIST_TX_ODO_01]){
-#if 0   /* BEV Rebase provisionally */
         (void)Com_SendSignal(ComConf_ComSignal_ODO_01, &u4_t_odo01_tx);                           /* MET1S52 */
         (void)Com_TriggerIPDUSend(MSG_MET1S52_TXCH0);
-#endif   /* BEV Rebase provisionally */
     }
     u4_sp_odo_dist_tx[ODO_DIST_TX_ODO_01] = u4_t_odo01_tx;
 
@@ -652,18 +611,14 @@ static void    vd_s_OdoComTxUpdtTrip(const U4 u4_a_0P001KM)
 
     if(u4_t_trip_a_tx != u4_sp_odo_dist_tx[ODO_DIST_TX_TRIP_A]){
 
-#if 0   /* BEV Rebase provisionally */
         (void)Com_SendSignal(ComConf_ComSignal_TRIP_A,   &u4_t_trip_a_tx);                        /* MET1S10 */
         (void)Com_TriggerIPDUSend(MSG_MET1S10_TXCH0);
-#endif   /* BEV Rebase provisionally */
     }
     u4_sp_odo_dist_tx[ODO_DIST_TX_TRIP_A] = u4_t_trip_a_tx;
 
     if(u4_t_trip_b_tx != u4_sp_odo_dist_tx[ODO_DIST_TX_TRIP_B]){
-#if 0   /* BEV Rebase provisionally */
         (void)Com_SendSignal(ComConf_ComSignal_TRIP_B,   &u4_t_trip_b_tx);                        /* MET1S11 */
         (void)Com_TriggerIPDUSend(MSG_MET1S11_TXCH0);
-#endif   /* BEV Rebase provisionally */
     }
     u4_sp_odo_dist_tx[ODO_DIST_TX_TRIP_B] = u4_t_trip_b_tx;
 }
@@ -737,14 +692,14 @@ static void    vd_s_OdoComTxUpdtOm(const U4 u4_a_0P001KM)
 
 #if 0   /* BEV Rebase provisionally */
     (void)Com_SendSignal(ComConf_ComSignal_OM_MLG, &u1_t_om_mlg);                                 /* MET1S10 */
-#endif   /* BEV Rebase provisionally */
     if(u1_t_pr_om_fl  != u1_s_odo_pr_om_fl){
-#if 0   /* BEV Rebase provisionally */
         (void)Com_SendSignal(ComConf_ComSignal_PR_OM_FL, &u1_t_pr_om_fl);                         /* MET1S10 */
         (void)Com_TriggerIPDUSend(MSG_MET1S10_TXCH0);
-#endif   /* BEV Rebase provisionally */
     }
     u1_s_odo_pr_om_fl = u1_t_pr_om_fl;
+#else   /* BEV Rebase provisionally */
+    u1_s_odo_pr_om_fl = (U1)0U;
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
