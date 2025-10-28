@@ -1,4 +1,4 @@
-/* 2.0.2 */
+/* 2.1.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -13,8 +13,8 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define GAUGE_CFG_H_MAJOR                        (2)
-#define GAUGE_CFG_H_MINOR                        (0)
-#define GAUGE_CFG_H_PATCH                        (2)
+#define GAUGE_CFG_H_MINOR                        (1)
+#define GAUGE_CFG_H_PATCH                        (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -22,9 +22,7 @@
 #include "aip_common.h"
 #include "gauge.h"
 #include "gauge_if.h"
-#if 0   /* BEV Rebase provisionally */
 #include "veh_opemd.h"
-#endif   /* BEV Rebase provisionally */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
@@ -34,25 +32,6 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if 0   /* BEV Rebase provisionally */
-#define GAUGE_VOM_MASK                          (VEH_OPEMD_MDBIT_ACC | VEH_OPEMD_MDBIT_STA | VEH_OPEMD_MDBIT_IGN)
-#endif   /* BEV Rebase provisionally */
-#define GAUGE_VOM_SHIFT                         (10U)
-
-#if 0   /* BEV Rebase provisionally */
-#define u2_g_GaugeCfgVomchk()                    ((U2)((u4_g_VehopemdMdfield() & (U4)GAUGE_VOM_MASK) << GAUGE_VOM_SHIFT))
-#else   /* BEV Rebase provisionally */
-#define u2_g_GaugeCfgVomchk()                    ((U2)(0x00U))
-#endif   /* BEV Rebase provisionally */
-
-#if 0   /* BEV Rebase provisionally */
-#if((GAUGE_SRC_CHK_ACC_ON != (VEH_OPEMD_MDBIT_ACC << GAUGE_VOM_SHIFT)) || \
-    (GAUGE_SRC_CHK_STA_ON != (VEH_OPEMD_MDBIT_STA << GAUGE_VOM_SHIFT)) || \
-    (GAUGE_SRC_CHK_IGN_ON != (VEH_OPEMD_MDBIT_IGN << GAUGE_VOM_SHIFT)))
-#error "gauge_cfg_private.h : GAUGE_SRC_CHK_XXX_ON shall be compatible with VEH_OPEMD_MDBIT_XXX"
-#endif
-#endif   /* BEV Rebase provisionally */
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -82,6 +61,7 @@ void    vd_g_GaugeCfgOpemdEvhk(const U4 u4_a_EVTBIT);
 void    vd_g_GaugeCfgMainStart(void);
 void    vd_g_GaugeCfgMainFinish(void);
 void    vd_g_GaugeCfgMapUpdate(void);
+U2      u2_g_GaugeCfgPowerChk(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */

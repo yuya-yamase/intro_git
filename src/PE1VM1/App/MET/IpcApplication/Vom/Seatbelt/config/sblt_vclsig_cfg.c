@@ -1,38 +1,45 @@
-/* 2.1.0 */
+/* 2.1.3 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-/*  Vehicle Status Viewer / Toyota IPC/MET Gauge                                                                                     */
-/*                                                                                                                                   */
+/*  Seatbelt reminder warning                                                                                                        */
+/*  Vehicle status                                                                                                                   */
 /*===================================================================================================================================*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define GAUGE_CFG_C_MAJOR                        (2)
-#define GAUGE_CFG_C_MINOR                        (1)
-#define GAUGE_CFG_C_PATCH                        (0)
+#define SBLT_VCLSIG_CFG_C_MAJOR                 (2)
+#define SBLT_VCLSIG_CFG_C_MINOR                 (1)
+#define SBLT_VCLSIG_CFG_C_PATCH                 (3)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#include "gauge_cfg_private.h"
-/* DIGITAL SPEED            */
-#include "vehspd_kmph.h"
-#include "gagdst_nxmph.h"
+#include "sblt_vclsts_cfg_private.h"
+#include "oxcan.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if ((GAUGE_CFG_C_MAJOR != GAUGE_CFG_H_MAJOR) || \
-     (GAUGE_CFG_C_MINOR != GAUGE_CFG_H_MINOR) || \
-     (GAUGE_CFG_C_PATCH != GAUGE_CFG_H_PATCH))
-#error "gauge_cfg.c and gauge_cfg_private.h : source and header files are inconsistent!"
+#if ((SBLT_VCLSIG_CFG_C_MAJOR != SBLT_VCLSTS_H_MAJOR) || \
+     (SBLT_VCLSIG_CFG_C_MINOR != SBLT_VCLSTS_H_MINOR) || \
+     (SBLT_VCLSIG_CFG_C_PATCH != SBLT_VCLSTS_H_PATCH))
+#error "sblt_vclsig_cfg.c and sblt_vclsts.h : source and header files are inconsistent!"
+#endif
+
+#if ((SBLT_VCLSIG_CFG_C_MAJOR != SBLT_VCLSTS_CFG_PRIVATE_H_MAJOR) || \
+     (SBLT_VCLSIG_CFG_C_MINOR != SBLT_VCLSTS_CFG_PRIVATE_H_MINOR) || \
+     (SBLT_VCLSIG_CFG_C_PATCH != SBLT_VCLSTS_CFG_PRIVATE_H_PATCH))
+#error "sblt_vclsig_cfg.c and sblt_vclsts_cfg_private.h : source and header files are inconsistent!"
 #endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#define SBLT_VHCLSIG_NUM_SGNLCFG                (9U)
+#define SBLT_VHCLSIG_PKBBDB_IGONMSK             (500U/SBLTWRN_TICK)
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -42,121 +49,204 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-ST_GAUGE_OW_CTRL             st_gp_gauge_ow_ctrl[GAUGE_NUM_CH];
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static U1      u1_s_GagsrcKmph(U2 * u2p_a_src);         /* vehspd_kmph      */
+static  U1      u1_s_SbltVclstsCfgGetPKBBDB(void);
+static  U1      u1_s_SbltVclstsCfgGetBP(void);
+static  U1      u1_s_SbltVclstsCfgGetBR(void);
+static  U1      u1_s_SbltVclstsCfgGetREVSW2(void);
+static  U1      u1_s_SbltVclstsCfgGetDCTY(void);
+static  U1      u1_s_SbltVclstsCfgGetPCTY(void);
+static  U1      u1_s_SbltVclstsCfgGetRRCY(void);
+static  U1      u1_s_SbltVclstsCfgGetRLCY(void);
+static  U1      u1_s_SbltVclstsCfgGetBCTY(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-const U2                    u2_g_GAUGE_OW_TOUT = (U2)5000U / (U2)20U;
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-const ST_GAUGE_IF           st_gp_GAUGE_IF_CFG[GAUGE_NUM_CH] = {
-    {
-    /* Digital Speed        */
-        &u1_s_GagsrcKmph,                       /* fp_u1_SRC     */
-        &vd_g_GagdstNxmphUpdt                   /* fp_vd_DST     */
-    }
+const   ST_SBLT_VCLSIG_SGNLCFG                  st_gp_SBLT_VCLSIG_SGNLCFG[SBLT_VHCLSIG_NUM_SGNLCFG] = {
+    {   &u1_s_SbltVclstsCfgGetPKBBDB,   (U1)SBLTWRN_MSG_BDB1S01,    (U1)SBLT_VHCLSIG_PKBBDB_IGONMSK,    (U1)0x01U,  (U1)0x00U,  (U1)0x01U },
+    {   &u1_s_SbltVclstsCfgGetBP,       (U1)SBLTWRN_MSG_ECT1G01,    (U1)0U,                             (U1)0x01U,  (U1)0x00U,  (U1)0x01U },
+    {   &u1_s_SbltVclstsCfgGetBR,       (U1)SBLTWRN_MSG_ECT1G01,    (U1)0U,                             (U1)0x00U,  (U1)0x00U,  (U1)0x01U },
+    {   &u1_s_SbltVclstsCfgGetREVSW2,   (U1)SBLTWRN_MSG_ZN11S26,    (U1)0U,                             (U1)0x00U,  (U1)0x00U,  (U1)0x01U },
+    {   &u1_s_SbltVclstsCfgGetDCTY,     (U1)SBLTWRN_MSG_BDB1S01,    (U1)0U,                             (U1)0x00U,  (U1)0x00U,  (U1)0x01U },
+    {   &u1_s_SbltVclstsCfgGetPCTY,     (U1)SBLTWRN_MSG_BDB1S01,    (U1)0U,                             (U1)0x00U,  (U1)0x00U,  (U1)0x01U },
+    {   &u1_s_SbltVclstsCfgGetRRCY,     (U1)SBLTWRN_MSG_BDB1S01,    (U1)0U,                             (U1)0x00U,  (U1)0x00U,  (U1)0x01U },
+    {   &u1_s_SbltVclstsCfgGetRLCY,     (U1)SBLTWRN_MSG_BDB1S01,    (U1)0U,                             (U1)0x00U,  (U1)0x00U,  (U1)0x01U },
+    {   &u1_s_SbltVclstsCfgGetBCTY,     (U1)SBLTWRN_MSG_BDB1S01,    (U1)0U,                             (U1)0x00U,  (U1)0x00U,  (U1)0x01U }
 };
-const U1                    u1_g_GAUGE_NUM_CH = (U1)GAUGE_NUM_CH;
+
+const   U2                                      u2_sp_SBLT_VCLSIG_MSKCFG[SBLT_VCLSTS_NUM_APP] = {
+    (U2)0x0003U,      /*  00 SBLTWRN_VCLSTS_PARK               */
+    (U2)0x000CU,      /*  01 SBLTWRN_VCLSTS_SHIFT_R            */
+    (U2)0x0010U,      /*  02 SBLTWRN_VCLSTS_D_DR_OP            */
+    (U2)0x0020U,      /*  03 SBLTWRN_VCLSTS_P_DR_OP            */
+    (U2)0x00C0U,      /*  04 SBLTWRN_VCLSTS_R_DR_OP            */
+    (U2)0x0100U,      /*  05 SBLTWRN_VCLSTS_B_DR_OP            */
+    (U2)0x01C0U,      /*  06 SBLTWRN_VCLSTS_RB_DR_OP           */
+    (U2)0x0030U,      /*  07 SBLTWRN_VCLSTS_DP_DR_OP           */
+    (U2)0x0130U,      /*  08 SBLTWRN_VCLSTS_DPB_DR_OP          */
+    (U2)0x01E0U       /*  09 SBLTWRN_VCLSTS_PRB_DR_OP          */
+};
+
+const   U1                                      u1_g_SBLT_VCLSTS_NUM_SGNL    = (U1)SBLT_VHCLSIG_NUM_SGNLCFG;
+const   U2                                      u2_g_SBLT_VCLSIG_PARKSTS_MSK = (U2)0x01F3U;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*===================================================================================================================================*/
-/*  void    vd_g_GaugeCfgBonInit(void)                                                                                               */
+/* static  U1      u1_s_SbltVclstsCfgGetPKBBDB(void)                                                                                 */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_GaugeCfgBonInit(void)
+static  U1      u1_s_SbltVclstsCfgGetPKBBDB(void)
 {
-    vd_g_GagdstNxmphInit();
-}
-/*===================================================================================================================================*/
-/*  void    vd_g_GaugeCfgRstwkInit(void)                                                                                             */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void    vd_g_GaugeCfgRstwkInit(void)
-{
-    vd_g_GagdstNxmphInit();
-}
-/*===================================================================================================================================*/
-/*  void    vd_g_GaugeCfgOpemdEvhk(const U4 u4_a_EVTBIT)                                                                             */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void    vd_g_GaugeCfgOpemdEvhk(const U4 u4_a_EVTBIT)
-{
-}
-/*===================================================================================================================================*/
-/*  void    vd_g_GaugeCfgMainStart(void)                                                                                             */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void    vd_g_GaugeCfgMainStart(void)
-{
-}
-/*===================================================================================================================================*/
-/*  void    vd_g_GaugeCfgMainFinish(void)                                                                                            */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void    vd_g_GaugeCfgMainFinish(void)
-{
-}
-/*===================================================================================================================================*/
-/*  void    vd_g_GaugeCfgMapUpdate(void)                                                                                             */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void    vd_g_GaugeCfgMapUpdate(void)
-{
-}
-/*===================================================================================================================================*/
-/*  static U1      u1_s_GagsrcKmph(U2 * u2p_a_src)                                                                                   */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static U1      u1_s_GagsrcKmph(U2 * u2p_a_src)
-{
-    return(u1_g_VehspdKmphBiased(u2p_a_src, (U1)FALSE));
-}
-/*===================================================================================================================================*/
-/*  U2      u2_g_GaugeCfgPowerChk(void)                                                                                              */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         u2_t_ret                                                                                                         */
-/*===================================================================================================================================*/
-U2      u2_g_GaugeCfgPowerChk(void)
-{
-    U2          u2_t_ret;
-    U1          u1_t_power_on;
+    U1          u1_t_sgnl;
 
-    u2_t_ret = (U2)0U;
+    u1_t_sgnl = (U1)0U;
+#if 0   /* BEV Rebase provisionally */
+    (void)Com_ReceiveSignal(ComConf_ComSignal_PKB_BDB, &u1_t_sgnl);
+#endif   /* BEV Rebase provisionally */
+    return (u1_t_sgnl);
+}
 
-    u1_t_power_on = u1_g_VehopemdAccOn();
-    if (u1_t_power_on == (U1)TRUE) {
-        u2_t_ret |= (U2)GAUGE_SRC_CHK_ACC_ON;
-    }
+/*===================================================================================================================================*/
+/* static  U1      u1_s_SbltVclstsCfgGetBP(void)                                                                                     */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static  U1      u1_s_SbltVclstsCfgGetBP(void)
+{
+    U1          u1_t_sgnl;
 
-    u1_t_power_on = u1_g_VehopemdIgnOn();
-    if (u1_t_power_on == (U1)TRUE) {
-        u2_t_ret |= (U2)GAUGE_SRC_CHK_IGN_ON;
-    }
+    u1_t_sgnl = (U1)0U;
+#if 0   /* BEV Rebase provisionally */
+    (void)Com_ReceiveSignal(ComConf_ComSignal_B_P, &u1_t_sgnl);
+#endif   /* BEV Rebase provisionally */
+    return (u1_t_sgnl);
+}
 
-    return(u2_t_ret);
+/*===================================================================================================================================*/
+/* static  U1      u1_s_SbltVclstsCfgGetBR(void)                                                                                     */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static  U1      u1_s_SbltVclstsCfgGetBR(void)
+{
+    U1          u1_t_sgnl;
+
+    u1_t_sgnl = (U1)0U;
+#if 0   /* BEV Rebase provisionally */
+    (void)Com_ReceiveSignal(ComConf_ComSignal_B_R, &u1_t_sgnl);
+#endif   /* BEV Rebase provisionally */
+    return (u1_t_sgnl);
+}
+
+/*===================================================================================================================================*/
+/* static  U1      u1_s_SbltVclstsCfgGetREVSW2(void)                                                                                 */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static  U1      u1_s_SbltVclstsCfgGetREVSW2(void)
+{
+    U1          u1_t_sgnl;
+
+    u1_t_sgnl = (U1)0U;
+#if 0   /* BEV Rebase provisionally */
+    (void)Com_ReceiveSignal(ComConf_ComSignal_REVSW2, &u1_t_sgnl);
+#endif   /* BEV Rebase provisionally */
+    return (u1_t_sgnl);
+}
+
+/*===================================================================================================================================*/
+/* static  U1      u1_s_SbltVclstsCfgGetDCTY(void)                                                                                   */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static  U1      u1_s_SbltVclstsCfgGetDCTY(void)
+{
+    U1          u1_t_sgnl;
+
+    u1_t_sgnl = (U1)0U;
+#if 0   /* BEV Rebase provisionally */
+    (void)Com_ReceiveSignal(ComConf_ComSignal_DCTY, &u1_t_sgnl);
+#endif   /* BEV Rebase provisionally */
+    return (u1_t_sgnl);
+}
+
+/*===================================================================================================================================*/
+/* static  U1      u1_s_SbltVclstsCfgGetPCTY(void)                                                                                   */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static  U1      u1_s_SbltVclstsCfgGetPCTY(void)
+{
+    U1          u1_t_sgnl;
+
+    u1_t_sgnl = (U1)0U;
+#if 0   /* BEV Rebase provisionally */
+    (void)Com_ReceiveSignal(ComConf_ComSignal_PCTY, &u1_t_sgnl);
+#endif   /* BEV Rebase provisionally */
+    return (u1_t_sgnl);
+}
+
+/*===================================================================================================================================*/
+/* static  U1      u1_s_SbltVclstsCfgGetRRCY(void)                                                                                   */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static  U1      u1_s_SbltVclstsCfgGetRRCY(void)
+{
+    U1          u1_t_sgnl;
+
+    u1_t_sgnl = (U1)0U;
+#if 0   /* BEV Rebase provisionally */
+    (void)Com_ReceiveSignal(ComConf_ComSignal_RRCY, &u1_t_sgnl);
+#endif   /* BEV Rebase provisionally */
+    return (u1_t_sgnl);
+}
+
+/*===================================================================================================================================*/
+/* static  U1      u1_s_SbltVclstsCfgGetRLCY(void)                                                                                   */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static  U1      u1_s_SbltVclstsCfgGetRLCY(void)
+{
+    U1          u1_t_sgnl;
+
+    u1_t_sgnl = (U1)0U;
+#if 0   /* BEV Rebase provisionally */
+    (void)Com_ReceiveSignal(ComConf_ComSignal_RLCY, &u1_t_sgnl);
+#endif   /* BEV Rebase provisionally */
+    return (u1_t_sgnl);
+}
+
+/*===================================================================================================================================*/
+/* static  U1      u1_s_SbltVclstsCfgGetBCTY(void)                                                                                   */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static  U1      u1_s_SbltVclstsCfgGetBCTY(void)
+{
+    U1          u1_t_sgnl;
+
+    u1_t_sgnl = (U1)0U;
+#if 0   /* BEV Rebase provisionally */
+    (void)Com_ReceiveSignal(ComConf_ComSignal_BCTY, &u1_t_sgnl);
+#endif   /* BEV Rebase provisionally */
+    return (u1_t_sgnl);
 }
 
 /*===================================================================================================================================*/
@@ -167,33 +257,24 @@ U2      u2_g_GaugeCfgPowerChk(void)
 /*                                                                                                                                   */
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  1.0.0     2/26/2018  TN       New.                                                                                               */
-/*  1.2.0     6/ 3/2019  TN       gauge v1.1.0 -> v1.2.0.                                                                            */
-/*  1.3.0    10/17/2019  TN       gauge v1.2.0 -> v1.3.0.                                                                            */
-/*  1.4.0     8/10/2020  AM       gauge v1.3.0 -> v1.4.0.                                                                            */
-/*            9/ 2/2020  TA       Addition of SOCINDLL signal judgment and change of I/F                                             */
-/*            1/27/2021  TA       Soc_Gauge function call removed on IG hook event                                                   */
-/*  2.0.0     6/04/2021  TA(M)    Renew.                                                                                             */
-/*  2.0.1    10/18/2021  TK       gauge v2.0.0 -> v2.0.1.                                                                            */
-/*  2.0.2    10/25/2021  TK       gauge v2.0.1 -> v2.0.2.                                                                            */
-/*  2.1.0    10/23/2025  SH       gauge v2.0.2 -> v2.1.0.                                                                            */
+/*  1.0.0    04/12/2018  HY       New.                                                                                               */
+/*  1.0.1    09/19/2019  YI       sblt_vclsts.c v1.0.0 -> v1.0.1.                                                                    */
+/*  2.0.0    10/08/2020  KK       sblt_vclsts.c v1.1.1 -> v2.0.0.                                                                    */
+/*  2.1.1    10/18/2021  TA(M)    sblt_vclsts.c v2.0.0 -> v2.1.1.                                                                    */
+/*  2.1.2    10/25/2021  TK       sblt_vclsts.c v2.1.1 -> v2.1.2.                                                                    */
+/*  2.1.3    02/28/2024  TH       sblt_vclsts.c v2.1.2 -> v2.1.3                                                                     */
 /*                                                                                                                                   */
-/*  Revision Date        Author   Change Description                                                                                 */
-/* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  800B-1   03/21/2020  SM       800B CV Correspondence                                                                             */
-/*  19PFv3-1 09/21/2023  SN       Delete tempseg,rpmzpos                                                                             */
-/*  19PFv3-2 02/01/2024  KH       Apply 19PFv3 configuration                                                                         */
-/*  19PFv3-3 10/03/2024  SN       Delete ATTemp Overheat                                                                             */
-/*  BEV-1    10/23/2025  SH       Configured for BEVstep3_Rebase                                                                     */
 /*                                                                                                                                   */
-/*  * TN   = Takashi Nagai, Denso                                                                                                    */
-/*  * SM   = Shota Maegawa, Denso Techno                                                                                             */
-/*  * AM   = Atsushi Mizutani, Denso Techno                                                                                          */
-/*  * TA   = Tsubasa Aki, Denso Techno                                                                                               */
+/*  Revision    Date        Author   Change Description                                                                              */
+/* ------------ ----------  -------  ----------------------------------------------------------------------------------------------- */
+/*  893B178D-1  11/05/2021  TN       893B178D/19PF Correspondence                                                                    */
+/*                                                                                                                                   */
+/*  * HY   = Hidefumi Yoshida, Denso                                                                                                 */
+/*  * YI   = Yoshiki  Iwata,   Denso                                                                                                 */
+/*  * KK   = Kohei Kato,       Denso Techno                                                                                          */
+/*  * TN   = Tetsu Naruse,     Denso Techno                                                                                          */
 /*  * TA(M)= Teruyuki Anjima, NTT Data MSE                                                                                           */
-/*  * TK   = Takanori Kuno, DensoTechno                                                                                              */
-/*  * SN   = Shimon Nambu, DensoTechno                                                                                               */
-/*  * KH   = Kiko Huerte, DTPH                                                                                                       */
-/*  * SH   = Sae Hirose, DensoTechno                                                                                                 */
+/*  * TK   = Takanori Kuno, Denso Techno                                                                                             */
+/*  * TH   = Taisuke Hirakawa, KSE                                                                                                   */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

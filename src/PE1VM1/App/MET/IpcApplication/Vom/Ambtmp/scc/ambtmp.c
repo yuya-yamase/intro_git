@@ -1,4 +1,4 @@
-/* 2.2.1 */
+/* 2.3.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,8 +10,8 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define AMBTMP_C_MAJOR                         (2)
-#define AMBTMP_C_MINOR                         (2)
-#define AMBTMP_C_PATCH                         (1)
+#define AMBTMP_C_MINOR                         (3)
+#define AMBTMP_C_PATCH                         (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -373,11 +373,7 @@ static void vd_s_AmbtmpIceWrnChk(void)
     U1 u1_t_trvl_dst_flg;               /* Travelling Distance Flag         */
     U4 u4_t_loop;
 
-#if 0   /* BEV Rebase provisionally */
     u1_t_trvl_dst_flg = u1_g_VehopemdPtsOn((U1)VEH_OPEMD_PTS_INV_OFF);
-#else   /* BEV Rebase provisionally */
-    u1_t_trvl_dst_flg = (U1)FALSE;
-#endif   /* BEV Rebase provisionally */
 
     for(u4_t_loop = (U4)0U ; u4_t_loop < (U4)AMBTMP_NUM_DEGREE ; u4_t_loop++){
         if(u1_s_ambtmp_sts != (U1)AMBTMP_STS_VALID){
@@ -420,11 +416,7 @@ static void vd_s_AmbtmpTrvlFlgChk(void)
     U2 u2_t_vehspd;                                                     /* Vehicle Speed(LSB0.01km/h)       */
 
     u2_t_vehspd = (U2)0U;
-#if 0   /* BEV Rebase provisionally */
     u1_t_spdsts = u1_g_VehspdKmphInst(&u2_t_vehspd, (U1)TRUE);
-#else   /* BEV Rebase provisionally */
-    u1_t_spdsts = (U1)AMBTMP_STS_UNKNOWN;
-#endif   /* BEV Rebase provisionally */
 
     if(u1_t_spdsts != (U1)AMBTMP_STS_VALID){
         u1_s_ambtmp_trvl_flg = (U1)FALSE;
@@ -462,9 +454,11 @@ static void vd_s_AmbtmpTrvlFlgChk(void)
 /*  2.1.0    11/25/2021  TA(M)    Change judge ice warning in Celsius and Fahrenheit respectively                                    */
 /*  2.2.0    03/07/2022  TA(M)    Change the processing when unknows of ambtmp_ad                                                    */
 /*  2.2.1    06/28/2022  TA(M)    Change rounding logic of u2_s_AmbtmpDspCel/u2_s_AmbtmpDspFah                                       */
+/*  2.3.0    10/28/2025  SN       Delete vd_g_AmbtmpOpemdEvhk                                                                        */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * YN   = Yasuhiro Nakamura, Denso Techno                                                                                         */
 /*  * TA(M)= Teruyuki Anjima, NTT Data MSE                                                                                           */
+/*  * SN   = Shimon Nambu, Denso Techno                                                                                              */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

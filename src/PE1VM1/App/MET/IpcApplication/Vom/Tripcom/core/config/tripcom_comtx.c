@@ -21,44 +21,7 @@
 #include "oxcan.h"
 #include "vardef.h"
 #include "veh_opemd.h"
-#if 0   /* BEV Rebase provisionally */
 #include "locale.h"
-#else   /* BEV Rebase provisionally */
-#define UNIT_IDX_DIST                       (0U)
-#define UNIT_IDX_SPEED                      (1U)
-#define UNIT_IDX_FUECO                      (2U)
-#define UNIT_IDX_ELECO                      (3U)
-
-/* Unit Distance */
-#define UNIT_NUM_VAL_DIST                   (2U)
-#define UNIT_VAL_DIST_KM                    (0U)
-#define UNIT_VAL_DIST_MILE                  (1U)
-
-/* Unit Speed */
-#define UNIT_NUM_VAL_SPEED                  (2U)
-#define UNIT_VAL_SPEED_KMPH                 (0U)
-#define UNIT_VAL_SPEED_MPH                  (1U)
-
-/* Unit Fuel Economy */
-#define UNIT_NUM_VAL_FUECO                  (7U)
-#define UNIT_VAL_FUECO_KMPL                 (0U)
-#define UNIT_VAL_FUECO_LP100KM              (1U)
-#define UNIT_VAL_FUECO_MPG_USA              (2U)
-#define UNIT_VAL_FUECO_MPG_UK               (3U)
-#define UNIT_VAL_FUECO_MPG_E                (4U)
-#define UNIT_VAL_FUECO_KMPKG                (5U)
-#define UNIT_VAL_FUECO_KGP100KM             (6U)
-
-/* Unit Electronic Economy */
-#define UNIT_NUM_VAL_ELECO                  (7U)   /* Electricity cost Number                      */
-#define UNIT_VAL_ELECO_WHPKM                (0U)
-#define UNIT_VAL_ELECO_KWHPKM               (1U)
-#define UNIT_VAL_ELECO_WHPMILE              (2U)
-#define UNIT_VAL_ELECO_KWHPMILE             (3U)
-#define UNIT_VAL_ELECO_KMPKWH               (4U)   /* Electricity cost    : km/kWh                 */
-#define UNIT_VAL_ELECO_KWHP100KM            (5U)   /* Electricity cost    : kWh/100km              */
-#define UNIT_VAL_ELECO_MILEPKWH             (6U)   /* Electricity cost    : miles/kWh              */
-#endif   /* BEV Rebase provisionally */
 #include "calibration.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -322,11 +285,7 @@ void            vd_g_TripcomCfgGetUnit(U1 * u1_ap_unittype)
 
     for (u4_t_loop = (U4)0U; u4_t_loop < (U4)TRIPCOM_NUM_CANTXUNIT; u4_t_loop++) {
         u1_ap_unittype[u4_t_loop] = (U1)0U;
-#if 0   /* BEV Rebase provisionally */
         u1_t_unit = u1_g_Unit(st_sp_TRIPCOM_TX_LOCALE_INF[u4_t_loop].u1_ch);
-#else   /* BEV Rebase provisionally */
-        u1_t_unit = (U1)U1_MAX;
-#endif   /* BEV Rebase provisionally */
         if (u1_t_unit < st_sp_TRIPCOM_TX_LOCALE_INF[u4_t_loop].u1_unit_num) {
             u1_ap_unittype[u4_t_loop] = st_sp_TRIPCOM_TX_LOCALE_INF[u4_t_loop].u1p_table[u1_t_unit];
         }
@@ -356,11 +315,7 @@ static  void    vd_s_TripcomCfgCanTxInit(void)
     u1_s_tripcom_tx_m1ec_timer  = (U1)U1_MAX;
     for (u4_t_loop = (U4)0U; u4_t_loop < (U4)TRIPCOM_NUM_CANTXUNIT; u4_t_loop++) {
         u1_sp_tripcom_tx_unit[u4_t_loop] = (U1)0U;
-#if 0   /* BEV Rebase provisionally */
         u1_t_unit = u1_g_Unit(st_sp_TRIPCOM_TX_LOCALE_INF[u4_t_loop].u1_ch);
-#else   /* BEV Rebase provisionally */
-        u1_t_unit = (U1)U1_MAX;
-#endif   /* BEV Rebase provisionally */
         if (u1_t_unit < st_sp_TRIPCOM_TX_LOCALE_INF[u4_t_loop].u1_unit_num) {
             u1_sp_tripcom_tx_unit[u4_t_loop] = st_sp_TRIPCOM_TX_LOCALE_INF[u4_t_loop].u1p_table[u1_t_unit];
         }
