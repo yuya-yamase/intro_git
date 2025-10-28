@@ -32,7 +32,9 @@
 #include "nwcm.h"
 #include "drec_tx.h"
 #include "dio_if.h"
+#endif   /* BEV Rebase provisionally */
 #include "sound_cri_mgr.h"
+#if 0   /* BEV Rebase provisionally */
 #include "gateway_mm.h"
 
 /* Application           */
@@ -131,8 +133,8 @@ void vd_g_22SSCallout_StaBonInit(void)
         &vd_g_HudCaInit,
 #endif   /* BEV Rebase provisionally */
         &vd_g_LocaleBonInit,
-#if 0   /* BEV Rebase provisionally */
         &vd_g_SoundCriMgrInitialize,
+#if 0   /* BEV Rebase provisionally */
         &vd_g_DrectxBonInit,
         &vd_g_DioIfInit,
 #endif   /* BEV Rebase provisionally */
@@ -234,8 +236,8 @@ void vd_g_22SSCallout_StaRstInit(void)
         &vd_g_HudCaInit,
 #endif   /* BEV Rebase provisionally */
         &vd_g_LocaleRstWkupInit,
-#if 0   /* BEV Rebase provisionally */
         &vd_g_SoundCriMgrInitialize,
+#if 0   /* BEV Rebase provisionally */
         &vd_g_DrectxRstInit,
         &vd_g_DioIfInit,
 #endif   /* BEV Rebase provisionally */
@@ -337,8 +339,8 @@ void vd_g_22SSCallout_StaWkupInit(void)
         &vd_g_HudCaInit,
 #endif   /* BEV Rebase provisionally */
         &vd_g_LocaleRstWkupInit,
-#if 0   /* BEV Rebase provisionally */
         &vd_g_SoundCriMgrInitialize,
+#if 0   /* BEV Rebase provisionally */
         &vd_g_DrectxWkupInit,
         &vd_g_DioIfInit,
 #endif   /* BEV Rebase provisionally */
@@ -431,7 +433,5 @@ void vd_g_22SSCallout_StaWkupInit(void)
 /*===================================================================================================================================*/
 void vd_g_22SSCallout_PrepShtdwn(void)
 {
-#if 0   /* BEV Rebase provisionally */
     vd_g_SoundCriMgr_DeInit();
-#endif   /* BEV Rebase provisionally */
 }

@@ -114,7 +114,9 @@
 #include "drec_tx.h"
 #include "nwcm.h"
 #include "dio_if.h"
+#endif   /* BEV Rebase provisionally */
 #include "sound_cri_mgr.h"
+#if 0   /* BEV Rebase provisionally */
 #include "gateway_cxpi.h"
 #include "gateway_mm.h"
 #endif   /* BEV Rebase provisionally */
@@ -320,13 +322,13 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     /*                                                                   */
     /*-------------------------------------------------------------------*/
     {&vd_g_Rim_Task,                    (U4)SCHDLR_TASKBIT__10MS_A  },
-#if 0   /* BEV Rebase provisionally */
     /*-------------------------------------------------------------------*/
     /*                                                                   */
     /*  Platform Pre Task                                                */
     /*                                                                   */
     /*-------------------------------------------------------------------*/
     {&vd_g_SoundCriMgrMainTask,         (U4)SCHDLR_TASKBIT__10MS_A  },
+#if 0   /* BEV Rebase provisionally */
     {&vd_g_DioIfMainIn,                 (U4)SCHDLR_TASKBIT__10MS_A  },
     /*-------------------------------------------------------------------*/
     /*                                                                   */

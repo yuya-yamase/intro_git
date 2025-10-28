@@ -33,9 +33,7 @@
 #ifdef DATE_CLK_H
 #include "date_clk.h"
 #endif
-#if 0   /* BEV Rebase provisionally */
 #include "sound_cri_mgr.h"
-#endif   /* BEV Rebase provisionally */
 /* MCAL                  */
 /* Memory                */
 #include "nvmc_mgr.h"
@@ -114,9 +112,7 @@ U1      u1_g_RunMCfghkShtdwnchk1st(void)
 #else
 #endif
         &u1_g_Nvmc_IsShtdwnOk,
-#if 0   /* BEV Rebase provisionally */
         &u1_g_SoundCriMgrShtdwnOk,
-#endif   /* BEV Rebase provisionally */
         &u1_g_IllumiShtdwnOk,
 #if 0   /* BEV Rebase provisionally */
         &u1_g_HmiProxyShtdwnOK

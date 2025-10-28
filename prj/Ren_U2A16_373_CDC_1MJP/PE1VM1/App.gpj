@@ -66,6 +66,11 @@
     -I${APP_DIR}/MET/IpcApplication/Vsv/WChime/config_D1L1
     -I${APP_DIR}/MET/IpcApplication/Vsv/WChime/config
     -I${APP_DIR}/MET/IpcApplication/Vsv/WChime/scc
+    -I${APP_DIR}/MET/Platform/ComplexDriver/SoundMiddle/config
+    -I${APP_DIR}/MET/Platform/ComplexDriver/SoundMiddle/data_TYT
+    -I${APP_DIR}/MET/Platform/ComplexDriver/SoundMiddle/data_LEX
+    -I${APP_DIR}/MET/Platform/ComplexDriver/SoundMiddle/include/U2Ax
+    -I${APP_DIR}/MET/Platform/ComplexDriver/SoundMiddle/scc
     
 
 ${SS_DIR}/eMCOS/config/eMCOS_TASK.c
@@ -480,4 +485,6 @@ App/MET/IpcApplication/Vsv/WChime/config_D1L1/wchime_grd_cfg.c
 App/MET/IpcApplication/Vsv/WChime/config/wchime_arb_cfg.c
 App/MET/IpcApplication/Vsv/WChime/config/wchime_req_cfg.c
 App/MET/IpcApplication/Vsv/WChime/scc/wchime_arb.c
+App/MET/Platform/ComplexDriver/SoundMiddle/config/sound_cri_mgr.c
+App/MET/Platform/ComplexDriver/SoundMiddle/scc/sound_cri_drv.c
 
