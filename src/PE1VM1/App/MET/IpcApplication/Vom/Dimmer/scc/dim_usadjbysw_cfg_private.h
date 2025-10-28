@@ -21,9 +21,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "aip_common.h"
 #include "dimmer.h"
-#if 0   /* BEV Rebase provisionally */
 #include "veh_opemd.h"
-#endif   /* BEV Rebase provisionally */
 #include "dim_usadjbysw.h"
 #include "calibration.h"
 
@@ -44,11 +42,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if 0   /* BEV Rebase provisionally */
 #define u1_g_DimUsadjbySwCfgIgnOn()              (u1_g_VehopemdIgnOn())
-#else   /* BEV Rebase provisionally */
-#define u1_g_DimUsadjbySwCfgIgnOn()              ((U1)FALSE)
-#endif   /* BEV Rebase provisionally */
 #define u1_DIM_USADJ_BY_SW_CALIB_RHEOSW          (u1_CALIB_MCUID0430_RHEOSW)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
