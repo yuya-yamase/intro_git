@@ -30,9 +30,6 @@
 #endif
 
 /* Complex Device Driver */
-#ifdef DATE_CLK_H
-#include "date_clk.h"
-#endif
 #if 0   /* BEV Rebase provisionally */
 #include "sound_cri_mgr.h"
 #endif   /* BEV Rebase provisionally */
@@ -198,25 +195,7 @@ void    vd_g_RunMCfgWksrcCfgRefresh(void)
 /*===================================================================================================================================*/
 U1      u1_g_RunMCfghkShtdwnchk2nd(const U1 u1_a_1ST, const U2 u2_a_TM_ELPSD)
 {
-#if 0   /* BEV BSW provisionally */
-    U1                        u1_t_2nd;
-    u1_t_2nd  = u1_a_1ST;
-
-#ifdef DATE_CLK_H
-    /* ----------------------------------------------------------------------------------- */
-    /* WARNING :                                                                           */
-    /* ----------------------------------------------------------------------------------- */
-    /* u1_g_DateclkShtdwnOk shall be invoked at end of u1_g_BswMCfghkShtdwnchk2nd.         */
-    /* Otherwise, ECU might not be able to go shutdown.                                    */
-    /* ----------------------------------------------------------------------------------- */
-    u1_t_2nd &= u1_g_DateclkShtdwnOk();
-#endif
-
-    return(u1_t_2nd);
-	
-#else
     return(u1_a_1ST);
-#endif
 }
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
@@ -243,8 +222,10 @@ U1      u1_g_RunMCfghkShtdwnchk2nd(const U1 u1_a_1ST, const U2 u2_a_TM_ELPSD)
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
+/*  BEV-1    10/22/2025  TS       Change for BEV rebase.                                                                             */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
 /*  * RS   = Ryuki Sako, Denso Techno                                                                                                */
+/*  * TS   = Takuo Suganuma Denso Techno                                                                                             */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
