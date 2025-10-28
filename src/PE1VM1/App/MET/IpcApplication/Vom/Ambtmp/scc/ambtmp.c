@@ -458,9 +458,11 @@ static void vd_s_AmbtmpTrvlFlgChk(void)
 /*  2.1.0    11/25/2021  TA(M)    Change judge ice warning in Celsius and Fahrenheit respectively                                    */
 /*  2.2.0    03/07/2022  TA(M)    Change the processing when unknows of ambtmp_ad                                                    */
 /*  2.2.1    06/28/2022  TA(M)    Change rounding logic of u2_s_AmbtmpDspCel/u2_s_AmbtmpDspFah                                       */
+/*  2.3.0    10/28/2025  SN       Delete vd_g_AmbtmpOpemdEvhk                                                                        */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * YN   = Yasuhiro Nakamura, Denso Techno                                                                                         */
 /*  * TA(M)= Teruyuki Anjima, NTT Data MSE                                                                                           */
+/*  * SN   = Shimon Nambu, Denso Techno                                                                                              */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

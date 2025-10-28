@@ -159,9 +159,11 @@ static U1   u1_s_AmbtmpCANNorm(const U1 u1_a_TMP, const U1 u1_a_AC_AMB05, U2 * u
 /*  2.0.1    10/18/2021  TA(M)    ambtmp.c v2.0.0 -> v2.0.1.                                                                         */
 /*  2.1.0    11/25/2021  TA(M)    ambtmp.c v2.0.1 -> v2.1.0.                                                                         */
 /*  2.2.1    06/28/2022  TA(M)    ambtmp.c v2.2.0 -> v2.2.1.                                                                         */
+/*  2.3.0    10/28/2025  SN       ambtmp.c v2.2.1 -> v2.3.0.                                                                         */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * YN   = Yasuhiro Nakamura, Denso Techno                                                                                         */
 /*  * TA(M)= Teruyuki Anjima, NTT Data MSE                                                                                           */
+/*  * SN   = Shimon Nambu, Denso Techno                                                                                              */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
