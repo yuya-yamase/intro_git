@@ -453,11 +453,7 @@ static void    vd_s_OdoComTxInit(const U4 u4_a_0P001KM)
     U1                 u1_t_om_app;
     U1                 u1_t_odo_unit;
 
-#if 0   /* BEV Rebase provisionally */
     u1_t_unit_def = u1_g_UnitDef((U1)UNIT_IDX_DIST);
-#else   /* BEV Rebase provisionally */
-    u1_t_unit_def = (U1)U1_MAX;
-#endif   /* BEV Rebase provisionally */
     if(u4_a_0P001KM > (U4)ODO_KM_MAX){
 
         u1_t_odo_unit_tx = (U1)0U;
@@ -467,11 +463,7 @@ static void    vd_s_OdoComTxInit(const U4 u4_a_0P001KM)
         u4_sp_odo_dist_tx[ODO_DIST_TX_TRIP_B]   = (U4)0U;
         u4_sp_odo_dist_tx[ODO_DIST_TX_ODO_01]   = (U4)0U;
     }
-#if 0   /* BEV Rebase provisionally */
     else if(u1_t_unit_def == (U1)UNIT_VAL_DIST_MILE){
-#else   /* BEV Rebase provisionally */
-    else if(u1_t_unit_def == (U1)1U){
-#endif   /* BEV Rebase provisionally */
 
         u1_t_odo_unit_tx = (U1)ODO_UNIT_TX_MI;
 
@@ -521,11 +513,7 @@ static void    vd_s_OdoComTxInit(const U4 u4_a_0P001KM)
     u1_t_om_mile = (U1)(u4_g_UnitconvtrKmtoMi(st_gp_odo_trip_km[ODO_TRIP_CH_OM].u4_di_m) / (U4)ODO_100_KM);
     u1_t_om_app  = u1_g_VardefTmntOpt();
     u1_t_om_km = (U1)(st_gp_odo_trip_km[ODO_TRIP_CH_OM].u4_di_m / (U4)ODO_100_KM);
-#if 0   /* BEV Rebase provisionally */
     u1_t_odo_unit = u1_g_Unit((U1)UNIT_IDX_DIST);
-#else   /* BEV Rebase provisionally */
-    u1_t_odo_unit = (U1)U1_MAX;
-#endif   /* BEV Rebase provisionally */
 
     if((u1_t_odo_unit_tx == (U1)0U    ) || 
        (u1_t_om_app      == (U1)FALSE)){
@@ -540,11 +528,7 @@ static void    vd_s_OdoComTxInit(const U4 u4_a_0P001KM)
             u1_t_om_mlg  = (U1)ODO_OM_MLG_MAX - u1_t_om_mile;
         }
 
-#if 0   /* BEV Rebase provisionally */
         if(u1_t_odo_unit          == (U1)UNIT_VAL_DIST_KM){
-#else   /* BEV Rebase provisionally */
-        if(u1_t_odo_unit          == (U1)0U){
-#endif   /* BEV Rebase provisionally */
             if(u1_t_om_km         >= (U1)ODO_OM_MLG_PRE_KM){
                 u1_s_odo_pr_om_fl  = (U1)TRUE;
             }
@@ -588,21 +572,13 @@ static void    vd_s_OdoComTxUpdtOdo(const U4 u4_a_0P001KM)
     U1                 u1_t_odo_unit_tx;
     U4                 u4_t_odo01_tx;
 
-#if 0   /* BEV Rebase provisionally */
     u1_t_unit_def = u1_g_UnitDef((U1)UNIT_IDX_DIST);
-#else   /* BEV Rebase provisionally */
-    u1_t_unit_def = (U1)U1_MAX;
-#endif   /* BEV Rebase provisionally */
     if(u4_a_0P001KM > (U4)ODO_KM_MAX){
         u1_t_odo_unit_tx = (U1)0U;
         u4_t_odo_tx      = (U4)0U;
         u4_t_odo01_tx    = (U4)0U;
     }
-#if 0   /* BEV Rebase provisionally */
     else if(u1_t_unit_def == (U1)UNIT_VAL_DIST_MILE){
-#else   /* BEV Rebase provisionally */
-    else if(u1_t_unit_def == (U1)1U){
-#endif   /* BEV Rebase provisionally */
         u1_t_odo_unit_tx = (U1)ODO_UNIT_TX_MI;
         u4_t_odo_tx      = u4_g_UnitconvtrKmtoMi(u4_a_0P001KM) / (U4)ODO_1_KM;
         u4_t_odo01_tx    = u4_g_UnitconvtrKmtoMi(u4_a_0P001KM) / (U4)ODO_0P1_KM;
@@ -657,20 +633,12 @@ static void    vd_s_OdoComTxUpdtTrip(const U4 u4_a_0P001KM)
     U4                 u4_t_trip_b_tx;
     U1                 u1_t_unit_def;
 
-#if 0   /* BEV Rebase provisionally */
     u1_t_unit_def = u1_g_UnitDef((U1)UNIT_IDX_DIST);
-#else   /* BEV Rebase provisionally */
-    u1_t_unit_def = (U1)U1_MAX;
-#endif   /* BEV Rebase provisionally */
     if(u4_a_0P001KM > (U4)ODO_KM_MAX){
         u4_t_trip_a_tx   = (U4)0U;
         u4_t_trip_b_tx   = (U4)0U;
     }
-#if 0   /* BEV Rebase provisionally */
     else if(u1_t_unit_def == (U1)UNIT_VAL_DIST_MILE){
-#else   /* BEV Rebase provisionally */
-    else if(u1_t_unit_def == (U1)1U){
-#endif   /* BEV Rebase provisionally */
         u4_t_trip_a_tx   = u4_g_UnitconvtrKmtoMi(st_gp_odo_trip_km[ODO_TRIP_CH_A].u4_di_m) / (U4)ODO_0P1_KM;
         u4_t_trip_b_tx   = u4_g_UnitconvtrKmtoMi(st_gp_odo_trip_km[ODO_TRIP_CH_B].u4_di_m) / (U4)ODO_0P1_KM;
     }
@@ -732,11 +700,7 @@ static void    vd_s_OdoComTxUpdtOm(const U4 u4_a_0P001KM)
     u4_t_om_mile = (u4_g_UnitconvtrKmtoMi(u4_t_om_di_m) / (U4)ODO_100_KM);
     u1_t_om_app  = u1_g_VardefTmntOpt();
     u4_t_om_km = u4_t_om_di_m / (U4)ODO_100_KM;
-#if 0   /* BEV Rebase provisionally */
     u1_t_odo_unit = u1_g_Unit((U1)UNIT_IDX_DIST);
-#else   /* BEV Rebase provisionally */
-    u1_t_odo_unit = (U1)1U;
-#endif   /* BEV Rebase provisionally */
 
     if((u1_t_odo_dist_sts    == (U1)FALSE) ||
        (u4_s_odo_dist_om_rst != (U4)0U)    ||
@@ -753,11 +717,7 @@ static void    vd_s_OdoComTxUpdtOm(const U4 u4_a_0P001KM)
             u1_t_om_mlg  = (U1)ODO_OM_MLG_MAX - (U1)u4_t_om_mile;
         }
 
-#if 0   /* BEV Rebase provisionally */
         if(u1_t_odo_unit      == (U1)UNIT_VAL_DIST_KM){
-#else   /* BEV Rebase provisionally */
-        if(u1_t_odo_unit      == (U1)0U){
-#endif   /* BEV Rebase provisionally */
             if(u4_t_om_km     >= (U4)ODO_OM_MLG_PRE_KM){
                 u1_t_pr_om_fl  = (U1)TRUE;
             }
