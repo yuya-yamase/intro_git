@@ -42,12 +42,13 @@
 
 /* -------------------------------------------------------------------------- */
 typedef struct {
-    uint8 arrayID;                                                              /* 送信用データ配列のIndex  */
+    uint8 arrayID;                                                              /* 送信用データIndex        */
     uint8 flagPosition;                                                         /* 送信判定用更新ビット     */
 } S_ETHSWT_DATA_FOR_UPDATE;
 
+/* リンク状態送信用「SWIC物理ポート番号Index(行) -> 送信用データIndex(列)」変換テーブル */
 static const S_ETHSWT_DATA_FOR_UPDATE S_ETHSWT_DATA_LINK_ID_TABLE[D_ETHSWT_SWIC_PORT_NUM] =
-{
+{   /* 送信用データIndex             , 送信用判定用更新ビット         */
     {D_ETHSWT_DATA_LINK_ADC_ID      , D_ETHSWT_DATA_UPDATE_ADC      }           /* Port1: A-DC      */
 ,   {D_ETHSWT_DATA_LINK_DCM_ID      , D_ETHSWT_DATA_UPDATE_DCM      }           /* Port2: DCM       */
 ,   {D_ETHSWT_DATA_FAILED           , D_ETHSWT_DATA_FAILED          }           /* Port3: no use    */
@@ -59,8 +60,9 @@ static const S_ETHSWT_DATA_FOR_UPDATE S_ETHSWT_DATA_LINK_ID_TABLE[D_ETHSWT_SWIC_
 ,   {D_ETHSWT_DATA_FAILED           , D_ETHSWT_DATA_FAILED          }           /* Port9: no use    */
 };
 
+/* MIB送信用「SWIC物理ポート番号Index(行) -> 送信用データIndex(列)」変換テーブル */
 static const S_ETHSWT_DATA_FOR_UPDATE S_ETHSWT_DATA_MIB_ID_TABLE[D_ETHSWT_SWIC_PORT_NUM] =
-{
+{   /* 送信用データIndex             , 送信用判定用更新ビット         */
     {D_ETHSWT_DATA_MIB_ADC_ID       , D_ETHSWT_DATA_UPDATE_ADC      }           /* Port1: A-DC      */
 ,   {D_ETHSWT_DATA_MIB_DCM_ID       , D_ETHSWT_DATA_UPDATE_DCM      }           /* Port2: DCM       */
 ,   {D_ETHSWT_DATA_FAILED           , D_ETHSWT_DATA_FAILED          }           /* Port3: no use    */
@@ -72,8 +74,9 @@ static const S_ETHSWT_DATA_FOR_UPDATE S_ETHSWT_DATA_MIB_ID_TABLE[D_ETHSWT_SWIC_P
 ,   {D_ETHSWT_DATA_FAILED           , D_ETHSWT_DATA_FAILED          }           /* Port9: no use    */
 };
 
+/* SQI値送信用「SWIC物理ポート番号Index(行) -> 送信用データIndex(列)」変換テーブル */
 static const S_ETHSWT_DATA_FOR_UPDATE S_ETHSWT_DATA_SQI_ID_TABLE[D_ETHSWT_SWIC_PORT_NUM] =
-{
+{   /* 送信用データIndex             , 送信用判定用更新ビット         */
     {D_ETHSWT_DATA_SQI_ADC_ID       , D_ETHSWT_DATA_UPDATE_ADC      }           /* Port1: A-DC      */
 ,   {D_ETHSWT_DATA_SQI_DCM_ID       , D_ETHSWT_DATA_UPDATE_DCM      }           /* Port2: DCM       */
 ,   {D_ETHSWT_DATA_FAILED           , D_ETHSWT_DATA_FAILED          }           /* Port3: no use    */
