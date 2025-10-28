@@ -48,6 +48,7 @@
     -I${APP_DIR}/MET/IpcApplication/Vom/Odo/config
     -I${APP_DIR}/MET/IpcApplication/Vom/Odo/scc
     -I${APP_DIR}/MET/IpcApplication/Vom/RcmmUI/scc
+    -I${APP_DIR}/MET/IpcApplication/Vom/Seatbelt/scc
     -I${APP_DIR}/MET/IpcApplication/Vom/Tripcom/app/scc
     -I${APP_DIR}/MET/IpcApplication/Vom/Tripcom/core/config
     -I${APP_DIR}/MET/IpcApplication/Vom/Tripcom/core/scc
@@ -60,6 +61,7 @@
     -I${APP_DIR}/MET/IpcApplication/Vsv/Gauge/scc
     -I${APP_DIR}/MET/IpcApplication/Vsv/Illumi/config
     -I${APP_DIR}/MET/IpcApplication/Vsv/Illumi/scc
+    -I${APP_DIR}/MET/IpcApplication/Vsv/Sbltsync/scc
     -I${APP_DIR}/MET/IpcApplication/Vsv/Thblnkr/scc
     -I${APP_DIR}/MET/IpcApplication/Vsv/WChime/config_D1L1
     -I${APP_DIR}/MET/IpcApplication/Vsv/WChime/config
@@ -427,6 +429,12 @@ App/MET/IpcApplication/Vom/Odo/scc/odo_nvmif_util.c
 App/MET/IpcApplication/Vom/Odo/scc/odo_vslmt.c
 App/MET/IpcApplication/Vom/RcmmUI/config/rcmmui_cfg.c
 App/MET/IpcApplication/Vom/RcmmUI/scc/rcmmui.c
+App/MET/IpcApplication/Vom/Seatbelt/config/sbltwrn_cfg.c
+App/MET/IpcApplication/Vom/Seatbelt/config/sblt_seatsig_cfg.c
+App/MET/IpcApplication/Vom/Seatbelt/config/sblt_vclsig_cfg.c
+App/MET/IpcApplication/Vom/Seatbelt/scc/sbltwrn.c
+App/MET/IpcApplication/Vom/Seatbelt/scc/sblt_seat.c
+App/MET/IpcApplication/Vom/Seatbelt/scc/sblt_vclsts.c
 App/MET/IpcApplication/Vom/Tripcom/app/scc/avgecon.c
 App/MET/IpcApplication/Vom/Tripcom/app/scc/avgee_kmpkwh.c
 App/MET/IpcApplication/Vom/Tripcom/app/scc/avggrph.c
@@ -464,6 +472,8 @@ App/MET/IpcApplication/Vsv/Gauge/scc/gauge.c
 App/MET/IpcApplication/Vsv/Illumi/config/illumi_cfg.c
 App/MET/IpcApplication/Vsv/Illumi/config/illumi_comtx.c
 App/MET/IpcApplication/Vsv/Illumi/scc/illumi.c
+App/MET/IpcApplication/Vsv/Sbltsync/config/sbltsync_cfg.c
+App/MET/IpcApplication/Vsv/Sbltsync/scc/sbltsync.c
 App/MET/IpcApplication/Vsv/Thblnkr/config/thblnkr_cfg.c
 App/MET/IpcApplication/Vsv/Thblnkr/scc/thblnkr.c
 App/MET/IpcApplication/Vsv/WChime/config_D1L1/wchime_grd_cfg.c
