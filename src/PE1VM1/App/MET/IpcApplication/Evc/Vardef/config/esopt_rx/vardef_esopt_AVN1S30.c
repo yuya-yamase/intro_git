@@ -63,7 +63,7 @@ U1      u1_g_VdfEsoRx_CNTR_DISP(void)
     U1                 u1_t_ava_rx;
 
 #if 0   /* BEV Rebase provisionally */
-    u1_t_rx  = u1_g_oXCANRxdStat((U2)OXCAN_PDU_RX_CAN_AVN1S30, (U2)OXCAN_RX_SYS_TOE_PBA, u2_s_VDF_ESO_AVN_RXTO_MAX);
+    u1_t_rx  = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_AVN1S30, (U2)OXCAN_RX_SYS_TOE_PBA, u2_s_VDF_ESO_AVN_RXTO_MAX);
 #else   /* BEV Rebase provisionally */
     u1_t_rx  = (U1)COM_TIMEOUT;
 #endif   /* BEV Rebase provisionally */
@@ -95,11 +95,9 @@ U1      u1_g_VdfEsoRx_CNTR_DISP(void)
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  800B-1    9/28/2020  SF       Change config for 800B CV-R                                                                        */
 /*  800B-2    1/25/2021  SF       Change config for 800B 1A                                                                          */
-/*  BEV-1     10/15/2025 SN       Configured for BEVstep3_Rebase                                                                     */
 /*                                                                                                                                   */
 /*  * TN = Takashi Nagai, DENSO                                                                                                      */
 /*  * SF = Seiya Fukutome, DENSO TECHNO                                                                                              */
 /*  * RO = Reiya Okuda, KSE                                                                                                          */
-/*  * SN = Shimon Nambu, Denso Techno                                                                                                */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

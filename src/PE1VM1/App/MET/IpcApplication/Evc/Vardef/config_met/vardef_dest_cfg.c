@@ -182,19 +182,10 @@ static inline U1    u1_s_VardefDestCfgCalibU1NumChk(const U1 u1_a_CALIBID, const
 const U2        u2_g_VDF_DST_C_CODE_RIM_U2      = (U2)RIMID_U2_VDF_C_CODE;
 const U2        u2_g_VDF_DST_DEST_BDB_RIM_U1    = (U2)RIMID_U1_VDF_DEST_BDB;
 const U2        u2_g_VDF_DST_STRG_WHL_RIM_U1    = (U2)RIMID_U1_VDF_STRG_WHL;
-#if 0   /* BEV Rebase provisionally */
 const U2        u2_g_VDF_DST_IDX_RIM_U1         = (U2)RIMID_U1_VDF_DST_IDX;
 const U2        u2_g_VDF_LANG_DST_IDX_RIM_U1    = (U2)RIMID_U1_VDF_LANG_DST_IDX;
-#else   /* BEV Rebase provisionally */
-const U2        u2_g_VDF_DST_IDX_RIM_U1         = U2_MAX;
-const U2        u2_g_VDF_LANG_DST_IDX_RIM_U1    = U2_MAX;
-#endif   /* BEV Rebase provisionally */
 
-#if 0   /* BEV Rebase provisionally */
-const U1        u1_g_VDF_DST_RXEV_CNT_INIT      = (U1)OXCAN_RX_RXEV_CNT_UNK;
-#else   /* BEV Rebase provisionally */
 const U1        u1_g_VDF_DST_RXEV_CNT_INIT      = (U1)OXCAN_RXD_EVC_UNK;
-#endif   /* BEV Rebase provisionally */
 
 const U1        u1_g_VDF_DST_C_CODE_IDX_DEF     = (U1)U1_MAX;
 const U1        u1_g_VDF_DST_DEST_BDB_IDX_DEF   = (U1)VDF_DST_DEST_BDB_B_GNR_L;

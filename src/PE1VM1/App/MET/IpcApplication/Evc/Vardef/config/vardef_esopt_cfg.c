@@ -629,7 +629,11 @@ const ST_VDF_ESO_CH    st_gp_VDF_ESO_CH[VDF_ESO_NUM_RX] = {
         &u1_g_VdfEsoRx_OILMNT,                  /* fp_u1_AVA_RX        */
         (U2)VDF_ESO_CH_OILMNT,                  /* u2_eso_ch           */
         (U1)VDF_ESO_INPUT_TYPE_CAN,             /* u1_input_type       */
-        (U2)OXCAN_RXD_PDU_CAN_ENG1S99_CH0,     /* u2_msg_rx           */
+#if 0   /* BEV Rebase provisionally */
+        (U2)OXCAN_PDU_RX_CAN_ENG1S99,           /* u2_msg_rx           */
+#else   /* BEV Rebase provisionally */
+        U2_MAX,                                 /* u2_msg_rx           */
+#endif   /* BEV Rebase provisionally */
         (U2)0x0010U,                            /* u2_vom_act          */
         ((U2)3200U / (U2)VDF_MAIN_TICK),        /* u2_rxc_peri         */
         {
@@ -1057,7 +1061,11 @@ const ST_VDF_ESO_CH    st_gp_VDF_ESO_CH[VDF_ESO_NUM_RX] = {
         vdp_PTR_NA,                             /* fp_u1_AVA_RX        */
         (U2)VDF_ESO_CH_DRS,                     /* u2_eso_ch           */
         (U1)VDF_ESO_INPUT_TYPE_CAN,             /* u1_input_type       */
-        (U2)OXCAN_RXD_PDU_CAN_ARS1S90_CH0,     /* u2_msg_rx           */
+#if 0   /* BEV Rebase provisionally */
+        (U2)OXCAN_PDU_RX_CAN_ARS1S90,           /* u2_msg_rx           */
+#else   /* BEV Rebase provisionally */
+        U2_MAX,                                 /* u2_msg_rx           */
+#endif   /* BEV Rebase provisionally */
         (U2)0x0002U,                            /* u2_vom_act          */
         ((U2)630U / (U2)VDF_MAIN_TICK),         /* u2_rxc_peri         */
         {
@@ -1069,7 +1077,11 @@ const ST_VDF_ESO_CH    st_gp_VDF_ESO_CH[VDF_ESO_NUM_RX] = {
         &u1_g_VdfEsoRx_SW_LTA,                  /* fp_u1_AVA_RX        */
         (U2)VDF_ESO_CH_SW_LTA,                  /* u2_eso_ch           */
         (U1)VDF_ESO_INPUT_TYPE_CAN,             /* u1_input_type       */
-        (U2)OXCAN_RXD_PDU_CAN_FCM1S92_CH0,     /* u2_msg_rx           */
+#if 0   /* BEV Rebase provisionally */
+        (U2)OXCAN_PDU_RX_CAN_FCM1S92,           /* u2_msg_rx           */
+#else   /* BEV Rebase provisionally */
+        U2_MAX,                                 /* u2_msg_rx           */
+#endif   /* BEV Rebase provisionally */
         (U2)0x0002U,                            /* u2_vom_act          */
         ((U2)2100U / (U2)VDF_MAIN_TICK),        /* u2_rxc_peri         */
         {
@@ -1081,7 +1093,11 @@ const ST_VDF_ESO_CH    st_gp_VDF_ESO_CH[VDF_ESO_NUM_RX] = {
         &u1_g_VdfEsoRx_SW_LTA_NA,               /* fp_u1_AVA_RX        */
         (U2)VDF_ESO_CH_SW_LTA_NA,               /* u2_eso_ch           */
         (U1)VDF_ESO_INPUT_TYPE_CAN,             /* u1_input_type       */
-        (U2)OXCAN_RXD_PDU_CAN_FCM1S92_CH0,     /* u2_msg_rx           */
+#if 0   /* BEV Rebase provisionally */
+        (U2)OXCAN_PDU_RX_CAN_FCM1S92,           /* u2_msg_rx           */
+#else   /* BEV Rebase provisionally */
+        U2_MAX,                                 /* u2_msg_rx           */
+#endif   /* BEV Rebase provisionally */
         (U2)0x0002U,                            /* u2_vom_act          */
         ((U2)2100U / (U2)VDF_MAIN_TICK),        /* u2_rxc_peri         */
         {
@@ -1197,7 +1213,11 @@ const ST_VDF_ESO_CH    st_gp_VDF_ESO_CH[VDF_ESO_NUM_RX] = {
         &u1_g_VdfEsoRx_SW_LTA_HOFDI,            /* fp_u1_AVA_RX        */
         (U2)VDF_ESO_CH_SW_LTA_HOFDI,            /* u2_eso_ch           */
         (U1)VDF_ESO_INPUT_TYPE_CAN,             /* u1_input_type       */
-        (U2)OXCAN_RXD_PDU_CAN_FCM1S92_CH0,     /* u2_msg_rx           */
+#if 0   /* BEV Rebase provisionally */
+        (U2)OXCAN_PDU_RX_CAN_FCM1S92,           /* u2_msg_rx           */
+#else   /* BEV Rebase provisionally */
+        U2_MAX,                                 /* u2_msg_rx           */
+#endif   /* BEV Rebase provisionally */
         (U2)0x0002U,                            /* u2_vom_act          */
         ((U2)2100U / (U2)VDF_MAIN_TICK),        /* u2_rxc_peri         */
         {
@@ -1513,7 +1533,11 @@ const ST_VDF_ESO_CH    st_gp_VDF_ESO_CH[VDF_ESO_NUM_RX] = {
         &u1_g_VdfEsoRx_FCTA,                    /* fp_u1_AVA_RX        */
         (U2)VDF_ESO_CH_FCTA,                    /* u2_eso_ch           */
         (U1)VDF_ESO_INPUT_TYPE_CAN,             /* u1_input_type       */
-        (U2)OXCAN_RXD_PDU_CAN_DS11S40_CH0,     /* u2_msg_rx           */
+#if 0   /* BEV Rebase provisionally */
+        (U2)OXCAN_PDU_RX_CAN_DS11S40,           /* u2_msg_rx           */
+#else   /* BEV Rebase provisionally */
+        U2_MAX,                                 /* u2_msg_rx           */
+#endif   /* BEV Rebase provisionally */
         (U2)0x0002U,                            /* u2_vom_act          */
         ((U2)2100U / (U2)VDF_MAIN_TICK),        /* u2_rxc_peri         */
         {
@@ -1709,7 +1733,11 @@ const ST_VDF_ESO_CH    st_gp_VDF_ESO_CH[VDF_ESO_NUM_RX] = {
         &u1_g_VdfEsoRx_OILLVG,                  /* fp_u1_AVA_RX        */
         (U2)VDF_ESO_CH_OILLVG,                  /* u2_eso_ch           */
         (U1)VDF_ESO_INPUT_TYPE_CAN,             /* u1_input_type       */
-        (U2)OXCAN_RXD_PDU_CAN_ENG1S99_CH0,     /* u2_msg_rx           */
+#if 0   /* BEV Rebase provisionally */
+        (U2)OXCAN_PDU_RX_CAN_ENG1S99,           /* u2_msg_rx           */
+#else   /* BEV Rebase provisionally */
+        U2_MAX,                                 /* u2_msg_rx           */
+#endif   /* BEV Rebase provisionally */
         (U2)0x0002U,                            /* u2_vom_act          */
         ((U2)3200U / (U2)VDF_MAIN_TICK),        /* u2_rxc_peri         */
         {
@@ -1721,7 +1749,11 @@ const ST_VDF_ESO_CH    st_gp_VDF_ESO_CH[VDF_ESO_NUM_RX] = {
         vdp_PTR_NA,                             /* fp_u1_AVA_RX        */
         (U2)VDF_ESO_CH_EPSSA,                   /* u2_eso_ch           */
         (U1)VDF_ESO_INPUT_TYPE_CAN,             /* u1_input_type       */
-        (U2)OXCAN_RXD_PDU_CAN_EPS1S11_CH0,     /* u2_msg_rx           */
+#if 0   /* BEV Rebase provisionally */
+        (U2)OXCAN_PDU_RX_CAN_EPS1S11,           /* u2_msg_rx           */
+#else   /* BEV Rebase provisionally */
+        U2_MAX,                                 /* u2_msg_rx           */
+#endif   /* BEV Rebase provisionally */
         (U2)0x0002U,                            /* u2_vom_act          */
         ((U2)200U / (U2)VDF_MAIN_TICK),         /* u2_rxc_peri         */
         {
@@ -2070,7 +2102,6 @@ const ST_VDF_ESO_CH    st_gp_VDF_ESO_CH[VDF_ESO_NUM_RX] = {
         (U2)VDF_ESO_CH_ZMILRQ_EVMILRQA,         /* u2_eso_ch           */
         (U1)VDF_ESO_INPUT_TYPE_CAN,             /* u1_input_type       */
         (U2)OXCAN_RXD_PDU_CAN_EHV1S99_CH0,     /* u2_msg_rx           */
-
         (U2)0x0002U,                            /* u2_vom_act          */
         ((U2)2100U / (U2)VDF_MAIN_TICK),        /* u2_rxc_peri         */
         {
