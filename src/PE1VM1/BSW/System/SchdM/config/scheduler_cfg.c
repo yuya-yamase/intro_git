@@ -82,9 +82,7 @@
 #endif   /* BEV Rebase provisionally */
 #include "wchime.h"
 #include "gauge.h"
-#if 0   /* BEV Rebase provisionally */
 #include "sbltsync.h"
-#endif   /* BEV Rebase provisionally */
 #include "locale.h"
 #include "vardef.h"
 #if 0   /* BEV Rebase provisionally */
@@ -408,8 +406,8 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     /*-------------------------------------------------------------------*/
     {&vd_g_IllumiMainTask,              (U4)SCHDLR_TASKBIT__20MS_A  },
     {&vd_g_GaugeMainTask,               (U4)SCHDLR_TASKBIT__20MS_A  },
-#if 0   /* BEV Rebase provisionally */
     {&vd_g_SbltsyncMainTask,            (U4)SCHDLR_TASKBIT__10MS_A  },
+#if 0   /* BEV Rebase provisionally */
     {&vd_g_TelltaleMainTask,            (U4)SCHDLR_TASKBIT__10MS_A  },
 #endif   /* BEV Rebase provisionally */
     {&vd_g_ThblnkrMainTask,             (U4)SCHDLR_TASKBIT__10MS_A  },
@@ -555,8 +553,10 @@ static void    vd_s_SchdlrCfgWdgTimRestart(void)
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
+/*  BEV-1    10/29/2025  TS       Change for BEV rebase                                                                              */
 /*                                                                                                                                   */
 /*  * TN      = Takashi Nagai, Denso                                                                                                 */
 /*  * AM      = Akira Motomatsu, Denso Create                                                                                        */
+/*  * TS      = Takuo Suganuma, Denso Techno                                                                                         */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

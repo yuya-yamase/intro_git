@@ -65,9 +65,7 @@
 #include "telltale.h"
 #endif   /* BEV Rebase provisionally */
 #include "wchime.h"
-#if 0   /* BEV Rebase provisionally */
 #include "sbltsync.h"
-#endif   /* BEV Rebase provisionally */
 #include "locale.h"
 #include "vardef.h"
 #if 0   /* BEV Rebase provisionally */
@@ -168,7 +166,9 @@ void vd_g_22SSCallout_StaBonInit(void)
         &vd_g_DrvIndPwrInit,
         &vd_g_DrvIndEcoInit,
         &vd_g_DrvIndHvInit,
+#endif   /* BEV Rebase provisionally */
         &vd_g_SbltsyncInit,
+#if 0   /* BEV Rebase provisionally */
         &vd_g_OilmilInit,
 #endif   /* BEV Rebase provisionally */
         &vd_g_HmiProxyBonInit,
@@ -271,7 +271,9 @@ void vd_g_22SSCallout_StaRstInit(void)
         &vd_g_DrvIndPwrInit,
         &vd_g_DrvIndEcoInit,
         &vd_g_DrvIndHvInit,
+#endif   /* BEV Rebase provisionally */
         &vd_g_SbltsyncInit,
+#if 0   /* BEV Rebase provisionally */
         &vd_g_OilmilInit,
 #endif   /* BEV Rebase provisionally */
         &vd_g_HmiProxyRstInit,
@@ -374,7 +376,9 @@ void vd_g_22SSCallout_StaWkupInit(void)
         &vd_g_DrvIndPwrInit,
         &vd_g_DrvIndEcoInit,
         &vd_g_DrvIndHvInit,
+#endif   /* BEV Rebase provisionally */
         &vd_g_SbltsyncInit,
+#if 0   /* BEV Rebase provisionally */
         &vd_g_OilmilInit,
 #endif   /* BEV Rebase provisionally */
         &vd_g_HmiProxyWkupInit,

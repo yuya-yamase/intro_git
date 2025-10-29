@@ -106,18 +106,18 @@ U2      u2_g_SbltsyncCfgChmMask(void)
         (U4)VDF_DS_2E_SBLT_4C,      /* SBLTWRN_R4C_SEAT */
         (U4)VDF_DS_2E_SBLT_4R       /* SBLTWRN_R4R_SEAT */
 #else   /* BEV Rebase provisionally */
-        (U4)U4_MAX,
-        (U4)U4_MAX,
-        (U4)U4_MAX,
-        (U4)U4_MAX,
-        (U4)U4_MAX,
-        (U4)U4_MAX,
-        (U4)U4_MAX,
-        (U4)U4_MAX,
-        (U4)U4_MAX,
-        (U4)U4_MAX,
-        (U4)U4_MAX,
-        (U4)U4_MAX
+        (U4)0x00000040U,
+        (U4)0x00000010U,
+        (U4)0x00000020U,
+        (U4)0x00000002U,
+        (U4)0x00000001U,
+        (U4)0x00000004U,
+        (U4)0x00004000U,
+        (U4)0x00002000U,
+        (U4)0x00008000U,
+        (U4)0x00000800U,
+        (U4)0x00000400U,
+        (U4)0x00001000U
 #endif   /* BEV Rebase provisionally */
     };
     U4  u4_t_ds2e_2041;
@@ -134,7 +134,7 @@ U2      u2_g_SbltsyncCfgChmMask(void)
 #if 0   /* BEV Rebase provisionally */
         u4_t_ds2e_2041 = u4_g_VardefDs2E_Las32((U2)VDF_DS_2E_2041);
 #else   /* BEV Rebase provisionally */
-        u4_t_ds2e_2041 = (U4)0U;
+        u4_t_ds2e_2041 = (U4)0x0000FC77U;
 #endif   /* BEV Rebase provisionally */
         u2_t_chmmsk = (U2)0U;
 
@@ -311,6 +311,7 @@ void    vd_g_SbltsyncCfgTxCXMET1S02(void)
 /*  Revision       Date        Author   Change Description                                                                           */
 /*  -------------- ----------  -------  ---------------------------------------------------------------------------------------------*/
 /*  330D-1         02/23/2023  MK       Modify 24FGM22-23189(change IF of Diag Judgement (to u1_g_VardefChainaReq))                  */
+/*  BEV-1          10/29/2025  TS       Change for BEV rebase                                                                        */
 /*                                                                                                                                   */
 /*  * YI   = Yoshiki Iwata,    Denso                                                                                                 */
 /*  * KK   = Kohei Kato,       Denso Techno                                                                                          */
@@ -319,5 +320,6 @@ void    vd_g_SbltsyncCfgTxCXMET1S02(void)
 /*  * YI(M)= Yoshiki Iwata,    NTT Data MSE                                                                                          */
 /*  * MK   = Mitsuhiro Kato,   Denso Techno                                                                                          */
 /*  * TH   = Taisuke Hirakawa, KSE                                                                                                   */
+/*  * TS   = Takuo Suganuma,   Denso Techno                                                                                          */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
