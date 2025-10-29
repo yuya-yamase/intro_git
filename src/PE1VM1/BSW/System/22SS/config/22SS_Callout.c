@@ -60,9 +60,6 @@
 #endif   /* BEV Rebase provisionally */
 #include "hdimmgr.h"
 #include "himgadj.h"
-#if 0   /* BEV Rebase provisionally */
-#include "attmp_cel.h"
-#endif   /* BEV Rebase provisionally */
 #include "xspi_met.h"
 #if 0   /* BEV Rebase provisionally */
 #include "datesi_met.h"
@@ -125,7 +122,6 @@ void vd_g_22SSCallout_StaBonInit(void)
         &vd_g_HdimmgrBonInit,
         &vd_g_HudImgAdjInit,
 #if 0   /* BEV Rebase provisionally */
-        &vd_g_AttmpInit,
         &vd_g_DateSIMETInit
 #endif   /* BEV Rebase provisionally */
     };
@@ -195,7 +191,6 @@ void vd_g_22SSCallout_StaRstInit(void)
         &vd_g_HdimmgrWkRstInit,
         &vd_g_HudImgAdjInit,
 #if 0   /* BEV Rebase provisionally */
-        &vd_g_AttmpInit,
         &vd_g_DateSIMETInit
 #endif   /* BEV Rebase provisionally */
     };
@@ -265,7 +260,6 @@ void vd_g_22SSCallout_StaWkupInit(void)
         &vd_g_HdimmgrWkRstInit,
         &vd_g_HudImgAdjInit,
 #if 0   /* BEV Rebase provisionally */
-        &vd_g_AttmpInit,
         &vd_g_DateSIMETInit
 #endif   /* BEV Rebase provisionally */
     };
