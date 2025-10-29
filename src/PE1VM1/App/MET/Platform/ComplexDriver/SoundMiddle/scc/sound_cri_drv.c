@@ -27,27 +27,25 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "def_reg.h"            /* レジスタ定義 */
 #include "def_hw.h"             /* ハードウェア設定 */
-#if 0   /* BEV BSW provisionally */
 #include "Port.h"
 #include "Dma.h"
 #include "pwm_drv.h"
 #include "gpt_drv_d16.h"
 #include "gpt_drv_j32.h"
-#endif   /* BEV Rebase provisionally */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 
 
-#if 0   /* BEV BSW provisionally */
 /* MCAL */
 #include "Dma.h"
 #if 0   /* BEV BSW provisionally */
 #include "gpt_drv_j32.h"
 #else
+#if 0   /* BEV Rebase provisionally */
 #include "gpt_drv_j32_channel_STUB.h"
 #include "dma_drv_STUB.h"
+#endif   /* BEV Rebase provisionally */
 #endif
 #include "int_drv.h"
-#endif   /* BEV Rebase provisionally */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -78,12 +76,10 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if 0   /* BEV Rebase provisionally */
 static const U2     u2_sp_CARSPDPLS_OPEN_TAUD_START[GPT_D16_START_NUM_CFG] = {
     (U2)GPT_D16_START_CTRL_BIT_TRG_ST,
     (U2)GPT_D16_PERI_MAX
 };
-#endif   /* BEV Rebase provisionally */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
@@ -171,9 +167,7 @@ void vd_g_SoundCriDrvTimerInitialize(void)
 /* void RsrcDrv_TimerStop(void)                                                                                                      */
 void vd_g_SoundCriDrvTimerFinalize(void)
 {
-#if 0   /* BEV Rebase provisionally */
     vd_g_Gpt_J32Stop(GPT_J32_UN_0_CH_00);
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -459,11 +453,9 @@ void vd_g_SoundCriDrvDmacIntr(const CriUint32 reload_src_addr_tbl[CRISFRDRVDMACH
 /* void RsrcDrv_DmacStop(void)                                                                                                       */
 void vd_g_SoundCriDrvDmacStop(void)
 {
-#if 0   /* BEV Rebase provisionally */
     Dma_DisableTrans(DMA_CH_DATA_ID_6);
     Dma_DisableTrans(DMA_CH_DATA_ID_7);
     Dma_DisableTrans(DMA_CH_DATA_ID_8);
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -507,11 +499,9 @@ void vd_g_SoundCriDrvTaudStart(CriUint16 master_CDR, CriUint16 slave_CDR)
     REG_PBGERRSLV50.PBGKCPROT.U32 = 0xA5A5A501U;
     REG_PBG51.PBGPROT0_2.U32 = 0x00000043U;
 
-#if 0   /* BEV Rebase provisionally */
     vd_g_Gpt_D16Start((U1)GPT_D16_UN_1_CH_0_DD_PWM_M, &u2_sp_CARSPDPLS_OPEN_TAUD_START[0]);
     vd_g_Gpt_D16Start((U1)GPT_D16_UN_1_CH_1_DD_PWM_S, &u2_sp_CARSPDPLS_OPEN_TAUD_START[0]);
     vd_g_Gpt_D16Start((U1)GPT_D16_UN_1_CH_2_DD_PWM_S, &u2_sp_CARSPDPLS_OPEN_TAUD_START[0]);
-#endif   /* BEV Rebase provisionally */
 
 
     REG_TAUD1.TAUDnCDRm[HW_TAUD_CH_MASTER].U16 = master_CDR;
@@ -554,11 +544,9 @@ void vd_g_SoundCriDrvTaudStop(void)
     rsrc_dummy_read16(&REG_TAUD1.TAUDnTT.U16);
     __SYNCP();
 
-#if 0   /* BEV Rebase provisionally */
     vd_g_Gpt_D16Stop((U1)GPT_D16_UN_1_CH_0_DD_PWM_M);
     vd_g_Gpt_D16Stop((U1)GPT_D16_UN_1_CH_1_DD_PWM_S);
     vd_g_Gpt_D16Stop((U1)GPT_D16_UN_1_CH_2_DD_PWM_S);
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -569,9 +557,7 @@ void vd_g_SoundCriDrvTaudStop(void)
 /*===================================================================================================================================*/
 void vd_g_SoundCriDrvDmacInterrupt(void)
 {
-#if 0   /* BEV Rebase provisionally */
     criAtomEx_ExecServerIntr_Rh850u2a();
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

@@ -34,12 +34,10 @@
 
 /* calibration header file */
 #include "calibration.h"
-#if 0   /* BEV Rebase provisionally */
 #include "reg_dma.h"
 
 #include "Port.h"
 #include "Dio.h"
-#endif   /* BEV Rebase provisionally */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -181,7 +179,6 @@ static CriSint32            s4_s_voicepooladxdata_size;                         
 static CriSint32            s4_s_player_size;                                              /* Size of work-space for AtomEx player creation              */
 #endif /* SOUND_CRI_DEBUGMODE */
 
-#if 0   /* BEV Rebase provisionally */
 static CriChar8             s1_sp_sound_cri_init_work[SOUND_CRI_INIT_WORK_SIZE];           /* Work-space for library initialization                      */
 
 static U1                   u1_sp_sound_acfdata_alloc[SOUND_ACFDATA_SIZE];                 /* Work-space for on-memory ACF data registration             */
@@ -196,7 +193,6 @@ static CriAtomExAcbHn       stp_s_sound_acb_hn;                                 
 static CriAtomExVoicePoolHn stp_s_sound_voicepoolsg_hn;                                    /* SG voice-pool handle                                       */
 static CriAtomExVoicePoolHn stp_s_sound_voicepooladx_hn;                                   /* ADX voice-pool handle                                      */
 static CriAtomExPlayerHn    stp_sp_sound_player_hn_gp[SOUND_GROUP_NUM];                    /* AtomEx player handle                                       */
-#endif   /* BEV Rebase provisionally */
 
 static U1                   u1_sp_sound_pre_reqidx[SOUND_GROUP_NUM];                       /* Index of requested sound in previous task-cycle            */
 static U1                   u1_sp_sound_pre_reqvol[SOUND_GROUP_NUM];                       /* Index of requested volume in previous task-cycle           */
@@ -248,54 +244,42 @@ static        U1      u1_s_SoundDiagnosis(void);
 #if (SOUND_VEHICLE_TYPE_TYT == TRUE)
 #include "ADXAT_Data_TYT.h"
 /* ACF data table */
-#if 0   /* BEV Rebase provisionally */
 static const CriUint32 u4_sp_SOUND_ACF_DATA[] = {
     #include "ADXAT_Data_acf_TYT.h"
 };
 static const CriSint32 s4_s_SOUND_ACF_DATA_SIZE = s4_s_SoundCriMgrArraySize(u4_sp_SOUND_ACF_DATA);
-#endif   /* BEV Rebase provisionally */
 
 /* AWB data table */
-#if 0   /* BEV Rebase provisionally */
 static const CriUint32 u4_sp_SOUND_AWB_DATA[] = {
     #include "ADXAT_Data_awb_TYT.h"
 };
 static const CriSint32 s4_s_SOUND_AWB_DATA_SIZE = s4_s_SoundCriMgrArraySize(u4_sp_SOUND_AWB_DATA);
-#endif   /* BEV Rebase provisionally */
 
 /* ACB data table */
-#if 0   /* BEV Rebase provisionally */
 static const CriUint32 u4_sp_SOUND_ACB_DATA[] = {
     #include "ADXAT_Data_c_acb_TYT.h"
 };
-#endif   /* BEV Rebase provisionally */
 static const CriSint32 s4_s_SOUND_ACB_DATA_SIZE = s4_s_SoundCriMgrArraySize(u4_sp_SOUND_ACB_DATA);
 
 #else
 #include "ADXAT_Data_LEX.h"
 /* ACF data table */
-#if 0   /* BEV Rebase provisionally */
 static const CriUint32 u4_sp_SOUND_ACF_DATA[] = {
     #include "ADXAT_Data_acf_LEX.h"
 };
 static const CriSint32 s4_s_SOUND_ACF_DATA_SIZE = s4_s_SoundCriMgrArraySize(u4_sp_SOUND_ACF_DATA);
-#endif   /* BEV Rebase provisionally */
 
 /* AWB data table */
-#if 0   /* BEV Rebase provisionally */
 static const CriUint32 u4_sp_SOUND_AWB_DATA[] = {
     #include "ADXAT_Data_awb_LEX.h"
 };
 static const CriSint32 s4_s_SOUND_AWB_DATA_SIZE = s4_s_SoundCriMgrArraySize(u4_sp_SOUND_AWB_DATA);
-#endif   /* BEV Rebase provisionally */
 
 /* ACB data table */
-#if 0   /* BEV Rebase provisionally */
 static const CriUint32 u4_sp_SOUND_ACB_DATA[] = {
     #include "ADXAT_Data_c_acb_LEX.h"
 };
 static const CriSint32 s4_s_SOUND_ACB_DATA_SIZE = s4_s_SoundCriMgrArraySize(u4_sp_SOUND_ACB_DATA);
-#endif   /* BEV Rebase provisionally */
 #endif
 
 #if (SOUND_VEHICLE_TYPE_TYT == TRUE)
@@ -420,11 +404,9 @@ void    vd_g_SoundCriMgrInitialize(void)
     u1_s_fltb_befor            = (U1)STD_HIGH;
     u1_s_sound_ic_error        = (U1)SOUND_IC_NORMAL;
 
-#if 0   /* BEV Rebase provisionally */
     Dio_WriteChannel((U1)DIO_ID_PORT20_CH1, (U1)STD_HIGH);
     Dio_WriteChannel((U1)DIO_ID_PORT20_CH2, (U1)STD_HIGH);
     Dio_WriteChannel((U1)DIO_ID_PORT0_CH5, (U1)STD_HIGH);
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -438,29 +420,21 @@ static void    vd_s_SoundCriMgrStartup(void)
     CriAtomExConfig_Rh850u2a                st_t_config_rh850u2a;             /* Configuration structure for library initialization  */
     CriAtomExSoundGeneratorVoicePoolConfig  st_t_sound_voice_pool_config_sg;  /* Configuration structure for SG voice-pool creation  */
     CriAtomExAdxVoicePoolConfig             st_t_sound_voice_pool_config_adx; /* Configuration structure for ADX voice-pool creation */
-#if 0   /* BEV Rebase provisionally */
     CriAtomExPlayerConfig                   st_t_sound_player_config;         /* Configuration structure for AtomEx player creation  */
-#endif   /* BEV Rebase provisionally */
     U1                                      u1_t_grp_no;                      /* Sound group number                                  */
 
-#if 0   /* BEV Rebase provisionally */
     criAtomEx_PreInitialize_Rh850u2a();
-#endif   /* BEV Rebase provisionally */
 
     vd_g_SoundCriDrvInitialize();
 
     __DI();
-#if 0   /* BEV Rebase provisionally */
     Dma_SetInterrupt( (U1)DMA_CH_DATA_ID_7, (U1)OFF, (U1)ON );
     Port_SetPinMode((U2)PORT_ID_PORT20_PIN1,   (U4)PORT_MODE_CFG_P20_1_TAUD1O1); 
     Port_SetPinMode((U2)PORT_ID_PORT20_PIN2,   (U4)PORT_MODE_CFG_P20_2_TAUD1O2);
-#endif   /* BEV Rebase provisionally */
     __EI();
 
 #if (SOUND_CRI_DEBUGMODE == TRUE)
-#if 0   /* BEV Rebase provisionally */
     criErr_SetCallback(vd_s_SoundCriMgrErrorCallback);
-#endif   /* BEV Rebase provisionally */
 #endif /* SOUND_CRI_DEBUGMODE */
 
     /* Set configuration structure for library initialization in default value */
@@ -486,124 +460,80 @@ static void    vd_s_SoundCriMgrStartup(void)
     st_t_config_rh850u2a.atom_ex.max_sequences               = (CriSint32)SOUND_CRI_MAX_SEQUENCES;
 
 #if (SOUND_CRI_DEBUGMODE == TRUE)
-#if 0   /* BEV Rebase provisionally */
     s4_s_initialize_size = (CriSint32)criAtomEx_CalculateWorkSize_Rh850u2a(&st_t_config_rh850u2a);
-#else   /* BEV Rebase provisionally */
-    s4_s_initialize_size = (S4)0;
-#endif   /* BEV Rebase provisionally */
     s4_s_initialize_size = s4_s_initialize_size;                          /* QAC countermeasure */
 #endif /* SOUND_CRI_DEBUGMODE */
 
     /* Library initialization */
-#if 0   /* BEV Rebase provisionally */
     criAtomEx_Initialize_Rh850u2a(&st_t_config_rh850u2a, s1_sp_sound_cri_init_work, (CriSint32)SOUND_CRI_INIT_WORK_SIZE);
-#endif   /* BEV Rebase provisionally */
 
 #if (SOUND_CRI_DEBUGMODE == TRUE)
     s4_s_acfdata_size = (CriSint32)criAtomEx_CalculateWorkSizeForRegisterAcfDataAt((void *)u4_sp_SOUND_ACF_DATA, s4_s_SOUND_ACF_DATA_SIZE);
     s4_s_acfdata_size = s4_s_acfdata_size;                                /* QAC countermeasure */
 #endif /* SOUND_CRI_DEBUGMODE */
     /* On-memory ACF data registration */
-#if 0   /* BEV Rebase provisionally */
     criAtomEx_RegisterAcfDataAt((void *)u4_sp_SOUND_ACF_DATA,
                               s4_s_SOUND_ACF_DATA_SIZE,
                               u1_sp_sound_acfdata_alloc,
                               (CriSint32)SOUND_ACFDATA_SIZE);
-#endif   /* BEV Rebase provisionally */
 
 #if (SOUND_CRI_DEBUGMODE == TRUE)
-#if 0   /* BEV Rebase provisionally */
     s4_s_awbdata_size = (CriSint32)CRIATOMAWB_WORKSIZE_FOR_LOADFROMMEMORYAT;
-#else   /* BEV Rebase provisionally */
-    s4_s_awbdata_size = (S4)0;
-#endif   /* BEV Rebase provisionally */
     s4_s_awbdata_size = s4_s_awbdata_size;                                /* QAC countermeasure */
 #endif /* SOUND_CRI_DEBUGMODE */
     /* On-memory AWB handle creation */
-#if 0   /* BEV Rebase provisionally */
     stp_s_sound_awb_hn = criAtomAwb_LoadFromMemoryAt(u4_sp_SOUND_AWB_DATA,
                                                      s4_s_SOUND_AWB_DATA_SIZE,
                                                      u1_sp_sound_awbdata_alloc,
                                                      (CriSint32)SOUND_AWBDATA_SIZE);
-#endif   /* BEV Rebase provisionally */
 
 #if (SOUND_CRI_DEBUGMODE == TRUE)
-#if 0   /* BEV Rebase provisionally */
     s4_s_acbdata_size = (CriSint32)criAtomExAcb_CalculateWorkSizeForLoadAcbDataWithAwbHnAt((void *)u4_sp_SOUND_ACB_DATA, s4_s_SOUND_ACB_DATA_SIZE, stp_s_sound_awb_hn);
-#else   /* BEV Rebase provisionally */
-    s4_s_acbdata_size = (S4)0;
-#endif   /* BEV Rebase provisionally */
     s4_s_acbdata_size = s4_s_acbdata_size;                                /* QAC countermeasure */
 #endif /* SOUND_CRI_DEBUGMODE */
     /* On-memory ACB data loading */
-#if 0   /* BEV Rebase provisionally */
     stp_s_sound_acb_hn = criAtomExAcb_LoadAcbDataWithAwbHnAt((void *)u4_sp_SOUND_ACB_DATA,
                                                            s4_s_SOUND_ACB_DATA_SIZE,
                                                            stp_s_sound_awb_hn,
                                                            u1_sp_sound_acbdata_alloc,
                                                            (CriSint32)SOUND_ACBDATA_SIZE);
-#endif   /* BEV Rebase provisionally */
 
-#if 0   /* BEV Rebase provisionally */
     /* Set configuration structure for ADX voice-pool creation in default value */
     criAtomExVoicePool_SetDefaultConfigForAdxVoicePool(&st_t_sound_voice_pool_config_adx);
-#endif   /* BEV Rebase provisionally */
     st_t_sound_voice_pool_config_adx.num_voices = (CriSint32)SOUND_OVERLAP_ADX_NUM;     /* Assign number of play voices at the same time in this codec */
 #if (SOUND_CRI_DEBUGMODE == TRUE)
-#if 0   /* BEV Rebase provisionally */
     s4_s_voicepooladxdata_size = (CriSint32)criAtomExVoicePool_CalculateWorkSizeForAdxVoicePool(&st_t_sound_voice_pool_config_adx);
-#else   /* BEV Rebase provisionally */
-    s4_s_voicepooladxdata_size = (S4)0;
-#endif   /* BEV Rebase provisionally */
     s4_s_voicepooladxdata_size = s4_s_voicepooladxdata_size;              /* QAC countermeasure */
 #endif /* SOUND_CRI_DEBUGMODE */
     /* ADX voice-pool creation */
-#if 0   /* BEV Rebase provisionally */
     stp_s_sound_voicepooladx_hn = criAtomExVoicePool_AllocateAdxVoicePool(&st_t_sound_voice_pool_config_adx,
                                                                           u1_sp_sound_voicepooladx_alloc,
                                                                           (CriSint32)SOUND_VOICEPOOLADXDATA_SIZE);
-#endif   /* BEV Rebase provisionally */
 
     /* Set configuration structure for SG voice-pool creation in default value */
-#if 0   /* BEV Rebase provisionally */
     criAtomExVoicePool_SetDefaultConfigForSoundGeneratorVoicePool(&st_t_sound_voice_pool_config_sg);
-#endif   /* BEV Rebase provisionally */
     st_t_sound_voice_pool_config_sg.num_voices = (CriSint32)SOUND_OVERLAP_SG_NUM;       /* Assign number of play voices at the same time in this codec */
 #if (SOUND_CRI_DEBUGMODE == TRUE)
-#if 0   /* BEV Rebase provisionally */
     s4_s_voicepoolsgdata_size = (CriSint32)criAtomExVoicePool_CalculateWorkSizeForSoundGeneratorVoicePool(&st_t_sound_voice_pool_config_sg);
-#else   /* BEV Rebase provisionally */
-    s4_s_voicepoolsgdata_size = (S4)0
-#endif   /* BEV Rebase provisionally */
     s4_s_voicepoolsgdata_size = s4_s_voicepoolsgdata_size;                /* QAC countermeasure */
 #endif /* SOUND_CRI_DEBUGMODE */
     /* SG voice-pool creation */
-#if 0   /* BEV Rebase provisionally */
     stp_s_sound_voicepoolsg_hn = criAtomExVoicePool_AllocateSoundGeneratorVoicePool(&st_t_sound_voice_pool_config_sg,
                                                                                     u1_sp_sound_voicepoolsg_alloc,
                                                                                     (CriSint32)SOUND_VOICEPOOLSGDATA_SIZE);
-#endif   /* BEV Rebase provisionally */
 
     /* Set configuration structure for AtomEx player creation in default value */
-#if 0   /* BEV Rebase provisionally */
     criAtomExPlayer_SetDefaultConfig(&st_t_sound_player_config);
-#endif   /* BEV Rebase provisionally */
 #if (SOUND_CRI_DEBUGMODE == TRUE)
-#if 0   /* BEV Rebase provisionally */
     s4_s_player_size = (CriSint32)criAtomExPlayer_CalculateWorkSize(&st_t_sound_player_config);
-#else   /* BEV Rebase provisionally */
-    s4_s_player_size = (S4)0
-#endif   /* BEV Rebase provisionally */
     s4_s_player_size = s4_s_player_size;                                  /* QAC countermeasure */
 #endif /* SOUND_CRI_DEBUGMODE */
 
     for(u1_t_grp_no = (U1)SOUND_GROUP1; u1_t_grp_no < (U1)SOUND_GROUP_NUM; u1_t_grp_no++){
         /* AtomEx player creation every CH */
-#if 0   /* BEV Rebase provisionally */
         stp_sp_sound_player_hn_gp[u1_t_grp_no] = criAtomExPlayer_Create(&st_t_sound_player_config,
                                                                         u1_sp2_sound_player_alloc[u1_t_grp_no],
                                                                         (CriSint32)SOUND_PLAYER_SIZE);
-#endif   /* BEV Rebase provisionally */
 
         u2_sp_sound_cur_cycletim[u1_t_grp_no]        = (U2)0U;
         u2_sp_sound_cycle_cnt[u1_t_grp_no]           = (U2)U2_MAX;
@@ -633,20 +563,14 @@ void    vd_g_SoundCriMgrFinalize(void)
 
     /* Release library functions */
     for(u1_t_grp_no = (U1)SOUND_GROUP1; u1_t_grp_no < (U1)SOUND_GROUP_NUM; u1_t_grp_no++){
-#if 0   /* BEV Rebase provisionally */
         criAtomExPlayer_Destroy(stp_sp_sound_player_hn_gp[u1_t_grp_no]);
-#endif   /* BEV Rebase provisionally */
     }
-#if 0   /* BEV Rebase provisionally */
     criAtomExVoicePool_Free(stp_s_sound_voicepoolsg_hn);
-#endif   /* BEV Rebase provisionally */
-#if 0   /* BEV Rebase provisionally */
     criAtomExVoicePool_Free(stp_s_sound_voicepooladx_hn);
     criAtomExAcb_Release(stp_s_sound_acb_hn);
     criAtomAwb_Release(stp_s_sound_awb_hn);
     criAtomEx_UnregisterAcf();
     criAtomEx_Finalize_Rh850u2a();
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -666,20 +590,13 @@ void    vd_g_SoundCriMgrMainTask(void)
     if (u1_t_initial != (U1)SOUND_INITIAL_WAIT) {
 #if 0   /* BEV BSW provisionally */
         u1_t_errsts = (U1)Dma_CheckDmaError((U1)SOUND_CRI_DRV_DMA_CH) & (U1)DMA_DTSER_DTSER;
-#else   /* BEV Rebase provisionally */
+#else
         u1_t_errsts = (U1)0U;
-#endif   /* BEV Rebase provisionally */
-#if 0   /* BEV BSW provisionally */
+#endif
         if(u1_t_errsts == (U1)DMA_DTSER_DTSER_ERR){
             vd_g_SoundCriMgrFinalize();
             vd_s_SoundCriMgrStartup();
         }
-#else   /* BEV Rebase provisionally */
-        if(u1_t_errsts == (U1)1U){
-            vd_g_SoundCriMgrFinalize();
-            vd_s_SoundCriMgrStartup();
-        }
-#endif   /* BEV Rebase provisionally */
 
         u1_t_playnum = u1_s_SoundCriMgrWavNext();                                           /* Control buzzer sounding every CH      */
         vd_s_SoundCriMgrUpdtLib(u1_t_playnum);                                              /* Library periodic process              */
@@ -1196,14 +1113,10 @@ static  void    vd_s_SoundCriMgrUpdtLib(const U1 u1_a_PLAYNUM)
     /* Update library function */
     for(u1_t_grp_no = (U1)SOUND_GROUP1; u1_t_grp_no < (U1)SOUND_GROUP_NUM; u1_t_grp_no++){
         vd_s_SoundCriMgrSetVolume(u1_t_grp_no, u1_sp_sound_pre_reqvol[u1_t_grp_no], u1_a_PLAYNUM);
-#if 0   /* BEV Rebase provisionally */
         criAtomExPlayer_UpdateAll(stp_sp_sound_player_hn_gp[u1_t_grp_no]);
-#endif   /* BEV Rebase provisionally */
     }
 
-#if 0   /* BEV Rebase provisionally */
     criAtomEx_ExecuteMain();
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -1221,11 +1134,7 @@ U1      u1_g_SoundCriMgrShtdwnOk(void)
     u1_t_sleep = (U1)TRUE;                                                                  /* Temporary, Set permission sleep check */
 
     for(u1_t_grp_no = (U1)SOUND_GROUP1; u1_t_grp_no < (U1)SOUND_GROUP_NUM; u1_t_grp_no++){
-#if 0   /* BEV Rebase provisionally */
         u1_t_sound_sts = criAtomExPlayer_GetStatus(stp_sp_sound_player_hn_gp[u1_t_grp_no]); /* Get AtomEx player status              */
-#else   /* BEV Rebase provisionally */
-        u1_t_sound_sts = (CriAtomExPlayerStatus)0U;
-#endif   /* BEV Rebase provisionally */
 
         if((u1_t_sound_sts == (CriAtomExPlayerStatus)CRIATOMEXPLAYER_STATUS_PREP   ) ||     /* Player is preparing condition         */
            (u1_t_sound_sts == (CriAtomExPlayerStatus)CRIATOMEXPLAYER_STATUS_PLAYING)){      /* Player is playing condition           */
@@ -2403,13 +2312,9 @@ static  void    vd_s_SoundCriMgrSetVolume(const U1 u1_a_GRP_NO, const U1 u1_a_RE
 static  void    vd_s_SoundCriMgrStartByCueId(const U1 u1_a_GRP_NO, const U2 u2_a_CUE_ID)
 {
     /* Set playing buzzer */
-#if 0   /* BEV Rebase provisionally */
     criAtomExPlayer_SetCueId(stp_sp_sound_player_hn_gp[u1_a_GRP_NO], stp_s_sound_acb_hn, (CriAtomExCueId)((U4)u2_a_CUE_ID));
-#endif   /* BEV Rebase provisionally */
     /* Start play */
-#if 0   /* BEV Rebase provisionally */
     (void)criAtomExPlayer_Start(stp_sp_sound_player_hn_gp[u1_a_GRP_NO]);
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -2421,9 +2326,7 @@ static  void    vd_s_SoundCriMgrStartByCueId(const U1 u1_a_GRP_NO, const U2 u2_a
 static  void    vd_s_SoundCriMgrStop(const U1 u1_a_GRP_NO)
 {
     /* Stop play */
-#if 0   /* BEV Rebase provisionally */
     criAtomExPlayer_Stop(stp_sp_sound_player_hn_gp[u1_a_GRP_NO]);
-#endif   /* BEV Rebase provisionally */
 }
 
 #if (SOUND_CRI_DEBUGMODE == TRUE)
@@ -2439,14 +2342,10 @@ static  void    vd_s_SoundCriMgrErrorCallback(const CriChar8 * s1p_a_ERRID, cons
     const CriChar8 * s1p_t_ERRMSG;                                                                     /* Error message              */
 
     /* Display an error message string */
-#if 0   /* BEV Rebase provisionally */
     s1p_t_ERRMSG = criErr_ConvertIdToMessage(s1p_a_ERRID, u4_a_P1, u4_a_P2);
-#endif   /* BEV Rebase provisionally */
 
     vd_s_SoundCriMgrUnusedParam(u4p_a_parray);                            /* QAC countermeasure */
-#if 0   /* BEV Rebase provisionally */
     vd_s_SoundCriMgrUnusedParam(s1p_t_ERRMSG);                            /* QAC countermeasure */
-#endif   /* BEV Rebase provisionally */
 }
 #endif /* SOUND_CRI_DEBUGMODE */
 /*===================================================================================================================================*/
@@ -2486,10 +2385,8 @@ static  U1  u1_s_SoundDiagnosis(void)
     u1_s_sound_initialwait++;
     if (u1_s_sound_initialwait <= (U1)SOUND_INITIAL_WAIT_TIM) {
         if (u1_s_sound_initialwait >= (U1)SOUND_INITIAL_MODESET_END_TIM) {
-#if 0   /* BEV Rebase provisionally */
             Dio_WriteChannel((U1)DIO_ID_PORT20_CH1, (U1)STD_LOW);
             Dio_WriteChannel((U1)DIO_ID_PORT20_CH2, (U1)STD_LOW);
-#endif   /* BEV Rebase provisionally */
             if (u1_s_sound_initialwait == (U1)SOUND_INITIAL_WAIT_TIM) {
                 vd_s_SoundCriMgrStartup();
             }
@@ -2498,11 +2395,7 @@ static  U1  u1_s_SoundDiagnosis(void)
     else if (u1_s_sound_initialwait >= (U1)SOUND_INITIAL_FLTBCHK_WAIT_TIM){
         u1_s_sound_fltbcheck_cycle++;
         if (u1_s_sound_fltbcheck_cycle > (U1)SOUND_FLTBCHECK_WAIT_TIM) {
-#if 0   /* BEV Rebase provisionally */
             u1_t_fltb = Dio_ReadChannel((U1)DIO_ID_PORT20_CH10);
-#else   /* BEV Rebase provisionally */
-            u1_t_fltb = (U1)0U;
-#endif   /* BEV Rebase provisionally */
             if (u1_t_fltb == u1_s_fltb_befor) {
                 if (u1_t_fltb == (U1)STD_LOW) {
                     u1_s_sound_ic_error  = (U1)SOUND_IC_ERROR;
@@ -2540,7 +2433,6 @@ U1  u1_g_SoundIcErrorStatus(void)
 /*===================================================================================================================================*/
 void  vd_g_SoundCriMgr_DeInit(void)
 {
-#if 0   /* BEV Rebase provisionally */
     Dio_WriteChannel((U1)DIO_ID_PORT20_CH1, (U1)STD_LOW);
     Dio_WriteChannel((U1)DIO_ID_PORT20_CH2, (U1)STD_LOW);
 
@@ -2548,7 +2440,6 @@ void  vd_g_SoundCriMgr_DeInit(void)
     Port_SetPinMode((U2)PORT_ID_PORT20_PIN2,   (U4)PORT_MODE_CFG_P20_2_DO_LO);
 
     Dio_WriteChannel((U1)DIO_ID_PORT0_CH5, (U1)STD_LOW);
-#endif   /* BEV Rebase provisionally */
 }
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
