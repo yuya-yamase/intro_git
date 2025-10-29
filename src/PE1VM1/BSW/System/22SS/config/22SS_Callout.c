@@ -27,12 +27,11 @@
 #include "nvmc_mgr.h"
 
 #include "fpcall_vd_fvd.h"
+/* Complex Device Driver */
 #include "drec_tx.h"
-#if 0   /* BEV Rebase provisionally */
 #include "sound_cri_mgr.h"
 
 /* Application           */
-#endif   /* BEV Rebase provisionally */
 #include "dimmer.h"
 #include "illumi.h"
 #include "thblnkr.h"
@@ -97,9 +96,7 @@ void vd_g_22SSCallout_StaBonInit(void)
     static const FP_VD_FVD             fp_sp_vd_ECU_M_CFG_BON_INIT[] = {
         &vd_g_VardefBonInit,
         &vd_g_LocaleBonInit,
-#if 0   /* BEV Rebase provisionally */
         &vd_g_SoundCriMgrInitialize,
-#endif   /* BEV Rebase provisionally */
         &vd_g_DrectxBonInit,
         &vd_g_DimInit,
         &vd_g_IllumiBonInit,
@@ -167,9 +164,7 @@ void vd_g_22SSCallout_StaRstInit(void)
     static const FP_VD_FVD             fp_sp_vd_ECU_M_CFG_RST_INIT[] = {
         &vd_g_VardefRstwkInit,
         &vd_g_LocaleRstWkupInit,
-#if 0   /* BEV Rebase provisionally */
         &vd_g_SoundCriMgrInitialize,
-#endif   /* BEV Rebase provisionally */
         &vd_g_DrectxRstInit,
         &vd_g_DimInit,
         &vd_g_IllumiRstInit,
@@ -237,9 +232,7 @@ void vd_g_22SSCallout_StaWkupInit(void)
     static const FP_VD_FVD             fp_sp_vd_ECU_M_CFG_WKUP_INIT[] = {
         &vd_g_VardefRstwkInit,
         &vd_g_LocaleRstWkupInit,
-#if 0   /* BEV Rebase provisionally */
         &vd_g_SoundCriMgrInitialize,
-#endif   /* BEV Rebase provisionally */
         &vd_g_DrectxWkupInit,
         &vd_g_DimInit,
         &vd_g_IllumiWkupInit,
@@ -304,7 +297,5 @@ void vd_g_22SSCallout_StaWkupInit(void)
 /*===================================================================================================================================*/
 void vd_g_22SSCallout_PrepShtdwn(void)
 {
-#if 0   /* BEV Rebase provisionally */
     vd_g_SoundCriMgr_DeInit();
-#endif   /* BEV Rebase provisionally */
 }

@@ -89,9 +89,7 @@
 /*---------------------------------------------------------------------------*/
 #endif   /* BEV Rebase provisionally */
 #include "drec_tx.h"
-#if 0   /* BEV Rebase provisionally */
 #include "sound_cri_mgr.h"
-#endif   /* BEV Rebase provisionally */
 #include "xspi_met.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -294,7 +292,6 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     /*                                                                   */
     /*-------------------------------------------------------------------*/
     {&vd_g_Rim_Task,                    (U4)SCHDLR_TASKBIT__10MS_A  },
-#if 0   /* BEV Rebase provisionally */
     /*-------------------------------------------------------------------*/
     /*                                                                   */
     /*  Platform Pre Task                                                */
@@ -308,7 +305,6 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     /*                                                                   */
     /*                                                                   */
     /*-------------------------------------------------------------------*/
-#endif   /* BEV Rebase provisionally */
     {&vd_g_VardefMainTask,              (U4)SCHDLR_TASKBIT__20MS_B  },
 #if 0   /* BEV Rebase provisionally */
     /*-------------------------------------------------------------------*/
