@@ -18,8 +18,6 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "sbltwrn_cfg_private.h"
 
-#include "nvmc_mgr.h"
-#include "vardef.h"
 #include "vardef_dest.h"
 #include "oxcan.h"
 
