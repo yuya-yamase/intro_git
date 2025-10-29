@@ -647,13 +647,8 @@ static U4   u4_s_HdimadjFrillFrill_CdCal(const U4 u4_a_CD)
 /* 2.1.0             2023.09.27  AA      Applied calibration implementation                                                          */
 /* 2.2.1             2024.07.02  His     Delete Calibration Guard Process.                                                           */
 /*                                                                                                                                   */
-/*  Revision         Date        Author   Change Description                                                                         */
-/* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  BEV-1            2025.10.29  MA      Change for BEV rebase.                                                                      */
-/*                                                                                                                                   */
 /*  * HO = Hiroyuki, Oomiya, NCOS                                                                                                    */
 /*  * HiS = Hidenobu Suzuki, MSE                                                                                                     */
 /*  * AA = Anna Asuncion, DT                                                                                                         */
-/*  * MA = Misaki Aiki, Denso Techno                                                                                                 */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

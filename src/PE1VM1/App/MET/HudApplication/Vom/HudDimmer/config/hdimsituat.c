@@ -125,12 +125,7 @@ U1    u1_g_HdimsituatGetSituatVal(U4 * u4_a_situat)
 /*  1.0.0           2016.02.29  HS      New                                                                                          */
 /*  2.0.0           2020.02.27  MaO     Added LSB configuration.                                                                     */
 /*                                                                                                                                   */
-/*  Revision         Date        Author   Change Description                                                                         */
-/* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  BEV-1            2025.10.29  MA      Change for BEV rebase.                                                                      */
-/*                                                                                                                                   */
 /*  * HS = Hidenobu Suzuki, NCOS                                                                                                     */
 /*  * MaO = Masayuki Okada, DENSO                                                                                                    */
-/*  * MA = Misaki Aiki, Denso Techno                                                                                                 */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
