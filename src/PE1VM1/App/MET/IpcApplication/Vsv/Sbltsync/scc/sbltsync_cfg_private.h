@@ -1,27 +1,41 @@
-/* 1.0.0 */
+/* 2.3.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-/*  Illumination  TFT Percent                                                                                                        */
+/*  Synchronizer of Seatbelt WarningChime with Telltale                                                                              */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
 
-#ifndef ILLUMI_TFT_PCT_H
-#define ILLUMI_TFT_PCT_H
+#ifndef SBLTSYNC_CFG_H
+#define SBLTSYNC_CFG_H
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define ILLUMI_TFT_PCT_H_MAJOR                   (1)
-#define ILLUMI_TFT_PCT_H_MINOR                   (0)
-#define ILLUMI_TFT_PCT_H_PATCH                   (0)
+#define SBLTSYNC_CFG_H_MAJOR                     (2)
+#define SBLTSYNC_CFG_H_MINOR                     (3)
+#define SBLTSYNC_CFG_H_PATCH                     (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#include "aip_common.h"
+#include "sbltwrn.h"
+#include "oxcan.h"
+#include "calibration.h"
+
+#include "sbltsync.h"
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#define SBLTSYNC_TICK                            (10U)
+
+#define SBLTSYNC_NUM_KND                         (3U)
+#define SBLTSYNC_KND_LGL                         (0U)
+#define SBLTSYNC_KND_LV2                         (1U)
+#define SBLTSYNC_KND_LV1                         (2U)
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -34,18 +48,31 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Prototypes                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-void    vd_g_IllumiTftPctInit(void);
-U2      u2_g_IllumiTftPctDuty(const U2 * u2_ap_DIM_LVL, const U2 u2_a_OW);
-U2      u2_g_IllumiTftPctAlpha(const U2 * u2_ap_DIM_LVL, const U2 u2_a_OW);
+U1      u1_g_SbltsyncCfgChmRingKnd(void);
+U2      u2_g_SbltsyncCfgChmMask(void);
+void    vd_g_SbltsyncCfgTxRRTT(const U1 u1_a_SIG);
+void    vd_g_SbltsyncCfgTxRCTT(const U1 u1_a_SIG);
+void    vd_g_SbltsyncCfgTxRLTT(const U1 u1_a_SIG);
+void    vd_g_SbltsyncCfgTxRR2TT(const U1 u1_a_SIG);
+void    vd_g_SbltsyncCfgTxRC2TT(const U1 u1_a_SIG);
+void    vd_g_SbltsyncCfgTxRL2TT(const U1 u1_a_SIG);
+void    vd_g_SbltsyncCfgTxRR3TT(const U1 u1_a_SIG);
+void    vd_g_SbltsyncCfgTxRC3TT(const U1 u1_a_SIG);
+void    vd_g_SbltsyncCfgTxRL3TT(const U1 u1_a_SIG);
+void    vd_g_SbltsyncCfgTxREARINDI(const U1 u1_a_SIG);
+void    vd_g_SbltsyncCfgTxCXMET1S02(void);
+
+/* U2   u2_g_SbltwrnChmsts(void);                       */
+/* U2   u2_g_SbltwrnTtsts(void);                        */
+/* U1   u1_g_SbltwrnTtstsBySeat(const U1 u1_a_SEATID);  */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-
-#endif /* ILLUMI_TFT_PCT_H */
+#endif      /* SBLTSYNC_CFG_H */
 
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
-/*  Change History  :  illumi_tftpct.c                                                                                               */
+/*  Change History  :  sbltsync.c                                                                                                    */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

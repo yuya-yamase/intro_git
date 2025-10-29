@@ -1,4 +1,4 @@
-/* 2.2.1 */
+/* 2.3.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,8 +10,8 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define AMBTMP_CFG_C_MAJOR                     (2)
-#define AMBTMP_CFG_C_MINOR                     (2)
-#define AMBTMP_CFG_C_PATCH                     (1)
+#define AMBTMP_CFG_C_MINOR                     (3)
+#define AMBTMP_CFG_C_PATCH                     (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -102,13 +102,9 @@ U1  u1_g_AmbtmpCANCfg(U1 * u1p_a_acn_amb , U1 * u1p_a_ac_amb05)
     U1           u1_t_pdusts;
     U1           u1_t_stsbit;
 
-#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_ACN_AMB, u1p_a_acn_amb);
     (void)Com_ReceiveSignal(ComConf_ComSignal_AC_AMB05, u1p_a_ac_amb05);
     u1_t_pdusts = (U1)Com_GetIPDUStatus(MSG_ZN21S13_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
-#else   /* BEV Rebase provisionally */
-    u1_t_pdusts = (U1)COM_NO_RX;
-#endif   /* BEV Rebase provisionally */
 
     if (u1_t_pdusts == ((U1)COM_TIMEOUT | (U1)COM_NO_RX)) {
         u1_t_stsbit = (U1)AMBTMP_STSBIT_INVALID | (U1)AMBTMP_STSBIT_UNKNOWN;
@@ -125,13 +121,9 @@ U1  u1_g_AmbtmpCANCfg(U1 * u1p_a_acn_amb , U1 * u1p_a_ac_amb05)
 
     return(u1_t_stsbit);
 #else
-#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_ACN_AMB, u1p_a_acn_amb);
     (void)Com_ReceiveSignal(ComConf_ComSignal_AC_AMB05, u1p_a_ac_amb05);
     return((U1)Com_GetIPDUStatus(MSG_ZN21S13_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX));
-#else   /* BEV Rebase provisionally */
-    return((U1)COM_NO_RX);
-#endif   /* BEV Rebase provisionally */
 #endif
 }
 /*===================================================================================================================================*/
@@ -171,6 +163,7 @@ void    vd_g_AmbtmpCfgMainFinish(const U1 u1_a_STS, const U2 u2_a_CEL, const U2 
 /*  2.1.0    11/25/2021  TA(M)    ambtmp.c v2.0.1 -> v2.1.0.                                                                         */
 /*  2.2.0    03/09/2022  TA(M)    ambtmp.c v2.1.0 -> v2.2.0.                                                                         */
 /*  2.2.1    06/28/2022  TA(M)    ambtmp.c v2.2.0 -> v2.2.1.                                                                         */
+/*  2.3.0    10/28/2025  SN       ambtmp.c v2.2.1 -> v2.3.0.                                                                         */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
@@ -180,5 +173,6 @@ void    vd_g_AmbtmpCfgMainFinish(const U1 u1_a_STS, const U2 u2_a_CEL, const U2 
 /*  * YN   = Yasuhiro Nakamura, Denso Techno                                                                                         */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * TA(M)= Teruyuki Anjima, NTT Data MSE                                                                                           */
+/*  * SN   = Shimon Nambu, Denso Techno                                                                                              */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

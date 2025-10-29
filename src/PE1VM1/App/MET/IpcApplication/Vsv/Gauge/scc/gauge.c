@@ -1,4 +1,4 @@
-/* 2.0.2 */
+/* 2.1.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,8 +10,8 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define GAUGE_C_MAJOR                           (2)
-#define GAUGE_C_MINOR                           (0)
-#define GAUGE_C_PATCH                           (2)
+#define GAUGE_C_MINOR                           (1)
+#define GAUGE_C_PATCH                           (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -131,7 +131,7 @@ void    vd_g_GaugeMainTask(void)
 
     vd_g_GaugeCfgMainStart();
 
-    u2_t_vom_chk = u2_g_GaugeCfgVomchk();
+    u2_t_vom_chk = u2_g_GaugeCfgPowerChk();
     for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)u1_g_GAUGE_NUM_CH; u4_t_lpcnt++){
         st_gp_gauge_ow_ctrl[u4_t_lpcnt].u4_unlock = (U4)0U;
 
@@ -227,10 +227,12 @@ U2      u2_g_GaugeTrgt(const U1 u1_a_GAG_CH)
 /*  2.0.0     6/04/2021  TA       Renew.                                                                                             */
 /*  2.0.1    10/18/2021  TK       Change the definition of the null pointer used.(BSW v115_r007)                                     */
 /*  2.0.2    10/25/2021  TK       QAC supported.                                                                                     */
+/*  2.1.0    10/23/2025  SH       Change VomChk logic.                                                                               */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
 /*  * AM   = Atsushi Mizutani, DENSO TECHNO                                                                                          */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * TK   = Takanori Kuno, DensoTechno                                                                                              */
+/*  * SH   = Sae Hirose, DensoTechno                                                                                                 */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
