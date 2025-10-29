@@ -82,7 +82,6 @@
 #include "hdimmgr.h"
 #include "himgadj.h"
 #if 0   /* BEV Rebase provisionally */
-#include "attmp_cel.h"
 #include "datesi_met.h"
 /*---------------------------------------------------------------------------*/
 /* Platform Header                                                           */
@@ -336,7 +335,6 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     {&vd_g_HdimmgrRoutine,              (U4)SCHDLR_TASKBIT__20MS_A  },
     {&vd_g_HudImgAdjMainTask,           (U4)SCHDLR_TASKBIT__10MS_A  },
 #if 0   /* BEV Rebase provisionally */
-    {&vd_g_AttmpMainTask,               (U4)SCHDLR_TASKBIT__10MS_A  },
     {&vd_g_DateSIMETMainTask,           (U4)SCHDLR_TASKBIT___5MS    },
     #endif   /* BEV Rebase provisionally */
     /*-------------------------------------------------------------------*/

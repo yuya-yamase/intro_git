@@ -49,11 +49,7 @@
 #endif   /* BEV Rebase provisionally */
 #include "vehspd_kmph.h"
 #include "ambtmp.h"
-#if 0   /* BEV Rebase provisionally */
-#include "gagdst_attempovhtind.h"
-#include "attmp_cel.h"
 /* #include "hydrvol.h" */
-#endif   /* BEV Rebase provisionally */
 #include "tripcom.h"
 #include "rcmmui.h"
 #include "odo_km.h"
@@ -299,7 +295,6 @@ static inline void    vd_s_XSpiCfgTxHud(           U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxWrnmsg(        U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxMulmed(        U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxCalib(         U4 * u4_ap_pdu_tx);
-static inline void    vd_s_XSpiCfgTxAttmp(         U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxNickname(      U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxAvgGrph(       U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxMetcstmMcst(   U4 * u4_ap_pdu_tx);
@@ -1126,38 +1121,6 @@ static inline void    vd_s_XSpiCfgTxNickname(    U4 * u4_ap_pdu_tx) {
 }
 
 /*===================================================================================================================================*/
-/*  static void    vd_s_XSpiCfgTxAttmp(U4 * u4_ap_pdu_tx)                                                                            */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static inline void    vd_s_XSpiCfgTxAttmp(   U4 * u4_ap_pdu_tx)
-{
-#if 0   /* BEV Rebase provisionally */
-    static const U4 u4_s_XSPI_ATTEMP_INVALID_16BIT = (U4)0x0000FFFFU;
-
-    U2          u2_t_attmp;
-    U1          u1_t_attmpsts;
-    U1          u1_t_attmpoverheat;
-    U4          u4_t_attmpputdate_cel;
-
-    u2_t_attmp      = (U2)0U;
-    u1_t_attmpsts = u1_g_AttmpCelFltrd(&u2_t_attmp);
-    u1_t_attmpoverheat = u1_g_GagdstATTempOvhtIndSts();
-
-    if(u1_t_attmpsts == (U1)ATTMP_STSBIT_VALID){
-        u4_t_attmpputdate_cel = (U4)u2_t_attmp;                                 /*  LSB :0.01     offset :  -273.15[cel]             */
-    }
-    else{
-        u4_t_attmpputdate_cel = u4_s_XSPI_ATTEMP_INVALID_16BIT;
-    }
-
-    u4_ap_pdu_tx[0]  = ((U4)u1_t_attmpoverheat & (U4)XSPI_MSK_01BIT) << 31;
-    u4_ap_pdu_tx[1]  = (u4_t_attmpputdate_cel & (U4)XSPI_MSK_16BIT);
-#endif   /* BEV Rebase provisionally */
-}
-
-/*===================================================================================================================================*/
 /*  static void    vd_s_XSpiCfgTxCalib(U4 * u4_ap_pdu_tx)                                                                            */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
@@ -1819,7 +1782,6 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
     vd_s_XSpiCfgTxTelltale(      &u4_ap_pdu_tx[235]);      /* 235 - 264    : Telltale                                      */
     vd_s_XSpiCfgTxMulmed(        &u4_ap_pdu_tx[265]);      /* 265 - 281    : MultimediaUserName                            */
     vd_s_XSpiCfgTxNickname(      &u4_ap_pdu_tx[362]);      /* 362 - 378    : MultimediaNickName                            */
-    vd_s_XSpiCfgTxAttmp  (       &u4_ap_pdu_tx[417]);      /* 417 - 418    : Attmp                                         */
     vd_s_XSpiCfgTxMetcstmMcst(   &u4_ap_pdu_tx[566]);      /* 566 - 584    : Meter Customize                               */
     vd_s_XSpiCfgTxCalib(         &u4_ap_pdu_tx[585]);      /* 585 - 625    : Calibration                                   */
 
