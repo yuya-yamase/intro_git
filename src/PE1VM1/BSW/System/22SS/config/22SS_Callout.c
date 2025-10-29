@@ -53,11 +53,6 @@
 #include "locale.h"
 #include "vardef.h"
 #include "hmiproxy.h"
-#if 0   /* BEV Rebase provisionally */
-#include "drvind_pwr_pct.h"
-#include "drvind_eco.h"
-#include "drvind_hv_pct.h"
-#endif   /* BEV Rebase provisionally */
 #include "hdimmgr.h"
 #include "himgadj.h"
 #if 0   /* BEV Rebase provisionally */
@@ -116,9 +111,6 @@ void vd_g_22SSCallout_StaBonInit(void)
         &vd_g_AmbtmpBonInit,
         &vd_g_RcmmUIInit,
 #if 0   /* BEV Rebase provisionally */
-        &vd_g_DrvIndPwrInit,
-        &vd_g_DrvIndEcoInit,
-        &vd_g_DrvIndHvInit,
         &vd_g_SbltsyncInit,
 #endif   /* BEV Rebase provisionally */
         &vd_g_HmiProxyBonInit,
@@ -186,9 +178,6 @@ void vd_g_22SSCallout_StaRstInit(void)
         &vd_g_AmbtmpRstWkInit,
         &vd_g_RcmmUIInit,
 #if 0   /* BEV Rebase provisionally */
-        &vd_g_DrvIndPwrInit,
-        &vd_g_DrvIndEcoInit,
-        &vd_g_DrvIndHvInit,
         &vd_g_SbltsyncInit,
 #endif   /* BEV Rebase provisionally */
         &vd_g_HmiProxyRstInit,
@@ -256,9 +245,6 @@ void vd_g_22SSCallout_StaWkupInit(void)
         &vd_g_AmbtmpRstWkInit,
         &vd_g_RcmmUIInit,
 #if 0   /* BEV Rebase provisionally */
-        &vd_g_DrvIndPwrInit,
-        &vd_g_DrvIndEcoInit,
-        &vd_g_DrvIndHvInit,
         &vd_g_SbltsyncInit,
 #endif   /* BEV Rebase provisionally */
         &vd_g_HmiProxyWkupInit,
