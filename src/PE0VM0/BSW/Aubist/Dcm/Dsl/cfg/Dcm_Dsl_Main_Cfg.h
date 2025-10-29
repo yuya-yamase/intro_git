@@ -42,12 +42,12 @@
 #define DCM_DSL_BUF_SIZE_1                  ((uint32)4095UL) /* Receive buffer size */
 #define DCM_DSL_BUF_SIZE_2                  ((uint32)4095UL) /* Receive buffer size */
 #define DCM_DSL_BUF_SIZE_3                  ((uint32)4095UL) /* Transmit buffer size */
-#define DCM_DSL_BUF_SIZE_4                  ((uint32)4112UL) /* Receive buffer size */
+#define DCM_DSL_BUF_SIZE_4                  ((uint32)4095UL) /* Receive buffer size */
 #define DCM_DSL_BUF_SIZE_5                  ((uint32)4095UL) /* Transmit buffer size */
 #define DCM_DSL_BUF_SIZE_6                  ((uint32)4095UL) /* Receive buffer size */
 #define DCM_DSL_BUF_SIZE_7                  ((uint32)4095UL) /* Receive buffer size */
 #define DCM_DSL_BUF_SIZE_8                  ((uint32)4095UL) /* Transmit buffer size */
-#define DCM_DSL_BUF_SIZE_9                  ((uint32)4112UL) /* Receive buffer size */
+#define DCM_DSL_BUF_SIZE_9                  ((uint32)4095UL) /* Receive buffer size */
 #define DCM_DSL_TXBUF_MAXSIZE               ((uint32)4095UL) /* Transmit buffer max size */
 #define DCM_DSL_TXIFBUF_MAXSIZE             ((uint32)1UL)    /* Periodic buffer size */
 #define DCM_DSL_ROEBUF_SIZE                 ((uint32)1UL)    /* ROE buffer size */

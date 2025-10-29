@@ -28,6 +28,8 @@
 #define PDUR_UPCOMP_LDCOM                 (BSW_PDUR_UPCOMP_LDCOM)
 #define PDUR_UPCOMP_CDD1                  (BSW_PDUR_UPCOMP_CDD1)
 #define PDUR_UPCOMP_CDD2                  (BSW_PDUR_UPCOMP_CDD2)
+#define PDUR_UPCOMP_J1939TP               (BSW_PDUR_UPCOMP_J1939TP)
+#define PDUR_UPCOMP_SOMEIPTP              (BSW_PDUR_UPCOMP_SOMEIPTP)
 
 /* Lower */
 #define PDUR_LOCOMP_IF                    (BSW_PDUR_LOCOMP_IF)
@@ -45,7 +47,10 @@
 #define PDUR_LOCOMP_SOADTP                (BSW_PDUR_LOCOMP_SOADTP)
 #define PDUR_LOCOMP_DOIPIF                (BSW_PDUR_LOCOMP_DOIPIF)
 #define PDUR_LOCOMP_DOIPTP                (BSW_PDUR_LOCOMP_DOIPTP)
+#define PDUR_LOCOMP_J1939TP               (BSW_PDUR_LOCOMP_J1939TP)
+#define PDUR_LOCOMP_SOMEIPTP              (BSW_PDUR_LOCOMP_SOMEIPTP)
 #define PDUR_LOCOMP_CANNM                 (BSW_PDUR_LOCOMP_CANNM)
+#define PDUR_LOCOMP_SD                    (BSW_PDUR_LOCOMP_SD)
 #define PDUR_LOCOMP_CANCDD1               (BSW_PDUR_LOCOMP_CANCDD1)
 #define PDUR_LOCOMP_CANCDD2               (BSW_PDUR_LOCOMP_CANCDD2)
 #define PDUR_LOCOMP_LINNM                 (BSW_PDUR_LOCOMP_LINNM)
@@ -152,7 +157,7 @@
 /*  Version         :Date                                                   */
 /*  v1-0-0          :2017/02/22                                             */
 /*  v2-0-0          :2021/05/24                                             */
-/*  v3-0-0          :2024/09/04                                             */
+/*  v3-0-0          :2025/01/23                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

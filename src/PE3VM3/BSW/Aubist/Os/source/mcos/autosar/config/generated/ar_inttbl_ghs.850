@@ -495,7 +495,7 @@ ar_inttbl_0:   /* Core 0 */
     .word   _mcos_v850_undefint_entry  /* INTC2 : 459 */
     .word   _mcos_v850_undefint_entry  /* INTC2 : 460 */
     .word   _mcos_v850_undefint_entry  /* INTC2 : 461 */
-    .word   ar_c2isr_eMCOS_ISR_INTRLIN311UR1  /* INTC2 : 462 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 462 */
     .word   _mcos_v850_undefint_entry  /* INTC2 : 463 */
     .word   _mcos_v850_undefint_entry  /* INTC2 : 464 */
     .word   _mcos_v850_undefint_entry  /* INTC2 : 465 */
@@ -861,15 +861,6 @@ ar_c2isr_eMCOS_ISR_INTOSTM2TINT:
     mov     _ar_isrcb_eMCOS_ISR_INTOSTM2TINT, r1
     jmp     _mcos_v850_cat2isr_entry[r0]
     .size   ar_c2isr_eMCOS_ISR_INTOSTM2TINT, .-ar_c2isr_eMCOS_ISR_INTOSTM2TINT
-
-    .type   ar_c2isr_eMCOS_ISR_INTRLIN311UR1, $function
-    .global ar_c2isr_eMCOS_ISR_INTRLIN311UR1
-    .extern _ar_isrcb_eMCOS_ISR_INTRLIN311UR1
-ar_c2isr_eMCOS_ISR_INTRLIN311UR1:
-    pushsp  r1
-    mov     _ar_isrcb_eMCOS_ISR_INTRLIN311UR1, r1
-    jmp     _mcos_v850_cat2isr_entry[r0]
-    .size   ar_c2isr_eMCOS_ISR_INTRLIN311UR1, .-ar_c2isr_eMCOS_ISR_INTRLIN311UR1
 
 
 #define OS_STOP_SEC_CODE_SHARED

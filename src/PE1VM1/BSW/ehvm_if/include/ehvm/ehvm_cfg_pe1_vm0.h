@@ -53,6 +53,7 @@
 #define EHVM_RX_VCCID_VCC_SHARED_TX_VM0 ((ehvm_uint32_t)16U)
 #define EHVM_RX_VCCID_VCC_SHARED_TX_VM2 ((ehvm_uint32_t)18U)
 #define EHVM_RX_VCCID_VCC_SHARED_TX_VM3 ((ehvm_uint32_t)19U)
+#define EHVM_RX_VCCID_VCC_IOHWAD_DATA_TX_VM0 ((ehvm_uint32_t)20U)
 
 #define EHVM_RX_VCCID_VCCBUFFER_0_SLEEPREQUEST_MASTER_TOSLAVE_MAX ((ehvm_uint32_t)0x00000004U)
 #define EHVM_RX_VCCID_VCCBUFFER_4_VM0_TOOTHERS_MAX ((ehvm_uint32_t)0x00000048U)
@@ -66,6 +67,7 @@
 #define EHVM_RX_VCCID_VCC_SHARED_TX_VM0_MAX ((ehvm_uint32_t)0x00000100U)
 #define EHVM_RX_VCCID_VCC_SHARED_TX_VM2_MAX ((ehvm_uint32_t)0x00000100U)
 #define EHVM_RX_VCCID_VCC_SHARED_TX_VM3_MAX ((ehvm_uint32_t)0x00000100U)
+#define EHVM_RX_VCCID_VCC_IOHWAD_DATA_TX_VM0_MAX ((ehvm_uint32_t)0x00000040U)
 
 /* ehvm_vmm_clear_wakeup_factor,ehvm_vmm_enable_wakeup_factor,ehvm_vmm_disable_wakeup_factor */
 #define EHVM_PE1_VM0_CTL_WAKEUP_FACTOR_A0_BIT_NUM_2  ((ehvm_uint32_t)2U)
@@ -80,6 +82,6 @@
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
 /*  Framework          :v2-1-0                                              */
-/*  BSW plug-in        :v2-0-0                                              */
+/*  BSW plug-in        :v2-2-0-z0001                                        */
 /****************************************************************************/
 

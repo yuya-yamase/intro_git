@@ -1,0 +1,75 @@
+#!gbuild
+gbuildDir=C:\GHS\RH850_V.R9144\comp_201715
+primaryTarget=v800_standalone.tgt
+[Program]
+    :macro=COMP_DIR=c:/GHS/RH850_V.R9144/comp_201715
+    :macro=PRJ_DIR=${%expand_path(../)}
+    :macro=CMN_DIR=${PRJ_DIR}/common
+    :macro=ROOT_DIR=${%expand_path(${PRJ_DIR}/../../src/EHVM)}
+    :macro=OBJ_DIR=obj
+    :macro=OUT_DIR=dst
+    :macro=MCAL_DIR=${ROOT_DIR}/BSW/MCAL
+    :macro=SS_DIR=${ROOT_DIR}/BSW/System
+#    :macro=LWH_DIR=${ROOT_DIR}/LWH_project
+#    :macro=LWH_INTEG_DIR=${ROOT_DIR}/LWH_integration
+    :macro=HV_DIR=${ROOT_DIR}/BSW/Hv
+    :macro=LIB_DIR=${ROOT_DIR}/LIB
+
+    :optionsFile=${CMN_DIR}/common.opt
+    :optionsFile=${CMN_DIR}/Hv.opt
+    :optionsFile=${CMN_DIR}/MCAL.opt
+
+    :macro=GSR_CLI="gsrec -sort -S3 -noS5 -bytes 16"
+    :macro=GSR_PAR="-pad1 0x003c0000 0x003fffff 0xff -start 0x003c0000 -end 0x003fffff"
+    :postexec="${GSR_CLI} ${GSR_PAR}                     -o dst/EHVM_ac.mot dst/EHVM.elf"
+    :postexec="${GSR_CLI} ${GSR_PAR} -romaddr 0x023c0000 -o dst/EHVM_bd.mot dst/EHVM.elf"
+
+    -I${COMP_DIR}/include/v800
+    -I${COMP_DIR}/ansi
+    -L${COMP_DIR}/lib/rh850
+
+    -lLIBARCH.A
+
+    -I${HV_DIR}
+    -I${HV_DIR}/callout
+    -I${ROOT_DIR}/BSW/CmnHdr
+    -I${SS_DIR}/22SS/scc
+    -I${SS_DIR}/22SS/config
+    -I${LIB_DIR}/Ren_G4MH/scc
+    -I${LIB_DIR}/Common/scc
+
+    -DECU_HOST
+    -D__RELEASE_BUILD__
+    {isdefined(__GMM_AIP_THROUGHPUT__)} -D__AIP_THROUGHPUT__=${__GMM_AIP_THROUGHPUT__}
+
+    # CompileSW (ProcessingLoad)
+    # Enter the measurement time in milliseconds
+    # Set to 0 to disable. Enable with any positive value (recommended: 10000).
+    -DPROCESSING_LOAD_MEASURE_TIME=0U
+
+    -o EHVM.elf
+    --no_additional_output
+
+    -T ${MCAL_SECTION_DIR}/memory_map_HOST.ld
+    -T ${MCAL_SECTION_DIR}/section.ld
+
+boot.gpj
+#${CMN_DIR}/MCAL_ADC.gpj
+${CMN_DIR}/MCAL_COMMON.gpj
+${CMN_DIR}/MCAL_DIO.gpj
+${CMN_DIR}/MCAL_DMA.gpj
+#${CMN_DIR}/MCAL_GPT.gpj
+MCAL_GPT_Frt.gpj
+${CMN_DIR}/MCAL_ICU.gpj
+${CMN_DIR}/MCAL_MCU.gpj
+${CMN_DIR}/MCAL_PORT.gpj
+${CMN_DIR}/MCAL_tyPORT.gpj
+#${CMN_DIR}/MCAL_PWM.gpj
+${CMN_DIR}/MCAL_SPI.gpj
+#${CMN_DIR}/MCAL_WDG.gpj
+${CMN_DIR}/MCAL_Intc.gpj
+${CMN_DIR}/MCAL_DUMMY.gpj
+${CMN_DIR}/MCAL_ErrH.gpj
+${CMN_DIR}/LWH_project.gpj
+${CMN_DIR}/LWH_integration.gpj
+${CMN_DIR}/LIB.gpj

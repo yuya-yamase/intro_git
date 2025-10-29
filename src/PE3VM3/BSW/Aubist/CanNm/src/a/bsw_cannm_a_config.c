@@ -52,9 +52,9 @@
 #define BSW_CANNM_A_CAN_CH_NUM                  (BSW_COMM_BUS_TYPE_CHNUM(CAN))
 
 #if (BSW_BSWM_CS_MSG_DELIVER == BSW_BSWM_CS_MSGDELIVER_HIGH)
-#define BSW_CANNM_A_u2MS2COMTICK_RUP            BSW_BSWM_CS_u2MS2TICK_RUP_HIGH
+#define BSW_CANNM_A_u2MS2COMTICK_RUP(msTime)    BSW_BSWM_CS_u2MS2TICK_RUP_HIGH(msTime)
 #else
-#define BSW_CANNM_A_u2MS2COMTICK_RUP            BSW_BSWM_CS_u2MS2TICK_RUP_MID
+#define BSW_CANNM_A_u2MS2COMTICK_RUP(msTime)    BSW_BSWM_CS_u2MS2TICK_RUP_MID(msTime)
 #endif
 
 /* Node ID setting */
@@ -4050,7 +4050,7 @@ BswConst    BswU2 bsw_cannm_a_timer_u2TmCntTbl[BSW_CANNM_A_COMMON_MAXCH][BSW_CAN
 /*  v1-0-0          :2017/10/16                                             */
 /*  v1-1-0          :2018/12/25                                             */
 /*  v2-0-0          :2021/12/02                                             */
-/*  v3-0-0          :2024/09/03                                             */
+/*  v3-0-0          :2025/01/17                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

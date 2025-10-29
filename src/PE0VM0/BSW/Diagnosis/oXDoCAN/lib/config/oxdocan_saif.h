@@ -133,8 +133,8 @@
 #define OXDC_DATA_REA_ANS_NB_F124                (24U)
 #define OXDC_DATA_REA_ANS_NB_F125                (24U)
 #define OXDC_DATA_REA_ANS_NB_F181                (49U)
-#define OXDC_DATA_REA_ANS_NB_F188                (19U)      /* @@@ */
-#define OXDC_DATA_REA_ANS_NB_F191                (15U)      /* @@@ */
+#define OXDC_DATA_REA_ANS_NB_F188                (19U)
+#define OXDC_DATA_REA_ANS_NB_F191                (15U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define OXDC_DATA_WRI_REQ_NB_0204                (4U)
@@ -417,7 +417,7 @@ U1      u1_g_oXDoCANRebyId_F120(U1 * u1_ap_ans, const U2 u2_a_ELPSD);
 U1      u1_g_oXDoCANRebyId_F121(U1 * u1_ap_ans, const U2 u2_a_ELPSD);
 U1      u1_g_oXDoCANRebyId_F181(U1 * u1_ap_ans, const U2 u2_a_ELPSD);
 U1      u1_g_oXDoCANRebyId_F188(U1 * u1_ap_ans, const U2 u2_a_ELPSD);
-U1      u1_g_oXDoCANRebyId_F191(U1 * u1_ap_ans, const U2 u2_a_ELPSD);       /* @@@ */
+U1      u1_g_oXDoCANRebyId_F191(U1 * u1_ap_ans, const U2 u2_a_ELPSD);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  oxdocan_xid_cfg.c / st_gp_OXDC_DATA_CFG[].fp_u1_WRITE                                                                            */

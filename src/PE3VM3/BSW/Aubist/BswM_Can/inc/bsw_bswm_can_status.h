@@ -24,6 +24,7 @@
 /* Function Prototypes                                                      */
 /*--------------------------------------------------------------------------*/
 void bsw_bswm_can_st_TPChkRamNone( void );
+void bsw_bswm_can_st_J1939TPCkRamNon( void );
 
 /*--------------------------------------------------------------------------*/
 /* Data                                                                     */
@@ -34,7 +35,7 @@ void bsw_bswm_can_st_TPChkRamNone( void );
 /*--------------------------------------------------------------------------*/
 /* ----Unit internal public definition ---- */
 extern void (* BswConst bsw_bswm_can_st_ptTPChkRamFunc)( void );
-
+extern void (* BswConst bsw_bswm_can_st_ptJ1939TpCkRamF)( void );
 
 #endif  /* BSW_BSWM_CAN_STATUS_H */
 
@@ -44,7 +45,7 @@ extern void (* BswConst bsw_bswm_can_st_ptTPChkRamFunc)( void );
 /*  v1-0-0          :2017/02/22                                             */
 /*  v1-1-0          :2018/11/16                                             */
 /*  v2-0-0          :2021/12/03                                             */
-/*  v3-0-0          :2024/08/30                                             */
+/*  v3-0-0          :2025/01/22                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

@@ -23,7 +23,7 @@
 
 #if defined MEMIF_START_SEC_CODE
 #undef MEMIF_START_SEC_CODE
-#pragma ghs section text = "bsw_memif_text"
+#pragma ghs section text = ".bsw_memif_text"
 #undef MEMMAP_ERROR
 
 #elif defined MEMIF_STOP_SEC_CODE
@@ -33,7 +33,7 @@
 
 #elif defined MEMIF_START_SEC_CONST_32
 #undef MEMIF_START_SEC_CONST_32
-#pragma ghs section rodata = "bsw_memif_rodata"
+#pragma ghs section rodata = ".bsw_memif_rodata"
 #undef MEMMAP_ERROR
 
 #elif defined MEMIF_STOP_SEC_CONST_32
@@ -43,7 +43,7 @@
 
 #elif defined MEMIF_START_SEC_CONST_CONFIG_32
 #undef MEMIF_START_SEC_CONST_CONFIG_32
-#pragma ghs section rodata = "bsw_memif_rodata"
+#pragma ghs section rodata = ".bsw_memif_rodata"
 #undef MEMMAP_ERROR
 
 #elif defined MEMIF_STOP_SEC_CONST_CONFIG_32
@@ -53,7 +53,7 @@
 
 #elif defined MEMIF_START_SEC_VAR_NO_INIT_32
 #undef MEMIF_START_SEC_VAR_NO_INIT_32
-#pragma ghs section bss = "bsw_memif_bss"
+#pragma ghs section bss = ".bsw_memif_bss"
 #undef MEMMAP_ERROR
 
 #elif defined MEMIF_STOP_SEC_VAR_NO_INIT_32
@@ -63,7 +63,7 @@
 
 #elif defined MEMIF_START_SEC_VAR_INIT_WAKEUP_32
 #undef MEMIF_START_SEC_VAR_INIT_WAKEUP_32
-#pragma ghs section bss = "bsw_memif_bss"
+#pragma ghs section bss = ".bsw_memif_bss"
 #undef MEMMAP_ERROR
 
 #elif defined MEMIF_STOP_SEC_VAR_INIT_WAKEUP_32
@@ -73,7 +73,7 @@
 
 #elif defined MEMIF_START_SEC_VAR_CLEARED_32
 #undef MEMIF_START_SEC_VAR_CLEARED_32
-#pragma ghs section bss = "bsw_memif_bss"
+#pragma ghs section bss = ".bsw_memif_bss"
 #undef MEMMAP_ERROR
 
 #elif defined MEMIF_STOP_SEC_VAR_CLEARED_32

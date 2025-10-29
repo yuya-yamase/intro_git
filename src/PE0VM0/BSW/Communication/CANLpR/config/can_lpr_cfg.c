@@ -84,7 +84,7 @@ const ST_CAN_LPR_ING * const    stp_gp_CAN_LPR_ING[CAN_LPR_NUM_ING] = {
     NULL_PTR,                    /*  6 */
     &st_s_CAN_LPR_ING_G5M,       /*  7 */
     &st_s_CAN_LPR_ING_VIR_0,     /*  8 */
-    NULL_PTR,                    /*  9 */
+    &st_s_CAN_LPR_ING_SECOC_TX,  /*  9 */
     NULL_PTR                     /* 10 */
 };
 const uint8                     u1_g_CAN_LPR_NUM_ING = (U1)CAN_LPR_NUM_ING;
@@ -97,8 +97,8 @@ const U4                        u4_gp_CAN_LPR_REGR_EN_BY_NET[CAN_LPR_NUM_NET * C
     /*   CAN_LPR_REGR_EN_UDS_FQ_G2M1  (0x00000020U) */
     /*   CAN_LPR_REGR_EN_PHY_TX_G2M1  (0x00000040U) */
     /*   CAN_LPR_REGR_EN_PHY_RX_G2M1  (0x00000800U) */
-    (U4)0x00000864U,                    /* FUL_EEE  */
-    (U4)0x00000824U,                    /* FUL_DEE  */
+    (U4)0x00000865U,                    /* FUL_EEE  */
+    (U4)0x00000825U,                    /* FUL_DEE  */
     (U4)0x00000800U,                    /* SIL_DDE  */
 
     /* ComMConf_ComMChannel_CANFD_G2M_2_BUS (1U)    */
@@ -132,8 +132,8 @@ const U4                        u4_gp_CAN_LPR_REGR_EN_BY_NET[CAN_LPR_NUM_NET * C
     /*   CAN_LPR_REGR_EN_SECOC_TX     (0x00000001U) */
     /*   CAN_LPR_REGR_EN_PHY_FQ_G5M   (0x00000008U) */
     /*   CAN_LPR_REGR_EN_PHY_TX_G5M   (0x00000080U) */
-    (U4)0x00000088U,                     /* FUL_EEE */
-    (U4)0x00000008U,                     /* FUL_DEE */
+    (U4)0x00000089U,                     /* FUL_EEE */
+    (U4)0x00000009U,                     /* FUL_DEE */
     (U4)0x00000000U                      /* SIL_DDE */
 
     /* CAN_LPR_NET_LOCA  (4U)                       */

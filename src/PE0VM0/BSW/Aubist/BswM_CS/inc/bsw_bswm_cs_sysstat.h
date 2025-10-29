@@ -35,7 +35,7 @@ void   bsw_bswm_cs_sysst_UpdtSysStat( void );
 void   bsw_bswm_cs_sysst_ChkSysStatRam( void );
 
 /* Dummy Function */
-void     bsw_bswm_cs_sysst_SetSystemStatus_dummy( uint32* Mask, uint32* SysStatus );
+void     bsw_bswm_cs_sysst_SetSystemStatus_dummy( BswConstR uint32* Mask, BswConstR uint32* SysStatus );
 void     bsw_bswm_cs_sysst_GetWuSystemStatus( uint32* SysStatus );
 
 /*--------------------------------------------------------------------------*/
@@ -51,7 +51,7 @@ extern BswConst BswU4 bsw_bswm_cs_sysst_u4ECUInitPw[];
 /*--------------------------------------------------------------------------*/
 /* Constants                                                                */
 /*--------------------------------------------------------------------------*/
-extern void    (* BswConst bsw_bswm_cs_st_ptSetSysStatFn)( uint32* Mask, uint32* SysStatus );
+extern void    (* BswConst bsw_bswm_cs_st_ptSetSysStatFn)( BswConstR uint32* Mask, BswConstR uint32* SysStatus );
 extern void    (* BswConst bsw_bswm_cs_st_ptGetSysStatFn)( uint32* SysStatus );
 
 #endif  /* BSW_BSWM_CS_SYSSTAT_H */
@@ -61,7 +61,7 @@ extern void    (* BswConst bsw_bswm_cs_st_ptGetSysStatFn)( uint32* SysStatus );
 /*  Version         :Date                                                   */
 /*  v1-0-0          :2017/02/22                                             */
 /*  v2-0-0          :2021/12/03                                             */
-/*  v3-0-0          :2024/11/13                                             */
+/*  v3-0-0          :2025/02/06                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/
