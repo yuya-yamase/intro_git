@@ -20,9 +20,9 @@
 #include "sound_cri_mgr.h"
 
 #include "wchime.h"
-#if 0   /* BEV Rebase provisionally */
+#if 0   /* BEV Rebase provisionally */ /* for xm-authentication */
 #include "vardef.h"
-#endif   /* BEV Rebase provisionally */
+#endif   /* BEV Rebase provisionally */ /* for xm-authentication */
 
 /* CRI header file */
 #include "cri_xpt.h"
@@ -232,7 +232,6 @@ static        void    vd_s_SoundCriMgrStop(const U1 u1_a_GRP_NO);
 #if (SOUND_CRI_DEBUGMODE == TRUE)
 static        void    vd_s_SoundCriMgrErrorCallback(const CriChar8 * s1p_a_ERRID, const CriUint32 u4_a_P1, const CriUint32 u4_a_P2, CriUint32 * u4p_a_parray);
 #endif /* SOUND_CRI_DEBUGMODE */
-static inline U1      u1_s_SoundCriMgrCalibU1NumChk(const U1 u1_a_CALIBID, const U1 u1_a_NUM, const U1 u1_a_DEF);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static        void    vd_s_SoundCriMgrStartup(void);
@@ -1238,8 +1237,8 @@ void    vd_g_SoundCriMgrOwDeAct(const U1 u1_a_SO_MDL_CH)
 /*===================================================================================================================================*/
 static  U1      u1_s_SoundCriMgrOwChk(const U1 u1_a_GRP_NO, const U1 u1_a_CYCLCHK, U2 * u2p_a_cueid, U1 * u1p_a_cuevol)
 {
-#if (SOUND_VEHICLE_TYPE_TYT == TRUE)
 #if 0   /* BEV Rebase provisionally */
+#if (SOUND_VEHICLE_TYPE_TYT == TRUE)
     /* Table to control the active test */
     static const ST_SOUND_OW_BUZ_INFO st_sp_SOUND_OW_BUZ_INFO_TYT[SOUND_OW_WAV_IDX_NUM] = {
         {   /* SOUND_AT_0P8_LRG_0P8_IN_1P2 */
@@ -1558,9 +1557,7 @@ static  U1      u1_s_SoundCriMgrOwChk(const U1 u1_a_GRP_NO, const U1 u1_a_CYCLCH
             (U1)SOUND_OW_TYPE_EVENT                                                                                                                                                                                                                                                                   /* TYPE    */
         }
     };
-#endif   /* BEV Rebase provisionally */
 #else
-#if 0   /* BEV Rebase provisionally */
     static const ST_SOUND_OW_BUZ_INFO st_sp_SOUND_OW_BUZ_INFO_LEX[SOUND_OW_WAV_IDX_NUM] = {
         {   /* SOUND_AT_0P8_LRG_0P8_IN_1P2 */
             {(U2)CRI_CUESHEET_0_LEX_DAN_800_1P2_NONE_0P8,              (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX                                              }, /* CUE_ID  */
@@ -1878,22 +1875,18 @@ static  U1      u1_s_SoundCriMgrOwChk(const U1 u1_a_GRP_NO, const U1 u1_a_CYCLCH
             (U1)SOUND_OW_TYPE_EVENT                                                                                                                                                                                                                                                                             /* TYPE    */
         }
     };
-#endif   /* BEV Rebase provisionally */
 #endif
 
-#if 0   /* BEV Rebase provisionally */
     const ST_SOUND_OW_BUZ_INFO * stp_t_OW_BUZ_INFO;
     ST_SOUND_OW_CTRL           * stp_t_ow_ctrl;
     U2                           u2_t_cueid;
-#endif   /* BEV Rebase provisionally */
     U1                           u1_t_ow_sts;
     U1                           u1_t_brand;
 
     u1_t_ow_sts          = (U1)SOUND_OW_CTRL_INA;
     u4_s_sound_ow_unlock = (U4)0U;
-    u1_t_brand           = u1_s_SoundCriMgrCalibU1NumChk(u1_CALIB_MCUID0024_BRAND, (U1)CALIB_MCUID0024_NUM, (U1)CALIB_MCUID0024_DEF);
+    u1_t_brand           = u1_CALIB_MCUID0024_BRAND
 
-#if 0   /* BEV Rebase provisionally */
     if(u1_a_GRP_NO < (U1)SOUND_GROUP_NUM){
         stp_t_ow_ctrl        = &st_sp_sound_ow_ctrl[u1_a_GRP_NO];
         if(u1_s_sound_ow_reqid < (U1)SOUND_OW_WAV_IDX_NUM){
@@ -1934,9 +1927,12 @@ static  U1      u1_s_SoundCriMgrOwChk(const U1 u1_a_GRP_NO, const U1 u1_a_CYCLCH
             stp_t_ow_ctrl->u2_ow_tocnt = (U2)U2_MAX;
         }
     }
-#endif   /* BEV Rebase provisionally */
 
     return(u1_t_ow_sts);
+#else   /* BEV Rebase provisionally */
+    u4_s_sound_ow_unlock = (U4)0U;
+    return((U1)SOUND_OW_CTRL_INA);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -2008,6 +2004,7 @@ static  U1      u1_s_SoundCriMgrOwStsChk(const U1 u1_a_CYCLCHK, const U1 u1_a_OW
 /*===================================================================================================================================*/
 static  void    vd_s_SoundCriMgrSetVolume(const U1 u1_a_GRP_NO, const U1 u1_a_REQ_VOL, const U1 u1_a_PLAYNUM)
 {
+#if 0   /* BEV Rebase provisionally */
     static volatile const U1 u1_s_VOL_CSR_RTCA_0           = (U1)5U;
     static volatile const U1 u1_s_VOL_CSR_RTCA_1           = (U1)6U;
     static volatile const U1 u1_s_VOL_CSR_RTCA_2           = (U1)8U;
@@ -2031,7 +2028,6 @@ static  void    vd_s_SoundCriMgrSetVolume(const U1 u1_a_GRP_NO, const U1 u1_a_RE
 
     static volatile const U1 u1_s_VOL_MULTI_CH_PLAY_RATE_1 = (U1)SOUND_VOL_MULTI_CH_PLAY_RATE_1;
 
-#if 0   /* BEV Rebase provisionally */
     static volatile const U1 * u1p_sp_SOUND_VOL[WCHIME_NUM_VOL] = {
         &u1_CALIB_MCUID0028_SBW_SI_MID,                     /* WCHIME_VOL_SBW_REVERSE_SI_MID                                         */
         &u1_CALIB_MCUID0745_SBW_SI_MAX,                     /* WCHIME_VOL_SBW_REVERSE_SI_MAX                                         */
@@ -2232,9 +2228,7 @@ static  void    vd_s_SoundCriMgrSetVolume(const U1 u1_a_GRP_NO, const U1 u1_a_RE
         &u1_CALIB_MCUID0027_ATR_MID,                        /* WCHIME_VOL_AT_MID                                                     */
         &u1_CALIB_MCUID0744_ATR_MAX                         /* WCHIME_VOL_AT_MAX                                                     */
     };
-#endif   /* BEV Rebase provisionally */
 
-#if 0   /* BEV Rebase provisionally */
     static volatile const U1 * u1p_sp_MULTI_CH_PLAY_RATE[SOUND_GROUP_NUM] = {
         &u1_s_VOL_MULTI_CH_PLAY_RATE_1,                     /* SOUND_GROUP1                                                          */
         &u1_CALIB_MCUID0205_2CH,                            /* SOUND_GROUP2                                                          */
@@ -2245,30 +2239,21 @@ static  void    vd_s_SoundCriMgrSetVolume(const U1 u1_a_GRP_NO, const U1 u1_a_RE
 #endif   /* BEV Rebase provisionally */
 
     CriFloat32  f4_t_cuevol;                                                                /* Volume of current sounding cue ID     */
+#if 0   /* BEV Rebase provisionally */ /* for xm-authentication */
     U4          u4_t_xmauth;
+#endif   /* BEV Rebase provisionally */ /* for xm-authentication */
     U1          u1_t_reqvol;
     U1          u1_t_sound_vol;
     U1          u1_t_multi_ch_play_rate_reqvol;
     U4          u4_t_calc_buf;
 
-#if 0   /* BEV Rebase provisionally */
+#if 0   /* BEV Rebase provisionally */ /* for xm-authentication */
     u4_t_xmauth   = u4_g_VardefDs2E_Las32((U2)VDF_DS_2E_2021);
-#else   /* BEV Rebase provisionally */
-    u4_t_xmauth   = (U4)0x00000000U;
-#endif   /* BEV Rebase provisionally */
+#endif   /* BEV Rebase provisionally */ /* for xm-authentication */
     u4_t_calc_buf = (U4)CALIB_SOUND_PRESS_RATE_MIN;
-#if 0   /* BEV Rebase provisionally */
+#if 0   /* BEV Rebase provisionally */ /* for xm-authentication */
     if((u4_t_xmauth & (U4)VDF_DS_2E_XM_MODE) == (U4)0U){
-        u1_t_reqvol = u1_a_REQ_VOL;
-        if(u1_a_REQ_VOL >= (U1)WCHIME_NUM_VOL){
-            u1_t_reqvol = (U1)SOUND_VOLUMEID_DEFAULT;
-        }
-        u1_t_sound_vol = *(u1p_sp_SOUND_VOL[u1_t_reqvol]);
-        u4_t_calc_buf = (U4)u1_t_sound_vol;
-        f4_t_cuevol = (CriFloat32)u4_t_calc_buf / (CriFloat32)SOUND_CALIBVOLUME_CHANGE_LSB;
-    }
-#else   /* BEV Rebase provisionally */
-    if((u4_t_xmauth & (U4)0x00000020U) == (U4)0U){
+#endif   /* BEV Rebase provisionally */ /* for xm-authentication */
         u1_t_reqvol = u1_a_REQ_VOL;
         if(u1_a_REQ_VOL >= (U1)WCHIME_NUM_VOL){
             u1_t_reqvol = (U1)SOUND_VOLUMEID_DEFAULT;
@@ -2280,11 +2265,12 @@ static  void    vd_s_SoundCriMgrSetVolume(const U1 u1_a_GRP_NO, const U1 u1_a_RE
 #endif   /* BEV Rebase provisionally */
         u4_t_calc_buf = (U4)u1_t_sound_vol;
         f4_t_cuevol = (CriFloat32)u4_t_calc_buf / (CriFloat32)SOUND_CALIBVOLUME_CHANGE_LSB;
+#if 0   /* BEV Rebase provisionally */ /* for xm-authentication */
     }
-#endif   /* BEV Rebase provisionally */
     else{
         f4_t_cuevol = (CriFloat32)SOUND_CUEVOLUME_MUTE;
     }
+#endif   /* BEV Rebase provisionally */ /* for xm-authentication */
     if((u1_a_PLAYNUM > (U1)0U) &&
        (u1_a_PLAYNUM <= (U1)SOUND_GROUP_NUM)){
 #if 0   /* BEV Rebase provisionally */
@@ -2296,9 +2282,7 @@ static  void    vd_s_SoundCriMgrSetVolume(const U1 u1_a_GRP_NO, const U1 u1_a_RE
         f4_t_cuevol *= ((CriFloat32)u4_t_calc_buf / (CriFloat32)SOUND_CALIBVOLUME_CHANGE_LSB);
         if(u1_a_GRP_NO < (U1)SOUND_GROUP_NUM){
             /* Set buzzer volume */
-#if 0   /* BEV Rebase provisionally */
             criAtomExPlayer_SetVolume(stp_sp_sound_player_hn_gp[u1_a_GRP_NO], f4_t_cuevol);
-#endif   /* BEV Rebase provisionally */
         }
     }
 }
@@ -2348,26 +2332,6 @@ static  void    vd_s_SoundCriMgrErrorCallback(const CriChar8 * s1p_a_ERRID, cons
     vd_s_SoundCriMgrUnusedParam(s1p_t_ERRMSG);                            /* QAC countermeasure */
 }
 #endif /* SOUND_CRI_DEBUGMODE */
-/*===================================================================================================================================*/
-/*===================================================================================================================================*/
-/*  static inline U1    u1_s_SoundCriMgrCalibU1NumChk(const U1 u1_a_CALIBID, const U1 u1_a_NUM, const U1 u1_a_DEF)                   */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      const U1 u1_a_CALIBID                                                                                            */
-/*                  const U1 u1_a_NUM                                                                                                */
-/*                  const U1 u1_a_DEF                                                                                                */
-/*  Return:         U1 u1_t_ret                                                                                                      */
-/*===================================================================================================================================*/
-static inline U1    u1_s_SoundCriMgrCalibU1NumChk(const U1 u1_a_CALIBID, const U1 u1_a_NUM, const U1 u1_a_DEF)
-{
-    U1 u1_t_ret;
-
-    u1_t_ret = u1_a_CALIBID;
-    if(u1_t_ret >= u1_a_NUM){
-        u1_t_ret = u1_a_DEF;
-    }
-
-    return(u1_t_ret);
-}
 
 /*===================================================================================================================================*/
 /*  static  U1  u1_s_SoundDiagnosis(void)                                                                                            */
