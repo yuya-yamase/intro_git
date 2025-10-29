@@ -39,9 +39,7 @@
 
 #include "alert.h"
 #include "illumi.h"
-#if 0   /* BEV Rebase provisionally */
 #include "hmiproxy.h"
-#endif   /* BEV Rebase provisionally */
 #include "vardef.h"
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -111,9 +109,7 @@ U1      u1_g_RunMCfghkShtdwnchk1st(void)
         &u1_g_Nvmc_IsShtdwnOk,
         &u1_g_SoundCriMgrShtdwnOk,
         &u1_g_IllumiShtdwnOk,
-#if 0   /* BEV Rebase provisionally */
         &u1_g_HmiProxyShtdwnOK
-#endif   /* BEV Rebase provisionally */
     };
     static const ST_ALERT_REQBIT   st_sp_REQBIT[] = {
         /*  u2_src_ch                       u1_src_act                          u1_dst_idx  u4_dst_bit                            */
