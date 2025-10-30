@@ -26,9 +26,7 @@
 #include "vardef.h"
 #include "veh_opemd.h"
 
-#if 0   /* BEV Rebase provisionally */
 #include "sound_cri_mgr.h"
-#endif   /* BEV Rebase provisionally */
 #include "thblnkr.h"
 #include "vptran_sel_typ.h"
 
@@ -438,11 +436,7 @@ U1      u1_g_wChimeCfgWavCycled(const U1 u1_a_WC_CH)
     U2 u2_t_tim;
     U1 u1_t_cycled;
 
-#if 0   /* BEV Rebase provisionally */
     u2_t_tim = u2_g_SoundCriMgrGetTimRemained(u1_a_WC_CH);
-#else   /* BEV Rebase provisionally */
-    u2_t_tim = (U2)0U;
-#endif   /* BEV Rebase provisionally */
     if(u2_t_tim <= (U2)1U){
         u1_t_cycled = (U1)TRUE;
     }

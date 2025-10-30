@@ -27,12 +27,9 @@
 /* Platform */
 /* #include "oxcan.h" */ /* @@@ Provisional for 310D PreCV @@@ */
 
-#include "mulmed_color.h"
 #include "vardef.h"
 
-#include "gateway_mm.h"
 
-#include "evschg.h"
 #endif   /* BEV Rebase provisionally */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -939,6 +936,7 @@ static inline void    vd_s_XSpiCanTx_FLYNOP(const U4 * u4_ap_pck_rx)
 /*           06/30/2025  KT       Change for BEV System_Consideration_2.(BEV3CDCMET-547/BEV3CDCMET-549)                              */
 /*           07/07/2025  KT       Change for BEV System_Consideration_2.(CAN V7.3)                                                   */
 /*           07/08/2025  TH       Change for BEV System_Consideration_2.(MET-C_HCSBSW-CSTD-0-02-A-C0)                                */
+/*           10/22/2025  TS       Change for BEV rebase.                                                                             */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * KM   = Keisuke Mashita, Denso Techno                                                                                           */
@@ -959,5 +957,6 @@ static inline void    vd_s_XSpiCanTx_FLYNOP(const U4 * u4_ap_pck_rx)
 /*  * HT   = Hibiki Tanii, KSE                                                                                                       */
 /*  * SN(K)= Shizuka Nakajima, KSE                                                                                                   */
 /*  * TH   = Taisuke Hirakawa, KSE                                                                                                   */
+/*  * TS   = Takuo Suganuma, Denso Techno                                                                                            */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

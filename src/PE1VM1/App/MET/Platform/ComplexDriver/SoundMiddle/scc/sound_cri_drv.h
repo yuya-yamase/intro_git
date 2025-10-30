@@ -1,33 +1,40 @@
-/* 0.0.0 */
+/* 2.0.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-/*  DENSO ICT1 Coding Style Standard Template                                                                                        */
+/* Sound Middleware (CRI) Driver                                                                                                     */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
-
-#ifndef XSPI_CH0_CFG_H
-#define XSPI_CH0_CFG_H
+#ifndef SOUND_CRI_DRV_H
+#define SOUND_CRI_DRV_H
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define XSPI_CH0_CFG_H_MAJOR                         (0)
-#define XSPI_CH0_CFG_H_MINOR                         (0)
-#define XSPI_CH0_CFG_H_PATCH                         (0)
+#define SOUND_CRI_DRV_H_MAJOR                        (2)
+#define SOUND_CRI_DRV_H_MINOR                        (0)
+#define SOUND_CRI_DRV_H_PATCH                        (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#include "xspi_met.h"
+/* MCAL */
+#include "Dma.h"
+
+/* CRI header file */
+#include "cri_xpt.h"
+#include "cri_atom_rh850u2a.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#if 0   /* BEV BSW provisionally */
+#define SOUND_CRI_DRV_DMA_CH                         (DMA_CH_SOUND_CRI)                      /* DMA channel used by CRI middleware   */
+#endif
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -37,14 +44,27 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Prototypes                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+void vd_g_SoundCriDrvInitialize(void);
+void vd_g_SoundCriDrvTimerInitialize(void);
+void vd_g_SoundCriDrvTimerFinalize(void);
+CriUint32 u4_g_SoundCriDrvTimerGetCount(void);
+void vd_g_SoundCriDrvDmacStart(const CriUint32 src_addr_tbl[CRISFRDRVDMACH_NUM], const CriSfrDrvDescriptorId descriptor_id_tbl[CRISFRDRVDMACH_NUM], CriUint32 transfer_count);
+void vd_g_SoundCriDrvDmacInterrupt(void);
+void vd_g_SoundCriDrvDmacIntr(const CriUint32 reload_src_addr_tbl[CRISFRDRVDMACH_NUM], const CriSfrDrvDescriptorId descriptor_id_tbl[CRISFRDRVDMACH_NUM], CriUint32 transfer_count);
+void vd_g_SoundCriDrvDmacStop(void);
+void vd_g_SoundCriDrvDmaDisableIntr(void);
+void vd_g_SoundCriDrvDmaEnableIntr(void);
+void vd_g_SoundCriDrvTaudStart(CriUint16 master_CDR, CriUint16 slave_CDR);
+void vd_g_SoundCriDrvTaudStop(void);
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 
-#endif      /* XSPI_CH0_CFG_H */
+#endif /* SOUND_CRI_DRV_H */
 
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
-/*  Change History  :  xspi_ch0_cfg.c                                                                                                */
+/*  Change History  :  sound_cri_drv.c                                                                                               */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
