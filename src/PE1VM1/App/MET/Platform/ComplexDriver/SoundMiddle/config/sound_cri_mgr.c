@@ -611,6 +611,7 @@ void    vd_g_SoundCriMgrMainTask(void)
 /*===================================================================================================================================*/
 static  U1      u1_s_SoundCriMgrWavNext(void)
 {
+#if 0   /* BEV Rebase provisionally */
 #if (SOUND_VEHICLE_TYPE_TYT == TRUE)
     /* Table to convert the requested buzzer ID to the cue ID */
     static const U2 u2_sp_SOUND_REQ_TO_WAV_TYT[WCHIME_NUM_REQ] = {
@@ -923,6 +924,7 @@ static  U1      u1_s_SoundCriMgrWavNext(void)
         (U2)CRI_CUESHEET_0_LEX_TAN_MET_LBZ_MMTURHAZ_FLA2_24_02_B                                /* WCHIME_REQ_SI_TURHAZ_FIN_HC_HS        */
     };
 #endif
+#endif   /* BEV Rebase provisionally */
 
     U2          u2_t_curcueid;                                                             /* Current sounding timbre cue ID        */
     U1          u1_t_playnum;                                                              /* Number of playing sound groups        */
@@ -958,11 +960,15 @@ static  U1      u1_s_SoundCriMgrWavNext(void)
             u1_t_reqidx = u1_s_SoundCriMgrUpdtNext(u1_t_grp_no, u1_t_reqidx, &u1_t_reqvol);
 
             if(u1_t_reqidx < (U1)WCHIME_NUM_REQ){
+#if 0   /* BEV Rebase provisionally */
 #if (SOUND_VEHICLE_TYPE_TYT == TRUE)
                 u2_t_curcueid = u2_sp_SOUND_REQ_TO_WAV_TYT[u1_t_reqidx];
 #else
                 u2_t_curcueid = u2_sp_SOUND_REQ_TO_WAV_LEX[u1_t_reqidx];
 #endif
+#else   /* BEV Rebase provisionally */
+                u2_t_curcueid = (U2)CRI_CUESHEET_0_LEX_TAN_MET_CBZ_BASE_NOTICE1_0_00;
+#endif   /* BEV Rebase provisionally */
             }
         }
 #if (SOUND_VEHICLE_TYPE_TYT == TRUE)
@@ -1885,7 +1891,7 @@ static  U1      u1_s_SoundCriMgrOwChk(const U1 u1_a_GRP_NO, const U1 u1_a_CYCLCH
 
     u1_t_ow_sts          = (U1)SOUND_OW_CTRL_INA;
     u4_s_sound_ow_unlock = (U4)0U;
-    u1_t_brand           = u1_CALIB_MCUID0024_BRAND
+    u1_t_brand           = u1_CALIB_MCUID0024_BRAND;
 
     if(u1_a_GRP_NO < (U1)SOUND_GROUP_NUM){
         stp_t_ow_ctrl        = &st_sp_sound_ow_ctrl[u1_a_GRP_NO];
@@ -2004,30 +2010,9 @@ static  U1      u1_s_SoundCriMgrOwStsChk(const U1 u1_a_CYCLCHK, const U1 u1_a_OW
 /*===================================================================================================================================*/
 static  void    vd_s_SoundCriMgrSetVolume(const U1 u1_a_GRP_NO, const U1 u1_a_REQ_VOL, const U1 u1_a_PLAYNUM)
 {
-#if 0   /* BEV Rebase provisionally */
-    static volatile const U1 u1_s_VOL_CSR_RTCA_0           = (U1)5U;
-    static volatile const U1 u1_s_VOL_CSR_RTCA_1           = (U1)6U;
-    static volatile const U1 u1_s_VOL_CSR_RTCA_2           = (U1)8U;
-    static volatile const U1 u1_s_VOL_CSR_RTCA_3           = (U1)10U;
-    static volatile const U1 u1_s_VOL_CSR_RTCA_4           = (U1)12U;
-    static volatile const U1 u1_s_VOL_CSR_RTCA_5           = (U1)15U;
-    static volatile const U1 u1_s_VOL_CSR_RTCA_6           = (U1)19U;
-    static volatile const U1 u1_s_VOL_CSR_RTCA_7           = (U1)24U;
-    static volatile const U1 u1_s_VOL_800HZ_57DB           = (U1)2U;
-    static volatile const U1 u1_s_VOL_800HZ_61DB           = (U1)2U;
-    static volatile const U1 u1_s_VOL_800HZ_63DB           = (U1)3U;
-    static volatile const U1 u1_s_VOL_800HZ_67DB           = (U1)3U;
-    static volatile const U1 u1_s_VOL_800HZ_73DB           = (U1)11U;
-    static volatile const U1 u1_s_VOL_1600HZ_63DB          = (U1)10U;
-    static volatile const U1 u1_s_VOL_1600HZ_67DB          = (U1)15U;
-    static volatile const U1 u1_s_VOL_1600HZ_73DB          = (U1)31U;
-    static volatile const U1 u1_s_VOL_1600HZ_77DB          = (U1)31U;
-    static volatile const U1 u1_s_VOL_2400HZ_63DB          = (U1)10U;
-    static volatile const U1 u1_s_VOL_2400HZ_67DB          = (U1)17U;
-    static volatile const U1 u1_s_VOL_2400HZ_73DB          = (U1)17U;
-
     static volatile const U1 u1_s_VOL_MULTI_CH_PLAY_RATE_1 = (U1)SOUND_VOL_MULTI_CH_PLAY_RATE_1;
 
+#if 0   /* BEV Rebase provisionally */
     static volatile const U1 * u1p_sp_SOUND_VOL[WCHIME_NUM_VOL] = {
         &u1_CALIB_MCUID0028_SBW_SI_MID,                     /* WCHIME_VOL_SBW_REVERSE_SI_MID                                         */
         &u1_CALIB_MCUID0745_SBW_SI_MAX,                     /* WCHIME_VOL_SBW_REVERSE_SI_MAX                                         */
@@ -2276,7 +2261,7 @@ static  void    vd_s_SoundCriMgrSetVolume(const U1 u1_a_GRP_NO, const U1 u1_a_RE
 #if 0   /* BEV Rebase provisionally */
         u1_t_multi_ch_play_rate_reqvol = *(u1p_sp_MULTI_CH_PLAY_RATE[(u1_a_PLAYNUM - (U1)1U)]);
 #else   /* BEV Rebase provisionally */
-        u1_t_multi_ch_play_rate_reqvol = (U1)100U;
+        u1_t_multi_ch_play_rate_reqvol = u1_s_VOL_MULTI_CH_PLAY_RATE_1;
 #endif   /* BEV Rebase provisionally */
         u4_t_calc_buf = (U4)u1_t_multi_ch_play_rate_reqvol;
         f4_t_cuevol *= ((CriFloat32)u4_t_calc_buf / (CriFloat32)SOUND_CALIBVOLUME_CHANGE_LSB);
