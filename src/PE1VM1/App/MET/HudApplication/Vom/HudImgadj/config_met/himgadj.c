@@ -584,11 +584,7 @@ static void vd_s_HudImgAdjIfUpdt(void)
         vd_s_HudImgAdjIfInit();
     }
 
-#if 0   /* BEV Rebase provisionally */
     u1_t_ig = u1_g_VehopemdIgnOn();
-#else   /* BEV Rebase provisionally */
-    u1_t_ig = (U1)FALSE;
-#endif   /* BEV Rebase provisionally */
     if(u1_t_ig != (U1)TRUE){
         u1_s_himgadj_l_up_possw = (U1)FALSE;
         u1_s_himgadj_l_dn_possw = (U1)FALSE;
@@ -611,7 +607,7 @@ static U1   u1_s_HudImgAdjGetHudSts(void)
     u1_t_hudonoff = u1_g_McstBf((U1)MCST_BFI_HUD);
     if(u1_t_hudonoff == (U1)MCST_HUD_ON){
 #else   /* BEV Rebase provisionally */
-    u1_t_hudonoff = (U1)U1_MAX;
+    u1_t_hudonoff = (U1)1U;
     if(u1_t_hudonoff == (U1)1U){
 #endif   /* BEV Rebase provisionally */
         u1_t_ishudon = (U1)TRUE;
@@ -1230,9 +1226,7 @@ static void vd_s_HudImgAdjDrvPsInit(void)
 
     u1_t_hudsts = (U1)HUDIMGADJ_HUDST_UNDET;
 #ifdef ComConf_ComSignal_HUD_ST
-#if 0   /* BEV Rebase provisionally */
     (void)Com_SendSignal(ComConf_ComSignal_HUD_ST, &u1_t_hudsts);  /* No event sending occur. Depend on TyCAN config. */
-#endif   /* BEV Rebase provisionally */
 #endif
 }
 /*===================================================================================================================================*/
@@ -1261,16 +1255,12 @@ static void vd_s_HudImgAdjDrvPsInvalidInit(void)
     u1_t_hudsts      = (U1)HUDIMGADJ_HUDST_UNDET;
     u1_t_hudsts_prev = (U1)HUDIMGADJ_HUDST_UNDET;
 #ifdef ComConf_ComSignal_HUD_ST
-#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_HUD_ST, &u1_t_hudsts_prev);
     (void)Com_SendSignal(ComConf_ComSignal_HUD_ST, &u1_t_hudsts);
-#endif   /* BEV Rebase provisionally */
 #endif
     if(u1_t_hudsts_prev != u1_t_hudsts){
 #ifdef MSG_HUD1S01_TXCH0
-#if 0   /* BEV Rebase provisionally */
         (void)Com_TriggerIPDUSend(MSG_HUD1S01_TXCH0);        /* Event send Trigger */
-#endif   /* BEV Rebase provisionally */
 #endif
     }
 }
@@ -1350,25 +1340,17 @@ static void vd_s_HudImgAdjDrvPsUpdt(void)
     U1  u1_t_drvps;
     U1  u1_t_hudreq;
 
-#if 0   /* BEV Rebase provisionally */
     u1_t_msg = Com_GetIPDUStatus((PduIdType)MSG_BDB1F02_RXCH0);
-#else   /* BEV Rebase provisionally */
-    u1_t_msg = (U1)COM_NO_RX;
-#endif   /* BEV Rebase provisionally */
     u1_t_msg &= ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     u1_t_drvps = (U1)HUDIMGADJ_CAN_DRVPSDT_NON;
     u1_t_hudreq = (U1)HUDIMGADJ_CAN_DRVPSREQ_NON;
     if(u1_t_msg == (U1)0U){
         u1_t_drvps = (U1)0U;
-#if 0   /* BEV Rebase provisionally */
         (void)Com_ReceiveSignal(ComConf_ComSignal_DRVPS_DT, &u1_t_drvps);
-#endif   /* BEV Rebase provisionally */
 
         u1_t_hudreq = (U1)0U;
-#if 0   /* BEV Rebase provisionally */
         (void)Com_ReceiveSignal(ComConf_ComSignal_HUD_R, &u1_t_hudreq);
-#endif   /* BEV Rebase provisionally */
 
         if(u1_t_drvps < (U1)HUDIMGADJ_NUM_DRVPS_DT){
             u1_t_id = u1_sp_HUDIMGADJ_TBL_DRVPSID[u1_t_drvps];
@@ -1429,11 +1411,7 @@ static void vd_s_HudImgAdjDrvPsMemUpdt(const U4 u4_a_SGNL, const U1 u1_a_ID)
     U1  u1_t_isvld;
 
     u1_t_isvld = (U1)FALSE;
-#if 0   /* BEV Rebase provisionally */
     u1_t_ig = u1_g_VehopemdIgnOn();
-#else   /* BEV Rebase provisionally */
-    u1_t_ig = (U1)FALSE;
-#endif   /* BEV Rebase provisionally */
     u1_t_hudsts = u1_s_HudImgAdjGetHudSts();
     u2_t_imgpos = u2_s_himgadj_gv_vipos_respos;
     u2_t_max = u2_s_himgadj_gv_vipos_maxpos;
@@ -1675,16 +1653,12 @@ static void vd_s_HudImgAdjDrvPsHudStsActn(const U1 u1_a_EVT)
 
     u1_t_hudsts_prev = (U1)HUDIMGADJ_HUDST_STP;
 #ifdef ComConf_ComSignal_HUD_ST
-#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_HUD_ST, &u1_t_hudsts_prev);
     (void)Com_SendSignal(ComConf_ComSignal_HUD_ST, &u1_t_hudsts);
-#endif   /* BEV Rebase provisionally */
 #endif
     if(u1_t_hudsts_prev != u1_t_hudsts){
 #ifdef MSG_HUD1S01_TXCH0
-#if 0   /* BEV Rebase provisionally */
         (void)Com_TriggerIPDUSend(MSG_HUD1S01_TXCH0);        /* Event send Trigger */
-#endif   /* BEV Rebase provisionally */
 #endif
     }
 }
@@ -1943,9 +1917,14 @@ U1      u1_g_HudImgAdjGetGvRtctlIniReq(void)
 /* 2.2.3              2024.09.13  His     DID 280C was revised. (u2_s_HudImgAdjowimgpos and u1_g_HudImgAdjReadDataImgPos)            */
 /* 2.2.4              2025.03.17  YuK     Removed the max and min limits for HUD position regeneration.                              */
 /*                                                                                                                                   */
+/*  Revision Date        Author   Change Description                                                                                 */
+/* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
+/*  BEV-1    10/24/2025  TS       Change for BEV rebase                                                                              */
+/*                                                                                                                                   */
 /*  * HS  = Hidenobu Suzuki, NCOS                                                                                                    */
 /*  * HiS = Hidenobu Suzuki, MSE                                                                                                     */
 /*  * HT  = Hideki Takagi,   MSE                                                                                                     */
 /*  * YuK = Yuki Koshimae,   MSE                                                                                                     */
+/*  * TS  = Takuo Suganuma,  Denso Techno                                                                                            */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

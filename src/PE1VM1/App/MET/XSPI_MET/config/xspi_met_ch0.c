@@ -55,7 +55,9 @@
 #include "locale.h"
 #include "avggrph.h"
 
+#if 0   /* BEV Rebase provisionally */
 #include "himgadj.h"
+#endif   /* BEV Rebase provisionally */
 #include "hdimmgr_if.h"
 
 /* VSV */
@@ -283,7 +285,9 @@ static inline void    vd_s_XSpiCfgTxTripcom(       U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxTelltale(      U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxRcmmui(        U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxMaint(         U4 * u4_ap_pdu_tx);
+#if 0   /* BEV Rebase provisionally */
 static inline void    vd_s_XSpiCfgTxHud(           U4 * u4_ap_pdu_tx);
+#endif   /* BEV Rebase provisionally */
 static inline void    vd_s_XSpiCfgTxWrnmsg(        U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxMulmed(        U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxCalib(         U4 * u4_ap_pdu_tx);
@@ -922,6 +926,7 @@ static inline void    vd_s_XSpiCfgTxMaint(         U4 * u4_ap_pdu_tx) {
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
+#if 0   /* BEV Rebase provisionally */
 static inline void    vd_s_XSpiCfgTxHud(           U4 * u4_ap_pdu_tx) {
     U1 u1_t_owdutyreq;
     U2 u2_t_owduty;
@@ -942,6 +947,7 @@ static inline void    vd_s_XSpiCfgTxHud(           U4 * u4_ap_pdu_tx) {
     u4_ap_pdu_tx[2] |= (U4)((U4)u1_g_HudImgAdjIsUpSwOn() & (U4)0x00000001U) << 17;          /* HUD_VIPOS_UPSW       */
     u4_ap_pdu_tx[2] |= (U4)((U4)u1_g_HudImgAdjIsDnSwOn() & (U4)0x01U) << 18;                /* HUD_VIPOS_DNSW       */
 }
+#endif   /* BEV Rebase provisionally */
 
 /*===================================================================================================================================*/
 /*  static void    vd_s_XSpiCfgTxWrnmsg(U4 * u4_ap_pdu_tx)                                                                           */
@@ -1693,7 +1699,9 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
     vd_s_XSpiCfgTxOdo(           &u4_ap_pdu_tx[ 59]);      /* 059 - 065    : Odo Meter                                     */
     vd_s_XSpiCfgTxMaint(         &u4_ap_pdu_tx[ 66]);      /* 066 - 067    : Maintenance                                   */
     vd_s_XSpiCfgTxRcmmui(        &u4_ap_pdu_tx[ 68]);      /* 068 - 069    : Rcmmui                                        */
+#if 0   /* BEV Rebase provisionally */
     vd_s_XSpiCfgTxHud(           &u4_ap_pdu_tx[110]);      /* 110 - 134    : Hud                                           */
+#endif   /* BEV Rebase provisionally */
     vd_s_XSpiCfgTxWrnmsg(        &u4_ap_pdu_tx[135]);      /* 135 - 184    : Wrnmsg                                        */
     vd_s_XSpiCfgTxTripcom(       &u4_ap_pdu_tx[185]);      /* 185 - 234    : Tripcom                                       */
     vd_s_XSpiCfgTxTelltale(      &u4_ap_pdu_tx[235]);      /* 235 - 264    : Telltale                                      */
@@ -1776,7 +1784,7 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*  BEV-8     05/30/2025 SN(K)    Change for BEV System_Consideration_2.(MET-S_ADBB-CSTD-0-01-A-C0)                                  */
 /*  BEV-9     06/17/2025 JS       Change for BEV System_Consideration_2.(MET-B_WDICBB-CSTD-0-01-A-C0)                                */
 /*  BEV-10    10/10/2025 KO       Configured for BEVstep3_Dimmer_Rebase                                                              */
-/*  BEV-11    10/22/2025 TS       Change for BEV rebase.                                                                             */
+/*  BEV-11    10/24/2025 TS       Change for BEV rebase.                                                                             */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * KM   = Keisuke Mashita, Denso Techno                                                                                           */
@@ -1797,6 +1805,6 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*  * SN(K)= Shizuka Nakajima, KSE                                                                                                   */
 /*  * JS   = Jun Sugiyama, KSE                                                                                                       */
 /*  * KO     = Kazuto Oishi,  Denso Techno                                                                                           */
-/*  * TS   = Takuo Suganuma, Denso Techno                                                                                            */
+/*  * TS   = Takuo Suganuma,  Denso Techno                                                                                           */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
