@@ -992,6 +992,10 @@ static inline void    vd_s_XSpiCfgTxMulmed(        U4 * u4_ap_pdu_tx) {
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
 static inline void    vd_s_XSpiCfgTxMetcstmMcst(    U4 * u4_ap_pdu_tx) {
+#if 0   /* BEV Rebase provisionally */
+#else   /* BEV Rebase provisionally */
+    u4_ap_pdu_tx[17] = (U4)(((U4)u1_g_wChimeGetMWVCope() & (U4)0x00000007U) << (U1)28U);
+#endif  /* BEV Rebase provisionally */
 }
 /*===================================================================================================================================*/
 /*  static void    vd_s_XSpiCfgTxNickname(U4 * u4_ap_pdu_tx)                                                                         */
@@ -1375,6 +1379,15 @@ static inline void    vd_s_XSpiCfgRxDispsts(    const U4 * u4_ap_PDU_RX) {
 /*===================================================================================================================================*/
 static inline void    vd_s_XSpiCfgRxMetcstm(    const U4 * u4_ap_PDU_RX) {
 
+#if 0   /* BEV Rebase provisionally */
+#else   /* BEV Rebase provisionally */
+    U1  u1_t_cstmvol;
+
+/* CSTM_VOL_CHANGE */
+    u1_t_cstmvol = u1_XSPI_MET_READ__BIT(u4_ap_PDU_RX[3] , (U1)22U, 3U);
+    vd_g_wChimePutMWVCope(u1_t_cstmvol);
+#endif   /* BEV Rebase provisionally */
+
     /* Maint */
     vd_g_HmiMaintMetCstmPut(&u4_ap_PDU_RX[6]);
 
@@ -1409,7 +1422,6 @@ static inline void    vd_s_XSpiCfgRxWchime(     const U4 * u4_ap_PDU_RX) {
     u1_t_wchime[HMIWCHIME_TSR_A]       = u1_XSPI_MET_READ__BIT(u4_ap_PDU_RX[0] , (U1)2U , (U1)2U);          /* TSR_BZ2        */
     u1_t_wchime[HMIWCHIME_TSR_P]       = (U1)0U;                                                        /* -              */
     u1_t_wchime[HMIWCHIME_MASTER]      = u1_XSPI_MET_READ__BIT(u4_ap_PDU_RX[1] , (U1)0U , (U1)2U);          /* MASTER_BZ      */
-    u1_t_wchime[HMIWCHIME_CRUISE_RJCT] = u1_XSPI_MET_READ__BIT(u4_ap_PDU_RX[1] , (U1)2U , (U1)2U);          /* CRUISE_RJCT_BZ */
     vd_g_HmiWchimePut(&u1_t_wchime[0] , (U1)HMIWCHIME_NUM);
 }
 

@@ -23,8 +23,6 @@
 #include "alert.h"
 #if 0   /* BEV Rebase provisionally */
 #include "sbltsync.h"
-
-#include "mcst.h"
 #endif   /* BEV Rebase provisionally */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -120,6 +118,10 @@ U2                           u2_gp_wchime_wt_tim[WCHIME_NUM_CH];          /* Res
 static U1                    u1_s_wchime_rcta_vol;                        /* Last volume kind of RCTA.                               */
 
 U1                           u1_g_wchime_silencetime_flag;                /*  silencetime_flag                                       */
+#if 0   /* BEV Rebase provisionally */
+#else   /* BEV Rebase provisionally */
+U1                           u1_g_wchime_metcstmvol;                      /*  Meter Alarm Volume Customized                          */
+#endif   /* BEV Rebase provisionally */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
@@ -583,6 +585,10 @@ static const U1              u1_sp2_WCHIME_REQ_VOL_INFO[WCHIME_NUM_REQ][WCHIME_V
 void    vd_g_wChimeReqCfgInit(void)
 {
     u1_s_wchime_rcta_vol = (U1)WCHIME_VOL_CSR_RCTA_5;
+#if 0   /* BEV Rebase provisionally */
+#else   /* BEV Rebase provisionally */
+    u1_g_wchime_metcstmvol = (U1)1U;  /* Default value for metcstm volume */
+#endif   /* BEV Rebase provisionally */
 }
 /*===================================================================================================================================*/
 /*  U1      u1_g_wChimeCfgOpemdchk(void)                                                                                             */
@@ -592,11 +598,7 @@ void    vd_g_wChimeReqCfgInit(void)
 /*===================================================================================================================================*/
 U1      u1_g_wChimeCfgOpemdchk(void)
 {
-#if 0   /* BEV Rebase provisionally */
     return(u1_g_VehopemdIgnOn());
-#else   /* BEV Rebase provisionally */
-    return((U1)0U);
-#endif   /* BEV Rebase provisionally */
 }
 /*===================================================================================================================================*/
 /*  U1      u1_g_wChimeReqSwCtrl(const U1 u1_a_REQ_SEL)                                                                              */
@@ -914,8 +916,11 @@ U1      u1_g_wChimeCfgVolGet(const U1 u1_a_REQ_SEL)
         if(u1_t_metcstmvol >= (U1)MCST_METWRNCSTM_VOL_NUM){
             u1_t_metcstmvol = (U1)MCST_METWRNCSTM_VOL_MID;
         }
-#else   /* BEV Rebase provisionally */
-        u1_t_metcstmvol = (U1)0U;
+#else
+        u1_t_metcstmvol = u1_g_wchime_metcstmvol;
+        if(u1_t_metcstmvol >= (U1)3U){
+            u1_t_metcstmvol = (U1)1U;
+        }
 #endif   /* BEV Rebase provisionally */
         u1_t_reqvol = u1_sp2_WCHIME_REQ_VOL_INFO[u1_a_REQ_SEL][u1_t_metcstmvol];
 
