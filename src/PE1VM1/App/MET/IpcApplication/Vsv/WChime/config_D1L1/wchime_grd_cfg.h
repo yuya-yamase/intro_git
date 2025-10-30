@@ -37,7 +37,6 @@
 /*  Function Prototypes                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 void    vd_g_wChimeGrdCfgInit(void);
-void    vd_g_wChimeCfgMMInfoTx(void);
 U1      u1_g_wChimeCfgRsaPermaReq(void);
 U1      u1_g_wChimeCfgRsaAdasReq(void);
 U1      u1_g_wChimeCfgMstrReq(void);

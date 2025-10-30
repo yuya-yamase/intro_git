@@ -199,10 +199,6 @@ void    vd_g_wChimeCfgPreTask(void)
 /*===================================================================================================================================*/
 void    vd_g_wChimeCfgPostTask(void)
 {
-#if 0   /* BEV Rebase provisionally */
-    /* Multi Media */
-    vd_g_wChimeCfgMMInfoTx();
-#endif   /* BEV Rebase provisionally */
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_wChimeCfgReqchk(U4 * u4p_a_reqbit)                                                                                  */

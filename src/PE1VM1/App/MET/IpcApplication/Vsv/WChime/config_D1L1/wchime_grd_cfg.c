@@ -33,8 +33,6 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define WCHIME_MWVC_OPE_INIT                   (7U)                                 /* Initial value of MWVCUS.                      */
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -65,27 +63,10 @@ static U1 u1_s_wchime_mwvc_pre;
 void    vd_g_wChimeGrdCfgInit(void)
 {
     u1_s_wchime_master_pre = (U1)HMIWCHIME_UNDEF;
-    u1_s_wchime_mwvc_pre   = (U1)WCHIME_MWVC_OPE_INIT;
-}
-/*===================================================================================================================================*/
-/*  void    vd_g_wChimeCfgMMInfoTx(void)                                                                                             */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void    vd_g_wChimeCfgMMInfoTx(void)
-{
-    U1 u1_t_level;
-    U1 u1_t_length;
-    U1 u1_t_emergency;
-
-    /* Multimedia */
-    vd_g_wChimeMetBuzzInfo(&u1_t_level, &u1_t_length, &u1_t_emergency);
-
 #if 0   /* BEV Rebase provisionally */
-    (void)Com_SendSignal(ComConf_ComSignal_EMERGENCY_ON, &u1_t_emergency);
-    (void)Com_SendSignal(ComConf_ComSignal_BUZZER_LV, &u1_t_level);
-    (void)Com_SendSignal(ComConf_ComSignal_BUZZER_LEN, &u1_t_length);
+    u1_s_wchime_mwvc_pre   = (U1)HMIMCST_MWVC_OPE_INIT;
+#else   /* BEV Rebase provisionally */
+    u1_s_wchime_mwvc_pre   = (U1)7U;
 #endif   /* BEV Rebase provisionally */
 }
 /*===================================================================================================================================*/
@@ -145,11 +126,18 @@ U1      u1_g_wChimeCfgMWVCReq(void)
     U1    u1_t_ope;
 
     u1_t_req = (U1)FALSE;
-    u1_t_ope = u1_g_wchime_metcstmvol;
-
 #if 0   /* BEV Rebase provisionally */
+    u1_t_ope = u1_g_HmiMcstGetMWVCOpe();
+
     if((u1_s_wchime_mwvc_pre != u1_t_ope    )&&
        (u1_t_ope <= (U1)HMIMCST_MWVC_OPE_MAX)){
+            u1_t_req = (U1)TRUE;
+    }
+#else   /* BEV Rebase provisionally */
+    u1_t_ope = u1_g_wchime_metcstmvol;
+
+    if((u1_s_wchime_mwvc_pre != u1_t_ope    )&&
+       (u1_t_ope <= (U1)2U)){
             u1_t_req = (U1)TRUE;
     }
 #endif   /* BEV Rebase provisionally */

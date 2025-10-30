@@ -100,7 +100,10 @@ extern  U1                          u1_g_wchime_alrt_csr_vol_old;
 extern  U1                          u1_g_wchime_alrt_csr_vol_now;
 
 extern  U1                          u1_g_wchime_silencetime_flag;
+#if 0   /* BEV Rebase provisionally */
+#else   /* BEV Rebase provisionally */
 extern  U1                          u1_g_wchime_metcstmvol;
+#endif   /* BEV Rebase provisionally */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Prototypes                                                                                                              */
