@@ -1,7 +1,7 @@
-/* Fee_PifExt.c v2-0-0                                                      */
+/* Fee_PifExt.c v2-1-0                                                      */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION. All rights reserved.                        */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -83,14 +83,20 @@ Fee_ExtDirectWrite(
 ){
     Fee_ExtDirect_ReturnType Ret = FEE_EXT_DRCT_JOB_NOT_ACCEPT;
     Std_ReturnType  FlsRet;
+    Std_ReturnType  MemAccRet;
     
     if( u4Length <= (uint32)FEE_DFAI_RW_SIZE_MAX )
     {
-        FlsRet = Fee_FlsWrp_Write( (Fls_AddressType)u4Address, ptWriteData, (Fls_LengthType)u4Length );
-        if(FlsRet == (Std_ReturnType)E_OK)
+        /* Preparing for MemAcc data flash access. */
+        MemAccRet = Fee_FlsWrp_ExtDfPreExecution();
+        if(MemAccRet == (Std_ReturnType)E_OK)
         {
-            Ret = FEE_EXT_DRCT_JOB_ACCEPT;
-            Fee_PifExt_DirectJobResultData = FEE_EXT_DRCT_JOB_BUSY;
+            FlsRet = Fee_FlsWrp_Write( (Fls_AddressType)u4Address, ptWriteData, (Fls_LengthType)u4Length );
+            if(FlsRet == (Std_ReturnType)E_OK)
+            {
+                Ret = FEE_EXT_DRCT_JOB_ACCEPT;
+                Fee_PifExt_DirectJobResultData = FEE_EXT_DRCT_JOB_BUSY;
+            }
         }
     }
         
@@ -115,14 +121,20 @@ Fee_ExtDirectErase(
 ){
     Fee_ExtDirect_ReturnType Ret = FEE_EXT_DRCT_JOB_NOT_ACCEPT;
     Std_ReturnType  FlsRet;
+    Std_ReturnType  MemAccRet;
     uint32 EraseSize;
     
-    EraseSize = (uint32)u2SectorNum * (uint32)FEE_DATA_FLASH_PHYS_SECTOR_SIZE;
-    FlsRet = Fee_FlsWrp_Erase( (Fls_AddressType)u4Address, (Fls_LengthType)EraseSize );
-    if(FlsRet == (Std_ReturnType)E_OK)
-    { 
-        Ret = FEE_EXT_DRCT_JOB_ACCEPT;
-        Fee_PifExt_DirectJobResultData = FEE_EXT_DRCT_JOB_BUSY;
+    /* Preparing for MemAcc data flash access. */
+    MemAccRet = Fee_FlsWrp_ExtDfPreExecution();
+    if(MemAccRet == (Std_ReturnType)E_OK)
+    {
+        EraseSize = (uint32)u2SectorNum * (uint32)FEE_DATA_FLASH_PHYS_SECTOR_SIZE;
+        FlsRet = Fee_FlsWrp_Erase( (Fls_AddressType)u4Address, (Fls_LengthType)EraseSize );
+        if(FlsRet == (Std_ReturnType)E_OK)
+        { 
+            Ret = FEE_EXT_DRCT_JOB_ACCEPT;
+            Fee_PifExt_DirectJobResultData = FEE_EXT_DRCT_JOB_BUSY;
+        }
     }
     
     return Ret;
@@ -141,7 +153,7 @@ Fee_ExtDirectMainFunction( void )
 {
     MemIf_JobResultType FlsJobResult;
     
-    Fee_FlsWrp_MainFunction();
+    Fee_FlsWrp_MainFunction( FEE_CALL_TIMING_NOT_PERIODIC );
     
     if( Fee_PifExt_DirectJobResultData == (Fee_ExtDirect_ReturnType)FEE_EXT_DRCT_JOB_BUSY )
     {
@@ -517,6 +529,7 @@ FUNC( void, FEE_CODE ) Fee_PifExt_AcceptedWriteJobNotification(
 /*  1-0-0          :2019/02/01                                              */
 /*  1-1-0          :2019/08/23                                              */
 /*  2-0-0          :2021/06/16                                              */
+/*  2-1-0          :2024/10/04                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

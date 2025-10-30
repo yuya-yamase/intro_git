@@ -1,4 +1,4 @@
-/* Fls_Drv_h_Revision(v1_0_0)                                               */
+/* Fls_Drv.h v2-0-0                                                         */
 /****************************************************************************/
 /* Protected                                                                */
 /* Copyright AUBASS CO., LTD.                                               */
@@ -21,7 +21,6 @@
 /*--------------------------------------------------------------------------*/
 /* Macros                                                                   */
 /*--------------------------------------------------------------------------*/
-#define FLS_DRV_U1_REGBIT_FASTAT_CMDLK      ((uint8)0x10u)              /* the bit of Command Lock */
 #define FLS_DRV_U1_REGBIT_FAEINT_RESET      ((uint8)0x00u)              /* The value for initialization of Flash Access Error Interrupt Enable Register(Hard defaults:0x99u) */
 
 #define FLS_DRV_U4_REGBIT_FSTATR_TBLDTCT    (0x00000008uL)              /* the bit which is an error detection 2 bits (rewriting parameter table) */
@@ -58,7 +57,8 @@
 #define FLS_DRV_U2_REGBIT_FECCTMD_KEY       ((uint16)0xA600u)           /* Key Code(Control of the rewriting propriety of the bit) setting value */
 #define FLS_DRV_U2_REGBIT_FECCTMD_RESET     ((uint16)0x0030u)           /* The value for initialization of Flash ECC Test Mode Register */
 
-#if ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A8 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A16 )
+#if ( ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A8 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A16 ) ) && \
+    ( FLS_Drv_SELECT_FPSYS == FLS_Drv_FPSYS_ALL )
 #define FLS_DRV_U4_REGBIT_DFERSTR_DEDF      (0x00000002uL)              /* ECC 2-Bit Error Monitor Flag */
 #define FLS_DRV_U4_REGVAL_DFERSTR_NOERR     (0x00000000uL)              /* An ECC error is not generated. */
 #define FLS_DRV_U4_REGBIT_DFERSTC_ERRCLR    (0x01uL)                    /* SEDF/DEDF Flag Clear (SEDF/DEDF is in DFERSTR register) */
@@ -79,8 +79,11 @@
 #define FLS_DRV_U4_PROTECT_MODE_ON          (FLS_DRV_U4_REGBIT_FHVE_ON) /* Protection setting */
 #define FLS_DRV_U4_PROTECT_MODE_OFF         (FLS_DRV_U4_REGBIT_FHVE_OFF) /* Protection release */
 
+#if ( FLS_Drv_SELECT_FPSYS == FLS_Drv_FPSYS_ALL ) || ( FLS_Drv_SELECT_FPSYS == FLS_Drv_FPSYS_0 )
 #define FLS_DRV_U4_DFLASH_CMD_ADD_0         (0xFFA20000uL)              /* FACI 0 command issue area */
-#if ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A8 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A16 )
+#endif
+#if ( ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A8 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A16 ) ) && \
+    ( ( FLS_Drv_SELECT_FPSYS == FLS_Drv_FPSYS_ALL ) || ( FLS_Drv_SELECT_FPSYS == FLS_Drv_FPSYS_1 ) )
 #define FLS_DRV_U4_DFLASH_CMD_ADD_1         (0xFFA20000uL + 0x10000uL)  /* FACI 1 command issue area */
 #endif
 
@@ -109,7 +112,11 @@
 #define FLS_DRV_U4_TOTAL_SIZE               (FLS_SECTOR_SIZE * FLS_SECTOR_NUMBER)  /* The amount of data of data Flash (total size) */
 
 #if ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A8 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A16 )
+#if ( FLS_Drv_SELECT_FPSYS == FLS_Drv_FPSYS_ALL )
 #define FLS_DRV_U1_FCU_MAX                  ((uint8)0x02u)              /* FCU Max */
+#else
+#define FLS_DRV_U1_FCU_MAX                  ((uint8)0x01u)              /* FCU Max */
+#endif
 #elif ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2B6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2B10 )
 #define FLS_DRV_U1_FCU_MAX                  ((uint8)0x01u)              /* FCU Max */
 #endif
@@ -124,6 +131,14 @@
 #define FLS_DRV_U4_BOUNDARY_ONE_BLOCK_SECTOR_NUM    ((uint32)32u)       /* number of sectors in FACI(each FACI0 and FACI1) */
 #elif ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2B10 )
 #define FLS_DRV_U4_BOUNDARY_ONE_BLOCK_SECTOR_NUM    ((uint32)64u)       /* number of sectors in FACI(each FACI0 and FACI1) */
+#endif
+
+#if ( FLS_Drv_SELECT_FPSYS == FLS_Drv_FPSYS_1 )
+#if ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A8 )
+#define FLS_DRV_U4_FPSYS_OFFSET_ADDRESS     ( 0x00020000UL )            /* DataFlashAdressOffset(for U2A8 Only FPSYS_1 ) */
+#elif ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A16 )
+#define FLS_DRV_U4_FPSYS_OFFSET_ADDRESS     ( 0x00040000UL )            /* DataFlashAdressOffset(for U2A16 Only FPSYS_1 ) */
+#endif
 #endif
 
 /* FACI size */
@@ -179,7 +194,8 @@
 #define FLS_DRV_U1_BIT2_TRUE                ((uint8)0x01u)              /* Data 2 is effective. */
 
 #define FLS_DRV_U1_VAL_0                    ((uint8)0x00u)
-#if ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A8 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A16 )
+#if ( ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A8 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A16 ) ) && \
+    ( FLS_Drv_SELECT_FPSYS == FLS_Drv_FPSYS_ALL )
 #define FLS_DRV_U1_VAL_1                    ((uint8)0x01u)
 #endif
 #define FLS_DRV_U4_VAL_0                    (0x00000000uL)
@@ -207,7 +223,8 @@ typedef uint8  Fls_StatusType;
 #define FLS_DRV_U1_ERR_INTERNAL             ((Fls_StatusType)0x07u)     /* Internal error */
 #define FLS_DRV_U1_ERR_TIMEOUT              ((Fls_StatusType)0x08u)     /* Timeout error */
 
-#if ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A8 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A16 )
+#if ( ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A8 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A16 ) ) && \
+    ( FLS_Drv_SELECT_FPSYS == FLS_Drv_FPSYS_ALL )
 typedef uint8  Fls_DataArea;
 
 #define FLS_DRV_U1_AREA_FACI0               ((Fls_DataArea)0x01u)       /* Data area 0 */
@@ -315,7 +332,8 @@ FUNC( Fls_FlagType, FLS_CODE ) Fls_Drv_VerifyID(P2CONST( Fls_Cdd_DataFlashIDType
 FUNC( Fls_StatusType, FLS_CODE ) Fls_Drv_StartBCOperation( uint32 u4_addStart, uint32 u4_addEnd, Fls_AddressType* pt_AddDest);
 #endif /* ( FLS_CDD_BLANK_CHECK_API == STD_ON ) || ( FLS_CDD_NOT_BLANK_ADDRESS_API == STD_ON ) */
 
-#if ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A8 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A16 )
+#if ( ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A8 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A16 ) ) && \
+    ( FLS_Drv_SELECT_FPSYS == FLS_Drv_FPSYS_ALL )
 FUNC( Fls_DataArea, FLS_CODE ) Fls_Drv_CalculateTargetArea( uint32 u4_addStart, uint32 u4_bCnt );
 #endif
 
@@ -346,8 +364,8 @@ extern VAR( FLS_DRV_DATA_T, FLS_VAR_NO_INIT ) Fls_Str;
 
 /****************************************************************************/
 /* History                                                                  */
-/* Version :Date                                                            */
-/* [Number] :[Date]                                                         */
+/*  Version        :Date                                                    */
+/*  2-0-0          :2024/07/31                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

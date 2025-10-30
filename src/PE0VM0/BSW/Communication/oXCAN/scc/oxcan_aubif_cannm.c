@@ -72,7 +72,15 @@
 Std_ReturnType CanNm_CbkGetPwonBusAwake(NetworkHandleType nmChannelHandle)
 {
 #if (OXCAN_AUBIF_NET_WK_AT_RST == 1U)
-    return(E_OK);
+    U1    u1_t_ret;
+
+    u1_t_ret = E_OK;
+    
+    if(nmChannelHandle == (NetworkHandleType)ComMConf_ComMChannel_MM_SUB_BUS){
+        u1_t_ret = E_NOT_OK;
+    }
+
+    return(u1_t_ret);
 #else
     return(E_NOT_OK);
 #endif

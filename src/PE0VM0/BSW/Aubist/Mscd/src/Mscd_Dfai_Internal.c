@@ -1,7 +1,7 @@
 /* Mscd_Dfai_Internal.c v2-0-0                                              */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION. All rights reserved.                        */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -48,18 +48,18 @@
 #include <Mscd_MemMap.h>
 
 #if( MSCD_DFAI_USE == STD_ON )
-/* common ユニット */
+/* common unit */
 /****************************************************************************/
-/* Function Name | Mscd_Dfai_CheckAddrRange                          */
-/*               |                                 （アドレス範囲チェック） */
-/* Description   | アドレスの先頭とデータ長がユーザが指定したメモリ領域の   */
-/*               | 範囲内かチェック                                         */
+/* Function Name | Mscd_Dfai_CheckAddrRange                                 */
+/*               |                         (address range check)            */
+/* Description   | Check if the beginning of the address and the data length*/
+/*               | are within the memory area specified by the user         */
 /* Preconditions |                                                          */
-/* Parameters    | u4Address            : チェックする領域の先頭アドレス    */
-/*               | u4Length             : チェックする領域のデータ長        */
+/* Parameters    | u4Address    : top address of area to check              */
+/*               | u4Length     : data length of area to check              */
 /* Return Value  | Std_ReturnType                                           */
-/*               |           E_OK     : パラメータ正常                      */
-/*               |           E_NOT_OK : パラメータ異常                      */
+/*               |      E_OK        : parameter normal                      */
+/*               |      E_NOT_OK    : parameter error                       */
 /* Notes         | None                                                     */
 /****************************************************************************/
 FUNC(Std_ReturnType, MSCD_CODE)
@@ -78,13 +78,13 @@ Mscd_Dfai_CheckAddrRange( uint32 u4Address, uint32 u4Length )
         u4StartUserAreaAddr = ( (uint32)u2StartUserAreaSectorNo_temp * (uint32)MSCD_DFAI_FLASH_SECTOR_SIZE );
         u4EndUserAreaAddr = ( ( ( (uint32)u2StartUserAreaSectorNo_temp + (uint32)Mscd_DFAI_u2UserAreaSectorNum ) * (uint32)MSCD_DFAI_FLASH_SECTOR_SIZE ) - (uint32)MSCD_DFAI_1LSB );
 
-        /* 先頭アドレスがユーザ使用領域の先頭より小さい場合、E_NOT_OKを返す */
+        /* Returns E_NOT_OK if start address is less than start of user used space */
         if( u4Address >= u4StartUserAreaAddr )
         {
-            /* 先頭アドレスがユーザ使用領域の末尾より大きい場合、E_NOT_OKを返す */
+            /* Returns E_NOT_OK if start address is greater than end of user space */
             if( u4Address <= u4EndUserAreaAddr )
             {
-                /* 要求アドレスの先頭からユーザが指定した領域の末尾までのサイズを求める */
+                /* Find the size from the beginning of the request address to the end of the user-specified area */
                 u4AddToEndLen = ( u4EndUserAreaAddr - u4Address ) + (uint32)MSCD_DFAI_1LSB;
 
                 if( u4Length <= u4AddToEndLen )

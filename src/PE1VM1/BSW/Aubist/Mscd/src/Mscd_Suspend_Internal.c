@@ -1,7 +1,7 @@
 /* Mscd_Suspend_Internal.c v1-0-0                                           */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION. All rights reserved.                        */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -59,13 +59,13 @@ VAR(uint8, MSCD_VAR_NO_INIT) Mscd_Suspend_u1SuspendMsOpeState;
 #include <Mscd_MemMap.h>
 
 /****************************************************************************/
-/* Function Name | Mscd_Suspend_UpdateUserOpeState                         */
-/* Description   | MSの動作状態を更新する                                   */
+/* Function Name | Mscd_Suspend_UpdateUserOpeState                          */
+/* Description   | Update MS operating status                               */
 /* Preconditions |                                                          */
 /* Parameters    | None                                                     */
 /* Return Value  | uint8                                                    */
-/*               |           MSCD_SUSPEND_MS_RUN     : 動作                 */
-/*               |           MSCD_SUSPEND_MS_SUSPEND : 停止                 */
+/*               |      MSCD_SUSPEND_MS_RUN     : run                       */
+/*               |      MSCD_SUSPEND_MS_SUSPEND : Stop                      */
 /* Notes         | None                                                     */
 /****************************************************************************/
 FUNC(uint8, MSCD_CODE)
@@ -73,20 +73,20 @@ Mscd_Suspend_UpdateUserOpeState( void )
 {
 #if( MSCD_SUSPEND_USE == STD_ON )
 
-    /* Mscd_Suspend_GetOpeStateHookの第1引数は将来拡張用であり、現在は0固定 */
+    /* The first argument of Mscd _ Suspend _ GetOpenStateHook is for future expansion, currently fixed at 0 */
     Std_ReturnType u1State = Mscd_Suspend_GetOpeStateHook( 0U );
 
-    /* ユーザが指定した動作許可状態に合わせてMSの動作状態更新 */
-    if( u1State == (Std_ReturnType)E_OK ) /* ユーザが動作許可を指定した場合、MSを動作状態にする */
+    /* Update MS operating status to match user-specified operating permission status */
+    if( u1State == (Std_ReturnType)E_OK ) /* Put MS in working state if user specifies operating permission */
     {
-        /* 停止状態から再開する場合は強制停止・再開処置 */
+        /* Forced stop/restart procedure when resuming from a stopped state */
         if( Mscd_Suspend_u1SuspendMsOpeState != MSCD_SUSPEND_MS_RUN )
         {
             NvM_ExtEnable();
         }
         Mscd_Suspend_u1SuspendMsOpeState = MSCD_SUSPEND_MS_RUN;
     }
-    else /* ユーザが動作禁止を指定した場合、MSを停止状態にする */
+    else /* Put MS in a suspended state if user specifies no action */
     {
         Mscd_Suspend_u1SuspendMsOpeState = MSCD_SUSPEND_MS_SUSPEND;
     }

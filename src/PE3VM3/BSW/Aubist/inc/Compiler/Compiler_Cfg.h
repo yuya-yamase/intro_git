@@ -17,7 +17,6 @@
 /*--------------------------------------------------------------------------*/
 
 
-#include "./Compiler_AbPartition_Cfg.h"
 #include "./Compiler_Crc_Cfg.h"
 #include "./Compiler_E2E_Cfg.h"
 #include "./Compiler_SchM_Cfg.h"

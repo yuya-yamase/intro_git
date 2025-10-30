@@ -108,7 +108,6 @@ ${CMN_DIR}/MCAL_Intc.gpj
 ${CMN_DIR}/MCAL_PORT.gpj
 ${CMN_DIR}/MCAL_Pwm.gpj
 ${CMN_DIR}/MCAL_SPI.gpj
-${CMN_DIR}/MCAL_Icu.gpj
 ${CMN_DIR}/MCAL_Wdg.gpj
 ${CMN_DIR}/MCAL_I2c.gpj
 ${CMN_DIR}/GpI2c.gpj

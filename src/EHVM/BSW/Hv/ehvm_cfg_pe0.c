@@ -29,7 +29,7 @@
 /****************************************************************************************/
 /* Hv4mVmConfig                                                                         */
 /****************************************************************************************/
-static EhvmConst ehvm_guest_int_config_t ehvm_guest_int_configs_pe0[10] = {
+static EhvmConst ehvm_guest_int_config_t ehvm_guest_int_configs_pe0[12] = {
     {
         26U,  /* intno */
         PEID_0,  /* Peid */
@@ -77,6 +77,16 @@ static EhvmConst ehvm_guest_int_config_t ehvm_guest_int_configs_pe0[10] = {
     },
     {
         321U,  /* intno */
+        PEID_0,  /* Peid */
+        GPID_VM0  /* Gpid */
+    },
+    {
+        334U,  /* intno */
+        PEID_0,  /* Peid */
+        GPID_VM0  /* Gpid */
+    },
+    {
+        335U,  /* intno */
         PEID_0,  /* Peid */
         GPID_VM0  /* Gpid */
     }
@@ -217,7 +227,7 @@ EhvmConst ehvm_cfg_tbl_t ehvm_cfg_tbl_pe0 =
 {
     0U,                             /* tptm_dividingratio */
     VM_NUM_PE0,                     /* vmnum */
-    10U,                            /* guest_int_num */
+    12U,                            /* guest_int_num */
 #if ((defined(__AIP_THROUGHPUT__)) && (__AIP_THROUGHPUT__ == 1))
     (ehvm_uint32_t)5000U,          /* hv_cycle */
 #else

@@ -1,7 +1,7 @@
 /* Mscd_Suspend.c v2-0-0                                                    */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION. All rights reserved.                        */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -51,8 +51,8 @@
 #include <Mscd_MemMap.h>
 
 /******************************************************************************/
-/* Function Name | Mscd_Suspend_Init （MS動作状態初期化処理）                 */
-/* Description   | MS動作状態を初期化する                                     */
+/* Function Name | Mscd_Suspend_Init (MS Action State Initialization)         */
+/* Description   | Initialize MS operating state                              */
 /* Preconditions |                                                            */
 /* Parameters    | None                                                       */
 /* Return Value  | None                                                       */
@@ -115,11 +115,11 @@ Mscd_Suspend_UpdateOpeState( void )
 
 #if( MSCD_SUSPEND_USE == STD_ON )
 /****************************************************************************/
-/* Function Name | Mscd_Suspend_ReqUpdateOpeState （MS動作状態更新要求）    */
-/* Description   | 本I/Fコール時にMSの動作状態を更新する                    */
+/* Function Name | Mscd_Suspend_ReqUpdateOpeState (MS motion state update request) */
+/* Description   | Update MS operating status during this I/F call          */
 /* Preconditions |                                                          */
-/* Parameters    | u1MemoryIdentifier  : メモリ媒体ID                       */
-/*               |                      ※将来の拡張用。現在は0固定         */
+/* Parameters    | u1MemoryIdentifier: memory medium ID                     */
+/*               |             * For future expansion. Currently fixed at 0 */
 /* Return Value  | None                                                     */
 /* Notes         | None                                                     */
 /****************************************************************************/
@@ -134,14 +134,14 @@ Mscd_Suspend_ReqUpdateOpeState( uint8 u1MemoryIdentifier )
 
 #if( MSCD_SUSPEND_USE == STD_ON )
 /****************************************************************************/
-/* Function Name | Mscd_Suspend_ReqAbort （MSドライバ強制停止）             */
-/* Description   | ドライバの処理を強制的に中止する                         */
+/* Function Name | Mscd_Suspend_ReqAbort (MS Driver Forced Stop)            */
+/* Description   | Force the driver to stop processing                      */
 /* Preconditions |                                                          */
-/* Parameters    | u1MemoryIdentifier  : メモリ媒体ID                       */
-/*               |                      ※将来の拡張用。現在は0固定         */
+/* Parameters    | u1MemoryIdentifier : memory medium ID                    */
+/*               |             * For future expansion. Currently fixed at 0 */
 /* Return Value  | Std_ReturnType                                           */
-/*               |           E_OK     : 要求が受け付けられた                */
-/*               |           E_NOT_OK : 要求が受け付けられなかった          */
+/*               |          E_OK        : Request accepted                  */
+/*               |          E_NOT_OK    : Request not accepted              */
 /* Notes         | None                                                     */
 /****************************************************************************/
 FUNC(Std_ReturnType, MSCD_CODE)
@@ -151,7 +151,7 @@ Mscd_Suspend_ReqAbort( uint8 u1MemoryIdentifier )
 
     u1Result = E_NOT_OK;
 
-    /* MSが停止状態のときのみドライバを中止する */
+    /* Abort driver only when MS is stopped */
     if( Mscd_Suspend_u1SuspendMsOpeState != MSCD_SUSPEND_MS_RUN )
     {
         NvM_ExtDisable();
