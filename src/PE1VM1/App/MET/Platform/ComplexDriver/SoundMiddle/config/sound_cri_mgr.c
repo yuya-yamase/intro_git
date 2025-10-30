@@ -98,8 +98,8 @@
 #define SOUND_OW_CTRL_CNT                      (2U)                        /* Active test status : Test continuation                 */
 #define SOUND_OW_CTRL_INA                      (3U)                        /* Active test status : Test inactive                     */
 
-#define SOUND_CALIBVOLUME_CHANGE_LSB           (1000)                       /* Type Unsigned char to Float                            */
-#define SOUND_VOL_MULTI_CH_PLAY_RATE_1         (1000U)                      /* Single channel playing(Fixed at 100%)                  */
+#define SOUND_CALIBVOLUME_CHANGE_LSB           (1000)                      /* Type Unsigned char to Float                            */
+#define SOUND_VOL_MULTI_CH_PLAY_RATE_1         (1000U)                     /* Single channel playing(Fixed at 100%)                  */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define SOUND_INITIAL_MODESET_END_TIM          (2U)
