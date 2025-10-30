@@ -2,68 +2,77 @@
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-/*  Ambient Temprature Celsius/Fahrenheit                                                                                            */
+/*  Synchronizer of Seatbelt WarningChime with Telltale                                                                              */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
 
-#ifndef AMBTMP_H
-#define AMBTMP_H
+#ifndef SBLTSYNC_CFG_H
+#define SBLTSYNC_CFG_H
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define AMBTMP_H_MAJOR                         (2)
-#define AMBTMP_H_MINOR                         (3)
-#define AMBTMP_H_PATCH                         (0)
+#define SBLTSYNC_CFG_H_MAJOR                     (2)
+#define SBLTSYNC_CFG_H_MINOR                     (3)
+#define SBLTSYNC_CFG_H_PATCH                     (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-/* #include "xxxx.h" */
+#include "aip_common.h"
+#include "sbltwrn.h"
+#include "oxcan.h"
+#include "calibration.h"
+
+#include "sbltsync.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define AMBTMP_STS_VALID            (0U)
-#define AMBTMP_STS_UNKNOWN          (1U)
-#define AMBTMP_STS_SNSRERROR        (2U)
-#define AMBTMP_STS_SNSRTO           (3U)
+#define SBLTSYNC_TICK                            (10U)
 
-#define AMBTMP_DEG_UNK              (0xffffU)
+#define SBLTSYNC_NUM_KND                         (3U)
+#define SBLTSYNC_KND_LGL                         (0U)
+#define SBLTSYNC_KND_LV2                         (1U)
+#define SBLTSYNC_KND_LV1                         (2U)
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Prototypes                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-void    vd_g_AmbtmpBonInit(void);
-void    vd_g_AmbtmpRstWkInit(void);
-void    vd_g_AmbtmpMainTask(void);
-U1      u1_g_AmbtmpCel(U2 * u2p_a_cel);     /* u2_ap_cel : res. = 0.01 celsius,    max 655.25 celsius,    offset 4000                */
-U1      u1_g_AmbtmpFah(U2 * u2p_a_fah);     /* u2_ap_fah : res. = 0.01 fahrenheit, max 655.25 fahrenheit, offset 4000                */
-U1      u1_g_AmbtmpIceWrnActCel(void);      /* Ice Warning Status: TRUE=Active  / FALSE=Inactive                                     */ 
-U1      u1_g_AmbtmpIcyraWrnActCel(void);    /* Road surface freezing display Status: TRUE=Active  / FALSE=Inactive                   */ 
-U1      u1_g_AmbtmpIceWrnActFah(void);      /* Ice Warning Status: TRUE=Active  / FALSE=Inactive                                     */ 
-U1      u1_g_AmbtmpIcyraWrnActFah(void);    /* Road surface freezing display Status: TRUE=Active  / FALSE=Inactive                   */ 
-U1      u1_g_AmbtmpIceWrnAct(void);
-U1      u1_g_AmbtmpIcyraWrnAct(void);
+U1      u1_g_SbltsyncCfgChmRingKnd(void);
+U2      u2_g_SbltsyncCfgChmMask(void);
+void    vd_g_SbltsyncCfgTxRRTT(const U1 u1_a_SIG);
+void    vd_g_SbltsyncCfgTxRCTT(const U1 u1_a_SIG);
+void    vd_g_SbltsyncCfgTxRLTT(const U1 u1_a_SIG);
+void    vd_g_SbltsyncCfgTxRR2TT(const U1 u1_a_SIG);
+void    vd_g_SbltsyncCfgTxRC2TT(const U1 u1_a_SIG);
+void    vd_g_SbltsyncCfgTxRL2TT(const U1 u1_a_SIG);
+void    vd_g_SbltsyncCfgTxRR3TT(const U1 u1_a_SIG);
+void    vd_g_SbltsyncCfgTxRC3TT(const U1 u1_a_SIG);
+void    vd_g_SbltsyncCfgTxRL3TT(const U1 u1_a_SIG);
+void    vd_g_SbltsyncCfgTxREARINDI(const U1 u1_a_SIG);
+void    vd_g_SbltsyncCfgTxCXMET1S02(void);
+
+/* U2   u2_g_SbltwrnChmsts(void);                       */
+/* U2   u2_g_SbltwrnTtsts(void);                        */
+/* U1   u1_g_SbltwrnTtstsBySeat(const U1 u1_a_SEATID);  */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-
-#endif      /* AMBTMP_H */
+#endif      /* SBLTSYNC_CFG_H */
 
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
-/*  Change History  :  ambtmp_cel.c                                                                                                  */
+/*  Change History  :  sbltsync.c                                                                                                    */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

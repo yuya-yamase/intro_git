@@ -1,39 +1,41 @@
-/* 2.3.0 */
+/* 2.2.1 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-/*  Ambient Temprature Celsius/Fahrenheit                                                                                            */
+/*  Seatbelt reminder warning                                                                                                        */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define AMBTMP_CFG_C_MAJOR                     (2)
-#define AMBTMP_CFG_C_MINOR                     (3)
-#define AMBTMP_CFG_C_PATCH                     (0)
+#define SBLTWRN_CFG_C_MAJOR                     (2)
+#define SBLTWRN_CFG_C_MINOR                     (2)
+#define SBLTWRN_CFG_C_PATCH                     (1)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#include "ambtmp_cfg_private.h"
+#include "sbltwrn_cfg_private.h"
 
-#include "locale.h"
+#include "nvmc_mgr.h"
+#include "vardef.h"
+#include "vardef_dest.h"
 #include "oxcan.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if ((AMBTMP_CFG_C_MAJOR != AMBTMP_H_MAJOR) || \
-     (AMBTMP_CFG_C_MINOR != AMBTMP_H_MINOR) || \
-     (AMBTMP_CFG_C_PATCH != AMBTMP_H_PATCH))
-#error "ambtmp_cfg.c and ambtmp_cel.h : source and header files are inconsistent!"
+#if ((SBLTWRN_CFG_C_MAJOR != SBLTWRN_H_MAJOR) || \
+     (SBLTWRN_CFG_C_MINOR != SBLTWRN_H_MINOR) || \
+     (SBLTWRN_CFG_C_PATCH != SBLTWRN_H_PATCH))
+#error "vptran_sel_cfg.c and vptran_sel.h : source and header files are inconsistent!"
 #endif
 
-#if ((AMBTMP_CFG_C_MAJOR != AMBTMP_CFG_H_MAJOR) || \
-     (AMBTMP_CFG_C_MINOR != AMBTMP_CFG_H_MINOR) || \
-     (AMBTMP_CFG_C_PATCH != AMBTMP_CFG_H_PATCH))
-#error "ambtmp_cfg.c and ambtmp_cfg_private.h : source and header files are inconsistent!"
+#if ((SBLTWRN_CFG_C_MAJOR != SBLTWRN_CFG_PRIVATE_H_MAJOR) || \
+     (SBLTWRN_CFG_C_MINOR != SBLTWRN_CFG_PRIVATE_H_MINOR) || \
+     (SBLTWRN_CFG_C_PATCH != SBLTWRN_CFG_PRIVATE_H_PATCH))
+#error "vptran_sel_cfg.c and vptran_sel_cfg_private.h : source and header files are inconsistent!"
 #endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -54,96 +56,92 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+const   ST_SBLTWRN_MSGCFG                       st_gp_SBLTWRN_MSGCOND_CFG[SBLTWRN_NUM_MSG] = {
+#if 0   /* BEV Rebase provisionally */
+    {   (U1)SBLTWRN_MSGCOND_BATT,   (U2)MSG_BDB1S01_RXCH0  },      /* 01 SBLTWRN_MSG_BDB1S01 */ /* For R*OSW, POSW, ***Y, PKB_BDB      */
+    {   (U1)SBLTWRN_MSGCOND_IGON,   (U2)MSG_ECT1G01_RXCH0  },      /* 02 SBLTWRN_MSG_ECT1G01 */ /* For B_P, B_R                        */
+    {   (U1)SBLTWRN_MSGCOND_IGON,   (U2)MSG_ABG1S01_RXCH0  },      /* 03 SBLTWRN_MSG_ABG1S01 */ /* For *BKLAB                          */
+    {   (U1)SBLTWRN_MSGCOND_IGON,   (U2)MSG_VSC1G13_RXCH0  },      /* 04 SBLTWRN_MSG_VSC1G13 */ /* For SP1                             */
+    {   (U1)SBLTWRN_MSGCOND_BATT,   (U2)MSG_PDC1G02_RXCH0  },      /* 05 SBLTWRN_MSG_PDC1G02 */ /* For R*BKLPDC, PBKL_PDC              */
+    {   (U1)SBLTWRN_MSGCOND_BATT,   (U2)MSG_ZN11S19_RXCH0  },      /* 06 SBLTWRN_MSG_ZN11S19 */ /* For R**OSW, CFOSW                   */
+    {   (U1)SBLTWRN_MSGCOND_IGON,   (U2)MSG_ZN11S26_RXCH0  }       /* 07 SBLTWRN_MSG_ZN11S26 */ /* For *R*BCKL, CFBCKL, DBKLSW, REVSW2 */
+#else   /* BEV Rebase provisionally */
+    {   (U1)SBLTWRN_MSGCOND_BATT,   (U2)U2_MAX             },      /* 01 SBLTWRN_MSG_BDB1S01 */ /* For R*OSW, POSW, ***Y, PKB_BDB      */
+    {   (U1)SBLTWRN_MSGCOND_IGON,   (U2)U2_MAX             },      /* 02 SBLTWRN_MSG_ECT1G01 */ /* For B_P, B_R                        */
+    {   (U1)SBLTWRN_MSGCOND_IGON,   (U2)U2_MAX             },      /* 03 SBLTWRN_MSG_ABG1S01 */ /* For *BKLAB                          */
+    {   (U1)SBLTWRN_MSGCOND_IGON,   (U2)U2_MAX             },      /* 04 SBLTWRN_MSG_VSC1G13 */ /* For SP1                             */
+    {   (U1)SBLTWRN_MSGCOND_BATT,   (U2)U2_MAX             },      /* 05 SBLTWRN_MSG_PDC1G02 */ /* For R*BKLPDC, PBKL_PDC              */
+    {   (U1)SBLTWRN_MSGCOND_BATT,   (U2)U2_MAX             },      /* 06 SBLTWRN_MSG_ZN11S19 */ /* For R**OSW, CFOSW                   */
+    {   (U1)SBLTWRN_MSGCOND_IGON,   (U2)U2_MAX             }       /* 07 SBLTWRN_MSG_ZN11S26 */ /* For *R*BCKL, CFBCKL, DBKLSW, REVSW2 */
+    #endif   /* BEV Rebase provisionally */
+};
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+static inline  U1 u1_s_SbltwrnCfgCalibU1NumChk(const U1 u1_a_CALIBID, const U1 u1_a_NUM, const U1 u1_a_DEF);
+
 /*===================================================================================================================================*/
-/* U1  u1_g_AmbtmpCfgIFIdx(void)                                                                                                     */
+/* U1              u1_g_SbltwrnDestCfg(void)                                                                                         */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-U1  u1_g_AmbtmpCfgIFIdx(void)
+U1              u1_g_SbltwrnDestCfg(void)
 {
-    return((U1)AMBTMP_IF_CAN);
+    static const U1 u1_sp_SBLTWRN_DESTJDG[CALIB_MCUID0024_NUM][VDF_NUM_SEATBLT_DEST] = {
+        {(U1)SBLTWRN_DEST_US_TS,    (U1)SBLTWRN_DEST_EU_TS,     (U1)SBLTWRN_DEST_CN_TS      },
+        {(U1)SBLTWRN_DEST_US_LS,    (U1)SBLTWRN_DEST_EU_LS,     (U1)SBLTWRN_DEST_CN_LS      },
+        {(U1)SBLTWRN_DEST_US_SB,    (U1)SBLTWRN_DEST_EU_SB,     (U1)SBLTWRN_DEST_CN_SB      }
+    };
+
+    U1  u1_t_brand;
+    U1  u1_t_dest;
+    U1  u1_t_beltdest;
+
+    u1_t_brand = u1_s_SbltwrnCfgCalibU1NumChk(u1_CALIB_MCUID0024_BRAND, (U1)CALIB_MCUID0024_NUM, (U1)CALIB_MCUID0024_DEF);
+    u1_t_dest = u1_g_VardefBltDstByPid();
+    if(u1_t_dest >= (U1)VDF_NUM_SEATBLT_DEST){
+        u1_t_dest = (U1)VDF_SEATBLT_DEST_USA;
+    }
+
+    u1_t_beltdest = u1_sp_SBLTWRN_DESTJDG[u1_t_brand][u1_t_dest];
+
+    return (u1_t_beltdest);
 }
 
 /*===================================================================================================================================*/
-/* U1  u1_g_AmbtmpCfgIFIdx(void)                                                                                                     */
+/* U1              u1_g_SbltwrnCanMsgstsCfg(const U2 u2_a_MSGSTS)                                                                    */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-U1      u1_g_AmbtmpCfgUnit(void)
+U1              u1_g_SbltwrnCanMsgstsCfg(const U2 u2_a_MSGSTS)
 {
-    U1  u1_t_unit;
+    U1          u1_t_ret;
+    u1_t_ret = (U1)Com_GetIPDUStatus((PduIdType)u2_a_MSGSTS);
 
-    u1_t_unit = u1_g_Unit((U1)UNIT_IDX_AMBTMP);
-    if(u1_t_unit == (U1)UNIT_VAL_AMBTMP_CEL){
-        u1_t_unit = (U1)AMBTMP_UNIT_CEL;
-    }
-    else{
-        u1_t_unit = (U1)AMBTMP_UNIT_FAH;
-    }
-    return(u1_t_unit);
+    return (u1_t_ret);
 }
 
 /*===================================================================================================================================*/
-/* U1  u1_g_AmbtmpCANCfg(U1 * u1p_a_acn_amb , U1 * u1p_a_ac_amb05)                                                                   */
+/* static inline  U1 u1_s_SbltwrnCfgCalibU1NumChk(const U1 u1_a_CALIBID, const U1 u1_a_NUM, const U1 u1_a_DEF)                       */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-U1  u1_g_AmbtmpCANCfg(U1 * u1p_a_acn_amb , U1 * u1p_a_ac_amb05)
+static inline  U1 u1_s_SbltwrnCfgCalibU1NumChk(const U1 u1_a_CALIBID, const U1 u1_a_NUM, const U1 u1_a_DEF)
 {
-#if ((AMBTMP_STSBIT_UNKNOWN != COM_NO_RX  ) || \
-     (AMBTMP_STSBIT_INVALID != COM_TIMEOUT))
-    U1           u1_t_pdusts;
-    U1           u1_t_stsbit;
+    U1 u1_t_ret;
 
-    (void)Com_ReceiveSignal(ComConf_ComSignal_ACN_AMB, u1p_a_acn_amb);
-    (void)Com_ReceiveSignal(ComConf_ComSignal_AC_AMB05, u1p_a_ac_amb05);
-    u1_t_pdusts = (U1)Com_GetIPDUStatus(MSG_ZN21S13_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
-
-    if (u1_t_pdusts == ((U1)COM_TIMEOUT | (U1)COM_NO_RX)) {
-        u1_t_stsbit = (U1)AMBTMP_STSBIT_INVALID | (U1)AMBTMP_STSBIT_UNKNOWN;
-    }
-    else if (u1_t_pdusts == (U1)COM_TIMEOUT) {
-        u1_t_stsbit =(U1)AMBTMP_STSBIT_INVALID;
-    }
-    else if (u1_t_pdusts == (U1)COM_NO_RX) {
-        u1_t_stsbit = (U1)AMBTMP_STSBIT_UNKNOWN;
-    }
-    else {
-        u1_t_stsbit = (U1)AMBTMP_STSBIT_VALID;
+    u1_t_ret = u1_a_CALIBID;
+    if(u1_t_ret >= u1_a_NUM){
+        u1_t_ret = u1_a_DEF;
     }
 
-    return(u1_t_stsbit);
-#else
-    (void)Com_ReceiveSignal(ComConf_ComSignal_ACN_AMB, u1p_a_acn_amb);
-    (void)Com_ReceiveSignal(ComConf_ComSignal_AC_AMB05, u1p_a_ac_amb05);
-    return((U1)Com_GetIPDUStatus(MSG_ZN21S13_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX));
-#endif
+    return(u1_t_ret);
 }
-/*===================================================================================================================================*/
-/* void    vd_g_AmbtmpCfgMainStart(void)                                                                                             */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void    vd_g_AmbtmpCfgMainStart(void)
-{
-}
-/*===================================================================================================================================*/
-/* void    vd_g_AmbtmpCfgMainFinish(const U1 u1_a_STS, const U2 u2_a_CEL, const U2 u2_a_FAH)                                         */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void    vd_g_AmbtmpCfgMainFinish(const U1 u1_a_STS, const U2 u2_a_CEL, const U2 u2_a_FAH)
-{
-}
+
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
@@ -152,27 +150,33 @@ void    vd_g_AmbtmpCfgMainFinish(const U1 u1_a_STS, const U2 u2_a_CEL, const U2 
 /*                                                                                                                                   */
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  1.0.0    12/15/2017  TN       New.                                                                                               */
-/*  1.1.0    03/10/2020  YN       ambtmp.c v1.0.0 -> v1.1.0.                                                                         */
-/*  1.1.1    05/14/2020  YN       ambtmp.c v1.1.0 -> v1.1.1.                                                                         */
-/*  1.2.1    06/15/2020  YN       ambtmp.c v1.1.1 -> v1.2.1.                                                                         */
-/*  1.2.2    07/21/2020  YN       ambtmp.c v1.2.1 -> v1.2.2.                                                                         */
-/*  1.3.2    07/27/2020  YN       ambtmp.c v1.2.2 -> v1.3.2.                                                                         */
-/*  2.0.0    04/14/2021  TA       ambtmp.c v1.3.2 -> v2.0.0.                                                                         */
-/*  2.0.1    10/18/2021  TA(M)    ambtmp.c v2.0.0 -> v2.0.1.                                                                         */
-/*  2.1.0    11/25/2021  TA(M)    ambtmp.c v2.0.1 -> v2.1.0.                                                                         */
-/*  2.2.0    03/09/2022  TA(M)    ambtmp.c v2.1.0 -> v2.2.0.                                                                         */
-/*  2.2.1    06/28/2022  TA(M)    ambtmp.c v2.2.0 -> v2.2.1.                                                                         */
-/*  2.3.0    10/28/2025  SN       ambtmp.c v2.2.1 -> v2.3.0.                                                                         */
+/*  1.0.0    04/12/2018  HY       New.                                                                                               */
+/*  1.1.0    06/03/2019  YI       sbltwrn.c v1.0.0 -> v1.1.0.                                                                        */
+/*  2.0.0    10/08/2020  KK       sbltwrn.c v1.1.1 -> v2.0.0.                                                                        */
+/*  2.1.0    01/12/2021  TN       sbltwrn.c v2.0.0 -> v2.1.0.                                                                        */
+/*  2.1.1    10/18/2021  TA(M)    sbltwrn.c v2.1.0 -> v2.1.1.                                                                        */
+/*  2.1.2    10/25/2021  TK       sbltwrn.c v2.1.1 -> v2.1.2.                                                                        */
+/*  2.1.3    04/05/2022  YI(M)    sbltwrn.c v2.1.2 -> v2.1.3.                                                                        */
+/*  2.2.0    02/29/2024  TH       sbltwrn.c v2.1.3 -> v2.2.0.                                                                        */
+/*  2.2.1    03/20/2025  TH       sbltwrn.c v2.2.0 -> v2.2.1.                                                                        */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
-/*  Revision Date        Author   Change Description                                                                                 */
-/* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
+/*  Revision     Date        Author   Change Description                                                                             */
+/*  ------------ ----------  -------  ---------------------------------------------------------------------------------------------- */
+/*  200D-1       06/11/2022  MK       200D/19PF Correspondence                                                                       */
+/*  200D-2       08/10/2022  MK       Update Toyota Standard Application                                                             */
+/*  330D-1       01/19/2023  KK       330D Correspondence (Disable 3rd-seat warnings)                                                */
+/*  19PFv3-1     12/26/2023  SH       Change seat variation to read calibration                                                      */
 /*                                                                                                                                   */
-/*  * TN   = Takashi Nagai, Denso                                                                                                    */
-/*  * YN   = Yasuhiro Nakamura, Denso Techno                                                                                         */
-/*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
+/*  * HY   = Hidefumi Yoshida, Denso                                                                                                 */
+/*  * YI   = Yoshiki  Iwata,   Denso                                                                                                 */
+/*  * KK   = Kohei Kato,       Denso Techno                                                                                          */
+/*  * TN   = Tetsu Naruse,     Denso Techno                                                                                          */
 /*  * TA(M)= Teruyuki Anjima, NTT Data MSE                                                                                           */
-/*  * SN   = Shimon Nambu, Denso Techno                                                                                              */
+/*  * TK   = Takanori Kuno, Denso Techno                                                                                             */
+/*  * MK   = Mitsuhiro Kato,   Denso Techno                                                                                          */
+/*  * YI(M)= Yoshiki  Iwata,   NTT Data MSE                                                                                          */
+/*  * SH   = Sae Hirose,       Denso Techno                                                                                          */
+/*  * TH   = Taisuke Hirakawa, KSE                                                                                                   */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
