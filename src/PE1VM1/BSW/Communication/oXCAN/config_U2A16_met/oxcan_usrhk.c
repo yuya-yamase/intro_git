@@ -23,8 +23,9 @@
 #include "can_rscf4_cfg.h"      /* CAN_CFG_CONTROLLERNUM_MAX is defined in can_rscf4_cfg.h */
 
 
-#if 0   /* BEV Rebase provisionally */
+
 #include "illumi_comtx.h"
+#if 0   /* BEV Rebase provisionally */
 #include "drec_tx.h"
 #endif   /* BEV Rebase provisionally */
 #include "xspi_met_can.h"
@@ -300,9 +301,7 @@ void    vd_g_oXCANUsrhkTraAck(const U2 u2_a_IPDU_TX)
 
     switch (u2_a_IPDU_TX) {
         case (U2)MSG_MET1S01_TXCH0:
-#if 0   /* BEV Rebase provisionally */
             vd_g_IllumiRheoTxAck();
-#endif   /* BEV Rebase provisionally */
             break;
         default:
             /* Do nothing */

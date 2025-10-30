@@ -88,6 +88,7 @@
 
 /* START : ##TOOL_OUT#RIM_ID_MOD_1B_U1## */
 #define RIMID_U1_SAMPLE_B_1                      (0x0400U)
+#define RIMID_U1_ILLUMI_LOUNGE                   (0x0401U)
 /* END : ##TOOL_OUT#RIM_ID_MOD_1B_U1## */
 /* START : ##TOOL_OUT#RIM_ID_MOD_1B_U2## */
 #define RIMID_U2_SAMPLE_B_2                      (0x4400U)
