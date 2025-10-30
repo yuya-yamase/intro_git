@@ -524,8 +524,8 @@ U1              u1_g_TripcomCfgGetPIEVSTS(U1 * u1p_a_pievsts)
         u1_t_msgsts = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_EHV1S93,
                                        (U2)(OXCAN_RX_SYS_NRX_IGP | OXCAN_RX_SYS_TOE_IGP),
                                        (U2)TRIPCOM_EHV1S93_FAILTIM) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
-        (void)Com_ReceiveSignal(ComConf_ComSignal_PIEVSTS, u1p_a_pievsts);
 #endif   /* BEV Rebase provisionally */
+        (void)Com_ReceiveSignal(ComConf_ComSignal_PIEVSTS, u1p_a_pievsts);
     }
 
     return (u1_t_msgsts);

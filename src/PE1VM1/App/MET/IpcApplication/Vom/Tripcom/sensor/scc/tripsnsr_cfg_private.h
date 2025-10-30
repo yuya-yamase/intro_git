@@ -50,7 +50,6 @@
 #define u1_g_TripsnsrPtsOn()                    (u1_g_VehopemdPtsOn((U1)VEH_OPEMD_PTS_INV_OFF))
                                                                     /* If any pts souce signal is invalid/rxto, return PTS-OFF/FALSE */
 #define u1_g_TripsnsrVspKmph(x)                 (u1_g_VehspdKmphInst((x), (U1)TRUE))
-#define u1_g_TripsnsrVspKmph(x)                 (u1_g_VehspdKmphInst((x), (U1)TRUE))
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
