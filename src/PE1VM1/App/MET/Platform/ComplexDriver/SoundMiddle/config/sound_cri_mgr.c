@@ -2224,7 +2224,9 @@ static  void    vd_s_SoundCriMgrSetVolume(const U1 u1_a_GRP_NO, const U1 u1_a_RE
 #endif   /* BEV Rebase provisionally */
 
     CriFloat32  f4_t_cuevol;                                                                /* Volume of current sounding cue ID     */
+#if 0   /* BEV Rebase provisionally */ /* for xm-authentication */
     U4          u4_t_xmauth;
+#endif   /* BEV Rebase provisionally */ /* for xm-authentication */
     U1          u1_t_reqvol;
     U1          u1_t_sound_vol;
     U1          u1_t_multi_ch_play_rate_reqvol;
