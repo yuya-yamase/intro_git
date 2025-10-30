@@ -67,6 +67,7 @@ typedef struct {
 static U1             u1_s_locale_timefmt;
 static U1             u1_s_locale_unit_dist;
 static U1             u1_s_locale_unit_speed;
+static U1             u1_s_locale_unit_fueco;
 static U1             u1_s_locale_unit_eleco;
 static U1             u1_s_locale_unit_ambtmp;
 static U1             u1_s_locale_lang;
@@ -269,9 +270,19 @@ static const U1 u1_sp_LOCALE_LNGDB_DEFLANG[VDF_NUM_LNGDBTYPE] = {
 /*===================================================================================================================================*/
 void  vd_g_LocaleComTxInit(void)
 {
-#if 0   /* BEV Rebase provisionally */
     U1  u1_t_unit_fueco;
     U1  u1_t_unit_ch2;
+
+#if 0   /* BEV Rebase provisionally */
+#else   /* BEV Rebase provisionally */
+    u1_s_locale_timefmt      = (U1)TIMEFMT_VAL_12H;
+    u1_s_locale_unit_dist    = (U1)UNIT_VAL_DIST_KM;
+    u1_s_locale_unit_speed   = (U1)UNIT_VAL_SPEED_KMPH;
+    u1_s_locale_unit_fueco   = (U1)UNIT_VAL_FUECO_LP100KM;
+    u1_s_locale_unit_eleco   = (U1)UNIT_VAL_ELECO_KWHP100KM;
+    u1_s_locale_unit_ambtmp  = (U1)UNIT_VAL_AMBTMP_CEL;
+    u1_s_locale_lang         = (U1)LANG_VAL______BRI_ENG;
+#endif   /* BEV Rebase provisionally */
 
     u1_t_unit_ch2   = (U1)LOCALE_UNIT_CH2_KM;
     u1_t_unit_fueco = u1_g_Unit((U1)UNIT_IDX_FUECO);
@@ -279,14 +290,6 @@ void  vd_g_LocaleComTxInit(void)
         u1_t_unit_ch2 = u1_sp_LOCALE_COMTX_UNIT_CH2[u1_t_unit_fueco];
     }
     (void)Com_SendSignal(ComConf_ComSignal_UNIT_CH2 , &u1_t_unit_ch2);
-#else   /* BEV Rebase provisionally */
-    u1_s_locale_timefmt      = (U1)TIMEFMT_VAL_12H;
-    u1_s_locale_unit_dist    = (U1)UNIT_VAL_DIST_KM;
-    u1_s_locale_unit_speed   = (U1)UNIT_VAL_SPEED_KMPH;
-    u1_s_locale_unit_eleco   = (U1)UNIT_VAL_ELECO_KWHP100KM;
-    u1_s_locale_unit_ambtmp  = (U1)UNIT_VAL_AMBTMP_CEL;
-    u1_s_locale_lang         = (U1)LANG_VAL______BRI_ENG;
-#endif   /* BEV Rebase provisionally */
 }
 /*===================================================================================================================================*/
 /*  void  vd_g_LocaleComTxTask(void)                                                                                                 */
@@ -296,7 +299,6 @@ void  vd_g_LocaleComTxInit(void)
 /*===================================================================================================================================*/
 void  vd_g_LocaleComTxTask(void)
 {
-#if 0   /* BEV Rebase provisionally */
     U1  u1_t_unit_fueco;
     U1  u1_t_pre_unit_ch2;
     U1  u1_t_unit_ch2;
@@ -313,7 +315,6 @@ void  vd_g_LocaleComTxTask(void)
     if(u1_t_pre_unit_ch2 != u1_t_unit_ch2){
         (void)Com_TriggerIPDUSend(MSG_MET1S11_TXCH0);
     }
-#endif   /* BEV Rebase provisionally */
 }
 /*===================================================================================================================================*/
 /*  U1  u1_g_LocaleCfgLangDef(void)                                                                                                  */
@@ -498,6 +499,9 @@ U1      u1_g_LocaleCfgUnit(const U1 u1_a_UNITIDX)
     case (U1)UNIT_IDX_SPEED:
         u1_t_unit  = u1_s_locale_unit_speed;
         break;
+    case (U1)UNIT_IDX_FUECO:
+        u1_t_unit  = u1_s_locale_unit_fueco;
+        break;
     case (U1)UNIT_IDX_ELECO:
         u1_t_unit  = u1_s_locale_unit_eleco;
         break;
@@ -531,6 +535,9 @@ void    vd_g_LocaleCfgUnitPut(const U1 u1_a_UNITIDX, const U1 u1_a_VAL)
         break;
     case (U1)UNIT_IDX_SPEED:
         u1_s_locale_unit_speed  = u1_a_VAL;
+        break;
+    case (U1)UNIT_IDX_FUECO:
+        u1_s_locale_unit_fueco  = u1_a_VAL;
         break;
     case (U1)UNIT_IDX_ELECO:
         u1_s_locale_unit_eleco  = u1_a_VAL;
