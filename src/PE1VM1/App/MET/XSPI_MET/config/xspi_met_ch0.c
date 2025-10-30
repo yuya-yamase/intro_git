@@ -240,7 +240,6 @@
 #define XSPI_NICKNAME_TXTNUM                (10U)
 
 #endif   /* BEV Rebase provisionally */
-#define XSPI_UNIT_MPGIMP                    (4U)
 #define XSPI_UNIT_VAL_ELECO_KMPKWH          (0U)   /* Electricity cost    : km/kWh                 */
 #define XSPI_UNIT_VAL_ELECO_KWHP100KM       (1U)   /* Electricity cost    : kWh/100km              */
 #define XSPI_UNIT_VAL_ELECO_MILEPKWH        (2U)   /* Electricity cost    : miles/kWh              */
@@ -2439,6 +2438,7 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*  BEV-8     05/30/2025 SN(K)    Change for BEV System_Consideration_2.(MET-S_ADBB-CSTD-0-01-A-C0)                                  */
 /*  BEV-9     06/17/2025 JS       Change for BEV System_Consideration_2.(MET-B_WDICBB-CSTD-0-01-A-C0)                                */
 /*  BEV-10    10/10/2025 KO       Configured for BEVstep3_Dimmer_Rebase                                                              */
+/*  BEV-11    10/30/2025 SN       Delete fueleco for BEVstep3_Locale_Rebase                                                          */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * KM   = Keisuke Mashita, Denso Techno                                                                                           */
