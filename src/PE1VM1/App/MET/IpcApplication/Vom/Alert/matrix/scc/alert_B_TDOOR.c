@@ -415,7 +415,6 @@ static U1      u1_s_AlertB_tdoorPsdSgnl(const U1 u1_a_FACT)
 /*===================================================================================================================================*/
 static U1      u1_s_AlertB_tdoorSlpSgnl(const U1 u1_a_FACT)
 {
-#if 0   /* BEV Rebase provisionally */
 #if (ALERT_CFG_B_TDOOR_SLP_POS == TRUE)
     static const U2 u2_s_ALERT_B_TDOOR_TO_SLP1S01 = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_B_TDOOR_SLP_MSK    = (U1)0x07U;
@@ -428,9 +427,11 @@ static U1      u1_s_AlertB_tdoorSlpSgnl(const U1 u1_a_FACT)
     U1              u1_t_retval;
 
 #if (ALERT_CFG_B_TDOOR_SLP_POS == TRUE)
+#if 0   /* BEV Rebase provisionally */
     u1_t_fact_slp1s01  = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_SLP1S01,
                                           (U2)OXCAN_RX_SYS_NRX_BAT | (U2)OXCAN_RX_SYS_TOE_BAT,
                                           u2_s_ALERT_B_TDOOR_TO_SLP1S01) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+#endif   /* BEV Rebase provisionally */
     u1_t_fact_slp1s01 |= u1_a_FACT;
     vd_g_AlertBRxTrnsSts(&u1_s_alert_b_tdoor_slp1s01_sts, u1_t_fact_slp1s01);
 #endif /* (ALERT_CFG_B_TDOOR_SLP_POS == TRUE) */
@@ -439,16 +440,15 @@ static U1      u1_s_AlertB_tdoorSlpSgnl(const U1 u1_a_FACT)
 #if (ALERT_CFG_B_TDOOR_SLP_POS == TRUE)
     if((u1_s_alert_b_tdoor_slp1s01_sts & (U1)COM_NO_RX) == (U1)0U){
         u1_t_sgnl   = (U1)0U;
+#if 0   /* BEV Rebase provisionally */
         (void)Com_ReceiveSignal(ComConf_ComSignal_SLP_POS, &u1_t_sgnl);
+#endif   /* BEV Rebase provisionally */
         u1_t_sgnl  &= u1_s_ALERT_B_TDOOR_SLP_MSK;
         u1_t_retval = u1_sp_ALERT_B_TDOOR_SLP_TBL[u1_t_sgnl];
     }
 #endif /* (ALERT_CFG_B_TDOOR_SLP_POS == TRUE) */
 
     return(u1_t_retval);
-#else   /* BEV Rebase provisionally */
-    return((U1)0U);
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

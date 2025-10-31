@@ -274,7 +274,7 @@ static U4      u4_s_AlertC_brkbzSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
 
     u1_s_alert_c_brkbz_b_buzze2_last = u1_t_sgnl_b_buzze2;
 
-    u4_t_src_chk_b_buzze2            = (U4)u2_g_MtrxSrch_lt(u4_t_src_chk_b_buzze2, &st_s_ALERT_C_BRKBZ_MTRX_SRCH);
+    u4_t_src_chk_b_buzze2            = (U4)u2_g_MtrxSrch((U2)0U, &u4_t_src_chk_b_buzze2, &st_s_ALERT_C_BRKBZ_MTRX_SRCH);
     if(u4_t_src_chk_b_buzze2 < (U4)ALERT_C_BRKBZ_BZJDG_REQ_TBL){
         u4_t_src_chk_b_buzze2 = (U4)u1_sp_ALERT_C_BRKBZ_BZJDG_DST[u4_t_src_chk_b_buzze2];
     }
@@ -301,7 +301,7 @@ static U4      u4_s_AlertC_brkbzSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
 
     u1_s_alert_c_brkbz_b_buzze_last  = u1_t_sgnl_b_buzze;
 
-    u4_t_src_chk_b_buzze             = (U4)u2_g_MtrxSrch_lt(u4_t_src_chk_b_buzze, &st_s_ALERT_C_BRKBZ_MTRX_SRCH);
+    u4_t_src_chk_b_buzze             = (U4)u2_g_MtrxSrch((U2)0U, &u4_t_src_chk_b_buzze, &st_s_ALERT_C_BRKBZ_MTRX_SRCH);
     if(u4_t_src_chk_b_buzze < (U4)ALERT_C_BRKBZ_BZJDG_REQ_TBL){
         u4_t_src_chk_b_buzze = (U4)u1_sp_ALERT_C_BRKBZ_BZJDG_DST[u4_t_src_chk_b_buzze];
     }

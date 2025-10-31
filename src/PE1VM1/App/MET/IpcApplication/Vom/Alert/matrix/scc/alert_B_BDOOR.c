@@ -212,9 +212,11 @@ static U4      u4_s_AlertB_bdoorSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
 #endif /* (ALERT_CFG_B_BDOOR_RPSDWARN == TRUE) */
 
 #if (ALERT_CFG_B_BDOOR_SLP_POS == TRUE)
+#if 0   /* BEV Rebase provisionally */
     u1_t_msgsts_slp1s01 = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_SLP1S01,
                                                 (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
                                                 u2_s_ALERT_B_BDOOR_THSH_TO_SLP1S) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+#endif   /* BEV Rebase provisionally */
 #else
     u1_t_msgsts_slp1s01 = (U1)COM_NO_RX;
 #endif /* (ALERT_CFG_B_BDOOR_SLP_POS == TRUE) */
@@ -309,7 +311,6 @@ static U1      u1_s_AlertB_bdoorGetSgnl(const U1 u1_a_BDB1S01STS, const U1 u1_a_
 /*===================================================================================================================================*/
 static U1      u1_s_AlertB_bdoorGetSlp(const U1 u1_a_SLP1S01STS)
 {
-#if 0   /* BEV Rebase provisionally */
 #if (ALERT_CFG_B_BDOOR_SLP_POS == TRUE)
     U1              u1_t_sgnl;
     U1              u1_t_retval;
@@ -327,7 +328,9 @@ static U1      u1_s_AlertB_bdoorGetSlp(const U1 u1_a_SLP1S01STS)
     u1_t_retval = (U1)ALERT_B_BDOOR_SLP_POS_INACT;
     if(u1_a_SLP1S01STS == (U1)0U){
         u1_t_sgnl   = (U1)0U;
+#if 0   /* BEV Rebase provisionally */
         (void)Com_ReceiveSignal(ComConf_ComSignal_SLP_POS, &u1_t_sgnl);
+#endif   /* BEV Rebase provisionally */
         if(u1_t_sgnl < (U1)ALERT_B_BDOOR_SLP_TBL_NUM){
             u1_t_retval = u1_sp_ALERT_B_BDOOR_SLP_TBL[u1_t_sgnl];
         }
@@ -337,9 +340,6 @@ static U1      u1_s_AlertB_bdoorGetSlp(const U1 u1_a_SLP1S01STS)
 #else
     return((U1)ALERT_B_BDOOR_SLP_POS_INACT);
 #endif /* (ALERT_CFG_B_BDOOR_SLP_POS == TRUE) */
-#else   /* BEV Rebase provisionally */
-    return((U1)ALERT_B_BDOOR_SLP_POS_INACT);
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

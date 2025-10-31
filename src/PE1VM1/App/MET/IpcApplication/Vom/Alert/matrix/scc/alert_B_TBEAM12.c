@@ -165,6 +165,8 @@ static U4      u4_s_AlertB_tbeam12Srcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM
 #else
     u4_t_src_chk   = (U4)0U;
 #endif /* defined(OXCAN_PDU_RX_CAN_AFS1S01) && defined(ComConf_ComSignal_AZB_HIND) */
+#else   /* BEV Rebase provisionally */
+    u4_t_src_chk   = (U4)0U;
 #endif   /* BEV Rebase provisionally */
 
     u1_t_trns_fact = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_BDB1S03_CH0,
@@ -179,11 +181,7 @@ static U4      u4_s_AlertB_tbeam12Srcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM
     u1_t_sgnl_hedh = (U1)0U;
     (void)Com_ReceiveSignal(ComConf_ComSignal_HEDH, &u1_t_sgnl_hedh);
 
-#if 0   /* BEV Rebase provisionally */
     u4_t_src_chk  |= ((U4)u1_t_sgnl_hedh                                    << u1_s_ALERT_B_TBEAM_LSB_HEDH);
-#else   /* BEV Rebase provisionally */
-    u4_t_src_chk   = ((U4)u1_t_sgnl_hedh                                    << u1_s_ALERT_B_TBEAM_LSB_HEDH);
-#endif   /* BEV Rebase provisionally */
     u4_t_src_chk  |= (((U4)u1_s_alert_b_tbeam12_msgsts_bdb & (U4)COM_NO_RX) << u1_s_ALERT_B_TBEAM_LSB_BDBSTS);
 
     if((u1_a_VOM & (U1)ALERT_VOM_BAT_WT) != (U1)0U){

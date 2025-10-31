@@ -97,7 +97,6 @@ const ST_ALERT_MTRX st_gp_ALERT_B_PEDPRO_MTRX[1] = {
 /*===================================================================================================================================*/
 static U4      u4_s_AlertB_pedproSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
-#if defined(ComConf_ComSignal_PDS_WL) && defined(OXCAN_RXD_PDU_CAN_PDS1S01_CH0) /* _840B_CAN_ */
     static const U2 u2_s_ALERT_B_PEDPRO_TO_THRESH  = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_B_PEDPRO_LSB_MSGSTS = (U1)2U;
     U1              u1_t_msgsts;
@@ -115,9 +114,6 @@ static U4      u4_s_AlertB_pedproSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_B_PEDPRO_LSB_MSGSTS);
 
     return(u4_t_src_chk);
-#else /* defined(ComConf_ComSignal_PDS_WL) && defined(OXCAN_RXD_PDU_CAN_PDS1S01_CH0)  */
-    return((U4)0U);
-#endif /* defined(ComConf_ComSignal_PDS_WL) && defined(OXCAN_RXD_PDU_CAN_PDS1S01_CH0)  */
 }
 
 /*===================================================================================================================================*/
