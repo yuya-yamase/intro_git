@@ -519,7 +519,7 @@ U1      u1_g_AlertGetReqSlot(void)
 /*  static U1      u1_s_AlertPowerChk(void)                                                                                          */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
-/*  Return:                                                                                                                        */
+/*  Return:         u1_t_vom_chk                                                                                                     */
 /*===================================================================================================================================*/
 static U1      u1_s_AlertPowerChk(void)
 {
@@ -530,7 +530,7 @@ static U1      u1_s_AlertPowerChk(void)
 
     u1_t_igr_on = u1_g_VehopemdIgnOn();
     if (u1_t_igr_on == (U1)TRUE) {
-        u1_t_vom_chk |= (U1)ALERT_VOM_IGN_ON | (U1)ALERT_VOM_VDC_ON;
+        u1_t_vom_chk |= ((U1)ALERT_VOM_IGN_ON | (U1)ALERT_VOM_VDC_ON);
         /* Attention: VDC_OFF during IGN_ON is not supported. */
     }
     else {
