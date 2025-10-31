@@ -22,11 +22,7 @@
 
 #include "can_rscf4_cfg.h"      /* CAN_CFG_CONTROLLERNUM_MAX is defined in can_rscf4_cfg.h */
 
-
-#if 0   /* BEV Rebase provisionally */
 #include "illumi_comtx.h"
-#include "drec_tx.h"
-#endif   /* BEV Rebase provisionally */
 #include "xspi_met_can.h"
 
 #if (CAN_CFG_CONTROLLERNUM_MAX > 0U)
@@ -308,10 +304,6 @@ void    vd_g_oXCANUsrhkTraAck(const U2 u2_a_IPDU_TX)
             /* Do nothing */
             break;
     }
-
-#if 0   /* BEV Rebase provisionally */
-    vd_g_DrectxTxAck(u2_a_IPDU_TX);
-#endif   /* BEV Rebase provisionally */
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_oXCANUsrhkRecAck(const U2 u2_a_IPDU_RX)                                                                             */
