@@ -569,11 +569,16 @@ static inline  U1 u1_s_SbltsyncGetCalibU1DataNumChk(const U1 u1_a_CALIBID, const
 /*  2.2.0    04/06/2022  YI(M)    Move cycle table to sbltsync.c.                                                                    */
 /*  2.3.0    01/29/2024  TH       for 19PFv3                    .                                                                    */
 /*                                                                                                                                   */
+/*  Revision       Date        Author   Change Description                                                                           */
+/*  -------------- ----------  -------  ---------------------------------------------------------------------------------------------*/
+/*  BEV-1          10/29/2025  TS       Change for BEV rebase                                                                        */
+/*                                                                                                                                   */
 /*  * YI   = Yoshiki Iwata, Denso                                                                                                    */
 /*  * KK   = Kohei Kato,    Denso Techno                                                                                             */
 /*  * TN   = Tetsu Naruse,  Denso Techno                                                                                             */
 /*  * TA(M)= Teruyuki Anjima, NTT Data MSE                                                                                           */
 /*  * YI(M)= Yoshiki Iwata, NTT Data MSE                                                                                             */
 /*  * TH   = Taisuke Hirakawa, KSE                                                                                                   */
+/*  * TS   = Takuo Suganuma, Denso Techno                                                                                            */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
