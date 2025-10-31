@@ -1,7 +1,7 @@
 /* Fee_Cust.c v1-1-0                                                        */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION. All rights reserved.                        */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -47,15 +47,16 @@
 #define FEE_START_SEC_CODE
 #include <Fee_MemMap.h>
 
-/*関数説明--------------------------------------------------------------------*/
-/* 説  明        ：データ書込み応答Hook                                       */
-/* 入  力        ：uint8    result  ：実行結果                                */
-/*               ：uint16   data_id ：書込みDATA-ID                           */
-/*               ：uint8    No      ：書込みエリアの番号                      */
-/* 出  力        ：なし                                                       */
-/* グローバル変数：                                                           */
-/* その他        ：                                                           */
-/*----------------------------------------------------------------------------*/
+/****************************************************************************/
+/* Function Name | Fee_Write_Rsp_Hook                                       */
+/* Description   | Data write response Hook                                 */
+/* Preconditions | None                                                     */
+/* Parameters    | uint8  result     : result of execution                  */
+/*               | uint16 data_id    : write DATA-ID                        */
+/*               | uint8  No         : Number of write area                 */
+/* Return Value  | None                                                     */
+/* Notes         | None                                                     */
+/****************************************************************************/
 FUNC(void, FEE_CODE) Fee_Write_Rsp_Hook(
     uint8   result,
     uint16  data_id,
@@ -66,15 +67,16 @@ FUNC(void, FEE_CODE) Fee_Write_Rsp_Hook(
     return;
 }
 
-/*関数説明--------------------------------------------------------------------*/
-/* 説  明        ：データ読出し応答Hook（ID指定読出し）                       */
-/* 入  力        ：uint8    result  ：処理成否                                */
-/*               ：uint16   data_id ：読出しDATA-ID                           */
-/*               ：uint8    No      ：読出しエリアの番号                      */
-/* 出  力        ：なし                                                       */
-/* グローバル変数：                                                           */
-/* その他        ：                                                           */
-/*----------------------------------------------------------------------------*/
+/****************************************************************************/
+/* Function Name | Fee_Read_Rsp_Hook                                        */
+/* Description   | Data read response Hook (ID-specified read)              */
+/* Preconditions | None                                                     */
+/* Parameters    | uint8  result     : ProcessSuccess                       */
+/*               | uint16 data _ id  : read DATA-ID                         */
+/*               | uint8  No         : number of reading area               */
+/* Return Value  | None                                                     */
+/* Notes         | None                                                     */
+/****************************************************************************/
 FUNC(void, FEE_CODE) Fee_Read_Rsp_Hook(
     uint8   result,
     uint16  data_id,
@@ -85,14 +87,15 @@ FUNC(void, FEE_CODE) Fee_Read_Rsp_Hook(
     return;
 }
 
-/*関数説明--------------------------------------------------------------------*/
-/* 説  明        ：データ再編応答Hook                                         */
-/* 入  力        ：uint8 result ：処理成否                                       */
-/*               ：uint8 No     ：再編エリアの番号                               */
-/* 出  力        ：なし                                                       */
-/* グローバル変数：                                                           */
-/* その他        ：                                                           */
-/*----------------------------------------------------------------------------*/
+/****************************************************************************/
+/* Function Name | Fee_Rebuild_Rsp_Hook                                     */
+/* Description   | Data reorganization response Hook                        */
+/* Preconditions | None                                                     */
+/* Parameters    | uint8  result : ProcessSuccess                           */
+/*               | uint8  No     : Number of the reorganization area        */
+/* Return Value  | None                                                     */
+/* Notes         | None                                                     */
+/****************************************************************************/
 FUNC(void, FEE_CODE) Fee_Rebuild_Rsp_Hook( uint8 result, uint8 No )
 {
     Fee_Pif_RebuildEndNotification( result );

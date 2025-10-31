@@ -17,7 +17,6 @@
 /*--------------------------------------------------------------------------*/
 
 
-#include "./Compiler_AbPartition_Cfg.h"
 #include "./Compiler_Crc_Cfg.h"
 #include "./Compiler_CryIf_Cfg.h"
 #include "./Compiler_Csm_Cfg.h"
@@ -27,9 +26,11 @@
 #include "./Compiler_SchM_Cfg.h"
 #include "./Compiler_Fee_Cfg.h"
 #include "./Compiler_Fls_Cfg.h"
+#include "./Compiler_MemAcc_Cfg.h"
 #include "./Compiler_MemIf_Cfg.h"
 #include "./Compiler_Mscd_Cfg.h"
 #include "./Compiler_NvM_Cfg.h"
+#include "./Compiler_Mem_Cfg.h"
 #include "./Compiler_SecOC_Cfg.h"
 
 #include "./Compiler_ExtDefs.h" /* SWS_COMPILER_00050 */

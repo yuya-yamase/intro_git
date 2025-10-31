@@ -32,6 +32,8 @@ SECTIONS {
     .bsw_memif_text         align(16)                       : > .
     .bsw_mscd_text          align(16)                       : > .
     .bsw_nvm_text           align(16)                       : > .
+    .bsw_memacc_text        align(16)                       : > .
+    .P_OTA_CODEFLS          align(16)                       : > .
     .bsw_cs_text            align(16)                       : > .
     .bsw_can_text           align(16)                       : > .
     .bsw_e2e_text           align(16)                       : > .
@@ -47,6 +49,8 @@ SECTIONS {
     .bsw_memif_rodata       align(4)                        : > .
     .bsw_mscd_rodata        align(4)                        : > .
     .bsw_nvm_rodata         align(4)                        : > .
+    .bsw_memacc_rodata      align(4)                        : > .
+    .C_OTA_CODEFLS          align(4)                        : > .
     .bsw_cs_const           align(4)                        : > .
     .bsw_can_const          align(4)                        : > .
     .bsw_const_bottom       align(4)                        : > .
@@ -79,7 +83,6 @@ SECTIONS {
     .DIO_TEXT_CODE          align(4)                        : > .
     .DMA_TEXT_CODE          align(4)                        : > .
     .GPT_TEXT_CODE          align(4)                        : > .
-    .ICU_TEXT_CODE          align(4)                        : > .
     .INTC_TEXT_CODE         align(4)                        : > .
     .MCALCOMMON_TEXT_CODE   align(4)                        : > .
     .PORT_TEXT_CODE         align(4)                        : > .
@@ -90,7 +93,6 @@ SECTIONS {
     .DIO_RODATA_CONST       align(4)                        : > .
     .DMA_RODATA_CONST       align(4)                        : > .
     .GPT_RODATA_CONST       align(4)                        : > .
-    .ICU_RODATA_CONST       align(4)                        : > .
     .INTC_RODATA_CONST      align(4)                        : > .
     .PORT_RODATA_CONST      align(4)                        : > .
     .PWM_RODATA_CONST       align(4)                        : > .
@@ -201,6 +203,8 @@ SECTIONS {
     .bsw_mscd_bss           align(4)                        : > .
     .bsw_nvm_bss            align(4)                        : > .
     .bsw_nvm_bss_saved_zone align(4)                        : > .
+    .bsw_memacc_bss         align(4)                        : > .
+    .B_OTA_CODEFLS          align(4)                        : > .
     .MEM_SEC_END_RAM_LOC_APPL    ALIGN(8)                             : > .
     _LOC_RAM_SIZE = . - ADDR(.MEM_SEC_STA_RAM_LOC_APPL);
 

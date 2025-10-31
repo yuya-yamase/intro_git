@@ -22,6 +22,10 @@
 #include "Can.h"
 #include "can_cv_cfg.h"
 
+#if (CAN_CFG_CV == CAN_USE)
+#include "can_rscf4_cfg.h"            /* CAN_CFG_CONTROLLERNUM_MAX      */
+#endif /*(CAN_CFG_CV == CAN_USE)*/
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -227,6 +231,9 @@ void    Can_UPreStart( uint8 u1Controller )
 /*===================================================================================================================================*/
 void    Can_IP0_UTxConfirmation( uint8 u1Controller, uint8 u1MsgBuffer )
 {
+#ifdef CAN_LPR_H
+    vd_g_CANLpRPhyTxAck(u1Controller, u1MsgBuffer);
+#endif /* #ifdef CAN_LPR_H */
 }
 /*===================================================================================================================================*/
 /*  void    Can_IP1_UTxConfirmation( uint8 u1Controller, uint8 u1MsgBuffer )                                                         */
@@ -236,6 +243,9 @@ void    Can_IP0_UTxConfirmation( uint8 u1Controller, uint8 u1MsgBuffer )
 /*===================================================================================================================================*/
 void    Can_IP1_UTxConfirmation( uint8 u1Controller, uint8 u1MsgBuffer )
 {
+#ifdef CAN_LPR_H
+    vd_g_CANLpRPhyTxAck((u1Controller + (U1)CAN_CFG_CONTROLLERNUM_MAX), u1MsgBuffer);
+#endif /* #ifdef CAN_LPR_H */
 }
 /*===================================================================================================================================*/
 /*  uint8   Can_IP0_URxIndication( uint8 u1Controller, uint8 u1MsgBuffer, CanConstR CanMsgType* ptMsg )                              */
@@ -243,11 +253,23 @@ void    Can_IP1_UTxConfirmation( uint8 u1Controller, uint8 u1MsgBuffer )
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
+#ifdef CAN_LPR_H
+/*===================================================================================================================================*/
 uint8   Can_IP0_URxIndication( uint8 u1Controller, uint8 u1MsgBuffer, CanConstR CanMsgType* ptMsg )
 {
-#ifdef CAN_LPR_H
-#warning "oxcan_aubif_can.c : CAN L-PDU Router is NOT integrated into Can_IP0_URxIndication."
-#endif
+    uint8          u1_t_ing;
+    uint8          u1_t_ok;
+
+    u1_t_ing = u1Controller;
+
+    if(u1_t_ing <= (U1)CAN_LPR_ING_PHY_CAN_MAX){
+        u1_t_ok = u1_g_CANLpRIngCANRx(u1_t_ing, u1MsgBuffer, ptMsg);
+    }
+    else{
+        u1_t_ok = (uint8)CAN_PROC_OK;
+    }
+
+    return(u1_t_ok);
 }
 /*===================================================================================================================================*/
 /*  uint8   Can_IP1_URxIndication( uint8 u1Controller, uint8 u1MsgBuffer, CanConstR CanMsgType* ptMsg )                              */
@@ -257,10 +279,47 @@ uint8   Can_IP0_URxIndication( uint8 u1Controller, uint8 u1MsgBuffer, CanConstR 
 /*===================================================================================================================================*/
 uint8   Can_IP1_URxIndication( uint8 u1Controller, uint8 u1MsgBuffer, CanConstR CanMsgType* ptMsg )
 {
-#ifdef CAN_LPR_H
-#warning "oxcan_aubif_can.c : CAN L-PDU Router is NOT integrated into Can_IP1_URxIndication."
-#endif
+    uint8          u1_t_ing;
+    uint8          u1_t_ok;
+
+    u1_t_ing = u1Controller + (U1)CAN_CFG_CONTROLLERNUM_MAX;
+
+    if(u1_t_ing <= (U1)CAN_LPR_ING_PHY_CAN_MAX){
+        u1_t_ok = u1_g_CANLpRIngCANRx(u1_t_ing, u1MsgBuffer, ptMsg);
+    }
+    else{
+        u1_t_ok = (uint8)CAN_PROC_OK;
+    }
+
+    return(u1_t_ok);
 }
+/*===================================================================================================================================*/
+#else /* #ifdef CAN_LPR_H */
+/*===================================================================================================================================*/
+uint8   Can_IP0_URxIndication( uint8 u1Controller, uint8 u1MsgBuffer, CanConstR CanMsgType* ptMsg )
+{
+#if ((defined(CAN_QSEV_RX_H)) && (OXCAN_AUBIF_PHY_CAN_QSEV_RX == 1U))
+    return(u1_g_CANQSEvRxFqCAN(u1Controller, u1MsgBuffer, ptMsg));
+#else
+    return((uint8)CAN_PROC_OK);
+#endif /* #if ((defined(CAN_QSEV_RX_H)) && (OXCAN_AUBIF_PHY_CAN_QSEV_RX == 1U)) */
+}
+/*===================================================================================================================================*/
+/*  uint8   Can_IP1_URxIndication( uint8 u1Controller, uint8 u1MsgBuffer, CanConstR CanMsgType* ptMsg )                              */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+uint8   Can_IP1_URxIndication( uint8 u1Controller, uint8 u1MsgBuffer, CanConstR CanMsgType* ptMsg )
+{
+#if ((defined(CAN_QSEV_RX_H)) && (OXCAN_AUBIF_PHY_CAN_QSEV_RX == 1U))
+    return(u1_g_CANQSEvRxFqCAN(u1Controller + (U1)CAN_CFG_CONTROLLERNUM_MAX, u1MsgBuffer, ptMsg));
+#else
+    return((uint8)CAN_PROC_OK);
+#endif /* #if ((defined(CAN_QSEV_RX_H)) && (OXCAN_AUBIF_PHY_CAN_QSEV_RX == 1U)) */
+}
+/*===================================================================================================================================*/
+#endif /* #ifdef CAN_LPR_H */
 /*===================================================================================================================================*/
 /*  void    Can_IP0_UPreStart( uint8 u1Controller )                                                                                  */
 /* --------------------------------------------------------------------------------------------------------------------------------- */

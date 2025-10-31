@@ -1,7 +1,7 @@
 /* Fee_Ram.h v1-1-0                                                         */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION. All rights reserved.                        */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -26,7 +26,7 @@
 #define FEE_START_SEC_VAR_NO_INIT_32
 #include <Fee_MemMap.h>
 
-/* データFlash制御管理データ */
+/* Data Flash Control Management Data */
 extern VAR( Fee_MngDfcInfType, FEE_VAR_NO_INIT ) Fee_MngDfcInfo;
 
 #if ( FEE_USE_REDUNDANCY_RAM == STD_ON )

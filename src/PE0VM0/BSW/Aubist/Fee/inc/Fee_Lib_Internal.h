@@ -1,7 +1,7 @@
 /* Fee_Lib_Internal.h v1-0-0                                                */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION. All rights reserved.                        */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -20,9 +20,9 @@
 /*--------------------------------------------------------------------------*/
 /* Macros                                                                   */
 /*--------------------------------------------------------------------------*/
-#define FEE_NEXT_AREANUM_OFFSET     (1U)    /* 次エリア番号を示すオフセット */
+#define FEE_NEXT_AREANUM_OFFSET     (1U)    /* Offset indicating next area number */
 
-#define FEE_START_AREANUM           (0U)    /* 開始エリア番号 */
+#define FEE_START_AREANUM           (0U)    /* Starting area number */
 
 #define FEE_LIB_RESIDUAL_VAL_CALC_MULTIPLES_REC  ( 0U )
 

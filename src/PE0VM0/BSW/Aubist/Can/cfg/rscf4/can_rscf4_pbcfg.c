@@ -314,9 +314,9 @@ CanConst CanHohCfgType Can_stHohCfgTbl[ CAN_TB_HOHNUM ] =
     ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB097 }   /* [242] HOH242 */
     ,{ (uint8)CAN_CONTROLLER_7,  (uint8)CAN_MB098 }   /* [243] HOH243 */
   /*--- Transmission -----------------------------*/
-    ,{ (uint8)CAN_CONTROLLER_3,  (uint8)CAN_MB000 }   /* [244] HOH244 */
-    ,{ (uint8)CAN_CONTROLLER_5,  (uint8)CAN_MB008 }   /* [245] HOH245 */
-    ,{ (uint8)CAN_CONTROLLER_5,  (uint8)CAN_MB009 }   /* [246] HOH246 */
+    ,{ (uint8)CAN_CONTROLLER_3,  (uint8)CAN_MB000 }   /* [244] HOH247 */
+    ,{ (uint8)CAN_CONTROLLER_5,  (uint8)CAN_MB008 }   /* [245] HOH248 */
+    ,{ (uint8)CAN_CONTROLLER_5,  (uint8)CAN_MB009 }   /* [246] HOH249 */
   /*========== User define Area [End] ============*/
 };
 #endif /* (CAN_CFG_TRANSMIT == CAN_USE) */

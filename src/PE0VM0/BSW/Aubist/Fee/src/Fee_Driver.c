@@ -1,7 +1,7 @@
 /* Fee_Driver.c v1-1-0                                                      */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION. All rights reserved.                        */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -21,18 +21,18 @@
 
 #include <Mscd_Common.h>
 
-/* MHA[データFlash]I/Fヘッダ */
+/* MHA (Data Flash) I/F header */
 #include "../inc/Fee_Legacy.h"
 #include "../inc/Fee_Pif.h"
 
-/* MHA[データFlash]ヘッダ */
+/* MHA header */
 #include "../inc/Fee_Lib.h"
 
-/* MHA[データFlash]ライブラリヘッダ */
+/* MHA library header */
 #include "../inc/Fee_Common.h"
 
 
-/* D.F.C.ヘッダ */
+/* D.F.C. header */
 #include "../inc/Fee_Dfc.h"
 #include "../inc/Fee_Ram.h"
 

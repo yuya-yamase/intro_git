@@ -12,6 +12,7 @@
 /*==============================================================================================*/
 #include	"Std_Types.h"
 #include	"Mcal_SpalCmn.h"
+#include	"gpt_busywait.h"
 
 #include	"Spi_Ucfg.h"
 
@@ -22,13 +23,6 @@
 /*==============================================================================================*/
 /*	prototypes																					*/
 /*==============================================================================================*/
-#if ( SPI_CFG_SYNCSEND_TIMEOUT < PIL_SPI_WAIT_MAX )
-extern void Esr_Ap_Pil_Spi_SyncSendWait_TimeOutError( void );
-#endif
-
-#if ( SPI_CFG_SYNCRECEIVE_TIMEOUT < PIL_SPI_WAIT_MAX )
-extern void Esr_Ap_Pil_Spi_SyncReceiveWait_TimeOutError( void );
-#endif
 
 /*==============================================================================================*/
 /*	defines / data types / structs / unions	/ macros											*/
@@ -323,10 +317,9 @@ U4		Pil_Spi_SendReceiveData( U1 t_u1HwChannelID, U4 t_u4TxData, const Pil_Spi_Ch
 		/* タイムアウト判定 */
 		if( t_u4CountVal >= (U4)SPI_CFG_SYNCSEND_TIMEOUT )
 		{
-			Esr_Ap_Pil_Spi_SyncSendWait_TimeOutError();								/* タイムアウト通知処理 */
 			break;
 		}
-		LIB_Wait( u4PIL_SPI_WAIT_1US );
+		vd_g_Gpt_BusyWait( GPT_BUSY_WAIT_1_US );
 		t_u4CountVal++;																/* @qac 3383:ラップアラウンドしない */
 #endif
 	}
@@ -344,10 +337,9 @@ U4		Pil_Spi_SendReceiveData( U1 t_u1HwChannelID, U4 t_u4TxData, const Pil_Spi_Ch
 		/* タイムアウト判定 */
 		if( t_u4CountVal >= (U4)SPI_CFG_SYNCRECEIVE_TIMEOUT )
 		{
-			Esr_Ap_Pil_Spi_SyncReceiveWait_TimeOutError();							/* タイムアウト通知処理 */
 			break;
 		}
-		LIB_Wait( u4PIL_SPI_WAIT_1US );
+		vd_g_Gpt_BusyWait( GPT_BUSY_WAIT_1_US );
 		t_u4CountVal++;																/* @qac 3383:ラップアラウンドしない */
 #endif
 	}
