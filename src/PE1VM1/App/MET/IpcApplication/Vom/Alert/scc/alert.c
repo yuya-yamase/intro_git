@@ -93,25 +93,11 @@ static U1           u1_s_alert_task_slot;
 static U1           u1_s_AlertVomchk(void);
 static U1           u1_s_AlertToutchk(void);
 static U1           u1_s_AlertJudgeStartEngine(void);
+static U1           u1_s_AlertPowerChk(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-/* #define VEH_OPEMD_MDBIT_OFF (0x00000000U) */
-/* #define VEH_OPEMD_MDBIT_ACC (0x00000001U) */
-/* #define VEH_OPEMD_MDBIT_IGN (0x00000002U) */
-/* #define VEH_OPEMD_MDBIT_STA (0x00000004U) */
-static const U1          u1_sp_ALERT_VOM_CHK[] = {
-    (U1)ALERT_VOM_BAT_AO | (U1)ALERT_VOM_IGN_OFF,                           /* 000b */
-    (U1)ALERT_VOM_BAT_AO | (U1)ALERT_VOM_IGN_OFF,                           /* 001b */
-    (U1)ALERT_VOM_BAT_AO | (U1)ALERT_VOM_IGN_ON | (U1)ALERT_VOM_VDC_ON,     /* 010b */
-    (U1)ALERT_VOM_BAT_AO | (U1)ALERT_VOM_IGN_ON | (U1)ALERT_VOM_VDC_ON,     /* 011b */
-    (U1)ALERT_VOM_BAT_AO | (U1)ALERT_VOM_IGN_OFF,                           /* 100b */
-    (U1)ALERT_VOM_BAT_AO | (U1)ALERT_VOM_IGN_OFF,                           /* 101b */
-    (U1)ALERT_VOM_BAT_AO | (U1)ALERT_VOM_IGN_ON,                            /* 110b */
-    (U1)ALERT_VOM_BAT_AO | (U1)ALERT_VOM_IGN_ON                             /* 111b */
-};
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -151,22 +137,16 @@ void    vd_g_AlertInit(void)
 /*===================================================================================================================================*/
 void    vd_g_AlertOpemdEvhk(const U4 u4_a_MDBIT, const U4 u4_a_EVTBIT)
 {
-    U4                       u4_t_mdbit;
     U4                       u4_t_evt;
     U1                       u1_t_vom_chk;
 
-#if 0   /* BEV Rebase provisionally */
-    u4_t_mdbit   = u4_a_MDBIT & ((U4)VEH_OPEMD_MDBIT_ACC |
-                                 (U4)VEH_OPEMD_MDBIT_IGN |
-                                 (U4)VEH_OPEMD_MDBIT_STA);
-
-    u1_t_vom_chk = u1_sp_ALERT_VOM_CHK[u4_t_mdbit];
-    u4_t_evt     = u4_a_EVTBIT & ((U4)VEH_OPEMD_EVTBIT_IGN_TO_OFF | (U4)VEH_OPEMD_EVTBIT_IGN_TO_ON);
-    if(u4_t_evt == (U4)VEH_OPEMD_EVTBIT_IGN_TO_ON){
+    u1_t_vom_chk = u1_s_AlertPowerChk();
+    u4_t_evt     = u4_a_EVTBIT & ((U4)VEH_OPEMD_EVBIT_IG_R_TO_OFF | (U4)VEH_OPEMD_EVBIT_IG_R_TO_ON);
+    if(u4_t_evt == (U4)VEH_OPEMD_EVBIT_IG_R_TO_ON){
         u4_s_alert_ign_tm_elpsd  = (U4)U4_MAX;
         u1_t_vom_chk            |= (U1)ALERT_VOM_BAT_WT;
     }
-    else if(u4_t_evt == (U4)VEH_OPEMD_EVTBIT_IGN_TO_OFF){
+    else if(u4_t_evt == (U4)VEH_OPEMD_EVBIT_IG_R_TO_OFF){
         u4_s_alert_ign_tm_elpsd  = (U4)U4_MAX;
         u4_s_alert_bslp_tm_elpsd = (U4)U4_MAX;
         u1_t_vom_chk            |= ((U1)ALERT_VOM_BAT_WT | (U1)ALERT_VOM_IGN_OFF_WT);
@@ -176,7 +156,6 @@ void    vd_g_AlertOpemdEvhk(const U4 u4_a_MDBIT, const U4 u4_a_EVTBIT)
     }
 
     u1_s_alert_vom_chk = u1_t_vom_chk;
-#endif   /* BEV Rebase provisionally */
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_AlertMainTask(void)                                                                                                 */
@@ -365,15 +344,7 @@ static U1      u1_s_AlertVomchk(void)
         u2_s_alert_rmtx_tm_elpsd++;
     }
 
-#if 0   /* BEV Rebase provisionally */
-    u4_t_mdbit   = u4_g_VehopemdMdfield() & ((U4)VEH_OPEMD_MDBIT_ACC |
-                                             (U4)VEH_OPEMD_MDBIT_IGN |
-                                             (U4)VEH_OPEMD_MDBIT_STA);
-#else   /* BEV Rebase provisionally */
-    u4_t_mdbit   = (U4)0U;
-#endif   /* BEV Rebase provisionally */
-
-    u1_t_vom_chk = u1_sp_ALERT_VOM_CHK[u4_t_mdbit];
+    u1_t_vom_chk = u1_s_AlertPowerChk();
     u1_t_ign_on  = u1_t_vom_chk & (U1)ALERT_VOM_IGN_ON;
     if(u1_t_ign_on != (U1)0U){
 
@@ -545,6 +516,30 @@ U1      u1_g_AlertGetReqSlot(void)
     return(u1_s_alert_task_slot);
 }
 /*===================================================================================================================================*/
+/*  static U1      u1_s_AlertPowerChk(void)                                                                                          */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:                                                                                                                        */
+/*===================================================================================================================================*/
+static U1      u1_s_AlertPowerChk(void)
+{
+    U1          u1_t_igr_on;
+    U1          u1_t_vom_chk;
+
+    u1_t_vom_chk = (U1)ALERT_VOM_BAT_AO;
+
+    u1_t_igr_on = u1_g_VehopemdIgnOn();
+    if (u1_t_igr_on == (U1)TRUE) {
+        u1_t_vom_chk |= (U1)ALERT_VOM_IGN_ON | (U1)ALERT_VOM_VDC_ON;
+        /* Attention: VDC_OFF during IGN_ON is not supported. */
+    }
+    else {
+        u1_t_vom_chk |= (U1)ALERT_VOM_IGN_OFF;
+    }
+
+    return(u1_t_vom_chk);
+}
+/*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
 /*                                                                                                                                   */
@@ -563,6 +558,7 @@ U1      u1_g_AlertGetReqSlot(void)
 /*  19PFv3-1 08/06/2024  TH       Add function(u1_g_AlertGetReqSlot).                                                                */
 /*  19PFv3-2 11/04/2024  HY       Renaming ipc_tycan.h -> ipc_mainline.h                                                             */
 /*  19PFv3-3 12/24/2024  SN       Add function(u1_s_AlertJudgeStartEngine).                                                          */
+/*  BEV-1    10/30/2025  SH       Configured for BEVstep3_Rebase                                                                     */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
 /*  * YI   = Yoshiki Iwata, Denso                                                                                                    */
@@ -570,5 +566,6 @@ U1      u1_g_AlertGetReqSlot(void)
 /*  * TH   = Takahiro Hirano, Denso Techno                                                                                           */
 /*  * HY   = Hiroki You, Denso Techno                                                                                                */
 /*  * SN   = Shimon Nambu, Denso Techno                                                                                              */
+/*  * SH   = Sae Hirose, Denso Techno                                                                                                */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
