@@ -36,7 +36,6 @@
     -I${APP_DIR}/MET/IpcApplication/Evc/Vardef/scc
     -I${APP_DIR}/MET/IpcApplication/Hmi/config
     -I${APP_DIR}/MET/IpcApplication/Hmi/scc
-    -I${APP_DIR}/MET/IpcApplication/Vom/Alert/config
     -I${APP_DIR}/MET/IpcApplication/Vom/Alert/matrix/config
     -I${APP_DIR}/MET/IpcApplication/Vom/Alert/scc
     -I${APP_DIR}/MET/IpcApplication/Vom/Ambtmp/scc
@@ -196,7 +195,6 @@ App/MET/IpcApplication/Hmi/scc/hmiscreen.c
 App/MET/IpcApplication/Hmi/scc/hmitripcom.c
 App/MET/IpcApplication/Hmi/scc/hmitt.c
 App/MET/IpcApplication/Hmi/scc/hmiwchime.c
-App/MET/IpcApplication/Vom/Alert/config/alert_bcm.c
 App/MET/IpcApplication/Vom/Alert/config/alert_cfg.c
 App/MET/IpcApplication/Vom/Alert/matrix/config/alert_mtrx.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_B_AIRBAG.c

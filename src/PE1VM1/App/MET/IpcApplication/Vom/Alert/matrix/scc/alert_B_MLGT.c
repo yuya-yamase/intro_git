@@ -109,7 +109,6 @@ void    vd_g_AlertB_mlgtInit(void)
 /*===================================================================================================================================*/
 static U4      u4_s_AlertB_mlgtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
-#if 0   /* BEV Rebase provisionally */
     static const U1 u1_s_ALERT_B_MLGT_LSB_BDB1S03 = (U1)1U;
     static const U4 u4_s_ALERT_B_MLGT_VOM_BAT_WT  = (U4)0x00000008U;
     static const U2 u2_s_ALERT_B_MLGT_THRSH_TO    = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
@@ -117,9 +116,9 @@ static U4      u4_s_AlertB_mlgtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, c
     U1              u1_t_msgsts;
     U1              u1_t_sgnl;
 
-    u1_t_msgsts = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_BDB1S03,
-                                        (U2)OXCAN_RX_SYS_NRX_BAT | (U2)OXCAN_RX_SYS_TOE_BAT,
-                                        u2_s_ALERT_B_MLGT_THRSH_TO) & (U1)(COM_TIMEOUT | COM_NO_RX);
+    u1_t_msgsts = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_BDB1S03_CH0,
+                                    (U4)ALERT_CAN_SYS_ALL,
+                                    u2_s_ALERT_B_MLGT_THRSH_TO) & (U1)(COM_TIMEOUT | COM_NO_RX);
     vd_g_AlertBRxTrnsSts(&u1_s_alert_b_mlgt_msgsts, u1_t_msgsts);
 
     u1_t_sgnl      = (U1)0U;
@@ -131,9 +130,6 @@ static U4      u4_s_AlertB_mlgtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, c
         u4_t_src_chk |= u4_s_ALERT_B_MLGT_VOM_BAT_WT;
     }
     return(u4_t_src_chk);
-#else   /* BEV Rebase provisionally */
-    return((U4)0U);
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
