@@ -296,9 +296,7 @@ void    vd_g_oXCANUsrhkTraAck(const U2 u2_a_IPDU_TX)
 
     switch (u2_a_IPDU_TX) {
         case (U2)MSG_MET1S01_TXCH0:
-#if 0   /* BEV Rebase provisionally */
             vd_g_IllumiRheoTxAck();
-#endif   /* BEV Rebase provisionally */
             break;
         default:
             /* Do nothing */
