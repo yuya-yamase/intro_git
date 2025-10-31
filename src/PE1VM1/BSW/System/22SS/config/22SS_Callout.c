@@ -46,9 +46,7 @@
 #include "rcmmui.h"
 #include "gauge.h"
 #include "wchime.h"
-#if 0   /* BEV Rebase provisionally */
 #include "sbltsync.h"
-#endif   /* BEV Rebase provisionally */
 #include "locale.h"
 #include "vardef.h"
 #include "hmiproxy.h"
@@ -104,9 +102,7 @@ void vd_g_22SSCallout_StaBonInit(void)
         &vd_g_TripcomBonInit,
         &vd_g_AmbtmpBonInit,
         &vd_g_RcmmUIInit,
-#if 0   /* BEV Rebase provisionally */
         &vd_g_SbltsyncInit,
-#endif   /* BEV Rebase provisionally */
         &vd_g_HmiProxyBonInit,
         &vd_g_HdimmgrBonInit,
         &vd_g_HudImgAdjInit,
@@ -168,9 +164,7 @@ void vd_g_22SSCallout_StaRstInit(void)
         &vd_g_TripcomWkupInit,
         &vd_g_AmbtmpRstWkInit,
         &vd_g_RcmmUIInit,
-#if 0   /* BEV Rebase provisionally */
         &vd_g_SbltsyncInit,
-#endif   /* BEV Rebase provisionally */
         &vd_g_HmiProxyRstInit,
         &vd_g_HdimmgrWkRstInit,
         &vd_g_HudImgAdjInit,
@@ -232,9 +226,7 @@ void vd_g_22SSCallout_StaWkupInit(void)
         &vd_g_TripcomWkupInit,
         &vd_g_AmbtmpRstWkInit,
         &vd_g_RcmmUIInit,
-#if 0   /* BEV Rebase provisionally */
         &vd_g_SbltsyncInit,
-#endif   /* BEV Rebase provisionally */
         &vd_g_HmiProxyWkupInit,
         &vd_g_HdimmgrWkRstInit,
         &vd_g_HudImgAdjInit,
