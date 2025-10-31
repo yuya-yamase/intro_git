@@ -117,7 +117,11 @@ U1              u1_g_SbltwrnDestCfg(void)
 U1              u1_g_SbltwrnCanMsgstsCfg(const U2 u2_a_MSGSTS)
 {
     U1          u1_t_ret;
+#if 0   /* BEV Rebase provisionally */
     u1_t_ret = (U1)Com_GetIPDUStatus((PduIdType)u2_a_MSGSTS);
+#else   /* BEV Rebase provisionally */
+    u1_t_ret = (U1)COM_NO_RX;
+#endif   /* BEV Rebase provisionally */
 
     return (u1_t_ret);
 }
