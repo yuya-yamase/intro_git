@@ -37,10 +37,10 @@
 #define UNIT_CONVRT_GAUS_TO_GAUK                 (6U)
 #define UNIT_CONVRT_GAUK_TO_GAUS                 (7U)
 
-#define UNIT_CONVRT_MI_TO_KM_MAX                 (2669339525U)    /* (0xffffffff / 1609) * 1000 */ /* Toyota Specific */
-#define UNIT_CONVRT_GAUS_TO_LT_MAX               (1134733764U)    /* (0xffffffff / 3785) * 1000 */ /* Toyota Specific */
-#define UNIT_CONVRT_GAUK_TO_LT_MAX               (944779431U)     /* (0xffffffff / 4546) * 1000 */ /* Toyota Specific */
-#define UNIT_CONVRT_GAUK_TO_GAUS_MAX             (3575990148U)    /* (0xffffffff / 4546) * 3785 */ /* Toyota Specific */
+#define UNIT_CONVRT_MI_TO_KM_MAX                 (2668768949U)    /* (0xffffffff / 25146) * 15625 */
+#define UNIT_CONVRT_GAUS_TO_LT_MAX               (1134613857U)    /* (0xffffffff / 37854) * 10000 */
+#define UNIT_CONVRT_GAUK_TO_LT_MAX               (944758649U)     /* (0xffffffff / 45461) * 10000 */
+#define UNIT_CONVRT_GAUK_TO_GAUS_MAX             (3576289391U)    /* (0xffffffff / 45461) * 37854 */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
