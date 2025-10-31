@@ -478,8 +478,10 @@ static void    vd_s_SchdlrCfgWdgTimRestart(void)
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
+/*  BEV-1    10/22/2025  TS       Change for BEV rebase.                                                                             */
 /*                                                                                                                                   */
 /*  * TN      = Takashi Nagai, Denso                                                                                                 */
 /*  * AM      = Akira Motomatsu, Denso Create                                                                                        */
+/*  * TS      = Takuo Suganuma, Denso Techno                                                                                         */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

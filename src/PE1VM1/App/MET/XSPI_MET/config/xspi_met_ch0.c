@@ -1712,8 +1712,9 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*  BEV-8     05/30/2025 SN(K)    Change for BEV System_Consideration_2.(MET-S_ADBB-CSTD-0-01-A-C0)                                  */
 /*  BEV-9     06/17/2025 JS       Change for BEV System_Consideration_2.(MET-B_WDICBB-CSTD-0-01-A-C0)                                */
 /*  BEV-10    10/10/2025 KO       Configured for BEVstep3_Dimmer_Rebase                                                              */
-/*  BEV-11    10/29/2025 KO       Configured for BEVstep3_illumi_Rebase                                                              */
-/*  BEV-12    10/30/2025 SN       Delete fueleco for BEVstep3_Locale_Rebase                                                          */
+/*  BEV-11    10/22/2025 TS       Change for BEV rebase                                                                              */
+/*  BEV-12    10/29/2025 KO       Configured for BEVstep3_illumi_Rebase                                                              */
+/*  BEV-13    10/30/2025 SN       Delete fueleco for BEVstep3_Locale_Rebase                                                          */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * KM   = Keisuke Mashita, Denso Techno                                                                                           */
@@ -1734,5 +1735,6 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*  * SN(K)= Shizuka Nakajima, KSE                                                                                                   */
 /*  * JS   = Jun Sugiyama, KSE                                                                                                       */
 /*  * KO     = Kazuto Oishi,  Denso Techno                                                                                           */
+/*  * TS   = Takuo Suganuma,  Denso Techno                                                                                           */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
