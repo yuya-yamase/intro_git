@@ -1,7 +1,7 @@
 /* Fee_Ram.c v1-1-0                                                         */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION. All rights reserved.                        */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -32,7 +32,7 @@
 /*----------------------------------------*/
 /*     DTF_Fee_lib                        */
 /*----------------------------------------*/
-VAR( Fee_CpuDtfType, FEE_VAR_NO_INIT ) Fee_CpuDtfInfo;                                 /* MHA[データFlash]管理データ */
+VAR( Fee_CpuDtfType, FEE_VAR_NO_INIT ) Fee_CpuDtfInfo;                                 /* MHA (Data Flash) Management Data */
 
 #if ( FEE_USE_REDUNDANCY_RAM == STD_ON )
 VAR( Fee_CpuDtfType, FEE_VAR_NO_INIT ) Fee_CpuDtfInfoSub;
@@ -41,7 +41,7 @@ VAR( Fee_CpuDtfType, FEE_VAR_NO_INIT ) Fee_CpuDtfInfoSub;
 /*----------------------------------------*/
 /*     DTF_Fee_mngdfc                     */
 /*----------------------------------------*/
-VAR( Fee_MngDfcInfType, FEE_VAR_NO_INIT ) Fee_MngDfcInfo;                              /* データFlash制御管理データ */
+VAR( Fee_MngDfcInfType, FEE_VAR_NO_INIT ) Fee_MngDfcInfo;                              /* Data Flash Control Management Data */
 
 #if ( FEE_USE_REDUNDANCY_RAM == STD_ON )
 VAR( Fee_MngDfcInfType, FEE_VAR_NO_INIT ) Fee_MngDfcInfoSub;

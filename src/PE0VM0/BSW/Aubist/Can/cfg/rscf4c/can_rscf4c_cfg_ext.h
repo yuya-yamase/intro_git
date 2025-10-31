@@ -29,32 +29,32 @@
 /*------------------------------------------------------------------*/
 /* Cycle Number of CAN RAM Initialization                           */
 /*------------------------------------------------------------------*/
-#define CAN_CFG_RAM_INIT_CYCLE          (19200UL)
+#define CAN_CFG_RAM_INIT_CYCLE          (75000UL)
 
 
 /*------------------------------------------------------------------*/
 /* Number of Tx Buffer                                              */
 /*------------------------------------------------------------------*/
-#define CAN_CFG_TXBUF_NUM               (32U)
+#define CAN_CFG_TXBUF_NUM               (64U)
 
 
 /*------------------------------------------------------------------*/
 /* Number of AFL Page                                               */
 /*------------------------------------------------------------------*/
-#define CAN_CFG_AFL_PAGE_NUM            (0U)
+#define CAN_CFG_AFL_PAGE_NUM            (96U)
 
 
 /*------------------------------------------------------------------*/
 /* Depth of TRX FIFO 1 for Polling RX(Each CAN Controller)          */
 /*------------------------------------------------------------------*/
-#define CAN_CFG_RXPOL_FIFO_SIZE_0       (48U)
-#define CAN_CFG_RXPOL_FIFO_SIZE_1       (48U)
-#define CAN_CFG_RXPOL_FIFO_SIZE_2       (48U)
-#define CAN_CFG_RXPOL_FIFO_SIZE_3       (48U)
-#define CAN_CFG_RXPOL_FIFO_SIZE_4       (48U)
-#define CAN_CFG_RXPOL_FIFO_SIZE_5       (48U)
-#define CAN_CFG_RXPOL_FIFO_SIZE_6       (48U)
-#define CAN_CFG_RXPOL_FIFO_SIZE_7       (48U)
+#define CAN_CFG_RXPOL_FIFO_SIZE_0       (64U)
+#define CAN_CFG_RXPOL_FIFO_SIZE_1       (64U)
+#define CAN_CFG_RXPOL_FIFO_SIZE_2       (64U)
+#define CAN_CFG_RXPOL_FIFO_SIZE_3       (64U)
+#define CAN_CFG_RXPOL_FIFO_SIZE_4       (64U)
+#define CAN_CFG_RXPOL_FIFO_SIZE_5       (64U)
+#define CAN_CFG_RXPOL_FIFO_SIZE_6       (64U)
+#define CAN_CFG_RXPOL_FIFO_SIZE_7       (64U)
 
 
 #endif  /* CAN_RSCF4C_CFG_EXT_H */

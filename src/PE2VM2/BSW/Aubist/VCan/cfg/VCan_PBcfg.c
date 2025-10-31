@@ -70,8 +70,8 @@ BswConst BswU1 bsw_vcan_stVirtualHohTbl[ BSW_VCAN_VHOHNUM ] =
     ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [6] */
     ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [7] */
     ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [8] */
-  /*--- VM Transmission(VHTH) -----------------------------*/
     ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [9] */
+  /*--- VM Transmission(VHTH) -----------------------------*/
     ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [10] */
     ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [11] */
     ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [12] */
@@ -114,6 +114,8 @@ BswConst BswU1 bsw_vcan_stVirtualHohTbl[ BSW_VCAN_VHOHNUM ] =
     ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [49] */
     ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [50] */
     ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [51] */
+    ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [52] */
+    ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [53] */
 };
 
 /************************************************/
@@ -125,14 +127,15 @@ BswConst Bsw_VCan_RxTblType bsw_vcan_stRxMessageTbl[ BSW_VCAN_VHRHNUM ] =
   /*   CAN ID      , Mask              */
   /*--- VM Reception(VHRH) ------------*/
      { 0x40000000UL, 0xFFFFFC00UL }   /* [0] */
-    ,{ 0x00000400UL, 0xBFFFFF00UL }   /* [1] */
-    ,{ 0x40000500UL, 0xFFFFFF00UL }   /* [2] */
-    ,{ 0x40000600UL, 0xFFFFFF00UL }   /* [3] */
-    ,{ 0x98DA1CE0UL, 0xBFFFFFFEUL }   /* [4] */
-    ,{ 0x98DBEFE0UL, 0xBFFFFFFEUL }   /* [5] */
-    ,{ 0x98000000UL, 0xBFFFFC00UL }   /* [6] */
-    ,{ 0x98002000UL, 0xBFFFFE00UL }   /* [7] */
-    ,{ 0x98008000UL, 0xBFFFFF00UL }   /* [8] */
+    ,{ 0x00000200UL, 0xFFFFFEEEUL }   /* [1] */
+    ,{ 0x00000400UL, 0xBFFFFF00UL }   /* [2] */
+    ,{ 0x40000500UL, 0xFFFFFF00UL }   /* [3] */
+    ,{ 0x40000600UL, 0xFFFFFF00UL }   /* [4] */
+    ,{ 0x98DA1CE0UL, 0xBFFFFFFEUL }   /* [5] */
+    ,{ 0x98DBEFE0UL, 0xBFFFFFFEUL }   /* [6] */
+    ,{ 0x98000000UL, 0xBFFFFC00UL }   /* [7] */
+    ,{ 0x98002000UL, 0xBFFFFE00UL }   /* [8] */
+    ,{ 0x98008000UL, 0xBFFFFF00UL }   /* [9] */
 };
 #endif /* ( BSW_VCAN_VHRHNUM != 0U ) */
 
@@ -307,8 +310,9 @@ BswConst BswU1 bsw_vcan_u1TxMBoxTbl_VControl0[ BSW_VCAN_TX_VMBOXNUM_0 ] =
    ,(BswU1)(BSW_VCAN_POLLING   | BSW_VCAN_KIND_TRANSMIT )   /* [38] */
    ,(BswU1)(BSW_VCAN_POLLING   | BSW_VCAN_KIND_TRANSMIT )   /* [39] */
    ,(BswU1)(BSW_VCAN_POLLING   | BSW_VCAN_KIND_TRANSMIT )   /* [40] */
-   ,(BswU1)(BSW_VCAN_INTERRUPT | BSW_VCAN_KIND_TRANSMIT )   /* [41] */
-   ,(BswU1)(BSW_VCAN_POLLING   | BSW_VCAN_KIND_TRANSMIT )   /* [42] */
+   ,(BswU1)(BSW_VCAN_POLLING   | BSW_VCAN_KIND_TRANSMIT )   /* [41] */
+   ,(BswU1)(BSW_VCAN_INTERRUPT | BSW_VCAN_KIND_TRANSMIT )   /* [42] */
+   ,(BswU1)(BSW_VCAN_POLLING   | BSW_VCAN_KIND_TRANSMIT )   /* [43] */
 };
 
 #endif /* ( BSW_VCAN_TX_VMBOXNUM_0 != 0U ) */

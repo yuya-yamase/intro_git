@@ -28,6 +28,10 @@
 #include "Vcc.h"               /* ehvm_vcc_clear_channel and ehvm_vcc_transmit */
 #endif /* #if ((defined(CAN_LPR_PHY_TX_VACK_CH)) && (CAN_LPR_PHY_TX_VACK_CH < 0xffffU)) */
 
+#if (CAN_CFG_CV == CAN_USE)
+#include "can_rscf4_cfg.h"            /* CAN_CFG_CONTROLLERNUM_MAX      */
+#endif /*(CAN_CFG_CV == CAN_USE)*/
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -850,6 +854,8 @@ static void    vd_s_CANLpRPhyTxReqbyMbox(const ST_CAN_LPR_PHY_TX * st_ap_PHY_TX,
         /* ----------------------------------------------------------------------------------------------------- */
         u4_ap_log[CAN_LPR_PHY_TX_LOG_FRT]    = (*u4p_g_GPT_FRT_RA) & (U4)CAN_LPR_FRT_MAX;
 
+#if (CAN_CFG_CV != CAN_USE)
+
 #if (CAN_LPR_CFG_DET == 1U)
         u1_t_eas_chk = Can_TxReq(u1_a_CTRLR, u1_a_MBOX, &st_t_can);
         if(u1_t_eas_chk != (U1)CAN_PROC_OK){
@@ -858,6 +864,29 @@ static void    vd_s_CANLpRPhyTxReqbyMbox(const ST_CAN_LPR_PHY_TX * st_ap_PHY_TX,
 #else   /* #if (CAN_LPR_CFG_DET == 1U) */
         (void)Can_TxReq(u1_a_CTRLR, u1_a_MBOX, &st_t_can);
 #endif  /* #if (CAN_LPR_CFG_DET == 1U) */
+
+
+#else  /* #if (CAN_CFG_CV != CAN_USE) */
+
+
+#if (CAN_LPR_CFG_DET == 1U)
+        if(u1_a_CTRLR < (U1)CAN_CFG_CONTROLLERNUM_MAX){
+            u1_t_eas_chk = Can_IP0_TxReq(u1_a_CTRLR, u1_a_MBOX, &st_t_can);
+        } else {
+            u1_t_eas_chk = Can_IP1_TxReq((u1_a_CTRLR - (U1)CAN_CFG_CONTROLLERNUM_MAX), u1_a_MBOX, &st_t_can);
+        }
+        if(u1_t_eas_chk != (U1)CAN_PROC_OK){
+            vd_g_CANLpRCfgDet((U1)CAN_LPR_DET_PHY_TX, u1_t_eas_chk, u4_t_can_id);
+        }
+#else   /* #if (CAN_LPR_CFG_DET == 1U) */
+        if(u1_a_CTRLR < (U1)CAN_CFG_CONTROLLERNUM_MAX){
+            (void)Can_IP0_TxReq(u1_a_CTRLR, u1_a_MBOX, &st_t_can);
+        } else {
+            (void)Can_IP1_TxReq((u1_a_CTRLR - (U1)CAN_CFG_CONTROLLERNUM_MAX), u1_a_MBOX, &st_t_can);
+        }
+#endif  /* #if (CAN_LPR_CFG_DET == 1U) */
+
+#endif/*(CAN_CFG_CV != CAN_USE)*/
     }
     else{
         u4_ap_log[CAN_LPR_PHY_TX_LOG_FRT] = (U4)CAN_LPR_FRT_INI;

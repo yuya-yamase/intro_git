@@ -62,6 +62,7 @@ static U1      u1_s_can_lpr_cfg_phy_txen;
 #include "can_lpr_cfg_phy_tx.h"
 #include "can_lpr_cfg_vir_0.h"
 #include "can_lpr_cfg_g2m_2.h"
+#include "can_lpr_cfg_local.h"
 
 #if ((CAN_LPR_RR_EN_SECOC_TX == 1U) || (CAN_LPR_RR_EN_SECOC_TX == 2U))
 #include "can_lpr_cfg_secoc_tx.h"
@@ -83,9 +84,13 @@ const ST_CAN_LPR_ING * const    stp_gp_CAN_LPR_ING[CAN_LPR_NUM_ING] = {
     &st_s_CAN_LPR_ING_G2M_1,     /*  5 */
     NULL_PTR,                    /*  6 */
     &st_s_CAN_LPR_ING_G5M,       /*  7 */
-    &st_s_CAN_LPR_ING_VIR_0,     /*  8 */
-    &st_s_CAN_LPR_ING_SECOC_TX,  /*  9 */
-    NULL_PTR                     /* 10 */
+    NULL_PTR,                    /*  8 */
+    NULL_PTR,                    /*  9 */
+    NULL_PTR,                    /* 10 */
+    &st_s_CAN_LPR_ING_LOCAL,     /* 11 */
+    &st_s_CAN_LPR_ING_VIR_0,     /* 12 */
+    &st_s_CAN_LPR_ING_SECOC_TX,  /* 13 */
+    NULL_PTR                     /* 14 */
 };
 const uint8                     u1_g_CAN_LPR_NUM_ING = (U1)CAN_LPR_NUM_ING;
 
@@ -128,7 +133,14 @@ const U4                        u4_gp_CAN_LPR_REGR_EN_BY_NET[CAN_LPR_NUM_NET * C
     (U4)0x00000600U,                     /* FUL_DEE */
     (U4)0x00000000U,                     /* SIL_DDE */
 
-    /* ComMConf_ComMChannel_CANFD_G5M_BUS   (3U)    */
+    /* CAN_LPR_NET_LOCA  (3U)                       */
+    /*   CAN_LPR_REGR_EN_PHY_FQ_LOCA  (0x00000010U) */
+    /*   CAN_LPR_REGR_EN_PHY_TX_LOCA  (0x00000100U) */
+    (U4)0x00000110U,                     /* FUL_EEE */
+    (U4)0x00000010U,                     /* FUL_DEE */
+    (U4)0x00000000U,                     /* SIL_DDE */
+
+    /* ComMConf_ComMChannel_CANFD_G5M_BUS   (4U)    */
     /*   CAN_LPR_REGR_EN_SECOC_TX     (0x00000001U) */
     /*   CAN_LPR_REGR_EN_PHY_FQ_G5M   (0x00000008U) */
     /*   CAN_LPR_REGR_EN_PHY_TX_G5M   (0x00000080U) */
@@ -136,8 +148,6 @@ const U4                        u4_gp_CAN_LPR_REGR_EN_BY_NET[CAN_LPR_NUM_NET * C
     (U4)0x00000009U,                     /* FUL_DEE */
     (U4)0x00000000U                      /* SIL_DDE */
 
-    /* CAN_LPR_NET_LOCA  (4U)                       */
-    /*   CAN_LPR_REGR_EN_PHY_TX_LOCA  (0x00000020U) */
 };
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

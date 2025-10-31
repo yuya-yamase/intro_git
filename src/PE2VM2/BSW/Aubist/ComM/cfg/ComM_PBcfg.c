@@ -82,6 +82,9 @@ BswConst BswU4 bsw_comm_ctrl_u4PncAwake_0[BSW_COMM_CH_PNAWKPW_NUM_0] = {
     /* ComMConf_ComMPnc_Awake_44 */
    ,(BswU4)(BSW_COMM_PWSTAT_ACC|BSW_COMM_PWSTAT_IG|ComMConf_SysStatusName_IGR)
    ,(BswU4)(BSW_COMM_PWSTAT_NONE)
+    /* ComMConf_ComMPnc_Awake_60 */
+   ,(BswU4)(BSW_COMM_PWSTAT_ACC|BSW_COMM_PWSTAT_IG|ComMConf_SysStatusName_IGR)
+   ,(BswU4)(BSW_COMM_PWSTAT_NONE)
 };
 #endif /* ( BSW_COMM_CH_PNCNUM_0 > 0U ) */
 #endif /* ( BSW_COMM_CFG_CHNUM > 0U ) */

@@ -1,0 +1,10 @@
+#!gbuild
+[Subproject]
+    :sourceDir=${HV_DIR}/callout
+
+ehvm_callout_ghs.850
+ehvm_callout.c
+# user_clk.c
+# user_port_dep.c
+# user_port_ghs.850
+# user_stbc_dep.c

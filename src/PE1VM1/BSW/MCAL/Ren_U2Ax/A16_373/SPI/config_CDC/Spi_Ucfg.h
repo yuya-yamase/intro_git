@@ -29,13 +29,11 @@
 #define SPI_CFG_MODEB_USE					(OFF)
 #define SPI_CFG_MODEC_USE					(ON)
 
-#define SPI_CFG_SYNCSEND_TIMEOUT			(0xFFFFFFFF)
-#define SPI_CFG_SYNCRECEIVE_TIMEOUT			(0xFFFFFFFF)
-#define SPI_CFG_SENDDMASTOP_TIMEOUT			(0xFFFFFFFF)
-#define SPI_CFG_RECEIVEDMASTOP_TIMEOUT		(0xFFFFFFFF)
-#define SPI_CFG_ASYNCDMASTART_TIMEOUT		(0xFFFFFFFF)
-
-#define SPI_CFG_MODEC_FSLEVEL				(SPI_QM)
+#define SPI_CFG_SYNCSEND_TIMEOUT			(20U)	/* @todo S.Abe : 20251024 to avoid an infinit loop */
+#define SPI_CFG_SYNCRECEIVE_TIMEOUT			(20U)	/* @todo S.Abe : 20251024 to avoid an infinit loop */
+#define SPI_CFG_SENDDMASTOP_TIMEOUT			(20U)	/* @todo S.Abe : 20251024 to avoid an infinit loop */
+#define SPI_CFG_RECEIVEDMASTOP_TIMEOUT		(20U)	/* @todo S.Abe : 20251024 to avoid an infinit loop */
+#define SPI_CFG_ASYNCDMASTART_TIMEOUT		(20U)	/* @todo S.Abe : 20251024 to avoid an infinit loop */
 
 #define Bswlib_GetCoreId()					(u4_g_GetCoreId())
 

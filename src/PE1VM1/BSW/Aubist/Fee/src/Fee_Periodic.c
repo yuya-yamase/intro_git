@@ -1,7 +1,7 @@
-/* Fee_Periodic.c v1-1-0                                                    */
+/* Fee_Periodic.c v2-0-0                                                    */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION. All rights reserved.                        */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -16,17 +16,17 @@
 
 #include "../inc/Fee_Mpu_Dev_Const.h"
 
-/* MHA[データFlash]I/Fヘッダ */
+/* MHA (Data Flash) I/F header */
 #include "../inc/Fee_Legacy.h"
 
-/* MHA[データFlash]ヘッダ */
+/* MHA header */
 #include "../inc/Fee_Lib.h"
 
-/* MHA[データFlash]ライブラリヘッダ */
+/* MHA library header */
 #include "../inc/Fee_Common.h"
 #include "../inc/Fee_Periodic_Internal.h"
 
-/* D.F.C.ヘッダ */
+/* D.F.C. header */
 #include "../inc/Fee_Dfc.h"
 
 #include "../inc/Fee_Record_Pos_Tbl.h"
@@ -34,9 +34,9 @@
 /*--------------------------------------------------------------------------*/
 /* Macros                                                                   */
 /*--------------------------------------------------------------------------*/
-/* 確認用メイン状態 */
-#define FEE_MAINSTATUS_IDLE         ((uint8)0x00U)      /* アイドル */
-#define FEE_MAINSTATUS_INVALID      ((uint8)0x0FU)      /* 無効値 */
+/* Main condition for checking */
+#define FEE_MAINSTATUS_IDLE         ((uint8)0x00U)      /* Idle */
+#define FEE_MAINSTATUS_INVALID      ((uint8)0x0FU)      /* Invalid value */
 
 /****************************************************************************/
 /* External Functions                                                       */
@@ -44,19 +44,21 @@
 #define FEE_START_SEC_CODE
 #include <Fee_MemMap.h>
 
-/*関数説明--------------------------------------------------------------------*/
-/* 説  明        ：データFlash定期処理実行命令                                */
-/* 入  力        ：stCPUDTF *ptstCPUDTFInfo                            */
-/*                                           ：MHA[データFlash]管理データ     */
-/* 出  力        ：なし                                                       */
-/* グローバル変数：                                                           */
-/* その他        ：                                                           */
-/*----------------------------------------------------------------------------*/
-FUNC(void, FEE_CODE) Fee_ExecPeriodic( P2VAR(Fee_CpuDtfType, AUTOMATIC, TYPEDEF) ptstCPUDTFInfo )
+/****************************************************************************/
+/* Function Name | Fee_ExecPeriodict                                        */
+/* Description   | Data Flash periodic processing execution instruction     */
+/* Preconditions | None                                                     */
+/* Parameters    | stCPUDTF * ptstCPUDTFInfo : MHA management data          */
+/*               | uint8 u1_callmode : type of periodic process             */
+/* Return Value  | None                                                     */
+/* Notes         | None                                                     */
+/****************************************************************************/
+
+FUNC(void, FEE_CODE) Fee_ExecPeriodic( P2VAR(Fee_CpuDtfType, AUTOMATIC, TYPEDEF) ptstCPUDTFInfo , uint8 u1_callmode )
 {
-    uint32          u4tStatus;                                  /* 処理状態内部変数 */
+    uint32          u4tStatus;                                  /* Processing state internal variable */
     
-    /* 処理結果を確認 */
+    /* Check processing results */
     if ( (ptstCPUDTFInfo->u1Result == FEE_RSP_TIMEOUT)
         || (ptstCPUDTFInfo->u1Result == FEE_RSP_NG_DTF_CTRL))
     {
@@ -64,15 +66,15 @@ FUNC(void, FEE_CODE) Fee_ExecPeriodic( P2VAR(Fee_CpuDtfType, AUTOMATIC, TYPEDEF)
     }
     else
     {
-        /* 処理結果がタイムアウトでない場合 */
-        /* DFC処理確認 */
-        u4tStatus = Fee_Periodic_ExecUnderLayer( ptstCPUDTFInfo );
+        /* If the result is not a timeout */
+        /* DFC processing confirmation */
+        u4tStatus = Fee_Periodic_ExecUnderLayer( ptstCPUDTFInfo , u1_callmode );
     }
 
-    /* 処理状態内部変数がEXITでない間ループ */
+    /* Loop while processing state internal variable is not EXIT */
     while ( u4tStatus != FEE_STATUS_EXIT )
     {
-        /* 処理状態内部変数で分岐 */
+        /* Branched by processing state internal variable */
         switch ( u4tStatus )
         {
             case FEE_STATUS_CONT:
@@ -175,6 +177,7 @@ Fee_Periodic_ExecPeriodicSubDone(
 /* Description   | This function handles underlayer jobs, MngDfc or Fls.    */
 /* Preconditions | None                                                     */
 /* Parameters    | CPUDTFInfo                                               */
+/*               | u1_callmode : type of periodic process                   */
 /* Return Value  | Status                                                   */
 /*               |   FEE_STATUS_EXIT                                        */
 /*               |   FEE_STATUS_DONE                                        */
@@ -183,7 +186,8 @@ Fee_Periodic_ExecPeriodicSubDone(
 /****************************************************************************/
 FUNC( uint32, FEE_CODE )
 Fee_Periodic_ExecUnderLayer(
-    P2VAR( Fee_CpuDtfType, AUTOMATIC, FEE_VAR_NO_INIT ) CPUDTFInfo
+    P2VAR( Fee_CpuDtfType, AUTOMATIC, FEE_VAR_NO_INIT ) CPUDTFInfo ,
+    uint8 u1_callmode
 ){
     boolean IsWaitingForCancel;
     uint32  RtnStatus;
@@ -191,15 +195,15 @@ Fee_Periodic_ExecUnderLayer(
     IsWaitingForCancel = Fee_Driver_IsWaitingForCancel();
     if( IsWaitingForCancel == (boolean)TRUE )
     {
-        RtnStatus = Fee_Periodic_ExecFlsForWaitingCancel();
+        RtnStatus = Fee_Periodic_ExecFlsForWaitingCancel( u1_callmode );
     }
     else if( CPUDTFInfo->u1Result == FEE_RSP_GARBLED_RAM )
     {
-        RtnStatus = Fee_Periodic_ExecFlsForWaitingAbort();
+        RtnStatus = Fee_Periodic_ExecFlsForWaitingAbort( u1_callmode );
     }
     else
     {
-        RtnStatus = Fee_Periodic_ExecMngDfc( CPUDTFInfo );
+        RtnStatus = Fee_Periodic_ExecMngDfc( CPUDTFInfo , u1_callmode );
     }
 
     return RtnStatus;
@@ -210,21 +214,21 @@ Fee_Periodic_ExecUnderLayer(
 /* Description   | Function to handle FLS jobs while waiting asynchronous   */
 /*               | cancel and execute cancel.                               */
 /* Preconditions | None                                                     */
-/* Parameters    | None                                                     */
+/* Parameters    | uint8 u1_callmode : type of periodic process             */
 /* Return Value  | Status. This function returns only FEE_STATUS_EXIT,      */
 /*               | because it is not wanted that Fee_ExecPeriodic() does    */
 /*               | something.                                               */
 /* Notes         | None                                                     */
 /****************************************************************************/
 FUNC( uint32, FEE_CODE )
-Fee_Periodic_ExecFlsForWaitingCancel( void )
+Fee_Periodic_ExecFlsForWaitingCancel( uint8 u1_callmode )
 {
     MemIf_StatusType DfcStatus;
 
     /* Return value is not checked.                                 */
     /* Instead of using the return value that is a result of FLS,   */
     /* this function uses the status of Fee_Dfc_GetStatus().        */
-    (void)Fee_Dfc_ExecFlsMainFunction();
+    (void)Fee_Dfc_ExecFlsMainFunction( u1_callmode );
 
     DfcStatus = Fee_Dfc_GetStatus();
     if( DfcStatus == MEMIF_IDLE )
@@ -239,21 +243,21 @@ Fee_Periodic_ExecFlsForWaitingCancel( void )
 /* Description   | Function to handle FLS jobs while waiting asynchronous   */
 /*               | abort and execute abort.                                 */
 /* Preconditions | None                                                     */
-/* Parameters    | None                                                     */
+/* Parameters    | uint8 u1_callmode : type of periodic process             */
 /* Return Value  | Status. This function returns only FEE_STATUS_EXIT,      */
 /*               | because it is not wanted that Fee_ExecPeriodic() does    */
 /*               | something.                                               */
 /* Notes         | None                                                     */
 /****************************************************************************/
 FUNC( uint32, FEE_CODE )
-Fee_Periodic_ExecFlsForWaitingAbort( void )
+Fee_Periodic_ExecFlsForWaitingAbort( uint8 u1_callmode )
 {
     MemIf_StatusType DfcStatus;
 
     /* Return value is not checked.                                 */
     /* Instead of using the return value that is a result of FLS,   */
     /* this function uses the status of Fee_Dfc_GetStatus().        */
-    (void)Fee_Dfc_ExecFlsMainFunction();
+    (void)Fee_Dfc_ExecFlsMainFunction( u1_callmode );
 
     DfcStatus = Fee_Dfc_GetStatus();
     if( DfcStatus == MEMIF_IDLE )
@@ -263,57 +267,59 @@ Fee_Periodic_ExecFlsForWaitingAbort( void )
     return FEE_STATUS_EXIT;
 }
 
-/*関数説明--------------------------------------------------------------------*/
-/* 説  明        ：DFC定期処理実行命令                                        */
-/* 入  力        ：stCPUDTF *ptstCPUDTFInfo                            */
-/*                                           ：MHA[データFlash]管理データ     */
-/* 出  力        ：処理状態                                                   */
-/*               ：  0x00000002 ：FEE_STATUS_EXIT ：処理中             */
-/*               ：  0x00000003 ：FEE_STATUS_DONE ：動作完了           */
-/*               ：  0x00000004 ：FEE_STATUS_CONT ：アイドル           */
-/* グローバル変数：                                                           */
-/* その他        ：                                                           */
-/*----------------------------------------------------------------------------*/
+/****************************************************************************/
+/* Function Name | Fee_Periodic_ExecMngDfc                                  */
+/* Description   | DFC periodic processing execution instruction            */
+/* Preconditions | None                                                     */
+/* Parameters    | stCPUDTF * ptstCPUDTFInfo : MHA management data          */
+/*               | uint8 u1_callmode : type of periodic process             */
+/* Return Value  | Processing status                                        */
+/*               | 0x00000002 : FEE_STATUS_EXIT : Processing                */
+/*               | 0x00000003 : FEE_STATUS_DONE : Operation completed       */
+/*               | 0x00000004 : FEE_STATUS_CONT : Idle                      */
+/* Notes         | None                                                     */
+/****************************************************************************/
 FUNC( uint32, FEE_CODE )
 Fee_Periodic_ExecMngDfc(
-    P2VAR(Fee_CpuDtfType, AUTOMATIC, TYPEDEF) ptstCPUDTFInfo
+    P2VAR(Fee_CpuDtfType, AUTOMATIC, TYPEDEF) ptstCPUDTFInfo ,
+    uint8 u1_callmode
 ){
-    uint32          u4tStatus;                                  /* 処理状態内部変数 */
-    uint32          u4tMngDFCResult;                            /* 定期処理用データFlash書込み制御処理結果 */
+    uint32          u4tStatus;                                  /* Processing state internal variable */
+    uint32          u4tMngDFCResult;                            /* Data for periodic processing Flash write control processing result */
     uint8           u1tLower4BitMainStatus;
 
-    /* 定期処理用データFlash制御管理処理 */
-    u4tMngDFCResult = Fee_MngDfcForPrd();
+    /* Data Flash Control Management Processing for Periodic Processing */
+    u4tMngDFCResult = Fee_MngDfcForPrd( u1_callmode );
     if ( u4tMngDFCResult == FEE_STATUS_BUSY )
     {
-        /* 処理中(STATUS_BUSY)の場合 */
-        /* メイン状態確認 */
+        /* In progress (STATUS _ BUSY) */
+        /* Check main status */
         u1tLower4BitMainStatus = ptstCPUDTFInfo->u1MainStatus & (uint8)FEE_LOWER4BIT;
         switch ( u1tLower4BitMainStatus )
         {
             case FEE_MAINSTATUS_IDLE:
-                /* メイン状態がアイドルの場合 */
-                /* 処理結果をデータFlashコントローラ異常に設定 */
+                /* When main state is idle */
+                /* Set processing result to Data Flash controller error */
                 ptstCPUDTFInfo->u1Result = FEE_RSP_NG_DTF_CTRL;
-                /* 処理状態内部変数をDONEに設定 */
+                /* Set processing state internal variable to DONE */
                 u4tStatus = FEE_STATUS_DONE;
                 break;
             case FEE_MAINSTATUS_INVALID:
-                /* メイン状態が無効値の場合 */
-                /* 処理状態内部変数をCONTに設定 */
+                /* if main state is invalid */
+                /* Set processing state internal variable to CONT */
                 u4tStatus = FEE_STATUS_CONT;
                 break;
             default:
-                /* メイン状態がアイドル・無効値でない場合 */
-                /* 処理状態内部変数をEXITに設定 */
+                /* If the main state is not idle/invalid */
+                /* Set processing state internal variable to EXIT */
                 u4tStatus = FEE_STATUS_EXIT;
                 break;
         }
     }
     else
     {
-        /* 処理中でない場合 */
-        /* 処理状態内部変数をCONTに設定 */
+        /* If not in progress */
+        /* Set processing state internal variable to CONT */
         u4tStatus = FEE_STATUS_CONT;
     }
     
@@ -328,6 +334,7 @@ Fee_Periodic_ExecMngDfc(
 /*  Version        :Date                                                    */
 /*  1-0-0          :2019/02/01                                              */
 /*  1-1-0          :2019/09/13                                              */
+/*  2-0-0          :2024/07/19                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

@@ -1,7 +1,7 @@
 /* Fee_Lib.c v2-0-0                                                         */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION. All rights reserved.                        */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -36,16 +36,16 @@
 /*--------------------------------------------------------------------------*/
 /* Macros                                                                   */
 /*--------------------------------------------------------------------------*/
-/* 最終書込みレコード位置関連定義 */
-/* バッファ初期化用データ */
-#define FEE_LWPBLKNO_INIT   ((uint8)0xFFU)      /* ブロック番号初期値 */
-#define FEE_LWPBS_INIT      ((uint8)0xFFU)      /* ブロックステータス初期値 */
+/* Final write record position association definition */
+/* Data for buffer initialization */
+#define FEE_LWPBLKNO_INIT   ((uint8)0xFFU)      /* Initial block number */
+#define FEE_LWPBS_INIT      ((uint8)0xFFU)      /* Initial block status */
 
-/* ミラーチェック用データ */
-#define FEE_MIRROR_CHECK_BLOCK_NO       ((uint8)0xFFU)          /* ブロック番号 */
-#define FEE_MIRROR_CHECK_BLOCK_STATUS   ((uint8)0xFFU)          /* ブロックステータス */
-#define FEE_MIRROR_CHECK_SET_KIND       ((uint8)0xFFU)          /* 設定処理種別 */
-#define FEE_MIRROR_CHECK_WRITE_POS      ((uint32)0xFFFFFFFFU)   /* データ書込み時・移行時書込み先アドレスオフセット */
+/* Mirror checking data */
+#define FEE_MIRROR_CHECK_BLOCK_NO       ((uint8)0xFFU)          /* Block number */
+#define FEE_MIRROR_CHECK_BLOCK_STATUS   ((uint8)0xFFU)          /* Block status */
+#define FEE_MIRROR_CHECK_SET_KIND       ((uint8)0xFFU)          /* Setting processing type */
+#define FEE_MIRROR_CHECK_WRITE_POS      ((uint32)0xFFFFFFFFU)   /* Write destination address offset during data write/transition */
 
 /*--------------------------------------------------------------------------*/
 /* Function Prototypes                                                      */
@@ -65,42 +65,43 @@
 #define FEE_START_SEC_CODE
 #include <Fee_MemMap.h>
 
-/*関数説明--------------------------------------------------------------------*/
-/* 説  明        ：MHA[データFlash]管理データ初期化                           */
-/* 入  力        ：stCPUDTF *ptstCPUDTFInfo                                   */
-/*                                           ：MHA[データFlash]管理データ     */
-/* 出  力        ：なし                                                       */
-/* グローバル変数：                                                           */
-/* その他        ：                                                           */
-/*----------------------------------------------------------------------------*/
+/****************************************************************************/
+/* Function Name | Fee_InitCpuDtfData                                       */
+/* Description   | MHA (Data Flash) Management Data Initialization          */
+/* Preconditions | stCPUDTF *ptstCPUDTFInfo                                 */
+/*               |             MHA management data                          */
+/* Parameters    | None                                                     */
+/* Return Value  | None                                                     */
+/* Notes         | None                                                     */
+/****************************************************************************/
 FUNC(void, FEE_CODE) Fee_InitCpuDtfData( P2VAR(Fee_CpuDtfType, AUTOMATIC, TYPEDEF) ptstCPUDTFInfo )
 {
-    ptstCPUDTFInfo->u1ProcessStatus = FEE_STATUSIDLE;                           /* 動作状態 */
-    ptstCPUDTFInfo->u1MainStatus = FEE_MSTATUSINVALID;                          /* メイン状態 */
-    ptstCPUDTFInfo->u1SubStatus = FEE_SSTATUSINVALID;                           /* サブ状態 */
-    ptstCPUDTFInfo->u1SubSubStatus = FEE_SSSTATUSINVALID;                       /* サブサブ状態 */
-    ptstCPUDTFInfo->u1Result = FEE_RSP_OK;                                      /* 処理結果 */
-    ptstCPUDTFInfo->u1AreaNum = (uint8)FEE_AREANUM_INVALID;                     /* エリア番号 */
+    ptstCPUDTFInfo->u1ProcessStatus = FEE_STATUSIDLE;                           /* Operational status */
+    ptstCPUDTFInfo->u1MainStatus = FEE_MSTATUSINVALID;                          /* MAIN STATE */
+    ptstCPUDTFInfo->u1SubStatus = FEE_SSTATUSINVALID;                           /* Substate */
+    ptstCPUDTFInfo->u1SubSubStatus = FEE_SSSTATUSINVALID;                       /* Subsubstate */
+    ptstCPUDTFInfo->u1Result = FEE_RSP_OK;                                      /* Result of processing */
+    ptstCPUDTFInfo->u1AreaNum = (uint8)FEE_AREANUM_INVALID;                     /* Area number */
 
-    ptstCPUDTFInfo->u4BlockCount = 0U;                                          /* ブロックカウンタ */
-    ptstCPUDTFInfo->u4FailCount = 0U;                                           /* 失敗カウンタ */
-    ptstCPUDTFInfo->u4SrchRemainCount = 0U;                                     /* 検索処理可能回数 */
-    ptstCPUDTFInfo->u4MoveSrcAddress = FEE_ADDRESS_INVALID;                     /* データ転送時転送元アドレス */
-    ptstCPUDTFInfo->u4ReadSrchAddress = FEE_ADDRESS_INVALID;                    /* ID指定データ読出し先アドレス */
-    ptstCPUDTFInfo->u4WriteLastRecMngAbsAddr = FEE_ADDRESS_INVALID;             /* データ書込み時・転送時書込み先アドレス */
+    ptstCPUDTFInfo->u4BlockCount = 0U;                                          /* Block counter */
+    ptstCPUDTFInfo->u4FailCount = 0U;                                           /* Failure counters */
+    ptstCPUDTFInfo->u4SrchRemainCount = 0U;                                     /* searchable */
+    ptstCPUDTFInfo->u4MoveSrcAddress = FEE_ADDRESS_INVALID;                     /* Data transfer source address */
+    ptstCPUDTFInfo->u4ReadSrchAddress = FEE_ADDRESS_INVALID;                    /* ID-specified data read-destination address */
+    ptstCPUDTFInfo->u4WriteLastRecMngAbsAddr = FEE_ADDRESS_INVALID;             /* Address to write when data is written and transferred */
     ptstCPUDTFInfo->u4WriteLastRecDatAbsAddr = FEE_ADDRESS_INVALID;
-    ptstCPUDTFInfo->u4MainTimerCnt = FEE_TM_INVALID;                            /* メインタイマカウンタ */
-    ptstCPUDTFInfo->u4DFCTimerCnt = FEE_TM_INVALID;                             /* D.F.C.タイマカウンタ */
-    ptstCPUDTFInfo->u1MainBlockNo = FEE_BLOCKNUM_INVALID;                       /* メインブロック番号 */
-    ptstCPUDTFInfo->u1MainBlockStatus = FEE_BS_INVALID;                         /* メインブロックステータス */
-    ptstCPUDTFInfo->u1SubBlockNo = FEE_BLOCKNUM_INVALID;                        /* サブブロック番号 */
-    ptstCPUDTFInfo->u1SubBlockStatus = FEE_BS_INVALID;                          /* サブブロックステータス */
+    ptstCPUDTFInfo->u4MainTimerCnt = FEE_TM_INVALID;                            /* Main timer counter */
+    ptstCPUDTFInfo->u4DFCTimerCnt = FEE_TM_INVALID;                             /* D.F.C. Timer Counter */
+    ptstCPUDTFInfo->u1MainBlockNo = FEE_BLOCKNUM_INVALID;                       /* MAIN BLOCK NUMBER */
+    ptstCPUDTFInfo->u1MainBlockStatus = FEE_BS_INVALID;                         /* MAIN BLOCK STATUS */
+    ptstCPUDTFInfo->u1SubBlockNo = FEE_BLOCKNUM_INVALID;                        /* Subblock number */
+    ptstCPUDTFInfo->u1SubBlockStatus = FEE_BS_INVALID;                          /* Subblock status */
     ptstCPUDTFInfo->u2DATA_ID = FEE_INIDAT_UINT16;                              /* DATA-ID */
     ptstCPUDTFInfo->u2MovDataId = FEE_INIDAT_UINT16;
-    ptstCPUDTFInfo->u1LastWritePosFlag = FEE_FLAG_OFF;                          /* 最終書込みレコード位置更新許可フラグ */
-    ptstCPUDTFInfo->ptstAreaInf = NULL_PTR;                                     /* エリア依存データ構造体 */
-    ptstCPUDTFInfo->ptu1ReqWriteAddr = NULL_PTR;                                /* 書込みデータアドレス */
-    ptstCPUDTFInfo->ptu1ReqReadAddr  = NULL_PTR;                                /* 読出しデータアドレス */
+    ptstCPUDTFInfo->u1LastWritePosFlag = FEE_FLAG_OFF;                          /* Last write record position update permission flag */
+    ptstCPUDTFInfo->ptstAreaInf = NULL_PTR;                                     /* Area-dependent data structure */
+    ptstCPUDTFInfo->ptu1ReqWriteAddr = NULL_PTR;                                /* Write data address */
+    ptstCPUDTFInfo->ptu1ReqReadAddr  = NULL_PTR;                                /* Read data address */
     ptstCPUDTFInfo->u2ReqDataLen = FEE_LENGTH_INVALID;
     ptstCPUDTFInfo->u2MovDataLen = FEE_LENGTH_INVALID;
 
@@ -355,78 +356,79 @@ Fee_Lib_SetLastWritePosLite(
 }
 #endif /*( MSCD_FREESPACE_USE == STD_ON )*/
 
-/*関数説明--------------------------------------------------------------------*/
-/* 説  明        ：最終書込みレコード位置読出し処理                           */
-/* 入  力        ：stCPUDTF *ptstCPUDTFInfo                                   */
-/*                                           ：MHA[データFlash]管理データ     */
-/* 出  力        ：読出し結果                                                 */
-/*               ：  0x00000000 ：FEE_STATUS_OK ：読出し成功                  */
-/*               ：  0x00000001 ：FEE_STATUS_NG ：読出し失敗                  */
-/* グローバル変数：                                                           */
-/* その他        ：                                                           */
-/*----------------------------------------------------------------------------*/
+/****************************************************************************/
+/* Function Name | Fee_RefLastWritePos                                      */
+/* Description   | Final write record position read processing              */
+/* Preconditions | None                                                     */
+/* Parameters    | stCPUDTF *ptstCPUDTFInfo                                 */
+/*               |                MHA management data                       */
+/* Return Value  | Read Results                                             */
+/*               | 0x00000000 : FEE_STATUS_OK : Read successful             */
+/*               | 0x00000001 : FEE_STATUS_NG : Read failed                 */
+/* Notes         | None                                                     */
+/****************************************************************************/
 FUNC(uint32, FEE_CODE) Fee_RefLastWritePos( P2VAR(Fee_CpuDtfType, AUTOMATIC, TYPEDEF) ptstCPUDTFInfo )
 {
-    uint32          u4tReturn;                          /* 戻り値 */
-    uint32          u4tChkResult;                       /* 末尾データの正当性確認結果 */
-    uint8           u1tAreaNum;                         /* エリア番号 */
-    uint32          u4tClearFlag;                       /* 末尾データをクリアするかどうか */
+    uint32          u4tReturn;                          /* RETURN */
+    uint32          u4tChkResult;                       /* Trailing data validation result */
+    uint8           u1tAreaNum;                         /* Area number */
+    uint32          u4tClearFlag;                       /* Whether to clear tail data */
 
-    /* 戻り値用変数を読出し失敗で初期化 */
+    /* Initialize on failure to read return variable */
     u4tReturn = FEE_STATUS_NG;
-    /* 末尾データをクリアするかどうかのフラグをクリアしないに初期化 */
+    /* Initialize without clearing flag on whether to clear tail data */
     u4tClearFlag = FEE_STATUS_NG;
-    /* エリア番号取り出し */
+    /* Eject Area Number */
     u1tAreaNum = ptstCPUDTFInfo->u1AreaNum;
 
-    /* 末尾レコード保持データの正当性確認 */
+    /* Validate tail-record retention data */
     u4tChkResult = Fee_ChkLastWritePos( ptstCPUDTFInfo );
 
     if ( u4tChkResult == FEE_STATUS_OK )
     {
-        /* 正しい場合 */
-        /* 動作状態チェック */
+        /* If correct */
+        /* Operating status check */
         if (   ( ptstCPUDTFInfo->u1ProcessStatus == FEE_STATUSWRITE ) 
             || ( ptstCPUDTFInfo->u1ProcessStatus == FEE_STATUSMOVE ) )
         {
-            /* 動作状態が書込み中かデータ再編中の場合 */
+            /* If the operating state is writing or reorganizing data */
             if ( ( Fee_LastWPosInfo1[u1tAreaNum].u1SetKind) == FEE_LWPWRITE )
             {
-                /* 処理設定種別が書込みで設定されている場合 */
-                /* 戻り値用変数を読出し成功に設定 */
+                /* When processing setting type is set to write */
+                /* Set return variable to read success */
                 u4tReturn = FEE_STATUS_OK;
             }
-            /* 末尾データをクリアするに設定 */
+            /* Set to clear tail data */
             u4tClearFlag = FEE_STATUS_OK;
         }
         else
         {
-            /* 動作状態がそれ以外(読出し中かアイドル)の場合 */
-            /* 戻り値用変数を読出し成功に設定 */
+            /* If the operating state is anything else (reading or idle) */
+            /* Set return variable to read success */
             u4tReturn = FEE_STATUS_OK;
         }
     }
 
     if ( u4tReturn == FEE_STATUS_OK )
     {
-        /* 戻り値用変数が読出し成功の場合 */
-        /* データ設定 */
-        /* メインブロック番号 */
+        /* If the return variable is read successfully */
+        /* Set data */
+        /* MAIN BLOCK NUMBER */
         ptstCPUDTFInfo->u1MainBlockNo = Fee_LastWPosInfo1[u1tAreaNum].stMainBlockInfo.u1BlockNo;
-        /* メインブロックステータス */
+        /* MAIN BLOCK STATUS */
         ptstCPUDTFInfo->u1MainBlockStatus = Fee_LastWPosInfo1[u1tAreaNum].stMainBlockInfo.u1BlockStatus;
-        /* サブブロック番号 */
+        /* Subblock number */
         ptstCPUDTFInfo->u1SubBlockNo = Fee_LastWPosInfo1[u1tAreaNum].stSubBlockInfo.u1BlockNo;
-        /* サブブロックステータス */
+        /* Subblock status */
         ptstCPUDTFInfo->u1SubBlockStatus = Fee_LastWPosInfo1[u1tAreaNum].stSubBlockInfo.u1BlockStatus;
-        /* データ書込み時・転送時書込み先アドレス */
+        /* Address to write when data is written and transferred */
         ptstCPUDTFInfo->u4WriteLastRecMngAbsAddr = Fee_LastWPosInfo1[u1tAreaNum].u4WriteLastRecMngAbsAddr;
         ptstCPUDTFInfo->u4WriteLastRecDatAbsAddr = Fee_LastWPosInfo1[u1tAreaNum].u4WriteLastRecDatAbsAddr;
     }
     if ( u4tClearFlag == FEE_STATUS_OK )
     {
-        /* 末尾データをクリアする場合 */
-        /* 最終書込みレコード位置初期化(指定エリア) */
+        /* To clear tail data */
+        /* Initialize last write record position (specified area) */
         Fee_InitLastWritePos( u1tAreaNum, FEE_INIT_ONE );
     }
 
@@ -434,68 +436,69 @@ FUNC(uint32, FEE_CODE) Fee_RefLastWritePos( P2VAR(Fee_CpuDtfType, AUTOMATIC, TYP
     return u4tReturn;
 }
 
-/*関数説明--------------------------------------------------------------------*/
-/* 説  明        ：最終書込みレコード位置保存処理                             */
-/* 入  力        ：stCPUDTF *ptstCPUDTFInfo                                   */
-/*                                           ：MHA[データFlash]管理データ     */
-/* 出  力        ：保存結果                                                   */
-/*               ：  0x00000000 ：FEE_STATUS_OK ：保存成功                    */
-/*               ：  0x00000001 ：FEE_STATUS_NG ：保存失敗                    */
-/* グローバル変数：                                                           */
-/* その他        ：                                                           */
-/*----------------------------------------------------------------------------*/
+/****************************************************************************/
+/* Function Name | Fee_SetLastWritePos                                      */
+/* Description   | Final write record position saving process               */
+/* Preconditions | None                                                     */
+/* Parameters    | stCPUDTF *ptstCPUDTFInfo                                 */
+/*               |              MHA management data                         */
+/* Return Value  | Read Results                                             */
+/*               | 0x00000000 : FEE_STATUS_OK : Save successful             */
+/*               | 0x00000001 : FEE_STATUS_NG : Save failed                 */
+/* Notes         | None                                                     */
+/****************************************************************************/
 FUNC(uint32, FEE_CODE) Fee_SetLastWritePos( P2CONST(Fee_CpuDtfType, AUTOMATIC, TYPEDEF) ptstCPUDTFInfo )
 {
-    uint32          u4tReturn;                          /* 戻り値 */
-    uint32          u4tChkResult;                       /* 末尾データの正当性確認結果 */
-    uint8           u1tAreaNum;                         /* エリア番号 */
+    uint32          u4tReturn;                          /* RETURN */
+    uint32          u4tChkResult;                       /* Trailing data validation result */
+    uint8           u1tAreaNum;                         /* Area number */
 
-    /* 戻り値用変数を保存失敗で初期化 */
+    /* Initialize with failure to save return variable */
     u4tReturn = FEE_STATUS_NG;
-    /* エリア番号取り出し */
+    /* Eject Area Number */
     u1tAreaNum = ptstCPUDTFInfo->u1AreaNum;
 
-    /* 動作状態チェック */
+    /* Operating status check */
     if (   ( ptstCPUDTFInfo->u1ProcessStatus == FEE_STATUSWRITE ) 
         || ( ptstCPUDTFInfo->u1ProcessStatus == FEE_STATUSMOVE ) )
     {
-        /* 動作状態が書込み中かデータ再編中の場合 */
-        /* 処理設定種別を書込みに設定 */
+        /* If the operating state is writing or reorganizing data */
+        /* Set processing setting type to write */
         Fee_LastWPosInfo1[u1tAreaNum].u1SetKind = FEE_LWPWRITE;
-        /* 戻り値用変数を保存成功に設定 */
+        /* Set return variable to save success */
         u4tReturn = FEE_STATUS_OK;
     }
     else
     {
-        /* 動作状態がそれ以外(読出し中かアイドル)の場合 */
-        /* 末尾レコード保持データの正当性確認 */
+        /* If the operating state is anything else (reading or idle) */
+        /* Validate tail-record retention data */
         u4tChkResult = Fee_ChkLastWritePos( ptstCPUDTFInfo );
         if ( u4tChkResult == FEE_STATUS_NG )
         {
-            /* 正しくない場合 */
-            /* 処理設定種別を読出しに設定 */
+            /* Incorrect */
+            /* Set processing setting type to read */
             Fee_LastWPosInfo1[u1tAreaNum].u1SetKind = FEE_LWPREAD;
-            /* 戻り値用変数を保存成功に設定 */
+            /* Set return variable to save success */
             u4tReturn = FEE_STATUS_OK;
         }
     }
 
     if ( u4tReturn == FEE_STATUS_OK )
     {
-        /* 戻り値用変数が保存成功の場合 */
-        /* メインブロック番号 */
+        /* If the return variable was successfully saved */
+        /* MAIN BLOCK NUMBER */
         Fee_LastWPosInfo1[u1tAreaNum].stMainBlockInfo.u1BlockNo = ptstCPUDTFInfo->u1MainBlockNo;
-        /* メインブロックステータス */
+        /* MAIN BLOCK STATUS */
         Fee_LastWPosInfo1[u1tAreaNum].stMainBlockInfo.u1BlockStatus = ptstCPUDTFInfo->u1MainBlockStatus;
-        /* サブブロック番号 */
+        /* Subblock number */
         Fee_LastWPosInfo1[u1tAreaNum].stSubBlockInfo.u1BlockNo = ptstCPUDTFInfo->u1SubBlockNo;
-        /* サブブロックステータス */
+        /* Subblock status */
         Fee_LastWPosInfo1[u1tAreaNum].stSubBlockInfo.u1BlockStatus = ptstCPUDTFInfo->u1SubBlockStatus;
-        /* データ書込み時・転送時書込み先アドレス */
+        /* Address to write when data is written and transferred */
         Fee_LastWPosInfo1[u1tAreaNum].u4WriteLastRecMngAbsAddr = ptstCPUDTFInfo->u4WriteLastRecMngAbsAddr;
         Fee_LastWPosInfo1[u1tAreaNum].u4WriteLastRecDatAbsAddr = ptstCPUDTFInfo->u4WriteLastRecDatAbsAddr;
         
-        /* 記憶バッファ2設定 */
+        /* Set memory buffer 2 */
         Fee_LastWPosInfo2[u1tAreaNum].stMainBlockInfo.u1BlockNo = (uint8)(~Fee_LastWPosInfo1[u1tAreaNum].stMainBlockInfo.u1BlockNo);
         Fee_LastWPosInfo2[u1tAreaNum].stMainBlockInfo.u1BlockStatus = (uint8)(~Fee_LastWPosInfo1[u1tAreaNum].stMainBlockInfo.u1BlockStatus);
         Fee_LastWPosInfo2[u1tAreaNum].stSubBlockInfo.u1BlockNo = (uint8)(~Fee_LastWPosInfo1[u1tAreaNum].stSubBlockInfo.u1BlockNo);
@@ -508,70 +511,71 @@ FUNC(uint32, FEE_CODE) Fee_SetLastWritePos( P2CONST(Fee_CpuDtfType, AUTOMATIC, T
     return u4tReturn;
 }
 
-/*関数説明--------------------------------------------------------------------*/
-/* 説  明        ：最終書込みレコード位置初期化                               */
-/* 入  力        ：uint8 u1AreaNum ：初期化するエリアの番号                   */
-/*               ：uint8 u1Mode    ：初期化モード                             */
-/* 出  力        ：なし                                                       */
-/* グローバル変数：                                                           */
-/* その他        ：                                                           */
-/*----------------------------------------------------------------------------*/
+/****************************************************************************/
+/* Function Name | Fee_InitLastWritePos                                     */
+/* Description   | Last write record position initialization                */
+/* Preconditions | None                                                     */
+/* Parameters    | uint8 u1Mode    : Initialization mode                    */
+/* Return Value  | None                                                     */
+/* Notes         | None                                                     */
+/****************************************************************************/
 FUNC(void, FEE_CODE) Fee_InitLastWritePos( uint8 u1AreaNum, uint8 u1Mode )
 {
-    uint32          u4tCounter;                         /* カウンタ */
-    uint32          u4tStartAreaNum;                    /* 開始エリア番号 */
-    uint32          u4tEndAreaNum;                      /* 終了エリア番号 */
+    uint32          u4tCounter;                         /* Counter */
+    uint32          u4tStartAreaNum;                    /* Starting area number */
+    uint32          u4tEndAreaNum;                      /* End area number */
 
-    /* 初期化モードチェック */
+    /* Initialization mode check */
     if ( u1Mode == FEE_INIT_ONE )
     {
-        /* 指定エリア */
+        /* Designated Area */
         u4tStartAreaNum = (uint32)u1AreaNum;
         u4tEndAreaNum = (uint32)u1AreaNum + (uint32)FEE_NEXT_AREANUM_OFFSET;
     }
     else
     {
-        /* 全エリア */
+        /* ALL AREA */
         u4tStartAreaNum = (uint32)FEE_START_AREANUM;
         u4tEndAreaNum = (uint32)Fee_AreaNumber;
     }
 
     for ( u4tCounter = u4tStartAreaNum; u4tCounter < u4tEndAreaNum; u4tCounter++ )
     {
-        /* 記憶バッファ1設定 */
-        Fee_LastWPosInfo1[u4tCounter].stMainBlockInfo.u1BlockNo = FEE_LWPBLKNO_INIT;    /* メインブロック番号 */
-        Fee_LastWPosInfo1[u4tCounter].stMainBlockInfo.u1BlockStatus = FEE_LWPBS_INIT;   /* メインブロックステータス */
-        Fee_LastWPosInfo1[u4tCounter].stSubBlockInfo.u1BlockNo = FEE_LWPBLKNO_INIT; /* サブブロック番号 */
-        Fee_LastWPosInfo1[u4tCounter].stSubBlockInfo.u1BlockStatus = FEE_LWPBS_INIT;    /* サブブロックステータス */
-        Fee_LastWPosInfo1[u4tCounter].u1SetKind = FEE_LWPKIND_INIT;                 /* 設定処理種別 */
-        Fee_LastWPosInfo1[u4tCounter].u4WriteLastRecMngAbsAddr = FEE_ADDRESS_INVALID;               /* データ書込み時・転送時書込み先アドレス */
+        /* Set memory buffer 1 */
+        Fee_LastWPosInfo1[u4tCounter].stMainBlockInfo.u1BlockNo = FEE_LWPBLKNO_INIT;    /* MAIN BLOCK NUMBER */
+        Fee_LastWPosInfo1[u4tCounter].stMainBlockInfo.u1BlockStatus = FEE_LWPBS_INIT;   /* MAIN BLOCK STATUS */
+        Fee_LastWPosInfo1[u4tCounter].stSubBlockInfo.u1BlockNo = FEE_LWPBLKNO_INIT; /* Subblock number */
+        Fee_LastWPosInfo1[u4tCounter].stSubBlockInfo.u1BlockStatus = FEE_LWPBS_INIT;    /* Subblock status */
+        Fee_LastWPosInfo1[u4tCounter].u1SetKind = FEE_LWPKIND_INIT;                 /* Setting processing type */
+        Fee_LastWPosInfo1[u4tCounter].u4WriteLastRecMngAbsAddr = FEE_ADDRESS_INVALID;               /* Address to write when data is written and transferred */
         Fee_LastWPosInfo1[u4tCounter].u4WriteLastRecDatAbsAddr = FEE_ADDRESS_INVALID;
-        /* 記憶バッファ2設定 */
-        Fee_LastWPosInfo2[u4tCounter].stMainBlockInfo.u1BlockNo = FEE_LWPBLKNO_INIT;    /* メインブロック番号 */
-        Fee_LastWPosInfo2[u4tCounter].stMainBlockInfo.u1BlockStatus = FEE_LWPBS_INIT;   /* メインブロックステータス */
-        Fee_LastWPosInfo2[u4tCounter].stSubBlockInfo.u1BlockNo = FEE_LWPBLKNO_INIT; /* サブブロック番号 */
-        Fee_LastWPosInfo2[u4tCounter].stSubBlockInfo.u1BlockStatus = FEE_LWPBS_INIT;    /* サブブロックステータス */
-        Fee_LastWPosInfo2[u4tCounter].u1SetKind = FEE_LWPKIND_INIT;                 /* 設定処理種別 */
-        Fee_LastWPosInfo2[u4tCounter].u4WriteLastRecMngAbsAddr = FEE_ADDRESS_INVALID;               /* データ書込み時・転送時書込み先アドレス */
+        /* Set memory buffer 2 */
+        Fee_LastWPosInfo2[u4tCounter].stMainBlockInfo.u1BlockNo = FEE_LWPBLKNO_INIT;    /* MAIN BLOCK NUMBER */
+        Fee_LastWPosInfo2[u4tCounter].stMainBlockInfo.u1BlockStatus = FEE_LWPBS_INIT;   /* MAIN BLOCK STATUS */
+        Fee_LastWPosInfo2[u4tCounter].stSubBlockInfo.u1BlockNo = FEE_LWPBLKNO_INIT; /* Subblock number */
+        Fee_LastWPosInfo2[u4tCounter].stSubBlockInfo.u1BlockStatus = FEE_LWPBS_INIT;    /* Subblock status */
+        Fee_LastWPosInfo2[u4tCounter].u1SetKind = FEE_LWPKIND_INIT;                 /* Setting processing type */
+        Fee_LastWPosInfo2[u4tCounter].u4WriteLastRecMngAbsAddr = FEE_ADDRESS_INVALID;               /* Address to write when data is written and transferred */
         Fee_LastWPosInfo2[u4tCounter].u4WriteLastRecDatAbsAddr = FEE_ADDRESS_INVALID;
     }
 
     return;
 }
 
-/*関数説明--------------------------------------------------------------------*/
-/* 説  明        ：最終書込みレコード位置チェック処理                         */
-/* 入  力        ：stCPUDTF *ptstCPUDTFInfo                                   */
-/*                                           ：MHA[データFlash]管理データ     */
-/* 出  力        ：チェック結果                                               */
-/*               ：  0x00000000 ：FEE_STATUS_OK ：チェック成功                */
-/*               ：  0x00000001 ：FEE_STATUS_NG ：チェック失敗                */
-/* グローバル変数：                                                           */
-/* その他        ：チェック失敗時は最終書込みレコード位置を初期化します       */
-/*----------------------------------------------------------------------------*/
+/****************************************************************************/
+/* Function Name | Fee_ChkLastWritePos                                      */
+/* Description   | Final write record position check processing             */
+/* Preconditions | None                                                     */
+/* Parameters    | stCPUDTF *ptstCPUDTFInfo                                 */
+/*               |              MHA management data                         */
+/* Return Value  | Read Results                                             */
+/*               | 0x00000000 : FEE_STATUS_OK : Check successful            */
+/*               | 0x00000001 : FEE_STATUS_NG : Check failed                */
+/* Notes         | Initialize last write record position when check fails   */
+/****************************************************************************/
 FUNC(uint32, FEE_CODE) Fee_ChkLastWritePos( P2CONST(Fee_CpuDtfType, AUTOMATIC, TYPEDEF) ptstCPUDTFInfo )
 {
-    uint32          u4tReturn;                          /* 戻り値 */
+    uint32          u4tReturn;                          /* RETURN */
     uint8           u1tAreaNum;
     Std_ReturnType  CheckResult;
 
@@ -738,53 +742,57 @@ Fee_ChkLastWritePosLastRecAddr(
     return Rtn;
 }
 
-/*関数説明--------------------------------------------------------------------*/
-/* 説  明        ：絶対アドレスを相対アドレスに変換処理　                     */
-/* 入  力        ：u4_absolute_address     ：絶対アドレス　　　　　　         */
-/* 出  力        ：変換結果：相対アドレス                                     */
-/* グローバル変数：                                                           */
-/* その他        ：                                                           */
-/*----------------------------------------------------------------------------*/
+/****************************************************************************/
+/* Function Name | Fee_ConvAddr_AbsToSectorTopRelative                      */
+/* Description   | Absolute addresses are converted to relative addresses   */
+/* Preconditions | None                                                     */
+/* Parameters    | u4 _ absolute _ address: absolute address                */
+/* Return Value  | Translation result: Relative address                     */
+/* Notes         | None                                                     */
+/****************************************************************************/
 FUNC(uint32, FEE_CODE) Fee_ConvAddr_AbsToBaseRelative( uint32 u4_absolute_address )
 {
     uint32 u4_relative_address;
 
-    /* フラッシュの絶対アドレスから先頭アドレスに対しての相対アドレスを算出 */
+    /* Calculate the relative address to the head address from the absolute address of the flash */
     u4_relative_address = u4_absolute_address - (uint32)FEE_DATA_FLASH_ADDRESS_START;
 
     return u4_relative_address;
 }
 
-/*関数説明--------------------------------------------------------------------*/
-/* 説  明        ：絶対アドレスをセクター先頭からの相対アドレスに変換処理　   */
-/* 入  力        ：u4_absolute_address     ：絶対アドレス　　　　　　         */
-/* 出  力        ：変換結果：相対アドレス                                     */
-/* グローバル変数：                                                           */
-/* その他        ：                                                           */
-/*----------------------------------------------------------------------------*/
+/****************************************************************************/
+/* Function Name | Fee_ConvAddr_AbsToSectorTopRelative                      */
+/* Description   | Absolute address is converted to a relative address      */
+/*               | from the beginning of the sector                         */
+/* Preconditions | None                                                     */
+/* Parameters    | u4_relative_address   : relative address                 */
+/* Return Value  | Translation result    : Absolute address                 */
+/* Notes         | None                                                     */
+/****************************************************************************/
 FUNC(uint32, FEE_CODE) Fee_ConvAddr_AbsToSectorTopRelative( uint32 u4_absolute_address )
 {
     uint32 u4_relative_address;
 
-    /* フラッシュの絶対アドレスからセクター先頭アドレスに対しての相対アドレスを算出 */
+    /* Calculate the relative address to the sector head address from the absolute address of the flash */
     u4_relative_address = u4_absolute_address - (uint32)FEE_DATA_FLASH_ADDRESS_START;
     u4_relative_address = u4_relative_address % (uint32)FEE_DATA_FLASH_SECTOR_SIZE;
     
     return u4_relative_address;
 }
 
-/*関数説明--------------------------------------------------------------------*/
-/* 説  明        ：相対アドレスを絶対アドレスに変換処理　                     */
-/* 入  力        ：u4_relative_address     ：相対アドレス　　　　　　         */
-/* 出  力        ：変換結果：絶対アドレス                                     */
-/* グローバル変数：                                                           */
-/* その他        ：                                                           */
-/*----------------------------------------------------------------------------*/
+/****************************************************************************/
+/* Function Name | Fee_ConvAddr_RelativeToAbsolute                          */
+/* Description   | Relative address is converted to absolute address        */
+/* Preconditions | None                                                     */
+/* Parameters    | u4_relative_address   : relative address                 */
+/* Return Value  | Translation result    : Absolute address                 */
+/* Notes         | None                                                     */
+/****************************************************************************/
 FUNC(uint32, FEE_CODE) Fee_ConvAddr_RelativeToAbsolute( uint32 u4_relative_address )
 {
     uint32 u4_absolute_address;
 
-    /* 相対アドレスから絶対アドレスを算出 */
+    /* Calculate absolute address from relative address */
     u4_absolute_address = u4_relative_address + (uint32)FEE_DATA_FLASH_ADDRESS_START;
 
     return u4_absolute_address;

@@ -19,10 +19,11 @@
 
 #include "./Compiler_Fee_Cfg.h"
 #include "./Compiler_Fls_Cfg.h"
+#include "./Compiler_MemAcc_Cfg.h"
 #include "./Compiler_MemIf_Cfg.h"
 #include "./Compiler_Mscd_Cfg.h"
 #include "./Compiler_NvM_Cfg.h"
-#include "./Compiler_AbPartition_Cfg.h"
+#include "./Compiler_Mem_Cfg.h"
 #include "./Compiler_Crc_Cfg.h"
 #include "./Compiler_E2E_Cfg.h"
 #include "./Compiler_SchM_Cfg.h"

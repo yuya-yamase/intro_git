@@ -32,3 +32,5 @@ install_config.log
 #CycurHSM
 bswSEC_CycurHSM.a
 bswSEC_CycurHSM.dba
+#Tool
+*_component.json

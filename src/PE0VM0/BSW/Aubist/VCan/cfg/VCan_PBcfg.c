@@ -67,8 +67,9 @@ BswConst BswU1 bsw_vcan_stVirtualHohTbl[ BSW_VCAN_VHOHNUM ] =
     ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [3] */
     ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [4] */
     ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [5] */
-  /*--- VM Transmission(VHTH) -----------------------------*/
     ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [6] */
+  /*--- VM Transmission(VHTH) -----------------------------*/
+    ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [7] */
 };
 
 /************************************************/
@@ -80,11 +81,12 @@ BswConst Bsw_VCan_RxTblType bsw_vcan_stRxMessageTbl[ BSW_VCAN_VHRHNUM ] =
   /*   CAN ID      , Mask              */
   /*--- VM Reception(VHRH) ------------*/
      { 0x40000000UL, 0xFFFFFC00UL }   /* [0] */
-    ,{ 0x00000400UL, 0xBFFFFF00UL }   /* [1] */
-    ,{ 0x40000500UL, 0xFFFFFF00UL }   /* [2] */
-    ,{ 0x40000600UL, 0xFFFFFF00UL }   /* [3] */
-    ,{ 0x00000700UL, 0xBFFFFF00UL }   /* [4] */
-    ,{ 0x98DA0000UL, 0xBFFE0000UL }   /* [5] */
+    ,{ 0x00000300UL, 0xFFFFFFFFUL }   /* [1] */
+    ,{ 0x00000400UL, 0xBFFFFF00UL }   /* [2] */
+    ,{ 0x40000500UL, 0xFFFFFF00UL }   /* [3] */
+    ,{ 0x40000600UL, 0xFFFFFF00UL }   /* [4] */
+    ,{ 0x00000700UL, 0xBFFFFF00UL }   /* [5] */
+    ,{ 0x98DA0000UL, 0xBFFE0000UL }   /* [6] */
 };
 #endif /* ( BSW_VCAN_VHRHNUM != 0U ) */
 

@@ -10,6 +10,7 @@
     -I${CAN_DIR}/ComM/inc
     -I${CAN_DIR}/CanSM/inc
     -I${CAN_DIR}/CanSM/cfg
+    -I${CAN_DIR}/Can/cfg/rscf4
 ###    -I${CAN_DIR}/VCan/inc
 
 config/can_lpfq_cfg.c
