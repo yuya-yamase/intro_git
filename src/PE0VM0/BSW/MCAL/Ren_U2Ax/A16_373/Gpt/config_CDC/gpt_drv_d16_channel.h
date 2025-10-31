@@ -53,9 +53,9 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define GPT_D16_UNIT_1                           (1U)
 
-#define GPT_D16_UN_1_CH_00                       (16U)
-#define GPT_D16_UN_1_CH_01                       (17U)
-#define GPT_D16_UN_1_CH_02                       (18U)
+#define GPT_D16_UN_1_CH_0_DD_PWM_M               (16U)
+#define GPT_D16_UN_1_CH_1_DD_PWM_S               (17U)
+#define GPT_D16_UN_1_CH_2_DD_PWM_S               (18U)
 #define GPT_D16_UN_1_CH_03                       (19U)
 #define GPT_D16_UN_1_CH_04                       (20U)
 #define GPT_D16_UN_1_CH_05                       (21U)
