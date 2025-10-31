@@ -55,10 +55,10 @@
 #include "locale.h"
 #include "avggrph.h"
 
-#if 0   /* BEV Rebase provisionally */
 #include "himgadj.h"
-#endif   /* BEV Rebase provisionally */
+#if 0   /* BEV Rebase provisionally */
 #include "hdimmgr_if.h"
+#endif   /* BEV Rebase provisionally */
 
 /* VSV */
 #include "gagdst_nxmph.h"

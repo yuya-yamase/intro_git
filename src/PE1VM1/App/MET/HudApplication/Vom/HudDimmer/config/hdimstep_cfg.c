@@ -41,6 +41,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+U1   u1_g_hdimstep_hudill;   /* BEV Rebase provisionally */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Variable Definitions                                                                                                    */
@@ -66,7 +67,7 @@ U1      u1_g_HdimstepCfgReadStep(void)
 #if 0   /* BEV Rebase provisionally */
     u1_t_step = u1_g_McstBf((U1)MCST_BFI_HUDILL);
 #else   /* BEV Rebase provisionally */
-    u1_t_step = (U1)U1_MAX;
+    u1_t_step = u1_g_hdimstep_hudill;
 #endif   /* BEV Rebase provisionally */
 
     return(u1_t_step);
@@ -84,6 +85,8 @@ U1      u1_g_HdimstepCfgWriteStep(const U1 u1_a_STEP)
 
 #if 0   /* BEV Rebase provisionally */
     vd_g_McstBfPut((U1)MCST_BFI_HUDILL, u1_a_STEP);
+#else   /* BEV Rebase provisionally */
+    u1_g_hdimstep_hudill = u1_a_STEP;
 #endif   /* BEV Rebase provisionally */
     u1_t_isok = (U1)TRUE;
     return(u1_t_isok);
@@ -114,7 +117,12 @@ void    vd_g_HdimstepCfgSwOprtIn(ST_HDIMSTEP_SWOP * st_ap_swop)
 /*  2.0.0            2020.02.20  MaO     New                                                                                         */
 /*  2.1.0            2024.02.14  HiS     HDIMSTEP_STEP_EXTRIN_SUP was revised. MM Dimmer was deleted.                                */
 /*                                                                                                                                   */
+/*  Revision         Date        Author   Change Description                                                                         */
+/* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
+/*  BEV-1            2025.10.29  MA      Change for BEV rebase.                                                                      */
+/*                                                                                                                                   */
 /*  * MaO = Masayuki Okada, DENSO                                                                                                    */
 /*  * HiS = Hidenobu Suzuki, ISB                                                                                                     */
+/*  * MA = Misaki Aiki, Denso Techno                                                                                                 */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

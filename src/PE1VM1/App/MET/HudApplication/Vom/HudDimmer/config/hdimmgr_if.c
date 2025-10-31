@@ -200,7 +200,7 @@ U1      u1_g_HdimmgrIfGetIsHudOn(void)
     u1_t_hudonoff = u1_g_McstBf((U1)MCST_BFI_HUD);
     if(u1_t_hudonoff == (U1)MCST_HUD_ON){
 #else   /* BEV Rebase provisionally */
-    u1_t_hudonoff = (U1)0U;
+    u1_t_hudonoff = (U1)1U;
     if(u1_t_hudonoff == (U1)1U){
 #endif   /* BEV Rebase provisionally */
         u1_t_ishudon = (U1)TRUE;
@@ -240,6 +240,11 @@ void    vd_g_HdimmgrIfSetUpDwSw(const U1 u1_a_UPSW, const U1 u1_a_DWSW)
 /* ---------------  ----------  ------  -------------------------------------------------------------------------------------------  */
 /*  2.0.0           2020.02.27  MaO     New                                                                                          */
 /*                                                                                                                                   */
+/*  Revision         Date        Author   Change Description                                                                         */
+/* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
+/*  BEV-1            2025.10.29  MA      Change for BEV rebase.                                                                      */
+/*                                                                                                                                   */
 /*  * MaO = Masayuki Okada,     DENSO                                                                                                */
+/*  * MA = Misaki Aiki, Denso Techno                                                                                                 */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
