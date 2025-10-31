@@ -97,32 +97,22 @@ const ST_ALERT_MTRX st_gp_ALERT_H_DRIPOW_MTRX[1] = {
 /*===================================================================================================================================*/
 static U4      u4_s_AlertH_dripowSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
-#if 0   /* BEV Rebase provisionally */
     static const U1 u1_s_ALERT_H_DRIPOW_LSB_MSGSTS = (U1)3U;
     U1              u1_t_msgsts;
     U1              u1_t_sgnl;
     U4              u4_t_src_chk;
 
-#if defined(OXCAN_PDU_RX_CAN_EHV1S26) /* _840B_CAN_ */
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_EHV1S26,
-                                          (U2)OXCAN_RX_SYS_NRX_IGR,
-                                          (U2)U2_MAX) & (U1)COM_NO_RX;
-#else
-    u1_t_msgsts   = (U1)COM_NO_RX;
-#endif
+    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_EHV1S26_CH0,
+                                      (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP,
+                                      (U2)U2_MAX) & (U1)COM_NO_RX;
 
     u1_t_sgnl     = (U1)0U;
-#if defined(ComConf_ComSignal_PWRLMID) /* _840B_CAN_ */
     (void)Com_ReceiveSignal(ComConf_ComSignal_PWRLMID, &u1_t_sgnl);
-#endif
     u4_t_src_chk  = (U4)u1_t_sgnl;
 
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_H_DRIPOW_LSB_MSGSTS);
 
     return(u4_t_src_chk);
-#else   /* BEV Rebase provisionally */
-    return((U4)0U);
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

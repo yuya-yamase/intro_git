@@ -28,9 +28,7 @@
 #include "tripsnsr_avgee.h"
 #include "tripsnsr_instee.h"
 
-#if 0   /* BEV Rebase provisionally */
 #include "veh_opemd.h"
-#endif   /* BEV Rebase provisionally */
 #include "vehspd_kmph.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -47,16 +45,10 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if 0   /* BEV Rebase provisionally */
 #define u1_g_TripsnsrIgnOn()                    (u1_g_VehopemdIgnOn())
 #define u1_g_TripsnsrAccOn()                    (u1_g_VehopemdAccOn())
 #define u1_g_TripsnsrPtsOn()                    (u1_g_VehopemdPtsOn((U1)VEH_OPEMD_PTS_INV_OFF))
                                                                     /* If any pts souce signal is invalid/rxto, return PTS-OFF/FALSE */
-#else   /* BEV Rebase provisionally */
-#define u1_g_TripsnsrIgnOn()                    ((U1)FALSE)
-#define u1_g_TripsnsrAccOn()                    ((U1)FALSE)
-#define u1_g_TripsnsrPtsOn()                    ((U1)FALSE)
-#endif   /* BEV Rebase provisionally */
 #define u1_g_TripsnsrVspKmph(x)                 (u1_g_VehspdKmphInst((x), (U1)TRUE))
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

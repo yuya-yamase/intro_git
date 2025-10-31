@@ -21,7 +21,9 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "aip_common.h"
 #include "sbltwrn.h"
+#if 0   /* BEV Rebase provisionally */
 #include "oxcan.h"
+#endif   /* BEV Rebase provisionally */
 #include "calibration.h"
 
 #include "sbltsync.h"

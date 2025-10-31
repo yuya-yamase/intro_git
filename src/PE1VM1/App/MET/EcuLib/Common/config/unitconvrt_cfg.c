@@ -30,18 +30,15 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-/* #define UNIT_CONVRT_KM_TO_MI_MLT                 (15625U)         1 mile = 1.609344 km         */
-/* #define UNIT_CONVRT_KM_TO_MI_DIV                 (25146U)                                      */
+#define UNIT_CONVRT_KM_TO_MI_MLT                 (15625U)         /* 1 mile = 1.609344 km         */
+#define UNIT_CONVRT_KM_TO_MI_DIV                 (25146U)
 
-#define UNIT_CONVRT_KM_TO_MI_MLT                 (1000U)          /* 1 mile = 1.609km             */ /* Toyota Specific */
-#define UNIT_CONVRT_KM_TO_MI_DIV                 (1609U)
+#define UNIT_CONVRT_LI_TO_GAUS_MLT               (10000U)         /* 1 gallon = 3.7854 liter      */
+#define UNIT_CONVRT_LI_TO_GAUS_DIV               (37854U)
 
-#define UNIT_CONVRT_LI_TO_GAUS_MLT               (1000U)          /* 1 gallon = 3.785 liter       */ /* Toyota Specific */
-#define UNIT_CONVRT_LI_TO_GAUS_DIV               (3785U)
+#define UNIT_CONVRT_LI_TO_GAUK_MLT               (10000U)         /* 1 gallon = 4.5461 liter      */
+#define UNIT_CONVRT_LI_TO_GAUK_DIV               (45461U)
 
-#define UNIT_CONVRT_LI_TO_GAUK_MLT               (1000U)          /* 1 gallon = 4.546 liter       */ /* Toyota Specific */
-#define UNIT_CONVRT_LI_TO_GAUK_DIV               (4546U)
- 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

@@ -111,7 +111,6 @@ void    vd_g_AlertB_tffogInit(void)
 /*===================================================================================================================================*/
 static U4      u4_s_AlertB_tffogSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
-#if 0   /* BEV Rebase provisionally */
     static const U2 u2_s_ALERT_B_TFFOG_TO_THRESH   = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_B_TFFOG_LSB_SGNL    = (U1)1U;
     static const U1 u1_s_ALERT_B_TFFOG_LSB_MSGSTS  = (U1)2U;
@@ -122,9 +121,9 @@ static U4      u4_s_AlertB_tffogSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
     U1              u1_t_sgnl;
     U4              u4_t_src_chk;
 
-    u1_t_trns_fact = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_BDB1S03,
-                                      (U2)OXCAN_RX_SYS_NRX_BAT | (U2)OXCAN_RX_SYS_TOE_BAT,
-                                      u2_s_ALERT_B_TFFOG_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+    u1_t_trns_fact = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_BDB1S03_CH0,
+                                       (U4)ALERT_CAN_SYS_ALL,
+                                       u2_s_ALERT_B_TFFOG_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     if((u1_a_VOM & (U1)ALERT_VOM_IGN_ON) == (U1)0U){
         u1_t_trns_fact |= (U1)ALERT_BRX_FACT_NO_RX;
@@ -155,9 +154,6 @@ static U4      u4_s_AlertB_tffogSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
     }
 
     return(u4_t_src_chk);
-#else   /* BEV Rebase provisionally */
-    return((U4)0U);
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

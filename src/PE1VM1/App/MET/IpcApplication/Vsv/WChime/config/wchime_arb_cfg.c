@@ -20,15 +20,11 @@
 
 #include "oxcan.h"
 #include "alert.h"
-#if 0   /* BEV Rebase provisionally */
 #include "sbltsync.h"
-#endif   /* BEV Rebase provisionally */
 #include "vardef.h"
 #include "veh_opemd.h"
 
-#if 0   /* BEV Rebase provisionally */
 #include "sound_cri_mgr.h"
-#endif   /* BEV Rebase provisionally */
 #include "thblnkr.h"
 #include "vptran_sel_typ.h"
 
@@ -199,8 +195,6 @@ void    vd_g_wChimeCfgPreTask(void)
 /*===================================================================================================================================*/
 void    vd_g_wChimeCfgPostTask(void)
 {
-    /* Multi Media */
-    vd_g_wChimeCfgMMInfoTx();
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_wChimeCfgReqchk(U4 * u4p_a_reqbit)                                                                                  */
@@ -438,11 +432,7 @@ U1      u1_g_wChimeCfgWavCycled(const U1 u1_a_WC_CH)
     U2 u2_t_tim;
     U1 u1_t_cycled;
 
-#if 0   /* BEV Rebase provisionally */
     u2_t_tim = u2_g_SoundCriMgrGetTimRemained(u1_a_WC_CH);
-#else   /* BEV Rebase provisionally */
-    u2_t_tim = (U2)0U;
-#endif   /* BEV Rebase provisionally */
     if(u2_t_tim <= (U2)1U){
         u1_t_cycled = (U1)TRUE;
     }
@@ -669,7 +659,6 @@ static  void    vd_s_wChimeCfgMcReqchk(U4 * u4p_a_reqbit)
 /*===================================================================================================================================*/
 static  void    vd_s_wChimeCfgSbltRemReqchk(U4 * u4p_a_reqbit)
 {
-#if 0   /* BEV Rebase provisionally */
     static const U1 u1_sp_WCHIME_SBLTID_LIST[SBLTSYNC_NUM_CHM] = {
         (U1)WCHIME_REQ_IN_SBLT_FMV,      /* 00 SBLTSYNC_CHM_REQ_LGL.   */
         (U1)WCHIME_REQ_IN_SBLT_LV2,      /* 01 SBLTSYNC_CHM_REQ_LV2.   */
@@ -686,7 +675,6 @@ static  void    vd_s_wChimeCfgSbltRemReqchk(U4 * u4p_a_reqbit)
             vd_s_wChimeCfgReqOn(u4p_a_reqbit, u1_sp_WCHIME_SBLTID_LIST[u4_t_loop]);
         }
     }
-#endif   /* BEV Rebase provisionally */
 }
 /*===================================================================================================================================*/
 /*  static  void    vd_s_wChimeCfgTurhazReqchk(U4 * u4p_a_reqbit)                                                                    */
