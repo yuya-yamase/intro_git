@@ -21,15 +21,11 @@
 
 #include "memfill_u4.h"
 #include "memcpy_u4.h"
-#include "oxcan.h"
 #include "alert.h"
 #include "ambtmp.h"
 #include "vptran_sel_typ.h"
 #include "veh_opemd.h"
 #include "vardef.h"
-#if 0   /* BEV Rebase provisionally */
-#include "rim_ctl.h"
-#endif   /* BEV Rebase provisionally */
 #include "calibration.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -136,7 +132,6 @@ static U4      u4_sp_hmiputxt_slote_req[HMIPUTXT_NWORD];
 static void           vd_s_HmiPuTxtCfgIGOffInit(void);
 static void           vd_s_HmiPutTxtCfgSysmalMask(U4* u4_ap_varmask);
 static void           vd_s_HmiPutTxtCfgGpfMidMask(U4* u4_ap_varmask);
-static U1             u1_s_HmiPuTxtCfgFctahudReq(void);
 static void           vd_s_HmiPuTxtCfgEvmReq(U4* u4_ap_req);
 static U1             u1_s_HmiPuTxtCfgSftaltReq(void);
 static void           vd_s_HmiPutTxtCfgLbwMask(U4* u4_ap_varmask);
@@ -211,10 +206,7 @@ void    vd_g_HmiPuTxtCfgReq(U4 * u4_ap_req)
     U1              u1_t_req;
     U1              u1_t_exist;
     U1              u1_t_icewrn;
-#if 0   /* BEV Rebase provisionally */
-    U1              u1_t_fctahud;
     U1              u1_t_sftalt;
-#endif   /* BEV Rebase provisionally */
     U1              u1_t_slot;
 
     for (u4_t_loop = (U4)0U; u4_t_loop < (U4)HMIPUTXT_NWORD; u4_t_loop++ ){
@@ -242,15 +234,6 @@ void    vd_g_HmiPuTxtCfgReq(U4 * u4_ap_req)
         u4_ap_req[u2_t_blkpos] |= ((U4)HMIPUTXT_ON_BIT << u2_t_bitpos);
     }
 
-#if 0   /* BEV Rebase provisionally */
-    /* FCTA(HUD) */
-    u1_t_fctahud = u1_s_HmiPuTxtCfgFctahudReq();
-    if(u1_t_fctahud == (U1)TRUE){
-        u2_t_blkpos             = (U2)HMIPUTXT_FCTAHUD_IDX >> HMIPUTXT_IDX_SFT;
-        u2_t_bitpos             = (U2)HMIPUTXT_FCTAHUD_IDX &  (U2)HMIPUTXT_REM_MSK;
-        u4_ap_req[u2_t_blkpos] |= ((U4)HMIPUTXT_ON_BIT << u2_t_bitpos);
-    }
-
     /* Sftalt */
     u1_t_sftalt = u1_s_HmiPuTxtCfgSftaltReq();
     if (u1_t_sftalt == (U1)TRUE){
@@ -259,7 +242,6 @@ void    vd_g_HmiPuTxtCfgReq(U4 * u4_ap_req)
         u4_ap_req[u2_t_blkpos] |= ((U4)HMIPUTXT_ON_BIT << u2_t_bitpos);
     }
 
-#endif   /* BEV Rebase provisionally */
     /* Evmod */
     vd_s_HmiPuTxtCfgEvmReq(&u4_ap_req[0]);
 
@@ -584,11 +566,7 @@ static void    vd_s_HmiPuTxtCfgEvmReq(U4 * u4_ap_req)
     U2              u2_t_bitpos;
     U4              u4_t_loop;
 
-#if 0   /* BEV Rebase provisionally */
     u1_t_igsts = u1_g_VehopemdIgnOn();
-#else   /* BEV Rebase provisionally */
-    u1_t_igsts = (U1)FALSE;
-#endif   /* BEV Rebase provisionally */
     if(u1_t_igsts == (U1)TRUE) {
 
         if(u2_s_hmiputxt_evmod_cnt < (U2)U2_MAX) {
@@ -702,54 +680,6 @@ void    vd_g_HmiPuTxtCfgThevmHidmask(U4 * u4_ap_varmask)
 }
 
 /*===================================================================================================================================*/
-/*  static U1 u1_s_HmiPuTxtCfgFctahudReq(void)                                                                                       */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         Request (TRUE / FALSE)                                                                                           */
-/*===================================================================================================================================*/
-static U1 u1_s_HmiPuTxtCfgFctahudReq(void)
-{
-    U1 u1_t_ret;             /* Requeset       */
-    U1 u1_t_igon;            /* IG-ON State    */
-    U1 u1_t_msgsts;          /* Message State  */
-    U1 u1_t_ctahr_sig;       /* Signal Varlue  */
-    U1 u1_t_ctahl_sig;       /* Signal Varlue  */
-
-#if 0   /* BEV Rebase provisionally */  
-    u1_t_igon = u1_g_VehopemdIgnOn();
-#else   /* BEV Rebase provisionally */
-    u1_t_igon = (U1)FALSE;
-#endif   /* BEV Rebase provisionally */
-    u1_t_ctahr_sig = (U1)0U;
-    u1_t_ctahl_sig = (U1)0U;
-
-#if 0   /* BEV Rebase provisionally */
-    u1_t_msgsts = (U1)Com_GetIPDUStatus(MSG_DS11S40_RXCH0);
-#else   /* BEV Rebase provisionally */
-    u1_t_msgsts = (U1)1U;
-#endif   /* BEV Rebase provisionally */
-    u1_t_msgsts &= (U1)(COM_TIMEOUT | COM_NO_RX);
-
-    if(u1_t_msgsts == (U1)0x00U){
-#if 0   /* BEV Rebase provisionally */
-        (void)Com_ReceiveSignal(ComConf_ComSignal_CTAHR, &u1_t_ctahr_sig);
-        (void)Com_ReceiveSignal(ComConf_ComSignal_CTAHL, &u1_t_ctahl_sig);
-#endif   /* BEV Rebase provisionally */
-    }
-
-    u1_t_ret = (U1)FALSE;
-    if(u1_t_igon == (U1)TRUE){
-        if((u1_t_ctahr_sig == (U1)HMIPUTXT_FCTAHUD_REQ_ON) ||
-           (u1_t_ctahl_sig == (U1)HMIPUTXT_FCTAHUD_REQ_ON)) {
-            u1_t_ret = (U1)TRUE;
-        }
-    }
-
-    return(u1_t_ret);
-
-}
-
-/*===================================================================================================================================*/
 /*  static U1 u1_s_HmiPuTxtCfgSftaltReq(void)                                                                                        */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
@@ -761,11 +691,7 @@ static U1 u1_s_HmiPuTxtCfgSftaltReq(void)
     U1 u1_t_igon;            /* IG-ON State    */
     U1 u1_t_calib_jdg;       /* Calib Value   */
 
-#if 0   /* BEV Rebase provisionally */ 
     u1_t_igon = u1_g_VehopemdIgnOn();
-#else   /* BEV Rebase provisionally */
-    u1_t_igon = (U1)FALSE;
-#endif   /* BEV Rebase provisionally */
 
     u1_t_ret = (U1)FALSE;
     if(u1_t_igon == (U1)TRUE){
@@ -882,6 +808,7 @@ static void    vd_s_HmiPutTxtCfgAlertReq(U1 u1_a_slot)
 /*  19PFv3-6 06/21/2024  JMH      Added LBW Mask Function                                                                            */
 /*  19PFv3-7 07/04/2024  TN       Delete Calibration Guard Process.                                                                  */
 /*  19PFv3-8 05/06/2025  PG       Delete MID Variation Mask of C_AVSWAR                                                              */
+/*  BEV-1    10/31/2025  MA       Change for BEV rebase                                                                              */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
@@ -892,5 +819,6 @@ static void    vd_s_HmiPutTxtCfgAlertReq(U1 u1_a_slot)
 /*  * PG   = Patrick Garcia, DTPH                                                                                                    */
 /*  * JMH  = James Michael D. Hilarion, DTPH                                                                                         */
 /*  * TN   = Tetsushi Nakano, Denso Techno                                                                                           */
+/*  * MA   = Misaki Aiki,  Denso Techno                                                                                              */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
