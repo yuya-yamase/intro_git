@@ -63,9 +63,7 @@ U1      u1_g_VdfEsoRx_TPMS(void)
     U1                 u1_t_ava_rx;
 
     u1_t_rx = (U1)0U;
-#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_TPM_VAR, &u1_t_rx);
-#endif   /* BEV Rebase provisionally */
     if(u1_t_rx == u1_s_VDF_ESO_TPM_VAR){
         u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
     }
@@ -90,9 +88,7 @@ U1      u1_g_VdfEsoRx_TPMSCHN(void)
     U1                 u1_t_ava_rx;
 
     u1_t_rx = (U1)0U;
-#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_TPM_DISC, &u1_t_rx);
-#endif   /* BEV Rebase provisionally */
 
     if(u1_t_rx == (U1)u1_s_VDF_ESO_TPM_DISC_CHN){
         u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;

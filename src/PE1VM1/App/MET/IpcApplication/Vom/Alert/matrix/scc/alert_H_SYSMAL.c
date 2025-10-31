@@ -323,34 +323,22 @@ const ST_ALERT_MTRX st_gp_ALERT_H_SYSMAL_MTRX[4] = {
 /*===================================================================================================================================*/
 static U4      u4_s_AlertH_sysmalBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
-#if 0   /* BEV Rebase provisionally */
     static const U1 u1_s_ALERT_H_SYSMALBC_LSB_EHV  = (U1)3U;
-#if defined(OXCAN_PDU_RX_CAN_EHV1S26)
     static const U2 u2_s_ALERT_H_SYSMALBC_THRSH_TO = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
-#endif /* defined(OXCAN_PDU_RX_CAN_EHV1S26) */
     U4              u4_t_src_chk;
     U1              u1_t_msgsts;
     U1              u1_t_sgnl;
 
-#if defined(OXCAN_PDU_RX_CAN_EHV1S26)
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_EHV1S26,
-                                     (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
-                                     u2_s_ALERT_H_SYSMALBC_THRSH_TO) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
-#else
-    u1_t_msgsts   = (U1)COM_NO_RX;
-#endif /* defined(OXCAN_PDU_RX_CAN_EHV1S26) */
+    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_EHV1S26_CH0,
+                                      (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP,
+                                      u2_s_ALERT_H_SYSMALBC_THRSH_TO) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
     u4_t_src_chk  = ((U4)u1_t_msgsts << u1_s_ALERT_H_SYSMALBC_LSB_EHV);
 
     u1_t_sgnl     = (U1)0U;
-#ifdef ComConf_ComSignal_HVBUZZ
     (void)Com_ReceiveSignal(ComConf_ComSignal_HVBUZZ, &u1_t_sgnl);
-#endif /* ComConf_ComSignal_HVBUZZ */
     u4_t_src_chk |= (U4)u1_t_sgnl;
 
     return(u4_t_src_chk);
-#else   /* BEV Rebase provisionally */
-    return((U4)0U);
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -361,26 +349,19 @@ static U4      u4_s_AlertH_sysmalBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
 /*===================================================================================================================================*/
 static U4      u4_s_AlertH_sysmalPd1Srcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
-#if 0   /* BEV Rebase provisionally */
     static const U1 u1_s_ALERT_H_SYSMALPD1_LSB_EHV  = (U1)8U;
     static const U1 u1_s_ALERT_H_SYSMALPD1_LSB_MLPT = (U1)5U;
     U4              u4_t_src_chk;
     U1              u1_t_msgsts;
     U1              u1_t_sgnl;
 
-#if defined(OXCAN_PDU_RX_CAN_EHV1S26)
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_EHV1S26,
-                                     (U2)OXCAN_RX_SYS_NRX_IGR,
-                                     (U2)U2_MAX) & (U1)COM_NO_RX;
-#else
-    u1_t_msgsts   = (U1)COM_NO_RX;
-#endif /* defined(OXCAN_PDU_RX_CAN_EHV1S26) */
+    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_EHV1S26_CH0,
+                                      (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP,
+                                      (U2)U2_MAX) & (U1)COM_NO_RX;
     u4_t_src_chk  = ((U4)u1_t_msgsts << u1_s_ALERT_H_SYSMALPD1_LSB_EHV);
 
     u1_t_sgnl     = (U1)0U;
-#ifdef ComConf_ComSignal_HVMALPAT
     (void)Com_ReceiveSignal(ComConf_ComSignal_HVMALPAT, &u1_t_sgnl);
-#endif /* ComConf_ComSignal_HVMALPAT */
     u4_t_src_chk |= ((U4)u1_t_sgnl   << u1_s_ALERT_H_SYSMALPD1_LSB_MLPT);
 
     u1_t_sgnl     = u1_g_AlertPtsys();
@@ -390,9 +371,6 @@ static U4      u4_s_AlertH_sysmalPd1Srcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
     u4_t_src_chk |= (U4)u1_t_sgnl;
 
     return(u4_t_src_chk);
-#else   /* BEV Rebase provisionally */
-    return((U4)0U);
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -403,26 +381,19 @@ static U4      u4_s_AlertH_sysmalPd1Srcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
 /*===================================================================================================================================*/
 static U4      u4_s_AlertH_sysmalPd2Srcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
-#if 0   /* BEV Rebase provisionally */
     static const U1 u1_s_ALERT_H_SYSMALPD2_LSB_EHV   = (U1)10U;
     static const U1 u1_s_ALERT_H_SYSMALPD2_LSB_HVIND = (U1)5U;
     U4              u4_t_src_chk;
     U1              u1_t_msgsts;
     U1              u1_t_sgnl;
 
-#if defined(OXCAN_PDU_RX_CAN_EHV1S26)
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_EHV1S26,
-                                     (U2)OXCAN_RX_SYS_NRX_IGR,
-                                     (U2)U2_MAX) & (U1)COM_NO_RX;
-#else
-    u1_t_msgsts   = (U1)COM_NO_RX;
-#endif /* defined(OXCAN_PDU_RX_CAN_EHV1S26) */
+    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_EHV1S26_CH0,
+                                      (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP,
+                                      (U2)U2_MAX) & (U1)COM_NO_RX;
     u4_t_src_chk  = ((U4)u1_t_msgsts << u1_s_ALERT_H_SYSMALPD2_LSB_EHV);
 
     u1_t_sgnl     = (U1)0U;
-#ifdef ComConf_ComSignal_HVIND
     (void)Com_ReceiveSignal(ComConf_ComSignal_HVIND, &u1_t_sgnl);
-#endif /* ComConf_ComSignal_HVIND */
     u4_t_src_chk |= ((U4)u1_t_sgnl   << u1_s_ALERT_H_SYSMALPD2_LSB_HVIND);
 
     u1_t_sgnl     = u1_g_AlertPtsys();
@@ -432,9 +403,6 @@ static U4      u4_s_AlertH_sysmalPd2Srcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
     u4_t_src_chk |= (U4)u1_t_sgnl;
 
     return(u4_t_src_chk);
-#else   /* BEV Rebase provisionally */
-    return((U4)0U);
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -445,7 +413,6 @@ static U4      u4_s_AlertH_sysmalPd2Srcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
 /*===================================================================================================================================*/
 static U4      u4_s_AlertH_sysmalRwSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
-#if 0   /* BEV Rebase provisionally */
     static const U1 u1_sp_ALERT_H_SYSMALRW_PTSYS_JDG[ALERT_H_SYSMAL_PTSYS_NUM_TBL] = {
         (U1)ALERT_H_SYSMAL_PTSYS_OTHER,
         (U1)ALERT_H_SYSMAL_PTSYS_OTHER,
@@ -516,17 +483,11 @@ static U4      u4_s_AlertH_sysmalRwSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
     U1              u1_t_msgsts;
     U1              u1_t_sgnl;
 
-#if defined(OXCAN_PDU_RX_CAN_EHV1S26)
-    u1_t_msgsts    = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_EHV1S26,
-                                      (U2)OXCAN_RX_SYS_NRX_IGR,
-                                      (U2)U2_MAX) & (U1)COM_NO_RX;
-#else
-    u1_t_msgsts   = (U1)COM_NO_RX;
-#endif /* defined(OXCAN_PDU_RX_CAN_EHV1S26) */
+    u1_t_msgsts    = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_EHV1S26_CH0,
+                                       (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP,
+                                       (U2)U2_MAX) & (U1)COM_NO_RX;
     u1_t_sgnl      = (U1)0U;
-#ifdef ComConf_ComSignal_HVMALPAT
     (void)Com_ReceiveSignal(ComConf_ComSignal_HVMALPAT, &u1_t_sgnl);
-#endif /* ComConf_ComSignal_HVMALPAT */
     if(u1_t_msgsts == (U1)COM_NO_RX){
         u4_t_mlpt_jdg  = (U4)ALERT_H_SYSMAL_HVMALPAT_RW_OFF;
     }
@@ -538,9 +499,7 @@ static U4      u4_s_AlertH_sysmalRwSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
     }
 
     u1_t_sgnl      = (U1)0U;
-#ifdef ComConf_ComSignal_HVIND
     (void)Com_ReceiveSignal(ComConf_ComSignal_HVIND, &u1_t_sgnl);
-#endif /* ComConf_ComSignal_HVIND */
     if((u1_t_msgsts == (U1)COM_NO_RX                   ) ||
        (u1_t_sgnl   >= (U1)ALERT_H_SYSMAL_HVIND_NUM_TBL)){
         u4_t_hvind_jdg = (U4)ALERT_H_SYSMAL_HVIND_RW_OFF;
@@ -558,9 +517,6 @@ static U4      u4_s_AlertH_sysmalRwSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
     u4_t_src_chk   = (u4_t_ptsys_jdg | u4_t_mlpt_jdg | u4_t_hvind_jdg);
 
     return(u4_t_src_chk);
-#else   /* BEV Rebase provisionally */
-    return((U4)0U);
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

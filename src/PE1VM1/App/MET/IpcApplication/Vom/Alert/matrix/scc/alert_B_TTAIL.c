@@ -103,7 +103,6 @@ void    vd_g_AlertB_ttailInit(void)
 /*===================================================================================================================================*/
 static U4      u4_s_AlertB_ttailSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
-#if 0   /* BEV Rebase provisionally */
     static const U4 u4_s_ALERT_B_TAIL_DLY_THRESH  = ((U4)300U  / (U4)ALERT_CH_TICK);
     static const U4 u4_s_ALERT_B_TAIL_BIT_DLYELPS = (U4)0x00000001U;
     static const U2 u2_s_ALERT_B_TAIL_TO_THRESH   = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
@@ -114,9 +113,9 @@ static U4      u4_s_AlertB_ttailSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
     U1              u1_t_trns_fact;
     U1              u1_t_isenable;
 
-    u1_t_trns_fact = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_BDB1S03,
-                                           (U2)OXCAN_RX_SYS_NRX_BAT | (U2)OXCAN_RX_SYS_TOE_BAT,
-                                           u2_s_ALERT_B_TAIL_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+    u1_t_trns_fact = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_BDB1S03_CH0,
+                                       (U4)ALERT_CAN_SYS_ALL,
+                                       u2_s_ALERT_B_TAIL_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     if((u1_a_VOM & (U1)ALERT_VOM_IGN_ON) == (U1)0U){
         u1_t_trns_fact |= (U1)ALERT_BRX_FACT_NO_RX;
@@ -146,9 +145,6 @@ static U4      u4_s_AlertB_ttailSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
     u4_t_src_chk  |= (((U4)u1_s_alert_b_ttail_msgsts & (U4)COM_NO_RX) << u1_s_ALERT_B_TAIL_LSB_MSGSTS);
 
     return(u4_t_src_chk);
-#else   /* BEV Rebase provisionally */
-    return((U4)0U);
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

@@ -96,16 +96,15 @@ const ST_ALERT_MTRX st_gp_ALERT_H_REGBRA_MTRX[1] = {
 /*===================================================================================================================================*/
 static U4      u4_s_AlertH_regbraSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
-#if 0   /* BEV Rebase provisionally */
     static const U2 u2_s_ALERT_H_REGBRA_TO_THRESH  = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_H_REGBRA_LSB_MSGSTS = (U1)2U;
     U1              u1_t_msgsts;
     U1              u1_t_sgnl;
     U4              u4_t_src_chk;
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_EHV1S26,
-                                     (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
-                                     u2_s_ALERT_H_REGBRA_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_EHV1S26_CH0,
+                                      (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP,
+                                      u2_s_ALERT_H_REGBRA_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     u1_t_sgnl     = (U1)0U;
     (void)Com_ReceiveSignal(ComConf_ComSignal_RBKLM, &u1_t_sgnl);
@@ -114,9 +113,6 @@ static U4      u4_s_AlertH_regbraSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_H_REGBRA_LSB_MSGSTS);
 
     return(u4_t_src_chk);
-#else   /* BEV Rebase provisionally */
-    return((U4)0U);
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
