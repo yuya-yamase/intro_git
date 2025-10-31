@@ -637,11 +637,7 @@ void    vd_g_HmiPuTxtCfgThevmHidmask(U4 * u4_ap_varmask)
     U1              u1_t_thevm_reqid;
     U1              u1_t_igsts;
 
-#if 0   /* BEV Rebase provisionally */
     u1_t_igsts = u1_g_VehopemdIgnOn();
-#else   /* BEV Rebase provisionally */
-    u1_t_igsts = (U1)FALSE;
-#endif   /* BEV Rebase provisionally */
     if (u1_t_igsts == (U1)TRUE) {
 
         if (u2_s_hmiputxt_thevm_cnt < (U2)U2_MAX) {
