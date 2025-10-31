@@ -20,6 +20,9 @@
 #include "sound_cri_mgr.h"
 
 #include "wchime.h"
+#if 0   /* BEV Rebase provisionally */ /* for xm-authentication */
+#include "vardef.h"
+#endif   /* BEV Rebase provisionally */ /* for xm-authentication */
 
 /* CRI header file */
 #include "cri_xpt.h"
