@@ -125,12 +125,12 @@ const U2                    u2_g_DIM_USADJ_BY_SW_LP_ACT   = (U2)800U / (U2)DIM_M
 /*===================================================================================================================================*/
 void    vd_g_DimCfgInit(void)
 {
-#ifdef ComConf_ComSignal_D_N_INF
     U1                      u1_t_tx;
 
     u1_t_tx = (U1)0U;
+#if 0    /* BEV Rebase provisionally */
     (void)Com_SendSignal(ComConf_ComSignal_D_N_INF,  &u1_t_tx);
-#endif
+#endif   /* BEV Rebase provisionally */
 
     vd_g_DimDaynightInit();
     vd_g_DimUsadjbySwInit();
@@ -200,7 +200,6 @@ U1      u1_g_DimDaynightCfgAdimRxEvt(U1 * u1_ap_daynight)
 /*===================================================================================================================================*/
 void    vd_g_DimDaynightCfgAdimRxchk(const U1 u1_a_RX_CHK, const U1 u1_a_DAYNIGHT)
 {
-#ifdef ComConf_ComSignal_D_N_INF
     static const U1         u1_sp_DIM_D_N_INF_BY_RX_CHK[DIM_ADIM_NUM_RX_CHK] = {
         (U1)0x00U,  /* DIM_ADIM_RX_CHK_VALID  (0U) */
         (U1)0x01U,  /* DIM_ADIM_RX_CHK_RT_1ST (1U) */
@@ -221,8 +220,9 @@ void    vd_g_DimDaynightCfgAdimRxchk(const U1 u1_a_RX_CHK, const U1 u1_a_DAYNIGH
         u1_t_tx = (U1)DIM_DAYNIGHT_ADIM_NIGHT;
     }
 
+#if 0    /* BEV Rebase provisionally */
     (void)Com_SendSignal(ComConf_ComSignal_D_N_INF,  &u1_t_tx);
-#endif
+#endif   /* BEV Rebase provisionally */
 }
 /*===================================================================================================================================*/
 /*  U1      u1_g_DimUsadjbySwCfgAdjstbl(void)                                                                                        */

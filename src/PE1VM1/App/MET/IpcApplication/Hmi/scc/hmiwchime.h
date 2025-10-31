@@ -22,11 +22,10 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define HMIWCHIME_NUM           (4U)
+#define HMIWCHIME_NUM           (3U)
 #define HMIWCHIME_TSR_P         (0U)
 #define HMIWCHIME_TSR_A         (1U)
 #define HMIWCHIME_MASTER        (2U)
-#define HMIWCHIME_CRUISE_RJCT   (3U)    /* ACC制御中 バックスイッチ リジェクトブザー */
 
 #define HMIWCHIME_OFF0          (0U)
 #define HMIWCHIME_ON1           (1U)
