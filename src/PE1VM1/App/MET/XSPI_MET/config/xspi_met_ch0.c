@@ -367,21 +367,7 @@ static inline void    vd_s_XSpiCfgTxVariation(     U4 * u4_ap_pdu_tx) {
 
     U4  u4_t_loop;
     U1  u1_t_subdigspd;
-    U1  u1_t_uniove;
-    U1  u1_t_stpindcvt;                                                /*  STPLMPIND                                            */
-    U1  u1_t_unitslct_fueco;                                           /*  UNITSLCT_FUECO                                       */
-    U1  u1_t_tmnt_sup;                                                 /*  TMNT_SUP                                             */
-    U1  u1_t_4wd_typ;                                                  /*  4WD_TYP                                              */
-    U1  u1_t_engrpm_unit;                                              /*  ENGRPM_UNIT                                          */
-    U1  u1_t_fugag_scale;                                              /*  FUGAG_SCALE                                          */
-    U1  u1_t_spd_red_scale;                                            /*  SPD_RED_SCALE                                        */
-    U1  u1_t_var_ecojdg_type;                                          /*  VAR_ECOJDG_TYPE                                      */
-    U1  u1_t_langslct_type;                                            /*  LANGSLCT_TYPE                                        */
-    U1  u1_t_smasta_na;                                                /*  SMASTA_NA                                            */
     U1  u1_t_var_4wdsys_disp;                                          /*  VAR_4WDSYS_DISP                                      */
-    U1  u1_t_tempdest;                                                 /*  TEMPDEST                                             */
-    U1  u1_t_cal_dsptyp;                                               /*  CALENDAR_DISP_TYPE                                   */
-    U1  u1_t_hvsysind;
     U1  u1_t_sys_hcs;                                                  /*  SYS_HCS                                              */
     U1  u1_t_dist;
 
@@ -396,46 +382,11 @@ static inline void    vd_s_XSpiCfgTxVariation(     U4 * u4_ap_pdu_tx) {
 
     u4_ap_pdu_tx[1] |= ((U4)u1_g_VardefTtTailHead() & (U4)0x01U) << 4; /*  VAR_TT_TAILHEAD                                      */
 
-    u4_ap_pdu_tx[1] |= ((U4)u1_g_VardefTtCheckEG() & (U4)0x01U) << 5;  /*  VAR_TT_CHKEG                                         */
-
-    u4_ap_pdu_tx[1] |= ((U4)u1_g_VardefTTVscExp() & (U4)0x01U) << 14; /*  VAR_TT_VSCEXP                                         */
-
     u4_ap_pdu_tx[1] |= ((U4)u1_g_VardefPtsRx() & (U4)0x1fU) << 16;     /*  VAR_PTSYS                                            */
 
     u1_t_subdigspd = u1_g_UnitSubSpd();
     u4_ap_pdu_tx[2] |= ((U4)u1_t_subdigspd & (U4)0x03U) << 11;         /*  SUBDIGSPD_DISP                                       */
 
-    u1_t_uniove    = u1_g_VardefChainaReq();
-    u4_ap_pdu_tx[2] |= ((U4)u1_t_uniove & (U4)0x01U) << 13;            /*  UNIOVE_ICON                                          */
-
-    /* Redesign If STPIND-CSTD-0 is Applied */
-    u1_t_stpindcvt = (U1)1U;
-    u4_ap_pdu_tx[2] |= ((U4)u1_t_stpindcvt & (U4)0x01U) << 14;         /*  STPLMPIND                                            */
-
-    u1_t_hvsysind = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_HVSYSIND);
-    u4_ap_pdu_tx[2] |= ((U4)u1_t_hvsysind & (U4)0x01U) << 16;          /*  HV_SYS_IND                                           */
-
-    u1_t_unitslct_fueco = u1_g_VardefUnitSlctTypeByPid();
-    u4_ap_pdu_tx[2] |= ((U4)u1_t_unitslct_fueco & (U4)0x1FU) << 19;    /*  UNITSLCT_FUECO                                       */
-
-    u1_t_tmnt_sup = u1_g_VardefTmntOpt();
-    u4_ap_pdu_tx[2] |= ((U4)u1_t_tmnt_sup & (U4)0x01U) << 24;          /*  TMNT_SUP                                             */
-
-    u1_t_4wd_typ = u1_g_Vardef4wdSysByPid();
-    u4_ap_pdu_tx[2] |= ((U4)u1_t_4wd_typ & (U4)0x01U) << 25;           /*  4WD_TYP                                              */
-
-    u1_t_engrpm_unit = u1_g_VardefEngUnit();
-    u4_ap_pdu_tx[2] |= ((U4)u1_t_engrpm_unit & (U4)0x03U) << 26;       /*  ENGRPM_UNIT                                          */
-
-    u1_t_fugag_scale = u1_g_VardefFuGauge();
-    u4_ap_pdu_tx[2] |= ((U4)u1_t_fugag_scale & (U4)0x01U) << 28;       /*  FUGAG_SCALE                                          */
-
-    u1_t_spd_red_scale = (U1)0U;
-    u1_t_dist = u1_g_Unit((U1)UNIT_IDX_DIST);
-    if(u1_t_dist == (U1)UNIT_VAL_DIST_KM){
-        u1_t_spd_red_scale = u1_g_VardefEuSpdScaleByPid();
-    }
-    u4_ap_pdu_tx[2] |= ((U4)u1_t_spd_red_scale & (U4)0x01U) << 29;     /*  SPD_RED_SCALE                                        */
 
     for(u4_t_loop = (U4)0U ; u4_t_loop < (U4)XSPI_VDF_AREA_SIZE; u4_t_loop++){
         u4_ap_pdu_tx[4U + u4_t_loop] = (U4)0x00U;
@@ -466,26 +417,11 @@ static inline void    vd_s_XSpiCfgTxVariation(     U4 * u4_ap_pdu_tx) {
     u4_ap_pdu_tx[12] |= (U4)TRUE << 7;                                 /*  SYS_DMM1EC               */ /* BEV SV1 provisionally */
 
 #endif   /* BEV Rebase provisionally */
-    u1_t_var_ecojdg_type = u1_g_VardefEcoJudge();
-    u4_ap_pdu_tx[13]  = ((U4)u1_t_var_ecojdg_type & (U4)0x01U) << 9;   /*  VAR_ECOJDG_TYPE                                      */
-
-    u1_t_langslct_type = u1_g_VardefLngDBTypeByPid();
-    u4_ap_pdu_tx[13] |= ((U4)u1_t_langslct_type & (U4)0x3FU) << 10;    /*  LANGSLCT_TYPE                                        */
-
     u1_t_sys_hcs      = u1_g_VardefHcsAva();
     u4_ap_pdu_tx[13] |= ((U4)u1_t_sys_hcs & (U4)0x01U) << 22;          /*  SYS_HCS                                              */
 
     u1_t_var_4wdsys_disp = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_4WDSYS);
     u4_ap_pdu_tx[13] |= ((U4)u1_t_var_4wdsys_disp & (U4)0x01U) << 23;  /*  VAR_4WDSYS_DISP                                      */
-
-    u1_t_cal_dsptyp = u1_g_VardefCalenderDispTypeByPid();
-    u4_ap_pdu_tx[13] |= ((U4)u1_t_cal_dsptyp & (U4)0x03U) << 24;       /*  CALENDAR_DISP_TYPE                                   */
-
-    u1_t_smasta_na = u1_g_VardefSmaStaMIDByPid();
-    u4_ap_pdu_tx[13] |= ((U4)u1_t_smasta_na & (U4)0x01U) << 28;        /*  SMASTA_NA                                            */
-
-    u1_t_tempdest = u1_g_VardefTempChrByPid();
-    u4_ap_pdu_tx[13] |= ((U4)u1_t_tempdest & (U4)0x01U) << 29;         /*  TEMPDEST                                             */
 
     /*  Variation:Dynamic Variartion No.1               */
     /*  Variation:Dynamic Variartion No.2               */

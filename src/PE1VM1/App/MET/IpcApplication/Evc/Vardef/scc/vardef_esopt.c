@@ -109,11 +109,7 @@ void    vd_g_VardefEsOptBonInit(void)
         u4_t_ch_nvm &= u4_t_ch_rx;
 
         u4_t_log_ava = (U4)0U;
-#if 0   /* BEV Rebase provisionally */
         u1_t_nvm_chk = u1_g_Nvmc_ReadU4withSts(st_gp_VDF_ESO_AVA[u4_t_lpcnt].u2_nid, &u4_t_log_ava);
-#else   /* BEV Rebase provisionally */
-        u1_t_nvm_chk = (U1)NVMC_STATUS_KIND_NG;
-#endif   /* BEV Rebase provisionally */
         if(u1_t_nvm_chk == (U1)NVMC_STATUS_KIND_OK){
             u4_t_log_ava &= u4_t_ch_nvm;
         }
@@ -124,9 +120,7 @@ void    vd_g_VardefEsOptBonInit(void)
 
         u4_gp_vdf_eso_ava[u4_t_lpcnt] = u4_t_log_ava;
 
-#if 0   /* BEV Rebase provisionally */
         vd_g_Rim_WriteU4(st_gp_VDF_ESO_AVA[u4_t_lpcnt].u2_bid, u4_t_log_ava);
-#endif   /* BEV Rebase provisionally */
     }
 
     vd_g_VardefEsOptCfgInit();
@@ -158,11 +152,7 @@ void    vd_g_VardefEsOptRstwkInit(void)
         u4_t_ch_nvm &= u4_t_ch_rx;
 
         u4_t_log_nvm = (U4)0U;
-#if 0   /* BEV Rebase provisionally */
         u1_t_log_chk = u1_g_Nvmc_ReadU4withSts(st_gp_VDF_ESO_AVA[u4_t_lpcnt].u2_nid, &u4_t_log_nvm);
-#else   /* BEV Rebase provisionally */
-        u1_t_log_chk = (U1)NVMC_STATUS_KIND_NG;
-#endif   /* BEV Rebase provisionally */
         if(u1_t_log_chk == (U1)NVMC_STATUS_KIND_OK){
             u4_t_log_nvm &= u4_t_ch_nvm;
         }
@@ -171,11 +161,7 @@ void    vd_g_VardefEsOptRstwkInit(void)
         }
 
         u4_t_log_bra = (U4)0U;
-#if 0   /* BEV Rebase provisionally */
         u1_t_log_chk = u1_g_Rim_ReadU4withStatus(st_gp_VDF_ESO_AVA[u4_t_lpcnt].u2_bid, &u4_t_log_bra) & (U1)RIM_RESULT_KIND_MASK;
-#else   /* BEV Rebase provisionally */
-        u1_t_log_chk = (U1)RIM_RESULT_KIND_NG;
-#endif   /* BEV Rebase provisionally */
         if(u1_t_log_chk == (U1)RIM_RESULT_KIND_OK){
             u4_t_log_bra &= u4_t_ch_bra;
         }
@@ -552,9 +538,7 @@ static U1      u1_s_VdfEsoNvmInit(const U1 u1_a_NWO_EN)
 
         u4_t_ch_ini   = st_gp_VDF_ESO_AVA[u4_t_lpcnt].u4_ini;
 
-#if 0   /* BEV Rebase provisionally */
         vd_g_Rim_WriteU4(st_gp_VDF_ESO_AVA[u4_t_lpcnt].u2_bid, u4_t_ch_ini);
-#endif   /* BEV Rebase provisionally */
 
         u4_t_ch_ini  &= st_gp_VDF_ESO_AVA[u4_t_lpcnt].u4_nvm;
         u4_t_ch_ini  &= st_gp_VDF_ESO_AVA[u4_t_lpcnt].u4_rx;
@@ -581,9 +565,7 @@ static U1      u1_s_VdfEsoNvmUpdt(const U1 u1_a_NWO_EN)
 
         u4_gp_vdf_eso_ava[u4_t_lpcnt] &= st_gp_VDF_ESO_AVA[u4_t_lpcnt].u4_rx;
 
-#if 0   /* BEV Rebase provisionally */
         vd_g_Rim_WriteU4(st_gp_VDF_ESO_AVA[u4_t_lpcnt].u2_bid, u4_gp_vdf_eso_ava[u4_t_lpcnt]);
-#endif   /* BEV Rebase provisionally */
 
         u4_t_log_nvm  = u4_gp_vdf_eso_ava[u4_t_lpcnt] & st_gp_VDF_ESO_AVA[u4_t_lpcnt].u4_nvm;
         u1_t_syn_chk |= u1_s_VdfEsoNvmNextUpdt(u1_a_NWO_EN, st_gp_VDF_ESO_AVA[u4_t_lpcnt].u2_nid, u4_t_log_nvm);
@@ -611,11 +593,7 @@ static U1      u1_s_VdfEsoNvmNext(const U1 u1_a_NWO_EN, const U2 u2_a_NID, const
     U1                        u1_t_nwo_chk;
 
     u4_t_last    = (U4)0U;
-#if 0   /* BEV Rebase provisionally */
     u1_t_nvm_chk = u1_g_Nvmc_ReadU4withSts(u2_a_NID, &u4_t_last);
-#else   /* BEV Rebase provisionally */
-    u1_t_nvm_chk = (U1)NVMC_STATUS_KIND_NG;
-#endif   /* BEV Rebase provisionally */
     if((u4_a_NEXT    != u4_t_last               ) ||
        (u1_t_nvm_chk >= (U1)NVMC_STATUS_KIND_NG ) ||
        (u1_t_nvm_chk == (U1)NVMC_STATUS_ERRCOMP ) ||
@@ -632,9 +610,7 @@ static U1      u1_s_VdfEsoNvmNext(const U1 u1_a_NWO_EN, const U2 u2_a_NID, const
 
     u1_t_nwo_chk = u1_t_syn_chk & u1_a_NWO_EN;
     if(u1_t_nwo_chk == (U1)VDF_ESO_NVM_SYN_STA){
-#if 0   /* BEV Rebase provisionally */
         vd_g_Nvmc_WriteU4(u2_a_NID, u4_a_NEXT);
-#endif   /* BEV Rebase provisionally */
     }
     else{
         u1_t_syn_chk &= (U1)VDF_ESO_NVM_SYN_RUN;
@@ -658,11 +634,7 @@ static U1      u1_s_VdfEsoNvmNextUpdt(const U1 u1_a_NWO_EN, const U2 u2_a_NID, c
     U1                        u1_t_nwo_chk;
 
     u4_t_last    = (U4)0U;
-#if 0   /* BEV Rebase provisionally */
     u1_t_nvm_chk = u1_g_Nvmc_ReadU4withSts(u2_a_NID, &u4_t_last);
-#else   /* BEV Rebase provisionally */
-    u1_t_nvm_chk = (U1)NVMC_STATUS_KIND_NG;
-#endif   /* BEV Rebase provisionally */
     if((u4_a_NEXT    != u4_t_last               ) ||
        (u1_t_nvm_chk >= (U1)NVMC_STATUS_KIND_NG ) ||
        (u1_t_nvm_chk == (U1)NVMC_STATUS_ERRCOMP ) ||
@@ -680,9 +652,7 @@ static U1      u1_s_VdfEsoNvmNextUpdt(const U1 u1_a_NWO_EN, const U2 u2_a_NID, c
     u1_t_nwo_chk = u1_t_syn_chk & u1_a_NWO_EN;
     if(u1_t_nwo_chk == (U1)VDF_ESO_NVM_SYN_STA){
         if(u2_s_vdf_eso_igredge >= (U2)VDF_ESO_IGROFFEG_ON){
-#if 0   /* BEV Rebase provisionally */
             vd_g_Nvmc_WriteU4(u2_a_NID, u4_a_NEXT);
-#endif   /* BEV Rebase provisionally */
         }
         else{
             u1_t_syn_chk = (U1)VDF_ESO_NVM_SYN_FIN;
@@ -756,14 +726,12 @@ static U1      u1_s_VdfEsoGetRxevCnt(const U1 u1_a_INPUT_TYPE, const U2 u2_a_MSG
 /*===================================================================================================================================*/
 void    vd_g_VardefEsOptIgoffEvhk(const U4 u4_a_MDBIT, const U4 u4_a_EVBIT)
 {
-#if 0   /* BEV Rebase provisionally */
     U4                      u4_t_ign_chk;
 
-    u4_t_ign_chk = u4_a_EVBIT & (U4)VEH_OPEMD_EVTBIT_IGN_TO_OFF;
-    if(u4_t_ign_chk == (U4)VEH_OPEMD_EVTBIT_IGN_TO_OFF){
+    u4_t_ign_chk = u4_a_EVBIT & (U4)VEH_OPEMD_EVBIT_IG_R_TO_OFF;
+    if(u4_t_ign_chk == (U4)VEH_OPEMD_EVBIT_IG_R_TO_OFF){
         u2_s_vdf_eso_igredge = (U2)VDF_ESO_IGROFFEG_ON;
     }
-#endif   /* BEV Rebase provisionally */
 }
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
