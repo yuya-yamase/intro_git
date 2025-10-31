@@ -37,9 +37,8 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define VPTRAN_TIM_PCN1S01_TO                   (5000U / OXCAN_MAIN_TICK)
-#define VPTRAN_TIM_ECT1G92_TO                   (5000U / OXCAN_MAIN_TICK)
-#define VPTRAN_TIM_SBW1G01_TO                   (5000U / OXCAN_MAIN_TICK)
+#define VPTRAN_TIM_PCN1S01_TO                   (u2_OXCAN_RXTO_THRSH(5000U))
+#define VPTRAN_TIM_ECT1G92_TO                   (u2_OXCAN_RXTO_THRSH(5000U))
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -71,13 +70,10 @@
 /*===================================================================================================================================*/
 U1              u1_g_VptranBywCfgGetMsgStsRNG(void)
 {
-#if 0   /* BEV Rebase provisionally */
-    return (u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_SBW1G01,
-                             ((U2)OXCAN_RX_SYS_NRX_BAT | (U2)OXCAN_RX_SYS_TOE_BAT),
-                             (U2)VPTRAN_TIM_SBW1G01_TO) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX));
-#else   /* BEV Rebase provisionally */
-    return ((U1)COM_NO_RX);
-#endif   /* BEV Rebase provisionally */
+    return (u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_PCN1S01_CH0,
+                             (U4)OXCAN_SYS_PNC_16 | (U4)OXCAN_SYS_PNC_40 | (U4)OXCAN_SYS_PNC_43 | (U4)OXCAN_SYS_PNC_44 | \
+                             (U4)OXCAN_SYS_PBA | (U4)OXCAN_SYS_ACC | (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP,
+                             (U2)VPTRAN_TIM_PCN1S01_TO) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX));
 }
 
 /*===================================================================================================================================*/
@@ -88,13 +84,10 @@ U1              u1_g_VptranBywCfgGetMsgStsRNG(void)
 /*===================================================================================================================================*/
 U1              u1_g_VptranBywCfgGetMsgStsGR(void)
 {
-#if 0   /* BEV Rebase provisionally */
-    return (u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_PCN1S01,
-                             ((U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR),
+    return (u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_PCN1S01_CH0,
+                             (U4)OXCAN_SYS_PNC_16 | (U4)OXCAN_SYS_PNC_40 | (U4)OXCAN_SYS_PNC_43 | (U4)OXCAN_SYS_PNC_44 | \
+                             (U4)OXCAN_SYS_PBA | (U4)OXCAN_SYS_ACC | (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP,
                              (U2)VPTRAN_TIM_PCN1S01_TO) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX));
-#else   /* BEV Rebase provisionally */
-    return ((U1)COM_NO_RX);
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -105,13 +98,9 @@ U1              u1_g_VptranBywCfgGetMsgStsGR(void)
 /*===================================================================================================================================*/
 U1              u1_g_VptranBywCfgGetMsgStsGRSts(void)
 {
-#if 0   /* BEV Rebase provisionally */
-    return (u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ECT1G92,
-                             ((U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR),
+    return (u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_ECT1G92_CH0,
+                             (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP,
                              (U2)VPTRAN_TIM_ECT1G92_TO) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX));
-#else   /* BEV Rebase provisionally */
-    return ((U1)COM_NO_RX);
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -122,13 +111,10 @@ U1              u1_g_VptranBywCfgGetMsgStsGRSts(void)
 /*===================================================================================================================================*/
 U1              u1_g_VptranBywCfgGetMsgStsSftBlks(void)
 {
-#if 0   /* BEV Rebase provisionally */
-    return (u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_SBW1G01,
-                             ((U2)OXCAN_RX_SYS_NRX_BAT | (U2)OXCAN_RX_SYS_TOE_BAT),
-                             (U2)VPTRAN_TIM_SBW1G01_TO) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX));
-#else   /* BEV Rebase provisionally */
-    return ((U1)COM_NO_RX);
-#endif   /* BEV Rebase provisionally */
+    return (u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_PCN1S01_CH0,
+                             (U4)OXCAN_SYS_PNC_16 | (U4)OXCAN_SYS_PNC_40 | (U4)OXCAN_SYS_PNC_43 | (U4)OXCAN_SYS_PNC_44 | \
+                             (U4)OXCAN_SYS_PBA | (U4)OXCAN_SYS_ACC | (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP,
+                             (U2)VPTRAN_TIM_PCN1S01_TO) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX));
 }
 
 /*===================================================================================================================================*/
@@ -142,9 +128,7 @@ U1              u1_g_VptranBywCfgGetSFTMETS(void)
     U1          u1_t_sgnl;
 
     u1_t_sgnl = (U1)0U;
-#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_SFT_METS, &u1_t_sgnl);
-#endif   /* BEV Rebase provisionally */
     return (u1_t_sgnl);
 }
 
@@ -159,9 +143,7 @@ U1              u1_g_VptranBywCfgGetBSLUPS(void)
     U1          u1_t_sgnl;
 
     u1_t_sgnl = (U1)0U;
-#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_B_SLUP_S, &u1_t_sgnl);
-#endif   /* BEV Rebase provisionally */
     return (u1_t_sgnl);
 }
 
@@ -176,9 +158,7 @@ U1              u1_g_VptranBywCfgGetBSLDNS(void)
     U1          u1_t_sgnl;
 
     u1_t_sgnl = (U1)0U;
-#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_B_SLDN_S, &u1_t_sgnl);
-#endif   /* BEV Rebase provisionally */
     return (u1_t_sgnl);
 }
 
@@ -193,9 +173,7 @@ U1              u1_g_VptranBywCfgGetBGEARS(void)
     U1          u1_t_sgnl;
 
     u1_t_sgnl = (U1)0U;
-#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_B_GEAR_S, &u1_t_sgnl);
-#endif   /* BEV Rebase provisionally */
     return (u1_t_sgnl);
 }
 
@@ -227,9 +205,7 @@ U1              u1_g_VptranBywCfgGetSFTBLKS(void)
     U1          u1_t_sgnl;
 
     u1_t_sgnl = (U1)0U;
-#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_SFT_BLKS, &u1_t_sgnl);
-#endif   /* BEV Rebase provisionally */
     return (u1_t_sgnl);
 }
 
@@ -258,6 +234,7 @@ U1              u1_g_VptranBywCfgGetSFTBLKS(void)
 /*  200D-2      09/05/2022  YK       200D Correspondence                                                                             */
 /*  330D-1      02/22/2023  YK       330D Correspondence                                                                             */
 /*  19PFv3-1    12/15/2023  GM       19PFv3 Correspondence                                                                           */
+/*  BEV-1       10/28/2025  MA       Change for BEV rebase.                                                                             */
 /*                                                                                                                                   */
 /*  * HY   = Hidefumi Yoshida, Denso                                                                                                 */
 /*  * YI   = Yoshiki  Iwata,   Denso                                                                                                 */
@@ -268,5 +245,6 @@ U1              u1_g_VptranBywCfgGetSFTBLKS(void)
 /*  * XY   = XuYang,           DNKT                                                                                                  */
 /*  * YK   = Yuki Kawai,       Denso Techno                                                                                          */
 /*  * GM   = Glen Monteposo,   DTPH                                                                                                  */
+/*  * MA   = Misaki Aiki,   Denso Techno                                                                                             */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
