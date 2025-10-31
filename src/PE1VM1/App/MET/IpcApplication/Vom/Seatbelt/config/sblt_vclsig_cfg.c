@@ -107,9 +107,7 @@ static  U1      u1_s_SbltVclstsCfgGetPKBBDB(void)
     U1          u1_t_sgnl;
 
     u1_t_sgnl = (U1)0U;
-#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_PKB_BDB, &u1_t_sgnl);
-#endif   /* BEV Rebase provisionally */
     return (u1_t_sgnl);
 }
 
@@ -124,9 +122,7 @@ static  U1      u1_s_SbltVclstsCfgGetBP(void)
     U1          u1_t_sgnl;
 
     u1_t_sgnl = (U1)0U;
-#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_B_P, &u1_t_sgnl);
-#endif   /* BEV Rebase provisionally */
     return (u1_t_sgnl);
 }
 
@@ -141,9 +137,7 @@ static  U1      u1_s_SbltVclstsCfgGetBR(void)
     U1          u1_t_sgnl;
 
     u1_t_sgnl = (U1)0U;
-#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_B_R, &u1_t_sgnl);
-#endif   /* BEV Rebase provisionally */
     return (u1_t_sgnl);
 }
 
@@ -158,9 +152,7 @@ static  U1      u1_s_SbltVclstsCfgGetREVSW2(void)
     U1          u1_t_sgnl;
 
     u1_t_sgnl = (U1)0U;
-#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_REVSW2, &u1_t_sgnl);
-#endif   /* BEV Rebase provisionally */
     return (u1_t_sgnl);
 }
 
@@ -175,9 +167,7 @@ static  U1      u1_s_SbltVclstsCfgGetDCTY(void)
     U1          u1_t_sgnl;
 
     u1_t_sgnl = (U1)0U;
-#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_DCTY, &u1_t_sgnl);
-#endif   /* BEV Rebase provisionally */
     return (u1_t_sgnl);
 }
 
@@ -192,9 +182,7 @@ static  U1      u1_s_SbltVclstsCfgGetPCTY(void)
     U1          u1_t_sgnl;
 
     u1_t_sgnl = (U1)0U;
-#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_PCTY, &u1_t_sgnl);
-#endif   /* BEV Rebase provisionally */
     return (u1_t_sgnl);
 }
 
@@ -209,9 +197,7 @@ static  U1      u1_s_SbltVclstsCfgGetRRCY(void)
     U1          u1_t_sgnl;
 
     u1_t_sgnl = (U1)0U;
-#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_RRCY, &u1_t_sgnl);
-#endif   /* BEV Rebase provisionally */
     return (u1_t_sgnl);
 }
 
@@ -226,9 +212,7 @@ static  U1      u1_s_SbltVclstsCfgGetRLCY(void)
     U1          u1_t_sgnl;
 
     u1_t_sgnl = (U1)0U;
-#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_RLCY, &u1_t_sgnl);
-#endif   /* BEV Rebase provisionally */
     return (u1_t_sgnl);
 }
 
@@ -243,9 +227,7 @@ static  U1      u1_s_SbltVclstsCfgGetBCTY(void)
     U1          u1_t_sgnl;
 
     u1_t_sgnl = (U1)0U;
-#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_BCTY, &u1_t_sgnl);
-#endif   /* BEV Rebase provisionally */
     return (u1_t_sgnl);
 }
 
