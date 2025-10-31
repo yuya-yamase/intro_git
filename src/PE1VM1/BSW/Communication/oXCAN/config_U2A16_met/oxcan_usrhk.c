@@ -23,7 +23,6 @@
 #include "can_rscf4_cfg.h"      /* CAN_CFG_CONTROLLERNUM_MAX is defined in can_rscf4_cfg.h */
 
 
-
 #include "illumi_comtx.h"
 #if 0   /* BEV Rebase provisionally */
 #include "drec_tx.h"

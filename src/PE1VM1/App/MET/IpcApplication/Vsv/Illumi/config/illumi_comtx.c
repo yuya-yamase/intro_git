@@ -145,7 +145,9 @@ static        U2       u2_s_IllumiRheoTxCtrl(const U2 * u2_ap_DIM_LVL, U1 * u1_a
 /*===================================================================================================================================*/
 void    vd_g_IllumiComTxInit(void)
 {
+#if 0   /* BEV Rebase provisionally */
     U1                   u1_t_tx;
+#endif   /* BEV Rebase provisionally */
 
 
     u2_s_illumi_tc_nmwk_tout   = (U2)U2_MAX;
@@ -154,7 +156,9 @@ void    vd_g_IllumiComTxInit(void)
     u1_s_illumi_rheo_tx_ctrl   = (U1)ILLUMI_RHEO_EVTX_STS_FIN;
 
     u1_s_illumi_rheo_tx_pct = (U1)0U;
+#if 0   /* BEV Rebase provisionally */
     u1_t_tx = (U1)U1_MAX;
+#endif   /* BEV Rebase provisionally */
 
     u1_s_illumi_tail_cn_tx     = (U1)ILLUMI_TAIL_CN_INACT;
     u1_s_illumi_rheo_tx_ack    = (U1)0U;
@@ -162,7 +166,7 @@ void    vd_g_IllumiComTxInit(void)
     u2_s_illumi_rheo_tx_il     = (U2)0U;
     u1_s_illumi_rheo_tx_pos    = (U1)ILLUMI_RHEOPOS_TX_DEF;
 
-#if 0    /* BEV Rebase provisionally */
+#if 0   /* BEV Rebase provisionally */
     (void)Com_SendSignal(ComConf_ComSignal_ILL_OUT, &u1_t_tx);
     (void)Com_SendSignal(ComConf_ComSignal_RHEO_IN, &u1_t_tx);
 #endif   /* BEV Rebase provisionally */
@@ -263,7 +267,7 @@ U2      u2_g_IllumiTRTx(const U2 * u2_ap_DIM_LVL, const U2 u2_a_OW)
         u2_t_pct = (U2)ILLUMI_DUTY_TX_MAX;
     }
     if(u2_t_pct != u2_s_illumi_rheo_tx_tr){
-        (void)Com_SendSignal(ComConf_ComSignal_TR2_DUTY, &u2_t_pct);
+       (void)Com_SendSignal(ComConf_ComSignal_TR2_DUTY, &u2_t_pct);
         (void)Com_TriggerIPDUSend((PduIdType)MSG_MET1S38_TXCH0);
     }
     u2_s_illumi_rheo_tx_tr = u2_t_pct;
@@ -649,7 +653,7 @@ static void    vd_s_IllumiRheoTxAct(const U2 u2_a_ACT, const U1 u1_a_RHEOPCT, co
             break;
     }
 
-#if 0    /* BEV Rebase provisionally */
+#if 0   /* BEV Rebase provisionally */
     (void)Com_SendSignal(ComConf_ComSignal_RHEO_IN, &u1_a_RHEODRTX);
 #endif   /* BEV Rebase provisionally */
 }
@@ -733,7 +737,7 @@ static void    vd_s_IllumiTftbkTx(const U2 * u2_ap_DIM_LVL)
         }
     }
 
-#if 0    /* BEV Rebase provisionally */
+#if 0   /* BEV Rebase provisionally */
     (void)Com_SendSignal(ComConf_ComSignal_ILL_OUT, &u1_t_tx);
 #endif   /* BEV Rebase provisionally */
 }
