@@ -25,9 +25,6 @@
 #include "sbltsync.h"
 
 #include "vardef.h"
-#if 0   /* BEV Rebase provisionally */ 
-#include "vardef_ds2e.h"
-#endif   /* BEV Rebase provisionally */
 #include "vardef_dest_dbf.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

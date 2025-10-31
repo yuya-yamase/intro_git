@@ -16,15 +16,13 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#include "eculib_cmn.h"
-
 #include "alert_cfg_private.h"
 #include "alert_mtrx_cfg_private.h"
 
 #include "veh_opemd.h"
 #include "oxcan.h"
 
-#include "g3mlib_mtrxsrch.h"
+#include "mtrxsrch.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -44,20 +42,6 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Package Version Check                                                                                                            */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if 0   /* BEV Rebase provisionally */
-#define ALERT_ECULIB_CMN_MAJOR                   (1)
-#define ALERT_ECULIB_CMN_MINOR                   (2)
-#define ALERT_ECULIB_CMN_PATCH                   (1)
-#define ALERT_ECULIB_CMN_REV                     (2)
-
-#if ((ALERT_ECULIB_CMN_MAJOR != ECULIB_CMN_VER_MAJOR) || \
-     (ALERT_ECULIB_CMN_MINOR != ECULIB_CMN_VER_MINOR) || \
-     (ALERT_ECULIB_CMN_PATCH != ECULIB_CMN_VER_PATCH) || \
-     (ALERT_ECULIB_CMN_REV   != ECULIB_CMN_REV      ))
-#error "alert pkg and eculib_cmn pkg : package are incompatible!"
-#endif
-#endif   /* BEV Rebase provisionally */
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  VOM Index Check                                                                                                                  */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -252,7 +236,7 @@ void    vd_g_AlertMainTask(void)
                (st_t_srch.u2_num_srch >  (U2)0U                )){
 
                 u4_t_src_chk |= u4_t_src_vom;
-                u4_t_src_chk  = (U4)u2_g_MtrxSrch_lt(u4_t_src_chk, &st_t_srch);
+                u4_t_src_chk  = (U4)u2_g_MtrxSrch((U2)0U, &u4_t_src_chk, &st_t_srch);
             }
 
             u1_tp_DST = st_tp_MTRX[u4_t_lpcnt].u1p_DST;
