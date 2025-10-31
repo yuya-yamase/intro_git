@@ -90,9 +90,9 @@ U1          u1_g_SbltsyncCfgChmRingKnd(void)
 /*===================================================================================================================================*/
 U2      u2_g_SbltsyncCfgChmMask(void)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U2 u2_s_BELT_CHM_DEF = (U2)0x0FFFU;
     static const U4 u4_sp_DS2E_BITPOS[SBLTWRN_NUM_ALLSEAT] = {
-#if 0   /* BEV Rebase provisionally */
         (U4)VDF_DS_2E_SBLT_DR,      /* SBLTWRN_DRV_SEAT */
         (U4)VDF_DS_2E_SBLT_CE,      /* SBLTWRN_FRC_SEAT */
         (U4)VDF_DS_2E_SBLT_PA,      /* SBLTWRN_PSG_SEAT */
@@ -105,20 +105,6 @@ U2      u2_g_SbltsyncCfgChmMask(void)
         (U4)VDF_DS_2E_SBLT_4L,      /* SBLTWRN_R4L_SEAT */
         (U4)VDF_DS_2E_SBLT_4C,      /* SBLTWRN_R4C_SEAT */
         (U4)VDF_DS_2E_SBLT_4R       /* SBLTWRN_R4R_SEAT */
-#else   /* BEV Rebase provisionally */
-        (U4)0x00000040U,
-        (U4)0x00000010U,
-        (U4)0x00000020U,
-        (U4)0x00000002U,
-        (U4)0x00000001U,
-        (U4)0x00000004U,
-        (U4)0x00004000U,
-        (U4)0x00002000U,
-        (U4)0x00008000U,
-        (U4)0x00000800U,
-        (U4)0x00000400U,
-        (U4)0x00001000U
-#endif   /* BEV Rebase provisionally */
     };
     U4  u4_t_ds2e_2041;
     U4  u4_t_seat;
@@ -131,11 +117,7 @@ U2      u2_g_SbltsyncCfgChmMask(void)
         /* No diag customization in China (for China SBR regulations). */
         u2_t_chmmsk = u2_s_BELT_CHM_DEF;
     } else {
-#if 0   /* BEV Rebase provisionally */
         u4_t_ds2e_2041 = u4_g_VardefDs2E_Las32((U2)VDF_DS_2E_2041);
-#else   /* BEV Rebase provisionally */
-        u4_t_ds2e_2041 = (U4)0x0000FC77U;
-#endif   /* BEV Rebase provisionally */
         u2_t_chmmsk = (U2)0U;
 
         for (u4_t_seat = (U4)0U; u4_t_seat < (U4)SBLTWRN_NUM_ALLSEAT; u4_t_seat++) {
@@ -146,6 +128,9 @@ U2      u2_g_SbltsyncCfgChmMask(void)
     }
 
     return (u2_t_chmmsk);
+#else   /* BEV Rebase provisionally */
+    return ((U2)0x0FFFU);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -311,7 +296,7 @@ void    vd_g_SbltsyncCfgTxCXMET1S02(void)
 /*  Revision       Date        Author   Change Description                                                                           */
 /*  -------------- ----------  -------  ---------------------------------------------------------------------------------------------*/
 /*  330D-1         02/23/2023  MK       Modify 24FGM22-23189(change IF of Diag Judgement (to u1_g_VardefChainaReq))                  */
-/*  BEV-1          10/29/2025  TS       Change for BEV rebase                                                                        */
+/*  BEV-1          10/31/2025  TS       Change for BEV rebase                                                                        */
 /*                                                                                                                                   */
 /*  * YI   = Yoshiki Iwata,    Denso                                                                                                 */
 /*  * KK   = Kohei Kato,       Denso Techno                                                                                          */
