@@ -23,13 +23,9 @@
 #include "can_rscf4_cfg.h"      /* CAN_CFG_CONTROLLERNUM_MAX is defined in can_rscf4_cfg.h */
 
 
-#if 0   /* BEV Rebase provisionally */
 #include "illumi_comtx.h"
+#if 0   /* BEV Rebase provisionally */
 #include "drec_tx.h"
-#include "mulmed_mulfr.h"
-#include "mulmed_color.h"
-#include "fspomgr.h"
-#include "mmappctrl.h"
 #endif   /* BEV Rebase provisionally */
 #include "xspi_met_can.h"
 
@@ -65,21 +61,12 @@ typedef struct{
     U4    u4_wrq;
     U1    u1_ch;
 }ST_OXCAN_ICU_RX;
-
-#if 0   /* BEV BSW provisionally */
-typedef struct{
-    U2               u2_msg;
-    void (* const    fp_vd_HOOK)(const U2 u2_a_MSG);
-}ST_OXCAN_USRHK_MMAPP;
-#else
-#endif
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static void vd_s_oXCANUsrhkMmappRxMsg(const U2 u2_a_MSG);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -313,9 +300,7 @@ void    vd_g_oXCANUsrhkTraAck(const U2 u2_a_IPDU_TX)
 
     switch (u2_a_IPDU_TX) {
         case (U2)MSG_MET1S01_TXCH0:
-#if 0   /* BEV Rebase provisionally */
             vd_g_IllumiRheoTxAck();
-#endif   /* BEV Rebase provisionally */
             break;
         default:
             /* Do nothing */
@@ -324,7 +309,6 @@ void    vd_g_oXCANUsrhkTraAck(const U2 u2_a_IPDU_TX)
 
 #if 0   /* BEV Rebase provisionally */
     vd_g_DrectxTxAck(u2_a_IPDU_TX);
-    vd_g_MulmedColorTxHk(u2_a_IPDU_TX);
 #endif   /* BEV Rebase provisionally */
 }
 /*===================================================================================================================================*/
@@ -373,66 +357,7 @@ void    vd_g_oXCANUsrhkRecAck(const U2 u2_a_IPDU_RX)
 /*          break;                                          */
 /*  }                                                       */
 
-    switch (u2_a_IPDU_RX) {
-        case (U2)MSG_ENG1G17_RXCH0:
-#if 0   /* BEV Rebase provisionally */
-            vd_g_FsposnsrCanRxEng1g17();
-#endif   /* BEV Rebase provisionally */
-            break;
-#if 0   /* BEV BSW provisionally */
-        case (U2)MSG_ENG1S98_RXCH0:
-            vd_g_FsposnsrCanRxEng1s98();
-            break;
-#else
-#endif
-        case (U2)MSG_VSC1G12_RXCH0:
-#if 0   /* BEV Rebase provisionally */
-            vd_g_FsposnsrCanRxVsc1g12();
-#endif   /* BEV Rebase provisionally */
-            break;
-#if 0   /* BEV BSW provisionally */
-        case (U2)MSG_VSC1G30_RXCH0:
-            vd_g_FsposnsrCanRxVsc1g30();
-            break;
-#else
-#endif
-        default:
-            /* Do nothing */
-            break;
-    }
-    
-    vd_s_oXCANUsrhkMmappRxMsg(u2_a_IPDU_RX);
-    
-#if 0   /* BEV Rebase provisionally */
-    vd_g_MulmedMulfrRxTxtHk(u2_a_IPDU_RX);
-#endif   /* BEV Rebase provisionally */
     vd_g_XSpiMETCANGWPushPDU(u2_a_IPDU_RX);
-}
-/*===================================================================================================================================*/
-/*  static void    vd_s_oXCANUsrhkMmappRxMsg(const U2 u2_a_IPDU_RX)                                                                  */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      --> u2_a_MSG : Message Handler                                                                                   */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void    vd_s_oXCANUsrhkMmappRxMsg(const U2 u2_a_IPDU_RX)
-{
-#if 0   /* BEV BSW provisionally */
-    static const ST_OXCAN_USRHK_MMAPP st_sp_OXCAN_USRHK_MMAPP[] = {
-        {(U2)MSG_AVNMS72_RXCH1,    &vd_g_MMAppCtrlNotifyRcvTextMsg  }
-    };
-    static const U4 u4_s_OXCAN_USRHK_MMAPP = ((U4)sizeof(st_sp_OXCAN_USRHK_MMAPP) / (U4)sizeof(ST_OXCAN_USRHK_MMAPP));
-
-    U4 u4_t_lpcnt;
-
-    for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < u4_s_OXCAN_USRHK_MMAPP; u4_t_lpcnt++){
-        if(u2_a_IPDU_RX == st_sp_OXCAN_USRHK_MMAPP[u4_t_lpcnt].u2_msg){
-            if(st_sp_OXCAN_USRHK_MMAPP[u4_t_lpcnt].fp_vd_HOOK != vdp_PTR_NA){
-                st_sp_OXCAN_USRHK_MMAPP[u4_t_lpcnt].fp_vd_HOOK(u2_a_IPDU_RX);
-            }
-        }
-    }
-#else
-#endif
 }
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
@@ -446,7 +371,9 @@ static void    vd_s_oXCANUsrhkMmappRxMsg(const U2 u2_a_IPDU_RX)
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
+/*  BEV-1    10/22/2025  TS       Change for BEV rebase.                                                                             */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, DENSO                                                                                                    */
+/*  * TS   = Takuo Suganuma, Denso Techno                                                                                            */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

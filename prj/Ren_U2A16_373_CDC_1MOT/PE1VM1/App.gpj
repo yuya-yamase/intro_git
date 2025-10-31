@@ -26,7 +26,6 @@
 
     -I${APP_DIR}/MET/EcuLib/Common/scc
     -I${APP_DIR}/MET/EcuLib/Common/config
-    -I${APP_DIR}/MET/EcuLib/Ren_G3m/scc
     -I${APP_DIR}/MET/HudApplication/Vom/HudDimmer/config
     -I${APP_DIR}/MET/HudApplication/Vom/HudDimmer/scc
     -I${APP_DIR}/MET/HudApplication/Vom/HudImgadj/config_met
@@ -66,6 +65,12 @@
     -I${APP_DIR}/MET/IpcApplication/Vsv/WChime/config_D1L1
     -I${APP_DIR}/MET/IpcApplication/Vsv/WChime/config
     -I${APP_DIR}/MET/IpcApplication/Vsv/WChime/scc
+    -I${APP_DIR}/MET/Platform/ComplexDriver/DrecTx/config
+    -I${APP_DIR}/MET/Platform/ComplexDriver/SoundMiddle/config
+    -I${APP_DIR}/MET/Platform/ComplexDriver/SoundMiddle/data_TYT
+    -I${APP_DIR}/MET/Platform/ComplexDriver/SoundMiddle/data_LEX
+    -I${APP_DIR}/MET/Platform/ComplexDriver/SoundMiddle/include/U2Ax
+    -I${APP_DIR}/MET/Platform/ComplexDriver/SoundMiddle/scc
     
 
 ${SS_DIR}/eMCOS/config/eMCOS_TASK.c
@@ -88,32 +93,15 @@ xspi_met_ch0_cfg.c
 xspi_met_ch1.c
 xspi_met_nvm.c
 xspi_met_ota.c
-App/MET/EcuLib/Common/scc/fpcall_vd_fu1.c
 App/MET/EcuLib/Common/scc/fpcall_vd_fvd.c
 App/MET/EcuLib/Common/scc/lerp_u2.c
-App/MET/EcuLib/Common/scc/mod_u2.c
-App/MET/EcuLib/Common/scc/mod_u4.c
-App/MET/EcuLib/Common/scc/msbsrch.c
 App/MET/EcuLib/Common/scc/mtrxsrch.c
 App/MET/EcuLib/Common/scc/rngcmpr_u2.c
 App/MET/EcuLib/Common/scc/rtime.c
-App/MET/EcuLib/Common/scc/sum_u1.c
-App/MET/EcuLib/Common/scc/sum_u2.c
-App/MET/EcuLib/Common/scc/sum_u4.850
 App/MET/EcuLib/Common/scc/unitconvrt.c
-App/MET/EcuLib/Common/scc/bcd.c
-App/MET/EcuLib/Common/scc/bfconvrt_and.c
-App/MET/EcuLib/Common/scc/bfconvrt_or.c
 App/MET/EcuLib/Common/scc/calc_u8.c
 App/MET/EcuLib/Common/scc/date.c
 App/MET/EcuLib/Common/config/unitconvrt_cfg.c
-App/MET/EcuLib/Ren_G3m/scc/g3mlib_memcpy_u1_blp.850
-App/MET/EcuLib/Ren_G3m/scc/g3mlib_memcpy_u1_dw.850
-App/MET/EcuLib/Ren_G3m/scc/g3mlib_memcpy_u2_blp.850
-App/MET/EcuLib/Ren_G3m/scc/g3mlib_memcpy_u2_dw.850
-App/MET/EcuLib/Ren_G3m/scc/g3mlib_memcpy_u4_blp.850
-App/MET/EcuLib/Ren_G3m/scc/g3mlib_memcpy_u4_dw.850
-App/MET/EcuLib/Ren_G3m/scc/g3mlib_mtrxsrch.850
 App/MET/HudApplication/Vom/HudDimmer/config/hdimillmn.c
 App/MET/HudApplication/Vom/HudDimmer/config/hdimmgr_adj_cfg.c
 App/MET/HudApplication/Vom/HudDimmer/config/hdimmgr_adj_frill.c
@@ -480,4 +468,7 @@ App/MET/IpcApplication/Vsv/WChime/config_D1L1/wchime_grd_cfg.c
 App/MET/IpcApplication/Vsv/WChime/config/wchime_arb_cfg.c
 App/MET/IpcApplication/Vsv/WChime/config/wchime_req_cfg.c
 App/MET/IpcApplication/Vsv/WChime/scc/wchime_arb.c
+App/MET/Platform/ComplexDriver/DrecTx/config/drec_tx.c
+App/MET/Platform/ComplexDriver/SoundMiddle/config/sound_cri_mgr.c
+App/MET/Platform/ComplexDriver/SoundMiddle/scc/sound_cri_drv.c
 
