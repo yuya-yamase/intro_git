@@ -194,7 +194,7 @@ U1      u1_g_VardefPtsRxCfgPtsyschk(U1 * u1_ap_ptsys_rx)
     return(u1_g_oXCANRxEvcnt((U2)OXCAN_PDU_RX_CAN_ENG1G13));
 #else
     (*u1_ap_ptsys_rx) = (U1)VDF_PTS_RX_1F_NRX;
-    return((U1)OXCAN_RXD_EVC_UNK);
+    return((U1)OXCAN_RX_RXEV_CNT_UNK);
 #endif
 #else   /* BEV Rebase provisionally */
     (*u1_ap_ptsys_rx) = (U1)VDF_PTS_RX_1F_NRX;
@@ -215,10 +215,11 @@ U1      u1_g_VardefPtsRxCfgPtsyschk(U1 * u1_ap_ptsys_rx)
 /*===================================================================================================================================*/
 U1      u1_g_VardefHcsCfgAscextchk(U1* u1_ap_ascext_rx)
 {
-    (void)Com_ReceiveSignal(ComConf_ComSignal_ASCEXT, u1_ap_ascext_rx);
 #if 0   /* BEV Rebase provisionally */
+    (void)Com_ReceiveSignal(ComConf_ComSignal_ASCEXT, u1_ap_ascext_rx);
     return(u1_g_oXCANRxEvcnt((U2)OXCAN_PDU_RX_CAN_ASC1S90));
 #else   /* BEV Rebase provisionally */
+    (*u1_ap_ascext_rx) = (U1)0U;
     return((U1)OXCAN_RXD_EVC_UNK);
 #endif   /* BEV Rebase provisionally */
 }

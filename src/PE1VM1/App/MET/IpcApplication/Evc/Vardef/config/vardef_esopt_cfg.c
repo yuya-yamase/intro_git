@@ -1653,11 +1653,7 @@ const ST_VDF_ESO_CH    st_gp_VDF_ESO_CH[VDF_ESO_NUM_RX] = {
         &u1_g_VdfEsoRx_ADIEXIST,                /* fp_u1_AVA_RX        */
         (U2)VDF_ESO_CH_ADIEXIST,                /* u2_eso_ch           */
         (U1)VDF_ESO_INPUT_TYPE_CAN,             /* u1_input_type       */
-#if 0   /* BEV Rebase provisionally */
-        (U2)OXCAN_PDU_RX_CAN_ADU1S07,           /* u2_msg_rx           */
-#else   /* BEV Rebase provisionally */
-        U2_MAX,                                 /* u2_msg_rx           */
-#endif   /* BEV Rebase provisionally */
+        (U2)OXCAN_RXD_PDU_CAN_ADU1S07_CH0,      /* u2_msg_rx           */
         (U2)0x0002U,                            /* u2_vom_act          */
         ((U2)2100U / (U2)VDF_MAIN_TICK),        /* u2_rxc_peri         */
         {
@@ -2262,13 +2258,8 @@ const U1               u1_g_VDF_ESO_NOW_AVA = (U1)VDF_ESO_NOW_AVA;
 const U2               u2_g_VDF_ESO_RES_TOUT = (U2)5000U / (U2)VDF_MAIN_TICK;  /* 5 seconds */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if 0   /* BEV Rebase provisionally */
-const U1               u1_g_VDF_ESO_RXC_INT = (U1)OXCAN_RX_RXEV_CNT_UNK;
-const U1               u1_g_VDF_ESO_RXC_MAX = (U1)OXCAN_RX_RXEV_CNT_MAX;
-#else   /* BEV Rebase provisionally */
 const U1               u1_g_VDF_ESO_RXC_INT = (U1)OXCAN_RXD_EVC_UNK;
 const U1               u1_g_VDF_ESO_RXC_MAX = (U1)OXCAN_RXD_EVC_MAX;
-#endif   /* BEV Rebase provisionally */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
