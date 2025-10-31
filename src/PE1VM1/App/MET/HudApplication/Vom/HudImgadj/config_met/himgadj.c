@@ -1225,9 +1225,7 @@ static void vd_s_HudImgAdjDrvPsInit(void)
     u1_s_himgadj_hudctrlsts = (U1)HUDIMGADJ_HUDCTLSTS_STP;
 
     u1_t_hudsts = (U1)HUDIMGADJ_HUDST_UNDET;
-#ifdef ComConf_ComSignal_HUD_ST
     (void)Com_SendSignal(ComConf_ComSignal_HUD_ST, &u1_t_hudsts);  /* No event sending occur. Depend on TyCAN config. */
-#endif
 }
 /*===================================================================================================================================*/
 /*  DRIVING_POSITION : static void vd_s_HudImgAdjDrvPsInvalidInit(void)                                                              */
@@ -1254,14 +1252,10 @@ static void vd_s_HudImgAdjDrvPsInvalidInit(void)
 
     u1_t_hudsts      = (U1)HUDIMGADJ_HUDST_UNDET;
     u1_t_hudsts_prev = (U1)HUDIMGADJ_HUDST_UNDET;
-#ifdef ComConf_ComSignal_HUD_ST
     (void)Com_ReceiveSignal(ComConf_ComSignal_HUD_ST, &u1_t_hudsts_prev);
     (void)Com_SendSignal(ComConf_ComSignal_HUD_ST, &u1_t_hudsts);
-#endif
     if(u1_t_hudsts_prev != u1_t_hudsts){
-#ifdef MSG_HUD1S01_TXCH0
         (void)Com_TriggerIPDUSend(MSG_HUD1S01_TXCH0);        /* Event send Trigger */
-#endif
     }
 }
 /*===================================================================================================================================*/
@@ -1652,14 +1646,10 @@ static void vd_s_HudImgAdjDrvPsHudStsActn(const U1 u1_a_EVT)
     }
 
     u1_t_hudsts_prev = (U1)HUDIMGADJ_HUDST_STP;
-#ifdef ComConf_ComSignal_HUD_ST
     (void)Com_ReceiveSignal(ComConf_ComSignal_HUD_ST, &u1_t_hudsts_prev);
     (void)Com_SendSignal(ComConf_ComSignal_HUD_ST, &u1_t_hudsts);
-#endif
     if(u1_t_hudsts_prev != u1_t_hudsts){
-#ifdef MSG_HUD1S01_TXCH0
         (void)Com_TriggerIPDUSend(MSG_HUD1S01_TXCH0);        /* Event send Trigger */
-#endif
     }
 }
 
