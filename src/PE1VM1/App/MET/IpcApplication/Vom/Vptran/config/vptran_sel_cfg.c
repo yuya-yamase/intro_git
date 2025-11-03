@@ -19,7 +19,6 @@
 #include "vptran_sel_cfg_private.h"
 #include "vptran_sel_typ.h"
 #include "vptran_byw.h"
-#include "vardef_esopt.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -80,22 +79,7 @@ void            vd_g_VptranInitCfg(void)
 /*===================================================================================================================================*/
 U1              u1_g_VptranTransMissionTypeCfg(void)
 {
-#if 0   /* BEV Rebase provisionally */
-    U1  u1_t_sbw_sup; 
-    U1  u1_t_tm_type;
-
-    u1_t_sbw_sup = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_SBW);
-
-    if (u1_t_sbw_sup == (U1)TRUE) {
-        u1_t_tm_type = (U1)VPTRAN_BYW;
-    } else {
-        u1_t_tm_type = (U1)VPTRAN_CVT;
-    }
-
-    return (u1_t_tm_type);
-#else   /* BEV Rebase provisionally */
     return ((U1)VPTRAN_BYW);
-#endif 0   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -122,6 +106,7 @@ U1              u1_g_VptranTransMissionTypeCfg(void)
 /*  200D-2      10/31/2022  YK       Update Toyota Standard Application(lib_ipc_tycan_v210_r009)                                     */
 /*  330D-1      02/22/2023  YK       330D Correspondence                                                                             */
 /*  19PFv3-1    12/15/2023  GM       19PFv3 Correspondence                                                                           */
+/*  BEV-1       10/28/2025  MA       Change for BEV rebase.                                                                          */
 /*                                                                                                                                   */
 /*  * HY   = Hidefumi Yoshida, Denso                                                                                                 */
 /*  * KK   = Kohei Kato,       Denso Techno                                                                                          */
@@ -129,5 +114,6 @@ U1              u1_g_VptranTransMissionTypeCfg(void)
 /*  * TA(M)= Teruyuki Anjima,  NTT Data MSE                                                                                          */
 /*  * YK   = Yuki Kawai,       Denso Techno                                                                                          */
 /*  * GM   = Glen Monteposo,   DTPH                                                                                                  */
+/*  * MA   = Misaki Aiki,   Denso Techno                                                                                             */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

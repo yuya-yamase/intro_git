@@ -184,7 +184,6 @@ App/MET/IpcApplication/Hmi/config/hmiputxt_cfg.c
 App/MET/IpcApplication/Hmi/config/hmiputxt_if_cfg.c
 App/MET/IpcApplication/Hmi/config/hmitt_cfg.c
 App/MET/IpcApplication/Hmi/config/hmitt_if_cfg.c
-App/MET/IpcApplication/Hmi/scc/hmiadu.c
 App/MET/IpcApplication/Hmi/scc/hmihud.c
 App/MET/IpcApplication/Hmi/scc/hmilocale.c
 App/MET/IpcApplication/Hmi/scc/hmimaint.c

@@ -107,7 +107,6 @@
 void    vd_g_HmiTtCfgInit(void);
 void    vd_g_HmiTtCfgReq(U4 * u4_ap_req);
 void    vd_g_HmiTtCfgVarmask(U4 * u4_ap_varmask);
-void    vd_g_HmiTtCfgCstmask(U4* u4_ap_varmask);
 void    vd_g_HmiTtCfgDestmask(U4* u4_ap_varmask);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */

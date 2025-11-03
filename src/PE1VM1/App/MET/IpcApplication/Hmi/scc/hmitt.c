@@ -83,7 +83,6 @@ void    vd_g_HmiTtMainTask(void)
         u4_tp_mask[u4_t_loop] = (U4)U4_MAX;
     }
     vd_g_HmiTtCfgVarmask(&u4_tp_mask[0]);
-    vd_g_HmiTtCfgCstmask(&u4_tp_mask[0]);
     vd_g_HmiTtCfgDestmask(&u4_tp_mask[0]);
 
     for(u4_t_loop = (U4)0U ; u4_t_loop < (U4)HMITT_NUM ; u4_t_loop++){
@@ -124,8 +123,13 @@ void    vd_g_HmiTt(U4 * u4_ap_req , const U1 u1_a_NWORD)
 /*  1.4.0    06/02/2021  TH       Setting for 22-24FGM CV.                                                                           */
 /*  1.6.0    02/02/2024  DR       Setting for 19PFv3                                                                                 */
 /*                                                                                                                                   */
+/*  Revision Date        Author   Change Description                                                                                 */
+/* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
+/*  BEV-1    10/31/2025  MA       Change for BEV rebase                                                                              */
+/*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * TH   = Takahiro Hirano, Denso Techno                                                                                           */
 /*  * DR   = Dyan Reyes, DTPH                                                                                                        */
+/*  * MA   = Misaki Aiki,  Denso Techno                                                                                              */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

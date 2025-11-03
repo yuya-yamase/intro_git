@@ -42,7 +42,6 @@
 #define DREC_TX_MSG_MET1D50                      (0U)
 #define DREC_TX_MSG_MET1D51                      (1U)
 
-#define DREC_TX_FNC_LSB_MET1D50                  (0U)
 #define DREC_TX_FNC_LSB_MET1D51                  (8U)
 #define DREC_TX_FNC_BIT_MET1D50                  (0x0001U)
 #define DREC_TX_FNC_BIT_MET1D51                  (0x0100U)
@@ -68,14 +67,12 @@ typedef struct{
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static U2                        u2_s_drec_tx_evt;
-static U1                        u1_s_drec_tx_mrst_tout;
 static U1                        u1_s_drec_tx_bpe_evt;
 
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static void    vd_s_DrectxMsg_MET1D50(const U1 * u1_ap_FNC);
 static void    vd_s_DrectxMsg_MET1D51(const U1 * u1_ap_FNC);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -95,7 +92,6 @@ void    vd_g_DrectxBonInit(void)
     U1                  u1_t_tx;
 
     u2_s_drec_tx_evt       = (U2)0U;
-    u1_s_drec_tx_mrst_tout = (U1)U1_MAX;
     u1_s_drec_tx_bpe_evt   = (U1)0U;
 
 #if 0   /* BEV Rebase provisionally */
@@ -104,16 +100,8 @@ void    vd_g_DrectxBonInit(void)
 
     u1_t_tx = (U1)0U;
 #if 0   /* BEV Rebase provisionally */
-    (void)Com_SendSignal(ComConf_ComSignal_DATA_NUM, &u1_t_tx);
-    (void)Com_SendSignal(ComConf_ComSignal_MET_REST, &u1_t_tx);
     (void)Com_SendSignal(ComConf_ComSignal_DATA_NM2, &u1_t_tx);
     (void)Com_SendSignal(ComConf_ComSignal_SW_INF,   &u1_t_tx);
-#endif   /* BEV Rebase provisionally */
-
-    u1_t_tx = (U1)FALSE;
-#if 0   /* BEV Rebase provisionally */
-    (void)Com_SendSignal(ComConf_ComSignal_FLWNG_ON, &u1_t_tx);
-    (void)Com_SendSignal(ComConf_ComSignal_ACTV_TST, &u1_t_tx);
 #endif   /* BEV Rebase provisionally */
 
     u1_t_tx = (U1)U1_MAX;
@@ -135,28 +123,11 @@ void    vd_g_DrectxRstInit(void)
     U1                  u1_t_tx;
 
     u2_s_drec_tx_evt       = (U2)0U;
-    u1_s_drec_tx_mrst_tout = (U1)0U;
     u1_s_drec_tx_bpe_evt   = (U1)0U;
 
     u2_t_br = (U2)0U;
 #if 0   /* BEV Rebase provisionally */
     (void)u1_g_Rim_ReadU2withStatus((U2)RIMID_U2_DREC_TX, &u2_t_br);
-#endif   /* BEV Rebase provisionally */
-
-    u1_t_fnc = (U1)(u2_t_br >> DREC_TX_FNC_LSB_MET1D50);
-#if 0   /* BEV Rebase provisionally */
-    (void)Com_SendSignal(ComConf_ComSignal_DATA_NUM, &u1_t_fnc);
-#endif   /* BEV Rebase provisionally */
-
-    u1_t_tx = (U1)TRUE;
-#if 0   /* BEV Rebase provisionally */
-    (void)Com_SendSignal(ComConf_ComSignal_MET_REST, &u1_t_tx);
-#endif   /* BEV Rebase provisionally */
-
-    u1_t_tx = (U1)FALSE;
-#if 0   /* BEV Rebase provisionally */
-    (void)Com_SendSignal(ComConf_ComSignal_FLWNG_ON, &u1_t_tx);
-    (void)Com_SendSignal(ComConf_ComSignal_ACTV_TST, &u1_t_tx);
 #endif   /* BEV Rebase provisionally */
 
     u1_t_fnc = (U1)(u2_t_br >> DREC_TX_FNC_LSB_MET1D51);
@@ -188,24 +159,11 @@ void    vd_g_DrectxWkupInit(void)
     U1                  u1_t_tx;
 
     u2_s_drec_tx_evt       = (U2)0U;
-    u1_s_drec_tx_mrst_tout = (U1)U1_MAX;
     u1_s_drec_tx_bpe_evt   = (U1)0U;
 
     u2_t_br = (U2)0U;
 #if 0   /* BEV Rebase provisionally */
     (void)u1_g_Rim_ReadU2withStatus((U2)RIMID_U2_DREC_TX, &u2_t_br);
-#endif   /* BEV Rebase provisionally */
-
-    u1_t_fnc = (U1)(u2_t_br >> DREC_TX_FNC_LSB_MET1D50);
-#if 0   /* BEV Rebase provisionally */
-    (void)Com_SendSignal(ComConf_ComSignal_DATA_NUM, &u1_t_fnc);
-#endif   /* BEV Rebase provisionally */
-
-    u1_t_tx = (U1)FALSE;
-#if 0   /* BEV Rebase provisionally */
-    (void)Com_SendSignal(ComConf_ComSignal_MET_REST, &u1_t_tx);
-    (void)Com_SendSignal(ComConf_ComSignal_FLWNG_ON, &u1_t_tx);
-    (void)Com_SendSignal(ComConf_ComSignal_ACTV_TST, &u1_t_tx);
 #endif   /* BEV Rebase provisionally */
 
     u1_t_fnc = (U1)(u2_t_br >> DREC_TX_FNC_LSB_MET1D51);
@@ -233,7 +191,6 @@ void    vd_g_DrectxWkupInit(void)
 void    vd_g_DrectxMainTask(void)
 {
     U2                  u2_t_br;
-    U2                  u2_t_tx_evt;
     U1                  u1_t_fnc;
 
     u2_t_br = (U2)0U;
@@ -245,15 +202,8 @@ void    vd_g_DrectxMainTask(void)
     vd_g_Rim_WriteU2((U2)RIMID_U2_DREC_TX, u2_t_br);
 #endif   /* BEV Rebase provisionally */
 
-    u2_t_tx_evt = u2_s_drec_tx_evt & (U2)DREC_TX_FNC_BIT_MET1D50;
-    if((u1_s_drec_tx_mrst_tout <  (U1)U1_MAX) &&
-       (u2_t_tx_evt            != (U2)0U    )){
-        u1_s_drec_tx_mrst_tout++;
-    }
     u2_s_drec_tx_evt = (U2)0U;
 
-    u1_t_fnc = (U1)(u2_t_br >> DREC_TX_FNC_LSB_MET1D50);
-    vd_s_DrectxMsg_MET1D50(&u1_t_fnc);
     u1_t_fnc = (U1)(u2_t_br >> DREC_TX_FNC_LSB_MET1D51);
     vd_s_DrectxMsg_MET1D51(&u1_t_fnc);
 }
@@ -279,50 +229,6 @@ void    vd_g_DrectxTxAck(const U2 u2_a_MSG)
 #endif   /* BEV Rebase provisionally */
 }
 /*===================================================================================================================================*/
-/*  static void    vd_s_DrectxMsg_MET1D50(const U1 * u1_ap_FNC)                                                                      */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void    vd_s_DrectxMsg_MET1D50(const U1 * u1_ap_FNC)
-{
-    static const U1     u1_s_DREC_TX_MRST_MAX = (U1)7U;
-
-    U1                  u1_t_tx;
-
-#if 0   /* BEV Rebase provisionally */
-    (void)Com_SendSignal(ComConf_ComSignal_DATA_NUM, u1_ap_FNC);
-    
- /* (void)Com_SendSignal(ComConf_ComSignal_RNW_COND, &u1_t_tx); */ /* written by fuelvol */
- /* (void)Com_SendSignal(ComConf_ComSignal_STOP_JG,  &u1_t_tx); */ /* written by fuelvol */
-
-    u1_t_tx = u1_g_GaugeOwActSts((U1)GAUGE_CH_FUELSEG);
-    (void)Com_SendSignal(ComConf_ComSignal_ACTV_TST, &u1_t_tx);
-#endif   /* BEV Rebase provisionally */
-
- /* (void)Com_SendSignal(ComConf_ComSignal_IGON_SIG, &u1_t_tx); */ /* written by fuelvol */
- /* (void)Com_SendSignal(ComConf_ComSignal_STON_SIG, &u1_t_tx); */ /* written by fuelvol */
-    if(u1_s_drec_tx_mrst_tout < u1_s_DREC_TX_MRST_MAX){
-        u1_t_tx = (U1)TRUE;
-    }
-    else{
-        u1_t_tx = (U1)FALSE;
-    }
-#if 0   /* BEV Rebase provisionally */
-    (void)Com_SendSignal(ComConf_ComSignal_MET_REST, &u1_t_tx);
-
-    u1_t_tx = u1_g_FuelvolTauLwAct();
-    (void)Com_SendSignal(ComConf_ComSignal_FLWNG_ON, &u1_t_tx);
-#endif   /* BEV Rebase provisionally */
-
- /* (void)Com_SendSignal(ComConf_ComSignal_FL_DISP,  &u1_t_tx); */ /* written by fuelvol */
- /* (void)Com_SendSignal(ComConf_ComSignal_FL_COMP,  &u1_t_tx); */ /* written by fuelvol */
- /* (void)Com_SendSignal(ComConf_ComSignal_FL_IS,    &u1_t_tx); */ /* written by fuelvol */
- /* (void)Com_SendSignal(ComConf_ComSignal_FL_AS,    &u1_t_tx); */ /* written by fuelvol */
- /* (void)Com_SendSignal(ComConf_ComSignal_FL_DS,    &u1_t_tx); */ /* written by fuelvol */
- /* (void)Com_SendSignal(ComConf_ComSignal_SBFL_DS,  &u1_t_tx); */ /* written by fuelvol */
-}
-/*===================================================================================================================================*/
 /*  static void    vd_s_DrectxMsg_MET1D51(const U1 * u1_ap_FNC)                                                                      */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
@@ -330,12 +236,6 @@ static void    vd_s_DrectxMsg_MET1D50(const U1 * u1_ap_FNC)
 /*===================================================================================================================================*/
 static void    vd_s_DrectxMsg_MET1D51(const U1 * u1_ap_FNC)
 {
-    static const U2     u2_s_DREC_TX_IG_MAX = (U2)1023U;
-    static const U2     u2_s_DREC_TX_IG_MUL = (U2)4010U;
-    static const U2     u2_s_DREC_TX_IG_OFS = (U2)10240U;
-    static const U2     u2_s_DREC_TX_IG_DIV = (U2)20480U;
-
-    U4                  u4_t_igvol;
     U1                  u1_t_tx;
 
 #if 0   /* BEV Rebase provisionally */
@@ -351,24 +251,6 @@ static void    vd_s_DrectxMsg_MET1D51(const U1 * u1_ap_FNC)
     (void)Com_SendSignal(ComConf_ComSignal_SW_INF,   &u1_s_drec_tx_bpe_evt);
 #endif   /* BEV Rebase provisionally */
 
-#if 0   /* BEV Rebase provisionally */
-    u4_t_igvol = (U4)u2_g_IoHwAdcLv((U1)ADC_CH_IG_MON);
-#else   /* BEV Rebase provisionally */
-    u4_t_igvol = (U4)U4_MAX;
-#endif   /* BEV Rebase provisionally */
-    if(u4_t_igvol > (U4)u2_s_DREC_TX_IG_MAX){
-        u1_t_tx = (U1)U1_MAX;
-    }
-    else{
-        u4_t_igvol = (u4_t_igvol * (U4)u2_s_DREC_TX_IG_MUL) + (U4)u2_s_DREC_TX_IG_OFS; /* PRQA S 3383 */
-        /* The maximum value of u4_t_igvol is 1023.                                        */
-        /* The value of u2_s_DREC_TX_IG_MUL is 4010.                                       */
-        /* The value of u2_s_DREC_TX_IG_OFS is 10240.                                      */
-        /* So calculations is always less than U4_MAX. (4112470)                           */
-        /* It is not necessary to check the wraparound.                                    */
-        u4_t_igvol =  u4_t_igvol / (U4)u2_s_DREC_TX_IG_DIV;
-        u1_t_tx    = (U1)u4_t_igvol;
-    }
 #if 0   /* BEV Rebase provisionally */
     (void)Com_SendSignal(ComConf_ComSignal_IG_VOL, &u1_t_tx);
 #endif   /* BEV Rebase provisionally */
@@ -395,6 +277,7 @@ static void    vd_s_DrectxMsg_MET1D51(const U1 * u1_ap_FNC)
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  BEV-1    10/22/2025 YN        Change for BEV rebase.                                                                             */
+/*  BEV-2    10/24/2025 YN        Change for BEV rebase.                                                                             */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, DENSO                                                                                                    */
 /*  * YA   = Yuhei Aoyama, DensoTechno                                                                                               */
