@@ -32,7 +32,7 @@
 #define     HMIPROXY_TOC_INI            (0xffffU)
 #define     HMIPROXY_TOC_MAX            (0xfffeU)
 
-#define     HMIPROXY_INIT_NUM           (25U)
+#define     HMIPROXY_INIT_NUM           (10U)
 #define     HMIPROXY_SHTDWN_NUM         (1U)
 #define     HMIPROXY_MAINTASK_NUM       (HMIPROXY_INIT_NUM + 1U)
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
