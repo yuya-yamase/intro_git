@@ -1069,14 +1069,6 @@ static inline void    vd_s_XSpiCfgRxDispsts(    const U4 * u4_ap_PDU_RX) {
     else{
         vd_g_HmiScreenPut((U1)HMISCREEN_CH_DISP_STS,(U1)FALSE);
     }
-
-    u1_t_display_sts = u1_XSPI_MET_READ__BIT(u4_ap_PDU_RX[0], (U1)2U, (U1)2U);            /* DISPLAY_STS_WO_TURN */
-    if (u1_t_display_sts == (U1)0x01U) {
-        vd_g_HmiScreenPut((U1)HMISCREEN_CH_DISP_STS_WO_TURN,(U1)TRUE);
-    }
-    else{
-        vd_g_HmiScreenPut((U1)HMISCREEN_CH_DISP_STS_WO_TURN,(U1)FALSE);
-    }
 }
 
 /*===================================================================================================================================*/
@@ -1225,52 +1217,16 @@ static inline void    vd_s_XSpiCfgRxTripcom(    const U4 * u4_ap_PDU_RX) {
 /*===================================================================================================================================*/
 static inline void    vd_s_XSpiCfgRxHUD(        const U4 * u4_ap_PDU_RX) {
 
-    U4 u4_t_loop;
     U1 u1_t_gvifsts;
-    U4 u4_tp_hud_dtabuf[XSPI_HUD_DTA_NUM];
     U1 u1_t_rxdata;    /* Receive data */
-
-    for(u4_t_loop = (U4)0U ; u4_t_loop < (U4)XSPI_HUD_DTA_NUM ; u4_t_loop++){
-        u4_tp_hud_dtabuf[u4_t_loop] = u4_ap_PDU_RX[u4_t_loop];
-    }
-
-    vd_g_HmiHudDataPut(&u4_tp_hud_dtabuf[0]);
 
     u1_t_gvifsts = u1_XSPI_MET_READ_BYTE(u4_ap_PDU_RX[2] , (U1)3U);
 
     if (u1_t_gvifsts == (U1)0U) {
         u1_s_xspi_vipos_disp = u1_XSPI_MET_READ__BIT(u4_ap_PDU_RX[15] , (U1)0U , (U1)1U);
 
-        u1_t_rxdata = (U1)(u4_ap_PDU_RX[10] & (U4)0x03U);
-        if(u1_t_rxdata == (U1)1U){
-#if 0   /* BEV Rebase provisionally */
-            vd_g_HmiMcstPut((U1)HMIMCST_GV_SYS_HW_ERR, u1_t_rxdata);    /* GV SYS HW ERR */
-#endif   /* BEV Rebase provisionally */
-        }
-        else if(u1_t_rxdata == (U1)0U){
-#if 0   /* BEV Rebase provisionally */
-            vd_g_HmiMcstPut((U1)HMIMCST_GV_SYS_HW_ERR, u1_t_rxdata);    /* GV SYS HW NML */
-#endif   /* BEV Rebase provisionally */
-        }
-        else {
-            /* Do Nothing */
-        }
-
         u1_t_rxdata = (U1)((u4_ap_PDU_RX[10] >> 2) & (U4)0x03U);
         u1_s_xspi_gvifsts = u1_t_rxdata;
-        if(u1_t_rxdata == (U1)1U){
-#if 0   /* BEV Rebase provisionally */
-            vd_g_HmiMcstPut((U1)HMIMCST_GVIF_LINKDOWN, u1_t_rxdata);    /* GVIF LINKDOWN */
-#endif   /* BEV Rebase provisionally */
-        }
-        else if(u1_t_rxdata == (U1)0U){
-#if 0   /* BEV Rebase provisionally */
-            vd_g_HmiMcstPut((U1)HMIMCST_GVIF_LINKDOWN, u1_t_rxdata);    /* GVIF LINK NML */
-#endif   /* BEV Rebase provisionally */
-        }
-        else {
-            /* Do Nothing */
-        }
     } else {
         u1_s_xspi_vipos_disp = (U1)0U;
         u1_s_xspi_gvifsts = (U1)XSPI_GVIF_UNDEF2;
@@ -1484,7 +1440,7 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*  BEV-8     05/30/2025 SN(K)    Change for BEV System_Consideration_2.(MET-S_ADBB-CSTD-0-01-A-C0)                                  */
 /*  BEV-9     06/17/2025 JS       Change for BEV System_Consideration_2.(MET-B_WDICBB-CSTD-0-01-A-C0)                                */
 /*  BEV-10    10/10/2025 KO       Configured for BEVstep3_Dimmer_Rebase                                                              */
-/*  BEV-11    10/22/2025 TS       Change for BEV rebase.                                                                             */
+/*  BEV-11    10/22/2025 TS       Change for BEV rebase                                                                              */
 /*  BEV-12    10/29/2025 KO       Configured for BEVstep3_illumi_Rebase                                                              */
 /*  BEV-13    10/30/2025 SN       Delete fueleco for BEVstep3_Locale_Rebase                                                          */
 /*                                                                                                                                   */
@@ -1507,6 +1463,6 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*  * SN(K)= Shizuka Nakajima, KSE                                                                                                   */
 /*  * JS   = Jun Sugiyama, KSE                                                                                                       */
 /*  * KO     = Kazuto Oishi,  Denso Techno                                                                                           */
-/*  * TS   = Takuo Suganuma, Denso Techno                                                                                            */
+/*  * TS   = Takuo Suganuma,  Denso Techno                                                                                           */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

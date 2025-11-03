@@ -27,7 +27,6 @@
 #include "hmiwchime.h"
 #include "hmitripcom.h"
 #include "hmiscreen.h"
-#include "hmiadu.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -71,8 +70,7 @@ void ( * const              fp_gp_vd_HMIPROXY_BON_INIT[HMIPROXY_INIT_NUM])(void)
      &vd_g_HmiTtInit,
      &vd_g_HmiWchimeInit,
      &vd_g_HmiTripcomInit,
-     &vd_g_HmiScreenInit,
-     &vd_g_HmiAduInit
+     &vd_g_HmiScreenInit
 };
 
 void ( * const              fp_gp_vd_HMIPROXY_RST_INIT[HMIPROXY_INIT_NUM])(void) = {
@@ -84,8 +82,7 @@ void ( * const              fp_gp_vd_HMIPROXY_RST_INIT[HMIPROXY_INIT_NUM])(void)
      &vd_g_HmiTtInit,
      &vd_g_HmiWchimeInit,
      &vd_g_HmiTripcomInit,
-     &vd_g_HmiScreenInit,
-     &vd_g_HmiAduInit
+     &vd_g_HmiScreenInit
 };
 
 void ( * const              fp_gp_vd_HMIPROXY_WKUP_INIT[HMIPROXY_INIT_NUM])(void) = {
@@ -97,8 +94,7 @@ void ( * const              fp_gp_vd_HMIPROXY_WKUP_INIT[HMIPROXY_INIT_NUM])(void
      &vd_g_HmiTtInit,
      &vd_g_HmiWchimeInit,
      &vd_g_HmiTripcomInit,
-     &vd_g_HmiScreenInit,
-     &vd_g_HmiAduInit
+     &vd_g_HmiScreenInit
 };
 
 U1   ( * const              fp_gp_u1_HMIPROXY_SHTDWN_CHK[HMIPROXY_SHTDWN_NUM])(void) = {
@@ -115,7 +111,6 @@ const ST_HMIPROXY     st_gp_HMIPROXY[HMIPROXY_MAINTASK_NUM] = {
      {&vd_g_HmiWchimeMainTask,   (U4)SCHDLR_TASKBIT__10MS_A  },
      {&vd_g_HmiTripcomMainTask,  (U4)SCHDLR_TASKBIT__50MS_E  },
      {&vd_g_HmiScreenMainTask,   (U4)SCHDLR_TASKBIT__50MS_A  },
-     {&vd_g_HmiAduMainTask,      (U4)SCHDLR_TASKBIT__10MS_A  },
      {vdp_PTR_NA,                (U4)SCHDLR_TASKBIT_RGLR     }   /* <- Terminator. Do Not Delete! */
 };
 
@@ -150,6 +145,7 @@ const ST_HMIPROXY     st_gp_HMIPROXY[HMIPROXY_MAINTASK_NUM] = {
 /* 19PFv3-5  08/22/2024  TN       Delete hmitaste function.                                                                          */
 /* 19PFv3-6  05/20/2025  PG       Add HmiAdu module                                                                                  */
 /* 19PFv3-7  06/27/2025  SH       Add HmiTdoor module                                                                                */
+/* BEV-1     10/31/2025  MA       Change for BEV rebase                                                                              */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * TH   = Takahiro Hirano, Denso Techno                                                                                           */
@@ -158,5 +154,6 @@ const ST_HMIPROXY     st_gp_HMIPROXY[HMIPROXY_MAINTASK_NUM] = {
 /*  * PG   = Patrick Garcia, DTPH                                                                                                    */
 /*  * AA   = Anna Asuncion, Denso Techno                                                                                             */
 /*  * TN   = Tetsushi Nakanao, Denso Techno                                                                                          */
+/*  * MA   = Misaki Aiki,  Denso Techno                                                                                              */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
