@@ -1,8 +1,8 @@
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-#ifndef GNSSCTL_H
-#define GNSSCTL_H
+#ifndef GYRODEVCTL_H
+#define GYRODEVCTL_H
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -85,6 +85,7 @@
 #define u1_GYRODEV_GYRO_I2C_CTRL_REGREAD(w, x, y, z)         (Mcu_Dev_I2c_Ctrl_RegRead((U1)MCU_I2C_ACK_GYRO, (w), (U1)GP_I2C_MA_SLA_6_GYRO, (x), (y), (z), (U1)MCU_I2C_WAIT_NON))
 #define u1_GYRODEV_GSENS_I2C_CTRL_REGSET(u, v, w, x, y, z)   (Mcu_Dev_I2c_Ctrl_RegSet((U1)MCU_I2C_ACK_G_MONI, (u), (v), (U1)GP_I2C_MA_SLA_7_G_MONI, (w), (x), (y), (z)))
 #define u1_GYRODEV_GSENS_I2C_CTRL_REGREAD(w, x, y, z)        (Mcu_Dev_I2c_Ctrl_RegRead((U1)MCU_I2C_ACK_G_MONI, (w), (U1)GP_I2C_MA_SLA_7_G_MONI, (x), (y), (z), (U1)MCU_I2C_WAIT_NON))
+#define u1_GYRODEV_GSENS_I2C_CTRL_REGACCESS(u, v, w, x, y, z) (Mcu_Dev_I2c_Ctrl_RegSet((U1)MCU_I2C_ACK_G_MONI, (u), (v), (U1)GP_I2C_MA_SLA_7_G_MONI, (w), (x), (y), (z)))
 
 #define vd_GYRODEV_DREC_REQ(x, y, z)                (vd_g_SysEcDrc_Drec((U1)SYSECDRC_DREC_CAT_GYROACC, (x), (y), (z)))
 #define vd_GYRODEV_DTC_REQ(x, y)                    (vd_g_DtcCtl_SetDtcId((x), (y)))
@@ -135,9 +136,9 @@ void    vd_g_GyroDev_OutCtl_SetReq(ST_GYRODEV_CTRLOUT_SETDATA st_a_oscmd_data);
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 
-#endif      /* GNSSCTL_H */
+#endif      /* GYRODEVCTL_H */
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
-/*  Change History  :  GNSSCtl.c                                                                                                     */
+/*  Change History  :  GyroDevCtl.c                                                                                                  */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
