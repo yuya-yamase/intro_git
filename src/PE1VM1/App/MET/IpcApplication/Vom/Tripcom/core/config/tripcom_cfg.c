@@ -32,10 +32,8 @@
 #include "oxcan.h"
 #include "vardef.h"
 
-#if 0   /* BEV Rebase provisionally */
 #include "alert.h"
 #include "alert_mtrx.h"
-#endif   /* BEV Rebase provisionally */
 
 #include "calibration.h"
 
@@ -439,12 +437,10 @@ U1              u1_g_TripcomCfgGetTEVRNSts(void)
     U1  u1_t_sts;
 
     u1_t_sts = (U1)FALSE;
-#if 0   /* BEV Rebase provisionally */
     u1_t_req = u1_g_AlertReqByCh((U2)ALERT_CH_H_TEVRN);
     if (u1_t_req == (U1)ALERT_REQ_H_TEVRN_ON) {
         u1_t_sts = (U1)TRUE;
     }
-#endif   /* BEV Rebase provisionally */
     return(u1_t_sts);
 }
 

@@ -61,9 +61,7 @@ U1      u1_g_VdfEsoRx_LTA(void)
     U1                 u1_t_ava_rx;
 
     u1_t_rx = (U1)0U;
-#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_LTAEXIST, &u1_t_rx);
-#endif   /* BEV Rebase provisionally */
     if(u1_t_rx != (U1)0U){
         u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
     }
@@ -85,9 +83,7 @@ U1      u1_g_VdfEsoRx_DS1_LDA(void)
     U1                 u1_t_ava_rx;
 
     u1_t_rx = (U1)0U;
-#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_LDWEXIST, &u1_t_rx);
-#endif   /* BEV Rebase provisionally */
     if(u1_t_rx != (U1)0U){
         u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
     }
@@ -109,9 +105,7 @@ U1      u1_g_VdfEsoRx_SW_LDA(void)
     U1                 u1_t_ava_rx;
 
     u1_t_rx = (U1)0U;
-#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_LDAEXIST, &u1_t_rx);
-#endif   /* BEV Rebase provisionally */
     if(u1_t_rx != (U1)0U){
         u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
     }
@@ -133,9 +127,7 @@ U1      u1_g_VdfEsoRx_SW_ALTOPT_VB(void)
     U1                 u1_t_ava_rx;
 
     u1_t_rx = (U1)0U;
-#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_VIBEXIST, &u1_t_rx);
-#endif   /* BEV Rebase provisionally */
     if(u1_t_rx != (U1)0U){
         u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
     }
@@ -157,9 +149,7 @@ U1      u1_g_VdfEsoRx_SW_LDWTEXT(void)
     U1                 u1_t_ava_rx;
 
     u1_t_rx = (U1)0U;
-#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_LDWTEXT, &u1_t_rx);
-#endif   /* BEV Rebase provisionally */
     if(u1_t_rx != (U1)0U){
         u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
     }
@@ -181,9 +171,7 @@ U1      u1_g_VdfEsoRx_SW_SWSEXIST(void)
     U1                 u1_t_ava_rx;
 
     u1_t_rx = (U1)0U;
-#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_SWSEXIST, &u1_t_rx);
-#endif   /* BEV Rebase provisionally */
     if(u1_t_rx != (U1)0U){
         u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
     }
@@ -205,9 +193,7 @@ U1      u1_g_VdfEsoRx_SWS(void)
     U1                 u1_t_ava_rx;
 
     u1_t_rx = (U1)0U;
-#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_SWSEXIST, &u1_t_rx);
-#endif   /* BEV Rebase provisionally */
     if(u1_t_rx != (U1)0U){
         u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
     }
@@ -229,9 +215,7 @@ U1      u1_g_VdfEsoRx_SW_DEPARTURE_PREVENT(void)
     U1                 u1_t_ava_rx;
 
     u1_t_rx = (U1)0U;
-#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_LDAAMEX, &u1_t_rx);
-#endif   /* BEV Rebase provisionally */
     if(u1_t_rx != (U1)0U){
         u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
     }

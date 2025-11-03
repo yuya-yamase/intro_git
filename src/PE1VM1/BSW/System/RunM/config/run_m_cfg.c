@@ -30,25 +30,16 @@
 #endif
 
 /* Complex Device Driver */
-#ifdef DATE_CLK_H
-#include "date_clk.h"
-#endif
-#if 0   /* BEV Rebase provisionally */
 #include "sound_cri_mgr.h"
-#endif   /* BEV Rebase provisionally */
 /* MCAL                  */
 /* Memory                */
 #include "nvmc_mgr.h"
 
-#if 0   /* BEV Rebase provisionally */
 /* Application           */
 
 #include "alert.h"
-#endif   /* BEV Rebase provisionally */
 #include "illumi.h"
-#if 0   /* BEV Rebase provisionally */
 #include "hmiproxy.h"
-#endif   /* BEV Rebase provisionally */
 #include "vardef.h"
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -116,22 +107,16 @@ U1      u1_g_RunMCfghkShtdwnchk1st(void)
 #else
 #endif
         &u1_g_Nvmc_IsShtdwnOk,
-#if 0   /* BEV Rebase provisionally */
         &u1_g_SoundCriMgrShtdwnOk,
-#endif   /* BEV Rebase provisionally */
         &u1_g_IllumiShtdwnOk,
-#if 0   /* BEV Rebase provisionally */
         &u1_g_HmiProxyShtdwnOK
-#endif   /* BEV Rebase provisionally */
     };
-#if 0   /* BEV Rebase provisionally */
     static const ST_ALERT_REQBIT   st_sp_REQBIT[] = {
         /*  u2_src_ch                       u1_src_act                          u1_dst_idx  u4_dst_bit                            */
         {  (U2)ALERT_CH_B_SMASTA_BCI1,      (U1)ALERT_REQ_B_SMASTA_BCI1_ON,     (U1)0U,     (U4)RUN_M_SLPNG_CHK_SMTBZ_ON       },
         {  (U2)ALERT_CH_B_THEAD,            (U1)ALERT_REQ_B_THEAD_ON,           (U1)0U,     (U4)RUN_M_SLPNG_CHK_THEAD_ON       },
         {  (U2)ALERT_CH_B_TTAIL,            (U1)ALERT_REQ_B_TTAIL_ON,           (U1)0U,     (U4)RUN_M_SLPNG_CHK_TTAIL_ON       }
     };
-#endif   /* BEV Rebase provisionally */
     U1                        u1_t_1st;
     U1                        u1_t_dest;
     U2                        u2_t_num_reqbit;
@@ -153,10 +138,8 @@ U1      u1_g_RunMCfghkShtdwnchk1st(void)
         u4_t_req = (U4)RUN_M_SLPNG_CHK_TYCAN;
     }
 
-#if 0   /* BEV Rebase provisionally */
     u2_t_num_reqbit = (U2)(sizeof(st_sp_REQBIT) / sizeof(st_sp_REQBIT[0]));
     vd_g_AlertReqToBit( st_sp_REQBIT, u2_t_num_reqbit, &u4_t_req, (U1)1);
-#endif   /* BEV Rebase provisionally */
 
     u1_t_dest       = u1_g_VardefTtTailHead();
     if(u1_t_dest == (U1)VDF_TTTAILHEAD_NO12){
@@ -204,25 +187,7 @@ void    vd_g_RunMCfgWksrcCfgRefresh(void)
 /*===================================================================================================================================*/
 U1      u1_g_RunMCfghkShtdwnchk2nd(const U1 u1_a_1ST, const U2 u2_a_TM_ELPSD)
 {
-#if 0   /* BEV BSW provisionally */
-    U1                        u1_t_2nd;
-    u1_t_2nd  = u1_a_1ST;
-
-#ifdef DATE_CLK_H
-    /* ----------------------------------------------------------------------------------- */
-    /* WARNING :                                                                           */
-    /* ----------------------------------------------------------------------------------- */
-    /* u1_g_DateclkShtdwnOk shall be invoked at end of u1_g_BswMCfghkShtdwnchk2nd.         */
-    /* Otherwise, ECU might not be able to go shutdown.                                    */
-    /* ----------------------------------------------------------------------------------- */
-    u1_t_2nd &= u1_g_DateclkShtdwnOk();
-#endif
-
-    return(u1_t_2nd);
-	
-#else
     return(u1_a_1ST);
-#endif
 }
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
@@ -249,8 +214,10 @@ U1      u1_g_RunMCfghkShtdwnchk2nd(const U1 u1_a_1ST, const U2 u2_a_TM_ELPSD)
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
+/*  BEV-1    10/22/2025  TS       Change for BEV rebase.                                                                             */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
 /*  * RS   = Ryuki Sako, Denso Techno                                                                                                */
+/*  * TS   = Takuo Suganuma Denso Techno                                                                                             */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

@@ -31,18 +31,20 @@
 #define RIMID_U1_VDF_HCS_ASCEXT                  (0x0001U)
 #define RIMID_U1_VDF_DEST_BDB                    (0x0002U)
 #define RIMID_U1_VDF_STRG_WHL                    (0x0003U)
-#define RIMID_U1_NVMC_ST_DTF_000                 (0x0004U)
-#define RIMID_U1_NVMC_ST_DTF_001                 (0x0005U)
-#define RIMID_U1_NVMC_ST_DTF_002                 (0x0006U)
-#define RIMID_U1_NVMC_ST_DTF_003                 (0x0007U)
-#define RIMID_U1_NVMC_ST_DTF_004                 (0x0008U)
-#define RIMID_U1_NVMC_ST_DTF_005                 (0x0009U)
-#define RIMID_U1_NVMC_ST_DTF_006                 (0x000AU)
-#define RIMID_U1_NVMC_ST_DTF_007                 (0x000BU)
-#define RIMID_U1_NVMC_ST_DTF_008                 (0x000CU)
-#define RIMID_U1_NVMC_ST_DTF_009                 (0x000DU)
-#define RIMID_U1_NVMC_ST_DTF_010                 (0x000EU)
-#define RIMID_U1_NVMC_ST_DTF_011                 (0x000FU)
+#define RIMID_U1_VDF_DST_IDX                     (0x0004U)
+#define RIMID_U1_VDF_LANG_DST_IDX                (0x0005U)
+#define RIMID_U1_NVMC_ST_DTF_000                 (0x0006U)
+#define RIMID_U1_NVMC_ST_DTF_001                 (0x0007U)
+#define RIMID_U1_NVMC_ST_DTF_002                 (0x0008U)
+#define RIMID_U1_NVMC_ST_DTF_003                 (0x0009U)
+#define RIMID_U1_NVMC_ST_DTF_004                 (0x000AU)
+#define RIMID_U1_NVMC_ST_DTF_005                 (0x000BU)
+#define RIMID_U1_NVMC_ST_DTF_006                 (0x000CU)
+#define RIMID_U1_NVMC_ST_DTF_007                 (0x000DU)
+#define RIMID_U1_NVMC_ST_DTF_008                 (0x000EU)
+#define RIMID_U1_NVMC_ST_DTF_009                 (0x000FU)
+#define RIMID_U1_NVMC_ST_DTF_010                 (0x0010U)
+#define RIMID_U1_NVMC_ST_DTF_011                 (0x0011U)
 /* END : ##TOOL_OUT#RIM_ID_MOD_3B_U1## */
 /* START : ##TOOL_OUT#RIM_ID_MOD_3B_U2## */
 #define RIMID_U2_SAMPLE_BBB_2                    (0x4000U)
@@ -88,6 +90,7 @@
 
 /* START : ##TOOL_OUT#RIM_ID_MOD_1B_U1## */
 #define RIMID_U1_SAMPLE_B_1                      (0x0400U)
+#define RIMID_U1_ILLUMI_LOUNGE                   (0x0401U)
 /* END : ##TOOL_OUT#RIM_ID_MOD_1B_U1## */
 /* START : ##TOOL_OUT#RIM_ID_MOD_1B_U2## */
 #define RIMID_U2_SAMPLE_B_2                      (0x4400U)
