@@ -51,7 +51,6 @@
 #define HMIPUTXT_ON_BIT                     (0x00000001U)
 
 #define HMIPUTXT_ICEWRN_IDX                 (427U)
-#define HMIPUTXT_FCTAHUD_IDX                (1087U)
 #define HMIPUTXT_SFTALT_IDX                 (1266U)
 
 #define HMIPUTXT_TASK_TIME                  (10U)
@@ -77,7 +76,6 @@
 #define HMIPUTXT_11BIT_SHIFT                (11U)
 #define HMIPUTXT_12BIT_SHIFT                (12U)
 
-#define HMIPUTXT_FCTAHUD_REQ_ON             (1U)
 #define HMIPUTXT_SFTALT_REQ_ON              (0U)
 
 

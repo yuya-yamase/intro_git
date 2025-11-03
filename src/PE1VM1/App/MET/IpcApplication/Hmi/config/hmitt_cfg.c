@@ -70,8 +70,6 @@
 #define HMITT_ICEWRN_DATPOS                       (9U)
 #define HMITT_REARBLT_DATPOS                      (10U)
 #define HMITT_STPIND_DATPOS                       (1U)
-#define HMITT_ECOIND_DATPOS                       (9U)
-#define HMITT_EVIND_DATPOS                        (10U)
 #define HMITT_LOWFUEL_DATPOS                      (8U)
 #define HMITT_TURN_DATPOS                         (1U)
 #define HMITT_HEAD_DATPOS                         (12U)
@@ -99,8 +97,6 @@
 #define HMITT_TURN_ACT_SFT                        (6U)
 
 #define HMITT_STPIND_BITPOS                       (8U)
-#define HMITT_ECOIND_BITPOS                       (16U)
-#define HMITT_EVIND_BITPOS                        (0U)
 #define HMITT_HEAD_BITPOS                         (0U)
 #define HMITT_TAIL_BITPOS                         (0U)
 

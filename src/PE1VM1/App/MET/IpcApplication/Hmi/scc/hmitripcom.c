@@ -261,7 +261,7 @@ static void    vd_s_HmiTripcomSWCount(const U2 u2_a_RIMID)
 /*  130D-1   12/12/2022  YK       Added processing to notify Tripcom of AVG_EE_KMPL_USRRST                                           */
 /*  19PFv3-1 01/11/2024  TH       Add AvgGrph                                                                                        */
 /*  19PFv3-2 09/23/2024  SI       Add Reset Count Logic (DID-10B2)                                                                   */
-/*  19PFv3-3 04/22/2025  KM       Bug fix ： added additional reset of 1MIN_AVGFUEL and 1MIN_AVGEE when history clear is requested    */
+/*  19PFv3-3 04/22/2025  KM       Bug fix : added additional reset of 1MIN_AVGFUEL and 1MIN_AVGEE when history clear is requested    */
 /*  BEV-1    10/31/2025  MA       Change for BEV rebase                                                                              */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
