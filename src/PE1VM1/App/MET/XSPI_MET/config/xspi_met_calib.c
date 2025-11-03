@@ -19,7 +19,7 @@
 #include "xspi_met_calib.h"
 
 #include "memfill_u4.h"
-#include "g3mlib_memcpy_u4_dw.h"
+#include "memcpy_u4.h"
 
 #include "calibration.h"
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -258,7 +258,7 @@ void    vd_g_XSpiCalibMainTask(void)
 /*===================================================================================================================================*/
 void    vd_g_XSpiCalibGetData(         U4 * u4_ap_pdu_tx)
 {
-    vd_g_MemcpyU4_dw(u4_ap_pdu_tx, u4_sp_calib_buf, (U4)XSPI_CALIB_PAYLOAD_NUM);
+    vd_g_MemcpyU4(u4_ap_pdu_tx, u4_sp_calib_buf, (U4)XSPI_CALIB_PAYLOAD_NUM);
 }
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
