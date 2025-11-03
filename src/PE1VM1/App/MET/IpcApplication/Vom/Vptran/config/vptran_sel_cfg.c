@@ -106,7 +106,7 @@ U1              u1_g_VptranTransMissionTypeCfg(void)
 /*  200D-2      10/31/2022  YK       Update Toyota Standard Application(lib_ipc_tycan_v210_r009)                                     */
 /*  330D-1      02/22/2023  YK       330D Correspondence                                                                             */
 /*  19PFv3-1    12/15/2023  GM       19PFv3 Correspondence                                                                           */
-/*  BEV-1       10/28/2025  MA       Change for BEV rebase.                                                                             */
+/*  BEV-1       10/28/2025  MA       Change for BEV rebase.                                                                          */
 /*                                                                                                                                   */
 /*  * HY   = Hidefumi Yoshida, Denso                                                                                                 */
 /*  * KK   = Kohei Kato,       Denso Techno                                                                                          */
