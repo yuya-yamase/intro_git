@@ -840,7 +840,7 @@ static void    vd_s_IllumiTftbkTx(const U2 * u2_ap_DIM_LVL)
     u2_t_daynight = u2_ap_DIM_LVL[ILLUMI_DIM_LVL_DAYNIGHT];
     if(u2_t_daynight < (U2)ILLUMI_DIM_LVL_DAYNIGHT){
         u2_t_lvl = u2_ap_DIM_LVL[u2_t_daynight];
-        if(u2_t_lvl < (U2)ILLUMI_DIM_LVL_BKLT_NUM){
+        if(u2_t_lvl < (U2)ILLUMI_DIM_LVL_NUM){
             if(u2_t_daynight == (U2)ILLUMI_DIM_LVL_USADJ_DAY){
                 u1_t_tx = *(u1p_sp_ILLUMI_BL_DAY[u2_t_lvl]);
             }
