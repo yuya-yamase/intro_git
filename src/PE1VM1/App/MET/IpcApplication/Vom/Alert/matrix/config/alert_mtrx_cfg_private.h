@@ -336,7 +336,11 @@
 #endif   /* BEV Rebase provisionally */
 #define u4_g_AlertUnitconvtrKmtoMi(x)                               (u4_g_UnitconvtrKmtoMi(x))
 #define u1_g_AlertUnit(u1_a_IDX)                                    (u1_g_Unit(u1_a_IDX))
+#if 0   /* BEV Rebase provisionally */
 #define u1_g_AlertPtsOn(u1_a_INV)                                   (u1_g_VehopemdPtsOn(u1_a_INV))
+#else   /* BEV Rebase provisionally */
+#define u1_g_AlertPtsOn(u1_a_INV)                                   ((U1)FALSE)
+#endif   /* BEV Rebase provisionally */
 #define u1_g_AlertPtsys()                                           (u1_g_VardefPtsRx())
 #define u1_g_AlertEsOptAvailable(u2_a_CH)                           (u1_g_VardefEsOptAvaByCh(u2_a_CH))
 #if 0   /* BEV Rebase provisionally */
