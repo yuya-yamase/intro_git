@@ -701,49 +701,55 @@ void    vd_g_XSpiMETTxSCL(U4 * u4_ap_pdu_tx)
 {
     U1 u1_t_ecscl;
     U1 u1_t_unit6;
-    U2 u2_t_assp;
-    U2 u2_t_range;
-    U2 u2_t_toec;
-    U2 u2_t_evrange;
-    U2 u2_t_astm;
-    U2 u2_t_inec;
-    U2 u2_t_asec;
-    U2 u2_t_asdt;
-
+    U1 u1_t_odo_unit;
+    U1 u1_t_dbkl_met;
+    U1 u1_t_pbkl_met;
+    U1 u1_t_rlbklmet;
+    U1 u1_t_rcbklmet;
+    U1 u1_t_rrbklmet;
+    U1 u1_t_bkl3lmet;
+    U1 u1_t_bkl3cmet;
+    U1 u1_t_bkl3rmet;
+    U4 u4_t_odo;
+    
     u1_t_ecscl    = (U1)0U;
     u1_t_unit6    = (U1)0U;
-    u2_t_assp     = (U2)0U;
-    u2_t_range    = (U2)0U;
-    u2_t_toec     = (U2)0U;
-    u2_t_evrange  = (U2)0U;
-    u2_t_astm     = (U2)0U;
-    u2_t_inec     = (U2)0U;
-    u2_t_asec     = (U2)0U;
-    u2_t_asdt     = (U2)0U;
+    u1_t_odo_unit = (U1)0U;
+    u1_t_dbkl_met = (U1)0U;
+    u1_t_pbkl_met = (U1)0U;
+    u1_t_rlbklmet = (U1)0U;
+    u1_t_rcbklmet = (U1)0U;
+    u1_t_rrbklmet = (U1)0U;
+    u1_t_bkl3lmet = (U1)0U;
+    u1_t_bkl3cmet = (U1)0U;
+    u1_t_bkl3rmet = (U1)0U;
+    u4_t_odo      = (U4)0U;
 
-    (void)Com_ReceiveSignal(ComConf_ComSignal_EC_SCL, &u1_t_ecscl);
-    (void)Com_ReceiveSignal(ComConf_ComSignal_UNIT_6, &u1_t_unit6);
-    (void)Com_ReceiveSignal(ComConf_ComSignal_AS_SP, &u2_t_assp);
-    (void)Com_ReceiveSignal(ComConf_ComSignal_RANGE, &u2_t_range);
-    (void)Com_ReceiveSignal(ComConf_ComSignal_TO_EC, &u2_t_toec);
-    (void)Com_ReceiveSignal(ComConf_ComSignal_EV_RANGE, &u2_t_evrange);
-    (void)Com_ReceiveSignal(ComConf_ComSignal_AS_TM, &u2_t_astm);
-    (void)Com_ReceiveSignal(ComConf_ComSignal_IN_EC, &u2_t_inec);
-    (void)Com_ReceiveSignal(ComConf_ComSignal_AS_EC, &u2_t_asec);
-#if 0   /* BEV BSW provisionally */
-    (void)Com_ReceiveSignal(ComConf_ComSignal_AS_DT, &u2_t_asdt);
-#endif
+    (void)Com_ReceiveSignal(ComConf_ComSignal_EC_SCL,   &u1_t_ecscl);
+    (void)Com_ReceiveSignal(ComConf_ComSignal_UNIT_6,   &u1_t_unit6);
+    (void)Com_ReceiveSignal(ComConf_ComSignal_ODO_UNIT, &u1_t_odo_unit);
+    (void)Com_ReceiveSignal(ComConf_ComSignal_DBKL_MET, &u1_t_dbkl_met);
+    (void)Com_ReceiveSignal(ComConf_ComSignal_PBKL_MET, &u1_t_pbkl_met);
+    (void)Com_ReceiveSignal(ComConf_ComSignal_RLBKLMET, &u1_t_rlbklmet);
+    (void)Com_ReceiveSignal(ComConf_ComSignal_RCBKLMET, &u1_t_rcbklmet);
+    (void)Com_ReceiveSignal(ComConf_ComSignal_RRBKLMET, &u1_t_rrbklmet);
+    (void)Com_ReceiveSignal(ComConf_ComSignal_BKL3LMET, &u1_t_bkl3lmet);
+    (void)Com_ReceiveSignal(ComConf_ComSignal_BKL3CMET, &u1_t_bkl3cmet);
+    (void)Com_ReceiveSignal(ComConf_ComSignal_BKL3RMET, &u1_t_bkl3rmet);
+    (void)Com_ReceiveSignal(ComConf_ComSignal_ODO,      &u4_t_odo);
 
-    u4_ap_pdu_tx[0] =  ((U4)u1_t_ecscl << 3);
-    u4_ap_pdu_tx[0] |= ((U4)u1_t_unit6 << 6);
-    u4_ap_pdu_tx[1] =  (U4)u2_t_assp;
-    u4_ap_pdu_tx[1] |= ((U4)u2_t_range << 16);
-    u4_ap_pdu_tx[2] =  (U4)u2_t_toec;
-    u4_ap_pdu_tx[2] |= ((U4)u2_t_evrange << 16);
-    u4_ap_pdu_tx[3] =  (U4)u2_t_astm;
-    u4_ap_pdu_tx[3] |= ((U4)u2_t_inec << 16);
-    u4_ap_pdu_tx[4] =  (U4)u2_t_asec;
-    u4_ap_pdu_tx[4] |= ((U4)u2_t_asdt << 16);
+    u4_ap_pdu_tx[0]  = ((U4)u1_t_ecscl << 3);      /* EC_SCL   */
+    u4_ap_pdu_tx[0] |= ((U4)u1_t_unit6 << 6);      /* UNIT_6   */
+    u4_ap_pdu_tx[0] |= ((U4)u1_t_odo_unit << 9);   /* ODO_UNIT */
+    u4_ap_pdu_tx[0] |= ((U4)u1_t_dbkl_met << 16);  /* DBKL_MET */
+    u4_ap_pdu_tx[0] |= ((U4)u1_t_pbkl_met << 18);  /* PBKL_MET */
+    u4_ap_pdu_tx[0] |= ((U4)u1_t_rlbklmet << 20);  /* RLBKLMET */
+    u4_ap_pdu_tx[0] |= ((U4)u1_t_rcbklmet << 22);  /* RCBKLMET */
+    u4_ap_pdu_tx[0] |= ((U4)u1_t_rrbklmet << 24);  /* RRBKLMET */
+    u4_ap_pdu_tx[0] |= ((U4)u1_t_bkl3lmet << 26);  /* BKL3LMET */
+    u4_ap_pdu_tx[0] |= ((U4)u1_t_bkl3cmet << 28);  /* BKL3CMET */
+    u4_ap_pdu_tx[0] |= ((U4)u1_t_bkl3rmet << 30);  /* BKL3RMET */
+    u4_ap_pdu_tx[1]  = u4_t_odo;                   /* ODO      */
 
 }
 
