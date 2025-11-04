@@ -86,12 +86,6 @@ U1              u1_g_TripsnsrCfgGetECOMODE3(U1 * u1p_a_ecomode);
 void            vd_g_TripsnsrCfgElpsdtmInit(void);
 U4              u4_g_TripsnsrCfgElpsdtmGetDlt(void);
 
-U1              u1_g_TripsnsrCfgGetBFC(U4 * u4p_a_fuel_inst);
-U1              u1_g_TripsnsrCfgRxCntBFC(U1 * u1p_a_rollcnt);
-
-U1              u1_g_TripsnsrCfgGetCNSMH2(U4 * u4p_a_hydr_inst);
-U1              u1_g_TripsnsrCfgRxCntCNSMH2(U1 * u1p_a_rollcnt);
-
 void            vd_g_TripsnsrCfgEvDteDist(U2 * u2p_a_dist);
 void            vd_g_TripsnsrCfgEvDteSubRate(U1 * u1p_a_subrate);
 void            vd_g_TripsnsrCfgEvDtePIEVE06(U1 * u1p_a_pieve06);
