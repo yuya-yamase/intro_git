@@ -1,16 +1,18 @@
 /* -------------------------------------------------------------------------- */
-/* file name  :  EthSwt_SWIC_PWR.h                                            */
+/* file name  :  EthSwt_Stub.h                                                */
 /* -------------------------------------------------------------------------- */
-#ifndef ETHSWT_SWIC_PWR_H
-#define ETHSWT_SWIC_PWR_H
+#ifndef ETHSWT_STUB_H
+#define ETHSWT_STUB_H
 /* -------------------------------------------------------------------------- */
 #include <Std_Types.h>
 /* -------------------------------------------------------------------------- */
-void EthSwt_SWIC_PWR_Init(void);
-void EthSwt_SWIC_PWR_LoProc(void);
-void EthSwt_SWIC_PWR_ForceOffReq(void);
-void EthSwt_SWIC_PWR_ResetReq(void);
-Std_ReturnType EthSwt_SWIC_PWR_GetSWICPower(void);
+#include <EthSwt_SWIC_Cfg.h>
 /* -------------------------------------------------------------------------- */
-#endif /* ETHSWT_SWIC_PWR_H */
+void EthSwt_Stub_Init(void);
+void EthSwt_Stub_Observe(void);
+uint8 EthSwt_Stub_GetSAIL(void);
+uint8 EthSwt_Stub_GetAOSSS(void);
+Std_ReturnType EthSwt_Stub_GetDIN2(void);
+/* -------------------------------------------------------------------------- */
+#endif /* ETHSWT_STUB_H */
 /* -------------------------------------------------------------------------- */

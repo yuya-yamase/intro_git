@@ -4,6 +4,13 @@
 #include <Std_Types.h>
 /* -------------------------------------------------------------------------- */
 #include "EthSwt_SWIC_Cfg.h"
+#include <Dio.h>
+#include <Dio_Symbols.h>
+#include <Port_Cfg.h>
+#include <Port.h>
+#include <VIS.h>
+#include <EthSwt_SWIC_PWR.h>
+#include <EthSwt_Stub.h>
 /* -------------------------------------------------------------------------- */
 /* Common */
 const Eth_ModeType G_ETHSWT_SWIC_PORT_DEFINE[D_ETHSWT_SWIC_PORT_NUM] =
@@ -19,14 +26,79 @@ const Eth_ModeType G_ETHSWT_SWIC_PORT_DEFINE[D_ETHSWT_SWIC_PORT_NUM] =
 ,   ETH_MODE_DOWN           /* Port9 */
 };
 
+static Std_ReturnType   S_ETHSWT_SWIC_POWERONREQ;
+
+/* -------------------------------------------------------------------------- */
+/* Config for EthSwt_SWIC.c                                                   */
+/* -------------------------------------------------------------------------- */
+void EthSwt_SWIC_Cfg_Init(void)
+{
+    S_ETHSWT_SWIC_POWERONREQ = STD_OFF;
+
+    return;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Config for EthSwt_SWIC.c                                                   */
+/* -------------------------------------------------------------------------- */
+void EthSwt_SWIC_Cfg_PowerOnReq(void)
+{
+    S_ETHSWT_SWIC_POWERONREQ = STD_ON;
+
+    return;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Config for EthSwt_SWIC.c                                                   */
+/* -------------------------------------------------------------------------- */
+void EthSwt_SWIC_Cfg_PowerOffReq(void)
+{
+    S_ETHSWT_SWIC_POWERONREQ = STD_OFF;
+    EthSwt_SWIC_PWR_ForceOffReq();
+
+    return;
+}
+
 /* -------------------------------------------------------------------------- */
 /* Config for EthSwt_SWIC_PWR.c                                               */
 /* -------------------------------------------------------------------------- */
-#include <Dio.h>
-#include <Dio_Symbols.h>
-#include <Port_Cfg.h>
-#include <Port.h>
-void EthSwt_SWIC_SetGPIOMode(void)
+Std_ReturnType EthSwt_SWIC_Cfg_CheckPowerCond(void)
+{
+    Std_ReturnType  ret = STD_OFF;
+    uint8           sail_resout_n;
+    uint8           aoss_sleep_entry_exit;
+
+    sail_resout_n = EthSwt_Stub_GetSAIL();              /* 暫定 のちにPwrCtrlのAPIに変更 */
+    aoss_sleep_entry_exit = EthSwt_Stub_GetAOSSS();     /* 暫定 のちにPwrCtrlのAPIに変更 */
+
+    if (S_ETHSWT_SWIC_POWERONREQ == STD_ON && sail_resout_n == STD_HIGH && aoss_sleep_entry_exit == STD_LOW) {
+        ret = STD_ON;
+    }
+    
+    return ret;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Config for EthSwt_SWIC_PWR.c                                               */
+/* -------------------------------------------------------------------------- */
+Std_ReturnType EthSwt_SWIC_Cfg_CheckSuplyState(void)
+{
+    Std_ReturnType  ret = STD_OFF;
+    Std_ReturnType  din2_stat = STD_OFF;
+
+    din2_stat = EthSwt_Stub_GetDIN2();                  /* 暫定 のちに他APIに変更 */
+
+    if (din2_stat == STD_ON) {
+        ret = STD_ON;
+    }
+
+    return ret;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Config for EthSwt_SWIC_PWR.c                                               */
+/* -------------------------------------------------------------------------- */
+void EthSwt_SWIC_Cfg_SetGPIOMode(void)
 {
     /* - OEM Custom：SPI通信ラインをGPIOモードへ変更 - */
     Port_SetPinMode( PORT_ID_PORT2_PIN11, PORT_MODE_CFG_P2_11_DI );         /* ETHERSW-RXD */
@@ -36,7 +108,11 @@ void EthSwt_SWIC_SetGPIOMode(void)
 
     return;
 }
-void EthSwt_SWIC_SetSPIMode(void)
+
+/* -------------------------------------------------------------------------- */
+/* Config for EthSwt_SWIC_PWR.c                                               */
+/* -------------------------------------------------------------------------- */
+void EthSwt_SWIC_Cfg_SetSPIMode(void)
 {
     /* - OEM Custom：SPI通信ラインをSPIモードへ変更 - */
     Port_SetPinMode(PORT_ID_PORT2_PIN11, PORT_MODE_CFG_P2_11_MSPI0SI);      /* ETHERSW-RXD */
@@ -46,7 +122,11 @@ void EthSwt_SWIC_SetSPIMode(void)
 
     return;
 }
-void EthSwt_SWIC_SetPowerOn(void)
+
+/* -------------------------------------------------------------------------- */
+/* Config for EthSwt_SWIC_PWR.c                                               */
+/* -------------------------------------------------------------------------- */
+void EthSwt_SWIC_Cfg_SetPowerOn(void)
 {
     /* - OEM Custom：SWIC電源ON - */
     /* ETHER_PWR_ENをHigh設定した後に、ETH_U2A_RESET_NをHigh設定 */
@@ -55,7 +135,11 @@ void EthSwt_SWIC_SetPowerOn(void)
 
     return;
 }
-void EthSwt_SWIC_SetPowerOff(void)
+
+/* -------------------------------------------------------------------------- */
+/* Config for EthSwt_SWIC_PWR.c                                               */
+/* -------------------------------------------------------------------------- */
+void EthSwt_SWIC_Cfg_SetPowerOff(void)
 {
     /* - OEM Custom：SWIC電源OFF - */
     /* ETH_U2A_RESET_NをLow設定した後に、ETHER_PWR_ENをLow設定 */
@@ -64,14 +148,22 @@ void EthSwt_SWIC_SetPowerOff(void)
 
     return;
 }
-void EthSwt_SWIC_SetResetAssert(void)
+
+/* -------------------------------------------------------------------------- */
+/* Config for EthSwt_SWIC_PWR.c                                               */
+/* -------------------------------------------------------------------------- */
+void EthSwt_SWIC_Cfg_SetResetAssert(void)
 {
     /* - OEM Custom：SWICリセットアサート - */
     Dio_WriteChannel(DIO_ID_APORT4_CH1, STD_LOW);                           /* ETH_U2A_RESET_N */
 
     return;
 }
-void EthSwt_SWIC_SetResetDeassert(void)
+
+/* -------------------------------------------------------------------------- */
+/* Config for EthSwt_SWIC_PWR.c                                               */
+/* -------------------------------------------------------------------------- */
+void EthSwt_SWIC_Cfg_SetResetDeassert(void)
 {
     /* - OEM Custom：SWICリセットディアサート - */
     Dio_WriteChannel(DIO_ID_APORT4_CH1, STD_HIGH);                          /* ETH_U2A_RESET_N */
@@ -82,8 +174,7 @@ void EthSwt_SWIC_SetResetDeassert(void)
 /* -------------------------------------------------------------------------- */
 /* Config for EthSwt_SWIC_STM.c                                               */
 /* -------------------------------------------------------------------------- */
-#include <VIS.h>
-Std_ReturnType EthSwt_SWIC_AllowRelay(void)
+Std_ReturnType EthSwt_SWIC_Cfg_AllowRelay(void)
 {
     /* - OEM Custom：中継が可能な状態か確認する - */
     Std_ReturnType ret = E_NOT_OK;
@@ -100,10 +191,7 @@ Std_ReturnType EthSwt_SWIC_AllowRelay(void)
 /* Config for EthSwt_SWIC_STM.c                                               */
 /* Config for EthSwt_SWIC_Reg.c                                               */
 /* -------------------------------------------------------------------------- */
-#include <Dio.h>
-#include <Dio_Symbols.h>
-#include <EthSwt_SWIC_PWR.h>
-Std_ReturnType EthSwt_SWIC_AllowSetRegister(void)
+Std_ReturnType EthSwt_SWIC_Cfg_AllowSetRegister(void)
 {
     /* - OEM Custom：レジスタ設定が可能な状態か確認する - */
     /* C-DCの場合は、PWRモジュールに加え、SAIL_RESOUT_Nも確認する */
