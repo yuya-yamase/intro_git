@@ -123,7 +123,6 @@
 #define XSPI_AMB_FAH_MAX                    (18100U)
 #define XSPI_AMB_LSB_1                      (100U)
 
-/* @@@ Provisional @@@ */
 #define XSPI_HUD_DTA_NUM                    (7U)
 
 #define XSPI_UNIT_VAL_ELECO_KMPKWH          (0U)   /* Electricity cost    : km/kWh                 */
@@ -1391,6 +1390,7 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*  BEV-11    10/22/2025 TS       Change for BEV rebase                                                                              */
 /*  BEV-12    10/29/2025 KO       Configured for BEVstep3_illumi_Rebase                                                              */
 /*  BEV-13    10/30/2025 SN       Delete fueleco for BEVstep3_Locale_Rebase                                                          */
+/*  BEV-14    11/04/2025 TN       Change for BEV rebase                                                                              */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * KM   = Keisuke Mashita, Denso Techno                                                                                           */
