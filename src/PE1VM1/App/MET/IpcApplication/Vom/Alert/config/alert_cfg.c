@@ -320,9 +320,11 @@ U1    u1_g_AlertCfgP_mflid_FlidCalibJdg(void)
     else{
         u1_t_open_msg_rqst = u1_s_OPEN_MSG_UNKNOWN;
     }
-#endif   /* BEV Rebase provisionally */
 
+    return(u1_t_open_msg_rqst);
+#else   /* BEV Rebase provisionally */
     return(u1_s_OPEN_MSG_UNKNOWN);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
