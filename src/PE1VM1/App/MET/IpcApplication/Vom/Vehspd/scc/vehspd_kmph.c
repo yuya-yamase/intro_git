@@ -578,6 +578,7 @@ static void   vd_s_VehspdGetBias(ST_VEHSPD_BIAS_FACT * st_ap_FACT)
 /* 19PFv3-1  08/22/2023  SN       Delete Tolerance Information Table. Create a new function that returns tolerance information       */
 /* 19PFv3-2  01/15/2024  TN(DT)   Change for MCUCONSTv010 Shipping Constant.                                                         */
 /* 19PFv3-3  04/16/2024  SH       Add calibration guard                                                                              */
+/* BEV-1     10/22/2025  TS       Change for BEV rebase                                                                              */
 /*                                                                                                                                   */
 /*  * TN     = Takashi Nagai, Denso                                                                                                  */
 /*  * HY     = Hiroshige Yanase, Denso Techno                                                                                        */
@@ -586,5 +587,6 @@ static void   vd_s_VehspdGetBias(ST_VEHSPD_BIAS_FACT * st_ap_FACT)
 /*  * TN(DT) = Tetsushi Nakano, Denso Techno                                                                                         */
 /*  * SH     = Sae Hirose, Denso Techno                                                                                              */
 /*  * SM     = Shota Maegawa, Denso Techno                                                                                           */
+/*  * TS     = Takuo Suganuma, Denso Techno                                                                                          */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

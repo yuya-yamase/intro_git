@@ -106,9 +106,7 @@ void    vd_g_VehspdCfgMedspdComTx(const U2 u2_a_KMPH)
     else{
         u1_t_metspd = (U1)u4_t_kmph;
     }
-#if 0   /* BEV Rebase provisionally */
     (void)Com_SendSignal(ComConf_ComSignal_MET_SPD, &u1_t_metspd);
-#endif   /* BEV Rebase provisionally */
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_VehspdCfgTolerXComTx(const ST_VEHSPD_BIAS_FACT * st_ap_FACT)                                                        */
@@ -122,16 +120,12 @@ void    vd_g_VehspdCfgTolerXComTx(const ST_VEHSPD_BIAS_FACT * st_ap_FACT)
     static const S1    s1_s_VEHSPD_TOLER_B_UNK = (S1)VEHSPD_TOL_B_INITIAL_VALUE;
 
     if(st_ap_FACT != vdp_PTR_NA){
-#if 0   /* BEV Rebase provisionally */
         (void)Com_SendSignal(ComConf_ComSignal_TOLER_A, &(st_ap_FACT->u1_toler_a));
         (void)Com_SendSignal(ComConf_ComSignal_TOLER_B, &(st_ap_FACT->s1_toler_b));
-#endif   /* BEV Rebase provisionally */
     }
     else{
-#if 0   /* BEV Rebase provisionally */
         (void)Com_SendSignal(ComConf_ComSignal_TOLER_A, &u1_s_VEHSPD_TOLER_A_UNK);
         (void)Com_SendSignal(ComConf_ComSignal_TOLER_B, &s1_s_VEHSPD_TOLER_B_UNK);
-#endif   /* BEV Rebase provisionally */
     }
 }
 /*===================================================================================================================================*/
@@ -169,9 +163,7 @@ void    vd_g_VehspdCfgOdoInst(const U4 u4_a_ODO_INST, const U1 u1_a_STSBIT)
 /*===================================================================================================================================*/
 void    vd_g_VehspdCanSp1xComRxInit(void)
 {
-#if 0   /* BEV Rebase provisionally */
     Com_InitIPDUStatus((PduIdType)MSG_VSC1G13_RXCH0, ((U1)COM_NO_RX | (U1)COM_TIMEOUT));
-#endif   /* BEV Rebase provisionally */
 }
 /*===================================================================================================================================*/
 /*  U1      u1_g_VehspdCanSp1xComRx(U2 * u2_ap_sp1, U1 * u1_ap_sp1p)                                                                 */
@@ -184,20 +176,14 @@ U1      u1_g_VehspdCanSp1xComRx(U2 * u2_ap_sp1, U1 * u1_ap_sp1p)
     U2                 u2_t_sp1;
 
     u2_t_sp1 = (U2)0U;
-#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_SP1,  &u2_t_sp1);
     (void)Com_ReceiveSignal(ComConf_ComSignal_SP1P, u1_ap_sp1p);
-#endif   /* BEV Rebase provisionally */
 
     if(u2_t_sp1 >= (U2)VEHSPD_CAN_SP1_MIN){
         *u2_ap_sp1 = u2_t_sp1;
     }
 
-#if 0   /* BEV Rebase provisionally */
     return((U1)Com_GetIPDUStatus((PduIdType)MSG_VSC1G13_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX));
-#else   /* BEV Rebase provisionally */
-    return((U1)COM_NO_RX);
-#endif   /* BEV Rebase provisionally */
 }
 /*===================================================================================================================================*/
 /*                                                                                                                                   */

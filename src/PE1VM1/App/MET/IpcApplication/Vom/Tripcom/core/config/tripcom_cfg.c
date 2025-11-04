@@ -60,10 +60,6 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define TRIPCOM_NUM_ENGTYPE                     (2U)
-#define TRIPCOM_ENGTYPE_UNDEF                   (0U)
-#define TRIPCOM_ENGTYPE_HYBRID                  (1U)
-
 #define TRIPCOM_NUM_PTSYS                       (16U)
 
 #define TRIPCOM_EHV1S93_FAILTIM                 (5000U/OXCAN_MAIN_TICK)
@@ -270,49 +266,6 @@ U2              u2_g_TripcomCfgGetVariation(void)
 }
 
 /*===================================================================================================================================*/
-/* U1              u1_g_TripcomCfgFuelFull(U2 * u2p_a_val)                                                                           */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1              u1_g_TripcomCfgFuelFull(U2 * u2p_a_val)
-{
-#if 0   /* BEV Rebase provisionally */
-    (*u2p_a_val) = u2_CALIB_MCUID0239_FULFUL;
-
-    return ((U1)TRIPCOM_STSBIT_VALID);
-#else   /* BEV Rebase provisionally */
-    return ((U1)TRIPCOM_STSBIT_UNKNOWN);
-#endif   /* BEV Rebase provisionally */
-}
-
-/*===================================================================================================================================*/
-/* U1              u1_g_TripcomCfgFuelVol(U2 * u2p_a_val)                                                                            */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1              u1_g_TripcomCfgFuelVol(U2 * u2p_a_val)
-{
-#if 0   /* BEV Rebase provisionally */
-#ifdef FUEL_VOL_TAU_H
-#if ((TRIPCOM_STSBIT_VALID   != FUEL_TAU_STSBIT_VALID    ) || \
-     (TRIPCOM_STSBIT_UNKNOWN != FUEL_TAU_STSBIT_UNKNOWN  ))
-#error "tripcom status bit and fuel status bit are inconsistent!"
-#endif
-
-    return (u1_g_FuelvolTauLitEst((U1)TRUE, u2p_a_val));
-#else
-    (*u2p_a_val) = (U2)4000U; /* Sample */
-    return ((U1)TRIPCOM_STSBIT_VALID);
-#endif
-#else   /* BEV Rebase provisionally */
-    (*u2p_a_val) = (U2)0U;
-    return ((U1)TRIPCOM_STSBIT_UNKNOWN);
-#endif   /* BEV Rebase provisionally */
-}
-
-/*===================================================================================================================================*/
 /* U1              u1_g_TripcomCfgGetTOFCRST(U1 * u1p_a_rst)                                                                         */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
@@ -389,53 +342,6 @@ U1              u1_g_TripcomCfgGetM1ECRST(U1 * u1p_a_rst)
 #else   /* BEV Rebase provisionally */
     return ((U1)COM_NO_RX);
 #endif   /* BEV Rebase provisionally */
-}
-
-/*===================================================================================================================================*/
-/* U1              u1_g_TripcomCfgGetNe1Sts(void)                                                                                    */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1              u1_g_TripcomCfgGetNe1Sts(void)
-{
-    U1  u1_t_msgsts;
-    U1  u1_t_ret;
-
-
-    u1_t_ret    = (U1)TRIPCOM_EVRATIO_VALID;
-#if 0   /* BEV Rebase provisionally */
-    u1_t_msgsts = (U1)Com_GetIPDUStatus((PduIdType)MSG_ENG1G02_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
-#else   /* BEV Rebase provisionally */
-    u1_t_msgsts = (U1)COM_NO_RX;
-#endif   /* BEV Rebase provisionally */
-    if ((u1_t_msgsts & (U1)COM_TIMEOUT) != (U1)0U) {
-        u1_t_ret = (U1)TRIPCOM_EVRATIO_INVALID;
-    }
-    if ((u1_t_msgsts & (U1)COM_NO_RX) != (U1)0U) {
-        u1_t_ret |= (U1)TRIPCOM_EVRATIO_UNKNOWN;
-    }
-
-    return(u1_t_ret);
-}
-
-/*===================================================================================================================================*/
-/* U1              u1_g_TripcomCfgGetTEVRNSts(void)                                                                                  */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1              u1_g_TripcomCfgGetTEVRNSts(void)
-{
-    U1  u1_t_req;
-    U1  u1_t_sts;
-
-    u1_t_sts = (U1)FALSE;
-    u1_t_req = u1_g_AlertReqByCh((U2)ALERT_CH_H_TEVRN);
-    if (u1_t_req == (U1)ALERT_REQ_H_TEVRN_ON) {
-        u1_t_sts = (U1)TRUE;
-    }
-    return(u1_t_sts);
 }
 
 /*===================================================================================================================================*/

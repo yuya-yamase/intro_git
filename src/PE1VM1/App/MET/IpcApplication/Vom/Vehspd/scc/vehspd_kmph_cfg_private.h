@@ -20,9 +20,6 @@
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "aip_common.h"
-#if 0   /* BEV Rebase provisionally */
-#include "veh_opemd.h"
-#endif   /* BEV Rebase provisionally */
 #include "vehspd_kmph.h"
 #include "calibration.h"
 #include "vardef.h"

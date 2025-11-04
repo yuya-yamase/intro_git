@@ -1069,11 +1069,7 @@ void            vd_g_SbltwrnMainTask(void)
     U1                  u1_t_dsttyp;
     U1                  u1_tp_msgsts[SBLTWRN_NUM_MSG];
 
-#if 0   /* BEV Rebase provisionally */
     u1_t_igon = u1_g_VehopemdIgnOn();
-#else   /* BEV Rebase provisionally */
-    u1_t_igon = (U1)FALSE;
-#endif   /* BEV Rebase provisionally */
     
     if (u1_t_igon == (U1)TRUE) {
         vd_s_SbltwrnTmcnt(&u2_s_sbltwrn_igontm);
