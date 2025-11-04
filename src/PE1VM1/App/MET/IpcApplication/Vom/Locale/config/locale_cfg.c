@@ -62,6 +62,16 @@ typedef struct {
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#if 0   /* BEV Rebase provisionally */
+#else   /* BEV Rebase provisionally */
+static U1             u1_s_locale_timefmt;
+static U1             u1_s_locale_unit_dist;
+static U1             u1_s_locale_unit_speed;
+static U1             u1_s_locale_unit_fueco;
+static U1             u1_s_locale_unit_eleco;
+static U1             u1_s_locale_unit_ambtmp;
+static U1             u1_s_locale_lang;
+#endif   /* BEV Rebase provisionally */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -263,14 +273,23 @@ void  vd_g_LocaleComTxInit(void)
     U1  u1_t_unit_fueco;
     U1  u1_t_unit_ch2;
 
+#if 0   /* BEV Rebase provisionally */
+#else   /* BEV Rebase provisionally */
+    u1_s_locale_timefmt      = (U1)TIMEFMT_VAL_12H;
+    u1_s_locale_unit_dist    = (U1)UNIT_VAL_DIST_KM;
+    u1_s_locale_unit_speed   = (U1)UNIT_VAL_SPEED_KMPH;
+    u1_s_locale_unit_fueco   = (U1)UNIT_VAL_FUECO_LP100KM;
+    u1_s_locale_unit_eleco   = (U1)UNIT_VAL_ELECO_KWHP100KM;
+    u1_s_locale_unit_ambtmp  = (U1)UNIT_VAL_AMBTMP_CEL;
+    u1_s_locale_lang         = (U1)LANG_VAL______BRI_ENG;
+#endif   /* BEV Rebase provisionally */
+
     u1_t_unit_ch2   = (U1)LOCALE_UNIT_CH2_KM;
     u1_t_unit_fueco = u1_g_Unit((U1)UNIT_IDX_FUECO);
     if(u1_t_unit_fueco < (U1)UNIT_NUM_VAL_FUECO){
         u1_t_unit_ch2 = u1_sp_LOCALE_COMTX_UNIT_CH2[u1_t_unit_fueco];
     }
-#if 0   /* BEV Rebase provisionally */
     (void)Com_SendSignal(ComConf_ComSignal_UNIT_CH2 , &u1_t_unit_ch2);
-#endif   /* BEV Rebase provisionally */
 }
 /*===================================================================================================================================*/
 /*  void  vd_g_LocaleComTxTask(void)                                                                                                 */
@@ -284,9 +303,7 @@ void  vd_g_LocaleComTxTask(void)
     U1  u1_t_pre_unit_ch2;
     U1  u1_t_unit_ch2;
 
-#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_UNIT_CH2 , &u1_t_pre_unit_ch2);
-#endif   /* BEV Rebase provisionally */
 
     u1_t_unit_ch2   = (U1)LOCALE_UNIT_CH2_KM;
     u1_t_unit_fueco = u1_g_Unit((U1)UNIT_IDX_FUECO);
@@ -294,12 +311,10 @@ void  vd_g_LocaleComTxTask(void)
         u1_t_unit_ch2 = u1_sp_LOCALE_COMTX_UNIT_CH2[u1_t_unit_fueco];
     }
 
-#if 0   /* BEV Rebase provisionally */
     (void)Com_SendSignal(ComConf_ComSignal_UNIT_CH2 , &u1_t_unit_ch2);
     if(u1_t_pre_unit_ch2 != u1_t_unit_ch2){
         (void)Com_TriggerIPDUSend(MSG_MET1S11_TXCH0);
     }
-#endif   /* BEV Rebase provisionally */
 }
 /*===================================================================================================================================*/
 /*  U1  u1_g_LocaleCfgLangDef(void)                                                                                                  */
@@ -443,7 +458,7 @@ U1      u1_g_LocaleCfgLang(void)
 #if 0   /* BEV Rebase provisionally */
     return(u1_g_McstBf((U1)MCST_BFI_LANG));
 #else   /* BEV Rebase provisionally */
-    return((U1)U1_MAX);
+    return(u1_s_locale_lang);
 #endif   /* BEV Rebase provisionally */
 }
 
@@ -457,6 +472,8 @@ void    vd_g_LocaleCfgLangPut(const U1 u1_a_LANG)
 {
 #if 0   /* BEV Rebase provisionally */
     vd_g_McstBfPut((U1)MCST_BFI_LANG, u1_a_LANG);
+#else   /* BEV Rebase provisionally */
+    u1_s_locale_lang = u1_a_LANG;
 #endif   /* BEV Rebase provisionally */
 }
 
@@ -475,7 +492,26 @@ U1      u1_g_LocaleCfgUnit(const U1 u1_a_UNITIDX)
 #if 0   /* BEV Rebase provisionally */
     u1_t_unit  = u1_g_McstBf(u1_t_idx);
 #else   /* BEV Rebase provisionally */
-    u1_t_unit = (U1)U1_MAX;
+    switch(u1_a_UNITIDX){
+    case  (U1)UNIT_IDX_DIST:
+        u1_t_unit  = u1_s_locale_unit_dist;
+        break;
+    case (U1)UNIT_IDX_SPEED:
+        u1_t_unit  = u1_s_locale_unit_speed;
+        break;
+    case (U1)UNIT_IDX_FUECO:
+        u1_t_unit  = u1_s_locale_unit_fueco;
+        break;
+    case (U1)UNIT_IDX_ELECO:
+        u1_t_unit  = u1_s_locale_unit_eleco;
+        break;
+    case (U1)UNIT_IDX_AMBTMP:
+        u1_t_unit  = u1_s_locale_unit_ambtmp;
+        break;
+    default:
+        u1_t_unit  = (U1)U1_MAX;
+        break;
+    }
 #endif   /* BEV Rebase provisionally */
     return(u1_t_unit);
 }
@@ -492,6 +528,27 @@ void    vd_g_LocaleCfgUnitPut(const U1 u1_a_UNITIDX, const U1 u1_a_VAL)
     u1_t_idx   = st_sp_LOCALE_UNITIDX[u1_a_UNITIDX].u1_mcst_id;
 #if 0   /* BEV Rebase provisionally */
     vd_g_McstBfPut(u1_t_idx , u1_a_VAL);
+#else   /* BEV Rebase provisionally */
+    switch(u1_a_UNITIDX){
+    case  (U1)UNIT_IDX_DIST:
+        u1_s_locale_unit_dist   = u1_a_VAL;
+        break;
+    case (U1)UNIT_IDX_SPEED:
+        u1_s_locale_unit_speed  = u1_a_VAL;
+        break;
+    case (U1)UNIT_IDX_FUECO:
+        u1_s_locale_unit_fueco  = u1_a_VAL;
+        break;
+    case (U1)UNIT_IDX_ELECO:
+        u1_s_locale_unit_eleco  = u1_a_VAL;
+        break;
+    case (U1)UNIT_IDX_AMBTMP:
+        u1_s_locale_unit_ambtmp = u1_a_VAL;
+        break;
+    default:
+        /* do nothing */
+        break;
+    }
 #endif   /* BEV Rebase provisionally */
 }
 
@@ -505,6 +562,8 @@ void    vd_g_LocaleCfgTfmPut(const U1 u1_a_FRMT)
 {
 #if 0   /* BEV Rebase provisionally */
     vd_g_McstBfPut((U1)MCST_BFI_TIMEFMT, u1_a_FRMT);
+#else   /* BEV Rebase provisionally */
+    u1_s_locale_timefmt = u1_a_FRMT;
 #endif   /* BEV Rebase provisionally */
 }
 
@@ -519,7 +578,7 @@ U1      u1_g_LocaleCfgTfm(void)
 #if 0   /* BEV Rebase provisionally */
     return(u1_g_McstBf((U1)MCST_BFI_TIMEFMT));
 #else   /* BEV Rebase provisionally */
-    return((U1)U1_MAX);
+    return(u1_s_locale_timefmt);
 #endif   /* BEV Rebase provisionally */
 }
 
@@ -568,6 +627,7 @@ U1      u1_g_LocaleCfgUnitdef(const U1 u1_a_UNITIDX)
 /*  296D235D 11/28/2022  TX       Add Lang Type18 and Type19                                                                         */
 /*  19PFv3-1 08/21/2023  SH       config merge                                                                                       */
 /*  19PFv3-2 04/24/2025  SF       Bug fixing for MET19PFV3-43718                                                                     */
+/*  BEV-1    10/15/2025  SN       Configured for BEVstep3_Rebase                                                                     */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
 /*  * SF   = Seiya Fukutome, DensoTechno                                                                                             */
@@ -577,5 +637,6 @@ U1      u1_g_LocaleCfgUnitdef(const U1 u1_a_UNITIDX)
 /*  * TX   = Xinyuan Tong, DNST                                                                                                      */
 /*  * TA(M)= Teruyuki Anjima, NTT Data MSE                                                                                           */
 /*  * SH   = Sae Hirose, Denso Techno                                                                                                */
+/*  * SN   = Shimon Nambu, DensoTechno                                                                                               */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

@@ -22,14 +22,9 @@
 #include "alert.h"
 #include "thblnkr.h"
 #include "ambtmp.h"
-#if 0   /* BEV Rebase provisionally */ 
 #include "sbltsync.h"
-#endif   /* BEV Rebase provisionally */
 
 #include "vardef.h"
-#if 0   /* BEV Rebase provisionally */ 
-#include "vardef_ds2e.h"
-#endif   /* BEV Rebase provisionally */
 #include "vardef_dest_dbf.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -75,8 +70,6 @@
 #define HMITT_ICEWRN_DATPOS                       (9U)
 #define HMITT_REARBLT_DATPOS                      (10U)
 #define HMITT_STPIND_DATPOS                       (1U)
-#define HMITT_ECOIND_DATPOS                       (9U)
-#define HMITT_EVIND_DATPOS                        (10U)
 #define HMITT_LOWFUEL_DATPOS                      (8U)
 #define HMITT_TURN_DATPOS                         (1U)
 #define HMITT_HEAD_DATPOS                         (12U)
@@ -104,8 +97,6 @@
 #define HMITT_TURN_ACT_SFT                        (6U)
 
 #define HMITT_STPIND_BITPOS                       (8U)
-#define HMITT_ECOIND_BITPOS                       (16U)
-#define HMITT_EVIND_BITPOS                        (0U)
 #define HMITT_HEAD_BITPOS                         (0U)
 #define HMITT_TAIL_BITPOS                         (0U)
 
@@ -166,13 +157,9 @@ void    vd_g_HmiTtCfgReq(U4 * u4_ap_req)
     U4  u4_t_loop;
     U4  u4_t_onoff;
     U2  u2_t_num_reqbit;
-#if 0   /* BEV Rebase provisionally */ 
     U2  u2_t_belt_tt;
-#endif   /* BEV Rebase provisionally */
     U1  u1_t_icewrn;
-#if 0   /* BEV Rebase provisionally */
     U1  u1_t_rearbelt_tt;
-#endif   /* BEV Rebase provisionally */
     U1  u1_t_placon;
     U1  u1_t_ecbepbtt;
     U1  u1_t_pkbtt;
@@ -189,7 +176,6 @@ void    vd_g_HmiTtCfgReq(U4 * u4_ap_req)
         u4_ap_req[HMITT_ICEWRN_DATPOS] |= u4_HMITT_HB0(HMITT_BLINK_SI_1P00HZ__50P_10TIMS_E__ON);
     }
 
-#if 0   /* BEV Rebase provisionally */
     u2_t_belt_tt  = u2_g_SbltsyncReqTt();
     u4_t_onoff    = (((U4)u2_t_belt_tt & (U4)SBLTSYNC_TT_REQ_R2L) >> HMITT_SBLT_R2L_SFT);
     u4_ap_req[HMITT_SBLT_R2L_DATPOS] |= (u4_t_onoff << HMITT_8BIT_SHIFT);
@@ -216,7 +202,6 @@ void    vd_g_HmiTtCfgReq(U4 * u4_ap_req)
     if (u1_t_rearbelt_tt == (U1)TRUE) {
         u4_ap_req[HMITT_REARBLT_DATPOS] |= u4_HMITT_HB4(HMITT_BLINK_CO_ON_____100P);
     }
-#endif   /* BEV Rebase provisionally */
 
     u1_t_placon  = u1_g_AlertReqByCh((U2)ALERT_CH_P_PLACON);
     if(u1_t_placon == (U1)ALERT_REQ_P_PLACON_FLASH){
@@ -526,35 +511,6 @@ void    vd_g_HmiTtCfgVarmask(U4 * u4_ap_varmask)
 }
 
 /*===================================================================================================================================*/
-/*  void    vd_g_HmiTtCfgCstmask(U4 * u4_ap_varmask)                                                                                 */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void    vd_g_HmiTtCfgCstmask(U4* u4_ap_varmask)
-{
-    U1  u1_t_mcst;
-
-#if 0   /* BEV Rebase provisionally */
-    u1_t_mcst = u1_g_McstBf((U1)MCST_BFI_ECO_IND);
-#else   /* BEV Rebase provisionally */
-    u1_t_mcst = (U1)1U;
-#endif   /* BEV Rebase provisionally */
-    if (u1_t_mcst == (U1)0U) {
-        u4_ap_varmask[HMITT_ECOIND_DATPOS] &= (~((U4)HMITT_VAR_MASK << HMITT_ECOIND_BITPOS));
-    }
-
-#if 0   /* BEV Rebase provisionally */
-    u1_t_mcst = u1_g_McstBf((U1)MCST_BFI_EV_IND);
-#else   /* BEV Rebase provisionally */
-    u1_t_mcst = (U1)1U;
-#endif   /* BEV Rebase provisionally */
-    if (u1_t_mcst == (U1)0U) {
-        u4_ap_varmask[HMITT_EVIND_DATPOS] &= (~((U4)HMITT_VAR_MASK << HMITT_EVIND_BITPOS));
-    }
-}
-
-/*===================================================================================================================================*/
 /*  void    vd_g_HmiTtCfgDestmask(U4 * u4_ap_varmask)                                                                                */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
@@ -597,6 +553,7 @@ void    vd_g_HmiTtCfgDestmask(U4* u4_ap_varmask)
 /*  19PFv3-2 07/08/2024  PG       Add mask process for H_ZMILRQ for 19PFv3 R1.2                                                      */
 /*  19PFv3-3 08/23/2024  AA       Add awake status of turn hazard                                                                    */
 /*  19PFv3-4 09/17/2024  KH       Change variable name and function call name in vd_s_HmiTtTurn                                      */
+/*  BEV-1    10/31/2025  MA       Change for BEV rebase                                                                              */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * TH   = Takahiro Hirano, Denso Techno                                                                                           */
@@ -607,5 +564,6 @@ void    vd_g_HmiTtCfgDestmask(U4* u4_ap_varmask)
 /*  * PG   = Patrick Garcia, DTPH                                                                                                    */
 /*  * AA   = Anna Asuncion, Denso Techno                                                                                             */
 /*  * KH   = Kiko Huerte, DTPH                                                                                                       */
+/*  * MA   = Misaki Aiki,  Denso Techno                                                                                              */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

@@ -38,6 +38,9 @@
 
 #define ALERT_CH_TICK                            (ALERT_MAIN_TICK * ALERT_TASK_NUM_SLOT)
 
+#define ALERT_CAN_SYS_PNC_ALL                    (OXCAN_SYS_PNC_44 | OXCAN_SYS_PNC_43 | OXCAN_SYS_PNC_40 | OXCAN_SYS_PNC_16)
+#define ALERT_CAN_SYS_ALL                        (ALERT_CAN_SYS_PNC_ALL | OXCAN_SYS_PBA | OXCAN_SYS_ACC | OXCAN_SYS_IGR | OXCAN_SYS_IGP)
+
 #define ALERT_HW_ID_B_BKEY_IGN__3P8V             (IOHW_DISGNL_IGN__3P8V)
 #define ALERT_HW_ID_B_WASLEV_WLVL                (U2_MAX)
 #define ALERT_HW_ID_C_PKBWAR_PKB                 (0xFFU)

@@ -448,16 +448,14 @@ static U4      u4_s_AlertS_lcaTtRSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
 /*===================================================================================================================================*/
 static U4      u4_s_AlertS_lcaBcRqSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
-#if 0   /* BEV Rebase provisionally */
-#if defined(OXCAN_PDU_RX_CAN_DS11S37) && defined(ComConf_ComSignal_LCSRQBZ)
     static const U1 u1_s_ALERT_S_LCA_BC_RQ_LSB_STS = (U1)1U;
     U1              u1_t_msgsts;
     U1              u1_t_sgnl;
     U4              u4_t_src_chk;
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_DS11S37,
-                                     (U2)OXCAN_RX_SYS_NRX_IGR,
-                                     (U2)U2_MAX) & (U1)COM_NO_RX;
+    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_DS11S37_CH0,
+                                      (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP,
+                                      (U2)U2_MAX) & (U1)COM_NO_RX;
 
     u1_t_sgnl     = (U1)0U;
     (void)Com_ReceiveSignal(ComConf_ComSignal_LCSRQBZ, &u1_t_sgnl);
@@ -466,12 +464,6 @@ static U4      u4_s_AlertS_lcaBcRqSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_S_LCA_BC_RQ_LSB_STS);
 
     return(u4_t_src_chk);
-#else
-    return((U4)0U);
-#endif /* defined(OXCAN_PDU_RX_CAN_DS11S37) && defined(ComConf_ComSignal_LCSRQBZ) */
-#else   /* BEV Rebase provisionally */
-    return((U4)0U);
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -482,15 +474,13 @@ static U4      u4_s_AlertS_lcaBcRqSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM
 /*===================================================================================================================================*/
 static U4      u4_s_AlertS_lcaBcClSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
-#if 0   /* BEV Rebase provisionally */
-#if defined(OXCAN_PDU_RX_CAN_DS11S37) && defined(ComConf_ComSignal_LCANGBZ)
     static const U1 u1_s_ALERT_S_LCA_BC_CL_LSB_STS = (U1)1U;
     U1              u1_t_msgsts;
     U1              u1_t_sgnl;
     U4              u4_t_src_chk;
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_DS11S37,
-                                     (U2)OXCAN_RX_SYS_NRX_IGR,
+    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_DS11S37_CH0,
+                                     (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP,
                                      (U2)U2_MAX) & (U1)COM_NO_RX;
 
     u1_t_sgnl     = (U1)0U;
@@ -500,12 +490,6 @@ static U4      u4_s_AlertS_lcaBcClSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_S_LCA_BC_CL_LSB_STS);
 
     return(u4_t_src_chk);
-#else
-    return((U4)0U);
-#endif /* defined(OXCAN_PDU_RX_CAN_DS11S37) && defined(ComConf_ComSignal_LCANGBZ) */
-#else   /* BEV Rebase provisionally */
-    return((U4)0U);
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -516,17 +500,15 @@ static U4      u4_s_AlertS_lcaBcClSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM
 /*===================================================================================================================================*/
 static U4      u4_s_AlertS_lcaBcVcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
-#if 0   /* BEV Rebase provisionally */
-#if defined(OXCAN_PDU_RX_CAN_DS11S37) && defined(ComConf_ComSignal_LCAVCBZ)
     static const U2 u2_s_ALERT_S_LCA_BC_VC_TO_THRS = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_S_LCA_BC_VC_LSB_STS = (U1)1U;
     U1              u1_t_msgsts;
     U1              u1_t_sgnl;
     U4              u4_t_src_chk;
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_DS11S37,
-                                     (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
-                                     u2_s_ALERT_S_LCA_BC_VC_TO_THRS) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_DS11S37_CH0,
+                                      (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP,
+                                      u2_s_ALERT_S_LCA_BC_VC_TO_THRS) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     u1_t_sgnl     = (U1)0U;
     (void)Com_ReceiveSignal(ComConf_ComSignal_LCAVCBZ, &u1_t_sgnl);
@@ -535,12 +517,6 @@ static U4      u4_s_AlertS_lcaBcVcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_S_LCA_BC_VC_LSB_STS);
 
     return(u4_t_src_chk);
-#else
-    return((U4)0U);
-#endif /* defined(OXCAN_PDU_RX_CAN_DS11S37) && defined(ComConf_ComSignal_LCAVCBZ) */
-#else   /* BEV Rebase provisionally */
-    return((U4)0U);
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

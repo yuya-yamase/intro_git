@@ -19,11 +19,6 @@
 
     -I${APP_DIR}/MET/XSPI_MET/config
     -I${APP_DIR}/MET/IpcApplication/Vsv/Illumi/config
-    -I${APP_DIR}/MET/Platform/ComplexDriver/DrecTx/config
-    -I${APP_DIR}/MET/IpcApplication/Vom/Mulmed/scc
-    -I${APP_DIR}/MET/IpcApplication/Vom/DateSI/scc
-    -I${APP_DIR}/MET/IpcApplication/Legacy/Fspo/fspo_framework/config
-    -I${APP_DIR}/MET/IpcApplication/Vom/MM/scc
 
     -I${VEHOPE_DIR}/config_tybev3
     -I${VEHOPE_DIR}/scc

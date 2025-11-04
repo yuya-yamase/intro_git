@@ -63,9 +63,7 @@ U1      u1_g_VdfEsoRx_SW_VHCL_HCTRL(void)
     U1                 u1_t_ava_rx;
 
     u1_t_rx = (U1)0U;
-#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_ASCSTPF1, &u1_t_rx);
-#endif   /* BEV Rebase provisionally */
     if (u1_t_rx == u1_s_VDF_ESO_SW_VHCL_HCTRL) {
         u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
     }
@@ -89,9 +87,7 @@ U1      u1_g_VdfEsoRx_SW_ACCESS_MODE(void)
     U1                 u1_t_ava_rx;
 
     u1_t_rx = (U1)0U;
-#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_ASCSTPF2, &u1_t_rx);
-#endif   /* BEV Rebase provisionally */
     if(u1_t_rx == u1_s_VDF_ESO_SW_ACCESS_MODE){
         u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
     }

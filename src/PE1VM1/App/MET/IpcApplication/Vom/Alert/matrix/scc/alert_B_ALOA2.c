@@ -157,7 +157,6 @@ void    vd_g_AlertB_aloa2Init(void)
 /*===================================================================================================================================*/
 static U4      u4_s_AlertB_aloa2Srcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
-#if 0   /* BEV Rebase provisionally */
     static const U2 u2_s_u2_s_ALERT_CH_B_ALOA2_TO_THRSH = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_CH_B_ALOA2_LSB_STS       = (U1)3U;
     static const U4 u4_s_ALERT_B_ALOA2_BIT_BAT_WT       = (U4)0x00000020U;
@@ -165,9 +164,9 @@ static U4      u4_s_AlertB_aloa2Srcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
     U1              u1_t_sgnl;
     U1              u1_t_msgsts;
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ZN11S19,
-                                     (U2)OXCAN_RX_SYS_NRX_BAT | (U2)OXCAN_RX_SYS_TOE_BAT,
-                                     u2_s_u2_s_ALERT_CH_B_ALOA2_TO_THRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_ZN11S19_CH0,
+                                      (U4)ALERT_CAN_SYS_ALL,
+                                      u2_s_u2_s_ALERT_CH_B_ALOA2_TO_THRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     vd_g_AlertBRxTrnsSts(&u1_s_alert_b_aloa2_zn11S19_sts, u1_t_msgsts);
     u4_t_src_chk  = ((U4)u1_s_alert_b_aloa2_zn11S19_sts << u1_s_ALERT_CH_B_ALOA2_LSB_STS);
@@ -181,9 +180,6 @@ static U4      u4_s_AlertB_aloa2Srcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
     }
 
     return(u4_t_src_chk);
-#else   /* BEV Rebase provisionally */
-    return((U4)0U);
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
