@@ -117,12 +117,7 @@ void    vd_g_HdimstepCfgSwOprtIn(ST_HDIMSTEP_SWOP * st_ap_swop)
 /*  2.0.0            2020.02.20  MaO     New                                                                                         */
 /*  2.1.0            2024.02.14  HiS     HDIMSTEP_STEP_EXTRIN_SUP was revised. MM Dimmer was deleted.                                */
 /*                                                                                                                                   */
-/*  Revision         Date        Author   Change Description                                                                         */
-/* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  BEV-1            2025.10.29  MA      Change for BEV rebase.                                                                      */
-/*                                                                                                                                   */
 /*  * MaO = Masayuki Okada, DENSO                                                                                                    */
 /*  * HiS = Hidenobu Suzuki, ISB                                                                                                     */
-/*  * MA = Misaki Aiki, Denso Techno                                                                                                 */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
