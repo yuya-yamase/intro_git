@@ -1907,14 +1907,9 @@ U1      u1_g_HudImgAdjGetGvRtctlIniReq(void)
 /* 2.2.3              2024.09.13  His     DID 280C was revised. (u2_s_HudImgAdjowimgpos and u1_g_HudImgAdjReadDataImgPos)            */
 /* 2.2.4              2025.03.17  YuK     Removed the max and min limits for HUD position regeneration.                              */
 /*                                                                                                                                   */
-/*  Revision Date        Author   Change Description                                                                                 */
-/* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  BEV-1    10/24/2025  TS       Change for BEV rebase                                                                              */
-/*                                                                                                                                   */
 /*  * HS  = Hidenobu Suzuki, NCOS                                                                                                    */
 /*  * HiS = Hidenobu Suzuki, MSE                                                                                                     */
 /*  * HT  = Hideki Takagi,   MSE                                                                                                     */
 /*  * YuK = Yuki Koshimae,   MSE                                                                                                     */
-/*  * TS  = Takuo Suganuma,  Denso Techno                                                                                            */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
