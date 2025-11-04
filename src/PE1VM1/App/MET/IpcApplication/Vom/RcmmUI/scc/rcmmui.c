@@ -1,4 +1,4 @@
-/* 1.2.0 */
+/* 1.3.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define RCMMUI_C_MAJOR                          (1)
-#define RCMMUI_C_MINOR                          (2)
+#define RCMMUI_C_MINOR                          (3)
 #define RCMMUI_C_PATCH                          (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -38,7 +38,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define RCMMUI_NEG_RESP                         (0xF0U)
 #define RCMMUI_USRACR_RESP                      (0x20U)
-#define RCMMUI_NUM_REQ                          (23U)
+#define RCMMUI_NUM_REQ                          (26U)
 
 #define RCMMUI_UACT_INIT                        (0xFEU)
 #define RCMMUI_UACT_INVLD                       (0xFFU)
@@ -90,6 +90,8 @@ static  const   ST_RCMMUI_REQUEST               st_sp_RCMMUI_REQUESTS[RCMMUI_NUM
     {   (U2)0x0819U,            (U1)0x10U,              (U1)0x18U       },      /* 11 RCMMUI_STREQ_8_3   */
     {   (U2)0x0B09U,            (U1)0x10U,              (U1)0x1BU       },      /* 12 RCMMUI_STREQ_11_1  */
     {   (U2)0x0B19U,            (U1)0x10U,              (U1)0x18U       },      /* 13 RCMMUI_STREQ_11_3  */
+    {   (U2)0x0C09U,            (U1)0x10U,              (U1)0x1BU       },      /* 14 RCMMUI_STREQ_12_1  */
+    {   (U2)0x0C19U,            (U1)0x10U,              (U1)0x18U       },      /* 15 RCMMUI_STREQ_12_3  */
     /* END REQUEST */
     {   (U2)0x0178U,            (U1)0x30U,              (U1)0x00U       },
     {   (U2)0x0278U,            (U1)0x30U,              (U1)0x00U       },
@@ -98,6 +100,7 @@ static  const   ST_RCMMUI_REQUEST               st_sp_RCMMUI_REQUESTS[RCMMUI_NUM
     {   (U2)0x0678U,            (U1)0x30U,              (U1)0x00U       },
     {   (U2)0x0878U,            (U1)0x30U,              (U1)0x00U       },
     {   (U2)0x0B78U,            (U1)0x30U,              (U1)0x00U       },
+    {   (U2)0x0C78U,            (U1)0x30U,              (U1)0x00U       },
     {   (U2)0xFF00U,            (U1)0x30U,              (U1)0x00U       },
     {   (U2)0xFF80U,            (U1)0x30U,              (U1)0x00U       }
 };
@@ -290,6 +293,7 @@ static  U1      u1_s_RcmmUICheckPow(const U1 u1_a_REQID)
 /*  1.0.0    02/18/2018  HY       New.                                                                                               */
 /*  1.1.0    10/07/2020  TH       Add to send PBDMSW and getting elapsed time of rcmmui display start.                               */
 /*  1.2.0    10/01/2025  YR       Change config for 19PFv3                                                                           */
+/*  1.3.0    07/03/2025  KO       Change config for BEV System_Consideration_2.                                                      */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
@@ -300,5 +304,6 @@ static  U1      u1_s_RcmmUICheckPow(const U1 u1_a_REQID)
 /*  * TH   = Takahiro Hirano,  Denso Techno                                                                                          */
 /*  * PG   = Patrick Garcia, DTPH                                                                                                    */
 /*  * YR   = Yhana Regalario, DTPH                                                                                                   */
+/*  * KO   = Kazuto Oishi,  Denso Techno                                                                                             */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
