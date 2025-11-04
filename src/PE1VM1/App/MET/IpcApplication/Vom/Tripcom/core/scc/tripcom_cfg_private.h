@@ -55,10 +55,6 @@
 #define TRIPCOM_CANTXUNIT_DIST                  (2U)
 #define TRIPCOM_CANTXUNIT_EECON                 (3U)
 
-#define TRIPCOM_EVRATIO_VALID                   (0x00U)
-#define TRIPCOM_EVRATIO_UNKNOWN                 (0x01U)
-#define TRIPCOM_EVRATIO_INVALID                 (0x02U)
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -96,8 +92,6 @@ void            vd_g_TripcomCfgTxWkupInit(void);
 void            vd_g_TripcomCfgApplInit(void);
 
 U2              u2_g_TripcomCfgGetVariation(void);
-U1              u1_g_TripcomCfgFuelFull(U2 * u2p_a_val);
-U1              u1_g_TripcomCfgFuelVol(U2 * u2p_a_val);
 void            vd_g_TripcomCfgSetTxValHk(const U1 u1_a_CNTTID, const U2 u2_a_TXVAL);
 void            vd_g_TripcomCfgGetUnit(U1 * u1_ap_unittype);
 
@@ -106,9 +100,6 @@ U1              u1_g_TripcomCfgGetTOFCRT2(U1 * u1p_a_rst);
 U1              u1_g_TripcomCfgGetM1FCRST(U1 * u1p_a_rst);
 U1              u1_g_TripcomCfgGetTOECRST(U1 * u1p_a_rst);
 U1              u1_g_TripcomCfgGetM1ECRST(U1 * u1p_a_rst);
-
-U1              u1_g_TripcomCfgGetNe1Sts(void);
-U1              u1_g_TripcomCfgGetTEVRNSts(void);
 
 U1              u1_g_TripcomCfgGetPIEVSTS(U1 * u1p_a_pievsts);
 U1              u1_g_TripcomCfgGetPHVMDIND(U1 * u1p_a_phvmdind);
