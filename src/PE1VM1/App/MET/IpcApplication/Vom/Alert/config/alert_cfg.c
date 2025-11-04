@@ -311,6 +311,7 @@ U1    u1_g_AlertCfgP_mflid_FlidCalibJdg(void)
     U1              u1_t_open_msg_rqst;
     U1              u1_t_calib_jdg;
 
+#if 0   /* BEV Rebase provisionally */
     u1_t_calib_jdg     = u1_CALIB_MCUID0432_LIDINFO;
 
     if(u1_t_calib_jdg == (U1)CALIB_MCUID0432_LSTM){
@@ -319,6 +320,9 @@ U1    u1_g_AlertCfgP_mflid_FlidCalibJdg(void)
     else{
         u1_t_open_msg_rqst = u1_s_OPEN_MSG_UNKNOWN;
     }
+#else   /* BEV Rebase provisionally */
+    u1_t_open_msg_rqst = u1_s_OPEN_MSG_UNKNOWN;
+#endif   /* BEV Rebase provisionally */
 
     return(u1_t_open_msg_rqst);
 }
