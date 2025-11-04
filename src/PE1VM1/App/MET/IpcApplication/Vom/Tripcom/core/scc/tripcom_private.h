@@ -125,10 +125,6 @@
 #define TRIPCOM_ENGPARAM_DKHCOEF                (3U)                    /*  Coefficient to adjust distance                                               */
 #define TRIPCOM_ENGPARAM_SAVEFSRA               (4U)                    /*  Saved fe per sec                                                             */
 
-#define TRIPCOM_NUM_MTRLINFO                    (2U)
-#define TRIPCOM_FUELINFO_FULL_10ML              (0U)                    /*  Full fuel volume                                                             */
-#define TRIPCOM_FUELINFO_LEFT_10ML              (1U)                    /*  Left fuel volume                                                             */
-
 #define TRIPCOM_FUELUSD_PC_PER_L                (2000000U)
 #define TRIPCOM_HYDRUSD_PC_PER_KG               (1000000U)
 #define TRIPCOM_EPUSD_PC_PER_KWH                (100000U)
@@ -155,10 +151,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  for application                                                                                                                  */
 U1              u1_g_TripcomOvrfChk(const U4 u4_a_AUGEND, const U4 u4_a_ADDEND, const U4 u4_a_MAX);
-U1              u1_g_TripcomGetMaterialInfo(const U1 u1_a_INFOID, U2 * u2p_a_val);
-U1              u1_g_TripcomGetEMGF(U1 * u1p_a_emgf);
 U1              u1_g_TripcomGetPIEVSTS(U1 * u1p_a_pievsts);
-U1              u1_g_TripcomGetPHVMDIND(U1 * u1p_a_phvmdind);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
