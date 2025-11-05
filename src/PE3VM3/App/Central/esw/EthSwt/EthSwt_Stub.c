@@ -42,8 +42,8 @@ void EthSwt_Stub_Init(void)
 /* -------------------------------------------------------------------------- */
 void EthSwt_Stub_Observe(void)
 {
-    uint8   SAILStatus;
-    uint8   AOSSStatus;
+    volatile uint8   SAILStatus;
+    volatile uint8   AOSSStatus;
 
     SAILStatus = Dio_ReadChannel(DIO_ID_PORT8_CH8);
     AOSSStatus = Dio_ReadChannel(DIO_ID_PORT17_CH0);

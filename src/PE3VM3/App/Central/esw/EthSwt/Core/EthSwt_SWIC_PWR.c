@@ -84,7 +84,7 @@ void EthSwt_SWIC_PWR_Init(void)
 /* -------------------------------------------------------------------------- */
 void EthSwt_SWIC_PWR_LoProc(void)
 {
-    /* LoProc‚É‚æ‚éó‘Ô‘JˆÚ‚Í1‰ñ‚É‚·‚é•ûj‚Ì‚à‚ÆÀ‘• */
+    /* LoProcï¿½É‚ï¿½ï¿½ï¿½Ô‘Jï¿½Ú‚ï¿½1ï¿½ï¿½É‚ï¿½ï¿½ï¿½ï¿½ï¿½jï¿½Ì‚ï¿½ï¿½Æï¿½ï¿½ï¿½ */
     G_ETHSWT_SWIC_PWR_PROC_LIST[G_SWIC_PWR_Status]();
 
     return;
@@ -128,7 +128,7 @@ static void ethswt_swic_pwr_offProc (void)
     Std_ReturnType  isPowerOnCond;
     do {
         isPowerOnCond = ethswt_swic_pwr_checkPowerCond();
-        if (isPowerOnCond != STD_ON) { break; }             /* do-while•K—v‚È‚¢‚ªAŠg’£«‚ğl—¶‚µ‚Ä‹LÚ */
+        if (isPowerOnCond != STD_ON) { break; }             /* do-whileï¿½Kï¿½vï¿½È‚ï¿½ï¿½ï¿½ï¿½Aï¿½gï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½lï¿½ï¿½ï¿½ï¿½ï¿½Ä‹Lï¿½ï¿½ */
     } while (0);
 
     return;
@@ -143,7 +143,7 @@ static void ethswt_swic_pwr_waitSuplyProc (void)
         if (isPowerOnCond != STD_ON) { break; }
         
         isSupply = ethswt_swic_pwr_checkSuply();
-        if (isSupply != STD_ON) { break; }                  /* do-while•K—v‚È‚¢‚ªAŠg’£«‚ğl—¶‚µ‚Ä‹LÚ */
+        if (isSupply != STD_ON) { break; }                  /* do-whileï¿½Kï¿½vï¿½È‚ï¿½ï¿½ï¿½ï¿½Aï¿½gï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½lï¿½ï¿½ï¿½ï¿½ï¿½Ä‹Lï¿½ï¿½ */
     } while (0);
 
     return;
@@ -255,7 +255,7 @@ static Std_ReturnType ethswt_swic_pwr_checkSuply (void)
     ret = EthSwt_SWIC_Cfg_CheckSuplyState();
 
     if (ret == STD_ON) {
-        ethswt_swic_pwr_stm(D_ETHSWT_SWIC_PWR_EV_PMICON);
+        ethswt_swic_pwr_stm(D_ETHSWT_SWIC_PWR_EV_SUPLY);
     } else {
         ethswt_swic_pwr_stm(D_ETHSWT_SWIC_PWR_EV_PMICOFF);
     }
