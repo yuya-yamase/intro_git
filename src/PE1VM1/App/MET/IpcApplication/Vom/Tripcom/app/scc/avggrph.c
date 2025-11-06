@@ -1,4 +1,4 @@
-/* 1.2.2 */
+/* 1.3.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,8 +10,8 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define AVGGRPH_C_MAJOR                         (1)
-#define AVGGRPH_C_MINOR                         (2)
-#define AVGGRPH_C_PATCH                         (2)
+#define AVGGRPH_C_MINOR                         (3)
+#define AVGGRPH_C_PATCH                         (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -36,7 +36,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-
+#define AVGGRPH_VM_1WORD                (1U)
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -222,6 +222,7 @@ void            vd_g_AvgGrphUpdt(const U1 u1_a_CNTTID, const U4 u4_a_data, const
     U1                          u1_t_next;
     const ST_AVGGRPH_CNTT *     st_tp_cfg;
     U1                          u1_t_msid;
+    U1                          u1_t_read_sts;
     U4                          u4_t_yymmddwk;
 
     if(u1_a_CNTTID < (U1)AVGGRPH_NUM_CNTT){
@@ -243,11 +244,11 @@ void            vd_g_AvgGrphUpdt(const U1 u1_a_CNTTID, const U4 u4_a_data, const
             vd_g_TripcomMsSetNvmRqst(u1_t_msid);
         }
         if(st_tp_cfg->u2p_date != vdp_PTR_NA){
-#if 0   /* BEV Rebase provisionally */
-            u4_t_yymmddwk = u4_g_DateSICal();
-#else   /* BEV Rebase provisionally */
-           u4_t_yymmddwk = (U1)0U;
-#endif   /* BEV Rebase provisionally */
+            u4_t_yymmddwk = (U4)0U;  
+            u1_t_read_sts = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_CPREQ_015, &u4_t_yymmddwk, (U2)AVGGRPH_VM_1WORD);
+            if(u1_t_read_sts == (U1)IVDSH_NO_REA){
+                u4_t_yymmddwk = (U4)0U;
+            }
             st_tp_cfg->u2p_date[u1_t_next] = (U2)((u4_t_yymmddwk & (U4)((U4)YYMMDDWK_BIT_DA | (U4)YYMMDDWK_BIT_MO)) >> YYMMDDWK_LSB_DA);
             u1_t_msid = st_tp_cfg->u1_msid_date + u1_t_next;
             vd_g_TripcomMsSetAccmltVal(u1_t_msid, (U4)(st_tp_cfg->u2p_date[u1_t_next]));
@@ -498,9 +499,15 @@ void            vd_g_AvgGrphTimeCnt(void)
 /*  1.2.0    04/20/2025  SN       Add maximum guard in vd_g_AvgGrphUpdt                                                              */
 /*  1.2.1    04/18/2025  TH       Fix: Update Result when GrphUpdt                                                                   */
 /*  1.2.2    05/20/2025  KM       Add delay count for TRIPCOM_MS_NVMSTS_NON                                                          */
+/*  1.3.0    05/08/2025  MN       Change for BEV PreCV.                                                                              */
+/*                                                                                                                                   */
+/*  Revision Date        Author   Change Description                                                                                 */
+/* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
+/* BEV-1     05/08/2025  MN       Change for BEV PreCV.(MET-M_CLKCTL-CSTD-0-/MET-M_CAL-CSTD-0-)                                      */
 /*                                                                                                                                   */
 /*  * TH   = Taisuke Hirakawa, KSE                                                                                                   */
 /*  * SN   = Shimon Nambu, Denso Techno                                                                                              */
 /*  * KM   = Keisuke Mashita, Denso Techno                                                                                           */
+/*  * MN   = Mikiya Negishi, KSE                                                                                                     */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

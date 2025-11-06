@@ -1,4 +1,4 @@
-/* 2.4.1 */
+/* 2.5.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,8 +10,8 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define TRIPCOM_COMTX_C_MAJOR                     (2)
-#define TRIPCOM_COMTX_C_MINOR                     (4)
-#define TRIPCOM_COMTX_C_PATCH                     (1)
+#define TRIPCOM_COMTX_C_MINOR                     (5)
+#define TRIPCOM_COMTX_C_PATCH                     (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -89,7 +89,9 @@ static  U1                                      u1_s_tripcom_tx_emgf_elpsd;
 static  U1                                      u1_s_tripcom_tx_emgf;
 static  U1                                      u1_sp_tripcom_tx_unit[TRIPCOM_NUM_CANTXUNIT];
 static  U2                                      u2_sp_tripcom_tx_value[TRIPCOM_NUM_CNTTS];
+#if 0   /* BEV BSW provisionally */
 static  U1                                      u1_s_tripcom_tx_m1fc_timer;
+#endif
 static  U1                                      u1_s_tripcom_tx_m1ec_timer;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -311,7 +313,9 @@ static  void    vd_s_TripcomCfgCanTxInit(void)
     u1_s_tripcom_tx_drvcyc      = (U1)FALSE;
     u1_s_tripcom_tx_emgf_elpsd  = (U1)U1_MAX;
     u1_s_tripcom_tx_emgf        = (U1)FALSE;
+#if 0   /* BEV BSW provisionally */
     u1_s_tripcom_tx_m1fc_timer  = (U1)U1_MAX;
+#endif
     u1_s_tripcom_tx_m1ec_timer  = (U1)U1_MAX;
     for (u4_t_loop = (U4)0U; u4_t_loop < (U4)TRIPCOM_NUM_CANTXUNIT; u4_t_loop++) {
         u1_sp_tripcom_tx_unit[u4_t_loop] = (U1)0U;
@@ -412,9 +416,6 @@ static  void    vd_s_TripcomCfgCanTxPtsOn250ms(void)
         (void)Com_TriggerIPDUSend(MSG_MET1S52_TXCH0);
 #endif   /* BEV Rebase provisionally */
         (void)Com_TriggerIPDUSend(MSG_MET1S55_TXCH0);
-#if 0   /* BEV Rebase provisionally */
-        (void)Com_TriggerIPDUSend(MSG_MET1S56_TXCH0);
-#endif   /* BEV Rebase provisionally */
     }
     u1_t_igsts = u1_g_VehopemdIgnOn();
     if (u1_t_igsts == (U1)TRUE) {
@@ -597,6 +598,7 @@ static  void    vd_s_TripcomCfgCanTxASFC(const U2 u2_a_VALUE)
 static  void    vd_s_TripcomCfgCanTxM1FC1(const U2 u2_a_VALUE)
 {
 
+#if 0   /* BEV BSW provisionally */
     U2          u2_t_prem1fc1;
     U1          u1_t_m1fcr;
     U1          u1_t_sndflg;
@@ -653,6 +655,7 @@ static  void    vd_s_TripcomCfgCanTxM1FC1(const U2 u2_a_VALUE)
         (void)Com_TriggerIPDUSend(MSG_MET1S55_TXCH0);
 #endif   /* BEV Rebase provisionally */
     }
+#endif
 
 }
 
@@ -669,14 +672,10 @@ static  void    vd_s_TripcomCfgCanTxTOEC(const U2 u2_a_VALUE)
 
 
     u2_t_presndval = (U2)0U;
-#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_TO_EC, &u2_t_presndval);
-#endif   /* BEV Rebase provisionally */
     if (u2_t_presndval != u2_a_VALUE) {
-#if 0   /* BEV Rebase provisionally */
         (void)Com_SendSignal(ComConf_ComSignal_TO_EC, &u2_a_VALUE);
-        (void)Com_TriggerIPDUSend(MSG_MET1S56_TXCH0);
-#endif   /* BEV Rebase provisionally */
+        (void)Com_TriggerIPDUSend(MSG_MET1S55_TXCH0);
     }
 }
 
@@ -1180,6 +1179,7 @@ static  void    vd_s_TripcomCfgCanDrTx(void)
 /*  2.3.1    10/22/2024  TH       tripcom.c v2.3.0 -> v2.3.1.                                                                        */
 /*  2.4.0    02/18/2025  MaO(M)   tripcom.c v2.3.1 -> v2.4.0.                                                                        */
 /*  2.4.1    04/22/2025  KM       tripcom.c v2.4.0 -> v2.4.1.                                                                        */
+/*  2.5.0    06/23/2025  RS       Change for BEV System_Consideration_2.                                                             */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
@@ -1217,5 +1217,6 @@ static  void    vd_s_TripcomCfgCanDrTx(void)
 /*  * TN   = Tetsushi Nakano, Denso Techno                                                                                           */
 /*  * MaO(M) = Masayuki Okada, NTT Data MSE                                                                                          */
 /*  * KM   = Kazuma Miyazawa, Denso Techno                                                                                           */
+/*  * RS   = Ryuki Sako, Denso Techno                                                                                                */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
