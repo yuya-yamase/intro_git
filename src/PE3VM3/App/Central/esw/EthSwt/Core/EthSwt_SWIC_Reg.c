@@ -59,7 +59,7 @@ static Std_ReturnType swic_Reg_SetTblWriteOFF(const swic_reg_data_t tbl[], const
 			break;
 		}
 
-		checkPwr = EthSwt_SWIC_AllowSetRegister();			/* OEM Config */
+		checkPwr = EthSwt_SWIC_Cfg_AllowSetRegister();			/* OEM Config */
 		if (checkPwr == E_NOT_OK) {
 			*errFactor = D_ETHSWT_SWIC_ERR_POWEROFF;
 			break;
@@ -95,7 +95,7 @@ static Std_ReturnType swic_Reg_SetTblReadON(const swic_reg_data_t tbl[], const u
 			cnt = 0u;										/* ˜A‘±3‰ñ */
 		}
 		else {
-			checkPwr = EthSwt_SWIC_AllowSetRegister();		/* OEM Config */
+			checkPwr = EthSwt_SWIC_Cfg_AllowSetRegister();		/* OEM Config */
 			if (checkPwr == E_NOT_OK) {
 				*errFactor = D_ETHSWT_SWIC_ERR_POWEROFF;
 				break;
@@ -144,7 +144,7 @@ static Std_ReturnType swic_Reg_SetTblReadOFF(const swic_reg_data_t tbl[], const 
 			}
 		}
 
-		checkPwr = EthSwt_SWIC_AllowSetRegister();			/* OEM Config */
+		checkPwr = EthSwt_SWIC_Cfg_AllowSetRegister();			/* OEM Config */
 		if (checkPwr == E_NOT_OK) {
 			*errFactor = D_ETHSWT_SWIC_ERR_POWEROFF;
 			break;

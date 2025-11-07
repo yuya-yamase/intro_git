@@ -13,30 +13,36 @@
 #define D_ETHSWT_SWIC_PORT_NUM                      (9U)
 extern const Eth_ModeType G_ETHSWT_SWIC_PORT_DEFINE[D_ETHSWT_SWIC_PORT_NUM];
 /* -------------------------------------------------------------------------- */
+void EthSwt_SWIC_Cfg_Init(void);
+/* -------------------------------------------------------------------------- */
 /* Config for EthSwt_SWIC_PWR.c                                               */
 /* -------------------------------------------------------------------------- */
 #define D_ETHSWT_SWIC_PWR_CYCLE                     (5U)
-#define D_ETHSWT_SWIC_PWR_ON_WAIT                   (105U)  /* 35ms(T8) + 60ms(T9) + PwrCtrlがEthSwtよりも先にコールされる + (タスク・CPUクロック誤差考慮) */
+#define D_ETHSWT_SWIC_PWR_ON_WAIT                   (155U)  /* 35ms(T8) + 60ms(T9) + PwrCtrlがEthSwtよりも先にコールされる + (タスク・CPUクロック誤差考慮) */ /* 暫定 */
 #define D_ETHSWT_SWIC_PWR_ASSERT_WAIT               (10U)    /* 1ms(T1) + (タスク・CPUクロック誤差) */
 #define D_ETHSWT_SWIC_PWR_DEASSERT_WAIT             (20U)   /* 15ms(T2) + (タスク・CPUクロック誤差) */
 
-void EthSwt_SWIC_SetGPIOMode(void);
-void EthSwt_SWIC_SetSPIMode(void);
-void EthSwt_SWIC_SetPowerOn(void);
-void EthSwt_SWIC_SetPowerOff(void);
-void EthSwt_SWIC_SetResetAssert(void);
-void EthSwt_SWIC_SetResetDeassert(void);
+void EthSwt_SWIC_Cfg_PowerOnReq(void);
+void EthSwt_SWIC_Cfg_PowerOffReq(void);
+Std_ReturnType EthSwt_SWIC_Cfg_CheckPowerCond(void);
+Std_ReturnType EthSwt_SWIC_Cfg_CheckSuplyState(void);
+void EthSwt_SWIC_Cfg_SetGPIOMode(void);
+void EthSwt_SWIC_Cfg_SetSPIMode(void);
+void EthSwt_SWIC_Cfg_SetPowerOn(void);
+void EthSwt_SWIC_Cfg_SetPowerOff(void);
+void EthSwt_SWIC_Cfg_SetResetAssert(void);
+void EthSwt_SWIC_Cfg_SetResetDeassert(void);
 
 /* -------------------------------------------------------------------------- */
 /* Config for EthSwt_SWIC_STM.c                                               */
 /* -------------------------------------------------------------------------- */
-Std_ReturnType EthSwt_SWIC_AllowRelay(void);
+Std_ReturnType EthSwt_SWIC_Cfg_AllowRelay(void);
 
 /* -------------------------------------------------------------------------- */
 /* Config for EthSwt_SWIC_STM.c                                               */
 /* Config for EthSwt_SWIC_Reg.c                                               */
 /* -------------------------------------------------------------------------- */
-Std_ReturnType EthSwt_SWIC_AllowSetRegister(void);
+Std_ReturnType EthSwt_SWIC_Cfg_AllowSetRegister(void);
 
 /* -------------------------------------------------------------------------- */
 /* Config for EthSwt_SWIC_Reg.c                                               */
