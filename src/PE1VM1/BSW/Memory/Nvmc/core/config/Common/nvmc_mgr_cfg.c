@@ -59,9 +59,7 @@
 #include "nvmc_dtf_inactdummy.h"
 
 /* START : ##TOOL_OUT#NVMC_APP_FUNC_INCLUDE_HEADER## */
-#if 0   /* BEV Rebase provisionally */
 #include "odo_nvmif.h"
-#endif   /* BEV Rebase provisionally */
 /* END : ##TOOL_OUT#NVMC_APP_FUNC_INCLUDE_HEADER## */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -86,11 +84,7 @@
 /*  Defines                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* START : ##TOOL_OUT#NVMC_APP_ACS_NUM## */
-#if 0   /* BEV Rebase provisionally */
 #define NVMC_APP_ACS_NUM                         (3U)
-#else   /* BEV Rebase provisionally */
-#define NVMC_APP_ACS_NUM                         (1U)
-#endif   /* BEV Rebase provisionally */
 /* END : ##TOOL_OUT#NVMC_APP_ACS_NUM## */
 
 #define NVMC_READ_BUF_SIZE                       (NVMC_DTF_READ_BUFFER_SIZE + NVMC_EEP_READ_BUFFER_SIZE)
@@ -234,10 +228,8 @@ const ST_NVMC_MODULE_CFG    st_dp_NVMC_MODULE_CFG[NVMC_MODULE_NUM] = {
 
 const ST_NVMC_APP_FUNC st_NVMC_APP_FUNC_TABLE[NVMC_APP_ACS_NUM] = {
 /* START : ##TOOL_OUT#NVMC_APP_FUNC_TABLE## */
-#if 0   /* BEV Rebase provisionally */
     {&vd_g_OdoNvmIfOdoRWTask,  &vd_g_OdoNvmIfOdoRWFinhk },
     {&vd_g_OdoNvmIfTripRWTask, &vd_g_OdoNvmIfTripRWFinhk},
-#endif   /* BEV Rebase provisionally */
     {&vd_d_Nvmc_Recovery_DTF,  vdp_PTR_NA               } 
 /* END : ##TOOL_OUT#NVMC_APP_FUNC_TABLE## */
 };
