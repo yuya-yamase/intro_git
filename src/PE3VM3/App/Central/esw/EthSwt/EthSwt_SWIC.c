@@ -9,7 +9,6 @@
 #include <EthSwt_SWIC_Link.h>
 #include <EthSwt_SWIC_Port.h>
 #include <EthSwt_SWIC_Cfg.h>
-#include <EthSwt_Stub.h>			/* Žb’è */
 /* -------------------------------------------------------------------------- */
 void EthSwt_SWIC_Init(const EthSwt_ConfigType *CfgPtr)
 {
@@ -17,7 +16,6 @@ void EthSwt_SWIC_Init(const EthSwt_ConfigType *CfgPtr)
 	EthSwt_SWIC_PWR_Init();
 	EthSwt_SWIC_STM_Init();
 	EthSwt_SWIC_Cfg_Init();
-	EthSwt_Stub_Init();				/* Žb’è */
 	return;
 }
 /* -------------------------------------------------------------------------- */
@@ -30,7 +28,6 @@ void EthSwt_SWIC_HiProc(void)
 void EthSwt_SWIC_LoProc(void)
 {
 	EthSwt_SWIC_PWR_LoProc();
-	EthSwt_Stub_Observe();			/* Žb’è */
 
 	return;
 }

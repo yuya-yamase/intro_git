@@ -10,7 +10,7 @@
 #include <Port.h>
 #include <VIS.h>
 #include <EthSwt_SWIC_PWR.h>
-#include <EthSwt_Stub.h>
+#include <PwrCtrl_Main.h>
 /* -------------------------------------------------------------------------- */
 /* Common */
 const Eth_ModeType G_ETHSWT_SWIC_PORT_DEFINE[D_ETHSWT_SWIC_PORT_NUM] =
@@ -68,8 +68,8 @@ Std_ReturnType EthSwt_SWIC_Cfg_CheckPowerCond(void)
     uint8           sail_resout_n;
     uint8           aoss_sleep_entry_exit;
 
-    sail_resout_n = EthSwt_Stub_GetSAIL();              /* ébíË ÇÃÇøÇ…PwrCtrlÇÃAPIÇ…ïœçX */
-    aoss_sleep_entry_exit = EthSwt_Stub_GetAOSSS();     /* ébíË ÇÃÇøÇ…PwrCtrlÇÃAPIÇ…ïœçX */
+    sail_resout_n = u1_g_PwrCtrlMainGetPinInfo(PWRCTRL_MAIN_PINID_SAIL_RES);
+    aoss_sleep_entry_exit = u1_g_PwrCtrlMainGetPinInfo(PWRCTRL_MAIN_PINID_AOSS_SLP);
 
     if (S_ETHSWT_SWIC_POWERONREQ == STD_ON && sail_resout_n == STD_HIGH && aoss_sleep_entry_exit == STD_LOW) {
         ret = STD_ON;
@@ -86,7 +86,7 @@ Std_ReturnType EthSwt_SWIC_Cfg_CheckSuplyState(void)
     Std_ReturnType  ret = STD_OFF;
     Std_ReturnType  din2_stat = STD_OFF;
 
-    din2_stat = EthSwt_Stub_GetDIN2();                  /* ébíË ÇÃÇøÇ…ëºAPIÇ…ïœçX */
+    din2_stat = STD_ON;                  /* ébíË ÇÃÇøÇ…ëºAPIÇ…ïœçX */
 
     if (din2_stat == STD_ON) {
         ret = STD_ON;
