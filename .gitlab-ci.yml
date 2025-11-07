@@ -1,32 +1,18 @@
 stages:          # List of stages for jobs, and their order of execution
-  - merge_target  # Stage for recording initial MR status
   - build_1MUS   # Stage for building 1MUS project
   - build_1MJP   # Stage for building 1MJP project
   - build_1MOT   # Stage for building 1MOT project
   - notification
 
-merge_target_branch:
-  stage: merge_target
+build-1MUS-job:
+  stage: build_1MUS
   script:
+    #Merge target branch
     - echo "Fetching target branch for merged results simulation..."
     - git fetch origin $CI_MERGE_REQUEST_TARGET_BRANCH_NAME
     - echo "Merging target branch into current branch..."
     - git merge origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME --no-edit
-  artifacts:
-    paths:
-      - ./
-    expire_in: 1 hour
-  rules:
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "develop"'
-      when: always
-  tags:
-    - ci_develop_cdc
 
-build-1MUS-job:
-  stage: build_1MUS
-  dependencies:  
-    - merge_target_branch 
-  script:
     - pushd .\tool\RenameMountDriveInfo
     - .\x_sb.bat z
     - popd
@@ -46,16 +32,20 @@ build-1MUS-job:
     expire_in: 1 hour
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "develop"'
-      when: on_success
+      when: always
       # Only run this job for merge requests targeting the develop branch
   tags:
     - ci_develop_cdc
 
 build-1MJP-job:
   stage: build_1MJP
-  dependencies:  
-    - merge_target_branch 
   script:
+    #Merge target branch
+    - echo "Fetching target branch for merged results simulation..."
+    - git fetch origin $CI_MERGE_REQUEST_TARGET_BRANCH_NAME
+    - echo "Merging target branch into current branch..."
+    - git merge origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME --no-edit
+
     - pushd .\tool\RenameMountDriveInfo
     - .\x_sb.bat z
     - popd
@@ -82,9 +72,13 @@ build-1MJP-job:
 
 build-1MOT-job:
   stage: build_1MOT
-  dependencies:  
-    - merge_target_branch 
   script:
+    #Merge target branch
+    - echo "Fetching target branch for merged results simulation..."
+    - git fetch origin $CI_MERGE_REQUEST_TARGET_BRANCH_NAME
+    - echo "Merging target branch into current branch..."
+    - git merge origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME --no-edit
+    
     - pushd .\tool\RenameMountDriveInfo
     - .\x_sb.bat z
     - popd
