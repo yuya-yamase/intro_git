@@ -16,14 +16,14 @@
 /* Macros                                                                   */
 /*--------------------------------------------------------------------------*/
 /* Number Of Channel */
-#define BSW_COMM_CFG_CHNUM             (4U)
+#define BSW_COMM_CFG_CHNUM             (5U)
 
 /* Bus Type */
 #define BSW_COMM_CFG_BUS_TYPE_0        (BSW_COMM_BUS_TYPE_CAN)
 #define BSW_COMM_CFG_BUS_TYPE_1        (BSW_COMM_BUS_TYPE_CAN)
 #define BSW_COMM_CFG_BUS_TYPE_2        (BSW_COMM_BUS_TYPE_CAN)
 #define BSW_COMM_CFG_BUS_TYPE_3        (BSW_COMM_BUS_TYPE_CAN)
-#define BSW_COMM_CFG_BUS_TYPE_4        (BSW_COMM_BUS_TYPE_INVALID)
+#define BSW_COMM_CFG_BUS_TYPE_4        (BSW_COMM_BUS_TYPE_CAN)
 #define BSW_COMM_CFG_BUS_TYPE_5        (BSW_COMM_BUS_TYPE_INVALID)
 #define BSW_COMM_CFG_BUS_TYPE_6        (BSW_COMM_BUS_TYPE_INVALID)
 #define BSW_COMM_CFG_BUS_TYPE_7        (BSW_COMM_BUS_TYPE_INVALID)
@@ -438,7 +438,7 @@
 #define BSW_COMM_CFG_NM_ACT_TYPE_0          (BSW_COMM_NM_ACT_TYPE_BSSLP)
 #define BSW_COMM_CFG_NM_ACT_TYPE_1          (BSW_COMM_NM_ACT_TYPE_BSSLP)
 #define BSW_COMM_CFG_NM_ACT_TYPE_2          (BSW_COMM_NM_ACT_TYPE_BSSLP)
-#define BSW_COMM_CFG_NM_ACT_TYPE_3          (BSW_COMM_NM_ACT_TYPE_NO_BSSLP)
+#define BSW_COMM_CFG_NM_ACT_TYPE_3          (BSW_COMM_NM_ACT_TYPE_BSSLP)
 #define BSW_COMM_CFG_NM_ACT_TYPE_4          (BSW_COMM_NM_ACT_TYPE_NO_BSSLP)
 #define BSW_COMM_CFG_NM_ACT_TYPE_5          (BSW_COMM_NM_ACT_TYPE_NO_BSSLP)
 #define BSW_COMM_CFG_NM_ACT_TYPE_6          (BSW_COMM_NM_ACT_TYPE_NO_BSSLP)
@@ -472,7 +472,8 @@
 #define ComMConf_ComMChannel_CANFD_G2M_1_BUS                (0U)
 #define ComMConf_ComMChannel_CANFD_G2M_2_BUS                (1U)
 #define ComMConf_ComMChannel_CDC_VCAN_BUS                   (2U)
-#define ComMConf_ComMChannel_CANFD_G5M_BUS                  (3U)
+#define ComMConf_ComMChannel_MM_SUB_BUS                     (3U)
+#define ComMConf_ComMChannel_CANFD_G5M_BUS                  (4U)
 
 /* Symbolic Name Reference - PNC No. */
 #define ComMConf_ComMPnc_Awake_16                           (16U)

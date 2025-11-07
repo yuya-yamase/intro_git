@@ -1,7 +1,7 @@
 /* Fee_Common.c v2-0-0                                                     */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION. All rights reserved.                        */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -16,17 +16,17 @@
 
 #include "../inc/Fee_Mpu_Dev_Const.h"
 
-/* MHA[データFlash]I/Fヘッダ */
+/* MHA (Data Flash) I/F header */
 #include "../inc/Fee_Legacy.h"
 
-/* MHA[データFlash]ヘッダ */
+/* MHA header */
 #include "../inc/Fee_Lib.h"
 
-/* MHA[データFlash]ライブラリヘッダ */
+/* MHA library header */
 #include "../inc/Fee_Common.h"
 
 
-/* D.F.C.ヘッダ */
+/* D.F.C. header */
 #include "../inc/Fee_Dfc.h"
 
 /*--------------------------------------------------------------------------*/
@@ -38,7 +38,7 @@
 #define FEE_START_SEC_CONST_32
 #include <Fee_MemMap.h>
 
-/* WC 書き込みデータ */
+/* WC write data */
 CONST(uint8, FEE_CONST) Fee_FixWCData[ FEE_DFLASH_FORMAT_WC_MAX_SIZE ] =
 {
     FEE_WCDAT_PHYSICAL_IMAGE_UPPER,
@@ -50,7 +50,7 @@ CONST(uint8, FEE_CONST) Fee_FixWCData[ FEE_DFLASH_FORMAT_WC_MAX_SIZE ] =
     FEE_WCDAT_PHYSICAL_IMAGE_UPPER,
     FEE_WCDAT_PHYSICAL_IMAGE_LOWER
 };
-/* DATA-STATUS書き込みデータ */
+/* DATA-STATUS write data */
 CONST(uint8, FEE_CONST) Fee_FixDSData[ FEE_DFLASH_FORMAT_DS_MAX_SIZE ] =
 {
     FEE_DSDAT_PHYSICAL_IMAGE_UPPER,
@@ -62,7 +62,7 @@ CONST(uint8, FEE_CONST) Fee_FixDSData[ FEE_DFLASH_FORMAT_DS_MAX_SIZE ] =
     FEE_DSDAT_PHYSICAL_IMAGE_UPPER,
     FEE_DSDAT_PHYSICAL_IMAGE_LOWER
 };
-/* BS初期ステータスデータ */
+/* BS initial status data */
 CONST(uint8, FEE_CONST) Fee_FixBSData[ FEE_DFLASH_FORMAT_BS_MAX_SIZE ] =
 {
     FEE_BSDAT_PHYSICAL_IMAGE_UPPER,

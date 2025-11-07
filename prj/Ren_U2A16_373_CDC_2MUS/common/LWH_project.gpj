@@ -1,0 +1,14 @@
+#!gbuild
+[Subproject]
+    :sourceDir=${HV_DIR}
+
+ehvm_cfg.c
+ehvm_cfg_memory.c
+ehvm_cfg_memory_pe0.c
+ehvm_cfg_memory_pe1.c
+ehvm_cfg_memory_pe2.c
+ehvm_cfg_memory_pe3.c
+ehvm_cfg_pe0.c
+ehvm_cfg_pe1.c
+ehvm_cfg_pe2.c
+ehvm_cfg_pe3.c

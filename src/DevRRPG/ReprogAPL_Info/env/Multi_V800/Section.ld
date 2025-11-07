@@ -32,6 +32,7 @@ SECTIONS
 		.APL_JUMPADDR					(apl_jump_addr)					: > .
 
 	.Rom1End															: > ROM1_END
+	.secinfo							ALIGN(4)						: > .
 
 	/* Ram */
 	.LocalRamStart						ALIGN(4)						: > LOCAL_RAM_CPU0

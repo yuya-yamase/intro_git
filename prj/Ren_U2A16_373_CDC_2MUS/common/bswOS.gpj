@@ -1,0 +1,47 @@
+#!gbuild
+[Subproject]
+    :sourceDir=${OS_DIR}
+    -DMCOS_AUTOSAR=1
+    -DOS_MEMMAP_ENABLE=1
+    -DMCOS
+    -DMCOS_USE_PROCESS_MODEL=0
+    -DUSE_EBINDER=0
+    -DBUILD_LIB=0
+    -DUSE_OSLIB=1
+
+    -I${OS_DIR}/include/ar_sys
+    # 当gpjのソースでインクルードしている stdint.h はコンパイラ標準のヘッダではなく上記パスのヘッダ
+    -I${OS_DIR}/config/mcos
+    -I${OS_DIR}/mcos/autosar/src
+    -I${OS_DIR}/mcos/include
+    -I${OS_DIR}/mcos/mk/include
+    -I${OS_DIR}/mcos/autosar/config/generated
+    -I${OS_DIR}/mcos/config_data/autosar
+    -I${OS_DIR}/mcos/config_data/mk
+    -I${OS_DIR}/mcos/mk/sys/arch/v850
+    -I${OS_DIR}/mcos/autosar/src/v850
+
+
+hal/config_data/chip/rh850u2a/haldata_rh850u2a.c
+hal/config_data/chip/rh850u2a/mcos/haldata_mcos_rh850u2a.c
+hal/config_data/cpu/v850/mcos/haldata_mcos_v850.c
+hal/user_impl/board/yrh850x2xmbt1/hal/hal_yrh850x2xmbt1_initialize.c
+hal/user_impl/chip/rh850u2a/hal/hal_os_rh850u2a_pic_init.c
+hal/user_impl/cpu/v850/mcos/mcos_os_v850_stk_ghs.850
+hal/user_impl/cpu/v850/mcos/mcos_os_v850_vector_ghs.850
+mcos/autosar/config/generated/ar_inttbl_ghs.850
+mcos/autosar/config/generated/mcos_c_init_table.c
+mcos/autosar/config/generated/Os_Cfg.c
+mcos/config_data/autosar/ar_data.c
+mcos/config_data/autosar/v850/ar_data_v850.c
+mcos/config_data/autosar/ar_func_table.c
+mcos/config_data/mk/mcos_mk_data.c
+mcos/config_data/mk/mcos_mk_data_v850.c
+mcos/user_impl/mcos_hook.c
+mcos/user_impl/mcos_userhook.c
+mcos/user_impl/mcos_refresh.c
+mcos/user_impl/mcos_trace.c
+mcos/user_impl/v850_exc_entry_ghs.850
+mcos/user_impl/v850_nonos_exc_handler.c
+mcos/config_data/autosar/v850/ar_svc_if_v850_ghs.850
+

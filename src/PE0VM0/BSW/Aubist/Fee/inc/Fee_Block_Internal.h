@@ -1,7 +1,7 @@
 /* Fee_Block_Internal.h v2-0-0                                              */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION. All rights reserved.                        */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -20,15 +20,15 @@
 /*--------------------------------------------------------------------------*/
 /* Macros                                                                   */
 /*--------------------------------------------------------------------------*/
-#define FEE_FIX_BS_JUDGE_TBL_OFFSET     (1U)    /* ブロックステータスデータ確定遷移先判定テーブル オフセット */
+#define FEE_FIX_BS_JUDGE_TBL_OFFSET     (1U)    /* Block status data fixed transition destination decision table offset */
 
-#define FEE_FIX_BSTBLINDEX_SSTATUS      (0U)    /* ブロックステータスデータ確定遷移先判定テーブル サブ状態格納先インデックス */
-#define FEE_FIX_BSTBLINDEX_SSSTATUS     (1U)    /* ブロックステータスデータ確定遷移先判定テーブル サブサブ状態格納先インデックス */
+#define FEE_FIX_BSTBLINDEX_SSTATUS      (0U)    /* Block status data fixed transition destination decision table substate storage destination index */
+#define FEE_FIX_BSTBLINDEX_SSSTATUS     (1U)    /* Block status data fixed transition destination decision table subsubstate storage destination index */
 
-#define FEE_TOP_BLOCK_IN_AREA           (0U)    /* エリア内の先頭ブロック */
-#define FEE_SECOND_BLOCK_IN_AREA        (1U)    /* エリア内の先頭ブロックの次ブロック */
-#define FEE_NEXT_BLOCKNUM_OFFSET        (1U)    /* 次ブロック番号を示すオフセット */
-#define FEE_LAST_BLOCKNUM_OFFSET        (1U)    /* 最終ブロック番号算出時のオフセット */
+#define FEE_TOP_BLOCK_IN_AREA           (0U)    /* First block in area */
+#define FEE_SECOND_BLOCK_IN_AREA        (1U)    /* Next block in first block in area */
+#define FEE_NEXT_BLOCKNUM_OFFSET        (1U)    /* Offset indicating next block number */
+#define FEE_LAST_BLOCKNUM_OFFSET        (1U)    /* Offset when calculating last block number */
 
 #define FEE_BSJUDGESTATUSKINDNUM        (5U)
 #define FEE_BSJUDGESTATUSNUM            (2U)
@@ -46,57 +46,57 @@
 #define FEE_START_SEC_CODE
 #include <Fee_MemMap.h>
 
-/* 使用中ブロック作成中状態管理(消去中) */
+/* In-use block creation status management (erasing) */
 FUNC(uint32, FEE_CODE) Fee_MakeUseBlock_DoErasing( P2VAR(Fee_CpuDtfType, AUTOMATIC, TYPEDEF) ptstCPUDTFInfo );
-/* 使用中ブロック作成中状態管理(使用中設定中) */
+/* In-use block creation status management (In use and set) */
 FUNC(uint32, FEE_CODE) Fee_MakeUseBlock_DoWritingUsing( P2VAR(Fee_CpuDtfType, AUTOMATIC, TYPEDEF) ptstCPUDTFInfo );
-/* 使用中ブロック選択(有効ブロック数０) */
+/* In-use block selection (0 effective blocks) */
 FUNC(uint32, FEE_CODE) Fee_FixUseBlockInCaseOfZero( P2CONST(Fee_CpuDtfType, AUTOMATIC, TYPEDEF) ptstCPUDTFInfo, uint32 u4UnUsedCount,
                                        P2VAR(uint32, AUTOMATIC, TYPEDEF) ptu4MainValidBlockNum, P2VAR(uint32, AUTOMATIC, TYPEDEF) ptu4SubValidBlockNum );
-/* 使用中ブロック選択(有効ブロック数１) */
+/* In-use block selection (1 effective block) */
 FUNC(uint32, FEE_CODE) Fee_FixUseBlockInCaseOfOne( P2CONST(Fee_CpuDtfType, AUTOMATIC, TYPEDEF) ptstCPUDTFInfo, P2CONST(uint32, AUTOMATIC, TYPEDEF) ptu4ValidBlockNum,
                                       P2VAR(uint32, AUTOMATIC, TYPEDEF) ptu4MainValidBlockNum, P2VAR(uint32, AUTOMATIC, TYPEDEF) ptu4SubValidBlockNum );
-/* 使用中ブロック選択(有効ブロック数２以上) */
+/* In-use block selection (2 or more valid blocks) */
 FUNC(uint32, FEE_CODE) Fee_FixUseBlockInCaseOfTwoAndMore( P2CONST(Fee_CpuDtfType, AUTOMATIC, TYPEDEF) ptstCPUDTFInfo, P2CONST(uint32, AUTOMATIC, TYPEDEF) ptu4ValidBlockNum,
                                              P2VAR(uint32, AUTOMATIC, TYPEDEF) ptu4MainValidBlockNum, P2VAR(uint32, AUTOMATIC, TYPEDEF) ptu4SubValidBlockNum );
-/* ブロックステータス組み合わせ判定 */
+/* Block status combination judgment */
 FUNC(uint32, FEE_CODE) Fee_JudgeBlockStatusCombination(uint8 u1MainBlockStatus, uint8 u1SubBlockStatus, uint8 u1BlockNum, P2VAR(boolean, AUTOMATIC, TYPEDEF) u1Swap);
-/* 有効ブロック数カウント */
+/* Valid block count */
 FUNC(void, FEE_CODE) Fee_CountValidBlock( P2CONST(Fee_CpuDtfType, AUTOMATIC, TYPEDEF) ptstCPUDTFInfo, P2VAR(uint32, AUTOMATIC, TYPEDEF) ptu4ValidBlock,
                                  P2VAR(uint32, AUTOMATIC, TYPEDEF) ptu4ValidNum, P2VAR(uint32, AUTOMATIC, TYPEDEF) ptu4UnUsedNum );
 
-/* ブロックステータスデータ確定中状態管理 */
+/* Block status data pending status management */
 FUNC(uint32, FEE_CODE) Fee_FixBlockStatus( P2VAR(Fee_CpuDtfType, AUTOMATIC, TYPEDEF) ptstCPUDTFInfo );
 
-/* 使用中ブロック作成中状態管理 */
+/* In-use block creation status management */
 FUNC(uint32, FEE_CODE) Fee_MakeUseBlock( P2VAR(Fee_CpuDtfType, AUTOMATIC, TYPEDEF) ptstCPUDTFInfo );
 
-/* 転送中ブロック作成中状態管理 */
+/* In-transit block creation status management */
 FUNC(uint32, FEE_CODE) Fee_MakeMoveBlock( P2VAR(Fee_CpuDtfType, AUTOMATIC, TYPEDEF) ptstCPUDTFInfo );
 
-/* 再編終了設定中状態管理 */
+/* State Management Setting Reorg Termination */
 FUNC(uint32, FEE_CODE) Fee_SetMoveEnd( P2VAR(Fee_CpuDtfType, AUTOMATIC, TYPEDEF) ptstCPUDTFInfo );
 
-/* エリア無効・使用済設定中状態管理 */
+/* Area Disabled/Used Setting State Management */
 FUNC(uint32, FEE_CODE) Fee_SetInvalidArea( P2VAR(Fee_CpuDtfType, AUTOMATIC, TYPEDEF) ptstCPUDTFInfo );
 
-/* 使用済・故障設定中状態管理 */
+/* Used and fault setting status management */
 FUNC(uint32, FEE_CODE) Fee_SetFailBlock( P2VAR(Fee_CpuDtfType, AUTOMATIC, TYPEDEF) ptstCPUDTFInfo );
 
-/* 全ブロックステータス判定 */
+/* Full block status judgment */
 FUNC(uint32, FEE_CODE) Fee_JudgeAllBS( P2VAR(Fee_CpuDtfType, AUTOMATIC, TYPEDEF) ptstCPUDTFInfo );
 
-/* 読出し用全ブロックステータス判定 */
+/* Full block status judgment for reading */
 FUNC( void, FEE_CODE )
 Fee_JudgeAllBSRead(
     P2CONST( Fee_CpuDtfType, AUTOMATIC, FEE_VAR_NO_INIT ) ptstCPUDTFInfo,
     P2VAR  ( boolean,        AUTOMATIC, TYPEDEF         ) NeedsToFix
 );
 
-/* ブロックステータス判定 */
+/* Block status determination */
 FUNC(uint32, FEE_CODE) Fee_JudgeBS( P2VAR(Fee_UseBlockType, AUTOMATIC, TYPEDEF) ptstUseBlock );
 
-/* 読出し用ブロックステータス判定 */
+/* Block status judgment for reading */
 FUNC( uint32, FEE_CODE )
 Fee_JudgeBSForRead(
     P2VAR( Fee_UseBlockType, AUTOMATIC, FEE_VAR_NO_INIT ) ptstUseBlock
@@ -109,10 +109,10 @@ FUNC(uint32, FEE_CODE) Fee_JudgeBSData(
     P2VAR(uint8, AUTOMATIC, TYPEDEF) ptu1WritePlace
 );
 
-/* ブロックステータスデータ読出し */
+/* Read Block Status Data */
 FUNC(uint32, FEE_CODE) Fee_ReadBSData( uint8 u1BlockNo, uint32 u4BSDataKind, uint32 u4DuplicateDataKind );
 
-/* 使用中ブロック選択 */
+/* Block in use selection */
 FUNC(uint32, FEE_CODE) Fee_SelectUseBlock( P2VAR(Fee_CpuDtfType, AUTOMATIC, TYPEDEF) ptstCPUDTFInfo );
 
 FUNC(void, FEE_CODE) Fee_SetBlockStatus(

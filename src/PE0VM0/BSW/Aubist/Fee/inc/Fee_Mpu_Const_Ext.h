@@ -1,7 +1,7 @@
 /* Fee_Mpu_Const_Ext.h v1-0-0                                               */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION. All rights reserved.                        */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -18,7 +18,7 @@
 #define FEE_START_SEC_CONST_32
 #include <Fee_MemMap.h>
 
-/* セクタ先頭アドレス */
+/* sector head address */
 extern CONST(AB_83_ConstV uint32, FEE_CONST) Fee_Mpu_Cau4SectorTopAddresse[];
 extern CONST(AB_83_ConstV uint16, FEE_CONST) Fee_Mpu_Cau4SectorTopAddresseSize;
 

@@ -33,7 +33,8 @@
 /* #define ComMConf_ComMChannel_CANFD_G2M_1_BUS (0U) */
 /* #define ComMConf_ComMChannel_CANFD_G2M_2_BUS (1U) */
 /* #define ComMConf_ComMChannel_CDC_VCAN_BUS    (2U) */
-/* #define ComMConf_ComMChannel_CANFD_G5M_BUS   (3U) */
+/* #define ComMConf_ComMChannel_MM_SUB_BUS      (3U) */
+/* #define ComMConf_ComMChannel_CANFD_G5M_BUS   (4U) */
 #define OXCAN_NMC_NUM_CH                        (3U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

@@ -1,7 +1,7 @@
 /* Fee_Api.h v2-0-0                                                         */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION. All rights reserved.                        */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -20,11 +20,11 @@
 /*----------------------------------------------------------------------------*/
 /* Macros                                                                     */
 /*----------------------------------------------------------------------------*/
-/* Flashアクセス可否状態 */
-#define FEE_FLASH_ACCESS_ENABLE         (0x00000000U)   /* Flashアクセス可能   */
-#define FEE_FLASH_ACCESS_READ_DISABLE   (0x00000001U)   /* 読み出し不可能      */
-#define FEE_FLASH_ACCESS_WRITE_DISABLE  (0x00000002U)   /* 書き込み不可能      */
-#define FEE_FLASH_ACCESS_DISABLE        (0x00000003U)   /* Flashアクセス不可能 */
+/* Flash accessibility status */
+#define FEE_FLASH_ACCESS_ENABLE         (0x00000000U)   /* Flash accessible */
+#define FEE_FLASH_ACCESS_READ_DISABLE   (0x00000001U)   /* Unreadable */
+#define FEE_FLASH_ACCESS_WRITE_DISABLE  (0x00000002U)   /* Unwritable */
+#define FEE_FLASH_ACCESS_DISABLE        (0x00000003U)   /* Flash inaccessible */
 
 /*----------------------------------------------------------------------------*/
 /* Types                                                                      */

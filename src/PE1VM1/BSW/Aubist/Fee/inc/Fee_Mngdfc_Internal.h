@@ -1,7 +1,7 @@
-/* Fee_Mngdfc_Internal.h v2-0-0                                             */
+/* Fee_Mngdfc_Internal.h v2-1-0                                             */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION. All rights reserved.                        */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -20,10 +20,10 @@
 /*--------------------------------------------------------------------------*/
 /* Macros                                                                   */
 /*--------------------------------------------------------------------------*/
-#define FEE_NEXT_CWRITENUM_OFFSET       (1U)    /* 連続書き込み数の次要素のオフセット */
-#define FEE_CWRITENUM_ZERO              (0U)    /* 連続書き込み数0 */
-#define FEE_CWRITE_LAST_INDEX_OFFSET    (1U)    /* 最後の連続書き込みデータを示すインデックスを算出するためのオフセット */
-#define FEE_HALFWORD_DATA_INVALID       (0U)    /* ハーフワードデータ無効値 */
+#define FEE_NEXT_CWRITENUM_OFFSET       (1U)    /* Offset next element of number of consecutive writes */
+#define FEE_CWRITENUM_ZERO              (0U)    /* Consecutive writes 0 */
+#define FEE_CWRITE_LAST_INDEX_OFFSET    (1U)    /* Offset to calculate index indicating last continuous write data */
+#define FEE_HALFWORD_DATA_INVALID       (0U)    /* Invalid half-word data */
 
 /*--------------------------------------------------------------------------*/
 /* Types                                                                    */
@@ -35,11 +35,11 @@
 #define FEE_START_SEC_CODE
 #include <Fee_MemMap.h>
 
-/* データFlash制御管理書き込み終了処理 */
+/* Data Flash Control Management Write Termination */
 FUNC(void, FEE_CODE) Fee_MngDfcEndWriteProcess( void );
-/* データFlash制御管理ブランクチェック終了処理 */
+/* Data Flash Control Management blank check termination processing */
 FUNC(void, FEE_CODE) Fee_MngDfcEndBlanckCheckProcess( void );
-/* データFlash制御管理ブランクチェック終了処理 */
+/* Data Flash Control Management blank check termination processing */
 FUNC(void, FEE_CODE) Fee_MngDfcEndEraseProcess( void );
 
 FUNC(uint32, FEE_CODE) Fee_MngDfcComCWrite(
@@ -47,11 +47,11 @@ FUNC(uint32, FEE_CODE) Fee_MngDfcComCWrite(
 );
 FUNC(uint32, FEE_CODE) Fee_MngDfcComRetry( void );
 FUNC(void, FEE_CODE) Fee_MngDfcReqWrite( void );
-/* データFlash制御管理共通処理 */
-FUNC(uint32, FEE_CODE) Fee_MngDfcCom( void );
+/* Data Flash Control Management Common Process */
+FUNC(uint32, FEE_CODE) Fee_MngDfcCom( uint8 u1_callmode );
 
 FUNC( uint32, FEE_CODE )
-Fee_MngDfc_ExecDfcAndCheckStatus( void );
+Fee_MngDfc_ExecDfcAndCheckStatus( uint8 u1_callmode );
 
 FUNC( void, FEE_CODE )
 Fee_MngDfc_VolChkWrite(
@@ -79,6 +79,7 @@ Fee_MngDfc_VolChkWrite(
 /*  Version        :Date                                                    */
 /*  1-0-0          :2019/02/01                                              */
 /*  2-0-0          :2021/06/02                                              */
+/*  2-1-0          :2024/07/19                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

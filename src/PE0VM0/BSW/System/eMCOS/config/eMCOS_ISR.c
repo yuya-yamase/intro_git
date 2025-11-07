@@ -20,7 +20,6 @@
 
 /* Communication         */
 #include "Can.h"
-#include "can_rscf4_cfg.h"
 
 #include "scheduler.h"
 
@@ -44,6 +43,8 @@ ISR(eMCOS_ISR_INTRCAN5REC);
 ISR(eMCOS_ISR_INTRCAN5TRX);
 ISR(eMCOS_ISR_INTRCAN7REC);
 ISR(eMCOS_ISR_INTRCAN7TRX);
+ISR(eMCOS_ISR_INTRCAN11REC);
+ISR(eMCOS_ISR_INTRCAN11TRX);
 
 /*----------------------------------------------------------------------------
  *		Codes
@@ -87,9 +88,7 @@ ISR(eMCOS_ISR_INTTAUD0I14)
 ISR(eMCOS_ISR_INTRCAN3REC)
 {
     /*    INTRCAN3REC_ISR;*/
-#if (CAN_CFG_RX_PROCESSING_3 == CAN_INTERRUPT)
     Can_RxFinish_3();
-#endif
 }
 
 /**---------------------------------------------------------------------------
@@ -102,9 +101,7 @@ ISR(eMCOS_ISR_INTRCAN3REC)
 ISR(eMCOS_ISR_INTRCAN3TRX)
 {
     /*    INTRCAN3TRX_ISR;*/
-#if (CAN_CFG_TX_PROCESSING_3 == CAN_INTERRUPT)
     Can_TxFinish_3();
-#endif
 }
 
 /**---------------------------------------------------------------------------
@@ -117,9 +114,7 @@ ISR(eMCOS_ISR_INTRCAN3TRX)
 ISR(eMCOS_ISR_INTRCAN5REC)
 {
     /*    INTRCAN5REC_ISR;*/
-#if (CAN_CFG_RX_PROCESSING_5 == CAN_INTERRUPT)
     Can_RxFinish_5();
-#endif
 }
 
 /**---------------------------------------------------------------------------
@@ -132,9 +127,7 @@ ISR(eMCOS_ISR_INTRCAN5REC)
 ISR(eMCOS_ISR_INTRCAN5TRX)
 {
     /*    INTRCAN5TRX_ISR;*/
-#if (CAN_CFG_TX_PROCESSING_5 == CAN_INTERRUPT)
     Can_TxFinish_5();
-#endif
 }
 
 /**---------------------------------------------------------------------------
@@ -147,9 +140,7 @@ ISR(eMCOS_ISR_INTRCAN5TRX)
 ISR(eMCOS_ISR_INTRCAN7REC)
 {
     /*    INTRCAN7REC_ISR;*/
-#if (CAN_CFG_RX_PROCESSING_7 == CAN_INTERRUPT)
     Can_RxFinish_7();
-#endif
 }
 
 /**---------------------------------------------------------------------------
@@ -162,9 +153,33 @@ ISR(eMCOS_ISR_INTRCAN7REC)
 ISR(eMCOS_ISR_INTRCAN7TRX)
 {
     /*    INTRCAN7TRX_ISR;*/
-#if (CAN_CFG_TX_PROCESSING_7 == CAN_INTERRUPT)
     Can_TxFinish_7();
-#endif
+}
+
+/**---------------------------------------------------------------------------
+ * [Format] 	ISR(eMCOS_ISR_INTRCAN11REC)
+ * [Function]	
+ * [Arguments]	None
+ * [Return] 	None
+ * [Notes]		
+ *--------------------------------------------------------------------------*/
+ISR(eMCOS_ISR_INTRCAN11REC)
+{
+    /*    INTRCAN11REC_ISR;*/
+    Can_RxFinish_11();
+}
+
+/**---------------------------------------------------------------------------
+ * [Format] 	ISR(eMCOS_ISR_INTRCAN11TRX)
+ * [Function]	
+ * [Arguments]	None
+ * [Return] 	None
+ * [Notes]		
+ *--------------------------------------------------------------------------*/
+ISR(eMCOS_ISR_INTRCAN11TRX)
+{
+    /*    INTRCAN11TRX_ISR;*/
+    Can_TxFinish_11();
 }
 
 #else /* #if ((defined(__AIP_THROUGHPUT__)) && (__AIP_THROUGHPUT__ == 1)) */
@@ -208,9 +223,7 @@ ISR(eMCOS_ISR_INTRCAN3REC)
 {
     /*    INTRCAN3REC_ISR;*/
     vd_g_ThroughputIntrptStart();
-#if (CAN_CFG_RX_PROCESSING_3 == CAN_INTERRUPT)
     Can_RxFinish_3();
-#endif
     vd_g_ThroughputIntrptFinish((U2)THRPTM_TASK_ISR_INTRCAN3REC);
 }
 
@@ -225,9 +238,7 @@ ISR(eMCOS_ISR_INTRCAN3TRX)
 {
     /*    INTRCAN3TRX_ISR;*/
     vd_g_ThroughputIntrptStart();
-#if (CAN_CFG_TX_PROCESSING_3 == CAN_INTERRUPT)
     Can_TxFinish_3();
-#endif
     vd_g_ThroughputIntrptFinish((U2)THRPTM_TASK_ISR_INTRCAN3TRX);
 }
 
@@ -242,9 +253,7 @@ ISR(eMCOS_ISR_INTRCAN5REC)
 {
     /*    INTRCAN5REC_ISR;*/
     vd_g_ThroughputIntrptStart();
-#if (CAN_CFG_RX_PROCESSING_5 == CAN_INTERRUPT)
     Can_RxFinish_5();
-#endif
     vd_g_ThroughputIntrptFinish((U2)THRPTM_TASK_ISR_INTRCAN5REC);
 }
 
@@ -259,9 +268,7 @@ ISR(eMCOS_ISR_INTRCAN5TRX)
 {
     /*    INTRCAN5TRX_ISR;*/
     vd_g_ThroughputIntrptStart();
-#if (CAN_CFG_TX_PROCESSING_5 == CAN_INTERRUPT)
     Can_TxFinish_5();
-#endif
     vd_g_ThroughputIntrptFinish((U2)THRPTM_TASK_ISR_INTRCAN5TRX);
 }
 
@@ -276,9 +283,7 @@ ISR(eMCOS_ISR_INTRCAN7REC)
 {
     /*    INTRCAN7REC_ISR;*/
     vd_g_ThroughputIntrptStart();
-#if (CAN_CFG_RX_PROCESSING_7 == CAN_INTERRUPT)
     Can_RxFinish_7();
-#endif
     vd_g_ThroughputIntrptFinish((U2)THRPTM_TASK_ISR_INTRCAN7REC);
 }
 
@@ -293,10 +298,38 @@ ISR(eMCOS_ISR_INTRCAN7TRX)
 {
     /*    INTRCAN7TRX_ISR;*/
     vd_g_ThroughputIntrptStart();
-#if (CAN_CFG_TX_PROCESSING_7 == CAN_INTERRUPT)
     Can_TxFinish_7();
-#endif
     vd_g_ThroughputIntrptFinish((U2)THRPTM_TASK_ISR_INTRCAN7TRX);
+}
+
+/**---------------------------------------------------------------------------
+ * [Format] 	ISR(eMCOS_ISR_INTRCAN11REC)
+ * [Function]	
+ * [Arguments]	None
+ * [Return] 	None
+ * [Notes]		
+ *--------------------------------------------------------------------------*/
+ISR(eMCOS_ISR_INTRCAN11REC)
+{
+    /*    INTRCAN11REC_ISR;*/
+    vd_g_ThroughputIntrptStart();
+    Can_RxFinish_11();
+    vd_g_ThroughputIntrptFinish((U2)THRPTM_TASK_ISR_INTRCAN11REC);
+}
+
+/**---------------------------------------------------------------------------
+ * [Format] 	ISR(eMCOS_ISR_INTRCAN11TRX)
+ * [Function]	
+ * [Arguments]	None
+ * [Return] 	None
+ * [Notes]		
+ *--------------------------------------------------------------------------*/
+ISR(eMCOS_ISR_INTRCAN11TRX)
+{
+    /*    INTRCAN11TRX_ISR;*/
+    vd_g_ThroughputIntrptStart();
+    Can_TxFinish_11();
+    vd_g_ThroughputIntrptFinish((U2)THRPTM_TASK_ISR_INTRCAN11TRX);
 }
 #endif /* #if (__AIP_THROUGHPUT__ != 1) */
 

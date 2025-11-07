@@ -88,19 +88,23 @@ static FUNC(Std_ReturnType, DIAGSRV_CODE_FAST) DiagSrv_0x27_Processing_sendKey
     VAR(uint8, AUTOMATIC) Index,
     P2VAR(uint8, AUTOMATIC, DIAGSRV_APPL_DATA) Nrc
 );
+#if 0   /* @@@ T.Inoue start : without Crypto_sw */
 static FUNC(Std_ReturnType, DIAGSRV_CODE_FAST) DiagSrv_0x27_Time_PreGenerateSeed
 (
     P2VAR(uint8, AUTOMATIC, DIAGSRV_APPL_DATA) Nrc
 );
+#endif  /* @@@ T.Inoue end : without Crypto_sw */
 static FUNC(Std_ReturnType, DIAGSRV_CODE_FAST) DiagSrv_0x27_Time_GenerateSeed
 (
     P2VAR(uint8, AUTOMATIC, DIAGSRV_APPL_DATA) Nrc
 );
 static FUNC(void, DIAGSRV_CODE_FAST) DiagSrv_0x27_Time_PostGenerateSeed (void);
+#if 0   /* @@@ T.Inoue start : without Crypto_sw */
 static FUNC(Std_ReturnType, DIAGSRV_CODE_FAST) DiagSrv_0x27_Time_PreGenerateKey
 (
     P2VAR(uint8, AUTOMATIC, DIAGSRV_APPL_DATA) Nrc
 );
+#endif  /* @@@ T.Inoue end : without Crypto_sw */
 static FUNC(Std_ReturnType, DIAGSRV_CODE_FAST) DiagSrv_0x27_Time_GenerateKey
 (
     P2VAR(uint8, AUTOMATIC, DIAGSRV_APPL_DATA) Nrc
@@ -195,8 +199,8 @@ FUNC(void, DIAGSRV_CODE_FAST) DiagSrv_0x27_Init (void)
         DiagSrv_0x27_SaveInfo[Index].KeyInfo.Key = DiagSrv_0x27_SecLevelConfig.InfoPtr[Index].KeyPtr;
         DiagSrv_0x27_SaveInfo[Index].KeyInfo.KeySize = DiagSrv_0x27_SecLevelConfig.InfoPtr[Index].KeySize;
 
-/*      Rte_Rpg_MemSet(DiagSrv_0x27_SaveInfo[Index].SeedInfo.Seed, 0U, (uint32)DiagSrv_0x27_SaveInfo[Index].SeedInfo.SeedSize); */ /* @@@ */
-        Rte_Rpg_MemSet(DiagSrv_0x27_SaveInfo[Index].SeedInfo.Seed, 0x5aU, (uint32)DiagSrv_0x27_SaveInfo[Index].SeedInfo.SeedSize); /* @@@ */
+/*      Rte_Rpg_MemSet(DiagSrv_0x27_SaveInfo[Index].SeedInfo.Seed, 0U, (uint32)DiagSrv_0x27_SaveInfo[Index].SeedInfo.SeedSize); */ /* @@@ Z.Yuan : without Crypto_sw */
+        Rte_Rpg_MemSet(DiagSrv_0x27_SaveInfo[Index].SeedInfo.Seed, 0x5aU, (uint32)DiagSrv_0x27_SaveInfo[Index].SeedInfo.SeedSize); /* @@@ Z.Yuan : without Crypto_sw */
         Rte_Rpg_MemSet(DiagSrv_0x27_SaveInfo[Index].KeyInfo.Key, 0U, (uint32)DiagSrv_0x27_SaveInfo[Index].KeyInfo.KeySize);
 
         if( DiagSrv_0x27_SecLevelConfig.InfoPtr[Index].DelayTimer != DIAGSRV_0X27_DLYTM_NOT_SUPPORT )
@@ -248,8 +252,10 @@ FUNC(void, DIAGSRV_CODE_FAST) DiagSrv_0x27_Init (void)
 FUNC(void, DIAGSRV_CODE_FAST) DiagSrv_0x27_Time (void)
 {
     VAR(uint8, AUTOMATIC) Nrc;
+#if 0   /* @@@ T.Inoue start : without Crypto_sw */
     VAR(uint8, AUTOMATIC) SecStatus;
     VAR(uint8, AUTOMATIC) SecJobResult;
+#endif  /* @@@ T.Inoue end : without Crypto_sw */
     VAR(Std_ReturnType, AUTOMATIC) Ret;
 
     if( DiagSrv_0x27_JobStatus != DIAGSRV_0X27_JOB_STAT_IDLE )
@@ -257,7 +263,7 @@ FUNC(void, DIAGSRV_CODE_FAST) DiagSrv_0x27_Time (void)
         Ret = DIAGSRV_0X27_E_PENDING;
         Nrc = DIAG_NRC_PR;
 
-#if 0	/* @@@ */
+#if 0   /* @@@ T.Inoue start : without Crypto_sw */
         SecStatus = Sec_GetStatus();
         if( SecStatus == SEC_IDLE )
         {
@@ -269,12 +275,15 @@ FUNC(void, DIAGSRV_CODE_FAST) DiagSrv_0x27_Time (void)
             }
             else
             {
-#endif	/* @@@ */
+#endif  /* @@@ T.Inoue end : without Crypto_sw */
                 if( DiagSrv_0x27_JobStatus == DIAGSRV_0X27_JOB_STAT_PRE_SEED )
                 {
-/*                    Ret = DiagSrv_0x27_Time_PreGenerateSeed(&Nrc);*//* @@@ */
-                    DiagSrv_0x27_Time_PostGenerateSeed(); /* @@@ */
-                    Ret = E_OK; /* @@@ */
+#if 0   /* @@@ T.Inoue start : without Crypto_sw */
+                    Ret = DiagSrv_0x27_Time_PreGenerateSeed(&Nrc);
+#else
+                    DiagSrv_0x27_Time_PostGenerateSeed();
+                    Ret = E_OK;
+#endif  /* @@@ T.Inoue end : without Crypto_sw */
                 }
                 else if( DiagSrv_0x27_JobStatus == DIAGSRV_0X27_JOB_STAT_SEED )
                 {
@@ -287,8 +296,11 @@ FUNC(void, DIAGSRV_CODE_FAST) DiagSrv_0x27_Time (void)
                 }
                 else if( DiagSrv_0x27_JobStatus == DIAGSRV_0X27_JOB_STAT_PRE_KEY )
                 {
-/*                    Ret = DiagSrv_0x27_Time_PreGenerateKey(&Nrc);*//* @@@ */
-                    Ret = DiagSrv_0x27_Time_PostGenerateKey(&Nrc); /* @@@ */
+#if 0   /* @@@ T.Inoue start : without Crypto_sw */
+                    Ret = DiagSrv_0x27_Time_PreGenerateKey(&Nrc);
+#else
+                    Ret = DiagSrv_0x27_Time_PostGenerateKey(&Nrc);
+#endif  /* @@@ T.Inoue end : without Crypto_sw */
                 }
                 else if( DiagSrv_0x27_JobStatus == DIAGSRV_0X27_JOB_STAT_KEY )
                 {
@@ -298,10 +310,10 @@ FUNC(void, DIAGSRV_CODE_FAST) DiagSrv_0x27_Time (void)
                 {
                     Ret = DiagSrv_0x27_Time_PostGenerateKey(&Nrc);
                 }
-#if 0 /* @@@ */
+#if 0   /* @@@ T.Inoue start : without Crypto_sw */
             }
         }
-#endif /* @@@ */
+#endif  /* @@@ T.Inoue end : without Crypto_sw */
 
         if( Ret == (Std_ReturnType)E_OK )
         {
@@ -448,7 +460,9 @@ static FUNC(Std_ReturnType, DIAGSRV_CODE_FAST) DiagSrv_0x27_Processing_requestSe
 )
 {
     VAR(Std_ReturnType, AUTOMATIC) Ret;
+#if 0   /* @@@ T.Inoue start : without Crypto_sw */
     VAR(Std_ReturnType, AUTOMATIC) SecRet;
+#endif  /* @@@ T.Inoue end : without Crypto_sw */
     VAR(uint8, AUTOMATIC) Subfunc;
     P2VAR(DiagSrv_0x27_SaveInfoType, AUTOMATIC, DIAGSRV_APPL_DATA) SaveInfoPtr;
     P2CONST(DiagSrv_0x27_SecLevelInfoConfigType, AUTOMATIC, DIAGSRV_APPL_CONST) SecLevelInfoConfigPtr;
@@ -498,7 +512,7 @@ static FUNC(Std_ReturnType, DIAGSRV_CODE_FAST) DiagSrv_0x27_Processing_requestSe
 
             if( Ret == DIAGSRV_0X27_E_PENDING )
             {
-#if 0	/* @@@ */
+#if 0   /* @@@ T.Inoue start : without Crypto_sw */
                 SecRet = Sec_ReqPreGenSeed(DIAGSRV_0X27_CURRENT_SECLEVEL);
                 if( SecRet != (Std_ReturnType)E_OK )
                 {
@@ -509,9 +523,9 @@ static FUNC(Std_ReturnType, DIAGSRV_CODE_FAST) DiagSrv_0x27_Processing_requestSe
                 {
                     DiagSrv_0x27_JobStatus = DIAGSRV_0X27_JOB_STAT_PRE_SEED;
                 }
-#else	/* @@@ */
+#else   /* @@@ */
                 DiagSrv_0x27_JobStatus = DIAGSRV_0X27_JOB_STAT_PRE_SEED; /* @@@ */
-#endif	/* @@@ */
+#endif  /* @@@ T.Inoue end : without Crypto_sw */
             }
             else /* ( Ret == (Std_ReturnType)E_OK ) */
             {
@@ -541,7 +555,9 @@ static FUNC(Std_ReturnType, DIAGSRV_CODE_FAST) DiagSrv_0x27_Processing_sendKey
 )
 {
     VAR(Std_ReturnType, AUTOMATIC) Ret;
+#if 0   /* @@@ T.Inoue start : without Crypto_sw */
     VAR(Std_ReturnType, AUTOMATIC) SecRet;
+#endif  /* @@@ T.Inoue end : without Crypto_sw */
     VAR(uint8, AUTOMATIC) Subfunc;
     P2VAR(DiagSrv_0x27_SaveInfoType, AUTOMATIC, DIAGSRV_APPL_DATA) SaveInfoPtr;
     P2CONST(DiagSrv_0x27_SecLevelInfoConfigType, AUTOMATIC, DIAGSRV_APPL_CONST) SecLevelInfoConfigPtr;
@@ -583,7 +599,7 @@ static FUNC(Std_ReturnType, DIAGSRV_CODE_FAST) DiagSrv_0x27_Processing_sendKey
     {
         Ret = DIAGSRV_0X27_E_PENDING;
 
-#if 0	/* @@@ */
+#if 0   /* @@@ T.Inoue start : without Crypto_sw */
         SecRet = Sec_ReqPreGenKey(DIAGSRV_0X27_CURRENT_SECLEVEL);
         if( SecRet != (Std_ReturnType)E_OK )
         {
@@ -594,9 +610,9 @@ static FUNC(Std_ReturnType, DIAGSRV_CODE_FAST) DiagSrv_0x27_Processing_sendKey
         {
             DiagSrv_0x27_JobStatus = DIAGSRV_0X27_JOB_STAT_PRE_KEY;
         }
-#else	/* @@@ */
+#else   /* @@@ */
         DiagSrv_0x27_JobStatus = DIAGSRV_0X27_JOB_STAT_PRE_KEY; /* @@@ */
-#endif	/* @@@ */
+#endif  /* @@@ T.Inoue end : without Crypto_sw */
     }
     else
     {
@@ -608,6 +624,7 @@ static FUNC(Std_ReturnType, DIAGSRV_CODE_FAST) DiagSrv_0x27_Processing_sendKey
     return Ret;
 }
 
+#if 0   /* @@@ T.Inoue start : without Crypto_sw */
 /******************************************************************************/
 /* Function Name | DiagSrv_0x27_Time_PreGenerateSeed                          */
 /* Description   | Time function of generating seed preprocessing             */
@@ -639,6 +656,7 @@ static FUNC(Std_ReturnType, DIAGSRV_CODE_FAST) DiagSrv_0x27_Time_PreGenerateSeed
 
     return Ret;
 }
+#endif  /* @@@ T.Inoue end : without Crypto_sw */
 
 /******************************************************************************/
 /* Function Name | DiagSrv_0x27_Time_GenerateSeed                             */
@@ -699,6 +717,7 @@ static FUNC(void, DIAGSRV_CODE_FAST) DiagSrv_0x27_Time_PostGenerateSeed (void)
     return;
 }
 
+#if 0   /* @@@ T.Inoue start : without Crypto_sw */
 /******************************************************************************/
 /* Function Name | DiagSrv_0x27_Time_PreGenerateKey                           */
 /* Description   | Time function of generating key preprocessing              */
@@ -730,6 +749,7 @@ static FUNC(Std_ReturnType, DIAGSRV_CODE_FAST) DiagSrv_0x27_Time_PreGenerateKey
 
     return Ret;
 }
+#endif  /* @@@ T.Inoue end : without Crypto_sw */
 
 /******************************************************************************/
 /* Function Name | DiagSrv_0x27_Time_GenerateKey                              */
@@ -779,12 +799,14 @@ static FUNC(Std_ReturnType, DIAGSRV_CODE_FAST) DiagSrv_0x27_Time_PostGenerateKey
     VAR(Std_ReturnType, AUTOMATIC) TmRet;
     P2VAR(DiagSrv_0x27_SaveInfoType, AUTOMATIC, DIAGSRV_APPL_DATA) SaveInfoPtr;
     P2CONST(DiagSrv_0x27_SecLevelInfoConfigType, AUTOMATIC, DIAGSRV_APPL_CONST) SecLevelInfoConfigPtr;
+#if 0   /* @@@ T.Inoue start : without Crypto_sw */
     VAR(uint8, AUTOMATIC) Index;
+#endif  /* @@@ T.Inoue end : without Crypto_sw */
 
     *Nrc = DIAG_NRC_PR;
     Ret = E_OK;
     SaveInfoPtr = &DiagSrv_0x27_SaveInfo[DiagSrv_0x27_SecLevInfoIndex];
-#if 0	/* @@@ */
+#if 0   /* @@@ T.Inoue start : without Crypto_sw */
     for( Index = 0U; Index < SaveInfoPtr->KeyInfo.KeySize; Index++ )
     {
         if( SaveInfoPtr->KeyInfo.Key[Index] != DiagSrv_0x27_Msg->ReqData[DIAGSRV_0X27_REQ_KEY_POS+Index] )
@@ -793,7 +815,7 @@ static FUNC(Std_ReturnType, DIAGSRV_CODE_FAST) DiagSrv_0x27_Time_PostGenerateKey
             break;
         }
     }
-#endif	/* @@@ */
+#endif  /* @@@ T.Inoue end : without Crypto_sw */
 
     Rte_Rpg_MemSet(SaveInfoPtr->KeyInfo.Key, 0U, (uint32)SaveInfoPtr->KeyInfo.KeySize);
 

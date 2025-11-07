@@ -82,17 +82,20 @@ def aggregate_section_sizes(extracted_lines):
     return section_component_sizes, category_component_sizes
 
 
-def map_file_analyze(json_file, file_path, sheet_name,output_file):
+def map_file_analyze(VM_keyword, file_path, sheet_name,output_file):
     global SECTION_INFO, CATEGORY_LIST, SECTION_DICT, COMPONENT_LIST, CAPACITY_DICT
 
     # JSON設定ファイルの読み込み
-    with open(json_file, 'r') as f:
+    with open(VM_keyword+'_data.json', 'r') as f:
         config = json.load(f)
+
+    with open(VM_keyword+'_component.json', 'r') as f:
+        component_list = json.load(f)
 
     SECTION_INFO = config["SECTION_INFO"]
     CATEGORY_LIST = SECTION_INFO["CATEGORY_LIST"]
     SECTION_DICT = SECTION_INFO["SECTION_DICT"]
-    COMPONENT_LIST = config["COMPONENT_LIST"]
+    COMPONENT_LIST = component_list["COMPONENT_LIST"]
     CAPACITY_DICT = SECTION_INFO["CAPACITY_DICT"]
 
     extracted_lines = extract_lines_from_map(file_path)
@@ -205,7 +208,7 @@ sortkey_section = ".section_"
 
 args = sys.argv
 
-json_files = ['EHVM_data.json', 'PE0VM0_data.json', 'PE1VM1_data.json', 'PE2VM2_data.json', 'PE3VM3_data.json']
+VM_keywords = ['EHVM','PE0VM0','PE1VM1','PE2VM2','PE3VM3']
 # .mapファイルを読み込んで処理する
 
 file_paths = [r"..\..\prj\Ren_U2A16_373_{}\EHVM\dst\EHVM.map".format(args[1]),
@@ -216,5 +219,5 @@ file_paths = [r"..\..\prj\Ren_U2A16_373_{}\EHVM\dst\EHVM.map".format(args[1]),
 
 sheet_names = ['EHVM', 'PE0VM0', 'PE1VM1', 'PE2VM2', 'PE3VM3']
 output_files = ['Section_Size_EHVM.xlsx', 'Section_Size_PE0VM0.xlsx', 'Section_Size_PE1VM1.xlsx', 'Section_Size_PE2VM2.xlsx', 'Section_Size_PE3VM3.xlsx']
-for json_file,file_path,sheet_name,output_file in zip(json_files, file_paths, sheet_names,output_files):
-    map_file_analyze(json_file, file_path, sheet_name, output_file)
+for VM_keyword,file_path,sheet_name,output_file in zip(VM_keywords, file_paths, sheet_names,output_files):
+    map_file_analyze(VM_keyword, file_path, sheet_name, output_file)
