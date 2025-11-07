@@ -1,4 +1,4 @@
-/* 2.0.1 */
+/* 2.1.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -13,8 +13,8 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define ODO_NVMIF_CFG_H_MAJOR                    (2)
-#define ODO_NVMIF_CFG_H_MINOR                    (0)
-#define ODO_NVMIF_CFG_H_PATCH                    (1)
+#define ODO_NVMIF_CFG_H_MINOR                    (1)
+#define ODO_NVMIF_CFG_H_PATCH                    (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -39,7 +39,6 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define u4_g_OdoNvmIfCrc32(u1p, u4)              (u4_g_Crc32((U4)0x5aa5a55aU, (u1p), (u4), (U1)FALSE))
 
-#if 0   /* BEV Rebase provisionally */
 #define vd_g_OdoNvmIfOdoRWAct()                  (vd_g_Nvmc_SetAcsReq(u2_g_ODO_NVMIF_NVMCID_ODO_KM, (U1)TRUE))
 #define vd_g_OdoNvmIfOdoRWDeAct()                (vd_g_Nvmc_SetAcsReq(u2_g_ODO_NVMIF_NVMCID_ODO_KM, (U1)FALSE))
 #define vd_g_OdoNvmIfTripRWAct()                 (vd_g_Nvmc_SetAcsReq(u2_g_ODO_NVMIF_NVMCID_TRIP_KM, (U1)TRUE))
@@ -51,19 +50,6 @@
 
 #define ODO_NVMIF_REQ_TYPE_READ                  (NVMC_REQUEST_TYPE_READ)
 #define ODO_NVMIF_JOB_RESULT_OK                  (NVMC_RESULT_OK)
-#else   /* BEV Rebase provisionally */
-#define vd_g_OdoNvmIfOdoRWAct()                  vdp_PTR_NA
-#define vd_g_OdoNvmIfOdoRWDeAct()                vdp_PTR_NA
-#define vd_g_OdoNvmIfTripRWAct()                 vdp_PTR_NA
-#define vd_g_OdoNvmIfTripRWDeAct()               vdp_PTR_NA
- 
-#define vd_g_OdoNvmIfWriteBlock(m,b,w,l)         vdp_PTR_NA
-#define vd_g_OdoNvmIfReadBlock(m,b)              vdp_PTR_NA
-#define u1_g_OdoNvmIfSyncBlock(m,b,r,l)          ((U1)1U)
-
-#define ODO_NVMIF_REQ_TYPE_READ                  (0U)
-#define ODO_NVMIF_JOB_RESULT_OK                  (0U)
-#endif   /* BEV Rebase provisionally */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
