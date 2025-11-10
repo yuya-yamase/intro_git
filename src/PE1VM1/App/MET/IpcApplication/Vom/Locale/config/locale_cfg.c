@@ -64,7 +64,7 @@ typedef struct {
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #if 0   /* BEV Rebase provisionally */
 #else   /* BEV Rebase provisionally */
-static  U1                                      u1_s_locale_timfmt;
+static U1                                       u1_s_locale_timfmt;
 static U1                                       u1_s_locale_unit_dist;
 static U1                                       u1_s_locale_unit_speed;
 static U1                                       u1_s_locale_unit_fueco;
