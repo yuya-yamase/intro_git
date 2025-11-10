@@ -45,12 +45,12 @@
 #define IVDSH_FQ_CH_WRI                          (3U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define IVDSH_WA_NWORD_WRI                       (16U)
+#define IVDSH_WA_NWORD_WRI                       (25U)
 #define IVDSH_WA_NWORD_REA_0                     (6U)
 #define IVDSH_WA_NWORD_REA_1                     (16U)
 #define IVDSH_WA_NWORD_REA_2                     (7U)
 
-#define IVDSH_WA_NWORD                           (74U)
+#define IVDSH_WA_NWORD                           (83U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -106,6 +106,15 @@ const ST_IVDSH_WA           st_gp_IVDSH_WA_BY_DID[IVDSH_NUM_DID] =
     {(U2)13U,       (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_CPREQ_047         */
     {(U2)14U,       (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_GPS_REQ           */
     {(U2)15U,       (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_VM2TO1_WHLINI_REQ */
+    {(U2)16U,       (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_CPREQ_055         */
+    {(U2)17U,       (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_VM2TO1_DMS1S02    */
+    {(U2)18U,       (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_VM2TO1_MET1S27    */
+    {(U2)19U,       (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_VM2TO1_MET1S28    */
+    {(U2)20U,       (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_VM2TO1_MET1S29    */
+    {(U2)21U,       (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_VM2TO1_MET1S30    */
+    {(U2)22U,       (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_VM2TO1_MET1S43    */
+    {(U2)23U,       (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_VM2TO1_MET1S62    */
+    {(U2)24U,       (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_VM2TO1_MET1S70    */
     /*------------------------------------------------------------------*/
     /* Read from VM#0                                                   */
     /*------------------------------------------------------------------*/
