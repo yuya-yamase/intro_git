@@ -79,7 +79,7 @@ void EthSwt_SWIC_STM_Background (void)
 {
     Std_ReturnType swicAvailable;
 
-    swicAvailable = EthSwt_SWIC_AllowSetRegister();
+    swicAvailable = EthSwt_SWIC_Cfg_AllowSetRegister();
     if (swicAvailable == E_OK) {
         switch (G_SWIC_Status) {
         case D_ETHSWT_SWIC_ST_UNINIT:
@@ -179,7 +179,7 @@ static void ethswt_swic_stm_portInitCompletedProc (void)
     }
 
     if (result == E_OK) {
-        allowRelay = EthSwt_SWIC_AllowRelay();
+        allowRelay = EthSwt_SWIC_Cfg_AllowRelay();
         if (allowRelay == E_OK) {
              ethswt_swic_stm_action(D_ETHSWT_SWIC_EV_START_RELAY);
         }
@@ -225,7 +225,7 @@ static void ethswt_swic_stm_activeProc (void)
     }
 
     if (result == E_OK) {
-        allowRelay = EthSwt_SWIC_AllowRelay();
+        allowRelay = EthSwt_SWIC_Cfg_AllowRelay();
         if (allowRelay != E_OK) {
              ethswt_swic_stm_action(D_ETHSWT_SWIC_EV_STOP_RELAY);
         }

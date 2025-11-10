@@ -8,8 +8,7 @@
 /* -------------------------------------------------------------------------- */
 void EthSwt_SWIC_PWR_Init(void);
 void EthSwt_SWIC_PWR_LoProc(void);
-void EthSwt_SWIC_PWR_PowerOnReq(void);
-void EthSwt_SWIC_PWR_PowerOffReq(void);
+void EthSwt_SWIC_PWR_ForceOffReq(void);
 void EthSwt_SWIC_PWR_ResetReq(void);
 Std_ReturnType EthSwt_SWIC_PWR_GetSWICPower(void);
 /* -------------------------------------------------------------------------- */
