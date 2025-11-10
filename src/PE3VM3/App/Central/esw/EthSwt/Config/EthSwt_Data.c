@@ -101,6 +101,7 @@ static uint32                   G_ETHSWT_DATA_LINK_ID;
 static uint32                   G_ETHSWT_DATA_MIB_ID;
 static uint32                   G_ETHSWT_DATA_SQI_ID;
 static uint32                   G_ETHSWT_DATA_QCI_ID;
+static uint32                   G_ETHSWT_DATA_SWICRESET_COUNT;
 
 static uint8                    G_ETHSWT_DATA_LINK_UPDATE;
 static uint8                    G_ETHSWT_DATA_MIB_UPDATE;
@@ -113,6 +114,7 @@ static void ethswt_data_checkLinkUpdate(void);
 static void ethswt_data_checkMIBUpdate(void);
 static void ethswt_data_checkSQIUpdate(void);
 static void ethswt_data_checkQciUpdate(void);
+static void ethswt_data_checkSWICReset(void);
 static void ethswt_data_incrementID(uint32 * const id);
 /* -------------------------------------------------------------------------- */
 void EthSwt_Data_Init(void)
@@ -210,6 +212,13 @@ void EthSwt_Data_NotifyQci(const uint8 QciIdx, const uint32 QciCount)
     return;
 }
 /* -------------------------------------------------------------------------- */
+void EthSwt_Data_NotifySWICReset(void)
+{
+    G_ETHSWT_DATA_SWICRESET_COUNT++;
+
+    return;
+}
+/* -------------------------------------------------------------------------- */
 void EthSwt_Data_LoProc(void)
 {
     ethswt_data_setEthSwtStateData();
@@ -217,6 +226,7 @@ void EthSwt_Data_LoProc(void)
     ethswt_data_checkMIBUpdate();
     ethswt_data_checkSQIUpdate();
     ethswt_data_checkQciUpdate();
+    ethswt_data_checkSWICReset();
     
     return;
 }
@@ -265,6 +275,13 @@ static void ethswt_data_checkQciUpdate(void)
         (void)ChipCom_SetPeriodicTxData(CHIPCOM_PERIODICID_ETHERSWT_SWIC_DATAUSAGEEXCEED, sizeof(G_ETHSWT_DATA_QCI), (uint8*)&G_ETHSWT_DATA_QCI);
         ethswt_data_incrementID(&G_ETHSWT_DATA_QCI_ID);        
     }
+
+    return;
+}
+/* -------------------------------------------------------------------------- */
+static void ethswt_data_checkSWICReset(void)
+{
+    (void)ChipCom_SetPeriodicTxData(CHIPCOM_PERIODICID_ETHERSWT_SWIC_RESETRESTART, sizeof(G_ETHSWT_DATA_SWICRESET_COUNT), (uint8*)&G_ETHSWT_DATA_SWICRESET_COUNT);
 
     return;
 }

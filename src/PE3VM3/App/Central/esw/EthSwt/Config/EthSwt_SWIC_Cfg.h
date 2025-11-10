@@ -33,6 +33,8 @@ void EthSwt_SWIC_Cfg_SetPowerOff(void);
 void EthSwt_SWIC_Cfg_SetResetAssert(void);
 void EthSwt_SWIC_Cfg_SetResetDeassert(void);
 
+#define ETHSWT_SWIC_PWR_NOTIFY()                  	EthSwt_Data_NotifySWICReset()
+
 /* -------------------------------------------------------------------------- */
 /* Config for EthSwt_SWIC_STM.c                                               */
 /* -------------------------------------------------------------------------- */
