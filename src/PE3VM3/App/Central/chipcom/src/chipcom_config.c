@@ -1,4 +1,4 @@
-/* v0-3-0-mcu03 */
+/* v0-4-0-mcu03 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -130,7 +130,7 @@ uint8 ChipCom_Initval_Vis_ComPwr                        [CHIPCOM_LENGTH_VIS_COMP
     0x00
 };
 uint8 ChipCom_Initval_EtherSwt_RegErrSts                [CHIPCOM_LENGTH_ETHERSWT_REGERRSTS              ] = {
-    0x00, 0x00
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 };
 uint8 ChipCom_Initval_EtherMgr_MacAddr                  [CHIPCOM_LENGTH_ETHERMGR_MACADDR                ] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00
@@ -183,6 +183,12 @@ uint8 ChipCom_Initval_EtherSwt_Swic_DataUsageExceed     [CHIPCOM_LENGTH_ETHERSWT
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x00
 };
+uint8 ChipCom_Initval_Vis_SailResetStatus               [CHIPCOM_LENGTH_VIS_SAILRESETST                 ] = {
+    0x00,
+};
+uint8 ChipCom_Initval_EtherSwt_Swic_SailResetRestart    [CHIPCOM_LENGTH_ETHERSWT_SWIC_RESETRESTART                ] = {
+    0x00, 0x00, 0x00, 0x00
+};
 
 PeriodicTable PeriodicRelation[CHIPCOM_PERIODICID_MAX] = {
     /*PeriodicId                                            DataLen                                           TxDataPos                                       RxDataPos                                       INIT                                */
@@ -215,5 +221,7 @@ PeriodicTable PeriodicRelation[CHIPCOM_PERIODICID_MAX] = {
     {CHIPCOM_PERIODICID_ETHERSWT_SWIC_MIB               ,   CHIPCOM_LENGTH_ETHERSWT_SWIC_MIB                , CHIPCOM_POS_TX_ETHERSWT_SWIC_MIB              , CHIPCOM_POS_RX_ETHERSWT_SWIC_MIB              , ChipCom_Initval_EtherSwt_Swic_MIB             },
     {CHIPCOM_PERIODICID_ETHERSWT_SWIC_SQI               ,   CHIPCOM_LENGTH_ETHERSWT_SWIC_SQI                , CHIPCOM_POS_TX_ETHERSWT_SWIC_SQI              , CHIPCOM_POS_RX_ETHERSWT_SWIC_SQI              , ChipCom_Initval_EtherSwt_Swic_SQI             },
     {CHIPCOM_PERIODICID_ETHERSWT_SWIC_DATAUSAGEEXCEED   ,   CHIPCOM_LENGTH_ETHERSWT_SWIC_DATAUSAGEEXCEED    , CHIPCOM_POS_TX_ETHERSWT_SWIC_DATAUSAGEEXCEED  , CHIPCOM_POS_RX_ETHERSWT_SWIC_DATAUSAGEEXCEED  , ChipCom_Initval_EtherSwt_Swic_DataUsageExceed },
+    {CHIPCOM_PERIODICID_VIS_SAILRESETST                 ,   CHIPCOM_LENGTH_VIS_SAILRESETST                  , CHIPCOM_POS_TX_VIS_SAILRESETST                , CHIPCOM_POS_RX_VIS_SAILRESETST                , ChipCom_Initval_Vis_SailResetStatus           },
+    {CHIPCOM_PERIODICID_ETHERSWT_SWIC_RESETRESTART      ,   CHIPCOM_LENGTH_ETHERSWT_SWIC_RESETRESTART       , CHIPCOM_POS_TX_ETHERSWT_SWIC_RESETRESTART     , CHIPCOM_POS_RX_ETHERSWT_SWIC_RESETRESTART     , ChipCom_Initval_EtherSwt_Swic_SailResetRestart},
 };
 

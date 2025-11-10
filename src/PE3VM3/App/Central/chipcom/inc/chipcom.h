@@ -1,4 +1,4 @@
-/* v0-3-0 */
+/* v0-4-0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -24,9 +24,16 @@
 #define CHIPCOM_ERR_KIND_TIN        XSPI_ERR_KIND_TIN           /* Airtime Over */
 #define CHIPCOM_ERR_KIND_RX_BUF_OVF XSPI_ERR_KIND_RX_BUF_OVF    /* RxBuffer Overflow */
 
+
 /*--------------------------------------------------------------------------*/
 /* Types                                                                    */
 /*--------------------------------------------------------------------------*/
+typedef enum {
+    CHIPCOM_NO_RX = 0x00U,                  /* After data initialization, no data has been received. */
+    CHIPCOM_TIMEOUT,                        /* Timeout occurred during data reception. */
+    CHIPCOM_TRX_START,                      /* Receiving operation is normal. */
+} ChipCom_IpduStatusType;
+typedef uint16  ChipCom_PduIdType;
 
 /*--------------------------------------------------------------------------*/
 /* Function Prototypes                                                      */
@@ -37,7 +44,8 @@ void            ChipCom_MainTx( void );
 
 Std_ReturnType ChipCom_Transmit(const uint8 data_id, const uint16 transreq_len, const uint8* const transreq_data);
 Std_ReturnType ChipCom_SetPeriodicTxData(const uint8 periodic_id, const uint16 trans_len, const uint8* const trans_data);
-Std_ReturnType ChipCom_GetPeriodicRxData(const uint8 periodic_id, uint16* receive_len, uint8* receive_data, uint32* receive_counter);			
+Std_ReturnType ChipCom_GetPeriodicRxData(const uint8 periodic_id, uint16* receive_len, uint8* receive_data, uint32* receive_counter);
+ChipCom_IpduStatusType ChipCom_GetIPDUStatus( ChipCom_PduIdType ChipCom_PduId );
 
 uint16 ChipCom_GetTxSize(void);
 void ChipCom_Nop(const uint16 receive_len, const uint8* const receive_data);
