@@ -17,10 +17,8 @@
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "hmiproxy_cfg_private.h"
-#if 0   /* BEV Rebase provisionally */
 #include "tripcom.h"
 #include "avggrph.h"
-#endif   /* BEV Rebase provisionally */
 
 #include "hmitripcom.h"
 #include "rim_ctl.h"
@@ -99,10 +97,8 @@ void    vd_g_HmiTripcomMainTask(void)
     u1_t_to = u1_g_HmiProxyToc(&u2_s_hmitripcom_to, u2_s_HMITRIPCOM_TO);
 
     if(u1_t_to == (U1)FALSE){
-#if 0   /* BEV Rebase provisionally */
         vd_g_TripcomRstRq(u2_s_hmitripcom_rstbit);
         vd_g_TripcomGrphRstRq(u2_s_hmitripcom_grphrst);
-#endif   /* BEV Rebase provisionally */
     }
     u2_s_hmitripcom_rstbit  = (U2)0U;
     u2_s_hmitripcom_grphrst = (U2)0U;
@@ -116,7 +112,6 @@ void    vd_g_HmiTripcomMainTask(void)
 /*===================================================================================================================================*/
 void  vd_g_HmiTripcomPut(const ST_HMITRIPCOM * stp_a_HMITRIPCOM)
 {
-#if 0   /* BEV Rebase provisionally */
     u2_s_hmitripcom_to    = (U2)HMIPROXY_TOC_INI;
     if(stp_a_HMITRIPCOM->u2_avg_vehspd_kmph_ta == (U2)0U){
         u2_s_hmitripcom_rstbit |= (U2)TRIPCOM_RSTRQBIT_M_AVGVEHSPD_TA;          /*  AVG_SPD_KMPH_USRRST                 */
@@ -162,7 +157,6 @@ void  vd_g_HmiTripcomPut(const ST_HMITRIPCOM * stp_a_HMITRIPCOM)
     if(stp_a_HMITRIPCOM->u4_dist_km_tr_b == (U4)0U){
         u2_s_hmitripcom_rstbit |= (U2)TRIPCOM_RSTRQBIT_M_PTSRUNDIST_TR_B;       /* TRIPB_DIST_KM_USRRST                 */
     }
-#endif   /* BEV Rebase provisionally */
 }
 /*===================================================================================================================================*/
 /*  void  vd_g_HmiTripcomGrphPut(const U4 * const u4_ap_GRPHRST)                                                                     */
@@ -186,10 +180,8 @@ void  vd_g_HmiTripcomGrphPut(const U4 * const u4_ap_GRPHRST)
     u4_t_grphrst >>= HMITRIPCOM_GRPHRSTREQ_LSB;
     u1_t_req = (U1)(u4_t_grphrst & (U4)HMITRIPCOM_GRPHRSTREQ_BIT);
     if(u1_t_req == (U1)TRUE){
-#if 0   /* BEV Rebase provisionally */
         u2_s_hmitripcom_grphrst |= (U2)TRIPCOM_RSTRQBIT_M_AVGEE_ONEM;           /*  AVG_EE_KMPL_1MIN_HIST_CLR           */
         u2_s_hmitripcom_rstbit |= (U2)TRIPCOM_RSTRQBIT_M_AVGEE_ONEM;            /*  AVG_EE_KMPL_1NIN_CLR                */
-#endif   /* BEV Rebase provisionally */
         if(u1_s_hmitripcom_ee_1min_hst == (U1)HMITRIPCOM_CNTREQ_INACT){
 #if 0   /* BEV Rebase provisionally */
             vd_s_HmiTripcomSWCount((U2)RIMID_U2_DS_22_10B2_EE_1MIN_HIST_CLR);
@@ -204,9 +196,7 @@ void  vd_g_HmiTripcomGrphPut(const U4 * const u4_ap_GRPHRST)
     u4_t_grphrst >>= HMITRIPCOM_GRPHRSTREQ_LSB;
     u1_t_req = (U1)(u4_t_grphrst & (U4)HMITRIPCOM_GRPHRSTREQ_BIT);
     if(u1_t_req == (U1)TRUE){
-#if 0   /* BEV Rebase provisionally */
         u2_s_hmitripcom_grphrst |= (U2)TRIPCOM_RSTRQBIT_M_AVGEE_TA;             /*  AVG_EE_KMPL_USRRST_HIST_CLR         */
-#endif   /* BEV Rebase provisionally */
         if(u1_s_hmitripcom_ee_rst_hst == (U1)HMITRIPCOM_CNTREQ_INACT){
 #if 0   /* BEV Rebase provisionally */
             vd_s_HmiTripcomSWCount((U2)RIMID_U2_DS_22_10B2_EE_USRRST_HIST_CLR);
@@ -221,9 +211,7 @@ void  vd_g_HmiTripcomGrphPut(const U4 * const u4_ap_GRPHRST)
     u4_t_grphrst >>= HMITRIPCOM_GRPHRSTREQ_LSB;
     u1_t_req = (U1)(u4_t_grphrst & (U4)HMITRIPCOM_GRPHRSTREQ_BIT);
     if(u1_t_req == (U1)TRUE){
-#if 0   /* BEV Rebase provisionally */
         u2_s_hmitripcom_rstbit |= (U2)TRIPCOM_RSTRQBIT_M_AVGEE_TA;              /*  AVG_EE_KMPL_USRRST_HIST_UPDT        */
-#endif   /* BEV Rebase provisionally */
     }
 }
 
@@ -273,12 +261,14 @@ static void    vd_s_HmiTripcomSWCount(const U2 u2_a_RIMID)
 /*  130D-1   12/12/2022  YK       Added processing to notify Tripcom of AVG_EE_KMPL_USRRST                                           */
 /*  19PFv3-1 01/11/2024  TH       Add AvgGrph                                                                                        */
 /*  19PFv3-2 09/23/2024  SI       Add Reset Count Logic (DID-10B2)                                                                   */
-/*  19PFv3-3 04/22/2025  KM       Bug fix ： added additional reset of 1MIN_AVGFUEL and 1MIN_AVGEE when history clear is requested    */
+/*  19PFv3-3 04/22/2025  KM       Bug fix : added additional reset of 1MIN_AVGFUEL and 1MIN_AVGEE when history clear is requested    */
+/*  BEV-1    10/31/2025  MA       Change for BEV rebase                                                                              */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * YK   = Yuta kusunoki, Denso Techno                                                                                             */
 /*  * TH   = Taisuke Hirakawa, KSE                                                                                                   */
 /*  * SI   = Shugo Ichinose, Denso Techno                                                                                            */
 /*  * KM   = Kazuma Miyazawa, Denso Techno                                                                                           */
+/*  * MA   = Misaki Aiki,  Denso Techno                                                                                              */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

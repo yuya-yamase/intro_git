@@ -1,4 +1,4 @@
-/* 1.2.0 */
+/* 1.3.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define RCMMUI_CFG_C_MAJOR                      (1)
-#define RCMMUI_CFG_C_MINOR                      (2)
+#define RCMMUI_CFG_C_MINOR                      (3)
 #define RCMMUI_CFG_C_PATCH                      (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -165,6 +165,8 @@ U1              u1_g_RcmmUICfgCheckPow(const U1 u1_a_REQID)
         case (U1)RCMMUI_STREQ_1_3:
         case (U1)RCMMUI_STREQ_11_1:
         case (U1)RCMMUI_STREQ_11_3:
+        case (U1)RCMMUI_STREQ_12_1:
+        case (U1)RCMMUI_STREQ_12_3:
             if ((u1_t_ba_sts  == (U1)TRUE) ||
                 (u1_t_acc_sts == (U1)TRUE) ||
                 (u1_t_igr_sts == (U1)TRUE) ||
@@ -175,6 +177,18 @@ U1              u1_g_RcmmUICfgCheckPow(const U1 u1_a_REQID)
             else{
                 u1_t_chk = (U1)FALSE;
             }        
+            break;
+        case (U1)RCMMUI_STREQ_2_1:
+        case (U1)RCMMUI_STREQ_8_1:
+        case (U1)RCMMUI_STREQ_8_2:
+        case (U1)RCMMUI_STREQ_8_3:
+            if (u1_t_igr_sts  == (U1)TRUE)
+            {
+                u1_t_chk = (U1)TRUE;
+            }
+            else{
+                u1_t_chk = (U1)FALSE;
+            }
             break;
         default:
             /* Do nothing */
@@ -195,6 +209,7 @@ U1              u1_g_RcmmUICfgCheckPow(const U1 u1_a_REQID)
 /*  1.0.0    02/18/2018  HY       New.                                                                                               */
 /*  1.1.0    10/07/2020  TH       Change config for 800B CV-R.                                                                       */
 /*  1.2.0    10/01/2025  YR       Change config for 19PFv3                                                                           */
+/*  1.3.0    07/03/2025  KO       Change config for BEV System_Consideration_2.                                                      */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */

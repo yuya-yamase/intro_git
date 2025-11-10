@@ -900,22 +900,12 @@ static U4 u4_s_HdimillmnCnlghtInptAveCal(const U4 u4_a_LX)
     U1 u1_t_aconmavecnt;
 
     u2_t_spd = (U2)0U;
-#if 0   /* BEV Rebase provisionally */
     u1_t_ig = u1_g_VehopemdIgnOn();
-#else   /* BEV Rebase provisionally */
-    u1_t_ig = (U1)FALSE;
-#endif   /* BEV Rebase provisionally */
     if(u1_t_ig == (U1)TRUE){
-#if 0   /* BEV Rebase provisionally */
         u1_t_msgsts = Com_GetIPDUStatus((PduIdType)MSG_VSC1G13_RXCH0);
-#else   /* BEV Rebase provisionally */
-        u1_t_msgsts = (U1)COM_NO_RX;
-#endif   /* BEV Rebase provisionally */
         u1_t_msgsts &= (U1)(COM_TIMEOUT | COM_NO_RX);
         if(u1_t_msgsts == (U1)0U){
-#if 0   /* BEV Rebase provisionally */
             (void)Com_ReceiveSignal(ComConf_ComSignal_SP1, &u2_t_spd);
-#endif   /* BEV Rebase provisionally */
         }
     }
 

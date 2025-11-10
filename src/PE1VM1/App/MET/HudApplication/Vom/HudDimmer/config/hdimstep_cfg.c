@@ -41,6 +41,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+U1   u1_g_hdimstep_hudill;   /* BEV Rebase provisionally */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Variable Definitions                                                                                                    */
@@ -66,7 +67,7 @@ U1      u1_g_HdimstepCfgReadStep(void)
 #if 0   /* BEV Rebase provisionally */
     u1_t_step = u1_g_McstBf((U1)MCST_BFI_HUDILL);
 #else   /* BEV Rebase provisionally */
-    u1_t_step = (U1)U1_MAX;
+    u1_t_step = u1_g_hdimstep_hudill;
 #endif   /* BEV Rebase provisionally */
 
     return(u1_t_step);
@@ -84,6 +85,8 @@ U1      u1_g_HdimstepCfgWriteStep(const U1 u1_a_STEP)
 
 #if 0   /* BEV Rebase provisionally */
     vd_g_McstBfPut((U1)MCST_BFI_HUDILL, u1_a_STEP);
+#else   /* BEV Rebase provisionally */
+    u1_g_hdimstep_hudill = u1_a_STEP;
 #endif   /* BEV Rebase provisionally */
     u1_t_isok = (U1)TRUE;
     return(u1_t_isok);

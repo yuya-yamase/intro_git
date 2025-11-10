@@ -200,7 +200,7 @@ U1      u1_g_HdimmgrIfGetIsHudOn(void)
     u1_t_hudonoff = u1_g_McstBf((U1)MCST_BFI_HUD);
     if(u1_t_hudonoff == (U1)MCST_HUD_ON){
 #else   /* BEV Rebase provisionally */
-    u1_t_hudonoff = (U1)0U;
+    u1_t_hudonoff = (U1)1U;
     if(u1_t_hudonoff == (U1)1U){
 #endif   /* BEV Rebase provisionally */
         u1_t_ishudon = (U1)TRUE;

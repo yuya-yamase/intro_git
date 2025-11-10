@@ -70,8 +70,6 @@
 #define HMITT_ICEWRN_DATPOS                       (9U)
 #define HMITT_REARBLT_DATPOS                      (10U)
 #define HMITT_STPIND_DATPOS                       (1U)
-#define HMITT_ECOIND_DATPOS                       (9U)
-#define HMITT_EVIND_DATPOS                        (10U)
 #define HMITT_LOWFUEL_DATPOS                      (8U)
 #define HMITT_TURN_DATPOS                         (1U)
 #define HMITT_HEAD_DATPOS                         (12U)
@@ -99,8 +97,6 @@
 #define HMITT_TURN_ACT_SFT                        (6U)
 
 #define HMITT_STPIND_BITPOS                       (8U)
-#define HMITT_ECOIND_BITPOS                       (16U)
-#define HMITT_EVIND_BITPOS                        (0U)
 #define HMITT_HEAD_BITPOS                         (0U)
 #define HMITT_TAIL_BITPOS                         (0U)
 
@@ -515,35 +511,6 @@ void    vd_g_HmiTtCfgVarmask(U4 * u4_ap_varmask)
 }
 
 /*===================================================================================================================================*/
-/*  void    vd_g_HmiTtCfgCstmask(U4 * u4_ap_varmask)                                                                                 */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void    vd_g_HmiTtCfgCstmask(U4* u4_ap_varmask)
-{
-    U1  u1_t_mcst;
-
-#if 0   /* BEV Rebase provisionally */
-    u1_t_mcst = u1_g_McstBf((U1)MCST_BFI_ECO_IND);
-#else   /* BEV Rebase provisionally */
-    u1_t_mcst = (U1)1U;
-#endif   /* BEV Rebase provisionally */
-    if (u1_t_mcst == (U1)0U) {
-        u4_ap_varmask[HMITT_ECOIND_DATPOS] &= (~((U4)HMITT_VAR_MASK << HMITT_ECOIND_BITPOS));
-    }
-
-#if 0   /* BEV Rebase provisionally */
-    u1_t_mcst = u1_g_McstBf((U1)MCST_BFI_EV_IND);
-#else   /* BEV Rebase provisionally */
-    u1_t_mcst = (U1)1U;
-#endif   /* BEV Rebase provisionally */
-    if (u1_t_mcst == (U1)0U) {
-        u4_ap_varmask[HMITT_EVIND_DATPOS] &= (~((U4)HMITT_VAR_MASK << HMITT_EVIND_BITPOS));
-    }
-}
-
-/*===================================================================================================================================*/
 /*  void    vd_g_HmiTtCfgDestmask(U4 * u4_ap_varmask)                                                                                */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
@@ -586,6 +553,7 @@ void    vd_g_HmiTtCfgDestmask(U4* u4_ap_varmask)
 /*  19PFv3-2 07/08/2024  PG       Add mask process for H_ZMILRQ for 19PFv3 R1.2                                                      */
 /*  19PFv3-3 08/23/2024  AA       Add awake status of turn hazard                                                                    */
 /*  19PFv3-4 09/17/2024  KH       Change variable name and function call name in vd_s_HmiTtTurn                                      */
+/*  BEV-1    10/31/2025  MA       Change for BEV rebase                                                                              */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * TH   = Takahiro Hirano, Denso Techno                                                                                           */
@@ -596,5 +564,6 @@ void    vd_g_HmiTtCfgDestmask(U4* u4_ap_varmask)
 /*  * PG   = Patrick Garcia, DTPH                                                                                                    */
 /*  * AA   = Anna Asuncion, Denso Techno                                                                                             */
 /*  * KH   = Kiko Huerte, DTPH                                                                                                       */
+/*  * MA   = Misaki Aiki,  Denso Techno                                                                                              */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

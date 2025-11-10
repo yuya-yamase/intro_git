@@ -19,7 +19,6 @@
 #include "hmiproxy_cfg_private.h"
 
 #include "hmiscreen.h"
-#include "oxcan.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -169,8 +168,13 @@ U1      u1_g_HmiScreenWoTurnShtdwnOK(void)
 /*  1.4.0    07/22/2024  AA       Deleted u1_g_HmiScreenShtdwnOK                                                                     */
 /*  1.5.0    08/23/2024  AA       Added u1_g_HmiScreenShtdwnOK                                                                     */
 /*                                                                                                                                   */
+/*  Revision Date        Author   Change Description                                                                                 */
+/* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
+/*  BEV-1    10/31/2025  MA       Change for BEV rebase                                                                              */
+/*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * SW   = Shun Watanae, DensoTechno                                                                                               */
 /*  * AA   = Anna Asuncion, DensoTechno                                                                                              */
+/*  * MA   = Misaki Aiki,  Denso Techno                                                                                              */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

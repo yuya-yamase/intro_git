@@ -21,7 +21,6 @@
 #if 0   /* BEV BSW provisionally */
 #include "xspi_met_can_cfg.h"
 #endif
-#include "xspi_met_ch_private.h"
 
 #if 0   /* BEV Rebase provisionally */
 /* Platform */
