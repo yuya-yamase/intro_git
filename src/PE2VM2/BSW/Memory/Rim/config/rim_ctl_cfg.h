@@ -32,9 +32,14 @@
 #define RIMID_U1_TIMEZONE_TZ_SIGN                (0x0002U)
 #define RIMID_U1_TIMEZONE_DST_S30                (0x0003U)
 #define RIMID_U1_IVI_STR_MODE                    (0x0004U)
+#define RIMID_U1_TIME_FORMAT                     (0x0005U)
 /* END : ##TOOL_OUT#RIM_ID_MOD_3B_U1## */
 /* START : ##TOOL_OUT#RIM_ID_MOD_3B_U2## */
 #define RIMID_U2_SAMPLE_BBB_2                    (0x4000U)
+#define RIMID_U2_CAL_MIN                         (0x4001U)
+#define RIMID_U2_CAL_DEF                         (0x4002U)
+#define RIMID_U2_OFFSET_TIME                     (0x4003U)
+#define RIMID_U2_CAL_DATE                        (0x4004U)
 /* END : ##TOOL_OUT#RIM_ID_MOD_3B_U2## */
 /* START : ##TOOL_OUT#RIM_ID_MOD_3B_U4## */
 #define RIMID_U4_SAMPLE_BBB_4                    (0x8000U)

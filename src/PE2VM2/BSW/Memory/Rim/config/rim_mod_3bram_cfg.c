@@ -45,8 +45,8 @@
 /*  Defines                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* START : ##TOOL_OUT#RIM_MOD_3B_SIZE## */
-#define RIM_MOD_3BRAM_U1_ID_NUM                  (5U)
-#define RIM_MOD_3BRAM_U2_ID_NUM                  (1U)
+#define RIM_MOD_3BRAM_U1_ID_NUM                  (6U)
+#define RIM_MOD_3BRAM_U2_ID_NUM                  (5U)
 #define RIM_MOD_3BRAM_U4_ID_NUM                  (3U)
 #define RIM_MOD_3BRAM_OTHER_ID_NUM               (1U)
 /* END : ##TOOL_OUT#RIM_MOD_3B_SIZE## */
