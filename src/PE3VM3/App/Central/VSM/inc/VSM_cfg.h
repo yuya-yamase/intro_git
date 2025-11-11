@@ -17,14 +17,14 @@
 /* Typedef                                                      */
 /****************************************************************/
 typedef struct type_bitdata {
-    U1  bit0:1;
-    U1  bit1:1;
-    U1  bit2:1;
-    U1  bit3:1;
-    U1  bit4:1;
-    U1  bit5:1;
-    U1  bit6:1;
-    U1  bit7:1;
+    U4  bit0:1;
+    U4  bit1:1;
+    U4  bit2:1;
+    U4  bit3:1;
+    U4  bit4:1;
+    U4  bit5:1;
+    U4  bit6:1;
+    U4  bit7:1;
 } TYPE_BITDATA;
 
 typedef union type_u4data {
