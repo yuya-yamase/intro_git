@@ -38,7 +38,7 @@ static U1 u1_s_PwrCtrlObserveJdgVm3Stby( void );
 /* Data                                                                     */
 /*--------------------------------------------------------------------------*/
 static U1 u1_s_PwrCtrl_Observe_TriggerInfo;   /* 起動検知/OFF検知判定結果 */
-static U1 u1_s_PwrCtrl_Observe_Vm3StbyInfo;   /* VM3スタンバイ条件成立有無 */
+static U1 u1_s_PwrCtrl_Observe_Vm3StbyInfo;   /* VM3スリープ許可情報 */
 static U4 u4_s_PwrCtrl_Observe_SleepTime;     /* スリープ条件継続時間 */
 
 /*--------------------------------------------------------------------------*/
@@ -89,7 +89,7 @@ void vd_g_PwrCtrlObserveOnOffTriggerDetect( void )
     u1_t_force_slp = u1_g_PwrCtrlComRxGetForceSleep();
 
     /* Boot信号 */
-    u1_t_boot = u1_g_PwrCtrl_PinMonitor_GetPinInfo(PWRCTRL_CFG_PRIVATE_KIND_BOOT);
+    u1_t_boot = u1_g_PwrCtrl_PinMonitor_GetPinInfo((U1)PWRCTRL_CFG_PRIVATE_KIND_BOOT);
 
     /* スタンバイ条件成立 */
     if( ((u1_t_stby_rslt == (U1)PWRCTRL_COM_STBY_OK)         /* 全VMスタンバイ可 */
@@ -109,7 +109,7 @@ void vd_g_PwrCtrlObserveOnOffTriggerDetect( void )
 /*****************************************************************************
   Function      : u1_g_PwrCtrlObserveOnOffTrigger
   Description   : 起動検知(起動トリガ)/OFF検知(サスペンド処理トリガ)結果取得
-  return        : [Out] VM3のスタンバイ条件成立有無
+  return        : [Out] 起動検知/OFF検知判定結果
   Note          : none
 *****************************************************************************/
 U1 u1_g_PwrCtrlObserveOnOffTrigger( void )
@@ -132,7 +132,7 @@ void vd_g_PwrCtrlObserveVm3StbyInfo( const U1 u1_a_ProhibitSleep )
 }
 
 /*****************************************************************************
-  Function      : u1_s_PwrCtrlObserveRxVm3Stby
+  Function      : u1_s_PwrCtrlObserveJdgVm3Stby
   Description   : VM3スタンバイ条件成立判定処理(60秒間継続判定)
   param[in/out] : none
   return        : [Out] VM3のスタンバイ条件成立有無

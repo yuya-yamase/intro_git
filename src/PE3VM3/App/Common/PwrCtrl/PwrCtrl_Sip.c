@@ -119,9 +119,9 @@
 /* Constants                                                                */
 /*--------------------------------------------------------------------------*/
 /* SIP制御共通処理 */
-static void vd_s_PwrCtrl_Sip_DioWriteCheck(U4* u4_a_counter , const U1 u1_a_ontime ,const Dio_ChannelType u2_a_ChannelId , const Dio_LevelType u1_a_Level);
-static void vd_s_PwrCtrl_Sip_DioReadCheck(U4* u4_a_counter , U4* u4_a_wait_counter ,const U1 u1_a_ontime ,const U1 u1_a_PinID , const Dio_LevelType u1_a_Level);
-static void vd_s_PwrCtrl_Sip_DioFreqAct(U4* u4_a_counter , const U1 u1_a_ontime ,const U1 u1_a_PWM_CH, const U2 u2_a_PERIOD, const U2 u2_a_DUTY);
+static void vd_s_PwrCtrl_Sip_DioWriteCheck(U4 *u4_a_counter , const U1 u1_a_ontime ,const Dio_ChannelType u2_a_ChannelId , const Dio_LevelType u1_a_Level);
+static void vd_s_PwrCtrl_Sip_DioReadCheck(U4 *u4_a_counter , U4 *u4_a_wait_counter ,const U1 u1_a_ontime ,const U1 u1_a_PinID , const Dio_LevelType u1_a_Level);
+static void vd_s_PwrCtrl_Sip_DioFreqAct(U4 *u4_a_counter , const U1 u1_a_ontime ,const U1 u1_a_PWM_CH, const U2 u2_a_PERIOD, const U2 u2_a_DUTY);
 
 /* LOW_POWER_ON状態要求 */
 static U1 u1_s_PwrCtrl_Sip_LOW_POWER_ON_Sts;
@@ -236,14 +236,33 @@ U1 u1_s_pwrctrl_common_err_dbg_state;
 /*--------------------------------------------------------------------------*/
 /* SIP通常起動制御 */
 static void vd_s_PwrCtrlSipOnMainFunc( void );
+static void vd_s_PwrCtrlSipOnStep1( void );
+static void vd_s_PwrCtrlSipOnStep2( void );
+static void vd_s_PwrCtrlSipOnStep3( void );
+static void vd_s_PwrCtrlSipOnStep4( void );
+static void vd_s_PwrCtrlSipOnStep5( void );
+static void vd_s_PwrCtrlSipOnStep6( void );
+static void vd_s_PwrCtrlSipOnStep7( void );
+static void vd_s_PwrCtrlSipOnStep8( void );
 /* SIPレジューム制御 */
 static void vd_s_PwrCtrlSipRsmMainFunc( void );
 /* SIP電源OFF制御 */
 static void vd_s_PwrCtrlSipOffMainFunc( void );
+static void vd_s_PwrCtrlSipOffStep1( void );
+static void vd_s_PwrCtrlSipOffStep2( void );
+static void vd_s_PwrCtrlSipOffStep3( void );
+static void vd_s_PwrCtrlSipOffStep4( void );
+static void vd_s_PwrCtrlSipOffStep5( void );
+static void vd_s_PwrCtrlSipOffStep6( void );
 /* スタンバイ制御 */
 static void vd_s_PwrCtrlSipStbyMainFunc( void );
 /* SIP電源強制OFF制御 */
 static void vd_s_PwrCtrlSipForcedOffMainFunc( void );
+static void vd_s_PwrCtrlSipForcedOffStep1( void );
+static void vd_s_PwrCtrlSipForcedOffStep2( void );
+static void vd_s_PwrCtrlSipForcedOffStep3( void );
+static void vd_s_PwrCtrlSipForcedOffStep4( void );
+static void vd_s_PwrCtrlSipForcedOffStep5( void );
 /* SIP電源強制OFF初期化要求 共通変数初期化 */
 static void vd_s_PwrCtrlSipForcedOffInitReq( void );
 /* WAKEUP-STAT端子の設定関数 */
@@ -318,9 +337,6 @@ static void vd_s_PwrCtrl_Sip_Write_WAKEUP_STAT(void);
 /*--------------------------------------------------------------------------*/
 /* Functions                                                                */
 /*--------------------------------------------------------------------------*/
-
-/*#define ***_START_SEC_CODE
-#include <***_MemMap.h>*/
 /****************************************************************************/
 /* Scheduled Functions                                                      */
 /****************************************************************************/
@@ -435,7 +451,7 @@ void vd_g_PwrCtrlSipEthReqJudge( void )
     if(u1_s_PwrCtrl_Sip_EthReq_Sts == (U1)PWRCTRL_ETH_REQ_ON){
     
         /* SAIL_RESOUT_Nの端子情報を取得する */
-        u1_t_readlv = u1_g_PwrCtrl_PinMonitor_GetPinInfo(PWRCTRL_CFG_PRIVATE_KIND_SAIL_RESOUT_N);
+        u1_t_readlv = u1_g_PwrCtrl_PinMonitor_GetPinInfo((U1)PWRCTRL_CFG_PRIVATE_KIND_SAIL_RESOUT_N);
         
         if(u1_t_readlv == (U1)MCU_DIO_HIGH){
             /* Hiを検知したらEtherSW起動要求を通知 */
@@ -449,7 +465,7 @@ void vd_g_PwrCtrlSipEthReqJudge( void )
     /* EtherSW終了要求有りの場合 */
     else if(u1_s_PwrCtrl_Sip_EthReq_Sts == (U1)PWRCTRL_ETH_REQ_OFF){
         /* SAIL_RESOUT_Nの端子情報を取得する */
-        u1_t_readlv = u1_g_PwrCtrl_PinMonitor_GetPinInfo(PWRCTRL_CFG_PRIVATE_KIND_SAIL_RESOUT_N);
+        u1_t_readlv = u1_g_PwrCtrl_PinMonitor_GetPinInfo((U1)PWRCTRL_CFG_PRIVATE_KIND_SAIL_RESOUT_N);
         
         if(u1_t_readlv == (U1)MCU_DIO_LOW){
             /* Loを検知したらEtherSW終了要求を通知 */
@@ -585,6 +601,7 @@ void vd_g_PwrCtrlSipBonInit( void )
     u4_s_PwrCtrl_Sip_ForcedOff_POFFCOMP_Wait_Tim       = (U4)PWRCTRL_SIP_TIME_INIT;
     u4_s_PwrCtrl_Sip_ForcedOff_POFFCOMP_Wait_Step4_Tim = (U4)PWRCTRL_SIP_TIME_INIT;
 
+    return;
 }
 
 /*****************************************************************************
@@ -724,6 +741,7 @@ void vd_g_PwrCtrlSipWkupInit( void )
     u4_s_PwrCtrl_Sip_ForcedOff_POFFCOMP_Wait_Tim       = (U4)PWRCTRL_SIP_TIME_INIT;
     u4_s_PwrCtrl_Sip_ForcedOff_POFFCOMP_Wait_Step4_Tim = (U4)PWRCTRL_SIP_TIME_INIT;
 
+    return;
 }
 
 /*****************************************************************************
@@ -782,6 +800,7 @@ void vd_g_PwrCtrlSipOnReq( void )
     /* 計測点③Soc起動の検知状態をクリア */
     vd_g_PwrCtrlComTxClrBootLog((U1)PWRCTRL_COM_BOOTLOG_BONREQ);
 
+    return;
 }
 
 /*****************************************************************************
@@ -840,6 +859,7 @@ void vd_g_PwrCtrlSipOnPwrOnReq( void )
     /* 計測点③Soc起動の検知状態をクリア */
     vd_g_PwrCtrlComTxClrBootLog((U1)PWRCTRL_COM_BOOTLOG_BONREQ);
 
+    return;
 }
 
 /*****************************************************************************
@@ -875,6 +895,7 @@ void vd_g_PwrCtrlSipRsmReq( void )
     /* 計測点③'STRWakeの検知状態をクリア */
     vd_g_PwrCtrlComTxClrBootLog((U1)PWRCTRL_COM_BOOTLOG_STRREQ);
 
+    return;
 }
 
 /*****************************************************************************
@@ -919,6 +940,7 @@ void vd_g_PwrCtrlSipOffReq( void )
     u4_s_PwrCtrl_Sip_Off_SAIL_RESOUT_N_Wait_Tim   = (U4)PWRCTRL_SIP_TIME_INIT;
     u4_s_PwrCtrl_Sip_Off_POFF_COMPLETE_N_Wait_Tim = (U4)PWRCTRL_SIP_TIME_INIT;
 
+    return;
 }
 
 /*****************************************************************************
@@ -951,6 +973,8 @@ void vd_g_PwrCtrlSipStbyReq( void )
     u4_s_PwrCtrl_Sip_Stby_LOW_POWER_ON_Tim     = (U4)PWRCTRL_SIP_TIME_INIT;
     u4_s_PwrCtrl_Sip_Stby_MM_STBY_N_Wait_Tim   = (U4)PWRCTRL_SIP_TIME_INIT;
     u4_s_PwrCtrl_Sip_Stby_AOSS_Wait_Tim        = (U4)PWRCTRL_SIP_TIME_INIT;
+
+    return;
 }
 
 /*****************************************************************************
@@ -969,6 +993,8 @@ void vd_g_PwrCtrlSipForcedOffSTEP1Req( void )
     u1_s_PwrCtrl_Sip_EthReq_Sts     = (U1)PWRCTRL_ETH_REQ_OFF;
     
     vd_s_PwrCtrlSipForcedOffInitReq();
+
+    return;
 }
 
 /*****************************************************************************
@@ -985,6 +1011,8 @@ void vd_g_PwrCtrlSipForcedOffSTEP2Req( void )
     u1_s_PwrCtrl_Sip_ForcedOff_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP2;
     
     vd_s_PwrCtrlSipForcedOffInitReq();
+
+    return;
 }
 
 /*****************************************************************************
@@ -1001,6 +1029,8 @@ void vd_g_PwrCtrlSipForcedOffSTEP4Req( void )
     u1_s_PwrCtrl_Sip_ForcedOff_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP4;
     
     vd_s_PwrCtrlSipForcedOffInitReq();
+
+    return;
 }
 
 /*****************************************************************************
@@ -1016,6 +1046,8 @@ void vd_g_PwrCtrlSipStandbyCancelSTEP1Req( void )
     u1_s_PwrCtrl_Sip_ForcedOff_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP1;
 
     vd_s_PwrCtrlSipForcedOffInitReq();
+
+    return;
 }
 
 /*****************************************************************************
@@ -1029,6 +1061,8 @@ void vd_g_PwrCtrlSipSetDDConvOff( const U1 u1_a_ddconv )
 {
     /* SIP入力DDコン電源OFF処理未実施状態を設定 */
     u1_s_PwrCtrl_Sip_DDConvFlag     = u1_a_ddconv;
+
+    return;
 }
 
 /*****************************************************************************
@@ -1107,6 +1141,7 @@ static void vd_s_PwrCtrlSipForcedOffInitReq( void )
     /* SIP入力DDコン電源OFF処理未実施状態を設定 */
     u1_s_PwrCtrl_Sip_DDConvFlag                        = (U1)PWRCTRL_SIP_FOFF_DDCONV_OFF;
 
+    return;
 }
 
 /*****************************************************************************
@@ -1147,8 +1182,11 @@ void vd_g_PwrCtrlSipMainFunc( void )
             break;
 
         default:
+            /* 未定義の要求が通知された場合は何もしない */
             break;
     }
+    
+    return;
 }
 
 /*****************************************************************************
@@ -1162,12 +1200,34 @@ static void vd_s_PwrCtrlSipOnMainFunc( void )
 {
     /* PM_PWR_EN_N=Lo(Step3-1)からの経過時間 */
     if(u4_s_PwrCtrl_Sip_On_PM_PWR_EN_N_Step3_Tim == (U4)PWRCTRL_SIP_TIME_INVALID){
-        u4_s_PwrCtrl_Sip_On_PM_PWR_EN_N_Lo_ElapsedTim++; /* Step3-1完了後、次の周期からカウント */
         if(u4_s_PwrCtrl_Sip_On_PM_PWR_EN_N_Lo_ElapsedTim >= (U4)PWRCTRL_SIP_ON_T_PM_PWR_EN_N_ELPSD){
             u4_s_PwrCtrl_Sip_On_PM_PWR_EN_N_Lo_ElapsedTim = (U4)PWRCTRL_SIP_ON_T_PM_PWR_EN_N_ELPSD; /* 最大値でガード */
         }
+        else{
+            u4_s_PwrCtrl_Sip_On_PM_PWR_EN_N_Lo_ElapsedTim++; /* Step3-1完了後、次の周期からカウント */
+        }
     }
+    vd_s_PwrCtrlSipOnStep1(); /* SiPへの電源供給開始 */
+    vd_s_PwrCtrlSipOnStep2(); /* POFF_COMPLETE_N、AOSS_SLEEP_ENTRY_EXITの初期値チェック */
+    vd_s_PwrCtrlSipOnStep3(); /* PM_PWR_EN_N = Lo設定 */
+    vd_s_PwrCtrlSipOnStep4(); /* PMA_PS_HOLD初期値チェック */
+    vd_s_PwrCtrlSipOnStep5(); /* SOC PMICによるSIP内部電源ONチェック */
+    vd_s_PwrCtrlSipOnStep6(); /* SOCリセット解除正常完了チェック */
+    vd_s_PwrCtrlSipOnStep7(); /* SOCのハードウェア起動チェック */
+    vd_s_PwrCtrlSipOnStep8(); /* PM_PWR_EN_N = Hi設定 */
+    
+    return;
+}
 
+/*****************************************************************************
+  Function      : vd_s_PwrCtrlSipOnStep1
+  Description   : 6-8-1.SIP通常起動制御_STEP1処理
+  param[in/out] : none
+  return        : none
+  Note          : none
+*****************************************************************************/
+static void vd_s_PwrCtrlSipOnStep1( void )
+{
 /* SiPへの電源供給開始など */
     if(u1_s_PwrCtrl_Sip_On_Step == (U1)PWRCTRL_COMMON_PROCESS_STEP1){
         /* VB-33-SIP-ON = Hi */
@@ -1193,7 +1253,19 @@ static void vd_s_PwrCtrlSipOnMainFunc( void )
             u1_s_PwrCtrl_Sip_On_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP2;
         }
     }
-        
+    
+    return;
+}
+
+/*****************************************************************************
+  Function      : vd_s_PwrCtrlSipOnStep2
+  Description   : 6-8-1.SIP通常起動制御_STEP2処理
+  param[in/out] : none
+  return        : none
+  Note          : none
+*****************************************************************************/
+static void vd_s_PwrCtrlSipOnStep2( void )
+{
     if(u1_s_PwrCtrl_Sip_On_Step == (U1)PWRCTRL_COMMON_PROCESS_STEP2){
         /* VB-33-SIP-ON = HiからtLOW-POWER-ON_HI経過後にLOW-POWER-ON = Hi */
         vd_s_PwrCtrlSipOnLOWPOWERON2();                 /* STEP2-1 */
@@ -1240,8 +1312,7 @@ static void vd_s_PwrCtrlSipOnMainFunc( void )
            }
 
         /* STEP2-2、2-3が50ms経過しても完了してなければSTEPを完了させる */
-        else
-        {
+        else{
             if((u4_s_PwrCtrl_Sip_On_AOSS_Wait_Tim > PWRCTRL_SIP_ON_WAIT_POFFCOMP_AOSS) ||
               (u4_s_PwrCtrl_Sip_On_POFFCOMP_Wait_Tim > PWRCTRL_SIP_ON_WAIT_POFFCOMP_AOSS)){
                 /* 強制OFFシーケンス(DDコンOFF)要求を設定 */
@@ -1253,6 +1324,18 @@ static void vd_s_PwrCtrlSipOnMainFunc( void )
         }
     }
     
+    return;
+}
+
+/*****************************************************************************
+  Function      : vd_s_PwrCtrlSipOnStep3
+  Description   : 6-8-1.SIP通常起動制御_STEP3処理
+  param[in/out] : none
+  return        : none
+  Note          : none
+*****************************************************************************/
+static void vd_s_PwrCtrlSipOnStep3( void )
+{
     if(u1_s_PwrCtrl_Sip_On_Step == (U1)PWRCTRL_COMMON_PROCESS_STEP3){
 /* PM_PWR_EN_N=Lo */
         /* AOSS_SLEEP_NETRY_EXIT,POFF_COMPLETE_N初期値チェックからtPM_PWR_EN_N_LO経過後にPM_PWR_EN_N = Lo */
@@ -1275,7 +1358,19 @@ static void vd_s_PwrCtrlSipOnMainFunc( void )
         /* AOSS_SLEEP_NETRY_EXIT,POFF_COMPLETE_N初期値チェックからtSTR_WAKE経過後にSTR_WAKE = Hi */
         vd_s_PwrCtrlSipOnSTRWAKE();                 /* STEP3-4 */
     }
-        
+    
+    return;
+}
+
+/*****************************************************************************
+  Function      : vd_s_PwrCtrlSipOnStep4
+  Description   : 6-8-1.SIP通常起動制御_STEP4処理
+  param[in/out] : none
+  return        : none
+  Note          : none
+*****************************************************************************/
+static void vd_s_PwrCtrlSipOnStep4( void )
+{
     if(u1_s_PwrCtrl_Sip_On_Step == (U1)PWRCTRL_COMMON_PROCESS_STEP4){
 /* PMA_PS_HOLD=Lo */
         /* PMA_PS_HOLD初期値(Lo)チェック */
@@ -1296,8 +1391,7 @@ static void vd_s_PwrCtrlSipOnMainFunc( void )
             u4_s_PwrCtrl_Sip_On_PMA_PS_HOLD_Wait_Tim = (U4)PWRCTRL_SIP_TIME_INIT;
         }
 
-        else
-        {
+        else{
             /* STEP4-1が300ms経過しても完了してなければSTEPを完了させる */
             if(u4_s_PwrCtrl_Sip_On_PMA_PS_HOLD_Wait_Tim > (U4)PWRCTRL_SIP_ON_WAIT_PMA_PS_HOLD_LO){
                 /* 強制OFFシーケンス(SoC異常)要求を設定 */
@@ -1309,7 +1403,19 @@ static void vd_s_PwrCtrlSipOnMainFunc( void )
         }
 
     }
+    
+    return;
+}
 
+/*****************************************************************************
+  Function      : vd_s_PwrCtrlSipOnStep5
+  Description   : 6-8-1.SIP通常起動制御_STEP5処理
+  param[in/out] : none
+  return        : none
+  Note          : none
+*****************************************************************************/
+static void vd_s_PwrCtrlSipOnStep5( void )
+{
     if(u1_s_PwrCtrl_Sip_On_Step == (U1)PWRCTRL_COMMON_PROCESS_STEP5){
 /* POFF_COMPLETE_N=Hi */
         /* PMA_PS_HOLD = Lo後にPOFF_COMPLETE_N変化(Lo→Hi)チェック */
@@ -1335,8 +1441,7 @@ static void vd_s_PwrCtrlSipOnMainFunc( void )
 
         }
         
-        else
-        {
+        else{
             /* STEP5-1が300ms経過しても完了してなければSTEPを完了させる */
             if(u4_s_PwrCtrl_Sip_On_POFFCOMP_Wait_Tim > (U4)PWRCTRL_SIP_ON_WAIT_POFFCOMP){
                 /* 強制OFFシーケンス(PMIC異常)要求を設定 */
@@ -1347,7 +1452,19 @@ static void vd_s_PwrCtrlSipOnMainFunc( void )
             }
         }
     }
+    
+    return;
+}
 
+/*****************************************************************************
+  Function      : vd_s_PwrCtrlSipOnStep6
+  Description   : 6-8-1.SIP通常起動制御_STEP6処理
+  param[in/out] : none
+  return        : none
+  Note          : none
+*****************************************************************************/
+static void vd_s_PwrCtrlSipOnStep6( void )
+{
     if(u1_s_PwrCtrl_Sip_On_Step == (U1)PWRCTRL_COMMON_PROCESS_STEP6){
 /* SOC_RESOUT_N & SAIL_RESOUT_N=Hi */
         /* POFF_COMPLETE_N変化(Hi)後にSOC_RESOUT_N変化(Hi)チェック */
@@ -1378,8 +1495,7 @@ static void vd_s_PwrCtrlSipOnMainFunc( void )
             vd_g_PwrCtrlComTxSetBootLog((U1)PWRCTRL_COM_BOOTLOG_BONREQ);
         }
 
-        else
-        {
+        else{
             /* STEP6-1、6-2が200ms経過しても完了してなければSTEPを完了させる */
             if((u4_s_PwrCtrl_Sip_On_SOC_RESOUT_Wait_Tim > (U4)PWRCTRL_SIP_ON_WAIT_SOC_SAIL_RES) ||
               (u4_s_PwrCtrl_Sip_On_SAIL_RESOUT_Wait_Tim > (U4)PWRCTRL_SIP_ON_WAIT_SOC_SAIL_RES)){
@@ -1391,7 +1507,19 @@ static void vd_s_PwrCtrlSipOnMainFunc( void )
             }
         }
     }
+    
+    return;
+}
 
+/*****************************************************************************
+  Function      : vd_s_PwrCtrlSipOnStep7
+  Description   : 6-8-1.SIP通常起動制御_STEP7処理
+  param[in/out] : none
+  return        : none
+  Note          : none
+*****************************************************************************/
+static void vd_s_PwrCtrlSipOnStep7( void )
+{
     if(u1_s_PwrCtrl_Sip_On_Step == (U1)PWRCTRL_COMMON_PROCESS_STEP7){
 /* PMA_PS_HOLD=Hi */
         /* SOC_RESOUT_N & SAIL_RESOUT_N=Hi変化後にPMA_PS_HOLD変化(Hi)チェック */
@@ -1418,8 +1546,7 @@ static void vd_s_PwrCtrlSipOnMainFunc( void )
 
         }
 
-        else
-        {
+        else{
             /* STEP8-1が200ms経過しても完了してなければSTEPを完了させる */
             if(u4_s_PwrCtrl_Sip_On_PMA_PS_HOLD_Wait_Tim > (U4)PWRCTRL_SIP_ON_WAIT_PMA_PS_HOLD_HI){
                 /* 強制OFFシーケンス(SoC異常)要求を設定 */
@@ -1431,6 +1558,18 @@ static void vd_s_PwrCtrlSipOnMainFunc( void )
         }
     }
     
+    return;
+}
+
+/*****************************************************************************
+  Function      : vd_s_PwrCtrlSipOnStep8
+  Description   : 6-8-1.SIP通常起動制御_STEP8処理
+  param[in/out] : none
+  return        : none
+  Note          : none
+*****************************************************************************/
+static void vd_s_PwrCtrlSipOnStep8( void )
+{
     if(u1_s_PwrCtrl_Sip_On_Step == (U1)PWRCTRL_COMMON_PROCESS_STEP8){
 /* PM_PWR_EN_N=Hi */
         /* STEP7完了後tPM_PWR_EN_N_HI_P2経過後にPM_PWR_EN_N = Hi */
@@ -1511,9 +1650,25 @@ static void vd_s_PwrCtrlSipRsmMainFunc( void )
 *****************************************************************************/
 static void vd_s_PwrCtrlSipOffMainFunc( void )
 {
-    U1 u1_t_socres_lv;        /* SOC_RESOUT_N  リード結果 */
-    U1 u1_t_sailres_lv;       /* SAIL_RESOUT_N リード結果 */
+    vd_s_PwrCtrlSipOffStep1(); /* MM_OFF_REQ = Lo設定 */
+    vd_s_PwrCtrlSipOffStep2(); /* MM_STBY_N応答チェック(TEN/DNソフトウェア終了処理完了確認) */
+    vd_s_PwrCtrlSipOffStep3(); /* PMA_PS_HOLD応答チェック(SOCシャットダウン完了確認) */
+    vd_s_PwrCtrlSipOffStep4(); /* SOC_RESOUT_N SAIL_RESOUT_N POFF_COMPLETE_N応答チェック(SOCリセット処理、およびSIP電源OFF完了確認) */
+    vd_s_PwrCtrlSipOffStep5(); /* SIP入力DDコン電源OFF処理 */
+    vd_s_PwrCtrlSipOffStep6(); /* SIP入力DDコン電源OFF処理 */
     
+    return;
+}
+
+/*****************************************************************************
+  Function      : vd_s_PwrCtrlSipOffStep1
+  Description   : 6-9.SIP電源OFF制御_STEP1処理
+  param[in/out] : none
+  return        : none
+  Note          : none
+*****************************************************************************/
+static void vd_s_PwrCtrlSipOffStep1( void )
+{
     if(u1_s_PwrCtrl_Sip_Off_Step == (U1)PWRCTRL_COMMON_PROCESS_STEP1){
         vd_s_PwrCtrlSipOffMMOFFREQ1(); /* STEP1-1 */
         
@@ -1522,7 +1677,19 @@ static void vd_s_PwrCtrlSipOffMainFunc( void )
             u1_s_PwrCtrl_Sip_Off_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP2;
         }
     }
+    
+    return;
+}
 
+/*****************************************************************************
+  Function      : vd_s_PwrCtrlSipOffStep2
+  Description   : 6-9.SIP電源OFF制御_STEP2処理
+  param[in/out] : none
+  return        : none
+  Note          : none
+*****************************************************************************/
+static void vd_s_PwrCtrlSipOffStep2( void )
+{
 /* MM_STBY_N =Lo? */
     if(u1_s_PwrCtrl_Sip_Off_Step == (U1)PWRCTRL_COMMON_PROCESS_STEP2){
         vd_s_PwrCtrlSipOffValChkMMSTBY();         /* STEP2-1 */
@@ -1540,8 +1707,7 @@ static void vd_s_PwrCtrlSipOffMainFunc( void )
 #endif
             u1_s_PwrCtrl_Sip_Off_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP3;
         }
-        else
-        {
+        else{
             /* STEP2-1が100秒経過しても完了してなければSTEPを完了させる */
             if(u4_s_PwrCtrl_Sip_Off_MM_STBY_Wait_Tim > (U4)PWRCTRL_SIP_OFF_WAIT_MM_STBY){
                 /* 強制OFFシーケンス(SoC異常)要求を設定 */
@@ -1552,7 +1718,19 @@ static void vd_s_PwrCtrlSipOffMainFunc( void )
             }
         }
     }
+    
+    return;
+}
 
+/*****************************************************************************
+  Function      : vd_s_PwrCtrlSipOffStep3
+  Description   : 6-9.SIP電源OFF制御_STEP3処理
+  param[in/out] : none
+  return        : none
+  Note          : none
+*****************************************************************************/
+static void vd_s_PwrCtrlSipOffStep3( void )
+{
 /* PMA_PS_HOLD =Lo? */
     if(u1_s_PwrCtrl_Sip_Off_Step == (U1)PWRCTRL_COMMON_PROCESS_STEP3){
         vd_s_PwrCtrlSipOffValChkPSHOLD(); /* STEP3-1 */
@@ -1571,8 +1749,7 @@ static void vd_s_PwrCtrlSipOffMainFunc( void )
             u1_s_PwrCtrl_Sip_Off_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP4;
         }
         
-        else
-        {
+        else{
             /* STEP3-1が3秒経過しても完了してなければSTEPを完了させる */
             if(u4_s_PwrCtrl_Sip_Off_PMA_PS_HOLD_Wait_Tim > (U4)PWRCTRL_SIP_OFF_WAIT_PMA_PS_HOLD){
                 /* 強制OFFシーケンス(SoC異常)要求を設定 */
@@ -1583,6 +1760,21 @@ static void vd_s_PwrCtrlSipOffMainFunc( void )
             }
         }
     }
+    
+    return;
+}
+
+/*****************************************************************************
+  Function      : vd_s_PwrCtrlSipOffStep4
+  Description   : 6-9.SIP電源OFF制御_STEP4処理
+  param[in/out] : none
+  return        : none
+  Note          : none
+*****************************************************************************/
+static void vd_s_PwrCtrlSipOffStep4( void )
+{
+    U1 u1_t_socres_lv;        /* SOC_RESOUT_N  リード結果 */
+    U1 u1_t_sailres_lv;       /* SAIL_RESOUT_N リード結果 */
 
 /* SOC_RESOUT_N & SAIL_RESOUT_N & POFF_COMPLETE_N =Lo? */
     if(u1_s_PwrCtrl_Sip_Off_Step == (U1)PWRCTRL_COMMON_PROCESS_STEP4){
@@ -1618,8 +1810,7 @@ static void vd_s_PwrCtrlSipOffMainFunc( void )
 #endif
              u1_s_PwrCtrl_Sip_Off_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP5;
         }
-        else
-        {
+        else{
 #ifndef PWRCTRL_CFG_PRIVATE_DBG_FAIL_OFF
             /* STEP4-1~4-3が100ms経過しても完了してなければSTEPを完了させる */
             if((u4_s_PwrCtrl_Sip_Off_SOC_RESOUT_N_Wait_Tim > (U4)PWRCTRL_SIP_OFF_WAIT_SOC_RESOUT_N)  ||
@@ -1631,8 +1822,8 @@ static void vd_s_PwrCtrlSipOffMainFunc( void )
                 vd_g_PwrCtrlSipSoCOnError();
                 
                 /* SAIL_RESOUT_N & SoC_RESOUT_N =Loチェックを行う */
-                u1_t_socres_lv  = u1_g_PwrCtrl_PinMonitor_GetPinInfo(PWRCTRL_CFG_PRIVATE_KIND_SOC_RESOUT_N);
-                u1_t_sailres_lv = u1_g_PwrCtrl_PinMonitor_GetPinInfo(PWRCTRL_CFG_PRIVATE_KIND_SAIL_RESOUT_N);
+                u1_t_socres_lv  = u1_g_PwrCtrl_PinMonitor_GetPinInfo((U1)PWRCTRL_CFG_PRIVATE_KIND_SOC_RESOUT_N);
+                u1_t_sailres_lv = u1_g_PwrCtrl_PinMonitor_GetPinInfo((U1)PWRCTRL_CFG_PRIVATE_KIND_SAIL_RESOUT_N);
                 
                 if((u1_t_socres_lv == (U1)MCU_DIO_LOW) && 
                   (u1_t_sailres_lv == (U1)MCU_DIO_LOW)){
@@ -1656,8 +1847,8 @@ static void vd_s_PwrCtrlSipOffMainFunc( void )
                     vd_g_PwrCtrlSipSoCOnError();
                     
                     /* SAIL_RESOUT_N & SoC_RESOUT_N =Loチェックを行う */
-                    u1_t_socres_lv  = u1_g_PwrCtrl_PinMonitor_GetPinInfo(PWRCTRL_CFG_PRIVATE_KIND_SOC_RESOUT_N);
-                    u1_t_sailres_lv = u1_g_PwrCtrl_PinMonitor_GetPinInfo(PWRCTRL_CFG_PRIVATE_KIND_SAIL_RESOUT_N);
+                    u1_t_socres_lv  = u1_g_PwrCtrl_PinMonitor_GetPinInfo((U1)PWRCTRL_CFG_PRIVATE_KIND_SOC_RESOUT_N);
+                    u1_t_sailres_lv = u1_g_PwrCtrl_PinMonitor_GetPinInfo((U1)PWRCTRL_CFG_PRIVATE_KIND_SAIL_RESOUT_N);
                     
                     if((u1_t_socres_lv == (U1)MCU_DIO_LOW) && 
                       (u1_t_sailres_lv == (U1)MCU_DIO_LOW)){
@@ -1673,7 +1864,19 @@ static void vd_s_PwrCtrlSipOffMainFunc( void )
 #endif
         }
     }
+    
+    return;
+}
 
+/*****************************************************************************
+  Function      : vd_s_PwrCtrlSipOffStep5
+  Description   : 6-9.SIP電源OFF制御_STEP5処理
+  param[in/out] : none
+  return        : none
+  Note          : none
+*****************************************************************************/
+static void vd_s_PwrCtrlSipOffStep5( void )
+{
     if(u1_s_PwrCtrl_Sip_Off_Step == (U1)PWRCTRL_COMMON_PROCESS_STEP5){
         vd_s_PwrCtrlSipOffVB33SIPFREQ(); /* STEP5-1 */
 
@@ -1683,6 +1886,18 @@ static void vd_s_PwrCtrlSipOffMainFunc( void )
         }
     }
 
+    return;
+}
+
+/*****************************************************************************
+  Function      : vd_s_PwrCtrlSipOffStep6
+  Description   : 6-9.SIP電源OFF制御_STEP6処理
+  param[in/out] : none
+  return        : none
+  Note          : none
+*****************************************************************************/
+static void vd_s_PwrCtrlSipOffStep6( void )
+{
     if(u1_s_PwrCtrl_Sip_Off_Step == (U1)PWRCTRL_COMMON_PROCESS_STEP6){
         vd_s_PwrCtrlSipOffVB33SIPON();       /* STEP6-1 */
         vd_s_PwrCtrlSipOffLOWPOWERON();      /* STEP6-2 */
@@ -1692,7 +1907,7 @@ static void vd_s_PwrCtrlSipOffMainFunc( void )
         vd_s_PwrCtrlSipOffSTRWAKE();         /* STEP6-6 */
         vd_s_PwrCtrlSipOffMMOFFREQ2();       /* STEP6-7 */
     
-        if(u4_s_PwrCtrl_Sip_Off_LOW_POWER_ON_Tim == PWRCTRL_SIP_TIME_INVALID){
+        if(u4_s_PwrCtrl_Sip_Off_LOW_POWER_ON_Tim == (U4)PWRCTRL_SIP_TIME_INVALID){
             /* LOW-POWER-ON_LOを検知時に端子モニタ停止を設定 */
             u1_s_PwrCtrl_Sip_LOW_POWER_ON_Sts = (U1)FALSE;
         }
@@ -1828,6 +2043,28 @@ static void vd_s_PwrCtrlSipStbyMainFunc( void )
 static void vd_s_PwrCtrlSipForcedOffMainFunc( void )
 {
 /* SIP電源強制OFF処理(SoC異常)開始 */
+    vd_s_PwrCtrlSipForcedOffStep1();
+    
+/* SIP電源強制OFF処理(PMIC異常)開始 */
+    vd_s_PwrCtrlSipForcedOffStep2();
+    vd_s_PwrCtrlSipForcedOffStep3();
+
+/* SIP入力DDコンOFF処理開始 */
+    vd_s_PwrCtrlSipForcedOffStep4();
+    vd_s_PwrCtrlSipForcedOffStep5();
+    
+    return;
+}
+
+/*****************************************************************************
+  Function      : vd_s_PwrCtrlSipForcedOffStep1
+  Description   : 5-6.SIP電源強制OFFシーケンス_STEP1処理
+  param[in/out] : none
+  return        : none
+  Note          : none
+*****************************************************************************/
+static void vd_s_PwrCtrlSipForcedOffStep1( void )
+{
     if(u1_s_PwrCtrl_Sip_ForcedOff_Step == (U1)PWRCTRL_COMMON_PROCESS_STEP1){
         vd_s_PwrCtrlSipFOffPMICFASTPOFF1(); /* STEP1-1 */
 /* POFF_COMPLETE_N =Lo? */
@@ -1840,8 +2077,7 @@ static void vd_s_PwrCtrlSipForcedOffMainFunc( void )
             u1_s_PwrCtrl_Sip_Pwr_Sts        = (U1)PWRCTRL_SIP_STS_NON;
         }
 
-        else
-        {
+        else{
             /* STEP1-2が100ms経過しても完了していなければ次のSTEPに移行 */
             if(u4_s_PwrCtrl_Sip_ForcedOff_POFFCOMP_Wait_Tim > (U4)PWRCTRL_SIP_FOFF_WAIT_POFF_COMP){
                 u1_s_PwrCtrl_Sip_ForcedOff_Step                    = (U1)PWRCTRL_COMMON_PROCESS_STEP2;
@@ -1852,8 +2088,19 @@ static void vd_s_PwrCtrlSipForcedOffMainFunc( void )
             }
         }
     }
+    
+    return;
+}
 
-/* SIP電源強制OFF処理(PMIC異常)開始 */
+/*****************************************************************************
+  Function      : vd_s_PwrCtrlSipForcedOffStep2
+  Description   : 5-6.SIP電源強制OFFシーケンス_STEP2処理
+  param[in/out] : none
+  return        : none
+  Note          : none
+*****************************************************************************/
+static void vd_s_PwrCtrlSipForcedOffStep2( void )
+{
     if(u1_s_PwrCtrl_Sip_ForcedOff_Step == (U1)PWRCTRL_COMMON_PROCESS_STEP2){
         vd_s_PwrCtrlSipFOffPMRESINHI(); /* STEP2-1 */
         
@@ -1867,7 +2114,19 @@ static void vd_s_PwrCtrlSipForcedOffMainFunc( void )
             u1_s_PwrCtrl_Sip_ForcedOff_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP3;
         }
     }
+    
+    return;
+}
 
+/*****************************************************************************
+  Function      : vd_s_PwrCtrlSipForcedOffStep3
+  Description   : 5-6.SIP電源強制OFFシーケンス_STEP3処理
+  param[in/out] : none
+  return        : none
+  Note          : none
+*****************************************************************************/
+static void vd_s_PwrCtrlSipForcedOffStep3( void )
+{
 /* POFF_COMPLETE_N =Lo? */
     if(u1_s_PwrCtrl_Sip_ForcedOff_Step == (U1)PWRCTRL_COMMON_PROCESS_STEP3){
         vd_s_PwrCtrlSipFOffValChkPOFFCOMP2(); /* STEP3-1 */
@@ -1877,8 +2136,7 @@ static void vd_s_PwrCtrlSipForcedOffMainFunc( void )
             u1_s_PwrCtrl_Sip_ForcedOff_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP4;
         }
 
-        else
-        {
+        else{
             /* STEP3が5秒経過しても完了していなければ異常内容を保存してから次のSTEPに進める */
             if(u4_s_PwrCtrl_Sip_ForcedOff_POFFCOMP_Wait_Step4_Tim > (U4)PWRCTRL_SIP_FOFF_WAIT_POFF_COMP_P2){
                 u1_s_PwrCtrl_Sip_ForcedOff_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP4;
@@ -1888,8 +2146,19 @@ static void vd_s_PwrCtrlSipForcedOffMainFunc( void )
             }
         }
     }
+    
+    return;
+}
 
-/* SIP入力DDコンOFF処理開始 */
+/*****************************************************************************
+  Function      : vd_s_PwrCtrlSipForcedOffStep4
+  Description   : 5-6.SIP電源強制OFFシーケンス_STEP4処理
+  param[in/out] : none
+  return        : none
+  Note          : none
+*****************************************************************************/
+static void vd_s_PwrCtrlSipForcedOffStep4( void )
+{
     if(u1_s_PwrCtrl_Sip_ForcedOff_Step == (U1)PWRCTRL_COMMON_PROCESS_STEP4){
         vd_s_PwrCtrlSipFOffVB33SIPFREQ(); /* STEP4-1 */
 
@@ -1898,7 +2167,19 @@ static void vd_s_PwrCtrlSipForcedOffMainFunc( void )
             u1_s_PwrCtrl_Sip_ForcedOff_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP5;
         }
     }
+    
+    return;
+}
 
+/*****************************************************************************
+  Function      : vd_s_PwrCtrlSipForcedOffStep5
+  Description   : 5-6.SIP電源強制OFFシーケンス_STEP5処理
+  param[in/out] : none
+  return        : none
+  Note          : none
+*****************************************************************************/
+static void vd_s_PwrCtrlSipForcedOffStep5( void )
+{
     if(u1_s_PwrCtrl_Sip_ForcedOff_Step == (U1)PWRCTRL_COMMON_PROCESS_STEP5){
         vd_s_PwrCtrlSipFOffLOWPOWERON(); /* STEP5-1 */
         
@@ -1942,14 +2223,14 @@ static void vd_s_PwrCtrlSipForcedOffMainFunc( void )
 /*****************************************************************************
   Function      : vd_s_PwrCtrlSipDioWriteCheck
   Description   : SIP共通 待ち時間の計測+DIOのWRITE処理実行関数
-  param[in/out] :[out] U4*      u4_a_counter                待ち時間の計測結果を格納
+  param[in/out] :[out] U4      *u4_a_counter                待ち時間の計測結果を格納
                  [in ] const U1 u1_a_ontime                 待ち時間計測のしきい値
                  [in ] const Dio_ChannelType u2_a_ChannelId DIOのWRITE処理を行うチャンネルID
                  [in ] const Dio_LevelType u1_a_Level       DIOで設定したい出力値
   return        : -
   Note          : none
 *****************************************************************************/
-static void vd_s_PwrCtrl_Sip_DioWriteCheck(U4* u4_a_counter , const U1 u1_a_ontime ,
+static void vd_s_PwrCtrl_Sip_DioWriteCheck(U4 *u4_a_counter , const U1 u1_a_ontime ,
         const Dio_ChannelType u2_a_ChannelId , const Dio_LevelType u1_a_Level)
 {
     if(*u4_a_counter != (U4)PWRCTRL_SIP_TIME_INVALID){
@@ -1968,22 +2249,24 @@ static void vd_s_PwrCtrl_Sip_DioWriteCheck(U4* u4_a_counter , const U1 u1_a_onti
 /*****************************************************************************
   Function      : vd_s_PwrCtrl_Sip_DioReadCheck
   Description   : SIP共通 待ち時間の計測+DIOのREAD処理実行関数
-  param[in/out] :[out] U4       u4_a_counter          待ち時間の計測結果を格納
-                 [out] U4       u4_a_wait_counter     待機時間の計測結果を格納
+  param[in/out] :[out] U4       *u4_a_counter          待ち時間の計測結果を格納
+                 [out] U4       *u4_a_wait_counter     待機時間の計測結果を格納
                  [in ] const U1 u1_a_ontime           待ち時間計測のしきい値
                  [in ] const U1 u1_a_PinID            READ処理を行うチャンネルI
                  [in ] const Dio_LevelType u1_a_Level READ結果の照合
   return        : -
   Note          : none
 *****************************************************************************/
-static void vd_s_PwrCtrl_Sip_DioReadCheck(U4* u4_a_counter , U4* u4_a_wait_counter , const U1 u1_a_ontime ,
+static void vd_s_PwrCtrl_Sip_DioReadCheck(U4 *u4_a_counter , U4 *u4_a_wait_counter , const U1 u1_a_ontime ,
         const U1 u1_a_PinID , const Dio_LevelType u1_a_Level)
 {
     U1 u1_t_read_lv;
 
     if(*u4_a_counter != (U4)PWRCTRL_SIP_TIME_INVALID){
         if(*u4_a_counter >= u1_a_ontime){                               /* u1_a_ontime時間が経過したか */
-            (*u4_a_wait_counter)++;                                     /* 待機時間測定カウンタをインクリメント */
+            if(*u4_a_wait_counter < (U4)PWRCTRL_SIP_TIME_INVALID){
+                (*u4_a_wait_counter)++;                                 /* 待機時間測定カウンタをインクリメント */
+            }
             u1_t_read_lv = u1_g_PwrCtrl_PinMonitor_GetPinInfo(u1_a_PinID); /* DIOのREAD関数をコール */
             if( u1_t_read_lv == u1_a_Level){                            /* READ関数で読みだした結果が期待値と一致するか */
                 *u4_a_counter = (U4)PWRCTRL_SIP_TIME_INVALID;           /* 一致すれば待ち時間の測定結果に完了を通知 */
@@ -2000,7 +2283,7 @@ static void vd_s_PwrCtrl_Sip_DioReadCheck(U4* u4_a_counter , U4* u4_a_wait_count
 /*****************************************************************************
   Function      : vd_s_PwrCtrl_Sip_DioFreqAct
   Description   : SIP共通 待ち時間の計測+PWM処理実行関数
-  param[in/out] :[out] U4       u4_a_counter 待ち時間の計測結果を格納
+  param[in/out] :[out] U4       *u4_a_counter 待ち時間の計測結果を格納
                 :[in ] const U1 u1_a_ontime  待ち時間計測のしきい値
                 :[in ] const U1 u1_a_PWM_CH  PWM処理を行うチャンネル
                 :[in ] const U2 u2_a_PERIOD  PWM処理の周期
@@ -2008,7 +2291,7 @@ static void vd_s_PwrCtrl_Sip_DioReadCheck(U4* u4_a_counter , U4* u4_a_wait_count
   return        : -
   Note          : none
 *****************************************************************************/
-static void vd_s_PwrCtrl_Sip_DioFreqAct(U4* u4_a_counter , const U1 u1_a_ontime ,
+static void vd_s_PwrCtrl_Sip_DioFreqAct(U4 *u4_a_counter , const U1 u1_a_ontime ,
               const U1 u1_a_PWM_CH, const U2 u2_a_PERIOD, const U2 u2_a_DUTY)
 {
     if(*u4_a_counter != (U4)PWRCTRL_SIP_TIME_INVALID){
@@ -2043,8 +2326,5 @@ static void vd_s_PwrCtrl_Sip_Write_WAKEUP_STAT(void)
 
     return;
 }
-
-/*#define ***_STOP_SEC_CODE
-#include <***_MemMap.h>*/
 
 /**** End of File ***********************************************************/
