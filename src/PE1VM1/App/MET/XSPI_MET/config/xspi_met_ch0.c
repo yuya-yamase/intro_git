@@ -131,10 +131,8 @@
 #define XSPI_UNIT_VAL_ELECO_MILEPKWH        (2U)   /* Electricity cost    : miles/kWh              */
 
 #define XSPI_VDF_AREA_SIZE                  (9U)
-#if 0   /* BEV Rebase provisionally */
 
 #define XSPI_CLOCK_UNKNOWN                  (0x1EFBEU)
-#endif   /* BEV Rebase provisionally */
 
 #define XSPI_VM_1WORD                       (1U)
 
@@ -483,7 +481,6 @@ static inline void    vd_s_XSpiCfgTxDimming(       U4 * u4_ap_pdu_tx) {
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
 static inline void    vd_s_XSpiCfgTxClock(         U4 * u4_ap_pdu_tx) {
-#if 0   /* BEV Rebase provisionally */
 
     U4  u4_t_disp_tim_now;
     U1  u1_t_read_sts;
@@ -495,7 +492,6 @@ static inline void    vd_s_XSpiCfgTxClock(         U4 * u4_ap_pdu_tx) {
         u4_t_disp_tim_now = (U4)XSPI_CLOCK_UNKNOWN;
     }
     u4_ap_pdu_tx[0] = u4_t_disp_tim_now;
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

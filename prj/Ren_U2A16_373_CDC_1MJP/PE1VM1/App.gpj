@@ -39,6 +39,7 @@
     -I${APP_DIR}/MET/IpcApplication/Vom/Alert/matrix/config
     -I${APP_DIR}/MET/IpcApplication/Vom/Alert/scc
     -I${APP_DIR}/MET/IpcApplication/Vom/Ambtmp/scc
+    -I${APP_DIR}/MET/IpcApplication/Vom/DateSI/scc
     -I${APP_DIR}/MET/IpcApplication/Vom/Dimmer/config
     -I${APP_DIR}/MET/IpcApplication/Vom/Dimmer/scc
     -I${APP_DIR}/MET/IpcApplication/Vom/Locale/config
@@ -397,6 +398,8 @@ App/MET/IpcApplication/Vom/Alert/scc/alert_brx.c
 App/MET/IpcApplication/Vom/Ambtmp/config/ambtmp_cfg.c
 App/MET/IpcApplication/Vom/Ambtmp/scc/ambtmp_can.c
 App/MET/IpcApplication/Vom/Ambtmp/scc/ambtmp.c
+App/MET/IpcApplication/Vom/DateSI/config/datesi_met_cfg.c
+App/MET/IpcApplication/Vom/DateSI/scc/datesi_met.c
 App/MET/IpcApplication/Vom/Dimmer/config/dimmer_cfg.c
 App/MET/IpcApplication/Vom/Dimmer/scc/dim_daynight.c
 App/MET/IpcApplication/Vom/Dimmer/scc/dim_usadjbysw.c

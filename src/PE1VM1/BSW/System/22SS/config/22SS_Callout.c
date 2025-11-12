@@ -53,9 +53,7 @@
 #include "hdimmgr.h"
 #include "himgadj.h"
 #include "xspi_met.h"
-#if 0   /* BEV Rebase provisionally */
 #include "datesi_met.h"
-#endif   /* BEV Rebase provisionally */
 
 /*----------------------------------------------------------------------------
  *		置換シンボル定義
@@ -106,9 +104,7 @@ void vd_g_22SSCallout_StaBonInit(void)
         &vd_g_HmiProxyBonInit,
         &vd_g_HdimmgrBonInit,
         &vd_g_HudImgAdjInit,
-#if 0   /* BEV Rebase provisionally */
         &vd_g_DateSIMETInit
-#endif   /* BEV Rebase provisionally */
     };
 
     U1    u1_t_rslt;
@@ -168,9 +164,7 @@ void vd_g_22SSCallout_StaRstInit(void)
         &vd_g_HmiProxyRstInit,
         &vd_g_HdimmgrWkRstInit,
         &vd_g_HudImgAdjInit,
-#if 0   /* BEV Rebase provisionally */
         &vd_g_DateSIMETInit
-#endif   /* BEV Rebase provisionally */
     };
 
     U1    u1_t_rslt;
@@ -230,9 +224,7 @@ void vd_g_22SSCallout_StaWkupInit(void)
         &vd_g_HmiProxyWkupInit,
         &vd_g_HdimmgrWkRstInit,
         &vd_g_HudImgAdjInit,
-#if 0   /* BEV Rebase provisionally */
         &vd_g_DateSIMETInit
-#endif   /* BEV Rebase provisionally */
     };
 
     U1    u1_t_rslt;
