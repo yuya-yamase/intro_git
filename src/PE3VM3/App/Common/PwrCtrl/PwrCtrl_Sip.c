@@ -119,9 +119,9 @@
 /* Constants                                                                */
 /*--------------------------------------------------------------------------*/
 /* SIP制御共通処理 */
-static void vd_s_PwrCtrl_Sip_DioWriteCheck(U4 *u4_a_counter , const U1 u1_a_ontime ,const Dio_ChannelType u2_a_ChannelId , const Dio_LevelType u1_a_Level);
-static void vd_s_PwrCtrl_Sip_DioReadCheck(U4 *u4_a_counter , U4 *u4_a_wait_counter ,const U1 u1_a_ontime ,const U1 u1_a_PinID , const Dio_LevelType u1_a_Level);
-static void vd_s_PwrCtrl_Sip_DioFreqAct(U4 *u4_a_counter , const U1 u1_a_ontime ,const U1 u1_a_PWM_CH, const U2 u2_a_PERIOD, const U2 u2_a_DUTY);
+static void vd_s_PwrCtrl_Sip_DioWriteCheck(U4 * const u4_a_counter , const U1 u1_a_ontime ,const Dio_ChannelType u2_a_ChannelId , const Dio_LevelType u1_a_Level);
+static void vd_s_PwrCtrl_Sip_DioReadCheck(U4 * const u4_a_counter , U4 * const u4_a_wait_counter ,const U1 u1_a_ontime ,const U1 u1_a_PinID , const Dio_LevelType u1_a_Level);
+static void vd_s_PwrCtrl_Sip_DioFreqAct(U4 * const u4_a_counter , const U1 u1_a_ontime ,const U1 u1_a_PWM_CH, const U2 u2_a_PERIOD, const U2 u2_a_DUTY);
 
 /* LOW_POWER_ON状態要求 */
 static U1 u1_s_PwrCtrl_Sip_LOW_POWER_ON_Sts;
@@ -369,8 +369,8 @@ U1 u1_g_PwrCtrlSipGetSts( void )
   Function      : u1_g_PwrCtrlSipLowPowerOnInfo
   Description   : LOW_POWER_ON ステータス通知関数
   param[in/out] : none
-  return        : FALSE(0)：LOW_POWER_ON Lo
-                  TRUE(1) ：LOW_POWER_ON Hi
+  return        : FALSE(0)：LOW_POWER_ON 端子モニタリング開始条件非成立
+                  TRUE(1) ：LOW_POWER_ON 端子モニタリング開始条件成立
   Note          : none
 *****************************************************************************/
 U1 u1_g_PwrCtrlSipLowPowerOnInfo( void )
@@ -2223,14 +2223,14 @@ static void vd_s_PwrCtrlSipForcedOffStep5( void )
 /*****************************************************************************
   Function      : vd_s_PwrCtrlSipDioWriteCheck
   Description   : SIP共通 待ち時間の計測+DIOのWRITE処理実行関数
-  param[in/out] :[out] U4      *u4_a_counter                待ち時間の計測結果を格納
+  param[in/out] :[out] U4 * const u4_a_counter              待ち時間の計測結果を格納
                  [in ] const U1 u1_a_ontime                 待ち時間計測のしきい値
                  [in ] const Dio_ChannelType u2_a_ChannelId DIOのWRITE処理を行うチャンネルID
                  [in ] const Dio_LevelType u1_a_Level       DIOで設定したい出力値
   return        : -
   Note          : none
 *****************************************************************************/
-static void vd_s_PwrCtrl_Sip_DioWriteCheck(U4 *u4_a_counter , const U1 u1_a_ontime ,
+static void vd_s_PwrCtrl_Sip_DioWriteCheck(U4 * const u4_a_counter , const U1 u1_a_ontime ,
         const Dio_ChannelType u2_a_ChannelId , const Dio_LevelType u1_a_Level)
 {
     if(*u4_a_counter != (U4)PWRCTRL_SIP_TIME_INVALID){
@@ -2249,15 +2249,15 @@ static void vd_s_PwrCtrl_Sip_DioWriteCheck(U4 *u4_a_counter , const U1 u1_a_onti
 /*****************************************************************************
   Function      : vd_s_PwrCtrl_Sip_DioReadCheck
   Description   : SIP共通 待ち時間の計測+DIOのREAD処理実行関数
-  param[in/out] :[out] U4       *u4_a_counter          待ち時間の計測結果を格納
-                 [out] U4       *u4_a_wait_counter     待機時間の計測結果を格納
+  param[in/out] :[out] U4 * const u4_a_counter        待ち時間の計測結果を格納
+                 [out] U4 * const u4_a_wait_counter   待機時間の計測結果を格納
                  [in ] const U1 u1_a_ontime           待ち時間計測のしきい値
                  [in ] const U1 u1_a_PinID            READ処理を行うチャンネルI
                  [in ] const Dio_LevelType u1_a_Level READ結果の照合
   return        : -
   Note          : none
 *****************************************************************************/
-static void vd_s_PwrCtrl_Sip_DioReadCheck(U4 *u4_a_counter , U4 *u4_a_wait_counter , const U1 u1_a_ontime ,
+static void vd_s_PwrCtrl_Sip_DioReadCheck(U4 * const u4_a_counter , U4 * const u4_a_wait_counter , const U1 u1_a_ontime ,
         const U1 u1_a_PinID , const Dio_LevelType u1_a_Level)
 {
     U1 u1_t_read_lv;
@@ -2283,7 +2283,7 @@ static void vd_s_PwrCtrl_Sip_DioReadCheck(U4 *u4_a_counter , U4 *u4_a_wait_count
 /*****************************************************************************
   Function      : vd_s_PwrCtrl_Sip_DioFreqAct
   Description   : SIP共通 待ち時間の計測+PWM処理実行関数
-  param[in/out] :[out] U4       *u4_a_counter 待ち時間の計測結果を格納
+  param[in/out] :[out] U4 * const u4_a_counter 待ち時間の計測結果を格納
                 :[in ] const U1 u1_a_ontime  待ち時間計測のしきい値
                 :[in ] const U1 u1_a_PWM_CH  PWM処理を行うチャンネル
                 :[in ] const U2 u2_a_PERIOD  PWM処理の周期
@@ -2291,7 +2291,7 @@ static void vd_s_PwrCtrl_Sip_DioReadCheck(U4 *u4_a_counter , U4 *u4_a_wait_count
   return        : -
   Note          : none
 *****************************************************************************/
-static void vd_s_PwrCtrl_Sip_DioFreqAct(U4 *u4_a_counter , const U1 u1_a_ontime ,
+static void vd_s_PwrCtrl_Sip_DioFreqAct(U4 * const u4_a_counter , const U1 u1_a_ontime ,
               const U1 u1_a_PWM_CH, const U2 u2_a_PERIOD, const U2 u2_a_DUTY)
 {
     if(*u4_a_counter != (U4)PWRCTRL_SIP_TIME_INVALID){
