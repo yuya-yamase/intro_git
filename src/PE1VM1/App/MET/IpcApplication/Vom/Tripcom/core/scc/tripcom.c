@@ -1,4 +1,4 @@
-/* 2.4.1 */
+/* 2.5.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,8 +10,8 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define TRIPCOM_C_MAJOR                         (2)
-#define TRIPCOM_C_MINOR                         (4)
-#define TRIPCOM_C_PATCH                         (1)
+#define TRIPCOM_C_MINOR                         (5)
+#define TRIPCOM_C_PATCH                         (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -689,6 +689,7 @@ static  void    vd_s_TripcomCanTx(const U2 u2_a_VARBIT)
 /*  2.3.1    10/22/2024  TH       Delete Refuel Threshold                                                                            */
 /*  2.4.0    02/18/2025  MaO(M)   Add write process immediately                                                                      */
 /*  2.4.1    04/22/2025  KM       Add posttask for tripcom application                                                               */
+/*  2.5.0    06/23/2025  RS       tripcom_comtx.c v2.4.1 -> v2.5.0.(Change for BEV System_Consideration_2)                           */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
@@ -703,5 +704,6 @@ static  void    vd_s_TripcomCanTx(const U2 u2_a_VARBIT)
 /*  * DR   = Dyan Reyes, DTPH                                                                                                        */
 /*  * MaO(M) = Masayuki Okada, NTT Data MSE                                                                                          */
 /*  * KM   = Kazuma Miyazawa, Denso Techno                                                                                           */
+/*  * RS   = Ryuki Sako, Denso Techno                                                                                                */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

@@ -1,4 +1,4 @@
-/* 2.1.1 */
+/* 2.2.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,8 +10,8 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define TRIPSNSR_ELPSDTM_C_MAJOR                (2)
-#define TRIPSNSR_ELPSDTM_C_MINOR                (1)
-#define TRIPSNSR_ELPSDTM_C_PATCH                (1)
+#define TRIPSNSR_ELPSDTM_C_MINOR                (2)
+#define TRIPSNSR_ELPSDTM_C_PATCH                (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -166,11 +166,13 @@ U2              u2_g_TripsnsrElpsdtmGetDelta(U4 * u4_ap_delta)
 /*  2.0.2    10/27/2021  TK       QAC supported.                                                                                     */
 /*  2.1.0    04/14/2022  TA(M)    See tripcom.c v2.1.1                                                                               */
 /*  2.1.1    08/08/2022  YI       See tripsnsr.c v2.1.1                                                                              */
+/*  2.2.0    06/23/2025  RS       Change for BEV System_Consideration_2.(tripsnsr_cfg.c v2.1.1 -> v2.2.0.)                           */
 /*                                                                                                                                   */
 /*  * HY   = Hidefumi Yoshida, Denso                                                                                                 */
 /*  * YA   = Yuhei Aoyama, DensoTechno                                                                                               */
 /*  * TA(M)= Teruyuki Anjima, NTT Data MSE                                                                                           */
 /*  * TK   = Takanori Kuno, Denso Techno                                                                                             */
 /*  * YI   = Yoshiki Iwata, NTT Data MSE                                                                                             */
+/*  * RS   = Ryuki Sako, Denso Techno                                                                                                */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

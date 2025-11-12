@@ -1,4 +1,4 @@
-/* 2.4.1 */
+/* 2.5.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,8 +10,8 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define TRIPCOM_CFG_C_MAJOR                     (2)
-#define TRIPCOM_CFG_C_MINOR                     (4)
-#define TRIPCOM_CFG_C_PATCH                     (1)
+#define TRIPCOM_CFG_C_MINOR                     (5)
+#define TRIPCOM_CFG_C_PATCH                     (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -62,7 +62,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define TRIPCOM_NUM_PTSYS                       (16U)
 
-#define TRIPCOM_EHV1S93_FAILTIM                 (5000U/OXCAN_MAIN_TICK)
+#define TRIPCOM_EHV1S94_FAILTIM                 (5000U/OXCAN_MAIN_TICK)
 
 #define TRIPCOM_CFG_EVDTE_VAL100                (100U)
 
@@ -432,12 +432,10 @@ U1              u1_g_TripcomCfgGetPIEVSTS(U1 * u1p_a_pievsts)
     u1_t_ptsys       = u1_g_VardefPtsRx();
     if((u1_t_ptsys == (U1)VDF_PTS_RX_04_HYB_PLU)
     || (u1_t_ptsys == (U1)VDF_PTS_RX_05_ELE_BAT)){
-#if 0   /* BEV Rebase provisionally */
-        u1_t_msgsts = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_EHV1S93,
-                                       (U2)(OXCAN_RX_SYS_NRX_IGP | OXCAN_RX_SYS_TOE_IGP),
-                                       (U2)TRIPCOM_EHV1S93_FAILTIM) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+        u1_t_msgsts = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_EHV1S94_CH0,
+                                       (U4)OXCAN_SYS_IGP,
+                                       (U2)TRIPCOM_EHV1S94_FAILTIM) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
         (void)Com_ReceiveSignal(ComConf_ComSignal_PIEVSTS, u1p_a_pievsts);
-#endif   /* BEV Rebase provisionally */
     }
 
     return (u1_t_msgsts);
@@ -682,6 +680,7 @@ void             vd_s_TripomCfgPostAppTask(void)
 /*  2.3.1     10/22/2024  TH       tripcom.c v2.3.0 -> v2.3.1.                                                                       */
 /*  2.4.0     02/18/2025  MaO(M)   tripcom.c v2.3.1 -> v2.4.0.                                                                       */
 /*  2.4.1     04/22/2025  KM       tripcom.c v2.4.0 -> v2.4.1.                                                                       */
+/*  2.5.0     06/23/2025  RS       tripcom_comtx.c v2.4.1 -> v2.5.0.(Change for BEV System_Consideration_2)                          */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  Revision  Date        Author   Change Description                                                                                */
@@ -728,5 +727,6 @@ void             vd_s_TripomCfgPostAppTask(void)
 /*  * MaO(M) = Masayuki Okada, NTT Data MSE                                                                                          */
 /*  * KM   = Kazuma Miyazawa, Denso Techno                                                                                           */
 /*  * SN   = Shimon Nambu, Denso Techno                                                                                              */
+/*  * RS   = Ryuki Sako, Denso Techno                                                                                                */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
