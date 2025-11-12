@@ -139,7 +139,6 @@
 static U1 u1_s_xspi_ivi_com_start_flg;  /*Communication Start Request*/
 static U1 u1_s_xspi_ivi_ini_send_flg;   /*Initial Send Data Request*/
 static U1 u1_s_xspi_ivi_comp_com_start; /*Communication Start Complete*/
-static U1 u1_s_xspi_ivi_comp_ini_send;  /*Initial Send Data Complete*/
 
 static U1 u1_sp_xspi_ivi_gyro_init_data[XSPI_IVI_INIT_DATA_LENGTH];    /*Init Transmission Gyro Data*/
 static U1 u1_sp_xspi_ivi_gyro_data[XSPI_IVI_DATA_LENGTH];              /*Regular Transmission Gyro Data*/
@@ -319,7 +318,6 @@ void            vd_g_XspiIviSub2Init(void)
 	u1_s_xspi_ivi_com_start_flg  = (U1)FALSE;                   /*通信開始フラグ初期化*/
     u1_s_xspi_ivi_ini_send_flg   = (U1)FALSE;                   /*初回送信開始フラグ初期化*/
     u1_s_xspi_ivi_comp_com_start = (U1)FALSE;                   /*通信開始応答完了フラグ初期化*/
-    u1_s_xspi_ivi_comp_ini_send  = (U1)FALSE;                   /*初回送信完了フラグ初期化*/
     u2_s_xspi_ivi_ini_buf_cnt = (U2)0U;                         /*分割送信フレーム番号初期化*/
     u1_s_xspi_ivi_tmp_gyro_ini_cnt = (U1)0U;                    /*初回送信データ数初期化*/
     u1_s_xspi_ivi_tmp_gyro_ini_cnt_buf = (U1)0U;                /*初回送信データのリングバッファ格納箇所初期化*/
@@ -384,8 +382,9 @@ static void            vd_s_XspiIviSub2GyroAna(const U1 * u1_ap_SUB2_ADD, const 
 
     if((u1_t_subtype == (U1)u1_s_GYRO_SUBTYPE_COM_START_REQ) && (u1_s_xspi_ivi_com_start_flg == (U1)FALSE)) {
         u1_s_xspi_ivi_com_start_flg = (U1)TRUE;
-    }else if((u1_t_subtype == (U1)u1_s_GYRO_SUBTYPE_INIT_DATA_REQ) &&  (u1_s_xspi_ivi_ini_send_flg == (U1)FALSE)){
+    }else if(u1_t_subtype == (U1)u1_s_GYRO_SUBTYPE_INIT_DATA_REQ){
         u1_s_xspi_ivi_ini_send_flg = (U1)TRUE;
+        u2_s_xspi_ivi_ini_buf_cnt = (U2)0U;
     }else{
         /* Do Nothing */
     }
@@ -494,7 +493,7 @@ static void            vd_s_XspiIviSub2SenSensorData(U1 * u1_ap_xspi_add)
         u1_ap_xspi_add[11] = (U1)0x00; /*Reserve*/
         u4_s_xspi_ivi_task_cnt[XSPI_TASK_CNT_GYRO] = (U4)0U;
 
-    }else if((u1_s_xspi_ivi_ini_send_flg == (U1)TRUE) && (u1_s_xspi_ivi_comp_ini_send == (U1)FALSE)) {
+    }else if(u1_s_xspi_ivi_ini_send_flg == (U1)TRUE) {
         /*20msごとに*/
         if(u4_s_xspi_ivi_task_cnt[XSPI_TASK_CNT_GYRO_INI] >= u4_s_XSPI_IVI_TASK_INIT_SEND_CNT) {
             /*初回送信*/
@@ -517,7 +516,7 @@ static void            vd_s_XspiIviSub2SenSensorData(U1 * u1_ap_xspi_add)
 
                 /*初回送信完了*/
                 vd_g_MemcpyU1(&u1_ap_xspi_add[16], &u1_sp_xspi_ivi_gyro_init_data[u2_t_buf_cnt], (U4)XSPI_IVI_INIT_DATA_SEND_LAST_LENG);
-                u1_s_xspi_ivi_comp_ini_send = (U1)TRUE;
+                u1_s_xspi_ivi_ini_send_flg = (U1)FALSE;
             } else{
                 u2_t_dt_size = (U2)XSPI_IVI_INIT_DATA_SEND_LENG;
                 u1_ap_xspi_add[14] = (U1)(u2_t_dt_size & 0x00FFU);  /*Frame Data Num(Lo)*/

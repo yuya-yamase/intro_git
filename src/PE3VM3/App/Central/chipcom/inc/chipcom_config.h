@@ -1,4 +1,4 @@
-/* v0-3-0-mcu03 */
+/* v0-4-0-mcu03 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -24,7 +24,7 @@ typedef enum {
     CHIPCOM_DATAID_ETHERSWT_RIDCLEAR,
     CHIPCOM_DATAID_VIS_TIME,
     CHIPCOM_DATAID_MAX
-} CHIPCOM_DATAID;
+} ChipComEventIdType;
 
 typedef enum {
     CHIPCOM_PERIODICID_ETHERSWT_PORT1MODEREQ = 0x00U,
@@ -56,8 +56,13 @@ typedef enum {
     CHIPCOM_PERIODICID_ETHERSWT_SWIC_MIB,
     CHIPCOM_PERIODICID_ETHERSWT_SWIC_SQI,
     CHIPCOM_PERIODICID_ETHERSWT_SWIC_DATAUSAGEEXCEED,
+    CHIPCOM_PERIODICID_VIS_SAILRESETST,
+    CHIPCOM_PERIODICID_ETHERSWT_SWIC_RESETRESTART,
     CHIPCOM_PERIODICID_MAX
-} CHIPCOM_PERIODICID;
+} ChipComPeriodicIdType;
+
+#define SIGNAL_CHIPCOM_CH0_BUS_SPI_ALL      ((uint16) 0U)
+#define SIGNAL_CHIPCOM_MAX                  ((uint16) 1U)
 
 #define CHIPCOM_LENGTH_ETHERSWT_PORT1MODEREQ            ((uint16)4U)
 #define CHIPCOM_LENGTH_ETHERSWT_PORT2MODEREQ            ((uint16)4U)
@@ -81,13 +86,15 @@ typedef enum {
 #define CHIPCOM_LENGTH_VIS_CRLYOF                       ((uint16)2U)
 #define CHIPCOM_LENGTH_VIS_VIN                          ((uint16)18U)
 #define CHIPCOM_LENGTH_VIS_COMPWR                       ((uint16)1U)
-#define CHIPCOM_LENGTH_ETHERSWT_REGERRSTS               ((uint16)2U)
+#define CHIPCOM_LENGTH_ETHERSWT_REGERRSTS               ((uint16)8U)
 #define CHIPCOM_LENGTH_ETHERMGR_MACADDR                 ((uint16)6U)
 #define CHIPCOM_LENGTH_VSM_SLEEPNG                      ((uint16)1U)
 #define	CHIPCOM_LENGTH_ETHERSWT_SWIC_LINKINFO           ((uint16)16U)
 #define	CHIPCOM_LENGTH_ETHERSWT_SWIC_MIB                ((uint16)244U)
 #define	CHIPCOM_LENGTH_ETHERSWT_SWIC_SQI                ((uint16)8U)
 #define	CHIPCOM_LENGTH_ETHERSWT_SWIC_DATAUSAGEEXCEED    ((uint16)24U)
+#define	CHIPCOM_LENGTH_VIS_SAILRESETST                  ((uint16)1U)
+#define	CHIPCOM_LENGTH_ETHERSWT_SWIC_RESETRESTART       ((uint16)4U)
 
 
 extern uint8 ChipCom_Initval_EtherSwt_Port1ModeReq  			[];
@@ -119,6 +126,8 @@ extern uint8 ChipCom_Initval_EtherSwt_Swic_LinkInfo             [];
 extern uint8 ChipCom_Initval_EtherSwt_Swic_MIB                  [];
 extern uint8 ChipCom_Initval_EtherSwt_Swic_SQI                  [];
 extern uint8 ChipCom_Initval_EtherSwt_Swic_DataUsageExceed      [];
+extern uint8 ChipCom_Initval_Vis_SailResetStatus                [];
+extern uint8 ChipCom_Initval_EtherSwt_Swic_SailResetRestart     [];
 
 #define CHIPCOM_MCU_SETTING
 
@@ -146,14 +155,15 @@ extern uint8 ChipCom_Initval_EtherSwt_Swic_DataUsageExceed      [];
 #define CHIPCOM_POS_TX_VIS_VIN                              ((uint16)225U)
 #define CHIPCOM_POS_TX_VIS_COMPWR                           ((uint16)243U)
 #define CHIPCOM_POS_TX_ETHERSWT_REGERRSTS                   ((uint16)244U)
-#define CHIPCOM_POS_TX_ETHERMGR_MACADDR                     ((uint16)246U)
+#define CHIPCOM_POS_TX_ETHERMGR_MACADDR                     ((uint16)252U)
 #define CHIPCOM_POS_TX_VSM_SLEEPNG                          ((uint16)0xFFFFU)
-#define CHIPCOM_POS_TX_ETHERSWT_SWIC_LINKINFO               ((uint16)252U)
-#define CHIPCOM_POS_TX_ETHERSWT_SWIC_MIB                    ((uint16)268U)
-#define CHIPCOM_POS_TX_ETHERSWT_SWIC_SQI                    ((uint16)512U)
-#define CHIPCOM_POS_TX_ETHERSWT_SWIC_DATAUSAGEEXCEED        ((uint16)520U)
-#define CHIPCOM_POS_TX_EVENTDATA_OFFSET                     ((uint16)544U)
-
+#define CHIPCOM_POS_TX_ETHERSWT_SWIC_LINKINFO               ((uint16)258U)
+#define CHIPCOM_POS_TX_ETHERSWT_SWIC_MIB                    ((uint16)274U)
+#define CHIPCOM_POS_TX_ETHERSWT_SWIC_SQI                    ((uint16)518U)
+#define CHIPCOM_POS_TX_ETHERSWT_SWIC_DATAUSAGEEXCEED        ((uint16)526U)
+#define CHIPCOM_POS_TX_VIS_SAILRESETST                      ((uint16)550U)
+#define CHIPCOM_POS_TX_ETHERSWT_SWIC_RESETRESTART           ((uint16)551U)
+#define CHIPCOM_POS_TX_EVENTDATA_OFFSET                     ((uint16)555U)
 
 #define CHIPCOM_POS_RX_ETHERSWT_PORT1MODEREQ                ((uint16) 14U)
 #define CHIPCOM_POS_RX_ETHERSWT_PORT2MODEREQ                ((uint16) 18U)
@@ -184,6 +194,8 @@ extern uint8 ChipCom_Initval_EtherSwt_Swic_DataUsageExceed      [];
 #define CHIPCOM_POS_RX_ETHERSWT_SWIC_MIB                    ((uint16)0xFFFFU)
 #define CHIPCOM_POS_RX_ETHERSWT_SWIC_SQI                    ((uint16)0xFFFFU)
 #define CHIPCOM_POS_RX_ETHERSWT_SWIC_DATAUSAGEEXCEED        ((uint16)0xFFFFU)
+#define CHIPCOM_POS_RX_VIS_SAILRESETST                      ((uint16)0xFFFFU)
+#define CHIPCOM_POS_RX_ETHERSWT_SWIC_RESETRESTART           ((uint16)0xFFFFU)
 #define CHIPCOM_POS_RX_EVENTDATA_OFFSET                     ((uint16) 39U)
 
 #else   /* SAIL ChipCom */
@@ -216,8 +228,9 @@ extern uint8 ChipCom_Initval_EtherSwt_Swic_DataUsageExceed      [];
 #define CHIPCOM_POS_TX_ETHERSWT_SWIC_MIB                    ((uint16)0xFFFFU)
 #define CHIPCOM_POS_TX_ETHERSWT_SWIC_SQI                    ((uint16)0xFFFFU)
 #define CHIPCOM_POS_TX_ETHERSWT_SWIC_DATAUSAGEEXCEED        ((uint16)0xFFFFU)
+#define CHIPCOM_POS_TX_VIS_SAILRESETST                      ((uint16)0xFFFFU)
+#define CHIPCOM_POS_TX_ETHERSWT_SWIC_RESETRESTART           ((uint16)0xFFFFU)
 #define CHIPCOM_POS_TX_EVENTDATA_OFFSET                     ((uint16) 39U)
-
 
 #define CHIPCOM_POS_RX_ETHERSWT_PORT1MODEREQ                ((uint16)0xFFFFU)
 #define CHIPCOM_POS_RX_ETHERSWT_PORT2MODEREQ                ((uint16)0xFFFFU)
@@ -242,13 +255,15 @@ extern uint8 ChipCom_Initval_EtherSwt_Swic_DataUsageExceed      [];
 #define CHIPCOM_POS_RX_VIS_VIN                              ((uint16)225U)
 #define CHIPCOM_POS_RX_VIS_COMPWR                           ((uint16)243U)
 #define CHIPCOM_POS_RX_ETHERSWT_REGERRSTS                   ((uint16)244U)
-#define CHIPCOM_POS_RX_ETHERMGR_MACADDR                     ((uint16)246U)
+#define CHIPCOM_POS_RX_ETHERMGR_MACADDR                     ((uint16)252U)
 #define CHIPCOM_POS_RX_VSM_SLEEPNG                          ((uint16)0xFFFFU)
-#define CHIPCOM_POS_RX_ETHERSWT_SWIC_LINKINFO               ((uint16)252U)
-#define CHIPCOM_POS_RX_ETHERSWT_SWIC_MIB                    ((uint16)268U)
-#define CHIPCOM_POS_RX_ETHERSWT_SWIC_SQI                    ((uint16)512U)
-#define CHIPCOM_POS_RX_ETHERSWT_SWIC_DATAUSAGEEXCEED        ((uint16)520U)
-#define CHIPCOM_POS_RX_EVENTDATA_OFFSET                     ((uint16)544U)
+#define CHIPCOM_POS_RX_ETHERSWT_SWIC_LINKINFO               ((uint16)258U)
+#define CHIPCOM_POS_RX_ETHERSWT_SWIC_MIB                    ((uint16)274U)
+#define CHIPCOM_POS_RX_ETHERSWT_SWIC_SQI                    ((uint16)518U)
+#define CHIPCOM_POS_RX_ETHERSWT_SWIC_DATAUSAGEEXCEED        ((uint16)526U)
+#define CHIPCOM_POS_RX_VIS_SAILRESETST                      ((uint16)550U)
+#define CHIPCOM_POS_RX_ETHERSWT_SWIC_RESETRESTART           ((uint16)551U)
+#define CHIPCOM_POS_RX_EVENTDATA_OFFSET                     ((uint16)555U)
 
 #endif
 

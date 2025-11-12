@@ -8,14 +8,14 @@
 #include <EthSwt_SWIC_Reg.h>
 #include <EthSwt_SWIC_Link.h>
 #include <EthSwt_SWIC_Port.h>
-#include <EthSwt_SWIC_SQI.h>
-#include <EthSwt_SWIC_Qci.h>
+#include <EthSwt_SWIC_Cfg.h>
 /* -------------------------------------------------------------------------- */
 void EthSwt_SWIC_Init(const EthSwt_ConfigType *CfgPtr)
 {
 	(void)CfgPtr;
 	EthSwt_SWIC_PWR_Init();
 	EthSwt_SWIC_STM_Init();
+	EthSwt_SWIC_Cfg_Init();
 	return;
 }
 /* -------------------------------------------------------------------------- */
@@ -52,14 +52,14 @@ Std_ReturnType EthSwt_SWIC_SetSwitchPortMode(uint8 SwitchIdx, uint8 SwitchPortId
 /* -------------------------------------------------------------------------- */
 void EthSwt_SWIC_PowerOn(void)
 {
-	EthSwt_SWIC_PWR_PowerOnReq();
+	EthSwt_SWIC_Cfg_PowerOnReq();
 
 	return;
 }
 /* -------------------------------------------------------------------------- */
 void EthSwt_SWIC_PowerOff(void)
 {
-	EthSwt_SWIC_PWR_PowerOffReq();
+	EthSwt_SWIC_Cfg_PowerOffReq();
 
 	return;
 }

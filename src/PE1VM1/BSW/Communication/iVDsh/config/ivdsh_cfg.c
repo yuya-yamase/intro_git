@@ -45,10 +45,10 @@
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define IVDSH_WA_NWORD_WRI                       (16U)
-#define IVDSH_WA_NWORD_REA_0                     (16U)
+#define IVDSH_WA_NWORD_REA_0                     (25U)
 #define IVDSH_WA_NWORD_REA_1                     (7U)
 
-#define IVDSH_WA_NWORD                           (62U)
+#define IVDSH_WA_NWORD                           (80U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -117,6 +117,14 @@ const ST_IVDSH_WA           st_gp_IVDSH_WA_BY_DID[IVDSH_NUM_DID] =
     {(U2)9U,        (U2)1U,         (U2)IVDSH_FQ_CH_REA_0},     /* IVDSH_DID_REA_VM2TO1_CAM_DIAP   */
     {(U2)10U,       (U2)1U,         (U2)IVDSH_FQ_CH_REA_0},     /* IVDSH_DID_REA_CPREQ_027         */
     {(U2)15U,       (U2)1U,         (U2)IVDSH_FQ_CH_REA_0},     /* IVDSH_DID_REA_VM2TO1_WHLINI_REQ */
+    {(U2)17U,       (U2)1U,         (U2)IVDSH_FQ_CH_REA_0},     /* IVDSH_DID_REA_VM2TO1_DMS1S02    */
+    {(U2)18U,       (U2)1U,         (U2)IVDSH_FQ_CH_REA_0},     /* IVDSH_DID_REA_VM2TO1_MET1S27    */
+    {(U2)19U,       (U2)1U,         (U2)IVDSH_FQ_CH_REA_0},     /* IVDSH_DID_REA_VM2TO1_MET1S28    */
+    {(U2)20U,       (U2)1U,         (U2)IVDSH_FQ_CH_REA_0},     /* IVDSH_DID_REA_VM2TO1_MET1S29    */
+    {(U2)21U,       (U2)1U,         (U2)IVDSH_FQ_CH_REA_0},     /* IVDSH_DID_REA_VM2TO1_MET1S30    */
+    {(U2)22U,       (U2)1U,         (U2)IVDSH_FQ_CH_REA_0},     /* IVDSH_DID_REA_VM2TO1_MET1S43    */
+    {(U2)23U,       (U2)1U,         (U2)IVDSH_FQ_CH_REA_0},     /* IVDSH_DID_REA_VM2TO1_MET1S62    */
+    {(U2)24U,       (U2)1U,         (U2)IVDSH_FQ_CH_REA_0},     /* IVDSH_DID_REA_VM2TO1_MET1S70    */
     /*------------------------------------------------------------------*/
     /* Read from VM#3                                                   */
     /*------------------------------------------------------------------*/
