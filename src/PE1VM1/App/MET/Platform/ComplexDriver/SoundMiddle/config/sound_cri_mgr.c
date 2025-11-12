@@ -1322,7 +1322,7 @@ static  U1      u1_s_SoundCriMgrOwChk(const U1 u1_a_GRP_NO, const U1 u1_a_CYCLCH
             (U1)SOUND_OW_TYPE_EVENT                                                                                                                                                                                                                                                                   /* TYPE    */
         },
         {   /* SOUND_AT_MET_CBZ_BASE_NOTICE1 */
-            {(U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX                                            }, /* CUE_ID  */
+            {(U2)CRI_CUESHEET_0_TYT_TAN_MET_CBZ_BASE_NOTICE1_0_01,   (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX                                            }, /* CUE_ID  */
             {(U1)WCHIME_VOL_BASE_NOTICE1_MID,                        (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX                                            }, /* CUE_VOL */
             (U1)SOUND_OW_TYPE_EVENT                                                                                                                                                                                                                                                                   /* TYPE    */
         },
