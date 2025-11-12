@@ -493,10 +493,10 @@ static U2   u2_s_IllumiILFadeJdg(const U2 u2_a_LVL, const U2 u2_a_PCT)
     U1                  u1_t_sts;
     U2                  u2_t_pct;
 
-    u1_t_at = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_AT);
+    u1_t_at = u1_g_VardefTrnsmssn();
     u1_t_ig = u1_g_VehopemdIgnOn();
 
-    if((u1_CALIB_MCUID0741_IL2OUTILLRUN == (U1)TRUE) && (u1_t_at == (U1)TRUE)
+    if((u1_CALIB_MCUID0741_IL2OUTILLRUN == (U1)TRUE) && (u1_t_at == (U1)VDF_TRNSMSSN_AT)
     && (u1_t_ig == (U1)TRUE)){
         if(u2_a_LVL == (U2)0U){
             u2_t_min = u2_CALIB_MCUID0743_IOUTILLRUNMAX;
