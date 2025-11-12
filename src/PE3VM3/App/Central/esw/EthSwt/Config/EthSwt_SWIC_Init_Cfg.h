@@ -42,7 +42,7 @@ static const struct swic_reg_seq	G_ETHSWT_SWIC_INIT_TABLE[]
     /* , {SWIC_REG_TBL(g_regListArp)					    , STD_OFF} */           /* ARP設定 */
     , {SWIC_REG_TBL(g_regListTc10)					      , STD_OFF}              /* TC10設定 */
     /* , {SWIC_REG_TBL(g_regListPTP)					    , STD_OFF} */           /* PTP設定 */
-    /* , {SWIC_REG_TBL(g_regListBandwidthLimit)		, STD_OFF} */           /* 帯域制限設定 */
+    , {SWIC_REG_TBL(g_regListBandwidthLimit)		  , STD_OFF}              /* 帯域制限設定 */
     , {SWIC_REG_TBL(g_regListSeqInterruptClear)	  , STD_OFF}              /* 割り込み要因クリア */
     , {SWIC_REG_TBL(g_regListSeqSWICReset)			  , STD_OFF}              /* ソフトウェアリセット */
     , {SWIC_REG_TBL(g_regListSeqPPUOff)				    , STD_OFF}              /* PPU OFF */

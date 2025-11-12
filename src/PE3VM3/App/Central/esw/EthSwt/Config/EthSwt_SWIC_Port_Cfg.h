@@ -8,6 +8,7 @@
 /* -------------------------------------------------------------------------- */
 #include <Std_Types.h>
 /* -------------------------------------------------------------------------- */
+#include "EthSwt_SWIC_Cfg.h"
 #include <EthSwt_SWIC_Define.h>
 /* -------------------------------------------------------------------------- */
 #include <EthSwt_SWIC_initRegListSeqInitSeq.h>
@@ -35,7 +36,7 @@ static const struct swic_reg_tbl G_ETHSWT_SWIC_RELAY_OFF_TABLE[] =
     SWIC_REG_TBL(g_regListSeqRelayOff)
 };
 
-static const struct swic_reg_tbl G_ETHSWT_SWIC_PHY_ON_TABLE[] =
+static const struct swic_reg_tbl G_ETHSWT_SWIC_PHY_ON_TABLE[D_ETHSWT_SWIC_PORT_NUM] =
 {   
     {g_regListSeqP1PhyOn            , SWIC_TBL_NUM(g_regListSeqP1PhyOn)         }	/* P1：ADC 1000BASE-T1         */
 ,   {g_regListSeqP2PhyOn            , SWIC_TBL_NUM(g_regListSeqP2PhyOn)         }   /* P2：DCM 1000BASE-T1         */
@@ -48,7 +49,7 @@ static const struct swic_reg_tbl G_ETHSWT_SWIC_PHY_ON_TABLE[] =
 ,   {NULL_PTR                       , 0u                                        }   /* P9：未使用                  */
 };
 
-static const struct swic_reg_tbl G_ETHSWT_SWIC_PHY_OFF_TABLE[] =
+static const struct swic_reg_tbl G_ETHSWT_SWIC_PHY_OFF_TABLE[D_ETHSWT_SWIC_PORT_NUM] =
 {   
     {g_regListSeqP1PhyOff           , SWIC_TBL_NUM(g_regListSeqP1PhyOff)        }	/* P1：ADC 1000BASE-T1         */
 ,   {g_regListSeqP2PhyOff           , SWIC_TBL_NUM(g_regListSeqP2PhyOff)        }	/* P2：DCM 1000BASE-T1         */
