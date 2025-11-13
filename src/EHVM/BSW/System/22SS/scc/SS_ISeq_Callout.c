@@ -33,6 +33,7 @@
 #include <SS_ISeq_Callout.h>
 #include <Ecu_Intg.h>
 #include <Ecu_IntgHAL.h>
+#include <22SS_Callout.h>
 
 #include <Ecu_Int.h>
 #ifdef ECU_SAMPLE_ON
@@ -195,6 +196,8 @@ void SS_Pm_postClockUpCallout(SS_BootType u4_BootSource)
         }else{
             vd_g_IcuWkInit((U1)ICU_WK_CFG_MCU_STA_BY_WK);
         }
+
+        vd_g_22SSCallout_BattLowInit();
 
         Spi_Init1();
 

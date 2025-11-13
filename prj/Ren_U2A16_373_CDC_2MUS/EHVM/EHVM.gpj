@@ -68,3 +68,5 @@ ${CMN_DIR}/MCAL_ErrH.gpj
 ${CMN_DIR}/LWH_project.gpj
 ${CMN_DIR}/LWH_integration.gpj
 ${CMN_DIR}/LIB.gpj
+
+App.gpj

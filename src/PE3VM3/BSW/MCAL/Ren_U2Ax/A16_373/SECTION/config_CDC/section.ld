@@ -64,7 +64,6 @@ SECTIONS {
     .mcal_rom_top           align(4)                        : > .
     .DIO_TEXT_CODE          align(4)                        : > .
     .DMA_TEXT_CODE          align(4)                        : > .
-    .DMA_DESC_TEXT_CODE     align(4)                        : > .
     .GPT_TEXT_CODE          align(4)                        : > .
     .INTC_TEXT_CODE         align(4)                        : > .
     .MCALCOMMON_TEXT_CODE   align(4)                        : > .
@@ -76,7 +75,6 @@ SECTIONS {
     .ADC_RODATA_CONST       align(4)                        : > .
     .DIO_RODATA_CONST       align(4)                        : > .
     .DMA_RODATA_CONST       align(4)                        : > .
-    .DMA_DESC_RODATA_CONST  align(4)                        : > .
     .GPT_RODATA_CONST       align(4)                        : > .
     .INTC_RODATA_CONST      align(4)                        : > .
     .PORT_RODATA_CONST      align(4)                        : > .

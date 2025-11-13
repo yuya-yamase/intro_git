@@ -6,10 +6,8 @@
     :sourceDir=${MCAL_DMA_CFG_DIR}
 
 pil_dmac.c
-pil_dmac_desc.c
 pil_dts.c
 pil_intc.c
 Dma.c
-Dma_Desc.c
 Dma_Cfg.c
 Dma_Irq.c
