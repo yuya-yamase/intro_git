@@ -1,4 +1,4 @@
-/* 3.3.0 */
+/* 3.4.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define THBLNKR_C_MAJOR                          (3)
-#define THBLNKR_C_MINOR                          (3)
+#define THBLNKR_C_MINOR                          (4)
 #define THBLNKR_C_PATCH                          (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -44,6 +44,8 @@ static U1                   u1_s_thblnkr_tictoc_hld;
 static U2                   u2_s_thblnkr_spdmd;
 static U1                   u1_s_thblnkr_ind_act;
 static U2                   u2_s_thblnkr_inact_tim;
+static U2                   u2_s_thblnkr_act_tim_mtnls_l;
+static U2                   u2_s_thblnkr_act_tim_mtnls_r;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
@@ -154,11 +156,13 @@ U1  u1_g_ThblnkrActiveJdg(void)
 /*===================================================================================================================================*/
 static void     vd_s_ThblnkrInit(void)
 {
-    u1_s_thblnkr_tictoc_req     = (U1)THBLNKR_NON;
-    u1_s_thblnkr_tictoc_hld     = (U1)U1_MAX;
-    u2_s_thblnkr_spdmd          = (U2)THBLNKR_SPDMD_LO;
-    u1_s_thblnkr_ind_act        = (U1)0U;
-    u2_s_thblnkr_inact_tim      = (U2)U2_MAX;
+    u1_s_thblnkr_tictoc_req         = (U1)THBLNKR_NON;
+    u1_s_thblnkr_tictoc_hld         = (U1)U1_MAX;
+    u2_s_thblnkr_spdmd              = (U2)THBLNKR_SPDMD_LO;
+    u1_s_thblnkr_ind_act            = (U1)0U;
+    u2_s_thblnkr_inact_tim          = (U2)U2_MAX;
+    u2_s_thblnkr_act_tim_mtnls_l    = (U2)0U;
+    u2_s_thblnkr_act_tim_mtnls_r    = (U2)0U;
 }
 
 /*===================================================================================================================================*/
@@ -169,15 +173,55 @@ static void     vd_s_ThblnkrInit(void)
 /*===================================================================================================================================*/
 static U1   u1_s_ThblnkrGetInput(void)
 {
-    static const U1 u1_s_MTNR_LSB_VAL = (U1)1U;
+    static const U1 u1_s_MTNR_LSB_VAL  = (U1)1U;
+    static const U2 u2_s_THBNLKR_INACT = ((U2)5000U / (U2)THBLNKR_MAINTICK);
     U1 u1_t_thblnkr_req;
     U1 u1_t_mtnl_sgnl;
     U1 u1_t_mtnr_sgnl;
+    U1 u1_t_msgsts;
+    U1 u1_t_mtnls_l;
+    U1 u1_t_mtnls_r;
 
-    u1_t_mtnl_sgnl = u1_g_ThblnkrCfgMTNL();
+    u1_t_mtnls_l   = (U1)FALSE;
+    u1_t_mtnl_sgnl = (U1)FALSE;
+    u1_t_mtnls_r   = (U1)FALSE;
+    u1_t_mtnr_sgnl = (U1)FALSE;
+
+    u1_t_msgsts = u1_g_ThblnkrCfgMTNLS_L(&u1_t_mtnls_l);
+    if ((u1_t_msgsts & (U1)COM_NO_RX) == (U1)0U) {
+        u1_t_mtnl_sgnl = u1_t_mtnls_l;
+    }
+
+    if (u1_t_mtnl_sgnl == (U1)TRUE) {
+        if (u2_s_thblnkr_act_tim_mtnls_l < (U2)U2_MAX) {
+            u2_s_thblnkr_act_tim_mtnls_l++;
+        }
+    }
+    else {
+        u2_s_thblnkr_act_tim_mtnls_l = (U2)0U;
+    }
+    if (u2_s_thblnkr_act_tim_mtnls_l > u2_s_THBNLKR_INACT) {
+        u1_t_mtnl_sgnl = (U1)FALSE;
+    }
     u1_t_thblnkr_req = u1_t_mtnl_sgnl;
 
-    u1_t_mtnr_sgnl = u1_g_ThblnkrCfgMTNR();
+
+    u1_t_msgsts = u1_g_ThblnkrCfgMTNLS_R(&u1_t_mtnls_r);
+    if ((u1_t_msgsts & (U1)COM_NO_RX) == (U1)0U) {
+        u1_t_mtnr_sgnl = u1_t_mtnls_r;
+    }
+
+    if (u1_t_mtnr_sgnl == (U1)TRUE) {
+        if (u2_s_thblnkr_act_tim_mtnls_r < (U2)U2_MAX) {
+            u2_s_thblnkr_act_tim_mtnls_r++;
+        }
+    }
+    else {
+        u2_s_thblnkr_act_tim_mtnls_r = (U2)0U;
+    }
+    if (u2_s_thblnkr_act_tim_mtnls_r > u2_s_THBNLKR_INACT) {
+        u1_t_mtnr_sgnl = (U1)FALSE;
+    }
     u1_t_thblnkr_req |= (u1_t_mtnr_sgnl << u1_s_MTNR_LSB_VAL);
 
     return(u1_t_thblnkr_req);
@@ -304,6 +348,7 @@ static void    vd_s_ThblnkrInactTimerSet(const U1 u1_a_CUR_INDACT)
 /*  3.2.0    09/16/2024  YR       Removed the processing for sound pressure                                                          */
 /*  3.3.0    09/16/2024  KH       Change logic of Awake condition                                                                    */
 /*           09/19/2024  YR       Change comment for u1_g_ThblnkrTicTocReq function                                                  */
+/*  3.4.0    10/23/2024  RS       Change for BEV System_Consideration_1                                                              */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima , Denso                                                                                                 */
 /*  * KK   = Kohei Kato,       Denso Techno                                                                                          */
@@ -314,5 +359,6 @@ static void    vd_s_ThblnkrInactTimerSet(const U1 u1_a_CUR_INDACT)
 /*  * KH   = Kiko Huerte,      DTPH                                                                                                  */
 /*  * AA   = Anna Asuncion,    Denso Techno                                                                                          */
 /*  * YR   = Yhana Regalario.  DTPH                                                                                                  */
+/*  * RS   = Ryuki Sako,       Denso Techno                                                                                          */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
