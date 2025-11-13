@@ -74,12 +74,10 @@
 #include "hmiproxy.h"
 #include "hdimmgr.h"
 #include "himgadj.h"
-#if 0   /* BEV Rebase provisionally */
 #include "datesi_met.h"
 /*---------------------------------------------------------------------------*/
 /* Platform Header                                                           */
 /*---------------------------------------------------------------------------*/
-#endif   /* BEV Rebase provisionally */
 #include "drec_tx.h"
 #include "sound_cri_mgr.h"
 #include "xspi_met.h"
@@ -321,9 +319,7 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     {&vd_g_RcmmUIMainTask,              (U4)SCHDLR_TASKBIT__20MS_B  },
     {&vd_g_HdimmgrRoutine,              (U4)SCHDLR_TASKBIT__20MS_A  },
     {&vd_g_HudImgAdjMainTask,           (U4)SCHDLR_TASKBIT__10MS_A  },
-#if 0   /* BEV Rebase provisionally */
     {&vd_g_DateSIMETMainTask,           (U4)SCHDLR_TASKBIT___5MS    },
-    #endif   /* BEV Rebase provisionally */
     /*-------------------------------------------------------------------*/
     /*                                                                   */
     /*                                                                   */
