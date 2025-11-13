@@ -238,7 +238,6 @@ void    vd_g_wChimeCfgReqchk(U4 * u4p_a_reqbit)
         {  (U2)ALERT_CH_O_EIGCON_ENG,     (U1)ALERT_REQ_O_EIGCON_ENG_CYCLE,      (U1)WCHIME_REQ_IN_EIGCON_EG_PWROFF   >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_IN_EIGCON_EG_PWROFF   & (U1)0x1FU)  }, /* MET-O_EIGCON-CSTD-            */
         {  (U2)ALERT_CH_H_BATTRW_BC,      (U1)ALERT_REQ_H_BATTRW_BC_THERMALBC,   (U1)WCHIME_REQ_IN_BATTRW             >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_IN_BATTRW             & (U1)0x1FU)  }, /* MET-H_BATTRW-CSTD-            */
         {  (U2)ALERT_CH_S_SCB,            (U1)ALERT_REQ_S_SCB_CYCL,              (U1)WCHIME_REQ_IN_SCB                >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_IN_SCB                & (U1)0x1FU)  }, /* MET-S_ADBZR-CSTD-             */
-        {  (U2)ALERT_CH_S_SCB,            (U1)ALERT_REQ_S_SCB_CYCL_SCB_OPE,      (U1)WCHIME_REQ_IN_SCB                >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_IN_SCB                & (U1)0x1FU)  }, /* MET-S_ADBZR-CSTD-             */
         {  (U2)ALERT_CH_S_BSM_BC,         (U1)ALERT_REQ_S_BSM_BC_WARNING,        (U1)WCHIME_REQ_IN_BSM                >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_IN_BSM                & (U1)0x1FU)  }, /* MET-S_ADBZR-CSTD-             */
         {  (U2)ALERT_CH_S_LDA_BC_LDW,     (U1)ALERT_REQ_S_LDA_BC_LDW_CYCL1,      (U1)WCHIME_REQ_IN_LDA                >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_IN_LDA                & (U1)0x1FU)  }, /* MET-S_ADBZR-CSTD-             */
         {  (U2)ALERT_CH_S_ITS_BC,         (U1)ALERT_REQ_S_ITS_BC_CYCL,           (U1)WCHIME_REQ_IN_INFRA_INT          >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_IN_INFRA_INT          & (U1)0x1FU)  }, /* MET-S_ADBZR-CSTD-             */
@@ -270,8 +269,6 @@ void    vd_g_wChimeCfgReqchk(U4 * u4p_a_reqbit)
         {  (U2)ALERT_CH_H_SYSMAL_BC,      (U1)ALERT_REQ_H_SYSMAL_BC_CYCL2,       (U1)WCHIME_REQ_IN_SYSMAL_REQSTP      >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_IN_SYSMAL_REQSTP      & (U1)0x1FU)  }, /* MET-H_SYSMAL-CSTD-            */
         {  (U2)ALERT_CH_C_BRKBZ,          (U1)ALERT_REQ_C_BRKBZ_APPOPE4,         (U1)WCHIME_REQ_IN_BRK_APP4           >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_IN_BRK_APP4           & (U1)0x1FU)  }, /* MET-C_BRKBZ-CSTD-             */
         {  (U2)ALERT_CH_C_EPB_WRN_IG,     (U1)ALERT_REQ_C_EPB_WRN_IG_LOCK,       (U1)WCHIME_REQ_IN_EPB                >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_IN_EPB                & (U1)0x1FU)  }, /* MET-C_EPB-CSTD-               */
-        {  (U2)ALERT_CH_C_EPB_WRN_IG,     (U1)ALERT_REQ_C_EPB_WRN_IG_EPBDEF1,    (U1)WCHIME_REQ_IN_EPB                >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_IN_EPB                & (U1)0x1FU)  }, /* MET-C_EPB-CSTD-               */
-        {  (U2)ALERT_CH_C_EPB_WRN_IG,     (U1)ALERT_REQ_C_EPB_WRN_IG_EPBDEFRW1,  (U1)WCHIME_REQ_IN_EPB                >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_IN_EPB                & (U1)0x1FU)  }, /* MET-C_EPB-CSTD-               */
         {  (U2)ALERT_CH_O_EIGCON_ENG,     (U1)ALERT_REQ_O_EIGCON_ENG_ON,         (U1)WCHIME_REQ_CO_EIGCON_IGOFF       >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_CO_EIGCON_IGOFF       & (U1)0x1FU)  }, /* MET-O_EIGCON-CSTD-            */
         {  (U2)ALERT_CH_S_ACC_BC,         (U1)ALERT_REQ_S_ACC_BC_CANCEL,         (U1)WCHIME_REQ_SI_ACC_LSPDCNSL       >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_SI_ACC_LSPDCNSL       & (U1)0x1FU)  }, /* MET-S_ADBZR-CSTD-             */
         {  (U2)ALERT_CH_S_LTA_2_BC_LKA,   (U1)ALERT_REQ_S_LTA_2_BC_LKA_DOUBLE,   (U1)WCHIME_REQ_SI_LTA_CNCL           >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_SI_LTA_CNCL           & (U1)0x1FU)  }, /* MET-S_ADBZR-CSTD-             */
@@ -283,6 +280,7 @@ void    vd_g_wChimeCfgReqchk(U4 * u4p_a_reqbit)
         {  (U2)ALERT_CH_S_SEA_BC,         (U1)ALERT_REQ_S_SEA_BC_DOUBLE,         (U1)WCHIME_REQ_SI_DOA_RJCT           >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_SI_DOA_RJCT           & (U1)0x1FU)  }, /* MET-S_ADBZR-CSTD-             */
         {  (U2)ALERT_CH_D_SBW_BZ_BSFT,    (U1)ALERT_REQ_D_SBW_BZ_BSFT_SINGLESP,  (U1)WCHIME_REQ_SI_SBW_SPL_STATE      >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_SI_SBW_SPL_STATE      & (U1)0x1FU)  }, /* MET-D_SBW-CSTD-               */
         {  (U2)ALERT_CH_S_DMC_BC,         (U1)ALERT_REQ_S_DMC_BC_CYCLE,          (U1)WCHIME_REQ_IN_DMC_LV2            >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_IN_DMC_LV2            & (U1)0x1FU)  }, /* MET-S_ADBZR-CSTD-             */
+        {  (U2)ALERT_CH_D_SFTPOS_B_RSBW,  (U1)ALERT_REQ_D_SFTPOS_B_RSBW_CYCLE,   (U1)WCHIME_REQ_IN_SFTPOS_REV         >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_IN_SFTPOS_REV         & (U1)0x1FU)  }, /* MET-D_SFTPOS-CSTD-            */
         {  (U2)ALERT_CH_B_SMASTA_BCI2,    (U1)ALERT_REQ_B_SMASTA_BCI2_ON,        (U1)WCHIME_REQ_IN_SMASTA_INT2        >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_IN_SMASTA_INT2        & (U1)0x1FU)  }, /* MET-B_SMASTA-CSTD-            */
         {  (U2)ALERT_CH_B_SMASTA_BCDR,    (U1)ALERT_REQ_B_SMASTA_BCDR_ON,        (U1)WCHIME_REQ_CO_SMASTA_CON         >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_CO_SMASTA_CON         & (U1)0x1FU)  }, /* MET-B_SMASTA-CSTD-            */
         {  (U2)ALERT_CH_S_ACC_BC,         (U1)ALERT_REQ_S_ACC_BC_OVER_SPD,       (U1)WCHIME_REQ_IN_ACC_OVERSPD        >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_IN_ACC_OVERSPD        & (U1)0x1FU)  }, /* MET-S_ADBZR-CSTD-             */
@@ -842,7 +840,7 @@ static  void    vd_s_wChimeCfgReqDel(U4 * u4_ap_reqbit, const U1 u1_a_REQ_ID)
 /*  19PFv3-18 9/25/2024  GM       Add Shift-By-Wire Judgement in SFTPOS Reject buzzer sounding condition                             */
 /*  19PFv3-19 11/12/2024 GM       Add u1_g_wChimeCfgIntermSplCnd() for switching to high priority from intermittent buzzer items     */
 /*  19PFv3-20 03/20/2025 SH       Added config for BATTRW                                                                            */
-/*  BEV-1     11/11/2025 SH       Configured for BEVstep3_Rebase                                                                     */
+/*  BEV-1     11/11/2025 SH       Configured for CONTBUZZ2-CSTD-0008                                                                 */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
 /*  * ToN  = Toshiharu Nagata, Denso Techno                                                                                          */

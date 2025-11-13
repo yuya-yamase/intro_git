@@ -1259,7 +1259,7 @@ static U1   u1_s_wChimeCfgClesonVolGet(const U1 u1_a_REQ_SEL)
 /*  19PFv3-12 10/23/2024 TeN      Change RSA(Lexus) buzzer config.                                                                   */
 /*  19PFv3-13 03/20/2025 SH       Added config for BATTRW                                                                            */
 /*  19PFv3-14 04/07/2025 SH       Change Reverse buzzer name                                                                         */
-/*  BEV-1     11/11/2025 SH       Configured for BEVstep3_Rebase                                                                     */
+/*  BEV-1     11/11/2025 SH       Configured for CONTBUZZ2-CSTD-0008                                                                 */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
 /*  * ToN  = Toshiharu Nagata, Denso Techno                                                                                          */
