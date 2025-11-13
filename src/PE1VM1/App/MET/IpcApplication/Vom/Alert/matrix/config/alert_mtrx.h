@@ -395,6 +395,11 @@
 #define ALERT_CH_H_BATTRW_PD                     (371U)
 #define ALERT_CH_H_BATTRW_BC                     (372U)
 #define ALERT_NUM_CH                             (373U)
+#if 0   /* BEV Rebase provisionally */
+#else   /* BEV Rebase provisionally */
+#define ALERT_CH_C_BRLV_2_BC                     (U2_MAX)
+#define ALERT_CH_O_PDSMAL_BC                     (U2_MAX)
+#endif   /* BEV Rebase provisionally */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* ALERT_REQ_[SYS]_[VIEW]_XXXX                            */
@@ -1524,6 +1529,14 @@
 #define ALERT_REQ_C_MTS_PD_UNAVAIL               (1U)
 #define ALERT_REQ_H_BATTRW_PD_THERMALPD          (0U)
 #define ALERT_REQ_H_BATTRW_BC_THERMALBC          (0U)
+#if 0   /* BEV Rebase provisionally */
+#else   /* BEV Rebase provisionally */
+#define ALERT_REQ_C_BRLV_2_BC_MALFUNC            (0xFEU)
+#define ALERT_REQ_C_BRKBZ_APPOPE4                (0xFEU)
+#define ALERT_REQ_C_BRKBZ_APPOPE5                (0xFEU)
+#define ALERT_REQ_C_BRKBZ_APPOPE6                (0xFEU)
+#define ALERT_REQ_O_PDSMAL_BC_CYCL               (0xFEU)
+#endif   /* BEV Rebase provisionally */
 
 /* ALERT_CH dummy define */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
