@@ -97,6 +97,7 @@ void EthSwt_Data_NotifyLink(const uint8 SwitchPortIdx, const Std_ReturnType getL
 void EthSwt_Data_NotifyMIB(const uint8 SwitchPortIdx, const uint32 *const MIBArray);
 void EthSwt_Data_NotifySQI(const uint8 SwtichPortIdx, const Std_ReturnType getSQIResult, const uint8 SQIValue);
 void EthSwt_Data_NotifyQci(const uint8 QciIdx, const uint32 QciCount);
+void EthSwt_Data_NotifySWICReset(void);
 /* -------------------------------------------------------------------------- */
 #endif /* ETHSWT_DATA_H */
 /* -------------------------------------------------------------------------- */
