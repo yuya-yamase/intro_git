@@ -138,6 +138,7 @@ void EthSwt_Data_Init(void)
     G_ETHSWT_DATA_MIB_ID = 0u;
     G_ETHSWT_DATA_SQI_ID = 0u;
     G_ETHSWT_DATA_QCI_ID = 0u;
+    G_ETHSWT_DATA_SWICRESET_COUNT = 0u;
 
     LIB_memset((uint8*)&G_ETHSWT_DATA_LINK_UPDATE, 0, sizeof(G_ETHSWT_DATA_LINK_UPDATE));
     LIB_memset((uint8*)&G_ETHSWT_DATA_MIB_UPDATE, 0, sizeof(G_ETHSWT_DATA_MIB_UPDATE));
@@ -214,7 +215,11 @@ void EthSwt_Data_NotifyQci(const uint8 QciIdx, const uint32 QciCount)
 /* -------------------------------------------------------------------------- */
 void EthSwt_Data_NotifySWICReset(void)
 {
-    G_ETHSWT_DATA_SWICRESET_COUNT++;
+    if (G_ETHSWT_DATA_SWICRESET_COUNT == 0xFFFFFFFF) {
+        G_ETHSWT_DATA_SWICRESET_COUNT = 0u;
+    } else {
+        G_ETHSWT_DATA_SWICRESET_COUNT++;
+    }
 
     return;
 }
