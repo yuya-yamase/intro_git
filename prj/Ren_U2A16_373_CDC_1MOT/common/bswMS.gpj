@@ -43,7 +43,6 @@ Fee/src/Fee_Lib.c
 Fee/src/Fee_Periodic.c
 Fee/src/Fee_Rebuild.c
 Fee/usr/Fee_DevCallout.c
-Fee/usr/Fee_Os_Connector.c
 
 Fls/src/Fls.c
 Fls/src/Fls_Cdd.c
@@ -96,3 +95,26 @@ NvM/src/NvM_WdtExt.c
 NvM/src/NvM_WdtExt_Cust.c
 NvM/usr/NvM_BswM_Connector.c
 NvM/usr/NvM_Dem_Connector.c
+
+MemAcc/cfg/MemAcc_Ccd_Lcfg.c
+MemAcc/cfg/MemAcc_Cfg.c
+MemAcc/src/MemAcc.c
+MemAcc/src/MemAcc_Api.c
+MemAcc/src/MemAcc_Cdd.c
+MemAcc/src/MemAcc_FlsWrp.c
+MemAcc/src/MemAcc_JobCtl.c
+MemAcc/src/MemAcc_MemWrp.c
+MemAcc/src/MemAcc_PifExt.c
+MemAcc/src/MemAcc_SemCtl.c
+MemAcc/usr/MemAcc_Pif_UserHook.c
+
+Mem/cfg/CodeFls_Cfg.c
+Mem/cfg/Mem_Cfg.c
+Mem/src/CodeFls.c
+Mem/src/CodeFls_Drv.c
+Mem/src/CodeFls_DrvAsm.850
+Mem/src/CodeFls_Sub.c
+Mem/src/Mem.c
+Mem/src/Mem_Sub.c
+Mem/usr/CodeFls_Usr.c
+Mem/usr/Mem_Usr.c

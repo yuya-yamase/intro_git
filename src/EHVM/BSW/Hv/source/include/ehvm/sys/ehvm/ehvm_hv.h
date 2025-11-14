@@ -45,7 +45,7 @@
 /*--------------------------------------------------------------------------*/
 
 /* HV Init */
-extern void ehvm_hvm_get_lock( ehvm_uint8_t* lock );
+extern ehvm_uint8_t ehvm_hvm_get_lock( EhvmConstR ehvm_uint8_t timeoutId, ehvm_uint8_t* lock );
 extern ehvm_uint8_t ehvm_hvm_try_to_lock( ehvm_uint8_t* lock );
 extern void ehvm_hvm_release_lock( ehvm_uint8_t* lock );
 extern ehvm_uint32_t ehvm_hvm_get_EIPSWH( void );
@@ -70,6 +70,7 @@ extern void ehvm_mp_mpu_load_memory( EhvmConstR ehvm_gpid_t gpid );
 extern void ehvm_mp_mpu_store_memory( EhvmConstR ehvm_gpid_t gpid );
 extern void ehvm_mp_mpu_load_mpid( EhvmConstR ehvm_gpid_t gpid );
 extern ehvm_std_return_t ehvm_mp_mpu_check_memory_protection( EhvmConstR ehvm_uint8_t* data, EhvmConstR ehvm_uint32_t lenbytes, EhvmConstR ehvm_spid_t spid );
+extern ehvm_std_return_t ehvm_mm_check_memory_alignment( EhvmConstR ehvm_uint8_t* EhvmConstR address, EhvmConstR ehvm_uint8_t access_size );
 extern void ehvm_bios_v850_mp_mpu_init_mpu_table( void );
 extern void ehvm_bios_v850_mp_mpu_set_MPIDX( EhvmConstR ehvm_uint32_t mpidx );
 extern void ehvm_bios_v850_mp_mpu_set_MPLA( EhvmConstR ehvm_uint32_t mpla );
@@ -80,6 +81,7 @@ extern void ehvm_bios_v850_mp_mpu_set_MCS( EhvmConstR ehvm_uint32_t size );
 extern void ehvm_bios_v850_mp_mpu_set_MCC( EhvmConstR ehvm_uint32_t val );
 extern void ehvm_bios_v850_mp_mpu_set_MCI( EhvmConstR ehvm_uint32_t spid );
 extern ehvm_uint32_t ehvm_bios_v850_mp_mpu_get_MCR( void );
+extern ehvm_uint8_t ehvm_bios_v850_mm_check_memory_alignment( EhvmConstR ehvm_uint8_t* EhvmConstR address, EhvmConstR ehvm_uint8_t access_size);
 extern void ehvm_bios_v850_mp_mpu_set_MPID( EhvmConstR ehvm_uint32_t index, EhvmConstR ehvm_uint32_t mpid );
 extern void ehvm_bios_v850_mp_mpu_exec_STM_MP( EhvmConstR ehvm_gpid_t gpid );
 extern void ehvm_bios_v850_mp_mpu_exec_LDM_MP( EhvmConstR ehvm_gpid_t gpid );

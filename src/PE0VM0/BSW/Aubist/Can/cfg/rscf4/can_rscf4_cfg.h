@@ -1,4 +1,4 @@
-/* can_rscf4_cfg_h_m10700_v2-2-0                                            */
+/* can_rscf4_cfg_h_m10700_v3-0-0                                            */
 /****************************************************************************/
 /* Protected                                                                */
 /* Copyright DENSO CORPORATION                                              */
@@ -169,7 +169,7 @@
 #define CAN_CFG_FILTER_MASK_VALUE_30        (0x00000400UL)
 #define CAN_CFG_FILTER_MASK_VALUE_31        (0x00000200UL)
 #define CAN_CFG_FILTER_MASK_VALUE_32        (0x8001FFFFUL)
-#define CAN_CFG_FILTER_MASK_VALUE_33        (0x0000000FUL)
+#define CAN_CFG_FILTER_MASK_VALUE_33        (0x00000007UL)
 #define CAN_CFG_FILTER_MASK_VALUE_34        (0x800003FFUL)
 #define CAN_CFG_FILTER_MASK_VALUE_35        (0x800001FFUL)
 #define CAN_CFG_FILTER_MASK_VALUE_36        (0x00000000UL)
@@ -550,7 +550,7 @@
 #define CAN_CFG_HRHNUM_2                    (0U)
 #define CAN_CFG_HRHNUM_3                    (2U)
 #define CAN_CFG_HRHNUM_4                    (0U)
-#define CAN_CFG_HRHNUM_5                    (146U)
+#define CAN_CFG_HRHNUM_5                    (147U)
 #define CAN_CFG_HRHNUM_6                    (0U)
 #define CAN_CFG_HRHNUM_7                    (95U)
 
@@ -1698,7 +1698,7 @@
 #define CAN_CFG_MBOXSET_5_MB153             (CAN_MB_RECEPTION|CAN_MB_INTERRUPT)
 #define CAN_CFG_MBOXSET_5_MB154             (CAN_MB_RECEPTION|CAN_MB_INTERRUPT)
 #define CAN_CFG_MBOXSET_5_MB155             (CAN_MB_RECEPTION|CAN_MB_INTERRUPT)
-#define CAN_CFG_MBOXSET_5_MB156             (CAN_MB_NOUSE)
+#define CAN_CFG_MBOXSET_5_MB156             (CAN_MB_RECEPTION|CAN_MB_INTERRUPT)
 #define CAN_CFG_MBOXSET_5_MB157             (CAN_MB_NOUSE)
 #define CAN_CFG_MBOXSET_5_MB158             (CAN_MB_NOUSE)
 #define CAN_CFG_MBOXSET_5_MB159             (CAN_MB_NOUSE)
@@ -3253,8 +3253,8 @@
 #define CAN_CFG_ID_VALUE_5_MB152            (0x00000390UL)
 #define CAN_CFG_ID_VALUE_5_MB153            (0x98DA0000UL)
 #define CAN_CFG_ID_VALUE_5_MB154            (0x98000000UL)
-#define CAN_CFG_ID_VALUE_5_MB155            (0x00000700UL)
-#define CAN_CFG_ID_VALUE_5_MB156            (0x00000000UL)
+#define CAN_CFG_ID_VALUE_5_MB155            (0x00000708UL)
+#define CAN_CFG_ID_VALUE_5_MB156            (0x000007DFUL)
 #define CAN_CFG_ID_VALUE_5_MB157            (0x00000000UL)
 #define CAN_CFG_ID_VALUE_5_MB158            (0x00000000UL)
 #define CAN_CFG_ID_VALUE_5_MB159            (0x00000000UL)
@@ -5259,10 +5259,11 @@
 /* History                                                                  */
 /*  Version        :Date                                                    */
 /*  v2-2-0         :2020/07/07                                              */
+/*  v3-0-0         :2025/02/13                                              */
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
-/*  Framework          :v2-0-3-z0003                                        */
+/*  Framework          :v2-1-0                                              */
 /*  BSW plug-in        :v3-0-0                                              */
 /****************************************************************************/
 

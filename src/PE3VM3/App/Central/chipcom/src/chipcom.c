@@ -1,4 +1,4 @@
-/* v0-3-0 */
+/* v0-4-0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -34,6 +34,10 @@
 #define CHIPCOM_RCV_FRM_MAX_WORD    ((uint16)(XSPI_FRM_MAX_WORD - 1U))
 #define CHIPCOM_SND_FRM_MAX_WORD    ((uint16)(XSPI_FRM_MAX_WORD - 1U))
 
+#define CHIPCOM_NORXTIME_INITVAL                ((uint16)    0U)
+#define CHIPCOM_NORXTIME_ADDVAL                 ((uint16)    5U)
+#define CHIPCOM_NORXTIME_TIMEOUT                ((uint16)10150U)
+
 #define CHIPCOM_BUFFER_INITVAL   	((uint8) 0x00U)
 #define CHIPCOM_U4CNT_TO_U1IDX      (4U)
 
@@ -63,7 +67,7 @@
 /*--------------------------------------------------------------------------*/
 /* Function Prototypes                                                      */
 /*--------------------------------------------------------------------------*/
-static void ChipCom_DispatchReceiveDate(uint8* pReceiveData);
+static void ChipCom_DispatchReceiveData(uint8* pReceiveData);
 
 /*--------------------------------------------------------------------------*/
 /* Data                                                                     */
@@ -77,6 +81,8 @@ static uint32       ChipCom_SeqNumberRx;
 static uint32       ChipCom_SeqNumberTx;
 
 static uint16       ChipCom_SpiTxData_index;
+static ChipCom_IpduStatusType   ChipCom_RxSts[SIGNAL_CHIPCOM_MAX];
+static uint16                   ChipCom_NoRxTime[SIGNAL_CHIPCOM_MAX];   /* Time since last received data(ms) */
 
 #ifdef CHIPCOM_SAIL_SETTING
 static PduIdType    ChipCom_TxConfPduIdQueue[CHIPCOM_TXCONF_PDUIDQUEUE_SIZE];
@@ -107,7 +113,7 @@ void ChipCom_Init(void)
         if( PeriodicRelation[i].TxPos < CHIPCOM_POS_TX_EVENTDATA_OFFSET ) {
             for (j = 0; j < PeriodicRelation[i].DataLen; j++) {
                 ChipCom_SpiTxDataU1[((PeriodicRelation[i].TxPos) + j)] = (pInitBuff[j]);
-            } 
+            }
         }
         if( PeriodicRelation[i].RxPos < CHIPCOM_POS_RX_EVENTDATA_OFFSET ) {
             for (j = 0; j < PeriodicRelation[i].DataLen; j++) {
@@ -115,8 +121,14 @@ void ChipCom_Init(void)
             }
         }
     }
+
     ChipCom_SeqNumberRx = 0;
     ChipCom_SeqNumberTx = 0;
+
+    for (i = 0; i < SIGNAL_CHIPCOM_MAX; i++) {
+        ChipCom_RxSts[i] = CHIPCOM_NO_RX;
+        ChipCom_NoRxTime[i] = CHIPCOM_NORXTIME_INITVAL;
+    }
 
     ChipCom_SpiTxData_index = CHIPCOM_POS_TX_EVENTDATA_OFFSET;
 
@@ -134,6 +146,7 @@ void ChipCom_MainRx(void)
 {
     uint8 SpiRead_Result;
     uint16 RxLoopCnt;
+    uint16 PduIdCnt;
 #ifdef CHIPCOM_SAIL_SETTING
     uint8 u1t_TxConf_Cnt;
 #endif /* CHIPCOM_SAIL_SETTING */
@@ -142,7 +155,6 @@ void ChipCom_MainRx(void)
     SpiRead_Result = xspi_Read(XSPI_CH_03, &(ChipCom_SpiRxDataU4[0]), (uint32)CHIPCOM_RCV_FRM_MAX_WORD);
     if (SpiRead_Result == XSPI_OK)
     {
-
         /* Convert U4 array to U1 */
         CHIPCOM_DISABLE_INTERRUPT();
         for (RxLoopCnt = 0; RxLoopCnt < CHIPCOM_SND_FRM_MAX_WORD; RxLoopCnt++) {
@@ -157,9 +169,14 @@ void ChipCom_MainRx(void)
                      ((ChipCom_SpiRxDataU1[CHIPCOM_POS_SEQUENCENO2]) << CHIPCOM_SHIFT_2BYTE ) |
                      ((ChipCom_SpiRxDataU1[CHIPCOM_POS_SEQUENCENO3]) << CHIPCOM_SHIFT_1BYTE ) |
                      ((ChipCom_SpiRxDataU1[CHIPCOM_POS_SEQUENCENO4])  );
+
+        for (PduIdCnt = 0; PduIdCnt < SIGNAL_CHIPCOM_MAX; PduIdCnt++) {
+            ChipCom_RxSts[PduIdCnt] = CHIPCOM_TRX_START;
+            ChipCom_NoRxTime[PduIdCnt] = CHIPCOM_NORXTIME_INITVAL;
+        }
         CHIPCOM_ENABLE_INTERRUPT();
 
-        ChipCom_DispatchReceiveDate(&(ChipCom_SpiRxDataU1[0U]));
+        ChipCom_DispatchReceiveData(&(ChipCom_SpiRxDataU1[0U]));
 #ifdef CHIPCOM_SAIL_SETTING
         if (ChipCom_TxConf_isTxConfBurstEnabled == TRUE) {
             /* Send All TxConfirmation When RxInd receive Task */
@@ -173,6 +190,18 @@ void ChipCom_MainRx(void)
             }
         }
 #endif /* CHIPCOM_SAIL_SETTING */
+    }
+    else {
+        for (PduIdCnt = 0; PduIdCnt < SIGNAL_CHIPCOM_MAX; PduIdCnt++) {
+            if ( ChipCom_RxSts[PduIdCnt] == CHIPCOM_TRX_START) {
+                if (ChipCom_NoRxTime[PduIdCnt] < (CHIPCOM_NORXTIME_TIMEOUT)) {
+                    ChipCom_NoRxTime[PduIdCnt] += CHIPCOM_NORXTIME_ADDVAL;
+                }
+                if (ChipCom_NoRxTime[PduIdCnt] >= CHIPCOM_NORXTIME_TIMEOUT) {
+                    ChipCom_RxSts[PduIdCnt] = CHIPCOM_TIMEOUT;
+                }
+            }
+        }
     }
 
     return;
@@ -341,6 +370,18 @@ Std_ReturnType ChipCom_GetPeriodicRxData(const uint8 periodic_id, uint16* receiv
     return Ret;
 }
 
+ChipCom_IpduStatusType ChipCom_GetIPDUStatus( ChipCom_PduIdType ChipCom_PduId )
+{
+    ChipCom_IpduStatusType RxDataStatus;
+    RxDataStatus = CHIPCOM_NO_RX;
+
+    if (ChipCom_PduId < SIGNAL_CHIPCOM_MAX) {
+        RxDataStatus = ChipCom_RxSts[ChipCom_PduId];
+    }
+
+    return RxDataStatus;
+}
+
 uint16 ChipCom_GetTxSize(void)
 {
     return (CHIPCOM_SND_FRM_MAX - ChipCom_SpiTxData_index);
@@ -355,7 +396,7 @@ void ChipCom_Nop(const uint16 receive_len, const uint8* const receive_data)
 /****************************************************************************/
 /* Internal Functions                                                       */
 /****************************************************************************/
-static void ChipCom_DispatchReceiveDate(uint8* pReceiveData)
+static void ChipCom_DispatchReceiveData(uint8* pReceiveData)
 {
     uint8 DataId;
     uint16 TotalLength;
@@ -365,20 +406,27 @@ static void ChipCom_DispatchReceiveDate(uint8* pReceiveData)
     TotalLength = (pReceiveData[CHIPCOM_POS_TOTALLENGTH1] << CHIPCOM_SHIFT_1BYTE);
     TotalLength = (TotalLength | pReceiveData[CHIPCOM_POS_TOTALLENGTH2]);
 
-    while (i < TotalLength) {
-        DataId = pReceiveData[i];
-        PayloadLength = pReceiveData[i + CHIPCOM_POS_LENGTH1_OFFSET];
-        PayloadLength = ((PayloadLength << CHIPCOM_SHIFT_1BYTE) | pReceiveData[i + CHIPCOM_POS_LENGTH2_OFFSET]);
+    if (TotalLength <= CHIPCOM_RCV_FRM_MAX) {
+        while (i < TotalLength) {
+            DataId = pReceiveData[i];
+            PayloadLength = pReceiveData[i + CHIPCOM_POS_LENGTH1_OFFSET];
+            PayloadLength = ((PayloadLength << CHIPCOM_SHIFT_1BYTE) | pReceiveData[i + CHIPCOM_POS_LENGTH2_OFFSET]);
 
-        if (DataId < CHIPCOM_DATAID_MAX) {
-#ifdef CHIPCOM_SAIL_SETTING
-            if (DataId == CHIPCOM_DATAID_CANTP_RXIND) {
-                ChipCom_TxConf_isTxConfBurstEnabled = TRUE;
+            if ((TotalLength - i) < (CHIPCOM_HEADER_LENGTH + PayloadLength)) {
+                break;
             }
+            else {
+                if (DataId < CHIPCOM_DATAID_MAX) {
+#ifdef CHIPCOM_SAIL_SETTING
+                    if (DataId == CHIPCOM_DATAID_CANTP_RXIND) {
+                        ChipCom_TxConf_isTxConfBurstEnabled = TRUE;
+                    }
 #endif
-            (NotificationFunction[DataId].NotificationFuncPtr)(PayloadLength, &pReceiveData[i + CHIPCOM_POS_DATA_OFFSET]);
+                    (NotificationFunction[DataId].NotificationFuncPtr)(PayloadLength, &pReceiveData[i + CHIPCOM_POS_DATA_OFFSET]);
+                }
+                i += CHIPCOM_HEADER_LENGTH + PayloadLength;/* Header+Length */
+            }
         }
-        i += CHIPCOM_HEADER_LENGTH + PayloadLength;/* Header+Length */
     }
 
     return;

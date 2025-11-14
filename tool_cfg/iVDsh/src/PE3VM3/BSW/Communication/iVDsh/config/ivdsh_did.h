@@ -38,7 +38,7 @@
 #define IVDSH_DID_WRI_GPS_STS                    (6U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define IVDSH_NUM_DID_REA                        (10U)
+#define IVDSH_NUM_DID_REA                        (11U)
 
 /* Read from VM#1 */
 #define IVDSH_DID_REA_CPREQ_002                  (7U)
@@ -52,6 +52,7 @@
 #define IVDSH_DID_REA_CPREQ_046                  (14U)
 #define IVDSH_DID_REA_CPREQ_047                  (15U)
 #define IVDSH_DID_REA_GPS_REQ                    (16U)
+#define IVDSH_DID_REA_CPREQ_055                  (17U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define IVDSH_NUM_DID                            (IVDSH_NUM_DID_WRI + IVDSH_NUM_DID_REA)

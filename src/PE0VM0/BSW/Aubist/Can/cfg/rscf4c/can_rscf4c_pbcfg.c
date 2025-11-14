@@ -1,4 +1,4 @@
-/* can_rscf4c_pbcfg_c_m10700_v2-2-0                                         */
+/* can_rscf4c_pbcfg_c_m10700_v3-0-0                                         */
 /****************************************************************************/
 /* Protected                                                                */
 /* Copyright DENSO CORPORATION                                              */
@@ -69,7 +69,11 @@ CanConst CanHohCfgType Can_stHohCfgTbl[ CAN_TB_HOHNUM ] =
   /*   u1ControllerID         , u1MboxNo          */
   /*========== User define Area [Start] ==========*/
   /*--- Reception --------------------------------*/
+     { (uint8)CAN_CONTROLLER_3,  (uint8)CAN_MB002 }   /* [0] HOH244 */
+    ,{ (uint8)CAN_CONTROLLER_3,  (uint8)CAN_MB003 }   /* [1] HOH245 */
+    ,{ (uint8)CAN_CONTROLLER_3,  (uint8)CAN_MB004 }   /* [2] HOH246 */
   /*--- Transmission -----------------------------*/
+    ,{ (uint8)CAN_CONTROLLER_3,  (uint8)CAN_MB001 }   /* [3] HOH250 */
   /*========== User define Area [End] ============*/
 };
 #endif /* (CAN_CFG_TRANSMIT == CAN_USE) */
@@ -90,7 +94,7 @@ CanConst CanBaudrateSwtCfgType Can_stBaudrateSwtCfgTbl[ CAN_CFG_BRSCFGTBL_SIZE ]
 {
   /* u4Baudrate                     , u4DataBaudrate                  , u4BaudrateInfo_1            , u4BaudrateInfo_2            , u4BaudrateInfo_3              */
   /*================================================================== User define Area [Start] ==================================================================*/
-     { (uint32)CAN_250KBPS_4M_PTN1  , (uint32)CAN_DB_250KBPS_4M_PTN1  , (uint32)CAN_BAUDRATEINFO_1_1, (uint32)CAN_BAUDRATEINFO_2_1, (uint32)CAN_BAUDRATEINFO_3_1 }   /* Baudrate Switch Number00 */
+     { (uint32)CAN_500KBPS_10M_PTN2 , (uint32)CAN_DB_500KBPS_10M_PTN2 , (uint32)CAN_BAUDRATEINFO_1_1, (uint32)CAN_BAUDRATEINFO_2_1, (uint32)CAN_BAUDRATEINFO_3_1 }   /* [0] Baudrate Switch Number00 */
   /*================================================================== User define Area [End] ====================================================================*/
 };
 
@@ -125,10 +129,11 @@ CanConst uint8 Can_stBRSwtCfgTbl_ARYSIZE = CAN_CFG_BRSCFGTBL_SIZE;
 /* History                                                                  */
 /*  Version        :Date                                                    */
 /*  v2-2-0         :2020/02/26                                              */
+/*  v3-0-0         :2025/02/13                                              */
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
-/*  Framework          :v2-0-3-z0003                                        */
+/*  Framework          :v2-1-0                                              */
 /*  BSW plug-in        :v3-0-0                                              */
 /****************************************************************************/
 

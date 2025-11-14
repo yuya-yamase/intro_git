@@ -1,7 +1,7 @@
 /* Fee_Record_Internal.h v2-0-0                                             */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION. All rights reserved.                        */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -22,9 +22,9 @@
 /*--------------------------------------------------------------------------*/
 /* Macros                                                                   */
 /*--------------------------------------------------------------------------*/
-#define FEE_SRCH_REMAIN_CNT_OFFSET  (1U)    /* 検索処理可能回数から検索終了アドレスを算出するためのオフセット */
+#define FEE_SRCH_REMAIN_CNT_OFFSET  (1U)    /* Offset for calculating the search end address from the number of times the search can be processed */
 
-#define FEE_OVER_MAXRETRYNUM_OFFSET (1U)    /* 最大リトライ回数超過判定時のオフセット */
+#define FEE_OVER_MAXRETRYNUM_OFFSET (1U)    /* Offset when judging maximum number of retries exceeded */
 
 #define FEE_RECORD_ROUNDUP_CALC_ADDNUM_VAL    (1U)
 #define FEE_RECORD_ROUNDUP_CALC_MASKNUM_VAL   (0xFFFFU)
@@ -100,19 +100,19 @@ Fee_Record_SrchSpcDatArea(
     P2VAR  ( uint32,         AUTOMATIC, TYPEDEF )         ptu4WriteLastRecDatAbsAddr
 );
 
-/* レコード書込み状態管理(アイドル) */
+/* Record write status management (idle) */
 FUNC(uint32, FEE_CODE) Fee_WriteRecord_DoIdle( P2VAR(Fee_CpuDtfType, AUTOMATIC, TYPEDEF) ptstCPUDTFInfo );
-/* レコード書込み状態管理(書込み位置検索中) */
+/* Record write status management (searching for write location) */
 FUNC(uint32, FEE_CODE) Fee_WriteRecord_DoSrchWritePosMng( P2VAR(Fee_CpuDtfType, AUTOMATIC, TYPEDEF) ptstCPUDTFInfo );
-/* レコード書込み状態管理(書込みレコード位置(データ)検索開始) */
+/* Record write status management (start search for write record position (data)) */
 FUNC(uint32, FEE_CODE) Fee_WriteRecord_DoStartSrchPosDat( P2VAR(Fee_CpuDtfType, AUTOMATIC, FEE_VAR_NO_INIT) ptstCPUDTFInfo );
-/* レコード書込み状態管理(書込みレコード位置(データ)検索中) */
+/* Record write status management (searching write record position (data)) */
 FUNC(uint32, FEE_CODE) Fee_WriteRecord_DoSrchWritePosDat( P2VAR(Fee_CpuDtfType, AUTOMATIC, FEE_VAR_NO_INIT) ptstCPUDTFInfo );
-/* レコード書込み状態管理(旧データ検索準備中) */
+/* Record write status management (preparing to retrieve old data) */
 FUNC(uint32, FEE_CODE) Fee_WriteRecord_DoPrepSrchOldRecord( P2VAR(Fee_CpuDtfType, AUTOMATIC, FEE_VAR_NO_INIT) ptstCPUDTFInfo );
-/* レコード書込み状態管理(旧データ検索中) */
+/* Record write status management (old data retrieval) */
 FUNC(uint32, FEE_CODE) Fee_WriteRecord_DoSrchOldRecord( P2VAR(Fee_CpuDtfType, AUTOMATIC, TYPEDEF) ptstCPUDTFInfo );
-/* レコード書込み状態管理(データ書き込み中) */
+/* Record write status management (writing data) */
 FUNC(uint32, FEE_CODE) Fee_WriteRecord_DoWriteNewRecord( P2VAR(Fee_CpuDtfType, AUTOMATIC, TYPEDEF) ptstCPUDTFInfo );
 
 FUNC( uint32, FEE_CODE )

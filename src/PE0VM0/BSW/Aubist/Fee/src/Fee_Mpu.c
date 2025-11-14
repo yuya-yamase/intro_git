@@ -1,7 +1,7 @@
 /* Fee_Mpu.c v2-0-0                                                         */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION. All rights reserved.                        */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -27,8 +27,8 @@
 #include <Fee_MemMap.h>
 
 /****************************************************************************/
-/* Function Name | Fee_Mpu_Init                                         */
-/* Description   | ユニットを初期化する                                     */
+/* Function Name | Fee_Mpu_Init                                             */
+/* Description   | Initialize the unit                                      */
 /* Preconditions |                                                          */
 /* Parameters    | None                                                     */
 /* Return Value  | None                                                     */
@@ -41,12 +41,12 @@ Fee_Mpu_Init( void ){
 }
 
 /****************************************************************************/
-/* Function Name | Fee_Mpu_FlashAccessCheck                             */
-/*               | （Flashアクセス可否判定）                                */
-/* Description   | Flashアクセス可否を判定する                              */
+/* Function Name | Fee_Mpu_FlashAccessCheck                                 */
+/*               | (Flash access permission decision)                       */
+/* Description   | Determine Flash access                                   */
 /* Preconditions |                                                          */
 /* Parameters    | None                                                     */
-/* Return Value  | uint32 : Flashアクセス可否状態                       */
+/* Return Value  | uint32 : Flash accessibility status                      */
 /* Notes         | None                                                     */
 /****************************************************************************/
 FUNC(uint32, FEE_CODE) 

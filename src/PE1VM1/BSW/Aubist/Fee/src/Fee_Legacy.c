@@ -1,7 +1,7 @@
 /* Fee_Legacy.c v2-0-0                                                      */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION. All rights reserved.                        */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -16,10 +16,10 @@
 
 #include "../inc/Fee_Mpu_Dev_Const.h"
 
-/* MHA[データFlash]I/Fヘッダ */
+/* MHA (Data Flash) I/F header */
 #include "../inc/Fee_Legacy.h"
 
-/* MHA[データFlash]ヘッダ */
+/* MHA header */
 #include "../inc/Fee_Lib.h"
 
 
@@ -33,23 +33,23 @@
 /*--------------------------------------------------------------------------*/
 /* Macros                                                                   */
 /*--------------------------------------------------------------------------*/
-/* ↓↓↓コンフィグ設定（ユーザ編集不可）↓↓↓ */
+/*      CONFIGURE SETTING (user can not edit)    */
 
-/* エリアステータスデータ１のオフセット */
+/* Offset of area status data 1 */
 #define FEE_AREASTATUSPOS1      ((uint8)0x00U)
-/* エリアステータスデータ２のオフセット */
+/* Offset of area status data 2 */
 #define FEE_AREASTATUSPOS2      ((uint8)(FEE_AREASTATUSPOS1 + (FEE_READ_UNIT_SIZE * 7U)))
-/* ブロックステータスデータ【使用済１】のオフセット */
+/* Offset of block status data "Used 1" */
 #define FEE_BLS_USEDPOS1            ((uint8)(FEE_READ_UNIT_SIZE * 1U))
-/* ブロックステータスデータ【使用済２】のオフセット */
+/* Offset of block status data "Used 2" */
 #define FEE_BLS_USEDPOS2            ((uint8)(FEE_BLS_USEDPOS1 + (FEE_READ_UNIT_SIZE * 5U)))
-/* ブロックステータスデータ【転送中１】のオフセット */
+/* Offset of block status data "Transferring 1" */
 #define FEE_BLS_MOVEPOS1            ((uint8)(FEE_READ_UNIT_SIZE * 2U))
-/* ブロックステータスデータ【転送中２】のオフセット */
+/* Offset of block status data "Transferring 2" */
 #define FEE_BLS_MOVEPOS2            ((uint8)(FEE_BLS_MOVEPOS1 + (FEE_READ_UNIT_SIZE * 3U)))
-/* ブロックステータスデータ【使用中１】のオフセット */
+/* Offset of block status data "In use 1" */
 #define FEE_BLS_USEPOS1         ((uint8)(FEE_READ_UNIT_SIZE * 3U))
-/* ブロックステータスデータ【使用中２】のオフセット */
+/* Offset of block status data "In use 2" */
 #define FEE_BLS_USEPOS2         ((uint8)(FEE_BLS_USEPOS1 + (FEE_READ_UNIT_SIZE * 1U)))
 
 /*--------------------------------------------------------------------------*/
@@ -62,21 +62,21 @@
 #define FEE_START_SEC_CONST_32
 #include <Fee_MemMap.h>
 
-/* 書込みHardware待ち時間閾値 */
+/* Write Hardware latency threshold */
 CONST(AB_83_ConstV uint32, FEE_CONST) Fee_HwLmtWriteTime = FEE_TIMEOUT_PERIODIC_FLS_WRITE;
-/* エリア・ブロックステータスデータアドレス */
-/* 定義の順番は、ブロックステータス種別の順番に合わせること */
+/* Area block status data address */
+/* Order definitions to match order of block status type */
 CONST(AB_83_ConstV uint8, FEE_CONST) Fee_ASBSDataTBL[FEE_ASBSDATASETNUM][FEE_ASBSDATAKINDNUM] = 
 {
-    {FEE_AREASTATUSPOS1,        /* エリアステータスデータ１ */
-    FEE_BLS_USEPOS1,            /* ブロックステータスデータ【使用中１】 */
-    FEE_BLS_MOVEPOS1,           /* ブロックステータスデータ【転送中１】 */
-    FEE_BLS_USEDPOS1},          /* ブロックステータスデータ【使用済１】 */
+    {FEE_AREASTATUSPOS1,        /* Area Status Data 1 */
+    FEE_BLS_USEPOS1,            /* Block status data [in use 1] */
+    FEE_BLS_MOVEPOS1,           /* Block status data [Transferring 1] */
+    FEE_BLS_USEDPOS1},          /* Block status data [used 1] */
 
-    {FEE_AREASTATUSPOS2,        /* エリアステータスデータ２ */
-    FEE_BLS_USEPOS2,            /* ブロックステータスデータ【使用中２】 */
-    FEE_BLS_MOVEPOS2,           /* ブロックステータスデータ【転送中２】 */
-    FEE_BLS_USEDPOS2}           /* ブロックステータスデータ【使用済２】 */
+    {FEE_AREASTATUSPOS2,        /* Area Status Data 2 */
+    FEE_BLS_USEPOS2,            /* Block status data [in use 2] */
+    FEE_BLS_MOVEPOS2,           /* Block status data [Transferring 2] */
+    FEE_BLS_USEDPOS2}           /* Block status data [used2 ] */
 };
 
 #define FEE_STOP_SEC_CONST_32

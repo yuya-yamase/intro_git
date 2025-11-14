@@ -1,14 +1,14 @@
 /* Fee_DevCallout.h v1-0-0                                                  */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION. All rights reserved.                        */
 /****************************************************************************/
 
 /****************************************************************************/
 /* Object Name  | FEE/DEV_CALLOUT/HEADER                                    */
 /*--------------------------------------------------------------------------*/
 /* Notes        | Caution: Do not change this file by application users.    */
-/*              |          This file permits AUBASS developers to change.   */
+/*              |          This file permits DENSO developers to change.   */
 /****************************************************************************/
 
 #ifndef FEE_DEVCALLOUT_H

@@ -11,7 +11,7 @@
 /*	DMA common configuration																	*/
 /*==============================================================================================*/
 /* Total number of channels using Dma */
-#define	DMA_UCFG_CHDATA_NUM				(6u)
+#define	DMA_UCFG_CHDATA_NUM				(7u)
 
 /* Uninterruptible/Uninterruptible */
 #define DMA_ENTER_CRITICAL_SECTION()			SuspendAllInterrupts()							/* Do not interrupt */
@@ -75,6 +75,13 @@
 #define	DMA_UCFG_CHDATA5_HWCH				(PIL_DMAC_CH5)						/* See DMA_UCFG_CHDATA0_HWCH for range			*/
 #define	DMA_UCFG_CHDATA5_PRILEVEL			(DMA_PRIORITY_NOUSE)				/* See DMA_UCFG_CHDATA0_PRILEVEL for range		*/
 #define	DMA_UCFG_CHDATA5_NOTIFICATION		(NULL_PTR)							/* See DMA_UCFG_CHDATA0_NOTIFICATION for range	*/
+
+/* [DMA_CH_DATA_ID_6] config */
+#define	DMA_UCFG_CHDATA6_TYPE				(DMA_DMAC0)							/* See DMA_UCFG_CHDATA0_TYPE			*/
+#define	DMA_UCFG_CHDATA6_REQ				(PIL_DMAC_GR0_INTRLIN311UR1)		/* See DMA_UCFG_CHDATA0_REQ for range			*/
+#define	DMA_UCFG_CHDATA6_HWCH				(PIL_DMAC_CH10)						/* See DMA_UCFG_CHDATA0_HWCH for range			*/
+#define	DMA_UCFG_CHDATA6_PRILEVEL			(DMA_PRIORITY_NOUSE)				/* See DMA_UCFG_CHDATA0_PRILEVEL for range		*/
+#define	DMA_UCFG_CHDATA6_NOTIFICATION		(NULL_PTR)							/* See DMA_UCFG_CHDATA0_NOTIFICATION for range	*/
 
 
 /*-- End Of File -------------------------------------------------------------------------------*/

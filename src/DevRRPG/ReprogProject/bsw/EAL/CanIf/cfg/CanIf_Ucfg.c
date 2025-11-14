@@ -64,20 +64,20 @@ CONST(CanIf_RxPduSettingConfigType, CANIF_CONFIG_DATA) CanIf_Ucfg_RxPduSetting_D
         CANIF_UCFG_HRHINDX_1,
         CANIF_UCFG_RXPDUCANIDTYPE_1
     },
-    {                                       /* ^^^ */
-        CANIF_UCFG_RXINDICATIONFUNC_2,      /* ^^^ */
-        CANIF_UCFG_RXPDUCANID_2,            /* ^^^ */
-        CANIF_RXPDUID_2,                    /* ^^^ */
-        CANIF_UCFG_HRHINDX_2,               /* ^^^ */
-        CANIF_UCFG_RXPDUCANIDTYPE_2         /* ^^^ */
-    },                                      /* ^^^ */
     {
-        CANIF_UCFG_RXINDICATIONFUNC_3,      /* ^^^ */
-        CANIF_UCFG_RXPDUCANID_3,            /* ^^^ */
-        CANIF_RXPDUID_3,                    /* ^^^ */
-        CANIF_UCFG_HRHINDX_3,               /* ^^^ */
-        CANIF_UCFG_RXPDUCANIDTYPE_3         /* ^^^ */
-    }                                       /* ^^^ */
+        CANIF_UCFG_RXINDICATIONFUNC_2,
+        CANIF_UCFG_RXPDUCANID_2,
+        CANIF_RXPDUID_2,
+        CANIF_UCFG_HRHINDX_2,
+        CANIF_UCFG_RXPDUCANIDTYPE_2
+    },
+    {
+        CANIF_UCFG_RXINDICATIONFUNC_3,
+        CANIF_UCFG_RXPDUCANID_3,
+        CANIF_RXPDUID_3,
+        CANIF_UCFG_HRHINDX_3,
+        CANIF_UCFG_RXPDUCANIDTYPE_3
+    }
 };
 
 CONST(CanIf_TxPduSettingConfigType, CANIF_CONFIG_DATA) CanIf_Ucfg_TxPduSetting_Data[CANIF_UCFG_TXPDUNUM] = {
@@ -87,13 +87,13 @@ CONST(CanIf_TxPduSettingConfigType, CANIF_CONFIG_DATA) CanIf_Ucfg_TxPduSetting_D
         CANIF_TXPDUID_0,
         CANIF_UCFG_HTHINDX_0,
         CANIF_UCFG_TXPDUCANIDTYPE_0
-    },                                      /* ^^^ */
-    {                                       /* ^^^ */
-        CANIF_UCFG_TXCONFIRMATIONFUNC_1,    /* ^^^ */
-        CANIF_UCFG_TXPDUCANID_1,            /* ^^^ */
-        CANIF_TXPDUID_1,                    /* ^^^ */
-        CANIF_UCFG_HTHINDX_1,               /* ^^^ */
-        CANIF_UCFG_TXPDUCANIDTYPE_1         /* ^^^ */
+    },
+    {
+        CANIF_UCFG_TXCONFIRMATIONFUNC_1,
+        CANIF_UCFG_TXPDUCANID_1,
+        CANIF_TXPDUID_1,
+        CANIF_UCFG_HTHINDX_1,
+        CANIF_UCFG_TXPDUCANIDTYPE_1
     }
 };
 
@@ -122,5 +122,10 @@ CONST(CanIf_TxPduSettingConfigType, CANIF_CONFIG_DATA) CanIf_Ucfg_TxPduSetting_D
 /*  v1.00       :2017/10/17 :New                                   rel.AUBASS */
 /*----------------------------------------------------------------------------*/
 /* Notes        |                                                             */
+/****************************************************************************/
+/* AUBIST Configurator Version                                              */
+/*  Framework          :v2-1-0                                              */
+/*  BSW plug-in        :v2-0-0                                              */
+/****************************************************************************/
 /**** End of File *************************************************************/
 

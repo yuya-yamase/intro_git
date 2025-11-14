@@ -1,7 +1,7 @@
 /* Fee_Idread_Internal.h v1-0-0                                             */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION. All rights reserved.                        */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -31,13 +31,13 @@
 #define FEE_START_SEC_CODE
 #include <Fee_MemMap.h>
 
-/* ID指定データ読出し状態管理(アイドル) */
+/* ID-specified data read status management (idle) */
 FUNC(uint32, FEE_CODE) Fee_ReadMainSelectReadBlock( P2VAR(Fee_CpuDtfType, AUTOMATIC, TYPEDEF) ptstCPUDTFInfo );
-/* ID指定データ読出し状態管理(空き領域検索中) */
+/* ID-specified data read status management (searching for free space) */
 FUNC(uint32, FEE_CODE) Fee_ReadMainSrchFreeSpace( P2VAR(Fee_CpuDtfType, AUTOMATIC, TYPEDEF) ptstCPUDTFInfo );
-/* ID指定データ読出し状態管理(ID指定データ読出し準備中) */
+/* ID-specified data read status management (preparing to read ID-specified data) */
 FUNC(uint32, FEE_CODE) Fee_ReadMainPrepSrchReadData( P2VAR(Fee_CpuDtfType, AUTOMATIC, FEE_VAR_NO_INIT) ptstCPUDTFInfo );
-/* ID指定データ読出し状態管理(ID指定データ読出し中) */
+/* ID-specified data reading status management (ID-specified data reading) */
 FUNC(uint32, FEE_CODE) Fee_ReadMainSrchReadData( P2VAR(Fee_CpuDtfType, AUTOMATIC, TYPEDEF) ptstCPUDTFInfo );
 
 #define FEE_STOP_SEC_CODE

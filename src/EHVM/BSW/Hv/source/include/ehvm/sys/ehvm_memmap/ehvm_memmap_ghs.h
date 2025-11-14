@@ -92,7 +92,7 @@
 #else
     .previous 
 #endif
-#undef EHVM_STOP_SEC_STACK
+#undef EHVM_STOP_SEC_ROSDATA
 #undef MEMMAP_ERROR
 
 /*
@@ -193,15 +193,15 @@
     .section ".bss.ehvm.global", "awb"
 /*    .align unspecified */
 #endif
-#undef EHVM_START_SEC_BSS
+#undef EHVM_START_SEC_BSS_GLOBAL
 #undef MEMMAP_ERROR
-#elif defined EHVM_STOP_SEC_BSS
+#elif defined EHVM_STOP_SEC_BSS_GLOBAL
 #ifndef _in_asm_source_
 #pragma ghs section bss=default
 #else
     .previous 
 #endif
-#undef EHVM_STOP_SEC_BSS
+#undef EHVM_STOP_SEC_BSS_GLOBAL
 #undef MEMMAP_ERROR
 
 /*

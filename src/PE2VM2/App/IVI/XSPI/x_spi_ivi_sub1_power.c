@@ -20,10 +20,11 @@
 #include    "x_spi_ivi_sub1_power.h"
 #include    "Dio.h"
 #include    "Dio_Symbols.h"
-#include    "Iohw_adc.h"
+#include    "iohw_adc_sh.h"
 #include    "PwrCtl.h"
 #include    "BootLogCtl.h"
 #include    "veh_opemd.h"
+#include    "ivdsh.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -159,6 +160,9 @@
 #define     MCU_PORT_GPS_RST                    (22U)        /* (DIO_ID_APORT4_CH8)  */
 #define     MCU_PORT_NUM                        (23U)
 #endif
+
+/*SoC Status Data Length*/
+#define     XSPI_IVI_POWER_VMTRA_LEN            (1U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
@@ -556,15 +560,33 @@ static void            vd_s_XspiIviSub1PowerOperationStsSend(const U1 u1_a_DATA)
 {
     /*動作ステータス応答*/    
     U1 u1_tp_data[XSPI_IVI_POWER_OPESTS_SIZE];
+    U2 u2_t_boot_cnt;
+    U4 u4_t_time;
+    U4 u4_t_buf;
+    U1 u1_t_vm_ret;
+
+    u2_t_boot_cnt = (U2)0U;
+    u4_t_time = (U4)0U;
+
+    /*起動回数取得*/
+    u1_t_vm_ret = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_CPREQ_048, &u4_t_buf, (U2)XSPI_IVI_POWER_VMTRA_LEN);
+    if(u1_t_vm_ret != (U1)IVDSH_NO_REA) {
+        u2_t_boot_cnt = (U2)(u4_t_buf & 0x0000FFFFU);
+    }
+    /*起動カウンタ*/
+    u1_t_vm_ret = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_CPREQ_049, &u4_t_buf, (U2)XSPI_IVI_POWER_VMTRA_LEN);
+    if(u1_t_vm_ret != (U1)IVDSH_NO_REA) {
+        u4_t_time = u4_t_buf;
+    }
 
     u1_tp_data[0] = (U1)XSPI_IVI_POWER_OPESTS_SEND;
     u1_tp_data[1] = u1_a_DATA;
-    u1_tp_data[2] = (U1)0U; /*暫定 起動回数カウンタ*/
-    u1_tp_data[3] = (U1)0U; /*暫定 起動回数カウンタ*/
-    u1_tp_data[4] = (U1)0U; /*暫定 Tick Time*/
-    u1_tp_data[5] = (U1)0U; /*暫定 Tick Time*/
-    u1_tp_data[6] = (U1)0U; /*暫定 Tick Time*/
-    u1_tp_data[7] = (U1)0U; /*暫定 Tick Time*/
+    u1_tp_data[2] = (U1)((u2_t_boot_cnt  & (U2)0xFF00U) >>  (U4)XSPI_IVI_SFT_08);
+    u1_tp_data[3] = (U1)(u2_t_boot_cnt  & (U2)0x00FFU);
+    u1_tp_data[4] = (U1)((u4_t_time  & (U4)0xFF000000U) >>  (U4)XSPI_IVI_SFT_24);
+    u1_tp_data[5] = (U1)((u4_t_time  & (U4)0x00FF0000U) >>  (U4)XSPI_IVI_SFT_16);
+    u1_tp_data[6] = (U1)((u4_t_time  & (U4)0x0000FF00U) >>  (U4)XSPI_IVI_SFT_08);
+    u1_tp_data[7] = (U1)(u4_t_time  & (U4)0x000000FFU);
 
     vd_s_XspiIviSub1PowerDataToQueue((U2)XSPI_IVI_POWER_OPESTS_SIZE,u1_tp_data);
 }
@@ -653,7 +675,13 @@ static void            vd_s_XspiIviSub1_PowerStateTransRec(const U1 * u1_ap_XSPI
 /*===================================================================================================================================*/
 static void            vd_s_XspiIviSub1PowerOperationStsRec(const U1 * u1_ap_XSPI_ADD)
 {
-    /*動作ステータス通知*/    
+    /*動作ステータス通知*/
+    U4  u4_t_data;
+    /*VM3に通知*/
+    u4_t_data = (U4)u1_ap_XSPI_ADD[1];
+    u4_t_data |= (U4)((u1_ap_XSPI_ADD[2] << XSPI_IVI_SFT_08) & 0x0000FF00U);
+    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_CPREQ_047, &u4_t_data, (U2)XSPI_IVI_POWER_VMTRA_LEN);
+
     vd_s_XspiIviSub1PowerOperationStsSend(u1_ap_XSPI_ADD[1]);
 
     /*暫定:Skip SoCからのリセット要求*/

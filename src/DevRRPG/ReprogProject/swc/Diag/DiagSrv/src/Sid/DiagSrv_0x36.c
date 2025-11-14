@@ -687,7 +687,7 @@ static FUNC(uint8, DIAGSRV_CODE_FAST) DiagSrv_0x36_Time_DecmpWrite (void)
 /******************************************************************************/
 static FUNC(uint8, DIAGSRV_CODE_FAST) DiagSrv_0x36_Time_SigVerify (void)
 {
-#if 0	/* @@@ */
+#if 0   /* @@@ T.Inoue start : without Crypto_sw */
     VAR(uint8, AUTOMATIC) Status;
     VAR(uint8, AUTOMATIC) JobResult;
     VAR(uint8, AUTOMATIC) Nrc;
@@ -706,8 +706,10 @@ static FUNC(uint8, DIAGSRV_CODE_FAST) DiagSrv_0x36_Time_SigVerify (void)
         }
     }
 
-#endif	/* @@@ */
-    return DIAG_NRC_PR;	/* @@@ */
+    return Nrc;
+#else
+    return DIAG_NRC_PR;
+#endif  /* @@@ T.Inoue end : without Crypto_sw */
 }
 
 /******************************************************************************/
@@ -1544,7 +1546,7 @@ static FUNC(uint8, DIAGSRV_CODE_FAST) DiagSrv_0x36_SigVerify (void)
 {
     VAR(uint8, AUTOMATIC) Nrc;
 
-#if 0	/* @@@ */
+#if 0   /* @@@ T.Inoue start : without Crypto_sw */
     Nrc = DIAG_NRC_PR;
 
     if( DiagSrv_0x36_VerifyInfo.AvailableSize > (uint32)0UL )
@@ -1557,9 +1559,10 @@ static FUNC(uint8, DIAGSRV_CODE_FAST) DiagSrv_0x36_SigVerify (void)
         DiagSrv_0x36_Status = DIAGSRV_0X36_STAT_WAIT_SIGVERIFY;
         Nrc = DIAG_NRC_RCRRP;
     }
-#endif	/* @@@ */
-    DiagSrv_0x36_Status = DIAGSRV_0X36_STAT_WAIT_SIGVERIFY;	/* @@@ */
-    Nrc = DIAG_NRC_RCRRP;	/* @@@ */
+#else
+    DiagSrv_0x36_Status = DIAGSRV_0X36_STAT_WAIT_SIGVERIFY;
+    Nrc = DIAG_NRC_RCRRP;
+#endif  /* @@@ T.Inoue end : without Crypto_sw */
 
     return Nrc;
 }

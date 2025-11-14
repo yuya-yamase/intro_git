@@ -11,6 +11,7 @@
 /*	include files																				*/
 /*==============================================================================================*/
 #include	"Std_Types.h"
+#include	"gpt_busywait.h"
 #include	"Spi_Ucfg.h"
 
 #include	"Dma.h"
@@ -21,24 +22,6 @@
 /*==============================================================================================*/
 /*	prototypes																					*/
 /*==============================================================================================*/
-#if ( SPI_CFG_SENDDMASTOP_TIMEOUT < PIL_SPI_WAIT_MAX )
-extern void Esr_Ap_Spi_SendDmaStop_TimeOutError( void );
-#if ( SPI_CFG_MODEC_FSLEVEL == SPI_ASIL )
-extern void Esr_Ap_Spi_SendDmaStop_AsilTimeOutError( void );
-#endif
-#endif
-
-#if ( SPI_CFG_RECEIVEDMASTOP_TIMEOUT < PIL_SPI_WAIT_MAX )
-extern void Esr_Ap_Spi_ReceiveDmaStop_TimeOutError( void );
-#if ( SPI_CFG_MODEC_FSLEVEL == SPI_ASIL )
-extern void Esr_Ap_Spi_ReceiveDmaStop_AsilTimeOutError( void );
-#endif
-#endif
-
-#if ( SPI_CFG_ASYNCDMASTART_TIMEOUT < PIL_SPI_WAIT_MAX )
-extern void Esr_Ap_Spi_AsyncDmaStart_TimeOutError( void );
-#endif
-
 #ifdef JGXSTACK
 void SYNC_stack_s_cstSpi_UcfgModeCChannelData_u4NotifId( const S4* t_pcs4Param );
 #endif
@@ -295,15 +278,9 @@ ZORN	Spi_AsyncTransmit( U1 t_u1ModeCChannelID, const Spi_ModeC_DataType* t_pcstS
 			/* タイムアウト判定 */
 			if( t_u4CountVal >= (U4)SPI_CFG_SENDDMASTOP_TIMEOUT )
 			{
-				/* タイムアウト通知処理 */
-#if ( SPI_CFG_MODEC_FSLEVEL == SPI_ASIL )
-				Esr_Ap_Spi_SendDmaStop_AsilTimeOutError();
-#else
-				Esr_Ap_Spi_SendDmaStop_TimeOutError();
-#endif
 				break;
 			}
-			LIB_Wait( u4PIL_SPI_WAIT_1US );
+			vd_g_Gpt_BusyWait( GPT_BUSY_WAIT_1_US );
 			t_u4CountVal++;														/* @qac 3383:ラップアラウンドしない */
 #endif
 		}
@@ -329,15 +306,9 @@ ZORN	Spi_AsyncTransmit( U1 t_u1ModeCChannelID, const Spi_ModeC_DataType* t_pcstS
 			/* タイムアウト判定 */
 			if( t_u4CountVal >= (U4)SPI_CFG_RECEIVEDMASTOP_TIMEOUT )
 			{
-				/* タイムアウト通知処理 */
-#if ( SPI_CFG_MODEC_FSLEVEL == SPI_ASIL )
-				Esr_Ap_Spi_ReceiveDmaStop_AsilTimeOutError();
-#else
-				Esr_Ap_Spi_ReceiveDmaStop_TimeOutError();
-#endif
 				break;
 			}
-			LIB_Wait( u4PIL_SPI_WAIT_1US );
+			vd_g_Gpt_BusyWait( GPT_BUSY_WAIT_1_US );
 			t_u4CountVal++;														/* @qac 3383:ラップアラウンドしない */
 #endif
 		}
@@ -371,10 +342,9 @@ ZORN	Spi_AsyncTransmit( U1 t_u1ModeCChannelID, const Spi_ModeC_DataType* t_pcstS
 				/* タイムアウト判定 */
 				if( t_u4CountVal >= (U4)SPI_CFG_ASYNCDMASTART_TIMEOUT )
 				{
-					Esr_Ap_Spi_AsyncDmaStart_TimeOutError();					/* タイムアウト通知処理 */
 					break;
 				}
-				LIB_Wait( u4PIL_SPI_WAIT_1US );
+				vd_g_Gpt_BusyWait( GPT_BUSY_WAIT_1_US );
 				t_u4CountVal++;													/* @qac 3383:ラップアラウンドしない */
 #endif
 			}while ( t_u2Data >= t_u2Times );
@@ -457,15 +427,9 @@ void	Spi_CancelAsyncTransmit( U1 t_u1ModeCChannelID )
 		/* タイムアウト判定 */
 		if( t_u4CountVal >= (U4)SPI_CFG_SENDDMASTOP_TIMEOUT )
 		{
-			/* タイムアウト通知処理 */
-#if ( SPI_CFG_MODEC_FSLEVEL == SPI_ASIL )
-			Esr_Ap_Spi_SendDmaStop_AsilTimeOutError();
-#else
-			Esr_Ap_Spi_SendDmaStop_TimeOutError();
-#endif
 			break;
 		}
-		LIB_Wait( u4PIL_SPI_WAIT_1US );
+		vd_g_Gpt_BusyWait( GPT_BUSY_WAIT_1_US );
 		t_u4CountVal++;														/* @qac 3383:ラップアラウンドしない */
 #endif
 	}
@@ -479,15 +443,9 @@ void	Spi_CancelAsyncTransmit( U1 t_u1ModeCChannelID )
 		/* タイムアウト判定 */
 		if( t_u4CountVal >= (U4)SPI_CFG_RECEIVEDMASTOP_TIMEOUT )
 		{
-			/* タイムアウト通知処理 */
-#if ( SPI_CFG_MODEC_FSLEVEL == SPI_ASIL )
-			Esr_Ap_Spi_ReceiveDmaStop_AsilTimeOutError();
-#else
-			Esr_Ap_Spi_ReceiveDmaStop_TimeOutError();
-#endif
 			break;
 		}
-		LIB_Wait( u4PIL_SPI_WAIT_1US );
+		vd_g_Gpt_BusyWait( GPT_BUSY_WAIT_1_US );
 		t_u4CountVal++;														/* @qac 3383:ラップアラウンドしない */
 #endif
 	}
@@ -710,10 +668,9 @@ void	Spi_DeInit( void )/* 使用しているチャネルのみDeInit。 */
 			/* タイムアウト判定 */
 			if( t_u4CountVal >= (U4)SPI_CFG_SENDDMASTOP_TIMEOUT )
 			{
-				Esr_Ap_Spi_SendDmaStop_TimeOutError();						/* タイムアウト通知処理 */
 				break;
 			}
-			LIB_Wait( u4PIL_SPI_WAIT_1US );
+			vd_g_Gpt_BusyWait( GPT_BUSY_WAIT_1_US );
 			t_u4CountVal++;													/* @qac 3383:ラップアラウンドしない */
 #endif
 		}
@@ -727,10 +684,9 @@ void	Spi_DeInit( void )/* 使用しているチャネルのみDeInit。 */
 			/* タイムアウト判定 */
 			if( t_u4CountVal >= (U4)SPI_CFG_RECEIVEDMASTOP_TIMEOUT )
 			{
-				Esr_Ap_Spi_ReceiveDmaStop_TimeOutError();					/* タイムアウト通知処理 */
 				break;
 			}
-			LIB_Wait( u4PIL_SPI_WAIT_1US );
+			vd_g_Gpt_BusyWait( GPT_BUSY_WAIT_1_US );
 			t_u4CountVal++;													/* @qac 3383:ラップアラウンドしない */
 #endif
 		}

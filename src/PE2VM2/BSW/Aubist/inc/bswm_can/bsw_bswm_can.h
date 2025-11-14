@@ -33,6 +33,9 @@
 #define BswM_Can_MainFunctionMidIn       (bsw_bswm_can_st_MainFuncMidIn)
 #define BswM_Can_MainFunctionMidCtrl     (bsw_bswm_can_st_MainFuncMidCtrl)
 #define BswM_Can_MainFunctionMidOut      (bsw_bswm_can_st_MainFuncMidOut)
+#define BswM_Can_MainFunctionPreComRx    (bsw_bswm_can_st_MainPreComRx)
+#define BswM_Can_MainFunctionPostComTx   (bsw_bswm_can_st_MainPostComTx)
+
 #define BswM_Can_DetectFail              (bsw_bswm_can_st_DetectFail)
 #define BswM_Can_CheckRam                (bsw_bswm_can_st_CheckRam)
 
@@ -76,7 +79,7 @@
 /* History                                                                  */
 /*  Version         :Date                                                   */
 /*  v2-0-0          :2021/12/09                                             */
-/*  v3-0-0          :2024/08/30                                             */
+/*  v3-0-0          :2025/01/29                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

@@ -27,7 +27,6 @@
 
 #define EM_ERROR_HEADDER_SIZE              (0x14U)
 #define EM_MESSAGE_ALIGN                   (0x04U)
-#define EM_MESSAGE_ALIGN_OFFSET            (0x03U)
 
 typedef struct {
     ehvm_uint32_t               timeStamp_high;

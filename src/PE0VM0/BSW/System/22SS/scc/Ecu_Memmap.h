@@ -91,6 +91,20 @@ extern uint32 __ghsbegin_bsw_n_nvar_withval_top[];
 extern uint32 __ghsbegin_bsw_n_nvar_ival_top[];
 extern uint32 BSW_N_NVAR_WITHVAL_SIZE[];
 
+extern uint32 __ghsbegin_bsw_sec_nvar_top[];
+extern uint32 BSW_SEC_NVAR_SIZE[];
+
+extern uint32 __ghsbegin_bsw_sec_nvar_withval_top[];
+extern uint32 __ghsbegin_bsw_sec_nvar_ival_top[];
+extern uint32 BSW_SEC_NVAR_WITHVAL_SIZE[];
+
+extern uint32 __ghsbegin_bsw_sec_hsm_nvar_top[];
+extern uint32 BSW_SEC_HSM_NVAR_SIZE[];
+
+extern uint32 __ghsbegin_bsw_sec_hsm_nvar_withval_top[];
+extern uint32 __ghsbegin_bsw_sec_hsm_nvar_ival_top[];
+extern uint32 BSW_SEC_HSM_NVAR_WITHVAL_SIZE[];
+
 extern uint32 __ghsbegin_bsw_e_nvar_withval_top[];
 extern uint32 __ghsbegin_bsw_e_nvar_ival_top[];
 extern uint32 BSW_E_NVAR_WITHVAL_SIZE[];

@@ -23,7 +23,6 @@
 /* bsw_com_tx_AddBit,GetBit related */
 #define BSW_COM_QUEKIND_EVENT           (0U)                    /* Specify event transmission queue      */
 #define BSW_COM_QUEKIND_PERIOD          (1U)                    /* Specify the periodic transmit queue   */
-#define BSW_COM_QUEKIND_RESPONSE        (2U)                    /* Specify the response transmit queue   */
 
 #define BSW_COM_BITIND_BYTEPOS_SHIFT    (3U)
 #define BSW_COM_BITIND_ROUNDUP_VALUE    (7U)
@@ -115,10 +114,11 @@ void                  bsw_com_tx_InitSendNTimes( void );
 void                  bsw_com_tx_InitSndNTimesNone( void );
 void                  bsw_com_tx_InitPrdStat( void );
 void                  bsw_com_tx_InitDelayTime( void );
-void                  bsw_com_tx_InitComTxStat( NetworkHandleType Network, BswU4* ptIpduGrpStat );
+void                  bsw_com_tx_InitComTxStat( NetworkHandleType Network, BswConstR BswU4* ptIpduGrpStat );
 void                  bsw_com_tx_ShutdownComTxStat( void );
 BswU1                 bsw_com_tx_GetPncIpduTxSt( NetworkHandleType Network, PduIdType u2PduId );
 BswU1                 bsw_com_tx_GetPncIpduTxStNone( NetworkHandleType Network, PduIdType u2PduId );
+void                  bsw_com_tx_InitTxTempBuf( void );
 
 /* Unit internal public definition */
 BswU2                 bsw_com_tx_NotifyPeriTxRtrgr( Bsw_Com_NetworkType u1Network, PduIdType u2PduId, BswU2 u2Time);
@@ -128,12 +128,12 @@ void                  bsw_com_tx_DelBit( Bsw_Com_NetworkType u1Network, PduIdTyp
 void                  bsw_com_tx_InitTxReqStat( PduIdType u2PduId );
 void                  bsw_com_tx_SetTxReqStat( PduIdType u2PduId, Bsw_Com_TxModeType u1TxMode );
 BswU1                 bsw_com_tx_GetTxReqStat( PduIdType u2PduId );
-void                  bsw_com_tx_TransmitCfm( PduIdType u2PduId );
+void                  bsw_com_tx_TransmitCfm( PduIdType u2PduId, Std_ReturnType u1Result );
 BswU2                 bsw_com_tx_TxTimeout( PduIdType u2PduId );
 void                  bsw_com_tx_InitTxReqStatNone( PduIdType u2PduId );
 void                  bsw_com_tx_SetTxReqStatNone( PduIdType u2PduId, Bsw_Com_TxModeType u1TxMode );
 BswU1                 bsw_com_tx_GetTxReqStatNone( PduIdType u2PduId );
-void                  bsw_com_tx_TransmitCfmNone( PduIdType u2PduId );
+void                  bsw_com_tx_TransmitCfmNone( PduIdType u2PduId, Std_ReturnType u1Result );
 BswU2                 bsw_com_tx_TxTimeoutNone( PduIdType u2PduId );
 void                  bsw_com_tx_ChgPrdIpduCnt( void );
 void                  bsw_com_tx_SendNTimesCnt( void );
@@ -177,7 +177,6 @@ void                  bsw_com_tx_CancelTxToutBusWkup( PduIdType u2PduId );
 void                  bsw_com_tx_CnclTxToutBusWkupNn( PduIdType u2PduId );
 void                  bsw_com_tx_CancelTxToutClrIpdu( PduIdType u2PduId );
 void                  bsw_com_tx_CnclTxToutClrIpduNn( PduIdType u2PduId );
-void                  bsw_com_tx_TimeoutTxMsgNone( PduIdType PduId );
 BswU2                 bsw_com_tx_GetTxFinDlyTimer( PduIdType u2PduId, Bsw_Com_TxModeType u1TxMode, BswU2 u2Offset );
 void                  bsw_com_tx_NotifyToutRtrgr( Bsw_Com_NetworkType u1Network, PduIdType u2PduId, Bsw_Com_TxModeType u1TxMode );
 void                  bsw_com_tx_UpdateTxStatus( BswU1 u1Ch );
@@ -187,15 +186,20 @@ void                  bsw_com_tx_ClearMDRmCh( NetworkHandleType Network );
 void                  bsw_com_tx_ClearMDRmChNone( NetworkHandleType Network );
 void                  bsw_com_tx_ClearMDRmMsg( Bsw_Com_NetworkType u1Network, PduIdType u2PduId );
 void                  bsw_com_tx_ClearMDRmMsgNone( Bsw_Com_NetworkType u1Network, PduIdType u2PduId );
-void                  bsw_com_tx_GetMetaDataTxMsg( PduIdType u2PduId, PduInfoType* ptSendMsg );
-void                  bsw_com_tx_GetMetaDataTxMsgNone( PduIdType u2PduId, PduInfoType* ptSendMsg );
+void                  bsw_com_tx_GetMetaDataTxMsg( PduIdType u2PduId, PduInfoType* ptSendMsg, Bsw_Com_RetStatusType s1QueExist );
+void                  bsw_com_tx_GetMetaDataTxMsgNone( PduIdType u2PduId, PduInfoType* ptSendMsg, Bsw_Com_RetStatusType s1QueExist );
+void                  bsw_com_tx_GetTxMsgUseMetaData( PduIdType u2PduId, PduInfoType* ptSendMsg, Bsw_Com_RetStatusType s1QueExist );
+void                  bsw_com_tx_GetTxMsg( PduIdType u2PduId, PduInfoType* ptSendMsg, Bsw_Com_RetStatusType s1QueExist );
 void                  bsw_com_tx_VPSTxIpduCalloutNone( PduIdType PduId, PduInfoType* PduInfoPtr );
+void                  bsw_com_tx_VPSTxConfNone( PduIdType TxPduId );
+void                  bsw_com_tx_VPSTxReqConfNone( PduIdType TxPduId );
 void                  bsw_com_tx_InitBitRsp( void );
 void                  bsw_com_tx_InitBitRspNone( void );
 void                  bsw_com_tx_InitChannelRsp( NetworkHandleType network );
 void                  bsw_com_tx_InitChannelRspNone( NetworkHandleType network );
+void                  bsw_com_tx_InitTempMetaDataBuf( void );
+void                  bsw_com_tx_InitTmpMetaBufNone( void );
 void                  bsw_com_tx_AddBitRsp( Bsw_Com_NetworkType u1Network, PduIdType u2PduId );
-void                  bsw_com_tx_AddBitRspNone( Bsw_Com_NetworkType u1Network, PduIdType u2PduId );
 void                  bsw_com_tx_DelBitRsp( Bsw_Com_NetworkType u1Network, PduIdType u2PduId );
 void                  bsw_com_tx_DelBitRspNone( Bsw_Com_NetworkType u1Network, PduIdType u2PduId );
 Bsw_Com_RetStatusType bsw_com_tx_GetBitRsp( Bsw_Com_NetworkType u1Network, PduIdType u2PduId );
@@ -203,7 +207,6 @@ Bsw_Com_RetStatusType bsw_com_tx_GetBitRspNone( Bsw_Com_NetworkType u1Network, P
 void                  bsw_com_tx_DelBitUseMD( Bsw_Com_NetworkType u1Network, PduIdType u2PduId, Bsw_Com_RetStatusType s1QueExist );
 void                  bsw_com_tx_DelBitUseMDNone( Bsw_Com_NetworkType u1Network, PduIdType u2PduId, Bsw_Com_RetStatusType s1QueExist );
 Std_ReturnType        bsw_com_tx_CheckMetaDataUpdated( PduIdType u2PduId );
-Std_ReturnType        bsw_com_tx_CheckMDUpdatedNone( PduIdType u2PduId );
 
 /*--------------------------------------------------------------------------*/
 /* Data                                                                     */
@@ -264,6 +267,8 @@ extern  BswConst BswU2            bsw_com_rom_u2SENDNTIMESMSGNUM;
 extern  BswConst BswU2            bsw_com_rom_u2TXLIM[];
 extern  BswConst BswU2            bsw_com_rom_u2BITINDCHTOP[];
 extern  BswConst BswU2            bsw_com_rom_u2EVDELAYTIME;
+extern  BswConst BswU2            bsw_com_rom_u2PRETXBUFSIZE;
+extern  BswConst BswU1            bsw_com_rom_u1TMPMETABUFSIZE;
 extern  BswConst BswU2            bsw_com_rom_u2PncPeriodicOffset[];
 extern  BswConst BswU1            bsw_com_rom_u1TXTIMEOUTMODE[];
 extern  BswConst BswU1            bsw_com_rom_u1TXREQCONTINUE[];
@@ -289,11 +294,10 @@ extern  void            (* BswConst bsw_com_rom_ptAlvCntrFuncTx[])( PduIdType u2
 extern  void            (* BswConst bsw_com_rom_ptInitTxReqStFunc)( PduIdType u2PduId );
 extern  void            (* BswConst bsw_com_rom_ptSetTxReqStFunc)( PduIdType u2PduId, Bsw_Com_TxModeType u1TxMode );
 extern  BswU1           (* BswConst bsw_com_rom_ptGetTxReqStFunc)( PduIdType u2PduId );
-extern  void            (* BswConst bsw_com_rom_ptTransCfmFunc)( PduIdType u2PduId );
+extern  void            (* BswConst bsw_com_rom_ptTransCfmFunc)( PduIdType u2PduId, Std_ReturnType u1Result );
 extern  BswU2           (* BswConst bsw_com_rom_ptTxTimeoutFunc)( PduIdType u2PduId );
 extern  void            (* BswConst bsw_com_rom_ptTxCnclToutBWFunc)( PduIdType u2PduId );
 extern  void            (* BswConst bsw_com_rom_ptTxCnclToutClrFunc)( PduIdType u2PduId );
-extern  void            (* BswConst bsw_com_rom_ptTxTimeoutHookFunc)( PduIdType PduId );
 extern  void            (* BswConst bsw_com_rom_ptSndNTimCntFunc)( void );
 extern  Bsw_Com_RetStatusType (* BswConst bsw_com_rom_ptChgPeriToNTimFunc)( PduIdType u2PduId, Bsw_Com_RetStatusType s1QueExist );
 extern  void            (* BswConst bsw_com_rom_ptSndNTimMsgFunc)( PduIdType u2PduId );
@@ -313,20 +317,21 @@ extern  BswU1           (* BswConst bsw_com_rom_ptGetPncIpduTxEnStFunc)( PduIdTy
 extern  void            (* BswConst bsw_com_rom_ptSetPncIpduPrOfsOnFunc)( PduIdType u2PduId );
 extern  BswU1           (* BswConst bsw_com_rom_ptGetPncChUseFunc)( NetworkHandleType Network );
 extern  void            (* BswConst bsw_com_rom_ptSetPncIpduFstDlyFunc)( PduIdType u2PduId, BswU1 u1PncUse );
-extern  void            (* BswConst bsw_com_rom_ptJdgPncTxStProcFunc)( BswU1 u1PncUse, BswU1 u1IpduChgSts, BswU1 u1PncIpduChgSts, BswU1* ptIpduProc, BswU1* ptIpduSubProc );
 extern  void            (* BswConst bsw_com_rom_ptUpdateTxStsFunc[])( BswU1 u1Ch );
 
 extern  void            (* BswConst bsw_com_rom_ptInitBitRspFunc)( void );
 extern  void            (* BswConst bsw_com_rom_ptInitChRspFunc)( NetworkHandleType network );
+extern  void            (* BswConst bsw_com_rom_ptInitTpMetaBufFunc)( void );
 extern  void            (* BswConst bsw_com_rom_ptDelBitRspFunc)( Bsw_Com_NetworkType u1Network, PduIdType u2PduId );
 extern  Bsw_Com_RetStatusType (* BswConst bsw_com_rom_ptGetBitRspFunc)( Bsw_Com_NetworkType u1Network, PduIdType u2PduId );
 extern  void            (* BswConst bsw_com_rom_ptDelBitUseMDFunc)( Bsw_Com_NetworkType u1Network, PduIdType u2PduId, Bsw_Com_RetStatusType s1QueExist );
 extern  void            (* BswConst bsw_com_rom_ptClrMDRmChFunc)( NetworkHandleType Network );
 extern  void            (* BswConst bsw_com_rom_ptClrMDRmMsgFunc)( Bsw_Com_NetworkType u1Network, PduIdType u2PduId );
-extern  void            (* BswConst bsw_com_rom_ptGetMDTxMsgFunc)( PduIdType u2PduId, PduInfoType* ptSendMsg );
-extern  Std_ReturnType  (* BswConst bsw_com_rom_ptChkMDUpdatedFunc)( PduIdType u2PduId );
+extern  void            (* BswConst bsw_com_rom_ptGetMDTxMsgFunc)( PduIdType u2PduId, PduInfoType* ptSendMsg, Bsw_Com_RetStatusType s1QueExist );
+extern  void            (* BswConst bsw_com_rom_ptGetTxMsgFunc)( PduIdType u2PduId, PduInfoType* ptSendMsg, Bsw_Com_RetStatusType s1QueExist );
 extern void             (* BswConst bsw_com_rom_ptVpsTxIpduCOFunc)( PduIdType PduId, PduInfoType* PduInfoPtr );
-
+extern void             (* BswConst bsw_com_rom_ptVpsTxConfFunc)( PduIdType TxPduId );
+extern void             (* BswConst bsw_com_rom_ptVpsTxReqConfFunc)( PduIdType TxPduId );
 #endif /* BSW_COM_TX_H */
 
 /****************************************************************************/
@@ -338,7 +343,7 @@ extern void             (* BswConst bsw_com_rom_ptVpsTxIpduCOFunc)( PduIdType Pd
 /*  v2-0-0          :2022/02/21                                             */
 /*  v2-1-0          :2022/11/08                                             */
 /*  v2-2-0          :2023/07/06                                             */
-/*  v3-0-0          :2024/11/15                                             */
+/*  v3-0-0          :2025/03/04                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

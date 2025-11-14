@@ -22,7 +22,7 @@
 #include "fflv_capt.h"
 #include "esi_adc.h"
 #include "dio_drv.h"
-#include "iohw_adc.h"
+#include "iohw_adc_sh.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */

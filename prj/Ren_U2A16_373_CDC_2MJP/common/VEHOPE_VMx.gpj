@@ -1,0 +1,12 @@
+#!gbuild
+[Subproject]
+    :sourceDir=${VEHOPE_DIR}
+
+#    -I${ROOT_DIR}/BSW/CmnHdr/CmnHdr/Platform
+    -I${LIB_DIR}
+
+    -I${VEHOPE_DIR}/config_tybev3
+    -I${VEHOPE_DIR}/scc
+
+scc/veh_opemd.c
+scc/veh_opemd.h

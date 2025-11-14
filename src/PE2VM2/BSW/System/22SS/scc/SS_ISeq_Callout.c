@@ -23,6 +23,10 @@
 #include "i2c_drv.h"
 #include "wdg_drv.h"
 
+/* Iohw */
+#include "iohw_adc_sh.h"
+#include "iohw_diflt.h"
+
 /* Communication         */
 #include "oxcan.h"
 /* Complex Device Driver */
@@ -176,9 +180,11 @@ void SS_Pm_postClockUpCallout(SS_BootType u4_BootSource)
     vd_g_Gpt_OstInit();    /* call in each VM that use OSTM */
 
     vd_g_I2cInit();
-
     vd_g_GpI2cMaInit();
 
+    vd_g_IoHwAdcShInit();
+    vd_g_IoHwDifltInit();
+    
     u1_t_bram_retained = (U1)FALSE;
     if(u4BootCause != ECU_INTG_u4BTCAUSE_PON){
         u1_t_bram_retained = u1_g_Rim_WkupRAMCheck();

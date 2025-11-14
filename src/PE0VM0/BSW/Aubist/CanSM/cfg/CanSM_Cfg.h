@@ -34,7 +34,7 @@
 #define BSW_CANSM_CFG_BOR_TIME_L1_1                  (35U)
 #define BSW_CANSM_CFG_BOR_TIME_L1_2                  (0U)
 #define BSW_CANSM_CFG_BOR_TIME_L1_3                  (35U)
-#define BSW_CANSM_CFG_BOR_TIME_L1_4                  (0U)
+#define BSW_CANSM_CFG_BOR_TIME_L1_4                  (35U)
 #define BSW_CANSM_CFG_BOR_TIME_L1_5                  (0U)
 #define BSW_CANSM_CFG_BOR_TIME_L1_6                  (0U)
 #define BSW_CANSM_CFG_BOR_TIME_L1_7                  (0U)
@@ -68,7 +68,7 @@
 #define BSW_CANSM_CFG_SNDLCK_RESTART_1               (5U)
 #define BSW_CANSM_CFG_SNDLCK_RESTART_2               (5U)
 #define BSW_CANSM_CFG_SNDLCK_RESTART_3               (5U)
-#define BSW_CANSM_CFG_SNDLCK_RESTART_4               (0U)
+#define BSW_CANSM_CFG_SNDLCK_RESTART_4               (5U)
 #define BSW_CANSM_CFG_SNDLCK_RESTART_5               (0U)
 #define BSW_CANSM_CFG_SNDLCK_RESTART_6               (0U)
 #define BSW_CANSM_CFG_SNDLCK_RESTART_7               (0U)
@@ -229,7 +229,7 @@
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
-/*  Framework          :v2-0-3-z0003                                        */
+/*  Framework          :v2-1-0                                              */
 /*  BSW plug-in        :v3-0-0                                              */
 /****************************************************************************/
 

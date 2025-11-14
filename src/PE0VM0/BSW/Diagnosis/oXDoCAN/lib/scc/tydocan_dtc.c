@@ -132,11 +132,7 @@ static void           vd_s_TydcDtcEvmAct(const U1 u1_a_ACT);
 
 static U4             u4_s_TydcDtcTrchk(const U2 u2_a_TSLOT, const U2 u2_a_ELPSD, const U1 u1_a_EVM);
 static U4             u4_s_TydcDtcComRx(const U2 u2_a_TSLOT, const U2 u2_a_ELPSD, const U1 u1_a_EVM);
-/*static U1             u1_s_TydcDtcPduRx(const ST_TYDC_DTC_COM_RX * st_ap_COM_RX, const U2 u2_a_ELPSD, const U1 u1_a_EVM);*//* @@@ */
 static U4             u4_s_TydcDtcLogRx(void);
-
-/*static U4             u4_s_TydcDtcTrPut(const U2 u2_a_ID, const U1 u1_a_CHK);*//* @@@ */
-/*static inline U1      u1_s_TydcDtcRxTOchk(const U4 u4_a_SUP, const U4 u4_a_UNK, const U4 u4_a_RXTO);*//* @@@ */
 
 static U1             u1_s_TydcDtcNvmcRead(const U2 u2_a_NVMCID, const U2 u2_a_size, U1 *u1_ap_data);
 
@@ -154,10 +150,6 @@ static U1             u1_s_TydcDtcNvmcRead(const U2 u2_a_NVMCID, const U2 u2_a_s
 /*===================================================================================================================================*/
 void    vd_g_oXDoCANDtcBonInit(void)
 {
-#if 0	/* @@@ */
-    vd_g_Rim_WriteU1(u2_g_TYDC_DTC_RIMID_UDM_EV_CNT, (U1)0U);
-    vd_g_Rim_WriteU2(u2_g_TYDC_DTC_RIMID_UDM_EV_ID,  (U2)U2_MAX);
-#endif
     vd_s_TydcDtcInit();
 }
 /*===================================================================================================================================*/
@@ -189,26 +181,8 @@ void    vd_g_oXDoCANDtcWkupInit(void)
 U4    u4_g_oXDoCANDtcMainTask(const ST_OXDC_REQ * st_ap_REQ, const U2 u2_a_TSLOT)
 {
     U4                         u4_t_ev_dtct;
-#if 0	/* @@@ */
-    U2                         u2_t_udm_last_ev_id;
-    U1                         u1_t_udm_ev_cnt;
-    U1                         u1_t_rim_chk;
-#endif
 
     u4_t_ev_dtct = u4_s_TydcDtcTrblchk(u2_a_TSLOT, st_ap_REQ->u1_eom_aft, st_ap_REQ->u1_ses_aft);
-
-#if 0	/* @@@ */
-    u1_t_udm_ev_cnt     = (U1)0U;
-    u2_t_udm_last_ev_id = (U2)U2_MAX;
-    u1_t_rim_chk  = u1_g_Rim_ReadU1withStatus(u2_g_TYDC_DTC_RIMID_UDM_EV_CNT, &u1_t_udm_ev_cnt);
-    u1_t_rim_chk |= u1_g_Rim_ReadU2withStatus(u2_g_TYDC_DTC_RIMID_UDM_EV_ID, &u2_t_udm_last_ev_id);
-    if((u1_t_rim_chk & (U1)RIM_RESULT_KIND_MASK) != (U1)RIM_RESULT_KIND_OK){
-        u1_t_udm_ev_cnt     = (U1)0U;
-        u2_t_udm_last_ev_id = (U2)U2_MAX;
-    }
-    vd_g_Rim_WriteU1(u2_g_TYDC_DTC_RIMID_UDM_EV_CNT, u1_t_udm_ev_cnt);
-    vd_g_Rim_WriteU2(u2_g_TYDC_DTC_RIMID_UDM_EV_ID,  u2_t_udm_last_ev_id);
-#endif
 
     return(u4_t_ev_dtct);
 }
@@ -220,42 +194,6 @@ U4    u4_g_oXDoCANDtcMainTask(const ST_OXDC_REQ * st_ap_REQ, const U2 u2_a_TSLOT
 /*===================================================================================================================================*/
 uint8   u1_g_oXDoCANAubIfDtcNvmWrStat(const uint16 u2_a_BID)
 {
-#if 0
-    U1                         u1_t_nvm_chk;
-    U1                         u1_t_ret;
-
-    /* DEM_NVM_REQ_OK                */
-    /* DEM_NVM_REQ_NOT_OK            */
-    /* DEM_NVM_REQ_PENDING           */
-    /* DEM_NVM_REQ_INTEGRITY_FAILED  */
-    /* DEM_NVM_REQ_BLOCK_SKIPPED     */
-    /* DEM_NVM_REQ_NV_INVALIDATED    */
-    /* DEM_NVM_REQ_CANCELED          */
-    /* DEM_NVM_REQ_REDUNDANCY_FAILED */
-    /* DEM_NVM_REQ_RESTORED_FROM_ROM */
-    u1_t_ret = DEM_NVM_REQ_NOT_OK;
-    if(u2_a_BID < DEM_NVM_USE_NVBLOCK_NUM){
-
-/*        u1_t_nvm_chk = u1_g_Nvmc_GetDataSts(u2_gp_TYDC_DTC_NVMC_BLOCK[u2_a_BID]);*//* @@@ */
-        u1_t_nvm_chk = (U1)NVMC_STATUS_COMP;        /* @@@ */
-
-        if(u1_t_nvm_chk == (U1)NVMC_STATUS_COMP){
-            u1_t_ret = DEM_NVM_REQ_OK;
-        }
-        else if((u1_t_nvm_chk == (U1)NVMC_STATUS_READING) ||
-                (u1_t_nvm_chk == (U1)NVMC_STATUS_WRITING)){
-            u1_t_ret = DEM_NVM_REQ_PENDING;
-        }
-        else{
-            /* u1_t_sts is NVMC_STATUS_ERRCOMP:    */
-            /* u1_t_sts is NVMC_STATUS_CACHE_NG:   */
-            /* u1_t_sts is NVMC_STATUS_NG:         */
-            /* u1_t_sts is NVMC_STATUS_NG_PRM_XXX: */
-        }
-    }
-
-    return (u1_t_ret);
-#endif
     return (DEM_NVM_REQ_OK);
 
 }
@@ -267,63 +205,6 @@ uint8   u1_g_oXDoCANAubIfDtcNvmWrStat(const uint16 u2_a_BID)
 /*===================================================================================================================================*/
 void    vd_g_oXDoCANAubIfDtcNvmWrBlock(const uint16 u2_a_BID, const uint8 * u1_ap_SRC)
 {
-#if 0
-/* @@@ */
-    U4                         u4_t_data;
-    U4                         u4_t_lpknd;
-    U2                         u2_t_nvmc_id;
-    U2                         u2_t_nbyte;
-    U2                         u2_t_evtid;
-    U2                         u2_t_rcrdid;
-    U1                         u1_t_rcrdkind;
-    U1                         u1_t_stsdtc;
-    U1                         u1_t_chk;
-    U1                         u1_t_skip;
-    U1                         u1_tp_nvmdata[TYDC_DTC_NVM_BLK_MAX_SIZE];
-
-    if(u2_a_BID < DEM_NVM_USE_NVBLOCK_NUM){
-        u2_t_nbyte = (U2)0U;
-        u2_t_nvmc_id = u2_gp_TYDC_DTC_NVMC_BLOCK[u2_a_BID];
-        for(u4_t_lpknd = (U4)0U; u4_t_lpknd < (U4)DEM_MM_NVM_REC_KIND_NUM; u4_t_lpknd++){
-            if((Dem_RecordInfo_NvBlockTable[u4_t_lpknd].DemBlockIndexFirst <= u2_a_BID) &&
-               (Dem_RecordInfo_NvBlockTable[u4_t_lpknd].DemBlockIndexLast  >= u2_a_BID)){
-                u2_t_nbyte   = Dem_RecordInfo_NvBlockTable[u4_t_lpknd].DemBlockSize;
-                break;
-            }
-        }
-
-        u2_t_rcrdid = (U2)DEM_MM_NVM_REC_KIND_NUM;
-        u1_t_skip = (U1)FALSE;
-
-        u1_t_chk  = (U1)Dem_GetRecordInfoByNvMBlockId(u2_a_BID, &u2_t_rcrdid, &u2_t_evtid);
-        if(u1_t_chk == (U1)E_OK){
-            u1_t_rcrdkind = u1_g_TyDoCANDtcCfgNvmKind(u2_t_rcrdid);
-            if((u1_t_rcrdkind == (U1)TYDC_DTC_NVM_REC_KIND_PRIM_EVT) || (u1_t_rcrdkind == (U1)TYDC_DTC_NVM_REC_KIND_UDM_EVT)){
-                u1_t_stsdtc = u1_ap_SRC[TYDC_DEMEVT_IDX_STSDTC] & (U1)TYDC_DEMEVT_MSK_STSDTC;
-
-                u1_t_chk = u1_s_TydcDtcNvmcRead(u2_t_nvmc_id, u2_t_nbyte, u1_tp_nvmdata);
-                if(((u1_t_chk == (U1)NVMC_STATUS_COMP) || (u1_t_chk == (U1)NVMC_STATUS_READING)) &&
-                   (u1_t_stsdtc == (u1_tp_nvmdata[TYDC_DEMEVT_IDX_STSDTC] & (U1)TYDC_DEMEVT_MSK_STSDTC))){
-                    u1_t_skip = (U1)TRUE;
-                }
-            }
-        }
-
-        if(u1_t_skip != (U1)TRUE){
-            /* 4byte alignment measures. */
-            if(u2_t_nbyte == (U2)TYDC_NVM_SIZE_U4){
-                u4_t_data =  (U4)((U4)u1_ap_SRC[TYDC_NVM_IDX_P0] << TYDC_NVM_U4_LSB_4TH);
-                u4_t_data |= (U4)((U4)u1_ap_SRC[TYDC_NVM_IDX_P1] << TYDC_NVM_U4_LSB_3RD);
-                u4_t_data |= (U4)((U4)u1_ap_SRC[TYDC_NVM_IDX_P2] << TYDC_NVM_U4_LSB_2ND);
-                u4_t_data |= (U4)(u1_ap_SRC[TYDC_NVM_IDX_P3]);
-                vd_g_Nvmc_WriteU4(u2_t_nvmc_id, u4_t_data);
-            }
-            else{
-                vd_g_Nvmc_WriteOthr(u2_t_nvmc_id, u2_t_nbyte, u1_ap_SRC);
-            }
-        }
-    }
-#endif
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_oXDoCANAubIfDtcEvmAct(const uint8 u1_a_EVM)                                                                         */
@@ -387,31 +268,7 @@ void    vd_g_TyDoCANDtcLogRxReset(void)
 /*===================================================================================================================================*/
 uint8   u1_g_oXDoCANAubIfDtcUdmDel(const uint16 DTCOrigin)
 {
-#if 0   /* @@@ */
-    U4      u4_t_lpcnt;
-    U1      u1_t_result;
-    U1      u1_t_ret;
-
-    u1_t_result = (U1)OXDC_DTC_UDM_DEL_OK;
-    for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)u1_g_TYDC_DTC_NUM_UDM_DEL; u4_t_lpcnt++){
-        if(st_gp_TYDC_DTC_UDM_DEL[u4_t_lpcnt].u2_mem_slct == DTCOrigin){
-            u1_t_result |= st_gp_TYDC_DTC_UDM_DEL[u4_t_lpcnt].fp_u1_UDM_DEL();
-        }
-    }
-
-    if((U1)(u1_t_result & (U1)OXDC_DTC_UDM_DEL_NG) == (U1)OXDC_DTC_UDM_DEL_NG){
-        u1_t_ret = DEM_CALLOUT_NG;
-    }
-    else if((U1)(u1_t_result & (U1)OXDC_DTC_UDM_DEL_RUN) == (U1)OXDC_DTC_UDM_DEL_RUN){
-        u1_t_ret = DEM_CALLOUT_PENDING;
-    }
-    else{
-        u1_t_ret = DEM_CALLOUT_OK;
-    }
-
-    return(u1_t_ret);
-#endif
-    return(DEM_CALLOUT_OK);     /* @@@ */
+    return(DEM_CALLOUT_OK);
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_oXDoCANAubIfUdmEvStsChg(const uint16 u2_a_EVID, const uint8 u1_a_OLD, const uint8 u1_a_NEW)                         */
@@ -421,101 +278,7 @@ uint8   u1_g_oXDoCANAubIfDtcUdmDel(const uint16 DTCOrigin)
 /*===================================================================================================================================*/
 void    vd_g_oXDoCANAubIfUdmEvStsChg(const uint16 u2_a_EVID, const uint8 u1_a_OLD, const uint8 u1_a_NEW)
 {
-#if 0 /* @@@ */
-    U2                         u2_t_udm_last_ev_id;
-    U1                         u1_t_udm_ev_cnt;
-    U1                         u1_t_rim_chk;
-
-    if(((u1_a_OLD & DEM_UDS_STATUS_TF) == (U1)0U) && ((u1_a_NEW & DEM_UDS_STATUS_TF) == DEM_UDS_STATUS_TF)){
-
-        u1_t_udm_ev_cnt     = (U1)0U;
-        u1_t_rim_chk = u1_g_Rim_ReadU1withStatus(u2_g_TYDC_DTC_RIMID_UDM_EV_CNT, &u1_t_udm_ev_cnt);
-        if((u1_t_rim_chk & (U1)RIM_RESULT_KIND_MASK) != (U1)RIM_RESULT_KIND_OK){
-            u1_t_udm_ev_cnt = (U1)0U;
-        }
-        u1_t_udm_ev_cnt++;          /* this is rolling counter so wrap-around is initentional */
-        u2_t_udm_last_ev_id = u2_a_EVID;
-        vd_g_Rim_WriteU1(u2_g_TYDC_DTC_RIMID_UDM_EV_CNT, u1_t_udm_ev_cnt);
-        vd_g_Rim_WriteU2(u2_g_TYDC_DTC_RIMID_UDM_EV_ID, u2_t_udm_last_ev_id);
-    }
-#endif
 }
-#if 0 /* @@@ */
-/*===================================================================================================================================*/
-/*  U1      u1_g_oXDoCANRebyId_A005(U1 * u1_ap_ans, const U2 u2_a_ELPSD)                                                             */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:                                                                                                                       */
-/*  Return:                                                                                                                          */
-/*===================================================================================================================================*/
-U1      u1_g_oXDoCANRebyId_A005(U1 * u1_ap_ans, const U2 u2_a_ELPSD)
-{
-    U2                         u2_t_udm_last_ev_id;
-    U1                         u1_t_udm_ev_cnt;
-    U1                         u1_t_rim_chk;
-
-    u1_t_udm_ev_cnt     = (U1)0U;
-    u2_t_udm_last_ev_id = (U2)U2_MAX;
-    u1_t_rim_chk  = u1_g_Rim_ReadU1withStatus(u2_g_TYDC_DTC_RIMID_UDM_EV_CNT, &u1_t_udm_ev_cnt);
-    u1_t_rim_chk |= u1_g_Rim_ReadU2withStatus(u2_g_TYDC_DTC_RIMID_UDM_EV_ID, &u2_t_udm_last_ev_id);
-    if((u1_t_rim_chk & (U1)RIM_RESULT_KIND_MASK) != (U1)RIM_RESULT_KIND_OK){
-        u1_t_udm_ev_cnt = (U1)0U;
-    }
-
-    u1_ap_ans[0] = u1_t_udm_ev_cnt;
-
-    return((U1)OXDC_SAL_PROC_FIN);
-}
-/*===================================================================================================================================*/
-/*  U1      u1_g_oXDoCANRebyId_A006(U1 * u1_ap_ans, const U2 u2_a_ELPSD)                                                             */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:                                                                                                                       */
-/*  Return:                                                                                                                          */
-/*===================================================================================================================================*/
-U1      u1_g_oXDoCANRebyId_A006(U1 * u1_ap_ans, const U2 u2_a_ELPSD)
-{
-    U4                         u4_t_dtc;
-    U1                         u1_t_mem_slct;
-    U1                         u1_t_ret;
-    U2                         u2_t_udm_last_ev_id;
-    U1                         u1_t_udm_ev_cnt;
-    U1                         u1_t_rim_chk;
-
-    u1_t_udm_ev_cnt     = (U1)0U;
-    u2_t_udm_last_ev_id = (U2)U2_MAX;
-    u1_t_rim_chk  = u1_g_Rim_ReadU1withStatus(u2_g_TYDC_DTC_RIMID_UDM_EV_CNT, &u1_t_udm_ev_cnt);
-    u1_t_rim_chk |= u1_g_Rim_ReadU2withStatus(u2_g_TYDC_DTC_RIMID_UDM_EV_ID, &u2_t_udm_last_ev_id);
-    if((u1_t_rim_chk & (U1)RIM_RESULT_KIND_MASK) != (U1)RIM_RESULT_KIND_OK){
-        u1_t_udm_ev_cnt     = (U1)0U;
-        u2_t_udm_last_ev_id = (U2)U2_MAX;
-    }
-
-    if(u2_t_udm_last_ev_id == (U2)U2_MAX){
-        u1_t_mem_slct = (U1)0U;
-        u4_t_dtc = (U4)0U;
-    }
-    else{
-        u1_t_ret = Dem_GetUserDefinedMemoryIdentifier(u2_t_udm_last_ev_id, &u1_t_mem_slct);
-        if(u1_t_ret != (U1)E_OK){
-            u1_t_mem_slct = (U1)0U;
-            u4_t_dtc = (U4)0U;
-        }
-        else{
-            u1_t_ret = Dem_GetDTCOfEvent(u2_t_udm_last_ev_id, DEM_DTC_FORMAT_UDS, &u4_t_dtc);
-            if(u1_t_ret != (U1)E_OK){
-                u4_t_dtc = (U4)0U;
-            }
-        }
-    }
-
-    u1_ap_ans[TYDC_DTC_A006_ANS_CNT]    = u1_t_udm_ev_cnt;
-    u1_ap_ans[TYDC_DTC_A006_ANS_DTC_H]  = (U1)(u4_t_dtc >>  TYDC_DTC_LSB_3RD);
-    u1_ap_ans[TYDC_DTC_A006_ANS_DTC_M]  = (U1)(u4_t_dtc >>  TYDC_DTC_LSB_2ND);
-    u1_ap_ans[TYDC_DTC_A006_ANS_DTC_L]  = (U1)(u4_t_dtc);
-    u1_ap_ans[TYDC_DTC_A006_ANS_MEMSEL] = u1_t_mem_slct;
-
-    return((U1)OXDC_SAL_PROC_FIN);
-}
-#endif /* @@@ */
 /*===================================================================================================================================*/
 /*  static void    vd_s_TydcDtcInit(void)                                                                                            */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
@@ -552,8 +315,7 @@ static void    vd_s_TydcDtcInit(void)
         u1_tp_first  = (U1 *)Dem_RecordInfo_NvBlockTable[u4_t_lpknd].DemRamDataFirstPtr;
         for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)Dem_RecordInfo_NvBlockTable[u4_t_lpknd].DemBlockTotalNum; u4_t_lpcnt++){
             u1_tp_dst    = &u1_tp_first[u4_t_lpcnt * (U4)u2_t_nbyte];
-/*            u2_t_nvmc_id = u2_gp_TYDC_DTC_NVMC_BLOCK[u4_t_blkidx];*//* @@@ */
-            u2_t_nvmc_id = (U2)0U;      /* @@@ */
+            u2_t_nvmc_id = (U2)0U;
             (void)u1_s_TydcDtcNvmcRead(u2_t_nvmc_id, u2_t_nbyte, u1_tp_dst);
             u4_t_blkidx++;
         }
@@ -571,8 +333,7 @@ static void    vd_s_TydcDtcInit(void)
     for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)u1_g_TYDC_DTC_NOW_LOG_RX; u4_t_lpcnt++){
 
         st_gp_tydc_dtc_log_rx[u4_t_lpcnt].u4_ev = (U4)0U;
-/*        u1_t_nvm_chk = u1_g_Nvmc_ReadU4withSts(u2_gp_TYDC_DTC_NVMC_LOG_RX[u4_t_lpcnt], &u4_t_log_rx);*//* @@@ */
-        u1_t_nvm_chk = (U1)NVMC_STATUS_ERRCOMP;    /* @@@ */
+        u1_t_nvm_chk = (U1)NVMC_STATUS_ERRCOMP;
         if(u1_t_nvm_chk == (U1)NVMC_STATUS_COMP){
             st_gp_tydc_dtc_log_rx[u4_t_lpcnt].u4_rx = u4_t_log_rx;
         }
@@ -730,30 +491,7 @@ static void    vd_s_TydcDtcEvmAct(const U1 u1_a_ACT)
 /*===================================================================================================================================*/
 static U4      u4_s_TydcDtcTrchk(const U2 u2_a_TSLOT, const U2 u2_a_ELPSD, const U1 u1_a_EVM)
 {
-#if 0   /* @@@ */
-    U4                         u4_t_ev_dtct;
-    U4                         u4_t_lpcnt;
-    U2                         u2_t_smpl_chk;
-    U1                         u1_t_tr_chk;
-
-    u4_t_ev_dtct = (U4)0U;
-    for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)u1_g_TYDC_DTC_NUM_TR_CHK; u4_t_lpcnt++){
-
-        u2_t_smpl_chk = u2_a_TSLOT & st_gp_TYDC_DTC_TR_CHK[u4_t_lpcnt].u2_smpl_tslot;
-        if((u2_t_smpl_chk                               != (U2)0U    ) &&
-           (st_gp_TYDC_DTC_TR_CHK[u4_t_lpcnt].fp_u1_CHK != vdp_PTR_NA)){
-
-            u1_t_tr_chk   = (*st_gp_TYDC_DTC_TR_CHK[u4_t_lpcnt].fp_u1_CHK)(u2_a_ELPSD);
-            if(u1_t_tr_chk < u1_a_EVM){
-                u1_t_tr_chk = u1_a_EVM;
-            }
-            u4_t_ev_dtct |= u4_s_TydcDtcTrPut(st_gp_TYDC_DTC_TR_CHK[u4_t_lpcnt].u2_dtc_id, u1_t_tr_chk);
-        }
-    }
-
-    return(u4_t_ev_dtct);
-#endif
-    return((U4)0U); /* @@@ */
+    return((U4)0U);
 }
 /*===================================================================================================================================*/
 /*  static U4      u4_s_TydcDtcComRx(const U2 u2_a_TSLOT, const U2 u2_a_ELPSD, const U1 u1_a_EVM)                                    */
@@ -763,132 +501,8 @@ static U4      u4_s_TydcDtcTrchk(const U2 u2_a_TSLOT, const U2 u2_a_ELPSD, const
 /*===================================================================================================================================*/
 static U4      u4_s_TydcDtcComRx(const U2 u2_a_TSLOT, const U2 u2_a_ELPSD, const U1 u1_a_EVM)
 {
-#if 0   /* @@@ */
-    U4                         u4_t_lpcnt;
-    U4                         u4_t_ev_dtct;
-
-    U2                         u2_t_smpl_chk;
-
-    U1                         u1_t_sup_chk;
-    U1                         u1_t_tr_chk;
-
-    u4_t_ev_dtct = (U4)0U;
-    for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)u1_g_TYDC_DTC_NUM_COM_RX; u4_t_lpcnt++){
-
-        u2_t_smpl_chk = u2_a_TSLOT & st_gp_TYDC_DTC_COM_RX[u4_t_lpcnt].u2_smpl_tslot;
-        if(u2_t_smpl_chk != (U2)0U){
-
-            u1_t_tr_chk = u1_s_TydcDtcPduRx(&st_gp_TYDC_DTC_COM_RX[u4_t_lpcnt], u2_a_ELPSD, u1_a_EVM);
-            if(st_gp_TYDC_DTC_COM_RX[u4_t_lpcnt].fp_u1_SUP != vdp_PTR_NA){
-                u1_t_sup_chk = (*st_gp_TYDC_DTC_COM_RX[u4_t_lpcnt].fp_u1_SUP)();
-                if(u1_t_sup_chk != (U1)TRUE){
-                    u1_t_tr_chk = (U1)OXDC_DTC_TR_N_A;
-                }
-            }
-
-            u4_t_ev_dtct |= u4_s_TydcDtcTrPut(st_gp_TYDC_DTC_COM_RX[u4_t_lpcnt].u2_dtc_id, u1_t_tr_chk);
-        }
-    }
-
-    return(u4_t_ev_dtct);
-#endif
-    return((U4)0U); /* @@@ */
+    return((U4)0U);
 }
-#if 0   /* @@@ */
-/*===================================================================================================================================*/
-/*  static U1      u1_s_TydcDtcPduRx(const ST_TYDC_DTC_COM_RX * st_ap_COM_RX, const U2 u2_a_ELPSD, const U1 u1_a_EVM)                */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static U1      u1_s_TydcDtcPduRx(const ST_TYDC_DTC_COM_RX * st_ap_COM_RX, const U2 u2_a_ELPSD, const U1 u1_a_EVM)
-{
-    const ST_TYDC_DTC_PDU_RX * st_tp_PDU_RX;
-
-    ST_TYDC_DTC_LOG_RX *       st_tp_log_rx;
-
-    U4                         u4_t_lpcnt;
-    U4                         u4_t_lpend;
-    U4                         u4_t_log_bit;
-    U4                         u4_t_sup_chk;
-    U4                         u4_t_unk_chk;
-    U4                         u4_t_rxto_chk;
-
-    U2                         u2_t_rxc_inc;
-    U2                         u2_t_rx_tout;
-
-    U1                         u1_t_rxc_nex;
-    U1                         u1_t_rxc_las;
-    U1                         u1_t_rx_stat;
-
-    U1                         u1_t_tr_chk;
-
-    u4_t_lpcnt    = (U4)st_ap_COM_RX->u1_pdu_begin;
-    u4_t_lpend    = u4_t_lpcnt + (U4)st_ap_COM_RX->u1_num_pdu;
-    if(u4_t_lpend > (U4)u1_g_TYDC_DTC_NUM_PDU_RX){
-        u4_t_lpend = (U4)u1_g_TYDC_DTC_NUM_PDU_RX;
-    }
-    u4_t_log_bit  = (U4)0x00000001U << st_ap_COM_RX->u1_log_bit;
-    st_tp_log_rx  = &st_gp_tydc_dtc_log_rx[st_ap_COM_RX->u1_log_idx];
-
-    u4_t_sup_chk  = (U4)0U;
-    u4_t_unk_chk  = (U4)0U;
-    u4_t_rxto_chk = (U4)0U;
-
-    while(u4_t_lpcnt < u4_t_lpend){
-
-        st_tp_PDU_RX = &st_gp_TYDC_DTC_PDU_RX[u4_t_lpcnt];
-
-        u1_t_rxc_nex = u1_g_oXCANRxEvcnt(st_tp_PDU_RX->u2_pdu_idx);
-        u1_t_rxc_las = u1_gp_tydc_dtc_rx_cnt[u4_t_lpcnt];
-        if((u1_a_EVM     != (U1)OXDC_DTC_TR_INA         ) ||
-           (u1_t_rxc_nex >  (U1)OXCAN_RX_RXEV_CNT_MAX) ||
-           (u1_t_rxc_las >  (U1)OXCAN_RX_RXEV_CNT_MAX)){
-
-            u2_gp_tydc_dtc_rxc_st[u4_t_lpcnt] = u2_s_tydc_dtc_rxc_cyctim;
-            u1_gp_tydc_dtc_rx_cnt[u4_t_lpcnt] = u1_t_rxc_nex;
-        }
-        else{
-
-            u2_t_rxc_inc = (U2)((U2)u1_t_rxc_nex - (U2)u1_t_rxc_las) & (U2)OXCAN_RX_RXEV_CNT_MAX;
-            if(u2_t_rxc_inc >= st_tp_PDU_RX->u2_rxc_min){
-                st_tp_log_rx->u4_ev |= ((st_tp_log_rx->u4_rx ^ u4_t_log_bit) & u4_t_log_bit);
-                st_tp_log_rx->u4_rx |= u4_t_log_bit;
-            }
-
-            u2_t_rxc_inc = u2_s_tydc_dtc_rxc_cyctim - u2_gp_tydc_dtc_rxc_st[u4_t_lpcnt];
-            if(u2_t_rxc_inc >= st_tp_PDU_RX->u2_rxc_cyc){
-                u2_gp_tydc_dtc_rxc_st[u4_t_lpcnt] = u2_s_tydc_dtc_rxc_cyctim;
-                u1_gp_tydc_dtc_rx_cnt[u4_t_lpcnt] = u1_t_rxc_nex;
-            }
-        }
-
-        u2_t_rx_tout = st_tp_PDU_RX->u2_rx_tout;
-        u1_t_rx_stat = u1_g_oXCANRxStat(st_tp_PDU_RX->u2_pdu_idx, st_tp_PDU_RX->u2_sys_chk, u2_t_rx_tout);
-        if((u2_a_ELPSD   < u2_t_rx_tout         ) ||
-           (u1_t_rx_stat < (U1)OXCAN_RX_RXST_TOE)){
-            u4_t_unk_chk  |= u4_t_log_bit;
-        }
-        else if(u1_t_rx_stat >= ((U1)OXCAN_RX_RXST_TOE | (U1)COM_TIMEOUT)){
-            u4_t_rxto_chk |= u4_t_log_bit;
-        }
-        else{
-            /* Do Nothing */
-        }
-
-        u4_t_sup_chk  |= u4_t_log_bit;
-        u4_t_log_bit <<= 1U;
-        u4_t_lpcnt++;
-    }
-
-    u4_t_sup_chk  &= st_tp_log_rx->u4_rx;
-    u4_t_unk_chk  &= u4_t_sup_chk;
-    u4_t_rxto_chk &= u4_t_sup_chk;
-    u1_t_tr_chk    = u1_s_TydcDtcRxTOchk(u4_t_sup_chk, u4_t_unk_chk, u4_t_rxto_chk);
-
-    return(u1_t_tr_chk);
-}
-#endif
 /*===================================================================================================================================*/
 /*  static U4      u4_s_TydcDtcLogRx(void)                                                                                           */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
@@ -905,8 +519,6 @@ static U4      u4_s_TydcDtcLogRx(void)
 
     if(st_gp_tydc_dtc_log_rx[u1_s_tydc_dtc_log_rx_idx].u4_ev != (U4)0U){
         u4_t_ev_dtct = st_gp_tydc_dtc_log_rx[u1_s_tydc_dtc_log_rx_idx].u4_ev;
-/*        vd_g_Nvmc_WriteU4(u2_gp_TYDC_DTC_NVMC_LOG_RX[u1_s_tydc_dtc_log_rx_idx],*/
-/*                          st_gp_tydc_dtc_log_rx[u1_s_tydc_dtc_log_rx_idx].u4_rx);*/
     }
     else{
         u4_t_ev_dtct = (U4)0U;
@@ -916,90 +528,6 @@ static U4      u4_s_TydcDtcLogRx(void)
 
     return(u4_t_ev_dtct);
 }
-#if 0   /* @@@ */
-/*===================================================================================================================================*/
-/*  static U4      u4_s_TydcDtcTrPut(const U2 u2_a_ID, const U1 u1_a_CHK)                                                            */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static U4      u4_s_TydcDtcTrPut(const U2 u2_a_ID, const U1 u1_a_CHK)
-{
-    U4                         u4_t_wid;
-    U4                         u4_t_bit;
-    U4                         u4_t_act;
-
-    u4_t_act = (U4)0U;
-    u4_t_wid = (U4)u2_a_ID >> TYDC_DTC_TRBL_LSR_WID;
-    if(u4_t_wid >= (U4)u1_g_TYDC_DTC_NOW_TR_ACT){
-
-        (void)Dem_SetEventAvailable(u2_a_ID, (U1)FALSE);
-
-     /* u4_t_act = (U4)0U; */
-    }
-    else if(u1_a_CHK >= (U1)OXDC_DTC_TR_N_A){
-
-        (void)Dem_SetEventAvailable(u2_a_ID, (U1)FALSE);
-
-        u4_t_bit = (U4)0x00000001U << (u2_a_ID & (U2)TYDC_DTC_TRBL_BIT_LSB);
-     /* u4_t_act = (U4)0U; */
-        u4_gp_tydc_dtc_tr_act[u4_t_wid] &= ((U4)U4_MAX ^ u4_t_bit);
-    }
-    else if(u1_a_CHK == (U1)OXDC_DTC_TR_UNK){
-
-        (void)Dem_SetEventAvailable(u2_a_ID, (U1)TRUE);
-
-        u4_t_bit = (U4)0x00000001U << (u2_a_ID & (U2)TYDC_DTC_TRBL_BIT_LSB);
-     /* u4_t_act = (U4)0U; */
-        u4_gp_tydc_dtc_tr_act[u4_t_wid] &= ((U4)U4_MAX ^ u4_t_bit);
-    }
-    else if(u1_a_CHK == (U1)OXDC_DTC_TR_INA){
-
-        (void)Dem_SetEventAvailable(u2_a_ID, (U1)TRUE);
-        (void)Dem_SetEventStatus(u2_a_ID, DEM_EVENT_STATUS_PASSED);
-
-        u4_t_bit = (U4)0x00000001U << (u2_a_ID & (U2)TYDC_DTC_TRBL_BIT_LSB);
-     /* u4_t_act = (U4)0U; */
-        u4_gp_tydc_dtc_tr_act[u4_t_wid] &= ((U4)U4_MAX ^ u4_t_bit);
-    }
-    else{
-
-        (void)Dem_SetEventAvailable(u2_a_ID, (U1)TRUE);
-        (void)Dem_SetEventStatus(u2_a_ID, DEM_EVENT_STATUS_FAILED);
-
-        u4_t_bit = (U4)0x00000001U << (u2_a_ID & (U2)TYDC_DTC_TRBL_BIT_LSB);
-        u4_t_act = (u4_gp_tydc_dtc_tr_act[u4_t_wid] ^ u4_t_bit) & u4_t_bit;
-        u4_gp_tydc_dtc_tr_act[u4_t_wid] |= u4_t_bit;
-    }
-
-    return(u4_t_act);
-}
-/*===================================================================================================================================*/
-/*  static inline U1      u1_s_TydcDtcRxTOchk(const U4 u4_a_SUP, const U4 u4_a_UNK, const U4 u4_a_RXTO)                              */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static inline U1      u1_s_TydcDtcRxTOchk(const U4 u4_a_SUP, const U4 u4_a_UNK, const U4 u4_a_RXTO)
-{
-    U1                         u1_t_tr_chk;
-
-    if(u4_a_SUP == (U4)0U){
-        u1_t_tr_chk = (U1)OXDC_DTC_TR_N_A;
-    }
-    else if(u4_a_UNK == u4_a_SUP){
-        u1_t_tr_chk = (U1)OXDC_DTC_TR_UNK;
-    }
-    else if(u4_a_RXTO == (U4)0U){
-        u1_t_tr_chk = (U1)OXDC_DTC_TR_INA;
-    }
-    else{
-        u1_t_tr_chk = (U1)OXDC_DTC_TR_ACT;
-    }
-
-    return(u1_t_tr_chk);
-}
-#endif
 /*===================================================================================================================================*/
 /*  static U1             u1_s_TydcDtcNvmcRead(const U2 u2_a_NVMCID, const U2 u2_a_size, U1 *u1_ap_data)                             */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
@@ -1008,33 +536,6 @@ static inline U1      u1_s_TydcDtcRxTOchk(const U4 u4_a_SUP, const U4 u4_a_UNK, 
 /*===================================================================================================================================*/
 static U1             u1_s_TydcDtcNvmcRead(const U2 u2_a_NVMCID, const U2 u2_a_size, U1 *u1_ap_data)
 {
-#if 0       /* @@@ */
-    U1                         u1_t_nvm_chk;
-    U4                         u4_t_data;
-
-    if(u2_a_size == (U2)TYDC_NVM_SIZE_U4){
-        u1_t_nvm_chk = u1_g_Nvmc_ReadU4withSts(u2_a_NVMCID, &u4_t_data);
-        if((u1_t_nvm_chk != (U1)NVMC_STATUS_COMP   ) &&
-           (u1_t_nvm_chk != (U1)NVMC_STATUS_READING)){
-            vd_g_MemfillU1(u1_ap_data, (U1)U1_MAX, (U4)u2_a_size);
-        }
-        else{
-            u1_ap_data[TYDC_NVM_IDX_P0] = (U1)(u4_t_data >> TYDC_NVM_U4_LSB_4TH);
-            u1_ap_data[TYDC_NVM_IDX_P1] = (U1)(u4_t_data >> TYDC_NVM_U4_LSB_3RD);
-            u1_ap_data[TYDC_NVM_IDX_P2] = (U1)(u4_t_data >> TYDC_NVM_U4_LSB_2ND);
-            u1_ap_data[TYDC_NVM_IDX_P3] = (U1)(u4_t_data);
-        }
-    }
-    else{
-        u1_t_nvm_chk = u1_g_Nvmc_ReadOthrwithSts(u2_a_NVMCID, u2_a_size, u1_ap_data);
-        if((u1_t_nvm_chk != (U1)NVMC_STATUS_COMP   ) &&
-           (u1_t_nvm_chk != (U1)NVMC_STATUS_READING)){
-            vd_g_MemfillU1(u1_ap_data, (U1)U1_MAX, (U4)u2_a_size);
-        }
-    }
-
-    return (u1_t_nvm_chk);
-#endif
     return ((U1)0);
 }
 /*===================================================================================================================================*/

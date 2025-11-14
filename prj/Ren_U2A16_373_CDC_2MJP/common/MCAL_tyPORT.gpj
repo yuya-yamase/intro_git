@@ -1,0 +1,9 @@
+#!gbuild
+[Subproject]
+    :optionsFile=${CMN_DIR}/MCAL.opt
+
+    :sourceDir=${MCAL_TYPORT_SCC_DIR}
+    :sourceDir=${MCAL_TYPORT_CFG_DIR}
+
+typort.c
+typort_callout.c

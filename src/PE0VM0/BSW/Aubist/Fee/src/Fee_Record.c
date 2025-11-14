@@ -1,7 +1,7 @@
-/* Fee_Record.c v2-0-0                                                     */
+/* Fee_Record.c v2-1-0                                                     */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION. All rights reserved.                        */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -32,6 +32,9 @@
 #include "../inc/Fee_Lib.h"
 #include "../inc/Fee_Pif.h"
 #include "../inc/Fee_Record_Pos_Tbl.h"
+
+#include "../inc/Fee_FlsWrp.h"
+
 
 /*--------------------------------------------------------------------------*/
 /* Types                                                                    */
@@ -67,7 +70,6 @@ VAR( uint16, FEE_VAR_NO_INIT ) Fee_Record_CompleteLen;
 /*          | Fee_Record_StateScRdAsubCalCSCpyDat_INT30_02          */
 /*          | Fee_Record_StateScMsAsubCalCS_INT30_02                */
 VAR( uint32, FEE_VAR_NO_INIT ) Fee_Record_CheckSumVal;
-
 VAR( uint32, FEE_VAR_NO_INIT ) Fee_Record_ReadOldRcrdResult;
 VAR( Fee_Record_DFlashAccessDataType, FEE_VAR_NO_INIT ) Fee_Record_Buffer;
 VAR( Fee_Record_RecordInfoType,       FEE_VAR_NO_INIT ) Fee_Record_RecordInfo;
@@ -188,67 +190,68 @@ Fee_Record_SetRAMSub( void )
     return;
 }
 
-/*関数説明--------------------------------------------------------------------*/
-/* 説  明        ：データ書込み用空き領域検索                                 */
-/* 入  力        ：stCPUDTF *ptstCPUDTFInfo                            */
-/*                                           ：MHA[データFlash]管理データ     */
-/*               ：uint32 *ptu4WriteLastRecMngAbsAddr                         */
-/*                                      :検索結果を格納するアドレス           */
-/* 出  力        ：なし                                                       */
-/* グローバル変数：                                                           */
-/* その他        ：最終書込みレコード先頭アドレスが返却されます               */
-/*----------------------------------------------------------------------------*/
+/****************************************************************************/
+/* Function Name | Fee_Record_SetRAMSub                                     */
+/* Description   | Retrieving free space for data writing                   */
+/* Preconditions | None                                                     */
+/* Parameters    | stCPUDTF *ptstCPUDTFInfo                                 */
+/*               |               MHA management data                        */
+/*               | uint32 *ptu4WriteLastRecMngAbsAddr                       */
+/*               |                   Address to store search results        */
+/* Return Value  | None                                                     */
+/* Notes         | First address of last written record is returned         */
+/****************************************************************************/
 FUNC( void, FEE_CODE )
 Fee_Record_SrchSpcMngArea(
     P2CONST( Fee_CpuDtfType, AUTOMATIC, FEE_VAR_NO_INIT ) ptstCPUDTFInfo,
     P2VAR  ( uint32,         AUTOMATIC, TYPEDEF         ) ptu4WriteLastRecMngAbsAddr
 ){
-    uint32          u4tBlockRecordAddress;                      /* ブロック先頭レコードアドレス */
-    uint32          u4tLastRecordAddress;                       /* ブロック最終レコードアドレス */
-    uint32          u4tDFCResult;                               /* ブランクチェック結果 */
-    uint32          u4tBlankErrAddress;                         /* ブランクエラー発生アドレス */
-    uint8           u1tBlockNo;                                 /* ブロック番号 */
+    uint32          u4tBlockRecordAddress;                      /* Block-first record address */
+    uint32          u4tLastRecordAddress;                       /* Block last record address */
+    uint32          u4tDFCResult;                               /* Blank check result */
+    uint32          u4tBlankErrAddress;                         /* Blank error address */
+    uint8           u1tBlockNo;                                 /* Block number */
     uint32          u4tBlockStartAddr;
 
-    /* ブロック番号取り出し */
+    /* Get block number */
     u1tBlockNo = ptstCPUDTFInfo->u1MainBlockNo;
-    /* 検索開始アドレス（レコード管理領域の先頭）を計算 */
+    /* Calculate search start address (beginning of record management area) */
     u4tBlockStartAddr     = FEE_BLKSTARTADDRTBL[u1tBlockNo];
     u4tBlockRecordAddress = u4tBlockStartAddr + FEE_STARTRECORDPOS;
-    /* 検索終了アドレス（レコード管理領域とデータ領域の境界 に配置される最後のレコードの先頭）を計算 */
+    /* Calculate the search end address (the beginning of the last record placed at the boundary between the record management area and the data area) */
     u4tLastRecordAddress = ( u4tBlockStartAddr
                            + (uint32)( ptstCPUDTFInfo->ptstAreaInf->u2RcrdDataAreaStartAddr ))
                            - (uint32)FEE_RECORDMNGINFOLEN;
 
-    /* ブランクチェック結果取得 */
+    /* Get blank check results */
     u4tDFCResult = Fee_GetMngDfcResult( &u4tBlankErrAddress );
     if ( u4tDFCResult != FEE_STATUS_OK )
     {
-        /* ブランクエラーが発生した場合 */
+        /* If a blank error occurs */
         if ( u4tBlankErrAddress < u4tBlockRecordAddress )
         {
-            /* ブランクエラーアドレスがブロック先頭レコードアドレス未満の場合 */
-            /* 検索結果をブロック先頭レコードアドレス-レコード長に設定 */
+            /* If the blank error address is less than the block head record address */
+            /* Set search result to block first record address - record length */
             *ptu4WriteLastRecMngAbsAddr = u4tBlockRecordAddress - (uint32)FEE_RECORDMNGINFOLEN;
         }
         else if ( u4tLastRecordAddress <= u4tBlankErrAddress )
         {
-            /* ブランクエラーアドレスがブロック最終レコードアドレス以上の場合 */
-            /* 検索結果をブロック最終レコードアドレスに設定 */
+            /* If the blank error address is greater than or equal to the block last record address */
+            /* Set search result to block last record address */
             *ptu4WriteLastRecMngAbsAddr = u4tLastRecordAddress;
         }
         else
         {
-            /* ブランクエラーアドレスがブロック先頭レコードアドレス以上の場合 */
-            /* ブランクエラーとなったレコードの先頭アドレスに変換する */
+            /* If the blank error address is greater than or equal to the block head record address */
+            /* Convert to the first address of the record with a blank error */
             *ptu4WriteLastRecMngAbsAddr = u4tBlankErrAddress
                                 - ( ( u4tBlankErrAddress - u4tBlockRecordAddress ) % (uint32)FEE_RECORDMNGINFOLEN );
         }
     }
     else
     {
-        /* ブランクエラーが発生していない場合 */
-        /* 検索結果をブロック先頭レコードアドレス-レコード長に設定 */
+        /* If no blank error occurred */
+        /* Set search result to block first record address - record length */
         *ptu4WriteLastRecMngAbsAddr = u4tBlockRecordAddress - (uint32)FEE_RECORDMNGINFOLEN;
     }
 
@@ -270,9 +273,9 @@ Fee_Record_SrchSpcDatArea(
 ){
     uint32          u4tDataAreaTopAddress;
     uint32          u4tDataAreaTailAddress;
-    uint32          u4tDFCResult;                               /* ブランクチェック結果 */
-    uint32          u4tBlankErrAddress;                         /* ブランクエラー発生アドレス */
-    uint8           u1tBlockNo;                                 /* ブロック番号 */
+    uint32          u4tDFCResult;                               /* Blank check result */
+    uint32          u4tBlankErrAddress;                         /* Blank error address */
+    uint8           u1tBlockNo;                                 /* Block number */
     uint32          u4tBlockStartAddr;
 
     u1tBlockNo = ptstCPUDTFInfo->u1MainBlockNo;
@@ -282,19 +285,19 @@ Fee_Record_SrchSpcDatArea(
                            + (uint32)FEE_DATA_FLASH_SECTOR_SIZE )
                            - (uint32)FEE_DATAAREA_REC_TAIL_OFFSET;
 
-    /* ブランクチェック結果取得 */
+    /* Get blank check results */
     u4tDFCResult = Fee_GetMngDfcResult( &u4tBlankErrAddress );
     if ( u4tDFCResult != FEE_STATUS_OK )
     {
-        /* ブランクエラーが発生した場合 */
+        /* If a blank error occurs */
         if ( u4tBlankErrAddress < u4tDataAreaTopAddress )
         {
-            /* ブランクエラーアドレスが探索領域先頭アドレス未満の場合 */
+            /* If the blank error address is less than the top address of the search area */
             *ptu4WriteLastRecDatAbsAddr = u4tDataAreaTopAddress - (uint32)FEE_DATAAREA_REC_TAIL_OFFSET;
         }
         else if ( u4tDataAreaTailAddress <= u4tBlankErrAddress )
         {
-            /* ブランクエラーアドレスが探索領域末尾アドレス以上の場合 */
+            /* If the blank error address is greater than or equal to the search area tail address */
             *ptu4WriteLastRecDatAbsAddr = u4tDataAreaTailAddress;
         }
         else
@@ -304,218 +307,243 @@ Fee_Record_SrchSpcDatArea(
     }
     else
     {
-        /* ブランクエラーが発生していない場合 */
+        /* If no blank error occurred */
         *ptu4WriteLastRecDatAbsAddr = u4tDataAreaTopAddress - (uint32)FEE_DATAAREA_REC_TAIL_OFFSET;
     }
 
     return;
 }
 
-/*関数説明--------------------------------------------------------------------*/
-/* 説  明        ：空き領域検索                                               */
-/* 入  力        ：stCPUDTF *ptstCPUDTFInfo                            */
-/*                                           ：MHA[データFlash]管理データ     */
-/* 出  力        ：検索結果                                                   */
-/*               ：  0x00000000 ：FEE_STATUS_OK   ：使用中         */
-/*               ：  0x00000001 ：FEE_STATUS_NG   ：未使用         */
-/*               ：  0x00000005 ：FEE_STATUS_BUSY ：処理継続中     */
-/* グローバル変数：                                                           */
-/* その他        ：検索はReadSrchAddressから開始し、結果アドレスで更新します  */
-/*               ：使用中の場合：非ブランクのレコードのアドレス               */
-/*               ：未使用の場合：ブロックの先頭レコードアドレス－レコード長   */
-/*               ：処理継続中の場合：次に検索するアドレス                     */
-/*----------------------------------------------------------------------------*/
+/****************************************************************************/
+/* Function Name | Fee_SrchFreeSpace                                        */
+/* Description   | Free Space Search                                        */
+/* Preconditions | None                                                     */
+/* Parameters    | stCPUDTF * ptstCPUDTFInfo                                */
+/*               |               MHA management data                        */
+/* Return Value  | Search Results                                           */
+/*               | 0x00000000: FEE_STATUS_OK     : In use                   */
+/*               | 0x00000001: FEE_STATUS_NG     : Not used                 */
+/*               | 0x00000005: FEE_STATUS_BUSY   : Processing ongoing       */
+/* Notes         | Search starts at ReadSrchAddress and updates             */
+/*               | at result address                                        */
+/*               | In use: address of non-blank record                      */
+/*               | if unused: first record address of block - record length */
+/*               | Continued processing: Next address to search             */
+/****************************************************************************/
 FUNC(uint32, FEE_CODE) Fee_SrchFreeSpace( P2VAR(Fee_CpuDtfType, AUTOMATIC, TYPEDEF) ptstCPUDTFInfo )
 {
-    uint32          u4tReturn;                          /* 戻り値 */
-    uint32          u4tSearchEndAddress;                /* 検索終了アドレス */
-    uint32          u4tReadSrchAddress;                 /* 検索アドレス */
-    uint32          u4tSrchRemainCount;                 /* 検索処理可能回数 */
-    uint32          u4tBlockRecordAddress;              /* ブロック先頭レコードアドレス */
+    uint32          u4tReturn;                          /* RETURN */
+    uint32          u4tSearchEndAddress;                /* Search end address */
+    uint32          u4tReadSrchAddress;                 /* Search address */
+    uint32          u4tSrchRemainCount;                 /* searchable */
+    uint32          u4tBlockRecordAddress;              /* Block-first record address */
     uint8           u1tBlankCheckResult;
+    Std_ReturnType  u1_dfPrepare;
 
-    /* ローカル変数(レジスタ変数)にロード */
-    u4tReadSrchAddress = ptstCPUDTFInfo->u4ReadSrchAddress;
-    u4tSrchRemainCount = ptstCPUDTFInfo->u4SrchRemainCount;
-    u4tBlockRecordAddress = FEE_BLKSTARTADDRTBL[ptstCPUDTFInfo->u1MainBlockNo] + FEE_STARTRECORDPOS;
-
-    /* 戻り値を未使用に設定 */
-    u4tReturn = FEE_STATUS_NG;
-    /* 検索処理可能回数から検索終了アドレスを計算 */
-    u4tSearchEndAddress = u4tReadSrchAddress - ( ( u4tSrchRemainCount - (uint32)FEE_SRCH_REMAIN_CNT_OFFSET ) * (uint32)FEE_RECORDMNGINFOLEN );
-    if ( u4tSearchEndAddress < u4tBlockRecordAddress )
+    /* Preparing for MemAcc data flash access. */
+    u1_dfPrepare = Fee_FlsWrp_ExtDfPreExecution();
+    if ( u1_dfPrepare == (Std_ReturnType)E_OK )
     {
-        /* 検索終了アドレスがブロック先頭レコードアドレスより小さい場合 */
-        /* 検索終了アドレスをブロック先頭レコードアドレスとする */
-        u4tSearchEndAddress = u4tBlockRecordAddress;
-    }
-
-    /* 検索開始アドレスからレコード長分デクリメントしながらブロック先頭アドレス以下になるまでループ */
-    while ( ( u4tSearchEndAddress <= u4tReadSrchAddress ) && ( u4tReturn == FEE_STATUS_NG ) )
-    {
-        u1tBlankCheckResult = Fee_DfcMpu_SyncBlankCheck( u4tReadSrchAddress, (uint32)FEE_RECORDMNGINFOLEN );
-        if ( u1tBlankCheckResult != FEE_DFCMPU_RESULT_OK )
+        /* Load into local variables (register variables) */
+        u4tReadSrchAddress = ptstCPUDTFInfo->u4ReadSrchAddress;
+        u4tSrchRemainCount = ptstCPUDTFInfo->u4SrchRemainCount;
+        u4tBlockRecordAddress = FEE_BLKSTARTADDRTBL[ptstCPUDTFInfo->u1MainBlockNo] + FEE_STARTRECORDPOS;
+    
+        /* Set return value unused */
+        u4tReturn = FEE_STATUS_NG;
+        /* Calculate the search end address from the number of times the search can be processed */
+        u4tSearchEndAddress = u4tReadSrchAddress - ( ( u4tSrchRemainCount - (uint32)FEE_SRCH_REMAIN_CNT_OFFSET ) * (uint32)FEE_RECORDMNGINFOLEN );
+        if ( u4tSearchEndAddress < u4tBlockRecordAddress )
         {
-            /* In case of a record is not blank. */
-            /* 戻り値を使用中(STATUS_OK)に設定 */
-            u4tReturn = FEE_STATUS_OK;
+            /* If the end address of the search is less than the beginning record address of the block */
+            /* Set search end address as block top record address */
+            u4tSearchEndAddress = u4tBlockRecordAddress;
         }
-        else
+    
+        /* Loop until it is less than or equal to the block head address while decrementing the record length from the search start address */
+        while ( ( u4tSearchEndAddress <= u4tReadSrchAddress ) && ( u4tReturn == FEE_STATUS_NG ) )
         {
-            /* 検索可能回数をデクリメント */
-            u4tSrchRemainCount--;
-            /* 検索アドレスをレコード長分デクリメント */
-            u4tReadSrchAddress -= (uint32)FEE_RECORDMNGINFOLEN;
+            u1tBlankCheckResult = Fee_DfcMpu_SyncBlankCheck( u4tReadSrchAddress, (uint32)FEE_RECORDMNGINFOLEN );
+            if ( u1tBlankCheckResult != FEE_DFCMPU_RESULT_OK )
+            {
+                /* In case of a record is not blank. */
+                /* Set return value to in use (STATUS _ OK) */
+                u4tReturn = FEE_STATUS_OK;
+            }
+            else
+            {
+                /* Decrement searchable count */
+                u4tSrchRemainCount--;
+                /* decrement search address by record length */
+                u4tReadSrchAddress -= (uint32)FEE_RECORDMNGINFOLEN;
+            }
         }
+    
+        if ( ( u4tReturn == FEE_STATUS_NG ) && ( u4tBlockRecordAddress <= u4tReadSrchAddress ) )
+        {
+            /* When the final data position is not found and the search address is greater than or equal to the block head record address */
+            /* Set return value to continue processing (STATUS _ BUSY) */
+            u4tReturn = FEE_STATUS_BUSY;
+        }
+        /* Write back search address */
+        ptstCPUDTFInfo->u4ReadSrchAddress = u4tReadSrchAddress;
+        /* Write back searchable count */
+        ptstCPUDTFInfo->u4SrchRemainCount = u4tSrchRemainCount;
     }
-
-    if ( ( u4tReturn == FEE_STATUS_NG ) && ( u4tBlockRecordAddress <= u4tReadSrchAddress ) )
+    else
     {
-        /* 最終データ位置が見つからず、かつ、検索アドレスがブロック先頭レコードアドレス以上のとき */
-        /* 戻り値を処理継続中(STATUS_BUSY)に設定 */
+        /* Set return value to continue processing (STATUS _ BUSY) */
         u4tReturn = FEE_STATUS_BUSY;
     }
-    /* 検索アドレスを書き戻し */
-    ptstCPUDTFInfo->u4ReadSrchAddress = u4tReadSrchAddress;
-    /* 検索処理可能回数を書き戻し */
-    ptstCPUDTFInfo->u4SrchRemainCount = u4tSrchRemainCount;
-
-    /* 戻り値を返却して処理終了 */
+    /* Return return value and finish processing */
     return u4tReturn;
 }
 
-/*関数説明--------------------------------------------------------------------*/
-/* 説  明        ：レコード書込み状態管理                                     */
-/* 入  力        ：stCPUDTF *ptstCPUDTFInfo                            */
-/*                                           ：MHA[データFlash]管理データ     */
-/* 出  力        ：処理状態                                                   */
-/*               ：  0x00000002 ：u4gSTATUS_EXIT ：書込み中(定期処理終了)     */
-/*               ：  0x00000003 ：u4gSTATUS_DONE ：書込み完了                 */
-/*               ：  0x00000004 ：u4gSTATUS_CONT ：書込み中(再実行可能)       */
-/* グローバル変数：                                                           */
-/* その他        ：                                                           */
-/*----------------------------------------------------------------------------*/
+/****************************************************************************/
+/* Function Name | Fee_WriteRecord                                          */
+/* Description   | Record write status management                           */
+/* Preconditions | None                                                     */
+/* Parameters    | stCPUDTF * ptstCPUDTFInfo                                */
+/*               |               MHA management data                        */
+/* Return Value  | Processing status                                        */
+/*               | 0x00000002 : u4gSTATUS_EXIT : Writing                    */
+/*               |                             (periodic processing ended)  */
+/*               | 0x00000003 : u4gSTATUS_DONE : Write complete             */
+/*               | 0x00000004 : u4gSTATUS_CONT : Writing (restartable)      */
+/* Notes         | None                                                     */
+/****************************************************************************/
 FUNC(uint32, FEE_CODE) Fee_WriteRecord( P2VAR(Fee_CpuDtfType, AUTOMATIC, TYPEDEF) ptstCPUDTFInfo )
 {
-    uint32          u4tReturn;                                  /* 戻り値 */
+    uint32          u4tReturn;                                  /* RETURN */
     
-    /* サブ状態により分岐 */
+    /* Branch by substate */
     switch ( ptstCPUDTFInfo->u1SubStatus )
     {
-        case FEE_SSTATUSWWIDLE:         /* 「アイドル」の場合 */
+        case FEE_SSTATUSWWIDLE:         /* For "Idol" */
             u4tReturn = Fee_WriteRecord_DoIdle( ptstCPUDTFInfo );
             break;
-        case FEE_SSTATUSWWSRCHPOSMNG:       /* 「書込みレコード位置(管理情報)検索中」の場合 */
+        case FEE_SSTATUSWWSRCHPOSMNG:       /* "Searching for position of write record (management information)" */
             u4tReturn = Fee_WriteRecord_DoSrchWritePosMng( ptstCPUDTFInfo );
             break;
-        case FEE_SSTATUSWWSTARTSRCHPOSDAT:      /* 「書込みレコード位置(データ)検索開始」の場合 */
+        case FEE_SSTATUSWWSTARTSRCHPOSDAT:      /* For "Begin search for position (data) of record to write" */
             u4tReturn = Fee_WriteRecord_DoStartSrchPosDat( ptstCPUDTFInfo );
             break;
-        case FEE_SSTATUSWWSRCHPOSDAT:           /* 「書込みレコード位置(データ)検索中」の場合 */
+        case FEE_SSTATUSWWSRCHPOSDAT:           /* "Searching for position (data) of record to write" */
             u4tReturn = Fee_WriteRecord_DoSrchWritePosDat( ptstCPUDTFInfo );
             break;
-        case FEE_SSTATUSWWPREPSRCHOLD:          /* 「旧データ検索準備中」の場合 */
+        case FEE_SSTATUSWWPREPSRCHOLD:          /* "Preparing to retrieve old data" */
             u4tReturn = Fee_WriteRecord_DoPrepSrchOldRecord( ptstCPUDTFInfo );
             break;
-        case FEE_SSTATUSWWSRCHOLD:      /* 「旧データ検索中」の場合 */
+        case FEE_SSTATUSWWSRCHOLD:      /* "Searching old data" */
             u4tReturn = Fee_WriteRecord_DoSrchOldRecord( ptstCPUDTFInfo );
             break;
-        case FEE_SSTATUSWWWRITE:            /* 「データ書き込み中」の場合 */
+        case FEE_SSTATUSWWWRITE:            /* For "writing data" */
             u4tReturn = Fee_WriteRecord_DoWriteNewRecord( ptstCPUDTFInfo );
             break;
-        default:                                    /* 上記以外の場合 */
-            /* 処理結果が「書込み成功・対象ブロックなし」以外の場合 */
+        default:                                    /* Otherwise */
+            /* When the processing result is other than "Write successful/No target block" */
             if ( ptstCPUDTFInfo->u1Result != FEE_RSP_NG_INITIALIZE )
             {
-                /* 処理結果を「書込み失敗」に設定 */
+                /* Set result to "write failed" */
                 ptstCPUDTFInfo->u1Result = FEE_RSP_NG_WRITE_DATA;
             }
-            /* 処理結果が「書込み成功・対象ブロックなし」の場合 */
+            /* When the processing result is "Write successful, no target block" */
             else
             {
-                /* 処理結果を「書込み失敗・対象ブロックなし」に設定 */
+                /* Set processing result to "write failed, no target block" */
                 ptstCPUDTFInfo->u1Result = FEE_RSP_NG_NODATA;
             }
-            /* 戻り値に「書込み完了」を設定 */
+            /* Set return value to "write complete" */
             u4tReturn = FEE_STATUS_DONE;
             break;
     }
     
-    /* 戻り値返却 */
+    /* RETURN */
     return u4tReturn;
 }
 
-/*関数説明--------------------------------------------------------------------*/
-/* 説  明        ：レコード書込み状態管理(アイドル)                           */
-/* 入  力        ：stCPUDTF *ptstCPUDTFInfo                            */
-/*                                           ：MHA[データFlash]管理データ     */
-/* 出  力        ：処理状態                                                   */
-/*               ：  0x00000002 ：u4gSTATUS_EXIT ：書込み中(定期処理終了)     */
-/*               ：  0x00000003 ：u4gSTATUS_DONE ：書込み完了                 */
-/*               ：  0x00000004 ：u4gSTATUS_CONT ：書込み中(再実行可能)       */
-/* グローバル変数：                                                           */
-/* その他        ：                                                           */
-/*----------------------------------------------------------------------------*/
+/****************************************************************************/
+/* Function Name | Fee_WriteRecord_DoIdle                                   */
+/* Description   | Record write status management (idle)                    */
+/* Preconditions | None                                                     */
+/* Parameters    | stCPUDTF * ptstCPUDTFInfo                                */
+/*               |               MHA management data                        */
+/* Return Value  | Processing status                                        */
+/*               | 0x00000002 : u4gSTATUS_EXIT : Writing                    */
+/*               |                              (periodic processing ended) */
+/*               | 0x00000003 : u4gSTATUS_DONE : Write complete             */
+/*               | 0x00000004 : u4gSTATUS_CONT : Writing (restartable)      */
+/* Notes         | None                                                     */
+/****************************************************************************/
 FUNC(uint32, FEE_CODE) Fee_WriteRecord_DoIdle( P2VAR(Fee_CpuDtfType, AUTOMATIC, TYPEDEF) ptstCPUDTFInfo )
 {
-    uint32          u4tReturn;                                  /* 戻り値 */
+    uint32          u4tReturn;                                  /* RETURN */
     uint32          u4tBCStartTailAddress;
     uint32          u4tBCEndTopAddress;
     uint32          u4tBlockStartAddr;
+    Std_ReturnType  u1_dfPrepare;
     
-    /* 末尾レコードを保持している場合 */
+    /* Keep trailing records */
     if (( ptstCPUDTFInfo->u4WriteLastRecMngAbsAddr != FEE_ADDRESS_INVALID ) &&
         ( ptstCPUDTFInfo->u4WriteLastRecDatAbsAddr != FEE_ADDRESS_INVALID ))
     {
-        /* ID指定データ読出し先アドレスに末尾レコードを設定 */
+        /* Set tail record at ID-specified data read destination address */
         ptstCPUDTFInfo->u4ReadSrchAddress = ptstCPUDTFInfo->u4WriteLastRecMngAbsAddr;
-        /* サブ状態を「旧データ検索準備中」に設定 */
+        /* Set sub status to "Old data ready" */
         ptstCPUDTFInfo->u1SubStatus = FEE_SSTATUSWWPREPSRCHOLD;
-        /* 戻り値に「書込み中(再実行可能)」を設定 */
+        /* Set return value to 'Writing (replayable)' */
         u4tReturn = FEE_STATUS_CONT;
     }
-    /* 末尾レコードを保持していない場合 */
+    /* If no tail record is kept */
     else
     {
-        /* ID指定データ読出し先アドレスに無効値を設定 */
-        ptstCPUDTFInfo->u4ReadSrchAddress = FEE_ADDRESS_INVALID;
-
-        /* Calculate blank check target address. */
-        /* The blank check target is a record management information area. */
-        u4tBlockStartAddr     = FEE_BLKSTARTADDRTBL[ptstCPUDTFInfo->u1MainBlockNo];
-        u4tBCEndTopAddress    = u4tBlockStartAddr + FEE_STARTRECORDPOS;
-        u4tBCStartTailAddress = u4tBlockStartAddr + (uint32)( ptstCPUDTFInfo->ptstAreaInf->u2RcrdDataAreaStartAddr );
-
-        /* Start blank check. */
-        Fee_StartBlankCheck( u4tBCStartTailAddress, u4tBCEndTopAddress );
-        /* サブ状態を「書込み位置検索中」に設定 */
-        ptstCPUDTFInfo->u1SubStatus = FEE_SSTATUSWWSRCHPOSMNG;
-        /* 戻り値に「書込み中(定期処理終了)」を設定 */
+        /* Preparing for MemAcc data flash access. */
+        u1_dfPrepare = Fee_FlsWrp_ExtDfPreExecution();
+        if ( u1_dfPrepare == (Std_ReturnType)E_OK )
+        {
+            /* Set invalid value for ID-specified data read destination address */
+            ptstCPUDTFInfo->u4ReadSrchAddress = FEE_ADDRESS_INVALID;
+    
+            /* Calculate blank check target address. */
+            /* The blank check target is a record management information area. */
+            u4tBlockStartAddr     = FEE_BLKSTARTADDRTBL[ptstCPUDTFInfo->u1MainBlockNo];
+            u4tBCEndTopAddress    = u4tBlockStartAddr + FEE_STARTRECORDPOS;
+            u4tBCStartTailAddress = u4tBlockStartAddr + (uint32)( ptstCPUDTFInfo->ptstAreaInf->u2RcrdDataAreaStartAddr );
+    
+            /* Start blank check. */
+            Fee_StartBlankCheck( u4tBCStartTailAddress, u4tBCEndTopAddress );
+            /* Set substate to "Finding write position" */
+            ptstCPUDTFInfo->u1SubStatus = FEE_SSTATUSWWSRCHPOSMNG;
+        }
+        /* Set return value to "Writing (Periodic Processing Ended)" */
         u4tReturn = FEE_STATUS_EXIT;
     }
     
     return u4tReturn;
 }
 
-/*関数説明--------------------------------------------------------------------*/
-/* 説  明        ：レコード書込み状態管理(書込み位置検索中)                   */
-/* 入  力        ：stCPUDTF *ptstCPUDTFInfo                            */
-/*                                           ：MHA[データFlash]管理データ     */
-/* 出  力        ：処理状態                                                   */
-/*               ：  0x00000002 ：STATUS_EXIT ：書込み中(定期処理終了)        */
-/* グローバル変数：                                                           */
-/* その他        ：                                                           */
-/*----------------------------------------------------------------------------*/
+/****************************************************************************/
+/* Function Name | Fee_WriteRecord_DoSrchWritePosMng                        */
+/* Description   | Record write status management                           */
+/*               | (searching for write location)                           */
+/* Preconditions | None                                                     */
+/* Parameters    | stCPUDTF * ptstCPUDTFInfo                                */
+/*               |               MHA management data                        */
+/* Return Value  | Processing status                                        */
+/*               | 0x00000002 : STATUS_EXIT : Writing                       */
+/*               |                           (periodic processing ended)    */
+/* Notes         | None                                                     */
+/****************************************************************************/
 FUNC(uint32, FEE_CODE) Fee_WriteRecord_DoSrchWritePosMng( P2VAR(Fee_CpuDtfType, AUTOMATIC, TYPEDEF) ptstCPUDTFInfo )
 {
-    /* データ書込み用空き領域検索 */
+    /* Find free space for data writing */
     Fee_Record_SrchSpcMngArea( ptstCPUDTFInfo, &(ptstCPUDTFInfo->u4WriteLastRecMngAbsAddr) );
-    /* ID指定データ読出し先アドレスにデータ書込み時・転送時書込み先アドレスを設定 */
+    /* Set write address for data write and transfer to ID-specified data read address */
     ptstCPUDTFInfo->u4ReadSrchAddress = ptstCPUDTFInfo->u4WriteLastRecMngAbsAddr;
-    /* サブ状態を「書込みレコード位置(データ)検索開始」に設定 */
+    /* Set substate to 'Start searching for write record position (data)' */
     ptstCPUDTFInfo->u1SubStatus = FEE_SSTATUSWWSTARTSRCHPOSDAT;
 
-    /* 戻り値に「書込み中(定期処理終了)」を設定 */
+    /* Set return value to "Writing (Periodic Processing Ended)" */
     return FEE_STATUS_EXIT;
 }
 
@@ -532,20 +560,26 @@ FUNC(uint32, FEE_CODE) Fee_WriteRecord_DoStartSrchPosDat( P2VAR(Fee_CpuDtfType, 
     uint32              u4tBCStartTailAddress;
     uint32              u4tBCEndTopAddress;
     uint32              u4tBlockStartAddr;
+    Std_ReturnType  u1_dfPrepare;
 
-    /* Calculate blank check target address. */
-    /* The blank check target is a record data area. */
-    u4tBlockStartAddr     = FEE_BLKSTARTADDRTBL[ptstCPUDTFInfo->u1MainBlockNo];
-    u4tBCEndTopAddress    = u4tBlockStartAddr + (uint32)(ptstCPUDTFInfo->ptstAreaInf->u2RcrdDataAreaStartAddr);
-    u4tBCStartTailAddress = u4tBlockStartAddr + (uint32)FEE_DATA_FLASH_SECTOR_SIZE;
-
-    /* Start blank check. */
-    Fee_StartBlankCheck( u4tBCStartTailAddress, u4tBCEndTopAddress );
-
-    /* サブ状態を「書込みレコード位置(データ)検索中」に設定 */
-    ptstCPUDTFInfo->u1SubStatus = FEE_SSTATUSWWSRCHPOSDAT;
-
-    /* 戻り値に「書込み中(定期処理終了)」を設定 */
+    /* Preparing for MemAcc data flash access. */
+    u1_dfPrepare = Fee_FlsWrp_ExtDfPreExecution();
+    if ( u1_dfPrepare == (Std_ReturnType)E_OK )
+    {
+        /* Calculate blank check target address. */
+        /* The blank check target is a record data area. */
+        u4tBlockStartAddr     = FEE_BLKSTARTADDRTBL[ptstCPUDTFInfo->u1MainBlockNo];
+        u4tBCEndTopAddress    = u4tBlockStartAddr + (uint32)(ptstCPUDTFInfo->ptstAreaInf->u2RcrdDataAreaStartAddr);
+        u4tBCStartTailAddress = u4tBlockStartAddr + (uint32)FEE_DATA_FLASH_SECTOR_SIZE;
+    
+        /* Start blank check. */
+        Fee_StartBlankCheck( u4tBCStartTailAddress, u4tBCEndTopAddress );
+    
+        /* Set substate to 'Finding write record position (data)' */
+        ptstCPUDTFInfo->u1SubStatus = FEE_SSTATUSWWSRCHPOSDAT;
+    }
+    
+    /* Set return value to "Writing (Periodic Processing Ended)" */
     return FEE_STATUS_EXIT;
 }
 
@@ -559,9 +593,9 @@ FUNC(uint32, FEE_CODE) Fee_WriteRecord_DoStartSrchPosDat( P2VAR(Fee_CpuDtfType, 
 /****************************************************************************/
 FUNC(uint32, FEE_CODE) Fee_WriteRecord_DoSrchWritePosDat( P2VAR(Fee_CpuDtfType, AUTOMATIC, FEE_VAR_NO_INIT) ptstCPUDTFInfo )
 {
-    /* データ書込み用空き領域検索 */
+    /* Find free space for data writing */
     Fee_Record_SrchSpcDatArea( ptstCPUDTFInfo, &(ptstCPUDTFInfo->u4WriteLastRecDatAbsAddr) );
-    /* サブ状態を「旧データ検索準備中」に設定 */
+    /* Set sub status to "Old data ready" */
     ptstCPUDTFInfo->u1SubStatus = FEE_SSTATUSWWPREPSRCHOLD;
     
     return FEE_STATUS_EXIT;
@@ -578,32 +612,35 @@ FUNC(uint32, FEE_CODE) Fee_WriteRecord_DoSrchWritePosDat( P2VAR(Fee_CpuDtfType, 
 FUNC(uint32, FEE_CODE) Fee_WriteRecord_DoPrepSrchOldRecord( P2VAR(Fee_CpuDtfType, AUTOMATIC, FEE_VAR_NO_INIT) ptstCPUDTFInfo )
 {
     Fee_Record_StateScOdStart();
-    /* サブ状態を「旧データ検索中」に設定 */
+    /* Set sub status to "Searching old data" */
     ptstCPUDTFInfo->u1SubStatus = FEE_SSTATUSWWSRCHOLD;
     
     return FEE_STATUS_CONT;
 }
 
-/*関数説明--------------------------------------------------------------------*/
-/* 説  明        ：レコード書込み状態管理(旧データ検索中)                     */
-/* 入  力        ：stCPUDTF *ptstCPUDTFInfo                            */
-/*                                           ：MHA[データFlash]管理データ     */
-/* 出  力        ：処理状態                                                   */
-/*               ：  0x00000002 ：u4gSTATUS_EXIT ：書込み中(定期処理終了)     */
-/*               ：  0x00000003 ：u4gSTATUS_DONE ：書込み完了                 */
-/*               ：  0x00000004 ：u4gSTATUS_CONT ：書込み中(再実行可能)       */
-/* グローバル変数：                                                           */
-/* その他        ：                                                           */
-/*----------------------------------------------------------------------------*/
+/****************************************************************************/
+/* Function Name | Fee_WriteRecord_DoSrchOldRecord                          */
+/* Description   | Record write status management                           */
+/*               |(during old data retrieval)                               */
+/* Preconditions | None                                                     */
+/* Parameters    | stCPUDTF * ptstCPUDTFInfo                                */
+/*               |               MHA management data                        */
+/* Return Value  | Processing status                                        */
+/*               | 0x00000002: u4gSTATUS _ EXIT: Writing                    */
+/*               |                               (periodic processing ended)*/
+/*               | 0x00000003: u4gSTATUS _ DONE: Write complete             */
+/*               | 0x00000004: u4gSTATUS _ CONT: Writing (restartable)      */
+/* Notes         | None                                                     */
+/****************************************************************************/
 FUNC(uint32, FEE_CODE) Fee_WriteRecord_DoSrchOldRecord( P2VAR(Fee_CpuDtfType, AUTOMATIC, TYPEDEF) ptstCPUDTFInfo )
 {
-    uint32          u4tReturn;                                  /* 戻り値 */
-    uint32          u4tReadActStatus;                           /* 結果 */
+    uint32          u4tReturn;                                  /* RETURN */
+    uint32          u4tReadActStatus;                           /* Results */
     uint32          u4tReadExecResult;
     boolean         btCheckDiffDataResult;
     boolean         btCheckWriteSpaceResult;
 
-    /* データ読み出し用データ検索 */
+    /* Data retrieval */
     u4tReadActStatus = Fee_Record_StateScOdExec( ptstCPUDTFInfo, &u4tReadExecResult, &btCheckDiffDataResult );
     if ( u4tReadActStatus == FEE_STATUS_EXIT )
     {
@@ -611,37 +648,37 @@ FUNC(uint32, FEE_CODE) Fee_WriteRecord_DoSrchOldRecord( P2VAR(Fee_CpuDtfType, AU
     }
     else if( u4tReadActStatus == FEE_STATUS_DONE )
     {
-        /* 旧データ比較結果が「旧データあり」の場合 */
+        /* When the old data comparison result is "With old data" */
         if (( u4tReadExecResult == FEE_STATUS_OK ) && ( btCheckDiffDataResult == (boolean)FALSE ))
         {
             u4tReturn = Fee_QuitWriteProcessSuccess( ptstCPUDTFInfo );
         }
-        /* 旧データ比較結果が「旧データなし」の場合 */
+        /* When the old data comparison result is "no old data" */
         else
         {
             btCheckWriteSpaceResult = Fee_Record_CheckWriteSpace( ptstCPUDTFInfo->u2ReqDataLen,
                                                                   (uint16)(ptstCPUDTFInfo->u1MainBlockNo),
                                                                   ptstCPUDTFInfo );
-            /* 書込み位置の空きがある場合 */
+            /* If there is room for writing */
             if ( btCheckWriteSpaceResult == (boolean)TRUE )
             {
                 Fee_Record_StateWtWtStart( ptstCPUDTFInfo, u4tReadExecResult );
 
-                /* サブ状態を「データ書き込み中」に設定 */
+                /* Set sub-state to 'Writing data' */
                 ptstCPUDTFInfo->u1SubStatus = FEE_SSTATUSWWWRITE;
-                /* 戻り値に「書込み中(定期処理終了)」を設定 */
+                /* Set return value to "Writing (Periodic Processing Ended)" */
                 u4tReturn = FEE_STATUS_EXIT;
             }
-            /* 書込み位置の空きがない場合 */
+            /* If there is no space at the writing position */
             else
             {
-                /* メイン状態を「ブロック選択中」に設定 */
+                /* Set main state to "Block selected" */
                 ptstCPUDTFInfo->u1MainStatus = FEE_MSTATUSWBSEL;
-                /* サブ状態を「転送中ブロック作成中」に設定 */
+                /* Set sub-state to 'Transferring block creation' */
                 ptstCPUDTFInfo->u1SubStatus = FEE_SSTATUSWSMOV;
-                /* サブサブ状態を「転送中ブロック作成中－転送中設定待ち」に設定 */
+                /* Set subsubstate to "Transferring block creation - Transferring pending setup" */
                 ptstCPUDTFInfo->u1SubSubStatus = FEE_SSSTATUSWSMWMOVE;
-                /* 戻り値にEXITを設定 */
+                /* Set EXIT in return */
                 u4tReturn = FEE_STATUS_EXIT;
             }
         }
@@ -654,36 +691,38 @@ FUNC(uint32, FEE_CODE) Fee_WriteRecord_DoSrchOldRecord( P2VAR(Fee_CpuDtfType, AU
     return u4tReturn;
 }
 
-/*関数説明--------------------------------------------------------------------*/
-/* 説  明        ：レコード書込み状態管理(データ書き込み中)                   */
-/* 入  力        ：stCPUDTF *ptstCPUDTFInfo                            */
-/*                                           ：MHA[データFlash]管理データ     */
-/* 出  力        ：処理状態                                                   */
-/*               ：  0x00000002 ：u4gSTATUS_EXIT ：書込み中(定期処理終了)     */
-/*               ：  0x00000003 ：u4gSTATUS_DONE ：書込み完了                 */
-/*               ：  0x00000004 ：u4gSTATUS_CONT ：書込み中(再実行可能)       */
-/* グローバル変数：                                                           */
-/* その他        ：                                                           */
-/*----------------------------------------------------------------------------*/
+/****************************************************************************/
+/* Function Name | Fee_WriteRecord_DoWriteNewRecord                         */
+/* Description   | Record write status management (writing data)            */
+/* Preconditions | None                                                     */
+/* Parameters    | stCPUDTF * ptstCPUDTFInfo                                */
+/*               |               MHA management data                        */
+/* Return Value  | Processing status                                        */
+/*               | 0x00000002 : u4gSTATUS_EXIT : Writing                    */
+/*               |                               (periodic processing ended)*/
+/*               | 0x00000003 : u4gSTATUS_DONE : Write complete             */
+/*               | 0x00000004 : u4gSTATUS_CONT : Writing (restartable)      */
+/* Notes         | None                                                     */
+/****************************************************************************/
 FUNC(uint32, FEE_CODE) Fee_WriteRecord_DoWriteNewRecord( P2VAR(Fee_CpuDtfType, AUTOMATIC, TYPEDEF) ptstCPUDTFInfo )
 {
-    uint32          u4tReturn;                                  /* 戻り値 */
-    uint32          u4tResult;                                  /* 結果 */
+    uint32          u4tReturn;                                  /* RETURN */
+    uint32          u4tResult;                                  /* Results */
 
-    /* データ書込み中共通処理 */
+    /* Common processing during data write */
     u4tResult = Fee_Record_StateWtWtExec( ptstCPUDTFInfo );
-    /* 「処理継続中」の場合 */
+    /* For "Processing Ongoing" */
     if ( u4tResult == FEE_STATUS_EXIT )
     {
-        /* 戻り値に「書込み中(定期処理終了)」を設定 */
+        /* Set return value to "Writing (Periodic Processing Ended)" */
         u4tReturn = FEE_STATUS_EXIT;
     }
-    /* 「書込み終了」の場合 */
+    /* In case of "write end" */
     else if ( u4tResult == FEE_STATUS_DONE )
     {
         u4tReturn = Fee_QuitWriteProcessSuccess( ptstCPUDTFInfo );
     }
-    /* 「書込み失敗」の場合 */
+    /* For "write failed" */
     else
     {
         u4tReturn = Fee_QuitWriteProcessFailure( ptstCPUDTFInfo );
@@ -692,37 +731,39 @@ FUNC(uint32, FEE_CODE) Fee_WriteRecord_DoWriteNewRecord( P2VAR(Fee_CpuDtfType, A
     return u4tReturn;
 }
 
-/*関数説明--------------------------------------------------------------------*/
-/* 説  明        ：書き込み成功時終了処理                                     */
-/* 入  力        ：stCPUDTF *ptstCPUDTFInfo                                   */
-/*                                           ：MHA[データFlash]管理データ     */
-/* 出  力        ：処理状態                                                   */
-/*               ：  0x00000002 ：u4gSTATUS_EXIT ：書込み中(定期処理終了)     */
-/*               ：  0x00000003 ：u4gSTATUS_DONE ：書込み完了                 */
-/*               ：  0x00000004 ：u4gSTATUS_CONT ：書込み中(再実行可能)       */
-/* グローバル変数：                                                           */
-/* その他        ：                                                           */
-/*----------------------------------------------------------------------------*/
+/****************************************************************************/
+/* Function Name | Fee_QuitWriteProcessSuccess                              */
+/* Description   | End processing on successful write                       */
+/* Preconditions | None                                                     */
+/* Parameters    | stCPUDTF *ptstCPUDTFInfo                                 */
+/*               |               MHA management data                        */
+/* Return Value  | Processing status                                        */
+/*               | 0x00000002: u4gSTATUS _ EXIT: Writing                    */
+/*               |                              (periodic processing ended) */
+/*               | 0x00000003: u4gSTATUS _ DONE: Write complete             */
+/*               | 0x00000004: u4gSTATUS _ CONT: Writing (restartable)      */
+/* Notes         | None                                                     */
+/****************************************************************************/
 FUNC( uint32, FEE_CODE )
 Fee_QuitWriteProcessSuccess(
     P2VAR(Fee_CpuDtfType, AUTOMATIC, TYPEDEF) ptstCPUDTFInfo
 ){
-    uint32          u4tReturn;                                  /* 戻り値 */
+    uint32          u4tReturn;                                  /* RETURN */
 
-    /* 最終書込みレコード位置更新許可フラグを「許可」に設定 */
+    /* Set last write record position update permission flag to "allow" */
     ptstCPUDTFInfo->u1LastWritePosFlag = FEE_FLAG_ON;
-    /* 処理結果が「書込み成功・対象ブロックなし」以外の場合 */
+    /* When the processing result is other than "Write successful/No target block" */
     if ( ptstCPUDTFInfo->u1Result != FEE_RSP_NG_INITIALIZE )
     {
-        /* 処理結果を「書込み成功」に設定 */
+        /* Set result to "write successful" */
         ptstCPUDTFInfo->u1Result = FEE_RSP_OK;
     }
-    /* 処理結果が「書込み成功・対象ブロックなし」の場合 */
+    /* When the processing result is "Write successful, no target block" */
     else
     {
         /* No process */
     }
-    /* 戻り値に「書込み完了」を設定 */
+    /* Set return value to "write complete" */
     u4tReturn = FEE_STATUS_DONE;
     
     return u4tReturn;
@@ -1045,6 +1086,7 @@ Fee_Record_StateWtMvExec(
     uint32 Rtn = FEE_STATUS_EXIT;
     uint32 MngDfcResult;
     uint32 DummyLastWriteAddr;
+    Std_ReturnType  u1_dfPrepare;
 
     MngDfcResult = Fee_GetMngDfcResult( &DummyLastWriteAddr );
 
@@ -1058,16 +1100,26 @@ Fee_Record_StateWtMvExec(
                 break;
 
             case FEE_RECORD_STATE_WWAITXFLAG:
-                Fee_Record_CompleteLen = FEE_RECORD_COMPLETELEN_INIT_VAL_ZERO; /* The point of initializing Fee_Record_CompleteLen. */
-                Fee_Record_StateWtMvActWtDatCs( CPUDTFInfo );
-                Fee_Record_State = FEE_RECORD_STATE_WWAITDATACS;
+                /* Preparing for MemAcc data flash access. */
+                u1_dfPrepare = Fee_FlsWrp_ExtDfPreExecution();
+                if ( u1_dfPrepare == (Std_ReturnType)E_OK )
+                {
+                    Fee_Record_CompleteLen = FEE_RECORD_COMPLETELEN_INIT_VAL_ZERO; /* The point of initializing Fee_Record_CompleteLen. */
+                    Fee_Record_StateWtMvActWtDatCs( CPUDTFInfo );
+                    Fee_Record_State = FEE_RECORD_STATE_WWAITDATACS;
+                }
                 break;
 
             case FEE_RECORD_STATE_WWAITDATACS:
                 if( Fee_Record_CompleteLen < ( CPUDTFInfo->u2MovDataLen + (uint16)FEE_RECORD_SIZE_CHECKSUM ))
                 {
-                    Fee_Record_StateWtMvActWtDatCs( CPUDTFInfo );
-                    Fee_Record_State = FEE_RECORD_STATE_WWAITDATACS;
+                    /* Preparing for MemAcc data flash access. */
+                    u1_dfPrepare = Fee_FlsWrp_ExtDfPreExecution();
+                    if ( u1_dfPrepare == (Std_ReturnType)E_OK )
+                    {
+                        Fee_Record_StateWtMvActWtDatCs( CPUDTFInfo );
+                        Fee_Record_State = FEE_RECORD_STATE_WWAITDATACS;
+                    }
                 }
                 else
                 {
@@ -1946,47 +1998,58 @@ Fee_Record_StateScOdActRecPosTbl(
     uint32 ActivateResult;
     uint32 CheckRecordPosResult;
     uint8  SectorNo = CPUDTFInfo->u1MainBlockNo;
+    Std_ReturnType  u1_dfPrepare;
 
-    /* Do Action. */
-    ActivateResult = Fee_RecordPosTbl_ReadyPosArea( CPUDTFInfo->u1AreaNum, SectorNo, CPUDTFInfo->u4WriteLastRecMngAbsAddr );
-
-    /* Exit action and state change. */
-    if( ActivateResult == FEE_STATUS_OK )
+    /* Preparing for MemAcc data flash access. */
+    u1_dfPrepare = Fee_FlsWrp_ExtDfPreExecution();
+    if ( u1_dfPrepare == (Std_ReturnType)E_OK )
     {
-        CheckRecordPosResult = Fee_Record_StateScCmAsubGetRecPos( CPUDTFInfo->u1AreaNum, SectorNo, CPUDTFInfo->u2DATA_ID, CPUDTFInfo->u2ReqDataLen, &(CPUDTFInfo->u4ReadSrchAddress) );
-        if( CheckRecordPosResult == FEE_STATUS_OK )
+        /* Do Action. */
+        ActivateResult = Fee_RecordPosTbl_ReadyPosArea( CPUDTFInfo->u1AreaNum, SectorNo, CPUDTFInfo->u4WriteLastRecMngAbsAddr );
+    
+        /* Exit action and state change. */
+        if( ActivateResult == FEE_STATUS_OK )
         {
-            /* Initialize sum value and calculate sum using block number and data address. */
-            Fee_Record_CheckSumVal = Fee_Record_StateScCmAsubCalCSIdAddr( CPUDTFInfo->u4ReadSrchAddress );/* The point of initializing Fee_Record_CheckSumVal. */
-
-            Fee_Record_CompleteLen     = FEE_RECORD_COMPLETELEN_INIT_VAL_ZERO; /* The point of initializing Fee_Record_CompleteLen. */
-            Fee_Record_DataMatchResult = FEE_RECORD_DATA_CMP_MATCH;
-
-            Fee_Record_State = FEE_RECORD_STATE_SWAITCALCSTBL;
-            Rtn = Fee_Record_StateScOdActCalCSTbl( CPUDTFInfo, DstSrchResult );
+            CheckRecordPosResult = Fee_Record_StateScCmAsubGetRecPos( CPUDTFInfo->u1AreaNum, SectorNo, CPUDTFInfo->u2DATA_ID, CPUDTFInfo->u2ReqDataLen, &(CPUDTFInfo->u4ReadSrchAddress) );
+            if( CheckRecordPosResult == FEE_STATUS_OK )
+            {
+                /* Initialize sum value and calculate sum using block number and data address. */
+                Fee_Record_CheckSumVal = Fee_Record_StateScCmAsubCalCSIdAddr( CPUDTFInfo->u4ReadSrchAddress );/* The point of initializing Fee_Record_CheckSumVal. */
+    
+                Fee_Record_CompleteLen     = FEE_RECORD_COMPLETELEN_INIT_VAL_ZERO; /* The point of initializing Fee_Record_CompleteLen. */
+                Fee_Record_DataMatchResult = FEE_RECORD_DATA_CMP_MATCH;
+    
+                Fee_Record_State = FEE_RECORD_STATE_SWAITCALCSTBL;
+                Rtn = Fee_Record_StateScOdActCalCSTbl( CPUDTFInfo, DstSrchResult );
+            }
+            else if( CheckRecordPosResult == FEE_STATUS_NODATA )
+            {
+                Fee_Record_State = FEE_RECORD_STATE_INVALID;
+                *DstSrchResult = FEE_STATUS_NG;
+                Rtn = FEE_STATUS_DONE;
+            }
+            else /* CheckRecordPosResult == FEE_STATUS_NG */
+            {
+                CPUDTFInfo->u4ReadSrchAddress = CPUDTFInfo->u4WriteLastRecMngAbsAddr;
+                Fee_Record_State = FEE_RECORD_STATE_SWAITSRCHDAT;
+                Rtn = Fee_Record_StateScOdActSrchDat( CPUDTFInfo, DstSrchResult );
+            }
         }
-        else if( CheckRecordPosResult == FEE_STATUS_NODATA )
-        {
-            Fee_Record_State = FEE_RECORD_STATE_INVALID;
-            *DstSrchResult = FEE_STATUS_NG;
-            Rtn = FEE_STATUS_DONE;
-        }
-        else /* CheckRecordPosResult == FEE_STATUS_NG */
+        else if( ActivateResult == FEE_STATUS_NG )
         {
             CPUDTFInfo->u4ReadSrchAddress = CPUDTFInfo->u4WriteLastRecMngAbsAddr;
             Fee_Record_State = FEE_RECORD_STATE_SWAITSRCHDAT;
             Rtn = Fee_Record_StateScOdActSrchDat( CPUDTFInfo, DstSrchResult );
         }
+        else /* ActivateResult == FEE_STATUS_BUSY */
+        {
+            Fee_Record_State = FEE_RECORD_STATE_SWAITRECPOSTBL;
+            Rtn = FEE_STATUS_EXIT;
+        }
     }
-    else if( ActivateResult == FEE_STATUS_NG )
+    else
     {
-        CPUDTFInfo->u4ReadSrchAddress = CPUDTFInfo->u4WriteLastRecMngAbsAddr;
-        Fee_Record_State = FEE_RECORD_STATE_SWAITSRCHDAT;
-        Rtn = Fee_Record_StateScOdActSrchDat( CPUDTFInfo, DstSrchResult );
-    }
-    else /* ActivateResult == FEE_STATUS_BUSY */
-    {
-        Fee_Record_State = FEE_RECORD_STATE_SWAITRECPOSTBL;
+        /* Set return value to exit */
         Rtn = FEE_STATUS_EXIT;
     }
 
@@ -2009,30 +2072,41 @@ Fee_Record_StateScOdActCalCSTbl(
     boolean ChkCSResult;
     uint32  CalCsResult;
     uint32  Rtn;
+    Std_ReturnType  u1_dfPrepare;
 
-    /* Do Action. Calculate check sum of data. And check if request data and old record data match. */
-    CalCsResult = Fee_Record_StateScOdAsubCalCSChkDat( CPUDTFInfo, &ChkCSResult );
-
-    /* Exit action and state change. */
-    if( CalCsResult == FEE_STATUS_DONE )
+    /* Preparing for MemAcc data flash access. */
+    u1_dfPrepare = Fee_FlsWrp_ExtDfPreExecution();
+    if ( u1_dfPrepare == (Std_ReturnType)E_OK )
     {
-        if ( ChkCSResult == (boolean)TRUE )
+        /* Do Action. Calculate check sum of data. And check if request data and old record data match. */
+        CalCsResult = Fee_Record_StateScOdAsubCalCSChkDat( CPUDTFInfo, &ChkCSResult );
+    
+        /* Exit action and state change. */
+        if( CalCsResult == FEE_STATUS_DONE )
         {
-            Fee_Record_State = FEE_RECORD_STATE_INVALID;
-            *DstSrchResult = Fee_Record_StateScCmAsubRdChkDS( CPUDTFInfo->u4ReadSrchAddress );
-            Rtn = FEE_STATUS_DONE;
+            if ( ChkCSResult == (boolean)TRUE )
+            {
+                Fee_Record_State = FEE_RECORD_STATE_INVALID;
+                *DstSrchResult = Fee_Record_StateScCmAsubRdChkDS( CPUDTFInfo->u4ReadSrchAddress );
+                Rtn = FEE_STATUS_DONE;
+            }
+            else
+            {
+                Fee_Record_DataMatchResult = FEE_RECORD_DATA_CMP_INI_MISMATCH;
+                CPUDTFInfo->u4ReadSrchAddress = CPUDTFInfo->u4WriteLastRecMngAbsAddr;
+                Fee_Record_State = FEE_RECORD_STATE_SWAITSRCHDAT;
+                Rtn = FEE_STATUS_EXIT;
+            }
         }
         else
         {
-            Fee_Record_DataMatchResult = FEE_RECORD_DATA_CMP_INI_MISMATCH;
-            CPUDTFInfo->u4ReadSrchAddress = CPUDTFInfo->u4WriteLastRecMngAbsAddr;
-            Fee_Record_State = FEE_RECORD_STATE_SWAITSRCHDAT;
+            Fee_Record_State = FEE_RECORD_STATE_SWAITCALCSTBL;
             Rtn = FEE_STATUS_EXIT;
         }
     }
     else
     {
-        Fee_Record_State = FEE_RECORD_STATE_SWAITCALCSTBL;
+        /* Set return value to exit */
         Rtn = FEE_STATUS_EXIT;
     }
 
@@ -2054,29 +2128,40 @@ Fee_Record_StateScOdActSrchDat (
 ){
     uint32 Rtn;
     uint32 SrchResult;
+    Std_ReturnType  u1_dfPrepare;
 
-    SrchResult = Fee_Record_StateScCmAsubSrchId( CPUDTFInfo->u2DATA_ID, CPUDTFInfo->u2ReqDataLen, CPUDTFInfo->u1MainBlockNo, CPUDTFInfo );
-
-    if( SrchResult == FEE_STATUS_BUSY )
+    /* Preparing for MemAcc data flash access. */
+    u1_dfPrepare = Fee_FlsWrp_ExtDfPreExecution();
+    if ( u1_dfPrepare == (Std_ReturnType)E_OK )
     {
-        Fee_Record_State = FEE_RECORD_STATE_SWAITSRCHDAT;
+        SrchResult = Fee_Record_StateScCmAsubSrchId( CPUDTFInfo->u2DATA_ID, CPUDTFInfo->u2ReqDataLen, CPUDTFInfo->u1MainBlockNo, CPUDTFInfo );
+    
+        if( SrchResult == FEE_STATUS_BUSY )
+        {
+            Fee_Record_State = FEE_RECORD_STATE_SWAITSRCHDAT;
+            Rtn = FEE_STATUS_EXIT;
+        }
+        else if( SrchResult == FEE_STATUS_OK )
+        {
+            Fee_Record_CheckSumVal = Fee_Record_StateScCmAsubCalCSIdAddr( CPUDTFInfo->u4ReadSrchAddress );/* The point of initializing Fee_Record_CheckSumVal. */
+            Fee_Record_CompleteLen = FEE_RECORD_COMPLETELEN_INIT_VAL_ZERO; /* The point of initializing Fee_Record_CompleteLen. */
+            Fee_Record_DataMatchResult = FEE_RECORD_DATA_CMP_MATCH;
+    
+            Fee_Record_State = FEE_RECORD_STATE_SWAITCALCSSRCH;
+            Rtn = Fee_Record_StateScOdActCalCSSrch( CPUDTFInfo, DstSrchResult );
+        }
+        else /* SrchResult == FEE_STATUS_NG */
+        {
+            Fee_RecordPosTbl_SetPos( CPUDTFInfo->u1AreaNum, CPUDTFInfo->u2DATA_ID, FEE_IDNONE );
+            Fee_Record_State = FEE_RECORD_STATE_INVALID;
+            *DstSrchResult = SrchResult;
+            Rtn = FEE_STATUS_DONE;
+        }
+    }
+    else
+    {
+        /* Set return value to exit */
         Rtn = FEE_STATUS_EXIT;
-    }
-    else if( SrchResult == FEE_STATUS_OK )
-    {
-        Fee_Record_CheckSumVal = Fee_Record_StateScCmAsubCalCSIdAddr( CPUDTFInfo->u4ReadSrchAddress );/* The point of initializing Fee_Record_CheckSumVal. */
-        Fee_Record_CompleteLen = FEE_RECORD_COMPLETELEN_INIT_VAL_ZERO; /* The point of initializing Fee_Record_CompleteLen. */
-        Fee_Record_DataMatchResult = FEE_RECORD_DATA_CMP_MATCH;
-
-        Fee_Record_State = FEE_RECORD_STATE_SWAITCALCSSRCH;
-        Rtn = Fee_Record_StateScOdActCalCSSrch( CPUDTFInfo, DstSrchResult );
-    }
-    else /* SrchResult == FEE_STATUS_NG */
-    {
-        Fee_RecordPosTbl_SetPos( CPUDTFInfo->u1AreaNum, CPUDTFInfo->u2DATA_ID, FEE_IDNONE );
-        Fee_Record_State = FEE_RECORD_STATE_INVALID;
-        *DstSrchResult = SrchResult;
-        Rtn = FEE_STATUS_DONE;
     }
 
     return Rtn;
@@ -2099,32 +2184,43 @@ Fee_Record_StateScOdActCalCSSrch(
     uint32  CalCsResult;
     uint32  ReadSrchAddress;
     uint32  Rtn;
+    Std_ReturnType  u1_dfPrepare;
 
-    /* Do Action. Calculate check sum of data. And check if request data and old record data match. */
-    CalCsResult = Fee_Record_StateScOdAsubCalCSChkDat( CPUDTFInfo, &ChkCSResult );
-
-    /* Exit action and state change. */
-    if( CalCsResult == FEE_STATUS_DONE )
+    /* Preparing for MemAcc data flash access. */
+    u1_dfPrepare = Fee_FlsWrp_ExtDfPreExecution();
+    if ( u1_dfPrepare == (Std_ReturnType)E_OK )
     {
-        ReadSrchAddress = CPUDTFInfo->u4ReadSrchAddress;
-        if ( ChkCSResult == (boolean)TRUE )
+        /* Do Action. Calculate check sum of data. And check if request data and old record data match. */
+        CalCsResult = Fee_Record_StateScOdAsubCalCSChkDat( CPUDTFInfo, &ChkCSResult );
+    
+        /* Exit action and state change. */
+        if( CalCsResult == FEE_STATUS_DONE )
         {
-            Fee_Record_StateCmCmAsubSetRecPos( CPUDTFInfo->u1AreaNum, CPUDTFInfo->u1MainBlockNo, CPUDTFInfo->u2DATA_ID, ReadSrchAddress );
-            Fee_Record_State = FEE_RECORD_STATE_INVALID;
-            *DstSrchResult = Fee_Record_StateScCmAsubRdChkDS( ReadSrchAddress );
-            Rtn = FEE_STATUS_DONE;
+            ReadSrchAddress = CPUDTFInfo->u4ReadSrchAddress;
+            if ( ChkCSResult == (boolean)TRUE )
+            {
+                Fee_Record_StateCmCmAsubSetRecPos( CPUDTFInfo->u1AreaNum, CPUDTFInfo->u1MainBlockNo, CPUDTFInfo->u2DATA_ID, ReadSrchAddress );
+                Fee_Record_State = FEE_RECORD_STATE_INVALID;
+                *DstSrchResult = Fee_Record_StateScCmAsubRdChkDS( ReadSrchAddress );
+                Rtn = FEE_STATUS_DONE;
+            }
+            else
+            {
+                Fee_Record_DataMatchResult = FEE_RECORD_DATA_CMP_INI_MISMATCH;
+                CPUDTFInfo->u4ReadSrchAddress = ReadSrchAddress - (uint32)FEE_RECORDMNGINFOLEN;
+                Fee_Record_State = FEE_RECORD_STATE_SWAITSRCHDAT;
+                Rtn = FEE_STATUS_EXIT;
+            }
         }
         else
         {
-            Fee_Record_DataMatchResult = FEE_RECORD_DATA_CMP_INI_MISMATCH;
-            CPUDTFInfo->u4ReadSrchAddress = ReadSrchAddress - (uint32)FEE_RECORDMNGINFOLEN;
-            Fee_Record_State = FEE_RECORD_STATE_SWAITSRCHDAT;
+            Fee_Record_State = FEE_RECORD_STATE_SWAITCALCSSRCH;
             Rtn = FEE_STATUS_EXIT;
         }
     }
     else
     {
-        Fee_Record_State = FEE_RECORD_STATE_SWAITCALCSSRCH;
+        /* Set return value to exit */
         Rtn = FEE_STATUS_EXIT;
     }
 
@@ -2148,45 +2244,56 @@ Fee_Record_StateScRdActRecPosTbl(
     uint32 ActivateResult;
     uint32 CheckRecordPosResult;
     uint8  SectorNo = CPUDTFInfo->u1MainBlockNo;
+    Std_ReturnType  u1_dfPrepare;
 
-    /* Do Action. */
-    ActivateResult = Fee_RecordPosTbl_ReadyPosArea( CPUDTFInfo->u1AreaNum, SectorNo, CPUDTFInfo->u4WriteLastRecMngAbsAddr );
-
-    /* Exit action and state change. */
-    if( ActivateResult == FEE_STATUS_OK )
+    /* Preparing for MemAcc data flash access. */
+    u1_dfPrepare = Fee_FlsWrp_ExtDfPreExecution();
+    if ( u1_dfPrepare == (Std_ReturnType)E_OK )
     {
-        CheckRecordPosResult = Fee_Record_StateScCmAsubGetRecPos( CPUDTFInfo->u1AreaNum, SectorNo, CPUDTFInfo->u2DATA_ID, CPUDTFInfo->u2ReqDataLen, &(CPUDTFInfo->u4ReadSrchAddress) );
-        if( CheckRecordPosResult == FEE_STATUS_OK )
+        /* Do Action. */
+        ActivateResult = Fee_RecordPosTbl_ReadyPosArea( CPUDTFInfo->u1AreaNum, SectorNo, CPUDTFInfo->u4WriteLastRecMngAbsAddr );
+    
+        /* Exit action and state change. */
+        if( ActivateResult == FEE_STATUS_OK )
         {
-            /* Initialize sum value and calculate sum using block number and data address. */
-            Fee_Record_CheckSumVal = Fee_Record_StateScCmAsubCalCSIdAddr( CPUDTFInfo->u4ReadSrchAddress );/* The point of initializing Fee_Record_CheckSumVal. */
-            Fee_Record_CompleteLen     = FEE_RECORD_COMPLETELEN_INIT_VAL_ZERO; /* The point of initializing Fee_Record_CompleteLen. */
-
-            Fee_Record_State = FEE_RECORD_STATE_SWAITCALCSTBL;
-            Rtn = Fee_Record_StateScRdActCalCSTbl( CPUDTFInfo, DstSrchResult );
+            CheckRecordPosResult = Fee_Record_StateScCmAsubGetRecPos( CPUDTFInfo->u1AreaNum, SectorNo, CPUDTFInfo->u2DATA_ID, CPUDTFInfo->u2ReqDataLen, &(CPUDTFInfo->u4ReadSrchAddress) );
+            if( CheckRecordPosResult == FEE_STATUS_OK )
+            {
+                /* Initialize sum value and calculate sum using block number and data address. */
+                Fee_Record_CheckSumVal = Fee_Record_StateScCmAsubCalCSIdAddr( CPUDTFInfo->u4ReadSrchAddress );/* The point of initializing Fee_Record_CheckSumVal. */
+                Fee_Record_CompleteLen     = FEE_RECORD_COMPLETELEN_INIT_VAL_ZERO; /* The point of initializing Fee_Record_CompleteLen. */
+    
+                Fee_Record_State = FEE_RECORD_STATE_SWAITCALCSTBL;
+                Rtn = Fee_Record_StateScRdActCalCSTbl( CPUDTFInfo, DstSrchResult );
+            }
+            else if( CheckRecordPosResult == FEE_STATUS_NODATA )
+            {
+                Fee_Record_State = FEE_RECORD_STATE_INVALID;
+                *DstSrchResult = FEE_STATUS_NG;
+                Rtn = FEE_STATUS_DONE;
+            }
+            else /* CheckRecordPosResult == FEE_STATUS_NG */
+            {
+                CPUDTFInfo->u4ReadSrchAddress = CPUDTFInfo->u4WriteLastRecMngAbsAddr;
+                Fee_Record_State = FEE_RECORD_STATE_SWAITSRCHDAT;
+                Rtn = Fee_Record_StateScRdActSrchDat( CPUDTFInfo, DstSrchResult );
+            }
         }
-        else if( CheckRecordPosResult == FEE_STATUS_NODATA )
-        {
-            Fee_Record_State = FEE_RECORD_STATE_INVALID;
-            *DstSrchResult = FEE_STATUS_NG;
-            Rtn = FEE_STATUS_DONE;
-        }
-        else /* CheckRecordPosResult == FEE_STATUS_NG */
+        else if( ActivateResult == FEE_STATUS_NG )
         {
             CPUDTFInfo->u4ReadSrchAddress = CPUDTFInfo->u4WriteLastRecMngAbsAddr;
             Fee_Record_State = FEE_RECORD_STATE_SWAITSRCHDAT;
             Rtn = Fee_Record_StateScRdActSrchDat( CPUDTFInfo, DstSrchResult );
         }
+        else /* ActivateResult == FEE_STATUS_BUSY */
+        {
+            Fee_Record_State = FEE_RECORD_STATE_SWAITRECPOSTBL;
+            Rtn = FEE_STATUS_EXIT;
+        }
     }
-    else if( ActivateResult == FEE_STATUS_NG )
+    else
     {
-        CPUDTFInfo->u4ReadSrchAddress = CPUDTFInfo->u4WriteLastRecMngAbsAddr;
-        Fee_Record_State = FEE_RECORD_STATE_SWAITSRCHDAT;
-        Rtn = Fee_Record_StateScRdActSrchDat( CPUDTFInfo, DstSrchResult );
-    }
-    else /* ActivateResult == FEE_STATUS_BUSY */
-    {
-        Fee_Record_State = FEE_RECORD_STATE_SWAITRECPOSTBL;
+        /* Set return value to exit */
         Rtn = FEE_STATUS_EXIT;
     }
 
@@ -2209,29 +2316,40 @@ Fee_Record_StateScRdActCalCSTbl(
     boolean ChkCSResult;
     uint32  CalCsResult;
     uint32  Rtn;
+    Std_ReturnType  u1_dfPrepare;
 
-    /* Do Action. Calculate check sum of data. And copy flash data to request address. */
-    CalCsResult = Fee_Record_StateScRdAsubCalCSCpyDat( CPUDTFInfo, &ChkCSResult );
-
-    /* Exit action and state change. */
-    if( CalCsResult == FEE_STATUS_DONE )
+    /* Preparing for MemAcc data flash access. */
+    u1_dfPrepare = Fee_FlsWrp_ExtDfPreExecution();
+    if ( u1_dfPrepare == (Std_ReturnType)E_OK )
     {
-        if ( ChkCSResult == (boolean)TRUE )
+        /* Do Action. Calculate check sum of data. And copy flash data to request address. */
+        CalCsResult = Fee_Record_StateScRdAsubCalCSCpyDat( CPUDTFInfo, &ChkCSResult );
+    
+        /* Exit action and state change. */
+        if( CalCsResult == FEE_STATUS_DONE )
         {
-            Fee_Record_State = FEE_RECORD_STATE_INVALID;
-            *DstSrchResult = Fee_Record_StateScCmAsubRdChkDS( CPUDTFInfo->u4ReadSrchAddress );
-            Rtn = FEE_STATUS_DONE;
+            if ( ChkCSResult == (boolean)TRUE )
+            {
+                Fee_Record_State = FEE_RECORD_STATE_INVALID;
+                *DstSrchResult = Fee_Record_StateScCmAsubRdChkDS( CPUDTFInfo->u4ReadSrchAddress );
+                Rtn = FEE_STATUS_DONE;
+            }
+            else
+            {
+                CPUDTFInfo->u4ReadSrchAddress = CPUDTFInfo->u4WriteLastRecMngAbsAddr;
+                Fee_Record_State = FEE_RECORD_STATE_SWAITSRCHDAT;
+                Rtn = FEE_STATUS_EXIT;
+            }
         }
         else
         {
-            CPUDTFInfo->u4ReadSrchAddress = CPUDTFInfo->u4WriteLastRecMngAbsAddr;
-            Fee_Record_State = FEE_RECORD_STATE_SWAITSRCHDAT;
+            Fee_Record_State = FEE_RECORD_STATE_SWAITCALCSTBL;
             Rtn = FEE_STATUS_EXIT;
         }
     }
     else
     {
-        Fee_Record_State = FEE_RECORD_STATE_SWAITCALCSTBL;
+        /* Set return value to exit */
         Rtn = FEE_STATUS_EXIT;
     }
 
@@ -2253,28 +2371,39 @@ Fee_Record_StateScRdActSrchDat (
 ){
     uint32 Rtn;
     uint32 SrchResult;
+    Std_ReturnType  u1_dfPrepare;
 
-    SrchResult = Fee_Record_StateScCmAsubSrchId( CPUDTFInfo->u2DATA_ID, CPUDTFInfo->u2ReqDataLen, CPUDTFInfo->u1MainBlockNo, CPUDTFInfo );
-
-    if( SrchResult == FEE_STATUS_BUSY )
+    /* Preparing for MemAcc data flash access. */
+    u1_dfPrepare = Fee_FlsWrp_ExtDfPreExecution();
+    if ( u1_dfPrepare == (Std_ReturnType)E_OK )
     {
-        Fee_Record_State = FEE_RECORD_STATE_SWAITSRCHDAT;
+        SrchResult = Fee_Record_StateScCmAsubSrchId( CPUDTFInfo->u2DATA_ID, CPUDTFInfo->u2ReqDataLen, CPUDTFInfo->u1MainBlockNo, CPUDTFInfo );
+    
+        if( SrchResult == FEE_STATUS_BUSY )
+        {
+            Fee_Record_State = FEE_RECORD_STATE_SWAITSRCHDAT;
+            Rtn = FEE_STATUS_EXIT;
+        }
+        else if( SrchResult == FEE_STATUS_OK )
+        {
+            Fee_Record_CheckSumVal = Fee_Record_StateScCmAsubCalCSIdAddr( CPUDTFInfo->u4ReadSrchAddress );/* The point of initializing Fee_Record_CheckSumVal. */
+            Fee_Record_CompleteLen = FEE_RECORD_COMPLETELEN_INIT_VAL_ZERO; /* The point of initializing Fee_Record_CompleteLen. */
+    
+            Fee_Record_State = FEE_RECORD_STATE_SWAITCALCSSRCH;
+            Rtn = Fee_Record_StateScRdActCalCSSrch( CPUDTFInfo, DstSrchResult );
+        }
+        else /* SrchResult == FEE_STATUS_NG */
+        {
+            Fee_RecordPosTbl_SetPos( CPUDTFInfo->u1AreaNum, CPUDTFInfo->u2DATA_ID, FEE_IDNONE );
+            Fee_Record_State = FEE_RECORD_STATE_INVALID;
+            *DstSrchResult = SrchResult;
+            Rtn = FEE_STATUS_DONE;
+        }
+    }
+    else
+    {
+        /* Set return value to exit */
         Rtn = FEE_STATUS_EXIT;
-    }
-    else if( SrchResult == FEE_STATUS_OK )
-    {
-        Fee_Record_CheckSumVal = Fee_Record_StateScCmAsubCalCSIdAddr( CPUDTFInfo->u4ReadSrchAddress );/* The point of initializing Fee_Record_CheckSumVal. */
-        Fee_Record_CompleteLen = FEE_RECORD_COMPLETELEN_INIT_VAL_ZERO; /* The point of initializing Fee_Record_CompleteLen. */
-
-        Fee_Record_State = FEE_RECORD_STATE_SWAITCALCSSRCH;
-        Rtn = Fee_Record_StateScRdActCalCSSrch( CPUDTFInfo, DstSrchResult );
-    }
-    else /* SrchResult == FEE_STATUS_NG */
-    {
-        Fee_RecordPosTbl_SetPos( CPUDTFInfo->u1AreaNum, CPUDTFInfo->u2DATA_ID, FEE_IDNONE );
-        Fee_Record_State = FEE_RECORD_STATE_INVALID;
-        *DstSrchResult = SrchResult;
-        Rtn = FEE_STATUS_DONE;
     }
 
     return Rtn;
@@ -2297,31 +2426,42 @@ Fee_Record_StateScRdActCalCSSrch(
     uint32  CalCsResult;
     uint32  ReadSrchAddress;
     uint32  Rtn;
+    Std_ReturnType  u1_dfPrepare;
 
-    /* Do Action. Calculate check sum of data. And copy flash data to request address. */
-    CalCsResult = Fee_Record_StateScRdAsubCalCSCpyDat( CPUDTFInfo, &ChkCSResult );
-
-    /* Exit action and state change. */
-    if( CalCsResult == FEE_STATUS_DONE )
+    /* Preparing for MemAcc data flash access. */
+    u1_dfPrepare = Fee_FlsWrp_ExtDfPreExecution();
+    if ( u1_dfPrepare == (Std_ReturnType)E_OK )
     {
-        ReadSrchAddress = CPUDTFInfo->u4ReadSrchAddress;
-        if ( ChkCSResult == (boolean)TRUE )
+        /* Do Action. Calculate check sum of data. And copy flash data to request address. */
+        CalCsResult = Fee_Record_StateScRdAsubCalCSCpyDat( CPUDTFInfo, &ChkCSResult );
+    
+        /* Exit action and state change. */
+        if( CalCsResult == FEE_STATUS_DONE )
         {
-            Fee_Record_StateCmCmAsubSetRecPos( CPUDTFInfo->u1AreaNum, CPUDTFInfo->u1MainBlockNo, CPUDTFInfo->u2DATA_ID, ReadSrchAddress );
-            Fee_Record_State = FEE_RECORD_STATE_INVALID;
-            *DstSrchResult = Fee_Record_StateScCmAsubRdChkDS( ReadSrchAddress );
-            Rtn = FEE_STATUS_DONE;
+            ReadSrchAddress = CPUDTFInfo->u4ReadSrchAddress;
+            if ( ChkCSResult == (boolean)TRUE )
+            {
+                Fee_Record_StateCmCmAsubSetRecPos( CPUDTFInfo->u1AreaNum, CPUDTFInfo->u1MainBlockNo, CPUDTFInfo->u2DATA_ID, ReadSrchAddress );
+                Fee_Record_State = FEE_RECORD_STATE_INVALID;
+                *DstSrchResult = Fee_Record_StateScCmAsubRdChkDS( ReadSrchAddress );
+                Rtn = FEE_STATUS_DONE;
+            }
+            else
+            {
+                CPUDTFInfo->u4ReadSrchAddress = ReadSrchAddress - (uint32)FEE_RECORDMNGINFOLEN;
+                Fee_Record_State = FEE_RECORD_STATE_SWAITSRCHDAT;
+                Rtn = FEE_STATUS_EXIT;
+            }
         }
         else
         {
-            CPUDTFInfo->u4ReadSrchAddress = ReadSrchAddress - (uint32)FEE_RECORDMNGINFOLEN;
-            Fee_Record_State = FEE_RECORD_STATE_SWAITSRCHDAT;
+            Fee_Record_State = FEE_RECORD_STATE_SWAITCALCSSRCH;
             Rtn = FEE_STATUS_EXIT;
         }
     }
     else
     {
-        Fee_Record_State = FEE_RECORD_STATE_SWAITCALCSSRCH;
+        /* Set return value to exit */
         Rtn = FEE_STATUS_EXIT;
     }
 
@@ -2343,27 +2483,38 @@ Fee_Record_StateScMsActSrchDat (
 ){
     uint32 Rtn;
     uint32 SrchResult;
+    Std_ReturnType  u1_dfPrepare;
 
-    SrchResult = Fee_Record_StateScCmAsubSrchValid( CPUDTFInfo );
-
-    if( SrchResult == FEE_STATUS_BUSY )
+    /* Preparing for MemAcc data flash access. */
+    u1_dfPrepare = Fee_FlsWrp_ExtDfPreExecution();
+    if ( u1_dfPrepare == (Std_ReturnType)E_OK )
     {
-        Fee_Record_State = FEE_RECORD_STATE_SWAITSRCHDAT;
+        SrchResult = Fee_Record_StateScCmAsubSrchValid( CPUDTFInfo );
+    
+        if( SrchResult == FEE_STATUS_BUSY )
+        {
+            Fee_Record_State = FEE_RECORD_STATE_SWAITSRCHDAT;
+            Rtn = FEE_STATUS_EXIT;
+        }
+        else if( SrchResult == FEE_STATUS_OK )
+        {
+            Fee_Record_CheckSumVal = Fee_Record_StateScCmAsubCalCSIdAddr( CPUDTFInfo->u4MoveSrcAddress );/* The point of initializing Fee_Record_CheckSumVal. */
+            Fee_Record_CompleteLen = FEE_RECORD_COMPLETELEN_INIT_VAL_ZERO; /* The point of initializing Fee_Record_CompleteLen. */
+    
+            Fee_Record_State = FEE_RECORD_STATE_SWAITCALCSSRCH;
+            Rtn = Fee_Record_StateScMsActCalCS( CPUDTFInfo, DstSrchResult );
+        }
+        else /* SrchResult == FEE_STATUS_NG */
+        {
+            Fee_Record_State = FEE_RECORD_STATE_INVALID;
+            *DstSrchResult = SrchResult;
+            Rtn = FEE_STATUS_DONE;
+        }
+    }
+    else
+    {
+        /* Set return value to exit */
         Rtn = FEE_STATUS_EXIT;
-    }
-    else if( SrchResult == FEE_STATUS_OK )
-    {
-        Fee_Record_CheckSumVal = Fee_Record_StateScCmAsubCalCSIdAddr( CPUDTFInfo->u4MoveSrcAddress );/* The point of initializing Fee_Record_CheckSumVal. */
-        Fee_Record_CompleteLen = FEE_RECORD_COMPLETELEN_INIT_VAL_ZERO; /* The point of initializing Fee_Record_CompleteLen. */
-
-        Fee_Record_State = FEE_RECORD_STATE_SWAITCALCSSRCH;
-        Rtn = Fee_Record_StateScMsActCalCS( CPUDTFInfo, DstSrchResult );
-    }
-    else /* SrchResult == FEE_STATUS_NG */
-    {
-        Fee_Record_State = FEE_RECORD_STATE_INVALID;
-        *DstSrchResult = SrchResult;
-        Rtn = FEE_STATUS_DONE;
     }
 
     return Rtn;
@@ -2385,29 +2536,40 @@ Fee_Record_StateScMsActCalCS(
     boolean ChkCSResult;
     uint32  CalCsResult;
     uint32  Rtn;
+    Std_ReturnType  u1_dfPrepare;
 
-    /* Do Action. Calculate check sum of data. */
-    CalCsResult = Fee_Record_StateScMsAsubCalCS( CPUDTFInfo, &ChkCSResult );
-
-    /* Exit action and state change. */
-    if( CalCsResult == FEE_STATUS_DONE )
+    /* Preparing for MemAcc data flash access. */
+    u1_dfPrepare = Fee_FlsWrp_ExtDfPreExecution();
+    if ( u1_dfPrepare == (Std_ReturnType)E_OK )
     {
-        if ( ChkCSResult == (boolean)TRUE )
+        /* Do Action. Calculate check sum of data. */
+        CalCsResult = Fee_Record_StateScMsAsubCalCS( CPUDTFInfo, &ChkCSResult );
+    
+        /* Exit action and state change. */
+        if( CalCsResult == FEE_STATUS_DONE )
         {
-            Fee_Record_State = FEE_RECORD_STATE_INVALID;
-            *DstSrchResult = FEE_STATUS_OK;
-            Rtn = FEE_STATUS_DONE;
+            if ( ChkCSResult == (boolean)TRUE )
+            {
+                Fee_Record_State = FEE_RECORD_STATE_INVALID;
+                *DstSrchResult = FEE_STATUS_OK;
+                Rtn = FEE_STATUS_DONE;
+            }
+            else
+            {
+                CPUDTFInfo->u4MoveSrcAddress -= (uint32)FEE_RECORDMNGINFOLEN;
+                Fee_Record_State = FEE_RECORD_STATE_SWAITSRCHDAT;
+                Rtn = FEE_STATUS_EXIT;
+            }
         }
         else
         {
-            CPUDTFInfo->u4MoveSrcAddress -= (uint32)FEE_RECORDMNGINFOLEN;
-            Fee_Record_State = FEE_RECORD_STATE_SWAITSRCHDAT;
+            Fee_Record_State = FEE_RECORD_STATE_SWAITCALCSSRCH;
             Rtn = FEE_STATUS_EXIT;
         }
     }
     else
     {
-        Fee_Record_State = FEE_RECORD_STATE_SWAITCALCSSRCH;
+        /* Set return value to exit */
         Rtn = FEE_STATUS_EXIT;
     }
 
@@ -2431,42 +2593,53 @@ Fee_Record_StateScMdActRecPosTbl(
     uint32  ActivateResult;
     uint32  CheckRecordPosResult;
     uint8   SectorNo = CPUDTFInfo->u1SubBlockNo;
+    Std_ReturnType  u1_dfPrepare;
 
-    /* Do Action. */
-    ActivateResult = Fee_RecordPosTbl_ReadyPosArea( CPUDTFInfo->u1AreaNum, SectorNo, CPUDTFInfo->u4WriteLastRecMngAbsAddr );
-
-    /* Exit action and state change. */
-    if( ActivateResult == FEE_STATUS_OK )
+    /* Preparing for MemAcc data flash access. */
+    u1_dfPrepare = Fee_FlsWrp_ExtDfPreExecution();
+    if ( u1_dfPrepare == (Std_ReturnType)E_OK )
     {
-        CheckRecordPosResult = Fee_Record_StateScCmAsubGetRecPos( CPUDTFInfo->u1AreaNum, SectorNo, CPUDTFInfo->u2MovDataId, CPUDTFInfo->u2MovDataLen, &(CPUDTFInfo->u4ReadSrchAddress) );
-        if( CheckRecordPosResult == FEE_STATUS_OK )
+        /* Do Action. */
+        ActivateResult = Fee_RecordPosTbl_ReadyPosArea( CPUDTFInfo->u1AreaNum, SectorNo, CPUDTFInfo->u4WriteLastRecMngAbsAddr );
+    
+        /* Exit action and state change. */
+        if( ActivateResult == FEE_STATUS_OK )
         {
-            Fee_Record_State = FEE_RECORD_STATE_INVALID;
-            *DstSrchResult = Fee_Record_StateScCmAsubRdChkDS( CPUDTFInfo->u4ReadSrchAddress );
-            Rtn = FEE_STATUS_DONE;
+            CheckRecordPosResult = Fee_Record_StateScCmAsubGetRecPos( CPUDTFInfo->u1AreaNum, SectorNo, CPUDTFInfo->u2MovDataId, CPUDTFInfo->u2MovDataLen, &(CPUDTFInfo->u4ReadSrchAddress) );
+            if( CheckRecordPosResult == FEE_STATUS_OK )
+            {
+                Fee_Record_State = FEE_RECORD_STATE_INVALID;
+                *DstSrchResult = Fee_Record_StateScCmAsubRdChkDS( CPUDTFInfo->u4ReadSrchAddress );
+                Rtn = FEE_STATUS_DONE;
+            }
+            else if( CheckRecordPosResult == FEE_STATUS_NODATA )
+            {
+                Fee_Record_State = FEE_RECORD_STATE_INVALID;
+                *DstSrchResult = FEE_STATUS_NG;
+                Rtn = FEE_STATUS_DONE;
+            }
+            else /* CheckRecordPosResult == FEE_STATUS_NG */
+            {
+                CPUDTFInfo->u4ReadSrchAddress = CPUDTFInfo->u4WriteLastRecMngAbsAddr;
+                Fee_Record_State = FEE_RECORD_STATE_SWAITSRCHDAT;
+                Rtn = Fee_Record_StateScMdActSrchDat( CPUDTFInfo, DstSrchResult );
+            }
         }
-        else if( CheckRecordPosResult == FEE_STATUS_NODATA )
-        {
-            Fee_Record_State = FEE_RECORD_STATE_INVALID;
-            *DstSrchResult = FEE_STATUS_NG;
-            Rtn = FEE_STATUS_DONE;
-        }
-        else /* CheckRecordPosResult == FEE_STATUS_NG */
+        else if( ActivateResult == FEE_STATUS_NG )
         {
             CPUDTFInfo->u4ReadSrchAddress = CPUDTFInfo->u4WriteLastRecMngAbsAddr;
             Fee_Record_State = FEE_RECORD_STATE_SWAITSRCHDAT;
             Rtn = Fee_Record_StateScMdActSrchDat( CPUDTFInfo, DstSrchResult );
         }
+        else /* ActivateResult == FEE_STATUS_BUSY */
+        {
+            Fee_Record_State = FEE_RECORD_STATE_SWAITRECPOSTBL;
+            Rtn = FEE_STATUS_EXIT;
+        }
     }
-    else if( ActivateResult == FEE_STATUS_NG )
+    else
     {
-        CPUDTFInfo->u4ReadSrchAddress = CPUDTFInfo->u4WriteLastRecMngAbsAddr;
-        Fee_Record_State = FEE_RECORD_STATE_SWAITSRCHDAT;
-        Rtn = Fee_Record_StateScMdActSrchDat( CPUDTFInfo, DstSrchResult );
-    }
-    else /* ActivateResult == FEE_STATUS_BUSY */
-    {
-        Fee_Record_State = FEE_RECORD_STATE_SWAITRECPOSTBL;
+        /* Set return value to exit */
         Rtn = FEE_STATUS_EXIT;
     }
 
@@ -2491,30 +2664,41 @@ Fee_Record_StateScMdActSrchDat (
     uint8  SubBlockNo;
     uint16 MovDataId;
     uint32 ReadSrchAddress;
+    Std_ReturnType  u1_dfPrepare;
 
-    SubBlockNo = CPUDTFInfo->u1SubBlockNo;
-    MovDataId  = CPUDTFInfo->u2MovDataId;
-    SrchResult = Fee_Record_StateScCmAsubSrchId( MovDataId, CPUDTFInfo->u2MovDataLen, SubBlockNo, CPUDTFInfo );
-
-    if( SrchResult == FEE_STATUS_BUSY )
+    /* Preparing for MemAcc data flash access. */
+    u1_dfPrepare = Fee_FlsWrp_ExtDfPreExecution();
+    if ( u1_dfPrepare == (Std_ReturnType)E_OK )
     {
-        Fee_Record_State = FEE_RECORD_STATE_SWAITSRCHDAT;
+        SubBlockNo = CPUDTFInfo->u1SubBlockNo;
+        MovDataId  = CPUDTFInfo->u2MovDataId;
+        SrchResult = Fee_Record_StateScCmAsubSrchId( MovDataId, CPUDTFInfo->u2MovDataLen, SubBlockNo, CPUDTFInfo );
+    
+        if( SrchResult == FEE_STATUS_BUSY )
+        {
+            Fee_Record_State = FEE_RECORD_STATE_SWAITSRCHDAT;
+            Rtn = FEE_STATUS_EXIT;
+        }
+        else if( SrchResult == FEE_STATUS_OK )
+        {
+            ReadSrchAddress = CPUDTFInfo->u4ReadSrchAddress;
+            Fee_Record_StateCmCmAsubSetRecPos( CPUDTFInfo->u1AreaNum, SubBlockNo, MovDataId, ReadSrchAddress );
+            Fee_Record_State = FEE_RECORD_STATE_INVALID;
+            *DstSrchResult = Fee_Record_StateScCmAsubRdChkDS( ReadSrchAddress );
+            Rtn = FEE_STATUS_DONE;
+        }
+        else /* SrchResult == FEE_STATUS_NG */
+        {
+            Fee_RecordPosTbl_SetPos( CPUDTFInfo->u1AreaNum, MovDataId, FEE_IDNONE );
+            Fee_Record_State = FEE_RECORD_STATE_INVALID;
+            *DstSrchResult = FEE_STATUS_NG;
+            Rtn = FEE_STATUS_DONE;
+        }
+    }
+    else
+    {
+        /* Set return value to exit */
         Rtn = FEE_STATUS_EXIT;
-    }
-    else if( SrchResult == FEE_STATUS_OK )
-    {
-        ReadSrchAddress = CPUDTFInfo->u4ReadSrchAddress;
-        Fee_Record_StateCmCmAsubSetRecPos( CPUDTFInfo->u1AreaNum, SubBlockNo, MovDataId, ReadSrchAddress );
-        Fee_Record_State = FEE_RECORD_STATE_INVALID;
-        *DstSrchResult = Fee_Record_StateScCmAsubRdChkDS( ReadSrchAddress );
-        Rtn = FEE_STATUS_DONE;
-    }
-    else /* SrchResult == FEE_STATUS_NG */
-    {
-        Fee_RecordPosTbl_SetPos( CPUDTFInfo->u1AreaNum, MovDataId, FEE_IDNONE );
-        Fee_Record_State = FEE_RECORD_STATE_INVALID;
-        *DstSrchResult = FEE_STATUS_NG;
-        Rtn = FEE_STATUS_DONE;
     }
 
     return Rtn;
@@ -2785,27 +2969,27 @@ Fee_Record_StateScCmAsubSrchId(
     uint8  TargetSector,
     P2VAR( Fee_CpuDtfType, AUTOMATIC, FEE_VAR_NO_INIT ) ptstCPUDTFInfo
 ){
-    uint32          u4tReturn;                          /* 戻り値 */
-    uint32          u4tReadSrchAddress;                 /* 検索アドレス */
-    sint32          s4tSrchRemainCount;                 /* 検索処理可能回数 */
-    uint32          u4tSearchEndAddress;                /* 検索終了アドレス */
-    uint16          u2tReadDataID;                      /* データFlash読出しデータ、DATA-ID */
+    uint32          u4tReturn;                          /* RETURN */
+    uint32          u4tReadSrchAddress;                 /* Search address */
+    sint32          s4tSrchRemainCount;                 /* searchable */
+    uint32          u4tSearchEndAddress;                /* Search end address */
+    uint16          u2tReadDataID;                      /* Data Flash Read Data, DATA-ID */
     uint8           u1tCompareResult;
 
-    /* ローカル変数(レジスタ変数)にロード */
+    /* Load into local variables (register variables) */
     u4tReadSrchAddress = ptstCPUDTFInfo->u4ReadSrchAddress;
     s4tSrchRemainCount = (sint32)ptstCPUDTFInfo->u4SrchRemainCount;
     u4tSearchEndAddress = FEE_BLKSTARTADDRTBL[TargetSector] + FEE_STARTRECORDPOS;
 
-    /* 戻り値をデータなし(STATUS_NG)に設定 */
+    /* Set return value to no data (STATUS _ NG) */
     u4tReturn = FEE_STATUS_NG;
 
-    /* 検索開始アドレスからレコード長分デクリメントしながらブロック先頭レコードアドレス以下の間ループ */
+    /* Loop from the search start address to the block head record address and below while decrementing by record length */
     while ( ( u4tSearchEndAddress <= u4tReadSrchAddress )
                 && ( u4tReturn == FEE_STATUS_NG )
                 && ( (sint32)FEE_SRCH_REMAIN_COUNT_ZERO < s4tSrchRemainCount ) )
     {
-        /* 検索処理可能回数をデクリメント */
+        /* Decrement searchable count */
         s4tSrchRemainCount--;
         /* Check DATA-ID. */
         /* Return value is not checked. */
@@ -2816,75 +3000,78 @@ Fee_Record_StateScCmAsubSrchId(
 #endif
         if ( u2tReadDataID == TargetId )
         {
-            /* 一致した場合 */
+            /* If they match */
             /* Check Write-CHECK. */
             u1tCompareResult = Fee_DfcMpu_SyncCompare_EccFixSize( ( u4tReadSrchAddress + (uint32)FEE_WRITECHECKPOS ), &Fee_FixWCData[0] );
             if ( u1tCompareResult == FEE_DFCMPU_RESULT_OK )
             {
-                /* Write-CHECKが有効だった場合 */
+                /* If Write-CHECK is enabled */
                 u4tReturn = Fee_Record_StateScCmAsubChkAddr( u4tReadSrchAddress, DataLength );
             }
         }
-        /* 検索アドレスをレコード長分デクリメント */
+        /* decrement search address by record length */
         u4tReadSrchAddress -= (uint32)FEE_RECORDMNGINFOLEN;
     }
     if ( ( u4tReturn == FEE_STATUS_NG ) && ( u4tSearchEndAddress <= u4tReadSrchAddress ) )
     {
-        /* 指定データが見つからず、かつ、検索アドレスがブロック先頭レコードアドレス以上のとき */
-        /* 戻り値を処理継続中(STATUS_BUSY)に設定 */
+        /* When the specified data is not found and the search address is greater than or equal to the first record address in the block */
+        /* Set return value to continue processing (STATUS _ BUSY) */
         u4tReturn = FEE_STATUS_BUSY;
     }
-    /* 検索アドレスを書き戻し */
+    /* Write back search address */
     if ( ( u4tReturn == FEE_STATUS_NG) || (u4tReturn == FEE_STATUS_BUSY ) )
     {
-        /* 指定データが見つからない場合 */
+        /* If the specified data is not found */
         ptstCPUDTFInfo->u4ReadSrchAddress = u4tReadSrchAddress;
     }
     else
     {
-        /* 指定データ(WC有効)が見つかった場合 */
-        /* 検索アドレスをレコード長分インクリメント */
+        /* If specified data (WC enabled) is found */
+        /* Increment search address by record length */
         ptstCPUDTFInfo->u4ReadSrchAddress = u4tReadSrchAddress + (uint32)FEE_RECORDMNGINFOLEN;
     }
-    /* 検索処理可能回数を書き戻し */
+    /* Write back searchable count */
     if ( s4tSrchRemainCount < (sint32)FEE_SRCH_REMAIN_COUNT_ZERO )
     {
-        /* 検索処理可能回数がマイナスの場合 */
-        /* 検索処理可能回数を0に設定 */
+        /* When searchable count is negative */
+        /* Set searchable count to 0 */
         ptstCPUDTFInfo->u4SrchRemainCount = 0UL;
     }
     else
     {
-        /* 検索処理可能回数を書き戻し */
+        /* Write back searchable count */
         ptstCPUDTFInfo->u4SrchRemainCount = (uint32)s4tSrchRemainCount;
     }
 
-    /* 戻り値を返却して処理終了 */
+    /* Return return value and finish processing */
     return u4tReturn;
 }
 
-/*関数説明--------------------------------------------------------------------*/
-/* 説  明        ：データ転送用有効データ検索                                 */
-/* 入  力        ：stCPUDTF *ptstCPUDTFInfo                            */
-/*                                           ：MHA[データFlash]管理データ     */
-/* 出  力        ：処理結果                                                   */
-/*               ：  0x00000000 ：FEE_STATUS_OK   ：データあり     */
-/*               ：  0x00000001 ：FEE_STATUS_NG   ：データなし     */
-/*               ：  0x00000005 ：FEE_STATUS_BUSY ：検索中         */
-/* グローバル変数：                                                           */
-/* その他        ：検索はMoveSrcAddressから開始し、結果アドレスで更新します   */
-/*               ：データありの場合：見つかったレコードのアドレス             */
-/*               ：データなしの場合：ブロックの先頭レコードアドレス－レコード長 */
-/*               ：検索中の場合：次に検索するアドレス                         */
-/*----------------------------------------------------------------------------*/
+/****************************************************************************/
+/* Function Name | Fee_Record_StateScCmAsubSrchValid                        */
+/* Description   | Valid data retrieval for data transfer                   */
+/* Preconditions | None                                                     */
+/* Parameters    | stCPUDTF * ptstCPUDTFInfo                                */
+/*               |               MHA management data                        */
+/* Return Value  | Result of processing                                     */
+/*               | 0x00000000: FEE_STATUS_OK     : Data present             */
+/*               | 0x00000001: FEE_STATUS_NG     : No data                  */
+/*               | 0x00000005: FEE_STATUS_BUSY   : Searching                */
+/* Notes         | Search starts at MoveSrcAddress and updates with         */
+/*               | result address                                           */
+/*               | with data: address of record found                       */
+/*               | For no data: First record address of block - record      */
+/*               | length                                                   */
+/*               | If searching: address to search next                     */
+/****************************************************************************/
 FUNC( uint32, FEE_CODE )
 Fee_Record_StateScCmAsubSrchValid(
     P2VAR( Fee_CpuDtfType, AUTOMATIC, FEE_VAR_NO_INIT ) ptstCPUDTFInfo
 ){
-    uint32          u4tReturn;                          /* 戻り値 */
-    uint32          u4tSearchEndAddress;                /* 検索終了アドレス */
-    uint32          u4tMoveSrcAddress;                  /* 検索アドレス */
-    sint32          s4tSrchRemainCount;                 /* 検索処理可能回数 */
+    uint32          u4tReturn;                          /* RETURN */
+    uint32          u4tSearchEndAddress;                /* Search end address */
+    uint32          u4tMoveSrcAddress;                  /* Search address */
+    sint32          s4tSrchRemainCount;                 /* searchable */
     uint16          u2tDataLen;
     uint16          u2tReadBlockNumber;
     uint8           u1tAreaNo;
@@ -2893,33 +3080,33 @@ Fee_Record_StateScCmAsubSrchValid(
     boolean         bCheckIdResult;
     Std_ReturnType  rtGetLenResult;
 
-    /* ローカル変数(レジスタ変数)にロード */
+    /* Load into local variables (register variables) */
     u4tMoveSrcAddress = ptstCPUDTFInfo->u4MoveSrcAddress;
     s4tSrchRemainCount = (sint32)ptstCPUDTFInfo->u4SrchRemainCount;
     u1tAreaNo = ptstCPUDTFInfo->u1AreaNum;
-    /* ブロック先頭レコードアドレス算出 */
+    /* Calculate block first record address */
     u4tSearchEndAddress = FEE_BLKSTARTADDRTBL[ptstCPUDTFInfo->u1MainBlockNo] + FEE_STARTRECORDPOS;
     
-    /* 戻り値をデータなし(STATUS_NG)に設定 */
+    /* Set return value to no data (STATUS _ NG) */
     u4tReturn = FEE_STATUS_NG;
 
-    /* 検索開始アドレスからレコード長分デクリメントしながらブロック先頭レコードアドレス以下の間ループ */
+    /* Loop from the search start address to the block head record address and below while decrementing by record length */
     while ( ( u4tSearchEndAddress <= u4tMoveSrcAddress )
                 && ( u4tReturn == FEE_STATUS_NG )
                 && ( (sint32)FEE_SRCH_REMAIN_COUNT_ZERO <  s4tSrchRemainCount ) )
     {
-        /* 検索処理可能回数をデクリメント */
+        /* Decrement searchable count */
         s4tSrchRemainCount--;
 
         u1tBlankCheckResult = Fee_DfcMpu_SyncBlankCheck( ( u4tMoveSrcAddress + (uint32)FEE_DATASTATUSPOS ), (uint32)FEE_DATA_FLASH_ECC_FIX_SIZE );
         if ( u1tBlankCheckResult == FEE_DFCMPU_RESULT_OK )
         {
-            /* DATA-STATUSが有効だった場合 */
+            /* If DATA-STATUS is enabled */
             /* Check Write-CHECK. */
             u1tCompareResult = Fee_DfcMpu_SyncCompare_EccFixSize( ( u4tMoveSrcAddress + (uint32)FEE_WRITECHECKPOS ), &Fee_FixWCData[0] );
             if ( u1tCompareResult == FEE_DFCMPU_RESULT_OK )
             {
-                /* Write-CHECKが有効だった場合 */
+                /* If Write-CHECK is enabled */
                 /* Check a block number. */
                 /* Return value is not checked. */
 #if ( FEE_RECORD_FORMAT_OFFSET_ID != 0U )
@@ -2940,43 +3127,43 @@ Fee_Record_StateScCmAsubSrchValid(
             }
         }
 
-        /* 検索アドレスをレコード長分デクリメント */
+        /* decrement search address by record length */
         u4tMoveSrcAddress -= (uint32)FEE_RECORDMNGINFOLEN;
     }
     if ( ( u4tReturn == FEE_STATUS_NG ) && ( u4tSearchEndAddress <= u4tMoveSrcAddress ) )
     {
-        /* 最終データ位置が見つからず、かつ、検索アドレスがブロック先頭レコードアドレス以上のとき */
-        /* 戻り値を処理継続中(STATUS_BUSY)に設定 */
+        /* When the final data position is not found and the search address is greater than or equal to the block head record address */
+        /* Set return value to continue processing (STATUS _ BUSY) */
         u4tReturn = FEE_STATUS_BUSY;
     }
-    /* 検索アドレスを書き戻し */
+    /* Write back search address */
     if ( u4tReturn == FEE_STATUS_OK )
     {
-        /* 最終データ位置が見つかった場合 */
-        /* 検索アドレスをレコード長分インクリメント */
+        /* If the final data location is found */
+        /* Increment search address by record length */
         ptstCPUDTFInfo->u4MoveSrcAddress = u4tMoveSrcAddress + (uint32)FEE_RECORDMNGINFOLEN;
         ptstCPUDTFInfo->u2MovDataId  = u2tReadBlockNumber;
         ptstCPUDTFInfo->u2MovDataLen = u2tDataLen;
     }
     else
     {
-        /* 最終データ位置が見つからない場合 */
+        /* If final data location is not found */
         ptstCPUDTFInfo->u4MoveSrcAddress = u4tMoveSrcAddress;
     }
-    /* 検索処理可能回数を書き戻し */
+    /* Write back searchable count */
     if ( s4tSrchRemainCount < (sint32)FEE_SRCH_REMAIN_COUNT_ZERO )
     {
-        /* 検索処理可能回数がマイナスの場合 */
-        /* 検索処理可能回数を0に設定 */
+        /* When searchable count is negative */
+        /* Set searchable count to 0 */
         ptstCPUDTFInfo->u4SrchRemainCount = 0UL;
     }
     else
     {
-        /* 検索処理可能回数を書き戻し */
+        /* Write back searchable count */
         ptstCPUDTFInfo->u4SrchRemainCount = (uint32)s4tSrchRemainCount;
     }
 
-    /* 戻り値を返却して処理終了 */
+    /* Return return value and finish processing */
     return u4tReturn;
 }
 
@@ -3395,6 +3582,7 @@ Fee_Record_StateCmCmAsubSetRecPos(
 /*  1-0-0          :2019/02/01                                              */
 /*  1-1-0          :2019/11/18                                              */
 /*  2-0-0          :2023/01/24                                              */
+/*  2-1-0          :2024/09/10                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

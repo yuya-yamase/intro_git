@@ -1,7 +1,7 @@
-/* Fee_FlsWrp.h v2-0-0                                                      */
+/* Fee_FlsWrp.h v2-1-0                                                      */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION. All rights reserved.                        */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -18,7 +18,6 @@
 /*--------------------------------------------------------------------------*/
 #include <Fls.h>
 #include <Fls_Cdd.h>
-#include "../usr/Fee_Os_Connector.h"
 
 /*--------------------------------------------------------------------------*/
 /* Function Prototypes                                                      */
@@ -50,7 +49,10 @@ FUNC( MemIf_JobResultType, FEE_PROXY_CODE )
 Fee_FlsWrp_GetJobResult( void );
 
 FUNC( void, FEE_PROXY_CODE )
-Fee_FlsWrp_MainFunction( void );
+Fee_FlsWrp_MainFunction( uint8 u1_callmode );
+
+FUNC( Std_ReturnType , FEE_PROXY_CODE )
+Fee_FlsWrp_ExtDfPreExecution( void );
 
 FUNC( Fls_Cdd_JobResultType, FEE_PROXY_CODE )
 Fee_FlsWrp_Cdd_Read(
@@ -72,69 +74,10 @@ Fee_FlsWrp_Cdd_NotBlankAddress(
     P2VAR( Fls_AddressType, AUTOMATIC, TYPEDEF ) NotBlankAddress
 );
 
+FUNC( boolean , FEE_PROXY_CODE )
+Fee_FlsWrp_IsLockStatus( void );
+
 #define FEE_PROXY_STOP_SEC_CODE
-#include <Fee_MemMap.h>
-
-#define FEE_PROXY_START_SEC_CODE_TRUST
-#include <Fee_MemMap.h>
-
-#if ( FEE_FORCE_TRUSTED == STD_OFF ) 
-FUNC( void, FEE_PROXY_CODE_TRUST )
-Fee_FlsWrp_Trusted_CallErase(
-    Fee_TrustedFunctionIndexType FunctionIndex,
-    Fee_TrustedFunctionParameterRefType FunctionParams
-);
-
-FUNC( void, FEE_PROXY_CODE_TRUST )
-Fee_FlsWrp_Trusted_CallWrite(
-    Fee_TrustedFunctionIndexType FunctionIndex,
-    Fee_TrustedFunctionParameterRefType FunctionParams
-);
-
-FUNC( void, FEE_PROXY_CODE_TRUST )
-Fee_FlsWrp_Trusted_CallCancel(
-    Fee_TrustedFunctionIndexType FunctionIndex,
-    Fee_TrustedFunctionParameterRefType FunctionParams
-);
-
-FUNC( void, FEE_PROXY_CODE_TRUST )
-Fee_FlsWrp_Trusted_CallGetStatus(
-    Fee_TrustedFunctionIndexType FunctionIndex,
-    Fee_TrustedFunctionParameterRefType FunctionParams
-);
-
-FUNC( void, FEE_PROXY_CODE_TRUST )
-Fee_FlsWrp_Trusted_CallGetJobResult(
-    Fee_TrustedFunctionIndexType FunctionIndex,
-    Fee_TrustedFunctionParameterRefType FunctionParams
-);
-
-FUNC( void, FEE_PROXY_CODE_TRUST )
-Fee_FlsWrp_Trusted_CallMainFunction(
-    Fee_TrustedFunctionIndexType FunctionIndex,
-    Fee_TrustedFunctionParameterRefType FunctionParams
-);
-
-FUNC( void, FEE_PROXY_CODE_TRUST )
-Fee_FlsWrp_Trusted_CallCddRead(
-    Fee_TrustedFunctionIndexType FunctionIndex,
-    Fee_TrustedFunctionParameterRefType FunctionParams
-);
-
-FUNC( void, FEE_PROXY_CODE_TRUST )
-Fee_FlsWrp_Trusted_CallCddBlankCheck(
-    Fee_TrustedFunctionIndexType FunctionIndex,
-    Fee_TrustedFunctionParameterRefType FunctionParams
-);
-
-FUNC( void, FEE_PROXY_CODE_TRUST )
-Fee_FlsWrp_Trusted_CallCddNotBlankAddress(
-    Fee_TrustedFunctionIndexType FunctionIndex,
-    Fee_TrustedFunctionParameterRefType FunctionParams
-);
-#endif /* FEE_FORCE_TRUSTED == STD_OFF */ 
-
-#define FEE_PROXY_STOP_SEC_CODE_TRUST
 #include <Fee_MemMap.h>
 
 #endif /* FEE_FLSWRP_H */
@@ -143,6 +86,7 @@ Fee_FlsWrp_Trusted_CallCddNotBlankAddress(
 /* History                                                                  */
 /*  Version        :Date                                                    */
 /*  2-0-0          :2022/08/24                                              */
+/*  2-1-0          :2024/10/11                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

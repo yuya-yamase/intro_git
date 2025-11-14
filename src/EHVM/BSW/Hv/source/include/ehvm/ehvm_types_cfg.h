@@ -144,6 +144,9 @@ typedef struct ehvm_cfg_tbl_cmn_st{
     EhvmConst ehvm_hvcm_info_t * EhvmConst                  HvcmInfo;
     EhvmConst ehvm_uc_config_t * EhvmConst                  ehvm_UcConfig;
     EhvmConst ehvm_uint32_t                                  ehvm_sch_disable_vm_switch_upper_margin;
+    EhvmConst ehvm_mm_common_config_t * EhvmConst           MmCommonConfigData;
+    EhvmConst ehvm_uint32_t * EhvmConst                     ehvm_hvm_get_lock_timeout_loop_count_info;
+    EhvmConst ehvm_uint32_t                                 deep_stop_seq_core_stop_wait_timeout_loop_count;
 }ehvm_cfg_tbl_cmn_t;
 
 typedef struct ehvm_cfg_tbl_st{
@@ -169,6 +172,7 @@ typedef struct ehvm_cfg_tbl_st{
     EhvmConst ehvm_vm_control_t * EhvmConst                 ehvm_vm_system_control3;
     EhvmConst ehvm_peg_config_t * EhvmConst                 ehvm_PegConfigData;
     EhvmConst ehvm_intc2g_prot_switch_config_t * EhvmConst  Intc2g_ProtSwitchConfigData;
+    EhvmConst ehvm_uint8_t * EhvmConst                      ehvm_vmm_clear_int_flag_config;
 }ehvm_cfg_tbl_t;
 
 #endif  /* EHVM_TYPES_CFG_H */

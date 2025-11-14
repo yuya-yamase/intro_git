@@ -25,10 +25,10 @@
 #define STARTUP_UCFG_APCHECK_ADDR_0         (0x00004000UL)
 
 #define STARTUP_UCFG_APAREA_NUM             (0x00000001UL)
-#define STARTUP_UCFG_APAREA_ADDR_0          (0x00020000UL)
-#define STARTUP_UCFG_APAREA_SIZE_0          (0x007E0000UL)
+#define STARTUP_UCFG_APAREA_ADDR_0          (0x0001C000UL)
+#define STARTUP_UCFG_APAREA_SIZE_0          (0x007A4000UL)
 
-#define STARTUP_UCFG_APJUMPADDR_SAVE_ADDR   (0x007FFDF8UL)
+#define STARTUP_UCFG_APJUMPADDR_SAVE_ADDR   (0x007BFDF8UL)
 
 
 /*----------------------------------------------------------------------------*/
@@ -60,5 +60,10 @@
 /*----------------------------------------------------------------------------*/
 /* Notes        |                                                             */
 /*----------------------------------------------------------------------------*/
+/****************************************************************************/
+/* AUBIST Configurator Version                                              */
+/*  Framework          :v2-1-0                                              */
+/*  BSW plug-in        :v2-0-0                                              */
+/****************************************************************************/
 /**** End of File *************************************************************/
 
