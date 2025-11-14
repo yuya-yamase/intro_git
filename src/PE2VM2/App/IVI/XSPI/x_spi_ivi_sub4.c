@@ -89,6 +89,9 @@
 
 #define XSPI_IVI_MASK_04                    (0x0FU)
 
+/* Provisional (CANSignal To VM1) */
+#define XSPI_IVI_IVDSH_NWORD                (1U)
+/* Provisional (CANSignal To VM1) */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -119,6 +122,18 @@ static U1       u1_sp_Xspi_Ivi_CanBusSts5M_pre[XSPI_IVI_CANBUS_POS_TOTAL];
 static U1       u1_s_Xspi_Ivi_ClockUtc_recflg;
 static U1       u1_sp_Xspi_Ivi_ClockUtcdata[XSPI_IVI_CLOCKUTC_DATA_SIZE];
 static U1       u1_sp_Xspi_Ivi_ClockUtcdata_pre[XSPI_IVI_CLOCKUTC_DATA_SIZE];
+
+/* Provisional (CANSignal To VM1) */
+static U1       u1_sp_Xspi_Ivi_DMS1S02_Data[XSPI_IVI_CAN_DLC_08];
+static U1       u1_sp_Xspi_Ivi_MET1S27_Data[XSPI_IVI_CAN_DLC_08];
+static U1       u1_sp_Xspi_Ivi_MET1S28_Data[XSPI_IVI_CAN_DLC_08];
+static U1       u1_sp_Xspi_Ivi_MET1S29_Data[XSPI_IVI_CAN_DLC_08];
+static U1       u1_sp_Xspi_Ivi_MET1S30_Data[XSPI_IVI_CAN_DLC_32];
+static U1       u1_sp_Xspi_Ivi_MET1S43_Data[XSPI_IVI_CAN_DLC_08];
+static U1       u1_sp_Xspi_Ivi_MET1S62_Data[XSPI_IVI_CAN_DLC_08];
+static U1       u1_sp_Xspi_Ivi_MET1S70_Data[XSPI_IVI_CAN_DLC_32];
+/* Provisional (CANSignal To VM1) */
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -163,6 +178,17 @@ void            vd_g_XspiIviSub4Init(void)
     u1_s_Xspi_Ivi_ClockUtc_recflg = (U1)FALSE;
     vd_g_MemfillU1(&u1_sp_Xspi_Ivi_ClockUtcdata[0], (U1)0U, (U4)XSPI_IVI_CLOCKUTC_DATA_SIZE);
     vd_g_MemfillU1(&u1_sp_Xspi_Ivi_ClockUtcdata_pre[0], (U1)0U, (U4)XSPI_IVI_CLOCKUTC_DATA_SIZE);
+
+    /* Provisional (CANSignal To VM1) */
+    vd_g_MemfillU1(&u1_sp_Xspi_Ivi_DMS1S02_Data[0], (U1)0U, (U4)XSPI_IVI_CAN_DLC_08);
+    vd_g_MemfillU1(&u1_sp_Xspi_Ivi_MET1S27_Data[0], (U1)0U, (U4)XSPI_IVI_CAN_DLC_08);
+    vd_g_MemfillU1(&u1_sp_Xspi_Ivi_MET1S28_Data[0], (U1)0U, (U4)XSPI_IVI_CAN_DLC_08);
+    vd_g_MemfillU1(&u1_sp_Xspi_Ivi_MET1S29_Data[0], (U1)0U, (U4)XSPI_IVI_CAN_DLC_08);
+    vd_g_MemfillU1(&u1_sp_Xspi_Ivi_MET1S30_Data[0], (U1)0U, (U4)XSPI_IVI_CAN_DLC_32);
+    vd_g_MemfillU1(&u1_sp_Xspi_Ivi_MET1S43_Data[0], (U1)0U, (U4)XSPI_IVI_CAN_DLC_08);
+    vd_g_MemfillU1(&u1_sp_Xspi_Ivi_MET1S62_Data[0], (U1)0U, (U4)XSPI_IVI_CAN_DLC_08);
+    vd_g_MemfillU1(&u1_sp_Xspi_Ivi_MET1S70_Data[0], (U1)0U, (U4)XSPI_IVI_CAN_DLC_32);
+    /* Provisional (CANSignal To VM1) */
 }
 
 /*===================================================================================================================================*/
@@ -182,6 +208,35 @@ void            vd_g_XspiIviSub4Ana(const U1 * u1_ap_XSPI_ADD)
     //U2          u2_t_frame_num;         /* Sub Frame 個数 未使用のためコメントアウト */
     U2          u2_t_dt_len;            /* 有効データ長 */
     U1          u1_t_dt_type;           /* データ種別 */
+
+    /* Provisional (CANSignal To VM1) */
+    U4 u4_t_dms1s02_adr;
+    U4 u4_t_met1s27_adr;
+    U4 u4_t_met1s28_adr;
+    U4 u4_t_met1s29_adr;
+    U4 u4_t_met1s30_adr;
+    U4 u4_t_met1s43_adr;
+    U4 u4_t_met1s62_adr;
+    U4 u4_t_met1s70_adr;
+
+    u4_t_dms1s02_adr = &u1_sp_Xspi_Ivi_DMS1S02_Data[0];
+    u4_t_met1s27_adr = &u1_sp_Xspi_Ivi_MET1S27_Data[0];
+    u4_t_met1s28_adr = &u1_sp_Xspi_Ivi_MET1S28_Data[0];
+    u4_t_met1s29_adr = &u1_sp_Xspi_Ivi_MET1S29_Data[0];
+    u4_t_met1s30_adr = &u1_sp_Xspi_Ivi_MET1S30_Data[0];
+    u4_t_met1s43_adr = &u1_sp_Xspi_Ivi_MET1S43_Data[0];
+    u4_t_met1s62_adr = &u1_sp_Xspi_Ivi_MET1S62_Data[0];
+    u4_t_met1s70_adr = &u1_sp_Xspi_Ivi_MET1S70_Data[0];
+
+    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM2TO1_DMS1S02, &u4_t_dms1s02_adr, (U2)XSPI_IVI_IVDSH_NWORD);
+    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM2TO1_MET1S27, &u4_t_met1s27_adr, (U2)XSPI_IVI_IVDSH_NWORD);
+    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM2TO1_MET1S28, &u4_t_met1s28_adr, (U2)XSPI_IVI_IVDSH_NWORD);
+    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM2TO1_MET1S29, &u4_t_met1s29_adr, (U2)XSPI_IVI_IVDSH_NWORD);
+    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM2TO1_MET1S30, &u4_t_met1s30_adr, (U2)XSPI_IVI_IVDSH_NWORD);
+    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM2TO1_MET1S43, &u4_t_met1s43_adr, (U2)XSPI_IVI_IVDSH_NWORD);
+    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM2TO1_MET1S62, &u4_t_met1s62_adr, (U2)XSPI_IVI_IVDSH_NWORD);
+    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM2TO1_MET1S70, &u4_t_met1s70_adr, (U2)XSPI_IVI_IVDSH_NWORD);
+    /* Provisional (CANSignal To VM1) */
 
     /* サブフレームヘッダ解析処理 */
     //u2_t_frame_counter  = (U2)((u1_ap_XSPI_ADD[0] << XSPI_IVI_SFT_08) | u1_ap_XSPI_ADD[1]);
@@ -318,6 +373,37 @@ static void            vd_s_XspiIviSub4CanAna(const U1 * u1_ap_SUB4_ADD, const U
             vd_g_CanCtlTx_SendHk(u4_t_msg_aubistid, &u1_tp_can_data[0]);
             (void)Com_SendIPDU((PduIdType)u4_t_msg_aubistid, &u1_tp_can_data[0] );
         }
+
+        /* Provisional (CANSignal To VM1) */
+        switch(u4_t_msg_canid) {
+            case 0x00000427U:
+                vd_g_MemcpyU1(&u1_sp_Xspi_Ivi_DMS1S02_Data[0], &u1_tp_can_data[0], (U4)XSPI_IVI_CAN_DLC_08);
+                break;
+            case 0x000003EAU:
+                vd_g_MemcpyU1(&u1_sp_Xspi_Ivi_MET1S27_Data[0], &u1_tp_can_data[0], (U4)XSPI_IVI_CAN_DLC_08);
+                break;
+            case 0x0000037EU:
+                vd_g_MemcpyU1(&u1_sp_Xspi_Ivi_MET1S28_Data[0], &u1_tp_can_data[0], (U4)XSPI_IVI_CAN_DLC_08);
+                break;
+            case 0x000003ECU:
+                vd_g_MemcpyU1(&u1_sp_Xspi_Ivi_MET1S29_Data[0], &u1_tp_can_data[0], (U4)XSPI_IVI_CAN_DLC_08);
+                break;
+            case 0x000003EEU:
+                vd_g_MemcpyU1(&u1_sp_Xspi_Ivi_MET1S30_Data[0], &u1_tp_can_data[0], (U4)XSPI_IVI_CAN_DLC_32);
+                break;
+            case 0x00000529U:
+                vd_g_MemcpyU1(&u1_sp_Xspi_Ivi_MET1S43_Data[0], &u1_tp_can_data[0], (U4)XSPI_IVI_CAN_DLC_08);
+                break;
+            case 0x0000041AU:
+                vd_g_MemcpyU1(&u1_sp_Xspi_Ivi_MET1S62_Data[0], &u1_tp_can_data[0], (U4)XSPI_IVI_CAN_DLC_08);
+                break;
+            case 0x00000357U:
+                vd_g_MemcpyU1(&u1_sp_Xspi_Ivi_MET1S70_Data[0], &u1_tp_can_data[0], (U4)XSPI_IVI_CAN_DLC_32);
+                break;
+            default:
+                break;
+        }
+        /* Provisional (CANSignal To VM1) */
 
         /* 読み出したデータ分ポインタを移動する */
         u1_tp_CNMS_MSG  = &u1_tp_CNMS_MSG[u1_tp_CNMS_CMS[0]];
