@@ -46,9 +46,9 @@
 /* データ長(word) */
 #define PWRCTRL_COM_PWRON_LEN              (1U)         /* SIP電源再起動通知データ長 */
 #define PWRCTRL_COM_PWRERR_LEN             (1U)         /* SIP異常検知通知データ長 */
-#define PWRCTRL_COM_COUNT_LEN              (1U)         /* データ長:1word */
-#define PWRCTRL_COM_TIME_LEN               (1U)         /* データ長:1word */
-#define PWRCTRL_COM_BOOTLOG_LEN            (1U)         /* データ長:1word */
+#define PWRCTRL_COM_COUNT_LEN              (1U)         /* SoC起動回数カウンタデータ長 */
+#define PWRCTRL_COM_TIME_LEN               (1U)         /* SoC起動回数カウンタ更新時間データ長 */
+#define PWRCTRL_COM_BOOTLOG_LEN            (1U)         /* 起動ログ計測点通知情報データ長 */
 
 /* SoC起動回数カウンタ */
 #define PWRCTRL_COM_SOCONCOUNT_MAX         (0xFFFFU)    /* 最大値 */
@@ -125,7 +125,7 @@ void vd_g_PwrCtrlComBonInit( void )
     u4_s_PwrCtrl_Com_Tx_PwrOn = (U4)PWRCTRL_COM_PWRON_NOINFO;       /* SIP電源再起動通知 */
     u4_s_PwrCtrl_Com_Tx_PwrErr = (U4)PWRCTRL_COM_PWRERR_NOERR;      /* SIP異常検知通知 */
     u4_s_PwrCtrl_Com_Tx_SoCOnCount = (U4)PWRCTRL_COM_SOCONCOUNT_INIT;   /* SoC起動回数カウンタ */
-    vd_g_Rim_WriteU2((U2)RIMID_U2_PWCTR_SOC_ON_COUNT, (U2)(u4_s_PwrCtrl_Com_Tx_SoCOnCount & PWRCTRL_COM_LOW2BMASK));
+    vd_g_Rim_WriteU2((U2)RIMID_U2_PWCTR_SOC_ON_COUNT, (U2)(u4_s_PwrCtrl_Com_Tx_SoCOnCount & (U4)PWRCTRL_COM_LOW2BMASK));
 
     u4_s_PwrCtrl_Com_Tx_SoCOnTime = (U4)PWRCTRL_COM_SOCONTIME_INIT;     /* SoC起動回数カウンタ更新時の時間 */
     vd_g_Rim_WriteU4((U2)RIMID_U4_PWCTR_SOC_ON_TIME, u4_s_PwrCtrl_Com_Tx_SoCOnTime); 
@@ -178,7 +178,7 @@ void vd_g_PwrCtrlComWkupInit( void )
     }
     else
     {
-        u4_s_PwrCtrl_Com_Tx_SoCOnCount = (U4)PWRCTRL_COM_SOCONTIME_INIT;
+        u4_s_PwrCtrl_Com_Tx_SoCOnCount = (U4)PWRCTRL_COM_SOCONCOUNT_INIT;
     }
 
     return;
@@ -483,8 +483,8 @@ static void vd_s_PwrCtrlComRxSoCSts( void )
 
     /* 受信OK */
     if(u1_t_vm_ret != (U1)IVDSH_NO_REA){
-        u1_s_PwrCtrl_Com_Rx_SoCResetReq = (U1)((u4_t_buf & PWRCTRL_COM_2BYTEMASK) >> PWRCTRL_COM_1BYTESHIFT );
-        u1_s_PwrCtrl_Com_Rx_SoCSts = (U1)(u4_t_buf & PWRCTRL_COM_1BYTEMASK);
+        u1_s_PwrCtrl_Com_Rx_SoCResetReq = (U1)((u4_t_buf & (U4)PWRCTRL_COM_2BYTEMASK) >> (U1)PWRCTRL_COM_1BYTESHIFT );
+        u1_s_PwrCtrl_Com_Rx_SoCSts = (U1)(u4_t_buf & (U4)PWRCTRL_COM_1BYTEMASK);
     }
 
     /* WAKEUP-STAT1更新判定 */
@@ -502,7 +502,7 @@ static void vd_s_PwrCtrlComRxSoCSts( void )
   return        : none
   Note          : none
 *****************************************************************************/
-void vd_s_PwrCtrlComRxSTR( void )
+static void vd_s_PwrCtrlComRxSTR( void )
 {
     U4 u4_t_buf;        /* VM間通信受信データ格納バッファ */
     U1 u1_t_vm_data;    /* VM間通信受信データ */
@@ -596,7 +596,7 @@ void vd_g_PwrCtrlComTxSetSoCOnStart( void )
     else{
         u4_s_PwrCtrl_Com_Tx_SoCOnCount++;
     }
-    vd_g_Rim_WriteU2((U2)RIMID_U2_PWCTR_SOC_ON_COUNT, (U2)(u4_s_PwrCtrl_Com_Tx_SoCOnCount & PWRCTRL_COM_LOW2BMASK));
+    vd_g_Rim_WriteU2((U2)RIMID_U2_PWCTR_SOC_ON_COUNT, (U2)(u4_s_PwrCtrl_Com_Tx_SoCOnCount & (U4)PWRCTRL_COM_LOW2BMASK));
 
     /* SoC起動回数カウンタ更新時の時間取得 */
     u4_s_PwrCtrl_Com_Tx_SoCOnTime = u4_g_Gpt_FrtGetUsElapsed(vdp_PTR_NA);
