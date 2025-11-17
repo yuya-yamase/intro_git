@@ -2,8 +2,7 @@ variables:
   # GitLab Runner説明ページのURL
   EXPLAIN_URL: "https://wiki.geniie.net/pages/viewpage.action?pageId=3433128148"
   # ターゲットブランチ名
-  CI_TARGET_BRANCH: 'feature/Integ/develop_ci_runner_test_0925BSW_hotfix'
-  #CI_TARGET_BRANCH: 'develop'
+  CI_TARGET_BRANCH: 'develop'
 
 stages:          # List of stages for jobs, and their order of execution
   - build_1MUS   # Stage for building 1MUS project
