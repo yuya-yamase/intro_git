@@ -56,7 +56,6 @@
 /*-------------------------------------------------------------------------------------------*/
 void vd_g_PwrCtrlMainBonReq( void );
 void vd_g_PwrCtrlMainWakeupReq( void );
-void vd_g_PwrCtrlMainStandbyReq( void );
 void vd_g_PwrCtrlMainBuDetReq( void );
 void vd_g_PwrCtrlMainTask( void );
 

@@ -80,6 +80,7 @@
 #include "hud_ca.h"
 #include "mcst.h"
 #include "vds_ci.h"
+#include "cantxappdum.h"
 #include "hmiproxy.h"
 #include "battpow.h"
 #include "drvind_pwr_pct.h"
@@ -339,6 +340,7 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     {&vd_g_VardefMmUnitCstmzTask,       (U4)SCHDLR_TASKBIT__20MS_A  },
     {&vd_g_LocaleMainTask,              (U4)SCHDLR_TASKBIT__20MS_B  },
     {&vd_g_VdsCIMainTask,               (U4)SCHDLR_TASKBIT__10MS_A  },
+    {&vd_g_CanTxAppDumMainTask,         (U4)SCHDLR_TASKBIT__10MS_A  },
     {&vd_g_DimMainTask,                 (U4)SCHDLR_TASKBIT__20MS_A  },
     {&vd_g_VehspdMainTask,              (U4)SCHDLR_TASKBIT__20MS_A  },
     {&vd_g_EngspdMainTask,              (U4)SCHDLR_TASKBIT__20MS_A  },
