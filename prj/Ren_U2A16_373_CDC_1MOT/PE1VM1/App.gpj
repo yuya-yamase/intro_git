@@ -99,6 +99,8 @@
     -I${APP_DIR}/MET/IpcApplication/Vom/Tripcom/sensor/scc
     -I${APP_DIR}/MET/IpcApplication/Vom/VdsCI/config
     -I${APP_DIR}/MET/IpcApplication/Vom/VdsCI/scc
+    -I${APP_DIR}/MET/IpcApplication/Vom/CanTxAppDum/config
+    -I${APP_DIR}/MET/IpcApplication/Vom/CanTxAppDum/scc
     -I${APP_DIR}/MET/IpcApplication/Vom/Vehspd/config
     -I${APP_DIR}/MET/IpcApplication/Vom/Vehspd/scc
     -I${APP_DIR}/MET/IpcApplication/Vom/Vptran/config
@@ -589,6 +591,8 @@ App/MET/IpcApplication/Vom/Tripcom/sensor/scc/tripsnsr_odocnt.c
 App/MET/IpcApplication/Vom/Tripcom/sensor/scc/tripsnsr.c
 App/MET/IpcApplication/Vom/VdsCI/config/vds_ci_cfg.c
 App/MET/IpcApplication/Vom/VdsCI/scc/vds_ci.c
+App/MET/IpcApplication/Vom/CanTxAppDum/config/cantxappdum_cfg.c
+App/MET/IpcApplication/Vom/CanTxAppDum/scc/cantxappdum.c
 App/MET/IpcApplication/Vom/Vehspd/config/vehspd_kmph_cfg.c
 App/MET/IpcApplication/Vom/Vehspd/scc/vehspd_can_sp1x.c
 App/MET/IpcApplication/Vom/Vehspd/scc/vehspd_kmph.c
