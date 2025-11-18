@@ -54,6 +54,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#if 0   /* BEV Rebase provisionally */
 const ST_ALERT_REQBIT   st_gp_HMIPUTXTREQBIT[HMIPUTXTCFG_IF_NUM] = {
     /*  u2_src_ch                           u1_src_act                              u1_dst_idx   u4_dst_bit         */
     {    (U2)ALERT_CH_C_BRK_0,              (U1)ALERT_REQ_C_BRK_0_TMODE,            (U1)0U,     (U4)0x00000040U    },
@@ -745,6 +746,7 @@ const ST_ALERT_REQBIT   st_gp_HMIPUTXTREQBIT_SLOTE[HMIPUTXTCFG_IF_SLOTE_NUM] = {
     {    (U2)ALERT_CH_S_LDA_PD_LDA,         (U1)ALERT_REQ_S_LDA_PD_LDA_RESTRICT,    (U1)40U,    (U4)0x00000400U    },
     {    (U2)ALERT_CH_S_LDA_PD_LDA,         (U1)ALERT_REQ_S_LDA_PD_LDA_LANEDEP,     (U1)40U,    (U4)0x00000800U    }
 };
+#endif   /* BEV Rebase provisionally */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -756,12 +758,16 @@ const ST_ALERT_REQBIT   st_gp_HMIPUTXTREQBIT_SLOTE[HMIPUTXTCFG_IF_SLOTE_NUM] = {
 /*  Return:         u2_t_ret : array element number                                                                                  */
 /*===================================================================================================================================*/
 U2 u2_g_HmiputxtSizeReqbit(void){
+#if 0   /* BEV Rebase provisionally */
 
     U2 u2_t_ret;
 
     u2_t_ret = (U2)(sizeof(st_gp_HMIPUTXTREQBIT) / sizeof(st_gp_HMIPUTXTREQBIT[0]));
 
     return (u2_t_ret);
+#else   /* BEV Rebase provisionally */
+    return ((U2)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

@@ -53,6 +53,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#if 0   /* BEV Rebase provisionally */
 const ST_ALERT_REQBIT   st_gp_HMITTREQBIT[HMITTCFG_IF_NUM] = {
     /*  u2_src_ch                     u1_src_act                           u1_dst_idx  u4_dst_bit                                                      */
     {  (U2)ALERT_CH_B_TTAIL,          (U1)ALERT_REQ_B_TTAIL_ON,                 (U1)0U,    u4_HMITT_HB0(HMITT_BLINK_CO_ON_____100P)                    },
@@ -263,6 +264,7 @@ const ST_ALERT_REQBIT   st_gp_HMITTREQBIT[HMITTCFG_IF_NUM] = {
     {  (U2)ALERT_CH_H_XMODE_TT,       (U1)ALERT_REQ_H_XMODE_TT_DSNWMUD_CNL,     (U1)24U,   u4_HMITT_HB5(HMITT_BLINK_CO_ON_____100P)                    },
     {  (U2)ALERT_CH_C_MTS_TT,         (U1)ALERT_REQ_C_MTS_TT_SAND,              (U1)24U,   u4_HMITT_HB6(HMITT_BLINK_CO_ON_____100P)                    }
 };
+#endif   /* BEV Rebase provisionally */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -274,12 +276,16 @@ const ST_ALERT_REQBIT   st_gp_HMITTREQBIT[HMITTCFG_IF_NUM] = {
 /*  Return:         u2_t_ret : array element number                                                                                  */
 /*===================================================================================================================================*/
 U2 u2_g_HmittSizeReqbit(void){
+#if 0   /* BEV Rebase provisionally */
 
     U2 u2_t_ret;
 
     u2_t_ret = (U2)(sizeof(st_gp_HMITTREQBIT) / sizeof(st_gp_HMITTREQBIT[0]));
 
     return (u2_t_ret);
+#else   /* BEV Rebase provisionally */
+    return ((U2)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

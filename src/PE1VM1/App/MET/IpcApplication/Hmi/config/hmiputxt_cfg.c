@@ -106,6 +106,7 @@ typedef struct{
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static U4      u4_s_HmiPuTxtIdx2Mask(const U2 u2_a_PUTXTIDX , U1 * u1p_a_bufpos);
+#if 0   /* BEV Rebase provisionally */
 #if (HMIPUTXT_EVM_JDG == HMIPUTXT_JDG_ON)
 static U2      u2_s_hmiputxt_evmod_cnt;
 static U1      u1_s_hmiputxt_evmod_prereq;
@@ -114,6 +115,7 @@ static U1      u1_s_hmiputxt_evmod_prereq;
 static U2      u2_s_hmiputxt_thevm_cnt;
 static U1      u1_s_hmiputxt_thevm_prereq;
 #endif
+#endif   /* BEV Rebase provisionally */
 static U4      u4_sp_hmiputxt_slota_req[HMIPUTXT_NWORD];
 static U4      u4_sp_hmiputxt_slotb_req[HMIPUTXT_NWORD];
 static U4      u4_sp_hmiputxt_slotc_req[HMIPUTXT_NWORD];
@@ -127,10 +129,14 @@ static U4      u4_sp_hmiputxt_slote_req[HMIPUTXT_NWORD];
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#if 0   /* BEV Rebase provisionally */
 static void           vd_s_HmiPuTxtCfgIGOffInit(void);
+#endif   /* BEV Rebase provisionally */
 static void           vd_s_HmiPutTxtCfgSysmalMask(U4* u4_ap_varmask);
 static void           vd_s_HmiPutTxtCfgGpfMidMask(U4* u4_ap_varmask);
+#if 0   /* BEV Rebase provisionally */
 static void           vd_s_HmiPuTxtCfgEvmReq(U4* u4_ap_req);
+#endif   /* BEV Rebase provisionally */
 static U1             u1_s_HmiPuTxtCfgSftaltReq(void);
 static void           vd_s_HmiPutTxtCfgLbwMask(U4* u4_ap_varmask);
 static void           vd_s_HmiPutTxtCfgAlertReq(U1 u1_a_slot);
@@ -142,6 +148,7 @@ static void           vd_s_HmiPutTxtCfgAlertReq(U1 u1_a_slot);
 /*===================================================================================================================================*/
 void    vd_g_HmiPuTxtCfgInit(void)
 {
+#if 0   /* BEV Rebase provisionally */
 #if (HMIPUTXT_EVM_JDG == HMIPUTXT_JDG_ON)
     u2_s_hmiputxt_evmod_cnt       = (U2)U2_MAX;
     u1_s_hmiputxt_evmod_prereq = (U1)HMIPUTXT_REQ_INIT;
@@ -150,6 +157,7 @@ void    vd_g_HmiPuTxtCfgInit(void)
     u2_s_hmiputxt_thevm_cnt       = (U2)U2_MAX;
     u1_s_hmiputxt_thevm_prereq = (U1)HMIPUTXT_REQ_INIT;
 #endif
+#endif   /* BEV Rebase provisionally */
 
     vd_g_MemfillU4(&u4_sp_hmiputxt_slota_req[0], (U4)0U, (U4)HMIPUTXT_NWORD);
     vd_g_MemfillU4(&u4_sp_hmiputxt_slotb_req[0], (U4)0U, (U4)HMIPUTXT_NWORD);
@@ -157,6 +165,7 @@ void    vd_g_HmiPuTxtCfgInit(void)
     vd_g_MemfillU4(&u4_sp_hmiputxt_slotd_req[0], (U4)0U, (U4)HMIPUTXT_NWORD);
     vd_g_MemfillU4(&u4_sp_hmiputxt_slote_req[0], (U4)0U, (U4)HMIPUTXT_NWORD);
 }
+#if 0   /* BEV Rebase provisionally */
 /*===================================================================================================================================*/
 /*  static void    vd_s_HmiPuTxtCfgIGoffInit(void)                                                                                   */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
@@ -175,6 +184,7 @@ static void    vd_s_HmiPuTxtCfgIGOffInit(void)
 #endif
 
 }
+#endif   /* BEV Rebase provisionally */
 /*===================================================================================================================================*/
 /*  void    vd_g_HmiPuTxtCfgReq(U4 * u4_ap_req)                                                                                      */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
@@ -183,16 +193,20 @@ static void    vd_s_HmiPuTxtCfgIGOffInit(void)
 /*===================================================================================================================================*/
 void    vd_g_HmiPuTxtCfgReq(U4 * u4_ap_req)
 {
+#if 0   /* BEV Rebase provisionally */
     static const ST_HMIPUTXT_REQ_W_ESOPT   st_sp_HMIPUTXT_REQ_W_ESOPT[] = {
         /*  u2_idx    u2_chid                      u1_req                                   u2_eso_ch             */
         {   (U2)331U, (U2)ALERT_CH_S_ADAFRO_PD,    (U1)ALERT_REQ_S_ADAFRO_PD_MLFNC,         (U2)U2_MAX           }     /* WARNING_ID_331 */
     };
+#endif   /* BEV Rebase provisionally */
 
     static const ST_HMIPUTXT_REQ_W_ESOPT   st_sp_HMIPUTXT_REQ_W_ESOPT_WNG0786[] = {
         /*  u2_idx    u2_chid                      u1_req                                   u2_eso_ch             */
         {   (U2)786U, (U2)ALERT_CH_B_LEDHEA,       (U1)ALERT_REQ_B_LEDHEA_MALFUNC,          (U2)U2_MAX           },    /* WARNING_ID_786 */
+#if 0   /* BEV Rebase provisionally */
         {   (U2)786U, (U2)ALERT_CH_S_HEALEV_PD,    (U1)ALERT_REQ_S_HEALEV_PD_MALFUNC,       (U2)U2_MAX           },    /* WARNING_ID_786 */
         {   (U2)786U, (U2)ALERT_CH_S_MWL_PD,       (U1)ALERT_REQ_S_MWL_PD_MALFUNC,          (U2)VDF_ESO_CH_MWL   }     /* WARNING_ID_786 */
+#endif   /* BEV Rebase provisionally */
     };
 
     U2              u2_t_num_reqbit;
@@ -211,6 +225,7 @@ void    vd_g_HmiPuTxtCfgReq(U4 * u4_ap_req)
         u4_ap_req[u4_t_loop] = (U4)0U;
     }
 
+#if 0   /* BEV Rebase provisionally */
     /* Alert */
     u1_t_slot = u1_g_AlertGetReqSlot();
     u2_t_num_reqbit = u2_g_HmiputxtSizeReqbit();
@@ -223,6 +238,7 @@ void    vd_g_HmiPuTxtCfgReq(U4 * u4_ap_req)
         u4_ap_req[u4_t_loop] |= u4_sp_hmiputxt_slotd_req[u4_t_loop];
         u4_ap_req[u4_t_loop] |= u4_sp_hmiputxt_slote_req[u4_t_loop];
     }
+#endif   /* BEV Rebase provisionally */
 
     /* IceWrn */
     u1_t_icewrn = u1_g_AmbtmpIcyraWrnAct();
@@ -240,9 +256,12 @@ void    vd_g_HmiPuTxtCfgReq(U4 * u4_ap_req)
         u4_ap_req[u2_t_blkpos] |= ((U4)HMIPUTXT_ON_BIT << u2_t_bitpos);
     }
 
+#if 0   /* BEV Rebase provisionally */
     /* Evmod */
     vd_s_HmiPuTxtCfgEvmReq(&u4_ap_req[0]);
+#endif   /* BEV Rebase provisionally */
 
+#if 0   /* BEV Rebase provisionally */
     u4_t_num_tbl = sizeof(st_sp_HMIPUTXT_REQ_W_ESOPT) / sizeof(st_sp_HMIPUTXT_REQ_W_ESOPT[0]);
     for(u4_t_loop = (U4)0U; u4_t_loop < u4_t_num_tbl; u4_t_loop++){
         u1_t_exist = (U1)TRUE;
@@ -261,6 +280,7 @@ void    vd_g_HmiPuTxtCfgReq(U4 * u4_ap_req)
             }
         }
     }
+#endif   /* BEV Rebase provisionally */
 
     /* WARNING_ID_786 */
     u4_t_num_tbl = sizeof(st_sp_HMIPUTXT_REQ_W_ESOPT_WNG0786) / sizeof(st_sp_HMIPUTXT_REQ_W_ESOPT_WNG0786[0]);
@@ -314,6 +334,7 @@ void    vd_g_HmiPuTxtCfgDetail(U2 * u2_ap_detail)
         case (U1)ALERT_REQ_H_SYSMAL_PD1_MALPAT6:
             u2_t_reqpos = (U2)HMIPUTXT_REQBIT << HMIPUTXT_5BIT_SHIFT;
             break;
+#if 0   /* BEV Rebase provisionally */
         case (U1)ALERT_REQ_H_SYSMAL_PD1_MALPAT7:
             u2_t_reqpos = (U2)HMIPUTXT_REQBIT << HMIPUTXT_6BIT_SHIFT;
             break;
@@ -335,6 +356,7 @@ void    vd_g_HmiPuTxtCfgDetail(U2 * u2_ap_detail)
         case (U1)ALERT_REQ_H_SYSMAL_PD1_MALPAT13:
             u2_t_reqpos = (U2)HMIPUTXT_REQBIT << HMIPUTXT_12BIT_SHIFT;
             break;
+#endif   /* BEV Rebase provisionally */
         default:
             /* Do Nothing */
             break;
@@ -536,6 +558,7 @@ static void vd_s_HmiPutTxtCfgGpfMidMask(U4* u4_ap_varmask) {
     }
 }
 
+#if 0   /* BEV Rebase provisionally */
 /*===================================================================================================================================*/
 /*  static void    vd_s_HmiPuTxtCfgEvmReq(U4 * u4_ap_req)                                                                            */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
@@ -610,6 +633,7 @@ static void    vd_s_HmiPuTxtCfgEvmReq(U4 * u4_ap_req)
 #endif
 
 }
+#endif   /* BEV Rebase provisionally */
 
 /*===================================================================================================================================*/
 /*  void    vd_g_HmiPuTxtCfgThevmHidmask(U4 * u4_ap_varmask)                                                                         */
@@ -619,6 +643,7 @@ static void    vd_s_HmiPuTxtCfgEvmReq(U4 * u4_ap_req)
 /*===================================================================================================================================*/
 void    vd_g_HmiPuTxtCfgThevmHidmask(U4 * u4_ap_varmask)
 {
+#if 0   /* BEV Rebase provisionally */
 #if (HMIPUTXT_THEVM_JDG == HMIPUTXT_JDG_ON)
     static const U2 u2_sp_HMIPUTXT_THEVM[] = {
         (U2)166U,
@@ -671,6 +696,7 @@ void    vd_g_HmiPuTxtCfgThevmHidmask(U4 * u4_ap_varmask)
     /* Do Nothing */
 #endif
 
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -749,6 +775,7 @@ static void    vd_s_HmiPutTxtCfgAlertReq(U1 u1_a_slot)
 
     vd_g_MemfillU4(&u4_tp_req[0], (U4)0U, (U4)HMIPUTXT_NWORD);
 
+#if 0   /* BEV Rebase provisionally */
     switch(u1_a_slot) {
         case (U1)HMIPUTXTCFG_SLOT_A:
             vd_g_AlertReqToBit(st_gp_HMIPUTXTREQBIT_SLOTA, (U2)HMIPUTXTCFG_IF_SLOTA_NUM, &u4_tp_req[0], (U1)HMIPUTXT_NWORD);
@@ -774,6 +801,7 @@ static void    vd_s_HmiPutTxtCfgAlertReq(U1 u1_a_slot)
             /* Do Nothing */
             break;
     }
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
