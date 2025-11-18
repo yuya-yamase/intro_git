@@ -1,4 +1,4 @@
-/* 5.3.0 */
+/* 5.4.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define ALERT_C_TRCOFF_C_MAJOR                   (5)
-#define ALERT_C_TRCOFF_C_MINOR                   (3)
+#define ALERT_C_TRCOFF_C_MINOR                   (4)
 #define ALERT_C_TRCOFF_C_PATCH                   (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -84,26 +84,22 @@ const ST_ALERT_MTRX st_gp_ALERT_C_TRCOFF_MTRX[1] = {
 /*===================================================================================================================================*/
 static U4      u4_s_AlertC_trcoffSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
-#if 0   /* BEV Rebase provisionally */
-    static const U1 u1_s_ALERT_C_TRCOFF_LSB_VSC1S95 = (U1)1U;
+    static const U1 u1_s_ALERT_C_TRCOFF_LSB_DDM1S17 = (U1)1U;
     U4              u4_t_src_chk;
     U1              u1_t_msgsts;
     U1              u1_t_sgnl;
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_VSC1S95,
-                                     (U2)OXCAN_RX_SYS_NRX_IGR,
+    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_DDM1S17_CH0,
+                                     (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP,
                                      (U2)U2_MAX) & (U1)COM_NO_RX;
 
-    u4_t_src_chk  = ((U4)u1_t_msgsts << u1_s_ALERT_C_TRCOFF_LSB_VSC1S95);
+    u4_t_src_chk  = ((U4)u1_t_msgsts << u1_s_ALERT_C_TRCOFF_LSB_DDM1S17);
 
     u1_t_sgnl     = (U1)0U;
     (void)Com_ReceiveSignal(ComConf_ComSignal_TRCOFF, &u1_t_sgnl);
     u4_t_src_chk |= (U4)u1_t_sgnl;
 
     return(u4_t_src_chk);
-#else   /* BEV Rebase provisionally */
-    return((U4)0U);
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -119,11 +115,13 @@ static U4      u4_s_AlertC_trcoffSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
 /*  5.1.1     1/19/2022  KAT      Update for 840B#2 1A(Version update).                                                              */
 /*  5.2.0     2/26/2024  SW       Update for 19PFv3(add PD CH).                                                                      */
 /*  5.3.0     11/25/2024 YR       Update for 19PFv3(removed PD CH)                                                                   */
+/*  5.4.0     11/13/2025 SH       Change for BEV System_Consideration_1.                                                             */
 /*                                                                                                                                   */
 /*  * SK   = Satoshi Kasai, NTTD MSE                                                                                                 */
 /*  * RI   = Ren Ito, NTTD MSE                                                                                                       */
 /*  * KAT  = Katsushi Takahashi, NTTD MSE                                                                                            */
 /*  * SW   = Shun Watanabe, Denso Techno                                                                                             */
 /*  * YR   = Yhana Regalario, DTPH                                                                                                   */
+/*  * SH   = Sae Hirose, Denso Techno                                                                                                */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

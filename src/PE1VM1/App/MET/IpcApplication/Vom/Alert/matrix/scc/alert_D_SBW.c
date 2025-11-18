@@ -41,20 +41,14 @@
 #define ALERT_D_SBW_PD_SBWF_NUM_DST              (16U)
 #define ALERT_D_SBW_PD_CHK_NUM_DST               (6U)
 #define ALERT_D_SBW_PD_SFTF_NUM_DST              (8U)
-#define ALERT_D_SBW_PD_RIS_NUM_DST               (19U)
+#define ALERT_D_SBW_PD_RIS_NUM_DST               (16U)
 #define ALERT_D_SBW_PD_NSFT_NUM_DST              (16U)
 #define ALERT_D_SBW_PD_PREQ_NUM_DST              (16U)
 #define ALERT_D_SBW_PD_SFML_NUM_DST              (16U)
 #define ALERT_D_SBW_PD_DAP_NUM_DST               (16U)
 #define ALERT_D_SBW_PD_ACCN_NUM_DST              (16U)
-#define ALERT_D_SBW_PD_APRJ_NUM_DST              (8U)
 #define ALERT_D_SBW_PD_SILUA_NUM_DST             (8U)
-
-#define ALERT_D_SBW_RWSGNL_SBW3                  (0U)
-#define ALERT_D_SBW_RWSGNL_SBW8                  (1U)
-#define ALERT_D_SBW_RWSGNL_SBW9                  (2U)
-
-#define ALERT_D_SBW_NUM_RWSGNL                   (3U)
+#define ALERT_D_SBW_PD_SFPF_NUM_DST              (8U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -93,13 +87,8 @@ static U4      u4_s_AlertD_sbwPdPreqSrcchk (const U1 u1_a_VOM, const U4 u4_a_IGN
 static U4      u4_s_AlertD_sbwPdSfmlSrcchk (const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS);
 static U4      u4_s_AlertD_sbwPdDapSrcchk  (const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS);
 static U4      u4_s_AlertD_sbwPdAccnSrcchk (const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS);
-static U4      u4_s_AlertD_sbwPdAprjSrcchk (const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS);
 static U4      u4_s_AlertD_sbwPdSiluaSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS);
-static void    vd_s_AlertD_sbwPdActfRwTx   (const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST);
-static void    vd_s_AlertD_sbwPdPswfRwTx   (const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST);
-static void    vd_s_AlertD_sbwPdSbwfRwTx   (const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST);
-static void    vd_s_AlertD_sbwPdChkRwTx    (const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST);
-static void    vd_s_AlertD_sbwPdSftfRwTx   (const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST);
+static U4      u4_s_AlertD_sbwPdSfpfSrcchk (const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
@@ -542,66 +531,57 @@ static const U1  u1_sp_ALERT_D_SBW_PD_SFTF_DST[ALERT_D_SBW_PD_SFTF_NUM_DST] = {
 };
 static const U4  u4_sp_ALERT_D_SBW_PD_RIS_CRIT[ALERT_D_SBW_PD_RIS_NUM_DST] = {
     (U4)0x00000001U,                                                           /* 00 MSG_08                                          */
-    (U4)0x00000002U,                                                           /* 01 MSG_09                                          */
-    (U4)0x00000003U,                                                           /* 02 MSG_11                                          */
-    (U4)0x00000005U,                                                           /* 03 MSG_12                                          */
-    (U4)0x00000006U,                                                           /* 04 MSG_38                                          */
-    (U4)0x00000007U,                                                           /* 05 MSG_39                                          */
-    (U4)0x00000008U,                                                           /* 06 MSG_33                                          */
-    (U4)0x00000009U,                                                           /* 07 MSG_16                                          */
-    (U4)0x0000000AU,                                                           /* 08 MSG_19                                          */
-    (U4)0x0000000BU,                                                           /* 09 MSG_20                                          */
-    (U4)0x0000000CU,                                                           /* 10 MSG_40                                          */
-    (U4)0x0000000EU,                                                           /* 11 MSG_34                                          */
-    (U4)0x0000000FU,                                                           /* 12 MSG_35                                          */
-    (U4)0x00000010U,                                                           /* 13 MSG_36                                          */
-    (U4)0x00000011U,                                                           /* 14 MSG_10                                          */
-    (U4)0x00000013U,                                                           /* 15 MSG_13                                          */
-    (U4)0x00000014U,                                                           /* 16 MSG_14                                          */
-    (U4)0x00000015U,                                                           /* 17 MSG_17                                          */
-    (U4)0x00000016U                                                            /* 18 MSG_18                                          */
+    (U4)0x00000003U,                                                           /* 01 MSG_11                                          */
+    (U4)0x00000005U,                                                           /* 02 MSG_12                                          */
+    (U4)0x00000006U,                                                           /* 03 MSG_38                                          */
+    (U4)0x00000007U,                                                           /* 04 MSG_39                                          */
+    (U4)0x00000008U,                                                           /* 05 MSG_33                                          */
+    (U4)0x00000009U,                                                           /* 06 MSG_16                                          */
+    (U4)0x0000000AU,                                                           /* 07 MSG_19                                          */
+    (U4)0x0000000BU,                                                           /* 08 MSG_20                                          */
+    (U4)0x0000000CU,                                                           /* 09 MSG_40                                          */
+    (U4)0x0000000FU,                                                           /* 10 MSG_35                                          */
+    (U4)0x00000010U,                                                           /* 11 MSG_36                                          */
+    (U4)0x00000013U,                                                           /* 12 MSG_13                                          */
+    (U4)0x00000014U,                                                           /* 13 MSG_14                                          */
+    (U4)0x00000015U,                                                           /* 14 MSG_17                                          */
+    (U4)0x00000016U                                                            /* 15 MSG_18                                          */
 };
 static const U4  u4_sp_ALERT_D_SBW_PD_RIS_MASK[ALERT_D_SBW_PD_RIS_NUM_DST] = {
     (U4)0x0000007FU,                                                           /* 00 MSG_08                                          */
-    (U4)0x0000007FU,                                                           /* 01 MSG_09                                          */
-    (U4)0x0000007FU,                                                           /* 02 MSG_11                                          */
-    (U4)0x0000007FU,                                                           /* 03 MSG_12                                          */
-    (U4)0x0000007FU,                                                           /* 04 MSG_38                                          */
-    (U4)0x0000007FU,                                                           /* 05 MSG_39                                          */
-    (U4)0x0000007FU,                                                           /* 06 MSG_33                                          */
-    (U4)0x0000007FU,                                                           /* 07 MSG_16                                          */
-    (U4)0x0000007FU,                                                           /* 08 MSG_19                                          */
-    (U4)0x0000007FU,                                                           /* 09 MSG_20                                          */
-    (U4)0x0000007FU,                                                           /* 10 MSG_40                                          */
-    (U4)0x0000007FU,                                                           /* 11 MSG_34                                          */
-    (U4)0x0000007FU,                                                           /* 12 MSG_35                                          */
-    (U4)0x0000007FU,                                                           /* 13 MSG_36                                          */
-    (U4)0x0000007FU,                                                           /* 14 MSG_10                                          */
-    (U4)0x0000007FU,                                                           /* 15 MSG_13                                          */
-    (U4)0x0000007FU,                                                           /* 16 MSG_14                                          */
-    (U4)0x0000007FU,                                                           /* 17 MSG_17                                          */
-    (U4)0x0000007FU                                                            /* 18 MSG_18                                          */
+    (U4)0x0000007FU,                                                           /* 01 MSG_11                                          */
+    (U4)0x0000007FU,                                                           /* 02 MSG_12                                          */
+    (U4)0x0000007FU,                                                           /* 03 MSG_38                                          */
+    (U4)0x0000007FU,                                                           /* 04 MSG_39                                          */
+    (U4)0x0000007FU,                                                           /* 05 MSG_33                                          */
+    (U4)0x0000007FU,                                                           /* 06 MSG_16                                          */
+    (U4)0x0000007FU,                                                           /* 07 MSG_19                                          */
+    (U4)0x0000007FU,                                                           /* 08 MSG_20                                          */
+    (U4)0x0000007FU,                                                           /* 09 MSG_40                                          */
+    (U4)0x0000007FU,                                                           /* 10 MSG_35                                          */
+    (U4)0x0000007FU,                                                           /* 11 MSG_36                                          */
+    (U4)0x0000007FU,                                                           /* 12 MSG_13                                          */
+    (U4)0x0000007FU,                                                           /* 13 MSG_14                                          */
+    (U4)0x0000007FU,                                                           /* 14 MSG_17                                          */
+    (U4)0x0000007FU                                                            /* 15 MSG_18                                          */
 };
 static const U1  u1_sp_ALERT_D_SBW_PD_RIS_DST[ALERT_D_SBW_PD_RIS_NUM_DST] = {
     (U1)ALERT_REQ_D_SBW_PD_RIS_MSG_08,                                         /* 00 MSG_08                                          */
-    (U1)ALERT_REQ_D_SBW_PD_RIS_MSG_09,                                         /* 01 MSG_09                                          */
-    (U1)ALERT_REQ_D_SBW_PD_RIS_MSG_11,                                         /* 02 MSG_11                                          */
-    (U1)ALERT_REQ_D_SBW_PD_RIS_MSG_12,                                         /* 03 MSG_12                                          */
-    (U1)ALERT_REQ_D_SBW_PD_RIS_MSG_38,                                         /* 04 MSG_38                                          */
-    (U1)ALERT_REQ_D_SBW_PD_RIS_MSG_39,                                         /* 05 MSG_39                                          */
-    (U1)ALERT_REQ_D_SBW_PD_RIS_MSG_33,                                         /* 06 MSG_33                                          */
-    (U1)ALERT_REQ_D_SBW_PD_RIS_MSG_16,                                         /* 07 MSG_16                                          */
-    (U1)ALERT_REQ_D_SBW_PD_RIS_MSG_19,                                         /* 08 MSG_19                                          */
-    (U1)ALERT_REQ_D_SBW_PD_RIS_MSG_20,                                         /* 09 MSG_20                                          */
-    (U1)ALERT_REQ_D_SBW_PD_RIS_MSG_40,                                         /* 10 MSG_40                                          */
-    (U1)ALERT_REQ_D_SBW_PD_RIS_MSG_34,                                         /* 11 MSG_34                                          */
-    (U1)ALERT_REQ_D_SBW_PD_RIS_MSG_35,                                         /* 12 MSG_35                                          */
-    (U1)ALERT_REQ_D_SBW_PD_RIS_MSG_36,                                         /* 13 MSG_36                                          */
-    (U1)ALERT_REQ_D_SBW_PD_RIS_MSG_10,                                         /* 14 MSG_10                                          */
-    (U1)ALERT_REQ_D_SBW_PD_RIS_MSG_13,                                         /* 15 MSG_13                                          */
-    (U1)ALERT_REQ_D_SBW_PD_RIS_MSG_14,                                         /* 16 MSG_14                                          */
-    (U1)ALERT_REQ_D_SBW_PD_RIS_MSG_17,                                         /* 17 MSG_17                                          */
-    (U1)ALERT_REQ_D_SBW_PD_RIS_MSG_18                                          /* 18 MSG_18                                          */
+    (U1)ALERT_REQ_D_SBW_PD_RIS_MSG_11,                                         /* 01 MSG_11                                          */
+    (U1)ALERT_REQ_D_SBW_PD_RIS_MSG_12,                                         /* 02 MSG_12                                          */
+    (U1)ALERT_REQ_D_SBW_PD_RIS_MSG_38,                                         /* 03 MSG_38                                          */
+    (U1)ALERT_REQ_D_SBW_PD_RIS_MSG_39,                                         /* 04 MSG_39                                          */
+    (U1)ALERT_REQ_D_SBW_PD_RIS_MSG_33,                                         /* 05 MSG_33                                          */
+    (U1)ALERT_REQ_D_SBW_PD_RIS_MSG_16,                                         /* 06 MSG_16                                          */
+    (U1)ALERT_REQ_D_SBW_PD_RIS_MSG_19,                                         /* 07 MSG_19                                          */
+    (U1)ALERT_REQ_D_SBW_PD_RIS_MSG_20,                                         /* 08 MSG_20                                          */
+    (U1)ALERT_REQ_D_SBW_PD_RIS_MSG_40,                                         /* 09 MSG_40                                          */
+    (U1)ALERT_REQ_D_SBW_PD_RIS_MSG_35,                                         /* 10 MSG_35                                          */
+    (U1)ALERT_REQ_D_SBW_PD_RIS_MSG_36,                                         /* 11 MSG_36                                          */
+    (U1)ALERT_REQ_D_SBW_PD_RIS_MSG_13,                                         /* 12 MSG_13                                          */
+    (U1)ALERT_REQ_D_SBW_PD_RIS_MSG_14,                                         /* 13 MSG_14                                          */
+    (U1)ALERT_REQ_D_SBW_PD_RIS_MSG_17,                                         /* 14 MSG_17                                          */
+    (U1)ALERT_REQ_D_SBW_PD_RIS_MSG_18                                          /* 15 MSG_18                                          */
 };
 static const U1  u1_sp_ALERT_D_SBW_PD_NSFT_DST[ALERT_D_SBW_PD_NSFT_NUM_DST] = {
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 00 UNKNOWN                                         */
@@ -693,9 +673,9 @@ static const U1  u1_sp_ALERT_D_SBW_PD_ACCN_DST[ALERT_D_SBW_PD_ACCN_NUM_DST] = {
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 14 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN                                                      /* 15 UNKNOWN                                         */
 };
-static const U1  u1_sp_ALERT_D_SBW_PD_APRJ_DST[ALERT_D_SBW_PD_APRJ_NUM_DST] = {
+static const U1  u1_sp_ALERT_D_SBW_PD_SILUA_DST[ALERT_D_SBW_PD_SILUA_NUM_DST] = {
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 00 UNKNOWN                                         */
-    (U1)ALERT_REQ_D_SBW_PD_APRJ_MSG_37,                                        /* 01 MSG_37                                          */
+    (U1)ALERT_REQ_D_SBW_PD_SILUA_MSG_41,                                       /* 01 MSG_41                                          */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 02 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 03 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 04 UNKNOWN                                         */
@@ -703,9 +683,9 @@ static const U1  u1_sp_ALERT_D_SBW_PD_APRJ_DST[ALERT_D_SBW_PD_APRJ_NUM_DST] = {
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 06 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN                                                      /* 07 UNKNOWN                                         */
 };
-static const U1  u1_sp_ALERT_D_SBW_PD_SILUA_DST[ALERT_D_SBW_PD_SILUA_NUM_DST] = {
+static const U1  u1_sp_ALERT_D_SBW_PD_SFPF_DST[ALERT_D_SBW_PD_SFPF_NUM_DST] = {
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 00 UNKNOWN                                         */
-    (U1)ALERT_REQ_D_SBW_PD_SILUA_MSG_41,                                       /* 01 MSG_41                                          */
+    (U1)ALERT_REQ_D_SBW_PD_SFPF_MSG_42,                                        /* 01 MSG_42                                          */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 02 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 03 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 04 UNKNOWN                                         */
@@ -752,7 +732,7 @@ const ST_ALERT_MTRX st_gp_ALERT_D_SBW_MTRX[17] = {
     },
     {
         &u4_s_AlertD_sbwPdActfSrcchk,                                          /* fp_u4_SRC_CHK                                      */
-        &vd_s_AlertD_sbwPdActfRwTx,                                            /* fp_vd_XDST                                         */
+        vdp_PTR_NA,                                                            /* fp_vd_XDST                                         */
 
         (const U4 *)vdp_PTR_NA,                                                /* u4p_MASK                                           */
         (const U4 *)vdp_PTR_NA,                                                /* u4p_CRIT                                           */
@@ -774,7 +754,7 @@ const ST_ALERT_MTRX st_gp_ALERT_D_SBW_MTRX[17] = {
     },
     {
         &u4_s_AlertD_sbwPdPswfSrcchk,                                          /* fp_u4_SRC_CHK                                      */
-        &vd_s_AlertD_sbwPdPswfRwTx,                                            /* fp_vd_XDST                                         */
+        vdp_PTR_NA,                                                            /* fp_vd_XDST                                         */
 
         (const U4 *)vdp_PTR_NA,                                                /* u4p_MASK                                           */
         (const U4 *)vdp_PTR_NA,                                                /* u4p_CRIT                                           */
@@ -785,7 +765,7 @@ const ST_ALERT_MTRX st_gp_ALERT_D_SBW_MTRX[17] = {
     },
     {
         &u4_s_AlertD_sbwPdSbwfSrcchk,                                          /* fp_u4_SRC_CHK                                      */
-        &vd_s_AlertD_sbwPdSbwfRwTx,                                            /* fp_vd_XDST                                         */
+        vdp_PTR_NA,                                                            /* fp_vd_XDST                                         */
 
         (const U4 *)vdp_PTR_NA,                                                /* u4p_MASK                                           */
         (const U4 *)vdp_PTR_NA,                                                /* u4p_CRIT                                           */
@@ -796,7 +776,7 @@ const ST_ALERT_MTRX st_gp_ALERT_D_SBW_MTRX[17] = {
     },
     {
         &u4_s_AlertD_sbwPdChkSrcchk,                                           /* fp_u4_SRC_CHK                                      */
-        &vd_s_AlertD_sbwPdChkRwTx,                                             /* fp_vd_XDST                                         */
+        vdp_PTR_NA,                                                            /* fp_vd_XDST                                         */
 
         &u4_sp_ALERT_D_SBW_PD_CHK_MASK[0],                                     /* u4p_MASK                                           */
         &u4_sp_ALERT_D_SBW_PD_CHK_CRIT[0],                                     /* u4p_CRIT                                           */
@@ -807,7 +787,7 @@ const ST_ALERT_MTRX st_gp_ALERT_D_SBW_MTRX[17] = {
     },
     {
         &u4_s_AlertD_sbwPdSftfSrcchk,                                          /* fp_u4_SRC_CHK                                      */
-        &vd_s_AlertD_sbwPdSftfRwTx,                                            /* fp_vd_XDST                                         */
+        vdp_PTR_NA,                                                            /* fp_vd_XDST                                         */
 
         (const U4 *)vdp_PTR_NA,                                                /* u4p_MASK                                           */
         (const U4 *)vdp_PTR_NA,                                                /* u4p_CRIT                                           */
@@ -883,17 +863,6 @@ const ST_ALERT_MTRX st_gp_ALERT_D_SBW_MTRX[17] = {
         (U1)ALERT_VOM_BAT_WT                                                   /* u1_vom_act                                         */
     },
     {
-        &u4_s_AlertD_sbwPdAprjSrcchk,                                          /* fp_u4_SRC_CHK                                      */
-        vdp_PTR_NA,                                                            /* fp_vd_XDST                                         */
-
-        (const U4 *)vdp_PTR_NA,                                                /* u4p_MASK                                           */
-        (const U4 *)vdp_PTR_NA,                                                /* u4p_CRIT                                           */
-
-        &u1_sp_ALERT_D_SBW_PD_APRJ_DST[0],                                     /* u1p_DST                                            */
-        (U2)ALERT_D_SBW_PD_APRJ_NUM_DST,                                       /* u2_num_srch                                        */
-        (U1)ALERT_VOM_IGN_ON                                                   /* u1_vom_act                                         */
-    },
-    {
         &u4_s_AlertD_sbwPdSiluaSrcchk,                                         /* fp_u4_SRC_CHK                                      */
         vdp_PTR_NA,                                                            /* fp_vd_XDST                                         */
 
@@ -902,6 +871,17 @@ const ST_ALERT_MTRX st_gp_ALERT_D_SBW_MTRX[17] = {
 
         &u1_sp_ALERT_D_SBW_PD_SILUA_DST[0],                                    /* u1p_DST                                            */
         (U2)ALERT_D_SBW_PD_SILUA_NUM_DST,                                      /* u2_num_srch                                        */
+        (U1)ALERT_VOM_IGN_ON                                                   /* u1_vom_act                                         */
+    },
+    {
+        &u4_s_AlertD_sbwPdSfpfSrcchk,                                          /* fp_u4_SRC_CHK                                      */
+        vdp_PTR_NA,                                                            /* fp_vd_XDST                                         */
+
+        (const U4 *)vdp_PTR_NA,                                                /* u4p_MASK                                           */
+        (const U4 *)vdp_PTR_NA,                                                /* u4p_CRIT                                           */
+
+        &u1_sp_ALERT_D_SBW_PD_SFPF_DST[0],                                     /* u1p_DST                                            */
+        (U2)ALERT_D_SBW_PD_SFPF_NUM_DST,                                       /* u2_num_srch                                        */
         (U1)ALERT_VOM_IGN_ON                                                   /* u1_vom_act                                         */
     }
 };
@@ -1001,9 +981,7 @@ static U4      u4_s_AlertD_sbwBzPtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM
 
     u1_t_sgnl                  = (U1)0U;
     if(u1_t_msgsts == (U1)0U){
-        #if defined(ComConf_ComSignal_BZR_PT) /*@@@ 19pvf CANFDItem  @@@*/
         (void)Com_ReceiveSignal(ComConf_ComSignal_BZR_PT, &u1_t_sgnl);
-        #endif /* ComConf_ComSignal_BZR_PT */
     }
     u4_t_src_chk               = u1_t_sgnl;
     return(u4_t_src_chk);
@@ -1341,7 +1319,6 @@ static U4      u4_s_AlertD_sbwPdSfmlSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
 /*===================================================================================================================================*/
 static U4      u4_s_AlertD_sbwPdDapSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
-#if 0   /* BEV Rebase provisionally */
     static const U2 u2_s_ALERT_SBW_PD_DAP_TO_TRSH    = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_D_SBW_PD_DAP_LSB_SB05 = (U1)1U;
     static const U4 u4_s_ALERT_SBW_PD_DAP_BIT_BATWT  = (U4)0x00000008U;
@@ -1349,8 +1326,8 @@ static U4      u4_s_AlertD_sbwPdDapSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
     U1              u1_t_msgsts;
     U1              u1_t_sgnl;
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_SBW1G05,
-                                     (U2)OXCAN_RX_SYS_NRX_BAT | (U2)OXCAN_RX_SYS_TOE_BAT,
+    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_PCN1S01_CH0,
+                                     (U4)ALERT_CAN_SYS_ALL,
                                      u2_s_ALERT_SBW_PD_DAP_TO_TRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
     vd_g_AlertBRxTrnsSts(&u1_s_alert_sbw_msgsts_dap, u1_t_msgsts);
 
@@ -1365,9 +1342,6 @@ static U4      u4_s_AlertD_sbwPdDapSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
     }
 
     return(u4_t_src_chk);
-#else   /* BEV Rebase provisionally */
-    return((U4)0U);
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -1378,7 +1352,6 @@ static U4      u4_s_AlertD_sbwPdDapSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
 /*===================================================================================================================================*/
 static U4      u4_s_AlertD_sbwPdAccnSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
-#if 0   /* BEV Rebase provisionally */
     static const U2 u2_s_ALERT_SBW_PD_ACCN_TO_TRSH   = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_SBW_PD_ACCN_LSB_MSG   = (U1)1U;
     static const U4 u4_s_ALERT_SBW_PD_ACCN_BIT_BATWT = (U4)0x00000008U;
@@ -1386,9 +1359,9 @@ static U4      u4_s_AlertD_sbwPdAccnSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
     U1              u1_t_msgsts;
     U1              u1_t_sgnl;
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_SBW1G05,
-                                     (U2)OXCAN_RX_SYS_NRX_BAT | (U2)OXCAN_RX_SYS_TOE_BAT,
-                                     u2_s_ALERT_SBW_PD_ACCN_TO_TRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_PCN1S01_CH0,
+                                      (U4)ALERT_CAN_SYS_ALL,
+                                      u2_s_ALERT_SBW_PD_ACCN_TO_TRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
     vd_g_AlertBRxTrnsSts(&u1_s_alert_sbw_msgsts_accn, u1_t_msgsts);
 
     u4_t_src_chk  = ((U4)u1_s_alert_sbw_msgsts_accn << u1_s_ALERT_SBW_PD_ACCN_LSB_MSG);
@@ -1402,40 +1375,6 @@ static U4      u4_s_AlertD_sbwPdAccnSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
     }
 
     return(u4_t_src_chk);
-#else   /* BEV Rebase provisionally */
-    return((U4)0U);
-#endif   /* BEV Rebase provisionally */
-}
-
-/*===================================================================================================================================*/
-/*  static U4      u4_s_AlertD_sbwPdAprjSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)                           */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static U4      u4_s_AlertD_sbwPdAprjSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
-{
-#if 0   /* BEV Rebase provisionally */
-    static const U2 u2_s_ALERT_SBW_PD_APRJ_TO_TRSH = ((U2)3600U / (U2)OXCAN_MAIN_TICK);
-    static const U1 u1_s_ALERT_SBW_PD_APRJ_LSB_MSG = (U1)1U;
-    U4              u4_t_src_chk;
-    U1              u1_t_msgsts;
-    U1              u1_t_sgnl;
-
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_SBW1G02,
-                                     (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
-                                     u2_s_ALERT_SBW_PD_APRJ_TO_TRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
-
-    u4_t_src_chk  = ((U4)u1_t_msgsts << u1_s_ALERT_SBW_PD_APRJ_LSB_MSG);
-
-    u1_t_sgnl     = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_MSG_APRJ, &u1_t_sgnl);
-    u4_t_src_chk |= (U4)u1_t_sgnl;
-
-    return(u4_t_src_chk);
-#else   /* BEV Rebase provisionally */
-    return((U4)0U);
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -1446,15 +1385,14 @@ static U4      u4_s_AlertD_sbwPdAprjSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
 /*===================================================================================================================================*/
 static U4      u4_s_AlertD_sbwPdSiluaSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
-#if 0   /* BEV Rebase provisionally */
     static const U2 u2_s_ALERT_D_SBW_SILUA_TO_TRSH = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_D_SBW_SILUA_LSB_MSG = (U1)1U;
     U4              u4_t_src_chk;
     U1              u1_t_msgsts;
     U1              u1_t_sgnl;
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_SBW1G05,
-                                     (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
+    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_PCN1S01_CH0,
+                                     (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP,
                                      u2_s_ALERT_D_SBW_SILUA_TO_TRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
     u4_t_src_chk  = ((U4)u1_t_msgsts << u1_s_ALERT_D_SBW_SILUA_LSB_MSG);
 
@@ -1463,150 +1401,32 @@ static U4      u4_s_AlertD_sbwPdSiluaSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN
     u4_t_src_chk |= (U4)u1_t_sgnl;
 
     return(u4_t_src_chk);
-#else   /* BEV Rebase provisionally */
-    return((U4)0U);
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
-/*  static void    vd_s_AlertD_sbwPdActfRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)                             */
+/*  static U4      u4_s_AlertD_sbwPdSfpfSrcchk (const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)                          */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-static void    vd_s_AlertD_sbwPdActfRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)
+static U4      u4_s_AlertD_sbwPdSfpfSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
-#if 0   /* BEV Rebase provisionally */
-    static const U4 u4_s_ALERT_SBW_PD_ACTF_RW_ENBL = ((U4)15000U / (U4)ALERT_MAIN_TICK);
-    U1              u1_t_shift_sbw;
+    static const U2 u2_s_ALERT_D_SBW_PD_SFPF_TO_TRSH = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
+    static const U1 u1_s_ALERT_D_SBW_PD_SFPF_LSB_MSG = (U1)1U;
+    U4              u4_t_src_chk;
+    U1              u1_t_msgsts;
     U1              u1_t_sgnl;
 
-    u1_t_shift_sbw = u1_g_AlertShiftSbwFunc();
+    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_PCN1S01_CH0,
+                                     (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP,
+                                     u2_s_ALERT_D_SBW_PD_SFPF_TO_TRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+    u4_t_src_chk  = ((U4)u1_t_msgsts << u1_s_ALERT_D_SBW_PD_SFPF_LSB_MSG);
 
-    if((u1_t_shift_sbw                    == (U1)TRUE                          ) &&
-       ((u1_a_VOM & (U1)ALERT_VOM_IGN_ON) != (U1)0U                            ) &&
-       (u4_a_IGN_TM                       >= u4_s_ALERT_SBW_PD_ACTF_RW_ENBL    ) &&
-       (u1_a_DST                          == (U1)ALERT_REQ_D_SBW_PD_ACTF_MSG_02)){
-        u1_t_sgnl = (U1)ALERT_RW_SGNL_ON;
-    }
-    else{
-        u1_t_sgnl = (U1)ALERT_RW_SGNL_OFF;
-    }
+    u1_t_sgnl     = (U1)0U;
+    (void)Com_ReceiveSignal(ComConf_ComSignal_MSG_SFPF, &u1_t_sgnl);
+    u4_t_src_chk |= (U4)u1_t_sgnl;
 
-    (void)Com_SendSignal(ComConf_ComSignal_SBW4, &u1_t_sgnl);
-#endif   /* BEV Rebase provisionally */
-}
-
-/*===================================================================================================================================*/
-/*  static void    vd_s_AlertD_sbwPdPswfRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)                             */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void    vd_s_AlertD_sbwPdPswfRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)
-{
-#if 0   /* BEV Rebase provisionally */
-    U1              u1_t_sgnl;
-
-    if(((u1_a_VOM & (U1)ALERT_VOM_RWT_EN) != (U1)0U                            ) &&
-       (u1_a_DST                          == (U1)ALERT_REQ_D_SBW_PD_PSWF_MSG_04)){
-        u1_t_sgnl = (U1)ALERT_RW_SGNL_ON;
-    }
-    else{
-        u1_t_sgnl = (U1)ALERT_RW_SGNL_OFF;
-    }
-
-    (void)Com_SendSignal(ComConf_ComSignal_SBW6, &u1_t_sgnl);
-#endif   /* BEV Rebase provisionally */
-}
-
-/*===================================================================================================================================*/
-/*  static void    vd_s_AlertD_sbwPdSbwfRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)                             */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void    vd_s_AlertD_sbwPdSbwfRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)
-{
-#if 0   /* BEV Rebase provisionally */
-    static const U4 u4_s_ALERT_SBW_PD_SBWF_RW_ENBL = ((U4)15000U / (U4)ALERT_MAIN_TICK);
-    U1              u1_t_sgnl;
-
-    if(((u1_a_VOM & (U1)ALERT_VOM_IGN_ON) != (U1)0U                            ) &&
-       (u4_a_IGN_TM                       >= u4_s_ALERT_SBW_PD_SBWF_RW_ENBL    ) &&
-       (u1_a_DST                          == (U1)ALERT_REQ_D_SBW_PD_SBWF_MSG_05)){
-        u1_t_sgnl = (U1)ALERT_RW_SGNL_ON;
-    }
-    else{
-        u1_t_sgnl = (U1)ALERT_RW_SGNL_OFF;
-    }
-
-    (void)Com_SendSignal(ComConf_ComSignal_SBW5, &u1_t_sgnl);
-#endif   /* BEV Rebase provisionally */
-}
-
-/*===================================================================================================================================*/
-/*  static void    vd_s_AlertD_sbwPdChkRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)                              */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void    vd_s_AlertD_sbwPdChkRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)
-{
-#if 0   /* BEV Rebase provisionally */
-    static const U1 u1_sp_ALERT_D_SBWRWTX_DST_CRT[ALERT_D_SBW_NUM_RWSGNL] = {
-        ((U1)((U1)1U << ALERT_REQ_D_SBW_PD_CHK_MSG_06 ) | (U1)((U1)1U << ALERT_REQ_D_SBW_PD_CHK_MSG6_SBW8)
-                                                        | (U1)((U1)1U << ALERT_REQ_D_SBW_PD_CHK_MSG6_SBW9)), /* SBW3 */
-        ((U1)((U1)1U << ALERT_REQ_D_SBW_PD_CHK_SBW8_ON) | (U1)((U1)1U << ALERT_REQ_D_SBW_PD_CHK_MSG6_SBW8)), /* SBW8 */
-        ((U1)((U1)1U << ALERT_REQ_D_SBW_PD_CHK_SBW9_ON) | (U1)((U1)1U << ALERT_REQ_D_SBW_PD_CHK_MSG6_SBW9))  /* SBW9 */
-    };
-    static const U1 u1_s_ALERT_D_SBWRWTX_DST_MSK = (U1)0x07U;
-
-    U1              u1_tp_sgnl[ALERT_D_SBW_NUM_RWSGNL];
-    U1              u1_t_rw;
-    U4              u4_t_idx;
-
-    u1_t_rw = (U1)0U;
-    if(u1_a_DST != (U1)ALERT_REQ_UNKNOWN){
-        u1_t_rw = ((U1)1U << (u1_a_DST & u1_s_ALERT_D_SBWRWTX_DST_MSK));
-    }
-    for(u4_t_idx = (U4)0U; u4_t_idx < (U4)ALERT_D_SBW_NUM_RWSGNL; u4_t_idx++){
-        if(((u1_a_VOM & (U1)ALERT_VOM_RWT_EN)                    != (U1)0U) &&
-           ((u1_t_rw  & u1_sp_ALERT_D_SBWRWTX_DST_CRT[u4_t_idx]) != (U1)0U)){
-
-            u1_tp_sgnl[u4_t_idx] = (U1)ALERT_RW_SGNL_ON;
-        }
-        else{
-            u1_tp_sgnl[u4_t_idx] = (U1)ALERT_RW_SGNL_OFF;
-        }
-    }
-    (void)Com_SendSignal(ComConf_ComSignal_SBW3 , &u1_tp_sgnl[ALERT_D_SBW_RWSGNL_SBW3]);
-    (void)Com_SendSignal(ComConf_ComSignal_SBW8 , &u1_tp_sgnl[ALERT_D_SBW_RWSGNL_SBW8]);
-    (void)Com_SendSignal(ComConf_ComSignal_SBW9 , &u1_tp_sgnl[ALERT_D_SBW_RWSGNL_SBW9]);
-#endif   /* BEV Rebase provisionally */
-}
-
-/*===================================================================================================================================*/
-/*  static void    vd_s_AlertD_sbwPdSftfRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)                             */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void    vd_s_AlertD_sbwPdSftfRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)
-{
-#if 0   /* BEV Rebase provisionally */
-    U1              u1_t_sgnl;
-
-    if(((u1_a_VOM & (U1)ALERT_VOM_RWT_EN) != (U1)0U                            ) &&
-       (u1_a_DST                          == (U1)ALERT_REQ_D_SBW_PD_SFTF_MSG_07)){
-        u1_t_sgnl = (U1)ALERT_RW_SGNL_ON;
-    }
-    else{
-        u1_t_sgnl = (U1)ALERT_RW_SGNL_OFF;
-    }
-
-    (void)Com_SendSignal(ComConf_ComSignal_SBW2, &u1_t_sgnl);
-#endif   /* BEV Rebase provisionally */
+    return(u4_t_src_chk);
 }
 
 /*===================================================================================================================================*/

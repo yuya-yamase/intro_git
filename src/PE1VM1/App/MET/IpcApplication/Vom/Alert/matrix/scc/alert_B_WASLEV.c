@@ -61,7 +61,6 @@ static U1      u1_s_alert_b_waslev_hw_jdg_lst;
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static U4      u4_s_AlertB_waslevSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS);
-static void    vd_s_AlertB_waslevRwTx  (const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST);
 static U1      u1_s_AlertB_waslevCanJdg(const U1 u1_a_VOM);
 static U1      u1_s_AlertB_waslevHwJdg (const U1 u1_a_VOM);
 
@@ -107,7 +106,7 @@ static const U1  u1_sp_ALERT_B_WASLEV_DST[ALERT_B_WASLEV_NUM_DST] = {
 const ST_ALERT_MTRX st_gp_ALERT_B_WASLEV_MTRX[1] = {
     {
         &u4_s_AlertB_waslevSrcchk,                                             /* fp_u4_SRC_CHK                                      */
-        &vd_s_AlertB_waslevRwTx,                                               /* fp_vd_XDST                                         */
+        vdp_PTR_NA,                                                            /* fp_vd_XDST                                         */
 
         (const U4 *)vdp_PTR_NA,                                                /* u4p_MASK                                           */
         (const U4 *)vdp_PTR_NA,                                                /* u4p_CRIT                                           */
@@ -177,36 +176,6 @@ static U4      u4_s_AlertB_waslevSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
     }
 
     return(u4_t_src_chk);
-}
-
-/*===================================================================================================================================*/
-/*  static void    vd_s_AlertB_waslevRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)                                */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void    vd_s_AlertB_waslevRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)
-{
-#if 0   /* BEV Rebase provisionally */
-#ifdef ComConf_ComSignal_WASH /* 460B_CAN */
-    static const U1 u1_s_ALERT_B_WASLEV_RWTX_CRT = ((U1)((U1)1U << ALERT_REQ_B_WASLEV_TT_PD_ON)
-                                                 |  (U1)((U1)1U << ALERT_REQ_B_WASLEV_PD_ON   ));
-    static const U1 u1_s_ALERT_B_WASLEV_RWTX_MSK = (U1)0x03U;
-    U1              u1_t_sgnl;
-    U1              u1_t_rw;
-
-    u1_t_rw = (U1)((U1)1U << (u1_a_DST & u1_s_ALERT_B_WASLEV_RWTX_MSK));
-    if(((u1_a_VOM & (U1)ALERT_VOM_RWT_EN)         != (U1)0U) &&
-       ((u1_t_rw  & u1_s_ALERT_B_WASLEV_RWTX_CRT) != (U1)0U)){
-        u1_t_sgnl = (U1)ALERT_RW_SGNL_ON;
-    }
-    else{
-        u1_t_sgnl = (U1)ALERT_RW_SGNL_OFF;
-    }
-
-    (void)Com_SendSignal(ComConf_ComSignal_WASH, &u1_t_sgnl);
-#endif /* ComConf_ComSignal_WASH */
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
