@@ -31,7 +31,6 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define ALERT_H_LEAUNF_PD_PWC_NUM_DST            (4U)
 #define ALERT_H_LEAUNF_PD_EHV_NUM_DST            (4U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -47,18 +46,11 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static U4      u4_s_AlertH_leaunfPdPwcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS);
-static U4      u4_s_AlertH_leaunfPdEhvSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS);
+static U4      u4_s_AlertH_leaunfSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static const U1  u1_sp_ALERT_H_LEAUNF_PD_PWC_DST[ALERT_H_LEAUNF_PD_PWC_NUM_DST] = {
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 00 UNKNOWN                                         */
-    (U1)ALERT_REQ_H_LEAUNF_PD_PWC_UNCOMP,                                      /* 01 UNCOMP                                          */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 02 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN                                                      /* 03 UNKNOWN                                         */
-};
 static const U1  u1_sp_ALERT_H_LEAUNF_PD_EHV_DST[ALERT_H_LEAUNF_PD_EHV_NUM_DST] = {
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 00 UNKNOWN                                         */
     (U1)ALERT_REQ_H_LEAUNF_PD_EHV_UNCOMP,                                      /* 01 UNCOMP                                          */
@@ -67,20 +59,9 @@ static const U1  u1_sp_ALERT_H_LEAUNF_PD_EHV_DST[ALERT_H_LEAUNF_PD_EHV_NUM_DST] 
 };
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-const ST_ALERT_MTRX st_gp_ALERT_H_LEAUNF_MTRX[2] = {
+const ST_ALERT_MTRX st_gp_ALERT_H_LEAUNF_MTRX[1] = {
     {
-        &u4_s_AlertH_leaunfPdPwcSrcchk,                                        /* fp_u4_SRC_CHK                                      */
-        vdp_PTR_NA,                                                            /* fp_vd_XDST                                         */
-
-        (const U4 *)vdp_PTR_NA,                                                /* u4p_MASK                                           */
-        (const U4 *)vdp_PTR_NA,                                                /* u4p_CRIT                                           */
-
-        &u1_sp_ALERT_H_LEAUNF_PD_PWC_DST[0],                                   /* u1p_DST                                            */
-        (U2)ALERT_H_LEAUNF_PD_PWC_NUM_DST,                                     /* u2_num_srch                                        */
-        (U1)ALERT_VOM_IGN_ON                                                   /* u1_vom_act                                         */
-    },
-    {
-        &u4_s_AlertH_leaunfPdEhvSrcchk,                                        /* fp_u4_SRC_CHK                                      */
+        &u4_s_AlertH_leaunfSrcchk,                                             /* fp_u4_SRC_CHK                                      */
         vdp_PTR_NA,                                                            /* fp_vd_XDST                                         */
 
         (const U4 *)vdp_PTR_NA,                                                /* u4p_MASK                                           */
@@ -92,45 +73,13 @@ const ST_ALERT_MTRX st_gp_ALERT_H_LEAUNF_MTRX[2] = {
     }
 };
 
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-/*  Function Definitions                                                                                                             */
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*===================================================================================================================================*/
-/*  static U4      u4_s_AlertH_leaunfPdPwcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)                         */
+/*  static U4      uu4_s_AlertH_leaunfSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)                             */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-static U4      u4_s_AlertH_leaunfPdPwcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
-{
-#if 0   /* BEV Rebase provisionally */
-    static const U1 u1_s_ALERT_H_LEAUNF_PDPWC_LSB_MS = (U1)1U;
-    U4              u4_t_src_chk;
-    U1              u1_t_msgsts;
-    U1              u1_t_sgnl;
-
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_PLG1G14,
-                                     (U2)OXCAN_RX_SYS_NRX_IGR,
-                                     (U2)U2_MAX) & (U1)COM_NO_RX;
-    u4_t_src_chk  = ((U4)u1_t_msgsts << u1_s_ALERT_H_LEAUNF_PDPWC_LSB_MS);
-
-    u1_t_sgnl     = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_SILUAPWC, &u1_t_sgnl);
-    u4_t_src_chk |= (U4)u1_t_sgnl;
-
-    return(u4_t_src_chk);
-#else   /* BEV Rebase provisionally */
-    return((U4)0U);
-#endif   /* BEV Rebase provisionally */
-}
-
-/*===================================================================================================================================*/
-/*  static U4      u4_s_AlertH_leaunfPdEhvSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)                         */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static U4      u4_s_AlertH_leaunfPdEhvSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
+static U4      u4_s_AlertH_leaunfSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
     static const U1 u1_s_ALERT_H_LEAUNF_PDEHV_LSB_MS = (U1)1U;
     U4              u4_t_src_chk;

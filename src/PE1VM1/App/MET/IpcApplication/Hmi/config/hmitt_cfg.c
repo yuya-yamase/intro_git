@@ -125,7 +125,9 @@ typedef struct{
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static void    vd_s_HmiTtTurn(U4 * u4_ap_req);
 static void    vd_s_HmiTtTECOLP2(U4* u4_ap_req);
+#if 0   /* BEV Rebase provisionally */
 static void    vd_s_HmiTtLbwTt(U4* u4_ap_req);
+#endif   /* BEV Rebase provisionally */
 static void    vd_s_HmiTtZmilrqTt(U4* u4_ap_req);
 static U1      u1_s_HmiTtEcbEpbTt(void);
 static U1      u1_s_HmiTtPkbTt(void);
@@ -160,7 +162,9 @@ void    vd_g_HmiTtCfgReq(U4 * u4_ap_req)
     U2  u2_t_belt_tt;
     U1  u1_t_icewrn;
     U1  u1_t_rearbelt_tt;
+#if 0   /* BEV Rebase provisionally */
     U1  u1_t_placon;
+#endif   /* BEV Rebase provisionally */
     U1  u1_t_ecbepbtt;
     U1  u1_t_pkbtt;
 
@@ -168,8 +172,10 @@ void    vd_g_HmiTtCfgReq(U4 * u4_ap_req)
         u4_ap_req[u4_t_loop] = (U4)0U;
     }
 
+#if 0   /* BEV Rebase provisionally */
     u2_t_num_reqbit = u2_g_HmittSizeReqbit();
     vd_g_AlertReqToBit( st_gp_HMITTREQBIT, u2_t_num_reqbit, u4_ap_req, (U1)HMITT_NUM);
+#endif   /* BEV Rebase provisionally */
 
     u1_t_icewrn = u1_g_AmbtmpIceWrnAct();
     if(u1_t_icewrn == (U1)TRUE){
@@ -203,12 +209,14 @@ void    vd_g_HmiTtCfgReq(U4 * u4_ap_req)
         u4_ap_req[HMITT_REARBLT_DATPOS] |= u4_HMITT_HB4(HMITT_BLINK_CO_ON_____100P);
     }
 
+#if 0   /* BEV Rebase provisionally */
     u1_t_placon  = u1_g_AlertReqByCh((U2)ALERT_CH_P_PLACON);
     if(u1_t_placon == (U1)ALERT_REQ_P_PLACON_FLASH){
         u4_ap_req[HMITT_LOWFUEL_DATPOS] |= u4_HMITT_HB6(HMITT_BLINK_CO_4P00HZ__50P_PLACON);
     }else {
         /* Do Nothing */
     }
+#endif   /* BEV Rebase provisionally */
 
 
     u1_t_ecbepbtt = u1_s_HmiTtEcbEpbTt();
@@ -219,7 +227,9 @@ void    vd_g_HmiTtCfgReq(U4 * u4_ap_req)
 
     vd_s_HmiTtTurn(u4_ap_req);
     vd_s_HmiTtTECOLP2(u4_ap_req);
+#if 0   /* BEV Rebase provisionally */
     vd_s_HmiTtLbwTt(u4_ap_req);
+#endif   /* BEV Rebase provisionally */
     vd_s_HmiTtZmilrqTt(u4_ap_req);
 }
 
@@ -354,9 +364,11 @@ static U1      u1_s_HmiTtPkbTt(void)
         (U1)HMITT_BLINK_CO_2P00HZ__50P_EPB,      /* ALERT_REQ_C_EPB_TT_PKB_FLASH_2HZ         ( 2U) */
         (U1)HMITT_BLINK_CO_4P00HZ__50P_EPB       /* ALERT_REQ_C_EPB_TT_PKB_FLASH_4HZ         ( 3U) */
     };
+#if 0   /* BEV Rebase provisionally */
     static const U1    u1_sp_HMITT_REQ_TEPKB_RED[HMITT_REQ_NUM_TEPKB_RED] = {
         (U1)HMITT_BLINK_CO_ON_____100P           /* ALERT_REQ_C_TPKBON_ON                    ( 0U) */
     };
+#endif   /* BEV Rebase provisionally */
 
     U1  u1_t_sts;
     U1  u1_t_req;
@@ -371,10 +383,12 @@ static U1      u1_s_HmiTtPkbTt(void)
         }
     }
     else{
+#if 0   /* BEV Rebase provisionally */
         u1_t_sts  = u1_g_AlertReqByCh((U2)ALERT_CH_C_TPKBON);
         if(u1_t_sts < (U1)HMITT_REQ_NUM_TEPKB_RED){
             u1_t_req = u1_sp_HMITT_REQ_TEPKB_RED[u1_t_sts];
         }
+#endif   /* BEV Rebase provisionally */
     }
     return(u1_t_req);
 }
@@ -402,6 +416,7 @@ static void    vd_s_HmiTtTECOLP2(U4* u4_ap_req)
     }
 }
 
+#if 0   /* BEV Rebase provisionally */
 /*===================================================================================================================================*/
 /*  static  void    vd_s_HmiTtLbwTt(U4 * u4_ap_req)                                                                                  */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
@@ -432,6 +447,7 @@ static void    vd_s_HmiTtLbwTt(U4* u4_ap_req)
         }
     }
 }
+#endif   /* BEV Rebase provisionally */
 
 /*===================================================================================================================================*/
 /*  static void    vd_s_HmiTtZmilrqTt(U4 * u4_ap_req)                                                                                */
@@ -468,12 +484,15 @@ void    vd_g_HmiTtCfgVarmask(U4 * u4_ap_varmask)
     static const ST_HMITT_ESOPT st_sp_HMITT_ESOPT[] = {
     /* u1_idx     u1_strtpos   u2_esopt                       u2_chid                           u1_req                                       */
         {  (U1)0U,    (U1)16U,    (U2)VDF_ESO_CH_PEDPRO,        (U2)ALERT_CH_B_PEDPRO,             (U1)ALERT_REQ_B_PEDPRO_DIAGDTRMN             },
+#if 0   /* BEV Rebase provisionally */
         {  (U1)1U,    (U1)0U,     (U2)VDF_ESO_CH_TPMS,          (U2)ALERT_CH_C_TPMS_TT,            (U1)ALERT_REQ_C_TPMS_TT_MALFUNC              },
         {  (U1)1U,    (U1)0U,     (U2)VDF_ESO_CH_TPMS,          (U2)ALERT_CH_C_TPMS_TT,            (U1)ALERT_REQ_C_TPMS_TT_STOP                 },
+#endif   /* BEV Rebase provisionally */
         {  (U1)1U,    (U1)12U,    (U2)VDF_ESO_CH_VSC,           (U2)ALERT_CH_C_SLIP,               (U1)ALERT_REQ_C_SLIP_MALFUNC                 },
         {  (U1)1U,    (U1)12U,    (U2)VDF_ESO_CH_VSC,           (U2)ALERT_CH_C_SLIP,               (U1)ALERT_REQ_C_SLIP_MALFUNC_RW              },
         {  (U1)2U,    (U1)28U,    (U2)VDF_ESO_CH_BRPADW,        (U2)ALERT_CH_C_BRPADW,             (U1)ALERT_REQ_C_BRPADW_MALFUNC               },
         {  (U1)3U,    (U1)4U,     (U2)VDF_ESO_CH_BRKHLD,        (U2)ALERT_CH_C_BRKHLD_HLD,         (U1)ALERT_REQ_C_BRKHLD_HLD_FLASH             },
+#if 0   /* BEV Rebase provisionally */
         {  (U1)4U,    (U1)24U,    (U2)VDF_ESO_CH_PCS,           (U2)ALERT_CH_S_PCS1_TT,            (U1)ALERT_REQ_S_PCS1_TT_MALFUNC              },
         {  (U1)5U,    (U1)8U,     (U2)VDF_ESO_CH_LTA,           (U2)ALERT_CH_S_LTA_2_TT,           (U1)ALERT_REQ_S_LTA_2_TT_MLFNC               },
         {  (U1)5U,    (U1)20U,    (U2)VDF_ESO_CH_DS1_LDA,       (U2)ALERT_CH_S_LDA_TT_LDA,         (U1)ALERT_REQ_S_LDA_TT_LDA_ON_A              },
@@ -488,6 +507,7 @@ void    vd_g_HmiTtCfgVarmask(U4 * u4_ap_varmask)
         {  (U1)18U,   (U1)0U,     (U2)VDF_ESO_CH_HOF_EXT,       (U2)ALERT_CH_S_ADTJA_TT,           (U1)ALERT_REQ_S_ADTJA_TT_MALFUNC             },
         {  (U1)20U,   (U1)16U,    (U2)VDF_ESO_CH_ADIEXIST,      (U2)ALERT_CH_S_ADASTT_TT,          (U1)ALERT_REQ_S_ADASTT_TT_A_ABN              },
         {  (U1)22U,   (U1)24U,    (U2)VDF_ESO_CH_DMC,           (U2)ALERT_CH_S_DMC_TT,             (U1)ALERT_REQ_S_DMC_TT_MAL_DMC               }
+#endif   /* BEV Rebase provisionally */
     };
 
     U4  u4_t_loop;

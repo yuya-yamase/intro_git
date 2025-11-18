@@ -47,7 +47,6 @@
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static U4      u4_s_AlertC_drsSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS);
-static void    vd_s_AlertC_drsRwTx  (const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
@@ -91,7 +90,7 @@ static const U1  u1_sp_ALERT_C_DRS_DST[ALERT_C_DRS_NUM_DST] = {
 const ST_ALERT_MTRX st_gp_ALERT_C_DRS_MTRX[1] = {
     {
         &u4_s_AlertC_drsSrcchk,                                                /* fp_u4_SRC_CHK                                      */
-        &vd_s_AlertC_drsRwTx,                                                  /* fp_vd_XDST                                         */
+        vdp_PTR_NA,                                                            /* fp_vd_XDST                                         */
 
         (const U4 *)vdp_PTR_NA,                                                /* u4p_MASK                                           */
         (const U4 *)vdp_PTR_NA,                                                /* u4p_CRIT                                           */
@@ -129,34 +128,6 @@ static U4      u4_s_AlertC_drsSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, co
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_C_DRS_LSB_MSGSTS);
 
     return(u4_t_src_chk);
-}
-
-/*===================================================================================================================================*/
-/*  static void    vd_s_AlertC_drsRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)                                   */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void    vd_s_AlertC_drsRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)
-{
-#if 0   /* BEV Rebase provisionally */
-    U1              u1_t_sgnl;
-    U1              u1_t_esopt;
-
-    u1_t_esopt = u1_g_AlertEsOptAvailable((U2)ALERT_OPT_ID_C_DRS_ARS1S90);
-    if(((u1_a_VOM & (U1)ALERT_VOM_RWT_EN) != (U1)0U                        ) &&
-       (u1_t_esopt                        == (U1)TRUE                      ) &&
-       (u1_a_DST                          == (U1)ALERT_REQ_C_DRS_MALFUNC_RW)){
-        u1_t_sgnl = (U1)ALERT_RW_SGNL_ON;
-    }
-    else{
-        u1_t_sgnl = (U1)ALERT_RW_SGNL_OFF;
-    }
-
-#if defined(ComConf_ComSignal_FWSW) /* _300D_CAN_ */
-    (void)Com_SendSignal(ComConf_ComSignal_FWSW, &u1_t_sgnl);
-#endif                              /* _300D_CAN_ */
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

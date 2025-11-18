@@ -47,7 +47,6 @@
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static U4      u4_s_AlertB_spatSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS);
-static void    vd_s_AlertB_spatRwTx  (const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
@@ -67,7 +66,7 @@ static const U1  u1_sp_ALERT_B_SPAT_DST[ALERT_B_SPAT_NUM_DST] = {
 const ST_ALERT_MTRX st_gp_ALERT_B_SPAT_MTRX[1] = {
     {
         &u4_s_AlertB_spatSrcchk,                                               /* fp_u4_SRC_CHK                                      */
-        &vd_s_AlertB_spatRwTx,                                                 /* fp_vd_XDST                                         */
+        vdp_PTR_NA,                                                            /* fp_vd_XDST                                         */
 
         (const U4 *)vdp_PTR_NA,                                                /* u4p_MASK                                           */
         (const U4 *)vdp_PTR_NA,                                                /* u4p_CRIT                                           */
@@ -105,31 +104,6 @@ static U4      u4_s_AlertB_spatSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, c
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_B_SPAT_LSB_MSGSTS);
 
     return(u4_t_src_chk);
-}
-
-/*===================================================================================================================================*/
-/*  static void    vd_s_AlertB_spatRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)                                  */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void    vd_s_AlertB_spatRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)
-{
-#if 0   /* BEV Rebase provisionally */
-    static const U4 u4_s_ALERT_B_SPAT_TIM_RW_ENBL = ((U4)15000U / (U4)ALERT_MAIN_TICK);
-    U1              u1_t_sgnl;
-
-    if (((u1_a_VOM & (U1)ALERT_VOM_IGN_ON) != (U1)0U                       ) &&
-        (u4_a_IGN_TM                       >= u4_s_ALERT_B_SPAT_TIM_RW_ENBL) &&
-        (u1_a_DST                          == (U1)ALERT_REQ_B_SPAT_MALFUNC )) {
-        u1_t_sgnl = (U1)ALERT_RW_SGNL_ON;
-    }
-    else {
-        u1_t_sgnl = (U1)ALERT_RW_SGNL_OFF;
-    }
-
-    (void)Com_SendSignal(ComConf_ComSignal_SPAW, &u1_t_sgnl);
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

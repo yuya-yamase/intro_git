@@ -43,7 +43,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static U1      u1_s_alert_h_tvpsof_pmn1g03_sts;
+static U1      u1_s_alert_h_tvpsof_bdc1s33_sts;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
@@ -98,7 +98,7 @@ const ST_ALERT_MTRX st_gp_ALERT_H_TVPSOF_MTRX[1] = {
 /*===================================================================================================================================*/
 void    vd_g_AlertH_tvpsofInit(void)
 {
-    u1_s_alert_h_tvpsof_pmn1g03_sts = (U1)COM_NO_RX;
+    u1_s_alert_h_tvpsof_bdc1s33_sts = (U1)COM_NO_RX;
 }
 
 /*===================================================================================================================================*/
@@ -109,25 +109,22 @@ void    vd_g_AlertH_tvpsofInit(void)
 /*===================================================================================================================================*/
 static U4      u4_s_AlertH_tvpsofSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
-#if 0   /* BEV Rebase provisionally */
     static const U2 u2_s_ALERT_H_TVPSOF_THRSH_TO    = ((U2)3600U / (U2)OXCAN_MAIN_TICK);
-    static const U1 u1_s_ALERT_H_TVPSOF_LSB_PMN1G03 = (U1)1U;
+    static const U1 u1_s_ALERT_H_TVPSOF_LSB_BDC1S33 = (U1)1U;
     static const U4 u4_s_ALERT_H_TVPSOF_BIT_BAT_WT  = (U4)0x00000008U;
     U4              u4_t_src_chk;
     U1              u1_t_msgsts;
     U1              u1_t_sgnl;
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_PMN1G03,
-                                     (U2)OXCAN_RX_SYS_NRX_BAT | (U2)OXCAN_RX_SYS_TOE_BAT,
-                                     u2_s_ALERT_H_TVPSOF_THRSH_TO) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
-    vd_g_AlertBRxTrnsSts(&u1_s_alert_h_tvpsof_pmn1g03_sts, u1_t_msgsts);
+    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_BDC1S33_CH0,
+                                      (U4)ALERT_CAN_SYS_ALL,
+                                      u2_s_ALERT_H_TVPSOF_THRSH_TO) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+    vd_g_AlertBRxTrnsSts(&u1_s_alert_h_tvpsof_bdc1s33_sts, u1_t_msgsts);
 
-    u4_t_src_chk  = ((U4)u1_s_alert_h_tvpsof_pmn1g03_sts << u1_s_ALERT_H_TVPSOF_LSB_PMN1G03);
+    u4_t_src_chk  = ((U4)u1_s_alert_h_tvpsof_bdc1s33_sts << u1_s_ALERT_H_TVPSOF_LSB_BDC1S33);
 
     u1_t_sgnl     = (U1)0U;
-#if defined(ComConf_ComSignal_TVPSOFF)
     (void)Com_ReceiveSignal(ComConf_ComSignal_TVPSOFF, &u1_t_sgnl);
-#endif /* defined(ComConf_ComSignal_TVPSOFF) */
     u4_t_src_chk |= (U4)u1_t_sgnl;
 
     if((u1_a_VOM & (U1)ALERT_VOM_BAT_WT) != (U1)0U){
@@ -135,9 +132,6 @@ static U4      u4_s_AlertH_tvpsofSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
     }
 
     return(u4_t_src_chk);
-#else   /* BEV Rebase provisionally */
-    return((U4)0U);
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

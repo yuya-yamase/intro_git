@@ -1,4 +1,4 @@
-/* 5.0.1 */
+/* 5.1.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,8 +10,8 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define ALERT_H_DRIPOW_C_MAJOR                   (5)
-#define ALERT_H_DRIPOW_C_MINOR                   (0)
-#define ALERT_H_DRIPOW_C_PATCH                   (1)
+#define ALERT_H_DRIPOW_C_MINOR                   (1)
+#define ALERT_H_DRIPOW_C_PATCH                   (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -31,7 +31,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define ALERT_H_DRIPOW_NUM_DST                   (16U)
+#define ALERT_H_DRIPOW_NUM_DST                   (32U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -47,14 +47,13 @@
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static U4      u4_s_AlertH_dripowSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS);
-static void    vd_s_AlertH_dripowRwTx  (const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static const U1  u1_sp_ALERT_H_DRIPOW_DST[ALERT_H_DRIPOW_NUM_DST] = {
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 00 UNKNOWN                                         */
-    (U1)ALERT_REQ_H_DRIPOW_PRMRYCHK,                                           /* 01 PRMRYCHK                                        */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 01 UNKNOWN                                         */
     (U1)ALERT_REQ_H_DRIPOW_OVHT,                                               /* 02 OVHT                                            */
     (U1)ALERT_REQ_H_DRIPOW_BATLOW,                                             /* 03 BATLOW                                          */
     (U1)ALERT_REQ_H_DRIPOW_OTHER,                                              /* 04 OTHER                                           */
@@ -68,14 +67,30 @@ static const U1  u1_sp_ALERT_H_DRIPOW_DST[ALERT_H_DRIPOW_NUM_DST] = {
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 12 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 13 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 14 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN                                                      /* 15 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 15 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 16 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 17 UNKNOWN                                         */
+    (U1)ALERT_REQ_H_DRIPOW_OVHT_CHN,                                           /* 18 OVHT_CHN                                        */
+    (U1)ALERT_REQ_H_DRIPOW_BATLOW_CHN,                                         /* 19 BATLOW_CHN                                      */
+    (U1)ALERT_REQ_H_DRIPOW_OTHER_CHN,                                          /* 20 OTHER_CHN                                       */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 21 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 22 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 23 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 24 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 25 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 26 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 27 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 28 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 29 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 30 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN                                                      /* 31 UNKNOWN                                         */
 };
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 const ST_ALERT_MTRX st_gp_ALERT_H_DRIPOW_MTRX[1] = {
     {
         &u4_s_AlertH_dripowSrcchk,                                             /* fp_u4_SRC_CHK                                      */
-        &vd_s_AlertH_dripowRwTx,                                               /* fp_vd_XDST                                         */
+        vdp_PTR_NA,                                                            /* fp_vd_XDST                                         */
 
         (const U4 *)vdp_PTR_NA,                                                /* u4p_MASK                                           */
         (const U4 *)vdp_PTR_NA,                                                /* u4p_CRIT                                           */
@@ -97,13 +112,15 @@ const ST_ALERT_MTRX st_gp_ALERT_H_DRIPOW_MTRX[1] = {
 /*===================================================================================================================================*/
 static U4      u4_s_AlertH_dripowSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
-    static const U1 u1_s_ALERT_H_DRIPOW_LSB_MSGSTS = (U1)3U;
+    static const U1 u1_s_ALERT_H_DRIPOW_LSB_MSGSTS   = (U1)3U;
+    static const U1 u1_s_ALERT_H_DRIPOW_LSB_CHINAJDG = (U1)4U;
     U1              u1_t_msgsts;
     U1              u1_t_sgnl;
     U4              u4_t_src_chk;
+    U1              u1_t_china_jdg;
 
     u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_EHV1S26_CH0,
-                                      (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP,
+                                      (U4)OXCAN_SYS_IGP,
                                       (U2)U2_MAX) & (U1)COM_NO_RX;
 
     u1_t_sgnl     = (U1)0U;
@@ -112,32 +129,10 @@ static U4      u4_s_AlertH_dripowSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
 
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_H_DRIPOW_LSB_MSGSTS);
 
+    u1_t_china_jdg = u1_g_VardefChainaReq();
+    u4_t_src_chk |= ((U4)u1_t_china_jdg << u1_s_ALERT_H_DRIPOW_LSB_CHINAJDG);
+
     return(u4_t_src_chk);
-}
-
-/*===================================================================================================================================*/
-/*  static void    vd_s_AlertH_dripowRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)                                */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void    vd_s_AlertH_dripowRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)
-{
-#if 0   /* BEV Rebase provisionally */
-#ifdef ComConf_ComSignal_EVHW
-    U1              u1_t_sgnl;
-
-    if(((u1_a_VOM & (U1)ALERT_VOM_RWT_EN) != (U1)0U                     ) &&
-       (u1_a_DST                          == (U1)ALERT_REQ_H_DRIPOW_OVHT)){
-        u1_t_sgnl = (U1)ALERT_RW_SGNL_ON;
-    }
-    else{
-        u1_t_sgnl = (U1)ALERT_RW_SGNL_OFF;
-    }
-
-    (void)Com_SendSignal(ComConf_ComSignal_EVHW, &u1_t_sgnl);
-#endif /* ComConf_ComSignal_EVHW */
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -150,8 +145,10 @@ static void    vd_s_AlertH_dripowRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, c
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  5.0.0     3/10/2020  SM       New.                                                                                               */
 /*  5.0.1     9/02/2020  DS       Update filename.                                                                                   */
+/*  5.1.0     10/25/2024 RS       Change for BEV System_Consideration_1.                                                             */
 /*                                                                                                                                   */
 /*  * SM   = Shingo Miyamoto, NTTD MSE                                                                                               */
 /*  * DS   = Daisuke Suzuki, NTTD MSE                                                                                                */
+/*  * RS   = Ryuki Sako, Denso Techno                                                                                                */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
