@@ -31,11 +31,11 @@
 #include "mmappctrl.h"
 #include "xspi_met_can.h"
 
-#if (CAN_CFG_CONTROLLERNUM_MAX > 0U)
+#if (BSW_CANIF_CFG_MPU_CONTROLLERNUM > 0U)
 #include "icu_drv_wk.h"
 #include "Dio.h"
 #include "Cdd_Canic.h"
-#endif
+#endif /* #if (BSW_CANIF_CFG_MPU_CONTROLLERNUM > 0U) */
 
 /* #include "can_lpr_test.h" */
 
@@ -81,8 +81,40 @@ static void vd_s_oXCANUsrhkMmappRxMsg(const U2 u2_a_MSG);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if (CAN_CFG_CONTROLLERNUM_MAX > 0U)
-static const ST_OXCAN_ICU_RX      st_sp_OXCAN_ICU_RX_BY_CTRL[CAN_CFG_CONTROLLERNUM_MAX] = {
+#if (BSW_CANIF_CFG_MPU_CONTROLLERNUM > 0U)
+static const ST_OXCAN_ICU_RX      st_sp_OXCAN_ICU_RX_BY_CTRL[BSW_CANIF_CFG_MPU_CONTROLLERNUM] = {
+    {
+        (U4)0x00000000U,               /* u4_wrq */
+        (U1)U1_MAX                     /* u1_ch  */
+    },
+    {
+        (U4)0x00000000U,               /* u4_wrq */
+        (U1)U1_MAX                     /* u1_ch  */
+    },
+    {
+        (U4)0x00000000U,               /* u4_wrq */
+        (U1)U1_MAX                     /* u1_ch  */
+    },
+    {
+        (U4)0x00000000U,               /* u4_wrq */
+        (U1)U1_MAX                     /* u1_ch  */
+    },
+    {
+        (U4)0x00000000U,               /* u4_wrq */
+        (U1)U1_MAX                     /* u1_ch  */
+    },
+    {
+        (U4)0x00000000U,               /* u4_wrq */
+        (U1)U1_MAX                     /* u1_ch  */
+    },
+    {
+        (U4)0x00000000U,               /* u4_wrq */
+        (U1)U1_MAX                     /* u1_ch  */
+    },
+    {
+        (U4)0x00000000U,               /* u4_wrq */
+        (U1)U1_MAX                     /* u1_ch  */
+    },
     {
         (U4)0x00000000U,               /* u4_wrq */
         (U1)U1_MAX                     /* u1_ch  */
@@ -121,7 +153,7 @@ static const ST_OXCAN_ICU_RX      st_sp_OXCAN_ICU_RX_BY_CTRL[CAN_CFG_CONTROLLERN
 static const U2               u2_sp_OXCAN_TRCV_BY_CH[BSW_COM_CFG_CHNUM] = {
     (U2)U2_MAX                  /* Virtual CAN      */
 };
-#endif /* #if (CAN_CFG_CONTROLLERNUM_MAX > 0U) */
+#endif /* #if (BSW_CANIF_CFG_MPU_CONTROLLERNUM > 0U) */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
@@ -135,8 +167,8 @@ static const U2               u2_sp_OXCAN_TRCV_BY_CH[BSW_COM_CFG_CHNUM] = {
 void    vd_g_oXCANUsrhkWRQDet(const U1 u1_a_CTRLR, const U1 u1_a_ENA)     /* called from oxcan_aubif.c :: Can_UEdgeEnableDetect  */
                                                                           /* called from oxcan_aubif.c :: Can_UEdgeDisableDetect */
 {
-#if (CAN_CFG_CONTROLLERNUM_MAX > 0U)
-    if(u1_a_CTRLR >= (U1)CAN_CFG_CONTROLLERNUM_MAX){
+#if (BSW_CANIF_CFG_MPU_CONTROLLERNUM > 0U)
+    if(u1_a_CTRLR >= (U1)BSW_CANIF_CFG_MPU_CONTROLLERNUM){
         /* do nothing */
     }
     else if(u1_a_ENA == (U1)TRUE){
@@ -145,7 +177,7 @@ void    vd_g_oXCANUsrhkWRQDet(const U1 u1_a_CTRLR, const U1 u1_a_ENA)     /* cal
     else{
         vd_g_IcuWkSetCh(st_sp_OXCAN_ICU_RX_BY_CTRL[u1_a_CTRLR].u1_ch,  (U1)ICU_WK_CFGBIT_ELC_FA                             );
     }
-#endif /* #if (CAN_CFG_CONTROLLERNUM_MAX > 0U) */
+#endif /* #if (BSW_CANIF_CFG_MPU_CONTROLLERNUM > 0U) */
 }
 /*===================================================================================================================================*/
 /*  U4      u4_g_oXCANUsrhkWRQst(const U1 u1_a_CTRLR, const U1 u1_a_W_CLR)                                                           */
@@ -156,10 +188,10 @@ void    vd_g_oXCANUsrhkWRQDet(const U1 u1_a_CTRLR, const U1 u1_a_ENA)     /* cal
 U4      u4_g_oXCANUsrhkWRQst(const U1 u1_a_CTRLR, const U1 u1_a_W_CLR)    /* called from oxcan_aubif.c :: Can_UEdgeClearStatus   */
                                                                           /* called from oxcan_aubif.c :: Can_UEdgeGetStatus     */
 {
-#if (CAN_CFG_CONTROLLERNUM_MAX > 0U)
+#if (BSW_CANIF_CFG_MPU_CONTROLLERNUM > 0U)
     U4          u4_t_wrqbit;
 
-    if(u1_a_CTRLR >= (U1)CAN_CFG_CONTROLLERNUM_MAX){
+    if(u1_a_CTRLR >= (U1)BSW_CANIF_CFG_MPU_CONTROLLERNUM){
         u4_t_wrqbit  = (U4)0U;
     }
     else if(u1_a_W_CLR == (U1)TRUE){
@@ -173,7 +205,7 @@ U4      u4_g_oXCANUsrhkWRQst(const U1 u1_a_CTRLR, const U1 u1_a_W_CLR)    /* cal
     return(u4_t_wrqbit);
 #else
     return((U4)0U);
-#endif /* #if (CAN_CFG_CONTROLLERNUM_MAX != 0U) */
+#endif /* #if (BSW_CANIF_CFG_MPU_CONTROLLERNUM != 0U) */
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_oXCANUsrhkTrcvToAct(const U1 u1_a_CH)                                                                               */
@@ -183,7 +215,7 @@ U4      u4_g_oXCANUsrhkWRQst(const U1 u1_a_CTRLR, const U1 u1_a_W_CLR)    /* cal
 /*===================================================================================================================================*/
 void    vd_g_oXCANUsrhkTrcvToAct(const U1 u1_a_CH)
 {
-#if (CAN_CFG_CONTROLLERNUM_MAX > 0U)
+#if (BSW_CANIF_CFG_MPU_CONTROLLERNUM > 0U)
     if(u1_a_CH >= (U1)BSW_COM_CFG_CHNUM){
         /* Do Nothing */
     }
@@ -196,7 +228,7 @@ void    vd_g_oXCANUsrhkTrcvToAct(const U1 u1_a_CH)
     else{
         /* Do Nothing */
     }
-#endif
+#endif /* #if (BSW_CANIF_CFG_MPU_CONTROLLERNUM != 0U) */
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_oXCANUsrhkTrcvToIna(const U1 u1_a_CH)                                                                               */
@@ -206,7 +238,7 @@ void    vd_g_oXCANUsrhkTrcvToAct(const U1 u1_a_CH)
 /*===================================================================================================================================*/
 void    vd_g_oXCANUsrhkTrcvToIna(const U1 u1_a_CH)
 {
-#if (CAN_CFG_CONTROLLERNUM_MAX > 0U)
+#if (BSW_CANIF_CFG_MPU_CONTROLLERNUM > 0U)
     if(u1_a_CH >= (U1)BSW_COM_CFG_CHNUM){
         /* Do Nothing */
     }
@@ -219,7 +251,7 @@ void    vd_g_oXCANUsrhkTrcvToIna(const U1 u1_a_CH)
     else{
         /* Do Nothing */
     }
-#endif
+#endif /* #if (BSW_CANIF_CFG_MPU_CONTROLLERNUM != 0U) */
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_oXCANUsrhkTraReq(const U1 u1_a_CH, const U2 u2_a_IPDU_TX, const U1 u1_a_TXMODE)                                     */

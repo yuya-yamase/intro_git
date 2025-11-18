@@ -7,7 +7,7 @@
 // ------------------------
 MEMORY {
 // Address Space:Code flash (User Area 0) (Bank A)
-    vector_core0            : ORIGIN = 0x00020000, LENGTH = 0x40000                 //LENGTH:256KB
+    vector_core0            : ORIGIN = 0x003C0000, LENGTH = 0x40000                 //LENGTH:256KB
 
 // Address Space:Local RAM (CPU3)
     ram_memory_core3        : ORIGIN = 0xFD604000, LENGTH = 0x4000                  //LENGTH:16KB
@@ -57,14 +57,10 @@ MEMORY {
 
 DEFAULTS {
 //1byte (0xFE430000 - 0xFE430100)
-    SHARE_IOHW_ADC_LV_RD_ADDR   = 0xFE430000
 //2byte (0xFE430100 - 0xFE430300)
 //4byte (0xFE430300 - 0xFE430700)
     SHARE_PORT_CONF_ADDR        = 0xFE430300
-    SHARE_VEH_OPEMD_MDBIT_ADDR  = 0xFE430304    
 //Struct, array
-    SHARE_IOHW_ADC_LV_ADDR      = 0xFE431000
-    SHARE_IOHW_DIFLT_FLTRD_ADDR = 0xFE431100
     SHARE_DMA_NOTICATION_ADDR   = 0xFE431200
     SHARE_SPI_MODEA_CHANNELDATA_ADDR   = 0xFE431300
     SHARE_SPI_MODEC_CHANNELDATA_ADDR   = 0xFE431400

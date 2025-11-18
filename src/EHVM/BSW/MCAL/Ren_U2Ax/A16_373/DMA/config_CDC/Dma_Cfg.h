@@ -97,7 +97,5 @@
 #define	DMA_UCFG_CHDATA8_HWCH				(PIL_DMAC_CH2)						/* See DMA_UCFG_CHDATA0_HWCH for range			*/
 #define	DMA_UCFG_CHDATA8_PRILEVEL			(DMA_PRIORITY_NOUSE)				/* See DMA_UCFG_CHDATA0_PRILEVEL for range		*/
 #define	DMA_UCFG_CHDATA8_NOTIFICATION		(NULL_PTR)							/* See DMA_UCFG_CHDATA0_NOTIFICATION for range	*/
-
-
 /*-- End Of File -------------------------------------------------------------------------------*/
 #endif /* DMA_CFG_H */

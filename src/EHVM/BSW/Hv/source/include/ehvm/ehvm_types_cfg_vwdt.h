@@ -21,7 +21,7 @@
 #ifndef EHVM_TYPES_CFG_VWDT_H
 #define EHVM_TYPES_CFG_VWDT_H
 
-#define NOUSE_VWDT_INTERRUPT           (0x7FFFFFFF)
+#define NOUSE_VWDT_INTERRUPT           (0x7FFFFFFFU)
 
 typedef struct {
     ehvm_vwdt_mode_t                   VWdtDefaultMode;

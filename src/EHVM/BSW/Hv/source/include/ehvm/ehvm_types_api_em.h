@@ -42,5 +42,6 @@
 #define EHVM_EM_ERROR_CAUSE_MM_ACC                     (0x00000300U)
 #define EHVM_EM_ERROR_CAUSE_DISABLE_VM_SWITCH_TIMEOUT  (0x00000400U)
 #define EHVM_EM_ERROR_CAUSE_UC_SPID                    (0x00000500U)
+#define EHVM_EM_ERROR_CAUSE_UC_MM_ACC                  (0x00000600U)
 
 #endif  /* EHVM_TYPES_API_EM_H */

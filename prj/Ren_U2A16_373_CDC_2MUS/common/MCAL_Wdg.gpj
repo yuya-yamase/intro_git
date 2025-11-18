@@ -1,0 +1,12 @@
+#!gbuild
+[Subproject]
+    :optionsFile=${CMN_DIR}/MCAL.opt
+
+    :sourceDir=${MCAL_WDG_SCC_DIR}
+    :sourceDir=${MCAL_WDG_CFG_DIR}
+
+    -I${LIB_DIR}
+
+# Wdg
+wdg_drv.c
+wdg_drv_cfg.c

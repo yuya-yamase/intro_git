@@ -1,4 +1,4 @@
-/* can_rscf4c_cfg_h_m10700_v2-2-0                                           */
+/* can_rscf4c_cfg_h_m10700_v3-0-0                                           */
 /****************************************************************************/
 /* Protected                                                                */
 /* Copyright DENSO CORPORATION                                              */
@@ -22,25 +22,25 @@
 /*--------------------------------------------------------------*/
 /* CAN USE/NOUSE                                                */
 /*--------------------------------------------------------------*/
-#define CAN_CFG_CAN                         (CAN_NOUSE)
+#define CAN_CFG_CAN                         (CAN_USE)
 
 
 /*--------------------------------------------------------------*/
 /* CPU Operating Clock                                          */
 /*--------------------------------------------------------------*/
-#define CAN_CFG_CLK                         (0U)
+#define CAN_CFG_CLK                         (400U)
 
 
 /*--------------------------------------------------------------*/
 /* CAN Operating Clock                                          */
 /*--------------------------------------------------------------*/
-#define CAN_CFG_CONTROLLER_CLK              (0U)
+#define CAN_CFG_CONTROLLER_CLK              (80U)
 
 
 /*--------------------------------------------------------------*/
 /* CAN Baudrate Control Clock                                   */
 /*--------------------------------------------------------------*/
-#define CAN_CFG_BAUDRATE_CLK                (0U)
+#define CAN_CFG_BAUDRATE_CLK                (80U)
 
 
 /*--------------------------------------------------------------*/
@@ -52,49 +52,49 @@
 /*--------------------------------------------------------------*/
 /* Maximum Number of CAN Controllers                            */
 /*--------------------------------------------------------------*/
-#define CAN_CFG_CONTROLLERNUM_MAX           (0U)
+#define CAN_CFG_CONTROLLERNUM_MAX           (8U)
 
 
 /*--------------------------------------------------------------*/
 /* CAN Regisger Base Address                                    */
 /*--------------------------------------------------------------*/
-#define CAN_CFG_REG_BASEADDR                (0x00000000UL)
+#define CAN_CFG_REG_BASEADDR                (0xFFD00000UL)
 
 
 /*--------------------------------------------------------------*/
 /* Addressing Mode                                              */
 /*--------------------------------------------------------------*/
-#define CAN_CFG_ADRSING                     (CAN_ADRSING_SHORT)
+#define CAN_CFG_ADRSING                     (CAN_ADRSING_NORMAL)
 
 
 /*--------------------------------------------------------------*/
 /* Tx Function USE/NOUSE                                        */
 /*--------------------------------------------------------------*/
-#define CAN_CFG_TRANSMIT                    (CAN_NOUSE)
+#define CAN_CFG_TRANSMIT                    (CAN_USE)
 
 
 /*--------------------------------------------------------------*/
 /* Tx Abort Send Function USE/NOUSE                             */
 /*--------------------------------------------------------------*/
-#define CAN_CFG_ABORTSEND                   (CAN_NOUSE)
+#define CAN_CFG_ABORTSEND                   (CAN_USE)
 
 
 /*--------------------------------------------------------------*/
 /* User Tx Function USE/NOUSE                                   */
 /*--------------------------------------------------------------*/
-#define CAN_CFG_USER_TRANSMIT               (CAN_NOUSE)
+#define CAN_CFG_USER_TRANSMIT               (CAN_USE)
 
 
 /*--------------------------------------------------------------*/
 /* Rx Function USE/NOUSE                                        */
 /*--------------------------------------------------------------*/
-#define CAN_CFG_RECEIVE                     (CAN_NOUSE)
+#define CAN_CFG_RECEIVE                     (CAN_USE)
 
 
 /*--------------------------------------------------------------*/
 /* User Rx Function USE/NOUSE                                   */
 /*--------------------------------------------------------------*/
-#define CAN_CFG_USER_RX_HOOK                (CAN_NOUSE)
+#define CAN_CFG_USER_RX_HOOK                (CAN_USE)
 
 
 /*--------------------------------------------------------------*/
@@ -118,7 +118,7 @@
 /*--------------------------------------------------------------*/
 /* Sleep Function USE/NOUSE                                     */
 /*--------------------------------------------------------------*/
-#define CAN_CFG_SLEEP                       (CAN_NOUSE)
+#define CAN_CFG_SLEEP                       (CAN_USE)
 
 
 /*--------------------------------------------------------------*/
@@ -272,14 +272,14 @@
 /*--------------------------------------------------------------*/
 /* CAN Controller Activation TRUE/FALSE                         */
 /*--------------------------------------------------------------*/
-#define CAN_CFG_CONTROLLER_ACTIVATION_0     (CAN_FALSE)
-#define CAN_CFG_CONTROLLER_ACTIVATION_1     (CAN_FALSE)
-#define CAN_CFG_CONTROLLER_ACTIVATION_2     (CAN_FALSE)
-#define CAN_CFG_CONTROLLER_ACTIVATION_3     (CAN_FALSE)
-#define CAN_CFG_CONTROLLER_ACTIVATION_4     (CAN_FALSE)
-#define CAN_CFG_CONTROLLER_ACTIVATION_5     (CAN_FALSE)
-#define CAN_CFG_CONTROLLER_ACTIVATION_6     (CAN_FALSE)
-#define CAN_CFG_CONTROLLER_ACTIVATION_7     (CAN_FALSE)
+#define CAN_CFG_CONTROLLER_ACTIVATION_0     (CAN_TRUE)
+#define CAN_CFG_CONTROLLER_ACTIVATION_1     (CAN_TRUE)
+#define CAN_CFG_CONTROLLER_ACTIVATION_2     (CAN_TRUE)
+#define CAN_CFG_CONTROLLER_ACTIVATION_3     (CAN_TRUE)
+#define CAN_CFG_CONTROLLER_ACTIVATION_4     (CAN_TRUE)
+#define CAN_CFG_CONTROLLER_ACTIVATION_5     (CAN_TRUE)
+#define CAN_CFG_CONTROLLER_ACTIVATION_6     (CAN_TRUE)
+#define CAN_CFG_CONTROLLER_ACTIVATION_7     (CAN_TRUE)
 
 
 /*--------------------------------------------------------------*/
@@ -288,7 +288,7 @@
 #define CAN_CFG_CONTROLLER_CAN_0            (CAN_NOUSE)
 #define CAN_CFG_CONTROLLER_CAN_1            (CAN_NOUSE)
 #define CAN_CFG_CONTROLLER_CAN_2            (CAN_NOUSE)
-#define CAN_CFG_CONTROLLER_CAN_3            (CAN_NOUSE)
+#define CAN_CFG_CONTROLLER_CAN_3            (CAN_USE)
 #define CAN_CFG_CONTROLLER_CAN_4            (CAN_NOUSE)
 #define CAN_CFG_CONTROLLER_CAN_5            (CAN_NOUSE)
 #define CAN_CFG_CONTROLLER_CAN_6            (CAN_NOUSE)
@@ -311,7 +311,7 @@
 /*--------------------------------------------------------------*/
 /* CAN RAM Size(Each CAN Controller)                            */
 /*--------------------------------------------------------------*/
-#define CAN_CFG_RAM_SIZE_0                  (0UL)
+#define CAN_CFG_RAM_SIZE_0                  (222464UL)
 #define CAN_CFG_RAM_SIZE_1                  (0UL)
 #define CAN_CFG_RAM_SIZE_2                  (0UL)
 #define CAN_CFG_RAM_SIZE_3                  (0UL)
@@ -379,7 +379,7 @@
 #define CAN_CFG_CONTROLLER_BAUDRATE_0       (CAN_250KBPS_4M_PTN1)
 #define CAN_CFG_CONTROLLER_BAUDRATE_1       (CAN_250KBPS_4M_PTN1)
 #define CAN_CFG_CONTROLLER_BAUDRATE_2       (CAN_250KBPS_4M_PTN1)
-#define CAN_CFG_CONTROLLER_BAUDRATE_3       (CAN_250KBPS_4M_PTN1)
+#define CAN_CFG_CONTROLLER_BAUDRATE_3       (CAN_500KBPS_8M_PTN2)
 #define CAN_CFG_CONTROLLER_BAUDRATE_4       (CAN_250KBPS_4M_PTN1)
 #define CAN_CFG_CONTROLLER_BAUDRATE_5       (CAN_250KBPS_4M_PTN1)
 #define CAN_CFG_CONTROLLER_BAUDRATE_6       (CAN_250KBPS_4M_PTN1)
@@ -431,7 +431,7 @@
 #define CAN_CFG_TX_PROCESSING_0             (CAN_POLLING)
 #define CAN_CFG_TX_PROCESSING_1             (CAN_POLLING)
 #define CAN_CFG_TX_PROCESSING_2             (CAN_POLLING)
-#define CAN_CFG_TX_PROCESSING_3             (CAN_POLLING)
+#define CAN_CFG_TX_PROCESSING_3             (CAN_INTERRUPT)
 #define CAN_CFG_TX_PROCESSING_4             (CAN_POLLING)
 #define CAN_CFG_TX_PROCESSING_5             (CAN_POLLING)
 #define CAN_CFG_TX_PROCESSING_6             (CAN_POLLING)
@@ -457,7 +457,7 @@
 #define CAN_CFG_RX_PROCESSING_0             (CAN_POLLING)
 #define CAN_CFG_RX_PROCESSING_1             (CAN_POLLING)
 #define CAN_CFG_RX_PROCESSING_2             (CAN_POLLING)
-#define CAN_CFG_RX_PROCESSING_3             (CAN_POLLING)
+#define CAN_CFG_RX_PROCESSING_3             (CAN_INTERRUPT)
 #define CAN_CFG_RX_PROCESSING_4             (CAN_POLLING)
 #define CAN_CFG_RX_PROCESSING_5             (CAN_POLLING)
 #define CAN_CFG_RX_PROCESSING_6             (CAN_POLLING)
@@ -496,7 +496,7 @@
 #define CAN_CFG_HTHNUM_0                    (0U)
 #define CAN_CFG_HTHNUM_1                    (0U)
 #define CAN_CFG_HTHNUM_2                    (0U)
-#define CAN_CFG_HTHNUM_3                    (0U)
+#define CAN_CFG_HTHNUM_3                    (1U)
 #define CAN_CFG_HTHNUM_4                    (0U)
 #define CAN_CFG_HTHNUM_5                    (0U)
 #define CAN_CFG_HTHNUM_6                    (0U)
@@ -509,7 +509,7 @@
 #define CAN_CFG_MB_TXOFFSET_0               (0U)
 #define CAN_CFG_MB_TXOFFSET_1               (0U)
 #define CAN_CFG_MB_TXOFFSET_2               (0U)
-#define CAN_CFG_MB_TXOFFSET_3               (0U)
+#define CAN_CFG_MB_TXOFFSET_3               (1U)
 #define CAN_CFG_MB_TXOFFSET_4               (0U)
 #define CAN_CFG_MB_TXOFFSET_5               (0U)
 #define CAN_CFG_MB_TXOFFSET_6               (0U)
@@ -522,7 +522,7 @@
 #define CAN_CFG_USERTXMBOXNUM_0             (0U)
 #define CAN_CFG_USERTXMBOXNUM_1             (0U)
 #define CAN_CFG_USERTXMBOXNUM_2             (0U)
-#define CAN_CFG_USERTXMBOXNUM_3             (0U)
+#define CAN_CFG_USERTXMBOXNUM_3             (1U)
 #define CAN_CFG_USERTXMBOXNUM_4             (0U)
 #define CAN_CFG_USERTXMBOXNUM_5             (0U)
 #define CAN_CFG_USERTXMBOXNUM_6             (0U)
@@ -548,7 +548,7 @@
 #define CAN_CFG_HRHNUM_0                    (0U)
 #define CAN_CFG_HRHNUM_1                    (0U)
 #define CAN_CFG_HRHNUM_2                    (0U)
-#define CAN_CFG_HRHNUM_3                    (0U)
+#define CAN_CFG_HRHNUM_3                    (3U)
 #define CAN_CFG_HRHNUM_4                    (0U)
 #define CAN_CFG_HRHNUM_5                    (0U)
 #define CAN_CFG_HRHNUM_6                    (0U)
@@ -561,7 +561,7 @@
 #define CAN_CFG_MB_RXOFFSET_0               (0U)
 #define CAN_CFG_MB_RXOFFSET_1               (0U)
 #define CAN_CFG_MB_RXOFFSET_2               (0U)
-#define CAN_CFG_MB_RXOFFSET_3               (0U)
+#define CAN_CFG_MB_RXOFFSET_3               (2U)
 #define CAN_CFG_MB_RXOFFSET_4               (0U)
 #define CAN_CFG_MB_RXOFFSET_5               (0U)
 #define CAN_CFG_MB_RXOFFSET_6               (0U)
@@ -1154,11 +1154,11 @@
 #define CAN_CFG_MBOXSET_2_MB191             (CAN_MB_NOUSE)
 
 /* CAN Controller 3 MBOX Settings */
-#define CAN_CFG_MBOXSET_3_MB000             (CAN_MB_NOUSE)
-#define CAN_CFG_MBOXSET_3_MB001             (CAN_MB_NOUSE)
-#define CAN_CFG_MBOXSET_3_MB002             (CAN_MB_NOUSE)
-#define CAN_CFG_MBOXSET_3_MB003             (CAN_MB_NOUSE)
-#define CAN_CFG_MBOXSET_3_MB004             (CAN_MB_NOUSE)
+#define CAN_CFG_MBOXSET_3_MB000             (CAN_MB_UTRANSMIT|CAN_MB_INTERRUPT)
+#define CAN_CFG_MBOXSET_3_MB001             (CAN_MB_TRANSMIT |CAN_MB_INTERRUPT)
+#define CAN_CFG_MBOXSET_3_MB002             (CAN_MB_RECEPTION|CAN_MB_INTERRUPT)
+#define CAN_CFG_MBOXSET_3_MB003             (CAN_MB_RECEPTION|CAN_MB_POLLING)
+#define CAN_CFG_MBOXSET_3_MB004             (CAN_MB_RECEPTION|CAN_MB_POLLING)
 #define CAN_CFG_MBOXSET_3_MB005             (CAN_MB_NOUSE)
 #define CAN_CFG_MBOXSET_3_MB006             (CAN_MB_NOUSE)
 #define CAN_CFG_MBOXSET_3_MB007             (CAN_MB_NOUSE)
@@ -2712,9 +2712,9 @@
 /* CAN Controller 3 CAN-ID Values */
 #define CAN_CFG_ID_VALUE_3_MB000            (0x00000000UL)
 #define CAN_CFG_ID_VALUE_3_MB001            (0x00000000UL)
-#define CAN_CFG_ID_VALUE_3_MB002            (0x00000000UL)
-#define CAN_CFG_ID_VALUE_3_MB003            (0x00000000UL)
-#define CAN_CFG_ID_VALUE_3_MB004            (0x00000000UL)
+#define CAN_CFG_ID_VALUE_3_MB002            (0x00000201UL)
+#define CAN_CFG_ID_VALUE_3_MB003            (0x00000310UL)
+#define CAN_CFG_ID_VALUE_3_MB004            (0x00000311UL)
 #define CAN_CFG_ID_VALUE_3_MB005            (0x00000000UL)
 #define CAN_CFG_ID_VALUE_3_MB006            (0x00000000UL)
 #define CAN_CFG_ID_VALUE_3_MB007            (0x00000000UL)
@@ -5259,10 +5259,11 @@
 /* History                                                                  */
 /*  Version        :Date                                                    */
 /*  v2-2-0         :2020/07/07                                              */
+/*  v3-0-0         :2025/02/13                                              */
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
-/*  Framework          :v2-0-3-z0003                                        */
+/*  Framework          :v2-1-0                                              */
 /*  BSW plug-in        :v3-0-0                                              */
 /****************************************************************************/
 

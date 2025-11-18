@@ -49,6 +49,10 @@
 #include "../../BswM_Can/inc/bsw_bswm_can_connector.h"
 #endif /* (BSW_BSWM_CS_FUNC_CANTP == BSW_USE) */
 
+#if ( BSW_BSWM_CS_FUNC_J1939TP == BSW_USE )
+#include <j1939tp/bsw_j1939tp.h>
+#endif
+
 #include <cs/bsw_cs_system_memmap_post.h>
 
 #if (BSW_BSWM_CS_FUNC_LINIF == BSW_USE)
@@ -71,9 +75,9 @@
 #include <SecOC.h>
 #endif /* (BSW_BSWM_CS_FUNC_SECOC == BSW_USE) */
 
-#if (BSW_BSWM_CS_FUNC_SOMEIP == BSW_USE)
+#if (BSW_BSWM_CS_FUNC_SOMEIPTP == BSW_USE)
 #include <SomeIpTp.h>
-#endif /* (BSW_BSWM_CS_FUNC_SOMEIP == BSW_USE) */
+#endif /* (BSW_BSWM_CS_FUNC_SOMEIPTP == BSW_USE) */
 
 #include <cs/bsw_cs_system_memmap_pre.h>
 
@@ -105,6 +109,7 @@
 #define BSW_PDUR_LDCOM_ROUTINGTBL      ( (BSW_BSWM_CS_FUNC_LDCOM == BSW_USE) ? (&bsw_pdur_u2LdComRoutingTbl[0U]) : (&bsw_pdur_u2DummyUpRoutingTbl[0U]) )
 #define BSW_PDUR_CDD1_ROUTINGTBL       ( (BSW_BSWM_CS_FUNC_UPPERCDD1 == BSW_USE) ? (&bsw_pdur_u2Cdd1RoutingTbl[0U]) : (&bsw_pdur_u2DummyUpRoutingTbl[0U]) )
 #define BSW_PDUR_CDD2_ROUTINGTBL       ( (BSW_BSWM_CS_FUNC_UPPERCDD2 == BSW_USE) ? (&bsw_pdur_u2Cdd2RoutingTbl[0U]) : (&bsw_pdur_u2DummyUpRoutingTbl[0U]) )
+#define BSW_PDUR_J1939TPUP_ROUTINGTBL  ( (BSW_BSWM_CS_FUNC_J1939TP == BSW_USE) ? (&bsw_pdur_u2J1939TpUpRoutingTbl[0U]) : (&bsw_pdur_u2DummyUpRoutingTbl[0U]) )
 
 #define BSW_PDUR_CANIF_ROUTINGTBL      ( (BSW_BSWM_CS_FUNC_CANIF == BSW_USE) ? (&bsw_pdur_stCanIfRoutingTbl[0U]) : (&bsw_pdur_stDummyRoutingTbl[0U]) )
 #define BSW_PDUR_CANTP_ROUTINGTBL      ( (BSW_BSWM_CS_FUNC_CANTP == BSW_USE) ? (&bsw_pdur_stCanTpRoutingTbl[0U]) : (&bsw_pdur_stDummyRoutingTbl[0U]) )
@@ -114,6 +119,7 @@
 #define BSW_PDUR_SOADTP_ROUTINGTBL     ( (BSW_BSWM_CS_FUNC_SOAD == BSW_USE) ? (&bsw_pdur_stSoAdTpRoutingTbl[0U]) : (&bsw_pdur_stDummyRoutingTbl[0U]) )
 #define BSW_PDUR_DOIPIF_ROUTINGTBL     ( (BSW_BSWM_CS_FUNC_DOIP == BSW_USE) ? (&bsw_pdur_stDoIPIfRoutingTbl[0U]) : (&bsw_pdur_stDummyRoutingTbl[0U]) )
 #define BSW_PDUR_DOIPTP_ROUTINGTBL     ( (BSW_BSWM_CS_FUNC_DOIP == BSW_USE) ? (&bsw_pdur_stDoIPTpRoutingTbl[0U]) : (&bsw_pdur_stDummyRoutingTbl[0U]) )
+#define BSW_PDUR_J1939TPLO_ROUTINGTBL  ( (BSW_BSWM_CS_FUNC_J1939TP == BSW_USE) ? (&bsw_pdur_stJ1939TpLoRoutingTbl[0U]) : (&bsw_pdur_stDummyRoutingTbl[0U]) )
 
 #if ( BSW_BSWM_CS_FUNC_IPDUM == BSW_USE )
 #define BSW_PDUR_COM_IPDUMLOTBL         ( (BSW_BSWM_CS_FUNC_COM == BSW_USE) ? (&bsw_pdur_u2ComIpduMTbl[0U]) : (&bsw_pdur_u2DummyIpduMTbl[0U]) )
@@ -121,27 +127,31 @@
 #define BSW_PDUR_LDCOM_IPDUMLOTBL       ( (BSW_BSWM_CS_FUNC_LDCOM == BSW_USE) ? (&bsw_pdur_u2LdComIpduMTbl[0U]) : (&bsw_pdur_u2DummyIpduMTbl[0U]) )
 #define BSW_PDUR_CDD1_IPDUMLOTBL        ( (BSW_BSWM_CS_FUNC_UPPERCDD1 == BSW_USE) ? (&bsw_pdur_u2Cdd1IpduMTbl[0U]) : (&bsw_pdur_u2DummyIpduMTbl[0U]) )
 #define BSW_PDUR_CDD2_IPDUMLOTBL        ( (BSW_BSWM_CS_FUNC_UPPERCDD2 == BSW_USE) ? (&bsw_pdur_u2Cdd2IpduMTbl[0U]) : (&bsw_pdur_u2DummyIpduMTbl[0U]) )
+#define BSW_PDUR_J1939TPUP_IPDUMLOTBL   ( (BSW_BSWM_CS_FUNC_J1939TP == BSW_USE) ?  (&bsw_pdur_u2J1939TpUpIpduMTbl[0U]) : (&bsw_pdur_u2DummyIpduMTbl[0U]) )
 #define BSW_PDUR_CANIF_IPDUMLOTBL       ( (BSW_BSWM_CS_FUNC_CANIF == BSW_USE) ? (&bsw_pdur_u2CanIfIpduMTbl[0U]) : (&bsw_pdur_u2DummyIpduMTbl[0U]) )
 #define BSW_PDUR_LINIF_IPDUMLOTBL       ( (BSW_BSWM_CS_FUNC_LINIF == BSW_USE) ? (&bsw_pdur_u2LinIfIpduMTbl[0U]) : (&bsw_pdur_u2DummyIpduMTbl[0U]) )
 #define BSW_PDUR_SOADIF_IPDUMLOTBL      ( (BSW_BSWM_CS_FUNC_SOAD == BSW_USE) ? (&bsw_pdur_u2SoAdIfIpduMTbl[0U]) : (&bsw_pdur_u2DummyIpduMTbl[0U]) )
 #define BSW_PDUR_DOIPIF_IPDUMLOTBL      ( (BSW_BSWM_CS_FUNC_DOIP == BSW_USE) ? (&bsw_pdur_u2DoIPIfIpduMTbl[0U]) : (&bsw_pdur_u2DummyIpduMTbl[0U]) )
+#define BSW_PDUR_J1939TPLO_IPDUMLOTBL   ( (BSW_BSWM_CS_FUNC_J1939TP == BSW_USE) ? (&bsw_pdur_u2J1939TpLoIpduMTbl[0U]) : (&bsw_pdur_u2DummyIpduMTbl[0U]) )
 #else
 #define BSW_PDUR_COM_IPDUMLOTBL         (&bsw_pdur_u2DummyIpduMTbl[0U])
 #define BSW_PDUR_DCM_IPDUMLOTBL         (&bsw_pdur_u2DummyIpduMTbl[0U])
 #define BSW_PDUR_LDCOM_IPDUMLOTBL       (&bsw_pdur_u2DummyIpduMTbl[0U])
 #define BSW_PDUR_CDD1_IPDUMLOTBL        (&bsw_pdur_u2DummyIpduMTbl[0U])
 #define BSW_PDUR_CDD2_IPDUMLOTBL        (&bsw_pdur_u2DummyIpduMTbl[0U])
+#define BSW_PDUR_J1939TPUP_IPDUMLOTBL   (&bsw_pdur_u2DummyIpduMTbl[0U])
 #define BSW_PDUR_CANIF_IPDUMLOTBL       (&bsw_pdur_u2DummyIpduMTbl[0U])
 #define BSW_PDUR_LINIF_IPDUMLOTBL       (&bsw_pdur_u2DummyIpduMTbl[0U])
 #define BSW_PDUR_SOADIF_IPDUMLOTBL      (&bsw_pdur_u2DummyIpduMTbl[0U])
 #define BSW_PDUR_DOIPIF_IPDUMLOTBL      (&bsw_pdur_u2DummyIpduMTbl[0U])
+#define BSW_PDUR_J1939TPLO_IPDUMLOTBL   (&bsw_pdur_u2DummyIpduMTbl[0U])
 #endif /* (BSW_BSWM_CS_FUNC_IPDUM == BSW_USE) */
 
-#if ( BSW_BSWM_CS_FUNC_SOMEIP == BSW_USE )
-#define BSW_PDUR_SOADIF_SOMEIPTPLOTBL   ( (BSW_BSWM_CS_FUNC_SOAD == BSW_USE) ? (&bsw_pdur_u2SoAdIfSomeIpTbl[0U]) : (&bsw_pdur_u2DummySomeIpTpTbl[0U]) )
+#if ( BSW_BSWM_CS_FUNC_SOMEIPTP == BSW_USE )
+#define BSW_PDUR_SOADIF_SOMEIPTPLOTBL   ( (BSW_BSWM_CS_FUNC_SOAD == BSW_USE) ? (&bsw_pdur_u2SoAdIfSomeIpTpTbl[0U]) : (&bsw_pdur_u2DummySomeIpTpTbl[0U]) )
 #else
 #define BSW_PDUR_SOADIF_SOMEIPTPLOTBL   (&bsw_pdur_u2DummySomeIpTpTbl[0U])
-#endif /* (BSW_BSWM_CS_FUNC_SOMEIP == BSW_USE) */
+#endif /* (BSW_BSWM_CS_FUNC_SOMEIPTP == BSW_USE) */
 
 #if ( (BSW_BSWM_CS_FUNC_SECOC == BSW_USE) && (BSW_PDUR_CFG_IPDU_MA == BSW_USE) )
 #define BSW_PDUR_COM_SECOCUPTBL         ( (BSW_BSWM_CS_FUNC_COM == BSW_USE) ? (&bsw_pdur_u2ComSecOCTbl[0U]) : (&bsw_pdur_u2DummySecOCTbl[0U]) )
@@ -149,12 +159,14 @@
 #define BSW_PDUR_LDCOM_SECOCUPTBL       ( (BSW_BSWM_CS_FUNC_LDCOM == BSW_USE) ? (&bsw_pdur_u2LdComSecOCTbl[0U]) : (&bsw_pdur_u2DummySecOCTbl[0U]) )
 #define BSW_PDUR_CDD1_SECOCUPTBL        ( (BSW_BSWM_CS_FUNC_UPPERCDD1 == BSW_USE) ? (&bsw_pdur_u2Cdd1SecOCTbl[0U]) : (&bsw_pdur_u2DummySecOCTbl[0U]) )
 #define BSW_PDUR_CDD2_SECOCUPTBL        ( (BSW_BSWM_CS_FUNC_UPPERCDD2 == BSW_USE) ? (&bsw_pdur_u2Cdd2SecOCTbl[0U]) : (&bsw_pdur_u2DummySecOCTbl[0U]) )
+#define BSW_PDUR_J1939TPUP_SECOCUPTBL   ( (BSW_BSWM_CS_FUNC_J1939TP == BSW_USE) ? (&bsw_pdur_u2J1939TpUpSecOCTbl[0U]) : (&bsw_pdur_u2DummySecOCTbl[0U]) )
 #else
 #define BSW_PDUR_COM_SECOCUPTBL         (&bsw_pdur_u2DummySecOCTbl[0U])
 #define BSW_PDUR_DCM_SECOCUPTBL         (&bsw_pdur_u2DummySecOCTbl[0U])
 #define BSW_PDUR_LDCOM_SECOCUPTBL       (&bsw_pdur_u2DummySecOCTbl[0U])
 #define BSW_PDUR_CDD1_SECOCUPTBL        (&bsw_pdur_u2DummySecOCTbl[0U])
 #define BSW_PDUR_CDD2_SECOCUPTBL        (&bsw_pdur_u2DummySecOCTbl[0U])
+#define BSW_PDUR_J1939TPUP_SECOCUPTBL   (&bsw_pdur_u2DummySecOCTbl[0U])
 #endif /* (BSW_BSWM_CS_FUNC_SECOC == BSW_USE) && (BSW_PDUR_CFG_IPDU_MA == BSW_USE) */
 #endif /* ( BSW_PDUR_ZEROCOSTOPERATION == BSW_PDUR_ZEROCOST_NOUSE ) */
 
@@ -276,6 +288,29 @@
 #define BSW_PDUR_UPCDD2_TPTXCONF_FUNC    (&bsw_pdur_dummy_TpTxConfirmation)
 #endif  /* (BSW_BSWM_CS_FUNC_UPPERCDD2 == BSW_USE) */
 
+/* Upper J1939Tp function */
+#if (BSW_BSWM_CS_FUNC_J1939TP == BSW_USE)
+#define BSW_PDUR_J1939TP_TRIGGERTX_FUNC   (&bsw_pdur_dummy_TriggerTransmit)
+#define BSW_PDUR_J1939TP_TXCONF_FUNC      (&J1939Tp_TxConfirmation)
+#define BSW_PDUR_J1939TP_RXIND_FUNC       (&J1939Tp_RxIndication)
+#define BSW_PDUR_J1939TP_COMGTTXMD_FUNC   (&bsw_pdur_dummy_ComGetTxMode)
+#define BSW_PDUR_J1939TP_SOR_FUNC         (&bsw_pdur_dummy_StartOfRecept)
+#define BSW_PDUR_J1939TP_COPYRXDT_FUNC    (&bsw_pdur_dummy_CopyRxData)
+#define BSW_PDUR_J1939TP_COPYTXDT_FUNC    (&bsw_pdur_dummy_CopyTxData)
+#define BSW_PDUR_J1939TP_TPRXIND_FUNC     (&bsw_pdur_dummy_TpRxIndication)
+#define BSW_PDUR_J1939TP_TPTXCONF_FUNC    (&bsw_pdur_dummy_TpTxConfirmation)
+#else
+#define BSW_PDUR_J1939TP_TRIGGERTX_FUNC   (&bsw_pdur_dummy_TriggerTransmit)
+#define BSW_PDUR_J1939TP_TXCONF_FUNC      (&bsw_pdur_dummy_TxConfirmation)
+#define BSW_PDUR_J1939TP_RXIND_FUNC       (&bsw_pdur_dummy_RxIndication)
+#define BSW_PDUR_J1939TP_COMGTTXMD_FUNC   (&bsw_pdur_dummy_ComGetTxMode)
+#define BSW_PDUR_J1939TP_SOR_FUNC         (&bsw_pdur_dummy_StartOfRecept)
+#define BSW_PDUR_J1939TP_COPYRXDT_FUNC    (&bsw_pdur_dummy_CopyRxData)
+#define BSW_PDUR_J1939TP_COPYTXDT_FUNC    (&bsw_pdur_dummy_CopyTxData)
+#define BSW_PDUR_J1939TP_TPRXIND_FUNC     (&bsw_pdur_dummy_TpRxIndication)
+#define BSW_PDUR_J1939TP_TPTXCONF_FUNC    (&bsw_pdur_dummy_TpTxConfirmation)
+#endif  /* (BSW_BSWM_CS_FUNC_J1939TP == BSW_USE) */
+
 /* CanIf function */
 #if (BSW_BSWM_CS_FUNC_CANIF == BSW_USE)
 #define BSW_PDUR_CANIF_TRANSMIT_FUNC   ( (BSW_BSWM_CS_FUNC_CANTX == BSW_USE) ? (&CanIf_Transmit)             : (&bsw_pdur_dummy_Transmit) )
@@ -363,9 +398,9 @@
 
 /* SoAdTp function */
 #if (BSW_BSWM_CS_FUNC_SOAD == BSW_USE)
-#define BSW_PDUR_SOADTP_TRANSMIT_FUNC   ( (BSW_PDUR_CFG_MSGSOADTP_NUM > 0) ? (&SoAd_TpTransmit)       : (&bsw_pdur_dummy_Transmit) )
-#define BSW_PDUR_SOADTP_CANCELTX_FUNC   ( (BSW_PDUR_CFG_MSGSOADTP_NUM > 0) ? (&SoAd_TpCancelTransmit) : (&bsw_pdur_dummy_CancelTransmit) )
-#define BSW_PDUR_SOADTP_CANCELRX_FUNC   ( (BSW_PDUR_CFG_MSGSOADTP_NUM > 0) ? (&SoAd_TpCancelReceive)  : (&bsw_pdur_dummy_CancelReceive) )
+#define BSW_PDUR_SOADTP_TRANSMIT_FUNC   ( (BSW_PDUR_CFG_MSGSOADTP_NUM > 0U) ? (&SoAd_TpTransmit)       : (&bsw_pdur_dummy_Transmit) )
+#define BSW_PDUR_SOADTP_CANCELTX_FUNC   ( (BSW_PDUR_CFG_MSGSOADTP_NUM > 0U) ? (&SoAd_TpCancelTransmit) : (&bsw_pdur_dummy_CancelTransmit) )
+#define BSW_PDUR_SOADTP_CANCELRX_FUNC   ( (BSW_PDUR_CFG_MSGSOADTP_NUM > 0U) ? (&SoAd_TpCancelReceive)  : (&bsw_pdur_dummy_CancelReceive) )
 #define BSW_PDUR_SOADTP_GETTXID_FUNC    (&bsw_pdur_dummy_ComGetTxId)
 #define BSW_PDUR_SOADTP_GETRXID_FUNC    (&bsw_pdur_dummy_ComGetRxId)
 #define BSW_PDUR_SOADTP_GETCURRXID_FUNC (&bsw_pdur_dummy_ComGetCrrntRxId)
@@ -412,6 +447,23 @@
 #define BSW_PDUR_DOIPTP_GETCURRXID_FUNC (&bsw_pdur_dummy_ComGetCrrntRxId)
 #endif  /* (BSW_BSWM_CS_FUNC_DOIP == BSW_USE) */
 
+/* J1939Tp function */
+#if (BSW_BSWM_CS_FUNC_J1939TP == BSW_USE)
+#define BSW_PDUR_J1939TP_TRANSMIT_FUNC   (&J1939Tp_Transmit)
+#define BSW_PDUR_J1939TP_CANCELTX_FUNC   (&J1939Tp_CancelTransmit)
+#define BSW_PDUR_J1939TP_CANCELRX_FUNC   (&J1939Tp_CancelReceive)
+#define BSW_PDUR_J1939TP_GETTXID_FUNC    (&bsw_pdur_dummy_ComGetTxId)
+#define BSW_PDUR_J1939TP_GETRXID_FUNC    (&bsw_pdur_dummy_ComGetRxId)
+#define BSW_PDUR_J1939TP_GETCURRXID_FUNC (&bsw_pdur_dummy_ComGetCrrntRxId)
+#else
+#define BSW_PDUR_J1939TP_TRANSMIT_FUNC   (&bsw_pdur_dummy_Transmit)
+#define BSW_PDUR_J1939TP_CANCELTX_FUNC   (&bsw_pdur_dummy_CancelTransmit)
+#define BSW_PDUR_J1939TP_CANCELRX_FUNC   (&bsw_pdur_dummy_CancelReceive)
+#define BSW_PDUR_J1939TP_GETTXID_FUNC    (&bsw_pdur_dummy_ComGetTxId)
+#define BSW_PDUR_J1939TP_GETRXID_FUNC    (&bsw_pdur_dummy_ComGetRxId)
+#define BSW_PDUR_J1939TP_GETCURRXID_FUNC (&bsw_pdur_dummy_ComGetCrrntRxId)
+#endif  /* (BSW_BSWM_CS_FUNC_J1939TP == BSW_USE) */
+
 /* IpduM function */
 #if (BSW_BSWM_CS_FUNC_IPDUM == BSW_USE)
 #define BSW_PDUR_IPDUM_TRANSMIT_FUNC     (&IpduM_Transmit)
@@ -428,7 +480,7 @@
 #endif  /* (BSW_BSWM_CS_FUNC_IPDUM == BSW_USE) */
 
 /* SomeIpTp function */
-#if (BSW_BSWM_CS_FUNC_SOMEIP == BSW_USE)
+#if (BSW_BSWM_CS_FUNC_SOMEIPTP == BSW_USE)
 #define BSW_PDUR_SOMEIPTP_TRANSMIT_FUNC  (&SomeIpTp_Transmit)
 #define BSW_PDUR_SOMEIPTP_CANCELTX_FUNC  (&bsw_pdur_dummy_CancelTransmit)
 #define BSW_PDUR_SOMEIPTP_TRIGRTX_FUNC   (&SomeIpTp_TriggerTransmit)
@@ -440,7 +492,7 @@
 #define BSW_PDUR_SOMEIPTP_TRIGRTX_FUNC   (&bsw_pdur_dummy_TriggerTransmit)
 #define BSW_PDUR_SOMEIPTP_TXCONF_FUNC    (&bsw_pdur_dummy_TxConfExt)
 #define BSW_PDUR_SOMEIPTP_RXIND_FUNC     (&bsw_pdur_dummy_RxIndication)
-#endif  /* (BSW_BSWM_CS_FUNC_SOMEIP == BSW_USE) */
+#endif  /* (BSW_BSWM_CS_FUNC_SOMEIPTP == BSW_USE) */
 
 /* SecOC function */
 #if (BSW_BSWM_CS_FUNC_SECOC == BSW_USE)
@@ -612,6 +664,7 @@
 #define BSW_PDUR_LDCOMGETLPDUID_FUNC ( (BSW_BSWM_CS_FUNC_LDCOM == BSW_USE) ? (&bsw_pdur_inf_LdComGetLpduIdMulti) : (&bsw_pdur_inf_dummy_GetLpduId) )
 #define BSW_PDUR_CDD1GETLPDUID_FUNC  ( (BSW_BSWM_CS_FUNC_UPPERCDD1 == BSW_USE) ? (&bsw_pdur_inf_Cdd1GetLpduIdMulti) : (&bsw_pdur_inf_dummy_GetLpduId) )
 #define BSW_PDUR_CDD2GETLPDUID_FUNC  ( (BSW_BSWM_CS_FUNC_UPPERCDD2 == BSW_USE) ? (&bsw_pdur_inf_Cdd2GetLpduIdMulti) : (&bsw_pdur_inf_dummy_GetLpduId) )
+#define BSW_PDUR_J1939TPUGETLPDUID_FUNC (&bsw_pdur_inf_dummy_GetLpduId)
 
 #else
 #define BSW_PDUR_GETIPDUID_FUNC      (&bsw_pdur_inf_GetIpduIdSingle)
@@ -622,6 +675,7 @@
 #define BSW_PDUR_LDCOMGETLPDUID_FUNC ( (BSW_BSWM_CS_FUNC_LDCOM == BSW_USE) ? (&bsw_pdur_inf_ComGetLpduIdSingle) : (&bsw_pdur_inf_dummy_GetLpduId) )
 #define BSW_PDUR_CDD1GETLPDUID_FUNC  (&bsw_pdur_inf_dummy_GetLpduId)
 #define BSW_PDUR_CDD2GETLPDUID_FUNC  (&bsw_pdur_inf_dummy_GetLpduId)
+#define BSW_PDUR_J1939TPUGETLPDUID_FUNC (&bsw_pdur_inf_dummy_GetLpduId)
 
 #endif /* (BSW_PDUR_ZEROCOSTOPERATION == BSW_PDUR_ZEROCOST_NOUSE) */
 
@@ -702,6 +756,12 @@
 #define BSW_PDUR_DOIPTP_FUNC           (&bsw_pdur_rt_DummyFuncTbl)
 #endif /* (BSW_BSWM_CS_FUNC_DOIP == BSW_USE) */
 
+#if (BSW_BSWM_CS_FUNC_J1939TP == BSW_USE)
+#define BSW_PDUR_J1939TPLO_FUNC        (&bsw_pdur_rt_J1939TpLoFuncTbl)
+#else
+#define BSW_PDUR_J1939TPLO_FUNC        (&bsw_pdur_rt_DummyFuncTbl)
+#endif /* (BSW_BSWM_CS_FUNC_J1939TP == BSW_USE) */
+
 #endif /* (BSW_PDUR_ZEROCOSTOPERATION == BSW_PDUR_ZEROCOST_NOUSE) */
 
 /******************************************/
@@ -736,6 +796,12 @@
 #else
 #define BSW_PDUR_CDD2_FUNC             (&bsw_pdur_DummyFuncTbl)
 #endif /* (BSW_BSWM_CS_FUNC_UPPERCDD2 == BSW_USE) */
+
+#if (BSW_BSWM_CS_FUNC_J1939TP == BSW_USE)
+#define BSW_PDUR_J1939TPUP_FUNC        (&bsw_pdur_J1939TpUpFuncTbl)
+#else
+#define BSW_PDUR_J1939TPUP_FUNC        (&bsw_pdur_DummyFuncTbl)
+#endif /* (BSW_BSWM_CS_FUNC_J1939TP == BSW_USE) */
 
 /******************************************/
 /* Definition for SecOC                            */
@@ -789,6 +855,7 @@ BswConst BswU2 bsw_pdur_u2DcmMsgNum    = (BswU2)BSW_PDUR_CFG_MSGDCM_NUM;
 BswConst BswU2 bsw_pdur_u2LdComMsgNum  = (BswU2)BSW_PDUR_CFG_MSGLDCOM_NUM;
 BswConst BswU2 bsw_pdur_u2Cdd1MsgNum   = (BswU2)BSW_PDUR_CFG_MSGCDD1_NUM;
 BswConst BswU2 bsw_pdur_u2Cdd2MsgNum   = (BswU2)BSW_PDUR_CFG_MSGCDD2_NUM;
+BswConst BswU2 bsw_pdur_u2J1939TpUpNum = (BswU2)BSW_PDUR_CFG_MSGJ1939TPUP_NUM;
 
 BswConst BswU2 bsw_pdur_u2UpCompMsgNumTbl[BSW_PDUR_MAX_UPCMPNUM] =
 {
@@ -796,7 +863,8 @@ BswConst BswU2 bsw_pdur_u2UpCompMsgNumTbl[BSW_PDUR_MAX_UPCMPNUM] =
     (BswU2)BSW_PDUR_CFG_MSGDCM_NUM,
     (BswU2)BSW_PDUR_CFG_MSGLDCOM_NUM,
     (BswU2)BSW_PDUR_CFG_MSGCDD1_NUM,
-    (BswU2)BSW_PDUR_CFG_MSGCDD2_NUM
+    (BswU2)BSW_PDUR_CFG_MSGCDD2_NUM,
+    (BswU2)BSW_PDUR_CFG_MSGJ1939TPUP_NUM
 };
 
 BswConst BswU2 bsw_pdur_u2LoCompMsgNumTbl[BSW_PDUR_MAX_LOCMPNUM] =
@@ -809,6 +877,7 @@ BswConst BswU2 bsw_pdur_u2LoCompMsgNumTbl[BSW_PDUR_MAX_LOCMPNUM] =
     (BswU2)BSW_PDUR_CFG_MSGSOADTP_NUM,
     (BswU2)BSW_PDUR_CFG_MSGDOIPIF_NUM,
     (BswU2)BSW_PDUR_CFG_MSGDOIPTP_NUM,
+    (BswU2)BSW_PDUR_CFG_MSGJ1939TPLO_NUM
 };
 
 /* Table for getting routing destination information */
@@ -818,7 +887,8 @@ BswConst   PduIdType* BswConst bsw_pdur_u2UpCompRoutingTbl[BSW_PDUR_MAX_UPCMPNUM
     BSW_PDUR_DCM_ROUTINGTBL,
     BSW_PDUR_LDCOM_ROUTINGTBL,
     BSW_PDUR_CDD1_ROUTINGTBL,
-    BSW_PDUR_CDD2_ROUTINGTBL
+    BSW_PDUR_CDD2_ROUTINGTBL,
+    BSW_PDUR_J1939TPUP_ROUTINGTBL
 };
 
 BswConst   Bsw_PduR_RoutingType* BswConst bsw_pdur_stLoCompRoutingTbl[BSW_PDUR_MAX_LOCMPNUM] =
@@ -830,7 +900,8 @@ BswConst   Bsw_PduR_RoutingType* BswConst bsw_pdur_stLoCompRoutingTbl[BSW_PDUR_M
     BSW_PDUR_SOADIF_ROUTINGTBL,
     BSW_PDUR_SOADTP_ROUTINGTBL,
     BSW_PDUR_DOIPIF_ROUTINGTBL,
-    BSW_PDUR_DOIPTP_ROUTINGTBL
+    BSW_PDUR_DOIPTP_ROUTINGTBL,
+    BSW_PDUR_J1939TPLO_ROUTINGTBL
 };
 
 /* Table for getting routing destination information */
@@ -840,7 +911,8 @@ BswConst   PduIdType* BswConst bsw_pdur_ptIpduMUpRoutingTbl[BSW_PDUR_MAX_UPCMPNU
     BSW_PDUR_DCM_IPDUMLOTBL,
     BSW_PDUR_LDCOM_IPDUMLOTBL,
     BSW_PDUR_CDD1_IPDUMLOTBL,
-    BSW_PDUR_CDD2_IPDUMLOTBL
+    BSW_PDUR_CDD2_IPDUMLOTBL,
+    BSW_PDUR_J1939TPUP_IPDUMLOTBL
 };
 
 BswConst   PduIdType* BswConst bsw_pdur_ptIpduMLoRoutingTbl[BSW_PDUR_MAX_LOCMPNUM] =
@@ -853,6 +925,7 @@ BswConst   PduIdType* BswConst bsw_pdur_ptIpduMLoRoutingTbl[BSW_PDUR_MAX_LOCMPNU
     &bsw_pdur_u2DummyIpduMTbl[0U],
     BSW_PDUR_DOIPIF_IPDUMLOTBL,
     &bsw_pdur_u2DummyIpduMTbl[0U],
+    BSW_PDUR_J1939TPLO_IPDUMLOTBL,
 };
 
 /* Table for getting routing destination information (SomeIpTp) */
@@ -865,6 +938,7 @@ BswConst   PduIdType* BswConst bsw_pdur_ptSomeIpTpLoRoutingTbl[BSW_PDUR_MAX_LOCM
     BSW_PDUR_SOADIF_SOMEIPTPLOTBL,
     &bsw_pdur_u2DummySomeIpTpTbl[0U],
     &bsw_pdur_u2DummySomeIpTpTbl[0U],
+    &bsw_pdur_u2DummySomeIpTpTbl[0U],
     &bsw_pdur_u2DummySomeIpTpTbl[0U]
 };
 
@@ -875,7 +949,8 @@ BswConst   PduIdType* BswConst bsw_pdur_u2SecOCUpRoutingTbl[BSW_PDUR_MAX_UPCMPNU
     BSW_PDUR_DCM_SECOCUPTBL,
     BSW_PDUR_LDCOM_SECOCUPTBL,
     BSW_PDUR_CDD1_SECOCUPTBL,
-    BSW_PDUR_CDD2_SECOCUPTBL
+    BSW_PDUR_CDD2_SECOCUPTBL,
+    BSW_PDUR_J1939TPUP_SECOCUPTBL
 };
 
 /******************************************/
@@ -986,12 +1061,12 @@ BswConst PduIdType bsw_pdur_u2SoAdIfIpduMTbl[BSW_PDUR_TBL_DUMMY_SIZE] =
     (PduIdType)0x0000U
 };
 #endif /* (BSW_BSWM_CS_FUNC_IPDUM == BSW_USE) */
-#if ( BSW_BSWM_CS_FUNC_SOMEIP == BSW_USE )
-BswConst PduIdType bsw_pdur_u2SoAdIfSomeIpTbl[BSW_PDUR_TBL_DUMMY_SIZE] =
+#if ( BSW_BSWM_CS_FUNC_SOMEIPTP == BSW_USE )
+BswConst PduIdType bsw_pdur_u2SoAdIfSomeIpTpTbl[BSW_PDUR_TBL_DUMMY_SIZE] =
 {
     (BswU2)BSW_PDUR_INVALID_PDUID
 };
-#endif /* (BSW_BSWM_CS_FUNC_SOMEIP == BSW_USE) */
+#endif /* (BSW_BSWM_CS_FUNC_SOMEIPTP == BSW_USE) */
 #endif /* (BSW_PDUR_CFG_MSGSOADIF_NUM == 0U) */
 #endif /* (BSW_BSWM_CS_FUNC_SOAD == BSW_USE) */
 
@@ -1056,6 +1131,30 @@ BswConst Bsw_PduR_RoutingType bsw_pdur_stDoIPTpRoutingTbl[BSW_PDUR_TBL_DUMMY_SIZ
 #endif /* (BSW_PDUR_CFG_MSGDOIPTP_NUM == 0U) */
 #endif /* (BSW_BSWM_CS_FUNC_DOIP == BSW_USE) */
 
+#if (BSW_BSWM_CS_FUNC_J1939TP == BSW_USE)
+static BswConst   Bsw_PduR_LoCompInfoType bsw_pdur_rt_J1939TpLoFuncTbl =
+{
+    BSW_PDUR_J1939TP_TRANSMIT_FUNC,
+    BSW_PDUR_J1939TP_CANCELTX_FUNC,
+    BSW_PDUR_J1939TP_CANCELRX_FUNC,
+    BSW_PDUR_J1939TP_GETTXID_FUNC,
+    BSW_PDUR_J1939TP_GETRXID_FUNC,
+    BSW_PDUR_J1939TP_GETCURRXID_FUNC
+};
+#if (BSW_PDUR_CFG_MSGJ1939TPLO_NUM == 0U)
+BswConst Bsw_PduR_RoutingType bsw_pdur_stJ1939TpLoRoutingTbl[BSW_PDUR_TBL_DUMMY_SIZE] =
+{
+    { (BswU2)0x0000U, (BswU2)0x0000U }
+};
+#if ( BSW_BSWM_CS_FUNC_IPDUM == BSW_USE )
+BswConst PduIdType bsw_pdur_u2J1939TpLoIpduMTbl[BSW_PDUR_TBL_DUMMY_SIZE] =
+{
+    (PduIdType)0x0000U
+};
+#endif /* (BSW_BSWM_CS_FUNC_IPDUM == BSW_USE) */
+#endif /* (BSW_PDUR_CFG_MSGJ1939TPLO_NUM == 0U) */
+#endif /* (BSW_BSWM_CS_FUNC_J1939TP == BSW_USE) */
+
 BswConst   Bsw_PduR_LoCompInfoType* BswConst bsw_pdur_rt_CompTbl[ BSW_PDUR_MAX_LOCMPNUM ] =
 {
     BSW_PDUR_CANIF_FUNC,
@@ -1065,7 +1164,8 @@ BswConst   Bsw_PduR_LoCompInfoType* BswConst bsw_pdur_rt_CompTbl[ BSW_PDUR_MAX_L
     BSW_PDUR_SOADIF_FUNC,
     BSW_PDUR_SOADTP_FUNC,
     BSW_PDUR_DOIPIF_FUNC,
-    BSW_PDUR_DOIPTP_FUNC
+    BSW_PDUR_DOIPTP_FUNC,
+    BSW_PDUR_J1939TPLO_FUNC,
 };
 
 /******************************************/
@@ -1236,13 +1336,47 @@ BswConst PduIdType bsw_pdur_u2Cdd2SecOCTbl[BSW_PDUR_TBL_DUMMY_SIZE] =
 #endif /* (BSW_BSWM_CS_FUNC_SECOC == BSW_NOUSE) || (BSW_PDUR_CFG_IPDU_MA == BSW_NOUSE) || (BSW_PDUR_CFG_MSGCDD2_NUM == 0U) */
 #endif /* (BSW_BSWM_CS_FUNC_UPPERCDD2 == BSW_USE) */
 
+#if (BSW_BSWM_CS_FUNC_J1939TP == BSW_USE)
+static BswConst   Bsw_PduR_UpCompInfoType bsw_pdur_J1939TpUpFuncTbl =
+{
+    BSW_PDUR_J1939TP_TRIGGERTX_FUNC,
+    BSW_PDUR_J1939TP_TXCONF_FUNC,
+    BSW_PDUR_J1939TP_RXIND_FUNC,
+    BSW_PDUR_J1939TP_SOR_FUNC,
+    BSW_PDUR_J1939TP_COPYRXDT_FUNC,
+    BSW_PDUR_J1939TP_COPYTXDT_FUNC,
+    BSW_PDUR_J1939TP_TPRXIND_FUNC,
+    BSW_PDUR_J1939TP_TPTXCONF_FUNC,
+    BSW_PDUR_J1939TP_COMGTTXMD_FUNC
+};
+#if (BSW_PDUR_CFG_MSGJ1939TPUP_NUM == 0U)
+BswConst PduIdType bsw_pdur_u2J1939TpUpRoutingTbl[BSW_PDUR_TBL_DUMMY_SIZE] =
+{
+    (BswU2)0x0000U
+};
+#endif /* (BSW_PDUR_CFG_MSGJ1939TPUP_NUM == 0U) */
+#if ( (BSW_BSWM_CS_FUNC_IPDUM == BSW_NOUSE) || (BSW_PDUR_CFG_MSGJ1939TPUP_NUM == 0U) )
+BswConst PduIdType bsw_pdur_u2J1939TpUpIpduMTbl[BSW_PDUR_TBL_DUMMY_SIZE] = 
+{
+    (BswU2)0x0000U
+};
+#endif /* (BSW_BSWM_CS_FUNC_IPDUM == BSW_NOUSE) || (BSW_PDUR_CFG_MSGJ1939TPUP_NUM == 0U) */
+#if ( (BSW_BSWM_CS_FUNC_SECOC == BSW_NOUSE) || (BSW_PDUR_CFG_IPDU_MA == BSW_NOUSE) || (BSW_PDUR_CFG_MSGJ1939TPUP_NUM == 0U) )
+BswConst PduIdType bsw_pdur_u2J1939TpUpSecOCTbl[BSW_PDUR_TBL_DUMMY_SIZE] = 
+{
+    (BswU2)BSW_PDUR_INVALID_PDUID
+};
+#endif /* (BSW_BSWM_CS_FUNC_SECOC == BSW_NOUSE) || (BSW_PDUR_CFG_IPDU_MA == BSW_NOUSE) || (BSW_PDUR_CFG_MSGJ1939TPUP_NUM == 0U) */
+#endif /* (BSW_BSWM_CS_FUNC_J1939TP == BSW_USE) */
+
 BswConst   Bsw_PduR_UpCompInfoType* BswConst bsw_pdur_UpperCompFuncTbl[ BSW_PDUR_MAX_UPCMPNUM ] =
 {
     BSW_PDUR_COM_FUNC,
     BSW_PDUR_DCM_FUNC,
     BSW_PDUR_LDCOM_FUNC,
     BSW_PDUR_CDD1_FUNC,
-    BSW_PDUR_CDD2_FUNC
+    BSW_PDUR_CDD2_FUNC,
+    BSW_PDUR_J1939TPUP_FUNC
 };
 
 /******************************************/
@@ -1295,6 +1429,7 @@ BswConst PduIdType bsw_pdur_u2SecOCToUpCompIdTbl[BSW_PDUR_MAX_UPCMPNUM] =
    ,(BswU2)BSW_PDUR_UPCOMP_LDCOM
    ,(BswU2)BSW_PDUR_UPCOMP_CDD1
    ,(BswU2)BSW_PDUR_UPCOMP_CDD2
+   ,(BswU2)BSW_PDUR_UPCOMP_J1939TP
 };
 BswConst PduIdType bsw_pdur_u2SecOCToLoCompIdTbl[BSW_PDUR_MAX_LOCMPNUM] =
 {
@@ -1306,6 +1441,7 @@ BswConst PduIdType bsw_pdur_u2SecOCToLoCompIdTbl[BSW_PDUR_MAX_LOCMPNUM] =
    ,(BswU2)BSW_PDUR_LOCOMP_SOADTP
    ,(BswU2)BSW_PDUR_LOCOMP_DOIPIF
    ,(BswU2)BSW_PDUR_LOCOMP_DOIPTP
+   ,(BswU2)BSW_PDUR_LOCOMP_J1939TP
 };
 #else
 BswConst PduIdType bsw_pdur_u2SecOCToUpCompIdTbl[BSW_PDUR_TBL_DUMMY_SIZE] =
@@ -1383,18 +1519,19 @@ BswConst   PduIdType bsw_pdur_u2DummySecOCTbl[ BSW_PDUR_TBL_DUMMY_SIZE ] =
 };
 
 BswConst   BswU1 bsw_pdur_u1IpduMFunc = (BswU1)BSW_BSWM_CS_FUNC_IPDUM;
-BswConst   BswU1 bsw_pdur_u1SomeIpTpFunc = (BswU1)BSW_BSWM_CS_FUNC_SOMEIP;
+BswConst   BswU1 bsw_pdur_u1SomeIpTpFunc = (BswU1)BSW_BSWM_CS_FUNC_SOMEIPTP;
 BswConst   BswU1 bsw_pdur_u1IPduMA    = (BswU1)BSW_PDUR_IPDU_MA;
 #endif /* (BSW_PDUR_ZEROCOSTOPERATION == BSW_PDUR_ZEROCOST_NOUSE) */
 
-/* L-PDUID conversion function table (Com,Dcm,LdCom,CDD1,CDD2)*/
+/* L-PDUID conversion function table (Com,Dcm,LdCom,CDD1,CDD2,J1939Tp)*/
 BswConst Bsw_PduR_GetLpduIdType bsw_pdur_rom_ptGetLIdFuncTbl[ BSW_PDUR_MAX_UPCMPNUM ] =
 {
     BSW_PDUR_COMGETLPDUID_FUNC,
     BSW_PDUR_DCMGETLPDUID_FUNC,
     BSW_PDUR_LDCOMGETLPDUID_FUNC,
     BSW_PDUR_CDD1GETLPDUID_FUNC,
-    BSW_PDUR_CDD2GETLPDUID_FUNC
+    BSW_PDUR_CDD2GETLPDUID_FUNC,
+    BSW_PDUR_J1939TPUGETLPDUID_FUNC
 };
 
 /* Function Pointer for Zero Cost Operation Switching */
@@ -1464,7 +1601,7 @@ BswConst   PduIdType bsw_pdur_PduIdTpCompSet  = BSW_PDUR_TPCOMPSET_ZEROCOST;
 /*  v2-0-0          :2022/02/11                                             */
 /*  v2-1-0          :2023/02/03                                             */
 /*  v2-2-0          :2023/05/23                                             */
-/*  v3-0-0          :2024/10/07                                             */
+/*  v3-0-0          :2025/01/29                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

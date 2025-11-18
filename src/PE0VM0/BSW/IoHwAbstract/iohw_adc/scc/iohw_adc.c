@@ -73,7 +73,7 @@ static volatile U1           u1_s_iohw_adc_cyclact;
 
 static volatile U1           u1_s_iohw_adc_lv_wr_act;
 static volatile U1           u1_s_iohw_adc_lv_wr_fin;
-static volatile U1           u1_s_iohw_adc_lv_rd          __attribute__((section(".bss_SHARE_IOHW_ADC_LV_RD")));
+static volatile U1           u1_s_iohw_adc_lv_rd;
 
 #pragma ghs section bss=default
 

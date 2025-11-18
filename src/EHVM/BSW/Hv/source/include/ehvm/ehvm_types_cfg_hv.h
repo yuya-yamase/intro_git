@@ -64,6 +64,9 @@
 #define VM_SYSTEM_CONTROL_POWER_RANGE3              (2U)
 #define VM_SYSTEM_CONTROL_POWER_RANGE_NUM           (3U)
 
+#define EHVM_VMM_ENABLE_CLEAR_INT_FLAG              ((ehvm_uint8_t)0x01U)
+#define EHVM_VMM_DISABLE_CLEAR_INT_FLAG             ((ehvm_uint8_t)0x00U)
+
 #define NOUSE_VMM_INTERRUPT                         (0xFFFFFFFFU)
 
 /* VCC */
@@ -93,6 +96,10 @@
 /* MPU */
 #define MPU_NUM_OF_ENTRY                            0x20U
 #define MPU_MPCFG_HBE_SHIFT                         0x08U
+
+/* Timeout */
+#define EHVM_LOCK_TIMEOUT_LOOP_CNT_INVALID                          ((ehvm_uint32_t)0xFFFFFFFFU)
+#define EHVM_PSM_DEEPSTOP_PE_STOP_WAIT_TIMEOUT_LOOP_COUNT_INVALID   ((ehvm_uint32_t)0xFFFFFFFFU)
 
 #ifndef NULL_PTR
 #define NULL_PTR                    ((void*)0x0)

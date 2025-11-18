@@ -21,8 +21,8 @@
 /* Macros                                                                   */
 /*--------------------------------------------------------------------------*/
 /* Number of components to be connected to PduR (excluding SecOC/IpduM) */
-#define BSW_PDUR_MAX_LOCMPNUM      (8U)
-#define BSW_PDUR_MAX_UPCMPNUM      (5U)
+#define BSW_PDUR_MAX_LOCMPNUM      (9U)
+#define BSW_PDUR_MAX_UPCMPNUM      (6U)
 
 /* For PDU ID processing */
 #define BSW_PDUR_SHIFT_IDBIT       (11U)
@@ -159,6 +159,7 @@ extern  BswConst   PduIdType bsw_pdur_u2DcmRoutingTbl[];
 extern  BswConst   PduIdType bsw_pdur_u2LdComRoutingTbl[];
 extern  BswConst   PduIdType bsw_pdur_u2Cdd1RoutingTbl[];
 extern  BswConst   PduIdType bsw_pdur_u2Cdd2RoutingTbl[];
+extern  BswConst   PduIdType bsw_pdur_u2J1939TpUpRoutingTbl[];
 
 extern  BswConst   PduIdType* BswConst bsw_pdur_u2UpCompRoutingTbl[];
 extern  BswConst   PduIdType bsw_pdur_u2DummyUpRoutingTbl[];
@@ -171,6 +172,7 @@ extern  BswConst   Bsw_PduR_RoutingType bsw_pdur_stCanTpRoutingTbl[];
 extern  BswConst   Bsw_PduR_RoutingType bsw_pdur_stLinTpRoutingTbl[];
 extern  BswConst   Bsw_PduR_RoutingType bsw_pdur_stSoAdTpRoutingTbl[];
 extern  BswConst   Bsw_PduR_RoutingType bsw_pdur_stDoIPTpRoutingTbl[];
+extern  BswConst   Bsw_PduR_RoutingType bsw_pdur_stJ1939TpLoRoutingTbl[];
 
 extern  BswConst   Bsw_PduR_RoutingType* BswConst bsw_pdur_stLoCompRoutingTbl[];
 extern  BswConst   Bsw_PduR_RoutingType bsw_pdur_stDummyRoutingTbl[];
@@ -180,11 +182,13 @@ extern  BswConst   PduIdType bsw_pdur_u2DcmIpduMTbl[];
 extern  BswConst   PduIdType bsw_pdur_u2LdComIpduMTbl[];
 extern  BswConst   PduIdType bsw_pdur_u2Cdd1IpduMTbl[];
 extern  BswConst   PduIdType bsw_pdur_u2Cdd2IpduMTbl[];
+extern  BswConst   PduIdType bsw_pdur_u2J1939TpUpIpduMTbl[];
 extern  BswConst   PduIdType bsw_pdur_u2CanIfIpduMTbl[];
 extern  BswConst   PduIdType bsw_pdur_u2LinIfIpduMTbl[];
 extern  BswConst   PduIdType bsw_pdur_u2SoAdIfIpduMTbl[];
 extern  BswConst   PduIdType bsw_pdur_u2DoIPIfIpduMTbl[];
-extern  BswConst   PduIdType bsw_pdur_u2SoAdIfSomeIpTbl[];
+extern  BswConst   PduIdType bsw_pdur_u2J1939TpLoIpduMTbl[];
+extern  BswConst   PduIdType bsw_pdur_u2SoAdIfSomeIpTpTbl[];
 
 extern  BswConst   PduIdType* BswConst bsw_pdur_ptIpduMUpRoutingTbl[];
 extern  BswConst   PduIdType* BswConst bsw_pdur_ptIpduMLoRoutingTbl[];
@@ -198,6 +202,7 @@ extern  BswConst   PduIdType bsw_pdur_u2DcmSecOCTbl[];
 extern  BswConst   PduIdType bsw_pdur_u2LdComSecOCTbl[];
 extern  BswConst   PduIdType bsw_pdur_u2Cdd1SecOCTbl[];
 extern  BswConst   PduIdType bsw_pdur_u2Cdd2SecOCTbl[];
+extern  BswConst   PduIdType bsw_pdur_u2J1939TpUpSecOCTbl[];
 
 extern  BswConst   PduIdType* BswConst bsw_pdur_u2SecOCUpRoutingTbl[];
 extern  BswConst   PduIdType bsw_pdur_u2DummySecOCTbl[];
@@ -240,6 +245,7 @@ extern  BswConst   BswU2 bsw_pdur_u2DcmMsgNum;
 extern  BswConst   BswU2 bsw_pdur_u2LdComMsgNum;
 extern  BswConst   BswU2 bsw_pdur_u2Cdd1MsgNum;
 extern  BswConst   BswU2 bsw_pdur_u2Cdd2MsgNum;
+extern  BswConst   BswU2 bsw_pdur_u2J1939TpUpNum;
 extern  BswConst   BswU2 bsw_pdur_u2UpCompMsgNumTbl[];
 extern  BswConst   BswU2 bsw_pdur_u2LoCompMsgNumTbl[];
 
@@ -287,7 +293,7 @@ extern  BswConst   PduIdType bsw_pdur_u2SecOCToLoCompIdTbl[];
 /*  v1-1-0          :2019/01/15                                             */
 /*  v1-2-0          :2019/11/05                                             */
 /*  v2-0-0          :2022/02/11                                             */
-/*  v3-0-0          :2024/09/04                                             */
+/*  v3-0-0          :2025/01/28                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

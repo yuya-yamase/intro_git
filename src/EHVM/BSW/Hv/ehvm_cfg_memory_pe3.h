@@ -44,6 +44,6 @@ extern EhvmConst ehvm_intc2g_prot_switch_config_t    ehvm_Intc2gSwitchConfigData
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
 /*  Framework          :v2-1-0                                              */
-/*  BSW plug-in        :v2-0-0                                              */
+/*  BSW plug-in        :v2-2-0-z0001                                        */
 /****************************************************************************/
 

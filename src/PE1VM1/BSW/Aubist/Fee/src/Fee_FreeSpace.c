@@ -1,7 +1,7 @@
-/* Fee_FreeSpace.c v2-0-0                                                   */
+/* Fee_FreeSpace.c v2-1-0                                                   */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION. All rights reserved.                        */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -25,6 +25,8 @@
 
 #include "../inc/Fee_Lib.h"
 #include "../inc/Fee_Dfc.h"
+
+#include "../inc/Fee_FlsWrp.h"
 
 /*--------------------------------------------------------------------------*/
 /* Types                                                                    */
@@ -267,30 +269,36 @@ Fee_FreeSpace_CheckBSOnFlash(
     P2VAR( boolean,        AUTOMATIC, TYPEDEF ) NeedsToFixBS
 ){
     uint32 Rtn = FEE_STATUS_BUSY;
+    Std_ReturnType u1_dfPrepare;
 
     (*NeedsToFixBS) = FALSE;
     if( Fee_CpuDtfInfo.u1ProcessStatus == FEE_STATUSIDLE )
     {
-        Fee_InitCpuDtfData( &Fee_CpuDtfInfo );
-        Fee_CpuDtfInfo.u1AreaNum = AreaNo;
-        Fee_SelectUseArea( &Fee_CpuDtfInfo );
-
-        Rtn = Fee_Block_GetSectorInfo( &Fee_CpuDtfInfo, NeedsToFixBS );
-        if( Rtn == FEE_STATUS_OK )
+        /* Preparing for MemAcc data flash access. */
+        u1_dfPrepare = Fee_FlsWrp_ExtDfPreExecution();
+        if( u1_dfPrepare == (Std_ReturnType)E_OK )
         {
-            LastWritePosInfo->stMainBlockInfo.u1BlockNo     = Fee_CpuDtfInfo.u1MainBlockNo;
-            LastWritePosInfo->stMainBlockInfo.u1BlockStatus = Fee_CpuDtfInfo.u1MainBlockStatus;
-            LastWritePosInfo->stSubBlockInfo.u1BlockNo      = Fee_CpuDtfInfo.u1SubBlockNo;
-            LastWritePosInfo->stSubBlockInfo.u1BlockStatus  = Fee_CpuDtfInfo.u1SubBlockStatus;
+            Fee_InitCpuDtfData( &Fee_CpuDtfInfo );
+            Fee_CpuDtfInfo.u1AreaNum = AreaNo;
+            Fee_SelectUseArea( &Fee_CpuDtfInfo );
+    
+            Rtn = Fee_Block_GetSectorInfo( &Fee_CpuDtfInfo, NeedsToFixBS );
+            if( Rtn == FEE_STATUS_OK )
+            {
+                LastWritePosInfo->stMainBlockInfo.u1BlockNo     = Fee_CpuDtfInfo.u1MainBlockNo;
+                LastWritePosInfo->stMainBlockInfo.u1BlockStatus = Fee_CpuDtfInfo.u1MainBlockStatus;
+                LastWritePosInfo->stSubBlockInfo.u1BlockNo      = Fee_CpuDtfInfo.u1SubBlockNo;
+                LastWritePosInfo->stSubBlockInfo.u1BlockStatus  = Fee_CpuDtfInfo.u1SubBlockStatus;
+            }
+            else /* Rtn == FEE_STATUS_NG, FEE_STATUS_NODATA */
+            {
+                /* No process. */
+            }
+    
+            Fee_InitCpuDtfData( &Fee_CpuDtfInfo );
+            Fee_Lib_SetCpuDtfDataSub();
+            Fee_Block_SetUseBlockInfoSub();
         }
-        else /* Rtn == FEE_STATUS_NG, FEE_STATUS_NODATA */
-        {
-            /* No process. */
-        }
-
-        Fee_InitCpuDtfData( &Fee_CpuDtfInfo );
-        Fee_Lib_SetCpuDtfDataSub();
-        Fee_Block_SetUseBlockInfoSub();
     }
 
     return Rtn;
@@ -394,42 +402,48 @@ Fee_FreeSpace_SrchMngAreaOnFlash(
     uint32 BCResult;
     uint32 NotBlankAddr;
     uint8  MainSectorNum;
+    Std_ReturnType u1_dfPrepare;
 
     Rtn = FEE_STATUS_BUSY;
     if( Fee_CpuDtfInfo.u1ProcessStatus == FEE_STATUSIDLE )
     {
-        /* Preparing for blankcheck on the data flash. */
-        Fee_Dfc_End();
-
-        /* Executing blank check. */
-        MainSectorNum = LastWritePosInfo->stMainBlockInfo.u1BlockNo;
-        BCStartTailAddress = FEE_BLKSTARTADDRTBL[MainSectorNum] + (uint32)( Fee_AreaInfTBL[AreaNo].u2RcrdDataAreaStartAddr );
-        BCEndTopAddress    = FEE_BLKSTARTADDRTBL[MainSectorNum] + FEE_STARTRECORDPOS;
-
-        Fee_Dfc_BlankCheck( BCStartTailAddress, BCEndTopAddress, SearchNum );
-
-        /* Checking a result and setting output values. */
-        NotBlankAddr = FEE_ADDRESS_INVALID;
-        BCResult = Fee_Dfc_GetBlankCheckResult( &NotBlankAddr );
-        if( BCResult == FEE_DFC_STATUS_BUSY ) /* The part of a management area is blank. */
+        /* Preparing for MemAcc data flash access. */
+        u1_dfPrepare = Fee_FlsWrp_ExtDfPreExecution();
+        if( u1_dfPrepare == (Std_ReturnType)E_OK )
         {
-            Rtn = FEE_STATUS_NG;
-        }
-        else if( BCResult == FEE_DFC_STATUS_ERROR ) /* A management area is not blank. */
-        {
-            LastWritePosInfo->u4WriteLastRecMngAbsAddr = NotBlankAddr
-                                                            - ( ( NotBlankAddr - BCEndTopAddress ) % (uint32)FEE_RECORDMNGINFOLEN );
-            Rtn = FEE_STATUS_OK;
-        }
-        else /* BCResult == FEE_DFC_STATUS_OK, A management area is blank. */
-        {
-            LastWritePosInfo->u4WriteLastRecMngAbsAddr = BCEndTopAddress - (uint32)FEE_RECORDMNGINFOLEN;
-            Rtn = FEE_STATUS_OK;
-        }
+            /* Preparing for blankcheck on the data flash. */
+            Fee_Dfc_End();
 
-        /* Post process for blankcheck on the data flash. */
-        Fee_Dfc_End();
-        Fee_Dfc_SetRAMSub();
+            /* Executing blank check. */
+            MainSectorNum = LastWritePosInfo->stMainBlockInfo.u1BlockNo;
+            BCStartTailAddress = FEE_BLKSTARTADDRTBL[MainSectorNum] + (uint32)( Fee_AreaInfTBL[AreaNo].u2RcrdDataAreaStartAddr );
+            BCEndTopAddress    = FEE_BLKSTARTADDRTBL[MainSectorNum] + FEE_STARTRECORDPOS;
+
+            Fee_Dfc_BlankCheck( BCStartTailAddress, BCEndTopAddress, SearchNum );
+
+            /* Checking a result and setting output values. */
+            NotBlankAddr = FEE_ADDRESS_INVALID;
+            BCResult = Fee_Dfc_GetBlankCheckResult( &NotBlankAddr );
+            if( BCResult == FEE_DFC_STATUS_BUSY ) /* The part of a management area is blank. */
+            {
+                Rtn = FEE_STATUS_NG;
+            }
+            else if( BCResult == FEE_DFC_STATUS_ERROR ) /* A management area is not blank. */
+            {
+                LastWritePosInfo->u4WriteLastRecMngAbsAddr = NotBlankAddr
+                                                                - ( ( NotBlankAddr - BCEndTopAddress ) % (uint32)FEE_RECORDMNGINFOLEN );
+                Rtn = FEE_STATUS_OK;
+            }
+            else /* BCResult == FEE_DFC_STATUS_OK, A management area is blank. */
+            {
+                LastWritePosInfo->u4WriteLastRecMngAbsAddr = BCEndTopAddress - (uint32)FEE_RECORDMNGINFOLEN;
+                Rtn = FEE_STATUS_OK;
+            }
+
+            /* Post process for blankcheck on the data flash. */
+            Fee_Dfc_End();
+            Fee_Dfc_SetRAMSub();
+        }
     }
 
     return Rtn;
@@ -545,41 +559,47 @@ Fee_FreeSpace_SrchDatAreaOnFlash(
     uint32 BCResult;
     uint32 NotBlankAddr;
     uint8  MainSectorNum;
+    Std_ReturnType u1_dfPrepare;
 
     Rtn = FEE_STATUS_BUSY;
     if( Fee_CpuDtfInfo.u1ProcessStatus == FEE_STATUSIDLE )
     {
-        /* Preparing for blankcheck on the data flash. */
-        Fee_Dfc_End();
-
-        /* Executing blank check. */
-        MainSectorNum = LastWritePosInfo->stMainBlockInfo.u1BlockNo;
-        BCStartTailAddress = FEE_BLKSTARTADDRTBL[MainSectorNum] + (uint32)FEE_DATA_FLASH_SECTOR_SIZE;
-        BCEndTopAddress    = FEE_BLKSTARTADDRTBL[MainSectorNum] + (uint32)( Fee_AreaInfTBL[AreaNo].u2RcrdDataAreaStartAddr );
-
-        Fee_Dfc_BlankCheck( BCStartTailAddress, BCEndTopAddress, SearchNum );
-
-        /* Checking a result and setting output values. */
-        NotBlankAddr = FEE_ADDRESS_INVALID;
-        BCResult = Fee_Dfc_GetBlankCheckResult( &NotBlankAddr );
-        if( BCResult == FEE_DFC_STATUS_BUSY ) /* The part of a management area is blank. */
+        /* Preparing for MemAcc data flash access. */
+        u1_dfPrepare = Fee_FlsWrp_ExtDfPreExecution();
+        if( u1_dfPrepare == (Std_ReturnType)E_OK )
         {
-            Rtn = FEE_STATUS_NG;
-        }
-        else if( BCResult == FEE_DFC_STATUS_ERROR ) /* A management area is not blank. */
-        {
-            LastWritePosInfo->u4WriteLastRecDatAbsAddr = ( NotBlankAddr + (uint32)FEE_DATA_FLASH_ECC_FIX_SIZE ) - (uint32)FEE_DATAAREA_REC_TAIL_OFFSET;
-            Rtn = FEE_STATUS_OK;
-        }
-        else /* BCResult == FEE_DFC_STATUS_OK, A management area is blank. */
-        {
-            LastWritePosInfo->u4WriteLastRecDatAbsAddr = BCEndTopAddress - (uint32)FEE_DATAAREA_REC_TAIL_OFFSET;
-            Rtn = FEE_STATUS_OK;
-        }
+            /* Preparing for blankcheck on the data flash. */
+            Fee_Dfc_End();
 
-        /* Post process for blankcheck on the data flash. */
-        Fee_Dfc_End();
-        Fee_Dfc_SetRAMSub();
+            /* Executing blank check. */
+            MainSectorNum = LastWritePosInfo->stMainBlockInfo.u1BlockNo;
+            BCStartTailAddress = FEE_BLKSTARTADDRTBL[MainSectorNum] + (uint32)FEE_DATA_FLASH_SECTOR_SIZE;
+            BCEndTopAddress    = FEE_BLKSTARTADDRTBL[MainSectorNum] + (uint32)( Fee_AreaInfTBL[AreaNo].u2RcrdDataAreaStartAddr );
+
+            Fee_Dfc_BlankCheck( BCStartTailAddress, BCEndTopAddress, SearchNum );
+
+            /* Checking a result and setting output values. */
+            NotBlankAddr = FEE_ADDRESS_INVALID;
+            BCResult = Fee_Dfc_GetBlankCheckResult( &NotBlankAddr );
+            if( BCResult == FEE_DFC_STATUS_BUSY ) /* The part of a management area is blank. */
+            {
+                Rtn = FEE_STATUS_NG;
+            }
+            else if( BCResult == FEE_DFC_STATUS_ERROR ) /* A management area is not blank. */
+            {
+                LastWritePosInfo->u4WriteLastRecDatAbsAddr = ( NotBlankAddr + (uint32)FEE_DATA_FLASH_ECC_FIX_SIZE ) - (uint32)FEE_DATAAREA_REC_TAIL_OFFSET;
+                Rtn = FEE_STATUS_OK;
+            }
+            else /* BCResult == FEE_DFC_STATUS_OK, A management area is blank. */
+            {
+                LastWritePosInfo->u4WriteLastRecDatAbsAddr = BCEndTopAddress - (uint32)FEE_DATAAREA_REC_TAIL_OFFSET;
+                Rtn = FEE_STATUS_OK;
+            }
+
+            /* Post process for blankcheck on the data flash. */
+            Fee_Dfc_End();
+            Fee_Dfc_SetRAMSub();
+        }
     }
 
     return Rtn;
@@ -618,6 +638,7 @@ Fee_FreeSpace_ClearLastWritePos(
 /*  1-0-0          :2019/02/01                                              */
 /*  1-1-0          :2019/10/16                                              */
 /*  2-0-0          :2022/08/24                                              */
+/*  2-1-0          :2024/09/04                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

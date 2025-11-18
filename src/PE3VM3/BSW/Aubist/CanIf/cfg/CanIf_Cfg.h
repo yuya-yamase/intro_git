@@ -2520,7 +2520,7 @@
 #define BSW_CANIF_CFG_30_RXPDURPDUNUM           (0U)
 #define BSW_CANIF_CFG_31_RXPDURPDUNUM           (0U)
 
-#define BSW_CANIF_CFG_0_RXCANNMPDUNUM           (4U)
+#define BSW_CANIF_CFG_0_RXCANNMPDUNUM           (3U)
 #define BSW_CANIF_CFG_1_RXCANNMPDUNUM           (0U)
 #define BSW_CANIF_CFG_2_RXCANNMPDUNUM           (0U)
 #define BSW_CANIF_CFG_3_RXCANNMPDUNUM           (0U)
@@ -3062,7 +3062,7 @@
 #define BSW_CANIF_CFG_METADATA_USE              (BSW_CANIF_NOUSE)
 
 /* PDU ID for Tx L-PDU */
-#define PDUID_CDC1N01_Tx_CDC_VCAN_BUS           (BSW_PDUR_LOCOMP_CANNM | 0x0000U)
+#define PDUID_VCE1N99_Tx_CDC_VCAN_BUS           (BSW_PDUR_LOCOMP_CANNM | 0x0000U)
 
 /* PDU ID for Rx L-PDU */
 #define PDUID_ABG1D50_Rx_CDC_VCAN_BUS           (BSW_PDUR_LOCOMP_CANIF | 0x0000U)
@@ -3173,13 +3173,12 @@
 #define PDUID_ZN11S67_Rx_CDC_VCAN_BUS           (BSW_PDUR_LOCOMP_CANIF | 0x0069U)
 #define PDUID_ZN11SF6_Rx_CDC_VCAN_BUS           (BSW_PDUR_LOCOMP_CANIF | 0x006AU)
 #define PDUID_ZN11SF7_Rx_CDC_VCAN_BUS           (BSW_PDUR_LOCOMP_CANIF | 0x006BU)
-#define PDUID_NM_Rx_CDC_VCAN_BUS                (BSW_PDUR_LOCOMP_CANNM | 0x0001U)
-#define PDUID_CDC1N00_Rx_CDC_VCAN_BUS           (BSW_PDUR_LOCOMP_CANNM | 0x0002U)
-#define PDUID_CDC1N02_Rx_CDC_VCAN_BUS           (BSW_PDUR_LOCOMP_CANNM | 0x0003U)
-#define PDUID_CDC1N03_Rx_CDC_VCAN_BUS           (BSW_PDUR_LOCOMP_CANNM | 0x0004U)
+#define PDUID_CDC1N01_Rx_CDC_VCAN_BUS           (BSW_PDUR_LOCOMP_CANNM | 0x0001U)
+#define PDUID_VME1N99_Rx_CDC_VCAN_BUS           (BSW_PDUR_LOCOMP_CANNM | 0x0002U)
+#define PDUID_VIV1N99_Rx_CDC_VCAN_BUS           (BSW_PDUR_LOCOMP_CANNM | 0x0003U)
 
 /* HOH Number for Tx L-PDU */
-#define HOH_CDC1N01_Tx_CDC_VCAN_BUS             (BSW_CANIF_HOH_VIRTUAL | 0x0006U)
+#define HOH_VCE1N99_Tx_CDC_VCAN_BUS             (BSW_CANIF_HOH_VIRTUAL | 0x0006U)
 
 /* HOH Number for Rx L-PDU */
 #define HOH_ABG1D50_Rx_CDC_VCAN_BUS             (BSW_CANIF_HOH_VIRTUAL | 0x0001U)
@@ -3290,10 +3289,9 @@
 #define HOH_ZN11S67_Rx_CDC_VCAN_BUS             (BSW_CANIF_HOH_VIRTUAL | 0x0001U)
 #define HOH_ZN11SF6_Rx_CDC_VCAN_BUS             (BSW_CANIF_HOH_VIRTUAL | 0x0000U)
 #define HOH_ZN11SF7_Rx_CDC_VCAN_BUS             (BSW_CANIF_HOH_VIRTUAL | 0x0000U)
-#define HOH_NM_Rx_CDC_VCAN_BUS                  (BSW_CANIF_HOH_VIRTUAL | 0x0001U)
-#define HOH_CDC1N00_Rx_CDC_VCAN_BUS             (BSW_CANIF_HOH_VIRTUAL | 0x0001U)
-#define HOH_CDC1N02_Rx_CDC_VCAN_BUS             (BSW_CANIF_HOH_VIRTUAL | 0x0001U)
-#define HOH_CDC1N03_Rx_CDC_VCAN_BUS             (BSW_CANIF_HOH_VIRTUAL | 0x0001U)
+#define HOH_CDC1N01_Rx_CDC_VCAN_BUS             (BSW_CANIF_HOH_VIRTUAL | 0x0001U)
+#define HOH_VME1N99_Rx_CDC_VCAN_BUS             (BSW_CANIF_HOH_VIRTUAL | 0x0001U)
+#define HOH_VIV1N99_Rx_CDC_VCAN_BUS             (BSW_CANIF_HOH_VIRTUAL | 0x0001U)
 
 /*--------------------------------------------------------------------------*/
 /* Types                                                                    */
@@ -3327,7 +3325,7 @@
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
-/*  Framework          :v2-0-3-z0003                                        */
+/*  Framework          :v2-1-0                                              */
 /*  BSW plug-in        :v3-0-0                                              */
 /****************************************************************************/
 

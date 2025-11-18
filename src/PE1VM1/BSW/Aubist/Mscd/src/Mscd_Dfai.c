@@ -1,7 +1,7 @@
 /* Mscd_Dfai.c v2-0-0                                                       */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION. All rights reserved.                        */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -31,14 +31,14 @@
 
 #if( MSCD_DFAI_USE == STD_ON )
 /****************************************************************************/
-/* Function Name | Mscd_Dfai_Write （データ書き込み）                       */
-/* Description   | メモリ媒体へ書き込み要求する                             */
+/* Function Name | Mscd_Dfai_Write                                          */
+/* Description   | Write request to memory medium                           */
 /* Preconditions |                                                          */
-/* Parameters    | u1MemoryIdentifier  : メモリ媒体ID                       */
-/*               |                      ※将来の拡張用。現在は0固定         */
-/*               | u4Address           : 書込み要求アドレス                 */
-/*               | ptSrcPtr            : 書込みデータの先頭ポインタ         */
-/*               | u4Length            : 書込みデータ長                     */
+/* Parameters    | u1MemoryIdentifier   : memory medium ID                  */
+/*               |              * For future expansion. Currently fixed at 0*/
+/*               | u4Address            : write request address             */
+/*               | ptSrcPtr             : first pointer of data written     */
+/*               | u4Length             : write data length                 */
 /* Return Value  | Mscd_Dfai_ReturnType                                     */
 /*               |           MSCD_DFAI_JOB_ACCEPT                           */
 /*               |           MSCD_DFAI_JOB_NOT_ACCEPT                       */
@@ -55,11 +55,11 @@ Mscd_Dfai_Write( uint8 u1MemoryIdentifier, uint32 u4Address, P2CONST(uint8, AUTO
 
     u1Result = MSCD_DFAI_JOB_NOT_ACCEPT;
 
-   /* MSが停止状態のときのみ実施する */
+   /* Only perform when MS is stopped */
     u1Suspend_state = Mscd_Suspend_GetUserSuspendState();
     if( MSCD_SUSPEND_MS_RUN != u1Suspend_state )
     {
-        /* 要求パラメータが、コンフィグで指定したユーザ用メモリ領域の範囲内かチェック */
+        /* Check if the request parameters are within the user memory area specified in the config */
         u1Param_check_result = Mscd_Dfai_CheckAddrRange( u4Address, u4Length );
 
         if( u1Param_check_result == (Std_ReturnType)E_OK )
@@ -86,14 +86,14 @@ Mscd_Dfai_Write( uint8 u1MemoryIdentifier, uint32 u4Address, P2CONST(uint8, AUTO
 
 #if( MSCD_DFAI_USE == STD_ON )
 /****************************************************************************/
-/* Function Name | Mscd_Dfai_Erase （データ消去）                           */
-/* Description   | メモリ媒体へ消去要求する                                 */
+/* Function Name | Mscd_Dfai_Erase                                          */
+/* Description   | Request to erase to memory medium                        */
 /* Preconditions |                                                          */
-/* Parameters    | u1MemoryIdentifier  : メモリ媒体ID                       */
-/*               |                 ※将来の拡張用。現在は0固定              */
-/*               | u4Address           : 消去対象アドレス                   */
-/*               |                 ※ セクタの先頭の相対アドレスであること  */
-/*               | u4Length            : 消去データ長                       */
+/* Parameters    | u1MemoryIdentifier   : memory medium ID                  */
+/*               |      * For future expansion. Currently fixed at 0        */
+/*               | u4Address            : erasable address                  */
+/*               |      * Relative address at beginning of sector           */
+/*               | u4Length             : Erase data length                 */
 /* Return Value  | Mscd_Dfai_ReturnType                                     */
 /*               |           MSCD_DFAI_JOB_ACCEPT                           */
 /*               |           MSCD_DFAI_JOB_NOT_ACCEPT                       */
@@ -111,12 +111,12 @@ Mscd_Dfai_Erase( uint8 u1MemoryIdentifier, uint32 u4Address, uint32 u4Length )
 
     u1Result = MSCD_DFAI_JOB_NOT_ACCEPT;
 
-    /* MSが停止状態のときのみ実施する */
+    /* Only perform when MS is stopped */
     u1Suspend_state = Mscd_Suspend_GetUserSuspendState();
     if( MSCD_SUSPEND_MS_RUN != u1Suspend_state )
     {
 
-        /* 要求パラメータが、コンフィグで指定したユーザ用メモリ領域の範囲内かチェック */
+        /* Check if the request parameters are within the user memory area specified in the config */
         u1Param_check_result = Mscd_Dfai_CheckAddrRange( u4Address, u4Length );
 
         if( u1Param_check_result == (Std_ReturnType)E_OK )
@@ -146,14 +146,14 @@ Mscd_Dfai_Erase( uint8 u1MemoryIdentifier, uint32 u4Address, uint32 u4Length )
 
 #if( MSCD_DFAI_USE == STD_ON )
 /****************************************************************************/
-/* Function Name | Mscd_Dfai_MainFunction （ドライバ定期処理）           */
-/* Description   | 非同期処理を進行させる                                   */
+/* Function Name | Mscd_Dfai_ MainFunction (Driver Periodic)                */
+/* Description   | Allow asynchronous processing to proceed                 */
 /* Preconditions |                                                          */
-/* Parameters    | u1MemoryIdentifier  : メモリ媒体ID                       */
-/*               |                      ※将来の拡張用。現在は0固定         */
+/* Parameters    | u1MemoryIdentifier   : memory medium ID                  */
+/*               |          * For future expansion. Currently fixed at 0    */
 /* Return Value  | None                                                     */
-/* Notes         | 今後メモリ媒体IDに対してロジックを組むことを考慮し、     */
-/*               | 名前置換ではなく関数で実現する                           */
+/* Notes         | Consider building logic for memory medium IDs in the future and */
+/*               | Realize with a function instead of name substitution     */
 /****************************************************************************/
 FUNC(void, MSCD_CODE)
 Mscd_Dfai_MainFunction( uint8 u1MemoryIdentifier )
@@ -239,7 +239,7 @@ Mscd_Dfai_GetJobResult( uint8 u1MemoryIdentifier )
 
     u1Req_result = Fee_ExtGetDirectJobResult();
 
-    /* 返り値の変換 */
+    /* RETURN CONVERSION */
     switch( u1Req_result )
     {
         case FEE_EXT_DRCT_JOB_OK:
@@ -255,7 +255,7 @@ Mscd_Dfai_GetJobResult( uint8 u1MemoryIdentifier )
             u1Result = MSCD_DFAI_JOB_FATALERROR;
             break;
         case FEE_EXT_DRCT_JOB_ERROR:
-        default: /* 化けている場合は失敗（エラー）として扱う */
+        default: /* Treat ram garbled as failures (errors) */
             u1Result = MSCD_DFAI_JOB_ERROR;
             break;
     }
@@ -266,18 +266,18 @@ Mscd_Dfai_GetJobResult( uint8 u1MemoryIdentifier )
 
 #if( MSCD_DFAI_USE == STD_ON )
 /****************************************************************************/
-/* Function Name | Mscd_Dfai_Read （読み出し(同期型)）                      */
-/* Description   | メモリ媒体へ同期読み出し要求する                         */
+/* Function Name | Mscd_Dfai_Read (synchronous)                             */
+/* Description   | Make a synchronous read request to the memory medium     */
 /* Preconditions |                                                          */
-/* Parameters    | u1MemoryIdentifier  : メモリ媒体ID                       */
-/*               |                      ※将来の拡張用。現在は0固定         */
-/*               | u4Address            : 読み出し要求アドレス              */
-/*               | ptSrcPtr             : 読出しデータの先頭ポインタ        */
-/*               | u4Length             : 読み出しデータ長                  */
+/* Parameters    | u1MemoryIdentifier   : memory medium ID                  */
+/*               |             * For future expansion. Currently fixed at 0 */
+/*               | u4Address            : read-request address              */
+/*               | ptSrcPtr             : first pointer of data to be read  */
+/*               | u4Length             : length of read data               */
 /* Return Value  | Mscd_Dfai_ReturnType                                     */
-/*               |      MSCD_DFAI_JOB_OK         : 成功                     */
-/*               |      MSCD_DFAI_JOB_ERROR      : 失敗（エラー）           */
-/*               |      MSCD_DFAI_JOB_FATALERROR : 失敗（致命的なエラー）   */
+/*               |      MSCD_DFAI_JOB_OK         : Success                  */
+/*               |      MSCD_DFAI_JOB_ERROR      : Failure (error)          */
+/*               |      MSCD_DFAI_JOB_FATALERROR : Fail (fatal error)       */
 /*               |      MSCD_DFAI_JOB_INOPERATIVE_HSM                       */
 /*               |      MSCD_DFAI_JOB_INTEGRITY_FAILED                      */
 /* Notes         | None                                                     */
@@ -292,11 +292,11 @@ Mscd_Dfai_Read( uint8 u1MemoryIdentifier, uint32 u4Address, P2VAR(uint8, AUTOMAT
 
     u1Result = MSCD_DFAI_JOB_ERROR;
 
-    /* MSが停止状態のときのみ実施する */
+    /* Only perform when MS is stopped */
     u1Suspend_state = Mscd_Suspend_GetUserSuspendState();
     if( MSCD_SUSPEND_MS_RUN != u1Suspend_state )
     {
-        /* 要求パラメータが、コンフィグで指定したユーザ用メモリ領域の範囲内かチェック */
+        /* Check if the request parameters are within the user memory area specified in the config */
         u1Param_check_result = Mscd_Dfai_CheckAddrRange( u4Address, u4Length );
 
         if( u1Param_check_result == (Std_ReturnType)E_OK )
@@ -331,18 +331,18 @@ Mscd_Dfai_Read( uint8 u1MemoryIdentifier, uint32 u4Address, P2VAR(uint8, AUTOMAT
 
 #if( MSCD_DFAI_USE == STD_ON )
 /****************************************************************************/
-/* Function Name | Mscd_Dfai_BlankCheck （ブランクチェック(同期型)）        */
-/* Description   | メモリ媒体へ同期ブランクチェック要求する                 */
+/* Function Name | Mscd_Dfai_BlankCheck (synchronous)                       */
+/* Description   | Request synchronous blank check to memory medium         */
 /* Preconditions |                                                          */
-/* Parameters    | u1MemoryIdentifier  : メモリ媒体ID                       */
-/*               |                      ※将来の拡張用。現在は0固定         */
-/*               | u4Address            : チェック対象アドレス              */
-/*               | u4Length             : チェックするデータ長              */
+/* Parameters    | u1MemoryIdentifier   : memory medium ID                  */
+/*               |          * For future expansion. Currently fixed at 0    */
+/*               | u4Address            : Address to be checked             */
+/*               | u4Length             : length of data to check           */
 /* Return Value  | Mscd_Dfai_ReturnType                                     */
-/*               |      MSCD_DFAI_JOB_BLANK      : ブランク               */
-/*               |      MSCD_DFAI_JOB_NOT_BLANK  : 非ブランク             */
-/*               |      MSCD_DFAI_JOB_ERROR      : 失敗（エラー）         */
-/*               |      MSCD_DFAI_JOB_FATALERROR : 失敗（致命的なエラー） */
+/*               |      MSCD _ DFAI _ JOB _ BLANK       : blank             */
+/*               |      MSCD _ DFAI _ JOB _ NOT _ BLANK : non-blank         */
+/*               |      MSCD _ DFAI _ JOB _ ERROR       : Failure (error)   */
+/*               |      MSCD _ DFAI _ JOB _ FATALERROR  : Fail (fatal error) */
 /*               |      MSCD_DFAI_JOB_INOPERATIVE_HSM                       */
 /* Notes         | None                                                     */
 /****************************************************************************/
@@ -356,26 +356,26 @@ Mscd_Dfai_BlankCheck( uint8 u1MemoryIdentifier, uint32 u4Address, uint32 u4Lengt
 
     u1Result = MSCD_DFAI_JOB_ERROR;
 
-    /* MSが停止状態のときのみ実施する */
+    /* Only perform when MS is stopped */
     u1Suspend_state = Mscd_Suspend_GetUserSuspendState();
     if( MSCD_SUSPEND_MS_RUN != u1Suspend_state )
     {
-        /* 要求パラメータが、コンフィグで指定したユーザ用メモリ領域の範囲内かチェック */
+        /* Check if the request parameters are within the user memory area specified in the config */
         u1Param_check_result = Mscd_Dfai_CheckAddrRange( u4Address, u4Length );
 
-        /* パラメータチェックがOKの場合はDFDAにブランクチェックを要求し、それ以外の場合はE_NOT_OKを返す */
+        /* Require a blank check from DFDA if parameter check is OK, otherwise return E_NOT_OK */
         if( u1Param_check_result == (Std_ReturnType)E_OK )
         {
             u1Req_result = Fee_ExtDirectBlankCheck( u4Address, u4Length );
 
-            /* 返り値の変換 */
+            /* RETURN CONVERSION */
             switch( u1Req_result )
             {
                 case FEE_EXT_DRCT_JOB_BLANK:
                     u1Result = MSCD_DFAI_JOB_BLANK;
                     break;
-                /* 非ブランク、かつ読み出せた場合はDFDAからDTF_FEE_RESULT_OKが返るため、 */
-                /* MSCD_DFAI_JOB_NOT_BLANKに変換 */
+                /* Because non-blank and DFDA returns DTF_FEE_RESULT_OK when read, */
+                /* Convert to MSCD_DFAI_JOB_NOT_BLANK */
                 case FEE_EXT_DRCT_JOB_NOT_BLANK:
                     u1Result = MSCD_DFAI_JOB_NOT_BLANK;
                     break;
@@ -386,7 +386,7 @@ Mscd_Dfai_BlankCheck( uint8 u1MemoryIdentifier, uint32 u4Address, uint32 u4Lengt
                     u1Result = MSCD_DFAI_JOB_INOPERATIVE_HSM;
                     break;
                 case FEE_EXT_DRCT_JOB_ERROR:
-                default: /* 化けている場合は失敗（エラー）として扱う */
+                default: /* If it is ram garbled, treat it as a failure (error). */
                     u1Result = MSCD_DFAI_JOB_ERROR;
                     break;
             }

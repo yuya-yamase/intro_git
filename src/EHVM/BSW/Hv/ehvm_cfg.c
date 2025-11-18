@@ -48,6 +48,7 @@ static ehvm_uint32_t   CH16_Vcc_Msg_Buffer[VCC_NUM_OF_RING_ELEMENT_CH16][VCC_SIZ
 static ehvm_uint32_t   CH17_Vcc_Msg_Buffer[VCC_NUM_OF_RING_ELEMENT_CH17][VCC_SIZE_OF_MESSAGE_BUFFER_CH17];
 static ehvm_uint32_t   CH18_Vcc_Msg_Buffer[VCC_NUM_OF_RING_ELEMENT_CH18][VCC_SIZE_OF_MESSAGE_BUFFER_CH18];
 static ehvm_uint32_t   CH19_Vcc_Msg_Buffer[VCC_NUM_OF_RING_ELEMENT_CH19][VCC_SIZE_OF_MESSAGE_BUFFER_CH19];
+static ehvm_uint32_t   CH20_Vcc_Msg_Buffer[VCC_NUM_OF_RING_ELEMENT_CH20][VCC_SIZE_OF_MESSAGE_BUFFER_CH20];
 
 #pragma ghs section bss=default
 
@@ -73,6 +74,7 @@ static ehvm_uint8_t   CH16_Vcc_Receive_SPID[VCC_MAX_VALUE_OF_SPID];
 static ehvm_uint8_t   CH17_Vcc_Receive_SPID[VCC_MAX_VALUE_OF_SPID];
 static ehvm_uint8_t   CH18_Vcc_Receive_SPID[VCC_MAX_VALUE_OF_SPID];
 static ehvm_uint8_t   CH19_Vcc_Receive_SPID[VCC_MAX_VALUE_OF_SPID];
+static ehvm_uint8_t   CH20_Vcc_Receive_SPID[VCC_MAX_VALUE_OF_SPID];
 
 static ehvm_vcc_ring_buffer_t   CH0_Vcc_Ring_Buffer[VCC_NUM_OF_RECEIVER_CHANNEL_CH0];
 static ehvm_vcc_ring_buffer_t   CH1_Vcc_Ring_Buffer[VCC_NUM_OF_RECEIVER_CHANNEL_CH1];
@@ -94,6 +96,7 @@ static ehvm_vcc_ring_buffer_t   CH16_Vcc_Ring_Buffer[VCC_NUM_OF_RECEIVER_CHANNEL
 static ehvm_vcc_ring_buffer_t   CH17_Vcc_Ring_Buffer[VCC_NUM_OF_RECEIVER_CHANNEL_CH17];
 static ehvm_vcc_ring_buffer_t   CH18_Vcc_Ring_Buffer[VCC_NUM_OF_RECEIVER_CHANNEL_CH18];
 static ehvm_vcc_ring_buffer_t   CH19_Vcc_Ring_Buffer[VCC_NUM_OF_RECEIVER_CHANNEL_CH19];
+static ehvm_vcc_ring_buffer_t   CH20_Vcc_Ring_Buffer[VCC_NUM_OF_RECEIVER_CHANNEL_CH20];
 
 static ehvm_vcc_ring_element_t   CH0_Vcc_Ring_Element_Info[VCC_NUM_OF_RING_ELEMENT_CH0];
 static ehvm_vcc_ring_element_t   CH1_Vcc_Ring_Element_Info[VCC_NUM_OF_RING_ELEMENT_CH1];
@@ -115,6 +118,7 @@ static ehvm_vcc_ring_element_t   CH16_Vcc_Ring_Element_Info[VCC_NUM_OF_RING_ELEM
 static ehvm_vcc_ring_element_t   CH17_Vcc_Ring_Element_Info[VCC_NUM_OF_RING_ELEMENT_CH17];
 static ehvm_vcc_ring_element_t   CH18_Vcc_Ring_Element_Info[VCC_NUM_OF_RING_ELEMENT_CH18];
 static ehvm_vcc_ring_element_t   CH19_Vcc_Ring_Element_Info[VCC_NUM_OF_RING_ELEMENT_CH19];
+static ehvm_vcc_ring_element_t   CH20_Vcc_Ring_Element_Info[VCC_NUM_OF_RING_ELEMENT_CH20];
 
 #pragma ghs section bss=default
 
@@ -140,7 +144,8 @@ static ehvm_uint32_t* EhvmConst VccMsgBufferManagement[VCC_NUM_OF_VCCID] = {
     CH16_Vcc_Msg_Buffer[0],
     CH17_Vcc_Msg_Buffer[0],
     CH18_Vcc_Msg_Buffer[0],
-    CH19_Vcc_Msg_Buffer[0]
+    CH19_Vcc_Msg_Buffer[0],
+    CH20_Vcc_Msg_Buffer[0]
 };
 
 static ehvm_uint8_t* EhvmConst VccReceiveSPIDManagement[VCC_NUM_OF_VCCID] = {
@@ -163,7 +168,8 @@ static ehvm_uint8_t* EhvmConst VccReceiveSPIDManagement[VCC_NUM_OF_VCCID] = {
     &CH16_Vcc_Receive_SPID[0],
     &CH17_Vcc_Receive_SPID[0],
     &CH18_Vcc_Receive_SPID[0],
-    &CH19_Vcc_Receive_SPID[0]
+    &CH19_Vcc_Receive_SPID[0],
+    &CH20_Vcc_Receive_SPID[0]
 };
 
 static ehvm_vcc_ring_buffer_t* EhvmConst VccRingBufferManagement[VCC_NUM_OF_VCCID] = {
@@ -186,7 +192,8 @@ static ehvm_vcc_ring_buffer_t* EhvmConst VccRingBufferManagement[VCC_NUM_OF_VCCI
     &CH16_Vcc_Ring_Buffer[0],
     &CH17_Vcc_Ring_Buffer[0],
     &CH18_Vcc_Ring_Buffer[0],
-    &CH19_Vcc_Ring_Buffer[0]
+    &CH19_Vcc_Ring_Buffer[0],
+    &CH20_Vcc_Ring_Buffer[0]
 };
 
 static ehvm_vcc_ring_element_t* EhvmConst VccRingElementManagement[VCC_NUM_OF_VCCID] = {
@@ -209,7 +216,8 @@ static ehvm_vcc_ring_element_t* EhvmConst VccRingElementManagement[VCC_NUM_OF_VC
     &CH16_Vcc_Ring_Element_Info[0],
     &CH17_Vcc_Ring_Element_Info[0],
     &CH18_Vcc_Ring_Element_Info[0],
-    &CH19_Vcc_Ring_Element_Info[0]
+    &CH19_Vcc_Ring_Element_Info[0],
+    &CH20_Vcc_Ring_Element_Info[0]
 };
 
 #pragma ghs section rodata=default
@@ -493,6 +501,14 @@ static EhvmConst ehvm_hvcm_config_t s_HvcmConfigData = {
 static EhvmConst ehvm_hvcm_info_t HvcmInfoData = {
     &s_HvcmConfigData,  /* hvcmConfigData */
     &HvcAccDenyList[0]  /* hvcAccDenyList */
+};
+
+/****************************************************************************************/
+/* Hv4mHypervisorCallTimeoutConfig                                                      */
+/****************************************************************************************/
+static EhvmConst ehvm_uint32_t ehvm_hvm_get_lock_timeout_loop_count[HVM_NUM_OF_GET_LOCK_COMPONENT] = {
+    EHVM_LOCK_TIMEOUT_LOOP_CNT_INVALID, /* VCC */
+    EHVM_LOCK_TIMEOUT_LOOP_CNT_INVALID  /* VMM */
 };
 
 /****************************************************************************************/
@@ -832,6 +848,26 @@ static EhvmConst ehvm_vcc_receiver_channel_t s_VccReceiver_CH19[VCC_NUM_OF_RECEI
         NOUSE_VCC_EDGE_DETECTION         /* VccEdgeRequest */
     }
 };
+static EhvmConst ehvm_vcc_receiver_channel_t s_VccReceiver_CH20[VCC_NUM_OF_RECEIVER_CHANNEL_CH20] = {
+    {
+        0x00000004U,    /* VccReceiverSpid */
+        NOUSE_VCC_INTERRUPT,           /* VccReceiveInterruptNumber */
+        NOUSE_VCC_INTERRUPT,           /* VccOverwriteInterruptNumber */
+        NOUSE_VCC_EDGE_DETECTION         /* VccEdgeRequest */
+    },
+    {
+        0x0000000CU,    /* VccReceiverSpid */
+        NOUSE_VCC_INTERRUPT,           /* VccReceiveInterruptNumber */
+        NOUSE_VCC_INTERRUPT,           /* VccOverwriteInterruptNumber */
+        NOUSE_VCC_EDGE_DETECTION         /* VccEdgeRequest */
+    },
+    {
+        0x0000000EU,    /* VccReceiverSpid */
+        NOUSE_VCC_INTERRUPT,           /* VccReceiveInterruptNumber */
+        NOUSE_VCC_INTERRUPT,           /* VccOverwriteInterruptNumber */
+        NOUSE_VCC_EDGE_DETECTION         /* VccEdgeRequest */
+    }
+};
 
 static EhvmConst ehvm_vcc_channel_t s_VccChannelData[VCC_NUM_OF_VCCID] = {
     /* VCCID:0 */
@@ -1073,11 +1109,23 @@ static EhvmConst ehvm_vcc_channel_t s_VccChannelData[VCC_NUM_OF_VCCID] = {
         VCC_SIZE_OF_PACKET_CH19,            /* VccPacketSize */
         VCC_NUM_OF_RING_ELEMENT_CH19,       /* VccNumOfRingElement */
         VCC_OVERWRITE_ENABLE              /* VccOverwriteConfiguration */
+    },
+    /* VCCID:20 */
+    {
+        0x00000002U,                       /* VccTransmitVMMask */
+        NOUSE_VCC_INTERRUPT,               /* VccTransmitInterruptNumber */
+        VCC_EDGE_DETECTION_DISABLE,        /* VccEdgeEnable */
+        VCC_NUM_OF_RECEIVER_CHANNEL_CH20,   /* VccNumOfReceiveVM */
+        &s_VccReceiver_CH20[0],             /* VccReceiverChannel */
+        0x00005010U,                       /* VccReceiveVMMask */
+        VCC_SIZE_OF_PACKET_CH20,            /* VccPacketSize */
+        VCC_NUM_OF_RING_ELEMENT_CH20,       /* VccNumOfRingElement */
+        VCC_OVERWRITE_ENABLE              /* VccOverwriteConfiguration */
     }
 };
 
 static EhvmConst ehvm_vcc_config_t ehvmVccConfigData = {
-    20U,                     /* VccNumOfVccId */
+    21U,                     /* VccNumOfVccId */
     &s_VccChannelData[0],   /* VccChannel */
     &ring_buffer_list[0]    /* VccRingBufferList */
 };
@@ -1273,7 +1321,10 @@ EhvmConst ehvm_cfg_tbl_cmn_t ehvm_cfg_tbl_conmon =
     VWDT_ENABLE,                /* VWdtEnable */
     &HvcmInfoData,                /* HvcmInfo */
     &UcConfigData,                /* ehvm_UcConfig */
-    6U                           /* ehvm_sch_disable_vm_switch_upper_margin */
+    6U,                          /* ehvm_sch_disable_vm_switch_upper_margin */
+    &ehvmMmCommonConfigData,      /* MmCommonConfigData */
+    &ehvm_hvm_get_lock_timeout_loop_count[0], /* ehvm_hvm_get_lock_timeout_loop_count_info */
+    EHVM_PSM_DEEPSTOP_PE_STOP_WAIT_TIMEOUT_LOOP_COUNT_INVALID       /* deep_stop_seq_core_stop_wait_timeout_loop_count */
 };
 
 #pragma ghs section rodata=default
@@ -1281,6 +1332,6 @@ EhvmConst ehvm_cfg_tbl_cmn_t ehvm_cfg_tbl_conmon =
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
 /*  Framework          :v2-1-0                                              */
-/*  BSW plug-in        :v2-0-0                                              */
+/*  BSW plug-in        :v2-2-0-z0001                                        */
 /****************************************************************************/
 

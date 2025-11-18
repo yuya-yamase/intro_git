@@ -23,6 +23,9 @@
 #include "spi_uart.h"
 #include "wdg_drv.h"
 
+/* Iohw */
+#include "iohw_diflt.h"
+
 /* Communication         */
 #include "oxcan.h"
 
@@ -175,6 +178,8 @@ void SS_Pm_postClockUpCallout(SS_BootType u4_BootSource)
 
     vd_g_SpiUartInit();
 
+    vd_g_IoHwDifltInit();
+    
     u1_t_bram_retained = (U1)FALSE;
     if(u4BootCause != ECU_INTG_u4BTCAUSE_PON){
         u1_t_bram_retained = u1_g_Rim_WkupRAMCheck();

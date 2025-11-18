@@ -18,8 +18,8 @@
 #define BSW_CANNM_CFG_NM_TYPE_CH0       (BSW_CANNM_NMTYPE_Y)
 #define BSW_CANNM_CFG_NM_TYPE_CH1       (BSW_CANNM_NMTYPE_Y)
 #define BSW_CANNM_CFG_NM_TYPE_CH2       (BSW_CANNM_NMTYPE_Y)
-#define BSW_CANNM_CFG_NM_TYPE_CH3       (BSW_CANNM_NMTYPE_Z)
-#define BSW_CANNM_CFG_NM_TYPE_CH4       (BSW_CANNM_NMTYPE_NONE)
+#define BSW_CANNM_CFG_NM_TYPE_CH3       (BSW_CANNM_NMTYPE_Y)
+#define BSW_CANNM_CFG_NM_TYPE_CH4       (BSW_CANNM_NMTYPE_Z)
 #define BSW_CANNM_CFG_NM_TYPE_CH5       (BSW_CANNM_NMTYPE_NONE)
 #define BSW_CANNM_CFG_NM_TYPE_CH6       (BSW_CANNM_NMTYPE_NONE)
 #define BSW_CANNM_CFG_NM_TYPE_CH7       (BSW_CANNM_NMTYPE_NONE)
@@ -107,7 +107,7 @@
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
-/*  Framework          :v2-0-3-z0003                                        */
+/*  Framework          :v2-1-0                                              */
 /*  BSW plug-in        :v3-0-0                                              */
 /****************************************************************************/
 

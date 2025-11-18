@@ -1,7 +1,7 @@
-/* Fee_Common.h v2-0-0                                                     */
+/* Fee_Common.h v2-1-0                                                     */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION. All rights reserved.                        */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -16,7 +16,7 @@
 /*--------------------------------------------------------------------------*/
 /* Include Files                                                            */
 /*--------------------------------------------------------------------------*/
-/* DTFEE 型定義ヘッダファイル */
+/* DTFEE type definition header file */
 #include <Mscd_Common.h>
 #include "Fee_Mpu_Const.h"
 #include "Fee_Mpu_Dev_Const.h"
@@ -33,7 +33,7 @@
 #define FEE_NUM_OF_BYTE_IN_UINT16   (2U)
 #define FEE_NUM_OF_BYTE_IN_UINT32   (4U)
 
-/* データ長 */
+/* Data length */
 #define FEE_LENGTH_00           (0U)
 #define FEE_LENGTH_02           (2U)
 #define FEE_LENGTH_04           (4U)
@@ -80,8 +80,8 @@
 
 #if (FEE_DATA_FLASH_READ_SIZE == FEE_BYTE_NUM_08)
 
-#define FEE_AREASTATUSLEN       ((uint8)16U)        /* 書き込み単位（2重化) (8 * 2)[byte] */
-#define FEE_BLOCKSTATUSLEN      ((uint8)48U)        /* (書き込み単位 * プロックステータスサイズ)（2重化） ((8 * 3 ) * 2 )[byte] */
+#define FEE_AREASTATUSLEN       ((uint8)16U)        /* Write Unit (Duplex) (8 * 2) [byte] */
+#define FEE_BLOCKSTATUSLEN      ((uint8)48U)        /* (write unit * block status size) (duplex) ((8 * 3) * 2) [byte] */
 
 #define FEE_RECORDMNGINFOLEN    (24U)                   /* The length of one record management information area. */
 #define FEE_WRITECHECKPOS       (8U)                    /* The write check position in a record. */
@@ -89,8 +89,8 @@
 
 #elif (FEE_DATA_FLASH_READ_SIZE == FEE_BYTE_NUM_16)
 
-#define FEE_AREASTATUSLEN       ((uint8)32U)        /* 読み出しバッファ単位（2重化) (16 * 2)[byte] */
-#define FEE_BLOCKSTATUSLEN      ((uint8)96U)        /* (読み出しバッファ単位 * プロックステータスサイズ)（2重化） ((16 * 3 ) * 2 )[byte] */
+#define FEE_AREASTATUSLEN       ((uint8)32U)        /* Read buffer unit (duplex) (16 * 2) [byte] */
+#define FEE_BLOCKSTATUSLEN      ((uint8)96U)        /* (read buffer unit * block status size) (duplex) ((16 * 3) * 2) [byte] */
 
 #else
 #error "This read unit size isn't supported"
@@ -135,38 +135,38 @@
 #error "The type that the value of data flash in a state of erase is not supported."
 #endif /* FEE_DATA_FLASH_BLANK_VAL_TYPE */
 
-/* ブロック番号無効値 */
+/* Block number invalid value */
 #define FEE_BLOCKNUM_INVALID        ((uint8)0xFFU)
 
 
-/* 戻り値共通定義 */
-#define FEE_STATUS_OK           ((uint32)0x00000000UL)      /* 正常 */
-#define FEE_STATUS_NG           ((uint32)0x00000001UL)      /* 異常 */
-#define FEE_STATUS_EXIT         ((uint32)0x00000002UL)      /* 継続処理不可 */
-#define FEE_STATUS_DONE         ((uint32)0x00000003UL)      /* 処理完了 */
-#define FEE_STATUS_CONT         ((uint32)0x00000004UL)      /* 継続処理可 */
-#define FEE_STATUS_BUSY         ((uint32)0x00000005UL)      /* 処理中 */
-#define FEE_STATUS_INVALID      ((uint32)0x00000006UL)      /* 無効データあり */
-#define FEE_STATUS_NODATA       ((uint32)0x00000007UL)      /* ブロック未使用/データなし */
+/* Return Common Definition */
+#define FEE_STATUS_OK           ((uint32)0x00000000UL)      /* normal */
+#define FEE_STATUS_NG           ((uint32)0x00000001UL)      /* Abnormal */
+#define FEE_STATUS_EXIT         ((uint32)0x00000002UL)      /* Uncontinuable */
+#define FEE_STATUS_DONE         ((uint32)0x00000003UL)      /* Done */
+#define FEE_STATUS_CONT         ((uint32)0x00000004UL)      /* Continuable */
+#define FEE_STATUS_BUSY         ((uint32)0x00000005UL)      /* Processing */
+#define FEE_STATUS_INVALID      ((uint32)0x00000006UL)      /* Invalid data present */
+#define FEE_STATUS_NODATA       ((uint32)0x00000007UL)      /* Block unused/no data */
 
-/* ブロックステータス種別 */
-/* 並び順には意味があるため、定義値を変更する場合には、注意すること！ */
-/* ブロックステータスデータ確定遷移先判定テーブル（Fee_FixBSJudgeTBL）に影響！ */
-/* ブロックステータス判定関数（FEE_JudgeBlockStatus）に影響 */
-#define FEE_BS_AREA         ((uint8)0x00U)      /* エリアステータス */
-#define FEE_BS_USING        ((uint8)0x01U)      /* 使用中 */
-#define FEE_BS_MOVE         ((uint8)0x02U)      /* 転送中 */
-#define FEE_BS_USED         ((uint8)0x03U)      /* 使用済 */
-#define FEE_BS_UNUSED       ((uint8)0x04U)      /* 未使用 */
-#define FEE_BS_ILLEGAL      ((uint8)0x05U)      /* 不正 */
-#define FEE_BS_MAX          ((uint8)0x06U)      /* ブロックステータス種別ガード */
-#define FEE_BS_INVALID      ((uint8)0xFFU)      /* 無効値 */
+/* Block status type */
+/* Order is meaningful, so be careful when changing definition values! */
+/* Affects block status data fixed transition destination decision table (Fee _ FixBSJudgeTBL)! */
+/* Affects the block status judgment function (FEE _ JudgeBlockStatus) */
+#define FEE_BS_AREA         ((uint8)0x00U)      /* Area Status */
+#define FEE_BS_USING        ((uint8)0x01U)      /* In use */
+#define FEE_BS_MOVE         ((uint8)0x02U)      /* Transferring */
+#define FEE_BS_USED         ((uint8)0x03U)      /* Used */
+#define FEE_BS_UNUSED       ((uint8)0x04U)      /* Not used */
+#define FEE_BS_ILLEGAL      ((uint8)0x05U)      /* Incorrect */
+#define FEE_BS_MAX          ((uint8)0x06U)      /* Block status type guard */
+#define FEE_BS_INVALID      ((uint8)0xFFU)      /* Invalid value */
 
-/* ブロックステータス確定処理種別 */
-#define FEE_BSFIXKIND_NONFIX        (0x00U)     /* 確定必要なし */
-#define FEE_BSFIXKIND_FIX1ST        (0x10U)     /* 1個目確定必要あり */
-#define FEE_BSFIXKIND_FIX2ND        (0x20U)     /* 2個目確定必要あり */
-#define FEE_BSFIXKIND_FIXALL        (0x30U)     /* 両方確定必要あり */
+/* Block status determination processing type */
+#define FEE_BSFIXKIND_NONFIX        (0x00U)     /* No firm requirement */
+#define FEE_BSFIXKIND_FIX1ST        (0x10U)     /* 1 must be confirmed */
+#define FEE_BSFIXKIND_FIX2ND        (0x20U)     /* 2nd confirmed needed */
+#define FEE_BSFIXKIND_FIXALL        (0x30U)     /* Both must be confirmed */
 
 /* write BlockStatus place */
 #define FEE_BSWRITE_NOTWRITE        (0x00U)     /* do not need to write */
@@ -174,24 +174,24 @@
 #define FEE_BSWRITE_SUB             (0x02U)     /* write sub */
 #define FEE_BSWRITE_ALL             (0x03U)     /* write both main and sub */
 
-/* ２重化データ種別 */
-#define FEE_DUPLIDATA_1ST       ((uint32)0x00000000UL)      /* 1個目のデータ */
-#define FEE_DUPLIDATA_2ND       ((uint32)0x00000001UL)      /* 2個目のデータ */
+/* Duplex data type */
+#define FEE_DUPLIDATA_1ST       ((uint32)0x00000000UL)      /* 1st data */
+#define FEE_DUPLIDATA_2ND       ((uint32)0x00000001UL)      /* 2nd data */
 
-/* ブロックステータスデータ判定結果 */
-/* 並び順には意味があるため、定義値を変更する場合には、注意すること！ */
-/* ブロックステータス判定テーブル（Fee_JudgeBSTBL）に影響！ */
-#define FEE_BSDATA_ERASE            (0x00U)     /* 消去状態 */
+/* Block status data judgment result */
+/* Order is meaningful, so be careful when changing definition values! */
+/* Affects block status judgment table (Fee _ JudgeBSTBL)! */
+#define FEE_BSDATA_ERASE            (0x00U)     /* erasure */
 #define FEE_BSDATA_VALID            (0x01U)     /* 0x55AA55AA */
-#define FEE_BSDATA_OTHER            (0x02U)     /* 上記以外 */
+#define FEE_BSDATA_OTHER            (0x02U)     /* NOT ABOVE */
 
-/* 初期化モード */
-#define FEE_INIT_ALL            ((uint8)0x00U)      /* 全エリア */
-#define FEE_INIT_ONE            ((uint8)0x01U)      /* 指定エリア */
+/* Initialization mode */
+#define FEE_INIT_ALL            ((uint8)0x00U)      /* ALL AREA */
+#define FEE_INIT_ONE            ((uint8)0x01U)      /* Designated Area */
 
-/* フラグ共通定義 */
-#define FEE_FLAG_OFF        ((uint8)0x00U)      /* フラグOFF */
-#define FEE_FLAG_ON         ((uint8)0x01U)      /* フラグON */
+/* Flag common definition */
+#define FEE_FLAG_OFF        ((uint8)0x00U)      /* Flag OFF */
+#define FEE_FLAG_ON         ((uint8)0x01U)      /* Flag ON */
 
 /* Flag value for continuity writing */
 #define FEE_CWFLG_NONE          (0x0000U)           /* Initialize value */
@@ -208,36 +208,36 @@
 #define FEE_CWOFFSET_ZERO               (0U)                                       /* Write Address Offset Zero */
 
 
-/* タイマ共通定義 */
-#define FEE_TM_INVALID  ((uint32)0xFFFFFFFFUL)      /* タイマ無効値 */
+/* Timer common definition */
+#define FEE_TM_INVALID  ((uint32)0xFFFFFFFFUL)      /* Timer disabled */
 
-/* レコード関連 */
+/* Record-related */
 #define FEE_XFLAGDAT_PHYSICAL_IMAGE           (0x66U)
 
 #define FEE_DATAAREA_REC_TAIL_OFFSET        ( FEE_DFLASH_FORMAT_XFLAG_SIZE ) /* The position of a data area record. */
 
-#define FEE_RECORD_FORMAT_OFFSET_ID           (0U)                  /* Offset from beginning of buffer record（number of bytes）： ID        */
+#define FEE_RECORD_FORMAT_OFFSET_ID           (0U)                  /*  Offset from beginning of buffer record(number of bytes): ID */
 #define FEE_RECORD_FORMAT_OFFSET_DATAADDR     (2U)                  /* Data address position */
 
 #if (FEE_ENDIAN == FEE_ENDIAN_BIG)
-#define FEE_RECORD_FORMAT_OFFSET_ID_MSBYTE          (0U)    /* Offset from beginning of buffer record（number of bytes）： ID most significant byte */
-#define FEE_RECORD_FORMAT_OFFSET_ID_LSBYTE          (1U)    /* Offset from beginning of buffer record（number of bytes）： ID least significant byte */
-#define FEE_RECORD_FORMAT_OFFSET_DATAADDR_MSBYTE    (2U)    /* Offset from beginning of buffer record（number of bytes）： DATA ADDR most significant byte */
-#define FEE_RECORD_FORMAT_OFFSET_DATAADDR_LSBYTE    (3U)    /* Offset from beginning of buffer record（number of bytes）： DATA ADDR least significant byte */
-#define FEE_RECORD_FORMAT_OFFSET_CS_MSBYTE_INDEX_0  (FEE_DFLASH_ONE_TIME_WRITE_SIZE - FEE_RECORD_SIZE_CHECKSUM)              /* Offset from beginning of buffer record（number of bytes）： CS 1st byte */
-#define FEE_RECORD_FORMAT_OFFSET_CS_MSBYTE_INDEX_1  ( ( FEE_DFLASH_ONE_TIME_WRITE_SIZE - FEE_RECORD_SIZE_CHECKSUM ) + 1U)    /* Offset from beginning of buffer record（number of bytes）： CS 2nd byte */
-#define FEE_RECORD_FORMAT_OFFSET_CS_MSBYTE_INDEX_2  ( ( FEE_DFLASH_ONE_TIME_WRITE_SIZE - FEE_RECORD_SIZE_CHECKSUM ) + 2U)    /* Offset from beginning of buffer record（number of bytes）： CS 3rd byte */
-#define FEE_RECORD_FORMAT_OFFSET_CS_MSBYTE_INDEX_3  ( ( FEE_DFLASH_ONE_TIME_WRITE_SIZE - FEE_RECORD_SIZE_CHECKSUM ) + 3U)    /* Offset from beginning of buffer record（number of bytes）： CS 4th byte */
+#define FEE_RECORD_FORMAT_OFFSET_ID_MSBYTE          (0U)    /*  Offset from beginning of buffer record(number of bytes): ID most significant byte */
+#define FEE_RECORD_FORMAT_OFFSET_ID_LSBYTE          (1U)    /*  Offset from beginning of buffer record(number of bytes): ID least significant byte */
+#define FEE_RECORD_FORMAT_OFFSET_DATAADDR_MSBYTE    (2U)    /*  Offset from beginning of buffer record(number of bytes): DATA ADDR most significant byte */
+#define FEE_RECORD_FORMAT_OFFSET_DATAADDR_LSBYTE    (3U)    /*  Offset from beginning of buffer record(number of bytes): DATA ADDR least significant byte */
+#define FEE_RECORD_FORMAT_OFFSET_CS_MSBYTE_INDEX_0  (FEE_DFLASH_ONE_TIME_WRITE_SIZE - FEE_RECORD_SIZE_CHECKSUM)              /*  Offset from beginning of buffer record(number of bytes): CS 1st byte */
+#define FEE_RECORD_FORMAT_OFFSET_CS_MSBYTE_INDEX_1  ( ( FEE_DFLASH_ONE_TIME_WRITE_SIZE - FEE_RECORD_SIZE_CHECKSUM ) + 1U)    /*  Offset from beginning of buffer record(number of bytes): CS 2nd byte */
+#define FEE_RECORD_FORMAT_OFFSET_CS_MSBYTE_INDEX_2  ( ( FEE_DFLASH_ONE_TIME_WRITE_SIZE - FEE_RECORD_SIZE_CHECKSUM ) + 2U)    /*  Offset from beginning of buffer record(number of bytes): CS 3rd byte */
+#define FEE_RECORD_FORMAT_OFFSET_CS_MSBYTE_INDEX_3  ( ( FEE_DFLASH_ONE_TIME_WRITE_SIZE - FEE_RECORD_SIZE_CHECKSUM ) + 3U)    /*  Offset from beginning of buffer record(number of bytes): CS 4th byte */
 
 #elif (FEE_ENDIAN == FEE_ENDIAN_LITTLE)
-#define FEE_RECORD_FORMAT_OFFSET_ID_MSBYTE          (1U)    /* Offset from beginning of buffer record（number of bytes）： ID most significant byte */
-#define FEE_RECORD_FORMAT_OFFSET_ID_LSBYTE          (0U)    /* Offset from beginning of buffer record（number of bytes）： ID least significant byte */
-#define FEE_RECORD_FORMAT_OFFSET_DATAADDR_MSBYTE    (3U)    /* Offset from beginning of buffer record（number of bytes）： DATA ADDR most significant byte */
-#define FEE_RECORD_FORMAT_OFFSET_DATAADDR_LSBYTE    (2U)    /* Offset from beginning of buffer record（number of bytes）： DATA ADDR least significant byte */
-#define FEE_RECORD_FORMAT_OFFSET_CS_MSBYTE_INDEX_0  ( ( FEE_DFLASH_ONE_TIME_WRITE_SIZE - FEE_RECORD_SIZE_CHECKSUM ) + 3U)    /* Offset from beginning of buffer record（number of bytes）： CS 1st byte */
-#define FEE_RECORD_FORMAT_OFFSET_CS_MSBYTE_INDEX_1  ( ( FEE_DFLASH_ONE_TIME_WRITE_SIZE - FEE_RECORD_SIZE_CHECKSUM ) + 2U)    /* Offset from beginning of buffer record（number of bytes）： CS 2nd byte */
-#define FEE_RECORD_FORMAT_OFFSET_CS_MSBYTE_INDEX_2  ( ( FEE_DFLASH_ONE_TIME_WRITE_SIZE - FEE_RECORD_SIZE_CHECKSUM ) + 1U)    /* Offset from beginning of buffer record（number of bytes）： CS 3rd byte */
-#define FEE_RECORD_FORMAT_OFFSET_CS_MSBYTE_INDEX_3  (FEE_DFLASH_ONE_TIME_WRITE_SIZE - FEE_RECORD_SIZE_CHECKSUM)              /* Offset from beginning of buffer record（number of bytes）： CS 4th byte */
+#define FEE_RECORD_FORMAT_OFFSET_ID_MSBYTE          (1U)    /*  Offset from beginning of buffer record(number of bytes): ID most significant byte */
+#define FEE_RECORD_FORMAT_OFFSET_ID_LSBYTE          (0U)    /*  Offset from beginning of buffer record(number of bytes): ID least significant byte */
+#define FEE_RECORD_FORMAT_OFFSET_DATAADDR_MSBYTE    (3U)    /*  Offset from beginning of buffer record(number of bytes): DATA ADDR most significant byte */
+#define FEE_RECORD_FORMAT_OFFSET_DATAADDR_LSBYTE    (2U)    /*  Offset from beginning of buffer record(number of bytes): DATA ADDR least significant byte */
+#define FEE_RECORD_FORMAT_OFFSET_CS_MSBYTE_INDEX_0  ( ( FEE_DFLASH_ONE_TIME_WRITE_SIZE - FEE_RECORD_SIZE_CHECKSUM ) + 3U)    /*  Offset from beginning of buffer record(number of bytes): CS 1st byte */
+#define FEE_RECORD_FORMAT_OFFSET_CS_MSBYTE_INDEX_1  ( ( FEE_DFLASH_ONE_TIME_WRITE_SIZE - FEE_RECORD_SIZE_CHECKSUM ) + 2U)    /*  Offset from beginning of buffer record(number of bytes): CS 2nd byte */
+#define FEE_RECORD_FORMAT_OFFSET_CS_MSBYTE_INDEX_2  ( ( FEE_DFLASH_ONE_TIME_WRITE_SIZE - FEE_RECORD_SIZE_CHECKSUM ) + 1U)    /*  Offset from beginning of buffer record(number of bytes): CS 3rd byte */
+#define FEE_RECORD_FORMAT_OFFSET_CS_MSBYTE_INDEX_3  (FEE_DFLASH_ONE_TIME_WRITE_SIZE - FEE_RECORD_SIZE_CHECKSUM)              /*  Offset from beginning of buffer record(number of bytes): CS 4th byte */
 
 #else
 /*"This endian isn't supported"*/
@@ -252,89 +252,89 @@
 
 #define FEE_CHECKSUM_UNLOCK_VAL             (0xC0000000U)
 
-/* 共通 */
+/* Common */
 #define FEE_BIT0                    ((uint32)0x00000001U)           /* BIT0 */
-#define FEE_UPPER4BIT               (0xF0U)                 /* 上位4bitマスク */
-#define FEE_LOWER4BIT               (0x0FU)                 /* 下位4bitマスク */
+#define FEE_UPPER4BIT               (0xF0U)                 /* Top 4 bit mask */
+#define FEE_LOWER4BIT               (0x0FU)                 /* Lower 4-bit mask */
 
-/* アドレス無効値 */
+/* ADDRESS INVALID */
 #define FEE_ADDRESS_INVALID     ((uint32)0xFFFFFFFFU)
 
-/* 動作状態 */
-#define FEE_STATUSIDLE                  ((uint8)0x00U)      /* アイドル */
-#define FEE_STATUSWRITE                 ((uint8)0x01U)      /* 書込み中 */
-#define FEE_STATUSMOVE                  ((uint8)0x02U)      /* データ再編中 */
-#define FEE_STATUSIDREAD                ((uint8)0x03U)      /* ID指定読出し中 */
-#define FEE_STATUSMAX                   ((uint8)0x04U)      /* 状態ガード */
+/* Operational status */
+#define FEE_STATUSIDLE                  ((uint8)0x00U)      /* Idle */
+#define FEE_STATUSWRITE                 ((uint8)0x01U)      /* Writing */
+#define FEE_STATUSMOVE                  ((uint8)0x02U)      /* Data Restructuring */
+#define FEE_STATUSIDREAD                ((uint8)0x03U)      /* Reading by ID */
+#define FEE_STATUSMAX                   ((uint8)0x04U)      /* State Guard */
 
-/* メイン状態 */
-#define FEE_MSTATUSWBIDLE               ((uint8)0x10U)      /* 書込み中－アイドル */
-#define FEE_MSTATUSWBSEL                ((uint8)0x11U)      /* 書込み中－ブロック選択中 */
-#define FEE_MSTATUSWBMOVE               ((uint8)0x12U)      /* 書込み中－データ転送中 */
-#define FEE_MSTATUSWBWRITE              ((uint8)0x13U)      /* 書込み中－レコード書込み中 */
-#define FEE_MSTATUSRIDLE                ((uint8)0x30U)      /* ID指定読出し中－アイドル */
-#define FEE_MSTATUSRBSRCH               ((uint8)0x31U)      /* ID指定読出し中－空き領域検索中 */
-#define FEE_MSTATUSRPREPISRCH           ((uint8)0x32U)      /* ID指定読出し中－ID指定データ読出し準備中 */
-#define FEE_MSTATUSRISRCH               ((uint8)0x33U)      /* ID指定読出し中－ID指定データ読出し中 */
-#define FEE_MSTATUSINVALID              ((uint8)0xFFU)      /* 無効値 */
+/* MAIN STATE */
+#define FEE_MSTATUSWBIDLE               ((uint8)0x10U)      /* Writing - Idle */
+#define FEE_MSTATUSWBSEL                ((uint8)0x11U)      /* Writing - Block selected */
+#define FEE_MSTATUSWBMOVE               ((uint8)0x12U)      /* Writing - Data transfer */
+#define FEE_MSTATUSWBWRITE              ((uint8)0x13U)      /* WRITING - WRITING RECORD */
+#define FEE_MSTATUSRIDLE                ((uint8)0x30U)      /* Reading by ID - Idle */
+#define FEE_MSTATUSRBSRCH               ((uint8)0x31U)      /* Reading by ID - Searching for free space */
+#define FEE_MSTATUSRPREPISRCH           ((uint8)0x32U)      /* Reading by ID - Preparing to read by ID */
+#define FEE_MSTATUSRISRCH               ((uint8)0x33U)      /* Reading specified ID - Reading specified ID data */
+#define FEE_MSTATUSINVALID              ((uint8)0xFFU)      /* Invalid value */
 
-/* サブ状態 */
-#define FEE_SSTATUSWSIDLE               ((uint8)0x10U)      /* ブロック選択中－アイドル(未使用) */
-#define FEE_SSTATUSWSFIX                ((uint8)0x11U)      /* ブロック選択中－ブロックステータスデータ確定中 */
-#define FEE_SSTATUSWSUSG                ((uint8)0x12U)      /* ブロック選択中－使用中ブロック作成中 */
-#define FEE_SSTATUSWSMOV                ((uint8)0x13U)      /* ブロック選択中－転送中ブロック作成中 */
-#define FEE_SSTATUSWSWEMOV              ((uint8)0x14U)      /* ブロック選択中－再編終了設定中 */
-#define FEE_SSTATUSWSALLU               ((uint8)0x15U)      /* ブロック選択中－エリア無効・使用済設定中 */
-#define FEE_SSTATUSWSFAIL               ((uint8)0x16U)      /* ブロック選択中－使用済・故障設定中 */
-#define FEE_SSTATUSWMIDLE               ((uint8)0x20U)      /* データ転送中－アイドル */
-#define FEE_SSTATUSWMSRCHMPS            ((uint8)0x21U)      /* データ転送中－転送元最終データ位置検索中 */
-#define FEE_SSTATUSWMPREPSRCHMDT        ((uint8)0x22U)      /* データ転送中－転送元データ検索準備中 */
-#define FEE_SSTATUSWMSRCHMDT            ((uint8)0x23U)      /* データ転送中－転送元データ検索中 */
-#define FEE_SSTATUSWMPREPSRCHSDT        ((uint8)0x24U)      /* データ転送中－転送先データ検索準備中 */
-#define FEE_SSTATUSWMSRCHSDT            ((uint8)0x25U)      /* データ転送中－転送先データ検索中 */
-#define FEE_SSTATUSWMWRITE              ((uint8)0x26U)      /* データ転送中－データ書き込み中 */
-#define FEE_SSTATUSWWIDLE               ((uint8)0x30U)      /* レコード書込み中－アイドル */
-#define FEE_SSTATUSWWSRCHPOSMNG         ((uint8)0x31U)      /* レコード書込み中－書込みレコード位置(管理情報)検索中 */
-#define FEE_SSTATUSWWSTARTSRCHPOSDAT    ((uint8)0x32U)      /* レコード書込み中－書込みレコード位置(データ)検索開始 */
-#define FEE_SSTATUSWWSRCHPOSDAT         ((uint8)0x33U)      /* レコード書込み中－書込みレコード位置(データ)検索中 */
-#define FEE_SSTATUSWWPREPSRCHOLD        ((uint8)0x34U)      /* レコード書込み中－旧データ検索準備中 */
-#define FEE_SSTATUSWWSRCHOLD            ((uint8)0x35U)      /* レコード書込み中－旧データ検索中 */
-#define FEE_SSTATUSWWWRITE              ((uint8)0x36U)      /* レコード書込み中－データ書き込み中 */
-#define FEE_SSTATUSINVALID              ((uint8)0xFFU)      /* 無効値 */
+/* Substate */
+#define FEE_SSTATUSWSIDLE               ((uint8)0x10U)      /* Block selected - idle (unused) */
+#define FEE_SSTATUSWSFIX                ((uint8)0x11U)      /* Selecting block - finalizing block status data */
+#define FEE_SSTATUSWSUSG                ((uint8)0x12U)      /* Blocks selected - Blocks in use are being created*/
+#define FEE_SSTATUSWSMOV                ((uint8)0x13U)      /* BLOCK SELECTING - IN TRANSFER BLOCK CREATING */
+#define FEE_SSTATUSWSWEMOV              ((uint8)0x14U)      /* BLOCK SELECTING - RESTRUCTION ENDING SETTING */
+#define FEE_SSTATUSWSALLU               ((uint8)0x15U)      /* Block Selection - Area Disabled/Used Setting */
+#define FEE_SSTATUSWSFAIL               ((uint8)0x16U)      /* BLOCK SELECTED - USED/FAILURE SETTING */
+#define FEE_SSTATUSWMIDLE               ((uint8)0x20U)      /* Data transfer in progress - idle */
+#define FEE_SSTATUSWMSRCHMPS            ((uint8)0x21U)      /* Data transfer in progress - Searching for last source data location */
+#define FEE_SSTATUSWMPREPSRCHMDT        ((uint8)0x22U)      /* Data transfer in progress - preparing to retrieve source data */
+#define FEE_SSTATUSWMSRCHMDT            ((uint8)0x23U)      /* Data transfer in progress - Retrieving source data */
+#define FEE_SSTATUSWMPREPSRCHSDT        ((uint8)0x24U)      /* Data transfer in progress - Preparing to retrieve destination data */
+#define FEE_SSTATUSWMSRCHSDT            ((uint8)0x25U)      /* Data transfer in progress - Retrieving destination data */
+#define FEE_SSTATUSWMWRITE              ((uint8)0x26U)      /* Transferring data - Writing data */
+#define FEE_SSTATUSWWIDLE               ((uint8)0x30U)      /* Writing record - Idle */
+#define FEE_SSTATUSWWSRCHPOSMNG         ((uint8)0x31U)      /* WRITING RECORD - SEARCHING WRITING RECORD LOCATION (MANAGEMENT INFORMATION) */
+#define FEE_SSTATUSWWSTARTSRCHPOSDAT    ((uint8)0x32U)      /* WRITING RECORD - START SEARCH FOR WRITING RECORD POSITION (DATA) */
+#define FEE_SSTATUSWWSRCHPOSDAT         ((uint8)0x33U)      /* WRITING RECORD - SEARCHING WRITING RECORD LOCATION (DATA) */
+#define FEE_SSTATUSWWPREPSRCHOLD        ((uint8)0x34U)      /* Writing record - preparing to retrieve old data */
+#define FEE_SSTATUSWWSRCHOLD            ((uint8)0x35U)      /* WRITING RECORD - SEARCHING OLD DATA */
+#define FEE_SSTATUSWWWRITE              ((uint8)0x36U)      /* WRITING RECORD - WRITING DATA */
+#define FEE_SSTATUSINVALID              ((uint8)0xFFU)      /* Invalid value */
 
-/* サブサブ状態 */
-#define FEE_SSSTATUSWSUIDLE             ((uint8)0x20U)      /* 使用中ブロック作成中－アイドル(未使用) */
-#define FEE_SSSTATUSWSUWERSG            ((uint8)0x21U)      /* 使用中ブロック作成中－消去待ち */
-#define FEE_SSSTATUSWSUWUSG             ((uint8)0x22U)      /* 使用中ブロック作成中－使用中設定待ち */
-#define FEE_SSSTATUSWSUERSG             ((uint8)0x23U)      /* 使用中ブロック作成中－消去中 */
-#define FEE_SSSTATUSWSUUSG              ((uint8)0x24U)      /* 使用中ブロック作成中－使用中設定中 */
-#define FEE_SSSTATUSWSMIDLE             ((uint8)0x30U)      /* 転送中ブロック作成中－アイドル(未使用) */
-#define FEE_SSSTATUSWSMWMOVE            ((uint8)0x31U)      /* 転送中ブロック作成中－転送中設定待ち */
-#define FEE_SSSTATUSWSMWUSD             ((uint8)0x32U)      /* 転送中ブロック作成中－使用済設定待ち */
-#define FEE_SSSTATUSWSMWERSG            ((uint8)0x33U)      /* 転送中ブロック作成中－消去待ち */
-#define FEE_SSSTATUSWSMMOVE             ((uint8)0x34U)      /* 転送中ブロック作成中－転送中設定中 */
-#define FEE_SSSTATUSWSMUSD              ((uint8)0x35U)      /* 転送中ブロック作成中－使用済設定中 */
-#define FEE_SSSTATUSWSMERSG             ((uint8)0x36U)      /* 転送中ブロック作成中－消去中 */
-#define FEE_SSSTATUSWSEIDLE             ((uint8)0x40U)      /* 再編終了設定中－アイドル */
-#define FEE_SSSTATUSWSEUSG              ((uint8)0x41U)      /* 再編終了設定中－使用中設定中 */
-#define FEE_SSSTATUSWSEUSD              ((uint8)0x42U)      /* 再編終了設定中－使用済設定中 */
-#define FEE_SSSTATUSWSAIDLE             ((uint8)0x50U)      /* エリア無効・使用済設定中－アイドル */
-#define FEE_SSSTATUSWSASET              ((uint8)0x51U)      /* エリア無効・使用済設定中－設定中 */
-#define FEE_SSSTATUSWSFIDLE             ((uint8)0x60U)      /* 使用済・故障設定中－アイドル(未使用) */
-#define FEE_SSSTATUSWSFWMUSD            ((uint8)0x61U)      /* 使用済・故障設定中－メインブロック使用済設定待ち */
-#define FEE_SSSTATUSWSFWSUSD            ((uint8)0x62U)      /* 使用済・故障設定中－サブブロック使用済設定待ち */
-#define FEE_SSSTATUSWSFWMF              ((uint8)0x63U)      /* 使用済・故障設定中－メインブロック故障設定待ち */
-#define FEE_SSSTATUSWSFWSF              ((uint8)0x64U)      /* 使用済・故障設定中－サブブロック故障設定待ち */
-#define FEE_SSSTATUSWSFSET              ((uint8)0x65U)      /* 使用済・故障設定中－設定中 */
+/* Subsubstate */
+#define FEE_SSSTATUSWSUIDLE             ((uint8)0x20U)      /* Blocking in use - idle (unused) */
+#define FEE_SSSTATUSWSUWERSG            ((uint8)0x21U)      /* Creating block in use - Waiting to be erased */
+#define FEE_SSSTATUSWSUWUSG             ((uint8)0x22U)      /* Creating block in use - Waiting for setting in use */
+#define FEE_SSSTATUSWSUERSG             ((uint8)0x23U)      /* Creating blocks in use - erasing */
+#define FEE_SSSTATUSWSUUSG              ((uint8)0x24U)      /* In use block creation - In use setting */
+#define FEE_SSSTATUSWSMIDLE             ((uint8)0x30U)      /* Blocking in transit - idle (unused) */
+#define FEE_SSSTATUSWSMWMOVE            ((uint8)0x31U)      /* Creating transfer block - Waiting for transfer settings */
+#define FEE_SSSTATUSWSMWUSD             ((uint8)0x32U)      /* Blocking in transit - Waiting for used settings */
+#define FEE_SSSTATUSWSMWERSG            ((uint8)0x33U)      /* Creating block in transit - waiting for erase */
+#define FEE_SSSTATUSWSMMOVE             ((uint8)0x34U)      /* Creating block in transit - Setting in transit */
+#define FEE_SSSTATUSWSMUSD              ((uint8)0x35U)      /* Transferring block creating - used setting */
+#define FEE_SSSTATUSWSMERSG             ((uint8)0x36U)      /* Blocking in transit - erasing */
+#define FEE_SSSTATUSWSEIDLE             ((uint8)0x40U)      /* Reorg end setting - Idle */
+#define FEE_SSSTATUSWSEUSG              ((uint8)0x41U)      /* Reorg end set - In use set */
+#define FEE_SSSTATUSWSEUSD              ((uint8)0x42U)      /* Reorg end setting - Used setting */
+#define FEE_SSSTATUSWSAIDLE             ((uint8)0x50U)      /* Area Disabled/Used Setting - Idle */
+#define FEE_SSSTATUSWSASET              ((uint8)0x51U)      /* Area Disabled/Used Setting - Setting */
+#define FEE_SSSTATUSWSFIDLE             ((uint8)0x60U)      /* Used/Fault Setting - Idle (unused) */
+#define FEE_SSSTATUSWSFWMUSD            ((uint8)0x61U)      /* Used/Fault Setting - Main Block Waiting for Used Setting */
+#define FEE_SSSTATUSWSFWSUSD            ((uint8)0x62U)      /* Used/Fault Setting - Subblock Waiting for Used Setting */
+#define FEE_SSSTATUSWSFWMF              ((uint8)0x63U)      /* USED/FAILURE SETTING - MAIN BLOCK FAILURE SETTING WAITING */
+#define FEE_SSSTATUSWSFWSF              ((uint8)0x64U)      /* Used/Fault Setting - Subblock Fault Setting Waiting */
+#define FEE_SSSTATUSWSFSET              ((uint8)0x65U)      /* Used/Fault Setting - Setting */
 
-#define FEE_SSSTATUSINVALID     ((uint8)0xFFU)      /* 無効値 */
+#define FEE_SSSTATUSINVALID     ((uint8)0xFFU)      /* Invalid value */
 
-/* バッファ初期化用データ */
+/* Data for buffer initialization */
 #define FEE_INIDAT_UINT8                ((uint8)FEE_DATA_FLASH_BLANK_VAL_UINT1)
 #define FEE_INIDAT_UINT32               ((uint32)FEE_DATA_FLASH_BLANK_VAL_UINT4)
 #define FEE_INIDAT_UINT16               ((uint16)FEE_DATA_FLASH_BLANK_VAL_UINT2)
 
-/* WC 書き込みデータ */
+/* WC write data */
 #if (FEE_ENDIAN == FEE_ENDIAN_BIG)
 #define FEE_WCDAT_PHYSICAL_IMAGE_UPPER  ((uint8)0xAAU)
 #define FEE_WCDAT_PHYSICAL_IMAGE_LOWER  ((uint8)0xAAU)
@@ -347,7 +347,7 @@
 /*"This endian isn't supported"*/
 #endif
 
-/* DATA-STATUS書き込みデータ */
+/* DATA-STATUS write data */
 #if (FEE_ENDIAN == FEE_ENDIAN_BIG)
 #define FEE_DSDAT_PHYSICAL_IMAGE_UPPER  ((uint8)FEE_DATA_FLASH_DS_VAL_UINT1_UPPER)
 #define FEE_DSDAT_PHYSICAL_IMAGE_LOWER  ((uint8)FEE_DATA_FLASH_DS_VAL_UINT1_LOWER)
@@ -360,7 +360,7 @@
 /*"This endian isn't supported"*/
 #endif
 
-/* BS初期ステータスデータ */
+/* BS initial status data */
 #if (FEE_ENDIAN == FEE_ENDIAN_BIG)
 #define FEE_BSDAT_PHYSICAL_IMAGE_UPPER  ((uint8)0x55U)
 #define FEE_BSDAT_PHYSICAL_IMAGE_LOWER  ((uint8)0xAAU)
@@ -379,11 +379,11 @@
 #define FEE_DFLASH_FORMAT_XFLAG_MAX_SIZE       (8U)
 
 
-#define FEE_AREANUM_INVALID (0xFFU)         /* エリア番号無効値 */
+#define FEE_AREANUM_INVALID (0xFFU)         /* Area number invalid value */
 
-#define FEE_SRCH_REMAIN_COUNT_ZERO  (0)     /* 検索処理可能回数0 */
+#define FEE_SRCH_REMAIN_COUNT_ZERO  (0)     /* 0 searchable */
 
-/* 配列インデックス番号 */
+/* array-index-number */
 #define FEE_ARRAY_INDEX_00  (0U)
 #define FEE_ARRAY_INDEX_01  (1U)
 
@@ -418,16 +418,16 @@
 /*--------------------------------------------------------------------------*/
 /* Types                                                                    */
 /*--------------------------------------------------------------------------*/
-/* データFlash制御管理データ構造体 */
+/* Data Flash Control Management Data Structure */
 typedef struct {
-    uint8   u1MngDFCStatus;                     /* データFlash制御状態 */
-    uint8   u1CWriteIndex;                      /* 連続書込み用バッファのインデックス */
-    uint8   u1CWriteNum;                        /* 連続書込みデータ数 */
+    uint8   u1MngDFCStatus;                     /* Data Flash Control State */
+    uint8   u1CWriteIndex;                      /* Index of buffer for continuous write */
+    uint8   u1CWriteNum;                        /* Number of consecutive write data */
     uint8   u1RetryFlag;                        /* Flag for retrying to write */
     uint16  u2CWriteDataLength[FEE_CWRITE_MAX]; /* WriteData Length */
     uint16  u2CWriteAddrOffset[FEE_CWRITE_MAX]; /* WriteAddr Offset */
-    uint16  u2CWriteFlag[FEE_CWRITE_MAX];       /* 連続書込み用フラグ */
-    uint32  u4CWriteAddrBuf[FEE_CWRITE_MAX];    /* 連続書込み用アドレスバッファ */
+    uint16  u2CWriteFlag[FEE_CWRITE_MAX];       /* Flags for continuous writing */
+    uint32  u4CWriteAddrBuf[FEE_CWRITE_MAX];    /* ADDRESS BUFFER FOR CONTINUOUS WRITE */
     P2CONST( uint8, AUTOMATIC, TYPEDEF ) ptu1CWriteDataAddr[FEE_CWRITE_MAX];
 } Fee_MngDfcInfType;
 
@@ -438,16 +438,16 @@ typedef struct {
 #define FEE_START_SEC_CODE
 #include <Fee_MemMap.h>
 
-/* 応答Hook呼び出し共通処理 */
+/* RESPONSE HOOK CALL COMMON PROCESSING */
 FUNC(void, FEE_CODE) Fee_RspHook( P2VAR(Fee_CpuDtfType, AUTOMATIC, TYPEDEF) ptstCPUDTFInfo);
 
-/* データ書込み状態管理（ブロック管理機能あり） */
+/* Data write status management with block management */
 FUNC(uint32, FEE_CODE) Fee_BWriteMain( P2VAR(Fee_CpuDtfType, AUTOMATIC, TYPEDEF) ptstCPUDTFInfo );
 
-/* ID指定データ読出し状態管理 */
+/* ID-specified data read status management */
 FUNC(uint32, FEE_CODE) Fee_ReadMain( P2VAR(Fee_CpuDtfType, AUTOMATIC, TYPEDEF) ptstCPUDTFInfo );
 
-/* データ転送状態管理 */
+/* Data transfer state management */
 FUNC(uint32, FEE_CODE) Fee_MoveData( P2VAR(Fee_CpuDtfType, AUTOMATIC, TYPEDEF) ptstCPUDTFInfo );
 
 FUNC( void, FEE_CODE )
@@ -468,13 +468,13 @@ Fee_Driver_AsyncAbort( void );
 FUNC( boolean, FEE_CODE )
 Fee_Driver_IsWaitingForCancel( void );
 
-/* データFlash定期処理実行命令 */
-FUNC(void, FEE_CODE) Fee_ExecPeriodic( P2VAR(Fee_CpuDtfType, AUTOMATIC, TYPEDEF) ptstCPUDTFInfo );
+/* Data Flash periodic processing execution instruction */
+FUNC(void, FEE_CODE) Fee_ExecPeriodic( P2VAR(Fee_CpuDtfType, AUTOMATIC, TYPEDEF) ptstCPUDTFInfo , uint8 u1_callmode );
 
-/* 使用エリア選択 */
+/* Select area to use */
 FUNC(void, FEE_CODE) Fee_SelectUseArea( P2VAR(Fee_CpuDtfType, AUTOMATIC, TYPEDEF) ptstCPUDTFInfo );
 
-/* 書込みブロック選択状態管理 */
+/* Write block selection state management */
 FUNC(uint32, FEE_CODE) Fee_SelectWriteBlock( P2VAR(Fee_CpuDtfType, AUTOMATIC, TYPEDEF) ptstCPUDTFInfo );
 
 FUNC(void, FEE_CODE) Fee_WriteBlockStatus(
@@ -483,10 +483,10 @@ FUNC(void, FEE_CODE) Fee_WriteBlockStatus(
     uint8 u1WritePlace
 );
 
-/* 読出しブロック選択 */
+/* Read block selection */
 FUNC(uint32, FEE_CODE) Fee_SelectReadBlock( P2VAR(Fee_CpuDtfType, AUTOMATIC, TYPEDEF) ptstCPUDTFInfo );
 
-/* 使用中ブロックデータ初期化 */
+/* Initializing block data in use */
 FUNC(void, FEE_CODE) Fee_ClrUseBlockInfo( void );
 
 FUNC( Std_ReturnType, FEE_CODE )
@@ -512,10 +512,10 @@ Fee_Record_CheckRAM( void );
 FUNC( void, FEE_CODE )
 Fee_Record_SetRAMSub( void );
 
-/* 空き領域検索 */
+/* Find Free Space */
 FUNC(uint32, FEE_CODE) Fee_SrchFreeSpace( P2VAR(Fee_CpuDtfType, AUTOMATIC, TYPEDEF) ptstCPUDTFInfo );
 
-/* レコード書込み状態管理 */
+/* Record write status management */
 FUNC(uint32, FEE_CODE) Fee_WriteRecord( P2VAR(Fee_CpuDtfType, AUTOMATIC, TYPEDEF) ptstCPUDTFInfo );
 
 FUNC( boolean, FEE_CODE )
@@ -568,41 +568,41 @@ Fee_MngDfc_CheckRAM( void );
 FUNC( void, FEE_CODE )
 Fee_MngDfc_SetRAMSub( void );
 
-/* 定期処理用データFlash制御管理 */
-FUNC(uint32, FEE_CODE) Fee_MngDfcForPrd( void );
+/* Data Flash Control Management for Periodic Processing */
+FUNC(uint32, FEE_CODE) Fee_MngDfcForPrd( uint8 u1_callmode );
 
-/* 連続書込み用バッファ追加処理 */
+/* ADD BUFFER FOR CONTINUOUS WRITE */
 FUNC(void, FEE_CODE) Fee_AddCWriteBuf( uint32 u4Address, P2CONST(uint8, AUTOMATIC, TYPEDEF) ptu1Src, uint16 u2Length, uint16 u2OffSet, uint16 u2Flg );
 
-/* 連続書込み開始処理 */
+/* Continuous write start processing */
 FUNC(void, FEE_CODE) Fee_StartCWrite( void );
 
 
-/* 消去開始処理 */
+/* Initiate erase */
 FUNC(void, FEE_CODE) Fee_StartErase( uint8 u1BlockNo );
 
-/* ブランクチェック開始処理 */
+/* Start blank check */
 FUNC(void, FEE_CODE) Fee_StartBlankCheck( uint32 u4StartTailAddress, uint32 u4EndTopAddress );
 
-/* 連続書込み用バッファ初期化処理 */
+/* Buffer Initialization for Continuous Writing */
 FUNC(void, FEE_CODE) Fee_ClearCWriteBuf( void );
 
-/* データFlash制御結果取得処理 */
+/* Data Flash control result acquisition processing */
 FUNC(uint32, FEE_CODE) Fee_GetMngDfcResult( P2VAR(uint32, AUTOMATIC, TYPEDEF) ptu4Address );
 
-/* MHA[データFlash]管理データ初期化 */
+/* Initialize MHA management data */
 FUNC(void, FEE_CODE) Fee_InitCpuDtfData( P2VAR(Fee_CpuDtfType, AUTOMATIC, TYPEDEF) ptstCPUDTFInfo );
 
-/* データセット処理 */
+/* Dataset processing */
 FUNC(void, FEE_CODE) Fee_Lib_SetMemory( P2VAR(uint8, AUTOMATIC, TYPEDEF) DstPtr, uint8 Constant, uint32 Length );
 
-/* 最終書込みレコード位置読出し処理 */
+/* Final write record position read processing */
 FUNC(uint32, FEE_CODE) Fee_RefLastWritePos( P2VAR(Fee_CpuDtfType, AUTOMATIC, TYPEDEF) ptstCPUDTFInfo );
 
-/* 最終書込みレコード位置保存処理 */
+/* Final write record position preservation */
 FUNC(uint32, FEE_CODE) Fee_SetLastWritePos( P2CONST(Fee_CpuDtfType, AUTOMATIC, TYPEDEF) ptstCPUDTFInfo );
 
-/* 最終書込みレコード位置初期化 */
+/* Initialize last write record position */
 FUNC(void, FEE_CODE) Fee_InitLastWritePos( uint8 u1AreaNum, uint8 u1Mode );
 
 #define FEE_STOP_SEC_CODE
@@ -636,6 +636,7 @@ extern CONST(uint8, FEE_CONST) Fee_FixXFlagData[FEE_DFLASH_FORMAT_XFLAG_MAX_SIZE
 /*  1-0-0          :2019/02/01                                              */
 /*  1-1-0          :2019/10/09                                              */
 /*  2-0-0          :2022/08/24                                              */
+/*  2-1-0          :2024/07/19                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

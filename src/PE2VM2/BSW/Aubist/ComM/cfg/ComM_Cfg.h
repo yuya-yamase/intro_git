@@ -127,7 +127,7 @@
 #define BSW_COMM_CFG_PNC_IF_TYPE            (BSW_COMM_PNC_IF_TYPE_AR_COMPLIANCE)
 
 /* Number Of PNC */
-#define BSW_COMM_CFG_CH_PNCNUM_0            (4U)
+#define BSW_COMM_CFG_CH_PNCNUM_0            (5U)
 #define BSW_COMM_CFG_CH_PNCNUM_1            (0U)
 #define BSW_COMM_CFG_CH_PNCNUM_2            (0U)
 #define BSW_COMM_CFG_CH_PNCNUM_3            (0U)
@@ -195,7 +195,7 @@
 #define BSW_COMM_CFG_PNC_RESETTIME_31       (0U)
 
 /* Communication Activated Factor From PNC */
-#define BSW_COMM_CFG_PNC_PER_CH_0UP         (BSW_COMM_PNCAWAKE_40|BSW_COMM_PNCAWAKE_43|BSW_COMM_PNCAWAKE_44)
+#define BSW_COMM_CFG_PNC_PER_CH_0UP         (BSW_COMM_PNCAWAKE_40|BSW_COMM_PNCAWAKE_43|BSW_COMM_PNCAWAKE_44|BSW_COMM_PNCAWAKE_60)
 #define BSW_COMM_CFG_PNC_PER_CH_0LO         (BSW_COMM_PNCAWAKE_16)
 #define BSW_COMM_CFG_PNC_PER_CH_1UP         (BSW_COMM_PNCAWAKE_NONE)
 #define BSW_COMM_CFG_PNC_PER_CH_1LO         (BSW_COMM_PNCAWAKE_NONE)
@@ -476,6 +476,7 @@
 #define ComMConf_ComMPnc_Awake_40                           (40U)
 #define ComMConf_ComMPnc_Awake_43                           (43U)
 #define ComMConf_ComMPnc_Awake_44                           (44U)
+#define ComMConf_ComMPnc_Awake_60                           (60U)
 
 /* Symbolic Name Reference - SysStatus */
 #define ComMConf_SysStatusName_BAT                          (BSW_COMM_PWSTAT_BAT)
@@ -516,7 +517,7 @@
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
-/*  Framework          :v2-0-3-z0003                                        */
+/*  Framework          :v2-1-0                                              */
 /*  BSW plug-in        :v3-0-0                                              */
 /****************************************************************************/
 

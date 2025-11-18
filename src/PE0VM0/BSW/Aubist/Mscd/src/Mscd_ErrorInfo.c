@@ -1,7 +1,7 @@
 /* Mscd_ErrorInfo.c v2-0-0                                                  */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION. All rights reserved.                        */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -48,8 +48,8 @@
 #define MSCD_START_SEC_CODE
 #include <Mscd_MemMap.h>
 /****************************************************************************/
-/* Function Name | Mscd_ErrorInfo_Init （エラー情報初期化）                 */
-/* Description   | エラー情報を初期化する                                   */
+/* Function Name | Mscd_ErrorInfo_Init (Error Information Initialization)   */
+/* Description   | Initialize error information                             */
 /* Preconditions |                                                          */
 /* Parameters    | None                                                     */
 /* Return Value  | None                                                     */
@@ -194,10 +194,10 @@ FUNC(void, MSCD_CODE) Mscd_ErrorInfo_MultiBlockJobEndHook( NvM_MultiBlockRequest
 
 /****************************************************************************/
 /* Function Name | Mscd_ErrorInfo_DetectErrorFactor                         */
-/*               | （エラー情報(要因)検出時更新）                           */
-/* Description   | エラー発生の通知を受け、エラー情報(要因)を更新する。     */
+/*               | (Update when error information (factor) is detected)     */
+/* Description   | Receive notification of an error and update the error information (factor). */
 /* Preconditions |                                                          */
-/* Parameters    | u1ErrorFactor       : エラー要因                         */
+/* Parameters    | u1ErrorFactor: Error Factor                              */
 /* Return Value  | None                                                     */
 /* Notes         | None                                                     */
 /****************************************************************************/
@@ -230,10 +230,10 @@ Mscd_ErrorInfo_DetectErrorFactor( uint8 u1ErrorFactor )
 
 /****************************************************************************/
 /* Function Name | Mscd_ErrorInfo_UpdateErrorResult                         */
-/*               | （エラー情報(結果)更新）                                 */
-/* Description   | エラー情報(結果)を更新する                               */
+/*               | (update error information (result))                      */
+/* Description   | Update error information (result)                        */
 /* Preconditions |                                                          */
-/* Parameters    | u4ErrorResult     : エラー情報(結果)                     */
+/* Parameters    | u4ErrorResult    : Error information (result)            */
 /* Return Value  | None                                                     */
 /* Notes         | None                                                     */
 /****************************************************************************/
@@ -289,8 +289,8 @@ Mscd_ErrorInfo_UpdateErrorResult( uint32 u4ErrorResult )
 #if ( MSCD_ERRORINFO_USE == STD_ON )
 /****************************************************************************/
 /* Function Name | Mscd_ErrorInfo_GetErrorFactor                            */
-/*               | （エラー情報(要因)取得）                                 */
-/* Description   | エラー情報(要因)を取得する                               */
+/*               | (Get error information (factor))                         */
+/* Description   | Get error information (factor)                           */
 /* Preconditions |                                                          */
 /* Parameters    | *ptrResult : Pointer of ErrorFactor                      */
 /* Return Value  | E_OK       : Request Accept                              */
@@ -318,9 +318,9 @@ Mscd_ErrorInfo_GetErrorFactor( P2VAR(Mscd_ErrorInfo_ErrorFactorInfoType, AUTOMAT
 #if ( MSCD_ERRORINFO_USE == STD_ON )
 /****************************************************************************/
 /* Function Name | Mscd_ErrorInfo_GetSingleBlockJobErrorResult              */
-/*               | （シングルブロック処理エラー情報(結果)取得）             */
-/* Description   | シングルブロック処理中に起こったエラー情報(結果)         */
-/*               | を取得する                                               */
+/*               | (get single block processing error information (result)) */
+/* Description   | Get error information (results) that occurred            */
+/*               | during single block processing                           */
 /* Preconditions |                                                          */
 /* Parameters    | u1BlockRequest : Block Request                           */
 /*               | *prResult      : Error Result                            */
@@ -372,9 +372,9 @@ Mscd_ErrorInfo_GetSingleBlockJobErrorResult( NvM_BlockRequestType u1BlockRequest
 #if ( MSCD_ERRORINFO_USE == STD_ON )
 /****************************************************************************/
 /* Function Name | Mscd_ErrorInfo_GetMultiBlockJobErrorResult               */
-/*               | （マルチブロック処理エラー情報(結果)取得）               */
-/* Description   | マルチブロック処理中に起こったエラー情報(結果)           */
-/*               | を取得する                                               */
+/*               | (Get multiblock processing error information (result))   */
+/* Description   | Get error information (results) that occurred            */
+/*               | during multiblock processing                             */
 /* Preconditions |                                                          */
 /* Parameters    | u1MultiBlockRequest : Block Request                      */
 /*               | *prResult           : Error Result                       */

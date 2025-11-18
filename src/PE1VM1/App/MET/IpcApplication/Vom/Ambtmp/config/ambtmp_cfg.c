@@ -25,7 +25,7 @@
 #else
 #include "oxcan_channel_STUB.h"
 #endif
-#include "iohw_adc.h"
+#include "iohw_adc_sh.h"
 #if 0   /* BEV BSW provisionally */
 #include "date_clk.h"
 #endif

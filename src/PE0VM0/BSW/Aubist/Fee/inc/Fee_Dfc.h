@@ -1,7 +1,7 @@
-/* Fee_Dfc.h v2-0-0                                                         */
+/* Fee_Dfc.h v2-1-0                                                         */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION. All rights reserved.                        */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -16,18 +16,18 @@
 /*--------------------------------------------------------------------------*/
 /* Include Files                                                            */
 /*--------------------------------------------------------------------------*/
-/* MHA[データFlash]ヘッダ */
+/* MHA header */
 #include "Fee_Common.h"
 #include <Mscd_Common.h>
 
 /*--------------------------------------------------------------------------*/
 /* Macros                                                                   */
 /*--------------------------------------------------------------------------*/
-#define FEE_DFC_STATUS_OK           ((uint32)0x00000000L)   /* 正常終了                */
+#define FEE_DFC_STATUS_OK           ((uint32)0x00000000L)   /* Normal termination */
 #define FEE_DFC_STATUS_BUSY         ((uint32)0x000000fdL)   /* BUSY                    */
-#define FEE_DFC_STATUS_ERROR        ((uint32)0x000000ffL)   /* エラー                  */
+#define FEE_DFC_STATUS_ERROR        ((uint32)0x000000ffL)   /* ERROR */
 
-#define FEE_DFC_ADDRESS_INVALID     ((uint32)0xFFFFFFFFUL)  /* アドレス無効値 */
+#define FEE_DFC_ADDRESS_INVALID     ((uint32)0xFFFFFFFFUL)  /* ADDRESS INVALID */
 
 /*--------------------------------------------------------------------------*/
 /* Function Prototypes                                                      */
@@ -57,7 +57,7 @@ Fee_Dfc_GetBlankCheckResult(
 );
 #endif /*( MSCD_FREESPACE_USE == STD_ON )*/
 
-FUNC(uint32 , FEE_CODE) Fee_Dfc_ExecFlsMainFunction( void );
+FUNC(uint32 , FEE_CODE) Fee_Dfc_ExecFlsMainFunction( uint8 u1_callmode );
 FUNC(uint32 , FEE_CODE) Fee_Dfc_ExecBlankCheck( void );
 FUNC(void, FEE_CODE) Fee_Dfc_End( void );
 
@@ -81,6 +81,7 @@ FUNC(MemIf_StatusType, FEE_CODE) Fee_Dfc_GetStatus(void);
 /*  1-0-0          :2019/02/01                                              */
 /*  1-1-0          :2019/08/19                                              */
 /*  2-0-0          :2022/08/24                                              */
+/*  2-1-0          :2024/07/19                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

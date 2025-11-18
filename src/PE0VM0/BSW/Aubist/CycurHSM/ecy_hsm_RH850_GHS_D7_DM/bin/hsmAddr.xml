@@ -1,0 +1,53 @@
+<HSM>
+    <!-- Configured signature scheme to be applied for verification of all three artifacts.
+         It might have the value "RSA_PSS_2048" or "ECDSA_SECP256" -->
+    <SIGNATURE_SCHEME>ECDSA_SECP256</SIGNATURE_SCHEME>
+    <BLOCK>
+    <!-- HSM Configuration Area -->
+        <SECTION_NAME>HSM_CONFIG</SECTION_NAME>
+        <BLOCK_ADR>0x7d0000</BLOCK_ADR>
+        <BLOCK_LEN>0x4000</BLOCK_LEN>
+        <PROLOGUE_LEN>0x200</PROLOGUE_LEN>
+    </BLOCK>
+    <BLOCK>
+    <!-- HSM Bootloader -->
+        <SECTION_NAME>HSM_BOOT</SECTION_NAME>
+        <BLOCK_ADR>0x7d4000</BLOCK_ADR>
+        <BLOCK_LEN>0x6c98</BLOCK_LEN> <!-- incl. version and CMAC -->
+        <VERSION_ADR>0x7dac60</VERSION_ADR>
+        <SIGNATURE_ADR>0x7dac98</SIGNATURE_ADR>
+        <PUBLIC_KEY_ADR>0x7d9f2a</PUBLIC_KEY_ADR>
+    </BLOCK>
+    <BLOCK>
+    <!-- HSM Core -->
+        <SECTION_NAME>HSM_CORE</SECTION_NAME>
+        <BLOCK_ADR>0x7dae00</BLOCK_ADR>
+        <BLOCK_LEN>0x24ef0</BLOCK_LEN> <!-- incl. version and CMAC -->
+        <VERSION_ADR>0x7ffcb8</VERSION_ADR>
+        <SIGNATURE_ADR>0x7ffcf0</SIGNATURE_ADR>
+    </BLOCK>
+    <BLOCK>
+    <!-- HSM Custom epilog -->
+        <SECTION_NAME>HSM_CUSTOM_EPILOG</SECTION_NAME>
+        <HASH_SCHEME>SHA2_256</HASH_SCHEME>
+        <BLOCK_ADR>0x7ffe00</BLOCK_ADR>
+        <BLOCK_LEN>0x200</BLOCK_LEN> <!-- custom epilog length -->
+        <HASH_ADR>0x7ffc78</HASH_ADR> <!-- address of the custom epilog reference hash -->
+    </BLOCK>
+    <BLOCK>
+    <!-- HSM Core hash -->
+        <SECTION_NAME>HSM_CORE_HASH</SECTION_NAME>
+        <HASH_SCHEME>SHA2_256</HASH_SCHEME>
+        <BLOCK_ADR>0x7dae00</BLOCK_ADR>
+        <BLOCK_LEN>0x24ec0</BLOCK_LEN> <!--hsm core hash length -->
+        <HASH_ADR>0x7ffcc0</HASH_ADR> <!-- address of the hsm core hash -->
+    </BLOCK>
+    <BLOCK>
+    <!-- HSM Core cmac -->
+        <SECTION_NAME>HSM_CMAC_HASH</SECTION_NAME>
+        <CMAC_SCHEME>CMAC_AES128</CMAC_SCHEME>
+        <BLOCK_ADR>0x7dae00</BLOCK_ADR>
+        <BLOCK_LEN>0x24ee0</BLOCK_LEN> <!-- hsm core cmac length -->
+        <CMAC_ADR>0x7ffce0</CMAC_ADR> <!-- address of the hsm core cmac -->
+    </BLOCK>
+</HSM>

@@ -63,6 +63,10 @@ BswConst BswU4 bsw_comm_ctrl_u4SysStsPerCh[BSW_COMM_CHNUM][BSW_COMM_SYSSTATTBLNU
         (BswU4)(BSW_COMM_PWSTAT_ACC|BSW_COMM_PWSTAT_IG|ComMConf_SysStatusName_IGR)
        ,(BswU4)(BSW_COMM_PWSTAT_NONE)
     }
+   ,{    /* ComMConf_ComMChannel_MM_SUB_BUS */
+        (BswU4)(BSW_COMM_PWSTAT_ACC|BSW_COMM_PWSTAT_IG|ComMConf_SysStatusName_IGR)
+       ,(BswU4)(BSW_COMM_PWSTAT_NONE)
+    }
    ,{    /* ComMConf_ComMChannel_CANFD_G5M_BUS */
         (BswU4)(BSW_COMM_PWSTAT_ACC|BSW_COMM_PWSTAT_IG|ComMConf_SysStatusName_IGR)
        ,(BswU4)(BSW_COMM_PWSTAT_NONE)
@@ -80,6 +84,10 @@ BswConst BswU4 bsw_comm_ctrl_u4CHPowSupply[BSW_COMM_CHNUM][BSW_COMM_SYSSTATTBLNU
        ,(BswU4)(BSW_COMM_PWSTAT_NONE)
     }
    ,{    /* ComMConf_ComMChannel_CDC_VCAN_BUS */
+        (BswU4)(BSW_COMM_PWSTAT_BAT|BSW_COMM_PWSTAT_ACC|BSW_COMM_PWSTAT_IG|ComMConf_SysStatusName_PBA|ComMConf_SysStatusName_IGR)
+       ,(BswU4)(BSW_COMM_PWSTAT_NONE)
+    }
+   ,{    /* ComMConf_ComMChannel_MM_SUB_BUS */
         (BswU4)(BSW_COMM_PWSTAT_BAT|BSW_COMM_PWSTAT_ACC|BSW_COMM_PWSTAT_IG|ComMConf_SysStatusName_PBA|ComMConf_SysStatusName_IGR)
        ,(BswU4)(BSW_COMM_PWSTAT_NONE)
     }
@@ -333,7 +341,7 @@ BswConst BswU4 bsw_comm_ctrl_u4PncAwake_31[BSW_COMM_CH_PNAWKPW_NUM_31] = {
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
-/*  Framework          :v2-0-3-z0003                                        */
+/*  Framework          :v2-1-0                                              */
 /*  BSW plug-in        :v3-0-0                                              */
 /****************************************************************************/
 

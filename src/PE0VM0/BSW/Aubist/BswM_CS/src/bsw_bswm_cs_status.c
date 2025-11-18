@@ -103,11 +103,11 @@ BswU1    bsw_bswm_cs_st_u1Clock;        /* Clock supply log */
 void
 bsw_bswm_cs_st_Init( void )
 {
+    bsw_bswm_cs_st_u2CSStatus = BSW_BSWM_CS_u2PVTST_UNINIT;
+
 #if ( BSW_BSWM_CS_FUNC_BSWM_VPS == BSW_USE )
     BswM_VPS_InitCS();
 #endif
-
-    bsw_bswm_cs_st_u2CSStatus = BSW_BSWM_CS_u2PVTST_UNINIT;
 
     bsw_bswm_cs_st_InitIpduGrVct();
     bsw_bswm_cs_sysst_Init();
@@ -203,6 +203,10 @@ bsw_bswm_cs_st_PrepareDeInit( void )
 #if ( BSW_BSWM_CS_FUNC_PDUR == BSW_USE )
     PduR_DeInit();
 #endif
+
+#if ( BSW_BSWM_CS_FUNC_BSWM_VPS == BSW_USE )
+    BswM_VPS_DeInitCS();
+#endif
 }
 
 /****************************************************************************/
@@ -263,13 +267,13 @@ bsw_bswm_cs_st_DeInit( void )
 void
 bsw_bswm_cs_st_Wakeup( void )
 {
-#if ( BSW_BSWM_CS_FUNC_BSWM_VPS == BSW_USE )
-    BswM_VPS_WakeupCS();
-#endif
-
     bsw_bswm_cs_st_u2CSStatus = BSW_BSWM_CS_u2PVTST_UNINIT;
 
     bsw_bswm_cs_user_CbkPreWakeup();
+
+#if ( BSW_BSWM_CS_FUNC_BSWM_VPS == BSW_USE )
+    BswM_VPS_WakeupCS();
+#endif
 
     bsw_bswm_cs_st_InitIpduGrVct();
     bsw_bswm_cs_sysst_Wakeup();
@@ -381,11 +385,11 @@ bsw_bswm_cs_st_Sleep( void )
 void
 bsw_bswm_cs_st_Reset( void )
 {
+    bsw_bswm_cs_st_u2CSStatus = BSW_BSWM_CS_u2PVTST_UNINIT;
+
 #if ( BSW_BSWM_CS_FUNC_BSWM_VPS == BSW_USE )
     BswM_VPS_InitCS();
 #endif
-
-    bsw_bswm_cs_st_u2CSStatus = BSW_BSWM_CS_u2PVTST_UNINIT;
 
     bsw_bswm_cs_st_InitIpduGrVct();
     bsw_bswm_cs_sysst_Init();
@@ -473,6 +477,9 @@ bsw_bswm_cs_st_MainFunctionHigh( void )
         IpduM_MainFunctionRx();
 #endif
 #endif
+#if ( BSW_BSWM_CS_FUNC_BSWMCAN == BSW_USE )
+        BswM_Can_MainFunctionPreComRx();
+#endif
 #if ( BSW_BSWM_CS_FUNC_COM == BSW_USE )
         Com_MainFunctionRx();
 #endif
@@ -490,6 +497,9 @@ bsw_bswm_cs_st_MainFunctionHigh( void )
 #if ( BSW_BSWM_CS_MSG_DELIVER == BSW_BSWM_CS_MSGDELIVER_HIGH )
 #if ( BSW_BSWM_CS_FUNC_COM == BSW_USE )
         Com_MainFunctionTx();
+#endif
+#if ( BSW_BSWM_CS_FUNC_BSWMCAN == BSW_USE )
+        BswM_Can_MainFunctionPostComTx();
 #endif
 #if ( BSW_BSWM_CS_FUNC_IPDUM == BSW_USE )
 #if ( BSW_BSWM_CS_MUX_MA_PTN != BSW_BSWM_CS_MUX_MA_MSG )
@@ -854,6 +864,9 @@ bsw_bswm_cs_st_MainFuncMidCtrl( void )
     IpduM_MainFunctionRx();
 #endif
 #endif
+#if ( BSW_BSWM_CS_FUNC_BSWMCAN == BSW_USE )
+    BswM_Can_MainFunctionPreComRx();
+#endif
 #if ( BSW_BSWM_CS_FUNC_COM == BSW_USE )
     Com_MainFunctionRx();
 #endif
@@ -917,6 +930,9 @@ bsw_bswm_cs_st_MainFuncMidOut( void )
 #if ( BSW_BSWM_CS_FUNC_COM == BSW_USE )
     Com_MainFunctionTx();
 #endif
+#if ( BSW_BSWM_CS_FUNC_BSWMCAN == BSW_USE )
+    BswM_Can_MainFunctionPostComTx();
+#endif
 #if ( BSW_BSWM_CS_FUNC_IPDUM == BSW_USE )
 #if ( BSW_BSWM_CS_MUX_MA_PTN != BSW_BSWM_CS_MUX_MA_MSG )
     IpduM_MainFunctionTx();
@@ -958,7 +974,7 @@ bsw_bswm_cs_st_MainFuncMidOut( void )
 /*  v2-0-0          :2021/12/08                                             */
 /*  v2-1-0          :2022/10/31                                             */
 /*  v2-2-0          :2023/05/08                                             */
-/*  v3-0-0          :2024/11/15                                             */
+/*  v3-0-0          :2025/02/03                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

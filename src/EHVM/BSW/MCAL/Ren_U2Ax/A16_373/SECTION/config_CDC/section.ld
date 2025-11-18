@@ -2,8 +2,8 @@
 //     セクション定義 ( RH850/U2A )
 // ==================================================
 
-#define USER_ENTRY_ADDRESS    0x00020200
-#define EHVM_ENTRY_ADDRESS    0x00030000
+#define USER_ENTRY_ADDRESS    0x003C0200
+#define EHVM_ENTRY_ADDRESS    0x003D0000
 
 // ------------------------
 // セクションテーブル
@@ -352,14 +352,10 @@ SECTIONS {
     .cluster2_share_ramtop                                   : > ram_memory_cluster2_share
 
 //1byte
-    .bss_SHARE_IOHW_ADC_LV_RD   SHARE_IOHW_ADC_LV_RD_ADDR   ABS    : > .
 //2byte
 //4byte
     .bss_SHARE_PORT_CONF        SHARE_PORT_CONF_ADDR        ABS    : > .
-    .bss_SHARE_VEH_OPEMD_MDBIT  SHARE_VEH_OPEMD_MDBIT_ADDR  ABS    : > .
 //struct
-    .bss_SHARE_IOHW_ADC_LV      SHARE_IOHW_ADC_LV_ADDR      ABS    : > .
-    .bss_SHARE_IOHW_DIFLT_FLTRD SHARE_IOHW_DIFLT_FLTRD_ADDR ABS    : > .
     .bss_SHARE_DMA_NOTICATION   SHARE_DMA_NOTICATION_ADDR   ABS    : > .
     .bss_SHARE_SPI_MODEA_CHANNELDATA SHARE_SPI_MODEA_CHANNELDATA_ADDR ABS    : > .
     .bss_SHARE_SPI_MODEC_CHANNELDATA SHARE_SPI_MODEC_CHANNELDATA_ADDR ABS    : > .

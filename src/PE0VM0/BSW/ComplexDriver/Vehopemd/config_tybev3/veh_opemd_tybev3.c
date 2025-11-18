@@ -56,7 +56,8 @@ static U2      u2_s_veh_opemd_unk_tocnt;
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static inline U2      u2_s_VehopemdVpschk(const U2 u2_a_RX, const ST_VEH_OPEMD_VPS_CHK * st_ap_CHK, const U2 u2_a_NUM_CHK);
-
+static U2             u2_s_VehopemdReadbdc1s81(void);
+static U2             u2_s_VehopemdReadbdc1s91(void);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -108,30 +109,36 @@ U4      u4_g_VehopemdCfgMdupdt(const U4 u4_a_MDBIT, U4 * u4_ap_evbit)
     U4                                   u4_t_ev_on;
 
     U2                                   u2_t_vps_chk;
-    U1                                   u1_t_vps_rx;
+    U2                                   u2_t_vps_rx;
     U1                                   u1_t_ipdu_st;
 
     u4_t_mdbit   = u4_a_MDBIT & (U4)VEH_OPEMD_MDBIT_FIELDS;
     u1_t_ipdu_st = (U1)Com_GetIPDUStatus((U2)MSG_BDC1S81_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
-    if(u1_t_ipdu_st == (U1)0U){ 
 
-        u1_t_vps_rx   = (U1)0U;
-        Com_ReceiveSignal(ComConf_ComSignal_VPSINFO1_0, &u1_t_vps_rx);
-        u2_t_vps_chk  = (U2)u1_t_vps_rx;
-        Com_ReceiveSignal(ComConf_ComSignal_VPSINFO2_0, &u1_t_vps_rx);
-        u2_t_vps_chk |= (U2)u1_t_vps_rx << 1U;
-        Com_ReceiveSignal(ComConf_ComSignal_VPSINFO3_0, &u1_t_vps_rx);
-        u2_t_vps_chk |= (U2)u1_t_vps_rx << 2U;
-        Com_ReceiveSignal(ComConf_ComSignal_VPSINFO4_0, &u1_t_vps_rx);
-        u2_t_vps_chk |= (U2)u1_t_vps_rx << 3U;
-        Com_ReceiveSignal(ComConf_ComSignal_VPSINFO5_0, &u1_t_vps_rx);
-        u2_t_vps_chk |= (U2)u1_t_vps_rx << 4U;
-        Com_ReceiveSignal(ComConf_ComSignal_VPSINFO6_0, &u1_t_vps_rx);
-        u2_t_vps_chk |= (U2)u1_t_vps_rx << 5U;
-        Com_ReceiveSignal(ComConf_ComSignal_VPSINFO7_0, &u1_t_vps_rx);
-        u2_t_vps_chk |= (U2)u1_t_vps_rx << 6U;
+    /* -------------------------------------------------------------------------------------------------- */
+    /* Note :                                                                                             */
+    /* -------------------------------------------------------------------------------------------------- */
+    /* VPS is determined according to the following.                                                      */
+    /* |--------------------------------------------------------------|                                   */
+    /* |                     |               BDC1S91                  |                                   */
+    /* |         Msg State   | COM_NO_RX   | COM_TIMEOUT |   OTHER    |                                   */
+    /* |---------------------|-------------|-------------|------------|                                   */
+    /* |BDC1S81  COM_NO_RX   | Prev Value  | Prev Value  | BDC1S91    |                                   */
+    /* |         COM_TIMEOUT | Prev Value  | Prev Value  | BDC1S91    |                                   */
+    /* |         OTHER       | BDC1S81     | BDC1S81     | BDC1S81    |                                   */
+    /* -------------------------------------------------------------------------------------------------- */
+ 
+    if(u1_t_ipdu_st == (U1)0U){
+        u2_t_vps_rx = u2_s_VehopemdReadbdc1s81();
+    } else {
+        u1_t_ipdu_st = (U1)Com_GetIPDUStatus((U2)MSG_BDC1S91_RXCH1) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+        if(u1_t_ipdu_st == (U1)0U){
+            u2_t_vps_rx = u2_s_VehopemdReadbdc1s91();
+        }
+    }
 
-        u2_t_vps_chk = u2_s_VehopemdVpschk(u2_t_vps_chk, &st_sp_VEH_OPEMD_VPS_CHK[0U], (U2)VEH_OPEMD_VPS_NUM_CHK);
+    if(u1_t_ipdu_st == (U1)0U){
+        u2_t_vps_chk = u2_s_VehopemdVpschk(u2_t_vps_rx, &st_sp_VEH_OPEMD_VPS_CHK[0U], (U2)VEH_OPEMD_VPS_NUM_CHK);
 
         if(u2_t_vps_chk != (U2)VEH_OPEMD_MDBIT_UNK){
             u4_t_mdbit = (U4)u2_t_vps_chk;
@@ -147,9 +154,11 @@ U4      u4_g_VehopemdCfgMdupdt(const U4 u4_a_MDBIT, U4 * u4_ap_evbit)
             u2_s_veh_opemd_unk_tocnt++;
         }
     }
+    /* BDC1S81 is "COM_TIMEOUT" or "COM_NO_RX" and BDC1S91 is "COM_NO_RX"   */
     else if(u1_t_ipdu_st == (U1)COM_NO_RX){
         u2_s_veh_opemd_unk_tocnt = (U2)U2_MAX;
     }
+    /* BDC1S81 is "COM_TIMEOUT" or "COM_NO_RX" and BDC1S91 is "COM_TIMEOUT" */
     else{
      /* u4_t_mdbit = (U4)VEH_OPEMD_MDBIT_UNK; */
         u2_s_veh_opemd_unk_tocnt = (U2)U2_MAX;
@@ -184,6 +193,68 @@ static inline U2      u2_s_VehopemdVpschk(const U2 u2_a_RX, const ST_VEH_OPEMD_V
 
     return(u2_t_chk);
 }
+/*===================================================================================================================================*/
+/*  static U2      u2_s_VehopemdReadbdc1s81(void)                                                                                    */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static U2      u2_s_VehopemdReadbdc1s81(void)
+{
+    U2                             u2_t_vps_rx;
+    U1                             u1_t_vps_inf;
+
+    u1_t_vps_inf = (U1)0U;   
+ 
+    Com_ReceiveSignal(ComConf_ComSignal_VPSINFO1_0, &u1_t_vps_inf);
+    u2_t_vps_rx  = (U2)u1_t_vps_inf;
+    Com_ReceiveSignal(ComConf_ComSignal_VPSINFO2_0, &u1_t_vps_inf);
+    u2_t_vps_rx |= (U2)u1_t_vps_inf << 1U;
+    Com_ReceiveSignal(ComConf_ComSignal_VPSINFO3_0, &u1_t_vps_inf);
+    u2_t_vps_rx |= (U2)u1_t_vps_inf << 2U;
+    Com_ReceiveSignal(ComConf_ComSignal_VPSINFO4_0, &u1_t_vps_inf);
+    u2_t_vps_rx |= (U2)u1_t_vps_inf << 3U;
+    Com_ReceiveSignal(ComConf_ComSignal_VPSINFO5_0, &u1_t_vps_inf);
+    u2_t_vps_rx |= (U2)u1_t_vps_inf << 4U;
+    Com_ReceiveSignal(ComConf_ComSignal_VPSINFO6_0, &u1_t_vps_inf);
+    u2_t_vps_rx |= (U2)u1_t_vps_inf << 5U;
+    Com_ReceiveSignal(ComConf_ComSignal_VPSINFO7_0, &u1_t_vps_inf);
+    u2_t_vps_rx |= (U2)u1_t_vps_inf << 6U;
+
+    return(u2_t_vps_rx);
+}
+
+/*===================================================================================================================================*/
+/*  static U2      u2_s_VehopemdReadbdc1s91(void)                                                                                    */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static U2      u2_s_VehopemdReadbdc1s91(void)
+{
+    U2                             u2_t_vps_rx;
+    U1                             u1_t_vps_inf;
+
+    u1_t_vps_inf = (U1)0U;
+    
+    Com_ReceiveSignal(ComConf_ComSignal_VPSINF1S_2, &u1_t_vps_inf);
+    u2_t_vps_rx  = (U2)u1_t_vps_inf;
+    Com_ReceiveSignal(ComConf_ComSignal_VPSINF2S_2, &u1_t_vps_inf);
+    u2_t_vps_rx |= (U2)u1_t_vps_inf << 1U;
+    Com_ReceiveSignal(ComConf_ComSignal_VPSINF3S_2, &u1_t_vps_inf);
+    u2_t_vps_rx |= (U2)u1_t_vps_inf << 2U;
+    Com_ReceiveSignal(ComConf_ComSignal_VPSINF4S_2, &u1_t_vps_inf);
+    u2_t_vps_rx |= (U2)u1_t_vps_inf << 3U;
+    Com_ReceiveSignal(ComConf_ComSignal_VPSINF5S_2, &u1_t_vps_inf);
+    u2_t_vps_rx |= (U2)u1_t_vps_inf << 4U;
+    Com_ReceiveSignal(ComConf_ComSignal_VPSINF6S_2, &u1_t_vps_inf);
+    u2_t_vps_rx |= (U2)u1_t_vps_inf << 5U;
+    Com_ReceiveSignal(ComConf_ComSignal_VPSINF7S_2, &u1_t_vps_inf);
+    u2_t_vps_rx |= (U2)u1_t_vps_inf << 6U;
+            
+    return(u2_t_vps_rx);
+}
+
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */

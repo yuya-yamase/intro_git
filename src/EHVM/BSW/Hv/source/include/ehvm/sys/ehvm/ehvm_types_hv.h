@@ -50,6 +50,7 @@
 #define E_EHVM_MM_ACC_NG             ((ehvm_std_return_t)0x20U)
 #define E_EHVM_VMM_MULTIPLE_REQUESTS ((ehvm_std_return_t)0x30U)
 #define E_EHVM_VMM_UNACCEPTABLE_STATE ((ehvm_std_return_t)0x40U)
+#define E_EHVM_GET_LOCK_FAILED       ((ehvm_std_return_t)0x50U)
 
 #define NULL_PTR                     ((void*)0x0)
 

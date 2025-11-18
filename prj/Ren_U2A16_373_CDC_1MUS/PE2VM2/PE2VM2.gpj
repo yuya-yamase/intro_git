@@ -33,6 +33,11 @@ primaryTarget=v800_standalone.tgt
     :optionsFile=${CMN_DIR}/IOHW.opt
     :optionsFile=${CMPSW_DIR}/PE2VM2_CmpSW.opt
 
+    :macro=GSR_CLI="gsrec -sort -S3 -noS5 -bytes 16"
+    :macro=GSR_PAR="-pad1 0x00400000 0x005effff 0xff -start 0x00400000 -end 0x005effff"
+    :postexec="${GSR_CLI} ${GSR_PAR}                     -o dst/PE2VM2_ac.mot dst/PE2VM2.elf"
+    :postexec="${GSR_CLI} ${GSR_PAR} -romaddr 0x02400000 -o dst/PE2VM2_bd.mot dst/PE2VM2.elf"
+
     -I${GPI2C_DIR}/config
     -I${GPI2C_DIR}/scc
 
@@ -89,6 +94,7 @@ primaryTarget=v800_standalone.tgt
     -DAR_OS_USE_HYPERVISOR
     -DECU_VM2
     -DECU_INTG_LWH_GUEST
+    {isdefined(__GMM_AIP_THROUGHPUT__)} -D__AIP_THROUGHPUT__=${__GMM_AIP_THROUGHPUT__}
 
     # CompileSW (ProcessingLoad)
     # Enter the measurement time in milliseconds
@@ -96,6 +102,7 @@ primaryTarget=v800_standalone.tgt
     -DPROCESSING_LOAD_MEASURE_TIME=0U
 
     -o PE2VM2.elf
+    --no_additional_output
 
 ${PRJ_DIR}/bswCAN.gpj
 ${CMN_DIR}/bswOS.gpj
@@ -112,14 +119,13 @@ ${CMN_DIR}/MCAL_Intc.gpj
 ${CMN_DIR}/MCAL_PORT.gpj
 ${CMN_DIR}/MCAL_Pwm.gpj
 ${CMN_DIR}/MCAL_SPI.gpj
-${CMN_DIR}/MCAL_Icu.gpj
 ${CMN_DIR}/MCAL_Wdg.gpj
 ${CMN_DIR}/MCAL_I2c.gpj
 ${CMN_DIR}/GpI2c.gpj
 
 ${CMN_DIR}/MS_Rim.gpj
 
-${CMN_DIR}/IOHW.gpj
+${PRJ_DIR}/IOHW.gpj
 ${CMN_DIR}/LIB.gpj
 ${PRJ_DIR}/App.gpj
 ${PRJ_DIR}/COM_OXCAN.gpj

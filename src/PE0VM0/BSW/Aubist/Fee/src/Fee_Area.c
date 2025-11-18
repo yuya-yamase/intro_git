@@ -1,7 +1,7 @@
 /* Fee_Area.c v1-0-0                                                        */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION. All rights reserved.                        */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -16,17 +16,17 @@
 
 #include "../inc/Fee_Mpu_Dev_Const.h"
 
-/* MHA[データFlash]I/Fヘッダ */
+/* MHA (Data Flash) I/F header */
 #include "../inc/Fee_Legacy.h"
 
-/* MHA[データFlash]ヘッダ */
+/* MHA header */
 #include "../inc/Fee_Lib.h"
 
-/* MHA[データFlash]ライブラリヘッダ */
+/* MHA library header */
 #include "../inc/Fee_Common.h"
 
 
-/* D.F.C.ヘッダ */
+/* D.F.C. header */
 #include "../inc/Fee_Dfc.h"
 
 #include "../inc/Fee_Ram.h"
@@ -56,35 +56,36 @@
 #define FEE_START_SEC_CODE
 #include <Fee_MemMap.h>
 
-/*関数説明--------------------------------------------------------------------*/
-/* 説  明        ：使用エリア選択                                             */
-/* 入  力        ：stCPUDTF *ptstCPUDTFInfo                            */
-/*                                           ：MHA[データFlash]管理データ     */
-/* 出  力        ：なし                                                       */
-/* グローバル変数：                                                           */
-/* その他        ：                                                           */
-/*----------------------------------------------------------------------------*/
+/****************************************************************************/
+/* Function Name | Fee_SelectUseArea                                        */
+/* Description   | Select area to be used                                   */
+/* Preconditions | None                                                     */
+/* Parameters    | stCPUDTF * ptstCPUDTFInfo                                */
+/*               |            MHA management data                           */
+/* Return Value  | None                                                     */
+/* Notes         | None                                                     */
+/****************************************************************************/
 FUNC(void, FEE_CODE) Fee_SelectUseArea( P2VAR(Fee_CpuDtfType, AUTOMATIC, TYPEDEF) ptstCPUDTFInfo )
 {
-    uint32          u4tCounter;                         /* カウンタ */
-    uint8           u1tBlockNum;                        /* ブロック数 */
-    uint8           u1tStartBlockNo;                    /* 開始ブロック番号 */
-    uint8           u1tAreaNum;                         /* エリア数 */
+    uint32          u4tCounter;                         /* Counter */
+    uint8           u1tBlockNum;                        /* Blocks */
+    uint8           u1tStartBlockNo;                    /* Starting block number */
+    uint8           u1tAreaNum;                         /* Number of areas */
 
-    /* エリア番号取り出し */
+    /* Eject Area Number */
     u1tAreaNum = ptstCPUDTFInfo->u1AreaNum;
 
-    /* エリア依存データ構造体を設定 */
+    /* Set area-dependent data structures */
     ptstCPUDTFInfo->ptstAreaInf = (volatile const Fee_AreaInfType *)( &Fee_AreaInfTBL[u1tAreaNum] );
 
-    /* ブロック数テーブルからブロック数取り出し */
+    /* Blocks taken from blocks table */
     u1tBlockNum = ptstCPUDTFInfo->ptstAreaInf->u1BlockNum;
-    /* 開始ブロック番号取り出し */
+    /* Get starting block number */
     u1tStartBlockNo = ptstCPUDTFInfo->ptstAreaInf->u1AreaStartBlockNum;
-    /* 全ブロック終了するまでループ */
+    /* Loop until all blocks are finished */
     for ( u4tCounter = 0U; u4tCounter < (uint32)u1tBlockNum; u4tCounter++ )
     {
-        /* 使用中ブロックデータ構造体にブロック番号を設定 */
+        /* Set block number in used block data structure */
         Fee_UseBlockInfo[u4tCounter].u1BlockNo = (uint8)(u1tStartBlockNo + u4tCounter);
     }
 

@@ -177,7 +177,7 @@ const ST_CAN_LPR_PHY_TX         st_gp_CAN_LPR_PHY_TX[]   = {
         (U2)CAN_LPR_PHY_TX_VACK_DI                         /* u2_vack      */
     }
 };
-const U2                        u2_g_CAN_LPR_NUM_PHY_TX = (U2)12U;
+const U2                        u2_g_CAN_LPR_NUM_PHY_TX = (U2)13U;
 
 const ST_CAN_LPR_PHY_CH         st_gp_CAN_LPR_PHY_CH[CAN_LPR_NUM_PHY_CH] = {
     /* CAN_LPR_REGR_EN_PHY_TX_G2M1 */
