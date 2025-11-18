@@ -11,12 +11,17 @@
  *  Stream Awb Path  : CueSheet_0_LEX.awb
  *===========================================================================*/
 
+#if 0   /* BEV Rebase provisionally */
 #define CRI_CUESHEET_0_LEX_CUENUM (48)
+#else   /* BEV Rebase provisionally */
+#define CRI_CUESHEET_0_LEX_CUENUM (22)
+#endif   /* BEV Rebase provisionally */
 
 /* AISAC Control List (AISAC Control ID) */
 #define CRI_CUESHEET_0_LEX_AISACCONTROL_AISACVOLUMECONFIG  (16) /* AisacVolumeConfig  */
 
 /* Cue List (Cue ID) */
+#if 0   /* BEV Rebase provisionally */
 #define CRI_CUESHEET_0_LEX_REN_1600_NONE_NONE_NONE            (  0) /*   */
 #define CRI_CUESHEET_0_LEX_DAN_1600_0P5_NONE_0P8              (  1) /*   */
 #define CRI_CUESHEET_0_LEX_DAN_1600_1_NONE_0P8                (  2) /*   */
@@ -65,6 +70,30 @@
 #define CRI_CUESHEET_0_LEX_TAN_2400_0P9_NONE_NONE             ( 45) /*   */
 #define CRI_CUESHEET_0_LEX_2REN_2400_0P2_50_NONE              ( 46) /*   */
 #define CRI_CUESHEET_0_LEX_REN_2400_NONE_NONE_NONE            ( 47) /*   */
+#else   /* BEV Rebase provisionally */
+#define CRI_CUESHEET_0_LEX_TAN_MET_CBZ_BASE_NOTICE1_0_01    (  0) /*   */
+#define CRI_CUESHEET_0_LEX_TAN_MET_CBZ_BASE_NOTICE2_0_01    (  1) /*   */
+#define CRI_CUESHEET_0_LEX_TAN_MET_CBZ_BASE_ACCEPT_0_01     (  2) /*   */
+#define CRI_CUESHEET_0_LEX_2REN_MET_CBZ_BASE_REJECT_0_01    (  3) /*   */
+#define CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNL_0_01   (  4) /*   */
+#define CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNM_0_01   (  5) /*   */
+#define CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNH_0_01   (  6) /*   */
+#define CRI_CUESHEET_0_LEX_REN_MET_CBZ_BASE_CONTWARN_0_01   (  7) /*   */
+#define CRI_CUESHEET_0_LEX_DAN_MET_LBZ_REVERSE_INT_24_01    (  8) /*   */
+#define CRI_CUESHEET_0_LEX_DAN_MET_LBZ_SEAREM_LV1_24_02     (  9) /*   */
+#define CRI_CUESHEET_0_LEX_DAN_MET_LBZ_SEAREM_LV2_24_02     ( 10) /*   */
+#define CRI_CUESHEET_0_LEX_TAN_MET_LBZ_SEAREM_LV1_24_02     ( 11) /*   */
+#define CRI_CUESHEET_0_LEX_TAN_MET_LBZ_MMTURHAZ_FLA1_24_02  ( 12) /*   */
+#define CRI_CUESHEET_0_LEX_TAN_MET_LBZ_MMTURHAZ_FLA2_24_02  ( 13) /*   */
+#define CRI_CUESHEET_0_LEX_REN_MET_LBZ_CLESON_FRS_24_00     ( 14) /*   */
+#define CRI_CUESHEET_0_LEX_DAN_MET_LBZ_CLESON_FRM_24_01     ( 15) /*   */
+#define CRI_CUESHEET_0_LEX_DAN_MET_LBZ_CLESON_FRL_24_01     ( 16) /*   */
+#define CRI_CUESHEET_0_LEX_DAN_MET_LBZ_CLESON_FRF_24_02     ( 17) /*   */
+#define CRI_CUESHEET_0_LEX_DAN_MET_LBZ_CLESON_RRM_24_01     ( 18) /*   */
+#define CRI_CUESHEET_0_LEX_DAN_MET_LBZ_CLESON_RRL_24_01     ( 19) /*   */
+#define CRI_CUESHEET_0_LEX_DAN_MET_LBZ_CLESON_RRF_24_02     ( 20) /*   */
+#define CRI_CUESHEET_0_LEX_DAN_MET_CBZ_AD_DOT_0_00          ( 21) /*   */
+#endif   /* BEV Rebase provisionally */
 
 /* Block List (Block Index) */
 

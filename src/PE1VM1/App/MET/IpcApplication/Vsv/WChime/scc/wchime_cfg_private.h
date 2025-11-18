@@ -32,7 +32,7 @@
 #define WCHIME_TICK                              (10U)               /* WChime tick period.                                          */
 #define WCHIME_WT_TIM_CMN                        (300U/WCHIME_TICK)  /* Waiting time : 300ms.                                        */
 
-#define WCHIME_APP_BZ_NUM                        (4U)                /* Number of APP buzzer.                                        */
+#define WCHIME_APP_BZ_NUM                        (2U)                /* Number of APP buzzer.                                        */
 
 #define WCHIME_REQ_IDX_UPLMT                     (224U)   /* Buzzer request upper limit.                                             */
 #define WCHIME_REQBIT_NWORD_MAX                  (7U)     /* Maximum number of rows to convert to buzzer req. ID to bit.             */
