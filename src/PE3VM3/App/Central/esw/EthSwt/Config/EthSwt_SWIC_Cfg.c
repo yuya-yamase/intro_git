@@ -86,7 +86,7 @@ Std_ReturnType EthSwt_SWIC_Cfg_CheckSuplyState(void)
     Std_ReturnType  ret = STD_OFF;
     Std_ReturnType  din2_stat = STD_OFF;
 
-    din2_stat = STD_ON;                  /* b’è ‚Ì‚¿‚É‘¼API‚É•ÏX */
+    din2_stat = STD_ON;                  /* ï¿½bï¿½ï¿½ ï¿½Ì‚ï¿½ï¿½É‘ï¿½APIï¿½É•ÏX */
 
     if (din2_stat == STD_ON) {
         ret = STD_ON;
@@ -100,7 +100,7 @@ Std_ReturnType EthSwt_SWIC_Cfg_CheckSuplyState(void)
 /* -------------------------------------------------------------------------- */
 void EthSwt_SWIC_Cfg_SetGPIOMode(void)
 {
-    /* - OEM CustomFSPI’ÊMƒ‰ƒCƒ“‚ğGPIOƒ‚[ƒh‚Ö•ÏX - */
+    /* - OEM Customï¿½FSPIï¿½ÊMï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½ï¿½GPIOï¿½ï¿½ï¿½[ï¿½hï¿½Ö•ÏX - */
     Port_SetPinMode( PORT_ID_PORT2_PIN11, PORT_MODE_CFG_P2_11_DI );         /* ETHERSW-RXD */
     Port_SetPinMode( PORT_ID_PORT2_PIN12, PORT_MODE_CFG_P2_12_DO_LO );      /* ETHERSW-CLK */
     Port_SetPinMode( PORT_ID_PORT2_PIN13, PORT_MODE_CFG_P2_13_DO_LO );      /* ETHERSW-TXD */
@@ -114,7 +114,7 @@ void EthSwt_SWIC_Cfg_SetGPIOMode(void)
 /* -------------------------------------------------------------------------- */
 void EthSwt_SWIC_Cfg_SetSPIMode(void)
 {
-    /* - OEM CustomFSPI’ÊMƒ‰ƒCƒ“‚ğSPIƒ‚[ƒh‚Ö•ÏX - */
+    /* - OEM Customï¿½FSPIï¿½ÊMï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½ï¿½SPIï¿½ï¿½ï¿½[ï¿½hï¿½Ö•ÏX - */
     Port_SetPinMode(PORT_ID_PORT2_PIN11, PORT_MODE_CFG_P2_11_MSPI0SI);      /* ETHERSW-RXD */
     Port_SetPinMode(PORT_ID_PORT2_PIN12, PORT_MODE_CFG_P2_12_MSPI0SC);      /* ETHERSW-CLK */
     Port_SetPinMode(PORT_ID_PORT2_PIN13, PORT_MODE_CFG_P2_13_MSPI0SO);      /* ETHERSW-TXD */
@@ -128,8 +128,8 @@ void EthSwt_SWIC_Cfg_SetSPIMode(void)
 /* -------------------------------------------------------------------------- */
 void EthSwt_SWIC_Cfg_SetPowerOn(void)
 {
-    /* - OEM CustomFSWIC“dŒ¹ON - */
-    /* ETHER_PWR_EN‚ğHighİ’è‚µ‚½Œã‚ÉAETH_U2A_RESET_N‚ğHighİ’è */
+    /* - OEM Customï¿½FSWICï¿½dï¿½ï¿½ON - */
+    /* ETHER_PWR_ENï¿½ï¿½Highï¿½İ’è‚µï¿½ï¿½ï¿½ï¿½ÉAETH_U2A_RESET_Nï¿½ï¿½Highï¿½İ’ï¿½ */
     Dio_WriteChannel(DIO_ID_APORT4_CH11, STD_HIGH);                         /* ETHER_PWR_EN */
     Dio_WriteChannel(DIO_ID_APORT4_CH1, STD_HIGH);                          /* ETH_U2A_RESET_N */
 
@@ -141,8 +141,8 @@ void EthSwt_SWIC_Cfg_SetPowerOn(void)
 /* -------------------------------------------------------------------------- */
 void EthSwt_SWIC_Cfg_SetPowerOff(void)
 {
-    /* - OEM CustomFSWIC“dŒ¹OFF - */
-    /* ETH_U2A_RESET_N‚ğLowİ’è‚µ‚½Œã‚ÉAETHER_PWR_EN‚ğLowİ’è */
+    /* - OEM Customï¿½FSWICï¿½dï¿½ï¿½OFF - */
+    /* ETH_U2A_RESET_Nï¿½ï¿½Lowï¿½İ’è‚µï¿½ï¿½ï¿½ï¿½ÉAETHER_PWR_ENï¿½ï¿½Lowï¿½İ’ï¿½ */
     Dio_WriteChannel(DIO_ID_APORT4_CH1, STD_LOW);                           /* ETH_U2A_RESET_N */
     Dio_WriteChannel(DIO_ID_APORT4_CH11, STD_LOW);                          /* ETHER_PWR_EN */
 
@@ -154,7 +154,7 @@ void EthSwt_SWIC_Cfg_SetPowerOff(void)
 /* -------------------------------------------------------------------------- */
 void EthSwt_SWIC_Cfg_SetResetAssert(void)
 {
-    /* - OEM CustomFSWICƒŠƒZƒbƒgƒAƒT[ƒg - */
+    /* - OEM Customï¿½FSWICï¿½ï¿½ï¿½Zï¿½bï¿½gï¿½Aï¿½Tï¿½[ï¿½g - */
     Dio_WriteChannel(DIO_ID_APORT4_CH1, STD_LOW);                           /* ETH_U2A_RESET_N */
 
     return;
@@ -165,7 +165,7 @@ void EthSwt_SWIC_Cfg_SetResetAssert(void)
 /* -------------------------------------------------------------------------- */
 void EthSwt_SWIC_Cfg_SetResetDeassert(void)
 {
-    /* - OEM CustomFSWICƒŠƒZƒbƒgƒfƒBƒAƒT[ƒg - */
+    /* - OEM Customï¿½FSWICï¿½ï¿½ï¿½Zï¿½bï¿½gï¿½fï¿½Bï¿½Aï¿½Tï¿½[ï¿½g - */
     Dio_WriteChannel(DIO_ID_APORT4_CH1, STD_HIGH);                          /* ETH_U2A_RESET_N */
     
     return;
@@ -176,7 +176,7 @@ void EthSwt_SWIC_Cfg_SetResetDeassert(void)
 /* -------------------------------------------------------------------------- */
 Std_ReturnType EthSwt_SWIC_Cfg_AllowRelay(void)
 {
-    /* - OEM CustomF’†Œp‚ª‰Â”\‚Èó‘Ô‚©Šm”F‚·‚é - */
+    /* - OEM Customï¿½Fï¿½ï¿½ï¿½pï¿½ï¿½ï¿½Â”\ï¿½Èï¿½Ô‚ï¿½ï¿½mï¿½Fï¿½ï¿½ï¿½ï¿½ - */
     Std_ReturnType ret = E_NOT_OK;
     volatile Std_ReturnType result;
     result = u1_g_VISPwrGetEthChPwr();
@@ -193,8 +193,8 @@ Std_ReturnType EthSwt_SWIC_Cfg_AllowRelay(void)
 /* -------------------------------------------------------------------------- */
 Std_ReturnType EthSwt_SWIC_Cfg_AllowSetRegister(void)
 {
-    /* - OEM CustomFƒŒƒWƒXƒ^İ’è‚ª‰Â”\‚Èó‘Ô‚©Šm”F‚·‚é - */
-    /* C-DC‚Ìê‡‚ÍAPWRƒ‚ƒWƒ…[ƒ‹‚É‰Á‚¦ASAIL_RESOUT_N‚àŠm”F‚·‚é */
+    /* - OEM Customï¿½Fï¿½ï¿½ï¿½Wï¿½Xï¿½^ï¿½İ’è‚ªï¿½Â”\ï¿½Èï¿½Ô‚ï¿½ï¿½mï¿½Fï¿½ï¿½ï¿½ï¿½ - */
+    /* C-DCï¿½Ìê‡ï¿½ÍAPWRï¿½ï¿½ï¿½Wï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½É‰ï¿½ï¿½ï¿½ï¿½ASAIL_RESOUT_Nï¿½ï¿½ï¿½mï¿½Fï¿½ï¿½ï¿½ï¿½ */
     Std_ReturnType swicAvailable = E_NOT_OK;
     Std_ReturnType swicPowerStatus;
     Std_ReturnType sailResoutN;
@@ -217,17 +217,17 @@ Std_ReturnType EthSwt_SWIC_RstDtct_IsNeedDtct()
 {
     Std_ReturnType result = E_NOT_OK;
     Std_ReturnType ether_pwr_en =           Dio_ReadChannel(DIO_ID_PORT8_CH8);
-    Std_ReturnType sail_resout_n =          Dio_ReadChannel(DIO_ID_APORT4_CH11);
-    Std_ReturnType aoss_sleep_entry_exit =  Dio_ReadChannel(DIO_ID_PORT17_CH0);
+    uint8 sail_resout_n =                   u1_g_PwrCtrlMainGetPinInfo(PWRCTRL_MAIN_PINID_SAIL_RES);
+    Std_ReturnType aoss_sleep_entry_exit =  u1_g_PwrCtrlMainGetPinInfo(PWRCTRL_MAIN_PINID_AOSS_SLP);
 
 
     if (STD_HIGH == ether_pwr_en)
     {
         if (STD_HIGH == sail_resout_n)
         {
-            if (STD_HIGH == aoss_sleep_entry_exit)
+            if (STD_LOW == aoss_sleep_entry_exit)
             {
-                // ƒŠƒZƒbƒgŒŸoŠm”F—v‹‚ ‚è
+                // ãƒªã‚»ãƒƒãƒˆæ¤œå‡ºç¢ºèªè¦æ±‚ã‚ã‚Š
                 result = E_OK;
             }
         }
