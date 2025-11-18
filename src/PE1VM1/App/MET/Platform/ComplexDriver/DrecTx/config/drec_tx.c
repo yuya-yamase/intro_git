@@ -23,7 +23,6 @@
 #if 0   /* BEV Rebase provisionally */
 #include "rim_ctl.h"
 #include "rim_ctl_cfg.h"
-#include "iohw_adc.h"
 #endif   /* BEV Rebase provisionally */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -38,14 +37,9 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define DREC_TX_NUM_MSG                          (2U)
-#define DREC_TX_MSG_MET1D50                      (0U)
-#define DREC_TX_MSG_MET1D51                      (1U)
-
 #define DREC_TX_FNC_LSB_MET1D51                  (8U)
-#define DREC_TX_FNC_BIT_MET1D50                  (0x0001U)
 #define DREC_TX_FNC_BIT_MET1D51                  (0x0100U)
-#define DREC_TX_FNC_BIT_MAX                      (0x0303U)
+#define DREC_TX_FNC_BIT_MAX                      (0x0300U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -53,16 +47,6 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-typedef struct{
-    U1         u1_tm_elpsd;
-    U1         u1_sts;
-}ST_DREC_TX_BPE_CH;
-
-typedef struct{
-    U2         u2_sw_ch;
-    U2         u2_lsb;
-}ST_DREC_TX_BPE_EVT;
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -216,10 +200,7 @@ void    vd_g_DrectxMainTask(void)
 void    vd_g_DrectxTxAck(const U2 u2_a_MSG)
 {
 #if 0   /* BEV Rebase provisionally */
-    if(u2_a_MSG == (U2)MSG_MET1D50_TXCH0){
-        u2_s_drec_tx_evt |= (U2)DREC_TX_FNC_BIT_MET1D50;
-    }
-    else if(u2_a_MSG == (U2)MSG_MET1D51_TXCH0){
+    if(u2_a_MSG == (U2)MSG_MET1D51_TXCH0){
         u2_s_drec_tx_evt |= (U2)DREC_TX_FNC_BIT_MET1D51;
         u1_s_drec_tx_bpe_evt = (U1)0U;
     }
