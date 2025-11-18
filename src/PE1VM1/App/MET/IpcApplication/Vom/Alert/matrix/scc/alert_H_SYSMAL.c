@@ -1,4 +1,4 @@
-/* 5.6.0 */
+/* 5.7.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define ALERT_H_SYSMAL_C_MAJOR                   (5)
-#define ALERT_H_SYSMAL_C_MINOR                   (6)
+#define ALERT_H_SYSMAL_C_MINOR                   (7)
 #define ALERT_H_SYSMAL_C_PATCH                   (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -33,28 +33,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define ALERT_H_SYSMAL_BC_NUM_DST                (32U)
 #define ALERT_H_SYSMAL_PD1_NUM_DST               (16U)
-#define ALERT_H_SYSMAL_PD2_NUM_DST               (19U)
-#define ALERT_H_SYSMAL_RW_NUM_DST                (32U)
-
-#define ALERT_H_SYSMAL_PTSYS_NUM_TBL             (32U)
-#define ALERT_H_SYSMAL_HVMALPAT_NUM_TBL          (8U)
-#define ALERT_H_SYSMAL_HVIND_NUM_TBL             (16U)
-
-#define ALERT_H_SYSMAL_PTSYS_OTHER               (0x00U)
-#define ALERT_H_SYSMAL_PTSYS_HV                  (0x08U)
-#define ALERT_H_SYSMAL_PTSYS_EV                  (0x10U)
-#define ALERT_H_SYSMAL_HVMALPAT_RW_OFF           (0x00U)
-#define ALERT_H_SYSMAL_HVMALPAT_RW_ON            (0x04U)
-#define ALERT_H_SYSMAL_HVIND_RW_OFF              (0x00U)
-#define ALERT_H_SYSMAL_HVIND_RW_PTN1             (0x01U)
-#define ALERT_H_SYSMAL_HVIND_RW_PTN2             (0x02U)
-
-#define ALERT_H_SYSMAL_RWSGNL_HVSW               (0U)
-#define ALERT_H_SYSMAL_RWSGNL_HVSW2              (1U)
-#define ALERT_H_SYSMAL_RWSGNL_EVSW               (2U)
-#define ALERT_H_SYSMAL_RWSGNL_EVSW2              (3U)
-
-#define ALERT_H_SYSMAL_NUM_RWSGNL                (4U)
+#define ALERT_H_SYSMAL_PD2_NUM_DST               (64U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -72,8 +51,6 @@
 static U4      u4_s_AlertH_sysmalBcSrcchk (const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS);
 static U4      u4_s_AlertH_sysmalPd1Srcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS);
 static U4      u4_s_AlertH_sysmalPd2Srcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS);
-static U4      u4_s_AlertH_sysmalRwSrcchk (const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS);
-static void    vd_s_AlertH_sysmalRwRwTx   (const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
@@ -112,147 +89,48 @@ static const U1  u1_sp_ALERT_H_SYSMAL_BC_DST[ALERT_H_SYSMAL_BC_NUM_DST] = {
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 30 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN                                                      /* 31 UNKNOWN                                         */
 };
-static const U4  u4_sp_ALERT_H_SYSMAL_PD1_CRIT[ALERT_H_SYSMAL_PD1_NUM_DST] = {
-    (U4)0x00000023U,                                                           /* 00 MALPAT1                                         */
-    (U4)0x00000024U,                                                           /* 01 MALPAT1                                         */
-    (U4)0x00000025U,                                                           /* 02 MALPAT7                                         */
-    (U4)0x00000027U,                                                           /* 03 MALPAT11                                        */
-    (U4)0x0000003FU,                                                           /* 04 MALPAT1                                         */
-    (U4)0x00000040U,                                                           /* 05 MALPAT13                                        */
-    (U4)0x00000060U,                                                           /* 06 MALPAT3                                         */
-    (U4)0x00000080U,                                                           /* 07 MALPAT4                                         */
-    (U4)0x000000A3U,                                                           /* 08 MALPAT6                                         */
-    (U4)0x000000A4U,                                                           /* 09 MALPAT6                                         */
-    (U4)0x000000A5U,                                                           /* 10 MALPAT8                                         */
-    (U4)0x000000A7U,                                                           /* 11 MALPAT12                                        */
-    (U4)0x000000BFU,                                                           /* 12 MALPAT6                                         */
-    (U4)0x000000C0U,                                                           /* 13 MALPAT5                                         */
-    (U4)0x000000E7U,                                                           /* 14 MALPAT9                                         */
-    (U4)0x000000E0U                                                            /* 15 MALPAT10                                        */
-};
-static const U4  u4_sp_ALERT_H_SYSMAL_PD1_MASK[ALERT_H_SYSMAL_PD1_NUM_DST] = {
-    (U4)0x000001FFU,                                                           /* 00 MALPAT1                                         */
-    (U4)0x000001FDU,                                                           /* 01 MALPAT1                                         */
-    (U4)0x000001FFU,                                                           /* 02 MALPAT7                                         */
-    (U4)0x000001FFU,                                                           /* 03 MALPAT11                                        */
-    (U4)0x000001FFU,                                                           /* 04 MALPAT1                                         */
-    (U4)0x000001E0U,                                                           /* 05 MALPAT13                                        */
-    (U4)0x000001E0U,                                                           /* 06 MALPAT3                                         */
-    (U4)0x000001E0U,                                                           /* 07 MALPAT4                                         */
-    (U4)0x000001FFU,                                                           /* 08 MALPAT6                                         */
-    (U4)0x000001FDU,                                                           /* 09 MALPAT6                                         */
-    (U4)0x000001FFU,                                                           /* 10 MALPAT8                                         */
-    (U4)0x000001FFU,                                                           /* 11 MALPAT12                                        */
-    (U4)0x000001FFU,                                                           /* 12 MALPAT6                                         */
-    (U4)0x000001E0U,                                                           /* 13 MALPAT5                                         */
-    (U4)0x000001FFU,                                                           /* 14 MALPAT9                                         */
-    (U4)0x000001E0U                                                            /* 15 MALPAT10                                        */
-};
 static const U1  u1_sp_ALERT_H_SYSMAL_PD1_DST[ALERT_H_SYSMAL_PD1_NUM_DST] = {
-    (U1)ALERT_REQ_H_SYSMAL_PD1_MALPAT1,                                        /* 00 MALPAT1                                         */
-    (U1)ALERT_REQ_H_SYSMAL_PD1_MALPAT1,                                        /* 01 MALPAT1                                         */
-    (U1)ALERT_REQ_H_SYSMAL_PD1_MALPAT7,                                        /* 02 MALPAT7                                         */
-    (U1)ALERT_REQ_H_SYSMAL_PD1_MALPAT11,                                       /* 03 MALPAT11                                        */
-    (U1)ALERT_REQ_H_SYSMAL_PD1_MALPAT1,                                        /* 04 MALPAT1                                         */
-    (U1)ALERT_REQ_H_SYSMAL_PD1_MALPAT13,                                       /* 05 MALPAT13                                        */
-    (U1)ALERT_REQ_H_SYSMAL_PD1_MALPAT3,                                        /* 06 MALPAT3                                         */
-    (U1)ALERT_REQ_H_SYSMAL_PD1_MALPAT4,                                        /* 07 MALPAT4                                         */
-    (U1)ALERT_REQ_H_SYSMAL_PD1_MALPAT6,                                        /* 08 MALPAT6                                         */
-    (U1)ALERT_REQ_H_SYSMAL_PD1_MALPAT6,                                        /* 09 MALPAT6                                         */
-    (U1)ALERT_REQ_H_SYSMAL_PD1_MALPAT8,                                        /* 10 MALPAT8                                         */
-    (U1)ALERT_REQ_H_SYSMAL_PD1_MALPAT12,                                       /* 11 MALPAT12                                        */
-    (U1)ALERT_REQ_H_SYSMAL_PD1_MALPAT6,                                        /* 12 MALPAT6                                         */
-    (U1)ALERT_REQ_H_SYSMAL_PD1_MALPAT5,                                        /* 13 MALPAT5                                         */
-    (U1)ALERT_REQ_H_SYSMAL_PD1_MALPAT9,                                        /* 14 MALPAT9                                         */
-    (U1)ALERT_REQ_H_SYSMAL_PD1_MALPAT10                                        /* 15 MALPAT10                                        */
-};
-static const U4  u4_sp_ALERT_H_SYSMAL_PD2_CRIT[ALERT_H_SYSMAL_PD2_NUM_DST] = {
-    (U4)0x00000020U,                                                           /* 00 IND1                                            */
-    (U4)0x00000040U,                                                           /* 01 IND2                                            */
-    (U4)0x00000060U,                                                           /* 02 IND3                                            */
-    (U4)0x00000080U,                                                           /* 03 IND7                                            */
-    (U4)0x000000A0U,                                                           /* 04 IND8                                            */
-    (U4)0x000000C0U,                                                           /* 05 IND9                                            */
-    (U4)0x000000E0U,                                                           /* 06 IND10                                           */
-    (U4)0x00000100U,                                                           /* 07 IND11                                           */
-    (U4)0x00000120U,                                                           /* 08 IND12                                           */
-    (U4)0x00000140U,                                                           /* 09 IND13                                           */
-    (U4)0x00000160U,                                                           /* 10 IND4                                            */
-    (U4)0x00000180U,                                                           /* 11 IND5                                            */
-    (U4)0x000001A3U,                                                           /* 12 IND14                                           */
-    (U4)0x000001A4U,                                                           /* 13 IND14                                           */
-    (U4)0x000001A5U,                                                           /* 14 IND16                                           */
-    (U4)0x000001A7U,                                                           /* 15 IND17                                           */
-    (U4)0x000001BFU,                                                           /* 16 IND14                                           */
-    (U4)0x000001C0U,                                                           /* 17 IND15                                           */
-    (U4)0x000001E0U                                                            /* 18 IND6                                            */
-};
-static const U4  u4_sp_ALERT_H_SYSMAL_PD2_MASK[ALERT_H_SYSMAL_PD2_NUM_DST] = {
-    (U4)0x000007E0U,                                                           /* 00 IND1                                            */
-    (U4)0x000007E0U,                                                           /* 01 IND2                                            */
-    (U4)0x000007E0U,                                                           /* 02 IND3                                            */
-    (U4)0x000007E0U,                                                           /* 03 IND7                                            */
-    (U4)0x000007E0U,                                                           /* 04 IND8                                            */
-    (U4)0x000007E0U,                                                           /* 05 IND9                                            */
-    (U4)0x000007E0U,                                                           /* 06 IND10                                           */
-    (U4)0x000007E0U,                                                           /* 07 IND11                                           */
-    (U4)0x000007E0U,                                                           /* 08 IND12                                           */
-    (U4)0x000007E0U,                                                           /* 09 IND13                                           */
-    (U4)0x000007E0U,                                                           /* 10 IND4                                            */
-    (U4)0x000007E0U,                                                           /* 11 IND5                                            */
-    (U4)0x000007FFU,                                                           /* 12 IND14                                           */
-    (U4)0x000007FDU,                                                           /* 13 IND14                                           */
-    (U4)0x000007FFU,                                                           /* 14 IND16                                           */
-    (U4)0x000007FFU,                                                           /* 15 IND17                                           */
-    (U4)0x000007FFU,                                                           /* 16 IND14                                           */
-    (U4)0x000007E0U,                                                           /* 17 IND15                                           */
-    (U4)0x000007E0U                                                            /* 18 IND6                                            */
-};
-static const U1  u1_sp_ALERT_H_SYSMAL_PD2_DST[ALERT_H_SYSMAL_PD2_NUM_DST] = {
-    (U1)ALERT_REQ_H_SYSMAL_PD2_IND1,                                           /* 00 IND1                                            */
-    (U1)ALERT_REQ_H_SYSMAL_PD2_IND2,                                           /* 01 IND2                                            */
-    (U1)ALERT_REQ_H_SYSMAL_PD2_IND3,                                           /* 02 IND3                                            */
-    (U1)ALERT_REQ_H_SYSMAL_PD2_IND7,                                           /* 03 IND7                                            */
-    (U1)ALERT_REQ_H_SYSMAL_PD2_IND8,                                           /* 04 IND8                                            */
-    (U1)ALERT_REQ_H_SYSMAL_PD2_IND9,                                           /* 05 IND9                                            */
-    (U1)ALERT_REQ_H_SYSMAL_PD2_IND10,                                          /* 06 IND10                                           */
-    (U1)ALERT_REQ_H_SYSMAL_PD2_IND11,                                          /* 07 IND11                                           */
-    (U1)ALERT_REQ_H_SYSMAL_PD2_IND12,                                          /* 08 IND12                                           */
-    (U1)ALERT_REQ_H_SYSMAL_PD2_IND13,                                          /* 09 IND13                                           */
-    (U1)ALERT_REQ_H_SYSMAL_PD2_IND4,                                           /* 10 IND4                                            */
-    (U1)ALERT_REQ_H_SYSMAL_PD2_IND5,                                           /* 11 IND5                                            */
-    (U1)ALERT_REQ_H_SYSMAL_PD2_IND14,                                          /* 12 IND14                                           */
-    (U1)ALERT_REQ_H_SYSMAL_PD2_IND14,                                          /* 13 IND14                                           */
-    (U1)ALERT_REQ_H_SYSMAL_PD2_IND16,                                          /* 14 IND16                                           */
-    (U1)ALERT_REQ_H_SYSMAL_PD2_IND17,                                          /* 15 IND17                                           */
-    (U1)ALERT_REQ_H_SYSMAL_PD2_IND14,                                          /* 16 IND14                                           */
-    (U1)ALERT_REQ_H_SYSMAL_PD2_IND15,                                          /* 17 IND15                                           */
-    (U1)ALERT_REQ_H_SYSMAL_PD2_IND6                                            /* 18 IND6                                            */
-};
-static const U1  u1_sp_ALERT_H_SYSMAL_RW_DST[ALERT_H_SYSMAL_RW_NUM_DST] = {
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 00 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 01 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 02 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 03 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 04 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 05 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 06 UNKNOWN                                         */
+    (U1)ALERT_REQ_H_SYSMAL_PD1_MALPAT4,                                        /* 01 MALPAT4                                         */
+    (U1)ALERT_REQ_H_SYSMAL_PD1_MALPAT6,                                        /* 02 MALPAT6                                         */
+    (U1)ALERT_REQ_H_SYSMAL_PD1_MALPAT1,                                        /* 03 MALPAT1                                         */
+    (U1)ALERT_REQ_H_SYSMAL_PD1_MALPAT2,                                        /* 04 MALPAT2                                         */
+    (U1)ALERT_REQ_H_SYSMAL_PD1_MALPAT5,                                        /* 05 MALPAT5                                         */
+    (U1)ALERT_REQ_H_SYSMAL_PD1_MALPAT3,                                        /* 06 MALPAT3                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 07 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 08 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 09 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 10 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 11 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 12 UNKNOWN                                         */
-    (U1)ALERT_REQ_H_SYSMAL_RW_HVSW,                                            /* 13 HVSW                                            */
-    (U1)ALERT_REQ_H_SYSMAL_RW_HVSW2,                                           /* 14 HVSW2                                           */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 15 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 13 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 14 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN                                                      /* 15 UNKNOWN                                         */
+};
+static const U1  u1_sp_ALERT_H_SYSMAL_PD2_DST[ALERT_H_SYSMAL_PD2_NUM_DST] = {
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 00 UNKNOWN                                         */
+    (U1)ALERT_REQ_H_SYSMAL_PD2_IND1,                                           /* 01 IND1                                            */
+    (U1)ALERT_REQ_H_SYSMAL_PD2_IND2,                                           /* 02 IND2                                            */
+    (U1)ALERT_REQ_H_SYSMAL_PD2_IND3,                                           /* 03 IND3                                            */
+    (U1)ALERT_REQ_H_SYSMAL_PD2_IND7,                                           /* 04 IND7                                            */
+    (U1)ALERT_REQ_H_SYSMAL_PD2_IND8,                                           /* 05 IND8                                            */
+    (U1)ALERT_REQ_H_SYSMAL_PD2_IND9,                                           /* 06 IND9                                            */
+    (U1)ALERT_REQ_H_SYSMAL_PD2_IND10,                                          /* 07 IND10                                           */
+    (U1)ALERT_REQ_H_SYSMAL_PD2_IND11,                                          /* 08 IND11                                           */
+    (U1)ALERT_REQ_H_SYSMAL_PD2_IND12,                                          /* 09 IND12                                           */
+    (U1)ALERT_REQ_H_SYSMAL_PD2_IND13,                                          /* 10 IND13                                           */
+    (U1)ALERT_REQ_H_SYSMAL_PD2_IND4,                                           /* 11 IND4                                            */
+    (U1)ALERT_REQ_H_SYSMAL_PD2_IND5,                                           /* 12 IND5                                            */
+    (U1)ALERT_REQ_H_SYSMAL_PD2_IND15,                                          /* 13 IND15                                           */
+    (U1)ALERT_REQ_H_SYSMAL_PD2_IND14,                                          /* 14 IND14                                           */
+    (U1)ALERT_REQ_H_SYSMAL_PD2_IND6,                                           /* 15 IND6                                            */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 16 UNKNOWN                                         */
-    (U1)ALERT_REQ_H_SYSMAL_RW_EVSW,                                            /* 17 EVSW                                            */
-    (U1)ALERT_REQ_H_SYSMAL_RW_EVSW2,                                           /* 18 EVSW2                                           */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 17 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 18 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 19 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 20 UNKNOWN                                         */
-    (U1)ALERT_REQ_H_SYSMAL_RW_EVSW,                                            /* 21 EVSW                                            */
-    (U1)ALERT_REQ_H_SYSMAL_RW_EVSW2,                                           /* 22 EVSW2                                           */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 21 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 22 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 23 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 24 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 25 UNKNOWN                                         */
@@ -261,11 +139,43 @@ static const U1  u1_sp_ALERT_H_SYSMAL_RW_DST[ALERT_H_SYSMAL_RW_NUM_DST] = {
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 28 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 29 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 30 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN                                                      /* 31 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 31 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 32 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 33 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 34 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 35 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 36 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 37 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 38 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 39 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 40 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 41 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 42 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 43 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 44 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 45 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 46 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 47 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 48 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 49 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 50 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 51 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 52 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 53 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 54 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 55 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 56 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 57 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 58 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 59 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 60 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 61 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 62 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN                                                      /* 63 UNKNOWN                                         */
 };
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-const ST_ALERT_MTRX st_gp_ALERT_H_SYSMAL_MTRX[4] = {
+const ST_ALERT_MTRX st_gp_ALERT_H_SYSMAL_MTRX[3] = {
     {
         &u4_s_AlertH_sysmalBcSrcchk,                                           /* fp_u4_SRC_CHK                                      */
         vdp_PTR_NA,                                                            /* fp_vd_XDST                                         */
@@ -281,8 +191,8 @@ const ST_ALERT_MTRX st_gp_ALERT_H_SYSMAL_MTRX[4] = {
         &u4_s_AlertH_sysmalPd1Srcchk,                                          /* fp_u4_SRC_CHK                                      */
         vdp_PTR_NA,                                                            /* fp_vd_XDST                                         */
 
-        &u4_sp_ALERT_H_SYSMAL_PD1_MASK[0],                                     /* u4p_MASK                                           */
-        &u4_sp_ALERT_H_SYSMAL_PD1_CRIT[0],                                     /* u4p_CRIT                                           */
+        (const U4 *)vdp_PTR_NA,                                                /* u4p_MASK                                           */
+        (const U4 *)vdp_PTR_NA,                                                /* u4p_CRIT                                           */
 
         &u1_sp_ALERT_H_SYSMAL_PD1_DST[0],                                      /* u1p_DST                                            */
         (U2)ALERT_H_SYSMAL_PD1_NUM_DST,                                        /* u2_num_srch                                        */
@@ -292,22 +202,11 @@ const ST_ALERT_MTRX st_gp_ALERT_H_SYSMAL_MTRX[4] = {
         &u4_s_AlertH_sysmalPd2Srcchk,                                          /* fp_u4_SRC_CHK                                      */
         vdp_PTR_NA,                                                            /* fp_vd_XDST                                         */
 
-        &u4_sp_ALERT_H_SYSMAL_PD2_MASK[0],                                     /* u4p_MASK                                           */
-        &u4_sp_ALERT_H_SYSMAL_PD2_CRIT[0],                                     /* u4p_CRIT                                           */
-
-        &u1_sp_ALERT_H_SYSMAL_PD2_DST[0],                                      /* u1p_DST                                            */
-        (U2)ALERT_H_SYSMAL_PD2_NUM_DST,                                        /* u2_num_srch                                        */
-        (U1)ALERT_VOM_IGN_ON                                                   /* u1_vom_act                                         */
-    },
-    {
-        &u4_s_AlertH_sysmalRwSrcchk,                                           /* fp_u4_SRC_CHK                                      */
-        &vd_s_AlertH_sysmalRwRwTx,                                             /* fp_vd_XDST                                         */
-
         (const U4 *)vdp_PTR_NA,                                                /* u4p_MASK                                           */
         (const U4 *)vdp_PTR_NA,                                                /* u4p_CRIT                                           */
 
-        &u1_sp_ALERT_H_SYSMAL_RW_DST[0],                                       /* u1p_DST                                            */
-        (U2)ALERT_H_SYSMAL_RW_NUM_DST,                                         /* u2_num_srch                                        */
+        &u1_sp_ALERT_H_SYSMAL_PD2_DST[0],                                      /* u1p_DST                                            */
+        (U2)ALERT_H_SYSMAL_PD2_NUM_DST,                                        /* u2_num_srch                                        */
         (U1)ALERT_VOM_IGN_ON                                                   /* u1_vom_act                                         */
     }
 };
@@ -349,25 +248,18 @@ static U4      u4_s_AlertH_sysmalBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
 /*===================================================================================================================================*/
 static U4      u4_s_AlertH_sysmalPd1Srcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
-    static const U1 u1_s_ALERT_H_SYSMALPD1_LSB_EHV  = (U1)8U;
-    static const U1 u1_s_ALERT_H_SYSMALPD1_LSB_MLPT = (U1)5U;
+    static const U1 u1_s_ALERT_H_SYSMALPD1_LSB_EHV  = (U1)3U;
     U4              u4_t_src_chk;
     U1              u1_t_msgsts;
     U1              u1_t_sgnl;
 
     u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_EHV1S26_CH0,
-                                      (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP,
+                                      (U4)OXCAN_SYS_IGP,
                                       (U2)U2_MAX) & (U1)COM_NO_RX;
     u4_t_src_chk  = ((U4)u1_t_msgsts << u1_s_ALERT_H_SYSMALPD1_LSB_EHV);
 
     u1_t_sgnl     = (U1)0U;
     (void)Com_ReceiveSignal(ComConf_ComSignal_HVMALPAT, &u1_t_sgnl);
-    u4_t_src_chk |= ((U4)u1_t_sgnl   << u1_s_ALERT_H_SYSMALPD1_LSB_MLPT);
-
-    u1_t_sgnl     = u1_g_AlertPtsys();
-    if(u1_t_sgnl > (U1)ALERT_PTSYS_1F_NRX){
-        u1_t_sgnl = (U1)ALERT_PTSYS_0F_UNK;
-    }
     u4_t_src_chk |= (U4)u1_t_sgnl;
 
     return(u4_t_src_chk);
@@ -381,194 +273,21 @@ static U4      u4_s_AlertH_sysmalPd1Srcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
 /*===================================================================================================================================*/
 static U4      u4_s_AlertH_sysmalPd2Srcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
-    static const U1 u1_s_ALERT_H_SYSMALPD2_LSB_EHV   = (U1)10U;
-    static const U1 u1_s_ALERT_H_SYSMALPD2_LSB_HVIND = (U1)5U;
+    static const U1 u1_s_ALERT_H_SYSMALPD2_LSB_EHV   = (U1)5U;
     U4              u4_t_src_chk;
     U1              u1_t_msgsts;
     U1              u1_t_sgnl;
 
     u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_EHV1S26_CH0,
-                                      (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP,
+                                      (U4)OXCAN_SYS_IGP,
                                       (U2)U2_MAX) & (U1)COM_NO_RX;
     u4_t_src_chk  = ((U4)u1_t_msgsts << u1_s_ALERT_H_SYSMALPD2_LSB_EHV);
 
     u1_t_sgnl     = (U1)0U;
     (void)Com_ReceiveSignal(ComConf_ComSignal_HVIND, &u1_t_sgnl);
-    u4_t_src_chk |= ((U4)u1_t_sgnl   << u1_s_ALERT_H_SYSMALPD2_LSB_HVIND);
-
-    u1_t_sgnl     = u1_g_AlertPtsys();
-    if(u1_t_sgnl > (U1)ALERT_PTSYS_1F_NRX){
-        u1_t_sgnl = (U1)ALERT_PTSYS_0F_UNK;
-    }
     u4_t_src_chk |= (U4)u1_t_sgnl;
 
     return(u4_t_src_chk);
-}
-
-/*===================================================================================================================================*/
-/*  static U4      u4_s_AlertH_sysmalRwSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)                            */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static U4      u4_s_AlertH_sysmalRwSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
-{
-    static const U1 u1_sp_ALERT_H_SYSMALRW_PTSYS_JDG[ALERT_H_SYSMAL_PTSYS_NUM_TBL] = {
-        (U1)ALERT_H_SYSMAL_PTSYS_OTHER,
-        (U1)ALERT_H_SYSMAL_PTSYS_OTHER,
-        (U1)ALERT_H_SYSMAL_PTSYS_OTHER,
-        (U1)ALERT_H_SYSMAL_PTSYS_HV,
-        (U1)ALERT_H_SYSMAL_PTSYS_HV,
-        (U1)ALERT_H_SYSMAL_PTSYS_EV,
-        (U1)ALERT_H_SYSMAL_PTSYS_HV,
-        (U1)ALERT_H_SYSMAL_PTSYS_OTHER,
-        (U1)ALERT_H_SYSMAL_PTSYS_OTHER,
-        (U1)ALERT_H_SYSMAL_PTSYS_OTHER,
-        (U1)ALERT_H_SYSMAL_PTSYS_OTHER,
-        (U1)ALERT_H_SYSMAL_PTSYS_OTHER,
-        (U1)ALERT_H_SYSMAL_PTSYS_OTHER,
-        (U1)ALERT_H_SYSMAL_PTSYS_OTHER,
-        (U1)ALERT_H_SYSMAL_PTSYS_OTHER,
-        (U1)ALERT_H_SYSMAL_PTSYS_OTHER,
-        (U1)ALERT_H_SYSMAL_PTSYS_OTHER,
-        (U1)ALERT_H_SYSMAL_PTSYS_OTHER,
-        (U1)ALERT_H_SYSMAL_PTSYS_OTHER,
-        (U1)ALERT_H_SYSMAL_PTSYS_OTHER,
-        (U1)ALERT_H_SYSMAL_PTSYS_OTHER,
-        (U1)ALERT_H_SYSMAL_PTSYS_OTHER,
-        (U1)ALERT_H_SYSMAL_PTSYS_OTHER,
-        (U1)ALERT_H_SYSMAL_PTSYS_OTHER,
-        (U1)ALERT_H_SYSMAL_PTSYS_OTHER,
-        (U1)ALERT_H_SYSMAL_PTSYS_OTHER,
-        (U1)ALERT_H_SYSMAL_PTSYS_OTHER,
-        (U1)ALERT_H_SYSMAL_PTSYS_OTHER,
-        (U1)ALERT_H_SYSMAL_PTSYS_OTHER,
-        (U1)ALERT_H_SYSMAL_PTSYS_OTHER,
-        (U1)ALERT_H_SYSMAL_PTSYS_OTHER,
-        (U1)ALERT_H_SYSMAL_PTSYS_HV
-    };
-    static const U1 u1_sp_ALERT_H_SYSMALRW_MLPT_JDG[ALERT_H_SYSMAL_HVMALPAT_NUM_TBL] = {
-        (U1)ALERT_H_SYSMAL_HVMALPAT_RW_OFF,
-        (U1)ALERT_H_SYSMAL_HVMALPAT_RW_ON,
-        (U1)ALERT_H_SYSMAL_HVMALPAT_RW_ON,
-        (U1)ALERT_H_SYSMAL_HVMALPAT_RW_ON,
-        (U1)ALERT_H_SYSMAL_HVMALPAT_RW_ON,
-        (U1)ALERT_H_SYSMAL_HVMALPAT_RW_OFF,
-        (U1)ALERT_H_SYSMAL_HVMALPAT_RW_ON,
-        (U1)ALERT_H_SYSMAL_HVMALPAT_RW_OFF
-    };
-    static const U1 u1_sp_ALERT_H_SYSMALRW_HVIND_JDG[ALERT_H_SYSMAL_HVIND_NUM_TBL] = {
-        (U1)ALERT_H_SYSMAL_HVIND_RW_OFF,
-        (U1)ALERT_H_SYSMAL_HVIND_RW_PTN2,
-        (U1)ALERT_H_SYSMAL_HVIND_RW_PTN1,
-        (U1)ALERT_H_SYSMAL_HVIND_RW_PTN2,
-        (U1)ALERT_H_SYSMAL_HVIND_RW_PTN1,
-        (U1)ALERT_H_SYSMAL_HVIND_RW_PTN1,
-        (U1)ALERT_H_SYSMAL_HVIND_RW_PTN1,
-        (U1)ALERT_H_SYSMAL_HVIND_RW_PTN1,
-        (U1)ALERT_H_SYSMAL_HVIND_RW_PTN1,
-        (U1)ALERT_H_SYSMAL_HVIND_RW_PTN1,
-        (U1)ALERT_H_SYSMAL_HVIND_RW_PTN1,
-        (U1)ALERT_H_SYSMAL_HVIND_RW_PTN2,
-        (U1)ALERT_H_SYSMAL_HVIND_RW_PTN2,
-        (U1)ALERT_H_SYSMAL_HVIND_RW_PTN1,
-        (U1)ALERT_H_SYSMAL_HVIND_RW_PTN1,
-        (U1)ALERT_H_SYSMAL_HVIND_RW_PTN1
-    };
-
-    U4              u4_t_src_chk;
-    U4              u4_t_ptsys_jdg;
-    U4              u4_t_mlpt_jdg;
-    U4              u4_t_hvind_jdg;
-    U1              u1_t_msgsts;
-    U1              u1_t_sgnl;
-
-    u1_t_msgsts    = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_EHV1S26_CH0,
-                                       (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP,
-                                       (U2)U2_MAX) & (U1)COM_NO_RX;
-    u1_t_sgnl      = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_HVMALPAT, &u1_t_sgnl);
-    if(u1_t_msgsts == (U1)COM_NO_RX){
-        u4_t_mlpt_jdg  = (U4)ALERT_H_SYSMAL_HVMALPAT_RW_OFF;
-    }
-    else if(u1_t_sgnl >= (U1)ALERT_H_SYSMAL_HVMALPAT_NUM_TBL){
-        u4_t_mlpt_jdg  = (U4)ALERT_H_SYSMAL_HVMALPAT_RW_OFF;
-    }
-    else{
-        u4_t_mlpt_jdg  = (U4)u1_sp_ALERT_H_SYSMALRW_MLPT_JDG[u1_t_sgnl];
-    }
-
-    u1_t_sgnl      = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_HVIND, &u1_t_sgnl);
-    if((u1_t_msgsts == (U1)COM_NO_RX                   ) ||
-       (u1_t_sgnl   >= (U1)ALERT_H_SYSMAL_HVIND_NUM_TBL)){
-        u4_t_hvind_jdg = (U4)ALERT_H_SYSMAL_HVIND_RW_OFF;
-    }
-    else{
-        u4_t_hvind_jdg = (U4)u1_sp_ALERT_H_SYSMALRW_HVIND_JDG[u1_t_sgnl];
-    }
-
-    u1_t_sgnl      = u1_g_AlertPtsys();
-    if(u1_t_sgnl > (U1)ALERT_PTSYS_1F_NRX){
-        u1_t_sgnl      = (U1)ALERT_PTSYS_0F_UNK;
-    }
-    u4_t_ptsys_jdg = (U4)u1_sp_ALERT_H_SYSMALRW_PTSYS_JDG[u1_t_sgnl];
-
-    u4_t_src_chk   = (u4_t_ptsys_jdg | u4_t_mlpt_jdg | u4_t_hvind_jdg);
-
-    return(u4_t_src_chk);
-}
-
-/*===================================================================================================================================*/
-/*  static void    vd_s_AlertH_sysmalRwRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)                              */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void    vd_s_AlertH_sysmalRwRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)
-{
-#if 0   /* BEV Rebase provisionally */
-    static const U1 u1_sp_ALERT_H_SYSMALRWTX_VOM_CRT[ALERT_H_SYSMAL_NUM_RWSGNL] = {
-        (U1)ALERT_VOM_IGN_ON,                                       /* HVSW     */
-        (U1)ALERT_VOM_RWT_EN,                                       /* HVSW2    */
-        (U1)ALERT_VOM_IGN_ON,                                       /* EVSW     */
-        (U1)ALERT_VOM_RWT_EN                                        /* EVSW2    */
-    };
-    static const U1 u1_sp_ALERT_H_SYSMALRWTX_DST_CRT[ALERT_H_SYSMAL_NUM_RWSGNL] = {
-        ((U1)1U << ALERT_REQ_H_SYSMAL_RW_HVSW),                     /* HVSW     */
-        ((U1)1U << ALERT_REQ_H_SYSMAL_RW_HVSW2),                    /* HVSW2    */
-        ((U1)1U << ALERT_REQ_H_SYSMAL_RW_EVSW),                     /* EVSW     */
-        ((U1)1U << ALERT_REQ_H_SYSMAL_RW_EVSW2)                     /* EVSW2    */
-    };
-    static const U1 u1_s_ALERT_H_SYSMALRWTX_DST_MSK = (U1)0x03U;
-
-    U1              u1_tp_sgnl[ALERT_H_SYSMAL_NUM_RWSGNL];
-    U1              u1_t_rw;
-    U4              u4_t_idx;
-
-    u1_t_rw = (U1)0U;
-    if(u1_a_DST != (U1)ALERT_REQ_UNKNOWN){
-        u1_t_rw = ((U1)1U << (u1_a_DST & u1_s_ALERT_H_SYSMALRWTX_DST_MSK));
-    }
-    for(u4_t_idx = (U4)0U; u4_t_idx < (U4)ALERT_H_SYSMAL_NUM_RWSGNL; u4_t_idx++){
-        if(((u1_a_VOM & u1_sp_ALERT_H_SYSMALRWTX_VOM_CRT[u4_t_idx]) != (U1)0U) &&
-           ((u1_t_rw  & u1_sp_ALERT_H_SYSMALRWTX_DST_CRT[u4_t_idx]) != (U1)0U)){
-            u1_tp_sgnl[u4_t_idx] = (U1)ALERT_RW_SGNL_ON;
-        }
-        else{
-            u1_tp_sgnl[u4_t_idx] = (U1)ALERT_RW_SGNL_OFF;
-        }
-    }
-
-    (void)Com_SendSignal(ComConf_ComSignal_HVSW, &u1_tp_sgnl[ALERT_H_SYSMAL_RWSGNL_HVSW]);
-    (void)Com_SendSignal(ComConf_ComSignal_HVSW2, &u1_tp_sgnl[ALERT_H_SYSMAL_RWSGNL_HVSW2]);
-#if defined(ComConf_ComSignal_EVSW)
-    (void)Com_SendSignal(ComConf_ComSignal_EVSW, &u1_tp_sgnl[ALERT_H_SYSMAL_RWSGNL_EVSW]);
-#endif /* defined(ComConf_ComSignal_EVSW)  */
-#if defined(ComConf_ComSignal_EVSW2)
-    (void)Com_SendSignal(ComConf_ComSignal_EVSW2, &u1_tp_sgnl[ALERT_H_SYSMAL_RWSGNL_EVSW2]);
-#endif /* defined(ComConf_ComSignal_EVSW2)  */
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -588,6 +307,7 @@ static void    vd_s_AlertH_sysmalRwRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
 /*  5.5.1     6/23/2021  TN       Update for 050D CV(Version update).                                                                */
 /*  5.5.2    11/16/2021  TM       Fix QAC Warning.                                                                                   */
 /*  5.6.0    01/12/2024  RO       Update for 19PFv3.                                                                                 */
+/*  5.7.0    10/25/2024  RS       Change for BEV System_Consideration_1.                                                             */
 /*                                                                                                                                   */
 /*  * MY   = Masaki Yoshizawa, NTTD MSE                                                                                              */
 /*  * ZS   = Zenjiro Shamoto, NTTD MSE                                                                                               */
@@ -596,5 +316,6 @@ static void    vd_s_AlertH_sysmalRwRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
 /*  * TN   = Toshiaki Nagashima, NTTD MSE                                                                                            */
 /*  * TM   = Tatsuya Mori, NTTD MSE                                                                                                  */
 /*  * RO   = Ryo Oohashi, KSE                                                                                                        */
+/*  * RS   = Ryuki Sako, Denso Techno                                                                                                */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

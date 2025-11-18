@@ -137,9 +137,7 @@ static U4      u4_s_AlertB_tpwsrSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
     if((u1_s_alert_b_tpwsr_msgsts & (U1)COM_NO_RX) != (U1)COM_NO_RX){
         (void)Com_ReceiveSignal(ComConf_ComSignal_PWWARN, &u1_t_pwwarn);
         u4_t_srcchk  = ((U4)u1_t_pwwarn << u1_s_ALERT_B_TPWSR_LSB_PWWARN);
-#if defined(ComConf_ComSignal_SRWARN)
         (void)Com_ReceiveSignal(ComConf_ComSignal_SRWARN, &u1_t_srwarn);
-#endif
         u4_t_srcchk |= ((U4)u1_t_srwarn << u1_s_ALERT_B_TPWSR_LSB_SRWARN);
     }
 

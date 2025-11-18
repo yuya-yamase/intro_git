@@ -47,7 +47,6 @@
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static U4      u4_s_AlertO_chamalSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS);
-static void    vd_s_AlertO_chamalRwTx  (const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
@@ -91,7 +90,7 @@ static const U1  u1_sp_ALERT_O_CHAMAL_DST[ALERT_O_CHAMAL_NUM_DST] = {
 const ST_ALERT_MTRX st_gp_ALERT_O_CHAMAL_MTRX[1] = {
     {
         &u4_s_AlertO_chamalSrcchk,                                             /* fp_u4_SRC_CHK                                      */
-        &vd_s_AlertO_chamalRwTx,                                               /* fp_vd_XDST                                         */
+        vdp_PTR_NA,                                                            /* fp_vd_XDST                                         */
 
         (const U4 *)vdp_PTR_NA,                                                /* u4p_MASK                                           */
         (const U4 *)vdp_PTR_NA,                                                /* u4p_CRIT                                           */
@@ -135,41 +134,6 @@ static U4      u4_s_AlertO_chamalSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
     u4_t_src_chk |= ((U4)u1_t_sgnl   << u1_s_ALERT_O_CHAMAL_LSB_CHAW_BZR);
 
     return(u4_t_src_chk);
-}
-
-/*===================================================================================================================================*/
-/*  static void    vd_s_AlertO_chamalRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)                                */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void    vd_s_AlertO_chamalRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)
-{
-#if 0   /* BEV Rebase provisionally */
-#ifdef ComConf_ComSignal_LW /* 130D_CAN */
-    static const U4 u4_s_ALERT_O_CHAMAL_RWTX_CRT    = (U4)(((U4)1U << ALERT_REQ_O_CHAMAL_MALFUNC      )
-                                                         | ((U4)1U << ALERT_REQ_O_CHAMAL_INSPECTION   )
-                                                         | ((U4)1U << ALERT_REQ_O_CHAMAL_MALFUNC_BZ   )
-                                                         | ((U4)1U << ALERT_REQ_O_CHAMAL_INSPECTION_BZ));
-    static const U1 u1_s_ALERT_O_CHAMAL_RWTX_MSK    = (U1)0x07U;
-    static const U4 u4_s_ALERT_O_CHAMAL_TIM_RW_ENBL = ((U4)15000U / (U4)ALERT_MAIN_TICK);
-    U1              u1_t_sgnl;
-    U4              u4_t_rw;
-
-    u4_t_rw = ((U4)1U << (u1_a_DST & u1_s_ALERT_O_CHAMAL_RWTX_MSK));
-
-    if(((u1_a_VOM & (U1)ALERT_VOM_IGN_ON)        != (U1)0U                         ) &&
-       (u4_a_IGN_TM                              >= u4_s_ALERT_O_CHAMAL_TIM_RW_ENBL) &&
-       ((u4_t_rw & u4_s_ALERT_O_CHAMAL_RWTX_CRT) != (U4)0U                         )){
-        u1_t_sgnl = (U1)ALERT_RW_SGNL_ON;
-    }
-    else{
-        u1_t_sgnl = (U1)ALERT_RW_SGNL_OFF;
-    }
-
-    (void)Com_SendSignal(ComConf_ComSignal_LW, &u1_t_sgnl);
-#endif /* ComConf_ComSignal_LW */ /* 130D_CAN */
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
