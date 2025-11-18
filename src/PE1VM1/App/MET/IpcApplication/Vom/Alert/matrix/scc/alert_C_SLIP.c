@@ -47,7 +47,6 @@
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static U4      u4_s_AlertC_slipSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS);
-static void    vd_s_AlertC_slipRwTx  (const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
@@ -123,7 +122,7 @@ static const U1  u1_sp_ALERT_C_SLIP_DST[ALERT_C_SLIP_NUM_DST] = {
 const ST_ALERT_MTRX st_gp_ALERT_C_SLIP_MTRX[1] = {
     {
         &u4_s_AlertC_slipSrcchk,                                               /* fp_u4_SRC_CHK                                      */
-        &vd_s_AlertC_slipRwTx,                                                 /* fp_vd_XDST                                         */
+        vdp_PTR_NA,                                                            /* fp_vd_XDST                                         */
 
         (const U4 *)vdp_PTR_NA,                                                /* u4p_MASK                                           */
         (const U4 *)vdp_PTR_NA,                                                /* u4p_CRIT                                           */
@@ -145,60 +144,28 @@ const ST_ALERT_MTRX st_gp_ALERT_C_SLIP_MTRX[1] = {
 /*===================================================================================================================================*/
 static U4      u4_s_AlertC_slipSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
-#if 0   /* BEV Rebase provisionally */
     static const U2 u2_s_ALERT_C_SLIP_TO_THRESH   = ((U2)1000U / (U2)OXCAN_MAIN_TICK);
-    static const U1 u1_s_ALERT_C_SLIP_LSB_VSC1S95 = (U1)3U;
+    static const U1 u1_s_ALERT_C_SLIP_LSB_DDM1S17 = (U1)3U;
     static const U1 u1_s_ALERT_C_SLIP_LSB_DDRTWV  = (U1)5U;
     U4              u4_t_src_chk;
     U1              u1_t_msgsts;
     U1              u1_t_sgnl;
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_VSC1S95,
-                                          (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
-                                          u2_s_ALERT_C_SLIP_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_DDM1S17_CH0,
+                                      (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP,
+                                      u2_s_ALERT_C_SLIP_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
-    u4_t_src_chk  = ((U4)u1_t_msgsts << u1_s_ALERT_C_SLIP_LSB_VSC1S95);
+    u4_t_src_chk  = ((U4)u1_t_msgsts << u1_s_ALERT_C_SLIP_LSB_DDM1S17);
 
     u1_t_sgnl     = (U1)0U;
     (void)Com_ReceiveSignal(ComConf_ComSignal_SLP_WL, &u1_t_sgnl);
     u4_t_src_chk |= (U4)u1_t_sgnl;
 
     u1_t_sgnl     = (U1)0U;
-#ifdef ComConf_ComSignal_DDRTWV
     (void)Com_ReceiveSignal(ComConf_ComSignal_DDRTWV, &u1_t_sgnl);
-#endif /* ComConf_ComSignal_DDRTWV */ /* 235D_CAN */
     u4_t_src_chk |= ((U4)u1_t_sgnl   << u1_s_ALERT_C_SLIP_LSB_DDRTWV);
 
     return(u4_t_src_chk);
-#else   /* BEV Rebase provisionally */
-    return((U4)0U);
-#endif   /* BEV Rebase provisionally */
-}
-
-/*===================================================================================================================================*/
-/*  static void    vd_s_AlertC_slipRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)                                  */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void    vd_s_AlertC_slipRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)
-{
-#if 0   /* BEV Rebase provisionally */
-    U1              u1_t_sgnl;
-    U1              u1_t_esopt_vsc;
-
-    u1_t_esopt_vsc = u1_g_AlertEsOptAvailable((U2)ALERT_OPT_ID_C_SLIP_VSCEXIST);
-    if(((u1_a_VOM & (U1)ALERT_VOM_RWT_EN) != (U1)0U                         ) &&
-       (u1_t_esopt_vsc                    == (U1)TRUE                       ) &&
-       (u1_a_DST                          == (U1)ALERT_REQ_C_SLIP_MALFUNC_RW)){
-        u1_t_sgnl = (U1)ALERT_RW_SGNL_ON;
-    }
-    else{
-        u1_t_sgnl = (U1)ALERT_RW_SGNL_OFF;
-    }
-
-    (void)Com_SendSignal(ComConf_ComSignal_VSCW, &u1_t_sgnl);
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
