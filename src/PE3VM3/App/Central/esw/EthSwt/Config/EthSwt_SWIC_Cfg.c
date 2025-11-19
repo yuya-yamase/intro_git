@@ -217,15 +217,15 @@ Std_ReturnType EthSwt_SWIC_RstDtct_IsNeedDtct()
 {
     Std_ReturnType result = E_NOT_OK;
     Std_ReturnType ether_pwr_en =           Dio_ReadChannel(DIO_ID_PORT8_CH8);
-    Std_ReturnType sail_resout_n =          Dio_ReadChannel(DIO_ID_APORT4_CH11);
-    Std_ReturnType aoss_sleep_entry_exit =  Dio_ReadChannel(DIO_ID_PORT17_CH0);
+    uint8 sail_resout_n =                   u1_g_PwrCtrlMainGetPinInfo(PWRCTRL_MAIN_PINID_SAIL_RES);
+    Std_ReturnType aoss_sleep_entry_exit =  u1_g_PwrCtrlMainGetPinInfo(PWRCTRL_MAIN_PINID_AOSS_SLP);
 
 
     if (STD_HIGH == ether_pwr_en)
     {
         if (STD_HIGH == sail_resout_n)
         {
-            if (STD_HIGH == aoss_sleep_entry_exit)
+            if (STD_LOW == aoss_sleep_entry_exit)
             {
                 // リセット検出確認要求あり
                 result = E_OK;

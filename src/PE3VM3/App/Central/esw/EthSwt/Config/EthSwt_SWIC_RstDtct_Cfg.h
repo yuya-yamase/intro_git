@@ -23,7 +23,7 @@ static const struct swic_reg_tbl G_ETHSWT_SWIC_RSTDTCT_TABLE[]
 ,   {&g_regListSeqGetResetDetect[12], 4u}
 };
 
-#define G_ETHSWT_SWIC_RSTDTCT_TABLE_NUM (sizeof(G_ETHSWT_SWIC_RSTDTCT_TABLE))
+#define G_ETHSWT_SWIC_RSTDTCT_TABLE_NUM (sizeof(G_ETHSWT_SWIC_RSTDTCT_TABLE) / sizeof(G_ETHSWT_SWIC_RSTDTCT_TABLE[0]))
 
 /* -------------------------------------------------------------------------- */
 #endif /* ETHSWT_SWIC_RSTDTCT_CFG_H */
