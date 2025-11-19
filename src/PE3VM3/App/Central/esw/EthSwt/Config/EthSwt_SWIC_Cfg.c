@@ -218,7 +218,7 @@ Std_ReturnType EthSwt_SWIC_RstDtct_IsNeedDtct()
     Std_ReturnType result = E_NOT_OK;
     Std_ReturnType ether_pwr_en =           Dio_ReadChannel(DIO_ID_PORT8_CH8);
     uint8 sail_resout_n =                   u1_g_PwrCtrlMainGetPinInfo(PWRCTRL_MAIN_PINID_SAIL_RES);
-    Std_ReturnType aoss_sleep_entry_exit =  u1_g_PwrCtrlMainGetPinInfo(PWRCTRL_MAIN_PINID_AOSS_SLP);
+    uint8 aoss_sleep_entry_exit =           u1_g_PwrCtrlMainGetPinInfo(PWRCTRL_MAIN_PINID_AOSS_SLP);
 
 
     if (STD_HIGH == ether_pwr_en)
