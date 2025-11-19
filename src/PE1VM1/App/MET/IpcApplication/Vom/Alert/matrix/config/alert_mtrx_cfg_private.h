@@ -120,7 +120,6 @@
 #define ALERT_S_LDA_CH_NUM                       (2U)
 #define ALERT_S_LTA_2_CH_NUM                     (2U)
 #define ALERT_S_PCS1_CH_NUM                      (1U)
-#define ALERT_S_OAA_CH_NUM                       (1U)
 #define ALERT_S_RSA_CH_NUM                       (2U)
 #define ALERT_S_SWS_CH_NUM                       (1U)
 #define ALERT_S_TMN_CH_NUM                       (1U)
@@ -145,7 +144,6 @@
 #define ALERT_H_TVPSOF_CH_NUM                    (1U)
 #define ALERT_B_ALOA2_CH_NUM                     (1U)
 #define ALERT_B_RPWSEA_CH_NUM                    (1U)
-#define ALERT_H_TCBM_CH_NUM                      (1U)
 #define ALERT_H_DCLDSP_CH_NUM                    (1U)
 #define ALERT_C_BRPADW_CH_NUM                    (1U)
 #define ALERT_C_HCS_CH_NUM                       (3U)
@@ -171,7 +169,11 @@
 #define ALERT_ENGTYPE_CAN_IOHW_VALID             (0x03U)
 #define ALERT_SHIFT_BZ_REV_DEST_JPN              (VDF_BZ_REV_JPN)
 #define ALERT_SHIFT_BZ_REV_DOMESTIC              (VDF_BZ_SBW_NON)
+#if 0   /* BEV Rebase provisionally */
 #define ALERT_SHIFT_BZ_REV_SOUNDTYPE_IN          (VDF_DS_2E_SBWC2_IN)
+#else   /* BEV Rebase provisionally */
+#define ALERT_SHIFT_BZ_REV_SOUNDTYPE_IN          (0x00000001U)
+#endif   /* BEV Rebase provisionally */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -182,7 +184,11 @@
 #define u1_g_AlertPtsys()                                           (u1_g_VardefPtsRx())
 #define u1_g_AlertEsOptAvailable(u2_a_CH)                           (u1_g_VardefEsOptAvaByCh(u2_a_CH))
 #define u1_g_AlertShiftSbwFunc()                                    (u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_SBW))
+#if 0   /* BEV Rebase provisionally */
 #define u4_g_AlertRevBzrSoundType()                                 (u4_g_VardefDs2E_Las32((U2)VDF_DS_2E_20C2))
+#else   /* BEV Rebase provisionally */
+#define u4_g_AlertRevBzrSoundType()                                 ((U4)ALERT_SHIFT_BZ_REV_SOUNDTYPE_IN)
+#endif   /* BEV Rebase provisionally */
 #define u1_g_AlertRevBzSbwDest()                                    (u1_g_VardefBzSbwDiagSupByPid())
 #define u1_g_AlertRevBzrDest()                                      (u1_g_VardefBzRevDstByPid())
 #define u1_g_AlertZmilrqDispJdg()                                   (u1_g_VardefZmilrqDispJdg())
@@ -312,7 +318,6 @@ extern const ST_ALERT_MTRX         st_gp_ALERT_S_FCTA_MTRX[ALERT_S_FCTA_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_S_LDA_MTRX[ALERT_S_LDA_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_S_LTA_2_MTRX[ALERT_S_LTA_2_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_S_PCS1_MTRX[ALERT_S_PCS1_CH_NUM];
-extern const ST_ALERT_MTRX         st_gp_ALERT_S_OAA_MTRX[ALERT_S_OAA_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_S_RSA_MTRX[ALERT_S_RSA_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_S_SWS_MTRX[ALERT_S_SWS_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_S_TMN_MTRX[ALERT_S_TMN_CH_NUM];
@@ -337,7 +342,6 @@ extern const ST_ALERT_MTRX         st_gp_ALERT_B_ESWUOC_MTRX[ALERT_B_ESWUOC_CH_N
 extern const ST_ALERT_MTRX         st_gp_ALERT_H_TVPSOF_MTRX[ALERT_H_TVPSOF_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_B_ALOA2_MTRX[ALERT_B_ALOA2_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_B_RPWSEA_MTRX[ALERT_B_RPWSEA_CH_NUM];
-extern const ST_ALERT_MTRX         st_gp_ALERT_H_TCBM_MTRX[ALERT_H_TCBM_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_H_DCLDSP_MTRX[ALERT_H_DCLDSP_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_C_BRPADW_MTRX[ALERT_C_BRPADW_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_C_HCS_MTRX[ALERT_C_HCS_CH_NUM];
