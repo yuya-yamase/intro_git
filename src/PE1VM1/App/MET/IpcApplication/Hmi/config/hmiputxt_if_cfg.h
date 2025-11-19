@@ -41,12 +41,14 @@
 #define HMIPUTXTCFG_SLOT_D                       (4U)
 #define HMIPUTXTCFG_SLOT_E                       (5U)
 
+#if 0   /* BEV Rebase provisionally */
 #define HMIPUTXTCFG_IF_NUM                       (150U)
 #define HMIPUTXTCFG_IF_SLOTA_NUM                 (53U)
 #define HMIPUTXTCFG_IF_SLOTB_NUM                 (94U)
 #define HMIPUTXTCFG_IF_SLOTC_NUM                 (129U)
 #define HMIPUTXTCFG_IF_SLOTD_NUM                 (127U)
 #define HMIPUTXTCFG_IF_SLOTE_NUM                 (120U)
+#endif   /* BEV Rebase provisionally */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
@@ -62,12 +64,14 @@ U2 u2_g_HmiputxtSizeReqbit(void);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#if 0   /* BEV Rebase provisionally */
 extern  const ST_ALERT_REQBIT        st_gp_HMIPUTXTREQBIT[HMIPUTXTCFG_IF_NUM];
 extern  const ST_ALERT_REQBIT        st_gp_HMIPUTXTREQBIT_SLOTA[HMIPUTXTCFG_IF_SLOTA_NUM];
 extern  const ST_ALERT_REQBIT        st_gp_HMIPUTXTREQBIT_SLOTB[HMIPUTXTCFG_IF_SLOTB_NUM];
 extern  const ST_ALERT_REQBIT        st_gp_HMIPUTXTREQBIT_SLOTC[HMIPUTXTCFG_IF_SLOTC_NUM];
 extern  const ST_ALERT_REQBIT        st_gp_HMIPUTXTREQBIT_SLOTD[HMIPUTXTCFG_IF_SLOTD_NUM];
 extern  const ST_ALERT_REQBIT        st_gp_HMIPUTXTREQBIT_SLOTE[HMIPUTXTCFG_IF_SLOTE_NUM];
+#endif   /* BEV Rebase provisionally */
 
 #endif      /* HMIPUTXT_IF_CFG_H */
 
