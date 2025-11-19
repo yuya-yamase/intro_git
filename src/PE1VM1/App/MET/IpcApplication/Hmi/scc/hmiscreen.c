@@ -166,7 +166,7 @@ U1      u1_g_HmiScreenWoTurnShtdwnOK(void)
 /*  1.2.0    01/11/2024  SW       Delete transmission of CDISP_EX signal                                                             */
 /*  1.3.0    07/09/2024  AA       Revised for WKUPSLP condition change                                                               */
 /*  1.4.0    07/22/2024  AA       Deleted u1_g_HmiScreenShtdwnOK                                                                     */
-/*  1.5.0    08/23/2024  AA       Added u1_g_HmiScreenShtdwnOK                                                                       */
+/*  1.5.0    08/23/2024  AA       Added u1_g_HmiScreenShtdwnOK                                                                     */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
