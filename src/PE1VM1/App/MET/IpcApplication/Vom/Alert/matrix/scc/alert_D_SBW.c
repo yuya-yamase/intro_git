@@ -1449,6 +1449,7 @@ static U4      u4_s_AlertD_sbwPdSfpfSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
 /*  5.7.1     7/13/2022  KK       Update for 840B #2 1A(Version update).                                                             */
 /*  5.8.0     1/15/2024  GM       Update for 19PFv3.                                                                                 */
 /*  5.9.0    11/ 4/2024  SHN      Change matrix table for PD_ACTF,sbwPdActfSrcchk function                                           */
+/*  5.10.0   11/19/2025  SH       Config BevStep3                                                                                    */
 /*                                                                                                                                   */
 /*  * SN   = Shinichiro Naito, NTTD MSE                                                                                              */
 /*  * DS   = Daisuke Suzuki, NTTD MSE                                                                                                */
@@ -1460,5 +1461,6 @@ static U4      u4_s_AlertD_sbwPdSfpfSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
 /*  * KK   = Kenta Kawahara, NTTD MSE                                                                                                */
 /*  * GM   = Glen Monteposo, DTPH                                                                                                    */
 /*  * SHN  = Shimon nambu,Denso Techno                                                                                               */
+/*  * SH   = Sae Hirose, Denso Techno                                                                                                */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
