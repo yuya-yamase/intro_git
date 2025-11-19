@@ -39,6 +39,8 @@
     -I${APP_DIR}/MET/IpcApplication/Vom/Alert/matrix/config
     -I${APP_DIR}/MET/IpcApplication/Vom/Alert/scc
     -I${APP_DIR}/MET/IpcApplication/Vom/Ambtmp/scc
+    -I${APP_DIR}/MET/IpcApplication/Vom/CanTxApp/config
+    -I${APP_DIR}/MET/IpcApplication/Vom/CanTxApp/scc
     -I${APP_DIR}/MET/IpcApplication/Vom/DateSI/scc
     -I${APP_DIR}/MET/IpcApplication/Vom/Dimmer/config
     -I${APP_DIR}/MET/IpcApplication/Vom/Dimmer/scc
@@ -291,6 +293,14 @@ App/MET/IpcApplication/Vom/Alert/scc/alert_brx.c
 App/MET/IpcApplication/Vom/Ambtmp/config/ambtmp_cfg.c
 App/MET/IpcApplication/Vom/Ambtmp/scc/ambtmp_can.c
 App/MET/IpcApplication/Vom/Ambtmp/scc/ambtmp.c
+App/MET/IpcApplication/Vom/CanTxApp/config/cantxapp_cfg.c
+App/MET/IpcApplication/Vom/CanTxApp/config/cantxapp_met1s02.c
+App/MET/IpcApplication/Vom/CanTxApp/config/cantxapp_met1s27.c
+App/MET/IpcApplication/Vom/CanTxApp/config/cantxapp_met1s29.c
+App/MET/IpcApplication/Vom/CanTxApp/config/cantxapp_met1s30.c
+App/MET/IpcApplication/Vom/CanTxApp/config/cantxapp_met1s62.c
+App/MET/IpcApplication/Vom/CanTxApp/config/cantxapp_met1s70.c
+App/MET/IpcApplication/Vom/CanTxApp/scc/cantxapp.c
 App/MET/IpcApplication/Vom/DateSI/config/datesi_met_cfg.c
 App/MET/IpcApplication/Vom/DateSI/scc/datesi_met.c
 App/MET/IpcApplication/Vom/Dimmer/config/dimmer_cfg.c

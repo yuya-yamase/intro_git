@@ -71,6 +71,7 @@
 #include "sbltsync.h"
 #include "locale.h"
 #include "vardef.h"
+#include "cantxapp.h"
 #include "hmiproxy.h"
 #include "hdimmgr.h"
 #include "himgadj.h"
@@ -320,6 +321,7 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     {&vd_g_HdimmgrRoutine,              (U4)SCHDLR_TASKBIT__20MS_A  },
     {&vd_g_HudImgAdjMainTask,           (U4)SCHDLR_TASKBIT__10MS_A  },
     {&vd_g_DateSIMETMainTask,           (U4)SCHDLR_TASKBIT___5MS    },
+    {&vd_g_CanTxAppMainTask,            (U4)SCHDLR_TASKBIT__10MS_A  },
     /*-------------------------------------------------------------------*/
     /*                                                                   */
     /*                                                                   */
@@ -477,9 +479,11 @@ static void    vd_s_SchdlrCfgWdgTimRestart(void)
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  BEV-1    10/22/2025  TS       Change for BEV rebase.                                                                             */
+/*  BEV-2    11/13/2025  YN       Change for BEV rebase.(Add CanTxApp)                                                               */
 /*                                                                                                                                   */
 /*  * TN      = Takashi Nagai, Denso                                                                                                 */
 /*  * AM      = Akira Motomatsu, Denso Create                                                                                        */
 /*  * TS      = Takuo Suganuma, Denso Techno                                                                                         */
+/*  * YN      = Yujiro Nagaya, Denso Techno                                                                                          */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
