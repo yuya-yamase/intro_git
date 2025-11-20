@@ -1,4 +1,4 @@
-/* 2.4.0 */
+/* 2.6.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -9,9 +9,9 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define VARDEF_ESOPT_AVNMS47_C_MAJOR             (2)
-#define VARDEF_ESOPT_AVNMS47_C_MINOR             (4)
-#define VARDEF_ESOPT_AVNMS47_C_PATCH             (0)
+#define VARDEF_ESOPT_BDB1F02_C_MAJOR             (2)
+#define VARDEF_ESOPT_BDB1F02_C_MINOR             (6)
+#define VARDEF_ESOPT_BDB1F02_C_PATCH             (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -22,10 +22,10 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if ((VARDEF_ESOPT_AVNMS47_C_MAJOR != VARDEF_ESOPT_RX_H_MAJOR) || \
-     (VARDEF_ESOPT_AVNMS47_C_MINOR != VARDEF_ESOPT_RX_H_MINOR) || \
-     (VARDEF_ESOPT_AVNMS47_C_PATCH != VARDEF_ESOPT_RX_H_PATCH))
-#error "vardef_esopt_AVNMS47.c and vardef_esopt_rx.h : source and header files are inconsistent!"
+#if ((VARDEF_ESOPT_BDB1F02_C_MAJOR != VARDEF_ESOPT_RX_H_MAJOR) || \
+     (VARDEF_ESOPT_BDB1F02_C_MINOR != VARDEF_ESOPT_RX_H_MINOR) || \
+     (VARDEF_ESOPT_BDB1F02_C_PATCH != VARDEF_ESOPT_RX_H_PATCH))
+#error "vardef_esopt_BDB1F02.c and vardef_esopt_rx.h : source and header files are inconsistent!"
 #endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -50,35 +50,74 @@
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*===================================================================================================================================*/
-/*  U1      u1_g_VdfEsoRx_MM_AUDIO(void)                                                                                             */
+/*  U1      u1_g_VdfEsoRx_SW_DPM1(void)                                                                                              */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
+/*  Return:         U1 u1_t_ava_rx  : signal status (active/inactive)                                                                */
 /*===================================================================================================================================*/
-U1      u1_g_VdfEsoRx_MM_AUDIO(void)
+U1      u1_g_VdfEsoRx_SW_DPM1(void)
 {
-#if 0   /* BEV Rebase provisionally */
-    static const U1 u1_s_VDF_ESO_MM_AUDIO_ACT = (U1)2U;
-    U1              u1_t_rx;
-    U1              u1_t_ava_rx;
-    U1              u1_t_sts;
+    U1                 u1_t_rx;
+    U1                 u1_t_ava_rx;
 
-    u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_UNK;
-    u1_t_sts = u1_g_VardefMmMthd();
-
-    if(u1_t_sts == (U1)VDF_MM_MTHD_MMSUBBUS){
-        u1_t_rx = (U1)0U;
-        (void)Com_ReceiveSignal(ComConf_ComSignal_EXIST_ADO, &u1_t_rx);
-        if(u1_t_rx == u1_s_VDF_ESO_MM_AUDIO_ACT){
-            u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
-        }
+    u1_t_rx = (U1)0U;
+    (void)Com_ReceiveSignal(ComConf_ComSignal_DPM1_FNC, &u1_t_rx);
+    if(u1_t_rx != (U1)0U){
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
+    }
+    else{
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_INA;
     }
 
     return(u1_t_ava_rx);
-#else   /* BEV Rebase provisionally */
-    return((U1)VDF_ESO_AVA_RX_UNK);
-#endif   /* BEV Rebase provisionally */
 }
+
+/*===================================================================================================================================*/
+/*  U1      u1_g_VdfEsoRx_SW_DPM2(void)                                                                                              */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         U1 u1_t_ava_rx  : signal status (active/inactive)                                                                */
+/*===================================================================================================================================*/
+U1      u1_g_VdfEsoRx_SW_DPM2(void)
+{
+    U1                 u1_t_rx;
+    U1                 u1_t_ava_rx;
+
+    u1_t_rx = (U1)0U;
+    (void)Com_ReceiveSignal(ComConf_ComSignal_DPM2_FNC, &u1_t_rx);
+    if(u1_t_rx != (U1)0U){
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
+    }
+    else{
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_INA;
+    }
+
+    return(u1_t_ava_rx);
+}
+
+/*===================================================================================================================================*/
+/*  U1      u1_g_VdfEsoRx_SW_DPM3(void)                                                                                              */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         U1 u1_t_ava_rx  : signal status (active/inactive)                                                                */
+/*===================================================================================================================================*/
+U1      u1_g_VdfEsoRx_SW_DPM3(void)
+{
+    U1                 u1_t_rx;
+    U1                 u1_t_ava_rx;
+
+    u1_t_rx = (U1)0U;
+    (void)Com_ReceiveSignal(ComConf_ComSignal_DPM3_FNC, &u1_t_rx);
+    if(u1_t_rx != (U1)0U){
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
+    }
+    else{
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_INA;
+    }
+
+    return(u1_t_ava_rx);
+}
+
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
@@ -87,20 +126,12 @@ U1      u1_g_VdfEsoRx_MM_AUDIO(void)
 /*                                                                                                                                   */
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  2.0.0     3/ 2/2020  TN       NEW!                                                                                               */
-/*  2.1.0     9/28/2020  SF       vardef_esopt.c v2.0.0 -> v2.1.0                                                                    */
-/*  2.2.0     1/25/2021  SF       vardef_esopt.c v2.1.0 -> v2.2.0                                                                    */
-/*  2.3.0    11/15/2021  RO       vardef_esopt.c v2.2.0 -> v2.3.0                                                                    */
-/*  2.4.0     3/15/2022  RO       vardef_esopt.c v2.3.0 -> v2.4.0                                                                    */
+/*  2.6.0    6/13/2025   KO      Newly Created                                                                                       */
+/*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  800B-1    9/28/2020  SF       Change config for 800B CV-R                                                                        */
-/*  117D-1   11/ 8/2022  MG       Change config for 117D MPT                                                                         */
+/*  BEV      6/13/2025   KO      Added function for BEV System_Consideration_2.(MET-B_DRPBB-CSTD-0-)                                 */
 /*                                                                                                                                   */
-/*  * TN = Takashi Nagai, DENSO                                                                                                      */
-/*  * SF = Seiya Fukutome, DENSO TECHNO                                                                                              */
-/*  * RO = Reiya Okuda, KSE                                                                                                          */
-/*  * MG = Mei Godo, KSE                                                                                                             */
-/*                                                                                                                                   */
+/*  * KO   = Kazuto Oishi,  Denso Techno                                                                                             */
 /*===================================================================================================================================*/

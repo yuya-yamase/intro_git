@@ -1,4 +1,4 @@
-/* 2.4.0 */
+/* 2.6.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -9,9 +9,9 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define VARDEF_ESOPT_AVN1S30_C_MAJOR             (2)
-#define VARDEF_ESOPT_AVN1S30_C_MINOR             (4)
-#define VARDEF_ESOPT_AVN1S30_C_PATCH             (0)
+#define VARDEF_ESOPT_ENG1S60_C_MAJOR             (2)
+#define VARDEF_ESOPT_ENG1S60_C_MINOR             (6)
+#define VARDEF_ESOPT_ENG1S60_C_PATCH             (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -22,10 +22,10 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if ((VARDEF_ESOPT_AVN1S30_C_MAJOR != VARDEF_ESOPT_RX_H_MAJOR) || \
-     (VARDEF_ESOPT_AVN1S30_C_MINOR != VARDEF_ESOPT_RX_H_MINOR) || \
-     (VARDEF_ESOPT_AVN1S30_C_PATCH != VARDEF_ESOPT_RX_H_PATCH))
-#error "vardef_esopt_AVN1S30.c and vardef_esopt_rx.h : source and header files are inconsistent!"
+#if ((VARDEF_ESOPT_ENG1S60_C_MAJOR != VARDEF_ESOPT_RX_H_MAJOR) || \
+     (VARDEF_ESOPT_ENG1S60_C_MINOR != VARDEF_ESOPT_RX_H_MINOR) || \
+     (VARDEF_ESOPT_ENG1S60_C_PATCH != VARDEF_ESOPT_RX_H_PATCH))
+#error "vardef_esopt_ENG1S60.c and vardef_esopt_rx.h : source and header files are inconsistent!"
 #endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -50,25 +50,19 @@
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*===================================================================================================================================*/
-/*  U1      u1_g_VdfEsoRx_CNTR_DISP(void)                                                                                            */
+/*  U1      u1_g_VdfEsoRx_DSC(void)                                                                                                  */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-U1      u1_g_VdfEsoRx_CNTR_DISP(void)
+U1      u1_g_VdfEsoRx_DSC(void)
 {
-    static const U2    u2_s_VDF_ESO_AVN_RXTO_MAX = ((U2)15000U / (U2)OXCAN_MAIN_TICK);
-
     U1                 u1_t_rx;
     U1                 u1_t_ava_rx;
 
-#if 0   /* BEV Rebase provisionally */
-    u1_t_rx  = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_AVN1S30, (U2)OXCAN_RX_SYS_TOE_PBA, u2_s_VDF_ESO_AVN_RXTO_MAX);
-#else   /* BEV Rebase provisionally */
-    u1_t_rx  = (U1)COM_TIMEOUT;
-#endif   /* BEV Rebase provisionally */
-    u1_t_rx &= (U1)COM_TIMEOUT;
-    if(u1_t_rx == (U1)0U){
+    u1_t_rx = (U1)0U;
+    (void)Com_ReceiveSignal(ComConf_ComSignal_DSCEXIST, &u1_t_rx);
+    if(u1_t_rx != (U1)0U){
         u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
     }
     else{
@@ -85,19 +79,14 @@ U1      u1_g_VdfEsoRx_CNTR_DISP(void)
 /*                                                                                                                                   */
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  2.0.0     3/ 2/2020  TN       NEW!                                                                                               */
-/*  2.1.0     9/28/2020  SF       vardef_esopt.c v2.0.0 -> v2.1.0                                                                    */
-/*  2.2.0     1/25/2021  SF       vardef_esopt.c v2.1.0 -> v2.2.0                                                                    */
-/*  2.3.0    11/15/2021  RO       vardef_esopt.c v2.2.0 -> v2.3.0                                                                    */
-/*  2.4.0     3/15/2022  RO       vardef_esopt.c v2.3.0 -> v2.4.0                                                                    */
+/*  2.5.0    10/31/2024  RO       NEW!                                                                                               */
+/*  2.6.0     5/30/2025  SN       vardef_esopt.c v2.5.0 -> v2.6.0                                                                    */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  800B-1    9/28/2020  SF       Change config for 800B CV-R                                                                        */
-/*  800B-2    1/25/2021  SF       Change config for 800B 1A                                                                          */
+/*  BEV      02/10/2025  RO       Added function for BEV System_Consideration_1.(MET-S_ADMID-CSTD-0-)                                */
 /*                                                                                                                                   */
-/*  * TN = Takashi Nagai, DENSO                                                                                                      */
-/*  * SF = Seiya Fukutome, DENSO TECHNO                                                                                              */
-/*  * RO = Reiya Okuda, KSE                                                                                                          */
+/*  * RO = Ryo Oohashi, KSE                                                                                                          */
+/*  * SN = Shizuka Nakajima, KSE                                                                                                     */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

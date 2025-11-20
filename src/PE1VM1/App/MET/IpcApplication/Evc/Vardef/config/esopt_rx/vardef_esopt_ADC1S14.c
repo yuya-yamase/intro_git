@@ -1,4 +1,4 @@
-/* 2.4.0 */
+/* 2.6.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -9,9 +9,9 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define VARDEF_ESOPT_SW_BATCSW_C_MAJOR           (2)
-#define VARDEF_ESOPT_SW_BATCSW_C_MINOR           (4)
-#define VARDEF_ESOPT_SW_BATCSW_C_PATCH           (0)
+#define VARDEF_ESOPT_ADC1S14_C_MAJOR             (2)
+#define VARDEF_ESOPT_ADC1S14_C_MINOR             (6)
+#define VARDEF_ESOPT_ADC1S14_C_PATCH             (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -22,10 +22,10 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if ((VARDEF_ESOPT_SW_BATCSW_C_MAJOR != VARDEF_ESOPT_RX_H_MAJOR) || \
-     (VARDEF_ESOPT_SW_BATCSW_C_MINOR != VARDEF_ESOPT_RX_H_MINOR) || \
-     (VARDEF_ESOPT_SW_BATCSW_C_PATCH != VARDEF_ESOPT_RX_H_PATCH))
-#error "vardef_esopt_SW_BATCSW.c and vardef_esopt_rx.h : source and header files are inconsistent!"
+#if ((VARDEF_ESOPT_ADC1S14_C_MAJOR != VARDEF_ESOPT_RX_H_MAJOR) || \
+     (VARDEF_ESOPT_ADC1S14_C_MINOR != VARDEF_ESOPT_RX_H_MINOR) || \
+     (VARDEF_ESOPT_ADC1S14_C_PATCH != VARDEF_ESOPT_RX_H_PATCH))
+#error "vardef_esopt_ADC1S14.c and vardef_esopt_rx.h : source and header files are inconsistent!"
 #endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -50,26 +50,26 @@
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*===================================================================================================================================*/
-/*  U1      u1_g_VdfEsoRx_SW_BATCSW(void)                                                                                                 */
+/*===================================================================================================================================*/
+/*  U1      u1_g_VdfEsoRx_SW_OBBSAV(void)                                                                                            */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
+/*  Return:         U1 u1_t_ava_rx  : signal status (active/inactive)                                                                */
 /*===================================================================================================================================*/
-U1      u1_g_VdfEsoRx_SW_BATCSW(void)
+U1      u1_g_VdfEsoRx_SW_OBBSAV(void)
 {
-    U1                 u1_t_ptsys;
-    U1                 u1_t_mmsup;
+    static const U1 u1_s_VDF_ESO_ACT_ADSEGDEX = (U1)1U;
+
+    U1                 u1_t_rx;
     U1                 u1_t_ava_rx;
 
-    u1_t_ptsys = u1_g_VardefPtsRx();
-    u1_t_mmsup = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_MOP);
-    u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_INA;
-
-    if(u1_t_mmsup == (U1)FALSE){
-        if((u1_t_ptsys == (U1)VDF_PTS_RX_04_HYB_PLU) ||
-           (u1_t_ptsys == (U1)VDF_PTS_RX_05_ELE_BAT)){
-            u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
-        }
+    u1_t_rx = (U1)0U;
+    (void)Com_ReceiveSignal(ComConf_ComSignal_ADSEGDEX, &u1_t_rx);
+    if(u1_t_rx == u1_s_VDF_ESO_ACT_ADSEGDEX){
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
+    }
+    else{
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_INA;
     }
 
     return(u1_t_ava_rx);
@@ -82,12 +82,11 @@ U1      u1_g_VdfEsoRx_SW_BATCSW(void)
 /*                                                                                                                                   */
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  2.4.0     3/15/2022  HF       New!                                                                                               */
+/*  2.6.0     5/30/2025  SN       NEW!                                                                                               */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  19PFv3    2/28/2024  HF       Change config for 19PFv3 PreCV                                                                     */
 /*                                                                                                                                   */
-/*  * HF   = Hinari Fukamachi, KSE                                                                                                   */
+/*  * SN = Shizuka Nakajima, KSE                                                                                                     */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

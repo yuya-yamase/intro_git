@@ -1,4 +1,4 @@
-/* 2.4.0 */
+/* 2.6.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -9,9 +9,9 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define VARDEF_ESOPT_PDS1S01_C_MAJOR             (2)
-#define VARDEF_ESOPT_PDS1S01_C_MINOR             (4)
-#define VARDEF_ESOPT_PDS1S01_C_PATCH             (0)
+#define VARDEF_ESOPT_SCS1S11_C_MAJOR             (2)
+#define VARDEF_ESOPT_SCS1S11_C_MINOR             (6)
+#define VARDEF_ESOPT_SCS1S11_C_PATCH             (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -22,10 +22,10 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if ((VARDEF_ESOPT_PDS1S01_C_MAJOR != VARDEF_ESOPT_RX_H_MAJOR) || \
-     (VARDEF_ESOPT_PDS1S01_C_MINOR != VARDEF_ESOPT_RX_H_MINOR) || \
-     (VARDEF_ESOPT_PDS1S01_C_PATCH != VARDEF_ESOPT_RX_H_PATCH))
-#error "vardef_esopt_PDS1S01.c and vardef_esopt_rx.h : source and header files are inconsistent!"
+#if ((VARDEF_ESOPT_SCS1S11_C_MAJOR != VARDEF_ESOPT_RX_H_MAJOR) || \
+     (VARDEF_ESOPT_SCS1S11_C_MINOR != VARDEF_ESOPT_RX_H_MINOR) || \
+     (VARDEF_ESOPT_SCS1S11_C_PATCH != VARDEF_ESOPT_RX_H_PATCH))
+#error "vardef_esopt_SCS1S11.c and vardef_esopt_rx.h : source and header files are inconsistent!"
 #endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -50,22 +50,19 @@
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*===================================================================================================================================*/
-/*  U1      u1_g_VdfEsoRx_PEDPRO(void)                                                                                                  */
+/*  U1      u1_g_VdfEsoRx_VHCOBBSD(void)                                                                                             */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
+/*  Return:         U1 u1_t_ava_rx  : signal status (active/inable)                                                                  */
 /*===================================================================================================================================*/
-U1      u1_g_VdfEsoRx_PEDPRO(void)
+U1      u1_g_VdfEsoRx_VHCOBBSD(void)
 {
-
-    static const U1 u1_s_VDF_ESO_PEDPRO_ACT = (U1)1U;
-
     U1                 u1_t_rx;
     U1                 u1_t_ava_rx;
 
     u1_t_rx = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_PUH_FLG, &u1_t_rx);
-    if(u1_t_rx == u1_s_VDF_ESO_PEDPRO_ACT){
+    (void)Com_ReceiveSignal(ComConf_ComSignal_HCOPMEXT, &u1_t_rx);
+    if(u1_t_rx != (U1)0U){
         u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
     }
     else{
@@ -74,6 +71,7 @@ U1      u1_g_VdfEsoRx_PEDPRO(void)
 
     return(u1_t_ava_rx);
 }
+
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
@@ -82,12 +80,12 @@ U1      u1_g_VdfEsoRx_PEDPRO(void)
 /*                                                                                                                                   */
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  2.4.0    11/14/2022  SK       NEW!                                                                                               */
+/*  2.6.0     5/30/2025  SN       Newly Created                                                                                      */
+/*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  351D-1   11/14/2022  SK       Change config for 351D CV                                                                          */
+/*  BEV       5/30/2025  SN       Added function of C_HCSBSW for BEV                                                                 */
 /*                                                                                                                                   */
-/*  * SK = Shotaro Kitayama, PSL                                                                                                     */
-/*                                                                                                                                   */
+/*  * SN   = Shizuka Nakajima, KSE                                                                                                   */
 /*===================================================================================================================================*/

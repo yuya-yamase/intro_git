@@ -753,13 +753,13 @@ void    vd_g_VardefEsOptIgoffEvhk(const U4 u4_a_MDBIT, const U4 u4_a_EVBIT)
 /*  2.3.0    11/15/2021  RO       Add Other judgement.                                                                               */
 /*  2.4.0     3/15/2022  RO       Add AVN judgement.                                                                                 */
 /*  2.5.0     8/26/2024  TN       QAC Fix : Delete u1_g_VardefEsOptAvaByAvn func.                                                    */
-/*  2.6.0     12/25/2024 KM       Updated write timing of DTF                                                                            */
+/*  2.6.0     12/25/2024 KM       Updated write timing of DTF                                                                        */
 /*                                                                                                                                   */
 /*  * YI   = Yoshiki Iwata, Denso                                                                                                    */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
 /*  * SF   = Seiya Fukutome, Denso Techno                                                                                            */
 /*  * RO   = Reiya Okuda, KSE                                                                                                        */
 /*  * TN   = Tetsushi Nakanao, Denso Techno                                                                                          */
-/*  * KM   = Kazuma Miyazawa, Denso Techno                                                                                          */
+/*  * KM   = Kazuma Miyazawa, Denso Techno                                                                                           */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

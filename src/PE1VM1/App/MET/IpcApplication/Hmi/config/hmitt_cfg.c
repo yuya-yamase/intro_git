@@ -504,8 +504,10 @@ void    vd_g_HmiTtCfgVarmask(U4 * u4_ap_varmask)
         {  (U1)9U,    (U1)28U,    (U2)VDF_ESO_CH_PTS_MILREQ,    (U2)ALERT_CH_P_MILREQ,             (U1)ALERT_REQ_P_MILREQ_FLASH_4HZ             },
         {  (U1)9U,    (U1)28U,    (U2)VDF_ESO_CH_PTS_MILREQ,    (U2)ALERT_CH_P_MILREQ,             (U1)ALERT_REQ_P_MILREQ_FLASH_EUREADY         },
         {  (U1)12U,   (U1)16U,    (U2)VDF_ESO_CH_ICS,           (U2)ALERT_CH_S_PKSB_TT,            (U1)ALERT_REQ_S_PKSB_TT_ON                   },
+#if 0   /* BEV Rebase provisionally */
         {  (U1)18U,   (U1)0U,     (U2)VDF_ESO_CH_HOF_EXT,       (U2)ALERT_CH_S_ADTJA_TT,           (U1)ALERT_REQ_S_ADTJA_TT_MALFUNC             },
         {  (U1)20U,   (U1)16U,    (U2)VDF_ESO_CH_ADIEXIST,      (U2)ALERT_CH_S_ADASTT_TT,          (U1)ALERT_REQ_S_ADASTT_TT_A_ABN              },
+#endif   /* BEV Rebase provisionally */
         {  (U1)22U,   (U1)24U,    (U2)VDF_ESO_CH_DMC,           (U2)ALERT_CH_S_DMC_TT,             (U1)ALERT_REQ_S_DMC_TT_MAL_DMC               }
 #endif   /* BEV Rebase provisionally */
     };

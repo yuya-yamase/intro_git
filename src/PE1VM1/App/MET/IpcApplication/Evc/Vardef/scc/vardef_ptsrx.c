@@ -1,4 +1,4 @@
-/* 2.4.0 */
+/* 2.6.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -9,7 +9,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define VARDEF_PTS_RX_C_MAJOR                    (2)
-#define VARDEF_PTS_RX_C_MINOR                    (4)
+#define VARDEF_PTS_RX_C_MINOR                    (6)
 #define VARDEF_PTS_RX_C_PATCH                    (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -19,8 +19,6 @@
 #include "vardef_ptsrx_cfg_private.h"
 /* #include "vardef_ptsrx.h" */ /* vardef_ptsx.h is included in vardef_dbf.h */
 #include "vardef.h"
-
-#include "rim_ctl.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -40,7 +38,6 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define VDF_PTS_RX_RXC_MAX                       (2U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -51,11 +48,6 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static U2           u2_s_vdf_pts_rx_elpsd;
-static U1           u1_s_vdf_pts_rxc_sta;
-static U1           u1_s_vdf_pts_rx_las;
-static U1           u1_s_vdf_pts_rx_rim;
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -66,141 +58,6 @@ static U1           u1_s_vdf_pts_rx_rim;
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*===================================================================================================================================*/
-/*  void    vd_g_VardefPtsRxBonInit(void)                                                                                            */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void    vd_g_VardefPtsRxBonInit(void)
-{
-    u1_s_vdf_pts_rx_rim    = (U1)VDF_PTS_RX_1F_NRX;
-#if 0   /* BEV Rebase provisionally */
-    vd_g_Rim_WriteU1(u2_g_VDF_PTS_RX_RIM_U1, u1_s_vdf_pts_rx_rim);
-#endif   /* BEV Rebase provisionally */
-
-    u2_s_vdf_pts_rx_elpsd  = (U2)U2_MAX;
-    u1_s_vdf_pts_rxc_sta   = u1_g_VDF_PTS_RX_RXC_INT;
-    u1_s_vdf_pts_rx_las    = (U1)VDF_PTS_RX_1F_NRX;
-}
-/*===================================================================================================================================*/
-/*  void    vd_g_VardefPtsRxRstwkInit(void)                                                                                          */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void    vd_g_VardefPtsRxRstwkInit(void)
-{
-    U1          u1_t_rim_rx;
-    U1          u1_t_rim_chk;
-
-    u1_t_rim_rx  = (U1)VDF_PTS_RX_1F_NRX;
-#if 0   /* BEV Rebase provisionally */
-    u1_t_rim_chk = u1_g_Rim_ReadU1withStatus(u2_g_VDF_PTS_RX_RIM_U1, &u1_t_rim_rx) & (U1)RIM_RESULT_KIND_MASK;
-#else   /* BEV Rebase provisionally */
-    u1_t_rim_chk = (U1)RIM_RESULT_KIND_NG;
-#endif   /* BEV Rebase provisionally */
-    if((u1_t_rim_chk == (U1)RIM_RESULT_KIND_OK) &&
-       (u1_t_rim_rx  <= (U1)VDF_PTS_RX_0F_UNK )){
-        u1_s_vdf_pts_rx_rim = u1_t_rim_rx;
-    }
-    else{
-        u1_s_vdf_pts_rx_rim = (U1)VDF_PTS_RX_1F_NRX;
-#if 0   /* BEV Rebase provisionally */
-        vd_g_Rim_WriteU1(u2_g_VDF_PTS_RX_RIM_U1, u1_s_vdf_pts_rx_rim);
-#endif   /* BEV Rebase provisionally */
-    }
-
-    u2_s_vdf_pts_rx_elpsd  = (U2)U2_MAX;
-    u1_s_vdf_pts_rxc_sta   = u1_g_VDF_PTS_RX_RXC_INT;
-    u1_s_vdf_pts_rx_las    = (U1)VDF_PTS_RX_1F_NRX;
-}
-/*===================================================================================================================================*/
-/*  void    vd_g_VardefPtsRxOpemdEvhk(const U2 u2_a_EOM)                                                                             */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void    vd_g_VardefPtsRxOpemdEvhk(const U2 u2_a_EOM)
-{
-    U2                  u2_t_ign;
-
-    u2_t_ign = u2_a_EOM & (U2)VDF_EOM_IGR_ON;
-    if(u2_t_ign == (U2)0U){
-        u1_s_vdf_pts_rxc_sta = u1_g_VDF_PTS_RX_RXC_INT;
-        u1_s_vdf_pts_rx_las  = (U1)VDF_PTS_RX_1F_NRX;
-    }
-}
-/*===================================================================================================================================*/
-/*  void    vd_g_VardefPtsRxMainTask(const U2 u2_a_EOM)                                                                              */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void    vd_g_VardefPtsRxMainTask(const U2 u2_a_EOM)
-{
-    static const U2     u2_s_VDF_PTS_RX_PERI = ((U2)600U/ (U2)VDF_MAIN_TICK);
-
-    U4                  u4_t_elpsd;
-
-    U2                  u2_t_ign;
-    U2                  u2_t_inc;
-
-    U1                  u1_t_rx;
-    U1                  u1_t_cnt;
-
-    u1_t_rx  = (U1)0U;
-    u1_t_cnt = u1_g_VardefPtsRxCfgPtsyschk(&u1_t_rx);
-    u2_t_ign = u2_a_EOM & (U2)VDF_EOM_IGR_ON;
-    if(u2_t_ign == (U2)0U){
-        u1_t_rx = (U1)VDF_PTS_RX_1F_NRX;
-    }
-
-    if((u1_t_rx              > (U1)VDF_PTS_RX_0F_UNK  ) ||
-       (u1_s_vdf_pts_rxc_sta > u1_g_VDF_PTS_RX_RXC_MAX) ||
-       (u1_t_cnt             > u1_g_VDF_PTS_RX_RXC_MAX)){
-        u1_s_vdf_pts_rxc_sta = u1_t_cnt;
-        u1_s_vdf_pts_rx_las  = (U1)VDF_PTS_RX_1F_NRX;
-    }
-    else if(u1_t_rx == u1_s_vdf_pts_rx_las){
-        u2_t_inc = (((U2)u1_t_cnt - (U2)u1_s_vdf_pts_rxc_sta) & (U2)u1_g_VDF_PTS_RX_RXC_MAX) + (U2)1U;
-        if(u2_t_inc >= (U2)VDF_PTS_RX_RXC_MAX){
-            if(u1_t_rx != (U1)VDF_PTS_RX_00_UNK){
-                u1_s_vdf_pts_rx_rim  = u1_t_rx;
-#if 0   /* BEV Rebase provisionally */
-                vd_g_Rim_WriteU1(u2_g_VDF_PTS_RX_RIM_U1, u1_s_vdf_pts_rx_rim);
-#endif   /* BEV Rebase provisionally */
-            }
-        }
-    }
-    else if(u1_t_cnt != u1_s_vdf_pts_rxc_sta){
-        u1_s_vdf_pts_rxc_sta = u1_t_cnt;
-        u1_s_vdf_pts_rx_las  = u1_t_rx;
-    }
-    else{
-        /* do nothing */
-    }
-
-    u4_t_elpsd = (U4)u2_s_vdf_pts_rx_elpsd + (U4)VDF_NUM_TSLOT;
-    if(u4_t_elpsd >= (U4)u2_s_VDF_PTS_RX_PERI){
-        u1_s_vdf_pts_rxc_sta = u1_t_cnt;
-        u1_s_vdf_pts_rx_las  = (U1)VDF_PTS_RX_1F_NRX;
-        u4_t_elpsd           = (U4)0U;
-    }
-    u2_s_vdf_pts_rx_elpsd = (U2)u4_t_elpsd;
-}
-/*===================================================================================================================================*/
-/*  void    vd_g_VardefPtsRxReset(void)                                                                                              */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void    vd_g_VardefPtsRxReset(void)
-{
-    u1_s_vdf_pts_rx_rim = (U1)VDF_PTS_RX_1F_NRX;
-#if 0   /* BEV Rebase provisionally */
-    vd_g_Rim_WriteU1(u2_g_VDF_PTS_RX_RIM_U1, u1_s_vdf_pts_rx_rim);
-#endif   /* BEV Rebase provisionally */
-}
 /*===================================================================================================================================*/
 /*  U1      u1_g_VardefPtsRx(void)                                                                                                   */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
@@ -209,15 +66,7 @@ void    vd_g_VardefPtsRxReset(void)
 /*===================================================================================================================================*/
 U1      u1_g_VardefPtsRx(void)
 {
-    U1    u1_t_ptsys_rx;
-
-    if(u1_s_vdf_pts_rx_rim == (U1)VDF_PTS_RX_1F_NRX){
-        u1_t_ptsys_rx = (U1)VDF_PTS_RX_03_HYB;
-    }
-    else{
-        u1_t_ptsys_rx = u1_s_vdf_pts_rx_rim;
-    }
-    return(u1_t_ptsys_rx);
+    return((U1)VDF_PTS_RX_05_ELE_BAT);
 }
 
 /*===================================================================================================================================*/
@@ -228,7 +77,7 @@ U1      u1_g_VardefPtsRx(void)
 /*===================================================================================================================================*/
 U1      u1_g_VardefPtsRxRim(void)
 {
-    return(u1_s_vdf_pts_rx_rim);
+    return((U1)VDF_PTS_RX_05_ELE_BAT);
 }
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
@@ -244,10 +93,12 @@ U1      u1_g_VardefPtsRxRim(void)
 /*  2.3.0     8/30/2022  RO       Add PTSYS Macro                                                                                    */
 /*  2.4.0     9/06/2022  RO       Change PTSYS Logic                                                                                 */
 /*  2.5.0     6/20/2024  JMH      Add PTSYS Rim Function                                                                             */
+/*  2.6.0     2/06/2025  SF       Setting for BEV System_Consideration_1.                                                            */
 /*                                                                                                                                   */
 /*  * TN  = Takashi Nagai, DENSO                                                                                                     */
 /*  * SF  = Seiya Fukutome, DENSO TECHNO                                                                                             */
 /*  * RO  = Reiya Okuda, KSE                                                                                                         */
 /*  * JMH = James Michael D. Hilarion, DTPH                                                                                          */
+/*  * SF  = Shiro Furui, DENSO TECHNO                                                                                                 */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
