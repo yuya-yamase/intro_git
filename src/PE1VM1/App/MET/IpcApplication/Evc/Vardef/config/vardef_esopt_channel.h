@@ -313,7 +313,6 @@
 #else   /* BEV Rebase provisionally */
 #define VDF_ESO_CH_GVIF2                         (65535U)
 #define VDF_ESO_CH_ECB                           (65535U)
-#define VDF_ESO_CH_ECOFLAG                       (65535U)
 #define VDF_ESO_CH_EPB                           (65535U)
 #define VDF_ESO_CH_SBW                           (65535U)
 #define VDF_ESO_CH_OILMNT                        (65535U)
@@ -324,7 +323,6 @@
 #define VDF_ESO_CH_GPF                           (65535U)
 #define VDF_ESO_CH_AT                            (65535U)
 #define VDF_ESO_CH_PTS_MILREQ                    (65535U)
-#define VDF_ESO_CH_BRPADW                        (65535U)
 #define VDF_ESO_CH_BRKHLD                        (65535U)
 #define VDF_ESO_CH_AISETH                        (65535U)
 #define VDF_ESO_CH_D_DPTZ                        (65535U)
