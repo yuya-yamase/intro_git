@@ -31,20 +31,11 @@
 #define ALERT_CAN_SYS_ALL                        (ALERT_CAN_SYS_PNC_ALL | (U4)OXCAN_SYS_PBA | (U4)OXCAN_SYS_ACC | (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP)
 
 #define ALERT_HW_ID_B_WASLEV_WLVL                (U2_MAX)
-#define ALERT_OPT_ID_B_PEDPRO_PUH_FLG            (VDF_ESO_CH_PEDPRO)
-#define ALERT_OPT_ID_C_BRKHLD_BHEXIST            (VDF_ESO_CH_BRKHLD)
-#define ALERT_OPT_ID_C_DRS_ARS1S90               (VDF_ESO_CH_DRS)
 #define ALERT_OPT_ID_C_EPB_EPB                   (VDF_ESO_CH_EPB)
 #define ALERT_OPT_ID_C_SLIP_VSCEXIST             (VDF_ESO_CH_VSC)
-#define ALERT_OPT_ID_P_TMNT_ECORUN               (VDF_ESO_CH_ECOFLAG)
 #define ALERT_OPT_ID_S_DSC_DSCEXIST              (VDF_ESO_CH_DSC)
 #define ALERT_OPT_ID_S_RSA_TSREQPD               (VDF_ESO_CH_RSA)
-#define ALERT_OPT_ID_C_AVSWAR_AVSEXT             (VDF_ESO_CH_AVSEXT)
 #define ALERT_OPT_ID_D_SFTPOS_VARTRM1            (VDF_ESO_CH_MT)
-#define ALERT_OPT_ID_C_BRPADW_PWIINFO            (VDF_ESO_CH_BRPADW)
-#define ALERT_OPT_ID_P_MILREQ_PTSYS              (VDF_ESO_CH_PTS_MILREQ)
-#define ALERT_OPT_ID_C_ECB_ECBEXIST              (VDF_ESO_CH_ECB)
-#define ALERT_OPT_ID_P_OILMIL_OILMNTMI           (VDF_ESO_CH_OILMNT)
 
 #define ALERT_CFG_B_BDOOR_RRCY                   (TRUE)
 #define ALERT_CFG_B_BDOOR_RLCY                   (TRUE)
@@ -183,7 +174,6 @@
 #define u1_g_AlertSpdFluctStat()                                    (u1_g_VehspdFluctStat())
 #define u1_g_AlertPtsys()                                           (u1_g_VardefPtsRx())
 #define u1_g_AlertEsOptAvailable(u2_a_CH)                           (u1_g_VardefEsOptAvaByCh(u2_a_CH))
-#define u1_g_AlertShiftSbwFunc()                                    (u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_SBW))
 #if 0   /* BEV Rebase provisionally */
 #define u4_g_AlertRevBzrSoundType()                                 (u4_g_VardefDs2E_Las32((U2)VDF_DS_2E_20C2))
 #else   /* BEV Rebase provisionally */
