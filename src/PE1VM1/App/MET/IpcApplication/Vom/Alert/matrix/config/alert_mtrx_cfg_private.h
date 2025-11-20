@@ -31,11 +31,6 @@
 #define ALERT_CAN_SYS_ALL                        (ALERT_CAN_SYS_PNC_ALL | (U4)OXCAN_SYS_PBA | (U4)OXCAN_SYS_ACC | (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP)
 
 #define ALERT_HW_ID_B_WASLEV_WLVL                (U2_MAX)
-#define ALERT_OPT_ID_C_EPB_EPB                   (VDF_ESO_CH_EPB)
-#define ALERT_OPT_ID_C_SLIP_VSCEXIST             (VDF_ESO_CH_VSC)
-#define ALERT_OPT_ID_S_DSC_DSCEXIST              (VDF_ESO_CH_DSC)
-#define ALERT_OPT_ID_S_RSA_TSREQPD               (VDF_ESO_CH_RSA)
-#define ALERT_OPT_ID_D_SFTPOS_VARTRM1            (VDF_ESO_CH_MT)
 
 #define ALERT_CFG_B_BDOOR_RRCY                   (TRUE)
 #define ALERT_CFG_B_BDOOR_RLCY                   (TRUE)
