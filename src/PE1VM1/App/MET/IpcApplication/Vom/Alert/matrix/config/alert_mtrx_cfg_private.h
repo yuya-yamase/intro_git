@@ -13,7 +13,6 @@
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "vardef.h"
-#include "vardef_esopt.h"
 #include "vehspd_kmph.h"
 #include "odo_km.h"
 #include "locale.h"
@@ -140,7 +139,6 @@
 #define ALERT_SPD_STSBIT_UNKNOWN                 (VEHSPD_STSBIT_UNKNOWN)
 #define ALERT_SPD_STSBIT_INVALID                 (VEHSPD_STSBIT_INVALID)
 #define ALERT_SPD_FLUCT_DECR                     (VEHSPD_FLUCT_DECR)
-#define ALERT_ESOPT_NUM_GR                       (VDF_ESO_NOW_AVA)
 #define ALERT_PTSYS_0F_UNK                       (VDF_PTS_RX_0F_UNK)
 #define ALERT_PTSYS_1F_NRX                       (VDF_PTS_RX_1F_NRX)
 #define ALERT_STEER_VD_PTSYS_UNDEF               (VDF_PTS_RX_00_UNK)
@@ -149,12 +147,6 @@
 #define ALERT_STEER_VD_PTSYS_EV                  (VDF_PTS_RX_05_ELE_BAT)
 #define ALERT_STEER_VD_PTSYS_HV_MOT              (VDF_PTS_RX_06_HYB_MOT)
 #define ALERT_STEER_VD_PTSYS_FCV                 (VDF_PTS_RX_07_ELE_HYD)
-#define ALERT_ENGTYPE_CAN_IOHW_INVALID           (0x00U)
-#define ALERT_ENGTYPE_CAN_VALID                  (0x01U)
-#define ALERT_ENGTYPE_IOHW_VALID                 (0x02U)
-#define ALERT_ENGTYPE_CAN_IOHW_VALID             (0x03U)
-#define ALERT_SHIFT_BZ_REV_DEST_JPN              (VDF_BZ_REV_JPN)
-#define ALERT_SHIFT_BZ_REV_DOMESTIC              (VDF_BZ_SBW_NON)
 #if 0   /* BEV Rebase provisionally */
 #define ALERT_SHIFT_BZ_REV_SOUNDTYPE_IN          (VDF_DS_2E_SBWC2_IN)
 #else   /* BEV Rebase provisionally */
@@ -168,24 +160,16 @@
 #define u1_g_AlertSpdKmphInst(u2_ap_kmph, u1_a_OW_EN)               (u1_g_VehspdKmphInst(u2_ap_kmph, u1_a_OW_EN))
 #define u1_g_AlertSpdFluctStat()                                    (u1_g_VehspdFluctStat())
 #define u1_g_AlertPtsys()                                           (u1_g_VardefPtsRx())
-#define u1_g_AlertEsOptAvailable(u2_a_CH)                           (u1_g_VardefEsOptAvaByCh(u2_a_CH))
 #if 0   /* BEV Rebase provisionally */
 #define u4_g_AlertRevBzrSoundType()                                 (u4_g_VardefDs2E_Las32((U2)VDF_DS_2E_20C2))
 #else   /* BEV Rebase provisionally */
 #define u4_g_AlertRevBzrSoundType()                                 ((U4)ALERT_SHIFT_BZ_REV_SOUNDTYPE_IN)
 #endif   /* BEV Rebase provisionally */
-#define u1_g_AlertRevBzSbwDest()                                    (u1_g_VardefBzSbwDiagSupByPid())
-#define u1_g_AlertRevBzrDest()                                      (u1_g_VardefBzRevDstByPid())
-#define u1_g_AlertZmilrqDispJdg()                                   (u1_g_VardefZmilrqDispJdg())
 #define u1_g_AlertHcsAscext()                                       (u1_g_VardefHcsRxAscext())
 
-#define vd_g_AlertCfgS_fcmdi2VardefEsOpt(u4_ap_esopt)               (vd_g_VardefEsOptAva((u4_ap_esopt), (U1)VDF_ESO_NOW_AVA))
 #define u1_g_AlertCfgTAILIsEnable()                                 ((U1)TRUE)
 #define u1_g_AlertCfgRFOGIsEnable()                                 ((U1)TRUE)
 #define u1_g_AlertCfgHEDLIsEnable()                                 ((U1)TRUE)
-#define u1_g_AlertCfgNCLMTIsEnable()                                ((U1)TRUE)
-#define u1_g_AlertCfgDCRCKDSPIsEnable()                             ((U1)TRUE)
-#define u1_g_AlertCfgOilmilIsEnable()                               ((U1)TRUE)
 
 #define u1_ALERT_CFG_B_TDOOR_RRCY                                   (u1_CALIB_MCUID0209_RRCYM)
 #define u1_ALERT_CFG_B_TDOOR_RLCY                                   (u1_CALIB_MCUID0210_RLCYM)
