@@ -277,12 +277,12 @@ void  vd_g_LocaleComTxInit(void)
     U1  u1_t_nvm_sts;
     U2  u2_t_nvmc_frmt;
 
-    u1_s_locale_unit_dist    = (U1)UNIT_VAL_DIST_KM;
-    u1_s_locale_unit_speed   = (U1)UNIT_VAL_SPEED_KMPH;
-    u1_s_locale_unit_fueco   = (U1)UNIT_VAL_FUECO_LP100KM;
-    u1_s_locale_unit_eleco   = (U1)UNIT_VAL_ELECO_KWHP100KM;
-    u1_s_locale_unit_ambtmp  = (U1)UNIT_VAL_AMBTMP_CEL;
-    u1_s_locale_lang         = (U1)LANG_VAL______BRI_ENG;
+    u1_s_locale_unit_dist    = (U1)U1_MAX;
+    u1_s_locale_unit_speed   = (U1)U1_MAX;
+    u1_s_locale_unit_fueco   = (U1)U1_MAX;
+    u1_s_locale_unit_eleco   = (U1)U1_MAX;
+    u1_s_locale_unit_ambtmp  = (U1)U1_MAX;
+    u1_s_locale_lang         = (U1)U1_MAX;
 
     u2_t_nvmc_frmt = (U2)0U;
     u1_t_nvm_sts   = u1_g_Nvmc_ReadStrValU2withSts((U2)NVMCID_U2_DATESI_TIMEFMT, &u2_t_nvmc_frmt);
@@ -644,6 +644,7 @@ U1      u1_g_LocaleCfgUnitdef(const U1 u1_a_UNITIDX)
 /*  19PFv3-2 04/24/2025  SF       Bug fixing for MET19PFV3-43718                                                                     */
 /*  BEV-1    07/04/2025  MN       BEV PreCV provisionally                                                                            */
 /*  BEV-2    10/15/2025  SN       Configured for BEVstep3_Rebase                                                                     */
+/*  BEV-3    11/14/2025  SN       Change initial value                                                                               */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
 /*  * SF   = Seiya Fukutome, DensoTechno                                                                                             */
