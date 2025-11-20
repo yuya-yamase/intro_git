@@ -19,9 +19,7 @@
 #include "alert_cfg_private.h"
 #include "alert_mtrx_cfg_private.h"
 
-#include "odo_km.h"
 #include "oxcan.h"
-#include "rim_ctl.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
