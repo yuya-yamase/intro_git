@@ -235,7 +235,8 @@ static inline void    vd_s_XSpiCfgTxVariation(     U4 * u4_ap_pdu_tx) {
     U1  u1_t_subdigspd;
     U1  u1_t_var_4wdsys_disp;                                          /*  VAR_4WDSYS_DISP                                      */
     U1  u1_t_sys_hcs;                                                  /*  SYS_HCS                                              */
-    U1  u1_t_dist;
+
+    u4_ap_pdu_tx[0] = (U4)u1_g_VardefDestinationByPid();               /*  DESTINATION                                          */
 
     /* Change for 970B/850B */
     u4_ap_pdu_tx[1] = ((U4)u1_g_VardefTtTrcoff() & (U4)0x01U);         /*  VAR_TT_TRCOFF                                        */
@@ -260,7 +261,6 @@ static inline void    vd_s_XSpiCfgTxVariation(     U4 * u4_ap_pdu_tx) {
 
     vd_s_XSpiCfgEsopt(&u4_ap_pdu_tx[4]);
 
-#if 0   /* BEV Rebase provisionally */
     u4_ap_pdu_tx[9] |= (U4)TRUE << 17;                                 /*  SYS_MOP                  */ /* BEV SV1 provisionally */
 
     u4_ap_pdu_tx[10] |= (U4)TRUE << 30;                                /*  SYS_DMASSP               */ /* BEV SV1 provisionally */
@@ -282,7 +282,6 @@ static inline void    vd_s_XSpiCfgTxVariation(     U4 * u4_ap_pdu_tx) {
     u4_ap_pdu_tx[12] |= (U4)TRUE << 6;                                 /*  SYS_DMTOEC               */ /* BEV SV1 provisionally */
     u4_ap_pdu_tx[12] |= (U4)TRUE << 7;                                 /*  SYS_DMM1EC               */ /* BEV SV1 provisionally */
 
-#endif   /* BEV Rebase provisionally */
     u1_t_sys_hcs      = u1_g_VardefHcsAva();
     u4_ap_pdu_tx[13]  = ((U4)u1_t_sys_hcs & (U4)0x01U) << 22;          /*  SYS_HCS                                              */
 

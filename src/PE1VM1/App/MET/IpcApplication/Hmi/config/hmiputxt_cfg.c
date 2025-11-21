@@ -378,13 +378,17 @@ void    vd_g_HmiPuTxtCfgDetail(U2 * u2_ap_detail)
 void    vd_g_HmiPuTxtCfgVarmask(U4 * u4_ap_varmask)
 {
     static const ST_HMIPUTXT_ESOPT st_sp_HMIPUTXT_ESOPT[] = {
+#if 0   /* BEV Rebase provisionally */
         {    (U2)52U,     (U2)VDF_ESO_CH_EPB      },
         {    (U2)70U,     (U2)VDF_ESO_CH_ECB      },
         {    (U2)278U,    (U2)VDF_ESO_CH_SBW      },
+#endif   /* BEV Rebase provisionally */
         {    (U2)308U,    (U2)VDF_ESO_CH_DSC      },
         {    (U2)314U,    (U2)VDF_ESO_CH_AUTOP    },
+#if 0   /* BEV Rebase provisionally */
         {    (U2)394U,    (U2)VDF_ESO_CH_OILMNT   },
         {    (U2)539U,    (U2)VDF_ESO_CH_OILMNT   },
+#endif   /* BEV Rebase provisionally */
         {    (U2)678U,    (U2)VDF_ESO_CH_BRPADW   },
         {    (U2)685U,    (U2)VDF_ESO_CH_AVSEXT   },
         {    (U2)1025U,   (U2)VDF_ESO_CH_PEDPRO   },
@@ -417,7 +421,11 @@ void    vd_g_HmiPuTxtCfgVarmask(U4 * u4_ap_varmask)
     }
 
     /* PKBWAR */
+#if 0   /* BEV Rebase provisionally */
      u1_t_pkbwar = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_EPB);
+#else   /* BEV Rebase provisionally */
+     u1_t_pkbwar = (U1)FALSE;
+#endif   /* BEV Rebase provisionally */
         if(u1_t_pkbwar == (U1)TRUE){
         u1_t_bufpos = (U1)0U;
         u4_t_mask   = u4_s_HmiPuTxtIdx2Mask(u2_s_HMIPUTXT_ID_PKBWAR, &u1_t_bufpos);
@@ -547,7 +555,11 @@ static void vd_s_HmiPutTxtCfgGpfMidMask(U4* u4_ap_varmask) {
     U1              u1_t_exist;
 
     u4_t_num = (U4)(sizeof(u2_sp_HMIPUTXT_GPFMID) / sizeof(u2_sp_HMIPUTXT_GPFMID[0]));
+#if 0   /* BEV Rebase provisionally */
     u1_t_exist = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_GPF);
+#else   /* BEV Rebase provisionally */
+    u1_t_exist = (U1)FALSE;
+#endif   /* BEV Rebase provisionally */
 
     if (u1_t_exist == (U1)TRUE) {
         for (u4_t_loop = (U4)0U; u4_t_loop < u4_t_num; u4_t_loop++) {
@@ -747,7 +759,11 @@ static void    vd_s_HmiPutTxtCfgLbwMask(U4* u4_ap_varmask)
 
     static const U2 u2_s_HMIPUTXT_ID_LBW = (U2)873U;
 
+#if 0   /* BEV Rebase provisionally */
     u1_t_ptsys = u1_g_VardefPtsRxRim();
+#else   /* BEV Rebase provisionally */
+    u1_t_ptsys = VDF_PTS_RX_05_ELE_BAT;
+#endif   /* BEV Rebase provisionally */
     if (
            (u1_t_ptsys == (U1)VDF_PTS_RX_05_ELE_BAT) ||
            (u1_t_ptsys == (U1)VDF_PTS_RX_1F_NRX)

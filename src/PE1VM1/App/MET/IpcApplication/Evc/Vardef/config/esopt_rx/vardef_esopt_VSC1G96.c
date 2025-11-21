@@ -1,4 +1,4 @@
-/* 2.4.0 */
+/* 2.6.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -9,9 +9,9 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define VARDEF_ESOPT_AVNMS31_C_MAJOR             (2)
-#define VARDEF_ESOPT_AVNMS31_C_MINOR             (4)
-#define VARDEF_ESOPT_AVNMS31_C_PATCH             (0)
+#define VARDEF_ESOPT_VSC1G96_C_MAJOR             (2)
+#define VARDEF_ESOPT_VSC1G96_C_MINOR             (6)
+#define VARDEF_ESOPT_VSC1G96_C_PATCH             (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -22,10 +22,10 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if ((VARDEF_ESOPT_AVNMS31_C_MAJOR != VARDEF_ESOPT_RX_H_MAJOR) || \
-     (VARDEF_ESOPT_AVNMS31_C_MINOR != VARDEF_ESOPT_RX_H_MINOR) || \
-     (VARDEF_ESOPT_AVNMS31_C_PATCH != VARDEF_ESOPT_RX_H_PATCH))
-#error "vardef_esopt_AVNMS31.c and vardef_esopt_rx.h : source and header files are inconsistent!"
+#if ((VARDEF_ESOPT_VSC1G96_C_MAJOR != VARDEF_ESOPT_RX_H_MAJOR) || \
+     (VARDEF_ESOPT_VSC1G96_C_MINOR != VARDEF_ESOPT_RX_H_MINOR) || \
+     (VARDEF_ESOPT_VSC1G96_C_PATCH != VARDEF_ESOPT_RX_H_PATCH))
+#error "vardef_esopt_VSC1G96.c and vardef_esopt_rx.h : source and header files are inconsistent!"
 #endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -50,35 +50,28 @@
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*===================================================================================================================================*/
-/*  U1      u1_g_VdfEsoRx_MM_TEL(void)                                                                                               */
+/*  U1      u1_g_VdfEsoRx_BRPADW(void)                                                                                                  */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-U1      u1_g_VdfEsoRx_MM_TEL(void)
+U1      u1_g_VdfEsoRx_BRPADW(void)
 {
-#if 0   /* BEV Rebase provisionally */
-    static const U1 u1_s_VDF_ESO_MM_TEL_ACT = (U1)2U;
-    U1              u1_t_rx;
-    U1              u1_t_ava_rx;
-    U1              u1_t_sts;
+    U1                 u1_t_rx;
+    U1                 u1_t_ava_rx;
 
-    u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_UNK;
-    u1_t_sts = u1_g_VardefMmMthd();
-
-    if(u1_t_sts == (U1)VDF_MM_MTHD_MMSUBBUS){
-        u1_t_rx = (U1)0U;
-        (void)Com_ReceiveSignal(ComConf_ComSignal_EXIST_TEL, &u1_t_rx);
-        if(u1_t_rx == u1_s_VDF_ESO_MM_TEL_ACT){
-            u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
-        }
+    u1_t_rx = (U1)0U;
+    (void)Com_ReceiveSignal(ComConf_ComSignal_PWIINFO, &u1_t_rx);
+    if(u1_t_rx != (U1)0U){
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
+    }
+    else{
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_INA;
     }
 
     return(u1_t_ava_rx);
-#else   /* BEV Rebase provisionally */
-    return((U1)VDF_ESO_AVA_RX_UNK);
-#endif   /* BEV Rebase provisionally */
 }
+
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
@@ -87,20 +80,18 @@ U1      u1_g_VdfEsoRx_MM_TEL(void)
 /*                                                                                                                                   */
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  2.0.0     3/ 2/2020  TN       NEW!                                                                                               */
-/*  2.1.0     9/28/2020  SF       vardef_esopt.c v2.0.0 -> v2.1.0                                                                    */
-/*  2.2.0     1/25/2021  SF       vardef_esopt.c v2.1.0 -> v2.2.0                                                                    */
-/*  2.3.0    11/15/2021  RO       vardef_esopt.c v2.2.0 -> v2.3.0                                                                    */
-/*  2.4.0     3/15/2022  RO       vardef_esopt.c v2.3.0 -> v2.4.0                                                                    */
+/*  2.4.0    07/02/2024   JMH     Newly Created                                                                                      */
+/*  2.5.0    11/25/2024  KO       vardef_esopt.c v2.4.0 -> v2.5.0                                                                    */
+/*  2.6.0    05/30/2025  SN       vardef_esopt.c v2.5.0 -> v2.6.0                                                                    */
+/*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  800B-1    9/28/2020  SF       Change config for 800B CV-R                                                                        */
-/*  117D-1   11/ 8/2022  MG       Change config for 117D MPT                                                                         */
+/*  19PFv3   07/02/2024   JMH     Added function of BRPADW for 19PFv3                                                                */
+/*  BEV      07/04/2025   KO      Change config for BEV System_Consideration_2.(MET-C_BRPADW-CSTD-A0-)                               */
 /*                                                                                                                                   */
-/*  * TN = Takashi Nagai, DENSO                                                                                                      */
-/*  * SF = Seiya Fukutome, DENSO TECHNO                                                                                              */
-/*  * RO = Reiya Okuda, KSE                                                                                                          */
-/*  * MG = Mei Godo, KSE                                                                                                             */
+/*  * JMH = James Michael D. Hilarion, DTPH                                                                                          */
+/*  * KO   = Kazuto Oishi,  Denso Techno                                                                                             */
+/*  * SN   = Shizuka Nakajima, KSE                                                                                                   */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

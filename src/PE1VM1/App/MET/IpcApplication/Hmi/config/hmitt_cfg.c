@@ -322,8 +322,13 @@ static U1      u1_s_HmiTtEcbEpbTt(void)
 
     u1_t_epbreq = u1_g_AlertReqByCh((U2)ALERT_CH_C_EPB_WRN_IG);
     u1_t_ecbreq = u1_g_AlertReqByCh((U2)ALERT_CH_C_ECB);
+#if 0   /* BEV Rebase provisionally */
     u1_t_epbexist = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_EPB);
     u1_t_ecbexist = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_ECB);
+#else   /* BEV Rebase provisionally */
+    u1_t_epbexist = (U1)FALSE;
+    u1_t_ecbexist = (U1)FALSE;
+#endif   /* BEV Rebase provisionally */
 
     /* Priority Check (ECB > EPB) */
     if ((u1_t_ecbreq                           < (U1)ALERT_REQ_C_ECB_MALFUNC)     &&
@@ -375,7 +380,11 @@ static U1      u1_s_HmiTtPkbTt(void)
     U1  u1_t_epb1f01;
 
     u1_t_req  = (U1)HMITT_BLINK_CO_OFF____100P;
+#if 0   /* BEV Rebase provisionally */
     u1_t_epb1f01 = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_EPB);
+#else   /* BEV Rebase provisionally */
+    u1_t_epb1f01 = (U1)FALSE;
+#endif   /* BEV Rebase provisionally */
     if(u1_t_epb1f01 == (U1)TRUE){
         u1_t_sts  = u1_g_AlertReqByCh((U2)ALERT_CH_C_EPB_TT_PKB);
         if(u1_t_sts < (U1)HMITT_REQ_NUM_EPB_TT_PKB_RED){
@@ -404,7 +413,11 @@ static void    vd_s_HmiTtTECOLP2(U4* u4_ap_req)
     U1  u1_t_at;
     U1  u1_t_ptsys;
 
+#if 0   /* BEV Rebase provisionally */
     u1_t_at =  u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_AT);
+#else   /* BEV Rebase provisionally */
+    u1_t_at = (U1)FALSE;
+#endif   /* BEV Rebase provisionally */
     u1_t_ptsys = u1_g_VardefPtsRx();
    if((u1_t_at      == (U1)TRUE                  ) && 
       ((u1_t_ptsys == (U1)VDF_PTS_RX_01_GAS      ) ||
@@ -459,7 +472,11 @@ static void    vd_s_HmiTtZmilrqTt(U4* u4_ap_req)
 {
     U1  u1_t_milreq_ava;
 
+#if 0   /* BEV Rebase provisionally */
     u1_t_milreq_ava = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_PTS_MILREQ);
+#else   /* BEV Rebase provisionally */
+    u1_t_milreq_ava = (U1)FALSE;
+#endif   /* BEV Rebase provisionally */
 
     /*MILREQ TT and ZMILRQ TT is exclusive*/
     /*When MILREQ is Available, ZMILRQ will be Not Available*/
@@ -504,8 +521,10 @@ void    vd_g_HmiTtCfgVarmask(U4 * u4_ap_varmask)
         {  (U1)9U,    (U1)28U,    (U2)VDF_ESO_CH_PTS_MILREQ,    (U2)ALERT_CH_P_MILREQ,             (U1)ALERT_REQ_P_MILREQ_FLASH_4HZ             },
         {  (U1)9U,    (U1)28U,    (U2)VDF_ESO_CH_PTS_MILREQ,    (U2)ALERT_CH_P_MILREQ,             (U1)ALERT_REQ_P_MILREQ_FLASH_EUREADY         },
         {  (U1)12U,   (U1)16U,    (U2)VDF_ESO_CH_ICS,           (U2)ALERT_CH_S_PKSB_TT,            (U1)ALERT_REQ_S_PKSB_TT_ON                   },
+#if 0   /* BEV Rebase provisionally */
         {  (U1)18U,   (U1)0U,     (U2)VDF_ESO_CH_HOF_EXT,       (U2)ALERT_CH_S_ADTJA_TT,           (U1)ALERT_REQ_S_ADTJA_TT_MALFUNC             },
         {  (U1)20U,   (U1)16U,    (U2)VDF_ESO_CH_ADIEXIST,      (U2)ALERT_CH_S_ADASTT_TT,          (U1)ALERT_REQ_S_ADASTT_TT_A_ABN              },
+#endif   /* BEV Rebase provisionally */
         {  (U1)22U,   (U1)24U,    (U2)VDF_ESO_CH_DMC,           (U2)ALERT_CH_S_DMC_TT,             (U1)ALERT_REQ_S_DMC_TT_MAL_DMC               }
 #endif   /* BEV Rebase provisionally */
     };

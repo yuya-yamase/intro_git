@@ -22,7 +22,6 @@
 #include "vardef_esopt.h"
 #include "vardef_ptsrx.h"
 #include "vardef_dest.h"
-#include "vardef_zmilrq.h"
 #include "vardef_hcs.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
