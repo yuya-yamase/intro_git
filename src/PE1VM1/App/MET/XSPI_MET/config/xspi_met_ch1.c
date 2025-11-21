@@ -18,18 +18,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "xspi_met.h"
 #include "xspi_met_ch1.h"
-#if 0   /* BEV BSW provisionally */
-#include "xspi_met_can_cfg.h"
-#endif
 
-#if 0   /* BEV Rebase provisionally */
-/* Platform */
-/* #include "oxcan.h" */ /* @@@ Provisional for 310D PreCV @@@ */
-
-#include "vardef.h"
-
-
-#endif   /* BEV Rebase provisionally */
 #include "cantxapp_mettx.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -61,15 +50,22 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/  
+
+#if 0   /* BEV Rebase provisionally */
+static U1             u1_s_preflynop;             /*  FLYNOP Previous RxValue  */
+#endif   /* BEV Rebase provisionally */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static inline void    vd_s_XSpiCanTx_MET1S02(const U4* u4_ap_tx_sts, const U4* u4_ap_tx_data);
-static inline void    vd_s_XSpiCanTx_MET1S27(const U4* u4_ap_tx_sts, const U4* u4_ap_tx_data);
-static inline void    vd_s_XSpiCanTx_MET1S29(const U4* u4_ap_tx_sts, const U4* u4_ap_tx_data);
-static inline void    vd_s_XSpiCanTx_MET1S30(const U4* u4_ap_tx_sts, const U4* u4_ap_tx_data);
-static inline void    vd_s_XSpiCanTx_MET1S62(const U4* u4_ap_tx_sts, const U4* u4_ap_tx_data);
-static inline void    vd_s_XSpiCanTx_MET1S70(const U4* u4_ap_tx_sts, const U4* u4_ap_tx_data);
+#if 0   /* BEV Rebase provisionally */
+static inline void    vd_s_XSpiCanTx_FLYNOP(const U4* u4_ap_pck_rx);
+#endif   /* BEV Rebase provisionally */
+static inline void    vd_s_XSpiCanTx_MET1S02(const U4 u4_a_TX_STS, const U4* u4_ap_tx_data);
+static inline void    vd_s_XSpiCanTx_MET1S27(const U4 u4_a_TX_STS, const U4* u4_ap_tx_data);
+static inline void    vd_s_XSpiCanTx_MET1S29(const U4 u4_a_TX_STS, const U4* u4_ap_tx_data);
+static inline void    vd_s_XSpiCanTx_MET1S30(const U4 u4_a_TX_STS, const U4* u4_ap_tx_data);
+static inline void    vd_s_XSpiCanTx_MET1S62(const U4 u4_a_TX_STS, const U4* u4_ap_tx_data);
+static inline void    vd_s_XSpiCanTx_MET1S70(const U4 u4_a_TX_STS, const U4* u4_ap_tx_data);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -84,6 +80,10 @@ static inline void    vd_s_XSpiCanTx_MET1S70(const U4* u4_ap_tx_sts, const U4* u
 /*===================================================================================================================================*/
 void    vd_g_XSpiCfgInitCh1(void)
 {
+#if 0   /* BEV Rebase provisionally */
+    u1_s_preflynop   = (U1)0U;
+
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -94,12 +94,17 @@ void    vd_g_XSpiCfgInitCh1(void)
 /*===================================================================================================================================*/
 void    vd_g_XSpiCfgPduRxCh1(const U4 * u4_ap_PDU_RX)
 {
-    vd_s_XSpiCanTx_MET1S02(&u4_ap_PDU_RX[700],&u4_ap_PDU_RX[769]);
-    vd_s_XSpiCanTx_MET1S27(&u4_ap_PDU_RX[700],&u4_ap_PDU_RX[721]);
-    vd_s_XSpiCanTx_MET1S29(&u4_ap_PDU_RX[700],&u4_ap_PDU_RX[723]);
-    vd_s_XSpiCanTx_MET1S30(&u4_ap_PDU_RX[701],&u4_ap_PDU_RX[791]);
-    vd_s_XSpiCanTx_MET1S62(&u4_ap_PDU_RX[700],&u4_ap_PDU_RX[737]);
-    vd_s_XSpiCanTx_MET1S70(&u4_ap_PDU_RX[700],&u4_ap_PDU_RX[739]);
+#if 0   /* BEV Rebase provisionally */
+
+    vd_s_XSpiCanTx_FLYNOP(&u4_ap_PDU_RX[47]);
+
+#endif   /* BEV Rebase provisionally */
+    vd_s_XSpiCanTx_MET1S02(u4_ap_PDU_RX[700],&u4_ap_PDU_RX[769]);
+    vd_s_XSpiCanTx_MET1S27(u4_ap_PDU_RX[700],&u4_ap_PDU_RX[721]);
+    vd_s_XSpiCanTx_MET1S29(u4_ap_PDU_RX[700],&u4_ap_PDU_RX[723]);
+    vd_s_XSpiCanTx_MET1S30(u4_ap_PDU_RX[701],&u4_ap_PDU_RX[791]);
+    vd_s_XSpiCanTx_MET1S62(u4_ap_PDU_RX[700],&u4_ap_PDU_RX[737]);
+    vd_s_XSpiCanTx_MET1S70(u4_ap_PDU_RX[700],&u4_ap_PDU_RX[739]);
 }
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -112,106 +117,126 @@ void    vd_g_XSpiCfgPduRxCh1(const U4 * u4_ap_PDU_RX)
 /*                                                                                                                                   */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 
+#if 0   /* BEV Rebase provisionally */
 /*===================================================================================================================================*/
-/*  static inline void    vd_s_XSpiCanTx_MET1S02(const U4 * u4_ap_tx_sts, const U4 * u4_ap_tx_data,)                                 */
+/*  static inline void    vd_s_XSpiCanTx_FLYNOP(U4 * u4_ap_pdu_tx)                                                                   */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:     u4_ap_tx_sts                                                                                                      */
+/*  Arguments:     u4_ap_pck_rx                                                                                                      */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static inline void    vd_s_XSpiCanTx_FLYNOP(const U4 * u4_ap_pck_rx)
+{
+    U1 u1_t_rxdata;
+
+    u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[0], (U1)29U, (U1)2U);
+
+    if (u1_t_rxdata != u1_s_preflynop) {
+        vd_g_VdsCIReqTx((U1)VDS_CI_SW_FLYNOP, u1_t_rxdata);
+    }
+    u1_s_preflynop = u1_t_rxdata;
+}
+#endif   /* BEV Rebase provisionally */
+
+/*===================================================================================================================================*/
+/*  static inline void    vd_s_XSpiCanTx_MET1S02(const U4 u4_a_TX_STS, const U4 * u4_ap_tx_data)                                     */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:     u4_a_TX_STS                                                                                                       */
 /*                 u4_ap_tx_data                                                                                                     */
 /*  Return:                                                                                                                          */
 /*===================================================================================================================================*/
-static inline void    vd_s_XSpiCanTx_MET1S02(const U4 * u4_ap_tx_sts, const U4 * u4_ap_tx_data)
+static inline void    vd_s_XSpiCanTx_MET1S02(const U4 u4_a_TX_STS, const U4 * u4_ap_tx_data)
 {
     U1 u1_t_txsts;
 
-    u1_t_txsts = u1_XSPI_MET_READ__BIT(u4_ap_tx_sts[0], (U1)30U, (U1)2U);
+    u1_t_txsts = u1_XSPI_MET_READ__BIT(u4_a_TX_STS, (U1)30U, (U1)2U);
 
-    if (u1_t_txsts == (U1)XSPI_TX_VALID) {
-    vd_g_CanTxAppMET1S02_Put(&u4_ap_tx_data[0], (U1)XSPI_TX_BUFSIZE2);
+    if (u1_t_txsts == (U1)XSPI_CANTX_VALID) {
+        vd_g_CanTxAppMET1S02_Put(&u4_ap_tx_data[0], (U1)XSPI_CANTX_BUFSIZE2);
     }
 }
 /*===================================================================================================================================*/
-/*  static inline void    vd_s_XSpiCanTx_MET1S27(const U4 * u4_ap_tx_sts, const U4 * u4_ap_tx_data,)                                 */
+/*  static inline void    vd_s_XSpiCanTx_MET1S27(const U4 u4_a_TX_STS, const U4 * u4_ap_tx_data)                                     */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:     u4_ap_tx_sts                                                                                                      */
+/*  Arguments:     u4_a_TX_STS                                                                                                       */
 /*                 u4_ap_tx_data                                                                                                     */
 /*  Return:                                                                                                                          */
 /*===================================================================================================================================*/
-static inline void    vd_s_XSpiCanTx_MET1S27(const U4 * u4_ap_tx_sts, const U4 * u4_ap_tx_data)
+static inline void    vd_s_XSpiCanTx_MET1S27(const U4 u4_a_TX_STS, const U4 * u4_ap_tx_data)
 {
     U1 u1_t_txsts;
 
-    u1_t_txsts = u1_XSPI_MET_READ__BIT(u4_ap_tx_sts[0], (U1)6U, (U1)2U);
+    u1_t_txsts = u1_XSPI_MET_READ__BIT(u4_a_TX_STS, (U1)6U, (U1)2U);
 
-    if (u1_t_txsts == (U1)XSPI_TX_VALID) {
-    vd_g_CanTxAppMET1S27_Put(&u4_ap_tx_data[0], (U1)XSPI_TX_BUFSIZE2);
+    if (u1_t_txsts == (U1)XSPI_CANTX_VALID) {
+        vd_g_CanTxAppMET1S27_Put(&u4_ap_tx_data[0], (U1)XSPI_CANTX_BUFSIZE2);
     }
 }
 /*===================================================================================================================================*/
-/*  static inline void    vd_s_XSpiCanTx_MET1S29(const U4 * u4_ap_tx_sts, const U4 * u4_ap_tx_data,)                                 */
+/*  static inline void    vd_s_XSpiCanTx_MET1S29(const U4 u4_a_TX_STS, const U4 * u4_ap_tx_data)                                     */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:     u4_ap_tx_sts                                                                                                      */
+/*  Arguments:     u4_a_TX_STS                                                                                                       */
 /*                 u4_ap_tx_data                                                                                                     */
 /*  Return:                                                                                                                          */
 /*===================================================================================================================================*/
-static inline void    vd_s_XSpiCanTx_MET1S29(const U4 * u4_ap_tx_sts, const U4 * u4_ap_tx_data)
+static inline void    vd_s_XSpiCanTx_MET1S29(const U4 u4_a_TX_STS, const U4 * u4_ap_tx_data)
 {
     U1 u1_t_txsts;
 
-    u1_t_txsts = u1_XSPI_MET_READ__BIT(u4_ap_tx_sts[0], (U1)8U, (U1)2U);
+    u1_t_txsts = u1_XSPI_MET_READ__BIT(u4_a_TX_STS, (U1)8U, (U1)2U);
 
-    if (u1_t_txsts == (U1)XSPI_TX_VALID) {
-    vd_g_CanTxAppMET1S29_Put(&u4_ap_tx_data[0], (U1)XSPI_TX_BUFSIZE2);
+    if (u1_t_txsts == (U1)XSPI_CANTX_VALID) {
+        vd_g_CanTxAppMET1S29_Put(&u4_ap_tx_data[0], (U1)XSPI_CANTX_BUFSIZE2);
     }
 }
 /*===================================================================================================================================*/
-/*  static inline void    vd_s_XSpiCanTx_MET1S30(const U4 * u4_ap_tx_sts, const U4 * u4_ap_tx_data,)                                 */
+/*  static inline void    vd_s_XSpiCanTx_MET1S30(const U4 u4_a_TX_STS, const U4 * u4_ap_tx_data)                                     */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:     u4_ap_tx_sts                                                                                                      */
+/*  Arguments:     u4_a_TX_STS                                                                                                       */
 /*                 u4_ap_tx_data                                                                                                     */
 /*  Return:                                                                                                                          */
 /*===================================================================================================================================*/
-static inline void    vd_s_XSpiCanTx_MET1S30(const U4 * u4_ap_tx_sts, const U4 * u4_ap_tx_data)
+static inline void    vd_s_XSpiCanTx_MET1S30(const U4 u4_a_TX_STS, const U4 * u4_ap_tx_data)
 {
     U1 u1_t_txsts;
 
-    u1_t_txsts = u1_XSPI_MET_READ__BIT(u4_ap_tx_sts[0], (U1)8U, (U1)2U);
+    u1_t_txsts = u1_XSPI_MET_READ__BIT(u4_a_TX_STS, (U1)8U, (U1)2U);
 
-    if (u1_t_txsts == (U1)XSPI_TX_VALID) {
-    vd_g_CanTxAppMET1S30_Put(&u4_ap_tx_data[0], (U1)XSPI_TX_BUFSIZE8);
+    if (u1_t_txsts == (U1)XSPI_CANTX_VALID) {
+        vd_g_CanTxAppMET1S30_Put(&u4_ap_tx_data[0], (U1)XSPI_CANTX_BUFSIZE8);
     }
 }
 /*===================================================================================================================================*/
-/*  static inline void    vd_s_XSpiCanTx_MET1S62(const U4 * u4_ap_tx_sts, const U4 * u4_ap_tx_data,)                                 */
+/*  static inline void    vd_s_XSpiCanTx_MET1S62(const U4 u4_a_TX_STS, const U4 * u4_ap_tx_data)                                     */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:     u4_ap_tx_sts                                                                                                      */
+/*  Arguments:     u4_a_TX_STS                                                                                                       */
 /*                 u4_ap_tx_data                                                                                                     */
 /*  Return:                                                                                                                          */
 /*===================================================================================================================================*/
-static inline void    vd_s_XSpiCanTx_MET1S62(const U4 * u4_ap_tx_sts, const U4 * u4_ap_tx_data)
+static inline void    vd_s_XSpiCanTx_MET1S62(const U4 u4_a_TX_STS, const U4 * u4_ap_tx_data)
 {
     U1 u1_t_txsts;
 
-    u1_t_txsts = u1_XSPI_MET_READ__BIT(u4_ap_tx_sts[0], (U1)16U, (U1)2U);
+    u1_t_txsts = u1_XSPI_MET_READ__BIT(u4_a_TX_STS, (U1)16U, (U1)2U);
 
-    if (u1_t_txsts == (U1)XSPI_TX_VALID) {
-    vd_g_CanTxAppMET1S62_Put(&u4_ap_tx_data[0], (U1)XSPI_TX_BUFSIZE2);
+    if (u1_t_txsts == (U1)XSPI_CANTX_VALID) {
+        vd_g_CanTxAppMET1S62_Put(&u4_ap_tx_data[0], (U1)XSPI_CANTX_BUFSIZE2);
     }
 }
 /*===================================================================================================================================*/
-/*  static inline void    vd_s_XSpiCanTx_MET1S70(const U4 * u4_ap_tx_sts, const U4 * u4_ap_tx_data,)                                 */
+/*  static inline void    vd_s_XSpiCanTx_MET1S70(const U4 u4_a_TX_STS, const U4 * u4_ap_tx_data)                                     */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:     u4_ap_tx_sts                                                                                                      */
+/*  Arguments:     u4_a_TX_STS                                                                                                       */
 /*                 u4_ap_tx_data                                                                                                     */
 /*  Return:                                                                                                                          */
 /*===================================================================================================================================*/
-static inline void    vd_s_XSpiCanTx_MET1S70(const U4 * u4_ap_tx_sts, const U4 * u4_ap_tx_data)
+static inline void    vd_s_XSpiCanTx_MET1S70(const U4 u4_a_TX_STS, const U4 * u4_ap_tx_data)
 {
     U1 u1_t_txsts;
 
-    u1_t_txsts = u1_XSPI_MET_READ__BIT(u4_ap_tx_sts[0], (U1)18U, (U1)2U);
+    u1_t_txsts = u1_XSPI_MET_READ__BIT(u4_a_TX_STS, (U1)18U, (U1)2U);
 
-    if (u1_t_txsts == (U1)XSPI_TX_VALID) {
-    vd_g_CanTxAppMET1S70_Put(&u4_ap_tx_data[0], (U1)XSPI_TX_BUFSIZE8);
+    if (u1_t_txsts == (U1)XSPI_CANTX_VALID) {
+        vd_g_CanTxAppMET1S70_Put(&u4_ap_tx_data[0], (U1)XSPI_CANTX_BUFSIZE8);
     }
 }
 

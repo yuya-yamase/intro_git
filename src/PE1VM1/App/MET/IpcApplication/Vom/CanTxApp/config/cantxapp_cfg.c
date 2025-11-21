@@ -16,22 +16,22 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#include "cantxapp_cfg.h"
 #include "cantxapp_cfg_private.h"
+#include "cantxapp_cfg_signal.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if ((CANTXAPP_CFG_C_MAJOR != CANTXAPP_CFG_H_MAJOR) || \
-     (CANTXAPP_CFG_C_MINOR != CANTXAPP_CFG_H_MINOR) || \
-     (CANTXAPP_CFG_C_PATCH != CANTXAPP_CFG_H_PATCH))
-#error "cantxapp_cfg.c and cantxapp_cfg.h : source and header files are inconsistent!"
-#endif
-
 #if ((CANTXAPP_CFG_C_MAJOR != CANTXAPP_CFG_PRIVATE_H_MAJOR) || \
      (CANTXAPP_CFG_C_MINOR != CANTXAPP_CFG_PRIVATE_H_MINOR) || \
      (CANTXAPP_CFG_C_PATCH != CANTXAPP_CFG_PRIVATE_H_PATCH))
 #error "cantxapp_cfg.c and cantxapp_cfg_private.h : source and header files are inconsistent!"
+#endif
+
+#if ((CANTXAPP_CFG_C_MAJOR != CANTXAPP_CFG_SIGNAL_H_MAJOR) || \
+     (CANTXAPP_CFG_C_MINOR != CANTXAPP_CFG_SIGNAL_H_MINOR) || \
+     (CANTXAPP_CFG_C_PATCH != CANTXAPP_CFG_SIGNAL_H_PATCH))
+#error "cantxapp_cfg.c and cantxapp_cfg_signal.h : source and header files are inconsistent!"
 #endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

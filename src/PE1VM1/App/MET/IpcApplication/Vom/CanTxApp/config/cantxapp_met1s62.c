@@ -16,17 +16,17 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#include "cantxapp_cfg_private.h"
+#include "cantxapp_cfg_signal.h"
 #include "cantxapp_mettx.h"
 
 #include "oxcan.h"
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if ((CANTXAPP_MET1S62_C_MAJOR != CANTXAPP_CFG_PRIVATE_H_MAJOR) || \
-     (CANTXAPP_MET1S62_C_MINOR != CANTXAPP_CFG_PRIVATE_H_MINOR) || \
-     (CANTXAPP_MET1S62_C_PATCH != CANTXAPP_CFG_PRIVATE_H_PATCH))
-#error "cantxapp_met1s62.c and cantxapp_cfg_private.h : source and header files are inconsistent!"
+#if ((CANTXAPP_MET1S62_C_MAJOR != CANTXAPP_CFG_SIGNAL_H_MAJOR) || \
+     (CANTXAPP_MET1S62_C_MINOR != CANTXAPP_CFG_SIGNAL_H_MINOR) || \
+     (CANTXAPP_MET1S62_C_PATCH != CANTXAPP_CFG_SIGNAL_H_PATCH))
+#error "cantxapp_met1s62.c and cantxapp_cfg_signal.h : source and header files are inconsistent!"
 #endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -67,7 +67,7 @@ void    vd_g_CanTxAppMET1S62_Init(void)
     U4                 u4_t_loop;
 
     for(u4_t_loop = (U4)0U; u4_t_loop < (U4)CANTXAPP_NBYTE_PAYLOAD2; u4_t_loop++){
-        u4_sp_cantxapp_met1s62data[u4_t_loop] = (U4)0x00U;
+        u4_sp_cantxapp_met1s62data[u4_t_loop] = (U4)0U;
     }
 }
 /*===================================================================================================================================*/
@@ -92,7 +92,9 @@ void    vd_g_CanTxAppMET1S62_Put(const U4 * u4_ap_pck_rx, const U1 u1_a_BUFSIZE)
     U4                 u4_t_loop;
 
     for(u4_t_loop = (U4)0U; u4_t_loop < (U4)u1_a_BUFSIZE; u4_t_loop++){
-        u4_sp_cantxapp_met1s62data[u4_t_loop] = u4_ap_pck_rx[u4_t_loop];
+        if(u1_a_BUFSIZE <= (U1)CANTXAPP_NBYTE_PAYLOAD2){
+            u4_sp_cantxapp_met1s62data[u4_t_loop] = u4_ap_pck_rx[u4_t_loop];
+        }
     }
 }
 /*===================================================================================================================================*/

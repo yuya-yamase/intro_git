@@ -6,15 +6,15 @@
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
 
-#ifndef CANTXAPP_CFG_PRIVATE_H
-#define CANTXAPP_CFG_PRIVATE_H
+#ifndef CANTXAPP_CFG_SIGNAL_H
+#define CANTXAPP_CFG_SIGNAL_H
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define CANTXAPP_CFG_PRIVATE_H_MAJOR                 (0)
-#define CANTXAPP_CFG_PRIVATE_H_MINOR                 (0)
-#define CANTXAPP_CFG_PRIVATE_H_PATCH                 (0)
+#define CANTXAPP_CFG_SIGNAL_H_MAJOR                  (0)
+#define CANTXAPP_CFG_SIGNAL_H_MINOR                  (0)
+#define CANTXAPP_CFG_SIGNAL_H_PATCH                  (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -89,6 +89,7 @@
 #define CANTXAPP_POS_8_5                             (29U)
 #define CANTXAPP_POS_8_6                             (30U)
 #define CANTXAPP_POS_8_7                             (31U)
+
 #define CANTXAPP_POS_9_1                             (1U)
 #define CANTXAPP_POS_11_6                            (22U)
 #define CANTXAPP_POS_16_4                            (28U)
@@ -136,7 +137,7 @@ void    vd_g_CanTxAppMET1S70_Send(void);
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 
-#endif      /* CANTXAPP_CFG_PRIVATE_H */
+#endif      /* CANTXAPP_CFG_SIGNAL_H */
 
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
