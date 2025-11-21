@@ -1,4 +1,4 @@
-/* 1.6.0 */
+/* 1.9.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -13,7 +13,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define HMITT_CFG_H_MAJOR                     (1)
-#define HMITT_CFG_H_MINOR                     (6)
+#define HMITT_CFG_H_MINOR                     (9)
 #define HMITT_CFG_H_PATCH                     (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -57,11 +57,11 @@
 #define HMITT_BLINK_SI_1P00HZ__50P_5TIMS_E_OFF       (4U)
 #define HMITT_BLINK_CO_4P00HZ__50P_EPB               (4U)
 #define HMITT_BLINK_CO_2P00HZ__50P_EPB               (3U)
+#define HMITT_BLINK_CO_4P00HZ__50P_STEER             (2U)
 #define HMITT_BLINK_CO_2P00HZ__50P_TMPIND            (1U)
 #define HMITT_BLINK_SI_1P00HZ__50P_10TIMS_E__ON      (1U)
 #define HMITT_BLINK_CO_1P00HZ__50P_63TIMS_E__ON      (5U)
 #define HMITT_BLINK_CO_5P00HZ__50P                   (2U)
-#define HMITT_BLINK_CO_4P00HZ__50P_PLACON            (2U)
 #define HMITT_BLINK_SI_1P00HZ__50P_3TIMS_E_OFF_REQ3  (2U)
 #define HMITT_BLINK_SI_1P00HZ__50P_3TIMS_E_OFF_REQ4  (3U)
 #define HMITT_BLINK_SI_1P00HZ__50P_3TIMS_E_OFF_REQ5  (4U)

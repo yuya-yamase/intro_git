@@ -42,7 +42,6 @@
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static U1   u1_s_hmiscreen_sts;
-static U1   u1_s_hmiscreen_sts_wo_turn;
 static U2   u2_s_hmiscreen_to;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -63,7 +62,6 @@ static U2   u2_s_hmiscreen_to;
 void    vd_g_HmiScreenInit(void)
 {
     u1_s_hmiscreen_sts         = (U1)FALSE;
-    u1_s_hmiscreen_sts_wo_turn = (U1)FALSE;
     u2_s_hmiscreen_to          = (U2)HMIPROXY_TOC_MAX;
 }
 
@@ -82,7 +80,6 @@ void    vd_g_HmiScreenMainTask(void)
 
     if(u1_t_to == (U1)TRUE){
         u1_s_hmiscreen_sts         = (U1)FALSE;
-        u1_s_hmiscreen_sts_wo_turn = (U1)FALSE;
     }
 
 }
@@ -106,17 +103,8 @@ U1      u1_g_HmiScreen(void)
 /*===================================================================================================================================*/
 void    vd_g_HmiScreenPut(const U1 u1_a_CH, const U1 u1_a_STS)
 {
-    if(u1_a_CH == (U1)HMISCREEN_CH_DISP_STS){
         u1_s_hmiscreen_sts         = u1_a_STS;
         u2_s_hmiscreen_to          = (U2)HMIPROXY_TOC_INI;
-    }
-    else if(u1_a_CH == (U1)HMISCREEN_CH_DISP_STS_WO_TURN) {
-        u1_s_hmiscreen_sts_wo_turn = u1_a_STS;
-        u2_s_hmiscreen_to          = (U2)HMIPROXY_TOC_INI;
-    }
-    else {
-        /* Do nothing */
-    }
 }
 
 /*===================================================================================================================================*/
@@ -131,23 +119,6 @@ U1      u1_g_HmiScreenShtdwnOK(void)
 
     u1_t_shtdwnok = (U1)FALSE;
     if(u1_s_hmiscreen_sts == (U1)FALSE){
-        u1_t_shtdwnok = (U1)TRUE;
-    }
-    return(u1_t_shtdwnok);
-}
-
-/*===================================================================================================================================*/
-/*  U1      u1_g_HmiScreenWoTurnShtdwnOK(void)                                                                                       */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1      u1_g_HmiScreenWoTurnShtdwnOK(void)
-{
-    U1  u1_t_shtdwnok;
-
-    u1_t_shtdwnok = (U1)FALSE;
-    if(u1_s_hmiscreen_sts_wo_turn == (U1)FALSE){
         u1_t_shtdwnok = (U1)TRUE;
     }
     return(u1_t_shtdwnok);

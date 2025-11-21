@@ -1,4 +1,4 @@
-/* 1.3.0 */
+/* 1.4.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define HMIPROXY_CFG_C_MAJOR                     (1)
-#define HMIPROXY_CFG_C_MINOR                     (3)
+#define HMIPROXY_CFG_C_MINOR                     (4)
 #define HMIPROXY_CFG_C_PATCH                     (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -97,10 +97,6 @@ void ( * const              fp_gp_vd_HMIPROXY_WKUP_INIT[HMIPROXY_INIT_NUM])(void
      &vd_g_HmiScreenInit
 };
 
-U1   ( * const              fp_gp_u1_HMIPROXY_SHTDWN_CHK[HMIPROXY_SHTDWN_NUM])(void) = {
-     &u1_g_HmiScreenWoTurnShtdwnOK
-};
-
 const ST_HMIPROXY     st_gp_HMIPROXY[HMIPROXY_MAINTASK_NUM] = {
      {&vd_g_HmiHudMainTask ,     (U4)SCHDLR_TASKBIT__10MS_A  },
      {&vd_g_HmiLocaleMainTask,   (U4)SCHDLR_TASKBIT__20MS_B  },
@@ -135,6 +131,7 @@ const ST_HMIPROXY     st_gp_HMIPROXY[HMIPROXY_MAINTASK_NUM] = {
 /*  1.1.0    03/20/2020  TH       Setting for 800B CV.                                                                               */
 /*  1.2.0    10/07/2020  TH       Setting for 800B CV-R.                                                                             */
 /*  1.3.0    01/06/2021  TH       Follow 775B 1A.                                                                                    */
+/*  1.4.0    05/08/2025  MN       Change for BEV PreCV.                                                                              */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
@@ -146,6 +143,7 @@ const ST_HMIPROXY     st_gp_HMIPROXY[HMIPROXY_MAINTASK_NUM] = {
 /* 19PFv3-6  05/20/2025  PG       Add HmiAdu module                                                                                  */
 /* 19PFv3-7  06/27/2025  SH       Add HmiTdoor module                                                                                */
 /* BEV-1     10/31/2025  MA       Change for BEV rebase                                                                              */
+/* BEV-2     05/08/2025  MN       Change for BEV PreCV.(MET-M_CLKCTL-CSTD-0-/MET-M_CAL-CSTD-0-) Delete hmidate and hmiclock          */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * TH   = Takahiro Hirano, Denso Techno                                                                                           */
@@ -154,6 +152,6 @@ const ST_HMIPROXY     st_gp_HMIPROXY[HMIPROXY_MAINTASK_NUM] = {
 /*  * PG   = Patrick Garcia, DTPH                                                                                                    */
 /*  * AA   = Anna Asuncion, Denso Techno                                                                                             */
 /*  * TN   = Tetsushi Nakanao, Denso Techno                                                                                          */
-/*  * MA   = Misaki Aiki,  Denso Techno                                                                                              */
+/*  * MN   = Mikiya Negishi, KSE                                                                                                     */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
