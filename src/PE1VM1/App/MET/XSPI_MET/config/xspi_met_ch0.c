@@ -124,8 +124,6 @@
 #define XSPI_AMB_FAH_MAX                    (18100U)
 #define XSPI_AMB_LSB_1                      (100U)
 
-#define XSPI_HUD_DTA_NUM                    (7U)
-
 #define XSPI_UNIT_VAL_ELECO_KMPKWH          (0U)   /* Electricity cost    : km/kWh                 */
 #define XSPI_UNIT_VAL_ELECO_KWHP100KM       (1U)   /* Electricity cost    : kWh/100km              */
 #define XSPI_UNIT_VAL_ELECO_MILEPKWH        (2U)   /* Electricity cost    : miles/kWh              */
@@ -158,7 +156,9 @@ typedef struct{
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#if 0   /* BEV Rebase provisionally */
 static U1           u1_s_xspi_vipos_disp;
+#endif   /* BEV Rebase provisionally */
 static U1           u1_s_xspi_dimsw;
 static U1           u1_s_xspi_gvifsts;
 static U1           u1_s_xspi_disp_gvifsts;
@@ -665,6 +665,7 @@ static inline void    vd_s_XSpiCfgTxRcmmui(        U4 * u4_ap_pdu_tx) {
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
 static inline void    vd_s_XSpiCfgTxHud(           U4 * u4_ap_pdu_tx) {
+#if 0   /* BEV Rebase provisionally */
     U1 u1_t_owdutyreq;
     U2 u2_t_owduty;
 
@@ -683,6 +684,7 @@ static inline void    vd_s_XSpiCfgTxHud(           U4 * u4_ap_pdu_tx) {
     u4_ap_pdu_tx[2] |= (U4)((U4)u1_g_HudImgAdjGetGvRtctlIniReq() & (U4)0x00000001U) << 16;  /* HUD_VIPOS_INIT_OWREQ */
     u4_ap_pdu_tx[2] |= (U4)((U4)u1_g_HudImgAdjIsUpSwOn() & (U4)0x00000001U) << 17;          /* HUD_VIPOS_UPSW       */
     u4_ap_pdu_tx[2] |= (U4)((U4)u1_g_HudImgAdjIsDnSwOn() & (U4)0x01U) << 18;                /* HUD_VIPOS_DNSW       */
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -982,12 +984,16 @@ static inline void    vd_s_XSpiCfgRxHUD(        const U4 * u4_ap_PDU_RX) {
     u1_t_gvifsts = u1_XSPI_MET_READ_BYTE(u4_ap_PDU_RX[2] , (U1)3U);
 
     if (u1_t_gvifsts == (U1)0U) {
+#if 0   /* BEV Rebase provisionally */
         u1_s_xspi_vipos_disp = u1_XSPI_MET_READ__BIT(u4_ap_PDU_RX[15] , (U1)0U , (U1)1U);
+#endif   /* BEV Rebase provisionally */
 
         u1_t_rxdata = (U1)((u4_ap_PDU_RX[10] >> 2) & (U4)0x03U);
         u1_s_xspi_gvifsts = u1_t_rxdata;
     } else {
+#if 0   /* BEV Rebase provisionally */
         u1_s_xspi_vipos_disp = (U1)0U;
+#endif   /* BEV Rebase provisionally */
         u1_s_xspi_gvifsts = (U1)XSPI_GVIF_UNDEF2;
     }
 }
@@ -1051,7 +1057,9 @@ U1    u1_g_XSpiGvifSts_METDISP(void) {
 /*===================================================================================================================================*/
 void    vd_g_XSpiCfgInitCh0(void)
 {
+#if 0   /* BEV Rebase provisionally */
     u1_s_xspi_vipos_disp                      = (U1)0U;
+#endif   /* BEV Rebase provisionally */
     u1_s_xspi_dimsw                           = (U1)0U;
     u1_s_xspi_gvifsts                         = (U1)XSPI_GVIF_UNDEF2;
     u1_s_xspi_disp_gvifsts                    = (U1)XSPI_GVIF_METDSP_UNDEF;
