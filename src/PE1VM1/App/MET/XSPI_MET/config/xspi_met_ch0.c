@@ -235,7 +235,6 @@ static inline void    vd_s_XSpiCfgTxVariation(     U4 * u4_ap_pdu_tx) {
     U1  u1_t_subdigspd;
     U1  u1_t_var_4wdsys_disp;                                          /*  VAR_4WDSYS_DISP                                      */
     U1  u1_t_sys_hcs;                                                  /*  SYS_HCS                                              */
-    U1  u1_t_dist;
 
     u4_ap_pdu_tx[0] = (U4)u1_g_VardefDestinationByPid();               /*  DESTINATION                                          */
 

@@ -9,9 +9,9 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define VARDEF_ESOPT_SCS1S90_C_MAJOR             (2)
-#define VARDEF_ESOPT_SCS1S90_C_MINOR             (6)
-#define VARDEF_ESOPT_SCS1S90_C_PATCH             (0)
+#define VARDEF_ESOPT_SCS1S14_C_MAJOR             (2)
+#define VARDEF_ESOPT_SCS1S14_C_MINOR             (6)
+#define VARDEF_ESOPT_SCS1S14_C_PATCH             (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -22,10 +22,10 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if ((VARDEF_ESOPT_SCS1S90_C_MAJOR != VARDEF_ESOPT_RX_H_MAJOR) || \
-     (VARDEF_ESOPT_SCS1S90_C_MINOR != VARDEF_ESOPT_RX_H_MINOR) || \
-     (VARDEF_ESOPT_SCS1S90_C_PATCH != VARDEF_ESOPT_RX_H_PATCH))
-#error "vardef_esopt_SCS1S90.c and vardef_esopt_rx.h : source and header files are inconsistent!"
+#if ((VARDEF_ESOPT_SCS1S14_C_MAJOR != VARDEF_ESOPT_RX_H_MAJOR) || \
+     (VARDEF_ESOPT_SCS1S14_C_MINOR != VARDEF_ESOPT_RX_H_MINOR) || \
+     (VARDEF_ESOPT_SCS1S14_C_PATCH != VARDEF_ESOPT_RX_H_PATCH))
+#error "vardef_esopt_SCS1S14.c and vardef_esopt_rx.h : source and header files are inconsistent!"
 #endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -83,9 +83,11 @@ U1      u1_g_VdfEsoRx_AVSEXT(void)
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  2.4.0    12/18/2023  AA       NEW!                                                                                               */
-/*  2.5.0    1/10/2024   KO      Newly Created                                                                                       */
-/*  2.6.0    5/30/2025   SN      vardef_esopt.c v2.5.0 -> v2.6.0                                                                     */
+/*  2.5.0    11/25/2024  KO       vardef_esopt.c v2.4.0 -> v2.5.0                                                                    */
+/*  2.6.0     5/30/2025  SN       vardef_esopt.c v2.5.0 -> v2.6.0                                                                    */
 /*                                                                                                                                   */
 /*  * AA = Anna Asuncion, DT                                                                                                         */
+/*  * KO   = Kazuto Oishi,  Denso Techno                                                                                             */
+/*  * SN = Shizuka Nakajima, KSE                                                                                                     */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
