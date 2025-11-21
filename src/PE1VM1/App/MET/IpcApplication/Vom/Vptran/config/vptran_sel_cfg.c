@@ -1,4 +1,4 @@
-/* 2.3.0 */
+/* 2.4.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define VPTRAN_SEL_CFG_C_MAJOR                  (2)
-#define VPTRAN_SEL_CFG_C_MINOR                  (3)
+#define VPTRAN_SEL_CFG_C_MINOR                  (4)
 #define VPTRAN_SEL_CFG_C_PATCH                  (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -79,7 +79,7 @@ void            vd_g_VptranInitCfg(void)
 /*===================================================================================================================================*/
 U1              u1_g_VptranTransMissionTypeCfg(void)
 {
-    return ((U1)VPTRAN_BYW);
+    return ((U1)VPTRAN_BYW);    /* BEV is SBW only */
 }
 
 /*===================================================================================================================================*/
@@ -97,6 +97,7 @@ U1              u1_g_VptranTransMissionTypeCfg(void)
 /*  2.1.0    11/30/2021  TA(M)    vptran_sel.c v2.0.1 -> v2.1.0.                                                                     */
 /*  2.2.0    09/30/2022  TA(M)    vptran_sel.c v2.1.0 -> v2.2.0.                                                                     */
 /*  2.3.0    12/15/2023  GM       vptran_sel.c v2.3.0 -> v2.3.0.                                                                     */
+/*  2.4.0     2/10/2025  HF       vptran_sel.c v2.3.0 -> v2.4.0.                                                                     */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  Revision    Date        Author   Change Description                                                                              */
@@ -106,7 +107,8 @@ U1              u1_g_VptranTransMissionTypeCfg(void)
 /*  200D-2      10/31/2022  YK       Update Toyota Standard Application(lib_ipc_tycan_v210_r009)                                     */
 /*  330D-1      02/22/2023  YK       330D Correspondence                                                                             */
 /*  19PFv3-1    12/15/2023  GM       19PFv3 Correspondence                                                                           */
-/*  BEV-1       10/28/2025  MA       Change for BEV rebase.                                                                          */
+/*  BEV-1       02/10/2025  HF       Change config for BEV System_Consideration_1.(MET-D_SFTPOS-CSTD-1-)                             */
+/*  BEV-2       10/28/2025  MA       Change for BEV rebase.                                                                          */
 /*                                                                                                                                   */
 /*  * HY   = Hidefumi Yoshida, Denso                                                                                                 */
 /*  * KK   = Kohei Kato,       Denso Techno                                                                                          */
@@ -114,6 +116,7 @@ U1              u1_g_VptranTransMissionTypeCfg(void)
 /*  * TA(M)= Teruyuki Anjima,  NTT Data MSE                                                                                          */
 /*  * YK   = Yuki Kawai,       Denso Techno                                                                                          */
 /*  * GM   = Glen Monteposo,   DTPH                                                                                                  */
+/*  * HF   = Hinari Fukamachi, KSE                                                                                                   */
 /*  * MA   = Misaki Aiki,   Denso Techno                                                                                             */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

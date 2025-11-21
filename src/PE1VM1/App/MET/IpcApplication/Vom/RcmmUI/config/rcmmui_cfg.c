@@ -18,6 +18,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "rcmmui_cfg_private.h"
 #include "oxcan.h"
+#include "cantxapp_mettx.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -133,9 +134,7 @@ void            vd_g_RcmmUICfgCanTx(const U2 u2_a_RCMM, const U1 u1_a_RES)
 void    vd_g_RcmmUIPbdmswPut(const U1 u1_a_OPT)
 {
     if(u1_s_rcmmui_prereq != u1_a_OPT){
-#if 0   /* BEV Rebase provisionally */
-        vd_g_VdsCIReqTx((U1)VDS_CI_SW_PBDMSW, u1_a_OPT);
-#endif   /* BEV Rebase provisionally */
+        vd_g_CanTxAppReqTx_PBDMSW(u1_a_OPT);
     }
     u1_s_rcmmui_prereq = u1_a_OPT;
 }
@@ -216,10 +215,12 @@ U1              u1_g_RcmmUICfgCheckPow(const U1 u1_a_REQID)
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  220D-1   07/18/2022  TH       Configured for 220D                                                                                */
 /*  BEV-1    10/02/2025  KO       Configured for BEVstep3_Rebase                                                                     */
+/*  BEV-2    11/13/2025  YN       Change for BEV rebase.(Add CanTxApp)                                                               */
 /*                                                                                                                                   */
 /*  * HY   = Hidefumi Yoshida, Denso                                                                                                 */
 /*  * TH   = Takahiro Hirano,  Denso Techno                                                                                          */
 /*  * YR   = Yhana Regalario, DTPH                                                                                                   */
 /*  * KO   = Kazuto Oishi,  Denso Techno                                                                                             */
+/*  * YN   = Yujiro Nagaya, Denso Techno                                                                                             */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

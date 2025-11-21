@@ -1,4 +1,4 @@
-/* 2.1.0 */
+/* 2.2.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define VEHSPD_KMPH_C_MAJOR                      (2)
-#define VEHSPD_KMPH_C_MINOR                      (1)
+#define VEHSPD_KMPH_C_MINOR                      (2)
 #define VEHSPD_KMPH_C_PATCH                      (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -84,6 +84,7 @@ static U1       u1_s_vehspd_if_idx;                        /* Interface index   
 
 static U2       u2_s_vehspd_fluct_kmph;                    /* Vehicle speed for checking fluctuation */
 static U1       u1_s_vehspd_fluct_stat;                    /* Status of vehicle speed fluctuation    */
+static U1       u1_s_vehspd_stopflag;                      /* Stop Judge Flag                        */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
@@ -95,6 +96,7 @@ static void    vd_s_VehspdFluctchk(const U2 u2_a_KMPH);
 static U1      u1_s_VehspdFuctHyschk(const U2 u2_a_KMPH);
 
 static void    vd_s_VehspdGetBias(ST_VEHSPD_BIAS_FACT * st_ap_FACT);
+static void    vd_s_VehspdStopFlgJdg(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
@@ -186,6 +188,8 @@ void    vd_g_VehspdInit(void)
 
     vd_s_VehspdGetBias(&st_t_fact);
     vd_g_VehspdCfgTolerXComTx(&st_t_fact);
+
+    u1_s_vehspd_stopflag = (U1)TRUE;
 
 }
 /*===================================================================================================================================*/
@@ -285,6 +289,9 @@ void    vd_g_VehspdMainTask(void)
     vd_g_VehspdCfgMedspdComTx(u2_t_kmph);
 
     vd_g_VehspdCfgOdoInst(u4_t_odocnt, u1_sp_vehspd_stsbit[VEHSPD_KMPH_OW_DI]);
+
+    vd_s_VehspdStopFlgJdg();
+
 }
 /*===================================================================================================================================*/
 /*  U1      u1_g_VehspdKmphInst(U2 * u2_ap_kmph, const U1 u1_a_OW_EN)                                                                */
@@ -569,7 +576,7 @@ static void   vd_s_VehspdGetBias(ST_VEHSPD_BIAS_FACT * st_ap_FACT)
     U1                            u1_t_bias_idx;
     U1                            u1_t_toler_a;
     S1                            s1_t_toler_b;
-    const volatile U2 *           u2_tp_BIAS_MAP;
+    const volatile U2 *           *u2_tp_BIAS_MAP;
     U2                            u2_t_bias_data_0p1kmph;
     U4                            u4_t_lpcnt;
 
@@ -578,19 +585,19 @@ static void   vd_s_VehspdGetBias(ST_VEHSPD_BIAS_FACT * st_ap_FACT)
     if(u1_t_bias_idx == (U1)VEHSPD_SPDTLRNC_USA_CAN){       /* Vehicle Speed ​​Tolerance in Usa/Canada */
         u1_t_toler_a   = u1_VEHSPD_CALIB_TOLER_A_USA_CAN;
         s1_t_toler_b   = s1_VEHSPD_CALIB_TOLER_B_USA_CAN;
-        u2_tp_BIAS_MAP = *(u2p_sp_VEHSPD_BIAS_USA_CAN); 
+        u2_tp_BIAS_MAP = &u2p_sp_VEHSPD_BIAS_USA_CAN[0]; 
     }
     else{                                                   /* Vehicle Speed ​​Tolerance in UNR/Australia/others or Default Settings */
         u1_t_toler_a   = u1_VEHSPD_CALIB_TOLER_A_UNR_AUS;
         s1_t_toler_b   = s1_VEHSPD_CALIB_TOLER_B_UNR_AUS;
-        u2_tp_BIAS_MAP = *(u2p_sp_VEHSPD_BIAS_UNR_AUS);
+        u2_tp_BIAS_MAP = &u2p_sp_VEHSPD_BIAS_UNR_AUS[0];
     }
-    
+
     st_ap_FACT->u1_toler_a = u1_t_toler_a;
     st_ap_FACT->s1_toler_b = s1_t_toler_b;
     vd_g_VehspdMemcpyU2(&st_ap_FACT->u2p_bias_map[0], &u2_sp_VEHSPD_BIAS_MAP_FIXEDVAL[0], (U2)VEHSPD_IDX_CALIB_CORPT);
     for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)VEHSPD_CALIB_CORPT; u4_t_lpcnt++){
-        u2_t_bias_data_0p1kmph = u2_tp_BIAS_MAP[u4_t_lpcnt];
+        u2_t_bias_data_0p1kmph = *(u2_tp_BIAS_MAP[u4_t_lpcnt]);
         if(((U4)u2_t_bias_data_0p1kmph * (U4)VEHSPD_RES_0P1_TO_0P01_KMPH) < (U4)U2_MAX){
             st_ap_FACT->u2p_bias_map[(U4)VEHSPD_IDX_CALIB_CORPT + u4_t_lpcnt] = u2_t_bias_data_0p1kmph * (U2)VEHSPD_RES_0P1_TO_0P01_KMPH;
         }
@@ -599,6 +606,44 @@ static void   vd_s_VehspdGetBias(ST_VEHSPD_BIAS_FACT * st_ap_FACT)
         }
     }
 }
+
+/*===================================================================================================================================*/
+/*  static void  vd_s_VehspdStopFlgJdg(void)                                                                                         */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void   vd_s_VehspdStopFlgJdg(void)
+{
+    static const U2 u2_s_VEHSPD_KMPH_STPJDGFLG_LOWLMT = (U2)175U;
+    static const U2 u2_s_VEHSPD_KMPH_STPJDGFLG_UPRLMT = (U2)800U;
+
+    if(u1_sp_vehspd_stsbit[VEHSPD_KMPH_OW_DI] == (U1)VEHSPD_STSBIT_VALID){ 
+        if(u2_sp_vehspd_kmph[VEHSPD_KMPH_OW_DI] >= u2_s_VEHSPD_KMPH_STPJDGFLG_UPRLMT){
+            u1_s_vehspd_stopflag = (U1)FALSE;
+        }
+        else if(u2_sp_vehspd_kmph[VEHSPD_KMPH_OW_DI] <= u2_s_VEHSPD_KMPH_STPJDGFLG_LOWLMT){
+            u1_s_vehspd_stopflag = (U1)TRUE;
+        }
+        else{
+            /* Do nothing */
+        }
+    }else{
+        u1_s_vehspd_stopflag = (U1)TRUE;
+    }
+}
+
+/*===================================================================================================================================*/
+/*  U1      u1_g_VehspdGetStopFlg(void)                                                                                              */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+U1      u1_g_VehspdGetStopFlg(void)
+{
+    return(u1_s_vehspd_stopflag);
+}
+
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
@@ -618,6 +663,7 @@ static void   vd_s_VehspdGetBias(ST_VEHSPD_BIAS_FACT * st_ap_FACT)
 /*  1.7.0     7/ 7/2020  HY       Apply the improvement of 775B-v131-r015 version.                                                   */
 /*  2.0.1    10/18/2021  TA(M)    Change the definition of the null pointer used.(BSW v115_r007)                                     */
 /*  2.1.0    06/06/2024  SM       Corrected the method of calculating the tolerance of the median tolerance to linear imputation.    */
+/*  2.2.0    01/22/2025  RO       Setting for BEV System_Consideration_1.                                                            */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
@@ -633,6 +679,7 @@ static void   vd_s_VehspdGetBias(ST_VEHSPD_BIAS_FACT * st_ap_FACT)
 /*  * TN(DT) = Tetsushi Nakano, Denso Techno                                                                                         */
 /*  * SH     = Sae Hirose, Denso Techno                                                                                              */
 /*  * SM     = Shota Maegawa, Denso Techno                                                                                           */
+/*  * RO     = Ryo Oohashi, KSE                                                                                                      */
 /*  * TS     = Takuo Suganuma, Denso Techno                                                                                          */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

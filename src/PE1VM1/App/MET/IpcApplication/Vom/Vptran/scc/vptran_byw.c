@@ -1,4 +1,4 @@
-/* 2.1.0 */
+/* 2.2.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define VPTRAN_BYW_C_MAJOR                      (2)
-#define VPTRAN_BYW_C_MINOR                      (1)
+#define VPTRAN_BYW_C_MINOR                      (2)
 #define VPTRAN_BYW_C_PATCH                      (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -45,22 +45,6 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-typedef struct {
-    U1  ( * const       fp_SGNL)(void);         /* Get Func                     */
-    U1                  u1_rngmsk;              /* Signal Mask for range check  */
-    U1                  u1_storepos;            /* Data Store Position          */
-} ST_VPTRAN_BYW_SGNLCFG;
-
-typedef struct {
-    U1                  u1_start;
-    U1                  u1_end;
-} ST_VPTRAN_BYW_SLCTCFG;
-
-typedef struct {
-    U2                  u2_crit;
-    U2                  u2_mask;
-} ST_VPTRAN_BYW_CHK;
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -72,7 +56,7 @@ static  U1                                      u1_s_vptran_byw_ger_sts;
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static  void    vd_s_VptranBywGetSgnl(U1 * const u1_ap_signal);
-static  U2      u2_s_VptranBywGetSftRng(const U1 u1_a_SIG, const U1 u1_a_TMSIG_STS, const U1 u1_a_SFTBLKS_STS);
+static  U2      u2_s_VptranBywGetSftRng(const U1 u1_a_SIG, const U1 u1_a_SFTBLKS_STS);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
@@ -108,14 +92,12 @@ void            vd_g_VptranByw(const U4 u4_a_PWRSTS)
 {
     U4                                          u4_t_loop;
     U1                                          u1_tp_signal[VPTRAN_NUM_APP];
-    U1                                          u1_t_grs_sts;
     U1                                          u1_t_sft_blks_sts;
 
 
     /*  Signal  */
     u1_s_vptran_byw_rng_sts   = u1_g_VptranBywCfgGetMsgStsRNG();
     u1_s_vptran_byw_ger_sts   = u1_g_VptranBywCfgGetMsgStsGR();
-    u1_t_grs_sts              = u1_g_VptranBywCfgGetMsgStsGRSts();
     u1_t_sft_blks_sts         = u1_g_VptranBywCfgGetMsgStsSftBlks();
 
     for (u4_t_loop = (U4)0U; u4_t_loop < (U4)VPTRAN_NUM_APP; u4_t_loop++ ) {
@@ -124,7 +106,7 @@ void            vd_g_VptranByw(const U4 u4_a_PWRSTS)
     vd_s_VptranBywGetSgnl(&u1_tp_signal[0]);
 
     /*  Range  */
-    u2_sp_vptran_byw_val[VPTRAN_APP_RNG] = u2_s_VptranBywGetSftRng(u1_tp_signal[VPTRAN_APP_RNG], u1_t_grs_sts, u1_t_sft_blks_sts);
+    u2_sp_vptran_byw_val[VPTRAN_APP_RNG] = u2_s_VptranBywGetSftRng(u1_tp_signal[VPTRAN_APP_RNG], u1_t_sft_blks_sts);
 
     if ((u4_a_PWRSTS & (U4)VPTRAN_PWRSTSBIT_IGON) != (U4)0U) {
         /*  Gear & Gsi */
@@ -174,14 +156,11 @@ static  void    vd_s_VptranBywGetSgnl(U1 * const u1_ap_signal)
     static  const  U1     u1_s_GSI_MSK       = (U1)0x03U;
     static  const  U1     u1_s_GSI_SFT       = (U1)1U;
     static  const  U1     u1_s_BGEARS_MSK    = (U1)0x0FU;
-    static  const  U1     u1_s_SFTSTS_MSK    = (U1)0x03U;
-    static  const  U1     u1_s_SFTSTS_SFT    = (U1)4U;
     static  const  U1     u1_s_SFTBLKS_MSK   = (U1)0x03U;
     static  const  U1     u1_s_SFTBLKS_SFT   = (U1)6U;
 
     u1_ap_signal[VPTRAN_APP_RNG]    = u1_g_VptranBywCfgGetSFTMETS();
     u1_ap_signal[VPTRAN_APP_RNG]   &= u1_s_RNG_MSK;
-    u1_ap_signal[VPTRAN_APP_RNG]   |= (U1)((u1_g_VptranBywCfgGetSFTBLNK() & u1_s_SFTSTS_MSK) << u1_s_SFTSTS_SFT);
     u1_ap_signal[VPTRAN_APP_RNG]   |= (U1)((u1_g_VptranBywCfgGetSFTBLKS() & u1_s_SFTBLKS_MSK) << u1_s_SFTBLKS_SFT);
 
     u1_ap_signal[VPTRAN_APP_GSI]    = u1_g_VptranBywCfgGetBSLUPS();
@@ -193,12 +172,12 @@ static  void    vd_s_VptranBywGetSgnl(U1 * const u1_ap_signal)
 }
 
 /*===================================================================================================================================*/
-/* static  U2      u2_s_VptranBywGetSftRng(const U1 u1_a_SIG, const U1 u1_a_TMSIG_STS)                                               */
+/* static  U2      u2_s_VptranBywGetSftRng(const U1 u1_a_SIG, const U1 u1_a_SFTBLKS_STS)                                             */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-static  U2      u2_s_VptranBywGetSftRng(const U1 u1_a_SIG, const U1 u1_a_TMSIG_STS, const U1 u1_a_SFTBLKS_STS)
+static  U2      u2_s_VptranBywGetSftRng(const U1 u1_a_SIG, const U1 u1_a_SFTBLKS_STS)
 {
     static const    U2          u2_sp_SFTMET_TBL[VPTRAN_BYW_NUM_RNG] = {
         (U2)VPTRAN_OFF,         /* SFT_METS = 0000b */
@@ -213,9 +192,6 @@ static  U2      u2_s_VptranBywGetSftRng(const U1 u1_a_SIG, const U1 u1_a_TMSIG_S
                                 /* SFT_METS = Other than above: VPTRAN_OFF */
     };
     static const    U1          u1_s_SIG_MSK            = (U1)0x0FU;
-    static const    U1          u1_s_STS_MSK            = (U1)0x30U;
-    static const    U1          u1_s_STS_CLTENGAGING    = (U1)0x10U;
-    static const    U1          u1_s_STS_HOT_TMFLUID    = (U1)0x20U;
     static const    U1          u1_s_STS_BLKS_MSK       = (U1)0xC0U;
     static const    U1          u1_s_STS_DBL_PARK       = (U1)0x80U;
 
@@ -233,22 +209,10 @@ static  U2      u2_s_VptranBywGetSftRng(const U1 u1_a_SIG, const U1 u1_a_TMSIG_S
 
     u1_t_sft = (U1)0U;
 
-    if (u1_a_TMSIG_STS == (U1)0U) {
-        u1_t_sft = u1_a_SIG & u1_s_STS_MSK;
-    }
-
     if (u1_a_SFTBLKS_STS == (U1)0U) {
         u1_t_sft |= (U1)(u1_a_SIG & u1_s_STS_BLKS_MSK);
     }
     
-    if ((u1_t_sft & u1_s_STS_MSK) == u1_s_STS_CLTENGAGING) {
-        u2_t_rng |= (U2)VPTRAN_STS_CLATCHENGAGE;
-    } else if ((u1_t_sft & u1_s_STS_MSK) == u1_s_STS_HOT_TMFLUID) {
-        u2_t_rng |= (U2)VPTRAN_STS_OILWRN;
-    } else {
-        /* Do Nothing */
-    }
-
     if ((u1_t_sft & u1_s_STS_BLKS_MSK) == u1_s_STS_DBL_PARK){
         u2_t_rng |= (U2)VPTRAN_STS_DBL_PARK;
     }
@@ -271,11 +235,13 @@ static  U2      u2_s_VptranBywGetSftRng(const U1 u1_a_SIG, const U1 u1_a_TMSIG_S
 /*  1.4.0    01/21/2021  TN       Add: Deceleration level support (DCLDSP-CSTD-0-00-A-C0)                                           */
 /*  2.0.1    10/18/2021  TA(M)    Change the definition of the null pointer used.(BSW v115_r007)                                     */
 /*  2.1.0    12/19/2023  GM       19PFv3 CV Change                                                                                   */
+/*  2.2.0    02/10/2025  HF       Change config for BEV System_Consideration_1.(MET-D_SFTPOS-CSTD-1-)                                */
 /*                                                                                                                                   */
 /*  * HY   = Hidefumi Yoshida, Denso                                                                                                 */
 /*  * KK   = Kohei Kato,       Denso Techno                                                                                          */
 /*  * TN   = Tetsu Naruse,     Denso Techno                                                                                          */
 /*  * TA(M)= Teruyuki Anjima, NTT Data MSE                                                                                           */
 /*  * GM   = Glen Monteposo  , DTPH                                                                                                  */
+/*  * HF   = Hinari Fukamachi,KSE                                                                                                    */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

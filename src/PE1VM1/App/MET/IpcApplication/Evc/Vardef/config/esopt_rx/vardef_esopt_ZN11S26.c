@@ -1,4 +1,4 @@
-/* 2.4.0 */
+/* 2.6.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -9,9 +9,9 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define VARDEF_ESOPT_BDB1S03_C_MAJOR             (2)
-#define VARDEF_ESOPT_BDB1S03_C_MINOR             (4)
-#define VARDEF_ESOPT_BDB1S03_C_PATCH             (0)
+#define VARDEF_ESOPT_ZN11S26_C_MAJOR             (2)
+#define VARDEF_ESOPT_ZN11S26_C_MINOR             (6)
+#define VARDEF_ESOPT_ZN11S26_C_PATCH             (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -22,10 +22,10 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if ((VARDEF_ESOPT_BDB1S03_C_MAJOR != VARDEF_ESOPT_RX_H_MAJOR) || \
-     (VARDEF_ESOPT_BDB1S03_C_MINOR != VARDEF_ESOPT_RX_H_MINOR) || \
-     (VARDEF_ESOPT_BDB1S03_C_PATCH != VARDEF_ESOPT_RX_H_PATCH))
-#error "vardef_esopt_BDB1S03.c and vardef_esopt_rx.h : source and header files are inconsistent!"
+#if ((VARDEF_ESOPT_ZN11S26_C_MAJOR != VARDEF_ESOPT_RX_H_MAJOR) || \
+     (VARDEF_ESOPT_ZN11S26_C_MINOR != VARDEF_ESOPT_RX_H_MINOR) || \
+     (VARDEF_ESOPT_ZN11S26_C_PATCH != VARDEF_ESOPT_RX_H_PATCH))
+#error "vardef_esopt_ZN11S26.c and vardef_esopt_rx.h : source and header files are inconsistent!"
 #endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -50,20 +50,21 @@
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*===================================================================================================================================*/
-/*===================================================================================================================================*/
-/*  U1      u1_g_VdfEsoRx_SW_RSR(void)                                                                                               */
+/*  U1      u1_g_VdfEsoRx_SW_RAINDROP_SENSOR(void)                                                                                   */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
+/*  Return:         U1 u1_t_ava_rx  : signal status (active/inactive)                                                                */
 /*===================================================================================================================================*/
-U1      u1_g_VdfEsoRx_SW_RSR(void)
+U1      u1_g_VdfEsoRx_SW_RAINDROP_SENSOR(void)
 {
+    static const U1 u1_s_VDF_ESO_SW_RAINDROP_SENSOR_ACT = (U1)2U;
+
     U1                 u1_t_rx;
     U1                 u1_t_ava_rx;
 
     u1_t_rx = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_RSR_PR, &u1_t_rx);
-    if(u1_t_rx != (U1)0U){
+    (void)Com_ReceiveSignal(ComConf_ComSignal_WVR_FNC, &u1_t_rx);
+    if(u1_t_rx == u1_s_VDF_ESO_SW_RAINDROP_SENSOR_ACT){
         u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
     }
     else{
@@ -72,6 +73,109 @@ U1      u1_g_VdfEsoRx_SW_RSR(void)
 
     return(u1_t_ava_rx);
 }
+
+/*===================================================================================================================================*/
+/*  U1      u1_g_VdfEsoRx_SW_INTTIME_AJUST(void)                                                                                     */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         U1 u1_t_ava_rx  : signal status (active/inactive)                                                                */
+/*===================================================================================================================================*/
+U1      u1_g_VdfEsoRx_SW_INTTIME_AJUST(void)
+{
+    static const U1 u1_s_VDF_ESO_SW_INTTIME_AJUST_ACT = (U1)1U;
+
+    U1                 u1_t_rx;
+    U1                 u1_t_ava_rx;
+
+    u1_t_rx = (U1)0U;
+    (void)Com_ReceiveSignal(ComConf_ComSignal_WVR_FNC, &u1_t_rx);
+    if(u1_t_rx == u1_s_VDF_ESO_SW_INTTIME_AJUST_ACT){
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
+    }
+    else{
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_INA;
+    }
+
+    return(u1_t_ava_rx);
+}
+
+/*===================================================================================================================================*/
+/*  U1      u1_g_VdfEsoRx_SW_REAR_WIPER(void)                                                                                        */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         U1 u1_t_ava_rx  : signal status (active/inactive)                                                                */
+/*===================================================================================================================================*/
+U1      u1_g_VdfEsoRx_SW_REAR_WIPER(void)
+{
+    static const U1 u1_s_VDF_ESO_SW_REAR_WIPER_INTLO_ACT = (U1)1U;
+    static const U1 u1_s_VDF_ESO_SW_REAR_WIPER_LO_ACT = (U1)2U;
+
+    U1                 u1_t_rx;
+    U1                 u1_t_ava_rx;
+
+    u1_t_rx = (U1)0U;
+    (void)Com_ReceiveSignal(ComConf_ComSignal_WR_FNC, &u1_t_rx);
+    if((u1_t_rx == u1_s_VDF_ESO_SW_REAR_WIPER_INTLO_ACT) ||
+       (u1_t_rx == u1_s_VDF_ESO_SW_REAR_WIPER_LO_ACT)){
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
+    }
+    else{
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_INA;
+    }
+
+    return(u1_t_ava_rx);
+}
+
+/*===================================================================================================================================*/
+/*  U1      u1_g_VdfEsoRx_SW_REAR_WIPER_INT(void)                                                                                    */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         U1 u1_t_ava_rx  : signal status (active/inactive)                                                                */
+/*===================================================================================================================================*/
+U1      u1_g_VdfEsoRx_SW_REAR_WIPER_INT(void)
+{
+    static const U1 u1_s_VDF_ESO_SW_REAR_WIPER_INT_ACT = (U1)1U;
+
+    U1                 u1_t_rx;
+    U1                 u1_t_ava_rx;
+
+    u1_t_rx = (U1)0U;
+    (void)Com_ReceiveSignal(ComConf_ComSignal_WR_FNC, &u1_t_rx);
+    if(u1_t_rx == u1_s_VDF_ESO_SW_REAR_WIPER_INT_ACT){
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
+    }
+    else{
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_INA;
+    }
+
+    return(u1_t_ava_rx);
+}
+
+/*===================================================================================================================================*/
+/*  U1      u1_g_VdfEsoRx_SW_REAR_WASHER(void)                                                                                       */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         U1 u1_t_ava_rx  : signal status (active/inactive)                                                                */
+/*===================================================================================================================================*/
+U1      u1_g_VdfEsoRx_SW_REAR_WASHER(void)
+{
+    static const U1 u1_s_VDF_ESO_SW_REAR_WASHER_ACT = (U1)1U;
+
+    U1                 u1_t_rx;
+    U1                 u1_t_ava_rx;
+
+    u1_t_rx = (U1)0U;
+    (void)Com_ReceiveSignal(ComConf_ComSignal_WRSW_FNC, &u1_t_rx);
+    if(u1_t_rx == u1_s_VDF_ESO_SW_REAR_WASHER_ACT){
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
+    }
+    else{
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_INA;
+    }
+
+    return(u1_t_ava_rx);
+}
+
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
@@ -80,17 +184,14 @@ U1      u1_g_VdfEsoRx_SW_RSR(void)
 /*                                                                                                                                   */
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  2.1.0     9/28/2020  SF       NEW!                                                                                               */
-/*  2.2.0     1/25/2021  SF       vardef_esopt.c v2.1.0 -> v2.2.0                                                                    */
-/*  2.3.0    11/15/2021  RO       vardef_esopt.c v2.2.0 -> v2.3.0                                                                    */
-/*  2.4.0     3/15/2022  RO       vardef_esopt.c v2.3.0 -> v2.4.0                                                                    */
+/*  2.5.0    12/16/2024  HT       Newly Created                                                                                      */
+/*  2.6.0     5/30/2025  SN       vardef_esopt.c v2.5.0 -> v2.6.0                                                                    */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  840B-1    9/13/2021  RO       Change config for 840B CV-R                                                                        */
-/*  200D-1    8/04/2022  RO       Change config for 200D Pre1A                                                                       */
+/*  BEV-1    12/16/2024  HT       Added function for BEV System_Consideration_1.(MET-B_WPBB-CSTD-0-)                                 */
 /*                                                                                                                                   */
-/*  * SF = Seiya Fukutome, DENSO TECHNO                                                                                              */
-/*  * RO = Reiya Okuda, KSE                                                                                                          */
+/*  * HT = Hibiki Tanii, KSE                                                                                                         */
+/*  * SN = Shizuka Nakajima, KSE                                                                                                     */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

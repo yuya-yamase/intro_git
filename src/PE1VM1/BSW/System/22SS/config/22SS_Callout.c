@@ -49,6 +49,7 @@
 #include "sbltsync.h"
 #include "locale.h"
 #include "vardef.h"
+#include "cantxapp.h"
 #include "hmiproxy.h"
 #include "hdimmgr.h"
 #include "himgadj.h"
@@ -104,7 +105,8 @@ void vd_g_22SSCallout_StaBonInit(void)
         &vd_g_HmiProxyBonInit,
         &vd_g_HdimmgrBonInit,
         &vd_g_HudImgAdjInit,
-        &vd_g_DateSIMETInit
+        &vd_g_DateSIMETInit,
+        &vd_g_CanTxAppInit
     };
 
     U1    u1_t_rslt;
@@ -164,7 +166,8 @@ void vd_g_22SSCallout_StaRstInit(void)
         &vd_g_HmiProxyRstInit,
         &vd_g_HdimmgrWkRstInit,
         &vd_g_HudImgAdjInit,
-        &vd_g_DateSIMETInit
+        &vd_g_DateSIMETInit,
+        &vd_g_CanTxAppInit
     };
 
     U1    u1_t_rslt;
@@ -224,7 +227,8 @@ void vd_g_22SSCallout_StaWkupInit(void)
         &vd_g_HmiProxyWkupInit,
         &vd_g_HdimmgrWkRstInit,
         &vd_g_HudImgAdjInit,
-        &vd_g_DateSIMETInit
+        &vd_g_DateSIMETInit,
+        &vd_g_CanTxAppInit
     };
 
     U1    u1_t_rslt;

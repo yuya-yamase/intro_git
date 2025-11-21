@@ -1,4 +1,4 @@
-/* 2.3.0 */
+/* 2.4.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define VARDEF_CFG_C_MAJOR                       (2)
-#define VARDEF_CFG_C_MINOR                       (3)
+#define VARDEF_CFG_C_MINOR                       (4)
 #define VARDEF_CFG_C_PATCH                       (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -18,7 +18,6 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "vardef_cfg_private.h"
 #include "vardef_dest_cfg_private.h"
-#include "vardef_ptsrx_cfg_private.h"
 #include "vardef_hcs_cfg_private.h"
 
 #include "oxcan.h"
@@ -65,16 +64,6 @@ static U1         u1_s_VardefCfgPowerChk(void);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#ifdef VARDEF_PTS_RX_H
-#if 0   /* BEV Rebase provisionally */
-const U2                u2_g_VDF_PTS_RX_RIM_U1       = (U2)RIMID_U1_VDF_PTSYS;
-#else   /* BEV Rebase provisionally */
-const U2                u2_g_VDF_PTS_RX_RIM_U1       = U2_MAX;
-#endif   /* BEV Rebase provisionally */
-
-const U1                u1_g_VDF_PTS_RX_RXC_INT  = (U1)OXCAN_RXD_EVC_UNK;
-const U1                u1_g_VDF_PTS_RX_RXC_MAX  = (U1)OXCAN_RXD_EVC_MAX;
-#endif /* #ifdef VARDEF_PTS_RX_H */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #ifdef VARDEF_HCS_H
@@ -85,10 +74,6 @@ const U1               u1_g_VDF_HCS_ASCEXT_RXC_MAX = (U1)OXCAN_RXD_EVC_MAX;
 #endif /* #ifdef VARDEF_HCS_H */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-const U2                u2_g_VDF_MT_CH                  = (U2)VDF_ESO_CH_MT;
-const U2                u2_g_VDF_AT_CH                  = (U2)VDF_ESO_CH_AT;
-const U2                u2_g_VDF_MMT_SMT_CH             = (U2)VDF_ESO_CH_MMT_SMT;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
@@ -104,7 +89,6 @@ void    vd_g_VardefCfgBonInit(void)
     vd_g_VardefEsOptBonInit();
     vd_g_VardefDestBonInit();
 
-    vd_g_VardefPtsRxBonInit();
     vd_g_VardefHcsBonInit();
 }
 /*===================================================================================================================================*/
@@ -118,7 +102,6 @@ void    vd_g_VardefCfgRstwkInit(void)
     vd_g_VardefEsOptRstwkInit();
     vd_g_VardefDestRstwkInit();
 
-    vd_g_VardefPtsRxRstwkInit();
     vd_g_VardefHcsRstwkInit();
 }
 /*===================================================================================================================================*/
@@ -130,7 +113,6 @@ void    vd_g_VardefCfgRstwkInit(void)
 void    vd_g_VardefCfgOpemdEvhk(const U2 u2_a_EOM)
 {
     vd_g_VardefEsOptOpemdEvhk(u2_a_EOM);
-    vd_g_VardefPtsRxOpemdEvhk(u2_a_EOM);
     vd_g_VardefHcsOpemdEvhk(u2_a_EOM);
 }
 /*===================================================================================================================================*/
@@ -145,7 +127,6 @@ void    vd_g_VardefCfgMainTask(const U2 u2_a_EOM, const U1 u1_a_TSLOT)
 
     if(u1_a_TSLOT == (U1)VDF_TSLOT_2){
         vd_g_VardefDestMainTask();                    /* vd_g_VardefDestMainTask shall be invoked every 100 milliseconds        */
-        vd_g_VardefPtsRxMainTask(u2_a_EOM);           /* vd_g_VardefPtsRxMainTask shall be invoked every 100 milliseconds       */
         vd_g_VardefHcsMainTask(u2_a_EOM);
     }
     else{
@@ -177,36 +158,6 @@ U2      u2_g_VardefCfgEomchk(void)
     return(u2_t_eom);
 }
 
-#ifdef VARDEF_PTS_RX_H
-
-
-/*===================================================================================================================================*/
-/*  U1      u1_g_VardefPtsRxCfgPtsyschk(U1 * u1_ap_ptsys_rx)                                                                         */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1      u1_g_VardefPtsRxCfgPtsyschk(U1 * u1_ap_ptsys_rx)
-{
-#if 0   /* BEV Rebase provisionally */
-#ifdef ComConf_ComSignal_PTSYS
-    (void)Com_ReceiveSignal(ComConf_ComSignal_PTSYS, u1_ap_ptsys_rx);
-    return(u1_g_oXCANRxEvcnt((U2)OXCAN_PDU_RX_CAN_ENG1G13));
-#else
-    (*u1_ap_ptsys_rx) = (U1)VDF_PTS_RX_1F_NRX;
-    return((U1)OXCAN_RX_RXEV_CNT_UNK);
-#endif
-#else   /* BEV Rebase provisionally */
-    (*u1_ap_ptsys_rx) = (U1)VDF_PTS_RX_1F_NRX;
-    return((U1)OXCAN_RXD_EVC_UNK);
-#endif   /* BEV Rebase provisionally */
-}
-/*===================================================================================================================================*/
-
-
-#endif /* #ifdef VARDEF_PTS_RX_H */
-
-
 /*===================================================================================================================================*/
 /*  U1      u1_g_VardefHcsCfgAscextchk(U1* u1_ap_ascext_rx)                                                                          */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
@@ -215,13 +166,8 @@ U1      u1_g_VardefPtsRxCfgPtsyschk(U1 * u1_ap_ptsys_rx)
 /*===================================================================================================================================*/
 U1      u1_g_VardefHcsCfgAscextchk(U1* u1_ap_ascext_rx)
 {
-#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_ASCEXT, u1_ap_ascext_rx);
-    return(u1_g_oXCANRxEvcnt((U2)OXCAN_PDU_RX_CAN_ASC1S90));
-#else   /* BEV Rebase provisionally */
-    (*u1_ap_ascext_rx) = (U1)0U;
-    return((U1)OXCAN_RXD_EVC_UNK);
-#endif   /* BEV Rebase provisionally */
+    return(u1_g_oXCANRxdEvcnt((U2)OXCAN_RXD_PDU_CAN_SCS1S11_CH0));
 }
 
 /*===================================================================================================================================*/
@@ -273,6 +219,7 @@ U1      u1_s_VardefCfgPowerChk(void)
 /*  2.1.0     9/28/2020  SF       vardef.c v2.0.0 -> v2.1.0                                                                          */
 /*  2.2.0     1/25/2021  SF       vardef.c v2.1.0 -> v2.2.0                                                                          */
 /*  2.3.0     5/02/2024  GM       vardef.c v2.2.0 -> v2.3.0                                                                          */
+/*  2.4.0     2/06/2025  SF       vardef.c v2.3.0 -> v2.4.0                                                                          */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
@@ -326,7 +273,9 @@ U1      u1_s_VardefCfgPowerChk(void)
 /*  19PFv3-7   7/10/2024 YR       Added HCS for 19pfv3                                                                               */
 /*  19PFv3-8  11/ 7/2024 PG       Added vardef_sgauge for 19PFv3 R2.2                                                                */
 /*  19PFv3-9  11/18/2024 SH       Added NE_MET and HV_NE for 19pfv3                                                                  */
-/*  BEV-1     10/15/2025 SN       Configured for BEVstep3_Rebase                                                                     */
+/*  BEV-1      2/06/2025 SF       Change for BEV System_Consideration_1.(MET-M_ONOFF-CSTD-1-02-A-C0)                                 */
+/*  BEV-2      4/04/2025 KO       Change for BEV System_Consideration_1.(MET-C_HCS-CSTD-0-00-A-C0)                                   */
+/*  BEV-3     10/15/2025 SN       Configured for BEVstep3_Rebase                                                                     */
 /*                                                                                                                                   */
 /*  * TN     = Takashi Nagai, Denso                                                                                                  */
 /*  * SF     = Seiya Fukutome, Denso Techno                                                                                          */
@@ -344,6 +293,8 @@ U1      u1_s_VardefCfgPowerChk(void)
 /*  * YR     = Yhana Regalario, DTPH                                                                                                 */
 /*  * PG     = Patrick Garcia, DTPH                                                                                                  */
 /*  * SH     = Sae Hirose, Denso Techno                                                                                              */
+/*  * SF     = Shiro Furui, Denso Techno                                                                                             */
+/*  * KO     = Kazuto Oishi,  Denso Techno                                                                                           */
 /*  * SN     = Shimon Nambu, Denso Techno                                                                                            */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

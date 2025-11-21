@@ -1,4 +1,4 @@
-/* 2.4.0 */
+/* 2.6.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -9,9 +9,9 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define VARDEF_ESOPT_VSC1S95_C_MAJOR             (2)
-#define VARDEF_ESOPT_VSC1S95_C_MINOR             (4)
-#define VARDEF_ESOPT_VSC1S95_C_PATCH             (0)
+#define VARDEF_ESOPT_SCS1S11_C_MAJOR             (2)
+#define VARDEF_ESOPT_SCS1S11_C_MINOR             (6)
+#define VARDEF_ESOPT_SCS1S11_C_PATCH             (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -22,10 +22,10 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if ((VARDEF_ESOPT_VSC1S95_C_MAJOR != VARDEF_ESOPT_RX_H_MAJOR) || \
-     (VARDEF_ESOPT_VSC1S95_C_MINOR != VARDEF_ESOPT_RX_H_MINOR) || \
-     (VARDEF_ESOPT_VSC1S95_C_PATCH != VARDEF_ESOPT_RX_H_PATCH))
-#error "vardef_esopt_VSC1S95.c and vardef_esopt_rx.h : source and header files are inconsistent!"
+#if ((VARDEF_ESOPT_SCS1S11_C_MAJOR != VARDEF_ESOPT_RX_H_MAJOR) || \
+     (VARDEF_ESOPT_SCS1S11_C_MINOR != VARDEF_ESOPT_RX_H_MINOR) || \
+     (VARDEF_ESOPT_SCS1S11_C_PATCH != VARDEF_ESOPT_RX_H_PATCH))
+#error "vardef_esopt_SCS1S11.c and vardef_esopt_rx.h : source and header files are inconsistent!"
 #endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -50,18 +50,18 @@
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*===================================================================================================================================*/
-/*  U1      u1_g_VdfEsoRx_VSC(void)                                                                                                  */
+/*  U1      u1_g_VdfEsoRx_VHCOBBSD(void)                                                                                             */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
+/*  Return:         U1 u1_t_ava_rx  : signal status (active/inable)                                                                  */
 /*===================================================================================================================================*/
-U1      u1_g_VdfEsoRx_VSC(void)
+U1      u1_g_VdfEsoRx_VHCOBBSD(void)
 {
     U1                 u1_t_rx;
     U1                 u1_t_ava_rx;
 
     u1_t_rx = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_VSCEXIST, &u1_t_rx);
+    (void)Com_ReceiveSignal(ComConf_ComSignal_HCOPMEXT, &u1_t_rx);
     if(u1_t_rx != (U1)0U){
         u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
     }
@@ -71,52 +71,7 @@ U1      u1_g_VdfEsoRx_VSC(void)
 
     return(u1_t_ava_rx);
 }
-/*===================================================================================================================================*/
-/*  U1      u1_g_VdfEsoRx_BRKHLD(void)                                                                                               */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1      u1_g_VdfEsoRx_BRKHLD(void)
-{
-    U1                 u1_t_rx;
-    U1                 u1_t_ava_rx;
 
-    u1_t_rx = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_BHEXIST, &u1_t_rx);
-    if(u1_t_rx != (U1)0U){
-        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
-    }
-    else{
-        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_INA;
-    }
-
-    return(u1_t_ava_rx);
-}
-/*===================================================================================================================================*/
-/*  U1      u1_g_VdfEsoRx_ECB(void)                                                                                                  */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1      u1_g_VdfEsoRx_ECB(void)
-{
-    U1                 u1_t_rx;
-    U1                 u1_t_ava_rx;
-
-    u1_t_rx = (U1)0U;
-#if 0   /* BEV Rebase provisionally */
-    (void)Com_ReceiveSignal(ComConf_ComSignal_ECBEXIST, &u1_t_rx);
-#endif   /* BEV Rebase provisionally */
-    if(u1_t_rx != (U1)0U) {
-        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
-    }
-    else{
-        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_INA;
-    }
-
-    return(u1_t_ava_rx);
-}
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
@@ -125,22 +80,12 @@ U1      u1_g_VdfEsoRx_ECB(void)
 /*                                                                                                                                   */
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  2.0.0     3/ 2/2020  TN       NEW!                                                                                               */
-/*  2.1.0     9/28/2020  SF       vardef_esopt.c v2.0.0 -> v2.1.0                                                                    */
-/*  2.2.0     1/25/2021  SF       vardef_esopt.c v2.1.0 -> v2.2.0                                                                    */
-/*  2.3.0    11/15/2021  RO       vardef_esopt.c v2.2.0 -> v2.3.0                                                                    */
-/*  2.4.0     3/15/2022  RO       vardef_esopt.c v2.3.0 -> v2.4.0                                                                    */
+/*  2.6.0     5/30/2025  SN       Newly Created                                                                                      */
+/*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  800B-1    9/28/2020  SF       Change config for 800B CV-R                                                                        */
-/*  840B-1    5/10/2021  AT       Change config for 840B CV                                                                          */
-/*  19PFv3   10/11/2023  PG       Added function of ECB for 19PFv3                                                                   */
+/*  BEV       5/30/2025  SN       Added function of C_HCSBSW for BEV                                                                 */
 /*                                                                                                                                   */
-/*  * TN = Takashi Nagai, DENSO                                                                                                      */
-/*  * SF = Seiya Fukutome, DENSO TECHNO                                                                                              */
-/*  * AT   = Ayano Tomimoto, KSE                                                                                                     */
-/*  * RO = Reiya Okuda, KSE                                                                                                          */
-/*  * PG = Patrick Garcia, DTPH                                                                                                      */
-/*                                                                                                                                   */
+/*  * SN   = Shizuka Nakajima, KSE                                                                                                   */
 /*===================================================================================================================================*/
