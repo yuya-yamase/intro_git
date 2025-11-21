@@ -140,7 +140,7 @@ static void    vd_s_DateSIMETCfgTxCalibCalDef(void)
     U4  u4_t_calib_cal_def;
 
     u4_t_calib_cal_def = (U4)u2_CALIB_MCUID0574_CAL_DEF;
-    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_CPREQ_021, &u4_t_calib_cal_def, (U2)DATESI_MET_CFG_VM_1WORD);
+    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM1TO2_CALDEF, &u4_t_calib_cal_def, (U2)DATESI_MET_CFG_VM_1WORD);
 }
 
 /*===================================================================================================================================*/
@@ -154,7 +154,7 @@ static void    vd_s_DateSIMETCfgTxCalibMinYear(void)
     U4  u4_t_calib_cal_min;
 
     u4_t_calib_cal_min = (U4)u2_CALIB_MCUID0575_CAL_MIN;
-    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_CPREQ_022, &u4_t_calib_cal_min, (U2)DATESI_MET_CFG_VM_1WORD);
+    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM1TO2_CALMIN, &u4_t_calib_cal_min, (U2)DATESI_MET_CFG_VM_1WORD);
 }
 
 /*===================================================================================================================================*/
@@ -170,7 +170,7 @@ static void    vd_s_DateSIMETCfgTxNvmcTimfmt(void)
 
     u1_t_24h_ind  = u1_g_TimeFormat12H24H();
     u4_t_24h_vmtx = (U4)u1_t_24h_ind;
-    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_CPREQ_010, &u4_t_24h_vmtx, (U2)DATESI_MET_CFG_VM_1WORD);
+    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM1TO2_TIMFMT, &u4_t_24h_vmtx, (U2)DATESI_MET_CFG_VM_1WORD);
 }
 
 /*===================================================================================================================================*/
@@ -184,7 +184,7 @@ static void    vd_s_DateSIMETCfgTxNvmcTimoffset(void)
     U4  u4_t_time_offset;
 
     u4_t_time_offset = (U4)u2_s_datesi_met_ofsttime;
-    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_CPREQ_004, &u4_t_time_offset, (U2)DATESI_MET_CFG_VM_1WORD);
+    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM1TO2_TIMOFST, &u4_t_time_offset, (U2)DATESI_MET_CFG_VM_1WORD);
 }
 
 /*===================================================================================================================================*/
@@ -198,7 +198,7 @@ static void    vd_s_DateSIMETCfgTxNvmcCal(void)
     U4  u4_t_date_calendar;
 
     u4_t_date_calendar = (U4)u2_s_datesi_met_cal;
-    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_CPREQ_018, &u4_t_date_calendar, (U2)DATESI_MET_CFG_VM_1WORD);
+    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM1TO2_CAL, &u4_t_date_calendar, (U2)DATESI_MET_CFG_VM_1WORD);
 }
 
 /*===================================================================================================================================*/
@@ -214,7 +214,7 @@ static void    vd_s_DateSIMETCfgRxNvmcTimfmt(void)
     U1  u1_t_24h_ind;
 
     u4_t_read     = (U4)0U;  
-    u1_t_read_sts = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_CPREQ_011, &u4_t_read, (U2)DATESI_MET_CFG_VM_1WORD);
+    u1_t_read_sts = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_VM2TO1_TIMFMT, &u4_t_read, (U2)DATESI_MET_CFG_VM_1WORD);
 
     if(u1_t_read_sts != (U1)IVDSH_NO_REA){
         u1_t_24h_ind = u1_g_TimeFormat12H24H();
@@ -236,7 +236,7 @@ static void    vd_s_DateSIMETCfgRxNvmcTimoffset(void)
     U1  u1_t_read_sts;
 
     u4_t_read     = (U4)0U;
-    u1_t_read_sts = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_CPREQ_009, &u4_t_read, (U2)DATESI_MET_CFG_VM_1WORD);
+    u1_t_read_sts = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_VM2TO1_TIMOFST, &u4_t_read, (U2)DATESI_MET_CFG_VM_1WORD);
 
     if(u1_t_read_sts != (U1)IVDSH_NO_REA){
         if(((U2)u4_t_read != u2_s_datesi_met_ofsttime) && (u4_t_read <= (U4)U2_MAX)){
@@ -259,7 +259,7 @@ static void    vd_s_DateSIMETCfgRxNvmcCal(void)
     U1  u1_t_read_sts;
 
     u4_t_read     = (U4)0U;  
-    u1_t_read_sts = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_CPREQ_019, &u4_t_read, (U2)DATESI_MET_CFG_VM_1WORD);
+    u1_t_read_sts = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_VM2TO1_CAL, &u4_t_read, (U2)DATESI_MET_CFG_VM_1WORD);
 
     if(u1_t_read_sts != (U1)IVDSH_NO_REA){
         if(((U2)u4_t_read != u2_s_datesi_met_cal) && (u4_t_read <= (U4)U2_MAX)){
