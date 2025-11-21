@@ -448,10 +448,10 @@ static void    vd_s_HmiPutTxtCfgAlertReq(U1 u1_a_slot)
             vd_g_AlertReqToBit(st_gp_HMIPUTXTREQBIT_SLOTD, (U2)HMIPUTXTCFG_IF_SLOTD_NUM, &u4_tp_req[0], (U1)HMIPUTXT_NWORD);
             vd_g_MemcpyU4(&u4_sp_hmiputxt_slotd_req[0], &u4_tp_req[0], (U4)HMIPUTXT_NWORD);
             break;
-        case (U1)HMIPUTXTCFG_SLOT_E:
-            vd_g_AlertReqToBit(st_gp_HMIPUTXTREQBIT_SLOTE, (U2)HMIPUTXTCFG_IF_SLOTE_NUM, &u4_tp_req[0], (U1)HMIPUTXT_NWORD);
-            vd_g_MemcpyU4(&u4_sp_hmiputxt_slote_req[0], &u4_tp_req[0], (U4)HMIPUTXT_NWORD);
-            break;
+/*        case (U1)HMIPUTXTCFG_SLOT_E: */
+/*            vd_g_AlertReqToBit(st_gp_HMIPUTXTREQBIT_SLOTE, (U2)HMIPUTXTCFG_IF_SLOTE_NUM, &u4_tp_req[0], (U1)HMIPUTXT_NWORD); */
+/*            vd_g_MemcpyU4(&u4_sp_hmiputxt_slote_req[0], &u4_tp_req[0], (U4)HMIPUTXT_NWORD); */
+/*            break; */
         default:
             /* Do Nothing */
             break;

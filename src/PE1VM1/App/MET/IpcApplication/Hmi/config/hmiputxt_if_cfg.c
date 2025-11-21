@@ -278,8 +278,8 @@ const ST_ALERT_REQBIT   st_gp_HMIPUTXTREQBIT_SLOTD[HMIPUTXTCFG_IF_SLOTD_NUM] = {
     {    (U2)ALERT_CH_D_SBW_PD_SFPF,        (U1)ALERT_REQ_D_SBW_PD_SFPF_MSG_42,     (U1)34U,    (U4)0x00000400U    }
 };
 
-const ST_ALERT_REQBIT   st_gp_HMIPUTXTREQBIT_SLOTE[HMIPUTXTCFG_IF_SLOTE_NUM] = {
-};
+/* const ST_ALERT_REQBIT   st_gp_HMIPUTXTREQBIT_SLOTE[HMIPUTXTCFG_IF_SLOTE_NUM] = { */
+/* }; */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

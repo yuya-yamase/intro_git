@@ -32,8 +32,6 @@
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define HMIPUTXT_SYSMAL_JDG                      (1)
-#define HMIPUTXT_EVM_JDG                         (1)
-#define HMIPUTXT_THEVM_JDG                       (1)
 
 #define HMIPUTXTCFG_SLOT_A                       (1U)
 #define HMIPUTXTCFG_SLOT_B                       (2U)
@@ -46,7 +44,7 @@
 #define HMIPUTXTCFG_IF_SLOTB_NUM                 (40U)
 #define HMIPUTXTCFG_IF_SLOTC_NUM                 (55U)
 #define HMIPUTXTCFG_IF_SLOTD_NUM                 (47U)
-#define HMIPUTXTCFG_IF_SLOTE_NUM                 (0U)
+/* #define HMIPUTXTCFG_IF_SLOTE_NUM                 (0U) */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
@@ -67,7 +65,7 @@ extern  const ST_ALERT_REQBIT        st_gp_HMIPUTXTREQBIT_SLOTA[HMIPUTXTCFG_IF_S
 extern  const ST_ALERT_REQBIT        st_gp_HMIPUTXTREQBIT_SLOTB[HMIPUTXTCFG_IF_SLOTB_NUM];
 extern  const ST_ALERT_REQBIT        st_gp_HMIPUTXTREQBIT_SLOTC[HMIPUTXTCFG_IF_SLOTC_NUM];
 extern  const ST_ALERT_REQBIT        st_gp_HMIPUTXTREQBIT_SLOTD[HMIPUTXTCFG_IF_SLOTD_NUM];
-extern  const ST_ALERT_REQBIT        st_gp_HMIPUTXTREQBIT_SLOTE[HMIPUTXTCFG_IF_SLOTE_NUM];
+/* extern  const ST_ALERT_REQBIT        st_gp_HMIPUTXTREQBIT_SLOTE[HMIPUTXTCFG_IF_SLOTE_NUM]; */
 
 #endif      /* HMIPUTXT_IF_CFG_H */
 
