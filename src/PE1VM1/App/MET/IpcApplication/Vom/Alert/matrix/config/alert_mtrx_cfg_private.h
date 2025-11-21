@@ -13,11 +13,7 @@
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "vardef.h"
-#include "vardef_esopt.h"
 #include "vehspd_kmph.h"
-#include "odo_km.h"
-#include "locale.h"
-#include "unitconvrt.h"
 #include "calibration.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -31,20 +27,6 @@
 #define ALERT_CAN_SYS_ALL                        (ALERT_CAN_SYS_PNC_ALL | (U4)OXCAN_SYS_PBA | (U4)OXCAN_SYS_ACC | (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP)
 
 #define ALERT_HW_ID_B_WASLEV_WLVL                (U2_MAX)
-#define ALERT_OPT_ID_B_PEDPRO_PUH_FLG            (VDF_ESO_CH_PEDPRO)
-#define ALERT_OPT_ID_C_BRKHLD_BHEXIST            (VDF_ESO_CH_BRKHLD)
-#define ALERT_OPT_ID_C_DRS_ARS1S90               (VDF_ESO_CH_DRS)
-#define ALERT_OPT_ID_C_EPB_EPB                   (VDF_ESO_CH_EPB)
-#define ALERT_OPT_ID_C_SLIP_VSCEXIST             (VDF_ESO_CH_VSC)
-#define ALERT_OPT_ID_P_TMNT_ECORUN               (VDF_ESO_CH_ECOFLAG)
-#define ALERT_OPT_ID_S_DSC_DSCEXIST              (VDF_ESO_CH_DSC)
-#define ALERT_OPT_ID_S_RSA_TSREQPD               (VDF_ESO_CH_RSA)
-#define ALERT_OPT_ID_C_AVSWAR_AVSEXT             (VDF_ESO_CH_AVSEXT)
-#define ALERT_OPT_ID_D_SFTPOS_VARTRM1            (VDF_ESO_CH_MT)
-#define ALERT_OPT_ID_C_BRPADW_PWIINFO            (VDF_ESO_CH_BRPADW)
-#define ALERT_OPT_ID_P_MILREQ_PTSYS              (VDF_ESO_CH_PTS_MILREQ)
-#define ALERT_OPT_ID_C_ECB_ECBEXIST              (VDF_ESO_CH_ECB)
-#define ALERT_OPT_ID_P_OILMIL_OILMNTMI           (VDF_ESO_CH_OILMNT)
 
 #define ALERT_CFG_B_BDOOR_RRCY                   (TRUE)
 #define ALERT_CFG_B_BDOOR_RLCY                   (TRUE)
@@ -120,7 +102,6 @@
 #define ALERT_S_LDA_CH_NUM                       (2U)
 #define ALERT_S_LTA_2_CH_NUM                     (2U)
 #define ALERT_S_PCS1_CH_NUM                      (1U)
-#define ALERT_S_OAA_CH_NUM                       (1U)
 #define ALERT_S_RSA_CH_NUM                       (2U)
 #define ALERT_S_SWS_CH_NUM                       (1U)
 #define ALERT_S_TMN_CH_NUM                       (1U)
@@ -145,7 +126,6 @@
 #define ALERT_H_TVPSOF_CH_NUM                    (1U)
 #define ALERT_B_ALOA2_CH_NUM                     (1U)
 #define ALERT_B_RPWSEA_CH_NUM                    (1U)
-#define ALERT_H_TCBM_CH_NUM                      (1U)
 #define ALERT_H_DCLDSP_CH_NUM                    (1U)
 #define ALERT_C_BRPADW_CH_NUM                    (1U)
 #define ALERT_C_HCS_CH_NUM                       (3U)
@@ -156,7 +136,6 @@
 #define ALERT_SPD_STSBIT_UNKNOWN                 (VEHSPD_STSBIT_UNKNOWN)
 #define ALERT_SPD_STSBIT_INVALID                 (VEHSPD_STSBIT_INVALID)
 #define ALERT_SPD_FLUCT_DECR                     (VEHSPD_FLUCT_DECR)
-#define ALERT_ESOPT_NUM_GR                       (VDF_ESO_NOW_AVA)
 #define ALERT_PTSYS_0F_UNK                       (VDF_PTS_RX_0F_UNK)
 #define ALERT_PTSYS_1F_NRX                       (VDF_PTS_RX_1F_NRX)
 #define ALERT_STEER_VD_PTSYS_UNDEF               (VDF_PTS_RX_00_UNK)
@@ -165,13 +144,11 @@
 #define ALERT_STEER_VD_PTSYS_EV                  (VDF_PTS_RX_05_ELE_BAT)
 #define ALERT_STEER_VD_PTSYS_HV_MOT              (VDF_PTS_RX_06_HYB_MOT)
 #define ALERT_STEER_VD_PTSYS_FCV                 (VDF_PTS_RX_07_ELE_HYD)
-#define ALERT_ENGTYPE_CAN_IOHW_INVALID           (0x00U)
-#define ALERT_ENGTYPE_CAN_VALID                  (0x01U)
-#define ALERT_ENGTYPE_IOHW_VALID                 (0x02U)
-#define ALERT_ENGTYPE_CAN_IOHW_VALID             (0x03U)
-#define ALERT_SHIFT_BZ_REV_DEST_JPN              (VDF_BZ_REV_JPN)
-#define ALERT_SHIFT_BZ_REV_DOMESTIC              (VDF_BZ_SBW_NON)
+#if 0   /* BEV Rebase provisionally */
 #define ALERT_SHIFT_BZ_REV_SOUNDTYPE_IN          (VDF_DS_2E_SBWC2_IN)
+#else   /* BEV Rebase provisionally */
+#define ALERT_SHIFT_BZ_REV_SOUNDTYPE_IN          (0x00000001U)
+#endif   /* BEV Rebase provisionally */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -180,21 +157,16 @@
 #define u1_g_AlertSpdKmphInst(u2_ap_kmph, u1_a_OW_EN)               (u1_g_VehspdKmphInst(u2_ap_kmph, u1_a_OW_EN))
 #define u1_g_AlertSpdFluctStat()                                    (u1_g_VehspdFluctStat())
 #define u1_g_AlertPtsys()                                           (u1_g_VardefPtsRx())
-#define u1_g_AlertEsOptAvailable(u2_a_CH)                           (u1_g_VardefEsOptAvaByCh(u2_a_CH))
-#define u1_g_AlertShiftSbwFunc()                                    (u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_SBW))
+#if 0   /* BEV Rebase provisionally */
 #define u4_g_AlertRevBzrSoundType()                                 (u4_g_VardefDs2E_Las32((U2)VDF_DS_2E_20C2))
-#define u1_g_AlertRevBzSbwDest()                                    (u1_g_VardefBzSbwDiagSupByPid())
-#define u1_g_AlertRevBzrDest()                                      (u1_g_VardefBzRevDstByPid())
-#define u1_g_AlertZmilrqDispJdg()                                   (u1_g_VardefZmilrqDispJdg())
+#else   /* BEV Rebase provisionally */
+#define u4_g_AlertRevBzrSoundType()                                 ((U4)ALERT_SHIFT_BZ_REV_SOUNDTYPE_IN)
+#endif   /* BEV Rebase provisionally */
 #define u1_g_AlertHcsAscext()                                       (u1_g_VardefHcsRxAscext())
 
-#define vd_g_AlertCfgS_fcmdi2VardefEsOpt(u4_ap_esopt)               (vd_g_VardefEsOptAva((u4_ap_esopt), (U1)VDF_ESO_NOW_AVA))
 #define u1_g_AlertCfgTAILIsEnable()                                 ((U1)TRUE)
 #define u1_g_AlertCfgRFOGIsEnable()                                 ((U1)TRUE)
 #define u1_g_AlertCfgHEDLIsEnable()                                 ((U1)TRUE)
-#define u1_g_AlertCfgNCLMTIsEnable()                                ((U1)TRUE)
-#define u1_g_AlertCfgDCRCKDSPIsEnable()                             ((U1)TRUE)
-#define u1_g_AlertCfgOilmilIsEnable()                               ((U1)TRUE)
 
 #define u1_ALERT_CFG_B_TDOOR_RRCY                                   (u1_CALIB_MCUID0209_RRCYM)
 #define u1_ALERT_CFG_B_TDOOR_RLCY                                   (u1_CALIB_MCUID0210_RLCYM)
@@ -312,7 +284,6 @@ extern const ST_ALERT_MTRX         st_gp_ALERT_S_FCTA_MTRX[ALERT_S_FCTA_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_S_LDA_MTRX[ALERT_S_LDA_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_S_LTA_2_MTRX[ALERT_S_LTA_2_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_S_PCS1_MTRX[ALERT_S_PCS1_CH_NUM];
-extern const ST_ALERT_MTRX         st_gp_ALERT_S_OAA_MTRX[ALERT_S_OAA_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_S_RSA_MTRX[ALERT_S_RSA_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_S_SWS_MTRX[ALERT_S_SWS_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_S_TMN_MTRX[ALERT_S_TMN_CH_NUM];
@@ -337,7 +308,6 @@ extern const ST_ALERT_MTRX         st_gp_ALERT_B_ESWUOC_MTRX[ALERT_B_ESWUOC_CH_N
 extern const ST_ALERT_MTRX         st_gp_ALERT_H_TVPSOF_MTRX[ALERT_H_TVPSOF_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_B_ALOA2_MTRX[ALERT_B_ALOA2_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_B_RPWSEA_MTRX[ALERT_B_RPWSEA_CH_NUM];
-extern const ST_ALERT_MTRX         st_gp_ALERT_H_TCBM_MTRX[ALERT_H_TCBM_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_H_DCLDSP_MTRX[ALERT_H_DCLDSP_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_C_BRPADW_MTRX[ALERT_C_BRPADW_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_C_HCS_MTRX[ALERT_C_HCS_CH_NUM];

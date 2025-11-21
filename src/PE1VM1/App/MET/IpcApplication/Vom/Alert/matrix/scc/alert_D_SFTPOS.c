@@ -206,12 +206,10 @@ static U4      u4_s_AlertD_sftposBRsbwSrcchk(const U1 u1_a_VOM, const U4 u4_a_IG
                                       u2_s_ALERT_D_SFTPOS_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_D_SFTPOS_LSB_MSGSTS);
 
-#if 0   /* BEV Rebase provisionally */
     u4_t_intermittent = u4_g_AlertRevBzrSoundType();
     if(u4_t_intermittent == (U4)ALERT_SHIFT_BZ_REV_SOUNDTYPE_IN){
         u4_t_src_chk |= u4_s_ALERT_D_SFTPOS_BIT_INTERMITTENT;
     }
-#endif   /* BEV Rebase provisionally */
 
     return(u4_t_src_chk);
 }
