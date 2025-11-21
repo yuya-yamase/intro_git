@@ -1,4 +1,4 @@
-/* 2.3.0 */
+/* 2.4.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -13,7 +13,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define VPTRAN_SEL_H_MAJOR                      (2)
-#define VPTRAN_SEL_H_MINOR                      (3)
+#define VPTRAN_SEL_H_MINOR                      (4)
 #define VPTRAN_SEL_H_PATCH                      (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -41,11 +41,6 @@
 #define VPTRAN_RNG_M_ON                         (0x0200U)
 #define VPTRAN_RNG_SD_ON                        (0x0400U)
 
-#define VPTRAN_STS_MSK                          (0xF000U)
-#define VPTRAN_STS_NORMAL                       (0x0000U)
-#define VPTRAN_STS_OILWRN                       (0x1000U)
-#define VPTRAN_STS_CLATCHENGAGE                 (0x2000U)
-#define VPTRAN_STS_SPTMDENABLE                  (0x4000U)
 #define VPTRAN_STS_DBL_PARK                     (0x8000U)
 
 #define VPTRAN_GSI_UP                           (0x0001U)
