@@ -74,35 +74,6 @@ U1      u1_g_VdfEsoRx_SW_LTA(void)
     return(u1_t_ava_rx);
 }
 /*===================================================================================================================================*/
-/*  U1      u1_g_VdfEsoRx_SW_LTA_NA(void)                                                                                            */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1      u1_g_VdfEsoRx_SW_LTA_NA(void)
-{
-    static const U1 u1_s_VDF_ESO_HOF_PROP_ACT = (U1)3U;
-    U1                 u1_data1_rx;
-    U1                 u1_data2_rx;
-    U1                 u1_t_ava_rx;
-
-    u1_data1_rx = (U1)0U;
-    u1_data2_rx = (U1)0U;
-#if 0   /* BEV Rebase provisionally */
-    (void)Com_ReceiveSignal(ComConf_ComSignal_HOF_EXT, &u1_data1_rx);
-    (void)Com_ReceiveSignal(ComConf_ComSignal_HOF_PROP, &u1_data2_rx);
-#endif   /* BEV Rebase provisionally */
-    if((u1_data1_rx != (U1)0U) &&
-       (u1_data2_rx == u1_s_VDF_ESO_HOF_PROP_ACT)){
-        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
-    }
-    else{
-        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_UNK;
-    }
-
-    return(u1_t_ava_rx);
-}
-/*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
 /*                                                                                                                                   */

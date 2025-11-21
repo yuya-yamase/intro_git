@@ -166,13 +166,8 @@ U2      u2_g_VardefCfgEomchk(void)
 /*===================================================================================================================================*/
 U1      u1_g_VardefHcsCfgAscextchk(U1* u1_ap_ascext_rx)
 {
-#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_ASCEXT, u1_ap_ascext_rx);
-    return(u1_g_oXCANRxEvcnt((U2)OXCAN_PDU_RX_CAN_ASC1S90));
-#else   /* BEV Rebase provisionally */
-    (*u1_ap_ascext_rx) = (U1)0U;
-    return((U1)OXCAN_RXD_EVC_UNK);
-#endif   /* BEV Rebase provisionally */
+    return(u1_g_oXCANRxdEvcnt((U2)OXCAN_RXD_PDU_CAN_SCS1S11_CH0));
 }
 
 /*===================================================================================================================================*/
