@@ -569,7 +569,7 @@ static void   vd_s_VehspdGetBias(ST_VEHSPD_BIAS_FACT * st_ap_FACT)
     U1                            u1_t_bias_idx;
     U1                            u1_t_toler_a;
     S1                            s1_t_toler_b;
-    const volatile U2 *           u2_tp_BIAS_MAP;
+    const volatile U2 *           *u2_tp_BIAS_MAP;
     U2                            u2_t_bias_data_0p1kmph;
     U4                            u4_t_lpcnt;
 
@@ -578,19 +578,19 @@ static void   vd_s_VehspdGetBias(ST_VEHSPD_BIAS_FACT * st_ap_FACT)
     if(u1_t_bias_idx == (U1)VEHSPD_SPDTLRNC_USA_CAN){       /* Vehicle Speed ​​Tolerance in Usa/Canada */
         u1_t_toler_a   = u1_VEHSPD_CALIB_TOLER_A_USA_CAN;
         s1_t_toler_b   = s1_VEHSPD_CALIB_TOLER_B_USA_CAN;
-        u2_tp_BIAS_MAP = *(u2p_sp_VEHSPD_BIAS_USA_CAN); 
+        u2_tp_BIAS_MAP = &u2p_sp_VEHSPD_BIAS_USA_CAN[0]; 
     }
     else{                                                   /* Vehicle Speed ​​Tolerance in UNR/Australia/others or Default Settings */
         u1_t_toler_a   = u1_VEHSPD_CALIB_TOLER_A_UNR_AUS;
         s1_t_toler_b   = s1_VEHSPD_CALIB_TOLER_B_UNR_AUS;
-        u2_tp_BIAS_MAP = *(u2p_sp_VEHSPD_BIAS_UNR_AUS);
+        u2_tp_BIAS_MAP = &u2p_sp_VEHSPD_BIAS_UNR_AUS[0];
     }
-    
+
     st_ap_FACT->u1_toler_a = u1_t_toler_a;
     st_ap_FACT->s1_toler_b = s1_t_toler_b;
     vd_g_VehspdMemcpyU2(&st_ap_FACT->u2p_bias_map[0], &u2_sp_VEHSPD_BIAS_MAP_FIXEDVAL[0], (U2)VEHSPD_IDX_CALIB_CORPT);
     for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)VEHSPD_CALIB_CORPT; u4_t_lpcnt++){
-        u2_t_bias_data_0p1kmph = u2_tp_BIAS_MAP[u4_t_lpcnt];
+        u2_t_bias_data_0p1kmph = *(u2_tp_BIAS_MAP[u4_t_lpcnt]);
         if(((U4)u2_t_bias_data_0p1kmph * (U4)VEHSPD_RES_0P1_TO_0P01_KMPH) < (U4)U2_MAX){
             st_ap_FACT->u2p_bias_map[(U4)VEHSPD_IDX_CALIB_CORPT + u4_t_lpcnt] = u2_t_bias_data_0p1kmph * (U2)VEHSPD_RES_0P1_TO_0P01_KMPH;
         }
