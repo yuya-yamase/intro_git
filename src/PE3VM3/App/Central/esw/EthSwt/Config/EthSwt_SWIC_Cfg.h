@@ -113,6 +113,12 @@ Std_ReturnType EthSwt_SWIC_RstDtct_IsNeedDtct(void);
 #define D_ETHSWT_SWIC_SQI_GET_CYCLE                 (100U)	/* SQI値取得周期(100ms) */
 
 #define ETHSWT_SWIC_SQI_NOTIFY(SwtichPortIdx, getSQIResult, SQIValue)		EthSwt_Data_NotifySQI(SwtichPortIdx, getSQIResult, SQIValue)
+/* -------------------------------------------------------------------------- */
+/* Config for EthSwt_SWIC_RegAxsErr.c                                         */
+/* -------------------------------------------------------------------------- */
+#define D_ETHSWT_SWIC_REGAXSERR_GET_CYCLE           (5)	/* レジスタアクセスエラー取得周期(5ms) */
+
+#define ETHSWT_SWIC_REGAXSERR_NOTIFY(SwtichPortIdx, getRegAxsErrResult, RegAxsErrValue)		EthSwt_Data_NotifyRegAxsErr(SwtichPortIdx, getRegAxsErrResult, RegAxsErrValue)
 
 /* -------------------------------------------------------------------------- */
 #endif /* ETHSWT_SWIC_CFG_H */

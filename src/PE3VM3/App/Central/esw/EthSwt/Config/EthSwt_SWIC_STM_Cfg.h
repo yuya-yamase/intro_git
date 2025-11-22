@@ -34,6 +34,7 @@ const EthSwt_InitFunc G_ETHSWT_SWIC_STM_INITLIST[] =
 ,	EthSwt_SWIC_SQI_Init
 ,   EthSwt_SWIC_MIB_Init
 ,   EthSwt_SWIC_Qci_Init
+,   EthSwt_SWIC_RegAxsErr_Init
 };
 #define D_ETHSWT_SWIC_STM_INITFUNC_NUM     (sizeof(G_ETHSWT_SWIC_STM_INITLIST) / sizeof(G_ETHSWT_SWIC_STM_INITLIST[0]))
 

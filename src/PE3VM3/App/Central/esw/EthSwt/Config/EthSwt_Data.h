@@ -47,6 +47,8 @@
 #define D_ETHSWT_DATA_QCI_DLC_UDP_ID        (4U)
 #define D_ETHSWT_DATA_QCI_NUM               (5U)
 
+#define D_ETHSWT_DATA_REGAXSERR_SAIL_ID     (0U)
+#define D_ETHSWT_DATA_REGAXSERR_NUM         (1U)
 /* -------------------------------------------------------------------------- */
 
 
@@ -89,6 +91,13 @@ typedef struct {
 } S_ETHSWT_DATA_QCI;                                                        /* Total: 24byte */
 #pragma pack()
 /* -------------------------------------------------------------------------- */
+#pragma pack(1)
+typedef struct {
+    S_ETHSWT_DATA_REGAXSERR_PER_PORT regAxsErr[D_ETHSWT_DATA_REGAXSERR_NUM]; /* 4byte */
+    uint32                          id;                                     /* 4byte */
+} S_ETHSWT_REGAXSERR_SQI;                                                   /* Total: 8byte */
+#pragma pack()
+/* -------------------------------------------------------------------------- */
 
 /* -------------------------------------------------------------------------- */
 void EthSwt_Data_Init(void);
@@ -97,6 +106,7 @@ void EthSwt_Data_NotifyLink(const uint8 SwitchPortIdx, const Std_ReturnType getL
 void EthSwt_Data_NotifyMIB(const uint8 SwitchPortIdx, const uint32 *const MIBArray);
 void EthSwt_Data_NotifySQI(const uint8 SwtichPortIdx, const Std_ReturnType getSQIResult, const uint8 SQIValue);
 void EthSwt_Data_NotifyQci(const uint8 QciIdx, const uint32 QciCount);
+void EthSwt_Data_NotifyRegAxsErr(const uint8 SwtichPortIdx, const Std_ReturnType getRegAxsErrResult, const uint8 RegAxsErrValue);
 void EthSwt_Data_NotifySWICReset(void);
 /* -------------------------------------------------------------------------- */
 #endif /* ETHSWT_DATA_H */

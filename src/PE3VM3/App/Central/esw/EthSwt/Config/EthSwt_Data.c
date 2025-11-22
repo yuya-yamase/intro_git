@@ -40,6 +40,9 @@
 /* Qci取得対象は、QciID = 0, 1, 2, 3, 4 */
 #define D_ETHSWT_DATA_QCI_TARGET                    (D_ETHSWT_DATA_UPDATE_QCI0 | D_ETHSWT_DATA_UPDATE_QCI1 | D_ETHSWT_DATA_UPDATE_QCI2 | D_ETHSWT_DATA_UPDATE_QCI3 | D_ETHSWT_DATA_UPDATE_QCI4)
 
+/* Qci取得対象は、SAIL ポート */
+#define D_ETHSWT_DATA_REGAXSERR_TARGET                    (D_ETHSWT_DATA_UPDATE_SAIL)
+
 /* -------------------------------------------------------------------------- */
 typedef struct {
     uint8 arrayID;                                                              /* 送信用データIndex        */
@@ -88,6 +91,19 @@ static const S_ETHSWT_DATA_FOR_UPDATE S_ETHSWT_DATA_SQI_ID_TABLE[D_ETHSWT_SWIC_P
 ,   {D_ETHSWT_DATA_FAILED           , D_ETHSWT_DATA_FAILED          }           /* Port9: no use    */
 };
 
+/* レジスタアクセスエラー送信用「SWIC物理ポート番号Index(行) -> 送信用データIndex(列)」変換テーブル */
+static const S_ETHSWT_DATA_FOR_UPDATE S_ETHSWT_DATA_REGAXSERR_ID_TABLE[D_ETHSWT_SWIC_PORT_NUM] =
+{   /* 送信用データIndex             , 送信用判定用更新ビット         */
+    {D_ETHSWT_DATA_FAILED           , D_ETHSWT_DATA_FAILED          }           /* Port1: A-DC      */
+,   {D_ETHSWT_DATA_FAILED           , D_ETHSWT_DATA_FAILED          }           /* Port2: DCM       */
+,   {D_ETHSWT_DATA_FAILED           , D_ETHSWT_DATA_FAILED          }           /* Port3: no use    */
+,   {D_ETHSWT_DATA_FAILED           , D_ETHSWT_DATA_FAILED          }           /* Port4: no use    */
+,   {D_ETHSWT_DATA_REGAXSERR_SAIL_ID, D_ETHSWT_DATA_UPDATE_SAIL     }           /* Port5: SAIL      */
+,   {D_ETHSWT_DATA_FAILED           , D_ETHSWT_DATA_FAILED          }           /* Port6: DLC       */
+,   {D_ETHSWT_DATA_FAILED           , D_ETHSWT_DATA_FAILED          }           /* Port7: Linux     */
+,   {D_ETHSWT_DATA_FAILED           , D_ETHSWT_DATA_FAILED          }           /* Port8: Android   */
+,   {D_ETHSWT_DATA_FAILED           , D_ETHSWT_DATA_FAILED          }           /* Port9: no use    */
+};
 /* -------------------------------------------------------------------------- */
 /* 以下、暫定 */
 static EthSwt_StateType         G_ETHSWT_DATA_STATE[181];
@@ -96,17 +112,20 @@ static S_ETHSWT_DATA_LINK       G_ETHSWT_DATA_LINK;
 static S_ETHSWT_DATA_MIB        G_ETHSWT_DATA_MIB;
 static S_ETHSWT_DATA_SQI        G_ETHSWT_DATA_SQI;
 static S_ETHSWT_DATA_QCI        G_ETHSWT_DATA_QCI;
+static S_ETHSWT_DATA_REGAXSERR  G_ETHSWT_DATA_REGAXSERR;
 
 static uint32                   G_ETHSWT_DATA_LINK_ID;
 static uint32                   G_ETHSWT_DATA_MIB_ID;
 static uint32                   G_ETHSWT_DATA_SQI_ID;
 static uint32                   G_ETHSWT_DATA_QCI_ID;
+static uint32                   G_ETHSWT_DATA_REGAXSERR_ID;
 static uint32                   G_ETHSWT_DATA_SWICRESET_COUNT;
 
 static uint8                    G_ETHSWT_DATA_LINK_UPDATE;
 static uint8                    G_ETHSWT_DATA_MIB_UPDATE;
 static uint8                    G_ETHSWT_DATA_SQI_UPDATE;
 static uint8                    G_ETHSWT_DATA_QCI_UPDATE;
+static uint8                    G_ETHSWT_DATA_REGAXSERR_UPDATE;
 
 /* -------------------------------------------------------------------------- */
 static void ethswt_data_setEthSwtStateData(void);
@@ -138,12 +157,14 @@ void EthSwt_Data_Init(void)
     G_ETHSWT_DATA_MIB_ID = 0u;
     G_ETHSWT_DATA_SQI_ID = 0u;
     G_ETHSWT_DATA_QCI_ID = 0u;
+    G_ETHSWT_DATA_REGAXSERR_ID = 0u;
     G_ETHSWT_DATA_SWICRESET_COUNT = 0u;
 
     LIB_memset((uint8*)&G_ETHSWT_DATA_LINK_UPDATE, 0, sizeof(G_ETHSWT_DATA_LINK_UPDATE));
     LIB_memset((uint8*)&G_ETHSWT_DATA_MIB_UPDATE, 0, sizeof(G_ETHSWT_DATA_MIB_UPDATE));
     LIB_memset((uint8*)&G_ETHSWT_DATA_SQI_UPDATE, 0, sizeof(G_ETHSWT_DATA_SQI_UPDATE));
     LIB_memset((uint8*)&G_ETHSWT_DATA_QCI_UPDATE, 0, sizeof(G_ETHSWT_DATA_QCI_UPDATE));
+    LIB_memset((uint8*)&G_ETHSWT_DATA_REGAXSERR_UPDATE, 0, sizeof(G_ETHSWT_DATA_REGAXSERR_UPDATE));
     
     return;
 }
@@ -213,6 +234,25 @@ void EthSwt_Data_NotifyQci(const uint8 QciIdx, const uint32 QciCount)
     return;
 }
 /* -------------------------------------------------------------------------- */
+void EthSwt_Data_NotifyRegAxsErr(const uint8 SwtichPortIdx, const Std_ReturnType getRegAxsErrResult, const uint8 RegAxsErrValue)
+{
+    uint8   idx;
+
+    do {
+        if (SwitchPortIdx >= D_ETHSWT_SWIC_PORT_NUM)                                          {break;}
+        if (S_ETHSWT_DATA_REGAXSERR_ID_TABLE[SwitchPortIdx].arrayID == D_ETHSWT_DATA_FAILED)  {break;}
+
+        LIB_DI();
+        for(idx = 0; idx < D_ETHSWT_SWIC_REGAXSERR_NUM; idx++) {
+            G_ETHSWT_DATA_REGAXSERR.regAxsErr[S_ETHSWT_DATA_REGAXSERR_ID_TABLE[SwitchPortIdx].arrayID][idx] = getRegAxsErrResult;
+        }
+        G_ETHSWT_DATA_REGAXSERR_UPDATE |= S_ETHSWT_DATA_REGAXSERR_ID_TABLE[SwitchPortIdx].flagPosition;
+        LIB_EI();
+    } while(0);
+
+	return;
+}
+/* -------------------------------------------------------------------------- */
 void EthSwt_Data_NotifySWICReset(void)
 {
     if (G_ETHSWT_DATA_SWICRESET_COUNT == 0xFFFFFFFF) {
@@ -231,6 +271,7 @@ void EthSwt_Data_LoProc(void)
     ethswt_data_checkMIBUpdate();
     ethswt_data_checkSQIUpdate();
     ethswt_data_checkQciUpdate();
+    ethswt_data_checkRegAxsErrUpdate();
     ethswt_data_checkSWICReset();
     
     return;
@@ -279,6 +320,17 @@ static void ethswt_data_checkQciUpdate(void)
         G_ETHSWT_DATA_QCI.id = G_ETHSWT_DATA_QCI_ID;
         (void)ChipCom_SetPeriodicTxData(CHIPCOM_PERIODICID_ETHERSWT_SWIC_DATAUSAGEEXCEED, sizeof(G_ETHSWT_DATA_QCI), (uint8*)&G_ETHSWT_DATA_QCI);
         ethswt_data_incrementID(&G_ETHSWT_DATA_QCI_ID);        
+    }
+
+    return;
+}
+static void ethswt_data_checkRegAxsErrUpdate(void)
+{
+    if (G_ETHSWT_DATA_REGAXSERR_UPDATE == D_ETHSWT_DATA_REGAXSERR_TARGET ) {
+        G_ETHSWT_DATA_REGAXSERR_UPDATE = 0u;
+        G_ETHSWT_DATA_REGAXSERR.id = G_ETHSWT_DATA_REGAXSERR_ID;
+        (void)ChipCom_SetPeriodicTxData(CHIPCOM_PERIODICID_ETHERSWT_SWIC_REGAXSERR, sizeof(G_ETHSWT_DATA_REGAXSERR), (uint8*)&G_ETHSWT_DATA_REGAXSERR);
+        ethswt_data_incrementID(&G_ETHSWT_DATA_REGAXSERR_ID);        
     }
 
     return;
