@@ -144,14 +144,7 @@ void    vd_g_HmiPuTxtCfgReq(U4 * u4_ap_req)
 {
     static const ST_HMIPUTXT_REQ_W_ESOPT   st_sp_HMIPUTXT_REQ_W_ESOPT_HEADLAMP[] = {
         /*  u2_idx    u2_chid                      u1_req                                   u2_eso_ch             */
- 
- 
- 
- 
- 
         {   (U2)331U, (U2)ALERT_CH_B_LEDHEA,       (U1)ALERT_REQ_B_LEDHEA_MALFUNC,          (U2)U2_MAX           }     /* WARNING_ID_331 */
- 
- 
     };
 
     U2              u2_t_num_reqbit;

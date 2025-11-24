@@ -78,23 +78,6 @@
 #define HMITT_BLINK_CO_0P83HZ__50P                   (2U)
 #define HMITT_BLINK_CO_2P50HZ__50P                   (3U)
 #define HMITT_BLINK_CO_1P00HZ__50P_4WDTRF           (3U)
-#define HMITT_BLINK_CO_1P00HZ__50P_3TIMS_E_OFF      (4U)
-
-#define HMITT_BLINK_CO_ON_100P_VSCEXP_0              (1U)
-#define HMITT_BLINK_CO_ON_100P_VSCEXP_1              (2U)
-#define HMITT_BLINK_CO_ON_100P_VSCEXP_2              (3U)
-#define HMITT_BLINK_CO_ON_100P_VSCEXP_3              (4U)
-#define HMITT_BLINK_CO_ON_100P_VSCEXP_4              (5U)
-#define HMITT_BLINK_CO_ON_100P_VSCEXP_5              (6U)
-
-#define HMITT_BLINK_CO_ON_____100P_ACC_DST1_WHT      (1U)
-#define HMITT_BLINK_CO_ON_____100P_ACC_DST1_GRN      (2U)
-#define HMITT_BLINK_CO_ON_____100P_ACC_DST2_WHT      (3U)
-#define HMITT_BLINK_CO_ON_____100P_ACC_DST2_GRN      (4U)
-#define HMITT_BLINK_CO_ON_____100P_ACC_DST3_WHT      (5U)
-#define HMITT_BLINK_CO_ON_____100P_ACC_DST3_GRN      (6U)
-#define HMITT_BLINK_CO_ON_____100P_ACC_DST4_WHT      (7U)
-#define HMITT_BLINK_CO_ON_____100P_ACC_DST4_GRN      (8U)
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

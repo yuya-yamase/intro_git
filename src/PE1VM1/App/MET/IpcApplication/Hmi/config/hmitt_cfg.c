@@ -73,7 +73,6 @@
 #define HMITT_TURN_DATPOS                         (1U)
 #define HMITT_HEAD_DATPOS                         (12U)
 #define HMITT_TAIL_DATPOS                         (0U)
-#define HMITT_TECBLP2_DATPOS                      (9U)
 
 #define HMITT_SBLT_R2L_SFT                        (3U)
 #define HMITT_SBLT_R2C_SFT                        (4U)
@@ -113,7 +112,6 @@ typedef struct{
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static void    vd_s_HmiTtTurn(U4 * u4_ap_req);
-static void    vd_s_HmiTtTECOLP2(U4* u4_ap_req);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -186,7 +184,6 @@ void    vd_g_HmiTtCfgReq(U4 * u4_ap_req)
     }
 
     vd_s_HmiTtTurn(u4_ap_req);
-    vd_s_HmiTtTECOLP2(u4_ap_req);
 }
 
 /*===================================================================================================================================*/
@@ -210,26 +207,6 @@ static void    vd_s_HmiTtTurn(U4 * u4_ap_req)
     u1_t_turn_act = u1_g_ThblnkrActiveJdg();
     if(u1_t_turn_act == (U1)TRUE){
         u4_ap_req[HMITT_TURN_DATPOS] |= ((U4)TRUE << HMITT_TURN_ACT_SFT);
-    }
-}
-
-/*===================================================================================================================================*/
-/*  static inline void    vd_s_HmiTtTECOLP2(U4 * u4_ap_req)                                                                          */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void    vd_s_HmiTtTECOLP2(U4* u4_ap_req)
-{
-    U1  u1_t_ptsys;
-
-    u1_t_ptsys = u1_g_VardefPtsRx();
-   if((u1_t_ptsys == (U1)VDF_PTS_RX_01_GAS      ) ||
-       (u1_t_ptsys == (U1)VDF_PTS_RX_02_GAS_ISS)) {
-      /* Do Nothing */
-   }
-   else{
-        u4_ap_req[HMITT_TECBLP2_DATPOS] &= (~((U4)HMITT_VAR_MASK << HMITT_16BIT_SHIFT));
     }
 }
 
