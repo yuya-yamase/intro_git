@@ -1,4 +1,4 @@
-/* 1.1.0 */
+/* 1.3.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define HMILOCALE_C_MAJOR                         (1)
-#define HMILOCALE_C_MINOR                         (1)
+#define HMILOCALE_C_MINOR                         (3)
 #define HMILOCALE_C_PATCH                         (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -32,11 +32,9 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define HMILOCALE_FUELCO_KMPL       (0U)    /* km/L         */
-#define HMILOCALE_FUELCO_LP100KM    (1U)    /* L/100km      */
-#define HMILOCALE_FUELCO_MPGUS      (2U)    /* MPG US       */
-#define HMILOCALE_FUELCO_MPGUK      (3U)    /* MPG UK       */
-#define HMILOCALE_FUELCO_MPGUKIMP   (4U)    /* MPG Imperial */
+#define HMILOCALE_ELECO_KMPKWH      (0U)    /* km/kWh       */
+#define HMILOCALE_ELECO_KWHP100KM   (1U)    /* kWh/100km    */
+#define HMILOCALE_ELECO_MILEPKWH    (2U)    /* miles/kWh    */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -94,34 +92,28 @@ void    vd_g_HmiLocaleMainTask(void)
     /*    vd_g_UnitPut((U1)UNIT_IDX_SPEED ,st_s_hmilocale_put.u1_unit_speed ); */
     /* } */
 
-    if (st_s_hmilocale_put.u1_unit_fueco <= (U1)HMILOCALE_FUELCO){
-        if(st_s_hmilocale_put.u1_unit_fueco == (U1)HMILOCALE_FUELCO_MPGUKIMP){
-            st_s_hmilocale_put.u1_unit_fueco = (U1)HMILOCALE_FUELCO_MPGUK;
-        }
-        vd_g_UnitPut((U1)UNIT_IDX_FUECO , st_s_hmilocale_put.u1_unit_fueco);
-
-        switch(st_s_hmilocale_put.u1_unit_fueco){
-            case (U1)HMILOCALE_FUELCO_KMPL:
-                vd_g_UnitPut((U1)UNIT_IDX_DIST , (U1)UNIT_VAL_DIST_KM);
-                vd_g_UnitPut((U1)UNIT_IDX_SPEED ,(U1)UNIT_VAL_SPEED_KMPH);
-                vd_g_UnitPut((U1)UNIT_IDX_ELECO , (U1)UNIT_VAL_ELECO_KMPKWH);
-                break;
-            case (U1)HMILOCALE_FUELCO_LP100KM:
-                vd_g_UnitPut((U1)UNIT_IDX_DIST , (U1)UNIT_VAL_DIST_KM);
-                vd_g_UnitPut((U1)UNIT_IDX_SPEED ,(U1)UNIT_VAL_SPEED_KMPH);
-                vd_g_UnitPut((U1)UNIT_IDX_ELECO , (U1)UNIT_VAL_ELECO_KWHP100KM);
-                break;
-            case (U1)HMILOCALE_FUELCO_MPGUS:
-            case (U1)HMILOCALE_FUELCO_MPGUK:
-            case (U1)HMILOCALE_FUELCO_MPGUKIMP:
-                vd_g_UnitPut((U1)UNIT_IDX_DIST , (U1)UNIT_VAL_DIST_MILE);
-                vd_g_UnitPut((U1)UNIT_IDX_SPEED ,(U1)UNIT_VAL_SPEED_MPH);
-                vd_g_UnitPut((U1)UNIT_IDX_ELECO , (U1)UNIT_VAL_ELECO_MILEPKWH);
-                break;
-            default:
+    switch(st_s_hmilocale_put.u1_unit_eleco){
+        case (U1)HMILOCALE_ELECO_KMPKWH:
+            vd_g_UnitPut((U1)UNIT_IDX_DIST , (U1)UNIT_VAL_DIST_KM);
+            vd_g_UnitPut((U1)UNIT_IDX_SPEED ,(U1)UNIT_VAL_SPEED_KMPH);
+            vd_g_UnitPut((U1)UNIT_IDX_ELECO , (U1)UNIT_VAL_ELECO_KMPKWH);
+            vd_g_UnitPut((U1)UNIT_IDX_FUECO , (U1)UNIT_VAL_FUECO_KMPL);
+            break;
+        case (U1)HMILOCALE_ELECO_KWHP100KM:
+            vd_g_UnitPut((U1)UNIT_IDX_DIST , (U1)UNIT_VAL_DIST_KM);
+            vd_g_UnitPut((U1)UNIT_IDX_SPEED ,(U1)UNIT_VAL_SPEED_KMPH);
+            vd_g_UnitPut((U1)UNIT_IDX_ELECO , (U1)UNIT_VAL_ELECO_KWHP100KM);
+            vd_g_UnitPut((U1)UNIT_IDX_FUECO , (U1)UNIT_VAL_FUECO_LP100KM);
+            break;
+        case (U1)HMILOCALE_ELECO_MILEPKWH:
+            vd_g_UnitPut((U1)UNIT_IDX_DIST , (U1)UNIT_VAL_DIST_MILE);
+            vd_g_UnitPut((U1)UNIT_IDX_SPEED ,(U1)UNIT_VAL_SPEED_MPH);
+            vd_g_UnitPut((U1)UNIT_IDX_ELECO , (U1)UNIT_VAL_ELECO_MILEPKWH);
+            vd_g_UnitPut((U1)UNIT_IDX_FUECO , (U1)UNIT_VAL_FUECO_MPG_USA);
+            break;
+        default:
                 /* Do nothing */
-                break;
-        }
+            break;
     }
 
 /*   if (st_s_hmilocale_put.u1_unit_eleco <= (U1)HMILOCALE_ELECO){ */
@@ -130,9 +122,9 @@ void    vd_g_HmiLocaleMainTask(void)
     if (st_s_hmilocale_put.u1_unit_ambtmp <= (U1)HMILOCALE_AMBTMP){
         vd_g_UnitPut((U1)UNIT_IDX_AMBTMP, st_s_hmilocale_put.u1_unit_ambtmp);
     }
-    if (st_s_hmilocale_put.u1_timeformat <= (U1)HMILOCALE_TIMEFORMAT){
-        vd_g_TimeFormat12H24HPut(st_s_hmilocale_put.u1_timeformat);
-    }
+/*    if (st_s_hmilocale_put.u1_timeformat <= (U1)HMILOCALE_TIMEFORMAT){ */
+/*        vd_g_TimeFormat12H24HPut(st_s_hmilocale_put.u1_timeformat); */
+/*    } */
 }
 
 /*===================================================================================================================================*/
@@ -164,7 +156,11 @@ void    vd_g_HmiLocalePut(const ST_HMILOCALE * stp_a_HMILOCALE)
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  1.0.0    07/16/2019  TA       New.                                                                                               */
 /*  1.1.0    09/02/2020  TA       See hmiproxy.c                                                                                     */
+/*  1.2.0    02/28/2025  RS       Change for BEV System_Consideration_1.(Requests from the SOC team for electricity cost units)      */
+/*  1.3.0    07/07/2025  MN       Change for BEV PreCV.(Delete timeformat)                                                           */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
+/*  * RS   = Ryuki Sako, Denso Techno                                                                                                */
+/*  * MN   = Mikiya Negishi, KSE                                                                                                     */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

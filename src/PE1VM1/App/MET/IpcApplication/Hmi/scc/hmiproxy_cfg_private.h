@@ -1,4 +1,4 @@
-/* 1.3.0 */
+/* 1.4.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -13,7 +13,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define HMIPROXY_CFG_H_MAJOR                     (1)
-#define HMIPROXY_CFG_H_MINOR                     (3)
+#define HMIPROXY_CFG_H_MINOR                     (4)
 #define HMIPROXY_CFG_H_PATCH                     (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -58,7 +58,6 @@ typedef struct{
 extern void ( * const               fp_gp_vd_HMIPROXY_BON_INIT[HMIPROXY_INIT_NUM])(void);
 extern void ( * const               fp_gp_vd_HMIPROXY_RST_INIT[HMIPROXY_INIT_NUM])(void);
 extern void ( * const               fp_gp_vd_HMIPROXY_WKUP_INIT[HMIPROXY_INIT_NUM])(void);
-extern U1   ( * const               fp_gp_u1_HMIPROXY_SHTDWN_CHK[HMIPROXY_SHTDWN_NUM])(void);
 extern const ST_HMIPROXY            st_gp_HMIPROXY[HMIPROXY_MAINTASK_NUM];
 
 #endif      /* HMIPROXY_CFG_H */
