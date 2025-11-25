@@ -78,7 +78,7 @@ Std_ReturnType EthSwt_SWIC_RegAccess_Action (uint32 * const errFactor)
 		LIB_DI();
 		S_ETHSWT_SWIC_REGACCESS_TIMER.req = STD_OFF;
 		LIB_EI();
-		result = ethswt_swic_regaccess_read(errFactor);
+		result = ethswt_swic_regAccess_read(errFactor);
 	}
 
 	return result;

@@ -146,6 +146,7 @@ void EthSwt_Data_Init(void)
     LIB_memset((uint8*)&G_ETHSWT_DATA_MIB, 0, sizeof(G_ETHSWT_DATA_MIB));
     LIB_memset((uint8*)&G_ETHSWT_DATA_SQI, 0, sizeof(G_ETHSWT_DATA_SQI));
     LIB_memset((uint8*)&G_ETHSWT_DATA_QCI, 0, sizeof(G_ETHSWT_DATA_QCI));
+    LIB_memset((uint8*)&G_ETHSWT_DATA_REGACCESS, 0, sizeof(G_ETHSWT_DATA_REGACCESS));
 
     for (idx = 0u; idx < D_ETHSWT_DATA_LINK_NUM; idx++) {
         G_ETHSWT_DATA_LINK.link[idx].linkGetResult = E_NOT_OK;
@@ -242,9 +243,7 @@ void EthSwt_Data_NotifyRegAccess(const Std_ReturnType getRegAccessResult)
     do {
 
         LIB_DI();
-        for(idx = 0; idx < D_ETHSWT_SWIC_REGACCESS_NUM; idx++) {
-            G_ETHSWT_DATA_REGACCESS.regAccess = getRegAccessResult;
-        }
+        G_ETHSWT_DATA_REGACCESS.regAccess = getRegAccessResult;
         G_ETHSWT_DATA_REGACCESS_UPDATE |= S_ETHSWT_DATA_REGACCESS_ID_TABLE.flagPosition;
         LIB_EI();
     } while(0);
@@ -328,7 +327,7 @@ static void ethswt_data_checkRegAccessUpdate(void)
     if (G_ETHSWT_DATA_REGACCESS_UPDATE == D_ETHSWT_DATA_REGACCESS_TARGET ) {
         G_ETHSWT_DATA_REGACCESS_UPDATE = 0u;
         G_ETHSWT_DATA_REGACCESS.id = G_ETHSWT_DATA_REGACCESS_ID;
-        (void)ChipCom_SetPeriodicTxData(CHIPCOM_PERIODICID_ETHERSWT_SWIC_REGACCESS, sizeof(G_ETHSWT_DATA_REGACCESS), (uint8*)&G_ETHSWT_DATA_REGACCESS); //岸本メモ書き：CHIPCOM側でCHIPCOM_PERIODICID_ETHERSWT_SWIC_REGAXSERRの実装が必要
+        (void)ChipCom_SetPeriodicTxData(CHIPCOM_PERIODICID_ETHERSWT_REGERRSTS, sizeof(G_ETHSWT_DATA_REGACCESS), (uint8*)&G_ETHSWT_DATA_REGACCESS);
         ethswt_data_incrementID(&G_ETHSWT_DATA_REGACCESS_ID);        
     }
 
