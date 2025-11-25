@@ -1,17 +1,17 @@
 /* -------------------------------------------------------------------------- */
-/* file name  :  EthSwt_SWIC_RegAxsErr.h                                           */
+/* file name  :  EthSwt_SWIC_RegAccess.h                                           */
 /* -------------------------------------------------------------------------- */
-#ifndef ETHSWT_SWIC_REGAXSERR_H
-#define ETHSWT_SWIC_REGAXSERR_H
+#ifndef ETHSWT_SWIC_REGACCESS_H
+#define ETHSWT_SWIC_REGACCESS_H
 /* -------------------------------------------------------------------------- */
 #include <Std_Types.h>
 /* -------------------------------------------------------------------------- */
 #include <EthSwt_SWIC_Cfg.h>
 /* -------------------------------------------------------------------------- */
-void EthSwt_SWIC_RegAxsErr_Init (void);
-void EthSwt_SWIC_RegAxsErr_TimerUpdate (void);
-void EthSwt_SWIC_RegAxsErr_Clear (void);
-Std_ReturnType EthSwt_SWIC_RegAxsErr_Action (uint32 * const errFactor);
+void EthSwt_SWIC_RegAccess_Init (void);
+void EthSwt_SWIC_RegAccess_TimerUpdate (void);
+void EthSwt_SWIC_RegAccess_Clear (void);
+Std_ReturnType EthSwt_SWIC_RegAccess_Action (uint32 * const errFactor);
 /* -------------------------------------------------------------------------- */
-#endif /* ETHSWT_SWIC_RegAxsErr_H */
+#endif /* ETHSWT_SWIC_RegAccess_H */
 /* -------------------------------------------------------------------------- */

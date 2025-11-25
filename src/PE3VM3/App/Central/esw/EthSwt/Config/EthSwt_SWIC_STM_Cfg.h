@@ -34,7 +34,7 @@ const EthSwt_InitFunc G_ETHSWT_SWIC_STM_INITLIST[] =
 ,	EthSwt_SWIC_SQI_Init
 ,   EthSwt_SWIC_MIB_Init
 ,   EthSwt_SWIC_Qci_Init
-,   EthSwt_SWIC_RegAxsErr_Init
+,   EthSwt_SWIC_RegAccess_Init
 };
 #define D_ETHSWT_SWIC_STM_INITFUNC_NUM     (sizeof(G_ETHSWT_SWIC_STM_INITLIST) / sizeof(G_ETHSWT_SWIC_STM_INITLIST[0]))
 
@@ -49,6 +49,7 @@ const EthSwt_HiPorcFunc G_ETHSWT_SWIC_STM_HIPROCTABLE[][D_ETHSWT_SWIC_ST_NUM] =
 ,   {   NULL_PTR                , NULL_PTR                  , NULL_PTR                          , NULL_PTR                          , EthSwt_SWIC_SQI_TimerUpdate       , NULL_PTR                          }   /* SQI値取得 */
 ,   {   NULL_PTR                , NULL_PTR                  , NULL_PTR                          , NULL_PTR                          , EthSwt_SWIC_MIB_TimerUpdate       , NULL_PTR                          }   /* MIB取得 */
 ,   {   NULL_PTR                , NULL_PTR                  , NULL_PTR                          , NULL_PTR                          , EthSwt_SWIC_Qci_TimerUpdate       , NULL_PTR                          }   /* Qci取得 */
+,   {   NULL_PTR                , NULL_PTR                  , NULL_PTR                          , NULL_PTR                          , EthSwt_SWIC_RegAccess_TimerUpdate , NULL_PTR                          }   /* レジスタアクセスエラー通知 */
 };
 #define D_ETHSWT_SWIC_STM_HIPROCFUNC_NUM   (sizeof(G_ETHSWT_SWIC_STM_HIPROCTABLE) / sizeof(G_ETHSWT_SWIC_STM_HIPROCTABLE[0]))
 
@@ -66,6 +67,7 @@ const EthSwt_registerAccessFunc G_ETHSWT_SWIC_STM_BACKFUNCTABLE[][D_ETHSWT_SWIC_
 ,   {   NULL_PTR                , NULL_PTR                  , NULL_PTR                          , NULL_PTR                              , EthSwt_SWIC_SQI_Action            , NULL_PTR                          }   /* SQI値取得 */
 ,   {   NULL_PTR                , NULL_PTR                  , EthSwt_SWIC_MIB_ReadDiscard       , NULL_PTR                              , EthSwt_SWIC_MIB_Action            , NULL_PTR                          }   /* MIB取得 */
 ,   {   NULL_PTR                , NULL_PTR                  , EthSwt_SWIC_Qci_ReadDiscard       , NULL_PTR                              , EthSwt_SWIC_Qci_Action            , NULL_PTR                          }   /* Qci取得 */
+,   {   NULL_PTR                , NULL_PTR                  , EthSwt_SWIC_RegAccess_Action      , EthSwt_SWIC_RegAccess_Action          , EthSwt_SWIC_RegAccess_Action      , NULL_PTR                          }   /* レジスタアクセスエラー通知 */
 };
 #define D_ETHSWT_SWIC_STM_BACKFUNC_NUM         (sizeof(G_ETHSWT_SWIC_STM_BACKFUNCTABLE) / sizeof(G_ETHSWT_SWIC_STM_BACKFUNCTABLE[0]))
 
