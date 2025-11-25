@@ -162,7 +162,7 @@ const ST_ALERT_TASK         st_gp_ALERT_TASK_CFG[]   = {
     {  &st_gp_ALERT_C_BRPADW_MTRX[0],        (U2)ALERT_CH_C_BRPADW,                 (U1)ALERT_C_BRPADW_CH_NUM,          (U1)2U  },
     {  &st_gp_ALERT_B_GRISHU_MTRX[0],        (U2)ALERT_CH_B_GRISHU,                 (U1)ALERT_B_GRISHU_CH_NUM,          (U1)3U  },
     {  &st_gp_ALERT_D_SBW_MTRX[0],           (U2)ALERT_CH_D_SBW_BZ_BSFT,            (U1)ALERT_D_SBW_CH_NUM,             (U1)3U  },
-    {  &st_gp_ALERT_H_LEAUNF_MTRX[0],        (U2)ALERT_CH_H_LEAUNF_PD_PWC,          (U1)ALERT_H_LEAUNF_CH_NUM,          (U1)3U  },
+    {  &st_gp_ALERT_H_LEAUNF_MTRX[0],        (U2)ALERT_CH_H_LEAUNF_PD_EHV,          (U1)ALERT_H_LEAUNF_CH_NUM,          (U1)3U  },
     {  &st_gp_ALERT_M_BGLFSPD_MTRX[0],       (U2)ALERT_CH_M_BGLFSPD,                (U1)ALERT_M_BGLFSPD_CH_NUM,         (U1)3U  },
     {  &st_gp_ALERT_M_T120_MTRX[0],          (U2)ALERT_CH_M_T120,                   (U1)ALERT_M_T120_CH_NUM,            (U1)3U  },
     {  &st_gp_ALERT_O_CHAMAL_MTRX[0],        (U2)ALERT_CH_O_CHAMAL,                 (U1)ALERT_O_CHAMAL_CH_NUM,          (U1)3U  },
