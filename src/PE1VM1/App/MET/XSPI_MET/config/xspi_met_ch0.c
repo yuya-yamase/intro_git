@@ -847,7 +847,7 @@ static inline void    vd_s_XSpiCfgRxMetcstm(    const U4 * u4_ap_PDU_RX) {
     U1  u1_t_cstmvol;
 
 /* CSTM_VOL_CHANGE */
-    u1_t_cstmvol = u1_XSPI_MET_READ__BIT(u4_ap_PDU_RX[3] , (U1)22U, 3U);
+    u1_t_cstmvol = u1_XSPI_MET_READ__BIT(u4_ap_PDU_RX[3] , (U1)19U, 3U);
     vd_g_wChimePutMWVCope(u1_t_cstmvol);
 #endif   /* BEV Rebase provisionally */
 
