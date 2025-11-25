@@ -85,7 +85,6 @@ static U1                   u1_s_wchime_sftpos_si_last;                         
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static  void    vd_s_wChimeCfgSftposRjctReqchk(U4* u4p_a_reqbit);
-static  void    vd_s_wChimeCfgRevReqchk(U4 * u4p_a_reqbit);
 static  void    vd_s_wChimeCfgRctaReqchk(U4 * u4p_a_reqbit);
 static  void    vd_s_wChimeCfgMcReqchk(U4 * u4p_a_reqbit);
 static  void    vd_s_wChimeCfgSbltRemReqchk(U4 * u4p_a_reqbit);
@@ -351,7 +350,6 @@ void    vd_g_wChimeCfgReqchk(U4 * u4p_a_reqbit)
     vd_g_AlertReqToBit(st_sp_WCHIME_ALERT_REQBIT, u2_t_num_reqbit, u4p_a_reqbit, (U1)WCHIME_REQBIT_NUM_WORD);
 
     vd_s_wChimeCfgSftposRjctReqchk(u4p_a_reqbit);                   /* Set SFTPOS reject buzzer req.               */
-    vd_s_wChimeCfgRevReqchk(u4p_a_reqbit);                          /* Set Reverse buzzer req.                     */
     vd_s_wChimeCfgRctaReqchk(u4p_a_reqbit);                         /* Set RCTA buzzer req.                        */
     vd_s_wChimeCfgMcReqchk(u4p_a_reqbit);                           /* Set Master Caution buzzer req.              */
     vd_s_wChimeCfgSbltRemReqchk(u4p_a_reqbit);                      /* Set Seatbelt Reminder buzzer req.           */
@@ -457,31 +455,6 @@ static  void    vd_s_wChimeCfgSftposRjctReqchk(U4* u4p_a_reqbit)
 
     u1_s_wchime_sftpos_si_last = u1_t_sftpos_rjct_req;
 
-}
-/*===================================================================================================================================*/
-/*  static  void    vd_s_wChimeCfgRevReqchk(U4 * u4p_a_reqbit)                                                                       */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static  void    vd_s_wChimeCfgRevReqchk(U4 * u4p_a_reqbit)
-{
-    U1 u1_t_reqid;
-    U1 u1_t_rev_cvt;
-    U1 u1_t_rev_sbw;
-
-    u1_t_reqid    = (U1)U1_MAX;
-
-    u1_t_rev_cvt  = u1_g_AlertReqByCh((U2)ALERT_CH_D_SFTPOS_B_RCVT);
-    u1_t_rev_sbw  = u1_g_AlertReqByCh((U2)ALERT_CH_D_SFTPOS_B_RSBW);
-    if((u1_t_rev_cvt == (U1)ALERT_REQ_D_SFTPOS_B_RCVT_CYCLE) ||
-       (u1_t_rev_sbw == (U1)ALERT_REQ_D_SFTPOS_B_RSBW_CYCLE)){
-        u1_t_reqid = (U1)WCHIME_REQ_IN_SFTPOS_REV;
-    }
-
-    if(u1_t_reqid < (U1)WCHIME_NUM_REQ){
-        vd_s_wChimeCfgReqOn(u4p_a_reqbit, u1_t_reqid);
-    }
 }
 /*===================================================================================================================================*/
 /*  static  void    vd_s_wChimeCfgRctaReqchk(U4 * u4p_a_reqbit)                                                                      */
