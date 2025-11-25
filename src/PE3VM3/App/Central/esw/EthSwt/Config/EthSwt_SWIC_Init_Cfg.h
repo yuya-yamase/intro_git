@@ -33,8 +33,8 @@ struct swic_reg_seq {
 
 static const struct swic_reg_seq	G_ETHSWT_SWIC_INIT_TABLE[]
 =	{
-    /* {SWIC_REG_TBL(g_regListSeqSetResetDetect)	, STD_OFF},	*/          /* SWICリセット検知用 */
-      {SWIC_REG_TBL(g_regListPort)					      , STD_OFF}              /* ポート設定 */
+      {SWIC_REG_TBL(g_regListSeqSetResetDetect)				      , STD_OFF}              /* SWICリセット検知用 */
+    , {SWIC_REG_TBL(g_regListPort)					      , STD_OFF}              /* ポート設定 */
     , {SWIC_REG_TBL(g_regListVlan)					      , STD_OFF}              /* VLAN設定 */
     , {SWIC_REG_TBL(g_regListL2)					        , STD_OFF}              /* L2設定 */
     , {SWIC_REG_TBL(g_regListQos)					        , STD_OFF}              /* QoS設定 */
