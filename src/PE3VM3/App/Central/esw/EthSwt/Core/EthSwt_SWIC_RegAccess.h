@@ -11,6 +11,7 @@
 void EthSwt_SWIC_RegAccess_Init (void);
 void EthSwt_SWIC_RegAccess_TimerUpdate (void);
 void EthSwt_SWIC_RegAccess_Clear (void);
+void EthSwt_SWIC_RegAccess_RegAccessErr(const swic_reg_data_t tbl[], const uint32 idx);
 Std_ReturnType EthSwt_SWIC_RegAccess_Action (uint32 * const errFactor);
 /* -------------------------------------------------------------------------- */
 #endif /* ETHSWT_SWIC_RegAccess_H */

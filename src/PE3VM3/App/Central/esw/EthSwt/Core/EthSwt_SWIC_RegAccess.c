@@ -14,6 +14,9 @@
 /* -------------------------------------------------------------------------- */
 static struct {
 	volatile Std_ReturnType			getRegAccessResult;
+	uint8	Paddr;
+	uint8	Raddr;												
+	uint32	cnt;												/* ÉGÉâÅ[ÉJÉEÉìÉ^ */
 } S_ETHSWT_SWIC_REGACCESS
 
 static struct {			/* É^ÉCÉ} */
@@ -32,7 +35,10 @@ void EthSwt_SWIC_RegAccess_Init (void)/* ÉåÉWÉXÉ^ÉAÉNÉZÉXÉGÉâÅ[ä÷òAÉfÅ[É^ÇÃèâä˙â
 	S_ETHSWT_SWIC_REGACCESS_TIMER.time = 0;
 	S_ETHSWT_SWIC_REGACCESS_TIMER.req = STD_ON;
 
-	S_ETHSWT_SWIC_REGACCESS.getRegAccessResult         = E_NOT_OK;
+	S_ETHSWT_SWIC_REGACCESS.getRegAccessResult         = E_OK;
+	S_ETHSWT_SWIC_REGACCESS.Paddr                      = 0;
+	S_ETHSWT_SWIC_REGACCESS.Raddr                      = 0;
+	S_ETHSWT_SWIC_REGACCESS.cnt                        = 0;
 
 	return;
 }
@@ -58,8 +64,11 @@ void EthSwt_SWIC_RegAccess_Clear (void)/* ÉåÉWÉXÉ^ÉAÉNÉZÉXÉGÉâÅ[ä÷òAÉfÅ[É^ÇÃèâä˙
 	S_ETHSWT_SWIC_REGACCESS_TIMER.time = 0;
 	S_ETHSWT_SWIC_REGACCESS_TIMER.req = STD_ON;
 
-	S_ETHSWT_SWIC_REGACCESS.getRegAccessResult         = E_NOT_OK;
-	
+	S_ETHSWT_SWIC_REGACCESS.getRegAccessResult         = E_OK;
+	S_ETHSWT_SWIC_REGACCESS.Paddr                      = 0;
+	S_ETHSWT_SWIC_REGACCESS.Raddr                      = 0;
+	S_ETHSWT_SWIC_REGACCESS.cnt                        = 0;	
+
 	LIB_EI();
 	
 	return;
@@ -84,18 +93,38 @@ Std_ReturnType EthSwt_SWIC_RegAccess_Action (uint32 * const errFactor)
 	return result;
 }
 /* -------------------------------------------------------------------------- */
+void EthSwt_SWIC_RegAccess_RegAccessErr(const swic_reg_data_t tbl[], const uint32 idx)
+{
+	if(S_ETHSWT_SWIC_REGACCESS.Paddr == tbl[idx].devAddr && S_ETHSWT_SWIC_REGACCESS.Raddr == tbl[idx].regAddr)
+	{
+		S_ETHSWT_SWIC_REGACCESS.cnt++;
+		if(G_ETHSWT_SWIC_REGACCESS_N_REGMONERREET <= S_ETHSWT_SWIC_REGACCESS.cnt)
+		{
+			S_ETHSWT_SWIC_REGACCESS.getRegAccessResult = E_NOT_OK;
+			S_ETHSWT_SWIC_REGACCESS.cnt = 0;
+		}
+	}
+	else
+	{
+		S_ETHSWT_SWIC_REGACCESS.Paddr = tbl[idx].devAddr;
+		S_ETHSWT_SWIC_REGACCESS.Raddr = tbl[idx].regAddr;
+		S_ETHSWT_SWIC_REGACCESS.cnt = 1;		
+	}
+	return;
+}
+/* -------------------------------------------------------------------------- */
 static Std_ReturnType ethswt_swic_regAccess_read(uint32 * const errFactor)
 {
 	Std_ReturnType	result = E_OK;
 	uint8			value;
 
 
-	if(D_ETHSWT_SWIC_ERR_CRC == errFactor)		
+	if(E_NOT_OK == S_ETHSWT_SWIC_REGACCESS.getRegAccessResult)
+	{
 		LIB_DI();
-		S_ETHSWT_SWIC_REGACCESS.getRegAccessResult = E_NOT_OK;
+		S_ETHSWT_SWIC_REGACCESS.getRegAccessResult = E_OK;
 		LIB_EI();
 		result = E_NOT_OK;
-
 	}
 
 	ETHSWT_SWIC_REGACCESS_NOTIFY(result);
