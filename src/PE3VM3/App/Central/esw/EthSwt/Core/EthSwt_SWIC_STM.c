@@ -394,5 +394,7 @@ static void ethswt_swic_stm_resetClear (void)
     for (idx = 0u; idx < D_ETHSWT_SWIC_STM_RESETCLEAR_NUM; idx++) {
         G_ETHSWT_SWIC_STM_RESETCLEAR[idx]();
     }
+
+    return;
 }
 /* -------------------------------------------------------------------------- */
