@@ -38,6 +38,7 @@
 #define u4_HMITT_HB1(x)                           ((U4)((U4)(x) <<  4U))
 #define u4_HMITT_HB0(x)                           ((U4)((U4)(x)       ))
 
+#define HMITT_BLINK_CO_OFF____100P                   (0U)
 #define HMITT_BLINK_CO_ON_____100P                   (1U)
 #define HMITT_BLINK_CO_2P00HZ__50P                   (2U)
 #define HMITT_BLINK_CO_4P00HZ__50P                   (3U)
