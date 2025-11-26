@@ -60,7 +60,7 @@
 
 #define SOUND_ACFDATA_SIZE                     (84U)                       /* Size of work-space for on-memory ACF data registration */
 #define SOUND_AWBDATA_SIZE                     (32U)                       /* Size of work-space for on-memory AWB handle creation   */
-#define SOUND_ACBDATA_SIZE                     (1216U)                     /* Size of work-space for on-memory ACB data loading      */
+#define SOUND_ACBDATA_SIZE                     (616U)                      /* Size of work-space for on-memory ACB data loading      */
 #define SOUND_OVERLAP_SG_NUM                   (1)                         /* Number of play voices at the same time in SG           */
 #define SOUND_OVERLAP_ADX_NUM                  (5)                         /* Number of play voices at the same time in ADX          */
 #define SOUND_VOICEPOOLSGDATA_SIZE             (2112U)                     /* Size of work-space for SG voice-pool creation          */
@@ -305,7 +305,8 @@ static const U2 u2_sp_SOUND_WAV_CYCLETIME_TYT[CRI_CUESHEET_0_TYT_CUENUM] = {
     (U2)20U,               /* CRI_CUESHEET_0_TYT_DAN_MET_TBZ_CLESON_RRM_24_00            */
     (U2)50U,               /* CRI_CUESHEET_0_TYT_DAN_MET_TBZ_CLESON_RRL_24_00            */
     (U2)70U,               /* CRI_CUESHEET_0_TYT_DAN_MET_TBZ_CLESON_RRF_24_00            */
-    (U2)200U               /* CRI_CUESHEET_0_TYT_DAN_MET_CBZ_AD_DOT_0_00                 */
+    (U2)200U,              /* CRI_CUESHEET_0_TYT_DAN_MET_CBZ_AD_DOT_0_00                 */
+    (U2)0U                 /* CRI_CUESHEET_0_TYT__DUMMY_CUE                              */
 };
 #else
 /* Table of sound cycle every timbre */
@@ -331,7 +332,8 @@ static const U2 u2_sp_SOUND_WAV_CYCLETIME_LEX[CRI_CUESHEET_0_LEX_CUENUM] = {
     (U2)20U,               /* CRI_CUESHEET_0_LEX_DAN_MET_LBZ_CLESON_RRM_24_01            */
     (U2)50U,               /* CRI_CUESHEET_0_LEX_DAN_MET_LBZ_CLESON_RRL_24_01            */
     (U2)70U,               /* CRI_CUESHEET_0_LEX_DAN_MET_LBZ_CLESON_RRF_24_02            */
-    (U2)200U               /* CRI_CUESHEET_0_LEX_DAN_MET_CBZ_AD_DOT_0_00                 */
+    (U2)200U,              /* CRI_CUESHEET_0_LEX_DAN_MET_CBZ_AD_DOT_0_00                 */
+    (U2)0U                 /* CRI_CUESHEET_0_LEX__DUMMY_CUE                              */
 };
 #endif
 
