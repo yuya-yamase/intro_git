@@ -17,7 +17,7 @@ static struct {
     volatile uint8              modeChangeIndication;
 } swicPort[D_ETHSWT_SWIC_PORT_NUM];
 /* -------------------------------------------------------------------------- */
-static Std_ReturnType EthSwt_SWIC_Port_ResetSwitchPortMode(uint32 *errFactor);
+static Std_ReturnType EthSwt_SWIC_Port_ResetSwitchPortMode(uint32 * const errFactor);
 static Std_ReturnType swic_Reg_SetSwitchPortMode(const uint8 SwitchPortIdx, uint32 * const errFactor);
 static Std_ReturnType swic_Reg_SetSwitchPortModeACTIVE(const uint8 SwitchPortIdx, uint32 * const errFactor);
 static Std_ReturnType swic_Reg_SetSwitchPortModeDOWN(const uint8 SwitchPortIdx, uint32 * const errFactor);
@@ -36,7 +36,7 @@ void EthSwt_SWIC_Port_Init (void)
     return;
 }
 /* -------------------------------------------------------------------------- */
-Std_ReturnType EthSwt_SWIC_Port_RelayOn(uint32 *errFactor)
+Std_ReturnType EthSwt_SWIC_Port_RelayOn(uint32 * const errFactor)
 {    
     Std_ReturnType	result = E_OK;
 	uint32			idx;
@@ -55,7 +55,7 @@ Std_ReturnType EthSwt_SWIC_Port_RelayOn(uint32 *errFactor)
 	return result;
 }
 /* -------------------------------------------------------------------------- */
-Std_ReturnType EthSwt_SWIC_Port_RelayOff(uint32 *errFactor)
+Std_ReturnType EthSwt_SWIC_Port_RelayOff(uint32 * const errFactor)
 {
     Std_ReturnType	result = E_OK;
 	uint32			idx;
@@ -102,7 +102,7 @@ Std_ReturnType EthSwt_SWIC_Port_Action (uint32 * const errFactor)
     return result;
 }
 /* -------------------------------------------------------------------------- */
-static Std_ReturnType EthSwt_SWIC_Port_ResetSwitchPortMode(uint32 *errFactor)
+static Std_ReturnType EthSwt_SWIC_Port_ResetSwitchPortMode(uint32 * const errFactor)
 {
 	Std_ReturnType	ret = E_OK;
 	uint8			idx;

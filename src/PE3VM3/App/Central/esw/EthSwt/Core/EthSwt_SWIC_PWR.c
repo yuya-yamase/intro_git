@@ -42,7 +42,7 @@ static void ethswt_swic_pwr_waitOnProc (void);
 static void ethswt_swic_pwr_onProc (void);
 static void ethswt_swic_pwr_rstAsrtProc (void);
 static void ethswt_swic_pwr_rstDasrtProc (void);
-static void ethswt_swic_pwr_stm (uint32 event);
+static void ethswt_swic_pwr_stm (const uint32 event);
 
 static Std_ReturnType ethswt_swic_pwr_checkPowerCond (void);
 static Std_ReturnType ethswt_swic_pwr_checkSuply (void);
@@ -264,7 +264,7 @@ static Std_ReturnType ethswt_swic_pwr_checkSuply (void)
 /* -------------------------------------------------------------------------- */
 typedef uint32 (*SWIC_PWR_ACT)();
 /* -------------------------------------------------------------------------- */
-static void ethswt_swic_pwr_stm (uint32 event)
+static void ethswt_swic_pwr_stm (const uint32 event)
 {
     static const SWIC_PWR_ACT   action_tbl[D_ETHSWT_SWIC_PWR_EV_NUM][D_ETHSWT_SWIC_PWR_ST_NUM] =
                         /*  { { S0:ST_OFF                   , S1:ST_WAITSUPLY               , S2:ST_WAITON                  , S3:ST_ON                      , S4:ST_RSTASRT                 , S5:ST_RSTDASRT                }} */

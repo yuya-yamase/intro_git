@@ -38,8 +38,8 @@ static void ethswt_swic_stm_portInitCompletedProc (void);
 static void ethswt_swic_stm_setRelayOnProc (void);
 static void ethswt_swic_stm_activeProc (void);
 static void ethswt_swic_stm_setRelayOffProc (void);
-static void ethswt_swic_stm_action (uint32 event);
-static void ethswt_swic_stm_error (uint32 resetFactor);
+static void ethswt_swic_stm_action (const uint32 event);
+static void ethswt_swic_stm_error (const uint32 resetFactor);
 static uint32 ethswt_swic_stm_act_move_init (void);
 static uint32 ethswt_swic_stm_act_move_port_init_completed (void);
 static uint32 ethswt_swic_stm_act_move_set_relay_on (void);
@@ -258,7 +258,7 @@ static void ethswt_swic_stm_setRelayOffProc (void)
     return;
 }
 /* -------------------------------------------------------------------------- */
-static void ethswt_swic_stm_error (uint32 resetFactor)
+static void ethswt_swic_stm_error (const uint32 resetFactor)
 {
     switch (resetFactor) {
     case D_ETHSWT_SWIC_ERR_POWEROFF:
@@ -294,7 +294,7 @@ static void ethswt_swic_stm_error (uint32 resetFactor)
 /* -------------------------------------------------------------------------- */
 typedef uint32 (*SWIC_STM_ACT)();
 /* -------------------------------------------------------------------------- */
-static void ethswt_swic_stm_action (uint32 event)
+static void ethswt_swic_stm_action (const uint32 event)
 {
     static const SWIC_STM_ACT   action_tbl[D_ETHSWT_SWIC_EV_NUM][D_ETHSWT_SWIC_ST_NUM] =
                         /*  { {S0:ST_UNINIT                     , S1:ST_INIT                                    , S2:ST_PORT_INIT_COMPLETED             , S3:ST_SET_RELAY_ON                , S4:ST_ACTIVE                              , S5:SET_RELAY_OFF                              }}*/
