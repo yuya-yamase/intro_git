@@ -8,6 +8,7 @@
 #include <LIB.h>
 #include <EthSwt_SWIC_initRegCommon.h>
 #include "EthSwt_SWIC_Spi.h"
+#include "EthSwt_SWIC_RegAccessErr.h"
 /* -------------------------------------------------------------------------- */
 #define	swic_SpiS1_Crc8Cmd(a,b)	swic_SpiS1_Crc8(a,b,0u)
 /* -------------------------------------------------------------------------- */
@@ -76,7 +77,7 @@ static Std_ReturnType swic_SpiS1_SetTblErr(const swic_reg_data_t tbl[], const ui
 	swic_SpiS1_Err.tbl	= tbl;
 	swic_SpiS1_Err.idx	= idx;
 	swic_SpiS1_Err.err	= err;
-	EthSwt_SWIC_RegAccess_RegAccessErr(tbl, idx);	/* レジスタアクセス異常の情報を通知 */
+	EthSwt_SWIC_RegAccess_RegAccessNotify(tbl, idx);	/* レジスタアクセス異常の情報を通知 */
 	return E_NOT_OK;
 }
 
