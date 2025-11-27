@@ -1,5 +1,0 @@
-#!gbuild
-[Subproject]
-    :sourceDir=${ROOT_DIR}
-
-${SS_DIR}/22SS/config/22SS_Callout.c

@@ -105,11 +105,11 @@ typedef struct REG_ST_SS_HSTM_TAUJ
     uint32 u4ReservedA8[2]; /* 0xA8 */
 } REG_ST_SS_HSTM_TAUJ;
 
-#define REG_ptTAUJn ((volatile REG_ST_SS_HSTM_TAUJ *)((uintptr_t)0xFFE81000UL)) /* TAUJ3_base */
+#define REG_ptTAUJn ((volatile REG_ST_SS_HSTM_TAUJ *)(0xFFE81000UL)) /* TAUJ3_base */
 
-#define REG_WUFMSK0_A2 (*(volatile uint32 *)((uintptr_t)0xFF98E024UL)) /* WUFMSK0_A2 */
-#define REG_WUF0_A2    (*(volatile uint32 *)((uintptr_t)0xFF98E020UL)) /* WUF0_A2 */
-#define REG_WUFC0_A2   (*(volatile uint32 *)((uintptr_t)0xFF98E028UL)) /* WUFC0_A2 */
+#define REG_WUFMSK0_A2 (*(volatile uint32 *)(0xFF98E024UL)) /* WUFMSK0_A2 */
+#define REG_WUF0_A2    (*(volatile uint32 *)(0xFF98E020UL)) /* WUF0_A2 */
+#define REG_WUFC0_A2   (*(volatile uint32 *)(0xFF98E028UL)) /* WUFC0_A2 */
 
 /* HST's pre-scaller */
 #define SS_HSTM_u1PRS_CK0 (0U)

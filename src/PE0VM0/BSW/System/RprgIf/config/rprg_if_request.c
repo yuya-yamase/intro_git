@@ -147,7 +147,7 @@ void vd_g_RprgIfRequestReprog(void)     /* @@@ */
 
     u4_t_sta_clearburam = u4_g_Gpt_FrtGetUsElapsed((void *)0) & (uint32)0x7fffffffU;
     /* Clear Retention RAM area from 0xFE808000(VM0 start) to 0xFE828000(VM3 end) */
-    (void)SS_Memory_set(__ghsbegin_retention_ramtop, 0UL, (uintptr_t)0x20000U);
+    (void)SS_Memory_set(__ghsbegin_retention_ramtop, 0UL, (uint32)0x20000U);
     u4_s_time_clearburam = (uint32)((u4_g_Gpt_FrtGetUsElapsed((void *)0) - u4_t_sta_clearburam) & (uint32)0x7fffffffU);
 
     Ecu_Int_performReset();

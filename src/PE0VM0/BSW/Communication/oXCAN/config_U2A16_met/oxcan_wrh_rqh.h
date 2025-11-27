@@ -56,8 +56,8 @@
 #define OXCAN_WRH_WRQBIT_H26                     (0x04000000U)    /* Reserved, DO NOT Delete */
 #define OXCAN_WRH_WRQBIT_H27                     (0x08000000U)    /* Reserved, DO NOT Delete */
 #define OXCAN_WRH_WRQBIT_H28                     (0x10000000U)    /* Reserved, DO NOT Delete */
-#define OXCAN_WRH_WRQBIT_H29                     (0x20000000U)    /* Reserved, DO NOT Delete */
 
+#define OXCAN_WRH_WRQBIT_PWR                     (0x20000000U)    /* Reserved, DO NOT Delete */
 #define OXCAN_WRH_WRQBIT_DCM                     (0x40000000U)    /* Reserved, DO NOT Delete */
 #define OXCAN_WRH_WRQBIT_VOM                     (0x80000000U)    /* Reserved, DO NOT Delete */
 

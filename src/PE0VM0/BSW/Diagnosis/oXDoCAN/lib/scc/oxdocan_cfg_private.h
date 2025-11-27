@@ -24,7 +24,7 @@
 #include "oxdocan_saif.h"
 #include "oxdocan.h"
 
-#include "nvmc_mgr.h"
+/* #include "nvmc_mgr.h" */
 
 #include "oxcan.h"
 

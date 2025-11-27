@@ -161,11 +161,11 @@ args = sys.argv
 VM_keywords = ['EHVM','PE0VM0','PE1VM1','PE2VM2','PE3VM3']
 # .mapファイルを読み込んで処理する
 
-file_paths = [r"..\..\prj\Ren_U2A16_373_{}\EHVM\dst\EHVM.map".format(args[1]),
-              r"..\..\prj\Ren_U2A16_373_{}\PE0VM0\dst\PE0VM0.map".format(args[1]),
-              r"..\..\prj\Ren_U2A16_373_{}\PE1VM1\dst\PE1VM1.map".format(args[1]),              
-              r"..\..\prj\Ren_U2A16_373_{}\PE2VM2\dst\PE2VM2.map".format(args[1]),
-              r"..\..\prj\Ren_U2A16_373_{}\PE3VM3\dst\PE3VM3.map".format(args[1]) ]
+file_paths = [r"..\..\prj\Ren_U2A16_373_{}\dst\ehvm.map".format(args[1]),
+              r"..\..\prj\Ren_U2A16_373_{}\dst\pe0vm0.map".format(args[1]),
+              r"..\..\prj\Ren_U2A16_373_{}\dst\pe1vm1.map".format(args[1]),              
+              r"..\..\prj\Ren_U2A16_373_{}\dst\pe2vm2.map".format(args[1]),
+              r"..\..\prj\Ren_U2A16_373_{}\dst\pe3vm3.map".format(args[1]) ]
 
 sheet_names = ['EHVM', 'PE0VM0', 'PE1VM1', 'PE2VM2', 'PE3VM3']
 output_files = ['Section_Size_EHVM.xlsx', 'Section_Size_PE0VM0.xlsx', 'Section_Size_PE1VM1.xlsx', 'Section_Size_PE2VM2.xlsx', 'Section_Size_PE3VM3.xlsx']

@@ -1,0 +1,86 @@
+#!gbuild
+[Options File]
+
+    -nopic
+    -nopid
+    -cpu=rh850g4mh
+    -rh850_4bytewordoffset
+    -Osize
+    -sda=0
+    -notda
+    -no_callt
+    -prepare_dispose
+    -allocate_ep
+    --long_long
+    -Xv800_no_ldst_compaction
+    -Onotailrecursion
+    -Xv800_no_jumptable_tablification
+    -no_codefactor
+    -Onoipa
+    --no_inline_tiny_functions
+    --no_commons
+    -nofarcallpatch
+    --no_keep_static_symbols
+# -------------------------------------------------------------------------------------------------------------------------
+#   39 : divide_by_zero
+#   47 : incompatible redefinition of macro "entity" (declared at line xxxx)
+#   64 : useless_decl declaration does not declare anything
+#   77 : missing_decl_specifiers, this declaration has no storage class or type specifier
+#  117 : no_value_returned_in_non_void_function, non-void entity-kind "entity" should return a valuemissing_decl_specifiers
+#  144 : bad_initializer_type, a value of type "type" cannot be used to initialize an entity of type "type"
+#  167 : incompatible_param argument of type "type" is incompatible with parameter of type "type"
+#  179 : mod_by_zero. right operand of "%" is zero
+#  186 : unsigned_compare_with_zero. pointless comparison of unsigned integer with zero
+#  187 : assign_where_compare_meant, use of "=" where "==" may have been intended
+#  260 : missing_type_specifier explicit type is missing ("int" assumed)
+#  301 : typedef name has already been declared (with same type)
+#  549 : used_before_set entity-kind "entity" is used before its value is set
+#  837 : nonstd_implicit_int omission of explicit type is nonstandard ("int" assumed)
+#  940 : implicit_return_from_non_void_function missing return statement at end of non-void entity-kind "entity"
+# 1704 : ghs_exact_float_test_not_allowed. floating point variable may not be tested for exact equality or inequality
+# 1750 : ghs_float_loop_counter_not_allowed. floating point expression not allowed in condition expression of for loop
+# 1818 : ghs_fp_divide_by_zero. floating point division by zero
+# 1898 : if statement does not affect control flow
+# -------------------------------------------------------------------------------------------------------------------------
+    --diag_warning=450,1704
+    --diag_error=39,47,64,77,117,144,167,179,186,187,260,301,549,837,940,1750,1818,1898
+# -------------------------------------------------------------------------------------------------------------------------
+    -reserve_r2
+    --asm_warnings
+    --no_alternative_tokens
+    --prototype_errors
+    -nostdinc
+    -gnu99
+    -g
+    --xref=full
+    -precise_signed_zero_compare
+    --unsigned_fields
+    -allow_1bit_volatile_any_basetype
+    --unsigned_chars
+    -no_smaller_bitops
+    -dual_debug
+    -asm3g
+    -inline_prologue
+    -rh850_abi=ghs2014
+    -Onoprintfuncs
+    -ffunctions
+    -Oinline_constant_math
+    -fno_NaN_cmp_unordered
+    -no_precise_signed_zero
+    -no_fused_madd
+    -no_float_associativity
+    -half_precision_type
+    --no_vla
+    -asm=-permissive_sysregs
+    -Mn
+    -Mx
+    -map
+    -no_delete
+    -nostdlib
+    --preprocess_linker_directive_full
+    -list
+
+    -e 0x00000000
+    --no_additional_output
+    
+
