@@ -53,14 +53,11 @@
 #define HMIPUTXT_ICEWRN_IDX                 (427U)
 #define HMIPUTXT_SFTALT_IDX                 (1266U)
 
-#define HMIPUTXT_TASK_TIME                  (10U)
 #define HMIPUTXT_REQ_INIT                   (ALERT_REQ_UNKNOWN)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define HMIPUTXT_IDX_SFT                    (5U)
-
 #define HMIPUTXT_REQBIT                     (1U)
 #define HMIPUTXT_1BIT_SHIFT                 (1U)
 #define HMIPUTXT_2BIT_SHIFT                 (2U)
@@ -91,11 +88,6 @@ typedef struct{
     U2                          u2_id;
     U2                          u2_eso_ch;
 }ST_HMIPUTXT_ESOPT;
-
-typedef struct{
-    U2                          u2_id;
-    U1                          u1_eso_result;
-}ST_HMIPUTXT_DI_ESOPT;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */

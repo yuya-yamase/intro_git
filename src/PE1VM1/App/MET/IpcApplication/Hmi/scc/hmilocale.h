@@ -28,7 +28,6 @@
 #define HMILOCALE_LANG                        (48U) /* 0:Japanese - 48:Slovenian */
 #define HMILOCALE_DIST                        (1U)  /* 0:KM       - 1:MILE       */
 #define HMILOCALE_SPEED                       (1U)  /* 0:KM/H     - 1:MPH        */
-#define HMILOCALE_FUELCO                      (4U)  /* 0:KM/L     - 4:MPG(UKIMP) */
 #define HMILOCALE_ELECO                       (6U)  /* 0:WK/KM    - 6:MILE/KWH   */
 #define HMILOCALE_AMBTMP                      (1U)  /* 0:CEL      - 1:FAHR       */
 #define HMILOCALE_TIMEFORMAT                  (1U)  /* 0:24H      - 1:12H        */
