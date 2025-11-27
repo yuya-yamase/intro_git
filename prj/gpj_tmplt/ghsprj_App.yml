@@ -1,0 +1,31 @@
+# -----------------------------------------------------------------------------------------------------
+#
+#
+# Greenhills Project File Generator Configuration
+#
+#
+# -----------------------------------------------------------------------------------------------------
+src_ext: ['.c', '.C', '.asm', '.850']
+inc_ext: ['.h', '.H', '.inc', '.cfg']
+lal_ext: ['.a', '.lib', '.ld']
+
+# -----------------------------------------------------------------------------------------------------
+gpj:
+  - name: pe0vm0_App
+    type: subproject
+    root: 
+      - ../../src/PE0VM0/App
+  - name: pe1vm1_App
+    type: subproject
+    root: 
+      - ../../src/PE1VM1/App
+  - name: pe2vm2_App
+    type: subproject
+    root: 
+      - ../../src/PE2VM2/App
+  - name: pe3vm3_App
+    type: subproject
+    root: 
+      - ../../src/PE3VM3/App
+
+#end of gpj
