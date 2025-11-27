@@ -20,7 +20,7 @@
 #include "LIB.h"
 #include "chipcom_config.h"
 #include "chipcom.h"
-#include "iohw_adc.h"
+#include "iohw_adc_sh.h"
 
 /*==============================================================================================*/
 /* define                                                                                       */
