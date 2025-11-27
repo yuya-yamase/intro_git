@@ -236,14 +236,16 @@ void EthSwt_Data_NotifyQci(const uint8 QciIdx, const uint32 QciCount)
     return;
 }
 /* -------------------------------------------------------------------------- */
-void EthSwt_Data_NotifyRegAccess(const Std_ReturnType getRegAccessResult)
+void EthSwt_Data_NotifyRegAccess(const Std_ReturnType getRegAccessResult, const swic_reg_data_t tbl[], const uint32 idx)
 {
-    uint8   idx;
-
     do {
 
         LIB_DI();
         G_ETHSWT_DATA_REGACCESS.regAccess = getRegAccessResult;
+        G_ETHSWT_DATA_REGACCESS.Paddr = tbl[idx].devAddr;
+        G_ETHSWT_DATA_REGACCESS.Raddr = tbl[idx].regAddr;
+        G_ETHSWT_DATA_REGACCESS.id = getRegAccessResult;
+    	
         G_ETHSWT_DATA_REGACCESS_UPDATE |= S_ETHSWT_DATA_REGACCESS_ID_TABLE.flagPosition;
         LIB_EI();
     } while(0);
