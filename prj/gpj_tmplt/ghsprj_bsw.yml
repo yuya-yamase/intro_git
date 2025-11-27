@@ -1,0 +1,55 @@
+# -----------------------------------------------------------------------------------------------------
+#
+#
+# Greenhills Project File Generator Configuration
+#
+#
+# -----------------------------------------------------------------------------------------------------
+src_ext: ['.c', '.C', '.asm', '.850']
+inc_ext: ['.h', '.H', '.inc', '.cfg']
+lal_ext: ['.a', '.lib', '.ld']
+
+# -----------------------------------------------------------------------------------------------------
+gpj:
+  - name: ehvm
+    type: program
+    root: 
+      - ../../src/EHVM
+  - name: pe0vm0
+    type: program
+    sub:  
+      - sub/pe0vm0_bsw
+  - name: pe0vm0_bsw
+    type: subproject
+    root: 
+      - ../../src/PE0VM0/BSW
+      - ../../src/PE0VM0/LIB
+  - name: pe1vm1
+    type: program
+    sub:  
+      - sub/pe1vm1_bsw
+  - name: pe1vm1_bsw
+    type: subproject
+    root: 
+      - ../../src/PE1VM1/BSW
+      - ../../src/PE1VM1/LIB
+  - name: pe2vm2
+    type: program
+    sub:  
+      - sub/pe2vm2_bsw
+  - name: pe2vm2_bsw
+    type: subproject
+    root: 
+      - ../../src/PE2VM2/BSW
+      - ../../src/PE2VM2/LIB
+  - name: pe3vm3
+    type: program
+    sub:  
+      - sub/pe3vm3_bsw
+  - name: pe3vm3_bsw
+    type: subproject
+    root: 
+      - ../../src/PE3VM3/BSW
+      - ../../src/PE3VM3/LIB
+
+#end of gpj

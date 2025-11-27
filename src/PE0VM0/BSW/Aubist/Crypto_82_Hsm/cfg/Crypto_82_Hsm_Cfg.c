@@ -260,12 +260,12 @@ CONST(Crypto_82_Hsm_ServiceDataType, CRYPTO_82_HSM_CONST) Crypto_82_Hsm_ServiceD
         TRUE
     },
     {
-        0u,
-        0u,
-        0u,
-        0u,
-        0u,
-        FALSE
+        CRYPTO_82_HSM_ENCRYPT_ALGOFAM,
+        CRYPTO_82_HSM_ENCRYPT_SECALGOFAM,
+        CRYPTO_82_HSM_ENCRYPT_PROCESSING_MODE,
+        CRYPTO_82_HSM_ENCRYPT_ALGO_MODE,
+        CRYPTO_82_HSM_ENCRYPT_OPERATING_MODE,
+        TRUE
     },
     {
         0u,

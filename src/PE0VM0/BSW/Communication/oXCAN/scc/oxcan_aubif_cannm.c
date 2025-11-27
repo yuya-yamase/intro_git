@@ -60,32 +60,6 @@
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*===================================================================================================================================*/
-/*  Std_ReturnType CanNm_CbkGetPwonBusAwake(NetworkHandleType nmChannelHandle)                                                       */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Aubist/cs Type Definitions                                                                                                       */
-/*                  NetworkHandleType:      typedef unsigned char                                                                    */
-/*                  Std_ReturnType:         typedef unsigned char                                                                    */
-/*===================================================================================================================================*/
-Std_ReturnType CanNm_CbkGetPwonBusAwake(NetworkHandleType nmChannelHandle)
-{
-#if (OXCAN_AUBIF_NET_WK_AT_RST == 1U)
-    U1    u1_t_ret;
-
-    u1_t_ret = E_OK;
-    
-    if(nmChannelHandle == (NetworkHandleType)ComMConf_ComMChannel_MM_SUB_BUS){
-        u1_t_ret = E_NOT_OK;
-    }
-
-    return(u1_t_ret);
-#else
-    return(E_NOT_OK);
-#endif
-}
-/*===================================================================================================================================*/
 /*  Std_ReturnType CanTrcv_SetOpMode(uint8 Transceiver, CanTrcv_TrcvModeType OpMode)                                                 */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
