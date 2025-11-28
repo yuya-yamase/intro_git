@@ -10,7 +10,7 @@
 /* -------------------------------------------------------------------------- */
 void EthSwt_SWIC_RegAccess_Init (void);
 void EthSwt_SWIC_RegAccess_Clear (void);
-void EthSwt_SWIC_RegAccess_RegAccessNotify(Std_ReturnType err, const swic_reg_data_t tbl[]);
+void EthSwt_SWIC_RegAccess_RegAccessNotify(Std_ReturnType err);
 /* -------------------------------------------------------------------------- */
 #endif /* ETHSWT_SWIC_RegAccess_H */
 /* -------------------------------------------------------------------------- */

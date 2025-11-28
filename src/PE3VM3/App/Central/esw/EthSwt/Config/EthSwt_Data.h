@@ -93,7 +93,7 @@ typedef struct {
 /* -------------------------------------------------------------------------- */
 #pragma pack(1)
 typedef struct {
-	Std_ReturnType                  getRegAccessResult                       /* 1byte */
+	Std_ReturnType                  getRegAccessResult;                       /* 1byte */
     uint32                          id;                                      /* 4byte */
 } S_ETHSWT_DATA_REGACCESS;                                                   /* Total: 5byte */
 #pragma pack()
