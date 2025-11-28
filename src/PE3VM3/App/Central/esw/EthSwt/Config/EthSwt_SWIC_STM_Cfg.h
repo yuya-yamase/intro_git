@@ -78,6 +78,7 @@ const EthSwt_ClearFunc G_ETHSWT_SWIC_STM_STOPCLEAR[] =
 ,	EthSwt_SWIC_SQI_Clear
 ,   EthSwt_SWIC_MIB_Clear
 ,   EthSwt_SWIC_Qci_Clear
+,   EthSwt_SWIC_RegAccess_Clear
 };
 #define G_ETHSWT_SWIC_STM_STOPCLEAR_NUM         (sizeof(G_ETHSWT_SWIC_STM_STOPCLEAR) / sizeof(G_ETHSWT_SWIC_STM_STOPCLEAR[0]))
 
@@ -89,6 +90,7 @@ const EthSwt_ClearFunc G_ETHSWT_SWIC_STM_RESETCLEAR[] =
 ,	EthSwt_SWIC_SQI_Clear
 ,   EthSwt_SWIC_MIB_Clear
 ,   EthSwt_SWIC_Qci_Clear
+,   EthSwt_SWIC_RegAccess_Clear
 };
 #define D_ETHSWT_SWIC_STM_RESETCLEAR_NUM        (sizeof(G_ETHSWT_SWIC_STM_RESETCLEAR) / sizeof(G_ETHSWT_SWIC_STM_RESETCLEAR[0]))
 

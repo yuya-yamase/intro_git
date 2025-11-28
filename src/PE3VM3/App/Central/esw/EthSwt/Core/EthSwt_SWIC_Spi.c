@@ -77,7 +77,7 @@ static Std_ReturnType swic_SpiS1_SetTblErr(const swic_reg_data_t tbl[], const ui
 	swic_SpiS1_Err.tbl	= tbl;
 	swic_SpiS1_Err.idx	= idx;
 	swic_SpiS1_Err.err	= err;
-	EthSwt_SWIC_RegAccess_RegAccessNotify(E_NOT_OK, tbl, idx);	/* レジスタアクセス異常の情報を通知 */
+	EthSwt_SWIC_RegAccess_RegAccessNotify(E_NOT_OK, tbl);	/* レジスタアクセス異常の情報を通知 */
 	return E_NOT_OK;
 }
 
@@ -213,7 +213,7 @@ Std_ReturnType EthSwt_SWIC_Spi_Write(const swic_reg_data_t tbl[], const uint32 c
 			swic_SpiS1_Cmd.Paddr= Paddr;
 			swic_SpiS1_Cmd.Raddr= Raddr;
 			swic_SpiS1_Cmd.wri	= wri;
-			EthSwt_SWIC_RegAccess_RegAccessNotify(E_OK, tbl, idx);	/* レジスタアクセス結果の情報を通知 */
+			EthSwt_SWIC_RegAccess_RegAccessNotify(E_OK, tbl);	/* レジスタアクセス結果の情報を通知 */
 			return err;
 		}
 	}
@@ -241,7 +241,7 @@ Std_ReturnType EthSwt_SWIC_Spi_ReadSPI(const swic_reg_data_t tbl[], const uint32
 		crc = swic_SpiS1_Crc8(&swic_SpiS1_Cmd.dat[3], 2u, crc);
 		if (swic_SpiS1_Cmd.dat[5] == crc) {
 			*RcvData = (uint16)(((uint32)swic_SpiS1_Cmd.dat[3] << 8) | (uint32)swic_SpiS1_Cmd.dat[4]);
-			EthSwt_SWIC_RegAccess_RegAccessNotify(E_OK, tbl, idx);	/* レジスタアクセス結果の情報を通知 */
+			EthSwt_SWIC_RegAccess_RegAccessNotify(E_OK, tbl);	/* レジスタアクセス結果の情報を通知 */
 			return err;
 		}
 	}
@@ -308,7 +308,7 @@ Std_ReturnType EthSwt_SWIC_Spi_Read(const swic_reg_data_t tbl[], const uint32 cn
 		crc = swic_SpiS1_Crc8(&swic_SpiS1_Cmd.dat[3], 2u, crc);
 		if (swic_SpiS1_Cmd.dat[5] == crc) {
 			*RcvData = (uint16)(((uint32)swic_SpiS1_Cmd.dat[3] << 8) | (uint32)swic_SpiS1_Cmd.dat[4]);
-			EthSwt_SWIC_RegAccess_RegAccessNotify(E_OK, tbl, idx);	/* レジスタアクセス結果の情報を通知 */
+			EthSwt_SWIC_RegAccess_RegAccessNotify(E_OK, tbl);	/* レジスタアクセス結果の情報を通知 */
 			return err;
 		}
 	}

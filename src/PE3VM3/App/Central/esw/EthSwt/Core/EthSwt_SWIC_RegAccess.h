@@ -9,10 +9,8 @@
 #include <EthSwt_SWIC_Cfg.h>
 /* -------------------------------------------------------------------------- */
 void EthSwt_SWIC_RegAccess_Init (void);
-void EthSwt_SWIC_RegAccess_TimerUpdate (void);
 void EthSwt_SWIC_RegAccess_Clear (void);
-void EthSwt_SWIC_RegAccess_RegAccessNotify(Std_ReturnType err, const swic_reg_data_t tbl[], const uint32 idx, const uint32 id);
-Std_ReturnType EthSwt_SWIC_RegAccess_Action (uint32 * const errFactor);
+void EthSwt_SWIC_RegAccess_RegAccessNotify(Std_ReturnType err, const swic_reg_data_t tbl[]);
 /* -------------------------------------------------------------------------- */
 #endif /* ETHSWT_SWIC_RegAccess_H */
 /* -------------------------------------------------------------------------- */

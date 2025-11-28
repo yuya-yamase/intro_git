@@ -116,9 +116,9 @@ Std_ReturnType EthSwt_SWIC_RstDtct_IsNeedDtct(void);
 /* -------------------------------------------------------------------------- */
 /* Config for EthSwt_SWIC_RegAccess.c                                         */
 /* -------------------------------------------------------------------------- */
-#define D_ETHSWT_SWIC_REGACCESS_GET_CYCLE           (5)	/* レジスタアクセスエラー取得周期(5ms) */
+#define G_ETHSWT_SWIC_REGACCESS_N_REGMONERREET      (3U)	/* レジスタ書き込み結果取得の試行回数 */
 
-#define ETHSWT_SWIC_REGACCESS_NOTIFY(getRegAccessResult, id)		EthSwt_Data_NotifyRegAccess(getRegAccessResult, id)
+#define ETHSWT_SWIC_REGACCESS_NOTIFY(getRegAccessResult)		EthSwt_Data_NotifyRegAccess(getRegAccessResult)
 
 /* -------------------------------------------------------------------------- */
 #endif /* ETHSWT_SWIC_CFG_H */
