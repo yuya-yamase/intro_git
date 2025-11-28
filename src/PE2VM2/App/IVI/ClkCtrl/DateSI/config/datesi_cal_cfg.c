@@ -153,7 +153,7 @@ void            vd_g_DateSICalCfgCanTx(const U4 u4_a_YYYYMMDD, const U1 u1_a_EVE
     U4  u4_t_cal_min;
 
     u4_t_cal_min = (U4)0U;
-    u1_t_read_sts = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_CPREQ_022, &u4_t_cal_min, (U2)DATESI_CAL_VM_1WORD);
+    u1_t_read_sts = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_VM1TO2_CALMIN, &u4_t_cal_min, (U2)DATESI_CAL_VM_1WORD);
     if((u1_t_read_sts != (U1)IVDSH_NO_REA) && (u4_t_cal_min <= (U4)U2_MAX)){
         u2_s_datesi_cal_min = (U2)u4_t_cal_min;
     }

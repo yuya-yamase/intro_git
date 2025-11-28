@@ -1040,7 +1040,7 @@ static inline void    vd_s_XSpiCfgTxClock(         U4 * u4_ap_pdu_tx) {
     U1  u1_t_read_sts;
 
     u4_t_disp_tim_now = (U4)0U;  
-    u1_t_read_sts     = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_CPREQ_013, &u4_t_disp_tim_now, (U2)XSPI_VM_1WORD);
+    u1_t_read_sts     = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_VM2TO1_DSPTIM, &u4_t_disp_tim_now, (U2)XSPI_VM_1WORD);
 
     if(u1_t_read_sts == (U1)IVDSH_NO_REA){
         u4_t_disp_tim_now = (U4)XSPI_CLOCK_UNKNOWN;

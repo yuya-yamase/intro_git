@@ -569,12 +569,12 @@ static void            vd_s_XspiIviSub1PowerOperationStsSend(const U1 u1_a_DATA)
     u4_t_time = (U4)0U;
 
     /*起動回数取得*/
-    u1_t_vm_ret = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_CPREQ_048, &u4_t_buf, (U2)XSPI_IVI_POWER_VMTRA_LEN);
+    u1_t_vm_ret = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_VM3TO2_BOOT_CNT, &u4_t_buf, (U2)XSPI_IVI_POWER_VMTRA_LEN);
     if(u1_t_vm_ret != (U1)IVDSH_NO_REA) {
         u2_t_boot_cnt = (U2)(u4_t_buf & 0x0000FFFFU);
     }
     /*起動カウンタ*/
-    u1_t_vm_ret = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_CPREQ_049, &u4_t_buf, (U2)XSPI_IVI_POWER_VMTRA_LEN);
+    u1_t_vm_ret = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_VM3TO2_BOOT_TIME, &u4_t_buf, (U2)XSPI_IVI_POWER_VMTRA_LEN);
     if(u1_t_vm_ret != (U1)IVDSH_NO_REA) {
         u4_t_time = u4_t_buf;
     }
@@ -680,7 +680,7 @@ static void            vd_s_XspiIviSub1PowerOperationStsRec(const U1 * u1_ap_XSP
     /*VM3に通知*/
     u4_t_data = (U4)u1_ap_XSPI_ADD[1];
     u4_t_data |= (U4)((u1_ap_XSPI_ADD[2] << XSPI_IVI_SFT_08) & 0x0000FF00U);
-    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_CPREQ_047, &u4_t_data, (U2)XSPI_IVI_POWER_VMTRA_LEN);
+    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM2TO3_OPESTS, &u4_t_data, (U2)XSPI_IVI_POWER_VMTRA_LEN);
 
     vd_s_XspiIviSub1PowerOperationStsSend(u1_ap_XSPI_ADD[1]);
 

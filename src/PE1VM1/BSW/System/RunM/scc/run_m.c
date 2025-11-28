@@ -119,8 +119,8 @@ void    vd_g_RunMMainTask(void)
     u1_s_run_m_shtdwnrqst = u1_t_shtdwn_1st & u1_t_shtdwn_2nd;
     u4_t_shtdwnrqst_nrml  = (U4)u1_s_run_m_shtdwnrqst;
 
-    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_CPREQ_002, &u4_t_shtdwnrqst_nrml, (U2)RUN_M_SLP_RQST_NWORD);
-    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_CPREQ_044, &u4_t_shtdwnrqst_frcd, (U2)RUN_M_SLP_RQST_NWORD);
+    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM1TO3_STBY,  &u4_t_shtdwnrqst_nrml, (U2)RUN_M_SLP_RQST_NWORD);
+    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM1TO23_FSLP, &u4_t_shtdwnrqst_frcd, (U2)RUN_M_SLP_RQST_NWORD);
 
 }
 /*===================================================================================================================================*/
