@@ -107,7 +107,6 @@
 #define ALERT_S_TMN_CH_NUM                       (1U)
 #define ALERT_S_DA_CH_NUM                        (1U)
 #define ALERT_S_ITS_CH_NUM                       (1U)
-#define ALERT_C_BRK_0_CH_NUM                     (1U)
 #define ALERT_C_AVSWAR_CH_NUM                    (1U)
 #define ALERT_D_SFTPOS_CH_NUM                    (2U)
 #define ALERT_B_FMSEAT_CH_NUM                    (1U)
@@ -289,7 +288,6 @@ extern const ST_ALERT_MTRX         st_gp_ALERT_S_SWS_MTRX[ALERT_S_SWS_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_S_TMN_MTRX[ALERT_S_TMN_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_S_DA_MTRX[ALERT_S_DA_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_S_ITS_MTRX[ALERT_S_ITS_CH_NUM];
-extern const ST_ALERT_MTRX         st_gp_ALERT_C_BRK_0_MTRX[ALERT_C_BRK_0_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_C_AVSWAR_MTRX[ALERT_C_AVSWAR_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_D_SFTPOS_MTRX[ALERT_D_SFTPOS_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_B_FMSEAT_MTRX[ALERT_B_FMSEAT_CH_NUM];
