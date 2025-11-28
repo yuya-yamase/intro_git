@@ -93,10 +93,9 @@ typedef struct {
 /* -------------------------------------------------------------------------- */
 #pragma pack(1)
 typedef struct {
-	uint8                           Paddr                                    /* 1byte */
-	uint8                           Raddr                                    /* 1byte */
+	Std_ReturnType                  getRegAccessResult                       /* 1byte */
     uint32                          id;                                      /* 4byte */
-} S_ETHSWT_DATA_REGACCESS;                                                   /* Total: 6byte */
+} S_ETHSWT_DATA_REGACCESS;                                                   /* Total: 5byte */
 #pragma pack()
 /* -------------------------------------------------------------------------- */
 
@@ -107,7 +106,7 @@ void EthSwt_Data_NotifyLink(const uint8 SwitchPortIdx, const Std_ReturnType getL
 void EthSwt_Data_NotifyMIB(const uint8 SwitchPortIdx, const uint32 *const MIBArray);
 void EthSwt_Data_NotifySQI(const uint8 SwtichPortIdx, const Std_ReturnType getSQIResult, const uint8 SQIValue);
 void EthSwt_Data_NotifyQci(const uint8 QciIdx, const uint32 QciCount);
-void EthSwt_Data_NotifyNotifyRegAccess(const Std_ReturnType getRegAccessResult,const swic_reg_data_t tbl[], const uint32 idx);
+void EthSwt_Data_NotifyNotifyRegAccess(const Std_ReturnType getRegAccessResult, const uint32 id);
 void EthSwt_Data_NotifySWICReset(void);
 /* -------------------------------------------------------------------------- */
 #endif /* ETHSWT_DATA_H */

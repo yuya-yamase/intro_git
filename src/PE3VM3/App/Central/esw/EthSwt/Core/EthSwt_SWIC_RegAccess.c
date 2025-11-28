@@ -57,7 +57,6 @@ void EthSwt_SWIC_RegAccess_RegAccessNotify(Std_ReturnType err, const swic_reg_da
 				S_ETHSWT_SWIC_REGACCESS.tbl                = NULL_PTR;
 				S_ETHSWT_SWIC_REGACCESS.id++;
 				S_ETHSWT_SWIC_REGACCESS.cnt                = 0;
-				ETHSWT_SWIC_REGACCESS_NOTIFY(tbl, idx, id);
 			}
 		}
 		else
@@ -68,9 +67,11 @@ void EthSwt_SWIC_RegAccess_RegAccessNotify(Std_ReturnType err, const swic_reg_da
 		}
 	}
 	else{
+		/* レジスタアクセス成功の場合は連続異常のカウンタを初期化する */
 		S_ETHSWT_SWIC_REGACCESS.tbl                = NULL_PTR;
 		S_ETHSWT_SWIC_REGACCESS.cnt                = 0;		
 	}
+	ETHSWT_SWIC_REGACCESS_NOTIFY(err, id);
 
 	return;
 }
