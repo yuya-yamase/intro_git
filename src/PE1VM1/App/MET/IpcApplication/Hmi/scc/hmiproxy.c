@@ -114,6 +114,9 @@ void    vd_g_HmiProxyMainTask(void)
         }
         stp_t_hmiproxy++;
     }
+
+    u1_s_hmiproxy_shtdwnok = u1_g_Fpcall_u1_And(&fp_gp_u1_HMIPROXY_SHTDWN_CHK[0], (U2)HMIPROXY_SHTDWN_NUM);
+
 }
 
 /*===================================================================================================================================*/

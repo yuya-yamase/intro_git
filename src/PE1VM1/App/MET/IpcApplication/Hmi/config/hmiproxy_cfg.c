@@ -97,6 +97,10 @@ void ( * const              fp_gp_vd_HMIPROXY_WKUP_INIT[HMIPROXY_INIT_NUM])(void
      &vd_g_HmiScreenInit
 };
 
+U1   ( * const              fp_gp_u1_HMIPROXY_SHTDWN_CHK[HMIPROXY_SHTDWN_NUM])(void) = {
+     &u1_g_HmiScreenShtdwnOK
+};
+
 const ST_HMIPROXY     st_gp_HMIPROXY[HMIPROXY_MAINTASK_NUM] = {
      {&vd_g_HmiHudMainTask ,     (U4)SCHDLR_TASKBIT__10MS_A  },
      {&vd_g_HmiLocaleMainTask,   (U4)SCHDLR_TASKBIT__20MS_B  },

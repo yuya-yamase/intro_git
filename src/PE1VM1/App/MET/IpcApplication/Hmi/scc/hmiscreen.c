@@ -101,10 +101,10 @@ U1      u1_g_HmiScreen(void)
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_HmiScreenPut(const U1 u1_a_CH, const U1 u1_a_STS)
+void    vd_g_HmiScreenPut(const U1 u1_a_STS)
 {
-        u1_s_hmiscreen_sts         = u1_a_STS;
-        u2_s_hmiscreen_to          = (U2)HMIPROXY_TOC_INI;
+    u1_s_hmiscreen_sts = u1_a_STS;
+    u2_s_hmiscreen_to = (U2)HMIPROXY_TOC_INI;
 }
 
 /*===================================================================================================================================*/

@@ -827,10 +827,10 @@ static inline void    vd_s_XSpiCfgRxDispsts(    const U4 * u4_ap_PDU_RX) {
 
     u1_t_display_sts = u1_XSPI_MET_READ__BIT(u4_ap_PDU_RX[0], (U1)0U, (U1)2U);            /* DISPLAY_STS         */
     if(u1_t_display_sts == (U1)0x01U){
-        vd_g_HmiScreenPut((U1)HMISCREEN_CH_DISP_STS,(U1)TRUE);
+        vd_g_HmiScreenPut((U1)TRUE);
     }
     else{
-        vd_g_HmiScreenPut((U1)HMISCREEN_CH_DISP_STS,(U1)FALSE);
+        vd_g_HmiScreenPut((U1)FALSE);
     }
 }
 
