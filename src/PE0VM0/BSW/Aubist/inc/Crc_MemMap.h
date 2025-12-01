@@ -33,9 +33,13 @@
 
 #elif defined CRC_START_SEC_APPL_DATA
 #undef CRC_START_SEC_APPL_DATA
+/* Pragma statement Start */
+#undef MEMMAP_ERROR
 
 #elif defined CRC_STOP_SEC_APPL_DATA
 #undef CRC_STOP_SEC_APPL_DATA
+/* Pragma statement Stop */
+#undef MEMMAP_ERROR
 
 #elif defined CRC_START_SEC_CONST_8
 #undef CRC_START_SEC_CONST_8
@@ -107,7 +111,7 @@
 
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
-/*  Framework          :v2-0-2                                              */
+/*  Framework          :v2-1-0                                              */
 /*  BSW plug-in        :v2-0-0                                              */
 /****************************************************************************/
 

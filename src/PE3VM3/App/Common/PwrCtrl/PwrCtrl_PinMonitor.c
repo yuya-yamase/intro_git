@@ -149,6 +149,22 @@ static const ST_PWRCTRL_PINMONITOR_STS st_PwrCtrl_PinMonitor_Sts[PWRCTRL_CFG_PRI
         (U1)PWRCTRL_CFG_PRIVATE_DBG_FAIL_OFF_WAITTIME,                     /* ポーリング開始待ち時間 */
         u1_g_PwrCtrlWakeUpInfo,                                            /* MCU初期化処理、またはウェイクアップ処理完了状態判定 */
     },
+    /* SAIL-ERR1 */
+    {
+        (U2)DIO_ID_PORT6_CH2,                                              /* DIOチャネルID */
+        (U1)PWRCTRL_PINMONITOR_SAMPLING_TASK_5ms,                          /* サンプリング周期 */
+        (U1)PWRCTRL_CFG_PRIVATE_SAIL_ERR1_JUDGECOUNT,                      /* 同一論理判定確定回数 */
+        (U1)PWRCTRL_CFG_PRIVATE_SAIL_ERR1_WAITTIME,                        /* ポーリング開始待ち時間 */
+        u1_g_PwrCtrlSipLowPowerOnInfo,                                     /* LowPowerOn状態判定 */
+    },
+    /* SAIL-ERR2 */
+    {
+        (U2)DIO_ID_PORT6_CH4,                                              /* DIOチャネルID */
+        (U1)PWRCTRL_PINMONITOR_SAMPLING_TASK_5ms,                          /* サンプリング周期 */
+        (U1)PWRCTRL_CFG_PRIVATE_SAIL_ERR2_JUDGECOUNT,                      /* 同一論理判定確定回数 */
+        (U1)PWRCTRL_CFG_PRIVATE_SAIL_ERR2_WAITTIME,                        /* ポーリング開始待ち時間 */
+        u1_g_PwrCtrlSipLowPowerOnInfo,                                     /* LowPowerOn状態判定 */
+    },
 };
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -157,15 +173,15 @@ static const ST_PWRCTRL_PINMONITOR_STS st_PwrCtrl_PinMonitor_Sts[PWRCTRL_CFG_PRI
 /**************************************************************************************************************************************
   Function      : u1_g_PwrCtrl_PinMonitor_GetPinInfo
   Description   : 端子情報の判定結果通知処理
-  param[in/out] : [in ] const U1 u1_a_Kind PINの種類
+  param[in/out] : [in ] const U1 u1_a_PinID PINの種類
   return        : U1 u1_t_ret PINの端子状態判定結果
   Note          : none
 **************************************************************************************************************************************/
-U1 u1_g_PwrCtrl_PinMonitor_GetPinInfo(U1 u1_a_PinID)
+U1 u1_g_PwrCtrl_PinMonitor_GetPinInfo(const U1 u1_a_PinID)
 {
     U1 u1_t_ret;
 
-    if ((u1_a_PinID < PWRCTRL_CFG_PRIVATE_KIND_NUM) &&
+    if ((u1_a_PinID < (U1)PWRCTRL_CFG_PRIVATE_KIND_NUM) &&
         ((st_PwrCtrl_PinMonitor_PollSts[u1_a_PinID].u1_PollTmnlSts == (U1)STD_HIGH) ||
          (st_PwrCtrl_PinMonitor_PollSts[u1_a_PinID].u1_PollTmnlSts == (U1)STD_LOW) ||
          (st_PwrCtrl_PinMonitor_PollSts[u1_a_PinID].u1_PollTmnlSts == (U1)PWRCTRL_PINMONITOR_TMNL_STS_NON))) {

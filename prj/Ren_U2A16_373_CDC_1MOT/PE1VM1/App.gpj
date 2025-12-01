@@ -22,6 +22,10 @@
     -I${OXCAN_DIR}/scc
     -I${VEHOPE_DIR}/config_tybev3
     -I${VEHOPE_DIR}/scc
+
+    -I${SS_DIR}/Throughput/scc
+    -I${SS_DIR}/Throughput/config
+
     -I${LIB_DIR}
 
     -I${APP_DIR}/MET/EcuLib/Common/scc
@@ -55,6 +59,8 @@
     -I${APP_DIR}/MET/IpcApplication/Vom/Tripcom/core/scc
     -I${APP_DIR}/MET/IpcApplication/Vom/Tripcom/sensor/config
     -I${APP_DIR}/MET/IpcApplication/Vom/Tripcom/sensor/scc
+    -I${APP_DIR}/MET/IpcApplication/Vom/CanTxAppDum/config
+    -I${APP_DIR}/MET/IpcApplication/Vom/CanTxAppDum/scc
     -I${APP_DIR}/MET/IpcApplication/Vom/Vehspd/scc
     -I${APP_DIR}/MET/IpcApplication/Vom/Vptran/config
     -I${APP_DIR}/MET/IpcApplication/Vom/Vptran/scc
@@ -82,6 +88,9 @@ ${SS_DIR}/RunM/config/run_m_cfg.c
 ${SS_DIR}/SchdM//scc/scheduler.c
 ${SS_DIR}/SchdM/config/scheduler_cfg.c
 ${SS_DIR}/RprgIf/config/rprg_if_cfg_bkram.c
+${SS_DIR}/Throughput/scc/throughput.c
+${SS_DIR}/Throughput/config/throughput_cfg.c
+${SS_DIR}/Throughput/config/throughput_sched.c
 
 ${SS_DIR}/22SS/config/22SS_Callout.c
 
@@ -325,6 +334,8 @@ App/MET/IpcApplication/Vom/Tripcom/sensor/scc/tripsnsr_elpsdtm.c
 App/MET/IpcApplication/Vom/Tripcom/sensor/scc/tripsnsr_instee.c
 App/MET/IpcApplication/Vom/Tripcom/sensor/scc/tripsnsr_odocnt.c
 App/MET/IpcApplication/Vom/Tripcom/sensor/scc/tripsnsr.c
+App/MET/IpcApplication/Vom/CanTxAppDum/config/cantxappdum_cfg.c
+App/MET/IpcApplication/Vom/CanTxAppDum/scc/cantxappdum.c
 App/MET/IpcApplication/Vom/Vehspd/config/vehspd_kmph_cfg.c
 App/MET/IpcApplication/Vom/Vehspd/scc/vehspd_can_sp1x.c
 App/MET/IpcApplication/Vom/Vehspd/scc/vehspd_kmph.c

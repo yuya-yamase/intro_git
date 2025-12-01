@@ -48,7 +48,7 @@ extern ehvm_uint32_t  ehvm_em_err_msg_array_VM0_PE2[EM_ERROR_BUFFER_SIZE_VM0_PE2
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
 /*  Framework          :v2-1-0                                              */
-/*  BSW plug-in        :v2-0-0                                              */
+/*  BSW plug-in        :v2-2-0-z0001                                        */
 /****************************************************************************/
 
 

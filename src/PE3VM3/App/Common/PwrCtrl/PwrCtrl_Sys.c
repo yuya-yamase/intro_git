@@ -58,6 +58,7 @@ static void vd_s_PwrCtrlSysPwrOnAudio( void );
 static void vd_s_PwrCtrlSysPwrOnV11Asil( void );
 static void vd_s_PwrCtrlSysPwrOnEizo( void );
 static void vd_s_PwrCtrlSysPwrOffFlw( void );
+static U2 u2_s_PwrCtrlSysPwrOnDutyCyc( const U4 u4_a_duty );
 
 /* デバイスON制御 */
 static U1       u1_t_Pwron_TimChk(const U4 u1_a_TIMCNT, const U4 u1_a_TIMFIN);
@@ -328,7 +329,7 @@ void vd_g_PwrCtrlSysInit( void )
 void vd_g_PwrCtrlSysPwrOnMainFunction( void )
 {
     /* SYS起動電源ON要求あり */
-    if ( u1_s_PwrCtrl_Sys_Pwr_Sts == PWRCTRL_SYS_ON )
+    if ( u1_s_PwrCtrl_Sys_Pwr_Sts == (U1)PWRCTRL_SYS_ON )
     {
         /* OFF側のSTEP管理RAM,タイマをクリアしてOFF2週目も実行できるようにする */
         u1_s_PwrCtrl_Sys_PwrOff_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP1;
@@ -601,7 +602,7 @@ static void vd_s_PwrCtrlSysPwrOnDdFreq( void )
     U2 dd_freq_duty;
 
     if(u4_s_PwrCtrl_Sys_Dd_Freq_Time == (U4)PWRCTRL_SYS_WAIT_DD_FREQ_TIME){
-        dd_freq_duty = PWRCTRL_SYS_PWM_DUTYCYCLE(5000U);    /* 50% */
+        dd_freq_duty = u2_s_PwrCtrlSysPwrOnDutyCyc((U4)PWRCTRL_SYS_PWM_DUTYCYC_DEF);    /* 50% */
         vd_g_Pwm_SetPeriodAndDuty((U1)PWM_CH_00_DDC_FREQ, (U2)PWRCTRL_SYS_PWM_PERIOD, dd_freq_duty);
         u4_s_PwrCtrl_Sys_Dd_Freq_Time = (U4)PWRCTRL_SYS_COUNTTIME_FIN;
     }
@@ -625,7 +626,7 @@ static void vd_s_PwrCtrlSysPwrOnBoostAsilFreq( void )
     U2 boost_asil_duty;
 
     if(u4_s_PwrCtrl_Sys_Boost_Asil_Freq_Time == (U4)PWRCTRL_SYS_WAIT_BOOST_ASIL_FREQ_TIME){
-        boost_asil_duty = PWRCTRL_SYS_PWM_DUTYCYCLE(5000U);    /* 50% */
+        boost_asil_duty = u2_s_PwrCtrlSysPwrOnDutyCyc((U4)PWRCTRL_SYS_PWM_DUTYCYC_DEF);    /* 50% */
         vd_g_Pwm_SetPeriodAndDuty((U1)PWM_CH_02_DDC_ASIL_FREQ, (U2)PWRCTRL_SYS_PWM_PERIOD, boost_asil_duty);
         u4_s_PwrCtrl_Sys_Boost_Asil_Freq_Time = (U4)PWRCTRL_SYS_COUNTTIME_FIN;
     }
@@ -635,6 +636,22 @@ static void vd_s_PwrCtrlSysPwrOnBoostAsilFreq( void )
     }
     
     return;
+}
+
+/*****************************************************************************
+  Function      : u2_s_PwrCtrlSysPwrOnDutyCyc
+  Description   : LSB補正後デューティ算出処理
+  param[in/out] : [in] const U4 u4_a_duty LSB補正前デューティ値
+  return        : u2_t_ret LSB補正後デューティ値
+  Note          : none
+*****************************************************************************/
+static U2 u2_s_PwrCtrlSysPwrOnDutyCyc( const U4 u4_a_duty )
+{
+    U2 u2_t_ret;
+    
+    u2_t_ret = (U2)((u4_a_duty * (U4)PWM_DRV_DUTY_MAX) / (U4)PWRCTRL_SYS_PWM_DUTYLSB);
+    
+    return(u2_t_ret);
 }
 
 /*****************************************************************************
@@ -1013,8 +1030,12 @@ static void     vd_s_McuDev_Pwron_PictIC(const U1 u1_a_PWR)
     dl_t_port   = Dio_ReadChannel(Mcu_Dio_PortId[PWRCTRL_CFG_PRIVATE_PORT_EIZO]);
 
     if((dl_t_port == (Dio_LevelType)STD_HIGH) && 
+#if 0   /* temporary */
        ((u1_a_PWR == (U1)POWER_MODE_STATE_APPON) || (u1_a_PWR == (U1)POWER_MODE_STATE_APPOFF))){
         /* EIZO-ON=H かつ「見た目オフ起動」または「見た目オン起動」または「OTA」へでカウンタインクリメント */
+#else
+       (u1_a_PWR != (U1)POWER_MODE_STATE_STANDBY)){
+#endif  /* temporary */
         if(u4_s_PwrCtrl_waittim_pictic < U4_MAX){
             u4_s_PwrCtrl_waittim_pictic++;
         }
@@ -1073,7 +1094,11 @@ static void     vd_s_McuDev_Pwron_GVIFTx_CDisp(const U1 u1_a_PWR)
     u1_t_timchk     = u1_t_Pwron_TimChk(u4_s_PwrCtrl_Polling_AUDIO, u4_s_WAITTIME_GVIFTX);
 
     if((u1_t_timchk ==  (U1)TRUE) &&
+#if 0   /* temporary */
        ((u1_a_PWR == (U1)POWER_MODE_STATE_APPON) || (u1_a_PWR == (U1)POWER_MODE_STATE_APPOFF))){
+#else
+       (u1_a_PWR != (U1)POWER_MODE_STATE_STANDBY)){
+#endif  /* temporary */
         vd_g_McuDevPwronSetPort(MCU_PORT_GVIF_CDISP_RST , MCU_DIO_HIGH);
         u2_g_PwrCtrl_OffSts &= ~(U2)PWROFF_GVIFTX_BIT;
     }

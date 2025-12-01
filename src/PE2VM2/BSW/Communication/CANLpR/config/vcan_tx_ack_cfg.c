@@ -47,12 +47,12 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static const ST_VCAN_TXA_HTH    st_sp_VCAN_TXA_HTH[] = {
     {
-        &bsw_vcan_tx_stConfirmedPdu[41U],                /* u2p_log_tx */
+        &bsw_vcan_tx_stConfirmedPdu[42U],                /* u2p_log_tx */
         (U4)0x18dae01CU,                                /* u4_cid     */ /* UDS/CAN IVI->DLC Diag Tool    */
         (U4)0x1fffffffU                                 /* u4_mask    */
     },
     {
-        &bsw_vcan_tx_stConfirmedPdu[41U],                /* u2p_log_tx */
+        &bsw_vcan_tx_stConfirmedPdu[42U],                /* u2p_log_tx */
         (U4)0x18dae11CU,                                /* u4_cid     */ /* UDS/CAN IVI->Remote Diag Tool */
         (U4)0x1fffffffU                                 /* u4_mask    */
     }
@@ -75,14 +75,14 @@ const U1                           u1_g_VCAN_TXA_NUM_CCH = (U1)2U;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 const U1                           u1_gp_VCAN_TXA_NRMB_BY_CTRLR[] = {
-    (U1)8U                                      /* Number of Rx Message Box for Controller#0 */
+    (U1)10U                                     /* Number of Rx Message Box for Controller#0 */
 };
 static const U4                    u4_s_VCAN_TXA_RSP_M0_31       = (U4)0x00000000U;
 const U4 * const                   u4p_gp_VCAN_TXA_RSP_BY_RX[]   = {
     &u4_s_VCAN_TXA_RSP_M0_31
 };
 const U1                           u1_g_VCAN_TXA_NUM_CTRLR       = (U1)1U;
-const U4                           u4_g_VCAN_TXA_VCC_RSP_TX      = (U4)3U;
+const U4                           u4_g_VCAN_TXA_VCC_RSP_TX      = (U4)14U;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */

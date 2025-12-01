@@ -27,19 +27,20 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define CAN_LPR_NUM_ING                          (11U)
+#define CAN_LPR_NUM_ING                          (15U)
 
 #define CAN_LPR_ING_PHY_CAN_MIN                  (0U)
-#define CAN_LPR_ING_PHY_CAN_MAX                  (7U)
-#define CAN_LPR_ING_VIR_CAN_MIN                  (8U)
-#define CAN_LPR_ING_VIR_CAN_MAX                  (8U)
+#define CAN_LPR_ING_PHY_CAN_MAX                  (11U)
+#define CAN_LPR_ING_VIR_CAN_MIN                  (12U)
+#define CAN_LPR_ING_VIR_CAN_MAX                  (12U)
 
 #define CAN_LPR_ING_G2M_2                        (3U)
 #define CAN_LPR_ING_G2M_1                        (5U)
 #define CAN_LPR_ING_G5M                          (7U)
-#define CAN_LPR_ING_VIR_0                        (8U)
-#define CAN_LPR_ING_SECOC_TX                     (9U)
-#define CAN_LPR_ING_SECOC_RX                     (10U)
+#define CAN_LPR_ING_LOCAL                        (11U)
+#define CAN_LPR_ING_VIR_0                        (12U)
+#define CAN_LPR_ING_SECOC_TX                     (13U)
+#define CAN_LPR_ING_SECOC_RX                     (14U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* Routing Egress Enabled : Port              */
@@ -57,6 +58,7 @@
 #define CAN_LPR_REGR_EN_UDS_TX_VIR_0             (0x00000400U)
 #define CAN_LPR_REGR_EN_PHY_RX_G2M1              (0x00000800U)
 #define CAN_LPR_REGR_EN_PHY_RX_G2M2              (0x00001000U)
+#define CAN_LPR_REGR_EN_PHY_RX_LOCA              (0x00002000U)
 
 #define CAN_LPR_REGR_EN_BIT_PORT                 (0x00001fffU)
 #define CAN_LPR_REGR_EN_BIT_DS28                 (0x00001ff3U)
@@ -64,7 +66,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define CAN_LPR_RR_EN_SECOC_TX                   (0U)      /* 1U   : SecOC Tx is enabled  and vd_g_CANLpRSecOCTRxPosHigh is disabled */
+#define CAN_LPR_RR_EN_SECOC_TX                   (1U)      /* 1U   : SecOC Tx is enabled  and vd_g_CANLpRSecOCTRxPosHigh is disabled */
                                                            /* 2U   : SecOC Tx is enabled  and vd_g_CANLpRSecOCTRxPosHigh is enabled  */
                                                            /* else : SecOC Tx is disabled and vd_g_CANLpRSecOCTRxPosHigh is disabled */
 #define CAN_LPR_RR_EN_SECOC_RX                   (0U)      /* 1U   : SecOC Rx is enabled  and vd_g_CANLpRSecOCTRxPosHigh is disabled */

@@ -245,7 +245,7 @@ void            vd_g_AvgGrphUpdt(const U1 u1_a_CNTTID, const U4 u4_a_data, const
         }
         if(st_tp_cfg->u2p_date != vdp_PTR_NA){
             u4_t_yymmddwk = (U4)0U;  
-            u1_t_read_sts = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_CPREQ_015, &u4_t_yymmddwk, (U2)AVGGRPH_VM_1WORD);
+            u1_t_read_sts = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_VM2TO1_DSPCAL, &u4_t_yymmddwk, (U2)AVGGRPH_VM_1WORD);
             if(u1_t_read_sts == (U1)IVDSH_NO_REA){
                 u4_t_yymmddwk = (U4)0U;
             }

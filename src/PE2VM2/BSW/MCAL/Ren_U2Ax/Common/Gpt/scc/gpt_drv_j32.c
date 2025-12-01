@@ -2,7 +2,7 @@
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-/*  Renesas RH850/F1KM : Timer Array Unit J                                                                                          */
+/*  Renesas RH850/U2A : Timer Array Unit J                                                                                           */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
 
@@ -457,6 +457,103 @@ void    vd_g_Gpt_J32Stop(const U1 u1_a_J32_CH)
         vd_REG_U1_WRITE(u1_tp_byte[GPT_J32_RA_BYTE_TT],   u1_t_chbit);
         vd_s_SYNCP_B(&u1_tp_byte[GPT_J32_RA_BYTE_TE]);
     }
+}
+/*===================================================================================================================================*/
+/*  void    vd_g_Gpt_J32SyncStart(const U1 u1_a_J32_UNIT, const U1 u1_a_J32_CHBIT)                                                   */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void    vd_g_Gpt_J32SyncStart(const U1 u1_a_J32_UNIT, const U1 u1_a_J32_CHBIT)
+{
+    volatile U1 *       u1_tp_byte;
+
+    U1                  u1_t_run;
+
+    if(u1_a_J32_UNIT < u1_g_GPT_J32_NUM_UNIT){
+
+        u1_tp_byte   = (volatile U1 *)st_gp_GPT_J32_UNIT_CFG[u1_a_J32_UNIT].u4p_base;
+
+        u1_t_run   = u1_REG_READ(u1_tp_byte[GPT_J32_RA_BYTE_TE]) & u1_a_J32_CHBIT;
+        if(u1_t_run != u1_a_J32_CHBIT){
+            vd_REG_U1_WRITE(u1_tp_byte[GPT_J32_RA_BYTE_TS],   u1_a_J32_CHBIT);
+            vd_s_SYNCP_B(&u1_tp_byte[GPT_J32_RA_BYTE_TE]);
+        }
+        else{
+            vd_REG_U1_WRITE(u1_tp_byte[GPT_J32_RA_BYTE_RDT],  u1_a_J32_CHBIT);
+            vd_s_SYNCP_B(&u1_tp_byte[GPT_J32_RA_BYTE_RSF]);
+        }
+    }
+}
+/*===================================================================================================================================*/
+/*  void    vd_g_Gpt_J32SyncStop(const U1 u1_a_J32_UNIT, const U1 u1_a_J32_CHBIT)                                                    */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void    vd_g_Gpt_J32SyncStop(const U1 u1_a_J32_UNIT, const U1 u1_a_J32_CHBIT)
+{
+    volatile U1 *       u1_tp_byte;
+
+    volatile U4         u4_t_gli;
+
+    U2                  u2_t_lpcnt;
+    U2                  u2_t_irq_ch;
+
+    U1                  u1_t_chbit;
+    U1                  u1_t_bit;
+
+    if(u1_a_J32_UNIT < u1_g_GPT_J32_NUM_UNIT){
+
+        u1_tp_byte   = (volatile U1 *)st_gp_GPT_J32_UNIT_CFG[u1_a_J32_UNIT].u4p_base;
+        u1_t_chbit   = u1_a_J32_CHBIT;
+        u2_t_irq_ch  = st_gp_GPT_J32_UNIT_CFG[u1_a_J32_UNIT].u2_irq_ch;
+         
+        u4_t_gli = u4_g_IRQ_DI();
+
+        u2_t_lpcnt = (U2)0U;
+        while(u1_t_chbit != (U1)0U){
+
+            u1_t_bit = u1_t_chbit & (U1)0x01;
+            if(u1_t_bit != (U1)0U){
+                vd_g_IntHndlrIRQCtrlCh(u2_t_irq_ch + u2_t_lpcnt, (U1)0x00U);
+            }
+            u1_t_chbit >>= 1;
+            u2_t_lpcnt++;
+        }
+
+        vd_REG_U1_WRITE(u1_tp_byte[GPT_J32_RA_BYTE_TT],   u1_a_J32_CHBIT);
+        vd_s_SYNCP_B(&u1_tp_byte[GPT_J32_RA_BYTE_TE]);
+
+        vd_g_IRQ_EI(u4_t_gli);
+    }
+}
+/*===================================================================================================================================*/
+/*  U1      u1_g_Gpt_J32SyncReload(const U1 u1_a_J32_UNIT, const U1 u1_a_J32_CHBIT)                                                  */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+U1      u1_g_Gpt_J32SyncReload(const U1 u1_a_J32_UNIT, const U1 u1_a_J32_CHBIT)
+{
+    volatile U1 *       u1_tp_byte;
+
+    U1                  u1_t_chbit;
+    U1                  u1_t_bit;
+    U1                  u1_t_reload;
+
+    u1_t_reload = (U1)FALSE;
+    if(u1_a_J32_UNIT < u1_g_GPT_J32_NUM_UNIT){
+
+        u1_tp_byte   = (volatile U1 *)st_gp_GPT_J32_UNIT_CFG[u1_a_J32_UNIT].u4p_base;
+        u1_t_chbit = (U1)st_gp_GPT_J32_UNIT_CFG[u1_a_J32_UNIT].u2_reload & u1_a_J32_CHBIT;
+        u1_t_bit   = (u1_REG_READ(u1_tp_byte[GPT_J32_RA_BYTE_RSF]) ^ u1_t_chbit) & u1_t_chbit;
+        if(u1_t_bit == u1_a_J32_CHBIT){
+            u1_t_reload = (U1)TRUE;
+        }
+    }
+
+    return(u1_t_reload);
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_Gpt_J32EI(const U1 u1_a_J32_CH)                                                                                     */

@@ -283,6 +283,7 @@ extern  BswConst   BswU4 bsw_comm_ctrl_u4PncAwake_17[];
 extern  BswConst   BswU4 bsw_comm_ctrl_u4PncAwake_18[];
 extern  BswConst   BswU4 bsw_comm_ctrl_u4PncAwake_19[];
 extern  BswConst   BswU4 bsw_comm_ctrl_u4PncAwake_20[];
+extern  BswConst   BswU4 bsw_comm_ctrl_u4PncAwake_21[];
 extern  BswConst   BswU4 bsw_comm_ctrl_u4PncAwake_22[];
 extern  BswConst   BswU4 bsw_comm_ctrl_u4PncAwake_23[];
 extern  BswConst   BswU4 bsw_comm_ctrl_u4PncAwake_24[];
@@ -324,6 +325,6 @@ extern  void (* BswConst bsw_comm_ctrl_ptStartNetworkFn)( BswU1 NetworkId );
 /*  v2-0-0          :2022/01/07                                             */
 /*  v2-1-0          :2022/10/14                                             */
 /*  v2-2-0          :2023/05/08                                             */
-/*  v3-0-0          :2024/11/14                                             */
+/*  v3-0-0          :2024/12/05                                             */
 /****************************************************************************/
 /**** End of File ***********************************************************/

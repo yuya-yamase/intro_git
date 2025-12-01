@@ -44,6 +44,13 @@
 
 #define DIAGAPP_SID22_POSRES            (0U)
 #define DIAGAPP_SID22_DID_SIZE          (2U)
+
+#define DIAGAPP_SID22_SUPPORT_DID_0101  (0x0101U)
+#define DIAGAPP_SID22_SUPPORT_DID_0121  (0x0121U)
+#define DIAGAPP_SID22_SUPPORT_DID_A001  (0xA001U)
+#define DIAGAPP_SID22_SUPPORT_DID_F1A0  (0xF1A0U)
+#define DIAGAPP_SID22_SUPPORT_DID_1010  (0x1010U)
+#define DIAGAPP_SID22_SUPPORT_DID_10F2  (0x10F2U)
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -94,12 +101,20 @@ void           vd_g_DiagAppSID22Request(const ST_OXDC_REQ * st_ap_REQ, ST_OXDC_A
     U2 u2_tp_did[DIAGAPP_SID22_DID_MAXNUM_PHY];
     U4 u4_t_lpcnt;
     U1 u1_t_did_bufpos;
+    U1 u1_t_did_supnum;
+    U2 u2_t_chk_did;
 
     /* Data Length */
     u1_t_datanum = (U1)(st_ap_REQ->u4_nbyte / (U4)2U);
     u1_t_NRC = (U1)0U;
 
-    if (st_ap_REQ->u2_tim_elpsd == 0) {
+    if (st_ap_REQ->u2_tim_elpsd == (U2)0U) {
+        /* Get Request ID */
+        u1_t_requestId = u1_g_DiagAppConvPduIdToRequestId(st_ap_REQ->u1_req_type);
+        if(u1_t_requestId == (U1)DIAGAPP_REQUESTID_FUNCOFF) {
+            vd_g_DiagAppAnsTxNRC((U1)DIAGAPP_NRC_NONSUP);
+            return;
+        }
         st_s_diagapp_sid22_ans.u1p_tx = st_ap_ans->u1p_tx;
         st_s_diagapp_sid22_ans.u4_nbyte = st_ap_ans->u4_nbyte;
         /* Under Minimum Request Data */
@@ -117,7 +132,8 @@ void           vd_g_DiagAppSID22Request(const ST_OXDC_REQ * st_ap_REQ, ST_OXDC_A
         }
 
         /* Over Number of DID */
-        if(st_ap_REQ->u1_req_type == (U1)OXDC_REQ_TYPE_PHYS) {
+        if((u1_t_requestId == (U1)DIAGAPP_REQUESTID_PHYOFF) ||
+           (u1_t_requestId == (U1)DIAGAPP_REQUESTID_PHYON)) {
             u1_t_maxnum = (U1)DIAGAPP_SID22_DID_MAXNUM_PHY;
         } else {
             u1_t_maxnum = (U1)DIAGAPP_SID22_DID_MAXNUM_FUNC;
@@ -131,17 +147,38 @@ void           vd_g_DiagAppSID22Request(const ST_OXDC_REQ * st_ap_REQ, ST_OXDC_A
             
         }
 
+        u1_t_did_supnum = (U1)0U;
         for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < u1_t_datanum; u4_t_lpcnt++) {
             u1_t_did_bufpos = (U1)(u4_t_lpcnt * (U4)2U);
-            u2_tp_did[u4_t_lpcnt] = (U2)((st_ap_REQ->u1p_RX[u1_t_did_bufpos] << DIAGAPP_SFT_08) | st_ap_REQ->u1p_RX[u1_t_did_bufpos + 1U]);
+            u2_t_chk_did = (U2)((st_ap_REQ->u1p_RX[u1_t_did_bufpos] << DIAGAPP_SFT_08) | st_ap_REQ->u1p_RX[u1_t_did_bufpos + 1U]);
+            switch(u1_t_requestId) {
+                case DIAGAPP_REQUESTID_PHYOFF:
+                    u2_tp_did[u1_t_did_supnum] = u2_t_chk_did;
+                    u1_t_did_supnum++;
+                    break;
+                case DIAGAPP_REQUESTID_PHYON:
+                case DIAGAPP_REQUESTID_FUNCON:
+                    if(((u2_t_chk_did >= (U2)DIAGAPP_SID22_SUPPORT_DID_0101) && (u2_t_chk_did <= (U2)DIAGAPP_SID22_SUPPORT_DID_0121)) ||
+                       ((u2_t_chk_did >= (U2)DIAGAPP_SID22_SUPPORT_DID_A001) && (u2_t_chk_did <= (U2)DIAGAPP_SID22_SUPPORT_DID_F1A0)) ||
+                       ((u2_t_chk_did >= (U2)DIAGAPP_SID22_SUPPORT_DID_1010) && (u2_t_chk_did <= (U2)DIAGAPP_SID22_SUPPORT_DID_10F2))) {
+                        u2_tp_did[u1_t_did_supnum] = u2_t_chk_did;
+                        u1_t_did_supnum++;
+                    }
+                    break;
+                default:
+                    vd_g_DiagAppAnsTxNRC((U1)DIAGAPP_NRC_NONSUP);
+                    return;
+            }
         }
 
-        /* Get Request ID */
-        u1_t_requestId = u1_g_DiagAppConvPduIdToRequestId(st_ap_REQ->u1_req_type);
+        if(u1_t_did_supnum != (U1)0U) {
+            u1_t_result = u1_g_XspiIviSub0Request_Sid22(u1_t_requestId, u1_t_did_supnum, &u2_tp_did[0], &u1_t_NRC);
+        } else {
+            vd_g_DiagAppAnsTxNRC(OXDC_SAL_PROC_NR_31);
+            return;
+        }
 
-        u1_t_result = u1_g_XspiIviSub0Request_Sid22(u1_t_requestId, u1_t_datanum, &u2_tp_did[0], &u1_t_NRC);
-
-        if (u1_t_result == E_NOT_OK) {
+        if (u1_t_result == (U1)E_NOT_OK) {
             /* NRC */
             vd_g_DiagAppAnsTxNRC(u1_t_NRC);
         }
@@ -199,8 +236,14 @@ void           vd_g_DiagAppResponse_Sid22(const U1 u1_a_NUM, const ST_DIAG_DID *
 
             switch (u1_t_nrc) {
                 case DAIAGAPP_NRC_INIT:
-                case OXDC_SAL_PROC_NR_31:
+                case OXDC_SAL_PROC_NR_14:
                     u1_t_nrc = u1_ap_NRC[u4_t_lpcnt];
+                    break;
+                case OXDC_SAL_PROC_NR_31:
+                    if((u1_ap_NRC[u4_t_lpcnt] == OXDC_SAL_PROC_NR_22) ||
+                        (u1_ap_NRC[u4_t_lpcnt] == DIAGAPP_SID22_POSRES)) {
+                            u1_t_nrc = u1_ap_NRC[u4_t_lpcnt];
+                        }
                     break;
                 case OXDC_SAL_PROC_NR_22:
                     if(u1_ap_NRC[u4_t_lpcnt] == (U1)DIAGAPP_SID22_POSRES) {

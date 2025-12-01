@@ -30,7 +30,7 @@
 #endif   /* BEV Rebase provisionally */
 #include "xspi_met_ch0.h"
 #if 0   /* BEV Rebase provisionally */
-#include "iohw_adc.h"
+#include "iohw_adc_sh.h"
 #endif   /* BEV Rebase provisionally */
 #include "hmiscreen.h"
 

@@ -106,9 +106,9 @@ typedef struct ehvm_reset_factor_st{
 #define EHVM_RESET_FACTOR_SOURCE_SW_SYS_RESET_SW_ECM      ((ehvm_reset_source_t)0x00000004U)
 #define EHVM_RESET_FACTOR_SOURCE_SW_SYS_RESET_WDT         ((ehvm_reset_source_t)0x00000008U)
 
-#define EHVM_WAKEUP_FACTOR_A0            (0x00)
-#define EHVM_WAKEUP_FACTOR_A1            (0x01)
-#define EHVM_WAKEUP_FACTOR_A2            (0x02)
+#define EHVM_WAKEUP_FACTOR_A0            (0x00U)
+#define EHVM_WAKEUP_FACTOR_A1            (0x01U)
+#define EHVM_WAKEUP_FACTOR_A2            (0x02U)
 
 #define EHVM_SET_WAKEUP_FACTOR_A0_BIT_NUM_1     (1U)
 #define EHVM_SET_WAKEUP_FACTOR_A0_BIT_NUM_2     (2U)

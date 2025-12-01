@@ -1,7 +1,7 @@
-/* Fee_Periodic_Internal.h v1-1-0                                           */
+/* Fee_Periodic_Internal.h v2-0-0                                           */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION. All rights reserved.                        */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -44,18 +44,20 @@ Fee_Periodic_ExecPeriodicSubDone(
 
 FUNC( uint32, FEE_CODE )
 Fee_Periodic_ExecUnderLayer(
-    P2VAR( Fee_CpuDtfType, AUTOMATIC, FEE_VAR_NO_INIT ) CPUDTFInfo
+    P2VAR( Fee_CpuDtfType, AUTOMATIC, FEE_VAR_NO_INIT ) CPUDTFInfo ,
+    uint8 u1_callmode
 );
 
 FUNC( uint32, FEE_CODE )
-Fee_Periodic_ExecFlsForWaitingCancel( void );
+Fee_Periodic_ExecFlsForWaitingCancel( uint8 u1_callmode );
 
 FUNC( uint32, FEE_CODE )
-Fee_Periodic_ExecFlsForWaitingAbort( void );
+Fee_Periodic_ExecFlsForWaitingAbort( uint8 u1_callmode );
 
 FUNC( uint32, FEE_CODE )
 Fee_Periodic_ExecMngDfc(
-    P2VAR(Fee_CpuDtfType, AUTOMATIC, TYPEDEF) ptstCPUDTFInfo
+    P2VAR(Fee_CpuDtfType, AUTOMATIC, TYPEDEF) ptstCPUDTFInfo ,
+    uint8 u1_callmode
 );
 
 #define FEE_STOP_SEC_CODE
@@ -76,6 +78,7 @@ Fee_Periodic_ExecMngDfc(
 /*  Version        :Date                                                    */
 /*  1-0-0          :2019/02/01                                              */
 /*  1-1-0          :2019/06/28                                              */
+/*  2-0-0          :2024/07/19                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

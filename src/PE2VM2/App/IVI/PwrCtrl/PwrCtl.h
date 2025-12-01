@@ -10,6 +10,7 @@
 
 #include "Dio.h"
 #include "oxcan.h"
+#include "veh_opemd.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
@@ -29,16 +30,11 @@
 
 #define u1_POWER_GET_BOOT()                         ((U1)Dio_ReadChannel((Dio_ChannelType)DIO_ID_PORT0_CH2))    /* 暫定 量産時削除 */
 
-#define vd_POWER_GET_VPSINFO1(x)                    ((void)Com_ReceiveSignal(ComConf_ComSignal_VPSINFO1, (x)))
-#define vd_POWER_GET_VPSINFO2(x)                    ((void)Com_ReceiveSignal(ComConf_ComSignal_VPSINFO2, (x)))
-#define vd_POWER_GET_VPSINFO3(x)                    ((void)Com_ReceiveSignal(ComConf_ComSignal_VPSINFO3, (x)))
-#define vd_POWER_GET_VPSINFO4(x)                    ((void)Com_ReceiveSignal(ComConf_ComSignal_VPSINFO4, (x)))
-#define vd_POWER_GET_VPSINFO5(x)                    ((void)Com_ReceiveSignal(ComConf_ComSignal_VPSINFO5, (x)))
-#define vd_POWER_GET_VPSINFO6(x)                    ((void)Com_ReceiveSignal(ComConf_ComSignal_VPSINFO6, (x)))
-#define vd_POWER_GET_VPSINFO7(x)                    ((void)Com_ReceiveSignal(ComConf_ComSignal_VPSINFO7, (x)))
 #define vd_POWER_GET_VPSINFOS(x)                    ((void)Com_ReceiveSignal(ComConf_ComSignal_VPSINFOS, (x)))
 #define vd_POWER_GET_APOFRQ(x)                      ((void)Com_ReceiveSignal(ComConf_ComSignal_APOFRQ, (x)))
 #define vd_POWER_GET_PWRERRST(x)                    ((void)Com_ReceiveSignal(ComConf_ComSignal_PWRERRST, (x)))
+
+#define u4_POWER_GET_VEHOPE_STS()                   (u4_g_VehopemdMdfield())
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */

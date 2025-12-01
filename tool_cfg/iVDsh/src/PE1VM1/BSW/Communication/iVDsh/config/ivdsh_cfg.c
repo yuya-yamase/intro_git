@@ -44,11 +44,11 @@
 #define IVDSH_FQ_CH_WRI                          (2U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define IVDSH_WA_NWORD_WRI                       (16U)
-#define IVDSH_WA_NWORD_REA_0                     (16U)
+#define IVDSH_WA_NWORD_WRI                       (12U)
+#define IVDSH_WA_NWORD_REA_0                     (21U)
 #define IVDSH_WA_NWORD_REA_1                     (7U)
 
-#define IVDSH_WA_NWORD                           (62U)
+#define IVDSH_WA_NWORD                           (68U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -88,39 +88,40 @@ const ST_IVDSH_WA           st_gp_IVDSH_WA_BY_DID[IVDSH_NUM_DID] =
     /*------------------------------------------------------------------*/
     /* Write                                                            */
     /*------------------------------------------------------------------*/
-    {(U2)0U,        (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_CPREQ_002         */
-    {(U2)1U,        (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_CPREQ_004         */
-    {(U2)2U,        (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_CPREQ_010         */
-    {(U2)3U,        (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_CPREQ_012         */
-    {(U2)4U,        (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_CPREQ_014         */
-    {(U2)5U,        (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_CPREQ_016         */
-    {(U2)6U,        (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_CPREQ_018         */
-    {(U2)7U,        (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_CPREQ_021         */
-    {(U2)8U,        (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_CPREQ_022         */
-    {(U2)9U,        (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_CPREQ_023         */
-    {(U2)10U,       (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_VM1TO2_CAM_DIAP   */
-    {(U2)11U,       (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_CPREQ_028         */
-    {(U2)12U,       (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_VM1TO2_FLYNOP     */
-    {(U2)13U,       (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_CPREQ_044         */
-    {(U2)14U,       (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_VM1TO2_WHLINI_RES */
-    {(U2)15U,       (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_VM1TO3_WHLINI_INF */
+    {(U2)0U,        (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_VM1TO3_STBY       */
+    {(U2)1U,        (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_VM1TO2_TIMOFST    */
+    {(U2)2U,        (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_VM1TO2_TIMFMT     */
+    {(U2)3U,        (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_VM1TO2_CAL        */
+    {(U2)4U,        (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_VM1TO2_CALDEF     */
+    {(U2)5U,        (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_VM1TO2_CALMIN     */
+    {(U2)6U,        (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_VM1TO3_SPI_FAIL   */
+    {(U2)7U,        (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_VM1TO2_CAM_DIAP   */
+    {(U2)8U,        (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_VM1TO2_FLYNOP     */
+    {(U2)9U,        (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_VM1TO23_FSLP      */
+    {(U2)10U,       (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_VM1TO2_WHLINI_RES */
+    {(U2)11U,       (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_VM1TO3_WHLINI_INF */
     /*------------------------------------------------------------------*/
     /* Read from VM#2                                                   */
     /*------------------------------------------------------------------*/
-    {(U2)1U,        (U2)1U,         (U2)IVDSH_FQ_CH_REA_0},     /* IVDSH_DID_REA_CPREQ_009         */
-    {(U2)2U,        (U2)1U,         (U2)IVDSH_FQ_CH_REA_0},     /* IVDSH_DID_REA_CPREQ_011         */
-    {(U2)3U,        (U2)1U,         (U2)IVDSH_FQ_CH_REA_0},     /* IVDSH_DID_REA_CPREQ_013         */
-    {(U2)4U,        (U2)1U,         (U2)IVDSH_FQ_CH_REA_0},     /* IVDSH_DID_REA_CPREQ_015         */
-    {(U2)5U,        (U2)1U,         (U2)IVDSH_FQ_CH_REA_0},     /* IVDSH_DID_REA_CPREQ_017         */
-    {(U2)6U,        (U2)1U,         (U2)IVDSH_FQ_CH_REA_0},     /* IVDSH_DID_REA_CPREQ_019         */
-    {(U2)7U,        (U2)1U,         (U2)IVDSH_FQ_CH_REA_0},     /* IVDSH_DID_REA_CPREQ_020         */
-    {(U2)9U,        (U2)1U,         (U2)IVDSH_FQ_CH_REA_0},     /* IVDSH_DID_REA_VM2TO1_CAM_DIAP   */
-    {(U2)10U,       (U2)1U,         (U2)IVDSH_FQ_CH_REA_0},     /* IVDSH_DID_REA_CPREQ_027         */
-    {(U2)15U,       (U2)1U,         (U2)IVDSH_FQ_CH_REA_0},     /* IVDSH_DID_REA_VM2TO1_WHLINI_REQ */
+    {(U2)1U,        (U2)1U,         (U2)IVDSH_FQ_CH_REA_0},     /* IVDSH_DID_REA_VM2TO1_TIMOFST    */
+    {(U2)2U,        (U2)1U,         (U2)IVDSH_FQ_CH_REA_0},     /* IVDSH_DID_REA_VM2TO1_TIMFMT     */
+    {(U2)3U,        (U2)1U,         (U2)IVDSH_FQ_CH_REA_0},     /* IVDSH_DID_REA_VM2TO1_DSPTIM     */
+    {(U2)4U,        (U2)1U,         (U2)IVDSH_FQ_CH_REA_0},     /* IVDSH_DID_REA_VM2TO1_DSPCAL     */
+    {(U2)5U,        (U2)1U,         (U2)IVDSH_FQ_CH_REA_0},     /* IVDSH_DID_REA_VM2TO1_CAL        */
+    {(U2)6U,        (U2)1U,         (U2)IVDSH_FQ_CH_REA_0},     /* IVDSH_DID_REA_VM2TO1_CAM_DIAP   */
+    {(U2)11U,       (U2)1U,         (U2)IVDSH_FQ_CH_REA_0},     /* IVDSH_DID_REA_VM2TO1_WHLINI_REQ */
+    {(U2)13U,       (U2)1U,         (U2)IVDSH_FQ_CH_REA_0},     /* IVDSH_DID_REA_VM2TO1_DMS1S02    */
+    {(U2)14U,       (U2)1U,         (U2)IVDSH_FQ_CH_REA_0},     /* IVDSH_DID_REA_VM2TO1_MET1S27    */
+    {(U2)15U,       (U2)1U,         (U2)IVDSH_FQ_CH_REA_0},     /* IVDSH_DID_REA_VM2TO1_MET1S28    */
+    {(U2)16U,       (U2)1U,         (U2)IVDSH_FQ_CH_REA_0},     /* IVDSH_DID_REA_VM2TO1_MET1S29    */
+    {(U2)17U,       (U2)1U,         (U2)IVDSH_FQ_CH_REA_0},     /* IVDSH_DID_REA_VM2TO1_MET1S30    */
+    {(U2)18U,       (U2)1U,         (U2)IVDSH_FQ_CH_REA_0},     /* IVDSH_DID_REA_VM2TO1_MET1S43    */
+    {(U2)19U,       (U2)1U,         (U2)IVDSH_FQ_CH_REA_0},     /* IVDSH_DID_REA_VM2TO1_MET1S62    */
+    {(U2)20U,       (U2)1U,         (U2)IVDSH_FQ_CH_REA_0},     /* IVDSH_DID_REA_VM2TO1_MET1S70    */
     /*------------------------------------------------------------------*/
     /* Read from VM#3                                                   */
     /*------------------------------------------------------------------*/
-    {(U2)3U,        (U2)1U,         (U2)IVDSH_FQ_CH_REA_1}      /* IVDSH_DID_REA_CPREQ_045         */
+    {(U2)3U,        (U2)1U,         (U2)IVDSH_FQ_CH_REA_1}      /* IVDSH_DID_REA_VM3TO12_RESTART   */
 };
 const U2                    u2_g_IVDSH_NUM_DID = (U2)IVDSH_NUM_DID;
 

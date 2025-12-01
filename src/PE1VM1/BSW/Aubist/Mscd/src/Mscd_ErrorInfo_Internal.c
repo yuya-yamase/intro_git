@@ -1,7 +1,7 @@
 /* Mscd_ErrorInfo_Internal.c v2-0-0                                         */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION. All rights reserved.                        */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -106,8 +106,8 @@ CONST( AB_83_ConstV Mscd_ErrorInfo_ErrorResultType, MSCD_CONST) Mscd_ErrorInfo_s
 #if ( MSCD_ERRORINFO_USE == STD_ON )
 /****************************************************************************/
 /* Function Name | Mscd_ErrorInfo_UpdateStateErrorFactor                    */
-/*               | （エラー状態更新）                                       */
-/* Description   | エラー状態を更新する                                     */
+/*               | (error status update)                                    */
+/* Description   | Update error status                                      */
 /* Preconditions |                                                          */
 /* Parameters    | None                                                     */
 /* Return Value  | None                                                     */
@@ -137,12 +137,12 @@ Mscd_ErrorInfo_UpdateStateErrorFactor( void )
 #if ( MSCD_ERRORINFO_USE == STD_ON )
 /****************************************************************************/
 /* Function Name | Mscd_ErrorInfo_TransformErrorResult                      */
-/*               | （エラー情報(結果)変換）                                 */
-/* Description   | NVM定義のサービスに対するエラー情報(結果)を              */
-/*               | ERRINFOコンポーネントのエラー情報(結果)に変換する        */
+/*               | (error information (result) conversion)                  */
+/* Description   | Convert error information (results) for NVM-defined services  */
+/*               | into error information (results) for the ERRINFO component */
 /* Preconditions |                                                          */
-/* Parameters    | u4ErrorResult     : エラー情報(NVM用結果)                */
-/* Return Value  | uint32            : エラー情報(ERRINFO用結果)            */
+/* Parameters    | u4ErrorResult    : Error information (result for NVM)    */
+/* Return Value  | uint32           : error information (result for ERRINFO)*/
 /* Notes         | None                                                     */
 /****************************************************************************/
 FUNC(uint32, MSCD_CODE)

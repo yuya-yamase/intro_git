@@ -37,6 +37,7 @@
 /* Following function is called from vd_g_Nvmc_DTF_Hook. */
 void    vd_g_Nvmc_DTF_ErrorFactorHook(const U4 u4_a_ERRORFACTOR);
 void    vd_g_Nvmc_DTF_StateErrorHook(void);
+void    vd_g_Nvmc_MemAcc_JobEndHook(const U2 u2_a_AREAID, const U1 u1_a_JOBRESULT);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Externs                                                                                                                 */

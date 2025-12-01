@@ -50,24 +50,18 @@ def save_selection():
     selected_variation = var.get()
     root.destroy()
 
-def analysis_file(base_path, existing_json_file, include_pattern, options, VM_keyword):
+def analysis_file(base_path, include_pattern, options, VM_keyword):
     extensions = ['.c', '.850', '.a']
 
+    # componentファイルを生成(ファイル名：VM名称_component.json)
     path_list = find_files_and_folders(base_path, extensions, include_pattern, options)
-
-    # 既存のJSONファイルを読み込む
-    with open(existing_json_file, 'r') as f:
-        existing_data = json.load(f)
     json_data = create_json(VM_keyword, path_list)
-    existing_data.update(json_data)
-
-    # 変更したデータを同じJSONファイルに書き込む（上書き）
-    with open(existing_json_file, 'w') as f:
-        json.dump(existing_data, f, indent=4)
+    with open(VM_keyword + '_component.json', 'w') as f:
+        json.dump(json_data, f, indent=4)
     f.close()
 
 ## GUI 選択ターブル
-options = ["CDC_1MUS", "CDC_1MJP", "CDC_1MOT"]
+options = ["CDC_1MUS", "CDC_1MJP", "CDC_1MOT", "CDC_2MUS", "CDC_2MJP", "CDC_2MOT"]
 include_pattern = []
 selected_variation = ""
 if len(sys.argv) == 1:
@@ -91,27 +85,25 @@ if len(sys.argv) == 1:
 else:
     selected_variation = sys.argv[1]
 
-include_pattern = [selected_variation[:-2],selected_variation]
+# 指定した仕向に加えて、同じHW仕向と地域仕向を抽出対象として追加
+# 例：CDC_1MJPを指定した場合、抽出対象はCDC_1M/CDC_1MJP/CDC_JP
+include_pattern = [selected_variation[:-2],
+                  selected_variation,
+                  selected_variation[:-4]+selected_variation[-2:]
+                  ]
 options.remove(selected_variation)
 
 # 使用するフォルダパスと拡張子リストを指定してください
-base_paths = [r'W:\src\EHVM',  # 例: '/path/to/your/folder'
-             r'W:\src\PE0VM0',
-             r'W:\src\PE1VM1',
-             r'W:\src\PE2VM2',
-             r'W:\src\PE3VM3'
+base_paths = [r'..\..\src\EHVM',  # 例: '/path/to/your/folder'
+             r'..\..\src\PE0VM0',
+             r'..\..\src\PE1VM1',
+             r'..\..\src\PE2VM2',
+             r'..\..\src\PE3VM3'
             ]
 VM_keywords = ['EHVM','PE0VM0','PE1VM1','PE2VM2','PE3VM3']
-# 既存のJSONファイルのパス
-existing_json_files = ['./EHVM_data.json',
-                      './PE0VM0_data.json',
-                      './PE1VM1_data.json',
-                      './PE2VM2_data.json',
-                      './PE3VM3_data.json'
-                    ]
 
-for path,json_file,VM_keyword in zip(base_paths, existing_json_files,VM_keywords):
-    analysis_file(path, json_file, include_pattern, options, VM_keyword)
+for path,VM_keyword in zip(base_paths, VM_keywords):
+    analysis_file(path, include_pattern, options, VM_keyword)
 
 
 subprocess.run(['python', "Sub.py" , selected_variation])

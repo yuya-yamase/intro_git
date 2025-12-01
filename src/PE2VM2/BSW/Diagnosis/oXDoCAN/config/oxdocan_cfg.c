@@ -19,6 +19,7 @@
 #include "oxdocan_cfg_private.h"
 #include "Dcm_Dsp_SID28_Cfg.h"
 
+#include "DiagApp_SID10.h"
 #include "DiagApp_SID14.h"
 #include "DiagApp_SID19.h"
 #include "DiagApp_SID22.h"
@@ -97,6 +98,7 @@ void    vd_g_oXDoCANCfgMainbySid(const ST_OXDC_REQ * st_ap_REQ, ST_OXDC_ANS * st
 {
     vd_s_oXDoCANMainSid28(st_ap_REQ->u1_ses_aft, st_ap_REQ->u1_ses_bfr);
     vd_s_oXDoCANRequest(st_ap_REQ, st_ap_ans);
+    vd_g_DiagAppSID10Request(st_ap_REQ->u1_ses_aft, st_ap_REQ->u1_ses_bfr);
 }
 /*===================================================================================================================================*/
 /*  static void    vd_s_oXDoCANMainSid28(const U1 u1_a_SES, const U1 u1_a_SES_BEF)                                                   */

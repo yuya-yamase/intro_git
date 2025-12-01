@@ -1,7 +1,7 @@
 /* Fee_Lib.h v2-0-0                                                         */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION. All rights reserved.                        */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -22,12 +22,12 @@
 /*--------------------------------------------------------------------------*/
 /* Macros                                                                   */
 /*--------------------------------------------------------------------------*/
-#define FEE_DUMMY_AREA_NO_FOR_LWPOS     (0U)    /* 最終書き込み位置初期化時のダミーエリア番号 */
+#define FEE_DUMMY_AREA_NO_FOR_LWPOS     (0U)    /* Dummy area number at last write position initialization */
 
-/* 設定処理種別 */
-#define FEE_LWPREAD         ((uint8)0x00U)      /* 設定処理種別：ID指定読出しor空き領域確認 */
-#define FEE_LWPWRITE        ((uint8)0x01U)      /* 設定処理種別：書込みor再編 */
-#define FEE_LWPKIND_INIT    ((uint8)0xFFU)      /* 設定処理種別初期値 */
+/* Setting processing type */
+#define FEE_LWPREAD         ((uint8)0x00U)      /* Setting processing type: ID-specified read or free space check */
+#define FEE_LWPWRITE        ((uint8)0x01U)      /* SetupProcessType: Write or Reorganize */
+#define FEE_LWPKIND_INIT    ((uint8)0xFFU)      /* Setting processing type initial */
 
 #define FEE_LIB_EQUAL       ((uint8)0x00U)
 #define FEE_LIB_UNEQUAL     ((uint8)0x01U)
@@ -74,7 +74,7 @@ Fee_Lib_SetLastWritePosLite(
 );
 #endif /*( MSCD_FREESPACE_USE == STD_ON )*/
 
-/* データフラッシュのアドレス値の変換　絶対アドレス⇔相対アドレス */
+/* Data flash address value conversion Absolute address </= relative address > Relative address */
 FUNC(uint32, FEE_CODE) Fee_ConvAddr_AbsToBaseRelative( uint32 u4_absolute_address );
 FUNC(uint32, FEE_CODE) Fee_ConvAddr_AbsToSectorTopRelative( uint32 u4_absolute_address );
 FUNC(uint32, FEE_CODE) Fee_ConvAddr_RelativeToAbsolute( uint32 u4_relative_address );
@@ -85,11 +85,11 @@ FUNC(uint32, FEE_CODE) Fee_ConvAddr_RelativeToAbsolute( uint32 u4_relative_addre
 #define FEE_START_SEC_CONST_32
 #include <Fee_MemMap.h>
 
-/* 全体としてのコンフィグレーション項目 */
-/* 書込みHardware待ち時間閾値 */
+/* Configuration items as a whole */
+/* Write Hardware latency threshold */
 extern CONST(AB_83_ConstV uint32, FEE_CONST) Fee_HwLmtWriteTime;
 
-/* エリア・ブロックステータスデータアドレス */
+/* Area block status data address */
 extern CONST(AB_83_ConstV uint8, FEE_CONST) Fee_ASBSDataTBL[FEE_ASBSDATASETNUM][FEE_ASBSDATAKINDNUM];
 
 #define FEE_STOP_SEC_CONST_32

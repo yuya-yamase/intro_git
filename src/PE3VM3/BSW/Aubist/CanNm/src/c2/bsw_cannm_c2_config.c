@@ -48,9 +48,9 @@
 #define BSW_CANNM_C2_USE(ch)                ( (BSW_CANNM_NM_TYPE(ch) == BSW_CANNM_NMTYPE_C2) ? BSW_USE : BSW_NOUSE )
 
 #if (BSW_BSWM_CS_MSG_DELIVER == BSW_BSWM_CS_MSGDELIVER_HIGH)
-#define BSW_CANNM_C2_u2MS2COMTICK_RUP        BSW_BSWM_CS_u2MS2TICK_RUP_HIGH
+#define BSW_CANNM_C2_u2MS2COMTICK_RUP(msTime)   BSW_BSWM_CS_u2MS2TICK_RUP_HIGH(msTime)
 #else
-#define BSW_CANNM_C2_u2MS2COMTICK_RUP        BSW_BSWM_CS_u2MS2TICK_RUP_MID
+#define BSW_CANNM_C2_u2MS2COMTICK_RUP(msTime)   BSW_BSWM_CS_u2MS2TICK_RUP_MID(msTime)
 #endif
 
 /* SendStart */
@@ -4765,7 +4765,7 @@ BswConst BswU1 bsw_cannm_c2_ctrl_u1ToTxStop[BSW_CANNM_C2_CHNUM] =
 /*  v1-0-0          :2018/12/13                                             */
 /*  v2-0-0          :2021/12/02                                             */
 /*  v2-2-0          :2023/05/15                                             */
-/*  v3-0-0          :2024/09/03                                             */
+/*  v3-0-0          :2025/01/17                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

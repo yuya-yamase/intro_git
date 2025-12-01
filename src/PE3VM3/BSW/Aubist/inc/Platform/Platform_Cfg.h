@@ -20,8 +20,8 @@
 #define PLATFORM_OFF                        (0x00U)
 
 #define PLATFORM_TYPEDEF_UINT64_ENABLE      PLATFORM_ON
-#define PLATFORM_TYPEDEF_SINT64_ENABLE      PLATFORM_ON
-#define PLATFORM_TYPEDEF_FLOAT64_ENABLE     PLATFORM_ON
+#define PLATFORM_TYPEDEF_SINT64_ENABLE      PLATFORM_OFF
+#define PLATFORM_TYPEDEF_FLOAT64_ENABLE     PLATFORM_OFF
 
 
 /*--------------------------------------------------------------------------*/
@@ -49,7 +49,7 @@
 
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
-/*  Framework          :v2-0-2                                              */
+/*  Framework          :v2-1-0                                              */
 /*  BSW plug-in        :v2-0-0                                              */
 /****************************************************************************/
 

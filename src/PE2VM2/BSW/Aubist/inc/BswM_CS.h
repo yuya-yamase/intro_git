@@ -193,7 +193,6 @@
 #define BswM_CS_GetSystemStatus            (bsw_bswm_cs_sysst_GetSysStat)
 #define BswM_CS_GetSystemStatusExt         (bsw_bswm_cs_sysst_GetSysStatExt)
 #define BswM_CS_GetLatestSystemStatus      (bsw_bswm_cs_sysst_GetLatSysStat)
-#define BswM_CS_GetLatestSystemStatusExt   (bsw_bswm_cs_sysst_GetLatSSExt)
 #define BswM_CS_GetECUInitPower            (bsw_bswm_cs_sysst_GetECUInitPw)
 #define BswM_CS_JudgeWakeUpChPower         (bsw_bswm_cs_sysst_JudgeWkUpChPw)
 

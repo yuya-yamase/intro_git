@@ -141,7 +141,7 @@
 /*  (Each Virtual Controller)             */
 /******************************************/
 /* Tx VHOH(VHTH) Number */
-#define BSW_VCAN_CFG_VHTHNUM_0                  (43U)
+#define BSW_VCAN_CFG_VHTHNUM_0                  (44U)
 #define BSW_VCAN_CFG_VHTHNUM_1                  (0U)
 #define BSW_VCAN_CFG_VHTHNUM_2                  (0U)
 #define BSW_VCAN_CFG_VHTHNUM_3                  (0U)
@@ -159,7 +159,7 @@
 #define BSW_VCAN_CFG_VHTHNUM_15                 (0U)
 
 /* First Virtual MBOX Number for VHTH */
-#define BSW_VCAN_CFG_VMBOX_TXOFFSET_0           (9U)
+#define BSW_VCAN_CFG_VMBOX_TXOFFSET_0           (10U)
 #define BSW_VCAN_CFG_VMBOX_TXOFFSET_1           (0U)
 #define BSW_VCAN_CFG_VMBOX_TXOFFSET_2           (0U)
 #define BSW_VCAN_CFG_VMBOX_TXOFFSET_3           (0U)
@@ -221,7 +221,7 @@
 /*  (Each Virtual Controller)             */
 /******************************************/
 /* Rx VHOH(VHRH) Number */
-#define BSW_VCAN_CFG_VHRHNUM_0                  (9U)
+#define BSW_VCAN_CFG_VHRHNUM_0                  (10U)
 #define BSW_VCAN_CFG_VHRHNUM_1                  (0U)
 #define BSW_VCAN_CFG_VHRHNUM_2                  (0U)
 #define BSW_VCAN_CFG_VHRHNUM_3                  (0U)
@@ -286,7 +286,7 @@
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
-/*  Framework          :v2-0-3-z0003                                        */
+/*  Framework          :v2-1-0                                              */
 /*  BSW plug-in        :v3-0-0                                              */
 /****************************************************************************/
 
