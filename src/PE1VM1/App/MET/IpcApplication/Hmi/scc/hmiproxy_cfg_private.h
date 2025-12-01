@@ -32,6 +32,7 @@
 #define     HMIPROXY_TOC_MAX            (0xfffeU)
 
 #define     HMIPROXY_INIT_NUM           (9U)
+#define     HMIPROXY_SHTDWN_NUM         (1U)
 #define     HMIPROXY_MAINTASK_NUM       (HMIPROXY_INIT_NUM + 1U)
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -56,6 +57,7 @@ typedef struct{
 extern void ( * const               fp_gp_vd_HMIPROXY_BON_INIT[HMIPROXY_INIT_NUM])(void);
 extern void ( * const               fp_gp_vd_HMIPROXY_RST_INIT[HMIPROXY_INIT_NUM])(void);
 extern void ( * const               fp_gp_vd_HMIPROXY_WKUP_INIT[HMIPROXY_INIT_NUM])(void);
+extern U1   ( * const               fp_gp_u1_HMIPROXY_SHTDWN_CHK[HMIPROXY_SHTDWN_NUM])(void);
 extern const ST_HMIPROXY            st_gp_HMIPROXY[HMIPROXY_MAINTASK_NUM];
 
 #endif      /* HMIPROXY_CFG_H */

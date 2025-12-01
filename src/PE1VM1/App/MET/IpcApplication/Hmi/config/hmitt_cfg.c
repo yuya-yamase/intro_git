@@ -86,7 +86,6 @@
 
 #define HMITT_TURN_R_SFT                          (4U)
 #define HMITT_TURN_L_SFT                          (5U)
-#define HMITT_TURN_ACT_SFT                        (6U)
 
 #define HMITT_HEAD_BITPOS                         (0U)
 #define HMITT_TAIL_BITPOS                         (0U)
@@ -193,7 +192,6 @@ void    vd_g_HmiTtCfgReq(U4 * u4_ap_req)
 static void    vd_s_HmiTtTurn(U4 * u4_ap_req)
 {
     U1  u1_t_turn;
-    U1  u1_t_turn_act;
 
     u1_t_turn = u1_g_ThblnkrIndAct();
     if((u1_t_turn & (U1)THBLNKR_BIT_INDLEFT) != (U1)0U){
@@ -201,10 +199,6 @@ static void    vd_s_HmiTtTurn(U4 * u4_ap_req)
     }
     if((u1_t_turn & (U1)THBLNKR_BIT_INDRIGHT) != (U1)0U){
         u4_ap_req[HMITT_TURN_DATPOS] |= ((U4)TRUE << HMITT_TURN_R_SFT);
-    }
-    u1_t_turn_act = u1_g_ThblnkrActiveJdg();
-    if(u1_t_turn_act == (U1)TRUE){
-        u4_ap_req[HMITT_TURN_DATPOS] |= ((U4)TRUE << HMITT_TURN_ACT_SFT);
     }
 }
 
