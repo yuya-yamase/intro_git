@@ -192,11 +192,7 @@ echo selected_variation: %last8%
 
 pushd ..\..\tool\MemAnalysis
 python SectionAnalysis.py %last8%
-move "Section_Size_EHVM.xlsx" "%current%\EHVM"
-move "Section_Size_PE0VM0.xlsx" "%current%\PE0VM0"
-move "Section_Size_PE1VM1.xlsx" "%current%\PE1VM1"
-move "Section_Size_PE2VM2.xlsx" "%current%\PE2VM2"
-move "Section_Size_PE3VM3.xlsx" "%current%\PE3VM3"
+move "*.xlsx" "%current%"
 popd
 
 rem ---------------------------------------------------------------------------------------------
