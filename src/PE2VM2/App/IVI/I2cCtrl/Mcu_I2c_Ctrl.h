@@ -52,6 +52,7 @@ void Mcu_Dev_I2c_Ctrl_Ack_Power(const uint8 mcu_ack);
 void Mcu_Dev_I2c_Ctrl_Ack_Rtc(const uint8 mcu_ack);
 void Mcu_Dev_I2c_Ctrl_Ack_Gyro(const uint8 mcu_ack);
 void Mcu_Dev_I2c_Ctrl_Ack_Gmoni(const uint8 mcu_ack);
+void Mcu_Dev_I2c_Ctrl_Ack_Pmic(const uint8 mcu_ack);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
