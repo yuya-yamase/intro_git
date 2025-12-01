@@ -240,6 +240,17 @@ static void    vd_s_GpI2cMaCfgTRxAckCh0_Pmic(const ST_GP_I2C_MA_REQ * st_ap_ACK)
     /* ----------------------------------------------------------------------------------- */
     /* vd_s_GpI2cMaCfgTRxAckCh0_Pmic is being invaked at vd_g_GpI2cMaMainTask().           */
     /* ----------------------------------------------------------------------------------- */
+    U1  u1_t_err;
+    U1  u1_t_ret;
+
+    u1_t_err    = (U1)(((st_ap_ACK->u4_cbf) & GP_I2C_MA_CBF_BIT_ERR) >> GP_I2C_MA_CBF_LSB_ERR);
+    u1_t_ret    = (U1)MCU_REGWRI_ACK_ERR;
+
+    if(u1_t_err == (U1)0U) {
+        u1_t_ret    = (U1)MCU_REGWRI_ACK_RCV;
+    }
+
+    Mcu_Dev_I2c_Ctrl_Ack_Pmic(u1_t_ret);
 }
 /*===================================================================================================================================*/
 /*  static void    vd_s_GpI2cMaCfgTRxAckCh0_VIc(const ST_GP_I2C_MA_REQ * st_ap_ACK)                                                  */
