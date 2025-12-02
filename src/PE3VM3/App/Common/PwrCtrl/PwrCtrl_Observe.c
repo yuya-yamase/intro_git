@@ -77,13 +77,38 @@ void vd_g_PwrCtrlObserveInit( void )
 void vd_g_PwrCtrlObserveOnOffTriggerDetect( void )
 {
     U1 u1_t_stby_rslt;  /* 全VMのスタンバイ可否 */
+    U1 u1_t_stby_vm1;   /* VM1のスタンバイ可否 */
+    U1 u1_t_stby_vm2;   /* VM2のスタンバイ可否 */
+    U1 u1_t_stby_vm3;   /* VM3のスタンバイ可否 */
     U1 u1_t_force_slp;  /* 強制スリープ条件成立有無 */
     U1 u1_t_boot;       /* Boot信号 */
 
+    u1_t_stby_rslt = (U1)PWRCTRL_OBSERVE_STBY_NG;
+
     /* 全VMのスタンバイ可否 */
-    u1_t_stby_rslt = u1_g_PwrCtrlComRxGetVm1Stby();
-    u1_t_stby_rslt &= u1_g_PwrCtrlComRxGetVm2Stby();
-    u1_t_stby_rslt &= u1_s_PwrCtrlObserveJdgVm3Stby();
+    u1_t_stby_vm1 = u1_g_PwrCtrlComRxGetVm1Stby();
+    u1_t_stby_vm2 = u1_g_PwrCtrlComRxGetVm2Stby();
+    u1_t_stby_vm3 = u1_s_PwrCtrlObserveJdgVm3Stby();
+
+    /* 全VMのスタンバイ可否判定 */
+    if((u1_t_stby_vm1 == (U1)PWRCTRL_OBSERVE_STBY_OK)
+    && (u1_t_stby_vm2 == (U1)PWRCTRL_OBSERVE_STBY_OK)
+    && (u1_t_stby_vm3 == (U1)PWRCTRL_OBSERVE_STBY_OK))
+    {
+        /* 60秒未経過 */
+        if( u4_s_PwrCtrl_Observe_SleepTime < (U4)PWRCTRL_OBSERVE_SLEEP_TIME ){
+            u4_s_PwrCtrl_Observe_SleepTime++;
+        }
+        else
+        {
+            /* 全VMスタンバイ可 */
+            u1_t_stby_rslt = (U1)PWRCTRL_OBSERVE_STBY_OK;
+        }
+    }
+    else{
+        /* 60秒継続クリア */
+        u4_s_PwrCtrl_Observe_SleepTime = (U4)PWRCTRL_OBSERVE_SLEEP_CLR;
+    }
 
     /* 強制スリープ条件成立有無 */
     u1_t_force_slp = u1_g_PwrCtrlComRxGetForceSleep();
@@ -92,8 +117,8 @@ void vd_g_PwrCtrlObserveOnOffTriggerDetect( void )
     u1_t_boot = u1_g_PwrCtrl_PinMonitor_GetPinInfo((U1)PWRCTRL_CFG_PRIVATE_KIND_BOOT);
 
     /* スタンバイ条件成立 */
-    if( ((u1_t_stby_rslt == (U1)PWRCTRL_COM_STBY_OK)         /* 全VMスタンバイ可 */
-     ||  (u1_t_force_slp == (U1)PWRCTRL_COM_FSLP_ON))        /* または、強制スリープ条件成立 */
+    if( ((u1_t_stby_rslt == (U1)PWRCTRL_OBSERVE_STBY_OK)     /* 全VMスタンバイ可 */
+     ||  (u1_t_force_slp == (U1)PWRCTRL_OBSERVE_FSLP_ON))    /* または、強制スリープ条件成立 */
      &&  (u1_t_boot == (U1)STD_LOW))                         /* 上記かつ、Boot = Low */
     {
         u1_s_PwrCtrl_Observe_TriggerInfo = (U1)PWRCTRL_OBSERVE_POWER_OFF;  /* スタンバイ要求検知 */
@@ -133,7 +158,7 @@ void vd_g_PwrCtrlObserveVm3StbyInfo( const U1 u1_a_ProhibitSleep )
 
 /*****************************************************************************
   Function      : u1_s_PwrCtrlObserveJdgVm3Stby
-  Description   : VM3スタンバイ条件成立判定処理(60秒間継続判定)
+  Description   : VM3スタンバイ条件成立判定処理
   param[in/out] : none
   return        : [Out] VM3のスタンバイ条件成立有無
   Note          : none
@@ -142,24 +167,13 @@ static U1 u1_s_PwrCtrlObserveJdgVm3Stby( void )
 {
     U1 u1_t_stbyinfo;
 
-    u1_t_stbyinfo = (U1)PWRCTRL_COM_STBY_NG;
+    u1_t_stbyinfo = (U1)PWRCTRL_OBSERVE_STBY_NG;
 
     /* スリープ許可 */
     if(u1_s_PwrCtrl_Observe_Vm3StbyInfo == (U1)PWRCTRL_MAIN_PROHIBITSLEEP_OFF)
     {
-        /* 60秒継続判定 */
-        if( u4_s_PwrCtrl_Observe_SleepTime < (U4)PWRCTRL_OBSERVE_SLEEP_TIME ){
-            u4_s_PwrCtrl_Observe_SleepTime++;
-        }
-        else{
-            /* スタンバイ可 */
-            u1_t_stbyinfo = (U1)PWRCTRL_COM_STBY_OK;
-        }
-    }
-    /* スリープ禁止 */
-    else{
-        /* 60秒継続クリア */
-        u4_s_PwrCtrl_Observe_SleepTime = (U4)PWRCTRL_OBSERVE_SLEEP_CLR;
+        /* スタンバイ可 */
+        u1_t_stbyinfo = (U1)PWRCTRL_OBSERVE_STBY_OK;
     }
 
     return(u1_t_stbyinfo);
