@@ -5,7 +5,7 @@
     -llibcri_base_rh850u2a.a
     -llibcri_damp_rh850u2a.a
 
-	-lLIBARCH.A
+    -lLIBARCH.A
 
     # CompileSW (ProcessingLoad)
     # Enter the measurement time in milliseconds
@@ -23,87 +23,64 @@
     -I../../src/PE1VM1/App/MET/HudApplication/Vom/HudDimmer/scc
     -I../../src/PE1VM1/App/MET/HudApplication/Vom/HudImgadj/config_met
     -I../../src/PE1VM1/App/MET/IpcApplication/Evc/Calibration/config
-    -I../../src/PE1VM1/App/MET/IpcApplication/Evc/HudCa/config
     -I../../src/PE1VM1/App/MET/IpcApplication/Evc/HudCa/scc
     -I../../src/PE1VM1/App/MET/IpcApplication/Evc/Mcst/config
     -I../../src/PE1VM1/App/MET/IpcApplication/Evc/Mcst/scc
     -I../../src/PE1VM1/App/MET/IpcApplication/Evc/Vardef/config/esopt_rx
     -I../../src/PE1VM1/App/MET/IpcApplication/Evc/Vardef/config
-    -I../../src/PE1VM1/App/MET/IpcApplication/Evc/Vardef/config_met
     -I../../src/PE1VM1/App/MET/IpcApplication/Evc/Vardef/config_met_common
     -I../../src/PE1VM1/App/MET/IpcApplication/Evc/Vardef/scc
     -I../../src/PE1VM1/App/MET/IpcApplication/Hmi/config
     -I../../src/PE1VM1/App/MET/IpcApplication/Hmi/scc
-###    -I../../src/PE1VM1/App/MET/IpcApplication/Legacy/Evcom/config
-###    -I../../src/PE1VM1/App/MET/IpcApplication/Legacy/Evcom/scc
+    -I../../src/PE1VM1/App/MET/IpcApplication/Legacy/Evcom/config
+    -I../../src/PE1VM1/App/MET/IpcApplication/Legacy/Evcom/scc
     -I../../src/PE1VM1/App/MET/IpcApplication/Legacy/Fspo/fspo_app/config
-    -I../../src/PE1VM1/App/MET/IpcApplication/Legacy/Fspo/fspo_app/scc
     -I../../src/PE1VM1/App/MET/IpcApplication/Legacy/Fspo/fspo_framework/config
-    -I../../src/PE1VM1/App/MET/IpcApplication/Legacy/Fspo/fspo_framework/scc
-    -I../../src/PE1VM1/App/MET/IpcApplication/Legacy/Mmcstmz/config
     -I../../src/PE1VM1/App/MET/IpcApplication/Legacy/Mmcstmz/scc
     -I../../src/PE1VM1/App/MET/IpcApplication/Legacy/Mmcstmz
     -I../../src/PE1VM1/App/MET/IpcApplication/Version/scc
     -I../../src/PE1VM1/App/MET/IpcApplication/Vom/Alert/config
     -I../../src/PE1VM1/App/MET/IpcApplication/Vom/Alert/matrix/config
-    -I../../src/PE1VM1/App/MET/IpcApplication/Vom/Alert/matrix/scc
-    -I../../src/PE1VM1/App/MET/IpcApplication/Vom/Alert/matrix/scc_rw
     -I../../src/PE1VM1/App/MET/IpcApplication/Vom/Alert/scc
-    -I../../src/PE1VM1/App/MET/IpcApplication/Vom/Ambtmp/config
     -I../../src/PE1VM1/App/MET/IpcApplication/Vom/Ambtmp/scc
-    -I../../src/PE1VM1/App/MET/IpcApplication/Vom/Attmp/config
     -I../../src/PE1VM1/App/MET/IpcApplication/Vom/Attmp/scc
     -I../../src/PE1VM1/App/MET/IpcApplication/Vom/Batcare/scc
-    -I../../src/PE1VM1/App/MET/IpcApplication/Vom/Battpow/config
     -I../../src/PE1VM1/App/MET/IpcApplication/Vom/Battpow/scc
-###    -I../../src/PE1VM1/App/MET/IpcApplication/Vom/Batvolt/config
-###    -I../../src/PE1VM1/App/MET/IpcApplication/Vom/Batvolt/scc
+    -I../../src/PE1VM1/App/MET/IpcApplication/Vom/Batvolt/config
+    -I../../src/PE1VM1/App/MET/IpcApplication/Vom/Batvolt/scc
     -I../../src/PE1VM1/App/MET/IpcApplication/Vom/CanTxAppDum/config
     -I../../src/PE1VM1/App/MET/IpcApplication/Vom/CanTxAppDum/scc
-    -I../../src/PE1VM1/App/MET/IpcApplication/Vom/DateSI/config
     -I../../src/PE1VM1/App/MET/IpcApplication/Vom/DateSI/scc
     -I../../src/PE1VM1/App/MET/IpcApplication/Vom/Dimmer/config
     -I../../src/PE1VM1/App/MET/IpcApplication/Vom/Dimmer/scc
-    -I../../src/PE1VM1/App/MET/IpcApplication/Vom/DrvInd/config
     -I../../src/PE1VM1/App/MET/IpcApplication/Vom/DrvInd/scc
-    -I../../src/PE1VM1/App/MET/IpcApplication/Vom/Ecojdg/config
     -I../../src/PE1VM1/App/MET/IpcApplication/Vom/Ecojdg/scc
-    -I../../src/PE1VM1/App/MET/IpcApplication/Vom/Engspd/config
     -I../../src/PE1VM1/App/MET/IpcApplication/Vom/Engspd/scc
-    -I../../src/PE1VM1/App/MET/IpcApplication/Vom/Evschg/config
     -I../../src/PE1VM1/App/MET/IpcApplication/Vom/Evschg/scc
-###    -I../../src/PE1VM1/App/MET/IpcApplication/Vom/Hudcom/config_t345d_D1L1
-###    -I../../src/PE1VM1/App/MET/IpcApplication/Vom/Hudcom/config_t345d_D1M1
-###    -I../../src/PE1VM1/App/MET/IpcApplication/Vom/Hudcom/scc
-###    -I../../src/PE1VM1/App/MET/IpcApplication/Vom/Hudcom/scc_345d
+    -I../../src/PE1VM1/App/MET/IpcApplication/Vom/Hudcom/config_t345d_D1L1
+    -I../../src/PE1VM1/App/MET/IpcApplication/Vom/Hudcom/config_t345d_D1M1
+    -I../../src/PE1VM1/App/MET/IpcApplication/Vom/Hudcom/scc
+    -I../../src/PE1VM1/App/MET/IpcApplication/Vom/Hudcom/scc_345d
     -I../../src/PE1VM1/App/MET/IpcApplication/Vom/Locale/config
     -I../../src/PE1VM1/App/MET/IpcApplication/Vom/Locale/scc
-###    -I../../src/PE1VM1/App/MET/IpcApplication/Vom/MgPwr/scc
+    -I../../src/PE1VM1/App/MET/IpcApplication/Vom/MgPwr/scc
     -I../../src/PE1VM1/App/MET/IpcApplication/Vom/MM/config
     -I../../src/PE1VM1/App/MET/IpcApplication/Vom/MM/scc
-    -I../../src/PE1VM1/App/MET/IpcApplication/Vom/Mulmed/config
     -I../../src/PE1VM1/App/MET/IpcApplication/Vom/Mulmed/scc
     -I../../src/PE1VM1/App/MET/IpcApplication/Vom/Odo/config
     -I../../src/PE1VM1/App/MET/IpcApplication/Vom/Odo/scc
-    -I../../src/PE1VM1/App/MET/IpcApplication/Vom/Oilmil/config
     -I../../src/PE1VM1/App/MET/IpcApplication/Vom/Oilmil/scc
-###    -I../../src/PE1VM1/App/MET/IpcApplication/Vom/PitchRoll/config
-###    -I../../src/PE1VM1/App/MET/IpcApplication/Vom/PitchRoll/scc
-    -I../../src/PE1VM1/App/MET/IpcApplication/Vom/Ptsctmp/config
+    -I../../src/PE1VM1/App/MET/IpcApplication/Vom/PitchRoll/config
+    -I../../src/PE1VM1/App/MET/IpcApplication/Vom/PitchRoll/scc
     -I../../src/PE1VM1/App/MET/IpcApplication/Vom/Ptsctmp/scc
-    -I../../src/PE1VM1/App/MET/IpcApplication/Vom/RcmmUI/config
     -I../../src/PE1VM1/App/MET/IpcApplication/Vom/RcmmUI/scc
-    -I../../src/PE1VM1/App/MET/IpcApplication/Vom/Seatbelt/config
     -I../../src/PE1VM1/App/MET/IpcApplication/Vom/Seatbelt/scc
     -I../../src/PE1VM1/App/MET/IpcApplication/Vom/Tripcom/app/scc
     -I../../src/PE1VM1/App/MET/IpcApplication/Vom/Tripcom/core/config
     -I../../src/PE1VM1/App/MET/IpcApplication/Vom/Tripcom/core/scc
-    -I../../src/PE1VM1/App/MET/IpcApplication/Vom/Tripcom/sensor/config
     -I../../src/PE1VM1/App/MET/IpcApplication/Vom/Tripcom/sensor/scc
-    -I../../src/PE1VM1/App/MET/IpcApplication/Vom/Tripcom/sensor
     -I../../src/PE1VM1/App/MET/IpcApplication/Vom/VdsCI/config
     -I../../src/PE1VM1/App/MET/IpcApplication/Vom/VdsCI/scc
-    -I../../src/PE1VM1/App/MET/IpcApplication/Vom/Vehspd/config
     -I../../src/PE1VM1/App/MET/IpcApplication/Vom/Vehspd/scc
     -I../../src/PE1VM1/App/MET/IpcApplication/Vom/Vptran/config
     -I../../src/PE1VM1/App/MET/IpcApplication/Vom/Vptran/scc
@@ -111,11 +88,9 @@
     -I../../src/PE1VM1/App/MET/IpcApplication/Vsv/Gauge/scc
     -I../../src/PE1VM1/App/MET/IpcApplication/Vsv/Illumi/config
     -I../../src/PE1VM1/App/MET/IpcApplication/Vsv/Illumi/scc
-    -I../../src/PE1VM1/App/MET/IpcApplication/Vsv/Sbltsync/config
     -I../../src/PE1VM1/App/MET/IpcApplication/Vsv/Sbltsync/scc
     -I../../src/PE1VM1/App/MET/IpcApplication/Vsv/Telltale/config
     -I../../src/PE1VM1/App/MET/IpcApplication/Vsv/Telltale/scc
-    -I../../src/PE1VM1/App/MET/IpcApplication/Vsv/Thblnkr/config
     -I../../src/PE1VM1/App/MET/IpcApplication/Vsv/Thblnkr/scc
     -I../../src/PE1VM1/App/MET/IpcApplication/Vsv/WChime/config
     -I../../src/PE1VM1/App/MET/IpcApplication/Vsv/WChime/config_D1L1
@@ -123,9 +98,9 @@
     -I../../src/PE1VM1/App/MET/Platform/ComplexDriver/DioIf/config
     -I../../src/PE1VM1/App/MET/Platform/ComplexDriver/DioIf/scc
     -I../../src/PE1VM1/App/MET/Platform/ComplexDriver/DrecTx/config
-###    -I../../src/PE1VM1/App/MET/Platform/ComplexDriver/Fcl/config
-###    -I../../src/PE1VM1/App/MET/Platform/ComplexDriver/Fcl
-###    -I../../src/PE1VM1/App/MET/Platform/ComplexDriver/Fcl/lib
+    -I../../src/PE1VM1/App/MET/Platform/ComplexDriver/Fcl/config
+    -I../../src/PE1VM1/App/MET/Platform/ComplexDriver/Fcl
+    -I../../src/PE1VM1/App/MET/Platform/ComplexDriver/Fcl/lib
     -I../../src/PE1VM1/App/MET/Platform/ComplexDriver/Gateway/config
     -I../../src/PE1VM1/App/MET/Platform/ComplexDriver/Gateway/scc
     -I../../src/PE1VM1/App/MET/Platform/ComplexDriver/NWCM/config
@@ -135,13 +110,13 @@
     -I../../src/PE1VM1/App/MET/Platform/ComplexDriver/SoundMiddle/data_TYT
     -I../../src/PE1VM1/App/MET/Platform/ComplexDriver/SoundMiddle/include/U2Ax
     -I../../src/PE1VM1/App/MET/Platform/ComplexDriver/SoundMiddle/scc
-###    -I../../src/PE1VM1/App/MET/Platform/ComplexDriver/Xpdinit/config
-###    -I../../src/PE1VM1/App/MET/Platform/Diagnosis/oXDoCAN/lib/config_D1L1_met
-###    -I../../src/PE1VM1/App/MET/Platform/Diagnosis/oXDoCAN/lib/scc
-###    -I../../src/PE1VM1/App/MET/Platform/Diagnosis/oXDoCAN/sal/config_t330d_D1L1_hv
-###    -I../../src/PE1VM1/App/MET/Platform/Diagnosis/oXDoCAN/sal/met
-###    -I../../src/PE1VM1/App/MET/Platform/Diagnosis/oXDoCAN/sal/scc/esi
-###    -I../../src/PE1VM1/App/MET/Platform/Diagnosis/oXDoCAN/sal/scc
+    -I../../src/PE1VM1/App/MET/Platform/ComplexDriver/Xpdinit/config
+    -I../../src/PE1VM1/App/MET/Platform/Diagnosis/oXDoCAN/lib/config_D1L1_met
+    -I../../src/PE1VM1/App/MET/Platform/Diagnosis/oXDoCAN/lib/scc
+    -I../../src/PE1VM1/App/MET/Platform/Diagnosis/oXDoCAN/sal/config_t330d_D1L1_hv
+    -I../../src/PE1VM1/App/MET/Platform/Diagnosis/oXDoCAN/sal/met
+    -I../../src/PE1VM1/App/MET/Platform/Diagnosis/oXDoCAN/sal/scc/esi
+    -I../../src/PE1VM1/App/MET/Platform/Diagnosis/oXDoCAN/sal/scc
     -I../../src/PE1VM1/App/MET/Platform/Version/scc
     -I../../src/PE1VM1/App/MET/STUB/config
     -I../../src/PE1VM1/App/MET/XSPI_MET/config

@@ -21,7 +21,6 @@
     -I../../src/PE2VM2/App/IVI/ClkCtrl/Common/scc
     -I../../src/PE2VM2/App/IVI/ClkCtrl/Dateclk/config
     -I../../src/PE2VM2/App/IVI/ClkCtrl/Dateclk/scc
-    -I../../src/PE2VM2/App/IVI/ClkCtrl/DateSI/config
     -I../../src/PE2VM2/App/IVI/ClkCtrl/DateSI/scc
     -I../../src/PE2VM2/App/IVI/ClkCtrl/RtcIcDrv/config
     -I../../src/PE2VM2/App/IVI/ClkCtrl/RtcIcDrv/scc
@@ -42,7 +41,6 @@
     -I../../src/PE2VM2/App/IVI/PwrCtrl/DDFreq
     -I../../src/PE2VM2/App/IVI/PwrCtrl
     -I../../src/PE2VM2/App/IVI/XSPI
-    -I../../src/PE2VM2/App/IVI
     -I../../src/PE2VM2/App/Stub
 
 # ----------------------------------------------------------------------------------------------------------------------------------
