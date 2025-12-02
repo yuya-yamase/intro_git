@@ -98,7 +98,9 @@ void EthSwt_SWIC_PWR_ForceOffReq(void)
 /* -------------------------------------------------------------------------- */
 void EthSwt_SWIC_PWR_ResetReq(void)
 {
+    LIB_DI();
     G_SWIC_PWR_ResetReq = STD_ON;
+    LIB_EI();
 
     return;
 }
