@@ -47,8 +47,6 @@
 #define D_ETHSWT_DATA_QCI_DLC_UDP_ID        (4U)
 #define D_ETHSWT_DATA_QCI_NUM               (5U)
 
-#define D_ETHSWT_DATA_REGACCESS_SAIL_ID     (0U)
-#define D_ETHSWT_DATA_REGACCESS_NUM         (1U)
 /* -------------------------------------------------------------------------- */
 
 
@@ -93,9 +91,9 @@ typedef struct {
 /* -------------------------------------------------------------------------- */
 #pragma pack(1)
 typedef struct {
-	Std_ReturnType                  getRegAccessResult;                       /* 1byte */
+    uint32                          getRegAccessResult;                      /* 4byte */
     uint32                          id;                                      /* 4byte */
-} S_ETHSWT_DATA_REGACCESS;                                                   /* Total: 5byte */
+} S_ETHSWT_DATA_REGACCESS;                                                   /* Total: 8byte */
 #pragma pack()
 /* -------------------------------------------------------------------------- */
 

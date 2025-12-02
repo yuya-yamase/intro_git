@@ -147,7 +147,10 @@ Std_ReturnType EthSwt_SWIC_Spi_WriteSPI(const swic_reg_data_t tbl[], const uint3
 	swic_SpiS1_Cmd.cmd[6]	= 0x00u;
 	err = swic_SpiS1_Req1(swic_SpiS1_Cmd.cmd, swic_SpiS1_Cmd.dat, 7);
 	if (err == E_OK) {
-		if (swic_SpiS1_Cmd.dat[6] == swic_SpiS1_CrcOK[crc])	{ return err; }
+		if (swic_SpiS1_Cmd.dat[6] == swic_SpiS1_CrcOK[crc]) {
+			EthSwt_SWIC_RegAccess_RegAccessNotify(E_OK);	/* レジスタアクセス結果の情報を通知 */                
+                  return err;
+                }
 	}
     return swic_SpiS1_SetTblErr(tbl, idx, err);
 }

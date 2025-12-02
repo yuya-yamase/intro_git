@@ -102,7 +102,6 @@ static uint32                   G_ETHSWT_DATA_LINK_ID;
 static uint32                   G_ETHSWT_DATA_MIB_ID;
 static uint32                   G_ETHSWT_DATA_SQI_ID;
 static uint32                   G_ETHSWT_DATA_QCI_ID;
-static uint32                   G_ETHSWT_DATA_REGACCESS_ID;
 static uint32                   G_ETHSWT_DATA_SWICRESET_COUNT;
 
 static uint8                    G_ETHSWT_DATA_LINK_UPDATE;
@@ -142,7 +141,6 @@ void EthSwt_Data_Init(void)
     G_ETHSWT_DATA_MIB_ID = 0u;
     G_ETHSWT_DATA_SQI_ID = 0u;
     G_ETHSWT_DATA_QCI_ID = 0u;
-    G_ETHSWT_DATA_REGACCESS_ID = 0u;
     G_ETHSWT_DATA_SWICRESET_COUNT = 0u;
 
     LIB_memset((uint8*)&G_ETHSWT_DATA_LINK_UPDATE, 0, sizeof(G_ETHSWT_DATA_LINK_UPDATE));
@@ -223,13 +221,12 @@ void EthSwt_Data_NotifyRegAccess(const Std_ReturnType getRegAccessResult)
 
     LIB_DI();
 	if(G_ETHSWT_DATA_REGACCESS.getRegAccessResult != getRegAccessResult && E_NOT_OK == getRegAccessResult){
-		G_ETHSWT_DATA_REGACCESS.getRegAccessResult = getRegAccessResult;
-		ethswt_data_incrementID(&G_ETHSWT_DATA_REGACCESS_ID);
-		G_ETHSWT_DATA_REGACCESS.id = G_ETHSWT_DATA_REGACCESS_ID;
+		G_ETHSWT_DATA_REGACCESS.getRegAccessResult = (uint32)getRegAccessResult;
+		ethswt_data_incrementID(&(G_ETHSWT_DATA_REGACCESS.id));
 	}
 	else
 	{
-		G_ETHSWT_DATA_REGACCESS.getRegAccessResult = getRegAccessResult;
+		G_ETHSWT_DATA_REGACCESS.getRegAccessResult = (uint32)getRegAccessResult;
 	}
 
 	LIB_EI();
