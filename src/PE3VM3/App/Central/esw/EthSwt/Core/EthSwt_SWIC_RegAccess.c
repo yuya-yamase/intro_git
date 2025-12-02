@@ -13,7 +13,6 @@
 #include "EthSwt_SWIC_Define.h"
 /* -------------------------------------------------------------------------- */
 static struct {
-    const swic_reg_data_t *volatile	tbl;						/* 異常が発生したレジスタテーブル */
 	uint32	cnt;												/* エラー連続発生カウンタ */
 } S_ETHSWT_SWIC_REGACCESS;
 
@@ -21,7 +20,6 @@ static struct {
 void EthSwt_SWIC_RegAccess_Init (void)/* レジスタアクセスエラー関連データの初期化 */
 {
 
-	S_ETHSWT_SWIC_REGACCESS.tbl                        = NULL_PTR;
 	S_ETHSWT_SWIC_REGACCESS.cnt                        = 0;
 
 	return;
@@ -32,7 +30,6 @@ void EthSwt_SWIC_RegAccess_Clear (void)/* レジスタアクセスエラー関連データの初期
 
 	LIB_DI();
 
-	S_ETHSWT_SWIC_REGACCESS.tbl                        = NULL_PTR;
 	S_ETHSWT_SWIC_REGACCESS.cnt                        = 0;
 
 	LIB_EI();
@@ -54,7 +51,7 @@ void EthSwt_SWIC_RegAccess_RegAccessNotify(Std_ReturnType err)
 	}
 	else{
 		/* レジスタアクセス成功の場合は成功を通知する */
-		S_ETHSWT_SWIC_REGACCESS.cnt = 0;		
+		S_ETHSWT_SWIC_REGACCESS.cnt = 0;
 		ETHSWT_SWIC_REGACCESS_NOTIFY(err);
 	}
 
