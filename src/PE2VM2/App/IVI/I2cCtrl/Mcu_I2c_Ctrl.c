@@ -55,6 +55,7 @@
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* Ack管理 */
+static uint8    Mcu_I2c_Ack_Pmic;               /* PMIC     : W 0xA2, R 0xA3 */
 static uint8    Mcu_I2c_Ack_Eizoic;             /* Video-IC : W 0x72, R 0x73 */
 static uint8    Mcu_I2c_Ack_Gvif_Rx;            /* GVIF-Rx  : W 0x46, R 0x47 */
 static uint8    Mcu_I2c_Ack_Gvif_Tx;            /* GVIF-Tx  : W 0x48, R 0x49 */
@@ -64,6 +65,7 @@ static uint8    Mcu_I2c_Ack_Gyro;               /* Gryo     : W 0xD2, R 0xD3 */
 static uint8    Mcu_I2c_Ack_G_Moni;             /* Gmoni    : W 0x32, R 0x33 */
 
 static uint8 *  Mcu_I2c_Ack[MCU_I2C_ACK_NUM] = {
+    &Mcu_I2c_Ack_Pmic,
     &Mcu_I2c_Ack_Eizoic,
     &Mcu_I2c_Ack_Gvif_Rx,
     &Mcu_I2c_Ack_Gvif_Tx,
@@ -73,6 +75,7 @@ static uint8 *  Mcu_I2c_Ack[MCU_I2C_ACK_NUM] = {
     &Mcu_I2c_Ack_G_Moni
 };
 
+static U2   u2_s_I2cCtrl_AckCnt_Pmic;            /* PMIC     : W 0xA2, R 0xA3 */
 static U2   u2_s_I2cCtrl_AckCnt_Eizoic;          /* Video-IC : W 0x72, R 0x73 */
 static U2   u2_s_I2cCtrl_AckCnt_Gvif_Rx;         /* GVIF-Rx  : W 0x46, R 0x47 */
 static U2   u2_s_I2cCtrl_AckCnt_Gvif_Tx;         /* GVIF-Tx  : W 0x48, R 0x49 */
@@ -82,6 +85,7 @@ static U2   u2_s_I2cCtrl_AckCnt_Gyro;            /* Gryo     : W 0xD2, R 0xD3 */
 static U2   u2_s_I2cCtrl_AckCnt_G_Moni;          /* Gmoni    : W 0x32, R 0x33 */
 
 static U2 * u2_s_I2cCtrl_AckCnt[MCU_I2C_ACK_NUM] = {
+    &u2_s_I2cCtrl_AckCnt_Pmic,
     &u2_s_I2cCtrl_AckCnt_Eizoic,
     &u2_s_I2cCtrl_AckCnt_Gvif_Rx,
     &u2_s_I2cCtrl_AckCnt_Gvif_Tx,
@@ -113,6 +117,7 @@ static uint8 Mcu_Dev_I2c_Ctrl_AckChk_Wri(uint8 mcu_ack, uint16 * mcu_regstep, co
 *****************************************************************************/
 void Mcu_Dev_I2c_Ctrl_Init(void)
 {
+    Mcu_I2c_Ack_Pmic            = (uint8)MCU_REGWRI_ACK_INI;
     Mcu_I2c_Ack_Eizoic          = (uint8)MCU_REGWRI_ACK_INI;
     Mcu_I2c_Ack_Gvif_Rx         = (uint8)MCU_REGWRI_ACK_INI;
     Mcu_I2c_Ack_Gvif_Tx         = (uint8)MCU_REGWRI_ACK_INI;
@@ -121,6 +126,7 @@ void Mcu_Dev_I2c_Ctrl_Init(void)
     Mcu_I2c_Ack_Gyro            = (uint8)MCU_REGWRI_ACK_INI;
     Mcu_I2c_Ack_G_Moni          = (uint8)MCU_REGWRI_ACK_INI;
 
+    u2_s_I2cCtrl_AckCnt_Pmic    = (U2)0xFFFFU;
     u2_s_I2cCtrl_AckCnt_Eizoic  = (U2)0xFFFFU;
     u2_s_I2cCtrl_AckCnt_Gvif_Rx = (U2)0xFFFFU;
     u2_s_I2cCtrl_AckCnt_Gvif_Tx = (U2)0xFFFFU;
@@ -445,6 +451,22 @@ void Mcu_Dev_I2c_Ctrl_Ack_Gmoni(const uint8 mcu_ack)
         u2_s_I2cCtrl_AckCnt_G_Moni++;
     }
 }
+
+/*****************************************************************************
+  Function      : Mcu_Dev_I2c_Ctrl_Ack_Pmic
+  Description   : 
+  param[in/out] : [i ]mcu_ack           : Ack Received Result
+  return        : -
+  Note          : Get Pmic Ack
+*****************************************************************************/
+void Mcu_Dev_I2c_Ctrl_Ack_Pmic(const uint8 mcu_ack)
+{
+    Mcu_I2c_Ack_Pmic      |=  mcu_ack;
+    if(u2_s_I2cCtrl_AckCnt_Pmic < (U2)U2_MAX){
+        u2_s_I2cCtrl_AckCnt_Pmic++;
+    }
+}
+
 
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
