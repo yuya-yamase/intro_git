@@ -20,10 +20,6 @@
 #include "alert_mtrx_cfg_private.h"
 
 #include "oxcan.h"
-#if 0   /* BEV BSW provisionally */
-#else
-#include "oxcan_channel_STUB.h"
-#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -131,13 +127,11 @@ static U4      u4_s_AlertS_rsaBcSgnSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
     U1              u1_t_sgnl;
 
     u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_FCM1S10_CH0,
-                                     (U4)OXCAN_SYS_IGR,
-                                     u2_s_ALERT_S_RSA_PD_THRSH_TO) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+                                      (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP,
+                                      u2_s_ALERT_S_RSA_PD_THRSH_TO) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     u1_t_sgnl     = (U1)0U;
-#if defined(ComConf_ComSignal_BZRRQ_A)
     (void)Com_ReceiveSignal(ComConf_ComSignal_BZRRQ_A, &u1_t_sgnl);
-#endif /* defined(ComConf_ComSignal_BZRRQ_A) */
 
     u4_t_src_chk  = (U4)u1_t_sgnl;
     u4_t_src_chk  |= ((U4)u1_t_msgsts << u1_s_ALERT_S_RSA_PD_LSB_FCM1S10_STS);
@@ -163,13 +157,11 @@ static U4      u4_s_AlertS_rsaBcLmtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
     U1              u1_t_sgnl;
 
     u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_FCM1S10_CH0,
-                                     (U4)OXCAN_SYS_IGR,
+                                     (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP,
                                      u2_s_ALERT_S_RSA_PD_THRSH_TO) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     u1_t_sgnl     = (U1)0U;
-#if defined(ComConf_ComSignal_SPBZRQ)
     (void)Com_ReceiveSignal(ComConf_ComSignal_SPBZRQ, &u1_t_sgnl);
-#endif /* defined(ComConf_ComSignal_SPBZRQ) */
 
     u4_t_src_chk  = (U4)u1_t_sgnl;
     u4_t_src_chk  |= ((U4)u1_t_msgsts << u1_s_ALERT_S_RSA_PD_LSB_FCM1S10_STS);

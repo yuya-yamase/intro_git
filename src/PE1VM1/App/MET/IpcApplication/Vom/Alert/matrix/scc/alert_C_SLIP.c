@@ -20,10 +20,6 @@
 #include "alert_mtrx_cfg_private.h"
 
 #include "oxcan.h"
-#if 0   /* BEV BSW provisionally */
-#else
-#include "oxcan_channel_STUB.h"
-#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -51,7 +47,6 @@
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static U4      u4_s_AlertC_slipSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS);
-static void    vd_s_AlertC_slipRwTx  (const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
@@ -127,7 +122,7 @@ static const U1  u1_sp_ALERT_C_SLIP_DST[ALERT_C_SLIP_NUM_DST] = {
 const ST_ALERT_MTRX st_gp_ALERT_C_SLIP_MTRX[1] = {
     {
         &u4_s_AlertC_slipSrcchk,                                               /* fp_u4_SRC_CHK                                      */
-        &vd_s_AlertC_slipRwTx,                                                 /* fp_vd_XDST                                         */
+        vdp_PTR_NA,                                                            /* fp_vd_XDST                                         */
 
         (const U4 *)vdp_PTR_NA,                                                /* u4p_MASK                                           */
         (const U4 *)vdp_PTR_NA,                                                /* u4p_CRIT                                           */
@@ -157,8 +152,8 @@ static U4      u4_s_AlertC_slipSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, c
     U1              u1_t_sgnl;
 
     u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_DDM1S17_CH0,
-                                          (U4)OXCAN_SYS_IGR,
-                                          u2_s_ALERT_C_SLIP_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+                                      (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP,
+                                      u2_s_ALERT_C_SLIP_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     u4_t_src_chk  = ((U4)u1_t_msgsts << u1_s_ALERT_C_SLIP_LSB_DDM1S17);
 
@@ -167,38 +162,10 @@ static U4      u4_s_AlertC_slipSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, c
     u4_t_src_chk |= (U4)u1_t_sgnl;
 
     u1_t_sgnl     = (U1)0U;
-#ifdef ComConf_ComSignal_DDRTWV
     (void)Com_ReceiveSignal(ComConf_ComSignal_DDRTWV, &u1_t_sgnl);
-#endif /* ComConf_ComSignal_DDRTWV */ /* 235D_CAN */
     u4_t_src_chk |= ((U4)u1_t_sgnl   << u1_s_ALERT_C_SLIP_LSB_DDRTWV);
 
     return(u4_t_src_chk);
-}
-
-/*===================================================================================================================================*/
-/*  static void    vd_s_AlertC_slipRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)                                  */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void    vd_s_AlertC_slipRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)
-{
-    U1              u1_t_sgnl;
-    U1              u1_t_esopt_vsc;
-
-    u1_t_esopt_vsc = u1_g_AlertEsOptAvailable((U2)ALERT_OPT_ID_C_SLIP_VSCEXIST);
-    if(((u1_a_VOM & (U1)ALERT_VOM_RWT_EN) != (U1)0U                         ) &&
-       (u1_t_esopt_vsc                    == (U1)TRUE                       ) &&
-       (u1_a_DST                          == (U1)ALERT_REQ_C_SLIP_MALFUNC_RW)){
-        u1_t_sgnl = (U1)ALERT_RW_SGNL_ON;
-    }
-    else{
-        u1_t_sgnl = (U1)ALERT_RW_SGNL_OFF;
-    }
-
-#if 0   /* BEV BSW provisionally */
-    (void)Com_SendSignal(ComConf_ComSignal_VSCW, &u1_t_sgnl);    /* COM Tx STUB delete */
-#endif
 }
 
 /*===================================================================================================================================*/

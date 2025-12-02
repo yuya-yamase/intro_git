@@ -20,6 +20,7 @@
 #include "odo_km.h"
 
 #include "hmiodo.h"
+#include "rim_ctl.h"
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -44,10 +45,13 @@
 static U4   u4_s_hmiodo_trip_a;
 static U4   u4_s_hmiodo_trip_b;
 static U2   u2_s_hmiodo_to;
+static U4   u4_s_hmiodo_pre_trip_a;
+static U4   u4_s_hmiodo_pre_trip_b;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+static void    vd_s_HmiOdoSWCount(const U2 u2_a_RIMID);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -62,9 +66,11 @@ static U2   u2_s_hmiodo_to;
 /*===================================================================================================================================*/
 void    vd_g_HmiOdoInit(void)
 {
-    u4_s_hmiodo_trip_a = (U4)U4_MAX;
-    u4_s_hmiodo_trip_b = (U4)U4_MAX;
-    u2_s_hmiodo_to     = (U2)HMIPROXY_TOC_MAX;
+    u4_s_hmiodo_trip_a     = (U4)U4_MAX;
+    u4_s_hmiodo_trip_b     = (U4)U4_MAX;
+    u2_s_hmiodo_to         = (U2)HMIPROXY_TOC_MAX;
+    u4_s_hmiodo_pre_trip_a = (U4)U4_MAX;
+    u4_s_hmiodo_pre_trip_b = (U4)U4_MAX;
 }
 
 /*===================================================================================================================================*/
@@ -107,9 +113,56 @@ void    vd_g_HmiOdoMainTask(void)
 /*===================================================================================================================================*/
 void  vd_g_HmiOdoPut(const U4 u4_a_TRIP_A , const U4 u4_a_TRIP_B)
 {
-    u2_s_hmiodo_to     = (U2)HMIPROXY_TOC_INI;
-    u4_s_hmiodo_trip_a = u4_a_TRIP_A;
-    u4_s_hmiodo_trip_b = u4_a_TRIP_B;
+    u2_s_hmiodo_to         = (U2)HMIPROXY_TOC_INI;
+    u4_s_hmiodo_trip_a     = u4_a_TRIP_A;
+    u4_s_hmiodo_trip_b     = u4_a_TRIP_B;
+
+    if((u4_s_hmiodo_trip_a     == (U1)0U) &&
+       (u4_s_hmiodo_pre_trip_a != (U1)0U)){
+#if 0   /* BEV Rebase provisionally */
+        vd_s_HmiOdoSWCount((U2)RIMID_U2_DS_22_10B2_TRIP_A);
+#endif   /* BEV Rebase provisionally */
+    }
+
+    if((u4_s_hmiodo_trip_b     == (U1)0U) &&
+       (u4_s_hmiodo_pre_trip_b != (U1)0U)){
+#if 0   /* BEV Rebase provisionally */
+        vd_s_HmiOdoSWCount((U2)RIMID_U2_DS_22_10B2_TRIP_B);
+#endif   /* BEV Rebase provisionally */
+    }
+
+    u4_s_hmiodo_pre_trip_a = u4_s_hmiodo_trip_a;
+    u4_s_hmiodo_pre_trip_b = u4_s_hmiodo_trip_b;
+}
+
+/*===================================================================================================================================*/
+/* static void    vd_s_HmiOdoSWCount(const U2 u2_a_RIMID)                                                                            */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void    vd_s_HmiOdoSWCount(const U2 u2_a_RIMID)
+{
+
+    U2  u2_t_count;
+    U1  u1_t_sts;
+
+    u2_t_count = (U2)0U;
+
+#if 0   /* BEV Rebase provisionally */
+    u1_t_sts = u1_g_Rim_ReadU2withStatus(u2_a_RIMID, &u2_t_count);
+#else   /* BEV Rebase provisionally */
+    u1_t_sts = (U1)RIM_RESULT_KIND_NG;
+#endif   /* BEV Rebase provisionally */
+
+    if(((u1_t_sts & (U1)RIM_RESULT_KIND_MASK) == (U1)RIM_RESULT_KIND_OK) &&
+       (u2_t_count                            <  (U2)U2_MAX            )){
+        u2_t_count++;
+#if 0   /* BEV Rebase provisionally */
+        vd_g_Rim_WriteU2(u2_a_RIMID, u2_t_count);
+#endif   /* BEV Rebase provisionally */
+    }
+
 }
 
 /*===================================================================================================================================*/
@@ -123,6 +176,11 @@ void  vd_g_HmiOdoPut(const U4 u4_a_TRIP_A , const U4 u4_a_TRIP_B)
 /*  1.0.0    07/16/2019  TA       New.                                                                                               */
 /*  1.1.0    09/02/2020  TA       See hmiproxy.c                                                                                     */
 /*                                                                                                                                   */
+/*  Revision Date        Author   Change Description                                                                                 */
+/* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
+/*  19PFv3-1 09/24/2024  SI       Add Reset Count Logic (DID-10B2)                                                                   */
+/*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
+/*  * SI   = Shugo Ichinose, Denso Techno                                                                                            */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

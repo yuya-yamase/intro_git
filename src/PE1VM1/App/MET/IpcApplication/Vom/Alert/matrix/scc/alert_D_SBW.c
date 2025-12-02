@@ -1,4 +1,4 @@
-/* 5.9.0 */
+/* 5.10.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define ALERT_D_SBW_C_MAJOR                      (5)
-#define ALERT_D_SBW_C_MINOR                      (9)
+#define ALERT_D_SBW_C_MINOR                      (10)
 #define ALERT_D_SBW_C_PATCH                      (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -21,10 +21,6 @@
 #include "alert_brx.h"
 
 #include "oxcan.h"
-#if 0   /* BEV BSW provisionally */
-#else
-#include "oxcan_channel_STUB.h"
-#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -53,12 +49,6 @@
 #define ALERT_D_SBW_PD_ACCN_NUM_DST              (16U)
 #define ALERT_D_SBW_PD_SILUA_NUM_DST             (8U)
 #define ALERT_D_SBW_PD_SFPF_NUM_DST              (8U)
-
-#define ALERT_D_SBW_RWSGNL_SBW3                  (0U)
-#define ALERT_D_SBW_RWSGNL_SBW8                  (1U)
-#define ALERT_D_SBW_RWSGNL_SBW9                  (2U)
-
-#define ALERT_D_SBW_NUM_RWSGNL                   (3U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -99,11 +89,6 @@ static U4      u4_s_AlertD_sbwPdDapSrcchk  (const U1 u1_a_VOM, const U4 u4_a_IGN
 static U4      u4_s_AlertD_sbwPdAccnSrcchk (const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS);
 static U4      u4_s_AlertD_sbwPdSiluaSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS);
 static U4      u4_s_AlertD_sbwPdSfpfSrcchk (const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS);
-static void    vd_s_AlertD_sbwPdActfRwTx   (const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST);
-static void    vd_s_AlertD_sbwPdPswfRwTx   (const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST);
-static void    vd_s_AlertD_sbwPdSbwfRwTx   (const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST);
-static void    vd_s_AlertD_sbwPdChkRwTx    (const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST);
-static void    vd_s_AlertD_sbwPdSftfRwTx   (const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
@@ -747,7 +732,7 @@ const ST_ALERT_MTRX st_gp_ALERT_D_SBW_MTRX[17] = {
     },
     {
         &u4_s_AlertD_sbwPdActfSrcchk,                                          /* fp_u4_SRC_CHK                                      */
-        &vd_s_AlertD_sbwPdActfRwTx,                                            /* fp_vd_XDST                                         */
+        vdp_PTR_NA,                                                            /* fp_vd_XDST                                         */
 
         (const U4 *)vdp_PTR_NA,                                                /* u4p_MASK                                           */
         (const U4 *)vdp_PTR_NA,                                                /* u4p_CRIT                                           */
@@ -769,7 +754,7 @@ const ST_ALERT_MTRX st_gp_ALERT_D_SBW_MTRX[17] = {
     },
     {
         &u4_s_AlertD_sbwPdPswfSrcchk,                                          /* fp_u4_SRC_CHK                                      */
-        &vd_s_AlertD_sbwPdPswfRwTx,                                            /* fp_vd_XDST                                         */
+        vdp_PTR_NA,                                                            /* fp_vd_XDST                                         */
 
         (const U4 *)vdp_PTR_NA,                                                /* u4p_MASK                                           */
         (const U4 *)vdp_PTR_NA,                                                /* u4p_CRIT                                           */
@@ -780,7 +765,7 @@ const ST_ALERT_MTRX st_gp_ALERT_D_SBW_MTRX[17] = {
     },
     {
         &u4_s_AlertD_sbwPdSbwfSrcchk,                                          /* fp_u4_SRC_CHK                                      */
-        &vd_s_AlertD_sbwPdSbwfRwTx,                                            /* fp_vd_XDST                                         */
+        vdp_PTR_NA,                                                            /* fp_vd_XDST                                         */
 
         (const U4 *)vdp_PTR_NA,                                                /* u4p_MASK                                           */
         (const U4 *)vdp_PTR_NA,                                                /* u4p_CRIT                                           */
@@ -791,7 +776,7 @@ const ST_ALERT_MTRX st_gp_ALERT_D_SBW_MTRX[17] = {
     },
     {
         &u4_s_AlertD_sbwPdChkSrcchk,                                           /* fp_u4_SRC_CHK                                      */
-        &vd_s_AlertD_sbwPdChkRwTx,                                             /* fp_vd_XDST                                         */
+        vdp_PTR_NA,                                                            /* fp_vd_XDST                                         */
 
         &u4_sp_ALERT_D_SBW_PD_CHK_MASK[0],                                     /* u4p_MASK                                           */
         &u4_sp_ALERT_D_SBW_PD_CHK_CRIT[0],                                     /* u4p_CRIT                                           */
@@ -802,7 +787,7 @@ const ST_ALERT_MTRX st_gp_ALERT_D_SBW_MTRX[17] = {
     },
     {
         &u4_s_AlertD_sbwPdSftfSrcchk,                                          /* fp_u4_SRC_CHK                                      */
-        &vd_s_AlertD_sbwPdSftfRwTx,                                            /* fp_vd_XDST                                         */
+        vdp_PTR_NA,                                                            /* fp_vd_XDST                                         */
 
         (const U4 *)vdp_PTR_NA,                                                /* u4p_MASK                                           */
         (const U4 *)vdp_PTR_NA,                                                /* u4p_CRIT                                           */
@@ -938,8 +923,8 @@ static U4      u4_s_AlertD_sbwBzBsftSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
     U1              u1_t_sgnl;
 
     u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_PCN1S01_CH0,
-                                     (U4)ALERT_CAN_SYS_PNC_ALL,
-                                     u2_s_ALERT_SBW_BZ_BSFT_TO_TRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+                                      (U4)ALERT_CAN_SYS_ALL,
+                                      u2_s_ALERT_SBW_BZ_BSFT_TO_TRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
     vd_g_AlertBRxTrnsSts(&u1_s_alert_sbw_msgsts_bsft, u1_t_msgsts);
 
     u4_t_src_chk = ((U4)u1_s_alert_sbw_msgsts_bsft << u1_s_ALERT_SBW_BZ_BSFT_LSB_MSG);
@@ -966,8 +951,8 @@ static U4      u4_s_AlertD_sbwBzIgsftSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN
     U1              u1_t_sgnl;
 
     u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_PCN1S01_CH0,
-                                     (U4)OXCAN_SYS_IGR,
-                                     u2_s_ALERT_SBW_BZ_IGSFT_TO_TRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+                                      (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP,
+                                      u2_s_ALERT_SBW_BZ_IGSFT_TO_TRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
     u4_t_src_chk  = ((U4)u1_t_msgsts << u1_s_ALERT_SBW_BZ_IGSFT_LSB_MSG);
 
     u1_t_sgnl     = (U1)0U;
@@ -991,14 +976,12 @@ static U4      u4_s_AlertD_sbwBzPtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM
     U1              u1_t_msgsts;
 
    u1_t_msgsts                = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_ENG1G92_CH0,
-                                                 (U4)OXCAN_SYS_IGR,
-                                                 u2_s_ALERT_SBW_BZ_PT_TRSH_1G92) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+                                                  (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP,
+                                                  u2_s_ALERT_SBW_BZ_PT_TRSH_1G92) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     u1_t_sgnl                  = (U1)0U;
     if(u1_t_msgsts == (U1)0U){
-        #if defined(ComConf_ComSignal_BZR_PT) /*@@@ 19pvf CANFDItem  @@@*/
         (void)Com_ReceiveSignal(ComConf_ComSignal_BZR_PT, &u1_t_sgnl);
-        #endif /* ComConf_ComSignal_BZR_PT */
     }
     u4_t_src_chk               = u1_t_sgnl;
     return(u4_t_src_chk);
@@ -1028,8 +1011,8 @@ static U4      u4_s_AlertD_sbwPdActfSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
     }
 
     u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_SBW1G02_CH0,
-                                     (U4)ALERT_CAN_SYS_PNC_ALL,
-                                     u2_s_ALERT_SBW_PD_ACTF_TO_TRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+                                      (U4)ALERT_CAN_SYS_ALL,
+                                      u2_s_ALERT_SBW_PD_ACTF_TO_TRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     vd_g_AlertBRxTrnsSts(&u1_s_alert_sbw_msgsts_actf, u1_t_msgsts);
     u4_t_src_chk |= ((U4)u1_s_alert_sbw_msgsts_actf << u1_s_ALERT_SBW_PD_ACTF_LSB_MSG);
@@ -1065,8 +1048,8 @@ static U4      u4_s_AlertD_sbwPdLbatSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
     U1              u1_t_sgnl;
 
     u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_SBW1G02_CH0,
-                                     (U4)ALERT_CAN_SYS_PNC_ALL,
-                                     u2_s_ALERT_SBW_PD_LBAT_TO_TRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+                                      (U4)ALERT_CAN_SYS_ALL,
+                                      u2_s_ALERT_SBW_PD_LBAT_TO_TRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     vd_g_AlertBRxTrnsSts(&u1_s_alert_sbw_msgsts_lbat, u1_t_msgsts);
 
@@ -1099,8 +1082,8 @@ static U4      u4_s_AlertD_sbwPdPswfSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
     U1              u1_t_sgnl;
 
     u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_SBW1G02_CH0,
-                                     (U4)ALERT_CAN_SYS_PNC_ALL,
-                                     u2_s_ALERT_SBW_PD_PSWF_TO_TRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+                                      (U4)ALERT_CAN_SYS_ALL,
+                                      u2_s_ALERT_SBW_PD_PSWF_TO_TRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     vd_g_AlertBRxTrnsSts(&u1_s_alert_sbw_msgsts_pswf, u1_t_msgsts);
 
@@ -1133,8 +1116,8 @@ static U4      u4_s_AlertD_sbwPdSbwfSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
     U1              u1_t_sgnl;
 
     u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_SBW1G02_CH0,
-                                     (U4)ALERT_CAN_SYS_PNC_ALL,
-                                     u2_s_ALERT_SBW_PD_SBWF_TO_TRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+                                      (U4)ALERT_CAN_SYS_ALL,
+                                      u2_s_ALERT_SBW_PD_SBWF_TO_TRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     vd_g_AlertBRxTrnsSts(&u1_s_alert_sbw_msgsts_sbwf, u1_t_msgsts);
 
@@ -1168,8 +1151,8 @@ static U4      u4_s_AlertD_sbwPdChkSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
     U1              u1_t_msgsts;
     U1              u1_t_sgnl;
     u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_PCN1S01_CH0,
-                                     (U4)ALERT_CAN_SYS_PNC_ALL,
-                                     u2_s_ALERT_SBW_PD_CHK_TRSH_1S01) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+                                      (U4)ALERT_CAN_SYS_ALL,
+                                      u2_s_ALERT_SBW_PD_CHK_TRSH_1S01) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
     vd_g_AlertBRxTrnsSts(&u1_s_alert_sbw_msgsts_chk, u1_t_msgsts);
 
     u4_t_src_chk  = ((U4)u1_s_alert_sbw_msgsts_chk << u1_s_ALERT_D_SBW_PD_CHK_LSB_PC01);
@@ -1178,15 +1161,13 @@ static U4      u4_s_AlertD_sbwPdChkSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
     u4_t_src_chk |= ((U4)u1_t_sgnl << u1_s_ALERT_D_SBW_PD_CHK_LSB_MSHK);
 
     u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_ENG1G92_CH0,
-                                     (U4)OXCAN_SYS_IGR,
-                                     u2_s_ALERT_SBW_PD_CHK_TRSH_1G92) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+                                      (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP,
+                                      u2_s_ALERT_SBW_PD_CHK_TRSH_1G92) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_D_SBW_PD_CHK_LSB_EN92);
 
     u1_t_sgnl     = (U1)0U;
-    #if defined(ComConf_ComSignal_MSG_SFML) /*@@@ 19pvf CANFDItem  @@@*/
     (void)Com_ReceiveSignal(ComConf_ComSignal_MSG_SFML, &u1_t_sgnl);
-    #endif /* ComConf_ComSignal_MSG_SFML */
     u4_t_src_chk |= (U4)u1_t_sgnl;
 
     return(u4_t_src_chk);
@@ -1207,8 +1188,8 @@ static U4      u4_s_AlertD_sbwPdSftfSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
     U1              u1_t_sgnl;
 
     u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_PCN1S01_CH0,
-                                     (U4)OXCAN_SYS_IGR,
-                                     u2_s_ALERT_SBW_PD_SFTF_TO_TRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+                                      (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP,
+                                      u2_s_ALERT_SBW_PD_SFTF_TO_TRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
     u4_t_src_chk  = ((U4)u1_t_msgsts << u1_s_ALERT_SBW_PD_SFTF_LSB_MSG);
 
     u1_t_sgnl     = (U1)0U;
@@ -1233,8 +1214,8 @@ static U4      u4_s_AlertD_sbwPdRisSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
     U1              u1_t_sgnl;
 
     u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_PCN1S01_CH0,
-                                     (U4)OXCAN_SYS_IGR,
-                                     u2_s_ALERT_SBW_PD_RIS_TO_TRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+                                      (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP,
+                                      u2_s_ALERT_SBW_PD_RIS_TO_TRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
     u4_t_src_chk  = ((U4)u1_t_msgsts << u1_s_ALERT_D_SBW_PD_RIS_LSB_PC01);
 
     u1_t_sgnl     = (U1)0U;
@@ -1259,8 +1240,8 @@ static U4      u4_s_AlertD_sbwPdNsftSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
     U1              u1_t_sgnl;
 
     u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_PCN1S01_CH0,
-                                     (U4)OXCAN_SYS_IGR,
-                                     u2_s_ALERT_SBW_PD_NSFT_TO_TRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+                                      (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP ,
+                                      u2_s_ALERT_SBW_PD_NSFT_TO_TRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
     u4_t_src_chk  = ((U4)u1_t_msgsts << u1_s_ALERT_SBW_PD_NSFT_LSB_MSG);
 
     u1_t_sgnl     = (U1)0U;
@@ -1286,8 +1267,8 @@ static U4      u4_s_AlertD_sbwPdPreqSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
     U1              u1_t_sgnl;
 
     u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_SBW1G02_CH0,
-                                     (U4)ALERT_CAN_SYS_PNC_ALL,
-                                     u2_s_ALERT_SBW_PD_PREQ_TO_TRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+                                      (U4)ALERT_CAN_SYS_ALL,
+                                      u2_s_ALERT_SBW_PD_PREQ_TO_TRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     vd_g_AlertBRxTrnsSts(&u1_s_alert_sbw_msgsts_preq, u1_t_msgsts);
 
@@ -1319,14 +1300,12 @@ static U4      u4_s_AlertD_sbwPdSfmlSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
     U1              u1_t_sgnl;
 
     u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_ENG1G92_CH0,
-                                          (U4)OXCAN_SYS_IGR,
-                                          u2_s_ALERT_SBW_PD_SFML_TRSH_1G92) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+                                      (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP,
+                                      u2_s_ALERT_SBW_PD_SFML_TRSH_1G92) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
     u4_t_src_chk  = ((U4)u1_t_msgsts << u1_s_ALERT_SBW_PD_SFML_LSB_MSG);
 
     u1_t_sgnl     = (U1)0U;
-    #if defined(ComConf_ComSignal_MSG_SFML) /*@@@ 19pvf CANFDItem  @@@*/
     (void)Com_ReceiveSignal(ComConf_ComSignal_MSG_SFML, &u1_t_sgnl);
-    #endif /* ComConf_ComSignal_MSG_SFML */
     u4_t_src_chk |= (U4)u1_t_sgnl;
 
     return(u4_t_src_chk);
@@ -1348,7 +1327,7 @@ static U4      u4_s_AlertD_sbwPdDapSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
     U1              u1_t_sgnl;
 
     u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_PCN1S01_CH0,
-                                     (U4)ALERT_CAN_SYS_PNC_ALL,
+                                     (U4)ALERT_CAN_SYS_ALL,
                                      u2_s_ALERT_SBW_PD_DAP_TO_TRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
     vd_g_AlertBRxTrnsSts(&u1_s_alert_sbw_msgsts_dap, u1_t_msgsts);
 
@@ -1381,8 +1360,8 @@ static U4      u4_s_AlertD_sbwPdAccnSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
     U1              u1_t_sgnl;
 
     u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_PCN1S01_CH0,
-                                     (U4)ALERT_CAN_SYS_PNC_ALL,
-                                     u2_s_ALERT_SBW_PD_ACCN_TO_TRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+                                      (U4)ALERT_CAN_SYS_ALL,
+                                      u2_s_ALERT_SBW_PD_ACCN_TO_TRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
     vd_g_AlertBRxTrnsSts(&u1_s_alert_sbw_msgsts_accn, u1_t_msgsts);
 
     u4_t_src_chk  = ((U4)u1_s_alert_sbw_msgsts_accn << u1_s_ALERT_SBW_PD_ACCN_LSB_MSG);
@@ -1413,7 +1392,7 @@ static U4      u4_s_AlertD_sbwPdSiluaSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN
     U1              u1_t_sgnl;
 
     u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_PCN1S01_CH0,
-                                     (U4)OXCAN_SYS_IGR,
+                                     (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP,
                                      u2_s_ALERT_D_SBW_SILUA_TO_TRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
     u4_t_src_chk  = ((U4)u1_t_msgsts << u1_s_ALERT_D_SBW_SILUA_LSB_MSG);
 
@@ -1439,158 +1418,15 @@ static U4      u4_s_AlertD_sbwPdSfpfSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
     U1              u1_t_sgnl;
 
     u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_PCN1S01_CH0,
-                                     (U4)OXCAN_SYS_IGR,
+                                     (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP,
                                      u2_s_ALERT_D_SBW_PD_SFPF_TO_TRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
     u4_t_src_chk  = ((U4)u1_t_msgsts << u1_s_ALERT_D_SBW_PD_SFPF_LSB_MSG);
 
     u1_t_sgnl     = (U1)0U;
-    #if defined(ComConf_ComSignal_MSG_SFPF) /*@@@ BEV CANFDItem  @@@*/
     (void)Com_ReceiveSignal(ComConf_ComSignal_MSG_SFPF, &u1_t_sgnl);
-    #endif /*@@@ ComConf_ComSignal_MSG_SFPF  @@@*/
     u4_t_src_chk |= (U4)u1_t_sgnl;
 
     return(u4_t_src_chk);
-}
-
-/*===================================================================================================================================*/
-/*  static void    vd_s_AlertD_sbwPdActfRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)                             */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void    vd_s_AlertD_sbwPdActfRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)
-{
-    static const U4 u4_s_ALERT_SBW_PD_ACTF_RW_ENBL = ((U4)15000U / (U4)ALERT_MAIN_TICK);
-    U1              u1_t_shift_sbw;
-    U1              u1_t_sgnl;
-
-    u1_t_shift_sbw = u1_g_AlertShiftSbwFunc();
-
-    if((u1_t_shift_sbw                    == (U1)TRUE                          ) &&
-       ((u1_a_VOM & (U1)ALERT_VOM_IGN_ON) != (U1)0U                            ) &&
-       (u4_a_IGN_TM                       >= u4_s_ALERT_SBW_PD_ACTF_RW_ENBL    ) &&
-       (u1_a_DST                          == (U1)ALERT_REQ_D_SBW_PD_ACTF_MSG_02)){
-        u1_t_sgnl = (U1)ALERT_RW_SGNL_ON;
-    }
-    else{
-        u1_t_sgnl = (U1)ALERT_RW_SGNL_OFF;
-    }
-
-#if 0   /* BEV BSW provisionally */
-    (void)Com_SendSignal(ComConf_ComSignal_SBW4, &u1_t_sgnl);    /* COM Tx STUB delete */
-#endif
-}
-
-/*===================================================================================================================================*/
-/*  static void    vd_s_AlertD_sbwPdPswfRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)                             */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void    vd_s_AlertD_sbwPdPswfRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)
-{
-    U1              u1_t_sgnl;
-
-    if(((u1_a_VOM & (U1)ALERT_VOM_RWT_EN) != (U1)0U                            ) &&
-       (u1_a_DST                          == (U1)ALERT_REQ_D_SBW_PD_PSWF_MSG_04)){
-        u1_t_sgnl = (U1)ALERT_RW_SGNL_ON;
-    }
-    else{
-        u1_t_sgnl = (U1)ALERT_RW_SGNL_OFF;
-    }
-
-#if 0   /* BEV BSW provisionally */
-    (void)Com_SendSignal(ComConf_ComSignal_SBW6, &u1_t_sgnl);    /* COM Tx STUB delete */
-#endif
-}
-
-/*===================================================================================================================================*/
-/*  static void    vd_s_AlertD_sbwPdSbwfRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)                             */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void    vd_s_AlertD_sbwPdSbwfRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)
-{
-    static const U4 u4_s_ALERT_SBW_PD_SBWF_RW_ENBL = ((U4)15000U / (U4)ALERT_MAIN_TICK);
-    U1              u1_t_sgnl;
-
-    if(((u1_a_VOM & (U1)ALERT_VOM_IGN_ON) != (U1)0U                            ) &&
-       (u4_a_IGN_TM                       >= u4_s_ALERT_SBW_PD_SBWF_RW_ENBL    ) &&
-       (u1_a_DST                          == (U1)ALERT_REQ_D_SBW_PD_SBWF_MSG_05)){
-        u1_t_sgnl = (U1)ALERT_RW_SGNL_ON;
-    }
-    else{
-        u1_t_sgnl = (U1)ALERT_RW_SGNL_OFF;
-    }
-
-#if 0   /* BEV BSW provisionally */
-    (void)Com_SendSignal(ComConf_ComSignal_SBW5, &u1_t_sgnl);    /* COM Tx STUB delete */
-#endif
-}
-
-/*===================================================================================================================================*/
-/*  static void    vd_s_AlertD_sbwPdChkRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)                              */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void    vd_s_AlertD_sbwPdChkRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)
-{
-    static const U1 u1_sp_ALERT_D_SBWRWTX_DST_CRT[ALERT_D_SBW_NUM_RWSGNL] = {
-        ((U1)((U1)1U << ALERT_REQ_D_SBW_PD_CHK_MSG_06 ) | (U1)((U1)1U << ALERT_REQ_D_SBW_PD_CHK_MSG6_SBW8)
-                                                        | (U1)((U1)1U << ALERT_REQ_D_SBW_PD_CHK_MSG6_SBW9)), /* SBW3 */
-        ((U1)((U1)1U << ALERT_REQ_D_SBW_PD_CHK_SBW8_ON) | (U1)((U1)1U << ALERT_REQ_D_SBW_PD_CHK_MSG6_SBW8)), /* SBW8 */
-        ((U1)((U1)1U << ALERT_REQ_D_SBW_PD_CHK_SBW9_ON) | (U1)((U1)1U << ALERT_REQ_D_SBW_PD_CHK_MSG6_SBW9))  /* SBW9 */
-    };
-    static const U1 u1_s_ALERT_D_SBWRWTX_DST_MSK = (U1)0x07U;
-
-    U1              u1_tp_sgnl[ALERT_D_SBW_NUM_RWSGNL];
-    U1              u1_t_rw;
-    U4              u4_t_idx;
-
-    u1_t_rw = (U1)0U;
-    if(u1_a_DST != (U1)ALERT_REQ_UNKNOWN){
-        u1_t_rw = ((U1)1U << (u1_a_DST & u1_s_ALERT_D_SBWRWTX_DST_MSK));
-    }
-    for(u4_t_idx = (U4)0U; u4_t_idx < (U4)ALERT_D_SBW_NUM_RWSGNL; u4_t_idx++){
-        if(((u1_a_VOM & (U1)ALERT_VOM_RWT_EN)                    != (U1)0U) &&
-           ((u1_t_rw  & u1_sp_ALERT_D_SBWRWTX_DST_CRT[u4_t_idx]) != (U1)0U)){
-
-            u1_tp_sgnl[u4_t_idx] = (U1)ALERT_RW_SGNL_ON;
-        }
-        else{
-            u1_tp_sgnl[u4_t_idx] = (U1)ALERT_RW_SGNL_OFF;
-        }
-    }
-#if 0   /* BEV BSW provisionally */
-    (void)Com_SendSignal(ComConf_ComSignal_SBW3 , &u1_tp_sgnl[ALERT_D_SBW_RWSGNL_SBW3]);    /* COM Tx STUB delete */
-    (void)Com_SendSignal(ComConf_ComSignal_SBW8 , &u1_tp_sgnl[ALERT_D_SBW_RWSGNL_SBW8]);    /* COM Tx STUB delete */
-    (void)Com_SendSignal(ComConf_ComSignal_SBW9 , &u1_tp_sgnl[ALERT_D_SBW_RWSGNL_SBW9]);    /* COM Tx STUB delete */
-#endif
-}
-
-/*===================================================================================================================================*/
-/*  static void    vd_s_AlertD_sbwPdSftfRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)                             */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void    vd_s_AlertD_sbwPdSftfRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)
-{
-    U1              u1_t_sgnl;
-
-    if(((u1_a_VOM & (U1)ALERT_VOM_RWT_EN) != (U1)0U                            ) &&
-       (u1_a_DST                          == (U1)ALERT_REQ_D_SBW_PD_SFTF_MSG_07)){
-        u1_t_sgnl = (U1)ALERT_RW_SGNL_ON;
-    }
-    else{
-        u1_t_sgnl = (U1)ALERT_RW_SGNL_OFF;
-    }
-
-#if 0   /* BEV BSW provisionally */
-    (void)Com_SendSignal(ComConf_ComSignal_SBW2, &u1_t_sgnl);    /* COM Tx STUB delete */
-#endif
 }
 
 /*===================================================================================================================================*/
@@ -1612,7 +1448,8 @@ static void    vd_s_AlertD_sbwPdSftfRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM
 /*  5.7.0     7/ 6/2022  RI       Fix by adding shift type condition to SBW4.(METHUD900B-5503)                                       */
 /*  5.7.1     7/13/2022  KK       Update for 840B #2 1A(Version update).                                                             */
 /*  5.8.0     1/15/2024  GM       Update for 19PFv3.                                                                                 */
-/*  5.9.0     2/10/2025  HF       Change for BEV System_Consideration_1.(MET-D_SBW-CSTD-3-00-A-C0)                                   */
+/*  5.9.0    11/ 4/2024  SHN      Change matrix table for PD_ACTF,sbwPdActfSrcchk function                                           */
+/*  5.10.0   11/19/2025  SH       Config BevStep3                                                                                    */
 /*                                                                                                                                   */
 /*  * SN   = Shinichiro Naito, NTTD MSE                                                                                              */
 /*  * DS   = Daisuke Suzuki, NTTD MSE                                                                                                */
@@ -1623,6 +1460,7 @@ static void    vd_s_AlertD_sbwPdSftfRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM
 /*  * RI   = Ren Ito, NTTD MSE                                                                                                       */
 /*  * KK   = Kenta Kawahara, NTTD MSE                                                                                                */
 /*  * GM   = Glen Monteposo, DTPH                                                                                                    */
-/*  * HF   = Hinari Fukamachi, KSE                                                                                                   */
+/*  * SHN  = Shimon nambu,Denso Techno                                                                                               */
+/*  * SH   = Sae Hirose, Denso Techno                                                                                                */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

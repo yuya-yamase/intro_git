@@ -20,10 +20,6 @@
 #include "alert_mtrx_cfg_private.h"
 
 #include "oxcan.h"
-#if 0   /* BEV BSW provisionally */
-#else
-#include "oxcan_channel_STUB.h"
-#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -239,8 +235,8 @@ static U4      u4_s_AlertS_frradaBzCmpSrcchk(const U1 u1_a_VOM, const U4 u4_a_IG
     U1              u1_t_msgsts;
 
     u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_ADU1S07_CH0,
-                                     (U4)OXCAN_SYS_IGR,
-                                     u2_s_ALERT_CH_S_FRRADA_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+                                      (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP,
+                                      u2_s_ALERT_CH_S_FRRADA_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     u1_t_sgnl     = (U1)0U;
     (void)Com_ReceiveSignal(ComConf_ComSignal_FSL_BZ_C, &u1_t_sgnl);
@@ -281,8 +277,8 @@ static U4      u4_s_AlertS_frradaBzErrSrcchk(const U1 u1_a_VOM, const U4 u4_a_IG
     U1              u1_t_msgsts;
 
     u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_ADU1S07_CH0,
-                                     (U4)OXCAN_SYS_IGR,
-                                     u2_s_ALERT_CH_S_FRRADA_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+                                      (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP,
+                                      u2_s_ALERT_CH_S_FRRADA_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     u1_t_sgnl     = (U1)0U;
     (void)Com_ReceiveSignal(ComConf_ComSignal_FSL_BZ_E, &u1_t_sgnl);

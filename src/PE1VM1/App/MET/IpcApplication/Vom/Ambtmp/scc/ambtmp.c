@@ -1,4 +1,4 @@
-/* 2.2.1 */
+/* 2.3.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,14 +10,13 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define AMBTMP_C_MAJOR                         (2)
-#define AMBTMP_C_MINOR                         (2)
-#define AMBTMP_C_PATCH                         (1)
+#define AMBTMP_C_MINOR                         (3)
+#define AMBTMP_C_PATCH                         (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "ambtmp_cfg_private.h"
-#include "ambtmp_ad.h"
 #include "ambtmp_can.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -42,7 +41,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define AMBTMP_NUM_SNSRIF           (2U)
+#define AMBTMP_NUM_SNSRIF           (1U)
 
 #define AMBTMP_NUM_DEGREE           (2U)
 #define AMBTMP_DEG_CELSIUS          (0U)
@@ -110,7 +109,6 @@ void    vd_g_AmbtmpBonInit(void)
     st_sp_ambtmp[AMBTMP_DEG_FAHRENHEIT].u1_icew   = (U1)FALSE;
     st_sp_ambtmp[AMBTMP_DEG_FAHRENHEIT].u1_icyraw = (U1)FALSE;
 
-    vd_g_AmbtmpAdBonInit();
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_AmbtmpRstWkInit(void)                                                                                               */
@@ -132,23 +130,6 @@ void    vd_g_AmbtmpRstWkInit(void)
     st_sp_ambtmp[AMBTMP_DEG_FAHRENHEIT].u1_icew   = (U1)FALSE;
     st_sp_ambtmp[AMBTMP_DEG_FAHRENHEIT].u1_icyraw = (U1)FALSE;
 
-    vd_g_AmbtmpAdRstWkInit();
-
-}
-/*===================================================================================================================================*/
-/*  void    vd_g_AmbtmpOpemdEvhk(const U4 u4_a_MDBIT, const U4 u4_a_EVTBIT)                                                          */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void    vd_g_AmbtmpOpemdEvhk(const U4 u4_a_MDBIT, const U4 u4_a_EVTBIT)
-{
-    U1  u1_t_comp;
-
-    u1_t_comp = u1_g_AmbtmpAdInitComp();
-    if(u1_t_comp == (U1)TRUE){
-        vd_g_AmbtmpCfgOpemdEvhk(u4_a_MDBIT, u4_a_EVTBIT);
-    }
 }
 
 /*===================================================================================================================================*/
@@ -160,8 +141,7 @@ void    vd_g_AmbtmpOpemdEvhk(const U4 u4_a_MDBIT, const U4 u4_a_EVTBIT)
 void    vd_g_AmbtmpMainTask(void)
 {
     static U1      (* const fp_sp_u1_AMBTMP_IF[AMBTMP_NUM_SNSRIF])(U2 * u2p_a_cel) ={
-        &u1_g_AmbtmpCAN,
-        &u1_g_AmbtmpAd
+        &u1_g_AmbtmpCAN
     };
 
     U1  u1_t_ifidx;
@@ -192,9 +172,6 @@ void    vd_g_AmbtmpMainTask(void)
         vd_s_AmbtmpTrvlFlgChk();
         vd_s_AmbtmpIceWrnChk();
     }
-    else{
-        vd_g_AmbtmpAdBonInit(); 
-    }
     vd_g_AmbtmpCfgMainFinish(u1_s_ambtmp_sts, st_sp_ambtmp[AMBTMP_DEG_CELSIUS].u2_deg, st_sp_ambtmp[AMBTMP_DEG_FAHRENHEIT].u2_deg);
 }
 
@@ -213,20 +190,6 @@ U1      u1_g_AmbtmpCel(U2 * u2p_a_cel)
 }
 
 /*===================================================================================================================================*/
-/*  U1      u1_g_AmbtmpCelInst(U2 * u2p_a_cel)                                                                                       */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1      u1_g_AmbtmpCelInst(U2 * u2p_a_cel)
-{
-    if(u2p_a_cel != vdp_PTR_NA){
-        *u2p_a_cel = st_sp_ambtmp[AMBTMP_DEG_CELSIUS   ].u2_deg;
-    }
-    return(u1_s_ambtmp_sts);
-}
-
-/*===================================================================================================================================*/
 /*  U1      u1_g_AmbtmpFah(U2 * u2p_a_fah)                                                                                           */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
@@ -236,20 +199,6 @@ U1      u1_g_AmbtmpFah(U2 * u2p_a_fah)
 {
     if(u2p_a_fah != vdp_PTR_NA){
         *u2p_a_fah = st_sp_ambtmp[AMBTMP_DEG_FAHRENHEIT].u2_dsp;
-    }
-    return(u1_s_ambtmp_sts);
-}
-
-/*===================================================================================================================================*/
-/*  U1      u1_g_AmbtmpFahInst(U2 * u2p_a_fah)                                                                                       */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1      u1_g_AmbtmpFahInst(U2 * u2p_a_fah)
-{
-    if(u2p_a_fah != vdp_PTR_NA){
-        *u2p_a_fah = st_sp_ambtmp[AMBTMP_DEG_FAHRENHEIT].u2_deg;
     }
     return(u1_s_ambtmp_sts);
 }
@@ -505,9 +454,11 @@ static void vd_s_AmbtmpTrvlFlgChk(void)
 /*  2.1.0    11/25/2021  TA(M)    Change judge ice warning in Celsius and Fahrenheit respectively                                    */
 /*  2.2.0    03/07/2022  TA(M)    Change the processing when unknows of ambtmp_ad                                                    */
 /*  2.2.1    06/28/2022  TA(M)    Change rounding logic of u2_s_AmbtmpDspCel/u2_s_AmbtmpDspFah                                       */
+/*  2.3.0    10/28/2025  SN       Delete vd_g_AmbtmpOpemdEvhk                                                                        */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * YN   = Yasuhiro Nakamura, Denso Techno                                                                                         */
 /*  * TA(M)= Teruyuki Anjima, NTT Data MSE                                                                                           */
+/*  * SN   = Shimon Nambu, Denso Techno                                                                                              */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

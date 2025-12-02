@@ -20,10 +20,6 @@
 #include "alert_mtrx_cfg_private.h"
 
 #include "oxcan.h"
-#if 0   /* BEV BSW provisionally */
-#else
-#include "oxcan_channel_STUB.h"
-#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -51,7 +47,6 @@
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static U4      u4_s_AlertB_pedproSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS);
-static void    vd_s_AlertB_pedproRwTx  (const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
@@ -79,7 +74,7 @@ static const U1  u1_sp_ALERT_B_PEDPRO_DST[ALERT_B_PEDPRO_NUM_DST] = {
 const ST_ALERT_MTRX st_gp_ALERT_B_PEDPRO_MTRX[1] = {
     {
         &u4_s_AlertB_pedproSrcchk,                                             /* fp_u4_SRC_CHK                                      */
-        &vd_s_AlertB_pedproRwTx,                                               /* fp_vd_XDST                                         */
+        vdp_PTR_NA,                                                            /* fp_vd_XDST                                         */
 
         (const U4 *)vdp_PTR_NA,                                                /* u4p_MASK                                           */
         (const U4 *)vdp_PTR_NA,                                                /* u4p_CRIT                                           */
@@ -101,7 +96,6 @@ const ST_ALERT_MTRX st_gp_ALERT_B_PEDPRO_MTRX[1] = {
 /*===================================================================================================================================*/
 static U4      u4_s_AlertB_pedproSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
-#if defined(ComConf_ComSignal_PDS_WL) && defined(OXCAN_RXD_PDU_CAN_PDS1S01_CH0) /* _840B_CAN_ */
     static const U2 u2_s_ALERT_B_PEDPRO_TO_THRESH  = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_B_PEDPRO_LSB_MSGSTS = (U1)2U;
     U1              u1_t_msgsts;
@@ -109,8 +103,8 @@ static U4      u4_s_AlertB_pedproSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
     U4              u4_t_src_chk;
 
     u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_PDS1S01_CH0,
-                                          (U4)OXCAN_SYS_IGR,
-                                          u2_s_ALERT_B_PEDPRO_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+                                      (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP,
+                                      u2_s_ALERT_B_PEDPRO_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     u1_t_sgnl     = (U1)0U;
     (void)Com_ReceiveSignal(ComConf_ComSignal_PDS_WL, &u1_t_sgnl);
@@ -119,64 +113,6 @@ static U4      u4_s_AlertB_pedproSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_B_PEDPRO_LSB_MSGSTS);
 
     return(u4_t_src_chk);
-#else /* defined(ComConf_ComSignal_PDS_WL) && defined(OXCAN_RXD_PDU_CAN_PDS1S01_CH0)  */
-    return((U4)0U);
-#endif /* defined(ComConf_ComSignal_PDS_WL) && defined(OXCAN_RXD_PDU_CAN_PDS1S01_CH0)  */
-}
-
-/*===================================================================================================================================*/
-/*  static void    vd_s_AlertB_pedproRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)                                */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void    vd_s_AlertB_pedproRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)
-{
-#if defined(ComConf_ComSignal_PEDW)
-    static const U4 u4_s_ALERT_B_PEDPRO_TIM_RW_ENBL = ((U4)15000U / (U4)ALERT_MAIN_TICK);
-#endif /* defined(ComConf_ComSignal_PEDW) */
-#if defined(ComConf_ComSignal_PUHW) /* _300D_CAN_ */
-    U1              u1_t_sgnl_PUHW;
-#endif                              /* _300D_CAN_ */
-#if defined(ComConf_ComSignal_PEDW)
-    U1              u1_t_sgnl_PEDW;
-#endif /* defined(ComConf_ComSignal_PEDW) */
-    U1              u1_t_esopt;
-
-    u1_t_esopt = u1_g_AlertEsOptAvailable((U2)ALERT_OPT_ID_B_PEDPRO_PUH_FLG);
-
-#if defined(ComConf_ComSignal_PUHW) /* _300D_CAN_ */
-    if(((u1_a_VOM & (U1)ALERT_VOM_RWT_EN) != (U1)0U                          ) &&
-       (u1_t_esopt                        == (U1)TRUE                        ) &&
-       (u1_a_DST                          == (U1)ALERT_REQ_B_PEDPRO_DIAGDTRMN)){
-        u1_t_sgnl_PUHW = (U1)ALERT_RW_SGNL_ON;
-    }
-    else{
-        u1_t_sgnl_PUHW = (U1)ALERT_RW_SGNL_OFF;
-    }
-#endif                              /* _300D_CAN_ */
-
-#if defined(ComConf_ComSignal_PEDW)
-    if(((u1_a_VOM & (U1)ALERT_VOM_IGN_ON) != (U1)0U                          ) &&
-       (u4_a_IGN_TM                       >= u4_s_ALERT_B_PEDPRO_TIM_RW_ENBL ) &&
-       (u1_a_DST                          == (U1)ALERT_REQ_B_PEDPRO_PUHDVCACT)){
-        u1_t_sgnl_PEDW = (U1)ALERT_RW_SGNL_ON;
-    }
-    else{
-        u1_t_sgnl_PEDW = (U1)ALERT_RW_SGNL_OFF;
-    }
-#endif /* defined(ComConf_ComSignal_PEDW) */
-
-#if defined(ComConf_ComSignal_PUHW) /* _300D_CAN_ */
-#if 0   /* BEV BSW provisionally */
-    (void)Com_SendSignal(ComConf_ComSignal_PUHW, &u1_t_sgnl_PUHW);    /* COM Tx STUB delete */
-#endif
-#endif                              /* _300D_CAN_ */
-#if defined(ComConf_ComSignal_PEDW)
-#if 0   /* BEV BSW provisionally */
-    (void)Com_SendSignal(ComConf_ComSignal_PEDW, &u1_t_sgnl_PEDW);    /* COM Tx STUB delete */
-#endif
-#endif /* defined(ComConf_ComSignal_PEDW) */
 }
 
 /*===================================================================================================================================*/

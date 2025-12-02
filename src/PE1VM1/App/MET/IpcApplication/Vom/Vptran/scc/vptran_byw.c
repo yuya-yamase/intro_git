@@ -209,12 +209,10 @@ static  U2      u2_s_VptranBywGetSftRng(const U1 u1_a_SIG, const U1 u1_a_SFTBLKS
 
     u1_t_sft = (U1)0U;
 
-
     if (u1_a_SFTBLKS_STS == (U1)0U) {
         u1_t_sft |= (U1)(u1_a_SIG & u1_s_STS_BLKS_MSK);
     }
     
-
     if ((u1_t_sft & u1_s_STS_BLKS_MSK) == u1_s_STS_DBL_PARK){
         u2_t_rng |= (U2)VPTRAN_STS_DBL_PARK;
     }

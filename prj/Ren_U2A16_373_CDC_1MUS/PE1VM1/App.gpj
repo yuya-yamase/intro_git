@@ -28,84 +28,39 @@
 
     -I${LIB_DIR}
 
-    -I${APP_DIR}/MET/STUB/config
     -I${APP_DIR}/MET/EcuLib/Common/scc
     -I${APP_DIR}/MET/EcuLib/Common/config
-    -I${APP_DIR}/MET/EcuLib/Ren_G3m/scc
     -I${APP_DIR}/MET/HudApplication/Vom/HudDimmer/config
     -I${APP_DIR}/MET/HudApplication/Vom/HudDimmer/scc
     -I${APP_DIR}/MET/HudApplication/Vom/HudImgadj/config_met
     -I${APP_DIR}/MET/IpcApplication/Evc/Calibration/config
-    -I${APP_DIR}/MET/IpcApplication/Evc/HudCa/config
-    -I${APP_DIR}/MET/IpcApplication/Evc/HudCa/scc
-    -I${APP_DIR}/MET/IpcApplication/Evc/Mcst/config
-    -I${APP_DIR}/MET/IpcApplication/Evc/Mcst/scc
     -I${APP_DIR}/MET/IpcApplication/Evc/Vardef/config
     -I${APP_DIR}/MET/IpcApplication/Evc/Vardef/config/esopt_rx
-    -I${APP_DIR}/MET/IpcApplication/Evc/Vardef/config_met
     -I${APP_DIR}/MET/IpcApplication/Evc/Vardef/config_met_common
     -I${APP_DIR}/MET/IpcApplication/Evc/Vardef/scc
     -I${APP_DIR}/MET/IpcApplication/Hmi/config
     -I${APP_DIR}/MET/IpcApplication/Hmi/scc
-    -I${APP_DIR}/MET/IpcApplication/Legacy/Fspo/fspo_app/config
-    -I${APP_DIR}/MET/IpcApplication/Legacy/Fspo/fspo_app/scc
-    -I${APP_DIR}/MET/IpcApplication/Legacy/Fspo/fspo_framework/config
-    -I${APP_DIR}/MET/IpcApplication/Legacy/Fspo/fspo_framework/scc
-    -I${APP_DIR}/MET/IpcApplication/Legacy/Mmcstmz
-    -I${APP_DIR}/MET/IpcApplication/Legacy/Mmcstmz/config
-    -I${APP_DIR}/MET/IpcApplication/Legacy/Mmcstmz/scc
-    -I${APP_DIR}/MET/IpcApplication/Version/scc
-    -I${APP_DIR}/MET/IpcApplication/Vom/Alert/config
     -I${APP_DIR}/MET/IpcApplication/Vom/Alert/matrix/config
-    -I${APP_DIR}/MET/IpcApplication/Vom/Alert/matrix/scc
-    -I${APP_DIR}/MET/IpcApplication/Vom/Alert/matrix/scc_rw
     -I${APP_DIR}/MET/IpcApplication/Vom/Alert/scc
-    -I${APP_DIR}/MET/IpcApplication/Vom/Ambtmp/config
     -I${APP_DIR}/MET/IpcApplication/Vom/Ambtmp/scc
-    -I${APP_DIR}/MET/IpcApplication/Vom/Attmp/config
-    -I${APP_DIR}/MET/IpcApplication/Vom/Attmp/scc
-    -I${APP_DIR}/MET/IpcApplication/Vom/Batcare/scc
-    -I${APP_DIR}/MET/IpcApplication/Vom/Battpow/config
-    -I${APP_DIR}/MET/IpcApplication/Vom/Battpow/scc
-    -I${APP_DIR}/MET/IpcApplication/Vom/DateSI/config
+    -I${APP_DIR}/MET/IpcApplication/Vom/CanTxApp/config
+    -I${APP_DIR}/MET/IpcApplication/Vom/CanTxApp/scc
     -I${APP_DIR}/MET/IpcApplication/Vom/DateSI/scc
     -I${APP_DIR}/MET/IpcApplication/Vom/Dimmer/config
     -I${APP_DIR}/MET/IpcApplication/Vom/Dimmer/scc
-    -I${APP_DIR}/MET/IpcApplication/Vom/DrvInd/config
-    -I${APP_DIR}/MET/IpcApplication/Vom/DrvInd/scc
-    -I${APP_DIR}/MET/IpcApplication/Vom/Ecojdg/config
-    -I${APP_DIR}/MET/IpcApplication/Vom/Ecojdg/scc
-    -I${APP_DIR}/MET/IpcApplication/Vom/Engspd/config
-    -I${APP_DIR}/MET/IpcApplication/Vom/Engspd/scc
-    -I${APP_DIR}/MET/IpcApplication/Vom/Evschg/config
-    -I${APP_DIR}/MET/IpcApplication/Vom/Evschg/scc
     -I${APP_DIR}/MET/IpcApplication/Vom/Locale/config
     -I${APP_DIR}/MET/IpcApplication/Vom/Locale/scc
-    -I${APP_DIR}/MET/IpcApplication/Vom/MM/config
-    -I${APP_DIR}/MET/IpcApplication/Vom/MM/scc
-    -I${APP_DIR}/MET/IpcApplication/Vom/Mulmed/config
-    -I${APP_DIR}/MET/IpcApplication/Vom/Mulmed/scc
     -I${APP_DIR}/MET/IpcApplication/Vom/Odo/config
     -I${APP_DIR}/MET/IpcApplication/Vom/Odo/scc
-    -I${APP_DIR}/MET/IpcApplication/Vom/Oilmil/config
-    -I${APP_DIR}/MET/IpcApplication/Vom/Oilmil/scc
-    -I${APP_DIR}/MET/IpcApplication/Vom/Ptsctmp/config
-    -I${APP_DIR}/MET/IpcApplication/Vom/Ptsctmp/scc
-    -I${APP_DIR}/MET/IpcApplication/Vom/RcmmUI/config
     -I${APP_DIR}/MET/IpcApplication/Vom/RcmmUI/scc
-    -I${APP_DIR}/MET/IpcApplication/Vom/Seatbelt/config
     -I${APP_DIR}/MET/IpcApplication/Vom/Seatbelt/scc
     -I${APP_DIR}/MET/IpcApplication/Vom/Tripcom/app/scc
     -I${APP_DIR}/MET/IpcApplication/Vom/Tripcom/core/config
     -I${APP_DIR}/MET/IpcApplication/Vom/Tripcom/core/scc
-    -I${APP_DIR}/MET/IpcApplication/Vom/Tripcom/sensor
     -I${APP_DIR}/MET/IpcApplication/Vom/Tripcom/sensor/config
     -I${APP_DIR}/MET/IpcApplication/Vom/Tripcom/sensor/scc
-    -I${APP_DIR}/MET/IpcApplication/Vom/VdsCI/config
-    -I${APP_DIR}/MET/IpcApplication/Vom/VdsCI/scc
     -I${APP_DIR}/MET/IpcApplication/Vom/CanTxAppDum/config
     -I${APP_DIR}/MET/IpcApplication/Vom/CanTxAppDum/scc
-    -I${APP_DIR}/MET/IpcApplication/Vom/Vehspd/config
     -I${APP_DIR}/MET/IpcApplication/Vom/Vehspd/scc
     -I${APP_DIR}/MET/IpcApplication/Vom/Vptran/config
     -I${APP_DIR}/MET/IpcApplication/Vom/Vptran/scc
@@ -113,28 +68,17 @@
     -I${APP_DIR}/MET/IpcApplication/Vsv/Gauge/scc
     -I${APP_DIR}/MET/IpcApplication/Vsv/Illumi/config
     -I${APP_DIR}/MET/IpcApplication/Vsv/Illumi/scc
-    -I${APP_DIR}/MET/IpcApplication/Vsv/Sbltsync/config
     -I${APP_DIR}/MET/IpcApplication/Vsv/Sbltsync/scc
-    -I${APP_DIR}/MET/IpcApplication/Vsv/Telltale/config
-    -I${APP_DIR}/MET/IpcApplication/Vsv/Telltale/scc
-    -I${APP_DIR}/MET/IpcApplication/Vsv/Thblnkr/config
     -I${APP_DIR}/MET/IpcApplication/Vsv/Thblnkr/scc
-    -I${APP_DIR}/MET/IpcApplication/Vsv/WChime/config
     -I${APP_DIR}/MET/IpcApplication/Vsv/WChime/config_D1L1
+    -I${APP_DIR}/MET/IpcApplication/Vsv/WChime/config
     -I${APP_DIR}/MET/IpcApplication/Vsv/WChime/scc
-    -I${APP_DIR}/MET/Platform/ComplexDriver/DioIf/config
-    -I${APP_DIR}/MET/Platform/ComplexDriver/DioIf/scc
     -I${APP_DIR}/MET/Platform/ComplexDriver/DrecTx/config
-    -I${APP_DIR}/MET/Platform/ComplexDriver/Gateway/config
-    -I${APP_DIR}/MET/Platform/ComplexDriver/Gateway/scc
-    -I${APP_DIR}/MET/Platform/ComplexDriver/NWCM/config
-    -I${APP_DIR}/MET/Platform/ComplexDriver/NWCM/libc
     -I${APP_DIR}/MET/Platform/ComplexDriver/SoundMiddle/config
     -I${APP_DIR}/MET/Platform/ComplexDriver/SoundMiddle/data_TYT
     -I${APP_DIR}/MET/Platform/ComplexDriver/SoundMiddle/data_LEX
     -I${APP_DIR}/MET/Platform/ComplexDriver/SoundMiddle/include/U2Ax
     -I${APP_DIR}/MET/Platform/ComplexDriver/SoundMiddle/scc
-    -I${APP_DIR}/MET/Platform/Version/scc
     
 
 ${SS_DIR}/eMCOS/config/eMCOS_TASK.c
@@ -153,41 +97,20 @@ ${SS_DIR}/22SS/config/22SS_Callout.c
 xspi.c
 xspi_sub.c
 xspi_met.c
+xspi_met_calib.c
 xspi_met_can.c
 xspi_met_vptran.c
 xspi_met_ch0.c
-xspi_met_ch0_cfg.c
 xspi_met_ch1.c
-xspi_met_dsal.c
-xspi_met_nvm.c
-xspi_met_ota.c
-App/MET/STUB/config/veh_opemd_xmode_STUB.c
-App/MET/EcuLib/Common/scc/fpcall_vd_fu1.c
 App/MET/EcuLib/Common/scc/fpcall_vd_fvd.c
 App/MET/EcuLib/Common/scc/lerp_u2.c
-App/MET/EcuLib/Common/scc/mod_u2.c
-App/MET/EcuLib/Common/scc/mod_u4.c
-App/MET/EcuLib/Common/scc/msbsrch.c
 App/MET/EcuLib/Common/scc/mtrxsrch.c
 App/MET/EcuLib/Common/scc/rngcmpr_u2.c
 App/MET/EcuLib/Common/scc/rtime.c
-App/MET/EcuLib/Common/scc/sum_u1.c
-App/MET/EcuLib/Common/scc/sum_u2.c
-App/MET/EcuLib/Common/scc/sum_u4.850
 App/MET/EcuLib/Common/scc/unitconvrt.c
-App/MET/EcuLib/Common/scc/bcd.c
-App/MET/EcuLib/Common/scc/bfconvrt_and.c
-App/MET/EcuLib/Common/scc/bfconvrt_or.c
 App/MET/EcuLib/Common/scc/calc_u8.c
 App/MET/EcuLib/Common/scc/date.c
 App/MET/EcuLib/Common/config/unitconvrt_cfg.c
-App/MET/EcuLib/Ren_G3m/scc/g3mlib_memcpy_u1_blp.850
-App/MET/EcuLib/Ren_G3m/scc/g3mlib_memcpy_u1_dw.850
-App/MET/EcuLib/Ren_G3m/scc/g3mlib_memcpy_u2_blp.850
-App/MET/EcuLib/Ren_G3m/scc/g3mlib_memcpy_u2_dw.850
-App/MET/EcuLib/Ren_G3m/scc/g3mlib_memcpy_u4_blp.850
-App/MET/EcuLib/Ren_G3m/scc/g3mlib_memcpy_u4_dw.850
-App/MET/EcuLib/Ren_G3m/scc/g3mlib_mtrxsrch.850
 App/MET/HudApplication/Vom/HudDimmer/config/hdimillmn.c
 App/MET/HudApplication/Vom/HudDimmer/config/hdimmgr_adj_cfg.c
 App/MET/HudApplication/Vom/HudDimmer/config/hdimmgr_adj_frill.c
@@ -201,43 +124,25 @@ App/MET/HudApplication/Vom/HudDimmer/scc/hdimowduty.c
 App/MET/HudApplication/Vom/HudDimmer/scc/hdimstep.c
 App/MET/HudApplication/Vom/HudImgadj/config_met/himgadj.c
 App/MET/IpcApplication/Evc/Calibration/config/calibration.c
-App/MET/IpcApplication/Evc/HudCa/config/hud_ca_cfg.c
-App/MET/IpcApplication/Evc/HudCa/scc/hud_ca.c
-App/MET/IpcApplication/Evc/Mcst/config/mcst_cfg.c
-App/MET/IpcApplication/Evc/Mcst/scc/mcst.c
 App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_ABG1S01.c
 App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_ACN1S04.c
 App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_ADC1S14.c
 App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_ADU1S07.c
-App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_AVN1S98.c
-App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_AVNMC08.c
-App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_AVNMS31.c
-App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_AVNMS47.c
-App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_AVNMS57.c
-App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_BAT1S01.c
-App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_BAT1S11.c
 App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_BCC1S06.c
-App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_BDB1F01.c
 App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_BDB1F02.c
-App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_BDB1S03.c
 App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_BDB1S08.c
-App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_BKD1S01.c
 App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_BSR1S01.c
 App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_BSR1S02.c
 App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_BSR1S03.c
 App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_CSR1S04.c
 App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_CSR1S07.c
+App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_DDM1S17.c
 App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_DS11S37.c
 App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_DS11S40.c
 App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_DS12F02.c
 App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_DS12F03.c
-App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_EHV1S97.c
 App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_EHV1S99.c
-App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_ENG1G13.c
-App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_ENG1G97.c
 App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_ENG1S60.c
-App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_ENG1S98.c
-App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_ENG1S99.c
 App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_FCM1S12.c
 App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_FCM1S39.c
 App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_FCM1S41.c
@@ -246,102 +151,46 @@ App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_FCM1S52.c
 App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_FCM1S70.c
 App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_FCM1S92.c
 App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_FWD1S10.c
-App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_GERPOS.c
-App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_GVIF.c
-App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_HVSYSIND.c
-App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_IDT1S07.c
 App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_IPA1S05.c
-App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_ITS1S04.c
 App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_LVN1S01.c
-App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_MM2C100N.c
-App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_MM2C107N.c
-App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_MM2C112N.c
 App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_PDS1S01.c
-App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_PLG1S21.c
 App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_SCS1S11.c
 App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_SCS1S14.c
-App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_SW_BATCSW.c
 App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_TPM1S02.c
-App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_DDM1S17.c
 App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_VSC1G96.c
 App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_SOL1S02.c
 App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_ZN11S19.c
 App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_ZN11S26.c
 App/MET/IpcApplication/Evc/Vardef/config/vardef_esopt_cfg.c
-App/MET/IpcApplication/Evc/Vardef/config/vardef_mmmthd_cfg.c
-App/MET/IpcApplication/Evc/Vardef/config/vardef_navspdlmt_cfg.c
 App/MET/IpcApplication/Evc/Vardef/config_met/vardef_cfg.c
 App/MET/IpcApplication/Evc/Vardef/config_met/vardef_dest_cfg.c
-App/MET/IpcApplication/Evc/Vardef/config_met/vardef_ds2e_cfg.c
-App/MET/IpcApplication/Evc/Vardef/config_met/vardef_ds2e_info_cfg.c
 App/MET/IpcApplication/Evc/Vardef/scc/vardef_dest.c
-App/MET/IpcApplication/Evc/Vardef/scc/vardef_ds2e.c
 App/MET/IpcApplication/Evc/Vardef/scc/vardef_esopt.c
 App/MET/IpcApplication/Evc/Vardef/scc/vardef_hcs.c
-App/MET/IpcApplication/Evc/Vardef/scc/vardef_mmmthd.c
-App/MET/IpcApplication/Evc/Vardef/scc/vardef_navspdlmt.c
-App/MET/IpcApplication/Evc/Vardef/scc/vardef_ptsrx_milreq.c
 App/MET/IpcApplication/Evc/Vardef/scc/vardef_ptsrx.c
 App/MET/IpcApplication/Evc/Vardef/scc/vardef.c
-App/MET/IpcApplication/Hmi/config/hmimm2c100n_cfg.c
-App/MET/IpcApplication/Hmi/config/hmimm2c107n_cfg.c
-App/MET/IpcApplication/Hmi/config/hmimm2c112n_cfg.c
-App/MET/IpcApplication/Hmi/config/hmimm2c118n_cfg.c
-App/MET/IpcApplication/Hmi/config/hmimm2c124n_cfg.c
 App/MET/IpcApplication/Hmi/config/hmiproxy_cfg.c
 App/MET/IpcApplication/Hmi/config/hmiputxt_cfg.c
 App/MET/IpcApplication/Hmi/config/hmiputxt_if_cfg.c
 App/MET/IpcApplication/Hmi/config/hmitt_cfg.c
 App/MET/IpcApplication/Hmi/config/hmitt_if_cfg.c
-App/MET/IpcApplication/Hmi/scc/hmidiag.c
-App/MET/IpcApplication/Hmi/scc/hmifuel.c
-App/MET/IpcApplication/Hmi/scc/hmigateway.c
 App/MET/IpcApplication/Hmi/scc/hmihud.c
-App/MET/IpcApplication/Hmi/scc/hmilcom.c
 App/MET/IpcApplication/Hmi/scc/hmilocale.c
 App/MET/IpcApplication/Hmi/scc/hmimaint.c
-App/MET/IpcApplication/Hmi/scc/hmimcst.c
-App/MET/IpcApplication/Hmi/scc/hmimm2c100n.c
-App/MET/IpcApplication/Hmi/scc/hmimm2c107n.c
-App/MET/IpcApplication/Hmi/scc/hmimm2c112n.c
-App/MET/IpcApplication/Hmi/scc/hmimm2c118n.c
-App/MET/IpcApplication/Hmi/scc/hmimm2c124n.c
 App/MET/IpcApplication/Hmi/scc/hmiodo.c
-App/MET/IpcApplication/Hmi/scc/hmioilmaint.c
 App/MET/IpcApplication/Hmi/scc/hmiproxy.c
 App/MET/IpcApplication/Hmi/scc/hmiputxt.c
-App/MET/IpcApplication/Hmi/scc/hmirim.c
 App/MET/IpcApplication/Hmi/scc/hmiscreen.c
-App/MET/IpcApplication/Hmi/scc/hmitaste.c
 App/MET/IpcApplication/Hmi/scc/hmitripcom.c
 App/MET/IpcApplication/Hmi/scc/hmitt.c
-App/MET/IpcApplication/Hmi/scc/hmivardef.c
 App/MET/IpcApplication/Hmi/scc/hmiwchime.c
-App/MET/IpcApplication/Legacy/Fspo/fspo_app/scc/fspo_cmn.c
-App/MET/IpcApplication/Legacy/Fspo/fspo_app/scc/g_monitor.c
-App/MET/IpcApplication/Legacy/Fspo/fspo_app/scc/hmigmon.c
-App/MET/IpcApplication/Legacy/Fspo/fspo_app/scc/oilpress.c
-App/MET/IpcApplication/Legacy/Fspo/fspo_app/scc/oiltemp.c
-App/MET/IpcApplication/Legacy/Fspo/fspo_framework/scc/fspomgr.c
-App/MET/IpcApplication/Legacy/Fspo/fspo_framework/scc/fsposnsr.c
-App/MET/IpcApplication/Legacy/Mmcstmz/config/mmlang_cfg.c
-App/MET/IpcApplication/Legacy/Mmcstmz/scc/mmlang.c
-App/MET/IpcApplication/Legacy/Mmcstmz/vmmunit.c
-App/MET/IpcApplication/Version/scc/ipc_tycan.c
-App/MET/IpcApplication/Vom/Alert/config/alert_bcm.c
 App/MET/IpcApplication/Vom/Alert/config/alert_cfg.c
 App/MET/IpcApplication/Vom/Alert/matrix/config/alert_mtrx.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_B_AIRBAG.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_B_ALOA.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_B_ALOA2.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_B_AVAS.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_B_BDOOR.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_B_BKEY.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_B_BLGT.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_B_BVOOPE.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_B_ESWUOC.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_B_FMSEAT.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_B_GRISHU.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_B_LEDHEA.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_B_MLGT.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_B_PBD.c
@@ -353,7 +202,6 @@ App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_B_RSEREM.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_B_SMASTA.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_B_SPAT.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_B_TBEAM12.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_B_TDOOR.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_B_TFFOG.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_B_THEAD.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_B_THESEN.c
@@ -365,117 +213,50 @@ App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_B_WASLEV.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_C_ABS.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_C_AVSWAR.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_C_BRK-CSTD-2.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_C_BRK-CSTD-A0.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_C_BRKBZ.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_C_BRKHLD.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_C_BRLV.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_C_BRPADW.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_C_DRIMOD.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_C_DRS.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_C_ECB.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_C_EPB.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_C_HCS.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_C_MCBW.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_C_PKBWAR.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_C_SBRDMB.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_C_SLIP.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_C_STEER.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_C_TPKBON.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_C_TPMS.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_C_TRCOFF.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_C_VSCEXP.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_C_VSCOFF.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_D_4WDSYS.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_D_ASLR.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_D_ATFWRN.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_D_ATMAL.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_D_CVTOIL.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_D_LAUNCH.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_D_SBW.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_D_SFTPOS.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_D_TMWRN.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_H_ACCHOL.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_H_ACDCSUP.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_H_ACONOF.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_H_BATCOO.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_H_BATINS.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_H_BATLOW.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_H_BATREF.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_H_BEVR.c
+App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_H_BATTRW.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_H_DCLDSP.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_H_DRIPOW.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_H_EVMOD.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_H_EWMUP.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_H_FSIND.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_H_LBW.c
+App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_H_LEAUNF.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_H_MAICER.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_H_MYROOM.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_H_NLOCK.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_H_ONACCN.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_H_ONACCP.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_H_PEXI.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_H_REASYS.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_H_REGBRA.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_H_RESADJ.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_H_SOCLOW.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_H_SPDL.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_H_SYSMAL.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_H_TCBM.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_H_TEVRN.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_H_THEVM.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_H_TOWWAR.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_H_TVPSOF.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_H_UNIOVE.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_H_XMDRJT.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_H_XMGRIP.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_H_XMODE.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_H_ZMILRQ.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_M_BGLFSPD.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_M_MINDSPWR.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_M_T120.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_M_VCOPE.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_O_CHAMAL.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_O_EIGCON.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_O_PDSMAL.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_O_POWMAN.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_P_BSTMOD.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_P_CHADYN.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_P_CHEENG.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_P_CIRMOD.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_P_COOTEM.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_P_ENGLIM.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_P_FUECAP.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_P_GPF.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_P_HTGDMI.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_P_MFLID.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_P_MILREQ.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_P_OILLEV.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_P_OILLVG.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_P_OILMIL.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_P_OILPRE.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_P_PLACON.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_P_PLOCK.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_P_ROLAWA.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_P_STOSTA.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_P_TECOLP2.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_P_TENGW.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_P_TMNT.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_S_ACC.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_S_ADTJA.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_S_APP.c
+App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_S_ACC.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_S_BSM.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_S_CLESON.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_S_DA.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_S_DMC.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_S_EDSS.c
+App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_S_DMC.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_S_FCTA.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_S_FRRADA.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_S_ITS.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_S_LCA.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_S_LDA.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_S_LTA.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_S_OAA.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_S_PCS1.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_S_PMAR.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_S_RSA.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_S_SCB.c
@@ -483,65 +264,38 @@ App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_S_SEA.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_S_SWS.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_S_TCHAR.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_S_TMN.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc_rw/alert_B_PWSTEP_RWRN.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc_rw/alert_C_SDM_RWRN.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc_rw/alert_C_STABI_RWRN.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc_rw/alert_D_4WDSYS_RWRN.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc_rw/alert_D_IMT_RWRN.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc_rw/alert_H_PARLON_RWRN.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc_rw/alert_H_SOLCHG_RWRN.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc_rw/alert_MET_IPAW-RW.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc_rw/alert_P_DPF_RWRN.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc_rw/alert_P_FFW_RWRN.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc_rw/alert_S_FCMDI_RWRN.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc_rw/alert_S_PSSDI_RWRN.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc_rw/alert_S_RCTA_RWRN.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc_rw/alert_S_RSRDI_RWRN.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc_rw/alert_SLMD-RW.c
-App/MET/IpcApplication/Vom/Alert/scc/alert_brx.c
+App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_B_ESWUOC.c
+App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_H_TVPSOF.c
+App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_B_AVAS.c
+App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_B_BDOOR.c
+App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_B_GRISHU.c
+App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_B_TDOOR.c
+App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_C_BRLV.c
+App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_C_EPB.c
+App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_S_LDA.c
+App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_S_LTA.c
+App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_S_PCS1.c
 App/MET/IpcApplication/Vom/Alert/scc/alert.c
+App/MET/IpcApplication/Vom/Alert/scc/alert_brx.c
 App/MET/IpcApplication/Vom/Ambtmp/config/ambtmp_cfg.c
-App/MET/IpcApplication/Vom/Ambtmp/scc/ambtmp_ad.c
 App/MET/IpcApplication/Vom/Ambtmp/scc/ambtmp_can.c
 App/MET/IpcApplication/Vom/Ambtmp/scc/ambtmp.c
-App/MET/IpcApplication/Vom/Attmp/config/attmp_cel_cfg.c
-App/MET/IpcApplication/Vom/Attmp/scc/attmp_cel.c
-App/MET/IpcApplication/Vom/Batcare/scc/batcare.c
-App/MET/IpcApplication/Vom/Battpow/config/battpow_cfg.c
-App/MET/IpcApplication/Vom/Battpow/scc/battpow.c
+App/MET/IpcApplication/Vom/CanTxApp/config/cantxapp_cfg.c
+App/MET/IpcApplication/Vom/CanTxApp/config/cantxapp_met1s02.c
+App/MET/IpcApplication/Vom/CanTxApp/config/cantxapp_met1s27.c
+App/MET/IpcApplication/Vom/CanTxApp/config/cantxapp_met1s29.c
+App/MET/IpcApplication/Vom/CanTxApp/config/cantxapp_met1s30.c
+App/MET/IpcApplication/Vom/CanTxApp/config/cantxapp_met1s62.c
+App/MET/IpcApplication/Vom/CanTxApp/config/cantxapp_met1s70.c
+App/MET/IpcApplication/Vom/CanTxApp/scc/cantxapp.c
 App/MET/IpcApplication/Vom/DateSI/config/datesi_met_cfg.c
 App/MET/IpcApplication/Vom/DateSI/scc/datesi_met.c
 App/MET/IpcApplication/Vom/Dimmer/config/dimmer_cfg.c
 App/MET/IpcApplication/Vom/Dimmer/scc/dim_daynight.c
 App/MET/IpcApplication/Vom/Dimmer/scc/dim_usadjbysw.c
 App/MET/IpcApplication/Vom/Dimmer/scc/dimmer.c
-App/MET/IpcApplication/Vom/DrvInd/config/drvind_eco_cfg.c
-App/MET/IpcApplication/Vom/DrvInd/config/drvind_hv_pct_cfg.c
-App/MET/IpcApplication/Vom/DrvInd/config/drvind_pwr_pct_cfg.c
-App/MET/IpcApplication/Vom/DrvInd/scc/drvind_eco.c
-App/MET/IpcApplication/Vom/DrvInd/scc/drvind_hv_pct.c
-App/MET/IpcApplication/Vom/DrvInd/scc/drvind_pwr_pct.c
-App/MET/IpcApplication/Vom/Ecojdg/config/ecojdg_cfg.c
-App/MET/IpcApplication/Vom/Ecojdg/scc/ecojdg.c
-App/MET/IpcApplication/Vom/Engspd/config/engspd_det_rpm_cfg.c
-App/MET/IpcApplication/Vom/Engspd/config/engspd_rpm_cfg.c
-App/MET/IpcApplication/Vom/Engspd/config/engspd_varrz_cfg.c
-App/MET/IpcApplication/Vom/Engspd/scc/engspd_det_rpm.c
-App/MET/IpcApplication/Vom/Engspd/scc/engspd_rpm.c
-App/MET/IpcApplication/Vom/Engspd/scc/engspd_varrz.c
-App/MET/IpcApplication/Vom/Evschg/config/evschg_cfg.c
-App/MET/IpcApplication/Vom/Evschg/scc/evschg.c
 App/MET/IpcApplication/Vom/Locale/config/locale_cfg.c
 App/MET/IpcApplication/Vom/Locale/scc/locale.c
-App/MET/IpcApplication/Vom/MM/scc/mmappctrl.c
-App/MET/IpcApplication/Vom/MM/scc/mmtext.c
-App/MET/IpcApplication/Vom/MM/scc/mmtexttx.c
-App/MET/IpcApplication/Vom/MM/scc/mmtim.c
-App/MET/IpcApplication/Vom/MM/scc/mmvar.c
-App/MET/IpcApplication/Vom/Mulmed/config/mulmed_color_cfg.c
-App/MET/IpcApplication/Vom/Mulmed/config/mulmed_mulfr_cfg.c
-App/MET/IpcApplication/Vom/Mulmed/scc/mulmed_color.c
-App/MET/IpcApplication/Vom/Mulmed/scc/mulmed_mulfr.c
 App/MET/IpcApplication/Vom/Odo/config/odo_km_cfg.c
 App/MET/IpcApplication/Vom/Odo/scc/odo_km.c
 App/MET/IpcApplication/Vom/Odo/scc/odo_nvmif_km.c
@@ -549,37 +303,23 @@ App/MET/IpcApplication/Vom/Odo/scc/odo_nvmif_odo_km.c
 App/MET/IpcApplication/Vom/Odo/scc/odo_nvmif_trip_km.c
 App/MET/IpcApplication/Vom/Odo/scc/odo_nvmif_util.c
 App/MET/IpcApplication/Vom/Odo/scc/odo_vslmt.c
-App/MET/IpcApplication/Vom/Oilmil/config/oilmil_cfg.c
-App/MET/IpcApplication/Vom/Oilmil/scc/oilmil.c
-App/MET/IpcApplication/Vom/Ptsctmp/config/ptsctmp_cel_cfg.c
-App/MET/IpcApplication/Vom/Ptsctmp/scc/ptsctmp_cel.c
-App/MET/IpcApplication/Vom/Ptsctmp/scc/ptsctmp_wtssr.c
 App/MET/IpcApplication/Vom/RcmmUI/config/rcmmui_cfg.c
 App/MET/IpcApplication/Vom/RcmmUI/scc/rcmmui.c
+App/MET/IpcApplication/Vom/Seatbelt/config/sbltwrn_cfg.c
 App/MET/IpcApplication/Vom/Seatbelt/config/sblt_seatsig_cfg.c
 App/MET/IpcApplication/Vom/Seatbelt/config/sblt_vclsig_cfg.c
-App/MET/IpcApplication/Vom/Seatbelt/config/sbltwrn_cfg.c
+App/MET/IpcApplication/Vom/Seatbelt/scc/sbltwrn.c
 App/MET/IpcApplication/Vom/Seatbelt/scc/sblt_seat.c
 App/MET/IpcApplication/Vom/Seatbelt/scc/sblt_vclsts.c
-App/MET/IpcApplication/Vom/Seatbelt/scc/sbltwrn.c
 App/MET/IpcApplication/Vom/Tripcom/app/scc/avgecon.c
 App/MET/IpcApplication/Vom/Tripcom/app/scc/avgee_kmpkwh.c
-App/MET/IpcApplication/Vom/Tripcom/app/scc/avgfe_kmpl.c
 App/MET/IpcApplication/Vom/Tripcom/app/scc/avggrph.c
-App/MET/IpcApplication/Vom/Tripcom/app/scc/avghe_kmpkg.c
 App/MET/IpcApplication/Vom/Tripcom/app/scc/avgvehspd_kmph.c
-App/MET/IpcApplication/Vom/Tripcom/app/scc/dte_ed.c
-App/MET/IpcApplication/Vom/Tripcom/app/scc/dte_km.c
 App/MET/IpcApplication/Vom/Tripcom/app/scc/evdte_km.c
-App/MET/IpcApplication/Vom/Tripcom/app/scc/evratio.c
 App/MET/IpcApplication/Vom/Tripcom/app/scc/instecon.c
 App/MET/IpcApplication/Vom/Tripcom/app/scc/instee_kmpkwh.c
-App/MET/IpcApplication/Vom/Tripcom/app/scc/instfe_kmpl.c
-App/MET/IpcApplication/Vom/Tripcom/app/scc/insthe_kmpkg.c
 App/MET/IpcApplication/Vom/Tripcom/app/scc/ptsrundist_km.c
 App/MET/IpcApplication/Vom/Tripcom/app/scc/ptsruntm_hrs.c
-App/MET/IpcApplication/Vom/Tripcom/app/scc/savefs_ml.c
-App/MET/IpcApplication/Vom/Tripcom/core/config/dte_ed_cfg.c
 App/MET/IpcApplication/Vom/Tripcom/core/config/tripcom_cfg.c
 App/MET/IpcApplication/Vom/Tripcom/core/config/tripcom_comtx.c
 App/MET/IpcApplication/Vom/Tripcom/core/config/tripcom_ms_cfg.c
@@ -591,13 +331,9 @@ App/MET/IpcApplication/Vom/Tripcom/core/scc/tripcom.c
 App/MET/IpcApplication/Vom/Tripcom/sensor/config/tripsnsr_cfg.c
 App/MET/IpcApplication/Vom/Tripcom/sensor/scc/tripsnsr_avgee.c
 App/MET/IpcApplication/Vom/Tripcom/sensor/scc/tripsnsr_elpsdtm.c
-App/MET/IpcApplication/Vom/Tripcom/sensor/scc/tripsnsr_fuelusd.c
-App/MET/IpcApplication/Vom/Tripcom/sensor/scc/tripsnsr_hydrusd.c
 App/MET/IpcApplication/Vom/Tripcom/sensor/scc/tripsnsr_instee.c
 App/MET/IpcApplication/Vom/Tripcom/sensor/scc/tripsnsr_odocnt.c
 App/MET/IpcApplication/Vom/Tripcom/sensor/scc/tripsnsr.c
-App/MET/IpcApplication/Vom/VdsCI/config/vds_ci_cfg.c
-App/MET/IpcApplication/Vom/VdsCI/scc/vds_ci.c
 App/MET/IpcApplication/Vom/CanTxAppDum/config/cantxappdum_cfg.c
 App/MET/IpcApplication/Vom/CanTxAppDum/scc/cantxappdum.c
 App/MET/IpcApplication/Vom/Vehspd/config/vehspd_kmph_cfg.c
@@ -607,43 +343,22 @@ App/MET/IpcApplication/Vom/Vptran/config/vptran_byw_cfg.c
 App/MET/IpcApplication/Vom/Vptran/config/vptran_sel_cfg.c
 App/MET/IpcApplication/Vom/Vptran/scc/vptran_byw.c
 App/MET/IpcApplication/Vom/Vptran/scc/vptran_sel.c
-App/MET/IpcApplication/Vsv/Gauge/config/gagdst_acdctx.c
-App/MET/IpcApplication/Vsv/Gauge/config/gagdst_attempovhtind.c
-App/MET/IpcApplication/Vsv/Gauge/config/gagdst_gss.c
-App/MET/IpcApplication/Vsv/Gauge/config/gagdst_lowfuel_cfg.c
 App/MET/IpcApplication/Vsv/Gauge/config/gagdst_nxmph_cfg.c
-App/MET/IpcApplication/Vsv/Gauge/config/gagdst_revind_cfg.c
-App/MET/IpcApplication/Vsv/Gauge/config/gagdst_revpeak_cfg.c
-App/MET/IpcApplication/Vsv/Gauge/config/gagdst_tempseg_cfg.c
 App/MET/IpcApplication/Vsv/Gauge/config/gauge_cfg.c
-App/MET/IpcApplication/Vsv/Gauge/scc/gagdst_lowfuel.c
 App/MET/IpcApplication/Vsv/Gauge/scc/gagdst_nxmph.c
-App/MET/IpcApplication/Vsv/Gauge/scc/gagdst_revind.c
-App/MET/IpcApplication/Vsv/Gauge/scc/gagdst_revpeak.c
-App/MET/IpcApplication/Vsv/Gauge/scc/gagdst_tempseg.c
 App/MET/IpcApplication/Vsv/Gauge/scc/gauge.c
 App/MET/IpcApplication/Vsv/Illumi/config/illumi_cfg.c
 App/MET/IpcApplication/Vsv/Illumi/config/illumi_comtx.c
 App/MET/IpcApplication/Vsv/Illumi/scc/illumi.c
 App/MET/IpcApplication/Vsv/Sbltsync/config/sbltsync_cfg.c
 App/MET/IpcApplication/Vsv/Sbltsync/scc/sbltsync.c
-App/MET/IpcApplication/Vsv/Telltale/config/telltale_blink.c
-App/MET/IpcApplication/Vsv/Telltale/config/telltale_req_cfg.c
-App/MET/IpcApplication/Vsv/Telltale/scc/telltale.c
 App/MET/IpcApplication/Vsv/Thblnkr/config/thblnkr_cfg.c
 App/MET/IpcApplication/Vsv/Thblnkr/scc/thblnkr.c
+App/MET/IpcApplication/Vsv/WChime/config_D1L1/wchime_grd_cfg.c
 App/MET/IpcApplication/Vsv/WChime/config/wchime_arb_cfg.c
 App/MET/IpcApplication/Vsv/WChime/config/wchime_req_cfg.c
-App/MET/IpcApplication/Vsv/WChime/config_D1L1/wchime_grd_cfg.c
 App/MET/IpcApplication/Vsv/WChime/scc/wchime_arb.c
-App/MET/Platform/ComplexDriver/DioIf/config/dio_if_cfg.c
-App/MET/Platform/ComplexDriver/DioIf/scc/dio_if.c
 App/MET/Platform/ComplexDriver/DrecTx/config/drec_tx.c
-App/MET/Platform/ComplexDriver/Gateway/config/gateway_cxpi_cfg.c
-App/MET/Platform/ComplexDriver/Gateway/config/gateway_mm_cfg.c
-App/MET/Platform/ComplexDriver/Gateway/scc/gateway_cxpi.c
-App/MET/Platform/ComplexDriver/Gateway/scc/gateway_mm.c
-App/MET/Platform/ComplexDriver/NWCM/config/nwcm_cfg.c
-App/MET/Platform/ComplexDriver/NWCM/libc/nwcm.c
 App/MET/Platform/ComplexDriver/SoundMiddle/config/sound_cri_mgr.c
 App/MET/Platform/ComplexDriver/SoundMiddle/scc/sound_cri_drv.c
+

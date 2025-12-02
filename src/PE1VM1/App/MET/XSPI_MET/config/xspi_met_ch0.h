@@ -30,10 +30,6 @@
 #define XSPI_SPN_NBYTE                      (12U)
 #define XSPI_SPN_NWORD                      ((XSPI_SPN_NBYTE + 3U) / 4U)
 
-#define XSPI_OPNG_PRESTART                  (0U)
-#define XSPI_OPNG_GOING                     (1U)
-#define XSPI_OPNG_COMPLETE                  (2U)
-
 #define XSPI_GVIF_LINKNML                   (0U)
 #define XSPI_GVIF_LINKDOWN                  (1U)
 #define XSPI_GVIF_UNDEF1                    (2U)
@@ -61,7 +57,6 @@ void    vd_g_XSpiCfgPduRxCh0(const U4 * u4_ap_PDU_RX);
 void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx);
 
 
-U1      u1_g_XSpiMmopngSts(void);
 U1      u1_g_XSpiDimSw(void);
 U1      u1_g_XSpiGvifSts(void);
 U1      u1_g_XSpiGvifSts_METDISP(void);

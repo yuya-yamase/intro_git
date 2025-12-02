@@ -21,26 +21,17 @@
 #include "dim_usadjbysw_cfg_private.h"
 
 #include "oxcan.h"
-#if 0   /* BEV BSW provisionally */
-#else
-#include "oxcan_channel_STUB.h"
-#endif
-#if 0   /* BEV BSW provisionally */
+#if 0   /* BEV Rebase provisionally */
 #include "es_inspect.h"
-#else
-#include "es_inspect_STUB.h"
-#endif
+#endif   /* BEV Rebase provisionally */
 
+#if 0   /* BEV Rebase provisionally */
 #include "dio_if.h"
-#include "iohw_diflt.h"
-#if 0   /* BEV BSW provisionally */
-#else
-#include "iohw_adc_channel_STUB.h"
-#include "iohw_diflt_sgnl_STUB.h"
-#endif
+#endif   /* BEV Rebase provisionally */
 #include "xspi_met_ch0.h"
+#if 0   /* BEV Rebase provisionally */
 #include "iohw_adc_sh.h"
-#include "mcst.h"
+#endif   /* BEV Rebase provisionally */
 #include "hmiscreen.h"
 
 #include "calibration.h"
@@ -134,14 +125,12 @@ const U2                    u2_g_DIM_USADJ_BY_SW_LP_ACT   = (U2)800U / (U2)DIM_M
 /*===================================================================================================================================*/
 void    vd_g_DimCfgInit(void)
 {
-#ifdef ComConf_ComSignal_D_N_INF
     U1                      u1_t_tx;
 
     u1_t_tx = (U1)0U;
-#if 0   /* BEV BSW provisionally */
-    (void)Com_SendSignal(ComConf_ComSignal_D_N_INF,  &u1_t_tx);    /* COM Tx STUB delete */
-#endif
-#endif
+#if 0    /* BEV Rebase provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_D_N_INF,  &u1_t_tx);
+#endif   /* BEV Rebase provisionally */
 
     vd_g_DimDaynightInit();
     vd_g_DimUsadjbySwInit();
@@ -222,7 +211,6 @@ U1      u1_g_DimDaynightCfgAdimRxEvt(U1 * u1_ap_daynight)
 /*===================================================================================================================================*/
 void    vd_g_DimDaynightCfgAdimRxchk(const U1 u1_a_RX_CHK, const U1 u1_a_DAYNIGHT)
 {
-#ifdef ComConf_ComSignal_D_N_INF
     static const U1         u1_sp_DIM_D_N_INF_BY_RX_CHK[DIM_ADIM_NUM_RX_CHK] = {
         (U1)0x00U,  /* DIM_ADIM_RX_CHK_VALID  (0U) */
         (U1)0x01U,  /* DIM_ADIM_RX_CHK_RT_1ST (1U) */
@@ -243,10 +231,9 @@ void    vd_g_DimDaynightCfgAdimRxchk(const U1 u1_a_RX_CHK, const U1 u1_a_DAYNIGH
         u1_t_tx = (U1)DIM_DAYNIGHT_ADIM_NIGHT;
     }
 
-#if 0   /* BEV BSW provisionally */
-    (void)Com_SendSignal(ComConf_ComSignal_D_N_INF,  &u1_t_tx);    /* COM Tx STUB delete */
-#endif
-#endif
+#if 0    /* BEV Rebase provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_D_N_INF,  &u1_t_tx);
+#endif   /* BEV Rebase provisionally */
 }
 /*===================================================================================================================================*/
 /*  U1      u1_g_DimUsadjbySwCfgAdjstbl(void)                                                                                        */
@@ -271,60 +258,18 @@ U1      u1_g_DimUsadjbySwCfgUpdwchk(void)
 {
     U1          u1_t_swchk;
     U1          u1_t_ch_act;
-    U1          u1_t_rheosw;
 
     u1_t_swchk  = (U1)0U;
-    u1_t_rheosw = u1_CALIB_MCUID0430_RHEOSW;
 
-    switch(u1_t_rheosw){
-        case (U1)CALIB_MCUID0430_1_INPUT:
-            u1_t_ch_act = u1_g_DioIfChAct((U2)DIO_IF_CH_DIM_UP, (U1)TRUE);
-            if(u1_t_ch_act == (U1)TRUE){
-                u1_t_swchk |= (U1)DIM_USADJ_BY_SW_SWON_BIT_UP;
-            }
-
-            u1_t_ch_act = u1_g_DioIfChAct((U2)DIO_IF_CH_DIM_DW, (U1)TRUE);
-            if(u1_t_ch_act == (U1)TRUE){
-                u1_t_swchk |= (U1)DIM_USADJ_BY_SW_SWON_BIT_DW;
-            }
-            break;
-        case (U1)CALIB_MCUID0430_2_INPUT:
-            u1_t_ch_act = u1_g_DioIfChAct((U2)DIO_IF_CH_DIM_UP, (U1)TRUE);
-            if(u1_t_ch_act == (U1)TRUE){
-                u1_t_swchk |= (U1)DIM_USADJ_BY_SW_SWON_BIT_UP;
-            }
-
-            u1_t_ch_act = u1_g_IoHwDifltSwitch((U2)IOHW_DISGNL_RHEOSTAT_DOWN_SW);
-            if(u1_t_ch_act == (U1)TRUE){
-                u1_t_swchk |= (U1)DIM_USADJ_BY_SW_SWON_BIT_DW;
-            }
-            break;
-        case (U1)CALIB_MCUID0430_SOFTSW:
-            u1_t_ch_act = u1_g_XSpiDimSw();
-            if(u1_t_ch_act == (U1)DIM_CFG_CSTM_SW_UP){
-                u1_t_swchk |= (U1)DIM_USADJ_BY_SW_SWON_BIT_UP;
-            }
-            else if(u1_t_ch_act == (U1)DIM_CFG_CSTM_SW_DW){
-                u1_t_swchk |= (U1)DIM_USADJ_BY_SW_SWON_BIT_DW;
-            }
-            else{
-                /* Do Nothing */
-           }
-            break;
-        case (U1)CALIB_MCUID0430_THUMB_WHEEL:
-            /* Do Nothing */
-            break;
-        default:
-            u1_t_ch_act = u1_g_DioIfChAct((U2)DIO_IF_CH_DIM_UP, (U1)TRUE);
-            if(u1_t_ch_act == (U1)TRUE){
-                u1_t_swchk |= (U1)DIM_USADJ_BY_SW_SWON_BIT_UP;
-            }
-
-            u1_t_ch_act = u1_g_DioIfChAct((U2)DIO_IF_CH_DIM_DW, (U1)TRUE);
-            if(u1_t_ch_act == (U1)TRUE){
-                u1_t_swchk |= (U1)DIM_USADJ_BY_SW_SWON_BIT_DW;
-            }
-            break;
+    u1_t_ch_act = u1_g_XSpiDimSw();
+    if(u1_t_ch_act == (U1)DIM_CFG_CSTM_SW_UP){
+        u1_t_swchk |= (U1)DIM_USADJ_BY_SW_SWON_BIT_UP;
+    }
+    else if(u1_t_ch_act == (U1)DIM_CFG_CSTM_SW_DW){
+        u1_t_swchk |= (U1)DIM_USADJ_BY_SW_SWON_BIT_DW;
+    }
+    else{
+        /* Do Nothing */
     }
 
     return(u1_t_swchk);
@@ -337,11 +282,7 @@ U1      u1_g_DimUsadjbySwCfgUpdwchk(void)
 /*===================================================================================================================================*/
 U1      u1_g_DimUsadjbySwVrCfgReAd(U2 * u2_a_ad)
 {
-    U1          u1_t_sts;
-
-    u1_t_sts = u1_g_IoHwAdcRead((U1)ADC_CH_RHEOSTAT_VR_IN, u2_a_ad);
-
-    return(u1_t_sts);
+    return((U1)FALSE);
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_DimUsadjbySwCfgNvmRead(U2 * u2_ap_lvl)                                                                              */
@@ -354,7 +295,11 @@ void    vd_g_DimUsadjbySwCfgNvmRead(U2 * u2_ap_lvl)
     U1         u1_t_rheo_pos;
     U2         u2_t_lvl;
     
+#if 0   /* BEV Rebase provisionally */
     u2_t_lvl = (U2)u1_g_McstBf((U1)MCST_BFI_RHEO_DAY);
+#else   /* BEV Rebase provisionally */
+    u2_t_lvl = (U2)DIM_USADJ_BY_SW_NUM_LVL;
+#endif   /* BEV Rebase provisionally */
     if(u2_t_lvl > (U2)DIM_USADJ_BY_SW_LVL_MAX){
         u2_ap_lvl[DIM_DAYNIGHT_LVL_DAY] = (U2)DIM_USADJ_BY_SW_LVL_MAX;
     }
@@ -362,7 +307,11 @@ void    vd_g_DimUsadjbySwCfgNvmRead(U2 * u2_ap_lvl)
         u2_ap_lvl[DIM_DAYNIGHT_LVL_DAY] = u2_t_lvl;
     }
     
+#if 0   /* BEV Rebase provisionally */
     u2_t_lvl = (U2)u1_g_McstBf((U1)MCST_BFI_RHEO_NIGHT);
+#else   /* BEV Rebase provisionally */
+    u2_t_lvl = (U2)DIM_USADJ_BY_SW_NUM_LVL;
+#endif   /* BEV Rebase provisionally */
     if(u2_t_lvl > (U2)DIM_USADJ_BY_SW_LVL_MAX){
         u1_t_rheo_pos = u1_s_DimCfgCalibU1MaxChk(u1_CALIB_MCUID0340_RHEOPOS_NIGHT, (U1)CALIB_MCUID0340_MAX, (U1)CALIB_MCUID0340_DEF);
         u2_ap_lvl[DIM_DAYNIGHT_LVL_NIGHT] = (U2)u1_t_rheo_pos;
@@ -381,14 +330,16 @@ void    vd_g_DimUsadjbySwCfgNvmWrite(const U2 * u2_ap_LVL)
 {
     U1          u1_t_esi_chk;
 
-#if 0   /* BEV BSW provisionally */
+#if 0   /* BEV Rebase provisionally */
     u1_t_esi_chk = u1_g_ESInspectMdBfield();
-#else
-    u1_t_esi_chk = (U1)0U;
-#endif
+#else   /* BEV Rebase provisionally */
+    u1_t_esi_chk = (U1)1U;
+#endif   /* BEV Rebase provisionally */
     if(u1_t_esi_chk == (U1)0U){
+#if 0   /* BEV Rebase provisionally */
         vd_g_McstBfPut((U1)MCST_BFI_RHEO_DAY,   (U1)u2_ap_LVL[DIM_DAYNIGHT_LVL_DAY]  );
         vd_g_McstBfPut((U1)MCST_BFI_RHEO_NIGHT, (U1)u2_ap_LVL[DIM_DAYNIGHT_LVL_NIGHT]);
+#endif   /* BEV Rebase provisionally */
     }
 }
 /*===================================================================================================================================*/
@@ -461,6 +412,7 @@ static inline U1    u1_s_DimCfgCalibU1MaxChk(const U1 u1_a_CALIBID, const U1 u1_
 /*  19PFv3-2 06/27/2024  TN(DT)   Delete Calibration Guard Process.                                                                  */
 /*  19PFv3-3 07/12/2024  TN(DT)   Add Calibration Guard to Avoid out of array references.                                            */
 /*  BEV-1    06/30/2025  SF       BSW Update:u1_g_DimDaynightCfgRxEnabled was modified                                               */
+/*  BEV-2    10/10/2025  KO       Configured for BEVstep3_Rebase                                                                     */
 /*                                                                                                                                   */
 /*  * TN     = Takashi Nagai, DENSO                                                                                                  */
 /*  * SH     = Shota Higashide                                                                                                       */
@@ -470,5 +422,6 @@ static inline U1    u1_s_DimCfgCalibU1MaxChk(const U1 u1_a_CALIBID, const U1 u1_
 /*  * SH     = Sae Hirose, Denso Techno                                                                                              */
 /*  * TN(DT) = Tetsushi Nakano, Denso Techno                                                                                         */
 /*  * SF     = Seiya Fukutome, Denso Techno                                                                                          */
+/*  * KO     = Kazuto Oishi,  Denso Techno                                                                                           */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

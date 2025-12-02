@@ -33,7 +33,6 @@
 #define VDF_ESO_METHOD_ETHER                     (1U)
 #define VDF_ESO_METHOD_MM                        (2U)
 
-#define VDF_ESO_AVA_BYAVN                        (0U)
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -49,6 +48,7 @@
 void    vd_g_VardefEsOptBonInit(void);
 void    vd_g_VardefEsOptRstwkInit(void);
 void    vd_g_VardefEsOptOpemdEvhk(const U2 u2_a_EOM);
+void    vd_g_VardefEsOptIgoffEvhk(const U4 u4_a_MDBIT, const U4 u4_a_EVBIT);
 
 void    vd_g_VardefEsOptMainTask(const U2 u2_a_EOM, const U1 u1_a_TSLOT);
 
@@ -57,7 +57,6 @@ void    vd_g_VardefEsOptAva(U4 * u4_ap_ava, const U1 u1_a_NWORD);
 
 U1      u1_g_VardefEsOptReset(const U1 u1_a_RUN);                   /* u1_a_RUN : TRUE/FALSE, Return : VDF_ESO_RES_XXX   */
 
-U1      u1_g_VardefEsOptAvaByAvn(const U2 u2_a_CH);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

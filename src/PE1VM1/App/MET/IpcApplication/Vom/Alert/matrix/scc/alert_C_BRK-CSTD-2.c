@@ -20,10 +20,6 @@
 #include "alert_mtrx_cfg_private.h"
 
 #include "oxcan.h"
-#if 0   /* BEV BSW provisionally */
-#else
-#include "oxcan_channel_STUB.h"
-#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -51,7 +47,6 @@
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static U4      u4_s_AlertC_brk_2Srcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS);
-static void    vd_s_AlertC_brk_2RwTx  (const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
@@ -127,7 +122,7 @@ static const U1  u1_sp_ALERT_C_BRK_2_DST[ALERT_C_BRK_2_NUM_DST] = {
 const ST_ALERT_MTRX st_gp_ALERT_C_BRK_2_MTRX[1] = {
     {
         &u4_s_AlertC_brk_2Srcchk,                                              /* fp_u4_SRC_CHK                                      */
-        &vd_s_AlertC_brk_2RwTx,                                                /* fp_vd_XDST                                         */
+        vdp_PTR_NA,                                                            /* fp_vd_XDST                                         */
 
         (const U4 *)vdp_PTR_NA,                                                /* u4p_MASK                                           */
         (const U4 *)vdp_PTR_NA,                                                /* u4p_CRIT                                           */
@@ -149,7 +144,6 @@ const ST_ALERT_MTRX st_gp_ALERT_C_BRK_2_MTRX[1] = {
 /*===================================================================================================================================*/
 static U4      u4_s_AlertC_brk_2Srcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
-#if defined(OXCAN_RXD_PDU_CAN_DDM1S17_CH0)
     static const U2 u2_s_ALERT_C_BRK_TO_THRESH     = ((U2)1000U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_C_BRK_LSB_B_BRKW    = (U1)1U;
     static const U1 u1_s_ALERT_C_BRK_LSB_DDRTWV    = (U1)3U;
@@ -160,88 +154,24 @@ static U4      u4_s_AlertC_brk_2Srcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
     U4              u4_t_src_chk;
 
     u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_DDM1S17_CH0,
-                                     (U4)OXCAN_SYS_IGR,
-                                     u2_s_ALERT_C_BRK_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+                                      (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP,
+                                      u2_s_ALERT_C_BRK_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     u4_t_src_chk  = ((U4)u1_t_msgsts << u1_s_ALERT_C_BRK_LSB_MGSSTS);
 
     u1_t_sgnl     = (U1)0U;
-#if defined(ComConf_ComSignal_BRK_MID)
     (void)Com_ReceiveSignal(ComConf_ComSignal_BRK_MID, &u1_t_sgnl);
-#endif /* defined(ComConf_ComSignal_BRK_MID) */
     u4_t_src_chk |= (U4)u1_t_sgnl;
 
     u1_t_sgnl     = (U1)0U;
-#if defined(ComConf_ComSignal_B_BRKW)
     (void)Com_ReceiveSignal(ComConf_ComSignal_B_BRKW, &u1_t_sgnl);
-#endif /* defined(ComConf_ComSignal_B_BRKW) */
     u4_t_src_chk |= ((U4)u1_t_sgnl  << u1_s_ALERT_C_BRK_LSB_B_BRKW);
 
     u1_t_sgnl     = (U1)0U;
-#if defined(ComConf_ComSignal_DDRTWV)
     (void)Com_ReceiveSignal(ComConf_ComSignal_DDRTWV, &u1_t_sgnl);
-#endif /* defined(ComConf_ComSignal_DDRTWV) */
     u4_t_src_chk |= ((U4)u1_t_sgnl  << u1_s_ALERT_C_BRK_LSB_DDRTWV);
 
     return(u4_t_src_chk);
-#else
-    return((U4)0U);
-#endif /* defined(OXCAN_RXD_PDU_CAN_DDM1S17_CH0) */
-}
-
-/*===================================================================================================================================*/
-/*  static void    vd_s_AlertC_brk_2RwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)                                 */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void    vd_s_AlertC_brk_2RwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)
-{
-    static const U1 u1_s_ALERT_C_BRK_2_RWTX_CRT = ((U1)((U1)1U << ALERT_REQ_C_BRK_2_ON_RW   )
-                                                |  (U1)((U1)1U << ALERT_REQ_C_BRK_2_MLFNC_RW)
-                                                |  (U1)((U1)1U << ALERT_REQ_C_BRK_2_WRN     ));
-    static const U1 u1_s_ALERT_C_BRK_2_RWTX_MSK = (U1)0x07U;
-#ifdef ALERT_CH_C_BRK_0
-#if (ALERT_CH_C_BRK_0 < ALERT_NUM_CH)
-    static const U1 u1_s_ALERT_C_BRK_0_RWTX_CRT = ((U1)((U1)1U << ALERT_REQ_C_BRK_0_LOW     )
-                                                |  (U1)((U1)1U << ALERT_REQ_C_BRK_0_TMODE   ));
-    static const U1 u1_s_ALERT_C_BRK_0_RWTX_MSK = (U1)0x03U;
-    U1              u1_t_rw_brk_0;
-#endif /* (ALERT_CH_C_BRK_0 < ALERT_NUM_CH) */
-#endif /* ALERT_CH_C_BRK_0 */
-    U1              u1_t_sgnl;
-    U1              u1_t_rw_brk_2;
-    U1              u1_t_rwtx_enbl;
-
-    u1_t_rwtx_enbl = (U1)FALSE;
-
-    u1_t_rw_brk_2 = ((U1)1U << (u1_a_DST & u1_s_ALERT_C_BRK_2_RWTX_MSK));
-    u1_t_rw_brk_2 = (U1)(u1_t_rw_brk_2 & u1_s_ALERT_C_BRK_2_RWTX_CRT);
-#ifdef ALERT_CH_C_BRK_0
-#if (ALERT_CH_C_BRK_0 < ALERT_NUM_CH)
-    u1_t_rw_brk_0 = ((U1)1U << (u1_g_AlertReqByCh((U2)ALERT_CH_C_BRK_0) & u1_s_ALERT_C_BRK_0_RWTX_MSK));
-    u1_t_rw_brk_0 = (U1)(u1_t_rw_brk_0 & u1_s_ALERT_C_BRK_0_RWTX_CRT);
-    if(u1_t_rw_brk_0 != (U1)0U){
-        u1_t_rwtx_enbl = (U1)TRUE;
-    }
-#endif /* (ALERT_CH_C_BRK_0 < ALERT_NUM_CH) */
-#endif /* ALERT_CH_C_BRK_0 */
-
-    if(u1_t_rw_brk_2 != (U1)0U){
-        u1_t_rwtx_enbl = (U1)TRUE;
-    }
-
-    if(((u1_a_VOM & (U1)ALERT_VOM_RWT_EN) != (U1)0U) &&
-       (u1_t_rwtx_enbl                    == (U1)TRUE)){
-        u1_t_sgnl = (U1)ALERT_RW_SGNL_ON;
-    }
-    else{
-        u1_t_sgnl = (U1)ALERT_RW_SGNL_OFF;
-    }
-
-#if 0   /* BEV BSW provisionally */
-    (void)Com_SendSignal(ComConf_ComSignal_BRW, &u1_t_sgnl);    /* COM Tx STUB delete */
-#endif
 }
 
 /*===================================================================================================================================*/

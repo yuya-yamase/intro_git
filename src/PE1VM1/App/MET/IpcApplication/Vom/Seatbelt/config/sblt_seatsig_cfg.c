@@ -1,4 +1,4 @@
-/* 2.2.0 */
+/* 2.2.1 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -11,24 +11,15 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define SBLT_SEATSIG_CFG_C_MAJOR                (2)
 #define SBLT_SEATSIG_CFG_C_MINOR                (2)
-#define SBLT_SEATSIG_CFG_C_PATCH                (0)
+#define SBLT_SEATSIG_CFG_C_PATCH                (1)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "sblt_seat_cfg_private.h"
 #include "oxcan.h"
-#if 0   /* BEV BSW provisionally */
-#else
-#include "oxcan_channel_STUB.h"
-#endif
 #include "vardef.h"
 #include "vardef_esopt.h"
-#include "veh_opemd.h"
-#if 0   /* BEV BSW provisionally */
-#else
-#include "veh_opemd_xmode_STUB.h"
-#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -670,6 +661,7 @@ U1              u1_g_SbltPsCfgABGSupd(void)
 /*  2.1.1    10/18/2021  TA(M)    sblt_seat.c v2.1.0 -> v2.1.1.                                                                      */
 /*  2.1.2    06/13/2022  TK       sblt_seat.c v2.1.1 -> v2.1.2.                                                                      */
 /*  2.2.0    02/28/2024  TH       sblt_seat.c v2.1.2 -> v2.2.0.                                                                      */
+/*  2.2.1    06/02/2025  TH       sblt_seat.c v2.2.0 -> v2.2.1.                                                                      */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  Revision     Date        Author   Change Description                                                                             */
@@ -680,6 +672,7 @@ U1              u1_g_SbltPsCfgABGSupd(void)
 /*  200D-4       12/06/2022  HO       Add 3rd row seatbelt signal transmission processing                                            */
 /*  330D-1       01/09/2023  KK       330D Correspondence (Delete 3rd-seat R/T signals)                                              */
 /*  19PFv3-1     12/12/2023  SH       Change the initial value of the received signal                                                */
+/*  BEV-1        10/29/2025  YN       Change for BEV rebase.                                                                         */
 /*                                                                                                                                   */
 /*  * HY   = Hidefumi Yoshida, Denso                                                                                                 */
 /*  * YI   = Yoshiki  Iwata,   Denso                                                                                                 */
@@ -691,5 +684,6 @@ U1              u1_g_SbltPsCfgABGSupd(void)
 /*  * HO   = Hirofumi Ono,     Denso Techno                                                                                          */
 /*  * SH   = Sae Hirose,       Denso Techno                                                                                          */
 /*  * TH   = Taisuke Hirakawa, KSE                                                                                                   */
+/*  * YN   = Yujiro Nagaya,    Denso Techno                                                                                          */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

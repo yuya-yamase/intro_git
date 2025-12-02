@@ -22,21 +22,16 @@
 #include "aip_common.h"
 #include "fpcall_vd_fvd.h"
 #include "scheduler.h"
-#if 0   /* BEV BSW provisionally */
-#else
-#include "scheduler_taskdef.h"
-#endif
 
 #include "hmiproxy.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define     HMIPROXY_MAIN_TICK          (10U)
 #define     HMIPROXY_TOC_INI            (0xffffU)
 #define     HMIPROXY_TOC_MAX            (0xfffeU)
 
-#define     HMIPROXY_INIT_NUM           (23U)
+#define     HMIPROXY_INIT_NUM           (9U)
 #define     HMIPROXY_SHTDWN_NUM         (1U)
 #define     HMIPROXY_MAINTASK_NUM       (HMIPROXY_INIT_NUM + 1U)
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

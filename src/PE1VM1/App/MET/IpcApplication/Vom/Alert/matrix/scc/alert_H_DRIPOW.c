@@ -20,10 +20,6 @@
 #include "alert_mtrx_cfg_private.h"
 
 #include "oxcan.h"
-#if 0   /* BEV BSW provisionally */
-#else
-#include "oxcan_channel_STUB.h"
-#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -51,7 +47,6 @@
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static U4      u4_s_AlertH_dripowSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS);
-static void    vd_s_AlertH_dripowRwTx  (const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
@@ -95,7 +90,7 @@ static const U1  u1_sp_ALERT_H_DRIPOW_DST[ALERT_H_DRIPOW_NUM_DST] = {
 const ST_ALERT_MTRX st_gp_ALERT_H_DRIPOW_MTRX[1] = {
     {
         &u4_s_AlertH_dripowSrcchk,                                             /* fp_u4_SRC_CHK                                      */
-        &vd_s_AlertH_dripowRwTx,                                               /* fp_vd_XDST                                         */
+        vdp_PTR_NA,                                                            /* fp_vd_XDST                                         */
 
         (const U4 *)vdp_PTR_NA,                                                /* u4p_MASK                                           */
         (const U4 *)vdp_PTR_NA,                                                /* u4p_CRIT                                           */
@@ -124,18 +119,12 @@ static U4      u4_s_AlertH_dripowSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
     U4              u4_t_src_chk;
     U1              u1_t_china_jdg;
 
-#if defined(OXCAN_RXD_PDU_CAN_EHV1S26_CH0) /* _840B_CAN_ */
     u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_EHV1S26_CH0,
-                                          (U4)OXCAN_SYS_IGP,
-                                          (U2)U2_MAX) & (U1)COM_NO_RX;
-#else
-    u1_t_msgsts   = (U1)COM_NO_RX;
-#endif
+                                      (U4)OXCAN_SYS_IGP,
+                                      (U2)U2_MAX) & (U1)COM_NO_RX;
 
     u1_t_sgnl     = (U1)0U;
-#if defined(ComConf_ComSignal_PWRLMID) /* _840B_CAN_ */
     (void)Com_ReceiveSignal(ComConf_ComSignal_PWRLMID, &u1_t_sgnl);
-#endif
     u4_t_src_chk  = (U4)u1_t_sgnl;
 
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_H_DRIPOW_LSB_MSGSTS);
@@ -144,31 +133,6 @@ static U4      u4_s_AlertH_dripowSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
     u4_t_src_chk |= ((U4)u1_t_china_jdg << u1_s_ALERT_H_DRIPOW_LSB_CHINAJDG);
 
     return(u4_t_src_chk);
-}
-
-/*===================================================================================================================================*/
-/*  static void    vd_s_AlertH_dripowRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)                                */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void    vd_s_AlertH_dripowRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)
-{
-#ifdef ComConf_ComSignal_EVHW
-    U1              u1_t_sgnl;
-
-    if(((u1_a_VOM & (U1)ALERT_VOM_RWT_EN) != (U1)0U                     ) &&
-       (u1_a_DST                          == (U1)ALERT_REQ_H_DRIPOW_OVHT)){
-        u1_t_sgnl = (U1)ALERT_RW_SGNL_ON;
-    }
-    else{
-        u1_t_sgnl = (U1)ALERT_RW_SGNL_OFF;
-    }
-
-#if 0   /* BEV BSW provisionally */
-    (void)Com_SendSignal(ComConf_ComSignal_EVHW, &u1_t_sgnl);    /* COM Tx STUB delete */
-#endif
-#endif /* ComConf_ComSignal_EVHW */
 }
 
 /*===================================================================================================================================*/

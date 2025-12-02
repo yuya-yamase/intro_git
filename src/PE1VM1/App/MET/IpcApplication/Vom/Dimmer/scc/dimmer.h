@@ -31,6 +31,10 @@
 #define DIM_DAYNIGHT_LVL_NIGHT                   (1U)
 #define DIM_DAYNIGHT_LVL_UNKNWN                  (0xffU)
 
+#define DIM_SW_VRNON                             (0U)
+#define DIM_SW_VRUP                              (1U)
+#define DIM_SW_VRDOWN                            (2U)
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -49,6 +53,7 @@ U1      u1_g_DimLvlDaynight(void);
 U2      u2_g_DimLvlUsadjust(const U1 u1_a_DAYNIGHT);
 void    vd_g_DimMcstReadHook(void);
 void    vd_g_DimMcstDataResetHook(void);
+U1      u1_g_DimSwVrUpDown(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */

@@ -1,4 +1,4 @@
-/* 1.1.0 */
+/* 1.3.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define AVGGRPH_C_MAJOR                         (1)
-#define AVGGRPH_C_MINOR                         (1)
+#define AVGGRPH_C_MINOR                         (3)
 #define AVGGRPH_C_PATCH                         (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -45,7 +45,9 @@
 #define AVGGRPH_1BYTE_LSB               (8U)
 #define AVGGRPH_1BYTE_MSK               (0x00FFU)
 #define AVGGRPH_ECON_MAX                (0xFFFFFFFEU)
+#define AVGGRPH_PAST_MAX                (0xFFFFFFFEU)
 
+#define AVGGRPH_DELAY_TIM               (2U)
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -85,6 +87,9 @@ static  U1    u1_s_avggrph_tafe_rslt;
 static  U1    u1_s_avggrph_1mfe_rslt;
 static  U1    u1_s_avggrph_taee_rslt;
 static  U1    u1_s_avggrph_1mee_rslt;
+
+static  U1    u1_sp_avggrph_prevrslt[AVGGRPH_NUM_CNTT];
+static  U1    u1_sp_avggrph_noncnt[AVGGRPH_NUM_CNTT];
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
@@ -153,12 +158,34 @@ static const ST_AVGGRPH_CNTT            st_sp_AVGGRPH_CNTTS_CFG[AVGGRPH_NUM_CNTT
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*===================================================================================================================================*/
-/* void            vd_g_AvgGrphBonInit(void)                                                                                         */
+/* void            vd_g_AvgGrphInit(void)                                                                                            */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
 void            vd_g_AvgGrphInit(void)
+{
+    U4                          u4_t_loop;
+    const ST_AVGGRPH_CNTT *     st_tp_cfg;
+
+    vd_g_AvgGrphDataSync();
+    for (u4_t_loop = (U4)0U; u4_t_loop < (U4)AVGGRPH_NUM_CNTT; u4_t_loop++) {
+        st_tp_cfg = &st_sp_AVGGRPH_CNTTS_CFG[u4_t_loop];
+        *(st_tp_cfg->u1p_rslt) = (U1)TRIPCOM_MS_NVMSTS_NON;
+
+        u1_sp_avggrph_prevrslt[u4_t_loop] = (U1)TRIPCOM_MS_NVMSTS_NON;
+        u1_sp_avggrph_noncnt[u4_t_loop]   = (U1)0U;
+    }
+
+}
+
+/*===================================================================================================================================*/
+/* void            vd_g_AvgGrphDataSync(void)                                                                                        */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void            vd_g_AvgGrphDataSync(void)
 {
     U4                          u4_t_loop;
     U4                          u4_t_loop2;
@@ -231,17 +258,23 @@ void            vd_g_AvgGrphUpdt(const U1 u1_a_CNTTID, const U4 u4_a_data, const
         }
         if(st_tp_cfg->u4p_max != vdp_PTR_NA){
             if((*(st_tp_cfg->u4p_max) < u4_a_data) || (*(st_tp_cfg->u4p_max) == (U4)U4_MAX)){
-                *(st_tp_cfg->u4p_max) = u4_a_data;
-                vd_g_TripcomMsSetAccmltVal(st_tp_cfg->u1_msid_max, u4_a_data);
-                if(u1_a_rwrqst == (U1)TRUE){
-                    vd_g_TripcomMsSetNvmRqst(st_tp_cfg->u1_msid_max);
+                if(u4_a_data > (U4)AVGGRPH_PAST_MAX){
+                    *(st_tp_cfg->u4p_max) = (U4)AVGGRPH_PAST_MAX;
                 }
+                else{
+                    *(st_tp_cfg->u4p_max) = u4_a_data;
+                }
+                vd_g_TripcomMsSetAccmltVal(st_tp_cfg->u1_msid_max, *(st_tp_cfg->u4p_max));
+            }
+            if(u1_a_rwrqst == (U1)TRUE){
+                vd_g_TripcomMsSetNvmRqst(st_tp_cfg->u1_msid_max);
             }
         }
         *(st_tp_cfg->u1p_latest) = u1_t_next;
         vd_g_TripcomMsSetAccmltVal(st_tp_cfg->u1_msid_ltst, (U4)u1_t_next);
         if(u1_a_rwrqst == (U1)TRUE){
             vd_g_TripcomMsSetNvmRqst(st_tp_cfg->u1_msid_ltst);
+            vd_g_AvgGrphUpdtRslt();
         }
     }
 }
@@ -359,13 +392,21 @@ void            vd_g_AvgGrphUpdtRslt(void)
 
         if((u1_t_rslt & (U1)TRIPCOM_MS_NVMSTS_FAIL) != (U1)0U){
             *(st_tp_cfg->u1p_rslt) = (U1)TRIPCOM_MS_NVMSTS_FAIL;
+            if(u1_sp_avggrph_prevrslt[u4_t_loop] == (U1)TRIPCOM_MS_NVMSTS_NON){
+                u1_sp_avggrph_noncnt[u4_t_loop] = (U1)0U;
+            }
+            
         }
         else if((u1_t_rslt & (U1)TRIPCOM_MS_NVMSTS_SUC) != (U1)0U){
             *(st_tp_cfg->u1p_rslt) = (U1)TRIPCOM_MS_NVMSTS_SUC;
+            if(u1_sp_avggrph_prevrslt[u4_t_loop] == (U1)TRIPCOM_MS_NVMSTS_NON){
+                u1_sp_avggrph_noncnt[u4_t_loop] = (U1)0U;
+            }
         }
         else{
             *(st_tp_cfg->u1p_rslt) = (U1)TRIPCOM_MS_NVMSTS_NON;
         }
+        u1_sp_avggrph_prevrslt[u4_t_loop] = *(st_tp_cfg->u1p_rslt);
     }
 }
 
@@ -382,8 +423,8 @@ static U1       u1_s_AvgGrphGetRslt(const U1 u1_a_CNTTID, const U1 u1_a_before)
 
     u1_t_rslt  = u1_a_before;
     u1_t_temp  = u1_g_TripcomMsGetNvmRslt(u1_a_CNTTID);
-    u1_t_rslt |= (U1)(u1_t_temp & (U1)TRIPCOM_MS_NVMSTS_FAIL);
-    u1_t_rslt &= (U1)(u1_t_temp & (U1)TRIPCOM_MS_NVMSTS_SUC);
+    u1_t_rslt |= (u1_t_temp & (U1)TRIPCOM_MS_NVMSTS_FAIL);
+    u1_t_rslt &= ((u1_t_temp & (U1)TRIPCOM_MS_NVMSTS_SUC) | (u1_t_rslt & ~(U1)TRIPCOM_MS_NVMSTS_SUC));
 
     return(u1_t_rslt);
 }
@@ -400,9 +441,49 @@ U1              u1_g_AvgGrphRslt(const U1 u1_a_CNTTID)
 
     u1_t_rslt = (U1)TRIPCOM_MS_NVMSTS_NON;
     if(u1_a_CNTTID < (U1)AVGGRPH_NUM_CNTT){
+        if(u1_sp_avggrph_noncnt[u1_a_CNTTID] < (U1)AVGGRPH_DELAY_TIM){
+            u1_t_rslt = (U1)TRIPCOM_MS_NVMSTS_NON;  /* To send "NON" during 100ms at least */
+        } else
+        {
+            u1_t_rslt = *(st_sp_AVGGRPH_CNTTS_CFG[u1_a_CNTTID].u1p_rslt);
+        }
+    }
+    return(u1_t_rslt);
+}
+/*===================================================================================================================================*/
+/* U1              u1_g_AvgGrphDiagRslt(const U1 u1_a_CNTTID)                                                                        */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      u1_a_CNTTID:AVGGRPH_CNTT_XXX                                                                                     */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+U1              u1_g_AvgGrphDiagRslt(const U1 u1_a_CNTTID)
+{
+    U1                          u1_t_rslt;
+
+    u1_t_rslt = (U1)TRIPCOM_MS_NVMSTS_NON;
+    
+
+    if(u1_a_CNTTID < (U1)AVGGRPH_NUM_CNTT){
         u1_t_rslt = *(st_sp_AVGGRPH_CNTTS_CFG[u1_a_CNTTID].u1p_rslt);
     }
     return(u1_t_rslt);
+}
+
+/*===================================================================================================================================*/
+/* void            vd_g_AvgGrphTimeCnt(void)                                                                                         */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void            vd_g_AvgGrphTimeCnt(void)
+{
+    U4                          u4_t_loop;
+
+    for (u4_t_loop = (U4)0U; u4_t_loop < (U4)AVGGRPH_NUM_CNTT; u4_t_loop++) {
+        if(u1_sp_avggrph_noncnt[u4_t_loop] < (U1)U1_MAX){
+            u1_sp_avggrph_noncnt[u4_t_loop]++;
+        }
+    }
 }
 
 /*===================================================================================================================================*/
@@ -414,13 +495,19 @@ U1              u1_g_AvgGrphRslt(const U1 u1_a_CNTTID)
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  1.0.0    12/19/2023  TH       New.                                                                                               */
-/*  1.1.0    05/08/2025  MN       Change for BEV PreCV.                                                                              */
+/*  1.1.0    12/19/2024  SN       Change method of getting date                                                                      */
+/*  1.2.0    04/20/2025  SN       Add maximum guard in vd_g_AvgGrphUpdt                                                              */
+/*  1.2.1    04/18/2025  TH       Fix: Update Result when GrphUpdt                                                                   */
+/*  1.2.2    05/20/2025  KM       Add delay count for TRIPCOM_MS_NVMSTS_NON                                                          */
+/*  1.3.0    05/08/2025  MN       Change for BEV PreCV.                                                                              */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /* BEV-1     05/08/2025  MN       Change for BEV PreCV.(MET-M_CLKCTL-CSTD-0-/MET-M_CAL-CSTD-0-)                                      */
 /*                                                                                                                                   */
 /*  * TH   = Taisuke Hirakawa, KSE                                                                                                   */
+/*  * SN   = Shimon Nambu, Denso Techno                                                                                              */
+/*  * KM   = Keisuke Mashita, Denso Techno                                                                                           */
 /*  * MN   = Mikiya Negishi, KSE                                                                                                     */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

@@ -1,4 +1,4 @@
-/* 2.1.0 */
+/* 2.1.2 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -14,7 +14,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define TRIPCOM_NVMIF_CFG_H_MAJOR                    (2)
 #define TRIPCOM_NVMIF_CFG_H_MINOR                    (1)
-#define TRIPCOM_NVMIF_CFG_H_PATCH                    (0)
+#define TRIPCOM_NVMIF_CFG_H_PATCH                    (2)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -22,10 +22,6 @@
 #include "aip_common.h"
 #include "crc32.h"
 #include "nvmc_mgr.h"
-#if 0   /* BEV BSW provisionally */
-#else
-#include "nvmc_mgr_cfg_STUB.h"
-#endif
 #include "tripcom_nvmif.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -43,6 +39,10 @@
 #define TRIPCOM_NVMIF_RW_DAT_RDBK                    (1U)
 
 #define TRIPCOM_NVMIF_NBYTE_CRC_32                   (4U)
+
+#define TRIPCOM_NVMIF_DEF_TYPE_NUM                   (2U)
+#define TRIPCOM_NVMIF_DEF_TYPE_ZERO                  (0U)
+#define TRIPCOM_NVMIF_DEF_TYPE_MAX                   (1U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -99,6 +99,7 @@ typedef struct{
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 extern const ST_TRIPCOM_NVMIF_REC_DATA  st_g_TRIPCOM_NVMIF_REC_DATA;
 extern const U2                         u2_g_TRIPCOM_NVMIF_NVMCID_DATA;
+extern const U1                         u1_g_TRIPCOM_NVMIF_DEF_TYPE[TRIPCOM_NVMIF_CH_NUM];
 
 #endif      /* TRIPCOM_NVMIF_CFG_H */
 
