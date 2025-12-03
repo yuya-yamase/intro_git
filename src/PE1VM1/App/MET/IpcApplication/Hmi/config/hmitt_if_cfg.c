@@ -1,4 +1,4 @@
-/* 1.9.0 */
+/* 1.10.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define HMITT_IF_CFG_C_MAJOR                  (1)
-#define HMITT_IF_CFG_C_MINOR                  (9)
+#define HMITT_IF_CFG_C_MINOR                  (10)
 #define HMITT_IF_CFG_C_PATCH                  (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -113,7 +113,8 @@ const ST_ALERT_REQBIT   st_gp_HMITTREQBIT[HMITTCFG_IF_NUM] = {
     {  (U2)ALERT_CH_C_HCS_TT,         (U1)ALERT_REQ_C_HCS_TT_GRN_ON,            (U1)22U,   u4_HMITT_HB4(HMITT_BLINK_CO_ON_____100P)                    },
     {  (U2)ALERT_CH_C_HCS_TT,         (U1)ALERT_REQ_C_HCS_TT_GRN_FLASH,         (U1)22U,   u4_HMITT_HB4(HMITT_BLINK_CO_1P00HZ__50P)                    },
     {  (U2)ALERT_CH_C_HCS_TT,         (U1)ALERT_REQ_C_HCS_TT_AMBER_ON,          (U1)22U,   u4_HMITT_HB5(HMITT_BLINK_CO_ON_____100P)                    },
-    {  (U2)ALERT_CH_C_HCS_TTB,        (U1)ALERT_REQ_C_HCS_TTB_ACCESS_MODE,      (U1)24U,   u4_HMITT_HB1(HMITT_BLINK_CO_ON_____100P)                    }
+    {  (U2)ALERT_CH_C_HCS_TTB,        (U1)ALERT_REQ_C_HCS_TTB_ACCESS_MODE,      (U1)24U,   u4_HMITT_HB1(HMITT_BLINK_CO_ON_____100P)                    },
+    {  (U2)ALERT_CH_S_TMTT,           (U1)ALERT_REQ_S_TMTT_ON,                  (U1)24U,   u4_HMITT_HB6(HMITT_BLINK_CO_ON_____100P)                    }
 };
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
@@ -150,6 +151,7 @@ U2 u2_g_HmittSizeReqbit(void){
 /*  1.6.0    02/02/2024  DR       Setting for 19PFv3                                                                                 */
 /*  1.8.0    10/15/2024  KO       Setting for BEV System_Consideration_1.                                                            */
 /*  1.9.0    06/23/2025  HY       Setting for BEV System_Consideration_2.                                                            */
+/*  1.10.0   11/27/2025  PG       Setting for BEV System_Consideration_ADAS                                                          */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */

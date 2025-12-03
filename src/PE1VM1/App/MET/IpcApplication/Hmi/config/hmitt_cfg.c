@@ -1,4 +1,4 @@
-/* 1.9.0 */
+/* 1.10.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define HMITT_CFG_C_MAJOR                     (1)
-#define HMITT_CFG_C_MINOR                     (9)
+#define HMITT_CFG_C_MINOR                     (10)
 #define HMITT_CFG_C_PATCH                     (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -216,7 +216,8 @@ void    vd_g_HmiTtCfgVarmask(U4 * u4_ap_varmask)
         {  (U1)1U,    (U1)12U,    (U2)VDF_ESO_CH_VSC,           (U2)ALERT_CH_C_SLIP,               (U1)ALERT_REQ_C_SLIP_MALFUNC                 },
         {  (U1)1U,    (U1)12U,    (U2)VDF_ESO_CH_VSC,           (U2)ALERT_CH_C_SLIP,               (U1)ALERT_REQ_C_SLIP_MALFUNC_RW              },
         {  (U1)2U,    (U1)28U,    (U2)VDF_ESO_CH_BRPADW,        (U2)ALERT_CH_C_BRPADW,             (U1)ALERT_REQ_C_BRPADW_MALFUNC               },
-        {  (U1)3U,    (U1)4U,     (U2)VDF_ESO_CH_BRKHLD,        (U2)ALERT_CH_C_BRKHLD_HLD,         (U1)ALERT_REQ_C_BRKHLD_HLD_FLASH             }
+        {  (U1)3U,    (U1)4U,     (U2)VDF_ESO_CH_BRKHLD,        (U2)ALERT_CH_C_BRKHLD_HLD,         (U1)ALERT_REQ_C_BRKHLD_HLD_FLASH             },
+        {  (U1)24U,   (U1)24U,    (U2)VDF_ESO_CH_SYS_ADDOT_TT,  (U2)ALERT_CH_S_TMTT,               (U1)ALERT_REQ_S_TMTT_ON                      }
     };
 
     U4  u4_t_loop;
@@ -276,7 +277,7 @@ void    vd_g_HmiTtCfgDestmask(U4* u4_ap_varmask)
 /*  1.7.0    06/21/2024  JMH      Setting for 19PFv3 (add LBW)                                                                       */
 /*  1.8.0    10/15/2024  KO       hmitt_if_cfg.c v1.6.0 -> v1.8.0. (Setting for BEV System_Consideration_1.)                         */
 /*  1.9.0    06/23/2025  HY       hmitt_if_cfg.c v1.8.0 -> v1.9.0. (Setting for BEV System_Consideration_2.)                         */
-/*                                                                                                                                   */
+/*  1.10.0   11/27/2025  PG       Setting for BEV System_Consideration_ADAS.                                                         */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */

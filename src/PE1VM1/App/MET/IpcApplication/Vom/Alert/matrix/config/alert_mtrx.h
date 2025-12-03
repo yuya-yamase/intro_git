@@ -163,7 +163,8 @@
 #define ALERT_CH_H_BATTRW_BC                     (144U)
 #define ALERT_CH_O_PDSMAL_BC                     (145U)
 #define ALERT_CH_O_PDSMAL_PD                     (146U)
-#define ALERT_NUM_CH                             (147U)
+#define ALERT_CH_S_TMTT                          (147U)
+#define ALERT_NUM_CH                             (148U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* ALERT_REQ_[SYS]_[VIEW]_XXXX                            */
@@ -577,6 +578,7 @@
 #define ALERT_REQ_H_BATTRW_BC_THERMALBC          (0U)
 #define ALERT_REQ_O_PDSMAL_BC_CYCL               (0U)
 #define ALERT_REQ_O_PDSMAL_PD_MULFUNC            (0U)
+#define ALERT_REQ_S_TMTT_ON                      (0U)
 
 /* ALERT_CH dummy define */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
