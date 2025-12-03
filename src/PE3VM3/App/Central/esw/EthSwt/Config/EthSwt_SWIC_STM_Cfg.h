@@ -21,6 +21,7 @@
 #include <EthSwt_SWIC_RstDtct.h>
 #include <EthSwt_SWIC_MIB.h>
 #include <EthSwt_SWIC_Qci.h>
+#include <EthSwt_SWIC_RegAccess.h>
 /* -------------------------------------------------------------------------- */
 typedef void (*EthSwt_InitFunc)(void);
 const EthSwt_InitFunc G_ETHSWT_SWIC_STM_INITLIST[] = 
@@ -34,6 +35,7 @@ const EthSwt_InitFunc G_ETHSWT_SWIC_STM_INITLIST[] =
 ,	EthSwt_SWIC_SQI_Init
 ,   EthSwt_SWIC_MIB_Init
 ,   EthSwt_SWIC_Qci_Init
+,   EthSwt_SWIC_RegAccess_Init
 };
 #define D_ETHSWT_SWIC_STM_INITFUNC_NUM     (sizeof(G_ETHSWT_SWIC_STM_INITLIST) / sizeof(G_ETHSWT_SWIC_STM_INITLIST[0]))
 
@@ -76,6 +78,7 @@ const EthSwt_ClearFunc G_ETHSWT_SWIC_STM_STOPCLEAR[] =
 ,	EthSwt_SWIC_SQI_Clear
 ,   EthSwt_SWIC_MIB_Clear
 ,   EthSwt_SWIC_Qci_Clear
+,   EthSwt_SWIC_RegAccess_Clear
 };
 #define G_ETHSWT_SWIC_STM_STOPCLEAR_NUM         (sizeof(G_ETHSWT_SWIC_STM_STOPCLEAR) / sizeof(G_ETHSWT_SWIC_STM_STOPCLEAR[0]))
 
@@ -87,6 +90,7 @@ const EthSwt_ClearFunc G_ETHSWT_SWIC_STM_RESETCLEAR[] =
 ,	EthSwt_SWIC_SQI_Clear
 ,   EthSwt_SWIC_MIB_Clear
 ,   EthSwt_SWIC_Qci_Clear
+,   EthSwt_SWIC_RegAccess_Clear
 };
 #define D_ETHSWT_SWIC_STM_RESETCLEAR_NUM        (sizeof(G_ETHSWT_SWIC_STM_RESETCLEAR) / sizeof(G_ETHSWT_SWIC_STM_RESETCLEAR[0]))
 

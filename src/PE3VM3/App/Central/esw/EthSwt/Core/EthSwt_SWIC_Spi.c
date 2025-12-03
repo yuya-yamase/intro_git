@@ -8,6 +8,7 @@
 #include <LIB.h>
 #include <EthSwt_SWIC_initRegCommon.h>
 #include "EthSwt_SWIC_Spi.h"
+#include "EthSwt_SWIC_RegAccess.h"
 /* -------------------------------------------------------------------------- */
 #define	swic_SpiS1_Crc8Cmd(a,b)	swic_SpiS1_Crc8(a,b,0u)
 /* -------------------------------------------------------------------------- */
@@ -76,6 +77,7 @@ static Std_ReturnType swic_SpiS1_SetTblErr(const swic_reg_data_t tbl[], const ui
 	swic_SpiS1_Err.tbl	= tbl;
 	swic_SpiS1_Err.idx	= idx;
 	swic_SpiS1_Err.err	= err;
+	EthSwt_SWIC_RegAccess_RegAccessNotify(E_NOT_OK);	/* レジスタアクセス異常の情報を通知 */
 	return E_NOT_OK;
 }
 
@@ -145,7 +147,10 @@ Std_ReturnType EthSwt_SWIC_Spi_WriteSPI(const swic_reg_data_t tbl[], const uint3
 	swic_SpiS1_Cmd.cmd[6]	= 0x00u;
 	err = swic_SpiS1_Req1(swic_SpiS1_Cmd.cmd, swic_SpiS1_Cmd.dat, 7);
 	if (err == E_OK) {
-		if (swic_SpiS1_Cmd.dat[6] == swic_SpiS1_CrcOK[crc])	{ return err; }
+		if (swic_SpiS1_Cmd.dat[6] == swic_SpiS1_CrcOK[crc]) {
+			EthSwt_SWIC_RegAccess_RegAccessNotify(E_OK);	/* レジスタアクセス結果の情報を通知 */                
+                  return err;
+                }
 	}
     return swic_SpiS1_SetTblErr(tbl, idx, err);
 }
@@ -211,6 +216,7 @@ Std_ReturnType EthSwt_SWIC_Spi_Write(const swic_reg_data_t tbl[], const uint32 c
 			swic_SpiS1_Cmd.Paddr= Paddr;
 			swic_SpiS1_Cmd.Raddr= Raddr;
 			swic_SpiS1_Cmd.wri	= wri;
+			EthSwt_SWIC_RegAccess_RegAccessNotify(E_OK);	/* レジスタアクセス結果の情報を通知 */
 			return err;
 		}
 	}
@@ -238,6 +244,7 @@ Std_ReturnType EthSwt_SWIC_Spi_ReadSPI(const swic_reg_data_t tbl[], const uint32
 		crc = swic_SpiS1_Crc8(&swic_SpiS1_Cmd.dat[3], 2u, crc);
 		if (swic_SpiS1_Cmd.dat[5] == crc) {
 			*RcvData = (uint16)(((uint32)swic_SpiS1_Cmd.dat[3] << 8) | (uint32)swic_SpiS1_Cmd.dat[4]);
+			EthSwt_SWIC_RegAccess_RegAccessNotify(E_OK);	/* レジスタアクセス結果の情報を通知 */
 			return err;
 		}
 	}
@@ -304,6 +311,7 @@ Std_ReturnType EthSwt_SWIC_Spi_Read(const swic_reg_data_t tbl[], const uint32 cn
 		crc = swic_SpiS1_Crc8(&swic_SpiS1_Cmd.dat[3], 2u, crc);
 		if (swic_SpiS1_Cmd.dat[5] == crc) {
 			*RcvData = (uint16)(((uint32)swic_SpiS1_Cmd.dat[3] << 8) | (uint32)swic_SpiS1_Cmd.dat[4]);
+			EthSwt_SWIC_RegAccess_RegAccessNotify(E_OK);	/* レジスタアクセス結果の情報を通知 */
 			return err;
 		}
 	}
