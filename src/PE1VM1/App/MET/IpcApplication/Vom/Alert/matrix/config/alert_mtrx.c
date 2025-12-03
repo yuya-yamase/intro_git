@@ -201,6 +201,7 @@ const ST_ALERT_TASK         st_gp_ALERT_TASK_CFG[]   = {
     {  &st_gp_ALERT_S_TMN_MTRX[0],           (U2)ALERT_CH_S_TMN,                    (U1)ALERT_S_TMN_CH_NUM,             (U1)4U  },
     {  &st_gp_ALERT_S_DA_MTRX[0],            (U2)ALERT_CH_S_DA_BC,                  (U1)ALERT_S_DA_CH_NUM,              (U1)4U  },
     {  &st_gp_ALERT_S_TMTT_MTRX[0],          (U2)ALERT_CH_S_TMTT,                   (U1)ALERT_S_TMTT_CH_NUM,            (U1)4U  },
+    {  &st_gp_ALERT_S_TMBZR_MTRX[0],         (U2)ALERT_CH_S_TMBZR_BC_AD,            (U1)ALERT_S_TMBZR_CH_NUM,           (U1)4U  },
     {  &st_gp_ALERT_B_BDOOR_MTRX[0],         (U2)ALERT_CH_B_BDOOR,                  (U1)ALERT_B_BDOOR_CH_NUM,           (U1)4U  },
     {  &st_gp_ALERT_B_LEDHEA_MTRX[0],        (U2)ALERT_CH_B_LEDHEA,                 (U1)ALERT_B_LEDHEA_CH_NUM,          (U1)4U  },
     {  &st_gp_ALERT_B_MLGT_MTRX[0],          (U2)ALERT_CH_B_MLGT,                   (U1)ALERT_B_MLGT_CH_NUM,            (U1)4U  },
@@ -302,6 +303,7 @@ void    vd_g_AlertMtrxInit(void)
 /*  BEV-12    6/23/2025  HY       Change for BEV System_Consideration_2.(MET-S_ADMID-CSTD-0-02-A-C0 / MET-S_ADTT-CSTD-0-02-A-C0)     */
 /*  BEV-13    7/07/2025  KT       Delete for BEV System_Consideration_2.(MET-B_PCL-CSTD-A0-02-B-C0 etc.)                             */
 /*  BEV-14   11/27/2025  PG       Change for BEV System_Consideration_ADAS. (MET-S_TMTT-CSTD-0-01-A-C0)                              */
+/*  BEV-14   11/28/2025  HL       Change for BEV System_Consideration_ADAS.(MET-S_TMBZR-CSTD-0-01-A-C0)                              */
 /*                                                                                                                                   */
 /*  * YI   = Yoshiki Iwata, Denso                                                                                                    */
 /*  * RS   = Ryuki Sako,      Denso Techno                                                                                           */
@@ -311,5 +313,6 @@ void    vd_g_AlertMtrxInit(void)
 /*  * HY   = Haruki Yagi, KSE                                                                                                        */
 /*  * KT   = Kenta Takaji,    Denso Techno                                                                                           */
 /*  * PG   = Patrick Garcia,  DTPH                                                                                                   */
+/*  * HL   = Harry Lapiceros,  DTPH                                                                                                  */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
