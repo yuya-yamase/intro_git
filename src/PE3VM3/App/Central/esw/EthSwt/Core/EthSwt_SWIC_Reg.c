@@ -162,4 +162,3 @@ static Std_ReturnType swic_Reg_SetTblReadOFF(const swic_reg_data_t tbl[], const 
 
 	return result;
 }
-/* -------------------------------------------------------------------------- */
