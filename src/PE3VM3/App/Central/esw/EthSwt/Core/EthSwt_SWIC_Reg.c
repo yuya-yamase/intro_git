@@ -79,8 +79,8 @@ static Std_ReturnType swic_Reg_SetTblReadON(const swic_reg_data_t tbl[], const u
 	uint16			val = 0u;
 	uint32			i;
 	uint16			cnt = 0u;
-	uint16			startTime;
-	uint16			endTime;
+	uint32			startTime;
+	uint32			endTime;
 	Std_ReturnType	checkPwr;
 
 	LIB_DI();
@@ -111,7 +111,12 @@ static Std_ReturnType swic_Reg_SetTblReadON(const swic_reg_data_t tbl[], const u
 		LIB_DI();
 		endTime = EthSwt_SWIC_Time_Get();
 		LIB_EI();
-		tmo = endTime - startTime;
+		if (endTime < startTime) {
+			tmo = (0xFFFFFFFF - startTime) + endTime + 1;
+		} else {
+			tmo = endTime - startTime;
+		}
+		
 		if (tmo > SWIC_REG_WAIT) {
 			*errFactor = D_ETHSWT_SWIC_ERR_BUSY;
 			 break;
