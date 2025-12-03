@@ -48,11 +48,7 @@ static const swic_reg_data_t  g_regListSeqPhyReset[] =  {
       {0x1c,0x19,0x00,0x00,0xFFFF,0x8000},
       {0x1c,0x18,0x00,0x00,0x8000,0x94C0},
 };
-#if 0    /* 未使用テーブルのため無効化 */
-static const swic_reg_data_t  g_regListSeqSetPhyResetRelease[] =  {
-      {0x01u,0x0000u,0x01u,0x00u,0x0000u,0x0000u},
-};
-#endif    /* 未使用テーブルのため無効化 */
+
 #define ETHSWT_STOP_SEC_CONFIG_DATA_PREBUILD
 #include <EthSwt_SWIC_MemMap.h>
 #endif
