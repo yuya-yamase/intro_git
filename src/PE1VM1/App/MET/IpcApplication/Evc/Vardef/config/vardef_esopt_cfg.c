@@ -689,7 +689,7 @@ const ST_VDF_ESO_CH    st_gp_VDF_ESO_CH[VDF_ESO_NUM_RX] = {
         (U2)0x0002U,                            /* u2_vom_act          */
         ((U2)2100U / (U2)VDF_MAIN_TICK),        /* u2_rxc_peri         */
         {
-            (U2)U2_MAX,                         /* u2_rxc_min[MIN_INA] */
+            (U2)2U,                             /* u2_rxc_min[MIN_INA] */
             (U2)2U                              /* u2_rxc_min[MIN_ACT] */
         }
     },
@@ -1240,6 +1240,7 @@ U1      u1_g_VardefEsOptCfgEthRxEvcnt(const U2 u2_a_MSG_ID)
 /*  BEV-18    06/18/2025  KO      Change config for BEV System_Consideration_2.(MET-B_DRPBB-CSTD-0-)                                 */
 /*  BEV-19    10/15/2025  SN      Configured for BEVstep3_Rebase                                                                     */
 /*  BEV-20    11/27/2025  PG      Change config for BEV System_Consideration_ADAS.(MET-S_TMTT-CSTD-0)                                */
+/*  BEV-21    12/02/2025  MA      SW_TITE Function presence judgment processing changed to bidirectional.(MET-B_TITEBB-CSTD-0-)      */
 /*                                                                                                                                   */
 /*  * YI     = Yoshiki Iwata, Denso                                                                                                  */
 /*  * TN     = Takashi Nagai, Denso                                                                                                  */
@@ -1270,5 +1271,6 @@ U1      u1_g_VardefEsOptCfgEthRxEvcnt(const U2 u2_a_MSG_ID)
 /*  * MN   = Mikiya Negishi, KSE                                                                                                     */
 /*  * SN(K)= Shizuka Nakajima, KSE                                                                                                   */
 /*  * JS   = Jun Sugiyama, KSE                                                                                                       */
+/*  * MA   = Misaki Aiki, Dendo Techno                                                                                               */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
