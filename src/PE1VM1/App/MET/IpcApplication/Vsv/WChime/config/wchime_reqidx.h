@@ -42,7 +42,7 @@
 #define WCHIME_REQ_IN_ACC                        (7U)                           /* MET-S_ADBZR-CSTD-                                 */
 #define WCHIME_REQ_IN_STEER_UNDRIVE              (8U)                           /* MET-C_STEER-CSTD-                                 */
 #define WCHIME_REQ_IN_LCS_APR                    (9U)                           /* MET-S_ADBZR-CSTD-                                 */
-#define WCHIME_REQ_IN_TMBZR_TEN_HI8              (10U)                          /* MET-S_TMBZR-CST0                                  */
+#define WCHIME_REQ_IN_TMBZR_TEN_PRI8             (10U)                          /* MET-S_TMBZR-CST0                                  */
 #define WCHIME_REQ_IN_DOA                        (11U)                          /* MET-S_ADBZR-CSTD-                                 */
 #define WCHIME_REQ_CO_CSR_FR_SD                  (12U)                          /* MET-S_ADBZR-CSTD-                                 */
 #define WCHIME_REQ_IN_CSR_FR_MD                  (13U)                          /* MET-S_ADBZR-CSTD-                                 */
@@ -61,9 +61,9 @@
 #define WCHIME_REQ_IN_CSR_FRRR_LD                (26U)                          /* MET-S_ADBZR-CSTD-                                 */
 #define WCHIME_REQ_IN_DA                         (27U)                          /* MET-S_ADBZR-CSTD-                                 */
 #define WCHIME_REQ_IN_TCHAR_CYCL2                (28U)                          /* MET-S_ADBZR-CSTD-                                 */
-#define WCHIME_REQ_IN_TMBZR_TEN_MID7             (29U)                          /* MET-S_TMBZR-CST0                                  */
+#define WCHIME_REQ_IN_TMBZR_TEN_PRI7             (29U)                          /* MET-S_TMBZR-CST0                                  */
 #define WCHIME_REQ_IN_EDSS_R03                   (30U)                          /* MET-S_ADBZR-CSTD-                                 */
-#define WCHIME_REQ_IN_TMBZR_FB_MID6_5            (31U)                          /* MET-S_TMBZR-CST0                                  */
+#define WCHIME_REQ_IN_TMBZR_TEN_PRI6P5           (31U)                          /* MET-S_TMBZR-CST0                                  */
 #define WCHIME_REQ_IN_EIGCON_EG_PWROFF           (32U)                          /* MET-O_EIGCON-CSTD-                                */
 #define WCHIME_REQ_IN_BATTRW                     (33U)                          /* MET-H_BATTRW-CSTD-                                */
 #define WCHIME_REQ_IN_SCB                        (34U)                          /* MET-S_ADBZR-CSTD-                                 */
@@ -77,7 +77,7 @@
 #define WCHIME_REQ_IN_TCHAR_CYCL1                (42U)                          /* MET-S_ADBZR-CSTD-                                 */
 #define WCHIME_REQ_IN_BRK_FLDLEAK                (43U)                          /* MET-C_BRLV-CSTD-                                  */
 #define WCHIME_REQ_IN_STEER_STP                  (44U)                          /* MET-C_STEER-CSTD-                                 */
-#define WCHIME_REQ_IN_TMBZR_TEN_MID6             (45U)                          /* MET-S_TMBZR-CST0                                  */
+#define WCHIME_REQ_IN_TMBZR_TEN_PRI6             (45U)                          /* MET-S_TMBZR-CST0                                  */
 #define WCHIME_REQ_IN_SBLT_FMV                   (46U)                          /* MET-B_SEAREM-CSTD--                               */
 #define WCHIME_REQ_IN_ACC_BRKREQ                 (47U)                          /* MET-S_ADBZR-CSTD-                                 */
 #define WCHIME_REQ_SI_SBW_RJCT                   (48U)                          /* MET-D_SBW-CSTD-                                   */
@@ -94,15 +94,15 @@
 #define WCHIME_REQ_IN_SYSMAL_REQSTP              (59U)                          /* MET-H_SYSMAL-CSTD-                                */
 #define WCHIME_REQ_IN_BRK_APP4                   (60U)                          /* MET-C_BRKBZ-CSTD-                                 */
 #define WCHIME_REQ_CO_TMBZR_CONT_PRI5            (61U)                          /* MET-S_TMBZR-CST0                                  */
-#define WCHIME_REQ_IN_TMBZR_TENSION5             (62U)                          /* MET-S_TMBZR-CST0                                  */
+#define WCHIME_REQ_IN_TMBZR_TEN_PRI5             (62U)                          /* MET-S_TMBZR-CST0                                  */
 #define WCHIME_REQ_IN_EPB                        (63U)                          /* MET-C_EPB-CSTD-                                   */
 #define WCHIME_REQ_CO_EIGCON_IGOFF               (64U)                          /* MET-O_EIGCON-CSTD-                                */
 #define WCHIME_REQ_SI_ACC_LSPDCNSL               (65U)                          /* MET-S_ADBZR-CSTD-                                 */
 #define WCHIME_REQ_SI_LTA_CNCL                   (66U)                          /* MET-S_ADBZR-CSTD-                                 */
 #define WCHIME_REQ_SI_LCS_CNCL                   (67U)                          /* MET-S_ADBZR-CSTD-                                 */
-#define WCHIME_REQ_SI_TMBZR_FB_MID4_5            (68U)                          /* MET-S_TMBZR-CST0                                  */
-#define WCHIME_REQ_SI_TMBZR_RCV_MID4_5           (69U)                          /* MET-S_TMBZR-CST0                                  */
-#define WCHIME_REQ_SI_TMBZR_RJT_MID4_5           (70U)                          /* MET-S_TMBZR-CST0                                  */
+#define WCHIME_REQ_SI_TMBZR_ANN_PRI4P5           (68U)                          /* MET-S_TMBZR-CST0                                  */
+#define WCHIME_REQ_SI_TMBZR_RCV_PRI4P5           (69U)                          /* MET-S_TMBZR-CST0                                  */
+#define WCHIME_REQ_SI_TMBZR_RJT_PRI4P5           (70U)                          /* MET-S_TMBZR-CST0                                  */
 #define WCHIME_REQ_SI_SFTPOS_NML                 (71U)                          /* MET-D_SFTPOS-CSTD-                                */
 #define WCHIME_REQ_SI_APP_DIS_ASSIST             (72U)                          /* MET-S_ADBZR-CSTD-                                 */
 #define WCHIME_REQ_SI_APP_CMPLT                  (73U)                          /* MET-S_ADBZR-CSTD-                                 */
@@ -134,11 +134,11 @@
 #define WCHIME_REQ_IN_SYSMAL_REMDST_1KM          (99U)                          /* MET-H_SYSMAL-CSTD-                                */
 #define WCHIME_REQ_IN_LTA_PTN2                   (100U)                         /* MET-S_ADBZR-CSTD-                                 */
 #define WCHIME_REQ_SI_LTA_PTN3                   (101U)                         /* MET-S_ADBZR-CSTD-                                 */
-#define WCHIME_REQ_SI_TMBZR_PRI4                 (102U)                         /* MET-S_TMBZR-CST0                                  */
+#define WCHIME_REQ_SI_TMBZR_ANN_PRI4             (102U)                         /* MET-S_TMBZR-CST0                                  */
 #define WCHIME_REQ_SI_TMBZR_RCV_PRI4             (103U)                         /* MET-S_TMBZR-CST0                                  */
 #define WCHIME_REQ_SI_TMBZR_RJT_PRI4             (104U)                         /* MET-S_TMBZR-CST0                                  */
 #define WCHIME_REQ_CO_TMBZR_CONT_PRI4            (105U)                         /* MET-S_TMBZR-CST0                                  */
-#define WCHIME_REQ_IN_TMBZR_TEN_LOW4             (106U)                         /* MET-S_TMBZR-CST0                                  */
+#define WCHIME_REQ_IN_TMBZR_TEN_PRI4             (106U)                         /* MET-S_TMBZR-CST0                                  */
 #define WCHIME_REQ_SI_MINDSPWR_LV1               (107U)                         /* MET-M_MINDSPWR-CSTD-                              */
 #define WCHIME_REQ_IN_SBLT_LV1                   (108U)                         /* MET-B_SEAREM-CSTD--                               */
 #define WCHIME_REQ_SI_SBLT                       (109U)                         /* MET-B_SEAREM-CSTD--                               */
@@ -149,15 +149,15 @@
 #define WCHIME_REQ_IN_LTA_PTN1                   (114U)                         /* MET-S_ADBZR-CSTD-                                 */
 #define WCHIME_REQ_SI_INFRA_SNGL                 (115U)                         /* MET-S_ADBZR-CSTD-                                 */
 #define WCHIME_REQ_SI_MLT_MSG                    (116U)                         /* MET-G_MULDISPMM-CSTD-                             */
-#define WCHIME_REQ_SI_TMBZR_PRI3                 (117U)                         /* MET-S_TMBZR-CST0                                  */
+#define WCHIME_REQ_SI_TMBZR_ANN_PRI3             (117U)                         /* MET-S_TMBZR-CST0                                  */
 #define WCHIME_REQ_SI_TMBZR_RCV_PRI3             (118U)                         /* MET-S_TMBZR-CST0                                  */
 #define WCHIME_REQ_SI_TMBZR_RJT_PRI3             (119U)                         /* MET-S_TMBZR-CST0                                  */
 #define WCHIME_REQ_CO_TMBZR_CONT_PRI3            (120U)                         /* MET-S_TMBZR-CST0                                  */
-#define WCHIME_REQ_IN_TMBZR_TEN_LOW3             (121U)                         /* MET-S_TMBZR-CST0                                  */
+#define WCHIME_REQ_IN_TMBZR_TEN_PRI3             (121U)                         /* MET-S_TMBZR-CST0                                  */
 #define WCHIME_REQ_SI_ACC_AUTOSTART              (122U)                         /* MET-S_ADBZR-CSTD-                                 */
 #define WCHIME_REQ_CO_LIGHT                      (123U)                         /* MET-B_BLGT-CSTD-                                  */
 #define WCHIME_REQ_SI_SBW_RCPT                   (124U)                         /* MET-D_SBW-CSTD-                                   */
-#define WCHIME_REQ_IN_TMBZR_PREDOT               (125U)                         /* MET-S_TMBZR-CST0                                  */
+#define WCHIME_REQ_IN_TMBZR_DOHREQ               (125U)                         /* MET-S_TMBZR-CST0                                  */
 #define WCHIME_REQ_IN_LDA_HFCT                   (126U)                         /* MET-S_ADBZR-CSTD-                                 */
 #define WCHIME_REQ_IN_BATINS                     (127U)                         /* MET-H_BATINS-CSTD-                                */
 #define WCHIME_REQ_SI_TPMS_SINGLE                (128U)                         /* MET-C_TPMS-CSTD-                                  */
@@ -166,11 +166,11 @@
 #define WCHIME_REQ_SI_SMASTA_SNGL                (131U)                         /* MET-B_SMASTA-CSTD-                                */
 #define WCHIME_REQ_IN_TOWWAR                     (132U)                         /* MET-H_TOWWAR-CSTD-                                */
 #define WCHIME_REQ_SI_TMN_LVN                    (133U)                         /* MET-S_ADBZR-CSTD-                                 */
-#define WCHIME_REQ_SI_TMBZR_PRI2                 (134U)                         /* MET-S_TMBZR-CST0                                  */
+#define WCHIME_REQ_SI_TMBZR_ANN_PRI2             (134U)                         /* MET-S_TMBZR-CST0                                  */
 #define WCHIME_REQ_SI_TMBZR_RCV_PRI2             (135U)                         /* MET-S_TMBZR-CST0                                  */
 #define WCHIME_REQ_SI_TMBZR_RJT_PRI2             (136U)                         /* MET-S_TMBZR-CST0                                  */
 #define WCHIME_REQ_CO_TMBZR_CONT_PRI2            (137U)                         /* MET-S_TMBZR-CST0                                  */
-#define WCHIME_REQ_IN_TMBZR_TEN_LOW2             (138U)                         /* MET-S_TMBZR-CST0                                  */
+#define WCHIME_REQ_IN_TMBZR_TEN_PRI2             (138U)                         /* MET-S_TMBZR-CST0                                  */
 #define WCHIME_REQ_IN_SMASTA_INT1                (139U)                         /* MET-B_SMASTA-CSTD-                                */
 #define WCHIME_REQ_SI_BRK_APP3                   (140U)                         /* MET-C_BRKBZ-CSTD-                                 */
 #define WCHIME_REQ_IN_BRK_APP1                   (141U)                         /* MET-C_BRKBZ-CSTD-                                 */
@@ -183,11 +183,11 @@
 #define WCHIME_REQ_SI_BKHLD_REL_R10              (148U)                         /* MET-C_BRKHLD-CSTD-                                */
 #define WCHIME_REQ_SI_BKHLD_REL_R11              (149U)                         /* MET-C_BRKHLD-CSTD-                                */
 #define WCHIME_REQ_SI_BKHLD_NOTACT_R13           (150U)                         /* MET-C_BRKHLD-CSTD-                                */
-#define WCHIME_REQ_SI_TMBZR_PRI1                 (151U)                         /* MET-S_TMBZR-CST0                                  */
+#define WCHIME_REQ_SI_TMBZR_ANN_PRI1             (151U)                         /* MET-S_TMBZR-CST0                                  */
 #define WCHIME_REQ_SI_TMBZR_RCV_PRI1             (152U)                         /* MET-S_TMBZR-CST0                                  */
 #define WCHIME_REQ_SI_TMBZR_RJT_PRI1             (153U)                         /* MET-S_TMBZR-CST0                                  */
 #define WCHIME_REQ_CO_TMBZR_CONT_PRI1            (154U)                         /* MET-S_TMBZR-CST0                                  */
-#define WCHIME_REQ_IN_TMBZR_TEN_LOW1             (155U)                         /* MET-S_TMBZR-CST0                                  */
+#define WCHIME_REQ_IN_TMBZR_TEN_PRI1             (155U)                         /* MET-S_TMBZR-CST0                                  */
 #define WCHIME_REQ_SI_BRK_APP5                   (156U)                         /* MET-C_BRKBZ-CSTD-                                 */
 #define WCHIME_REQ_SI_RSA_CHG_SPLDLMT            (157U)                         /* MET-S_ADBZR-CSTD-                                 */
 #define WCHIME_REQ_SI_ACC_APPRVLSTART            (158U)                         /* MET-S_ADBZR-CSTD-                                 */
@@ -203,11 +203,12 @@
 #define WCHIME_REQ_SI_TURHAZ_FIN_LS              (168U)                         /* MET-B_TURHAZ-CSTD-                                */
 #define WCHIME_REQ_SI_TURHAZ_FIN_MS              (169U)                         /* MET-B_TURHAZ-CSTD-                                */
 #define WCHIME_REQ_SI_TURHAZ_FIN_HS              (170U)                         /* MET-B_TURHAZ-CSTD-                                */
-#define WCHIME_REQ_SI_TMBZR_PRI0                 (171U)                         /* MET-S_TMBZR-CST0                                  */
+#define WCHIME_REQ_SI_TMBZR_ANN_PRI0             (171U)                         /* MET-S_TMBZR-CST0                                  */
 #define WCHIME_REQ_SI_TMBZR_RCV_PRI0             (172U)                         /* MET-S_TMBZR-CST0                                  */
 #define WCHIME_REQ_SI_TMBZR_RJT_PRI0             (173U)                         /* MET-S_TMBZR-CST0                                  */
 #define WCHIME_REQ_CO_TMBZR_CONT_PRI0            (174U)                         /* MET-S_TMBZR-CST0                                  */
-#define WCHIME_REQ_IN_TMBZR_TEN_LOW0             (175U)                         /* MET-S_TMBZR-CST0                                  */
+#define WCHIME_REQ_IN_TMBZR_TEN_PRI0             (175U)                         /* MET-S_TMBZR-CST0                                  */
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define WCHIME_REQBIT_NUM_WORD                   ((WCHIME_NUM_REQ + 31U) >> 5)  /* Number of rows to convert buzzer req. ID to bit.  */
 

@@ -131,6 +131,7 @@
 #define ALERT_H_BATTRW_CH_NUM                    (1U)
 #define ALERT_O_PDSMAL_CH_NUM                    (2U)
 #define ALERT_S_TMTT_CH_NUM                      (1U)
+#define ALERT_S_TMBZR_CH_NUM                     (2U)
 
 #define ALERT_SPD_STSBIT_VALID                   (VEHSPD_STSBIT_VALID)
 #define ALERT_SPD_STSBIT_UNKNOWN                 (VEHSPD_STSBIT_UNKNOWN)
@@ -313,6 +314,7 @@ extern const ST_ALERT_MTRX         st_gp_ALERT_C_HCS_MTRX[ALERT_C_HCS_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_H_BATTRW_MTRX[ALERT_H_BATTRW_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_O_PDSMAL_MTRX[ALERT_O_PDSMAL_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_S_TMTT_MTRX[ALERT_S_TMTT_CH_NUM];
+extern const ST_ALERT_MTRX         st_gp_ALERT_S_TMBZR_MTRX[ALERT_S_TMBZR_CH_NUM];
 
 #endif      /* ALERT_MTRX_CFG_H */
 
