@@ -209,6 +209,7 @@ App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_B_TPWSR.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_B_TRFOG.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_B_TRWIP.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_B_TTAIL.c
+App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_B_TURHAZ.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_B_WASLEV.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_C_ABS.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_C_AVSWAR.c
