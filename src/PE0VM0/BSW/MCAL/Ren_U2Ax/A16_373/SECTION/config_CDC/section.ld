@@ -29,6 +29,7 @@ SECTIONS {
     .bsw_cryif_code         align(16)                       : > .
     .bsw_secoc_code         align(16)                       : > .
     .bsw_secoc_cd_fv_code   align(16)                       : > .
+    .bsw_idsm_code          align(16)                       : > .
     .bsw_dcm_text           align(16)                       : > .
     .bsw_dem_text           align(16)                       : > .
     .bsw_fee_text           align(16)                       : > .
@@ -54,6 +55,7 @@ SECTIONS {
     .bsw_can_const          align(4)                        : > .
     .bsw_csm_const_config   align(4)                        : > .
     .bsw_secoc_const_config align(4)                        : > .
+    .bsw_idsm_const_config  align(4)                        : > .
     .bsw_dcm_rodata         align(4)                        : > .
     .bsw_dem_rodata         align(4)                        : > .
     .bsw_fee_rodata         align(4)                        : > .
@@ -358,6 +360,8 @@ SECTIONS {
         .bsw_secoc_var_no_init        align(4)                    : > .
         .bsw_secoc_var_cleared_wakeup align(4)                    : > .
         .bsw_secoc_cd_fv_var_no_init  align(4)                    : > .
+        .bsw_idsm_var_no_init         align(4)                    : > .
+        .bsw_idsm_var_cleared_wakeup  align(4)                    : > .
 
         // CryptoDriver, CycurHSM Bss
         .bsw_crypto_bss               align(4)                    : > .                                      // CryptoDriver: must allocate in QM section area(zero clear section)

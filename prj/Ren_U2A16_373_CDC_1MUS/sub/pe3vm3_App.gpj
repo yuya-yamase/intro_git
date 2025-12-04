@@ -1,0 +1,66 @@
+#!gbuild
+[Subproject]
+    :sourceDir=../
+
+
+
+# ----------------------------------------------------------------------------------------------------------------------------------
+# sources
+# ----------------------------------------------------------------------------------------------------------------------------------
+../../src/PE3VM3/App/Central/CanIfProxy/src/CanIfProxy.c
+../../src/PE3VM3/App/Central/chipcom/src/chipcom.c
+../../src/PE3VM3/App/Central/chipcom/src/chipcom_config.c
+../../src/PE3VM3/App/Central/esw/EthDLC/Config/EthDLC_Cfg.c
+../../src/PE3VM3/App/Central/esw/EthDLC/Core/EthDLC_ACTL.c
+../../src/PE3VM3/App/Central/esw/EthDLC/Core/EthDLC_STM.c
+../../src/PE3VM3/App/Central/esw/EthDLC/EthDLC.c
+../../src/PE3VM3/App/Central/esw/EthSW_Task/EthSW_Task.c
+../../src/PE3VM3/App/Central/esw/EthSwt/Config/EthSwt_Data.c
+../../src/PE3VM3/App/Central/esw/EthSwt/Config/EthSwt_SWIC_Cfg.c
+../../src/PE3VM3/App/Central/esw/EthSwt/Core/EthSwt_SWIC_Init.c
+../../src/PE3VM3/App/Central/esw/EthSwt/Core/EthSwt_SWIC_Link.c
+../../src/PE3VM3/App/Central/esw/EthSwt/Core/EthSwt_SWIC_Port.c
+../../src/PE3VM3/App/Central/esw/EthSwt/Core/EthSwt_SWIC_PWR.c
+../../src/PE3VM3/App/Central/esw/EthSwt/Core/EthSwt_SWIC_Reg.c
+../../src/PE3VM3/App/Central/esw/EthSwt/Core/EthSwt_SWIC_Spi.c
+../../src/PE3VM3/App/Central/esw/EthSwt/Core/EthSwt_SWIC_STM.c
+../../src/PE3VM3/App/Central/esw/EthSwt/Core/EthSwt_SWIC_Time.c
+../../src/PE3VM3/App/Central/esw/EthSwt/EthSwt_SWIC.c
+../../src/PE3VM3/App/Central/LIB/LIB_byteswap.c
+../../src/PE3VM3/App/Central/LIB/LIB_counter.c
+../../src/PE3VM3/App/Central/LIB/LIB_interrupt.c
+../../src/PE3VM3/App/Central/LIB/LIB_memcpy.c
+../../src/PE3VM3/App/Central/LIB/LIB_memset.c
+../../src/PE3VM3/App/Central/Pmic/src/Pmic_Pwr.c
+../../src/PE3VM3/App/Central/VIS/src/VIS_Can.c
+../../src/PE3VM3/App/Central/VIS/src/VIS_Main.c
+../../src/PE3VM3/App/Central/VIS/src/VIS_Pwr.c
+../../src/PE3VM3/App/Central/VIS/src/VIS_Pwrcfg.c
+../../src/PE3VM3/App/Central/VSM/src/VSM.c
+../../src/PE3VM3/App/Central/VSM/src/VSM_SAILWrapper.c
+../../src/PE3VM3/App/Common/PwrCtrl/PwrCtlSup.c
+../../src/PE3VM3/App/Common/PwrCtrl/PwrCtrl_cfg.c
+../../src/PE3VM3/App/Common/PwrCtrl/PwrCtrl_Com.c
+../../src/PE3VM3/App/Common/PwrCtrl/PwrCtrl_Main.c
+../../src/PE3VM3/App/Common/PwrCtrl/PwrCtrl_NoRedun.c
+../../src/PE3VM3/App/Common/PwrCtrl/PwrCtrl_Observe.c
+../../src/PE3VM3/App/Common/PwrCtrl/PwrCtrl_PinMonitor.c
+../../src/PE3VM3/App/Common/PwrCtrl/PwrCtrl_Sip.c
+../../src/PE3VM3/App/Common/PwrCtrl/PwrCtrl_Sys.c
+../../src/PE3VM3/App/Common/xspi/xspi.c
+../../src/PE3VM3/App/Common/xspi/xspi_sub.c
+###../../src/PE3VM3/App/Product/config_1MJP/product_cfg.c
+###../../src/PE3VM3/App/Product/config_1MOT/product_cfg.c
+../../src/PE3VM3/App/Product/config_1MUS/product_cfg.c
+###../../src/PE3VM3/App/Product/config_1SJP/product_cfg.c
+###../../src/PE3VM3/App/Product/config_1SUS/product_cfg.c
+
+# ----------------------------------------------------------------------------------------------------------------------------------
+# libraries and linker directives
+# ----------------------------------------------------------------------------------------------------------------------------------
+
+# ----------------------------------------------------------------------------------------------------------------------------------
+# ghsprj version 1-0-0
+# Date generated: 2025/11/27 15:24:34
+# ----------------------------------------------------------------------------------------------------------------------------------
+
