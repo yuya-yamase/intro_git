@@ -191,7 +191,7 @@ static U1   u1_s_ThblnkrGetInput(void)
 
 
     if((u4_t_req & (U4)THBLNKR_CHK_TURN_R_ON) != (U4)0U){
-        u1_t_mtnl_sgnl = (U1)((u4_t_req & (U4)THBLNKR_CHK_TURN_R_ON) >> THBLNKR_1BIT_SHIFT);
+        u1_t_mtnr_sgnl = (U1)((u4_t_req & (U4)THBLNKR_CHK_TURN_R_ON) >> THBLNKR_1BIT_SHIFT);
     }
 
     if (u1_t_mtnr_sgnl == (U1)TRUE) {
