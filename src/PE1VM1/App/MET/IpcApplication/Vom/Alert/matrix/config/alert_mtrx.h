@@ -166,7 +166,9 @@
 #define ALERT_CH_S_TMTT                          (147U)
 #define ALERT_CH_S_TMBZR_BC_AD                   (148U)
 #define ALERT_CH_S_TMBZR_BC_DOT                  (149U)
-#define ALERT_NUM_CH                             (150U)
+#define ALERT_CH_B_TURHAZ_L                      (150U)
+#define ALERT_CH_B_TURHAZ_R                      (151U)
+#define ALERT_NUM_CH                             (152U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* ALERT_REQ_[SYS]_[VIEW]_XXXX                            */
@@ -616,6 +618,8 @@
 #define ALERT_REQ_S_TMBZR_BC_AD_TEN_7            (32U)
 #define ALERT_REQ_S_TMBZR_BC_AD_TEN_8            (33U)
 #define ALERT_REQ_S_TMBZR_BC_DOT_DOHREQ          (0U)
+#define ALERT_REQ_B_TURHAZ_L_ON                  (0U)
+#define ALERT_REQ_B_TURHAZ_R_ON                  (0U)
 
 /* ALERT_CH dummy define */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
