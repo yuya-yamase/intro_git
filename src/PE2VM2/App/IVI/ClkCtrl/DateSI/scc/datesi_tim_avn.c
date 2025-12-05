@@ -182,8 +182,11 @@ static void     vd_s_DateSITimDiagClkNewBak(const U4 u4_a_HHMMSS_NEW);
 /*===================================================================================================================================*/
 void            vd_g_DateSITimAvnBonInit(void)
 {
+    S4  s4_t_offset_time;
+
     vd_g_TimeZoneBonInit();
-    s4_s_datesi_tim_ofst           = (S4)DATESI_TIM_OFFSET_INIT;
+    s4_t_offset_time               = s4_g_DateSITimCfgBonOfstTime();
+    s4_s_datesi_tim_ofst           = s4_s_DateSITimChkOfstTime(s4_t_offset_time);
     u1_s_datesi_tim_sync           = (U1)FALSE;
     u1_s_datesi_tim_prv_hr         = (U1)0U;
     u4_s_datesi_tim_adj_clock      = (U4)HHMMSS_UNKNWN;
@@ -206,8 +209,16 @@ void            vd_g_DateSITimAvnBonInit(void)
 /*===================================================================================================================================*/
 void            vd_g_DateSITimAvnWkupInit(void)
 {
+    S4  s4_t_offset_time;
+    S4  s4_t_time_zone;
+
     vd_g_TimeZoneRstWkupInit();
-    s4_s_datesi_tim_ofst           = (S4)DATESI_TIM_OFFSET_INIT;
+    s4_t_offset_time               = s4_g_DateSITimCfgWkupOfstTime();
+    s4_t_offset_time               = s4_s_DateSITimChkOfstTime(s4_t_offset_time);
+    s4_t_time_zone                 = s4_g_TimeZoneUtcDiffSec();
+    s4_t_time_zone                 = s4_s_DateSITimChkTimZn(s4_t_time_zone);
+    s4_s_datesi_tim_ofst           = s4_t_offset_time + s4_t_time_zone;
+
     u1_s_datesi_tim_sync           = (U1)FALSE;
     u1_s_datesi_tim_prv_hr         = (U1)0U;
     u4_s_datesi_tim_adj_clock      = (U4)HHMMSS_UNKNWN;

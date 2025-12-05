@@ -74,10 +74,9 @@ void            vd_g_DateSITimBonInit(void)
     u1_s_datesi_tim_adj_act   = (U1)FALSE;
 
     vd_g_DateSITimAvnBonInit();
+    vd_g_DateSITimCfgBonInit();
 
     vd_g_DateSITimCfgCanTx(u4_s_datesi_tim_now, (U1)FALSE);
-
-    vd_g_DateSITimCfgBonInit();
 
     /* iVDsh Initial Value Transmit*/
     u4_t_datesi_tim_ofset_write = (U4)U4_MAX;
@@ -102,10 +101,9 @@ void            vd_g_DateSITimRstWkupInit(void)
     u1_s_datesi_tim_adj_act   = (U1)FALSE;
 
     vd_g_DateSITimAvnWkupInit();
+    vd_g_DateSITimCfgRstWkupInit();
 
     vd_g_DateSITimCfgCanTx(u4_s_datesi_tim_now, (U1)FALSE);
-
-    vd_g_DateSITimCfgRstWkupInit();
 
     /* iVDsh Initial Value Transmit*/
     u4_t_datesi_tim_ofset_write = (U4)U4_MAX;
