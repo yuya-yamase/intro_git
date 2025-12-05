@@ -17,7 +17,6 @@
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "thblnkr_cfg_private.h"
-#include "alert.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -34,11 +33,6 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define     THBLNKR_1BIT_SHIFT        (1U)
-#define     THBLNKR_TURHAZ_REQ_NUM    (2U)
-#define     THBLNKR_CHK_TURN_L_ON     (0x00000001U)
-#define     THBLNKR_CHK_TURN_R_ON     (0x00000002U)
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -153,28 +147,16 @@ static void     vd_s_ThblnkrInit(void)
 /*===================================================================================================================================*/
 static U1   u1_s_ThblnkrGetInput(void)
 {
-    static const ST_ALERT_REQBIT   st_sp_THBLNKR_L_REQBIT[THBLNKR_TURHAZ_REQ_NUM] = {
-        /*  u2_src_ch                       u1_src_act                          u1_dst_idx  u4_dst_bit                */
-        {  (U2)ALERT_CH_B_TURHAZ_L,         (U1)ALERT_REQ_B_TURHAZ_L_ON,        (U1)0U,     (U4)THBLNKR_CHK_TURN_L_ON  },
-        {  (U2)ALERT_CH_B_TURHAZ_R,         (U1)ALERT_REQ_B_TURHAZ_R_ON,        (U1)0U,     (U4)THBLNKR_CHK_TURN_R_ON  }
-    };
-
     static const U1 u1_s_MTNR_LSB_VAL  = (U1)1U;
     static const U2 u2_s_THBNLKR_INACT = ((U2)5000U / (U2)THBLNKR_MAINTICK);
     U1 u1_t_thblnkr_req;
     U1 u1_t_mtnl_sgnl;
     U1 u1_t_mtnr_sgnl;
-    U4 u4_t_req;
 
     u1_t_mtnl_sgnl = (U1)FALSE;
     u1_t_mtnr_sgnl = (U1)FALSE;
-    u4_t_req       = (U4)0U;
 
-    vd_g_AlertReqToBit(st_sp_THBLNKR_L_REQBIT, (U2)THBLNKR_TURHAZ_REQ_NUM, &u4_t_req, (U1)1U);
-
-    if((u4_t_req & (U4)THBLNKR_CHK_TURN_L_ON) != (U4)0U){
-        u1_t_mtnl_sgnl = (U1)(u4_t_req & (U4)THBLNKR_CHK_TURN_L_ON);
-    }
+    u1_t_mtnl_sgnl = u1_g_ThblnkrCfgL_Req();
 
     if (u1_t_mtnl_sgnl == (U1)TRUE) {
         if (u2_s_thblnkr_act_tim_mtnls_l < (U2)U2_MAX) {
@@ -190,9 +172,7 @@ static U1   u1_s_ThblnkrGetInput(void)
     u1_t_thblnkr_req = u1_t_mtnl_sgnl;
 
 
-    if((u4_t_req & (U4)THBLNKR_CHK_TURN_R_ON) != (U4)0U){
-        u1_t_mtnr_sgnl = (U1)((u4_t_req & (U4)THBLNKR_CHK_TURN_R_ON) >> THBLNKR_1BIT_SHIFT);
-    }
+    u1_t_mtnr_sgnl = u1_g_ThblnkrCfgR_Req();
 
     if (u1_t_mtnr_sgnl == (U1)TRUE) {
         if (u2_s_thblnkr_act_tim_mtnls_r < (U2)U2_MAX) {

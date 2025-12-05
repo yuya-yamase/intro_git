@@ -309,8 +309,8 @@ void    vd_g_AlertMtrxInit(void)
 /*  BEV-12    6/23/2025  HY       Change for BEV System_Consideration_2.(MET-S_ADMID-CSTD-0-02-A-C0 / MET-S_ADTT-CSTD-0-02-A-C0)     */
 /*  BEV-13    7/07/2025  KT       Delete for BEV System_Consideration_2.(MET-B_PCL-CSTD-A0-02-B-C0 etc.)                             */
 /*  BEV-14   11/27/2025  PG       Change for BEV System_Consideration_ADAS. (MET-S_TMTT-CSTD-0-01-A-C0)                              */
-/*  BEV-14   11/28/2025  HL       Change for BEV System_Consideration_ADAS.(MET-S_TMBZR-CSTD-0-01-A-C0)                              */
-/*  BEV-15   12/04/2025  SH       Change for BEV System_Consideration_ADAS.(MET-B_TURHAZ-CSTD-1-01-A-C1)                             */
+/*  BEV-15   11/28/2025  HL       Change for BEV System_Consideration_ADAS.(MET-S_TMBZR-CSTD-0-01-A-C0)                              */
+/*  BEV-16   12/04/2025  SH       Change for BEV System_Consideration_ADAS.(MET-B_TURHAZ-CSTD-1-01-A-C1)                             */
 /*                                                                                                                                   */
 /*  * YI   = Yoshiki Iwata, Denso                                                                                                    */
 /*  * RS   = Ryuki Sako,      Denso Techno                                                                                           */
