@@ -53,8 +53,7 @@
 #define DATESI_CAL_CAN_WEEK_SAT                 (6U)                                         /* Saturday                             */
 #define DATESI_CAL_CAN_WEEK_SUN                 (7U)                                         /* Sunday                               */
 
-/* BEV PreCV provisionally */
-#define DATESI_CAL_MIN                          (2021U)
+#define DATESI_CAL_MIN                          (2000U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -85,14 +84,61 @@ const   U4                                      u4_g_DATESI_CAL_DAYCNT_ABSMAX = 
 #endif
 
 /*===================================================================================================================================*/
-/* void            vd_g_DateSICalCfgInit(void)                                                                                       */
+/* U2              u2_g_DateSICalCfgBonInit(void)                                                                                    */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         u2_s_datesi_cal_minÅFcalendar min Initial value.                                                                 */
+/*===================================================================================================================================*/
+U2              u2_g_DateSICalCfgBonInit(void)
+{
+    u2_s_datesi_cal_min = (U2)DATESI_CAL_MIN;
+    vd_g_Rim_WriteU2((U2)RIMID_U2_CAL_MIN, u2_s_datesi_cal_min);
+
+    return(u2_s_datesi_cal_min);
+}
+
+/*===================================================================================================================================*/
+/* U2              u2_g_DateSICalCfgRstWkupInit(void)                                                                                */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         u2_s_datesi_cal_minÅFcalendar min RIM value.                                                                     */
+/*===================================================================================================================================*/
+U2              u2_g_DateSICalCfgRstWkupInit(void)
+{
+    U1  u1_t_rim_sts;
+    U2  u2_t_rim_data;
+
+    u2_s_datesi_cal_min = (U2)DATESI_CAL_MIN;
+    u2_t_rim_data       = (U2)0U;
+
+    u1_t_rim_sts = u1_g_Rim_ReadU2withStatus((U2)RIMID_U2_CAL_MIN, &u2_t_rim_data);
+    if((u1_t_rim_sts & (U1)RIM_RESULT_KIND_MASK) == (U1)RIM_RESULT_KIND_OK){
+        u2_s_datesi_cal_min = u2_t_rim_data;
+    }
+
+    return(u2_s_datesi_cal_min);
+}
+
+/*===================================================================================================================================*/
+/* U1              u1_g_DateSICalCfgInitCalmin(U2 * u2p_a_cal_min)                                                                   */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void            vd_g_DateSICalCfgInit(void)
+U1              u1_g_DateSICalCfgInitCalmin(U2 * u2p_a_cal_min)
 {
-    u2_s_datesi_cal_min = (U2)DATESI_CAL_MIN; /* BEV PreCV provisionally */
+    U1  u1_t_read_sts;
+    U4  u4_t_cal_min;
+
+    u4_t_cal_min  = (U4)0U;
+    u1_t_read_sts = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_VM1TO2_CALMIN, &u4_t_cal_min, (U2)DATESI_CAL_VM_1WORD);
+    if((u1_t_read_sts != (U1)IVDSH_NO_REA) && (u4_t_cal_min <= (U4)U2_MAX)){
+        u2_s_datesi_cal_min = (U2)u4_t_cal_min;
+        vd_g_Rim_WriteU2((U2)RIMID_U2_CAL_MIN, u2_s_datesi_cal_min);
+    }
+    (*u2p_a_cal_min) = u2_s_datesi_cal_min;
+
+    return(u1_t_read_sts);
 }
 
 /*===================================================================================================================================*/
@@ -149,14 +195,6 @@ void            vd_g_DateSICalCfgCanTx(const U4 u4_a_YYYYMMDD, const U1 u1_a_EVE
      defined(ComConf_ComSignal_M_WEEK))
     U1  u1_t_pretx;
     U1  u1_t_date[YYMMDD_DATE_SIZE];
-    U1  u1_t_read_sts;
-    U4  u4_t_cal_min;
-
-    u4_t_cal_min = (U4)0U;
-    u1_t_read_sts = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_VM1TO2_CALMIN, &u4_t_cal_min, (U2)DATESI_CAL_VM_1WORD);
-    if((u1_t_read_sts != (U1)IVDSH_NO_REA) && (u4_t_cal_min <= (U4)U2_MAX)){
-        u2_s_datesi_cal_min = (U2)u4_t_cal_min;
-    }
 
     u1_t_pretx     = (U1)0U;
 #endif
@@ -173,7 +211,7 @@ void            vd_g_DateSICalCfgCanTx(const U4 u4_a_YYYYMMDD, const U1 u1_a_EVE
             u1_t_date[YYMMDD_DATE_YR] = (U1)(u2_s_datesi_cal_min - (U2)DATESI_CAL_YEAR_OFFSET);
         }
         else{
-            u1_t_date[YYMMDD_DATE_YR] = (U1)DATESI_CAL_MIN - (U1)DATESI_CAL_YEAR_OFFSET;
+            u1_t_date[YYMMDD_DATE_YR] = (U1)0xFFU;   /*Invalid Value*/
         }
     }
     (void)Com_ReceiveSignal(ComConf_ComSignal_M_YEAR, &u1_t_pretx);
