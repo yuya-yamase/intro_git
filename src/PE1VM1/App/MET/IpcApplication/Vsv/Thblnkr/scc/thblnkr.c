@@ -153,9 +153,6 @@ static U1   u1_s_ThblnkrGetInput(void)
     U1 u1_t_mtnl_sgnl;
     U1 u1_t_mtnr_sgnl;
 
-    u1_t_mtnl_sgnl = (U1)FALSE;
-    u1_t_mtnr_sgnl = (U1)FALSE;
-
     u1_t_mtnl_sgnl = u1_g_ThblnkrCfgL_Req();
 
     if (u1_t_mtnl_sgnl == (U1)TRUE) {
