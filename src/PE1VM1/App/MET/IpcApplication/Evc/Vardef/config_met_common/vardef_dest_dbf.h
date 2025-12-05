@@ -1,4 +1,4 @@
-/* 2.1.0 */
+/* 2.2.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -13,7 +13,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define VARDEF_DEST_DBF_H_MAJOR             (2)
-#define VARDEF_DEST_DBF_H_MINOR             (1)
+#define VARDEF_DEST_DBF_H_MINOR             (2)
 #define VARDEF_DEST_DBF_H_PATCH             (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -21,7 +21,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
-#define VDF_DEST_DBF_NBYTE              (35U)
+#define VDF_DEST_DBF_NBYTE              (34U)
 #define VDF_DEST_DBF_DESTINATION        (0U)
 #define VDF_DEST_DBF_DEFUNIT_SPD        (1U)
 #define VDF_DEST_DBF_DEFUNIT_DST        (2U)
@@ -40,23 +40,22 @@
 #define VDF_DEST_DBF_TTTRCOFF           (15U)
 #define VDF_DEST_DBF_TTVSCEXP           (16U)
 #define VDF_DEST_DBF_BZ_SBW_SUP         (17U)
-#define VDF_DEST_DBF_LC_DEST            (18U)
-#define VDF_DEST_DBF_ECOJUDGE           (19U)
-#define VDF_DEST_DBF_MDLEST_WRN         (20U)
-#define VDF_DEST_DBF_BZ_REV_DEST        (21U)
-#define VDF_DEST_DBF_SEATBLT_CONST      (22U)
-#define VDF_DEST_DBF_SUBDIGSPD          (23U)
-#define VDF_DEST_DBF_SPDTLRNC           (24U)
-#define VDF_DEST_DBF_CHAINAREQ          (25U)
-#define VDF_DEST_DBF_TTBRAKE            (26U)
-#define VDF_DEST_DBF_TTABS              (27U)
-#define VDF_DEST_DBF_TTEPBPKB           (28U)
-#define VDF_DEST_DBF_TTTAILHEAD         (29U)
-#define VDF_DEST_DBF_TTCHECKEG          (30U)
-#define VDF_DEST_DBF_TMNT               (31U)
-#define VDF_DEST_DBF_STPIND             (32U)
-#define VDF_DEST_DBF_AMBTMP             (33U)
-#define VDF_DEST_DBF_PRESSUNIT          (34U)
+#define VDF_DEST_DBF_ECOJUDGE           (18U)
+#define VDF_DEST_DBF_MDLEST_WRN         (19U)
+#define VDF_DEST_DBF_BZ_REV_DEST        (20U)
+#define VDF_DEST_DBF_SEATBLT_CONST      (21U)
+#define VDF_DEST_DBF_SUBDIGSPD          (22U)
+#define VDF_DEST_DBF_SPDTLRNC           (23U)
+#define VDF_DEST_DBF_CHAINAREQ          (24U)
+#define VDF_DEST_DBF_TTBRAKE            (25U)
+#define VDF_DEST_DBF_TTABS              (26U)
+#define VDF_DEST_DBF_TTEPBPKB           (27U)
+#define VDF_DEST_DBF_TTTAILHEAD         (28U)
+#define VDF_DEST_DBF_TTCHECKEG          (29U)
+#define VDF_DEST_DBF_TMNT               (30U)
+#define VDF_DEST_DBF_STPIND             (31U)
+#define VDF_DEST_DBF_AMBTMP             (32U)
+#define VDF_DEST_DBF_PRESSUNIT          (33U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define VDF_LANG_DEST_DBF_NBYTE         (2U)
@@ -148,11 +147,6 @@
 #define VDF_BZ_SBW_NON                  (1U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define VDF_NUM_LC_BLNK_CNT_DST         (2U)
-#define VDF_LC_BLNK_CNT_JPN             (0U)
-#define VDF_LC_BLNK_CNT_OTR             (1U)
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define VDF_NUM_BZ_REV_DST              (2U)
 #define VDF_BZ_REV_JPN                  (0U)
 #define VDF_BZ_REV_OTR                  (1U)
@@ -202,7 +196,6 @@
 #define VDF_TTCHECKEG_NO1               (0U)
 #define VDF_TTCHECKEG_NO2               (1U)
 
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define VDF_NUM_PRESSUNIT               (3U)
 #define VDF_PRESSUNIT_KPA               (0U)
@@ -222,9 +215,6 @@
 #define VDF_LNGDBTYPE_TYPE9             (8U)
 #define VDF_LNGDBTYPE_TYPE10            (9U)
 #define VDF_LNGDBTYPE_TYPE11            (10U)
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define VDF_TMNT_DUMMY                  (0U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define VDF_NUM_UNIT_TYPE               (12U)
@@ -269,7 +259,6 @@
 #define u1_g_VardefTtTrcoff()                          (u1_g_VardefDestDbfByPid((U1)VDF_DEST_DBF_TTTRCOFF))
 #define u1_g_VardefTTVscExp()                          (u1_g_VardefDestDbfByPid((U1)VDF_DEST_DBF_TTVSCEXP))
 #define u1_g_VardefBzSbwDiagSupByPid()                 (u1_g_VardefDestDbfByPid((U1)VDF_DEST_DBF_BZ_SBW_SUP))
-#define u1_g_VardefLCBlnkCntDstByPid()                 (u1_g_VardefDestDbfByPid((U1)VDF_DEST_DBF_LC_DEST))
 #define u1_g_VardefEcoJudge()                          (u1_g_VardefDestDbfByPid((U1)VDF_DEST_DBF_ECOJUDGE))
 #define u1_g_VardefMdlLEstWrnByPid()                   (u1_g_VardefDestDbfByPid((U1)VDF_DEST_DBF_MDLEST_WRN))
 #define u1_g_VardefBzRevDstByPid()                     (u1_g_VardefDestDbfByPid((U1)VDF_DEST_DBF_BZ_REV_DEST))
@@ -282,13 +271,12 @@
 #define u1_g_VardefTtEpbPkb()                          (u1_g_VardefDestDbfByPid((U1)VDF_DEST_DBF_TTEPBPKB))
 #define u1_g_VardefTtTailHead()                        (u1_g_VardefDestDbfByPid((U1)VDF_DEST_DBF_TTTAILHEAD))
 #define u1_g_VardefTtCheckEG()                         (u1_g_VardefDestDbfByPid((U1)VDF_DEST_DBF_TTCHECKEG))
+#define u1_g_VardefTmntOpt()                           (u1_g_VardefDestDbfByPid((U1)VDF_DEST_DBF_TMNT))
 #define u1_g_VardefStpInd()                            (u1_g_VardefDestDbfByPid((U1)VDF_DEST_DBF_STPIND))
 #define u1_g_VardefUnitAmbTmpByPid()                   (u1_g_VardefDestDbfByPid((U1)VDF_DEST_DBF_AMBTMP))
 #define u1_g_VardefPressUnitByPid()                    (u1_g_VardefDestDbfByPid((U1)VDF_DEST_DBF_PRESSUNIT))
 #define u1_g_VardefDefLangByPid()                      (u1_g_VardefLangDestDbfByPid((U1)VDF_DEST_DBF_DEFLANG))
 #define u1_g_VardefLngDBTypeByPid()                    (u1_g_VardefLangDestDbfByPid((U1)VDF_DEST_DBF_LANGDBTYPE))
-
-#define u1_g_VardefTmntOpt()                           (u1_g_VardefCfgTmntOpt())
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
@@ -302,7 +290,6 @@
 U1      u1_g_VardefCfgUnitType(void);
 U1      u1_g_VardefCfgBltDst(void);
 U1      u1_g_VardefCfg4wdSys(void);
-U1      u1_g_VardefCfgTmntOpt(void);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

@@ -28,6 +28,12 @@
 #define XSPI_ETHER_UNDEF1                    (2U)
 #define XSPI_ETHER_UNDEF2                    (3U)
 
+#define XSPI_CANTX_VALID                     (0U)
+#define XSPI_CANTX_UNKOWN                    (1U)
+
+#define XSPI_CANTX_BUFSIZE2                  (2U)
+#define XSPI_CANTX_BUFSIZE8                  (8U)
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

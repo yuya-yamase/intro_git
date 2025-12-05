@@ -20,10 +20,6 @@
 #include "alert_mtrx_cfg_private.h"
 
 #include "oxcan.h"
-#if 0   /* BEV BSW provisionally */
-#else
-#include "oxcan_channel_STUB.h"
-#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -131,8 +127,8 @@ static U4      u4_s_AlertS_ldaBcLdwSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
     U4              u4_t_src_chk;
 
     u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_DS12F03_CH0,
-                                     (U4)OXCAN_SYS_IGR,
-                                     u2_s_ALERT_S_LDA_BC_LDW_TO_THRS) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+                                      (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP,
+                                      u2_s_ALERT_S_LDA_BC_LDW_TO_THRS) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     u1_t_sgnl     = (U1)0U;
     (void)Com_ReceiveSignal(ComConf_ComSignal_LDWBUZ, &u1_t_sgnl);
@@ -158,8 +154,8 @@ static U4      u4_s_AlertS_ldaBcCsfSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
     U4              u4_t_src_chk;
 
     u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_DS12F03_CH0,
-                                     (U4)OXCAN_SYS_IGR,
-                                     u2_s_ALERT_S_LDA_BC_CSF_TO_THRS) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+                                      (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP,
+                                      u2_s_ALERT_S_LDA_BC_CSF_TO_THRS) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     u1_t_sgnl     = (U1)0U;
     (void)Com_ReceiveSignal(ComConf_ComSignal_CSFBUZ, &u1_t_sgnl);

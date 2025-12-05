@@ -20,10 +20,6 @@
 #include "alert_mtrx_cfg_private.h"
 
 #include "oxcan.h"
-#if 0   /* BEV BSW provisionally */
-#else
-#include "oxcan_channel_STUB.h"
-#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -37,14 +33,6 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define ALERT_H_BATINS_BC_NUM_DST                (32U)
 #define ALERT_H_BATINS_PD_NUM_DST                (16U)
-
-#define ALERT_H_BATINS_RWSGNL_BAT1               (0U)
-#define ALERT_H_BATINS_RWSGNL_BAT2               (1U)
-#define ALERT_H_BATINS_RWSGNL_BAT3               (2U)
-
-#define ALERT_H_BATINS_NUM_RWSGNL                (3U)
-
-#define ALERT_H_BATINS_RWT_IG                    (0x10U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -61,7 +49,6 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static U4      u4_s_AlertH_batinsBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS);
 static U4      u4_s_AlertH_batinsPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS);
-static void    vd_s_AlertH_batinsPdRwTx  (const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
@@ -134,7 +121,7 @@ const ST_ALERT_MTRX st_gp_ALERT_H_BATINS_MTRX[2] = {
     },
     {
         &u4_s_AlertH_batinsPdSrcchk,                                           /* fp_u4_SRC_CHK                                      */
-        &vd_s_AlertH_batinsPdRwTx,                                             /* fp_vd_XDST                                         */
+        vdp_PTR_NA,                                                            /* fp_vd_XDST                                         */
 
         (const U4 *)vdp_PTR_NA,                                                /* u4p_MASK                                           */
         (const U4 *)vdp_PTR_NA,                                                /* u4p_CRIT                                           */
@@ -168,8 +155,8 @@ static U4      u4_s_AlertH_batinsBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
     u4_t_src_chk  = (U4)u1_t_sgnl;
 
     u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_BAT1S01_CH0,
-                                     (U4)OXCAN_SYS_IGR,
-                                     u2_s_ALERT_H_BATINS_THRSH_TO) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+                                      (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP,
+                                      u2_s_ALERT_H_BATINS_THRSH_TO) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_H_BATINS_BC_MSGSTS);
 
@@ -195,57 +182,12 @@ static U4      u4_s_AlertH_batinsPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
     u4_t_src_chk  = (U4)u1_t_sgnl;
 
     u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_BAT1S01_CH0,
-                                     (U4)OXCAN_SYS_IGR,
-                                     (U2)U2_MAX) & (U1)COM_NO_RX;
+                                      (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP,
+                                      (U2)U2_MAX) & (U1)COM_NO_RX;
 
     u4_t_src_chk    |= ((U4)u1_t_msgsts << u1_s_ALERT_H_BATINS_PD_MSGSTS);
 
     return(u4_t_src_chk);
-}
-
-/*===================================================================================================================================*/
-/*  static void    vd_s_AlertH_batinsPdRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)                              */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void    vd_s_AlertH_batinsPdRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)
-{
-    static const U4 u4_s_ALERT_H_BATINS_RWT_THRESH = ((U4)15000U / (U4)ALERT_MAIN_TICK);
-
-    static const U1 u1_sp_ALERT_H_BATINS_RWTX_CRT[ALERT_H_BATINS_NUM_RWSGNL] = {
-        ((U1)ALERT_VOM_RWT_EN      | (U1)((U1)1U << ALERT_REQ_H_BATINS_PD_REQINSPECT)),
-        ((U1)ALERT_VOM_RWT_EN      | (U1)((U1)1U << ALERT_REQ_H_BATINS_PD_EMERGENCY)),
-        ((U1)ALERT_H_BATINS_RWT_IG | (U1)((U1)1U << ALERT_REQ_H_BATINS_PD_UNAVAILABL))
-    };
-
-    U1              u1_tp_sgnl[ALERT_H_BATINS_NUM_RWSGNL];
-    U1              u1_t_rw;
-    U4              u4_t_idx;
-
-    u1_t_rw  = (U1)0U;
-    if(u1_a_DST != (U1)ALERT_REQ_UNKNOWN){
-        u1_t_rw = ((U1)1U << u1_a_DST);
-        if(u4_a_IGN_TM >= u4_s_ALERT_H_BATINS_RWT_THRESH){
-            u1_t_rw |= (U1)ALERT_H_BATINS_RWT_IG;
-        }
-    }
-    u1_t_rw |= (u1_a_VOM & (U1)ALERT_VOM_RWT_EN);
-
-    for(u4_t_idx = (U4)0U; u4_t_idx < (U4)ALERT_H_BATINS_NUM_RWSGNL; u4_t_idx++){
-        if((u1_t_rw & u1_sp_ALERT_H_BATINS_RWTX_CRT[u4_t_idx]) == u1_sp_ALERT_H_BATINS_RWTX_CRT[u4_t_idx]){
-            u1_tp_sgnl[u4_t_idx] = (U1)ALERT_RW_SGNL_ON;
-        }
-        else{
-            u1_tp_sgnl[u4_t_idx] = (U1)ALERT_RW_SGNL_OFF;
-        }
-    }
-
-#if 0   /* BEV BSW provisionally */
-    (void)Com_SendSignal(ComConf_ComSignal_BAT1, &u1_tp_sgnl[ALERT_H_BATINS_RWSGNL_BAT1]);    /* COM Tx STUB delete */
-    (void)Com_SendSignal(ComConf_ComSignal_BAT2, &u1_tp_sgnl[ALERT_H_BATINS_RWSGNL_BAT2]);    /* COM Tx STUB delete */
-    (void)Com_SendSignal(ComConf_ComSignal_BAT3, &u1_tp_sgnl[ALERT_H_BATINS_RWSGNL_BAT3]);    /* COM Tx STUB delete */
-#endif
 }
 
 /*===================================================================================================================================*/

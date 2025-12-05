@@ -40,68 +40,14 @@
 
 #define HMITT_BLINK_CO_OFF____100P                   (0U)
 #define HMITT_BLINK_CO_ON_____100P                   (1U)
-#define HMITT_BLINK_CO_ON_____100P_SPD_LO            (1U)
-#define HMITT_BLINK_CO_ON_____100P_SPD_LOMID         (2U)
-#define HMITT_BLINK_CO_ON_____100P_SPD_MID           (3U)
-#define HMITT_BLINK_CO_ON_____100P_SPD_MIDHI         (4U)
-#define HMITT_BLINK_CO_ON_____100P_SPD_HI            (5U)
 #define HMITT_BLINK_CO_2P00HZ__50P                   (2U)
 #define HMITT_BLINK_CO_4P00HZ__50P                   (3U)
-#define HMITT_BLINK_CO_0P50HZ__50P                   (2U)
-#define HMITT_BLINK_CO_1P00HZ__50P_S_OFF             (2U)
 #define HMITT_BLINK_CO_1P00HZ__50P                   (2U)
-#define HMITT_BLINK_CO_2P50HZ__50P_CLESON            (2U)
-#define HMITT_BLINK_SI_1P00HZ__50P_3TIMS_E_OFF       (2U)
-#define HMITT_BLINK_CO_0P25HZ__50P                   (2U)
-#define HMITT_BLINK_CO_3P33HZ__50P                   (4U)
-#define HMITT_BLINK_SI_1P00HZ__50P_5TIMS_E_OFF       (4U)
 #define HMITT_BLINK_CO_4P00HZ__50P_EPB               (4U)
 #define HMITT_BLINK_CO_2P00HZ__50P_EPB               (3U)
 #define HMITT_BLINK_CO_4P00HZ__50P_STEER             (2U)
-#define HMITT_BLINK_CO_2P00HZ__50P_TMPIND            (1U)
 #define HMITT_BLINK_SI_1P00HZ__50P_10TIMS_E__ON      (1U)
-#define HMITT_BLINK_CO_1P00HZ__50P_63TIMS_E__ON      (5U)
-#define HMITT_BLINK_CO_5P00HZ__50P                   (2U)
-#define HMITT_BLINK_CO_4P00HZ__50P_PLACON            (2U)
-#define HMITT_BLINK_SI_1P00HZ__50P_3TIMS_E_OFF_REQ3  (2U)
-#define HMITT_BLINK_SI_1P00HZ__50P_3TIMS_E_OFF_REQ4  (3U)
-#define HMITT_BLINK_SI_1P00HZ__50P_3TIMS_E_OFF_REQ5  (4U)
-#define HMITT_BLINK_SI_1P00HZ__50P_3TIMS_E_OFF_REQ6  (5U)
-#define HMITT_BLINK_CO_1P00HZ__50P_TPMS              (3U)
-#define HMITT_BLINK_CO_4P00HZ__50P_TPMS              (4U)
-#define HMITT_BLINK_CO_1P00HZ__50P_STOSTA            (3U)
 #define HMITT_BLINK_CO_ON_____100P_AIRBAG            (2U)
-#define HMITT_BLINK_SI_1P67HZ__50P_3TIMS_E_OFF_THEVM (2U)
-#define HMITT_BLINK_SI_1P67HZ__50P_3TIMS_E_ON_THEVM  (3U)
-#define HMITT_BLINK_CO_1P00HZ__50P_S_OFF_THEVM       (3U)
-#define HMITT_BLINK_CO_4P00HZ__50P_FACTMD            (1U)
-
-#define HMITT_BLINK_CO_0P83HZ__50P                   (2U)
-#define HMITT_BLINK_CO_2P50HZ__50P                   (3U)
-#define HMITT_BLINK_CO_1P00HZ__50P_4WDTRF           (3U)
-#define HMITT_BLINK_CO_1P00HZ__50P_3TIMS_E_OFF      (4U)
-
-#define HMITT_BLINK_CO_ON_____100P_XMGRIP_SPD1LVL    (1U)
-#define HMITT_BLINK_CO_ON_____100P_XMGRIP_SPD2LVL    (2U)
-#define HMITT_BLINK_CO_ON_____100P_XMGRIP_SPD3LVL    (3U)
-#define HMITT_BLINK_CO_ON_____100P_XMGRIP_SPD4LVL    (4U)
-#define HMITT_BLINK_CO_ON_____100P_XMGRIP_SPD5LVL    (5U)
-
-#define HMITT_BLINK_CO_ON_100P_VSCEXP_0              (1U)
-#define HMITT_BLINK_CO_ON_100P_VSCEXP_1              (2U)
-#define HMITT_BLINK_CO_ON_100P_VSCEXP_2              (3U)
-#define HMITT_BLINK_CO_ON_100P_VSCEXP_3              (4U)
-#define HMITT_BLINK_CO_ON_100P_VSCEXP_4              (5U)
-#define HMITT_BLINK_CO_ON_100P_VSCEXP_5              (6U)
-
-#define HMITT_BLINK_CO_ON_____100P_ACC_DST1_WHT      (1U)
-#define HMITT_BLINK_CO_ON_____100P_ACC_DST1_GRN      (2U)
-#define HMITT_BLINK_CO_ON_____100P_ACC_DST2_WHT      (3U)
-#define HMITT_BLINK_CO_ON_____100P_ACC_DST2_GRN      (4U)
-#define HMITT_BLINK_CO_ON_____100P_ACC_DST3_WHT      (5U)
-#define HMITT_BLINK_CO_ON_____100P_ACC_DST3_GRN      (6U)
-#define HMITT_BLINK_CO_ON_____100P_ACC_DST4_WHT      (7U)
-#define HMITT_BLINK_CO_ON_____100P_ACC_DST4_GRN      (8U)
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -114,7 +60,6 @@
 void    vd_g_HmiTtCfgInit(void);
 void    vd_g_HmiTtCfgReq(U4 * u4_ap_req);
 void    vd_g_HmiTtCfgVarmask(U4 * u4_ap_varmask);
-void    vd_g_HmiTtCfgCstmask(U4* u4_ap_varmask);
 void    vd_g_HmiTtCfgDestmask(U4* u4_ap_varmask);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */

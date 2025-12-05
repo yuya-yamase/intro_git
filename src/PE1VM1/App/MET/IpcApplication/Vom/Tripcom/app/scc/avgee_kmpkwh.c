@@ -1,4 +1,4 @@
-/* 2.1.0 */
+/* 2.2.1 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,8 +10,8 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define AVGEE_KMPKWH_C_MAJOR                      (2)
-#define AVGEE_KMPKWH_C_MINOR                      (1)
-#define AVGEE_KMPKWH_C_PATCH                      (0)
+#define AVGEE_KMPKWH_C_MINOR                      (2)
+#define AVGEE_KMPKWH_C_PATCH                      (1)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -181,6 +181,7 @@ void          vd_g_AvgEeInit(void)
         st_sp_avgee_var[u4_t_loop].u1_calcstsbit = (U1)AVGEE_CALCACT_ACT;
         st_sp_avgee_var[u4_t_loop].u1_initupdt   = (U1)FALSE;
         st_sp_avgee_var[u4_t_loop].u1_rstterm    = (U1)FALSE;
+        st_sp_avgee_var[u4_t_loop].u1_rstimmw    = (U1)TRIPCOM_RSTIMMW_UNK;
     }
     
     u1_s_avgee_applsts = (U1)TRIPCOM_STSBIT_UNKNOWN;
@@ -406,7 +407,6 @@ void          vd_g_AvgEeGrphUpdt(const U1 u1_a_CNTTID)
                 && (u1_s_avgee_econ_init_bk == (U1)FALSE)){
                     vd_g_AvgGrphUpdt((U1)AVGGRPH_CNTT_TAEE, u4_s_avgee_econ_prev_rst, (U1)TRUE);
                 }
-                u1_s_avgee_econ_init_bk = st_sp_avgee_var[AVGEE_CNTT_TA].u1_initupdt;
                 break;
             case (U1)AVGEE_CNTT_ONEM:
                 u4_t_economy = u4_g_TripcomMsGetAccmltVal(stp_t_CNTT->u1_ms_economy_id);
@@ -418,6 +418,24 @@ void          vd_g_AvgEeGrphUpdt(const U1 u1_a_CNTTID)
                 /* Do Nothing */
                 break;
         }
+    }
+}
+
+/*===================================================================================================================================*/
+/* void            vd_g_AvgEeRstImmw(const U1 u1_a_ACTV, const U1 u1_a_CNTTID, const U2 * u2_ap_STSFIELD)                            */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void            vd_g_AvgEeRstImmw(const U1 u1_a_ACTV, const U1 u1_a_CNTTID, const U2 * u2_ap_STSFIELD)
+{
+    const ST_AVGECON_CNTT *                     stp_t_CNTT;
+    ST_AVGECON_VAR *                            stp_t_var;
+
+    if (u1_a_CNTTID < (U1)AVGEE_NUM_CNTTS) {
+        stp_t_CNTT = &st_sp_AVGEE_CNTTS_CFG[u1_a_CNTTID];
+        stp_t_var  = &st_sp_avgee_var[u1_a_CNTTID];
+        vd_g_AvgEconRstImmw(u1_a_ACTV, stp_t_CNTT, stp_t_var, u2_ap_STSFIELD);
     }
 }
 
@@ -441,6 +459,24 @@ U1            u1_g_AvgEeKmpkwh(const U1 u1_a_AVG_EE_CH, U4 * u4p_a_kmpkwh)
     }
 
     return (u1_t_status);
+}
+
+/*===================================================================================================================================*/
+/* U1              u1_g_AvgEeRstImmwRslt(const U1 u1_a_AVG_EE_CH)                                                                    */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+U1              u1_g_AvgEeRstImmwRslt(const U1 u1_a_AVG_EE_CH)
+{
+    U1                                          u1_t_rslt;
+
+    u1_t_rslt = (U1)TRIPCOM_RSTIMMW_UNK;
+    if (u1_a_AVG_EE_CH < (U1)AVGEE_NUM_CNTTS) {
+        u1_t_rslt = st_sp_avgee_var[u1_a_AVG_EE_CH].u1_rstimmw;
+    }
+
+    return(u1_t_rslt);
 }
 
 /*===================================================================================================================================*/
@@ -500,6 +536,16 @@ static  U1    u1_s_AvgEeOvrfChk(const S4 s4_a_USD, const S4 s4_a_EPUSD)
 }
 
 /*===================================================================================================================================*/
+/* void            vd_g_AvgEePostTask(void)                                                                                          */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void            vd_g_AvgEePostTask(void)
+{
+    u1_s_avgee_econ_init_bk = st_sp_avgee_var[AVGEE_CNTT_TA].u1_initupdt;
+}
+/*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
 /*                                                                                                                                   */
@@ -513,10 +559,14 @@ static  U1    u1_s_AvgEeOvrfChk(const S4 s4_a_USD, const S4 s4_a_EPUSD)
 /*  2.0.2    10/27/2021  TK       QAC supported.                                                                                     */
 /*  2.0.3    02/25/2022  TA(M)    Delete call vd_g_AvgEeUpdt((U1)AVGEE_CNTT_TA) at vd_g_AvgEeInit                                    */
 /*  2.1.0    01/10/2024  TH       for 19PFv3  Add AvgGrph                                                                            */
+/*  2.2.0    02/18/2025  MaO(M)   Add privacy data delete/result API                                                                 */
+/*  2.2.1    04/22/2025  KM       Bug fix ： Change update timing of u1_s_avgee_econ_init_bk                                          */
 /*                                                                                                                                   */
 /*  * YA   = Yuhei Aoyama, DensoTechno                                                                                               */
 /*  * TA(M)= Teruyuki Anjima, NTT Data MSE                                                                                           */
 /*  * TK   = Takanori Kuno, Denso Techno                                                                                             */
 /*  * TH   = Taisuke Hirakawa, KSE                                                                                                   */
+/*  * MaO(M) = Masayuki Okada, NTT Data MSE                                                                                          */
+/*  * KM   = Kazuma Miyazawa, Denso Techno                                                                                           */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

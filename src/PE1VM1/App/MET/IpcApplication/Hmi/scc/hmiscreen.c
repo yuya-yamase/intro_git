@@ -1,4 +1,4 @@
-/* 1.3.0 */
+/* 1.2.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define HMISCREEN_C_MAJOR                         (1)
-#define HMISCREEN_C_MINOR                         (3)
+#define HMISCREEN_C_MINOR                         (2)
 #define HMISCREEN_C_PATCH                         (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -19,11 +19,6 @@
 #include "hmiproxy_cfg_private.h"
 
 #include "hmiscreen.h"
-#include "oxcan.h"
-#if 0   /* BEV BSW provisionally */
-#else
-#include "oxcan_channel_STUB.h"
-#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -47,7 +42,6 @@
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static U1   u1_s_hmiscreen_sts;
-static U1   u1_s_hmiscreen_sts_wo_turn;
 static U2   u2_s_hmiscreen_to;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -67,9 +61,8 @@ static U2   u2_s_hmiscreen_to;
 /*===================================================================================================================================*/
 void    vd_g_HmiScreenInit(void)
 {
-    u1_s_hmiscreen_sts         = (U1)FALSE;
-    u1_s_hmiscreen_sts_wo_turn = (U1)FALSE;
-    u2_s_hmiscreen_to          = (U2)HMIPROXY_TOC_MAX;
+    u1_s_hmiscreen_sts = (U1)FALSE;
+    u2_s_hmiscreen_to  = (U2)HMIPROXY_TOC_MAX;
 }
 
 /*===================================================================================================================================*/
@@ -86,8 +79,7 @@ void    vd_g_HmiScreenMainTask(void)
     u1_t_to = u1_g_HmiProxyToc(&u2_s_hmiscreen_to, u2_s_HMISCREEN_TO);
 
     if(u1_t_to == (U1)TRUE){
-        u1_s_hmiscreen_sts         = (U1)FALSE;
-        u1_s_hmiscreen_sts_wo_turn = (U1)FALSE;
+        u1_s_hmiscreen_sts = (U1)FALSE;
     }
 
 }
@@ -109,19 +101,10 @@ U1      u1_g_HmiScreen(void)
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_HmiScreenPut(const U1 u1_a_CH, const U1 u1_a_STS)
+void    vd_g_HmiScreenPut(const U1 u1_a_STS)
 {
-    if(u1_a_CH == (U1)HMISCREEN_CH_DISP_STS){
-        u1_s_hmiscreen_sts         = u1_a_STS;
-        u2_s_hmiscreen_to          = (U2)HMIPROXY_TOC_INI;
-    }
-    else if(u1_a_CH == (U1)HMISCREEN_CH_DISP_STS_WO_TURN) {
-        u1_s_hmiscreen_sts_wo_turn = u1_a_STS;
-        u2_s_hmiscreen_to          = (U2)HMIPROXY_TOC_INI;
-    }
-    else {
-        /* Do nothing */
-    }
+    u1_s_hmiscreen_sts = u1_a_STS;
+    u2_s_hmiscreen_to  = (U2)HMIPROXY_TOC_INI;
 }
 
 /*===================================================================================================================================*/
@@ -142,23 +125,6 @@ U1      u1_g_HmiScreenShtdwnOK(void)
 }
 
 /*===================================================================================================================================*/
-/*  U1      u1_g_HmiScreenWoTurnShtdwnOK(void)                                                                                       */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1      u1_g_HmiScreenWoTurnShtdwnOK(void)
-{
-    U1  u1_t_shtdwnok;
-
-    u1_t_shtdwnok = (U1)FALSE;
-    if(u1_s_hmiscreen_sts_wo_turn == (U1)FALSE){
-        u1_t_shtdwnok = (U1)TRUE;
-    }
-    return(u1_t_shtdwnok);
-}
-
-/*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
 /*                                                                                                                                   */
@@ -169,10 +135,8 @@ U1      u1_g_HmiScreenWoTurnShtdwnOK(void)
 /*  1.0.0    07/16/2019  TA       New.                                                                                               */
 /*  1.1.0    09/02/2020  TA       See hmiproxy.c                                                                                     */
 /*  1.2.0    01/11/2024  SW       Delete transmission of CDISP_EX signal                                                             */
-/*  1.3.0    07/09/2024  AA       Revised for WKUPSLP condition change                                                               */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * SW   = Shun Watanae, DensoTechno                                                                                               */
-/*  * AA   = Anna Asuncion, DensoTechno                                                                                              */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

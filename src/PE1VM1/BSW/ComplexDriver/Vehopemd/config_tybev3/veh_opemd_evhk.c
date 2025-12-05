@@ -21,18 +21,10 @@
 #include "iohw_diflt.h"
 #include "oxcan.h"
 
-#if 0   /* BEV BSW provisionally */
-#include "xpd_init.h"
-#else
-#endif
-
 #include "vehspd_kmph.h"
-#include "ptsctmp_cel.h"
 #include "alert.h"
 #include "gauge.h"
-
 #include "vardef.h"
-#include "fspomgr.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -46,7 +38,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define VEH_OPEMD_NUM_EVHK                      (5U)
+#define VEH_OPEMD_NUM_EVHK                      (4U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -82,18 +74,11 @@ void    vd_g_VehopemdCfgEvhk(const U4 u4_a_MDBIT, const U4 u4_a_EVBIT)
 #if (VEH_OPEMD_NUM_EVHK > 0U)
     static const ST_VEH_OPEMD_EVHK   st_sp_VEH_OPEMD_EVHK[VEH_OPEMD_NUM_EVHK] = {
         {&vd_g_VehspdOpemdEvhk,         (U4)VEH_OPEMD_EVBIT_IG_R_TO_ON    },
-
-        {&vd_g_PtsctmpOpemdEvhk,        ((U4)VEH_OPEMD_EVBIT_IG_R_TO_ON  |
-                                         (U4)VEH_OPEMD_EVBIT_IG_R_TO_OFF) },
-
         {&vd_g_AlertOpemdEvhk,          ((U4)VEH_OPEMD_EVBIT_IG_R_TO_ON  |
                                          (U4)VEH_OPEMD_EVBIT_IG_R_TO_OFF) },
-
         {&vd_g_GaugeOpemdEvhk,          ((U4)VEH_OPEMD_EVBIT_IG_R_TO_ON  |
                                          (U4)VEH_OPEMD_EVBIT_IG_R_TO_OFF) },
-
-        {&vd_g_FspoOpemdEvhk,          ((U4)VEH_OPEMD_EVBIT_IG_R_TO_ON  |
-                                         (U4)VEH_OPEMD_EVBIT_IG_R_TO_OFF) }
+        {&vd_g_VardefEsOptIgoffEvhk,    (U4)VEH_OPEMD_EVBIT_IG_R_TO_OFF   }
     };
 
     U4                                u4_t_cnt;
@@ -103,20 +88,6 @@ void    vd_g_VehopemdCfgEvhk(const U4 u4_a_MDBIT, const U4 u4_a_EVBIT)
     vd_g_oXCANVomEvhk();
 
     vd_g_VardefOpemdEvhk();
-
-#ifdef DATE_CLK_H
-    u4_t_jdgbit = u4_a_EVTBIT & (U4)VEH_OPEMD_EVBIT_IG_R_TO_OFF;
-    if(u4_t_jdgbit != (U4)0U){
-        vd_g_DateclkEtmStart((U1)DATE_CLK_ETM_CH_TMRWK, (U4)0U); /* zero start */
-    }
-#endif
-#if 0   /* BEV BSW provisionally */
-    u4_t_jdgbit = u4_a_EVTBIT & (U4)VEH_OPEMD_EVTBIT_IGN_TO_ON;
-    if(u4_t_jdgbit != (U4)0U){
-       (void)u1_g_XpdiAbocnt((U1)TRUE);
-    }
-#else
-#endif
 
     for(u4_t_cnt = (U4)0U; u4_t_cnt < (U4)VEH_OPEMD_NUM_EVHK; u4_t_cnt++){
         u4_t_bit = u4_a_EVBIT & st_sp_VEH_OPEMD_EVHK[u4_t_cnt].u4_evbit;
@@ -145,8 +116,13 @@ void    vd_g_VehopemdCfgEvhk(const U4 u4_a_MDBIT, const U4 u4_a_EVBIT)
 /*  2.0.0     2/ 3/2025  ST       Supported vehicle power state.                                                                     */
 /*  2.1.0     2/ 7/2025  TN       veh_opemd v2.0.0 -> v2.1.0.                                                                        */
 /*                                                                                                                                   */
+/*  Revision Date        Author   Change Description                                                                                 */
+/* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
+/*  BEV-1    10/22/2025  TS       Change for BEV rebase.                                                                             */
+/*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
 /*  * HU   = Hayato Usui, Denso Create                                                                                               */
 /*  * ST   = Satoshi Tanaka, Denso Create                                                                                            */
+/*  * TS   = Takuo Suganuma, Denso Techno                                                                                            */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

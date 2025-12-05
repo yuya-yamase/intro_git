@@ -57,7 +57,7 @@
 #define LANG_VAL__MIDEAST_ENG               (29U)   /* Middle East         : English                */
 #define LANG_VAL__JPN_ENGLISH               (30U)   /* Japan               : English                */
 #define LANG_VAL___CAN_FRENCH               (31U)   /* Canada              : French                 */
-#define LANG_VAL__MEX_SPANISH               (32U)   /* Mexico              : Spanish                */
+#define LANG_VAL__USA_SPANISH               (32U)   /* USA                 : Spanish                */
 #define LANG_VAL________MALAY               (33U)   /* Malaysia            : Malay                  */
 #define LANG_VAL___INDONESIAN               (34U)   /* Indonesia           : Indonesian             */
 #define LANG_VAL______EUSKARA               (35U)   /* Euskal Herria       : euskara                */

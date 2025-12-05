@@ -22,16 +22,8 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define GAUGE_NUM_CH                             (6U)
+#define GAUGE_NUM_CH                             (1U)
 #define GAUGE_CH_XMPH                            (0U)
-#define GAUGE_CH_FUELSEG                         (0xffU)
-#define GAUGE_CH_LOWFUEL                         (1U)
-#define GAUGE_CH_TEMPSEG                         (2U)
-#define GAUGE_CH_SOCSEG                          (0xffU)
-#define GAUGE_CH_RPMZPOS                         (0xffU)
-#define GAUGE_CH_REVPEAK                         (3U)
-#define GAUGE_CH_REVIND                          (4U)
-#define GAUGE_CH_ATTEMPOVHTIND                   (5U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */

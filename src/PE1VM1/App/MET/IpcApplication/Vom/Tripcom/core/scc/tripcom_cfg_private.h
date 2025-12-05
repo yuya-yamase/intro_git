@@ -1,4 +1,4 @@
-/* 2.4.0 */
+/* 2.5.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -13,7 +13,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define TRIPCOM_CFG_H_MAJOR                     (2)
-#define TRIPCOM_CFG_H_MINOR                     (4)
+#define TRIPCOM_CFG_H_MINOR                     (5)
 #define TRIPCOM_CFG_H_PATCH                     (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -49,21 +49,11 @@
 #define TRIPCOM_NUM_CNTTS                       (36U)
 #define TRIPCOM_NUM_ENGPARAM                    (5U)
 
-#define TRIPCOM_NUM_REFUEL_THR                  (4U)
-#define TRIPCOM_REFUEL_THR_STP_FE               (0U)
-#define TRIPCOM_REFUEL_THR_RUN_FE               (1U)
-#define TRIPCOM_REFUEL_THR_STP_DTE              (2U)
-#define TRIPCOM_REFUEL_THR_RUN_DTE              (3U)
-
 #define TRIPCOM_NUM_CANTXUNIT                   (4U)
 #define TRIPCOM_CANTXUNIT_XECON                 (0U)
 #define TRIPCOM_CANTXUNIT_SPEED                 (1U)
 #define TRIPCOM_CANTXUNIT_DIST                  (2U)
 #define TRIPCOM_CANTXUNIT_EECON                 (3U)
-
-#define TRIPCOM_EVRATIO_VALID                   (0x00U)
-#define TRIPCOM_EVRATIO_UNKNOWN                 (0x01U)
-#define TRIPCOM_EVRATIO_INVALID                 (0x02U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -77,6 +67,7 @@ typedef struct {
     void    (* const                            fp_vd_ACCMLT)(const U1 u1_a_CNTTID, const U2 * u2_ap_STSFIELD, const U4 * u4_ap_DELTA);
     void    (* const                            fp_vd_UPDT)(const U1 u1_a_CNTTID);
     void    (* const                            fp_vd_GRPHUPDT)(const U1 u1_a_CNTTID);
+    void    (* const                            fp_vd_RSTIMMW)(const U1 u1_a_ACTV, const U1 u1_a_CNTTID, const U2 * u2_ap_STSFIELD);
 } ST_TRIPCOM_IF;
 
 typedef struct {
@@ -101,8 +92,6 @@ void            vd_g_TripcomCfgTxWkupInit(void);
 void            vd_g_TripcomCfgApplInit(void);
 
 U2              u2_g_TripcomCfgGetVariation(void);
-U1              u1_g_TripcomCfgFuelFull(U2 * u2p_a_val);
-U1              u1_g_TripcomCfgFuelVol(U2 * u2p_a_val);
 void            vd_g_TripcomCfgSetTxValHk(const U1 u1_a_CNTTID, const U2 u2_a_TXVAL);
 void            vd_g_TripcomCfgGetUnit(U1 * u1_ap_unittype);
 
@@ -112,16 +101,15 @@ U1              u1_g_TripcomCfgGetM1FCRST(U1 * u1p_a_rst);
 U1              u1_g_TripcomCfgGetTOECRST(U1 * u1p_a_rst);
 U1              u1_g_TripcomCfgGetM1ECRST(U1 * u1p_a_rst);
 
-U1              u1_g_TripcomCfgGetNe1Sts(void);
-U1              u1_g_TripcomCfgGetTEVRNSts(void);
-
 U1              u1_g_TripcomCfgGetPIEVSTS(U1 * u1p_a_pievsts);
 U1              u1_g_TripcomCfgGetPHVMDIND(U1 * u1p_a_phvmdind);
 U1              u1_g_TripcomCfgGetEVRunSts(void);
 U1              u1_g_TripcomCfgGetEMGF(U1 * u1p_a_emgf);
 U1              u1_g_TripcomCfgJdgRefuelEnd(void);
 void            vd_g_TripcomCfgSmoothingTask(void);
-void            vd_g_TripcomCfgRefuelThr(U2 * u2_ap_ref_th);
+
+void            vd_g_TripcomNvmIfGrphSyncCmplt(void);
+void            vd_s_TripomCfgPostAppTask(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */

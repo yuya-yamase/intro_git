@@ -19,7 +19,6 @@
 #include "vptran_sel_cfg_private.h"
 #include "vptran_sel_typ.h"
 #include "vptran_byw.h"
-#include "vardef_esopt.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -109,6 +108,7 @@ U1              u1_g_VptranTransMissionTypeCfg(void)
 /*  330D-1      02/22/2023  YK       330D Correspondence                                                                             */
 /*  19PFv3-1    12/15/2023  GM       19PFv3 Correspondence                                                                           */
 /*  BEV-1       02/10/2025  HF       Change config for BEV System_Consideration_1.(MET-D_SFTPOS-CSTD-1-)                             */
+/*  BEV-2       10/28/2025  MA       Change for BEV rebase.                                                                          */
 /*                                                                                                                                   */
 /*  * HY   = Hidefumi Yoshida, Denso                                                                                                 */
 /*  * KK   = Kohei Kato,       Denso Techno                                                                                          */
@@ -117,5 +117,6 @@ U1              u1_g_VptranTransMissionTypeCfg(void)
 /*  * YK   = Yuki Kawai,       Denso Techno                                                                                          */
 /*  * GM   = Glen Monteposo,   DTPH                                                                                                  */
 /*  * HF   = Hinari Fukamachi, KSE                                                                                                   */
+/*  * MA   = Misaki Aiki,   Denso Techno                                                                                             */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

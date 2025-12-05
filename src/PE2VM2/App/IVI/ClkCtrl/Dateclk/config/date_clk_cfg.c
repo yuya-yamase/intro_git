@@ -127,7 +127,7 @@ U4      u4_g_DateclkCfgDaycntInit(void)
 
     u4_t_ret           = u4_s_DateclkCfgCaldefValJdg();
     u4_t_date_calendar = (U4)0U;
-    u1_t_read_sts      = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_CPREQ_018, &u4_t_date_calendar, (U2)1U);
+    u1_t_read_sts      = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_VM1TO2_CAL, &u4_t_date_calendar, (U2)1U);
     u4_t_daycnt_min    = u4_s_DateclkCfgGetDayCntMin();
     
     if(u1_t_read_sts != (U1)IVDSH_NO_REA){

@@ -18,10 +18,6 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "tripsnsr_cfg_private.h"
 #include "oxcan.h"
-#if 0   /* BEV BSW provisionally */
-#else
-#include "oxcan_channel_STUB.h"
-#endif
 #include "gpt_drv_frt.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -52,6 +48,9 @@
 #define TRIPSNSR_EHV1S96_FAILTIM                (3600U/OXCAN_MAIN_TICK)
 #define TRIPSNSR_ENG1S28_FAILTIM                (10000U/OXCAN_MAIN_TICK)
 
+#define TRIPSNSR_CAN_SYS_PNC_ALL                ((U4)OXCAN_SYS_PNC_44 | (U4)OXCAN_SYS_PNC_43 | (U4)OXCAN_SYS_PNC_40 | (U4)OXCAN_SYS_PNC_16)
+#define TRIPSNSR_CAN_SYS_ALL                    (TRIPSNSR_CAN_SYS_PNC_ALL | (U4)OXCAN_SYS_PBA | (U4)OXCAN_SYS_ACC | (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP)
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -71,12 +70,12 @@ static  U4      u4_sp_tripsnsr_elpsdtm_frt[GPT_FRT_USELPSD_NUM_PARAM];
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 const   ST_TRIPSNSR_CNTTS                       st_gp_TRIPSNSR_CNTTS_CFG[TRIPSNSR_NUM_SNSR]         = {
     {   &vd_g_TripsnsrElpsdtmInit,  &vd_g_TripsnsrElpsdtmSmplngTask,    &u2_g_TripsnsrElpsdtmGetDelta,  vdp_PTR_NA                   },
-    {   &vd_g_TripsnsrFuelusdInit,  &vd_g_TripsnsrFuelusdSmplngTask,    &u2_g_TripsnsrFuelusdGetDelta,  &u1_g_TripsnsrFuelusdRxReset },
-    {   &vd_g_TripsnsrHydrusdInit,  &vd_g_TripsnsrHydrusdSmplngTask,    &u2_g_TripsnsrHydrusdGetDelta,  &u1_g_TripsnsrHydrusdRxReset },
+    {   vdp_PTR_NA,                 vdp_PTR_NA,                         vdp_PTR_NA,                     vdp_PTR_NA                   },
+    {   vdp_PTR_NA,                 vdp_PTR_NA,                         vdp_PTR_NA,                     vdp_PTR_NA                   },
     {   &vd_g_TripsnsrOdocntInit,   &vd_g_TripsnsrOdocntSmplngTask,     &u2_g_TripsnsrOdocntGetDelta,   vdp_PTR_NA                   },
     {   &vd_g_TripsnsrAvgeeInit,    &vd_g_TripsnsrAvgeeSmplngTask,      &u2_g_TripsnsrAvgeeGetDelta,    vdp_PTR_NA                   },
     {   &vd_g_TripsnsrInsteeInit,   &vd_g_TripsnsrInsteeSmplngTask,     &u2_g_TripsnsrInsteeGetDelta,   &u1_g_TripsnsrInsteeRxReset  },
-    {   vdp_PTR_NA,                 vdp_PTR_NA,                         &u2_g_TripsnsrFuelusdEmgfGetDelta,vdp_PTR_NA                 },
+    {   vdp_PTR_NA,                 vdp_PTR_NA,                         vdp_PTR_NA,                     vdp_PTR_NA                   },
     {   vdp_PTR_NA,                 vdp_PTR_NA,                         &u2_g_TripsnsrOdocntEmgfGetDelta,vdp_PTR_NA                  }
 };
 const   U4                                      u4_g_TRIPSNSR_ELPSDTM_FRT_1US                       = (U4)GPT_FRT_1US;  /*  1 [us]   */
@@ -104,7 +103,7 @@ U1              u1_g_TripsnsrCfgEcoMode(void)
 /*===================================================================================================================================*/
 U1              u1_g_TripsnsrCfgGetECOMODE3(U1 * u1p_a_ecomode)
 {
-#if 0   /* BEV BSW provisionally */
+#if 0   /* BEV Rebase provisionally */
 #if defined(ComConf_ComSignal_ECOMODE3)
     (void)Com_ReceiveSignal(ComConf_ComSignal_ECOMODE3, u1p_a_ecomode);
     return ((U1)Com_GetIPDUStatus(MSG_ECO1S90_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX));
@@ -112,10 +111,10 @@ U1              u1_g_TripsnsrCfgGetECOMODE3(U1 * u1p_a_ecomode)
     (*u1p_a_ecomode) = (U1)0U;
     return ((U1)TRIPCOM_STSBIT_INVALID);
 #endif
-#else
+#else   /* BEV Rebase provisionally */
     (*u1p_a_ecomode) = (U1)0U;
     return ((U1)TRIPCOM_STSBIT_INVALID);
-#endif
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -155,84 +154,6 @@ U4              u4_g_TripsnsrCfgElpsdtmGetDlt(void)
     u4_sp_tripsnsr_elpsdtm_frt[GPT_FRT_USELPSD_BASE] = u4_sp_tripsnsr_elpsdtm_frt[GPT_FRT_USELPSD_CRRNT];
 
     return (u4_t_frt_elpsd);
-}
-
-/*===================================================================================================================================*/
-/* U1              u1_g_TripsnsrCfgGetBFC(U4 * u4p_a_fuel_inst)                                                                      */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1              u1_g_TripsnsrCfgGetBFC(U4 * u4p_a_fuel_inst)
-{
-    U1          u1_t_msgsts;
-    U2          u2_t_bfc;
-
-
-#if 0   /* BEV BSW provisionally */
-    (void)Com_ReceiveSignal(ComConf_ComSignal_B_FC, &u2_t_bfc);
-#else
-    u2_t_bfc = (U2)0U;
-#endif
-    (*u4p_a_fuel_inst) = (U4)u2_t_bfc;
-    u1_t_msgsts = u1_g_oXCANRxdStat((U2)OXCAN_PDU_RX_CAN_ENG1S28,
-                                        (U4)OXCAN_SYS_IGP,
-                                        (U2)TRIPSNSR_ENG1S28_FAILTIM) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
-
-    return (u1_t_msgsts);
-}
-
-/*===================================================================================================================================*/
-/* U1              u1_g_TripsnsrCfgRxCntBFC(U1 * u1p_a_rollcnt)                                                                      */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1              u1_g_TripsnsrCfgRxCntBFC(U1 * u1p_a_rollcnt)
-{
-    U1          u1_t_status;
-
-    (*u1p_a_rollcnt) = u1_g_oXCANRxdEvcnt((U2)OXCAN_PDU_RX_CAN_ENG1S28);
-
-    u1_t_status = (U1)TRIPCOM_STSBIT_VALID;
-    if ((*u1p_a_rollcnt) == (U1)OXCAN_RXD_EVC_UNK) {
-        u1_t_status = (U1)TRIPCOM_STSBIT_INVALID;
-    }
-
-    return (u1_t_status);
-}
-
-/*===================================================================================================================================*/
-/* U1              u1_g_TripsnsrCfgGetCNSMH2(U4 * u4p_a_hydr_inst)                                                                   */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1              u1_g_TripsnsrCfgGetCNSMH2(U4 * u4p_a_hydr_inst)
-{
-    U1          u1_t_msgsts;
-
-    (*u4p_a_hydr_inst) = (U4)0U;
-    u1_t_msgsts = (U1)TRIPCOM_STSBIT_VALID;
-
-    return (u1_t_msgsts);
-}
-
-/*===================================================================================================================================*/
-/* U1              u1_g_TripsnsrCfgRxCntCNSMH2(U1 * u1p_a_rollcnt)                                                                   */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1              u1_g_TripsnsrCfgRxCntCNSMH2(U1 * u1p_a_rollcnt)
-{
-    U1          u1_t_status;
-
-    (*u1p_a_rollcnt) = (U1)OXCAN_RXD_EVC_UNK;
-
-    u1_t_status = (U1)TRIPCOM_STSBIT_INVALID;
-
-    return (u1_t_status);
 }
 
 /*===================================================================================================================================*/
@@ -297,19 +218,14 @@ void              vd_g_TripsnsrCfgEvDtePIEVE06(U1 * u1p_a_pieve06)
 /*===================================================================================================================================*/
 U1              u1_g_TripsnsrCfgEvDteCNGPIEVD(U1 * u1p_a_cngpievd)
 {
-#if defined(ComConf_ComSignal_CNGPIEVD)
     U1          u1_t_msgsts;
 
     u1_t_msgsts =  u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_EHV1S31_CH0,
-                                         (U4)OXCAN_SYS_IGP,
-                                         (U2)U2_MAX) & ((U1)TRIPSNSR_EVDTE_INVALID | (U1)TRIPSNSR_EVDTE_UNKNOWN);
+                                     (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP,
+                                     (U2)U2_MAX) & ((U1)TRIPSNSR_EVDTE_INVALID | (U1)TRIPSNSR_EVDTE_UNKNOWN);
     (void)Com_ReceiveSignal(ComConf_ComSignal_CNGPIEVD, u1p_a_cngpievd);
     return(u1_t_msgsts);
 
-#else
-    *u1p_a_cngpievd = (U1)0U;
-    return((U1)TRIPSNSR_EVDTE_UNKNOWN);
-#endif
 }
 
 /*===================================================================================================================================*/
@@ -326,8 +242,8 @@ U1              u1_g_TripsnsrCfgEvDteSts(void)
     u1_t_ret = (U1)TRIPSNSR_EVDTE_VALID;
     
     u1_t_sts  =  u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_PLG1S06_CH0,
-                                       (U4)OXCAN_SYS_IGR,
-                                       (U2)TRIPSNSR_PLG1S06_FAILTIM) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+                                   (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP,
+                                   (U2)TRIPSNSR_PLG1S06_FAILTIM) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     u1_t_sts |= u1_g_TripsnsrCfgGetPtsSts();
 
@@ -359,8 +275,8 @@ U1              u1_g_TripsnsrCfgEvDteBatSts(void)
     u1_t_ret = (U1)TRIPSNSR_EVDTE_VALID;
 
     u1_t_sts = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_PLG1S06_CH0,
-                                (U4)TRIPSNSR_CAN_SYS_PNC_ALL,
-                                (U2)TRIPSNSR_PLG1S06_FAILTIM) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+                                 (U4)TRIPSNSR_CAN_SYS_ALL,
+                                 (U2)TRIPSNSR_PLG1S06_FAILTIM) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     if((u1_t_sts & (U1)COM_TIMEOUT) != (U1)0U){
         u1_t_ret = (U1)TRIPSNSR_EVDTE_INVALID;
@@ -381,7 +297,6 @@ U1              u1_g_TripsnsrCfgEvDteBatSts(void)
 /*===================================================================================================================================*/
 U1              u1_g_TripsnsrCfgGetInsEpusd(S4 * s4p_a_insepusd)
 {
-#if defined(ComConf_ComSignal_INS_BATE) && defined(OXCAN_RXD_PDU_CAN_EHV1S31_CH0)
     U1          u1_t_msgsts;
     S2          s2_t_insepusd;
 
@@ -389,14 +304,10 @@ U1              u1_g_TripsnsrCfgGetInsEpusd(S4 * s4p_a_insepusd)
     (void)Com_ReceiveSignal(ComConf_ComSignal_INS_BATE, &s2_t_insepusd);
     (*s4p_a_insepusd) = (S4)s2_t_insepusd;
     u1_t_msgsts =  u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_EHV1S31_CH0,
-                                         (U4)OXCAN_SYS_IGP,
-                                         (U2)TRIPSNSR_EHV1S31_FAILTIM) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+                                     (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP,
+                                     (U2)TRIPSNSR_EHV1S31_FAILTIM) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     return (u1_t_msgsts);
-#else
-    (*s4p_a_insepusd) = (S4)0; 
-    return ((U1)COM_NO_RX);
-#endif
 }
 
 /*===================================================================================================================================*/
@@ -407,7 +318,6 @@ U1              u1_g_TripsnsrCfgGetInsEpusd(S4 * s4p_a_insepusd)
 /*===================================================================================================================================*/
 U1              u1_g_TripsnsrCfgGetInsEvdist(U4 * u4p_a_evdist)
 {
-#if defined(ComConf_ComSignal_INS_EVD) && defined(OXCAN_RXD_PDU_CAN_EHV1S31_CH0)
     U1          u1_t_msgsts;
     U2          u2_t_evdist;
 
@@ -415,14 +325,10 @@ U1              u1_g_TripsnsrCfgGetInsEvdist(U4 * u4p_a_evdist)
     (void)Com_ReceiveSignal(ComConf_ComSignal_INS_EVD, &u2_t_evdist);
     (*u4p_a_evdist) = (U4)u2_t_evdist;
     u1_t_msgsts =  u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_EHV1S31_CH0,
-                                         (U4)OXCAN_SYS_IGP,
-                                         (U2)TRIPSNSR_EHV1S31_FAILTIM) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+                                     (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP,
+                                     (U2)TRIPSNSR_EHV1S31_FAILTIM) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     return (u1_t_msgsts);
-#else
-    (*u4p_a_evdist) = (U4)0U;
-    return ((U1)COM_NO_RX);
-#endif
 }
 
 /*===================================================================================================================================*/
@@ -433,7 +339,6 @@ U1              u1_g_TripsnsrCfgGetInsEvdist(U4 * u4p_a_evdist)
 /*===================================================================================================================================*/
 U1              u1_g_TripsnsrCfgGetInsUpdtflg(U1 * u1p_a_updtflg)
 {
-#if defined(ComConf_ComSignal_INS_UPD) && defined(OXCAN_RXD_PDU_CAN_EHV1S31_CH0)
     U1          u1_t_msgsts;
     U1          u1_t_updtflg;
 
@@ -441,14 +346,10 @@ U1              u1_g_TripsnsrCfgGetInsUpdtflg(U1 * u1p_a_updtflg)
     (void)Com_ReceiveSignal(ComConf_ComSignal_INS_UPD, &u1_t_updtflg);
     (*u1p_a_updtflg) = u1_t_updtflg;
     u1_t_msgsts =  u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_EHV1S31_CH0,
-                                         (U4)OXCAN_SYS_IGP,
-                                         (U2)TRIPSNSR_EHV1S31_FAILTIM) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+                                     (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP,
+                                     (U2)TRIPSNSR_EHV1S31_FAILTIM) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     return (u1_t_msgsts);
-#else
-    (*u1p_a_updtflg) = (U1)0U;
-    return ((U1)COM_NO_RX);
-#endif
 }
 
 /*===================================================================================================================================*/
@@ -459,7 +360,6 @@ U1              u1_g_TripsnsrCfgGetInsUpdtflg(U1 * u1p_a_updtflg)
 /*===================================================================================================================================*/
 U1              u1_g_TripsnsrCfgGetEpusd(S4 * s4p_a_epusd)
 {
-#if defined(ComConf_ComSignal_EC_MON) && defined(OXCAN_RXD_PDU_CAN_EHV1S96_CH0)
     U1          u1_t_msgsts;
     S2          s2_t_epusd;
 
@@ -468,14 +368,10 @@ U1              u1_g_TripsnsrCfgGetEpusd(S4 * s4p_a_epusd)
     (void)Com_ReceiveSignal(ComConf_ComSignal_EC_MON, &s2_t_epusd);
     (*s4p_a_epusd) = (S4)s2_t_epusd;
     u1_t_msgsts =  u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_EHV1S96_CH0,
-                                         (U4)OXCAN_SYS_IGP,
-                                         (U2)TRIPSNSR_EHV1S96_FAILTIM) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+                                     (U4)OXCAN_SYS_IGP,
+                                     (U2)TRIPSNSR_EHV1S96_FAILTIM) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     return (u1_t_msgsts);
-#else
-    (*s4p_a_epusd) = (S4)0;
-    return ((U1)COM_NO_RX);
-#endif
 }
 /*===================================================================================================================================*/
 /* U1              u1_g_TripsnsrCfgGetEpUpdflg(U1 * u1p_a_epupdflg)                                                                  */
@@ -485,7 +381,6 @@ U1              u1_g_TripsnsrCfgGetEpusd(S4 * s4p_a_epusd)
 /*===================================================================================================================================*/
 U1              u1_g_TripsnsrCfgGetEpUpdflg(U1 * u1p_a_epupdflg)
 {
-#if defined(ComConf_ComSignal_RNEC_MON) && defined(OXCAN_RXD_PDU_CAN_EHV1S96_CH0)
     U1          u1_t_msgsts;
     U1          u1_t_epupdflg;
 
@@ -494,14 +389,10 @@ U1              u1_g_TripsnsrCfgGetEpUpdflg(U1 * u1p_a_epupdflg)
     (void)Com_ReceiveSignal(ComConf_ComSignal_RNEC_MON, &u1_t_epupdflg);
     (*u1p_a_epupdflg) = u1_t_epupdflg;
     u1_t_msgsts =  u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_EHV1S96_CH0,
-                                         (U4)OXCAN_SYS_IGP,
-                                         (U2)TRIPSNSR_EHV1S96_FAILTIM) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+                                     (U4)OXCAN_SYS_IGP,
+                                     (U2)TRIPSNSR_EHV1S96_FAILTIM) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     return (u1_t_msgsts);
-#else
-    (*u1p_a_epupdflg) = (U1)0U;
-    return ((U1)COM_NO_RX);
-#endif
 }
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
@@ -523,6 +414,7 @@ U1              u1_g_TripsnsrCfgGetEpUpdflg(U1 * u1p_a_epupdflg)
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /*  19PFv3-1 02/12/2024  PG       Change  for MET-M_DMEVRNGE-CSTD-1-07-A-C1                                                          */
+/*  BEV-1    10/23/2025  SN       Configured for BEVstep3_Rebase                                                                     */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*                                                                                                                                   */
 /*  * HY   = Hidefumi Yoshida, Denso                                                                                                 */
@@ -532,5 +424,6 @@ U1              u1_g_TripsnsrCfgGetEpUpdflg(U1 * u1p_a_epupdflg)
 /*  * YI   = Yoshiki Iwata, NTT Data MSE                                                                                             */
 /*  * PG   = Patrick Garcia, DTPH                                                                                                    */
 /*  * RS   = Ryuki Sako, Denso Techno                                                                                                */
+/*  * SN   = Shimon Nambu, Denso Techno                                                                                              */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

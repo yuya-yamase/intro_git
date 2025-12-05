@@ -20,10 +20,6 @@
 #include "alert_brx.h"
 
 #include "oxcan.h"
-#if 0   /* BEV BSW provisionally */
-#else
-#include "oxcan_channel_STUB.h"
-#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */

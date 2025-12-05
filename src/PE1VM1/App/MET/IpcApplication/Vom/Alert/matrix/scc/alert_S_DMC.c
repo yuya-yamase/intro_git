@@ -1,4 +1,4 @@
-/* 5.4.0 */
+/* 5.5.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define ALERT_S_DMC_C_MAJOR                      (5)
-#define ALERT_S_DMC_C_MINOR                      (4)
+#define ALERT_S_DMC_C_MINOR                      (5)
 #define ALERT_S_DMC_C_PATCH                      (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -20,10 +20,6 @@
 #include "alert_mtrx_cfg_private.h"
 
 #include "oxcan.h"
-#if 0   /* BEV BSW provisionally */
-#else
-#include "oxcan_channel_STUB.h"
-#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -107,8 +103,8 @@ static U4      u4_s_AlertS_dmcBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
     U1              u1_t_sgnl;
 
     u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_ADU1S07_CH0,
-                                     (U4)OXCAN_SYS_IGR,
-                                     u2_s_ALERT_S_DMC_BC_TRSH_ADU1S07) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+                                      (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP,
+                                      u2_s_ALERT_S_DMC_BC_TRSH_ADU1S07) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
     u4_t_src_chk  = ((U4)u1_t_msgsts << u1_s_ALERT_S_DMC_BC_LSB_ADU1S07);
 
     u1_t_sgnl     = (U1)0U;
@@ -132,6 +128,7 @@ static U4      u4_s_AlertS_dmcBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
 /*  5.2.0     2/19/2024  GM       Update for 19PFv3.                                                                                 */
 /*  5.3.0     4/02/2024  JM       Removal of 1 telltale item (TT02-REQ02).                                                           */
 /*  5.4.0     6/23/2025  HY       Change for BEV System_Consideration_2.(MET-S_ADMID-CSTD-0-02-A-C0,MET-S_ADTT-CSTD-0-02-A-C0)       */
+/*  5.5.0    11/13/2025  SH       Configured for BevStep3                                                                            */
 /*                                                                                                                                   */
 /*  * RI   = Ren Itou, NTTD MSE                                                                                                      */
 /*  * SO   = Syuhei Ooshima, NTTD MSE                                                                                                */
@@ -139,6 +136,7 @@ static U4      u4_s_AlertS_dmcBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
 /*  * GM   = Glen Monteposo, DTPH                                                                                                    */
 /*  * JMH  = James Michael Hilarion, DTPH                                                                                            */
 /*  * HY   = Haruki Yagi, KSE                                                                                                        */
+/*  * SH   = Sae Hirose, Denso Techno                                                                                                */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
 

@@ -17,12 +17,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "hdimmgr_cfg_private.h"
 
-#include "mcst.h"
 #include "veh_opemd.h"
-#if 0   /* BEV BSW provisionally */
-#else
-#include "veh_opemd_xmode_STUB.h"
-#endif
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -201,8 +196,13 @@ U1      u1_g_HdimmgrIfGetIsHudOn(void)
     U1  u1_t_ishudon;
 
     u1_t_ishudon  = (U1)FALSE;
+#if 0   /* BEV Rebase provisionally */
     u1_t_hudonoff = u1_g_McstBf((U1)MCST_BFI_HUD);
     if(u1_t_hudonoff == (U1)MCST_HUD_ON){
+#else   /* BEV Rebase provisionally */
+    u1_t_hudonoff = (U1)1U;
+    if(u1_t_hudonoff == (U1)1U){
+#endif   /* BEV Rebase provisionally */
         u1_t_ishudon = (U1)TRUE;
     }
     return(u1_t_ishudon);

@@ -71,14 +71,14 @@ void vd_g_iVDTr_SlpCtrlMain(void)
      U1 u1_t_recieve_rslt;
      U4 u4_t_shtdwnreq_recieve;
 
-     u1_t_recieve_rslt = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_CPREQ_044, &u4_t_shtdwnreq_recieve, (U2)SLPCTL_SLP_RQST_NWORD);
+     u1_t_recieve_rslt = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_VM1TO23_FSLP, &u4_t_shtdwnreq_recieve, (U2)SLPCTL_SLP_RQST_NWORD);
      if(u1_t_recieve_rslt != (U4)IVDSH_NO_REA) {
           if(u4_t_shtdwnreq_recieve == (U4)SLPCTL_FORCESSLP_OK_RX) {
               u4_s_slpctl_shtdwnreq = u4_t_shtdwnreq_recieve;
           }
      }
 
-     vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_CPREQ_003, &u4_s_slpctl_shtdwnreq, (U2)SLPCTL_SLP_RQST_NWORD);
+     vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM2TO3_STBY, &u4_s_slpctl_shtdwnreq, (U2)SLPCTL_SLP_RQST_NWORD);
 }
 
 /*===================================================================================================================================*/
