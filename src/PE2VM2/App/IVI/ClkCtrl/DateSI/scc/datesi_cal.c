@@ -116,7 +116,9 @@ static        U2      u2_s_DateSICalRangeGuard(const U2 u2_a_RAW, const U2 u2_a_
 /*===================================================================================================================================*/
 void            vd_g_DateSICalBonInit(void)
 {
-    vd_g_DateSICalRstWkupInit();
+    u2_s_datesi_cal_year_min = u2_g_DateSICalCfgBonInit();
+    vd_s_DateSICalInit();
+    vd_g_DateSICalCfgCanTx(u4_s_datesi_cal_now, (U1)FALSE);
 }
 
 /*===================================================================================================================================*/
@@ -127,6 +129,7 @@ void            vd_g_DateSICalBonInit(void)
 /*===================================================================================================================================*/
 void            vd_g_DateSICalRstWkupInit(void)
 {
+    u2_s_datesi_cal_year_min = u2_g_DateSICalCfgRstWkupInit();
     vd_s_DateSICalInit();
     vd_g_DateSICalCfgCanTx(u4_s_datesi_cal_now, (U1)FALSE);
 }
@@ -143,7 +146,6 @@ static void     vd_s_DateSICalInit(void)
     U4  u4_t_min_yymmdd;
     U4  u4_t_daycnt_write;
 
-    u2_t_cal_min                  = u2_DATESI_CAL_YEAR_MIN;
     u4_s_datesi_cal_now           = (U4)DATESI_CAL_NOW_INIT;           /* YA=8CF MO=0 DA=00 WK =00 */
     u4_s_datesi_cal_adj_date      = (U4)YYMMDDWK_UNKNWN;
     u1_s_datesi_cal_timsync_act   = (U1)FALSE;
@@ -151,15 +153,13 @@ static void     vd_s_DateSICalInit(void)
 
     u4_s_datesi_cal_daycnt_last   = u4_g_YymmddToDaycnt(u4_s_datesi_cal_now);
 
-    u2_s_datesi_cal_year_min      = u2_t_cal_min;
+    u2_t_cal_min                  = u2_s_datesi_cal_year_min;
     u4_t_min_yymmdd               = (U4)DATESI_CAL_MIN_MM_DD;
     u4_t_min_yymmdd              |= ((U4)u2_t_cal_min << YYMMDDWK_LSB_YR);
     u4_s_datesi_cal_daycnt_min    = u4_g_YymmddToDaycnt(u4_t_min_yymmdd);
     u4_s_datesi_cal_daycnt_absmin = u4_s_datesi_cal_daycnt_min - (U4)1U;
 
     u1_s_datesi_cal_init_read_fin = (U1)FALSE;
-
-    vd_g_DateSICalCfgInit();
 
     /* iVDsh Initial Value Transmit*/
     u4_t_daycnt_write = (U4)U4_MAX;
@@ -205,16 +205,16 @@ void            vd_g_DateSICalMainTask(void)
 /*===================================================================================================================================*/
 static U1       u1_s_DateSICalInitReadiVDsh(void)
 {
-    U4  u4_t_cal_min;
+    U2  u2_t_cal_min;
     U4  u4_t_min_yymmdd;
     U1  u1_t_read_sts;
 
-    u4_t_cal_min  = (U4)0U;
-    u1_t_read_sts = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_VM1TO2_CALMIN, &u4_t_cal_min, (U2)DATESI_CAL_VM_1WORD);
-    if((u1_t_read_sts != (U1)IVDSH_NO_REA) && (u4_t_cal_min <= (U4)U2_MAX)){
-        u2_s_datesi_cal_year_min      = (U2)u4_t_cal_min;
+    u2_t_cal_min  = (U2)0U;
+    u1_t_read_sts = u1_g_DateSICalCfgInitCalmin(&u2_t_cal_min);
+    if(u1_t_read_sts != (U1)IVDSH_NO_REA){
+        u2_s_datesi_cal_year_min      = u2_t_cal_min;
         u4_t_min_yymmdd               = (U4)DATESI_CAL_MIN_MM_DD;
-        u4_t_min_yymmdd              |= (u4_t_cal_min << YYMMDDWK_LSB_YR);
+        u4_t_min_yymmdd              |= ((U4)u2_t_cal_min << YYMMDDWK_LSB_YR);
         u4_s_datesi_cal_daycnt_min    = u4_g_YymmddToDaycnt(u4_t_min_yymmdd);
         u4_s_datesi_cal_daycnt_absmin = u4_s_datesi_cal_daycnt_min - (U4)1U;
     }
