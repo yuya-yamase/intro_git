@@ -78,6 +78,7 @@
 ../../src/PE2VM2/App/IVI/PwrCtrl/DDFreq/IVI_PwrCtrl_DDFreq.c
 ../../src/PE2VM2/App/IVI/PwrCtrl/GNSSCtl.c
 ../../src/PE2VM2/App/IVI/PwrCtrl/IVI_PwrCtrl_Main.c
+../../src/PE2VM2/App/IVI/PwrCtrl/PMIC.c
 ../../src/PE2VM2/App/IVI/PwrCtrl/PwrCtl.c
 ../../src/PE2VM2/App/IVI/PwrCtrl/STRCtl.c
 ../../src/PE2VM2/App/IVI/PwrCtrl/XMTunerCtl.c
@@ -111,6 +112,6 @@
 
 # ----------------------------------------------------------------------------------------------------------------------------------
 # ghsprj version 1-0-0
-# Date generated: 2025/11/27 15:24:34
+# Date generated: 2025/12/05 11:16:08
 # ----------------------------------------------------------------------------------------------------------------------------------
 
