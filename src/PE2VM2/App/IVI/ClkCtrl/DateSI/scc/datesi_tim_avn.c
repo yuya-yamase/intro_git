@@ -115,7 +115,9 @@ static  U2                                      u2_s_datesi_tim_diagcnt;
 static  U1                                      u1_s_datesi_tim_diagact;
 static  U1                                      u1_s_datesi_tim_diagsts;
 static  U4                                      u4_s_datesi_tim_diaginfo[DATESI_TIM_DIAG_INFO_NUM];
-static  U1                                      u1_s_datesi_tim_init_read_fin;
+static  U1                                      u1_s_datesi_tim_init_read_fin1;
+static  U1                                      u1_s_datesi_tim_init_read_fin2;
+static  U1                                      u1_s_datesi_tim_init_read_fin3;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
@@ -181,12 +183,14 @@ static void     vd_s_DateSITimDiagClkNewBak(const U4 u4_a_HHMMSS_NEW);
 void            vd_g_DateSITimAvnBonInit(void)
 {
     vd_g_TimeZoneBonInit();
-    s4_s_datesi_tim_ofst          = (S4)DATESI_TIM_OFFSET_INIT;
-    u1_s_datesi_tim_sync          = (U1)FALSE;
-    u1_s_datesi_tim_prv_hr        = (U1)0U;
-    u4_s_datesi_tim_adj_clock     = (U4)HHMMSS_UNKNWN;
-    u1_s_datesi_tim_adj_sts       = (U1)DATESI_TIM_ADJ_NON;
-    u1_s_datesi_tim_init_read_fin = (U1)FALSE;
+    s4_s_datesi_tim_ofst           = (S4)DATESI_TIM_OFFSET_INIT;
+    u1_s_datesi_tim_sync           = (U1)FALSE;
+    u1_s_datesi_tim_prv_hr         = (U1)0U;
+    u4_s_datesi_tim_adj_clock      = (U4)HHMMSS_UNKNWN;
+    u1_s_datesi_tim_adj_sts        = (U1)DATESI_TIM_ADJ_NON;
+    u1_s_datesi_tim_init_read_fin1 = (U1)FALSE;
+    u1_s_datesi_tim_init_read_fin2 = (U1)FALSE;
+    u1_s_datesi_tim_init_read_fin3 = (U1)FALSE;
 
     vd_s_DateSITimSwCtlInit();
     vd_g_DateSITimCfgCanTxOffst(s4_s_datesi_tim_ofst, (U1)FALSE);
@@ -203,12 +207,14 @@ void            vd_g_DateSITimAvnBonInit(void)
 void            vd_g_DateSITimAvnWkupInit(void)
 {
     vd_g_TimeZoneRstWkupInit();
-    s4_s_datesi_tim_ofst          = (S4)DATESI_TIM_OFFSET_INIT;
-    u1_s_datesi_tim_sync          = (U1)FALSE;
-    u1_s_datesi_tim_prv_hr        = (U1)0U;
-    u4_s_datesi_tim_adj_clock     = (U4)HHMMSS_UNKNWN;
-    u1_s_datesi_tim_adj_sts       = (U1)DATESI_TIM_ADJ_NON;
-    u1_s_datesi_tim_init_read_fin = (U1)FALSE;
+    s4_s_datesi_tim_ofst           = (S4)DATESI_TIM_OFFSET_INIT;
+    u1_s_datesi_tim_sync           = (U1)FALSE;
+    u1_s_datesi_tim_prv_hr         = (U1)0U;
+    u4_s_datesi_tim_adj_clock      = (U4)HHMMSS_UNKNWN;
+    u1_s_datesi_tim_adj_sts        = (U1)DATESI_TIM_ADJ_NON;
+    u1_s_datesi_tim_init_read_fin1 = (U1)FALSE;
+    u1_s_datesi_tim_init_read_fin2 = (U1)FALSE;
+    u1_s_datesi_tim_init_read_fin3 = (U1)FALSE;
 
     vd_s_DateSITimSwCtlInit();
     vd_g_DateSITimCfgCanTxOffst(s4_s_datesi_tim_ofst, (U1)FALSE);
@@ -240,10 +246,14 @@ U1              u1_g_DateSITimMainAvnTask(U4 * u4p_a_offstd_now)
     U1  u1_t_read_sts;
     U1  u1_t_adj_act;
 
-    if(u1_s_datesi_tim_init_read_fin != (U1)TRUE){
+    if((u1_s_datesi_tim_init_read_fin1 == (U1)FALSE) &&
+       (u1_s_datesi_tim_init_read_fin2 == (U1)FALSE) &&
+       (u1_s_datesi_tim_init_read_fin3 == (U1)FALSE)){
         u1_t_read_sts = u1_s_DateSITimInitReadiVDsh();
         if(u1_t_read_sts != (U1)IVDSH_NO_REA){
-            u1_s_datesi_tim_init_read_fin = (U1)TRUE;
+            u1_s_datesi_tim_init_read_fin1 = (U1)TRUE;
+            u1_s_datesi_tim_init_read_fin2 = (U1)TRUE;
+            u1_s_datesi_tim_init_read_fin3 = (U1)TRUE;
         }
     }
 
