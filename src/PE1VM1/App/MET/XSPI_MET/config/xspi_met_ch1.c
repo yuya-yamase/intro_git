@@ -99,12 +99,12 @@ void    vd_g_XSpiCfgPduRxCh1(const U4 * u4_ap_PDU_RX)
     vd_s_XSpiCanTx_FLYNOP(&u4_ap_PDU_RX[47]);
 
 #endif   /* BEV Rebase provisionally */
-    vd_s_XSpiCanTx_MET1S02(u4_ap_PDU_RX[700],&u4_ap_PDU_RX[769]);
-    vd_s_XSpiCanTx_MET1S27(u4_ap_PDU_RX[700],&u4_ap_PDU_RX[721]);
-    vd_s_XSpiCanTx_MET1S29(u4_ap_PDU_RX[700],&u4_ap_PDU_RX[723]);
-    vd_s_XSpiCanTx_MET1S30(u4_ap_PDU_RX[701],&u4_ap_PDU_RX[791]);
-    vd_s_XSpiCanTx_MET1S62(u4_ap_PDU_RX[700],&u4_ap_PDU_RX[737]);
-    vd_s_XSpiCanTx_MET1S70(u4_ap_PDU_RX[700],&u4_ap_PDU_RX[739]);
+    vd_s_XSpiCanTx_MET1S02(u4_ap_PDU_RX[0],&u4_ap_PDU_RX[69]);
+    vd_s_XSpiCanTx_MET1S27(u4_ap_PDU_RX[0],&u4_ap_PDU_RX[21]);
+    vd_s_XSpiCanTx_MET1S29(u4_ap_PDU_RX[0],&u4_ap_PDU_RX[23]);
+    vd_s_XSpiCanTx_MET1S30(u4_ap_PDU_RX[1],&u4_ap_PDU_RX[91]);
+    vd_s_XSpiCanTx_MET1S62(u4_ap_PDU_RX[0],&u4_ap_PDU_RX[37]);
+    vd_s_XSpiCanTx_MET1S70(u4_ap_PDU_RX[0],&u4_ap_PDU_RX[39]);
 }
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
