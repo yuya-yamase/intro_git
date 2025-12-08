@@ -1,4 +1,4 @@
-/* 2.1.0 */
+/* 2.2.1 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -13,8 +13,8 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define AVGEE_KMPKWH_H_MAJOR                      (2)
-#define AVGEE_KMPKWH_H_MINOR                      (1)
-#define AVGEE_KMPKWH_H_PATCH                      (0)
+#define AVGEE_KMPKWH_H_MINOR                      (2)
+#define AVGEE_KMPKWH_H_PATCH                      (1)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -41,8 +41,10 @@ U1              u1_g_AvgEeCalcTrnst(const U1 u1_a_CNTTID, const U2 * u2_ap_STSFI
 void            vd_g_AvgEeAccmlt(const U1 u1_a_CNTTID, const U2 * u2_ap_STSFIELD, const U4 * u4_ap_DELTA);
 void            vd_g_AvgEeUpdt(const U1 u1_a_CNTTID);
 void            vd_g_AvgEeGrphUpdt(const U1 u1_a_CNTTID);
+void            vd_g_AvgEeRstImmw(const U1 u1_a_ACTV, const U1 u1_a_CNTTID, const U2 * u2_ap_STSFIELD);
 
 U2              u2_g_AvgEeCalcTx(const U1 u1_a_CNTTID, const U1 u1_a_UNIT);
+void            vd_g_AvgEePostTask(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */

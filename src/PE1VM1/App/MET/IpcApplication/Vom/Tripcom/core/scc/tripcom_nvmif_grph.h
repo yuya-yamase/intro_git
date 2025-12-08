@@ -60,7 +60,6 @@ void    vd_g_TripcomNvmIfGrphDiagStart(const U1 u1_a_REQ);                      
 void    vd_g_TripcomNvmIfGrphCbkData(const U1 u1_a_CH, const ST_TRIPCOM_GRPH_NVMDATA * const st_ap_DATANVM);
                                                                                 /* called by tripcom_nvmif                           */
 void    vd_g_TripcomNvmIfGrphDiagFinish(const U1 u1_a_RSLT);                    /* called by tripcom_nvmif                           */
-void    vd_g_TripcomNvmIfGrphSyncCmplt(void);                                   /* called by tripcom_nvmif                           */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */

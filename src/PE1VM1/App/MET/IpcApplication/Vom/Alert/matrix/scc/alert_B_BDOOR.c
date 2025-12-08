@@ -20,10 +20,6 @@
 #include "alert_mtrx_cfg_private.h"
 
 #include "oxcan.h"
-#if 0   /* BEV BSW provisionally */
-#else
-#include "oxcan_channel_STUB.h"
-#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -192,33 +188,35 @@ static U4      u4_s_AlertB_bdoorSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
     U1              u1_t_slp;
 
     u1_t_msgsts_bdb1s01 = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_BDB1S01_CH0,
-                                                (U4)OXCAN_SYS_IGR,
-                                                u2_s_ALERT_B_BDOOR_THSH_TO_BDB1S) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+                                            (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP,
+                                            u2_s_ALERT_B_BDOOR_THSH_TO_BDB1S) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     u1_t_msgsts_bdb1f01 = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_BDB1F01_CH0,
-                                                (U4)OXCAN_SYS_IGR,
-                                                u2_s_ALERT_B_BDOOR_THSH_TO_BDB1F) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+                                            (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP,
+                                            u2_s_ALERT_B_BDOOR_THSH_TO_BDB1F) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
 #if (ALERT_CFG_B_BDOOR_LPSDWARN == TRUE)
     u1_t_msgsts_drl1s03 = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_DRL1S03_CH0,
-                                                (U4)OXCAN_SYS_IGR,
-                                                u2_s_ALERT_B_BDOOR_THSH_TO_DRL1S) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+                                            (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP,
+                                            u2_s_ALERT_B_BDOOR_THSH_TO_DRL1S) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 #else
     u1_t_msgsts_drl1s03 = (U1)COM_NO_RX;
 #endif /* (ALERT_CFG_B_BDOOR_LPSDWARN == TRUE) */
 
 #if (ALERT_CFG_B_BDOOR_RPSDWARN == TRUE)
     u1_t_msgsts_drr1s03 = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_DRR1S03_CH0,
-                                                (U4)OXCAN_SYS_IGR,
-                                                u2_s_ALERT_B_BDOOR_THSH_TO_DRR1S) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+                                            (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP,
+                                            u2_s_ALERT_B_BDOOR_THSH_TO_DRR1S) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 #else
     u1_t_msgsts_drr1s03 = (U1)COM_NO_RX;
 #endif /* (ALERT_CFG_B_BDOOR_RPSDWARN == TRUE) */
 
 #if (ALERT_CFG_B_BDOOR_SLP_POS == TRUE)
-    u1_t_msgsts_slp1s01 = u1_g_oXCANRxdStat((U2)OXCAN_PDU_RX_CAN_SLP1S01,
-                                                (U4)OXCAN_SYS_IGR,
+#if 0   /* BEV Rebase provisionally */
+    u1_t_msgsts_slp1s01 = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_SLP1S01,
+                                                (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
                                                 u2_s_ALERT_B_BDOOR_THSH_TO_SLP1S) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+#endif   /* BEV Rebase provisionally */
 #else
     u1_t_msgsts_slp1s01 = (U1)COM_NO_RX;
 #endif /* (ALERT_CFG_B_BDOOR_SLP_POS == TRUE) */
@@ -330,7 +328,9 @@ static U1      u1_s_AlertB_bdoorGetSlp(const U1 u1_a_SLP1S01STS)
     u1_t_retval = (U1)ALERT_B_BDOOR_SLP_POS_INACT;
     if(u1_a_SLP1S01STS == (U1)0U){
         u1_t_sgnl   = (U1)0U;
+#if 0   /* BEV Rebase provisionally */
         (void)Com_ReceiveSignal(ComConf_ComSignal_SLP_POS, &u1_t_sgnl);
+#endif   /* BEV Rebase provisionally */
         if(u1_t_sgnl < (U1)ALERT_B_BDOOR_SLP_TBL_NUM){
             u1_t_retval = u1_sp_ALERT_B_BDOOR_SLP_TBL[u1_t_sgnl];
         }

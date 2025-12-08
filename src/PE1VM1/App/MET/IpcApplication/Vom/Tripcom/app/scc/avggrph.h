@@ -1,4 +1,4 @@
-/* 1.1.0 */
+/* 1.3.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -13,7 +13,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define AVGGRPH_H_MAJOR                         (1)
-#define AVGGRPH_H_MINOR                         (1)
+#define AVGGRPH_H_MINOR                         (3)
 #define AVGGRPH_H_PATCH                         (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -44,11 +44,14 @@
 /*  Function Prototypes                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 void            vd_g_AvgGrphInit(void);
+void            vd_g_AvgGrphDataSync(void);
 void            vd_g_AvgGrphUpdt(const U1 u1_a_CNTTID, const U4 u4_a_data, const U1 u1_a_rwrqst);
 void            vd_g_AvgGrphReset(const U1 u1_a_CNTTID);
 U4              u4_g_AvgGrphData(const U1 u1_a_CNTTID, U4 * u4_ap_data, U1 * u1_ap_month, U1 * u1_ap_day);
 void            vd_g_AvgGrphUpdtRslt(void);
 U1              u1_g_AvgGrphRslt(const U1 u1_a_CNTTID);
+U1              u1_g_AvgGrphDiagRslt(const U1 u1_a_CNTTID);
+void            vd_g_AvgGrphTimeCnt(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */

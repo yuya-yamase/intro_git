@@ -20,11 +20,6 @@
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "aip_common.h"
-#include "veh_opemd.h"
-#if 0   /* BEV BSW provisionally */
-#else
-#include "veh_opemd_xmode_STUB.h"
-#endif
 #include "vehspd_kmph.h"
 #include "calibration.h"
 #include "vardef.h"
@@ -47,7 +42,7 @@
 #define VEHSPD_SPDTLRNC_UNR_AUS                  (VDF_SPDTLRNC_UNR_AUS)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define VEHSPD_CALIB_CORPT                       (CALIB_SP_TOLER_CORPT_NUM)
+#define VEHSPD_CALIB_CORPT                       (20U)
 #define VEHSPD_CORPT                             (VEHSPD_CALIB_CORPT + 1U)      /* Linear completion points used in tolerances.      */
 #define VEHSPD_CORPT_NUM                         ((VEHSPD_CORPT * 2U) + 1U)     /* Number of elements in a linear complement array.  */
 
@@ -58,8 +53,6 @@
 #define s1_VEHSPD_CALIB_TOLER_B_USA_CAN          (s1_CALIB_MCUID0257_TOLB_USA_CAN)
 #define u1_VEHSPD_CALIB_TOLER_A_UNR_AUS          (u1_CALIB_MCUID0260_TOLA_UNR_AUS)
 #define s1_VEHSPD_CALIB_TOLER_B_UNR_AUS          (s1_CALIB_MCUID0261_TOLB_UNR_AUS)
-#define u2p_VEHSPD_CALIB_BIAS_USA_CAN            (&u2_CALIB_MCUID0757_SP_USA_CAN[0])
-#define u2p_VEHSPD_CALIB_BIAS_UNR_AUS            (&u2_CALIB_MCUID0777_SP_UNR_AUS[0])
 
 #define u1_g_VehspdSpdTlrnc()                    (u1_g_VardefSpdTlrncByPid())
 

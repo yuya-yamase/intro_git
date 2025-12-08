@@ -1,4 +1,4 @@
-/* 2.2.0 */
+/* 2.2.1 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -11,7 +11,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define SBLTWRN_C_MAJOR                         (2)
 #define SBLTWRN_C_MINOR                         (2)
-#define SBLTWRN_C_PATCH                         (0)
+#define SBLTWRN_C_PATCH                         (1)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -1136,8 +1136,8 @@ U1              u1_g_SbltwrnDiagEvCapt(const U1 u1_a_ODO_UPDT, U4 * u4_ap_ss)
     u1_t_capt = (U1)FALSE;
     if ((u1_sp_sbltwrn_sbrbit[SBLTWRN_SBRBIT_IDX0] != (U1)0U) ||
         (u1_sp_sbltwrn_sbrbit[SBLTWRN_SBRBIT_IDX1] != (U1)0U)) {
-        u4_ap_ss[SBLTWRN_SBRBIT_IDX0] = (U4)(u1_sp_sbltwrn_sbrbit[SBLTWRN_SBRBIT_IDX0] & (U1)SBLTWRN_DRV_SEAT_BIT_IDX_ALL);
-        u4_ap_ss[SBLTWRN_SBRBIT_IDX1] = (U4)(u1_sp_sbltwrn_sbrbit[SBLTWRN_SBRBIT_IDX1] & (U1)SBLTWRN_R3L_SEAT_BIT_IDX1);
+        u4_ap_ss[SBLTWRN_SBRBIT_IDX0] = (U4)u1_sp_sbltwrn_sbrbit[SBLTWRN_SBRBIT_IDX0] & (U4)SBLTWRN_DRV_SEAT_BIT_IDX_ALL;
+        u4_ap_ss[SBLTWRN_SBRBIT_IDX1] = (U4)u1_sp_sbltwrn_sbrbit[SBLTWRN_SBRBIT_IDX1] & (U4)SBLTWRN_R3L_SEAT_BIT_IDX1;
         u1_sp_sbltwrn_sbrbit[SBLTWRN_SBRBIT_IDX0] = (U1)0U;
         u1_sp_sbltwrn_sbrbit[SBLTWRN_SBRBIT_IDX1] = (U1)0U;
         u1_t_capt = (U1)TRUE;
@@ -1447,7 +1447,7 @@ static  void    vd_s_SbltwrnTtTimAct(ST_SBLTWRN_TTST *stp_a_ttsts, const U4 u4_a
     U4  u4_t_act_bit;
     U1  u1_t_dropn;
 
-    u1_t_dropn  = u1_s_SbltwrnDrchk(u4_a_VCLSTS, u1_a_SEATTYP, (U1)FALSE);
+    u1_t_dropn  = u1_s_SbltwrnDrchk(u4_a_VCLSTS, u1_a_SEATTYP, (U1)TRUE);
 
     if (u1_t_dropn == (U1)TRUE) {
         u4_a_ttopt |= (U4)SBLTWRN_TTOPT_DRTM_CNTCLR;
@@ -2685,7 +2685,7 @@ static  U4      u4_s_SbltwrnTtTrns_condAL(const U1 u1_a_SEATID, const U1 u1_a_SE
     U4  u4_t_cond;
     U1  u1_t_dropn;
 
-    u1_t_dropn  = u1_s_SbltwrnDrchk(stp_a_VCLSTS->u4_vclsts, u1_a_SEATTYP, (U1)FALSE);
+    u1_t_dropn  = u1_s_SbltwrnDrchk(stp_a_VCLSTS->u4_vclsts, u1_a_SEATTYP, (U1)TRUE);
 
     if (
         (u1_t_dropn == (U1)TRUE) &&                                                         /* some rear door(s) open */
@@ -2885,7 +2885,7 @@ static  U4      u4_s_SbltwrnTtTrns_condKL(const U1 u1_a_SEATID, const U1 u1_a_SE
     U4  u4_t_cond;
     U1  u1_t_dropn;
 
-    u1_t_dropn  = u1_s_SbltwrnDrchk(stp_a_VCLSTS->u4_vclsts, u1_a_SEATTYP, (U1)FALSE);
+    u1_t_dropn  = u1_s_SbltwrnDrchk(stp_a_VCLSTS->u4_vclsts, u1_a_SEATTYP, (U1)TRUE);
 
     if (
         ((stp_a_VCLSTS->u1p_bklsts[u1_a_SEATID] & (U1)SBLTWRN_BKLSTS_UNBCKL) != (U1)0U) &&
@@ -2962,7 +2962,7 @@ static  U4      u4_s_SbltwrnTtTrns_condLN(const U1 u1_a_SEATID, const U1 u1_a_SE
     U4  u4_t_prk_chk;
     U1  u1_t_dropn;
 
-    u1_t_dropn  = u1_s_SbltwrnDrchk(stp_a_VCLSTS->u4_vclsts, u1_a_SEATTYP, (U1)FALSE);
+    u1_t_dropn  = u1_s_SbltwrnDrchk(stp_a_VCLSTS->u4_vclsts, u1_a_SEATTYP, (U1)TRUE);
     if (u1_a_SEATTYP == (U1)SBLTWRN_SEATTYP_RS_SNSR) {
         u4_t_prk_chk = (U4)SBLTWRN_VCLSTS_PARK;
     } else {
@@ -2992,7 +2992,7 @@ static  U4      u4_s_SbltwrnTtTrns_condLO(const U1 u1_a_SEATID, const U1 u1_a_SE
     U4  u4_t_cond;
     U1  u1_t_dropn;
 
-    u1_t_dropn  = u1_s_SbltwrnDrchk(stp_a_VCLSTS->u4_vclsts, u1_a_SEATTYP, (U1)FALSE);
+    u1_t_dropn  = u1_s_SbltwrnDrchk(stp_a_VCLSTS->u4_vclsts, u1_a_SEATTYP, (U1)TRUE);
 
     if (
         ((stp_a_VCLSTS->u1p_bklsts[u1_a_SEATID] & (U1)SBLTWRN_BKLSTS_UNBCKL) != (U1)0U) &&
@@ -3067,7 +3067,7 @@ static  U4      u4_s_SbltwrnTtTrns_condLS(const U1 u1_a_SEATID, const U1 u1_a_SE
     U4  u4_t_prk_chk;
     U1  u1_t_dropn;
 
-    u1_t_dropn  = u1_s_SbltwrnDrchk(stp_a_VCLSTS->u4_vclsts, u1_a_SEATTYP, (U1)FALSE);
+    u1_t_dropn  = u1_s_SbltwrnDrchk(stp_a_VCLSTS->u4_vclsts, u1_a_SEATTYP, (U1)TRUE);
     if (u1_a_SEATTYP == (U1)SBLTWRN_SEATTYP_RS_SNSR) {
         u4_t_prk_chk_trgt = (U4)SBLTWRN_VCLSTS_PARK;
         u4_t_prk_chk = (U4)0U;
@@ -3127,7 +3127,7 @@ static  U4      u4_s_SbltwrnTtTrns_condNL(const U1 u1_a_SEATID, const U1 u1_a_SE
     U4  u4_t_cond;
     U1  u1_t_dropn;
 
-    u1_t_dropn  = u1_s_SbltwrnDrchk(stp_a_VCLSTS->u4_vclsts, u1_a_SEATTYP, (U1)FALSE);
+    u1_t_dropn  = u1_s_SbltwrnDrchk(stp_a_VCLSTS->u4_vclsts, u1_a_SEATTYP, (U1)TRUE);
 
     if (((stp_a_VCLSTS->u1p_bklsts[u1_a_SEATID] & (U1)SBLTWRN_BKLSTS_UNBCKL) != (U1)0U) && (u1_t_dropn == (U1)TRUE)) {
         u4_t_cond = (U4)(SBLTWRN_TTSTS_DOOR | SBLTWRN_TTOPT_UBTM_CNTCLR | SBLTWRN_TTOPT_UBTM_CNTSTP | SBLTWRN_TTOPT_DRTM_CNTCLR | SBLTWRN_TTOPT_DRTM_CNTUP);
@@ -3196,7 +3196,7 @@ static  U4      u4_s_SbltwrnTtTrns_condOL(const U1 u1_a_SEATID, const U1 u1_a_SE
     U4  u4_t_cond;
     U1  u1_t_dropn;
 
-    u1_t_dropn  = u1_s_SbltwrnDrchk(stp_a_VCLSTS->u4_vclsts, u1_a_SEATTYP, (U1)FALSE);
+    u1_t_dropn  = u1_s_SbltwrnDrchk(stp_a_VCLSTS->u4_vclsts, u1_a_SEATTYP, (U1)TRUE);
 
     if (((stp_a_VCLSTS->u1p_bklsts[u1_a_SEATID] & (U1)SBLTWRN_BKLSTS_UNBCKL) != (U1)0U) && (u1_t_dropn == (U1)TRUE)) {
         u4_t_cond = (U4)(SBLTWRN_TTSTS_DOOR | SBLTWRN_TTOPT_DRTM_CNTCLR | SBLTWRN_TTOPT_DRTM_CNTUP);
@@ -3369,7 +3369,7 @@ static  U4      u4_s_SbltwrnTtTrns_condPL(const U1 u1_a_SEATID, const U1 u1_a_SE
     U4  u4_t_cond;
     U1  u1_t_dropn;
 
-    u1_t_dropn  = u1_s_SbltwrnDrchk(stp_a_VCLSTS->u4_vclsts, u1_a_SEATTYP, (U1)FALSE);
+    u1_t_dropn  = u1_s_SbltwrnDrchk(stp_a_VCLSTS->u4_vclsts, u1_a_SEATTYP, (U1)TRUE);
 
     if (((stp_a_VCLSTS->u1p_bklsts[u1_a_SEATID] & (U1)SBLTWRN_BKLSTS_UNBCKL) != (U1)0U) && (u1_t_dropn == (U1)TRUE)) {
         u4_t_cond = (U4)(SBLTWRN_TTSTS_DOOR | SBLTWRN_TTOPT_DRTM_CNTCLR | SBLTWRN_TTOPT_DRTM_CNTUP);
@@ -3458,7 +3458,7 @@ static  U4      u4_s_SbltwrnTtTrns_condQL(const U1 u1_a_SEATID, const U1 u1_a_SE
     U4  u4_t_cond;
     U1  u1_t_dropn;
 
-    u1_t_dropn  = u1_s_SbltwrnDrchk(stp_a_VCLSTS->u4_vclsts, u1_a_SEATTYP, (U1)FALSE);
+    u1_t_dropn  = u1_s_SbltwrnDrchk(stp_a_VCLSTS->u4_vclsts, u1_a_SEATTYP, (U1)TRUE);
 
     if (
         (u1_t_dropn == (U1)TRUE) &&
@@ -3562,7 +3562,7 @@ static  U4      u4_s_SbltwrnTtTrns_condRL(const U1 u1_a_SEATID, const U1 u1_a_SE
     U4  u4_t_cond;
     U1  u1_t_dropn;
 
-    u1_t_dropn  = u1_s_SbltwrnDrchk(stp_a_VCLSTS->u4_vclsts, u1_a_SEATTYP, (U1)FALSE);
+    u1_t_dropn  = u1_s_SbltwrnDrchk(stp_a_VCLSTS->u4_vclsts, u1_a_SEATTYP, (U1)TRUE);
 
     if (((stp_a_VCLSTS->u1p_bklsts[u1_a_SEATID] & (U1)SBLTWRN_BKLSTS_UNBCKL) != (U1)0U) && (u1_t_dropn == (U1)TRUE)) {
         u4_t_cond = (U4)(SBLTWRN_TTSTS_DOOR | SBLTWRN_TTOPT_DRTM_CNTCLR | SBLTWRN_TTOPT_DRTM_CNTUP);
@@ -3637,7 +3637,7 @@ static  U4      u4_s_SbltwrnTtTrns_condSL(const U1 u1_a_SEATID, const U1 u1_a_SE
     U4  u4_t_cond;
     U1  u1_t_dropn;
 
-    u1_t_dropn  = u1_s_SbltwrnDrchk(stp_a_VCLSTS->u4_vclsts, u1_a_SEATTYP, (U1)FALSE);
+    u1_t_dropn  = u1_s_SbltwrnDrchk(stp_a_VCLSTS->u4_vclsts, u1_a_SEATTYP, (U1)TRUE);
 
     if (((stp_a_VCLSTS->u1p_bklsts[u1_a_SEATID] & (U1)SBLTWRN_BKLSTS_UNBCKL) != (U1)0U) && (u1_t_dropn == (U1)TRUE)) {
         u4_t_cond = (U4)(SBLTWRN_TTSTS_DOOR | SBLTWRN_TTOPT_UBTM_CNTCLR | SBLTWRN_TTOPT_UBTM_CNTSTP | SBLTWRN_TTOPT_DRTM_CNTCLR | SBLTWRN_TTOPT_DRTM_CNTUP);
@@ -4077,6 +4077,7 @@ static  inline  U1  u1_s_SbltwrnCalibU1MaxChk(const U1 u1_a_CALIBID, const U1 u1
 /*  2.1.2    10/25/2021  TK       QAC supported.                                                                                     */
 /*  2.1.3    04/05/2022  YI(M)    Delete unused define and process.                                                                  */
 /*  2.2.0    02/29/2024  TH       for 19PFv3                                                                                         */
+/*  2.2.1    03/20/2025  TH       Fix : Door Open Judge (Telltale al,kl,nl,ol,pl,ql,rl,sl,la,ln,lo,ls)                               */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /*  -------- ----------  -------  -------------------------------------------------------------------------------------------------- */

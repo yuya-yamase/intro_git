@@ -57,35 +57,19 @@
 /*===================================================================================================================================*/
 U1      u1_g_VdfEsoRx_4WDSYS(void)
 {
-    static const U1 u1_s_VDF_ESO_4WD_INA_FWDREQ = (U1)0U;
     static const U1 u1_s_VDF_ESO_4WD_ACT_FWDREQ = (U1)1U;
 
-    U1                 u1_t_msgsts;
-    U1                 u1_t_wrg;
     U1                 u1_t_rx;
     U1                 u1_t_ava_rx;
 
-    u1_t_wrg = (U1)0U;
     u1_t_rx = (U1)0U;
 
-    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_EHV1S26_CH0,
-                                     (U4)OXCAN_SYS_IGP,
-                                     (U2)U2_MAX) & (U1)COM_NO_RX;
-
-    (void)Com_ReceiveSignal(ComConf_ComSignal_HV4WNG, &u1_t_wrg);
     (void)Com_ReceiveSignal(ComConf_ComSignal_FWDREQ, &u1_t_rx);
 
-    if((u1_t_msgsts == (U1)0U)
-    && (u1_t_wrg == (U1)0U)){
-        if(u1_t_rx == u1_s_VDF_ESO_4WD_ACT_FWDREQ){
-            u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
-        }else if(u1_t_rx == u1_s_VDF_ESO_4WD_INA_FWDREQ){
-            u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_INA;
-        }else{
-            u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_UNK;
-        }
-    }else{ 
-        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_UNK;
+    if(u1_t_rx == u1_s_VDF_ESO_4WD_ACT_FWDREQ){
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
+    }else{
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_INA;
     }
 
     return(u1_t_ava_rx);
@@ -109,10 +93,12 @@ U1      u1_g_VdfEsoRx_4WDSYS(void)
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  19PFv3   12/18/2023  RO       NEW!                                                                                               */
+/*  19PFv3-2  4/22/2025  TK       Change config for 19PFv3 R4(Change of judgment conditions)                                         */
 /*                                                                                                                                   */
 /*  * SF = Seiya Fukutome, DENSO TECHNO                                                                                              */
 /*  * RO = Reiya Okuda, KSE                                                                                                          */
 /*  * RO = Ryo Oohashi, KSE                                                                                                          */
+/*  * TK = Tamao Kamiya, DENSO TECHNO                                                                                                */
 /*  * KO   = Kazuto Oishi,  Denso Techno                                                                                             */
 /*  * SN = Shizuka Nakajima, KSE                                                                                                     */
 /*                                                                                                                                   */

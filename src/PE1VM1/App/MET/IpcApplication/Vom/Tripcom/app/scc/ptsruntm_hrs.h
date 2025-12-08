@@ -1,4 +1,4 @@
-/* 2.0.3 */
+/* 2.1.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -13,8 +13,8 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define PTSRUNTM_HRS_H_MAJOR                    (2)
-#define PTSRUNTM_HRS_H_MINOR                    (0)
-#define PTSRUNTM_HRS_H_PATCH                    (3)
+#define PTSRUNTM_HRS_H_MINOR                    (1)
+#define PTSRUNTM_HRS_H_PATCH                    (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -39,6 +39,7 @@ void            vd_g_PtsRunTmInit(void);
 void            vd_g_PtsRunTmCondChk(const U1 u1_a_CNTTID, const U2 * u2_ap_STSFIELD);
 U1              u1_g_PtsRunTmCalcTrnst(const U1 u1_a_CNTTID, const U2 * u2_ap_STSFIELD);
 void            vd_g_PtsRunTmAccmlt(const U1 u1_a_CNTTID, const U2 * u2_ap_STSFIELD, const U4 * u4_ap_DELTA);
+void            vd_g_PtsRunTmRstImmw(const U1 u1_a_ACTV, const U1 u1_a_CNTTID, const U2 * u2_ap_STSFIELD);
 
 U2              u2_g_PtsRunTmCalcTx(const U1 u1_a_CNTTID, const U1 u1_a_UNIT);
 

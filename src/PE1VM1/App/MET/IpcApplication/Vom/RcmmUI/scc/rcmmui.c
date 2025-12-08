@@ -226,8 +226,8 @@ void            vd_g_RcmmUIUserAct(const U1 u1_a_CID, const U1 u1_a_USRACT)
         if(u1_a_CID == u1_s_rcmmui_reqid    ){
             u1_s_rcmmui_usract = u1_a_USRACT;
         }
-        else if((u1_a_CID          == (U1)RCMMUI_STREQ_3_1_1) &&
-                (u1_s_rcmmui_reqid == (U1)RCMMUI_STREQ_3_1_2)){
+        else if((u1_a_CID          == (U1)RCMMUI_STREQ_3_1) &&
+                (u1_s_rcmmui_reqid == (U1)RCMMUI_STREQ_4_1)){
             u1_s_rcmmui_usract = u1_a_USRACT;
         }
         else{

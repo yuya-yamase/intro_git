@@ -163,8 +163,8 @@ static void     vd_s_DateSICalInit(void)
 
     /* iVDsh Initial Value Transmit*/
     u4_t_daycnt_write = (U4)U4_MAX;
-    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_CPREQ_015, &u4_s_datesi_cal_now, (U2)DATESI_CAL_VM_1WORD);
-    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_CPREQ_019, &u4_t_daycnt_write, (U2)DATESI_CAL_VM_1WORD);
+    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM2TO1_DSPCAL, &u4_s_datesi_cal_now, (U2)DATESI_CAL_VM_1WORD);
+    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM2TO1_CAL, &u4_t_daycnt_write, (U2)DATESI_CAL_VM_1WORD);
 }
 
 /*===================================================================================================================================*/
@@ -190,7 +190,7 @@ void            vd_g_DateSICalMainTask(void)
         vd_s_DateSICalSync(&u4_s_datesi_cal_now);
         vd_s_DateSICalWriteRtcDate();
         vd_g_DateSICalCfgCanTx(u4_s_datesi_cal_now, (U1)TRUE);
-        vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_CPREQ_015, &u4_s_datesi_cal_now, (U2)DATESI_CAL_VM_1WORD);
+        vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM2TO1_DSPCAL, &u4_s_datesi_cal_now, (U2)DATESI_CAL_VM_1WORD);
     }
     else{
         vd_s_DateSICalInit();
@@ -210,7 +210,7 @@ static U1       u1_s_DateSICalInitReadiVDsh(void)
     U1  u1_t_read_sts;
 
     u4_t_cal_min  = (U4)0U;
-    u1_t_read_sts = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_CPREQ_022, &u4_t_cal_min, (U2)DATESI_CAL_VM_1WORD);
+    u1_t_read_sts = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_VM1TO2_CALMIN, &u4_t_cal_min, (U2)DATESI_CAL_VM_1WORD);
     if((u1_t_read_sts != (U1)IVDSH_NO_REA) && (u4_t_cal_min <= (U4)U2_MAX)){
         u2_s_datesi_cal_year_min      = (U2)u4_t_cal_min;
         u4_t_min_yymmdd               = (U4)DATESI_CAL_MIN_MM_DD;
@@ -486,7 +486,7 @@ static void     vd_s_DateSICalWriteRtcDate(void)
     if((u1_t_esi_chk                == (U1)0U         ) &&
       ((u4_s_datesi_cal_daycnt_last != u4_t_daycnt_now) &&
        (u4_t_daycnt_write           != (U4)U4_MAX     ))){
-        vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_CPREQ_019, &u4_t_daycnt_write, (U2)DATESI_CAL_VM_1WORD);
+        vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM2TO1_CAL, &u4_t_daycnt_write, (U2)DATESI_CAL_VM_1WORD);
         u4_s_datesi_cal_daycnt_last = u4_t_daycnt_now;
     }
 }

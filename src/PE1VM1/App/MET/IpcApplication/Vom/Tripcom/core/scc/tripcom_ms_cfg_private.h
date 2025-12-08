@@ -1,4 +1,4 @@
-/* 2.1.1 */
+/* 2.1.3 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -14,7 +14,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define TRIPCOM_MS_CFG_H_MAJOR                  (2)
 #define TRIPCOM_MS_CFG_H_MINOR                  (1)
-#define TRIPCOM_MS_CFG_H_PATCH                  (1)
+#define TRIPCOM_MS_CFG_H_PATCH                  (3)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -22,20 +22,8 @@
 #include "aip_common.h"
 #include "tripcom.h"
 #include "veh_opemd.h"
-#if 0   /* BEV BSW provisionally */
-#else
-#include "veh_opemd_xmode_STUB.h"
-#endif
 #include "nvmc_mgr.h"
-#if 0   /* BEV BSW provisionally */
-#else
-#include "nvmc_mgr_cfg_STUB.h"
-#endif
 #include "rim_ctl.h"
-#if 0   /* BEV BSW provisionally */
-#else
-#include "rim_ctl_cfg_STUB.h"
-#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
@@ -58,6 +46,7 @@
 typedef struct {
     U2                                          u2_memoryid;
     U1                                          u1_devtype;
+    U1                                          u1_nvmifch;         /* u1_gp_TRIPCOM_MS_CH2ID */
 } ST_TRIPCOM_MS_MEM;
 
 typedef struct {

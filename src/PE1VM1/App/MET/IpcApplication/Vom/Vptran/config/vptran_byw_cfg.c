@@ -18,10 +18,6 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "vptran_byw_cfg_private.h"
 #include "oxcan.h"
-#if 0   /* BEV BSW provisionally */
-#else
-#include "oxcan_channel_STUB.h"
-#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -41,9 +37,8 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define VPTRAN_TIM_PCN1S01_TO                   (5000U / OXCAN_MAIN_TICK)
-#define VPTRAN_TIM_ECT1G92_TO                   (5000U / OXCAN_MAIN_TICK)
-#define VPTRAN_TIM_SBW1G01_TO                   (5000U / OXCAN_MAIN_TICK)
+#define VPTRAN_TIM_PCN1S01_TO                   (u2_OXCAN_RXTO_THRSH(5000U))
+#define VPTRAN_TIM_ECT1G92_TO                   (u2_OXCAN_RXTO_THRSH(5000U))
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -76,8 +71,9 @@
 U1              u1_g_VptranBywCfgGetMsgStsRNG(void)
 {
     return (u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_PCN1S01_CH0,
-                             ((U4)VPTRAN_CAN_SYS_PNC_ALL),
-                             (U2)VPTRAN_TIM_SBW1G01_TO) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX));
+                              (U4)OXCAN_SYS_PNC_16 | (U4)OXCAN_SYS_PNC_40 | (U4)OXCAN_SYS_PNC_43 | (U4)OXCAN_SYS_PNC_44 | \
+                              (U4)OXCAN_SYS_PBA | (U4)OXCAN_SYS_ACC | (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP,
+                              (U2)VPTRAN_TIM_PCN1S01_TO) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX));
 }
 
 /*===================================================================================================================================*/
@@ -89,8 +85,9 @@ U1              u1_g_VptranBywCfgGetMsgStsRNG(void)
 U1              u1_g_VptranBywCfgGetMsgStsGR(void)
 {
     return (u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_PCN1S01_CH0,
-                             ((U4)OXCAN_SYS_IGR),
-                             (U2)VPTRAN_TIM_PCN1S01_TO) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX));
+                              (U4)OXCAN_SYS_PNC_16 | (U4)OXCAN_SYS_PNC_40 | (U4)OXCAN_SYS_PNC_43 | (U4)OXCAN_SYS_PNC_44 | \
+                              (U4)OXCAN_SYS_PBA | (U4)OXCAN_SYS_ACC | (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP,
+                              (U2)VPTRAN_TIM_PCN1S01_TO) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX));
 }
 
 /*===================================================================================================================================*/
@@ -102,8 +99,8 @@ U1              u1_g_VptranBywCfgGetMsgStsGR(void)
 U1              u1_g_VptranBywCfgGetMsgStsGRSts(void)
 {
     return (u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_ECT1G92_CH0,
-                             ((U4)OXCAN_SYS_IGR),
-                             (U2)VPTRAN_TIM_ECT1G92_TO) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX));
+                              (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP,
+                              (U2)VPTRAN_TIM_ECT1G92_TO) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX));
 }
 
 /*===================================================================================================================================*/
@@ -115,8 +112,9 @@ U1              u1_g_VptranBywCfgGetMsgStsGRSts(void)
 U1              u1_g_VptranBywCfgGetMsgStsSftBlks(void)
 {
     return (u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_PCN1S01_CH0,
-                             ((U4)VPTRAN_CAN_SYS_PNC_ALL),
-                             (U2)VPTRAN_TIM_SBW1G01_TO) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX));
+                              (U4)OXCAN_SYS_PNC_16 | (U4)OXCAN_SYS_PNC_40 | (U4)OXCAN_SYS_PNC_43 | (U4)OXCAN_SYS_PNC_44 | \
+                              (U4)OXCAN_SYS_PBA | (U4)OXCAN_SYS_ACC | (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP,
+                              (U2)VPTRAN_TIM_PCN1S01_TO) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX));
 }
 
 /*===================================================================================================================================*/
@@ -221,6 +219,7 @@ U1              u1_g_VptranBywCfgGetSFTBLKS(void)
 /*  330D-1      02/22/2023  YK       330D Correspondence                                                                             */
 /*  19PFv3-1    12/15/2023  GM       19PFv3 Correspondence                                                                           */
 /*  BEV-1       02/10/2025  HF       Change config for BEV System_Consideration_1.(MET-D_SFTPOS-CSTD-1-)                             */
+/*  BEV-2       10/28/2025  MA       Change for BEV rebase.                                                                          */
 /*                                                                                                                                   */
 /*  * HY   = Hidefumi Yoshida, Denso                                                                                                 */
 /*  * YI   = Yoshiki  Iwata,   Denso                                                                                                 */
@@ -232,5 +231,6 @@ U1              u1_g_VptranBywCfgGetSFTBLKS(void)
 /*  * YK   = Yuki Kawai,       Denso Techno                                                                                          */
 /*  * GM   = Glen Monteposo,   DTPH                                                                                                  */
 /*  * HF   = Hinari Fukamachi, KSE                                                                                                   */
+/*  * MA   = Misaki Aiki,   Denso Techno                                                                                             */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

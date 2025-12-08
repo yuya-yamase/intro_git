@@ -1271,7 +1271,7 @@ void            vd_g_XspiIviCANBusGet2M(void)
     u4_t_data   = (U4)0U;
 
     /* 2M-1 */
-    u1_t_sts    = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_CPREQ_029, &u4_t_data, u2_s_NWORD);
+    u1_t_sts    = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_CANBUS_STS_2M1, &u4_t_data, u2_s_NWORD);
     if(u1_t_sts != (U1)IVDSH_NO_REA){
         u1_sp_Xspi_Ivi_CanBusSts2M[0]   = (U1)0x00U;    /* 初期化 : 正常 */
         u1_sp_Xspi_Ivi_CanBusSts2M[1]   = (U1)0x00U;    /* 初期化 : 正常 */
@@ -1329,7 +1329,7 @@ void            vd_g_XspiIviCANBusGet5M(void)
     u4_t_data   = (U4)0U;
 
     /* 5M */
-    u1_t_sts    = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_CPREQ_032, &u4_t_data, u2_s_NWORD);
+    u1_t_sts    = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_CANBUS_STS_5M, &u4_t_data, u2_s_NWORD);
     if(u1_t_sts != (U1)IVDSH_NO_REA){
         u1_sp_Xspi_Ivi_CanBusSts5M[0]   = (U1)0x00U;    /* 初期化 : 正常 */
         u1_sp_Xspi_Ivi_CanBusSts5M[1]   = (U1)0x00U;    /* 初期化 : 正常 */

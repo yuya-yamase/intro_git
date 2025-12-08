@@ -24,15 +24,8 @@
 /* #include "vardef_esopt.h" */ /* vardef_esopt.h is included in vardef_dbf.h" */
 
 #include "nvmc_mgr.h"
-#if 0   /* BEV BSW provisionally */
-#else
-#include "nvmc_mgr_cfg_STUB.h"
-#endif
 #include "rim_ctl.h"
-#if 0   /* BEV BSW provisionally */
-#else
-#include "rim_ctl_cfg_STUB.h"
-#endif
+#include "veh_opemd_xmode.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
@@ -96,8 +89,6 @@ void    vd_g_VardefEsOptCfgInit(void);
 
 U1      u1_g_VardefEsOptCfgCanRxEvcnt(const U2 u2_a_MSG_ID);
 U1      u1_g_VardefEsOptCfgEthRxEvcnt(const U2 u2_a_MSG_ID);
-
-U1      u1_g_VardefEsOptCfgAvaByAVN(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */

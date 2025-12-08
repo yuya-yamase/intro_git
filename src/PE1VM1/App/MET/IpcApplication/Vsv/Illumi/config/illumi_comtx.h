@@ -1,4 +1,4 @@
-/* 2.2.0 */
+/* 2.2.2 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -14,7 +14,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define ILLUMI_COM_TX_H_MAJOR                   (2)
 #define ILLUMI_COM_TX_H_MINOR                   (2)
-#define ILLUMI_COM_TX_H_PATCH                   (0)
+#define ILLUMI_COM_TX_H_PATCH                   (2)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -45,6 +45,7 @@ U2      u2_g_IllumiILTx(const U2 * u2_ap_DIM_LVL, const U2 u2_a_OW);
 void    vd_g_IllumiRheoTxAck(void);
 
 U1      u1_g_IllumiRheoTxNmwk(const U2 u2_a_TOUT);  /* Return : TRUE = Network Management Wakeup is being requested, FALSE = Not */
+U1      u1_g_IllumiTcTxNmwk(const U2 u2_a_TOUT);    /* Return : TRUE = Network Management Wakeup is being requested, FALSE = Not */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */

@@ -21,10 +21,6 @@
 #include "alert_brx.h"
 
 #include "oxcan.h"
-#if 0   /* BEV BSW provisionally */
-#else
-#include "oxcan_channel_STUB.h"
-#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -114,8 +110,8 @@ static U4      u4_s_AlertB_trfogSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
     U4              u4_t_src_chk;
 
     u1_t_trns_fact = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_BDB1S03_CH0,
-                                           (U4)ALERT_CAN_SYS_PNC_ALL,
-                                           u2_s_ALERT_B_TRFOG_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+                                       (U4)ALERT_CAN_SYS_ALL,
+                                       u2_s_ALERT_B_TRFOG_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     if((u1_a_VOM & (U1)ALERT_VOM_IGN_ON) == (U1)0U){
         u1_t_trns_fact |= (U1)ALERT_BRX_FACT_NO_RX;

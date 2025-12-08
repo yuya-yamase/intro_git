@@ -22,10 +22,6 @@
 #include "aip_common.h"
 #include "vehspd_kmph.h"
 #include "veh_opemd.h"
-#if 0   /* BEV BSW provisionally */
-#else
-#include "veh_opemd_xmode_STUB.h"
-#endif
 #include "vehspd_can_sp1x.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -47,8 +43,6 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Prototypes                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-/* U1      u1_g_VehspdCanSp1xIgnOn(void); */
-
 void    vd_g_VehspdCanSp1xComRxInit(void);
 U1      u1_g_VehspdCanSp1xComRx(U2 * u2_ap_sp1, U1 * u1_ap_sp1p); /* return VEHSPD_STSBIT_XXXX */
 

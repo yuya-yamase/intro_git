@@ -20,9 +20,7 @@
 #include "odo_om_rst_if.h"
 
 #include "hmimaint.h"
-#include "hmimm2c118n.h"
 #include "vardef.h"
-#include "mcst_bf.h"
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -48,10 +46,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static U1    u1_s_hmimaint_rstreq;
 static U1    u1_s_hmimaint_rstreq_pre;
-#if ((defined(MCST_MMCUSREQ)) && (MCST_MMCUSREQ == TRUE))
-#else
 static U2    u2_s_hmimaint_to;
-#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
@@ -72,11 +67,7 @@ void    vd_g_HmiMaintInit(void)
 {
     u1_s_hmimaint_rstreq = (U1)U1_MAX;
     u1_s_hmimaint_rstreq_pre = (U1)U1_MAX;
-#if ((defined(MCST_MMCUSREQ)) && (MCST_MMCUSREQ == TRUE))
-#else
     u2_s_hmimaint_to   = (U2)HMIPROXY_TOC_MAX;
-#endif
-
 }
 
 /*===================================================================================================================================*/
@@ -87,8 +78,6 @@ void    vd_g_HmiMaintInit(void)
 /*===================================================================================================================================*/
 void    vd_g_HmiMaintMainTask(void)
 {
-#if ((defined(MCST_MMCUSREQ)) && (MCST_MMCUSREQ == TRUE))
-#else
     static const U2 u2_s_HMIMAINT_TO = (U2)1000U / (U2)50U;
     U1              u1_t_to;
     U1              u1_t_exist;
@@ -97,7 +86,6 @@ void    vd_g_HmiMaintMainTask(void)
     u1_t_exist = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_AISETH);
 
     if (u1_t_exist == (U1)TRUE){
-#endif
         if((u1_s_hmimaint_rstreq == (U1)HMIMAINT_RST) &&
            (u1_s_hmimaint_rstreq != u1_s_hmimaint_rstreq_pre)){
             vd_g_OdoOmReset((U1)TRUE);
@@ -105,8 +93,6 @@ void    vd_g_HmiMaintMainTask(void)
         else{
             vd_g_OdoOmReset((U1)FALSE);
         }
-#if ((defined(MCST_MMCUSREQ)) && (MCST_MMCUSREQ == TRUE))
-#else
     } else {
         if((u1_t_to              == (U1)FALSE)        &&
            (u1_s_hmimaint_rstreq == (U1)HMIMAINT_RST) &&
@@ -117,30 +103,7 @@ void    vd_g_HmiMaintMainTask(void)
             vd_g_OdoOmReset((U1)FALSE);
         }
     }
-#endif
     u1_s_hmimaint_rstreq_pre = u1_s_hmimaint_rstreq;
-}
-
-/*===================================================================================================================================*/
-/*  void  vd_g_HmiMaintPut(const U1 u1_a_MAINTDIST)                                                                                  */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      u4_a_MAINTDIST  :  maintenance reset signal                                                                      */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void  vd_g_HmiMaintPut(const U1 u1_a_MAINTRST)
-{
-    U1 u1_t_sts;
-    U1 u1_t_mmmthd;
-
-    u1_t_sts = u1_g_HmiMM2C118NStsChk();
-    u1_t_mmmthd = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_AISETH);
-
-    if((u1_t_sts != (U1)HMIMM2C118N_STS_NML) && 
-        (u1_t_mmmthd == (U1)TRUE)){
-        u1_s_hmimaint_rstreq = (U1)0U;
-    }else{
-        u1_s_hmimaint_rstreq = u1_a_MAINTRST;
-    }
 }
 
 /*===================================================================================================================================*/
@@ -151,8 +114,6 @@ void  vd_g_HmiMaintPut(const U1 u1_a_MAINTRST)
 /*===================================================================================================================================*/
 void    vd_g_HmiMaintMetCstmPut(const U4 * u4_ap_REQ)
 {
-#if ((defined(MCST_MMCUSREQ)) && (MCST_MMCUSREQ == TRUE))
-#else
     U1 u1_t_exist;
 
     u1_t_exist = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_AISETH);
@@ -164,7 +125,6 @@ void    vd_g_HmiMaintMetCstmPut(const U4 * u4_ap_REQ)
         }
         u2_s_hmimaint_to   = (U2)HMIPROXY_TOC_INI;
     }
-#endif
 }
 
 /*===================================================================================================================================*/
@@ -180,7 +140,12 @@ void    vd_g_HmiMaintMetCstmPut(const U4 * u4_ap_REQ)
 /*  1.2.0    01/06/2021  TH       Follow 775B 1A.                                                                                    */
 /*  1.3.0    06/15/2021  TH       Add to Meter Custmize.                                                                             */
 /*                                                                                                                                   */
+/*  Revision Date        Author   Change Description                                                                                 */
+/* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
+/*  BEV-1    10/31/2025  MA       Change for BEV rebase                                                                              */
+/*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * TH   = Takahiro Hirano, Denso Techno                                                                                           */
+/*  * MA   = Misaki Aiki,  Denso Techno                                                                                              */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

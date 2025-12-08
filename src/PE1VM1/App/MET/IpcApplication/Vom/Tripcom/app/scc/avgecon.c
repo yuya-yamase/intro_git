@@ -1,4 +1,4 @@
-/* 2.0.2 */
+/* 2.1.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,8 +10,8 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define AVGECON_C_MAJOR                         (2)
-#define AVGECON_C_MINOR                         (0)
-#define AVGECON_C_PATCH                         (2)
+#define AVGECON_C_MINOR                         (1)
+#define AVGECON_C_PATCH                         (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -71,6 +71,8 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+static U1              u1_s_AvgEconImmwRunAct(const ST_AVGECON_CNTT * stp_a_CNTT, const U1 u1_a_UPDT, const U1 u1_a_INIT);
+static U1              u1_s_AvgEconImmwRstChk(const ST_AVGECON_CNTT * stp_a_CNTT);
 static U2              u2_s_AvgEconResConv(const ST_AVGECON_CNTT * stp_a_CNTT, U4 u4_a_xecon);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -95,6 +97,7 @@ void            vd_g_AvgEconInit(U1 * u1p_a_sts, ST_AVGECON_VAR * st_ap_var, con
         st_ap_var[u4_t_loop].u1_calcstsbit = (U1)AVGECON_CALCACT_ACT;
         st_ap_var[u4_t_loop].u1_initupdt   = (U1)FALSE;
         st_ap_var[u4_t_loop].u1_rstterm    = (U1)FALSE;
+        st_ap_var[u4_t_loop].u1_rstimmw    = (U1)TRIPCOM_RSTIMMW_UNK;
     }
 
     (*u1p_a_sts) = (U1)TRIPCOM_STSBIT_UNKNOWN;
@@ -254,6 +257,61 @@ void            vd_g_AvgEconUpdt(const ST_AVGECON_CNTT * stp_a_CNTT, const U1 u1
 }
 
 /*===================================================================================================================================*/
+/* void            vd_g_AvgEconRstImmw(const U1 u1_a_ACTV, const ST_AVGECON_CNTT * stp_a_CNTT, ST_AVGECON_VAR * stp_a_var, const U2 * u2_ap_STSFIELD) */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void            vd_g_AvgEconRstImmw(const U1 u1_a_ACTV, const ST_AVGECON_CNTT * stp_a_CNTT, ST_AVGECON_VAR * stp_a_var, const U2 * u2_ap_STSFIELD)
+{
+    U1                                          u1_t_rstimmw;
+    U1                                          u1_t_updt;
+    U1                                          u1_t_init;
+    U1                                          u1_t_accpt;
+    U1                                          u1_t_stsbit;
+
+    u1_t_rstimmw = stp_a_var->u1_rstimmw;
+
+    if((u1_t_rstimmw & (U1)TRIPCOM_RSTIMMW_RUN) == (U1)0U){
+        /* TRIPCOM_RSTIMMW_UNK or TRIPCOM_RSTIMMW_(SUC or TRIPCOM_RSTIMMW_FAI */
+        if(((u2_ap_STSFIELD[TRIPCOM_STSFIELD_AURST_IMMW] & stp_a_CNTT->u2_autoreset  ) != (U2)0U) ||
+           ((u2_ap_STSFIELD[TRIPCOM_STSFIELD_MARST_IMMW] & stp_a_CNTT->u2_manualreset) != (U2)0U)){
+            if(u1_a_ACTV == (U1)TRUE){
+                u1_t_updt = stp_a_var->u1_initupdt;
+                u1_t_init = (U1)FALSE;
+            }
+            else{
+                u1_t_updt = (U1)TRUE;
+                u1_t_init = (U1)TRUE;
+            }
+
+            u1_t_accpt = u1_s_AvgEconImmwRunAct(stp_a_CNTT, u1_t_updt, u1_t_init);
+            if(u1_t_accpt == (U1)TRUE){
+                u1_t_rstimmw = (U1)TRIPCOM_RSTIMMW_RUN;
+            }
+            else{
+                u1_t_rstimmw = (U1)TRIPCOM_RSTIMMW_FAI;
+            }
+        }
+    }
+    else{
+        /* TRIPCOM_RSTIMMW_RUN */
+        u1_t_stsbit = u1_s_AvgEconImmwRstChk(stp_a_CNTT);
+
+        if((u1_t_stsbit & (U1)TRIPCOM_MS_NVMSTS_SUC) != (U1)0x00U){
+            u1_t_rstimmw = (U1)TRIPCOM_RSTIMMW_SUC;
+        }
+        else if((u1_t_stsbit & (U1)TRIPCOM_MS_NVMSTS_FAIL) != (U1)0x00U){
+            u1_t_rstimmw = (U1)TRIPCOM_RSTIMMW_FAI;
+        }
+        else{
+            /* nothing */
+        }
+    }
+    stp_a_var->u1_rstimmw = u1_t_rstimmw;
+}
+
+/*===================================================================================================================================*/
 /* U2           u2_g_AvgEconCalcTx(const ST_AVGECON_CNTT * stp_a_CNTT, const U1 u1_a_RSTTRM, const U1 u1_a_UNIT, const U1 u1_a_TYPE) */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
@@ -291,6 +349,73 @@ U2              u2_g_AvgEconCalcTx(const ST_AVGECON_CNTT * stp_a_CNTT, const U1 
     }
 
     return (u2_t_txval);
+}
+
+/*===================================================================================================================================*/
+/* static U1       u1_s_AvgEconImmwRunAct(const ST_AVGECON_CNTT * stp_a_CNTT, const U1 u1_a_UPDT, const U1 u1_a_INIT)                */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static U1       u1_s_AvgEconImmwRunAct(const ST_AVGECON_CNTT * stp_a_CNTT, const U1 u1_a_UPDT, const U1 u1_a_INIT)
+{
+    U1                                          u1_t_accpt;
+    U1                                          u1_t_rslt_a;
+    U1                                          u1_t_rslt_b;
+    U1                                          u1_t_rslt_c;
+
+    u1_t_accpt = (U1)FALSE;
+
+    if(u1_a_UPDT == (U1)TRUE){
+        u1_t_rslt_a = u1_g_TripcomMsGetNvmRslt(stp_a_CNTT->u1_ms_economy_id);
+        u1_t_rslt_b = u1_g_TripcomMsGetNvmRslt(stp_a_CNTT->u1_ms_used_id   );
+        u1_t_rslt_c = u1_g_TripcomMsGetNvmRslt(stp_a_CNTT->u1_ms_odocnt_id );
+
+        if((u1_t_rslt_a != (U1)TRIPCOM_MS_NVMSTS_WAIT) &&
+           (u1_t_rslt_b != (U1)TRIPCOM_MS_NVMSTS_WAIT) &&
+           (u1_t_rslt_c != (U1)TRIPCOM_MS_NVMSTS_WAIT)){
+            if(u1_a_INIT == (U1)TRUE){
+                vd_g_TripcomMsSetAccmltVal(stp_a_CNTT->u1_ms_economy_id, (U4)0U);
+                vd_g_TripcomMsSetAccmltVal(stp_a_CNTT->u1_ms_used_id,    (U4)0U);
+                vd_g_TripcomMsSetAccmltVal(stp_a_CNTT->u1_ms_odocnt_id,  (U4)0U);
+            }
+
+            vd_g_TripcomMsSetNvmRqst(stp_a_CNTT->u1_ms_economy_id);
+            vd_g_TripcomMsSetNvmRqst(stp_a_CNTT->u1_ms_used_id   );
+            vd_g_TripcomMsSetNvmRqst(stp_a_CNTT->u1_ms_odocnt_id );
+
+            u1_t_accpt = (U1)TRUE;
+        }
+    }
+    return(u1_t_accpt);
+}
+
+/*===================================================================================================================================*/
+/* static U1       u1_s_AvgEconImmwRstChk(const ST_AVGECON_CNTT * stp_a_CNTT)                                                        */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static U1       u1_s_AvgEconImmwRstChk(const ST_AVGECON_CNTT * stp_a_CNTT)
+{
+    U1                                          u1_t_tmpbit;
+    U1                                          u1_t_stsbit;
+    U1                                          u1_t_sucbit;
+    U1                                          u1_t_faibit;
+
+    u1_t_stsbit = u1_g_TripcomMsGetNvmRslt(stp_a_CNTT->u1_ms_economy_id);
+
+    u1_t_tmpbit = u1_g_TripcomMsGetNvmRslt(stp_a_CNTT->u1_ms_used_id);
+    u1_t_sucbit = (U1)((u1_t_stsbit & u1_t_tmpbit) & (U1)TRIPCOM_MS_NVMSTS_SUC);
+    u1_t_faibit = (U1)((u1_t_stsbit | u1_t_tmpbit) & (U1)TRIPCOM_MS_NVMSTS_FAIL);
+    u1_t_stsbit = u1_t_sucbit | u1_t_faibit;
+
+    u1_t_tmpbit = u1_g_TripcomMsGetNvmRslt(stp_a_CNTT->u1_ms_odocnt_id);
+    u1_t_sucbit = (U1)((u1_t_stsbit & u1_t_tmpbit) & (U1)TRIPCOM_MS_NVMSTS_SUC);
+    u1_t_faibit = (U1)((u1_t_stsbit | u1_t_tmpbit) & (U1)TRIPCOM_MS_NVMSTS_FAIL);
+    u1_t_stsbit = u1_t_sucbit | u1_t_faibit;
+
+    return(u1_t_stsbit);
 }
 
 /*===================================================================================================================================*/
@@ -332,10 +457,12 @@ static  U2      u2_s_AvgEconResConv(const ST_AVGECON_CNTT * stp_a_CNTT, U4 u4_a_
 /*  1.0.2    10/07/2020  YA       Change for 800B CV-R                                                                               */
 /*  2.0.1    10/18/2021  TA(M)    Change the definition of the null pointer used.(BSW v115_r007)                                     */
 /*  2.0.2    10/27/2021  TK       QAC supported.                                                                                     */
+/*  2.1.0    02/18/2025  MaO(M)   Add privacy data delete/result API                                                                 */
 /*                                                                                                                                   */
 /*  * HY   = Hidefumi Yoshida, Denso                                                                                                 */
 /*  * YA   = Yuhei Aoyama, DensoTechno                                                                                               */
 /*  * TA(M)= Teruyuki Anjima, NTT Data MSE                                                                                           */
 /*  * TK   = Takanori Kuno, Denso Techno                                                                                             */
+/*  * MaO(M) = Masayuki Okada, NTT Data MSE                                                                                          */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

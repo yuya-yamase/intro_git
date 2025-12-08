@@ -64,6 +64,7 @@ U1      u1_g_AlertReqByCh(const U2 u2_a_CH);
 void    vd_g_AlertReqToBit(const ST_ALERT_REQBIT * st_ap_REQBIT, const U2 u2_a_NUM_REQBIT, U4 * u4_ap_reqbit, const U1 u1_a_NUM_WORD);
                                     /* u4_ap_reqbit   : If the st_ap_REQBIT is not met, the u4_ap_reqbit is not set.                 */
                                     /*                  i.e. The u4_ap_reqbit is not initialized.                                    */
+U1      u1_g_AlertGetReqSlot(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */

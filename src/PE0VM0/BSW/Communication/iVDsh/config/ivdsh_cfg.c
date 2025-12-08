@@ -42,9 +42,9 @@
 #define IVDSH_FQ_CH_WRI                          (0U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define IVDSH_WA_NWORD_WRI                       (6U)
+#define IVDSH_WA_NWORD_WRI                       (4U)
 
-#define IVDSH_WA_NWORD                           (6U)
+#define IVDSH_WA_NWORD                           (4U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -84,12 +84,10 @@ const ST_IVDSH_WA           st_gp_IVDSH_WA_BY_DID[IVDSH_NUM_DID] =
     /*------------------------------------------------------------------*/
     /* Write                                                            */
     /*------------------------------------------------------------------*/
-    {(U2)0U,        (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_CPREQ_006         */
-    {(U2)1U,        (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_CPREQ_008         */
-    {(U2)2U,        (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_CPREQ_029         */
-    {(U2)3U,        (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_CPREQ_032         */
-    {(U2)4U,        (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_CPREQ_035         */
-    {(U2)5U,        (U2)1U,         (U2)IVDSH_FQ_CH_WRI  }      /* IVDSH_DID_WRI_CPREQ_038         */
+    {(U2)0U,        (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_CANBUS_STS_2M1    */
+    {(U2)1U,        (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_CANBUS_STS_5M     */
+    {(U2)2U,        (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_CANBUS_STS_2M2    */
+    {(U2)3U,        (U2)1U,         (U2)IVDSH_FQ_CH_WRI  }      /* IVDSH_DID_WRI_CANBUS_STS_LCAN   */
 };
 const U2                    u2_g_IVDSH_NUM_DID = (U2)IVDSH_NUM_DID;
 

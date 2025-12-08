@@ -1,4 +1,4 @@
-/* 5.4.0 */
+/* 5.5.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define ALERT_B_RSEREM_C_MAJOR                   (5)
-#define ALERT_B_RSEREM_C_MINOR                   (4)
+#define ALERT_B_RSEREM_C_MINOR                   (5)
 #define ALERT_B_RSEREM_C_PATCH                   (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -21,10 +21,6 @@
 #include "alert_brx.h"
 
 #include "oxcan.h"
-#if 0   /* BEV BSW provisionally */
-#else
-#include "oxcan_channel_STUB.h"
-#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -39,8 +35,8 @@
 #define ALERT_B_RSEREM_IGOFF_NUM_DST             (32U)
 #define ALERT_B_RSEREM_BAT_NUM_DST               (32U)
 #define ALERT_B_RSEREM_OFFTT_NUM_DST             (32U)
-#define ALERT_B_RSEREM_BAT2_NUM_DST              (32U)
-#define ALERT_B_RSEREM_BAT3_NUM_DST              (32U)
+#define ALERT_B_RSEREM_BAT2_NUM_DST              (16U)
+#define ALERT_B_RSEREM_BAT3_NUM_DST              (16U)
 #define ALERT_B_RSEREM_IGOFF2_NUM_DST            (32U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -185,30 +181,15 @@ static const U1  u1_sp_ALERT_B_RSEREM_BAT2_DST[ALERT_B_RSEREM_BAT2_NUM_DST] = {
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 06 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 07 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 08 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 09 UNKNOWN                                         */
+    (U1)ALERT_REQ_B_RSEREM_BAT2_UNAVBL,                                        /* 09 UNAVBL                                          */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 10 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 11 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 12 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 13 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 14 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 15 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 16 UNKNOWN                                         */
-    (U1)ALERT_REQ_B_RSEREM_BAT2_UNAVBL,                                        /* 17 UNAVBL                                          */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 18 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 19 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 20 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 21 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 22 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 23 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 24 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 25 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 26 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 27 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 28 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 29 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 30 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN                                                      /* 31 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN                                                      /* 15 UNKNOWN                                         */
 };
+
 static const U1  u1_sp_ALERT_B_RSEREM_BAT3_DST[ALERT_B_RSEREM_BAT3_NUM_DST] = {
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 00 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 01 UNKNOWN                                         */
@@ -219,30 +200,15 @@ static const U1  u1_sp_ALERT_B_RSEREM_BAT3_DST[ALERT_B_RSEREM_BAT3_NUM_DST] = {
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 06 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 07 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 08 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 09 UNKNOWN                                         */
+    (U1)ALERT_REQ_B_RSEREM_BAT3_MALFNC,                                        /* 09 MALFNC                                          */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 10 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 11 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 12 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 13 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 14 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 15 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 16 UNKNOWN                                         */
-    (U1)ALERT_REQ_B_RSEREM_BAT3_MALFNC,                                        /* 17 MALFNC                                          */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 18 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 19 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 20 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 21 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 22 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 23 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 24 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 25 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 26 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 27 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 28 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 29 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 30 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN                                                      /* 31 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN                                                      /* 15 UNKNOWN                                         */
 };
+
 static const U1  u1_sp_ALERT_B_RSEREM_IGOFF2_DST[ALERT_B_RSEREM_IGOFF2_NUM_DST] = {
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 00 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 01 UNKNOWN                                         */
@@ -383,8 +349,8 @@ static U4      u4_s_AlertB_rseremIgoffSrcchk(const U1 u1_a_VOM, const U4 u4_a_IG
     U1              u1_t_sgnl;
 
     u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_BDB1S03_CH0,
-                                     (U4)ALERT_CAN_SYS_PNC_ALL,
-                                     u2_s_ALERT_B_RSEREM_IGOFF_TRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+                                      (U4)ALERT_CAN_SYS_ALL,
+                                      u2_s_ALERT_B_RSEREM_IGOFF_TRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     vd_g_AlertBRxTrnsSts(&u1_s_alert_b_rserem_igoff_msgsts, u1_t_msgsts);
 
@@ -417,8 +383,8 @@ static U4      u4_s_AlertB_rseremBatSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
     U1              u1_t_sgnl;
 
     u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_BDB1S03_CH0,
-                                     (U4)ALERT_CAN_SYS_PNC_ALL,
-                                     u2_s_ALERT_B_RSEREM_BAT_TRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+                                      (U4)ALERT_CAN_SYS_ALL,
+                                      u2_s_ALERT_B_RSEREM_BAT_TRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     vd_g_AlertBRxTrnsSts(&u1_s_alert_b_rserem_bat_msgsts, u1_t_msgsts);
 
@@ -451,15 +417,13 @@ static U4      u4_s_AlertB_rseremOffttSrcchk(const U1 u1_a_VOM, const U4 u4_a_IG
     U1              u1_t_sgnl;
 
     u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_BDB1S03_CH0,
-                                     (U4)ALERT_CAN_SYS_PNC_ALL,
-                                     u2_s_ALERT_B_RSEREM_OFFTT_TRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+                                      (U4)ALERT_CAN_SYS_ALL,
+                                      u2_s_ALERT_B_RSEREM_OFFTT_TRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     vd_g_AlertBRxTrnsSts(&u1_s_alert_b_rserem_offtt_msgsts, u1_t_msgsts);
 
     u1_t_sgnl     = (U1)0U;
-#ifdef ComConf_ComSignal_RSROFFTT
     (void)Com_ReceiveSignal(ComConf_ComSignal_RSROFFTT, &u1_t_sgnl);
-#endif /* ComConf_ComSignal_RSROFFTT */
 
     u4_t_src_chk  = (U4)u1_t_sgnl;
     u4_t_src_chk |= ((U4)u1_s_alert_b_rserem_offtt_msgsts << u1_s_ALERT_B_RSEREM_OFFTT_LSB);
@@ -481,22 +445,25 @@ static U4      u4_s_AlertB_rseremBat2Srcchk(const U1 u1_a_VOM, const U4 u4_a_IGN
 {
     static const U2 u2_s_ALERT_B_RSEREM_BAT2_TRSH   = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_B_RSEREM_BAT2_LSB    = (U1)2U;
-    static const U4 u4_s_ALERT_B_RSEREM_BAT2_BIT_WT = (U4)0x00000010U;
+    static const U4 u4_s_ALERT_B_RSEREM_BAT2_BIT_WT = (U4)0x00000008U;
     U4              u4_t_src_chk;
     U1              u1_t_msgsts;
     U1              u1_t_sgnl;
 
     u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_BDB1S03_CH0,
-                                     (U4)ALERT_CAN_SYS_PNC_ALL,
-                                     u2_s_ALERT_B_RSEREM_BAT2_TRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+                                      (U4)ALERT_CAN_SYS_ALL,
+                                      u2_s_ALERT_B_RSEREM_BAT2_TRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
+    if((u1_a_VOM & (U1)ALERT_VOM_IGN_ON) == (U1)0U){
+        u1_t_msgsts |= (U1)ALERT_BRX_FACT_NO_RX;
+    }
     vd_g_AlertBRxTrnsSts(&u1_s_alert_b_rserem_bat2_msgsts, u1_t_msgsts);
 
     u1_t_sgnl     = (U1)0U;
     (void)Com_ReceiveSignal(ComConf_ComSignal_RSRSENFT, &u1_t_sgnl);
 
     u4_t_src_chk  = (U4)u1_t_sgnl;
-    u4_t_src_chk |= ((U4)u1_s_alert_b_rserem_bat2_msgsts << u1_s_ALERT_B_RSEREM_BAT2_LSB);
+    u4_t_src_chk |= (((U4)u1_s_alert_b_rserem_bat2_msgsts & (U4)COM_NO_RX) << u1_s_ALERT_B_RSEREM_BAT2_LSB);
 
     if((u1_a_VOM & (U1)ALERT_VOM_BAT_WT) != (U1)0U){
         u4_t_src_chk |= u4_s_ALERT_B_RSEREM_BAT2_BIT_WT;
@@ -515,22 +482,25 @@ static U4      u4_s_AlertB_rseremBat3Srcchk(const U1 u1_a_VOM, const U4 u4_a_IGN
 {
     static const U2 u2_s_ALERT_B_RSEREM_BAT3_TRSH   = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_B_RSEREM_BAT3_LSB    = (U1)2U;
-    static const U4 u4_s_ALERT_B_RSEREM_BAT3_BIT_WT = (U4)0x00000010U;
+    static const U4 u4_s_ALERT_B_RSEREM_BAT3_BIT_WT = (U4)0x00000008U;
     U4              u4_t_src_chk;
     U1              u1_t_msgsts;
     U1              u1_t_sgnl;
 
     u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_BDB1S03_CH0,
-                                     (U4)ALERT_CAN_SYS_PNC_ALL,
-                                     u2_s_ALERT_B_RSEREM_BAT3_TRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+                                      (U4)ALERT_CAN_SYS_ALL,
+                                      u2_s_ALERT_B_RSEREM_BAT3_TRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
+    if((u1_a_VOM & (U1)ALERT_VOM_IGN_ON) == (U1)0U){
+        u1_t_msgsts |= (U1)ALERT_BRX_FACT_NO_RX;
+    }
     vd_g_AlertBRxTrnsSts(&u1_s_alert_b_rserem_bat3_msgsts, u1_t_msgsts);
 
     u1_t_sgnl     = (U1)0U;
     (void)Com_ReceiveSignal(ComConf_ComSignal_RSRSENFC, &u1_t_sgnl);
 
     u4_t_src_chk  = (U4)u1_t_sgnl;
-    u4_t_src_chk |= ((U4)u1_s_alert_b_rserem_bat3_msgsts << u1_s_ALERT_B_RSEREM_BAT3_LSB);
+    u4_t_src_chk |= (((U4)u1_s_alert_b_rserem_bat3_msgsts & (U4)COM_NO_RX) << u1_s_ALERT_B_RSEREM_BAT3_LSB);
 
     if((u1_a_VOM & (U1)ALERT_VOM_BAT_WT) != (U1)0U){
         u4_t_src_chk |= u4_s_ALERT_B_RSEREM_BAT3_BIT_WT;
@@ -555,8 +525,8 @@ static U4      u4_s_AlertB_rseremIgoff2Srcchk(const U1 u1_a_VOM, const U4 u4_a_I
     U1              u1_t_sgnl;
 
     u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_BDB1S03_CH0,
-                                     (U4)ALERT_CAN_SYS_PNC_ALL,
-                                     u2_s_ALERT_B_RSEREM_IGOFF2_TRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+                                      (U4)ALERT_CAN_SYS_ALL,
+                                      u2_s_ALERT_B_RSEREM_IGOFF2_TRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     vd_g_AlertBRxTrnsSts(&u1_s_alert_b_rserem_igoff2_msgsts, u1_t_msgsts);
 
@@ -588,6 +558,7 @@ static U4      u4_s_AlertB_rseremIgoff2Srcchk(const U1 u1_a_VOM, const U4 u4_a_I
 /*  5.3.1     5/30/2022  KK       Update for 840B#2 1A(Version update).                                                              */
 /*  5.3.2     6/24/2022  YN       Update for 840B#2 1A(Version update).                                                              */
 /*  5.4.0     2/09/2024  RO       Update for 19PFv3 CV                                                                               */
+/*  5.5.0    11/13/2024  KM       Bugfix of UNAVBL and MALFNC                                                                        */
 /*                                                                                                                                   */
 /*  * ZS   = Zenjiro Shamoto, NTTD MSE                                                                                               */
 /*  * TN   = Toshiaki Nagashima, NTTD MSE                                                                                            */
@@ -596,5 +567,6 @@ static U4      u4_s_AlertB_rseremIgoff2Srcchk(const U1 u1_a_VOM, const U4 u4_a_I
 /*  * KK   = Kenta Kawahara, NTTD MSE                                                                                                */
 /*  * YN   = Yuma Nagahara, NTTD MSE                                                                                                 */
 /*  * RO   = Ryo Oohashi, KSE                                                                                                        */
+/*  * KM   = Kazuma Miyazawa, DensoTechno                                                                                            */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

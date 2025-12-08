@@ -83,7 +83,6 @@ void    vd_g_HmiTtMainTask(void)
         u4_tp_mask[u4_t_loop] = (U4)U4_MAX;
     }
     vd_g_HmiTtCfgVarmask(&u4_tp_mask[0]);
-    vd_g_HmiTtCfgCstmask(&u4_tp_mask[0]);
     vd_g_HmiTtCfgDestmask(&u4_tp_mask[0]);
 
     for(u4_t_loop = (U4)0U ; u4_t_loop < (U4)HMITT_NUM ; u4_t_loop++){
@@ -126,9 +125,14 @@ void    vd_g_HmiTt(U4 * u4_ap_req , const U1 u1_a_NWORD)
 /*  1.8.0    10/15/2024  KO       hmitt_if_cfg.c v1.6.0 -> v1.8.0. (Setting for BEV System_Consideration_1.)                         */
 /*  1.9.0    06/23/2025  HY       hmitt_if_cfg.c v1.8.0 -> v1.9.0. (Setting for BEV System_Consideration_2.)                         */
 /*                                                                                                                                   */
+/*  Revision Date        Author   Change Description                                                                                 */
+/* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
+/*  BEV-1    10/31/2025  MA       Change for BEV rebase                                                                              */
+/*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * TH   = Takahiro Hirano, Denso Techno                                                                                           */
 /*  * DR   = Dyan Reyes, DTPH                                                                                                        */
+/*  * MA   = Misaki Aiki,  Denso Techno                                                                                              */
 /*  * KO   = Kazuto Oishi,  Denso Techno                                                                                             */
 /*  * HY   = Haruki Yagi, KSE                                                                                                        */
 /*                                                                                                                                   */
