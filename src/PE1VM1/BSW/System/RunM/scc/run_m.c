@@ -1,4 +1,4 @@
-/* 1.12.0 */
+/* 1.13.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -11,7 +11,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define RUN_M_C_MAJOR                            (1)
-#define RUN_M_C_MINOR                            (12)
+#define RUN_M_C_MINOR                            (13)
 #define RUN_M_C_PATCH                            (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -47,7 +47,6 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static U4     u4_s_run_m_shtdwndlycnt;                           /* Shutdown Delay Timer/Counter   */
 static U1     u1_s_run_m_shtdwnrqst;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -67,7 +66,6 @@ static U1     u1_s_run_m_shtdwnrqst;
 /*===================================================================================================================================*/
 void    vd_g_RunMInit(void)
 {
-    u4_s_run_m_shtdwndlycnt = (U4)U4_MAX;
     u1_s_run_m_shtdwnrqst   = (U1)FALSE;
 
     vd_g_RunMCfgInit();
@@ -87,24 +85,10 @@ void    vd_g_RunMMainTask(void)
     
     u4_t_shtdwnrqst_frcd = (U4)FALSE;
 
-    if(u4_s_run_m_shtdwndlycnt > (U4)U2_MAX){
-        u4_s_run_m_shtdwndlycnt = (U4)0U;
-    }
-    else if(u4_s_run_m_shtdwndlycnt >= (U4)u2_g_RUN_M_TIMOUT_TO_SHTDWN){
-        u4_s_run_m_shtdwndlycnt = (U4)u2_g_RUN_M_TIMOUT_TO_SHTDWN;
-    }
-    else{
-        u4_s_run_m_shtdwndlycnt++;
-    }
-
     u1_t_shtdwn_1st  = u1_g_RunMCfghkShtdwnchk1st();
     u1_t_shtdwn_1st &= u1_g_RunMCfgWksrcIrqchk();
     vd_g_RunMCfgWksrcCfgRefresh();
     if((u1_t_shtdwn_1st & ((U1)RUN_M_NRML_SLP_CHK_TRUE | (U1)RUN_M_FRCD_SLP_CHK_TRUE)) == (U1)0U){
-        u1_t_shtdwn_1st = (U1)FALSE;
-        u4_s_run_m_shtdwndlycnt = (U4)0U;
-    }
-    else if(u4_s_run_m_shtdwndlycnt < (U4)u2_g_RUN_M_TIMOUT_TO_SHTDWN){
         u1_t_shtdwn_1st = (U1)FALSE;
     }
     else if((u1_t_shtdwn_1st & (U1)RUN_M_FRCD_SLP_CHK_TRUE) != (U1)0U){
@@ -115,7 +99,7 @@ void    vd_g_RunMMainTask(void)
      /* u1_t_shtdwn_1st = (U1)TRUE; */
     }
 
-    u1_t_shtdwn_2nd = u1_g_RunMCfghkShtdwnchk2nd(u1_t_shtdwn_1st, (U2)u4_s_run_m_shtdwndlycnt);
+    u1_t_shtdwn_2nd = u1_g_RunMCfghkShtdwnchk2nd(u1_t_shtdwn_1st);
     u1_s_run_m_shtdwnrqst = u1_t_shtdwn_1st & u1_t_shtdwn_2nd;
     u4_t_shtdwnrqst_nrml  = (U4)u1_s_run_m_shtdwnrqst;
 
@@ -135,7 +119,6 @@ U1      u1_g_RunMShtdwnRqst(void)
 
     u1_t_shtdwn = u1_g_RunMCfgWksrcIrqchk();
     if((u1_t_shtdwn & ((U1)RUN_M_NRML_SLP_CHK_TRUE | (U1)RUN_M_FRCD_SLP_CHK_TRUE)) == (U1)0U){
-        u4_s_run_m_shtdwndlycnt = (U4)U4_MAX;
         u1_s_run_m_shtdwnrqst   = (U1)FALSE;
     }
 
@@ -167,6 +150,7 @@ U1      u1_g_RunMShtdwnRqst(void)
 /*  1.11.0    3/ 4/2019  TN       Improvement : u1_s_bsw_m_shtdwnrqst was determined depend on u1_t_shtdwn_1st and u1_t_shtdwn_2nd   */
 /*                                              in vd_g_BswMMainTask.                                                                */
 /*  1.12.0    6/24/2025  RS       Change for BEV PreCV.                                                                              */
+/*  1.13.0   11/25/2025  RS       Delete 60s count from MET sleep condition.                                                         */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
 /*  * RS   = Ryuki Sako, Denso Techno                                                                                                */

@@ -1,43 +1,38 @@
-/* 2.7.0 */
+/* 5.0.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-/*  Variation Defines / Power-train System Rx                                                                                        */
+/*  Alert S_TMTT                                                                                                                     */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define VARDEF_PTS_RX_C_MAJOR                    (2)
-#define VARDEF_PTS_RX_C_MINOR                    (7)
-#define VARDEF_PTS_RX_C_PATCH                    (0)
+#define ALERT_S_TMTT_C_MAJOR                     (5)
+#define ALERT_S_TMTT_C_MINOR                     (0)
+#define ALERT_S_TMTT_C_PATCH                     (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#include "aip_common.h"
-#include "vardef_ptsrx_cfg_private.h"
-/* #include "vardef_ptsrx.h" */ /* vardef_ptsx.h is included in vardef_dbf.h */
-#include "vardef.h"
+#include "alert_cfg_private.h"
+#include "alert_mtrx_cfg_private.h"
+
+#include "oxcan.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if ((VARDEF_PTS_RX_C_MAJOR != VARDEF_PTS_RX_H_MAJOR) || \
-     (VARDEF_PTS_RX_C_MINOR != VARDEF_PTS_RX_H_MINOR) || \
-     (VARDEF_PTS_RX_C_PATCH != VARDEF_PTS_RX_H_PATCH))
-#error "vardef_ptsrx.c and vardef_ptsrx.h : source and header files are inconsistent!"
-#endif
-
-#if ((VARDEF_PTS_RX_C_MAJOR != VARDEF_PTS_RX_CFG_H_MAJOR) || \
-     (VARDEF_PTS_RX_C_MINOR != VARDEF_PTS_RX_CFG_H_MINOR) || \
-     (VARDEF_PTS_RX_C_PATCH != VARDEF_PTS_RX_CFG_H_PATCH))
-#error "vardef_pts.c and vardef_ptsrx_cfg_private.h : source and header files are inconsistent!"
+#if (ALERT_S_TMTT_C_MAJOR != ALERT_CFG_H_MAJOR)
+#error "alert_S_TMTT.c and alert_cfg_private.h : source and header files are inconsistent!"
 #endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#define ALERT_S_TMTT_NUM_DST                     (16U)
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -47,35 +42,79 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+static U4      u4_s_AlertS_tmttSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS);
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+static const U1  u1_sp_ALERT_S_TMTT_DST[ALERT_S_TMTT_NUM_DST] = {
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 00 UNKNOWN                                         */
+    (U1)ALERT_REQ_S_TMTT_ON,                                                   /* 01 ON                                              */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 02 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 03 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 04 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 05 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 06 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 07 UNKNOWN                                         */
+    (U1)ALERT_REQ_S_TMTT_ON,                                                   /* 08 ON                                              */
+    (U1)ALERT_REQ_S_TMTT_ON,                                                   /* 09 ON                                              */
+    (U1)ALERT_REQ_S_TMTT_ON,                                                   /* 10 ON                                              */
+    (U1)ALERT_REQ_S_TMTT_ON,                                                   /* 11 ON                                              */
+    (U1)ALERT_REQ_S_TMTT_ON,                                                   /* 12 ON                                              */
+    (U1)ALERT_REQ_S_TMTT_ON,                                                   /* 13 ON                                              */
+    (U1)ALERT_REQ_S_TMTT_ON,                                                   /* 14 ON                                              */
+    (U1)ALERT_REQ_S_TMTT_ON                                                    /* 15 ON                                              */
+};
+
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+const ST_ALERT_MTRX st_gp_ALERT_S_TMTT_MTRX[1] = {
+    {
+        &u4_s_AlertS_tmttSrcchk,                                               /* fp_u4_SRC_CHK                                      */
+        vdp_PTR_NA,                                                            /* fp_vd_XDST                                         */
+
+        (const U4 *)vdp_PTR_NA,                                                /* u4p_MASK                                           */
+        (const U4 *)vdp_PTR_NA,                                                /* u4p_CRIT                                           */
+
+        &u1_sp_ALERT_S_TMTT_DST[0],                                            /* u1p_DST                                            */
+        (U2)ALERT_S_TMTT_NUM_DST,                                              /* u2_num_srch                                        */
+        (U1)ALERT_VOM_IGN_ON                                                   /* u1_vom_act                                         */
+    }
+};
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*===================================================================================================================================*/
-/*  U1      u1_g_VardefPtsRx(void)                                                                                                   */
+/*  static U4      u4_s_AlertS_tmttSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)                                */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-U1      u1_g_VardefPtsRx(void)
+static U4      u4_s_AlertS_tmttSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
-    return((U1)VDF_PTS_RX_05_ELE_BAT);
+    static const U2 u2_s_ALERT_S_TMTT_TO_THRSH = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
+    static const U1 u1_s_ALERT_S_TMTT_LSB_STS  = (U1)2U;
+    U4              u4_t_src_chk;
+    U1              u1_t_msgsts;
+    U1              u1_t_sgnl;
+
+    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_ADC1S14_CH0,
+                                      (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP,
+                                      u2_s_ALERT_S_TMTT_TO_THRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+
+    u1_t_sgnl     = (U1)0U;
+    (void)Com_ReceiveSignal(ComConf_ComSignal_ADDOTTT, &u1_t_sgnl);
+    u4_t_src_chk  = (U4)u1_t_sgnl;
+
+    u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_S_TMTT_LSB_STS);
+
+    return(u4_t_src_chk);
 }
-/*===================================================================================================================================*/
-/*  U1      u1_g_VardefPtinfbRx(void)                                                                                                */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1      u1_g_VardefPtinfbRx(void)
-{
-    return((U1)VDF_PTINFB_RX_04_BEV);
-}
+
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
@@ -84,20 +123,8 @@ U1      u1_g_VardefPtinfbRx(void)
 /*                                                                                                                                   */
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  1.0.0     3/26/2020  TN       New.                                                                                               */
-/*  2.1.0     9/28/2020  SF       Change Memory : NVM -> RIM.                                                                        */
-/*  2.2.0     1/25/2021  SF       Change PTSYS judgment time                                                                         */
-/*  2.3.0     8/30/2022  RO       Add PTSYS Macro                                                                                    */
-/*  2.4.0     9/06/2022  RO       Change PTSYS Logic                                                                                 */
-/*  2.5.0     6/20/2024  JMH      Add PTSYS Rim Function                                                                             */
-/*  2.6.0     2/06/2025  SF       Setting for BEV System_Consideration_1.                                                            */
-/*  2.7.0    12/05/2025  KH       Setting for BEV System_Consideration_ADAS.                                                         */
+/*  5.0.0    11/27/2025  PG       New.                                                                                               */
 /*                                                                                                                                   */
-/*  * TN  = Takashi Nagai, DENSO                                                                                                     */
-/*  * SF  = Seiya Fukutome, DENSO TECHNO                                                                                             */
-/*  * RO  = Reiya Okuda, KSE                                                                                                         */
-/*  * JMH = James Michael D. Hilarion, DTPH                                                                                          */
-/*  * SF  = Shiro Furui, DENSO TECHNO                                                                                                */
-/*  * KH  = Kiko Huerte, DTPH                                                                                                        */
+/*  * PG   = Patrick Garcia, DTPH                                                                                                    */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

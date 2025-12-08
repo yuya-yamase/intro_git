@@ -130,6 +130,9 @@
 #define ALERT_C_HCS_CH_NUM                       (3U)
 #define ALERT_H_BATTRW_CH_NUM                    (1U)
 #define ALERT_O_PDSMAL_CH_NUM                    (2U)
+#define ALERT_S_TMTT_CH_NUM                      (1U)
+#define ALERT_S_TMBZR_CH_NUM                     (2U)
+#define ALERT_B_TURHAZ_CH_NUM                    (2U)
 
 #define ALERT_SPD_STSBIT_VALID                   (VEHSPD_STSBIT_VALID)
 #define ALERT_SPD_STSBIT_UNKNOWN                 (VEHSPD_STSBIT_UNKNOWN)
@@ -137,12 +140,11 @@
 #define ALERT_SPD_FLUCT_DECR                     (VEHSPD_FLUCT_DECR)
 #define ALERT_PTSYS_0F_UNK                       (VDF_PTS_RX_0F_UNK)
 #define ALERT_PTSYS_1F_NRX                       (VDF_PTS_RX_1F_NRX)
-#define ALERT_STEER_VD_PTSYS_UNDEF               (VDF_PTS_RX_00_UNK)
-#define ALERT_STEER_VD_PTSYS_HV                  (VDF_PTS_RX_03_HYB)
-#define ALERT_STEER_VD_PTSYS_PHV                 (VDF_PTS_RX_04_HYB_PLU)
-#define ALERT_STEER_VD_PTSYS_EV                  (VDF_PTS_RX_05_ELE_BAT)
-#define ALERT_STEER_VD_PTSYS_HV_MOT              (VDF_PTS_RX_06_HYB_MOT)
-#define ALERT_STEER_VD_PTSYS_FCV                 (VDF_PTS_RX_07_ELE_HYD)
+#define ALERT_STEER_VD_PTINFB_UNK                (VDF_PTINFB_RX_0F_UNK)
+#define ALERT_STEER_VD_PTINFB_HEV                (VDF_PTINFB_RX_01_HEV)
+#define ALERT_STEER_VD_PTINFB_PHEV               (VDF_PTINFB_RX_02_PHEV)
+#define ALERT_STEER_VD_PTINFB_FCEV               (VDF_PTINFB_RX_03_FCEV)
+#define ALERT_STEER_VD_PTINFB_BEV                (VDF_PTINFB_RX_04_BEV)
 #if 0   /* BEV Rebase provisionally */
 #define ALERT_SHIFT_BZ_REV_SOUNDTYPE_IN          (VDF_DS_2E_SBWC2_IN)
 #else   /* BEV Rebase provisionally */
@@ -156,6 +158,7 @@
 #define u1_g_AlertSpdKmphInst(u2_ap_kmph, u1_a_OW_EN)               (u1_g_VehspdKmphInst(u2_ap_kmph, u1_a_OW_EN))
 #define u1_g_AlertSpdFluctStat()                                    (u1_g_VehspdFluctStat())
 #define u1_g_AlertPtsys()                                           (u1_g_VardefPtsRx())
+#define u1_g_AlertPtinfb()                                          (u1_g_VardefPtinfbRx())
 #if 0   /* BEV Rebase provisionally */
 #define u4_g_AlertRevBzrSoundType()                                 (u4_g_VardefDs2E_Las32((U2)VDF_DS_2E_20C2))
 #else   /* BEV Rebase provisionally */
@@ -215,6 +218,7 @@ void    vd_g_AlertB_aloa2Init(void);
 void    vd_g_AlertC_hcsInit(void);
 void    vd_g_AlertH_battrwInit(void);
 void    vd_g_AlertO_pdsmalInit(void);
+void    vd_g_AlertB_turhazInit(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* Required  */
@@ -311,6 +315,9 @@ extern const ST_ALERT_MTRX         st_gp_ALERT_C_BRPADW_MTRX[ALERT_C_BRPADW_CH_N
 extern const ST_ALERT_MTRX         st_gp_ALERT_C_HCS_MTRX[ALERT_C_HCS_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_H_BATTRW_MTRX[ALERT_H_BATTRW_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_O_PDSMAL_MTRX[ALERT_O_PDSMAL_CH_NUM];
+extern const ST_ALERT_MTRX         st_gp_ALERT_S_TMTT_MTRX[ALERT_S_TMTT_CH_NUM];
+extern const ST_ALERT_MTRX         st_gp_ALERT_S_TMBZR_MTRX[ALERT_S_TMBZR_CH_NUM];
+extern const ST_ALERT_MTRX         st_gp_ALERT_B_TURHAZ_MTRX[ALERT_B_TURHAZ_CH_NUM];
 
 #endif      /* ALERT_MTRX_CFG_H */
 
