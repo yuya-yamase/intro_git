@@ -52,4 +52,14 @@ typedef struct {
     EhvmConst ehvm_mpu_memory_entry_t*  MpuFixedHostEntry;
 } ehvm_mpu_config_t;
 
+typedef struct {
+    ehvm_uint32_t MmRomramLowerAddr;
+    ehvm_uint32_t MmRomramUpperAddr;
+} ehvm_mm_romram_area_t;
+
+typedef struct {
+    EhvmConst ehvm_mm_romram_area_t* MmRomramArea;
+    ehvm_uint8_t                     MmNumOfRomramArea;
+} ehvm_mm_common_config_t;
+
 #endif /* EHVM_TYPES_CFG_MP_MPU_H */

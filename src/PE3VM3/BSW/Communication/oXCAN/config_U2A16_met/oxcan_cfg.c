@@ -33,23 +33,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define OXCAN_IRQ_CH_RX0                         (299U)
-#define OXCAN_IRQ_CH_TX0                         (300U)
-#define OXCAN_IRQ_CH_RX1                         (302U)
-#define OXCAN_IRQ_CH_TX1                         (303U)
-#define OXCAN_IRQ_CH_RX2                         (305U)
-#define OXCAN_IRQ_CH_TX2                         (306U)
-#define OXCAN_IRQ_CH_RX3                         (308U)
-#define OXCAN_IRQ_CH_TX3                         (309U)
-#define OXCAN_IRQ_CH_RX4                         (311U)
-#define OXCAN_IRQ_CH_TX4                         (312U)
-#define OXCAN_IRQ_CH_RX5                         (314U)
-#define OXCAN_IRQ_CH_TX5                         (315U)
-#define OXCAN_IRQ_CH_RX6                         (317U)
-#define OXCAN_IRQ_CH_TX6                         (318U)
-#define OXCAN_IRQ_CH_RX7                         (320U)
-#define OXCAN_IRQ_CH_TX7                         (321U)
-
+#define OXCAN_CFG_NUM_IRQ_EN        (0U)        /* ref. u2_sp_OXCAN_IRQ_CH[] */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -62,8 +46,10 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#if (OXCAN_CFG_NUM_IRQ_EN != 0U)
 static void    vd_s_oXCANCfgEI(void);
 static void    vd_s_oXCANCfgDI(void);
+#endif /* (OXCAN_CFG_NUM_IRQ_EN != 0U) */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
@@ -71,6 +57,51 @@ static void    vd_s_oXCANCfgDI(void);
 const U1         u1_gp_OXCAN_CTRLR_BY_CH[BSW_COM_CFG_CHNUM] = {
     (U1)U1_MAX  /* CAN Virtual Channel  =  0 ch. */
 };
+
+#if (OXCAN_CFG_NUM_IRQ_EN != 0U)
+    /*---------------------------------------------------------------------------------------------------------------*/
+    /* Define the IRQ channels to enable CAN transmit/receive interrupts with reference to the following.            */
+    /*---------------------------------------------------------------------------------------------------------------*/
+    /* For controllers 0-7:                                                                                          */
+    /*   configure by referencing "CAN_CFG_RX_PROCESSING_x"/"CAN_CFG_TX_PROCESSING_x" in can_rscf4_cfg.h             */
+    /* For controllers 8-15:                                                                                         */
+    /*   configure by referencing "CAN_CFG_RX_PROCESSING_x"/"CAN_CFG_TX_PROCESSING_x" in can_rscf4c_cfg.h            */
+    /*---------------------------------------------------------------------------------------------------------------*/
+static const U2    u2_sp_OXCAN_IRQ_CH[OXCAN_CFG_NUM_IRQ_EN] = {
+    /*(U2)299U,       */ /* Controller  0 Rx   */
+    /*(U2)300U,       */ /* Controller  0 Tx   */
+    /*(U2)302U,       */ /* Controller  1 Rx   */
+    /*(U2)303U,       */ /* Controller  1 Tx   */
+    /*(U2)305U,       */ /* Controller  2 Rx   */
+    /*(U2)306U,       */ /* Controller  2 Tx   */
+    /*(U2)308U,       */ /* Controller  3 Rx   */
+    /*(U2)309U,       */ /* Controller  3 Tx   */
+    /*(U2)311U,       */ /* Controller  4 Rx   */
+    /*(U2)312U,       */ /* Controller  4 Tx   */
+    /*(U2)314U,       */ /* Controller  5 Rx   */
+    /*(U2)315U,       */ /* Controller  5 Tx   */
+    /*(U2)317U,       */ /* Controller  6 Rx   */
+    /*(U2)318U,       */ /* Controller  6 Tx   */
+    /*(U2)320U,       */ /* Controller  7 Rx   */
+    /*(U2)321U,       */ /* Controller  7 Tx   */
+    /*(U2)325U,       */ /* Controller  8 Rx    */
+    /*(U2)326U,       */ /* Controller  8 Tx    */
+    /*(U2)328U,       */ /* Controller  9 Rx    */
+    /*(U2)329U,       */ /* Controller  9 Tx    */
+    /*(U2)331U,       */ /* Controller 10 Rx    */
+    /*(U2)332U,       */ /* Controller 10 Tx    */
+    /*(U2)334U,       */ /* Controller 11 Rx    */
+    /*(U2)335U,       */ /* Controller 11 Tx    */
+    /*(U2)337U,       */ /* Controller 12 Rx    */
+    /*(U2)338U,       */ /* Controller 12 Tx    */
+    /*(U2)340U,       */ /* Controller 13 Rx    */
+    /*(U2)341U,       */ /* Controller 13 Tx    */
+    /*(U2)343U,       */ /* Controller 14 Rx    */
+    /*(U2)344U,       */ /* Controller 14 Tx    */
+    /*(U2)346U,       */ /* Controller 15 Rx    */
+    /*(U2)347U,       */ /* Controller 15 Tx    */
+};
+#endif /* (OXCAN_CFG_NUM_IRQ_EN != 0U) */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
@@ -86,7 +117,9 @@ void    vd_g_oXCANCfgRstInit(void)
 #ifdef CAN_LPR_TEST_H
     vd_g_CANLpRTestInit();
 #endif /* #ifdef CAN_LPR_TEST_H */
+#if (OXCAN_CFG_NUM_IRQ_EN != 0U)
     vd_s_oXCANCfgEI();                 /* vd_s_oXCANCfgEI shall be called at end                      */
+#endif /* (OXCAN_CFG_NUM_IRQ_EN != 0U) */
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_oXCANCfgWkupInit(void)                                                                                              */
@@ -99,7 +132,9 @@ void    vd_g_oXCANCfgWkupInit(void)
 #ifdef CAN_LPR_TEST_H
     vd_g_CANLpRTestInit();
 #endif /* #ifdef CAN_LPR_TEST_H */
+#if (OXCAN_CFG_NUM_IRQ_EN != 0U)
     vd_s_oXCANCfgEI();                /* vd_s_oXCANCfgEI shall be called at end                      */
+#endif /* (OXCAN_CFG_NUM_IRQ_EN != 0U) */
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_oXCANCfgVomEvhk(const U4 u4_a_SYSBIT_LAST, const U4 u4_a_SYSBIT_NEXT)                                               */
@@ -157,7 +192,9 @@ void    vd_g_oXCANCfgPosTask(const U4 u4_a_SYSBIT, const U2 u2_a_FATAL)
 /*-------------------------------------------------------------------------------------*/
     }
 
+#if (OXCAN_CFG_NUM_IRQ_EN != 0U)
     vd_s_oXCANCfgEI();
+#endif /* (OXCAN_CFG_NUM_IRQ_EN != 0U) */
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_oXCANCfgShtdwn(void)                                                                                                */
@@ -167,7 +204,9 @@ void    vd_g_oXCANCfgPosTask(const U4 u4_a_SYSBIT, const U2 u2_a_FATAL)
 /*===================================================================================================================================*/
 void    vd_g_oXCANCfgShtdwn(void)
 {
+#if (OXCAN_CFG_NUM_IRQ_EN != 0U)
     vd_s_oXCANCfgDI();               /* vd_s_oXCANCfgDI shall be called at 1st                     */
+#endif /* (OXCAN_CFG_NUM_IRQ_EN != 0U) */
 }
 /*===================================================================================================================================*/
 /*  U4      u4_g_oXCANCfgSyschk(void)                                                                                                */
@@ -263,6 +302,7 @@ U4      u4_g_oXCANCfgSyschk(void)
     return(u4_t_sys_chk | (U4)OXCAN_SYS_BAT);
 #endif
 }
+#if (OXCAN_CFG_NUM_IRQ_EN != 0U)
 /*===================================================================================================================================*/
 /*  static void    vd_s_oXCANCfgEI(void)                                                                                             */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
@@ -271,69 +311,11 @@ U4      u4_g_oXCANCfgSyschk(void)
 /*===================================================================================================================================*/
 static void    vd_s_oXCANCfgEI(void)
 {
-#if (CAN_CFG_RX_PROCESSING_0 == CAN_INTERRUPT)
-    vd_g_IntHndlrIRQCtrlCh((U2)OXCAN_IRQ_CH_RX0, (U1)INT_HNDLR_IRQ_CTRL_CH_ENA);
-#endif
-
-#if (CAN_CFG_TX_PROCESSING_0 == CAN_INTERRUPT)
-    vd_g_IntHndlrIRQCtrlCh((U2)OXCAN_IRQ_CH_TX0, (U1)INT_HNDLR_IRQ_CTRL_CH_ENA);
-#endif
-
-#if (CAN_CFG_RX_PROCESSING_1 == CAN_INTERRUPT)
-    vd_g_IntHndlrIRQCtrlCh((U2)OXCAN_IRQ_CH_RX1, (U1)INT_HNDLR_IRQ_CTRL_CH_ENA);
-#endif
-
-#if (CAN_CFG_TX_PROCESSING_1 == CAN_INTERRUPT)
-    vd_g_IntHndlrIRQCtrlCh((U2)OXCAN_IRQ_CH_TX1, (U1)INT_HNDLR_IRQ_CTRL_CH_ENA);
-#endif
-
-#if (CAN_CFG_RX_PROCESSING_2 == CAN_INTERRUPT)
-    vd_g_IntHndlrIRQCtrlCh((U2)OXCAN_IRQ_CH_RX2, (U1)INT_HNDLR_IRQ_CTRL_CH_ENA);
-#endif
-
-#if (CAN_CFG_TX_PROCESSING_2 == CAN_INTERRUPT)
-    vd_g_IntHndlrIRQCtrlCh((U2)OXCAN_IRQ_CH_TX2, (U1)INT_HNDLR_IRQ_CTRL_CH_ENA);
-#endif
-
-#if (CAN_CFG_RX_PROCESSING_3 == CAN_INTERRUPT)
-    vd_g_IntHndlrIRQCtrlCh((U2)OXCAN_IRQ_CH_RX3, (U1)INT_HNDLR_IRQ_CTRL_CH_ENA);
-#endif
-
-#if (CAN_CFG_TX_PROCESSING_3 == CAN_INTERRUPT)
-    vd_g_IntHndlrIRQCtrlCh((U2)OXCAN_IRQ_CH_TX3, (U1)INT_HNDLR_IRQ_CTRL_CH_ENA);
-#endif
-
-#if (CAN_CFG_RX_PROCESSING_4 == CAN_INTERRUPT)
-    vd_g_IntHndlrIRQCtrlCh((U2)OXCAN_IRQ_CH_RX4, (U1)INT_HNDLR_IRQ_CTRL_CH_ENA);
-#endif
-
-#if (CAN_CFG_TX_PROCESSING_4 == CAN_INTERRUPT)
-    vd_g_IntHndlrIRQCtrlCh((U2)OXCAN_IRQ_CH_TX4, (U1)INT_HNDLR_IRQ_CTRL_CH_ENA);
-#endif
-
-#if (CAN_CFG_RX_PROCESSING_5 == CAN_INTERRUPT)
-    vd_g_IntHndlrIRQCtrlCh((U2)OXCAN_IRQ_CH_RX5, (U1)INT_HNDLR_IRQ_CTRL_CH_ENA);
-#endif
-
-#if (CAN_CFG_TX_PROCESSING_5 == CAN_INTERRUPT)
-    vd_g_IntHndlrIRQCtrlCh((U2)OXCAN_IRQ_CH_TX5, (U1)INT_HNDLR_IRQ_CTRL_CH_ENA);
-#endif
-
-#if (CAN_CFG_RX_PROCESSING_6 == CAN_INTERRUPT)
-    vd_g_IntHndlrIRQCtrlCh((U2)OXCAN_IRQ_CH_RX6, (U1)INT_HNDLR_IRQ_CTRL_CH_ENA);
-#endif
-
-#if (CAN_CFG_TX_PROCESSING_6 == CAN_INTERRUPT)
-    vd_g_IntHndlrIRQCtrlCh((U2)OXCAN_IRQ_CH_TX6, (U1)INT_HNDLR_IRQ_CTRL_CH_ENA);
-#endif
-
-#if (CAN_CFG_RX_PROCESSING_7 == CAN_INTERRUPT)
-    vd_g_IntHndlrIRQCtrlCh((U2)OXCAN_IRQ_CH_RX7, (U1)INT_HNDLR_IRQ_CTRL_CH_ENA);
-#endif
-
-#if (CAN_CFG_TX_PROCESSING_7 == CAN_INTERRUPT)
-    vd_g_IntHndlrIRQCtrlCh((U2)OXCAN_IRQ_CH_TX7, (U1)INT_HNDLR_IRQ_CTRL_CH_ENA);
-#endif
+    U4    u4_t_lpcnt;
+    
+    for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)OXCAN_CFG_NUM_IRQ_EN; u4_t_lpcnt++){
+        vd_g_IntHndlrIRQCtrlCh(u2_sp_OXCAN_IRQ_CH[u4_t_lpcnt], (U1)INT_HNDLR_IRQ_CTRL_CH_ENA);
+    }
 }
 /*===================================================================================================================================*/
 /*  static void    vd_s_oXCANCfgDI(void)                                                                                             */
@@ -343,70 +325,14 @@ static void    vd_s_oXCANCfgEI(void)
 /*===================================================================================================================================*/
 static void    vd_s_oXCANCfgDI(void)
 {
-#if (CAN_CFG_RX_PROCESSING_0 == CAN_INTERRUPT)
-    vd_g_IntHndlrIRQCtrlCh((U2)OXCAN_IRQ_CH_RX0, (U1)0U);
-#endif
 
-#if (CAN_CFG_TX_PROCESSING_0 == CAN_INTERRUPT)
-    vd_g_IntHndlrIRQCtrlCh((U2)OXCAN_IRQ_CH_TX0, (U1)0U);
-#endif
-
-#if (CAN_CFG_RX_PROCESSING_1 == CAN_INTERRUPT)
-    vd_g_IntHndlrIRQCtrlCh((U2)OXCAN_IRQ_CH_RX1, (U1)0U);
-#endif
-
-#if (CAN_CFG_TX_PROCESSING_1 == CAN_INTERRUPT)
-    vd_g_IntHndlrIRQCtrlCh((U2)OXCAN_IRQ_CH_TX1, (U1)0U);
-#endif
-
-#if (CAN_CFG_RX_PROCESSING_2 == CAN_INTERRUPT)
-    vd_g_IntHndlrIRQCtrlCh((U2)OXCAN_IRQ_CH_RX2, (U1)0U);
-#endif
-
-#if (CAN_CFG_TX_PROCESSING_2 == CAN_INTERRUPT)
-    vd_g_IntHndlrIRQCtrlCh((U2)OXCAN_IRQ_CH_TX2, (U1)0U);
-#endif
-
-#if (CAN_CFG_RX_PROCESSING_3 == CAN_INTERRUPT)
-    vd_g_IntHndlrIRQCtrlCh((U2)OXCAN_IRQ_CH_RX3, (U1)0U);
-#endif
-
-#if (CAN_CFG_TX_PROCESSING_3 == CAN_INTERRUPT)
-    vd_g_IntHndlrIRQCtrlCh((U2)OXCAN_IRQ_CH_TX3, (U1)0U);
-#endif
-
-#if (CAN_CFG_RX_PROCESSING_4 == CAN_INTERRUPT)
-    vd_g_IntHndlrIRQCtrlCh((U2)OXCAN_IRQ_CH_RX4, (U1)0U);
-#endif
-
-#if (CAN_CFG_TX_PROCESSING_4 == CAN_INTERRUPT)
-    vd_g_IntHndlrIRQCtrlCh((U2)OXCAN_IRQ_CH_TX4, (U1)0U);
-#endif
-
-#if (CAN_CFG_RX_PROCESSING_5 == CAN_INTERRUPT)
-    vd_g_IntHndlrIRQCtrlCh((U2)OXCAN_IRQ_CH_RX5, (U1)0U);
-#endif
-
-#if (CAN_CFG_TX_PROCESSING_5 == CAN_INTERRUPT)
-    vd_g_IntHndlrIRQCtrlCh((U2)OXCAN_IRQ_CH_TX5, (U1)0U);
-#endif
-
-#if (CAN_CFG_RX_PROCESSING_6 == CAN_INTERRUPT)
-    vd_g_IntHndlrIRQCtrlCh((U2)OXCAN_IRQ_CH_RX6, (U1)0U);
-#endif
-
-#if (CAN_CFG_TX_PROCESSING_6 == CAN_INTERRUPT)
-    vd_g_IntHndlrIRQCtrlCh((U2)OXCAN_IRQ_CH_TX6, (U1)0U);
-#endif
-
-#if (CAN_CFG_RX_PROCESSING_7 == CAN_INTERRUPT)
-    vd_g_IntHndlrIRQCtrlCh((U2)OXCAN_IRQ_CH_RX7, (U1)0U);
-#endif
-
-#if (CAN_CFG_TX_PROCESSING_7 == CAN_INTERRUPT)
-    vd_g_IntHndlrIRQCtrlCh((U2)OXCAN_IRQ_CH_TX7, (U1)0U);
-#endif
+    U4    u4_t_lpcnt;
+    
+    for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)OXCAN_CFG_NUM_IRQ_EN; u4_t_lpcnt++){
+        vd_g_IntHndlrIRQCtrlCh(u2_sp_OXCAN_IRQ_CH[u4_t_lpcnt], (U1)0U);
+    }
 }
+#endif /* (OXCAN_CFG_NUM_IRQ_EN != 0U) */
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */

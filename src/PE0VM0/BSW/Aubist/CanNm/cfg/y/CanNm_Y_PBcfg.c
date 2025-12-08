@@ -57,7 +57,8 @@ BswConst BswU1 bsw_cannm_y_u1TxData[BSW_CANNM_Y_CAN_CH_NUM][BSW_CANNM_Y_PDU_DATA
     { (BswU1)0xFFU, (BswU1)0xFFU, (BswU1)0x00U, (BswU1)0x00U, (BswU1)0x0FU, (BswU1)0x0FU, (BswU1)0x0FU, (BswU1)0x0FU }   /* [0] */
    ,{ (BswU1)0xFFU, (BswU1)0xFFU, (BswU1)0x00U, (BswU1)0x00U, (BswU1)0x0FU, (BswU1)0x0FU, (BswU1)0x0FU, (BswU1)0x0FU }   /* [1] */
    ,{ (BswU1)0xFFU, (BswU1)0xFFU, (BswU1)0x00U, (BswU1)0x00U, (BswU1)0x0FU, (BswU1)0x0FU, (BswU1)0x0FU, (BswU1)0x0FU }   /* [2] */
-   ,{ (BswU1)0xFFU, (BswU1)0xFFU, (BswU1)0xFFU, (BswU1)0xFFU, (BswU1)0xFFU, (BswU1)0xFFU, (BswU1)0xFFU, (BswU1)0xFFU }   /* [3] */
+   ,{ (BswU1)0xFFU, (BswU1)0xFFU, (BswU1)0x00U, (BswU1)0x00U, (BswU1)0x0FU, (BswU1)0x0FU, (BswU1)0x0FU, (BswU1)0x0FU }   /* [3] */
+   ,{ (BswU1)0xFFU, (BswU1)0xFFU, (BswU1)0xFFU, (BswU1)0xFFU, (BswU1)0xFFU, (BswU1)0xFFU, (BswU1)0xFFU, (BswU1)0xFFU }   /* [4] */
 };
 
 #endif /* ( BSW_CANNM_NM_TYPE_USE_Y == BSW_USE ) */
@@ -72,7 +73,7 @@ BswConst BswU1 bsw_cannm_y_u1TxData[BSW_CANNM_Y_CAN_CH_NUM][BSW_CANNM_Y_PDU_DATA
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
-/*  Framework          :v2-0-3-z0003                                        */
+/*  Framework          :v2-1-0                                              */
 /*  BSW plug-in        :v3-0-0                                              */
 /****************************************************************************/
 

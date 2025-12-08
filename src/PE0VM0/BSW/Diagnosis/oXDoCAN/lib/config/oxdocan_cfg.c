@@ -24,21 +24,7 @@
 #endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-
-#if ((defined(BSW_BSWM_CS_CFG_FUNC_CS)  ) && \
-     (defined(BSW_BSWM_CS_CFG_FUNC_SECOC)  ) && \
-     (BSW_BSWM_CS_CFG_FUNC_CS    == BSW_USE) && \
-     (BSW_BSWM_CS_CFG_FUNC_SECOC == BSW_USE))
-     
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if 0   /* @@@ */
-#include "tydocan_dtc_ma_cfg_private.h"
 #include "tydocan_xid_ma_cfg_private.h"
-#include "SchM_IdsM.h"
-#endif
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-
-#endif /* #if ((defined(BSW_BSWM_CS_CFG_FUNC_CS)  ) && ... */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 
@@ -57,20 +43,7 @@
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* Application Headers */
-#if 0   /* @@@ */
-#include "tydocan_dtc_mm.h"
-#include "tydocan_dtc_nmwk.h"
-#include "tydocan_dtc_ecuslp.h"
-#include "tydocan_dtc_nmgbl.h"
-#include "tydocan_did_ssr.h"
-#include "tydocan_security_cfg_private.h"
-#include "tydocan_security_aes_cfg_private.h"
-#include "es_inspect.h"
-#endif
 #include "Dcm_Dsp_SID28_Cfg.h"
-#if 0   /* @@@ */
-#include "oxdocan_rout_cfg.h"
-#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -105,8 +78,7 @@
 #define OXDC_REBYADR_RB_MAX                      (0xFFFFFFFFU)
 #endif
 
-/*#define OXDC_SUPPORT_SES_NUM                     (4U)*/   /* @@@ */
-#define OXDC_SUPPORT_SES_NUM                     (3U)       /* @@@ */
+#define OXDC_SUPPORT_SES_NUM                     (3U)
 
 #ifdef OXDC_FUNC_RPG_RESET
 #define OXDC_MR_RA_WORD_RESF                     (0xfff80760U)
@@ -164,7 +136,6 @@ const U1                u1_g_OXDC_RBA_MEM_NUM_CFG = (U1)(sizeof(st_gp_OXDC_RBA_M
 /*===================================================================================================================================*/
 void    vd_g_oXDoCANCfgBonPreInit(void)
 {
-/*    vd_g_TyDoCANSecurityInit();*//* @@@ */
 #if(OXDC_SID86_USE == OXDC_USE)
     vd_g_oXDoCANRoePreInit((U1)TRUE);
 #endif
@@ -177,7 +148,6 @@ void    vd_g_oXDoCANCfgBonPreInit(void)
 /*===================================================================================================================================*/
 void    vd_g_oXDoCANCfgRstPreInit(void)
 {
-/*    vd_g_TyDoCANSecurityInit();*//* @@@ */
 #if(OXDC_SID86_USE == OXDC_USE)
     vd_g_oXDoCANRoePreInit((U1)FALSE);
 #endif
@@ -190,7 +160,6 @@ void    vd_g_oXDoCANCfgRstPreInit(void)
 /*===================================================================================================================================*/
 void    vd_g_oXDoCANCfgWkupPreInit(void)
 {
-/*    vd_g_TyDoCANSecurityInit();*//* @@@ */
 #if(OXDC_SID86_USE == OXDC_USE)
     vd_g_oXDoCANRoePreInit((U1)FALSE);
 #endif
@@ -303,11 +272,10 @@ void    vd_g_oXDoCANCfgServiceInit(void)
 #if(OXDC_SID23_USE == OXDC_USE)
     vd_g_oXDoCANRebyAdrInit();
 #endif
-/*    vd_g_oXDoCANWrbyIdInit();*//* @@@ */
 #if(OXDC_SID2F_USE == OXDC_USE)
     vd_g_oXDoCANIocInit();
 #endif
-/*    vd_g_oXDoCANRoutInit();*//* @@@ */
+    vd_g_oXDoCANRoutInit();
 #if(OXDC_SIDBA_USE == OXDC_USE)
     vd_g_TyDoCANEsiInit();
 #endif
@@ -320,7 +288,6 @@ void    vd_g_oXDoCANCfgServiceInit(void)
     vd_g_oXDoCANRoeInit();
 #endif
 
-/*    vd_g_oXDoCANRoutCfgInit();*//* @@@ */
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_oXDoCANCfgMainStart(const ST_OXDC_REQ * st_ap_REQ, const U2 u2_a_TSLOT)                                             */
@@ -381,19 +348,12 @@ void    vd_g_oXDoCANCfgServiceMain(const ST_OXDC_REQ * st_ap_REQ, ST_OXDC_ANS * 
     U1                     u1_t_ev_nvm;
 #endif /* #ifdef TYDOCAN_DID_SSR_H */
 
-#if ((defined(BSW_BSWM_CS_CFG_FUNC_CS)  ) && \
-     (defined(BSW_BSWM_CS_CFG_FUNC_SECOC)  ) && \
-     (BSW_BSWM_CS_CFG_FUNC_CS == BSW_USE) && \
-     (BSW_BSWM_CS_CFG_FUNC_SECOC == BSW_USE))
-//    vd_g_TyDoCANXidMaMainTask(st_ap_REQ);
-//    vd_g_TyDoCANDtcMaMainTask(st_ap_REQ->u1_eom_aft);
-#endif /* #if ((defined(BSW_BSWM_CS_CFG_FUNC_CS)  ) && ... */
+    vd_g_TyDoCANXidMaMainTask(st_ap_REQ);
 
     u4_t_ev_dtct = u4_g_oXDoCANDtcMainTask(st_ap_REQ, u2_a_TSLOT);
     if(u4_t_ev_dtct != (U4)0U){
         vd_g_oXDoCANCfgReqNvmcToRun();
     }
-/*    vd_g_oXDoCANTmstpMainTask(u2_a_TSLOT, st_ap_REQ->u1_eom_aft);*//* @@@ */
 
 #ifdef TYDOCAN_DID_SSR_H
     u1_t_ev_nvm = u1_g_oXDoCANDidSsrMainTask(u2_a_TSLOT, st_ap_REQ->u1_eom_aft);
@@ -407,11 +367,10 @@ void    vd_g_oXDoCANCfgServiceMain(const ST_OXDC_REQ * st_ap_REQ, ST_OXDC_ANS * 
 #if(OXDC_SID23_USE == OXDC_USE)
     vd_g_oXDoCANRebyAdrMainTask(st_ap_REQ, st_ap_ans); /* SID 0x23 */
 #endif
-/*    vd_g_oXDoCANWrbyIdMainTask(st_ap_REQ, st_ap_ans);*//* SID 0x2E *//* @@@ */
 #if(OXDC_SID2F_USE == OXDC_USE)
     vd_g_oXDoCANIocMainTask(st_ap_REQ, st_ap_ans);     /* SID 0x2F */
 #endif
-/*    vd_g_oXDoCANRoutMainTask(st_ap_REQ, st_ap_ans);*//* SID 0x31 *//* @@@ */
+    vd_g_oXDoCANRoutMainTask(st_ap_REQ, st_ap_ans);    /* SID 0x31 */
 #if(OXDC_SIDBA_USE == OXDC_USE)
     vd_g_TyDoCANEsiMainTask(st_ap_REQ, st_ap_ans);     /* SID 0xBA */
 #endif
@@ -419,13 +378,6 @@ void    vd_g_oXDoCANCfgServiceMain(const ST_OXDC_REQ * st_ap_REQ, ST_OXDC_ANS * 
     vd_g_oXDoCANRoeMainTask(st_ap_REQ->u1_eom_aft);    /* SID 0x86 */
 #endif
     /* ---------------------------------------------------------------------------------------------------- */
-#if ((defined(BSW_BSWM_CS_CFG_FUNC_CS   )) && \
-     (defined(BSW_BSWM_CS_CFG_FUNC_SECOC)) && \
-     (BSW_BSWM_CS_CFG_FUNC_CS   ==BSW_USE) && \
-     (BSW_BSWM_CS_CFG_FUNC_SECOC==BSW_USE))
-//    IdsM_Ab_MainFunctionDem();
-#endif  /* #if ((defined(BSW_BSWM_CS_CFG_FUNC_CS)  ) && ... */
-/*    vd_g_oXDoCANRoutCfgMain();*//* @@@ */
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_oXDoCANCfgMainFinish(const U2 u2_a_TSLOT)                                                                           */
@@ -444,10 +396,7 @@ void    vd_g_oXDoCANCfgMainFinish(const U2 u2_a_TSLOT)
 /*===================================================================================================================================*/
 void    vd_g_oXDoCANCfgSesChange(const uint8 u1_a_OLD, const uint8 u1_a_NEW)
 {
-#if 0   /* @@@ */
     vd_g_oXDoCANRoutStop(u1_a_NEW);
-    vd_g_TyDoCANSecurityAesSeedKeyClear();
-#endif
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_oXDoCANCfgComTREOvrrd(const U1 u1_a_COM_CH, const U1 u1_a_MODE)                                                     */
@@ -528,7 +477,7 @@ void    vd_g_oXDoCANCfgRpgPrepToRun(const U2 u2_a_ELPSD)
 /*===================================================================================================================================*/
 void    vd_g_oXDoCANCfgRpgSwReset(void)
 {
-/* ���v���J�ڗp���Z�b�g @@@ */
+/* reset for repro-soft start */
     vd_s_oXdcPrepSwReset();
     vd_g_RprgIfRequestReprog();
 }
@@ -551,36 +500,7 @@ void    vd_g_oXDoCANCfgRpgCancel(void)
 /*===================================================================================================================================*/
 U2      u2_g_oXDoCANCfgKmph(void)
 {
-#ifdef MSG_VSC1G13_RXCH0
-#if 0       /* @@@ */
-    static const U2         u2_s_OXDC_KMPH_RX_TOUT = u2_OXCAN_RXTO_THRSH(3600U);
-
-    U2                      u2_t_sp1;
-    U2                      u2_t_kmph;
-    U1                      u1_t_rx_stat;
-
-    u2_t_sp1     = (U2)0U;
-    u1_t_rx_stat = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_VSC1G13,
-                                    (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_VDC,
-                                    u2_s_OXDC_KMPH_RX_TOUT) & ((U1)COM_NO_RX | (U1)COM_TIMEOUT);
-
-    (void)Com_ReceiveSignal(ComConf_ComSignal_SP1, &u2_t_sp1);
-    if(u1_t_rx_stat >= (U1)COM_TIMEOUT){
-        u2_t_kmph = (U2)OXDC_KMPH_UNK;
-    }
-    else if(u1_t_rx_stat == (U1)0U){
-        u2_t_kmph = u2_t_sp1;
-    }
-    else{
-        u2_t_kmph = (U2)0U;
-    }
-
-    return(u2_t_kmph);
-#endif
     return((U2)0U);
-#else
-    return((U2)0U);
-#endif
 }
 /*===================================================================================================================================*/
 /*  U1      u1_g_oXDoCANCfgEomchk(void)                                                                                              */
@@ -780,7 +700,6 @@ U1      u1_g_oXDoCANCfgDidSessionBitChk(const U1 u1_a_CUR_SES, const U2 u2_a_CON
         (U1)DCM_DEFAULT_SESSION,
         (U1)DCM_RkDcmDspSessionRow_Reprog,
         (U1)DCM_EXTENDED_DIAGNOSTIC_SESSION,
-/*        (U1)DCM_RkDcmDspSessionRow_Ota*/  /* @@@ */
     };
 
     U1                       u1_t_ret;

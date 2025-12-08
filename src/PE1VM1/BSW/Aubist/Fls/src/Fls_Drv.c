@@ -1,3 +1,4 @@
+/* Fls_Drv.c v2-0-0                                                         */
 /****************************************************************************/
 /* Protected                                                                */
 /* Copyright AUBASS CO., LTD.                                               */
@@ -35,7 +36,6 @@
 
 #define FLS_START_SEC_CODE
 #include <Fls_MemMap.h>
-FLS_DRV_STATIC FUNC( uint8, FLS_CODE ) Fls_Drv_ReadMemoryU08(uint32 u4_add);
 FLS_DRV_STATIC FUNC( uint16, FLS_CODE ) Fls_Drv_ReadMemoryU16(uint32 u4_add);
 FLS_DRV_STATIC FUNC( uint32, FLS_CODE ) Fls_Drv_ReadMemoryU32(uint32 u4_add);
 FLS_DRV_STATIC FUNC( void, FLS_CODE ) Fls_Drv_WriteMemoryU08(uint32 u4_add, uint8  u1_val);
@@ -70,6 +70,7 @@ FLS_DRV_STATIC FUNC( Fls_StatusType, FLS_CODE ) Fls_Drv_ChkAccessRight(uint8 u1_
 
 FLS_DRV_STATIC CONST(AB_83_ConstV FLS_DRV_REGADDFCI_T, FLS_CONST) Fls_RegAdd_Fci[FLS_DRV_U1_FCU_MAX] =
 {
+#if ( FLS_Drv_SELECT_FPSYS == FLS_Drv_FPSYS_ALL ) || ( FLS_Drv_SELECT_FPSYS == FLS_Drv_FPSYS_0 )
     {
         FLS_DRV_U4_REGADD_FASTAT_0,    /* Flash Access Status Register( for data area 0) */
         FLS_DRV_U4_REGADD_FAEINT_0,    /* Flash Access Error Interrupt Enable Register( for data area 0) */
@@ -88,7 +89,9 @@ FLS_DRV_STATIC CONST(AB_83_ConstV FLS_DRV_REGADDFCI_T, FLS_CONST) Fls_RegAdd_Fci
         FLS_DRV_U4_REGADD_FHVE15FP0,   /* FHVE15 Control Register( for data area 0) */
         FLS_DRV_U4_DFLASH_CMD_ADD_0    /* FACI 0 command issue area */
     },
-#if ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A8 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A16 )
+#endif
+#if ( ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A8 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A16 ) ) && \
+    ( ( FLS_Drv_SELECT_FPSYS == FLS_Drv_FPSYS_ALL ) || ( FLS_Drv_SELECT_FPSYS == FLS_Drv_FPSYS_1 ) )
     {
         FLS_DRV_U4_REGADD_FASTAT_1,    /* Flash Access Status Register( for data area 1) */
         FLS_DRV_U4_REGADD_FAEINT_1,    /* Flash Access Error Interrupt Enable Register( for data area 1) */
@@ -121,23 +124,6 @@ FLS_DRV_STATIC CONST(AB_83_ConstV FLS_DRV_REGADDFCI_T, FLS_CONST) Fls_RegAdd_Fci
 
 #define FLS_START_SEC_CODE
 #include <Fls_MemMap.h>
-/*****************************************************************************
-   Function      : Read Data Function (8-bit data)
-   Description   : This function reads the data(8-bit) from the specified address.
-   param[in]     : u4_add                          (Read-target address)
-   return        :  *( (volatile uint8 *)(add) )   (Read data)
-   Note          : -
-*****************************************************************************/
-FLS_DRV_STATIC FUNC( uint8, FLS_CODE )  
-Fls_Drv_ReadMemoryU08(uint32 u4_add)
-{
-    /* MISRA DEVIATION                                                */
-    /* Volatile is required to directly access the address determined */
-    /* by the hardware specification.                                 */
-    return(*((volatile uint8 *)(u4_add)));
-
-} /* Fls_Drv_ReadMemoryU08 */
-
 /*****************************************************************************
    Function      : Read Data Function (16-bit data)
    Description   : This function reads the data(16-bit) from the specified address.
@@ -260,11 +246,15 @@ Fls_Drv_ClearOperationInfo(void)
 {
     uint32 u4_AreaLoopCnt;   /* area loop counter */
 
-#if ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2B6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2B10 )
+#if ( ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A8 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A16 ) ) && \
+    ( ( FLS_Drv_SELECT_FPSYS == FLS_Drv_FPSYS_0 ) || ( FLS_Drv_SELECT_FPSYS == FLS_Drv_FPSYS_1 ) )
+    u4_AreaLoopCnt = FLS_DRV_U4_VAL_0;
+#elif ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2B6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2B10 )
     u4_AreaLoopCnt = FLS_DRV_U4_VAL_0;
 #endif
 
-#if ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A8 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A16 )
+#if ( ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A8 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A16 ) ) && \
+    ( FLS_Drv_SELECT_FPSYS == FLS_Drv_FPSYS_ALL )
     for( u4_AreaLoopCnt = FLS_DRV_U4_VAL_0; u4_AreaLoopCnt < FLS_DRV_U1_FCU_MAX; u4_AreaLoopCnt++ )
     {
 #endif
@@ -274,7 +264,8 @@ Fls_Drv_ClearOperationInfo(void)
         Fls_Str.stMulOp_str[u4_AreaLoopCnt].u4FlashAddEnd  = FLS_DRV_U4_VAL_0;        /* last address of Flash  */
         Fls_Str.stMulOp_str[u4_AreaLoopCnt].stCommand_enu  = FLS_DRV_U1_CMDTYPE_NONE; /* command                */
         Fls_Str.stMulOp_str[u4_AreaLoopCnt].stStatus       = FLS_DRV_U1_OK;           /* Command Status         */
-#if ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A8 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A16 )
+#if ( ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A8 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A16 ) ) && \
+    ( FLS_Drv_SELECT_FPSYS == FLS_Drv_FPSYS_ALL )
     }
 #endif
 
@@ -440,23 +431,9 @@ Fls_Drv_Reset(uint8 u1_area)
 FLS_DRV_STATIC FUNC( Fls_StatusType, FLS_CODE ) 
 Fls_Drv_ForcedStop(uint8 u1_area)
 {
-    uint32          u4_res;
     uint32          u4_watchTime;
     uint8           u1_res;
     Fls_StatusType  st_ret;
-
-    /* read Flash Status Register(FSTATR) */
-    u4_res = Fls_Drv_ReadMemoryU32(Fls_RegAdd_Fci[u1_area].u4RegAddFSTATR);
-
-    if( FLS_DRV_U4_REGBIT_FSTATR_ILGERR == (FLS_DRV_U4_REGBIT_FSTATR_ILGERR & u4_res) )
-    {
-        /* when an illegal error has occurred, unlock command */
-        u1_res = Fls_Drv_ReadMemoryU08(Fls_RegAdd_Fci[u1_area].u4RegAddFASTAT);
-        if( FLS_DRV_U1_REGBIT_FASTAT_CMDLK != u1_res )
-        {
-            Fls_Drv_WriteMemoryU08(Fls_RegAdd_Fci[u1_area].u4RegAddFASTAT, FLS_DRV_U1_REGBIT_FASTAT_CMDLK);
-        }
-    }
 
     /* issue foreced stop command */
     Fls_Drv_WriteMemoryU08(Fls_RegAdd_Fci[u1_area].u4RegAddFACICMD, FLS_DRV_U1_CMD_FORCED_STOP);
@@ -495,22 +472,6 @@ Fls_Drv_ForcedStop(uint8 u1_area)
 FLS_DRV_STATIC FUNC( void, FLS_CODE ) 
 Fls_Drv_ClearStatus(uint8 u1_area)
 {
-    uint32  u4_res;
-    uint8   u1_res;
-
-    /* read Flash Status Register(FSTATR) */
-    u4_res = Fls_Drv_ReadMemoryU32(Fls_RegAdd_Fci[u1_area].u4RegAddFSTATR);
-
-    if( FLS_DRV_U4_REGBIT_FSTATR_ILGERR == ( FLS_DRV_U4_REGBIT_FSTATR_ILGERR & u4_res ) )
-    {
-        /* when an illegal error has occurred, unlock command */
-        u1_res = Fls_Drv_ReadMemoryU08(Fls_RegAdd_Fci[u1_area].u4RegAddFASTAT);
-        if( FLS_DRV_U1_REGBIT_FASTAT_CMDLK != u1_res )
-        {
-            Fls_Drv_WriteMemoryU08(Fls_RegAdd_Fci[u1_area].u4RegAddFASTAT, FLS_DRV_U1_REGBIT_FASTAT_CMDLK);
-        }
-    }
-
     /* issue the clear status command */
     Fls_Drv_WriteMemoryU08(Fls_RegAdd_Fci[u1_area].u4RegAddFACICMD, FLS_DRV_U1_CMD_CLEARSTAT);
 
@@ -801,14 +762,24 @@ Fls_Drv_ChkAccessRight( uint8 u1_area )
 
     /* check whether the start address isn't in the Data Flash area. */
     u4_addStart = Fls_Drv_ReadMemoryU32(Fls_RegAdd_Fci[u1_area].u4RegAddFSADR);
+#if ( FLS_Drv_SELECT_FPSYS == FLS_Drv_FPSYS_ALL ) || ( FLS_Drv_SELECT_FPSYS == FLS_Drv_FPSYS_0 )
     if( u4_addStart > ( FLS_DRV_U4_TOTAL_SIZE - FLS_DRV_U4_VAL_1 ) )
+#else
+    if( ( u4_addStart < FLS_DRV_U4_FPSYS_OFFSET_ADDRESS ) ||
+        ( u4_addStart > ( ( FLS_DRV_U4_FPSYS_OFFSET_ADDRESS + FLS_DRV_U4_TOTAL_SIZE ) - FLS_DRV_U4_VAL_1 ) ) )
+#endif
     {
         st_ret = FLS_DRV_U1_ERR_INTERNAL;      /* Internal error */
     }
 
     /* check whether the end address isn't the Data Flash area. */
     u4_addEnd = Fls_Drv_ReadMemoryU32(Fls_RegAdd_Fci[u1_area].u4RegAddFEADR) + (FLS_DRV_U4_ACCESS_SIZE - FLS_DRV_U4_VAL_1);
+#if ( FLS_Drv_SELECT_FPSYS == FLS_Drv_FPSYS_ALL ) || ( FLS_Drv_SELECT_FPSYS == FLS_Drv_FPSYS_0 )
     if( u4_addEnd > ( FLS_DRV_U4_TOTAL_SIZE - FLS_DRV_U4_VAL_1 ) )
+#else
+    if( ( u4_addEnd < FLS_DRV_U4_FPSYS_OFFSET_ADDRESS ) ||
+        ( u4_addEnd > ( ( FLS_DRV_U4_FPSYS_OFFSET_ADDRESS + FLS_DRV_U4_TOTAL_SIZE ) - FLS_DRV_U4_VAL_1 ) ) )
+#endif
     {
         st_ret = FLS_DRV_U1_ERR_INTERNAL;      /* Internal error */
     }
@@ -838,16 +809,23 @@ Fls_Drv_StartWriteOperation( P2CONST( uint8, AUTOMATIC, FLS_APPL_CONST )pt_AddSr
     uint32          u4_writesize;
     uint32          u4_data;
     uint32          u4_TempData;
+    uint32          u4_addDest_Tmp;
     P2CONST( uint8, AUTOMATIC, FLS_APPL_CONST ) pt_AddSrc_tmp;
     Fls_StatusType  st_ret;
 
     pt_AddSrc_tmp = pt_AddSrc;
 
+#if ( FLS_Drv_SELECT_FPSYS == FLS_Drv_FPSYS_ALL ) || ( FLS_Drv_SELECT_FPSYS == FLS_Drv_FPSYS_0 )
+    u4_addDest_Tmp = u4_addDest;
+#else
+    u4_addDest_Tmp = u4_addDest + FLS_DRV_U4_FPSYS_OFFSET_ADDRESS;
+#endif
+
     /* The write address is set to a FACI command processing start address register. */
-    Fls_Drv_WriteMemoryU32(Fls_RegAdd_Fci[u1_area].u4RegAddFSADR, u4_addDest);
+    Fls_Drv_WriteMemoryU32(Fls_RegAdd_Fci[u1_area].u4RegAddFSADR, u4_addDest_Tmp);
 
     /* The end address is calculated and  set to a FACI command processing end address register. */
-    Fls_Drv_WriteMemoryU32(Fls_RegAdd_Fci[u1_area].u4RegAddFEADR, u4_addDest + ( u4_cnt - FLS_DRV_U4_VAL_1 ) );
+    Fls_Drv_WriteMemoryU32(Fls_RegAdd_Fci[u1_area].u4RegAddFEADR, u4_addDest_Tmp + ( u4_cnt - FLS_DRV_U4_VAL_1 ) );
 
     /* 0xE8 is written to FACI command issue area. */
     Fls_Drv_WriteMemoryU08(Fls_RegAdd_Fci[u1_area].u4RegAddFACICMD, FLS_DRV_U1_CMD_WRITE);
@@ -898,6 +876,8 @@ Fls_Drv_StartBCEraseOperation( uint32   u4_addStart,
                                uint8    u1_fcuCmd,
                                uint8    u1_area )
 {
+    uint32         u4_addStart_Tmp;
+    uint32         u4_addEnd_Tmp;
     Fls_StatusType st_ret;
 
 #if ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A8 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A16 )
@@ -905,11 +885,18 @@ Fls_Drv_StartBCEraseOperation( uint32   u4_addStart,
     Fls_Drv_WriteMemoryU16(Fls_RegAdd_Fci[u1_area].u4RegAddFCPSR, FLS_DRV_U2_REGBIT_FCPSR_SUSPMD);
 #endif
 
+#if ( FLS_Drv_SELECT_FPSYS == FLS_Drv_FPSYS_ALL ) || ( FLS_Drv_SELECT_FPSYS == FLS_Drv_FPSYS_0 )
+    u4_addStart_Tmp = u4_addStart;
+    u4_addEnd_Tmp = u4_addEnd;
+#else
+    u4_addStart_Tmp = u4_addStart + FLS_DRV_U4_FPSYS_OFFSET_ADDRESS;
+    u4_addEnd_Tmp = u4_addEnd + FLS_DRV_U4_FPSYS_OFFSET_ADDRESS;
+#endif
     /* FACI command processing start address register is established. */
-    Fls_Drv_WriteMemoryU32(Fls_RegAdd_Fci[u1_area].u4RegAddFSADR, u4_addStart);
+    Fls_Drv_WriteMemoryU32(Fls_RegAdd_Fci[u1_area].u4RegAddFSADR, u4_addStart_Tmp);
 
     /* FACI command processing end address register is established. */
-    Fls_Drv_WriteMemoryU32(Fls_RegAdd_Fci[u1_area].u4RegAddFEADR, u4_addEnd);
+    Fls_Drv_WriteMemoryU32(Fls_RegAdd_Fci[u1_area].u4RegAddFEADR, u4_addEnd_Tmp);
 
     /* 0x20 (Erase)is written to FACI command issue area. */
     Fls_Drv_WriteMemoryU08(Fls_RegAdd_Fci[u1_area].u4RegAddFACICMD, u1_fcuCmd);
@@ -946,7 +933,8 @@ Fls_Drv_ReadOperation( uint32 u4_addSrc, P2VAR( uint8, AUTOMATIC, TYPEDEF )pt_Ad
     P2VAR( uint8, AUTOMATIC, TYPEDEF )pt_AddDest_tmp;
     uint32          u4_DataBufPos;
     Fls_StatusType  st_ret;
-#if ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A8 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A16 )
+#if ( ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A8 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A16 ) ) && \
+    ( FLS_Drv_SELECT_FPSYS == FLS_Drv_FPSYS_ALL )
     uint32          u4_regDFERSTR;
 #elif ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2B6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2B10 )
     uint32          u4_regDFSERSTR;
@@ -966,7 +954,8 @@ Fls_Drv_ReadOperation( uint32 u4_addSrc, P2VAR( uint8, AUTOMATIC, TYPEDEF )pt_Ad
     u4_addEnd  = u4_add    + u4_cnt;              /* The reading end address */
     u4_sizeMask = FLS_DRV_U4_ACCESS_SIZE - FLS_DRV_U4_VAL_1;
 
-#if ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A8 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A16 )
+#if ( ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A8 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A16 ) ) && \
+    ( FLS_Drv_SELECT_FPSYS == FLS_Drv_FPSYS_ALL )
     /* An error flag of Data flash error status clear register(DFERSTC) is cleared. */
     Fls_Drv_WriteMemoryU32(FLS_DRV_U4_REGADD_DFERSTC, FLS_DRV_U4_REGBIT_DFERSTC_ERRCLR);
 #elif ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2B6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2B10 )
@@ -989,7 +978,8 @@ Fls_Drv_ReadOperation( uint32 u4_addSrc, P2VAR( uint8, AUTOMATIC, TYPEDEF )pt_Ad
         /* by the 4Byte unit, reading */
         u4DataBuf = Fls_Drv_ReadMemoryU32(u4_add);    /* from a data flash, reading */
 
-#if ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A8 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A16 )
+#if ( ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A8 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A16 ) ) && \
+    ( FLS_Drv_SELECT_FPSYS == FLS_Drv_FPSYS_ALL )
         /* Reading of Data flash error status register(DFERSTR) */
         /* in case of F1L, P1M-E, D1M1A or E2M */
         u4_regDFERSTR = Fls_Drv_ReadMemoryU32(FLS_DRV_U4_REGADD_DFERSTR);
@@ -1636,7 +1626,8 @@ Fls_Drv_StartBCOperation( uint32 u4_addStart, uint32 u4_addEnd, Fls_AddressType*
 
 #endif/* ( ( FLS_CDD_BLANK_CHECK_API == STD_ON ) || ( FLS_CDD_NOT_BLANK_ADDRESS_API == STD_ON ) )  */
 
-#if ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A8 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A16 )
+#if ( ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A8 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A16 ) ) && \
+    ( FLS_Drv_SELECT_FPSYS == FLS_Drv_FPSYS_ALL )
 /*****************************************************************************
    Function      : Fls_Drv_CalculateTargetArea
    Description   : Function to Calculate Target Area for Writing or Erasing
@@ -1680,8 +1671,8 @@ Fls_Drv_CalculateTargetArea( uint32 u4_addStart, uint32 u4_bCnt )
 
 /****************************************************************************/
 /* History                                                                  */
-/* Version :Date                                                            */
-/* [Number] :[Date]                                                         */
+/*  Version        :Date                                                    */
+/*  2-0-0          :2024/07/31                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

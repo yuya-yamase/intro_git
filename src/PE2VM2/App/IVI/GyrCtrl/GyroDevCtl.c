@@ -857,6 +857,13 @@ static void vd_s_vd_g_GyroDev_CycChk(void)
                     }
                     if((u1_s_gyrodev_gyro_read_complete_flag == (U1)TRUE)
                     && (u1_s_gyrodev_gsens_read_complete_flag == (U1)TRUE)){
+                        /* Timer Clear */
+                        if(u2_s_gyrodev_cycchk_timer >= (U2)GYRODEV_CYCCHK_POLING){
+                            u2_s_gyrodev_cycchk_timer -= (U2)GYRODEV_CYCCHK_POLING;
+                        }
+                        else{
+                            u2_s_gyrodev_cycchk_timer = (U2)0;
+                        }
                         /* Read Data Notificaiton */
                         vd_GYRODEV_OSCMD_GYRO_DATA_NOTIF(st_gyrodev_readdata);
                         /* Execute only STEP0 of the function */
@@ -877,8 +884,6 @@ static void vd_s_vd_g_GyroDev_CycChk(void)
                                 vd_s_GyroDev_AppChk();
                             }
                         }
-                        /* Timer Clear */
-                        u2_s_gyrodev_cycchk_timer = (U2)0;
                         /* Flag Clear */
                         u1_s_gyrodev_gyro_read_complete_flag = (U1)FALSE;
                         u1_s_gyrodev_gsens_read_complete_flag = (U1)FALSE;

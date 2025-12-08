@@ -1,4 +1,4 @@
-/* Fls_Drv_Cfg_h_Revision(v1_0_0)                                           */
+/* Fls_Drv_Cfg.h v2-0-0                                                     */
 /****************************************************************************/
 /* Protected                                                                */
 /* Copyright AUBASS Corporation                                             */
@@ -34,7 +34,18 @@
 #define FLS_Drv_DEVICE_U2B6                         ( 0x04U )               /* U2B6    */
 #define FLS_Drv_DEVICE_U2B10                        ( 0x05U )               /* U2B10   */
 
+/* Flash Programing System */
+#define FLS_Drv_FPSYS_ALL                           ( 0x01U )               /* Standard */
+#define FLS_Drv_FPSYS_0                             ( 0x02U )               /* System 0 (U2A8 Only) */
+#define FLS_Drv_FPSYS_1                             ( 0x03U )               /* System 1 (U2A8 Only) */
+
 #define FLS_Drv_SELECT_DEVICE                       FLS_Drv_DEVICE_U2A16    /* The target model */
+
+#if ( ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A8 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A16 ) )
+#define FLS_Drv_SELECT_FPSYS                        FLS_Drv_FPSYS_ALL       /* The target flash sequencer mode */
+#else
+#define FLS_Drv_SELECT_FPSYS                        FLS_Drv_FPSYS_ALL       /* FPSYS_ALL Only */
+#endif
 
 /*--------------------------------------------------------------------------*/
 /* Types                                                                    */
@@ -58,8 +69,8 @@
 
 /****************************************************************************/
 /* History                                                                  */
-/* Version :Date                                                            */
-/* [Number] :[Date]                                                         */
+/*  Version        :Date                                                    */
+/*  2-0-0          :2024/07/31                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

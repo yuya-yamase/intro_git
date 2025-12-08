@@ -58,6 +58,7 @@ static void vd_s_PwrCtrlSysPwrOnAudio( void );
 static void vd_s_PwrCtrlSysPwrOnV11Asil( void );
 static void vd_s_PwrCtrlSysPwrOnEizo( void );
 static void vd_s_PwrCtrlSysPwrOffFlw( void );
+static U2 u2_s_PwrCtrlSysPwrOnDutyCyc( const U4 u4_a_duty );
 
 /* デバイスON制御 */
 static U1       u1_t_Pwron_TimChk(const U4 u1_a_TIMCNT, const U4 u1_a_TIMFIN);
@@ -601,7 +602,7 @@ static void vd_s_PwrCtrlSysPwrOnDdFreq( void )
     U2 dd_freq_duty;
 
     if(u4_s_PwrCtrl_Sys_Dd_Freq_Time == (U4)PWRCTRL_SYS_WAIT_DD_FREQ_TIME){
-        dd_freq_duty = PWRCTRL_SYS_PWM_DUTYCYCLE(5000U);    /* 50% */
+        dd_freq_duty = u2_s_PwrCtrlSysPwrOnDutyCyc((U4)PWRCTRL_SYS_PWM_DUTYCYC_DEF);    /* 50% */
         vd_g_Pwm_SetPeriodAndDuty((U1)PWM_CH_00_DDC_FREQ, (U2)PWRCTRL_SYS_PWM_PERIOD, dd_freq_duty);
         u4_s_PwrCtrl_Sys_Dd_Freq_Time = (U4)PWRCTRL_SYS_COUNTTIME_FIN;
     }
@@ -625,7 +626,7 @@ static void vd_s_PwrCtrlSysPwrOnBoostAsilFreq( void )
     U2 boost_asil_duty;
 
     if(u4_s_PwrCtrl_Sys_Boost_Asil_Freq_Time == (U4)PWRCTRL_SYS_WAIT_BOOST_ASIL_FREQ_TIME){
-        boost_asil_duty = PWRCTRL_SYS_PWM_DUTYCYCLE(5000U);    /* 50% */
+        boost_asil_duty = u2_s_PwrCtrlSysPwrOnDutyCyc((U4)PWRCTRL_SYS_PWM_DUTYCYC_DEF);    /* 50% */
         vd_g_Pwm_SetPeriodAndDuty((U1)PWM_CH_02_DDC_ASIL_FREQ, (U2)PWRCTRL_SYS_PWM_PERIOD, boost_asil_duty);
         u4_s_PwrCtrl_Sys_Boost_Asil_Freq_Time = (U4)PWRCTRL_SYS_COUNTTIME_FIN;
     }
@@ -635,6 +636,22 @@ static void vd_s_PwrCtrlSysPwrOnBoostAsilFreq( void )
     }
     
     return;
+}
+
+/*****************************************************************************
+  Function      : u2_s_PwrCtrlSysPwrOnDutyCyc
+  Description   : LSB補正後デューティ算出処理
+  param[in/out] : [in] const U4 u4_a_duty LSB補正前デューティ値
+  return        : u2_t_ret LSB補正後デューティ値
+  Note          : none
+*****************************************************************************/
+static U2 u2_s_PwrCtrlSysPwrOnDutyCyc( const U4 u4_a_duty )
+{
+    U2 u2_t_ret;
+    
+    u2_t_ret = (U2)((u4_a_duty * (U4)PWM_DRV_DUTY_MAX) / (U4)PWRCTRL_SYS_PWM_DUTYLSB);
+    
+    return(u2_t_ret);
 }
 
 /*****************************************************************************

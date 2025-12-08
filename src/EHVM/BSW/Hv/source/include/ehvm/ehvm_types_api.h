@@ -23,6 +23,7 @@
 #define EHVM_TYPES_API_H
 
 #include "ehvm_types_api_em.h"
+#include "ehvm_types_api_mm.h"
 
 /* VM Management */
 #define EHVM_RESET_FACTOR_CATEGORY_NONE                   ((ehvm_reset_category_t)0x00000000U)
@@ -69,6 +70,9 @@
 #define EHVM_HVC_FUNC_ID_SCH_DISABLE_VM_SWITCH            ((ehvm_uint32_t)24U)
 #define EHVM_HVC_FUNC_ID_SCH_ENABLE_VM_SWITCH             ((ehvm_uint32_t)25U)
 #define EHVM_HVC_FUNC_ID_UC_CALL_FUNCTION                 ((ehvm_uint32_t)26U)
+
+#define EHVM_HVC_TIMEOUT_ID_VCC                           ((ehvm_uint8_t)0U)
+#define EHVM_HVC_TIMEOUT_ID_VMM                           ((ehvm_uint8_t)1U)
 
 #ifndef E_OK
 #define E_OK                        ((ehvm_std_return_t)0x00U)

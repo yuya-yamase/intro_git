@@ -26,7 +26,7 @@
 /******************************************/
 /* Send-Queue Number */
 #define BSW_CANIF_CFG_3_QUENUM_PDUR             (0U)
-#define BSW_CANIF_CFG_3_QUENUM_CANNM            (0U)
+#define BSW_CANIF_CFG_3_QUENUM_CANNM            (1U)
 #define BSW_CANIF_CFG_3_QUENUM_CANTP            (0U)
 #define BSW_CANIF_CFG_3_QUENUM_CDD1             (0U)
 #define BSW_CANIF_CFG_3_QUENUM_CDD2             (0U)
@@ -34,7 +34,7 @@
 
 /* Send-Queue Offset */
 #define BSW_CANIF_CFG_3_QUEOFFSET_PDUR          (BSW_CANIF_NOUSE)
-#define BSW_CANIF_CFG_3_QUEOFFSET_CANNM         (BSW_CANIF_NOUSE)
+#define BSW_CANIF_CFG_3_QUEOFFSET_CANNM         (0U)
 #define BSW_CANIF_CFG_3_QUEOFFSET_CANTP         (BSW_CANIF_NOUSE)
 #define BSW_CANIF_CFG_3_QUEOFFSET_CDD1          (BSW_CANIF_NOUSE)
 #define BSW_CANIF_CFG_3_QUEOFFSET_CDD2          (BSW_CANIF_NOUSE)
@@ -49,7 +49,7 @@
 /******************************************/
 /******************************************/
 /* Send-Queue Size */
-#define BSW_CANIF_CFG_3_SIZE_SNDQUE000          (0U)
+#define BSW_CANIF_CFG_3_SIZE_SNDQUE000          (20U)
 #define BSW_CANIF_CFG_3_SIZE_SNDQUE001          (0U)
 #define BSW_CANIF_CFG_3_SIZE_SNDQUE002          (0U)
 #define BSW_CANIF_CFG_3_SIZE_SNDQUE003          (0U)
@@ -301,7 +301,7 @@
 #define BSW_CANIF_CFG_3_SIZE_SNDQUE249          (0U)
 
 /* Send-Queue HOH */
-#define BSW_CANIF_CFG_3_HOH_SNDQUE000           (BSW_CANIF_HOH_NOUSE)
+#define BSW_CANIF_CFG_3_HOH_SNDQUE000           (0x00FAU)
 #define BSW_CANIF_CFG_3_HOH_SNDQUE001           (BSW_CANIF_HOH_NOUSE)
 #define BSW_CANIF_CFG_3_HOH_SNDQUE002           (BSW_CANIF_HOH_NOUSE)
 #define BSW_CANIF_CFG_3_HOH_SNDQUE003           (BSW_CANIF_HOH_NOUSE)
@@ -1065,7 +1065,7 @@
 /******************************************/
 /******************************************/
 /* Receive-Queue Size */
-#define BSW_CANIF_CFG_3_SIZE_RCVQUE             (20U)
+#define BSW_CANIF_CFG_3_SIZE_RCVQUE             (2400U)
 
 
 /******************************************/
@@ -1113,7 +1113,7 @@
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
-/*  Framework          :v2-0-3-z0003                                        */
+/*  Framework          :v2-1-0                                              */
 /*  BSW plug-in        :v3-0-0                                              */
 /****************************************************************************/
 

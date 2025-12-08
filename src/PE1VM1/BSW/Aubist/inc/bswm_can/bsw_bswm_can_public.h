@@ -101,6 +101,8 @@ void                 bsw_bswm_can_st_MainFuncHiOut( void );
 void                 bsw_bswm_can_st_MainFuncMidIn( void );
 void                 bsw_bswm_can_st_MainFuncMidCtrl( void );
 void                 bsw_bswm_can_st_MainFuncMidOut( void );
+void                 bsw_bswm_can_st_MainPreComRx( void );
+void                 bsw_bswm_can_st_MainPostComTx( void );
 
 void                 bsw_bswm_can_st_DetectFail( void );
 void                 bsw_bswm_can_st_CheckRam( void );
@@ -157,7 +159,7 @@ void                 bsw_bswm_can_bkup_GetBackupData( uint8* BackupDataPtr );
 /*  Version         :Date                                                   */
 /*  v2-0-0          :2021/12/09                                             */
 /*  v2-1-0          :2022/09/15                                             */
-/*  v3-0-0          :2024/11/12                                             */
+/*  v3-0-0          :2025/01/29                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

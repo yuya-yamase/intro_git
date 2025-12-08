@@ -1,3 +1,4 @@
+/* Fls.c v2-0-0                                                               */
 /******************************************************************************/
 /* Protected                                                                  */
 /* Copyright AUBASS CO., LTD.                                                 */
@@ -78,13 +79,17 @@ Fls_Init(
     uint8  u1_AreaLoopCnt;          /* loop counter */
 
     st_chk = E_OK;                  /* continue processing */
-#if ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2B6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2B10 )
+#if ( ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A8 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A16 ) ) && \
+    ( ( FLS_Drv_SELECT_FPSYS == FLS_Drv_FPSYS_0 ) || ( FLS_Drv_SELECT_FPSYS == FLS_Drv_FPSYS_1 ) )
+    u1_AreaLoopCnt = FLS_DRV_U1_VAL_0;
+#elif ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2B6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2B10 )
     u1_AreaLoopCnt = FLS_DRV_U1_VAL_0;
 #endif
 
     Fls_Drv_InitVariables();
 
-#if ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A8 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A16 )
+#if ( ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A8 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A16 ) ) && \
+    ( FLS_Drv_SELECT_FPSYS == FLS_Drv_FPSYS_ALL )
     for( u1_AreaLoopCnt = FLS_DRV_U1_VAL_0; u1_AreaLoopCnt < FLS_DRV_U1_FCU_MAX; u1_AreaLoopCnt++ )
     {
 #endif
@@ -110,7 +115,8 @@ Fls_Init(
         {
             Fls_Drv_InitRegister(u1_AreaLoopCnt);
         }
-#if ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A8 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A16 )
+#if ( ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A8 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A16 ) ) && \
+    ( FLS_Drv_SELECT_FPSYS == FLS_Drv_FPSYS_ALL )
     }
 #endif
 
@@ -151,7 +157,8 @@ Fls_Write(
 {
     Std_ReturnType  st_ret;             /* return value */
     Fls_StatusType  st_result;          /* return value of a called function */
-#if ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A8 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A16 )
+#if ( ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A8 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A16 ) ) && \
+    ( FLS_Drv_SELECT_FPSYS == FLS_Drv_FPSYS_ALL )
     Fls_DataArea    st_area;            /* return of Target area */
 #endif
     uint32          u4_addFlash;        /* start address of the memory to be written */
@@ -170,7 +177,10 @@ Fls_Write(
 #if ( FLS_DEV_ERROR_DETECT == STD_ON )
     u1_reportErr = FLS_E_EXT_WRITE_FAILED;
 #endif /* FLS_DEV_ERROR_DETECT == STD_ON */
-#if ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2B6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2B10 )
+#if ( ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A8 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A16 ) ) && \
+    ( ( FLS_Drv_SELECT_FPSYS == FLS_Drv_FPSYS_0 ) || ( FLS_Drv_SELECT_FPSYS == FLS_Drv_FPSYS_1 ) )
+    u1_AreaLoopCnt = FLS_DRV_U1_VAL_0;
+#elif ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2B6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2B10 )
     u1_AreaLoopCnt = FLS_DRV_U1_VAL_0;
 #endif
 
@@ -207,7 +217,6 @@ Fls_Write(
         if( (Std_ReturnType)E_OK == st_ret )
         {
 #endif /* LS_DEV_ERROR_DETECT == STD_ON */
-
             /* store information to local variables. */
             pt_AddBuf   = SourceAddressPtr;
             u4_addFlash = TargetAddress;
@@ -226,7 +235,8 @@ Fls_Write(
             }
             u4_DataBufPos = FLS_DRV_U4_VAL_0;
 
-#if ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A8 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A16 )
+#if ( ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A8 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A16 ) ) && \
+    ( FLS_Drv_SELECT_FPSYS == FLS_Drv_FPSYS_ALL )
             /* calculate the target area */
             st_area = Fls_Drv_CalculateTargetArea(TargetAddress, Length);
 
@@ -238,7 +248,8 @@ Fls_Write(
                 Fls_Str.stMulOp_str[u1_AreaLoopCnt].u4FlashAddEnd  = FLS_DRV_U4_VAL_0;
                 Fls_Str.stMulOp_str[u1_AreaLoopCnt].stStatus       = FLS_DRV_U1_OK;
 
-#if ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A8 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A16 )
+#if ( ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A8 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A16 ) ) && \
+    ( FLS_Drv_SELECT_FPSYS == FLS_Drv_FPSYS_ALL )
                 if( (st_area & (uint8)(FLS_DRV_U1_VAL_1 << u1_AreaLoopCnt) ) != FLS_DRV_U1_VAL_0 )
                 {
 #endif
@@ -249,7 +260,6 @@ Fls_Write(
                     st_result = Fls_Drv_SwitchMode(FLS_DRV_U2_MODE_PE, u1_AreaLoopCnt);
                     if( FLS_DRV_U1_OK == st_result )
                     {
-
                         /* remove protection */
                         Fls_Drv_SetProtect(FLS_DRV_U4_PROTECT_MODE_OFF, u1_AreaLoopCnt);
 
@@ -258,7 +268,6 @@ Fls_Write(
                                                                 u4_addFlash, 
                                                                 u4_cntCurOp, 
                                                                 u1_AreaLoopCnt);
-
 
                         if( FLS_DRV_U1_BUSY == st_result )
                         {
@@ -270,7 +279,8 @@ Fls_Write(
                             Fls_Str.stMulOp_str[u1_AreaLoopCnt].u4FlashAdd    = u4_FlashAdd;
                             Fls_Str.stMulOp_str[u1_AreaLoopCnt].u4FlashAddEnd = u4_FlashAddEnd;
 
-#if ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A8 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A16 )
+#if ( ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A8 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A16 ) ) && \
+    ( FLS_Drv_SELECT_FPSYS == FLS_Drv_FPSYS_ALL )
                             if( FLS_DRV_U4_BOUNDARY_ONE_BLOCK_SIZE >= u4_addFlash )
                             {
                                 /* If there is a next area to process, set the address of the buffer to be */
@@ -283,7 +293,6 @@ Fls_Write(
                                 u4_FlashAdd    = u4_addFlash + u4_cntCurOp;
                             }
 #endif
-
                             /* set the command to FLS_DRV_U1_CMDTYPE_WRITE, set the FLS state to BUSY, set the processing result to processing */
                             Fls_Str.stMulOp_str[u1_AreaLoopCnt].stCommand_enu = FLS_DRV_U1_CMDTYPE_WRITE;
                         }
@@ -299,7 +308,6 @@ Fls_Write(
 
                             /* If FLS_DEV_ERROR_DETECT == STD_ON, The value of u1_reportErr */
                             /* is FLS_E_EXT_WRITE_FAILED set as the initial value.          */
-
                             st_ret = E_NOT_OK;
                         }
                     }
@@ -310,10 +318,10 @@ Fls_Write(
 
                         /* If FLS_DEV_ERROR_DETECT == STD_ON, The value of u1_reportErr */
                         /* is FLS_E_EXT_WRITE_FAILED set as the initial value.          */
-
                         st_ret = E_NOT_OK;
                     }
-#if ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A8 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A16 )
+#if ( ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A8 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A16 ) ) && \
+    ( FLS_Drv_SELECT_FPSYS == FLS_Drv_FPSYS_ALL )
                 }
                 else
                 {
@@ -329,7 +337,6 @@ Fls_Write(
 #if ( FLS_DEV_ERROR_DETECT == STD_ON )
         }
 #endif /* FLS_DEV_ERROR_DETECT == STD_ON */
-
     }
     else
     {
@@ -365,7 +372,8 @@ Fls_Erase(Fls_AddressType TargetAddress, Fls_LengthType Length)
 {
     Std_ReturnType  st_ret;             /* return value */
     Fls_StatusType  st_result;          /* return value of a called function */
-#if ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A8 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A16 )
+#if ( ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A8 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A16 ) ) && \
+    ( FLS_Drv_SELECT_FPSYS == FLS_Drv_FPSYS_ALL )
     Fls_DataArea    st_area;            /* return of Target area */
 #endif
     uint32          u4_addFlash;        /* start address of the memory to be erased */
@@ -382,7 +390,10 @@ Fls_Erase(Fls_AddressType TargetAddress, Fls_LengthType Length)
 #if ( FLS_DEV_ERROR_DETECT == STD_ON )
     u1_reportErr = FLS_E_EXT_ERASE_FAILED;
 #endif /* FLS_DEV_ERROR_DETECT == STD_ON */
-#if ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2B6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2B10 )
+#if ( ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A8 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A16 ) ) && \
+    ( ( FLS_Drv_SELECT_FPSYS == FLS_Drv_FPSYS_0 ) || ( FLS_Drv_SELECT_FPSYS == FLS_Drv_FPSYS_1 ) )
+    u1_AreaLoopCnt = FLS_DRV_U1_VAL_0;
+#elif ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2B6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2B10 )
     u1_AreaLoopCnt = FLS_DRV_U1_VAL_0;
 #endif
 
@@ -437,7 +448,8 @@ Fls_Erase(Fls_AddressType TargetAddress, Fls_LengthType Length)
                 u4_FlashAddEnd = (u4_addFlash + u4_cntTotal) - FLS_DRV_U4_VAL_1;
             }
 
-#if ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A8 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A16 )
+#if ( ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A8 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A16 ) ) && \
+    ( FLS_Drv_SELECT_FPSYS == FLS_Drv_FPSYS_ALL )
             /* calculate the target area */
             st_area = Fls_Drv_CalculateTargetArea(TargetAddress, Length);
 
@@ -449,7 +461,8 @@ Fls_Erase(Fls_AddressType TargetAddress, Fls_LengthType Length)
                 Fls_Str.stMulOp_str[u1_AreaLoopCnt].u4FlashAddEnd  = FLS_DRV_U4_VAL_0;
                 Fls_Str.stMulOp_str[u1_AreaLoopCnt].stStatus       = FLS_DRV_U1_OK;
 
-#if ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A8 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A16 )
+#if ( ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A8 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A16 ) ) && \
+    ( FLS_Drv_SELECT_FPSYS == FLS_Drv_FPSYS_ALL )
                 if( (st_area & (uint8)(FLS_DRV_U1_VAL_1 << u1_AreaLoopCnt) ) != FLS_DRV_U1_VAL_0 )
                 {
 #endif
@@ -481,7 +494,8 @@ Fls_Erase(Fls_AddressType TargetAddress, Fls_LengthType Length)
                             Fls_Str.stMulOp_str[u1_AreaLoopCnt].u4FlashAdd    = u4_FlashAdd;
                             Fls_Str.stMulOp_str[u1_AreaLoopCnt].u4FlashAddEnd = u4_FlashAddEnd;
 
-#if ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A8 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A16 )
+#if ( ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A8 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A16 ) ) && \
+    ( FLS_Drv_SELECT_FPSYS == FLS_Drv_FPSYS_ALL )
                             /* set data for data area 1 */
                             u4_FlashAddEnd = (u4_addFlash + u4_cntTotal) - FLS_DRV_U4_VAL_1;
                             u4_addFlash    = FLS_DRV_U4_BOUNDARY_ONE_BLOCK_SIZE * ((uint32)u1_AreaLoopCnt + FLS_DRV_U4_VAL_1);
@@ -518,7 +532,8 @@ Fls_Erase(Fls_AddressType TargetAddress, Fls_LengthType Length)
 
                         st_ret       = E_NOT_OK;
                     }
-#if ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A8 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A16 )
+#if ( ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A8 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A16 ) ) && \
+    ( FLS_Drv_SELECT_FPSYS == FLS_Drv_FPSYS_ALL )
                 }
                 else
                 {
@@ -582,11 +597,15 @@ Fls_Cancel(void)
     uint8   u1_AreaLoopCnt;
 
     st_EndStatus = FLS_DRV_U1_OK;
-#if ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2B6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2B10 )
+#if ( ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A8 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A16 ) ) && \
+    ( ( FLS_Drv_SELECT_FPSYS == FLS_Drv_FPSYS_0 ) || ( FLS_Drv_SELECT_FPSYS == FLS_Drv_FPSYS_1 ) )
+    u1_AreaLoopCnt = FLS_DRV_U1_VAL_0;
+#elif ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2B6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2B10 )
     u1_AreaLoopCnt = FLS_DRV_U1_VAL_0;
 #endif
 
-#if ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A8 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A16 )
+#if ( ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A8 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A16 ) ) && \
+    ( FLS_Drv_SELECT_FPSYS == FLS_Drv_FPSYS_ALL )
     for( u1_AreaLoopCnt = FLS_DRV_U1_VAL_0; u1_AreaLoopCnt < FLS_DRV_U1_FCU_MAX; u1_AreaLoopCnt++ )
     {
 #endif
@@ -620,7 +639,8 @@ Fls_Cancel(void)
             (void)Fls_ErrorHook(FLS_MODULE_ID, FLS_INSTANCE_ID, FLS_APIID_CANCEL, u1_rpt);
         }
 #endif /* FLS_DEV_ERROR_DETECT == STD_ON */
-#if ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A8 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A16 )
+#if ( ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A8 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A16 ) ) && \
+    ( FLS_Drv_SELECT_FPSYS == FLS_Drv_FPSYS_ALL )
     }
 #endif
 
@@ -660,14 +680,18 @@ Fls_MainFunction( void )
 
     st_EndStatus   = FLS_DRV_U1_OK;
     u1_errArea     = FLS_DRV_U1_FCU_MAX;
-#if ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2B6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2B10 )
+#if ( ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A8 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A16 ) ) && \
+    ( ( FLS_Drv_SELECT_FPSYS == FLS_Drv_FPSYS_0 ) || ( FLS_Drv_SELECT_FPSYS == FLS_Drv_FPSYS_1 ) )
+    u1_AreaLoopCnt = FLS_DRV_U1_VAL_0;
+#elif ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2B6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2B10 )
     u1_AreaLoopCnt = FLS_DRV_U1_VAL_0;
 #endif
 
     /* check whether FLS internal state is 'busy' */
     if( MEMIF_BUSY == Fls_Str.stiStat_enu )
     {
-#if ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A8 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A16 )
+#if ( ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A8 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A16 ) ) && \
+    ( FLS_Drv_SELECT_FPSYS == FLS_Drv_FPSYS_ALL )
         for( u1_AreaLoopCnt = FLS_DRV_U1_VAL_0; u1_AreaLoopCnt < FLS_DRV_U1_FCU_MAX; u1_AreaLoopCnt++ )
         {
 #endif
@@ -714,7 +738,8 @@ Fls_MainFunction( void )
             }
             Fls_Str.stMulOp_str[u1_AreaLoopCnt].stStatus = st_status[u1_AreaLoopCnt];
 
-#if ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A8 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A16 )
+#if ( ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A8 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A16 ) ) && \
+    ( FLS_Drv_SELECT_FPSYS == FLS_Drv_FPSYS_ALL )
         }
 #endif
 
@@ -732,13 +757,15 @@ Fls_MainFunction( void )
                 Fls_Drv_EndCurrentOperation(st_status[u1_errArea], u1_errArea);
             }
 
-#if ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A8 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A16 )
+#if ( ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A8 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A16 ) ) && \
+    ( FLS_Drv_SELECT_FPSYS == FLS_Drv_FPSYS_ALL )
             for( u1_AreaLoopCnt = FLS_DRV_U1_VAL_0; u1_AreaLoopCnt < FLS_DRV_U1_FCU_MAX; u1_AreaLoopCnt++ )
             {
 #endif
                 /* set protection */
                 Fls_Drv_SetProtect(FLS_DRV_U4_PROTECT_MODE_ON, u1_AreaLoopCnt);
-#if ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A8 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A16 )
+#if ( ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A8 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A16 ) ) && \
+    ( FLS_Drv_SELECT_FPSYS == FLS_Drv_FPSYS_ALL )
             }
 #endif
 
@@ -748,13 +775,15 @@ Fls_MainFunction( void )
     /*  FLS internal state is 'other than busy' */
     else
     {
-#if ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A8 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A16 )
+#if ( ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A8 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A16 ) ) && \
+    ( FLS_Drv_SELECT_FPSYS == FLS_Drv_FPSYS_ALL )
         for( u1_AreaLoopCnt = FLS_DRV_U1_VAL_0; u1_AreaLoopCnt < FLS_DRV_U1_FCU_MAX; u1_AreaLoopCnt++ )
         {
 #endif
             /* refresh SFR */
             (void)Fls_Drv_SwitchMode(FLS_DRV_U2_MODE_USER, u1_AreaLoopCnt);
-#if ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A8 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A16 )
+#if ( ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A6 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A8 ) || ( FLS_Drv_SELECT_DEVICE == FLS_Drv_DEVICE_U2A16 ) ) && \
+    ( FLS_Drv_SELECT_FPSYS == FLS_Drv_FPSYS_ALL )
         }
 #endif
         Fls_Str.stiStat_enu = MEMIF_IDLE;
@@ -857,8 +886,8 @@ Fls_GetVersionInfo( P2VAR( Std_VersionInfoType, AUTOMATIC, FLS_APPL_DATA ) Versi
 
 /****************************************************************************/
 /* History                                                                  */
-/* Version :Date                                                            */
-/* [Number] :[Date]                                                         */
+/*  Version        :Date                                                    */
+/*  2-0-0          :2024/07/31                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

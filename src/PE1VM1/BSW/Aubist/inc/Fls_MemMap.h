@@ -23,7 +23,7 @@
 
 #if defined FLS_START_SEC_CODE
 #undef FLS_START_SEC_CODE
-#pragma ghs section text = "bsw_fls_text"
+#pragma ghs section text = ".bsw_fls_text"
 #undef MEMMAP_ERROR
 
 #elif defined FLS_STOP_SEC_CODE
@@ -33,7 +33,7 @@
 
 #elif defined FLS_START_SEC_CONST_32
 #undef FLS_START_SEC_CONST_32
-#pragma ghs section rodata = "bsw_fls_rodata"
+#pragma ghs section rodata = ".bsw_fls_rodata"
 #undef MEMMAP_ERROR
 
 #elif defined FLS_STOP_SEC_CONST_32
@@ -49,7 +49,7 @@
 
 #elif defined FLS_START_SEC_VAR_NO_INIT_32
 #undef FLS_START_SEC_VAR_NO_INIT_32
-#pragma ghs section bss = "bsw_fls_bss"
+#pragma ghs section bss = ".bsw_fls_bss"
 #undef MEMMAP_ERROR
 
 #elif defined FLS_STOP_SEC_VAR_NO_INIT_32

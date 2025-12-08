@@ -200,6 +200,13 @@ BswConst PduIdType bsw_pdur_u2Cdd2RoutingTbl[BSW_PDUR_CFG_MSGCDD2_NUM] =
 };
 #endif
 
+#if ( (BSW_BSWM_CS_FUNC_J1939TP == BSW_USE) && (BSW_PDUR_CFG_MSGJ1939TPUP_NUM != 0U) )
+BswConst PduIdType bsw_pdur_u2J1939TpUpRoutingTbl[BSW_PDUR_CFG_MSGJ1939TPUP_NUM] =
+{
+    /* PDU ID (Lower Component | ID)   */
+};
+#endif
+
 #endif /* (BSW_PDUR_CFG_ZEROCOSTOPERATION == BSW_NOUSE) */
 
 
@@ -374,6 +381,12 @@ BswConst Bsw_PduR_RoutingType bsw_pdur_stDoIPTpRoutingTbl[BSW_PDUR_CFG_MSGDOIPTP
 };
 #endif /* ( (BSW_BSWM_CS_FUNC_DOIP == BSW_USE) && (BSW_PDUR_CFG_MSGDOIPTP_NUM != 0U) ) */
 
+#if ( (BSW_BSWM_CS_FUNC_J1939TP == BSW_USE) && (BSW_PDUR_CFG_MSGJ1939TPLO_NUM != 0U) )
+BswConst Bsw_PduR_RoutingType bsw_pdur_stJ1939TpLoRoutingTbl[BSW_PDUR_CFG_MSGJ1939TPLO_NUM] =
+{
+    /* I-PDU ID (Upper Component | ID)           ,    SecOC ID                      */
+};
+#endif /* ( (BSW_BSWM_CS_FUNC_J1939TP == BSW_USE) && (BSW_PDUR_CFG_MSGJ1939TPLO_NUM != 0U) ) */
 
 /******************************************/
 /*                                        */
@@ -417,6 +430,13 @@ BswConst PduIdType bsw_pdur_u2Cdd2IpduMTbl[BSW_PDUR_CFG_MSGCDD2_NUM] =
 };
 #endif
 
+#if ( (BSW_BSWM_CS_FUNC_J1939TP == BSW_USE) && (BSW_PDUR_CFG_MSGJ1939TPUP_NUM != 0U) )
+BswConst PduIdType bsw_pdur_u2J1939TpUpIpduMTbl[BSW_PDUR_CFG_MSGJ1939TPUP_NUM] =
+{
+    /* IpduM I-PDU ID */
+};
+#endif
+
 #if ( (BSW_BSWM_CS_FUNC_CANIF == BSW_USE) && (BSW_PDUR_CFG_MSGCANIF_NUM != 0U) )
 BswConst PduIdType bsw_pdur_u2CanIfIpduMTbl[BSW_PDUR_CFG_MSGCANIF_NUM] =
 {
@@ -445,6 +465,13 @@ BswConst PduIdType bsw_pdur_u2DoIPIfIpduMTbl[BSW_PDUR_CFG_MSGDOIPIF_NUM] =
 };
 #endif /* ( (BSW_BSWM_CS_FUNC_DOIP == BSW_USE) && (BSW_PDUR_CFG_MSGDOIPIF_NUM != 0U) ) */
 
+#if ( (BSW_BSWM_CS_FUNC_J1939TP == BSW_USE) && (BSW_PDUR_CFG_MSGJ1939TPLO_NUM != 0U) )
+BswConst PduIdType bsw_pdur_u2J1939TpLoIpduMTbl[BSW_PDUR_CFG_MSGJ1939TPLO_NUM] =
+{
+    /* IpduM I-PDU ID */
+};
+#endif /* ( (BSW_BSWM_CS_FUNC_J1939TP == BSW_USE) && (BSW_PDUR_CFG_MSGJ1939TPLO_NUM != 0U) ) */
+
 #endif /* (BSW_BSWM_CS_FUNC_IPDUM == BSW_USE) */
 
 /******************************************/
@@ -452,16 +479,16 @@ BswConst PduIdType bsw_pdur_u2DoIPIfIpduMTbl[BSW_PDUR_CFG_MSGDOIPIF_NUM] =
 /* SomeIpTp I-PDU Table                   */
 /*                                        */
 /******************************************/
-#if ( BSW_BSWM_CS_FUNC_SOMEIP == BSW_USE )
+#if ( BSW_BSWM_CS_FUNC_SOMEIPTP == BSW_USE )
 
 #if ( (BSW_BSWM_CS_FUNC_SOAD == BSW_USE) && (BSW_PDUR_CFG_MSGSOADIF_NUM != 0U) )
-BswConst PduIdType bsw_pdur_u2SoAdIfSomeIpTbl[BSW_PDUR_CFG_MSGSOADIF_NUM] =
+BswConst PduIdType bsw_pdur_u2SoAdIfSomeIpTpTbl[BSW_PDUR_CFG_MSGSOADIF_NUM] =
 {
     /* SomeIpTp I-PDU ID */
 };
 #endif /* ( (BSW_BSWM_CS_FUNC_SOAD == BSW_USE) && (BSW_PDUR_CFG_MSGSOADIF_NUM != 0U) ) */
 
-#endif /* (BSW_BSWM_CS_FUNC_SOMEIP == BSW_USE) */
+#endif /* (BSW_BSWM_CS_FUNC_SOMEIPTP == BSW_USE) */
 
 /******************************************/
 /*                                        */
@@ -504,6 +531,13 @@ BswConst PduIdType bsw_pdur_u2Cdd2SecOCTbl[BSW_PDUR_CFG_MSGCDD2_NUM] =
     /* SecOC I-PDU ID */
 };
 #endif
+
+#if ( (BSW_BSWM_CS_FUNC_J1939TP == BSW_USE) && (BSW_PDUR_CFG_MSGJ1939TPUP_NUM != 0U) )
+BswConst PduIdType bsw_pdur_u2J1939TpUpSecOCTbl[BSW_PDUR_CFG_MSGJ1939TPUP_NUM] =
+{
+    /* SecOC I-PDU ID */
+};
+#endif
 #endif /* (BSW_BSWM_CS_FUNC_SECOC == BSW_USE) && (BSW_PDUR_CFG_IPDU_MA == BSW_USE) */
 
 #endif /* (BSW_PDUR_CFG_ZEROCOSTOPERATION == BSW_NOUSE) */
@@ -527,11 +561,11 @@ BswConst PduIdType bsw_pdur_u2Cdd2SecOCTbl[BSW_PDUR_CFG_MSGCDD2_NUM] =
 /*  v1-1-0          :2019/01/15                                             */
 /*  v1-2-0          :2019/11/05                                             */
 /*  v2-0-0          :2021/02/12                                             */
-/*  v3-0-0          :2024/09/04                                             */
+/*  v3-0-0          :2025/01/23                                             */
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
-/*  Framework          :v2-0-3-z0003                                        */
+/*  Framework          :v2-1-0                                              */
 /*  BSW plug-in        :v3-0-0                                              */
 /****************************************************************************/
 

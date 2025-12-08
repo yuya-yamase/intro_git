@@ -96,11 +96,13 @@ static S_ETHSWT_DATA_LINK       G_ETHSWT_DATA_LINK;
 static S_ETHSWT_DATA_MIB        G_ETHSWT_DATA_MIB;
 static S_ETHSWT_DATA_SQI        G_ETHSWT_DATA_SQI;
 static S_ETHSWT_DATA_QCI        G_ETHSWT_DATA_QCI;
+static S_ETHSWT_DATA_REGACCESS  G_ETHSWT_DATA_REGACCESS;
 
 static uint32                   G_ETHSWT_DATA_LINK_ID;
 static uint32                   G_ETHSWT_DATA_MIB_ID;
 static uint32                   G_ETHSWT_DATA_SQI_ID;
 static uint32                   G_ETHSWT_DATA_QCI_ID;
+static uint32                   G_ETHSWT_DATA_REGACCESS_ID;
 static uint32                   G_ETHSWT_DATA_SWICRESET_COUNT;
 
 static uint8                    G_ETHSWT_DATA_LINK_UPDATE;
@@ -114,6 +116,7 @@ static void ethswt_data_checkLinkUpdate(void);
 static void ethswt_data_checkMIBUpdate(void);
 static void ethswt_data_checkSQIUpdate(void);
 static void ethswt_data_checkQciUpdate(void);
+static void ethswt_data_checkRegAccessUpdate(void);
 static void ethswt_data_checkSWICReset(void);
 static void ethswt_data_incrementID(uint32 * const id);
 /* -------------------------------------------------------------------------- */
@@ -126,6 +129,7 @@ void EthSwt_Data_Init(void)
     LIB_memset((uint8*)&G_ETHSWT_DATA_MIB, 0, sizeof(G_ETHSWT_DATA_MIB));
     LIB_memset((uint8*)&G_ETHSWT_DATA_SQI, 0, sizeof(G_ETHSWT_DATA_SQI));
     LIB_memset((uint8*)&G_ETHSWT_DATA_QCI, 0, sizeof(G_ETHSWT_DATA_QCI));
+    LIB_memset((uint8*)&G_ETHSWT_DATA_REGACCESS, 0, sizeof(G_ETHSWT_DATA_REGACCESS));
 
     for (idx = 0u; idx < D_ETHSWT_DATA_LINK_NUM; idx++) {
         G_ETHSWT_DATA_LINK.link[idx].linkGetResult = E_NOT_OK;
@@ -138,6 +142,7 @@ void EthSwt_Data_Init(void)
     G_ETHSWT_DATA_MIB_ID = 0u;
     G_ETHSWT_DATA_SQI_ID = 0u;
     G_ETHSWT_DATA_QCI_ID = 0u;
+	G_ETHSWT_DATA_REGACCESS_ID = 0u;
     G_ETHSWT_DATA_SWICRESET_COUNT = 0u;
 
     LIB_memset((uint8*)&G_ETHSWT_DATA_LINK_UPDATE, 0, sizeof(G_ETHSWT_DATA_LINK_UPDATE));
@@ -213,6 +218,25 @@ void EthSwt_Data_NotifyQci(const uint8 QciIdx, const uint32 QciCount)
     return;
 }
 /* -------------------------------------------------------------------------- */
+void EthSwt_Data_NotifyRegAccess(const Std_ReturnType getRegAccessResult)
+{
+
+    LIB_DI();
+	if(G_ETHSWT_DATA_REGACCESS.getRegAccessResult != getRegAccessResult && E_NOT_OK == getRegAccessResult){
+		G_ETHSWT_DATA_REGACCESS.getRegAccessResult = (uint32)getRegAccessResult;
+		ethswt_data_incrementID(&G_ETHSWT_DATA_REGACCESS_ID);
+		G_ETHSWT_DATA_REGACCESS.id = G_ETHSWT_DATA_REGACCESS_ID;
+	}
+	else
+	{
+		G_ETHSWT_DATA_REGACCESS.getRegAccessResult = (uint32)getRegAccessResult;
+	}
+
+	LIB_EI();
+
+	return;
+}
+/* -------------------------------------------------------------------------- */
 void EthSwt_Data_NotifySWICReset(void)
 {
     if (G_ETHSWT_DATA_SWICRESET_COUNT == 0xFFFFFFFF) {
@@ -231,6 +255,7 @@ void EthSwt_Data_LoProc(void)
     ethswt_data_checkMIBUpdate();
     ethswt_data_checkSQIUpdate();
     ethswt_data_checkQciUpdate();
+    ethswt_data_checkRegAccessUpdate();
     ethswt_data_checkSWICReset();
     
     return;
@@ -280,6 +305,12 @@ static void ethswt_data_checkQciUpdate(void)
         (void)ChipCom_SetPeriodicTxData(CHIPCOM_PERIODICID_ETHERSWT_SWIC_DATAUSAGEEXCEED, sizeof(G_ETHSWT_DATA_QCI), (uint8*)&G_ETHSWT_DATA_QCI);
         ethswt_data_incrementID(&G_ETHSWT_DATA_QCI_ID);        
     }
+
+    return;
+}
+static void ethswt_data_checkRegAccessUpdate(void)
+{
+    (void)ChipCom_SetPeriodicTxData(CHIPCOM_PERIODICID_ETHERSWT_REGERRSTS, sizeof(G_ETHSWT_DATA_REGACCESS), (uint8*)&G_ETHSWT_DATA_REGACCESS);
 
     return;
 }

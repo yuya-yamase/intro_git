@@ -1,0 +1,7 @@
+#!gbuild
+[Subproject]
+    :sourceDir=${IVDSH_DIR}
+
+scc/ivdsh.c
+scc/ivdsh_fqif.c
+config/ivdsh_cfg.c

@@ -1,7 +1,7 @@
-/* Fee_Dfc.c v2-0-0                                                         */
+/* Fee_Dfc.c v2-1-0                                                         */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION. All rights reserved.                        */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -43,10 +43,10 @@
 #define FEE_DFC_RSP_NG_RAM_ERROR            ((uint8)0x85)   /* RAM error       */
 #define FEE_DFC_RSP_NG_BLANK_ERROR          ((uint8)0x86)   /* Blank error     */
 
-/* データFlashのベースアドレス */
+/* Data Flash base address */
 #define FEE_DFC_BASEADDRESS     FEE_DATA_FLASH_ADDRESS_START
 
-/* 消去単位サイズ */
+/* Erase unit size */
 #define FEE_DFC_DEFAULT_ERASE_SIZE      (FEE_DATA_FLASH_SECTOR_SIZE)
 
 /*--------------------------------------------------------------------------*/
@@ -119,21 +119,20 @@ Fee_Dfc_SetRAMSub( void )
 }
 
 /****************************************************************************/
-/*  関数名      : void Fee_Dfc_Write(const uint32 Address,              */
-/*                  const uint8 * ptu1Data)                 */
-/*  処理名      : 書込み関数                                                */
-/*  機能説明    : DTFから要求されたデータをデータFlashに書き込む            */
-/*  引数        : const uint32 Address : データを書込むアドレス         */
-/*              : const uint32 Data    : データFlash に書込むデータ     */
-/*              : const uint16 DataLen : Write Data Length                  */
-/*  戻り値      : void                                                      */
-/*  備考        : なし                                                      */
+/* Function Name | Fee_Dfc_Write                                            */
+/* Description   | Write data requested from DTF to data Flash.             */
+/* Preconditions | None                                                     */
+/* Parameters    | const uint 32 Address : Address to write data to         */
+/*               | const uint 32 Data    : Data written to data Flash       */
+/*               | const uint16 DataLen  : Write Data Length                */
+/* Return Value  | None                                                     */
+/* Notes         | None                                                     */
 /****************************************************************************/
 FUNC(void, FEE_CODE) Fee_Dfc_Write(const uint32 Address, P2CONST(uint8, AUTOMATIC, TYPEDEF) ptu1Data, const uint16 u2Len)
 {
     Std_ReturnType ret;
 
-    /* FLSに書込み要求を出す */
+    /* Send a write request to FLS */
     ret = Fee_FlsWrp_Write((Address - (Fls_AddressType)FEE_DFC_BASEADDRESS), ptu1Data, (Fls_LengthType)u2Len);
 
     if( ret == (Std_ReturnType)E_OK )
@@ -141,24 +140,25 @@ FUNC(void, FEE_CODE) Fee_Dfc_Write(const uint32 Address, P2CONST(uint8, AUTOMATI
         Fee_CpuDtfInfo.u4DFCTimerCnt = Fee_HwLmtWriteTime;
     }
 
-    /* FLSの応答を上位層が期待する応答へ変換して保存 */
+    /* Convert the FLS response into the response expected by the upper layer and save it */
     Fee_DrvWrap_ConvDrvReqResult(ret);
 
     return;
 }
 /****************************************************************************/
-/*  関数名      : void Fee_Dfc_Erase(const uint32 Address)          */
-/*  処理名      : 消去関数                                                  */
-/*  機能説明    : 指定されたアドレスから始まるブロックの内容を消去する      */
-/*  引数        : const uint32 Address : 消去を開始するアドレス         */
-/*  戻り値      : void                                                      */
-/*  備考        : なし                                                      */
+/* Function Name | Fee_Dfc_Erase                                            */
+/* Description   | Erase the contents of the block starting                 */
+/*               | at the specified address                                 */
+/* Preconditions | None                                                     */
+/* Parameters    | const uint 32 Address: Address to start erasing          */
+/* Return Value  | None                                                     */
+/* Notes         | None                                                     */
 /****************************************************************************/
 FUNC(void, FEE_CODE) Fee_Dfc_Erase(const uint32 Address)
 {
     Std_ReturnType ret;
 
-    /* FLSに消去要求を出す */
+    /* Submit an erase request to FLS */
     ret = Fee_FlsWrp_Erase((Address - (Fls_AddressType)FEE_DFC_BASEADDRESS), (Fls_LengthType)FEE_DFC_DEFAULT_ERASE_SIZE);
 
     if( ret == (Std_ReturnType)E_OK )
@@ -166,21 +166,22 @@ FUNC(void, FEE_CODE) Fee_Dfc_Erase(const uint32 Address)
         Fee_CpuDtfInfo.u4DFCTimerCnt = Fee_HwlmtInitTime;
     }
 
-    /* DTFDの応答を上位層が期待する応答へ変換して保存 */
+    /* Save DTFD response as expected by upper layer */
     Fee_DrvWrap_ConvDrvReqResult(ret);
 
     return;
 }
-
 /****************************************************************************/
-/*  関数名      : void Fee_Dfc_BlankCheck                                   */
-/*  処理名      : ブランクチェック関数                                      */
-/*  機能説明    : 指定アドレスから始まるブロックのブランクチェックを行う    */
-/*  引数        : const uint32 StartTailAddress : ブランクチェック開始アドレス   */
-/*              : const uint32 EndTopAddress    : ブランクチェック終了アドレス   */
-/*              : uint32 MaxBlankCheckNum       : The number of blank check in one cycle.   */
-/*  戻り値      : void                                                      */
-/*  備考        : なし                                                      */
+/* Function Name | Fee_Dfc_BlankCheck                                       */
+/* Description   | Blank check block starting at specified address          */
+/* Preconditions | None                                                     */
+/* Parameters    | const uint 32 StartTailAddress: blank check              */
+/*               |                                 start address            */
+/*               | const uint 32 EndTopAddress   : blank check end address  */
+/*               | uint32 MaxBlankCheckNum       : The number of blank      */
+/*               |                                 check in one cycle.      */
+/* Return Value  | None                                                     */
+/* Notes         | None                                                     */
 /****************************************************************************/
 FUNC( void, FEE_CODE )
 Fee_Dfc_BlankCheck(
@@ -188,15 +189,15 @@ Fee_Dfc_BlankCheck(
     const uint32 EndTopAddress,
     uint32 MaxBlankCheckNum
 ){
-    /* ブランクチェック状態を「実行中」に設定 */
+    /* Set blank check state to "Running" */
     Fee_DrvWrap_BlankCheck_State = FEE_DFC_STATUS_BUSY;
 
-    /* ブランクチェックの開始時は、ブランクチェック結果（最終書込みレコードアドレス）にブロック末尾アドレスを入れる */
+    /* When starting a blank check, include the block trailing address in the blank check result (last write record address) */
     Fee_DrvWrap_WrittenAdr = StartTailAddress - (uint32)FEE_DATA_FLASH_ECC_FIX_SIZE;
     Fee_Dfc_BlankCheckEndAdr = EndTopAddress;
     Fee_Dfc_MaxBlankCheckNum = MaxBlankCheckNum;
 
-    /* ブランクチェック実行 */
+    /* Perform blank check */
     Fee_DrvWrap_BlankCheck_Main();
 
     return;
@@ -229,22 +230,22 @@ Fee_Dfc_GetBlankCheckResult(
 #endif /*( MSCD_FREESPACE_USE == STD_ON )*/
 
 /****************************************************************************/
-/*  関数名      : uint32 Fee_Dfc_ExecBlankCheck(void)                       */
-/*  処理名      : 継続ブランクチェック                                      */
-/*  機能説明    : 指定アドレスから始まるブロックのブランクチェックを行う    */
-/*  引数        : なし                                                      */
-/*  戻り値      : uint32 : データFlash動作確認結果                          */
-/*                  FEE_DFC_STATUS_OK    全領域ブランク                     */
-/*                  FEE_DFC_STATUS_ERROR 非ブランク領域あり                 */
-/*                  FEE_DFC_STATUS_BUSY  ブランクチェック中                 */
-/*  備考        : なし                                                      */
+/* Function Name | Fee_Dfc_ExecBlankCheck                                   */
+/* Description   | Blank check block starting at specified address          */
+/* Preconditions | None                                                     */
+/* Parameters    | None                                                     */
+/* Return Value  | uint 32: Data Flash operation confirmation result        */
+/*               |   FEE _ DFC _ STATUS _ OK Full space blank               */
+/*               |   FEE _ DFC _ STATUS _ ERROR There is non-blank space    */
+/*               |   FEE _ DFC _ STATUS _ BUSY Blank checking               */
+/* Notes         | None                                                     */
 /****************************************************************************/
 FUNC( uint32 ,FEE_CODE )
 Fee_Dfc_ExecBlankCheck( void )
 {
     if( Fee_DrvWrap_BlankCheck_State == FEE_DFC_STATUS_BUSY )
     {
-        /* ブランクチェック実行 */
+        /* Perform blank check */
         Fee_DrvWrap_BlankCheck_Main();
     }
 
@@ -252,12 +253,12 @@ Fee_Dfc_ExecBlankCheck( void )
 }
 
 /****************************************************************************/
-/*  関数名      : void Fee_DrvWrap_BlankCheck_Main(void)                        */
-/*  処理名      : ブランクチェック実行                                      */
-/*  機能説明    : 指定アドレスから始まるブロックのブランクチェックを行う    */
-/*  引数        : なし                                                      */
-/*  戻り値      : なし                                                      */
-/*  備考        : なし                                                      */
+/* Function Name | Fee_DrvWrap_BlankCheck_Main                              */
+/* Description   | Blank check block starting at specified address          */
+/* Preconditions | None                                                     */
+/* Parameters    | None                                                     */
+/* Return Value  | None                                                     */
+/* Notes         | None                                                     */
 /****************************************************************************/
 FUNC(void , FEE_CODE) Fee_DrvWrap_BlankCheck_Main(void)
 {
@@ -314,20 +315,20 @@ FUNC(void , FEE_CODE) Fee_DrvWrap_BlankCheck_Main(void)
 /* Function Name | Fee_Dfc_ExecFlsMainFunction                              */
 /* Description   | Run the Data Flash Driver, and return the results.       */
 /* Preconditions | None                                                     */
-/* Parameters    | None                                                     */
+/* Parameters    | u1_callmode : type of periodic process                   */
 /* Return Value  | Result of running Data Flash                             */
 /*               |  FEE_DFC_STATUS_OK    Processing Success                 */
 /*               |  FEE_DFC_STATUS_ERROR Error Occurred                     */
 /*               |  FEE_DFC_STATUS_BUSY  Continue Processing                */
 /* Notes         | None                                                     */
 /****************************************************************************/
-FUNC(uint32, FEE_CODE) Fee_Dfc_ExecFlsMainFunction(void)
+FUNC(uint32, FEE_CODE) Fee_Dfc_ExecFlsMainFunction( uint8 u1_callmode )
 {
     uint32 ret;
     MemIf_JobResultType FlsJobResult;
     uint32 drvwrap_state_current = Fee_DrvWrap_State;
 
-    Fee_FlsWrp_MainFunction();
+    Fee_FlsWrp_MainFunction( u1_callmode );
 
     FlsJobResult = Fee_FlsWrp_GetJobResult();
 
@@ -366,16 +367,16 @@ FUNC(uint32, FEE_CODE) Fee_Dfc_ExecFlsMainFunction(void)
 }
 
 /****************************************************************************/
-/*  関数名      : void Fee_Dfc_End(void)                                */
-/*  処理名      : フラッシュ操作終了関数                                    */
-/*  機能説明    : フラッシュ操作の終了を行う                                */
-/*  引数        : void                                                      */
-/*  戻り値      : void                                                      */
-/*  備考        : なし                                                      */
+/* Function Name | Fee_Dfc_End                                              */
+/* Description   | End flash operation                                      */
+/* Preconditions | None                                                     */
+/* Parameters    | None                                                     */
+/* Return Value  | None                                                     */
+/* Notes         | None                                                     */
 /****************************************************************************/
 FUNC(void, FEE_CODE) Fee_Dfc_End(void)
 {
-    /* 結合層のRAMを初期化 */
+    /* Initialize RAM for bonding layer */
     Fee_DrvWrap_Init();
 
     return;
@@ -413,17 +414,16 @@ Fee_Dfc_Cancel( void )
 }
 
 /****************************************************************************/
-/*  関数名      : uint32 Fee_Dfc_GetFLAP(void)                      */
-/*  処理名      : FLAP 取得関数                                             */
-/*  機能説明    : ブランクチェックで判明したブランクで無い箇所の            */
-/*                アドレスを返却する                                        */
-/*  引数        : void                                                      */
-/*  戻り値      : U4 : ブランクで無い箇所のアドレス                         */
-/*  備考        : なし                                                      */
+/* Function Name | Fee_Dfc_GetFLAP                                          */
+/* Description   | Return addresses found by blank check that are not blank */
+/* Preconditions | None                                                     */
+/* Parameters    | None                                                     */
+/* Return Value  | U4: address where not blank                              */
+/* Notes         | None                                                     */
 /****************************************************************************/
 FUNC(uint32, FEE_CODE) Fee_Dfc_GetFLAP(void)
 {
-    /* 保存してある最終書き込みレコードの先頭アドレスを返す */
+    /* returns the first address of the last saved write record */
     return (Fee_DrvWrap_WrittenAdr);
 }
 
@@ -463,12 +463,12 @@ FUNC(void, FEE_CODE) Fee_DrvWrap_ConvDrvReqResult(
     uint32 drvwrap_state_new;
 
     switch(result){
-        /* 「処理成功」の場合「処理継続」を返す */
+        /* Returns "Process Continued" if "Process Succeeded" */
         case E_OK:
             drvwrap_state_new = FEE_DFC_STATUS_BUSY;
             break;
 
-        /* 「要求拒否」「パラメータエラー」「その他(異常)」の場合「エラー発生」を返す */
+        /* Returns "Error occurred" for "Request denied," "Parameter error" and "Other (abnormal)" */
         default:
             drvwrap_state_new = FEE_DFC_STATUS_ERROR;
             break;
@@ -480,12 +480,12 @@ FUNC(void, FEE_CODE) Fee_DrvWrap_ConvDrvReqResult(
 }
 
 /****************************************************************************/
-/*  関数名      : void Fee_DrvWrap_Init(void)                               */
-/*  処理名      : RAMクリア関数                                             */
-/*  機能説明    : 結合層内のRAMをクリアする                                 */
-/*  引数        : void                                                      */
-/*  戻り値      : void                                                      */
-/*  備考        : なし                                                      */
+/* Function Name | Fee_DrvWrap_Init                                         */
+/* Description   | Clear RAM in bonding layer                               */
+/* Preconditions | None                                                     */
+/* Parameters    | None                                                     */
+/* Return Value  | None                                                     */
+/* Notes         | None                                                     */
 /****************************************************************************/
 FUNC(void, FEE_CODE) Fee_DrvWrap_Init(void)
 {
@@ -507,6 +507,7 @@ FUNC(void, FEE_CODE) Fee_DrvWrap_Init(void)
 /*  1-0-0          :2019/02/01                                              */
 /*  1-1-0          :2019/08/19                                              */
 /*  2-0-0          :2022/08/24                                              */
+/*  2-1-0          :2024/09/04                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

@@ -44,6 +44,7 @@
 #define DIAGAPP_SID31_SF_01             (0x01)      /* Sub Fubction:0x01     */
 #define DIAGAPP_SID31_SF_02             (0x02)      /* Sub Fubction:0x02     */
 #define DIAGAPP_SID31_SF_03             (0x03)      /* Sub Fubction:0x03     */
+#define DIAGAPP_SID31_SF_MASK           (0x7FU)
 #define DIAGAPP_SID31_RID_HIGH_POS      (1U)
 #define DIAGAPP_SID31_RID_LOW_POS       (2U)
 /*request buf position*/
@@ -135,7 +136,7 @@ void           vd_g_DiagAppSID31Request(const ST_OXDC_REQ * st_ap_REQ, ST_OXDC_A
             return;
         }
 
-        u1_subfunction = st_ap_REQ->u1p_RX[DIAGAPP_SID31_SF];
+        u1_subfunction = st_ap_REQ->u1p_RX[DIAGAPP_SID31_SF] & (U1)DIAGAPP_SID31_SF_MASK;
 
         if((u1_subfunction == (U1)DIAGAPP_SID31_SF_01) ||
           (u1_subfunction == (U1)DIAGAPP_SID31_SF_02)||

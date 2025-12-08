@@ -74,6 +74,7 @@ static void vd_s_PwrCtrlMainBonDDconvOnReq( void );
 static void vd_s_PwrCtrlMainBonPwrOnReq( void );
 static void vd_s_PwrCtrlMainSipOffMcuStandbyReq( void );
 static void vd_s_PwrCtrlMainSipOffMcuStandbySysDevReq( void );
+static void vd_s_PwrCtrlMainStandbyReq( void );
 static void vd_s_PwrCtrlMainForcedOffReq( const U1 u1_s_evtype );
 static void vd_s_PwrCtrlMainStbyCancelSt1Req( void );
 static void vd_s_PwrCtrlMainStbyCancelSt2Req( const U1 u1_a_pre_seq );
@@ -83,7 +84,15 @@ static void vd_s_PwrCtrlMainOnOffJudge( void );
 static void vd_s_PwrCtrlMainBonSeq( void );
 static void vd_s_PwrCtrlMainWakeUpSeq( void );
 static void vd_s_PwrCtrlMainSipOffMcuStandbySeq( void );
+static void vd_s_PwrCtrlMainSipOffMcuStandbySipOffStep( void );
+static void vd_s_PwrCtrlMainSipOffMcuStandbySysDevOffStep( void );
+static void vd_s_PwrCtrlMainSipOffMcuStandbySysOffStep( void );
+static void vd_s_PwrCtrlMainSipOffMcuStandbyNrdOffStep( void );
 static void vd_s_PwrCtrlMainStandbySeq( void );
+static void vd_s_PwrCtrlMainStandbySipStby( void );
+static void vd_s_PwrCtrlMainStandbySysDevOff( void );
+static void vd_s_PwrCtrlMainStandbySysOff( void );
+static void vd_s_PwrCtrlMainStandbyNrdOff( void );
 static void vd_s_PwrCtrlMainForcedOffSeq( void );
 static void vd_s_PwrCtrlMainStbyCancelSt1Seq( void );
 static void vd_s_PwrCtrlMainStbyCancelSt2Seq( void );
@@ -332,13 +341,13 @@ static void vd_s_PwrCtrlMainSipOffMcuStandbySysDevReq( void )
 }
 
 /*****************************************************************************
-  Function      : vd_g_PwrCtrlMainStandbyReq
+  Function      : vd_s_PwrCtrlMainStandbyReq
   Description   : スタンバイシーケンス要求
   param[in/out] : none
   return        : none
   Note          : none
 *****************************************************************************/
-void vd_g_PwrCtrlMainStandbyReq( void )
+static void vd_s_PwrCtrlMainStandbyReq( void )
 {
     u1_s_PwrCtrl_Main_Sts           = (U1)PWRCTRL_MAIN_STANDBY_REQ;
     vd_s_PwrCtrlMainStartSet();
@@ -489,7 +498,7 @@ void vd_g_PwrCtrlMainTask( void )
     /* スタンバイ/スタンバイ中断(再起動)開始判定 */
     vd_s_PwrCtrlMainOnOffJudge();
 
-    u1_g_PwrCtrl_Main_DbgFailOffFlag = u1_g_PwrCtrl_PinMonitor_GetPinInfo(PWRCTRL_CFG_PRIVATE_KIND_DBG_FAIL_OFF);    /* DBG-FAIL-OFF端子の状態を取得 */
+    u1_g_PwrCtrl_Main_DbgFailOffFlag = u1_g_PwrCtrl_PinMonitor_GetPinInfo((U1)PWRCTRL_CFG_PRIVATE_KIND_DBG_FAIL_OFF);    /* DBG-FAIL-OFF端子の状態を取得 */
 
     if(u1_s_PwrCtrl_Main_Sts == (U1)PWRCTRL_MAIN_BON_REQ)
     {
@@ -563,7 +572,7 @@ static void vd_s_PwrCtrlMainOnOffJudge( void )
                 
                 if(u1_t_str == (U1)PWRCTRL_COM_STR_ON){
                     /* スタンバイシーケンス要求 */
-                    vd_g_PwrCtrlMainStandbyReq();
+                    vd_s_PwrCtrlMainStandbyReq();
                 }
                 
                 else{
@@ -644,7 +653,7 @@ static void vd_s_PwrCtrlMainBonSeq( void )
 /* /BU-DET =Hi? */
     if ( u1_s_PwrCtrl_Main_SysPwrSts == (U1)PWRCTRL_MAIN_SYS_STS_BUDET )
     {
-        u1_t_read_lv = u1_g_PwrCtrl_PinMonitor_GetPinInfo(PWRCTRL_CFG_PRIVATE_KIND_BU_DET);    /* BU-DET端子の状態を取得 */
+        u1_t_read_lv = u1_g_PwrCtrl_PinMonitor_GetPinInfo((U1)PWRCTRL_CFG_PRIVATE_KIND_BU_DET);    /* BU-DET端子の状態を取得 */
         if ( u1_t_read_lv == (U1)MCU_DIO_HIGH )
         {
             /* 低電圧検知と判定してBU断シーケンスを開始する */
@@ -687,7 +696,7 @@ static void vd_s_PwrCtrlMainBonSeq( void )
 /* MM_STBY_N =Hi?(SOCメインドメインのQNX起動完了の確認) */
     if ( u1_s_PwrCtrl_Main_SipPwrSts == (U1)PWRCTRL_MAIN_SIP_STS_CHK_MMSTBY )
     {
-        u1_t_read_lv = u1_g_PwrCtrl_PinMonitor_GetPinInfo(PWRCTRL_CFG_PRIVATE_KIND_MM_STBY_N); /* MM_STBY_N端子の状態を取得 */
+        u1_t_read_lv = u1_g_PwrCtrl_PinMonitor_GetPinInfo((U1)PWRCTRL_CFG_PRIVATE_KIND_MM_STBY_N); /* MM_STBY_N端子の状態を取得 */
 #ifndef PWRCTRL_CFG_PRIVATE_DBG_FAIL_OFF
         if ( u1_t_read_lv == (U1)MCU_DIO_HIGH )
 #else
@@ -757,7 +766,7 @@ static void vd_s_PwrCtrlMainWakeUpSeq( void )
 /* /BU-DET =Hi? */
     if ( u1_s_PwrCtrl_Main_SysPwrSts == (U1)PWRCTRL_MAIN_SYS_STS_BUDET )
     {
-        u1_t_read_lv = u1_g_PwrCtrl_PinMonitor_GetPinInfo(PWRCTRL_CFG_PRIVATE_KIND_BU_DET);    /* BU-DET端子の状態を取得 */
+        u1_t_read_lv = u1_g_PwrCtrl_PinMonitor_GetPinInfo((U1)PWRCTRL_CFG_PRIVATE_KIND_BU_DET);    /* BU-DET端子の状態を取得 */
         if ( u1_t_read_lv == (U1)MCU_DIO_HIGH )
         {
             /* 低電圧検知と判定してBU断シーケンスを開始する */
@@ -766,7 +775,7 @@ static void vd_s_PwrCtrlMainWakeUpSeq( void )
         
         else{
             /* 低電圧を検知していなければ正常ルートを進める */
-            u1_s_PwrCtrl_Main_SysPwrSts = PWRCTRL_MAIN_SYS_STS_INPRC;
+            u1_s_PwrCtrl_Main_SysPwrSts = (U1)PWRCTRL_MAIN_SYS_STS_INPRC;
         }
     }
 
@@ -782,7 +791,7 @@ static void vd_s_PwrCtrlMainWakeUpSeq( void )
         if ( u1_t_syson_seq == (U1)TRUE )                                                                 /* 処理完了 */
         {
 /* AOSS_SLEEP_ENTRY_EXIT＝Hi？(SIPがサスペンド状態であることを確認※1度のみ実施) */
-            u1_t_read_lv = u1_g_PwrCtrl_PinMonitor_GetPinInfo(PWRCTRL_CFG_PRIVATE_KIND_AOSS_SLP_ENTRY_EXIT); /* AOSS_SLEEP_ENTRY_EXIT端子の状態を取得    */
+            u1_t_read_lv = u1_g_PwrCtrl_PinMonitor_GetPinInfo((U1)PWRCTRL_CFG_PRIVATE_KIND_AOSS_SLP_ENTRY_EXIT); /* AOSS_SLEEP_ENTRY_EXIT端子の状態を取得    */
             if(u1_t_read_lv == (U1)MCU_DIO_HIGH)
             {
                 u1_s_PwrCtrl_Main_SysPwrSts = (U1)PWRCTRL_MAIN_SYS_STS_COMP;                              /* SYS電源状態：実行中→完了 */
@@ -822,7 +831,7 @@ static void vd_s_PwrCtrlMainWakeUpSeq( void )
 /* AOSS_SLEEP_ENTRY_EXIT=Lo?(PMICからのSIP電源レジューム完了確認) */
     if(u1_s_PwrCtrl_Main_SipPwrSts == (U1)PWRCTRL_MAIN_SIP_STS_CHK_AOSS)
     {
-        u1_t_read_lv = u1_g_PwrCtrl_PinMonitor_GetPinInfo(PWRCTRL_CFG_PRIVATE_KIND_AOSS_SLP_ENTRY_EXIT);   /* AOSS_SLEEP_ENTRY_EXIT端子の状態を取得    */
+        u1_t_read_lv = u1_g_PwrCtrl_PinMonitor_GetPinInfo((U1)PWRCTRL_CFG_PRIVATE_KIND_AOSS_SLP_ENTRY_EXIT);   /* AOSS_SLEEP_ENTRY_EXIT端子の状態を取得    */
 #ifndef PWRCTRL_CFG_PRIVATE_DBG_FAIL_OFF
         if(u1_t_read_lv == (U1)MCU_DIO_LOW)
 #else
@@ -861,8 +870,8 @@ static void vd_s_PwrCtrlMainWakeUpSeq( void )
     
 /* SAIL-ERR[2:1] ='01'? */
     if(u1_s_PwrCtrl_Main_SipPwrSts == (U1)PWRCTRL_MAIN_SIP_STS_CHK_SAILERR){
-        u1_t_sail_err1 = u1_g_PwrCtrl_PinMonitor_GetPinInfo(PWRCTRL_CFG_PRIVATE_KIND_SAIL_ERR1);   /* SAIL-ERR1端子の状態を取得 */
-        u1_t_sail_err2 = u1_g_PwrCtrl_PinMonitor_GetPinInfo(PWRCTRL_CFG_PRIVATE_KIND_SAIL_ERR2);   /* SAIL-ERR2端子の状態を取得 */
+        u1_t_sail_err1 = u1_g_PwrCtrl_PinMonitor_GetPinInfo((U1)PWRCTRL_CFG_PRIVATE_KIND_SAIL_ERR1);   /* SAIL-ERR1端子の状態を取得 */
+        u1_t_sail_err2 = u1_g_PwrCtrl_PinMonitor_GetPinInfo((U1)PWRCTRL_CFG_PRIVATE_KIND_SAIL_ERR2);   /* SAIL-ERR2端子の状態を取得 */
         
 #ifndef PWRCTRL_CFG_PRIVATE_DBG_FAIL_OFF
         if((u1_t_sail_err1 == (U1)MCU_DIO_HIGH) &&
@@ -895,7 +904,7 @@ static void vd_s_PwrCtrlMainWakeUpSeq( void )
 /* MM_STBY_N =Hi?(SOCメインドメインのQNX起動完了の確認) */
     if (u1_s_PwrCtrl_Main_SipPwrSts == (U1)PWRCTRL_MAIN_SIP_STS_CHK_MMSTBY)
     {
-        u1_t_read_lv = u1_g_PwrCtrl_PinMonitor_GetPinInfo(PWRCTRL_CFG_PRIVATE_KIND_MM_STBY_N);             /* MM_STBY_N端子の状態を取得 */
+        u1_t_read_lv = u1_g_PwrCtrl_PinMonitor_GetPinInfo((U1)PWRCTRL_CFG_PRIVATE_KIND_MM_STBY_N);        /* MM_STBY_N端子の状態を取得 */
 #ifndef PWRCTRL_CFG_PRIVATE_DBG_FAIL_OFF
         if(u1_t_read_lv == (U1)MCU_DIO_HIGH)
 #else
@@ -956,11 +965,6 @@ static void vd_s_PwrCtrlMainWakeUpSeq( void )
 *****************************************************************************/
 static void vd_s_PwrCtrlMainSipOffMcuStandbySeq( void )
 {
-    U1 u1_t_sipoff_seq;                                                      /* SIP電源OFFシーケンス状態問い合わせ結果 */
-    U1 u1_t_foff_req;                                                        /* SIP電源強制OFFシーケンス要求確認結果 */
-    U1 u1_t_nrdoff_seq;                                                      /* 非冗長電源OFFシーケンス状態問い合わせ結果 */
-    U1 u1_t_sysoff_seq;                                                      /* SYS電源OFFシーケンス状態問い合わせ結果 */
-    U1 u1_t_devoff_seq;                                                      /* SYS系デバイス終了状態問い合わせ結果 */
     U1 u1_t_step_chk;                                                        /* 現在STEP問い合わせ結果 */
     U1 u1_t_wkup_req;                                                        /* 起動トリガ判定結果 */
     U1 u1_t_stbycancel;
@@ -989,7 +993,7 @@ static void vd_s_PwrCtrlMainSipOffMcuStandbySeq( void )
         if ( u1_s_PwrCtrl_Main_SipPwrSts == (U1)PWRCTRL_MAIN_SIP_STS_INPRC )
         {
             /* 現在STEP(SIP電源OFFシーケンス)を取得する */
-            u1_t_step_chk = u1_g_PwrCtrlSipStbyStepGetSts(PWRCTRL_SIP_SIPOFF_STEP_REQ);
+            u1_t_step_chk = u1_g_PwrCtrlSipStbyStepGetSts((U1)PWRCTRL_SIP_SIPOFF_STEP_REQ);
             /* 現在STEPがSTEP1からSTEP3の場合 */
             if((u1_t_step_chk == (U1)PWRCTRL_COMMON_PROCESS_STEP1) ||
                (u1_t_step_chk == (U1)PWRCTRL_COMMON_PROCESS_STEP2) ||
@@ -1003,54 +1007,13 @@ static void vd_s_PwrCtrlMainSipOffMcuStandbySeq( void )
 
     if(u1_t_stbycancel == (U1)FALSE){
         /* SIP電源OFF処理 */
-        if ( u1_s_PwrCtrl_Main_SipPwrSts == (U1)PWRCTRL_MAIN_SIP_STS_INPRC )
-        {
-            vd_g_PwrCtrlSipMainFunc();                                           /* SIP電源 定期処理 */
-
-            u1_t_foff_req  = u1_g_PwrCtrlSipFOffInfo();                          /* SIP電源強制OFFシーケンス要求問い合わせ */
-            /* 強制OFFシーケンス要求 */
-            vd_s_PwrCtrlMainForcedOffReq(u1_t_foff_req);
-
-            u1_t_sipoff_seq = u1_g_PwrCtrlSipGetSts();                           /* SIP電源シーケンス状態問い合わせ */
-            if ( u1_t_sipoff_seq == (U1)TRUE )                                   /* 処理完了 */
-            {
-                u1_s_PwrCtrl_Main_SipPwrSts = (U1)PWRCTRL_MAIN_SIP_STS_COMP;     /* SIP電源状態：実行中→完了 */
-                u1_s_PwrCtrl_Main_SysPwrSts = (U1)PWRCTRL_MAIN_SYS_STS_WAITDEV;  /* SYS電源状態：開始→SYSデバイス終了待ち */
-            }
-        }
-
+        vd_s_PwrCtrlMainSipOffMcuStandbySipOffStep();
         /* SYS系デバイス終了状態問い合わせ */
-        if ( u1_s_PwrCtrl_Main_SysPwrSts == (U1)PWRCTRL_MAIN_SYS_STS_WAITDEV )
-        {
-            u1_t_devoff_seq = u1_g_PwrCtrlSysShtdwnGetSts();                     /* SYS系デバイス終了状態問い合わせ */
-            if ( u1_t_devoff_seq == (U1)TRUE )                                   /* 処理完了 */
-            {
-                u1_s_PwrCtrl_Main_SysPwrSts = (U1)PWRCTRL_MAIN_SYS_STS_INPRC;    /* SYS電源状態:SYSデバイス終了待ち→実行中 */
-                /* SYS電源OFF要求 */
-                vd_g_PwrCtrlSysPwrOffStart();                                    /* SYS電源OFF要求 */
-            }
-        }
-
+        vd_s_PwrCtrlMainSipOffMcuStandbySysDevOffStep();
         /* SYS電源OFF制御 */
-        if ( u1_s_PwrCtrl_Main_SysPwrSts == (U1)PWRCTRL_MAIN_SYS_STS_INPRC )     /* SYS電源状態:実行中 */
-        {
-            vd_g_PwrCtrlSysPwrOffMainFunction();
-            u1_t_sysoff_seq = u1_g_PwrCtrlSysGetSts();                           /* SYS電源シーケンス状態問い合わせ */
-            if ( u1_t_sysoff_seq == (U1)TRUE )                                   /* 処理完了 */
-            {
-                u1_s_PwrCtrl_Main_SysPwrSts = (U1)PWRCTRL_MAIN_SYS_STS_COMP;     /* SYS電源状態：実行中→完了 */
-            }
-        }
-
+        vd_s_PwrCtrlMainSipOffMcuStandbySysOffStep();
         /* 非冗長電源OFFシーケンス状態問い合わせ */
-        if ( u1_s_PwrCtrl_Main_NonRednPwrSts == (U1)PWRCTRL_MAIN_NRD_STS_INPRC )
-        {
-            u1_t_nrdoff_seq = u1_g_PwrCtrlNoRedunGetSts();                       /* 非冗長電源シーケンス状態問い合わせ */
-            if ( u1_t_nrdoff_seq == (U1)TRUE )                                   /* 処理完了 */
-            {
-                u1_s_PwrCtrl_Main_NonRednPwrSts = (U1)PWRCTRL_MAIN_NRD_STS_COMP; /* 非冗長電源状態：実行中→完了 */
-            }
-        }
+        vd_s_PwrCtrlMainSipOffMcuStandbyNrdOffStep();
 
         if(u1_s_PwrCtrl_Main_SysPwrSts == (U1)PWRCTRL_MAIN_SYS_STS_COMP)
         {
@@ -1081,6 +1044,112 @@ static void vd_s_PwrCtrlMainSipOffMcuStandbySeq( void )
 }
 
 /*****************************************************************************
+  Function      : vd_s_PwrCtrlMainSipOffMcuStandbySipOffStep
+  Description   : 5-5.SIP電源OFF&MCUスタンバイシーケンス_SIP電源OFF処理
+  param[in/out] : none
+  return        : none
+  Note          : none
+*****************************************************************************/
+static void vd_s_PwrCtrlMainSipOffMcuStandbySipOffStep( void )
+{
+    U1 u1_t_sipoff_seq;                                                      /* SIP電源OFFシーケンス状態問い合わせ結果 */
+    U1 u1_t_foff_req;                                                        /* SIP電源強制OFFシーケンス要求確認結果 */
+    
+    /* SIP電源OFF処理 */
+    if ( u1_s_PwrCtrl_Main_SipPwrSts == (U1)PWRCTRL_MAIN_SIP_STS_INPRC )
+    {
+        vd_g_PwrCtrlSipMainFunc();                                           /* SIP電源 定期処理 */
+
+        u1_t_foff_req  = u1_g_PwrCtrlSipFOffInfo();                          /* SIP電源強制OFFシーケンス要求問い合わせ */
+        /* 強制OFFシーケンス要求 */
+        vd_s_PwrCtrlMainForcedOffReq(u1_t_foff_req);
+
+        u1_t_sipoff_seq = u1_g_PwrCtrlSipGetSts();                           /* SIP電源シーケンス状態問い合わせ */
+        if ( u1_t_sipoff_seq == (U1)TRUE )                                   /* 処理完了 */
+        {
+            u1_s_PwrCtrl_Main_SipPwrSts = (U1)PWRCTRL_MAIN_SIP_STS_COMP;     /* SIP電源状態：実行中→完了 */
+            u1_s_PwrCtrl_Main_SysPwrSts = (U1)PWRCTRL_MAIN_SYS_STS_WAITDEV;  /* SYS電源状態：開始→SYSデバイス終了待ち */
+        }
+    }
+
+    return;
+}
+
+/*****************************************************************************
+  Function      : vd_s_PwrCtrlMainSipOffMcuStandbySysDevOffStep
+  Description   : 5-5.SIP電源OFF&MCUスタンバイシーケンス_SYS系デバイスOFF処理
+  param[in/out] : none
+  return        : none
+  Note          : none
+*****************************************************************************/
+static void vd_s_PwrCtrlMainSipOffMcuStandbySysDevOffStep( void )
+{
+    U1 u1_t_devoff_seq;                                                      /* SYS系デバイス終了状態問い合わせ結果 */
+    
+    /* SYS系デバイス終了状態問い合わせ */
+    if ( u1_s_PwrCtrl_Main_SysPwrSts == (U1)PWRCTRL_MAIN_SYS_STS_WAITDEV )
+    {
+        u1_t_devoff_seq = u1_g_PwrCtrlSysShtdwnGetSts();                     /* SYS系デバイス終了状態問い合わせ */
+        if ( u1_t_devoff_seq == (U1)TRUE )                                   /* 処理完了 */
+        {
+            u1_s_PwrCtrl_Main_SysPwrSts = (U1)PWRCTRL_MAIN_SYS_STS_INPRC;    /* SYS電源状態:SYSデバイス終了待ち→実行中 */
+            /* SYS電源OFF要求 */
+            vd_g_PwrCtrlSysPwrOffStart();                                    /* SYS電源OFF要求 */
+        }
+    }
+
+    return;
+}
+
+/*****************************************************************************
+  Function      : vd_s_PwrCtrlMainSipOffMcuStandbySysOffStep
+  Description   : 5-5.SIP電源OFF&MCUスタンバイシーケンス_SYS電源OFF処理
+  param[in/out] : none
+  return        : none
+  Note          : none
+*****************************************************************************/
+static void vd_s_PwrCtrlMainSipOffMcuStandbySysOffStep( void )
+{
+    U1 u1_t_sysoff_seq;                                                      /* SYS電源OFFシーケンス状態問い合わせ結果 */
+    
+    /* SYS電源OFF制御 */
+    if ( u1_s_PwrCtrl_Main_SysPwrSts == (U1)PWRCTRL_MAIN_SYS_STS_INPRC )     /* SYS電源状態:実行中 */
+    {
+        vd_g_PwrCtrlSysPwrOffMainFunction();
+        u1_t_sysoff_seq = u1_g_PwrCtrlSysGetSts();                           /* SYS電源シーケンス状態問い合わせ */
+        if ( u1_t_sysoff_seq == (U1)TRUE )                                   /* 処理完了 */
+        {
+            u1_s_PwrCtrl_Main_SysPwrSts = (U1)PWRCTRL_MAIN_SYS_STS_COMP;     /* SYS電源状態：実行中→完了 */
+        }
+    }
+
+    return;
+}
+
+/*****************************************************************************
+  Function      : vd_s_PwrCtrlMainSipOffMcuStandbyNrdOffStep
+  Description   : 5-5.SIP電源OFF&MCUスタンバイシーケンス_非冗長電源OFF処理
+  param[in/out] : none
+  return        : none
+  Note          : none
+*****************************************************************************/
+static void vd_s_PwrCtrlMainSipOffMcuStandbyNrdOffStep( void )
+{
+    U1 u1_t_nrdoff_seq;                                                      /* 非冗長電源OFFシーケンス状態問い合わせ結果 */
+    
+    if ( u1_s_PwrCtrl_Main_NonRednPwrSts == (U1)PWRCTRL_MAIN_NRD_STS_INPRC )
+    {
+        u1_t_nrdoff_seq = u1_g_PwrCtrlNoRedunGetSts();                       /* 非冗長電源シーケンス状態問い合わせ */
+        if ( u1_t_nrdoff_seq == (U1)TRUE )                                   /* 処理完了 */
+        {
+            u1_s_PwrCtrl_Main_NonRednPwrSts = (U1)PWRCTRL_MAIN_NRD_STS_COMP; /* 非冗長電源状態：実行中→完了 */
+        }
+    }
+
+    return;
+}
+
+/*****************************************************************************
   Function      : vd_s_PwrCtrlMainStandbySeq(void)
   Description   : 
   param[in/out] : none
@@ -1089,11 +1158,6 @@ static void vd_s_PwrCtrlMainSipOffMcuStandbySeq( void )
 *****************************************************************************/
 static void vd_s_PwrCtrlMainStandbySeq( void )
 {
-    U1 u1_t_sipstb_seq;                                                      /* SIPスタンバイシーケンス状態問い合わせ結果 */
-    U1 u1_t_foff_req;                                                        /* SIP電源強制OFFシーケンス要求確認結果 */
-    U1 u1_t_nrdoff_seq;                                                      /* 非冗長電源OFFシーケンス状態問い合わせ結果 */
-    U1 u1_t_sysoff_seq;                                                      /* SYS電源OFFシーケンス状態問い合わせ結果 */
-    U1 u1_t_devoff_seq;                                                      /* SYS系デバイス終了状態問い合わせ結果 */
     U1 u1_t_step_chk;                                                        /* 現在STEP問い合わせ結果 */
     U1 u1_t_wkup_req;                                                        /* 起動トリガ判定結果 */
     U1 u1_t_stbycancel;
@@ -1122,7 +1186,7 @@ static void vd_s_PwrCtrlMainStandbySeq( void )
         if ( u1_s_PwrCtrl_Main_SipPwrSts == (U1)PWRCTRL_MAIN_SIP_STS_INPRC )
         {
             /* 現在STEP(スタンバイシーケンス)を取得する */
-            u1_t_step_chk = u1_g_PwrCtrlSipStbyStepGetSts(PWRCTRL_SIP_STBY_STEP_REQ);
+            u1_t_step_chk = u1_g_PwrCtrlSipStbyStepGetSts((U1)PWRCTRL_SIP_STBY_STEP_REQ);
             /* 現在STEPがSTEP1からSTEP3の場合 */
             if((u1_t_step_chk == (U1)PWRCTRL_COMMON_PROCESS_STEP1) ||
                (u1_t_step_chk == (U1)PWRCTRL_COMMON_PROCESS_STEP2) ||
@@ -1136,57 +1200,15 @@ static void vd_s_PwrCtrlMainStandbySeq( void )
 
     if(u1_t_stbycancel == (U1)FALSE){
 
-        /* SIP電源OFF */
-        if(u1_s_PwrCtrl_Main_SipPwrSts == (U1)PWRCTRL_MAIN_SIP_STS_INPRC)
-        {
-            vd_g_PwrCtrlSipMainFunc();                                           /* SIP電源 定期処理 */
-
-            u1_t_foff_req  = u1_g_PwrCtrlSipFOffInfo();                          /* SIP電源強制OFFシーケンス要求問い合わせ */
-
-            /* 強制OFFシーケンス要求 */
-            vd_s_PwrCtrlMainForcedOffReq(u1_t_foff_req);
-
-            u1_t_sipstb_seq = u1_g_PwrCtrlSipGetSts();                           /* SIP電源シーケンス状態問い合わせ */
-            if(u1_t_sipstb_seq == (U1)TRUE)                                      /* 処理完了 */
-            {
-                u1_s_PwrCtrl_Main_SipPwrSts = (U1)PWRCTRL_MAIN_SIP_STS_COMP;     /* SIP電源状態：実行中→完了 */
-                u1_s_PwrCtrl_Main_SysPwrSts = (U1)PWRCTRL_MAIN_SYS_STS_WAITDEV;  /* SYS電源状態：開始→SYSデバイス終了待ち */
-            }
-        }
-
+        /* SIP電源スタンバイ */
+        vd_s_PwrCtrlMainStandbySipStby();
         /* SYS系デバイス終了状態問い合わせ */
-        if(u1_s_PwrCtrl_Main_SysPwrSts == (U1)PWRCTRL_MAIN_SYS_STS_WAITDEV)
-        {
-            u1_t_devoff_seq = u1_g_PwrCtrlSysShtdwnGetSts();                     /* SYS系デバイス終了状態問い合わせ */
-            if(u1_t_devoff_seq ==(U1)TRUE)
-            {                                                                    /* 処理完了 */
-                u1_s_PwrCtrl_Main_SysPwrSts = (U1)PWRCTRL_MAIN_SYS_STS_INPRC;    /* SYS電源状態:SYSデバイス終了待ち→実行中 */
-                /* SYS電源OFF要求 */
-                vd_g_PwrCtrlSysPwrOffStart();                                    /* SYS電源OFF要求 */
-            }
-        }
-
+        vd_s_PwrCtrlMainStandbySysDevOff();
         /* SYS電源OFF制御 */
-        if ( u1_s_PwrCtrl_Main_SysPwrSts == (U1)PWRCTRL_MAIN_SYS_STS_INPRC )     /* SYS電源状態:実行中 */
-        {
-            vd_g_PwrCtrlSysPwrOffMainFunction();
-            u1_t_sysoff_seq = u1_g_PwrCtrlSysGetSts();                           /* SYS電源シーケンス状態問い合わせ */
-            if(u1_t_sysoff_seq == (U1)TRUE)                                      /* 処理完了 */
-            {
-                u1_s_PwrCtrl_Main_SysPwrSts = (U1)PWRCTRL_MAIN_SYS_STS_COMP;     /* SYS電源状態：実行中→完了 */
-            }
-        }
-    
-
+        vd_s_PwrCtrlMainStandbySysOff();
         /* 非冗長電源OFFシーケンス状態問い合わせ */
-        if(u1_s_PwrCtrl_Main_NonRednPwrSts == (U1)PWRCTRL_MAIN_NRD_STS_INPRC)
-        {
-            u1_t_nrdoff_seq = u1_g_PwrCtrlNoRedunGetSts();                       /* 非冗長電源シーケンス状態問い合わせ */
-            if(u1_t_nrdoff_seq == (U1)TRUE)                                      /* 処理完了 */
-            {
-                u1_s_PwrCtrl_Main_NonRednPwrSts = (U1)PWRCTRL_MAIN_NRD_STS_COMP; /* 非冗長電源状態：実行中→完了 */
-            }
-        }
+        vd_s_PwrCtrlMainStandbyNrdOff();
+
         if(u1_s_PwrCtrl_Main_SysPwrSts == (U1)PWRCTRL_MAIN_SYS_STS_COMP)
         {
             /* SYS電源OFF以降の起動トリガ有無判定 */
@@ -1212,6 +1234,114 @@ static void vd_s_PwrCtrlMainStandbySeq( void )
             }
         }
     }
+    return;
+}
+
+/*****************************************************************************
+  Function      : vd_s_PwrCtrlMainStandbySipStby
+  Description   : 5-3.スタンバイシーケンス_SIP電源スタンバイ処理
+  param[in/out] : none
+  return        : none
+  Note          : none
+*****************************************************************************/
+static void vd_s_PwrCtrlMainStandbySipStby( void )
+{
+    U1 u1_t_sipstb_seq;                                                      /* SIPスタンバイシーケンス状態問い合わせ結果 */
+    U1 u1_t_foff_req;                                                        /* SIP電源強制OFFシーケンス要求確認結果 */
+    
+    /* SIP電源OFF */
+    if(u1_s_PwrCtrl_Main_SipPwrSts == (U1)PWRCTRL_MAIN_SIP_STS_INPRC)
+    {
+        vd_g_PwrCtrlSipMainFunc();                                           /* SIP電源 定期処理 */
+
+        u1_t_foff_req  = u1_g_PwrCtrlSipFOffInfo();                          /* SIP電源強制OFFシーケンス要求問い合わせ */
+
+        /* 強制OFFシーケンス要求 */
+        vd_s_PwrCtrlMainForcedOffReq(u1_t_foff_req);
+
+        u1_t_sipstb_seq = u1_g_PwrCtrlSipGetSts();                           /* SIP電源シーケンス状態問い合わせ */
+        if(u1_t_sipstb_seq == (U1)TRUE)                                      /* 処理完了 */
+        {
+            u1_s_PwrCtrl_Main_SipPwrSts = (U1)PWRCTRL_MAIN_SIP_STS_COMP;     /* SIP電源状態：実行中→完了 */
+            u1_s_PwrCtrl_Main_SysPwrSts = (U1)PWRCTRL_MAIN_SYS_STS_WAITDEV;  /* SYS電源状態：開始→SYSデバイス終了待ち */
+        }
+    }
+
+    return;
+}
+
+/*****************************************************************************
+  Function      : vd_s_PwrCtrlMainStandbySysDevOff
+  Description   : 5-3.スタンバイシーケンス_SYS系デバイスOFF処理
+  param[in/out] : none
+  return        : none
+  Note          : none
+*****************************************************************************/
+static void vd_s_PwrCtrlMainStandbySysDevOff( void )
+{
+    U1 u1_t_devoff_seq;                                                      /* SYS系デバイス終了状態問い合わせ結果 */
+    
+    /* SYS系デバイス終了状態問い合わせ */
+    if(u1_s_PwrCtrl_Main_SysPwrSts == (U1)PWRCTRL_MAIN_SYS_STS_WAITDEV)
+    {
+        u1_t_devoff_seq = u1_g_PwrCtrlSysShtdwnGetSts();                     /* SYS系デバイス終了状態問い合わせ */
+        if(u1_t_devoff_seq ==(U1)TRUE)
+        {                                                                    /* 処理完了 */
+            u1_s_PwrCtrl_Main_SysPwrSts = (U1)PWRCTRL_MAIN_SYS_STS_INPRC;    /* SYS電源状態:SYSデバイス終了待ち→実行中 */
+            /* SYS電源OFF要求 */
+            vd_g_PwrCtrlSysPwrOffStart();                                    /* SYS電源OFF要求 */
+        }
+    }
+
+    return;
+}
+
+/*****************************************************************************
+  Function      : vd_s_PwrCtrlMainStandbySysOff
+  Description   : 5-3.スタンバイシーケンス_SYS電源OFF処理
+  param[in/out] : none
+  return        : none
+  Note          : none
+*****************************************************************************/
+static void vd_s_PwrCtrlMainStandbySysOff( void )
+{
+    U1 u1_t_sysoff_seq;                                                      /* SYS電源シーケンス状態問い合わせ結果 */
+    
+    /* SYS電源OFF制御 */
+    if ( u1_s_PwrCtrl_Main_SysPwrSts == (U1)PWRCTRL_MAIN_SYS_STS_INPRC )     /* SYS電源状態:実行中 */
+    {
+        vd_g_PwrCtrlSysPwrOffMainFunction();
+        u1_t_sysoff_seq = u1_g_PwrCtrlSysGetSts();                           /* SYS電源シーケンス状態問い合わせ */
+        if(u1_t_sysoff_seq == (U1)TRUE)                                      /* 処理完了 */
+        {
+            u1_s_PwrCtrl_Main_SysPwrSts = (U1)PWRCTRL_MAIN_SYS_STS_COMP;     /* SYS電源状態：実行中→完了 */
+        }
+    }
+
+    return;
+}
+
+/*****************************************************************************
+  Function      : vd_s_PwrCtrlMainStandbyNrdOff
+  Description   : 5-3.スタンバイシーケンス_非冗長電源OFF処理
+  param[in/out] : none
+  return        : none
+  Note          : none
+*****************************************************************************/
+static void vd_s_PwrCtrlMainStandbyNrdOff( void )
+{
+    U1 u1_t_nrdoff_seq;                                                      /* 非冗長電源OFFシーケンス状態問い合わせ結果 */
+    
+    /* 非冗長電源OFFシーケンス状態問い合わせ */
+    if(u1_s_PwrCtrl_Main_NonRednPwrSts == (U1)PWRCTRL_MAIN_NRD_STS_INPRC)
+    {
+        u1_t_nrdoff_seq = u1_g_PwrCtrlNoRedunGetSts();                       /* 非冗長電源シーケンス状態問い合わせ */
+        if(u1_t_nrdoff_seq == (U1)TRUE)                                      /* 処理完了 */
+        {
+            u1_s_PwrCtrl_Main_NonRednPwrSts = (U1)PWRCTRL_MAIN_NRD_STS_COMP; /* 非冗長電源状態：実行中→完了 */
+        }
+    }
+
     return;
 }
 

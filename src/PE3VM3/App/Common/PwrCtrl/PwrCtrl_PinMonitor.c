@@ -173,15 +173,15 @@ static const ST_PWRCTRL_PINMONITOR_STS st_PwrCtrl_PinMonitor_Sts[PWRCTRL_CFG_PRI
 /**************************************************************************************************************************************
   Function      : u1_g_PwrCtrl_PinMonitor_GetPinInfo
   Description   : 端子情報の判定結果通知処理
-  param[in/out] : [in ] const U1 u1_a_Kind PINの種類
+  param[in/out] : [in ] const U1 u1_a_PinID PINの種類
   return        : U1 u1_t_ret PINの端子状態判定結果
   Note          : none
 **************************************************************************************************************************************/
-U1 u1_g_PwrCtrl_PinMonitor_GetPinInfo(U1 u1_a_PinID)
+U1 u1_g_PwrCtrl_PinMonitor_GetPinInfo(const U1 u1_a_PinID)
 {
     U1 u1_t_ret;
 
-    if ((u1_a_PinID < PWRCTRL_CFG_PRIVATE_KIND_NUM) &&
+    if ((u1_a_PinID < (U1)PWRCTRL_CFG_PRIVATE_KIND_NUM) &&
         ((st_PwrCtrl_PinMonitor_PollSts[u1_a_PinID].u1_PollTmnlSts == (U1)STD_HIGH) ||
          (st_PwrCtrl_PinMonitor_PollSts[u1_a_PinID].u1_PollTmnlSts == (U1)STD_LOW) ||
          (st_PwrCtrl_PinMonitor_PollSts[u1_a_PinID].u1_PollTmnlSts == (U1)PWRCTRL_PINMONITOR_TMNL_STS_NON))) {

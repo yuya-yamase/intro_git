@@ -1,7 +1,7 @@
-/* Fee_Api_Internal.h v1-0-0                                                */
+/* Fee_Api_Internal.h v2-0-0                                                */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION. All rights reserved.                        */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -21,7 +21,7 @@
 /*--------------------------------------------------------------------------*/
 /* Macros                                                                   */
 /*--------------------------------------------------------------------------*/
-#define FEE_TM_COUNT_ZERO   (0U)    /* タイマカウント0 */
+#define FEE_TM_COUNT_ZERO   (0U)    /* Timer count 0 */
 
 /*--------------------------------------------------------------------------*/
 /* Types                                                                    */
@@ -33,9 +33,9 @@
 #define FEE_START_SEC_CODE
 #include <Fee_MemMap.h>
 
-/* データFlash定期処理(共通) */
-FUNC(void, FEE_CODE) Fee_Periodic_FuncCommon( void );
-/* Flashアクセス可否判定 */
+/* Data Flash Periodic (common) */
+FUNC(void, FEE_CODE) Fee_Periodic_FuncCommon( uint8 u1_callmode );
+/* Flash access permission decision */
 FUNC(void, FEE_CODE) Fee_FlashAccessCheck( void );
 
 FUNC( Std_ReturnType, FEE_CODE )
@@ -68,6 +68,7 @@ extern CONST(AB_83_ConstV uint8, FEE_CONST) Fee_Legacy_GetStatusTBL[FEE_STATUSMA
 /* History                                                                  */
 /*  Version        :Date                                                    */
 /*  1-0-0          :2019/02/01                                              */
+/*  2-0-0          :2024/07/19                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

@@ -2,7 +2,7 @@
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-/*  Renesas RH850/F1KM : Timer Array Unit D                                                                                          */
+/*  Renesas RH850/U2A : Timer Array Unit D                                                                                           */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
 
@@ -87,6 +87,18 @@
 #define GPT_D16_RO_HALF_LSR_CH                   (1U)
 #define GPT_D16_RO_BYTE_LSR_CH                   (2U)
 
+#define GPT_D16_PIC1_TAUD0                       (GPT_D16_UNIT_0)
+#define GPT_D16_PIC1_TAUD1                       (GPT_D16_UNIT_1 << 4)
+#define GPT_D16_PIC1_TAUD2                       (GPT_D16_UNIT_2 << 4)
+
+#define GPT_D16_PIC1_BASE                        ((volatile U4 *)0xFFBFAF00U)
+#define GPT_D16_PIC1_TAUD2SEL_BASE               ((volatile U2 *)0xFFBF6800U)
+
+#define GPT_D16_PIC1_RA_WORD_TAUD0S              (0x0078U >> 2)
+#define GPT_D16_PIC1_RA_WORD_TAUD1S              (0x007cU >> 2) 
+#define GPT_D16_PIC1_RA_HALF_TAUD2               (0x0000U)
+
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -103,6 +115,10 @@
 #define RH850_G4MH_SYNCP_HALF  /* static inline void  vd_s_SYNCP_H(const volatile U2 * const u2_ap_RDBK) */
 #define RH850_G4MH_RDBK_HALF   /* static inline void  vd_s_RDBK_H(const volatile U2 * const u2_ap_RDBK)  */
 #include "rh850_g4mh.h"
+
+static void    vd_s_Gpt_D16PICInit(void);
+static void    vd_s_Gpt_D16PICDeInit(void);
+static U1      u1_s_Gpt_D16PICSetup(const U1 u1_a_D16_CH);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
@@ -132,6 +148,8 @@ void    vd_g_Gpt_D16Init(void)
     U4                  u4_t_ch;
     U4                  u4_t_lpcnt;
     U4                  u4_t_offset;
+
+    vd_s_Gpt_D16PICInit();
 
     for(u4_t_unit = (U4)0U; u4_t_unit < (U4)u1_g_GPT_D16_NUM_UNIT; u4_t_unit++){
 
@@ -224,6 +242,7 @@ void    vd_g_Gpt_D16DeInit(void)
 
         vd_g_IRQ_EI(u4_t_gli);
     }
+    vd_s_Gpt_D16PICDeInit();
 }
 /*===================================================================================================================================*/
 /*  U2      u2_g_Gpt_D16GetTimeElapsed(const U1 u1_a_D16_CH, U2 * u2_ap_d16stamp)                                                    */
@@ -671,6 +690,127 @@ U1      u1_g_Gpt_D16IRQenabled(const U1 u1_a_D16_CH)
     }
 
     return(u1_t_irqen);
+}
+/*===================================================================================================================================*/
+/*  U1      u1_g_Gpt_D16PICRegChk(const U1 u1_a_D16_CH)                                                                              */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+U1      u1_g_Gpt_D16PICRegChk(const U1 u1_a_D16_CH)
+{
+    U4                  u4_t_unit;
+    U4                  u4_t_ch;
+    U4                  u4_t_ch_msk;
+    U4                  u4_t_ch_bit;
+    U1                  u1_t_rslt;
+
+    u1_t_rslt   = (U1)TRUE;
+    u4_t_ch     = (U4)u1_a_D16_CH & (U4)GPT_D16_CH_TO_CH_BY_UNIT;
+    u4_t_unit   = (U4)u1_a_D16_CH >> GPT_D16_CH_TO_UNIT;
+    u4_t_ch_msk = (U4)0x03U << (u4_t_ch * 2U);
+
+    switch(u4_t_unit){
+        case GPT_D16_UNIT_0:
+            u4_t_ch_bit = u4_REG_READ(GPT_D16_PIC1_BASE[GPT_D16_PIC1_RA_WORD_TAUD0S]) & u4_t_ch_msk;
+            if(u4_t_ch_bit != (U4)(u4_g_GPT_CFG_PIC1_TAUDSEL[GPT_D16_UNIT_0] & u4_t_ch_msk)){
+                u1_t_rslt = (U1)FALSE;
+            }
+            break;
+
+        case GPT_D16_UNIT_1:
+            u4_t_ch_bit = u4_REG_READ(GPT_D16_PIC1_BASE[GPT_D16_PIC1_RA_WORD_TAUD1S]) & u4_t_ch_msk;
+            if(u4_t_ch_bit != (U4)(u4_g_GPT_CFG_PIC1_TAUDSEL[GPT_D16_UNIT_1] & u4_t_ch_msk)){
+                u1_t_rslt = (U1)FALSE;
+            }
+            break;
+
+        case GPT_D16_UNIT_2:
+            u4_t_ch_msk = (U4)1U << u4_t_ch; /* Because TAUD2 has a different register layout, reset the mask value. */
+            u4_t_ch_bit = (U4)u2_REG_READ(GPT_D16_PIC1_TAUD2SEL_BASE[GPT_D16_PIC1_RA_HALF_TAUD2]) & u4_t_ch_msk;
+            if((U2)u4_t_ch_bit != (U2)(u4_g_GPT_CFG_PIC1_TAUDSEL[GPT_D16_UNIT_2] & u4_t_ch_msk)){
+                u1_t_rslt = (U1)FALSE;
+            }
+            break;
+        default:
+            u1_t_rslt = (U1)FALSE;
+            break;
+    }
+
+    return u1_t_rslt;
+}
+/*===================================================================================================================================*/
+/*  U1      u1_g_Gpt_D16PICRegRefresh(const U1 u1_a_D16_CH)                                                                          */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+U1      u1_g_Gpt_D16PICRegRefresh(const U1 u1_a_D16_CH)
+{
+    U1                  u1_t_rslt;
+
+    u1_t_rslt = u1_s_Gpt_D16PICSetup(u1_a_D16_CH);
+
+    return u1_t_rslt;
+}
+/*===================================================================================================================================*/
+/*  static void    vd_s_Gpt_D16PICInit(void)                                                                                         */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void    vd_s_Gpt_D16PICInit(void)
+{
+    (void)u1_s_Gpt_D16PICSetup(GPT_D16_PIC1_TAUD0);
+    (void)u1_s_Gpt_D16PICSetup(GPT_D16_PIC1_TAUD1);
+    (void)u1_s_Gpt_D16PICSetup(GPT_D16_PIC1_TAUD2);
+}
+/*===================================================================================================================================*/
+/*  static void    vd_s_Gpt_D16PICDeInit(void)                                                                                       */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void    vd_s_Gpt_D16PICDeInit(void)
+{
+    vd_REG_U4_WRITE(GPT_D16_PIC1_BASE[GPT_D16_PIC1_RA_WORD_TAUD0S], (U4)0x00000000U);
+    vd_REG_U4_WRITE(GPT_D16_PIC1_BASE[GPT_D16_PIC1_RA_WORD_TAUD1S], (U4)0x00000000U);
+    vd_REG_U2_WRITE(GPT_D16_PIC1_TAUD2SEL_BASE[GPT_D16_PIC1_RA_HALF_TAUD2], (U2)0x0000U);
+}
+/*===================================================================================================================================*/
+/*  U1      u1_s_Gpt_D16PICSetup(const U1 u1_a_D16_CH)                                                                               */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static U1 u1_s_Gpt_D16PICSetup(const U1 u1_a_D16_CH)
+{
+    U1                  u1_t_rslt;
+    U4                  u4_t_unit;
+
+    u4_t_unit = (U4)u1_a_D16_CH >> GPT_D16_CH_TO_UNIT;
+
+    switch(u4_t_unit){
+        case GPT_D16_UNIT_0:
+            vd_REG_U4_WRITE(GPT_D16_PIC1_BASE[GPT_D16_PIC1_RA_WORD_TAUD0S], (U4)u4_g_GPT_CFG_PIC1_TAUDSEL[GPT_D16_UNIT_0]);
+            break;
+
+        case GPT_D16_UNIT_1:
+            vd_REG_U4_WRITE(GPT_D16_PIC1_BASE[GPT_D16_PIC1_RA_WORD_TAUD1S], (U4)u4_g_GPT_CFG_PIC1_TAUDSEL[GPT_D16_UNIT_1]);
+            break;
+
+        case GPT_D16_UNIT_2:
+            vd_REG_U2_WRITE(GPT_D16_PIC1_TAUD2SEL_BASE[GPT_D16_PIC1_RA_HALF_TAUD2], (U2)u4_g_GPT_CFG_PIC1_TAUDSEL[GPT_D16_UNIT_2]);
+            break;
+
+        default:
+            /* do nothing */
+            break;
+    }
+
+    u1_t_rslt = u1_g_Gpt_D16PICRegChk(u1_a_D16_CH);
+
+    return u1_t_rslt;
 }
 
 #pragma ghs section text=default
