@@ -50,6 +50,7 @@
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static U1      u1_s_session_chg_ok;     /*0:不可 1:可*/
+static U1      u1_s_session_pre;        /*前回セッション情報*/
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -72,6 +73,7 @@ static U1      u1_s_session_chg_ok;     /*0:不可 1:可*/
 void            vd_g_DiagAppSID10Init(void)
 {
     u1_s_session_chg_ok = (U1)FALSE;
+    u1_s_session_pre = (U1)OXDC_SESSION_DEF;
 }
 
 /*===================================================================================================================================*/
@@ -127,6 +129,7 @@ void            vd_g_DiagAppSID10Request(const U1 u1_a_SES, const U1 u1_a_SES_BE
         u1_tp_data[2] = u1_a_SES;
         vd_g_XspiIviSub0Request_SID10((U2)DIAGAPP_SID10_SIZE,(U1)DIAGAPP_REQUESTID_PHYOFF,&u1_tp_data[0]);
     }
+    u1_s_session_pre = u1_a_SES;
 }
 
 /*===================================================================================================================================*/
@@ -140,6 +143,7 @@ U1               u1_g_DiagAppSID10SesCtrlChk(const U1 u1_a_SES)
 {
     U1   u1_t_ret;
     U1   u1_t_power_sts;
+    U1   u1_tp_data[3];
 
     u1_t_ret = (U1)E_OK;
     u1_t_power_sts = u1_g_VehopemdIgnOn();
@@ -149,7 +153,13 @@ U1               u1_g_DiagAppSID10SesCtrlChk(const U1 u1_a_SES)
     } else if(u1_t_power_sts == (U1)FALSE) {
         u1_t_ret = (U1)OXDC_SAL_PROC_NR_22;
     } else {
-        /*Do Nothing*/
+        if(u1_a_SES == u1_s_session_pre) {
+            u1_tp_data[0] = (U1)(((U2)DIAGAPP_SID10_OPC_1001 >> DIAGAPP_SFT_08) & 0x00FFU);
+            u1_tp_data[1] = ((U1)DIAGAPP_SID10_OPC_1001 & 0x00FFU);
+            u1_tp_data[2] = u1_a_SES;
+            vd_g_XspiIviSub0Request_SID10((U2)DIAGAPP_SID10_SIZE,(U1)DIAGAPP_REQUESTID_PHYOFF,&u1_tp_data[0]);
+        }
+        u1_s_session_pre = u1_a_SES;
     }
 
     return u1_t_ret;

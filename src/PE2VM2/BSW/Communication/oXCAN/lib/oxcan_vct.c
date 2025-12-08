@@ -38,6 +38,7 @@
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define OXCAN_VCT_WRQ_NBYTE                      (4U)
+#define OXCAN_VCT_WRQ_RX_LP_MAX                  (5U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -55,6 +56,8 @@ static U4    u4_s_oxcan_vct_log_rx;
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+static inline U1    u1_s_oXCANvCtWrqRxbyCh(const U4 u4_a_CH, U4 * u4_ap_wrq_ch);
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -93,28 +96,23 @@ void    vd_g_oXCANvCtMainRx(void)
 {
     static const U1    u1_s_OXCAN_VCT_RX_TOUT = (U1)10U;
 
+    U4                 u4_t_lpcnt;
+
     U4                 u4_t_wrq_rx;
+    U4                 u4_t_wrq_ch;
     U4                 u4_t_log_rx;
     U4                 u4_t_las_rx;
-    U4                 u4_t_lpcnt;
-    U4                 u4_t_vcc_rx;
-    U4                 u4_t_que_rx;
-    U4                 u4_t_nbyte;
 
-    U1                 u1_t_eas_chk;
+    U1                 u1_t_wrq_ok;
 
     u4_t_wrq_rx = (U4)0U;
     u4_t_log_rx = (U4)0U;
     for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)u1_g_OXCAN_VCT_VCC_NUM_RX; u4_t_lpcnt++){
 
-        u4_t_las_rx  = u4_gp_oxcan_vct_rx_by_ch[u4_t_lpcnt];
-        u4_t_vcc_rx  = (U4)u2_gp_OXCAN_VCT_VCC_RX[u4_t_lpcnt];
-        u4_t_que_rx  = (U4)0U;
-        u1_t_eas_chk = ehvm_vcc_receive(u4_t_vcc_rx, &u4_t_que_rx, (U4)OXCAN_VCT_WRQ_NBYTE, &u4_t_nbyte);
-        if((u1_t_eas_chk == E_EHVM_OK                      ) ||
-           (u1_t_eas_chk == E_EHVM_RECEIVE_OVERWRITE_OCCURS)){ 
-
-            u4_t_wrq_rx                         |= u4_t_que_rx;
+        u4_t_las_rx = u4_gp_oxcan_vct_rx_by_ch[u4_t_lpcnt];
+        u1_t_wrq_ok = u1_s_oXCANvCtWrqRxbyCh((U4)u2_gp_OXCAN_VCT_VCC_RX[u4_t_lpcnt], &u4_t_wrq_ch);
+        if(u1_t_wrq_ok == (U1)TRUE){ 
+            u4_t_wrq_rx                         |= u4_t_wrq_ch;
             u4_t_log_rx                          = (U4)U4_MAX;
             u1_gp_oxcan_vct_rx_tout[u4_t_lpcnt]  = (U1)U1_MAX;
         }
@@ -195,6 +193,44 @@ void    vd_g_oXCANvCtWrqDet(const U1 u1_a_CTRLR, const U1 u1_a_ENA)
     else{
         u4_s_oxcan_vct_wrq_en &= ((U4)U4_MAX ^ u4_t_ctbit);
     }
+}
+/*===================================================================================================================================*/
+/*  static inline U1    u1_s_oXCANvCtWrqRxbyCh(const U4 u4_a_CH, U4 * u4_ap_wrq_ch)                                                  */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static inline U1    u1_s_oXCANvCtWrqRxbyCh(const U4 u4_a_CH, U4 * u4_ap_wrq_ch)
+{
+    U4                 u4_t_lpcnt;
+    U4                 u4_t_wrq_rx;
+    U4                 u4_t_que_rx;
+    U4                 u4_t_nbyte;
+
+    U1                 u1_t_vcc_ok;
+    U1                 u1_t_wrq_ok;
+
+    u4_t_wrq_rx = (U4)0U;
+    u1_t_wrq_ok = (U1)FALSE;
+    for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)OXCAN_VCT_WRQ_RX_LP_MAX; u4_t_lpcnt++){
+
+        u1_t_vcc_ok = ehvm_vcc_receive(u4_a_CH, &u4_t_que_rx, (U4)OXCAN_VCT_WRQ_NBYTE, &u4_t_nbyte);
+        if(u1_t_vcc_ok == E_EHVM_OK){ 
+            u4_t_wrq_rx |= u4_t_que_rx;
+            u1_t_wrq_ok  = (U1)TRUE;
+        }
+        else if(u1_t_vcc_ok == E_EHVM_RECEIVE_OVERWRITE_OCCURS){
+            /* do nothing */
+        }
+        else{
+            break;
+        }
+    }
+    if(u1_t_wrq_ok == (U1)TRUE){
+        (*u4_ap_wrq_ch) = u4_t_wrq_rx;
+    }
+
+    return(u1_t_wrq_ok);
 }
 /*===================================================================================================================================*/
 /*                                                                                                                                   */

@@ -57,8 +57,8 @@ CONST(CanSM_NetworkSettingConfigType, CANSM_CONFIG_DATA) CanSM_Ucfg_NetworkSetti
 CONST(CanSM_PduIdSettingConfigType, CANSM_CONFIG_DATA) CanSM_Ucfg_PduIdSetting_Data[CANSM_UCFG_PDUID_NUM] = {
     { CANSM_UCFG_CANID_0, CANSM_UCFG_IPDUID_0, CANSM_UCFG_CONTROLLERID_0 },
     { CANSM_UCFG_CANID_1, CANSM_UCFG_IPDUID_1, CANSM_UCFG_CONTROLLERID_0 },
-    { CANSM_UCFG_CANID_2, CANSM_UCFG_IPDUID_2, CANSM_UCFG_CONTROLLERID_0 },     /* ^^^ */
-    { CANSM_UCFG_CANID_3, CANSM_UCFG_IPDUID_3, CANSM_UCFG_CONTROLLERID_0 }      /* ^^^ */
+    { CANSM_UCFG_CANID_2, CANSM_UCFG_IPDUID_2, CANSM_UCFG_CONTROLLERID_0 },
+    { CANSM_UCFG_CANID_3, CANSM_UCFG_IPDUID_3, CANSM_UCFG_CONTROLLERID_0 }
 };
 
 CONST(CanSM_BaudrateSettingConfigType, CANSM_CONFIG_DATA) CanSM_Ucfg_BaudrateSettingConfig[CANSM_UCFG_BAUDRATE_NUM] = {
@@ -91,5 +91,10 @@ CONST(CanSM_BaudrateSettingConfigType, CANSM_CONFIG_DATA) CanSM_Ucfg_BaudrateSet
 /*  v2.00       :2019/12/03 :Update                                rel.AUBASS */
 /*----------------------------------------------------------------------------*/
 /* Notes        |                                                             */
+/****************************************************************************/
+/* AUBIST Configurator Version                                              */
+/*  Framework          :v2-1-0                                              */
+/*  BSW plug-in        :v2-0-0                                              */
+/****************************************************************************/
 /**** End of File *************************************************************/
 

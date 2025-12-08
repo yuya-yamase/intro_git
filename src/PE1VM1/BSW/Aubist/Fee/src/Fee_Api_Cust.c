@@ -1,7 +1,7 @@
 /* Fee_Api_Cust.c v2-0-0                                                    */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION. All rights reserved.                        */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -44,9 +44,9 @@
 /****************************************************************************/
 /* External Functions                                                       */
 /****************************************************************************/
-/* Function Name | DTF_Fee_RestInitHook                                    */
-/*               | （FEEリセット時初期化タイミング通知Hook）                */
-/* Description   | FEEリセット時初期化のタイミングを通知する                */
+/* Function Name | Fee_ResetInitHook                                        */
+/*               | (Initialization timing notification Hook at FEE reset)   */
+/* Description   | Notify when to reset FEE                                 */
 /* Preconditions |                                                          */
 /* Parameters    | None                                                     */
 /* Return Value  | None                                                     */
@@ -61,20 +61,20 @@ Fee_ResetInitHook( void )
 }
 
 /****************************************************************************/
-/* Function Name | Fee_FlashAccessCheckHook                             */
-/*               | （Flashアクセス可否判定Hook）                            */
-/* Description   | Flashアクセス可否を判定し、その結果を通知する            */
+/* Function Name | Fee_FlashAccessCheckHook                                 */
+/*               | (Flash access permission/permission check Hook)          */
+/* Description   | Determine Flash accessibility and report the result      */
 /* Preconditions |                                                          */
 /* Parameters    | None                                                     */
-/* Return Value  | uint32 : Flashアクセス可否判定結果                   */
+/* Return Value  | uint32: Flash access permission judgment result          */
 /* Notes         | None                                                     */
 /****************************************************************************/
 FUNC(uint32, FEE_CODE) 
 Fee_FlashAccessCheckHook( void )
 {
-    uint32 u4FlashAccessState;  /* Flashアクセス可否状態 */
+    uint32 u4FlashAccessState;  /* Flash accessibility status */
 
-    /* Flashアクセス可否確認 */
+    /* Check Flash accessibility */
     u4FlashAccessState = Fee_Mpu_FlashAccessCheck();
     
     return u4FlashAccessState;

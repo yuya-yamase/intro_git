@@ -65,7 +65,6 @@ SECTIONS {
     .DIO_TEXT_CODE          align(4)                        : > .
     .DMA_TEXT_CODE          align(4)                        : > .
     .GPT_TEXT_CODE          align(4)                        : > .
-    .ICU_TEXT_CODE          align(4)                        : > .
     .INTC_TEXT_CODE         align(4)                        : > .
     .MCALCOMMON_TEXT_CODE   align(4)                        : > .
     .PORT_TEXT_CODE         align(4)                        : > .
@@ -77,7 +76,6 @@ SECTIONS {
     .DIO_RODATA_CONST       align(4)                        : > .
     .DMA_RODATA_CONST       align(4)                        : > .
     .GPT_RODATA_CONST       align(4)                        : > .
-    .ICU_RODATA_CONST       align(4)                        : > .
     .INTC_RODATA_CONST      align(4)                        : > .
     .PORT_RODATA_CONST      align(4)                        : > .
     .PWM_RODATA_CONST       align(4)                        : > .
@@ -120,15 +118,11 @@ SECTIONS {
     .secinfo                align(4)                        : > .               // セクションデータ領域
 
 // Production Code (Address Fix)
-    _product_code_start_address = 0x007FFB00;
+    _product_code_start_address = 0x007BFB00;
     .app_product_const (_product_code_start_address) : {
         *(.app_product_const)
         .=ALIGN(4);
     } > .
-
-    .rodata_SHARE_ROM_RIM_KEYWORD0 SHARE_ROM_VM3_RIM_KEYWORD0      ABS    : > rom_memory_share
-    .rodata_SHARE_ROM_RIM_KEYWORD1 SHARE_ROM_VM3_RIM_KEYWORD1      ABS    : > .
-    .rodata_SHARE_ROM_RIM_KEYWORD2 SHARE_ROM_VM3_RIM_KEYWORD2      ABS    : > .
 
 // -- RAM -------------------
 // TopAddress
@@ -225,14 +219,10 @@ SECTIONS {
     .cluster2_share_ramtop                                   : > ram_memory_cluster2_share
 
 //1byte
-    .bss_SHARE_IOHW_ADC_LV_RD   SHARE_IOHW_ADC_LV_RD_ADDR   ABS    : > .
 //2byte
 //4byte
     .bss_SHARE_PORT_CONF        SHARE_PORT_CONF_ADDR        ABS    : > .
-    .bss_SHARE_VEH_OPEMD_MDBIT  SHARE_VEH_OPEMD_MDBIT_ADDR  ABS    : > .
 //struct
-    .bss_SHARE_IOHW_ADC_LV      SHARE_IOHW_ADC_LV_ADDR      ABS    : > .
-    .bss_SHARE_IOHW_DIFLT_FLTRD SHARE_IOHW_DIFLT_FLTRD_ADDR ABS    : > .
     .bss_SHARE_DMA_NOTICATION   SHARE_DMA_NOTICATION_ADDR   ABS    : > .
     .bss_SHARE_SPI_MODEA_CHANNELDATA SHARE_SPI_MODEA_CHANNELDATA_ADDR ABS    : > .
     .bss_SHARE_SPI_MODEC_CHANNELDATA SHARE_SPI_MODEC_CHANNELDATA_ADDR ABS    : > .

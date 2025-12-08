@@ -1,0 +1,211 @@
+[Header]
+Description=Renesas Flash Programmer Configuration File
+File Type=3.3
+[Device Info]
+Device Type=2
+Protocol=31
+Device Code=03
+Product Name=RH850
+Support FAW=FALSE
+Support AWPR=FALSE
+Support ESW=FALSE
+Memory Area Count=21
+[Clock Info]
+Clock Mode=0
+Support Clock=
+OSC Frequency Range=16000000,40000000
+CPU Frequency Range=400000000,400000000
+SCI Frequency Range=0,80000000
+CPU Ratio=
+SCI Ratio=
+[Memory Area 0]
+Area Type=0x00000001
+Start Address=0x00000000
+Size=0x00020000
+Erase Unit Size=0x00004000
+Write Unit Size=0x00000200
+Sum Unit Size=0x00000001
+Read Unit Size=0x00000001
+Attribute=0x00000000
+[Memory Area 1]
+Area Type=0x00000001
+Start Address=0x00020000
+Size=0x003E0000
+Erase Unit Size=0x00010000
+Write Unit Size=0x00000200
+Sum Unit Size=0x00000001
+Read Unit Size=0x00000001
+Attribute=0x00000000
+[Memory Area 2]
+Area Type=0x00000001
+Start Address=0x00400000
+Size=0x00020000
+Erase Unit Size=0x00004000
+Write Unit Size=0x00000200
+Sum Unit Size=0x00000001
+Read Unit Size=0x00000001
+Attribute=0x00000000
+[Memory Area 3]
+Area Type=0x00000001
+Start Address=0x00420000
+Size=0x003E0000
+Erase Unit Size=0x00010000
+Write Unit Size=0x00000200
+Sum Unit Size=0x00000001
+Read Unit Size=0x00000001
+Attribute=0x00000000
+[Memory Area 4]
+Area Type=0x00000001
+Start Address=0x00800000
+Size=0x00020000
+Erase Unit Size=0x00004000
+Write Unit Size=0x00000200
+Sum Unit Size=0x00000001
+Read Unit Size=0x00000001
+Attribute=0x00000000
+[Memory Area 5]
+Area Type=0x00000001
+Start Address=0x00820000
+Size=0x003E0000
+Erase Unit Size=0x00010000
+Write Unit Size=0x00000200
+Sum Unit Size=0x00000001
+Read Unit Size=0x00000001
+Attribute=0x00000000
+[Memory Area 6]
+Area Type=0x00000001
+Start Address=0x00C00000
+Size=0x00020000
+Erase Unit Size=0x00004000
+Write Unit Size=0x00000200
+Sum Unit Size=0x00000001
+Read Unit Size=0x00000001
+Attribute=0x00000000
+[Memory Area 7]
+Area Type=0x00000001
+Start Address=0x00C20000
+Size=0x003E0000
+Erase Unit Size=0x00010000
+Write Unit Size=0x00000200
+Sum Unit Size=0x00000001
+Read Unit Size=0x00000001
+Attribute=0x00000000
+[Memory Area 8]
+Area Type=0x00000100
+Start Address=0x08000000
+Size=0x00010000
+Erase Unit Size=0x00010000
+Write Unit Size=0x00000200
+Sum Unit Size=0x00000001
+Read Unit Size=0x00000001
+Attribute=0x00000000
+[Memory Area 9]
+Area Type=0x00000101
+Start Address=0x08400000
+Size=0x00010000
+Erase Unit Size=0x00010000
+Write Unit Size=0x00000200
+Sum Unit Size=0x00000001
+Read Unit Size=0x00000001
+Attribute=0x00000000
+[Memory Area 10]
+Area Type=0x00000010
+Start Address=0xFF200000
+Size=0x00090000
+Erase Unit Size=0x00001000
+Write Unit Size=0x00000004
+Sum Unit Size=0x00000001
+Read Unit Size=0x00000001
+Attribute=0x00000000
+[Memory Area 11]
+Area Type=0x00000020
+Start Address=0xFF320000
+Size=0x00000800
+Erase Unit Size=0x00000800
+Write Unit Size=0x00000004
+Sum Unit Size=0x00000001
+Read Unit Size=0x00000001
+Attribute=0x00000000
+[Memory Area 12]
+Area Type=0x00010000
+Start Address=0xFF321200
+Size=0x00000600
+Erase Unit Size=0x00000000
+Write Unit Size=0x00000020
+Sum Unit Size=0x00000001
+Read Unit Size=0x00000001
+Attribute=0x00000000
+[Memory Area 13]
+Area Type=0x00020000
+Start Address=0xFF322200
+Size=0x00000600
+Erase Unit Size=0x00000000
+Write Unit Size=0x00000020
+Sum Unit Size=0x00000001
+Read Unit Size=0x00000001
+Attribute=0x00000000
+[Memory Area 14]
+Area Type=0x00040000
+Start Address=0xFF323200
+Size=0x00000600
+Erase Unit Size=0x00000000
+Write Unit Size=0x00000020
+Sum Unit Size=0x00000001
+Read Unit Size=0x00000001
+Attribute=0x00000000
+[Memory Area 15]
+Area Type=0x00040001
+Start Address=0xFF340A00
+Size=0x00000600
+Erase Unit Size=0x00000000
+Write Unit Size=0x00000020
+Sum Unit Size=0x00000001
+Read Unit Size=0x00000001
+Attribute=0x00000000
+[Memory Area 16]
+Area Type=0x00200000
+Start Address=0xFF325800
+Size=0x00000800
+Erase Unit Size=0x00000000
+Write Unit Size=0x00000000
+Sum Unit Size=0x00000000
+Read Unit Size=0x00000001
+Attribute=0x00000000
+[Memory Area 17]
+Area Type=0x00200001
+Start Address=0xFF327000
+Size=0x00000800
+Erase Unit Size=0x00000000
+Write Unit Size=0x00000000
+Sum Unit Size=0x00000000
+Read Unit Size=0x00000001
+Attribute=0x00000000
+[Memory Area 18]
+Area Type=0x00200002
+Start Address=0xFF341800
+Size=0x00000800
+Erase Unit Size=0x00000000
+Write Unit Size=0x00000000
+Sum Unit Size=0x00000000
+Read Unit Size=0x00000001
+Attribute=0x00000000
+[Memory Area 19]
+Area Type=0x00200003
+Start Address=0xFF343000
+Size=0x00000800
+Erase Unit Size=0x00000000
+Write Unit Size=0x00000000
+Sum Unit Size=0x00000000
+Read Unit Size=0x00000001
+Attribute=0x00000000
+[Memory Area 20]
+Area Type=0x00100000
+Start Address=0x08030000
+Size=0x00008000
+Erase Unit Size=0x00000000
+Write Unit Size=0x00000000
+Sum Unit Size=0x00000000
+Read Unit Size=0x00000001
+Attribute=0x00000000
+[Checksum]
+Checksum=0x23B71DCC

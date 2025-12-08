@@ -21,7 +21,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "aip_common.h"
 #include "fpcall_vd_fvd.h"
-#include "Iohw_adc.h"
+#include "iohw_adc_sh.h"
 #include "veh_opemd.h"
 #if 0   /* BEV BSW provisionally */
 #else

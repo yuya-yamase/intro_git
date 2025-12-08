@@ -22,7 +22,7 @@
     :macro=MCAL_UART_SCC_DIR=${MCAL_DIR}/Ren_U2Ax/Common/Uart/scc
     :macro=MCAL_WDG_SCC_DIR=${MCAL_DIR}/Ren_U2Ax/Common/Wdg/scc
 
-    :macro=MCAL_ADC_CFG_DIR=${MCAL_DIR}/Ren_U2Ax/A16_373/ADC/config_CDC_1MOT
+    :macro=MCAL_ADC_CFG_DIR=${MCAL_DIR}/Ren_U2Ax/A16_373/ADC/config_CDC_OT
     :macro=MCAL_ADCDIAG_CFG_DIR=${MCAL_DIR}/Ren_U2Ax/A16_373/ADCDIAG/config_CDC
     :macro=MCAL_COMMON_CFG_DIR=${MCAL_DIR}/Ren_U2Ax/A16_373/COMMON/config_CDC
     :macro=MCAL_DIO_CFG_DIR=${MCAL_DIR}/Ren_U2Ax/A16_373/DIO/config_CDC

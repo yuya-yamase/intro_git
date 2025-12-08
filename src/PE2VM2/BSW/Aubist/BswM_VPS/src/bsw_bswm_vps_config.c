@@ -16,28 +16,207 @@
 #include <Std_Types.h>
 #include <cs/bsw_cs_common.h>
 #include <cs/bsw_cs_system.h>
+#include <cs/bsw_cs_system_memmap_pre.h>
 #include <ComStack_Types.h>
-#include "../inc/bsw_bswm_vps_MemMap.h"
 
 #include <comm/bsw_comm.h>
 #include <bswm_cs/bsw_bswm_cs.h>
 #include "../../ComM/inc/bsw_comm_config.h"
 #include "../../BswM_CS/inc/bsw_bswm_cs_config.h"
+#include <cs/bsw_cs_system_memmap_post.h>
 
 #if( BSW_BSWM_CS_FUNC_BSWM_VPS == BSW_USE )
+#include <cs/bsw_cs_system_memmap_pre.h>
 #include <bswm_vps/bsw_bswm_vps.h>
 #include "../inc/bsw_bswm_vps_ctrl.h"
 #include "../inc/bsw_bswm_vps_config.h"
 #include "../cfg/BswM_VPS_Cfg.h"
+#include <cs/bsw_cs_system_memmap_post.h>
 
 #if( BSW_BSWM_VPS_VPSMSG_E2EUSE == BSW_USE )
 #include <E2E.h>
+#include <cs/bsw_cs_system_memmap_pre.h>
 #include "../inc/bsw_bswm_vps_ctrl_e2e.h"
+#include <cs/bsw_cs_system_memmap_post.h>
 #endif /* BSW_BSWM_VPS_VPSMSG_E2EUSE == BSW_USE */
 
+#include <cs/bsw_cs_system_memmap_pre.h>
 /*--------------------------------------------------------------------------*/
 /* Macros                                                                   */
 /*--------------------------------------------------------------------------*/
+#if ( BSW_COMM_CHNUM > 0U )
+#define BSW_BSWM_VPS_CH_PNCNUM_0     BSW_COMM_CH_PNCNUM_0
+#else
+#define BSW_BSWM_VPS_CH_PNCNUM_0     (0U)
+#endif
+#if ( BSW_COMM_CHNUM > 1U )
+#define BSW_BSWM_VPS_CH_PNCNUM_1     BSW_COMM_CH_PNCNUM_1
+#else
+#define BSW_BSWM_VPS_CH_PNCNUM_1     (0U)
+#endif
+#if ( BSW_COMM_CHNUM > 2U )
+#define BSW_BSWM_VPS_CH_PNCNUM_2     BSW_COMM_CH_PNCNUM_2
+#else
+#define BSW_BSWM_VPS_CH_PNCNUM_2     (0U)
+#endif
+#if ( BSW_COMM_CHNUM > 3U )
+#define BSW_BSWM_VPS_CH_PNCNUM_3     BSW_COMM_CH_PNCNUM_3
+#else
+#define BSW_BSWM_VPS_CH_PNCNUM_3     (0U)
+#endif
+#if ( BSW_COMM_CHNUM > 4U )
+#define BSW_BSWM_VPS_CH_PNCNUM_4     BSW_COMM_CH_PNCNUM_4
+#else
+#define BSW_BSWM_VPS_CH_PNCNUM_4     (0U)
+#endif
+#if ( BSW_COMM_CHNUM > 5U )
+#define BSW_BSWM_VPS_CH_PNCNUM_5     BSW_COMM_CH_PNCNUM_5
+#else
+#define BSW_BSWM_VPS_CH_PNCNUM_5     (0U)
+#endif
+#if ( BSW_COMM_CHNUM > 6U )
+#define BSW_BSWM_VPS_CH_PNCNUM_6     BSW_COMM_CH_PNCNUM_6
+#else
+#define BSW_BSWM_VPS_CH_PNCNUM_6     (0U)
+#endif
+#if ( BSW_COMM_CHNUM > 7U )
+#define BSW_BSWM_VPS_CH_PNCNUM_7     BSW_COMM_CH_PNCNUM_7
+#else
+#define BSW_BSWM_VPS_CH_PNCNUM_7     (0U)
+#endif
+#if ( BSW_COMM_CHNUM > 8U )
+#define BSW_BSWM_VPS_CH_PNCNUM_8     BSW_COMM_CH_PNCNUM_8
+#else
+#define BSW_BSWM_VPS_CH_PNCNUM_8     (0U)
+#endif
+#if ( BSW_COMM_CHNUM > 9U )
+#define BSW_BSWM_VPS_CH_PNCNUM_9     BSW_COMM_CH_PNCNUM_9
+#else
+#define BSW_BSWM_VPS_CH_PNCNUM_9     (0U)
+#endif
+#if ( BSW_COMM_CHNUM > 10U )
+#define BSW_BSWM_VPS_CH_PNCNUM_10     BSW_COMM_CH_PNCNUM_10
+#else
+#define BSW_BSWM_VPS_CH_PNCNUM_10     (0U)
+#endif
+#if ( BSW_COMM_CHNUM > 11U )
+#define BSW_BSWM_VPS_CH_PNCNUM_11     BSW_COMM_CH_PNCNUM_11
+#else
+#define BSW_BSWM_VPS_CH_PNCNUM_11     (0U)
+#endif
+#if ( BSW_COMM_CHNUM > 12U )
+#define BSW_BSWM_VPS_CH_PNCNUM_12     BSW_COMM_CH_PNCNUM_12
+#else
+#define BSW_BSWM_VPS_CH_PNCNUM_12     (0U)
+#endif
+#if ( BSW_COMM_CHNUM > 13U )
+#define BSW_BSWM_VPS_CH_PNCNUM_13     BSW_COMM_CH_PNCNUM_13
+#else
+#define BSW_BSWM_VPS_CH_PNCNUM_13     (0U)
+#endif
+#if ( BSW_COMM_CHNUM > 14U )
+#define BSW_BSWM_VPS_CH_PNCNUM_14     BSW_COMM_CH_PNCNUM_14
+#else
+#define BSW_BSWM_VPS_CH_PNCNUM_14     (0U)
+#endif
+#if ( BSW_COMM_CHNUM > 15U )
+#define BSW_BSWM_VPS_CH_PNCNUM_15     BSW_COMM_CH_PNCNUM_15
+#else
+#define BSW_BSWM_VPS_CH_PNCNUM_15     (0U)
+#endif
+#if ( BSW_COMM_CHNUM > 16U )
+#define BSW_BSWM_VPS_CH_PNCNUM_16     BSW_COMM_CH_PNCNUM_16
+#else
+#define BSW_BSWM_VPS_CH_PNCNUM_16     (0U)
+#endif
+#if ( BSW_COMM_CHNUM > 17U )
+#define BSW_BSWM_VPS_CH_PNCNUM_17     BSW_COMM_CH_PNCNUM_17
+#else
+#define BSW_BSWM_VPS_CH_PNCNUM_17     (0U)
+#endif
+#if ( BSW_COMM_CHNUM > 18U )
+#define BSW_BSWM_VPS_CH_PNCNUM_18     BSW_COMM_CH_PNCNUM_18
+#else
+#define BSW_BSWM_VPS_CH_PNCNUM_18     (0U)
+#endif
+#if ( BSW_COMM_CHNUM > 19U )
+#define BSW_BSWM_VPS_CH_PNCNUM_19     BSW_COMM_CH_PNCNUM_19
+#else
+#define BSW_BSWM_VPS_CH_PNCNUM_19     (0U)
+#endif
+#if ( BSW_COMM_CHNUM > 20U )
+#define BSW_BSWM_VPS_CH_PNCNUM_20     BSW_COMM_CH_PNCNUM_20
+#else
+#define BSW_BSWM_VPS_CH_PNCNUM_20     (0U)
+#endif
+#if ( BSW_COMM_CHNUM > 21U )
+#define BSW_BSWM_VPS_CH_PNCNUM_21     BSW_COMM_CH_PNCNUM_21
+#else
+#define BSW_BSWM_VPS_CH_PNCNUM_21     (0U)
+#endif
+#if ( BSW_COMM_CHNUM > 22U )
+#define BSW_BSWM_VPS_CH_PNCNUM_22     BSW_COMM_CH_PNCNUM_22
+#else
+#define BSW_BSWM_VPS_CH_PNCNUM_22     (0U)
+#endif
+#if ( BSW_COMM_CHNUM > 23U )
+#define BSW_BSWM_VPS_CH_PNCNUM_23     BSW_COMM_CH_PNCNUM_23
+#else
+#define BSW_BSWM_VPS_CH_PNCNUM_23     (0U)
+#endif
+#if ( BSW_COMM_CHNUM > 24U )
+#define BSW_BSWM_VPS_CH_PNCNUM_24     BSW_COMM_CH_PNCNUM_24
+#else
+#define BSW_BSWM_VPS_CH_PNCNUM_24     (0U)
+#endif
+#if ( BSW_COMM_CHNUM > 25U )
+#define BSW_BSWM_VPS_CH_PNCNUM_25     BSW_COMM_CH_PNCNUM_25
+#else
+#define BSW_BSWM_VPS_CH_PNCNUM_25     (0U)
+#endif
+#if ( BSW_COMM_CHNUM > 26U )
+#define BSW_BSWM_VPS_CH_PNCNUM_26     BSW_COMM_CH_PNCNUM_26
+#else
+#define BSW_BSWM_VPS_CH_PNCNUM_26     (0U)
+#endif
+#if ( BSW_COMM_CHNUM > 27U )
+#define BSW_BSWM_VPS_CH_PNCNUM_27     BSW_COMM_CH_PNCNUM_27
+#else
+#define BSW_BSWM_VPS_CH_PNCNUM_27     (0U)
+#endif
+#if ( BSW_COMM_CHNUM > 28U )
+#define BSW_BSWM_VPS_CH_PNCNUM_28     BSW_COMM_CH_PNCNUM_28
+#else
+#define BSW_BSWM_VPS_CH_PNCNUM_28     (0U)
+#endif
+#if ( BSW_COMM_CHNUM > 29U )
+#define BSW_BSWM_VPS_CH_PNCNUM_29     BSW_COMM_CH_PNCNUM_29
+#else
+#define BSW_BSWM_VPS_CH_PNCNUM_29     (0U)
+#endif
+#if ( BSW_COMM_CHNUM > 30U )
+#define BSW_BSWM_VPS_CH_PNCNUM_30     BSW_COMM_CH_PNCNUM_30
+#else
+#define BSW_BSWM_VPS_CH_PNCNUM_30     (0U)
+#endif
+#if ( BSW_COMM_CHNUM > 31U )
+#define BSW_BSWM_VPS_CH_PNCNUM_31     BSW_COMM_CH_PNCNUM_31
+#else
+#define BSW_BSWM_VPS_CH_PNCNUM_31     (0U)
+#endif
+
+#define BSW_BSWM_VPS_PNCCHNUM         ( BSW_BSWM_VPS_PNCCHNUM_0_3 + BSW_BSWM_VPS_PNCCHNUM_4_7 + BSW_BSWM_VPS_PNCCHNUM_8_11 + BSW_BSWM_VPS_PNCCHNUM_12_15 \
+                                      + BSW_BSWM_VPS_PNCCHNUM_16_19 + BSW_BSWM_VPS_PNCCHNUM_20_23 + BSW_BSWM_VPS_PNCCHNUM_24_27 + BSW_BSWM_VPS_PNCCHNUM_28_31 )
+#define BSW_BSWM_VPS_PNCCHNUM_CH(ch)  ( ( BSW_BSWM_VPS_CH_PNCNUM_##ch > 0U ) ? 1U : 0U )
+#define BSW_BSWM_VPS_PNCCHNUM_0_3     ( BSW_BSWM_VPS_PNCCHNUM_CH(0)  + BSW_BSWM_VPS_PNCCHNUM_CH(1)  + BSW_BSWM_VPS_PNCCHNUM_CH(2)  + BSW_BSWM_VPS_PNCCHNUM_CH(3) )
+#define BSW_BSWM_VPS_PNCCHNUM_4_7     ( BSW_BSWM_VPS_PNCCHNUM_CH(4)  + BSW_BSWM_VPS_PNCCHNUM_CH(5)  + BSW_BSWM_VPS_PNCCHNUM_CH(6)  + BSW_BSWM_VPS_PNCCHNUM_CH(7) )
+#define BSW_BSWM_VPS_PNCCHNUM_8_11    ( BSW_BSWM_VPS_PNCCHNUM_CH(8)  + BSW_BSWM_VPS_PNCCHNUM_CH(9)  + BSW_BSWM_VPS_PNCCHNUM_CH(10) + BSW_BSWM_VPS_PNCCHNUM_CH(11) )
+#define BSW_BSWM_VPS_PNCCHNUM_12_15   ( BSW_BSWM_VPS_PNCCHNUM_CH(12) + BSW_BSWM_VPS_PNCCHNUM_CH(13) + BSW_BSWM_VPS_PNCCHNUM_CH(14) + BSW_BSWM_VPS_PNCCHNUM_CH(15) )
+#define BSW_BSWM_VPS_PNCCHNUM_16_19   ( BSW_BSWM_VPS_PNCCHNUM_CH(16) + BSW_BSWM_VPS_PNCCHNUM_CH(17) + BSW_BSWM_VPS_PNCCHNUM_CH(18) + BSW_BSWM_VPS_PNCCHNUM_CH(19) )
+#define BSW_BSWM_VPS_PNCCHNUM_20_23   ( BSW_BSWM_VPS_PNCCHNUM_CH(20) + BSW_BSWM_VPS_PNCCHNUM_CH(21) + BSW_BSWM_VPS_PNCCHNUM_CH(22) + BSW_BSWM_VPS_PNCCHNUM_CH(23) )
+#define BSW_BSWM_VPS_PNCCHNUM_24_27   ( BSW_BSWM_VPS_PNCCHNUM_CH(24) + BSW_BSWM_VPS_PNCCHNUM_CH(25) + BSW_BSWM_VPS_PNCCHNUM_CH(26) + BSW_BSWM_VPS_PNCCHNUM_CH(27) )
+#define BSW_BSWM_VPS_PNCCHNUM_28_31   ( BSW_BSWM_VPS_PNCCHNUM_CH(28) + BSW_BSWM_VPS_PNCCHNUM_CH(29) + BSW_BSWM_VPS_PNCCHNUM_CH(30) + BSW_BSWM_VPS_PNCCHNUM_CH(31) )
+
 #define BSW_BSWM_VPS_CHANNELNUM_DUMMY          (1U)
 #define BSW_BSWM_VPS_AWKFACTNUM_DUMMY          (1U)
 #define BSW_BSWM_VPS_CHANNELNUM_ZERO           (0U)
@@ -732,11 +911,11 @@
 
 /* PNC Function Table */
 #if ( BSW_COMM_PNC_FUNC == BSW_USE )
-#define BSW_BSWM_VPS_REQCHPNCCOMMODE_FUNC           ( &ComM_RequestChPncComMode )
-#define BSW_BSWM_VPS_SETCOPNCAWAKE_FUNC             ( &ComM_SetCoPncAwake )
+#define BSW_BSWM_VPS_REQCHPNCCOMMODE_FUNC           ( &bsw_bswm_vps_ctrl_RqChPncCM )
+#define BSW_BSWM_VPS_SETCOPNCAWAKE_FUNC             ( &bsw_bswm_vps_ctrl_SetCoPncAwk )
 #else
-#define BSW_BSWM_VPS_REQCHPNCCOMMODE_FUNC           ( &bsw_bswm_vps_ctrl_RequestChPncComModeNone )
-#define BSW_BSWM_VPS_SETCOPNCAWAKE_FUNC             ( &bsw_bswm_vps_ctrl_SetCoPncAwakeNone )
+#define BSW_BSWM_VPS_REQCHPNCCOMMODE_FUNC           ( &bsw_bswm_vps_ctrl_RqChPncCMNo )
+#define BSW_BSWM_VPS_SETCOPNCAWAKE_FUNC             ( &bsw_bswm_vps_ctrl_SetCoPncAwkNo )
 #endif /* BSW_COMM_PNC_FUNC == BSW_USE */
 
 /* CS Function Table */
@@ -745,15 +924,28 @@
 #define BSW_BSWM_VPS_DEINIT_FUNC                    ( &bsw_bswm_vps_ctrl_DeInit )
 #define BSW_BSWM_VPS_WAKEUP_FUNC                    ( &bsw_bswm_vps_ctrl_Wakeup )
 #define BSW_BSWM_VPS_MAINFUNCTION_FUNC              ( &bsw_bswm_vps_ctrl_MainFunction )
-#define BSW_BSWM_VPS_GETSYSTEMSTATUS_FUNC           ( &bsw_bswm_vps_ctrl_GetSysStat )
+#define BSW_BSWM_VPS_GETSYSTEMSTATUS_FUNC           ( &bsw_bswm_vps_ctrl_GetSysStatNone )
 #define BSW_BSWM_VPS_TXIPDUCO_FUNC                  ( &bsw_bswm_vps_ctrl_TxIpduCoIn )
+#if ( BSW_BSWM_VPS_CFG_VPS_RXPDUIDNUM != 0U )
+#define BSW_BSWM_VPS_RXINDVPSMSG_FUNC               ( &bsw_bswm_vps_ctrl_RxVPSMsg )
+#else
+#define BSW_BSWM_VPS_RXINDVPSMSG_FUNC               ( &bsw_bswm_vps_ctrl_RxVPSMsgNone )
+#endif /* BSW_BSWM_VPS_CFG_VPS_RXPDUIDNUM != 0U */
+#define BSW_BSWM_VPS_PERIRXVPSMSG_FUNC              ( &bsw_bswm_vps_ctrl_PrRxVpsMsgNo )
 #else
 #define BSW_BSWM_VPS_INIT_FUNC                      ( &bsw_bswm_vps_ctrl_InitNone )
 #define BSW_BSWM_VPS_DEINIT_FUNC                    ( &bsw_bswm_vps_ctrl_DeInitNone )
 #define BSW_BSWM_VPS_WAKEUP_FUNC                    ( &bsw_bswm_vps_ctrl_WakeupNone )
 #define BSW_BSWM_VPS_MAINFUNCTION_FUNC              ( &bsw_bswm_vps_ctrl_MainFunctionNone )
-#define BSW_BSWM_VPS_GETSYSTEMSTATUS_FUNC           ( &bsw_bswm_vps_ctrl_GetSysStatNone )
+#define BSW_BSWM_VPS_GETSYSTEMSTATUS_FUNC           ( &bsw_bswm_vps_ctrl_GetSysStat )
 #define BSW_BSWM_VPS_TXIPDUCO_FUNC                  ( &bsw_bswm_vps_ctrl_TxIpduCoNone )
+#define BSW_BSWM_VPS_RXINDVPSMSG_FUNC               ( &bsw_bswm_vps_ctrl_RxVPSMsgNone )
+#if ( BSW_BSWM_VPS_CFG_VPS_RXPDUIDNUM != 0U )
+#define BSW_BSWM_VPS_PERIRXVPSMSG_FUNC              ( &bsw_bswm_vps_ctrl_PrRxVpsMsg )
+#else
+#define BSW_BSWM_VPS_PERIRXVPSMSG_FUNC              ( &bsw_bswm_vps_ctrl_PrRxVpsMsgNo )
+#endif /* BSW_BSWM_VPS_CFG_VPS_RXPDUIDNUM != 0U */
+
 #endif /* BSW_BSWM_VPS_CFG_DATA_DIV_LOC == BSW_NOUSE */
 
 #if (( BSW_BSWM_VPS_CFG_DATA_DIV_LOC == BSW_NOUSE ) && ( BSW_BSWM_VPS_CFG_RXVPSFIX == BSW_NOUSE ))
@@ -763,11 +955,11 @@
 #endif /* ( BSW_BSWM_VPS_CFG_DATA_DIV_LOC == BSW_NOUSE ) && ( BSW_BSWM_VPS_CFG_RXVPSFIX == BSW_NOUSE ) */
 
 #if ( BSW_BSWM_VPS_CFG_HANDSHAKE == BSW_USE )
-#define BSW_BSWM_VPS_STOPSTATHDL_FUNC               ( &bsw_bswm_vps_ctrl_StopStatHdl )
+#define BSW_BSWM_VPS_STHDLSYSCHG_FUNC               ( &bsw_bswm_vps_ctrl_StHdlSysChg )
 #define BSW_BSWM_VPS_TXRLYONCONFREQ_FUNC            ( &bsw_bswm_vps_ctrl_TxRlyConfReq )
 #define BSW_BSWM_VPS_UPDTROCTIM_FUNC                ( &bsw_bswm_vps_ctrl_UpdtROCTimer )
 #else
-#define BSW_BSWM_VPS_STOPSTATHDL_FUNC               ( &bsw_bswm_vps_ctrl_StopStatHdlNone )
+#define BSW_BSWM_VPS_STHDLSYSCHG_FUNC               ( &bsw_bswm_vps_ctrl_StHdlSysChgNo )
 #define BSW_BSWM_VPS_TXRLYONCONFREQ_FUNC            ( &bsw_bswm_vps_ctrl_TxRlyConfReqNone )
 #define BSW_BSWM_VPS_UPDTROCTIM_FUNC                ( &bsw_bswm_vps_ctrl_UpdtROCTimerNone )
 #endif /* BSW_BSWM_VPS_CFG_HANDSHAKE == BSW_USE */
@@ -796,16 +988,14 @@
 #define BSW_BSWM_VPS_TXVPSMSG_FUNC                  ( &bsw_bswm_vps_ctrl_TxVPSMsgNone )
 #endif /* BSW_BSWM_VPS_CFG_VPS_TXPDUIDNUM != 0U */
 
-#if ( BSW_BSWM_VPS_CFG_VPS_RXPDUIDNUM != 0U )
-#define BSW_BSWM_VPS_RXVPSMSG_FUNC                  ( &bsw_bswm_vps_ctrl_RxVPSMsg )
-#else
-#define BSW_BSWM_VPS_RXVPSMSG_FUNC                  ( &bsw_bswm_vps_ctrl_RxVPSMsgNone )
-#endif /* BSW_BSWM_VPS_CFG_VPS_TXPDUIDNUM != 0U */
-
 #if ( (BSW_BSWM_VPS_CFG_RLYONCONFREQ_RXPDUIDNUM + BSW_BSWM_VPS_CFG_RLYONCONFRES_RXPDUIDNUM) != 0U )
 #define BSW_BSWM_VPS_RXRLYMSG_FUNC                  ( &bsw_bswm_vps_ctrl_RxRlyMsg )
+#define BSW_BSWM_VPS_UPDTROCRXTIM_FUNC              ( &bsw_bswm_vps_ctrl_UpdROCRxTimer )
+#define BSW_BSWM_VPS_STOPROCRXTIM_FUNC              ( &bsw_bswm_vps_ctrl_StopROCRxTimer )
 #else
 #define BSW_BSWM_VPS_RXRLYMSG_FUNC                  ( &bsw_bswm_vps_ctrl_RxRlyMsgNone )
+#define BSW_BSWM_VPS_UPDTROCRXTIM_FUNC              ( &bsw_bswm_vps_ctrl_UpdROCRxTimNn )
+#define BSW_BSWM_VPS_STOPROCRXTIM_FUNC              ( &bsw_bswm_vps_ctrl_StopROCRxTimNn )
 #endif /* (BSW_BSWM_VPS_CFG_RLYONCONFREQ_RXPDUIDNUM + BSW_BSWM_VPS_CFG_RLYONCONFRES_RXPDUIDNUM) != 0U */
 /*--------------------------------------------------------------------------*/
 /* Types                                                                    */
@@ -818,7 +1008,13 @@
 /*--------------------------------------------------------------------------*/
 /* Data                                                                     */
 /*--------------------------------------------------------------------------*/
-Bsw_BswM_VPS_RxPncEvntType bsw_bswm_vps_ctrl_stRxPncEvnt;
+#if( BSW_BSWM_VPS_CFG_MAX_MSGSIZE > 0U )
+BswU1 bsw_bswm_vps_u1TmpMsgData[BSW_BSWM_VPS_CFG_MAX_MSGSIZE];
+BswU1 bsw_bswm_vps_u1SndDataMsk[BSW_BSWM_VPS_CFG_MAX_MSGSIZE];
+#else
+BswU1 bsw_bswm_vps_u1TmpMsgData[BSW_BSWM_VPS_TBLNUM_DUMMY];
+BswU1 bsw_bswm_vps_u1SndDataMsk[BSW_BSWM_VPS_TBLNUM_DUMMY];
+#endif /* BSW_BSWM_VPS_CFG_MAX_MSGSIZE > 0U */
 
 #if( BSW_BSWM_VPS_RX_MESSAGE_NUM > 0U )
 BswU1 bsw_bswm_vps_u1RxEvent[BSW_BSWM_VPS_RX_MESSAGE_NUM];
@@ -827,16 +1023,28 @@ BswU1 bsw_bswm_vps_u1RxStatus[BSW_BSWM_VPS_RX_MESSAGE_NUM];
 BswU1 bsw_bswm_vps_u1RxEvent[BSW_BSWM_VPS_TBLNUM_DUMMY];
 BswU1 bsw_bswm_vps_u1RxStatus[BSW_BSWM_VPS_TBLNUM_DUMMY];
 #endif /* BSW_BSWM_VPS_RX_MESSAGE_NUM > 0U */
+
+#if ( BSW_BSWM_VPS_CFG_VPS_TXPDUIDNUM != 0U )
+BswU1 bsw_bswm_vps_u1TxVPSMsgSt[BSW_BSWM_VPS_CFG_VPS_TXPDUIDNUM];
+#else
+BswU1 bsw_bswm_vps_u1TxVPSMsgSt[BSW_BSWM_VPS_TBLNUM_DUMMY];
+#endif /* BSW_BSWM_VPS_CFG_VPS_TXPDUIDNUM != 0U */
+
 /*--------------------------------------------------------------------------*/
 /* Constants                                                                */
 /*--------------------------------------------------------------------------*/
+/* Number of PNC Channels */
+BswConst BswU1  bsw_bswm_vps_u1PncChNum         = (BswU1)BSW_BSWM_VPS_PNCCHNUM;
+
 /* Vehicle Power State */
 BswConst BswU1  bsw_bswm_vps_u1VehiPwStNum      = (BswU1)BSW_BSWM_VPS_CFG_VPS_NUM;
 BswConst BswU1  bsw_bswm_vps_u1VehiPwStSpNum    = (BswU1)BSW_BSWM_VPS_CFG_VPSSP_NUM;
-BswConst BswU1  bsw_bswm_vps_u1RxVPSFix         = (BswU1)BSW_BSWM_VPS_CFG_RXVPSFIX;
 
 /* Message */
+BswConst BswU1  bsw_bswm_vps_u1DataDivLocUse    = (BswU1)BSW_BSWM_VPS_CFG_DATA_DIV_LOC;
+BswConst BswU2  bsw_bswm_vps_u2MaxMsgSize       = (BswU2)BSW_BSWM_VPS_CFG_MAX_MSGSIZE;
 BswConst BswU1  bsw_bswm_vps_u1PwStPos          = (BswU1)BSW_BSWM_VPS_CFG_VPS_POS;
+BswConst BswU1  bsw_bswm_vps_u1PwStActiveBit    = (BswU1)BSW_BSWM_VPS_CFG_VPS_ACTIVE_BIT;
 BswConst BswU1  bsw_bswm_vps_u1PwStSpPos        = (BswU1)BSW_BSWM_VPS_CFG_VPSSP_POS;
 BswConst BswU1  bsw_bswm_vps_u1PwStSpTransPos   = (BswU1)BSW_BSWM_VPS_CFG_VPSSPTRANS_POS;
 BswConst BswU1  bsw_bswm_vps_u1PwStSpOtaPos     = (BswU1)BSW_BSWM_VPS_CFG_VPSSP_OTA_POS;
@@ -847,9 +1055,7 @@ BswConst BswU1  bsw_bswm_vps_u1VhPwStRxPduIdNum       = (BswU1)BSW_BSWM_VPS_CFG_
 BswConst BswU1  bsw_bswm_vps_u1RxPduIdNum             = (BswU1)BSW_BSWM_VPS_RX_MESSAGE_NUM;
 BswConst BswU1  bsw_bswm_vps_u1VhPwStTxPduIdNum       = (BswU1)BSW_BSWM_VPS_CFG_VPS_TXPDUIDNUM;
 BswConst BswU1  bsw_bswm_vps_u1RlyOnConfReqTxPduIdNum = (BswU1)BSW_BSWM_VPS_CFG_RLYONCONFREQ_TXPDUIDNUM;
-BswConst BswU1  bsw_bswm_vps_u1TxPduIdNum             = (BswU1)BSW_BSWM_VPS_TX_MESSAGE_NUM;
 
-BswConst BswU1  bsw_bswm_vps_u1VpsMsgE2EUse           = (BswU1)BSW_BSWM_VPS_CFG_VPSMSG_E2EUSE;
 BswConst BswU1  bsw_bswm_vps_u1E2ERxCntError          = (BswU1)BSW_BSWM_VPS_CFG_E2E_RXCNTERROR;
 
 BswConst BswU1  bsw_bswm_vps_u1RlyOnConfBytePos = (BswU1)BSW_BSWM_VPS_CFG_RLYONCONF_BYTE_POS;
@@ -868,7 +1074,6 @@ BswConst BswU1  bsw_bswm_vps_u1E2EProtectRxMsgNum = (BswU1)BSW_BSWM_VPS_CFG_VPS_
 
 /* Handshake */
 BswConst BswU2  bsw_bswm_vps_u2RlyOnConfTOTim   = BSW_BSWM_CS_u2MS2TICK_RUP_MID(BSW_BSWM_VPS_CFG_RLYONCONFTO);
-BswConst BswU1  bsw_bswm_vps_u1HandShake        = (BswU1)BSW_BSWM_VPS_CFG_HANDSHAKE;
 
 /* Wakeup Factor */
 BswConst BswU1  bsw_bswm_vps_u1AwkFctNum        = (BswU1)BSW_BSWM_VPS_CFG_AWKFACTNUM;
@@ -904,6 +1109,108 @@ BswConst Bsw_BswM_VPS_CoPncAwakeType bsw_bswm_vps_stCoPncAwake_Dummy[BSW_BSWM_VP
 /***********************/
 /* Wakeup Factor Table */
 /***********************/
+/* PNC Channel Number Table */
+BswConst BswU1 bsw_bswm_vps_u1PncChNumTbl[BSW_BSWM_VPS_PNCCHNUM + BSW_BSWM_VPS_CHANNELNUM_DUMMY] = 
+{
+   #if ( BSW_BSWM_VPS_CH_PNCNUM_0 > 0U )
+   (BswU1)0U,
+   #endif /* BSW_BSWM_VPS_CH_PNCNUM_0 > 0U */
+   #if ( BSW_BSWM_VPS_CH_PNCNUM_1 > 0U )
+   (BswU1)1U,
+   #endif /* BSW_BSWM_VPS_CH_PNCNUM_1 > 0U */
+   #if ( BSW_BSWM_VPS_CH_PNCNUM_2 > 0U )
+   (BswU1)2U,
+   #endif /* BSW_BSWM_VPS_CH_PNCNUM_2 > 0U */
+   #if ( BSW_BSWM_VPS_CH_PNCNUM_3> 0U )
+   (BswU1)3U,
+   #endif /* BSW_BSWM_VPS_CH_PNCNUM_3> 0U */
+   #if ( BSW_BSWM_VPS_CH_PNCNUM_4 > 0U )
+   (BswU1)4U,
+   #endif /* BSW_BSWM_VPS_CH_PNCNUM_4> 0U */
+   #if ( BSW_BSWM_VPS_CH_PNCNUM_5 > 0U )
+   (BswU1)5U,
+   #endif /* BSW_BSWM_VPS_CH_PNCNUM_5> 0U */
+   #if ( BSW_BSWM_VPS_CH_PNCNUM_6 > 0U )
+   (BswU1)6U,
+   #endif /* BSW_BSWM_VPS_CH_PNCNUM_6> 0U */
+   #if ( BSW_BSWM_VPS_CH_PNCNUM_7 > 0U )
+   (BswU1)7U,
+   #endif /* BSW_BSWM_VPS_CH_PNCNUM_7> 0U */
+   #if ( BSW_BSWM_VPS_CH_PNCNUM_8 > 0U )
+   (BswU1)8U,
+   #endif /* BSW_BSWM_VPS_CH_PNCNUM_8> 0U */
+   #if ( BSW_BSWM_VPS_CH_PNCNUM_9 > 0U )
+   (BswU1)9U,
+   #endif /* BSW_BSWM_VPS_CH_PNCNUM_9> 0U */
+   #if ( BSW_BSWM_VPS_CH_PNCNUM_10 > 0U )
+   (BswU1)10U,
+   #endif /* BSW_BSWM_VPS_CH_PNCNUM_10> 0U */
+   #if ( BSW_BSWM_VPS_CH_PNCNUM_11 > 0U )
+   (BswU1)11U,
+   #endif /* BSW_BSWM_VPS_CH_PNCNUM_11> 0U */
+   #if ( BSW_BSWM_VPS_CH_PNCNUM_12 > 0U )
+   (BswU1)12U,
+   #endif /* BSW_BSWM_VPS_CH_PNCNUM_12> 0U */
+   #if ( BSW_BSWM_VPS_CH_PNCNUM_13 > 0U )
+   (BswU1)13U,
+   #endif /* BSW_BSWM_VPS_CH_PNCNUM_13> 0U */
+   #if ( BSW_BSWM_VPS_CH_PNCNUM_14 > 0U )
+   (BswU1)14U,
+   #endif /* BSW_BSWM_VPS_CH_PNCNUM_14> 0U */
+   #if ( BSW_BSWM_VPS_CH_PNCNUM_15 > 0U )
+   (BswU1)15U,
+   #endif /* BSW_BSWM_VPS_CH_PNCNUM_15> 0U */
+   #if ( BSW_BSWM_VPS_CH_PNCNUM_16 > 0U )
+   (BswU1)16U,
+   #endif /* BSW_BSWM_VPS_CH_PNCNUM_16> 0U */
+   #if ( BSW_BSWM_VPS_CH_PNCNUM_17 > 0U )
+   (BswU1)17U,
+   #endif /* BSW_BSWM_VPS_CH_PNCNUM_17> 0U */
+   #if ( BSW_BSWM_VPS_CH_PNCNUM_18 > 0U )
+   (BswU1)18U,
+   #endif /* BSW_BSWM_VPS_CH_PNCNUM_18> 0U */
+   #if ( BSW_BSWM_VPS_CH_PNCNUM_19 > 0U )
+   (BswU1)19U,
+   #endif /* BSW_BSWM_VPS_CH_PNCNUM_19> 0U */
+   #if ( BSW_BSWM_VPS_CH_PNCNUM_20 > 0U )
+   (BswU1)20U,
+   #endif /* BSW_BSWM_VPS_CH_PNCNUM_20> 0U */
+   #if ( BSW_BSWM_VPS_CH_PNCNUM_21 > 0U )
+   (BswU1)21U,
+   #endif /* BSW_BSWM_VPS_CH_PNCNUM_21> 0U */
+   #if ( BSW_BSWM_VPS_CH_PNCNUM_22 > 0U )
+   (BswU1)22U,
+   #endif /* BSW_BSWM_VPS_CH_PNCNUM_22> 0U */
+   #if ( BSW_BSWM_VPS_CH_PNCNUM_23 > 0U )
+   (BswU1)23U,
+   #endif /* BSW_BSWM_VPS_CH_PNCNUM_23> 0U */
+   #if ( BSW_BSWM_VPS_CH_PNCNUM_24 > 0U )
+   (BswU1)24U,
+   #endif /* BSW_BSWM_VPS_CH_PNCNUM_24> 0U */
+   #if ( BSW_BSWM_VPS_CH_PNCNUM_25 > 0U )
+   (BswU1)25U,
+   #endif /* BSW_BSWM_VPS_CH_PNCNUM_25> 0U */
+   #if ( BSW_BSWM_VPS_CH_PNCNUM_26 > 0U )
+   (BswU1)26U,
+   #endif /* BSW_BSWM_VPS_CH_PNCNUM_26> 0U */
+   #if ( BSW_BSWM_VPS_CH_PNCNUM_27 > 0U )
+   (BswU1)27U,
+   #endif /* BSW_BSWM_VPS_CH_PNCNUM_27> 0U */
+   #if ( BSW_BSWM_VPS_CH_PNCNUM_28 > 0U )
+   (BswU1)28U,
+   #endif /* BSW_BSWM_VPS_CH_PNCNUM_28> 0U */
+   #if ( BSW_BSWM_VPS_CH_PNCNUM_29 > 0U )
+   (BswU1)29U,
+   #endif /* BSW_BSWM_VPS_CH_PNCNUM_29> 0U */
+   #if ( BSW_BSWM_VPS_CH_PNCNUM_30 > 0U )
+   (BswU1)30U,
+   #endif /* BSW_BSWM_VPS_CH_PNCNUM_30> 0U */
+   #if ( BSW_BSWM_VPS_CH_PNCNUM_31 > 0U )
+   (BswU1)31U,
+   #endif /* BSW_BSWM_VPS_CH_PNCNUM_31> 0U */
+   (BswU1)BSW_BSWM_VPS_CHANNELNUM_ZERO
+};
+
 /* UserHandle Table */
 #if ( BSW_BSWM_VPS_CFG_AWKFACTNUM > 0U )
 BswConst BswU1 bsw_bswm_vps_u1UserHandleTbl[BSW_BSWM_VPS_CFG_AWKFACTNUM] = 
@@ -1010,7 +1317,7 @@ BswConst BswU1 bsw_bswm_vps_u1UserHandleTbl[BSW_BSWM_VPS_AWKFACTNUM_DUMMY] =
 
 /* ChPncAwake Table */
 #if ( BSW_BSWM_VPS_CFG_AWKFACTNUM > 0U )
-BswConst Bsw_BswM_VPS_ChPncAwakeType* bsw_bswm_vps_ptChPncAwake[BSW_BSWM_VPS_CFG_AWKFACTNUM] =
+BswConst Bsw_BswM_VPS_ChPncAwakeType* BswConst bsw_bswm_vps_ptChPncAwake[BSW_BSWM_VPS_CFG_AWKFACTNUM] =
 {
     BSW_BSWM_VPS_CHPNCAWAKE_00
 #if ( BSW_BSWM_VPS_CFG_AWKFACTNUM > 1U )
@@ -1108,13 +1415,13 @@ BswConst Bsw_BswM_VPS_ChPncAwakeType* bsw_bswm_vps_ptChPncAwake[BSW_BSWM_VPS_CFG
 #endif /* BSW_BSWM_VPS_CFG_AWKFACTNUM > 31U */
 };
 #else /* BSW_BSWM_VPS_CFG_AWKFACTNUM == 0U */
-BswConst Bsw_BswM_VPS_ChPncAwakeType* bsw_bswm_vps_ptChPncAwake[BSW_BSWM_VPS_AWKFACTNUM_DUMMY] =
+BswConst Bsw_BswM_VPS_ChPncAwakeType* BswConst bsw_bswm_vps_ptChPncAwake[BSW_BSWM_VPS_AWKFACTNUM_DUMMY] =
 { bsw_bswm_vps_stChPncAwake_Dummy };
 #endif /* BSW_BSWM_VPS_CFG_AWKFACTNUM > 0U */
 
 /* ChPncAwake Table */
 #if ( BSW_BSWM_VPS_CFG_AWKFACTNUM > 0U )
-BswConst BswU1* bsw_bswm_vps_ptCoBusAwake[BSW_BSWM_VPS_CFG_AWKFACTNUM] =
+BswConst BswU1* BswConst bsw_bswm_vps_ptCoBusAwake[BSW_BSWM_VPS_CFG_AWKFACTNUM] =
 {
     BSW_BSWM_VPS_COBUSAWAKE_00
 #if ( BSW_BSWM_VPS_CFG_AWKFACTNUM > 1U )
@@ -1212,13 +1519,13 @@ BswConst BswU1* bsw_bswm_vps_ptCoBusAwake[BSW_BSWM_VPS_CFG_AWKFACTNUM] =
 #endif /* BSW_BSWM_VPS_CFG_AWKFACTNUM > 31U */
 };
 #else /* BSW_BSWM_VPS_CFG_AWKFACTNUM == 0U */
-BswConst BswU1* bsw_bswm_vps_ptCoBusAwake[BSW_BSWM_VPS_AWKFACTNUM_DUMMY] =
+BswConst BswU1* BswConst bsw_bswm_vps_ptCoBusAwake[BSW_BSWM_VPS_AWKFACTNUM_DUMMY] =
 { bsw_bswm_vps_u1CoBusAwake_Dummy };
 #endif /* BSW_BSWM_VPS_CFG_AWKFACTNUM > 0U */
 
 /* CoPncAwake Table */
 #if ( BSW_BSWM_VPS_CFG_AWKFACTNUM > 0U )
-BswConst Bsw_BswM_VPS_CoPncAwakeType* bsw_bswm_vps_ptCoPncAwake[BSW_BSWM_VPS_CFG_AWKFACTNUM] =
+BswConst Bsw_BswM_VPS_CoPncAwakeType* BswConst bsw_bswm_vps_ptCoPncAwake[BSW_BSWM_VPS_CFG_AWKFACTNUM] =
 {
     BSW_BSWM_VPS_COPNCAWAKE_00
 #if ( BSW_BSWM_VPS_CFG_AWKFACTNUM > 1U )
@@ -1316,7 +1623,7 @@ BswConst Bsw_BswM_VPS_CoPncAwakeType* bsw_bswm_vps_ptCoPncAwake[BSW_BSWM_VPS_CFG
 #endif /* BSW_BSWM_VPS_CFG_AWKFACTNUM > 31U */
 };
 #else /* BSW_BSWM_VPS_CFG_AWKFACTNUM == 0U */
-BswConst Bsw_BswM_VPS_CoPncAwakeType* bsw_bswm_vps_ptCoPncAwake[BSW_BSWM_VPS_AWKFACTNUM_DUMMY] =
+BswConst Bsw_BswM_VPS_CoPncAwakeType* BswConst bsw_bswm_vps_ptCoPncAwake[BSW_BSWM_VPS_AWKFACTNUM_DUMMY] =
 { bsw_bswm_vps_stCoPncAwake_Dummy };
 #endif /* BSW_BSWM_VPS_CFG_AWKFACTNUM > 0U */
 
@@ -1635,31 +1942,34 @@ BswConst BswU1 bsw_bswm_vps_u1CoPncChNumTbl[BSW_BSWM_VPS_CHANNELNUM_DUMMY] =
 /* E2E Function Table */
 void    (* BswConst bsw_bswm_vps_ctrl_ptE2EInitFn)( void )                                = BSW_BSWM_VPS_E2E_INIT_FUNC;
 void    (* BswConst bsw_bswm_vps_ctrl_ptE2ETxProtectFn)( uint8 u1TxIdx, uint8* DataPtr )  = BSW_BSWM_VPS_E2E_TXPROTECT_FUNC;
-boolean (* BswConst bsw_bswm_vps_ctrl_ptE2ERxCheckFn)( uint8 u1TxIdx, uint8* DataPtr )    = BSW_BSWM_VPS_E2E_RXCHECK_FUNC;
+boolean (* BswConst bsw_bswm_vps_ctrl_ptE2ERxCheckFn)( uint8 u1TxIdx, BswConstR uint8* DataPtr )    = BSW_BSWM_VPS_E2E_RXCHECK_FUNC;
 
 /* PNC Function Table */
-Std_ReturnType    (* BswConst bsw_bswm_vps_ctrl_ptReqChPNCComModeFn)( NetworkHandleType Channel, Bsw_ComM_UserHandleType User, Bsw_ComM_ModeType ComMode ) = BSW_BSWM_VPS_REQCHPNCCOMMODE_FUNC;
-Std_ReturnType    (* BswConst bsw_bswm_vps_ctrl_ptSetCoPncAwakeFn)( NetworkHandleType Channel, uint32 PncAwakeLo, uint32 PncAwakeUp )                      = BSW_BSWM_VPS_SETCOPNCAWAKE_FUNC;
+void    (* BswConst bsw_bswm_vps_ctrl_ptRqChPncCMFn)( void ) = BSW_BSWM_VPS_REQCHPNCCOMMODE_FUNC;
+void    (* BswConst bsw_bswm_vps_ctrl_ptSetCoPncAwkFn)( BswConst Bsw_BswM_VPS_CoPncAwakeType* ptCfgCoPncData, uint8 u1CfgCoPncChNum ) = BSW_BSWM_VPS_SETCOPNCAWAKE_FUNC;
 
 /* CS Function Table */
-void    (* BswConst bsw_bswm_vps_ctrl_ptInitFn)( void )                 = BSW_BSWM_VPS_INIT_FUNC;
-void    (* BswConst bsw_bswm_vps_ctrl_ptDeInitFn)( void )               = BSW_BSWM_VPS_DEINIT_FUNC;
-void    (* BswConst bsw_bswm_vps_ctrl_ptWakeupFn)( void )               = BSW_BSWM_VPS_WAKEUP_FUNC;
-void    (* BswConst bsw_bswm_vps_ctrl_ptMainFunctionFn)( void )         = BSW_BSWM_VPS_MAINFUNCTION_FUNC;
-void    (* BswConst bsw_bswm_vps_ctrl_ptGetSystemStatusFn)( uint32* SysStatus )               = BSW_BSWM_VPS_GETSYSTEMSTATUS_FUNC;
-void    (* BswConst bsw_bswm_vps_ctrl_ptSetSystemStatusFn)( uint32* Mask, uint32* SysStatus ) = BSW_BSWM_VPS_SETSYSTEMSTATUS_FUNC;
-void    (* BswConst bsw_bswm_vps_ctrl_ptFixSysStFn)( void )             = BSW_BSWM_VPS_FIXSYSST_FUNC;
-void    (* BswConst bsw_bswm_vps_ctrl_ptSetFixedStFn)( void )           = BSW_BSWM_VPS_SETFIXEDST_FUNC;
-void    (* BswConst bsw_bswm_vps_ctrl_ptCkRxVPSTOFn)( void )            = BSW_BSWM_VPS_CKRXVPSTO_FUNC;
-void    (* BswConst bsw_bswm_vps_ctrl_ptTxVpsMsgFn)( void )             = BSW_BSWM_VPS_TXVPSMSG_FUNC;
-void    (* BswConst bsw_bswm_vps_ctrl_ptRxVpsMsgFn)( uint8 u1RxEvntIdx, uint8 *SduDataPtr )                  = BSW_BSWM_VPS_RXVPSMSG_FUNC;
-void    (* BswConst bsw_bswm_vps_ctrl_ptRxRlyMsgFn)( uint8 u1RxEvntIdx, uint8 *SduDataPtr, uint8 u1RxEvent ) = BSW_BSWM_VPS_RXRLYMSG_FUNC;
-void    (* BswConst bsw_bswm_vps_ctrl_ptTxIpduCoFn)( PduIdType PduId, PduInfoType* PduInfoPtr )              = BSW_BSWM_VPS_TXIPDUCO_FUNC;
+void       (* BswConst bsw_bswm_vps_ctrl_ptInitFn)( void )                 = BSW_BSWM_VPS_INIT_FUNC;
+void       (* BswConst bsw_bswm_vps_ctrl_ptDeInitFn)( void )               = BSW_BSWM_VPS_DEINIT_FUNC;
+void       (* BswConst bsw_bswm_vps_ctrl_ptWakeupFn)( void )               = BSW_BSWM_VPS_WAKEUP_FUNC;
+void       (* BswConst bsw_bswm_vps_ctrl_ptMainFunctionFn)( void )         = BSW_BSWM_VPS_MAINFUNCTION_FUNC;
+void       (* BswConst bsw_bswm_vps_ctrl_ptGetSystemStatusFn)( uint32* SysStatus )               = BSW_BSWM_VPS_GETSYSTEMSTATUS_FUNC;
+void       (* BswConst bsw_bswm_vps_ctrl_ptSetSystemStatusFn)( BswConstR uint32* Mask, BswConstR uint32* SysStatus ) = BSW_BSWM_VPS_SETSYSTEMSTATUS_FUNC;
+void       (* BswConst bsw_bswm_vps_ctrl_ptFixSysStFn)( void )             = BSW_BSWM_VPS_FIXSYSST_FUNC;
+void       (* BswConst bsw_bswm_vps_ctrl_ptSetFixedStFn)( void )           = BSW_BSWM_VPS_SETFIXEDST_FUNC;
+void       (* BswConst bsw_bswm_vps_ctrl_ptCkRxVPSTOFn)( void )            = BSW_BSWM_VPS_CKRXVPSTO_FUNC;
+void       (* BswConst bsw_bswm_vps_ctrl_ptTxVpsMsgFn)( void )             = BSW_BSWM_VPS_TXVPSMSG_FUNC;
+boolean    (* BswConst bsw_bswm_vps_ctrl_ptRxIndVpsMsgFn)( uint8 u1RxEvntIdx, BswConstR uint8 *SduDataPtr )               = BSW_BSWM_VPS_RXINDVPSMSG_FUNC;
+void       (* BswConst bsw_bswm_vps_ctrl_ptPrRxVpsMsgFn)( uint8 u1RxEvntIdx, BswConstR uint8 *SduDataPtr )                = BSW_BSWM_VPS_PERIRXVPSMSG_FUNC;
+void       (* BswConst bsw_bswm_vps_ctrl_ptRxRlyMsgFn)( uint8 u1RxEvntIdx, BswConstR uint8 *SduDataPtr, uint8 u1RxEvent ) = BSW_BSWM_VPS_RXRLYMSG_FUNC;
+void       (* BswConst bsw_bswm_vps_ctrl_ptUpdROCRxTimFn)( void )            = BSW_BSWM_VPS_UPDTROCRXTIM_FUNC;
+void       (* BswConst bsw_bswm_vps_ctrl_ptStopROCRxTimFn)( BswU1 u1RxTrSt ) = BSW_BSWM_VPS_STOPROCRXTIM_FUNC;
+void       (* BswConst bsw_bswm_vps_ctrl_ptTxIpduCoFn)( PduIdType PduId, PduInfoType* PduInfoPtr )                        = BSW_BSWM_VPS_TXIPDUCO_FUNC;
 
 /* RlyOnConf Function Table */
-void    (* BswConst bsw_bswm_vps_ctrl_ptStopStatHdlFn)( void )          = BSW_BSWM_VPS_STOPSTATHDL_FUNC;
-void    (* BswConst bsw_bswm_vps_ctrl_ptTxRlyOnConfReqFn)( void )       = BSW_BSWM_VPS_TXRLYONCONFREQ_FUNC;
-void    (* BswConst bsw_bswm_vps_ctrl_ptUpdtROCTimFn)( void )           = BSW_BSWM_VPS_UPDTROCTIM_FUNC;
+void       (* BswConst bsw_bswm_vps_ctrl_ptStHdlSysChgFn)( void )          = BSW_BSWM_VPS_STHDLSYSCHG_FUNC;
+void       (* BswConst bsw_bswm_vps_ctrl_ptTxRlyOnConfReqFn)( void )       = BSW_BSWM_VPS_TXRLYONCONFREQ_FUNC;
+void       (* BswConst bsw_bswm_vps_ctrl_ptUpdtROCTimFn)( void )           = BSW_BSWM_VPS_UPDTROCTIM_FUNC;
 
 /****************/
 /* Dummy CfgTbl */
@@ -1703,6 +2013,10 @@ BswConst BswU4 bsw_bswm_vps_u4SysStVPSSp[BSW_BSWM_VPS_TBLNUM_DUMMY][BSW_BSWM_VPS
 BswConst Bsw_BswM_VPS_InfoSpType bsw_bswm_vps_stInfoSpTbl[BSW_BSWM_VPS_TBLNUM_DUMMY] = {
     { BSW_BSWM_VPS_u1INFO_INVALID, BSW_BSWM_VPS_u1INFO_INVALID }
 };
+
+BswConst Bsw_BswM_VPS_InfoSpType bsw_bswm_vps_stInfoSpOff = {
+    BSW_BSWM_VPS_u1INFO_INVALID, BSW_BSWM_VPS_u1INFO_INVALID
+};
 #endif /* BSW_BSWM_VPS_CFG_VPSSP_NUM == 0U */
 
 /* Rx Message Table */
@@ -1715,7 +2029,7 @@ BswConst Bsw_BswM_VPS_RxMsgType bsw_bswm_vps_stRxMsgTbl[BSW_BSWM_VPS_TBLNUM_DUMM
 /* Tx Message Table */
 #if( BSW_BSWM_VPS_TX_MESSAGE_NUM == 0U )
 BswConst Bsw_BswM_VPS_TxMsgType bsw_bswm_vps_stTxMsgTbl[BSW_BSWM_VPS_TBLNUM_DUMMY] = {
-    { (BswU2)0U, (BswU1)BSW_BSWM_VPS_MSG_VPS, (BswU1)0U }
+    { (BswU2)0U, (BswU1)0U, (BswU1)BSW_BSWM_VPS_MSG_VPS }
 };
 #endif /* BSW_BSWM_VPS_TX_MESSAGE_NUM == 0U */
 
@@ -1735,12 +2049,14 @@ BswConst Bsw_BswM_VPS_CoPncAwakeType bsw_bswm_vps_stCoPncAwake_HandShake[BSW_BSW
 /* Internal Functions                                                       */
 /****************************************************************************/
 
+#include <cs/bsw_cs_system_memmap_post.h>
+
 #endif /* BSW_BSWM_CS_FUNC_BSWM_VPS == BSW_USE */
 
 /****************************************************************************/
 /* History                                                                  */
 /*  Version         :Date                                                   */
-/*  v3-0-0          :2024/11/14                                             */
+/*  v3-0-0          :2025/04/10                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

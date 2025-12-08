@@ -1,7 +1,7 @@
-/* Fee_Mpu_Const.h v2-0-0                                                   */
+/* Fee_Mpu_Const.h v2-1-0                                                   */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION. All rights reserved.                        */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -44,12 +44,10 @@
 #define FEE_TIMEOUT_PERIODIC_FEE_WRITE      (60000U)
 #define FEE_TIMEOUT_PERIODIC_FEE_READ_ID    (60000U)
 #define FEE_TIMEOUT_PERIODIC_FEE_REBUILD    (60000U)
-#define FEE_TIMEOUT_PERIODIC_FLS_ERASE      (2865U)
-#define FEE_TIMEOUT_PERIODIC_FLS_WRITE      (4U)
+#define FEE_TIMEOUT_PERIODIC_FLS_ERASE      (60000U)
+#define FEE_TIMEOUT_PERIODIC_FLS_WRITE      (60000U)
 
 #define FEE_WC_DIVIDE_WRITE                 (STD_OFF)
-
-#define FEE_FORCE_TRUSTED                   (STD_ON)
 
 #endif /* FEE_MPU_CONST_H */
 
@@ -59,6 +57,7 @@
 /*  1-0-0          :2019/02/01                                              */
 /*  1-1-0          :2019/07/03                                              */
 /*  2-0-0          :2021/11/12                                              */
+/*  2-1-0          :2024/09/04                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

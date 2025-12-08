@@ -111,8 +111,7 @@ static uint8  Mcu_OffCnt_GNSS;
 /*--------------------------------------------------------------------------*/
 /* メイン状態遷移管理用テーブル */
 /* 前回と次回の状態の組み合わせで、シーケンスの処理関数の処理内容を決定する */
-/* 【todo】4.0版にて処理順序変更 */
-const ST_PWRCTRL_NOREDUN_NXYSTS PWRCTRL_NOREDUN_NXTSTS[PWRCTRL_NOREDUN_STATE_NUM][PWRCTRL_NOREDUN_STATE_NUM] = {
+static const ST_PWRCTRL_NOREDUN_NXYSTS PWRCTRL_NOREDUN_NXTSTS[PWRCTRL_NOREDUN_STATE_NUM][PWRCTRL_NOREDUN_STATE_NUM] = {
   /* 前回状態：OFF */
   /* Meter+BB Display       CenterDisplay         DSRC(Hub) */
   { {PWRCTRL_NOREDUN_PWR_NON,   PWRCTRL_NOREDUN_PWR_NON,  PWRCTRL_NOREDUN_PWR_NON },   /* 次回状態：OFF */
@@ -411,8 +410,6 @@ static U1 u1_s_PwrCtrlNoRedunNxtsts( void )
     u1_t_mcu_return              =  u1_s_PwrCtrl_NoRedun_Sts;   /* 初期値：前回保持状態 */
     u1_t_mcu_BasicState          = (U1)VIS_BASICSTATE_PARKING;  /* 初期値：駐車中 */
     u1_t_mcu_SpecialState        = (U1)VIS_SPECIALSTATE_NOTSET; /* 初期値：設定なし */
-    u1_t_mcu_Apofrq              = (U1)STD_OFF;  /* 初期値：OFF要求なし */
-    u1_t_mcu_boot                = (U1)STD_LOW;  /* 初期値：BOOT_Lo */
 
     (void)u1_g_VISPwrGetBasicState(&u1_t_mcu_BasicState);                    /* 車両電源基本ステート取得 */
     (void)u1_g_VISPwrGetSpecialState(&u1_t_mcu_SpecialState);                /* 車両電源特殊ステート取得 */
@@ -420,7 +417,7 @@ static U1 u1_s_PwrCtrlNoRedunNxtsts( void )
 
     /* 量産向け暫定 */
     /* BOOT入力値取得処理 */
-    u1_t_mcu_boot = u1_g_PwrCtrl_PinMonitor_GetPinInfo(PWRCTRL_CFG_PRIVATE_KIND_BOOT);
+    u1_t_mcu_boot = u1_g_PwrCtrl_PinMonitor_GetPinInfo((U1)PWRCTRL_CFG_PRIVATE_KIND_BOOT);
     /* 量産向け暫定ここまで */
     
     if ( u1_g_PwrCtrl_NoRedun_Pwr_Sts == (U1)PWRCTRL_NOREDUN_STS_OFF )       /* OFFトリガをリセットして次回要求に備える */
@@ -486,7 +483,7 @@ static U1 u1_s_PwrCtrlNoRedunNxtsts( void )
     }
 
     /* 量産向け暫定 */
-    if((u1_g_PwrCtrl_NoRedun_Pwr_Sts != PWRCTRL_NOREDUN_STS_OFF) && /* OFF要求がない場合かつ */
+    if((u1_g_PwrCtrl_NoRedun_Pwr_Sts != (U1)PWRCTRL_NOREDUN_STS_OFF) && /* OFF要求がない場合かつ */
        (u1_t_mcu_boot == (U1)STD_HIGH)){                            /* BOOT=Hiを検知した場合、どの状態でも見た目オン起動へ上書き */
       u1_t_mcu_return  = (U1)PWRCTRL_NOREDUN_STATE_APPON;           /* 電源ON 見た目オン起動 */
     }
@@ -617,7 +614,7 @@ static void vd_s_PwrCtrlNoRedunPwrOnMbPwr( void )
         u2_s_PwrCtrl_NoRedun_MBon_Time = (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN;
     }
 
-    if ( u2_s_PwrCtrl_NoRedun_MBon_Time != (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN )
+    if ( u2_s_PwrCtrl_NoRedun_MBon_Time < (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN )
     {
         u2_s_PwrCtrl_NoRedun_MBon_Time++;
     }
@@ -642,7 +639,7 @@ static void vd_s_PwrCtrlNoRedunWkGvifTxMetBB( void )
         u2_s_PwrCtrl_NoRedun_Gviftx_Mbwk_Time = (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN;
     }
 
-    if ( u2_s_PwrCtrl_NoRedun_Gviftx_Mbwk_Time != (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN )
+    if ( u2_s_PwrCtrl_NoRedun_Gviftx_Mbwk_Time < (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN )
     {
         u2_s_PwrCtrl_NoRedun_Gviftx_Mbwk_Time++;
     }
@@ -667,7 +664,7 @@ static void vd_s_PwrCtrlNoRedunWkOffGvifTxMetBB( void )
         u2_s_PwrCtrl_NoRedun_Gviftx_Mbwk_Off_Time = (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN;
     }
 
-    if ( u2_s_PwrCtrl_NoRedun_Gviftx_Mbwk_Off_Time != (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN )
+    if ( u2_s_PwrCtrl_NoRedun_Gviftx_Mbwk_Off_Time < (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN )
     {
         u2_s_PwrCtrl_NoRedun_Gviftx_Mbwk_Off_Time++;
     }
@@ -692,7 +689,7 @@ static void vd_s_PwrCtrlNoRedunPwrOffMbPwr( void )
         u2_s_PwrCtrl_NoRedun_MBoff_Time = (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN;
     }
 
-    if ( u2_s_PwrCtrl_NoRedun_MBoff_Time != (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN )
+    if ( u2_s_PwrCtrl_NoRedun_MBoff_Time < (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN )
     {
         u2_s_PwrCtrl_NoRedun_MBoff_Time++;
     }
@@ -723,13 +720,13 @@ static void vd_s_PwrCtrlNoRedunDisp( void )
         {
             case (U1)PWRCTRL_COMMON_PROCESS_STEP1:
                 /* 実行中のONシーケンスをCenterDispに設定 */
-                u1_s_PwrCtrl_NoRedun_OnSequence = (U2)PWRCTRL_NOREDUN_ONSEQ_CNTDSP;
+                u1_s_PwrCtrl_NoRedun_OnSequence = (U1)PWRCTRL_NOREDUN_ONSEQ_CNTDSP;
 
                 vd_s_PwrCtrlNoRedunPwrOnDsp();
 
                 if(u2_s_PwrCtrl_NoRedun_Dspon_Time == (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN){
                    /* STEP1が完了していれば次のSTEPに進める */
-                   u1_s_PwrCtrl_NoRedun_Disp_OnStep = (U2)PWRCTRL_COMMON_PROCESS_STEP2;
+                   u1_s_PwrCtrl_NoRedun_Disp_OnStep = (U1)PWRCTRL_COMMON_PROCESS_STEP2;
                 }
                 break;
 
@@ -738,7 +735,7 @@ static void vd_s_PwrCtrlNoRedunDisp( void )
 
                 if(u2_s_PwrCtrl_NoRedun_Gviftx_Dspwk_Time == (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN){
                     /* STEP1,2が完了していれば正常起動を設定 */
-                    u1_s_PwrCtrl_NoRedun_Disp_OnStep = (U2)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
+                    u1_s_PwrCtrl_NoRedun_Disp_OnStep = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
                 }
                 /* 非冗長電源間ウェイトタイムをクリアしカウント開始する */
                 u2_s_PwrCtrl_NoRedun_BetWait_Time = (U2)0U;
@@ -814,7 +811,7 @@ static void vd_s_PwrCtrlNoRedunPwrOnDsp( void )
     u2_s_PwrCtrl_NoRedun_Dspon_Time = (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN;
   }
     
-  if(u2_s_PwrCtrl_NoRedun_Dspon_Time != (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN){
+  if(u2_s_PwrCtrl_NoRedun_Dspon_Time < (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN){
     u2_s_PwrCtrl_NoRedun_Dspon_Time++;
   }
     
@@ -837,7 +834,7 @@ static void vd_s_PwrCtrlNoRedunWkGvifTxDisp( void )
     u2_s_PwrCtrl_NoRedun_Gviftx_Dspwk_Time = (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN;
   }
     
-  if(u2_s_PwrCtrl_NoRedun_Gviftx_Dspwk_Time != (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN){
+  if(u2_s_PwrCtrl_NoRedun_Gviftx_Dspwk_Time < (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN){
     u2_s_PwrCtrl_NoRedun_Gviftx_Dspwk_Time++;
   }
     
@@ -860,7 +857,7 @@ static void vd_s_PwrCtrlNoRedunWkOffGvifTxDisp( void )
     u2_s_PwrCtrl_NoRedun_Gviftx_Dspwk_Off_Time = (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN;
   }
     
-  if(u2_s_PwrCtrl_NoRedun_Gviftx_Dspwk_Off_Time != (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN){
+  if(u2_s_PwrCtrl_NoRedun_Gviftx_Dspwk_Off_Time < (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN){
     u2_s_PwrCtrl_NoRedun_Gviftx_Dspwk_Off_Time++;
   }
 
@@ -883,7 +880,7 @@ static void vd_s_PwrCtrlNoRedunPwrOffDsp( void )
     u2_s_PwrCtrl_NoRedun_Dspoff_Time = (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN;
   }
     
-  if(u2_s_PwrCtrl_NoRedun_Dspoff_Time != (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN){
+  if(u2_s_PwrCtrl_NoRedun_Dspoff_Time < (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN){
     u2_s_PwrCtrl_NoRedun_Dspoff_Time++;
   }
     
@@ -1003,7 +1000,7 @@ static void vd_s_PwrCtrlNoRedunPwrOnHub( void )
     u2_s_PwrCtrl_NoRedun_Hubon_Time = (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN;
   }
     
-  if(u2_s_PwrCtrl_NoRedun_Hubon_Time != (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN){
+  if(u2_s_PwrCtrl_NoRedun_Hubon_Time < (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN){
     u2_s_PwrCtrl_NoRedun_Hubon_Time++;
   }
     
@@ -1026,7 +1023,7 @@ static void vd_s_PwrCtrlNoRedunWkHub( void )
     u2_s_PwrCtrl_NoRedun_Hubwk_Time = (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN;
   }
     
-  if(u2_s_PwrCtrl_NoRedun_Hubwk_Time != (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN){
+  if(u2_s_PwrCtrl_NoRedun_Hubwk_Time < (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN){
     u2_s_PwrCtrl_NoRedun_Hubwk_Time++;
   }
     
@@ -1049,7 +1046,7 @@ static void vd_s_PwrCtrlNoRedunWkOffHub( void )
     u2_s_PwrCtrl_NoRedun_Hubwk_Off_Time = (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN;
   }
     
-  if(u2_s_PwrCtrl_NoRedun_Hubwk_Off_Time != (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN){
+  if(u2_s_PwrCtrl_NoRedun_Hubwk_Off_Time < (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN){
     u2_s_PwrCtrl_NoRedun_Hubwk_Off_Time++;
   }
     
@@ -1072,7 +1069,7 @@ static void vd_s_PwrCtrlNoRedunPwrOffHub( void )
     u2_s_PwrCtrl_NoRedun_Huboff_Time = (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN;
   }
     
-  if(u2_s_PwrCtrl_NoRedun_Huboff_Time != (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN){
+  if(u2_s_PwrCtrl_NoRedun_Huboff_Time < (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN){
     u2_s_PwrCtrl_NoRedun_Huboff_Time++;
   }
     
@@ -1095,7 +1092,7 @@ static void vd_s_PwrCtrlNoRedunBetWait( void )
   }
   
   /* ウェイトタイム経過前はカウント */
-  if(u2_s_PwrCtrl_NoRedun_BetWait_Time != (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN){
+  if(u2_s_PwrCtrl_NoRedun_BetWait_Time < (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN){
     u2_s_PwrCtrl_NoRedun_BetWait_Time++;
   }
     

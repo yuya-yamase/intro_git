@@ -1,7 +1,7 @@
 /* Fee_Cfg.h                                                                */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION. All rights reserved.                        */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -26,6 +26,7 @@
 #define FEE_RECORDPOSTBL_ENABLE             (STD_OFF)
 #define FEE_RECORDPOSTBL_FAILSAFE           (STD_OFF)
 #define FEE_INTENT_RBLD_ENABLE              (STD_OFF)
+#define FEE_USE_MEMACC                      (STD_ON)
 
 #define FEE_MAIN_FUNCTION_PERIOD            (5U)
 

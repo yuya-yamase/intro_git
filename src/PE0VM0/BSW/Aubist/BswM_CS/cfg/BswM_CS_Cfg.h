@@ -49,6 +49,7 @@
 #define BSW_BSWM_CS_CFG_FUNC_CANTRCV          (BSW_USE)
 #define BSW_BSWM_CS_CFG_FUNC_CANDRV           (BSW_USE)
 #define BSW_BSWM_CS_CFG_FUNC_VCAN             (BSW_USE)
+#define BSW_BSWM_CS_CFG_FUNC_J1939TP          (BSW_NOUSE)
 
 #define BSW_BSWM_CS_CFG_FUNC_LIN              (BSW_NOUSE)
 #define BSW_BSWM_CS_CFG_FUNC_LINTP            (BSW_NOUSE)
@@ -64,7 +65,8 @@
 
 #define BSW_BSWM_CS_CFG_FUNC_SECOC            (BSW_NOUSE)
 #define BSW_BSWM_CS_CFG_FUNC_IPDUM            (BSW_NOUSE)
-#define BSW_BSWM_CS_CFG_FUNC_SOMEIP           (BSW_NOUSE)
+#define BSW_BSWM_CS_CFG_FUNC_SOMEIPTP         (BSW_NOUSE)
+#define BSW_BSWM_CS_CFG_FUNC_SD               (BSW_NOUSE)
 
 #define BSW_BSWM_CS_CFG_FUNC_BSWM_VPS         (BSW_NOUSE)
 
@@ -110,7 +112,7 @@
 #define BSW_BSWM_CS_CFG_TXCTRL_TYPE_1         (BSW_BSWM_CS_TXCTRL_STOPALL)
 #define BSW_BSWM_CS_CFG_TXCTRL_TYPE_2         (BSW_BSWM_CS_TXCTRL_STOPALL)
 #define BSW_BSWM_CS_CFG_TXCTRL_TYPE_3         (BSW_BSWM_CS_TXCTRL_STOPALL)
-#define BSW_BSWM_CS_CFG_TXCTRL_TYPE_4         (BSW_BSWM_CS_TXCTRL_NOUSE)
+#define BSW_BSWM_CS_CFG_TXCTRL_TYPE_4         (BSW_BSWM_CS_TXCTRL_STOPALL)
 #define BSW_BSWM_CS_CFG_TXCTRL_TYPE_5         (BSW_BSWM_CS_TXCTRL_NOUSE)
 #define BSW_BSWM_CS_CFG_TXCTRL_TYPE_6         (BSW_BSWM_CS_TXCTRL_NOUSE)
 #define BSW_BSWM_CS_CFG_TXCTRL_TYPE_7         (BSW_BSWM_CS_TXCTRL_NOUSE)
@@ -143,7 +145,7 @@
 #define BSW_BSWM_CS_CFG_SENDSTART_PW_1        (300U)
 #define BSW_BSWM_CS_CFG_SENDSTART_PW_2        (300U)
 #define BSW_BSWM_CS_CFG_SENDSTART_PW_3        (300U)
-#define BSW_BSWM_CS_CFG_SENDSTART_PW_4        (0U)
+#define BSW_BSWM_CS_CFG_SENDSTART_PW_4        (300U)
 #define BSW_BSWM_CS_CFG_SENDSTART_PW_5        (0U)
 #define BSW_BSWM_CS_CFG_SENDSTART_PW_6        (0U)
 #define BSW_BSWM_CS_CFG_SENDSTART_PW_7        (0U)
@@ -312,7 +314,6 @@
 #define BswM_CSConf_SysStatusName_IG                        (BSW_BSWM_CS_SYSSTAT_IG)
 #define BswM_CSConf_SysStatusName_PBA                       (BSW_BSWM_CS_SYSSTAT_USER1)
 #define BswM_CSConf_SysStatusName_IGR                       (BSW_BSWM_CS_SYSSTAT_USER2)
-
 /*--------------------------------------------------------------------------*/
 /* Types                                                                    */
 /*--------------------------------------------------------------------------*/
@@ -340,11 +341,11 @@
 /*  v2-0-0          :2022/02/23                                             */
 /*  v2-1-0          :2023/01/26                                             */
 /*  v2-2-0          :2023/05/09                                             */
-/*  v3-0-0          :2024/11/11                                             */
+/*  v3-0-0          :2025/01/23                                             */
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
-/*  Framework          :v2-0-3-z0003                                        */
+/*  Framework          :v2-1-0                                              */
 /*  BSW plug-in        :v3-0-0                                              */
 /****************************************************************************/
 

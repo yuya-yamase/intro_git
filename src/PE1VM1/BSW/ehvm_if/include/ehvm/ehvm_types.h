@@ -49,6 +49,7 @@ typedef unsigned char                   ehvm_context_id_t;
 #define E_EHVM_MM_ACC_NG                 ((ehvm_std_return_t)0x20U)
 #define E_EHVM_VMM_MULTIPLE_REQUESTS     ((ehvm_std_return_t)0x30U)
 #define E_EHVM_VMM_UNACCEPTABLE_STATE    ((ehvm_std_return_t)0x40U)
+#define E_EHVM_GET_LOCK_FAILED           ((ehvm_std_return_t)0x50U)
 
 #define EHVM_CORE_ID_0             (0x00U)
 #define EHVM_CORE_ID_1             (0x01U)

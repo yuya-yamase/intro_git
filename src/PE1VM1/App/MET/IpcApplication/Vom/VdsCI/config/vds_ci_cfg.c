@@ -928,7 +928,7 @@ static void    vd_s_VdsCIReqTx_PWSPSWAC(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
 /*===================================================================================================================================*/
 static void    vd_s_VdsCIReqTx_BSMMSW(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
 {
-#ifdef ComConf_ComSignal_BSMMSW
+#if 0
     U1                 u1_t_tx;
 
     if(u1_a_OPT <= (U1)VDS_CI_OPT_ON){
@@ -949,7 +949,7 @@ static void    vd_s_VdsCIReqTx_BSMMSW(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
 /*===================================================================================================================================*/
 static void    vd_s_VdsCIReqTx_CSRMSW(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
 {
-#ifdef ComConf_ComSignal_CSRMSW
+#if 0
     U1                 u1_t_tx;
 
     if(u1_a_OPT <= (U1)VDS_CI_OPT_ON){
@@ -991,7 +991,7 @@ static void    vd_s_VdsCIReqTx_FCMMSW(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
 /*===================================================================================================================================*/
 static void    vd_s_VdsCIReqTx_ICSMSW(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
 {
-#ifdef ComConf_ComSignal_ICSMSW
+#if 0
     U1                 u1_t_tx;
 
     if(u1_a_OPT <= (U1)VDS_CI_OPT_ON){
@@ -1012,7 +1012,7 @@ static void    vd_s_VdsCIReqTx_ICSMSW(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
 /*===================================================================================================================================*/
 static void    vd_s_VdsCIReqTx_LDA_SFB(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
 {
-#ifdef ComConf_ComSignal_LDA_SFB
+#if 0
     U1                 u1_t_tx;
 
     if(u1_a_OPT <= (U1)VDS_CI_LDA_SFB_MAX){
@@ -1033,7 +1033,7 @@ static void    vd_s_VdsCIReqTx_LDA_SFB(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
 /*===================================================================================================================================*/
 static void    vd_s_VdsCIReqTx_LDAMCUS(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
 {
-#ifdef ComConf_ComSignal_LDAMCUS
+#if 0
     U1                 u1_t_tx;
 
     if(u1_a_OPT <= (U1)VDS_CI_LDAMCUS_MAX){
@@ -1054,7 +1054,7 @@ static void    vd_s_VdsCIReqTx_LDAMCUS(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
 /*===================================================================================================================================*/
 static void    vd_s_VdsCIReqTx_PCSMSW(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
 {
-#ifdef ComConf_ComSignal_PCSMSW
+#if 0
     U1                 u1_t_tx;
 
     if(u1_a_OPT <= (U1)VDS_CI_OPT_ON){
@@ -1075,7 +1075,7 @@ static void    vd_s_VdsCIReqTx_PCSMSW(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
 /*===================================================================================================================================*/
 static void    vd_s_VdsCIReqTx_RCTAMSW(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
 {
-#ifdef ComConf_ComSignal_RCTAMSW
+#if 0
     U1                 u1_t_tx;
 
     if(u1_a_OPT <= (U1)VDS_CI_OPT_ON){
@@ -1117,7 +1117,7 @@ static void    vd_s_VdsCIReqTx_SW_DEA01(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
 /*===================================================================================================================================*/
 static void    vd_s_VdsCIReqTx_SW_LTC01(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
 {
-#ifdef ComConf_ComSignal_SW_LTC01
+#if 0
     U1                 u1_t_tx;
 
     if(u1_a_OPT <= (U1)VDS_CI_OPT_ON){
@@ -1138,7 +1138,7 @@ static void    vd_s_VdsCIReqTx_SW_LTC01(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
 /*===================================================================================================================================*/
 static void    vd_s_VdsCIReqTx_SW_RCD01(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
 {
-#ifdef ComConf_ComSignal_SW_RCD01
+#if 0
     U1                 u1_t_tx;
 
     if(u1_a_OPT <= (U1)VDS_CI_OPT_ON){
@@ -1159,7 +1159,7 @@ static void    vd_s_VdsCIReqTx_SW_RCD01(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
 /*===================================================================================================================================*/
 static void    vd_s_VdsCIReqTx_TSR_OSL(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
 {
-#ifdef ComConf_ComSignal_TSR_OSL
+#if 0
     U1                 u1_t_tx;
 
     if(u1_a_OPT <= (U1)VDS_CI_TSR_OSL_MAX){
@@ -1180,7 +1180,7 @@ static void    vd_s_VdsCIReqTx_TSR_OSL(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
 /*===================================================================================================================================*/
 static void    vd_s_VdsCIReqTx_TSR_SNM(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
 {
-#ifdef ComConf_ComSignal_TSR_SNM
+#if 0
     U1                 u1_t_tx;
 
     if(u1_a_OPT <= (U1)VDS_CI_TSR_SNM_MAX){
@@ -1222,7 +1222,7 @@ static void    vd_s_VdsCIReqTx_RSCSW_OP(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
 /*===================================================================================================================================*/
 static void    vd_s_VdsCIReqTx_TPINSEL(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
 {
-#ifdef ComConf_ComSignal_TPINSEL
+#if 0
     U1                 u1_t_tx;
 
     if(u1_a_OPT <= (U1)VDS_CI_TPINSEL_MAX){
@@ -1243,7 +1243,7 @@ static void    vd_s_VdsCIReqTx_TPINSEL(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
 /*===================================================================================================================================*/
 static void    vd_s_VdsCIReqTx_TPINSELF(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
 {
-#ifdef ComConf_ComSignal_TPINSELF
+#if 0
     U1                 u1_t_tx;
 
     if(u1_a_OPT <= (U1)VDS_CI_TPINSELF_MAX){
@@ -1264,7 +1264,7 @@ static void    vd_s_VdsCIReqTx_TPINSELF(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
 /*===================================================================================================================================*/
 static void    vd_s_VdsCIReqTx_TPINSELR(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
 {
-#ifdef ComConf_ComSignal_TPINSELR
+#if 0
     U1                 u1_t_tx;
 
     if(u1_a_OPT <= (U1)VDS_CI_TPINSELR_MAX){
@@ -1285,7 +1285,7 @@ static void    vd_s_VdsCIReqTx_TPINSELR(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
 /*===================================================================================================================================*/
 static void    vd_s_VdsCIReqTx_TPUNTSET(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
 {
-#ifdef ComConf_ComSignal_TPUNTSET
+#if 0
     U1                 u1_t_tx;
 
     if(u1_a_OPT <= (U1)VDS_CI_TPUNTSET_MAX){
@@ -2007,7 +2007,7 @@ static void    vd_s_VdsCIReqTx_PWSPL_SU(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
 /*===================================================================================================================================*/
 static void    vd_s_VdsCIReqTx_TBCSW(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
 {
-#ifdef ComConf_ComSignal_TBCSW
+#if 0
     U1                 u1_t_tx;
     U1                 u1_t_pre_tx;
 
@@ -2310,7 +2310,7 @@ static void    vd_s_VdsCIReqTx_RTAN_MSW(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
 /*===================================================================================================================================*/
 static void    vd_s_VdsCIReqTx_TSR_MAIN(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
 {
-#ifdef ComConf_ComSignal_TSR_MAIN
+#if 0
     U1                 u1_t_tx;
 
     if(u1_a_OPT <= (U1)VDS_CI_OPT_ON){
@@ -2484,7 +2484,7 @@ static void    vd_s_VdsCIReqTx_HOFCUS(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
 /*===================================================================================================================================*/
 static void    vd_s_VdsCIReqTx_SW_ITS04(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
 {
-#ifdef ComConf_ComSignal_SW_ITS04
+#if 0
     U1                 u1_t_tx;
 
     if(u1_a_OPT <= (U1)VDS_CI_OPT_ON){
@@ -2881,7 +2881,7 @@ static void vd_s_VdsCIReqTx_ADDS_MSW(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
 /*===================================================================================================================================*/
 static void vd_s_VdsCIReqTx_SPBZ_OPE(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
 {
-#ifdef ComConf_ComSignal_SPBZ_OPE
+#if 0
     U1                 u1_t_tx;
 
     if(u1_a_OPT <= (U1)VDS_CI_OPT_ON){
@@ -3216,7 +3216,7 @@ static void    vd_s_VdsCIReqTx_M_SLMDRQ(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
 /*===================================================================================================================================*/
 static void vd_s_VdsCIReqTx_TBWSW(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
 {
-#ifdef ComConf_ComSignal_TBWSW
+#if 0
     U1                 u1_t_tx;
     U1                 u1_t_pre_tx;
 
@@ -3428,7 +3428,7 @@ static void    vd_s_VdsCIReqTx_SRPMSW(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
 /*===================================================================================================================================*/
 static void    vd_s_VdsCIReqTx_RG_MD_SW(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
 {
-#ifdef ComConf_ComSignal_RG_MD_SW
+#if 0
     U1                 u1_t_tx;
     U1                 u1_t_pre_tx;
 
@@ -3809,7 +3809,7 @@ static void    vd_s_VdsCIReqTx_TMNSSW(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
 /*===================================================================================================================================*/
 static void    vd_s_VdsCIReqTx_ITSSETSW(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
 {
-#ifdef ComConf_ComSignal_ITSSETSW
+#if 0
     U1                 u1_t_tx;
 
     if(u1_a_OPT <= (U1)VDS_CI_ITSSETSW_MAX){

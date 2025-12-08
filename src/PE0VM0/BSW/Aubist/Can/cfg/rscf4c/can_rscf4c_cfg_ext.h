@@ -1,4 +1,4 @@
-/* can_rscf4c_cfg_ext_h_m10700_v2-2-1                                       */
+/* can_rscf4c_cfg_ext_h_m10700_v3-0-0                                       */
 /****************************************************************************/
 /* Protected                                                                */
 /* Copyright DENSO CORPORATION                                              */
@@ -29,32 +29,32 @@
 /*------------------------------------------------------------------*/
 /* Cycle Number of CAN RAM Initialization                           */
 /*------------------------------------------------------------------*/
-#define CAN_CFG_RAM_INIT_CYCLE          (19200UL)
+#define CAN_CFG_RAM_INIT_CYCLE          (75000UL)
 
 
 /*------------------------------------------------------------------*/
 /* Number of Tx Buffer                                              */
 /*------------------------------------------------------------------*/
-#define CAN_CFG_TXBUF_NUM               (32U)
+#define CAN_CFG_TXBUF_NUM               (64U)
 
 
 /*------------------------------------------------------------------*/
 /* Number of AFL Page                                               */
 /*------------------------------------------------------------------*/
-#define CAN_CFG_AFL_PAGE_NUM            (0U)
+#define CAN_CFG_AFL_PAGE_NUM            (96U)
 
 
 /*------------------------------------------------------------------*/
 /* Depth of TRX FIFO 1 for Polling RX(Each CAN Controller)          */
 /*------------------------------------------------------------------*/
-#define CAN_CFG_RXPOL_FIFO_SIZE_0       (48U)
-#define CAN_CFG_RXPOL_FIFO_SIZE_1       (48U)
-#define CAN_CFG_RXPOL_FIFO_SIZE_2       (48U)
-#define CAN_CFG_RXPOL_FIFO_SIZE_3       (48U)
-#define CAN_CFG_RXPOL_FIFO_SIZE_4       (48U)
-#define CAN_CFG_RXPOL_FIFO_SIZE_5       (48U)
-#define CAN_CFG_RXPOL_FIFO_SIZE_6       (48U)
-#define CAN_CFG_RXPOL_FIFO_SIZE_7       (48U)
+#define CAN_CFG_RXPOL_FIFO_SIZE_0       (64U)
+#define CAN_CFG_RXPOL_FIFO_SIZE_1       (64U)
+#define CAN_CFG_RXPOL_FIFO_SIZE_2       (64U)
+#define CAN_CFG_RXPOL_FIFO_SIZE_3       (64U)
+#define CAN_CFG_RXPOL_FIFO_SIZE_4       (64U)
+#define CAN_CFG_RXPOL_FIFO_SIZE_5       (64U)
+#define CAN_CFG_RXPOL_FIFO_SIZE_6       (64U)
+#define CAN_CFG_RXPOL_FIFO_SIZE_7       (64U)
 
 
 #endif  /* CAN_RSCF4C_CFG_EXT_H */
@@ -64,10 +64,11 @@
 /*  Version        :Date                                                    */
 /*  v2-2-0         :2020/03/03                                              */
 /*  v2-2-1         :2022/11/01                                              */
+/*  v3-0-0         :2025/02/13                                              */
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
-/*  Framework          :v2-0-3-z0003                                        */
+/*  Framework          :v2-1-0                                              */
 /*  BSW plug-in        :v3-0-0                                              */
 /****************************************************************************/
 

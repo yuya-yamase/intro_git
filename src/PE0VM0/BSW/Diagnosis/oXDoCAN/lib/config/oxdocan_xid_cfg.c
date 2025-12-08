@@ -22,19 +22,8 @@
 /* #include "nvmc_mgr.h"             nvmc_mgr.h is included in oxdocan_cfg_private.h              */
 /* #include "oxcan.h"                oxcan.h is included in oxdocan_cfg_private.h                 */
 
-#if ((defined(BSW_BSWM_CS_CFG_FUNC_CS)  ) && \
-     (defined(BSW_BSWM_CS_CFG_FUNC_SECOC)  ) && \
-     (BSW_BSWM_CS_CFG_FUNC_CS    == BSW_USE) && \
-     (BSW_BSWM_CS_CFG_FUNC_SECOC == BSW_USE))
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if 0   /* @@@ */
-#include "tydocan_dtc_ma_cfg_private.h"
 #include "tydocan_xid_ma_cfg_private.h"
-#endif
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
 
-#endif /* #if ((defined(BSW_BSWM_CS_CFG_FUNC_CS)  ) && ... */
 /* Application Headers */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -74,12 +63,13 @@ const U2                        u2_g_OXDC_IOC_RDBK_DLY_MAX = (U2)20U / (U2)10U; 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 const ST_OXDC_IOC_IF            st_gp_OXDC_IOC_IF[] = {
 /*   fp_u1_CSM_CHK                  fp_vd_ACT                       fp_vd_DEACT                    fp_u1_SEC_CHK*/
-    {vdp_PTR_NA,                    vdp_PTR_NA,                     vdp_PTR_NA,                    vdp_PTR_NA}      /* @@@ */
+    {vdp_PTR_NA,                    vdp_PTR_NA,                     vdp_PTR_NA,                    vdp_PTR_NA}
 };
 const U2                        u2_g_OXDC_NUM_IOC = (U2)(sizeof(st_gp_OXDC_IOC_IF) / sizeof(ST_OXDC_IOC_IF));
 
 const ST_OXDC_DID               st_gp_OXDC_DATA_XID[] = {
 /*   fp_u1_SUP                      u2_xid          u2_rd_ses          fp_u1_RDSEC_CHK    u2_wr_ses          fp_u1_WRSEC_CHK */
+    {vdp_PTR_NA,                    (U2)0xA901U,    (U2)0x000DU,       vdp_PTR_NA,       (U2)0x0000U,        vdp_PTR_NA},
     {vdp_PTR_NA,                    (U2)0xF186U,    (U2)0x000DU,       vdp_PTR_NA,       (U2)0x0000U,        vdp_PTR_NA},
     {vdp_PTR_NA,                    (U2)0xF188U,    (U2)0x000DU,       vdp_PTR_NA,       (U2)0x0000U,        vdp_PTR_NA},
     {vdp_PTR_NA,                    (U2)0xF191U,    (U2)0x000DU,       vdp_PTR_NA,       (U2)0x0000U,        vdp_PTR_NA}
@@ -87,6 +77,7 @@ const ST_OXDC_DID               st_gp_OXDC_DATA_XID[] = {
 
 const ST_OXDC_XID_ML            st_gp_OXDC_DATA_XID_ML[] = {
 /*   u2_req_nbyte                   u2_ans_nbyte */
+    {(U2)0U,                        (U2)OXDC_DATA_REA_ANS_NB_A901},
     {(U2)0U,                        (U2)OXDC_DATA_REA_ANS_NB_F186},
     {(U2)0U,                        (U2)OXDC_DATA_REA_ANS_NB_F188},
     {(U2)0U,                        (U2)OXDC_DATA_REA_ANS_NB_F191}
@@ -94,6 +85,7 @@ const ST_OXDC_XID_ML            st_gp_OXDC_DATA_XID_ML[] = {
 
 const ST_OXDC_DATA_IF           st_gp_OXDC_DATA_CFG[] = {
 /*   fp_u1_READ                     fp_u1_WRITE                     stp_IOC */
+    {&u1_g_oXDoCANRebyId_A901,      vdp_PTR_NA,                     vdp_PTR_NA                    },    /* DID:0xA901 */
     {&u1_g_oXDoCANRebyId_F186,      vdp_PTR_NA,                     vdp_PTR_NA                    },    /* DID:0xF186 */
     {&u1_g_oXDoCANRebyId_F188,      vdp_PTR_NA,                     vdp_PTR_NA                    },    /* DID:0xF188 */
     {&u1_g_oXDoCANRebyId_F191,      vdp_PTR_NA,                     vdp_PTR_NA                    }     /* DID:0xF191 */
@@ -104,61 +96,32 @@ const U2                        u2_g_OXDC_DATA_NUM_XID = (U2)(sizeof(st_gp_OXDC_
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 const ST_OXDC_XID               st_gp_OXDC_ROUT_XID[] = {
 /*   fp_u1_SUP                 u2_xid          u2_ses          fp_u1_SEC_CHK */
-    {vdp_PTR_NA,               (U2)0x0000U,    (U2)0x000DU,     vdp_PTR_NA}     /* @@@ */
+    {vdp_PTR_NA,               (U2)0xD904U,    (U2)0x000DU,     vdp_PTR_NA}
 };
 
 const ST_OXDC_XID_ML            st_gp_OXDC_ROUT_XID_ML_SF_01[] = {
 /*   u2_req_nbyte                   u2_ans_nbyte */
-    {(U2)0U,                        (U2)0U                       }      /* @@@ */
+    {(U2)OXDC_ROUT_STA_REQ_NB_D904, (U2)OXDC_ROUT_STA_ANS_NB_D904}      /* RID:0xD904 */
 };
 
 const ST_OXDC_XID_ML            st_gp_OXDC_ROUT_XID_ML_SF_02[] = {
 /*   u2_req_nbyte                   u2_ans_nbyte */
-    {(U2)0U,                        (U2)0U                       }      /* @@@ */
+    {(U2)0U,                        (U2)0U                       }      /* RID:0xD904 */
 };
 
 const ST_OXDC_XID_ML            st_gp_OXDC_ROUT_XID_ML_SF_03[] = {
 /*   u2_req_nbyte                   u2_ans_nbyte */
-    {(U2)0U,                        (U2)0U                       }      /* @@@ */
+    {(U2)OXDC_ROUT_RES_REQ_NB_D904, (U2)OXDC_ROUT_RES_ANS_NB_D904}      /* RID:0xD904 */
 };
 
 const ST_OXDC_ROUT_IF           st_gp_OXDC_ROUT_CFG[] = {
 /*   fp_u1_COR_CHK                  fp_u1_START                         fp_u1_STOP                    fp_u1_RESULT */
-    {vdp_PTR_NA,                    vdp_PTR_NA,        vdp_PTR_NA,                   vdp_PTR_NA                     }    /* @@@ */
+    {&u1_g_oXDoCANRoutCorchk_D904,  &u1_g_oXDoCANRoutStart_D904,        vdp_PTR_NA,                   &u1_g_oXDoCANRoutRslt_D904     }    /* RID:0xD904 */
 };
 
 const U2                        u2_g_OXDC_ROUT_NUM_XID = (U2)(sizeof(st_gp_OXDC_ROUT_XID) / sizeof(ST_OXDC_XID));
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-
-#ifdef TYDOCAN_XID_MA_CFG_H
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-static const U1         u1_sp_TYDC_KZK_RX_D902[] = {                        /* oxdocan_xid_ma_cfg_private.h */
-    (U1)TYDC_KZK_RX_PDU_1,   /* MSG_CGW1S11_RXCH0 (105U) */
-    (U1)TYDC_KZK_RX_PDU_2,   /* MSG_CGW1S12_RxCH0 (106U) */
-    (U1)TYDC_KZK_RX_PDU_3,   /* MSG_CGW1S13_RxCH0 (107U) */
-    (U1)TYDC_KZK_RX_PDU_4,   /* MSG_CGW1S14_RxCH0 (108U) */
-    (U1)TYDC_KZK_RX_PDU_5,   /* MSG_CGW1S15_RxCH0 (109U) */
-    (U1)TYDC_KZK_RX_PDU_6,   /* MSG_CGW1S16_RxCH0 (110U) */
-    (U1)TYDC_KZK_RX_PDU_7,   /* MSG_CGW1S17_RxCH0 (111U) */
-    (U1)TYDC_KZK_RX_PDU_8    /* MSG_CGW1S18_RxCH0 (112U) */
-};
-static const U1         u1_sp_TYDC_KZK_RX_D903[] = {                        /* oxdocan_xid_ma_cfg_private.h */
-    (U1)TYDC_KZK_RX_PDU_IU,    /* MSG_CGW1S21_RXCH0 (113U) */
-    (U1)TYDC_KZK_RX_PDU_11,    /* MSG_CGW1S22_RxCH0 (114U) */
-    (U1)TYDC_KZK_RX_PDU_12,    /* MSG_CGW1S23_RxCH0 (115U) */
-    (U1)TYDC_KZK_RX_PDU_13,    /* MSG_CGW1S24_RxCH0 (116U) */
-    (U1)TYDC_KZK_RX_PDU_14     /* MSG_CGW1S25_RXCH0 (117U) */
-};
-const ST_TYDC_KZK_RX    st_gp_TYDC_KZK_RX[TYDC_KZK_NUM_RX] = {              /* oxdocan_xid_ma_cfg_private.h */
-/*   u1p_KZK_RX                     u2_pdu_min                      u2_pdu_max */
-     {&u1_sp_TYDC_KZK_RX_D902[0],    (U2)MSG_CGW1S11_RXCH0,         (U2)MSG_CGW1S18_RXCH0     },
-     {&u1_sp_TYDC_KZK_RX_D903[0],    (U2)MSG_CGW1S21_RXCH0,         (U2)MSG_CGW1S25_RXCH0     }
-};
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-
-#endif /* #ifdef OXDOCAN_XID_MA_CFG_H */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -180,11 +143,22 @@ U1      u1_g_TyDoCANXidMaCfgSafeKeyNum(U1 * u1_ap_skn)
     /* ----------------------------------------------------------------- */
     /* Attention :                                                       */
     /* ----------------------------------------------------------------- */
-    /* The array size of u1_ap_skn = OXDC_DATA_REA_ANS_NB_010B and it's  */
+    /* The array size of u1_ap_skn = OXDC_DATA_REA_ANS_NB_A901 and it's  */
     /* tested in oxdocan_rebyid.c                                        */
     /* ----------------------------------------------------------------- */
 
-    return((U1)FALSE);
+    /* sample start : Notify fixed values */
+    static const U1 u1_sp_SKEY_NUMBER[OXDC_DATA_REA_ANS_NB_A901] = {
+        0x00U,0x11U,0x22U,0x33U,
+        0x44U,0x55U,0x66U,0x77U,
+        0x88U,0x99U,0xaaU,0xbbU,
+        0xccU,0xddU,0xeeU,0xffU
+    };
+
+    vd_g_MemcpyU1(u1_ap_skn, &u1_sp_SKEY_NUMBER[0], (U4)OXDC_DATA_REA_ANS_NB_A901);
+    /* sample end */
+
+    return((U1)TRUE);
 }
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 

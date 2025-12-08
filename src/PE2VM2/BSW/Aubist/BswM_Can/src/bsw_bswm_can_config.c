@@ -28,6 +28,9 @@
 #include <bswm_can/bsw_bswm_can.h>
 #include <cannm/bsw_cannm.h>
 #include <vcan/bsw_vcan.h>
+#if ( BSW_BSWM_CS_FUNC_J1939TP == BSW_USE )
+#include <j1939tp/bsw_j1939tp.h>
+#endif
 
 #include "../inc/bsw_bswm_can_ctrl.h"
 #include "../inc/bsw_bswm_can_connector.h"
@@ -75,6 +78,11 @@
 #else
 #define BSW_BSWM_CAN_FUNC_CHECKRAM             (&bsw_bswm_can_st_TPChkRamNone)
 #endif
+#if ( BSW_BSWM_CS_FUNC_J1939TP == BSW_USE )
+#define BSW_BSWM_CAN_FUNC_J1939TPCHKRAM        (&J1939Tp_CheckRam)
+#else
+#define BSW_BSWM_CAN_FUNC_J1939TPCHKRAM        (&bsw_bswm_can_st_J1939TPCkRamNon)
+#endif
 #endif
 
 #if ( BSW_BSWM_CS_FUNC_CANTP == BSW_USE )
@@ -83,6 +91,14 @@
 #else
 #define BSW_BSWM_CAN_FUNC_TPENABLETX           (&bsw_bswm_can_ctrl_TpEnTxNone)
 #define BSW_BSWM_CAN_FUNC_TPDISABLETX          (&bsw_bswm_can_ctrl_TpDisTxNone)
+#endif
+
+#if ( BSW_BSWM_CS_FUNC_J1939TP == BSW_USE )
+#define BSW_BSWM_CAN_FUNC_J1939TPENATX         (&J1939Tp_EnableTx)
+#define BSW_BSWM_CAN_FUNC_J1939TPDISTX         (&J1939Tp_DisableTx)
+#else
+#define BSW_BSWM_CAN_FUNC_J1939TPENATX         (&bsw_bswm_can_ctrl_J1939TpEnTxNn)
+#define BSW_BSWM_CAN_FUNC_J1939TPDISTX         (&bsw_bswm_can_ctrl_J1939TpDsTxNn)
 #endif
 
 /*--------------------------------------------------------------------------*/
@@ -447,11 +463,16 @@ void (* BswConst bsw_bswm_can_ctrl_ptUpdDmCtrFnc)( BswU1 u1Channel, BswU4* u4DmG
 void (* BswConst bsw_bswm_can_ctrl_ptTPEnTxFunc)( NetworkHandleType Network ) = BSW_BSWM_CAN_FUNC_TPENABLETX;
 void (* BswConst bsw_bswm_can_ctrl_ptTPDisTxFunc)( NetworkHandleType Network ) = BSW_BSWM_CAN_FUNC_TPDISABLETX;
 
+/* Disable J1939Tp transmission frame transmission enable */
+void (* BswConst bsw_bswm_can_ctrl_ptJ1939TPETxF)( NetworkHandleType Network ) = BSW_BSWM_CAN_FUNC_J1939TPENATX;
+void (* BswConst bsw_bswm_can_ctrl_ptJ1939TPDTxF)( NetworkHandleType Network ) = BSW_BSWM_CAN_FUNC_J1939TPDISTX;
+
 /*------------------------------------------*/
 /* Unit:State management                       */
 /*------------------------------------------*/
 #if ( BSW_BSWM_CS_ECU_FAIL == BSW_NOUSE )
-void (* BswConst bsw_bswm_can_st_ptTPChkRamFunc)( void ) = BSW_BSWM_CAN_FUNC_CHECKRAM;
+void (* BswConst bsw_bswm_can_st_ptTPChkRamFunc)( void )  = BSW_BSWM_CAN_FUNC_CHECKRAM;
+void (* BswConst bsw_bswm_can_st_ptJ1939TpCkRamF)( void ) = BSW_BSWM_CAN_FUNC_J1939TPCHKRAM;
 #endif
 
 /****************************************************************************/
@@ -471,7 +492,7 @@ void (* BswConst bsw_bswm_can_st_ptTPChkRamFunc)( void ) = BSW_BSWM_CAN_FUNC_CHE
 /*  v1-1-0          :2018/12/14                                             */
 /*  v2-0-0          :2021/12/02                                             */
 /*  v2-1-0          :2022/05/24                                             */
-/*  v3-0-0          :2024/11/13                                             */
+/*  v3-0-0          :2025/01/23                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

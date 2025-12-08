@@ -119,17 +119,17 @@ static EhvmConst ehvm_peg_spid_t s_Peg_SpidData_CH2[3] = {
 
 static EhvmConst ehvm_peg_prot_t s_Peg_ProtData_CH2[3] = {
     {
-        0x01800000U,  /* PEGBAD */
+        0xFD800000U,  /* PEGBAD */
         0x03FF8000U,  /* PEGADV */
         0x00000043U   /* PEGPROT */
     },
     {
-        0x01808000U,  /* PEGBAD */
+        0xFD808000U,  /* PEGBAD */
         0x03FF8000U,  /* PEGADV */
         0x00000043U   /* PEGPROT */
     },
     {
-        0x03FCC000U,  /* PEGBAD */
+        0xFFFCC000U,  /* PEGBAD */
         0x03FFC000U,  /* PEGADV */
         0x00000043U   /* PEGPROT */
     }
@@ -206,6 +206,6 @@ EhvmConst ehvm_intc2g_prot_switch_config_t ehvm_Intc2gSwitchConfigData_pe2 = {
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
 /*  Framework          :v2-1-0                                              */
-/*  BSW plug-in        :v2-0-0                                              */
+/*  BSW plug-in        :v2-2-0-z0001                                        */
 /****************************************************************************/
 

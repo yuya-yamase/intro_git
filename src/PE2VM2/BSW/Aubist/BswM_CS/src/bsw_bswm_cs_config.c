@@ -1120,7 +1120,7 @@ BswConst Bsw_BswmCS_BusDmFuncTblType* BswConst bsw_bswm_cs_ctrl_ptBusDmFuncTbl[B
 };
 #endif /* ( BSW_BSWM_CS_DMCTRL_FUNC == BSW_USE ) */
 
-void    (* BswConst bsw_bswm_cs_st_ptSetSysStatFn)( uint32* Mask, uint32* SysStatus ) = BSW_BSWM_CS_SETSYSSTAT_FUNC;
+void    (* BswConst bsw_bswm_cs_st_ptSetSysStatFn)( BswConstR uint32* Mask, BswConstR uint32* SysStatus ) = BSW_BSWM_CS_SETSYSSTAT_FUNC;
 void    (* BswConst bsw_bswm_cs_st_ptGetSysStatFn)( uint32* SysStatus )               = BSW_BSWM_CS_GETSYSSTAT_FUNC;
 
 /****************************************************************************/
@@ -1143,7 +1143,7 @@ void    (* BswConst bsw_bswm_cs_st_ptGetSysStatFn)( uint32* SysStatus )         
 /*  v2-0-0          :2021/12/09                                             */
 /*  v2-1-0          :2023/02/03                                             */
 /*  v2-2-0          :2023/05/09                                             */
-/*  v3-0-0          :2024/11/15                                             */
+/*  v3-0-0          :2025/02/06                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

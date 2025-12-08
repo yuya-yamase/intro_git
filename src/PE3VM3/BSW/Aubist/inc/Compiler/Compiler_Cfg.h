@@ -17,7 +17,6 @@
 /*--------------------------------------------------------------------------*/
 
 
-#include "./Compiler_AbPartition_Cfg.h"
 #include "./Compiler_Crc_Cfg.h"
 #include "./Compiler_E2E_Cfg.h"
 #include "./Compiler_SchM_Cfg.h"
@@ -54,7 +53,7 @@
 
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
-/*  Framework          :v2-0-2                                              */
+/*  Framework          :v2-1-0                                              */
 /*  BSW plug-in        :v2-0-0                                              */
 /****************************************************************************/
 

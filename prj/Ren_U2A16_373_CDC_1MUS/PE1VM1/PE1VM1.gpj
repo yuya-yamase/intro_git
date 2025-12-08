@@ -3,7 +3,7 @@ gbuildDir=C:\GHS\RH850_V.R9144\comp_201715
 primaryTarget=v800_standalone.tgt
 [Program]
     :macro=COMP_DIR=c:/GHS/RH850_V.R9144/comp_201715
-	:macro=PRJ_DIR=${%expand_path(.)}
+    :macro=PRJ_DIR=${%expand_path(.)}
     :macro=CMN_DIR=${PRJ_DIR}/../common
     :macro=ROOT_DIR=${%expand_path(${PRJ_DIR}/../../../src/PE1VM1)}
     :macro=OBJ_DIR=obj
@@ -16,14 +16,19 @@ primaryTarget=v800_standalone.tgt
     :macro=IVDSH_DIR=${ROOT_DIR}/BSW/Communication/iVDsh
     :macro=VEHOPE_DIR=${ROOT_DIR}/BSW/ComplexDriver/Vehopemd
     :macro=MCAL_DIR=${ROOT_DIR}/BSW/MCAL
-	:macro=MS_DIR=${ROOT_DIR}/BSW/Memory
-	:macro=IOHW_DIR=${ROOT_DIR}/BSW/IoHwAbstract
-	:macro=APP_DIR=${ROOT_DIR}/App
-	:macro=LIB_DIR=${ROOT_DIR}/LIB
+    :macro=MS_DIR=${ROOT_DIR}/BSW/Memory
+    :macro=IOHW_DIR=${ROOT_DIR}/BSW/IoHwAbstract
+    :macro=APP_DIR=${ROOT_DIR}/App
+    :macro=LIB_DIR=${ROOT_DIR}/LIB
 
     :optionsFile=${CMN_DIR}/common.opt
     :optionsFile=${CMN_DIR}/MCAL.opt
     :optionsFile=${CMN_DIR}/IOHW.opt
+
+    :macro=GSR_CLI="gsrec -sort -S3 -noS5 -bytes 16"
+    :macro=GSR_PAR="-pad1 0x0001c000 0x0020ffff 0xff -start 0x0001c000 -end 0x0020ffff"
+    :postexec="${GSR_CLI} ${GSR_PAR}                     -o dst/PE1VM1_ac.mot dst/PE1VM1.elf"
+    :postexec="${GSR_CLI} ${GSR_PAR} -romaddr 0x0201c000 -o dst/PE1VM1_bd.mot dst/PE1VM1.elf"
 
     -I${COMP_DIR}/include/v800
     -I${COMP_DIR}/ansi
@@ -40,7 +45,7 @@ primaryTarget=v800_standalone.tgt
     -I${OS_DIR}/include
     -I${OS_DIR}/include/ar_api
     -I${OS_DIR}/include/generated
-	-I${OS_DIR}/include/ar_sys
+    -I${OS_DIR}/include/ar_sys
     -I${OS_DIR}/config
     -I${EHVM_IF_DIR}/include/ehvm
 
@@ -88,6 +93,7 @@ primaryTarget=v800_standalone.tgt
     -DAR_OS_USE_HYPERVISOR
     -DECU_VM1
     -DECU_INTG_LWH_GUEST
+    {isdefined(__GMM_AIP_THROUGHPUT__)} -D__AIP_THROUGHPUT__=${__GMM_AIP_THROUGHPUT__}
 
     # CompileSW (ProcessingLoad)
     # Enter the measurement time in milliseconds
@@ -95,6 +101,7 @@ primaryTarget=v800_standalone.tgt
     -DPROCESSING_LOAD_MEASURE_TIME=0U
 
     -o PE1VM1.elf
+    --no_additional_output
 
 ${PRJ_DIR}/bswCAN.gpj
 ${CMN_DIR}/bswOS.gpj
@@ -111,14 +118,13 @@ ${CMN_DIR}/MCAL_Intc.gpj
 ${CMN_DIR}/MCAL_PORT.gpj
 ${CMN_DIR}/MCAL_Pwm.gpj
 ${CMN_DIR}/MCAL_SPI.gpj
-${CMN_DIR}/MCAL_Icu.gpj
 ${CMN_DIR}/MCAL_Wdg.gpj
 
 ${CMN_DIR}/bswMS.gpj
 ${CMN_DIR}/MS_Rim.gpj
 ${CMN_DIR}/MS_NVMC.gpj
 
-${CMN_DIR}/IOHW.gpj
+${PRJ_DIR}/IOHW.gpj
 ${CMN_DIR}/LIB.gpj
 ${PRJ_DIR}/App.gpj
 ${PRJ_DIR}/COM_OXCAN.gpj

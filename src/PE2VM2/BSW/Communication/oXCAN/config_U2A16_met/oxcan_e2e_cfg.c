@@ -59,12 +59,12 @@ const U1                           u1_gp_OXCAN_E2E_TRA_LEN[OXCAN_E2E_NUM_TRA] = 
 /* Reception   */
 #if (OXCAN_E2E_NUM_REC > 0U)
 const U2                           u2_gp_OXCAN_E2E_REC_BY_PDU[] = {
-    (U2)0U,                         /* #define MSG_BDC1S81_RXCH0                       (190U) */
-    (U2)U2_MAX,                     /* #define MSG_BDC1S82_RXCH0                       (191U) */
-    (U2)U2_MAX,                     /* #define MSG_BDC1S83_RXCH0                       (192U) */
-    (U2)U2_MAX,                     /* #define MSG_BDC1S87_RXCH0                       (193U) */
-    (U2)U2_MAX,                     /* #define MSG_BDC1S89_RXCH0                       (194U) */
-    (U2)1U                          /* #define MSG_BDC1S91_RXCH0                       (195U) */
+    (U2)0U,                         /* #define MSG_BDC1S81_RXCH0                       (191U) */
+    (U2)U2_MAX,                     /* #define MSG_BDC1S82_RXCH0                       (192U) */
+    (U2)U2_MAX,                     /* #define MSG_BDC1S83_RXCH0                       (193U) */
+    (U2)U2_MAX,                     /* #define MSG_BDC1S87_RXCH0                       (194U) */
+    (U2)U2_MAX,                     /* #define MSG_BDC1S89_RXCH0                       (195U) */
+    (U2)1U                          /* #define MSG_BDC1S91_RXCH0                       (196U) */
 };
 const U1                           u1_gp_OXCAN_E2E_REC_LEN[OXCAN_E2E_NUM_REC] = {
     (U1)21U,                        /* 0 BDC1S81 32 - FV/KZK 11 bytes */

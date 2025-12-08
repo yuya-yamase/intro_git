@@ -1,7 +1,7 @@
-/* Fee_Idread.c v2-0-0                                                      */
+/* Fee_Idread.c v2-1-0                                                      */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION. All rights reserved.                        */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -17,20 +17,22 @@
 
 #include "../inc/Fee_Mpu_Dev_Const.h"
 
-/* MHA[データFlash]I/Fヘッダ */
+/* MHA (Data Flash) I/F header */
 #include "../inc/Fee_Legacy.h"
 
-/* MHA[データFlash]ヘッダ */
+/* MHA header */
 #include "../inc/Fee_Lib.h"
 
-/* MHA[データFlash]ライブラリヘッダ */
+/* MHA library header */
 #include "../inc/Fee_Common.h"
 #include "../inc/Fee_Idread_Internal.h"
 
-/* D.F.C.ヘッダ */
+/* D.F.C. header */
 #include "../inc/Fee_Dfc.h"
 
 #include "../inc/Fee_Record_Pos_Tbl.h"
+
+#include "../inc/Fee_FlsWrp.h"
 
 /*--------------------------------------------------------------------------*/
 /* Types                                                                    */
@@ -58,182 +60,197 @@
 #define FEE_START_SEC_CODE
 #include <Fee_MemMap.h>
 
-/*関数説明--------------------------------------------------------------------*/
-/* 説  明        ：ID指定データ読出し状態管理                                 */
-/* 入  力        ：stCPUDTF *ptstCPUDTFInfo                            */
-/*                                           ：MHA[データFlash]管理データ     */
-/* 出  力        ：処理状態                                                   */
-/*               ：  0x00000002 ：u4gSTATUS_EXIT ：読出し中                   */
-/*               ：  0x00000003 ：u4gSTATUS_DONE ：処理終了                   */
-/* グローバル変数：                                                           */
-/* その他        ：                                                           */
-/*----------------------------------------------------------------------------*/
+/****************************************************************************/
+/* Function Name | Fee_ReadMain                                             */
+/* Description   | ID designation data read status management               */
+/* Preconditions | None                                                     */
+/* Parameters    | stCPUDTF * ptstCPUDTFInfo                                */
+/*               |                 MHA management data                      */
+/* Return Value  | Processing status                                        */
+/*               | 0x00000002 : u4gSTATUS_EXIT : Reading                    */
+/*               | 0x00000003 : u4gSTATUS_DONE : Processing ended           */
+/* Notes         | None                                                     */
+/****************************************************************************/
 FUNC(uint32, FEE_CODE) Fee_ReadMain( P2VAR(Fee_CpuDtfType, AUTOMATIC, TYPEDEF) ptstCPUDTFInfo )
 {
-    uint32          u4tReturn;                                  /* 戻り値 */
+    uint32          u4tReturn;                                  /* RETURN */
     
-    /* 戻り値を処理継続に設定 */
+    /* Set return value to continue processing */
     u4tReturn = FEE_STATUS_CONT;
     while ( u4tReturn == FEE_STATUS_CONT )
     {
-        /* 処理継続の間は処理を続ける */
-        /* メイン状態により分岐 */
+        /* Continue processing while processing continues */
+        /* Branch by main state */
         switch ( ptstCPUDTFInfo->u1MainStatus )
         {
-            case FEE_MSTATUSRIDLE:                  /* メイン状態がアイドル(MAIN_STATUS_R_IDLE)の場合 */
+            case FEE_MSTATUSRIDLE:                  /* If main state is idle (MAIN _ STATUS _ R _ IDLE) */
                 u4tReturn = Fee_ReadMainSelectReadBlock( ptstCPUDTFInfo );
                 break;
 
-            case FEE_MSTATUSRBSRCH:                 /* メイン状態が空き領域検索中(MAIN_STATUS_R_BSRCH)の場合 */
+            case FEE_MSTATUSRBSRCH:                 /* If the main state is searching for free space (MAIN _ STATUS _ R _ BSRCH) */
                 u4tReturn = Fee_ReadMainSrchFreeSpace( ptstCPUDTFInfo );
                 break;
 
-            case FEE_MSTATUSRPREPISRCH:             /* メイン状態がID指定データ読出し準備中の場合 */
+            case FEE_MSTATUSRPREPISRCH:             /* When the main state is preparing to read ID designation data */
                 u4tReturn = Fee_ReadMainPrepSrchReadData( ptstCPUDTFInfo );
                 break;
 
-            case FEE_MSTATUSRISRCH:                 /* メイン状態がID指定データ読出し中(MAIN_STATUS_R_ISRCH)の場合 */
+            case FEE_MSTATUSRISRCH:                 /* When main status is reading ID designation data (MAIN _ STATUS _ R _ ISRCH) */
                 u4tReturn = Fee_ReadMainSrchReadData( ptstCPUDTFInfo );
                 break;
 
-            default:                                            /* メイン状態がそれ以外の場合 */
-                /* 処理結果を該当データなし(RSP_NODATA)に設定 */
+            default:                                            /* If the main state is anything else */
+                /* Set processing result to no applicable data (RSP _ NODATA) */
                 ptstCPUDTFInfo->u1Result = FEE_RSP_NODATA;
-                /* 戻り値を処理終了に設定 */
+                /* Set return value to end processing */
                 u4tReturn = FEE_STATUS_DONE;
                 break;
         }
     }
 
-    /* 戻り値を返却して処理終了 */
+    /* Return return value and finish processing */
     return u4tReturn;
 }
 
-/*関数説明--------------------------------------------------------------------*/
-/* 説  明        ：ID指定データ読出し状態管理(アイドル)                       */
-/* 入  力        ：stCPUDTF *ptstCPUDTFInfo                            */
-/*                                           ：MHA[データFlash]管理データ     */
-/* 出  力        ：処理状態                                                   */
-/*               ：  0x00000002 ：u4gSTATUS_EXIT ：読出し中                   */
-/*               ：  0x00000003 ：u4gSTATUS_DONE ：処理終了                   */
-/* グローバル変数：                                                           */
-/* その他        ：                                                           */
-/*----------------------------------------------------------------------------*/
+/****************************************************************************/
+/* Function Name | Fee_ReadMainSelectReadBlock                              */
+/* Description   | ID-specified data read status management (idle)          */
+/* Preconditions | None                                                     */
+/* Parameters    | stCPUDTF * ptstCPUDTFInfo                                */
+/*               |                 MHA management data                      */
+/* Return Value  | Processing status                                        */
+/*               | 0x00000002 : u4gSTATUS_EXIT : Reading                    */
+/*               | 0x00000003 : u4gSTATUS_DONE : Processing ended           */
+/* Notes         | None                                                     */
+/****************************************************************************/
 FUNC(uint32, FEE_CODE) Fee_ReadMainSelectReadBlock( P2VAR(Fee_CpuDtfType, AUTOMATIC, TYPEDEF) ptstCPUDTFInfo )
 {
-    uint32          u4tReturn;                                  /* 戻り値 */
-    uint32          u4tSelResult;                               /* 読出しブロック選択処理結果 */
+    uint32          u4tReturn;                                  /* RETURN */
+    uint32          u4tSelResult;                               /* Result of read block selection */
     uint32          u4tRcrdDataAreaStartAbsAddr;
     uint32          u4tBlockStartAddr;
+    Std_ReturnType  u1_dfPrepare;
 
-    /* 読出しブロック選択処理 */
-    u4tSelResult = Fee_SelectReadBlock( ptstCPUDTFInfo );
-    if ( u4tSelResult == FEE_STATUS_OK )
+    /* Preparing for MemAcc data flash access. */
+    u1_dfPrepare = Fee_FlsWrp_ExtDfPreExecution();
+    if( u1_dfPrepare == (Std_ReturnType)E_OK )
     {
-        /* 選択成功の場合 */
-        /* 最終書込みレコード位置は有効か？*/
-        if ( ptstCPUDTFInfo->u4WriteLastRecMngAbsAddr != FEE_ADDRESS_INVALID )
+        /* Read block selection processing */
+        u4tSelResult = Fee_SelectReadBlock( ptstCPUDTFInfo );
+        if ( u4tSelResult == FEE_STATUS_OK )
         {
-            /* 最終書込みレコード位置が有効の場合 */
-            /* 読出し検索開始アドレスを最終書込みレコード位置に設定 */
-            ptstCPUDTFInfo->u4ReadSrchAddress = ptstCPUDTFInfo->u4WriteLastRecMngAbsAddr;
-
-            ptstCPUDTFInfo->u1MainStatus = FEE_MSTATUSRPREPISRCH;
+            /* for successful selection */
+            /* Is the last write record position valid? */
+            if ( ptstCPUDTFInfo->u4WriteLastRecMngAbsAddr != FEE_ADDRESS_INVALID )
+            {
+                /* If last write record position is enabled */
+                /* Set read search start address to last write record position */
+                ptstCPUDTFInfo->u4ReadSrchAddress = ptstCPUDTFInfo->u4WriteLastRecMngAbsAddr;
+    
+                ptstCPUDTFInfo->u1MainStatus = FEE_MSTATUSRPREPISRCH;
+            }
+            else
+            {
+                /* If last write record position is invalid */
+                /* Set read search start address to last record of block */
+                u4tBlockStartAddr = FEE_BLKSTARTADDRTBL[ptstCPUDTFInfo->u1MainBlockNo];
+                u4tRcrdDataAreaStartAbsAddr = u4tBlockStartAddr
+                                              + (uint32)( ptstCPUDTFInfo->ptstAreaInf->u2RcrdDataAreaStartAddr );
+                ptstCPUDTFInfo->u4ReadSrchAddress = u4tRcrdDataAreaStartAbsAddr - (uint32)FEE_RECORDMNGINFOLEN;
+    
+                /* Set main state to searching for free space (MAIN _ STATUS _ R _ BSRCH) */
+                ptstCPUDTFInfo->u1MainStatus = FEE_MSTATUSRBSRCH;
+            }
+            /* Set return value to continue processing */
+            u4tReturn = FEE_STATUS_CONT;
+        }
+        else if ( u4tSelResult == FEE_STATUS_NODATA )
+        {
+            /* If all blocks are unused */
+            /* Set result to unblocked (RSP _ UNUSED) */
+            ptstCPUDTFInfo->u1Result = FEE_RSP_UNUSED;
+            /* Set return value to end processing */
+            u4tReturn = FEE_STATUS_DONE;
         }
         else
         {
-            /* 最終書込みレコード位置が無効の場合 */
-            /* 読出し検索開始アドレスをブロックの最終レコードに設定 */
-            u4tBlockStartAddr = FEE_BLKSTARTADDRTBL[ptstCPUDTFInfo->u1MainBlockNo];
-            u4tRcrdDataAreaStartAbsAddr = u4tBlockStartAddr
-                                          + (uint32)( ptstCPUDTFInfo->ptstAreaInf->u2RcrdDataAreaStartAddr );
-            ptstCPUDTFInfo->u4ReadSrchAddress = u4tRcrdDataAreaStartAbsAddr - (uint32)FEE_RECORDMNGINFOLEN;
-
-            /* メイン状態を空き領域検索中(MAIN_STATUS_R_BSRCH)に設定 */
-            ptstCPUDTFInfo->u1MainStatus = FEE_MSTATUSRBSRCH;
+            /* Otherwise: In case of selection failure */
+            /* Set processing result to no applicable data (RSP _ NODATA) */
+            ptstCPUDTFInfo->u1Result = FEE_RSP_NODATA;
+            /* Set return value to end processing */
+            u4tReturn = FEE_STATUS_DONE;
         }
-        /* 戻り値を処理継続に設定 */
-        u4tReturn = FEE_STATUS_CONT;
-    }
-    else if ( u4tSelResult == FEE_STATUS_NODATA )
-    {
-        /* 全ブロック未使用の場合 */
-        /* 処理結果をブロック未使用(RSP_UNUSED)に設定 */
-        ptstCPUDTFInfo->u1Result = FEE_RSP_UNUSED;
-        /* 戻り値を処理終了に設定 */
-        u4tReturn = FEE_STATUS_DONE;
     }
     else
     {
-        /* それ以外：選択失敗の場合 */
-        /* 処理結果を該当データなし(RSP_NODATA)に設定 */
-        ptstCPUDTFInfo->u1Result = FEE_RSP_NODATA;
-        /* 戻り値を処理終了に設定 */
-        u4tReturn = FEE_STATUS_DONE;
+        /* Set return value to exit */
+        u4tReturn = FEE_STATUS_EXIT;
     }
 
-    /* 戻り値を返却して処理終了 */
+    /* Return return value and finish processing */
     return u4tReturn;
 }
 
-/*関数説明--------------------------------------------------------------------*/
-/* 説  明        ：ID指定データ読出し状態管理(空き領域検索中)                 */
-/* 入  力        ：stCPUDTF *ptstCPUDTFInfo                            */
-/*                                           ：MHA[データFlash]管理データ     */
-/* 出  力        ：処理状態                                                   */
-/*               ：  0x00000002 ：u4gSTATUS_EXIT ：読出し中                   */
-/*               ：  0x00000003 ：u4gSTATUS_DONE ：処理終了                   */
-/* グローバル変数：                                                           */
-/* その他        ：                                                           */
-/*----------------------------------------------------------------------------*/
+/****************************************************************************/
+/* Function Name | Fee_ReadMainSrchFreeSpace                                */
+/* Description   | ID-specified data read status management                 */
+/*               | (searching for free space)                               */
+/* Preconditions | None                                                     */
+/* Parameters    | stCPUDTF * ptstCPUDTFInfo                                */
+/*               |                 MHA management data                      */
+/* Return Value  | Processing status                                        */
+/*               | 0x00000002 : u4gSTATUS_EXIT : Reading                    */
+/*               | 0x00000003 : u4gSTATUS_DONE : Processing ended           */
+/* Notes         | None                                                     */
+/****************************************************************************/
 FUNC(uint32, FEE_CODE) Fee_ReadMainSrchFreeSpace( P2VAR(Fee_CpuDtfType, AUTOMATIC, TYPEDEF) ptstCPUDTFInfo )
 {
-    uint32          u4tReturn;                                  /* 戻り値 */
-    uint32          u4tSrchFSResult;                            /* 空き領域検索結果 */
+    uint32          u4tReturn;                                  /* RETURN */
+    uint32          u4tSrchFSResult;                            /* Free space search results */
 
-    /* 空き領域検索処理 */
+    /* Free space search */
     u4tSrchFSResult = Fee_SrchFreeSpace( ptstCPUDTFInfo );
-    /* 戻り値により分岐 */
+    /* Branch by return */
     switch ( u4tSrchFSResult )
     {
-        case FEE_STATUS_OK:             /* 戻り値が使用中(STATUS_OK)の場合 */
-            /* 末尾レコード保持データ更新許可フラグを許可(FLAG_ON)に設定 */
+        case FEE_STATUS_OK:             /* If the return value is in use (STATUS _ OK) */
+            /* Set tail-record retention data update permission flag to allowed (FLAG _ ON) */
             ptstCPUDTFInfo->u1LastWritePosFlag = FEE_FLAG_ON;
-            /* データ書込み時・転送時書込み先アドレスに検索結果アドレスを設定 */
+            /* Set search result address to write destination address when data is written and transferred */
             ptstCPUDTFInfo->u4WriteLastRecMngAbsAddr = ptstCPUDTFInfo->u4ReadSrchAddress;
             ptstCPUDTFInfo->u4WriteLastRecDatAbsAddr = FEE_ADDRESS_INVALID;
 
             ptstCPUDTFInfo->u1MainStatus = FEE_MSTATUSRPREPISRCH;
-            /* 戻り値を処理継続に設定 */
+            /* Set return value to continue processing */
             u4tReturn = FEE_STATUS_CONT;
             break;
 
-        case FEE_STATUS_NG:             /* 戻り値が未使用(STATUS_NG)の場合 */
-            /* 末尾レコード保持データ更新許可フラグを許可(FLAG_ON)に設定 */
+        case FEE_STATUS_NG:             /* If the return value is unused (STATUS _ NG) */
+            /* Set tail-record retention data update permission flag to allowed (FLAG _ ON) */
             ptstCPUDTFInfo->u1LastWritePosFlag = FEE_FLAG_ON;
-            /* データ書込み時・転送時書込み先アドレスに検索結果アドレスを設定 */
+            /* Set search result address to write destination address when data is written and transferred */
             ptstCPUDTFInfo->u4WriteLastRecMngAbsAddr = ptstCPUDTFInfo->u4ReadSrchAddress;
             ptstCPUDTFInfo->u4WriteLastRecDatAbsAddr = FEE_ADDRESS_INVALID;
-            /* 処理結果を該当データなし(RSP_NODATA)に設定 */
+            /* Set processing result to no applicable data (RSP _ NODATA) */
             ptstCPUDTFInfo->u1Result = FEE_RSP_NODATA;
-            /* 戻り値を処理終了に設定 */
+            /* Set return value to end processing */
             u4tReturn = FEE_STATUS_DONE;
             break;
 
-        case FEE_STATUS_BUSY:           /* 戻り値が処理継続中(STATUS_BUSY)の場合 */
-            /* 戻り値を読出し中(STATUS_EXIT)に設定 */
+        case FEE_STATUS_BUSY:           /* If the return value is ongoing (STATUS _ BUSY) */
+            /* Set return value to reading (STATUS _ EXIT) */
             u4tReturn = FEE_STATUS_EXIT;
             break;
 
-        default:                                    /* それ以外 */
-            /* 処理結果を該当データなし(RSP_NODATA)に設定 */
+        default:                                    /* Other */
+            /* Set processing result to no applicable data (RSP _ NODATA) */
             ptstCPUDTFInfo->u1Result = FEE_RSP_NODATA;
-            /* 戻り値を処理終了に設定 */
+            /* Set return value to end processing */
             u4tReturn = FEE_STATUS_DONE;
             break;
     }
 
-    /* 戻り値を返却して処理終了 */
+    /* Return return value and finish processing */
     return u4tReturn;
 }
 
@@ -248,25 +265,27 @@ FUNC(uint32, FEE_CODE) Fee_ReadMainSrchFreeSpace( P2VAR(Fee_CpuDtfType, AUTOMATI
 FUNC(uint32, FEE_CODE) Fee_ReadMainPrepSrchReadData( P2VAR(Fee_CpuDtfType, AUTOMATIC, FEE_VAR_NO_INIT) ptstCPUDTFInfo )
 {
     Fee_Record_StateScRdStart();
-    /* メイン状態をID指定データ読出し中(MAIN_STATUS_R_ISRCH)に設定 */
+    /* Set main status to reading ID designation data (MAIN_STATUS_R_ISRCH) */
     ptstCPUDTFInfo->u1MainStatus = FEE_MSTATUSRISRCH;
 
     return FEE_STATUS_CONT;
 }
 
-/*関数説明--------------------------------------------------------------------*/
-/* 説  明        ：ID指定データ読出し状態管理(ID指定データ読出し中)           */
-/* 入  力        ：stCPUDTF *ptstCPUDTFInfo                            */
-/*                                           ：MHA[データFlash]管理データ     */
-/* 出  力        ：処理状態                                                   */
-/*               ：  0x00000002 ：u4gSTATUS_EXIT ：読出し中                   */
-/*               ：  0x00000003 ：u4gSTATUS_DONE ：処理終了                   */
-/* グローバル変数：                                                           */
-/* その他        ：                                                           */
-/*----------------------------------------------------------------------------*/
+/****************************************************************************/
+/* Function Name | Fee_ReadMainSrchReadData                                 */
+/* Description   | ID-specified data reading status management              */
+/*               | (ID-specified data reading)                              */
+/* Preconditions | None                                                     */
+/* Parameters    | stCPUDTF * ptstCPUDTFInfo                                */
+/*               |                 MHA management data                      */
+/* Return Value  | Processing status                                        */
+/*               | 0x00000002 : u4gSTATUS_EXIT : Reading                    */
+/*               | 0x00000003 : u4gSTATUS_DONE : Processing ended           */
+/* Notes         | None                                                     */
+/****************************************************************************/
 FUNC(uint32, FEE_CODE) Fee_ReadMainSrchReadData( P2VAR(Fee_CpuDtfType, AUTOMATIC, TYPEDEF) ptstCPUDTFInfo )
 {
-    uint32          u4tReturn;                                  /* 戻り値 */
+    uint32          u4tReturn;                                  /* RETURN */
     uint32          u4tReadActStatus;
     uint32          u4tReadExecResult;
 
@@ -299,7 +318,7 @@ FUNC(uint32, FEE_CODE) Fee_ReadMainSrchReadData( P2VAR(Fee_CpuDtfType, AUTOMATIC
             break;
     }
 
-    /* 戻り値を返却して処理終了 */
+    /* Return return value and finish processing */
     return u4tReturn;
 }
 
@@ -312,6 +331,7 @@ FUNC(uint32, FEE_CODE) Fee_ReadMainSrchReadData( P2VAR(Fee_CpuDtfType, AUTOMATIC
 /*  1-0-0          :2019/02/01                                              */
 /*  1-1-0          :2019/08/19                                              */
 /*  2-0-0          :2021/07/29                                              */
+/*  2-1-0          :2024/09/04                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

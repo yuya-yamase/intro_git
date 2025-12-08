@@ -27,9 +27,11 @@
 #include "NvM.h"
 #include "NvM_Ext.h"
 #include "SchM_NvM.h"
+#include "SchM_MemAcc.h"
 #include "Mscd.h"
 #include "Fee.h"
 #include "Fls.h"
+#include "MemAcc.h"
 
 #include "nvmc_mgr.h"
 #include "nvmc_mgr_private.h"
@@ -114,7 +116,7 @@ void    vd_d_Nvmc_BonInit_DTF(void)
 
     vd_s_Nvmc_RAMBlockInit();
     u4_t_mode_bak = u4_g_CPUM_PRIV();
-    Fls_Init(vdp_PTR_NA);
+    MemAcc_Init(vdp_PTR_NA);
     NvM_PreInit();
     Mscd_Init();
     NvM_Init(vdp_PTR_NA);
@@ -135,7 +137,7 @@ void    vd_d_Nvmc_WkupInit_DTF(void)
 
     vd_s_Nvmc_RAMBlockInit();
     u4_t_mode_bak = u4_g_CPUM_PRIV();
-    Fls_Init(vdp_PTR_NA);
+    MemAcc_Init(vdp_PTR_NA);
     NvM_PreInit();
     Mscd_Init();
     NvM_Init(vdp_PTR_NA);
@@ -288,6 +290,7 @@ void    vd_d_Nvmc_MainFunc_DTF_Req(void)
     volatile U4             u4_t_mode_bak;
 
     u4_t_mode_bak = u4_g_CPUM_PRIV();
+    MemAcc_MainFunction();
     NvM_MainFunction();
     vd_g_CPUM_RSTR(u4_t_mode_bak);
 }
