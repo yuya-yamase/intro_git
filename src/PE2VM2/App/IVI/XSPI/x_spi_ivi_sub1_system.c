@@ -291,7 +291,7 @@ void            vd_g_XspiIviSub1SystemAna(const U1 * u1_ap_XSPI_ADD, const U2 u2
     switch (u1_t_subtype)
     {
     case XSPI_IVI_SYSTEM_DDCON_REC:
-        vd_g_Ivi_PwrCtrl_DDFreq_ChgReq(u1_ap_XSPI_ADD[1]);
+        vd_g_Ivi_PwrCtrl_DDFreq_ChgReq(&u1_ap_XSPI_ADD[1]);
         break;
     case XSPI_IVI_SYSTEM_GPS_OPE_RECUEST:
         /*GPS動作要求の通知先IFをコール*/
@@ -336,19 +336,20 @@ static void            vd_s_XspiIviSub1SystemSetDataRec(const U1 * u1_ap_XSPI_AD
 }
 
 /*===================================================================================================================================*/
-/*  void            vd_g_XspiIviSub1DDconSend(const U1 u1_a_DATA)                                                                    */
+/*  void            vd_g_XspiIviSub1DDconSend(const U1 * u1_ap_DATA)                                                                 */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Description:    SubFlame1(MISC) Data Analysis                                                                                    */
-/*  Arguments:      u1_a_DATA : 切り替え周波数                                                                                        */
+/*  Arguments:      u1_ap_DATA : 切り替え周波数                                                                                      */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void            vd_g_XspiIviSub1DDconSend(const U1 u1_a_DATA)
+void            vd_g_XspiIviSub1DDconSend(const U1 * u1_ap_DATA)
 {
-    U2     u2_s_SYSTEM_DDCON_SIZE = (U2)2U;
-    U1     u1_tp_data[2];
+    U2     u2_s_SYSTEM_DDCON_SIZE = (U2)3U;
+    U1     u1_tp_data[3];
 
     u1_tp_data[0] = (U1)XSPI_IVI_SYSTEM_DDCON_SEND;
-    u1_tp_data[1] = u1_a_DATA;
+    u1_tp_data[1] = u1_ap_DATA[0];
+    u1_tp_data[2] = u1_ap_DATA[1];
     vd_s_XspiIviSub1SystemDataToQueue(u2_s_SYSTEM_DDCON_SIZE,u1_tp_data);
 }
 
