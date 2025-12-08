@@ -40,9 +40,9 @@
 #define HMIPUTXTCFG_SLOT_E                       (5U)
 
 #define HMIPUTXTCFG_IF_NUM                       (42U)
-#define HMIPUTXTCFG_IF_SLOTA_NUM                 (24U)
-#define HMIPUTXTCFG_IF_SLOTB_NUM                 (40U)
-#define HMIPUTXTCFG_IF_SLOTC_NUM                 (55U)
+#define HMIPUTXTCFG_IF_SLOTA_NUM                 (23U)
+#define HMIPUTXTCFG_IF_SLOTB_NUM                 (41U)
+#define HMIPUTXTCFG_IF_SLOTC_NUM                 (63U)
 #define HMIPUTXTCFG_IF_SLOTD_NUM                 (47U)
 /* #define HMIPUTXTCFG_IF_SLOTE_NUM                 (0U) */
 

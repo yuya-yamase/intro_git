@@ -115,7 +115,6 @@ const ST_ALERT_REQBIT   st_gp_HMIPUTXTREQBIT_SLOTA[HMIPUTXTCFG_IF_SLOTA_NUM] = {
     {    (U2)ALERT_CH_B_BVOOPE,             (U1)ALERT_REQ_B_BVOOPE_OPERATING,       (U1)5U,     (U4)0x00800000U    },
     {    (U2)ALERT_CH_B_THESEN,             (U1)ALERT_REQ_B_THESEN_SENOFF,          (U1)11U,    (U4)0x00008000U    },
     {    (U2)ALERT_CH_B_THESEN,             (U1)ALERT_REQ_B_THESEN_SENON,           (U1)11U,    (U4)0x00010000U    },
-    {    (U2)ALERT_CH_B_AIRBAG,             (U1)ALERT_REQ_B_AIRBAG_MALFUNC,         (U1)12U,    (U4)0x00000100U    },
     {    (U2)ALERT_CH_B_AVAS,               (U1)ALERT_REQ_B_AVAS_MALFUNC,           (U1)12U,    (U4)0x80000000U    },
     {    (U2)ALERT_CH_B_AVAS,               (U1)ALERT_REQ_B_AVAS_MALFUNC_PD,        (U1)12U,    (U4)0x80000000U    },
     {    (U2)ALERT_CH_B_WASLEV,             (U1)ALERT_REQ_B_WASLEV_TT_PD_ON,        (U1)13U,    (U4)0x04000000U    },
@@ -140,6 +139,7 @@ const ST_ALERT_REQBIT   st_gp_HMIPUTXTREQBIT_SLOTB[HMIPUTXTCFG_IF_SLOTB_NUM] = {
     {    (U2)ALERT_CH_C_ABS_PD,             (U1)ALERT_REQ_C_ABS_PD_MALFUNC,         (U1)9U,     (U4)0x02000000U    },
     {    (U2)ALERT_CH_C_MCBW,               (U1)ALERT_REQ_C_MCBW_MALFUNC,           (U1)10U,    (U4)0x00000200U    },
     {    (U2)ALERT_CH_C_MCBW,               (U1)ALERT_REQ_C_MCBW_MALFUNC_RW,        (U1)10U,    (U4)0x00000200U    },
+    {    (U2)ALERT_CH_B_AIRBAG,             (U1)ALERT_REQ_B_AIRBAG_MALFUNC,         (U1)12U,    (U4)0x00000100U    },
     {    (U2)ALERT_CH_C_BRKHLD_WRN,         (U1)ALERT_REQ_C_BRKHLD_WRN_DEACT2,      (U1)13U,    (U4)0x00008000U    },
     {    (U2)ALERT_CH_C_BRKHLD_WRN,         (U1)ALERT_REQ_C_BRKHLD_WRN_MAINT1,      (U1)13U,    (U4)0x00020000U    },
     {    (U2)ALERT_CH_C_BRKHLD_WRN,         (U1)ALERT_REQ_C_BRKHLD_WRN_MALFNC1,     (U1)13U,    (U4)0x00080000U    },
@@ -224,6 +224,14 @@ const ST_ALERT_REQBIT   st_gp_HMIPUTXTREQBIT_SLOTC[HMIPUTXTCFG_IF_SLOTC_NUM] = {
     {    (U2)ALERT_CH_C_STEER_PD,           (U1)ALERT_REQ_C_STEER_PD_NONSYNC_MOD,   (U1)26U,    (U4)0x00020000U    },
     {    (U2)ALERT_CH_C_STEER_PD,           (U1)ALERT_REQ_C_STEER_PD_SELF_CALIB,    (U1)26U,    (U4)0x00040000U    },
     {    (U2)ALERT_CH_C_STEER_PD,           (U1)ALERT_REQ_C_STEER_PD_RDY_DRIVE,     (U1)26U,    (U4)0x00080000U    },
+    {    (U2)ALERT_CH_C_STEER_PD,           (U1)ALERT_REQ_C_STEER_PD_SPDLIMIT,      (U1)26U,    (U4)0x00100000U    },
+    {    (U2)ALERT_CH_C_STEER_PD,           (U1)ALERT_REQ_C_STEER_PD_FURLMTSPD,     (U1)26U,    (U4)0x00200000U    },
+    {    (U2)ALERT_CH_C_STEER_PD,           (U1)ALERT_REQ_C_STEER_PD_CMAXSPDLMT,    (U1)26U,    (U4)0x00400000U    },
+    {    (U2)ALERT_CH_C_STEER_PD,           (U1)ALERT_REQ_C_STEER_PD_CMAXSPDFLMT,   (U1)26U,    (U4)0x00800000U    },
+    {    (U2)ALERT_CH_C_STEER_PD,           (U1)ALERT_REQ_C_STEER_PD_MAXLMTSOON,    (U1)26U,    (U4)0x01000000U    },
+    {    (U2)ALERT_CH_C_STEER_PD,           (U1)ALERT_REQ_C_STEER_PD_MAXFURLMT,     (U1)26U,    (U4)0x02000000U    },
+    {    (U2)ALERT_CH_C_STEER_PD,           (U1)ALERT_REQ_C_STEER_PD_STOPVEH,       (U1)26U,    (U4)0x04000000U    },
+    {    (U2)ALERT_CH_C_STEER_PD,           (U1)ALERT_REQ_C_STEER_PD_VEHUNAVAIL,    (U1)26U,    (U4)0x08000000U    },
     {    (U2)ALERT_CH_H_ONACCN,             (U1)ALERT_REQ_H_ONACCN_MALFUNC,         (U1)32U,    (U4)0x00100000U    },
     {    (U2)ALERT_CH_C_STEER_PD,           (U1)ALERT_REQ_C_STEER_PD_FCV_STOP,      (U1)33U,    (U4)0x08000000U    }
 };
@@ -338,6 +346,7 @@ U2 u2_g_HmiputxtSizeReqbit(void){
 /*  BEV-8     6/20/2025  KO       Change for BEV System_Consideration_2.(MET-O_PDSMAL-CSTD-0-00-A-C0)                                */
 /*  BEV-9    06/23/2025  HY       Change for BEV System_Consideration_2.(MET-S_ADMID-CSTD-0-02-A-C0 / MET-S_ADTT-CSTD-0-02-A-C0)     */
 /*  BEV-10    7/07/2025  KT       Change for BEV System_Consideration_2.(MET-M_CONTDISP2-CSTD-0010-C0)                               */
+/*  BEV-11   12/05/2025  KH       Change for BEV System_Consideration_ADAS.(MET-C_STEER-CSTD-0-02-B-C0)                              */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * TH   = Takahiro Hirano, Denso Techno                                                                                           */
@@ -350,5 +359,6 @@ U2 u2_g_HmiputxtSizeReqbit(void){
 /*  * HF   = Hinari Fukamachi,KSE                                                                                                    */
 /*  * HY   = Haruki Yagi, KSE                                                                                                        */
 /*  * KT   = Kenta Takaji,    Denso Techno                                                                                           */
+/*  * KH   = Kiko Huerte,     DTPH                                                                                                   */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
