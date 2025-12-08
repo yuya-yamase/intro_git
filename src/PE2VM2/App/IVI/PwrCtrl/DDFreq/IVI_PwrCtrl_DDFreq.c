@@ -1,4 +1,4 @@
-/* 0.0.0 */
+/* 0.1.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO TECHNO Corporation                                                                                               */
 /*===================================================================================================================================*/
@@ -9,15 +9,18 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define PWRCTRL_DDFREQ_C_MAJOR                  (0)
-#define PWRCTRL_DDFREQ_C_MINOR                  (0)
+#define PWRCTRL_DDFREQ_C_MINOR                  (1)
 #define PWRCTRL_DDFREQ_C_PATCH                  (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#include    "aip_common.h"
 #include    "IVI_PwrCtrl_DDFreq.h"
 
 #include    "pwm_drv.h"
+#include    "Dio.h"
+#include    "x_spi_ivi_sub1_system.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -40,21 +43,48 @@
 
 /* パターンB */
 /* 周波数：454.5454545[kHz], デューティ：50[%], カウントクロック周波数：80[MHz] 分周なし */
-#define     IVI_SYS_PWM_PERIOD_B            (176U)		/* (1/454.545)*80000 = 176.00[counts] */
+#define     IVI_SYS_PWM_PERIOD_B            (176U)      /* (1/454.545)*80000 = 176.00[counts] */
+
+#define     IVI_DDFREQ_DDPTRN_NUM           (2U)                /* パターン総数 */
+#define     IVI_DDFREQ_DDPTRN_A             (0U)                /* パターンA */
+#define     IVI_DDFREQ_DDPTRN_B             (1U)                /* パターンB */
+#define     IVI_DDFREQ_DDPTRN_FAIL          (2U)
+
+#define     IVI_DDFREQ_ADCPTRN_NUM          (2U)
+#define     IVI_DDFREQ_ADCPTRN_LO           (0U)
+#define     IVI_DDFREQ_ADCPTRN_HI           (1U)
+#define     IVI_DDFREQ_ADCFAIL              (2U)
+
+#define     IVI_DDFREQ_NON                  (0xFFU)             /* 初期値(パターン指定なし) */
+
+#define     IVI_DDFREQ_REQ_NUM              (2U)
+#define     IVI_DDFREQ_DDREQ                (0U)
+#define     IVI_DDFREQ_ADCREQ               (1U)
+
+#if 0
+#define     IVI_DDFREQ_ADC_FREQ_SHIFT       (DIO_ID_APORT4_CH7)
+#endif
+#define     IVI_DDFREQ_ADC_FREQ_SHIFT       (0xFFFFU)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* Duty Cycle演算 LSB：0.01% */
-#define 	IVI_SYS_PWM_DUTYCYCLE(i)        ((uint16)(((uint32)(i) * (uint32)PWM_DRV_DUTY_MAX) / (uint32)10000U))
+#define     IVI_SYS_PWM_DUTYCYCLE(i)        ((uint16)(((uint32)(i) * (uint32)PWM_DRV_DUTY_MAX) / (uint32)10000U))
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+typedef struct {
+    U1  u1_req;
+    U1  u1_dd_type;
+    U1  u1_adc_type;
+} ST_REQ_FREQ;
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-U1          u1_g_pwrctrl_ddfreq_flg;                    /* 要求フラグ */
+static ST_REQ_FREQ  st_s_pwrctrl_req_flg;                    /* 要求フラグ */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
@@ -62,7 +92,7 @@ U1          u1_g_pwrctrl_ddfreq_flg;                    /* 要求フラグ */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-const U2 u2_sp_DDFREQ_PERIOD[IVI_DDFREQ_PTRN_NUM] = {
+const U2 u2_sp_DDFREQ_PERIOD[IVI_DDFREQ_DDPTRN_NUM] = {
     (U2)IVI_SYS_PWM_PERIOD_A,                           /* パターンA */
     (U2)IVI_SYS_PWM_PERIOD_B                            /* パターンB */
 };
@@ -82,8 +112,11 @@ const U2 u2_sp_DDFREQ_PERIOD[IVI_DDFREQ_PTRN_NUM] = {
 /*===================================================================================================================================*/
 void            vd_g_Ivi_PwrCtrl_DDFreq_init(void)
 {
-    u1_g_pwrctrl_ddfreq_flg = (U1)IVI_DDFREQ_NON;
+    st_s_pwrctrl_req_flg.u1_req = (U1)FALSE;
+    st_s_pwrctrl_req_flg.u1_dd_type = (U1)IVI_DDFREQ_NON;
+    st_s_pwrctrl_req_flg.u1_adc_type = (U1)IVI_DDFREQ_NON;
 }
+
 /*===================================================================================================================================*/
 /*  void            vd_g_PwrCtrl_DDFreq(void)                                                                                    */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
@@ -94,28 +127,45 @@ void            vd_g_Ivi_PwrCtrl_DDFreq_init(void)
 void            vd_g_Ivi_PwrCtrl_DDFreq(void)
 {
     U2 u2_t_duty;
+    U1 u1_t_send[IVI_DDFREQ_REQ_NUM];
+    
+    u1_t_send[IVI_DDFREQ_DDREQ] = (U1)IVI_DDFREQ_DDPTRN_FAIL;
+    u1_t_send[IVI_DDFREQ_ADCREQ] = (U1)IVI_DDFREQ_ADCFAIL;
 
-    if(u1_g_pwrctrl_ddfreq_flg < IVI_DDFREQ_PTRN_NUM) {
-        u2_t_duty = IVI_SYS_PWM_DUTYCYCLE(5000U);     /* 50% */
-        vd_g_Pwm_SetPeriodAndDuty((U1)PWM_CH_00_DDC_FREQ,       u2_sp_DDFREQ_PERIOD[u1_g_pwrctrl_ddfreq_flg], u2_t_duty);
-        vd_g_Pwm_SetPeriodAndDuty((U1)PWM_CH_01_DDC_SIP_FREQ,   u2_sp_DDFREQ_PERIOD[u1_g_pwrctrl_ddfreq_flg], u2_t_duty);
-        vd_g_Pwm_SetPeriodAndDuty((U1)PWM_CH_02_DDC_ASIL_FREQ,  u2_sp_DDFREQ_PERIOD[u1_g_pwrctrl_ddfreq_flg], u2_t_duty);
-
-        /* 変更したらXSPIの応答関数をコールし、フラグを要求なしに変更 */
-        vd_g_XspiIviSub1DDconSend(u1_g_pwrctrl_ddfreq_flg);
-        u1_g_pwrctrl_ddfreq_flg = (U1)IVI_DDFREQ_NON;
+    if(st_s_pwrctrl_req_flg.u1_req == (U1)TRUE){
+        if(st_s_pwrctrl_req_flg.u1_dd_type < IVI_DDFREQ_DDPTRN_NUM) {
+            u2_t_duty = IVI_SYS_PWM_DUTYCYCLE(5000U);     /* 50% */
+            vd_g_Pwm_SetPeriodAndDuty((U1)PWM_CH_00_DDC_FREQ,       u2_sp_DDFREQ_PERIOD[st_s_pwrctrl_req_flg.u1_dd_type], u2_t_duty);
+            vd_g_Pwm_SetPeriodAndDuty((U1)PWM_CH_01_DDC_SIP_FREQ,   u2_sp_DDFREQ_PERIOD[st_s_pwrctrl_req_flg.u1_dd_type], u2_t_duty);
+            vd_g_Pwm_SetPeriodAndDuty((U1)PWM_CH_02_DDC_ASIL_FREQ,  u2_sp_DDFREQ_PERIOD[st_s_pwrctrl_req_flg.u1_dd_type], u2_t_duty);
+        	u1_t_send[IVI_DDFREQ_DDREQ] = st_s_pwrctrl_req_flg.u1_dd_type;
+        }
+        if(st_s_pwrctrl_req_flg.u1_adc_type < IVI_DDFREQ_ADCPTRN_NUM) {
+            if(st_s_pwrctrl_req_flg.u1_adc_type == (U1)IVI_DDFREQ_ADCPTRN_HI){
+                Dio_WriteChannel(IVI_DDFREQ_ADC_FREQ_SHIFT, (Dio_LevelType)TRUE);
+            }
+            else{
+                Dio_WriteChannel(IVI_DDFREQ_ADC_FREQ_SHIFT, (Dio_LevelType)FALSE);
+            }
+            u1_t_send[IVI_DDFREQ_ADCREQ] = st_s_pwrctrl_req_flg.u1_adc_type;
+        }
+        vd_g_XspiIviSub1DDconSend(&u1_t_send[0]);
+        st_s_pwrctrl_req_flg.u1_req = (U1)FALSE;
     }
 }
+
 /*===================================================================================================================================*/
-/*  void            vd_g_Ivi_PwrCtrl_DDFreq_ChgReq(void)                                                                             */
+/*  void            vd_g_Ivi_PwrCtrl_DDFreq_ChgReq(const U1 * u1_ap_REQDATA)                                                         */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Description:    PWM出力パターン変更要求                                                                                            */
-/*  Arguments:      u1_a_pwm_type : PWMパターン                                                                                       */
+/*  Description:    PWM出力パターン変更要求                                                                                          */
+/*  Arguments:      u1_ap_REQDATA : DDコン/ADC周波数切替要求                                                                         */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void            vd_g_Ivi_PwrCtrl_DDFreq_ChgReq(const U1 u1_a_pwm_type)
+void            vd_g_Ivi_PwrCtrl_DDFreq_ChgReq(const U1 * u1_ap_REQDATA)
 {
-    u1_g_pwrctrl_ddfreq_flg = (U1)u1_a_pwm_type;
+    st_s_pwrctrl_req_flg.u1_req = (U1)TRUE;
+    st_s_pwrctrl_req_flg.u1_dd_type = u1_ap_REQDATA[IVI_DDFREQ_DDREQ];
+    st_s_pwrctrl_req_flg.u1_adc_type = u1_ap_REQDATA[IVI_DDFREQ_ADCREQ];
 }
 
 /*===================================================================================================================================*/
@@ -127,11 +177,13 @@ void            vd_g_Ivi_PwrCtrl_DDFreq_ChgReq(const U1 u1_a_pwm_type)
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  0.0.0    11/11/2024  TN       New.                                                                                               */
+/*  0.1.0    11/03/2025  TaN      ADC-FREQ-SHIFT pin control added                                                                   */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  * TN   = Tetsu Naruse, Denso Techno                                                                                              */
+/*  * TaN  = Tatsuya Niimi, KSE                                                                                                      */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
