@@ -69,7 +69,7 @@ typedef struct{
 void            vd_g_XspiIviSub1SystemInit(void);
 void            vd_g_XspiIviSub1SystemMainTask(void);
 void            vd_g_XspiIviSub1SystemAna(const U1 * u1_ap_XSPI_ADD, const U2 u2_a_DATA_SIZE);
-void            vd_g_XspiIviSub1DDconSend(const U1 u1_a_DATA);
+void            vd_g_XspiIviSub1DDconSend(const U1 * u1_ap_DATA);
 void            vd_g_XspiIviSub1GpsStsSend(void);
 void            vd_g_XspiIviSub1GpsStsPut(const U1 u1_a_DATA);
 void            vd_g_XspiIviSub1ExtSiGSend(void);

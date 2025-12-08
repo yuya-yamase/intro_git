@@ -113,7 +113,12 @@
 #define XSPI_IVI_ACCL_AXS_CEN            (0x0000)
 #define XSPI_IVI_ACCL_TEMP_CEN           (0x0017)
 
-/*GセンサINT*/
+/*コマンドSubType*/
+#define XSPI_IVI_GYRO_COM_START_REQ      (0x01U)
+#define XSPI_IVI_GYRO_COM_START_RES      (0x02U)
+#define XSPI_IVI_GYRO_INIT_DATA_REQ      (0x03U)
+#define XSPI_IVI_GYRO_INIT_DATA_RES      (0x04U)
+#define XSPI_IVI_GYRO_DATA_SEND          (0x05U)
 #define XSPI_IVI_GYRO_INT_SET_REQ        (0x11U)
 #define XSPI_IVI_GYRO_INT_GET_REQ        (0x13U)
 #define XSPI_IVI_GYRO_INT_OUT_REQ        (0x15U)
@@ -380,17 +385,15 @@ static void            vd_s_XspiIviSub2GyroAna(const U1 * u1_ap_SUB2_ADD, const 
 
     u1_t_subtype = u1_ap_SUB2_ADD[0];
 
-    if((u1_t_subtype == (U1)u1_s_GYRO_SUBTYPE_COM_START_REQ) && (u1_s_xspi_ivi_com_start_flg == (U1)FALSE)) {
-        u1_s_xspi_ivi_com_start_flg = (U1)TRUE;
-    }else if(u1_t_subtype == (U1)u1_s_GYRO_SUBTYPE_INIT_DATA_REQ){
-        u1_s_xspi_ivi_ini_send_flg = (U1)TRUE;
-        u2_s_xspi_ivi_ini_buf_cnt = (U2)0U;
-    }else{
-        /* Do Nothing */
-    }
-
     switch (u1_t_subtype)
     {
+    case XSPI_IVI_GYRO_COM_START_REQ:
+        u1_s_xspi_ivi_com_start_flg = (U1)TRUE;
+        break;
+    case XSPI_IVI_GYRO_INIT_DATA_REQ:
+        u1_s_xspi_ivi_ini_send_flg = (U1)TRUE;
+        u2_s_xspi_ivi_ini_buf_cnt = (U2)0U;
+        break;
     case XSPI_IVI_GYRO_INT_SET_REQ:
         st_t_setdata.u1_threshold = u1_ap_SUB2_ADD[4];
         st_t_setdata.u1_axis_x = u1_ap_SUB2_ADD[5];
@@ -445,17 +448,18 @@ void            vd_g_XspiIviSub2Send(U1 * u1_ap_xspi_add)
     vd_g_MemfillU1(&u1_ap_xspi_add[0],(U1)0U,(U4)XSPI_IVI_SUBFRAME2_TOTAL_LENGTH);
 
     /*通信開始応答かそうじゃないか*/
-    if((u1_s_xspi_ivi_com_start_flg == (U1)TRUE) && (u1_s_xspi_ivi_comp_com_start == (U1)FALSE)) {
+    if((u1_s_xspi_ivi_com_start_flg == (U1)TRUE)) {
         /* 通信開始応答 */
         vd_s_XspiIviSub2FrameHeader(u1_ap_xspi_add,(U2)XSPI_IVI_COM_START_RES_LENGTH,(U2)0U);
-        u1_ap_xspi_add[8] = (U1)0x02;
+        u1_ap_xspi_add[8] = (U1)XSPI_IVI_GYRO_COM_START_RES;
         u1_ap_xspi_add[9] = (U1)0x00;
         u1_ap_xspi_add[10] = (U1)0x00;
         u1_ap_xspi_add[11] = (U1)0x00;
 
         u1_s_xspi_ivi_comp_com_start = (U1)TRUE;
+        u1_s_xspi_ivi_com_start_flg = (U1)FALSE;
         u4_s_xspi_ivi_task_cnt[XSPI_TASK_CNT_GYRO] = (U4)0U;
-    }else if((u1_s_xspi_ivi_com_start_flg == (U1)TRUE) && (u1_s_xspi_ivi_comp_com_start == (U1)TRUE)){
+    }else if(u1_s_xspi_ivi_comp_com_start == (U1)TRUE){
         /*Gyroセンサデータ取得処理*/
         vd_s_XspiIviSub2SenSensorData(u1_ap_xspi_add);
     }else{
@@ -487,7 +491,7 @@ static void            vd_s_XspiIviSub2SenSensorData(U1 * u1_ap_xspi_add)
         /*定期送信処理*/
         vd_s_XspiIviSub2FrameHeader(u1_ap_xspi_add,(U2)XSPI_IVI_DATA_LENGTH,(U2)0U);
         vd_g_MemcpyU1(&u1_ap_xspi_add[8], &u1_sp_xspi_ivi_gyro_data[0], (U4)XSPI_IVI_DATA_LENGTH);
-        u1_ap_xspi_add[8]  = (U1)0x05; /*SubType*/
+        u1_ap_xspi_add[8]  = (U1)XSPI_IVI_GYRO_DATA_SEND; /*SubType*/
         u1_ap_xspi_add[9]  = (U1)0x00; /*Reserve*/
         u1_ap_xspi_add[10] = (U1)0x00; /*Reserve*/
         u1_ap_xspi_add[11] = (U1)0x00; /*Reserve*/
@@ -502,7 +506,7 @@ static void            vd_s_XspiIviSub2SenSensorData(U1 * u1_ap_xspi_add)
             vd_s_XspiIviSub2FrameHeader(u1_ap_xspi_add,(U2)XSPI_IVI_INIT_DATA_LENGTH,u2_s_xspi_ivi_ini_buf_cnt);
 
             /*初回送信の0-7byteフィールド*/
-            u1_ap_xspi_add[8]  = (U1)0x04; /*SubType*/
+            u1_ap_xspi_add[8]  = (U1)XSPI_IVI_GYRO_INIT_DATA_RES; /*SubType*/
             u1_ap_xspi_add[9]  = (U1)0x00; /*Reserve*/
             u1_ap_xspi_add[10] = (U1)0x00; /*Reserve*/
             u1_ap_xspi_add[11] = (U1)0x00; /*Reserve*/

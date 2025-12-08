@@ -121,6 +121,8 @@ void            vd_g_DateSITimCfgCanTxOffst(const S4 s4_a_SEC, const U1 u1_a_EVE
 void            vd_g_DateSITimCfgCanTxHk(void);
 U1              u1_g_DateSITimCfgBusSlpOk(void);
 U1              u1_g_DateSITimCfgCanRxHk(void);
+S4              s4_g_DateSITimCfgBonOfstTime(void);
+S4              s4_g_DateSITimCfgWkupOfstTime(void);
 U1              u1_g_DateSITimCfgInitOfstTime(S4 * s4p_a_offset_time);
 void            vd_g_DateSITimCfgOfstRoutine(void);
 void            vd_g_DateSITimCfgOfstAdjStart(void);
