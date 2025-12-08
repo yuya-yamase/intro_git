@@ -475,7 +475,7 @@ U1      u1_g_VdfEsoRx_SW_TITE(void)
         u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
     }
     else{
-        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_UNK;
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_INA;
     }
 
     return(u1_t_ava_rx);
@@ -501,6 +501,7 @@ U1      u1_g_VdfEsoRx_SW_TITE(void)
 /*  BEV-4     2/10/2025   HF      Added function for BEV System_Consideration_1.(MET-B_LMPBB-CSTD-0-)                                */
 /*  BEV-5     5/30/2025   SN      Added function for BEV System_Consideration_2.(MET-B_TITEBB-CSTD-0-)                               */
 /*  BEV-6    12/03/2025   KO      Added function for BEV System_Consideration_ADAS.(MET-B_OMRBB-CSTD-0-)                             */
+/*  BEV-7    12/03/2025   MA      SW_TITE Function presence judgment processing changed to bidirectional.(MET-B_TITEBB-CSTD-0-)      */
 /*                                                                                                                                   */
 /*  * KT = Kenta Takaji, Denso Techno                                                                                                */
 /*  * HY = Haruki Yagi, KSE                                                                                                          */
@@ -508,4 +509,5 @@ U1      u1_g_VdfEsoRx_SW_TITE(void)
 /*  * HF = Hinari Fukamachi, KSE                                                                                                     */
 /*  * SN = Shizuka Nakajima, KSE                                                                                                     */
 /*  * KO = Kazuto Oishi, Denso Techno                                                                                                */
+/*  * MA = Misaki Aiki, Dendo Techno                                                                                                 */
 /*===================================================================================================================================*/
