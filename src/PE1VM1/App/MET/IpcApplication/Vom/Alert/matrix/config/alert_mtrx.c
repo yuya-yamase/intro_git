@@ -51,7 +51,6 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 const ST_ALERT_TASK         st_gp_ALERT_TASK_CFG[]   = {
     /* stp_MTRX,                             u2_ch_begin,                           u1_num_mtrx,                        u1_slot      */
-    {  &st_gp_ALERT_B_AIRBAG_MTRX[0],        (U2)ALERT_CH_B_AIRBAG,                 (U1)ALERT_B_AIRBAG_CH_NUM,          (U1)0U  },
     {  &st_gp_ALERT_B_ALOA2_MTRX[0],         (U2)ALERT_CH_B_ALOA2,                  (U1)ALERT_B_ALOA2_CH_NUM,           (U1)0U  },
     {  &st_gp_ALERT_B_AVAS_MTRX[0],          (U2)ALERT_CH_B_AVAS,                   (U1)ALERT_B_AVAS_CH_NUM,            (U1)0U  },
     {  &st_gp_ALERT_B_BLGT_MTRX[0],          (U2)ALERT_CH_B_BLGT,                   (U1)ALERT_B_BLGT_CH_NUM,            (U1)0U  },
@@ -94,6 +93,7 @@ const ST_ALERT_TASK         st_gp_ALERT_TASK_CFG[]   = {
     {  &st_gp_ALERT_H_BATTRW_MTRX[0],        (U2)ALERT_CH_H_BATTRW_BC,              (U1)ALERT_H_BATTRW_CH_NUM,          (U1)0U  },
     {  &st_gp_ALERT_O_PDSMAL_MTRX[0],        (U2)ALERT_CH_O_PDSMAL_BC,              (U1)ALERT_O_PDSMAL_CH_NUM,          (U1)0U  },
     {  &st_gp_ALERT_B_TURHAZ_MTRX[0],        (U2)ALERT_CH_B_TURHAZ_L,               (U1)ALERT_B_TURHAZ_CH_NUM,          (U1)0U  },
+    {  &st_gp_ALERT_B_AIRBAG_MTRX[0],        (U2)ALERT_CH_B_AIRBAG,                 (U1)ALERT_B_AIRBAG_CH_NUM,          (U1)1U  },
     {  &st_gp_ALERT_B_PEDPRO_MTRX[0],        (U2)ALERT_CH_B_PEDPRO,                 (U1)ALERT_B_PEDPRO_CH_NUM,          (U1)1U  },
     {  &st_gp_ALERT_C_ABS_MTRX[0],           (U2)ALERT_CH_C_ABS_TT,                 (U1)ALERT_C_ABS_CH_NUM,             (U1)1U  },
     {  &st_gp_ALERT_C_BRKHLD_MTRX[0],        (U2)ALERT_CH_C_BRKHLD_STBY,            (U1)ALERT_C_BRKHLD_CH_NUM,          (U1)1U  },
@@ -311,6 +311,7 @@ void    vd_g_AlertMtrxInit(void)
 /*  BEV-14   11/27/2025  PG       Change for BEV System_Consideration_ADAS. (MET-S_TMTT-CSTD-0-01-A-C0)                              */
 /*  BEV-15   11/28/2025  HL       Change for BEV System_Consideration_ADAS.(MET-S_TMBZR-CSTD-0-01-A-C0)                              */
 /*  BEV-16   12/04/2025  SH       Change for BEV System_Consideration_ADAS.(MET-B_TURHAZ-CSTD-1-01-A-C1)                             */
+/*  BEV-17   12/05/2025  KH       Change for BEV System_Consideration_ADAS.(MET-C_STEER-CSTD-0-02-B-C0)                              */
 /*                                                                                                                                   */
 /*  * YI   = Yoshiki Iwata, Denso                                                                                                    */
 /*  * RS   = Ryuki Sako,      Denso Techno                                                                                           */
@@ -322,5 +323,6 @@ void    vd_g_AlertMtrxInit(void)
 /*  * PG   = Patrick Garcia,  DTPH                                                                                                   */
 /*  * HL   = Harry Lapiceros,  DTPH                                                                                                  */
 /*  * SH   = Sae Hirose,      Denso Techno                                                                                           */
+/*  * KH   = Kiko Huerte,     DTPH                                                                                                   */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

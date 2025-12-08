@@ -140,12 +140,11 @@
 #define ALERT_SPD_FLUCT_DECR                     (VEHSPD_FLUCT_DECR)
 #define ALERT_PTSYS_0F_UNK                       (VDF_PTS_RX_0F_UNK)
 #define ALERT_PTSYS_1F_NRX                       (VDF_PTS_RX_1F_NRX)
-#define ALERT_STEER_VD_PTSYS_UNDEF               (VDF_PTS_RX_00_UNK)
-#define ALERT_STEER_VD_PTSYS_HV                  (VDF_PTS_RX_03_HYB)
-#define ALERT_STEER_VD_PTSYS_PHV                 (VDF_PTS_RX_04_HYB_PLU)
-#define ALERT_STEER_VD_PTSYS_EV                  (VDF_PTS_RX_05_ELE_BAT)
-#define ALERT_STEER_VD_PTSYS_HV_MOT              (VDF_PTS_RX_06_HYB_MOT)
-#define ALERT_STEER_VD_PTSYS_FCV                 (VDF_PTS_RX_07_ELE_HYD)
+#define ALERT_STEER_VD_PTINFB_UNK                (VDF_PTINFB_RX_0F_UNK)
+#define ALERT_STEER_VD_PTINFB_HEV                (VDF_PTINFB_RX_01_HEV)
+#define ALERT_STEER_VD_PTINFB_PHEV               (VDF_PTINFB_RX_02_PHEV)
+#define ALERT_STEER_VD_PTINFB_FCEV               (VDF_PTINFB_RX_03_FCEV)
+#define ALERT_STEER_VD_PTINFB_BEV                (VDF_PTINFB_RX_04_BEV)
 #if 0   /* BEV Rebase provisionally */
 #define ALERT_SHIFT_BZ_REV_SOUNDTYPE_IN          (VDF_DS_2E_SBWC2_IN)
 #else   /* BEV Rebase provisionally */
@@ -159,6 +158,7 @@
 #define u1_g_AlertSpdKmphInst(u2_ap_kmph, u1_a_OW_EN)               (u1_g_VehspdKmphInst(u2_ap_kmph, u1_a_OW_EN))
 #define u1_g_AlertSpdFluctStat()                                    (u1_g_VehspdFluctStat())
 #define u1_g_AlertPtsys()                                           (u1_g_VardefPtsRx())
+#define u1_g_AlertPtinfb()                                          (u1_g_VardefPtinfbRx())
 #if 0   /* BEV Rebase provisionally */
 #define u4_g_AlertRevBzrSoundType()                                 (u4_g_VardefDs2E_Las32((U2)VDF_DS_2E_20C2))
 #else   /* BEV Rebase provisionally */
