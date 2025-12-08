@@ -191,6 +191,7 @@ static void     vd_s_XspiIviRoutine(void)
     vd_g_XspiIviCANBusGet2M();
     vd_g_XspiIviCANBusGet5M();
     vd_g_XspiIviCANBusEventJdg();
+    vd_g_XspiIviDrecSgnlGet();
 }
 
 /*===================================================================================================================================*/

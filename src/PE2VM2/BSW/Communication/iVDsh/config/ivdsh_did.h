@@ -52,7 +52,7 @@
 #define IVDSH_DID_WRI_VM2TO1_MET1S70             (20U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define IVDSH_NUM_DID_REA                        (20U)
+#define IVDSH_NUM_DID_REA                        (21U)
 
 /* Read from VM#0 */
 #define IVDSH_DID_REA_CANBUS_STS_2M1             (21U)
@@ -69,14 +69,15 @@
 #define IVDSH_DID_REA_VM1TO2_FLYNOP              (31U)
 #define IVDSH_DID_REA_VM1TO23_FSLP               (32U)
 #define IVDSH_DID_REA_VM1TO2_WHLINI_RES          (33U)
+#define IVDSH_DID_REA_VM1TO2_MET1D51             (34U)
 /* Read from VM#3 */
-#define IVDSH_DID_REA_VM3TO2_SIPERR_INF          (34U)
-#define IVDSH_DID_REA_VM3TO2_OTA_OFFSTS          (35U)
-#define IVDSH_DID_REA_VM3TO2_BOOTLOG_INF         (36U)
-#define IVDSH_DID_REA_VM3TO12_RESTART            (37U)
-#define IVDSH_DID_REA_VM3TO2_BOOT_CNT            (38U)
-#define IVDSH_DID_REA_VM3TO2_BOOT_TIME           (39U)
-#define IVDSH_DID_REA_GPS_STS                    (40U)
+#define IVDSH_DID_REA_VM3TO2_SIPERR_INF          (35U)
+#define IVDSH_DID_REA_VM3TO2_OTA_OFFSTS          (36U)
+#define IVDSH_DID_REA_VM3TO2_BOOTLOG_INF         (37U)
+#define IVDSH_DID_REA_VM3TO12_RESTART            (38U)
+#define IVDSH_DID_REA_VM3TO2_BOOT_CNT            (39U)
+#define IVDSH_DID_REA_VM3TO2_BOOT_TIME           (40U)
+#define IVDSH_DID_REA_GPS_STS                    (41U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define IVDSH_NUM_DID                            (IVDSH_NUM_DID_WRI + IVDSH_NUM_DID_REA)
