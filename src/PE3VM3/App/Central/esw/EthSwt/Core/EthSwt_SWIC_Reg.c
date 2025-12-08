@@ -80,15 +80,12 @@ static Std_ReturnType swic_Reg_SetTblReadON(const swic_reg_data_t tbl[], const u
 	uint32			i;
 	uint16			cnt = 0u;
 	uint32			startTime;
-	uint32			endTime;
+	uint32			pastTime;
 	Std_ReturnType	checkPwr;
 
-	LIB_DI();
-	startTime = EthSwt_SWIC_Time_Get();
-	LIB_EI();
+	startTime = EthSwt_SWIC_Time_GetCurrentTime();
 
 	for (i = 0uL ; i < SWIC_REG_WAIT_L ; i++) {				/* ★ループガードについて要検討 */
-		uint16	tmo;
 		result = EthSwt_SWIC_Spi_ReadSPI(tbl, idx, &val);
 		if (result == E_OK) {
 			if (((val ^ value) & mask) == 0u) { break; }
@@ -108,16 +105,9 @@ static Std_ReturnType swic_Reg_SetTblReadON(const swic_reg_data_t tbl[], const u
 			}
 		}
 
-		LIB_DI();
-		endTime = EthSwt_SWIC_Time_Get();
-		LIB_EI();
-		if (endTime < startTime) {
-			tmo = (0xFFFFFFFF - startTime) + endTime + 1;
-		} else {
-			tmo = endTime - startTime;
-		}
+		pastTime = EthSwt_SWIC_Time_GetPastTime(startTime);
 		
-		if (tmo > SWIC_REG_WAIT) {
+		if (pastTime > SWIC_REG_WAIT) {
 			*errFactor = D_ETHSWT_SWIC_ERR_BUSY;
 			 break;
 		}
