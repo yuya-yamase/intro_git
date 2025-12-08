@@ -24,6 +24,9 @@
 #define PWRCTRL_ETH_REQ_NON                (0U)                              /* EtherSW要求無し */
 #define PWRCTRL_ETH_REQ_OFF                (1U)                              /* EtherSW終了要求 */
 #define PWRCTRL_ETH_REQ_ON                 (2U)                              /* EtherSW起動要求 */
+/* SAILへの起動要因通知定義 */
+#define PWRCTRL_SIP_SOCRST_NORMAL          (VIS_SOCRST_NORMAL)               /* SoCリセット起動要因：通常起動 */
+#define PWRCTRL_SIP_SOCRST_ABNORMAL        (VIS_SOCRST_ABNORMAL)             /* SoCリセット起動要因：強制リセット起動 */
 
 /* SIP電源ON用定義 */
 #define PWRCTRL_SIP_ON_T_VB33_SIP_ON       (0U)                              /* tVB33-SIP-ON:0ms                                                     */
@@ -144,6 +147,9 @@ static U1 u1_s_PwrCtrl_Sip_Pwr_Sts;
 static U1 u1_s_PwrCtrl_Sip_WAKEUP_STAT1;
 static U1 u1_s_PwrCtrl_Sip_WAKEUP_STAT2;
 static U1 u1_s_PwrCtrl_Sip_WAKEUP_STAT3;
+
+/* SoCリセット起動要因 */
+static U1 u1_s_PwrCtrl_Sip_Soc_Rst;
 
 static U1 u1_s_PwrCtrl_Sip_On_Step;
 static U4 u4_s_PwrCtrl_Sip_On_VB33SIPON_Tim;
@@ -523,6 +529,9 @@ void vd_g_PwrCtrlSipBonInit( void )
     /* WAKEUP-STAT端子状態のRIM更新 */
     vd_g_Rim_WriteU1((U2)RIMID_U1_PWCTR_SOC_WU_STAT1, u1_s_PwrCtrl_Sip_WAKEUP_STAT1);
     vd_g_Rim_WriteU1((U2)RIMID_U1_PWCTR_SOC_WU_STAT2, u1_s_PwrCtrl_Sip_WAKEUP_STAT2);
+    
+    /* SoCリセット起動要因の初期化 */
+    u1_s_PwrCtrl_Sip_Soc_Rst                          = PWRCTRL_SIP_SOCRST_NORMAL;
 
     /* 待機時間測定用RAMの初期化 */
     /* SiP通常起動 */
@@ -665,6 +674,20 @@ void vd_g_PwrCtrlSipWkupInit( void )
     }
     /* WAKEUP-STAT3初期化 */
     u1_s_PwrCtrl_Sip_WAKEUP_STAT3 = (U1)MCU_DIO_LOW;
+    
+    /* SoCリセット起動要因の初期化 */
+    /* WAKEUP-STAT2に記録したRIMからデータの読み出し成功かつ、読み出し結果がSoC異常起動の場合 */
+    if(((u1_t_wust2_ret & (U1)RIM_RESULT_KIND_MASK) == (U1)RIM_RESULT_KIND_OK) &&
+      (u1_t_wust2_buf == (U1)MCU_DIO_HIGH))
+    {
+        /* SoCリセット起動要因：強制リセット起動を設定 */
+        u1_s_PwrCtrl_Sip_Soc_Rst = PWRCTRL_SIP_SOCRST_ABNORMAL;
+    }
+    else
+    {
+        /* SoCリセット起動要因：通常起動を設定 */
+        u1_s_PwrCtrl_Sip_Soc_Rst = PWRCTRL_SIP_SOCRST_NORMAL;
+    }
 
     /* 待機時間測定用RAMの初期化 */
     /* SiP通常起動 */
@@ -1100,10 +1123,10 @@ void vd_g_PwrCtrlSipSoCOnComp(void)
 
 /*****************************************************************************
   Function      : vd_g_PwrCtrlSipSoCOnError
-  Description   : SIP共通 SoC異常検知時のWAKEUP-STAT2設定関数
+  Description   : SIP共通 SoC異常検知時の状態設定関数
   param[in/out] : -
   return        : -
-  Note          : none
+  Note          : 設定対象：WAKEUP-STAT2、SAILへの起動要因通知
 *****************************************************************************/
 void vd_g_PwrCtrlSipSoCOnError(void)
 {
@@ -1111,7 +1134,35 @@ void vd_g_PwrCtrlSipSoCOnError(void)
     u1_s_PwrCtrl_Sip_WAKEUP_STAT2 = (U1)MCU_DIO_HIGH;
     vd_g_Rim_WriteU1((U2)RIMID_U1_PWCTR_SOC_WU_STAT2, u1_s_PwrCtrl_Sip_WAKEUP_STAT2);
 
+    /* SAILへの起動要因に強制リセット起動を設定 */
+    u1_s_PwrCtrl_Sip_Soc_Rst = PWRCTRL_SIP_SOCRST_ABNORMAL;
     return;
+}
+
+/*****************************************************************************
+  Function      : u1_g_PwrCtrlSipSoCRstSts
+  Description   : SIP共通 SoCリセット起動要因通知関数
+  param[in/out] : -
+  return        : PWRCTRL_SIP_SOCRST_NORMAL   0x01 SoCリセット起動要因：通常起動
+                  PWRCTRL_SIP_SOCRST_ABNORMAL 0x02 SoCリセット起動要因：強制リセット起動
+  Note          : none
+*****************************************************************************/
+U1 u1_g_PwrCtrlSipSoCRstSts( void )
+{
+    return(u1_s_PwrCtrl_Sip_Soc_Rst);
+}
+
+/*****************************************************************************
+  Function      : vd_g_PwrCtrlSipSoCRstClr
+  Description   : SIP共通 SoCリセット起動要因クリア関数
+  param[in/out] : -
+  return        : -
+  Note          : none
+*****************************************************************************/
+void vd_g_PwrCtrlSipSoCRstClr( void )
+{
+    /* SoCリセット起動要因に通常起動を設定 */
+    u1_s_PwrCtrl_Sip_Soc_Rst = PWRCTRL_SIP_SOCRST_NORMAL;
 }
 
 /*****************************************************************************

@@ -83,6 +83,11 @@ void vd_g_PwrCtrlSipSoCOnComp( void );
 /* SoC異常検知通知関数 */
 void vd_g_PwrCtrlSipSoCOnError( void );
 
+/* SoCリセット起動要因通知関数 */
+U1 u1_g_PwrCtrlSipSoCRstSts( void );
+/* SoCリセット起動要因クリア関数 */
+void vd_g_PwrCtrlSipSoCRstClr( void );
+
 #endif /* PWRCTRL_SIP_H */
 
 /**** End of File ***********************************************************/

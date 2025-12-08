@@ -648,6 +648,7 @@ static void vd_s_PwrCtrlMainBonSeq( void )
     U1 u1_t_sipon_seq;                                                         /* SIP電源ONシーケンス状態問い合わせ結果 */
     U1 u1_t_read_lv;                                                           /* MCU端子状態取得結果 */
     U1 u1_t_foff_req;                                                          /* SIP電源強制OFFシーケンス要求確認結果 */
+    U1 u1_t_socrst;                                                            /* SoCリセット起動要因取得 */
 
     u1_t_foff_req = (U1)PWRCTRL_MAIN_FORCEDOFF_STS_INIT;
 /* /BU-DET =Hi? */
@@ -705,6 +706,12 @@ static void vd_s_PwrCtrlMainBonSeq( void )
 #endif
         {
             u1_s_PwrCtrl_Main_SipPwrSts = (U1)PWRCTRL_MAIN_SIP_STS_COMP;       /* SIP電源状態：MM_STBY_N=Hi判定中→完了 */
+            /* MM_STBY_N =Hiを検知したら */
+            /* VISドメインにSoCリセット起動要因を通知 */
+            u1_t_socrst = u1_g_PwrCtrlSipSoCRstSts();
+            vd_g_VISPwrSocRstNotify(u1_t_socrst);
+            /* VISドメインに通知後に状態をクリア */
+            vd_g_PwrCtrlSipSoCRstClr();
         }
 
         else{
@@ -761,6 +768,7 @@ static void vd_s_PwrCtrlMainWakeUpSeq( void )
     U1 u1_t_str;                                                                                           /* STRモード状態 */
     U1 u1_t_sail_err1;                                                                                     /* SAIL-ERR[1]状態 */
     U1 u1_t_sail_err2;                                                                                     /* SAIL-ERR[2]状態 */
+    U1 u1_t_socrst;                                                                                        /* SoCリセット起動要因取得 */
 
     u1_t_foff_req = (U1)PWRCTRL_MAIN_FORCEDOFF_STS_INIT;
 /* /BU-DET =Hi? */
@@ -803,8 +811,6 @@ static void vd_s_PwrCtrlMainWakeUpSeq( void )
                 u1_t_str = u1_g_PwrCtrlComGetSTRMode();
                 if(u1_t_str == (U1)PWRCTRL_COM_STR_ON){
                     /* 【todo】異常内容保存[ID0009]※STRがON時のみ記録 */
-                    /* SoC異常検知を通知 */
-                    vd_g_PwrCtrlSipSoCOnError();
                 }
                 /* +B-ONシーケンスのSIP通常起動から開始 */
                 vd_s_PwrCtrlMainBonDDconvOnReq();
@@ -913,6 +919,12 @@ static void vd_s_PwrCtrlMainWakeUpSeq( void )
 #endif
         {
             u1_s_PwrCtrl_Main_SipPwrSts = (U1)PWRCTRL_MAIN_SIP_STS_COMP;                                  /* SIP電源状態：MM_STBY_N=Hi判定中→完了 */
+            /* MM_STBY_N =Hiを検知したら */
+            /* VISドメインにSoCリセット起動要因を通知 */
+            u1_t_socrst = u1_g_PwrCtrlSipSoCRstSts();
+            vd_g_VISPwrSocRstNotify(u1_t_socrst);
+            /* VISドメインに通知後に状態をクリア */
+            vd_g_PwrCtrlSipSoCRstClr();
             
             /* 【todo】4.0版参照 Wait time (MIN)5秒、(TYP)6秒、(MAX)20秒 4.0版参照 */
             /* 【todo】4.0版参照 5-7. SAIL UART Message監視開始 4.0版参照 */
