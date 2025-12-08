@@ -50,11 +50,11 @@
 #define PWRCTRL_SIP_ON_T_SAIL_RESOUT_N     (0U)                              /* SAIL_RESOUT_N:0ms                                                    */
 #define PWRCTRL_SIP_ON_T_PMA_PS_HOLD_VAL   (0U)                              /* PMA_PS_HOLD:0ms                                                      */
 #define PWRCTRL_SIP_ON_T_PM_PWR_EN_N_ELPSD ( 50U / PWRCTRL_CFG_TASK_TIME)    /* PN_PWR_EN_N=Lo→Hiの必要時間:50ms                                    */
-#define PWRCTRL_SIP_ON_WAIT_POFFCOMP_AOSS  ( 50U / PWRCTRL_CFG_TASK_TIME)    /* POFF_COMPLETE_N =Lo & AOSS_SLEEP_ENTRY_EXIT =Loチェック待機時間:50ms */
-#define PWRCTRL_SIP_ON_WAIT_PMA_PS_HOLD_LO (300U / PWRCTRL_CFG_TASK_TIME)    /* PMA_PS_HOLD =Loチェック待機時間:300ms                                */
+#define PWRCTRL_SIP_ON_WAIT_POFFCOMP_AOSS  (100U / PWRCTRL_CFG_TASK_TIME)    /* POFF_COMPLETE_N =Lo & AOSS_SLEEP_ENTRY_EXIT =Loチェック待機時間:100ms*/
+#define PWRCTRL_SIP_ON_WAIT_PMA_PS_HOLD_LO (100U / PWRCTRL_CFG_TASK_TIME)    /* PMA_PS_HOLD =Loチェック待機時間:100ms                                */
 #define PWRCTRL_SIP_ON_WAIT_POFFCOMP       (300U / PWRCTRL_CFG_TASK_TIME)    /* POFF_COMPLETE_N =Hiチェック待機時間:300ms                            */
-#define PWRCTRL_SIP_ON_WAIT_SOC_SAIL_RES   (200U / PWRCTRL_CFG_TASK_TIME)    /* SOC_RESOUT_N =Hi & SAIL_RESOUT_N =Hiチェック待機時間:200ms           */
-#define PWRCTRL_SIP_ON_WAIT_PMA_PS_HOLD_HI (200U / PWRCTRL_CFG_TASK_TIME)    /* PMA_PS_HOLD =Hiチェック待機時間:200ms                                */
+#define PWRCTRL_SIP_ON_WAIT_SOC_SAIL_RES   (100U / PWRCTRL_CFG_TASK_TIME)    /* SOC_RESOUT_N =Hi & SAIL_RESOUT_N =Hiチェック待機時間:100ms           */
+#define PWRCTRL_SIP_ON_WAIT_PMA_PS_HOLD_HI (100U / PWRCTRL_CFG_TASK_TIME)    /* PMA_PS_HOLD =Hiチェック待機時間:100ms                                */
 
 /* SIPレジューム用定義 */
 #define PWRCTRL_SIP_RSM_T_LOW_POWER_ON     (0U)                              /* tLOW-POWER-ON_HI:0ms                                                 */
@@ -110,7 +110,7 @@
 #define PWRCTRL_SIP_FOFF_T_MM_OFF_REQ_LO   (0U)                              /* tMM_OFF_REQ_LO:0ms                                                   */
 #define PWRCTRL_SIP_FOFF_T_DDCONV_OFF_WAIT (  10U / PWRCTRL_CFG_TASK_TIME)   /* DDコンに対するOFF区間確保時間:10ms                                   */
 #define PWRCTRL_SIP_FOFF_WAIT_POFF_COMP    ( 100U / PWRCTRL_CFG_TASK_TIME)   /* POFF_COMPLETE_N =Loチェック待機時間:100ms                            */
-#define PWRCTRL_SIP_FOFF_WAIT_POFF_COMP_P2 (5000U / PWRCTRL_CFG_TASK_TIME)   /* POFF_COMPLETE_N =Loチェック待機時間:5秒                              */
+#define PWRCTRL_SIP_FOFF_WAIT_POFF_COMP_P2 ( 100U / PWRCTRL_CFG_TASK_TIME)   /* POFF_COMPLETE_N =Loチェック待機時間:100ms                              */
 
 /*--------------------------------------------------------------------------*/
 /* Types                                                                    */
@@ -1374,7 +1374,7 @@ static void vd_s_PwrCtrlSipOnStep2( void )
             u4_s_PwrCtrl_Sip_On_POFFCOMP_Wait_Tim = (U4)PWRCTRL_SIP_TIME_INIT;
            }
 
-        /* STEP2-2、2-3が50ms経過しても完了してなければSTEPを完了させる */
+        /* STEP2-2、2-3が100ms経過しても完了してなければSTEPを完了させる */
         else{
             if((u4_s_PwrCtrl_Sip_On_AOSS_Wait_Tim > PWRCTRL_SIP_ON_WAIT_POFFCOMP_AOSS) ||
               (u4_s_PwrCtrl_Sip_On_POFFCOMP_Wait_Tim > PWRCTRL_SIP_ON_WAIT_POFFCOMP_AOSS)){
@@ -1455,7 +1455,7 @@ static void vd_s_PwrCtrlSipOnStep4( void )
         }
 
         else{
-            /* STEP4-1が300ms経過しても完了してなければSTEPを完了させる */
+            /* STEP4-1が100ms経過しても完了してなければSTEPを完了させる */
             if(u4_s_PwrCtrl_Sip_On_PMA_PS_HOLD_Wait_Tim > (U4)PWRCTRL_SIP_ON_WAIT_PMA_PS_HOLD_LO){
                 /* 強制OFFシーケンス(SoC異常)要求を設定 */
                 u1_s_PwrCtrl_Sip_FOff_Sts = (U1)PWRCTRL_SIP_FORCEDOFF_SOCERR;
@@ -1559,7 +1559,7 @@ static void vd_s_PwrCtrlSipOnStep6( void )
         }
 
         else{
-            /* STEP6-1、6-2が200ms経過しても完了してなければSTEPを完了させる */
+            /* STEP6-1、6-2が100ms経過しても完了してなければSTEPを完了させる */
             if((u4_s_PwrCtrl_Sip_On_SOC_RESOUT_Wait_Tim > (U4)PWRCTRL_SIP_ON_WAIT_SOC_SAIL_RES) ||
               (u4_s_PwrCtrl_Sip_On_SAIL_RESOUT_Wait_Tim > (U4)PWRCTRL_SIP_ON_WAIT_SOC_SAIL_RES)){
                 /* 強制OFFシーケンス(PMIC異常)要求を設定 */
@@ -1610,7 +1610,7 @@ static void vd_s_PwrCtrlSipOnStep7( void )
         }
 
         else{
-            /* STEP8-1が200ms経過しても完了してなければSTEPを完了させる */
+            /* STEP8-1が100ms経過しても完了してなければSTEPを完了させる */
             if(u4_s_PwrCtrl_Sip_On_PMA_PS_HOLD_Wait_Tim > (U4)PWRCTRL_SIP_ON_WAIT_PMA_PS_HOLD_HI){
                 /* 強制OFFシーケンス(SoC異常)要求を設定 */
                 u1_s_PwrCtrl_Sip_FOff_Sts = (U1)PWRCTRL_SIP_FORCEDOFF_SOCERR;
@@ -2202,7 +2202,7 @@ static void vd_s_PwrCtrlSipForcedOffStep3( void )
         }
 
         else{
-            /* STEP3が5秒経過しても完了していなければ異常内容を保存してから次のSTEPに進める */
+            /* STEP3が100ms経過しても完了していなければ異常内容を保存してから次のSTEPに進める */
             if(u4_s_PwrCtrl_Sip_ForcedOff_POFFCOMP_Wait_Step4_Tim > (U4)PWRCTRL_SIP_FOFF_WAIT_POFF_COMP_P2){
                 u1_s_PwrCtrl_Sip_ForcedOff_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP4;
                 /* 【todo】異常内容の保存[ID0021] */
