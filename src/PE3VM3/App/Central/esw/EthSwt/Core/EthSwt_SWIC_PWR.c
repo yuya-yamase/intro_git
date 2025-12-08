@@ -322,6 +322,8 @@ static uint32 ethswt_swic_pwr_act_resume (void)
     G_SWIC_PWR_ResetAssertCount = 0;
     G_SWIC_PWR_ResetDeassertCount = 0;
 
+    ETHSWT_SWIC_PWR_NOTIFY();
+    
     return D_ETHSWT_SWIC_PWR_ST_ON;
 }
 /* -------------------------------------------------------------------------- */

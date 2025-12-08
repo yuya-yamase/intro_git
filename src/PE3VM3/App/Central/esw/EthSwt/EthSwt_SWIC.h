@@ -3,6 +3,7 @@
 #include <Std_Types.h>
 #include <EthSwt_SWIC_Cfg.h>
 #include <EthSwt.h>
+#include <EthSwt_SWIC_MIB.h>
 
 void EthSwt_SWIC_Init(const EthSwt_ConfigType *CfgPtr);
 Std_ReturnType EthSwt_SWIC_SetSwitchPortMode(uint8 SwitchIdx, uint8 SwitchPortIdx, Eth_ModeType PortMode);
@@ -12,4 +13,5 @@ void EthSwt_SWIC_LoProc(void);
 void EthSwt_SWIC_BackgroundTask(void);
 void EthSwt_SWIC_PowerOn(void);
 void EthSwt_SWIC_PowerOff(void);
+EthSwt_StateType EthSwt_SWIC_GetEthSwtState(uint8 SwitchIdx);
 #endif /*ETHSWT_SWIC_H*/

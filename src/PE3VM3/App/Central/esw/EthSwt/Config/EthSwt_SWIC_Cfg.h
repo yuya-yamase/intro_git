@@ -33,6 +33,8 @@ void EthSwt_SWIC_Cfg_SetPowerOff(void);
 void EthSwt_SWIC_Cfg_SetResetAssert(void);
 void EthSwt_SWIC_Cfg_SetResetDeassert(void);
 
+#define ETHSWT_SWIC_PWR_NOTIFY()                  	EthSwt_Data_NotifySWICReset()
+
 /* -------------------------------------------------------------------------- */
 /* Config for EthSwt_SWIC_STM.c                                               */
 /* -------------------------------------------------------------------------- */
@@ -57,10 +59,66 @@ Std_ReturnType EthSwt_SWIC_Cfg_AllowSetRegister(void);
 /* -------------------------------------------------------------------------- */
 /* Config for EthSwt_SWIC_Link.c                                              */
 /* -------------------------------------------------------------------------- */
-#define D_ETHSWT_SWIC_LINK_FAST_GET_TMO             (70U)
+#include <EthSwt_Data.h>
 #define D_ETHSWT_SWIC_LINK_GET_CYCLE                (100U)
 
+#define ETHSWT_SWIC_LINK_NOTIFY(SwitchPortIdx, result, state)		EthSwt_Data_NotifyLink(SwitchPortIdx, result, state)
 
+/* -------------------------------------------------------------------------- */
+/* Config for EthSwt_SWIC_MIB.c                                               */
+/* -------------------------------------------------------------------------- */
+#define D_ETHSWT_SWIC_MIB_GET_CYCLE	                (100U)
+
+#define D_ETHSWT_SWIC_MIB_INFCSERR					(0U)
+#define D_ETHSWT_SWIC_MIB_INDISCARDS				(1U)
+#define D_ETHSWT_SWIC_MIB_INFILTERED				(2U)
+#define D_ETHSWT_SWIC_MIB_INOVERSIZE				(3U)
+#define D_ETHSWT_SWIC_MIB_INUNDERSIZE				(4U)
+#define D_ETHSWT_SWIC_MIB_TCAM0						(5U)
+#define D_ETHSWT_SWIC_MIB_TCAM1						(6U)
+#define D_ETHSWT_SWIC_MIB_TCAM2						(7U)
+#define D_ETHSWT_SWIC_MIB_TCAM3						(8U)
+#define D_ETHSWT_SWIC_MIB_NUM						(9U)
+
+#define ETHSWT_SWIC_MIB_NOTIFY(SwitchPortIdx, MIBArray)				EthSwt_Data_NotifyMIB(SwitchPortIdx, MIBArray)
+
+/* -------------------------------------------------------------------------- */
+/* Config for EthSwt_SWIC_Qci.c                                               */
+/* -------------------------------------------------------------------------- */
+#define D_ETHSWT_SWIC_QCI_GET_CYCLE	                (20U)
+
+#define D_ETHSWT_SWIC_QCI_ID_DCM_TCP				(0U)
+#define D_ETHSWT_SWIC_QCI_ID_DCM_UDP				(1U)
+#define D_ETHSWT_SWIC_QCI_ID_DCM_ICMP				(2U)
+#define D_ETHSWT_SWIC_QCI_ID_DLC_TCP				(3U)
+#define D_ETHSWT_SWIC_QCI_ID_DLC_UDP				(4U)
+#define D_ETHSWT_SWIC_QCI_ID_NUM					(5U)
+
+#define ETHSWT_SWIC_QCI_NOTIFY(qciIdx, qciCount)					EthSwt_Data_NotifyQci(qciIdx, qciCount)
+
+/* -------------------------------------------------------------------------- */
+/* Config for EthSwt_SWIC_RstDtct.c                                           */
+/* -------------------------------------------------------------------------- */
+#define D_ETHSWT_SWIC_RSTDTCT_GET_CYCLE             (50U)	/* リセット検出周期(50ms) */
+Std_ReturnType EthSwt_SWIC_RstDtct_IsNeedDtct(void);
+
+/* -------------------------------------------------------------------------- */
+/* Config for EthSwt_SWIC_IntErr.c                                               */
+/* -------------------------------------------------------------------------- */
+#define D_ETHSWT_SWIC_INTERR_GET_CYCLE	            (5U)	/* 内部エラー検出周期(5ms) */
+
+/* -------------------------------------------------------------------------- */
+/* Config for EthSwt_SWIC_SQI.c                                               */
+/* -------------------------------------------------------------------------- */
+#define D_ETHSWT_SWIC_SQI_GET_CYCLE                 (100U)	/* SQI値取得周期(100ms) */
+
+#define ETHSWT_SWIC_SQI_NOTIFY(SwtichPortIdx, getSQIResult, SQIValue)		EthSwt_Data_NotifySQI(SwtichPortIdx, getSQIResult, SQIValue)
+/* -------------------------------------------------------------------------- */
+/* Config for EthSwt_SWIC_RegAccess.c                                         */
+/* -------------------------------------------------------------------------- */
+#define G_ETHSWT_SWIC_REGACCESS_N_REGMONERREET      (3U)	/* レジスタ書き込み結果取得の試行回数 */
+
+#define ETHSWT_SWIC_REGACCESS_NOTIFY(getRegAccessResult)		EthSwt_Data_NotifyRegAccess(getRegAccessResult)
 
 /* -------------------------------------------------------------------------- */
 #endif /* ETHSWT_SWIC_CFG_H */
