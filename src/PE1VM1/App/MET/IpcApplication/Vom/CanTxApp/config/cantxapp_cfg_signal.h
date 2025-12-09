@@ -25,6 +25,9 @@
 #define CANTXAPP_NBYTE_PAYLOAD2                      (2U)
 #define CANTXAPP_NBYTE_PAYLOAD8                      (8U)
 
+#define CANTXAPP_MAIN_TICK                           (10U)
+#define CANTXAPP_HOLD_TIME                           ((U2)150U / (U2)CANTXAPP_MAIN_TICK)
+
 #define CANTXAPP_POS_1_0                             (24U)
 #define CANTXAPP_POS_1_1                             (25U)
 #define CANTXAPP_POS_1_2                             (26U)

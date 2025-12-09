@@ -20,6 +20,7 @@
 #include "xspi_met_ch1.h"
 
 #include "cantxapp_mettx.h"
+#include "ivdsh.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -39,6 +40,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#define XSPI_MET_CH1_VM_1WORD                (1U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -49,17 +51,11 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
-/*-----------------------------------------------------------------------------------------------------------------------------------*/  
-
-#if 0   /* BEV Rebase provisionally */
-static U1             u1_s_preflynop;             /*  FLYNOP Previous RxValue  */
-#endif   /* BEV Rebase provisionally */
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if 0   /* BEV Rebase provisionally */
-static inline void    vd_s_XSpiCanTx_FLYNOP(const U4* u4_ap_pck_rx);
-#endif   /* BEV Rebase provisionally */
+static inline void    vd_s_XSpiCanTx_AVN1S03(const U4 u4_a_TX_STS, const U4* u4_ap_tx_data);
 static inline void    vd_s_XSpiCanTx_MET1S02(const U4 u4_a_TX_STS, const U4* u4_ap_tx_data);
 static inline void    vd_s_XSpiCanTx_MET1S27(const U4 u4_a_TX_STS, const U4* u4_ap_tx_data);
 static inline void    vd_s_XSpiCanTx_MET1S29(const U4 u4_a_TX_STS, const U4* u4_ap_tx_data);
@@ -80,10 +76,10 @@ static inline void    vd_s_XSpiCanTx_MET1S70(const U4 u4_a_TX_STS, const U4* u4_
 /*===================================================================================================================================*/
 void    vd_g_XSpiCfgInitCh1(void)
 {
-#if 0   /* BEV Rebase provisionally */
-    u1_s_preflynop   = (U1)0U;
+    U4 u4_t_txdata;
 
-#endif   /* BEV Rebase provisionally */
+    u4_t_txdata = (U4)0U;
+    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM1TO2_FLYNOP, &u4_t_txdata, (U2)XSPI_MET_CH1_VM_1WORD);
 }
 
 /*===================================================================================================================================*/
@@ -94,11 +90,7 @@ void    vd_g_XSpiCfgInitCh1(void)
 /*===================================================================================================================================*/
 void    vd_g_XSpiCfgPduRxCh1(const U4 * u4_ap_PDU_RX)
 {
-#if 0   /* BEV Rebase provisionally */
-
-    vd_s_XSpiCanTx_FLYNOP(&u4_ap_PDU_RX[47]);
-
-#endif   /* BEV Rebase provisionally */
+    vd_s_XSpiCanTx_AVN1S03(u4_ap_PDU_RX[0],&u4_ap_PDU_RX[47]);
     vd_s_XSpiCanTx_MET1S02(u4_ap_PDU_RX[0],&u4_ap_PDU_RX[69]);
     vd_s_XSpiCanTx_MET1S27(u4_ap_PDU_RX[0],&u4_ap_PDU_RX[21]);
     vd_s_XSpiCanTx_MET1S29(u4_ap_PDU_RX[0],&u4_ap_PDU_RX[23]);
@@ -117,25 +109,25 @@ void    vd_g_XSpiCfgPduRxCh1(const U4 * u4_ap_PDU_RX)
 /*                                                                                                                                   */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 
-#if 0   /* BEV Rebase provisionally */
 /*===================================================================================================================================*/
-/*  static inline void    vd_s_XSpiCanTx_FLYNOP(U4 * u4_ap_pdu_tx)                                                                   */
+/*  static inline void    vd_s_XSpiCanTx_AVN1S03(const U4 u4_a_TX_STS, const U4 * u4_ap_tx_data)                                     */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:     u4_ap_pck_rx                                                                                                      */
-/*  Return:         -                                                                                                                */
+/*  Arguments:     u4_a_TX_STS                                                                                                       */
+/*                 u4_ap_tx_data                                                                                                     */
+/*  Return:                                                                                                                          */
 /*===================================================================================================================================*/
-static inline void    vd_s_XSpiCanTx_FLYNOP(const U4 * u4_ap_pck_rx)
+static inline void    vd_s_XSpiCanTx_AVN1S03(const U4 u4_a_TX_STS, const U4 * u4_ap_tx_data)
 {
-    U1 u1_t_rxdata;
+    U1 u1_t_txsts;
+    U4 u4_t_txdata;
 
-    u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[0], (U1)29U, (U1)2U);
+    u1_t_txsts = u1_XSPI_MET_READ__BIT(u4_a_TX_STS, (U1)20U, (U1)2U);
 
-    if (u1_t_rxdata != u1_s_preflynop) {
-        vd_g_VdsCIReqTx((U1)VDS_CI_SW_FLYNOP, u1_t_rxdata);
+    if (u1_t_txsts == (U1)XSPI_CANTX_VALID) {
+        u4_t_txdata = u1_XSPI_MET_READ__BIT(u4_ap_tx_data[0], (U1)29U, (U1)2U);
+        vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM1TO2_FLYNOP, &u4_t_txdata, (U2)XSPI_MET_CH1_VM_1WORD);
     }
-    u1_s_preflynop = u1_t_rxdata;
 }
-#endif   /* BEV Rebase provisionally */
 
 /*===================================================================================================================================*/
 /*  static inline void    vd_s_XSpiCanTx_MET1S02(const U4 u4_a_TX_STS, const U4 * u4_ap_tx_data)                                     */
@@ -294,6 +286,7 @@ static inline void    vd_s_XSpiCanTx_MET1S70(const U4 u4_a_TX_STS, const U4 * u4
 /*           07/08/2025  TH       Change for BEV System_Consideration_2.(MET-C_HCSBSW-CSTD-0-02-A-C0)                                */
 /*           10/22/2025  TS       Change for BEV rebase.                                                                             */
 /*           11/13/2025  YN       Change for BEV rebase.(Add CanTxApp)                                                               */
+/*           12/08/2025  YN       Change for BEV rebase.(Add CanTxApp_2)                                                             */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * KM   = Keisuke Mashita, Denso Techno                                                                                           */
