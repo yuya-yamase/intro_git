@@ -107,10 +107,7 @@ void    vd_g_oXDoCANCfgMainbySid(const ST_OXDC_REQ * st_ap_REQ, ST_OXDC_ANS * st
 {
     vd_s_oXDoCANMainSid28(st_ap_REQ->u1_ses_aft, st_ap_REQ->u1_ses_bfr);
     vd_s_oXDoCANRequest(st_ap_REQ, st_ap_ans);
-#warning "BEVCDCFD-2209"
-#if 1 /* BEVCDCFD-2209 */   /* 以下112行目のコードの挿入先の検討をお願いいたします */
     vd_g_DiagAppSID10Request(st_ap_REQ->u1_ses_aft, st_ap_REQ->u1_ses_bfr);
-#endif /* BEVCDCFD-2209 */
     switch(st_ap_REQ->u1_pdu_rx) {
         case OXDC_PDU_RX_CL_POF_1CE0:
         case OXDC_PDU_RX_FD_POF_1CE0:
