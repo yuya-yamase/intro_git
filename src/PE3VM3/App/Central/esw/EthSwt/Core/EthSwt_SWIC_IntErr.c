@@ -39,6 +39,8 @@ void EthSwt_SWIC_IntErr_Init(void)
 	/* 周期タイマの初期化 */
 	swicGetIntErrTimer.time = 0;
 	swicGetIntErrTimer.req = STD_ON;
+
+	return;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -61,6 +63,8 @@ void EthSwt_SWIC_IntErr_Clear(void)
 	swicGetIntErrTimer.time = 0;
 	swicGetIntErrTimer.req = STD_ON;
 	LIB_EI();
+
+	return;
 }
 /* -------------------------------------------------------------------------- */
 Std_ReturnType EthSwt_SWIC_IntErr_Action(uint32 * const errFactor)
@@ -270,4 +274,5 @@ static void ethswt_swic_interr_portMacResetRequest(uint32 * const errFactor)
 		if (G_ETHSWT_SWIC_PORT_DEFINE[idx] != ETH_MODE_DOWN)	{ continue; }	/* リンクダウン不要 */
 		(void)ethswt_swic_interr_tblReg(idx, off, SWIC_TBL_NUM(off), errFactor);
 	}
-	return;}
+	return;
+}

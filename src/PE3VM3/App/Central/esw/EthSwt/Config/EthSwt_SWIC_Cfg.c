@@ -194,15 +194,17 @@ Std_ReturnType EthSwt_SWIC_Cfg_AllowRelay(void)
 Std_ReturnType EthSwt_SWIC_Cfg_AllowSetRegister(void)
 {
     /* - OEM Custom：レジスタ設定が可能な状態か確認する - */
-    /* C-DCの場合は、PWRモジュールに加え、SAIL_RESOUT_Nも確認する */
     Std_ReturnType swicAvailable = E_NOT_OK;
     Std_ReturnType swicPowerStatus;
-    Std_ReturnType sailResoutN;
+    uint8           sail_resout_n;
+    uint8           aoss_sleep_entry_exit;
 
     swicPowerStatus = EthSwt_SWIC_PWR_GetSWICPower();
-    sailResoutN = Dio_ReadChannel(DIO_ID_PORT8_CH8);
+    sail_resout_n = u1_g_PwrCtrlMainGetPinInfo(PWRCTRL_MAIN_PINID_SAIL_RES);
+    aoss_sleep_entry_exit = u1_g_PwrCtrlMainGetPinInfo(PWRCTRL_MAIN_PINID_AOSS_SLP);
+    /* DIN2_Stateビットの確認も後に加える */
 
-    if (swicPowerStatus == STD_ON && sailResoutN == STD_ON) {
+    if (swicPowerStatus == STD_ON && sail_resout_n == STD_HIGH && aoss_sleep_entry_exit == STD_LOW) {
         swicAvailable = E_OK;
     }
 

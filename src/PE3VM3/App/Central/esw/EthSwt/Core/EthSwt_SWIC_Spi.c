@@ -58,7 +58,7 @@ static volatile uint8 swic_SpiS1_RegErr;
 
 #define	ETHSWT_START_SEC_CODE
 #include <EthSwt_SWIC_MemMap.h>
-
+/* -------------------------------------------------------------------------- */
 void EthSwt_SWIC_Spi_Init(void)
 {
 	swic_SpiS1_Err.tbl	= NULL_PTR;
@@ -71,7 +71,7 @@ void EthSwt_SWIC_Spi_Init(void)
 	LIB_memset(swic_SpiS1_Cmd.rea, 0u, sizeof(swic_SpiS1_Cmd.rea));	/* データ部分を0クリアしておく */
 	swic_SpiS1_RegErr	= STD_OFF;
 }
-
+/* -------------------------------------------------------------------------- */
 static Std_ReturnType swic_SpiS1_SetTblErr(const swic_reg_data_t tbl[], const uint32 idx, const Std_ReturnType err)
 {
 	swic_SpiS1_Err.tbl	= tbl;
@@ -80,7 +80,7 @@ static Std_ReturnType swic_SpiS1_SetTblErr(const swic_reg_data_t tbl[], const ui
 	EthSwt_SWIC_RegAccess_RegAccessNotify(E_NOT_OK);	/* レジスタアクセス異常の情報を通知 */
 	return E_NOT_OK;
 }
-
+/* -------------------------------------------------------------------------- */
 static uint8 swic_SpiS1_Crc8(const uint8 msg[], const uint32 len, const uint8 val)
 {
 	static const uint8	swic_SpiS1_Crc[]
@@ -108,7 +108,7 @@ static uint8 swic_SpiS1_Crc8(const uint8 msg[], const uint32 len, const uint8 va
 	}
 	return ~crc;
 }
-
+/* -------------------------------------------------------------------------- */
 void EthSwt_SWIC_Spi_ReqInit(void)
 {
 	swic_SpiS1_Cmd.Paddr= 0u;
@@ -116,7 +116,7 @@ void EthSwt_SWIC_Spi_ReqInit(void)
 	swic_SpiS1_Cmd.wri	= 0u;
 	swic_SpiS1_Cmd.rcv	= 0u;
 }
-
+/* -------------------------------------------------------------------------- */
 static Std_ReturnType swic_SpiS1_Req1(const Spi_DataBufferType *const cmd, Spi_DataBufferType *const dat, const Spi_NumberOfDataType len)
 {
 	Std_ReturnType		err;
@@ -128,7 +128,7 @@ static Std_ReturnType swic_SpiS1_Req1(const Spi_DataBufferType *const cmd, Spi_D
 	if (rslt != SPI_SEQ_OK) { return E_NOT_OK; }
 	return E_OK;
 }
-
+/* -------------------------------------------------------------------------- */
 Std_ReturnType EthSwt_SWIC_Spi_WriteSPI(const swic_reg_data_t tbl[], const uint32 idx, const uint16 SndData)
 {
 	const uint8		Paddr = tbl[idx].devAddr;
@@ -154,7 +154,7 @@ Std_ReturnType EthSwt_SWIC_Spi_WriteSPI(const swic_reg_data_t tbl[], const uint3
 	}
     return swic_SpiS1_SetTblErr(tbl, idx, err);
 }
-
+/* -------------------------------------------------------------------------- */
 static uint8 swic_SpiS1_WriteCnt(const swic_reg_data_t tbl[], const uint32 cnt, const uint32 idx)
 {
 	const uint8	Paddr = tbl[idx].devAddr;
@@ -171,7 +171,7 @@ static uint8 swic_SpiS1_WriteCnt(const swic_reg_data_t tbl[], const uint32 cnt, 
 	}
 	return wri;
 }
-
+/* -------------------------------------------------------------------------- */
 static Std_ReturnType swic_SpiS1_WriteDat(const uint8 Paddr, const uint8 Raddr)
 {
 	uint8	wri;
@@ -181,7 +181,7 @@ static Std_ReturnType swic_SpiS1_WriteDat(const uint8 Paddr, const uint8 Raddr)
 	if (swic_SpiS1_Cmd.wri <= wri)		{ return E_NOT_OK; }
 	return E_OK;
 }
-
+/* -------------------------------------------------------------------------- */
 Std_ReturnType EthSwt_SWIC_Spi_Write(const swic_reg_data_t tbl[], const uint32 cnt, const uint32 idx)
 {
 	const uint8				Paddr = tbl[idx].devAddr;
@@ -222,7 +222,7 @@ Std_ReturnType EthSwt_SWIC_Spi_Write(const swic_reg_data_t tbl[], const uint32 c
 	}
     return swic_SpiS1_SetTblErr(tbl, idx, err);
 }
-
+/* -------------------------------------------------------------------------- */
 Std_ReturnType EthSwt_SWIC_Spi_ReadSPI(const swic_reg_data_t tbl[], const uint32 idx, uint16 *const RcvData)
 {
 	const uint8			Paddr = tbl[idx].devAddr;
@@ -250,7 +250,7 @@ Std_ReturnType EthSwt_SWIC_Spi_ReadSPI(const swic_reg_data_t tbl[], const uint32
 	}
     return swic_SpiS1_SetTblErr(tbl, idx, err);
 }
-
+/* -------------------------------------------------------------------------- */
 static uint8 swic_SpiS1_ReadCnt(const swic_reg_data_t tbl[], const uint32 cnt, const uint32 idx)
 {
 	const uint8	Paddr = tbl[idx].devAddr;
@@ -267,7 +267,7 @@ static uint8 swic_SpiS1_ReadCnt(const swic_reg_data_t tbl[], const uint32 cnt, c
 	}
 	return rcv;
 }
-
+/* -------------------------------------------------------------------------- */
 static Std_ReturnType swic_Spi_ReadDat(const uint8 Paddr, const uint8 Raddr, uint16 *const RcvData)
 {
 	uint8	rcv;
@@ -285,7 +285,7 @@ static Std_ReturnType swic_Spi_ReadDat(const uint8 Paddr, const uint8 Raddr, uin
 	}
 	return E_OK;
 }
-
+/* -------------------------------------------------------------------------- */
 Std_ReturnType EthSwt_SWIC_Spi_Read(const swic_reg_data_t tbl[], const uint32 cnt, const uint32 idx, uint16 *const RcvData)
 {
 	const uint8		Paddr = tbl[idx].devAddr;
@@ -317,7 +317,7 @@ Std_ReturnType EthSwt_SWIC_Spi_Read(const swic_reg_data_t tbl[], const uint32 cn
 	}
     return swic_SpiS1_SetTblErr(tbl, idx, err);
 }
-
+/* -------------------------------------------------------------------------- */
 void EthSwt_SWIC_SpiRegChkNotify(uint32 status)
 {
 	(void)status;
@@ -326,6 +326,7 @@ void EthSwt_SWIC_SpiRegChkNotify(uint32 status)
 	
 	return;
 }
+/* -------------------------------------------------------------------------- */
 uint8 EthSwt_SWIC_Spi_GetSpiRegErr(void)
 {
 	uint8 ret = swic_SpiS1_RegErr;

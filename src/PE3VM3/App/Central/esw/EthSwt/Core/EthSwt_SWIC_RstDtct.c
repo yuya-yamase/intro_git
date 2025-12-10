@@ -12,15 +12,13 @@
 #include "EthSwt_SWIC_RstDtct.h"
 #include "EthSwt_SWIC_RstDtct_Cfg.h"
 /* -------------------------------------------------------------------------- */
-
 static Std_ReturnType ethswt_swic_rstdtct_checkRstReg(uint32* const errFactor);
 
 struct {
 	sint32								time;
 	volatile uint8						req;
 } swicGetRstDtctTimer;
-
-
+/* -------------------------------------------------------------------------- */
 void EthSwt_SWIC_RstDtct_Init(void)
 {
 	swicGetRstDtctTimer.time = 0;
@@ -28,7 +26,7 @@ void EthSwt_SWIC_RstDtct_Init(void)
 
 	return;
 }
-
+/* -------------------------------------------------------------------------- */
 void EthSwt_SWIC_RstDtct_Clear(void)
 {
 	LIB_DI();
@@ -40,7 +38,7 @@ void EthSwt_SWIC_RstDtct_Clear(void)
 
 	return;
 }
-
+/* -------------------------------------------------------------------------- */
 void EthSwt_SWIC_RstDtct_TimerUpdate(void)
 {
 	swicGetRstDtctTimer.time = swicGetRstDtctTimer.time + D_ETHSWT_SWIC_PERIOD;
@@ -51,8 +49,7 @@ void EthSwt_SWIC_RstDtct_TimerUpdate(void)
 
 	return;
 }
-
-
+/* -------------------------------------------------------------------------- */
 static Std_ReturnType ethswt_swic_rstdtct_checkRstReg(uint32 * const errFactor)
 {
 	Std_ReturnType result = E_OK;
@@ -76,8 +73,7 @@ static Std_ReturnType ethswt_swic_rstdtct_checkRstReg(uint32 * const errFactor)
 
 	return result;
 }
-
-
+/* -------------------------------------------------------------------------- */
 Std_ReturnType EthSwt_SWIC_RstDtct_Action(uint32 * const errFactor)
 {
 	Std_ReturnType result = E_OK;
