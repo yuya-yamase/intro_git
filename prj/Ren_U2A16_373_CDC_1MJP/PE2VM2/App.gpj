@@ -26,6 +26,7 @@
     :sourceDir=${APP_DIR}/IVI/ClkCtrl/STUB/config
     :sourceDir=${APP_DIR}/IVI/DrcCtrl
     :sourceDir=${APP_DIR}/IVI/CanCtrl
+    :sourceDir=${APP_DIR}/IVI/Fwupx
     :sourceDir=${APP_DIR}/IVI/iVDTr
     :sourceDir=${APP_DIR}/IVI/DiagApp
 
@@ -72,6 +73,7 @@
     -I${APP_DIR}/IVI/DspCtrl/config
     -I${APP_DIR}/IVI/DrcCtrl
     -I${APP_DIR}/IVI/CanCtrl
+    -I${APP_DIR}/IVI/Fwupx
     -I${APP_DIR}/IVI/iVDTr
     -I${APP_DIR}/IVI/DiagApp
 
@@ -121,6 +123,7 @@ x_spi_ivi_sub1_power.c
 x_spi_ivi_sub1_system.c
 x_spi_ivi_sub1_diag.c
 x_spi_ivi_sub1_version.c
+x_spi_ivi_sub1_repro.c
 x_spi_ivi_queue.c
 IVI_PwrCtrl_Main.c
 IVI_PwrCtrl_DDFreq.c
@@ -172,6 +175,7 @@ datesi_com.c
 datesi.c
 PowerIcCtl.c
 PwrCtl.c
+fwupx.c
 iVDTr_Main.c
 iVDTr_SlpCtrl.c
 

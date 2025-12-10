@@ -134,6 +134,7 @@
     -I${APP_DIR}/MET/Platform/ComplexDriver/SoundMiddle/data_LEX
     -I${APP_DIR}/MET/Platform/ComplexDriver/SoundMiddle/include/U2Ax
     -I${APP_DIR}/MET/Platform/ComplexDriver/SoundMiddle/scc
+    -I${APP_DIR}/MET/Platform/Fwush/scc
     -I${APP_DIR}/MET/Platform/Version/scc
     
 
@@ -647,3 +648,5 @@ App/MET/Platform/ComplexDriver/NWCM/config/nwcm_cfg.c
 App/MET/Platform/ComplexDriver/NWCM/libc/nwcm.c
 App/MET/Platform/ComplexDriver/SoundMiddle/config/sound_cri_mgr.c
 App/MET/Platform/ComplexDriver/SoundMiddle/scc/sound_cri_drv.c
+App/MET/Platform/Fwush/scc/fwush.c
+App/MET/Platform/Fwush/scc/fwumemacc.c

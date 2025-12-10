@@ -250,7 +250,7 @@ void            vd_g_XspiIviSub4Ana(const U1 * u1_ap_XSPI_ADD)
     }
     else if (u1_t_dt_type == u1_s_ID_REPRO_DARA_SOC2MCU) {
         /* Repro Data解析処理 */
-        /* skip */
+        vd_s_FwupxPutReqData(&u1_ap_XSPI_ADD[8], u2_t_dt_len);
     }
     else if (u1_t_dt_type == u1_s_ID_LCAN_DARA_SOC2MCU) {
         /* LCAN Data解析処理 */

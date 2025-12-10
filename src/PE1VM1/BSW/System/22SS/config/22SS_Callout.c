@@ -37,6 +37,7 @@
 #include "dio_if.h"
 #include "sound_cri_mgr.h"
 #include "gateway_mm.h"
+#include "fwush.h"
 
 /* Application           */
 #include "dimmer.h"
@@ -159,7 +160,8 @@ void vd_g_22SSCallout_StaBonInit(void)
         &vd_g_AttmpInit,
         &vd_g_MMAppCtrlInitial,
         &vd_g_BatcareBonInit,
-        &vd_g_DateSIMETInit
+        &vd_g_DateSIMETInit,
+        &vd_g_FwushInit
     };
 
     U1    u1_t_rslt;
@@ -245,7 +247,8 @@ void vd_g_22SSCallout_StaRstInit(void)
         &vd_g_AttmpInit,
         &vd_g_MMAppCtrlInitial,
         &vd_g_BatcareRstwkInit,
-        &vd_g_DateSIMETInit
+        &vd_g_DateSIMETInit,
+        &vd_g_FwushInit
     };
 
     U1    u1_t_rslt;
@@ -331,7 +334,8 @@ void vd_g_22SSCallout_StaWkupInit(void)
         &vd_g_AttmpInit,
         &vd_g_MMAppCtrlInitial,
         &vd_g_BatcareRstwkInit,
-        &vd_g_DateSIMETInit
+        &vd_g_DateSIMETInit,
+        &vd_g_FwushInit
     };
 
     U1    u1_t_rslt;

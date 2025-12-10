@@ -191,6 +191,8 @@ static void     vd_s_XspiIviRoutine(void)
     vd_g_XspiIviCANBusGet2M();
     vd_g_XspiIviCANBusGet5M();
     vd_g_XspiIviCANBusEventJdg();
+    /* リプロ定期監視処理 */
+    vd_g_XspiIviSub1Routine();
 }
 
 /*===================================================================================================================================*/
