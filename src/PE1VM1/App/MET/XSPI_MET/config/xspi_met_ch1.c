@@ -124,7 +124,7 @@ static inline void    vd_s_XSpiCanTx_AVN1S03(const U4 u4_a_TX_STS, const U4 * u4
     u1_t_txsts = u1_XSPI_MET_READ__BIT(u4_a_TX_STS, (U1)20U, (U1)2U);
 
     if (u1_t_txsts == (U1)XSPI_CANTX_VALID) {
-        u4_t_txdata = u1_XSPI_MET_READ__BIT(u4_ap_tx_data[0], (U1)29U, (U1)2U);
+        u4_t_txdata = (U4)u1_XSPI_MET_READ__BIT(u4_ap_tx_data[0], (U1)29U, (U1)2U);
         vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM1TO2_FLYNOP, &u4_t_txdata, (U2)XSPI_MET_CH1_VM_1WORD);
     }
 }
