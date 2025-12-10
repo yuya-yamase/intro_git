@@ -7,6 +7,7 @@
 #include "EthSwt_SWIC_Link.h"
 #include "EthSwt_SWIC_Reg.h"
 #include "EthSwt_SWIC_STM.h"
+#include "EthSwt_SWIC_Define.h"
 #include <EthSwt_SWIC_Link_Cfg.h>
 #include <LIB.h>
 #include "EthSwt_SWIC_Time.h"

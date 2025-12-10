@@ -9,7 +9,6 @@
 /* Common */
 #include <EthSwt_BSW_define.h>								/* BSWに合わせてヘッダファイル変更 */
 
-#define D_ETHSWT_SWIC_PERIOD                        (1U)
 #define D_ETHSWT_SWIC_PORT_NUM                      (9U)
 extern const Eth_ModeType G_ETHSWT_SWIC_PORT_DEFINE[D_ETHSWT_SWIC_PORT_NUM];
 /* -------------------------------------------------------------------------- */
