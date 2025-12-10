@@ -3,10 +3,10 @@
 /*   DO NOT EDIT BY HAND, or your modifications will be lost.  */
 /*  ---------------------------------------------------------  */
 /* [ BIN2TXT 2.02 */
-/*   CONVERTED : Wed Nov 05 11:43:09 2025 */
+/*   CONVERTED : Tue Dec 02 10:52:43 2025 */
 /*   OPTIONS   : -fc -b4 -e  -i  */
-/*   INPUT     : .\ADXAT_Data_for_LEX_20251015.acf 5280[byte] */
-/*   OUTPUT    : ..\ADXAT_Data_for_LEX_20251015\\ADXAT_Data_for_LEX_20251015.acf.h  */
+/*   INPUT     : .\ADXAT_Data_for_LEX_20251126.acf 5280[byte] */
+/*   OUTPUT    : ..\ADXAT_Data_for_LEX_20251126\\ADXAT_Data_for_LEX_20251126.acf.h  */
 
 	0x46545540, 0x78140000, 0x58010100, 0x77020000, 
 	0xB8050000, 0x00000000, 0x1F014000, 0x01000000, 

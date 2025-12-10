@@ -3,15 +3,15 @@
  *  Project          : NewProject
  *  Tool Ver.        : CRI Atom Craft Ver.2.27.67
  *  File Name        : CueSheet_0_LEX.acb
- *  File Size        : 12,800 bytes
- *  Date Time        : 2025/10/30 10:30
+ *  File Size        : 13,120 bytes
+ *  Date Time        : 2025/12/02 10:52
  *  Target           : PC
- *  Cues             : 23
+ *  Cues             : 24
  *  CueSheet Comment : 
  *  Stream Awb Path  : CueSheet_0_LEX.awb
  *===========================================================================*/
 
-#define CRI_CUESHEET_0_LEX_CUENUM (23)
+#define CRI_CUESHEET_0_LEX_CUENUM (24)
 
 /* AISAC Control List (AISAC Control ID) */
 #define CRI_CUESHEET_0_LEX_AISACCONTROL_AISACVOLUMECONFIG  (16) /* AisacVolumeConfig  */
@@ -39,7 +39,8 @@
 #define CRI_CUESHEET_0_LEX_DAN_MET_LBZ_CLESON_RRL_24_01     ( 19) /*   */
 #define CRI_CUESHEET_0_LEX_DAN_MET_LBZ_CLESON_RRF_24_02     ( 20) /*   */
 #define CRI_CUESHEET_0_LEX_DAN_MET_CBZ_AD_DOT_0_00          ( 21) /*   */
-#define CRI_CUESHEET_0_LEX__DUMMY_CUE                       ( 22) /*   */
+#define CRI_CUESHEET_0_LEX_3REN_MET_CBZ_BASE_INTWARNH_0_01  ( 22) /* RCTAブザー仕様  */
+#define CRI_CUESHEET_0_LEX__DUMMY_CUE                       ( 23) /*   */
 
 /* Block List (Block Index) */
 
