@@ -164,63 +164,6 @@ copy ..\..\src\PE0VM0\BSW\Aubist\CycurHSM\ecy_hsm_RH850_GHS_D7_DM\bin\HSM.hex RF
 copy ..\..\src\PE0VM0\BSW\Aubist\CycurHSM\ecy_hsm_RH850_GHS_D7_DM\bin\HSM_B.hex RFP\bin\cychsm_v2716_rfp_bd.hex
 
 rem ---------------------------------------------------------------------------------------------
-echo -- Generate Binary from ELF files --
-echo ------------------------------------------------------------------------------------- >> build.log
-echo -- Generate Binary from ELF files --                                                 >> build.log
-echo ------------------------------------------------------------------------------------- >> build.log
-rem ---------------------------------------------------------------------------------------------
-gmemfile -fill1 0x00210000 0x003bffff 0xff -start 0x00210000 -end 0x003bffff -o PE0VM0\dst\PE0VM0_ac.bin PE0VM0\dst\PE0VM0.elf
-gmemfile -fill1 0x0001c000 0x0020ffff 0xff -start 0x0001c000 -end 0x0020ffff -o PE1VM1\dst\PE1VM1_ac.bin PE1VM1\dst\PE1VM1.elf
-gmemfile -fill1 0x00400000 0x005effff 0xff -start 0x00400000 -end 0x005effff -o PE2VM2\dst\PE2VM2_ac.bin PE2VM2\dst\PE2VM2.elf
-gmemfile -fill1 0x005f0000 0x007bfddf 0xff -start 0x005f0000 -end 0x007bfddf -o PE3VM3\dst\PE3VM3_ac.bin PE3VM3\dst\PE3VM3.elf
-gmemfile -fill1 0x003c0000 0x003fffff 0xff -start 0x003c0000 -end 0x003fffff -o EHVM\dst\EHVM_ac.bin EHVM\dst\EHVM.elf
-gmemfile -fill2 0x007BFDE0 0x007BFDFF 0x5AA5 -fill1 0x007BFE00 0x007BFFFF 0xFF -start 0x007BFDE0 -end 0x007BFFFF -o ..\..\src\DevRRPG\ReprogAPL_Info\env\out\Info_Full.bin ..\..\src\DevRRPG\ReprogAPL_Info\env\out\ReprogAPL.elf
-
-rem ---------------------------------------------------------------------------------------------
-echo -- Concatenate Binary files --
-echo ------------------------------------------------------------------------------------- >> build.log
-echo -- Concatenate Binary files --                                                       >> build.log
-echo ------------------------------------------------------------------------------------- >> build.log
-rem ---------------------------------------------------------------------------------------------
-
-copy /b PE1VM1\dst\PE1VM1_ac.bin + PE0VM0\dst\PE0VM0_ac.bin + EHVM\dst\EHVM_ac.bin + PE2VM2\dst\PE2VM2_ac.bin + PE3VM3\dst\PE3VM3_ac.bin + ..\..\src\DevRRPG\ReprogAPL_Info\env\out\Info_Full.bin RFP\bin\b3ckpt_usr_ac_wo_header.bin
-
-rem ---------------------------------------------------------------------------------------------
-echo -- Calculate CRC32 for b3ckpt_usr_ac_wo_header.bin --
-echo ------------------------------------------------------------------------------------- >> build.log
-echo -- Calculate CRC32 for b3ckpt_usr_ac_wo_header.bin --                                >> build.log
-echo ------------------------------------------------------------------------------------- >> build.log
-rem ---------------------------------------------------------------------------------------------
-python ..\..\src\USBRPG\Tool\update_crc_and_build.py RFP\bin\b3ckpt_usr_ac_wo_header.bin
-python ..\..\src\USBRPG\Tool\update_crc_and_build.py RFP\bin\b3ckpt_usr_ac_wo_header.bin >> build.log
-rem ---------------------------------------------------------------------------------------------
-echo -- USBRPG --
-echo ------------------------------------------------------------------------------------- >> build.log
-echo -- USBRPG --                                                                          >> build.log
-echo ------------------------------------------------------------------------------------- >> build.log
-rem ---------------------------------------------------------------------------------------------
-gbuild -top USBRPG\USBRPG.gpj -D__GMM_RH850_U2A16_USBRPG_CFM_HSM__=0 -strict >> build.log 2>&1
-if %ERRORLEVEL% neq 0 (echo [ERROR] USBRPG build failed & echo [ERROR] USBRPG build failed >> build.log) else (echo [OK] USBRPG build completed & echo [OK] USBRPG build completed >> build.log)
-
-rem Wait for file to be released
-timeout /t 1 /nobreak > nul
-
-rem Verify USBRPG.bin exists
-if not exist "USBRPG\dst\USBRPG.bin" (
-    echo [ERROR] USBRPG.bin not found
-    echo [ERROR] USBRPG.bin not found >> build.log
-    goto END_BUILD
-)
-
-rem ---------------------------------------------------------------------------------------------
-echo -- Generate Final Binary with USBRPG Header --
-echo ------------------------------------------------------------------------------------- >> build.log
-echo -- Generate Final Binary with USBRPG Header --                                       >> build.log
-echo ------------------------------------------------------------------------------------- >> build.log
-rem ---------------------------------------------------------------------------------------------
-copy /b USBRPG\dst\USBRPG.bin + RFP\bin\b3ckpt_usr_ac_wo_header.bin RFP\bin\b3ckpt_usr_ac.bin
-
-rem ---------------------------------------------------------------------------------------------
 @echo OFF
 echo -- Step: Calculate ROM/RAM  --
 set "current=%cd%"
