@@ -73,6 +73,29 @@ U1      u1_g_VdfEsoRx_BRPADW(void)
 }
 
 /*===================================================================================================================================*/
+/*  U1      u1_g_VdfEsoRx_SW_MSBBSW_DAC(void)                                                                                        */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+U1      u1_g_VdfEsoRx_SW_MSBBSW_DAC(void)
+{
+    U1                 u1_t_rx;
+    U1                 u1_t_ava_rx;
+
+    u1_t_rx = (U1)0U;
+    (void)Com_ReceiveSignal(ComConf_ComSignal_DACSSWEX, &u1_t_rx);
+    if(u1_t_rx != (U1)0U){
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
+    }
+    else{
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_INA;
+    }
+
+    return(u1_t_ava_rx);
+}
+
+/*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
 /*                                                                                                                                   */
@@ -89,9 +112,11 @@ U1      u1_g_VdfEsoRx_BRPADW(void)
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  19PFv3   07/02/2024   JMH     Added function of BRPADW for 19PFv3                                                                */
 /*  BEV      07/04/2025   KO      Change config for BEV System_Consideration_2.(MET-C_BRPADW-CSTD-A0-)                               */
+/*  BEV-2    12/05/2025   MA      Added 10 function presence judgment processes.(MET-C_MSBBSW-CSTD-0-)                               */
 /*                                                                                                                                   */
 /*  * JMH = James Michael D. Hilarion, DTPH                                                                                          */
 /*  * KO   = Kazuto Oishi,  Denso Techno                                                                                             */
 /*  * SN   = Shizuka Nakajima, KSE                                                                                                   */
+/*  * MA   = Misaki Aiki, Denso Techno                                                                                               */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
