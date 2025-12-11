@@ -221,6 +221,21 @@ rem ----------------------------------------------------------------------------
 copy /b USBRPG\dst\USBRPG.bin + RFP\bin\b3ckpt_usr_ac_wo_header.bin RFP\bin\b3ckpt_usr_ac.bin
 
 rem ---------------------------------------------------------------------------------------------
+echo -- Rename USBRPG Binary --
+echo ------------------------------------------------------------------------------------- >> build.log
+echo -- Rename USBRPG Binary --                                                            >> build.log
+echo ------------------------------------------------------------------------------------- >> build.log
+rem ---------------------------------------------------------------------------------------------
+if exist "RFP\bin\b3ckpt_usr_ac.bin" (
+    move RFP\bin\b3ckpt_usr_ac.bin RFP\bin\%USB_REPROG_FILE%
+    echo [SUCCESS] Renamed RFP\bin\b3ckpt_usr_ac.bin to RFP\bin\%USB_REPROG_FILE%
+    echo [SUCCESS] Renamed RFP\bin\b3ckpt_usr_ac.bin to RFP\bin\%USB_REPROG_FILE% >> build.log
+) else (
+    echo [ERROR] RFP\bin\b3ckpt_usr_ac.bin not found.
+    echo [ERROR] RFP\bin\b3ckpt_usr_ac.bin not found. >> build.log
+)
+
+rem ---------------------------------------------------------------------------------------------
 @echo OFF
 echo -- Step: Calculate ROM/RAM  --
 set "current=%cd%"
