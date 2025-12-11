@@ -43,7 +43,7 @@ typedef unsigned long      U4;
 #pragma ghs section rodata=".rh850u2a16_usbrpg_cfg"
 
 const U4      u4_gp_RH850_U2A16_USBRPG_CFG[RH850_U2A16_USBRPG_CFG_NWORD] = {
-    (U4)0xD6C40AA4U,             /*  0       -- CRC32                      Calculated value for LB1              */
+    (U4)0x22CFF501U,             /*  0       -- CRC32                      Calculated value for LB1              */
     (U4)0xFFFFFFFFU,             /*  1       -- Reserved                   Shipping : 0xFFFFFFFF                 */
     (U4)0xFFFFFFFFU,             /*  2       -- Reserved                   Shipping : 0xFFFFFFFF                 */
     (U4)0xFFFFFFFFU,             /*  3       -- Reserved                   Shipping : 0xFFFFFFFF                 */
