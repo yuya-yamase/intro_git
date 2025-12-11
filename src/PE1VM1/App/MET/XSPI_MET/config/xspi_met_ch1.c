@@ -20,7 +20,6 @@
 #include "xspi_met_ch1.h"
 
 #include "cantxapp_mettx.h"
-#include "ivdsh.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -40,7 +39,6 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define XSPI_MET_CH1_VM_1WORD                (1U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -76,10 +74,6 @@ static inline void    vd_s_XSpiCanTx_MET1S70(const U4 u4_a_TX_STS, const U4* u4_
 /*===================================================================================================================================*/
 void    vd_g_XSpiCfgInitCh1(void)
 {
-    U4 u4_t_txdata;
-
-    u4_t_txdata = (U4)0U;
-    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM1TO2_FLYNOP, &u4_t_txdata, (U2)XSPI_MET_CH1_VM_1WORD);
 }
 
 /*===================================================================================================================================*/
@@ -119,13 +113,11 @@ void    vd_g_XSpiCfgPduRxCh1(const U4 * u4_ap_PDU_RX)
 static inline void    vd_s_XSpiCanTx_AVN1S03(const U4 u4_a_TX_STS, const U4 * u4_ap_tx_data)
 {
     U1 u1_t_txsts;
-    U4 u4_t_txdata;
 
     u1_t_txsts = u1_XSPI_MET_READ__BIT(u4_a_TX_STS, (U1)20U, (U1)2U);
 
     if (u1_t_txsts == (U1)XSPI_CANTX_VALID) {
-        u4_t_txdata = (U4)u1_XSPI_MET_READ__BIT(u4_ap_tx_data[0], (U1)29U, (U1)2U);
-        vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM1TO2_FLYNOP, &u4_t_txdata, (U2)XSPI_MET_CH1_VM_1WORD);
+        vd_g_CanTxAppAVN1S03_Put(&u4_ap_tx_data[0], (U1)XSPI_CANTX_BUFSIZE8);
     }
 }
 

@@ -283,6 +283,7 @@ App/MET/IpcApplication/Vom/Alert/scc/alert_brx.c
 App/MET/IpcApplication/Vom/Ambtmp/config/ambtmp_cfg.c
 App/MET/IpcApplication/Vom/Ambtmp/scc/ambtmp_can.c
 App/MET/IpcApplication/Vom/Ambtmp/scc/ambtmp.c
+App/MET/IpcApplication/Vom/CanTxApp/config/cantxapp_avn1s03.c
 App/MET/IpcApplication/Vom/CanTxApp/config/cantxapp_cfg.c
 App/MET/IpcApplication/Vom/CanTxApp/config/cantxapp_met1s02.c
 App/MET/IpcApplication/Vom/CanTxApp/config/cantxapp_met1s27.c

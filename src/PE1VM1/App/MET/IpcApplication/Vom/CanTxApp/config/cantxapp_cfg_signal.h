@@ -121,6 +121,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Prototypes                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+void    vd_g_CanTxAppAVN1S03_Init(void);
 void    vd_g_CanTxAppMET1S02_Init(void);
 void    vd_g_CanTxAppMET1S27_Init(void);
 void    vd_g_CanTxAppMET1S29_Init(void);
@@ -128,6 +129,7 @@ void    vd_g_CanTxAppMET1S30_Init(void);
 void    vd_g_CanTxAppMET1S62_Init(void);
 void    vd_g_CanTxAppMET1S70_Init(void);
 
+void    vd_g_CanTxAppAVN1S03_Send(void);
 void    vd_g_CanTxAppMET1S02_Send(void);
 void    vd_g_CanTxAppMET1S27_Send(void);
 void    vd_g_CanTxAppMET1S29_Send(void);

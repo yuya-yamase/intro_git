@@ -32,6 +32,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#define CANTXAPP_PBDMSW_MAX      (1U)
 #define CANTXAPP_PBDMSW_OFF      (0U)
 #define CANTXAPP_PBDMSW_ON       (1U)
 
@@ -631,8 +632,11 @@ static void    vd_s_CanTxAppSend_PBDMSW(void)
     if(u1_s_cantxapp_pbdmsw_cnt < (U1)CANTXAPP_HOLD_TIME){
         u1_t_tx = (U1)CANTXAPP_PBDMSW_ON;
     }
-    else{
+    else if(u1_s_cantxapp_pbdmsw_req <= (U1)CANTXAPP_PBDMSW_MAX){
         u1_t_tx = u1_s_cantxapp_pbdmsw_req;
+    }
+    else{
+        u1_t_tx = (U1)CANTXAPP_PBDMSW_OFF;
     }
     u1_s_cantxapp_pbdmsw_pre = u1_t_tx;
 
