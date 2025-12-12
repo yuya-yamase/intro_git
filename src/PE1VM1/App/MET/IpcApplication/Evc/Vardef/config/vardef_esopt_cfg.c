@@ -1362,7 +1362,8 @@ U1      u1_g_VardefEsOptCfgEthRxEvcnt(const U2 u2_a_MSG_ID)
 /*  BEV-20    11/27/2025  PG      Change config for BEV System_Consideration_ADAS.(MET-S_TMTT-CSTD-0)                                */
 /*  BEV-21    12/02/2025  MA      SW_TITE Function presence judgment processing changed to bidirectional.(MET-B_TITEBB-CSTD-0-)      */
 /*  BEV-22    12/08/2025  TS      Change config for BEV System_Consideration_ADAS.(MET-S_ADVMID-CSTD-0)                              */
-/*  BEV-23    12/12/2025  MA      Added 10 function presence judgment processes.(MET-C_MSBBSW-CSTD-0-)                               */
+/*  BEV-23    12/12/2025  KN      Change config for BEV System_Consideration_ADAS.(MET-C_HCSBSW-CSTD-0-)                             */
+/*  BEV-24    12/12/2025  MA      Added 10 function presence judgment processes.(MET-C_MSBBSW-CSTD-0-)                               */
 /*                                                                                                                                   */
 /*  * YI     = Yoshiki Iwata, Denso                                                                                                  */
 /*  * TN     = Takashi Nagai, Denso                                                                                                  */
@@ -1395,5 +1396,6 @@ U1      u1_g_VardefEsOptCfgEthRxEvcnt(const U2 u2_a_MSG_ID)
 /*  * JS   = Jun Sugiyama, KSE                                                                                                       */
 /*  * MA   = Misaki Aiki, Denso Techno                                                                                               */
 /*  * TS   = Takuo Suganuma, Denso Techno                                                                                            */
+/*  * KN   = kazuo Nishigaki, Denso Techno                                                                                           */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
