@@ -1,4 +1,4 @@
-/* 0.3.0 */
+/* 0.4.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define XSPI_MET_C_MAJOR                     (0U)
-#define XSPI_MET_C_MINOR                     (3U)
+#define XSPI_MET_C_MINOR                     (4U)
 #define XSPI_MET_C_PATCH                     (0U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -37,6 +37,11 @@
 #define XSPI_MET_PDU_NWORD                   ((XSPI_MET_PDU_NBYTE + 3U) >> 2)
 #define XSPI_MET_SUBFRAME_NUM                (2U)
 
+#define XSPI_MET_MCU_STS                     (1U)    /* VALID   */
+#define XSPI_MET_AGLBE_STS                   (3U)    /* INVALID */
+#define XSPI_MET_HUDGVIFCTL_STS              (3U)    /* INVALID */
+#define XSPI_MET_QNXBE_STS                   (3U)    /* INVALID */
+#define XSPI_MET_DAE_STS                     (3U)    /* INVALID */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -121,6 +126,11 @@ void    vd_g_XSpiMETPduTx(void)
             (U2)564U    /* BUFFER POS 1234   */
         }
     };
+    static const U4 u4_s_XSPI_MET_READ_ACCESS_STS = ((U4)XSPI_MET_MCU_STS            ) |
+                                                    ((U4)XSPI_MET_AGLBE_STS      << 2) |
+                                                    ((U4)XSPI_MET_HUDGVIFCTL_STS << 4) |
+                                                    ((U4)XSPI_MET_QNXBE_STS      << 6) |
+                                                    ((U4)XSPI_MET_DAE_STS        << 8);
 
     U1      u1_t_xspi_condition;
     U1      u1_t_write_sts;
@@ -138,6 +148,8 @@ void    vd_g_XSpiMETPduTx(void)
     for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)XSPI_MET_SUBFRAME_NUM; u4_t_lpcnt++){
         u4_sp_xspi_met_db_tra[u4_t_lpcnt] = (U4)0U;
     }
+    /* Set read access permission status */
+    u4_sp_xspi_met_db_tra[2] = u4_s_XSPI_MET_READ_ACCESS_STS;
 
     if((u1_t_xspi_condition == (U1)XSPI_DCOND_IDLE) || (u1_t_xspi_condition == (U1)XSPI_DCOND_TRANSMIT)) {
         u1_t_write_sts = xspi_Write((U1)XSPI_CH_02, &u4_sp_xspi_met_db_tra[0], (U4)XSPI_MET_PDU_NWORD);
@@ -157,6 +169,7 @@ void    vd_g_XSpiMETPduTx(void)
 /*  0.1.0    06/09/2025  KT       Change for xspi IF.(1byte -> 4byte)                                                                */
 /*  0.2.0    07/07/2025  KT       Change for BEV System_Consideration_1.(CAN V7.3)                                                   */
 /*  0.3.0    10/02/2025  TN       Fix header issue (BEV3CDCMET-971).                                                                 */
+/*  0.4.0    12/09/2025  TN       Fix initial value issue (BEV3CDCMET-2505).                                                         */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
