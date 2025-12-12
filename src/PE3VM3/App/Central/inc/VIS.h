@@ -42,6 +42,11 @@
 
 #define VIS_NORMAL_USERDRIVEN                               ((U1)0x00U)     /* 電源異常初期値：異常なし(手動運転中) */
 
+#define VIS_SOCRST_NORESPONSE                               ((U1)0x00U)     /* SoCリセット起動要因：未受信 */
+#define VIS_SOCRST_NORMAL                                   ((U1)0x01U)     /* SoCリセット起動要因：通常起動 */
+#define VIS_SOCRST_ABNORMAL                                 ((U1)0x02U)     /* SoCリセット起動要因：強制リセット起動 */
+#define VIS_SOCRST_FAIL                                     ((U1)0xFFU)     /* SoCリセット起動要因：異常値 */
+
 #define VIS_VIN_MAX_NM                                      ((U1)17U)       /* VIN情報要素数 */
 #define VIS_VIN_INIT_VAL                                    ((U1)0x3FU)     /* VIN初期値 */
 #define VIS_NORESPONSE                                      ((U1)0x00U)     /* CAN受信状態：未受信 */
@@ -67,8 +72,8 @@ void vd_g_VISMidCycle(void);
 /* -------------------------------------------------------------------------- */
 U1 u1_g_VISPwrGetBasicState (U1 * const u1_a_BASICSTATE);
 U1 u1_g_VISPwrGetSpecialState (U1 * const u1_a_SPECIALSTATE);
-U1 u1_g_VISPwrGetTransFlg (U1 * const u1_a_TRANSFLG);
 U1 u1_g_VISPwrGetEthChPwr (void);
 U1 u1_g_VISPwrGetApofrq (void);
+void vd_g_VISPwrSocRstNotify (U1 const u1_a_SOCRST_TYPE);
 /* -------------------------------------------------------------------------- */
 #endif/*VIS_H*/
