@@ -160,30 +160,6 @@ U1      u1_g_VdfEsoRx_ERM(void)
     return(u1_t_ava_rx);
 }
 /*===================================================================================================================================*/
-/*  U1      u1_g_VdfEsoRx_TM(void)                                                                                                   */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1      u1_g_VdfEsoRx_TM(void)
-{
-    U1                 u1_t_rx;
-    U1                 u1_t_ava_rx;
-
-    u1_t_rx = (U1)0U;
-#if 0   /* BEV Rebase provisionally */
-    (void)Com_ReceiveSignal(ComConf_ComSignal_TMDSPFLG, &u1_t_rx);
-#endif   /* BEV Rebase provisionally */
-    if(u1_t_rx != (U1)0U){
-        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
-    }
-    else{
-        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_INA;
-    }
-
-    return(u1_t_ava_rx);
-}
-/*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
 /*                                                                                                                                   */
@@ -205,6 +181,7 @@ U1      u1_g_VdfEsoRx_TM(void)
 /*  19PFv3   02/20/2024  GM       Change config for 19PFv3 CV                                                                        */
 /*  19PFv3-2 02/29/2024  SW       Change config for 19PFv3 CV(add function for EDSS, CC, ERM, TM. add ENBLE judge to AHB)            */
 /*  19PFv3-3 04/18/2024  SN       Change config for 19PFv3 CV(add function for ADASCS)                                               */
+/*  BEV-1    12/08/2025  TS       Change config for BEV System_Consideration_ADAS.                                                   */
 /*                                                                                                                                   */
 /*  * SF = Seiya Fukutome, DENSO TECHNO                                                                                              */
 /*  * RO   = Reiya Okuda, KSE                                                                                                        */
@@ -213,5 +190,6 @@ U1      u1_g_VdfEsoRx_TM(void)
 /*  * SN = Shimon Nambu, Denso Techno                                                                                                */
 /*  * KO   = Kazuto Oishi,  Denso Techno                                                                                             */
 /*  * SN(K)= Shizuka Nakajima, KSE                                                                                                   */
+/*  * TS   = Takuo Suganuma, Denso Techno                                                                                            */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
