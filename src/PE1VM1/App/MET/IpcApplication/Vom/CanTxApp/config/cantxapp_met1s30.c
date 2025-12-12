@@ -636,6 +636,7 @@ static void    vd_s_CanTxAppSend_PBDMSW(void)
         u1_t_tx = u1_s_cantxapp_pbdmsw_req;
     }
     else{
+        u1_s_cantxapp_pbdmsw_req = (U1)CANTXAPP_PBDMSW_OFF;
         u1_t_tx = (U1)CANTXAPP_PBDMSW_OFF;
     }
     u1_s_cantxapp_pbdmsw_pre = u1_t_tx;
