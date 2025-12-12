@@ -505,7 +505,7 @@ const ST_VDF_ESO_CH    st_gp_VDF_ESO_CH[VDF_ESO_NUM_RX] = {
         &u1_g_VdfEsoRx_TM,                      /* fp_u1_AVA_RX        */
         (U2)VDF_ESO_CH_TM,                      /* u2_eso_ch           */
         (U1)VDF_ESO_INPUT_TYPE_CAN,             /* u1_input_type       */
-        (U2)OXCAN_RXD_PDU_CAN_FCM1S52_CH0,      /* u2_msg_rx           */
+        (U2)OXCAN_RXD_PDU_CAN_ADC1S14_CH0,      /* u2_msg_rx           */
         (U2)0x0002U,                            /* u2_vom_act          */
         ((U2)2100U / (U2)VDF_MAIN_TICK),        /* u2_rxc_peri         */
         {
@@ -1362,6 +1362,7 @@ U1      u1_g_VardefEsOptCfgEthRxEvcnt(const U2 u2_a_MSG_ID)
 /*  BEV-20    11/27/2025  PG      Change config for BEV System_Consideration_ADAS.(MET-S_TMTT-CSTD-0)                                */
 /*  BEV-21    12/02/2025  MA      SW_TITE Function presence judgment processing changed to bidirectional.(MET-B_TITEBB-CSTD-0-)      */
 /*  BEV-22    12/05/2025  MA      Added 10 function presence judgment processes.(MET-C_MSBBSW-CSTD-0-)                               */
+/*  BEV-23    12/08/2025  TS      Change config for BEV System_Consideration_ADAS.(MET-S_ADVMID-CSTD-0)                              */
 /*                                                                                                                                   */
 /*  * YI     = Yoshiki Iwata, Denso                                                                                                  */
 /*  * TN     = Takashi Nagai, Denso                                                                                                  */
@@ -1393,5 +1394,6 @@ U1      u1_g_VardefEsOptCfgEthRxEvcnt(const U2 u2_a_MSG_ID)
 /*  * SN(K)= Shizuka Nakajima, KSE                                                                                                   */
 /*  * JS   = Jun Sugiyama, KSE                                                                                                       */
 /*  * MA   = Misaki Aiki, Denso Techno                                                                                               */
+/*  * TS   = Takuo Suganuma, Denso Techno                                                                                            */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

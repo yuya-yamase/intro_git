@@ -52,6 +52,7 @@ U1      u1_g_VdfEsoRx_SW_WIPER_DEICER(void);
 /* vardef_esopt_ADC1S14.c */
 U1      u1_g_VdfEsoRx_SW_OBBSAV(void);
 U1      u1_g_VdfEsoRx_SYS_ADDOT_TT(void);
+U1      u1_g_VdfEsoRx_TM(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* vardef_esopt_ADU1S07.c */
@@ -155,7 +156,6 @@ U1      u1_g_VdfEsoRx_DMC(void);
 U1      u1_g_VdfEsoRx_EDSS(void);
 U1      u1_g_VdfEsoRx_CC(void);
 U1      u1_g_VdfEsoRx_ERM(void);
-U1      u1_g_VdfEsoRx_TM(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* vardef_esopt_FCM1S70.c */
