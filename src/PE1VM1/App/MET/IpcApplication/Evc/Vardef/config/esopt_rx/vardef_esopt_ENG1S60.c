@@ -292,7 +292,7 @@ U1      u1_g_VdfEsoRx_SW_MSBBSW_TRAIL(void)
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  BEV      02/10/2025  RO       Added function for BEV System_Consideration_1.(MET-S_ADMID-CSTD-0-)                                */
-/*  BEV-2    12/05/2025  MA       Added 10 function presence judgment processes.(MET-C_MSBBSW-CSTD-0-)                               */
+/*  BEV-2    12/12/2025  MA       Added 10 function presence judgment processes.(MET-C_MSBBSW-CSTD-0-)                               */
 /*                                                                                                                                   */
 /*  * RO = Ryo Oohashi, KSE                                                                                                          */
 /*  * SN = Shizuka Nakajima, KSE                                                                                                     */

@@ -112,7 +112,7 @@ U1      u1_g_VdfEsoRx_SW_MSBBSW_DAC(void)
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  19PFv3   07/02/2024   JMH     Added function of BRPADW for 19PFv3                                                                */
 /*  BEV      07/04/2025   KO      Change config for BEV System_Consideration_2.(MET-C_BRPADW-CSTD-A0-)                               */
-/*  BEV-2    12/05/2025   MA      Added 10 function presence judgment processes.(MET-C_MSBBSW-CSTD-0-)                               */
+/*  BEV-2    12/12/2025   MA      Added 10 function presence judgment processes.(MET-C_MSBBSW-CSTD-0-)                               */
 /*                                                                                                                                   */
 /*  * JMH = James Michael D. Hilarion, DTPH                                                                                          */
 /*  * KO   = Kazuto Oishi,  Denso Techno                                                                                             */
