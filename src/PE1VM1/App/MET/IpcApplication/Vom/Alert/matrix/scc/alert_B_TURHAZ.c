@@ -91,7 +91,7 @@ const ST_ALERT_MTRX st_gp_ALERT_B_TURHAZ_MTRX[2] = {
         (U2)ALERT_B_TURHAZ_L_NUM_DST,                                          /* u2_num_srch                                        */
         (U1)ALERT_VOM_BAT_WT                                                   /* u1_vom_act                                         */
     },
-        {
+    {
         &u4_s_AlertB_turhazRSrcchk,                                            /* fp_u4_SRC_CHK                                      */
         vdp_PTR_NA,                                                            /* fp_vd_XDST                                         */
 
