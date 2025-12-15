@@ -122,6 +122,15 @@ U1      u1_g_VdfEsoRx_EVMIL_AMBER(void);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* vardef_esopt_ENG1S60.c */
 U1      u1_g_VdfEsoRx_DSC(void);
+U1      u1_g_VdfEsoRx_SW_MSBBSW_NORMAL(void);
+U1      u1_g_VdfEsoRx_SW_MSBBSW_SPORT(void);
+U1      u1_g_VdfEsoRx_SW_MSBBSW_ECO(void);
+U1      u1_g_VdfEsoRx_SW_MSBBSW_CUSTOM(void);
+U1      u1_g_VdfEsoRx_SW_MSBBSW_RANGE(void);
+U1      u1_g_VdfEsoRx_SW_MSBBSW_RCMFRT(void);
+U1      u1_g_VdfEsoRx_SW_MSBBSW_SNOW(void);
+U1      u1_g_VdfEsoRx_SW_MSBBSW_TRACK(void);
+U1      u1_g_VdfEsoRx_SW_MSBBSW_TRAIL(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* vardef_esopt_FCM1S12.c */
@@ -198,6 +207,7 @@ U1      u1_g_VdfEsoRx_BRKHLD(void);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* vardef_esopt_VSC1G96.c */
 U1      u1_g_VdfEsoRx_BRPADW(void);
+U1      u1_g_VdfEsoRx_SW_MSBBSW_DAC(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* vardef_esopt_ZN11S19.c */
