@@ -1,36 +1,38 @@
-/* 2.6.0 */
+/* 5.0.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-/*  Toyota IPC/MET : Vadef Electrical System Option.                                                                                 */
+/*  Alert_S_ADBZR_TCW                                                                                                                */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define VARDEF_ESOPT_ADC1S14_C_MAJOR             (2)
-#define VARDEF_ESOPT_ADC1S14_C_MINOR             (6)
-#define VARDEF_ESOPT_ADC1S14_C_PATCH             (0)
+#define ALERT_S_ADBZR_TCW_C_MAJOR                         (5)
+#define ALERT_S_ADBZR_TCW_C_MINOR                         (0)
+#define ALERT_S_ADBZR_TCW_C_PATCH                         (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#include "vardef_esopt_cfg_private.h"
-#include "vardef_esopt_rx.h"
+#include "alert_cfg_private.h"
+#include "alert_mtrx_cfg_private.h"
+
+#include "oxcan.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if ((VARDEF_ESOPT_ADC1S14_C_MAJOR != VARDEF_ESOPT_RX_H_MAJOR) || \
-     (VARDEF_ESOPT_ADC1S14_C_MINOR != VARDEF_ESOPT_RX_H_MINOR) || \
-     (VARDEF_ESOPT_ADC1S14_C_PATCH != VARDEF_ESOPT_RX_H_PATCH))
-#error "vardef_esopt_ADC1S14.c and vardef_esopt_rx.h : source and header files are inconsistent!"
+#if (ALERT_S_ADBZR_TCW_C_MAJOR != ALERT_CFG_H_MAJOR)
+#error "alert_S_ADBZR_TCW.c and alert_cfg_private.h : source and header files are inconsistent!"
 #endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#define ALERT_S_ADBZR_TCW_NUM_DST                (16U)
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -40,83 +42,79 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+static U4      u4_s_AlertS_adbzr_tcwSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS);
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+static const U1  u1_sp_ALERT_S_ADBZR_TCW_DST[ALERT_S_ADBZR_TCW_NUM_DST] = {
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 00 UNKNOWN                                         */
+    (U1)ALERT_REQ_S_ADBZR_TCW_CYCL,                                            /* 01 CYCL                                            */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 02 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 03 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 04 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 05 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 06 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 07 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 08 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 09 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 10 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 11 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 12 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 13 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 14 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN                                                      /* 15 UNKNOWN                                         */
+};
+
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+const ST_ALERT_MTRX st_gp_ALERT_S_ADBZR_TCW_MTRX[1] = {
+    {
+        &u4_s_AlertS_adbzr_tcwSrcchk,                                          /* fp_u4_SRC_CHK                                      */
+        vdp_PTR_NA,                                                            /* fp_vd_XDST                                         */
+
+        (const U4 *)vdp_PTR_NA,                                                /* u4p_MASK                                           */
+        (const U4 *)vdp_PTR_NA,                                                /* u4p_CRIT                                           */
+
+        &u1_sp_ALERT_S_ADBZR_TCW_DST[0],                                       /* u1p_DST                                            */
+        (U2)ALERT_S_ADBZR_TCW_NUM_DST,                                         /* u2_num_srch                                        */
+        (U1)ALERT_VOM_IGN_ON                                                   /* u1_vom_act                                         */
+    }
+};
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*===================================================================================================================================*/
-/*  U1      u1_g_VdfEsoRx_SW_OBBSAV(void)                                                                                            */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         U1 u1_t_ava_rx  : signal status (active/inactive)                                                                */
-/*===================================================================================================================================*/
-U1      u1_g_VdfEsoRx_SW_OBBSAV(void)
-{
-    static const U1 u1_s_VDF_ESO_ACT_ADSEGDEX = (U1)1U;
-
-    U1                 u1_t_rx;
-    U1                 u1_t_ava_rx;
-
-    u1_t_rx = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_ADSEGDEX, &u1_t_rx);
-    if(u1_t_rx == u1_s_VDF_ESO_ACT_ADSEGDEX){
-        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
-    }
-    else{
-        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_INA;
-    }
-
-    return(u1_t_ava_rx);
-}
-/*===================================================================================================================================*/
-/*  U1      u1_g_VdfEsoRx_SYS_ADDOT_TT(void)                                                                                         */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         U1 u1_t_ava_rx  : signal status (active/inactive)                                                                */
-/*===================================================================================================================================*/
-U1      u1_g_VdfEsoRx_SYS_ADDOT_TT(void)
-{
-    U1                 u1_t_rx;
-    U1                 u1_t_ava_rx;
-
-    u1_t_rx = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_ADDOTEXT, &u1_t_rx);
-    if(u1_t_rx != (U1)0U){
-        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
-    }
-    else{
-        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_INA;
-    }
-
-    return(u1_t_ava_rx);
-}
-/*===================================================================================================================================*/
-/*  U1      u1_g_VdfEsoRx_TM(void)                                                                                                   */
+/*  static U4      u4_s_AlertS_adbzr_tcwSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)                           */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-U1      u1_g_VdfEsoRx_TM(void)
+static U4      u4_s_AlertS_adbzr_tcwSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
-    U1                 u1_t_rx;
-    U1                 u1_t_ava_rx;
+    static const U2 u2_s_ALERT_S_ADBZR_TCW_TO_THRESH  = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
+    static const U1 u1_s_ALERT_S_ADBZR_TCW_LSB_MSGSTS = (U1)2U;
+    U1              u1_t_msgsts;
+    U1              u1_t_sgnl;
+    U4              u4_t_src_chk;
 
-    u1_t_rx = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_ADHOFEXT, &u1_t_rx);
-    if(u1_t_rx != (U1)0U){
-        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
-    }
-    else{
-        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_INA;
-    }
+    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_TRA1S01_CH0,
+                                      (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP,
+                                      u2_s_ALERT_S_ADBZR_TCW_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
-    return(u1_t_ava_rx);
+    u1_t_sgnl     = (U1)0U;
+    (void)Com_ReceiveSignal(ComConf_ComSignal_TCW_BUZ, &u1_t_sgnl);
+    u4_t_src_chk  = (U4)u1_t_sgnl;
+
+    u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_S_ADBZR_TCW_LSB_MSGSTS);
+
+    return(u4_t_src_chk);
 }
+
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
@@ -125,15 +123,8 @@ U1      u1_g_VdfEsoRx_TM(void)
 /*                                                                                                                                   */
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  2.6.0     5/30/2025  SN       NEW!                                                                                               */
+/*  5.0.0    12/09/2025  DT       New.                                                                                               */
 /*                                                                                                                                   */
-/*  Revision Date        Author   Change Description                                                                                 */
-/* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  BEV-01   11/27/2025  PG       Change for BEV System_Consideration_ADAS                                                           */
-/*  BEV-02   12/08/2025  TS       Change for BEV System_Consideration_ADAS(add function judgment)                                    */
-/*                                                                                                                                   */
-/*  * SN = Shizuka Nakajima, KSE                                                                                                     */
-/*  * PG = Patrick Garcia,   DTPH                                                                                                    */
-/*  * TS = Takuo Suganuma, Denso Techno                                                                                              */
+/*  * DT   = Dj Tutanes, DTPH                                                                                                        */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

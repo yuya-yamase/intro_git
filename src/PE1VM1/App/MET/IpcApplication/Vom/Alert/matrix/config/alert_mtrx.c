@@ -61,7 +61,7 @@ const ST_ALERT_TASK         st_gp_ALERT_TASK_CFG[]   = {
     {  &st_gp_ALERT_B_TRFOG_MTRX[0],         (U2)ALERT_CH_B_TRFOG,                  (U1)ALERT_B_TRFOG_CH_NUM,           (U1)0U  },
     {  &st_gp_ALERT_B_TTAIL_MTRX[0],         (U2)ALERT_CH_B_TTAIL,                  (U1)ALERT_B_TTAIL_CH_NUM,           (U1)0U  },
     {  &st_gp_ALERT_B_WASLEV_MTRX[0],        (U2)ALERT_CH_B_WASLEV,                 (U1)ALERT_B_WASLEV_CH_NUM,          (U1)0U  },
-    {  &st_gp_ALERT_S_EDSS_MTRX[0],          (U2)ALERT_CH_S_EDSS_BC,                (U1)ALERT_S_EDSS_CH_NUM,            (U1)0U  },
+    {  &st_gp_ALERT_S_ADBZR_EDSS_MTRX[0],    (U2)ALERT_CH_S_ADBZR_EDSS,             (U1)ALERT_S_ADBZR_EDSS_CH_NUM,      (U1)0U  },
     {  &st_gp_ALERT_S_ITS_MTRX[0],           (U2)ALERT_CH_S_ITS_BC,                 (U1)ALERT_S_ITS_CH_NUM,             (U1)0U  },
     {  &st_gp_ALERT_S_LCA_MTRX[0],           (U2)ALERT_CH_S_LCA_BC_RQ,              (U1)ALERT_S_LCA_CH_NUM,             (U1)0U  },
     {  &st_gp_ALERT_S_SCB_MTRX[0],           (U2)ALERT_CH_S_SCB,                    (U1)ALERT_S_SCB_CH_NUM,             (U1)0U  },
@@ -133,6 +133,7 @@ const ST_ALERT_TASK         st_gp_ALERT_TASK_CFG[]   = {
     {  &st_gp_ALERT_H_DCLDSP_MTRX[0],        (U2)ALERT_CH_H_DCLDSP,                 (U1)ALERT_H_DCLDSP_CH_NUM,          (U1)1U  },
     {  &st_gp_ALERT_C_BRPADW_MTRX[0],        (U2)ALERT_CH_C_BRPADW,                 (U1)ALERT_C_BRPADW_CH_NUM,          (U1)1U  },
     {  &st_gp_ALERT_B_TURHAZ_MTRX[0],        (U2)ALERT_CH_B_TURHAZ_L,               (U1)ALERT_B_TURHAZ_CH_NUM,          (U1)1U  },
+    {  &st_gp_ALERT_S_ADBZR_TCW_MTRX[0],     (U2)ALERT_CH_S_ADBZR_TCW,              (U1)ALERT_S_ADBZR_TCW_CH_NUM,       (U1)1U  },
     {  &st_gp_ALERT_C_STEER_MTRX[0],         (U2)ALERT_CH_C_STEER_TT,               (U1)ALERT_C_STEER_CH_NUM,           (U1)2U  },
     {  &st_gp_ALERT_H_ACCHOL_MTRX[0],        (U2)ALERT_CH_H_ACCHOL,                 (U1)ALERT_H_ACCHOL_CH_NUM,          (U1)2U  },
     {  &st_gp_ALERT_H_BATINS_MTRX[0],        (U2)ALERT_CH_H_BATINS_BC,              (U1)ALERT_H_BATINS_CH_NUM,          (U1)2U  },
@@ -259,7 +260,6 @@ void    vd_g_AlertMtrxInit(void)
         &vd_g_AlertB_tdoorInit,
         &vd_g_AlertB_tpwsrInit,
         &vd_g_AlertC_brlv_2Init,
-        &vd_g_AlertS_seaInit,
         &vd_g_AlertC_epbInit,
         &vd_g_AlertC_steerInit,
         &vd_g_AlertD_sbwInit,
@@ -312,6 +312,9 @@ void    vd_g_AlertMtrxInit(void)
 /*  BEV-15   11/28/2025  HL       Change for BEV System_Consideration_ADAS.(MET-S_TMBZR-CSTD-0-01-A-C0)                              */
 /*  BEV-16   12/04/2025  SH       Change for BEV System_Consideration_ADAS.(MET-B_TURHAZ-CSTD-1-01-A-C1)                             */
 /*  BEV-17   12/05/2025  KH       Change for BEV System_Consideration_ADAS.(MET-C_STEER-CSTD-0-02-B-C0)                              */
+/*  BEV-18   12/10/2025  EA       Change for BEV System_Consideration_ADAS EDSS.(MET-S_ADBZR-CSTD-0-06-A-C0)                         */
+/*  BEV-19   12/10/2025  DT       Change for BEV System_Consideration_ADAS TCW.(MET-S_ADBZR-CSTD-0-06-A-C0)                          */
+/*  BEV-20   12/12/2025  ED       Change for BEV System_Consideration_ADAS SEA.(MET-S_ADBZR-CSTD-0-06-A-C0)                          */
 /*                                                                                                                                   */
 /*  * YI   = Yoshiki Iwata, Denso                                                                                                    */
 /*  * RS   = Ryuki Sako,      Denso Techno                                                                                           */
@@ -324,5 +327,8 @@ void    vd_g_AlertMtrxInit(void)
 /*  * HL   = Harry Lapiceros,  DTPH                                                                                                  */
 /*  * SH   = Sae Hirose,      Denso Techno                                                                                           */
 /*  * KH   = Kiko Huerte,     DTPH                                                                                                   */
+/*  * EA   = Eunice Avelin,   DTPH                                                                                                   */
+/*  * DT   = Dj Tutanes,      DTPH                                                                                                   */
+/*  * ED   = Emoh Dagasdas,   DTPH                                                                                                   */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

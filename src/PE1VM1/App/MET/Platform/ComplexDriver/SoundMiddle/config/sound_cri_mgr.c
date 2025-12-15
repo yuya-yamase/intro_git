@@ -60,10 +60,8 @@
 
 #define SOUND_ACFDATA_SIZE                     (84U)                       /* Size of work-space for on-memory ACF data registration */
 #define SOUND_AWBDATA_SIZE                     (32U)                       /* Size of work-space for on-memory AWB handle creation   */
-#define SOUND_ACBDATA_SIZE                     (616U)                      /* Size of work-space for on-memory ACB data loading      */
-#define SOUND_OVERLAP_SG_NUM                   (1)                         /* Number of play voices at the same time in SG           */
+#define SOUND_ACBDATA_SIZE                     (640U)                      /* Size of work-space for on-memory ACB data loading      */
 #define SOUND_OVERLAP_ADX_NUM                  (5)                         /* Number of play voices at the same time in ADX          */
-#define SOUND_VOICEPOOLSGDATA_SIZE             (2112U)                     /* Size of work-space for SG voice-pool creation          */
 #define SOUND_VOICEPOOLADXDATA_SIZE            (15404U)                    /* Size of work-space for ADX voice-pool creation         */
 #define SOUND_PLAYER_SIZE                      (108U)                      /* Size of work-space for AtomEx player creation          */
 
@@ -174,7 +172,6 @@ static CriSint32            s4_s_initialize_size;                               
 static CriSint32            s4_s_acfdata_size;                                             /* Size of work-space for on-memory ACF data registration     */
 static CriSint32            s4_s_awbdata_size;                                             /* Size of work-space for on-memory AWB handle creation       */
 static CriSint32            s4_s_acbdata_size;                                             /* Size of work-space for on-memory ACB data loading          */
-static CriSint32            s4_s_voicepoolsgdata_size;                                     /* Size of work-space for SG voice-pool creation              */
 static CriSint32            s4_s_voicepooladxdata_size;                                    /* Size of work-space for ADX voice-pool creation             */
 static CriSint32            s4_s_player_size;                                              /* Size of work-space for AtomEx player creation              */
 #endif /* SOUND_CRI_DEBUGMODE */
@@ -184,13 +181,11 @@ static CriChar8             s1_sp_sound_cri_init_work[SOUND_CRI_INIT_WORK_SIZE];
 static U1                   u1_sp_sound_acfdata_alloc[SOUND_ACFDATA_SIZE];                 /* Work-space for on-memory ACF data registration             */
 static U1                   u1_sp_sound_awbdata_alloc[SOUND_AWBDATA_SIZE];                 /* Work-space for on-memory AWB handle creation               */
 static U1                   u1_sp_sound_acbdata_alloc[SOUND_ACBDATA_SIZE];                 /* Work-space for on-memory ACB data loading                  */
-static U1                   u1_sp_sound_voicepoolsg_alloc[SOUND_VOICEPOOLSGDATA_SIZE];     /* Work-space for SG voice-pool creation                      */
 static U1                   u1_sp_sound_voicepooladx_alloc[SOUND_VOICEPOOLADXDATA_SIZE];   /* Work-space for ADX voice-pool creation                     */
 static U1                   u1_sp2_sound_player_alloc[SOUND_GROUP_NUM][SOUND_PLAYER_SIZE]; /* Work-space for AtomEx player creation                      */
 
 static CriAtomAwbHn         stp_s_sound_awb_hn;                                            /* On-memory AWB handle                                       */
 static CriAtomExAcbHn       stp_s_sound_acb_hn;                                            /* On-memory ACB handle                                       */
-static CriAtomExVoicePoolHn stp_s_sound_voicepoolsg_hn;                                    /* SG voice-pool handle                                       */
 static CriAtomExVoicePoolHn stp_s_sound_voicepooladx_hn;                                   /* ADX voice-pool handle                                      */
 static CriAtomExPlayerHn    stp_sp_sound_player_hn_gp[SOUND_GROUP_NUM];                    /* AtomEx player handle                                       */
 
@@ -242,6 +237,7 @@ static        U1      u1_s_SoundDiagnosis(void);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #if (SOUND_VEHICLE_TYPE_TYT == TRUE)
 #include "ADXAT_Data_TYT.h"
+#define CRI_CUESHEET_0_TYT_CUENUM_ADX          (CRI_CUESHEET_0_TYT_CUENUM - 1U)
 /* ACF data table */
 static const CriUint32 u4_sp_SOUND_ACF_DATA[] = {
     #include "ADXAT_Data_acf_TYT.h"
@@ -262,6 +258,7 @@ static const CriSint32 s4_s_SOUND_ACB_DATA_SIZE = s4_s_SoundCriMgrArraySize(u4_s
 
 #else
 #include "ADXAT_Data_LEX.h"
+#define CRI_CUESHEET_0_LEX_CUENUM_ADX          (CRI_CUESHEET_0_LEX_CUENUM - 1U)
 /* ACF data table */
 static const CriUint32 u4_sp_SOUND_ACF_DATA[] = {
     #include "ADXAT_Data_acf_LEX.h"
@@ -283,7 +280,7 @@ static const CriSint32 s4_s_SOUND_ACB_DATA_SIZE = s4_s_SoundCriMgrArraySize(u4_s
 
 #if (SOUND_VEHICLE_TYPE_TYT == TRUE)
 /* Table of sound cycle every timbre */
-static const U2 u2_sp_SOUND_WAV_CYCLETIME_TYT[CRI_CUESHEET_0_TYT_CUENUM] = {
+static const U2 u2_sp_SOUND_WAV_CYCLETIME_TYT[CRI_CUESHEET_0_TYT_CUENUM_ADX] = {
     (U2)90U,               /* CRI_CUESHEET_0_TYT_TAN_MET_CBZ_BASE_NOTICE1_0_01           */
     (U2)20U,               /* CRI_CUESHEET_0_TYT_TAN_MET_CBZ_BASE_NOTICE2_0_01           */
     (U2)20U,               /* CRI_CUESHEET_0_TYT_TAN_MET_CBZ_BASE_ACCEPT_0_01            */
@@ -306,11 +303,11 @@ static const U2 u2_sp_SOUND_WAV_CYCLETIME_TYT[CRI_CUESHEET_0_TYT_CUENUM] = {
     (U2)50U,               /* CRI_CUESHEET_0_TYT_DAN_MET_TBZ_CLESON_RRL_24_00            */
     (U2)70U,               /* CRI_CUESHEET_0_TYT_DAN_MET_TBZ_CLESON_RRF_24_00            */
     (U2)200U,              /* CRI_CUESHEET_0_TYT_DAN_MET_CBZ_AD_DOT_0_00                 */
-    (U2)0U                 /* CRI_CUESHEET_0_TYT__DUMMY_CUE                              */
+    (U2)42U                /* CRI_CUESHEET_0_TYT_3REN_MET_CBZ_BASE_INTWARNH_0_01         */
 };
 #else
 /* Table of sound cycle every timbre */
-static const U2 u2_sp_SOUND_WAV_CYCLETIME_LEX[CRI_CUESHEET_0_LEX_CUENUM] = {
+static const U2 u2_sp_SOUND_WAV_CYCLETIME_LEX[CRI_CUESHEET_0_LEX_CUENUM_ADX] = {
     (U2)90U,               /* CRI_CUESHEET_0_LEX_TAN_MET_CBZ_BASE_NOTICE1_0_01           */
     (U2)20U,               /* CRI_CUESHEET_0_LEX_TAN_MET_CBZ_BASE_NOTICE2_0_01           */
     (U2)20U,               /* CRI_CUESHEET_0_LEX_TAN_MET_CBZ_BASE_ACCEPT_0_01            */
@@ -333,7 +330,7 @@ static const U2 u2_sp_SOUND_WAV_CYCLETIME_LEX[CRI_CUESHEET_0_LEX_CUENUM] = {
     (U2)50U,               /* CRI_CUESHEET_0_LEX_DAN_MET_LBZ_CLESON_RRL_24_01            */
     (U2)70U,               /* CRI_CUESHEET_0_LEX_DAN_MET_LBZ_CLESON_RRF_24_02            */
     (U2)200U,              /* CRI_CUESHEET_0_LEX_DAN_MET_CBZ_AD_DOT_0_00                 */
-    (U2)0U                 /* CRI_CUESHEET_0_LEX__DUMMY_CUE                              */
+    (U2)42U                /* CRI_CUESHEET_0_LEX_3REN_MET_CBZ_BASE_INTWARNH_0_01         */
 };
 #endif
 
@@ -367,7 +364,6 @@ void    vd_g_SoundCriMgrInitialize(void)
 static void    vd_s_SoundCriMgrStartup(void)
 {
     CriAtomExConfig_Rh850u2a                st_t_config_rh850u2a;             /* Configuration structure for library initialization  */
-    CriAtomExSoundGeneratorVoicePoolConfig  st_t_sound_voice_pool_config_sg;  /* Configuration structure for SG voice-pool creation  */
     CriAtomExAdxVoicePoolConfig             st_t_sound_voice_pool_config_adx; /* Configuration structure for ADX voice-pool creation */
     CriAtomExPlayerConfig                   st_t_sound_player_config;         /* Configuration structure for AtomEx player creation  */
     U1                                      u1_t_grp_no;                      /* Sound group number                                  */
@@ -459,18 +455,6 @@ static void    vd_s_SoundCriMgrStartup(void)
                                                                           u1_sp_sound_voicepooladx_alloc,
                                                                           (CriSint32)SOUND_VOICEPOOLADXDATA_SIZE);
 
-    /* Set configuration structure for SG voice-pool creation in default value */
-    criAtomExVoicePool_SetDefaultConfigForSoundGeneratorVoicePool(&st_t_sound_voice_pool_config_sg);
-    st_t_sound_voice_pool_config_sg.num_voices = (CriSint32)SOUND_OVERLAP_SG_NUM;       /* Assign number of play voices at the same time in this codec */
-#if (SOUND_CRI_DEBUGMODE == TRUE)
-    s4_s_voicepoolsgdata_size = (CriSint32)criAtomExVoicePool_CalculateWorkSizeForSoundGeneratorVoicePool(&st_t_sound_voice_pool_config_sg);
-    s4_s_voicepoolsgdata_size = s4_s_voicepoolsgdata_size;                /* QAC countermeasure */
-#endif /* SOUND_CRI_DEBUGMODE */
-    /* SG voice-pool creation */
-    stp_s_sound_voicepoolsg_hn = criAtomExVoicePool_AllocateSoundGeneratorVoicePool(&st_t_sound_voice_pool_config_sg,
-                                                                                    u1_sp_sound_voicepoolsg_alloc,
-                                                                                    (CriSint32)SOUND_VOICEPOOLSGDATA_SIZE);
-
     /* Set configuration structure for AtomEx player creation in default value */
     criAtomExPlayer_SetDefaultConfig(&st_t_sound_player_config);
 #if (SOUND_CRI_DEBUGMODE == TRUE)
@@ -514,7 +498,6 @@ void    vd_g_SoundCriMgrFinalize(void)
     for(u1_t_grp_no = (U1)SOUND_GROUP1; u1_t_grp_no < (U1)SOUND_GROUP_NUM; u1_t_grp_no++){
         criAtomExPlayer_Destroy(stp_sp_sound_player_hn_gp[u1_t_grp_no]);
     }
-    criAtomExVoicePool_Free(stp_s_sound_voicepoolsg_hn);
     criAtomExVoicePool_Free(stp_s_sound_voicepooladx_hn);
     criAtomExAcb_Release(stp_s_sound_acb_hn);
     criAtomAwb_Release(stp_s_sound_awb_hn);
@@ -582,7 +565,7 @@ static  U1      u1_s_SoundCriMgrWavNext(void)
         (U2)CRI_CUESHEET_0_TYT_DAN_MET_TBZ_CLESON_RRM_24_00,                                  /* WCHIME_REQ_IN_CSR_RR_MD               */
         (U2)CRI_CUESHEET_0_TYT_REN_MET_TBZ_CLESON_FRS_24_01,                                  /* WCHIME_REQ_CO_CSR_FRRR_SD             */
         (U2)CRI_CUESHEET_0_TYT_DAN_MET_TBZ_CLESON_FRM_24_01,                                  /* WCHIME_REQ_IN_CSR_FRRR_MD             */
-        (U2)CRI_CUESHEET_0_TYT_DAN_MET_CBZ_BASE_INTWARNH_0_01,                                /* WCHIME_REQ_IN_CSR_RCTA                */
+        (U2)CRI_CUESHEET_0_TYT_3REN_MET_CBZ_BASE_INTWARNH_0_01,                               /* WCHIME_REQ_IN_CSR_RCTA                */
         (U2)CRI_CUESHEET_0_TYT_DAN_MET_CBZ_BASE_INTWARNH_0_01,                                /* WCHIME_REQ_IN_SYSMAL_REMDST_0M        */
         (U2)CRI_CUESHEET_0_TYT_DAN_MET_CBZ_BASE_INTWARNM_0_01,                                /* WCHIME_REQ_IN_TCW_BUZ                 */
         (U2)CRI_CUESHEET_0_TYT_DAN_MET_CBZ_BASE_INTWARNM_0_01,                                /* WCHIME_REQ_IN_PCS_PED                 */
@@ -761,7 +744,7 @@ static  U1      u1_s_SoundCriMgrWavNext(void)
         (U2)CRI_CUESHEET_0_LEX_DAN_MET_LBZ_CLESON_RRM_24_01,                                  /* WCHIME_REQ_IN_CSR_RR_MD               */
         (U2)CRI_CUESHEET_0_LEX_REN_MET_LBZ_CLESON_FRS_24_00,                                  /* WCHIME_REQ_CO_CSR_FRRR_SD             */
         (U2)CRI_CUESHEET_0_LEX_DAN_MET_LBZ_CLESON_FRM_24_01,                                  /* WCHIME_REQ_IN_CSR_FRRR_MD             */
-        (U2)CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNH_0_01,                                /* WCHIME_REQ_IN_CSR_RCTA                */
+        (U2)CRI_CUESHEET_0_LEX_3REN_MET_CBZ_BASE_INTWARNH_0_01,                               /* WCHIME_REQ_IN_CSR_RCTA                */
         (U2)CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNH_0_01,                                /* WCHIME_REQ_IN_SYSMAL_REMDST_0M        */
         (U2)CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNM_0_01,                                /* WCHIME_REQ_IN_TCW_BUZ                 */
         (U2)CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNM_0_01,                                /* WCHIME_REQ_IN_PCS_PED                 */
@@ -964,9 +947,9 @@ static  U1      u1_s_SoundCriMgrWavNext(void)
             }
         }
 #if (SOUND_VEHICLE_TYPE_TYT == TRUE)
-        if(u2_t_curcueid < (U2)CRI_CUESHEET_0_TYT_CUENUM){
+        if(u2_t_curcueid < (U2)CRI_CUESHEET_0_TYT_CUENUM_ADX){
 #else
-        if(u2_t_curcueid < (U2)CRI_CUESHEET_0_LEX_CUENUM){
+        if(u2_t_curcueid < (U2)CRI_CUESHEET_0_LEX_CUENUM_ADX){
 #endif
             u1_t_playnum++;
 #if (SOUND_VEHICLE_TYPE_TYT == TRUE)
@@ -1473,9 +1456,9 @@ static  U1      u1_s_SoundCriMgrOwChk(const U1 u1_a_GRP_NO, const U1 u1_a_CYCLCH
 #endif
             u2_t_cueid        = stp_t_OW_BUZ_INFO->u2_cueid[u1_a_GRP_NO];
 #if (SOUND_VEHICLE_TYPE_TYT == TRUE)
-            if(u2_t_cueid < (U2)CRI_CUESHEET_0_TYT_CUENUM){
+            if(u2_t_cueid < (U2)CRI_CUESHEET_0_TYT_CUENUM_ADX){
 #else
-            if(u2_t_cueid < (U2)CRI_CUESHEET_0_LEX_CUENUM){
+            if(u2_t_cueid < (U2)CRI_CUESHEET_0_LEX_CUENUM_ADX){
 #endif
                 u1_t_ow_sts = u1_s_SoundCriMgrOwStsChk(u1_a_CYCLCHK, stp_t_OW_BUZ_INFO->u1_type, stp_t_ow_ctrl);
                 if((u1_t_ow_sts == (U1)SOUND_OW_CTRL_RUN) ||
@@ -1986,6 +1969,7 @@ void  vd_g_SoundCriMgr_DeInit(void)
 /*  BEV-5     6/24/2025  RO       Change for BEV System_Consideration_2.(MMET-M_CONTBUZZ2-CSTD-0004-C1)                              */
 /*  BEV-6    11/11/2025  SH       Configured for CONTBUZZ2-CSTD-0008                                                                 */
 /*  BEV-7    11/28/2025  HL       Change for BEV System_Consideration_ADAS.(MET-S_TMBZR-CSTD-0-01-A-C0)                              */
+/*  BEV-8    12/10/2025  HY       Change sound file(CUE_ID) for RCTA buzzer                                                          */
 /*                                                                                                                                   */
 /*  * YK       = Yuuki Kato, Denso Techno                                                                                            */
 /*  * TN       = Toshiharu Nagata, Denso Techno                                                                                      */
@@ -2006,5 +1990,6 @@ void  vd_g_SoundCriMgr_DeInit(void)
 /*  * JS       = Jun Sugiyama, KSE                                                                                                   */
 /*  * KO       = Kazuto Oishi, Denso Techno                                                                                          */
 /*  * HL       = Harry Lapiceros,  DTPH                                                                                              */
+/*  * HY       = Hiroki You, Denso Techno                                                                                            */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
