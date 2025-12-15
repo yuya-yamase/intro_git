@@ -27,17 +27,17 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Defines                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define CALIB_MCUID0001_DEF                         (48U)            /* MCU Software version No.1                                    */
-#define CALIB_MCUID0002_DEF                         (48U)            /* MCU Software version No.2                                    */
-#define CALIB_MCUID0003_DEF                         (48U)            /* MCU Software version No.3                                    */
-#define CALIB_MCUID0004_DEF                         (48U)            /* MCU Software version No.4                                    */
-#define CALIB_MCUID0005_DEF                         (48U)            /* MCU Software version No.5                                    */
-#define CALIB_MCUID0006_DEF                         (48U)            /* MCU Software version No.6                                    */
-#define CALIB_MCUID0007_DEF                         (48U)            /* MCU Software version No.7                                    */
+#define CALIB_MCUID0001_DEF                         (56U)            /* MCU Software version No.1                                    */
+#define CALIB_MCUID0002_DEF                         (65U)            /* MCU Software version No.2                                    */
+#define CALIB_MCUID0003_DEF                         (52U)            /* MCU Software version No.3                                    */
+#define CALIB_MCUID0004_DEF                         (65U)            /* MCU Software version No.4                                    */
+#define CALIB_MCUID0005_DEF                         (49U)            /* MCU Software version No.5                                    */
+#define CALIB_MCUID0006_DEF                         (52U)            /* MCU Software version No.6                                    */
+#define CALIB_MCUID0007_DEF                         (55U)            /* MCU Software version No.7                                    */
 #define CALIB_MCUID0008_DEF                         (48U)            /* MCU Software version No.8                                    */
-#define CALIB_MCUID0009_DEF                         (48U)            /* MCU Software version No.9                                    */
+#define CALIB_MCUID0009_DEF                         (50U)            /* MCU Software version No.9                                    */
 #define CALIB_MCUID0010_DEF                         (48U)            /* MCU Software version No.10                                   */
-#define CALIB_MCUID0011_DEF                         (35U)            /* MCU Software version No.11                                   */
+#define CALIB_MCUID0011_DEF                         (48U)            /* MCU Software version No.11                                   */
 #define CALIB_MCUID0012_DEF                         (48U)            /* MCU Software version No.12                                   */
 #define CALIB_MCUID0013_DEF                         (32U)            /* Speed Meter ID No.1                                          */
 #define CALIB_MCUID0014_DEF                         (32U)            /* Speed Meter ID No.2                                          */
@@ -112,27 +112,27 @@
 #define CALIB_MCUID0340_DEF                         (10U)            /* Rheostat Position Night                                      */
 #define CALIB_MCUID0341_DEF                         (1U)             /* TAIL Apply                                                   */
 #define CALIB_MCUID0342_DEF                         (100U)           /* Daytime Back-light control(%):light control is max hold      */
-#define CALIB_MCUID0343_DEF                         (96U)            /* Daytime Back-light control(%):light control level (1)        */
-#define CALIB_MCUID0344_DEF                         (92U)            /* Daytime Back-light control(%):light control level (2)        */
-#define CALIB_MCUID0345_DEF                         (88U)            /* Daytime Back-light control(%):light control level (3)        */
-#define CALIB_MCUID0346_DEF                         (83U)            /* Daytime Back-light control(%):light control level (4)        */
-#define CALIB_MCUID0347_DEF                         (79U)            /* Daytime Back-light control(%):light control level (5)        */
-#define CALIB_MCUID0348_DEF                         (79U)            /* Daytime Back-light control(%):light control level (6)        */
-#define CALIB_MCUID0349_DEF                         (79U)            /* Daytime Back-light control(%):light control level (7)        */
-#define CALIB_MCUID0350_DEF                         (79U)            /* Daytime Back-light control(%):light control level (8)        */
-#define CALIB_MCUID0351_DEF                         (79U)            /* Daytime Back-light control(%):light control level (9)        */
-#define CALIB_MCUID0352_DEF                         (79U)            /* Daytime Back-light control(%):light control level (10)       */
-#define CALIB_MCUID0353_DEF                         (79U)            /* Daytime Back-light control(%):light control level (11)       */
-#define CALIB_MCUID0354_DEF                         (79U)            /* Daytime Back-light control(%):light control level (12)       */
-#define CALIB_MCUID0355_DEF                         (79U)            /* Daytime Back-light control(%):light control level (13)       */
-#define CALIB_MCUID0356_DEF                         (79U)            /* Daytime Back-light control(%):light control level (14)       */
-#define CALIB_MCUID0357_DEF                         (79U)            /* Daytime Back-light control(%):light control level (15)       */
-#define CALIB_MCUID0358_DEF                         (79U)            /* Daytime Back-light control(%):light control level (16)       */
-#define CALIB_MCUID0359_DEF                         (79U)            /* Daytime Back-light control(%):light control level (17)       */
-#define CALIB_MCUID0360_DEF                         (79U)            /* Daytime Back-light control(%):light control level (18)       */
-#define CALIB_MCUID0361_DEF                         (79U)            /* Daytime Back-light control(%):light control level (19)       */
-#define CALIB_MCUID0362_DEF                         (79U)            /* Daytime Back-light control(%):light control level (20)       */
-#define CALIB_MCUID0363_DEF                         (79U)            /* Daytime Back-light control(%): light control is min hold     */
+#define CALIB_MCUID0343_DEF                         (84U)            /* Daytime Back-light control(%):light control level (1)        */
+#define CALIB_MCUID0344_DEF                         (70U)            /* Daytime Back-light control(%):light control level (2)        */
+#define CALIB_MCUID0345_DEF                         (59U)            /* Daytime Back-light control(%):light control level (3)        */
+#define CALIB_MCUID0346_DEF                         (50U)            /* Daytime Back-light control(%):light control level (4)        */
+#define CALIB_MCUID0347_DEF                         (42U)            /* Daytime Back-light control(%):light control level (5)        */
+#define CALIB_MCUID0348_DEF                         (35U)            /* Daytime Back-light control(%):light control level (6)        */
+#define CALIB_MCUID0349_DEF                         (29U)            /* Daytime Back-light control(%):light control level (7)        */
+#define CALIB_MCUID0350_DEF                         (25U)            /* Daytime Back-light control(%):light control level (8)        */
+#define CALIB_MCUID0351_DEF                         (21U)            /* Daytime Back-light control(%):light control level (9)        */
+#define CALIB_MCUID0352_DEF                         (17U)            /* Daytime Back-light control(%):light control level (10)       */
+#define CALIB_MCUID0353_DEF                         (17U)            /* Daytime Back-light control(%):light control level (11)       */
+#define CALIB_MCUID0354_DEF                         (17U)            /* Daytime Back-light control(%):light control level (12)       */
+#define CALIB_MCUID0355_DEF                         (17U)            /* Daytime Back-light control(%):light control level (13)       */
+#define CALIB_MCUID0356_DEF                         (17U)            /* Daytime Back-light control(%):light control level (14)       */
+#define CALIB_MCUID0357_DEF                         (17U)            /* Daytime Back-light control(%):light control level (15)       */
+#define CALIB_MCUID0358_DEF                         (17U)            /* Daytime Back-light control(%):light control level (16)       */
+#define CALIB_MCUID0359_DEF                         (17U)            /* Daytime Back-light control(%):light control level (17)       */
+#define CALIB_MCUID0360_DEF                         (17U)            /* Daytime Back-light control(%):light control level (18)       */
+#define CALIB_MCUID0361_DEF                         (17U)            /* Daytime Back-light control(%):light control level (19)       */
+#define CALIB_MCUID0362_DEF                         (17U)            /* Daytime Back-light control(%):light control level (20)       */
+#define CALIB_MCUID0363_DEF                         (17U)            /* Daytime Back-light control(%): light control is min hold     */
 #define CALIB_MCUID0364_DEF                         (0U)             /* Daytime RGB control(%):light control is max hold             */
 #define CALIB_MCUID0365_DEF                         (0U)             /* Daytime RGB control(%):light control level (1)               */
 #define CALIB_MCUID0366_DEF                         (0U)             /* Daytime RGB control(%):light control level (2)               */
@@ -144,39 +144,39 @@
 #define CALIB_MCUID0372_DEF                         (0U)             /* Daytime RGB control(%):light control level (8)               */
 #define CALIB_MCUID0373_DEF                         (0U)             /* Daytime RGB control(%):light control level (9)               */
 #define CALIB_MCUID0374_DEF                         (0U)             /* Daytime RGB control(%):light control level (10)              */
-#define CALIB_MCUID0375_DEF                         (0U)             /* Daytime RGB control(%):light control level (11)              */
-#define CALIB_MCUID0376_DEF                         (0U)             /* Daytime RGB control(%):light control level (12)              */
-#define CALIB_MCUID0377_DEF                         (0U)             /* Daytime RGB control(%):light control level (13)              */
-#define CALIB_MCUID0378_DEF                         (0U)             /* Daytime RGB control(%):light control level (14)              */
-#define CALIB_MCUID0379_DEF                         (0U)             /* Daytime RGB control(%):light control level (15)              */
-#define CALIB_MCUID0380_DEF                         (0U)             /* Daytime RGB control(%):light control level (16)              */
-#define CALIB_MCUID0381_DEF                         (0U)             /* Daytime RGB control(%):light control level (17)              */
-#define CALIB_MCUID0382_DEF                         (0U)             /* Daytime RGB control(%):light control level (18)              */
-#define CALIB_MCUID0383_DEF                         (0U)             /* Daytime RGB control(%):light control level (19)              */
-#define CALIB_MCUID0384_DEF                         (0U)             /* Daytime RGB control(%):light control level (20)              */
-#define CALIB_MCUID0385_DEF                         (0U)             /* Daytime RGB control(%): light control is min hold            */
-#define CALIB_MCUID0386_DEF                         (55U)            /* Nighttime Back-light control(%):light control is max hold    */
-#define CALIB_MCUID0387_DEF                         (52U)            /* Nighttime Back-light control(%):light control level (1)      */
-#define CALIB_MCUID0388_DEF                         (49U)            /* Nighttime Back-light control(%):light control level (2)      */
-#define CALIB_MCUID0389_DEF                         (46U)            /* Nighttime Back-light control(%):light control level (3)      */
-#define CALIB_MCUID0390_DEF                         (43U)            /* Nighttime Back-light control(%):light control level (4)      */
-#define CALIB_MCUID0391_DEF                         (40U)            /* Nighttime Back-light control(%):light control level (5)      */
-#define CALIB_MCUID0392_DEF                         (37U)            /* Nighttime Back-light control(%):light control level (6)      */
-#define CALIB_MCUID0393_DEF                         (34U)            /* Nighttime Back-light control(%):light control level (7)      */
-#define CALIB_MCUID0394_DEF                         (31U)            /* Nighttime Back-light control(%):light control level (8)      */
-#define CALIB_MCUID0395_DEF                         (28U)            /* Nighttime Back-light control(%):light control level (9)      */
-#define CALIB_MCUID0396_DEF                         (25U)            /* Nighttime Back-light control(%):light control level (10)     */
-#define CALIB_MCUID0397_DEF                         (22U)            /* Nighttime Back-light control(%):light control level (11)     */
-#define CALIB_MCUID0398_DEF                         (19U)            /* Nighttime Back-light control(%):light control level (12)     */
-#define CALIB_MCUID0399_DEF                         (17U)            /* Nighttime Back-light control(%):light control level (13)     */
-#define CALIB_MCUID0400_DEF                         (17U)            /* Nighttime Back-light control(%):light control level (14)     */
-#define CALIB_MCUID0401_DEF                         (17U)            /* Nighttime Back-light control(%):light control level (15)     */
-#define CALIB_MCUID0402_DEF                         (17U)            /* Nighttime Back-light control(%):light control level (16)     */
-#define CALIB_MCUID0403_DEF                         (17U)            /* Nighttime Back-light control(%):light control level (17)     */
-#define CALIB_MCUID0404_DEF                         (17U)            /* Nighttime Back-light control(%):light control level (18)     */
-#define CALIB_MCUID0405_DEF                         (17U)            /* Nighttime Back-light control(%):light control level (19)     */
-#define CALIB_MCUID0406_DEF                         (17U)            /* Nighttime Back-light control(%):light control level (20)     */
-#define CALIB_MCUID0407_DEF                         (17U)            /* Nighttime Back-light control(%): light control is min hold   */
+#define CALIB_MCUID0375_DEF                         (20U)            /* Daytime RGB control(%):light control level (11)              */
+#define CALIB_MCUID0376_DEF                         (38U)            /* Daytime RGB control(%):light control level (12)              */
+#define CALIB_MCUID0377_DEF                         (54U)            /* Daytime RGB control(%):light control level (13)              */
+#define CALIB_MCUID0378_DEF                         (70U)            /* Daytime RGB control(%):light control level (14)              */
+#define CALIB_MCUID0379_DEF                         (84U)            /* Daytime RGB control(%):light control level (15)              */
+#define CALIB_MCUID0380_DEF                         (97U)            /* Daytime RGB control(%):light control level (16)              */
+#define CALIB_MCUID0381_DEF                         (109U)           /* Daytime RGB control(%):light control level (17)              */
+#define CALIB_MCUID0382_DEF                         (120U)           /* Daytime RGB control(%):light control level (18)              */
+#define CALIB_MCUID0383_DEF                         (131U)           /* Daytime RGB control(%):light control level (19)              */
+#define CALIB_MCUID0384_DEF                         (140U)           /* Daytime RGB control(%):light control level (20)              */
+#define CALIB_MCUID0385_DEF                         (149U)           /* Daytime RGB control(%): light control is min hold            */
+#define CALIB_MCUID0386_DEF                         (20U)            /* Nighttime Back-light control(%):light control is max hold    */
+#define CALIB_MCUID0387_DEF                         (16U)            /* Nighttime Back-light control(%):light control level (1)      */
+#define CALIB_MCUID0388_DEF                         (12U)            /* Nighttime Back-light control(%):light control level (2)      */
+#define CALIB_MCUID0389_DEF                         (9U)             /* Nighttime Back-light control(%):light control level (3)      */
+#define CALIB_MCUID0390_DEF                         (7U)             /* Nighttime Back-light control(%):light control level (4)      */
+#define CALIB_MCUID0391_DEF                         (6U)             /* Nighttime Back-light control(%):light control level (5)      */
+#define CALIB_MCUID0392_DEF                         (4U)             /* Nighttime Back-light control(%):light control level (6)      */
+#define CALIB_MCUID0393_DEF                         (3U)             /* Nighttime Back-light control(%):light control level (7)      */
+#define CALIB_MCUID0394_DEF                         (3U)             /* Nighttime Back-light control(%):light control level (8)      */
+#define CALIB_MCUID0395_DEF                         (3U)             /* Nighttime Back-light control(%):light control level (9)      */
+#define CALIB_MCUID0396_DEF                         (3U)             /* Nighttime Back-light control(%):light control level (10)     */
+#define CALIB_MCUID0397_DEF                         (3U)             /* Nighttime Back-light control(%):light control level (11)     */
+#define CALIB_MCUID0398_DEF                         (3U)             /* Nighttime Back-light control(%):light control level (12)     */
+#define CALIB_MCUID0399_DEF                         (3U)             /* Nighttime Back-light control(%):light control level (13)     */
+#define CALIB_MCUID0400_DEF                         (3U)             /* Nighttime Back-light control(%):light control level (14)     */
+#define CALIB_MCUID0401_DEF                         (3U)             /* Nighttime Back-light control(%):light control level (15)     */
+#define CALIB_MCUID0402_DEF                         (3U)             /* Nighttime Back-light control(%):light control level (16)     */
+#define CALIB_MCUID0403_DEF                         (3U)             /* Nighttime Back-light control(%):light control level (17)     */
+#define CALIB_MCUID0404_DEF                         (3U)             /* Nighttime Back-light control(%):light control level (18)     */
+#define CALIB_MCUID0405_DEF                         (3U)             /* Nighttime Back-light control(%):light control level (19)     */
+#define CALIB_MCUID0406_DEF                         (3U)             /* Nighttime Back-light control(%):light control level (20)     */
+#define CALIB_MCUID0407_DEF                         (3U)             /* Nighttime Back-light control(%): light control is min hold   */
 #define CALIB_MCUID0408_DEF                         (0U)             /* Nighttime RGB control(%):light control is max hold           */
 #define CALIB_MCUID0409_DEF                         (0U)             /* Nighttime RGB control(%):light control level (1)             */
 #define CALIB_MCUID0410_DEF                         (0U)             /* Nighttime RGB control(%):light control level (2)             */
@@ -185,20 +185,20 @@
 #define CALIB_MCUID0413_DEF                         (0U)             /* Nighttime RGB control(%):light control level (5)             */
 #define CALIB_MCUID0414_DEF                         (0U)             /* Nighttime RGB control(%):light control level (6)             */
 #define CALIB_MCUID0415_DEF                         (0U)             /* Nighttime RGB control(%):light control level (7)             */
-#define CALIB_MCUID0416_DEF                         (0U)             /* Nighttime RGB control(%):light control level (8)             */
-#define CALIB_MCUID0417_DEF                         (0U)             /* Nighttime RGB control(%):light control level (9)             */
-#define CALIB_MCUID0418_DEF                         (0U)             /* Nighttime RGB control(%):light control level (10)            */
-#define CALIB_MCUID0419_DEF                         (0U)             /* Nighttime RGB control(%):light control level (11)            */
-#define CALIB_MCUID0420_DEF                         (0U)             /* Nighttime RGB control(%):light control level (12)            */
-#define CALIB_MCUID0421_DEF                         (0U)             /* Nighttime RGB control(%):light control level (13)            */
-#define CALIB_MCUID0422_DEF                         (0U)             /* Nighttime RGB control(%):light control level (14)            */
-#define CALIB_MCUID0423_DEF                         (0U)             /* Nighttime RGB control(%):light control level (15)            */
-#define CALIB_MCUID0424_DEF                         (0U)             /* Nighttime RGB control(%):light control level (16)            */
-#define CALIB_MCUID0425_DEF                         (0U)             /* Nighttime RGB control(%):light control level (17)            */
-#define CALIB_MCUID0426_DEF                         (0U)             /* Nighttime RGB control(%):light control level (18)            */
-#define CALIB_MCUID0427_DEF                         (0U)             /* Nighttime RGB control(%):light control level (19)            */
-#define CALIB_MCUID0428_DEF                         (0U)             /* Nighttime RGB control(%):light control level (20)            */
-#define CALIB_MCUID0429_DEF                         (0U)             /* Nighttime RGB control(%): light control is min hold          */
+#define CALIB_MCUID0416_DEF                         (28U)            /* Nighttime RGB control(%):light control level (8)             */
+#define CALIB_MCUID0417_DEF                         (52U)            /* Nighttime RGB control(%):light control level (9)             */
+#define CALIB_MCUID0418_DEF                         (74U)            /* Nighttime RGB control(%):light control level (10)            */
+#define CALIB_MCUID0419_DEF                         (94U)            /* Nighttime RGB control(%):light control level (11)            */
+#define CALIB_MCUID0420_DEF                         (111U)           /* Nighttime RGB control(%):light control level (12)            */
+#define CALIB_MCUID0421_DEF                         (127U)           /* Nighttime RGB control(%):light control level (13)            */
+#define CALIB_MCUID0422_DEF                         (141U)           /* Nighttime RGB control(%):light control level (14)            */
+#define CALIB_MCUID0423_DEF                         (153U)           /* Nighttime RGB control(%):light control level (15)            */
+#define CALIB_MCUID0424_DEF                         (164U)           /* Nighttime RGB control(%):light control level (16)            */
+#define CALIB_MCUID0425_DEF                         (174U)           /* Nighttime RGB control(%):light control level (17)            */
+#define CALIB_MCUID0426_DEF                         (183U)           /* Nighttime RGB control(%):light control level (18)            */
+#define CALIB_MCUID0427_DEF                         (191U)           /* Nighttime RGB control(%):light control level (19)            */
+#define CALIB_MCUID0428_DEF                         (198U)           /* Nighttime RGB control(%):light control level (20)            */
+#define CALIB_MCUID0429_DEF                         (204U)           /* Nighttime RGB control(%): light control is min hold          */
 #define CALIB_MCUID0430_DEF                         (3U)             /* Rheostat SW Apply                                            */
 #define CALIB_MCUID0590_DEF                         (0U)             /* SOC Port Position                                            */
 #define CALIB_MCUID_RSV_1B_0175_DEF                 (0U)             /* Reserve_1B_0175                                              */
@@ -783,7 +783,7 @@
 #define CALIB_MCUID_RSV_1B_0754_DEF                 (0U)             /* Reserve_1B-0754                                              */
 #define CALIB_MCUID_RSV_1B_0755_DEF                 (0U)             /* Reserve_1B-0755                                              */
 #define CALIB_MCUID_RSV_1B_0756_DEF                 (0U)             /* Reserve_1B-0756                                              */
-#define CALIB_MCUID0797_DEF                         (0U)             /* Constant write flag                                          */
+#define CALIB_MCUID0797_DEF                         (1U)             /* Constant write flag                                          */
 
 #define CALIB_MCUID3002_DEF                         (400U)           /* Basic 7 Tones Reporting Tone Medium                          */
 #define CALIB_MCUID3003_DEF                         (400U)           /* Basic 7 Tones Reporting Tone (Special) Medium                */
@@ -989,51 +989,51 @@
 #define CALIB_MCUID0293_DEF                         (1000U)          /* CAN:TR2_DUTY(%):light control level (1)                      */
 #define CALIB_MCUID0294_DEF                         (940U)           /* CAN:TR2_DUTY(%):light control level (2)                      */
 #define CALIB_MCUID0295_DEF                         (830U)           /* CAN:TR2_DUTY(%):light control level (3)                      */
-#define CALIB_MCUID0296_DEF                         (740U)           /* CAN:TR2_DUTY(%):light control level (4)                      */
-#define CALIB_MCUID0297_DEF                         (670U)           /* CAN:TR2_DUTY(%):light control level (5)                      */
-#define CALIB_MCUID0298_DEF                         (600U)           /* CAN:TR2_DUTY(%):light control level (6)                      */
-#define CALIB_MCUID0299_DEF                         (540U)           /* CAN:TR2_DUTY(%):light control level (7)                      */
-#define CALIB_MCUID0300_DEF                         (480U)           /* CAN:TR2_DUTY(%):light control level (8)                      */
-#define CALIB_MCUID0301_DEF                         (430U)           /* CAN:TR2_DUTY(%):light control level (9)                      */
-#define CALIB_MCUID0302_DEF                         (390U)           /* CAN:TR2_DUTY(%):light control level (10)                     */
-#define CALIB_MCUID0303_DEF                         (350U)           /* CAN:TR2_DUTY(%):light control level (11)                     */
-#define CALIB_MCUID0304_DEF                         (310U)           /* CAN:TR2_DUTY(%):light control level (12)                     */
+#define CALIB_MCUID0296_DEF                         (743U)           /* CAN:TR2_DUTY(%):light control level (4)                      */
+#define CALIB_MCUID0297_DEF                         (666U)           /* CAN:TR2_DUTY(%):light control level (5)                      */
+#define CALIB_MCUID0298_DEF                         (598U)           /* CAN:TR2_DUTY(%):light control level (6)                      */
+#define CALIB_MCUID0299_DEF                         (536U)           /* CAN:TR2_DUTY(%):light control level (7)                      */
+#define CALIB_MCUID0300_DEF                         (481U)           /* CAN:TR2_DUTY(%):light control level (8)                      */
+#define CALIB_MCUID0301_DEF                         (432U)           /* CAN:TR2_DUTY(%):light control level (9)                      */
+#define CALIB_MCUID0302_DEF                         (388U)           /* CAN:TR2_DUTY(%):light control level (10)                     */
+#define CALIB_MCUID0303_DEF                         (348U)           /* CAN:TR2_DUTY(%):light control level (11)                     */
+#define CALIB_MCUID0304_DEF                         (313U)           /* CAN:TR2_DUTY(%):light control level (12)                     */
 #define CALIB_MCUID0305_DEF                         (280U)           /* CAN:TR2_DUTY(%):light control level (13)                     */
-#define CALIB_MCUID0306_DEF                         (250U)           /* CAN:TR2_DUTY(%):light control level (14)                     */
-#define CALIB_MCUID0307_DEF                         (230U)           /* CAN:TR2_DUTY(%):light control level (15)                     */
-#define CALIB_MCUID0308_DEF                         (200U)           /* CAN:TR2_DUTY(%):light control level (16)                     */
+#define CALIB_MCUID0306_DEF                         (251U)           /* CAN:TR2_DUTY(%):light control level (14)                     */
+#define CALIB_MCUID0307_DEF                         (225U)           /* CAN:TR2_DUTY(%):light control level (15)                     */
+#define CALIB_MCUID0308_DEF                         (202U)           /* CAN:TR2_DUTY(%):light control level (16)                     */
 #define CALIB_MCUID0309_DEF                         (180U)           /* CAN:TR2_DUTY(%):light control level (17)                     */
 #define CALIB_MCUID0310_DEF                         (160U)           /* CAN:TR2_DUTY(%):light control level (18)                     */
-#define CALIB_MCUID0311_DEF                         (140U)           /* CAN:TR2_DUTY(%):light control level (19)                     */
-#define CALIB_MCUID0312_DEF                         (130U)           /* CAN:TR2_DUTY(%):light control level (20)                     */
-#define CALIB_MCUID0313_DEF                         (130U)           /* CAN:TR2_DUTY(%): light control is min hold                   */
+#define CALIB_MCUID0311_DEF                         (142U)           /* CAN:TR2_DUTY(%):light control level (19)                     */
+#define CALIB_MCUID0312_DEF                         (125U)           /* CAN:TR2_DUTY(%):light control level (20)                     */
+#define CALIB_MCUID0313_DEF                         (125U)           /* CAN:TR2_DUTY(%): light control is min hold                   */
 #define CALIB_MCUID0314_DEF                         (1000U)          /* CAN:IL2_DUTY(%):light control is max hold                    */
 #define CALIB_MCUID0315_DEF                         (1000U)          /* CAN:IL2_DUTY(%):light control level (1)                      */
 #define CALIB_MCUID0316_DEF                         (940U)           /* CAN:IL2_DUTY(%):light control level (2)                      */
 #define CALIB_MCUID0317_DEF                         (830U)           /* CAN:IL2_DUTY(%):light control level (3)                      */
-#define CALIB_MCUID0318_DEF                         (740U)           /* CAN:IL2_DUTY(%):light control level (4)                      */
-#define CALIB_MCUID0319_DEF                         (670U)           /* CAN:IL2_DUTY(%):light control level (5)                      */
-#define CALIB_MCUID0320_DEF                         (600U)           /* CAN:IL2_DUTY(%):light control level (6)                      */
-#define CALIB_MCUID0321_DEF                         (540U)           /* CAN:IL2_DUTY(%):light control level (7)                      */
-#define CALIB_MCUID0322_DEF                         (480U)           /* CAN:IL2_DUTY(%):light control level (8)                      */
-#define CALIB_MCUID0323_DEF                         (430U)           /* CAN:IL2_DUTY(%):light control level (9)                      */
-#define CALIB_MCUID0324_DEF                         (390U)           /* CAN:IL2_DUTY(%):light control level (10)                     */
-#define CALIB_MCUID0325_DEF                         (350U)           /* CAN:IL2_DUTY(%):light control level (11)                     */
-#define CALIB_MCUID0326_DEF                         (310U)           /* CAN:IL2_DUTY(%):light control level (12)                     */
+#define CALIB_MCUID0318_DEF                         (743U)           /* CAN:IL2_DUTY(%):light control level (4)                      */
+#define CALIB_MCUID0319_DEF                         (666U)           /* CAN:IL2_DUTY(%):light control level (5)                      */
+#define CALIB_MCUID0320_DEF                         (598U)           /* CAN:IL2_DUTY(%):light control level (6)                      */
+#define CALIB_MCUID0321_DEF                         (536U)           /* CAN:IL2_DUTY(%):light control level (7)                      */
+#define CALIB_MCUID0322_DEF                         (481U)           /* CAN:IL2_DUTY(%):light control level (8)                      */
+#define CALIB_MCUID0323_DEF                         (432U)           /* CAN:IL2_DUTY(%):light control level (9)                      */
+#define CALIB_MCUID0324_DEF                         (388U)           /* CAN:IL2_DUTY(%):light control level (10)                     */
+#define CALIB_MCUID0325_DEF                         (348U)           /* CAN:IL2_DUTY(%):light control level (11)                     */
+#define CALIB_MCUID0326_DEF                         (313U)           /* CAN:IL2_DUTY(%):light control level (12)                     */
 #define CALIB_MCUID0327_DEF                         (280U)           /* CAN:IL2_DUTY(%):light control level (13)                     */
-#define CALIB_MCUID0328_DEF                         (250U)           /* CAN:IL2_DUTY(%):light control level (14)                     */
-#define CALIB_MCUID0329_DEF                         (230U)           /* CAN:IL2_DUTY(%):light control level (15)                     */
-#define CALIB_MCUID0330_DEF                         (200U)           /* CAN:IL2_DUTY(%):light control level (16)                     */
+#define CALIB_MCUID0328_DEF                         (251U)           /* CAN:IL2_DUTY(%):light control level (14)                     */
+#define CALIB_MCUID0329_DEF                         (225U)           /* CAN:IL2_DUTY(%):light control level (15)                     */
+#define CALIB_MCUID0330_DEF                         (202U)           /* CAN:IL2_DUTY(%):light control level (16)                     */
 #define CALIB_MCUID0331_DEF                         (180U)           /* CAN:IL2_DUTY(%):light control level (17)                     */
 #define CALIB_MCUID0332_DEF                         (160U)           /* CAN:IL2_DUTY(%):light control level (18)                     */
-#define CALIB_MCUID0333_DEF                         (140U)           /* CAN:IL2_DUTY(%):light control level (19)                     */
-#define CALIB_MCUID0334_DEF                         (130U)           /* CAN:IL2_DUTY(%):light control level (20)                     */
-#define CALIB_MCUID0335_DEF                         (130U)           /* CAN:IL2_DUTY(%): light control is min hold                   */
+#define CALIB_MCUID0333_DEF                         (142U)           /* CAN:IL2_DUTY(%):light control level (19)                     */
+#define CALIB_MCUID0334_DEF                         (125U)           /* CAN:IL2_DUTY(%):light control level (20)                     */
+#define CALIB_MCUID0335_DEF                         (125U)           /* CAN:IL2_DUTY(%): light control is min hold                   */
 #define CALIB_MCUID0574_DEF                         (2050U)          /* CAL_DEF                                                      */
-#define CALIB_MCUID0575_DEF                         (2020U)          /* CAL_MIN                                                      */
+#define CALIB_MCUID0575_DEF                         (2021U)          /* CAL_MIN                                                      */
 #define CALIB_MCUID0738_DEF                         (30U)            /* Timeout Time                                                 */
-#define CALIB_MCUID0742_DEF                         (125U)           /* IOUTILLRun                                                   */
-#define CALIB_MCUID0743_DEF                         (250U)           /* IOUTILLRunmax                                                */
+#define CALIB_MCUID0742_DEF                         (0U)             /* IOUTILLRun                                                   */
+#define CALIB_MCUID0743_DEF                         (0U)             /* IOUTILLRunmax                                                */
 #define CALIB_MCUID0923_DEF                         (0U)             /* Special destination for judgement Country code 1             */
 #define CALIB_MCUID0924_DEF                         (0U)             /* Special destination for judgement Country code 2             */
 #define CALIB_MCUID0925_DEF                         (0U)             /* Special destination for judgement Country code 3             */
