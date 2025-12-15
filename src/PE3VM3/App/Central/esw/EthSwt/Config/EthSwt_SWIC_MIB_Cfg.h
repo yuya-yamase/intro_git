@@ -42,7 +42,7 @@ static const struct swic_reg_tbl G_ETHSWT_SWIC_MIB_SELECT_PORT[D_ETHSWT_SWIC_POR
   , {&g_regListSeqSelectPort[16], 2u} /* P9 */
 };
 
-static const struct swic_reg_tbl G_ETHSWT_SWIC_MIB_TABLE_LIST[D_ETHSWT_SWIC_PORT_NUM]
+static const struct swic_reg_tbl G_ETHSWT_SWIC_MIB_TABLE_LIST[D_ETHSWT_SWIC_MIB_NUM]
 = { {g_regListSeqMibInFCSErr,     SWIC_TBL_NUM(g_regListSeqMibInFCSErr)     }           /* InFCSErr */
   , {g_regListSeqMibInDiscards,   SWIC_TBL_NUM(g_regListSeqMibInDiscards)   }           /* InDiscards */
   , {g_regListSeqMibInFiltered,   SWIC_TBL_NUM(g_regListSeqMibInFiltered)   }           /* InFiltered */
