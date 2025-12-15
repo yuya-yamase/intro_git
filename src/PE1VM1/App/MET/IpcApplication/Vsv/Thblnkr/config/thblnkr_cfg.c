@@ -150,6 +150,7 @@ U1             u1_g_ThblnkrCfgR_Req(void)
 /*  330D-1       02/23/2023   MK       Fix 24FGM22-23181(F+B correction value error).                                                */
 /*  19PFv3-1     09/16/2024   YR       Removed the processing for sound pressure                                                     */
 /*  19PFv3-2     09/19/2024   YR       Removed "vardef.h" in the include files                                                       */
+/*  BEV-1        12/12/2025   SH       Change getting REQ from CAN signal to Alert                                                   */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * DS   = Daisuke Suzuki,  Denso                                                                                                  */

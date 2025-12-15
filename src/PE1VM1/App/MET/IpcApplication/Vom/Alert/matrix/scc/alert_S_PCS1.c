@@ -54,10 +54,10 @@ static U4      u4_s_AlertS_pcs1BzrSrcchk    (const U1 u1_a_VOM, const U4 u4_a_IG
 static const U1  u1_sp_ALERT_S_PCS1_BZR_DST[ALERT_S_PCS1_BZR_NUM_DST] = {
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 00 UNKNOWN                                         */
     (U1)ALERT_REQ_S_PCS1_BZR_NOTICE,                                           /* 01 NOTICE                                          */
-    (U1)ALERT_REQ_S_PCS1_BZR_PBA,                                              /* 02 PBA                                             */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 02 UNKNOWN                                         */
     (U1)ALERT_REQ_S_PCS1_BZR_PCS,                                              /* 03 PCS                                             */
-    (U1)ALERT_REQ_S_PCS1_BZR_ALM,                                              /* 04 ALM                                             */
-    (U1)ALERT_REQ_S_PCS1_BZR_BRK_INSP,                                         /* 05 BRK_INSP                                        */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 04 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 05 UNKNOWN                                         */
     (U1)ALERT_REQ_S_PCS1_BZR_RDR_CMP,                                          /* 06 RDR_CMP                                         */
     (U1)ALERT_REQ_S_PCS1_BZR_WRN,                                              /* 07 WRN                                             */
     (U1)ALERT_REQ_S_PCS1_BZR_CMR_CMP,                                          /* 08 CMR_CMP                                         */

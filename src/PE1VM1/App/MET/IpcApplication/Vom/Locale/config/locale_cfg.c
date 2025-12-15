@@ -97,14 +97,9 @@ static const ST_UNITIDX st_sp_LOCALE_UNITIDX[UNIT_NUM_IDX] = {
 };
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static const U1 u1_sp_LOCALE_COMTX_UNIT_CH2[UNIT_NUM_VAL_FUECO] = {
-    (U1)LOCALE_UNIT_CH2_KM, /* UNIT_VAL_FUECO_KMPL                 (0U) */
-    (U1)LOCALE_UNIT_CH2_KM, /* UNIT_VAL_FUECO_LP100KM              (1U) */
-    (U1)LOCALE_UNIT_CH2_MI, /* UNIT_VAL_FUECO_MPG_USA              (2U) */
-    (U1)LOCALE_UNIT_CH2_MI, /* UNIT_VAL_FUECO_MPG_UK               (3U) */
-    (U1)LOCALE_UNIT_CH2_MI, /* UNIT_VAL_FUECO_MPG_E                (4U) */
-    (U1)LOCALE_UNIT_CH2_KM, /* UNIT_VAL_FUECO_KMPKG                (5U) */
-    (U1)LOCALE_UNIT_CH2_KM  /* UNIT_VAL_FUECO_KGP100KM             (6U) */
+static const U1 u1_sp_LOCALE_COMTX_UNIT_CH2[UNIT_NUM_VAL_SPEED] = {
+    (U1)LOCALE_UNIT_CH2_KM, /* UNIT_VAL_SPEED_KMPH                 (0U) */
+    (U1)LOCALE_UNIT_CH2_MI  /* UNIT_VAL_SPEED_MPH                  (1U) */
 };
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -270,7 +265,7 @@ static const U1 u1_sp_LOCALE_LNGDB_DEFLANG[VDF_NUM_LNGDBTYPE] = {
 /*===================================================================================================================================*/
 void  vd_g_LocaleComTxInit(void)
 {
-    U1  u1_t_unit_fueco;
+    U1  u1_t_unit_speed;
     U1  u1_t_unit_ch2;
 #if 0   /* BEV Rebase provisionally */
 #else   /* BEV Rebase provisionally */
@@ -295,9 +290,9 @@ void  vd_g_LocaleComTxInit(void)
 #endif   /* BEV Rebase provisionally */
 
     u1_t_unit_ch2   = (U1)LOCALE_UNIT_CH2_KM;
-    u1_t_unit_fueco = u1_g_Unit((U1)UNIT_IDX_FUECO);
-    if(u1_t_unit_fueco < (U1)UNIT_NUM_VAL_FUECO){
-        u1_t_unit_ch2 = u1_sp_LOCALE_COMTX_UNIT_CH2[u1_t_unit_fueco];
+    u1_t_unit_speed = u1_g_Unit((U1)UNIT_IDX_SPEED);
+    if(u1_t_unit_speed < (U1)UNIT_NUM_VAL_SPEED){
+        u1_t_unit_ch2 = u1_sp_LOCALE_COMTX_UNIT_CH2[u1_t_unit_speed];
     }
     (void)Com_SendSignal(ComConf_ComSignal_UNIT_CH2 , &u1_t_unit_ch2);
 
@@ -310,16 +305,16 @@ void  vd_g_LocaleComTxInit(void)
 /*===================================================================================================================================*/
 void  vd_g_LocaleComTxTask(void)
 {
-    U1  u1_t_unit_fueco;
+    U1  u1_t_unit_speed;
     U1  u1_t_pre_unit_ch2;
     U1  u1_t_unit_ch2;
 
     (void)Com_ReceiveSignal(ComConf_ComSignal_UNIT_CH2 , &u1_t_pre_unit_ch2);
 
     u1_t_unit_ch2   = (U1)LOCALE_UNIT_CH2_KM;
-    u1_t_unit_fueco = u1_g_Unit((U1)UNIT_IDX_FUECO);
-    if(u1_t_unit_fueco < (U1)UNIT_NUM_VAL_FUECO){
-        u1_t_unit_ch2 = u1_sp_LOCALE_COMTX_UNIT_CH2[u1_t_unit_fueco];
+    u1_t_unit_speed = u1_g_Unit((U1)UNIT_IDX_SPEED);
+    if(u1_t_unit_speed < (U1)UNIT_NUM_VAL_SPEED){
+        u1_t_unit_ch2 = u1_sp_LOCALE_COMTX_UNIT_CH2[u1_t_unit_speed];
     }
 
     (void)Com_SendSignal(ComConf_ComSignal_UNIT_CH2 , &u1_t_unit_ch2);
@@ -645,6 +640,7 @@ U1      u1_g_LocaleCfgUnitdef(const U1 u1_a_UNITIDX)
 /*  BEV-1    07/04/2025  MN       BEV PreCV provisionally                                                                            */
 /*  BEV-2    10/15/2025  SN       Configured for BEVstep3_Rebase                                                                     */
 /*  BEV-3    11/14/2025  SN       Change initial value                                                                               */
+/*  BEV-4    12/08/2025  TS       Change UNIT_CH2 table and units referenced when sending UNIT_CH2                                   */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
 /*  * SF   = Seiya Fukutome, DensoTechno                                                                                             */
@@ -656,5 +652,6 @@ U1      u1_g_LocaleCfgUnitdef(const U1 u1_a_UNITIDX)
 /*  * SH   = Sae Hirose, Denso Techno                                                                                                */
 /*  * MN   = Mikiya Negishi, KSE                                                                                                     */
 /*  * SN   = Shimon Nambu, DensoTechno                                                                                               */
+/*  * TS   = Takuo Suganuma, Denso Techno                                                                                            */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

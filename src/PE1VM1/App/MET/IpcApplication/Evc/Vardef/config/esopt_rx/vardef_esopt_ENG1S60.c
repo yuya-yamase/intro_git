@@ -72,6 +72,213 @@ U1      u1_g_VdfEsoRx_DSC(void)
     return(u1_t_ava_rx);
 }
 /*===================================================================================================================================*/
+/*  U1      u1_g_VdfEsoRx_SW_MSBBSW_NORMAL(void)                                                                                     */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+U1      u1_g_VdfEsoRx_SW_MSBBSW_NORMAL(void)
+{
+    static const U2    u2_s_VDF_ESO_NORML_MSK = (U2)0x0001U;
+    U2                 u2_t_rx;
+    U1                 u1_t_ava_rx;
+
+    u2_t_rx = (U2)0U;
+    (void)Com_ReceiveSignal(ComConf_ComSignal_B_DMINF3, &u2_t_rx);
+    if((u2_t_rx & u2_s_VDF_ESO_NORML_MSK) != (U2)0U){
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
+    }
+    else{
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_INA;
+    }
+
+    return(u1_t_ava_rx);
+}
+/*===================================================================================================================================*/
+/*  U1      u1_g_VdfEsoRx_SW_MSBBSW_SPORT(void)                                                                                      */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+U1      u1_g_VdfEsoRx_SW_MSBBSW_SPORT(void)
+{
+    static const U2    u2_s_VDF_ESO_SPORT_MSK = (U2)0x0002U;
+    U2                 u2_t_rx;
+    U1                 u1_t_ava_rx;
+
+    u2_t_rx = (U2)0U;
+    (void)Com_ReceiveSignal(ComConf_ComSignal_B_DMINF3, &u2_t_rx);
+    if((u2_t_rx & u2_s_VDF_ESO_SPORT_MSK) != (U2)0U){
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
+    }
+    else{
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_INA;
+    }
+
+    return(u1_t_ava_rx);
+}
+/*===================================================================================================================================*/
+/*  U1      u1_g_VdfEsoRx_SW_MSBBSW_ECO(void)                                                                                        */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+U1      u1_g_VdfEsoRx_SW_MSBBSW_ECO(void)
+{
+    static const U2    u2_s_VDF_ESO_ECO_MSK = (U2)0x0004U;
+    U2                 u2_t_rx;
+    U1                 u1_t_ava_rx;
+
+    u2_t_rx = (U2)0U;
+    (void)Com_ReceiveSignal(ComConf_ComSignal_B_DMINF3, &u2_t_rx);
+    if((u2_t_rx & u2_s_VDF_ESO_ECO_MSK) != (U2)0U){
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
+    }
+    else{
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_INA;
+    }
+
+    return(u1_t_ava_rx);
+}
+/*===================================================================================================================================*/
+/*  U1      u1_g_VdfEsoRx_SW_MSBBSW_CUSTOM(void)                                                                                     */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+U1      u1_g_VdfEsoRx_SW_MSBBSW_CUSTOM(void)
+{
+    static const U2    u2_s_VDF_ESO_CUSTOM_MSK = (U2)0x0008U;
+    U2                 u2_t_rx;
+    U1                 u1_t_ava_rx;
+
+    u2_t_rx = (U2)0U;
+    (void)Com_ReceiveSignal(ComConf_ComSignal_B_DMINF3, &u2_t_rx);
+    if((u2_t_rx & u2_s_VDF_ESO_CUSTOM_MSK) != (U2)0U){
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
+    }
+    else{
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_INA;
+    }
+
+    return(u1_t_ava_rx);
+}
+/*===================================================================================================================================*/
+/*  U1      u1_g_VdfEsoRx_SW_MSBBSW_RANGE(void)                                                                                      */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+U1      u1_g_VdfEsoRx_SW_MSBBSW_RANGE(void)
+{
+    static const U2    u2_s_VDF_ESO_RANGE_MSK = (U2)0x0010U;
+    U2                 u2_t_rx;
+    U1                 u1_t_ava_rx;
+
+    u2_t_rx = (U2)0U;
+    (void)Com_ReceiveSignal(ComConf_ComSignal_B_DMINF3, &u2_t_rx);
+    if((u2_t_rx & u2_s_VDF_ESO_RANGE_MSK) != (U2)0U){
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
+    }
+    else{
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_INA;
+    }
+
+    return(u1_t_ava_rx);
+}
+/*===================================================================================================================================*/
+/*  U1      u1_g_VdfEsoRx_SW_MSBBSW_RCMFRT(void)                                                                                     */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+U1      u1_g_VdfEsoRx_SW_MSBBSW_RCMFRT(void)
+{
+    static const U2    u2_s_VDF_ESO_RCMFRT_MSK = (U2)0x0020U;
+    U2                 u2_t_rx;
+    U1                 u1_t_ava_rx;
+
+    u2_t_rx = (U2)0U;
+    (void)Com_ReceiveSignal(ComConf_ComSignal_B_DMINF3, &u2_t_rx);
+    if((u2_t_rx & u2_s_VDF_ESO_RCMFRT_MSK) != (U2)0U){
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
+    }
+    else{
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_INA;
+    }
+
+    return(u1_t_ava_rx);
+}
+/*===================================================================================================================================*/
+/*  U1      u1_g_VdfEsoRx_SW_MSBBSW_SNOW(void)                                                                                       */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+U1      u1_g_VdfEsoRx_SW_MSBBSW_SNOW(void)
+{
+    static const U2    u2_s_VDF_ESO_SNOW_MSK = (U2)0x0040U;
+    U2                 u2_t_rx;
+    U1                 u1_t_ava_rx;
+
+    u2_t_rx = (U2)0U;
+    (void)Com_ReceiveSignal(ComConf_ComSignal_B_DMINF3, &u2_t_rx);
+    if((u2_t_rx & u2_s_VDF_ESO_SNOW_MSK) != (U2)0U){
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
+    }
+    else{
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_INA;
+    }
+
+    return(u1_t_ava_rx);
+}
+/*===================================================================================================================================*/
+/*  U1      u1_g_VdfEsoRx_SW_MSBBSW_TRACK(void)                                                                                      */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+U1      u1_g_VdfEsoRx_SW_MSBBSW_TRACK(void)
+{
+    static const U2    u2_s_VDF_ESO_TRACK_MSK = (U2)0x0080U;
+    U2                 u2_t_rx;
+    U1                 u1_t_ava_rx;
+
+    u2_t_rx = (U2)0U;
+    (void)Com_ReceiveSignal(ComConf_ComSignal_B_DMINF3, &u2_t_rx);
+    if((u2_t_rx & u2_s_VDF_ESO_TRACK_MSK) != (U2)0U){
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
+    }
+    else{
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_INA;
+    }
+
+    return(u1_t_ava_rx);
+}
+/*===================================================================================================================================*/
+/*  U1      u1_g_VdfEsoRx_SW_MSBBSW_TRAIL(void)                                                                                      */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+U1      u1_g_VdfEsoRx_SW_MSBBSW_TRAIL(void)
+{
+    static const U1    u1_s_VDF_ESO_TRAIL = (U1)1U;
+    U1                 u1_t_rx;
+    U1                 u1_t_ava_rx;
+
+    u1_t_rx = (U1)0U;
+    (void)Com_ReceiveSignal(ComConf_ComSignal_OMSSSWEX, &u1_t_rx);
+    if(u1_t_rx == u1_s_VDF_ESO_TRAIL){
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
+    }
+    else{
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_INA;
+    }
+
+    return(u1_t_ava_rx);
+}
+/*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
 /*                                                                                                                                   */
@@ -85,8 +292,10 @@ U1      u1_g_VdfEsoRx_DSC(void)
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  BEV      02/10/2025  RO       Added function for BEV System_Consideration_1.(MET-S_ADMID-CSTD-0-)                                */
+/*  BEV-2    12/12/2025  MA       Added 10 function presence judgment processes.(MET-C_MSBBSW-CSTD-0-)                               */
 /*                                                                                                                                   */
 /*  * RO = Ryo Oohashi, KSE                                                                                                          */
 /*  * SN = Shizuka Nakajima, KSE                                                                                                     */
+/*  * MA = Misaki Aiki, Denso Techno                                                                                                 */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
