@@ -349,7 +349,7 @@ const ST_VDF_ESO_CH    st_gp_VDF_ESO_CH[VDF_ESO_NUM_RX] = {
         &u1_g_VdfEsoRx_AUTOP,                   /* fp_u1_AVA_RX        */
         (U2)VDF_ESO_CH_AUTOP,                   /* u2_eso_ch           */
         (U1)VDF_ESO_INPUT_TYPE_CAN,             /* u1_input_type       */
-        (U2)OXCAN_RXD_PDU_CAN_IPA1S05_CH0,      /* u2_msg_rx           */
+        (U2)OXCAN_RXD_PDU_CAN_BDC1SV1_CH0,      /* u2_msg_rx           */
         (U2)0x0002U,                            /* u2_vom_act          */
         ((U2)2100U / (U2)VDF_MAIN_TICK),        /* u2_rxc_peri         */
         {

@@ -53,7 +53,7 @@ static U4      u4_s_AlertS_fctaSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, c
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static const U1  u1_sp_ALERT_S_FCTA_DST[ALERT_S_FCTA_NUM_DST] = {
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 00 UNKNOWN                                         */
-    (U1)ALERT_REQ_S_FCTA_SINGLE,                                               /* 01 SINGLE                                          */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 01 UNKNOWN                                         */
     (U1)ALERT_REQ_S_FCTA_CYCL,                                                 /* 02 CYCL                                            */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 03 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 04 UNKNOWN                                         */
