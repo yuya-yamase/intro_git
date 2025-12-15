@@ -938,7 +938,7 @@ const ST_VDF_ESO_CH    st_gp_VDF_ESO_CH[VDF_ESO_NUM_RX] = {
         (U2)VDF_ESO_CH_VHCOBBSD,                /* u2_eso_ch           */
         (U1)VDF_ESO_INPUT_TYPE_CAN,             /* u1_input_type       */
         (U2)OXCAN_RXD_PDU_CAN_SCS1S11_CH0,      /* u2_msg_rx           */
-        (U2)0x0001U,                            /* u2_vom_act          */
+        (U2)0x0002U,                            /* u2_vom_act          */
         ((U2)4200U / (U2)VDF_MAIN_TICK),        /* u2_rxc_peri         */
         {
             (U2)2U,                             /* u2_rxc_min[MIN_INA] */
