@@ -25,6 +25,9 @@
 #define CANTXAPP_NBYTE_PAYLOAD2                      (2U)
 #define CANTXAPP_NBYTE_PAYLOAD8                      (8U)
 
+#define CANTXAPP_MAIN_TICK                           (10U)
+#define CANTXAPP_HOLD_TIME                           ((U1)150U / (U1)CANTXAPP_MAIN_TICK)
+
 #define CANTXAPP_POS_1_0                             (24U)
 #define CANTXAPP_POS_1_1                             (25U)
 #define CANTXAPP_POS_1_2                             (26U)
@@ -118,6 +121,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Prototypes                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+void    vd_g_CanTxAppAVN1S03_Init(void);
 void    vd_g_CanTxAppMET1S02_Init(void);
 void    vd_g_CanTxAppMET1S27_Init(void);
 void    vd_g_CanTxAppMET1S29_Init(void);
@@ -125,6 +129,7 @@ void    vd_g_CanTxAppMET1S30_Init(void);
 void    vd_g_CanTxAppMET1S62_Init(void);
 void    vd_g_CanTxAppMET1S70_Init(void);
 
+void    vd_g_CanTxAppAVN1S03_Send(void);
 void    vd_g_CanTxAppMET1S02_Send(void);
 void    vd_g_CanTxAppMET1S27_Send(void);
 void    vd_g_CanTxAppMET1S29_Send(void);

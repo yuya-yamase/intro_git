@@ -54,9 +54,9 @@ static U4      u4_s_AlertS_appBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static const U1  u1_sp_ALERT_S_APP_BC_DST[ALERT_S_APP_BC_NUM_DST] = {
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 00 UNKNOWN                                         */
-    (U1)ALERT_REQ_S_APP_BC_NOTOPERATED1,                                       /* 01 NOTOPERATED1                                    */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 01 UNKNOWN                                         */
     (U1)ALERT_REQ_S_APP_BC_DISCONTINUE,                                        /* 02 DISCONTINUE                                     */
-    (U1)ALERT_REQ_S_APP_BC_NOTOPERATED2,                                       /* 03 NOTOPERATED2                                    */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 03 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 04 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 05 UNKNOWN                                         */
     (U1)ALERT_REQ_S_APP_BC_COMPLETION,                                         /* 06 COMPLETION                                      */

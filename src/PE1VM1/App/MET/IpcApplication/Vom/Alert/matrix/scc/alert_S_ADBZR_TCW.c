@@ -1,36 +1,38 @@
-/* 2.6.0 */
+/* 5.0.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-/*  Toyota IPC/MET : Vadef Electrical System Option.                                                                                 */
+/*  Alert_S_ADBZR_TCW                                                                                                                */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define VARDEF_ESOPT_VSC1G96_C_MAJOR             (2)
-#define VARDEF_ESOPT_VSC1G96_C_MINOR             (6)
-#define VARDEF_ESOPT_VSC1G96_C_PATCH             (0)
+#define ALERT_S_ADBZR_TCW_C_MAJOR                         (5)
+#define ALERT_S_ADBZR_TCW_C_MINOR                         (0)
+#define ALERT_S_ADBZR_TCW_C_PATCH                         (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#include "vardef_esopt_cfg_private.h"
-#include "vardef_esopt_rx.h"
+#include "alert_cfg_private.h"
+#include "alert_mtrx_cfg_private.h"
+
+#include "oxcan.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if ((VARDEF_ESOPT_VSC1G96_C_MAJOR != VARDEF_ESOPT_RX_H_MAJOR) || \
-     (VARDEF_ESOPT_VSC1G96_C_MINOR != VARDEF_ESOPT_RX_H_MINOR) || \
-     (VARDEF_ESOPT_VSC1G96_C_PATCH != VARDEF_ESOPT_RX_H_PATCH))
-#error "vardef_esopt_VSC1G96.c and vardef_esopt_rx.h : source and header files are inconsistent!"
+#if (ALERT_S_ADBZR_TCW_C_MAJOR != ALERT_CFG_H_MAJOR)
+#error "alert_S_ADBZR_TCW.c and alert_cfg_private.h : source and header files are inconsistent!"
 #endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#define ALERT_S_ADBZR_TCW_NUM_DST                (16U)
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -40,59 +42,77 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+static U4      u4_s_AlertS_adbzr_tcwSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS);
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+static const U1  u1_sp_ALERT_S_ADBZR_TCW_DST[ALERT_S_ADBZR_TCW_NUM_DST] = {
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 00 UNKNOWN                                         */
+    (U1)ALERT_REQ_S_ADBZR_TCW_CYCL,                                            /* 01 CYCL                                            */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 02 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 03 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 04 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 05 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 06 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 07 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 08 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 09 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 10 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 11 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 12 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 13 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 14 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN                                                      /* 15 UNKNOWN                                         */
+};
+
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+const ST_ALERT_MTRX st_gp_ALERT_S_ADBZR_TCW_MTRX[1] = {
+    {
+        &u4_s_AlertS_adbzr_tcwSrcchk,                                          /* fp_u4_SRC_CHK                                      */
+        vdp_PTR_NA,                                                            /* fp_vd_XDST                                         */
+
+        (const U4 *)vdp_PTR_NA,                                                /* u4p_MASK                                           */
+        (const U4 *)vdp_PTR_NA,                                                /* u4p_CRIT                                           */
+
+        &u1_sp_ALERT_S_ADBZR_TCW_DST[0],                                       /* u1p_DST                                            */
+        (U2)ALERT_S_ADBZR_TCW_NUM_DST,                                         /* u2_num_srch                                        */
+        (U1)ALERT_VOM_IGN_ON                                                   /* u1_vom_act                                         */
+    }
+};
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*===================================================================================================================================*/
-/*  U1      u1_g_VdfEsoRx_BRPADW(void)                                                                                                  */
+/*  static U4      u4_s_AlertS_adbzr_tcwSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)                           */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-U1      u1_g_VdfEsoRx_BRPADW(void)
+static U4      u4_s_AlertS_adbzr_tcwSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
-    U1                 u1_t_rx;
-    U1                 u1_t_ava_rx;
+    static const U2 u2_s_ALERT_S_ADBZR_TCW_TO_THRESH  = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
+    static const U1 u1_s_ALERT_S_ADBZR_TCW_LSB_MSGSTS = (U1)2U;
+    U1              u1_t_msgsts;
+    U1              u1_t_sgnl;
+    U4              u4_t_src_chk;
 
-    u1_t_rx = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_PWIINFO, &u1_t_rx);
-    if(u1_t_rx != (U1)0U){
-        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
-    }
-    else{
-        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_INA;
-    }
+    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_TRA1S01_CH0,
+                                      (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP,
+                                      u2_s_ALERT_S_ADBZR_TCW_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
-    return(u1_t_ava_rx);
-}
+    u1_t_sgnl     = (U1)0U;
+    (void)Com_ReceiveSignal(ComConf_ComSignal_TCW_BUZ, &u1_t_sgnl);
+    u4_t_src_chk  = (U4)u1_t_sgnl;
 
-/*===================================================================================================================================*/
-/*  U1      u1_g_VdfEsoRx_SW_MSBBSW_DAC(void)                                                                                        */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1      u1_g_VdfEsoRx_SW_MSBBSW_DAC(void)
-{
-    U1                 u1_t_rx;
-    U1                 u1_t_ava_rx;
+    u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_S_ADBZR_TCW_LSB_MSGSTS);
 
-    u1_t_rx = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_DACSSWEX, &u1_t_rx);
-    if(u1_t_rx != (U1)0U){
-        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
-    }
-    else{
-        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_INA;
-    }
-
-    return(u1_t_ava_rx);
+    return(u4_t_src_chk);
 }
 
 /*===================================================================================================================================*/
@@ -103,20 +123,8 @@ U1      u1_g_VdfEsoRx_SW_MSBBSW_DAC(void)
 /*                                                                                                                                   */
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  2.4.0    07/02/2024   JMH     Newly Created                                                                                      */
-/*  2.5.0    11/25/2024  KO       vardef_esopt.c v2.4.0 -> v2.5.0                                                                    */
-/*  2.6.0    05/30/2025  SN       vardef_esopt.c v2.5.0 -> v2.6.0                                                                    */
+/*  5.0.0    12/09/2025  DT       New.                                                                                               */
 /*                                                                                                                                   */
-/*                                                                                                                                   */
-/*  Revision Date        Author   Change Description                                                                                 */
-/* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  19PFv3   07/02/2024   JMH     Added function of BRPADW for 19PFv3                                                                */
-/*  BEV      07/04/2025   KO      Change config for BEV System_Consideration_2.(MET-C_BRPADW-CSTD-A0-)                               */
-/*  BEV-2    12/12/2025   MA      Added 10 function presence judgment processes.(MET-C_MSBBSW-CSTD-0-)                               */
-/*                                                                                                                                   */
-/*  * JMH = James Michael D. Hilarion, DTPH                                                                                          */
-/*  * KO   = Kazuto Oishi,  Denso Techno                                                                                             */
-/*  * SN   = Shizuka Nakajima, KSE                                                                                                   */
-/*  * MA   = Misaki Aiki, Denso Techno                                                                                               */
+/*  * DT   = Dj Tutanes, DTPH                                                                                                        */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
