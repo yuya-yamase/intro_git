@@ -8,6 +8,7 @@
 /* -------------------------------------------------------------------------- */
 #define	SWIC_REG_TBL(a)		{(a), SWIC_TBL_NUM(a)}	/* swic_reg_tblê›íËóp */
 #define	SWIC_TBL_NUM(a)	(sizeof(a)/sizeof((a)[0]))
+#define D_ETHSWT_SWIC_PERIOD            (1U)
                              
 #define D_ETHSWT_SWIC_ERR_NONE          (0x0000uL)
 #define D_ETHSWT_SWIC_ERR_POWEROFF	    (0x0001uL)	/* SWICìdåπOFF */
