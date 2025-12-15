@@ -875,6 +875,6 @@ static  void    vd_s_wChimeCfgReqDel(U4 * u4_ap_reqbit, const U1 u1_a_REQ_ID)
 /*  * HL   = Harry Lapiceros, DTPH                                                                                                   */
 /*  * EA   = Eunice Avelin, DTPH                                                                                                     */
 /*  * DT   = Dj Tutanes, DTPH                                                                                                        */
-/*  * ED   = Emoh Dagasdas, DTPH                                                                                                   */
+/*  * ED   = Emoh Dagasdas, DTPH                                                                                                     */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
