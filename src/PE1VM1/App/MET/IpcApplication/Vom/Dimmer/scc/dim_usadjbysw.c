@@ -1,4 +1,4 @@
-/* 1.4.0 */
+/* 1.4.1 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -11,7 +11,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define DIM_USADJ_BY_SW_C_MAJOR                  (1)
 #define DIM_USADJ_BY_SW_C_MINOR                  (4)
-#define DIM_USADJ_BY_SW_C_PATCH                  (0)
+#define DIM_USADJ_BY_SW_C_PATCH                  (1)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -91,6 +91,7 @@ typedef struct {
 static U2         u2_s_dim_usadjbysw_nvm_updt;
 static U2         u2_s_dim_usadjbysw_tmelpsd;
 static U1         u1_s_dim_usadjbysw_swchk;
+static U1         u1_s_dim_usadjbysw_vrupdn;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
@@ -120,6 +121,7 @@ void    vd_g_DimUsadjbySwInit(void)
 
     u2_s_dim_usadjbysw_tmelpsd  = (U2)U2_MAX;
     u1_s_dim_usadjbysw_swchk    = (U1)DIM_USADJ_BY_SW_SWCHK_NO_PRS;
+    u1_s_dim_usadjbysw_vrupdn   = (U1)DIM_SW_VRNON;
 
 }
 /*===================================================================================================================================*/
@@ -136,6 +138,7 @@ void    vd_g_DimUsadjbySwUpdt(const U1 u1_a_DAYNIGHT, U2 * u2_ap_lvl)
     U1                       u1_t_adjbl;
     U1                       u1_t_rheosw;
 
+    u1_s_dim_usadjbysw_vrupdn = (U1)DIM_SW_VRNON;
     u1_t_rheosw = u1_DIM_USADJ_BY_SW_CALIB_RHEOSW;
 
     if(u2_ap_lvl != vdp_PTR_NA){
@@ -353,28 +356,28 @@ static void    vd_s_DimUsadjbySwVrchk(const U1 u1_a_ADJBL, const U1 u1_a_TAIL_ON
 static U2  u2_s_DimUsadjbySwVrHysManualLv(const U2 u2_a_AD, const U2 u2_a_OLDSTEP)
 {
     static const ST_DIM_VRADHYS st_sp_DIM_USADJ_BY_SW_VRSTEP[DIM_USADJ_BY_SW_NUM_LVL] = {
-        {(U2)10U,   (U2)10U   },
-        {(U2)29U,   (U2)70U   },
-        {(U2)76U,   (U2)117U  },
-        {(U2)125U,  (U2)166U  },
-        {(U2)172U,  (U2)213U  },
-        {(U2)219U,  (U2)260U  },
-        {(U2)266U,  (U2)307U  },
-        {(U2)313U,  (U2)354U  },
-        {(U2)360U,  (U2)401U  },
-        {(U2)407U,  (U2)448U  },
-        {(U2)456U,  (U2)497U  },
-        {(U2)503U,  (U2)544U  },
-        {(U2)550U,  (U2)591U  },
-        {(U2)597U,  (U2)638U  },
-        {(U2)644U,  (U2)685U  },
-        {(U2)692U,  (U2)732U  },
-        {(U2)739U,  (U2)780U  },
-        {(U2)786U,  (U2)827U  },
-        {(U2)835U,  (U2)876U  },
-        {(U2)882U,  (U2)923U  },
-        {(U2)929U,  (U2)970U  },
-        {(U2)996U,  (U2)996U  }
+        {(U2)33U,   (U2)33U   },
+        {(U2)78U,   (U2)71U   },
+        {(U2)123U,  (U2)115U  },
+        {(U2)169U,  (U2)160U  },
+        {(U2)214U,  (U2)204U  },
+        {(U2)260U,  (U2)248U  },
+        {(U2)305U,  (U2)293U  },
+        {(U2)350U,  (U2)337U  },
+        {(U2)396U,  (U2)382U  },
+        {(U2)441U,  (U2)426U  },
+        {(U2)487U,  (U2)471U  },
+        {(U2)532U,  (U2)515U  },
+        {(U2)577U,  (U2)560U  },
+        {(U2)623U,  (U2)604U  },
+        {(U2)668U,  (U2)649U  },
+        {(U2)713U,  (U2)693U  },
+        {(U2)759U,  (U2)738U  },
+        {(U2)804U,  (U2)782U  },
+        {(U2)850U,  (U2)827U  },
+        {(U2)895U,  (U2)871U  },
+        {(U2)940U,  (U2)916U  },
+        {(U2)960U,  (U2)960U  }
     };
     U2  u2_t_newstep;
     U1  u1_t_fixed;
@@ -406,8 +409,30 @@ static U2  u2_s_DimUsadjbySwVrHysManualLv(const U2 u2_a_AD, const U2 u2_a_OLDSTE
     if(u2_t_newstep != u2_a_OLDSTEP){
         u2_s_dim_usadjbysw_nvm_updt = (U2)0U;
     }
+    if(u2_a_OLDSTEP < (U2)DIM_USADJ_BY_SW_NUM_LVL){
+        if(u2_t_newstep > u2_a_OLDSTEP){
+            u1_s_dim_usadjbysw_vrupdn = (U1)DIM_SW_VRUP;
+        }
+        else if(u2_t_newstep < u2_a_OLDSTEP){
+            u1_s_dim_usadjbysw_vrupdn = (U1)DIM_SW_VRDOWN;
+        }
+        else{
+            /* Do Nothing */
+        }
+    }
 
     return(u2_t_newstep);
+}
+
+/*===================================================================================================================================*/
+/*  U1      u1_g_DimUsadjbySwVrUpDown(void)                                                                                          */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+U1      u1_g_DimUsadjbySwVrUpDown(void)
+{
+    return(u1_s_dim_usadjbysw_vrupdn);
 }
 
 /*===================================================================================================================================*/
@@ -424,6 +449,7 @@ static U2  u2_s_DimUsadjbySwVrHysManualLv(const U2 u2_a_AD, const U2 u2_a_OLDSTE
 /*  1.3.0     3/26/2019  TN       NULL check was implemented into vd_g_DimUsadjbySwUpdt.                                             */
 /*  1.3.1     1/26/2021  KM       Fixed QAC warning.(No.2013 No Comments in Else Case)                                               */
 /*  1.4.0     2/15/2024  TH       for 19PFv3                                                                                         */
+/*  1.4.1    11/19/2024  TH       Update HDSR v2.3.d (04-005)                                                                        */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */

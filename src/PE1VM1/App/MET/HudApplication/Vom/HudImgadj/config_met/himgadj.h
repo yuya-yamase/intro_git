@@ -1,4 +1,4 @@
-/* 2.2.1 */
+/* 2.2.4 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -12,7 +12,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define HUDIMGADJ_H_MAJOR                      (2)
 #define HUDIMGADJ_H_MINOR                      (2)
-#define HUDIMGADJ_H_PATCH                      (1)
+#define HUDIMGADJ_H_PATCH                      (4)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
@@ -76,6 +76,10 @@ U1      u1_g_HudImgAdjGetMovReqID(void);                                        
 /*---------------------------------------------------------------------------*/
 /*  ZEROPOS_INIT(Routine Control)                                            */
 /*---------------------------------------------------------------------------*/
+#define HUDIMGADJ_RTCTLRSLT_NML             (0x02U)
+#define HUDIMGADJ_RTCTLRSLT_ERR             (0x03U)
+#define HUDIMGADJ_RTCTLRSLT_RUN             (0x01U)
+#define HUDIMGADJ_RTCTLRSLT_IDLE            (0xFFU)
 U1      u1_g_HudImgAdjRoutRslt(void);
 U1      u1_g_HudImgAdjRoutStartIsOK(void);
 U1      u1_g_HudImgAdjGetGvRtctlIniReq(void);                                       /* GV_DG_VIPOS_INIT   */

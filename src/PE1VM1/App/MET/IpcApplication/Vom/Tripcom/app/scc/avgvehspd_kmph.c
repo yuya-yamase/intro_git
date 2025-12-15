@@ -1,4 +1,4 @@
-/* 2.0.4 */
+/* 2.1.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,8 +10,8 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define AVGVEHSPD_KMPH_C_MAJOR                  (2)
-#define AVGVEHSPD_KMPH_C_MINOR                  (0)
-#define AVGVEHSPD_KMPH_C_PATCH                  (4)
+#define AVGVEHSPD_KMPH_C_MINOR                  (1)
+#define AVGVEHSPD_KMPH_C_PATCH                  (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -63,6 +63,7 @@
 typedef struct {
     U2                                          u2_calctm;
     U1                                          u1_initupdt;
+    U1                                          u1_rstimmw;
 } ST_AVGVEHSPD_VAR;
 
 typedef struct {
@@ -87,6 +88,9 @@ static  U1                                      u1_s_avgvehspd_applsts;
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+static U1       u1_s_AvgVehspdImmwRunAct(const ST_AVGVEHSPD_CNTT * stp_a_CNTT, const U1 u1_a_UPDT, const U1 u1_a_INIT);
+static U1       u1_s_AvgVehspdImmwRstChk(const ST_AVGVEHSPD_CNTT * stp_a_CNTT);
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -158,6 +162,7 @@ void            vd_g_AvgVehspdInit(void)
     for (u4_t_loop = (U4)0U; u4_t_loop < (U4)AVGVEHSPD_NUM_CNTTS; u4_t_loop++) {
         st_sp_avgvehspd_var[u4_t_loop].u2_calctm     = (U2)U2_MAX;
         st_sp_avgvehspd_var[u4_t_loop].u1_initupdt   = (U1)FALSE;
+        st_sp_avgvehspd_var[u4_t_loop].u1_rstimmw    = (U1)TRIPCOM_RSTIMMW_UNK;
     }
     u1_s_avgvehspd_applsts = (U1)TRIPCOM_STSBIT_UNKNOWN;
 }
@@ -326,6 +331,66 @@ void            vd_g_AvgVehspdUpdt(const U1 u1_a_CNTTID)
 }
 
 /*===================================================================================================================================*/
+/* void            vd_g_AvgVehspdRstImmw(const U1 u1_a_ACTV, const U1 u1_a_CNTTID, const U2 * u2_ap_STSFIELD)                        */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void            vd_g_AvgVehspdRstImmw(const U1 u1_a_ACTV, const U1 u1_a_CNTTID, const U2 * u2_ap_STSFIELD)
+{
+    const ST_AVGVEHSPD_CNTT *                   stp_t_CNTT;
+    ST_AVGVEHSPD_VAR *                          stp_t_var;
+    U1                                          u1_t_rstimmw;
+    U1                                          u1_t_updt;
+    U1                                          u1_t_init;
+    U1                                          u1_t_accpt;
+    U1                                          u1_t_stsbit;
+
+    if (u1_a_CNTTID < (U1)AVGVEHSPD_NUM_CNTTS) {
+        stp_t_CNTT   = &st_sp_AVGVEHSPD_CNTTS_CFG[u1_a_CNTTID];
+        stp_t_var    = &st_sp_avgvehspd_var[u1_a_CNTTID];
+        u1_t_rstimmw = stp_t_var->u1_rstimmw;
+
+        if((u1_t_rstimmw & (U1)TRIPCOM_RSTIMMW_RUN) == (U1)0U){
+            /* TRIPCOM_RSTIMMW_UNK or TRIPCOM_RSTIMMW_SUC or TRIPCOM_RSTIMMW_FAI */
+            if((u2_ap_STSFIELD[TRIPCOM_STSFIELD_MARST_IMMW] & stp_t_CNTT->u2_manualreset) != (U2)0U){
+                if(u1_a_ACTV == (U1)TRUE){
+                    u1_t_updt = stp_t_var->u1_initupdt;
+                    u1_t_init = (U1)FALSE;
+                }
+                else{
+                    u1_t_updt = (U1)TRUE;
+                    u1_t_init = (U1)TRUE;
+                }
+
+                u1_t_accpt = u1_s_AvgVehspdImmwRunAct(stp_t_CNTT, u1_t_updt, u1_t_init);
+                if(u1_t_accpt == (U1)TRUE){
+                    u1_t_rstimmw = (U1)TRIPCOM_RSTIMMW_RUN;
+                }
+                else{
+                    u1_t_rstimmw = (U1)TRIPCOM_RSTIMMW_FAI;
+                }
+            }
+        }
+        else{
+            /* TRIPCOM_RSTIMMW_RUN */
+            u1_t_stsbit = u1_s_AvgVehspdImmwRstChk(stp_t_CNTT);
+
+            if((u1_t_stsbit & (U1)TRIPCOM_MS_NVMSTS_SUC) != (U1)0x00U){
+                u1_t_rstimmw = (U1)TRIPCOM_RSTIMMW_SUC;
+            }
+            else if((u1_t_stsbit & (U1)TRIPCOM_MS_NVMSTS_FAIL) != (U1)0x00U){
+                u1_t_rstimmw = (U1)TRIPCOM_RSTIMMW_FAI;
+            }
+            else{
+                /* nothing */
+            }
+        }
+        stp_t_var->u1_rstimmw = u1_t_rstimmw;
+    }
+}
+
+/*===================================================================================================================================*/
 /* U1              u1_g_AvgVehspdKmph(const U1 u1_a_AVG_VEHSPD_CH, U2 * u2p_a_kmph)                                                  */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
@@ -350,6 +415,24 @@ U1              u1_g_AvgVehspdKmph(const U1 u1_a_AVG_VEHSPD_CH, U2 * u2p_a_kmph)
     }
 
     return (u1_t_status);
+}
+
+/*===================================================================================================================================*/
+/* U1              u1_g_AvgVehspdRstImmwRslt(const U1 u1_a_AVG_VEHSPD_CH)                                                            */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+U1              u1_g_AvgVehspdRstImmwRslt(const U1 u1_a_AVG_VEHSPD_CH)
+{
+    U1                                          u1_t_rslt;
+
+    u1_t_rslt = (U1)TRIPCOM_RSTIMMW_UNK;
+    if (u1_a_AVG_VEHSPD_CH < (U1)AVGVEHSPD_NUM_CNTTS) {
+        u1_t_rslt = st_sp_avgvehspd_var[u1_a_AVG_VEHSPD_CH].u1_rstimmw;
+    }
+
+    return(u1_t_rslt);
 }
 
 /*===================================================================================================================================*/
@@ -391,6 +474,72 @@ U2              u2_g_AvgVehspdCalcTx(const U1 u1_a_CNTTID, const U1 u1_a_UNIT)
     return (u2_t_txval);
 }
 
+/*===================================================================================================================================*/
+/* static U1       u1_s_AvgVehspdImmwRunAct(const ST_AVGVEHSPD_CNTT * stp_a_CNTT, const U1 u1_a_UPDT, const U1 u1_a_INIT)            */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static U1       u1_s_AvgVehspdImmwRunAct(const ST_AVGVEHSPD_CNTT * stp_a_CNTT, const U1 u1_a_UPDT, const U1 u1_a_INIT)
+{
+    U1                                          u1_t_accpt;
+    U1                                          u1_t_rslt_a;
+    U1                                          u1_t_rslt_b;
+    U1                                          u1_t_rslt_c;
+
+    u1_t_accpt = (U1)FALSE;
+
+    if(u1_a_UPDT == (U1)TRUE){
+        u1_t_rslt_a = u1_g_TripcomMsGetNvmRslt(stp_a_CNTT->u1_ms_vehspd_id );
+        u1_t_rslt_b = u1_g_TripcomMsGetNvmRslt(stp_a_CNTT->u1_ms_elpsdtm_id);
+        u1_t_rslt_c = u1_g_TripcomMsGetNvmRslt(stp_a_CNTT->u1_ms_odocnt_id );
+
+        if((u1_t_rslt_a != (U1)TRIPCOM_MS_NVMSTS_WAIT) &&
+           (u1_t_rslt_b != (U1)TRIPCOM_MS_NVMSTS_WAIT) &&
+           (u1_t_rslt_c != (U1)TRIPCOM_MS_NVMSTS_WAIT)){
+            if(u1_a_INIT == (U1)TRUE){
+                vd_g_TripcomMsSetAccmltVal(stp_a_CNTT->u1_ms_vehspd_id,  (U4)0U);
+                vd_g_TripcomMsSetAccmltVal(stp_a_CNTT->u1_ms_elpsdtm_id, (U4)0U);
+                vd_g_TripcomMsSetAccmltVal(stp_a_CNTT->u1_ms_odocnt_id,  (U4)0U);
+            }
+
+            vd_g_TripcomMsSetNvmRqst(stp_a_CNTT->u1_ms_vehspd_id );
+            vd_g_TripcomMsSetNvmRqst(stp_a_CNTT->u1_ms_elpsdtm_id);
+            vd_g_TripcomMsSetNvmRqst(stp_a_CNTT->u1_ms_odocnt_id );
+
+            u1_t_accpt = (U1)TRUE;
+        }
+    }
+    return(u1_t_accpt);
+}
+
+/*===================================================================================================================================*/
+/* static U1       u1_s_AvgVehspdImmwRstChk(const ST_AVGVEHSPD_CNTT * stp_a_CNTT)                                                    */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static U1       u1_s_AvgVehspdImmwRstChk(const ST_AVGVEHSPD_CNTT * stp_a_CNTT)
+{
+    U1                                          u1_t_tmpbit;
+    U1                                          u1_t_stsbit;
+    U1                                          u1_t_sucbit;
+    U1                                          u1_t_faibit;
+
+    u1_t_stsbit = u1_g_TripcomMsGetNvmRslt(stp_a_CNTT->u1_ms_vehspd_id);
+
+    u1_t_tmpbit = u1_g_TripcomMsGetNvmRslt(stp_a_CNTT->u1_ms_elpsdtm_id);
+    u1_t_sucbit = (U1)((u1_t_stsbit & u1_t_tmpbit) & (U1)TRIPCOM_MS_NVMSTS_SUC);
+    u1_t_faibit = (U1)((u1_t_stsbit | u1_t_tmpbit) & (U1)TRIPCOM_MS_NVMSTS_FAIL);
+    u1_t_stsbit = u1_t_sucbit | u1_t_faibit;
+
+    u1_t_tmpbit = u1_g_TripcomMsGetNvmRslt(stp_a_CNTT->u1_ms_odocnt_id);
+    u1_t_sucbit = (U1)((u1_t_stsbit & u1_t_tmpbit) & (U1)TRIPCOM_MS_NVMSTS_SUC);
+    u1_t_faibit = (U1)((u1_t_stsbit | u1_t_tmpbit) & (U1)TRIPCOM_MS_NVMSTS_FAIL);
+    u1_t_stsbit = u1_t_sucbit | u1_t_faibit;
+
+    return(u1_t_stsbit);
+}
 
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
@@ -406,9 +555,11 @@ U2              u2_g_AvgVehspdCalcTx(const U1 u1_a_CNTTID, const U1 u1_a_UNIT)
 /*  2.0.2    10/25/2021  TA(M)    Supports TripA and TripB.                                                                          */
 /*  2.0.3    10/27/2021  TK       QAC supported.                                                                                     */
 /*  2.0.4    02/25/2022  TA(M)    Delete call vd_g_AvgVehspdUpdt((U1)AVGVEHSPD_CNTT_TA) at vd_g_AvgVehspdInit                        */
+/*  2.1.0    02/18/2025  MaO(M)   Add privacy data delete/result API                                                                 */
 /*                                                                                                                                   */
 /*  * HY   = Hidefumi Yoshida, Denso                                                                                                 */
 /*  * YA   = Yuhei Aoyama, DensoTechno                                                                                               */
 /*  * TA(M)= Teruyuki Anjima, NTT Data MSE                                                                                           */
+/*  * MaO(M) = Masayuki Okada, NTT Data MSE                                                                                          */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

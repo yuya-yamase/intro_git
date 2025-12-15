@@ -1,4 +1,4 @@
-/* 2.4.0 */
+/* 2.5.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -13,7 +13,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define TRIPCOM_PRIVATE_H_MAJOR                 (2)
-#define TRIPCOM_PRIVATE_H_MINOR                 (4)
+#define TRIPCOM_PRIVATE_H_MINOR                 (5)
 #define TRIPCOM_PRIVATE_H_PATCH                 (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -24,12 +24,14 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define TRIPCOM_TICK                            (50U)
 
-#define TRIPCOM_NUM_STSFIELD                    (5U)
+#define TRIPCOM_NUM_STSFIELD                    (7U)
 #define TRIPCOM_STSFIELD_VSTS                   (0U)
 #define TRIPCOM_STSFIELD_SNSR                   (1U)
 #define TRIPCOM_STSFIELD_MANUAL_RSTRQ           (2U)
 #define TRIPCOM_STSFIELD_AUTO_RSTRQ             (3U)
-#define TRIPCOM_STSFIELD_OTHRQ                  (4U)
+#define TRIPCOM_STSFIELD_AURST_IMMW             (4U)
+#define TRIPCOM_STSFIELD_MARST_IMMW             (5U)
+#define TRIPCOM_STSFIELD_OTHRQ                  (6U)
 
 /*  TRIPCOM_STSFIELD_VSTS                       */
 #define TRIPCOM_VEHSTS_ACCON                    (0x0001U)
@@ -73,6 +75,13 @@
 /* #define TRIPCOM_RSTRQBIT_M_AVGFEHE_ONEM      (0x0040U)                   defined at tripcom.h                                     */
 /* #define TRIPCOM_RSTRQBIT_M_AVGEE_TA          (0x0080U)                   defined at tripcom.h                                     */
 /* #define TRIPCOM_RSTRQBIT_M_AVGEE_ONEM        (0x0100U)                   defined at tripcom.h                                     */
+/* #define TRIPCOM_RSTRQBIT_M_AVGVEHSPD_TR_A    (0x0200U)                   defined at tripcom.h                                     */
+/* #define TRIPCOM_RSTRQBIT_M_AVGVEHSPD_TR_B    (0x0400U)                   defined at tripcom.h                                     */
+/* #define TRIPCOM_RSTRQBIT_M_PTSRUNDIST_TR_A   (0x0800U)                   defined at tripcom.h                                     */
+/* #define TRIPCOM_RSTRQBIT_M_PTSRUNDIST_TR_B   (0x1000U)                   defined at tripcom.h                                     */
+/* #define TRIPCOM_RSTRQBIT_M_PTSRUNTM_TR_A     (0x2000U)                   defined at tripcom.h                                     */
+/* #define TRIPCOM_RSTRQBIT_M_PTSRUNTM_TR_B     (0x4000U)                   defined at tripcom.h                                     */
+/* #define TRIPCOM_RSTRQBIT_M_DTE_RF            (0x8000U)                   defined at tripcom.h                                     */
 #define TRIPCOM_RSTRQBIT_A_DRVCYC               (0x0001U)
 #define TRIPCOM_RSTRQBIT_A_FE_RECHRG            (0x0002U)
 #define TRIPCOM_RSTRQBIT_A_DTE_RECHRG           (0x0004U)
@@ -87,6 +96,12 @@
 #define TRIPCOM_PSRQBIT_A_DTE_RECHRG            (0x0002U)               /*  Refuel pause                                                                 */
 #define TRIPCOM_PSRQBIT_A_FRCRECHRG             (0x0004U)               /*  Force Refuel pause                                                           */
 #define TRIPCOM_PSRQBIT_A_EVRUN                 (0x0008U)               /*  EV Run Mode pause                                                            */
+
+/*  TRIPCOM_STSFIELD_AURST_IMMW                  */
+/* #define TRIPCOM_RSTRQBIT_A_FRCRECHRG         (0x0008U) */
+
+/*  TRIPCOM_STSFIELD_MARST_IMMW                  */
+/* see TRIPCOM_STSFIELD_RSTRQ */
 
 #define TRIPCOM_NUM_DELTA                       (14U)
 #define TRIPCOM_DELTA_DC_ELPSD_10MS             (0U)                    /* Unsigned : Elapsed time during driving cycle                        [10ms]    */
@@ -109,10 +124,6 @@
 #define TRIPCOM_ENGPARAM_DEFFE_MAX              (2U)                    /*  Learned fe range                                                             */
 #define TRIPCOM_ENGPARAM_DKHCOEF                (3U)                    /*  Coefficient to adjust distance                                               */
 #define TRIPCOM_ENGPARAM_SAVEFSRA               (4U)                    /*  Saved fe per sec                                                             */
-
-#define TRIPCOM_NUM_MTRLINFO                    (2U)
-#define TRIPCOM_FUELINFO_FULL_10ML              (0U)                    /*  Full fuel volume                                                             */
-#define TRIPCOM_FUELINFO_LEFT_10ML              (1U)                    /*  Left fuel volume                                                             */
 
 #define TRIPCOM_FUELUSD_PC_PER_L                (2000000U)
 #define TRIPCOM_HYDRUSD_PC_PER_KG               (1000000U)
@@ -140,10 +151,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  for application                                                                                                                  */
 U1              u1_g_TripcomOvrfChk(const U4 u4_a_AUGEND, const U4 u4_a_ADDEND, const U4 u4_a_MAX);
-U1              u1_g_TripcomGetMaterialInfo(const U1 u1_a_INFOID, U2 * u2p_a_val);
-U1              u1_g_TripcomGetEMGF(U1 * u1p_a_emgf);
 U1              u1_g_TripcomGetPIEVSTS(U1 * u1p_a_pievsts);
-U1              u1_g_TripcomGetPHVMDIND(U1 * u1p_a_phvmdind);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */

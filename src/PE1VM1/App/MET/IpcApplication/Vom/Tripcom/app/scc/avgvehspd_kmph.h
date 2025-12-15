@@ -1,4 +1,4 @@
-/* 2.0.4 */
+/* 2.1.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -13,8 +13,8 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define AVGVEHSPD_KMPH_H_MAJOR                  (2)
-#define AVGVEHSPD_KMPH_H_MINOR                  (0)
-#define AVGVEHSPD_KMPH_H_PATCH                  (4)
+#define AVGVEHSPD_KMPH_H_MINOR                  (1)
+#define AVGVEHSPD_KMPH_H_PATCH                  (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -40,6 +40,7 @@ void            vd_g_AvgVehspdApplTask(const U2 * u2_ap_STSFIELD);
 U1              u1_g_AvgVehspdCalcTrnst(const U1 u1_a_CNTTID, const U2 * u2_ap_STSFIELD);
 void            vd_g_AvgVehspdAccmlt(const U1 u1_a_CNTTID, const U2 * u2_ap_STSFIELD, const U4 * u4_ap_DELTA);
 void            vd_g_AvgVehspdUpdt(const U1 u1_a_CNTTID);
+void            vd_g_AvgVehspdRstImmw(const U1 u1_a_ACTV, const U1 u1_a_CNTTID, const U2 * u2_ap_STSFIELD);
 
 U2              u2_g_AvgVehspdCalcTx(const U1 u1_a_CNTTID, const U1 u1_a_UNIT);
 

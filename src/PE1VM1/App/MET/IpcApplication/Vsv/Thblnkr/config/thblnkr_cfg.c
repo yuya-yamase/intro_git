@@ -1,4 +1,4 @@
-/* 3.2.0 */
+/* 3.5.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define THBLNKR_CFG_C_MAJOR                      (3)
-#define THBLNKR_CFG_C_MINOR                      (2)
+#define THBLNKR_CFG_C_MINOR                      (5)
 #define THBLNKR_CFG_C_PATCH                      (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -18,8 +18,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "thblnkr_cfg_private.h"
 #include "vehspd_kmph.h"
-#include "vardef.h"
-#include "oxcan.h"
+#include "alert.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -51,9 +50,6 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if (THBLNKR_UNKNOWN != COM_NO_RX)
-#error "thblnkr status bit and com status bit are inconsistent!"
-#endif
 /*===================================================================================================================================*/
 /*  U2    u2_g_ThblnkrVehSpdDsplyd(void)                                                                                             */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
@@ -75,56 +71,43 @@ U2    u2_g_ThblnkrVehSpdDsplyd(void)
 }
 
 /*===================================================================================================================================*/
-/* U1      u1_g_ThblnkrCfgSndPrs(void)                                                                                               */
+/*  U1             u1_g_ThblnkrCfgL_Req(void)                                                                                        */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
+/*  Return:         u1_t_ret                                                                                                         */
 /*===================================================================================================================================*/
-U1      u1_g_ThblnkrCfgSndPrs(void)
+U1             u1_g_ThblnkrCfgL_Req(void)
 {
-    U4      u4_t_ds2e_2043;
-    U1      u1_t_snd_prs;
+    U1 u1_t_ret;
+    U1 u1_t_alert_req;
 
-    u4_t_ds2e_2043 = u4_g_VardefDs2E_Las32((U2)VDF_DS_2E_2043);
-
-    switch (u4_t_ds2e_2043) {
-        case (U4)VDF_DS_2E_TIC_TOC_HI:
-            u1_t_snd_prs = (U1)THBLNKR_SNDPRS_HI;
-            break;
-        case (U4)VDF_DS_2E_TIC_TOC_LO:
-            u1_t_snd_prs = (U1)THBLNKR_SNDPRS_LO;
-            break;
-        case (U4)VDF_DS_2E_TIC_TOC_ME:
-        default:
-            u1_t_snd_prs = (U1)THBLNKR_SNDPRS_MID;
-            break;
+    u1_t_ret       = (U1)FALSE;
+    u1_t_alert_req = u1_g_AlertReqByCh((U2)ALERT_CH_B_TURHAZ_L);
+    if(u1_t_alert_req == (U1)ALERT_REQ_B_TURHAZ_L_ON){
+        u1_t_ret = (U1)TRUE;
     }
 
-    return (u1_t_snd_prs);
+    return(u1_t_ret);
 }
 
 /*===================================================================================================================================*/
-/*  U1             u1_g_ThblnkrCfgMTNL(U1 * u1p_a_mtnls_l)                                                                           */
+/*  U1             u1_g_ThblnkrCfgR_Req(void)                                                                                        */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
+/*  Return:         u1_t_ret                                                                                                         */
 /*===================================================================================================================================*/
-U1             u1_g_ThblnkrCfgMTNLS_L(U1 * u1p_a_mtnls_l)
+U1             u1_g_ThblnkrCfgR_Req(void)
 {
-    (void)Com_ReceiveSignal(ComConf_ComSignal_MTNLS_L, u1p_a_mtnls_l);
-    return((U1)Com_GetIPDUStatus(MSG_BDC1S23_RXCH0));
-}
+    U1 u1_t_ret;
+    U1 u1_t_alert_req;
 
-/*===================================================================================================================================*/
-/*  U1             u1_g_ThblnkrCfgMTNR(U1 * u1p_a_mtnls_r)                                                                           */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1             u1_g_ThblnkrCfgMTNLS_R(U1 * u1p_a_mtnls_r)
-{
-    (void)Com_ReceiveSignal(ComConf_ComSignal_MTNLS_R, u1p_a_mtnls_r);
-    return((U1)Com_GetIPDUStatus(MSG_BDC1S23_RXCH0));
+    u1_t_ret       = (U1)FALSE;
+    u1_t_alert_req = u1_g_AlertReqByCh((U2)ALERT_CH_B_TURHAZ_R);
+    if(u1_t_alert_req == (U1)ALERT_REQ_B_TURHAZ_R_ON){
+        u1_t_ret = (U1)TRUE;
+    }
+
+    return(u1_t_ret);
 }
 
 /*===================================================================================================================================*/
@@ -147,7 +130,10 @@ U1             u1_g_ThblnkrCfgMTNLS_R(U1 * u1p_a_mtnls_r)
 /*  2.5.1    10/20/2022  YI       thblnkr.c v2.5.0 -> v2.5.1.                                                                        */
 /*  3.0.0    12/13/2023  KH       thblnkr.c v2.5.1 -> v3.0.0.                                                                        */
 /*  3.1.0    07/03/2024  AA       thblnkr.c v3.0.0 -> v3.1.0.                                                                        */
-/*  3.2.0    10/23/2024  RS       thblnkr.c v3.1.0 -> v3.2.0. (Change for BEV System_Consideration_1)                                */
+/*  3.2.0    09/16/2024  YR       thblnkr.c v3.1.0 -> v3.2.0.                                                                        */
+/*  3.3.0    09/16/2024  KH       thblnkr.c v3.2.0 -> v3.3.0.                                                                        */
+/*  3.4.0    10/23/2024  RS       thblnkr.c v3.3.0 -> v3.4.0. (Change for BEV System_Consideration_1)                                */
+/*  3.5.0    12/04/2025  SH       thblnkr.c v3.4.0 -> v3.5.0. (Change for BEV System_Consideration_ADAS)                             */
 /*                                                                                                                                   */
 /*  Revision     Date         Author   Change Description                                                                            */
 /*  ------------ -----------  -------  --------------------------------------------------------------------------------------------- */
@@ -162,6 +148,8 @@ U1             u1_g_ThblnkrCfgMTNLS_R(U1 * u1p_a_mtnls_r)
 /*  200D-7       10/31/2022   MK       Update Toyota Standard Application(lib_ipc_tycan_v210_r009)                                   */
 /*  200D-8       12/06/2022   YK       Add masking with starter signal(B_ST).                                                        */
 /*  330D-1       02/23/2023   MK       Fix 24FGM22-23181(F+B correction value error).                                                */
+/*  19PFv3-1     09/16/2024   YR       Removed the processing for sound pressure                                                     */
+/*  19PFv3-2     09/19/2024   YR       Removed "vardef.h" in the include files                                                       */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * DS   = Daisuke Suzuki,  Denso                                                                                                  */
@@ -175,6 +163,8 @@ U1             u1_g_ThblnkrCfgMTNLS_R(U1 * u1p_a_mtnls_r)
 /*  * YK   = Yuki Kawai,      Denso Techno                                                                                           */
 /*  * KH   = Kiko Huerte,     DTPH                                                                                                   */
 /*  * AA   = Anna Asuncion,   Denso Techno                                                                                           */
+/*  * YR   = Yhana Regalario, DTPH                                                                                                   */
 /*  * RS   = Ryuki Sako,      Denso Techno                                                                                           */
+/*  * SH   = Sae Hirose,      Denso Techno                                                                                           */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

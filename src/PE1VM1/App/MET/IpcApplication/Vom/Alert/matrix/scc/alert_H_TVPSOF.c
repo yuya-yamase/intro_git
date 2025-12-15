@@ -21,10 +21,6 @@
 #include "alert_brx.h"
 
 #include "oxcan.h"
-#if 0   /* BEV BSW provisionally */
-#else
-#include "oxcan_channel_STUB.h"
-#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -121,16 +117,14 @@ static U4      u4_s_AlertH_tvpsofSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
     U1              u1_t_sgnl;
 
     u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_BDC1S33_CH0,
-                                     (U4)ALERT_CAN_SYS_PNC_ALL,
-                                     u2_s_ALERT_H_TVPSOF_THRSH_TO) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+                                      (U4)ALERT_CAN_SYS_ALL,
+                                      u2_s_ALERT_H_TVPSOF_THRSH_TO) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
     vd_g_AlertBRxTrnsSts(&u1_s_alert_h_tvpsof_bdc1s33_sts, u1_t_msgsts);
 
     u4_t_src_chk  = ((U4)u1_s_alert_h_tvpsof_bdc1s33_sts << u1_s_ALERT_H_TVPSOF_LSB_BDC1S33);
 
     u1_t_sgnl     = (U1)0U;
-#if defined(ComConf_ComSignal_TVPSOFF)
     (void)Com_ReceiveSignal(ComConf_ComSignal_TVPSOFF, &u1_t_sgnl);
-#endif /* defined(ComConf_ComSignal_TVPSOFF) */
     u4_t_src_chk |= (U4)u1_t_sgnl;
 
     if((u1_a_VOM & (U1)ALERT_VOM_BAT_WT) != (U1)0U){

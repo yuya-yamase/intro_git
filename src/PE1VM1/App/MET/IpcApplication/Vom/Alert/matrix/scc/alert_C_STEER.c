@@ -1,4 +1,4 @@
-/* 5.3.0 */
+/* 5.4.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define ALERT_C_STEER_C_MAJOR                      (5)
-#define ALERT_C_STEER_C_MINOR                      (3)
+#define ALERT_C_STEER_C_MINOR                      (4)
 #define ALERT_C_STEER_C_PATCH                      (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -20,10 +20,6 @@
 #include "alert_mtrx_cfg_private.h"
 
 #include "oxcan.h"
-#if 0   /* BEV BSW provisionally */
-#else
-#include "oxcan_channel_STUB.h"
-#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -38,7 +34,6 @@
 #define ALERT_C_STEER_TT_NUM_DST                 (32U)
 #define ALERT_C_STEER_BC_NUM_DST                 (16U)
 #define ALERT_C_STEER_PD_NUM_DST                 (37U)
-#define ALERT_C_STEER_RWRN_NUM_DST               (8U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -49,12 +44,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if defined(OXCAN_RXD_PDU_CAN_EPS1S90_CH0) && defined(ComConf_ComSignal_EPS_MINF)
 static U1      u1_s_alert_c_steerpd_msgsts;
-#endif /* defined(OXCAN_RXD_PDU_CAN_EPS1S90_CH0) && defined(ComConf_ComSignal_EPS_MINF) */
-#if defined(OXCAN_RXD_PDU_CAN_EPS1S90_CH0) && defined(ComConf_ComSignal_EPS_REMT)
-static U1      u1_s_alert_c_steerrw_msgsts;
-#endif /* defined(OXCAN_RXD_PDU_CAN_EPS1S90_CH0) && defined(ComConf_ComSignal_EPS_REMT) */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
@@ -62,8 +52,6 @@ static U1      u1_s_alert_c_steerrw_msgsts;
 static U4      u4_s_AlertC_steerTtSrcchk  (const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS);
 static U4      u4_s_AlertC_steerBcSrcchk  (const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS);
 static U4      u4_s_AlertC_steerPdSrcchk  (const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS);
-static U4      u4_s_AlertC_steerRwrnSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS);
-static void    vd_s_AlertC_steerRwrnRwTx  (const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
@@ -125,7 +113,7 @@ static const U4  u4_sp_ALERT_C_STEER_PD_CRIT[ALERT_C_STEER_PD_NUM_DST] = {
     (U4)0x00000001U,                                                           /* 01 ASSIST_LMT                                      */
     (U4)0x00000002U,                                                           /* 02 ASSIST_STOP                                     */
     (U4)0x00000003U,                                                           /* 03 POWSTOP                                         */
-    (U4)0x00000004U,                                                           /* 04 ASSIST_CONTI                                    */
+    (U4)0x00000004U,                                                           /* 04 ASSIST_CNTI                                     */
     (U4)0x00000005U,                                                           /* 05 ENGSTOP                                         */
     (U4)0x00000006U,                                                           /* 06 HV_STOP                                         */
     (U4)0x00000086U,                                                           /* 07 EV_STOP                                         */
@@ -146,25 +134,25 @@ static const U4  u4_sp_ALERT_C_STEER_PD_CRIT[ALERT_C_STEER_PD_NUM_DST] = {
     (U4)0x00000013U,                                                           /* 22 NONSYNC_MOD                                     */
     (U4)0x00000014U,                                                           /* 23 SELF_CALIB                                      */
     (U4)0x00000015U,                                                           /* 24 RDY_DRIVE                                       */
-    (U4)0x00000016U,                                                           /* 25 UNKNOWN                                         */
-    (U4)0x00000017U,                                                           /* 26 UNKNOWN                                         */
-    (U4)0x00000018U,                                                           /* 27 UNKNOWN                                         */
-    (U4)0x00000019U,                                                           /* 28 UNKNOWN                                         */
-    (U4)0x0000001AU,                                                           /* 29 UNKNOWN                                         */
-    (U4)0x0000001BU,                                                           /* 30 UNKNOWN                                         */
-    (U4)0x0000001CU,                                                           /* 31 UNKNOWN                                         */
-    (U4)0x0000001DU,                                                           /* 32 UNKNOWN                                         */
+    (U4)0x00000016U,                                                           /* 25 SPDLIMIT                                        */
+    (U4)0x00000017U,                                                           /* 26 FURLMTSPD                                       */
+    (U4)0x00000018U,                                                           /* 27 CMAXSPDLMT                                      */
+    (U4)0x00000019U,                                                           /* 28 CMAXSPDFLMT                                     */
+    (U4)0x0000001AU,                                                           /* 29 MAXLMTSOON                                      */
+    (U4)0x0000001BU,                                                           /* 30 MAXFURLMT                                       */
+    (U4)0x0000001CU,                                                           /* 31 STOPVEH                                         */
+    (U4)0x0000001DU,                                                           /* 32 VEHUNAVAIL                                      */
     (U4)0x0000001EU,                                                           /* 33 UNKNOWN                                         */
     (U4)0x0000001FU,                                                           /* 34 UNKNOWN                                         */
     (U4)0x00000020U,                                                           /* 35 UNKNOWN                                         */
-    (U4)0x00000040U                                                            /* 36 ASSIST_CONTI                                    */
+    (U4)0x00000040U                                                            /* 36 ASSIST_CNTI                                     */
 };
 static const U4  u4_sp_ALERT_C_STEER_PD_MASK[ALERT_C_STEER_PD_NUM_DST] = {
     (U4)0x0000007FU,                                                           /* 00 UNKNOWN                                         */
     (U4)0x0000007FU,                                                           /* 01 ASSIST_LMT                                      */
     (U4)0x0000007FU,                                                           /* 02 ASSIST_STOP                                     */
     (U4)0x0000007FU,                                                           /* 03 POWSTOP                                         */
-    (U4)0x0000007FU,                                                           /* 04 ASSIST_CONTI                                    */
+    (U4)0x0000007FU,                                                           /* 04 ASSIST_CNTI                                     */
     (U4)0x0000007FU,                                                           /* 05 ENGSTOP                                         */
     (U4)0x000001FFU,                                                           /* 06 HV_STOP                                         */
     (U4)0x000001FFU,                                                           /* 07 EV_STOP                                         */
@@ -185,18 +173,18 @@ static const U4  u4_sp_ALERT_C_STEER_PD_MASK[ALERT_C_STEER_PD_NUM_DST] = {
     (U4)0x0000007FU,                                                           /* 22 NONSYNC_MOD                                     */
     (U4)0x0000007FU,                                                           /* 23 SELF_CALIB                                      */
     (U4)0x0000007FU,                                                           /* 24 RDY_DRIVE                                       */
-    (U4)0x0000007FU,                                                           /* 25 UNKNOWN                                         */
-    (U4)0x0000007FU,                                                           /* 26 UNKNOWN                                         */
-    (U4)0x0000007FU,                                                           /* 27 UNKNOWN                                         */
-    (U4)0x0000007FU,                                                           /* 28 UNKNOWN                                         */
-    (U4)0x0000007FU,                                                           /* 29 UNKNOWN                                         */
-    (U4)0x0000007FU,                                                           /* 30 UNKNOWN                                         */
-    (U4)0x0000007FU,                                                           /* 31 UNKNOWN                                         */
-    (U4)0x0000007FU,                                                           /* 32 UNKNOWN                                         */
+    (U4)0x0000007FU,                                                           /* 25 SPDLIMIT                                        */
+    (U4)0x0000007FU,                                                           /* 26 FURLMTSPD                                       */
+    (U4)0x0000007FU,                                                           /* 27 CMAXSPDLMT                                      */
+    (U4)0x0000007FU,                                                           /* 28 CMAXSPDFLMT                                     */
+    (U4)0x0000007FU,                                                           /* 29 MAXLMTSOON                                      */
+    (U4)0x0000007FU,                                                           /* 30 MAXFURLMT                                       */
+    (U4)0x0000007FU,                                                           /* 31 STOPVEH                                         */
+    (U4)0x0000007FU,                                                           /* 32 VEHUNAVAIL                                      */
     (U4)0x0000007FU,                                                           /* 33 UNKNOWN                                         */
     (U4)0x0000007FU,                                                           /* 34 UNKNOWN                                         */
     (U4)0x00000060U,                                                           /* 35 UNKNOWN                                         */
-    (U4)0x00000040U                                                            /* 36 ASSIST_CONTI                                    */
+    (U4)0x00000040U                                                            /* 36 ASSIST_CNTI                                     */
 };
 static const U1  u1_sp_ALERT_C_STEER_PD_DST[ALERT_C_STEER_PD_NUM_DST] = {
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 00 UNKNOWN                                         */
@@ -224,32 +212,22 @@ static const U1  u1_sp_ALERT_C_STEER_PD_DST[ALERT_C_STEER_PD_NUM_DST] = {
     (U1)ALERT_REQ_C_STEER_PD_NONSYNC_MOD,                                      /* 22 NONSYNC_MOD                                     */
     (U1)ALERT_REQ_C_STEER_PD_SELF_CALIB,                                       /* 23 SELF_CALIB                                      */
     (U1)ALERT_REQ_C_STEER_PD_RDY_DRIVE,                                        /* 24 RDY_DRIVE                                       */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 25 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 26 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 27 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 28 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 29 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 30 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 31 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 32 UNKNOWN                                         */
+    (U1)ALERT_REQ_C_STEER_PD_SPDLIMIT,                                         /* 25 SPDLIMIT                                        */
+    (U1)ALERT_REQ_C_STEER_PD_FURLMTSPD,                                        /* 26 FURLMTSPD                                       */
+    (U1)ALERT_REQ_C_STEER_PD_CMAXSPDLMT,                                       /* 27 CMAXSPDLMT                                      */
+    (U1)ALERT_REQ_C_STEER_PD_CMAXSPDFLMT,                                      /* 28 CMAXSPDFLMT                                     */
+    (U1)ALERT_REQ_C_STEER_PD_MAXLMTSOON,                                       /* 29 MAXLMTSOON                                      */
+    (U1)ALERT_REQ_C_STEER_PD_MAXFURLMT,                                        /* 30 MAXFURLMT                                       */
+    (U1)ALERT_REQ_C_STEER_PD_STOPVEH,                                          /* 31 STOPVEH                                         */
+    (U1)ALERT_REQ_C_STEER_PD_VEHUNAVAIL,                                       /* 32 VEHUNAVAIL                                      */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 33 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 34 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 35 UNKNOWN                                         */
     (U1)ALERT_REQ_C_STEER_PD_ASSIST_CNTI                                       /* 36 ASSIST_CNTI                                     */
 };
-static const U1  u1_sp_ALERT_C_STEER_RWRN_DST[ALERT_C_STEER_RWRN_NUM_DST] = {
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 00 UNKNOWN                                         */
-    (U1)ALERT_REQ_C_STEER_RWRN_EPSWREQ,                                        /* 01 EPSWREQ                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 02 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 03 UNKNOWN                                         */
-    (U1)ALERT_REQ_C_STEER_RWRN_EPSWREQ,                                        /* 04 EPSWREQ                                         */
-    (U1)ALERT_REQ_C_STEER_RWRN_EPSWREQ,                                        /* 05 EPSWREQ                                         */
-    (U1)ALERT_REQ_C_STEER_RWRN_EPSWREQ,                                        /* 06 EPSWREQ                                         */
-    (U1)ALERT_REQ_C_STEER_RWRN_EPSWREQ                                         /* 07 EPSWREQ                                         */
-};
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-const ST_ALERT_MTRX st_gp_ALERT_C_STEER_MTRX[4] = {
+const ST_ALERT_MTRX st_gp_ALERT_C_STEER_MTRX[3] = {
     {
         &u4_s_AlertC_steerTtSrcchk,                                            /* fp_u4_SRC_CHK                                      */
         vdp_PTR_NA,                                                            /* fp_vd_XDST                                         */
@@ -282,17 +260,6 @@ const ST_ALERT_MTRX st_gp_ALERT_C_STEER_MTRX[4] = {
         &u1_sp_ALERT_C_STEER_PD_DST[0],                                        /* u1p_DST                                            */
         (U2)ALERT_C_STEER_PD_NUM_DST,                                          /* u2_num_srch                                        */
         (U1)ALERT_VOM_IGN_ON                                                   /* u1_vom_act                                         */
-    },
-    {
-        &u4_s_AlertC_steerRwrnSrcchk,                                          /* fp_u4_SRC_CHK                                      */
-        &vd_s_AlertC_steerRwrnRwTx,                                            /* fp_vd_XDST                                         */
-
-        (const U4 *)vdp_PTR_NA,                                                /* u4p_MASK                                           */
-        (const U4 *)vdp_PTR_NA,                                                /* u4p_CRIT                                           */
-
-        &u1_sp_ALERT_C_STEER_RWRN_DST[0],                                      /* u1p_DST                                            */
-        (U2)ALERT_C_STEER_RWRN_NUM_DST,                                        /* u2_num_srch                                        */
-        (U1)ALERT_VOM_IGN_ON                                                   /* u1_vom_act                                         */
     }
 };
 
@@ -307,12 +274,7 @@ const ST_ALERT_MTRX st_gp_ALERT_C_STEER_MTRX[4] = {
 /*===================================================================================================================================*/
 void    vd_g_AlertC_steerInit(void)
 {
-#if defined(OXCAN_RXD_PDU_CAN_EPS1S90_CH0) && defined(ComConf_ComSignal_EPS_MINF)
     u1_s_alert_c_steerpd_msgsts   = (U1)COM_NO_RX;
-#endif /* defined(OXCAN_RXD_PDU_CAN_EPS1S90_CH0) && defined(ComConf_ComSignal_EPS_MINF) */
-#if defined(OXCAN_RXD_PDU_CAN_EPS1S90_CH0) && defined(ComConf_ComSignal_EPS_REMT)
-    u1_s_alert_c_steerrw_msgsts   = (U1)COM_NO_RX;
-#endif /* defined(OXCAN_RXD_PDU_CAN_EPS1S90_CH0) && defined(ComConf_ComSignal_EPS_REMT) */
 }
 
 /*===================================================================================================================================*/
@@ -323,7 +285,6 @@ void    vd_g_AlertC_steerInit(void)
 /*===================================================================================================================================*/
 static U4      u4_s_AlertC_steerTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
-#if defined(OXCAN_RXD_PDU_CAN_EPS1S90_CH0) && defined(ComConf_ComSignal_EPS_WLMP)
     static const U2 u2_s_ALERT_C_STEERTT_TO_THRESH = ((U2)1000U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_C_STEERTT_LSB_COMRX = (U1)3U;
     U1              u1_t_msgsts;
@@ -331,8 +292,8 @@ static U4      u4_s_AlertC_steerTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM
     U4              u4_t_src_chk;
 
     u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_EPS1S90_CH0,
-                                     (U4)OXCAN_SYS_IGR,
-                                     u2_s_ALERT_C_STEERTT_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+                                      (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP,
+                                      u2_s_ALERT_C_STEERTT_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     u1_t_sgnl     = (U1)0U;
     (void)Com_ReceiveSignal(ComConf_ComSignal_EPS_WLMP, &u1_t_sgnl);
@@ -341,9 +302,6 @@ static U4      u4_s_AlertC_steerTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_C_STEERTT_LSB_COMRX);
 
     return(u4_t_src_chk);
-#else
-    return((U4)0U);
-#endif /* defined(OXCAN_RXD_PDU_CAN_EPS1S90_CH0) && defined(ComConf_ComSignal_EPS_WLMP) */
 }
 
 /*===================================================================================================================================*/
@@ -354,7 +312,6 @@ static U4      u4_s_AlertC_steerTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM
 /*===================================================================================================================================*/
 static U4      u4_s_AlertC_steerBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
-#if defined(OXCAN_RXD_PDU_CAN_EPS1S90_CH0) && defined(ComConf_ComSignal_EPS_BZER)
     static const U2 u2_s_ALERT_C_STEERBC_TO_THRESH = ((U2)1000U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_C_STEERBC_LSB_COMRX = (U1)2U;
 
@@ -363,8 +320,8 @@ static U4      u4_s_AlertC_steerBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM
     U4              u4_t_src_chk;
 
     u1_t_msgsts = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_EPS1S90_CH0,
-                                   (U4)OXCAN_SYS_IGR,
-                                   u2_s_ALERT_C_STEERBC_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+                                    (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP,
+                                    u2_s_ALERT_C_STEERBC_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     u1_t_sgnl       = (U1)0U;
     (void)Com_ReceiveSignal(ComConf_ComSignal_EPS_BZER, &u1_t_sgnl);
@@ -373,9 +330,6 @@ static U4      u4_s_AlertC_steerBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM
     u4_t_src_chk   |= ((U4)u1_t_msgsts << u1_s_ALERT_C_STEERBC_LSB_COMRX);
 
     return(u4_t_src_chk);
-#else
-    return((U4)0U);
-#endif /* defined(OXCAN_RXD_PDU_CAN_EPS1S90_CH0) && defined(ComConf_ComSignal_EPS_BZER) */
 }
 
 /*===================================================================================================================================*/
@@ -386,22 +340,21 @@ static U4      u4_s_AlertC_steerBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM
 /*===================================================================================================================================*/
 static U4      u4_s_AlertC_steerPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
-#if defined(OXCAN_RXD_PDU_CAN_EPS1S90_CH0) && defined(ComConf_ComSignal_EPS_MINF)
-    static const U2 u2_s_ALERT_C_STEERPD_TO_THRESH     = ((U2)1000U / (U2)OXCAN_MAIN_TICK);
-    static const U1 u1_s_ALERT_C_STEERPD_LSB_COMRX     = (U1)5U;
-    static const U1 u1_s_ALERT_C_STEERPD_LSB_SIG_PTSYS = (U1)7U;
-    static const U1 u1_s_ALERT_C_STEER_PTSYS_HV        = (U1)0U;
-    static const U1 u1_s_ALERT_C_STEER_PTSYS_EV        = (U1)1U;
-    static const U1 u1_s_ALERT_C_STEER_PTSYS_FCV       = (U1)2U;
-    static const U1 u1_s_ALERT_C_STEER_PTSYS_UKN       = (U1)3U;
+    static const U2 u2_s_ALERT_C_STEERPD_TO_THRESH      = ((U2)1000U / (U2)OXCAN_MAIN_TICK);
+    static const U1 u1_s_ALERT_C_STEERPD_LSB_COMRX      = (U1)5U;
+    static const U1 u1_s_ALERT_C_STEERPD_LSB_SIG_PTINFB = (U1)7U;
+    static const U1 u1_s_ALERT_C_STEER_PTINFB_HV        = (U1)0U;
+    static const U1 u1_s_ALERT_C_STEER_PTINFB_EV        = (U1)1U;
+    static const U1 u1_s_ALERT_C_STEER_PTINFB_FCV       = (U1)2U;
+    static const U1 u1_s_ALERT_C_STEER_PTINFB_UKN       = (U1)3U;
     U1              u1_t_msgsts;
     U1              u1_t_sgnl;
-    U1              u1_t_ptsys;
+    U1              u1_t_ptinfb;
     U4              u4_t_src_chk;
 
 	u1_t_msgsts = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_EPS1S90_CH0,
-                                   (U4)OXCAN_SYS_IGR,
-                                   u2_s_ALERT_C_STEERPD_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+                                    (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP,
+                                    u2_s_ALERT_C_STEERPD_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     u1_s_alert_c_steerpd_msgsts = u1_t_msgsts;
 
@@ -410,101 +363,31 @@ static U4      u4_s_AlertC_steerPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM
     u4_t_src_chk    = (U4)u1_t_sgnl;
     u4_t_src_chk   |= ((U4)u1_s_alert_c_steerpd_msgsts << u1_s_ALERT_C_STEERPD_LSB_COMRX);
 
-    u1_t_ptsys = u1_g_AlertPtsys();
-    switch (u1_t_ptsys)
+    u1_t_ptinfb = u1_g_AlertPtinfb();
+    switch (u1_t_ptinfb)
     {
-        case (U1)ALERT_STEER_VD_PTSYS_UNDEF:
-        case (U1)ALERT_STEER_VD_PTSYS_HV:
-        case (U1)ALERT_STEER_VD_PTSYS_PHV:
-        case (U1)ALERT_STEER_VD_PTSYS_HV_MOT:
-            u1_t_ptsys = u1_s_ALERT_C_STEER_PTSYS_HV;
+        case (U1)ALERT_STEER_VD_PTINFB_UNK:
+        case (U1)ALERT_STEER_VD_PTINFB_HEV:
+        case (U1)ALERT_STEER_VD_PTINFB_PHEV:
+            u1_t_ptinfb = u1_s_ALERT_C_STEER_PTINFB_HV;
             break;
 
-        case (U1)ALERT_STEER_VD_PTSYS_EV:
-            u1_t_ptsys = u1_s_ALERT_C_STEER_PTSYS_EV;
+        case (U1)ALERT_STEER_VD_PTINFB_BEV:
+            u1_t_ptinfb = u1_s_ALERT_C_STEER_PTINFB_EV;
             break;
 
-        case (U1)ALERT_STEER_VD_PTSYS_FCV:
-            u1_t_ptsys = u1_s_ALERT_C_STEER_PTSYS_FCV;
+        case (U1)ALERT_STEER_VD_PTINFB_FCEV:
+            u1_t_ptinfb = u1_s_ALERT_C_STEER_PTINFB_FCV;
             break;
 
         default:
-            u1_t_ptsys = (U1)u1_s_ALERT_C_STEER_PTSYS_UKN;
+            u1_t_ptinfb = u1_s_ALERT_C_STEER_PTINFB_UKN;
             break;
     }
 
-    u4_t_src_chk   |= ((U4)u1_t_ptsys << u1_s_ALERT_C_STEERPD_LSB_SIG_PTSYS);
+    u4_t_src_chk   |= ((U4)u1_t_ptinfb << u1_s_ALERT_C_STEERPD_LSB_SIG_PTINFB);
 
     return(u4_t_src_chk);
-#else
-    return((U4)0U);
-#endif /* defined(OXCAN_RXD_PDU_CAN_EPS1S90_CH0) && defined(ComConf_ComSignal_EPS_MINF) */
-}
-
-/*===================================================================================================================================*/
-/*  static U4      u4_s_AlertC_steerRwrnSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)                           */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static U4      u4_s_AlertC_steerRwrnSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
-{
-#if defined(OXCAN_RXD_PDU_CAN_EPS1S90_CH0) && defined(ComConf_ComSignal_EPS_REMT)
-    static const U2 u2_s_ALERT_C_STEERRW_TO_THRESH = ((U2)1000U / (U2)OXCAN_MAIN_TICK);
-    static const U1 u1_s_ALERT_C_STEERRW_LSB_COMRX = (U1)1U;
-    U4              u4_t_src_chk;
-    U1              u1_t_msgsts__7v;
-    U1              u1_t_msgsts_10v;
-    U1              u1_t_sgnl;
-
-    u1_t_msgsts__7v = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_EPS1S90_CH0,
-                                       (U4)OXCAN_SYS_IGR,
-                                       u2_s_ALERT_C_STEERRW_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
-
-    if((u1_t_msgsts__7v & (U1)COM_TIMEOUT) == (U1)0U){
-        u1_s_alert_c_steerrw_msgsts = u1_t_msgsts__7v;
-    }
-    else{
-        u1_t_msgsts_10v = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_EPS1S90_CH0,
-                                           (U4)OXCAN_SYS_IGR,
-                                           u2_s_ALERT_C_STEERRW_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
-        if((u1_t_msgsts_10v & (U1)COM_TIMEOUT) != (U1)0U){
-            u1_s_alert_c_steerrw_msgsts = u1_t_msgsts_10v;
-        }
-    }
-
-    u1_t_sgnl       = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_EPS_REMT, &u1_t_sgnl);
-    u4_t_src_chk    = (U4)u1_t_sgnl;
-
-    u4_t_src_chk |= ((U4)u1_s_alert_c_steerrw_msgsts << u1_s_ALERT_C_STEERRW_LSB_COMRX);
-
-    return(u4_t_src_chk);
-#else
-    return((U4)0U);
-#endif /* defined(OXCAN_RXD_PDU_CAN_EPS1S90_CH0) && defined(ComConf_ComSignal_EPS_REMT) */
-}
-
-/*===================================================================================================================================*/
-/*  static void    vd_s_AlertC_steerRwrnRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)                             */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void    vd_s_AlertC_steerRwrnRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)
-{
-    U1              u1_t_sgnl;
-
-    if(((u1_a_VOM & (U1)ALERT_VOM_RWT_EN) != (U1)0U                            ) &&
-       (u1_a_DST                          == (U1)ALERT_REQ_C_STEER_RWRN_EPSWREQ)){
-        u1_t_sgnl = (U1)ALERT_RW_SGNL_ON;
-    }
-    else{
-        u1_t_sgnl = (U1)ALERT_RW_SGNL_OFF;
-    }
-#if 0   /* BEV BSW provisionally */
-    (void)Com_SendSignal(ComConf_ComSignal_EPSW, &u1_t_sgnl);    /* COM Tx STUB delete */
-#endif
 }
 
 /*===================================================================================================================================*/
@@ -520,9 +403,11 @@ static void    vd_s_AlertC_steerRwrnRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM
 /*  5.2.0    04/18/2024  JMH      Updated PTSYS judgement from dedicated to ON/OFF generic                                           */
 /*                                Removed Special processing                                                                         */
 /*  5.3.0    10/11/2024  KO       Change for BEV System_Consideration_1.                                                             */
+/*  5.4.0    12/05/2025  KH       Change for BEV System_Consideration_ADAS.                                                          */
 /*                                                                                                                                   */
 /*  * DR   = Dyan Reyes, Denso Techno Philippines Inc                                                                                */
 /*  * JMH  = James Michael Hilarion, Denso Techno Philippines Inc.                                                                   */
 /*  * KO   = Kazuto Oishi,  Denso Techno                                                                                             */
+/*  * KH   = Kiko Huerte,  Denso Techno                                                                                              */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

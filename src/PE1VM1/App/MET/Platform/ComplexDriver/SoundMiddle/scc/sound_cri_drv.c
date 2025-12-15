@@ -40,8 +40,10 @@
 #if 0   /* BEV BSW provisionally */
 #include "gpt_drv_j32.h"
 #else
+#if 0   /* BEV Rebase provisionally */
 #include "gpt_drv_j32_channel_STUB.h"
 #include "dma_drv_STUB.h"
+#endif   /* BEV Rebase provisionally */
 #endif
 #include "int_drv.h"
 

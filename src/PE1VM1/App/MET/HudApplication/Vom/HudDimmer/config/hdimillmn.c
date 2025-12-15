@@ -18,10 +18,6 @@
 #include "hdimmgr_cfg_private.h"
 
 #include "oxcan.h"
-#if 0   /* BEV BSW provisionally */
-#else
-#include "oxcan_channel_STUB.h"
-#endif
 
 /* #include "illmnsnsr.h" */
 #ifdef ILLMNSNSR_H
@@ -29,10 +25,6 @@
 #endif /* ILLMNSNSR_H */
 #include "memfill_u4.h"
 #include "veh_opemd.h"
-#if 0   /* BEV BSW provisionally */
-#else
-#include "veh_opemd_xmode_STUB.h"
-#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -768,12 +760,12 @@ static void vd_s_HdimillmnCnlghtUpdt(void)
     U2  u2_t_lxdata;
     U2  u2_t_nlx_id;
 
-#if 0   /* BEV BSW provisionally */
+#if 0   /* BEV Rebase provisionally */
     u1_t_rec = Com_GetIPDUStatus((PduIdType)MSG_BDB1S19_RXCH0);
     u1_t_rec &= (U1)(COM_TIMEOUT | COM_NO_RX);
-#else
+#else   /* BEV Rebase provisionally */
     u1_t_rec = (U1)COM_NO_RX;
-#endif
+#endif   /* BEV Rebase provisionally */
 
     if(u1_t_rec == (U1)0){
         u2_t_lxdata = u2_s_HdimillmnCnlghtGet_N_LX();
@@ -974,11 +966,11 @@ static U2    u2_s_HdimillmnCnlghtGet_N_LX(void)
 {
     U2 u2_t_lxdata;
 
-#if 0   /* BEV BSW provisionally */
+#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_N_LX, &u2_t_lxdata);
-#else
-    u2_t_lxdata = (U2)HDIMILLMN_CNLGHT_LXDATA_JUDGE_ERR;
-#endif
+#else   /* BEV Rebase provisionally */
+    u2_t_lxdata = (U1)0U;
+#endif   /* BEV Rebase provisionally */
     if(u2_t_lxdata >= (U2)HDIMILLMN_CNLGHT_LXDATA_JUDGE_ERR){
         u2_t_lxdata = (U2)HDIMILLMN_CNLGHT_LXDATA_FAIL;
     }

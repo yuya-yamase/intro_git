@@ -1,4 +1,4 @@
-/* 5.4.0 */
+/* 5.5.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define ALERT_D_SFTPOS_C_MAJOR                   (5)
-#define ALERT_D_SFTPOS_C_MINOR                   (4)
+#define ALERT_D_SFTPOS_C_MINOR                   (5)
 #define ALERT_D_SFTPOS_C_PATCH                   (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -20,10 +20,6 @@
 #include "alert_mtrx_cfg_private.h"
 
 #include "oxcan.h"
-#if 0   /* BEV BSW provisionally */
-#else
-#include "oxcan_channel_STUB.h"
-#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -172,8 +168,8 @@ static U4      u4_s_AlertD_sftposBRjtbSrcchk(const U1 u1_a_VOM, const U4 u4_a_IG
     U1              u1_t_sgnl;
 
     u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_ECT1G92_CH0,
-                                     (U4)OXCAN_SYS_IGR,
-                                     (U2)U2_MAX) & (U1)COM_NO_RX;
+                                      (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP,
+                                      (U2)U2_MAX) & (U1)COM_NO_RX;
 
     u4_t_src_chk  = ((U4)u1_t_msgsts << u1_s_ALERT_D_SFTPOS_BC_LSB_ECT);
 
@@ -206,8 +202,8 @@ static U4      u4_s_AlertD_sftposBRsbwSrcchk(const U1 u1_a_VOM, const U4 u4_a_IG
     u4_t_src_chk  = (U4)u1_t_sgnl;
 
     u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_PCN1S01_CH0,
-                                     (U4)OXCAN_SYS_IGR,
-                                     u2_s_ALERT_D_SFTPOS_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+                                      (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP,
+                                      u2_s_ALERT_D_SFTPOS_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_D_SFTPOS_LSB_MSGSTS);
 
     u4_t_intermittent = u4_g_AlertRevBzrSoundType();
@@ -234,7 +230,8 @@ static U4      u4_s_AlertD_sftposBRsbwSrcchk(const U1 u1_a_VOM, const U4 u4_a_IG
 /*  5.3.3    12/19/2023  GM       Update for 19PFv3 CV              .                                                                */
 /*  5.3.3-BEV-1                                                                                                                      */
 /*            2/ 6/2025  SF       Setting for BEV System_Consideration_1.                                                            */
-/*  5.4.0    03/21/2025  HF       Setting for BEV System_Consideration_1.                                                            */
+/*  5.4.0    05/26/2025  YR       Fix logic for SBW buzer request                                                                    */
+/*  5.5.0    11/13/2025  SH       Config BevStep3                                                                                    */
 /*                                                                                                                                   */
 /*  * SM   = Shingo Miyamoto, NTTD MSE                                                                                               */
 /*  * TN   = Toshiaki Nagashima, NTTD MSE                                                                                            */
@@ -242,6 +239,8 @@ static U4      u4_s_AlertD_sftposBRsbwSrcchk(const U1 u1_a_VOM, const U4 u4_a_IG
 /*  * HU   = Hidekazu Usui, NTTD MSE                                                                                                 */
 /*  * SS   = Shuji Suzuki, NTTD MSE                                                                                                  */
 /*  * GM   = Glen Monteposo, DTPH                                                                                                    */
+/*  * YR   = Yhana Regalario, DTPH                                                                                                   */
 /*  * HF   = Hinari Fukamachi, KSE                                                                                                   */
+/*  * SH   = Sae Hirose, Denso Techno                                                                                                */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

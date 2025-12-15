@@ -91,7 +91,7 @@ U1      u1_g_VdfEsoRx_PEDPRO(void)
 /*  351D-1   11/14/2022  SK       Change config for 351D CV                                                                          */
 /*                                                                                                                                   */
 /*  * SK = Shotaro Kitayama, PSL                                                                                                     */
-/*  * KO   = Kazuto Oishi,  Denso Techno                                                                                             */
+/*  * KO = Kazuto Oishi,  Denso Techno                                                                                               */
 /*  * SN = Shizuka Nakajima, KSE                                                                                                     */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

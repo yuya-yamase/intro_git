@@ -91,6 +91,7 @@ void    vd_g_HdimstepBon(void)
     u2_s_hdimstep_upswoncnt = (U2)U2_MAX;
     u2_s_hdimstep_dwswoncnt = (U2)U2_MAX;
     u1_s_hdimstep_swsgnl    = (U1)0;
+    u1_g_hdimstep_hudill    = (U1)7U;   /* BEV Rebase provisionally */
 
     u1_s_hdimstep_step = (U1)HDIMSTEP_STEP_DEF;
     u1_t_step          = u1_g_HdimstepCfgReadStep();
@@ -113,6 +114,7 @@ void    vd_g_HdimstepWkup(void)
     u2_s_hdimstep_upswoncnt = (U2)U2_MAX;
     u2_s_hdimstep_dwswoncnt = (U2)U2_MAX;
     u1_s_hdimstep_swsgnl    = (U1)0;
+    u1_g_hdimstep_hudill    = (U1)7U;   /* BEV Rebase provisionally */
 
     u1_s_hdimstep_step = (U1)HDIMSTEP_STEP_DEF;
     u1_t_step          = u1_g_HdimstepCfgReadStep();

@@ -21,10 +21,6 @@
 #include "alert_brx.h"
 
 #include "oxcan.h"
-#if 0   /* BEV BSW provisionally */
-#else
-#include "oxcan_channel_STUB.h"
-#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -169,8 +165,8 @@ static U4      u4_s_AlertB_aloa2Srcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
     U1              u1_t_msgsts;
 
     u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_ZN11S19_CH0,
-                                     (U4)ALERT_CAN_SYS_PNC_ALL,
-                                     u2_s_u2_s_ALERT_CH_B_ALOA2_TO_THRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+                                      (U4)ALERT_CAN_SYS_ALL,
+                                      u2_s_u2_s_ALERT_CH_B_ALOA2_TO_THRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     vd_g_AlertBRxTrnsSts(&u1_s_alert_b_aloa2_zn11S19_sts, u1_t_msgsts);
     u4_t_src_chk  = ((U4)u1_s_alert_b_aloa2_zn11S19_sts << u1_s_ALERT_CH_B_ALOA2_LSB_STS);

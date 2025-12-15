@@ -55,12 +55,12 @@ const ST_IVCBSH_PRM    st_sp_IVCBSH_PRM[IVCBSH_SYS_NUM_NET] = {
     /* CAN-FD Bus/G2M-1 */
     {
         (U1)BSW_CANIF_CFG_CH_CONTROLLER5,   /* CAN Physical Channel =  5 ch. */
-        (U2)IVDSH_DID_WRI_CPREQ_029
+        (U2)IVDSH_DID_WRI_CANBUS_STS_2M1
     },
     /* CAN-FD Bus/G5M */
     {
         (U1)BSW_CANIF_CFG_CH_CONTROLLER7,   /* CAN Physical Channel =  7 ch. */
-        (U2)IVDSH_DID_WRI_CPREQ_032
+        (U2)IVDSH_DID_WRI_CANBUS_STS_5M
     }
 };
 /* u1_COM_CH            */

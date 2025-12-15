@@ -19,13 +19,6 @@
 #include "gagdst_nxmph_cfg_private.h"
 
 #include "vehspd_kmph.h"
-#include "oxcan.h"
-#if 0   /* BEV BSW provisionally */
-#else
-#include "oxcan_channel_STUB.h"
-#endif
-#include "iohw_adc_sh.h"
-#include "locale.h"
 #include "calibration.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

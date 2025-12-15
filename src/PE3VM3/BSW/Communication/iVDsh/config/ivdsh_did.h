@@ -29,30 +29,29 @@
 /*-------------------------------------------------------------------------------*/
 /* CPREQ_XXX = "https://wiki.geniie.net/x/Wcq5pQ" numbering list (sample config) */
 /*-------------------------------------------------------------------------------*/
-#define IVDSH_DID_WRI_CPREQ_005                  (0U)
-#define IVDSH_DID_WRI_CPREQ_007                  (1U)
+#define IVDSH_DID_WRI_VM3TO2_SIPERR_INF          (0U)
+#define IVDSH_DID_WRI_VM3TO2_OTA_OFFSTS          (1U)
 #define IVDSH_DID_WRI_VM3TO2_BOOTLOG_INF         (2U)
-#define IVDSH_DID_WRI_CPREQ_045                  (3U)
-#define IVDSH_DID_WRI_CPREQ_048                  (4U)
-#define IVDSH_DID_WRI_CPREQ_049                  (5U)
+#define IVDSH_DID_WRI_VM3TO12_RESTART            (3U)
+#define IVDSH_DID_WRI_VM3TO2_BOOT_CNT            (4U)
+#define IVDSH_DID_WRI_VM3TO2_BOOT_TIME           (5U)
 #define IVDSH_DID_WRI_GPS_STS                    (6U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define IVDSH_NUM_DID_REA                        (11U)
+#define IVDSH_NUM_DID_REA                        (10U)
 
 /* Read from VM#1 */
-#define IVDSH_DID_REA_CPREQ_002                  (7U)
-#define IVDSH_DID_REA_CPREQ_023                  (8U)
-#define IVDSH_DID_REA_CPREQ_044                  (9U)
+#define IVDSH_DID_REA_VM1TO3_STBY                (7U)
+#define IVDSH_DID_REA_VM1TO3_SPI_FAIL            (8U)
+#define IVDSH_DID_REA_VM1TO23_FSLP               (9U)
 #define IVDSH_DID_REA_VM1TO3_WHLINI_INF          (10U)
 /* Read from VM#2 */
-#define IVDSH_DID_REA_CPREQ_003                  (11U)
-#define IVDSH_DID_REA_CPREQ_024                  (12U)
-#define IVDSH_DID_REA_VM2TO3_WHLINI_REQ          (13U)
-#define IVDSH_DID_REA_CPREQ_046                  (14U)
-#define IVDSH_DID_REA_CPREQ_047                  (15U)
-#define IVDSH_DID_REA_GPS_REQ                    (16U)
-#define IVDSH_DID_REA_CPREQ_055                  (17U)
+#define IVDSH_DID_REA_VM2TO3_STBY                (11U)
+#define IVDSH_DID_REA_VM2TO3_WHLINI_REQ          (12U)
+#define IVDSH_DID_REA_VM2TO3_STRMODE             (13U)
+#define IVDSH_DID_REA_VM2TO3_OPESTS              (14U)
+#define IVDSH_DID_REA_GPS_REQ                    (15U)
+#define IVDSH_DID_REA_VM2TO3_DIN2_STAT           (16U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define IVDSH_NUM_DID                            (IVDSH_NUM_DID_WRI + IVDSH_NUM_DID_REA)

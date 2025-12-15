@@ -24,17 +24,15 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define IVDSH_NUM_DID_WRI                        (6U)
+#define IVDSH_NUM_DID_WRI                        (4U)
 
 /*-------------------------------------------------------------------------------*/
 /* CPREQ_XXX = "https://wiki.geniie.net/x/Wcq5pQ" numbering list (sample config) */
 /*-------------------------------------------------------------------------------*/
-#define IVDSH_DID_WRI_CPREQ_006                  (0U)
-#define IVDSH_DID_WRI_CPREQ_008                  (1U)
-#define IVDSH_DID_WRI_CPREQ_029                  (2U)
-#define IVDSH_DID_WRI_CPREQ_032                  (3U)
-#define IVDSH_DID_WRI_CPREQ_035                  (4U)
-#define IVDSH_DID_WRI_CPREQ_038                  (5U)
+#define IVDSH_DID_WRI_CANBUS_STS_2M1             (0U)
+#define IVDSH_DID_WRI_CANBUS_STS_5M              (1U)
+#define IVDSH_DID_WRI_CANBUS_STS_2M2             (2U)
+#define IVDSH_DID_WRI_CANBUS_STS_LCAN            (3U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define IVDSH_NUM_DID_REA                        (0U)

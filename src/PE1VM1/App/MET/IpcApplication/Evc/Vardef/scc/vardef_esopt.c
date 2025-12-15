@@ -40,6 +40,9 @@
 #define VDF_ESO_NVM_SYN_RUN                      (0x01U)
 #define VDF_ESO_NVM_SYN_STA                      (0x02U)
 
+#define VDF_ESO_IGROFFEG_OFF                     (0x0000U)
+#define VDF_ESO_IGROFFEG_ON                      (0x0001U)
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -55,6 +58,7 @@ static U2             u2_s_vdf_eso_vom_act;
 
 static U1             u1_s_vdf_eso_vom_tocnt;
 static U1             u1_s_vdf_eso_res_ctrl;
+static U2             u2_s_vdf_eso_igredge;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
@@ -67,6 +71,7 @@ static void    vd_s_VdfEsoNvmSynchk(const U2 u2_a_EOM);
 static U1      u1_s_VdfEsoNvmInit(const U1 u1_a_NWO_EN);
 static U1      u1_s_VdfEsoNvmUpdt(const U1 u1_a_NWO_EN);
 static U1      u1_s_VdfEsoNvmNext(const U1 u1_a_NWO_EN, const U2 u2_a_NID, const U4 u4_a_NEXT);
+static U1      u1_s_VdfEsoNvmNextUpdt(const U1 u1_a_NWO_EN, const U2 u2_a_NID, const U4 u4_a_NEXT);
 
 static void    vd_s_VdfEsoNvmReschk(const U1 u1_a_SYN_CHK);
 
@@ -351,23 +356,6 @@ U1      u1_g_VardefEsOptReset(const U1 u1_a_RUN)
     return(u1_s_vdf_eso_res_ctrl);
 }
 /*===================================================================================================================================*/
-/*  U1          u1_g_VardefEsOptAvaByAvn(const U2 u2_a_CH)                                                                           */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1          u1_g_VardefEsOptAvaByAvn(const U2 u2_a_CH)
-{
-    U1                        u1_t_ava;
-
-    u1_t_ava = (U1)FALSE;
-    if(u2_a_CH == (U2)VDF_ESO_AVA_BYAVN){
-        u1_t_ava = u1_g_VardefEsOptCfgAvaByAVN();
-    }
-
-    return(u1_t_ava);
-}
-/*===================================================================================================================================*/
 /*  static void        vd_s_VdfEsoInit(void)                                                                                         */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
@@ -383,7 +371,8 @@ static void        vd_s_VdfEsoInit(void)
 
     u1_s_vdf_eso_vom_tocnt = (U1)U1_MAX;
     u1_s_vdf_eso_res_ctrl  = (U1)VDF_ESO_RES_UNK;
-
+    u2_s_vdf_eso_igredge = (U2)VDF_ESO_IGROFFEG_OFF;
+    
     for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)u2_g_VDF_ESO_NUM_RX; u4_t_lpcnt++){
         st_gp_vdf_eso_rx[u4_t_lpcnt].u2_tim_elpsd = (U2)U2_MAX;
         st_gp_vdf_eso_rx[u4_t_lpcnt].u1_rxc_start = u1_g_VDF_ESO_RXC_INT;
@@ -508,9 +497,11 @@ static void    vd_s_VdfEsoNvmSynchk(const U2 u2_a_EOM)
 
     if(u1_s_vdf_eso_res_ctrl == (U1)VDF_ESO_RES_RUN){
         u1_t_syn_chk = u1_s_VdfEsoNvmInit(u1_t_nwo_en);
+        u2_s_vdf_eso_igredge = (U2)VDF_ESO_IGROFFEG_OFF;
     }
     else if(u2_a_EOM >= (U2)VDF_EOM_SI_ACT){
         u1_t_syn_chk = (U1)VDF_ESO_NVM_SYN_FIN;
+        u2_s_vdf_eso_igredge = (U2)VDF_ESO_IGROFFEG_OFF;
     }
     else{
         u1_t_syn_chk = u1_s_VdfEsoNvmUpdt(u1_t_nwo_en);
@@ -577,7 +568,12 @@ static U1      u1_s_VdfEsoNvmUpdt(const U1 u1_a_NWO_EN)
         vd_g_Rim_WriteU4(st_gp_VDF_ESO_AVA[u4_t_lpcnt].u2_bid, u4_gp_vdf_eso_ava[u4_t_lpcnt]);
 
         u4_t_log_nvm  = u4_gp_vdf_eso_ava[u4_t_lpcnt] & st_gp_VDF_ESO_AVA[u4_t_lpcnt].u4_nvm;
-        u1_t_syn_chk |= u1_s_VdfEsoNvmNext(u1_a_NWO_EN, st_gp_VDF_ESO_AVA[u4_t_lpcnt].u2_nid, u4_t_log_nvm);
+        u1_t_syn_chk |= u1_s_VdfEsoNvmNextUpdt(u1_a_NWO_EN, st_gp_VDF_ESO_AVA[u4_t_lpcnt].u2_nid, u4_t_log_nvm);
+    }
+    
+    if(((u1_t_syn_chk & (U1)VDF_ESO_NVM_SYN_STA) != (U1)0U) ||
+       (u1_t_syn_chk == (U1)VDF_ESO_NVM_SYN_FIN)){
+        u2_s_vdf_eso_igredge = (U2)VDF_ESO_IGROFFEG_OFF;
     }
 
     return(u1_t_syn_chk);
@@ -622,8 +618,55 @@ static U1      u1_s_VdfEsoNvmNext(const U1 u1_a_NWO_EN, const U2 u2_a_NID, const
 
     return(u1_t_syn_chk);
 }
+
 /*===================================================================================================================================*/
-/*  static U1      u1_s_VdfEsoNvmUpdt(void)                                                                                          */
+/*  static U1      u1_s_VdfEsoNvmNextUpdt(const U1 u1_a_NWO_EN, const U2 u2_a_NID, const U4 u4_a_NEXT)                                   */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static U1      u1_s_VdfEsoNvmNextUpdt(const U1 u1_a_NWO_EN, const U2 u2_a_NID, const U4 u4_a_NEXT)
+{
+    U4                        u4_t_last;
+
+    U1                        u1_t_nvm_chk;
+    U1                        u1_t_syn_chk;
+    U1                        u1_t_nwo_chk;
+
+    u4_t_last    = (U4)0U;
+    u1_t_nvm_chk = u1_g_Nvmc_ReadU4withSts(u2_a_NID, &u4_t_last);
+    if((u4_a_NEXT    != u4_t_last               ) ||
+       (u1_t_nvm_chk >= (U1)NVMC_STATUS_KIND_NG ) ||
+       (u1_t_nvm_chk == (U1)NVMC_STATUS_ERRCOMP ) ||
+       (u1_t_nvm_chk == (U1)NVMC_STATUS_CACHE_NG)){
+
+        u1_t_syn_chk = ((U1)VDF_ESO_NVM_SYN_STA | (U1)VDF_ESO_NVM_SYN_RUN);
+    }
+    else if(u1_t_nvm_chk == (U1)NVMC_STATUS_WRITING){
+        u1_t_syn_chk = (U1)VDF_ESO_NVM_SYN_RUN;
+    }
+    else{
+        u1_t_syn_chk = (U1)VDF_ESO_NVM_SYN_FIN;
+    }
+
+    u1_t_nwo_chk = u1_t_syn_chk & u1_a_NWO_EN;
+    if(u1_t_nwo_chk == (U1)VDF_ESO_NVM_SYN_STA){
+        if(u2_s_vdf_eso_igredge >= (U2)VDF_ESO_IGROFFEG_ON){
+            vd_g_Nvmc_WriteU4(u2_a_NID, u4_a_NEXT);
+        }
+        else{
+            u1_t_syn_chk = (U1)VDF_ESO_NVM_SYN_FIN;
+       }
+    }
+    else{
+        u1_t_syn_chk &= (U1)VDF_ESO_NVM_SYN_RUN;
+    }
+
+    return(u1_t_syn_chk);
+}
+
+/*===================================================================================================================================*/
+/*  static U1      vd_s_VdfEsoNvmReschk(const U1 u1_a_SYN_CHK)                                                                 */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
@@ -676,6 +719,21 @@ static U1      u1_s_VdfEsoGetRxevCnt(const U1 u1_a_INPUT_TYPE, const U2 u2_a_MSG
     return(u1_t_rxev_cnt);
 }
 /*===================================================================================================================================*/
+/*  void    vd_g_VardefEsOptIgoffEvhk(const U4 u4_a_MDBIT, const U4 u4_a_EVBIT)                                        */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void    vd_g_VardefEsOptIgoffEvhk(const U4 u4_a_MDBIT, const U4 u4_a_EVBIT)
+{
+    U4                      u4_t_ign_chk;
+
+    u4_t_ign_chk = u4_a_EVBIT & (U4)VEH_OPEMD_EVBIT_IG_R_TO_OFF;
+    if(u4_t_ign_chk == (U4)VEH_OPEMD_EVBIT_IG_R_TO_OFF){
+        u2_s_vdf_eso_igredge = (U2)VDF_ESO_IGROFFEG_ON;
+    }
+}
+/*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
 /*                                                                                                                                   */
@@ -694,14 +752,14 @@ static U1      u1_s_VdfEsoGetRxevCnt(const U1 u1_a_INPUT_TYPE, const U2 u2_a_MSG
 /*  2.2.0     1/25/2021  SF       Bug Fix : Initial value of option availability was incorrect if NvM was unknown.                   */
 /*  2.3.0    11/15/2021  RO       Add Other judgement.                                                                               */
 /*  2.4.0     3/15/2022  RO       Add AVN judgement.                                                                                 */
-/*  2.5.0     11/25/2024 KO       Setting for BEV System_Consideration_1.                                                            */
-/*  2.6.0      5/30/2025 SN       Setting for BEV System_Consideration_2.                                                            */
+/*  2.5.0     8/26/2024  TN       QAC Fix : Delete u1_g_VardefEsOptAvaByAvn func.                                                    */
+/*  2.6.0     12/25/2024 KM       Updated write timing of DTF                                                                        */
 /*                                                                                                                                   */
 /*  * YI   = Yoshiki Iwata, Denso                                                                                                    */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
 /*  * SF   = Seiya Fukutome, Denso Techno                                                                                            */
 /*  * RO   = Reiya Okuda, KSE                                                                                                        */
-/*  * KO   = Kazuto Oishi,  Denso Techno                                                                                             */
-/*  * SN   = Shizuka Nakajima, KSE                                                                                                   */
+/*  * TN   = Tetsushi Nakanao, Denso Techno                                                                                          */
+/*  * KM   = Kazuma Miyazawa, Denso Techno                                                                                           */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

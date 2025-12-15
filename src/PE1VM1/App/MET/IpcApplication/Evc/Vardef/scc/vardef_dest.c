@@ -1,4 +1,4 @@
-/* 2.1.0 */
+/* 2.2.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define VARDEF_DEST_C_MAJOR                     (2)
-#define VARDEF_DEST_C_MINOR                     (1)
+#define VARDEF_DEST_C_MINOR                     (2)
 #define VARDEF_DEST_C_PATCH                     (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -19,10 +19,6 @@
 #include "vardef_dest_cfg_private.h"
 
 #include "rim_ctl.h"
-#if 0   /* BEV BSW provisionally */
-#else
-#include "rim_ctl_cfg_STUB.h"
-#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -73,6 +69,8 @@ static U1           u1_s_vdf_dst_c_code_idx;
 static U1           u1_s_vdf_dst_dest_bdb_idx;
 static U1           u1_s_vdf_lang_dst_c_code_idx;
 static U1           u1_s_vdf_lang_dst_dest_bdb_idx;
+static U1           u1_s_vdf_dst_idx;
+static U1           u1_s_vdf_lang_dst_idx;
 
 static U1           u1_s_vdf_dst_hdlside;
 
@@ -115,6 +113,13 @@ void    vd_g_VardefDestBonInit(void)
     u1_s_vdf_dst_dest_bdb_idx      = u1_g_VDF_DST_DEST_BDB_IDX_DEF;
     u1_s_vdf_lang_dst_c_code_idx   = u1_g_VDF_DST_C_CODE_IDX_DEF;
     u1_s_vdf_lang_dst_dest_bdb_idx = u1_g_VDF_LANG_DST_IDX_DEF;
+
+    u1_s_vdf_dst_idx               = u1_g_VDF_DST_IDX_DEF;
+    vd_g_Rim_WriteU1(u2_g_VDF_DST_IDX_RIM_U1, u1_s_vdf_dst_idx);
+
+    u1_s_vdf_lang_dst_idx          = u1_g_VDF_DST_IDX_DEF;
+    vd_g_Rim_WriteU1(u2_g_VDF_LANG_DST_IDX_RIM_U1, u1_s_vdf_lang_dst_idx);
+
     u1_s_vdf_dst_hdlside           = (U1)VDF_HDSIDE_LHD;
 }
 /*===================================================================================================================================*/
@@ -164,6 +169,21 @@ void    vd_g_VardefDestRstwkInit(void)
 
     u1_s_vdf_dst_rxcnt        = u1_g_VDF_DST_RXEV_CNT_INIT;
     u2_s_vdf_dst_intvl        = (U2)0U;
+    u1_t_sts    = u1_g_Rim_ReadU1withStatus(u2_g_VDF_DST_IDX_RIM_U1, &u1_t_data);
+    if ((u1_t_sts & (U1)RIM_RESULT_KIND_MASK) == (U1)RIM_RESULT_KIND_OK){
+        u1_s_vdf_dst_idx            = u1_t_data;
+    }
+    else{
+        u1_s_vdf_dst_idx            = u1_g_VDF_DST_IDX_DEF;
+    }
+
+    u1_t_sts    = u1_g_Rim_ReadU1withStatus(u2_g_VDF_LANG_DST_IDX_RIM_U1, &u1_t_data);
+    if ((u1_t_sts & (U1)RIM_RESULT_KIND_MASK) == (U1)RIM_RESULT_KIND_OK){
+        u1_s_vdf_lang_dst_idx       = u1_t_data;
+    }
+    else{
+        u1_s_vdf_lang_dst_idx       = u1_g_VDF_DST_IDX_DEF;
+    }
     vd_s_VardefDestDBIdxJdg();
     vd_s_VardefLangDestDBIdxJdg();
     u1_s_vdf_dst_hdlside      = (U1)VDF_HDSIDE_LHD;
@@ -258,49 +278,62 @@ static void    vd_s_VardefDestDBIdxJdg(void)
 {
     static const U1 u1_s_VDF_DST_STRG_WHL_BIT = (U1)8U;
     U1    u1_t_idx_loop;
-    U1    u1_t_idx;
+    U1    u1_t_ccode_idx;
+    U1    u1_t_destbdb_idx;
     U2    u2_t_dest_bdb_val;
 
     u2_t_dest_bdb_val = ((U2)u1_s_vdf_dst_dest_bdb | (U2)((U2)u1_s_vdf_dst_strg_whl << u1_s_VDF_DST_STRG_WHL_BIT));
 
-    u1_t_idx = (U1)U1_MAX;
+    u1_t_ccode_idx = (U1)U1_MAX;
     for(u1_t_idx_loop = (U1)0U; u1_t_idx_loop < u1_g_VDF_DST_NUM_C_CODE; u1_t_idx_loop++){
         if(u2_s_vdf_dst_c_code == st_gp_VDF_DST_C_CODE[u1_t_idx_loop].u2_t_c_code){
-            u1_t_idx = st_gp_VDF_DST_C_CODE[u1_t_idx_loop].u1_t_c_code_idx;
+            u1_t_ccode_idx = st_gp_VDF_DST_C_CODE[u1_t_idx_loop].u1_t_c_code_idx;
         }
     }
 
-    if((u1_t_idx           == u1_g_VDF_DST_C_CODE_KOR  ) &&
-       (u1_CALIB_MCUID0810_KOREA_LOW == (U1)CALIB_MCUID0810_KOREA_LOW_MIN)){
-        u1_t_idx = u1_g_VDF_DST_C_CODE_KOR_FMVSS;
+    if((u1_t_ccode_idx               == u1_g_VDF_DST_C_CODE_KOR  ) &&
+       (u1_CALIB_MCUID0810_KOREA_LOW == (U1)CALIB_MCUID0810_FMVSS)){
+        u1_t_ccode_idx = u1_g_VDF_DST_C_CODE_KOR_FMVSS;
     }
-    else if((u1_t_idx           == u1_g_VDF_DST_C_CODE_MEX  ) &&
-            (u1_CALIB_MCUID0809_MEXICO_LOW == (U1)CALIB_MCUID0809_MEXICO_LOW_MIN)){
-        u1_t_idx = u1_g_VDF_DST_C_CODE_MEX_FMVSS;
+    else if((u1_t_ccode_idx                == u1_g_VDF_DST_C_CODE_MEX  ) &&
+            (u1_CALIB_MCUID0809_MEXICO_LOW == (U1)CALIB_MCUID0809_FMVSS)){
+        u1_t_ccode_idx = u1_g_VDF_DST_C_CODE_MEX_FMVSS;
     }
     else {
         /* Do Nothing */
      }
 
-    if(u1_t_idx != (U1)U1_MAX){
-        u1_s_vdf_dst_c_code_idx = u1_t_idx;
+    u1_t_destbdb_idx = (U1)U1_MAX;
+    for(u1_t_idx_loop = (U1)0U; u1_t_idx_loop < u1_g_VDF_DST_NUM_DEST_BDB; u1_t_idx_loop++){
+        if((u2_t_dest_bdb_val & st_gp_VDF_DST_DEST_BDB_JDGIDX[u1_t_idx_loop].u2_dest_bdb_mask) == st_gp_VDF_DST_DEST_BDB_JDGIDX[u1_t_idx_loop].u2_dest_bdb_val){
+            u1_t_destbdb_idx = u1_t_idx_loop;
+        }
+    }
+
+    if(u1_t_ccode_idx < u1_g_VDF_DST_NUM_C_CODE_REG){
+        u1_s_vdf_dst_c_code_idx   = u1_t_ccode_idx;
+        u1_s_vdf_dst_dest_bdb_idx = u1_g_VDF_DST_DEST_BDB_IDX_DEF;
+        u1_s_vdf_dst_idx          = u1_s_vdf_dst_c_code_idx;
+    }
+    else if(u1_t_destbdb_idx < u1_g_VDF_DST_NUM_DEST_BDB){
+        u1_s_vdf_dst_c_code_idx   = u1_g_VDF_DST_C_CODE_IDX_DEF;
+        u1_s_vdf_dst_dest_bdb_idx = u1_t_destbdb_idx;
+        u1_s_vdf_dst_idx          = (U1)(u1_s_vdf_dst_dest_bdb_idx + u1_g_VDF_DST_NUM_C_CODE_REG);
+    }
+    else if(u1_s_vdf_dst_idx < u1_g_VDF_DST_NUM_C_CODE_REG){
+        u1_s_vdf_dst_c_code_idx   = u1_s_vdf_dst_idx;
+        u1_s_vdf_dst_dest_bdb_idx = u1_g_VDF_DST_DEST_BDB_IDX_DEF;
+    }
+    else if(u1_s_vdf_dst_idx < (U1)(u1_g_VDF_DST_NUM_C_CODE_REG + u1_g_VDF_DST_NUM_DEST_BDB)){
+        u1_s_vdf_dst_c_code_idx   = u1_g_VDF_DST_C_CODE_IDX_DEF;
+        u1_s_vdf_dst_dest_bdb_idx = (U1)(u1_s_vdf_dst_idx - u1_g_VDF_DST_NUM_C_CODE_REG);
     }
     else{
         u1_s_vdf_dst_c_code_idx   = u1_g_VDF_DST_C_CODE_IDX_DEF;
+        u1_s_vdf_dst_dest_bdb_idx = u1_g_VDF_DST_DEST_BDB_IDX_DEF;
+        u1_s_vdf_dst_idx          = u1_g_VDF_DST_IDX_DEF;
     }
-
-    u1_t_idx = (U1)U1_MAX;
-    for(u1_t_idx_loop = (U1)0U; u1_t_idx_loop < u1_g_VDF_DST_NUM_DEST_BDB; u1_t_idx_loop++){
-        if((u2_t_dest_bdb_val & st_gp_VDF_DST_DEST_BDB_JDGIDX[u1_t_idx_loop].u2_dest_bdb_mask) == st_gp_VDF_DST_DEST_BDB_JDGIDX[u1_t_idx_loop].u2_dest_bdb_val){
-            u1_t_idx = u1_t_idx_loop;
-        }
-    }
-    if(u1_t_idx != (U1)U1_MAX){
-        u1_s_vdf_dst_dest_bdb_idx = u1_t_idx;
-    }
-    else{
-        u1_s_vdf_dst_dest_bdb_idx   = u1_g_VDF_DST_DEST_BDB_IDX_DEF;
-    }
+    vd_g_Rim_WriteU1(u2_g_VDF_DST_IDX_RIM_U1, u1_s_vdf_dst_idx);
 }
 /*===================================================================================================================================*/
 /*  static U1    vd_s_VardefLangDestDBIdxJdg(void)                                                                                   */
@@ -312,36 +345,50 @@ static void    vd_s_VardefLangDestDBIdxJdg(void)
 {
     static const U1 u1_s_VDF_DST_STRG_WHL_BIT = (U1)8U;
     U1    u1_t_idx_loop;
-    U1    u1_t_idx;
+    U1    u1_t_ccode_idx;
+    U1    u1_t_destbdb_idx;
     U2    u2_t_dest_bdb_val;
 
     u2_t_dest_bdb_val = ((U2)u1_s_vdf_dst_dest_bdb | (U2)((U2)u1_s_vdf_dst_strg_whl << u1_s_VDF_DST_STRG_WHL_BIT));
 
-    u1_t_idx = (U1)U1_MAX;
+    u1_t_ccode_idx = (U1)U1_MAX;
     for(u1_t_idx_loop = (U1)0U; u1_t_idx_loop < u1_g_VDF_LANG_DST_NUM_C_CODE; u1_t_idx_loop++){
         if(u2_s_vdf_dst_c_code == u2_gp_VDF_LANG_DST_C_CODE[u1_t_idx_loop]){
-            u1_t_idx = u1_t_idx_loop;
+            u1_t_ccode_idx = u1_t_idx_loop;
         }
     }
-    if(u1_t_idx != (U1)U1_MAX){
-        u1_s_vdf_lang_dst_c_code_idx = u1_t_idx;
+
+    u1_t_destbdb_idx = (U1)U1_MAX;
+    for(u1_t_idx_loop = (U1)0U; u1_t_idx_loop < u1_g_VDF_LANG_DST_NUM_DEST_BDB; u1_t_idx_loop++){
+        if((u2_t_dest_bdb_val & st_gp_VDF_LANG_DST_DEST_BDB_JDGIDX[u1_t_idx_loop].u2_dest_bdb_mask) == st_gp_VDF_LANG_DST_DEST_BDB_JDGIDX[u1_t_idx_loop].u2_dest_bdb_val){
+            u1_t_destbdb_idx = u1_t_idx_loop;
+        }
+    }
+
+    if(u1_t_ccode_idx < u1_g_VDF_LANG_DST_NUM_C_CODE){
+        u1_s_vdf_lang_dst_c_code_idx   = u1_t_ccode_idx;
+        u1_s_vdf_lang_dst_dest_bdb_idx = u1_g_VDF_LANG_DST_IDX_DEF;
+        u1_s_vdf_lang_dst_idx          = u1_s_vdf_lang_dst_c_code_idx;
+    }
+    else if(u1_t_destbdb_idx < u1_g_VDF_LANG_DST_NUM_DEST_BDB){
+        u1_s_vdf_lang_dst_c_code_idx   = u1_g_VDF_DST_C_CODE_IDX_DEF;
+        u1_s_vdf_lang_dst_dest_bdb_idx = u1_t_destbdb_idx;
+        u1_s_vdf_lang_dst_idx          = (U1)(u1_s_vdf_lang_dst_dest_bdb_idx + u1_g_VDF_LANG_DST_NUM_C_CODE);
+    }
+    else if(u1_s_vdf_lang_dst_idx < u1_g_VDF_LANG_DST_NUM_C_CODE){
+        u1_s_vdf_lang_dst_c_code_idx   = u1_s_vdf_lang_dst_idx;
+        u1_s_vdf_lang_dst_dest_bdb_idx = u1_g_VDF_LANG_DST_IDX_DEF;
+    }
+    else if(u1_s_vdf_lang_dst_idx < (U1)(u1_g_VDF_LANG_DST_NUM_C_CODE + u1_g_VDF_LANG_DST_NUM_DEST_BDB)){
+        u1_s_vdf_lang_dst_c_code_idx   = u1_g_VDF_DST_C_CODE_IDX_DEF;
+        u1_s_vdf_lang_dst_dest_bdb_idx = (U1)(u1_s_vdf_lang_dst_idx - u1_g_VDF_LANG_DST_NUM_C_CODE);
     }
     else{
         u1_s_vdf_lang_dst_c_code_idx   = u1_g_VDF_DST_C_CODE_IDX_DEF;
+        u1_s_vdf_lang_dst_dest_bdb_idx = u1_g_VDF_LANG_DST_IDX_DEF;
+        u1_s_vdf_lang_dst_idx          = u1_g_VDF_DST_IDX_DEF;
     }
-
-    u1_t_idx = (U1)U1_MAX;
-    for(u1_t_idx_loop = (U1)0U; u1_t_idx_loop < u1_g_VDF_LANG_DST_NUM_DEST_BDB; u1_t_idx_loop++){
-        if((u2_t_dest_bdb_val & st_gp_VDF_LANG_DST_DEST_BDB_JDGIDX[u1_t_idx_loop].u2_dest_bdb_mask) == st_gp_VDF_LANG_DST_DEST_BDB_JDGIDX[u1_t_idx_loop].u2_dest_bdb_val){
-            u1_t_idx = u1_t_idx_loop;
-        }
-    }
-    if(u1_t_idx != (U1)U1_MAX){
-        u1_s_vdf_lang_dst_dest_bdb_idx = u1_t_idx;
-    }
-    else{
-        u1_s_vdf_lang_dst_dest_bdb_idx   = u1_g_VDF_LANG_DST_IDX_DEF;
-    }
+    vd_g_Rim_WriteU1(u2_g_VDF_LANG_DST_IDX_RIM_U1, u1_s_vdf_lang_dst_idx);
 }
 /*===================================================================================================================================*/
 /*  static void    vd_s_VardefDestHdlJdg(const U1 u1_a_STRG_WHL)                                                                     */
@@ -377,10 +424,12 @@ static void    vd_s_VardefDestHdlJdg(const U1 u1_a_STRG_WHL)
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  1.0.0     1/25/2021  SF       New.                                                                                               */
 /*  2.0.0     1/19/2024  HF       for 19PFv3.                                                                                        */
-/*  2.1.0     6/27/2025  SN       for BEV System_Consideration_2.(MET-M_DESTVARI-CSTD-A0-06)                                         */
+/*  2.1.0    10/28/2024  AA       M_DESTVARI-CSTD-A0-07 spec update                                                                  */
+/*  2.2.0     6/27/2025  SN       for BEV System_Consideration_2.(MET-M_DESTVARI-CSTD-A0-06)                                         */
 /*                                                                                                                                   */
 /*  * SF = Seiya Fukutome, DENSO-TECHNO                                                                                              */
 /*  * HF = Hinari Fukamachi, KSE                                                                                                     */
+/*  * AA = Anna Asuncion, DTPH                                                                                                       */
 /*  * SN = Shizuka Nakajima, KSE                                                                                                     */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

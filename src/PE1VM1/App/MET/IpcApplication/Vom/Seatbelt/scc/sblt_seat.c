@@ -1,4 +1,4 @@
-/* 2.2.0 */
+/* 2.2.1 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -11,7 +11,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define SBLT_SEAT_C_MAJOR                       (2)
 #define SBLT_SEAT_C_MINOR                       (2)
-#define SBLT_SEAT_C_PATCH                       (0)
+#define SBLT_SEAT_C_PATCH                       (1)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -832,7 +832,8 @@ static U1     u1_s_SbltRsXBklstsJdg(const U4 u4_a_SEATID, const U1 u1_a_BKLINPT,
     if (u1_a_BKLINPT != (U1)SBLTWRN_BKLSIG_UNKNOWN) {
         st_sp_sblt_seat[u4_a_SEATID].u1_defined = (U1)TRUE;
     }
-    st_sp_sblt_seat[u4_a_SEATID].u1_prvsig = u1_a_BKLINPT;
+    st_sp_sblt_seat[u4_a_SEATID].u1_prvsig    = u1_a_BKLINPT;
+    st_sp_sblt_seat[u4_a_SEATID].u1_prvoswsig = u1_a_OSWSTS;
     
     return (u1_t_bklsts);
 }
@@ -987,6 +988,7 @@ static  void    vd_s_SbltInptDly(U1 *u1p_a_sgnl, U1 *u1p_a_prvsgnl, U2 *u2p_a_cn
 /*  2.1.1    10/18/2021  TA(M)    Change the definition of the null pointer used.(BSW v115_r007)                                     */
 /*  2.1.2    06/13/2022  TK       Fixed 24FGM22-11011.                                                                               */
 /*  2.2.0    02/28/2024  TH       for 19PFv3                                                                                         */
+/*  2.2.1    06/02/2025  TH       Fixed : Keep State if Occupied SW signal = 11b                                                     */
 /*                                                                                                                                   */
 /*  * HY   = Hidefumi Yoshida, Denso                                                                                                 */
 /*  * YI   = Yoshiki  Iwata,   Denso                                                                                                 */

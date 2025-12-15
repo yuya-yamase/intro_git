@@ -1,4 +1,4 @@
-/* 2.0.3 */
+/* 2.1.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,8 +10,8 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define PTSRUNTM_HRS_C_MAJOR                    (2)
-#define PTSRUNTM_HRS_C_MINOR                    (0)
-#define PTSRUNTM_HRS_C_PATCH                    (3)
+#define PTSRUNTM_HRS_C_MINOR                    (1)
+#define PTSRUNTM_HRS_C_PATCH                    (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -49,6 +49,7 @@
 typedef struct {
     U1                                          u1_initupdt;
     U1                                          u1_status;
+    U1                                          u1_rstimmw;
 } ST_PTSRUNTM_VAR;
 
 typedef struct {
@@ -71,6 +72,7 @@ static  ST_PTSRUNTM_VAR                         st_sp_ptsruntm_var[PTSRUNTM_NUM_
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static void      vd_s_PtsRunTmHandleOvrf(const U4 u4_a_MAX, const U1 u1_a_ROLLCNT, const U4 u4_a_DELTA, U4 * u4_ap_elpsdtm);
+static U1        u1_s_PtsRunTmHrsImmwRunAct(const ST_PTSRUNTM_CNTT * stp_a_CNTT, const U1 u1_a_UPDT, const U1 u1_a_INIT);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
@@ -179,6 +181,7 @@ void            vd_g_PtsRunTmInit(void)
     for (u4_t_loop = (U4)0U; u4_t_loop < (U4)PTSRUNTM_NUM_CNTTS; u4_t_loop++) {
         st_sp_ptsruntm_var[u4_t_loop].u1_initupdt = (U1)FALSE;
         st_sp_ptsruntm_var[u4_t_loop].u1_status   = (U1)TRIPCOM_STSBIT_UNKNOWN;
+        st_sp_ptsruntm_var[u4_t_loop].u1_rstimmw  = (U1)TRIPCOM_RSTIMMW_UNK;
     }
 }
 
@@ -285,6 +288,66 @@ void            vd_g_PtsRunTmAccmlt(const U1 u1_a_CNTTID, const U2 * u2_ap_STSFI
 }
 
 /*===================================================================================================================================*/
+/* void            vd_g_PtsRunTmRstImmw(const U1 u1_a_ACTV, const U1 u1_a_CNTTID, const U2 * u2_ap_STSFIELD)                         */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void            vd_g_PtsRunTmRstImmw(const U1 u1_a_ACTV, const U1 u1_a_CNTTID, const U2 * u2_ap_STSFIELD)
+{
+    const ST_PTSRUNTM_CNTT *                    stp_t_CNTT;
+    ST_PTSRUNTM_VAR *                           stp_t_var;
+    U1                                          u1_t_rstimmw;
+    U1                                          u1_t_updt;
+    U1                                          u1_t_init;
+    U1                                          u1_t_accpt;
+    U1                                          u1_t_stsbit;
+
+    if (u1_a_CNTTID < (U1)AVGVEHSPD_NUM_CNTTS) {
+        stp_t_CNTT   = &st_sp_PTSRUNTM_CNTTS_CFG[u1_a_CNTTID];
+        stp_t_var    = &st_sp_ptsruntm_var[u1_a_CNTTID];
+        u1_t_rstimmw = stp_t_var->u1_rstimmw;
+
+        if((u1_t_rstimmw & (U1)TRIPCOM_RSTIMMW_RUN) == (U1)0U){
+            /* TRIPCOM_RSTIMMW_UNK or TRIPCOM_RSTIMMW_SUC or TRIPCOM_RSTIMMW_FAI */
+            if((u2_ap_STSFIELD[TRIPCOM_STSFIELD_MARST_IMMW] & stp_t_CNTT->u2_manualreset) != (U2)0U){
+                if(u1_a_ACTV == (U1)TRUE){
+                    u1_t_updt = stp_t_var->u1_initupdt;
+                    u1_t_init = (U1)FALSE;
+                }
+                else{
+                    u1_t_updt = (U1)TRUE;
+                    u1_t_init = (U1)TRUE;
+                }
+
+                u1_t_accpt = u1_s_PtsRunTmHrsImmwRunAct(stp_t_CNTT, u1_t_updt, u1_t_init);
+                if(u1_t_accpt == (U1)TRUE){
+                    u1_t_rstimmw = (U1)TRIPCOM_RSTIMMW_RUN;
+                }
+                else{
+                    u1_t_rstimmw = (U1)TRIPCOM_RSTIMMW_FAI;
+                }
+            }
+        }
+        else{
+            /* TRIPCOM_RSTIMMW_RUN */
+            u1_t_stsbit = u1_g_TripcomMsGetNvmRslt(stp_t_CNTT->u1_ms_ptsruntm_id);
+
+            if((u1_t_stsbit & (U1)TRIPCOM_MS_NVMSTS_SUC) != (U1)0x00U){
+                u1_t_rstimmw = (U1)TRIPCOM_RSTIMMW_SUC;
+            }
+            else if((u1_t_stsbit & (U1)TRIPCOM_MS_NVMSTS_FAIL) != (U1)0x00U){
+                u1_t_rstimmw = (U1)TRIPCOM_RSTIMMW_FAI;
+            }
+            else{
+                /* nothing */
+            }
+        }
+        stp_t_var->u1_rstimmw = u1_t_rstimmw;
+    }
+}
+
+/*===================================================================================================================================*/
 /* U1              u1_g_PtsRunTmHrs(const U1 u1_a_PTSRUN_TM_CH, U4 * u4p_a_hhmmss)                                                   */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
@@ -306,6 +369,24 @@ U1              u1_g_PtsRunTmHrs(const U1 u1_a_PTSRUN_TM_CH, U4 * u4p_a_hhmmss)
     }
 
     return (u1_t_status);
+}
+
+/*===================================================================================================================================*/
+/* U1              u1_g_PtsRunTmRstImmwRslt(const U1 u1_a_PTSRUN_TM_CH)                                                              */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+U1              u1_g_PtsRunTmRstImmwRslt(const U1 u1_a_PTSRUN_TM_CH)
+{
+    U1                                          u1_t_rslt;
+
+    u1_t_rslt = (U1)TRIPCOM_RSTIMMW_UNK;
+    if (u1_a_PTSRUN_TM_CH < (U1)PTSRUNTM_NUM_CNTTS) {
+        u1_t_rslt = st_sp_ptsruntm_var[u1_a_PTSRUN_TM_CH].u1_rstimmw;
+    }
+
+    return(u1_t_rslt);
 }
 
 /*===================================================================================================================================*/
@@ -365,6 +446,35 @@ static  void      vd_s_PtsRunTmHandleOvrf(const U4 u4_a_MAX, const U1 u1_a_ROLLC
 }
 
 /*===================================================================================================================================*/
+/* static U1       u1_s_PtsRunTmHrsImmwRunAct(const ST_PTSRUNTM_CNTT * stp_a_CNTT, const U1 u1_a_UPDT, const U1 u1_a_INIT)           */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static U1       u1_s_PtsRunTmHrsImmwRunAct(const ST_PTSRUNTM_CNTT * stp_a_CNTT, const U1 u1_a_UPDT, const U1 u1_a_INIT)
+{
+    U1                                          u1_t_accpt;
+    U1                                          u1_t_rslt;
+
+    u1_t_accpt = (U1)FALSE;
+
+    if(u1_a_UPDT == (U1)TRUE){
+        u1_t_rslt = u1_g_TripcomMsGetNvmRslt(stp_a_CNTT->u1_ms_ptsruntm_id);
+
+        if(u1_t_rslt != (U1)TRIPCOM_MS_NVMSTS_WAIT){
+            if(u1_a_INIT == (U1)TRUE){
+                vd_g_TripcomMsSetAccmltVal(stp_a_CNTT->u1_ms_ptsruntm_id, (U4)0U);
+            }
+
+            vd_g_TripcomMsSetNvmRqst(stp_a_CNTT->u1_ms_ptsruntm_id);
+
+            u1_t_accpt = (U1)TRUE;
+        }
+    }
+    return(u1_t_accpt);
+}
+
+/*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
 /*                                                                                                                                   */
@@ -377,10 +487,12 @@ static  void      vd_s_PtsRunTmHandleOvrf(const U4 u4_a_MAX, const U1 u1_a_ROLLC
 /*  2.0.1    10/18/2021  TA(M)    Change the definition of the null pointer used.(BSW v115_r007)                                     */
 /*  2.0.2    10/25/2021  TA(M)    Supports TripA and TripB.                                                                          */
 /*  2.0.3    10/27/2021  TK       QAC supported.                                                                                     */
+/*  2.1.0    02/18/2025  MaO(M)   Add privacy data delete/result API                                                                 */
 /*                                                                                                                                   */
 /*  * HY   = Hidefumi Yoshida, Denso                                                                                                 */
 /*  * YA   = Yuhei Aoyama, DensoTechno                                                                                               */
 /*  * TA(M)= Teruyuki Anjima, NTT Data MSE                                                                                           */
 /*  * TK   = Takanori Kuno, Denso Techno                                                                                             */
+/*  * MaO(M) = Masayuki Okada, NTT Data MSE                                                                                          */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

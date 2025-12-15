@@ -1,4 +1,4 @@
-/* 2.2.0 */
+/* 2.2.2 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -11,7 +11,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define ILLUMI_COM_TX_C_MAJOR                   (2)
 #define ILLUMI_COM_TX_C_MINOR                   (2)
-#define ILLUMI_COM_TX_C_PATCH                   (0)
+#define ILLUMI_COM_TX_C_PATCH                   (2)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -21,28 +21,10 @@
 
 #include "dim_usadjbysw.h"
 #include "oxcan.h"
-#if 0   /* BEV BSW provisionally */
-#else
-#include "oxcan_channel_STUB.h"
-#endif
 #include "calibration.h"
-#include "iohw_diflt.h"
-#if 0   /* BEV BSW provisionally */
-#else
-#include "iohw_adc_channel_STUB.h"
-#include "iohw_diflt_sgnl_STUB.h"
-#endif
 #include "rim_ctl.h"
-#if 0   /* BEV BSW provisionally */
-#else
-#include "rim_ctl_cfg_STUB.h"
-#endif
 #include "vardef.h"
 #include "veh_opemd.h"
-#if 0   /* BEV BSW provisionally */
-#else
-#include "veh_opemd_xmode_STUB.h"
-#endif
 #include "vptran_sel.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -89,11 +71,6 @@
 #define ILLUMI_TAIL_CN_ACT                      (0x02U)  /* TAIL_CN Active      */
 #define ILLUMI_TAIL_CN_INACT                    (0x03U)  /* TAIL_CN Inactive    */
 
-#define ILLUMI_DIM_LVL_RHEOSTAT_NUM             (CALIB_MCUID0270_RHEO_STEP)
-#define ILLUMI_DIM_LVL_TR2_NUM                  (CALIB_MCUID0292_TR2_STEP)
-#define ILLUMI_DIM_LVL_IL2_NUM                  (CALIB_MCUID0314_IL2_STEP)
-#define ILLUMI_DIM_LVL_BKLT_NUM                 (CALIB_BL_STEP)
-#define ILLUMI_DIM_LVL_OFS                      (1U)    /* Lelel Offset Value  */
 #define ILLUMI_ILL_OUT_TX_MAX                   (100U)  /* ILL_OUT MAX Value   */
 
 #define ILLUMI_COMTX_IL2STS_PARK                (0U)
@@ -109,9 +86,15 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+typedef struct{
+    U2      u2_fadein;
+    U2      u2_fadeout;
+}ST_ILL_FADE;
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+static U2       u2_s_illumi_tc_nmwk_tout;
 static U2       u2_s_illumi_rheo_nmwk_tout;
 static U2       u2_s_illumi_rheo_evt_tout;
 static U1       u1_s_illumi_rheo_tx_ctrl;
@@ -146,6 +129,131 @@ static        U2       u2_s_IllumiRheoTxCtrl(const U2 * u2_ap_DIM_LVL, U1 * u1_a
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+static volatile const U1 * u1p_sp_ILLUMI_RHEO_PCT[ILLUMI_DIM_LVL_NUM] = {
+    &u1_CALIB_MCUID0291_RHEO_MIN,
+    &u1_CALIB_MCUID0290_RHEO_LV20,
+    &u1_CALIB_MCUID0289_RHEO_LV19,
+    &u1_CALIB_MCUID0288_RHEO_LV18,
+    &u1_CALIB_MCUID0287_RHEO_LV17,
+    &u1_CALIB_MCUID0286_RHEO_LV16,
+    &u1_CALIB_MCUID0285_RHEO_LV15,
+    &u1_CALIB_MCUID0284_RHEO_LV14,
+    &u1_CALIB_MCUID0283_RHEO_LV13,
+    &u1_CALIB_MCUID0282_RHEO_LV12,
+    &u1_CALIB_MCUID0281_RHEO_LV11,
+    &u1_CALIB_MCUID0280_RHEO_LV10,
+    &u1_CALIB_MCUID0279_RHEO_LV9,
+    &u1_CALIB_MCUID0278_RHEO_LV8,
+    &u1_CALIB_MCUID0277_RHEO_LV7,
+    &u1_CALIB_MCUID0276_RHEO_LV6,
+    &u1_CALIB_MCUID0275_RHEO_LV5,
+    &u1_CALIB_MCUID0274_RHEO_LV4,
+    &u1_CALIB_MCUID0273_RHEO_LV3,
+    &u1_CALIB_MCUID0272_RHEO_LV2,
+    &u1_CALIB_MCUID0271_RHEO_LV1,
+    &u1_CALIB_MCUID0270_RHEO_MAX
+};
+
+static volatile const U2 * u2p_sp_ILLUMI_TR2_PCT[ILLUMI_DIM_LVL_NUM] = {
+    &u2_CALIB_MCUID0313_TR2_DUTY_MIN,
+    &u2_CALIB_MCUID0312_TR2_DUTY_LV20,
+    &u2_CALIB_MCUID0311_TR2_DUTY_LV19,
+    &u2_CALIB_MCUID0310_TR2_DUTY_LV18,
+    &u2_CALIB_MCUID0309_TR2_DUTY_LV17,
+    &u2_CALIB_MCUID0308_TR2_DUTY_LV16,
+    &u2_CALIB_MCUID0307_TR2_DUTY_LV15,
+    &u2_CALIB_MCUID0306_TR2_DUTY_LV14,
+    &u2_CALIB_MCUID0305_TR2_DUTY_LV13,
+    &u2_CALIB_MCUID0304_TR2_DUTY_LV12,
+    &u2_CALIB_MCUID0303_TR2_DUTY_LV11,
+    &u2_CALIB_MCUID0302_TR2_DUTY_LV10,
+    &u2_CALIB_MCUID0301_TR2_DUTY_LV9,
+    &u2_CALIB_MCUID0300_TR2_DUTY_LV8,
+    &u2_CALIB_MCUID0299_TR2_DUTY_LV7,
+    &u2_CALIB_MCUID0298_TR2_DUTY_LV6,
+    &u2_CALIB_MCUID0297_TR2_DUTY_LV5,
+    &u2_CALIB_MCUID0296_TR2_DUTY_LV4,
+    &u2_CALIB_MCUID0295_TR2_DUTY_LV3,
+    &u2_CALIB_MCUID0294_TR2_DUTY_LV2,
+    &u2_CALIB_MCUID0293_TR2_DUTY_LV1,
+    &u2_CALIB_MCUID0292_TR2_DUTY_MAX
+};
+
+static volatile const U2 * u2p_sp_ILLUMI_IL2_PCT[ILLUMI_DIM_LVL_NUM] = {
+    &u2_CALIB_MCUID0335_IL2_DUTY_MIN,
+    &u2_CALIB_MCUID0334_IL2_DUTY_LV20,
+    &u2_CALIB_MCUID0333_IL2_DUTY_LV19,
+    &u2_CALIB_MCUID0332_IL2_DUTY_LV18,
+    &u2_CALIB_MCUID0331_IL2_DUTY_LV17,
+    &u2_CALIB_MCUID0330_IL2_DUTY_LV16,
+    &u2_CALIB_MCUID0329_IL2_DUTY_LV15,
+    &u2_CALIB_MCUID0328_IL2_DUTY_LV14,
+    &u2_CALIB_MCUID0327_IL2_DUTY_LV13,
+    &u2_CALIB_MCUID0326_IL2_DUTY_LV12,
+    &u2_CALIB_MCUID0325_IL2_DUTY_LV11,
+    &u2_CALIB_MCUID0324_IL2_DUTY_LV10,
+    &u2_CALIB_MCUID0323_IL2_DUTY_LV9,
+    &u2_CALIB_MCUID0322_IL2_DUTY_LV8,
+    &u2_CALIB_MCUID0321_IL2_DUTY_LV7,
+    &u2_CALIB_MCUID0320_IL2_DUTY_LV6,
+    &u2_CALIB_MCUID0319_IL2_DUTY_LV5,
+    &u2_CALIB_MCUID0318_IL2_DUTY_LV4,
+    &u2_CALIB_MCUID0317_IL2_DUTY_LV3,
+    &u2_CALIB_MCUID0316_IL2_DUTY_LV2,
+    &u2_CALIB_MCUID0315_IL2_DUTY_LV1,
+    &u2_CALIB_MCUID0314_IL2_DUTY_MAX
+};
+
+static volatile const U1 * u1p_sp_ILLUMI_BL_DAY[ILLUMI_DIM_LVL_NUM] = {
+    &u1_CALIB_MCUID0363_BL_DAY_MIN,
+    &u1_CALIB_MCUID0362_BL_DAY_LV20,
+    &u1_CALIB_MCUID0361_BL_DAY_LV19,
+    &u1_CALIB_MCUID0360_BL_DAY_LV18,
+    &u1_CALIB_MCUID0359_BL_DAY_LV17,
+    &u1_CALIB_MCUID0358_BL_DAY_LV16,
+    &u1_CALIB_MCUID0357_BL_DAY_LV15,
+    &u1_CALIB_MCUID0356_BL_DAY_LV14,
+    &u1_CALIB_MCUID0355_BL_DAY_LV13,
+    &u1_CALIB_MCUID0354_BL_DAY_LV12,
+    &u1_CALIB_MCUID0353_BL_DAY_LV11,
+    &u1_CALIB_MCUID0352_BL_DAY_LV10,
+    &u1_CALIB_MCUID0351_BL_DAY_LV9,
+    &u1_CALIB_MCUID0350_BL_DAY_LV8,
+    &u1_CALIB_MCUID0349_BL_DAY_LV7,
+    &u1_CALIB_MCUID0348_BL_DAY_LV6,
+    &u1_CALIB_MCUID0347_BL_DAY_LV5,
+    &u1_CALIB_MCUID0346_BL_DAY_LV4,
+    &u1_CALIB_MCUID0345_BL_DAY_LV3,
+    &u1_CALIB_MCUID0344_BL_DAY_LV2,
+    &u1_CALIB_MCUID0343_BL_DAY_LV1,
+    &u1_CALIB_MCUID0342_BL_DAY_MAX
+};
+
+static volatile const U1 * u1p_sp_ILLUMI_BL_NGT[ILLUMI_DIM_LVL_NUM] = {
+    &u1_CALIB_MCUID0407_BL_NGT_MIN,
+    &u1_CALIB_MCUID0406_BL_NGT_LV20,
+    &u1_CALIB_MCUID0405_BL_NGT_LV19,
+    &u1_CALIB_MCUID0404_BL_NGT_LV18,
+    &u1_CALIB_MCUID0403_BL_NGT_LV17,
+    &u1_CALIB_MCUID0402_BL_NGT_LV16,
+    &u1_CALIB_MCUID0401_BL_NGT_LV15,
+    &u1_CALIB_MCUID0400_BL_NGT_LV14,
+    &u1_CALIB_MCUID0399_BL_NGT_LV13,
+    &u1_CALIB_MCUID0398_BL_NGT_LV12,
+    &u1_CALIB_MCUID0397_BL_NGT_LV11,
+    &u1_CALIB_MCUID0396_BL_NGT_LV10,
+    &u1_CALIB_MCUID0395_BL_NGT_LV9,
+    &u1_CALIB_MCUID0394_BL_NGT_LV8,
+    &u1_CALIB_MCUID0393_BL_NGT_LV7,
+    &u1_CALIB_MCUID0392_BL_NGT_LV6,
+    &u1_CALIB_MCUID0391_BL_NGT_LV5,
+    &u1_CALIB_MCUID0390_BL_NGT_LV4,
+    &u1_CALIB_MCUID0389_BL_NGT_LV3,
+    &u1_CALIB_MCUID0388_BL_NGT_LV2,
+    &u1_CALIB_MCUID0387_BL_NGT_LV1,
+    &u1_CALIB_MCUID0386_BL_NGT_MAX
+};
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -157,43 +265,31 @@ static        U2       u2_s_IllumiRheoTxCtrl(const U2 * u2_ap_DIM_LVL, U1 * u1_a
 /*===================================================================================================================================*/
 void    vd_g_IllumiComTxInit(void)
 {
-#if ((defined(ComConf_ComSignal_RHEO_IN)) || (defined(ComConf_ComSignal_ILL_OUT)))
+#if 0   /* BEV Rebase provisionally */
     U1                   u1_t_tx;
-#endif /* #if ((defined(ComConf_ComSignal_RHEO_IN)) || (defined(ComConf_ComSignal_ILL_OUT))) */
-    U1                   u1_t_rheosw;
+#endif   /* BEV Rebase provisionally */
 
 
+    u2_s_illumi_tc_nmwk_tout   = (U2)U2_MAX;
     u2_s_illumi_rheo_nmwk_tout = (U2)U2_MAX;
     u2_s_illumi_rheo_evt_tout  = (U2)U2_MAX;
     u1_s_illumi_rheo_tx_ctrl   = (U1)ILLUMI_RHEO_EVTX_STS_FIN;
-    u1_t_rheosw   = u1_CALIB_MCUID0430_RHEOSW;
 
     u1_s_illumi_rheo_tx_pct = (U1)0U;
-#if ((defined(ComConf_ComSignal_RHEO_IN)) || (defined(ComConf_ComSignal_ILL_OUT)))
+#if 0   /* BEV Rebase provisionally */
     u1_t_tx = (U1)U1_MAX;
-#endif /* #if ((defined(ComConf_ComSignal_RHEO_IN)) || (defined(ComConf_ComSignal_ILL_OUT))) */
+#endif   /* BEV Rebase provisionally */
 
-    if(u1_t_rheosw == (U1)CALIB_MCUID0430_THUMB_WHEEL){
-        u1_s_illumi_tail_cn_tx = (U1)ILLUMI_TAIL_CN_UNK;
-    }
-    else{
-        u1_s_illumi_tail_cn_tx = (U1)ILLUMI_TAIL_CN_INACT;
-    }
+    u1_s_illumi_tail_cn_tx     = (U1)ILLUMI_TAIL_CN_INACT;
     u1_s_illumi_rheo_tx_ack    = (U1)0U;
     u2_s_illumi_rheo_tx_tr     = (U2)0U;
     u2_s_illumi_rheo_tx_il     = (U2)0U;
     u1_s_illumi_rheo_tx_pos    = (U1)ILLUMI_RHEOPOS_TX_DEF;
 
-#ifdef ComConf_ComSignal_ILL_OUT
-#if 0   /* BEV BSW provisionally */
-    (void)Com_SendSignal(ComConf_ComSignal_ILL_OUT, &u1_t_tx);    /* COM Tx STUB delete */
-#endif
-#endif /* #ifdef ComConf_ComSignal_ILL_OUT */
-#ifdef ComConf_ComSignal_RHEO_IN
-#if 0   /* BEV BSW provisionally */
-    (void)Com_SendSignal(ComConf_ComSignal_RHEO_IN, &u1_t_tx);    /* COM Tx STUB delete */
-#endif
-#endif /* #ifdef ComConf_ComSignal_RHEO_IN */
+#if 0   /* BEV Rebase provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_ILL_OUT, &u1_t_tx);
+    (void)Com_SendSignal(ComConf_ComSignal_RHEO_IN, &u1_t_tx);
+#endif   /* BEV Rebase provisionally */
     (void)Com_SendSignal(ComConf_ComSignal_RHEOSTAT, &u1_s_illumi_rheo_tx_pct);
     (void)Com_SendSignal(ComConf_ComSignal_TR2_DUTY, &u2_s_illumi_rheo_tx_tr);
     (void)Com_SendSignal(ComConf_ComSignal_IL2_DUTY, &u2_s_illumi_rheo_tx_il);
@@ -283,9 +379,8 @@ U2      u2_g_IllumiTRTx(const U2 * u2_ap_DIM_LVL, const U2 u2_a_OW)
     U2                  u2_t_lvl;
 
     u2_t_lvl = u2_ap_DIM_LVL[ILLUMI_DIM_LVL_USADJ_NIGHT];
-    if(u2_t_lvl < (U2)ILLUMI_DIM_LVL_TR2_NUM){
-        u2_t_lvl = ((U2)ILLUMI_DIM_LVL_TR2_NUM - (U2)ILLUMI_DIM_LVL_OFS) - u2_t_lvl;
-        u2_t_pct = u2_CALIB_MCUID0292_TR2_PCT[u2_t_lvl];
+    if(u2_t_lvl < (U2)ILLUMI_DIM_LVL_NUM){
+        u2_t_pct = *(u2p_sp_ILLUMI_TR2_PCT[u2_t_lvl]);
     }
     else{
         u2_t_pct = (U2)ILLUMI_DUTY_TX_MAX;
@@ -310,9 +405,8 @@ U2      u2_g_IllumiILTx(const U2 * u2_ap_DIM_LVL, const U2 u2_a_OW)
     U2                  u2_t_lvl;
 
     u2_t_lvl = u2_ap_DIM_LVL[ILLUMI_DIM_LVL_USADJ_NIGHT];
-    if(u2_t_lvl < (U2)ILLUMI_DIM_LVL_IL2_NUM){
-        u2_t_lvl = ((U2)ILLUMI_DIM_LVL_IL2_NUM - (U2)ILLUMI_DIM_LVL_OFS) - u2_t_lvl;
-        u2_t_pct = u2_CALIB_MCUID0314_IL2_PCT[u2_t_lvl];
+    if(u2_t_lvl < (U2)ILLUMI_DIM_LVL_NUM){
+        u2_t_pct = *(u2p_sp_ILLUMI_IL2_PCT[u2_t_lvl]);
         u2_t_pct = u2_s_IllumiILFadeJdg(u2_t_lvl, u2_t_pct);
     }
     else{
@@ -338,68 +432,71 @@ static U2   u2_s_IllumiILFadeJdg(const U2 u2_a_LVL, const U2 u2_a_PCT)
 {
     static const U2     u2_s_ILLUMI_COMTX_FADE_PCT_LSB = (U2)10000U;
     static const U2     u2_s_ILLUMI_COMTX_FADE_PCT_MAX = (U2)10000U;
-    static const U2     u2_sp_ILLUMI_FADE_PCT[ILLUMI_COMTX_FADE_TIM] = {
-        (U2)61U,        /*   20ms */
-        (U2)61U,        /*   40ms */
-        (U2)61U,        /*   60ms */
-        (U2)61U,        /*   80ms */
-        (U2)61U,        /*  100ms */
-        (U2)405U,       /*  120ms */
-        (U2)405U,       /*  140ms */
-        (U2)405U,       /*  160ms */
-        (U2)405U,       /*  180ms */
-        (U2)405U,       /*  200ms */
-        (U2)829U,       /*  220ms */
-        (U2)829U,       /*  240ms */
-        (U2)829U,       /*  260ms */
-        (U2)829U,       /*  280ms */
-        (U2)829U,       /*  300ms */
-        (U2)1350U,      /*  320ms */
-        (U2)1350U,      /*  340ms */
-        (U2)1350U,      /*  360ms */
-        (U2)1350U,      /*  380ms */
-        (U2)1350U,      /*  400ms */
-        (U2)1993U,      /*  420ms */
-        (U2)1993U,      /*  440ms */
-        (U2)1993U,      /*  460ms */
-        (U2)1993U,      /*  480ms */
-        (U2)1993U,      /*  500ms */
-        (U2)2784U,      /*  520ms */
-        (U2)2784U,      /*  540ms */
-        (U2)2784U,      /*  560ms */
-        (U2)2784U,      /*  580ms */
-        (U2)2784U,      /*  600ms */
-        (U2)3757U,      /*  620ms */
-        (U2)3757U,      /*  640ms */
-        (U2)3757U,      /*  660ms */
-        (U2)3757U,      /*  680ms */
-        (U2)3757U,      /*  700ms */
-        (U2)4956U,      /*  720ms */
-        (U2)4956U,      /*  740ms */
-        (U2)4956U,      /*  760ms */
-        (U2)4956U,      /*  780ms */
-        (U2)4956U,      /*  800ms */
-        (U2)6432U,      /*  820ms */
-        (U2)6432U,      /*  840ms */
-        (U2)6432U,      /*  860ms */
-        (U2)6432U,      /*  880ms */
-        (U2)6432U,      /*  900ms */
-        (U2)8249U,      /*  920ms */
-        (U2)8249U,      /*  940ms */
-        (U2)8249U,      /*  960ms */
-        (U2)8249U,      /*  980ms */
-        (U2)8249U       /* 1000ms */
+    static const ST_ILL_FADE    st_sp_ILLUMI_FADE_PCT[ILLUMI_COMTX_FADE_TIM] = {
+/*      FadeIn      FadeOut                   */
+        {(U2)0U,    (U2)10000U},    /*    0ms */
+        {(U2)0U,    (U2)10000U},    /*   20ms */
+        {(U2)0U,    (U2)10000U},    /*   40ms */
+        {(U2)0U,    (U2)10000U},    /*   60ms */
+        {(U2)0U,    (U2)10000U},    /*   80ms */
+        {(U2)330U,  (U2)7854U },    /*  100ms */
+        {(U2)330U,  (U2)7854U },    /*  120ms */
+        {(U2)330U,  (U2)7854U },    /*  140ms */
+        {(U2)330U,  (U2)7854U },    /*  160ms */
+        {(U2)330U,  (U2)7854U },    /*  180ms */
+        {(U2)737U,  (U2)6111U },    /*  200ms */
+        {(U2)737U,  (U2)6111U },    /*  220ms */
+        {(U2)737U,  (U2)6111U },    /*  240ms */
+        {(U2)737U,  (U2)6111U },    /*  260ms */
+        {(U2)737U,  (U2)6111U },    /*  280ms */
+        {(U2)1237U, (U2)4696U },    /*  300ms */
+        {(U2)1237U, (U2)4696U },    /*  320ms */
+        {(U2)1237U, (U2)4696U },    /*  340ms */
+        {(U2)1237U, (U2)4696U },    /*  360ms */
+        {(U2)1237U, (U2)4696U },    /*  380ms */
+        {(U2)1853U, (U2)3546U },    /*  400ms */
+        {(U2)1853U, (U2)3546U },    /*  420ms */
+        {(U2)1853U, (U2)3546U },    /*  440ms */
+        {(U2)1853U, (U2)3546U },    /*  460ms */
+        {(U2)1853U, (U2)3546U },    /*  480ms */
+        {(U2)2612U, (U2)2612U },    /*  500ms */
+        {(U2)2612U, (U2)2612U },    /*  520ms */
+        {(U2)2612U, (U2)2612U },    /*  540ms */
+        {(U2)2612U, (U2)2612U },    /*  560ms */
+        {(U2)2612U, (U2)2612U },    /*  580ms */
+        {(U2)3546U, (U2)1853U },    /*  600ms */
+        {(U2)3546U, (U2)1853U },    /*  620ms */
+        {(U2)3546U, (U2)1853U },    /*  640ms */
+        {(U2)3546U, (U2)1853U },    /*  660ms */
+        {(U2)3546U, (U2)1853U },    /*  680ms */
+        {(U2)4696U, (U2)1237U },    /*  700ms */
+        {(U2)4696U, (U2)1237U },    /*  720ms */
+        {(U2)4696U, (U2)1237U },    /*  740ms */
+        {(U2)4696U, (U2)1237U },    /*  760ms */
+        {(U2)4696U, (U2)1237U },    /*  780ms */
+        {(U2)6111U, (U2)737U  },    /*  800ms */
+        {(U2)6111U, (U2)737U  },    /*  820ms */
+        {(U2)6111U, (U2)737U  },    /*  840ms */
+        {(U2)6111U, (U2)737U  },    /*  860ms */
+        {(U2)6111U, (U2)737U  },    /*  880ms */
+        {(U2)7854U, (U2)330U  },    /*  900ms */
+        {(U2)7854U, (U2)330U  },    /*  920ms */
+        {(U2)7854U, (U2)330U  },    /*  940ms */
+        {(U2)7854U, (U2)330U  },    /*  960ms */
+        {(U2)7854U, (U2)330U  }     /*  980ms */
     };
 
+    U1                  u1_t_at;
     U1                  u1_t_ig;
     U2                  u2_t_cnt;
     U2                  u2_t_min;
     U1                  u1_t_sts;
     U2                  u2_t_pct;
 
+    u1_t_at = u1_g_VardefTrnsmssn();
     u1_t_ig = u1_g_VehopemdIgnOn();
 
-    if((u1_CALIB_MCUID0741_IL2OUTILLRUN == (U1)TRUE)
+    if((u1_CALIB_MCUID0741_IL2OUTILLRUN == (U1)TRUE) && (u1_t_at == (U1)VDF_TRNSMSSN_AT)
     && (u1_t_ig == (U1)TRUE)){
         if(u2_a_LVL == (U2)0U){
             u2_t_min = u2_CALIB_MCUID0743_IOUTILLRUNMAX;
@@ -411,7 +508,7 @@ static U2   u2_s_IllumiILFadeJdg(const U2 u2_a_LVL, const U2 u2_a_PCT)
         u1_t_sts = u1_s_IllumiILFadeDriveJdg();
         if(u1_t_sts == (U1)ILLUMI_COMTX_IL2STS_DRIVE){
             if(u2_s_illumi_comtx_fade_tmelpsd < (U2)ILLUMI_COMTX_FADE_TIM){
-                u2_t_cnt = u2_sp_ILLUMI_FADE_PCT[(U2)ILLUMI_COMTX_FADE_TIM - u2_s_illumi_comtx_fade_tmelpsd - (U2)1U];
+                u2_t_cnt = st_sp_ILLUMI_FADE_PCT[u2_s_illumi_comtx_fade_tmelpsd].u2_fadeout;
             }
             else{
                 u2_t_cnt = (U2)0U;
@@ -419,7 +516,7 @@ static U2   u2_s_IllumiILFadeJdg(const U2 u2_a_LVL, const U2 u2_a_PCT)
         }
         else{
             if(u2_s_illumi_comtx_fade_tmelpsd < (U2)ILLUMI_COMTX_FADE_TIM){
-                u2_t_cnt = u2_sp_ILLUMI_FADE_PCT[u2_s_illumi_comtx_fade_tmelpsd];
+                u2_t_cnt = st_sp_ILLUMI_FADE_PCT[u2_s_illumi_comtx_fade_tmelpsd].u2_fadein;
             }
             else{
                 u2_t_cnt = u2_s_ILLUMI_COMTX_FADE_PCT_MAX;
@@ -427,10 +524,10 @@ static U2   u2_s_IllumiILFadeJdg(const U2 u2_a_LVL, const U2 u2_a_PCT)
         }
 
         if(u2_a_PCT >= u2_t_min){
-            u2_t_pct = (U2)((U4)u2_t_min + (((U4)(u2_a_PCT - u2_t_min) * (U4)u2_t_cnt) / (U4)u2_s_ILLUMI_COMTX_FADE_PCT_LSB));
+            u2_t_pct = (U2)((U4)u2_t_min + ((((U4)u2_a_PCT - (U4)u2_t_min) * (U4)u2_t_cnt) / (U4)u2_s_ILLUMI_COMTX_FADE_PCT_LSB));
         }
         else{
-            u2_t_pct = (U2)((U4)u2_t_min - (((U4)(u2_t_min - u2_a_PCT) * (U4)u2_t_cnt) / (U4)u2_s_ILLUMI_COMTX_FADE_PCT_LSB));
+            u2_t_pct = (U2)((U4)u2_t_min - ((((U4)u2_t_min - (U4)u2_a_PCT) * (U4)u2_t_cnt) / (U4)u2_s_ILLUMI_COMTX_FADE_PCT_LSB));
         }
     }
     else{
@@ -589,18 +686,13 @@ static U2      u2_s_IllumiRheoTxCtrl(const U2 * u2_ap_DIM_LVL, U1 * u1_ap_RHEOPC
 
     U1                  u1_t_pct;
     U1                  u1_t_stschk;
-#ifdef ComConf_ComSignal_RHEO_IN
     U1                  u1_t_drtx;
-#endif
 
     u2_t_lvl = u2_ap_DIM_LVL[ILLUMI_DIM_LVL_USADJ_NIGHT];
-    if((u1_s_illumi_rheo_tx_ctrl < (U1)ILLUMI_RHEO_EVTX_NUM_STS   ) &&
-       (u2_t_lvl                 < (U2)ILLUMI_DIM_LVL_RHEOSTAT_NUM)){
-        u2_t_lvl = ((U2)ILLUMI_DIM_LVL_RHEOSTAT_NUM - (U2)ILLUMI_DIM_LVL_OFS) - u2_t_lvl;
-        u1_t_pct = u1_CALIB_MCUID0270_RHEO_PCT[u2_t_lvl];
-#ifdef ComConf_ComSignal_RHEO_IN
+    if((u1_s_illumi_rheo_tx_ctrl < (U1)ILLUMI_RHEO_EVTX_NUM_STS) &&
+       (u2_t_lvl                 < (U2)ILLUMI_DIM_LVL_NUM      )){
+        u1_t_pct = *(u1p_sp_ILLUMI_RHEO_PCT[u2_t_lvl]);
         u1_t_drtx    = u1_t_pct;
-#endif
         u1_t_stschk = u1_s_illumi_rheo_tx_ack & (U1)ILLUMI_RHEO_CHK_TX_ACK;
 
         if(u1_t_pct != u1_s_illumi_rheo_tx_pct){
@@ -626,15 +718,11 @@ static U2      u2_s_IllumiRheoTxCtrl(const U2 * u2_ap_DIM_LVL, U1 * u1_ap_RHEOPC
     else{
         u2_t_act   = (U2)ILLUMI_RHEO_TX_ACT_INIT;
         u1_t_pct   = (U1)ILLUMI_RHEO_TX_MAX;
-#ifdef ComConf_ComSignal_RHEO_IN
         u1_t_drtx  = (U1)ILLUMI_RHEO_TX_MAX;
-#endif
     }
 
     (*u1_ap_RHEOPCT)   = u1_t_pct;
-#ifdef ComConf_ComSignal_RHEO_IN
     (*u1_ap_RHEODRTX)  = u1_t_drtx;
-#endif
 
     return(u2_t_act);
 }
@@ -682,11 +770,9 @@ static void    vd_s_IllumiRheoTxAct(const U2 u2_a_ACT, const U1 u1_a_RHEOPCT, co
             break;
     }
 
-#ifdef ComConf_ComSignal_RHEO_IN
-#if 0   /* BEV BSW provisionally */
-    (void)Com_SendSignal(ComConf_ComSignal_RHEO_IN, &u1_a_RHEODRTX);    /* COM Tx STUB delete */
-#endif
-#endif
+#if 0   /* BEV Rebase provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_RHEO_IN, &u1_a_RHEODRTX);
+#endif   /* BEV Rebase provisionally */
 }
 /*===================================================================================================================================*/
 /*  static void    vd_s_IllumiLoungeTx(const U2 * u2_ap_DIM_LVL)                                                                     */
@@ -720,11 +806,11 @@ static void    vd_s_IllumiPosTx(const U2 * u2_ap_DIM_LVL)
     u2_t_daynight = u2_ap_DIM_LVL[ILLUMI_DIM_LVL_DAYNIGHT];
     if(u2_t_daynight < (U2)DIM_DAYNIGHT_NUM_LVL){
         u2_t_lvl = u2_ap_DIM_LVL[u2_t_daynight];
-        if(u2_t_lvl       < (U2)ILLUMI_DIM_LVL_RHEOSTAT_NUM){
+        if(u2_t_lvl       < (U2)ILLUMI_DIM_LVL_NUM){
             u1_t_tx = (U1)u2_t_lvl;
         }
         else{
-            u1_t_tx = (U1)ILLUMI_DIM_LVL_RHEOSTAT_NUM - (U1)1U;
+            u1_t_tx = (U1)ILLUMI_DIM_LVL_NUM - (U1)1U;
         }
     }
     else{
@@ -745,7 +831,6 @@ static void    vd_s_IllumiPosTx(const U2 * u2_ap_DIM_LVL)
 /*===================================================================================================================================*/
 static void    vd_s_IllumiTftbkTx(const U2 * u2_ap_DIM_LVL)
 {
-#ifdef ComConf_ComSignal_ILL_OUT
 
     U2                  u2_t_daynight;
     U2                  u2_t_lvl;
@@ -755,13 +840,12 @@ static void    vd_s_IllumiTftbkTx(const U2 * u2_ap_DIM_LVL)
     u2_t_daynight = u2_ap_DIM_LVL[ILLUMI_DIM_LVL_DAYNIGHT];
     if(u2_t_daynight < (U2)ILLUMI_DIM_LVL_DAYNIGHT){
         u2_t_lvl = u2_ap_DIM_LVL[u2_t_daynight];
-        if(u2_t_lvl < (U2)ILLUMI_DIM_LVL_BKLT_NUM){
-            u2_t_lvl = ((U2)ILLUMI_DIM_LVL_BKLT_NUM - (U2)ILLUMI_DIM_LVL_OFS) - u2_t_lvl;
+        if(u2_t_lvl < (U2)ILLUMI_DIM_LVL_NUM){
             if(u2_t_daynight == (U2)ILLUMI_DIM_LVL_USADJ_DAY){
-                u1_t_tx = u1_CALIB_MCUID0342_BL_PCT_DAY[u2_t_lvl];
+                u1_t_tx = *(u1p_sp_ILLUMI_BL_DAY[u2_t_lvl]);
             }
             else{
-                u1_t_tx = u1_CALIB_MCUID0386_BL_PCT_NIGHT[u2_t_lvl];
+                u1_t_tx = *(u1p_sp_ILLUMI_BL_NGT[u2_t_lvl]);
             }
         }
         else{
@@ -769,10 +853,9 @@ static void    vd_s_IllumiTftbkTx(const U2 * u2_ap_DIM_LVL)
         }
     }
 
-#if 0   /* BEV BSW provisionally */
-    (void)Com_SendSignal(ComConf_ComSignal_ILL_OUT, &u1_t_tx);    /* COM Tx STUB delete */
-#endif
-#endif
+#if 0   /* BEV Rebase provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_ILL_OUT, &u1_t_tx);
+#endif   /* BEV Rebase provisionally */
 }
 /*===================================================================================================================================*/
 /*  static void    vd_s_IllumiTailCancelTx(void)                                                                                     */
@@ -783,29 +866,16 @@ static void    vd_s_IllumiTftbkTx(const U2 * u2_ap_DIM_LVL)
 static void    vd_s_IllumiTailCancelTx(void)
 {
     U1                  u1_t_tx;
-    U1                  u1_t_tailcnsw_act;                            /* Tailcancel Sw                                               */
-    U1                  u1_t_rheosw;
 
-    u1_t_tx       = (U1)ILLUMI_TAIL_CN_UNK;
-    u1_t_rheosw   = u1_CALIB_MCUID0430_RHEOSW;
+    u1_t_tx       = (U1)ILLUMI_TAIL_CN_INACT;
 
-    if(u1_t_rheosw   == (U1)CALIB_MCUID0430_THUMB_WHEEL){
-        u1_t_tailcnsw_act = u1_g_IoHwDifltSwitch((U2)IOHW_DISGNL_TAIL_CANCEL_IN);
-        if(u1_t_tailcnsw_act == (U1)IOHW_DIFLT_SWITCH_ACT){
-            u1_t_tx = (U1)ILLUMI_TAIL_CN_ACT;
-        }
-        else if(u1_t_tailcnsw_act == (U1)IOHW_DIFLT_SWITCH_INACT){
-            u1_t_tx = (U1)ILLUMI_TAIL_CN_INACT;
-        }
-        else{
-            /* Do Nothing */
-        }
-    }
-    else{
-        u1_t_tx = (U1)ILLUMI_TAIL_CN_INACT;
-    }
     (void)Com_SendSignal(ComConf_ComSignal_TAIL_CN, &u1_t_tx);
+    if(u2_s_illumi_tc_nmwk_tout < (U2)U2_MAX){
+        u2_s_illumi_tc_nmwk_tout++;
+    }
+
     if(u1_t_tx != u1_s_illumi_tail_cn_tx){
+        u2_s_illumi_tc_nmwk_tout = (U2)0U;
         (void)Com_TriggerIPDUSend((PduIdType)MSG_MET1S01_TXCH0);
     }
     u1_s_illumi_tail_cn_tx = u1_t_tx;
@@ -851,7 +921,25 @@ static U1       u1_s_IllumiLoungeHysJdg(const U2 * u2_ap_DIM_LVL)
 
     return(u1_t_tx);
 }
+/*===================================================================================================================================*/
+/*  U1      u1_g_IllumiTcTxNmwk(const U2 u2_a_TOUT)                                                                                  */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+U1      u1_g_IllumiTcTxNmwk(const U2 u2_a_TOUT)
+{
+    U1                  u1_t_nmwk;                            /* Tailcancel State                                                    */
 
+    if(u2_s_illumi_tc_nmwk_tout < u2_a_TOUT){
+        u1_t_nmwk = (U1)TRUE;
+    }
+    else{
+        u1_t_nmwk = (U1)FALSE;
+    }
+
+    return(u1_t_nmwk);
+}
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
@@ -871,6 +959,8 @@ static U1       u1_s_IllumiLoungeHysJdg(const U2 * u2_ap_DIM_LVL)
 /*  2.0.1    11/16/2021  SA       Change the definition of the null pointer used.(BSW v115_r007)                                     */
 /*  2.1.0    02/07/2022  SA       illumi v2.0.1 -> v2.1.0.                                                                           */
 /*  2.2.0    01/11/2024  TH       for 19PFv3  Add RHEO_POS,TR2_DUTY,IR2_DUTY  etc                                                    */
+/*  2.2.1     9/18/2024  SM       Add u1_g_IllumiTcTxNmwk for NM Diag                                                                */
+/*  2.2.2    11/19/2024  TH       Fix : EventTx Timing                                                                               */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
@@ -879,7 +969,7 @@ static U1       u1_s_IllumiLoungeHysJdg(const U2 * u2_ap_DIM_LVL)
 /* 19PFv3-3   2/23/2024  SH       Change ILL_OF control                                                                              */
 /* 19PFv3-4   4/12/2024  SH       Add calibration guard                                                                              */
 /* 19PFv3-5   6/27/2024  TN(DT)   Delete Calibration Guard Process.                                                                  */
-/* BEV-1      2/06/2025  SF(DT)   Change for BEV System_Consideration_1.(MET-M_ONOFF-CSTD-1-02-A-C0)                                 */
+/* BEV-1     10/29/2025  KO       Configured for BEVstep3_Rebase                                                                     */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  * TN     = Takashi Nagai, DENSO                                                                                                  */
@@ -890,6 +980,6 @@ static U1       u1_s_IllumiLoungeHysJdg(const U2 * u2_ap_DIM_LVL)
 /*  * SH     = Sae Hirose, Denso Techno                                                                                              */
 /*  * TH     = Taisuke Hirakawa, KSE                                                                                                 */
 /*  * TN(DT) = Tetsushi Nakano, Denso Techno                                                                                         */
-/*  * SF(DT) = Shiro Furui, Denso Techno                                                                                             */
+/*  * KO     = Kazuto Oishi,  Denso Techno                                                                                           */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

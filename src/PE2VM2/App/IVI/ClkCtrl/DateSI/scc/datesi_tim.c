@@ -74,17 +74,16 @@ void            vd_g_DateSITimBonInit(void)
     u1_s_datesi_tim_adj_act   = (U1)FALSE;
 
     vd_g_DateSITimAvnBonInit();
+    vd_g_DateSITimCfgBonInit();
 
     vd_g_DateSITimCfgCanTx(u4_s_datesi_tim_now, (U1)FALSE);
-
-    vd_g_DateSITimCfgBonInit();
 
     /* iVDsh Initial Value Transmit*/
     u4_t_datesi_tim_ofset_write = (U4)U4_MAX;
     u4_t_datesi_tim_fmt_write   = (U4)U4_MAX;
-    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_CPREQ_009, &u4_t_datesi_tim_ofset_write, (U2)DATESI_TIME_VM_1WORD);
-    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_CPREQ_011, &u4_t_datesi_tim_fmt_write, (U2)DATESI_TIME_VM_1WORD);
-    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_CPREQ_013, &u4_s_datesi_tim_now, (U2)DATESI_TIME_VM_1WORD);
+    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM2TO1_TIMOFST, &u4_t_datesi_tim_ofset_write, (U2)DATESI_TIME_VM_1WORD);
+    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM2TO1_TIMFMT, &u4_t_datesi_tim_fmt_write, (U2)DATESI_TIME_VM_1WORD);
+    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM2TO1_DSPTIM, &u4_s_datesi_tim_now, (U2)DATESI_TIME_VM_1WORD);
 }
 
 /*===================================================================================================================================*/
@@ -102,17 +101,16 @@ void            vd_g_DateSITimRstWkupInit(void)
     u1_s_datesi_tim_adj_act   = (U1)FALSE;
 
     vd_g_DateSITimAvnWkupInit();
+    vd_g_DateSITimCfgRstWkupInit();
 
     vd_g_DateSITimCfgCanTx(u4_s_datesi_tim_now, (U1)FALSE);
-
-    vd_g_DateSITimCfgRstWkupInit();
 
     /* iVDsh Initial Value Transmit*/
     u4_t_datesi_tim_ofset_write = (U4)U4_MAX;
     u4_t_datesi_tim_fmt_write   = (U4)U4_MAX;
-    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_CPREQ_009, &u4_t_datesi_tim_ofset_write, (U2)DATESI_TIME_VM_1WORD);
-    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_CPREQ_011, &u4_t_datesi_tim_fmt_write, (U2)DATESI_TIME_VM_1WORD);
-    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_CPREQ_013, &u4_s_datesi_tim_now, (U2)DATESI_TIME_VM_1WORD);
+    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM2TO1_TIMOFST, &u4_t_datesi_tim_ofset_write, (U2)DATESI_TIME_VM_1WORD);
+    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM2TO1_TIMFMT, &u4_t_datesi_tim_fmt_write, (U2)DATESI_TIME_VM_1WORD);
+    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM2TO1_DSPTIM, &u4_s_datesi_tim_now, (U2)DATESI_TIME_VM_1WORD);
 }
 
 /*===================================================================================================================================*/
@@ -125,7 +123,7 @@ void            vd_g_DateSITimMainTask(void)
 {
     u1_s_datesi_tim_adj_act   = u1_g_DateSITimMainAvnTask(&u4_s_datesi_tim_now);
     vd_g_DateSITimCfgCanTx(u4_s_datesi_tim_now, (U1)TRUE);
-    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_CPREQ_013, &u4_s_datesi_tim_now, (U2)DATESI_TIME_VM_1WORD);
+    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM2TO1_DSPTIM, &u4_s_datesi_tim_now, (U2)DATESI_TIME_VM_1WORD);
 }
 
 /*===================================================================================================================================*/

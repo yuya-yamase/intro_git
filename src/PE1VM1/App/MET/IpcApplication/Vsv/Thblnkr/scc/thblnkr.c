@@ -1,4 +1,4 @@
-/* 3.2.0 */
+/* 3.5.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define THBLNKR_C_MAJOR                          (3)
-#define THBLNKR_C_MINOR                          (2)
+#define THBLNKR_C_MINOR                          (5)
 #define THBLNKR_C_PATCH                          (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -43,8 +43,6 @@ static U1                   u1_s_thblnkr_tictoc_req;
 static U1                   u1_s_thblnkr_tictoc_hld;
 static U2                   u2_s_thblnkr_spdmd;
 static U1                   u1_s_thblnkr_ind_act;
-static U1                   u1_s_thblnkr_awake_req;
-static U2                   u2_s_thblnkr_inact_tim;
 static U2                   u2_s_thblnkr_act_tim_mtnls_l;
 static U2                   u2_s_thblnkr_act_tim_mtnls_r;
 
@@ -55,7 +53,6 @@ static void     vd_s_ThblnkrInit(void);
 static U1       u1_s_ThblnkrGetInput(void);
 static void     vd_s_ThblnkrTicTac(const U1 u1_a_PRE_INDACT, const U1 u1_a_CUR_INDACT);
 static void     vd_s_ThblnkrSpdMd(void);
-static void     vd_s_ThblnkrAwakeJdg(const U1 u1_a_CUR_INDACT);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
@@ -97,26 +94,19 @@ void    vd_g_ThblnkrMainTask(void)
     vd_s_ThblnkrTicTac(u1_s_thblnkr_ind_act, u1_t_ind_act_next);
     vd_s_ThblnkrSpdMd();
 
-    if (u2_s_thblnkr_inact_tim < (U2)U2_MAX) {
-        u2_s_thblnkr_inact_tim++;
-    }
-
-    vd_s_ThblnkrAwakeJdg(u1_t_ind_act_next);
-
     u1_s_thblnkr_ind_act = u1_t_ind_act_next;
 }
 
+/*===================================================================================================================================*/
+/*  U1      u1_g_ThblnkrTicTocReq(U1 * u1p_a_spdmd)                                                                                  */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-U1      u1_g_ThblnkrTicTocReq(U1 * u1p_a_spdmd, U1 * u1p_a_sndprs)
+U1      u1_g_ThblnkrTicTocReq(U1 * u1p_a_spdmd)
 {
     if (u1p_a_spdmd != vdp_PTR_NA) {
         *u1p_a_spdmd = (U1)u2_s_thblnkr_spdmd;
-    }
-    if (u1p_a_sndprs != vdp_PTR_NA) {
-        *u1p_a_sndprs = u1_g_ThblnkrCfgSndPrs();
     }
 
     return(u1_s_thblnkr_tictoc_req);
@@ -134,17 +124,6 @@ U1  u1_g_ThblnkrIndAct(void)
 }
 
 /*===================================================================================================================================*/
-/*  U1  u1_g_ThblnkrNmAwake(void)                                                                                                    */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1  u1_g_ThblnkrNmAwake(void)
-{
-    return(u1_s_thblnkr_awake_req);
-}
-
-/*===================================================================================================================================*/
 /*  static void     vd_s_ThblnkrInit(void)                                                                                           */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
@@ -156,8 +135,6 @@ static void     vd_s_ThblnkrInit(void)
     u1_s_thblnkr_tictoc_hld         = (U1)U1_MAX;
     u2_s_thblnkr_spdmd              = (U2)THBLNKR_SPDMD_LO;
     u1_s_thblnkr_ind_act            = (U1)0U;
-    u1_s_thblnkr_awake_req          = (U1)FALSE;
-    u2_s_thblnkr_inact_tim          = (U2)U2_MAX;
     u2_s_thblnkr_act_tim_mtnls_l    = (U2)0U;
     u2_s_thblnkr_act_tim_mtnls_r    = (U2)0U;
 }
@@ -175,19 +152,8 @@ static U1   u1_s_ThblnkrGetInput(void)
     U1 u1_t_thblnkr_req;
     U1 u1_t_mtnl_sgnl;
     U1 u1_t_mtnr_sgnl;
-    U1 u1_t_msgsts;
-    U1 u1_t_mtnls_l;
-    U1 u1_t_mtnls_r;
 
-    u1_t_mtnls_l   = (U1)FALSE;
-    u1_t_mtnl_sgnl = (U1)FALSE;
-    u1_t_mtnls_r   = (U1)FALSE;
-    u1_t_mtnr_sgnl = (U1)FALSE;
-
-    u1_t_msgsts = u1_g_ThblnkrCfgMTNLS_L(&u1_t_mtnls_l);
-    if ((u1_t_msgsts & (U1)THBLNKR_UNKNOWN) == (U1)0U) {
-        u1_t_mtnl_sgnl = u1_t_mtnls_l;
-    }
+    u1_t_mtnl_sgnl = u1_g_ThblnkrCfgL_Req();
 
     if (u1_t_mtnl_sgnl == (U1)TRUE) {
         if (u2_s_thblnkr_act_tim_mtnls_l < (U2)U2_MAX) {
@@ -203,10 +169,7 @@ static U1   u1_s_ThblnkrGetInput(void)
     u1_t_thblnkr_req = u1_t_mtnl_sgnl;
 
 
-    u1_t_msgsts = u1_g_ThblnkrCfgMTNLS_R(&u1_t_mtnls_r);
-    if ((u1_t_msgsts & (U1)THBLNKR_UNKNOWN) == (U1)0U) {
-        u1_t_mtnr_sgnl = u1_t_mtnls_r;
-    }
+    u1_t_mtnr_sgnl = u1_g_ThblnkrCfgR_Req();
 
     if (u1_t_mtnr_sgnl == (U1)TRUE) {
         if (u2_s_thblnkr_act_tim_mtnls_r < (U2)U2_MAX) {
@@ -288,31 +251,11 @@ static void vd_s_ThblnkrSpdMd(void)
         (U2)3U
     };
     U2  u2_t_kmph;
-    
+
     u2_t_kmph          = u2_g_ThblnkrVehSpdDsplyd();
     u2_s_thblnkr_spdmd = u2_g_ThblnkrRngCmprU2(u2_s_thblnkr_spdmd, u2_t_kmph, &st_s_THBLNKR_SPDMD_CHK);
     if(u2_s_thblnkr_spdmd >= (U2)THBLNKR_NUM_SPDMD){
         u2_s_thblnkr_spdmd = (U2)THBLNKR_SPDMD_HI;
-    }
-}
-
-/*===================================================================================================================================*/
-/*  static void    vd_s_ThblnkrAwakeJdg(const U1 u1_a_CUR_INDACT)                                                                    */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void    vd_s_ThblnkrAwakeJdg(const U1 u1_a_CUR_INDACT)
-{
-    static const U2 u2_s_THBNLKR_TRSH = ((U2)2000U / (U2)THBLNKR_MAINTICK);
-
-    u1_s_thblnkr_awake_req = (U1)FALSE;
-
-    if (u1_a_CUR_INDACT != (U1)0U) {
-        if (u2_s_thblnkr_inact_tim > u2_s_THBNLKR_TRSH) {
-            u1_s_thblnkr_awake_req = (U1)TRUE;
-        }
-        u2_s_thblnkr_inact_tim = (U2)0U;
     }
 }
 
@@ -345,7 +288,11 @@ static void    vd_s_ThblnkrAwakeJdg(const U1 u1_a_CUR_INDACT)
 /*  2.5.1    10/20/2022  YI       Fix QAC warning.                                                                                   */
 /*  3.0.0    12/13/2023  KH       Change according to MET-B_TURHAZ-CSTD-A0-xx-x-xx specification                                     */
 /*  3.1.0    07/03/2024  AA       Change for WKPSLP update                                                                           */
-/*  3.2.0    10/23/2024  RS       Change for BEV System_Consideration_1                                                              */
+/*  3.2.0    09/16/2024  YR       Removed the processing for sound pressure                                                          */
+/*  3.3.0    09/16/2024  KH       Change logic of Awake condition                                                                    */
+/*           09/19/2024  YR       Change comment for u1_g_ThblnkrTicTocReq function                                                  */
+/*  3.4.0    10/23/2024  RS       Change for BEV System_Consideration_1                                                              */
+/*  3.5.0    12/04/2025  SH       Change for BEV System_Consideration_ADAS                                                           */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima , Denso                                                                                                 */
 /*  * KK   = Kohei Kato,       Denso Techno                                                                                          */
@@ -355,6 +302,8 @@ static void    vd_s_ThblnkrAwakeJdg(const U1 u1_a_CUR_INDACT)
 /*  * ZS   = Zenjiro Shamoto,  NTT Data MSE                                                                                          */
 /*  * KH   = Kiko Huerte,      DTPH                                                                                                  */
 /*  * AA   = Anna Asuncion,    Denso Techno                                                                                          */
+/*  * YR   = Yhana Regalario.  DTPH                                                                                                  */
 /*  * RS   = Ryuki Sako,       Denso Techno                                                                                          */
+/*  * SH   = Sae Hirose,       Denso Techno                                                                                          */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

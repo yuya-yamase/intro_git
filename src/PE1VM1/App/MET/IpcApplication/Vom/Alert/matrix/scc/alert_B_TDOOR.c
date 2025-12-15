@@ -1,4 +1,4 @@
-/* 5.7.0 */
+/* 5.8.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define ALERT_B_TDOOR_C_MAJOR                    (5)
-#define ALERT_B_TDOOR_C_MINOR                    (7)
+#define ALERT_B_TDOOR_C_MINOR                    (8)
 #define ALERT_B_TDOOR_C_PATCH                    (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -21,10 +21,6 @@
 #include "alert_brx.h"
 
 #include "oxcan.h"
-#if 0   /* BEV BSW provisionally */
-#else
-#include "oxcan_channel_STUB.h"
-#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -59,6 +55,9 @@
 #endif
 #if !defined(ALERT_CFG_B_TDOOR_SLP_POS)
 #error "alert_cfg_private.h : ALERT_CFG_B_TDOOR_SLP_POS is undefined!"
+#endif
+#if !defined(ALERT_CFG_B_TDOOR_DISP_TIME)
+#error "alert_cfg_private.h : ALERT_CFG_B_TDOOR_DISP_TIME is undefined!"
 #endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -287,11 +286,11 @@ static U1      u1_s_AlertB_tdoorSgnl(const U1 u1_a_FACT)
     U1              u1_t_hdcy_bdb;
 
     u1_t_fact_bdb1s01  = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_BDB1S01_CH0,
-                                               (U4)ALERT_CAN_SYS_PNC_ALL,
-                                               u2_s_ALERT_B_TDOOR_TO_BDB1S01) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+                                           (U4)ALERT_CAN_SYS_ALL,
+                                           u2_s_ALERT_B_TDOOR_TO_BDB1S01) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
     u1_t_fact_bdb1f01  = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_BDB1F01_CH0,
-                                               (U4)ALERT_CAN_SYS_PNC_ALL,
-                                               u2_s_ALERT_B_TDOOR_TO_BDB1F01) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+                                           (U4)ALERT_CAN_SYS_ALL,
+                                           u2_s_ALERT_B_TDOOR_TO_BDB1F01) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
     u1_t_fact_bdb1s01 |= u1_a_FACT;
     u1_t_fact_bdb1f01 |= u1_a_FACT;
 
@@ -374,15 +373,15 @@ static U1      u1_s_AlertB_tdoorPsdSgnl(const U1 u1_a_FACT)
 
 #if (ALERT_CFG_B_TDOOR_LPSDWARN == TRUE)
     u1_t_fact_drl1s03  = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_DRL1S03_CH0,
-                                          (U4)ALERT_CAN_SYS_PNC_ALL,
-                                               u2_s_ALERT_B_TDOOR_TO_DRL1S03) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+                                           (U4)ALERT_CAN_SYS_ALL,
+                                           u2_s_ALERT_B_TDOOR_TO_DRL1S03) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
     u1_t_fact_drl1s03 |= u1_a_FACT;
     vd_g_AlertBRxTrnsSts(&u1_s_alert_b_tdoor_drl1s03_sts, u1_t_fact_drl1s03);
 #endif /* (ALERT_CFG_B_TDOOR_LPSDWARN == TRUE) */
 #if (ALERT_CFG_B_TDOOR_RPSDWARN == TRUE)
     u1_t_fact_drr1s03  = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_DRR1S03_CH0,
-                                          (U4)ALERT_CAN_SYS_PNC_ALL,
-                                               u2_s_ALERT_B_TDOOR_TO_DRR1S03) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+                                           (U4)ALERT_CAN_SYS_ALL,
+                                           u2_s_ALERT_B_TDOOR_TO_DRR1S03) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
     u1_t_fact_drr1s03 |= u1_a_FACT;
     vd_g_AlertBRxTrnsSts(&u1_s_alert_b_tdoor_drr1s03_sts, u1_t_fact_drr1s03);
 #endif /* (ALERT_CFG_B_TDOOR_RPSDWARN == TRUE) */
@@ -428,9 +427,11 @@ static U1      u1_s_AlertB_tdoorSlpSgnl(const U1 u1_a_FACT)
     U1              u1_t_retval;
 
 #if (ALERT_CFG_B_TDOOR_SLP_POS == TRUE)
-    u1_t_fact_slp1s01  = u1_g_oXCANRxdStat((U2)OXCAN_PDU_RX_CAN_SLP1S01,
-                                          (U4)ALERT_CAN_SYS_PNC_ALL,
+#if 0   /* BEV Rebase provisionally */
+    u1_t_fact_slp1s01  = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_SLP1S01,
+                                          (U2)OXCAN_RX_SYS_NRX_BAT | (U2)OXCAN_RX_SYS_TOE_BAT,
                                           u2_s_ALERT_B_TDOOR_TO_SLP1S01) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+#endif   /* BEV Rebase provisionally */
     u1_t_fact_slp1s01 |= u1_a_FACT;
     vd_g_AlertBRxTrnsSts(&u1_s_alert_b_tdoor_slp1s01_sts, u1_t_fact_slp1s01);
 #endif /* (ALERT_CFG_B_TDOOR_SLP_POS == TRUE) */
@@ -439,7 +440,9 @@ static U1      u1_s_AlertB_tdoorSlpSgnl(const U1 u1_a_FACT)
 #if (ALERT_CFG_B_TDOOR_SLP_POS == TRUE)
     if((u1_s_alert_b_tdoor_slp1s01_sts & (U1)COM_NO_RX) == (U1)0U){
         u1_t_sgnl   = (U1)0U;
+#if 0   /* BEV Rebase provisionally */
         (void)Com_ReceiveSignal(ComConf_ComSignal_SLP_POS, &u1_t_sgnl);
+#endif   /* BEV Rebase provisionally */
         u1_t_sgnl  &= u1_s_ALERT_B_TDOOR_SLP_MSK;
         u1_t_retval = u1_sp_ALERT_B_TDOOR_SLP_TBL[u1_t_sgnl];
     }
@@ -456,7 +459,7 @@ static U1      u1_s_AlertB_tdoorSlpSgnl(const U1 u1_a_FACT)
 /*===================================================================================================================================*/
 static U4      u4_s_AlertB_tdoorIgOffDsp(const U1 u1_a_VOM, const U2 u2_a_DOOR_STS)
 {
-    static const U4 u4_s_ALERT_TDOOR_IGOFF_DSPTM  = ((U4)1200000U / (U4)ALERT_MAIN_TICK);
+    static const U4 u4_s_ALERT_TDOOR_IGOFF_DSPTM  = ((U4)ALERT_CFG_B_TDOOR_DISP_TIME / (U4)ALERT_MAIN_TICK);
     static const U4 u4_s_ALERT_TDOOR_DSPCNT_RST   = (U4)1U;
     static const U4 u4_s_ALERT_TDOOR_BIT_IGOFFCNT = (U4)0x00000001U;
     U4              u4_t_retval;
@@ -536,6 +539,7 @@ static U1      u1_s_AlertB_tdoorRunSts(void)
 /*  5.5.0     4/18/2023  TN       Add compile SW(RPSDWARN and LPSDWARN).                                                             */
 /*  5.6.0     5/13/2023  SH       Add compile SW(SLP_POS).                                                                           */
 /*  5.7.0     6/27/2024  TN       Delete Calibration Guard Process.                                                                  */
+/*  5.8.0     6/20/2025  KH       Change IG-OFF display time (20mins -> 4mins).                                                      */
 /*                                                                                                                                   */
 /*  * RI   = Ren Ito, NTTD MSE                                                                                                       */
 /*  * MO   = Masayuki Oofuji, NTTD MSE                                                                                               */
@@ -543,5 +547,6 @@ static U1      u1_s_AlertB_tdoorRunSts(void)
 /*  * MY   = Masaki Yoshizawa, NTTD MSE                                                                                              */
 /*  * SH   = Sae Hirose, Denso Techno                                                                                                */
 /*  * TN   = Tetsushi Nakano, Denso Techno                                                                                           */
+/*  * KH   = Kiko Huerte, DTPH                                                                                                       */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

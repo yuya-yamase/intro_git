@@ -1,4 +1,4 @@
-/* 2.1.1 */
+/* 2.1.3 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -11,7 +11,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define TRIPCOM_MS_C_MAJOR                      (2)
 #define TRIPCOM_MS_C_MINOR                      (1)
-#define TRIPCOM_MS_C_PATCH                      (1)
+#define TRIPCOM_MS_C_PATCH                      (3)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -269,33 +269,45 @@ void            vd_g_TripcomMsSetNvmRqst(const U1 u1_a_ID)
     U4                          u4_t_loop;
     U1                          u1_t_memsts;
     U4                          u4_t_value;
-    for (u4_t_loop = (U4)0U; u4_t_loop < (U4)TRIPCOM_NVMIF_CH_NUM; u4_t_loop++) {
-        if(u1_a_ID == u1_gp_TRIPCOM_MS_CH2ID[u4_t_loop]){
-            u1_sp_tripcom_ms_nvmsts[u4_t_loop] = (U1)TRIPCOM_MS_NVMSTS_REQ;
-        }
-    }
-    for (u4_t_loop = (U4)0U; u4_t_loop < (U4)TRIPCOM_NVMIF_GRPH_CH_NUM; u4_t_loop++) {
-        if((u1_a_ID >= u1_gp_TRIPCOM_MS_GRPH_CH2ID[u4_t_loop])
-        && (u1_a_ID <  (u1_gp_TRIPCOM_MS_GRPH_CH2ID[u4_t_loop] + (U1)TRIPCOM_NVMIF_GRPH_GRP_SIZE))){
-            u1_sp_tripcom_ms_nvmgrphsts[u4_t_loop] = (U1)TRIPCOM_MS_NVMSTS_REQ;
-        }
-    }
+
     if(u1_a_ID < (U1)TRIPCOM_MS_NUM_ID){
         stp_t_MEM = &st_gp_TRIPCOM_MS_MEM_CFG[u1_a_ID];
-        if(((stp_t_MEM->u1_devtype                                  == (U1)TRIPCOM_MS_DEV_BR_Z)
-         || (stp_t_MEM->u1_devtype                                  == (U1)TRIPCOM_MS_DEV_BR_M))
-        && (stp_t_MEM->u2_memoryid                                  != (U2)U2_MAX             )
-        && (fp_gp_TRIPCOM_MS_WRIF[stp_t_MEM->u1_devtype]            != vdp_PTR_NA             )
-        && (st_gp_TRIPCOM_MS_RDIF[stp_t_MEM->u1_devtype].fp_u1_RDIF != vdp_PTR_NA             )) {
-            fp_gp_TRIPCOM_MS_WRIF[stp_t_MEM->u1_devtype](stp_t_MEM->u2_memoryid, u4_sp_tripcom_ms_value[u1_a_ID]);
-            u1_t_memsts = st_gp_TRIPCOM_MS_RDIF[stp_t_MEM->u1_devtype].fp_u1_RDIF(stp_t_MEM->u2_memoryid, &u4_t_value);
-            if(((u1_t_memsts & (U1)RIM_RESULT_KIND_MASK) == (U1)RIM_RESULT_KIND_OK         )
-            && (u4_t_value                               == u4_sp_tripcom_ms_value[u1_a_ID])){
-                u1_sp_tripcom_ms_rimsts[u1_a_ID] = (U1)TRIPCOM_MS_NVMSTS_SUC;
+
+        if((stp_t_MEM->u1_devtype == (U1)TRIPCOM_MS_DEV_BR_Z) ||        /* +B Backup Memory */
+           (stp_t_MEM->u1_devtype == (U1)TRIPCOM_MS_DEV_BR_M)){
+            if((stp_t_MEM->u2_memoryid                                  != (U2)U2_MAX) &&
+               (fp_gp_TRIPCOM_MS_WRIF[stp_t_MEM->u1_devtype]            != vdp_PTR_NA) &&
+               (st_gp_TRIPCOM_MS_RDIF[stp_t_MEM->u1_devtype].fp_u1_RDIF != vdp_PTR_NA)) {
+
+                fp_gp_TRIPCOM_MS_WRIF[stp_t_MEM->u1_devtype](stp_t_MEM->u2_memoryid, u4_sp_tripcom_ms_value[u1_a_ID]);
+#if 0   /* BEV Rebase provisionally */
+                u1_t_memsts = st_gp_TRIPCOM_MS_RDIF[stp_t_MEM->u1_devtype].fp_u1_RDIF(stp_t_MEM->u2_memoryid, &u4_t_value);
+#else   /* BEV Rebase provisionally */
+                u4_t_value = (U4)U4_MAX;
+                u1_t_memsts = (U1)RIM_RESULT_KIND_NG;
+#endif   /* BEV Rebase provisionally */
+                if(((u1_t_memsts & (U1)RIM_RESULT_KIND_MASK) == (U1)RIM_RESULT_KIND_OK         )
+                && (u4_t_value                               == u4_sp_tripcom_ms_value[u1_a_ID])){
+                    u1_sp_tripcom_ms_rimsts[u1_a_ID] = (U1)TRIPCOM_MS_NVMSTS_SUC;
+                }
+                else{
+                    u1_sp_tripcom_ms_rimsts[u1_a_ID] = (U1)TRIPCOM_MS_NVMSTS_FAIL;
+                }
             }
-            else{
-                u1_sp_tripcom_ms_rimsts[u1_a_ID] = (U1)TRIPCOM_MS_NVMSTS_FAIL;
+        }
+        else if(stp_t_MEM->u1_devtype == (U1)TRIPCOM_MS_DEV_NVM){       /* Non Volatile Memory */
+            if(stp_t_MEM->u1_nvmifch < (U1)TRIPCOM_NVMIF_CH_NUM){
+                u1_sp_tripcom_ms_nvmsts[stp_t_MEM->u1_nvmifch] = (U1)TRIPCOM_MS_NVMSTS_REQ;
             }
+            for (u4_t_loop = (U4)0U; u4_t_loop < (U4)TRIPCOM_NVMIF_GRPH_CH_NUM; u4_t_loop++) {
+                if((u1_a_ID >= u1_gp_TRIPCOM_MS_GRPH_CH2ID[u4_t_loop])
+                && (u1_a_ID <  (u1_gp_TRIPCOM_MS_GRPH_CH2ID[u4_t_loop] + (U1)TRIPCOM_NVMIF_GRPH_GRP_SIZE))){
+                    u1_sp_tripcom_ms_nvmgrphsts[u4_t_loop] = (U1)TRIPCOM_MS_NVMSTS_REQ;
+                }
+            }
+        }
+        else{                                                           /* Volatile Memory */
+            /* nothing */
         }
     }
 }
@@ -344,6 +356,7 @@ void            vd_g_TripcomMsClrRimRslt(void)
     for (u4_t_loop = (U4)0U; u4_t_loop < (U4)TRIPCOM_MS_NUM_ID; u4_t_loop++) {
         u1_sp_tripcom_ms_rimsts[u4_t_loop] = (U1)TRIPCOM_MS_NVMSTS_NON;
     }
+    vd_g_AvgGrphUpdtRslt();
 }
 
 /*===================================================================================================================================*/
@@ -355,27 +368,32 @@ void            vd_g_TripcomMsClrRimRslt(void)
 U1              u1_g_TripcomMsGetNvmRslt(const U1 u1_a_ID)
 {
     const ST_TRIPCOM_MS_MEM *   stp_t_MEM;
-    U1                          u1_t_rslt;
     U4                          u4_t_loop;
+    U1                          u1_t_rslt;
 
     u1_t_rslt = (U1)TRIPCOM_MS_NVMSTS_NON;
-    if(u1_a_ID < (U1)TRIPCOM_MS_NUM_ID){
+    if (u1_a_ID < (U1)TRIPCOM_MS_NUM_ID) {
         stp_t_MEM = &st_gp_TRIPCOM_MS_MEM_CFG[u1_a_ID];
-        if(((stp_t_MEM->u1_devtype  == (U1)TRIPCOM_MS_DEV_BR_Z)
-         || (stp_t_MEM->u1_devtype  == (U1)TRIPCOM_MS_DEV_BR_M))
-        && (stp_t_MEM->u2_memoryid != (U2)U2_MAX             )){
-            u1_t_rslt = u1_sp_tripcom_ms_rimsts[u1_a_ID];
+
+        if((stp_t_MEM->u1_devtype  == (U1)TRIPCOM_MS_DEV_BR_Z) ||       /* +B Backup Memory */
+           (stp_t_MEM->u1_devtype  == (U1)TRIPCOM_MS_DEV_BR_M)){
+            if(stp_t_MEM->u2_memoryid != (U2)U2_MAX){
+                u1_t_rslt = u1_sp_tripcom_ms_rimsts[u1_a_ID];
+            }
         }
-    }
-    for (u4_t_loop = (U4)0U; u4_t_loop < (U4)TRIPCOM_NVMIF_CH_NUM; u4_t_loop++) {
-        if(u1_a_ID == u1_gp_TRIPCOM_MS_CH2ID[u4_t_loop]){
-            u1_t_rslt = u1_sp_tripcom_ms_nvmsts[u4_t_loop];
+        else if(stp_t_MEM->u1_devtype == (U1)TRIPCOM_MS_DEV_NVM){       /* Non Volatile Memory */
+            if(stp_t_MEM->u1_nvmifch < (U1)TRIPCOM_NVMIF_CH_NUM){
+                u1_t_rslt = u1_sp_tripcom_ms_nvmsts[stp_t_MEM->u1_nvmifch];
+            }
+            for (u4_t_loop = (U4)0U; u4_t_loop < (U4)TRIPCOM_NVMIF_GRPH_CH_NUM; u4_t_loop++) {
+                if((u1_a_ID >= u1_gp_TRIPCOM_MS_GRPH_CH2ID[u4_t_loop])
+                && (u1_a_ID <  (u1_gp_TRIPCOM_MS_GRPH_CH2ID[u4_t_loop] + (U1)TRIPCOM_NVMIF_GRPH_GRP_SIZE))){
+                    u1_t_rslt = u1_sp_tripcom_ms_nvmgrphsts[u4_t_loop];
+                }
+            }
         }
-    }
-    for (u4_t_loop = (U4)0U; u4_t_loop < (U4)TRIPCOM_NVMIF_GRPH_CH_NUM; u4_t_loop++) {
-        if((u1_a_ID >= u1_gp_TRIPCOM_MS_GRPH_CH2ID[u4_t_loop])
-        && (u1_a_ID <  (u1_gp_TRIPCOM_MS_GRPH_CH2ID[u4_t_loop] + (U1)TRIPCOM_NVMIF_GRPH_GRP_SIZE))){
-            u1_t_rslt = u1_sp_tripcom_ms_nvmgrphsts[u4_t_loop];
+        else{ /* if(stp_t_MEM->u1_devtype >= (U1)TRIPCOM_MS_NUM_DEV) */  /* Volatile Memory */
+            u1_t_rslt = (U1)TRIPCOM_MS_NVMSTS_SUC;
         }
     }
     return(u1_t_rslt);
@@ -446,8 +464,8 @@ U1    u1_g_TripcomNvmClear(const U1 u1_a_REQ, const U1 u1_a_RUN)
 
         u1_t_rslt = (U1)TRIPCOM_NVMR_RES_UNK;
     }
-    else if ((u1_t_ctrl >= (U1)TRIPCOM_MS_NVMR_CTRL_FIN)) {
-
+    else if ((u1_t_ctrl     >= (U1)TRIPCOM_MS_NVMR_CTRL_FIN)
+          && (u1_t_grphctrl >= (U1)TRIPCOM_MS_NVMR_CTRL_FIN)) {
         u1_t_req = u1_t_ctrl & (U1)TRIPCOM_NVMIF_DIAG_REQ_WRI;
         u1_t_grphreq = u1_t_grphctrl & (U1)TRIPCOM_NVMIF_GRPH_DIAG_REQ_WRI;
         if (u1_a_RUN == (U1)TRUE) {
@@ -526,6 +544,8 @@ void            vd_g_TripcomNvmIfGrphDiagFinish(const U1 u1_a_RSLT)
 /*  2.0.3    08/08/2022  YI       Add TRIPCOM_MS_ID_EVDTE_PCT.                                                                       */
 /*  2.1.0    01/10/2024  TH       Add TRIPCOM_MS_ID_AVGGRPH  .                                                                       */
 /*  2.1.1    06/24/2024  SM       Added vd_g_TripcomMsSyncUpdtImm to fix bug MET19PFV3-16362                                         */
+/*  2.1.2    02/17/2025  MaO(M)   Improving processing load(vd_g_TripcomMsSetNvmRqst, u1_g_TripcomMsGetNvmRslt)                      */
+/*  2.1.3    04/18/2025  TH       Fix: Update Result when Clear Rim Result                                                           */
 /*                                                                                                                                   */
 /*  * HY   = Hidefumi Yoshida, Denso                                                                                                 */
 /*  * YA   = Yuhei Aoyama, DensoTechno                                                                                               */
@@ -533,5 +553,6 @@ void            vd_g_TripcomNvmIfGrphDiagFinish(const U1 u1_a_RSLT)
 /*  * YI   = Yoshiki Iwata, NTT Data MSE                                                                                             */
 /*  * TH   = Taisuke Hirakawa, KSE                                                                                                   */
 /*  * SM   = Shota Maegawa, Denso Techno                                                                                             */
+/*  * MaO(M) = Masayuki Okada, NTT Data MSE                                                                                          */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

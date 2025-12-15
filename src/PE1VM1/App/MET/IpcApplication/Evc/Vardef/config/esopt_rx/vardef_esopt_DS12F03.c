@@ -94,150 +94,6 @@ U1      u1_g_VdfEsoRx_DS1_LDA(void)
     return(u1_t_ava_rx);
 }
 /*===================================================================================================================================*/
-/*  U1      u1_g_VdfEsoRx_SW_LDA(void)                                                                                              */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1      u1_g_VdfEsoRx_SW_LDA(void)
-{
-    U1                 u1_t_rx;
-    U1                 u1_t_ava_rx;
-
-    u1_t_rx = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_LDAEXIST, &u1_t_rx);
-    if(u1_t_rx != (U1)0U){
-        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
-    }
-    else{
-        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_INA;
-    }
-
-    return(u1_t_ava_rx);
-}
-/*===================================================================================================================================*/
-/*  U1      u1_g_VdfEsoRx_SW_ALTOPT_VB(void)                                                                                         */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1      u1_g_VdfEsoRx_SW_ALTOPT_VB(void)
-{
-    U1                 u1_t_rx;
-    U1                 u1_t_ava_rx;
-
-    u1_t_rx = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_VIBEXIST, &u1_t_rx);
-    if(u1_t_rx != (U1)0U){
-        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
-    }
-    else{
-        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_INA;
-    }
-
-    return(u1_t_ava_rx);
-}
-/*===================================================================================================================================*/
-/*  U1      u1_g_VdfEsoRx_SW_ALTOPT_BOF(void)                                                                                        */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1      u1_g_VdfEsoRx_SW_ALTOPT_BOF(void)
-{
-    U1                 u1_t_rx_vibexist;
-    U1                 u1_t_rx_ldawrnc;
-    U1                 u1_t_ava_rx;
-
-    u1_t_rx_vibexist = (U1)0U;
-    u1_t_rx_ldawrnc = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_VIBEXIST, &u1_t_rx_vibexist);
-    #if 0 /*@@@ 19pvf CANFDItem  @@@*/
-    (void)Com_ReceiveSignal(ComConf_ComSignal_LDAWRNC, &u1_t_rx_ldawrnc);
-    #endif
-    if((u1_t_rx_vibexist == (U1)0U) &&
-      (u1_t_rx_ldawrnc != (U1)0U)) {
-        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
-    }
-    else{
-        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_UNK;
-    }
-
-    return(u1_t_ava_rx);
-}
-/*===================================================================================================================================*/
-/*  U1      u1_g_VdfEsoRx_SW_ALTOPT_VBOF(void)                                                                                       */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1      u1_g_VdfEsoRx_SW_ALTOPT_VBOF(void)
-{
-    U1                 u1_t_rx_vibexist;
-    U1                 u1_t_rx_ldawrnc;
-    U1                 u1_t_ava_rx;
-
-    u1_t_rx_vibexist = (U1)0U;
-    u1_t_rx_ldawrnc = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_VIBEXIST, &u1_t_rx_vibexist);
-    #if 0 /*@@@ 19pvf CANFDItem  @@@*/
-    (void)Com_ReceiveSignal(ComConf_ComSignal_LDAWRNC, &u1_t_rx_ldawrnc);
-    #endif
-    if((u1_t_rx_vibexist != (U1)0U) &&
-      (u1_t_rx_ldawrnc != (U1)0U)) {
-        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
-    }
-    else{
-        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_UNK;
-    }
-
-    return(u1_t_ava_rx);
-}
-/*===================================================================================================================================*/
-/*  U1      u1_g_VdfEsoRx_SW_LDWTEXT(void)                                                                                           */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1      u1_g_VdfEsoRx_SW_LDWTEXT(void)
-{
-    U1                 u1_t_rx;
-    U1                 u1_t_ava_rx;
-
-    u1_t_rx = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_LDWTEXT, &u1_t_rx);
-    if(u1_t_rx != (U1)0U){
-        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
-    }
-    else{
-        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_INA;
-    }
-
-    return(u1_t_ava_rx);
-}
-/*===================================================================================================================================*/
-/*  U1      u1_g_VdfEsoRx_SW_SWSEXIST(void)                                                                                          */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1      u1_g_VdfEsoRx_SW_SWSEXIST(void)
-{
-    U1                 u1_t_rx;
-    U1                 u1_t_ava_rx;
-
-    u1_t_rx = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_SWSEXIST, &u1_t_rx);
-    if(u1_t_rx != (U1)0U){
-        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
-    }
-    else{
-        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_INA;
-    }
-
-    return(u1_t_ava_rx);
-}
-/*===================================================================================================================================*/
 /*  U1      u1_g_VdfEsoRx_SWS(void)                                                                                                  */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
@@ -250,28 +106,6 @@ U1      u1_g_VdfEsoRx_SWS(void)
 
     u1_t_rx = (U1)0U;
     (void)Com_ReceiveSignal(ComConf_ComSignal_SWSEXIST, &u1_t_rx);
-    if(u1_t_rx != (U1)0U){
-        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
-    }
-    else{
-        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_INA;
-    }
-
-    return(u1_t_ava_rx);
-}
-/*===================================================================================================================================*/
-/*  U1      u1_g_VdfEsoRx_SW_DEPARTURE_PREVENT(void)                                                                                 */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1      u1_g_VdfEsoRx_SW_DEPARTURE_PREVENT(void)
-{
-    U1                 u1_t_rx;
-    U1                 u1_t_ava_rx;
-
-    u1_t_rx = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_LDAAMEX, &u1_t_rx);
     if(u1_t_rx != (U1)0U){
         u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
     }
@@ -305,6 +139,7 @@ U1      u1_g_VdfEsoRx_SW_DEPARTURE_PREVENT(void)
 /*  19PFv3-1 02/29/2024  SW       Change config for 19PFv3 CV(add function for SWS)                                                  */
 /*  19PFv3-2 04/08/2024  SN       Change config for 19PFv3 CV(add function for ADASCS)                                               */
 /*  19PFv3-3  5/24/2024  SW       Change config for 19PFv3 CV(delete unused function)                                                */
+/*  19PFv3-4 11/19/2024  KH       Change config for 19PFv3 R2.2(delete unused function)                                              */
 /*                                                                                                                                   */
 /*  * TN = Takashi Nagai, DENSO                                                                                                      */
 /*  * SF = Seiya Fukutome, DENSO TECHNO                                                                                              */
@@ -312,6 +147,7 @@ U1      u1_g_VdfEsoRx_SW_DEPARTURE_PREVENT(void)
 /*  * MG = Mei Godo, KSE                                                                                                             */
 /*  * SW = Shun Watanabe, Denso Techno                                                                                               */
 /*  * SN = Shimon Nambu, Denso Techno                                                                                                */
+/*  * KH = Kiko Huerte, DTPH                                                                                                         */
 /*  * KO   = Kazuto Oishi,  Denso Techno                                                                                             */
 /*  * SN(K)= Shizuka Nakajima, KSE                                                                                                   */
 /*                                                                                                                                   */

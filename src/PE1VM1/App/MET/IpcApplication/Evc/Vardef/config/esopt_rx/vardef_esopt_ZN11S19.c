@@ -126,17 +126,12 @@ U1      u1_g_VdfEsoRx_SW_OMRBB_REVERSE(void)
 /*===================================================================================================================================*/
 U1      u1_g_VdfEsoRx_SW_OMRBB_AUTO(void)
 {
-    static const U1    u1_s_VDF_ESO_OMRBB_MRTR_ON = (U1)1U;
-    static const U1    u1_s_VDF_ESO_OMRBB_ARTR_ON = (U1)1U;
-    U1                 u1_t_rx_mrtr;
-    U1                 u1_t_rx_artr;    
+    U1                 u1_t_rx;
     U1                 u1_t_ava_rx;
 
-    u1_t_rx_mrtr = (U1)0U;
-    u1_t_rx_artr = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_MRTR_FNC, &u1_t_rx_mrtr);
-    (void)Com_ReceiveSignal(ComConf_ComSignal_ARTR_FNC, &u1_t_rx_artr);
-    if((u1_t_rx_mrtr == u1_s_VDF_ESO_OMRBB_MRTR_ON) && (u1_t_rx_artr == u1_s_VDF_ESO_OMRBB_ARTR_ON)){
+    u1_t_rx = (U1)0U;
+    (void)Com_ReceiveSignal(ComConf_ComSignal_ARTR_FNC, &u1_t_rx);
+    if(u1_t_rx != (U1)0U){
         u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
     }
     else{
@@ -154,17 +149,12 @@ U1      u1_g_VdfEsoRx_SW_OMRBB_AUTO(void)
 /*===================================================================================================================================*/
 U1      u1_g_VdfEsoRx_SW_OMRBB_NONAUTO(void)
 {
-    static const U1    u1_s_VDF_ESO_OMRBB_MRTR_ON = (U1)1U;
-    static const U1    u1_s_VDF_ESO_OMRBB_ARTR_OFF = (U1)0U;
-    U1                 u1_t_rx_mrtr;
-    U1                 u1_t_rx_artr;  
+    U1                 u1_t_rx; 
     U1                 u1_t_ava_rx;
 
-    u1_t_rx_mrtr = (U1)0U;
-    u1_t_rx_artr = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_MRTR_FNC, &u1_t_rx_mrtr);
-    (void)Com_ReceiveSignal(ComConf_ComSignal_ARTR_FNC, &u1_t_rx_artr);
-    if((u1_t_rx_mrtr == u1_s_VDF_ESO_OMRBB_MRTR_ON) && (u1_t_rx_artr == u1_s_VDF_ESO_OMRBB_ARTR_OFF)) {
+    u1_t_rx = (U1)0U;
+    (void)Com_ReceiveSignal(ComConf_ComSignal_MRTR_FNC, &u1_t_rx);
+    if(u1_t_rx != (U1)0U) {
         u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
     }
     else{
@@ -485,7 +475,7 @@ U1      u1_g_VdfEsoRx_SW_TITE(void)
         u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
     }
     else{
-        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_UNK;
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_INA;
     }
 
     return(u1_t_ava_rx);
@@ -510,10 +500,14 @@ U1      u1_g_VdfEsoRx_SW_TITE(void)
 /*  BEV-3    12/16/2024   HT      Added function for BEV System_Consideration_1.(MET-B_WPBB-CSTD-0-)                                 */
 /*  BEV-4     2/10/2025   HF      Added function for BEV System_Consideration_1.(MET-B_LMPBB-CSTD-0-)                                */
 /*  BEV-5     5/30/2025   SN      Added function for BEV System_Consideration_2.(MET-B_TITEBB-CSTD-0-)                               */
+/*  BEV-6    12/03/2025   KO      Added function for BEV System_Consideration_ADAS.(MET-B_OMRBB-CSTD-0-)                             */
+/*  BEV-7    12/03/2025   MA      SW_TITE Function presence judgment processing changed to bidirectional.(MET-B_TITEBB-CSTD-0-)      */
 /*                                                                                                                                   */
 /*  * KT = Kenta Takaji, Denso Techno                                                                                                */
 /*  * HY = Haruki Yagi, KSE                                                                                                          */
 /*  * HT = Hibiki Tanii, KSE                                                                                                         */
 /*  * HF = Hinari Fukamachi, KSE                                                                                                     */
 /*  * SN = Shizuka Nakajima, KSE                                                                                                     */
+/*  * KO = Kazuto Oishi, Denso Techno                                                                                                */
+/*  * MA = Misaki Aiki, Dendo Techno                                                                                                 */
 /*===================================================================================================================================*/

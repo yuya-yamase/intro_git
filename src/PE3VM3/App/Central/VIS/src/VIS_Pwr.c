@@ -43,6 +43,7 @@ static U1   u1_s_vispwr_ch_compwr;                  /* チャネル通信起動電源状態 
 static U2   u2_s_vispwr_tm_passive_on;              /* パッシブ起動条件成立保持タイマ */
 static U2   u2_s_vispwr_tm_ch_off;                  /* チャネル通信起動電源 OFFタイマ */
 static U1   u1_s_vispwr_apofrq;                     /* 見た目OFF制御要求 */
+static U1   u1_s_vispwr_socrst;                     /* SoCリセット起動要因 */
 
 /* #define VIS_STOP_SEC_VAR */
 /* #include <VIS_MemMap.h> */
@@ -63,6 +64,7 @@ static U1 u1_s_VISPwrJudgeEthActiveStartup(void);
 static U1 u1_s_VISPwrJudgeEthPassiveStartup(void);
 static void vd_s_VISPwrJudgeEthChComPwr(void);
 static void vd_s_VISPwrJudgeApofrq(const U1 u1_t_ipdu_st, const U1 u1_t_apofrq);
+static void vd_s_VISPwrTransSocRst(void);
 
 /************************************************************************************************/
 /* Function Name     : vd_g_VISPwrInit                                                          */
@@ -82,6 +84,7 @@ void vd_g_VISPwrInit(void)
     u2_s_vispwr_tm_passive_on = VIS_PWR_JUDGE_PASSIVEON_TM;
     u2_s_vispwr_tm_ch_off = VIS_PWR_JUDGE_CH_POWEROFF_TM;
     u1_s_vispwr_apofrq = (U1)STD_OFF;
+    u1_s_vispwr_socrst = VIS_SOCRST_NORESPONSE;
     
     return;
 }
@@ -94,6 +97,7 @@ void vd_g_VISPwrCyc(void)
     vd_s_VISPwrGetBatVolt();
     vd_s_VISPwrRcvBDC1S81();
     vd_s_VISPwrJudgeEthChComPwr();
+    vd_s_VISPwrTransSocRst();
 
     return;
 }
@@ -188,6 +192,7 @@ static U1 u1_s_VISPwrBatVoltADCnv(const U2 u2_a_digitalbatvolt)
 static void vd_s_VISPwrRcvBDC1S81(void)
 {
     U1 u1_t_ipdu_st;
+    U1 u1_t_ipdu_st_trsflg;
     U1 u1_tp_rx[VIS_PWR_STATE_RX_NBYTE];
 
     /* 格納先の初期化 */
@@ -199,14 +204,27 @@ static void vd_s_VISPwrRcvBDC1S81(void)
     /* BDC1S81メッセージ状態取得 */
     u1_t_ipdu_st = (U1)Com_GetIPDUStatus((U2)MSG_BDC1S81_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
+    /* 車両電源(特殊)ステート遷移中フラグ用メッセージ状態設定 */
+    /* (BDC1S91は冗長化信号対象外のためBDC1S81の状態のみで判定する) */
+    u1_t_ipdu_st_trsflg = u1_t_ipdu_st;
+
     if (VIS_PWR_COM_IPDUST_OK == u1_t_ipdu_st){
         /* BDC1S81メッセージ読出し */
         (void)Com_ReadIPDU((U2)MSG_BDC1S81_RXCH0, &u1_tp_rx[VIS_PWR_STATE_RX_MIN_POS]);
     }
+    else{
+        /* BDC1S91メッセージ状態取得 */
+        u1_t_ipdu_st = (U1)Com_GetIPDUStatus((U2)MSG_BDC1S91_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+
+        if (VIS_PWR_COM_IPDUST_OK == u1_t_ipdu_st){
+            /* BDC1S91メッセージ読出し */
+            (void)Com_ReadIPDU((U2)MSG_BDC1S91_RXCH0, &u1_tp_rx[VIS_PWR_STATE_RX_MIN_POS]);
+        }
+    }
 
     vd_s_VISPwrJudgeBasicState(u1_t_ipdu_st, u1_tp_rx[VIS_PWR_STATE_RX_BASICSTATE]);     /* 車両電源ステート(基本ステート)情報判定 */
     vd_s_VISPwrJudgeSpecialState(u1_t_ipdu_st, u1_tp_rx[VIS_PWR_STATE_RX_SPECIALSTATE]); /* 車両電源ステート(特殊ステート)情報判定 */
-    vd_s_VISPwrJudgeTransFlg(u1_t_ipdu_st, u1_tp_rx[VIS_PWR_STATE_RX_TRANSFLG]);         /* 車両電源(特殊)ステート遷移中フラグ情報判定 */
+    vd_s_VISPwrJudgeTransFlg(u1_t_ipdu_st_trsflg, u1_tp_rx[VIS_PWR_STATE_RX_TRANSFLG]);  /* 車両電源(特殊)ステート遷移中フラグ情報判定 */
     vd_s_VISPwrJudgeApofrq(u1_t_ipdu_st, u1_tp_rx[VIS_PWR_STATE_RX_APQFRQ]);             /* 見た目OFF制御要求情報判定 */
 
     return;
@@ -256,7 +274,7 @@ static void vd_s_VISPwrJudgeBasicState(const U1 u1_t_ipdu_st, const U1 u1_t_recv
         u1_s_vispwr_vpsinfo_responsestate = VIS_COMMUNICATION_ERROR;            /* CANメッセージ受信状態：途絶 */
     }
     else{
-        /* do nothing */
+        u1_s_vispwr_vpsinfo_responsestate = VIS_NORESPONSE;                     /* CANメッセージ受信状態：未受信 */
     }
     
     /* チップ間通信_送信要求 */
@@ -299,7 +317,7 @@ static void vd_s_VISPwrJudgeSpecialState(const U1 u1_t_ipdu_st, const U1 u1_t_vp
         u1_s_vispwr_vpsinfos_responsestate = VIS_COMMUNICATION_ERROR;           /* CANメッセージ受信状態：途絶 */
     }
     else{
-        /* do nothing */
+        u1_s_vispwr_vpsinfos_responsestate = VIS_NORESPONSE;                    /* CANメッセージ受信状態：未受信 */
     }
 
     /* チップ間通信_送信要求 */
@@ -485,6 +503,20 @@ static void vd_s_VISPwrJudgeApofrq(const U1 u1_t_ipdu_st, const U1 u1_t_apofrq)
 }
 
 /************************************************************************************************/
+/* Function Name     : vd_s_VISPwrJudgeSocRst                                                   */
+/************************************************************************************************/
+static void vd_s_VISPwrTransSocRst(void)
+{
+    U1 u1_tp_transreq_data[VIS_PWR_TRANSREQ_DATA_LENGTH_1];
+    
+    /* チップ間通信_送信要求 */
+    u1_tp_transreq_data[VIS_PWR_TRANSREQ_DATA_RECEIVEVAL] = u1_s_vispwr_socrst;
+    (void)ChipCom_SetPeriodicTxData((U1)CHIPCOM_PERIODICID_VIS_SAILRESETST,VIS_PWR_TRANSREQ_DATA_LENGTH_1,u1_tp_transreq_data);
+
+    return;
+}
+
+/************************************************************************************************/
 /* Function Name     : u1_g_VISPwrGetBasicState                                                 */
 /************************************************************************************************/
 U1 u1_g_VISPwrGetBasicState (U1 * const u1_a_BASICSTATE)
@@ -505,16 +537,6 @@ U1 u1_g_VISPwrGetSpecialState (U1 * const u1_a_SPECIALSTATE)
 }
 
 /************************************************************************************************/
-/* Function Name     : u1_g_VISPwrGetTransFlg                                                   */
-/************************************************************************************************/
-U1 u1_g_VISPwrGetTransFlg (U1 * const u1_a_TRANSFLG)
-{
-    if (u1_a_TRANSFLG == NULL_PTR) { return VIS_INTERNAL_ERROR; }
-    *u1_a_TRANSFLG = u1_s_vispwr_transflg;
-    return u1_s_vispwr_vpscng_responsestate;
-}
-
-/************************************************************************************************/
 /* Function Name     :  u1_g_VISPwrGetEthChPwr                                                  */
 /************************************************************************************************/
 U1 u1_g_VISPwrGetEthChPwr (void)
@@ -528,6 +550,20 @@ U1 u1_g_VISPwrGetEthChPwr (void)
 U1 u1_g_VISPwrGetApofrq (void)
 {
     return u1_s_vispwr_apofrq;
+}
+
+/************************************************************************************************/
+/* Function Name     :  vd_g_VISPwrSocRstNotify                                                 */
+/************************************************************************************************/
+void vd_g_VISPwrSocRstNotify (U1 const u1_a_SOCRST_TYPE)
+{
+    u1_s_vispwr_socrst = VIS_SOCRST_FAIL;
+
+    if ((VIS_SOCRST_NORMAL == u1_a_SOCRST_TYPE) || (VIS_SOCRST_ABNORMAL == u1_a_SOCRST_TYPE)) {
+        u1_s_vispwr_socrst = u1_a_SOCRST_TYPE;
+    }
+
+    return;
 }
 
 /************************************************************************************************/

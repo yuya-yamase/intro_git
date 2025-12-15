@@ -68,7 +68,7 @@ U1      u1_g_VdfEsoRx_EVMIL_RED(void)
     if(u1_t_rx_evmilrqr != (U1)0U){
         u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
     }
-    else if((u1_t_rx_evmilrqa != (U1)0U) && (u1_t_rx_evmilrqr == (U1)0U)){
+    else if(u1_t_rx_evmilrqa != (U1)0U){
         u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_INA;
     }
     else{
@@ -97,7 +97,7 @@ U1      u1_g_VdfEsoRx_EVMIL_AMBER(void)
     if(u1_t_rx_evmilrqr != (U1)0U){
         u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_INA;
     }
-    else if((u1_t_rx_evmilrqa != (U1)0U) && (u1_t_rx_evmilrqr == (U1)0U)){
+    else if(u1_t_rx_evmilrqa != (U1)0U){
         u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
     }
     else{
@@ -122,9 +122,11 @@ U1      u1_g_VdfEsoRx_EVMIL_AMBER(void)
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  BEV-1    12/23/2024  KO       Change for BEV System_Consideration_1.(MET-H_ZMILREQ-CSTD-1-00-A-C0)                               */
+/*  BEV-2    11/05/2025  SNm      Change for BEV rebase                                                                              */
 /*                                                                                                                                   */
 /*  * PG   = Patrick Garcia, DTPH                                                                                                    */
 /*  * KO   = Kazuto Oishi,  Denso Techno                                                                                             */
 /*  * SN   = Shizuka Nakajima, KSE                                                                                                   */
+/*  * SNm  = Shimon Nambu, Denso Techno                                                                                              */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

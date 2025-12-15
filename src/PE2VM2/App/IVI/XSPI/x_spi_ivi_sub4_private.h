@@ -55,6 +55,7 @@ void            vd_g_XspiIviCANBusGet2M(void);
 void            vd_g_XspiIviCANBusGet5M(void);
 void            vd_g_XspiIviCANBusEventJdg(void);
 void            vd_g_XspiIviClockUTCPut(const U1* u1_ap_DATA);
+void            vd_g_XspiIviDrecSgnlGet(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */

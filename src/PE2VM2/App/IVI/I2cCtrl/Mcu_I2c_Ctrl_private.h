@@ -32,14 +32,16 @@
 #define MCU_REGWRI_RTRN_FIN                     (0xFFU) /* レジスタ書込み処理 全データ書込み完了通知 */
 
 /* Ack管理 */
-#define MCU_I2C_ACK_NUM                         (7U)    /* Ack監視RAM 総数 */
-#define MCU_I2C_ACK_VIDEO_IC                    (0U)
-#define MCU_I2C_ACK_GVIF_RX                     (1U)
-#define MCU_I2C_ACK_GVIF_TX                     (2U)
-#define MCU_I2C_ACK_POWER                       (3U)
-#define MCU_I2C_ACK_RTC                         (4U)
-#define MCU_I2C_ACK_GYRO                        (5U)
-#define MCU_I2C_ACK_G_MONI                      (6U)
+#define MCU_I2C_ACK_NUM                         (8U)    /* Ack監視RAM 総数 */
+#define MCU_I2C_ACK_PMIC                        (0U)
+#define MCU_I2C_ACK_VIDEO_IC                    (1U)
+#define MCU_I2C_ACK_GVIF_RX                     (2U)
+#define MCU_I2C_ACK_GVIF_TX                     (3U)
+#define MCU_I2C_ACK_POWER                       (4U)
+#define MCU_I2C_ACK_RTC                         (5U)
+#define MCU_I2C_ACK_GYRO                        (6U)
+#define MCU_I2C_ACK_G_MONI                      (7U)
+
 
 /* 書き込み時Waitモード */
 #define MCU_I2C_WAIT_NON                        (0U)    /* Waitなし */
