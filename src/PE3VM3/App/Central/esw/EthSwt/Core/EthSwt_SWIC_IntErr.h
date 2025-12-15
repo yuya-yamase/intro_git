@@ -1,18 +1,18 @@
 /* -------------------------------------------------------------------------- */
-/* file name  :  EthSwt_SWIC_Link.h                                           */
+/* file name  :  EthSwt_SWIC_IntErr.h                                         */
 /* -------------------------------------------------------------------------- */
-#ifndef ETHSWT_SWIC_LINK_H
-#define ETHSWT_SWIC_LINK_H
+#ifndef ETHSWT_SWIC_INTERR_H
+#define ETHSWT_SWIC_INTERR_H
 /* -------------------------------------------------------------------------- */
 #include <Std_Types.h>
 /* -------------------------------------------------------------------------- */
+#include <EthSwt_SWIC_initRegCommon.h>
 #include <EthSwt_SWIC_Cfg.h>
 /* -------------------------------------------------------------------------- */
-void EthSwt_SWIC_Link_Init (void);
-void EthSwt_SWIC_Link_TimerUpdate (void);
-void EthSwt_SWIC_Link_Clear (void);
-Std_ReturnType EthSwt_SWIC_Link_Action (uint32 * const errFactor);
-Std_ReturnType EthSwt_SWIC_Link_Get(const uint8 SwitchPortIdx, EthTrcv_LinkStateType * const LinkStatePtr);
+void EthSwt_SWIC_IntErr_Init (void);
+void EthSwt_SWIC_IntErr_Clear(void);
+void EthSwt_SWIC_IntErr_TimerUpdate (void);
+Std_ReturnType EthSwt_SWIC_IntErr_Action(uint32 * const errFactor);
 /* -------------------------------------------------------------------------- */
-#endif /* ETHSWT_SWIC_LINK_H */
+#endif /* ETHSWT_SWIC_INTERR_H */
 /* -------------------------------------------------------------------------- */

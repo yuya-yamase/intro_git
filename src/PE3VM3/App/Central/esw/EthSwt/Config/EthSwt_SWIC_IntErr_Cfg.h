@@ -1,12 +1,11 @@
 /* -------------------------------------------------------------------------- */
-/* file name  :  EthSwt_SWIC_Init.h                                           */
+/* file name  :  EthSwt_SWIC_IntErr_Cfg.h                                     */
 /* -------------------------------------------------------------------------- */
-#ifndef ETHSWT_SWIC_INIT_H
-#define ETHSWT_SWIC_INIT_H
+#ifndef ETHSWT_SWIC_INTERR_CFG_H
+#define ETHSWT_SWIC_INTERR_CFG_H
 /* -------------------------------------------------------------------------- */
-#include <Std_Types.h>
+
+
 /* -------------------------------------------------------------------------- */
-Std_ReturnType EthSwt_SWIC_Init_Setting(uint32 * const errFactor);
-/* -------------------------------------------------------------------------- */
-#endif /* ETHSWT_SWIC_INIT_H */
+#endif /* ETHSWT_SWIC_INTERR_CFG_H */
 /* -------------------------------------------------------------------------- */
