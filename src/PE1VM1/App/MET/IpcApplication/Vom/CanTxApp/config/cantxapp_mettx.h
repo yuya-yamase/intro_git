@@ -35,6 +35,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Prototypes                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+void    vd_g_CanTxAppAVN1S03_Put(const U4 * u4_ap_pck_rx, const U1 u1_a_BUFSIZE);
 void    vd_g_CanTxAppMET1S02_Put(const U4 * u4_ap_pck_rx, const U1 u1_a_BUFSIZE);
 void    vd_g_CanTxAppMET1S27_Put(const U4 * u4_ap_pck_rx, const U1 u1_a_BUFSIZE);
 void    vd_g_CanTxAppMET1S29_Put(const U4 * u4_ap_pck_rx, const U1 u1_a_BUFSIZE);

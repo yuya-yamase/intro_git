@@ -9,46 +9,50 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define CANTXAPP_CFG_C_MAJOR                     (0)
-#define CANTXAPP_CFG_C_MINOR                     (0)
-#define CANTXAPP_CFG_C_PATCH                     (0)
+#define CANTXAPP_AVN1S03_C_MAJOR                     (0)
+#define CANTXAPP_AVN1S03_C_MINOR                     (0)
+#define CANTXAPP_AVN1S03_C_PATCH                     (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#include "cantxapp_cfg_private.h"
 #include "cantxapp_cfg_signal.h"
+#include "cantxapp_mettx.h"
 
+#include "oxcan.h"
+#include "ivdsh.h"
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if ((CANTXAPP_CFG_C_MAJOR != CANTXAPP_CFG_PRIVATE_H_MAJOR) || \
-     (CANTXAPP_CFG_C_MINOR != CANTXAPP_CFG_PRIVATE_H_MINOR) || \
-     (CANTXAPP_CFG_C_PATCH != CANTXAPP_CFG_PRIVATE_H_PATCH))
-#error "cantxapp_cfg.c and cantxapp_cfg_private.h : source and header files are inconsistent!"
-#endif
-
-#if ((CANTXAPP_CFG_C_MAJOR != CANTXAPP_CFG_SIGNAL_H_MAJOR) || \
-     (CANTXAPP_CFG_C_MINOR != CANTXAPP_CFG_SIGNAL_H_MINOR) || \
-     (CANTXAPP_CFG_C_PATCH != CANTXAPP_CFG_SIGNAL_H_PATCH))
-#error "cantxapp_cfg.c and cantxapp_cfg_signal.h : source and header files are inconsistent!"
+#if ((CANTXAPP_AVN1S03_C_MAJOR != CANTXAPP_CFG_SIGNAL_H_MAJOR) || \
+     (CANTXAPP_AVN1S03_C_MINOR != CANTXAPP_CFG_SIGNAL_H_MINOR) || \
+     (CANTXAPP_AVN1S03_C_PATCH != CANTXAPP_CFG_SIGNAL_H_PATCH))
+#error "cantxapp_avn1s03.c and cantxapp_cfg_signal.h : source and header files are inconsistent!"
 #endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#define CANTXAPP_AVN1S03_VM_1WORD                    (1U)
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#define u1_CANTXAPP_MET_READ_BIT(u4_buf , u1_pos , u1_len) ((U1)((U1)((u4_buf)  >> (u1_pos)) & (U1)((1U << (u1_len)) - 1U)))
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+static U4    u4_sp_cantxapp_avn1s03data[CANTXAPP_NBYTE_PAYLOAD8];
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+static void    vd_s_CanTxAppSend_FLYNOP(void);
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -56,36 +60,63 @@
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*===================================================================================================================================*/
-/*  void    vd_g_CanTxAppCfgInit(void)                                                                                               */
+/*  void    vd_g_CanTxAppAVN1S03_Init(void)                                                                                          */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_CanTxAppCfgInit(void)
+void    vd_g_CanTxAppAVN1S03_Init(void)
 {
-    vd_g_CanTxAppAVN1S03_Init();
-    vd_g_CanTxAppMET1S02_Init();
-    vd_g_CanTxAppMET1S27_Init();
-    vd_g_CanTxAppMET1S29_Init();
-    vd_g_CanTxAppMET1S30_Init();
-    vd_g_CanTxAppMET1S62_Init();
-    vd_g_CanTxAppMET1S70_Init();
+    U4                 u4_t_loop;
+    U4                 u4_t_tx;
+
+    for(u4_t_loop = (U4)0U; u4_t_loop < (U4)CANTXAPP_NBYTE_PAYLOAD8; u4_t_loop++){
+        u4_sp_cantxapp_avn1s03data[u4_t_loop] = (U4)0U;
+    }
+
+    u4_t_tx = (U4)0U;
+    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM1TO2_FLYNOP, &u4_t_tx, (U2)CANTXAPP_AVN1S03_VM_1WORD);
 }
 /*===================================================================================================================================*/
-/*  void    vd_g_CanTxAppCfgMainTask(void)                                                                                           */
+/*  void    vd_g_CanTxAppAVN1S03_Send(void)                                                                                          */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_CanTxAppCfgMainTask(void)
+void    vd_g_CanTxAppAVN1S03_Send(void)
 {
-    vd_g_CanTxAppAVN1S03_Send();
-    vd_g_CanTxAppMET1S02_Send();
-    vd_g_CanTxAppMET1S27_Send();
-    vd_g_CanTxAppMET1S29_Send();
-    vd_g_CanTxAppMET1S30_Send();
-    vd_g_CanTxAppMET1S62_Send();
-    vd_g_CanTxAppMET1S70_Send();
+    vd_s_CanTxAppSend_FLYNOP();
+}
+/*===================================================================================================================================*/
+/*  void    vd_g_CanTxAppAVN1S03_Put(const U4 * u4_ap_pck_rx, const U1 u1_a_BUFSIZE)                                                 */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      u4_ap_pck_rx: xspi buffer                                                                                        */
+/*                  u1_a_BUFSIZE: buffer size                                                                                        */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void    vd_g_CanTxAppAVN1S03_Put(const U4 * u4_ap_pck_rx, const U1 u1_a_BUFSIZE)
+{
+    U4                 u4_t_loop;
+
+    for(u4_t_loop = (U4)0U; u4_t_loop < (U4)u1_a_BUFSIZE; u4_t_loop++){
+        if(u1_a_BUFSIZE <= (U1)CANTXAPP_NBYTE_PAYLOAD8){
+            u4_sp_cantxapp_avn1s03data[u4_t_loop] = u4_ap_pck_rx[u4_t_loop];
+        }
+    }
+}
+/*===================================================================================================================================*/
+/*  static void    vd_s_CanTxAppSend_FLYNOP(void)                                                                                    */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*                                                                                                                                   */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void    vd_s_CanTxAppSend_FLYNOP(void)
+{
+    U4                 u4_t_tx;
+
+    u4_t_tx = (U4)u1_CANTXAPP_MET_READ_BIT(u4_sp_cantxapp_avn1s03data[0], (U1)CANTXAPP_POS_1_5, (U1)CANTXAPP_LEN_2);
+    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM1TO2_FLYNOP, &u4_t_tx, (U2)CANTXAPP_AVN1S03_VM_1WORD);
 }
 
 /*===================================================================================================================================*/
@@ -96,12 +127,11 @@ void    vd_g_CanTxAppCfgMainTask(void)
 /*                                                                                                                                   */
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  0.0.0    11/13/2025  YN       New.                                                                                               */
+/*  0.0.0    12/11/2025  YN       New.                                                                                               */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  BEV-1    12/12/2025  YN       Add AVN1S03 transmission process and initialization process.                                       */
 /*                                                                                                                                   */
 /*  * YN   = Yujiro Nagaya, Denso Techno                                                                                             */
 /*                                                                                                                                   */
