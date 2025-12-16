@@ -80,7 +80,6 @@
     -I${APP_DIR}/MET/Platform/ComplexDriver/SoundMiddle/include/U2Ax
     -I${APP_DIR}/MET/Platform/ComplexDriver/SoundMiddle/scc
     -I${APP_DIR}/MET/Platform/Fwush/scc
-    -I${APP_DIR}/MET/Platform/Version/scc
     
 
 ${SS_DIR}/eMCOS/config/eMCOS_TASK.c
