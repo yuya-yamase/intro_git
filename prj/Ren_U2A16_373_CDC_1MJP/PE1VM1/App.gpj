@@ -79,6 +79,7 @@
     -I${APP_DIR}/MET/Platform/ComplexDriver/SoundMiddle/data_LEX
     -I${APP_DIR}/MET/Platform/ComplexDriver/SoundMiddle/include/U2Ax
     -I${APP_DIR}/MET/Platform/ComplexDriver/SoundMiddle/scc
+    -I${APP_DIR}/MET/Platform/Fwush/scc
     
 
 ${SS_DIR}/eMCOS/config/eMCOS_TASK.c
@@ -366,4 +367,6 @@ App/MET/IpcApplication/Vsv/WChime/scc/wchime_arb.c
 App/MET/Platform/ComplexDriver/DrecTx/config/drec_tx.c
 App/MET/Platform/ComplexDriver/SoundMiddle/config/sound_cri_mgr.c
 App/MET/Platform/ComplexDriver/SoundMiddle/scc/sound_cri_drv.c
+App/MET/Platform/Fwush/scc/fwush.c
+App/MET/Platform/Fwush/scc/fwumemacc.c
 
