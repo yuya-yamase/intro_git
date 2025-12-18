@@ -177,6 +177,8 @@ if not exist %GHS_MOT_HSM_TRGT%_bd.hex (
     copy ..\..\src\PE0VM0\BSW\Aubist\CycurHSM\ecy_hsm_RH850_GHS_D7_DM\bin\HSM_B.hex %GHS_MOT_HSM_TRGT%_bd.hex
 )
 
+call generate_USBRPG.bat %USB_REPROG_FILE%
+
 rem ---------------------------------------------------------------------------------------------
 @echo OFF
 echo -- Step: Calculate ROM/RAM  --

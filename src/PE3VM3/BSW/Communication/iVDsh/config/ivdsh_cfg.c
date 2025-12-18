@@ -45,10 +45,10 @@
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define IVDSH_WA_NWORD_WRI                       (7U)
-#define IVDSH_WA_NWORD_REA_0                     (12U)
-#define IVDSH_WA_NWORD_REA_1                     (21U)
+#define IVDSH_WA_NWORD_REA_0                     (16U)
+#define IVDSH_WA_NWORD_REA_1                     (24U)
 
-#define IVDSH_WA_NWORD                           (73U)
+#define IVDSH_WA_NWORD                           (87U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */

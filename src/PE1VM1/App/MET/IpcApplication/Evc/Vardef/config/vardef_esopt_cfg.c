@@ -36,7 +36,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define VDF_ESO_NUM_RX                           (79U)
+#define VDF_ESO_NUM_RX                           (90U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -349,7 +349,7 @@ const ST_VDF_ESO_CH    st_gp_VDF_ESO_CH[VDF_ESO_NUM_RX] = {
         &u1_g_VdfEsoRx_AUTOP,                   /* fp_u1_AVA_RX        */
         (U2)VDF_ESO_CH_AUTOP,                   /* u2_eso_ch           */
         (U1)VDF_ESO_INPUT_TYPE_CAN,             /* u1_input_type       */
-        (U2)OXCAN_RXD_PDU_CAN_IPA1S05_CH0,      /* u2_msg_rx           */
+        (U2)OXCAN_RXD_PDU_CAN_BDC1SV1_CH0,      /* u2_msg_rx           */
         (U2)0x0002U,                            /* u2_vom_act          */
         ((U2)2100U / (U2)VDF_MAIN_TICK),        /* u2_rxc_peri         */
         {
@@ -421,7 +421,7 @@ const ST_VDF_ESO_CH    st_gp_VDF_ESO_CH[VDF_ESO_NUM_RX] = {
         &u1_g_VdfEsoRx_SW_LTA,                  /* fp_u1_AVA_RX        */
         (U2)VDF_ESO_CH_SW_LTA,                  /* u2_eso_ch           */
         (U1)VDF_ESO_INPUT_TYPE_CAN,             /* u1_input_type       */
-        (U2)OXCAN_RXD_PDU_CAN_FCM1S92_CH0,      /* u2_msg_rx           */
+        (U2)OXCAN_RXD_PDU_CAN_ADC1S17_CH0,      /* u2_msg_rx           */
         (U2)0x0002U,                            /* u2_vom_act          */
         ((U2)2100U / (U2)VDF_MAIN_TICK),        /* u2_rxc_peri         */
         {
@@ -505,7 +505,7 @@ const ST_VDF_ESO_CH    st_gp_VDF_ESO_CH[VDF_ESO_NUM_RX] = {
         &u1_g_VdfEsoRx_TM,                      /* fp_u1_AVA_RX        */
         (U2)VDF_ESO_CH_TM,                      /* u2_eso_ch           */
         (U1)VDF_ESO_INPUT_TYPE_CAN,             /* u1_input_type       */
-        (U2)OXCAN_RXD_PDU_CAN_FCM1S52_CH0,      /* u2_msg_rx           */
+        (U2)OXCAN_RXD_PDU_CAN_ADC1S14_CH0,      /* u2_msg_rx           */
         (U2)0x0002U,                            /* u2_vom_act          */
         ((U2)2100U / (U2)VDF_MAIN_TICK),        /* u2_rxc_peri         */
         {
@@ -689,7 +689,7 @@ const ST_VDF_ESO_CH    st_gp_VDF_ESO_CH[VDF_ESO_NUM_RX] = {
         (U2)0x0002U,                            /* u2_vom_act          */
         ((U2)2100U / (U2)VDF_MAIN_TICK),        /* u2_rxc_peri         */
         {
-            (U2)U2_MAX,                         /* u2_rxc_min[MIN_INA] */
+            (U2)2U,                             /* u2_rxc_min[MIN_INA] */
             (U2)2U                              /* u2_rxc_min[MIN_ACT] */
         }
     },
@@ -938,7 +938,7 @@ const ST_VDF_ESO_CH    st_gp_VDF_ESO_CH[VDF_ESO_NUM_RX] = {
         (U2)VDF_ESO_CH_VHCOBBSD,                /* u2_eso_ch           */
         (U1)VDF_ESO_INPUT_TYPE_CAN,             /* u1_input_type       */
         (U2)OXCAN_RXD_PDU_CAN_SCS1S11_CH0,      /* u2_msg_rx           */
-        (U2)0x0001U,                            /* u2_vom_act          */
+        (U2)0x0002U,                            /* u2_vom_act          */
         ((U2)4200U / (U2)VDF_MAIN_TICK),        /* u2_rxc_peri         */
         {
             (U2)2U,                             /* u2_rxc_min[MIN_INA] */
@@ -998,6 +998,138 @@ const ST_VDF_ESO_CH    st_gp_VDF_ESO_CH[VDF_ESO_NUM_RX] = {
         (U2)VDF_ESO_CH_SW_DPM3,                 /* u2_eso_ch           */
         (U1)VDF_ESO_INPUT_TYPE_CAN,             /* u1_input_type       */
         (U2)OXCAN_RXD_PDU_CAN_BDB1F02_CH0,      /* u2_msg_rx           */
+        (U2)0x0002U,                            /* u2_vom_act          */
+        ((U2)2100U / (U2)VDF_MAIN_TICK),        /* u2_rxc_peri         */
+        {
+            (U2)2U,                             /* u2_rxc_min[MIN_INA] */
+            (U2)2U                              /* u2_rxc_min[MIN_ACT] */
+        }
+    },
+    {
+        &u1_g_VdfEsoRx_SYS_ADDOT_TT,            /* fp_u1_AVA_RX        */
+        (U2)VDF_ESO_CH_SYS_ADDOT_TT,            /* u2_eso_ch           */
+        (U1)VDF_ESO_INPUT_TYPE_CAN,             /* u1_input_type       */
+        (U2)OXCAN_RXD_PDU_CAN_ADC1S14_CH0,      /* u2_msg_rx           */
+        (U2)0x0002U,                            /* u2_vom_act          */
+        ((U2)2100U / (U2)VDF_MAIN_TICK),        /* u2_rxc_peri         */
+        {
+            (U2)2U,                             /* u2_rxc_min[MIN_INA] */
+            (U2)2U                              /* u2_rxc_min[MIN_ACT] */
+        }
+    },
+    {
+        &u1_g_VdfEsoRx_SW_MSBBSW_NORMAL,        /* fp_u1_AVA_RX        */
+        (U2)VDF_ESO_CH_SYS_MSBBSW_NORMAL,       /* u2_eso_ch           */
+        (U1)VDF_ESO_INPUT_TYPE_CAN,             /* u1_input_type       */
+        (U2)OXCAN_RXD_PDU_CAN_ENG1S60_CH0,      /* u2_msg_rx           */
+        (U2)0x0002U,                            /* u2_vom_act          */
+        ((U2)2100U / (U2)VDF_MAIN_TICK),        /* u2_rxc_peri         */
+        {
+            (U2)2U,                             /* u2_rxc_min[MIN_INA] */
+            (U2)2U                              /* u2_rxc_min[MIN_ACT] */
+        }
+    },
+    {
+        &u1_g_VdfEsoRx_SW_MSBBSW_SPORT,         /* fp_u1_AVA_RX        */
+        (U2)VDF_ESO_CH_SYS_MSBBSW_SPORT,        /* u2_eso_ch           */
+        (U1)VDF_ESO_INPUT_TYPE_CAN,             /* u1_input_type       */
+        (U2)OXCAN_RXD_PDU_CAN_ENG1S60_CH0,      /* u2_msg_rx           */
+        (U2)0x0002U,                            /* u2_vom_act          */
+        ((U2)2100U / (U2)VDF_MAIN_TICK),        /* u2_rxc_peri         */
+        {
+            (U2)2U,                             /* u2_rxc_min[MIN_INA] */
+            (U2)2U                              /* u2_rxc_min[MIN_ACT] */
+        }
+    },
+    {
+        &u1_g_VdfEsoRx_SW_MSBBSW_ECO,           /* fp_u1_AVA_RX        */
+        (U2)VDF_ESO_CH_SYS_MSBBSW_ECO,          /* u2_eso_ch           */
+        (U1)VDF_ESO_INPUT_TYPE_CAN,             /* u1_input_type       */
+        (U2)OXCAN_RXD_PDU_CAN_ENG1S60_CH0,      /* u2_msg_rx           */
+        (U2)0x0002U,                            /* u2_vom_act          */
+        ((U2)2100U / (U2)VDF_MAIN_TICK),        /* u2_rxc_peri         */
+        {
+            (U2)2U,                             /* u2_rxc_min[MIN_INA] */
+            (U2)2U                              /* u2_rxc_min[MIN_ACT] */
+        }
+    },
+    {
+        &u1_g_VdfEsoRx_SW_MSBBSW_CUSTOM,        /* fp_u1_AVA_RX        */
+        (U2)VDF_ESO_CH_SYS_MSBBSW_CUSTOM,       /* u2_eso_ch           */
+        (U1)VDF_ESO_INPUT_TYPE_CAN,             /* u1_input_type       */
+        (U2)OXCAN_RXD_PDU_CAN_ENG1S60_CH0,      /* u2_msg_rx           */
+        (U2)0x0002U,                            /* u2_vom_act          */
+        ((U2)2100U / (U2)VDF_MAIN_TICK),        /* u2_rxc_peri         */
+        {
+            (U2)2U,                             /* u2_rxc_min[MIN_INA] */
+            (U2)2U                              /* u2_rxc_min[MIN_ACT] */
+        }
+    },
+    {
+        &u1_g_VdfEsoRx_SW_MSBBSW_RANGE,         /* fp_u1_AVA_RX        */
+        (U2)VDF_ESO_CH_SYS_MSBBSW_RANGE,        /* u2_eso_ch           */
+        (U1)VDF_ESO_INPUT_TYPE_CAN,             /* u1_input_type       */
+        (U2)OXCAN_RXD_PDU_CAN_ENG1S60_CH0,      /* u2_msg_rx           */
+        (U2)0x0002U,                            /* u2_vom_act          */
+        ((U2)2100U / (U2)VDF_MAIN_TICK),        /* u2_rxc_peri         */
+        {
+            (U2)2U,                             /* u2_rxc_min[MIN_INA] */
+            (U2)2U                              /* u2_rxc_min[MIN_ACT] */
+        }
+    },
+    {
+        &u1_g_VdfEsoRx_SW_MSBBSW_RCMFRT,        /* fp_u1_AVA_RX        */
+        (U2)VDF_ESO_CH_SYS_MSBBSW_RCMFRT,       /* u2_eso_ch           */
+        (U1)VDF_ESO_INPUT_TYPE_CAN,             /* u1_input_type       */
+        (U2)OXCAN_RXD_PDU_CAN_ENG1S60_CH0,      /* u2_msg_rx           */
+        (U2)0x0002U,                            /* u2_vom_act          */
+        ((U2)2100U / (U2)VDF_MAIN_TICK),        /* u2_rxc_peri         */
+        {
+            (U2)2U,                             /* u2_rxc_min[MIN_INA] */
+            (U2)2U                              /* u2_rxc_min[MIN_ACT] */
+        }
+    },
+    {
+        &u1_g_VdfEsoRx_SW_MSBBSW_SNOW,          /* fp_u1_AVA_RX        */
+        (U2)VDF_ESO_CH_SYS_MSBBSW_SNOW,         /* u2_eso_ch           */
+        (U1)VDF_ESO_INPUT_TYPE_CAN,             /* u1_input_type       */
+        (U2)OXCAN_RXD_PDU_CAN_ENG1S60_CH0,      /* u2_msg_rx           */
+        (U2)0x0002U,                            /* u2_vom_act          */
+        ((U2)2100U / (U2)VDF_MAIN_TICK),        /* u2_rxc_peri         */
+        {
+            (U2)2U,                             /* u2_rxc_min[MIN_INA] */
+            (U2)2U                              /* u2_rxc_min[MIN_ACT] */
+        }
+    },
+    {
+        &u1_g_VdfEsoRx_SW_MSBBSW_TRACK,         /* fp_u1_AVA_RX        */
+        (U2)VDF_ESO_CH_SYS_MSBBSW_TRACK,        /* u2_eso_ch           */
+        (U1)VDF_ESO_INPUT_TYPE_CAN,             /* u1_input_type       */
+        (U2)OXCAN_RXD_PDU_CAN_ENG1S60_CH0,      /* u2_msg_rx           */
+        (U2)0x0002U,                            /* u2_vom_act          */
+        ((U2)2100U / (U2)VDF_MAIN_TICK),        /* u2_rxc_peri         */
+        {
+            (U2)2U,                             /* u2_rxc_min[MIN_INA] */
+            (U2)2U                              /* u2_rxc_min[MIN_ACT] */
+        }
+    },
+    {
+        &u1_g_VdfEsoRx_SW_MSBBSW_TRAIL,         /* fp_u1_AVA_RX        */
+        (U2)VDF_ESO_CH_SYS_MSBBSW_TRAIL,        /* u2_eso_ch           */
+        (U1)VDF_ESO_INPUT_TYPE_CAN,             /* u1_input_type       */
+        (U2)OXCAN_RXD_PDU_CAN_ENG1S60_CH0,      /* u2_msg_rx           */
+        (U2)0x0002U,                            /* u2_vom_act          */
+        ((U2)2100U / (U2)VDF_MAIN_TICK),        /* u2_rxc_peri         */
+        {
+            (U2)2U,                             /* u2_rxc_min[MIN_INA] */
+            (U2)2U                              /* u2_rxc_min[MIN_ACT] */
+        }
+    },
+    {
+        &u1_g_VdfEsoRx_SW_MSBBSW_DAC,           /* fp_u1_AVA_RX        */
+        (U2)VDF_ESO_CH_SYS_MSBBSW_DAC,          /* u2_eso_ch           */
+        (U1)VDF_ESO_INPUT_TYPE_CAN,             /* u1_input_type       */
+        (U2)OXCAN_RXD_PDU_CAN_VSC1G96_CH0,      /* u2_msg_rx           */
         (U2)0x0002U,                            /* u2_vom_act          */
         ((U2)2100U / (U2)VDF_MAIN_TICK),        /* u2_rxc_peri         */
         {
@@ -1087,8 +1219,8 @@ const ST_VDF_ESO_AVA   st_gp_VDF_ESO_AVA[VDF_ESO_NOW_AVA] = {
     {
         (U4)VDF_ESO_INI_W8,                        /* u4_ini */
         (U4)VDF_ESO_NVM_W8,                        /* u4_nvm */
-        (U4)0x00000714U,                           /* u4_unk */
-        (U4)0x00000716U,                           /* u4_rx  */
+        (U4)0x007FE714U,                           /* u4_unk */
+        (U4)0x007FF716U,                           /* u4_rx  */
 
         (U2)NVMCID_U4_VDF_ESO_W8,                  /* u2_nid */
         (U2)RIMID_U4_VDF_ESO_W8                    /* u2_bid */
@@ -1227,6 +1359,12 @@ U1      u1_g_VardefEsOptCfgEthRxEvcnt(const U2 u2_a_MSG_ID)
 /*  BEV-17    06/17/2025  JS      Change config for BEV System_Consideration_2.(MET-B_WDICBB-CSTD-0-)                                */
 /*  BEV-18    06/18/2025  KO      Change config for BEV System_Consideration_2.(MET-B_DRPBB-CSTD-0-)                                 */
 /*  BEV-19    10/15/2025  SN      Configured for BEVstep3_Rebase                                                                     */
+/*  BEV-20    11/27/2025  PG      Change config for BEV System_Consideration_ADAS.(MET-S_TMTT-CSTD-0)                                */
+/*  BEV-21    12/02/2025  MA      SW_TITE Function presence judgment processing changed to bidirectional.(MET-B_TITEBB-CSTD-0-)      */
+/*  BEV-22    12/08/2025  TS      Change config for BEV System_Consideration_ADAS.(MET-S_ADVMID-CSTD-0)                              */
+/*  BEV-23    12/12/2025  KN      Change config for BEV System_Consideration_ADAS.(MET-C_HCSBSW-CSTD-0-)                             */
+/*  BEV-24    12/12/2025  MA      Added 10 function presence judgment processes.(MET-C_MSBBSW-CSTD-0-)                               */
+/*  BEV-25    12/12/2025  KO      Change config for BEV System_Consideration_ADAS.(MET-S_ADBB-CSTD-0)                                */
 /*                                                                                                                                   */
 /*  * YI     = Yoshiki Iwata, Denso                                                                                                  */
 /*  * TN     = Takashi Nagai, Denso                                                                                                  */
@@ -1257,5 +1395,8 @@ U1      u1_g_VardefEsOptCfgEthRxEvcnt(const U2 u2_a_MSG_ID)
 /*  * MN   = Mikiya Negishi, KSE                                                                                                     */
 /*  * SN(K)= Shizuka Nakajima, KSE                                                                                                   */
 /*  * JS   = Jun Sugiyama, KSE                                                                                                       */
+/*  * MA   = Misaki Aiki, Denso Techno                                                                                               */
+/*  * TS   = Takuo Suganuma, Denso Techno                                                                                            */
+/*  * KN   = kazuo Nishigaki, Denso Techno                                                                                           */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

@@ -28,6 +28,7 @@
 #include    "PncreqCtl.h"
 #include    "ivdsh.h"
 #include    "CanCtlTx.h"
+#include    "fwupx.h"
 #include    "can_qsev_rx.h"
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
@@ -55,6 +56,7 @@ void            vd_g_XspiIviCANBusGet2M(void);
 void            vd_g_XspiIviCANBusGet5M(void);
 void            vd_g_XspiIviCANBusEventJdg(void);
 void            vd_g_XspiIviClockUTCPut(const U1* u1_ap_DATA);
+void            vd_g_XspiIviDrecSgnlGet(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */

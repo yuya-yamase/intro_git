@@ -1,4 +1,4 @@
-/* 5.8.0 */
+/* 5.9.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define ALERT_S_SEA_C_MAJOR                      (5)
-#define ALERT_S_SEA_C_MINOR                      (8)
+#define ALERT_S_SEA_C_MINOR                      (9)
 #define ALERT_S_SEA_C_PATCH                      (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -43,8 +43,6 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static U1      u1_s_alert_s_sea_msgsts_doa_buz;
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -139,17 +137,6 @@ const ST_ALERT_MTRX st_gp_ALERT_S_SEA_MTRX[1] = {
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*===================================================================================================================================*/
-/*  void    vd_g_AlertS_seaInit(void)                                                                                                */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void    vd_g_AlertS_seaInit(void)
-{
-    u1_s_alert_s_sea_msgsts_doa_buz  = (U1)COM_NO_RX;
-}
-
-/*===================================================================================================================================*/
 /*  static U4      u4_s_AlertS_seaBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)                               */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
@@ -168,13 +155,11 @@ static U4      u4_s_AlertS_seaBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
     (void)Com_ReceiveSignal(ComConf_ComSignal_DOA_BUZ, &u1_t_sgnl);
 
     u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_BSR1S01_CH0,
-                                      (U4)OXCAN_SYS_PBA | (U4)OXCAN_SYS_ACC | (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP,
+                                      (U4)OXCAN_SYS_ACC | (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP,
                                       u2_s_ALERT_S_SEA_BC_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
-    vd_g_AlertBRxTrnsSts(&u1_s_alert_s_sea_msgsts_doa_buz, u1_t_msgsts);
-
     u4_t_src_chk  = (U4)u1_t_sgnl;
-    u4_t_src_chk |= ((U4)u1_s_alert_s_sea_msgsts_doa_buz << u1_s_ALERT_S_SEA_BC_LSB_MSGSTS);
+    u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_S_SEA_BC_LSB_MSGSTS);
 
     if((u1_a_VOM & (U1)ALERT_VOM_BAT_WT) != (U1)0U){
         u4_t_src_chk |= u4_s_ALERT_S_SEA_BC_BIT_BAT_WT;
@@ -204,6 +189,7 @@ static U4      u4_s_AlertS_seaBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
 /*  5.7.0     1/09/2024  RO       Update for 19PFv3.                                                                                 */
 /*  5.8.0     6/23/2025  HY       Change for BEV System_Consideration_2.(MET-S_ADMID-CSTD-0-02-A-C0,MET-S_ADTT-CSTD-0-02-A-C0)       */
 /*            6/23/2025  JS       Change for BEV System_Consideration_2.(MET-S_ADBZR-CSTD-0-05-A-C0)                                 */
+/*  5.9.0    12/09/2025  ED       Change for BEV System_Consideration (MET-S_ADBZR-CSTD-0-06-A-C0.xlsx)                              */
 /*                                                                                                                                   */
 /*  * ZS   = Zenjiro Shamoto, NTTD MSE                                                                                               */
 /*  * DS   = Daisuke Suzuki, NTTD MSE                                                                                                */
@@ -216,5 +202,6 @@ static U4      u4_s_AlertS_seaBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
 /*  * RO   = Ryo Oohashi, KSE                                                                                                        */
 /*  * HY   = Haruki Yagi, KSE                                                                                                        */
 /*  * JS   = Jun Sugiyama, KSE                                                                                                       */
+/*  * ED   = Emoh Dagasdas, DTPH                                                                                                     */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

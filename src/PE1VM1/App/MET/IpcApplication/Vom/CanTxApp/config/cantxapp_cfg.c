@@ -63,6 +63,7 @@
 /*===================================================================================================================================*/
 void    vd_g_CanTxAppCfgInit(void)
 {
+    vd_g_CanTxAppAVN1S03_Init();
     vd_g_CanTxAppMET1S02_Init();
     vd_g_CanTxAppMET1S27_Init();
     vd_g_CanTxAppMET1S29_Init();
@@ -78,6 +79,7 @@ void    vd_g_CanTxAppCfgInit(void)
 /*===================================================================================================================================*/
 void    vd_g_CanTxAppCfgMainTask(void)
 {
+    vd_g_CanTxAppAVN1S03_Send();
     vd_g_CanTxAppMET1S02_Send();
     vd_g_CanTxAppMET1S27_Send();
     vd_g_CanTxAppMET1S29_Send();
@@ -99,6 +101,7 @@ void    vd_g_CanTxAppCfgMainTask(void)
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
+/*  BEV-1    12/12/2025  YN       Add AVN1S03 transmission process and initialization process.                                       */
 /*                                                                                                                                   */
 /*  * YN   = Yujiro Nagaya, Denso Techno                                                                                             */
 /*                                                                                                                                   */

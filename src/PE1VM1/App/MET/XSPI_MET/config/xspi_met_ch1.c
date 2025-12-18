@@ -49,17 +49,11 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
-/*-----------------------------------------------------------------------------------------------------------------------------------*/  
-
-#if 0   /* BEV Rebase provisionally */
-static U1             u1_s_preflynop;             /*  FLYNOP Previous RxValue  */
-#endif   /* BEV Rebase provisionally */
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if 0   /* BEV Rebase provisionally */
-static inline void    vd_s_XSpiCanTx_FLYNOP(const U4* u4_ap_pck_rx);
-#endif   /* BEV Rebase provisionally */
+static inline void    vd_s_XSpiCanTx_AVN1S03(const U4 u4_a_TX_STS, const U4* u4_ap_tx_data);
 static inline void    vd_s_XSpiCanTx_MET1S02(const U4 u4_a_TX_STS, const U4* u4_ap_tx_data);
 static inline void    vd_s_XSpiCanTx_MET1S27(const U4 u4_a_TX_STS, const U4* u4_ap_tx_data);
 static inline void    vd_s_XSpiCanTx_MET1S29(const U4 u4_a_TX_STS, const U4* u4_ap_tx_data);
@@ -80,10 +74,6 @@ static inline void    vd_s_XSpiCanTx_MET1S70(const U4 u4_a_TX_STS, const U4* u4_
 /*===================================================================================================================================*/
 void    vd_g_XSpiCfgInitCh1(void)
 {
-#if 0   /* BEV Rebase provisionally */
-    u1_s_preflynop   = (U1)0U;
-
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -94,17 +84,13 @@ void    vd_g_XSpiCfgInitCh1(void)
 /*===================================================================================================================================*/
 void    vd_g_XSpiCfgPduRxCh1(const U4 * u4_ap_PDU_RX)
 {
-#if 0   /* BEV Rebase provisionally */
-
-    vd_s_XSpiCanTx_FLYNOP(&u4_ap_PDU_RX[47]);
-
-#endif   /* BEV Rebase provisionally */
-    vd_s_XSpiCanTx_MET1S02(u4_ap_PDU_RX[700],&u4_ap_PDU_RX[769]);
-    vd_s_XSpiCanTx_MET1S27(u4_ap_PDU_RX[700],&u4_ap_PDU_RX[721]);
-    vd_s_XSpiCanTx_MET1S29(u4_ap_PDU_RX[700],&u4_ap_PDU_RX[723]);
-    vd_s_XSpiCanTx_MET1S30(u4_ap_PDU_RX[701],&u4_ap_PDU_RX[791]);
-    vd_s_XSpiCanTx_MET1S62(u4_ap_PDU_RX[700],&u4_ap_PDU_RX[737]);
-    vd_s_XSpiCanTx_MET1S70(u4_ap_PDU_RX[700],&u4_ap_PDU_RX[739]);
+    vd_s_XSpiCanTx_AVN1S03(u4_ap_PDU_RX[0],&u4_ap_PDU_RX[47]);
+    vd_s_XSpiCanTx_MET1S02(u4_ap_PDU_RX[0],&u4_ap_PDU_RX[69]);
+    vd_s_XSpiCanTx_MET1S27(u4_ap_PDU_RX[0],&u4_ap_PDU_RX[21]);
+    vd_s_XSpiCanTx_MET1S29(u4_ap_PDU_RX[0],&u4_ap_PDU_RX[23]);
+    vd_s_XSpiCanTx_MET1S30(u4_ap_PDU_RX[1],&u4_ap_PDU_RX[91]);
+    vd_s_XSpiCanTx_MET1S62(u4_ap_PDU_RX[0],&u4_ap_PDU_RX[37]);
+    vd_s_XSpiCanTx_MET1S70(u4_ap_PDU_RX[0],&u4_ap_PDU_RX[39]);
 }
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -117,25 +103,23 @@ void    vd_g_XSpiCfgPduRxCh1(const U4 * u4_ap_PDU_RX)
 /*                                                                                                                                   */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 
-#if 0   /* BEV Rebase provisionally */
 /*===================================================================================================================================*/
-/*  static inline void    vd_s_XSpiCanTx_FLYNOP(U4 * u4_ap_pdu_tx)                                                                   */
+/*  static inline void    vd_s_XSpiCanTx_AVN1S03(const U4 u4_a_TX_STS, const U4 * u4_ap_tx_data)                                     */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:     u4_ap_pck_rx                                                                                                      */
-/*  Return:         -                                                                                                                */
+/*  Arguments:     u4_a_TX_STS                                                                                                       */
+/*                 u4_ap_tx_data                                                                                                     */
+/*  Return:                                                                                                                          */
 /*===================================================================================================================================*/
-static inline void    vd_s_XSpiCanTx_FLYNOP(const U4 * u4_ap_pck_rx)
+static inline void    vd_s_XSpiCanTx_AVN1S03(const U4 u4_a_TX_STS, const U4 * u4_ap_tx_data)
 {
-    U1 u1_t_rxdata;
+    U1 u1_t_txsts;
 
-    u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[0], (U1)29U, (U1)2U);
+    u1_t_txsts = u1_XSPI_MET_READ__BIT(u4_a_TX_STS, (U1)20U, (U1)2U);
 
-    if (u1_t_rxdata != u1_s_preflynop) {
-        vd_g_VdsCIReqTx((U1)VDS_CI_SW_FLYNOP, u1_t_rxdata);
+    if (u1_t_txsts == (U1)XSPI_CANTX_VALID) {
+        vd_g_CanTxAppAVN1S03_Put(&u4_ap_tx_data[0], (U1)XSPI_CANTX_BUFSIZE8);
     }
-    u1_s_preflynop = u1_t_rxdata;
 }
-#endif   /* BEV Rebase provisionally */
 
 /*===================================================================================================================================*/
 /*  static inline void    vd_s_XSpiCanTx_MET1S02(const U4 u4_a_TX_STS, const U4 * u4_ap_tx_data)                                     */
@@ -294,6 +278,7 @@ static inline void    vd_s_XSpiCanTx_MET1S70(const U4 u4_a_TX_STS, const U4 * u4
 /*           07/08/2025  TH       Change for BEV System_Consideration_2.(MET-C_HCSBSW-CSTD-0-02-A-C0)                                */
 /*           10/22/2025  TS       Change for BEV rebase.                                                                             */
 /*           11/13/2025  YN       Change for BEV rebase.(Add CanTxApp)                                                               */
+/*           12/08/2025  YN       Change for BEV rebase.(Add CanTxApp_2)                                                             */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * KM   = Keisuke Mashita, Denso Techno                                                                                           */

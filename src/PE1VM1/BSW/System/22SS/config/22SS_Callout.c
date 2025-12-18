@@ -30,6 +30,7 @@
 /* Complex Device Driver */
 #include "drec_tx.h"
 #include "sound_cri_mgr.h"
+#include "fwush.h"
 
 /* Application           */
 #include "dimmer.h"
@@ -106,7 +107,8 @@ void vd_g_22SSCallout_StaBonInit(void)
         &vd_g_HdimmgrBonInit,
         &vd_g_HudImgAdjInit,
         &vd_g_DateSIMETInit,
-        &vd_g_CanTxAppInit
+        &vd_g_CanTxAppInit,
+        &vd_g_FwushInit
     };
 
     U1    u1_t_rslt;
@@ -167,7 +169,8 @@ void vd_g_22SSCallout_StaRstInit(void)
         &vd_g_HdimmgrWkRstInit,
         &vd_g_HudImgAdjInit,
         &vd_g_DateSIMETInit,
-        &vd_g_CanTxAppInit
+        &vd_g_CanTxAppInit,
+        &vd_g_FwushInit
     };
 
     U1    u1_t_rslt;
@@ -228,7 +231,8 @@ void vd_g_22SSCallout_StaWkupInit(void)
         &vd_g_HdimmgrWkRstInit,
         &vd_g_HudImgAdjInit,
         &vd_g_DateSIMETInit,
-        &vd_g_CanTxAppInit
+        &vd_g_CanTxAppInit,
+        &vd_g_FwushInit
     };
 
     U1    u1_t_rslt;

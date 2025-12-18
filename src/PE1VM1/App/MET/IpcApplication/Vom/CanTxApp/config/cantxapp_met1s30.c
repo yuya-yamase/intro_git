@@ -32,6 +32,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#define CANTXAPP_PBDMSW_MAX      (1U)
 #define CANTXAPP_PBDMSW_OFF      (0U)
 #define CANTXAPP_PBDMSW_ON       (1U)
 
@@ -47,7 +48,9 @@
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static U4    u4_sp_cantxapp_met1s30data[CANTXAPP_NBYTE_PAYLOAD8];
+static U1    u1_s_cantxapp_pbdmsw_cnt;
 static U1    u1_s_cantxapp_pbdmsw_req;
+static U1    u1_s_cantxapp_pbdmsw_pre;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
@@ -96,7 +99,9 @@ void    vd_g_CanTxAppMET1S30_Init(void)
         u4_sp_cantxapp_met1s30data[u4_t_loop] = (U4)0U;
     }
 
+    u1_s_cantxapp_pbdmsw_cnt = (U1)U1_MAX;
     u1_s_cantxapp_pbdmsw_req = (U1)CANTXAPP_PBDMSW_OFF;
+    u1_s_cantxapp_pbdmsw_pre = (U1)CANTXAPP_PBDMSW_OFF;
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_CanTxAppMET1S30_Send(void)                                                                                          */
@@ -610,11 +615,32 @@ static void    vd_s_CanTxAppSend_PBDMSW(void)
     U1                 u1_t_tx;
     U1                 u1_t_pre_tx;
 
-    u1_t_tx = (U1)CANTXAPP_PBDMSW_OFF;
+    if(u1_s_cantxapp_pbdmsw_cnt < (U1)U1_MAX){
+        u1_s_cantxapp_pbdmsw_cnt++;
+    }
 
-    if(u1_s_cantxapp_pbdmsw_req == (U1)CANTXAPP_PBDMSW_ON){
+    if(u1_s_cantxapp_pbdmsw_cnt >= (U1)CANTXAPP_HOLD_TIME){
+        if((u1_s_cantxapp_pbdmsw_pre == (U1)CANTXAPP_PBDMSW_OFF) &&
+           (u1_s_cantxapp_pbdmsw_req == (U1)CANTXAPP_PBDMSW_ON )){
+            u1_s_cantxapp_pbdmsw_cnt = (U1)0U;
+        }
+        else{
+            u1_s_cantxapp_pbdmsw_cnt = (U1)U1_MAX;
+        }
+    }
+
+    if(u1_s_cantxapp_pbdmsw_cnt < (U1)CANTXAPP_HOLD_TIME){
         u1_t_tx = (U1)CANTXAPP_PBDMSW_ON;
     }
+    else if(u1_s_cantxapp_pbdmsw_req <= (U1)CANTXAPP_PBDMSW_MAX){
+        u1_t_tx = u1_s_cantxapp_pbdmsw_req;
+    }
+    else{
+        u1_s_cantxapp_pbdmsw_req = (U1)CANTXAPP_PBDMSW_OFF;
+        u1_t_tx = (U1)CANTXAPP_PBDMSW_OFF;
+    }
+    u1_s_cantxapp_pbdmsw_pre = u1_t_tx;
+
     u1_t_pre_tx = (U1)0U;
 
     (void)Com_ReceiveSignal(ComConf_ComSignal_PBDMSW, &u1_t_pre_tx);
@@ -682,6 +708,7 @@ static void    vd_s_CanTxAppSend_MOSS(void)
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
+/*  BEV-1    12/08/2025  YN       Changed function of PBDMSW transmission process.                                                   */
 /*                                                                                                                                   */
 /*  * YN   = Yujiro Nagaya, Denso Techno                                                                                             */
 /*                                                                                                                                   */
