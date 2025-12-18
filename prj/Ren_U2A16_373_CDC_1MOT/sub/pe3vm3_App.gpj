@@ -18,11 +18,17 @@
 ../../src/PE3VM3/App/Central/esw/EthSwt/Config/EthSwt_Data.c
 ../../src/PE3VM3/App/Central/esw/EthSwt/Config/EthSwt_SWIC_Cfg.c
 ../../src/PE3VM3/App/Central/esw/EthSwt/Core/EthSwt_SWIC_Init.c
+../../src/PE3VM3/App/Central/esw/EthSwt/Core/EthSwt_SWIC_IntErr.c
 ../../src/PE3VM3/App/Central/esw/EthSwt/Core/EthSwt_SWIC_Link.c
+../../src/PE3VM3/App/Central/esw/EthSwt/Core/EthSwt_SWIC_MIB.c
 ../../src/PE3VM3/App/Central/esw/EthSwt/Core/EthSwt_SWIC_Port.c
 ../../src/PE3VM3/App/Central/esw/EthSwt/Core/EthSwt_SWIC_PWR.c
+../../src/PE3VM3/App/Central/esw/EthSwt/Core/EthSwt_SWIC_Qci.c
 ../../src/PE3VM3/App/Central/esw/EthSwt/Core/EthSwt_SWIC_Reg.c
+../../src/PE3VM3/App/Central/esw/EthSwt/Core/EthSwt_SWIC_RegAccess.c
+../../src/PE3VM3/App/Central/esw/EthSwt/Core/EthSwt_SWIC_RstDtct.c
 ../../src/PE3VM3/App/Central/esw/EthSwt/Core/EthSwt_SWIC_Spi.c
+../../src/PE3VM3/App/Central/esw/EthSwt/Core/EthSwt_SWIC_SQI.c
 ../../src/PE3VM3/App/Central/esw/EthSwt/Core/EthSwt_SWIC_STM.c
 ../../src/PE3VM3/App/Central/esw/EthSwt/Core/EthSwt_SWIC_Time.c
 ../../src/PE3VM3/App/Central/esw/EthSwt/EthSwt_SWIC.c
@@ -61,6 +67,6 @@
 
 # ----------------------------------------------------------------------------------------------------------------------------------
 # ghsprj version 1-0-0
-# Date generated: 2025/11/27 15:24:34
+# Date generated: 2025/12/18 14:35:13
 # ----------------------------------------------------------------------------------------------------------------------------------
 

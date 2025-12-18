@@ -66,11 +66,12 @@
     -I../../src/PE1VM1/App/MET/Platform/ComplexDriver/SoundMiddle/data_TYT
     -I../../src/PE1VM1/App/MET/Platform/ComplexDriver/SoundMiddle/include/U2Ax
     -I../../src/PE1VM1/App/MET/Platform/ComplexDriver/SoundMiddle/scc
+    -I../../src/PE1VM1/App/MET/Platform/Fwush/scc
     -I../../src/PE1VM1/App/MET/XSPI_MET/config
     -I../../src/PE1VM1/App/MET/XSPI_MET/scc
 
 # ----------------------------------------------------------------------------------------------------------------------------------
 # ghsprj version 1-0-0
-# Date generated: 2025/12/05 11:16:03
+# Date generated: 2025/12/18 14:35:04
 # ----------------------------------------------------------------------------------------------------------------------------------
 
