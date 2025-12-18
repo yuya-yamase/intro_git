@@ -9,12 +9,13 @@ primaryTarget=v800_standalone.tgt
     :macro=OBJ_DIR=obj
     :macro=OUT_DIR=dst
 
-    :optionsFile=${CMN_DIR}/common.opt
+    :optionsFile=../../ghs_ccal_rh850g4mh.opt
+    -object_dir=obj
 
     :macro=GSR_CLI="gsrec -sort -S3 -noS5 -bytes 16"
 
     -T ${ROOT_DIR}/scc/rh850u2a16_usbrpg.ld
-    -o USBRPG.elf
+    -o dst/USBRPG.elf
 
     :postexec="${GSR_CLI} -o dst/USBRPG.mot dst/USBRPG.elf"
     :postexec="gmemfile -o dst/USBRPG.bin dst/USBRPG.elf"
