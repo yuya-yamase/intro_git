@@ -284,7 +284,7 @@ static void vd_s_PwrCtrl_Sip_Write_WAKEUP_STAT(void);
 /* SIP通常起動制御 */
 #define vd_s_PwrCtrlSipOnVB33SIPON()       (vd_s_PwrCtrl_Sip_DioWriteCheck(&u4_s_PwrCtrl_Sip_On_VB33SIPON_Tim, (U1)PWRCTRL_SIP_ON_T_VB33_SIP_ON,(U1)PWRCTRL_CFG_PRIVATE_PORT_VB33_SIP, (Dio_LevelType)MCU_DIO_HIGH))
 #define vd_s_PwrCtrlSipOnLOWPOWERON1()     (vd_s_PwrCtrl_Sip_DioWriteCheck(&u4_s_PwrCtrl_Sip_On_LOPWON_S1_Tim, (U1)PWRCTRL_SIP_ON_T_LOW_POWER_ON_LO,(U1)PWRCTRL_CFG_PRIVATE_PORT_LOW_POWER, (Dio_LevelType)MCU_DIO_LOW))
-#define vd_s_PwrCtrlSipOnVB33SIPFREQ1()    (vd_s_PwrCtrl_Sip_DioFreqAct(&u4_s_PwrCtrl_Sip_On_SIPFRQ_S1_Tim, (U1)PWRCTRL_SIP_ON_T_VB33_SIP_FREQ_LO,(U1)PWM_CH_01_DDC_SIP_FREQ, (U2)PWRCTRL_SIP_PWM_PERIOD_OFF, (U2)PWRCTRL_SIP_PWM_DUTYCYCLE_OFF))
+#define vd_s_PwrCtrlSipOnVB33SIPFREQ1()    (vd_s_PwrCtrl_Sip_DioFreqAct(&u4_s_PwrCtrl_Sip_On_SIPFRQ_S1_Tim, (U1)PWRCTRL_SIP_ON_T_VB33_SIP_FREQ_LO,(U1)PWM_CH_01_DDC_SIP_FREQ, (U2)PWRCTRL_SIP_PWM_PERIOD_DEF, (U2)PWRCTRL_SIP_PWM_DUTYCYCLE_MAX))
 #define vd_s_PwrCtrlSipOnPMPWREN1()        (vd_s_PwrCtrl_Sip_DioWriteCheck(&u4_s_PwrCtrl_Sip_On_PM_PWR_EN_N_Step1_Tim, (U1)PWRCTRL_SIP_ON_T_PMPWREN_STEP1_LO,(U1)PWRCTRL_CFG_PRIVATE_PORT_PM_PWR_EN, (Dio_LevelType)MCU_DIO_HIGH))
 #define vd_s_PwrCtrlSipOnPMICFASTPOFF1()   (vd_s_PwrCtrl_Sip_DioWriteCheck(&u4_s_PwrCtrl_Sip_On_PMIC_FAST_POFF_EN_N_Step1_Tim, (U1)PWRCTRL_SIP_ON_T_PMICFASTPOFF_LO,(U1)PWRCTRL_CFG_PRIVATE_PORT_PMIC_FAST_POFF_EN, (Dio_LevelType)MCU_DIO_LOW))
 #define vd_s_PwrCtrlSipOnMMOFFREQ()        (vd_s_PwrCtrl_Sip_DioWriteCheck(&u4_s_PwrCtrl_Sip_On_MM_OFF_REQ_Step1_Tim, (U1)PWRCTRL_SIP_ON_T_MM_OFF_REQ,(U1)PWRCTRL_CFG_PRIVATE_PORT_MM_OFF_REQ, (Dio_LevelType)MCU_DIO_LOW))
@@ -314,7 +314,7 @@ static void vd_s_PwrCtrl_Sip_Write_WAKEUP_STAT(void);
 #define vd_s_PwrCtrlSipOffValChkSOCRSOUT() (vd_s_PwrCtrl_Sip_DioReadCheck(&u4_s_PwrCtrl_Sip_Off_SOC_RESOUT_N_Chk_Tim, &u4_s_PwrCtrl_Sip_Off_SOC_RESOUT_N_Wait_Tim, (U1)PWRCTRL_SIP_OFF_T_SOC_RESOUT_N,(U1)PWRCTRL_CFG_PRIVATE_KIND_SOC_RESOUT_N, (Dio_LevelType)MCU_DIO_LOW))
 #define vd_s_PwrCtrlSipOffValChkSAILROUT() (vd_s_PwrCtrl_Sip_DioReadCheck(&u4_s_PwrCtrl_Sip_Off_SAIL_RESOUT_N_Chk_Tim, &u4_s_PwrCtrl_Sip_Off_SAIL_RESOUT_N_Wait_Tim, (U1)PWRCTRL_SIP_OFF_T_SAIL_RESOUT_N,(U1)PWRCTRL_CFG_PRIVATE_KIND_SAIL_RESOUT_N, (Dio_LevelType)MCU_DIO_LOW))
 #define vd_s_PwrCtrlSipOffValChkPOFFCOMP() (vd_s_PwrCtrl_Sip_DioReadCheck(&u4_s_PwrCtrl_Sip_Off_POFF_COMPLETE_N_Chk_Tim, &u4_s_PwrCtrl_Sip_Off_POFF_COMPLETE_N_Wait_Tim, (U1)PWRCTRL_SIP_OFF_T_POFF_COMPLETE_N,(U1)PWRCTRL_CFG_PRIVATE_KIND_POFF_COMPLETE_N, (Dio_LevelType)MCU_DIO_LOW))
-#define vd_s_PwrCtrlSipOffVB33SIPFREQ()    (vd_s_PwrCtrl_Sip_DioFreqAct(&u4_s_PwrCtrl_Sip_Off_VB33_SIP_FREQ_Tim, (U1)PWRCTRL_SIP_OFF_T_VB33_SIP_FREQ,(U1)PWM_CH_01_DDC_SIP_FREQ, (U2)PWRCTRL_SIP_PWM_PERIOD_OFF, (U2)PWRCTRL_SIP_PWM_DUTYCYCLE_OFF))
+#define vd_s_PwrCtrlSipOffVB33SIPFREQ()    (vd_s_PwrCtrl_Sip_DioFreqAct(&u4_s_PwrCtrl_Sip_Off_VB33_SIP_FREQ_Tim, (U1)PWRCTRL_SIP_OFF_T_VB33_SIP_FREQ,(U1)PWM_CH_01_DDC_SIP_FREQ, (U2)PWRCTRL_SIP_PWM_PERIOD_DEF, (U2)PWRCTRL_SIP_PWM_DUTYCYCLE_MAX))
 #define vd_s_PwrCtrlSipOffVB33SIPON()      (vd_s_PwrCtrl_Sip_DioWriteCheck(&u4_s_PwrCtrl_Sip_Off_VB33_SIP_ON_Tim, (U1)PWRCTRL_SIP_OFF_T_VB33_SIP_ON,(U1)PWRCTRL_CFG_PRIVATE_PORT_VB33_SIP, (Dio_LevelType)MCU_DIO_LOW))
 #define vd_s_PwrCtrlSipOffLOWPOWERON()     (vd_s_PwrCtrl_Sip_DioWriteCheck(&u4_s_PwrCtrl_Sip_Off_LOW_POWER_ON_Tim, (U1)PWRCTRL_SIP_OFF_T_LOW_POWER_ON,(U1)PWRCTRL_CFG_PRIVATE_PORT_LOW_POWER, (Dio_LevelType)MCU_DIO_LOW))
 #define vd_s_PwrCtrlSipOffPMPWREN()        (vd_s_PwrCtrl_Sip_DioWriteCheck(&u4_s_PwrCtrl_Sip_Off_PM_PWR_EN_N_Tim, (U1)PWRCTRL_SIP_OFF_T_PM_PWR_EN_N,(U1)PWRCTRL_CFG_PRIVATE_PORT_PM_PWR_EN, (Dio_LevelType)MCU_DIO_LOW))
@@ -328,7 +328,7 @@ static void vd_s_PwrCtrl_Sip_Write_WAKEUP_STAT(void);
 #define vd_s_PwrCtrlSipStbySTRWAKE()       (vd_s_PwrCtrl_Sip_DioWriteCheck(&u4_s_PwrCtrl_Sip_Stby_STR_WAKE_Tim, (U1)PWRCTRL_SIP_STBY_T_STR_WAKE,(U1)PWRCTRL_CFG_PRIVATE_PORT_STR_WAKE, (Dio_LevelType)MCU_DIO_LOW))
 #define vd_s_PwrCtrlSipStbyValChkMMSTBY()  (vd_s_PwrCtrl_Sip_DioReadCheck(&u4_s_PwrCtrl_Sip_Stby_MM_STBY_N_Chk_Tim, &u4_s_PwrCtrl_Sip_Stby_MM_STBY_N_Wait_Tim, (U1)PWRCTRL_SIP_STBY_T_MM_STBY,(U1)PWRCTRL_CFG_PRIVATE_KIND_MM_STBY_N, (Dio_LevelType)MCU_DIO_LOW))
 #define vd_s_PwrCtrlSipStbyValChkAOSS()    (vd_s_PwrCtrl_Sip_DioReadCheck(&u4_s_PwrCtrl_Sip_Stby_AOSS_Tim, &u4_s_PwrCtrl_Sip_Stby_AOSS_Wait_Tim, (U1)PWRCTRL_SIP_STBY_T_AOSS,(U1)PWRCTRL_CFG_PRIVATE_KIND_AOSS_SLP_ENTRY_EXIT, (Dio_LevelType)MCU_DIO_HIGH))
-#define vd_s_PwrCtrlSipStbyVB33SIPFREQ()   (vd_s_PwrCtrl_Sip_DioFreqAct(&u4_s_PwrCtrl_Sip_Stby_FREQ_Tim, (U1)PWRCTRL_SIP_STBY_T_VB33_SIP_FREQ,(U1)PWM_CH_01_DDC_SIP_FREQ, (U2)PWRCTRL_SIP_PWM_PERIOD_OFF, (U2)PWRCTRL_SIP_PWM_DUTYCYCLE_OFF))
+#define vd_s_PwrCtrlSipStbyVB33SIPFREQ()   (vd_s_PwrCtrl_Sip_DioFreqAct(&u4_s_PwrCtrl_Sip_Stby_FREQ_Tim, (U1)PWRCTRL_SIP_STBY_T_VB33_SIP_FREQ,(U1)PWM_CH_01_DDC_SIP_FREQ, (U2)PWRCTRL_SIP_PWM_PERIOD_DEF, (U2)PWRCTRL_SIP_PWM_DUTYCYCLE_MAX))
 #define vd_s_PwrCtrlSipStbyLOWPOWERON()    (vd_s_PwrCtrl_Sip_DioWriteCheck(&u4_s_PwrCtrl_Sip_Stby_LOW_POWER_ON_Tim, (U1)PWRCTRL_SIP_STBY_T_LOW_POWER_ON,(U1)PWRCTRL_CFG_PRIVATE_PORT_LOW_POWER, (Dio_LevelType)MCU_DIO_LOW))
 /* SIP電源強制OFFシーケンス */
 #define vd_s_PwrCtrlSipFOffPMICFASTPOFF1()   (vd_s_PwrCtrl_Sip_DioWriteCheck(&u4_s_PwrCtrl_Sip_ForcedOff_PMICFASTPOFF_Tim, (U1)PWRCTRL_SIP_FOFF_T_PMICFASTPOFF,(U1)PWRCTRL_CFG_PRIVATE_PORT_PMIC_FAST_POFF_EN, (Dio_LevelType)MCU_DIO_LOW))
@@ -336,7 +336,7 @@ static void vd_s_PwrCtrl_Sip_Write_WAKEUP_STAT(void);
 #define vd_s_PwrCtrlSipFOffPMRESINHI()       (vd_s_PwrCtrl_Sip_DioWriteCheck(&u4_s_PwrCtrl_Sip_ForcedOff_PMRESIN_HiChk_Tim, (U1)PWRCTRL_SIP_FOFF_T_PMRESIN_HI,(U1)PWRCTRL_CFG_PRIVATE_PORT_PM_RESIN, (Dio_LevelType)MCU_DIO_HIGH))
 #define vd_s_PwrCtrlSipFOffPMRESINLO()       (vd_s_PwrCtrl_Sip_DioWriteCheck(&u4_s_PwrCtrl_Sip_ForcedOff_PMRESIN_LoChk_Tim, (U1)PWRCTRL_SIP_FOFF_T_PMRESIN_LO,(U1)PWRCTRL_CFG_PRIVATE_PORT_PM_RESIN, (Dio_LevelType)MCU_DIO_LOW))
 #define vd_s_PwrCtrlSipFOffValChkPOFFCOMP2() (vd_s_PwrCtrl_Sip_DioReadCheck(&u4_s_PwrCtrl_Sip_ForcedOff_POFF_COMPLETE_N_Chk_Tim, &u4_s_PwrCtrl_Sip_ForcedOff_POFFCOMP_Wait_Step4_Tim, (U1)PWRCTRL_SIP_FOFF_T_POFF_COMPLETE_N,(U1)PWRCTRL_CFG_PRIVATE_KIND_POFF_COMPLETE_N, (Dio_LevelType)MCU_DIO_LOW))
-#define vd_s_PwrCtrlSipFOffVB33SIPFREQ()     (vd_s_PwrCtrl_Sip_DioFreqAct(&u4_s_PwrCtrl_Sip_ForcedOff_VB33_SIP_FREQ_Tim, (U1)PWRCTRL_SIP_FOFF_T_VB33_SIP_FREQ,(U1)PWM_CH_01_DDC_SIP_FREQ, (U2)PWRCTRL_SIP_PWM_PERIOD_OFF, (U2)PWRCTRL_SIP_PWM_DUTYCYCLE_OFF))
+#define vd_s_PwrCtrlSipFOffVB33SIPFREQ()     (vd_s_PwrCtrl_Sip_DioFreqAct(&u4_s_PwrCtrl_Sip_ForcedOff_VB33_SIP_FREQ_Tim, (U1)PWRCTRL_SIP_FOFF_T_VB33_SIP_FREQ,(U1)PWM_CH_01_DDC_SIP_FREQ, (U2)PWRCTRL_SIP_PWM_PERIOD_DEF, (U2)PWRCTRL_SIP_PWM_DUTYCYCLE_MAX))
 #define vd_s_PwrCtrlSipFOffLOWPOWERON()      (vd_s_PwrCtrl_Sip_DioWriteCheck(&u4_s_PwrCtrl_Sip_ForcedOff_LOW_POWER_ON_Tim, (U1)PWRCTRL_SIP_FOFF_T_LOW_POWER_ON,(U1)PWRCTRL_CFG_PRIVATE_PORT_LOW_POWER, (Dio_LevelType)MCU_DIO_LOW))
 #define vd_s_PwrCtrlSipFOffVB33SIPON()       (vd_s_PwrCtrl_Sip_DioWriteCheck(&u4_s_PwrCtrl_Sip_ForcedOff_VB33_SIP_ON_Tim, (U1)PWRCTRL_SIP_FOFF_T_VB33_SIP_ON,(U1)PWRCTRL_CFG_PRIVATE_PORT_VB33_SIP, (Dio_LevelType)MCU_DIO_LOW))
 #define vd_s_PwrCtrlSipFOffPMPWREN()         (vd_s_PwrCtrl_Sip_DioWriteCheck(&u4_s_PwrCtrl_Sip_ForcedOff_PM_PWR_EN_N_Tim, (U1)PWRCTRL_SIP_FOFF_T_PM_PWR_EN_N,(U1)PWRCTRL_CFG_PRIVATE_PORT_PM_PWR_EN, (Dio_LevelType)MCU_DIO_LOW))
@@ -1298,6 +1298,7 @@ static void vd_s_PwrCtrlSipOnStep1( void )
         /* LOW-POWER-ON = Lo(SIP電源投入と合わせてLo論理確定)       */
         vd_s_PwrCtrlSipOnLOWPOWERON1();             /* STEP1-2      */
         /* VB33-SIP-FREQ = Lo(SIP電源投入と合わせてLo論理確定)      */
+        /* VB33-SIP-FREQは位相反転するため、DutyCycle=100%にすることでLo設定を実現する */
         vd_s_PwrCtrlSipOnVB33SIPFREQ1();            /* STEP1-3      */
         /* PM_PWR_EN_N = Hi(SIP電源投入と合わせてHi論理確定)        */
         vd_s_PwrCtrlSipOnPMPWREN1();                /* STEP1-4      */
@@ -1941,6 +1942,7 @@ static void vd_s_PwrCtrlSipOffStep4( void )
 static void vd_s_PwrCtrlSipOffStep5( void )
 {
     if(u1_s_PwrCtrl_Sip_Off_Step == (U1)PWRCTRL_COMMON_PROCESS_STEP5){
+        /* VB33-SIP-FREQは位相反転するため、DutyCycle=100%にすることでLo設定を実現する */
         vd_s_PwrCtrlSipOffVB33SIPFREQ(); /* STEP5-1 */
 
         /* STEP5-1が完了していれば次のSTEPに進める */
@@ -2075,6 +2077,7 @@ static void vd_s_PwrCtrlSipStbyMainFunc( void )
     }
     
     if(u1_s_PwrCtrl_Sip_Stby_Step == (U1)PWRCTRL_COMMON_PROCESS_STEP4){
+        /* VB33-SIP-FREQは位相反転するため、DutyCycle=100%にすることでLo設定を実現する */
         vd_s_PwrCtrlSipStbyVB33SIPFREQ(); /* STEP4-1 */
             
         /* STEP4-1が完了していれば次のSTEPに進める */
@@ -2225,6 +2228,7 @@ static void vd_s_PwrCtrlSipForcedOffStep3( void )
 static void vd_s_PwrCtrlSipForcedOffStep4( void )
 {
     if(u1_s_PwrCtrl_Sip_ForcedOff_Step == (U1)PWRCTRL_COMMON_PROCESS_STEP4){
+        /* VB33-SIP-FREQは位相反転するため、DutyCycle=100%にすることでLo設定を実現する */
         vd_s_PwrCtrlSipFOffVB33SIPFREQ(); /* STEP4-1 */
 
         /* STEP4-1が完了していれば次のSTEPに進める */
