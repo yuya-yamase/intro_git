@@ -346,6 +346,7 @@ static U1       u1_s_DateSITimSyncRoutine(U4 * u4p_a_offstd_now)
     U1                u1_t_calendar;
     U1                u1_t_range_is_ok;
     U1                u1_t_sync_range_is_ok;
+    U1                u1_t_result;
     ST_DATESI_TIM_RX  st_t_tim_rx;
 
     st_t_tim_rx.u1_valid                     = (U1)FALSE;
@@ -355,6 +356,7 @@ static U1       u1_s_DateSITimSyncRoutine(U4 * u4p_a_offstd_now)
     st_t_tim_rx.u1p_time[HHMMSS_24H_TIME_HR] = (U1)U1_MAX;
     u1_t_adj_act                             = (U1)FALSE;
     u1_t_rxsts                               = u1_g_DateSITimCfgCanRx(&st_t_tim_rx);
+    u1_t_result                              = (U1)FALSE;
 
     u1_t_range_is_ok      = u1_s_DateSITimClkRangeCheck(st_t_tim_rx);
     u1_t_sync_range_is_ok = u1_s_DateSITimClkSyncCheck(st_t_tim_rx);
@@ -380,9 +382,6 @@ static U1       u1_s_DateSITimSyncRoutine(U4 * u4p_a_offstd_now)
         u1_s_datesi_tim_sync   = (U1)TRUE;
         if(u1_t_calendar == (U1)DATESI_CALEXIST_ON){
             vd_g_DateSICalSyncAct();
-        }
-        else{
-            vd_g_DateSIComSetCmp();
         }
     }
 
@@ -413,8 +412,9 @@ static U1       u1_s_DateSITimSyncRoutine(U4 * u4p_a_offstd_now)
     (*u4p_a_offstd_now)  = u4_s_DateSITimUpdateNow(u4_t_now, s4_s_datesi_tim_ofst);
 
     if(u4_t_adj != (U4)HHMMSS_UNKNWN){
-        vd_g_DateSITimAdjustOwnClk(u4_t_adj);
+        u1_t_result = u1_g_DateSITimAdjustOwnClk(u4_t_adj);
     }
+    vd_g_DateSIComSetCmp(u1_t_result,(U1)DATESI_COM_KIND_TIM);
 
     return(u1_t_adj_act);
 }
@@ -713,7 +713,7 @@ void            vd_g_DateSITimExecTmSet(void)
 
     u4_t_hhmmss_zerorst = u4_s_DateSITimUpdateNow(u4_t_hhmmss_zerorst, s4_t_offset);
 
-    vd_g_DateSITimAdjustOwnClk(u4_t_hhmmss_zerorst);
+    (void)u1_g_DateSITimAdjustOwnClk(u4_t_hhmmss_zerorst);
 
     u4_t_hhmmss_diag = u4_g_DateclkHhmmss24h();
     u4_t_hhmmss_diag = u4_s_DateSITimUpdateNow(u4_t_hhmmss_diag, s4_s_datesi_tim_ofst);
@@ -922,7 +922,7 @@ void            vd_g_DateSITimClockUpdate(void)
 
         u4_t_hhmmss_update = u4_s_DateSITimUpdateNow(u4_s_datesi_tim_adj_clock, s4_t_offset);
 
-        vd_g_DateSITimAdjustOwnClk(u4_t_hhmmss_update);
+        (void)u1_g_DateSITimAdjustOwnClk(u4_t_hhmmss_update);
 
         u4_t_hhmmss_diag = u4_g_DateclkHhmmss24h();
         u4_t_hhmmss_diag = u4_s_DateSITimUpdateNow(u4_t_hhmmss_diag, s4_s_datesi_tim_ofst);

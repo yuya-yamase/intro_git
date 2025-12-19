@@ -20,6 +20,7 @@
 #include "datesi_tim.h"
 #include "datesi_cal.h"
 #include "date_clk.h"
+#include "datesi_cfg_private.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -97,7 +98,7 @@ static ST_DATESI_COMMAND_DATA         st_s_command_data;
 static ST_XSPI_IVI_CLOCK_DISP_DATA    st_s_clock_disp_data;
 static U1                             u1_s_datesi_com_req_act;
 static U1                             u1_s_datesi_com_send_act;
-static U1                             u1_s_setting_sts;
+static U1                             u1_sp_datesi_com_setting_sts[DATESI_COM_KIND_NUM];
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
@@ -109,6 +110,7 @@ static U1                             u1_s_setting_sts;
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static ST_XSPI_IVI_CLOCK_RTC_DATA     st_s_DateSIComRtcSet(void);
+static U1                             u1_s_DateSIComSetCmpChk(void);
 
 /*===================================================================================================================================*/
 /* void            vd_g_DateSIComInit(void)                                                                                          */
@@ -118,6 +120,8 @@ static ST_XSPI_IVI_CLOCK_RTC_DATA     st_s_DateSIComRtcSet(void);
 /*===================================================================================================================================*/
 void           vd_g_DateSIComInit(void)
 {
+    U4                u4_t_lpcnt;
+
     /*Command Data Initial value set*/
     st_s_command_data.u1_clk_year              = (U1)DATESI_COM_CLK_YEAR_INI;
     st_s_command_data.u1_clk_mont              = (U1)DATESI_COM_CLK_MONT_INI;
@@ -159,7 +163,9 @@ void           vd_g_DateSIComInit(void)
     st_s_clock_disp_data.u1_1224format_disp    = (U1)DATESI_COM_TIME_SET_INI;
 
     u1_s_datesi_com_send_act                   = (U1)FALSE;
-    u1_s_setting_sts                           = (U1)DATESI_COM_SET_NG;
+    for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)DATESI_COM_KIND_NUM; u4_t_lpcnt++){
+        u1_sp_datesi_com_setting_sts[u4_t_lpcnt] = (U1)FALSE;
+    }
 }
 
 
@@ -267,6 +273,7 @@ void            vd_g_DateSIComClockDispUpdate(const U1 u1_a_VAL, const U1 u1_a_S
 void            vd_g_DateSIComCommandTx(void)
 {
     ST_XSPI_IVI_CLOCK_RTC_DATA   st_t_clock_rtc_data;
+    U1                           u1_t_setting_sts;
 
     if(u1_s_datesi_com_send_act == (U1)TRUE){
         /* Send DisplayClockData to XSPI */
@@ -281,8 +288,8 @@ void            vd_g_DateSIComCommandTx(void)
 
     if(u1_s_datesi_com_req_act == (U1)TRUE){
         /* Send Setting Status to XSPI*/
-        vd_g_XspiIviSub1ClockSettingSend(u1_s_setting_sts);
-        u1_s_setting_sts        = (U1)DATESI_COM_SET_NG;
+        u1_t_setting_sts        = u1_s_DateSIComSetCmpChk();
+        vd_g_XspiIviSub1ClockSettingSend(u1_t_setting_sts);
         u1_s_datesi_com_req_act = (U1)FALSE;
     }
 
@@ -369,6 +376,41 @@ static ST_XSPI_IVI_CLOCK_RTC_DATA  st_s_DateSIComRtcSet(void)
 }
 
 /*===================================================================================================================================*/
+/* static U1       u1_s_DateSIComSetCmpChk(void)                                                                                     */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         u1_t_result : Result Status( DATESI_COM_SET_OK / DATESI_COM_SET_NG )                                             */
+/*===================================================================================================================================*/
+static U1       u1_s_DateSIComSetCmpChk(void)
+{
+    U1                u1_t_result;
+    U1                u1_t_calendar;
+    U4                u4_t_lpcnt;
+
+    u1_t_result   = (U1)DATESI_COM_SET_NG;
+    u1_t_calendar = u1_g_DateSICfgCalExst();
+
+    if(u1_t_calendar == (U1)DATESI_CALEXIST_ON){
+        if((u1_sp_datesi_com_setting_sts[(U1)DATESI_COM_KIND_TIM] == (U1)TRUE) &&
+           (u1_sp_datesi_com_setting_sts[(U1)DATESI_COM_KIND_CAL] == (U1)TRUE)){
+            u1_t_result = (U1)DATESI_COM_SET_OK;
+        }
+    }
+    else{
+        if(u1_sp_datesi_com_setting_sts[(U1)DATESI_COM_KIND_TIM] == (U1)TRUE){
+            u1_t_result = (U1)DATESI_COM_SET_OK;
+        }
+    }
+
+    for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)DATESI_COM_KIND_NUM; u4_t_lpcnt++){
+        u1_sp_datesi_com_setting_sts[u4_t_lpcnt] = (U1)FALSE;
+    }
+
+    return(u1_t_result);
+
+}
+
+/*===================================================================================================================================*/
 /* ST_DATESI_COMMAND_DATA  st_g_DateSIComRx(void)                                                                                    */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
@@ -382,12 +424,15 @@ ST_DATESI_COMMAND_DATA  st_g_DateSIComRx(void)
 /*===================================================================================================================================*/
 /* void            vd_g_DateSIComSetCmp(void)                                                                                        */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
+/*  Arguments:      u1_a_RTC_UPDT : RTC Update Status(True/False)                                                                    */
+/*                  u1_a_KIND : Clock(0)/Calendar(1)                                                                                 */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void            vd_g_DateSIComSetCmp(void)
+void            vd_g_DateSIComSetCmp(const U1 u1_a_RTC_UPDT, const U1 u1_a_KIND)
 {
-    u1_s_setting_sts = (U1)DATESI_COM_SET_OK;
+    if(u1_a_KIND < (U1)DATESI_COM_KIND_NUM){
+        u1_sp_datesi_com_setting_sts[u1_a_KIND] = u1_a_RTC_UPDT;
+    }
 }
 
 /*===================================================================================================================================*/

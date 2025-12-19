@@ -236,7 +236,7 @@ static void     vd_s_DateSICalSync(U4 * u4p_a_offstd_now)
     U1                u1_t_result;
     ST_DATESI_CAL_RX  st_t_cal_rx;
 
-    u1_t_result                          = (U1)TRUE;
+    u1_t_result                          = (U1)FALSE;
     u4_t_yymmdd                          = (U4)YYMMDDWK_UNKNWN;
     st_t_cal_rx.u1_valid                 = (U1)FALSE;
     st_t_cal_rx.u1_act                   = (U1)FALSE;
@@ -258,12 +258,10 @@ static void     vd_s_DateSICalSync(U4 * u4p_a_offstd_now)
 
     if(u4_t_adj != (U4)YYMMDDWK_UNKNWN){
         u1_t_result = u1_s_DateSICalAdjustOwnClk(u4_t_adj);
-        if(u1_t_result == (U1)TRUE){
-            vd_g_DateSIComSetCmp();
-        }
     }
+    vd_g_DateSIComSetCmp(u1_t_result,(U1)DATESI_COM_KIND_CAL);
 
-    if((u1_t_result == (U1)TRUE) && (u4_t_now != (U4)YYMMDDWK_UNKNWN)){
+    if((u1_t_result == (U1)TRUE) || (u4_t_adj == (U4)YYMMDDWK_UNKNWN)){
         (*u4p_a_offstd_now) = u4_s_DateSICalToUpdtDate(u4_t_now, (U1)DATESI_CAL_DISP_DATE);
     }
 

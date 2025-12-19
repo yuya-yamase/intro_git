@@ -149,17 +149,21 @@ U1              u1_g_DateSITimAdjAct(void)
 }
 
 /*===================================================================================================================================*/
-/* void            vd_g_DateSITimAdjustOwnClk(const U4 u4_a_HHMMSS)                                                                  */
+/* U1              u1_g_DateSITimAdjustOwnClk(const U4 u4_a_HHMMSS)                                                                  */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void            vd_g_DateSITimAdjustOwnClk(const U4 u4_a_HHMMSS)
+U1              u1_g_DateSITimAdjustOwnClk(const U4 u4_a_HHMMSS)
 {
+    U1  u1_t_ret;
+
     (void)u1_g_DateclkAdjUnLock((U1)DATE_CLK_ADJ_HHMMSS);
-    (void)u1_g_DateclkAdjHhmmss24h(u4_a_HHMMSS);
+    u1_t_ret = u1_g_DateclkAdjHhmmss24h(u4_a_HHMMSS);
     vd_g_DateclkSet();
     vd_g_DateclkAdjLock((U1)DATE_CLK_ADJ_HHMMSS);
+
+    return(u1_t_ret);
 }
 
 /*===================================================================================================================================*/
