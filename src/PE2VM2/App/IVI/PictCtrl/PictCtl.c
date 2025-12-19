@@ -18,6 +18,7 @@
 #include "PictMuteCtl.h"
 #include "SysEcDrc.h"
 #include "PwrCtl.h"
+#include "veh_opemd.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
@@ -135,7 +136,8 @@
 #define PICT_TIMID_CAMKIND_SENDCYC                      (8U)    /* カメラ種別判別通知定期送信タイマ                             */
 #define PICT_TIMID_CAMSYNCPATHINFO_SENDCYC              (9U)   /* 同期検知・経路情報通知?定期送信タイマ                        */
 #define PICT_TIMID_SIP_POTR_FRZ_CHK                     (10U)   /* 起動時SIP端子固着検知用の待ち時間(暫定)                      */
-#define PICT_TIMID_MAX                                  (11U)   /* タイマＩＤ ＭＡＸ数                                          */
+#define PICT_TIMID_MAVTYPE_TIMEOUT                      (11U)   /* MAVTYPE(BCC1S05) 3Cycle(3000ms) TimeOut                      */
+#define PICT_TIMID_MAX                                  (12U)   /* タイマＩＤ ＭＡＸ数                                          */
 
 /* 仕様値のMIN値を使用する場合は、設定値+1msが必要 */
 #define PICT_TIMER_CORRECTION_1MS                       (1U)
@@ -156,6 +158,7 @@
 #define PICT_TIMER_TABCMD_SENDCYC                       (3000U)
 #define PICT_TIMER_CAM_KIND_DISC_STA                    (1000U)
 #define PICT_TIMER_SIP_POTR_FRZ_CHK                     (300U)  /* 起動時SIP端子固着検知用の待ち時間(暫定) */
+#define PICT_TIMER_MAVTYPE_TIMEOUT                      (3000U)
 
 #define PICT_CAN_CAM_CNTMAX                             (3U)    /* カメラ種別確定回数 */
 
@@ -169,6 +172,7 @@
 #define PICT_CAN_CAM_KIND_PVM_METER                     (0x07U) /* PVM(w/METER) */
 #define PICT_CAN_CAM_KIND_MTM_METER                     (0x08U) /* MTM(w/METER) */
 #define PICT_CAN_CAM_KIND_NONE                          (0x09U) /* 無し */
+#define PICT_CAN_CAM_KIND_NORX                          (0xFFU)
 
 /* カメラ切替状態 */
 #define PICT_CAMCHG_STS_OFF                             (0U)    /* カメラ以外 */
@@ -290,6 +294,9 @@
 #define PICT_AIS_KIND_NOMAL                             (0U)
 #define PICT_AIS_KIND_HEACON                            (1U)
 #define PICT_AIS_KIND_HCNDIAL                           (2U)
+
+#define PICT_VEHOPE_STS_POWERON                         (0x007EU)
+#define PICT_VEHOPE_STS_POWERON_STOP                    (0x007AU)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -512,6 +519,7 @@ static void vd_s_PictCtl_CamSyncPathInfoNtyChk(void);
 static void vd_s_PictCtl_CamSyncPathInfoNtySnd(void);
 static void vd_s_PictCtl_CamKindDiscSta(void);
 static U1   u1_s_PictCtl_CamKindjdg(void);
+static void vd_s_PictCtl_MavtypeTimeout(void);
 static U1   u1_s_PictCtl_CamKindValidChk(U1 u1_a_CamKind);
 static void vd_s_PictCtl_CamKindConverdUpDate(void);
 static void vd_s_PictCtl_GvifCamKindConverdUpDate(void);
@@ -551,7 +559,8 @@ static const ST_PICT_TIMENT tbl_Pict_TimInf[] = {
     /*------------------------------------------------------------------*/
     {   (U1)PICT_TIMID_CAM_KIND_DISC_STA_WAIT,          vd_s_PictCtl_CamKindDiscSta             },
     {   (U1)PICT_TIMID_CAMKIND_SENDCYC,                 vd_s_PictCtl_CamKindNtySnd              },
-    {   (U1)PICT_TIMID_CAMSYNCPATHINFO_SENDCYC,         vd_s_PictCtl_CamSyncPathInfoNtySnd      }
+    {   (U1)PICT_TIMID_CAMSYNCPATHINFO_SENDCYC,         vd_s_PictCtl_CamSyncPathInfoNtySnd      },
+    {   (U1)PICT_TIMID_MAVTYPE_TIMEOUT,                 vd_s_PictCtl_MavtypeTimeout             }
 };
 
 
@@ -790,10 +799,9 @@ static void vd_s_PictCtl_PollMngInit(void)
  ===========================================================================*/
 void vd_g_PictCtl_MainTask(void)
 {
-    vd_s_PictCtl_MLIniChk();
     vd_s_PictCtl_PollMng();
-    vd_s_PictCtl_StsMng();
     vd_s_PictCtl_TimMng();
+    vd_s_PictCtl_StsMng();
     vd_s_PictCtl_SeqMng();
     vd_s_PictCtl_MipiChg();
     vd_s_PictCtl_CamPathChg();
@@ -1070,6 +1078,8 @@ static void vd_s_PictCtl_StsMng(void)
     U1 u1_t_audio_on;
     U1 u1_t_mmstby_n;
     
+    vd_s_PictCtl_MLIniChk();
+    
     /* 見た目オン起動状態チェック(暫定) */
     vd_s_PictCtl_IgStsChk();
     
@@ -1120,6 +1130,7 @@ static void vd_s_PictCtl_IgStsChk(void)
     U1 u1_t_stasts;
     U2 u2_t_time;
     U1 u1_t_vicrset;
+    U4 u4_t_power_sts;
     
     u1_t_stasts = u1_g_Power_ModeState(); /* 見た目オン起動状態 */
     
@@ -1144,6 +1155,21 @@ static void vd_s_PictCtl_IgStsChk(void)
         /* MIPI設定完了フラグOFF */
         bfg_Pict_StsMng.u1_MainMipiSetEndFlg = (U1)FALSE;
     }
+    
+    u4_t_power_sts = u4_g_VehopemdMdfield();
+    u2_t_time = u2_s_PictCtl_GetTim((U1)PICT_TIMID_MAVTYPE_TIMEOUT);
+    if((u4_t_power_sts != (U4)PICT_VEHOPE_STS_POWERON) &&
+        (u4_t_power_sts != (U4)PICT_VEHOPE_STS_POWERON_STOP)){
+        if(u2_t_time != (U2)PICT_TIM_STOP){
+        	vd_s_PictCtl_ClrTim((U1)PICT_TIMID_MAVTYPE_TIMEOUT);
+        }
+    }
+	else{
+        if(u2_t_time == (U2)PICT_TIM_STOP){
+        	vd_s_PictCtl_SetTim((U1)PICT_TIMID_MAVTYPE_TIMEOUT, (U2)PICT_TIMER_MAVTYPE_TIMEOUT);
+        }
+	}
+    
     bfg_Pict_StsMng.u1_stasts = u1_t_stasts;
 }
 
@@ -3274,7 +3300,22 @@ static U1 u1_s_PictCtl_CamKindjdg(void)
             bfg_Pict_StsMng.st_CamDisc.u1_CamKindCnt = (U1)PICT_SAMECNT_INI;
         }
     }
+
+    vd_s_PictCtl_SetTim((U1)PICT_TIMID_MAVTYPE_TIMEOUT, (U2)PICT_TIMER_MAVTYPE_TIMEOUT);
+
     return(u1_t_chgflg);
+}
+
+/*===================================================================================================================================*/
+/*  static void vd_s_PictCtl_MavtypeTimeout(void)                                                                                    */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void vd_s_PictCtl_MavtypeTimeout(void)
+{
+    bfg_Pict_StsMng.st_CamDisc.u1_LastCamKind = (U1)PICT_CAN_CAM_KIND_NORX;
+    bfg_Pict_StsMng.st_CamDisc.u1_CamKindCnt = (U1)PICT_SAMECNT_INI;
 }
 
 /*============================================================================
