@@ -85,6 +85,8 @@ typedef struct{
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Prototypes                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+void                         vd_g_DateSIComBonInit(void);
+void                         vd_g_DateSIComRstWkupInit(void);
 void                         vd_g_DateSIComInit(void);
 void                         vd_g_DateSIComCommandRx(const ST_DATESI_COMMAND_DATA st_a_DATA);
 void                         vd_g_DateSIComClockDispUpdate(const U1 u1_a_VAL, const U1 u1_a_SIGN, const U1 u1_a_EVENT_EI);

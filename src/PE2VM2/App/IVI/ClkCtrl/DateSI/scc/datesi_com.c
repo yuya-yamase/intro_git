@@ -21,6 +21,7 @@
 #include "datesi_cal.h"
 #include "date_clk.h"
 #include "datesi_cfg_private.h"
+#include "rim_ctl.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -99,6 +100,7 @@ static ST_XSPI_IVI_CLOCK_DISP_DATA    st_s_clock_disp_data;
 static U1                             u1_s_datesi_com_req_act;
 static U1                             u1_s_datesi_com_send_act;
 static U1                             u1_sp_datesi_com_setting_sts[DATESI_COM_KIND_NUM];
+static U1                             u1_s_datesi_com_rtc_sts;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
@@ -111,6 +113,42 @@ static U1                             u1_sp_datesi_com_setting_sts[DATESI_COM_KI
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static ST_XSPI_IVI_CLOCK_RTC_DATA     st_s_DateSIComRtcSet(void);
 static U1                             u1_s_DateSIComSetCmpChk(void);
+
+/*===================================================================================================================================*/
+/* void            vd_g_DateSIComBonInit(void)                                                                                       */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void           vd_g_DateSIComBonInit(void)
+{
+    u1_s_datesi_com_rtc_sts = (U1)FALSE;
+    vd_g_Rim_WriteU1((U2)RIMID_U1_RTC_STS, u1_s_datesi_com_rtc_sts);
+
+    vd_g_DateSIComInit();
+}
+
+/*===================================================================================================================================*/
+/* void            vd_g_DateSIComRstWkupInit(void)                                                                                   */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void           vd_g_DateSIComRstWkupInit(void)
+{
+    U1  u1_t_rim_sts;
+    U1  u1_t_rim_data;
+
+    u1_s_datesi_com_rtc_sts = (U1)FALSE;
+    u1_t_rim_data           = (U1)0U;
+
+    u1_t_rim_sts = u1_g_Rim_ReadU1withStatus((U2)RIMID_U1_RTC_STS, &u1_t_rim_data);
+    if((u1_t_rim_sts & (U1)RIM_RESULT_KIND_MASK) == (U1)RIM_RESULT_KIND_OK){
+        u1_s_datesi_com_rtc_sts = u1_t_rim_data;
+    }
+
+    vd_g_DateSIComInit();
+}
 
 /*===================================================================================================================================*/
 /* void            vd_g_DateSIComInit(void)                                                                                          */
@@ -201,6 +239,12 @@ void            vd_g_DateSIComCommandRx(const ST_DATESI_COMMAND_DATA st_a_DATA)
     st_s_command_data.u1_clk_day_updt  = st_a_DATA.u1_clk_day_updt;
 
     u1_s_datesi_com_req_act = (U1)TRUE;
+
+    /* RTC v1.1 provisionally */
+    if(u1_s_datesi_com_rtc_sts != (U1)TRUE){
+        u1_s_datesi_com_rtc_sts = (U1)TRUE;
+        vd_g_Rim_WriteU1((U2)RIMID_U1_RTC_STS,u1_s_datesi_com_rtc_sts);
+    }
 
     vd_g_DateSITimCanRxHk();
     vd_g_DateSICalAdjustdate();
@@ -314,7 +358,6 @@ static ST_XSPI_IVI_CLOCK_RTC_DATA  st_s_DateSIComRtcSet(void)
     };
 
     ST_XSPI_IVI_CLOCK_RTC_DATA   st_t_clock_rtc_data;
-    U1                           u1_t_rtc_sts;
     U4                           u4_t_now_tim;
     U4                           u4_t_now_cal;
     U1                           u1_tp_time[HHMMSS_24H_TIME_SIZE];
@@ -329,20 +372,15 @@ static ST_XSPI_IVI_CLOCK_RTC_DATA  st_s_DateSIComRtcSet(void)
     st_t_clock_rtc_data.u1_minute_rtc           = (U1)DATESI_COM_RTC_MINUTE_INVALID;
     st_t_clock_rtc_data.u1_second_rtc           = (U1)DATESI_COM_RTC_SECOND_INVALID;
     st_t_clock_rtc_data.u1_dow_rtc              = (U1)DATESI_COM_RTC_WEEK_INVALID;
-    st_t_clock_rtc_data.u1_clock_set_sts_rtc    = (U1)TRUE;
+    st_t_clock_rtc_data.u1_clock_set_sts_rtc    = u1_s_datesi_com_rtc_sts;
 
-    u1_t_rtc_sts = u1_g_DateclkRtcSts();
-
-    if(u1_t_rtc_sts == (U1)TRUE){
+    if(u1_s_datesi_com_rtc_sts == (U1)TRUE){
         u4_t_now_tim = u4_g_DateclkHhmmss24h();
         u1_t_ans = u1_g_HhmmssFrmtIs24h(u4_t_now_tim, &u1_tp_time[0]);
         if(u1_t_ans == (U1)TRUE){
             st_t_clock_rtc_data.u1_hour_rtc   = u1_tp_time[HHMMSS_24H_TIME_HR];
             st_t_clock_rtc_data.u1_minute_rtc = u1_tp_time[HHMMSS_24H_TIME_MI];
             st_t_clock_rtc_data.u1_second_rtc = u1_tp_time[HHMMSS_24H_TIME_SE];
-        }
-        else{
-            st_t_clock_rtc_data.u1_clock_set_sts_rtc = (U1)FALSE;
         }
         
         u4_t_now_cal = u4_g_DateclkYymmddwk();
@@ -351,25 +389,13 @@ static ST_XSPI_IVI_CLOCK_RTC_DATA  st_s_DateSIComRtcSet(void)
             if(u2_tp_cal[YYMMDD_DATE_YR] >= (U2)DATESI_COM_YEAR_OFFSET){
                 st_t_clock_rtc_data.u1_year_rtc = (U1)(u2_tp_cal[YYMMDD_DATE_YR] - (U2)DATESI_COM_YEAR_OFFSET);
             }
-            else{
-                st_t_clock_rtc_data.u1_clock_set_sts_rtc = (U1)FALSE;
-            }
             st_t_clock_rtc_data.u1_month_rtc = (U1)u2_tp_cal[YYMMDD_DATE_MO];
             st_t_clock_rtc_data.u1_day_rtc   = (U1)u2_tp_cal[YYMMDD_DATE_DA];
-        }
-        else{
-            st_t_clock_rtc_data.u1_clock_set_sts_rtc = (U1)FALSE;
         }
         u1_t_week = (U1)(u4_t_now_cal & (U4)YYMMDDWK_BIT_WK);
         if(u1_t_week < (U1)DATESI_COM_RTC_WEEK_NUM){
             st_t_clock_rtc_data.u1_dow_rtc = u1_sp_DATESI_COM_WEEK_TX_VAL[u1_t_week];
         }
-        else{
-            st_t_clock_rtc_data.u1_clock_set_sts_rtc = (U1)FALSE;
-        }
-    }
-    else{
-        st_t_clock_rtc_data.u1_clock_set_sts_rtc = (U1)FALSE;
     }
 
     return(st_t_clock_rtc_data);

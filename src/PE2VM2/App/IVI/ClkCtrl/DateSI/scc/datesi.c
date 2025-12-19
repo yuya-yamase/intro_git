@@ -65,7 +65,7 @@
 /*===================================================================================================================================*/
 void            vd_g_DateSIBonInit(void)
 {
-    vd_g_DateSIComInit();
+    vd_g_DateSIComBonInit();
     vd_g_DateSITimBonInit();
     vd_g_DateSICalBonInit();
 }
@@ -78,7 +78,7 @@ void            vd_g_DateSIBonInit(void)
 /*===================================================================================================================================*/
 void            vd_g_DateSIRstWkupInit(void)
 {
-    vd_g_DateSIComInit();
+    vd_g_DateSIComRstWkupInit();
     vd_g_DateSITimRstWkupInit();
     vd_g_DateSICalRstWkupInit();
 }
