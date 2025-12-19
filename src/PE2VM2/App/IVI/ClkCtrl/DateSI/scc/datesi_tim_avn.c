@@ -1,4 +1,4 @@
-/* 0.0.0 */
+/* 0.0.1 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -11,7 +11,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define DATESI_TIM_AVN_C_MAJOR                  (0)
 #define DATESI_TIM_AVN_C_MINOR                  (0)
-#define DATESI_TIM_AVN_C_PATCH                  (0)
+#define DATESI_TIM_AVN_C_PATCH                  (1)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -629,7 +629,6 @@ static void     vd_s_DateSITimExecMinD(void)
     vd_g_DateSITimSetAdjStart();
     vd_g_DateSITimAdjustClk((U1)DATESI_TIM_RNK_MIN, (U1)DATESI_TIM_ADJ_VAL_1, (U1)DATESI_TIM_ADJ_MINUS);
     vd_g_DateSITimClockUpdate();
-    vd_g_DateSIComSetCmp();
     vd_g_DateSITimSetAdjEnd();
 }
 
@@ -644,7 +643,6 @@ static void     vd_s_DateSITimExecMinU(void)
     vd_g_DateSITimSetAdjStart();
     vd_g_DateSITimAdjustClk((U1)DATESI_TIM_RNK_MIN, (U1)DATESI_TIM_ADJ_VAL_1, (U1)DATESI_TIM_ADJ_PLUS);
     vd_g_DateSITimClockUpdate();
-    vd_g_DateSIComSetCmp();
     vd_g_DateSITimSetAdjEnd();
 }
 
@@ -659,7 +657,6 @@ static void     vd_s_DateSITimExecHourD(void)
     vd_g_DateSITimSetAdjStart();
     vd_g_DateSITimAdjustClk((U1)DATESI_TIM_RNK_HUR, (U1)DATESI_TIM_ADJ_VAL_1, (U1)DATESI_TIM_ADJ_MINUS);
     vd_g_DateSITimClockUpdate();
-    vd_g_DateSIComSetCmp();
     vd_g_DateSITimSetAdjEnd();
 }
 
@@ -674,7 +671,6 @@ static void     vd_s_DateSITimExecHourU(void)
     vd_g_DateSITimSetAdjStart();
     vd_g_DateSITimAdjustClk((U1)DATESI_TIM_RNK_HUR, (U1)DATESI_TIM_ADJ_VAL_1, (U1)DATESI_TIM_ADJ_PLUS);
     vd_g_DateSITimClockUpdate();
-    vd_g_DateSIComSetCmp();
     vd_g_DateSITimSetAdjEnd();
 }
 
@@ -1199,6 +1195,11 @@ U1              u1_g_DateSITimDiagEvCapt(const U1 u1_a_ODO_UPDT, U4 * const u4_a
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  0.0.0    04/23/2025  MN       New.                                                                                               */
+/*  0.0.1    12/18/2025  MN       Change for BEV Pre_CV                                                                              */
+/*                                                                                                                                   */
+/*  Revision Date        Author   Change Description                                                                                 */
+/* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
+/*  BEV-1    12/18/2025  MN       Addressing issues.                                                                                 */
 /*                                                                                                                                   */
 /*  * MN   = Mikiya Negishi, KSE                                                                                                     */
 /*                                                                                                                                   */

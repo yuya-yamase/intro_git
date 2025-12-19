@@ -1,4 +1,4 @@
-/* 0.0.0 */
+/* 0.0.1 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -11,7 +11,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define DATESI_COM_C_MAJOR                      (0)
 #define DATESI_COM_C_MINOR                      (0)
-#define DATESI_COM_C_PATCH                      (0)
+#define DATESI_COM_C_PATCH                      (1)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -28,12 +28,6 @@
      (DATESI_COM_C_MINOR != DATESI_COM_H_MINOR) || \
      (DATESI_COM_C_PATCH != DATESI_COM_H_PATCH))
 #error "datesi.c and datesi.h : source and header files are inconsistent!"
-#endif
-
-#if ((DATESI_COM_C_MAJOR != DATESI_CFG_H_MAJOR) || \
-     (DATESI_COM_C_MINOR != DATESI_CFG_H_MINOR) || \
-     (DATESI_COM_C_PATCH != DATESI_CFG_H_PATCH))
-#error "datesi.c and datesi_cfg_private.h : source and header files are inconsistent!"
 #endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -405,6 +399,11 @@ void            vd_g_DateSIComSetCmp(void)
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  0.0.0    04/23/2025  MN       New.                                                                                               */
+/*  0.0.1    12/18/2025  MN       Change for BEV Pre_CV                                                                              */
+/*                                                                                                                                   */
+/*  Revision Date        Author   Change Description                                                                                 */
+/* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
+/*  BEV-1    12/18/2025  MN       Addressing issues.                                                                                 */
 /*                                                                                                                                   */
 /*  * MN   = Mikiya Negishi, KSE                                                                                                     */
 /*                                                                                                                                   */

@@ -1,4 +1,4 @@
-/* 0.0.0 */
+/* 0.0.1 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -11,7 +11,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define DATESI_CAL_C_MAJOR                      (0)
 #define DATESI_CAL_C_MINOR                      (0)
-#define DATESI_CAL_C_PATCH                      (0)
+#define DATESI_CAL_C_PATCH                      (1)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -341,7 +341,6 @@ void            vd_g_DateSICalExecTmSet(const U1 u1_a_ADD)
     U4  u4_t_yymmddwk_zerorst;
     U4  u4_t_daycnt_zerorst;
     U4  u4_t_abs_yymmdd;
-    U1  u1_t_result;
 
     u4_t_yymmddwk_zerorst = u4_s_datesi_cal_now;
     u4_t_daycnt_zerorst   = u4_g_YymmddToDaycnt(u4_t_yymmddwk_zerorst);
@@ -353,10 +352,7 @@ void            vd_g_DateSICalExecTmSet(const U1 u1_a_ADD)
 
     u4_t_yymmddwk_zerorst = u4_g_DaycntToYymmddwk(u4_t_daycnt_zerorst);
     u4_t_abs_yymmdd       = u4_s_DateSICalToUpdtDate(u4_t_yymmddwk_zerorst, (U1)DATESI_CAL_ABS_DATE);
-    u1_t_result           = u1_s_DateSICalAdjustOwnClk(u4_t_abs_yymmdd);
-    if(u1_t_result == (U1)TRUE){
-        vd_g_DateSIComSetCmp();
-    }
+    (void)u1_s_DateSICalAdjustOwnClk(u4_t_abs_yymmdd);
 }
 
 /*===================================================================================================================================*/
@@ -830,7 +826,6 @@ void            vd_g_DateSICalAdjustdate(void)
             if(u1_t_result == (U1)TRUE){
                 u4_t_abs_yymmdd     = u4_g_DateclkYymmddwk();
                 u4_s_datesi_cal_now = u4_s_DateSICalToUpdtDate(u4_t_abs_yymmdd, (U1)DATESI_CAL_DISP_DATE);
-                vd_g_DateSIComSetCmp();
             }
         }
     }
@@ -845,6 +840,11 @@ void            vd_g_DateSICalAdjustdate(void)
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  0.0.0    04/23/2025  MN       New.                                                                                               */
+/*  0.0.1    12/18/2025  MN       Change for BEV Pre_CV                                                                              */
+/*                                                                                                                                   */
+/*  Revision Date        Author   Change Description                                                                                 */
+/* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
+/*  BEV-1    12/18/2025  MN       Addressing issues.                                                                                 */
 /*                                                                                                                                   */
 /*  * MN   = Mikiya Negishi, KSE                                                                                                     */
 /*                                                                                                                                   */
