@@ -66,6 +66,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static U4                       u4_s_oxcan_wrh_wrq_act;
 static U2                       u2_s_oxcan_wrh_vom_tocnt;
+static U2                       u2_s_oxcan_wrh_pwr_tocnt;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
@@ -84,12 +85,12 @@ static U4      u4_s_oXCANWrhRqhAct(const U2 u2_a_ACT, ST_OXCAN_WRH_HCH * st_ap_h
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*===================================================================================================================================*/
-/*  void    vd_g_oXCANWrhInit(void)                                                                                                  */
+/*  void    vd_g_oXCANWrhInit(const U1 u1_a_RST_INIT)                                                                                */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_oXCANWrhInit(void)
+void    vd_g_oXCANWrhInit(const U1 u1_a_RST_INIT)
 {
     U4                 u4_t_hch;
 
@@ -100,6 +101,12 @@ void    vd_g_oXCANWrhInit(void)
         st_gp_oxcan_wrh_hch[u4_t_hch].u4_req   = (U4)0U;
         st_gp_oxcan_wrh_hch[u4_t_hch].u2_elpsd = (U2)U2_MAX;
         st_gp_oxcan_wrh_hch[u4_t_hch].u2_ctrl  = (U2)OXCAN_WRQH_CTRL_WFR;
+    }
+
+    if(u1_a_RST_INIT == (U1)TRUE){
+        u2_s_oxcan_wrh_pwr_tocnt = (U2)0U;
+    }else{
+        u2_s_oxcan_wrh_pwr_tocnt = (U2)U2_MAX;    
     }
 }
 /*===================================================================================================================================*/
@@ -128,6 +135,15 @@ void    vd_g_oXCANWrhMainTask(const U4 u4_a_SYS_ACT)
     }
     u4_t_req_by_net |= u4_t_req_by_vom;
     u4_t_req_by_net |= u4_s_oXCANWrhReqbyRqh(u4_a_SYS_ACT, &u4_t_wrqbit);
+
+    if(u2_s_oxcan_wrh_pwr_tocnt < u2_g_OXCAN_WRH_PWR_TOUT){
+        u4_t_req_by_net |= u4_g_OXCAN_WRH_REQ_BY_PWR;
+        u4_t_wrqbit |= (U4)OXCAN_WRH_WRQBIT_PWR;
+        u2_s_oxcan_wrh_pwr_tocnt++;
+    }else{
+        u2_s_oxcan_wrh_pwr_tocnt = (U2)U2_MAX;
+    }
+
     u4_s_oxcan_wrh_wrq_act = u4_t_wrqbit;
 
     vd_g_oXCANWrhCfgReqbyNet(u4_t_req_by_net);

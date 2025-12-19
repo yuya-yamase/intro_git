@@ -83,6 +83,9 @@ extern const U4                    u4_g_OXCAN_WRH_TOR_BY_VOM;           /* TimeO
 extern const U4                    u4_g_OXCAN_WRH_REQ_BY_VOM;           /* OXCAN_SYS_XXX of OXCAN_SYS_NET defined in oxcan_sys_def.h */
 extern const U2                    u2_g_OXCAN_WRH_VOM_TOUT;
 
+extern const U4                    u4_g_OXCAN_WRH_REQ_BY_PWR;
+extern const U2                    u2_g_OXCAN_WRH_PWR_TOUT;
+
 extern const ST_OXCAN_WRH_RQH      st_gp_OXCAN_WRH_RQH[];
 extern const U1                    u1_g_OXCAN_WRH_NUM_RQH;
 

@@ -155,7 +155,7 @@ void    vd_g_oXDoCANMainTask(void)
     st_t_req.u2_tim_elpsd = u2_s_oxdc_serv_tim_elpsd;
 
     st_t_req.u1_sid       = u1_s_oxdc_serv_act;
-    st_t_req.u1_req_type  = st_s_oxdc_msg_trx.msgAddInfo.reqType;
+    st_t_req.u1_pdu_rx    = (U1)st_s_oxdc_msg_trx.dcmRxPduId;
     st_t_req.u1_ses_bfr   = u1_s_oxdc_ses_bfr;
     st_t_req.u1_ses_aft   = u1_s_oXdcSessionchk();
 

@@ -56,12 +56,16 @@ ST_OXCAN_WRH_HCH            st_gp_oxcan_wrh_hch[OXCAN_WRH_NUM_RQH];
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-const U4                    u4_g_OXCAN_WRH_LOG_REQ_EX = (U4)OXCAN_SYS_BAT;                    /* vd_g_oXCANWrhReqHch was executed    */ 
+const U4                    u4_g_OXCAN_WRH_LOG_REQ_EX = (U4)OXCAN_SYS_BAT;                /* vd_g_oXCANWrhReqHch was executed        */ 
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-const U4                    u4_g_OXCAN_WRH_TOR_BY_VOM = (U4)OXCAN_SYS_IGR;                    /* TimeOut count Restart Condition     */
+const U4                    u4_g_OXCAN_WRH_TOR_BY_VOM = (U4)OXCAN_SYS_IGR;                /* TimeOut count Restart Condition         */
 const U4                    u4_g_OXCAN_WRH_REQ_BY_VOM = (U4)0x00000000U;
 const U2                    u2_g_OXCAN_WRH_VOM_TOUT   = (U2)0U;
+
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+const U4                    u4_g_OXCAN_WRH_REQ_BY_PWR = (U4)OXCAN_SYS_PNC_44;             /* see:gnvehpwrstatecs-07-a/PWRCOM-015,016 */
+const U2                    u2_g_OXCAN_WRH_PWR_TOUT   = (U2)3000U / (U2)OXCAN_MAIN_TICK;  /* 3000msec                                */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 const ST_OXCAN_WRH_RQH      st_gp_OXCAN_WRH_RQH[OXCAN_WRH_NUM_RQH] = {

@@ -183,9 +183,1260 @@ CONST(uint16, SECOC_CONST_CONFIG) SecOC_JobId2MsgTblIdx[SECOC_JOBID_2_MSG_TBL_ID
     12U,
     13U,
     14U,
-    15U
+    15U,
+    0U,
+    1U,
+    2U,
+    3U,
+    4U,
+    5U,
+    6U,
+    7U,
+    8U,
+    9U,
+    10U,
+    11U,
+    12U,
+    13U,
+    14U,
+    15U,
+    16U,
+    17U,
+    18U,
+    19U,
+    20U,
+    21U,
+    22U,
+    23U,
+    24U,
+    25U,
+    26U,
+    27U,
+    28U
 };
 
+CONST(SecOC_RxPduProcessingType, SECOC_CONST_CONFIG) SecOC_RxPduProcessing[SECOC_RX_PDU_PROCESSING_MAX] = 
+{
+    {
+        128U, /* Ab_AuthInfoLength */
+        32U, /* AuthInfoTruncLength */
+        0U, /* Ab_BusIndex */
+        11U, /* Ab_TxSecurityDataSize */
+        0U, /* dummy1 */
+        0U, /* Ab_MessageTypeIndex */
+        SECOC_AB_MSGTYPE_SECURED, /* Ab_MessageType */
+        SECOC_NONE, /* VerifyStatusPropagationMode */
+        1U, /* AuthenticationBuildAttempts */
+        786U, /* Ab_DataId */
+        0U, /* AuthenticationVerifyAttempts */
+        6U, /* FreshnessValueId */
+        56U, /* FreshnessValueLength */
+        56U, /* FreshnessValueTruncLength */
+        { 16U, CRYPTO_PROCESSING_ASYNC, {0U, 0U, 0U} }, /* RxAuthServiceConfigRef */
+        32U, /* SameBufferPduRef */
+        0U, /* Ab_BufferStartOffset */
+        32U, /* Ab_RxMakeAuthBufferSize */
+        0U, /* Ab_RxBufferStartOffset */
+        &SecOC_CD_FV_VerifyResult, /* Ab_FreshnessValueCallout */
+        0U, /* RxSecuredLayerPduId */
+        0U, /* Ab_RxAuthenticLayerPduId */
+        &SecOC_CD_FV_GetRxFreshness, /* Ab_FreshnessValueFuncName */
+        {&SecOC_Callout_User_VerificationFinalStatus}, /* Ab_VerificationFinalStatusCallout */
+        SECOC_AB_FV_CFUNC, /* Ab_QueryFreshnessValue */
+        0U, /* Ab_ProtDataPaddingSize */
+        NULL_PTR, /* Ab_ErrorDetailNotifyCallout */
+        1U, /* Ab_RxAuthTpCopySize */
+        SECOC_IFPDU, /* RxAuthPduType */
+        SECOC_IFPDU, /* Ab_RxSecuredPduType */
+        FALSE, /* Ab_ForceReceive */
+        SECOC_BOTH, /* Ab_VerifyFinalStatusPropagationMode */
+        0U, /* Ab_RxAuthenticLayerPduRefId */
+        0U, /* Ab_RxSecuredLayerPduRefId */
+        0U, /* Ab_CsmReqSaSizeMax */
+        { NULL_PTR }, /* Ab_RxMsgOverflowDestructionCallout */
+        { NULL_PTR }, /* Ab_RxMsgBusyDestructionCallout */
+        SECOC_AB_CSM_REQ_SC, /* Ab_CsmReqType */
+        TRUE, /* SecuredRxPduVerification */
+        0U /* dummy2 */
+    },
+    {
+        128U, /* Ab_AuthInfoLength */
+        32U, /* AuthInfoTruncLength */
+        0U, /* Ab_BusIndex */
+        11U, /* Ab_TxSecurityDataSize */
+        0U, /* dummy1 */
+        1U, /* Ab_MessageTypeIndex */
+        SECOC_AB_MSGTYPE_SECURED, /* Ab_MessageType */
+        SECOC_NONE, /* VerifyStatusPropagationMode */
+        1U, /* AuthenticationBuildAttempts */
+        915U, /* Ab_DataId */
+        0U, /* AuthenticationVerifyAttempts */
+        12U, /* FreshnessValueId */
+        56U, /* FreshnessValueLength */
+        56U, /* FreshnessValueTruncLength */
+        { 17U, CRYPTO_PROCESSING_ASYNC, {0U, 0U, 0U} }, /* RxAuthServiceConfigRef */
+        64U, /* SameBufferPduRef */
+        32U, /* Ab_BufferStartOffset */
+        64U, /* Ab_RxMakeAuthBufferSize */
+        32U, /* Ab_RxBufferStartOffset */
+        &SecOC_CD_FV_VerifyResult, /* Ab_FreshnessValueCallout */
+        1U, /* RxSecuredLayerPduId */
+        1U, /* Ab_RxAuthenticLayerPduId */
+        &SecOC_CD_FV_GetRxFreshness, /* Ab_FreshnessValueFuncName */
+        {&SecOC_Callout_User_VerificationFinalStatus}, /* Ab_VerificationFinalStatusCallout */
+        SECOC_AB_FV_CFUNC, /* Ab_QueryFreshnessValue */
+        0U, /* Ab_ProtDataPaddingSize */
+        NULL_PTR, /* Ab_ErrorDetailNotifyCallout */
+        1U, /* Ab_RxAuthTpCopySize */
+        SECOC_IFPDU, /* RxAuthPduType */
+        SECOC_IFPDU, /* Ab_RxSecuredPduType */
+        FALSE, /* Ab_ForceReceive */
+        SECOC_BOTH, /* Ab_VerifyFinalStatusPropagationMode */
+        1U, /* Ab_RxAuthenticLayerPduRefId */
+        1U, /* Ab_RxSecuredLayerPduRefId */
+        0U, /* Ab_CsmReqSaSizeMax */
+        { NULL_PTR }, /* Ab_RxMsgOverflowDestructionCallout */
+        { NULL_PTR }, /* Ab_RxMsgBusyDestructionCallout */
+        SECOC_AB_CSM_REQ_SC, /* Ab_CsmReqType */
+        TRUE, /* SecuredRxPduVerification */
+        0U /* dummy2 */
+    },
+    {
+        128U, /* Ab_AuthInfoLength */
+        32U, /* AuthInfoTruncLength */
+        0U, /* Ab_BusIndex */
+        11U, /* Ab_TxSecurityDataSize */
+        0U, /* dummy1 */
+        2U, /* Ab_MessageTypeIndex */
+        SECOC_AB_MSGTYPE_SECURED, /* Ab_MessageType */
+        SECOC_NONE, /* VerifyStatusPropagationMode */
+        1U, /* AuthenticationBuildAttempts */
+        917U, /* Ab_DataId */
+        0U, /* AuthenticationVerifyAttempts */
+        13U, /* FreshnessValueId */
+        56U, /* FreshnessValueLength */
+        56U, /* FreshnessValueTruncLength */
+        { 18U, CRYPTO_PROCESSING_ASYNC, {0U, 0U, 0U} }, /* RxAuthServiceConfigRef */
+        64U, /* SameBufferPduRef */
+        96U, /* Ab_BufferStartOffset */
+        64U, /* Ab_RxMakeAuthBufferSize */
+        96U, /* Ab_RxBufferStartOffset */
+        &SecOC_CD_FV_VerifyResult, /* Ab_FreshnessValueCallout */
+        2U, /* RxSecuredLayerPduId */
+        2U, /* Ab_RxAuthenticLayerPduId */
+        &SecOC_CD_FV_GetRxFreshness, /* Ab_FreshnessValueFuncName */
+        {&SecOC_Callout_User_VerificationFinalStatus}, /* Ab_VerificationFinalStatusCallout */
+        SECOC_AB_FV_CFUNC, /* Ab_QueryFreshnessValue */
+        0U, /* Ab_ProtDataPaddingSize */
+        NULL_PTR, /* Ab_ErrorDetailNotifyCallout */
+        1U, /* Ab_RxAuthTpCopySize */
+        SECOC_IFPDU, /* RxAuthPduType */
+        SECOC_IFPDU, /* Ab_RxSecuredPduType */
+        FALSE, /* Ab_ForceReceive */
+        SECOC_BOTH, /* Ab_VerifyFinalStatusPropagationMode */
+        2U, /* Ab_RxAuthenticLayerPduRefId */
+        2U, /* Ab_RxSecuredLayerPduRefId */
+        0U, /* Ab_CsmReqSaSizeMax */
+        { NULL_PTR }, /* Ab_RxMsgOverflowDestructionCallout */
+        { NULL_PTR }, /* Ab_RxMsgBusyDestructionCallout */
+        SECOC_AB_CSM_REQ_SC, /* Ab_CsmReqType */
+        TRUE, /* SecuredRxPduVerification */
+        0U /* dummy2 */
+    },
+    {
+        128U, /* Ab_AuthInfoLength */
+        32U, /* AuthInfoTruncLength */
+        0U, /* Ab_BusIndex */
+        11U, /* Ab_TxSecurityDataSize */
+        0U, /* dummy1 */
+        3U, /* Ab_MessageTypeIndex */
+        SECOC_AB_MSGTYPE_SECURED, /* Ab_MessageType */
+        SECOC_NONE, /* VerifyStatusPropagationMode */
+        1U, /* AuthenticationBuildAttempts */
+        918U, /* Ab_DataId */
+        0U, /* AuthenticationVerifyAttempts */
+        14U, /* FreshnessValueId */
+        56U, /* FreshnessValueLength */
+        56U, /* FreshnessValueTruncLength */
+        { 19U, CRYPTO_PROCESSING_ASYNC, {0U, 0U, 0U} }, /* RxAuthServiceConfigRef */
+        64U, /* SameBufferPduRef */
+        160U, /* Ab_BufferStartOffset */
+        64U, /* Ab_RxMakeAuthBufferSize */
+        160U, /* Ab_RxBufferStartOffset */
+        &SecOC_CD_FV_VerifyResult, /* Ab_FreshnessValueCallout */
+        3U, /* RxSecuredLayerPduId */
+        3U, /* Ab_RxAuthenticLayerPduId */
+        &SecOC_CD_FV_GetRxFreshness, /* Ab_FreshnessValueFuncName */
+        {&SecOC_Callout_User_VerificationFinalStatus}, /* Ab_VerificationFinalStatusCallout */
+        SECOC_AB_FV_CFUNC, /* Ab_QueryFreshnessValue */
+        0U, /* Ab_ProtDataPaddingSize */
+        NULL_PTR, /* Ab_ErrorDetailNotifyCallout */
+        1U, /* Ab_RxAuthTpCopySize */
+        SECOC_IFPDU, /* RxAuthPduType */
+        SECOC_IFPDU, /* Ab_RxSecuredPduType */
+        FALSE, /* Ab_ForceReceive */
+        SECOC_BOTH, /* Ab_VerifyFinalStatusPropagationMode */
+        3U, /* Ab_RxAuthenticLayerPduRefId */
+        3U, /* Ab_RxSecuredLayerPduRefId */
+        0U, /* Ab_CsmReqSaSizeMax */
+        { NULL_PTR }, /* Ab_RxMsgOverflowDestructionCallout */
+        { NULL_PTR }, /* Ab_RxMsgBusyDestructionCallout */
+        SECOC_AB_CSM_REQ_SC, /* Ab_CsmReqType */
+        TRUE, /* SecuredRxPduVerification */
+        0U /* dummy2 */
+    },
+    {
+        128U, /* Ab_AuthInfoLength */
+        32U, /* AuthInfoTruncLength */
+        0U, /* Ab_BusIndex */
+        11U, /* Ab_TxSecurityDataSize */
+        0U, /* dummy1 */
+        4U, /* Ab_MessageTypeIndex */
+        SECOC_AB_MSGTYPE_SECURED, /* Ab_MessageType */
+        SECOC_NONE, /* VerifyStatusPropagationMode */
+        1U, /* AuthenticationBuildAttempts */
+        922U, /* Ab_DataId */
+        0U, /* AuthenticationVerifyAttempts */
+        15U, /* FreshnessValueId */
+        56U, /* FreshnessValueLength */
+        56U, /* FreshnessValueTruncLength */
+        { 20U, CRYPTO_PROCESSING_ASYNC, {0U, 0U, 0U} }, /* RxAuthServiceConfigRef */
+        64U, /* SameBufferPduRef */
+        224U, /* Ab_BufferStartOffset */
+        64U, /* Ab_RxMakeAuthBufferSize */
+        224U, /* Ab_RxBufferStartOffset */
+        &SecOC_CD_FV_VerifyResult, /* Ab_FreshnessValueCallout */
+        4U, /* RxSecuredLayerPduId */
+        4U, /* Ab_RxAuthenticLayerPduId */
+        &SecOC_CD_FV_GetRxFreshness, /* Ab_FreshnessValueFuncName */
+        {&SecOC_Callout_User_VerificationFinalStatus}, /* Ab_VerificationFinalStatusCallout */
+        SECOC_AB_FV_CFUNC, /* Ab_QueryFreshnessValue */
+        0U, /* Ab_ProtDataPaddingSize */
+        NULL_PTR, /* Ab_ErrorDetailNotifyCallout */
+        1U, /* Ab_RxAuthTpCopySize */
+        SECOC_IFPDU, /* RxAuthPduType */
+        SECOC_IFPDU, /* Ab_RxSecuredPduType */
+        FALSE, /* Ab_ForceReceive */
+        SECOC_BOTH, /* Ab_VerifyFinalStatusPropagationMode */
+        4U, /* Ab_RxAuthenticLayerPduRefId */
+        4U, /* Ab_RxSecuredLayerPduRefId */
+        0U, /* Ab_CsmReqSaSizeMax */
+        { NULL_PTR }, /* Ab_RxMsgOverflowDestructionCallout */
+        { NULL_PTR }, /* Ab_RxMsgBusyDestructionCallout */
+        SECOC_AB_CSM_REQ_SC, /* Ab_CsmReqType */
+        TRUE, /* SecuredRxPduVerification */
+        0U /* dummy2 */
+    },
+    {
+        128U, /* Ab_AuthInfoLength */
+        32U, /* AuthInfoTruncLength */
+        0U, /* Ab_BusIndex */
+        11U, /* Ab_TxSecurityDataSize */
+        0U, /* dummy1 */
+        5U, /* Ab_MessageTypeIndex */
+        SECOC_AB_MSGTYPE_SECURED, /* Ab_MessageType */
+        SECOC_NONE, /* VerifyStatusPropagationMode */
+        1U, /* AuthenticationBuildAttempts */
+        923U, /* Ab_DataId */
+        0U, /* AuthenticationVerifyAttempts */
+        16U, /* FreshnessValueId */
+        56U, /* FreshnessValueLength */
+        56U, /* FreshnessValueTruncLength */
+        { 21U, CRYPTO_PROCESSING_ASYNC, {0U, 0U, 0U} }, /* RxAuthServiceConfigRef */
+        64U, /* SameBufferPduRef */
+        288U, /* Ab_BufferStartOffset */
+        64U, /* Ab_RxMakeAuthBufferSize */
+        288U, /* Ab_RxBufferStartOffset */
+        &SecOC_CD_FV_VerifyResult, /* Ab_FreshnessValueCallout */
+        5U, /* RxSecuredLayerPduId */
+        5U, /* Ab_RxAuthenticLayerPduId */
+        &SecOC_CD_FV_GetRxFreshness, /* Ab_FreshnessValueFuncName */
+        {&SecOC_Callout_User_VerificationFinalStatus}, /* Ab_VerificationFinalStatusCallout */
+        SECOC_AB_FV_CFUNC, /* Ab_QueryFreshnessValue */
+        0U, /* Ab_ProtDataPaddingSize */
+        NULL_PTR, /* Ab_ErrorDetailNotifyCallout */
+        1U, /* Ab_RxAuthTpCopySize */
+        SECOC_IFPDU, /* RxAuthPduType */
+        SECOC_IFPDU, /* Ab_RxSecuredPduType */
+        FALSE, /* Ab_ForceReceive */
+        SECOC_BOTH, /* Ab_VerifyFinalStatusPropagationMode */
+        5U, /* Ab_RxAuthenticLayerPduRefId */
+        5U, /* Ab_RxSecuredLayerPduRefId */
+        0U, /* Ab_CsmReqSaSizeMax */
+        { NULL_PTR }, /* Ab_RxMsgOverflowDestructionCallout */
+        { NULL_PTR }, /* Ab_RxMsgBusyDestructionCallout */
+        SECOC_AB_CSM_REQ_SC, /* Ab_CsmReqType */
+        TRUE, /* SecuredRxPduVerification */
+        0U /* dummy2 */
+    },
+    {
+        128U, /* Ab_AuthInfoLength */
+        32U, /* AuthInfoTruncLength */
+        0U, /* Ab_BusIndex */
+        11U, /* Ab_TxSecurityDataSize */
+        0U, /* dummy1 */
+        6U, /* Ab_MessageTypeIndex */
+        SECOC_AB_MSGTYPE_SECURED, /* Ab_MessageType */
+        SECOC_NONE, /* VerifyStatusPropagationMode */
+        1U, /* AuthenticationBuildAttempts */
+        925U, /* Ab_DataId */
+        0U, /* AuthenticationVerifyAttempts */
+        17U, /* FreshnessValueId */
+        56U, /* FreshnessValueLength */
+        56U, /* FreshnessValueTruncLength */
+        { 22U, CRYPTO_PROCESSING_ASYNC, {0U, 0U, 0U} }, /* RxAuthServiceConfigRef */
+        64U, /* SameBufferPduRef */
+        352U, /* Ab_BufferStartOffset */
+        64U, /* Ab_RxMakeAuthBufferSize */
+        352U, /* Ab_RxBufferStartOffset */
+        &SecOC_CD_FV_VerifyResult, /* Ab_FreshnessValueCallout */
+        6U, /* RxSecuredLayerPduId */
+        6U, /* Ab_RxAuthenticLayerPduId */
+        &SecOC_CD_FV_GetRxFreshness, /* Ab_FreshnessValueFuncName */
+        {&SecOC_Callout_User_VerificationFinalStatus}, /* Ab_VerificationFinalStatusCallout */
+        SECOC_AB_FV_CFUNC, /* Ab_QueryFreshnessValue */
+        0U, /* Ab_ProtDataPaddingSize */
+        NULL_PTR, /* Ab_ErrorDetailNotifyCallout */
+        1U, /* Ab_RxAuthTpCopySize */
+        SECOC_IFPDU, /* RxAuthPduType */
+        SECOC_IFPDU, /* Ab_RxSecuredPduType */
+        FALSE, /* Ab_ForceReceive */
+        SECOC_BOTH, /* Ab_VerifyFinalStatusPropagationMode */
+        6U, /* Ab_RxAuthenticLayerPduRefId */
+        6U, /* Ab_RxSecuredLayerPduRefId */
+        0U, /* Ab_CsmReqSaSizeMax */
+        { NULL_PTR }, /* Ab_RxMsgOverflowDestructionCallout */
+        { NULL_PTR }, /* Ab_RxMsgBusyDestructionCallout */
+        SECOC_AB_CSM_REQ_SC, /* Ab_CsmReqType */
+        TRUE, /* SecuredRxPduVerification */
+        0U /* dummy2 */
+    },
+    {
+        128U, /* Ab_AuthInfoLength */
+        32U, /* AuthInfoTruncLength */
+        0U, /* Ab_BusIndex */
+        11U, /* Ab_TxSecurityDataSize */
+        0U, /* dummy1 */
+        7U, /* Ab_MessageTypeIndex */
+        SECOC_AB_MSGTYPE_SECURED, /* Ab_MessageType */
+        SECOC_NONE, /* VerifyStatusPropagationMode */
+        1U, /* AuthenticationBuildAttempts */
+        926U, /* Ab_DataId */
+        0U, /* AuthenticationVerifyAttempts */
+        18U, /* FreshnessValueId */
+        56U, /* FreshnessValueLength */
+        56U, /* FreshnessValueTruncLength */
+        { 23U, CRYPTO_PROCESSING_ASYNC, {0U, 0U, 0U} }, /* RxAuthServiceConfigRef */
+        64U, /* SameBufferPduRef */
+        416U, /* Ab_BufferStartOffset */
+        64U, /* Ab_RxMakeAuthBufferSize */
+        416U, /* Ab_RxBufferStartOffset */
+        &SecOC_CD_FV_VerifyResult, /* Ab_FreshnessValueCallout */
+        7U, /* RxSecuredLayerPduId */
+        7U, /* Ab_RxAuthenticLayerPduId */
+        &SecOC_CD_FV_GetRxFreshness, /* Ab_FreshnessValueFuncName */
+        {&SecOC_Callout_User_VerificationFinalStatus}, /* Ab_VerificationFinalStatusCallout */
+        SECOC_AB_FV_CFUNC, /* Ab_QueryFreshnessValue */
+        0U, /* Ab_ProtDataPaddingSize */
+        NULL_PTR, /* Ab_ErrorDetailNotifyCallout */
+        1U, /* Ab_RxAuthTpCopySize */
+        SECOC_IFPDU, /* RxAuthPduType */
+        SECOC_IFPDU, /* Ab_RxSecuredPduType */
+        FALSE, /* Ab_ForceReceive */
+        SECOC_BOTH, /* Ab_VerifyFinalStatusPropagationMode */
+        7U, /* Ab_RxAuthenticLayerPduRefId */
+        7U, /* Ab_RxSecuredLayerPduRefId */
+        0U, /* Ab_CsmReqSaSizeMax */
+        { NULL_PTR }, /* Ab_RxMsgOverflowDestructionCallout */
+        { NULL_PTR }, /* Ab_RxMsgBusyDestructionCallout */
+        SECOC_AB_CSM_REQ_SC, /* Ab_CsmReqType */
+        TRUE, /* SecuredRxPduVerification */
+        0U /* dummy2 */
+    },
+    {
+        128U, /* Ab_AuthInfoLength */
+        32U, /* AuthInfoTruncLength */
+        0U, /* Ab_BusIndex */
+        11U, /* Ab_TxSecurityDataSize */
+        0U, /* dummy1 */
+        8U, /* Ab_MessageTypeIndex */
+        SECOC_AB_MSGTYPE_SECURED, /* Ab_MessageType */
+        SECOC_NONE, /* VerifyStatusPropagationMode */
+        1U, /* AuthenticationBuildAttempts */
+        927U, /* Ab_DataId */
+        0U, /* AuthenticationVerifyAttempts */
+        19U, /* FreshnessValueId */
+        56U, /* FreshnessValueLength */
+        56U, /* FreshnessValueTruncLength */
+        { 24U, CRYPTO_PROCESSING_ASYNC, {0U, 0U, 0U} }, /* RxAuthServiceConfigRef */
+        64U, /* SameBufferPduRef */
+        480U, /* Ab_BufferStartOffset */
+        64U, /* Ab_RxMakeAuthBufferSize */
+        480U, /* Ab_RxBufferStartOffset */
+        &SecOC_CD_FV_VerifyResult, /* Ab_FreshnessValueCallout */
+        8U, /* RxSecuredLayerPduId */
+        8U, /* Ab_RxAuthenticLayerPduId */
+        &SecOC_CD_FV_GetRxFreshness, /* Ab_FreshnessValueFuncName */
+        {&SecOC_Callout_User_VerificationFinalStatus}, /* Ab_VerificationFinalStatusCallout */
+        SECOC_AB_FV_CFUNC, /* Ab_QueryFreshnessValue */
+        0U, /* Ab_ProtDataPaddingSize */
+        NULL_PTR, /* Ab_ErrorDetailNotifyCallout */
+        1U, /* Ab_RxAuthTpCopySize */
+        SECOC_IFPDU, /* RxAuthPduType */
+        SECOC_IFPDU, /* Ab_RxSecuredPduType */
+        FALSE, /* Ab_ForceReceive */
+        SECOC_BOTH, /* Ab_VerifyFinalStatusPropagationMode */
+        8U, /* Ab_RxAuthenticLayerPduRefId */
+        8U, /* Ab_RxSecuredLayerPduRefId */
+        0U, /* Ab_CsmReqSaSizeMax */
+        { NULL_PTR }, /* Ab_RxMsgOverflowDestructionCallout */
+        { NULL_PTR }, /* Ab_RxMsgBusyDestructionCallout */
+        SECOC_AB_CSM_REQ_SC, /* Ab_CsmReqType */
+        TRUE, /* SecuredRxPduVerification */
+        0U /* dummy2 */
+    },
+    {
+        128U, /* Ab_AuthInfoLength */
+        32U, /* AuthInfoTruncLength */
+        0U, /* Ab_BusIndex */
+        11U, /* Ab_TxSecurityDataSize */
+        0U, /* dummy1 */
+        9U, /* Ab_MessageTypeIndex */
+        SECOC_AB_MSGTYPE_SECURED, /* Ab_MessageType */
+        SECOC_NONE, /* VerifyStatusPropagationMode */
+        1U, /* AuthenticationBuildAttempts */
+        933U, /* Ab_DataId */
+        0U, /* AuthenticationVerifyAttempts */
+        20U, /* FreshnessValueId */
+        56U, /* FreshnessValueLength */
+        56U, /* FreshnessValueTruncLength */
+        { 25U, CRYPTO_PROCESSING_ASYNC, {0U, 0U, 0U} }, /* RxAuthServiceConfigRef */
+        64U, /* SameBufferPduRef */
+        544U, /* Ab_BufferStartOffset */
+        64U, /* Ab_RxMakeAuthBufferSize */
+        544U, /* Ab_RxBufferStartOffset */
+        &SecOC_CD_FV_VerifyResult, /* Ab_FreshnessValueCallout */
+        9U, /* RxSecuredLayerPduId */
+        9U, /* Ab_RxAuthenticLayerPduId */
+        &SecOC_CD_FV_GetRxFreshness, /* Ab_FreshnessValueFuncName */
+        {&SecOC_Callout_User_VerificationFinalStatus}, /* Ab_VerificationFinalStatusCallout */
+        SECOC_AB_FV_CFUNC, /* Ab_QueryFreshnessValue */
+        0U, /* Ab_ProtDataPaddingSize */
+        NULL_PTR, /* Ab_ErrorDetailNotifyCallout */
+        1U, /* Ab_RxAuthTpCopySize */
+        SECOC_IFPDU, /* RxAuthPduType */
+        SECOC_IFPDU, /* Ab_RxSecuredPduType */
+        FALSE, /* Ab_ForceReceive */
+        SECOC_BOTH, /* Ab_VerifyFinalStatusPropagationMode */
+        9U, /* Ab_RxAuthenticLayerPduRefId */
+        9U, /* Ab_RxSecuredLayerPduRefId */
+        0U, /* Ab_CsmReqSaSizeMax */
+        { NULL_PTR }, /* Ab_RxMsgOverflowDestructionCallout */
+        { NULL_PTR }, /* Ab_RxMsgBusyDestructionCallout */
+        SECOC_AB_CSM_REQ_SC, /* Ab_CsmReqType */
+        TRUE, /* SecuredRxPduVerification */
+        0U /* dummy2 */
+    },
+    {
+        128U, /* Ab_AuthInfoLength */
+        32U, /* AuthInfoTruncLength */
+        0U, /* Ab_BusIndex */
+        11U, /* Ab_TxSecurityDataSize */
+        0U, /* dummy1 */
+        10U, /* Ab_MessageTypeIndex */
+        SECOC_AB_MSGTYPE_SECURED, /* Ab_MessageType */
+        SECOC_NONE, /* VerifyStatusPropagationMode */
+        1U, /* AuthenticationBuildAttempts */
+        940U, /* Ab_DataId */
+        0U, /* AuthenticationVerifyAttempts */
+        21U, /* FreshnessValueId */
+        56U, /* FreshnessValueLength */
+        56U, /* FreshnessValueTruncLength */
+        { 26U, CRYPTO_PROCESSING_ASYNC, {0U, 0U, 0U} }, /* RxAuthServiceConfigRef */
+        64U, /* SameBufferPduRef */
+        608U, /* Ab_BufferStartOffset */
+        64U, /* Ab_RxMakeAuthBufferSize */
+        608U, /* Ab_RxBufferStartOffset */
+        &SecOC_CD_FV_VerifyResult, /* Ab_FreshnessValueCallout */
+        10U, /* RxSecuredLayerPduId */
+        10U, /* Ab_RxAuthenticLayerPduId */
+        &SecOC_CD_FV_GetRxFreshness, /* Ab_FreshnessValueFuncName */
+        {&SecOC_Callout_User_VerificationFinalStatus}, /* Ab_VerificationFinalStatusCallout */
+        SECOC_AB_FV_CFUNC, /* Ab_QueryFreshnessValue */
+        0U, /* Ab_ProtDataPaddingSize */
+        NULL_PTR, /* Ab_ErrorDetailNotifyCallout */
+        1U, /* Ab_RxAuthTpCopySize */
+        SECOC_IFPDU, /* RxAuthPduType */
+        SECOC_IFPDU, /* Ab_RxSecuredPduType */
+        FALSE, /* Ab_ForceReceive */
+        SECOC_BOTH, /* Ab_VerifyFinalStatusPropagationMode */
+        10U, /* Ab_RxAuthenticLayerPduRefId */
+        10U, /* Ab_RxSecuredLayerPduRefId */
+        0U, /* Ab_CsmReqSaSizeMax */
+        { NULL_PTR }, /* Ab_RxMsgOverflowDestructionCallout */
+        { NULL_PTR }, /* Ab_RxMsgBusyDestructionCallout */
+        SECOC_AB_CSM_REQ_SC, /* Ab_CsmReqType */
+        TRUE, /* SecuredRxPduVerification */
+        0U /* dummy2 */
+    },
+    {
+        128U, /* Ab_AuthInfoLength */
+        32U, /* AuthInfoTruncLength */
+        0U, /* Ab_BusIndex */
+        11U, /* Ab_TxSecurityDataSize */
+        0U, /* dummy1 */
+        11U, /* Ab_MessageTypeIndex */
+        SECOC_AB_MSGTYPE_SECURED, /* Ab_MessageType */
+        SECOC_NONE, /* VerifyStatusPropagationMode */
+        1U, /* AuthenticationBuildAttempts */
+        942U, /* Ab_DataId */
+        0U, /* AuthenticationVerifyAttempts */
+        22U, /* FreshnessValueId */
+        56U, /* FreshnessValueLength */
+        56U, /* FreshnessValueTruncLength */
+        { 27U, CRYPTO_PROCESSING_ASYNC, {0U, 0U, 0U} }, /* RxAuthServiceConfigRef */
+        64U, /* SameBufferPduRef */
+        672U, /* Ab_BufferStartOffset */
+        64U, /* Ab_RxMakeAuthBufferSize */
+        672U, /* Ab_RxBufferStartOffset */
+        &SecOC_CD_FV_VerifyResult, /* Ab_FreshnessValueCallout */
+        11U, /* RxSecuredLayerPduId */
+        11U, /* Ab_RxAuthenticLayerPduId */
+        &SecOC_CD_FV_GetRxFreshness, /* Ab_FreshnessValueFuncName */
+        {&SecOC_Callout_User_VerificationFinalStatus}, /* Ab_VerificationFinalStatusCallout */
+        SECOC_AB_FV_CFUNC, /* Ab_QueryFreshnessValue */
+        0U, /* Ab_ProtDataPaddingSize */
+        NULL_PTR, /* Ab_ErrorDetailNotifyCallout */
+        1U, /* Ab_RxAuthTpCopySize */
+        SECOC_IFPDU, /* RxAuthPduType */
+        SECOC_IFPDU, /* Ab_RxSecuredPduType */
+        FALSE, /* Ab_ForceReceive */
+        SECOC_BOTH, /* Ab_VerifyFinalStatusPropagationMode */
+        11U, /* Ab_RxAuthenticLayerPduRefId */
+        11U, /* Ab_RxSecuredLayerPduRefId */
+        0U, /* Ab_CsmReqSaSizeMax */
+        { NULL_PTR }, /* Ab_RxMsgOverflowDestructionCallout */
+        { NULL_PTR }, /* Ab_RxMsgBusyDestructionCallout */
+        SECOC_AB_CSM_REQ_SC, /* Ab_CsmReqType */
+        TRUE, /* SecuredRxPduVerification */
+        0U /* dummy2 */
+    },
+    {
+        128U, /* Ab_AuthInfoLength */
+        32U, /* AuthInfoTruncLength */
+        0U, /* Ab_BusIndex */
+        11U, /* Ab_TxSecurityDataSize */
+        0U, /* dummy1 */
+        12U, /* Ab_MessageTypeIndex */
+        SECOC_AB_MSGTYPE_SECURED, /* Ab_MessageType */
+        SECOC_NONE, /* VerifyStatusPropagationMode */
+        1U, /* AuthenticationBuildAttempts */
+        946U, /* Ab_DataId */
+        0U, /* AuthenticationVerifyAttempts */
+        23U, /* FreshnessValueId */
+        56U, /* FreshnessValueLength */
+        56U, /* FreshnessValueTruncLength */
+        { 28U, CRYPTO_PROCESSING_ASYNC, {0U, 0U, 0U} }, /* RxAuthServiceConfigRef */
+        64U, /* SameBufferPduRef */
+        736U, /* Ab_BufferStartOffset */
+        64U, /* Ab_RxMakeAuthBufferSize */
+        736U, /* Ab_RxBufferStartOffset */
+        &SecOC_CD_FV_VerifyResult, /* Ab_FreshnessValueCallout */
+        12U, /* RxSecuredLayerPduId */
+        12U, /* Ab_RxAuthenticLayerPduId */
+        &SecOC_CD_FV_GetRxFreshness, /* Ab_FreshnessValueFuncName */
+        {&SecOC_Callout_User_VerificationFinalStatus}, /* Ab_VerificationFinalStatusCallout */
+        SECOC_AB_FV_CFUNC, /* Ab_QueryFreshnessValue */
+        0U, /* Ab_ProtDataPaddingSize */
+        NULL_PTR, /* Ab_ErrorDetailNotifyCallout */
+        1U, /* Ab_RxAuthTpCopySize */
+        SECOC_IFPDU, /* RxAuthPduType */
+        SECOC_IFPDU, /* Ab_RxSecuredPduType */
+        FALSE, /* Ab_ForceReceive */
+        SECOC_BOTH, /* Ab_VerifyFinalStatusPropagationMode */
+        12U, /* Ab_RxAuthenticLayerPduRefId */
+        12U, /* Ab_RxSecuredLayerPduRefId */
+        0U, /* Ab_CsmReqSaSizeMax */
+        { NULL_PTR }, /* Ab_RxMsgOverflowDestructionCallout */
+        { NULL_PTR }, /* Ab_RxMsgBusyDestructionCallout */
+        SECOC_AB_CSM_REQ_SC, /* Ab_CsmReqType */
+        TRUE, /* SecuredRxPduVerification */
+        0U /* dummy2 */
+    },
+    {
+        128U, /* Ab_AuthInfoLength */
+        32U, /* AuthInfoTruncLength */
+        0U, /* Ab_BusIndex */
+        11U, /* Ab_TxSecurityDataSize */
+        0U, /* dummy1 */
+        13U, /* Ab_MessageTypeIndex */
+        SECOC_AB_MSGTYPE_SECURED, /* Ab_MessageType */
+        SECOC_NONE, /* VerifyStatusPropagationMode */
+        1U, /* AuthenticationBuildAttempts */
+        947U, /* Ab_DataId */
+        0U, /* AuthenticationVerifyAttempts */
+        24U, /* FreshnessValueId */
+        56U, /* FreshnessValueLength */
+        56U, /* FreshnessValueTruncLength */
+        { 29U, CRYPTO_PROCESSING_ASYNC, {0U, 0U, 0U} }, /* RxAuthServiceConfigRef */
+        64U, /* SameBufferPduRef */
+        800U, /* Ab_BufferStartOffset */
+        64U, /* Ab_RxMakeAuthBufferSize */
+        800U, /* Ab_RxBufferStartOffset */
+        &SecOC_CD_FV_VerifyResult, /* Ab_FreshnessValueCallout */
+        13U, /* RxSecuredLayerPduId */
+        13U, /* Ab_RxAuthenticLayerPduId */
+        &SecOC_CD_FV_GetRxFreshness, /* Ab_FreshnessValueFuncName */
+        {&SecOC_Callout_User_VerificationFinalStatus}, /* Ab_VerificationFinalStatusCallout */
+        SECOC_AB_FV_CFUNC, /* Ab_QueryFreshnessValue */
+        0U, /* Ab_ProtDataPaddingSize */
+        NULL_PTR, /* Ab_ErrorDetailNotifyCallout */
+        1U, /* Ab_RxAuthTpCopySize */
+        SECOC_IFPDU, /* RxAuthPduType */
+        SECOC_IFPDU, /* Ab_RxSecuredPduType */
+        FALSE, /* Ab_ForceReceive */
+        SECOC_BOTH, /* Ab_VerifyFinalStatusPropagationMode */
+        13U, /* Ab_RxAuthenticLayerPduRefId */
+        13U, /* Ab_RxSecuredLayerPduRefId */
+        0U, /* Ab_CsmReqSaSizeMax */
+        { NULL_PTR }, /* Ab_RxMsgOverflowDestructionCallout */
+        { NULL_PTR }, /* Ab_RxMsgBusyDestructionCallout */
+        SECOC_AB_CSM_REQ_SC, /* Ab_CsmReqType */
+        TRUE, /* SecuredRxPduVerification */
+        0U /* dummy2 */
+    },
+    {
+        128U, /* Ab_AuthInfoLength */
+        32U, /* AuthInfoTruncLength */
+        0U, /* Ab_BusIndex */
+        11U, /* Ab_TxSecurityDataSize */
+        0U, /* dummy1 */
+        14U, /* Ab_MessageTypeIndex */
+        SECOC_AB_MSGTYPE_SECURED, /* Ab_MessageType */
+        SECOC_NONE, /* VerifyStatusPropagationMode */
+        1U, /* AuthenticationBuildAttempts */
+        953U, /* Ab_DataId */
+        0U, /* AuthenticationVerifyAttempts */
+        25U, /* FreshnessValueId */
+        56U, /* FreshnessValueLength */
+        56U, /* FreshnessValueTruncLength */
+        { 30U, CRYPTO_PROCESSING_ASYNC, {0U, 0U, 0U} }, /* RxAuthServiceConfigRef */
+        64U, /* SameBufferPduRef */
+        864U, /* Ab_BufferStartOffset */
+        64U, /* Ab_RxMakeAuthBufferSize */
+        864U, /* Ab_RxBufferStartOffset */
+        &SecOC_CD_FV_VerifyResult, /* Ab_FreshnessValueCallout */
+        14U, /* RxSecuredLayerPduId */
+        14U, /* Ab_RxAuthenticLayerPduId */
+        &SecOC_CD_FV_GetRxFreshness, /* Ab_FreshnessValueFuncName */
+        {&SecOC_Callout_User_VerificationFinalStatus}, /* Ab_VerificationFinalStatusCallout */
+        SECOC_AB_FV_CFUNC, /* Ab_QueryFreshnessValue */
+        0U, /* Ab_ProtDataPaddingSize */
+        NULL_PTR, /* Ab_ErrorDetailNotifyCallout */
+        1U, /* Ab_RxAuthTpCopySize */
+        SECOC_IFPDU, /* RxAuthPduType */
+        SECOC_IFPDU, /* Ab_RxSecuredPduType */
+        FALSE, /* Ab_ForceReceive */
+        SECOC_BOTH, /* Ab_VerifyFinalStatusPropagationMode */
+        14U, /* Ab_RxAuthenticLayerPduRefId */
+        14U, /* Ab_RxSecuredLayerPduRefId */
+        0U, /* Ab_CsmReqSaSizeMax */
+        { NULL_PTR }, /* Ab_RxMsgOverflowDestructionCallout */
+        { NULL_PTR }, /* Ab_RxMsgBusyDestructionCallout */
+        SECOC_AB_CSM_REQ_SC, /* Ab_CsmReqType */
+        TRUE, /* SecuredRxPduVerification */
+        0U /* dummy2 */
+    },
+    {
+        128U, /* Ab_AuthInfoLength */
+        32U, /* AuthInfoTruncLength */
+        0U, /* Ab_BusIndex */
+        11U, /* Ab_TxSecurityDataSize */
+        0U, /* dummy1 */
+        15U, /* Ab_MessageTypeIndex */
+        SECOC_AB_MSGTYPE_SECURED, /* Ab_MessageType */
+        SECOC_NONE, /* VerifyStatusPropagationMode */
+        1U, /* AuthenticationBuildAttempts */
+        956U, /* Ab_DataId */
+        0U, /* AuthenticationVerifyAttempts */
+        26U, /* FreshnessValueId */
+        56U, /* FreshnessValueLength */
+        56U, /* FreshnessValueTruncLength */
+        { 31U, CRYPTO_PROCESSING_ASYNC, {0U, 0U, 0U} }, /* RxAuthServiceConfigRef */
+        64U, /* SameBufferPduRef */
+        928U, /* Ab_BufferStartOffset */
+        64U, /* Ab_RxMakeAuthBufferSize */
+        928U, /* Ab_RxBufferStartOffset */
+        &SecOC_CD_FV_VerifyResult, /* Ab_FreshnessValueCallout */
+        15U, /* RxSecuredLayerPduId */
+        15U, /* Ab_RxAuthenticLayerPduId */
+        &SecOC_CD_FV_GetRxFreshness, /* Ab_FreshnessValueFuncName */
+        {&SecOC_Callout_User_VerificationFinalStatus}, /* Ab_VerificationFinalStatusCallout */
+        SECOC_AB_FV_CFUNC, /* Ab_QueryFreshnessValue */
+        0U, /* Ab_ProtDataPaddingSize */
+        NULL_PTR, /* Ab_ErrorDetailNotifyCallout */
+        1U, /* Ab_RxAuthTpCopySize */
+        SECOC_IFPDU, /* RxAuthPduType */
+        SECOC_IFPDU, /* Ab_RxSecuredPduType */
+        FALSE, /* Ab_ForceReceive */
+        SECOC_BOTH, /* Ab_VerifyFinalStatusPropagationMode */
+        15U, /* Ab_RxAuthenticLayerPduRefId */
+        15U, /* Ab_RxSecuredLayerPduRefId */
+        0U, /* Ab_CsmReqSaSizeMax */
+        { NULL_PTR }, /* Ab_RxMsgOverflowDestructionCallout */
+        { NULL_PTR }, /* Ab_RxMsgBusyDestructionCallout */
+        SECOC_AB_CSM_REQ_SC, /* Ab_CsmReqType */
+        TRUE, /* SecuredRxPduVerification */
+        0U /* dummy2 */
+    },
+    {
+        128U, /* Ab_AuthInfoLength */
+        32U, /* AuthInfoTruncLength */
+        0U, /* Ab_BusIndex */
+        11U, /* Ab_TxSecurityDataSize */
+        0U, /* dummy1 */
+        16U, /* Ab_MessageTypeIndex */
+        SECOC_AB_MSGTYPE_SECURED, /* Ab_MessageType */
+        SECOC_NONE, /* VerifyStatusPropagationMode */
+        1U, /* AuthenticationBuildAttempts */
+        966U, /* Ab_DataId */
+        0U, /* AuthenticationVerifyAttempts */
+        27U, /* FreshnessValueId */
+        56U, /* FreshnessValueLength */
+        56U, /* FreshnessValueTruncLength */
+        { 32U, CRYPTO_PROCESSING_ASYNC, {0U, 0U, 0U} }, /* RxAuthServiceConfigRef */
+        64U, /* SameBufferPduRef */
+        992U, /* Ab_BufferStartOffset */
+        64U, /* Ab_RxMakeAuthBufferSize */
+        992U, /* Ab_RxBufferStartOffset */
+        &SecOC_CD_FV_VerifyResult, /* Ab_FreshnessValueCallout */
+        16U, /* RxSecuredLayerPduId */
+        16U, /* Ab_RxAuthenticLayerPduId */
+        &SecOC_CD_FV_GetRxFreshness, /* Ab_FreshnessValueFuncName */
+        {&SecOC_Callout_User_VerificationFinalStatus}, /* Ab_VerificationFinalStatusCallout */
+        SECOC_AB_FV_CFUNC, /* Ab_QueryFreshnessValue */
+        0U, /* Ab_ProtDataPaddingSize */
+        NULL_PTR, /* Ab_ErrorDetailNotifyCallout */
+        1U, /* Ab_RxAuthTpCopySize */
+        SECOC_IFPDU, /* RxAuthPduType */
+        SECOC_IFPDU, /* Ab_RxSecuredPduType */
+        FALSE, /* Ab_ForceReceive */
+        SECOC_BOTH, /* Ab_VerifyFinalStatusPropagationMode */
+        16U, /* Ab_RxAuthenticLayerPduRefId */
+        16U, /* Ab_RxSecuredLayerPduRefId */
+        0U, /* Ab_CsmReqSaSizeMax */
+        { NULL_PTR }, /* Ab_RxMsgOverflowDestructionCallout */
+        { NULL_PTR }, /* Ab_RxMsgBusyDestructionCallout */
+        SECOC_AB_CSM_REQ_SC, /* Ab_CsmReqType */
+        TRUE, /* SecuredRxPduVerification */
+        0U /* dummy2 */
+    },
+    {
+        128U, /* Ab_AuthInfoLength */
+        32U, /* AuthInfoTruncLength */
+        0U, /* Ab_BusIndex */
+        11U, /* Ab_TxSecurityDataSize */
+        0U, /* dummy1 */
+        17U, /* Ab_MessageTypeIndex */
+        SECOC_AB_MSGTYPE_SECURED, /* Ab_MessageType */
+        SECOC_NONE, /* VerifyStatusPropagationMode */
+        1U, /* AuthenticationBuildAttempts */
+        967U, /* Ab_DataId */
+        0U, /* AuthenticationVerifyAttempts */
+        28U, /* FreshnessValueId */
+        56U, /* FreshnessValueLength */
+        56U, /* FreshnessValueTruncLength */
+        { 33U, CRYPTO_PROCESSING_ASYNC, {0U, 0U, 0U} }, /* RxAuthServiceConfigRef */
+        64U, /* SameBufferPduRef */
+        1056U, /* Ab_BufferStartOffset */
+        64U, /* Ab_RxMakeAuthBufferSize */
+        1056U, /* Ab_RxBufferStartOffset */
+        &SecOC_CD_FV_VerifyResult, /* Ab_FreshnessValueCallout */
+        17U, /* RxSecuredLayerPduId */
+        17U, /* Ab_RxAuthenticLayerPduId */
+        &SecOC_CD_FV_GetRxFreshness, /* Ab_FreshnessValueFuncName */
+        {&SecOC_Callout_User_VerificationFinalStatus}, /* Ab_VerificationFinalStatusCallout */
+        SECOC_AB_FV_CFUNC, /* Ab_QueryFreshnessValue */
+        0U, /* Ab_ProtDataPaddingSize */
+        NULL_PTR, /* Ab_ErrorDetailNotifyCallout */
+        1U, /* Ab_RxAuthTpCopySize */
+        SECOC_IFPDU, /* RxAuthPduType */
+        SECOC_IFPDU, /* Ab_RxSecuredPduType */
+        FALSE, /* Ab_ForceReceive */
+        SECOC_BOTH, /* Ab_VerifyFinalStatusPropagationMode */
+        17U, /* Ab_RxAuthenticLayerPduRefId */
+        17U, /* Ab_RxSecuredLayerPduRefId */
+        0U, /* Ab_CsmReqSaSizeMax */
+        { NULL_PTR }, /* Ab_RxMsgOverflowDestructionCallout */
+        { NULL_PTR }, /* Ab_RxMsgBusyDestructionCallout */
+        SECOC_AB_CSM_REQ_SC, /* Ab_CsmReqType */
+        TRUE, /* SecuredRxPduVerification */
+        0U /* dummy2 */
+    },
+    {
+        128U, /* Ab_AuthInfoLength */
+        32U, /* AuthInfoTruncLength */
+        0U, /* Ab_BusIndex */
+        11U, /* Ab_TxSecurityDataSize */
+        0U, /* dummy1 */
+        18U, /* Ab_MessageTypeIndex */
+        SECOC_AB_MSGTYPE_SECURED, /* Ab_MessageType */
+        SECOC_NONE, /* VerifyStatusPropagationMode */
+        1U, /* AuthenticationBuildAttempts */
+        973U, /* Ab_DataId */
+        0U, /* AuthenticationVerifyAttempts */
+        29U, /* FreshnessValueId */
+        56U, /* FreshnessValueLength */
+        56U, /* FreshnessValueTruncLength */
+        { 34U, CRYPTO_PROCESSING_ASYNC, {0U, 0U, 0U} }, /* RxAuthServiceConfigRef */
+        64U, /* SameBufferPduRef */
+        1120U, /* Ab_BufferStartOffset */
+        64U, /* Ab_RxMakeAuthBufferSize */
+        1120U, /* Ab_RxBufferStartOffset */
+        &SecOC_CD_FV_VerifyResult, /* Ab_FreshnessValueCallout */
+        18U, /* RxSecuredLayerPduId */
+        18U, /* Ab_RxAuthenticLayerPduId */
+        &SecOC_CD_FV_GetRxFreshness, /* Ab_FreshnessValueFuncName */
+        {&SecOC_Callout_User_VerificationFinalStatus}, /* Ab_VerificationFinalStatusCallout */
+        SECOC_AB_FV_CFUNC, /* Ab_QueryFreshnessValue */
+        0U, /* Ab_ProtDataPaddingSize */
+        NULL_PTR, /* Ab_ErrorDetailNotifyCallout */
+        1U, /* Ab_RxAuthTpCopySize */
+        SECOC_IFPDU, /* RxAuthPduType */
+        SECOC_IFPDU, /* Ab_RxSecuredPduType */
+        FALSE, /* Ab_ForceReceive */
+        SECOC_BOTH, /* Ab_VerifyFinalStatusPropagationMode */
+        18U, /* Ab_RxAuthenticLayerPduRefId */
+        18U, /* Ab_RxSecuredLayerPduRefId */
+        0U, /* Ab_CsmReqSaSizeMax */
+        { NULL_PTR }, /* Ab_RxMsgOverflowDestructionCallout */
+        { NULL_PTR }, /* Ab_RxMsgBusyDestructionCallout */
+        SECOC_AB_CSM_REQ_SC, /* Ab_CsmReqType */
+        TRUE, /* SecuredRxPduVerification */
+        0U /* dummy2 */
+    },
+    {
+        128U, /* Ab_AuthInfoLength */
+        32U, /* AuthInfoTruncLength */
+        0U, /* Ab_BusIndex */
+        11U, /* Ab_TxSecurityDataSize */
+        0U, /* dummy1 */
+        19U, /* Ab_MessageTypeIndex */
+        SECOC_AB_MSGTYPE_SECURED, /* Ab_MessageType */
+        SECOC_NONE, /* VerifyStatusPropagationMode */
+        1U, /* AuthenticationBuildAttempts */
+        979U, /* Ab_DataId */
+        0U, /* AuthenticationVerifyAttempts */
+        30U, /* FreshnessValueId */
+        56U, /* FreshnessValueLength */
+        56U, /* FreshnessValueTruncLength */
+        { 35U, CRYPTO_PROCESSING_ASYNC, {0U, 0U, 0U} }, /* RxAuthServiceConfigRef */
+        64U, /* SameBufferPduRef */
+        1184U, /* Ab_BufferStartOffset */
+        64U, /* Ab_RxMakeAuthBufferSize */
+        1184U, /* Ab_RxBufferStartOffset */
+        &SecOC_CD_FV_VerifyResult, /* Ab_FreshnessValueCallout */
+        19U, /* RxSecuredLayerPduId */
+        19U, /* Ab_RxAuthenticLayerPduId */
+        &SecOC_CD_FV_GetRxFreshness, /* Ab_FreshnessValueFuncName */
+        {&SecOC_Callout_User_VerificationFinalStatus}, /* Ab_VerificationFinalStatusCallout */
+        SECOC_AB_FV_CFUNC, /* Ab_QueryFreshnessValue */
+        0U, /* Ab_ProtDataPaddingSize */
+        NULL_PTR, /* Ab_ErrorDetailNotifyCallout */
+        1U, /* Ab_RxAuthTpCopySize */
+        SECOC_IFPDU, /* RxAuthPduType */
+        SECOC_IFPDU, /* Ab_RxSecuredPduType */
+        FALSE, /* Ab_ForceReceive */
+        SECOC_BOTH, /* Ab_VerifyFinalStatusPropagationMode */
+        19U, /* Ab_RxAuthenticLayerPduRefId */
+        19U, /* Ab_RxSecuredLayerPduRefId */
+        0U, /* Ab_CsmReqSaSizeMax */
+        { NULL_PTR }, /* Ab_RxMsgOverflowDestructionCallout */
+        { NULL_PTR }, /* Ab_RxMsgBusyDestructionCallout */
+        SECOC_AB_CSM_REQ_SC, /* Ab_CsmReqType */
+        TRUE, /* SecuredRxPduVerification */
+        0U /* dummy2 */
+    },
+    {
+        128U, /* Ab_AuthInfoLength */
+        32U, /* AuthInfoTruncLength */
+        0U, /* Ab_BusIndex */
+        11U, /* Ab_TxSecurityDataSize */
+        0U, /* dummy1 */
+        20U, /* Ab_MessageTypeIndex */
+        SECOC_AB_MSGTYPE_SECURED, /* Ab_MessageType */
+        SECOC_NONE, /* VerifyStatusPropagationMode */
+        1U, /* AuthenticationBuildAttempts */
+        982U, /* Ab_DataId */
+        0U, /* AuthenticationVerifyAttempts */
+        31U, /* FreshnessValueId */
+        56U, /* FreshnessValueLength */
+        56U, /* FreshnessValueTruncLength */
+        { 36U, CRYPTO_PROCESSING_ASYNC, {0U, 0U, 0U} }, /* RxAuthServiceConfigRef */
+        64U, /* SameBufferPduRef */
+        1248U, /* Ab_BufferStartOffset */
+        64U, /* Ab_RxMakeAuthBufferSize */
+        1248U, /* Ab_RxBufferStartOffset */
+        &SecOC_CD_FV_VerifyResult, /* Ab_FreshnessValueCallout */
+        20U, /* RxSecuredLayerPduId */
+        20U, /* Ab_RxAuthenticLayerPduId */
+        &SecOC_CD_FV_GetRxFreshness, /* Ab_FreshnessValueFuncName */
+        {&SecOC_Callout_User_VerificationFinalStatus}, /* Ab_VerificationFinalStatusCallout */
+        SECOC_AB_FV_CFUNC, /* Ab_QueryFreshnessValue */
+        0U, /* Ab_ProtDataPaddingSize */
+        NULL_PTR, /* Ab_ErrorDetailNotifyCallout */
+        1U, /* Ab_RxAuthTpCopySize */
+        SECOC_IFPDU, /* RxAuthPduType */
+        SECOC_IFPDU, /* Ab_RxSecuredPduType */
+        FALSE, /* Ab_ForceReceive */
+        SECOC_BOTH, /* Ab_VerifyFinalStatusPropagationMode */
+        20U, /* Ab_RxAuthenticLayerPduRefId */
+        20U, /* Ab_RxSecuredLayerPduRefId */
+        0U, /* Ab_CsmReqSaSizeMax */
+        { NULL_PTR }, /* Ab_RxMsgOverflowDestructionCallout */
+        { NULL_PTR }, /* Ab_RxMsgBusyDestructionCallout */
+        SECOC_AB_CSM_REQ_SC, /* Ab_CsmReqType */
+        TRUE, /* SecuredRxPduVerification */
+        0U /* dummy2 */
+    },
+    {
+        128U, /* Ab_AuthInfoLength */
+        32U, /* AuthInfoTruncLength */
+        0U, /* Ab_BusIndex */
+        11U, /* Ab_TxSecurityDataSize */
+        0U, /* dummy1 */
+        21U, /* Ab_MessageTypeIndex */
+        SECOC_AB_MSGTYPE_SECURED, /* Ab_MessageType */
+        SECOC_NONE, /* VerifyStatusPropagationMode */
+        1U, /* AuthenticationBuildAttempts */
+        989U, /* Ab_DataId */
+        0U, /* AuthenticationVerifyAttempts */
+        32U, /* FreshnessValueId */
+        56U, /* FreshnessValueLength */
+        56U, /* FreshnessValueTruncLength */
+        { 37U, CRYPTO_PROCESSING_ASYNC, {0U, 0U, 0U} }, /* RxAuthServiceConfigRef */
+        64U, /* SameBufferPduRef */
+        1312U, /* Ab_BufferStartOffset */
+        64U, /* Ab_RxMakeAuthBufferSize */
+        1312U, /* Ab_RxBufferStartOffset */
+        &SecOC_CD_FV_VerifyResult, /* Ab_FreshnessValueCallout */
+        21U, /* RxSecuredLayerPduId */
+        21U, /* Ab_RxAuthenticLayerPduId */
+        &SecOC_CD_FV_GetRxFreshness, /* Ab_FreshnessValueFuncName */
+        {&SecOC_Callout_User_VerificationFinalStatus}, /* Ab_VerificationFinalStatusCallout */
+        SECOC_AB_FV_CFUNC, /* Ab_QueryFreshnessValue */
+        0U, /* Ab_ProtDataPaddingSize */
+        NULL_PTR, /* Ab_ErrorDetailNotifyCallout */
+        1U, /* Ab_RxAuthTpCopySize */
+        SECOC_IFPDU, /* RxAuthPduType */
+        SECOC_IFPDU, /* Ab_RxSecuredPduType */
+        FALSE, /* Ab_ForceReceive */
+        SECOC_BOTH, /* Ab_VerifyFinalStatusPropagationMode */
+        21U, /* Ab_RxAuthenticLayerPduRefId */
+        21U, /* Ab_RxSecuredLayerPduRefId */
+        0U, /* Ab_CsmReqSaSizeMax */
+        { NULL_PTR }, /* Ab_RxMsgOverflowDestructionCallout */
+        { NULL_PTR }, /* Ab_RxMsgBusyDestructionCallout */
+        SECOC_AB_CSM_REQ_SC, /* Ab_CsmReqType */
+        TRUE, /* SecuredRxPduVerification */
+        0U /* dummy2 */
+    },
+    {
+        128U, /* Ab_AuthInfoLength */
+        32U, /* AuthInfoTruncLength */
+        0U, /* Ab_BusIndex */
+        11U, /* Ab_TxSecurityDataSize */
+        0U, /* dummy1 */
+        22U, /* Ab_MessageTypeIndex */
+        SECOC_AB_MSGTYPE_SECURED, /* Ab_MessageType */
+        SECOC_NONE, /* VerifyStatusPropagationMode */
+        1U, /* AuthenticationBuildAttempts */
+        993U, /* Ab_DataId */
+        0U, /* AuthenticationVerifyAttempts */
+        33U, /* FreshnessValueId */
+        56U, /* FreshnessValueLength */
+        56U, /* FreshnessValueTruncLength */
+        { 38U, CRYPTO_PROCESSING_ASYNC, {0U, 0U, 0U} }, /* RxAuthServiceConfigRef */
+        64U, /* SameBufferPduRef */
+        1376U, /* Ab_BufferStartOffset */
+        64U, /* Ab_RxMakeAuthBufferSize */
+        1376U, /* Ab_RxBufferStartOffset */
+        &SecOC_CD_FV_VerifyResult, /* Ab_FreshnessValueCallout */
+        22U, /* RxSecuredLayerPduId */
+        22U, /* Ab_RxAuthenticLayerPduId */
+        &SecOC_CD_FV_GetRxFreshness, /* Ab_FreshnessValueFuncName */
+        {&SecOC_Callout_User_VerificationFinalStatus}, /* Ab_VerificationFinalStatusCallout */
+        SECOC_AB_FV_CFUNC, /* Ab_QueryFreshnessValue */
+        0U, /* Ab_ProtDataPaddingSize */
+        NULL_PTR, /* Ab_ErrorDetailNotifyCallout */
+        1U, /* Ab_RxAuthTpCopySize */
+        SECOC_IFPDU, /* RxAuthPduType */
+        SECOC_IFPDU, /* Ab_RxSecuredPduType */
+        FALSE, /* Ab_ForceReceive */
+        SECOC_BOTH, /* Ab_VerifyFinalStatusPropagationMode */
+        22U, /* Ab_RxAuthenticLayerPduRefId */
+        22U, /* Ab_RxSecuredLayerPduRefId */
+        0U, /* Ab_CsmReqSaSizeMax */
+        { NULL_PTR }, /* Ab_RxMsgOverflowDestructionCallout */
+        { NULL_PTR }, /* Ab_RxMsgBusyDestructionCallout */
+        SECOC_AB_CSM_REQ_SC, /* Ab_CsmReqType */
+        TRUE, /* SecuredRxPduVerification */
+        0U /* dummy2 */
+    },
+    {
+        128U, /* Ab_AuthInfoLength */
+        32U, /* AuthInfoTruncLength */
+        0U, /* Ab_BusIndex */
+        11U, /* Ab_TxSecurityDataSize */
+        0U, /* dummy1 */
+        23U, /* Ab_MessageTypeIndex */
+        SECOC_AB_MSGTYPE_SECURED, /* Ab_MessageType */
+        SECOC_NONE, /* VerifyStatusPropagationMode */
+        1U, /* AuthenticationBuildAttempts */
+        1003U, /* Ab_DataId */
+        0U, /* AuthenticationVerifyAttempts */
+        34U, /* FreshnessValueId */
+        56U, /* FreshnessValueLength */
+        56U, /* FreshnessValueTruncLength */
+        { 39U, CRYPTO_PROCESSING_ASYNC, {0U, 0U, 0U} }, /* RxAuthServiceConfigRef */
+        64U, /* SameBufferPduRef */
+        1440U, /* Ab_BufferStartOffset */
+        64U, /* Ab_RxMakeAuthBufferSize */
+        1440U, /* Ab_RxBufferStartOffset */
+        &SecOC_CD_FV_VerifyResult, /* Ab_FreshnessValueCallout */
+        23U, /* RxSecuredLayerPduId */
+        23U, /* Ab_RxAuthenticLayerPduId */
+        &SecOC_CD_FV_GetRxFreshness, /* Ab_FreshnessValueFuncName */
+        {&SecOC_Callout_User_VerificationFinalStatus}, /* Ab_VerificationFinalStatusCallout */
+        SECOC_AB_FV_CFUNC, /* Ab_QueryFreshnessValue */
+        0U, /* Ab_ProtDataPaddingSize */
+        NULL_PTR, /* Ab_ErrorDetailNotifyCallout */
+        1U, /* Ab_RxAuthTpCopySize */
+        SECOC_IFPDU, /* RxAuthPduType */
+        SECOC_IFPDU, /* Ab_RxSecuredPduType */
+        FALSE, /* Ab_ForceReceive */
+        SECOC_BOTH, /* Ab_VerifyFinalStatusPropagationMode */
+        23U, /* Ab_RxAuthenticLayerPduRefId */
+        23U, /* Ab_RxSecuredLayerPduRefId */
+        0U, /* Ab_CsmReqSaSizeMax */
+        { NULL_PTR }, /* Ab_RxMsgOverflowDestructionCallout */
+        { NULL_PTR }, /* Ab_RxMsgBusyDestructionCallout */
+        SECOC_AB_CSM_REQ_SC, /* Ab_CsmReqType */
+        TRUE, /* SecuredRxPduVerification */
+        0U /* dummy2 */
+    },
+    {
+        128U, /* Ab_AuthInfoLength */
+        32U, /* AuthInfoTruncLength */
+        0U, /* Ab_BusIndex */
+        11U, /* Ab_TxSecurityDataSize */
+        0U, /* dummy1 */
+        24U, /* Ab_MessageTypeIndex */
+        SECOC_AB_MSGTYPE_SECURED, /* Ab_MessageType */
+        SECOC_NONE, /* VerifyStatusPropagationMode */
+        1U, /* AuthenticationBuildAttempts */
+        1007U, /* Ab_DataId */
+        0U, /* AuthenticationVerifyAttempts */
+        35U, /* FreshnessValueId */
+        56U, /* FreshnessValueLength */
+        56U, /* FreshnessValueTruncLength */
+        { 40U, CRYPTO_PROCESSING_ASYNC, {0U, 0U, 0U} }, /* RxAuthServiceConfigRef */
+        64U, /* SameBufferPduRef */
+        1504U, /* Ab_BufferStartOffset */
+        64U, /* Ab_RxMakeAuthBufferSize */
+        1504U, /* Ab_RxBufferStartOffset */
+        &SecOC_CD_FV_VerifyResult, /* Ab_FreshnessValueCallout */
+        24U, /* RxSecuredLayerPduId */
+        24U, /* Ab_RxAuthenticLayerPduId */
+        &SecOC_CD_FV_GetRxFreshness, /* Ab_FreshnessValueFuncName */
+        {&SecOC_Callout_User_VerificationFinalStatus}, /* Ab_VerificationFinalStatusCallout */
+        SECOC_AB_FV_CFUNC, /* Ab_QueryFreshnessValue */
+        0U, /* Ab_ProtDataPaddingSize */
+        NULL_PTR, /* Ab_ErrorDetailNotifyCallout */
+        1U, /* Ab_RxAuthTpCopySize */
+        SECOC_IFPDU, /* RxAuthPduType */
+        SECOC_IFPDU, /* Ab_RxSecuredPduType */
+        FALSE, /* Ab_ForceReceive */
+        SECOC_BOTH, /* Ab_VerifyFinalStatusPropagationMode */
+        24U, /* Ab_RxAuthenticLayerPduRefId */
+        24U, /* Ab_RxSecuredLayerPduRefId */
+        0U, /* Ab_CsmReqSaSizeMax */
+        { NULL_PTR }, /* Ab_RxMsgOverflowDestructionCallout */
+        { NULL_PTR }, /* Ab_RxMsgBusyDestructionCallout */
+        SECOC_AB_CSM_REQ_SC, /* Ab_CsmReqType */
+        TRUE, /* SecuredRxPduVerification */
+        0U /* dummy2 */
+    },
+    {
+        128U, /* Ab_AuthInfoLength */
+        32U, /* AuthInfoTruncLength */
+        0U, /* Ab_BusIndex */
+        11U, /* Ab_TxSecurityDataSize */
+        0U, /* dummy1 */
+        25U, /* Ab_MessageTypeIndex */
+        SECOC_AB_MSGTYPE_SECURED, /* Ab_MessageType */
+        SECOC_NONE, /* VerifyStatusPropagationMode */
+        1U, /* AuthenticationBuildAttempts */
+        1013U, /* Ab_DataId */
+        0U, /* AuthenticationVerifyAttempts */
+        36U, /* FreshnessValueId */
+        56U, /* FreshnessValueLength */
+        56U, /* FreshnessValueTruncLength */
+        { 41U, CRYPTO_PROCESSING_ASYNC, {0U, 0U, 0U} }, /* RxAuthServiceConfigRef */
+        64U, /* SameBufferPduRef */
+        1568U, /* Ab_BufferStartOffset */
+        64U, /* Ab_RxMakeAuthBufferSize */
+        1568U, /* Ab_RxBufferStartOffset */
+        &SecOC_CD_FV_VerifyResult, /* Ab_FreshnessValueCallout */
+        25U, /* RxSecuredLayerPduId */
+        25U, /* Ab_RxAuthenticLayerPduId */
+        &SecOC_CD_FV_GetRxFreshness, /* Ab_FreshnessValueFuncName */
+        {&SecOC_Callout_User_VerificationFinalStatus}, /* Ab_VerificationFinalStatusCallout */
+        SECOC_AB_FV_CFUNC, /* Ab_QueryFreshnessValue */
+        0U, /* Ab_ProtDataPaddingSize */
+        NULL_PTR, /* Ab_ErrorDetailNotifyCallout */
+        1U, /* Ab_RxAuthTpCopySize */
+        SECOC_IFPDU, /* RxAuthPduType */
+        SECOC_IFPDU, /* Ab_RxSecuredPduType */
+        FALSE, /* Ab_ForceReceive */
+        SECOC_BOTH, /* Ab_VerifyFinalStatusPropagationMode */
+        25U, /* Ab_RxAuthenticLayerPduRefId */
+        25U, /* Ab_RxSecuredLayerPduRefId */
+        0U, /* Ab_CsmReqSaSizeMax */
+        { NULL_PTR }, /* Ab_RxMsgOverflowDestructionCallout */
+        { NULL_PTR }, /* Ab_RxMsgBusyDestructionCallout */
+        SECOC_AB_CSM_REQ_SC, /* Ab_CsmReqType */
+        TRUE, /* SecuredRxPduVerification */
+        0U /* dummy2 */
+    },
+    {
+        128U, /* Ab_AuthInfoLength */
+        32U, /* AuthInfoTruncLength */
+        0U, /* Ab_BusIndex */
+        11U, /* Ab_TxSecurityDataSize */
+        0U, /* dummy1 */
+        26U, /* Ab_MessageTypeIndex */
+        SECOC_AB_MSGTYPE_SECURED, /* Ab_MessageType */
+        SECOC_NONE, /* VerifyStatusPropagationMode */
+        1U, /* AuthenticationBuildAttempts */
+        1332U, /* Ab_DataId */
+        0U, /* AuthenticationVerifyAttempts */
+        37U, /* FreshnessValueId */
+        56U, /* FreshnessValueLength */
+        56U, /* FreshnessValueTruncLength */
+        { 42U, CRYPTO_PROCESSING_ASYNC, {0U, 0U, 0U} }, /* RxAuthServiceConfigRef */
+        64U, /* SameBufferPduRef */
+        1632U, /* Ab_BufferStartOffset */
+        64U, /* Ab_RxMakeAuthBufferSize */
+        1632U, /* Ab_RxBufferStartOffset */
+        &SecOC_CD_FV_VerifyResult, /* Ab_FreshnessValueCallout */
+        26U, /* RxSecuredLayerPduId */
+        26U, /* Ab_RxAuthenticLayerPduId */
+        &SecOC_CD_FV_GetRxFreshness, /* Ab_FreshnessValueFuncName */
+        {&SecOC_Callout_User_VerificationFinalStatus}, /* Ab_VerificationFinalStatusCallout */
+        SECOC_AB_FV_CFUNC, /* Ab_QueryFreshnessValue */
+        0U, /* Ab_ProtDataPaddingSize */
+        NULL_PTR, /* Ab_ErrorDetailNotifyCallout */
+        1U, /* Ab_RxAuthTpCopySize */
+        SECOC_IFPDU, /* RxAuthPduType */
+        SECOC_IFPDU, /* Ab_RxSecuredPduType */
+        FALSE, /* Ab_ForceReceive */
+        SECOC_BOTH, /* Ab_VerifyFinalStatusPropagationMode */
+        26U, /* Ab_RxAuthenticLayerPduRefId */
+        26U, /* Ab_RxSecuredLayerPduRefId */
+        0U, /* Ab_CsmReqSaSizeMax */
+        { NULL_PTR }, /* Ab_RxMsgOverflowDestructionCallout */
+        { NULL_PTR }, /* Ab_RxMsgBusyDestructionCallout */
+        SECOC_AB_CSM_REQ_SC, /* Ab_CsmReqType */
+        TRUE, /* SecuredRxPduVerification */
+        0U /* dummy2 */
+    },
+    {
+        128U, /* Ab_AuthInfoLength */
+        32U, /* AuthInfoTruncLength */
+        0U, /* Ab_BusIndex */
+        11U, /* Ab_TxSecurityDataSize */
+        0U, /* dummy1 */
+        27U, /* Ab_MessageTypeIndex */
+        SECOC_AB_MSGTYPE_SECURED, /* Ab_MessageType */
+        SECOC_NONE, /* VerifyStatusPropagationMode */
+        1U, /* AuthenticationBuildAttempts */
+        888U, /* Ab_DataId */
+        0U, /* AuthenticationVerifyAttempts */
+        38U, /* FreshnessValueId */
+        56U, /* FreshnessValueLength */
+        56U, /* FreshnessValueTruncLength */
+        { 43U, CRYPTO_PROCESSING_ASYNC, {0U, 0U, 0U} }, /* RxAuthServiceConfigRef */
+        64U, /* SameBufferPduRef */
+        1696U, /* Ab_BufferStartOffset */
+        64U, /* Ab_RxMakeAuthBufferSize */
+        1696U, /* Ab_RxBufferStartOffset */
+        &SecOC_CD_FV_VerifyResult, /* Ab_FreshnessValueCallout */
+        27U, /* RxSecuredLayerPduId */
+        27U, /* Ab_RxAuthenticLayerPduId */
+        &SecOC_CD_FV_GetRxFreshness, /* Ab_FreshnessValueFuncName */
+        {&SecOC_Callout_User_VerificationFinalStatus}, /* Ab_VerificationFinalStatusCallout */
+        SECOC_AB_FV_CFUNC, /* Ab_QueryFreshnessValue */
+        0U, /* Ab_ProtDataPaddingSize */
+        NULL_PTR, /* Ab_ErrorDetailNotifyCallout */
+        1U, /* Ab_RxAuthTpCopySize */
+        SECOC_IFPDU, /* RxAuthPduType */
+        SECOC_IFPDU, /* Ab_RxSecuredPduType */
+        FALSE, /* Ab_ForceReceive */
+        SECOC_BOTH, /* Ab_VerifyFinalStatusPropagationMode */
+        27U, /* Ab_RxAuthenticLayerPduRefId */
+        27U, /* Ab_RxSecuredLayerPduRefId */
+        0U, /* Ab_CsmReqSaSizeMax */
+        { NULL_PTR }, /* Ab_RxMsgOverflowDestructionCallout */
+        { NULL_PTR }, /* Ab_RxMsgBusyDestructionCallout */
+        SECOC_AB_CSM_REQ_SC, /* Ab_CsmReqType */
+        TRUE, /* SecuredRxPduVerification */
+        0U /* dummy2 */
+    },
+    {
+        128U, /* Ab_AuthInfoLength */
+        32U, /* AuthInfoTruncLength */
+        0U, /* Ab_BusIndex */
+        11U, /* Ab_TxSecurityDataSize */
+        0U, /* dummy1 */
+        28U, /* Ab_MessageTypeIndex */
+        SECOC_AB_MSGTYPE_SECURED, /* Ab_MessageType */
+        SECOC_NONE, /* VerifyStatusPropagationMode */
+        1U, /* AuthenticationBuildAttempts */
+        957U, /* Ab_DataId */
+        0U, /* AuthenticationVerifyAttempts */
+        46U, /* FreshnessValueId */
+        56U, /* FreshnessValueLength */
+        56U, /* FreshnessValueTruncLength */
+        { 44U, CRYPTO_PROCESSING_ASYNC, {0U, 0U, 0U} }, /* RxAuthServiceConfigRef */
+        32U, /* SameBufferPduRef */
+        1760U, /* Ab_BufferStartOffset */
+        32U, /* Ab_RxMakeAuthBufferSize */
+        1760U, /* Ab_RxBufferStartOffset */
+        &SecOC_CD_FV_VerifyResult, /* Ab_FreshnessValueCallout */
+        28U, /* RxSecuredLayerPduId */
+        28U, /* Ab_RxAuthenticLayerPduId */
+        &SecOC_CD_FV_GetRxFreshness, /* Ab_FreshnessValueFuncName */
+        {&SecOC_Callout_User_VerificationFinalStatus}, /* Ab_VerificationFinalStatusCallout */
+        SECOC_AB_FV_CFUNC, /* Ab_QueryFreshnessValue */
+        0U, /* Ab_ProtDataPaddingSize */
+        NULL_PTR, /* Ab_ErrorDetailNotifyCallout */
+        1U, /* Ab_RxAuthTpCopySize */
+        SECOC_IFPDU, /* RxAuthPduType */
+        SECOC_IFPDU, /* Ab_RxSecuredPduType */
+        FALSE, /* Ab_ForceReceive */
+        SECOC_BOTH, /* Ab_VerifyFinalStatusPropagationMode */
+        28U, /* Ab_RxAuthenticLayerPduRefId */
+        28U, /* Ab_RxSecuredLayerPduRefId */
+        0U, /* Ab_CsmReqSaSizeMax */
+        { NULL_PTR }, /* Ab_RxMsgOverflowDestructionCallout */
+        { NULL_PTR }, /* Ab_RxMsgBusyDestructionCallout */
+        SECOC_AB_CSM_REQ_SC, /* Ab_CsmReqType */
+        TRUE, /* SecuredRxPduVerification */
+        0U /* dummy2 */
+    }
+
+};
 
 CONST(SecOC_TxPduProcessingType, SECOC_CONST_CONFIG) SecOC_TxPduProcessing[SECOC_TX_PDU_PROCESSING_MAX] = 
 {
@@ -771,6 +2022,38 @@ CONST(SecOC_TxPduProcessingType, SECOC_CONST_CONFIG) SecOC_TxPduProcessing[SECOC
 CONST(SecOC_Ab_BusId2SecuredMsgIdxType, SECOC_CONST_CONFIG) SecOC_Ab_BusId2SecuredMsgIdxLists[SECOC_AB_BUS_MAX] = 
 {
     {        /* Bus[0] */
+        29U, /* Ab_RxSecuredMsgCount */
+        {    /* Ab_RxSecuredMsgIdxList */
+            0U,
+            1U,
+            2U,
+            3U,
+            4U,
+            5U,
+            6U,
+            7U,
+            8U,
+            9U,
+            10U,
+            11U,
+            12U,
+            13U,
+            14U,
+            15U,
+            16U,
+            17U,
+            18U,
+            19U,
+            20U,
+            21U,
+            22U,
+            23U,
+            24U,
+            25U,
+            26U,
+            27U,
+            28U
+        },
         15U, /* Ab_TxSecuredMsgCount */
         {    /* Ab_TxSecuredMsgIdxList */
             0U,
@@ -791,6 +2074,38 @@ CONST(SecOC_Ab_BusId2SecuredMsgIdxType, SECOC_CONST_CONFIG) SecOC_Ab_BusId2Secur
         }
     },
     {        /* Bus[1] */
+        0U, /* Ab_RxSecuredMsgCount */
+        {    /* Ab_RxSecuredMsgIdxList */
+            0U,
+            0U,
+            0U,
+            0U,
+            0U,
+            0U,
+            0U,
+            0U,
+            0U,
+            0U,
+            0U,
+            0U,
+            0U,
+            0U,
+            0U,
+            0U,
+            0U,
+            0U,
+            0U,
+            0U,
+            0U,
+            0U,
+            0U,
+            0U,
+            0U,
+            0U,
+            0U,
+            0U,
+            0U
+        },
         0U, /* Ab_TxSecuredMsgCount */
         {    /* Ab_TxSecuredMsgIdxList */
             0U,
@@ -811,6 +2126,38 @@ CONST(SecOC_Ab_BusId2SecuredMsgIdxType, SECOC_CONST_CONFIG) SecOC_Ab_BusId2Secur
         }
     },
     {        /* Bus[2] */
+        0U, /* Ab_RxSecuredMsgCount */
+        {    /* Ab_RxSecuredMsgIdxList */
+            0U,
+            0U,
+            0U,
+            0U,
+            0U,
+            0U,
+            0U,
+            0U,
+            0U,
+            0U,
+            0U,
+            0U,
+            0U,
+            0U,
+            0U,
+            0U,
+            0U,
+            0U,
+            0U,
+            0U,
+            0U,
+            0U,
+            0U,
+            0U,
+            0U,
+            0U,
+            0U,
+            0U,
+            0U
+        },
         1U, /* Ab_TxSecuredMsgCount */
         {    /* Ab_TxSecuredMsgIdxList */
             15U,
@@ -831,6 +2178,38 @@ CONST(SecOC_Ab_BusId2SecuredMsgIdxType, SECOC_CONST_CONFIG) SecOC_Ab_BusId2Secur
         }
     },
     {        /* Bus[3] */
+        0U, /* Ab_RxSecuredMsgCount */
+        {    /* Ab_RxSecuredMsgIdxList */
+            0U,
+            0U,
+            0U,
+            0U,
+            0U,
+            0U,
+            0U,
+            0U,
+            0U,
+            0U,
+            0U,
+            0U,
+            0U,
+            0U,
+            0U,
+            0U,
+            0U,
+            0U,
+            0U,
+            0U,
+            0U,
+            0U,
+            0U,
+            0U,
+            0U,
+            0U,
+            0U,
+            0U,
+            0U
+        },
         0U, /* Ab_TxSecuredMsgCount */
         {    /* Ab_TxSecuredMsgIdxList */
             0U,

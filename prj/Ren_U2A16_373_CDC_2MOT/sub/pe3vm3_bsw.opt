@@ -1,0 +1,181 @@
+#!gbuild
+[Options File]
+
+    # --------------------------------------
+    # Aubist/Os Options
+    # --------------------------------------
+    -DAR_OS_USE_HYPERVISOR
+    -DMCOS_AUTOSAR=1
+    -DOS_MEMMAP_ENABLE=1
+    -DMCOS
+    -DMCOS_USE_PROCESS_MODEL=0
+    -DUSE_EBINDER=0
+    -DBUILD_LIB=0
+    -DUSE_OSLIB=1
+    # --------------------------------------
+    # --------------------------------------
+    # System/22SS Options
+    # --------------------------------------
+    -DECU_VM3
+    -DECU_INTG_LWH_GUEST
+    # --------------------------------------
+
+    {isdefined(__GMM_AIP_THROUGHPUT__)} -D__AIP_THROUGHPUT__=${__GMM_AIP_THROUGHPUT__}
+
+# ----------------------------------------------------------------------------------------------------------------------------------
+# includes
+# ----------------------------------------------------------------------------------------------------------------------------------
+    -I../../src/PE3VM3/BSW/Aubist/inc
+    -I../../src/PE3VM3/LIB/Common/scc
+###    -I../../src/PE3VM3/BSW/Aubist/BswM_Can/cfg
+###    -I../../src/PE3VM3/BSW/Aubist/BswM_Can/inc
+###    -I../../src/PE3VM3/BSW/Aubist/BswM_CS/cfg
+    -I../../src/PE3VM3/BSW/Aubist/BswM_CS/inc
+###    -I../../src/PE3VM3/BSW/Aubist/BswM_VPS/inc
+###    -I../../src/PE3VM3/BSW/Aubist/BswM_VPS/usr
+###    -I../../src/PE3VM3/BSW/Aubist/CanIf/cfg
+    -I../../src/PE3VM3/BSW/Aubist/CanIf/inc
+###    -I../../src/PE3VM3/BSW/Aubist/CanNm/cfg/common
+###    -I../../src/PE3VM3/BSW/Aubist/CanNm/cfg/y
+###    -I../../src/PE3VM3/BSW/Aubist/CanNm/inc/a
+###    -I../../src/PE3VM3/BSW/Aubist/CanNm/inc/a2
+###    -I../../src/PE3VM3/BSW/Aubist/CanNm/inc/b
+###    -I../../src/PE3VM3/BSW/Aubist/CanNm/inc
+###    -I../../src/PE3VM3/BSW/Aubist/CanNm/inc/c2
+    -I../../src/PE3VM3/BSW/Aubist/CanNm/inc/common
+###    -I../../src/PE3VM3/BSW/Aubist/CanNm/inc/e
+###    -I../../src/PE3VM3/BSW/Aubist/CanNm/inc/y
+###    -I../../src/PE3VM3/BSW/Aubist/CanNm/inc/z
+    -I../../src/PE3VM3/BSW/Aubist/CanSM/cfg
+    -I../../src/PE3VM3/BSW/Aubist/CanSM/inc
+###    -I../../src/PE3VM3/BSW/Aubist/CanTp/cfg
+###    -I../../src/PE3VM3/BSW/Aubist/CanTp/inc
+###    -I../../src/PE3VM3/BSW/Aubist/CanTrcv/inc
+    -I../../src/PE3VM3/BSW/Aubist/Com/cfg
+    -I../../src/PE3VM3/BSW/Aubist/Com/inc
+###    -I../../src/PE3VM3/BSW/Aubist/ComM/cfg
+    -I../../src/PE3VM3/BSW/Aubist/ComM/inc
+###     -I../../src/PE3VM3/BSW/Aubist/Crc/cfg
+    -I../../src/PE3VM3/BSW/Aubist/CS/inc
+###    -I../../src/PE3VM3/BSW/Aubist/CS_System/cfg
+###    -I../../src/PE3VM3/BSW/Aubist/CS_System/inc
+###    -I../../src/PE3VM3/BSW/Aubist/E2E/inc
+###    -I../../src/PE3VM3/BSW/Aubist/inc                    should be defined as first in order to reduce compilation time
+###    -I../../src/PE3VM3/BSW/Aubist/inc/bswm_can
+###    -I../../src/PE3VM3/BSW/Aubist/inc/bswm_cs
+###    -I../../src/PE3VM3/BSW/Aubist/inc/bswm_vps
+###    -I../../src/PE3VM3/BSW/Aubist/inc/can/common
+###    -I../../src/PE3VM3/BSW/Aubist/inc/canif
+###    -I../../src/PE3VM3/BSW/Aubist/inc/cannm
+###    -I../../src/PE3VM3/BSW/Aubist/inc/cansm
+###    -I../../src/PE3VM3/BSW/Aubist/inc/cantp
+###    -I../../src/PE3VM3/BSW/Aubist/inc/cantrcv
+###    -I../../src/PE3VM3/BSW/Aubist/inc/com
+###    -I../../src/PE3VM3/BSW/Aubist/inc/comm
+###    -I../../src/PE3VM3/BSW/Aubist/inc/Compiler
+###    -I../../src/PE3VM3/BSW/Aubist/inc/cs
+###    -I../../src/PE3VM3/BSW/Aubist/inc/ipdum
+###    -I../../src/PE3VM3/BSW/Aubist/inc/ldcom
+###    -I../../src/PE3VM3/BSW/Aubist/inc/nm
+###    -I../../src/PE3VM3/BSW/Aubist/inc/pdur
+###    -I../../src/PE3VM3/BSW/Aubist/inc/Platform
+###    -I../../src/PE3VM3/BSW/Aubist/inc/vcan
+###    -I../../src/PE3VM3/BSW/Aubist/inc/Xfrm
+###    -I../../src/PE3VM3/BSW/Aubist/IpduM/inc
+###    -I../../src/PE3VM3/BSW/Aubist/LdCom/cfg
+###    -I../../src/PE3VM3/BSW/Aubist/LdCom/inc
+###    -I../../src/PE3VM3/BSW/Aubist/Nm/cfg
+###    -I../../src/PE3VM3/BSW/Aubist/Nm/inc
+###    -I../../src/PE3VM3/BSW/Aubist/Os/source/config/hal/board/yrh850x2xmbt1
+###    -I../../src/PE3VM3/BSW/Aubist/Os/source/config/hal/chip/rh850u2a/mcos
+###    -I../../src/PE3VM3/BSW/Aubist/Os/source/config/hal/chip/rh850u2a
+###    -I../../src/PE3VM3/BSW/Aubist/Os/source/config/hal/cpu/v850/mcos
+###    -I../../src/PE3VM3/BSW/Aubist/Os/source/config/hal
+    -I../../src/PE3VM3/BSW/Aubist/Os/source/config/mcos
+    -I../../src/PE3VM3/BSW/Aubist/Os/source/config
+###    -I../../src/PE3VM3/BSW/Aubist/Os/source/hal/user_impl/chip/rh850u2a/hal
+    -I../../src/PE3VM3/BSW/Aubist/Os/source/include/ar_api
+###    -I../../src/PE3VM3/BSW/Aubist/Os/source/include/ar_sys/arch/v850
+    -I../../src/PE3VM3/BSW/Aubist/Os/source/include/ar_sys
+###    -I../../src/PE3VM3/BSW/Aubist/Os/source/include/generated/hal/cpu/v850/hal
+    -I../../src/PE3VM3/BSW/Aubist/Os/source/include/generated
+###    -I../../src/PE3VM3/BSW/Aubist/Os/source/include/hal/board/yrh850x2xmbt1
+###    -I../../src/PE3VM3/BSW/Aubist/Os/source/include/hal/chip/rh850u2a/hal
+###    -I../../src/PE3VM3/BSW/Aubist/Os/source/include/hal/chip/rh850u2a
+###    -I../../src/PE3VM3/BSW/Aubist/Os/source/include/hal/chip/rh850u2a/mcos
+###    -I../../src/PE3VM3/BSW/Aubist/Os/source/include/hal/cpu/v850/hal
+###    -I../../src/PE3VM3/BSW/Aubist/Os/source/include/hal/cpu/v850
+###    -I../../src/PE3VM3/BSW/Aubist/Os/source/include/hal/cpu/v850/mcos
+###    -I../../src/PE3VM3/BSW/Aubist/Os/source/include/hal
+###    -I../../src/PE3VM3/BSW/Aubist/Os/source/include/mcos
+###    -I../../src/PE3VM3/BSW/Aubist/Os/source/include/mcos/v850
+    -I../../src/PE3VM3/BSW/Aubist/Os/source/include
+    -I../../src/PE3VM3/BSW/Aubist/Os/source/mcos/autosar/config/generated
+    -I../../src/PE3VM3/BSW/Aubist/Os/source/mcos/autosar/src
+    -I../../src/PE3VM3/BSW/Aubist/Os/source/mcos/autosar/src/v850
+    -I../../src/PE3VM3/BSW/Aubist/Os/source/mcos/config_data/autosar
+    -I../../src/PE3VM3/BSW/Aubist/Os/source/mcos/include
+###    -I../../src/PE3VM3/BSW/Aubist/Os/source/mcos/include/arch/v850
+###    -I../../src/PE3VM3/BSW/Aubist/Os/source/mcos/mk/cls
+###    -I../../src/PE3VM3/BSW/Aubist/Os/source/mcos/mk/cmn
+    -I../../src/PE3VM3/BSW/Aubist/Os/source/mcos/mk/include
+    -I../../src/PE3VM3/BSW/Aubist/Os/source/mcos/mk/sys/arch/v850
+###    -I../../src/PE3VM3/BSW/Aubist/PduR/cfg
+###    -I../../src/PE3VM3/BSW/Aubist/PduR/inc
+###    -I../../src/PE3VM3/BSW/Aubist/VCan/cfg
+    -I../../src/PE3VM3/BSW/Aubist/VCan/inc
+    -I../../src/PE3VM3/BSW/Communication/iVDsh/config
+    -I../../src/PE3VM3/BSW/Communication/iVDsh/scc
+    -I../../src/PE3VM3/BSW/Communication/oXCAN/config_U2A16_met
+    -I../../src/PE3VM3/BSW/Communication/oXCAN/lib
+    -I../../src/PE3VM3/BSW/Communication/oXCAN/scc
+    -I../../src/PE3VM3/BSW/ComplexDriver/Vehopemd/config_tybev3
+    -I../../src/PE3VM3/BSW/ComplexDriver/Vehopemd/scc
+    -I../../src/PE3VM3/BSW/ehvm_if/include/ehvm
+###    -I../../src/PE3VM3/BSW/IoHwAbstract/iohw_adc/config_CDC_JP
+    -I../../src/PE3VM3/BSW/IoHwAbstract/iohw_adc/config_CDC_OT
+###    -I../../src/PE3VM3/BSW/IoHwAbstract/iohw_adc/config_CDC_US
+    -I../../src/PE3VM3/BSW/IoHwAbstract/iohw_adc/scc
+    -I../../src/PE3VM3/BSW/IoHwAbstract/iohw_diflt/config_CDC
+    -I../../src/PE3VM3/BSW/IoHwAbstract/iohw_diflt/scc
+    -I../../src/PE3VM3/BSW/MCAL/Ren_U2Ax/A16_373/COMMON/config_CDC
+    -I../../src/PE3VM3/BSW/MCAL/Ren_U2Ax/A16_373/DIO/config_CDC
+    -I../../src/PE3VM3/BSW/MCAL/Ren_U2Ax/A16_373/DMA/config_CDC
+    -I../../src/PE3VM3/BSW/MCAL/Ren_U2Ax/A16_373/Gpt/config_CDC
+###    -I../../src/PE3VM3/BSW/MCAL/Ren_U2Ax/A16_373/PORT/config_CDC_1MJP
+###    -I../../src/PE3VM3/BSW/MCAL/Ren_U2Ax/A16_373/PORT/config_CDC_1MOT
+###    -I../../src/PE3VM3/BSW/MCAL/Ren_U2Ax/A16_373/PORT/config_CDC_1MUS
+###    -I../../src/PE3VM3/BSW/MCAL/Ren_U2Ax/A16_373/PORT/config_CDC_2MJP
+    -I../../src/PE3VM3/BSW/MCAL/Ren_U2Ax/A16_373/PORT/config_CDC_2MOT
+###    -I../../src/PE3VM3/BSW/MCAL/Ren_U2Ax/A16_373/PORT/config_CDC_2MUS
+    -I../../src/PE3VM3/BSW/MCAL/Ren_U2Ax/A16_373/Pwm/config_CDC
+    -I../../src/PE3VM3/BSW/MCAL/Ren_U2Ax/A16_373/SPI/config_CDC
+    -I../../src/PE3VM3/BSW/MCAL/Ren_U2Ax/A16_373/Uart/config_CDC
+    -I../../src/PE3VM3/BSW/MCAL/Ren_U2Ax/Common/COMMON/scc
+    -I../../src/PE3VM3/BSW/MCAL/Ren_U2Ax/Common/DIO/scc
+    -I../../src/PE3VM3/BSW/MCAL/Ren_U2Ax/Common/DMA/scc
+    -I../../src/PE3VM3/BSW/MCAL/Ren_U2Ax/Common/DUMMY/scc
+    -I../../src/PE3VM3/BSW/MCAL/Ren_U2Ax/Common/Gpt/scc
+    -I../../src/PE3VM3/BSW/MCAL/Ren_U2Ax/Common/Intc/scc
+    -I../../src/PE3VM3/BSW/MCAL/Ren_U2Ax/Common/PORT/scc
+    -I../../src/PE3VM3/BSW/MCAL/Ren_U2Ax/Common/Pwm/scc
+    -I../../src/PE3VM3/BSW/MCAL/Ren_U2Ax/Common/SPI/scc
+    -I../../src/PE3VM3/BSW/MCAL/Ren_U2Ax/Common/Uart/scc
+    -I../../src/PE3VM3/BSW/MCAL/Ren_U2Ax/Common/Wdg/scc
+    -I../../src/PE3VM3/BSW/Memory/Rim/config
+    -I../../src/PE3VM3/BSW/Memory/Rim/scc
+    -I../../src/PE3VM3/BSW/System/22SS/config
+    -I../../src/PE3VM3/BSW/System/22SS/scc
+    -I../../src/PE3VM3/BSW/System/RunM/scc
+    -I../../src/PE3VM3/BSW/System/SchdM/config
+    -I../../src/PE3VM3/BSW/System/SchdM/scc
+    -I../../src/PE3VM3/BSW/System/Throughput/config
+    -I../../src/PE3VM3/BSW/System/Throughput/scc
+###    -I../../src/PE3VM3/LIB/Common/scc                     should be defined as second in order to reduce compilation time
+    -I../../src/PE3VM3/LIB/Ren_G4MH/scc
+
+# ----------------------------------------------------------------------------------------------------------------------------------
+# ghsprj version 1-0-0
+# Date generated: 2025/11/27 07:51:42
+# ----------------------------------------------------------------------------------------------------------------------------------
+

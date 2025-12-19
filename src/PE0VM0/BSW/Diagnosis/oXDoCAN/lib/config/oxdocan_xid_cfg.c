@@ -96,32 +96,75 @@ const U2                        u2_g_OXDC_DATA_NUM_XID = (U2)(sizeof(st_gp_OXDC_
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 const ST_OXDC_XID               st_gp_OXDC_ROUT_XID[] = {
 /*   fp_u1_SUP                 u2_xid          u2_ses          fp_u1_SEC_CHK */
-    {vdp_PTR_NA,               (U2)0xD904U,    (U2)0x000DU,     vdp_PTR_NA}
+    {vdp_PTR_NA,               (U2)0xD100U,    (U2)0x0005U,     vdp_PTR_NA},
+    {vdp_PTR_NA,               (U2)0xD1D1U,    (U2)0x0005U,     vdp_PTR_NA},
+    {vdp_PTR_NA,               (U2)0xD1D9U,    (U2)0x0005U,     vdp_PTR_NA},
+    {vdp_PTR_NA,               (U2)0xD902U,    (U2)0x0005U,     vdp_PTR_NA},
+    {vdp_PTR_NA,               (U2)0xD903U,    (U2)0x0005U,     vdp_PTR_NA},
+    {vdp_PTR_NA,               (U2)0xD904U,    (U2)0x0005U,     vdp_PTR_NA}
 };
 
 const ST_OXDC_XID_ML            st_gp_OXDC_ROUT_XID_ML_SF_01[] = {
 /*   u2_req_nbyte                   u2_ans_nbyte */
+    {(U2)OXDC_ROUT_STA_REQ_NB_D100, (U2)OXDC_ROUT_STA_ANS_NB_D100},     /* RID:0xD100 */
+    {(U2)OXDC_ROUT_STA_REQ_NB_D1XX, (U2)OXDC_ROUT_STA_ANS_NB_D1XX},     /* RID:0xD1D1 */
+    {(U2)OXDC_ROUT_STA_REQ_NB_D1XX, (U2)OXDC_ROUT_STA_ANS_NB_D1XX},     /* RID:0xD1D9 */
+    {(U2)OXDC_ROUT_STA_REQ_NB_D902, (U2)OXDC_ROUT_STA_ANS_NB_D902},     /* RID:0xD902 */
+    {(U2)OXDC_ROUT_STA_REQ_NB_D903, (U2)OXDC_ROUT_STA_ANS_NB_D903},     /* RID:0xD903 */
     {(U2)OXDC_ROUT_STA_REQ_NB_D904, (U2)OXDC_ROUT_STA_ANS_NB_D904}      /* RID:0xD904 */
 };
 
 const ST_OXDC_XID_ML            st_gp_OXDC_ROUT_XID_ML_SF_02[] = {
 /*   u2_req_nbyte                   u2_ans_nbyte */
+    {(U2)0U,                        (U2)0U                       },     /* RID:0xD100 */
+    {(U2)0U,                        (U2)0U                       },     /* RID:0xD1D1 */
+    {(U2)0U,                        (U2)0U                       },     /* RID:0xD1D9 */
+    {(U2)0U,                        (U2)0U                       },     /* RID:0xD902 */
+    {(U2)0U,                        (U2)0U                       },     /* RID:0xD903 */
     {(U2)0U,                        (U2)0U                       }      /* RID:0xD904 */
 };
 
 const ST_OXDC_XID_ML            st_gp_OXDC_ROUT_XID_ML_SF_03[] = {
 /*   u2_req_nbyte                   u2_ans_nbyte */
+    {(U2)0U,                        (U2)0U                       },     /* RID:0xD100 */
+    {(U2)0U,                        (U2)0U                       },     /* RID:0xD1D1 */
+    {(U2)0U,                        (U2)0U                       },     /* RID:0xD1D9 */
+    {(U2)0U,                        (U2)0U                       },     /* RID:0xD902 */
+    {(U2)0U,                        (U2)0U                       },     /* RID:0xD903 */
     {(U2)OXDC_ROUT_RES_REQ_NB_D904, (U2)OXDC_ROUT_RES_ANS_NB_D904}      /* RID:0xD904 */
 };
 
 const ST_OXDC_ROUT_IF           st_gp_OXDC_ROUT_CFG[] = {
 /*   fp_u1_COR_CHK                  fp_u1_START                         fp_u1_STOP                    fp_u1_RESULT */
+    {vdp_PTR_NA,                    &u1_g_oXDoCANRoutStart_D100,        vdp_PTR_NA,                   vdp_PTR_NA                     },   /* RID:0xD100 */
+    {vdp_PTR_NA,                    &u1_g_oXDoCANRoutStart_D1XX,        vdp_PTR_NA,                   vdp_PTR_NA                     },   /* RID:0xD1D1 */
+    {vdp_PTR_NA,                    &u1_g_oXDoCANRoutStart_D1XX,        vdp_PTR_NA,                   vdp_PTR_NA                     },   /* RID:0xD1D9 */
+    {vdp_PTR_NA,                    &u1_g_oXDoCANRoutStart_D902,        vdp_PTR_NA,                   vdp_PTR_NA                     },   /* RID:0xD902 */
+    {vdp_PTR_NA,                    &u1_g_oXDoCANRoutStart_D903,        vdp_PTR_NA,                   vdp_PTR_NA                     },   /* RID:0xD903 */
     {&u1_g_oXDoCANRoutCorchk_D904,  &u1_g_oXDoCANRoutStart_D904,        vdp_PTR_NA,                   &u1_g_oXDoCANRoutRslt_D904     }    /* RID:0xD904 */
 };
 
 const U2                        u2_g_OXDC_ROUT_NUM_XID = (U2)(sizeof(st_gp_OXDC_ROUT_XID) / sizeof(ST_OXDC_XID));
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+
+#ifdef TYDOCAN_XID_MA_CFG_H
+
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+static const U1         u1_sp_TYDC_KZK_RX_D902[] = {                        /* oxdocan_xid_ma_cfg_private.h */
+    (U1)TYDC_KZK_RX_PDU_1      /* MSG_BDC1S52_RXCH0 (0U) */
+};
+static const U1         u1_sp_TYDC_KZK_RX_D903[] = {                        /* oxdocan_xid_ma_cfg_private.h */
+    (U1)TYDC_KZK_RX_PDU_IUV    /* MSG_BDC1S60_RXCH0 (1U) */
+};
+const ST_TYDC_KZK_RX    st_gp_TYDC_KZK_RX[TYDC_KZK_NUM_RX] = {              /* oxdocan_xid_ma_cfg_private.h */
+/*   u1p_KZK_RX                     u2_pdu_min                      u2_pdu_max */
+     {&u1_sp_TYDC_KZK_RX_D902[0],    (U2)MSG_BDC1S52_RXCH0,         (U2)MSG_BDC1S52_RXCH0     },
+     {&u1_sp_TYDC_KZK_RX_D903[0],    (U2)MSG_BDC1S60_RXCH0,         (U2)MSG_BDC1S60_RXCH0     }
+};
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+
+#endif /* #ifdef OXDOCAN_XID_MA_CFG_H */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

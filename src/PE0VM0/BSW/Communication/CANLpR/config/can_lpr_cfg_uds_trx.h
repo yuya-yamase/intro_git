@@ -30,6 +30,13 @@
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define CAN_LPR_UDS_RX_VIR_EN                    (0U)
+#define CAN_LPR_UDS_RD_TEST                      (0U) /* 0:Product configuration  1:Remote Diag Communication Test configuration     */
+                                                      /* If this configuration is modified, you must also update the following file: */
+                                                      /*   PE2VM2\BSW\Communication\CANLpR\config\vcan_tx_ack_cfg.c                  */
+                                                      /* to maintain configuration consistency.                                      */
+#if (CAN_LPR_UDS_RD_TEST == 1U)
+#warning "can_lpr_cfg_uds_trx.h : This build uses a configuration for the Remote Diagnostics Communication Test. Do not use for production."
+#endif /* #if (CAN_LPR_UDS_RD_TEST == 1U) */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
@@ -43,6 +50,72 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#if (CAN_LPR_UDS_RD_TEST == 1U) /* This configuration is copied from bevstep3-cockpit_mm-dd-yyyy_CANLpR_vxxx_rxxx_RDCTE.xlsx. */
+static const U4             u4_sp_CAN_LPR_UDS_EGR_TA_G2M_1[] = {
+    (U4)0xffffffffU,           /* CAN-ID bit#15-8 Target Address : 0x00 - 0x1f */
+    (U4)0xffffffffU,           /* CAN-ID bit#15-8 Target Address : 0x20 - 0x3f */
+    (U4)0xffffffffU,           /* CAN-ID bit#15-8 Target Address : 0x40 - 0x5f */
+    (U4)0xffffffffU,           /* CAN-ID bit#15-8 Target Address : 0x60 - 0x7f */
+    (U4)0xffffffffU,           /* CAN-ID bit#15-8 Target Address : 0x80 - 0x9f */
+    (U4)0xffffffffU,           /* CAN-ID bit#15-8 Target Address : 0xa0 - 0xbf */
+    (U4)0xffffffffU,           /* CAN-ID bit#15-8 Target Address : 0xc0 - 0xdf */
+    (U4)0x0000aaaaU            /* CAN-ID bit#15-8 Target Address : 0xe0 - 0xff */
+};
+static const U4             u4_sp_CAN_LPR_UDS_EGR_SO_G2M_1[] = {
+    (U4)0xef7fffffU,           /* CAN-ID bit#7-0  Source Address : 0x00 - 0x1f */
+    (U4)0xffffffffU,           /* CAN-ID bit#7-0  Source Address : 0x20 - 0x3f */
+    (U4)0xffffffffU,           /* CAN-ID bit#7-0  Source Address : 0x40 - 0x5f */
+    (U4)0xffffffffU,           /* CAN-ID bit#7-0  Source Address : 0x60 - 0x7f */
+    (U4)0xffffffffU,           /* CAN-ID bit#7-0  Source Address : 0x80 - 0x9f */
+    (U4)0xffffffffU,           /* CAN-ID bit#7-0  Source Address : 0xa0 - 0xbf */
+    (U4)0xffffffffU,           /* CAN-ID bit#7-0  Source Address : 0xc0 - 0xdf */
+    (U4)0xffffd557U            /* CAN-ID bit#7-0  Source Address : 0xe0 - 0xff */
+};
+static const U4             u4_sp_CAN_LPR_UDS_REC_TA_G2M_1[] = {
+    (U4)0x00800000U,           /* CAN-ID bit#7-0  Source Address : 0x00 - 0x1f */
+    (U4)0x00000000U,           /* CAN-ID bit#7-0  Source Address : 0x20 - 0x3f */
+    (U4)0x00000000U,           /* CAN-ID bit#7-0  Source Address : 0x40 - 0x5f */
+    (U4)0x00000000U,           /* CAN-ID bit#7-0  Source Address : 0x60 - 0x7f */
+    (U4)0x00000000U,           /* CAN-ID bit#7-0  Source Address : 0x80 - 0x9f */
+    (U4)0x00000000U,           /* CAN-ID bit#7-0  Source Address : 0xa0 - 0xbf */
+    (U4)0x00000000U,           /* CAN-ID bit#7-0  Source Address : 0xc0 - 0xdf */
+    (U4)0x00008000U            /* CAN-ID bit#7-0  Source Address : 0xe0 - 0xff */
+};
+static const U4             u4_sp_CAN_LPR_UDS_REC_SO_G2M_1[] = {
+    (U4)0x00000000U,           /* CAN-ID bit#7-0  Source Address : 0x00 - 0x1f */
+    (U4)0x00000000U,           /* CAN-ID bit#7-0  Source Address : 0x20 - 0x3f */
+    (U4)0x00000000U,           /* CAN-ID bit#7-0  Source Address : 0x40 - 0x5f */
+    (U4)0x00000000U,           /* CAN-ID bit#7-0  Source Address : 0x60 - 0x7f */
+    (U4)0x00000000U,           /* CAN-ID bit#7-0  Source Address : 0x80 - 0x9f */
+    (U4)0x00000000U,           /* CAN-ID bit#7-0  Source Address : 0xa0 - 0xbf */
+    (U4)0x00000000U,           /* CAN-ID bit#7-0  Source Address : 0xc0 - 0xdf */
+    (U4)0x00000001U            /* CAN-ID bit#7-0  Source Address : 0xe0 - 0xff */
+};
+
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+static const U4             u4_sp_CAN_LPR_UDS_EGR_TA_VIR_0[] = {
+    (U4)0xef7fffffU,           /* CAN-ID bit#15-8 Target Address : 0x00 - 0x1f */
+    (U4)0xffffffffU,           /* CAN-ID bit#15-8 Target Address : 0x20 - 0x3f */
+    (U4)0xffffffffU,           /* CAN-ID bit#15-8 Target Address : 0x40 - 0x5f */
+    (U4)0xffffffffU,           /* CAN-ID bit#15-8 Target Address : 0x60 - 0x7f */
+    (U4)0xffffffffU,           /* CAN-ID bit#15-8 Target Address : 0x80 - 0x9f */
+    (U4)0xffffffffU,           /* CAN-ID bit#15-8 Target Address : 0xa0 - 0xbf */
+    (U4)0xffffffffU,           /* CAN-ID bit#15-8 Target Address : 0xc0 - 0xdf */
+    (U4)0xffffd557U            /* CAN-ID bit#15-8 Target Address : 0xe0 - 0xff */
+};
+static const U4             u4_sp_CAN_LPR_UDS_EGR_SO_VIR_0[] = {
+    (U4)0x10000000U,           /* CAN-ID bit#7-0  Source Address : 0x00 - 0x1f */
+    (U4)0x00000000U,           /* CAN-ID bit#7-0  Source Address : 0x20 - 0x3f */
+    (U4)0x00000000U,           /* CAN-ID bit#7-0  Source Address : 0x40 - 0x5f */
+    (U4)0x00000000U,           /* CAN-ID bit#7-0  Source Address : 0x60 - 0x7f */
+    (U4)0x00000000U,           /* CAN-ID bit#7-0  Source Address : 0x80 - 0x9f */
+    (U4)0x00000000U,           /* CAN-ID bit#7-0  Source Address : 0xa0 - 0xbf */
+    (U4)0x00000000U,           /* CAN-ID bit#7-0  Source Address : 0xc0 - 0xdf */
+    (U4)0x0000aaaaU            /* CAN-ID bit#7-0  Source Address : 0xe0 - 0xff */
+};
+
+#else /* This configuration is copied from bevstep3-cockpit_mm-dd-yyyy_CANLpR_vxxx_rxxx.xlsx. */
+
 static const U4             u4_sp_CAN_LPR_UDS_EGR_TA_G2M_1[] = {
     (U4)0xffffffffU,           /* CAN-ID bit#15-8 Target Address : 0x00 - 0x1f */
     (U4)0xffffffffU,           /* CAN-ID bit#15-8 Target Address : 0x20 - 0x3f */
@@ -105,6 +178,8 @@ static const U4             u4_sp_CAN_LPR_UDS_EGR_SO_VIR_0[] = {
     (U4)0x00000000U,           /* CAN-ID bit#7-0  Source Address : 0xc0 - 0xdf */
     (U4)0x0000aaaaU            /* CAN-ID bit#7-0  Source Address : 0xe0 - 0xff */
 };
+#endif /* #if (CAN_LPR_UDS_RD_TEST == 1U)*/
+
 #if (CAN_LPR_UDS_RX_VIR_EN == 1U)
 static const U4             u4_sp_CAN_LPR_UDS_REC_TA_VIR_0[] = {
     (U4)0x00800000U,           /* CAN-ID bit#7-0  Source Address : 0x00 - 0x1f */
@@ -127,6 +202,7 @@ static const U4             u4_sp_CAN_LPR_UDS_REC_SO_VIR_0[] = {
     (U4)0x00000002U            /* CAN-ID bit#7-0  Source Address : 0xe0 - 0xff */
 };
 #endif /* #if (CAN_LPR_UDS_RX_VIR_EN == 1U) */
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 const ST_CAN_LPR_UDS_TRX    st_gp_CAN_LPR_UDS_TRX[] = {
     /* G2M_1 -> VIR_0 */
