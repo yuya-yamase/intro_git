@@ -24,7 +24,6 @@
 #include    "gpt_drv_frt.h"
 #include    "x_spi_ivi_private.h"
 #include    "x_spi_ivi_sub4.h"
-#include    "PictCtl.h"
 #include    "PncreqCtl.h"
 #include    "ivdsh.h"
 #include    "CanCtlTx.h"

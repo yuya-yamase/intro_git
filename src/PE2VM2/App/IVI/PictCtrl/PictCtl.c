@@ -260,10 +260,37 @@
 #define PICT_PORT_PM_V_MUTE                             (DIO_ID_PORT24_CH9)
 #define PICT_PORT_V_IC_STATUS                           (DIO_ID_PORT3_CH2)
 
+#define PICT_CD_SIZE_TBLNUM                             (16U)
 
 /* カメラ有効領域 */
 #define PICT_CD_SIZE_INVALID                            (0x00U) /* 無効値 */
-#define PICT_CD_SIZE_1920X1080_140IN                    (0x01U) /* 1920 x 1080 14in */
+#define PICT_CD_SIZE_1920X1080_140IN                    (0x01U) /* 1920 x 1080 14in   */
+#define PICT_CD_SIZE_1920X954_140IN                     (0x02U) /* 1920 x 954  14in   */
+#define PICT_CD_SIZE_1696X954_140IN                     (0x03U) /* 1696 x 954  14in   */
+#define PICT_CD_SIZE_1920X900_140IN                     (0x04U) /* 1920 x 900  14in   */
+#define PICT_CD_SIZE_1920X954_129IN                     (0x05U) /* 1920 x 954  12.9in */
+#define PICT_CD_SIZE_1696X954_129IN                     (0x06U) /* 1696 x 954  12.9in */
+#define PICT_CD_SIZE_1920X720_123IN                     (0x07U) /* 1920 x 720  12.3in */
+#define PICT_CD_SIZE_1280X720_123IN                     (0x08U) /* 1280 x 720  12.3in */
+#define PICT_CD_SIZE_1280X720_105IN                     (0x09U) /* 1280 x 720  10.5in */
+#define PICT_CD_SIZE_1280X621_105IN                     (0x0AU) /* 1280 x 621  10.5in */
+#define PICT_CD_SIZE_1104X621_105IN                     (0x0BU) /* 1104 x 621  10.5in */
+#define PICT_CD_SIZE_1280X846_98IN                      (0x0CU) /* 1280 x 846  9.8in  */
+#define PICT_CD_SIZE_1280X720_8IN                       (0x0DU) /* 1280 x 720  8in    */
+#define PICT_CD_SIZE_1920X954_156IN                     (0x0EU) /* 1920 x 954  15.6in */
+
+/* 車パラ固定値(暫定) */
+#define PICT_SIZE_156IN                                 (0U)
+#define PICT_SIZE_140IN                                 (1U)
+#define PICT_SIZE_129IN                                 (2U)
+#define PICT_SIZE_123IN                                 (3U)
+#define PICT_SIZE_105IN                                 (4U)
+#define PICT_SIZE_80IN                                  (5U)
+
+#define PICT_AIS_KIND_NOMAL                             (0U)
+#define PICT_AIS_KIND_HEACON                            (1U)
+#define PICT_AIS_KIND_HCNDIAL                           (2U)
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -375,6 +402,13 @@ typedef struct {
     U1  u1_vicstastssig;
 } ST_PICT_SEND_DATA;
 
+typedef struct {
+    U1  u1_size;
+    U1  u1_ais;
+    U1  u1_camkind;
+    U1  u1_cdsize_sig;
+} ST_PICT_CNTDSP_STS;
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -412,6 +446,9 @@ static U1    u1_s_pict_regwrite_req;
 static U1    u1_s_pict_regwrite_sts;
 static U1    u1_s_pict_cd_size;
 static U1    u1_s_pict_cammodelog_flg;
+static U1    u1_s_pict_dispsize;
+static U1    u1_s_pict_mvdisp_exsit;
+static U1    u1_s_pict_heacon;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
@@ -570,6 +607,26 @@ static const ST_PICT_POLLMNG tb_Pict_PollMng[PICT_POLLNO_MAX]
     }
 };
 
+static const ST_PICT_CNTDSP_STS st_sp_PICT_CDSIZE_TBL[PICT_CD_SIZE_TBLNUM] =
+{
+    {(U1)PICT_SIZE_156IN, (U1)PICT_AIS_KIND_HEACON,  (U1)PICT_GVIFIF_ADAS,   (U1)PICT_CD_SIZE_1920X954_156IN },
+    {(U1)PICT_SIZE_140IN, (U1)PICT_AIS_KIND_NOMAL,   (U1)PICT_GVIFIF_ADAS,   (U1)PICT_CD_SIZE_1920X1080_140IN},
+    {(U1)PICT_SIZE_140IN, (U1)PICT_AIS_KIND_NOMAL,   (U1)PICT_GVIFIF_CNVBOX, (U1)PICT_CD_SIZE_1920X1080_140IN},
+    {(U1)PICT_SIZE_140IN, (U1)PICT_AIS_KIND_HEACON,  (U1)PICT_GVIFIF_ADAS,   (U1)PICT_CD_SIZE_1920X954_140IN },
+    {(U1)PICT_SIZE_140IN, (U1)PICT_AIS_KIND_HEACON,  (U1)PICT_GVIFIF_CNVBOX, (U1)PICT_CD_SIZE_1696X954_140IN },
+    {(U1)PICT_SIZE_140IN, (U1)PICT_AIS_KIND_HCNDIAL, (U1)PICT_GVIFIF_ADAS,   (U1)PICT_CD_SIZE_1920X900_140IN },
+    {(U1)PICT_SIZE_129IN, (U1)PICT_AIS_KIND_HEACON,  (U1)PICT_GVIFIF_ADAS,   (U1)PICT_CD_SIZE_1920X954_129IN },
+    {(U1)PICT_SIZE_129IN, (U1)PICT_AIS_KIND_HEACON,  (U1)PICT_GVIFIF_CNVBOX, (U1)PICT_CD_SIZE_1696X954_129IN },
+    {(U1)PICT_SIZE_123IN, (U1)PICT_AIS_KIND_NOMAL,   (U1)PICT_GVIFIF_ADAS,   (U1)PICT_CD_SIZE_1920X720_123IN },
+    {(U1)PICT_SIZE_123IN, (U1)PICT_AIS_KIND_NOMAL,   (U1)PICT_GVIFIF_CNVBOX, (U1)PICT_CD_SIZE_1280X720_123IN },
+    {(U1)PICT_SIZE_105IN, (U1)PICT_AIS_KIND_NOMAL,   (U1)PICT_GVIFIF_ADAS,   (U1)PICT_CD_SIZE_1280X720_105IN },
+    {(U1)PICT_SIZE_105IN, (U1)PICT_AIS_KIND_NOMAL,   (U1)PICT_GVIFIF_CNVBOX, (U1)PICT_CD_SIZE_1280X720_105IN },
+    {(U1)PICT_SIZE_105IN, (U1)PICT_AIS_KIND_HEACON,  (U1)PICT_GVIFIF_ADAS,   (U1)PICT_CD_SIZE_1280X621_105IN },
+    {(U1)PICT_SIZE_105IN, (U1)PICT_AIS_KIND_HEACON,  (U1)PICT_GVIFIF_CNVBOX, (U1)PICT_CD_SIZE_1104X621_105IN },
+    {(U1)PICT_SIZE_80IN,  (U1)PICT_AIS_KIND_NOMAL,   (U1)PICT_GVIFIF_ADAS,   (U1)PICT_CD_SIZE_1280X720_8IN   },
+    {(U1)PICT_SIZE_80IN,  (U1)PICT_AIS_KIND_NOMAL,   (U1)PICT_GVIFIF_CNVBOX, (U1)PICT_CD_SIZE_1280X720_8IN   }
+};
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -669,6 +726,9 @@ void vd_g_PictCtl_Init(void)
     u1_s_pict_regwrite_sts = (U1)PICT_ML_CAMAREASET_COMPLETED;
     u1_s_pict_cd_size = (U1)PICT_CD_SIZE_INVALID;
     u1_s_pict_cammodelog_flg = (U1)FALSE;
+    u1_s_pict_dispsize = (U1)PICT_SIZE_140IN; /* 車パラ対応までの暫定 */
+    u1_s_pict_mvdisp_exsit = (U1)FALSE; /* 車パラ対応までの暫定 */
+    u1_s_pict_heacon = (U1)PICT_AIS_KIND_NOMAL; /* 車パラ対応までの暫定 */
     
     st_sp_send.u1_CamKind = st_sp_Pict_BackUpInf.u1_CamKind;
     st_sp_send.u1_CenterCamSiz = st_sp_Pict_BackUpInf.u1_CenterCamSiz;
@@ -742,7 +802,6 @@ void vd_g_PictCtl_MainTask(void)
     vd_s_PictCtl_CamKindNtyChk();
     vd_s_PictCtl_CamSyncPathInfoNtyChk();
     vd_s_PictCtl_CamAreaChk();
-    vd_s_PictCtl_CdsizeChk();
 }
 
 /*===================================================================================================================================*/
@@ -3092,6 +3151,7 @@ static void vd_s_PictCtl_CamKindDiscSta(void)
 {
     /* カメラシステム種別判別フラグON */
     bfg_Pict_StsMng.st_CamDisc.u1_CamKindDiscEn = (U1)TRUE;
+    vd_s_PictCtl_CdsizeChk();
 }
 
 /*============================================================================
@@ -3143,6 +3203,7 @@ void vd_g_PictCtl_DispQualPraChk(U1 u1_a_MODE)
 void vd_g_PictCtl_RcvBCC1S05(void)
 {
     U1 u1_t_caminfchgflg;
+    U1 u1_t_CamKindConverd;
 
     /* カメラシステム種別判定許可判断 */
     if(bfg_Pict_StsMng.st_CamDisc.u1_CamKindDiscEn == (U1)TRUE){
@@ -3152,8 +3213,12 @@ void vd_g_PictCtl_RcvBCC1S05(void)
         /* カメラシステム種別・センターカメラサイズ変更後の処理                                         */
         /************************************************************************************************/
         if(u1_t_caminfchgflg == (U1)TRUE){
+            u1_t_CamKindConverd = bfg_Pict_StsMng.u1_CamKindConverd;
             /* カメラシステム種別(ADAS/変換BOX)更新 */
             vd_s_PictCtl_CamKindConverdUpDate();
+            if(u1_t_CamKindConverd != bfg_Pict_StsMng.u1_CamKindConverd){
+                vd_s_PictCtl_CdsizeChk();
+            }
 
             /* カメラシステム種別(ドメコン有/ドメコン無)更新 */
             vd_s_PictCtl_GvifCamKindConverdUpDate();
@@ -3369,7 +3434,6 @@ static U1 u1_s_PictCtl_CenterCamSizjdg(void)
                 st_sp_Pict_BackUpInf.u1_CenterCamSiz = u1_t_centercamsiz;
                 /*  センターカメラサイズ変更フラグ：ON */
                 u1_t_chgflg = (U1)TRUE;
-                vd_s_PictCtl_CdsizeChk();
             }
             bfg_Pict_StsMng.st_CamDisc.u1_CenterCamSizCnt = (U1)PICT_SAMECNT_INI;
         }
@@ -3670,17 +3734,35 @@ void vd_g_PictCtl_RcvDiagModInd(const U1 u1_a_MODE)
 /*===================================================================================================================================*/
 static void vd_s_PictCtl_CdsizeChk(void)
 {
-    U1  u1_t_pre_cdsize;
+    U1  u1_t_cnt;
+    U1  u1_t_pre_sig;
+    U1  u1_t_cdsize;
     
-    if(st_sp_Pict_BackUpInf.u1_CenterCamSiz == (U1)PICT_CAN_CAM_SIZE_1920X1080){
-        u1_s_pict_cd_size = (U1)PICT_CD_SIZE_1920X1080_140IN;
+    u1_t_pre_sig = (U1)PICT_CD_SIZE_INVALID;
+    u1_t_cdsize = (U1)PICT_CD_SIZE_INVALID;
+    
+    if(u1_s_pict_mvdisp_exsit == (U1)TRUE){/* 可動有り */
+        if((u1_s_pict_dispsize == (U1)PICT_SIZE_140IN) &&
+            (u1_s_pict_heacon == (U1)PICT_AIS_KIND_HEACON) &&
+            (bfg_Pict_StsMng.u1_CamKindConverd == (U1)PICT_GVIFIF_ADAS)){/* 14inかつADC内臓かつヒーコン統合 */
+            u1_t_cdsize = (U1)PICT_CD_SIZE_1920X954_140IN;
+        }
+        
     }
-    else{
-        u1_s_pict_cd_size = (U1)PICT_CD_SIZE_INVALID;
+    else{/* 可動無し */
+        for(u1_t_cnt = (U1)0U; u1_t_cnt < (U1)PICT_CD_SIZE_TBLNUM; u1_t_cnt++){
+            if((u1_s_pict_dispsize == st_sp_PICT_CDSIZE_TBL[u1_t_cnt].u1_size) &&
+                (u1_s_pict_heacon == st_sp_PICT_CDSIZE_TBL[u1_t_cnt].u1_ais) &&
+                (bfg_Pict_StsMng.u1_CamKindConverd == st_sp_PICT_CDSIZE_TBL[u1_t_cnt].u1_camkind)){
+                u1_t_cdsize = st_sp_PICT_CDSIZE_TBL[u1_t_cnt].u1_cdsize_sig;
+                break;
+            }
+        }
     }
+    u1_s_pict_cd_size = u1_t_cdsize;
 
-    (void)Com_ReceiveSignal(ComConf_ComSignal_CD_SIZE , &u1_t_pre_cdsize);
-    if(u1_t_pre_cdsize != u1_s_pict_cd_size){
+    (void)Com_ReceiveSignal(ComConf_ComSignal_CD_SIZE , &u1_t_pre_sig);
+    if(u1_t_pre_sig != u1_s_pict_cd_size){
         (void)Com_SendSignal(ComConf_ComSignal_CD_SIZE , &u1_s_pict_cd_size);
         Com_TriggerIPDUSend((PduIdType)MSG_AVN1S97_TXCH0);
     }
@@ -3694,7 +3776,7 @@ static void vd_s_PictCtl_CdsizeChk(void)
 /*===================================================================================================================================*/
 U1 u1_g_PictCtl_CdsizeSnd(void)
 {
-	return(u1_s_pict_cd_size);
+    return(u1_s_pict_cd_size);
 }
 
 /*===================================================================================================================================*/
