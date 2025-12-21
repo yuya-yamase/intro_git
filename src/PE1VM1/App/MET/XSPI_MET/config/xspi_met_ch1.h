@@ -50,11 +50,6 @@
 void    vd_g_XSpiCfgInitCh1(void);
 void    vd_g_XSpiCfgPduRxCh1(const U4 * u4_ap_PDU_RX);
 
-U1      u1_g_XSpiEtherComSts(void);
-U1      u1_g_XSpiMm2c100n_rxcnt(void);
-U1      u1_g_XSpiMm2c107n_rxcnt(void);
-U1      u1_g_XSpiMm2c112n_rxcnt(void);
-U1      u1_g_XSpiMm2c118n_rxcnt(void);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

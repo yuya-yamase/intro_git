@@ -51,7 +51,7 @@
 #define ALERT_B_TRFOG_CH_NUM                     (1U)
 #define ALERT_B_TTAIL_CH_NUM                     (1U)
 #define ALERT_B_WASLEV_CH_NUM                    (1U)
-#define ALERT_S_EDSS_CH_NUM                      (1U)
+#define ALERT_S_ADBZR_EDSS_CH_NUM                (1U)
 #define ALERT_S_LCA_CH_NUM                       (3U)
 #define ALERT_S_SCB_CH_NUM                       (1U)
 #define ALERT_B_BDOOR_CH_NUM                     (1U)
@@ -133,6 +133,7 @@
 #define ALERT_S_TMTT_CH_NUM                      (1U)
 #define ALERT_S_TMBZR_CH_NUM                     (2U)
 #define ALERT_B_TURHAZ_CH_NUM                    (2U)
+#define ALERT_S_ADBZR_TCW_CH_NUM                 (1U)
 
 #define ALERT_SPD_STSBIT_VALID                   (VEHSPD_STSBIT_VALID)
 #define ALERT_SPD_STSBIT_UNKNOWN                 (VEHSPD_STSBIT_UNKNOWN)
@@ -202,7 +203,6 @@ void    vd_g_AlertB_tbeam12Init(void);
 void    vd_g_AlertB_tdoorInit(void);
 void    vd_g_AlertB_tpwsrInit(void);
 void    vd_g_AlertC_brlv_2Init(void);
-void    vd_g_AlertS_seaInit(void);
 void    vd_g_AlertC_epbInit(void);
 void    vd_g_AlertC_steerInit(void);
 void    vd_g_AlertD_sbwInit(void);
@@ -236,7 +236,7 @@ extern const ST_ALERT_MTRX         st_gp_ALERT_B_THEAD_MTRX[ALERT_B_THEAD_CH_NUM
 extern const ST_ALERT_MTRX         st_gp_ALERT_B_TRFOG_MTRX[ALERT_B_TRFOG_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_B_TTAIL_MTRX[ALERT_B_TTAIL_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_B_WASLEV_MTRX[ALERT_B_WASLEV_CH_NUM];
-extern const ST_ALERT_MTRX         st_gp_ALERT_S_EDSS_MTRX[ALERT_S_EDSS_CH_NUM];
+extern const ST_ALERT_MTRX         st_gp_ALERT_S_ADBZR_EDSS_MTRX[ALERT_S_ADBZR_EDSS_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_S_LCA_MTRX[ALERT_S_LCA_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_S_SCB_MTRX[ALERT_S_SCB_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_B_BDOOR_MTRX[ALERT_B_BDOOR_CH_NUM];
@@ -318,6 +318,7 @@ extern const ST_ALERT_MTRX         st_gp_ALERT_O_PDSMAL_MTRX[ALERT_O_PDSMAL_CH_N
 extern const ST_ALERT_MTRX         st_gp_ALERT_S_TMTT_MTRX[ALERT_S_TMTT_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_S_TMBZR_MTRX[ALERT_S_TMBZR_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_B_TURHAZ_MTRX[ALERT_B_TURHAZ_CH_NUM];
+extern const ST_ALERT_MTRX         st_gp_ALERT_S_ADBZR_TCW_MTRX[ALERT_S_ADBZR_TCW_CH_NUM];
 
 #endif      /* ALERT_MTRX_CFG_H */
 

@@ -1,116 +1,122 @@
-/* 5.0.3 */
+/* 0.0.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-/*  Alert S_FCTA                                                                                                                     */
+/*  Can Tx Application                                                                                                               */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define ALERT_S_FCTA_C_MAJOR                     (5)
-#define ALERT_S_FCTA_C_MINOR                     (0)
-#define ALERT_S_FCTA_C_PATCH                     (3)
+#define CANTXAPP_AVN1S03_C_MAJOR                     (0)
+#define CANTXAPP_AVN1S03_C_MINOR                     (0)
+#define CANTXAPP_AVN1S03_C_PATCH                     (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#include "alert_cfg_private.h"
-#include "alert_mtrx_cfg_private.h"
+#include "cantxapp_cfg_signal.h"
+#include "cantxapp_mettx.h"
 
 #include "oxcan.h"
-
+#include "ivdsh.h"
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if (ALERT_S_FCTA_C_MAJOR != ALERT_CFG_H_MAJOR)
-#error "alert_S_FCTA.c and alert_cfg_private.h : source and header files are inconsistent!"
+#if ((CANTXAPP_AVN1S03_C_MAJOR != CANTXAPP_CFG_SIGNAL_H_MAJOR) || \
+     (CANTXAPP_AVN1S03_C_MINOR != CANTXAPP_CFG_SIGNAL_H_MINOR) || \
+     (CANTXAPP_AVN1S03_C_PATCH != CANTXAPP_CFG_SIGNAL_H_PATCH))
+#error "cantxapp_avn1s03.c and cantxapp_cfg_signal.h : source and header files are inconsistent!"
 #endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define ALERT_S_FCTA_NUM_DST                     (16U)
+#define CANTXAPP_AVN1S03_VM_1WORD                    (1U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#define u1_CANTXAPP_MET_READ_BIT(u4_buf , u1_pos , u1_len) ((U1)((U1)((u4_buf)  >> (u1_pos)) & (U1)((1U << (u1_len)) - 1U)))
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+static U4    u4_sp_cantxapp_avn1s03data[CANTXAPP_NBYTE_PAYLOAD8];
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static U4      u4_s_AlertS_fctaSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS);
+static void    vd_s_CanTxAppSend_FLYNOP(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static const U1  u1_sp_ALERT_S_FCTA_DST[ALERT_S_FCTA_NUM_DST] = {
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 00 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 01 UNKNOWN                                         */
-    (U1)ALERT_REQ_S_FCTA_CYCL,                                                 /* 02 CYCL                                            */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 03 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 04 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 05 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 06 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 07 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 08 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 09 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 10 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 11 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 12 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 13 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 14 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN                                                      /* 15 UNKNOWN                                         */
-};
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-const ST_ALERT_MTRX st_gp_ALERT_S_FCTA_MTRX[1] = {
-    {
-        &u4_s_AlertS_fctaSrcchk,                                               /* fp_u4_SRC_CHK                                      */
-        vdp_PTR_NA,                                                            /* fp_vd_XDST                                         */
-
-        (const U4 *)vdp_PTR_NA,                                                /* u4p_MASK                                           */
-        (const U4 *)vdp_PTR_NA,                                                /* u4p_CRIT                                           */
-
-        &u1_sp_ALERT_S_FCTA_DST[0],                                            /* u1p_DST                                            */
-        (U2)ALERT_S_FCTA_NUM_DST,                                              /* u2_num_srch                                        */
-        (U1)ALERT_VOM_IGN_ON                                                   /* u1_vom_act                                         */
-    }
-};
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*===================================================================================================================================*/
-/*  static U4      u4_s_AlertS_fctaSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)                                */
+/*  void    vd_g_CanTxAppAVN1S03_Init(void)                                                                                          */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-static U4      u4_s_AlertS_fctaSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
+void    vd_g_CanTxAppAVN1S03_Init(void)
 {
-    static const U2  u2_s_ALERT_S_FCTA_TO_THRESH  = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
-    static const U1  u1_s_ALERT_S_FCTA_LSB_MSGSTS = (U1)2U;
-    U1               u1_t_msgsts;
-    U1               u1_t_sgnl;
-    U4               u4_t_src_chk;
+    U4                 u4_t_loop;
+    U4                 u4_t_tx;
 
-    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_DS11S40_CH0,
-                                      (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP,
-                                      u2_s_ALERT_S_FCTA_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
-    u1_t_sgnl     = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_CTABUZF, &u1_t_sgnl);
-    u4_t_src_chk  = (U4)u1_t_sgnl;
-    u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_S_FCTA_LSB_MSGSTS);
+    for(u4_t_loop = (U4)0U; u4_t_loop < (U4)CANTXAPP_NBYTE_PAYLOAD8; u4_t_loop++){
+        u4_sp_cantxapp_avn1s03data[u4_t_loop] = (U4)0U;
+    }
 
-    return(u4_t_src_chk);
+    u4_t_tx = (U4)0U;
+    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM1TO2_FLYNOP, &u4_t_tx, (U2)CANTXAPP_AVN1S03_VM_1WORD);
+}
+/*===================================================================================================================================*/
+/*  void    vd_g_CanTxAppAVN1S03_Send(void)                                                                                          */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void    vd_g_CanTxAppAVN1S03_Send(void)
+{
+    vd_s_CanTxAppSend_FLYNOP();
+}
+/*===================================================================================================================================*/
+/*  void    vd_g_CanTxAppAVN1S03_Put(const U4 * u4_ap_pck_rx, const U1 u1_a_BUFSIZE)                                                 */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      u4_ap_pck_rx: xspi buffer                                                                                        */
+/*                  u1_a_BUFSIZE: buffer size                                                                                        */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void    vd_g_CanTxAppAVN1S03_Put(const U4 * u4_ap_pck_rx, const U1 u1_a_BUFSIZE)
+{
+    U4                 u4_t_loop;
+
+    for(u4_t_loop = (U4)0U; u4_t_loop < (U4)u1_a_BUFSIZE; u4_t_loop++){
+        if(u1_a_BUFSIZE <= (U1)CANTXAPP_NBYTE_PAYLOAD8){
+            u4_sp_cantxapp_avn1s03data[u4_t_loop] = u4_ap_pck_rx[u4_t_loop];
+        }
+    }
+}
+/*===================================================================================================================================*/
+/*  static void    vd_s_CanTxAppSend_FLYNOP(void)                                                                                    */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*                                                                                                                                   */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void    vd_s_CanTxAppSend_FLYNOP(void)
+{
+    U4                 u4_t_tx;
+
+    u4_t_tx = (U4)u1_CANTXAPP_MET_READ_BIT(u4_sp_cantxapp_avn1s03data[0], (U1)CANTXAPP_POS_1_5, (U1)CANTXAPP_LEN_2);
+    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM1TO2_FLYNOP, &u4_t_tx, (U2)CANTXAPP_AVN1S03_VM_1WORD);
 }
 
 /*===================================================================================================================================*/
@@ -121,14 +127,12 @@ static U4      u4_s_AlertS_fctaSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, c
 /*                                                                                                                                   */
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  5.0.0     3/26/2020  FN       New.                                                                                               */
-/*  5.0.1     7/20/2020  TI       Update filename.                                                                                   */
-/*  5.0.2     3/26/2021  SO       Update for 840B CV(Version update).                                                                */
-/*  5.0.3    12/09/2021  KT       Add Compile switch.                                                                                */
+/*  0.0.0    12/11/2025  YN       New.                                                                                               */
 /*                                                                                                                                   */
-/*  * FN   = Farah Niwa, NTTD MSE                                                                                                    */
-/*  * TI   = Takuro Iwanaga, NTTD MSE                                                                                                */
-/*  * SO   = Syuhei Ooshima, NTTD MSE                                                                                                */
-/*  * KT   = Kenichi Takahashi, NTTD MSE                                                                                             */
+/*                                                                                                                                   */
+/*  Revision Date        Author   Change Description                                                                                 */
+/* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
+/*                                                                                                                                   */
+/*  * YN   = Yujiro Nagaya, Denso Techno                                                                                             */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
