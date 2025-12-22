@@ -1,11 +1,11 @@
-/* Dem_DataCtl_EvtDisplacement_c(v5-5-0)                                    */
+/* Dem_DataCtl_EvtDisplacement_c(v5-10-0)                                   */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
-/* Object Name  | Dem/DataCtl/CODE                                          */
+/* Object Name  | Dem/DataCtl_EvtDisplacement/CODE                          */
 /*--------------------------------------------------------------------------*/
 /* Notes        |                                                           */
 /****************************************************************************/
@@ -287,6 +287,9 @@ static FUNC( boolean, DEM_CODE ) Dem_Data_ChkOverwriteFFR
 /*               |      TRUE  : necessary                                   */
 /*               |      FALSE : unnecessary                                 */
 /* Notes         |                                                          */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-8-0      | no branch changed.                                       */
 /****************************************************************************/
 static FUNC( boolean, DEM_CODE ) Dem_Data_ChkOverwriteOBDFFR
 (void)
@@ -296,12 +299,12 @@ static FUNC( boolean, DEM_CODE ) Dem_Data_ChkOverwriteOBDFFR
     VAR( Dem_u08_FFDIndexType, AUTOMATIC ) obdFFDRecordSpaceNum;
     VAR( boolean, AUTOMATIC ) retVal;
 
-    obdFFDRecordNum = Dem_ObdFFDRecordNum;
+    obdFFDRecordNum = Dem_CfgInfoPm_GetObdFFDRecordNum();
 
     retVal = (boolean)FALSE;
     if( obdFFDRecordNum > (Dem_u08_FFDIndexType)0U )
     {
-        obdFFRClassPerDTCMaxNum = (Dem_u08_FFDIndexType)Dem_OBDFFRClassPerDTCMaxNum;
+        obdFFRClassPerDTCMaxNum = (Dem_u08_FFDIndexType)Dem_CfgInfoPm_GetOBDFFRClassPerDTCMaxNum();
         obdFFDRecordSpaceNum    = (Dem_u08_FFDIndexType)(obdFFDRecordNum - Dem_TmpEventMemoryEntry.EventMemoryRecordList.NumberOfObdFreezeFrameRecords);
         if( obdFFDRecordSpaceNum < obdFFRClassPerDTCMaxNum )
         {
@@ -333,6 +336,7 @@ static FUNC( boolean, DEM_CODE ) Dem_Data_ChkOverwriteOBDFFR
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-8-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_Data_GetEventPriorityAndStatusOfDTC
 (
@@ -343,12 +347,18 @@ FUNC( void, DEM_CODE ) Dem_Data_GetEventPriorityAndStatusOfDTC
     VAR( Dem_u08_EventPriorityType, AUTOMATIC )   eventPriority;
     VAR( Dem_u08_EventPriorityType, AUTOMATIC )   orgEventPriority;
     VAR( Dem_UdsStatusByteType, AUTOMATIC ) statusOfDTC;
+#if ( DEM_EVENT_DISPLACEMENT_BY_CDTC_NONOBDONLY_SUPPORT == STD_ON ) /* [FuncSw] */
+    VAR( boolean, AUTOMATIC ) eventOBDKind;
+#endif  /* ( DEM_EVENT_DISPLACEMENT_BY_CDTC_NONOBDONLY_SUPPORT == STD_ON )  */
     VAR( boolean, AUTOMATIC ) availableStatus;
     VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) eventStorageNum;
 
     eventPriority = DEM_PRIORITY_EVT_AVL;
     orgEventPriority = DEM_PRIORITY_EVT_AVL;
     statusOfDTC = DEM_DTCSTATUS_BYTE_DEFAULT;
+#if ( DEM_EVENT_DISPLACEMENT_BY_CDTC_NONOBDONLY_SUPPORT == STD_ON ) /* [FuncSw] */
+    eventOBDKind = (boolean)FALSE;
+#endif  /* ( DEM_EVENT_DISPLACEMENT_BY_CDTC_NONOBDONLY_SUPPORT == STD_ON )  */
     eventStorageNum = Dem_PrimaryMemEventStorageNum;
 
     if( EventStrgIndex < eventStorageNum )                                                                  /* [GUD:if]EventStrgIndex */
@@ -366,11 +376,18 @@ FUNC( void, DEM_CODE ) Dem_Data_GetEventPriorityAndStatusOfDTC
         }
 
         (void)Dem_DataMngC_GetER_StatusOfDTC( EventStrgIndex, &statusOfDTC );    /* no return check required */
+
+#if ( DEM_EVENT_DISPLACEMENT_BY_CDTC_NONOBDONLY_SUPPORT == STD_ON ) /* [FuncSw] */
+        eventOBDKind = Dem_CfgInfoPm_CheckEventKindOfOBD_InEvtStrgGrp( EventStrgIndex );
+#endif  /* ( DEM_EVENT_DISPLACEMENT_BY_CDTC_NONOBDONLY_SUPPORT == STD_ON )  */
     }
 
     EventEntryOverwritePtr->EventPriority = eventPriority;
     EventEntryOverwritePtr->OrgEventPriority = orgEventPriority;
     EventEntryOverwritePtr->StatusOfDTC = statusOfDTC;
+#if ( DEM_EVENT_DISPLACEMENT_BY_CDTC_NONOBDONLY_SUPPORT == STD_ON ) /* [FuncSw] */
+    EventEntryOverwritePtr->EventOBDKind = eventOBDKind;
+#endif  /* ( DEM_EVENT_DISPLACEMENT_BY_CDTC_NONOBDONLY_SUPPORT == STD_ON )  */
 
     return;
 }
@@ -391,6 +408,8 @@ FUNC( void, DEM_CODE ) Dem_Data_GetEventPriorityAndStatusOfDTC
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-7-0      | no object changed.                                       */
+/*   v5-10-0     | no branch changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_Data_SelectNonOBDFFROverwrite
 (
@@ -408,14 +427,13 @@ static FUNC( void, DEM_CODE ) Dem_Data_SelectNonOBDFFROverwrite
     VAR( Dem_u08_FFRecordClassIndexType, AUTOMATIC ) ffrRecordClassConfigureNum;
 
     P2CONST( AB_83_ConstV Dem_FreezeFrameRecNumClassType, AUTOMATIC, DEM_CONFIG_DATA ) freezeFrameRecNumClassPtr;
-    P2CONST( AB_83_ConstV Dem_FreezeFrameRecordClassType, AUTOMATIC, DEM_CONFIG_DATA ) freezeFrameRecordClassPtr;
 
     nonObdFFDRecordNum          = Dem_NonObdFFDRecordNum;
     nonOBDFFRClassPerDTCMaxNum  = Dem_NonOBDFFRClassPerDTCMaxNum;
 
     for( loopRecordNumberIndex = (Dem_u08_FFListIndexType)0U; loopRecordNumberIndex < nonOBDFFRClassPerDTCMaxNum; loopRecordNumberIndex++ ) /* [GUD:for] loopRecordNumberIndex */
     {
-        if( FaultRecordPtr->RecordNumberIndex[loopRecordNumberIndex] < nonObdFFDRecordNum )                                                 /* [GUD] loopRecordNumberIndex */
+        if( FaultRecordPtr->RecordNumberIndex[loopRecordNumberIndex] < nonObdFFDRecordNum )                                                 /* [GUD] loopRecordNumberIndex *//* [ARYCHK] DEM_NONOBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / loopRecordNumberIndex */
         {
             /* This FaultRecord has NonOBD FFR */
             Dem_CfgInfoPm_GetFreezeFrameAndRecNumClass( FaultRecordPtr->EventStrgIndex, &freezeFrameClassRef, &freezeFrameRecNumClassRef);  /* [GUD:OUT:Not DEM_FFCLASSINDEX_INVALID] freezeFrameClassRef *//* [GUD:OUT:Not DEM_FFRECNUMCLASSINDEX_INVALID] freezeframeRecNumClassRef */
@@ -423,11 +441,10 @@ static FUNC( void, DEM_CODE ) Dem_Data_SelectNonOBDFFROverwrite
             if( freezeFrameRecNumClassRef != DEM_FFRECNUMCLASSINDEX_INVALID )                                                               /* [GUD:if] freezeFrameRecNumClassRef */
             {
                 freezeFrameRecNumClassPtr = &Dem_FreezeFrameRecNumClassTable[freezeFrameRecNumClassRef];                                    /* [GUD] freezeFrameRecNumClassRef */
-                freezeFrameRecordClassIndex = freezeFrameRecNumClassPtr->DemFreezeFrameRecordClassRef[loopRecordNumberIndex];               /* [GUD] loopRecordNumberIndex */
+                freezeFrameRecordClassIndex = freezeFrameRecNumClassPtr->DemFreezeFrameRecordClassRef[loopRecordNumberIndex];               /* [GUD] loopRecordNumberIndex *//* [ARYCHK] DEM_FF_RECORD_CLASS_REF_MAX_NUM / 1 / loopRecordNumberIndex */
                 if( freezeFrameRecordClassIndex < ffrRecordClassConfigureNum )                                                              /* [GUD:if] freezeFrameRecordClassIndex */
                 {
-                    freezeFrameRecordClassPtr = &Dem_FreezeFrameRecordClassTable[freezeFrameRecordClassIndex];                              /* [GUD] freezeFrameRecordClassIndex *//* [GUD:CFG:IF_GUARDED: freezeFrameRecordClassIndex ]freezeFrameRecordClassPtr */
-                    freezeFrameRecordTrigger = freezeFrameRecordClassPtr->DemFreezeFrameRecordTrigger;                                      /* [GUD] freezeFrameRecordClassPtr */
+                    freezeFrameRecordTrigger =  Dem_CfgInfoPm_GetFreezeFrameRecordTriggerType( freezeFrameRecordClassIndex );               /* [GUD] freezeFrameRecordClassIndex */
                 }
                 else
                 {
@@ -461,6 +478,8 @@ static FUNC( void, DEM_CODE ) Dem_Data_SelectNonOBDFFROverwrite
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-7-0      | no object changed.                                       */
+/*   v5-8-0      | no branch changed.                                       */
 /****************************************************************************/
 #if ( DEM_OBDFFD_SUPPORT == STD_ON )
 static FUNC( void, DEM_CODE ) Dem_Data_SelectOBDFFROverwrite
@@ -473,12 +492,12 @@ static FUNC( void, DEM_CODE ) Dem_Data_SelectOBDFFROverwrite
     VAR( Dem_u08_FFListIndexType, AUTOMATIC ) loopRecordNumberIndex;
     VAR( Dem_u08_FFDIndexType, AUTOMATIC ) obdFFDRecordNum;
 
-    obdFFDRecordNum         = Dem_ObdFFDRecordNum;
-    obdFFRClassPerDTCMaxNum = Dem_OBDFFRClassPerDTCMaxNum;
+    obdFFDRecordNum         = Dem_CfgInfoPm_GetObdFFDRecordNum();
+    obdFFRClassPerDTCMaxNum = Dem_CfgInfoPm_GetOBDFFRClassPerDTCMaxNum();
 
     for( loopRecordNumberIndex = (Dem_u08_FFListIndexType)0U; loopRecordNumberIndex < obdFFRClassPerDTCMaxNum; loopRecordNumberIndex++ )    /* [GUD:for] loopRecordNumberIndex */
     {
-        if( FaultRecordPtr->ObdRecordNumberIndex[loopRecordNumberIndex] < obdFFDRecordNum )                                                 /* [GUD] loopRecordNumberIndex */
+        if( FaultRecordPtr->ObdRecordNumberIndex[loopRecordNumberIndex] < obdFFDRecordNum )                                                 /* [GUD] loopRecordNumberIndex *//* [ARYCHK] DEM_OBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / loopRecordNumberIndex */
         {
             /* This FaultRecord has OBD FFR */
             Dem_DcEeo_SelectOBDFFROverwrite( EventEntryOverwritePtr );
@@ -500,6 +519,9 @@ static FUNC( void, DEM_CODE ) Dem_Data_SelectOBDFFROverwrite
 /*  v5-0-0         :2022-03-29                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-7-0         :2024-05-29                                              */
+/*  v5-8-0         :2024-10-29                                              */
+/*  v5-10-0        :2025-06-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

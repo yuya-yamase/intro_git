@@ -290,6 +290,7 @@
 ###../../src/PE0VM0/BSW/Aubist/Dcm/Dsp/src/Dcm_Dsp_SID35.c
 ../../src/PE0VM0/BSW/Aubist/Dcm/Dsp/src/Dcm_Dsp_SID36.c
 ../../src/PE0VM0/BSW/Aubist/Dcm/Dsp/src/Dcm_Dsp_SID37.c
+###../../src/PE0VM0/BSW/Aubist/Dcm/Dsp/src/Dcm_Dsp_SID3D.c
 ../../src/PE0VM0/BSW/Aubist/Dcm/Dsp/src/Dcm_Dsp_SID3E.c
 ../../src/PE0VM0/BSW/Aubist/Dcm/Dsp/src/Dcm_Dsp_SID85.c
 ../../src/PE0VM0/BSW/Aubist/Dcm/Dsp/src/Dcm_Dsp_SID86.c
@@ -375,8 +376,11 @@
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CmnReq/ConfigInfo/Dem_ConfigInfo_PriMem.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CmnReq/ConfigInfo/Dem_ConfigInfo_PriMem_Calib.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CmnReq/ConfigInfo/Dem_ConfigInfo_PriMem_CalibByCallout.c
+../../src/PE0VM0/BSW/Aubist/Dem/src/CmnReq/ConfigInfo/Dem_ConfigInfo_PriMem_ClearAllowed.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CmnReq/ConfigInfo/Dem_ConfigInfo_PriMem_DTCAttr.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CmnReq/ConfigInfo/Dem_ConfigInfo_PriMem_DTCFormat.c
+../../src/PE0VM0/BSW/Aubist/Dem/src/CmnReq/ConfigInfo/Dem_ConfigInfo_PriMem_FFRec.c
+###../../src/PE0VM0/BSW/Aubist/Dem/src/CmnReq/ConfigInfo/Dem_ConfigInfo_PriMem_IUMPR.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CmnReq/ConfigInfo/Dem_ConfigInfo_PriMem_MI.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CmnReq/ConfigInfo/Dem_ConfigInfo_PriMem_MI_WWH.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CmnReq/ConfigInfo/Dem_ConfigInfo_PriMem_Misfire.c
@@ -395,6 +399,7 @@
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CmnReq/Control/Dem_Control_FilteredDTC.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CmnReq/Control/Dem_Control_IFCmn.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CmnReq/Control/Dem_Control_Ind.c
+../../src/PE0VM0/BSW/Aubist/Dem/src/CmnReq/Control/Dem_Control_InitModules.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CmnReq/Control/Dem_Control_OpCycle.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CmnReq/Control/Dem_Control_OpCycleQualified.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CmnReq/DataAvl/Dem_DataAvl.c
@@ -431,6 +436,7 @@
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CmnReq/If/Dem_If_AltIUMPR.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CmnReq/If/Dem_If_DTCCtrl.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CmnReq/If/Dem_If_DTR.c
+###../../src/PE0VM0/BSW/Aubist/Dem/src/CmnReq/If/Dem_If_GetConfirmedDTCOrder.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CmnReq/If/Dem_If_GetEventCtrlInfo.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CmnReq/If/Dem_If_GetEventInfo.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CmnReq/If/Dem_If_GetEventList.c
@@ -483,6 +489,7 @@
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/Control/Dem_Control_FilteredDTC_ReadinessGrp.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/Control/Dem_Control_FilteredEDR.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/Control/Dem_Control_FilteredRecord.c
+###../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/Control/Dem_Control_GetUDSDTCByConfirmedDTCOrder.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/Control/Dem_Control_Healing.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/Control/Dem_Control_IndPrimary.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/Control/Dem_Control_IUMPR.c
@@ -511,7 +518,9 @@
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/DataCtl/Dem_DataCtl_DisableDTCInfo.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/DataCtl/Dem_DataCtl_DisableDTCInfo_PairEvent.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/DataCtl/Dem_DataCtl_DisableDTCInfo_RecNumMng.c
+###../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/DataCtl/Dem_DataCtl_DisableDTCInfo_RecNumMng_FilRec.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/DataCtl/Dem_DataCtl_DisReqUpd_GetFFIdx.c
+###../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/DataCtl/Dem_DataCtl_DisReqUpd_GetFFIdx_FilRec.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/DataCtl/Dem_DataCtl_DisReqUpd_GetFFIdx_RtvlOn.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/DataCtl/Dem_DataCtl_EdsFFD.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/DataCtl/Dem_DataCtl_EventEntry.c
@@ -528,6 +537,9 @@
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/DataCtl/Dem_DataCtl_FFDClearPattern.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/DataCtl/Dem_DataCtl_FFDClearPatternTable.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/DataCtl/Dem_DataCtl_FilteredRecord.c
+../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/DataCtl/Dem_DataCtl_FilteredRecord_RtvlOff.c
+###../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/DataCtl/Dem_DataCtl_FilteredRecord_RtvlOn.c
+###../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/DataCtl/Dem_DataCtl_GetUDSDTCByConfirmedDTCOrder.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/DataCtl/Dem_DataCtl_InfoEvent.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/DataCtl/Dem_DataCtl_InfoFFD.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/DataCtl/Dem_DataCtl_InfoFFD_ChkSptFFDRecNum.c
@@ -550,6 +562,7 @@
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/DTC/DTCStatus/Dem_DTC_DTCStatus_Translate.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/DTC/DTCStatus/Dem_DTC_DTCStatus_Update.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/DTC/DTCStatus/Dem_DTC_GetDTCStatusByDTC.c
+../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/DTC/DTCStatus/Dem_DTC_GetDTCStatusByDTC_FilDTC.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/DTC/DTCStatus/Dem_DTC_JudgeClearTarget.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/DTC/DTCStatus/Dem_DTC_PreFFD.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/DTC/FilDTC/Dem_DTC_FilDTC.c
@@ -563,10 +576,12 @@
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/DTR/Dem_DTR.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/DTR/Dem_DTR_Convert.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/DTR/Dem_DTR_ReadDTCBased.c
+###../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/DTR/Dem_DTR_ReadDTCBased_Misfire.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/EDR/Dem_EDR_CheckRecNumSupport.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/EDR/Dem_EDR_FilEDR.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/Event/Dem_Event_FCThreshold.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/Event/Dem_Event_QualificationInfo.c
+###../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/Event/Dem_Event_QualificationInfo_CmbStrgON.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/FFD/Dem_FFD.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/FFD/Dem_FFD_FilRecord.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/FFD/Dem_FFD_GetFFDByDTC.c
@@ -584,6 +599,7 @@
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/IUMPR/Dem_IUMPR_Ratio_OFF.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/IUMPR/Dem_IUMPR_ReadDTCBased.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/Misfire/Dem_Misfire.c
+###../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/Misfire/Dem_Misfire_ConfirmedOrderCylinder.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/Misfire/Dem_Misfire_CylinderStatus.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/Misfire/Dem_Misfire_EventEntry.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/Misfire/Dem_Misfire_EventEntryCompare.c
@@ -674,6 +690,7 @@
 ../../src/PE0VM0/BSW/Aubist/Dem/src/DataMng/DataMng/Dem_DataMng_FreezeFrameIndex.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/DataMng/DataMng/Dem_DataMng_GetRecordData.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/DataMng/DataMng/Dem_DataMng_RecDt_Event.c
+###../../src/PE0VM0/BSW/Aubist/Dem/src/DataMng/DataMng/Dem_DataMng_RecDt_Event_CmbStrgON.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/DataMng/DataMng/Dem_DataMng_RecDt_Fault.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/DataMng/DataMng/Dem_DataMng_RecDt_FFD.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/DataMng/DataMng/Dem_DataMng_RecDt_OBD_FFD.c
@@ -695,6 +712,7 @@
 ../../src/PE0VM0/BSW/Aubist/Dem/src/DataMng/OpCycleMng/Dem_OpCycleMng.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/DataMng/OpCycleMng/Dem_OpCycleMng_nonOBD.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/DataMng/OrderList/Dem_OdrLst_Confirmed.c
+###../../src/PE0VM0/BSW/Aubist/Dem/src/DataMng/OrderList/Dem_OdrLst_Confirmed_Misfire.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/DataMng/OrderList/Dem_OdrLst_Fault.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/DataMng/OrderList/Dem_OdrLst_MIL.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/DataMng/OrderList/Dem_OdrLst_Sort.c
@@ -746,6 +764,7 @@
 ../../src/PE0VM0/BSW/Aubist/Dem/usr/Dem_FiM_Connector.c
 ../../src/PE0VM0/BSW/Aubist/Dem/usr/Dem_IUMPR_Callout.c
 ../../src/PE0VM0/BSW/Aubist/Dem/usr/Dem_IUMPR_FiM_Connector.c
+###../../src/PE0VM0/BSW/Aubist/Dem/usr/Dem_IUMPR_NODI_Callout.c
 ../../src/PE0VM0/BSW/Aubist/Dem/usr/Dem_Misfire_NotifyCylinderStatus_Callout.c
 ../../src/PE0VM0/BSW/Aubist/Dem/usr/Dem_NotifyError_Callout.c
 ../../src/PE0VM0/BSW/Aubist/Dem/usr/Dem_NotifyOpCycleUpdate_Callout.c

@@ -1,7 +1,7 @@
-/* Dem_NotifyOpCycleUpdate_Callout_c(v5-0-0)                                */
+/* Dem_NotifyOpCycleUpdate_Callout_c(v5-10-0)                               */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 /****************************************************************************/
 /* Object Name  | Dem/NotifyOpCycleUpdate_Callout/CODE                      */
@@ -54,8 +54,8 @@
 
 
 /****************************************************************************/
-/* Function Name | Dem_NotifyOperationCycleUpdated                                 */
-/* Description   | norify operation cycle updated.                          */
+/* Function Name | Dem_NotifyOperationCycleUpdated                          */
+/* Description   | notify operation cycle updated.                          */
 /* Preconditions | none                                                     */
 /* Parameters    | [in] OperationCycleId : operation cycle ID               */
 /*               | [in] DrivingCycleQualified :                             */
@@ -91,6 +91,7 @@ FUNC( void, DEM_CODE_CALLOUT ) Dem_NotifyOperationCycleUpdated
 /*  v2-0-0         :2019-03-27                                              */
 /*  v4-0-0         :2020-03-19                                              */
 /*  v5-0-0         :2021-09-28                                              */
+/*  v5-10-0        :2025-06-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

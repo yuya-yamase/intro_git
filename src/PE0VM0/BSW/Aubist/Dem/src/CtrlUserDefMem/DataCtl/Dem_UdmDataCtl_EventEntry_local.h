@@ -1,7 +1,7 @@
 /* Dem_UdmDataCtl_EventEntry_local_h(v5-5-0)                                */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 /****************************************************************************/
 /* Object Name  | Dem/UdmDataCtl_EventEntry_local/HEADER                    */

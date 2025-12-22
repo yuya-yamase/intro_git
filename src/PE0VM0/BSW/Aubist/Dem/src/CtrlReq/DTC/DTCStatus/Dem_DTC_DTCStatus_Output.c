@@ -1,7 +1,7 @@
-/* Dem_DTC_DTCStatus_Output_c(v5-5-0)                                       */
+/* Dem_DTC_DTCStatus_Output_c(v5-7-0)                                       */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 
@@ -286,6 +286,8 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DTC_GetDTCStatusAndUdsDTC
 /* Preconditions | none                                                     */
 /* Parameters    | [in] EventStrgIndex :                                    */
 /*               |        index of the event                                */
+/*               | [in] DTCStatusMask :                                     */
+/*               |        DTCStatusMask.                                    */
 /*               | [in] FilterWithSeverity :                                */
 /*               |        FilterWithSeverity.                               */
 /*               | [in] DTCSeverityMask :                                   */
@@ -303,10 +305,12 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DTC_GetDTCStatusAndUdsDTC
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | new created. based on Dem_DTC_GetDTCStatusAndUdsDTC.     */
+/*   v5-7-0      | branch changed.                                          */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DTC_GetDTCStatusAndUdsDTC_forFilDTC
 (
     VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex,
+    VAR( Dem_UdsStatusByteType, AUTOMATIC ) DTCStatusMask,
     VAR( boolean, AUTOMATIC ) FilterWithSeverity,
     VAR( Dem_DTCSeverityType, AUTOMATIC ) DTCSeverityMask,
     P2VAR( Dem_u32_DTCValueType, AUTOMATIC, AUTOMATIC ) DTCValuePtr,
@@ -317,7 +321,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DTC_GetDTCStatusAndUdsDTC_forFi
     VAR( Dem_u08_InternalReturnType, AUTOMATIC ) retVal;
     VAR( Dem_u08_InternalReturnType, AUTOMATIC ) retGetDTC;
     VAR( Dem_u08_InternalReturnType, AUTOMATIC ) resultGetStatus;
-    VAR( boolean, AUTOMATIC ) retDTCClerTarget;
 
     retVal = DEM_IRT_NG;
 
@@ -330,19 +333,10 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DTC_GetDTCStatusAndUdsDTC_forFi
         /*  Merge WIRStatus is in Dem_DTC_GetDTCStatusByDTCAndSeverity().           */
         /*--------------------------------------------------*/
         /*  severity target data.   */
-        resultGetStatus = Dem_DTC_GetDTCStatusByDTCAndSeverity( EventStrgIndex, FilterWithSeverity, DTCSeverityMask, DTCStatusPtr, DTCSeverityPtr );    /* [GUD]EventStrgIndex */
+        resultGetStatus = Dem_DTC_GetDTCStatusByDTCAndSeverity( EventStrgIndex, DTCStatusMask, FilterWithSeverity, DTCSeverityMask, DTCStatusPtr, DTCSeverityPtr );    /* [GUD]EventStrgIndex */
 
         if( resultGetStatus == DEM_IRT_OK )
         {
-            retDTCClerTarget = Dem_DTC_JudgeDTCClearTarget( EventStrgIndex );                           /* [GUD]EventStrgIndex */
-            if( retDTCClerTarget == (boolean)TRUE )
-            {
-                /*--------------------------------------*/
-                /*  set default statusOfDTC.            */
-                /*--------------------------------------*/
-                (*DTCStatusPtr) =   DEM_DTCSTATUS_BYTE_DEFAULT;
-            }
-            Dem_DTC_TranslateDTCStatusForOutput_NoMergeWIRBit( EventStrgIndex, DTCStatusPtr );      /* [GUD]EventStrgIndex */
             retVal = DEM_IRT_OK;
 
         }
@@ -359,6 +353,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DTC_GetDTCStatusAndUdsDTC_forFi
 /*  Version        :Date                                                    */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-7-0         :2024-05-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

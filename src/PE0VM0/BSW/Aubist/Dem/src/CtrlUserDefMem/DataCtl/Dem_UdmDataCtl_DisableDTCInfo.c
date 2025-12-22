@@ -1,7 +1,7 @@
-/* Dem_UdmDataCtl_DisableDTCInfo_c(v5-5-0)                                  */
+/* Dem_UdmDataCtl_DisableDTCInfo_c(v5-9-0)                                  */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -105,6 +105,7 @@ static VAR( Dem_UdmTmpDisabledRecordType, DEM_VAR_NO_INIT ) Dem_UdmTmpDisabledRe
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | branch changed.                                          */
+/*   v5-9-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmData_SaveDisabledRecord
 (
@@ -150,7 +151,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmData_SaveDisabledRecord
         if( resultOfGetEventRec == DEM_IRT_OK ) /* [GUD:RET:DEM_IRT_OK]Dem_UdmTmpDisabledRecord.EventRecord */
         {
             /* Checks whether the fault index is valid. */
-            if( Dem_UdmTmpDisabledRecord.EventRecord.UdmFaultIndex != DEM_FAULTINDEX_INITIAL )
+            if( Dem_UdmTmpDisabledRecord.EventRecord.UdmFaultIndex != DEM_UDMFAULTINDEX_INITIAL )
             {
                 /* The fault index is valid. */
 
@@ -272,6 +273,7 @@ FUNC( void, DEM_CODE ) Dem_UdmData_GetDTCStatusOfDisabledRecord
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-9-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( boolean, DEM_CODE ) Dem_UdmData_CheckAndGetConsistentFFRecord
 (
@@ -290,13 +292,13 @@ FUNC( boolean, DEM_CODE ) Dem_UdmData_CheckAndGetConsistentFFRecord
     VAR( Dem_UdmFaultRecordType, AUTOMATIC ) udmFaultRecord;
 
     retVal = (boolean)FALSE;
-    udmFaultIndex = DEM_FAULTINDEX_INITIAL;
+    udmFaultIndex = DEM_UDMFAULTINDEX_INITIAL;
     resultOfGetFaultRec = DEM_IRT_NG;
 
     resultOfGetFaultIndex = Dem_UdmEventMngC_GetER_FaultIndex( Dem_UdmTmpDisabledRecord.UdmEventIndex, &udmFaultIndex );    /* [GUD:RET:DEM_IRT_OK] UdmEventIndex */
     if( resultOfGetFaultIndex == DEM_IRT_OK )
     {
-        if( udmFaultIndex != DEM_FAULTINDEX_INITIAL )
+        if( udmFaultIndex != DEM_UDMFAULTINDEX_INITIAL )
         {
             resultOfGetFaultRec = Dem_UdmFaultMngC_GetRecord( Dem_UdmTmpDisabledRecord.UdmGroupKindIndex, udmFaultIndex, &udmFaultRecord );
         }
@@ -360,6 +362,9 @@ FUNC( boolean, DEM_CODE ) Dem_UdmData_CheckAndGetConsistentFFRecord
 /*               |        DEM_IRT_WRONG_BUFFERSIZE : provided buffer size - */
 /*               |        to small                                          */
 /* Notes         | -                                                        */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-7-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmData_GetAllRecordNumber
 (
@@ -382,12 +387,12 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmData_GetAllRecordNumber
     }
     else
     {
-        recordNumCnt        =   *RecordNumPtr;
+        recordNumCnt        =   (uint8)0U;
 
         /*------------------------------*/
         /*  trigger freeze frame        */
         /*------------------------------*/
-        retVal  =   Dem_UdmData_GetAllFFRecordNumber( Dem_UdmTmpDisabledRecord.UdmEventIndex, RecordNumBufferPtr, &recordNumCnt );
+        retVal  =   Dem_UdmData_GetAllFFRecordNumber( Dem_UdmTmpDisabledRecord.UdmEventIndex, RecordNumBufferPtr, (*RecordNumPtr), (uint8)0U, &recordNumCnt );
 
 #if ( DEM_TSFF_UDM_SUPPORT == STD_ON )   /*  [FuncSw]    */
         /*------------------------------*/
@@ -395,8 +400,8 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmData_GetAllRecordNumber
         /*------------------------------*/
         if ( retVal == DEM_IRT_OK )
         {
-            recordTSFFNumCnt    =   *RecordNumPtr - recordNumCnt;
-            retVal  =   Dem_UdmData_GetAllTSFFRecordNumber( &RecordNumBufferPtr[recordNumCnt], &recordTSFFNumCnt );
+            recordTSFFNumCnt    =   (uint8)0U;
+            retVal  =   Dem_UdmData_GetAllTSFFRecordNumber( RecordNumBufferPtr, (*RecordNumPtr), recordNumCnt, &recordTSFFNumCnt );
 
             if ( retVal == DEM_IRT_OK )
             {
@@ -492,6 +497,8 @@ static FUNC( boolean, DEM_CODE ) Dem_UdmData_CheckConsistencyOfFFRecord
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-7-0         :2024-05-29                                              */
+/*  v5-9-0         :2025-02-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

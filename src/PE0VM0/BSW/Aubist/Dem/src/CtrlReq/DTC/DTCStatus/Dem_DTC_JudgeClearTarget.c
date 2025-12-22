@@ -1,7 +1,7 @@
-/* Dem_DTC_JudgeClearTarget_c(v5-5-0)                                       */
+/* Dem_DTC_JudgeClearTarget_c(v5-8-0)                                       */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -71,6 +71,7 @@
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-8-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( boolean, DEM_CODE ) Dem_DTC_JudgeDTCClearTarget
 (
@@ -88,7 +89,7 @@ FUNC( boolean, DEM_CODE ) Dem_DTC_JudgeDTCClearTarget
     retVal = (boolean)FALSE;
 
     eventStorageNum = Dem_PrimaryMemEventStorageNum;
-    execClearDTC = Dem_Control_CheckExecClearDTCProcess();
+    execClearDTC = Dem_Control_CheckExecClearDTCProcessActive();
 
     if( execClearDTC == (boolean)TRUE )
     {
@@ -132,6 +133,7 @@ FUNC( boolean, DEM_CODE ) Dem_DTC_JudgeDTCClearTarget
 /*  v5-0-0         :2022-03-29                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-8-0         :2024-10-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

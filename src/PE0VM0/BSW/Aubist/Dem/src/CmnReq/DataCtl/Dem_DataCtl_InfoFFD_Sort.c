@@ -1,7 +1,7 @@
-/* Dem_DataCtl_InfoFFD_Sort_c(v5-3-0)                                       */
+/* Dem_DataCtl_InfoFFD_Sort_c(v5-7-0)                                       */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -77,6 +77,9 @@ static FUNC( void, DEM_CODE ) Dem_DataCtl_SwapSaveRecordNumber
 /*               |                  &Dem_TmpRecordNumberByDTC[x]            */
 /* Return Value  | void                                                     */
 /* Notes         | -                                                        */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_Data_SortSaveRecordNumber
 (
@@ -98,16 +101,16 @@ FUNC( void, DEM_CODE ) Dem_Data_SortSaveRecordNumber
         for( rootNodeIndex = (Dem_s32_FFRecNumStoredIndexType)indexOfLastRootNode; rootNodeIndex >= (Dem_s32_FFRecNumStoredIndexType)0; rootNodeIndex-- )
         {
             /* Down heap */
-            Dem_DataCtl_DownHeapSaveRecordNumber( (Dem_u16_FFRecNumStoredIndexType)rootNodeIndex, lastIndexOfList, &DataPtr[0] );
+            Dem_DataCtl_DownHeapSaveRecordNumber( (Dem_u16_FFRecNumStoredIndexType)rootNodeIndex, lastIndexOfList, &DataPtr[0] );/* [ARYCHK] DEM_TOTAL_NUM_OF_RECNUM_PER_DTC / 1 / 0 */
         }
         /* Sorts heap */
         for( ; lastIndexOfList > (Dem_u16_FFRecNumStoredIndexType)0U; lastIndexOfList-- )
         {
             /* Swaps occurrence order list data */
-            Dem_DataCtl_SwapSaveRecordNumber( &DataPtr[0], &DataPtr[lastIndexOfList] );
+            Dem_DataCtl_SwapSaveRecordNumber( &DataPtr[0], &DataPtr[lastIndexOfList] );/* [ARYCHK] DEM_TOTAL_NUM_OF_RECNUM_PER_DTC / 1 / 0 *//* [ARYCHK] DEM_TOTAL_NUM_OF_RECNUM_PER_DTC / 1 / lastIndexOfList */
 
             /* Down heap */
-            Dem_DataCtl_DownHeapSaveRecordNumber( (Dem_u16_FFRecNumStoredIndexType)0U, ( lastIndexOfList - (Dem_u16_FFRecNumStoredIndexType)1U ), &DataPtr[0] );
+            Dem_DataCtl_DownHeapSaveRecordNumber( (Dem_u16_FFRecNumStoredIndexType)0U, ( lastIndexOfList - (Dem_u16_FFRecNumStoredIndexType)1U ), &DataPtr[0] );/* [ARYCHK] DEM_TOTAL_NUM_OF_RECNUM_PER_DTC / 1 / 0 */
         }
     }
     else
@@ -129,6 +132,9 @@ FUNC( void, DEM_CODE ) Dem_Data_SortSaveRecordNumber
 /*               |                  &Dem_TmpRecordNumberByDTC[x]            */
 /* Return Value  | void                                                     */
 /* Notes         | -                                                        */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_DataCtl_DownHeapSaveRecordNumber
 (
@@ -147,10 +153,10 @@ static FUNC( void, DEM_CODE ) Dem_DataCtl_DownHeapSaveRecordNumber
 
     /* Saves the original root node. */
     rootNodeIndex                           = (Dem_u32_FFRecNumStoredSortIndexType)IndexOfRoot;
-    originalRootNode.EventStrgIndex         = DataPtr[rootNodeIndex].EventStrgIndex;
-    originalRootNode.RecordNumber           = DataPtr[rootNodeIndex].RecordNumber;
-    originalRootNode.FreezeFrameDataIndex   = DataPtr[rootNodeIndex].FreezeFrameDataIndex;
-    originalRootNode.FreezeFrameDataType    = DataPtr[rootNodeIndex].FreezeFrameDataType;
+    originalRootNode.EventStrgIndex         = DataPtr[rootNodeIndex].EventStrgIndex;/* [ARYCHK] DEM_TOTAL_NUM_OF_RECNUM_PER_DTC / 1 / rootNodeIndex */
+    originalRootNode.RecordNumber           = DataPtr[rootNodeIndex].RecordNumber;/* [ARYCHK] DEM_TOTAL_NUM_OF_RECNUM_PER_DTC / 1 / rootNodeIndex */
+    originalRootNode.FreezeFrameDataIndex   = DataPtr[rootNodeIndex].FreezeFrameDataIndex;/* [ARYCHK] DEM_TOTAL_NUM_OF_RECNUM_PER_DTC / 1 / rootNodeIndex */
+    originalRootNode.FreezeFrameDataType    = DataPtr[rootNodeIndex].FreezeFrameDataType;/* [ARYCHK] DEM_TOTAL_NUM_OF_RECNUM_PER_DTC / 1 / rootNodeIndex */
 
     breakLoop = (boolean)FALSE;
 
@@ -179,7 +185,7 @@ static FUNC( void, DEM_CODE ) Dem_DataCtl_DownHeapSaveRecordNumber
                 rightChildNodeIndex = leftChildNodeIndex + (Dem_u32_FFRecNumStoredSortIndexType)1U;     /*  no wrap around      */
 
                 /* Compares the left child node's occurrence order with the right child node's one. */
-                if( DataPtr[leftChildNodeIndex].RecordNumber < DataPtr[rightChildNodeIndex].RecordNumber )
+                if( DataPtr[leftChildNodeIndex].RecordNumber < DataPtr[rightChildNodeIndex].RecordNumber )/* [ARYCHK] DEM_TOTAL_NUM_OF_RECNUM_PER_DTC / 1 / leftChildNodeIndex *//* [ARYCHK] DEM_TOTAL_NUM_OF_RECNUM_PER_DTC / 1 / rightChildNodeIndex */
                 {
                     /* In case the right child node's occurrence order is greater than the left's one. */
 
@@ -197,13 +203,13 @@ static FUNC( void, DEM_CODE ) Dem_DataCtl_DownHeapSaveRecordNumber
             }
 
             /* Compares the root node's occurrence order of with the max child node's one. */
-            if( originalRootNode.RecordNumber < DataPtr[maxChildNodeIndex].RecordNumber )
+            if( originalRootNode.RecordNumber < DataPtr[maxChildNodeIndex].RecordNumber )/* [ARYCHK] DEM_TOTAL_NUM_OF_RECNUM_PER_DTC / 1 / maxChildNodeIndex */
             {
                 /* The max child node's occurrence order is greater than the root node's one, so stores the max child node to the root. */
-                DataPtr[rootNodeIndex].FreezeFrameDataIndex    = DataPtr[maxChildNodeIndex].FreezeFrameDataIndex;
-                DataPtr[rootNodeIndex].EventStrgIndex          = DataPtr[maxChildNodeIndex].EventStrgIndex;
-                DataPtr[rootNodeIndex].RecordNumber            = DataPtr[maxChildNodeIndex].RecordNumber;
-                DataPtr[rootNodeIndex].FreezeFrameDataType     = DataPtr[maxChildNodeIndex].FreezeFrameDataType;
+                DataPtr[rootNodeIndex].FreezeFrameDataIndex    = DataPtr[maxChildNodeIndex].FreezeFrameDataIndex;/* [ARYCHK] DEM_TOTAL_NUM_OF_RECNUM_PER_DTC / 1 / rootNodeIndex *//* [ARYCHK] DEM_TOTAL_NUM_OF_RECNUM_PER_DTC / 1 / maxChildNodeIndex */
+                DataPtr[rootNodeIndex].EventStrgIndex          = DataPtr[maxChildNodeIndex].EventStrgIndex;/* [ARYCHK] DEM_TOTAL_NUM_OF_RECNUM_PER_DTC / 1 / rootNodeIndex *//* [ARYCHK] DEM_TOTAL_NUM_OF_RECNUM_PER_DTC / 1 / maxChildNodeIndex */
+                DataPtr[rootNodeIndex].RecordNumber            = DataPtr[maxChildNodeIndex].RecordNumber;/* [ARYCHK] DEM_TOTAL_NUM_OF_RECNUM_PER_DTC / 1 / rootNodeIndex *//* [ARYCHK] DEM_TOTAL_NUM_OF_RECNUM_PER_DTC / 1 / maxChildNodeIndex */
+                DataPtr[rootNodeIndex].FreezeFrameDataType     = DataPtr[maxChildNodeIndex].FreezeFrameDataType;/* [ARYCHK] DEM_TOTAL_NUM_OF_RECNUM_PER_DTC / 1 / rootNodeIndex *//* [ARYCHK] DEM_TOTAL_NUM_OF_RECNUM_PER_DTC / 1 / maxChildNodeIndex */
 
                 /* Sets the max child node's index to the root's one. */
                 rootNodeIndex = maxChildNodeIndex;
@@ -218,10 +224,10 @@ static FUNC( void, DEM_CODE ) Dem_DataCtl_DownHeapSaveRecordNumber
     }
 
     /* Stores the saved original node to the root. */
-    DataPtr[rootNodeIndex].EventStrgIndex          = originalRootNode.EventStrgIndex;
-    DataPtr[rootNodeIndex].RecordNumber            = originalRootNode.RecordNumber;
-    DataPtr[rootNodeIndex].FreezeFrameDataIndex    = originalRootNode.FreezeFrameDataIndex;
-    DataPtr[rootNodeIndex].FreezeFrameDataType     = originalRootNode.FreezeFrameDataType;
+    DataPtr[rootNodeIndex].EventStrgIndex          = originalRootNode.EventStrgIndex;/* [ARYCHK] DEM_TOTAL_NUM_OF_RECNUM_PER_DTC / 1 / rootNodeIndex */
+    DataPtr[rootNodeIndex].RecordNumber            = originalRootNode.RecordNumber;/* [ARYCHK] DEM_TOTAL_NUM_OF_RECNUM_PER_DTC / 1 / rootNodeIndex */
+    DataPtr[rootNodeIndex].FreezeFrameDataIndex    = originalRootNode.FreezeFrameDataIndex;/* [ARYCHK] DEM_TOTAL_NUM_OF_RECNUM_PER_DTC / 1 / rootNodeIndex */
+    DataPtr[rootNodeIndex].FreezeFrameDataType     = originalRootNode.FreezeFrameDataType;/* [ARYCHK] DEM_TOTAL_NUM_OF_RECNUM_PER_DTC / 1 / rootNodeIndex */
 
     return;
 }
@@ -274,6 +280,7 @@ static FUNC( void, DEM_CODE ) Dem_DataCtl_SwapSaveRecordNumber
 /*  v5-0-0         :2022-03-29                                              */
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
+/*  v5-7-0         :2024-05-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

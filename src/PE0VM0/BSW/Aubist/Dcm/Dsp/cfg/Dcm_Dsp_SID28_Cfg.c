@@ -1,7 +1,7 @@
 /* Dcm_Dsp_SID28_Cfg_c(v5-0-0)                                              */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -47,10 +47,7 @@
 static CONST ( AB_83_ConstV Dcm_Dsp_ComControlAllChType, DCM_CONFIG_DATA ) Dcm_P_SID28_stComCtrlAllCh_Tbl[ DCM_P_COMCTRL_ALLCH_N ] =
 {
     /* Used */          /* ChannelRef */
-    { (boolean)TRUE,    (uint8)0x00U   },
-    { (boolean)TRUE,    (uint8)0x01U   },
-    { (boolean)TRUE,    (uint8)0x03U   },
-    { (boolean)TRUE,    (uint8)0x04U   }
+    { (boolean)TRUE,    (uint8)0U   }
 };
 
 
@@ -144,7 +141,7 @@ FUNC( Std_ReturnType, DCM_CODE ) Dcm_SID28_Sub03
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
 /*  Framework          :v2-1-0                                              */
-/*  BSW plug-in        :v5-5-1                                              */
+/*  BSW plug-in        :v5-10-0                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

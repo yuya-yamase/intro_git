@@ -1,7 +1,7 @@
-/* Dem_Control_FilteredEDR_c(v5-3-0)                                        */
+/* Dem_Control_FilteredEDR_c(v5-8-0)                                        */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -43,6 +43,7 @@
 #define DEM_START_SEC_VAR_NO_INIT
 #include <Dem_MemMap.h>
 
+static VAR( uint16, DEM_VAR_NO_INIT ) Dem_NumberOfEDRNumFilteredDTC;
 
 #define DEM_STOP_SEC_VAR_NO_INIT
 #include <Dem_MemMap.h>
@@ -70,6 +71,9 @@
 /*               |        DEM_IRT_WRONG_CONDITION : condition error.        */
 /*               |        DEM_IRT_WRONG_RECORDNUMBER : Wrong record number. */
 /* Notes         |                                                          */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-8-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_SetEDRNumberFilter
 (
@@ -93,6 +97,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_SetEDRNumberFilter
         }
         else
         {
+            Dem_NumberOfEDRNumFilteredDTC = (uint16)0U;
             retFilter = Dem_EDR_SetEDRNumberFilter( ExtendedDataNumber );
             if( retFilter == DEM_IRT_OK )
             {
@@ -110,6 +115,78 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_SetEDRNumberFilter
                         retVal = DEM_IRT_WRONG_RECORDNUMBER;
                  }
             }
+        }
+    }
+
+    return retVal;
+}
+
+/****************************************************************************/
+/* Function Name | Dem_Control_GetNumberOfEDRNumFilteredDTC                 */
+/* Description   | Gets the number of filtered DTCs.                        */
+/* Preconditions | none                                                     */
+/* Parameters    | [out] NumberOfEDRNumFilteredDTCPtr :                     */
+/*               |        The number of DTCs matching the defined filter.   */
+/* Return Value  | Dem_u08_InternalReturnType                               */
+/*               |        DEM_IRT_OK : Getting number of filtered DTCs was  */
+/*               |         successful.                                      */
+/*               |        DEM_IRT_NG : Getting number of filtered DTCs fai- */
+/*               |        led.                                              */
+/*               |        DEM_IRT_PENDING : The requested values is calcul- */
+/*               |        ated asynchronously and currently not available.  */
+/*               |         The caller can retry later.                      */
+/* Notes         | -                                                        */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-8-0      | new created.                                             */
+/****************************************************************************/
+FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_GetNumberOfEDRNumFilteredDTC
+(
+    P2VAR( uint16, AUTOMATIC, AUTOMATIC ) NumberOfEDRNumFilteredDTCPtr
+)
+{
+    VAR( Dem_u08_InternalReturnType, AUTOMATIC ) retVal;
+    VAR( Dem_u08_InternalReturnType, AUTOMATIC ) internalReturnValue;
+    VAR( boolean, AUTOMATIC ) loopEnd;
+    VAR( Dem_u32_DTCValueType, AUTOMATIC ) dtcValue; /* for dummy argument. */
+    VAR( Dem_UdsStatusByteType, AUTOMATIC ) dtcStatus; /* for dummy argument. */
+
+    /* Need not to get exclusive, because DTCStatus does not used. */
+
+    retVal = DEM_IRT_NG;
+    loopEnd = (boolean)FALSE;
+    dtcValue = (Dem_u32_DTCValueType)0x00000000U;
+    dtcStatus = (Dem_UdsStatusByteType)0x00U;
+
+    while ( loopEnd == (boolean)FALSE )
+    {
+        internalReturnValue = Dem_EDR_GetNextEDRNumFilteredDTC( &dtcValue, &dtcStatus );
+
+        switch( internalReturnValue )
+        {
+            case DEM_IRT_OK:
+                Dem_NumberOfEDRNumFilteredDTC = Dem_NumberOfEDRNumFilteredDTC + (uint16)1U;
+                break;
+
+            case DEM_IRT_NO_MATCHING_ELEMENT:
+                /* Loop End (Complete). */
+                loopEnd = (boolean)TRUE;
+                *NumberOfEDRNumFilteredDTCPtr = Dem_NumberOfEDRNumFilteredDTC;
+                Dem_EDR_RestartSetEDRNumberFilter();
+                Dem_NumberOfEDRNumFilteredDTC = (uint16)0U;
+                retVal = DEM_IRT_OK;
+                break;
+
+            case DEM_IRT_PENDING:
+                /* Loop End (Pending). */
+                loopEnd = (boolean)TRUE;
+                retVal = DEM_IRT_PENDING;
+                break;
+
+            default:
+                /* Loop End, Illegal Return Value */
+                loopEnd = (boolean)TRUE;
+                break;
         }
     }
 
@@ -168,6 +245,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_GetNextEDRNumFilteredDT
 /*  Version        :Date                                                    */
 /*  v5-0-0         :2022-03-29                                              */
 /*  v5-3-0         :2023-03-29                                              */
+/*  v5-8-0         :2024-10-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

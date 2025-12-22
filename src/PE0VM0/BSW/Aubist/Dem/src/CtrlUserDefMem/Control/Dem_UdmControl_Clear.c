@@ -1,7 +1,7 @@
-/* Dem_UdmControl_Clear_c(v5-5-0)                                           */
+/* Dem_UdmControl_Clear_c(v5-10-0)                                          */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -195,10 +195,12 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmControl_ClearRAM
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | branch changed.                                          */
+/*   v5-10-0     | branch changed.                                          */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_UdmControl_EndClearDTC
 (
-    VAR( Dem_DTCOriginType, AUTOMATIC ) DTCOrigin
+    VAR( Dem_DTCOriginType, AUTOMATIC ) DTCOrigin,
+    VAR( Dem_u08_ClearCompleteType, AUTOMATIC ) ClearResult
 )
 {
     VAR( Dem_u08_InternalReturnType, AUTOMATIC ) retTempVal;
@@ -208,21 +210,26 @@ FUNC( void, DEM_CODE ) Dem_UdmControl_EndClearDTC
     VAR( Dem_u16_UdmDemMemKindIndexType, AUTOMATIC ) udmGroupKindIndexNum;
     VAR( Dem_u16_UdmDemMemKindIndexType, AUTOMATIC ) udmGroupKindIndexEnd;
 
-    /* get udm info index by DTCOrigin. */
-    retTempVal = Dem_CfgInfoUdm_CnvDTCOriginToInternalInfoTableIndex( DTCOrigin, &udmInfoTableIndex ); /* [GUD:RET:DEM_IRT_OK] udmInfoTableIndex */
-    /* check not invalid or ecternal */
-    if( retTempVal == DEM_IRT_OK )
+    /*  clear RAM at [DEM_CLEARCOMPLETE_OK] or [DEM_CLEARCOMPLETE_SWCERROR].    */
+    /*  no clear RAM at [DEM_CLEARCOMPLETE_NVMERROR].                           */
+    if(( ClearResult == DEM_CLEARCOMPLETE_OK ) || ( ClearResult == DEM_CLEARCOMPLETE_SWCERROR ))
     {
-        Dem_CfgInfoUdm_GetUserDefinedMemoryGroupKindIndex( udmInfoTableIndex, &udmGroupKindIndexStart, &udmGroupKindIndexNum );     /* [GUD]udmInfoTableIndex */
-        udmGroupKindIndexEnd = udmGroupKindIndexStart + udmGroupKindIndexNum;
-
-        for( udmGroupKindIndex = udmGroupKindIndexStart; udmGroupKindIndex < udmGroupKindIndexEnd; udmGroupKindIndex++ )    /* [GUD:for]udmGroupKindIndex */
+        /* get udm info index by DTCOrigin. */
+        retTempVal = Dem_CfgInfoUdm_CnvDTCOriginToInternalInfoTableIndex( DTCOrigin, &udmInfoTableIndex ); /* [GUD:RET:DEM_IRT_OK] udmInfoTableIndex */
+        /* check not invalid or ecternal */
+        if( retTempVal == DEM_IRT_OK )
         {
-            Dem_UdmData_ReplaceSearchFRIndex( udmGroupKindIndex );                                                          /* [GUD]udmGroupKindIndex */
+            Dem_CfgInfoUdm_GetUserDefinedMemoryGroupKindIndex( udmInfoTableIndex, &udmGroupKindIndexStart, &udmGroupKindIndexNum );     /* [GUD]udmInfoTableIndex */
+            udmGroupKindIndexEnd = udmGroupKindIndexStart + udmGroupKindIndexNum;
+
+            for( udmGroupKindIndex = udmGroupKindIndexStart; udmGroupKindIndex < udmGroupKindIndexEnd; udmGroupKindIndex++ )    /* [GUD:for]udmGroupKindIndex */
+            {
+                Dem_UdmData_ReplaceSearchFRIndex( udmGroupKindIndex );                                                          /* [GUD]udmGroupKindIndex */
 
 #if ( DEM_TSFF_UDM_SUPPORT == STD_ON )  /* [FuncSw] */
-            Dem_UdmData_GenerateTSFFLRecordList( udmGroupKindIndex );                                                       /* [GUD]udmGroupKindIndex */
+                Dem_UdmData_GenerateTSFFLRecordList( udmGroupKindIndex );                                                       /* [GUD]udmGroupKindIndex */
 #endif  /* ( DEM_TSFF_UDM_SUPPORT == STD_ON )   */
+            }
         }
     }
 
@@ -360,6 +367,7 @@ FUNC( void, DEM_CODE ) Dem_UdmControl_Clear_ClearDTCInfo
 /*  v5-0-0         :2022-03-29                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-10-0        :2025-06-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

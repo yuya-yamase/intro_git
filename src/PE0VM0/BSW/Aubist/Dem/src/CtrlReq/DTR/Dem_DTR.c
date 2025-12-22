@@ -1,7 +1,7 @@
-/* Dem_DTR_c(v5-5-0)                                                        */
+/* Dem_DTR_c(v5-10-0)                                                       */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -125,6 +125,7 @@ static VAR( Dem_u16_DTRIndexType, DEM_VAR_NO_INIT ) Dem_DtrGetDataRestartPos;
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-8-0      | branch changed.                                          */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_DTR_Init_AfterRecordCheckComplete
 (void)
@@ -141,8 +142,6 @@ FUNC( void, DEM_CODE ) Dem_DTR_Init_AfterRecordCheckComplete
     VAR(Dem_u08_DTRSupportObdMidIndexType , AUTOMATIC) lastvisibleTblNum;
 
     midNum = Dem_DtrMidNum;
-    offsetTop = ((Dem_u16_DTRIndexType)0U);
-    tidNumMax   = ((Dem_u08_DTRTidIndexType)0U);
     lastvisibleTblNum = ((Dem_u08_DTRSupportObdMidIndexType)0U);
 
     Dem_DtrGetDataMidIndex   = DEM_DTRMIDINDEX_INVALID;
@@ -173,17 +172,16 @@ FUNC( void, DEM_CODE ) Dem_DTR_Init_AfterRecordCheckComplete
                         offsetTop = Dem_DtrMidTable[midIndexNum].DemDtrIdOffsetTop;                         /* [GUD]midIndexNum */
                         tidNumMax = Dem_DtrMidTable[midIndexNum].DemDtrTidNum;                              /* [GUD]midIndexNum */
 
+                        /* Gets number of visible TID */
+                        numTid = Dem_DTRMng_GetNumTIDsOfOBDMID(offsetTop, tidNumMax);
+                        if ( numTid > ((Dem_u08_DTRTidIndexType)0U) )
+                        {
+                            /* Sets visible state */
+                            Dem_DtrObdMidVisibleBitmap[tblNum] = Dem_DtrObdMidVisibleBitmap[tblNum] | ( DEM_DTR_VISIBLE << ((uint8)(DEM_DTR_BIT31 - bitNum)) );     /* [GUD]tblNum */
+                        }
+
                         break;
                     }
-                }
-
-                /* Gets number of visible TID */
-                numTid = Dem_DTRMng_GetNumTIDsOfOBDMID(offsetTop, tidNumMax);
-
-                if ( numTid > ((Dem_u08_DTRTidIndexType)0U) )
-                {
-                    /* Sets visible state */
-                    Dem_DtrObdMidVisibleBitmap[tblNum] = Dem_DtrObdMidVisibleBitmap[tblNum] | ( DEM_DTR_VISIBLE << ((uint8)(DEM_DTR_BIT31 - bitNum)) );     /* [GUD]tblNum */
                 }
             }
         }
@@ -289,6 +287,57 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DTR_GetDTR
 #endif  /* ( DEM_DTR_RAWDATASTORAGE_SUPPORT == STD_ON ) */
 
 /****************************************************************************/
+/* Function Name | Dem_DTR_GetDTRConvertInfo                                */
+/* Description   | Gets the DTR convert information.                        */
+/* Preconditions | none                                                     */
+/* Parameters    | [in]  DTRId           : DTR identifier.                  */
+/*               | [out] DtrMidPtr       : MonitorID of DTR.                */
+/*               | [out] DtrTidPtr       : TestID of DTR.                   */
+/*               | [out] DtrUasidPtr     : Unit and ScalingID of DTR.       */
+/*               | [out] CompuN0DivD0Ptr : The value of CompuNumerator0 divided by CompuDenominator0. */
+/*               | [out] CompuN1DivD0Ptr : The value of CompuNumerator1 divided by CompuDenominator0. */
+/* Return Value  | Dem_u08_InternalReturnType                               */
+/*               |        DEM_IRT_OK : success                              */
+/*               |        DEM_IRT_NG : failed                               */
+/* Notes         | -                                                        */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-9-0      | new created. based on Dem_DTRMng_GetDTRRecordData.       */
+/****************************************************************************/
+FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DTR_GetDTRConvertInfo
+(
+    VAR( Dem_u16_DTRIndexType, AUTOMATIC ) DTRId,
+    P2VAR( Dem_u08_DTRObdMidType, AUTOMATIC, AUTOMATIC ) DtrMidPtr,
+    P2VAR( Dem_u08_DTRTidIndexType, AUTOMATIC, AUTOMATIC ) DtrTidPtr,
+    P2VAR( Dem_u08_DTRUasidType, AUTOMATIC, AUTOMATIC ) DtrUasidPtr,
+    P2VAR( Dem_s32_DTRValueRawType, AUTOMATIC, AUTOMATIC ) CompuN0DivD0Ptr,
+    P2VAR( Dem_s32_DTRValueRawType, AUTOMATIC, AUTOMATIC ) CompuN1DivD0Ptr
+)
+{
+    VAR( Dem_u16_DTRIndexType, AUTOMATIC ) dtrNum;
+    VAR( Dem_u08_DTRMidIndexType, AUTOMATIC ) dtrMidIndex;
+    VAR( Dem_u08_InternalReturnType, AUTOMATIC ) retVal;
+
+    retVal = DEM_IRT_NG;
+
+    dtrNum = Dem_DtrNum;
+    if( DTRId < dtrNum )                                                        /* [GUD:if]DTRId */
+    {
+        *DtrTidPtr          = Dem_DtrTable[DTRId].DemDtrTid;                    /* [GUD]DTRId */
+        *DtrUasidPtr        = Dem_DtrTable[DTRId].DemDtrUasid;                  /* [GUD]DTRId */
+        *CompuN0DivD0Ptr    = Dem_DtrTable[DTRId].DemDtrCompuN0DivD0;           /* [GUD]DTRId */
+        *CompuN1DivD0Ptr    = Dem_DtrTable[DTRId].DemDtrCompuN1DivD0;           /* [GUD]DTRId */
+
+        dtrMidIndex         = Dem_DtrTable[DTRId].DemDtrMidIndex;               /* [GUD]DTRId *//* [GUD:CFG:IF_GUARDED: DTRId ]dtrMidIndex */
+        *DtrMidPtr          = Dem_DtrMidTable[dtrMidIndex].DemDtrMid;           /* [GUD]dtrMidIndex */
+
+        retVal = DEM_IRT_OK;
+    }
+
+    return retVal;
+}
+
+/****************************************************************************/
 /* Function Name | Dem_DTR_GetAvailableOBDMIDs                              */
 /* Description   | Gets value of OBDMID.                                    */
 /* Preconditions | none                                                     */
@@ -390,6 +439,8 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DTR_GetNumTIDsOfOBDMID
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-8-0      | no branch changed.                                       */
+/*   v5-10-0     | no branch changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DTR_GetDTRData
 (
@@ -405,7 +456,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DTR_GetDTRData
     VAR( Dem_u08_DTRMidIndexType, AUTOMATIC ) midIndex;
     VAR( Dem_u08_InternalReturnType , AUTOMATIC ) retVal;
     VAR( boolean, AUTOMATIC ) execClearDTC;
-    VAR( Dem_u32_DTCGroupType, AUTOMATIC ) getDTCGroup;
     VAR( Dem_DTCOriginType, AUTOMATIC ) getDTCOrigin;
 
     retVal = DEM_IRT_NG;
@@ -428,8 +478,8 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DTR_GetDTRData
                 retVal = Dem_DTRMng_GetDTRRecordData( dtrId, DtrDataPtr );                              /* [GUD:RET:DEM_IRT_OK] dtrId */
                 if ( retVal == DEM_IRT_OK )
                 {
-                    execClearDTC = Dem_Control_CheckExecClearDTCProcess();
-                    Dem_Control_GetClearType( &getDTCGroup, &getDTCOrigin );
+                    execClearDTC = Dem_Control_CheckExecClearDTCProcessActive();
+                    getDTCOrigin = Dem_Control_GetClearDTCOrigin();
 
                     if ( ( execClearDTC == (boolean)TRUE ) && ( getDTCOrigin == DEM_DTC_ORIGIN_PRIMARY_MEMORY ) )
                     {
@@ -651,6 +701,9 @@ static FUNC(void, DEM_CODE) Dem_DTR_SetDTR_ForFailedTid
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-7-0      | no object changed.                                       */
+/*   v5-8-0      | branch changed.                                          */
+/*   v5-10-0     | no branch changed.                                       */
 /****************************************************************************/
 static FUNC(void, DEM_CODE) Dem_DTR_SetObdmidInfo
 (
@@ -671,86 +724,89 @@ static FUNC(void, DEM_CODE) Dem_DTR_SetObdmidInfo
     VAR(Dem_u16_DTRIndexType, AUTOMATIC) offsetTop;
     VAR(Dem_u08_DTRTidIndexType, AUTOMATIC)  tidNumMax;
     VAR(Dem_u08_DTRObdMidType, AUTOMATIC)  mid;
+    VAR(Dem_u08_DTRObdMidType, AUTOMATIC)  checkSupportMidBit;
 
     isSupported      = DEM_DTR_INVISIBLE;
     offsetTop = Dem_DtrMidTable[MidIndex].DemDtrIdOffsetTop;        /* [GUDCHK:CALLER]MidIndex */
     tidNumMax = Dem_DtrMidTable[MidIndex].DemDtrTidNum;             /* [GUDCHK:CALLER]MidIndex */
     mid       = Dem_DtrMidTable[MidIndex].DemDtrMid;                /* [GUDCHK:CALLER]MidIndex */
 
-    SchM_Enter_Dem_DTR();
-
-    /* Duplicates OBDMID bitmaps */
-    for (tblNum = ((Dem_u08_DTRSupportObdMidIndexType)0U); tblNum < DEM_DTR_SUPPORT_OBDMID_NUM; tblNum++)       /* [GUD:for]tblNum */
+    checkSupportMidBit = mid & DEM_DTR_GETMID_MASK;
+    if ( checkSupportMidBit != (Dem_u08_DTRObdMidType)0U )
     {
-        obdmidInfoLocal[tblNum] = Dem_DtrObdMidVisibleBitmap[tblNum];       /* [GUD]tblNum */
-    }
+        /* mid is not 0x00, 0x20, 0x40, 0x60, 0x80, 0xA0, 0xC0, or 0xE0 */
 
-    SchM_Exit_Dem_DTR();
-
-    /* Gets number of visible TID */
-    tids = Dem_DTRMng_GetNumTIDsOfOBDMID(offsetTop, tidNumMax);
-
-    nowBitValue = DEM_DTR_INVISIBLE;
-
-    /* Checks if the MID is supported */
-    if ( tids != ((Dem_u08_DTRTidIndexType)0U) )
-    {
-        nowBitValue = DEM_DTR_VISIBLE;
-    }
-
-    /* Gets element number of OBDMID bitmaps and bit offset */
-    obdmidInfoNum = (Dem_u08_DTRSupportObdMidIndexType)( mid >> DEM_DTR_GETMID_BITOFFSET );     /*  right 5 bit shift is equal to divided by 32.    */  /* [GUD:logic]obdmidInfoNum */
-    bitOffset     = DEM_DTR_BIT32 - (mid & DEM_DTR_GETMID_MASK);
-
-    /* Gets previous bit state of the MID */
-    preBitValue = (Dem_u32_DTRObdMidBmpType)( (obdmidInfoLocal[obdmidInfoNum] >> bitOffset) & DEM_DTR_VISIBLE );        /* [GUD]obdmidInfoNum */
-
-    /* Updates OBDMID bitmaps if the MID bit state is changed */
-    if ( nowBitValue != preBitValue )
-    {
-        /* Updates the MID bit state and this last bit state of duplication */
-        for ( modTblNum = (sint8)obdmidInfoNum; modTblNum >= ((sint8)0); modTblNum-- )                                  /* [GUD:for]modTblNum */
+        /* Duplicates OBDMID bitmaps */
+        for (tblNum = ((Dem_u08_DTRSupportObdMidIndexType)0U); tblNum < DEM_DTR_SUPPORT_OBDMID_NUM; tblNum++)       /* [GUD:for]tblNum */
         {
-            if ( modTblNum == (sint8)obdmidInfoNum )
-            {
-                /* Updates the MID state of duplication */
-                obdmidInfoLocal[obdmidInfoNum] = obdmidInfoLocal[obdmidInfoNum] ^ ( DEM_DTR_VISIBLE << bitOffset );     /* [GUD]obdmidInfoNum */
-            }
-            else
-            {
-                /* Gets this last bit state */
-                lastBitValue = ( obdmidInfoLocal[modTblNum] & DEM_DTR_VISIBLE );                                        /* [GUD]modTblNum */
+            obdmidInfoLocal[tblNum] = Dem_DtrObdMidVisibleBitmap[tblNum];       /* [GUD]tblNum *//* [ARYCHK] DEM_DTR_SUPPORT_OBDMID_NUM / 1 / tblNum */
+        }
 
-                /* Ends the roop if this last bit doesn't need to be updated */
-                if ( lastBitValue == isSupported )
+        /* Gets number of visible TID */
+        tids = Dem_DTRMng_GetNumTIDsOfOBDMID(offsetTop, tidNumMax);
+
+        nowBitValue = DEM_DTR_INVISIBLE;
+
+        /* Checks if the MID is supported */
+        if ( tids != ((Dem_u08_DTRTidIndexType)0U) )
+        {
+            nowBitValue = DEM_DTR_VISIBLE;
+        }
+
+        /* Gets element number of OBDMID bitmaps and bit offset */
+        obdmidInfoNum = (Dem_u08_DTRSupportObdMidIndexType)( mid >> DEM_DTR_GETMID_BITOFFSET );     /*  right 5 bit shift is equal to divided by 32.    */  /* [GUD:logic]obdmidInfoNum */
+        bitOffset     = DEM_DTR_BIT32 - (mid & DEM_DTR_GETMID_MASK);
+
+        /* Gets previous bit state of the MID */
+        preBitValue = (Dem_u32_DTRObdMidBmpType)( (obdmidInfoLocal[obdmidInfoNum] >> bitOffset) & DEM_DTR_VISIBLE );        /* [GUD]obdmidInfoNum *//* [ARYCHK] DEM_DTR_SUPPORT_OBDMID_NUM / 1 / obdmidInfoNum */
+
+        /* Updates OBDMID bitmaps if the MID bit state is changed */
+        if ( nowBitValue != preBitValue )
+        {
+            /* Updates the MID bit state and this last bit state of duplication */
+            for ( modTblNum = (sint8)obdmidInfoNum; modTblNum >= ((sint8)0); modTblNum-- )                                  /* [GUD:for]modTblNum */
+            {
+                if ( modTblNum == (sint8)obdmidInfoNum )
                 {
-                    break;
+                    /* Updates the MID state of duplication */
+                    obdmidInfoLocal[obdmidInfoNum] = obdmidInfoLocal[obdmidInfoNum] ^ ( DEM_DTR_VISIBLE << bitOffset );     /* [GUD]obdmidInfoNum *//* [ARYCHK] DEM_DTR_SUPPORT_OBDMID_NUM / 1 / obdmidInfoNum *//* [ARYCHK] DEM_DTR_SUPPORT_OBDMID_NUM / 1 / obdmidInfoNum */
+                }
+                else
+                {
+                    /* Gets this last bit state */
+                    lastBitValue = ( obdmidInfoLocal[modTblNum] & DEM_DTR_VISIBLE );                                        /* [GUD]modTblNum *//* [ARYCHK] DEM_DTR_SUPPORT_OBDMID_NUM / 1 / modTblNum */
+
+                    /* Ends the roop if this last bit doesn't need to be updated */
+                    if ( lastBitValue == isSupported )
+                    {
+                        break;
+                    }
+
+                    /* Updates this last bit state of duplication */
+                    obdmidInfoLocal[modTblNum] = obdmidInfoLocal[modTblNum] ^ DEM_DTR_VISIBLE ;                             /* [GUD]modTblNum *//* [ARYCHK] DEM_DTR_SUPPORT_OBDMID_NUM / 1 / modTblNum *//* [ARYCHK] DEM_DTR_SUPPORT_OBDMID_NUM / 1 / modTblNum */
                 }
 
-                /* Updates this last bit state of duplication */
-                obdmidInfoLocal[modTblNum] = obdmidInfoLocal[modTblNum] ^ DEM_DTR_VISIBLE ;                             /* [GUD]modTblNum */
+                /* Holds if this OBDMID is supported */
+                if ( obdmidInfoLocal[modTblNum] == DEM_DTR_INVISIBLE )                                                      /* [GUD]modTblNum *//* [ARYCHK] DEM_DTR_SUPPORT_OBDMID_NUM / 1 / modTblNum */
+                {
+                    isSupported = DEM_DTR_INVISIBLE;
+                }
+                else
+                {
+                    isSupported = DEM_DTR_VISIBLE;
+                }
             }
 
-            /* Holds if this OBDMID is supported */
-            if ( obdmidInfoLocal[modTblNum] == DEM_DTR_INVISIBLE )                                                      /* [GUD]modTblNum */
+            SchM_Enter_Dem_DTR();
+
+            /* Updates OBDMID bitmaps from BODMID has the target bit to last modified table number */
+            for ( updateTblNum = (sint8)obdmidInfoNum; updateTblNum > modTblNum; updateTblNum-- )                           /* [GUD:for]updateTblNum */
             {
-                isSupported = DEM_DTR_INVISIBLE;
+                Dem_DtrObdMidVisibleBitmap[updateTblNum] = obdmidInfoLocal[updateTblNum];                                   /* [GUD]updateTblNum *//* [ARYCHK] DEM_DTR_SUPPORT_OBDMID_NUM / 1 / updateTblNum */
             }
-            else
-            {
-                isSupported = DEM_DTR_VISIBLE;
-            }
+
+            SchM_Exit_Dem_DTR();
         }
-
-        SchM_Enter_Dem_DTR();
-
-        /* Updates OBDMID bitmaps from BODMID has the target bit to last modified table number */
-        for ( updateTblNum = (sint8)obdmidInfoNum; updateTblNum > modTblNum; updateTblNum-- )                           /* [GUD:for]updateTblNum */
-        {
-            Dem_DtrObdMidVisibleBitmap[updateTblNum] = obdmidInfoLocal[updateTblNum];                                   /* [GUD]updateTblNum */
-        }
-
-        SchM_Exit_Dem_DTR();
     }
     return;
 }
@@ -838,6 +894,10 @@ static FUNC( void, DEM_CODE ) Dem_DTR_ClearDTRDataArea
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-7-0         :2024-05-29                                              */
+/*  v5-8-0         :2024-10-29                                              */
+/*  v5-9-0         :2025-02-26                                              */
+/*  v5-10-0        :2025-06-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

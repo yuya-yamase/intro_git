@@ -1,7 +1,7 @@
-/* Dem_Control_EvtAvl_c(v5-5-0)                                             */
+/* Dem_Control_EvtAvl_c(v5-9-0)                                             */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -24,6 +24,7 @@
 #include "../../../inc/Dem_Pm_MonSts.h"
 #include "../../../inc/Dem_Pm_PreFFD.h"
 #include "../../../inc/Dem_Pm_DataAvl.h"
+#include "../../../inc/Dem_Pm_Event.h"
 #include "../../../usr/Dem_SavedZone_Callout.h"
 
 #if ( DEM_EVENT_AVAILABILITY_SUPPORT == STD_ON )
@@ -83,6 +84,9 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_SetEvtAvlValue
 /*               |        DEM_IRT_NG : Change of available status not       */
 /*               |                     accepted.                            */
 /* Notes         |                                                          */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-9-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_SetEvtAvl
 (
@@ -97,11 +101,11 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_SetEvtAvl
     retVal = DEM_IRT_NG;
     eventCtrlIndex = DEM_EVENTCTRLINDEX_INVALID;
 
-    retTempVal = Dem_CfgInfoPm_CnvEventIdToEventCtrlIndex( EventId, &eventCtrlIndex );
+    retTempVal = Dem_CfgInfoPm_CnvEventIdToEventCtrlIndex( EventId, &eventCtrlIndex );  /* [GUD:RET:DEM_IRT_OK]eventCtrlIndex */
 
     if( retTempVal == DEM_IRT_OK )
     {
-        retVal = Dem_Control_SetEvtAvlValue( eventCtrlIndex, AvailableStatus );
+        retVal = Dem_Control_SetEvtAvlValue( eventCtrlIndex, AvailableStatus );         /* [GUD]eventCtrlIndex */
     }
 
     return retVal;
@@ -125,6 +129,9 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_SetEvtAvl
 /*               |        DEM_IRT_FAILED_ENQUEUE : Operation was successful,*/
 /*               |                     but failed Enqueue.                  */
 /* Notes         |                                                          */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-9-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_SetEvtAvl
 (
@@ -139,13 +146,13 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_SetEvtAvl
     retVal = DEM_IRT_NG;
     eventCtrlIndex = DEM_EVENTCTRLINDEX_INVALID;
 
-    retTempVal = Dem_CfgInfoPm_CnvEventIdToEventCtrlIndex( EventId, &eventCtrlIndex );
+    retTempVal = Dem_CfgInfoPm_CnvEventIdToEventCtrlIndex( EventId, &eventCtrlIndex );  /* [GUD:RET:DEM_IRT_OK]eventCtrlIndex */
     if( retTempVal == DEM_IRT_OK )
     {
-        retTempVal = Dem_AsyncReq_JudgeReqCondition( DEM_ASYNCREQ_NOTIFY_EVENT_AVAILABLE, (Dem_u16_AsyncReqItemAType)eventCtrlIndex, (Dem_u08_AsyncReqItemBType)AvailableStatus );
+        retTempVal = Dem_AsyncReq_JudgeReqCondition( DEM_ASYNCREQ_NOTIFY_EVENT_AVAILABLE, (Dem_u16_AsyncReqItemAType)eventCtrlIndex, (Dem_u08_AsyncReqItemBType)AvailableStatus );/* [GUD]eventCtrlIndex */
         if( retTempVal == DEM_IRT_OK )
         {
-            (void)Dem_Control_SetEvtAvlValue( eventCtrlIndex, AvailableStatus );      /* no return check required */
+            (void)Dem_Control_SetEvtAvlValue( eventCtrlIndex, AvailableStatus );      /* no return check required *//* [GUD]eventCtrlIndex */
 
             retTempVal = Dem_AsyncReq_Enqueue( DEM_ASYNCREQ_NOTIFY_EVENT_AVAILABLE, (Dem_u16_AsyncReqItemAType)eventCtrlIndex, (Dem_u08_AsyncReqItemBType)AvailableStatus );
             if( retTempVal == DEM_IRT_OK )
@@ -193,6 +200,9 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_SetEvtAvl
 /*               |        DEM_IRT_NG : Change of available status not       */
 /*               |                     accepted.                            */
 /* Notes         | none                                                     */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-9-0      | branch changed.                                          */
 /****************************************************************************/
 static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_SetEvtAvlValue
 (
@@ -206,7 +216,15 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_SetEvtAvlValue
 #endif  /* ( DEM_FF_PRESTORAGE_SUPPORT == STD_ON )              */
 
     /* Gets event available status */
-    retVal = Dem_DataAvl_SetEvtAvl( EventCtrlIndex, AvailableStatus );
+    retVal = Dem_DataAvl_SetEvtAvl( EventCtrlIndex, AvailableStatus );      /* [GUD:RET:DEM_IRT_OK]EventCtrlIndex */
+
+#if ( DEM_COMBINEDEVENT_ONSTORAGE_SUPPORT == STD_ON )   /*  [FuncSw]    */
+    if( retVal == DEM_IRT_OK )
+    {
+        /*  update FCThreshold.         */
+        Dem_Event_UpdateFCThresholdValue_InEvtStrgGrp( EventCtrlIndex );    /* [GUD]EventCtrlIndex */
+    }
+#endif  /* ( DEM_COMBINEDEVENT_ONSTORAGE_SUPPORT == STD_ON )            */
 
 #if ( DEM_FF_PRESTORAGE_SUPPORT == STD_ON )     /*  [FuncSw]    */
     if( retVal == DEM_IRT_OK  )
@@ -255,6 +273,7 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_SetEvtAvlValue
 /*  v5-0-0         :2022-03-29                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-9-0         :2025-02-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

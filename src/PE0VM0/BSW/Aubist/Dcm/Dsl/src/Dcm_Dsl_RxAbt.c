@@ -1,7 +1,7 @@
-/* Dcm_Dsl_RxAbt_c(v5-5-0)                                                  */
+/* Dcm_Dsl_RxAbt_c(v5-10-0)                                                 */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -83,7 +83,7 @@ static FUNC(boolean, DCM_CODE) Dcm_Dsl_RxAbt_ArbitrateSORCore
 /*               | Dcm_StartOfReception.                                    */
 /* Preconditions | ptInfo != NULL_PTR                                       */
 /* Parameters    | [in]  u2PduIdMapIndex : Management number of PduId       */
-/*               | [in]  ptInfo          : RxData information()             */
+/*               | [in]  ptInfo          : RxData information               */
 /*               | [in]  bOverwriteSOR   : Received SOR overwrite           */
 /*               | [in,out] ptReqKind    : Request kind                     */
 /* Return Value  | boolean                                                  */
@@ -357,6 +357,7 @@ FUNC(void, DCM_CODE) Dcm_Dsl_RxAbt_ArbitrateRxIndPseudoKAL
                 b_ResourceInUse = Dcm_Dsl_Ctrl_IsResourceInUse(u2PduIdMapIndex);
                 if( b_ResourceInUse == (boolean)FALSE )
                 {
+                    Dcm_Dsl_Ctrl_NotifyPseudoKALasNoKAL(u2PduIdMapIndex);
                     Dcm_Dsl_Ctrl_GetCurRxResource(u2PduIdMapIndex, &st_BufferInfo);
 
                     /* Since the size of the buffer is 8 bytes or more, 2 bytes can be copied. */
@@ -665,6 +666,7 @@ static FUNC(uint8, DCM_CODE) Dcm_Dsl_RxAbt_GetPrioCompResult
 /*  v5-0-0         :2022-03-29                                              */
 /*  v5-3-0         :2022-12-23                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-10-0        :2025-08-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

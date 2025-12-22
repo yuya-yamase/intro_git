@@ -1,7 +1,7 @@
-/* Dem_Control_EventEntry_c(v5-5-0)                                         */
+/* Dem_Control_EventEntry_c(v5-10-0)                                        */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -55,6 +55,7 @@ static FUNC( void, DEM_CODE ) Dem_Control_UpdateEventStatusProcess
     VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex,
     VAR( Dem_EventStatusType, AUTOMATIC ) EventStatus,
     VAR( Dem_MonitorDataType, AUTOMATIC ) monitorData0,
+    VAR( boolean, AUTOMATIC ) ActiveFaultReqFlag,
     P2VAR( Dem_UpdEvtCtrlFlagStType, AUTOMATIC, AUTOMATIC ) UpdEvtCtrlFlagStPtr
 );
 static FUNC( void, DEM_CODE ) Dem_Control_PredictiveFFDProcess
@@ -93,17 +94,20 @@ static FUNC( void, DEM_CODE ) Dem_Control_PredictiveFFDProcess
 /* Parameters    | [in] EventCtrlIndex   : Index of the event table.        */
 /*               | [in] EventStatus      : Status of the event.             */
 /*               | [in] monitorData0     : Monitor test result              */
+/*               | [in] ActiveFaultReqFlag :                                */
 /* Return Value  | Dem_u08_AsyncExecReturnType :                            */
 /* Notes         | -                                                        */
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | branch changed.                                          */
+/*   v5-9-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_AsyncExecReturnType, DEM_CODE ) Dem_Control_SetEventCommon
 (
     VAR( Dem_u16_EventCtrlIndexType, AUTOMATIC ) EventCtrlIndex,
     VAR( Dem_EventStatusType, AUTOMATIC ) EventStatus,
-    VAR( Dem_MonitorDataType, AUTOMATIC ) monitorData0
+    VAR( Dem_MonitorDataType, AUTOMATIC ) monitorData0,
+    VAR( boolean, AUTOMATIC ) ActiveFaultReqFlag
 )
 {
     VAR( Dem_u08_AsyncExecReturnType, AUTOMATIC ) retVal;
@@ -129,7 +133,7 @@ FUNC( Dem_u08_AsyncExecReturnType, DEM_CODE ) Dem_Control_SetEventCommon
 
         if( EventStatus != DEM_EVENT_STATUS_FDC_THRESHOLD_REACHED )
         {
-            Dem_Control_UpdateEventStatusProcess( EventCtrlIndex, eventStrgIndex, EventStatus, monitorData0, &updEvtCtrlFlagSt );
+            Dem_Control_UpdateEventStatusProcess( EventCtrlIndex, eventStrgIndex, EventStatus, monitorData0, ActiveFaultReqFlag, &updEvtCtrlFlagSt );
         }
         else
         {
@@ -181,15 +185,23 @@ FUNC( Dem_u08_AsyncExecReturnType, DEM_CODE ) Dem_Control_SetEventCommon
 /* Function Name | Dem_Control_UpdateEventStatusProcess                     */
 /* Description   | UpdateEventStatus process.                               */
 /* Preconditions | none                                                     */
-/* Parameters    | [in] EventStrgIndex :                                    */
+/* Parameters    | [in] EventCtrlIndex   : Index of the event table.        */
+/*               | [in] EventStrgIndex :                                    */
 /*               | [in] EventStatus :                                       */
 /*               | [in] monitorData0 :                                      */
+/*               | [in] ActiveFaultReqFlag :                                */
 /*               | [out] UpdEvtCtrlFlagStPtr :                              */
 /* Return Value  | void                                                     */
 /* Notes         |                                                          */
 /*--------------------------------------------------------------------------*/
+/* UpdateRecord  | [UpdRec]IUMPR    :   NotifySavedZone                     */
+/* UpdateRecord  | [UpdRec]AltIUMPR :   NotifySavedZone                     */
+/*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | new created. split from Dem_Control_SetEventCommon(v5-3-0). */
+/*   v5-6-0      | no branch changed.                                       */
+/*   v5-9-0      | branch changed.                                          */
+/*   v5-10-0     | branch changed.                                          */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_Control_UpdateEventStatusProcess
 (
@@ -197,20 +209,18 @@ static FUNC( void, DEM_CODE ) Dem_Control_UpdateEventStatusProcess
     VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex,
     VAR( Dem_EventStatusType, AUTOMATIC ) EventStatus,
     VAR( Dem_MonitorDataType, AUTOMATIC ) monitorData0,
+    VAR( boolean, AUTOMATIC ) ActiveFaultReqFlag,
     P2VAR( Dem_UpdEvtCtrlFlagStType, AUTOMATIC, AUTOMATIC ) UpdEvtCtrlFlagStPtr
 )
 {
     VAR( Dem_DTCStatusStType, AUTOMATIC ) oldDTCStatusSt;
     VAR( Dem_DTCStatusStType, AUTOMATIC ) newDTCStatusSt;
-    VAR( Dem_DTCStatusStType, AUTOMATIC ) newDTCStatus2St;
     VAR( Dem_u08_InternalReturnType, AUTOMATIC ) retChangeDTC;
     VAR( Dem_u08_InternalReturnType, AUTOMATIC ) retEventRetntion;
     VAR( Dem_u08_EventQualificationType, AUTOMATIC ) eventQualification;
     VAR( Dem_OrderListOccurredFlagType, AUTOMATIC ) occurFlag;
     VAR( boolean, AUTOMATIC ) faultOccurrenceFlag;
-    VAR( boolean, AUTOMATIC ) updateTmpAreaFlag;
     VAR( boolean, AUTOMATIC ) updateDataFlag;
-    VAR( boolean, AUTOMATIC ) isPassedToPassed;
 
     retChangeDTC                    = DEM_IRT_NG;
     eventQualification              = DEM_EVENT_QUALIFICATION_NOTQUALIFIED;
@@ -223,16 +233,19 @@ static FUNC( void, DEM_CODE ) Dem_Control_UpdateEventStatusProcess
     oldDTCStatusSt.ExtendDTCStatus  = DEM_DTCSTATUSEX_BYTE_ALL_OFF;
     oldDTCStatusSt.ExtendDTCStatus2 = DEM_DTCSTATUSEX2_BYTE_ALL_OFF;
 
-    /* When temporary area acquisition is successful */
-    /* Execute event status setting processing */
-    updateTmpAreaFlag               = (boolean)FALSE;
-
     /* Gets DTC status from the temporary domain. */
     Dem_Data_GetDTCStatusStructFromTmp( &oldDTCStatusSt );
 
     newDTCStatusSt.DTCStatus        = oldDTCStatusSt.DTCStatus;
     newDTCStatusSt.ExtendDTCStatus  = oldDTCStatusSt.ExtendDTCStatus;
     newDTCStatusSt.ExtendDTCStatus2 = oldDTCStatusSt.ExtendDTCStatus2;
+
+    /*--------------------------------------*/
+    /*  notify SAVED_ZONE update - start.   */
+#if ( DEM_IUMPR_SUPPORT == STD_ON ) /*  [FuncSw]    */
+    Dem_NotifySavedZoneIUMPRUpdate_Enter();      /*  notify start :  IUMPR/AltIUMPR savedzone area will be update.  */
+#endif  /* ( DEM_IUMPR_SUPPORT == STD_ON )          */
+    /*--------------------------------------*/
 
     /*  check failure cycle counter or event occurrence counter increment condition.    */
     if ( EventStatus == DEM_EVENT_STATUS_FAILED )
@@ -241,36 +254,31 @@ static FUNC( void, DEM_CODE ) Dem_Control_UpdateEventStatusProcess
         {
             /*  increment failure cycle counter.            */
             Dem_Data_IncrementFailureCounterOfTmp();
-            updateTmpAreaFlag       = (boolean)TRUE;
         }
 
+#if ( DEM_GETOCCURRENCECOUNTER_SUPPORT == STD_ON )  /* [FuncSw] */
         if( ( oldDTCStatusSt.DTCStatus & DEM_UDS_STATUS_TF ) != DEM_UDS_STATUS_TF )     /*  statusOfDTC : bit0  */
         {
             /*  increment event occurrence counter.         */
             Dem_Data_IncrementEventOccurrenceCounterOfTmp();
-            updateTmpAreaFlag       = (boolean)TRUE;
         }
+#endif  /* ( DEM_GETOCCURRENCECOUNTER_SUPPORT == STD_ON )       */
     }
     /*  set qualification info.                 */
-    updateDataFlag = Dem_Event_SetQualificationInfo( EventCtrlIndex, EventStatus, &eventQualification, &isPassedToPassed );     /* [GUDCHK:CALLER]EventCtrlIndex */
+    updateDataFlag = Dem_Event_SetQualificationInfo( EventCtrlIndex, EventStatus, &eventQualification );     /* [GUDCHK:CALLER]EventCtrlIndex *//* [UpdRec]AltIUMPR */
+
+    /* When called by ActiveFaultEventStatus, always update event */
+    if ( ActiveFaultReqFlag == (boolean)TRUE )
+    {
+        updateDataFlag = (boolean)TRUE;
+    }
 
     /* Judge whether to update event */
     if( updateDataFlag == (boolean)TRUE )
     {
         /* When there is an event to be updated */
         /* Execute DTC status change processing */
-        retChangeDTC = Dem_DTC_ChangeDTCStatus( EventStrgIndex, eventQualification, &oldDTCStatusSt, &newDTCStatusSt, &occurFlag );
-    }
-    else
-    {
-        /* When no event to be updated */
-        if ( isPassedToPassed == (boolean)TRUE )
-        {
-            Dem_Data_GetDTCStatusStructFromTmp( &newDTCStatus2St );
-            newDTCStatus2St.ExtendDTCStatus  = ( newDTCStatus2St.ExtendDTCStatus | DEM_UDS_STATUS_HISTORY_PASSED );
-            Dem_Data_SetDTCStatusStructToTmp( &newDTCStatus2St );
-            updateTmpAreaFlag   =   (boolean)TRUE;
-        }
+        retChangeDTC = Dem_DTC_ChangeDTCStatus( EventStrgIndex, eventQualification, ActiveFaultReqFlag, &oldDTCStatusSt, &newDTCStatusSt, &occurFlag );
     }
 
     if( retChangeDTC == DEM_IRT_OK )
@@ -284,7 +292,7 @@ static FUNC( void, DEM_CODE ) Dem_Control_UpdateEventStatusProcess
             retEventRetntion = Dem_Control_ProcessEventRetention( &occurFlag, &faultOccurrenceFlag );
             if( ( retEventRetntion == DEM_IRT_NG ) && ( faultOccurrenceFlag == (boolean)FALSE ) )
             {
-                Dem_Event_ClearTargetQualificationInfo_NotTestedInCycle( EventCtrlIndex );      /* [GUDCHK:CALLER]EventCtrlIndex */
+                Dem_Event_ClearTargetQualificationInfo_NotTestedInCycle( EventCtrlIndex );      /* [GUDCHK:CALLER]EventCtrlIndex *//* [UpdRec]AltIUMPR */
             }
 
             /* Checks if fault record will be overwritten. */
@@ -297,10 +305,10 @@ static FUNC( void, DEM_CODE ) Dem_Control_UpdateEventStatusProcess
         }
 
         /* Update statusOfDTC bit2, bit3, bit7 */
-        Dem_DTC_UpdateDTCStatusByRetentionResult( EventStrgIndex, retEventRetntion, occurFlag.ConfirmedOccurFlag, DEM_MISFIRE_CYLINDER_INVALID, &oldDTCStatusSt, &newDTCStatusSt );
+        Dem_DTC_UpdateDTCStatusByRetentionResult( EventStrgIndex, EventStatus, retEventRetntion, occurFlag.ConfirmedOccurFlag, DEM_MISFIRE_CYLINDER_INVALID, &oldDTCStatusSt, &newDTCStatusSt );
         Dem_Control_UpdateEventRelatedData( EventStrgIndex, EventStatus, monitorData0, faultOccurrenceFlag, oldDTCStatusSt.DTCStatus, newDTCStatusSt.DTCStatus, DEM_MISFIRE_CYLINDER_INVALID );
 
-        Dem_Control_UpdateEventMemoryEntryFromTmp( DEM_EVTKINDPTN_PRIMEM_NORMAL );
+        Dem_Control_UpdateEventMemoryEntryFromTmp( DEM_EVTKINDPTN_PRIMEM_NORMAL, EventStatus );
         UpdEvtCtrlFlagStPtr->TSFFDeleteFlag = Dem_Data_CheckTSFFDeleteByFFROverwritten();
 #if ( DEM_FF_PRESTORAGE_SUPPORT == STD_ON )     /*  [FuncSw]    */
         Dem_Control_RemovePrestoredFreezeFrame( EventStrgIndex, EventStatus, oldDTCStatusSt.DTCStatus, newDTCStatusSt.DTCStatus);
@@ -326,20 +334,22 @@ static FUNC( void, DEM_CODE ) Dem_Control_UpdateEventStatusProcess
     else
     {
         /*  no change DTC status.                   */
-        if( updateTmpAreaFlag == (boolean)TRUE )
-        {
-            /*  update only failure cycle.          */
-            Dem_Data_UpdateEventMemoryEntryFromTmp();
-        }
     }
 #if ( DEM_IUMPR_RATIO_SUPPORT == STD_ON ) /*  [FuncSw]    */
     /* IUMPR Count Trigger Update */
-    Dem_IUMPR_UpdateEventRelatedNumerator( EventCtrlIndex );        /* [GUDCHK:CALLER]EventCtrlIndex */
+    Dem_IUMPR_UpdateEventRelatedNumerator( EventCtrlIndex );        /* [GUDCHK:CALLER]EventCtrlIndex *//*[UpdRec]IUMPR */
 #endif  /*   ( DEM_IUMPR_RATIO_SUPPORT == STD_ON )        */
 
 #if ( DEM_WWH_OBD_SUPPORT == STD_ON ) /* [FuncSw] */
     Dem_IndMI_UpdateB1RecordBySetEvent( EventStatus, EventStrgIndex, newDTCStatusSt.DTCStatus );    /* [GUDCHK:CALLER]EventCtrlIndex */
 #endif /* ( DEM_WWH_OBD_SUPPORT == STD_ON ) */
+
+    /*--------------------------------------*/
+    /*  notify SAVED_ZONE update - end.     */
+#if ( DEM_IUMPR_SUPPORT == STD_ON ) /*  [FuncSw]    */
+    Dem_NotifySavedZoneIUMPRUpdate_Exit();  /*  notify end :  IUMPR/AltIUMPR savedzone area will be update.  */
+#endif  /* ( DEM_IUMPR_SUPPORT == STD_ON )          */
+    /*--------------------------------------*/
 
     return ;
 }
@@ -356,6 +366,9 @@ static FUNC( void, DEM_CODE ) Dem_Control_UpdateEventStatusProcess
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
+/*   v5-8-0      | no branch changed.                                       */
+/*   v5-9-0      | no branch changed.                                       */
+/*   v5-10-0     | no branch changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_Control_PredictiveFFDProcess
 (
@@ -364,11 +377,24 @@ static FUNC( void, DEM_CODE ) Dem_Control_PredictiveFFDProcess
     P2VAR( Dem_UpdEvtCtrlFlagStType, AUTOMATIC, AUTOMATIC ) UpdEvtCtrlFlagStPtr
 )
 {
+#if ( DEM_EVENT_DISPLACEMENT_SUPPORT == STD_ON )    /*  [FuncSw]    */
+    VAR( Dem_UdsStatusByteType, AUTOMATIC ) tmpStatusOfDTC;
+#endif  /*   ( DEM_EVENT_DISPLACEMENT_SUPPORT == STD_ON )           */
     VAR( Dem_u08_InternalReturnType, AUTOMATIC ) retEventRetntion;
     VAR( Dem_u08_InternalReturnType, AUTOMATIC ) retCheckStorePredictiveFFD;
     VAR( boolean, AUTOMATIC ) retCheckExistsEventMemoryEntry;
-    VAR( boolean, AUTOMATIC ) faultOccurrenceFlag   = (boolean)FALSE;
-    VAR( Dem_OrderListOccurredFlagType, AUTOMATIC ) occurFlag = {(boolean)FALSE, (boolean)FALSE};
+    VAR( boolean, AUTOMATIC ) faultOccurrenceFlag;
+    VAR( Dem_OrderListOccurredFlagType, AUTOMATIC ) occurFlag;
+
+    faultOccurrenceFlag             = (boolean)FALSE;
+    occurFlag.ConfirmedOccurFlag    = (boolean)FALSE;
+    occurFlag.MILOccurFlag          = (boolean)FALSE;
+
+#if ( DEM_EVENT_DISPLACEMENT_SUPPORT == STD_ON )    /*  [FuncSw]    */
+    tmpStatusOfDTC = DEM_DTCSTATUS_BYTE_DEFAULT;
+    Dem_Data_GetDTCStatusFromTmp( &tmpStatusOfDTC );
+    Dem_Data_SetDTCStatusForFaultRecordOverwrite( tmpStatusOfDTC );
+#endif  /*   ( DEM_EVENT_DISPLACEMENT_SUPPORT == STD_ON )           */
 
     /* Check if FaultRecord is exists. */
     retCheckExistsEventMemoryEntry = Dem_Data_CheckExistsEventMemoryEntryOfTmp();
@@ -385,10 +411,6 @@ static FUNC( void, DEM_CODE ) Dem_Control_PredictiveFFDProcess
     else
     {
         /* FaultRecord not secured. */
-
-#if ( DEM_EVENT_DISPLACEMENT_SUPPORT == STD_ON )    /*  [FuncSw]    */
-        Dem_Data_SetDTCStatusForFaultRecordOverwrite( DEM_DTCSTATUS_BYTE_DEFAULT );
-#endif  /*   ( DEM_EVENT_DISPLACEMENT_SUPPORT == STD_ON )           */
 
         /* Bit3 and Bit7 are not turned on in PredictiveFFD Request. */
         /* (occurFlag.ConfirmedOccurFlag & MILOccurFlag is FALSE)  */
@@ -407,7 +429,7 @@ static FUNC( void, DEM_CODE ) Dem_Control_PredictiveFFDProcess
             /* Checks if fault record will be overwritten. */
             UpdEvtCtrlFlagStPtr->FaultRecordOverwriteFlag = Dem_Data_CheckFaultRecordOverwrite( &( UpdEvtCtrlFlagStPtr->EventStrgIndexOfFaultRecordOverwritten ), &( UpdEvtCtrlFlagStPtr->OldDTCStatusOverwritten ) );
 
-            Dem_Control_UpdateEventMemoryEntryFromTmp( DEM_EVTKINDPTN_PRIMEM_NORMAL );
+            Dem_Control_UpdateEventMemoryEntryFromTmp( DEM_EVTKINDPTN_PRIMEM_NORMAL, DEM_EVENT_STATUS_FDC_THRESHOLD_REACHED );
             UpdEvtCtrlFlagStPtr->TSFFDeleteFlag = Dem_Data_CheckTSFFDeleteByFFROverwritten();
         }
     }
@@ -431,6 +453,10 @@ static FUNC( void, DEM_CODE ) Dem_Control_PredictiveFFDProcess
 /*  v5-0-0         :2022-03-29                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-6-0         :2024-01-29                                              */
+/*  v5-8-0         :2024-10-29                                              */
+/*  v5-9-0         :2025-02-26                                              */
+/*  v5-10-0        :2025-06-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

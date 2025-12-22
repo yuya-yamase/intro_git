@@ -1,7 +1,7 @@
-/* Dem_DataCtl_OBD_InfoOrder_c(v5-5-0)                                      */
+/* Dem_DataCtl_OBD_InfoOrder_c(v5-9-0)                                      */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -117,6 +117,7 @@ static FUNC( boolean, DEM_CODE ) Dem_Data_CheckCountableConfirmedDTC
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | branch changed.                                          */
+/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_GetFilteredObdDTC
 (
@@ -147,12 +148,12 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_GetFilteredObdDTC
     failRecordNum = (Dem_u08_OrderIndexType)Dem_FailRecordNum;
     eventStorageNum = Dem_CfgInfoPm_GetMaxNumberOfOBDEvent(); /*  event index check  : range of OBD event(may include nonOBD event).  */
 
-#if ( DEM_COMBINEDEVENT_ONRETRIEVAL_SUPPORT == STD_ON )  /*  [FuncSw]    */
+#if ( DEM_COMBINEDEVENT_ONRETRIEVAL_FILDTC_SUPPORT == STD_ON )  /*  [FuncSw]    */
     if ( *FaultSearchIndexPtr == ( Dem_u08_OrderIndexType )0U )
     {
         Dem_CmbEvt_StartOfCheckOutputFilteredDTC();
     }
-#endif  /*  ( DEM_COMBINEDEVENT_ONRETRIEVAL_SUPPORT == STD_ON )     */
+#endif  /*  ( DEM_COMBINEDEVENT_ONRETRIEVAL_FILDTC_SUPPORT == STD_ON )     */
 
     for( faultSearchIndex = *FaultSearchIndexPtr; faultSearchIndex < failRecordNum; faultSearchIndex++ )
     {
@@ -209,7 +210,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_GetFilteredObdDTC
     return retVal;
 }
 
-#if ( DEM_COMBINEDEVENT_ONRETRIEVAL_SUPPORT == STD_OFF )
+#if ( DEM_COMBINEDEVENT_ONRETRIEVAL_FILDTC_SUPPORT == STD_OFF )
 /****************************************************************************/
 /* Function Name | Dem_Data_GetTargetOfFilteredDTC                          */
 /* Description   | Gets target FilteredDTC.                                 */
@@ -309,9 +310,9 @@ static FUNC( boolean, DEM_CODE ) Dem_Data_GetTargetOfFilteredDTC
     }
     return getTarget;
 }
-#endif  /* ( DEM_COMBINEDEVENT_ONRETRIEVAL_SUPPORT == STD_OFF ) */
+#endif  /* ( DEM_COMBINEDEVENT_ONRETRIEVAL_FILDTC_SUPPORT == STD_OFF ) */
 
-#if ( DEM_COMBINEDEVENT_ONRETRIEVAL_SUPPORT == STD_ON )
+#if ( DEM_COMBINEDEVENT_ONRETRIEVAL_FILDTC_SUPPORT == STD_ON )
 /****************************************************************************/
 /* Function Name | Dem_Data_GetTargetOfFilteredDTC                          */
 /* Description   | Gets target FilteredDTC.                                 */
@@ -329,6 +330,7 @@ static FUNC( boolean, DEM_CODE ) Dem_Data_GetTargetOfFilteredDTC
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | new created.                                             */
+/*   v5-7-0      | branch changed.                                          */
 /****************************************************************************/
 static FUNC( boolean, DEM_CODE ) Dem_Data_GetTargetOfFilteredDTC
 (
@@ -346,7 +348,6 @@ static FUNC( boolean, DEM_CODE ) Dem_Data_GetTargetOfFilteredDTC
 #endif  /*   ( DEM_OBDDTC_FORMAT_SUPPORT == STD_ON )           */
 
     VAR( Dem_u08_InternalReturnType, AUTOMATIC ) retOutput;
-    VAR( Dem_u08_InternalReturnType, AUTOMATIC ) retStatusMask;
     VAR( boolean, AUTOMATIC ) retOutputDTC;
     VAR( boolean, AUTOMATIC ) retValidateDTC;
     VAR( boolean, AUTOMATIC ) getTarget;
@@ -367,20 +368,11 @@ static FUNC( boolean, DEM_CODE ) Dem_Data_GetTargetOfFilteredDTC
             {
                 /*  get merged statusOfDTC. with checking filter DTCSeverityMask.   */
                 /*  Merge WIRStatus is in Dem_DTC_GetDTCStatusByDTCAndSeverity().   */
-                retOutput   =   Dem_DTC_GetDTCStatusByDTCAndSeverity( EventStrgIndex, DTCFilterPtr->FilterWithSeverity, DTCFilterPtr->DTCSeverityMask, DTCStatusPtr, DTCSeverityPtr );    /* no return check required *//* [GUDCHK:CALLER]EventStrgIndex */
+                retOutput   =   Dem_DTC_GetDTCStatusByDTCAndSeverity( EventStrgIndex, DTCFilterPtr->DTCStatusMask, DTCFilterPtr->FilterWithSeverity, DTCFilterPtr->DTCSeverityMask, DTCStatusPtr, DTCSeverityPtr );    /* no return check required *//* [GUDCHK:CALLER]EventStrgIndex */
                 if ( retOutput == DEM_IRT_OK )
                 {
-                    /* translate DTCStatus */
-                    (void)Dem_DTC_TranslateDTCStatusForOutput_NoMergeWIRBit( EventStrgIndex, DTCStatusPtr ); /* no return check required *//* [GUDCHK:CALLER]EventStrgIndex */
-
-                    *DTCStatusPtr   =   Dem_DTC_CnvDTCStatus_PmAvailabilityMask( *DTCStatusPtr );
-
-                    retStatusMask   =   Dem_DTC_CheckDTCStatusForFilter( DTCFilterPtr->DTCStatusMask, *DTCStatusPtr );
-                    if ( retStatusMask == DEM_IRT_OK )
-                    {
-                        *DTCValuePtr    =   udsDTCValue;
-                        getTarget       =   (boolean)TRUE;
-                    }
+                    *DTCValuePtr    =   udsDTCValue;
+                    getTarget       =   (boolean)TRUE;
                 }
             }
         }
@@ -410,7 +402,7 @@ static FUNC( boolean, DEM_CODE ) Dem_Data_GetTargetOfFilteredDTC
 
     return getTarget;
 }
-#endif  /* ( DEM_COMBINEDEVENT_ONRETRIEVAL_SUPPORT == STD_ON )  */
+#endif  /* ( DEM_COMBINEDEVENT_ONRETRIEVAL_FILDTC_SUPPORT == STD_ON )  */
 
 #endif  /* ( DEM_OBD_SUPPORT == STD_ON )    */
 
@@ -654,7 +646,7 @@ FUNC( void, DEM_CODE ) Dem_Data_GetOBDDTCActiveStatus_CDTCAndMIL_forCalcPID
 #if ( DEM_OBD_SUPPORT == STD_ON )
 #if ( DEM_WWH_OBD_SUPPORT == STD_OFF )
 /****************************************************************************/
-/* Function Name | Dem_Data_GetMILStatus                                    */
+/* Function Name | Dem_Data_GetMILStatus_NormalEvent                        */
 /* Description   | Get MIL status. without Misfire event.                   */
 /* Preconditions | none                                                     */
 /* Parameters    | none                                                     */
@@ -1460,6 +1452,8 @@ static FUNC( boolean, DEM_CODE ) Dem_Data_CheckCountableConfirmedDTC
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-7-0         :2024-05-29                                              */
+/*  v5-9-0         :2025-02-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

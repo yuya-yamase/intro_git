@@ -1,7 +1,7 @@
-/* Dem_Control_IUMPR_c(v5-3-0)                                              */
+/* Dem_Control_IUMPR_c(v5-6-0)                                              */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -279,6 +279,11 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_SetIUMPRDenCondition
 /*               |       : See the description of the return value of       */
 /*               |         "DemAsyncReqFncPTR" in Dem_CmnLib_Control_AsyncReq.h.   */
 /* Notes         | -                                                        */
+/*--------------------------------------------------------------------------*/
+/* UpdateRecord  | [UpdRec]IUMPR    :   NotifySavedZone                     */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-6-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_AsyncExecReturnType, DEM_CODE ) Dem_Control_NotifyIUMPRDenCondition
 (
@@ -299,14 +304,14 @@ FUNC( Dem_u08_AsyncExecReturnType, DEM_CODE ) Dem_Control_NotifyIUMPRDenConditio
 
     /*--------------------------------------*/
     /*  notify SAVED_ZONE update - start.   */
-    Dem_NotifySavedZoneUpdate_Enter();      /*  notify start :  savedzone area will be update.  */
+    Dem_NotifySavedZoneIUMPRUpdate_Enter();      /*  notify start :  savedzone area will be update.  */
     /*--------------------------------------*/
 
-    Dem_IUMPR_SetIUMPRDenCondition( ConditionId, ConditionStatus );
+    Dem_IUMPR_SetIUMPRDenCondition( ConditionId, ConditionStatus );         /* [UpdRec]IUMPR */
 
     /*--------------------------------------*/
     /*  notify SAVED_ZONE update - end.     */
-    Dem_NotifySavedZoneUpdate_Exit();       /*  notify end :  savedzone area will be update.    */
+    Dem_NotifySavedZoneIUMPRUpdate_Exit();       /*  notify end :  savedzone area will be update.    */
     /*--------------------------------------*/
 
     return retVal;
@@ -339,6 +344,11 @@ FUNC( void, DEM_CODE ) Dem_Control_InitIUMPRInfo
 /* Parameters    | none                                                     */
 /* Return Value  | void                                                     */
 /* Notes         | This function is in Dem_MainFunction process.            */
+/*--------------------------------------------------------------------------*/
+/* UpdateRecord  | [UpdRec]IUMPR    :   NotifySavedZone                     */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-6-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_Control_UpdateIUMPRProcess
 (void)
@@ -371,14 +381,14 @@ FUNC( void, DEM_CODE ) Dem_Control_UpdateIUMPRProcess
 
         /*--------------------------------------*/
         /*  notify SAVED_ZONE update - start.   */
-        Dem_NotifySavedZoneUpdate_Enter();      /*  notify start :  savedzone area will be update.  */
+        Dem_NotifySavedZoneIUMPRUpdate_Enter();      /*  notify start :  savedzone area will be update.  */
         /*--------------------------------------*/
 
-        Dem_IUMPR_UpdateIUMPRProcess( firstTime, &compUpdate );
+        Dem_IUMPR_UpdateIUMPRProcess( firstTime, &compUpdate );     /* [UpdRec]IUMPR */
 
         /*--------------------------------------*/
         /*  notify SAVED_ZONE update - end.     */
-        Dem_NotifySavedZoneUpdate_Exit();       /*  notify end :  savedzone area will be update.    */
+        Dem_NotifySavedZoneIUMPRUpdate_Exit();       /*  notify end :  savedzone area will be update.    */
         /*--------------------------------------*/
 
         if( compUpdate == (boolean)TRUE )
@@ -478,6 +488,7 @@ static FUNC( void, DEM_CODE ) Dem_Control_DecIUMPRDenCondQueParam
 /*  v5-0-0         :2022-03-29                                              */
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
+/*  v5-6-0         :2024-01-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

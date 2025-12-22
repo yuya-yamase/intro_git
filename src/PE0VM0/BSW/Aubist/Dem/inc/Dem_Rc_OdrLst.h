@@ -1,7 +1,7 @@
-/* Dem_Rc_OdrLst_h(v5-5-0)                                                  */
+/* Dem_Rc_OdrLst_h(v5-6-0)                                                  */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 /****************************************************************************/
 /* Object Name  | Dem/Rc_OdrLst/HEADER                                      */
@@ -150,7 +150,27 @@ FUNC( void, DEM_CODE ) Dem_OdrLst_Confirmed_UpdateNextOccurrenceOrder
 );
 #endif  /* ( DEM_EVENT_DISPLACEMENT_SUPPORT == STD_ON ) */
 
+#if ( DEM_GET_UDSDTC_BY_CONFIRMED_ORDER_SUPPORT == STD_ON )
+#if ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON )
+FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_OdrLst_Confirmed_GetAndUpdateNextOccurrenceOrder
+(
+    P2VAR( Dem_u16_OccrOrderType, AUTOMATIC, AUTOMATIC ) OccurrenceOrderPtr
+);
+#endif /* ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON ) */
+#endif /* ( DEM_GET_UDSDTC_BY_CONFIRMED_ORDER_SUPPORT == STD_ON ) */
+
+
 #endif  /*   ( DEM_ORDERTYPE_CONFIRMED_USE == STD_ON )      */
+
+/*----------------------------------*/
+/*  Confirmed OrderList Misfire     */
+/*----------------------------------*/
+#if ( DEM_GET_UDSDTC_BY_CONFIRMED_ORDER_SUPPORT == STD_ON )
+#if ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON )
+FUNC( Dem_u16_OccrOrderType, DEM_CODE ) Dem_OdrLst_Confirmed_Misfire_GetLargestOccurrenceOrder
+( void );
+#endif /* ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON ) */
+#endif /* ( DEM_GET_UDSDTC_BY_CONFIRMED_ORDER_SUPPORT == STD_ON ) */
 
 /*----------------------------------*/
 /*  MIL OrderList                   */
@@ -224,6 +244,7 @@ FUNC( void, DEM_CODE ) Dem_OdrLst_MIL_UpdateNextOccurrenceOrder
 /*  v5-0-0         :2021-12-24                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-6-0         :2024-01-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

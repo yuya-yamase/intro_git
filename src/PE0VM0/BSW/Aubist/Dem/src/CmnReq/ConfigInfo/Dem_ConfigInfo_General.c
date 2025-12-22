@@ -1,7 +1,7 @@
-/* Dem_ConfigInfo_General_c(v5-5-0)                                         */
+/* Dem_ConfigInfo_General_c(v5-10-0)                                        */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -36,6 +36,12 @@
 /****************************************************************************/
 #define DEM_START_SEC_CODE
 #include <Dem_MemMap.h>
+
+static FUNC( boolean, DEM_CODE ) Dem_CfgInfo_CheckTriggerCommon
+(
+    VAR( Dem_u08_StorageTriggerType, AUTOMATIC ) TargetTrigger,
+    VAR( Dem_u08_FFValidTriggerType, AUTOMATIC ) TriggerFromCaller
+);
 
 #define DEM_STOP_SEC_CODE
 #include <Dem_MemMap.h>
@@ -91,10 +97,6 @@ FUNC( Dem_DTCTranslationFormatType, DEM_CODE ) Dem_CfgInfo_GetTranslationType
 /* Description   | Judge Aging Require or not.                              */
 /* Preconditions | none                                                     */
 /* Parameters    | [in] DTCStatusStPtr : statusOfDTC.                       */
-/*               | [in] HealingAgingCycleFlag :                             */
-/*               |          check HealingAgingCycle or not.                 */
-/*               | [in] PendingRecoveryExecFlag :                           */
-/*               |          check pending recovery was executed.            */
 /* Return Value  | Dem_u08_InternalReturnType                               */
 /*               |        DEM_IRT_OK : Aging is Required.                   */
 /*               |        DEM_IRT_NG : Aging is not Required.               */
@@ -102,12 +104,11 @@ FUNC( Dem_DTCTranslationFormatType, DEM_CODE ) Dem_CfgInfo_GetTranslationType
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | branch changed.                                          */
+/*   v5-7-0      | branch changed.                                          */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_CfgInfo_JudgeAgingRequire
 (
-    CONSTP2VAR( Dem_DTCStatusStType, AUTOMATIC, AUTOMATIC ) DTCStatusStPtr,
-    VAR( Dem_u08_OpcycUpdateHealingAgingCycleType, AUTOMATIC ) HealingAgingCycleFlag,   /* MISRA DEVIATION */
-    VAR( boolean, AUTOMATIC ) PendingRecoveryExecFlag                                   /* MISRA DEVIATION */
+    CONSTP2VAR( Dem_DTCStatusStType, AUTOMATIC, AUTOMATIC ) DTCStatusStPtr
 )
 {
     VAR( Dem_u08_InternalReturnType, AUTOMATIC ) retVal;
@@ -126,27 +127,8 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_CfgInfo_JudgeAgingRequire
         /*  if PendingDTC is ON, Aging is not required. */
         if (( DTCStatusStPtr->DTCStatus & DEM_UDS_STATUS_PDTC ) == DEM_UDS_STATUS_PDTC )
         {
-#if ( DEM_WWH_OBD_SUPPORT == STD_ON ) /* [FuncSw] */
-            if (( HealingAgingCycleFlag & DEM_OPCYCUPD_HACYC_EXEC_WWHOBD_AGING ) == DEM_OPCYCUPD_HACYC_EXEC_WWHOBD_AGING )
-            {
-                /*  For WWH-OBD, need to check additional aging condition if this cycle is AgingCycle. */
-
-                if( PendingRecoveryExecFlag == (boolean)FALSE )
-                {
-                    /*  Aging is not required.      */
-                    retVal = DEM_IRT_NG;
-                }
-                else
-                {
-                    /*  Aging is required if pending recovery was executed in this cycle.   */
-                }
-            }
-            else
-#endif /* ( DEM_WWH_OBD_SUPPORT == STD_ON ) */
-            {
                 /*  Aging is not required.      */
                 retVal = DEM_IRT_NG;
-            }
         }
     }
 
@@ -170,6 +152,84 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_CfgInfo_JudgeAgingRequire
 /* Function Name | Dem_CfgInfo_CheckTrigger                                 */
 /* Description   |                                                          */
 /* Preconditions |                                                          */
+/* Parameters    | [in/out] TriggerKind : The target trigger classification */
+/*               |        that this function checks.                        */
+/*               | [in] TriggerFromCaller : The trigger from caller.        */
+/*               |                                                          */
+/* Return Value  | boolean                                                  */
+/*               |        TRUE  : The trigger is included.                  */
+/*               |        FALSE : The trigger is not included.              */
+/* Notes         |                                                          */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-10-0     | new created.                                             */
+/****************************************************************************/
+FUNC( boolean, DEM_CODE ) Dem_CfgInfo_CheckTrigger
+(
+    P2VAR( Dem_u08_StorageTriggerType, AUTOMATIC, AUTOMATIC ) TargetTriggerPtr,
+    VAR( Dem_u08_FFValidTriggerType, AUTOMATIC ) TriggerFromCaller
+)
+{
+    VAR( boolean, AUTOMATIC ) retVal;
+    VAR( Dem_u08_StorageTriggerType, AUTOMATIC ) freezeFrameRecordTrigger;
+
+#if ( DEM_FFD_RECORDUPDATE_AT_TESTFAILED_SUPPORT == STD_ON )    /* [ FuncSw ] */
+    VAR( Dem_u08_StorageTriggerType, AUTOMATIC ) freezeFrameRecordUpdateTrigger;
+#endif  /* ( DEM_FFD_RECORDUPDATE_AT_TESTFAILED_SUPPORT == STD_ON )             */
+
+    /*--------------------------------------*/
+    /*  mask update trigger.                */
+    /*--------------------------------------*/
+    freezeFrameRecordTrigger        =   (*TargetTriggerPtr) & DEM_TRIGGER_ON_TRIGGERTYPE_MASK;
+
+    /*----------------------------------------------*/
+    /*  check trigger type and occurred trigger.    */
+    /*----------------------------------------------*/
+    retVal  =   Dem_CfgInfo_CheckTriggerCommon( freezeFrameRecordTrigger, TriggerFromCaller );
+
+#if ( DEM_FFD_RECORDUPDATE_AT_TESTFAILED_SUPPORT == STD_ON )    /* [ FuncSw ] */
+    if ( retVal == (boolean)FALSE )
+    {
+        /*--------------------------------------*/
+        /*  check update trigger.               */
+        /*--------------------------------------*/
+        freezeFrameRecordUpdateTrigger  =   (*TargetTriggerPtr) & DEM_TRIGGER_ON_UPDATETYPE_MASK;
+
+        if( ( freezeFrameRecordUpdateTrigger & DEM_TRIGGER_ON_UPD_TEST_FAILED ) == DEM_TRIGGER_ON_UPD_TEST_FAILED )
+        {
+            /*  DEM_TRIGGER_ON_UPD_TEST_FAILED is only update trigger.      */
+            if( freezeFrameRecordTrigger == DEM_TRIGGER_ON_CONFIRMED )
+            {
+                if( ( TriggerFromCaller & DEM_VALID_TRIGGER_TEST_FAILED_AT_CDTC ) == DEM_VALID_TRIGGER_TEST_FAILED_AT_CDTC )
+                {
+                    /* Sets the return value to TRUE. */
+                    retVal = (boolean)TRUE;
+                }
+            }
+            else
+            {
+                if( ( TriggerFromCaller & DEM_VALID_TRIGGER_TEST_FAILED ) == DEM_VALID_TRIGGER_TEST_FAILED )
+                {
+                    /* Sets the return value to TRUE. */
+                    retVal = (boolean)TRUE;
+                }
+            }
+        }
+    }
+#endif  /* ( DEM_FFD_RECORDUPDATE_AT_TESTFAILED_SUPPORT == STD_ON )             */
+
+    /*--------------------------------------*/
+    /*  set trigger type.                   */
+    /*--------------------------------------*/
+    *TargetTriggerPtr   =   freezeFrameRecordTrigger;
+
+    return retVal;
+}
+
+/****************************************************************************/
+/* Function Name | Dem_CfgInfo_CheckTriggerCommon                           */
+/* Description   |                                                          */
+/* Preconditions |                                                          */
 /* Parameters    | [in] TriggerKind : The target trigger classification     */
 /*               |        that this function checks.                        */
 /*               | [in] TriggerFromCaller : The trigger from caller.        */
@@ -178,8 +238,12 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_CfgInfo_JudgeAgingRequire
 /*               |        TRUE  : The trigger is included.                  */
 /*               |        FALSE : The trigger is not included.              */
 /* Notes         |                                                          */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-10-0     | rename from Dem_CfgInfo_CheckTrigger(v5-9-0).            */
+/*   v5-10-0     | no object changed.                                       */
 /****************************************************************************/
-FUNC( boolean, DEM_CODE ) Dem_CfgInfo_CheckTrigger
+static FUNC( boolean, DEM_CODE ) Dem_CfgInfo_CheckTriggerCommon
 (
     VAR( Dem_u08_StorageTriggerType, AUTOMATIC ) TargetTrigger,
     VAR( Dem_u08_FFValidTriggerType, AUTOMATIC ) TriggerFromCaller
@@ -199,10 +263,6 @@ FUNC( boolean, DEM_CODE ) Dem_CfgInfo_CheckTrigger
             /* Sets the return value to TRUE. */
             retVal = (boolean)TRUE;
         }
-        else
-        {
-            /* No Process */
-        }
     }
     else if( TargetTrigger == DEM_TRIGGER_ON_FDC_THRESHOLD )
     {
@@ -211,10 +271,6 @@ FUNC( boolean, DEM_CODE ) Dem_CfgInfo_CheckTrigger
         {
             /* Sets the return value to TRUE. */
             retVal = (boolean)TRUE;
-        }
-        else
-        {
-            /* No Process */
         }
     }
     else if( TargetTrigger == DEM_TRIGGER_ON_PENDING )
@@ -225,10 +281,6 @@ FUNC( boolean, DEM_CODE ) Dem_CfgInfo_CheckTrigger
             /* Sets the return value to TRUE. */
             retVal = (boolean)TRUE;
         }
-        else
-        {
-            /* No Process */
-        }
     }
     else if( TargetTrigger == DEM_TRIGGER_ON_TEST_FAILED_THIS_OPERATION_CYCLE )
     {
@@ -237,10 +289,6 @@ FUNC( boolean, DEM_CODE ) Dem_CfgInfo_CheckTrigger
         {
             /* Sets the return value to TRUE. */
             retVal = (boolean)TRUE;
-        }
-        else
-        {
-            /* No Process */
         }
     }
     else
@@ -256,7 +304,7 @@ FUNC( boolean, DEM_CODE ) Dem_CfgInfo_CheckTrigger
 /* Function Name | Dem_CfgInfo_CheckObdTrigger                              */
 /* Description   |                                                          */
 /* Preconditions |                                                          */
-/* Parameters    | [in] TriggerKind : The target trigger classification     */
+/* Parameters    | [in/out] TriggerKind : The target trigger classification */
 /*               |        that this function checks.                        */
 /*               | [in] TriggerFromCaller : The trigger from caller.        */
 /*               | [out] UpdatePendingFFDPtr : The flag if update PendingF- */
@@ -266,10 +314,13 @@ FUNC( boolean, DEM_CODE ) Dem_CfgInfo_CheckTrigger
 /*               |        TRUE  : The trigger is included.                  */
 /*               |        FALSE : The trigger is not included.              */
 /* Notes         |                                                          */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-10-0     | branch changed.                                          */
 /****************************************************************************/
 FUNC( boolean, DEM_CODE ) Dem_CfgInfo_CheckObdTrigger
 (
-    VAR( Dem_u08_StorageTriggerType, AUTOMATIC ) TargetTrigger,
+    P2VAR( Dem_u08_StorageTriggerType, AUTOMATIC, AUTOMATIC ) TargetTriggerPtr,
     VAR( Dem_u08_FFValidTriggerType, AUTOMATIC ) TriggerFromCaller,
     P2VAR( boolean, AUTOMATIC, AUTOMATIC ) UpdatePendingFFDPtr
 )
@@ -277,21 +328,20 @@ FUNC( boolean, DEM_CODE ) Dem_CfgInfo_CheckObdTrigger
     VAR( boolean, AUTOMATIC ) retVal;
     VAR( boolean, AUTOMATIC ) judgeUpdateObdPendingFFD;
 
-    /* Initializeds return value to FALSE. */
-    retVal = (boolean)FALSE;
     /* Initializes the update PendingFFD flag to FALSE */
     (*UpdatePendingFFDPtr) = (boolean)FALSE;
 
-    /* Checks the specified TargetTrigger. */
-    if( TargetTrigger == DEM_TRIGGER_ON_PENDING )
+    /*--------------------------------------------------*/
+    /*  check trigger update.                           */
+    /*--------------------------------------------------*/
+    retVal = Dem_CfgInfo_CheckTrigger( TargetTriggerPtr, TriggerFromCaller );
+
+    if ( retVal == (boolean)FALSE )
     {
-        /* Checks the DEM_VALID_TRIGGER_PENDING bit of the specified caller's trigger is on. */
-        if( ( TriggerFromCaller & DEM_VALID_TRIGGER_PENDING ) == DEM_VALID_TRIGGER_PENDING )
-        {
-            /* Sets the return value to TRUE. */
-            retVal = (boolean)TRUE;
-        }
-        else
+        /*----------------------------------------------*/
+        /*  no update condition.                        */
+        /*----------------------------------------------*/
+        if( *TargetTriggerPtr == DEM_TRIGGER_ON_PENDING )
         {
             /* Checks the DEM_VALID_TRIGGER_CONFIRMED bit of the specified caller's trigger is on. */
             if( ( TriggerFromCaller & DEM_VALID_TRIGGER_CONFIRMED ) == DEM_VALID_TRIGGER_CONFIRMED )
@@ -307,11 +357,6 @@ FUNC( boolean, DEM_CODE ) Dem_CfgInfo_CheckObdTrigger
             }
         }
     }
-    else
-    {
-        retVal = Dem_CfgInfo_CheckTrigger( TargetTrigger, TriggerFromCaller );
-    }
-
     return retVal;
 }
 #endif  /* ( DEM_OBDFFD_SUPPORT == STD_ON )    */
@@ -327,6 +372,8 @@ FUNC( boolean, DEM_CODE ) Dem_CfgInfo_CheckObdTrigger
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-7-0         :2024-05-29                                              */
+/*  v5-10-0        :2025-06-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

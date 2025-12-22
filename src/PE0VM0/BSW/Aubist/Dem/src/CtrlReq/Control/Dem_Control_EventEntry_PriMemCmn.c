@@ -1,7 +1,7 @@
-/* Dem_Control_EventEntry_PriMemCmn_c(v5-5-0)                               */
+/* Dem_Control_EventEntry_PriMemCmn_c(v5-10-0)                              */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -218,26 +218,33 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_SaveEventMemoryEntryToT
 /* Parameters    | none                                                     */
 /* Return Value  | void                                                     */
 /* Notes         | This Function is in CheckClearDTCStatus exclusive sec..  */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-9-0      | branch changed.                                          */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_Control_UpdateEventMemoryEntryFromTmp
 (
-    VAR( Dem_u08_EventKindPtnType, AUTOMATIC ) EventKindPattern     /* MISRA DEVIATION */
+    VAR( Dem_u08_EventKindPtnType, AUTOMATIC ) EventKindPattern,     /* MISRA DEVIATION */
+    VAR( Dem_EventStatusType, AUTOMATIC ) EventStatus                /* MISRA DEVIATION */
 )
 {
 
     Dem_Data_UpdateEventMemoryEntryFromTmp();
 
 #if ( DEM_PFC_SUPPORT == STD_ON )   /*  [FuncSw]    */
+    if ( EventStatus == DEM_EVENT_STATUS_FAILED )
+    {
 #if ( DEM_SPECIFIC_EVENT_SUPPORT == STD_ON )    /*  [FuncSw]    */
-    if ( EventKindPattern == DEM_EVTKINDPTN_PRIMEM_SPECIFIC )
-    {
-        Dem_DTC_UpdateSpecificPermanentMemoryEntryToTmp();
-    }
-    else
+        if ( EventKindPattern == DEM_EVTKINDPTN_PRIMEM_SPECIFIC )
+        {
+            Dem_DTC_UpdateSpecificPermanentMemoryEntryToTmp();
+        }
+        else
 #endif  /* ( DEM_SPECIFIC_EVENT_SUPPORT == STD_ON )             */
-    {
-        /*  DEM_EVTKINDPTN_PRIMEM_NORMAL          */
-        Dem_DTC_UpdatePermanentMemoryEntryToTmp();
+        {
+            /*  DEM_EVTKINDPTN_PRIMEM_NORMAL          */
+            Dem_DTC_UpdatePermanentMemoryEntryToTmp();
+        }
     }
 #endif  /*   ( DEM_PFC_SUPPORT == STD_ON )      */
 
@@ -392,6 +399,7 @@ FUNC( void, DEM_CODE ) Dem_Control_RemovePrestoredFreezeFrame
 /* History       |                                                          */
 /*   v5-5-0      | rename from Dem_DTC_CheckTriggerByDTCStatus(v5-3-0).     */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-10-0     | branch changed.                                          */
 /****************************************************************************/
 static FUNC( Dem_u08_FFValidTriggerType, DEM_CODE ) Dem_Control_CheckTriggerByDTCStatus
 (
@@ -441,6 +449,27 @@ static FUNC( Dem_u08_FFValidTriggerType, DEM_CODE ) Dem_Control_CheckTriggerByDT
         retVal |= DEM_VALID_TRIGGER_TFTOC;
     }
 
+#if ( DEM_FFD_RECORDUPDATE_AT_TESTFAILED_SUPPORT == STD_ON )    /* [ FuncSw ] */
+    /*************************************************************************/
+    /* Judgment of the trigger condition by TestFailedThisOperationCycle bit */
+    /**************************************************************************/
+    oldStatus = ( OldDTCStatus & ((Dem_UdsStatusByteType)DEM_UDS_STATUS_TF) );
+    newStatus = ( NewDTCStatus & ((Dem_UdsStatusByteType)DEM_UDS_STATUS_TF) );
+
+    if( newStatus > oldStatus )
+    {
+        if ( ( OldDTCStatus & DEM_UDS_STATUS_CDTC ) == DEM_UDS_STATUS_CDTC )
+        {
+            /* A trigger condition by test failed bit is concluded */
+            retVal |= DEM_VALID_TRIGGER_TEST_FAILED_AT_CDTC;
+        }
+
+        /* A trigger condition by test failed bit is concluded */
+        retVal |= DEM_VALID_TRIGGER_TEST_FAILED;
+
+    }
+#endif  /* ( DEM_FFD_RECORDUPDATE_AT_TESTFAILED_SUPPORT == STD_ON )           */
+
     return retVal;
 }
 
@@ -452,6 +481,8 @@ static FUNC( Dem_u08_FFValidTriggerType, DEM_CODE ) Dem_Control_CheckTriggerByDT
 /*  Version        :Date                                                    */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-9-0         :2025-02-26                                              */
+/*  v5-10-0        :2025-06-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

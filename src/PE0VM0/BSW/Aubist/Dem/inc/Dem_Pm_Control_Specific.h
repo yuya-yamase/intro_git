@@ -1,7 +1,7 @@
-/* Dem_Pm_Control_Specific_h(v5-5-0)                                        */
+/* Dem_Pm_Control_Specific_h(v5-9-0)                                        */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 /****************************************************************************/
 /* Object Name  | Dem/Pm_Control_Specific/HEADER                            */
@@ -57,6 +57,12 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_GetPendingClearCounter
     VAR( Dem_EventIdType, AUTOMATIC ) EventID,
     P2VAR( Dem_u08_HealingCounterType, AUTOMATIC, AUTOMATIC ) PendingClearCounterPtr
 );
+FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_GetSimilarCondition
+(
+    VAR( Dem_EventIdType, AUTOMATIC ) EventID,
+    P2VAR( Dem_SimilarConditionValueType, AUTOMATIC, DEM_APPL_DATA ) SimilarConditionArrayPtr,
+    P2VAR( Dem_SimilarConditionStatusType, AUTOMATIC, AUTOMATIC ) SimilarConditionStatusPtr
+);
 #endif  /* ( DEM_SIMILAR_EVENT_CONFIGURED == STD_ON )   */
 
 #if ( DEM_SPECIFIC_EVENT_SUPPORT == STD_ON )
@@ -80,6 +86,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_GetExceedanceCounter
 /*  v5-0-0         :2021-09-28                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-9-0         :2025-02-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

@@ -1,7 +1,7 @@
-/* Dem_Similar_local_c(v5-5-0)                                              */
+/* Dem_Similar_local_c(v5-7-0)                                              */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -66,6 +66,9 @@
 /* Parameters    | [in] SimilarConditionPtr :                               */
 /* Return Value  | Dem_u08_InternalReturnType                               */
 /* Notes         | -                                                        */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Similar_CheckConditionForPassed
 (
@@ -78,9 +81,9 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Similar_CheckConditionForPassed
 
     retVal = DEM_IRT_NG;
 
-    Dem_Similar_GetConditionStoredListToTmp( &oldSimilarConditionValue[0] );
+    Dem_Similar_GetConditionStoredListToTmp( &oldSimilarConditionValue[0] );/* [ARYCHK] DEM_SIMILARTYPE_MAX_NUM / 1 / 0 */
 
-    retJudgeSimilarCondition = Dem_JudgeSimilarCondition( &oldSimilarConditionValue[0] ,SimilarConditionPtr );
+    retJudgeSimilarCondition = Dem_JudgeSimilarCondition( &oldSimilarConditionValue[0] ,SimilarConditionPtr );/* [ARYCHK] DEM_SIMILARTYPE_MAX_NUM / 1 / 0 */
     if( retJudgeSimilarCondition == (boolean)TRUE )
     {
         retVal = DEM_IRT_OK;
@@ -101,6 +104,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Similar_CheckConditionForPassed
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Similar_CheckConditionForFailed
 (
@@ -122,9 +126,9 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Similar_CheckConditionForFailed
         /*  similarStrgIndex : value range check in Dem_CfgInfoPm_CnvEventStrgIndexToSimilarStrgIndex().        */
         if( Dem_SimilarClassRefTable[ similarStrgIndex ].DemUseSimilarCondToConfirmed == (boolean)TRUE )        /* [GUD]similarStrgIndex */
         {
-            Dem_Similar_GetConditionStoredListToTmp( &oldSimilarConditionValue[0] );
+            Dem_Similar_GetConditionStoredListToTmp( &oldSimilarConditionValue[0] );/* [ARYCHK] DEM_SIMILARTYPE_MAX_NUM / 1 / 0 */
 
-            retJudgeSimilarCondition = Dem_JudgeSimilarCondition( &oldSimilarConditionValue[0] ,SimilarConditionPtr );
+            retJudgeSimilarCondition = Dem_JudgeSimilarCondition( &oldSimilarConditionValue[0] ,SimilarConditionPtr );/* [ARYCHK] DEM_SIMILARTYPE_MAX_NUM / 1 / 0 */
             if( retJudgeSimilarCondition == (boolean)TRUE )
             {
                 retVal = DEM_IRT_OK;
@@ -159,6 +163,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Similar_CheckConditionForFailed
 /*  v5-0-0         :2021-09-28                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-7-0         :2024-05-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

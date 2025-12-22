@@ -1,7 +1,7 @@
-/* Dem_UdmDTC_DTCStatus_Output_c(v5-5-0)                                    */
+/* Dem_UdmDTC_DTCStatus_Output_c(v5-8-0)                                    */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 
@@ -46,7 +46,7 @@
 #define DEM_START_SEC_CODE
 #include <Dem_MemMap.h>
 
-static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmDTC_CalculateDTCStatus
+static FUNC( void, DEM_CODE ) Dem_UdmDTC_CalculateDTCStatus
 (
     VAR( Dem_u16_UdmEventIndexType, AUTOMATIC ) UdmEventIndex,
     P2VAR( Dem_UdsStatusByteType, AUTOMATIC, AUTOMATIC ) DTCStatusPtr
@@ -124,21 +124,19 @@ FUNC( void, DEM_CODE ) Dem_UdmDTC_TranslateDTCStatusAfterUpdate
 /*               |                                                          */
 /*               | [in/out] DTCStatusPtr :                                  */
 /*               |                                                          */
-/* Return Value  | Dem_u08_InternalReturnType                               */
-/*               |        DEM_IRT_OK :                                      */
-/*               |        DEM_IRT_NG :                                      */
+/* Return Value  | void                                                     */
 /* Notes         |                                                          */
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
+/*   v5-7-0      | no branch changed.                                       */
 /****************************************************************************/
-FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmDTC_TranslateDTCStatusForOutput
+FUNC( void, DEM_CODE ) Dem_UdmDTC_TranslateDTCStatusForOutput
 (
-    VAR( Dem_u16_UdmEventIndexType, AUTOMATIC ) UdmEventIndex,
+    VAR( Dem_u16_UdmEventIndexType, AUTOMATIC ) UdmEventIndex,              /* [PRMCHK:CALLER] */
     P2VAR( Dem_UdsStatusByteType, AUTOMATIC, AUTOMATIC ) DTCStatusPtr
 )
 {
-    VAR( Dem_u08_InternalReturnType, AUTOMATIC ) retVal;
     VAR( Std_ReturnType, AUTOMATIC ) resultOfCallOut;
     VAR( Dem_EventIdType, AUTOMATIC ) eventId;
 
@@ -157,64 +155,43 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmDTC_TranslateDTCStatusForOut
     /*------------------------------------------*/
     (*DTCStatusPtr) = Dem_DTC_CnvDTCStatus_ForOutput( (*DTCStatusPtr) );
 
-    retVal = DEM_IRT_OK;
-
-    return retVal;
+    return ;
 }
 
 
 /****************************************************************************/
 /* Function Name | Dem_UdmDTC_GetDTCStatusOfEvent                           */
 /* Description   | Get status of DTC by EventIndex.                         */
-/* Preconditions | -                                                        */
+/* Preconditions | UdmEventIndex is guarded at caller.                      */
 /* Parameters    | [in] UdmEventIndex :                                     */
 /*               |        Identifier to specify the event record including  */
 /*               |         the DTC status.                                  */
 /*               | [out] DTCStatusPtr :                                     */
 /*               |        UDS DTC statu byte                                */
-/* Return Value  | Dem_u08_InternalReturnType                               */
-/*               |        DEM_IRT_OK : to get status of DTC was successful- */
-/*               |        .                                                 */
-/*               |        DEM_IRT_NG : to get status of DTC failed.         */
+/* Return Value  | void                                                     */
 /* Notes         | -                                                        */
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
+/*   v5-7-0      | branch changed.                                          */
 /****************************************************************************/
-FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmDTC_GetDTCStatusOfEvent
+FUNC( void, DEM_CODE ) Dem_UdmDTC_GetDTCStatusOfEvent
 (
-    VAR( Dem_u16_UdmEventIndexType, AUTOMATIC ) UdmEventIndex,
+    VAR( Dem_u16_UdmEventIndexType, AUTOMATIC ) UdmEventIndex,      /* [PRMCHK:CALLER] */
     P2VAR( Dem_UdsStatusByteType, AUTOMATIC, AUTOMATIC ) DTCStatusPtr
 )
 {
-    VAR( Dem_u08_InternalReturnType, AUTOMATIC ) retVal;
-    VAR( Dem_u08_InternalReturnType, AUTOMATIC ) resultCalc;
-
-    retVal = DEM_IRT_NG;
-
     /* Calculation of statusOfDTC */
-    resultCalc = Dem_UdmDTC_CalculateDTCStatus( UdmEventIndex, DTCStatusPtr );
+    Dem_UdmDTC_CalculateDTCStatus( UdmEventIndex, DTCStatusPtr );   /* [GUDCHK:CALLER]UdmEventIndex */
 
-    if( resultCalc == DEM_IRT_OK )
-    {
-        retVal = DEM_IRT_OK;
-    }
-    else
-    {
-        /*------------------------------------------*/
-        /*  convert to output statusOfDTC.          */
-        /*------------------------------------------*/
-        (*DTCStatusPtr) = Dem_DTC_CnvDTCStatus_ForOutput( DEM_DTCSTATUS_BYTE_DEFAULT );
-    }
-
-    return retVal;
+    return ;
 }
 
 
 /****************************************************************************/
 /* Function Name | Dem_UdmDTC_GetDTCStatus                                  */
 /* Description   | Gets the status of a DTC.                                */
-/* Preconditions | none                                                     */
+/* Preconditions | UdmEventIndex is guarded at caller.                      */
 /* Parameters    | [in] UdmEventIndex :                                     */
 /*               | [in] DTCStatusAvailabilityMask :                         */
 /*               | [out] DTCStatusPtr :                                     */
@@ -223,61 +200,42 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmDTC_GetDTCStatusOfEvent
 /*               |        unction call is other than DEM_STATUS_OK this pa- */
 /*               |        rameter does not contain valid data.0x00...0xFF - */
 /*               |        match DTCStatusMask as defined in ISO14229-1.     */
-/* Return Value  | Dem_u08_InternalReturnType                               */
-/*               |        DEM_IRT_OK : Status of DTC is OK                  */
-/*               |        DEM_IRT_NG : DTC failed                           */
-/*               |        DEM_IRT_WRONG_DTC : Wrong DTC                     */
-/*               |        DEM_IRT_WRONG_DTCORIGIN : Wrong DTCOrigin         */
+/* Return Value  | void                                                     */
 /* Notes         |                                                          */
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
+/*   v5-7-0      | branch changed.                                          */
+/*   v5-8-0      | no branch changed.                                       */
 /****************************************************************************/
-FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmDTC_GetDTCStatus
+FUNC( void, DEM_CODE ) Dem_UdmDTC_GetDTCStatus
 (
-    VAR( Dem_u16_UdmEventIndexType, AUTOMATIC ) UdmEventIndex,
+    VAR( Dem_u16_UdmEventIndexType, AUTOMATIC ) UdmEventIndex,                  /* [PRMCHK:CALLER] */
     VAR( Dem_UdsStatusByteType, AUTOMATIC ) DTCStatusAvailabilityMask,
     P2VAR( Dem_UdsStatusByteType, AUTOMATIC, AUTOMATIC ) DTCStatusPtr
 )
 {
-    VAR( Dem_u08_InternalReturnType, AUTOMATIC ) retVal;
-    VAR( Dem_u08_InternalReturnType, AUTOMATIC ) resultGetStatus;
     VAR( boolean, AUTOMATIC ) retUdmDTCClearTarget;
     VAR( Dem_UdsStatusByteType, AUTOMATIC ) availabilityMaskDTCStatus;
 
 
-    retUdmDTCClearTarget = Dem_UdmDTC_JudgeUdmDTCClearTarget( UdmEventIndex );
+    retUdmDTCClearTarget = Dem_UdmDTC_JudgeUdmDTCClearTargetOnClearProcessActive( UdmEventIndex );  /* [GUDCHK:CALLER]UdmEventIndex */
     if( retUdmDTCClearTarget == (boolean)FALSE )
     {
         /* Calculation of statusOfDTC */
-        resultGetStatus = Dem_UdmDTC_CalculateDTCStatus( UdmEventIndex, DTCStatusPtr );
+        Dem_UdmDTC_CalculateDTCStatus( UdmEventIndex, DTCStatusPtr );           /* [GUDCHK:CALLER]UdmEventIndex */
     }
     else
     {
         *DTCStatusPtr = DEM_DTCSTATUS_BYTE_DEFAULT;
-        (void)Dem_UdmDTC_TranslateDTCStatusForOutput( UdmEventIndex, DTCStatusPtr );    /* no return check required */
-        resultGetStatus = DEM_IRT_OK;
+        Dem_UdmDTC_TranslateDTCStatusForOutput( UdmEventIndex, DTCStatusPtr );  /* [GUDCHK:CALLER]UdmEventIndex */
     }
 
-    if( resultGetStatus == DEM_IRT_OK )
-    {
-        /* mask it with statusOfDTC in DemDtcStatusAvailabilityMask. */
-        availabilityMaskDTCStatus   =   DTCStatusAvailabilityMask;
-        (*DTCStatusPtr) &= availabilityMaskDTCStatus;
-        retVal = DEM_IRT_OK;
-    }
-    else
-    {
-        /* Calculation of statusOfDTC failed */
-        retVal = DEM_IRT_NG;
+    /* mask it with statusOfDTC in DemDtcStatusAvailabilityMask. */
+    availabilityMaskDTCStatus   =   DTCStatusAvailabilityMask;
+    (*DTCStatusPtr) &= availabilityMaskDTCStatus;
 
-        /*------------------------------------------*/
-        /*  convert to output statusOfDTC.          */
-        /*------------------------------------------*/
-        (*DTCStatusPtr) = Dem_DTC_CnvDTCStatus_ForOutput( DEM_DTCSTATUS_BYTE_DEFAULT );
-    }
-
-    return retVal;
+    return ;
 }
 
 
@@ -302,10 +260,14 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmDTC_GetDTCStatus
 /*               |        DEM_IRT_OK : get of DTC and status was successful */
 /*               |        DEM_IRT_NG : get of DTC and status failed         */
 /* Notes         |                                                          */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-7-0      | no object changed.                                       */
+/*   v5-8-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmDTC_GetDTCAndStatus
 (
-    VAR( Dem_u16_UdmEventIndexType, AUTOMATIC ) UdmEventIndex,
+    VAR( Dem_u16_UdmEventIndexType, AUTOMATIC ) UdmEventIndex,                  /* [PRMCHK:CALLER] */
     VAR( Dem_UdsStatusByteType, AUTOMATIC ) DTCStatusAvailabilityMask,
     P2VAR( Dem_u32_DTCValueType, AUTOMATIC, AUTOMATIC ) DTCValuePtr,
     P2VAR( Dem_UdsStatusByteType, AUTOMATIC, AUTOMATIC ) DTCStatusPtr
@@ -319,13 +281,13 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmDTC_GetDTCAndStatus
 
     retVal = DEM_IRT_NG;
 
-    retGetDTC = Dem_UdmDataAvl_GetDTCByUdmEventIndex( UdmEventIndex, DEM_DTC_FORMAT_UDS, DTCValuePtr );
+    retGetDTC = Dem_UdmDataAvl_GetDTCByUdmEventIndex( UdmEventIndex, DEM_DTC_FORMAT_UDS, DTCValuePtr ); /* [GUDCHK:CALLER]UdmEventIndex */
     if( retGetDTC == DEM_IRT_OK )
     {
-        retUdmDTCClerTarget = Dem_UdmDTC_JudgeUdmDTCClearTarget( UdmEventIndex );
+        retUdmDTCClerTarget = Dem_UdmDTC_JudgeUdmDTCClearTargetOnClearProcessActive( UdmEventIndex );
         if( retUdmDTCClerTarget == (boolean)FALSE )
         {
-            retGetDTCStatus = Dem_UdmData_GetDTCStatus( UdmEventIndex, DTCStatusPtr );
+            retGetDTCStatus = Dem_UdmData_GetDTCStatus( UdmEventIndex, DTCStatusPtr );  /* [GUDCHK:CALLER]UdmEventIndex */
         }
         else
         {
@@ -335,7 +297,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmDTC_GetDTCAndStatus
 
         if( retGetDTCStatus == DEM_IRT_OK )
         {
-            (void)Dem_UdmDTC_TranslateDTCStatusForOutput( UdmEventIndex, DTCStatusPtr ); /* no return check required */
+            Dem_UdmDTC_TranslateDTCStatusForOutput( UdmEventIndex, DTCStatusPtr );      /* [GUDCHK:CALLER]UdmEventIndex */
             dtcStatusAvailabilityMask   =   DTCStatusAvailabilityMask;
             (*DTCStatusPtr) &= dtcStatusAvailabilityMask;
             retVal = DEM_IRT_OK;
@@ -351,37 +313,30 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmDTC_GetDTCAndStatus
 /****************************************************************************/
 /* Function Name | Dem_UdmDTC_CalculateDTCStatus                            */
 /* Description   |                                                          */
-/* Preconditions |                                                          */
+/* Preconditions | UdmEventIndex is guarded at caller.                      */
 /* Parameters    | [in] UdmEventIndex :                                     */
 /*               |                                                          */
 /*               | [out] DTCStatusPtr :                                     */
 /*               |                                                          */
-/* Return Value  | Dem_u08_InternalReturnType                               */
-/*               |        DEM_IRT_OK :                                      */
-/*               |        DEM_IRT_NG :                                      */
+/* Return Value  | void                                                     */
 /* Notes         | -                                                        */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-7-0      | branch changed.                                          */
 /****************************************************************************/
-static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmDTC_CalculateDTCStatus
+static FUNC( void, DEM_CODE ) Dem_UdmDTC_CalculateDTCStatus
 (
-    VAR( Dem_u16_UdmEventIndexType, AUTOMATIC ) UdmEventIndex,
+    VAR( Dem_u16_UdmEventIndexType, AUTOMATIC ) UdmEventIndex,              /* [PRMCHK:CALLER] */
     P2VAR( Dem_UdsStatusByteType, AUTOMATIC, AUTOMATIC ) DTCStatusPtr
 )
 {
-    VAR( Dem_u08_InternalReturnType, AUTOMATIC ) retVal;
-    VAR( Dem_u08_InternalReturnType, AUTOMATIC ) resultGetStatus;
-
-    retVal = DEM_IRT_NG;
-
     /* Gets DTCStatus from event memory */
-    resultGetStatus = Dem_UdmData_GetDTCStatus( UdmEventIndex, DTCStatusPtr );
+    (void)Dem_UdmData_GetDTCStatus( UdmEventIndex, DTCStatusPtr );  /* no return check required */  /* [GUDCHK:CALLER]UdmEventIndex */
 
-    if( resultGetStatus == DEM_IRT_OK )
-    {
-        /* Translate the DTCStatus that got for the outside output. */
-        retVal = Dem_UdmDTC_TranslateDTCStatusForOutput( UdmEventIndex, DTCStatusPtr );
-    }
+    /* Translate the DTCStatus that got for the outside output. */
+    Dem_UdmDTC_TranslateDTCStatusForOutput( UdmEventIndex, DTCStatusPtr );                          /* [GUDCHK:CALLER]UdmEventIndex */
 
-    return retVal;
+    return ;
 }
 
 
@@ -397,6 +352,8 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmDTC_CalculateDTCStatu
 /*  v5-0-0         :2022-03-29                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-7-0         :2024-05-29                                              */
+/*  v5-8-0         :2024-10-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

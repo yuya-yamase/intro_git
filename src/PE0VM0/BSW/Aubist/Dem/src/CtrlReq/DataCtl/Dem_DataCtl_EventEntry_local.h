@@ -1,7 +1,7 @@
-/* Dem_DataCtl_EventEntry_local_h(v5-5-0)                                   */
+/* Dem_DataCtl_EventEntry_local_h(v5-6-0)                                   */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 /****************************************************************************/
 /* Object Name  | Dem/DataCtl_EventEntry_local/HEADER                       */
@@ -134,11 +134,8 @@ typedef struct {
 /*----------------------------------*/
 FUNC( void, DEM_CODE ) Dem_Data_InitTmpEventMemoryEntry
 ( void );
-
-#if ( DEM_EVENT_DISPLACEMENT_SUPPORT == STD_ON )
-FUNC( void, DEM_CODE ) Dem_Data_InitFaultRecordOverwrite
+FUNC( void, DEM_CODE ) Dem_Data_InitTmpMemoryWithoutRecord
 ( void );
-#endif  /* ( DEM_EVENT_DISPLACEMENT_SUPPORT == STD_ON ) */
 
 /*----------------------------------*/
 /*  Dem_DataCtl_EventEntry01Latch   */
@@ -244,6 +241,7 @@ extern VAR( Dem_Copy_FaultRecordOverwrittenType, DEM_VAR_NO_INIT ) Dem_Data_Copy
 /*  v5-0-0         :2021-12-24                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-6-0         :2024-01-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

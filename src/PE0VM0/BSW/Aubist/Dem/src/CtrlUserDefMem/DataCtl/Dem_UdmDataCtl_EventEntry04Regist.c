@@ -1,7 +1,7 @@
-/* Dem_UdmDataCtl_EventEntry04Regist_c(v5-5-0)                              */
+/* Dem_UdmDataCtl_EventEntry04Regist_c(v5-9-0)                              */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -95,6 +95,7 @@ static FUNC( void, DEM_CODE ) Dem_UdmData_StoreEventMemoryRecordFromTmp
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
+/*   v5-9-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_UdmData_StoreEventOverwitten
 (
@@ -109,7 +110,7 @@ FUNC( void, DEM_CODE ) Dem_UdmData_StoreEventOverwitten
     {
         (void)Dem_UdmEventMngC_GetRecord( UdmEventIndexOverwritten, &udmEventRecordOverwritten );   /* no return check required */
 
-        udmEventRecordOverwritten.UdmFaultIndex = DEM_FAULTINDEX_INITIAL;
+        udmEventRecordOverwritten.UdmFaultIndex = DEM_UDMFAULTINDEX_INITIAL;
         udmEventRecordOverwritten.StatusOfDTC = DTCStatusAtOverwritten;
 
 #ifndef JGXSTACK
@@ -370,6 +371,7 @@ static FUNC( void, DEM_CODE ) Dem_UdmData_StoreEventMemoryRecordFromTmp
 /*  v5-0-0         :2022-03-29                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-9-0         :2025-02-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

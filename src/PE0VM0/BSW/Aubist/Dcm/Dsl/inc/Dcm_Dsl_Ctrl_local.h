@@ -1,7 +1,7 @@
-/* Dcm_Dsl_Ctrl_local_h(v5-5-0)                                             */
+/* Dcm_Dsl_Ctrl_local_h(v5-10-0)                                            */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 /****************************************************************************/
 /* Object Name | Dcm/Dsl_Ctrl_local/HEADER                                  */
@@ -77,6 +77,11 @@ FUNC( void, DCM_CODE ) Dcm_Dsl_Ctrl_RedoOfReception
 (
     const uint16 u2PduMapIndex,
     const uint8 u1PrevReqKind
+);
+
+FUNC( void, DCM_CODE ) Dcm_Dsl_Ctrl_NotifyPseudoKALasNoKAL
+(
+    const uint16 u2PduMapIndex
 );
 
 FUNC( void, DCM_CODE ) Dcm_Dsl_Ctrl_Accept
@@ -585,6 +590,7 @@ FUNC( void, DCM_CODE ) Dcm_Dsl_Ctrl_ProvideDiagComData
 /*  v5-0-0         :2021-12-24                                              */
 /*  v5-3-0         :2022-08-30                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-10-0        :2025-08-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

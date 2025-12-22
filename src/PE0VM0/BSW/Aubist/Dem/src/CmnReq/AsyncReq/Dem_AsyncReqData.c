@@ -1,7 +1,7 @@
-/* Dem_AsyncReqData_c(v5-5-0)                                               */
+/* Dem_AsyncReqData_c(v5-10-0)                                              */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -203,6 +203,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_AsyncReqData_RegistQue
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_AsyncReqData_SetQueData
 (
@@ -227,7 +228,7 @@ FUNC( void, DEM_CODE ) Dem_AsyncReqData_SetQueData
     for( dataCnt = (Dem_u08_AsyncDataQueItemSizeType)0U; dataCnt < itemSize; dataCnt++ )                                    /* [GUD:for]dataCnt */
     {
         dataQueIndex = (Dem_u16_AsyncDataQueBuffIndexType)( dataStartIndex + (Dem_u16_AsyncDataQueBuffIndexType)dataCnt );  /* [GUD:for]dataQueIndex */
-        queBufferPtr[ dataQueIndex ] = DataBufferPtr[ dataCnt ];                                                            /* [GUD]dataQueIndex *//* [GUD]dataCnt */
+        queBufferPtr[ dataQueIndex ] = DataBufferPtr[ dataCnt ];                                                            /* [GUD]dataQueIndex *//* [GUD]dataCnt *//* [ARYCHK] itemSize+dataStartIndex / 1 / dataQueIndex *//* [ARYCHK] itemSize / 1 / dataCnt */
     }
 
     return ;
@@ -252,6 +253,7 @@ FUNC( void, DEM_CODE ) Dem_AsyncReqData_SetQueData
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_AsyncReqData_ReleaseQue
 (
@@ -288,7 +290,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_AsyncReqData_ReleaseQue
         for( dataCnt = (Dem_u08_AsyncDataQueItemSizeType)0U; dataCnt < itemSize; dataCnt++ )                                        /* [GUD:for]dataCnt */
         {
             dataQueIndex = (Dem_u16_AsyncDataQueBuffIndexType)( dataStartIndex + (Dem_u16_AsyncDataQueBuffIndexType)dataCnt );      /* [GUD:for]dataQueIndex */
-            DataBufferPtr[ dataCnt ] = queBufferPtr[ dataQueIndex ];                                                                /* [GUD]dataQueIndex *//* [GUD]dataCnt */
+            DataBufferPtr[ dataCnt ] = queBufferPtr[ dataQueIndex ];                                                                /* [GUD]dataQueIndex *//* [GUD]dataCnt *//* [ARYCHK] itemSize / 1 / dataCnt *//* [ARYCHK] itemSize+dataStartIndex / 1 / dataQueIndex */
         }
 
         /* Release the data queue. */
@@ -322,6 +324,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_AsyncReqData_ReleaseQue
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-10-0     | branch changed.                                          */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_AsyncReqData_ReleaseQueWithoutData
 (
@@ -340,15 +343,18 @@ FUNC( void, DEM_CODE ) Dem_AsyncReqData_ReleaseQueWithoutData
         tmpEmptyPos         =   *( Dem_ExecAsyncDataQueTable[ AsyncDataQueIndex ].EmptyPosVPtr );                       /* [GUDCHK:CALLER]AsyncDataQueIndex */
         tmpStoredItemNum    =   *( Dem_ExecAsyncDataQueTable[ AsyncDataQueIndex ].StoredItemNumVPtr );                  /* [GUDCHK:CALLER]AsyncDataQueIndex */
 
-        /* Release the data queue. */
-        if( tmpStoredItemNum == itemNum )
+        if ( tmpStoredItemNum > DEM_ASYNCDATAQUE_INITIAL_DATA_STOREDITEMNUM )
         {
-            tmpEmptyPos = QueIndex;
-        }
-        tmpStoredItemNum    =   tmpStoredItemNum - (Dem_u08_AsyncDataQueIndexType)1U;
+            /* Release the data queue. */
+            if( tmpStoredItemNum == itemNum )
+            {
+                tmpEmptyPos = QueIndex;
+            }
+            tmpStoredItemNum    =   tmpStoredItemNum - (Dem_u08_AsyncDataQueIndexType)1U;
 
-        *( Dem_ExecAsyncDataQueTable[ AsyncDataQueIndex ].EmptyPosVPtr )       =   tmpEmptyPos;                         /* [GUDCHK:CALLER]AsyncDataQueIndex */
-        *( Dem_ExecAsyncDataQueTable[ AsyncDataQueIndex ].StoredItemNumVPtr )  =   tmpStoredItemNum;                    /* [GUDCHK:CALLER]AsyncDataQueIndex */
+            *( Dem_ExecAsyncDataQueTable[ AsyncDataQueIndex ].EmptyPosVPtr )       =   tmpEmptyPos;                         /* [GUDCHK:CALLER]AsyncDataQueIndex */
+            *( Dem_ExecAsyncDataQueTable[ AsyncDataQueIndex ].StoredItemNumVPtr )  =   tmpStoredItemNum;                    /* [GUDCHK:CALLER]AsyncDataQueIndex */
+        }
     }
 
     return ;
@@ -405,6 +411,7 @@ FUNC( void, DEM_CODE ) Dem_AsyncReqData_ReleaseQueIndex
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_AsyncReqData_GetEventStatus
 (
@@ -422,7 +429,7 @@ FUNC( void, DEM_CODE ) Dem_AsyncReqData_GetEventStatus
 
     /* Get the first data of the data queue as the event status. */
     /* The event status stored position is defined in the macro DEM_ASYNCDATAQUE_EVENTSTATUS_POS. */
-    *EventStatusPtr = Dem_ExecAsyncDataQueTable[ AsyncDataQueIndex ].BuffPtr[ dataStartIndex ];                         /* [GUDCHK:CALLER]AsyncDataQueIndex *//* [GUDCHK:CALLER]dataStartIndex */
+    *EventStatusPtr = Dem_ExecAsyncDataQueTable[ AsyncDataQueIndex ].BuffPtr[ dataStartIndex ];                         /* [GUDCHK:CALLER]AsyncDataQueIndex *//* [GUDCHK:CALLER]dataStartIndex *//* [ARYCHK] itemSize+dataStartIndex / 1 / dataStartIndex */
 
     return ;
 }
@@ -440,6 +447,8 @@ FUNC( void, DEM_CODE ) Dem_AsyncReqData_GetEventStatus
 /*  v5-0-0         :2021-12-24                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-7-0         :2024-05-29                                              */
+/*  v5-10-0        :2025-06-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

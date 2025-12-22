@@ -1,7 +1,7 @@
-/* Dem_Types_h(v5-5-0)                                                      */
+/* Dem_Types_h(v5-8-0)                                                      */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 /****************************************************************************/
 /* Object Name  | Dem/Types/HEADER                                          */
@@ -66,6 +66,7 @@ typedef uint8        Dem_u08_EDRRecordNumberType;           /*  ExtendedData Rec
 #define DEM_EDR_RECNUM_00   ((Dem_u08_EDRRecordNumberType)0x00U)        /*  DEM_GETSIZEBYDTC_WRONG_RECNUM                               */
 #define DEM_EDR_RECNUM_01   ((Dem_u08_EDRRecordNumberType)0x01U)        /*  DEM_GETSIZEBYDTC_OK :   single target : range minimum       */
 #define DEM_EDR_RECNUM_90   ((Dem_u08_EDRRecordNumberType)0x90U)        /*  DEM_GETSIZEBYDTC_OK :   single target : range minimum       */
+#define DEM_EDR_RECNUM_92   ((Dem_u08_EDRRecordNumberType)0x92U)        /*  DTR RecordNumber    :   single target : DTR RecordNumber    */
 #define DEM_EDR_RECNUM_9F   ((Dem_u08_EDRRecordNumberType)0x9FU)        /*  DEM_GETSIZEBYDTC_OK :   single target : range maximum       */
 #define DEM_EDR_RECNUM_EF   ((Dem_u08_EDRRecordNumberType)0xEFU)        /*  DEM_GETSIZEBYDTC_OK :   single target : range minimum       */
 #define DEM_EDR_RECNUM_FE   ((Dem_u08_EDRRecordNumberType)0xFEU)        /*  OBD RecordNumber    :   multiple target : OBD RecordNumber  */
@@ -217,6 +218,7 @@ typedef uint8       Dem_u08_ReadinessCondType;           /*  Readiness Data type
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-8-0         :2024-10-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

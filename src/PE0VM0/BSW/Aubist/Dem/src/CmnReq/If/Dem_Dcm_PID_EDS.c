@@ -1,11 +1,11 @@
-/* Dem_Dcm_c(v5-5-0)                                                        */
+/* Dem_Dcm_PID_EDS_c(v5-8-0)                                                */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
-/* Object Name  | Dem/Dcm/CODE                                              */
+/* Object Name  | Dem/Dcm_PID_EDS/CODE                                      */
 /*--------------------------------------------------------------------------*/
 /* Notes        |                                                           */
 /****************************************************************************/
@@ -82,6 +82,9 @@
 /*               |        DEM_E_NO_DTC_AVAILABLE : Initialization non-compl */
 /*               |                                 etion.                   */
 /* Notes         | -                                                        */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-8-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( Std_ReturnType, DEM_CODE ) Dem_DcmGetDTCOfOBDFreezeFrame
 (
@@ -102,7 +105,7 @@ FUNC( Std_ReturnType, DEM_CODE ) Dem_DcmGetDTCOfOBDFreezeFrame
     else
     {
         dtcValue = (Dem_u32_DTCValueType)0U;  /*  out paramter.   */
-        internalRetVal = Dem_Control_GetDTCOfOBDFreezeFrame( FrameNumber, &dtcValue );
+        internalRetVal = Dem_Control_GetDTCOfOBDFreezeFrame( DEM_CALLER_DCM, FrameNumber, &dtcValue );
         *DTC = dtcValue;
 
         /* Convert return value */
@@ -288,6 +291,7 @@ FUNC( Std_ReturnType, DEM_CODE ) Dem_DcmReadDataOfOBDFreezeFrame
 /* History                                                                  */
 /*  Version        :Date                                                    */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-8-0         :2024-10-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

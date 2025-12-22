@@ -1,7 +1,7 @@
-/* Dem_Misfire_FilRecord_c(v5-5-0)                                          */
+/* Dem_Misfire_FilRecord_c(v5-9-0)                                          */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -38,6 +38,16 @@
 #define DEM_START_SEC_CODE
 #include <Dem_MemMap.h>
 
+#if ( DEM_COMBINEDEVENT_ONRETRIEVAL_SUPPORT == STD_OFF )
+#if ( DEM_OBDFFD_SUPPORT == STD_ON )
+static FUNC( boolean, DEM_CODE ) Dem_Misfire_GetOutputFilteredObdFFDCylinderNumber
+(
+    VAR( Dem_MisfireCylinderType, AUTOMATIC ) MisfireObdFFDCyl,
+    P2VAR( Dem_MisfireCylinderNumberType, AUTOMATIC, AUTOMATIC ) MisfireCylinderNumberOutputPtr
+);
+
+#endif  /* ( DEM_OBDFFD_SUPPORT == STD_ON )                     */
+#endif  /* ( DEM_COMBINEDEVENT_ONRETRIEVAL_SUPPORT == STD_ON )  */
 
 #define DEM_STOP_SEC_CODE
 #include <Dem_MemMap.h>
@@ -48,7 +58,11 @@
 #define DEM_START_SEC_VAR_NO_INIT
 #include <Dem_MemMap.h>
 
+#if ( DEM_COMBINEDEVENT_ONRETRIEVAL_SUPPORT == STD_OFF )
 #if ( DEM_OBDFFD_SUPPORT == STD_ON )
+#if ( DEM_MISFIRE_OUTPUT_UDSOBDFFD_MULTIPLE_FAILED_CYL_SUPPORT == STD_ON )
+static VAR( Dem_MisfireCylinderNumberType, DEM_VAR_NO_INIT ) Dem_MisfireFilRecOutputOBDFFDCylNum;
+#endif  /* ( DEM_MISFIRE_OUTPUT_UDSOBDFFD_MULTIPLE_FAILED_CYL_SUPPORT == STD_ON )   */
 static VAR( Dem_MisfireCylinderType, DEM_VAR_NO_INIT )  Dem_MisfireFilRecOBDFFDCyl[DEM_MISFIRE_OBD_FFDCYL_INDEX_NUM];
 #endif  /* ( DEM_OBDFFD_SUPPORT == STD_ON )             */
 static VAR( Dem_MisfireCylinderType, DEM_VAR_NO_INIT )  Dem_MisfireFilRecFFDCyl[DEM_MISFIRE_FFDCYL_INDEX_NUM];
@@ -57,6 +71,8 @@ static VAR( Dem_MisfireCylinderType, DEM_VAR_NO_INIT )  Dem_MisfireFilRecFFDCyl[
 static VAR( Dem_u16_MisfireStrgIndexType, DEM_VAR_NO_INIT )  Dem_MisfireFilRecMisfireStrgIndexOfOBDFFD[DEM_MISFIRE_OBD_FFDCYL_INDEX_NUM];
 #endif  /*   ( DEM_OBDFFD_SUPPORT == STD_ON )       */
 static VAR( Dem_u16_MisfireStrgIndexType, DEM_VAR_NO_INIT )  Dem_MisfireFilRecMisfireStrgIndexOfFFD[DEM_MISFIRE_FFDCYL_INDEX_NUM];
+#endif  /* ( DEM_COMBINEDEVENT_ONRETRIEVAL_SUPPORT == STD_OFF ) */
+
 
 #define DEM_STOP_SEC_VAR_NO_INIT
 #include <Dem_MemMap.h>
@@ -69,6 +85,27 @@ static VAR( Dem_u16_MisfireStrgIndexType, DEM_VAR_NO_INIT )  Dem_MisfireFilRecMi
 #define DEM_START_SEC_CODE
 #include <Dem_MemMap.h>
 
+#if ( DEM_COMBINEDEVENT_ONRETRIEVAL_SUPPORT == STD_ON )
+/****************************************************************************/
+/* Function Name | Dem_Misfire_PrepareFilteredRecord                        */
+/* Description   | Prepare for the misfire freeze frame record filter.      */
+/* Preconditions | none                                                     */
+/* Parameters    | none                                                     */
+/* Return Value  | void                                                     */
+/* Notes         |                                                          */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-6-0      | new coreated.                                            */
+/****************************************************************************/
+FUNC( void, DEM_CODE ) Dem_Misfire_PrepareFilteredRecord
+( void )
+{
+    /*  no process.     */
+    return ;
+}
+#endif  /* ( DEM_COMBINEDEVENT_ONRETRIEVAL_SUPPORT == STD_ON )  */
+
+#if ( DEM_COMBINEDEVENT_ONRETRIEVAL_SUPPORT == STD_OFF )
 /****************************************************************************/
 /* Function Name | Dem_Misfire_PrepareFilteredRecord                        */
 /* Description   | Prepare for the misfire freeze frame record filter.      */
@@ -79,6 +116,7 @@ static VAR( Dem_u16_MisfireStrgIndexType, DEM_VAR_NO_INIT )  Dem_MisfireFilRecMi
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
+/*   v5-9-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_Misfire_PrepareFilteredRecord
 ( void )
@@ -101,7 +139,7 @@ FUNC( void, DEM_CODE ) Dem_Misfire_PrepareFilteredRecord
         misfireIndex = Dem_Misfire_GetMisfireStrgIndexOfStoredObdFFD( misfireObdFFDCylIndex );                                                          /* [GUD]misfireObdFFDCylIndex */
         if( misfireIndex < misfireEventNum )                                                                                                            /* [GUD:if]misfireIndex */
         {
-            Dem_MisfireFilRecOBDFFDCyl[ misfireObdFFDCylIndex ] = Dem_MisfireMng_GetObdFFDCyl( misfireIndex, misfireObdFFDCylIndex );                   /* [GUD]misfireObdFFDCylIndex */
+            Dem_MisfireFilRecOBDFFDCyl[ misfireObdFFDCylIndex ] = Dem_Misfire_GetOutputObdFFDCyl( misfireIndex, misfireObdFFDCylIndex );                /* [GUD]misfireObdFFDCylIndex */
         }
         else
         {
@@ -109,6 +147,10 @@ FUNC( void, DEM_CODE ) Dem_Misfire_PrepareFilteredRecord
         }
         Dem_MisfireFilRecMisfireStrgIndexOfOBDFFD[ misfireObdFFDCylIndex ] = misfireIndex;                                                              /* [GUD]misfireObdFFDCylIndex */
     }
+
+#if ( DEM_MISFIRE_OUTPUT_UDSOBDFFD_MULTIPLE_FAILED_CYL_SUPPORT == STD_ON )  /*  [FuncSw]    */
+    Dem_MisfireFilRecOutputOBDFFDCylNum = DEM_MISFIRE_CYL_NUM_RM;
+#endif  /* ( DEM_MISFIRE_OUTPUT_UDSOBDFFD_MULTIPLE_FAILED_CYL_SUPPORT == STD_ON )   */
 
 #endif  /* ( DEM_OBDFFD_SUPPORT == STD_ON )             */
 
@@ -147,6 +189,7 @@ FUNC( void, DEM_CODE ) Dem_Misfire_PrepareFilteredRecord
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | refactor function.                                       */
+/*   v5-9-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( boolean, DEM_CODE ) Dem_Misfire_CheckOutputFilteredObdFFD
 (
@@ -182,9 +225,7 @@ FUNC( boolean, DEM_CODE ) Dem_Misfire_CheckOutputFilteredObdFFD
             {
                 misfireObdFFDCyl =  Dem_MisfireFilRecOBDFFDCyl[ misfireObdFFDCylIndex ];                            /* [GUD]misfireObdFFDCylIndex */
 
-                *MisfireCylinderNumberOutputPtr =   Dem_CfgInfoPm_GetMisfireCylinderNumberFromCylBit( misfireObdFFDCyl );
-
-                retVal = (boolean)TRUE;
+                retVal = Dem_Misfire_GetOutputFilteredObdFFDCylinderNumber( misfireObdFFDCyl, MisfireCylinderNumberOutputPtr );
             }
         }
     }
@@ -255,6 +296,102 @@ FUNC( boolean, DEM_CODE ) Dem_Misfire_CheckOutputFilteredFFD
     return retVal;
 }
 
+
+#if ( DEM_OBDFFD_SUPPORT == STD_ON )
+#if ( DEM_MISFIRE_OUTPUT_UDSOBDFFD_MULTIPLE_FAILED_CYL_SUPPORT == STD_OFF )
+/****************************************************************************/
+/* Function Name | Dem_Misfire_GetOutputMisfireCylinderNumber               */
+/* Description   | Get Output MisfireCylinderNumber.                        */
+/* Preconditions |                                                          */
+/* Parameters    | [in] MisfireObdFFDCyl :                                  */
+/*               |        OBD FFD Cylinder Index.                           */
+/* Parameters    | [in] MisfireCylinderNumberOutputPtr :                    */
+/*               |        Output MisfireCylinderNumber.                     */
+/* Return Value  | boolean                                                  */
+/*               |          TRUE  : Output.                                 */
+/*               |          FALSE : No Output cylinder number.              */
+/* Notes         | -                                                        */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-9-0      | new created.                                             */
+/****************************************************************************/
+static FUNC( boolean, DEM_CODE ) Dem_Misfire_GetOutputFilteredObdFFDCylinderNumber
+(
+    VAR( Dem_MisfireCylinderType, AUTOMATIC ) MisfireObdFFDCyl,
+    P2VAR( Dem_MisfireCylinderNumberType, AUTOMATIC, AUTOMATIC ) MisfireCylinderNumberOutputPtr
+)
+{
+    *MisfireCylinderNumberOutputPtr =   Dem_CfgInfoPm_GetMisfireCylinderNumberFromCylBit( MisfireObdFFDCyl );
+
+    return (boolean)TRUE;
+}
+#endif  /* ( DEM_MISFIRE_OUTPUT_UDSOBDFFD_MULTIPLE_FAILED_CYL_SUPPORT == STD_OFF )  */
+
+#if ( DEM_MISFIRE_OUTPUT_UDSOBDFFD_MULTIPLE_FAILED_CYL_SUPPORT == STD_ON )
+
+/****************************************************************************/
+/* Function Name | Dem_Misfire_GetOutputMisfireCylinderNumber               */
+/* Description   | Get Output MisfireCylinderNumber.                        */
+/* Preconditions |                                                          */
+/* Parameters    | [in] MisfireObdFFDCyl :                                  */
+/*               |        OBD FFD Cylinder Index.                           */
+/* Parameters    | [in] MisfireCylinderNumberOutputPtr :                    */
+/*               |        Output MisfireCylinderNumber.                     */
+/* Return Value  | boolean                                                  */
+/*               |          TRUE  : Output.                                 */
+/*               |          FALSE : No Output cylinder number.              */
+/* Notes         | -                                                        */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-9-0      | new created.                                             */
+/****************************************************************************/
+static FUNC( boolean, DEM_CODE ) Dem_Misfire_GetOutputFilteredObdFFDCylinderNumber
+(
+    VAR( Dem_MisfireCylinderType, AUTOMATIC ) MisfireObdFFDCyl,
+    P2VAR( Dem_MisfireCylinderNumberType, AUTOMATIC, AUTOMATIC ) MisfireCylinderNumberOutputPtr
+)
+{
+    VAR( Dem_MisfireCylinderNumberType, AUTOMATIC ) misfireCylinderCnt;
+    VAR( Dem_MisfireCylinderNumberType, AUTOMATIC ) misfireCylinderNum;
+    VAR( Dem_MisfireCylinderNumberType, AUTOMATIC ) misfireCylinderStart;
+    VAR( Dem_MisfireCylinderType, AUTOMATIC ) misfireCylinderBitCheck;
+    VAR( boolean, AUTOMATIC ) retVal;
+
+    retVal      =   (boolean)FALSE;
+
+    misfireCylinderNum      = Dem_MisfireCylinderNum;
+    misfireCylinderStart    = Dem_MisfireFilRecOutputOBDFFDCylNum;
+
+    for( misfireCylinderCnt = misfireCylinderStart; misfireCylinderCnt < misfireCylinderNum; misfireCylinderCnt++ )
+    {
+        misfireCylinderBitCheck =   MisfireObdFFDCyl & (Dem_MisfireCylinderType)( DEM_MISFIRE_CHECK_CYLINDER_BIT << misfireCylinderCnt );
+        if( misfireCylinderBitCheck != DEM_MISFIRE_CYLINDER_NON )
+        {
+            /*  get output cylinder number.             */
+            *MisfireCylinderNumberOutputPtr     = misfireCylinderCnt;
+
+            /*  latch next search cylinder number.      */
+            Dem_MisfireFilRecOutputOBDFFDCylNum = misfireCylinderCnt + (Dem_MisfireCylinderNumberType)1U;   /* no wrap around */
+
+            /*  output cylinder number.                 */
+            retVal = (boolean)TRUE;
+            break;
+        }
+    }
+    if ( retVal == (boolean)FALSE )
+    {
+        /*  reset latched cylinder number.      */
+        Dem_MisfireFilRecOutputOBDFFDCylNum = DEM_MISFIRE_CYL_NUM_RM;
+    }
+
+    return retVal;
+}
+
+#endif  /* ( DEM_MISFIRE_OUTPUT_UDSOBDFFD_MULTIPLE_FAILED_CYL_SUPPORT == STD_ON ) */
+#endif  /* ( DEM_OBDFFD_SUPPORT == STD_ON ) */
+
+#endif  /* ( DEM_COMBINEDEVENT_ONRETRIEVAL_SUPPORT == STD_OFF ) */
+
 #define DEM_STOP_SEC_CODE
 #include <Dem_MemMap.h>
 
@@ -269,6 +406,8 @@ FUNC( boolean, DEM_CODE ) Dem_Misfire_CheckOutputFilteredFFD
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-6-0         :2024-01-29                                              */
+/*  v5-9-0         :2025-02-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

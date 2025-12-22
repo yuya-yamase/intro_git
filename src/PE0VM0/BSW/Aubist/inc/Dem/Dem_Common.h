@@ -1,7 +1,7 @@
-/* Dem_Common_h(v5-5-0)                                                     */
+/* Dem_Common_h(v5-10-0)                                                    */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -27,18 +27,25 @@
 /* AUTOSAR Conformity                                                       */
 /****************************************************************************/
 /*  typedef uint8       Dem_StorageTriggerType;  */
-#define DEM_TRIGGER_ON_CONFIRMED                        ((Dem_u08_StorageTriggerType)0x00U)     /*  used in Configurator        */
-#define DEM_TRIGGER_ON_FDC_THRESHOLD                    ((Dem_u08_StorageTriggerType)0x01U)     /*  used in Configurator        */
-#define DEM_TRIGGER_ON_PENDING                          ((Dem_u08_StorageTriggerType)0x02U)     /*  used in Configurator        */
-#define DEM_TRIGGER_ON_TEST_FAILED_THIS_OPERATION_CYCLE ((Dem_u08_StorageTriggerType)0x04U)     /*  used in Configurator        */
-#define DEM_TRIGGER_ON_NONE                             ((Dem_u08_StorageTriggerType)0xFFU)
+#define DEM_TRIGGER_ON_NONE                             ((Dem_u08_StorageTriggerType)0x00U)
+#define DEM_TRIGGER_ON_CONFIRMED                        ((Dem_u08_StorageTriggerType)0x01U)     /*  used in Configurator        */
+#define DEM_TRIGGER_ON_FDC_THRESHOLD                    ((Dem_u08_StorageTriggerType)0x02U)     /*  used in Configurator        */
+#define DEM_TRIGGER_ON_PENDING                          ((Dem_u08_StorageTriggerType)0x04U)     /*  used in Configurator        */
+#define DEM_TRIGGER_ON_TEST_FAILED_THIS_OPERATION_CYCLE ((Dem_u08_StorageTriggerType)0x08U)     /*  used in Configurator        */
+#define DEM_TRIGGER_ON_TRIGGERTYPE_MASK                 ((Dem_u08_StorageTriggerType)0x0FU)
+
+#define DEM_TRIGGER_ON_UPD_TEST_FAILED                  ((Dem_u08_StorageTriggerType)0x80U)
+#define DEM_TRIGGER_ON_UPDATETYPE_MASK                  ((Dem_u08_StorageTriggerType)0xC0U)
+
 
 /* typedef uint8        Dem valid trigger definition */
 #define DEM_VALID_TRIGGER_NONE                  ((Dem_u08_FFValidTriggerType)0x00U)
 #define DEM_VALID_TRIGGER_CONFIRMED             ((Dem_u08_FFValidTriggerType)0x01U)
 #define DEM_VALID_TRIGGER_FDC_THRESHOLD         ((Dem_u08_FFValidTriggerType)0x02U)
-#define DEM_VALID_TRIGGER_PENDING               ((Dem_u08_FFValidTriggerType)0x10U)
-#define DEM_VALID_TRIGGER_TFTOC                 ((Dem_u08_FFValidTriggerType)0x40U)
+#define DEM_VALID_TRIGGER_PENDING               ((Dem_u08_FFValidTriggerType)0x04U)
+#define DEM_VALID_TRIGGER_TFTOC                 ((Dem_u08_FFValidTriggerType)0x08U)
+#define DEM_VALID_TRIGGER_TEST_FAILED           ((Dem_u08_FFValidTriggerType)0x40U)
+#define DEM_VALID_TRIGGER_TEST_FAILED_AT_CDTC   ((Dem_u08_FFValidTriggerType)0x80U)
 
 /* typedef uint8        request caller type.         */
 #define DEM_CALLER_NONE                     ((Dem_u08_RequestCallerType)0x00U)
@@ -98,6 +105,10 @@
 #define DEM_MF_JUDGE_FFD_CYL_ACCUMULATED        ((Dem_u08_MisfJudgeFFCylinderType)0x00U)    /*  used in Configurator        */
 #define DEM_MF_JUDGE_FFD_CYL_REQUESTED          ((Dem_u08_MisfJudgeFFCylinderType)0x01U)    /*  used in Configurator        */
 
+/* uint8       DemMisfireFilteredEDRN92 definition */
+#define DEM_MF_RM_CYL_NOT_OUTPUT                ((Dem_u08_MisfireFilteredEDRType)0x00U)     /*  used in Configurator        */
+#define DEM_MF_RM_CYL_OUTPUT                    ((Dem_u08_MisfireFilteredEDRType)0x01U)     /*  used in Configurator        */
+
 /* uint8       Dem_u08_EventPriorityType definition */
 #define DEM_PRIORITY_INITIAL                    ((Dem_u08_EventPriorityType)0U)
 #define DEM_PRIORITY_OBD_OBDFFD                 ((Dem_u08_EventPriorityType)10U)
@@ -142,17 +153,24 @@
 #define DEM_OBD_RDY_BOOSTPR                ((Dem_u08_ReadinessGroupIdType)0x12U)           /*  used in Configurator        */
 #define DEM_OBD_RDY_NOXADSORB              ((Dem_u08_ReadinessGroupIdType)0x13U)           /*  used in Configurator        */
 #define DEM_OBD_RDY_PMFLT                  ((Dem_u08_ReadinessGroupIdType)0x14U)           /*  used in Configurator        */
-/* only use calcurate Readiness.        */
+
+/*  0x15-0xFF : Reserved                        */
+/*  - definition value for configration.        */
+/* only use calculate Readiness.        */
 #define DEM_OBD_RDY_O2SENS                 ((Dem_u08_ReadinessGroupIdType)0x21U)           /*  used in Configurator        */
 #define DEM_OBD_RDY_O2SENSHT               ((Dem_u08_ReadinessGroupIdType)0x22U)           /*  used in Configurator        */
-/* only use calcurate Readiness(mix).   */
+/* only use calculate Readiness(mix).   */
 #define DEM_OBD_RDY_EGR_VVT                ((Dem_u08_ReadinessGroupIdType)0x41U)           /*  used in Configurator        */
 #define DEM_OBD_RDY_NOXCAT_NADS            ((Dem_u08_ReadinessGroupIdType)0x42U)           /*  used in Configurator        */
+
+/* invalid ID value.                    */
+#define DEM_OBD_RDY_INVALID                ((Dem_u08_ReadinessGroupIdType)0xFFU)           /*  used in Configurator        */
 
 /* no use ReadinessGroupId.             */
 /*       DEM_OBD_RDY_AC                 */
 /*       DEM_OBD_RDY_FLSYS_NONCONT : setting to DEM_OBD_RDY_FLSYS table.  */
 
+/* DTCOrigin : memory identifier mask.  */
 #define DEM_DTC_ORIGIN_MEMORYIDENTIFIER_MASK        ((Dem_DTCOriginType)0x00FFU)
 
 /*  for DemStatusBitHandlingTestFailedSinceLastClear / DemResetConfirmedBitOnOverflow       */
@@ -186,7 +204,7 @@ typedef uint8       Dem_u08_TSFFStorePatternType;                               
 #define DEM_TSFFD_STORE_PATTERN2                ((Dem_u08_TSFFStorePatternType)0x11U)               /*  used in Configurator        */
 
 /****************************************************************************/
-/* AUBASS definition                                                        */
+/* AUBIST definition                                                        */
 /****************************************************************************/
 /*  typedef uint16     Dem_EventIdType[SWS_Dem_00925] range */
 #define DEM_EVENT_ID_MIN                        ((Dem_EventIdType)1U)
@@ -241,6 +259,7 @@ typedef uint8       Dem_u08_TSFFStorePatternType;                               
 #define DEM_DTCSTATUSEX2_STATUS_AGING_HISTORY                   ((Dem_u08_DTCStatusEx2Type)0x04U)           /*  Aging history                    */
 #define DEM_DTCSTATUSEX2_STATUS_INDICATOR_AT_CYCLESTART         ((Dem_u08_DTCStatusEx2Type)0x08U)           /*  ActiveFault at cycle start       */
 #define DEM_DTCSTATUSEX2_STATUS_CONTINUOUS_MI_HISTORY           ((Dem_u08_DTCStatusEx2Type)0x10U)           /*  Continuous-MI History            */
+#define DEM_DTCSTATUSEX2_STATUS_MISF_PENDINGOFEMISSION          ((Dem_u08_DTCStatusEx2Type)0x20U)           /*  Misfire PendingOfEmission        */
 #define DEM_DTCSTATUSEX2_STATUS_EVENTDISABLE                    ((Dem_u08_DTCStatusEx2Type)0x80U)           /*  SetEventDisable                         */
 #define DEM_DTCSTATUSEX2_BYTE_DEFAULT                           ( DEM_DTCSTATUSEX2_STATUS_TNCTOC_IN_PFCCLEARCONDCYCLE )     /*  True : bit6 in PFCClearCondition cycle  */
 #define DEM_DTCSTATUSEX2_BYTE_ALL_OFF                           ((Dem_u08_DTCStatusEx2Type)0x00U)
@@ -381,14 +400,14 @@ typedef P2FUNC( Std_ReturnType, DEM_CODE, DemCallbackInitMForEFncPTR )
 #if ( DEM_READFUNC_MONITORDATA_SUPPORT == STD_ON )
 typedef P2FUNC( Std_ReturnType, DEM_CODE, DemDataElementReadFncPTR )
 (
-    P2VAR( uint8, AUTOMATIC, DEM_VAR_NO_INIT ) Buffer,
+    P2VAR( uint8, AUTOMATIC, DEM_VAR_SAVED_ZONE ) Buffer,
     VAR( Dem_MonitorDataType, AUTOMATIC ) monitorData0
 );
 #endif /* (DEM_READFUNC_MONITORDATA_SUPPORT == STD_ON) */
 #if ( DEM_READFUNC_MONITORDATA_SUPPORT == STD_OFF )
 typedef P2FUNC( Std_ReturnType, DEM_CODE, DemDataElementReadFncPTR )
 (
-    P2VAR( uint8, AUTOMATIC, DEM_VAR_NO_INIT ) Buffer
+    P2VAR( uint8, AUTOMATIC, DEM_VAR_SAVED_ZONE ) Buffer
 );
 #endif /* ( DEM_READFUNC_MONITORDATA_SUPPORT == STD_OFF ) */
 
@@ -399,6 +418,13 @@ typedef P2FUNC( Dem_u08_InternalReturnType, DEM_CODE, DemInternalDataElementRead
     VAR( Dem_u08_GetExtendDataModeType, AUTOMATIC ) GetExtendDataMode,
     P2VAR( uint8, AUTOMATIC, DEM_APPL_DATA ) BufferPtr,
     P2VAR( Dem_u16_EDRRecordSizeType, AUTOMATIC, AUTOMATIC ) BufSizePtr
+);
+
+typedef P2FUNC( Std_ReturnType, DEM_CODE, DemFreezeFrameReadFncPTR )
+(
+    VAR( Dem_EventIdType, AUTOMATIC ) EventId,
+    P2VAR( uint8, AUTOMATIC, DEM_VAR_SAVED_ZONE ) BufferPtr,
+    VAR( uint16, AUTOMATIC ) BufSize
 );
 
 /*--------------------------------------------------------------------------*/
@@ -429,6 +455,10 @@ typedef P2FUNC( Dem_u08_InternalReturnType, DEM_CODE, DemInternalDataElementRead
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-6-0         :2024-01-29                                              */
+/*  v5-8-0         :2024-10-29                                              */
+/*  v5-9-0         :2025-02-26                                              */
+/*  v5-10-0        :2025-06-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

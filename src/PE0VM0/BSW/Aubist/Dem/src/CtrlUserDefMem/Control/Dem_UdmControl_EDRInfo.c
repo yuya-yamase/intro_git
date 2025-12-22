@@ -1,7 +1,7 @@
-/* Dem_UdmControl_EDRInfo_c(v5-5-0)                                         */
+/* Dem_UdmControl_EDRInfo_c(v5-8-0)                                         */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -22,6 +22,7 @@
 #include "../../../inc/Dem_Udm_Control.h"
 #include "../../../inc/Dem_Udm_Data.h"
 #include "../../../inc/Dem_Udm_ExternalMem.h"
+#include "Dem_Udm_Control_local.h"
 
 /*--------------------------------------------------------------------------*/
 /* Macros                                                                   */
@@ -69,6 +70,24 @@ static VAR( Dem_u08_EDRClassRefIndexType, DEM_VAR_NO_INIT )       Dem_UdmEDR_Sea
 /*--------------------------------------------------------------------------*/
 
 /****************************************************************************/
+/* Function Name | Dem_UdmControl_SetDisableRecordUpdateInfoForEDR          */
+/* Description   | Disable record update action for EDR.                    */
+/* Preconditions | none                                                     */
+/* Parameters    | none                                                     */
+/* Return Value  | void                                                     */
+/* Notes         |                                                          */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-8-0      | new created.                                             */
+/****************************************************************************/
+FUNC( void, DEM_CODE ) Dem_UdmControl_SetDisableRecordUpdateInfoForEDR
+( void )
+{
+    Dem_UdmEDR_SearchEDRClassRefIndex   =   ( Dem_u08_EDRClassRefIndexType )0U;
+    return ;
+}
+
+/****************************************************************************/
 /* Function Name | Dem_Control_GetSizeOfExtendedDataRecordByDTC             */
 /* Description   | Gets the size of the extended data record by DTC and the */
 /*               |  record number                                           */
@@ -92,6 +111,7 @@ static VAR( Dem_u08_EDRClassRefIndexType, DEM_VAR_NO_INIT )       Dem_UdmEDR_Sea
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
+/*   v5-8-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmControl_GetSizeOfExtendedDataRecordByDTC
 (
@@ -134,7 +154,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmControl_GetSizeOfExtendedDat
             {
                 retVal = DEM_IRT_WRONG_RECORDNUMBER;
             }
-            Dem_UdmEDR_SearchEDRClassRefIndex   =   ( Dem_u08_EDRClassRefIndexType )0U;
         }
     }
     else
@@ -281,6 +300,7 @@ static FUNC( boolean, DEM_CODE ) Dem_UdmControl_CheckExtendedDataNumberSupported
 /*  Version        :Date                                                    */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-8-0         :2024-10-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

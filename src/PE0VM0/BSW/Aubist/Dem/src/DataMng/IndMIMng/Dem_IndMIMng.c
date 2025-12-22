@@ -1,7 +1,7 @@
-/* Dem_IndMIMng_c(v5-5-0)                                                   */
+/* Dem_IndMIMng_c(v5-10-0)                                                  */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -177,6 +177,7 @@ FUNC( void, DEM_CODE ) Dem_IndMIMng_InitSavedZone
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | new created.                                             */
+/*   v5-8-0      | branch changed.                                          */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_IndMIMng_DataVerify
 (
@@ -199,6 +200,9 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_IndMIMng_DataVerify
     VAR( Dem_u32_B1CounterType, AUTOMATIC )  b1CounterHold;
     VAR( Dem_u32_B1CounterType, AUTOMATIC )  b1CounterThreshold;
     VAR( boolean, AUTOMATIC ) clearAllowed;
+#if ( DEM_CLEAR_EVENT_ALLOWED_BY_CALLOUT_SUPPORT == STD_ON )
+    VAR( boolean, AUTOMATIC ) clearAllowedByCallout;
+#endif  /* ( DEM_CLEAR_EVENT_ALLOWED_BY_CALLOUT_SUPPORT == STD_ON ) */
 
     eventStorageNum = Dem_PrimaryMemEventStorageNum;
     recMngCmnKindIndMI = Dem_RecMngCmnKindIndMI;
@@ -247,7 +251,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_IndMIMng_DataVerify
                 }
                 else
                 {
-                    clearAllowed = Dem_CfgInfoPm_ClearAllowed_InEvtStrgGrp( eventStrgIndexRecord );     /* [GUD]eventStrgIndexRecord */
+                    clearAllowed = Dem_CfgInfoPm_ClearAllowedByConfig_InEvtStrgGrp( eventStrgIndexRecord );     /* [GUD]eventStrgIndexRecord */
                     if ( clearAllowed == (boolean)TRUE )
                     {
                         if ( clrInfoNvmReadResult != DEM_IRT_OK )
@@ -264,12 +268,20 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_IndMIMng_DataVerify
                         {
                             if ( obdClearId != Dem_IndMIB1CounterRecord[ indMIIndex ].ClearID )                             /* [GUD]indMIIndex */
                             {
-                                if ( Dem_IndMIB1CounterRecord[ indMIIndex ].B1Counter >= b1CounterThreshold )               /* [GUD]indMIIndex */
-                                {
-                                    Dem_IndMIB1CounterRecord[ indMIIndex ].B1Counter  =  b1CounterHold;                     /* [GUD]indMIIndex */
-                                }
+#if ( DEM_CLEAR_EVENT_ALLOWED_BY_CALLOUT_SUPPORT == STD_ON )
+                                /*  check clear allowed from callout function.  */
+                                clearAllowedByCallout   =   Dem_CfgInfoPm_JudgeClearAllowedByCallout( eventStrgIndexRecord );  /* [GUD]eventStrgIndexRecord */
 
-                                Dem_IndMIB1CounterRecord[ indMIIndex ].ClearID    =  obdClearId;                            /* [GUD]indMIIndex */
+                                if ( clearAllowedByCallout == (boolean)TRUE )
+#endif  /* ( DEM_CLEAR_EVENT_ALLOWED_BY_CALLOUT_SUPPORT == STD_ON ) */
+                                {
+                                    if ( Dem_IndMIB1CounterRecord[ indMIIndex ].B1Counter >= b1CounterThreshold )               /* [GUD]indMIIndex */
+                                    {
+                                        Dem_IndMIB1CounterRecord[ indMIIndex ].B1Counter  =  b1CounterHold;                     /* [GUD]indMIIndex */
+                                    }
+
+                                    Dem_IndMIB1CounterRecord[ indMIIndex ].ClearID    =  obdClearId;                            /* [GUD]indMIIndex */
+                                }
                             }
                         }
                     }
@@ -649,45 +661,32 @@ FUNC( void, DEM_CODE ) Dem_IndMIMng_ClearB1ClearCycleCounter
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | new created.                                             */
+/*   v5-10-0     | branch changed.                                          */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_IndMIMng_SetB1Counter
 (
     VAR( Dem_u16_IndMIIndexType, AUTOMATIC ) IndMIIndex,
-    VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex,
     VAR( Dem_u32_B1CounterType, AUTOMATIC ) B1Counter
 )
 {
     VAR( Dem_u32_B1CounterType, AUTOMATIC ) b1Counter_base;
-    VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) eventStrgIndex_base;
     VAR( Dem_u16_IndMIIndexType, AUTOMATIC ) indMIMaxNumberOfClassB1Event;
     VAR( Dem_u16_RecordKindIndexType, AUTOMATIC ) recMngCmnKindIndMI;
-    VAR( boolean, AUTOMATIC ) updateNvM;
     VAR( Dem_u08_InternalReturnType, AUTOMATIC ) retVal;
 
     retVal      =   DEM_IRT_NG;
-    updateNvM   =   (boolean)FALSE;
 
     indMIMaxNumberOfClassB1Event = Dem_WWHOBDMaxNumberOfClassB1Event;
 
     if ( IndMIIndex < indMIMaxNumberOfClassB1Event )                                                        /* [GUD:if]indMIIndex */
     {
         b1Counter_base      =   Dem_IndMIB1CounterRecord[ IndMIIndex ].B1Counter;                           /* [GUD]indMIIndex */
-        eventStrgIndex_base =   Dem_IndMIB1CounterRecord[ IndMIIndex ].EventStrgIndex;                      /* [GUD]indMIIndex */
         if ( b1Counter_base != B1Counter )
         {
             SchM_Enter_Dem_IndMI();
             Dem_IndMIB1CounterRecord[ IndMIIndex ].B1Counter  =   B1Counter;                                /* [GUD]indMIIndex */
             SchM_Exit_Dem_IndMI();
-            updateNvM = (boolean)TRUE;
-        }
-        if ( eventStrgIndex_base != EventStrgIndex )
-        {
-            Dem_IndMIB1CounterRecord[ IndMIIndex ].EventStrgIndex  =   EventStrgIndex;                      /* [GUD]indMIIndex */
-            updateNvM = (boolean)TRUE;
-        }
 
-        if ( updateNvM == (boolean)TRUE )
-        {
             Dem_IndMIB1CounterRecord[ IndMIIndex ].ClearID = Dem_ClrInfoMng_GetObdClearID();                /* [GUD]indMIIndex */
             recMngCmnKindIndMI = Dem_RecMngCmnKindIndMI;
             Dem_RecMngCmn_SetNvMWriteStatus( recMngCmnKindIndMI, ( Dem_u16_RecordIndexType )IndMIIndex );   /* [GUD]indMIIndex */
@@ -868,6 +867,7 @@ static FUNC( void, DEM_CODE ) Dem_IndMIMng_InitMirrorMemory
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | new created. based from Dem_AltIUMPRMng_InitPadding.     */
+/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_IndMIMng_InitPadding
 (
@@ -881,7 +881,7 @@ static FUNC( void, DEM_CODE ) Dem_IndMIMng_InitPadding
 
     for( paddingIndex = (Dem_u16_PaddingIndexType)0U; paddingIndex < paddingSize; paddingIndex++ )      /* [GUD:for]paddingIndex */
     {
-        IndMIRecordPtr->Reserve[paddingIndex] = (uint8)0U;                                           /* [GUD]paddingIndex */
+        IndMIRecordPtr->Reserve[paddingIndex] = (uint8)0U;                                           /* [GUD]paddingIndex *//* [ARYCHK] DEM_INDMI_RECORD_PADDINGSIZE_TO_BLOCKSIZE / 1 / paddingIndex */
     }
 
     return;
@@ -899,6 +899,9 @@ static FUNC( void, DEM_CODE ) Dem_IndMIMng_InitPadding
 /* History                                                                  */
 /*  Version        :Date                                                    */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-7-0         :2024-05-29                                              */
+/*  v5-8-0         :2024-10-29                                              */
+/*  v5-10-0        :2025-06-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

@@ -1,7 +1,7 @@
-/* Dem_Pm_Misfire_h(v5-5-0)                                                 */
+/* Dem_Pm_Misfire_h(v5-9-0)                                                 */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 /****************************************************************************/
 /* Object Name  | Dem/Pm_Misfire_h/HEADER                                   */
@@ -59,6 +59,10 @@ FUNC( void, DEM_CODE_TRUST ) Dem_Misfire_PreInit        /*  PreInit section     
 #if ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON )
 FUNC( void, DEM_CODE ) Dem_Misfire_Init
 ( void );
+#if ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )
+FUNC( void, DEM_CODE ) Dem_Misfire_Init_AfterRecordCheckComplete
+( void );
+#endif  /* ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )           */
 FUNC( void, DEM_CODE ) Dem_Misfire_InitTmpEventMemoryEntry
 ( void );
 #if ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )
@@ -120,6 +124,27 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Misfire_CheckConfirmedFaultOfCA
 );
 #endif  /* ( DEM_SIMILAR_EVENT_CONFIGURED == STD_ON ) */
 #endif  /* ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )   */
+
+#if ( DEM_OBDONUDS_SUPPORT == STD_ON )
+#if ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )
+FUNC( void, DEM_CODE ) Dem_Misfire_SetObdRecordNumberIndexSyncStatus
+(
+    VAR( boolean, AUTOMATIC ) ObdRecordNumberIndexSyncStatus
+);
+FUNC( boolean, DEM_CODE ) Dem_Misfire_GetObdRecordNumberIndexSyncStatus
+( void );
+#endif  /* ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )   */
+#endif  /* ( DEM_OBDONUDS_SUPPORT == STD_ON )                 */
+
+#if ( DEM_OBDFFD_SUPPORT == STD_ON )
+#if ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )
+FUNC( boolean, DEM_CODE ) Dem_Misfire_JudgeClearableObdFreezeFrame
+(
+    VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex
+);
+#endif  /* ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )   */
+#endif  /* ( DEM_OBDFFD_SUPPORT == STD_ON )                 */
+
 #endif  /* ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON )    */
 
 /*----------------------------------*/
@@ -150,8 +175,14 @@ FUNC( Dem_UdsStatusByteType, DEM_CODE ) Dem_Misfire_GetCylinderDTCStatus
 (
     VAR( Dem_MisfireCylinderNumberType, AUTOMATIC ) MisfireCylinderNum
 );
-FUNC( void, DEM_CODE ) Dem_Misfire_SetFilteredDTCForCylinder
+FUNC( void, DEM_CODE ) Dem_Misfire_SetFilteredDTCForCylinderForEDR
+(
+    VAR( Dem_u08_EDRRecordNumberType, AUTOMATIC ) ExtendedDataNumber
+);
+#if ( DEM_PID_READINESS_SUPPORT == STD_ON )
+FUNC( void, DEM_CODE ) Dem_Misfire_SetFilteredDTCForCylinderForReadiness
 ( void );
+#endif  /* ( DEM_PID_READINESS_SUPPORT == STD_ON )    */
 
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Misfire_GetNextFilterdDTCForCylinder
 (
@@ -217,6 +248,8 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Misfire_GetFilteredUdsDTCAndSev
 /* SID19-03 */
 FUNC( void, DEM_CODE ) Dem_Misfire_PrepareFilteredRecord
 ( void );
+
+#if ( DEM_COMBINEDEVENT_ONRETRIEVAL_SUPPORT == STD_OFF )
 #if ( DEM_OBDFFD_SUPPORT == STD_ON )
 FUNC( boolean, DEM_CODE ) Dem_Misfire_CheckOutputFilteredObdFFD
 (
@@ -231,6 +264,8 @@ FUNC( boolean, DEM_CODE ) Dem_Misfire_CheckOutputFilteredFFD
     VAR( Dem_u08_StorageTriggerType, AUTOMATIC ) Trigger,
     P2VAR( Dem_MisfireCylinderNumberType, AUTOMATIC, AUTOMATIC ) MisfireCylinderNumberOutputPtr
 );
+#endif  /* ( DEM_COMBINEDEVENT_ONRETRIEVAL_SUPPORT == STD_OFF ) */
+
 #endif  /*   ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON )         */
 
 
@@ -243,7 +278,7 @@ FUNC( boolean, DEM_CODE ) Dem_Misfire_CheckOutputOBDFFDConditionByTrigger
 (
     VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex,
     VAR( Dem_u08_StorageTriggerType, AUTOMATIC ) Trigger,
-    P2VAR( Dem_MisfireCylinderNumberType, AUTOMATIC, AUTOMATIC ) MisfireCylinderNumberTypePtr
+    VAR( Dem_MisfireCylinderNumberType, AUTOMATIC ) MisfireCylinderNumber
 );
 #endif  /* ( DEM_OBDFFD_SUPPORT == STD_ON ) */
 FUNC( boolean, DEM_CODE ) Dem_Misfire_CheckOutputFFDConditionByTrigger
@@ -290,15 +325,13 @@ FUNC( void, DEM_CODE ) Dem_Misfire_GetNumOfConfirmedCylAndMIL
 /*  Dem_Misfire_SID0x02             */
 /*----------------------------------*/
 #if ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON )
-#if ( DEM_OBDFFD_SUPPORT == STD_ON )
-#if ( DEM_OBDFFD_DID_SUPPORT == STD_OFF )
+#if ( DEM_OBDONEDS_SUPPORT == STD_ON )
 /* SID02 */
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Misfire_GetEdsDTCOfOBDFreezeFrame
 (
     P2VAR( Dem_u32_DTCValueType, AUTOMATIC, AUTOMATIC ) DTCValuePtr
 );
-#endif  /*   ( DEM_OBDFFD_DID_SUPPORT == STD_OFF )             */
-#endif  /*   ( DEM_OBDFFD_SUPPORT == STD_ON )                   */
+#endif  /*   ( DEM_OBDONEDS_SUPPORT == STD_ON )                 */
 #endif  /*   ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON )         */
 
 /*----------------------------------*/
@@ -419,12 +452,14 @@ FUNC( void, DEM_CODE ) Dem_Misfire_ClearDataRelatedFFD
 #if ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )
 FUNC( void, DEM_CODE ) Dem_Misfire_ProcessPendingFaultRecovery
 (
-    VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex
+    VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex,
+    P2VAR( Dem_DTCStatusStType, AUTOMATIC, AUTOMATIC ) NewDTCStatusStPtr
 );
 FUNC( void, DEM_CODE ) Dem_Misfire_ProcessForEventFailed
 (
     VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex,
-    P2CONST( Dem_ChkBitDTCStatusType, AUTOMATIC, AUTOMATIC ) ChkOldBitStatusPtr
+    P2CONST( Dem_ChkBitDTCStatusType, AUTOMATIC, AUTOMATIC ) ChkOldBitStatusPtr,
+    P2VAR( Dem_DTCStatusStType, AUTOMATIC, AUTOMATIC ) NewDTCStatusStPtr
 );
 #endif  /* ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )   */
 
@@ -520,6 +555,27 @@ FUNC( void, DEM_CODE ) Dem_Misfire_GetDTCAndStatusOfStoredData
 #endif  /* ( DEM_DTCSTOREDDATA_DEMINTERNAL_SUPPORT == STD_ON )     */
 
 
+/*--------------------------------------------------------------------------*/
+/* Dem_Misfire_ConfirmedOrderCylinder                                       */
+/*--------------------------------------------------------------------------*/
+#if ( DEM_GET_UDSDTC_BY_CONFIRMED_ORDER_SUPPORT == STD_ON )
+#if ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON )
+FUNC( void, DEM_CODE ) Dem_Misfire_ClearConfirmedOrderCylListToTmp
+( void );
+FUNC( void, DEM_CODE ) Dem_Misfire_SetConfirmedOrderCylinder
+(
+    VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex
+);
+FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Misfire_GetConfirmedUDSDTCAndOrder
+(
+    VAR( Dem_MisfireCylinderNumberType, AUTOMATIC ) MisfireConfirmedOrderIndex,
+    P2VAR( Dem_u32_DTCValueType, AUTOMATIC, AUTOMATIC ) ConfirmedDTCPtr,
+    P2VAR( Dem_u16_OccrOrderType, AUTOMATIC, AUTOMATIC ) ConfirmedOccurrenceOrderPtr
+);
+#endif /* ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON ) */
+#endif  /* ( DEM_GET_UDSDTC_BY_CONFIRMED_ORDER_SUPPORT == STD_ON )  */
+
+
 #define DEM_STOP_SEC_CODE
 #include <Dem_MemMap.h>
 
@@ -534,6 +590,9 @@ FUNC( void, DEM_CODE ) Dem_Misfire_GetDTCAndStatusOfStoredData
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-6-0         :2024-01-29                                              */
+/*  v5-8-0         :2024-10-29                                              */
+/*  v5-9-0         :2025-02-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

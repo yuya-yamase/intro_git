@@ -1,7 +1,7 @@
-/* Dem_Rc_SimilarMng_h(v5-5-0)                                              */
+/* Dem_Rc_SimilarMng_h(v5-9-0)                                              */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 /****************************************************************************/
 /* Object Name  | Dem/Rc_SimilarMng/HEADER                                  */
@@ -84,6 +84,21 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_SimilarMng_GetPendingClearCount
     VAR( Dem_u16_SimilarStrgIndexType, AUTOMATIC ) SimilarStrgIndex,
     P2VAR( Dem_u08_SimilarPendingClearCounterType, AUTOMATIC, AUTOMATIC ) PendingClearCounterPtr
 );
+FUNC( void, DEM_CODE ) Dem_SimilarMng_GetSimilarConditionStoredflg
+(
+    VAR( Dem_u16_SimilarStrgIndexType, AUTOMATIC ) SimilarStrgIndex,
+    P2VAR( boolean, AUTOMATIC, AUTOMATIC ) SimilarConditionStoredflgPtr
+);
+FUNC( void, DEM_CODE ) Dem_SimilarMng_GetSimilarConditionStoredList
+(
+    VAR( Dem_u16_SimilarStrgIndexType, AUTOMATIC ) SimilarStrgIndex,
+    P2VAR( Dem_SimilarConditionValueType, AUTOMATIC, DEM_APPL_DATA ) SimilarConditionArrayPtr
+);
+FUNC( void, DEM_CODE ) Dem_SimilarMng_GetSimilarConditionLatchedList
+(
+    VAR( Dem_u16_SimilarStrgIndexType, AUTOMATIC ) SimilarStrgIndex,
+    P2VAR( Dem_SimilarConditionValueType, AUTOMATIC, DEM_APPL_DATA ) SimilarConditionArrayPtr
+);
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_SimilarMng_CompareSimilarRecord
 (
     VAR( Dem_u16_SimilarStrgIndexType, AUTOMATIC ) SimilarStrgIndex,
@@ -151,6 +166,7 @@ extern VAR( Dem_SimilarRecordType, DEM_VAR_NO_INIT ) Dem_TmpSimilarMirror;
 /*  v5-1-0         :2022-03-29                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-9-0         :2025-02-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

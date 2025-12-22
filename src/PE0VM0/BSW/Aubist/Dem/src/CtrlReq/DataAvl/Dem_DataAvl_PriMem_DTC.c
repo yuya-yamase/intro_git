@@ -1,7 +1,7 @@
-/* Dem_DataAvl_PriMem_DTC_c(v5-5-0)                                         */
+/* Dem_DataAvl_PriMem_DTC_c(v5-8-0)                                         */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -93,6 +93,7 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataAvl_GetEventStrgInde
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
+/*   v5-8-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataAvl_GetDTCByEventStrgIndex
 (
@@ -109,10 +110,12 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataAvl_GetDTCByEventStrgIndex
     {
         retVal = Dem_DataAvl_GetUDSDTCByEventStrgIndex( EventStrgIndex , DTCValuePtr ); /* [GUD:RET:DEM_IRT_OK] EventStrgIndex */
     }
+#if ( DEM_OBDDTC_FORMAT_SUPPORT == STD_ON )    /*  [FuncSw]        */
     else if( DTCFormat == DEM_DTC_FORMAT_OBD )
     {
         retVal = Dem_DataAvl_GetOBDDTCByEventStrgIndex( EventStrgIndex , DTCValuePtr ); /* [GUD:RET:DEM_IRT_OK] EventStrgIndex */
     }
+#endif  /*   ( DEM_OBDDTC_FORMAT_SUPPORT == STD_ON )               */
     else
     {
         /* Out of range. */
@@ -179,6 +182,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataAvl_GetUDSDTCByEventStrgInd
     return retVal;
 }
 
+#if ( DEM_OBDDTC_FORMAT_SUPPORT == STD_ON )
 /****************************************************************************/
 /* Function Name | Dem_DataAvl_GetOBDDTCByEventStrgIndex                    */
 /* Description   | Gets the OBD DTC value which is corresponding to the sp- */
@@ -201,6 +205,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataAvl_GetUDSDTCByEventStrgInd
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
+/*   v5-8-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataAvl_GetOBDDTCByEventStrgIndex
 (
@@ -210,10 +215,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataAvl_GetOBDDTCByEventStrgInd
 {
     VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) eventStorageNum;
     VAR( Dem_u08_InternalReturnType, AUTOMATIC ) retVal;
-#if ( DEM_OBDDTC_FORMAT_SUPPORT == STD_ON )    /*  [FuncSw]        */
     VAR( boolean, AUTOMATIC ) eventOBDKind;
-#endif  /*   ( DEM_OBDDTC_FORMAT_SUPPORT == STD_ON )               */
-
 
     retVal = DEM_IRT_NG;
 
@@ -224,7 +226,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataAvl_GetOBDDTCByEventStrgInd
         /* Initializes the return value. */
         retVal = DEM_IRT_NODATAAVAILABLE;
 
-#if ( DEM_OBDDTC_FORMAT_SUPPORT == STD_ON )    /*  [FuncSw]        */
         /*  get event OBD kind.     */
         eventOBDKind    =   Dem_CfgInfoPm_CheckEventKindOfOBD_InEvtStrgGrp( EventStrgIndex );       /* [GUD]EventStrgIndex */
         if( eventOBDKind == (boolean)TRUE ) /*  OBD     */
@@ -233,11 +234,11 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataAvl_GetOBDDTCByEventStrgInd
 
             retVal = DEM_IRT_OK;
         }
-#endif  /*   ( DEM_OBDDTC_FORMAT_SUPPORT == STD_ON )               */
     }
 
     return retVal;
 }
+#endif  /*   ( DEM_OBDDTC_FORMAT_SUPPORT == STD_ON )               */
 
 
 /****************************************************************************/
@@ -440,6 +441,7 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataAvl_GetEventStrgInde
 /*  Version        :Date                                                    */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-8-0         :2024-10-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

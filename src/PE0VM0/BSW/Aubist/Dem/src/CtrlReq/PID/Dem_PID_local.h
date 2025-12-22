@@ -1,7 +1,7 @@
-/* Dem_PID_local_h(v5-5-0)                                                  */
+/* Dem_PID_local_h(v5-7-0)                                                  */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 /****************************************************************************/
 /* Object Name  | Dem/PID/HEADER                                            */
@@ -85,6 +85,10 @@ FUNC( void, DEM_CODE ) Dem_PID_ClearAllEventDisable
 #if ( DEM_CALIBRATION_BY_CALLOUT_SUPPORT == STD_ON )
 FUNC( void, DEM_CODE ) Dem_PID_CalcInitReadinessBaseSupportAndCompleteData
 (
+#ifndef DEM_SIT_RANGE_CHECK
+#else   /* DEM_SIT_RANGE_CHECK */
+    VAR( uint8, AUTOMATIC ) ReadinessDataSize,
+#endif  /* DEM_SIT_RANGE_CHECK */
     CONSTP2VAR( uint8, AUTOMATIC, DEM_APPL_DATA ) ReadinessDataPtr,
     VAR( Dem_u08_ReadinessDataPositionIndexType, AUTOMATIC )    CalcType
 );
@@ -118,6 +122,7 @@ FUNC( void, DEM_CODE ) Dem_PID_InitReadReadinessData
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-7-0         :2024-05-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

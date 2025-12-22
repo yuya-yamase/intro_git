@@ -1,7 +1,7 @@
-/* Dem_UdmDTC_FilDTC_c(v5-5-0)                                              */
+/* Dem_UdmDTC_FilDTC_c(v5-7-0)                                              */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -181,6 +181,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmDTC_SetFilteredDTC
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | branch changed.                                          */
+/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmDTC_SearchFilteredDTC
 (
@@ -249,7 +250,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmDTC_SearchFilteredDTC
                     if( retChkEventAvailable == (boolean) TRUE )
                     {
                         /* check DTCStatus */
-                        retChkDTC = Dem_UdmDTC_CheckDTCForFilter( searchUdmEventIndex, DTCStatusMask, Dem_UdmDTCStatusAvailabilityMask, DTCValuePtr, DTCStatusPtr );    /* [GUD:RET:DEM_IRT_OK]DTCValuePtr, DTCStatusPtr */
+                        retChkDTC = Dem_UdmDTC_CheckDTCForFilter( searchUdmEventIndex, DTCStatusMask, Dem_UdmDTCStatusAvailabilityMask, DTCValuePtr, DTCStatusPtr );    /* [GUD]searchUdmEventIndex *//* [GUD:RET:DEM_IRT_OK]DTCValuePtr, DTCStatusPtr */
 
                         if( retChkDTC == DEM_IRT_OK )
                         {
@@ -340,10 +341,13 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmDTC_SearchFilteredDTC
 /*               |        DEM_IRT_OK : find matching element                */
 /*               |        DEM_IRT_NG : not find matching element            */
 /* Notes         | -                                                        */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmDTC_CheckDTCForFilter
 (
-    VAR( Dem_u16_UdmEventIndexType, AUTOMATIC ) UdmEventIndex,
+    VAR( Dem_u16_UdmEventIndexType, AUTOMATIC ) UdmEventIndex,      /* [PRMCHK:CALLER] */
     VAR( Dem_UdsStatusByteType, AUTOMATIC ) DTCStatusMask,
     VAR( Dem_UdsStatusByteType, AUTOMATIC ) DTCStatusAvailabilityMask,
     P2VAR( Dem_u32_DTCValueType, AUTOMATIC, AUTOMATIC ) DTCValuePtr,
@@ -356,7 +360,7 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmDTC_CheckDTCForFilter
 
     retVal = DEM_IRT_NG;
 
-    retGetDTCAndStatus = Dem_UdmDTC_GetDTCAndStatus( UdmEventIndex, DTCStatusAvailabilityMask, DTCValuePtr, DTCStatusPtr );
+    retGetDTCAndStatus = Dem_UdmDTC_GetDTCAndStatus( UdmEventIndex, DTCStatusAvailabilityMask, DTCValuePtr, DTCStatusPtr ); /* [GUDCHK:CALLER]UdmEventIndex */
 
     if( retGetDTCAndStatus == DEM_IRT_OK )
     {
@@ -433,6 +437,7 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmDTC_CheckDTCStatusFor
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-7-0         :2024-05-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

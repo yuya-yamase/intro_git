@@ -1,7 +1,7 @@
-/* Dem_Ind_MI_B1Counter_WWH_c(v5-5-0)                                       */
+/* Dem_Ind_MI_B1Counter_WWH_c(v5-10-0)                                      */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -302,6 +302,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_IndMI_CheckB1CounterThresholdRe
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | new created.                                             */
+/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_IndMI_UpdateB1Counter
 ( void )
@@ -326,7 +327,7 @@ FUNC( void, DEM_CODE ) Dem_IndMI_UpdateB1Counter
             resultOfCallback = Dem_DataElement_ReadData( dataElementClassPtr, dataBuffer , DEM_MONITORDATA_OTHER );
             if( resultOfCallback == (Std_ReturnType)E_OK )
             {
-                b1CounterCalc = (Dem_u32_B1CounterType)dataBuffer[DEM_WWHOBD_READDATAELEMENT_DATAPOS0];
+                b1CounterCalc = (Dem_u32_B1CounterType)dataBuffer[DEM_WWHOBD_READDATAELEMENT_DATAPOS0];/* [ARYCHK] DEM_WWHOBD_CALCULATION_DATASIZE_TIMESESBY3MIN / 1 / DEM_WWHOBD_READDATAELEMENT_DATAPOS0 */
                 if ( b1CounterCalc != (Dem_u32_B1CounterType)0x00000000 )
                 {
                     Dem_IndMI_CalcB1Counter( b1CounterCalc );
@@ -721,6 +722,7 @@ FUNC( void, DEM_CODE ) Dem_IndMI_UpdateB1Record
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | new created.                                             */
+/*   v5-10-0     | no branch changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_IndMI_CalcB1Counter
 (
@@ -770,7 +772,7 @@ static FUNC( void, DEM_CODE ) Dem_IndMI_CalcB1Counter
                                 b1Counter_new = b1Counter_old + B1CounterCalc; /* no wrap around */
                             }
 
-                            (void)Dem_IndMIMng_SetB1Counter( indMIIndex, eventStrgIndexRecord, b1Counter_new ); /* no return check required */
+                            (void)Dem_IndMIMng_SetB1Counter( indMIIndex, b1Counter_new ); /* no return check required */
 
                             if ( ( b1Counter_new >= b1CounterThreshold ) && ( b1Counter_old < b1CounterThreshold ) )
                             {
@@ -964,6 +966,8 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_IndMI_GetIndMIIndexFromI
 /* History                                                                  */
 /*  Version        :Date                                                    */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-7-0         :2024-05-29                                              */
+/*  v5-10-0        :2025-06-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

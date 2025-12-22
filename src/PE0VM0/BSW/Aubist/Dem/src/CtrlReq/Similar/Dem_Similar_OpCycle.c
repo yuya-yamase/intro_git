@@ -1,7 +1,7 @@
-/* Dem_Similar_OpCycle_c(v5-3-0)                                            */
+/* Dem_Similar_OpCycle_c(v5-10-0)                                           */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -43,6 +43,15 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE) Dem_Similar_GetPendingClearCn
 (
     VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex,
     P2VAR( Dem_u08_SimilarPendingClearCounterType, AUTOMATIC, AUTOMATIC ) ThresholdPtr
+);
+static FUNC( boolean, DEM_CODE ) Dem_Similar_CheckSimilarConditionToStore
+(
+    P2CONST( Dem_ChkBitDTCStatusType, AUTOMATIC, AUTOMATIC ) ChkBitDTCStatusPtr,
+    VAR( boolean, AUTOMATIC ) SimilarConditionStoredflg
+);
+static FUNC( boolean, DEM_CODE ) Dem_Similar_CheckSimilarConditionForClear
+(
+    VAR( Dem_UdsStatusByteType, AUTOMATIC ) UdsStatusByte
 );
 
 #define DEM_STOP_SEC_CODE
@@ -157,12 +166,16 @@ FUNC( boolean, DEM_CODE) Dem_Similar_CheckReachedPendingEraseCycCntThreshold
 /* Parameters    | [in]  ChkBitStatusOldPtr                                 */
 /* Return Value  | none                                                     */
 /* Notes         |                                                          */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-10-0     | branch changed.                                          */
 /****************************************************************************/
 FUNC( void, DEM_CODE) Dem_Similar_ProcessForEventFailed
 (
     P2CONST( Dem_ChkBitDTCStatusType, AUTOMATIC, AUTOMATIC ) ChkBitStatusOldPtr
 )
 {
+    VAR( boolean, AUTOMATIC ) checkResult;
     VAR( boolean, AUTOMATIC ) similarConditionStoredflg;
 
     if( ChkBitStatusOldPtr->PendingDTC == (boolean)TRUE )
@@ -171,8 +184,8 @@ FUNC( void, DEM_CODE) Dem_Similar_ProcessForEventFailed
 
         Dem_Similar_GetConditionStoredflgToTmp( &similarConditionStoredflg );
 
-        if( ( ChkBitStatusOldPtr->WirStatus == (boolean)FALSE )
-         || ( similarConditionStoredflg     == (boolean)FALSE ) )
+        checkResult = Dem_Similar_CheckSimilarConditionToStore( ChkBitStatusOldPtr, similarConditionStoredflg );
+        if( checkResult == (boolean)TRUE )
         {
             Dem_Similar_SetConditionStoreBeforeDcyToTmp( (boolean)TRUE );
 
@@ -191,18 +204,24 @@ FUNC( void, DEM_CODE) Dem_Similar_ProcessForEventFailed
 /* Description   | Check Pending Recovery Possible                          */
 /* Preconditions | none                                                     */
 /* Parameters    | [in]  NewStatus                                          */
-/* Return Value  | nnoe                                                     */
+/* Return Value  | none                                                     */
 /* Notes         |                                                          */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-10-0     | branch changed.                                          */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_Similar_ClearTmpByCycleStart
 (
     VAR( Dem_UdsStatusByteType, AUTOMATIC ) NewStatus
 )
 {
+    VAR( boolean, AUTOMATIC ) checkResult;
+
     Dem_Similar_SetSimilarPassedThisDcyToTmp( (boolean)FALSE );
     Dem_Similar_SetExceedanceCounterToTmp( (Dem_u08_SimilarExceedanceCounterType)0U );
 
-    if( ( NewStatus & ( DEM_UDS_STATUS_PDTC | DEM_UDS_STATUS_WIR ) ) == (Dem_UdsStatusByteType)0U ) /*  statusOfDTC : bit2,7    */
+    checkResult = Dem_Similar_CheckSimilarConditionForClear( NewStatus );
+    if( checkResult == (boolean)TRUE )
     {
         Dem_Similar_SetConditionStoredflgToTmp( (boolean)FALSE );
     }
@@ -295,6 +314,136 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE) Dem_Similar_GetPendingClearCn
     return retVal;
 }
 
+#if ( DEM_SIMCONDCLEAR_PATTERN2_SUPPORT == STD_OFF )
+/****************************************************************************/
+/* Function Name | Dem_Similar_CheckSimilarConditionToStore                 */
+/* Description   | Check store conditions for SimilarCondition.             */
+/* Preconditions | none                                                     */
+/* Parameters    | [in] ChkBitDTCStatusPtr                                  */
+/*               | [in] SimilarConditionStoredflg                           */
+/* Return Value  | boolean                                                  */
+/*               |      TRUE  : Store OK.                                   */
+/*               |      FALSE : Store NG.                                   */
+/* Notes         |                                                          */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-10-0     | new created.                                             */
+/****************************************************************************/
+static FUNC( boolean, DEM_CODE ) Dem_Similar_CheckSimilarConditionToStore
+(
+    P2CONST( Dem_ChkBitDTCStatusType, AUTOMATIC, AUTOMATIC ) ChkBitDTCStatusPtr,
+    VAR( boolean, AUTOMATIC ) SimilarConditionStoredflg
+)
+{
+    VAR( boolean, AUTOMATIC ) checkResult;
+    checkResult = (boolean)FALSE;
+
+    if( ( ChkBitDTCStatusPtr->WirStatus == (boolean)FALSE ) || ( SimilarConditionStoredflg == (boolean)FALSE ) )
+    {
+        checkResult = (boolean)TRUE;
+    }
+
+    return checkResult;
+}
+
+/****************************************************************************/
+/* Function Name | Dem_Similar_CheckSimilarConditionForClear                */
+/* Description   | Check clear conditions for SimilarCondition.             */
+/* Preconditions | none                                                     */
+/* Parameters    | [in] UdsStatusByte                                       */
+/* Return Value  | boolean                                                  */
+/*               |      TRUE  : Clear OK.                                   */
+/*               |      FALSE : Clear NG.                                   */
+/* Notes         |                                                          */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-10-0     | new created.                                             */
+/****************************************************************************/
+static FUNC( boolean, DEM_CODE ) Dem_Similar_CheckSimilarConditionForClear
+(
+    VAR( Dem_UdsStatusByteType, AUTOMATIC ) UdsStatusByte
+)
+{
+    VAR( boolean, AUTOMATIC ) checkResult;
+    VAR( Dem_UdsStatusByteType, AUTOMATIC ) udsStatusByteMask;
+
+    checkResult = (boolean)FALSE;
+    udsStatusByteMask = ( DEM_UDS_STATUS_PDTC | DEM_UDS_STATUS_WIR );   /*  statusOfDTC : bit2,7    */
+
+    if( ( UdsStatusByte & udsStatusByteMask ) == (Dem_UdsStatusByteType)0U )
+    {
+        checkResult = (boolean)TRUE;
+    }
+
+    return checkResult;
+}
+#endif /* ( DEM_SIMCONDCLEAR_PATTERN2_SUPPORT == STD_OFF ) */
+
+#if ( DEM_SIMCONDCLEAR_PATTERN2_SUPPORT == STD_ON )
+/****************************************************************************/
+/* Function Name | Dem_Similar_CheckSimilarConditionToStore                 */
+/* Description   | Check store conditions for SimilarCondition.             */
+/* Preconditions | none                                                     */
+/* Parameters    | [in] ChkBitDTCStatusPtr                                  */
+/*               | [in] SimilarConditionStoredflg                           */
+/* Return Value  | boolean                                                  */
+/*               |      TRUE  : Store OK.                                   */
+/*               |      FALSE : Store NG.                                   */
+/* Notes         |                                                          */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-10-0     | new created.                                             */
+/****************************************************************************/
+static FUNC( boolean, DEM_CODE ) Dem_Similar_CheckSimilarConditionToStore
+(
+    P2CONST( Dem_ChkBitDTCStatusType, AUTOMATIC, AUTOMATIC ) ChkBitDTCStatusPtr,    /* MISRA DEVIATION */
+    VAR( boolean, AUTOMATIC ) SimilarConditionStoredflg
+)
+{
+    VAR( boolean, AUTOMATIC ) checkResult;
+    checkResult = (boolean)FALSE;
+
+    if( SimilarConditionStoredflg == (boolean)FALSE )
+    {
+        checkResult = (boolean)TRUE;
+    }
+
+    return checkResult;
+}
+
+/****************************************************************************/
+/* Function Name | Dem_Similar_CheckSimilarConditionForClear                */
+/* Description   | Check clear conditions for SimilarCondition.             */
+/* Preconditions | none                                                     */
+/* Parameters    | [in] UdsStatusByte                                       */
+/* Return Value  | boolean                                                  */
+/*               |      TRUE  : Clear OK.                                   */
+/*               |      FALSE : Clear NG.                                   */
+/* Notes         |                                                          */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-10-0     | new created.                                             */
+/****************************************************************************/
+static FUNC( boolean, DEM_CODE ) Dem_Similar_CheckSimilarConditionForClear
+(
+    VAR( Dem_UdsStatusByteType, AUTOMATIC ) UdsStatusByte
+)
+{
+    VAR( boolean, AUTOMATIC ) checkResult;
+    VAR( Dem_UdsStatusByteType, AUTOMATIC ) udsStatusByteMask;
+
+    checkResult = (boolean)FALSE;
+    udsStatusByteMask = ( DEM_UDS_STATUS_PDTC | DEM_UDS_STATUS_CDTC | DEM_UDS_STATUS_WIR );     /*  statusOfDTC : bit2,3,7  */
+
+    if( ( UdsStatusByte & udsStatusByteMask ) == (Dem_UdsStatusByteType)0U )
+    {
+        checkResult = (boolean)TRUE;
+    }
+
+    return checkResult;
+}
+#endif /* ( DEM_SIMCONDCLEAR_PATTERN2_SUPPORT == STD_ON ) */
+
 
 #define DEM_STOP_SEC_CODE
 #include <Dem_MemMap.h>
@@ -309,6 +458,7 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE) Dem_Similar_GetPendingClearCn
 /*  v5-0-0         :2022-03-29                                              */
 /*  v5-1-0         :2022-03-29                                              */
 /*  v5-3-0         :2023-03-29                                              */
+/*  v5-10-0        :2025-06-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

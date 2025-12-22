@@ -1,7 +1,7 @@
-/* Dem_UdmDataCtl_EventEntry04Regist_TSFFD_c(v5-5-0)                        */
+/* Dem_UdmDataCtl_EventEntry04Regist_TSFFD_c(v5-7-0)                        */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -27,6 +27,11 @@
 #include "Dem_UdmDataCtl_TSFFD_local.h"
 #include "Dem_UdmDataCtl_EventEntry_local.h"
 #include "Dem_UdmDataCtl_EventEntry_TSFFD_local.h"
+
+#ifndef DEM_SIT_RANGE_CHECK
+#else   /* DEM_SIT_RANGE_CHECK */
+#include <Dem_SIT_RangeCheck.h>
+#endif  /* DEM_SIT_RANGE_CHECK */
 
 #if ( DEM_TSFF_UDM_SUPPORT == STD_ON )
 
@@ -411,6 +416,7 @@ FUNC( void, DEM_CODE ) Dem_UdmData_StoreTSFFRecordFromSample
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
+/*   v5-6-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmData_CaptureTSFFFromSample
 (
@@ -430,7 +436,7 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmData_CaptureTSFFFromS
     VAR( Dem_u16_SmpTSFFRecClassIndexType, AUTOMATIC ) tsffSamplingFFClassConfigureNum;
     VAR( Dem_u16_TSFFListIndexType, AUTOMATIC ) tsffTotalDTCNum;
     VAR( Dem_SamplingFreezeFrameRecordPosType, AUTOMATIC ) samplingFFRPos;
-    P2VAR( uint8, AUTOMATIC, DEM_VAR_SAVED_ZONE ) samplingFreezeFrameRecordDataPtr;
+    P2VAR( uint8, AUTOMATIC, DEM_VAR_NO_INIT ) samplingFreezeFrameRecordDataPtr;
 
     tsffSamplingFFClassConfigureNum = Dem_TSFFSamplingFFClassConfigureNum;
 
@@ -482,7 +488,7 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmData_CaptureTSFFFromS
                 samplingFreezeFrameRecordDataPtr = Dem_Data_GetSamplingFreezeFrameRecordDataPtr( samplingFreezeFrameMemoryRef, samplingFFRecIndex );    /* [GUD:RET:Not NULL_PTR ] samplingFreezeFrameMemoryRef */
                 if( samplingFreezeFrameRecordDataPtr != NULL_PTR )
                 {
-                    (void)Dem_UdmTSFFDMng_SetBeforeTimeSeriesFreezeFrameRecord( Dem_UdmTmpEventMemoryEntry.UdmGroupKindIndex, Dem_UdmTmpEventMemoryEntry.OldestFreezeFrameRecordIndex, tsFFRecIndex, Dem_UdmTmpEventMemoryEntry.UdmEventIndex, TriggerFFDConsistencyId, &samplingFreezeFrameRecordDataPtr[samplingFFRPos.DataStart] );/* no return check required */ /* [GUD]samplingFFRPos.DataStart */
+                    (void)Dem_UdmTSFFDMng_SetBeforeTimeSeriesFreezeFrameRecord( Dem_UdmTmpEventMemoryEntry.UdmGroupKindIndex, Dem_UdmTmpEventMemoryEntry.OldestFreezeFrameRecordIndex, tsFFRecIndex, Dem_UdmTmpEventMemoryEntry.UdmEventIndex, TriggerFFDConsistencyId, &samplingFreezeFrameRecordDataPtr[samplingFFRPos.DataStart] );/* no return check required */ /* [GUD]samplingFFRPos.DataStart *//* [ARYCHK] (Dem_SamplingFreezeFrameRecordTable[samplingFreezeFrameMemoryRef].DemFFDStoredFormatSize) / 1 / samplingFFRPos.DataStart */
                 }
             }
 
@@ -510,7 +516,7 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmData_CaptureTSFFFromS
                 samplingFreezeFrameRecordDataPtr = Dem_Data_GetSamplingFreezeFrameRecordDataPtr( samplingFreezeFrameMemoryRef, samplingFFRecIndex );    /* [GUD:RET:Not NULL_PTR ] samplingFreezeFrameMemoryRef */
                 if( samplingFreezeFrameRecordDataPtr != NULL_PTR )
                 {
-                    if( samplingFreezeFrameRecordDataPtr[samplingFFRPos.RecordStatus] == DEM_FFD_STORED )               /* [GUD]samplingFFRPos.RecordStatus */
+                    if( samplingFreezeFrameRecordDataPtr[samplingFFRPos.RecordStatus] == DEM_FFD_STORED )               /* [GUD]samplingFFRPos.RecordStatus *//* [ARYCHK] (Dem_SamplingFreezeFrameRecordTable[samplingFreezeFrameMemoryRef].DemFFDStoredFormatSize) / 1 / samplingFFRPos.RecordStatus */
                     {
                         Dem_UdmTSFFDMng_SetRecordStatus( Dem_UdmTmpEventMemoryEntry.UdmGroupKindIndex, tsFFRecIndex );
                     }
@@ -594,6 +600,8 @@ static FUNC( void, DEM_CODE ) Dem_UdmData_ClearTSFFListRecordOtherThanTheFirstTi
 /*  Version        :Date                                                    */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-6-0         :2024-01-29                                              */
+/*  v5-7-0         :2024-05-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

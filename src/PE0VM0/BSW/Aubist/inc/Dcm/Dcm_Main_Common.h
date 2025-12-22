@@ -1,7 +1,7 @@
-/* Dcm_Main_Common_h(v5-0-0)                                                */
+/* Dcm_Main_Common_h(v5-8-0)                                                */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -78,6 +78,13 @@ FUNC( void, DCM_CODE ) Dcm_Main_SyncOsapDataCbk
 );
 #endif /* DCM_M_USE_VINDATAIDENTIFIER == STD_ON */
 
+FUNC( void, DCM_CODE ) Dcm_Main_SetMemory
+(
+    P2VAR( uint8, AUTOMATIC, DCM_APPL_DATA )    ptBufferPtr,
+    const uint8                                 u1CharData,
+    const uint16                                u2BufferSize
+);
+
 #define DCM_STOP_SEC_CODE
 #include <Dcm_MemMap.h>
 
@@ -130,6 +137,7 @@ FUNC( void, DCM_CODE ) Dcm_Main_ClearSatelliteVin
 /*  v1-0-0         :2018-03-20                                              */
 /*  v3-2-0         :2020-10-28                                              */
 /*  v5-0-0         :2022-03-29                                              */
+/*  v5-8-0         :2024-10-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

@@ -1,7 +1,7 @@
-/* Dem_Control_AsyncReq_c(v5-5-0)                                           */
+/* Dem_Control_AsyncReq_c(v5-7-0)                                           */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -205,6 +205,7 @@ FUNC( void, DEM_CODE ) Dem_Control_SetEventProcess
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
+/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_Control_SetEventLoop
 ( void )
@@ -249,7 +250,7 @@ static FUNC( void, DEM_CODE ) Dem_Control_SetEventLoop
         for( loopCount = (Dem_u16_EventQueueIndexType)0U; loopCount < setEventNum; loopCount++ )
         {
             /* Because it is not in operation cycle state setting, dequeue */
-            retDequeue = Dem_AsyncReq_Dequeue( &setNewEventKind, &setEventIndex, &setEventStatus, &dataBuffer[0] );
+            retDequeue = Dem_AsyncReq_Dequeue( &setNewEventKind, &setEventIndex, &setEventStatus, &dataBuffer[0] );/* [ARYCHK] DEM_ASYNCDATAQUE_ITEMSIZE_MAX / 1 / 0 */
             if( retDequeue == DEM_IRT_OK )
             {
                 Dem_Control_SetSettingEventMode( settingEvent );
@@ -292,9 +293,9 @@ static FUNC( void, DEM_CODE ) Dem_Control_SetEventLoop
 
 #ifndef JGXSTACK
                     /*  Execute asyncronus jobs.            */
-                    asyncFuncRetVal = Dem_ExecAsyncReqTable[ asyncReqIndex ].Func( setEventIndex, setEventStatus, &dataBuffer[0] );
+                    asyncFuncRetVal = Dem_ExecAsyncReqTable[ asyncReqIndex ].Func( setEventIndex, setEventStatus, &dataBuffer[0] );/* [ARYCHK] DEM_ASYNCDATAQUE_ITEMSIZE_MAX / 1 / 0 */
 #else /* JGXSTACK */
-                    asyncFuncRetVal = Dem_AsyncReqFnc_ForStack( setEventIndex, setEventStatus, &dataBuffer[0] );
+                    asyncFuncRetVal = Dem_AsyncReqFnc_ForStack( setEventIndex, setEventStatus, &dataBuffer[0] );/* [ARYCHK] DEM_ASYNCDATAQUE_ITEMSIZE_MAX / 1 / 0 */
 #endif /* JGXSTACK */
 
 #if ( DEM_TRIGGER_FIM_REPORTS == STD_ON )   /*  [FuncSw]    */
@@ -650,6 +651,7 @@ static FUNC( void, DEM_CODE ) Dem_Control_ClearSettingEventMode
 /*  v5-0-0         :2022-03-29                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-7-0         :2024-05-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

@@ -1,7 +1,7 @@
-/* Dem_Control_EventInfoSpecific_c(v5-5-0)                                  */
+/* Dem_Control_EventInfoSpecific_c(v5-9-0)                                  */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -147,6 +147,121 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_GetPendingClearCounter
                     *PendingClearCounterPtr =   threshold;
                 }
 
+                retVal = DEM_IRT_OK;
+            }
+        }
+    }
+
+    return retVal;
+}
+
+/****************************************************************************/
+/* Function Name | Dem_Control_GetSimilarCondition                          */
+/* Description   | Gets the similar condition of an event.                  */
+/* Preconditions | none                                                     */
+/* Parameters    | [in] EventID :                                           */
+/*               |        Identification of an event by assigned EventId.   */
+/*               | [out] SimilarConditionArrayPtr :                         */
+/*               |        Pointer to the area to get SimilarConditions.     */
+/*               | [out] SimilarConditionStatusPtr :                        */
+/*               |        Pointer to the area to get SimilarConditions sta- */
+/*               |        tus.                                              */
+/* Return Value  | Dem_u08_InternalReturnType                               */
+/*               |        DEM_IRT_OK  : success                             */
+/*               |        DEM_IRT_NG  : failed                              */
+/* Notes         | -                                                        */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-9-0      | new created. based on Dem_Control_GetPendingClearCounter.*/
+/****************************************************************************/
+FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_GetSimilarCondition
+(
+    VAR( Dem_EventIdType, AUTOMATIC ) EventID,
+    P2VAR( Dem_SimilarConditionValueType, AUTOMATIC, DEM_APPL_DATA ) SimilarConditionArrayPtr,
+    P2VAR( Dem_SimilarConditionStatusType, AUTOMATIC, AUTOMATIC ) SimilarConditionStatusPtr
+)
+{
+    VAR( Dem_u08_InternalReturnType, AUTOMATIC ) retVal;
+    VAR( Dem_u08_InternalReturnType, AUTOMATIC ) retCnvId;
+
+    VAR( Dem_u16_EventCtrlIndexType, AUTOMATIC ) eventCtrlIndex;
+    VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) eventStrgIndex;
+    VAR( Dem_u16_SimilarStrgIndexType, AUTOMATIC ) similarStrgIndex;
+    VAR( Dem_u08_FaultIndexType, AUTOMATIC ) faultIndex;
+    VAR( Dem_u08_FaultIndexType, AUTOMATIC ) failRecordNum;
+
+    VAR( Dem_u08_InternalReturnType, AUTOMATIC ) retTempVal;
+    VAR( Dem_u08_InternalReturnType, AUTOMATIC ) checkStatus;
+    VAR( boolean, AUTOMATIC ) similarConditionStoredflg;
+    VAR( Dem_UdsStatusByteType, AUTOMATIC ) statusOfDTC;
+    VAR( Dem_SimilarConditionStatusType, AUTOMATIC ) similarConditionStatus;
+
+    retVal = DEM_IRT_NG;
+    eventCtrlIndex = DEM_EVENTCTRLINDEX_INVALID;
+
+    checkStatus = Dem_Control_ChkAfterCompleteInit();
+    if( checkStatus == DEM_IRT_OK )
+    {
+        /*  convert eventid to eventCtrlIndex with check eventAvailable.    */
+        retTempVal = Dem_Control_GetEventCtrlIndexFromEventId( EventID, &eventCtrlIndex );                               /* [GUD:RET:DEM_IRT_OK] eventCtrlIndex */
+        if( retTempVal == DEM_IRT_OK )
+        {
+            eventStrgIndex  =   Dem_CmbEvt_CnvEventCtrlIndex_ToEventStrgIndex( eventCtrlIndex );    /* [GUD]eventCtrlIndex *//* [GUD:RET:IF_GUARDED: EventCtrlIndex ] eventStrgIndex */
+
+            /*  check and get similarStrgIndex.     */
+            retCnvId        =   Dem_CfgInfoPm_CnvEventStrgIndexToSimilarStrgIndex( eventStrgIndex, &similarStrgIndex );     /* [GUD:RET:DEM_IRT_OK] similarStrgIndex */
+
+            if ( retCnvId == DEM_IRT_OK )
+            {
+                /*--------------------------------------------------------------------------*/
+                /* Need to get exclusive [SchM_Enter_Dem_EventMemory].                      */
+                /* These are the reasons why this function needs to get exclusive.          */
+                /*  - This function call [DataMng] function directory.                      */
+                /*  - This function called from SW-C/Dcm context.                           */
+                /*  Waits to finish the exclusive section in the Dem_MainFunction context.  */
+                SchM_Enter_Dem_EventMemory();    /* waits completion of updating Diag record data by Dem_MainFunction.      */
+                SchM_Exit_Dem_EventMemory();
+                /*--------------------------------------------------------------------------*/
+
+                similarConditionStatus = DEM_SIMILARCONDITION_STATUS_NO_DATA;
+
+                faultIndex = DEM_FAULTINDEX_INITIAL;
+                failRecordNum = Dem_FailRecordNum;
+
+                /*  check whether SimilarEvent is registered in fault record.       */
+                (void)Dem_DataMngC_GetER_FaultIndex( eventStrgIndex, &faultIndex );                                         /* no return check required *//* [GUD]eventStrgIndex */
+                if( faultIndex < failRecordNum )
+                {
+                    similarConditionStoredflg = (boolean)FALSE;
+
+                    /*  check current SimilarConditions stored flag.    */
+                    Dem_SimilarMng_GetSimilarConditionStoredflg( similarStrgIndex, &similarConditionStoredflg );            /* [GUD]similarStrgIndex */
+                    if( similarConditionStoredflg == (boolean)TRUE )
+                    {
+                        /*  SimilarConditions is stored.    */
+
+                        Dem_SimilarMng_GetSimilarConditionStoredList( similarStrgIndex, SimilarConditionArrayPtr );         /* [GUD]similarStrgIndex */
+                        similarConditionStatus = DEM_SIMILARCONDITION_STATUS_STORED;
+                    }
+                    else
+                    {
+                        /*  SimilarConditions not stored.   */
+
+                        statusOfDTC = DEM_DTCSTATUS_BYTE_ALL_OFF;
+
+                        /*  check current statusOfDTC.      */
+                        (void)Dem_DataMngC_GetER_StatusOfDTC( eventStrgIndex, &statusOfDTC );                               /* no return check required *//* [GUD]eventStrgIndex */
+                        if( ( statusOfDTC & DEM_UDS_STATUS_PDTC ) == DEM_UDS_STATUS_PDTC )      /*  statusOfDTC : bit2  */
+                        {
+                            /*  SimilarConditions is latched.   */
+
+                            Dem_SimilarMng_GetSimilarConditionLatchedList( similarStrgIndex, SimilarConditionArrayPtr );    /* [GUD]similarStrgIndex */
+                            similarConditionStatus = DEM_SIMILARCONDITION_STATUS_LATCHED;
+                        }
+                    }
+                }
+
+                *SimilarConditionStatusPtr = similarConditionStatus;
                 retVal = DEM_IRT_OK;
             }
         }
@@ -314,6 +429,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_GetExceedanceCounter
 /* History                                                                  */
 /*  Version        :Date                                                    */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-9-0         :2025-02-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

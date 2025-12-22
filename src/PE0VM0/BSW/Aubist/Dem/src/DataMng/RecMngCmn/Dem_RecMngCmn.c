@@ -1,7 +1,7 @@
-/* Dem_RecMngCmn_c(v5-5-0)                                                  */
+/* Dem_RecMngCmn_c(v5-7-0)                                                  */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -147,6 +147,7 @@ FUNC( void, DEM_CODE ) Dem_RecMngCmn_Init
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_RecMngCmn_InitNvMStatus
 (
@@ -159,7 +160,7 @@ static FUNC( void, DEM_CODE ) Dem_RecMngCmn_InitNvMStatus
     recMngCmnStsMax =   Dem_NvMWriteInfo[RecordKind].RecordNum;         /* [GUDCHK:CALLER]RecordKind */
     for( recMngCmnStsIndex = (Dem_u16_RecordIndexType)0U; recMngCmnStsIndex < recMngCmnStsMax ; recMngCmnStsIndex++ )   /* [GUD:for]recMngCmnStsIndex */
     {
-        Dem_NvMWriteInfo[RecordKind].NvMStatusPtr[recMngCmnStsIndex] = DEM_RECMNGCMN_NVM_STS_NON_TARGET;    /* [GUDCHK:CALLER]RecordKind *//* [GUD]recMngCmnStsIndex */
+        Dem_NvMWriteInfo[RecordKind].NvMStatusPtr[recMngCmnStsIndex] = DEM_RECMNGCMN_NVM_STS_NON_TARGET;    /* [GUDCHK:CALLER]RecordKind *//* [GUD]recMngCmnStsIndex *//* [ARYCHK] recMngCmnStsMax / 1 / recMngCmnStsIndex */
     }
     Dem_RecMngCmn_NvMRequestIndex[RecordKind]            = DEM_RECORDINDEX_INVALID;                         /* [GUDCHK:CALLER]RecordKind */
 
@@ -283,6 +284,7 @@ FUNC( void, DEM_CODE ) Dem_RecMngCmn_InitSavedZone
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_RecMngCmn_SetNvMWriteStatus
 (
@@ -292,9 +294,9 @@ FUNC( void, DEM_CODE ) Dem_RecMngCmn_SetNvMWriteStatus
 {
     if( RecordIndex < Dem_NvMWriteInfo[RecordKind].RecordNum )                                              /* [GUDCHK:CALLER]RecordKind *//* [GUD:if]RecordIndex */
     {
-        if ( Dem_NvMWriteInfo[RecordKind].NvMStatusPtr[RecordIndex] == DEM_RECMNGCMN_NVM_STS_WRITING )      /* [GUDCHK:CALLER]RecordKind *//* [GUD]RecordIndex */
+        if ( Dem_NvMWriteInfo[RecordKind].NvMStatusPtr[RecordIndex] == DEM_RECMNGCMN_NVM_STS_WRITING )      /* [GUDCHK:CALLER]RecordKind *//* [GUD]RecordIndex *//* [ARYCHK] Dem_NvMWriteInfo[RecordKind].RecordNum / 1 / RecordIndex */
         {
-            Dem_NvMWriteInfo[RecordKind].NvMStatusPtr[RecordIndex] = DEM_RECMNGCMN_NVM_STS_UPDATA_WRITING;  /* [GUDCHK:CALLER]RecordKind *//* [GUD]RecordIndex */
+            Dem_NvMWriteInfo[RecordKind].NvMStatusPtr[RecordIndex] = DEM_RECMNGCMN_NVM_STS_UPDATA_WRITING;  /* [GUDCHK:CALLER]RecordKind *//* [GUD]RecordIndex *//* [ARYCHK] Dem_NvMWriteInfo[RecordKind].RecordNum / 1 / RecordIndex */
 
             /* The same exclusion as ExclusiveEnterFnc and ExclusiveExitFnc is applied by the caller of this function, */
             /* so exclusion is not required here. */
@@ -302,8 +304,8 @@ FUNC( void, DEM_CODE ) Dem_RecMngCmn_SetNvMWriteStatus
             Dem_RecMngCmn_ExistNvMWriteData[RecordKind] = (boolean)TRUE;                                    /* [GUDCHK:CALLER]RecordKind */
 
         }
-        else if ( ( Dem_NvMWriteInfo[RecordKind].NvMStatusPtr[RecordIndex] == DEM_RECMNGCMN_NVM_STS_TARGET ) ||         /* [GUDCHK:CALLER]RecordKind *//* [GUD]RecordIndex */
-                  ( Dem_NvMWriteInfo[RecordKind].NvMStatusPtr[RecordIndex] == DEM_RECMNGCMN_NVM_STS_UPDATA_WRITING ) )  /* [GUDCHK:CALLER]RecordKind *//* [GUD]RecordIndex */
+        else if ( ( Dem_NvMWriteInfo[RecordKind].NvMStatusPtr[RecordIndex] == DEM_RECMNGCMN_NVM_STS_TARGET ) ||         /* [GUDCHK:CALLER]RecordKind *//* [GUD]RecordIndex *//* [ARYCHK] Dem_NvMWriteInfo[RecordKind].RecordNum / 1 / RecordIndex */
+                  ( Dem_NvMWriteInfo[RecordKind].NvMStatusPtr[RecordIndex] == DEM_RECMNGCMN_NVM_STS_UPDATA_WRITING ) )  /* [GUDCHK:CALLER]RecordKind *//* [GUD]RecordIndex *//* [ARYCHK] Dem_NvMWriteInfo[RecordKind].RecordNum / 1 / RecordIndex */
         {
             /* No process */
         }
@@ -312,7 +314,7 @@ FUNC( void, DEM_CODE ) Dem_RecMngCmn_SetNvMWriteStatus
             /*   Dem_NvMWriteInfo[RecordKind].NvMStatusPtr[RecordIndex] == DEM_RECMNGCMN_NVM_STS_NON_TARGET         */
             /*   Dem_NvMWriteInfo[RecordKind].NvMStatusPtr[RecordIndex] == DEM_RECMNGCMN_NVM_STS_NOT_VERIFIED       */
             /*   invalid value                                                                                      */
-            Dem_NvMWriteInfo[RecordKind].NvMStatusPtr[RecordIndex] = DEM_RECMNGCMN_NVM_STS_TARGET;                      /* [GUDCHK:CALLER]RecordKind *//* [GUD]RecordIndex */
+            Dem_NvMWriteInfo[RecordKind].NvMStatusPtr[RecordIndex] = DEM_RECMNGCMN_NVM_STS_TARGET;                      /* [GUDCHK:CALLER]RecordKind *//* [GUD]RecordIndex *//* [ARYCHK] Dem_NvMWriteInfo[RecordKind].RecordNum / 1 / RecordIndex */
 
             /*  Set mode :  DEM_MODE_SYNCING_NVRAM  */
             SchM_Enter_Dem_NvMRecordAccess();
@@ -346,6 +348,7 @@ FUNC( void, DEM_CODE ) Dem_RecMngCmn_SetNvMWriteStatus
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_RecMngCmn_GetNvMWriteData
 (
@@ -379,7 +382,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_RecMngCmn_GetNvMWriteData
                 Dem_RecMngCmnExcEnterFnc_ForStack();
 #endif /* JGXSTACK */
 
-                if ( Dem_NvMWriteInfo[RecordKind].NvMStatusPtr[recMngCmnIndex] == DEM_RECMNGCMN_NVM_STS_TARGET )        /* [GUDCHK:CALLER]RecordKind *//* [GUD]recMngCmnIndex */
+                if ( Dem_NvMWriteInfo[RecordKind].NvMStatusPtr[recMngCmnIndex] == DEM_RECMNGCMN_NVM_STS_TARGET )        /* [GUDCHK:CALLER]RecordKind *//* [GUD]recMngCmnIndex *//* [ARYCHK] Dem_NvMWriteInfo[RecordKind].RecordNum / 1 / recMngCmnIndex */
                 {
                     /* Set record index */
                     Dem_RecMngCmn_NvMRequestIndex[RecordKind] = recMngCmnIndex;                                         /* [GUDCHK:CALLER]RecordKind */
@@ -387,7 +390,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_RecMngCmn_GetNvMWriteData
                     Dem_RecMngCmn_SetBlockMirror( RecordKind, BlockMirrorPtr );                                         /* [GUDCHK:CALLER]RecordKind */
 
                     /* Change status */
-                    Dem_NvMWriteInfo[RecordKind].NvMStatusPtr[recMngCmnIndex] = DEM_RECMNGCMN_NVM_STS_WRITING;          /* [GUDCHK:CALLER]RecordKind *//* [GUD]recMngCmnIndex */
+                    Dem_NvMWriteInfo[RecordKind].NvMStatusPtr[recMngCmnIndex] = DEM_RECMNGCMN_NVM_STS_WRITING;          /* [GUDCHK:CALLER]RecordKind *//* [GUD]recMngCmnIndex *//* [ARYCHK] Dem_NvMWriteInfo[RecordKind].RecordNum / 1 / recMngCmnIndex */
 
                     /* Set flag */
                     breakFlg = (boolean)TRUE;
@@ -471,6 +474,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_RecMngCmn_GetNvMWriteData
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_RecMngCmn_NotifyCompleteNvMWrite
 (
@@ -496,14 +500,14 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_RecMngCmn_NotifyCompleteNvMWrit
             Dem_RecMngCmnExcEnterFnc_ForStack();
 #endif /* JGXSTACK */
 
-            if ( Dem_NvMWriteInfo[RecordKind].NvMStatusPtr[recMngCmnIndex] == DEM_RECMNGCMN_NVM_STS_WRITING )               /* [GUDCHK:CALLER]RecordKind *//* [GUD]recMngCmnIndex */
+            if ( Dem_NvMWriteInfo[RecordKind].NvMStatusPtr[recMngCmnIndex] == DEM_RECMNGCMN_NVM_STS_WRITING )               /* [GUDCHK:CALLER]RecordKind *//* [GUD]recMngCmnIndex *//* [ARYCHK] Dem_NvMWriteInfo[RecordKind].RecordNum / 1 / recMngCmnIndex */
             {
                 /* Nvm Write Success or Failure */
-                Dem_NvMWriteInfo[RecordKind].NvMStatusPtr[recMngCmnIndex] = DEM_RECMNGCMN_NVM_STS_NON_TARGET;               /* [GUDCHK:CALLER]RecordKind *//* [GUD]recMngCmnIndex */
+                Dem_NvMWriteInfo[RecordKind].NvMStatusPtr[recMngCmnIndex] = DEM_RECMNGCMN_NVM_STS_NON_TARGET;               /* [GUDCHK:CALLER]RecordKind *//* [GUD]recMngCmnIndex *//* [ARYCHK] Dem_NvMWriteInfo[RecordKind].RecordNum / 1 / recMngCmnIndex */
             }
-            else if( Dem_NvMWriteInfo[RecordKind].NvMStatusPtr[recMngCmnIndex] == DEM_RECMNGCMN_NVM_STS_UPDATA_WRITING )    /* [GUDCHK:CALLER]RecordKind *//* [GUD]recMngCmnIndex */
+            else if( Dem_NvMWriteInfo[RecordKind].NvMStatusPtr[recMngCmnIndex] == DEM_RECMNGCMN_NVM_STS_UPDATA_WRITING )    /* [GUDCHK:CALLER]RecordKind *//* [GUD]recMngCmnIndex *//* [ARYCHK] Dem_NvMWriteInfo[RecordKind].RecordNum / 1 / recMngCmnIndex */
             {
-                Dem_NvMWriteInfo[RecordKind].NvMStatusPtr[recMngCmnIndex] = DEM_RECMNGCMN_NVM_STS_TARGET;                   /* [GUDCHK:CALLER]RecordKind *//* [GUD]recMngCmnIndex */
+                Dem_NvMWriteInfo[RecordKind].NvMStatusPtr[recMngCmnIndex] = DEM_RECMNGCMN_NVM_STS_TARGET;                   /* [GUDCHK:CALLER]RecordKind *//* [GUD]recMngCmnIndex *//* [ARYCHK] Dem_NvMWriteInfo[RecordKind].RecordNum / 1 / recMngCmnIndex */
 
                 /*  Set mode :  DEM_MODE_SYNCING_NVRAM  */
                 SchM_Enter_Dem_NvMRecordAccess();
@@ -545,7 +549,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_RecMngCmn_NotifyCompleteNvMWrit
                 Dem_RecMngCmnExcEnterFnc_ForStack();
 #endif /* JGXSTACK */
 
-                Dem_NvMWriteInfo[RecordKind].NvMStatusPtr[recMngCmnIndex] = DEM_RECMNGCMN_NVM_STS_TARGET;       /* [GUDCHK:CALLER]RecordKind *//* [GUD]recMngCmnIndex */
+                Dem_NvMWriteInfo[RecordKind].NvMStatusPtr[recMngCmnIndex] = DEM_RECMNGCMN_NVM_STS_TARGET;       /* [GUDCHK:CALLER]RecordKind *//* [GUD]recMngCmnIndex *//* [ARYCHK] Dem_NvMWriteInfo[RecordKind].RecordNum / 1 / recMngCmnIndex */
 
 #ifndef JGXSTACK
                 /* Exit exclusive area */
@@ -737,6 +741,7 @@ FUNC( void, DEM_CODE ) Dem_RecMngCmn_RefreshRAM
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-7-0         :2024-05-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

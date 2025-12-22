@@ -1,7 +1,7 @@
 /* Dem_Rc_RecMngCmn_h(v5-5-0)                                               */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 /****************************************************************************/
 /* Object Name  | Dem/Rc_RecMngCmn/HEADER                                   */
@@ -31,7 +31,7 @@
 #endif /* DEM_NVM_SYNC_PROCESS_ENABLE -STD_ON- */
 #define DEM_RECMNGCMN_NVM_STS_NOT_VERIFIED       ((Dem_u08_RecMngMtxStsType)0xFFU)
 
-#define DEM_RECORD_ONE_FIELD                     ((Dem_u16_RecordFieldIndexType)0xFFFFU) 
+#define DEM_RECORD_ONE_FIELD                     ((Dem_u16_RecordFieldIndexType)0xFFFFU)
 /*--------------------------------------------------------------------------*/
 /* Types                                                                    */
 /*--------------------------------------------------------------------------*/

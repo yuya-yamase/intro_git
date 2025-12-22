@@ -1,7 +1,7 @@
-/* Dem_DTC_BitAces_ExtendDTCStatus_c(v5-5-0)                                */
+/* Dem_DTC_BitAces_ExtendDTCStatus_c(v5-9-0)                                */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 
@@ -711,6 +711,56 @@ FUNC( Dem_u08_DTCStatusEx2Type, DEM_CODE ) Dem_DTC_ExDTC2_ResetContMIHistAndIndA
     return newExDTCStatus2;
 }
 
+#if ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )
+/****************************************************************************/
+/* Function Name | Dem_DTC_ExDTC2_SetPendingOfEmission                      */
+/* Description   | Turn on Extend DTC status2 bit(MisfPendingOfEmission)    */
+/* Preconditions | none                                                     */
+/* Parameters    | [in] ExtendDTCStatus2 : DTC status before the change.    */
+/* Return Value  | Dem_u08_DTCStatusEx2Type                                 */
+/* Notes         |                                                          */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-9-0      | new created.based on Dem_DTC_ExDTC2_SetEventDisable().   */
+/****************************************************************************/
+FUNC( Dem_u08_DTCStatusEx2Type, DEM_CODE ) Dem_DTC_ExDTC2_SetPendingOfEmission
+(
+    VAR( Dem_u08_DTCStatusEx2Type, AUTOMATIC ) ExtendDTCStatus2
+)
+{
+    VAR( Dem_u08_DTCStatusEx2Type, AUTOMATIC ) retVal;
+
+     /* Turns on Extend DTC status bit */
+    retVal = ( ExtendDTCStatus2 | DEM_DTCSTATUSEX2_STATUS_MISF_PENDINGOFEMISSION );
+
+    return retVal;
+}
+
+/****************************************************************************/
+/* Function Name | Dem_DTC_ExDTC2_ResetPendingOfEmission                    */
+/* Description   | Turn off Extend DTC status2 bit(MisfPendingOfEmission)   */
+/* Preconditions | none                                                     */
+/* Parameters    | [in] ExtendDTCStatus2 : DTC status before the change.    */
+/* Return Value  | Dem_u08_DTCStatusEx2Type                                 */
+/* Notes         |                                                          */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-9-0      | new created.based on Dem_DTC_ExDTC2_ClearEventDisable(). */
+/****************************************************************************/
+FUNC( Dem_u08_DTCStatusEx2Type, DEM_CODE ) Dem_DTC_ExDTC2_ResetPendingOfEmission
+(
+    VAR( Dem_u08_DTCStatusEx2Type, AUTOMATIC ) ExtendDTCStatus2
+)
+{
+    VAR( Dem_u08_DTCStatusEx2Type, AUTOMATIC ) retVal;
+
+     /* Turns off Extend DTC status bit */
+    retVal = ( ExtendDTCStatus2 & ~DEM_DTCSTATUSEX2_STATUS_MISF_PENDINGOFEMISSION );
+
+    return retVal;
+}
+#endif  /* ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )   */
+
 #define DEM_STOP_SEC_CODE
 #include <Dem_MemMap.h>
 
@@ -722,6 +772,7 @@ FUNC( Dem_u08_DTCStatusEx2Type, DEM_CODE ) Dem_DTC_ExDTC2_ResetContMIHistAndIndA
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-9-0         :2025-02-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

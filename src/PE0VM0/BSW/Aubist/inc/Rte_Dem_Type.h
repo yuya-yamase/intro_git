@@ -1,7 +1,7 @@
-/* Rte_Dem_Type_h(v5-5-0)                                                   */
+/* Rte_Dem_Type_h(v5-9-0)                                                   */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -98,6 +98,16 @@ extern "C" {
 #ifndef DEM_SEVERITY_CHECK_IMMEDIATELY
 #define DEM_SEVERITY_CHECK_IMMEDIATELY ((Dem_DTCSeverityType)0x80U)
 #endif /* DEM_SEVERITY_CHECK_IMMEDIATELY */
+
+
+#ifndef DEM_DTCSETTING_STATUS_ENABLE
+#define DEM_DTCSETTING_STATUS_ENABLE ((Dem_DTCSettingStatusType)0x00U)
+#endif /* DEM_DTCSETTING_STATUS_ENABLE */
+
+#ifndef DEM_DTCSETTING_STATUS_DISABLE
+#define DEM_DTCSETTING_STATUS_DISABLE ((Dem_DTCSettingStatusType)0x01U)
+#endif /* DEM_DTCSETTING_STATUS_DISABLE */
+
 
 #ifndef DEM_SEVERITY_NO_SEVERITY
 #define DEM_SEVERITY_NO_SEVERITY ((Dem_DTCSeverityType)0x00U)
@@ -672,6 +682,19 @@ extern "C" {
 #endif /* DEM_WRONG_CONDITION */
 
 
+#ifndef DEM_SIMILARCONDITION_STATUS_NO_DATA
+#define DEM_SIMILARCONDITION_STATUS_NO_DATA ((Dem_SimilarConditionStatusType)0x00U)
+#endif /* DEM_SIMILARCONDITION_STATUS_NO_DATA */
+
+#ifndef DEM_SIMILARCONDITION_STATUS_LATCHED
+#define DEM_SIMILARCONDITION_STATUS_LATCHED ((Dem_SimilarConditionStatusType)0x01U)
+#endif /* DEM_SIMILARCONDITION_STATUS_LATCHED */
+
+#ifndef DEM_SIMILARCONDITION_STATUS_STORED
+#define DEM_SIMILARCONDITION_STATUS_STORED ((Dem_SimilarConditionStatusType)0x02U)
+#endif /* DEM_SIMILARCONDITION_STATUS_STORED */
+
+
 #ifndef DEM_UDS_STATUS_TF
 #define DEM_UDS_STATUS_TF ((Dem_UdsStatusByteType)0x01U)
 #endif /* DEM_UDS_STATUS_TF */
@@ -804,7 +827,7 @@ extern "C" {
 
 
 /****************************************************************************/
-/* AUBASS definition for Array                                              */
+/* AUBIST definition for Array                                              */
 /****************************************************************************/
 #define DEM_MAX_DATA_ARRAY_SIZE                ((uint16)17U)
 #define DEM_MAX_PID_DATA_ARRAY_SIZE            ((uint16)1U)
@@ -821,11 +844,13 @@ extern "C" {
 /*  v5-0-0         :2021-12-24                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-8-0         :2024-10-29                                              */
+/*  v5-9-0         :2025-02-26                                              */
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
 /*  Framework          :v2-1-0                                              */
-/*  BSW plug-in        :v5-5-0                                              */
+/*  BSW plug-in        :v5-10-0                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

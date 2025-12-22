@@ -1,11 +1,11 @@
-/* Dem_DataCtl_InfoFFD_c(v5-5-0)                                            */
+/* Dem_DataCtl_InfoFFD_GetEvtFFD_c(v5-9-0)                                  */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
-/* Object Name  | Dem/DataCtl_InfoFFD/CODE                                  */
+/* Object Name  | Dem/DataCtl_InfoFFD_GetEvtFFD/CODE                        */
 /*--------------------------------------------------------------------------*/
 /* Notes        |                                                           */
 /****************************************************************************/
@@ -24,6 +24,11 @@
 #include "../../../inc/Dem_Utl.h"
 
 #include "Dem_DataCtl_local.h"
+
+#ifndef DEM_SIT_RANGE_CHECK
+#else   /* DEM_SIT_RANGE_CHECK */
+#include <Dem_SIT_RangeCheck.h>
+#endif /* DEM_SIT_RANGE_CHECK */
 
 /*--------------------------------------------------------------------------*/
 /* Macros                                                                   */
@@ -147,6 +152,8 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_GetTSFFRecordByDidC
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
+/*   v5-8-0      | no branch changed.                                       */
+/*   v5-9-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_GetEventFreezeFrameData
 (
@@ -176,7 +183,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_GetEventFreezeFrameData
 
     P2CONST( AB_83_ConstV Dem_FreezeFrameClassType, AUTOMATIC, DEM_CONFIG_DATA ) freezeFrameClassPtr;
     P2CONST( AB_83_ConstV Dem_FreezeFrameRecNumClassType, AUTOMATIC, DEM_CONFIG_DATA ) freezeFrameRecNumClassPtr;
-    P2CONST( AB_83_ConstV Dem_FreezeFrameRecordClassType, AUTOMATIC, DEM_CONFIG_DATA ) freezeFrameRecordClassPtr;
 
     /* Initializes the return value to DEM_IRT_WRONG_RECORDNUMBER. */
     retVal = DEM_IRT_WRONG_RECORDNUMBER;
@@ -194,9 +200,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_GetEventFreezeFrameData
     {
         /* Initialize DemFreezeFrameRecordClass index to 0. */
         freezeFrameRecordClassIndex = 0U;
-
-        /* Initialize FreezeFrameRecordClass table to NULL. */
-        freezeFrameRecordClassPtr = NULL_PTR;
 
         /* Initialize FreezeFrameRecordTrigger to NONE. */
         freezeFrameRecordTrigger = DEM_TRIGGER_ON_NONE;
@@ -229,7 +232,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_GetEventFreezeFrameData
                 /* Specify the FreezeFrameRecNumClass table and the specified record number,                 */
                 /* the FreezeFrameRecordClass table storage area, and the FreezeFrameRecordClass table index */
                 /* Call FreezeFrameRecordClass table acquisition processing.                                 */
-                resultOfFfrClass = Dem_Data_GetFreezeFrameRecordClassByRecordNumber( freezeFrameRecNumClassPtr, RecordNumber, &freezeFrameRecordClassPtr, &freezeFrameRecordClassIndex, &freezeFrameRecordTrigger );/* [GUD:RET:DEM_IRT_OK] freezeFrameRecordClassPtr *//* [GUD:RET:DEM_IRT_OK] freezeFrameRecordClassIndex */
+                resultOfFfrClass = Dem_Data_GetFreezeFrameRecordClassByRecordNumber( DEM_CALLER_SWC, freezeFrameRecNumClassPtr, RecordNumber, &freezeFrameRecordClassIndex, &freezeFrameRecordTrigger );/* [GUD:RET:DEM_IRT_OK] freezeFrameRecordClassIndex */
                 /* Checks FreezeFrameRecordClass table acquisition result. */
                 if( resultOfFfrClass == DEM_IRT_OK )
                 {
@@ -365,9 +368,9 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_GetEventFFDataFromT
         {
             freezeFrameClassPtr = &Dem_FreezeFrameClassTable[freezeFrameClassRef];      /* [GUD]freezeFrameClassRef */
 
-            didClassIndex = (Dem_u32_DIDClassIndexType)0U;
-
-            resultOfDidClass = Dem_Data_GetDidClassByDataID( freezeFrameClassPtr, DataID, &didClassIndex, &dataOffset );
+            didClassIndex       = (Dem_u32_DIDClassIndexType)0U;
+            dataOffset          = (Dem_u16_FFDStoredIndexType)0U;
+            resultOfDidClass    = Dem_Data_GetDidClassByDataID( freezeFrameClassPtr, DataID, &didClassIndex, &dataOffset );
 
             if( resultOfDidClass == DEM_IRT_OK )
             {
@@ -420,6 +423,8 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_GetEventFFDataFromT
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | branch changed.                                          */
+/*   v5-6-0      | no branch changed.                                       */
+/*   v5-7-0      | branch changed.                                          */
 /****************************************************************************/
 static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_GetFFRecordByDidClass
 (
@@ -439,7 +444,7 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_GetFFRecordByDidCla
 #if ( DEM_OBDFFD_SUPPORT == STD_ON )
     VAR( boolean, AUTOMATIC ) judgeOutputOBDFFDTrigger;
 #endif  /*  ( DEM_OBDFFD_SUPPORT == STD_ON )    */
-    VAR( Dem_u16_FFDStoredIndexType, AUTOMATIC ) dataOffset;
+    VAR( Dem_u32_FFDStoredIndexType, AUTOMATIC ) dataOffset;
     VAR( Dem_u16_FFDStoredIndexType, AUTOMATIC ) didDataSize;
 #if ( DEM_OBDFFD_SUPPORT == STD_ON )    /*  [FuncSw]    */
     VAR( Dem_UdsStatusByteType, AUTOMATIC ) statusOfDTC;
@@ -458,13 +463,13 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_GetFFRecordByDidCla
         {
             if( freezeFrameRecord.RecordStatus == DEM_FFD_STORED )
             {
-                dataOffset = DataOffset;                                                                                                /* [GUDCHK:CALLER]DataOffset */
+                dataOffset = (Dem_u32_FFDStoredIndexType)DataOffset;                                                                                                /* [GUDCHK:CALLER]DataOffset */
 
-                ffdOutputAllow = Dem_Data_GetFFDOutputAllow( DidClassIndex, freezeFrameRecord.DataPtr[dataOffset], &dataOffset );       /* [GUDCHK:CALLER]DataOffset */
-                if( ffdOutputAllow == (boolean)TRUE )
-                {
 #if ( DEM_OBDFFD_SUPPORT == STD_ON )    /*  [FuncSw]    */
-                    if( FreezeFrameDataType == DEM_FFD_TYPE_OBDFFD )
+                if( FreezeFrameDataType == DEM_FFD_TYPE_OBDFFD )
+                {
+                    ffdOutputAllow = Dem_Data_GetFFDOutputAllow( DidClassIndex, freezeFrameRecord.DataPtr[dataOffset], &dataOffset );       /* [GUDCHK:CALLER]DataOffset *//* [ARYCHK] DEM_SIT_R_CHK_OBD_FF_DATA_SIZE / 1 / dataOffset */
+                    if( ffdOutputAllow == (boolean)TRUE )
                     {
                         /*  get status of DTC at DisableRecordUpdate.       */
                         statusOfDTC = DEM_DTCSTATUS_BYTE_ALL_OFF;
@@ -474,16 +479,20 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_GetFFRecordByDidCla
                         judgeOutputOBDFFDTrigger = Dem_Data_JudgeOutputOBDFFDTrigger( statusOfDTC, FreezeFrameRecordTrigger );
                         if( judgeOutputOBDFFDTrigger == (boolean)TRUE )
                         {
-                            Dem_UtlMem_CopyMemory( DestBufferPtr, &freezeFrameRecord.DataPtr[dataOffset], didDataSize );                /* [GUDCHK:CALLER]DataOffset */
+                            Dem_UtlMem_CopyMemory( DestBufferPtr, &freezeFrameRecord.DataPtr[dataOffset], didDataSize );                /* [GUDCHK:CALLER]DataOffset *//* [ARYCHK] DEM_SIT_R_CHK_OBD_FF_DATA_SIZE / 1 / dataOffset */
                             *BufSizePtr = didDataSize;
 
                             retVal = DEM_IRT_OK;
                         }
                     }
-                    else
+                }
+                else
 #endif  /*  ( DEM_OBDFFD_SUPPORT == STD_ON )    */
+                {
+                    ffdOutputAllow = Dem_Data_GetFFDOutputAllow( DidClassIndex, freezeFrameRecord.DataPtr[dataOffset], &dataOffset );       /* [GUDCHK:CALLER]DataOffset *//* [ARYCHK] DEM_SIT_R_CHK_NONOBD_FF_DATA_SIZE / 1 / dataOffset */
+                    if( ffdOutputAllow == (boolean)TRUE )
                     {
-                        Dem_UtlMem_CopyMemory( DestBufferPtr, &freezeFrameRecord.DataPtr[dataOffset], didDataSize );                    /* [GUDCHK:CALLER]DataOffset */
+                        Dem_UtlMem_CopyMemory( DestBufferPtr, &freezeFrameRecord.DataPtr[dataOffset], didDataSize );                    /* [GUDCHK:CALLER]DataOffset *//* [ARYCHK] DEM_SIT_R_CHK_NONOBD_FF_DATA_SIZE / 1 / dataOffset */
                         *BufSizePtr = didDataSize;
 
                         retVal = DEM_IRT_OK;
@@ -518,6 +527,7 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_GetFFRecordByDidCla
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
+/*   v5-8-0      | no branch changed.                                       */
 /****************************************************************************/
 static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_GetFreezeFrameRecord
 (
@@ -541,7 +551,7 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_GetFreezeFrameRecor
 #if ( DEM_OBDFFD_SUPPORT == STD_ON )   /*  [FuncSw]    */
     if ( FreezeFrameDataType == DEM_FFD_TYPE_OBDFFD )
     {
-        ffrClassPerDTCMaxNum = Dem_OBDFFRClassPerDTCMaxNum;
+        ffrClassPerDTCMaxNum = Dem_CfgInfoPm_GetOBDFFRClassPerDTCMaxNum();
     }
     else
 #endif  /*  ( DEM_OBDFFD_SUPPORT == STD_ON )           */
@@ -640,6 +650,8 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_GetFreezeFrameRecor
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-6-0      | branch changed.                                          */
+/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_GetDidClassByDataID
 (
@@ -650,38 +662,44 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_GetDidClassByDataID
 )
 {
     VAR( Dem_u08_InternalReturnType, AUTOMATIC ) retVal;
-    VAR( Dem_u08_DIDClassPerFFIndexType, AUTOMATIC ) didClassRefIndex;
+    VAR( Dem_u16_DIDClassPerFFIndexType, AUTOMATIC ) didClassRefIndex;
 
     VAR( Dem_u32_DIDClassIndexType, AUTOMATIC ) didClassIndex;
-    VAR( Dem_u16_FFDStoredIndexType, AUTOMATIC ) addedValue;
+    VAR( Dem_u32_FFDStoredIndexType, AUTOMATIC ) addedValue;
     VAR( Dem_u16_DIDNumberType, AUTOMATIC ) didIdentifier;
+    VAR( boolean, AUTOMATIC ) loopEnd;
 
     retVal = DEM_IRT_NG;
 
     addedValue = (Dem_u16_FFDStoredIndexType)0U;
+    loopEnd =   (boolean)FALSE;
 
-    for( didClassRefIndex = (Dem_u08_DIDClassPerFFIndexType)0U; didClassRefIndex < FreezeFrameClassPtr->DemDidClassNum; didClassRefIndex++ )    /* [GUD:for]didClassRefIndex */
+    for( didClassRefIndex = (Dem_u16_DIDClassPerFFIndexType)0U; didClassRefIndex < FreezeFrameClassPtr->DemDidClassNum; didClassRefIndex++ )    /* [GUD:for]didClassRefIndex */
     {
-        didClassIndex = FreezeFrameClassPtr->DemDidClassRef[didClassRefIndex];      /* [GUDCHK:CALLER]FreezeFrameClassPtr *//* [GUD]didClassRefIndex */
+        didClassIndex = FreezeFrameClassPtr->DemDidClassRef[didClassRefIndex];      /* [GUDCHK:CALLER]FreezeFrameClassPtr *//* [GUD]didClassRefIndex *//* [ARYCHK] DEM_DID_NUM_PER_FRAME_MAX_NUM / 1 / didClassRefIndex */
 
         didIdentifier = Dem_DIDClassTable[didClassIndex].DemDidIdentifier;          /* [GUDCHK:CALLER]FreezeFrameClassPtr */
 
         if( didIdentifier == DataID )
         {
             *DidClassIndexPtr   =   didClassIndex;                                  /* [GUDCHK:CALLER]FreezeFrameClassPtr */
-            *DataOffsetPtr      =   addedValue;                                     /* [GUDCHK:CALLER]FreezeFrameClassPtr */
+            *DataOffsetPtr      =   (Dem_u16_FFDStoredIndexType)addedValue;         /* [GUDCHK:CALLER]FreezeFrameClassPtr */
 
             retVal = DEM_IRT_OK;
-            break;
+            loopEnd = (boolean)TRUE;
         }
         else
         {
-            addedValue = addedValue + Dem_DIDClassTable[didClassIndex].DemDidDataSize;      /* [GUDCHK:CALLER]FreezeFrameClassPtr */
+            addedValue = addedValue + (Dem_u32_FFDStoredIndexType)Dem_DIDClassTable[didClassIndex].DemDidDataSize;      /* [GUDCHK:CALLER]FreezeFrameClassPtr *//*  no wrap around      */
 
 #if ( DEM_FFD_OUTPUT_JUDGE_SUPPORT == STD_ON )  /*  [FuncSw]    */
             Dem_Data_AddFFDOutputJudgeSize( didClassIndex, &addedValue );
 #endif  /* ( DEM_FFD_OUTPUT_JUDGE_SUPPORT == STD_ON )           */
+        }
 
+        if ( loopEnd == (boolean)TRUE )
+        {
+            break;
         }
     }
 
@@ -715,6 +733,7 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_GetDidClassByDataID
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_GetTSFFRecordByDidClass
 (
@@ -730,7 +749,7 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_GetTSFFRecordByDidC
     VAR( Dem_u08_InternalReturnType, AUTOMATIC ) retVal;
     VAR( Dem_u08_InternalReturnType, AUTOMATIC ) resultOfGetTSFFRec;
     VAR( boolean, AUTOMATIC ) ffdOutputAllow;
-    VAR( Dem_u16_FFDStoredIndexType, AUTOMATIC ) dataOffset;
+    VAR( Dem_u32_FFDStoredIndexType, AUTOMATIC ) dataOffset;
     VAR( Dem_u16_FFDStoredIndexType, AUTOMATIC ) didDataSize;
 
     VAR( Dem_FreezeFrameRecordMngType, AUTOMATIC ) tsFFRecord;
@@ -746,12 +765,12 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_GetTSFFRecordByDidC
         {
             if( tsFFRecord.RecordStatus == DEM_FFD_STORED )
             {
-                dataOffset = DataOffset;                                                                                            /* [GUDCHK:CALLER]DataOffset */
+                dataOffset = (Dem_u32_FFDStoredIndexType)DataOffset;                                                                /* [GUDCHK:CALLER]DataOffset */
 
-                ffdOutputAllow = Dem_Data_GetFFDOutputAllow( DidClassIndex, tsFFRecord.DataPtr[dataOffset], &dataOffset );          /* [GUDCHK:CALLER]DataOffset */
+                ffdOutputAllow = Dem_Data_GetFFDOutputAllow( DidClassIndex, tsFFRecord.DataPtr[dataOffset], &dataOffset );          /* [GUDCHK:CALLER]DataOffset *//* [ARYCHK] DEM_SIT_R_CHK_TS_FF_DATA_SIZE / 1 / dataOffset */
                 if( ffdOutputAllow == (boolean)TRUE )
                 {
-                    Dem_UtlMem_CopyMemory( DestBufferPtr, &tsFFRecord.DataPtr[dataOffset], didDataSize );                           /* [GUDCHK:CALLER]DataOffset */
+                    Dem_UtlMem_CopyMemory( DestBufferPtr, &tsFFRecord.DataPtr[dataOffset], didDataSize );                           /* [GUDCHK:CALLER]DataOffset *//* [ARYCHK] DEM_SIT_R_CHK_TS_FF_DATA_SIZE / 1 / dataOffset */
 
                     *BufSizePtr = didDataSize;
 
@@ -777,6 +796,10 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_GetTSFFRecordByDidC
 /* History                                                                  */
 /*  Version        :Date                                                    */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-6-0         :2024-01-29                                              */
+/*  v5-7-0         :2024-05-29                                              */
+/*  v5-8-0         :2024-10-29                                              */
+/*  v5-9-0         :2025-02-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

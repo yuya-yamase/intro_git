@@ -1,7 +1,7 @@
-/* Dem_Pm_TSFFD_h(v5-3-0)                                                   */
+/* Dem_Pm_TSFFD_h(v5-7-0)                                                   */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 
@@ -19,6 +19,11 @@
 /*--------------------------------------------------------------------------*/
 #include <Dem.h>
 #include "Dem_CmnLib_DataCtl_SamplingFFDAccess.h"
+
+#ifndef DEM_SIT_RANGE_CHECK
+#else   /* DEM_SIT_RANGE_CHECK */
+#include <Dem_SIT_RangeCheck.h>
+#endif /* DEM_SIT_RANGE_CHECK */
 
 /*--------------------------------------------------------------------------*/
 /* Macros                                                                   */
@@ -43,6 +48,10 @@
 
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_CaptureAfterTriggeredTSFFFromSample
 (
+#ifndef DEM_SIT_RANGE_CHECK
+#else   /* DEM_SIT_RANGE_CHECK */
+    VAR( Dem_u16_FFDStoredIndexType, AUTOMATIC ) SamplingFFRDataSize,
+#endif  /* DEM_SIT_RANGE_CHECK */
     VAR( Dem_u08_FaultIndexType, AUTOMATIC ) FaultIndex,
     VAR( Dem_u16_TSFFDIndexType, AUTOMATIC ) TimeSeriesFreezeFrameRecordIndex,
     VAR( Dem_u08_StorageTriggerType, AUTOMATIC ) TimeSeriesFreezeFrameTrigger,
@@ -68,6 +77,7 @@ FUNC( void, DEM_CODE ) Dem_Data_MakeTSFFListRecordList
 /*  v4-0-0         :2020-03-19                                              */
 /*  v5-0-0         :2021-12-24                                              */
 /*  v5-3-0         :2023-03-29                                              */
+/*  v5-7-0         :2024-05-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

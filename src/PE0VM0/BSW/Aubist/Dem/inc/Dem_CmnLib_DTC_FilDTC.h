@@ -1,7 +1,7 @@
-/* Dem_CmnLib_DTC_FilDTC_h(v5-5-0)                                          */
+/* Dem_CmnLib_DTC_FilDTC_h(v5-7-0)                                          */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -33,13 +33,6 @@
 #define DEM_START_SEC_CODE
 #include <Dem_MemMap.h>
 
-FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DTC_CheckDTCAndSeverityForFilter
-(
-    P2CONST( Dem_SetDTCFilterType, AUTOMATIC, AUTOMATIC ) DTCFilterPtr,
-    VAR( Dem_UdsStatusByteType, AUTOMATIC ) DTCStatus,
-    P2VAR( Dem_DTCSeverityType, AUTOMATIC, AUTOMATIC ) DTCSeverityPtr
-);
-
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DTC_CheckDTCStatusForFilter
 (
     VAR( Dem_UdsStatusByteType, AUTOMATIC ) DTCStatusMask,
@@ -63,6 +56,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DTC_CheckDTCSeverityForFilter
 /* History                                                                  */
 /*  Version        :Date                                                    */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-7-0         :2024-05-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

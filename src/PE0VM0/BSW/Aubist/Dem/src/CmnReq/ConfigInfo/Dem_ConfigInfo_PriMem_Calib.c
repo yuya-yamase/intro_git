@@ -1,7 +1,7 @@
-/* Dem_ConfigInfo_PriMem_Calib_c(v5-5-0)                                    */
+/* Dem_ConfigInfo_PriMem_Calib_c(v5-10-0)                                   */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -154,10 +154,12 @@ FUNC( boolean, DEM_CODE_TRUST ) Dem_CfgInfoPm_GetEventAvailable
 #include <Dem_MemMap.h>
 
 /****************************************************************************/
-/* Function Name | Dem_CfgInfoPm_CheckEventKindOfOBD_ByEvtCtrlIdx           */
+/* Function Name | Dem_CfgInfoPm_GetEventKindOfOBD_ByEvtCtrlIdx             */
 /* Description   | OBD event or not.                                        */
 /* Preconditions | EventCtrlIndex < Dem_PrimaryMemEventConfigureNum         */
-/* Parameters    | [in] EventCtrlIndex :  EventCtrlIndex                    */
+/* Parameters    | [in] EventCtrlIndex      :  EventCtrlIndex               */
+/*               | [out] DTCClassPtr        :  DTC Class                    */
+/*               | [out] IsMILIndicatorPtr  :  target event has MIL or not. */
 /* Return Value  | boolean                                                  */
 /*               |          FALSE  :   non OBD event.                       */
 /*               |          TRUE   :   OBD event.                           */
@@ -256,10 +258,9 @@ FUNC( boolean, DEM_CODE ) Dem_CfgInfoPm_CheckEventKindOfOBD_ByEvtCtrlIdx
     return eventOBDKind;
 }
 
-
-#if ( DEM_EVENT_DISPLACEMENT_SUPPORT == STD_ON )
+#if ( DEM_EVENTPRIORITY_PM_SUPPORT == STD_ON )
 /****************************************************************************/
-/* Function Name | Dem_CfgInfoPm_Event_EventPriority                        */
+/* Function Name | Dem_CfgInfoPm_GetEventPriority                           */
 /* Description   | GetData by EventStrgIndex                                */
 /* Preconditions | EventStrgIndex < Dem_PrimaryMemEventConfigureNum         */
 /* Parameters    | [in] EventStrgIndex :  EventStrgIndex                    */
@@ -281,36 +282,7 @@ FUNC( Dem_u08_EventPriorityType, DEM_CODE ) Dem_CfgInfoPm_GetEventPriority
 
     return eventPriority;
 }
-#endif  /* ( DEM_EVENT_DISPLACEMENT_SUPPORT == STD_ON ) */
-
-#if ( DEM_EVENT_DISPLACEMENT_SUPPORT == STD_OFF )
-#if ( DEM_OBDONEDS_SUPPORT == STD_ON )
-/****************************************************************************/
-/* Function Name | Dem_CfgInfoPm_Event_EventPriority                        */
-/* Description   | GetData by EventStrgIndex                                */
-/* Preconditions | EventStrgIndex < Dem_PrimaryMemEventConfigureNum         */
-/* Parameters    | [in] EventStrgIndex :  EventStrgIndex                    */
-/* Return Value  | Dem_u08_EventPriorityType                                */
-/* Notes         | none                                                     */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-5-0      | no object changed.                                       */
-/****************************************************************************/
-FUNC( Dem_u08_EventPriorityType, DEM_CODE ) Dem_CfgInfoPm_GetEventPriority
-(
-    VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex         /* [PRMCHK:CALLER] */
-)
-{
-    VAR( Dem_u08_EventPriorityType, AUTOMATIC ) eventPriority;
-
-    /*  get data.        */
-    eventPriority = Dem_EventParameterStorageTable[ EventStrgIndex ].DemEventPriority;                          /* [GUDCHK:CALLER]EventStrgIndex */
-
-    return eventPriority;
-}
-#endif  /* ( DEM_OBDONEDS_SUPPORT == STD_ON )                */
-#endif  /* ( DEM_EVENT_DISPLACEMENT_SUPPORT == STD_OFF ) */
-
+#endif  /* ( DEM_EVENTPRIORITY_PM_SUPPORT == STD_ON ) */
 
 /****************************************************************************/
 /* Function Name | Dem_CfgInfoPm_GetUdsDTCValue                             */
@@ -622,13 +594,23 @@ FUNC( Dem_u08_SimilarPendingClearCounterType, DEM_CODE) Dem_CfgInfoPm_GetPending
 /* Preconditions |                                                          */
 /* Parameters    | [in]  CalcType :                                         */
 /*               |        Calclation Target Type.                           */
+/*               |         <  DEM_READINESS_DATAPOSITIONTABLE_NUM           */
+/*               |              : called from calculation readness.         */
+/*               |         == DEM_READINESSDATAPOSITIONINDEX_INVALID        */
+/*               |              : called from SID19 sf56.                   */
 /*               | [in] ReadinessGroupIndex :                               */
 /*               |        Readiness group index.                            */
+/*               |         at called from calculation readness :            */
+/*               |           Number of consecutive to Dem_ReadinessDataPositionTable[].ReadinessGrpNum.  */
+/*               |         at called from SID19 sf56 :                      */
+/*               |           Dem_ReadinessGroupTable[] index.               */
 /* Return Value  | Dem_u16_EventCtrlIndexType                               */
 /* Notes         |                                                          */
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-7-0      | no object changed.                                       */
+/*   v5-10-0     | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u16_EventCtrlIndexType, DEM_CODE ) Dem_CfgInfoPm_GetEventNumberOfReadinessGroup
 (
@@ -640,10 +622,16 @@ FUNC( Dem_u16_EventCtrlIndexType, DEM_CODE ) Dem_CfgInfoPm_GetEventNumberOfReadi
 
     if ( CalcType < DEM_READINESS_DATAPOSITIONTABLE_NUM )                   /* [GUD:if]CalcType */
     {
-        eventNumberOfReadinessGroup = Dem_ReadinessDataPositionTable[ CalcType ].ReadinessGrpTblPtr[ ReadinessGroupIndex ].TableNum;    /* [GUD]CalcType */ /* [GUDCHK:CALLER]ReadinessGroupIndex */
+        /*--------------------------------------------------*/
+        /*  at called from calculation readness.            */
+        /*--------------------------------------------------*/
+        eventNumberOfReadinessGroup = Dem_ReadinessDataPositionTable[ CalcType ].ReadinessGrpTblPtr[ ReadinessGroupIndex ].TableNum;    /* [GUD]CalcType */ /* [GUDCHK:CALLER]ReadinessGroupIndex *//* [ARYCHK] Dem_ReadinessDataPositionTable[ CalcType ].ReadinessGrpNum / 1 / ReadinessGroupIndex */
     }
     else
     {
+        /*--------------------------------------------------*/
+        /*  at called from SID19 sf56.                      */
+        /*--------------------------------------------------*/
         eventNumberOfReadinessGroup = Dem_ReadinessGroupTable[ ReadinessGroupIndex ].TableNum;                  /* [GUDCHK:CALLER]ReadinessGroupIndex */
     }
 
@@ -657,8 +645,16 @@ FUNC( Dem_u16_EventCtrlIndexType, DEM_CODE ) Dem_CfgInfoPm_GetEventNumberOfReadi
 /* Preconditions |                                                          */
 /* Parameters    | [in]  CalcType :                                         */
 /*               |        Calclation Target Type.                           */
+/*               |         <  DEM_READINESS_DATAPOSITIONTABLE_NUM           */
+/*               |              : called from calculation readness.         */
+/*               |         == DEM_READINESSDATAPOSITIONINDEX_INVALID        */
+/*               |              : called from SID19 sf56.                   */
 /*               | [in] ReadinessGroupIndex :                               */
 /*               |        Readiness group index.                            */
+/*               |         at called from calculation readness :            */
+/*               |           Number of consecutive to Dem_ReadinessDataPositionTable[].ReadinessGrpNum.  */
+/*               |         at called from SID19 sf56 :                      */
+/*               |           Dem_ReadinessGroupTable[] index.               */
 /*               | [in] EventListIndex :                                    */
 /*               |        Event List index.                                 */
 /* Return Value  | Dem_u16_EventCtrlIndexType                               */
@@ -666,6 +662,8 @@ FUNC( Dem_u16_EventCtrlIndexType, DEM_CODE ) Dem_CfgInfoPm_GetEventNumberOfReadi
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-7-0      | no object changed.                                       */
+/*   v5-10-0     | no branch changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u16_EventCtrlIndexType, DEM_CODE ) Dem_CfgInfoPm_GetEventCtrlIndexOfReadinessGroup
 (
@@ -678,15 +676,55 @@ FUNC( Dem_u16_EventCtrlIndexType, DEM_CODE ) Dem_CfgInfoPm_GetEventCtrlIndexOfRe
 
     if ( CalcType < DEM_READINESS_DATAPOSITIONTABLE_NUM )                   /* [GUD:if]CalcType */
     {
-        eventCtrlIndex = Dem_ReadinessDataPositionTable[ CalcType ].ReadinessGrpTblPtr[ ReadinessGroupIndex ].EvtIdxListPtr[ EventListIndex ];  /* [GUD]CalcType *//* [GUDCHK:CALLER]ReadinessGroupIndex *//* [GUDCHK:CALLER]EventListIndex */
+        /*--------------------------------------------------*/
+        /*  at called from calculation readness.            */
+        /*--------------------------------------------------*/
+        eventCtrlIndex = Dem_ReadinessDataPositionTable[ CalcType ].ReadinessGrpTblPtr[ ReadinessGroupIndex ].EvtIdxListPtr[ EventListIndex ];  /* [GUD]CalcType *//* [GUDCHK:CALLER]ReadinessGroupIndex *//* [GUDCHK:CALLER]EventListIndex *//* [ARYCHK] Dem_ReadinessDataPositionTable[ CalcType ].ReadinessGrpNum / 1 / ReadinessGroupIndex *//* [ARYCHK] Dem_ReadinessDataPositionTable[ CalcType ].ReadinessGrpTblPtr[ ReadinessGroupIndex ].TableNum / 1 / EventListIndex */
+
+        /*  for caluculate Readiness.                                   */
+        /*  DEM_READINESS_EVT_DUPLICATEDTC_MARKBIT : turn to OFF.       */
+        eventCtrlIndex  =   eventCtrlIndex & ~DEM_READINESS_EVT_DUPLICATEDTC_MARKBIT;
     }
     else
     {
-        eventCtrlIndex = Dem_ReadinessGroupTable[ ReadinessGroupIndex ].EvtIdxListPtr[ EventListIndex ];        /* [GUDCHK:CALLER]ReadinessGroupIndex *//* [GUDCHK:CALLER]EventListIndex */
+        /*--------------------------------------------------*/
+        /*  at called from SID19 sf56.                      */
+        /*--------------------------------------------------*/
+        eventCtrlIndex = Dem_ReadinessGroupTable[ ReadinessGroupIndex ].EvtIdxListPtr[ EventListIndex ];        /* [GUDCHK:CALLER]ReadinessGroupIndex *//* [GUDCHK:CALLER]EventListIndex *//* [ARYCHK] Dem_ReadinessGroupTable[ ReadinessGroupIndex ].TableNum / 1 / EventListIndex */
+
+        /*  for output SID19 sf56.                                      */
+        /*  DEM_READINESS_EVT_DUPLICATEDTC_MARKBIT : NOT turn to OFF.   */
     }
 
     return eventCtrlIndex;
 }
+
+#if ( DEM_COMBINEDEVENT_ONSTORAGE_SUPPORT == STD_ON )
+/****************************************************************************/
+/* Function Name | Dem_CfgInfoPm_GetReadinessGroupIdForSID1956              */
+/* Description   | GetData by EventIndex : Dem_EventParameterTable[].ReadinessGroupIdForSID1956 */
+/* Preconditions | EventCtrlIndex < Dem_PrimaryMemEventConfigureNum         */
+/* Parameters    | [in] EventCtrlIndex :  EventIndex                        */
+/* Return Value  | Dem_u08_ReadinessGroupIdType : ReadinessGroupId          */
+/* Notes         |                                                          */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-10-0     | new created.                                             */
+/****************************************************************************/
+FUNC( Dem_u08_ReadinessGroupIdType, DEM_CODE ) Dem_CfgInfoPm_GetReadinessGroupIdForSID1956
+(
+    VAR( Dem_u16_EventCtrlIndexType, AUTOMATIC )    EventCtrlIndex                      /* [PRMCHK:CALLER] */
+)
+{
+    VAR( Dem_u08_ReadinessGroupIdType, AUTOMATIC ) readinessGroupId;
+
+    /*  get config data.                        */
+    readinessGroupId    =   Dem_EventParameterTable[ EventCtrlIndex ].ReadinessGroupIdForSID1956; /* [GUDCHK:CALLER]EventCtrlIndex */
+
+    return readinessGroupId;
+}
+#endif  /* ( DEM_COMBINEDEVENT_ONSTORAGE_SUPPORT == STD_ON )    */
+
 #endif  /* ( DEM_PID_READINESS_SUPPORT == STD_ON )    */
 
 #if ( DEM_OBDFFD_SUPPORT == STD_ON )
@@ -834,6 +872,10 @@ FUNC( boolean, DEM_CODE ) Dem_CfgInfoPm_CheckDelegateEventStrgIndexInSameDTCGrou
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-7-0         :2024-05-29                                              */
+/*  v5-8-0         :2024-10-29                                              */
+/*  v5-9-0         :2025-02-26                                              */
+/*  v5-10-0        :2025-06-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

@@ -1,7 +1,7 @@
-/* Dem_DataMng_FreezeFrame_h(v5-3-0)                                        */
+/* Dem_DataMng_FreezeFrame_h(v5-7-0)                                        */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 /****************************************************************************/
 /* Object Name  | Dem/DataMng_FreezeFrame/HEADER                            */
@@ -37,6 +37,10 @@
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_DataMng_SetCapturedFreezeFrame
 (
+#ifndef DEM_SIT_RANGE_CHECK
+#else   /* DEM_SIT_RANGE_CHECK */
+    VAR( Dem_u16_FFDStoredIndexType, AUTOMATIC ) StorageFormatDataSize,
+#endif  /* DEM_SIT_RANGE_CHECK */
     P2CONST( AB_83_ConstV Dem_FreezeFrameDataPosType, AUTOMATIC, DEM_CONFIG_DATA ) FreezeFrameDataPosTablePtr,
     VAR( Dem_u08_ConsistencyIdType, AUTOMATIC ) ConsistencyID,
     VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex,
@@ -63,6 +67,7 @@ FUNC( void, DEM_CODE ) Dem_DataMng_SetCapturedFreezeFrame
 /*  v4-0-0         :2020-03-19                                              */
 /*  v5-0-0         :2022-03-29                                              */
 /*  v5-3-0         :2023-03-29                                              */
+/*  v5-7-0         :2024-05-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

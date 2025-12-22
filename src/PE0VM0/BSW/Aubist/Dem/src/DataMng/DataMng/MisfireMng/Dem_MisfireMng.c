@@ -1,7 +1,7 @@
-/* Dem_MisfireMng_c(v5-5-0)                                                 */
+/* Dem_MisfireMng_c(v5-9-0)                                                 */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -562,6 +562,7 @@ static FUNC( void, DEM_CODE ) Dem_MisfireMng_InitMisfireRecord
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
+/*   v5-6-0      | branch changed.                                          */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_MisfireMng_InitMisfireComRecord
 (void)
@@ -572,7 +573,10 @@ static FUNC( void, DEM_CODE ) Dem_MisfireMng_InitMisfireComRecord
 #endif  /* ( DEM_OBDFFD_SUPPORT == STD_ON )             */
     VAR( Dem_u08_MisfireFFDCylIndexType, AUTOMATIC ) misfireFFDCylIndex;
     VAR( Dem_u08_MisfireFFDCylIndexType, AUTOMATIC ) misfireFFDCylIndexNum;
-
+#if ( DEM_GET_UDSDTC_BY_CONFIRMED_ORDER_SUPPORT == STD_ON )     /*  [FuncSw]    */
+    VAR( Dem_MisfireCylinderNumberType, AUTOMATIC ) misfireCylinderNum;
+    VAR( Dem_MisfireCylinderNumberType, AUTOMATIC ) misfireConfirmedOrderIndex;
+#endif  /* ( DEM_GET_UDSDTC_BY_CONFIRMED_ORDER_SUPPORT == STD_ON )  */
 
     Dem_MisfireComRecord.FirstPendingCyl        = DEM_MISFIRE_CYLINDER_FACTORY_DEFAULT;
     Dem_MisfireComRecord.FirstConfirmedCyl      = DEM_MISFIRE_CYLINDER_FACTORY_DEFAULT;
@@ -589,6 +593,15 @@ static FUNC( void, DEM_CODE ) Dem_MisfireMng_InitMisfireComRecord
     {
         Dem_MisfireComRecord.MisfireKindOfFFD[misfireFFDCylIndex] = DEM_MISFIRE_KIND_INVALID;   /* [GUD]misfireFFDCylIndex */
     }
+
+#if ( DEM_GET_UDSDTC_BY_CONFIRMED_ORDER_SUPPORT == STD_ON )     /*  [FuncSw]    */
+    misfireCylinderNum = Dem_MisfireCylinderNum;
+    for( misfireConfirmedOrderIndex = (Dem_MisfireCylinderNumberType)0U; misfireConfirmedOrderIndex < misfireCylinderNum; misfireConfirmedOrderIndex++ )    /* [GUD:for]misfireConfirmedOrderIndex */
+    {
+        Dem_MisfireComRecord.ConfirmedOrderCylList[misfireConfirmedOrderIndex] = DEM_MISFIRE_CYL_NUM_INVALID;   /* [GUD]misfireConfirmedOrderIndex */
+        Dem_MisfireComRecord.OccurrenceOrderListOfConfirmedCyl[misfireConfirmedOrderIndex] = DEM_FAIL_OCCURRENCE_NUM_INVALID;   /* [GUD]misfireConfirmedOrderIndex */
+    }
+#endif  /* ( DEM_GET_UDSDTC_BY_CONFIRMED_ORDER_SUPPORT == STD_ON )  */
 
     Dem_MisfireComRecord.ConsistencyIdForEmission  = DEM_CONSISTENCY_INITIAL;
     Dem_MisfireComRecord.ConsistencyIdForCAT       = DEM_CONSISTENCY_INITIAL;
@@ -609,6 +622,7 @@ static FUNC( void, DEM_CODE ) Dem_MisfireMng_InitMisfireComRecord
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
+/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_MisfireMng_GetAllMisfireRecordList
 (
@@ -628,29 +642,29 @@ FUNC( void, DEM_CODE ) Dem_MisfireMng_GetAllMisfireRecordList
 
     for( misfireIndex = (Dem_u16_MisfireStrgIndexType)0U; misfireIndex < misfireEventNum; misfireIndex++ )  /* [GUD:for]misfireIndex */
     {
-        MisfireRecordPtr[misfireIndex].FailedCyl                         = Dem_MisfireRecordList[misfireIndex].FailedCyl;                   /* [GUD]misfireIndex */
-        MisfireRecordPtr[misfireIndex].AccumCyl                          = Dem_MisfireRecordList[misfireIndex].AccumCyl;                    /* [GUD]misfireIndex */
-        MisfireRecordPtr[misfireIndex].AccumFailedCylThisOC              = Dem_MisfireRecordList[misfireIndex].AccumFailedCylThisOC;        /* [GUD]misfireIndex */
-        MisfireRecordPtr[misfireIndex].AccumFailedCylSinceClear          = Dem_MisfireRecordList[misfireIndex].AccumFailedCylSinceClear;    /* [GUD]misfireIndex */
-        MisfireRecordPtr[misfireIndex].AccumTestNotCompleteCylSinceClear = Dem_MisfireRecordList[misfireIndex].AccumTestNotCompleteCylSinceClear;   /* [GUD]misfireIndex */
-        MisfireRecordPtr[misfireIndex].AccumPendingCyl                   = Dem_MisfireRecordList[misfireIndex].AccumPendingCyl;             /* [GUD]misfireIndex */
-        MisfireRecordPtr[misfireIndex].AccumConfirmedCyl                 = Dem_MisfireRecordList[misfireIndex].AccumConfirmedCyl;           /* [GUD]misfireIndex */
+        MisfireRecordPtr[misfireIndex].FailedCyl                         = Dem_MisfireRecordList[misfireIndex].FailedCyl;                   /* [GUD]misfireIndex *//* [ARYCHK] DEM_MISFIRE_EVENT_NUM / 1 / misfireIndex */
+        MisfireRecordPtr[misfireIndex].AccumCyl                          = Dem_MisfireRecordList[misfireIndex].AccumCyl;                    /* [GUD]misfireIndex *//* [ARYCHK] DEM_MISFIRE_EVENT_NUM / 1 / misfireIndex */
+        MisfireRecordPtr[misfireIndex].AccumFailedCylThisOC              = Dem_MisfireRecordList[misfireIndex].AccumFailedCylThisOC;        /* [GUD]misfireIndex *//* [ARYCHK] DEM_MISFIRE_EVENT_NUM / 1 / misfireIndex */
+        MisfireRecordPtr[misfireIndex].AccumFailedCylSinceClear          = Dem_MisfireRecordList[misfireIndex].AccumFailedCylSinceClear;    /* [GUD]misfireIndex *//* [ARYCHK] DEM_MISFIRE_EVENT_NUM / 1 / misfireIndex */
+        MisfireRecordPtr[misfireIndex].AccumTestNotCompleteCylSinceClear = Dem_MisfireRecordList[misfireIndex].AccumTestNotCompleteCylSinceClear;   /* [GUD]misfireIndex *//* [ARYCHK] DEM_MISFIRE_EVENT_NUM / 1 / misfireIndex */
+        MisfireRecordPtr[misfireIndex].AccumPendingCyl                   = Dem_MisfireRecordList[misfireIndex].AccumPendingCyl;             /* [GUD]misfireIndex *//* [ARYCHK] DEM_MISFIRE_EVENT_NUM / 1 / misfireIndex */
+        MisfireRecordPtr[misfireIndex].AccumConfirmedCyl                 = Dem_MisfireRecordList[misfireIndex].AccumConfirmedCyl;           /* [GUD]misfireIndex *//* [ARYCHK] DEM_MISFIRE_EVENT_NUM / 1 / misfireIndex */
 #if ( DEM_OBDFFD_SUPPORT == STD_ON )    /*  [FuncSw]    */
         misfireObdFFDCylIndexNum = Dem_MisfireObdFFDCylIndexNum;
         for( misfireObdFFDCylIndex = (Dem_u08_MisfireObdFFDCylIndexType)0U; misfireObdFFDCylIndex < misfireObdFFDCylIndexNum; misfireObdFFDCylIndex++ ) /* [GUD:for]misfireObdFFDCylIndex */
         {
-            MisfireRecordPtr[misfireIndex].OBDFFDCyl[misfireObdFFDCylIndex] = Dem_MisfireRecordList[misfireIndex].OBDFFDCyl[misfireObdFFDCylIndex];     /* [GUD]misfireIndex *//* [GUD]misfireObdFFDCylIndex */
+            MisfireRecordPtr[misfireIndex].OBDFFDCyl[misfireObdFFDCylIndex] = Dem_MisfireRecordList[misfireIndex].OBDFFDCyl[misfireObdFFDCylIndex];     /* [GUD]misfireIndex *//* [GUD]misfireObdFFDCylIndex *//* [ARYCHK] DEM_MISFIRE_EVENT_NUM / 1 / misfireIndex *//* [ARYCHK] DEM_MISFIRE_OBD_FFDCYL_INDEX_NUM / 1 / misfireObdFFDCylIndex */
         }
 #endif  /* ( DEM_OBDFFD_SUPPORT == STD_ON )             */
         misfireFFDCylIndexNum = Dem_MisfireFFDCylIndexNum;
         for( misfireFFDCylIndex = (Dem_u08_MisfireFFDCylIndexType)0U; misfireFFDCylIndex < misfireFFDCylIndexNum; misfireFFDCylIndex++ )    /* [GUD:for]misfireFFDCylIndex */
         {
-            MisfireRecordPtr[misfireIndex].FFDCyl[misfireFFDCylIndex] = Dem_MisfireRecordList[misfireIndex].FFDCyl[misfireFFDCylIndex];     /* [GUD]misfireIndex *//* [GUD]misfireFFDCylIndex */
+            MisfireRecordPtr[misfireIndex].FFDCyl[misfireFFDCylIndex] = Dem_MisfireRecordList[misfireIndex].FFDCyl[misfireFFDCylIndex];     /* [GUD]misfireIndex *//* [GUD]misfireFFDCylIndex *//* [ARYCHK] DEM_MISFIRE_EVENT_NUM / 1 / misfireIndex *//* [ARYCHK] DEM_MISFIRE_FFDCYL_INDEX_NUM / 1 / misfireFFDCylIndex */
         }
-        MisfireRecordPtr[misfireIndex].ExceedanceCounter        = Dem_MisfireRecordList[misfireIndex].ExceedanceCounter;                /* [GUD]misfireIndex */
+        MisfireRecordPtr[misfireIndex].ExceedanceCounter        = Dem_MisfireRecordList[misfireIndex].ExceedanceCounter;                /* [GUD]misfireIndex *//* [ARYCHK] DEM_MISFIRE_EVENT_NUM / 1 / misfireIndex */
 
-        MisfireRecordPtr[misfireIndex].ClearID                  = Dem_MisfireRecordList[misfireIndex].ClearID;              /* [GUD]misfireIndex */
-        MisfireRecordPtr[misfireIndex].FactoryCheck             = DEM_MISFIRE_ROMCHECK_SAVED;                               /* [GUD]misfireIndex */
+        MisfireRecordPtr[misfireIndex].ClearID                  = Dem_MisfireRecordList[misfireIndex].ClearID;              /* [GUD]misfireIndex *//* [ARYCHK] DEM_MISFIRE_EVENT_NUM / 1 / misfireIndex */
+        MisfireRecordPtr[misfireIndex].FactoryCheck             = DEM_MISFIRE_ROMCHECK_SAVED;                               /* [GUD]misfireIndex *//* [ARYCHK] DEM_MISFIRE_EVENT_NUM / 1 / misfireIndex */
     }
 
     return;
@@ -667,6 +681,7 @@ FUNC( void, DEM_CODE ) Dem_MisfireMng_GetAllMisfireRecordList
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
+/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_MisfireMng_SetMisfireRecordList
 (
@@ -696,13 +711,13 @@ FUNC( void, DEM_CODE ) Dem_MisfireMng_SetMisfireRecordList
     misfireObdFFDCylIndexNum = Dem_MisfireObdFFDCylIndexNum;
     for( misfireObdFFDCylIndex = (Dem_u08_MisfireObdFFDCylIndexType)0U; misfireObdFFDCylIndex < misfireObdFFDCylIndexNum; misfireObdFFDCylIndex++ ) /* [GUD:for]misfireObdFFDCylIndex */
     {
-        Dem_MisfireRecordList[MisfireIndex].OBDFFDCyl[misfireObdFFDCylIndex] = MisfireRecordPtr->OBDFFDCyl[misfireObdFFDCylIndex];  /* [GUDCHK:CALLER]MisfireIndex *//* [GUD]misfireObdFFDCylIndex */
+        Dem_MisfireRecordList[MisfireIndex].OBDFFDCyl[misfireObdFFDCylIndex] = MisfireRecordPtr->OBDFFDCyl[misfireObdFFDCylIndex];  /* [GUDCHK:CALLER]MisfireIndex *//* [GUD]misfireObdFFDCylIndex *//* [ARYCHK] DEM_MISFIRE_OBD_FFDCYL_INDEX_NUM / 1 / misfireObdFFDCylIndex */
     }
 #endif  /* ( DEM_OBDFFD_SUPPORT == STD_ON )             */
     misfireFFDCylIndexNum = Dem_MisfireFFDCylIndexNum;
     for( misfireFFDCylIndex = (Dem_u08_MisfireFFDCylIndexType)0U; misfireFFDCylIndex < misfireFFDCylIndexNum; misfireFFDCylIndex++ )    /* [GUD:for]misfireFFDCylIndex */
     {
-        Dem_MisfireRecordList[MisfireIndex].FFDCyl[misfireFFDCylIndex] = MisfireRecordPtr->FFDCyl[misfireFFDCylIndex];  /* [GUDCHK:CALLER]MisfireIndex *//* [GUD]misfireFFDCylIndex */
+        Dem_MisfireRecordList[MisfireIndex].FFDCyl[misfireFFDCylIndex] = MisfireRecordPtr->FFDCyl[misfireFFDCylIndex];  /* [GUDCHK:CALLER]MisfireIndex *//* [GUD]misfireFFDCylIndex *//* [ARYCHK] DEM_MISFIRE_FFDCYL_INDEX_NUM / 1 / misfireFFDCylIndex */
     }
     Dem_MisfireRecordList[MisfireIndex].ExceedanceCounter        = MisfireRecordPtr->ExceedanceCounter; /* [GUDCHK:CALLER]MisfireIndex */
 
@@ -838,6 +853,48 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_MisfireMng_CompareMisfireRecord
     return retVal;
 }
 
+#if ( DEM_OBDFFD_SUPPORT == STD_ON )
+#if ( DEM_OBDONUDS_SUPPORT == STD_ON )
+#if ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )
+/****************************************************************************/
+/* Function Name | Dem_MisfireMng_CopyAllObdFFDCyl                          */
+/* Description   | copy ObdFFDCyl of Misfire record.                        */
+/* Preconditions |                                                          */
+/* Parameters    | [in] MisfireIndexDest : MisfireRecordIndex: copy to.     */
+/*               | [in] MisfireIndexSrc  : MisfireRecordIndex: copy from.   */
+/*               |                                                          */
+/* Return Value  | void                                                     */
+/* Notes         | None                                                     */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-9-0      | new created.based on Dem_MisfireMng_CmpWithObdFFDCyl().  */
+/****************************************************************************/
+FUNC( void, DEM_CODE ) Dem_MisfireMng_CopyAllObdFFDCyl
+(
+    VAR( Dem_u16_MisfireStrgIndexType, AUTOMATIC ) MisfireIndexDest,    /*  [PRMCHK:CALLER] */
+    VAR( Dem_u16_MisfireStrgIndexType, AUTOMATIC ) MisfireIndexSrc      /*  [PRMCHK:CALLER] */
+)
+{
+    VAR( Dem_u08_MisfireObdFFDCylIndexType, AUTOMATIC ) misfireObdFFDCylIndex;
+    VAR( Dem_u08_MisfireObdFFDCylIndexType, AUTOMATIC ) misfireObdFFDCylIndexNum;
+    VAR( Dem_u16_RecordKindIndexType, AUTOMATIC ) recMngCmnKindMisfire;
+
+    misfireObdFFDCylIndexNum = Dem_MisfireObdFFDCylIndexNum;
+    recMngCmnKindMisfire = Dem_RecMngCmnKindMisfire;
+
+    /* copy ObdFFDCyl. */
+    for( misfireObdFFDCylIndex = (Dem_u08_MisfireObdFFDCylIndexType)0U; misfireObdFFDCylIndex < misfireObdFFDCylIndexNum; misfireObdFFDCylIndex++ ) /* [GUD:for]misfireObdFFDCylIndex */
+    {
+        Dem_MisfireRecordList[ MisfireIndexDest ].OBDFFDCyl[ misfireObdFFDCylIndex ] = Dem_MisfireRecordList[ MisfireIndexSrc ].OBDFFDCyl[ misfireObdFFDCylIndex ];   /* [GUDCHK:CALLER]MisfireIndexDest *//* [GUDCHK:CALLER]MisfireIndexSrc *//* [GUD]misfireObdFFDCylIndex */
+    }
+
+    Dem_RecMngCmn_SetNvMWriteStatus( recMngCmnKindMisfire, ( Dem_u16_RecordIndexType )MisfireIndexDest );   /* [GUDCHK:CALLER]MisfireIndexDest */
+
+    return ;
+}
+#endif  /* ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )   */
+#endif  /* ( DEM_OBDONUDS_SUPPORT == STD_ON )               */
+#endif  /* ( DEM_OBDFFD_SUPPORT == STD_ON )                 */
 
 /****************************************************************************/
 /* Function Name | Dem_MisfireMng_CmpWithFFDCyl                             */
@@ -897,6 +954,7 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_MisfireMng_CmpWithFFDCyl
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_MisfireMng_CmpWithObdFFDCyl
 (
@@ -915,7 +973,7 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_MisfireMng_CmpWithObdFFD
     /* check ObdFFDCyl. */
     for( misfireObdFFDCylIndex = (Dem_u08_MisfireObdFFDCylIndexType)0U; misfireObdFFDCylIndex < misfireObdFFDCylIndexNum; misfireObdFFDCylIndex++ ) /* [GUD:for]misfireObdFFDCylIndex */
     {
-        if( Dem_MisfireRecordList[MisfireIndex].OBDFFDCyl[misfireObdFFDCylIndex] != CheckMisfireRecordPtr->OBDFFDCyl[misfireObdFFDCylIndex] )   /* [GUD]misfireObdFFDCylIndex */
+        if( Dem_MisfireRecordList[MisfireIndex].OBDFFDCyl[misfireObdFFDCylIndex] != CheckMisfireRecordPtr->OBDFFDCyl[misfireObdFFDCylIndex] )   /* [GUD]misfireObdFFDCylIndex *//* [ARYCHK] DEM_MISFIRE_OBD_FFDCYL_INDEX_NUM / 1 / misfireObdFFDCylIndex */
         {
             retVal = DEM_IRT_NG;
             break;
@@ -940,6 +998,7 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_MisfireMng_CmpWithObdFFD
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_MisfireMng_CmpWithNonObdFFDCyl
 (
@@ -958,7 +1017,7 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_MisfireMng_CmpWithNonObd
     /* check OBD freezeframe list. */
     for( misfireFFDCylIndex = (Dem_u08_MisfireFFDCylIndexType)0U; misfireFFDCylIndex < misfireFFDCylIndexNum; misfireFFDCylIndex++ )    /* [GUD:for]misfireFFDCylIndex */
     {
-        if( Dem_MisfireRecordList[MisfireIndex].FFDCyl[misfireFFDCylIndex] != CheckMisfireRecordPtr->FFDCyl[misfireFFDCylIndex] )   /* [GUD]misfireFFDCylIndex */
+        if( Dem_MisfireRecordList[MisfireIndex].FFDCyl[misfireFFDCylIndex] != CheckMisfireRecordPtr->FFDCyl[misfireFFDCylIndex] )   /* [GUD]misfireFFDCylIndex *//* [ARYCHK] DEM_MISFIRE_FFDCYL_INDEX_NUM / 1 / misfireFFDCylIndex */
         {
             retVal = DEM_IRT_NG;
             break;
@@ -977,6 +1036,9 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_MisfireMng_CmpWithNonObd
 /*               |                                                          */
 /* Return Value  | Dem_u08_InternalReturnType                               */
 /* Notes         | None                                                     */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-6-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_MisfireMng_CompareMisfireComRecord
 (
@@ -1011,6 +1073,9 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_MisfireMng_CompareMisfireComRec
 
     /* not compared member: */
     /* ConsistencyIdForCAT, ConsistencyIdForEmission, ClearID , FactoryCheck */
+
+    /* ConfirmedOrderCylList[] and OccurrenceOrderListOfConfirmedCyl[] are not compared */
+    /* because they are registered after Event is processed. */
 
     return retVal;
 }
@@ -1070,6 +1135,7 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_MisfireMng_CmpWithKindOf
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_MisfireMng_CmpWithKindOfObdFFD
 (
@@ -1087,7 +1153,7 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_MisfireMng_CmpWithKindOf
     /* check KindOfOBDFFD. */
     for( misfireObdFFDCylIndex = (Dem_u08_MisfireObdFFDCylIndexType)0U; misfireObdFFDCylIndex < misfireObdFFDCylIndexNum; misfireObdFFDCylIndex++ ) /* [GUD:for]misfireObdFFDCylIndex */
     {
-        if( Dem_MisfireComRecord.MisfireKindOfOBDFFD[misfireObdFFDCylIndex] != CheckMisfireComRecordPtr->MisfireKindOfOBDFFD[misfireObdFFDCylIndex] )   /* [GUD]misfireObdFFDCylIndex */
+        if( Dem_MisfireComRecord.MisfireKindOfOBDFFD[misfireObdFFDCylIndex] != CheckMisfireComRecordPtr->MisfireKindOfOBDFFD[misfireObdFFDCylIndex] )   /* [GUD]misfireObdFFDCylIndex *//* [ARYCHK] DEM_MISFIRE_OBD_FFDCYL_INDEX_NUM / 1 / misfireObdFFDCylIndex */
         {
             retVal = DEM_IRT_NG;
             break;
@@ -1110,6 +1176,7 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_MisfireMng_CmpWithKindOf
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_MisfireMng_CmpWithKindOfNonObdFFD
 (
@@ -1127,7 +1194,7 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_MisfireMng_CmpWithKindOf
     /* check eKindOfFFD. */
     for( misfireFFDCylIndex = (Dem_u08_MisfireFFDCylIndexType)0U; misfireFFDCylIndex < misfireFFDCylIndexNum; misfireFFDCylIndex++ )    /* [GUD:for]misfireFFDCylIndex */
     {
-        if( Dem_MisfireComRecord.MisfireKindOfFFD[misfireFFDCylIndex] != CheckMisfireComRecordPtr->MisfireKindOfFFD[misfireFFDCylIndex] )   /* [GUD]misfireFFDCylIndex */
+        if( Dem_MisfireComRecord.MisfireKindOfFFD[misfireFFDCylIndex] != CheckMisfireComRecordPtr->MisfireKindOfFFD[misfireFFDCylIndex] )   /* [GUD]misfireFFDCylIndex *//* [ARYCHK] DEM_MISFIRE_FFDCYL_INDEX_NUM / 1 / misfireFFDCylIndex */
         {
             retVal = DEM_IRT_NG;
             break;
@@ -1513,6 +1580,49 @@ FUNC( Dem_u08_MisfireKindType, DEM_CODE ) Dem_MisfireMng_GetMisfireKindOfFFD
     return Dem_MisfireComRecord.MisfireKindOfFFD[MisfireFFDCylIndex];   /* [GUDCHK:CALLER]MisfireFFDCylIndex */
 }
 
+#if ( DEM_GET_UDSDTC_BY_CONFIRMED_ORDER_SUPPORT == STD_ON )
+/****************************************************************************/
+/* Function Name | Dem_MisfireMng_GetConfirmedOrderCyl                      */
+/* Description   | Get misfire confirmed order cylinder.                    */
+/* Preconditions |                                                          */
+/* Parameters    | [in] MisfireConfirmedOrderIndex :                        */
+/*               |        misfire confirmed order.                          */
+/* Return Value  | Dem_MisfireCylinderNumberType                            */
+/* Notes         | none                                                     */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-6-0      | new created.                                             */
+/****************************************************************************/
+FUNC( Dem_MisfireCylinderNumberType, DEM_CODE ) Dem_MisfireMng_GetConfirmedOrderCyl
+(
+    VAR( Dem_MisfireCylinderNumberType, AUTOMATIC ) MisfireConfirmedOrderIndex  /* [PRMCHK:CALLER] */
+)
+{
+    return Dem_MisfireComRecord.ConfirmedOrderCylList[MisfireConfirmedOrderIndex];  /* [GUDCHK:CALLER]MisfireConfirmedOrderIndex */
+}
+
+/****************************************************************************/
+/* Function Name | Dem_MisfireMng_GetConfirmedOccurrenceOrder               */
+/* Description   | Get misfire occurrence order.                            */
+/* Preconditions |                                                          */
+/* Parameters    | [in] MisfireConfirmedOrderIndex :                        */
+/*               |        misfire confirmed order.                          */
+/* Return Value  | Dem_u16_OccrOrderType                                    */
+/* Notes         | none                                                     */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-6-0      | new created.                                             */
+/****************************************************************************/
+FUNC( Dem_u16_OccrOrderType, DEM_CODE ) Dem_MisfireMng_GetConfirmedOccurrenceOrder
+(
+    VAR( Dem_MisfireCylinderNumberType, AUTOMATIC ) MisfireConfirmedOrderIndex  /* [PRMCHK:CALLER] */
+)
+{
+    return Dem_MisfireComRecord.OccurrenceOrderListOfConfirmedCyl[MisfireConfirmedOrderIndex];  /* [GUDCHK:CALLER]MisfireConfirmedOrderIndex */
+}
+#endif  /* ( DEM_GET_UDSDTC_BY_CONFIRMED_ORDER_SUPPORT == STD_ON )  */
+
+
 #if ( DEM_OBDFFD_SUPPORT == STD_ON )
 /****************************************************************************/
 /* Function Name | Dem_MisfireMng_InitObdFFDCyl                             */
@@ -1669,6 +1779,8 @@ FUNC( void, DEM_CODE ) Dem_MisfireMng_SetMisfireKindOfFFD
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
+/*   v5-6-0      | branch changed.                                          */
+/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_MisfireMng_GetMisfireComRecord
 (
@@ -1681,7 +1793,10 @@ FUNC( void, DEM_CODE ) Dem_MisfireMng_GetMisfireComRecord
 #endif  /* ( DEM_OBDFFD_SUPPORT == STD_ON )             */
     VAR( Dem_u08_MisfireFFDCylIndexType, AUTOMATIC ) misfireFFDCylIndex;
     VAR( Dem_u08_MisfireFFDCylIndexType, AUTOMATIC ) misfireFFDCylIndexNum;
-
+#if ( DEM_GET_UDSDTC_BY_CONFIRMED_ORDER_SUPPORT == STD_ON )     /*  [FuncSw]    */
+    VAR( Dem_MisfireCylinderNumberType, AUTOMATIC ) misfireCylinderNum;
+    VAR( Dem_MisfireCylinderNumberType, AUTOMATIC ) misfireConfirmedOrderIndex;
+#endif  /* ( DEM_GET_UDSDTC_BY_CONFIRMED_ORDER_SUPPORT == STD_ON )  */
 
     MisfireComRecordPtr->FirstPendingCyl        = Dem_MisfireComRecord.FirstPendingCyl;
     MisfireComRecordPtr->FirstConfirmedCyl      = Dem_MisfireComRecord.FirstConfirmedCyl;
@@ -1690,14 +1805,23 @@ FUNC( void, DEM_CODE ) Dem_MisfireMng_GetMisfireComRecord
     misfireObdFFDCylIndexNum = Dem_MisfireObdFFDCylIndexNum;
     for( misfireObdFFDCylIndex = (Dem_u08_MisfireObdFFDCylIndexType)0U; misfireObdFFDCylIndex < misfireObdFFDCylIndexNum; misfireObdFFDCylIndex++ ) /* [GUD:for]misfireObdFFDCylIndex */
     {
-        MisfireComRecordPtr->MisfireKindOfOBDFFD[misfireObdFFDCylIndex] = Dem_MisfireComRecord.MisfireKindOfOBDFFD[misfireObdFFDCylIndex];  /* [GUD]misfireObdFFDCylIndex */
+        MisfireComRecordPtr->MisfireKindOfOBDFFD[misfireObdFFDCylIndex] = Dem_MisfireComRecord.MisfireKindOfOBDFFD[misfireObdFFDCylIndex];  /* [GUD]misfireObdFFDCylIndex *//* [ARYCHK] DEM_MISFIRE_OBD_FFDCYL_INDEX_NUM / 1 / misfireObdFFDCylIndex */
     }
 #endif  /* ( DEM_OBDFFD_SUPPORT == STD_ON )             */
     misfireFFDCylIndexNum = Dem_MisfireFFDCylIndexNum;
     for( misfireFFDCylIndex = (Dem_u08_MisfireFFDCylIndexType)0U; misfireFFDCylIndex < misfireFFDCylIndexNum; misfireFFDCylIndex++ )    /* [GUD:for]misfireFFDCylIndex */
     {
-        MisfireComRecordPtr->MisfireKindOfFFD[misfireFFDCylIndex] = Dem_MisfireComRecord.MisfireKindOfFFD[misfireFFDCylIndex];  /* [GUD]misfireFFDCylIndex */
+        MisfireComRecordPtr->MisfireKindOfFFD[misfireFFDCylIndex] = Dem_MisfireComRecord.MisfireKindOfFFD[misfireFFDCylIndex];  /* [GUD]misfireFFDCylIndex *//* [ARYCHK] DEM_MISFIRE_FFDCYL_INDEX_NUM / 1 / misfireFFDCylIndex */
     }
+
+#if ( DEM_GET_UDSDTC_BY_CONFIRMED_ORDER_SUPPORT == STD_ON )     /*  [FuncSw]    */
+    misfireCylinderNum = Dem_MisfireCylinderNum;
+    for( misfireConfirmedOrderIndex = (Dem_MisfireCylinderNumberType)0U; misfireConfirmedOrderIndex < misfireCylinderNum; misfireConfirmedOrderIndex++ )    /* [GUD:for]misfireConfirmedOrderIndex */
+    {
+        MisfireComRecordPtr->ConfirmedOrderCylList[misfireConfirmedOrderIndex] = Dem_MisfireComRecord.ConfirmedOrderCylList[misfireConfirmedOrderIndex];    /* [GUD]misfireConfirmedOrderIndex *//* [ARYCHK] DEM_MISFIRE_CYLINDER_AND_RM_NUM / 1 / misfireConfirmedOrderIndex */
+        MisfireComRecordPtr->OccurrenceOrderListOfConfirmedCyl[misfireConfirmedOrderIndex] = Dem_MisfireComRecord.OccurrenceOrderListOfConfirmedCyl[misfireConfirmedOrderIndex];    /* [GUD]misfireConfirmedOrderIndex *//* [ARYCHK] DEM_MISFIRE_CYLINDER_AND_RM_NUM / 1 / misfireConfirmedOrderIndex */
+    }
+#endif  /* ( DEM_GET_UDSDTC_BY_CONFIRMED_ORDER_SUPPORT == STD_ON )  */
 
     MisfireComRecordPtr->ConsistencyIdForEmission     = Dem_MisfireComRecord.ConsistencyIdForEmission;
     MisfireComRecordPtr->ConsistencyIdForCAT          = Dem_MisfireComRecord.ConsistencyIdForCAT;
@@ -1718,6 +1842,8 @@ FUNC( void, DEM_CODE ) Dem_MisfireMng_GetMisfireComRecord
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
+/*   v5-6-0      | branch changed.                                          */
+/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_MisfireMng_SetMisfireComRecord
 (
@@ -1731,6 +1857,10 @@ FUNC( void, DEM_CODE ) Dem_MisfireMng_SetMisfireComRecord
     VAR( Dem_u08_MisfireFFDCylIndexType, AUTOMATIC ) misfireFFDCylIndex;
     VAR( Dem_u08_MisfireFFDCylIndexType, AUTOMATIC ) misfireFFDCylIndexNum;
     VAR( Dem_u16_RecordKindIndexType, AUTOMATIC ) recMngCmnKindMisfireCom;
+#if ( DEM_GET_UDSDTC_BY_CONFIRMED_ORDER_SUPPORT == STD_ON )     /*  [FuncSw]    */
+    VAR( Dem_MisfireCylinderNumberType, AUTOMATIC ) misfireCylinderNum;
+    VAR( Dem_MisfireCylinderNumberType, AUTOMATIC ) misfireConfirmedOrderIndex;
+#endif  /* ( DEM_GET_UDSDTC_BY_CONFIRMED_ORDER_SUPPORT == STD_ON )  */
 
 
     Dem_MisfireComRecord.FirstPendingCyl        = MisfireComRecordPtr->FirstPendingCyl;
@@ -1740,14 +1870,23 @@ FUNC( void, DEM_CODE ) Dem_MisfireMng_SetMisfireComRecord
     misfireObdFFDCylIndexNum = Dem_MisfireObdFFDCylIndexNum;
     for( misfireObdFFDCylIndex = (Dem_u08_MisfireObdFFDCylIndexType)0U; misfireObdFFDCylIndex < misfireObdFFDCylIndexNum; misfireObdFFDCylIndex++ ) /* [GUD:for]misfireObdFFDCylIndex */
     {
-        Dem_MisfireComRecord.MisfireKindOfOBDFFD[misfireObdFFDCylIndex] = MisfireComRecordPtr->MisfireKindOfOBDFFD[misfireObdFFDCylIndex];  /* [GUD]misfireObdFFDCylIndex */
+        Dem_MisfireComRecord.MisfireKindOfOBDFFD[misfireObdFFDCylIndex] = MisfireComRecordPtr->MisfireKindOfOBDFFD[misfireObdFFDCylIndex];  /* [GUD]misfireObdFFDCylIndex *//* [ARYCHK] DEM_MISFIRE_OBD_FFDCYL_INDEX_NUM / 1 / misfireObdFFDCylIndex */
     }
 #endif  /* ( DEM_OBDFFD_SUPPORT == STD_ON )             */
     misfireFFDCylIndexNum = Dem_MisfireFFDCylIndexNum;
     for( misfireFFDCylIndex = (Dem_u08_MisfireFFDCylIndexType)0U; misfireFFDCylIndex < misfireFFDCylIndexNum; misfireFFDCylIndex++ )    /* [GUD:for]misfireFFDCylIndex */
     {
-        Dem_MisfireComRecord.MisfireKindOfFFD[misfireFFDCylIndex] = MisfireComRecordPtr->MisfireKindOfFFD[misfireFFDCylIndex];          /* [GUD]misfireFFDCylIndex */
+        Dem_MisfireComRecord.MisfireKindOfFFD[misfireFFDCylIndex] = MisfireComRecordPtr->MisfireKindOfFFD[misfireFFDCylIndex];          /* [GUD]misfireFFDCylIndex *//* [ARYCHK] DEM_MISFIRE_FFDCYL_INDEX_NUM / 1 / misfireFFDCylIndex */
     }
+
+#if ( DEM_GET_UDSDTC_BY_CONFIRMED_ORDER_SUPPORT == STD_ON )     /*  [FuncSw]    */
+    misfireCylinderNum = Dem_MisfireCylinderNum;
+    for( misfireConfirmedOrderIndex = (Dem_MisfireCylinderNumberType)0U; misfireConfirmedOrderIndex < misfireCylinderNum; misfireConfirmedOrderIndex++ )    /* [GUD:for]misfireConfirmedOrderIndex */
+    {
+        Dem_MisfireComRecord.ConfirmedOrderCylList[misfireConfirmedOrderIndex] = MisfireComRecordPtr->ConfirmedOrderCylList[misfireConfirmedOrderIndex];    /* [GUD]misfireConfirmedOrderIndex *//* [ARYCHK] DEM_MISFIRE_CYLINDER_AND_RM_NUM / 1 / misfireConfirmedOrderIndex */
+        Dem_MisfireComRecord.OccurrenceOrderListOfConfirmedCyl[misfireConfirmedOrderIndex] = MisfireComRecordPtr->OccurrenceOrderListOfConfirmedCyl[misfireConfirmedOrderIndex];    /* [GUD]misfireConfirmedOrderIndex *//* [ARYCHK] DEM_MISFIRE_CYLINDER_AND_RM_NUM / 1 / misfireConfirmedOrderIndex */
+    }
+#endif  /* ( DEM_GET_UDSDTC_BY_CONFIRMED_ORDER_SUPPORT == STD_ON )  */
 
     Dem_MisfireComRecord.ClearID                = MisfireComRecordPtr->ClearID;
     Dem_MisfireComRecord.FactoryCheck           = DEM_MISFIRE_ROMCHECK_SAVED;
@@ -1758,6 +1897,43 @@ FUNC( void, DEM_CODE ) Dem_MisfireMng_SetMisfireComRecord
     return;
 }
 
+#if ( DEM_GET_UDSDTC_BY_CONFIRMED_ORDER_SUPPORT == STD_ON )     /*  [FuncSw]    */
+/****************************************************************************/
+/* Function Name | Dem_MisfireMng_SetConfirmedOrderCyl                      */
+/* Description   | Set the ConfirmedOrderCyl.                               */
+/* Preconditions | none                                                     */
+/* Parameters    | [in] ConfirmedOrderCylIndex :                            */
+/*               | [in] ConfirmedOrderCyl :                                 */
+/*               | [in] ConfirmedOccurrenceOrder :                          */
+/* Return Value  | none                                                     */
+/* Notes         | -                                                        */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-6-0      | new created.                                             */
+/****************************************************************************/
+FUNC( void, DEM_CODE ) Dem_MisfireMng_SetConfirmedOrderCyl
+(
+    VAR( Dem_MisfireCylinderNumberType, AUTOMATIC ) ConfirmedOrderCylIndex,
+    VAR( Dem_MisfireCylinderNumberType, AUTOMATIC ) ConfirmedOrderCyl,
+    VAR( Dem_u16_OccrOrderType, AUTOMATIC ) ConfirmedOccurrenceOrder
+)
+{
+    VAR( Dem_u16_RecordKindIndexType, AUTOMATIC ) recMngCmnKindMisfireCom;
+    VAR( Dem_MisfireCylinderNumberType, AUTOMATIC ) misfireCylinderNum;
+
+    misfireCylinderNum = Dem_MisfireCylinderNum;
+    if( ConfirmedOrderCylIndex < misfireCylinderNum )   /* [GUD:if]ConfirmedOrderCylIndex */
+    {
+        Dem_MisfireComRecord.ConfirmedOrderCylList[ConfirmedOrderCylIndex] = ConfirmedOrderCyl; /* [GUD]ConfirmedOrderCylIndex */
+        Dem_MisfireComRecord.OccurrenceOrderListOfConfirmedCyl[ConfirmedOrderCylIndex] = ConfirmedOccurrenceOrder; /* [GUD]ConfirmedOrderCylIndex */
+    }
+
+    recMngCmnKindMisfireCom = Dem_RecMngCmnKindMisfireCom;
+    Dem_RecMngCmn_SetNvMWriteStatus( recMngCmnKindMisfireCom, ( Dem_u16_RecordIndexType )0U );
+
+    return;
+}
+#endif  /* ( DEM_GET_UDSDTC_BY_CONFIRMED_ORDER_SUPPORT == STD_ON )  */
 
 /****************************************************************************/
 /* Function Name | Dem_MisfireMng_ClearMisfireComRecord                     */
@@ -1769,6 +1945,7 @@ FUNC( void, DEM_CODE ) Dem_MisfireMng_SetMisfireComRecord
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
+/*   v5-6-0      | branch changed.                                          */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_MisfireMng_ClearMisfireComRecord
 (void)
@@ -1780,7 +1957,10 @@ FUNC( void, DEM_CODE ) Dem_MisfireMng_ClearMisfireComRecord
     VAR( Dem_u08_MisfireFFDCylIndexType, AUTOMATIC ) misfireFFDCylIndex;
     VAR( Dem_u08_MisfireFFDCylIndexType, AUTOMATIC ) misfireFFDCylIndexNum;
     VAR( Dem_u16_RecordKindIndexType, AUTOMATIC ) recMngCmnKindMisfireCom;
-
+#if ( DEM_GET_UDSDTC_BY_CONFIRMED_ORDER_SUPPORT == STD_ON )     /*  [FuncSw]    */
+    VAR( Dem_MisfireCylinderNumberType, AUTOMATIC ) misfireCylinderNum;
+    VAR( Dem_MisfireCylinderNumberType, AUTOMATIC ) misfireConfirmedOrderIndex;
+#endif  /* ( DEM_GET_UDSDTC_BY_CONFIRMED_ORDER_SUPPORT == STD_ON )  */
 
     Dem_MisfireComRecord.FirstPendingCyl        = DEM_MISFIRE_CYLINDER_NON;
     Dem_MisfireComRecord.FirstConfirmedCyl      = DEM_MISFIRE_CYLINDER_NON;
@@ -1797,6 +1977,15 @@ FUNC( void, DEM_CODE ) Dem_MisfireMng_ClearMisfireComRecord
     {
         Dem_MisfireComRecord.MisfireKindOfFFD[misfireFFDCylIndex] = DEM_MISFIRE_KIND_INVALID;           /* [GUD]misfireFFDCylIndex */
     }
+
+#if ( DEM_GET_UDSDTC_BY_CONFIRMED_ORDER_SUPPORT == STD_ON )     /*  [FuncSw]    */
+    misfireCylinderNum = Dem_MisfireCylinderNum;
+    for( misfireConfirmedOrderIndex = (Dem_MisfireCylinderNumberType)0U; misfireConfirmedOrderIndex < misfireCylinderNum; misfireConfirmedOrderIndex++ )    /* [GUD:for]misfireConfirmedOrderIndex */
+    {
+        Dem_MisfireComRecord.ConfirmedOrderCylList[misfireConfirmedOrderIndex] = DEM_MISFIRE_CYL_NUM_INVALID;   /* [GUD]misfireConfirmedOrderIndex */
+        Dem_MisfireComRecord.OccurrenceOrderListOfConfirmedCyl[misfireConfirmedOrderIndex] = DEM_FAIL_OCCURRENCE_NUM_INVALID;   /* [GUD]misfireConfirmedOrderIndex */
+    }
+#endif  /* ( DEM_GET_UDSDTC_BY_CONFIRMED_ORDER_SUPPORT == STD_ON )  */
 
     Dem_MisfireComRecord.ClearID                = Dem_ClrInfoMng_GetObdClearID();
     Dem_MisfireComRecord.FactoryCheck           = DEM_MISFIRE_ROMCHECK_SAVED;
@@ -1990,6 +2179,7 @@ static FUNC( void, DEM_CODE ) Dem_MisfireMng_InitMisfireMirrorRecord
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_MisfireMng_InitPaddingMisfire
 (
@@ -2003,7 +2193,7 @@ static FUNC( void, DEM_CODE ) Dem_MisfireMng_InitPaddingMisfire
 
     for( paddingIndex = (Dem_u16_PaddingIndexType)0U; paddingIndex < paddingSize; paddingIndex++ )  /* [GUD:for]paddingIndex */
     {
-        MisfireRecordPtr->Reserve[paddingIndex] = DEM_DATA_RESERVE_INITIAL_VALUE;   /* [GUD]paddingIndex */
+        MisfireRecordPtr->Reserve[paddingIndex] = DEM_DATA_RESERVE_INITIAL_VALUE;   /* [GUD]paddingIndex *//* [ARYCHK] DEM_MISFIRE_RECORD_PADDINGSIZE_TO_BLOCKSIZE / 1 / paddingIndex */
     }
 
     return;
@@ -2021,6 +2211,7 @@ static FUNC( void, DEM_CODE ) Dem_MisfireMng_InitPaddingMisfire
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
+/*   v5-6-0      | branch changed.                                          */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_MisfireMng_InitMisfireComMirrorRecord
 ( void )
@@ -2031,7 +2222,10 @@ static FUNC( void, DEM_CODE ) Dem_MisfireMng_InitMisfireComMirrorRecord
 #endif  /* ( DEM_OBDFFD_SUPPORT == STD_ON )             */
     VAR( Dem_u08_MisfireFFDCylIndexType, AUTOMATIC ) misfireFFDCylIndex;
     VAR( Dem_u08_MisfireFFDCylIndexType, AUTOMATIC ) misfireFFDCylIndexNum;
-
+#if ( DEM_GET_UDSDTC_BY_CONFIRMED_ORDER_SUPPORT == STD_ON )     /*  [FuncSw]    */
+    VAR( Dem_MisfireCylinderNumberType, AUTOMATIC ) misfireCylinderNum;
+    VAR( Dem_MisfireCylinderNumberType, AUTOMATIC ) misfireConfirmedOrderIndex;
+#endif  /* ( DEM_GET_UDSDTC_BY_CONFIRMED_ORDER_SUPPORT == STD_ON )  */
 
     Dem_TmpMisfireComMirror.FirstPendingCyl        = DEM_MISFIRE_CYLINDER_NON;
     Dem_TmpMisfireComMirror.FirstConfirmedCyl      = DEM_MISFIRE_CYLINDER_NON;
@@ -2048,6 +2242,15 @@ static FUNC( void, DEM_CODE ) Dem_MisfireMng_InitMisfireComMirrorRecord
     {
         Dem_TmpMisfireComMirror.MisfireKindOfFFD[misfireFFDCylIndex] = DEM_MISFIRE_KIND_INVALID;            /* [GUD]misfireFFDCylIndex */
     }
+
+#if ( DEM_GET_UDSDTC_BY_CONFIRMED_ORDER_SUPPORT == STD_ON )     /*  [FuncSw]    */
+    misfireCylinderNum = Dem_MisfireCylinderNum;
+    for( misfireConfirmedOrderIndex = (Dem_MisfireCylinderNumberType)0U; misfireConfirmedOrderIndex < misfireCylinderNum; misfireConfirmedOrderIndex++ )    /* [GUD:for]misfireConfirmedOrderIndex */
+    {
+        Dem_TmpMisfireComMirror.ConfirmedOrderCylList[misfireConfirmedOrderIndex] = DEM_MISFIRE_CYL_NUM_INVALID;    /* [GUD]misfireConfirmedOrderIndex */
+        Dem_TmpMisfireComMirror.OccurrenceOrderListOfConfirmedCyl[misfireConfirmedOrderIndex] = DEM_FAIL_OCCURRENCE_NUM_INVALID;    /* [GUD]misfireConfirmedOrderIndex */
+    }
+#endif  /* ( DEM_GET_UDSDTC_BY_CONFIRMED_ORDER_SUPPORT == STD_ON )  */
 
     Dem_TmpMisfireComMirror.ConsistencyIdForEmission = DEM_CONSISTENCY_INITIAL;
     Dem_TmpMisfireComMirror.ConsistencyIdForCAT      = DEM_CONSISTENCY_INITIAL;
@@ -2074,6 +2277,7 @@ static FUNC( void, DEM_CODE ) Dem_MisfireMng_InitMisfireComMirrorRecord
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_MisfireMng_InitPaddingMisfireCom
 (
@@ -2087,7 +2291,7 @@ static FUNC( void, DEM_CODE ) Dem_MisfireMng_InitPaddingMisfireCom
 
     for( paddingIndex = (Dem_u16_PaddingIndexType)0U; paddingIndex < paddingSize; paddingIndex++ )  /* [GUD:for]paddingIndex */
     {
-        MisfireComRecordPtr->Reserve[paddingIndex] = DEM_DATA_RESERVE_INITIAL_VALUE;    /* [GUD]paddingIndex */
+        MisfireComRecordPtr->Reserve[paddingIndex] = DEM_DATA_RESERVE_INITIAL_VALUE;    /* [GUD]paddingIndex *//* [ARYCHK] DEM_MISFIRECOM_RECORD_PADDINGSIZE_TO_BLOCKSIZE / 1 / paddingIndex */
     }
 
     return;
@@ -2105,6 +2309,7 @@ static FUNC( void, DEM_CODE ) Dem_MisfireMng_InitPaddingMisfireCom
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
+/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_MisfireMng_GetMisfireRecordList
 (
@@ -2135,14 +2340,14 @@ static FUNC( void, DEM_CODE ) Dem_MisfireMng_GetMisfireRecordList
         misfireObdFFDCylIndexNum = Dem_MisfireObdFFDCylIndexNum;
         for( misfireObdFFDCylIndex = (Dem_u08_MisfireObdFFDCylIndexType)0U; misfireObdFFDCylIndex < misfireObdFFDCylIndexNum; misfireObdFFDCylIndex++ ) /* [GUD:for]misfireObdFFDCylIndex */
         {
-            MisfireRecordPtr->OBDFFDCyl[misfireObdFFDCylIndex] = Dem_MisfireRecordList[MisfireIndex].OBDFFDCyl[misfireObdFFDCylIndex];      /* [GUD]misfireObdFFDCylIndex *//* [GUD]MisfireIndex */
+            MisfireRecordPtr->OBDFFDCyl[misfireObdFFDCylIndex] = Dem_MisfireRecordList[MisfireIndex].OBDFFDCyl[misfireObdFFDCylIndex];      /* [GUD]misfireObdFFDCylIndex *//* [GUD]MisfireIndex *//* [ARYCHK] DEM_MISFIRE_OBD_FFDCYL_INDEX_NUM / 1 / misfireObdFFDCylIndex */
         }
 #endif  /* ( DEM_OBDFFD_SUPPORT == STD_ON )             */
 
         misfireFFDCylIndexNum = Dem_MisfireFFDCylIndexNum;
         for( misfireFFDCylIndex = (Dem_u08_MisfireFFDCylIndexType)0U; misfireFFDCylIndex < misfireFFDCylIndexNum; misfireFFDCylIndex++ )    /* [GUD:for]misfireFFDCylIndex */
         {
-            MisfireRecordPtr->FFDCyl[misfireFFDCylIndex] = Dem_MisfireRecordList[MisfireIndex].FFDCyl[misfireFFDCylIndex];  /* [GUD]misfireFFDCylIndex *//* [GUD]MisfireIndex */
+            MisfireRecordPtr->FFDCyl[misfireFFDCylIndex] = Dem_MisfireRecordList[MisfireIndex].FFDCyl[misfireFFDCylIndex];  /* [GUD]misfireFFDCylIndex *//* [GUD]MisfireIndex *//* [ARYCHK] DEM_MISFIRE_FFDCYL_INDEX_NUM / 1 / misfireFFDCylIndex */
         }
         MisfireRecordPtr->ExceedanceCounter        = Dem_MisfireRecordList[MisfireIndex].ExceedanceCounter;                 /* [GUD]MisfireIndex */
 
@@ -2194,8 +2399,11 @@ FUNC( void, DEM_CODE ) Dem_MisfireMng_PFCMisfireComRecordInit
 /* Return Value  | void                                                     */
 /* Notes         |                                                          */
 /*--------------------------------------------------------------------------*/
+/* UpdateRecord  | [UpdRec]PFCMisfire   :   NotifySavedZone                 */
+/*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-6-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_MisfireMng_PFCMisfireComRecordInitSavedZone
 (
@@ -2214,7 +2422,7 @@ FUNC( void, DEM_CODE ) Dem_MisfireMng_PFCMisfireComRecordInitSavedZone
         Dem_NotifySavedZonePermanentUpdate_Enter();         /*  notify start :  savedzone area will be update.  */
         /*--------------------------------------------------*/
 
-        Dem_MisfireMng_InitPFCMisfireComRecord();
+        Dem_MisfireMng_InitPFCMisfireComRecord();       /*[UpdRec]PFCMisfire */
         Dem_RecMngCmn_SetNvMWriteStatus( recMngCmnKindPFCMisfireCom, ( Dem_u16_RecordIndexType )0U );
 
         /*--------------------------------------------------*/
@@ -2233,11 +2441,15 @@ FUNC( void, DEM_CODE ) Dem_MisfireMng_PFCMisfireComRecordInitSavedZone
 /* Description   | Verify PFCMisfireCom record.                             */
 /* Preconditions | none                                                     */
 /* Parameters    | none                                                     */
-/* Return Value  |                                                          */
-/* Notes         |                                                          */
+/* Return Value  | void                                                     */
+/* Notes         | Dem_NotifySavedZonePermanentUpdate_Enter/Exit() is called at caller function.   */
+/*--------------------------------------------------------------------------*/
+/* UpdateRecord  | [UpdRec]PFCMisfire                                       */
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-6-0      | no object changed.                                       */
+/*   v5-7-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_MisfireMng_PFCMisfireComDataVerify
 (
@@ -2249,10 +2461,6 @@ FUNC( void, DEM_CODE ) Dem_MisfireMng_PFCMisfireComDataVerify
 
     recMngCmnKindPFCMisfireCom = Dem_RecMngCmnKindPFCMisfireCom;
 
-    /*--------------------------------------------------*/
-    /*  notify SAVED_ZONE_PERMANENT update - start.     */
-    Dem_NotifySavedZonePermanentUpdate_Enter();         /*  notify start :  savedzone area will be update.  */
-    /*--------------------------------------------------*/
     if ( Dem_PFCMisfireComRecord.FactoryCheck != DEM_MISFIRE_ROMCHECK_FACTORY )
     {
         if( ExistMisfireRecordflg == (boolean)TRUE )
@@ -2267,9 +2475,9 @@ FUNC( void, DEM_CODE ) Dem_MisfireMng_PFCMisfireComDataVerify
         {
             if( Dem_PFCMisfireComRecord.AccumPermanentCyl != DEM_MISFIRE_CYLINDER_NON )
             {
-                Dem_PFCMisfireComRecord.FirstPermanentCyl      = DEM_MISFIRE_CYLINDER_NON;
-                Dem_PFCMisfireComRecord.FirstAccumPermanentCyl = DEM_MISFIRE_CYLINDER_NON;
-                Dem_PFCMisfireComRecord.AccumPermanentCyl      = DEM_MISFIRE_CYLINDER_NON;
+                Dem_PFCMisfireComRecord.FirstPermanentCyl      = DEM_MISFIRE_CYLINDER_NON;      /*[UpdRec]PFCMisfire */
+                Dem_PFCMisfireComRecord.FirstAccumPermanentCyl = DEM_MISFIRE_CYLINDER_NON;      /*[UpdRec]PFCMisfire */
+                Dem_PFCMisfireComRecord.AccumPermanentCyl      = DEM_MISFIRE_CYLINDER_NON;      /*[UpdRec]PFCMisfire */
                 Dem_RecMngCmn_SetNvMWriteStatus( recMngCmnKindPFCMisfireCom, ( Dem_u16_RecordIndexType )0U );
             }
         }
@@ -2277,10 +2485,10 @@ FUNC( void, DEM_CODE ) Dem_MisfireMng_PFCMisfireComDataVerify
     else
     {
         /* Initializes the PFCMisfireComRecord. */
-        Dem_PFCMisfireComRecord.FirstPermanentCyl      = DEM_MISFIRE_CYLINDER_NON;
-        Dem_PFCMisfireComRecord.FirstAccumPermanentCyl = DEM_MISFIRE_CYLINDER_NON;
-        Dem_PFCMisfireComRecord.AccumPermanentCyl      = DEM_MISFIRE_CYLINDER_NON;
-        Dem_PFCMisfireComRecord.FactoryCheck           = DEM_MISFIRE_ROMCHECK_SAVED;
+        Dem_PFCMisfireComRecord.FirstPermanentCyl      = DEM_MISFIRE_CYLINDER_NON;      /*[UpdRec]PFCMisfire */
+        Dem_PFCMisfireComRecord.FirstAccumPermanentCyl = DEM_MISFIRE_CYLINDER_NON;      /*[UpdRec]PFCMisfire */
+        Dem_PFCMisfireComRecord.AccumPermanentCyl      = DEM_MISFIRE_CYLINDER_NON;      /*[UpdRec]PFCMisfire */
+        Dem_PFCMisfireComRecord.FactoryCheck           = DEM_MISFIRE_ROMCHECK_SAVED;        /*[UpdRec]PFCMisfire */
 
         if( ExistMisfireRecordflg == (boolean)TRUE )
         {
@@ -2290,9 +2498,6 @@ FUNC( void, DEM_CODE ) Dem_MisfireMng_PFCMisfireComDataVerify
 
         Dem_RecMngCmn_SetNvMWriteStatus( recMngCmnKindPFCMisfireCom, ( Dem_u16_RecordIndexType )0U );
     }
-    /*--------------------------------------------------*/
-    /*  notify SAVED_ZONE_PERMANENT update - end.       */
-    Dem_NotifySavedZonePermanentUpdate_Exit();          /*  notify end :  savedzone area will be update.  */
 
     return;
 }
@@ -2328,8 +2533,11 @@ FUNC( void, DEM_CODE ) Dem_MisfireMng_GetPFCMisfireComRecord
 /* Return Value  | none                                                     */
 /* Notes         | -                                                        */
 /*--------------------------------------------------------------------------*/
+/* UpdateRecord  | [UpdRec]PFCMisfire                                       */
+/*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-6-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_MisfireMng_SetPFCMisfireComRecord
 (
@@ -2345,13 +2553,13 @@ FUNC( void, DEM_CODE ) Dem_MisfireMng_SetPFCMisfireComRecord
     {
         SchM_Enter_Dem_PermanentMemory();
 
-        Dem_PFCMisfireComRecord.FirstPermanentCyl      = PFCMisfireComRecordPtr->FirstPermanentCyl;
-        Dem_PFCMisfireComRecord.FirstAccumPermanentCyl = PFCMisfireComRecordPtr->FirstAccumPermanentCyl;
-        Dem_PFCMisfireComRecord.AccumPermanentCyl      = PFCMisfireComRecordPtr->AccumPermanentCyl;
+        Dem_PFCMisfireComRecord.FirstPermanentCyl      = PFCMisfireComRecordPtr->FirstPermanentCyl;         /*[UpdRec]PFCMisfire */
+        Dem_PFCMisfireComRecord.FirstAccumPermanentCyl = PFCMisfireComRecordPtr->FirstAccumPermanentCyl;    /*[UpdRec]PFCMisfire */
+        Dem_PFCMisfireComRecord.AccumPermanentCyl      = PFCMisfireComRecordPtr->AccumPermanentCyl;         /*[UpdRec]PFCMisfire */
 
         SchM_Exit_Dem_PermanentMemory();
 
-        Dem_PFCMisfireComRecord.FactoryCheck           = DEM_MISFIRE_ROMCHECK_SAVED;
+        Dem_PFCMisfireComRecord.FactoryCheck           = DEM_MISFIRE_ROMCHECK_SAVED;                        /*[UpdRec]PFCMisfire */
 
         recMngCmnKindPFCMisfireCom = Dem_RecMngCmnKindPFCMisfireCom;
         Dem_RecMngCmn_SetNvMWriteStatus( recMngCmnKindPFCMisfireCom, ( Dem_u16_RecordIndexType )0U );
@@ -2360,6 +2568,37 @@ FUNC( void, DEM_CODE ) Dem_MisfireMng_SetPFCMisfireComRecord
     return;
 }
 
+/****************************************************************************/
+/* Function Name | Dem_MisfireMng_ClearPFCMisfireComRecord                  */
+/* Description   | Clear the PFCMisfireComRecord.                           */
+/* Preconditions | none                                                     */
+/* Parameters    | none                                                     */
+/* Return Value  | none                                                     */
+/* Notes         | -                                                        */
+/*--------------------------------------------------------------------------*/
+/* UpdateRecord  | [UpdRec]PFCMisfire                                       */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-6-0      | new created.                                             */
+/****************************************************************************/
+FUNC( void, DEM_CODE ) Dem_MisfireMng_ClearPFCMisfireComRecord
+( void )
+{
+    VAR( Dem_u16_RecordKindIndexType, AUTOMATIC ) recMngCmnKindPFCMisfireCom;
+
+    SchM_Enter_Dem_PermanentMemory();
+
+    Dem_PFCMisfireComRecord.FirstPermanentCyl      = DEM_MISFIRE_CYLINDER_NON;         /*[UpdRec]PFCMisfire */
+    Dem_PFCMisfireComRecord.FirstAccumPermanentCyl = DEM_MISFIRE_CYLINDER_NON;         /*[UpdRec]PFCMisfire */
+    Dem_PFCMisfireComRecord.AccumPermanentCyl      = DEM_MISFIRE_CYLINDER_NON;         /*[UpdRec]PFCMisfire */
+
+    SchM_Exit_Dem_PermanentMemory();
+
+    recMngCmnKindPFCMisfireCom = Dem_RecMngCmnKindPFCMisfireCom;
+    Dem_RecMngCmn_SetNvMWriteStatus( recMngCmnKindPFCMisfireCom, ( Dem_u16_RecordIndexType )0U );
+
+    return;
+}
 
 /****************************************************************************/
 /* Function Name | Dem_MisfireMng_ComparePFCMisfireComRecord                */
@@ -2410,15 +2649,20 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_MisfireMng_ComparePFCMis
 /* Parameters    | none                                                     */
 /* Return Value  | none                                                     */
 /* Notes         | none                                                     */
+/*--------------------------------------------------------------------------*/
+/* UpdateRecord  | [UpdRec]PFCMisfire                                       */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-6-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_MisfireMng_InitPFCMisfireComRecord
 ( void )
 {
-    Dem_PFCMisfireComRecord.FirstPermanentCyl      = DEM_MISFIRE_CYLINDER_FACTORY_DEFAULT;
-    Dem_PFCMisfireComRecord.FirstAccumPermanentCyl = DEM_MISFIRE_CYLINDER_FACTORY_DEFAULT;
-    Dem_PFCMisfireComRecord.AccumPermanentCyl      = DEM_MISFIRE_CYLINDER_FACTORY_DEFAULT;
+    Dem_PFCMisfireComRecord.FirstPermanentCyl      = DEM_MISFIRE_CYLINDER_FACTORY_DEFAULT;      /*[UpdRec]PFCMisfire */
+    Dem_PFCMisfireComRecord.FirstAccumPermanentCyl = DEM_MISFIRE_CYLINDER_FACTORY_DEFAULT;      /*[UpdRec]PFCMisfire */
+    Dem_PFCMisfireComRecord.AccumPermanentCyl      = DEM_MISFIRE_CYLINDER_FACTORY_DEFAULT;      /*[UpdRec]PFCMisfire */
 
-    Dem_PFCMisfireComRecord.FactoryCheck           = DEM_MISFIRE_ROMCHECK_FACTORY;
+    Dem_PFCMisfireComRecord.FactoryCheck           = DEM_MISFIRE_ROMCHECK_FACTORY;              /*[UpdRec]PFCMisfire */
 
     return;
 }
@@ -2594,6 +2838,9 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_MisfireMng_PFCMisfireCom_GetEve
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-6-0         :2024-01-29                                              */
+/*  v5-7-0         :2024-05-29                                              */
+/*  v5-9-0         :2025-02-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

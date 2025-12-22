@@ -1,7 +1,7 @@
-/* Dcm_FuncSwitch_cfg_h(v5-5-0)                                             */
+/* Dcm_FuncSwitch_cfg_h(v5-9-0)                                             */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -32,7 +32,9 @@
 #define DCM_PAGEDBUFFER_SID19_SUB0A_ENABLED  (STD_OFF)   /* Use Paged Buffer in SID19_SUB0A */
 #define DCM_PAGEDBUFFER_SID19_SUB17_ENABLED  (STD_OFF)   /* Use Paged Buffer in SID19_SUB17 */
 #define DCM_PAGEDBUFFER_SID19_SUB18_ENABLED  (STD_OFF)   /* Use Paged Buffer in SID19_SUB18 */
+#define DCM_PAGEDBUFFER_SID19_SUB1A_ENABLED  (STD_OFF)   /* Use Paged Buffer in SID19_SUB1A */
 #define DCM_PAGEDBUFFER_SID19_SUB42_ENABLED  (STD_OFF)   /* Use Paged Buffer in SID19_SUB42 */
+#define DCM_PAGEDBUFFER_SID19_SUB56_ENABLED  (STD_OFF)   /* Use Paged Buffer in SID19_SUB56 */
 #define DCM_PAGEDBUFFER_SID31_ENABLED        (STD_OFF)   /* Use Paged Buffer in SID31 */
 #define DCM_PERIODIC_SEND_USE                (STD_OFF)   /* Use Periodic Sending */
 #define DCM_PERIODIC_DDDID_USE               (STD_OFF)   /* Use DynamicallyDefineDataIdentifier for Periodic Sending */
@@ -81,6 +83,7 @@
 #define DCM_SUPPORT_SID2E                    (STD_OFF)   /* Use SID2E     */
 #define DCM_SUPPORT_SID2F                    (STD_OFF)   /* Use SID2F     */
 #define DCM_SUPPORT_SID31                    (STD_OFF)   /* Use SID31     */
+#define DCM_SUPPORT_SID3D                    (STD_OFF)   /* Use SID3D     */
 #define DCM_SUPPORT_SID3E                    (STD_ON)    /* Use SID3E     */
 #define DCM_SUPPORT_SID85                    (STD_OFF)   /* Use SID85     */
 #define DCM_SUPPORT_SID85_SUB01              (STD_OFF)   /* Use SID85Sf01 */
@@ -98,6 +101,7 @@
 #define DCM_SUPPORT_SID86_SUB46              (STD_OFF)   /* Use SID86Sf46 */
 #define DCM_SUPPORT_SID86_SUB47              (STD_OFF)   /* Use SID86Sf47 */
 #define DCM_USE_PROVIDE_SERVICE              (STD_ON)    /* Use Provide Service  */
+#define DCM_ASYNC_RESETTODEFAULTSESSION      (STD_OFF)   /* Use ResetToDefaultSession as Async  */
 
 /*--------------------------------------------------------------------------*/
 /* Types                                                                    */
@@ -127,11 +131,14 @@
 /*  v5-0-0         :2022-03-29                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-6-0         :2024-02-27                                              */
+/*  v5-8-0         :2024-10-29                                              */
+/*  v5-9-0         :2025-02-26                                              */
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
 /*  Framework          :v2-1-0                                              */
-/*  BSW plug-in        :v5-5-1                                              */
+/*  BSW plug-in        :v5-10-0                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

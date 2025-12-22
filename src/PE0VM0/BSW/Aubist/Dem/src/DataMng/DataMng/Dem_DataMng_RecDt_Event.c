@@ -1,7 +1,7 @@
-/* Dem_DataMng_RecDt_Event_c(v5-5-0)                                        */
+/* Dem_DataMng_RecDt_Event_c(v5-9-0)                                        */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -68,6 +68,11 @@ static FUNC( void, DEM_CODE ) Dem_DataMng_SetEventCtlRecord
 );
 
 #if ( DEM_NVM_SYNC_PROCESS_ENABLE == STD_ON )
+static FUNC( void, DEM_CODE ) Dem_DataMngM_GetEventRecord
+(
+    VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex,
+    P2VAR( Dem_EventRecordType, AUTOMATIC, DEM_VAR_NO_INIT ) EventRecordPtr
+);
 static FUNC( void, DEM_CODE ) Dem_DataMng_GetEventRecord_Ctl
 (
     VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex,
@@ -98,7 +103,7 @@ static FUNC( void, DEM_CODE ) Dem_EventMng_InitMirrorMemory
 #if ( DEM_EVENT_RECORD_PADDING_EXIST == STD_ON )
 static FUNC( void, DEM_CODE ) Dem_EventMng_InitRecord_Padding
 (
-    P2VAR( Dem_EventRecordType, AUTOMATIC, DEM_VAR_NO_INIT ) EventRecordPtr
+    P2VAR( Dem_EventRecordType, AUTOMATIC, DEM_VAR_SAVED_ZONE ) EventRecordPtr
 );
 #endif /* DEM_EVENT_RECORD_PADDING_EXIST -STD_ON- */
 
@@ -683,7 +688,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataMngC_GetER_FailureCounter
     return retVal;
 }
 
-
+#if ( DEM_GETOCCURRENCECOUNTER_SUPPORT == STD_ON )
 /****************************************************************************/
 /* Function Name | Dem_DataMngC_GetER_OccurrenceCounter                     */
 /* Description   | Gets the occurrence counter of the event record list co- */
@@ -702,6 +707,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataMngC_GetER_FailureCounter
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | new created. based on Dem_DataMngC_GetER_StatusOfDTC.    */
+/*   v5-9-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataMngC_GetER_OccurrenceCounter
 (
@@ -723,7 +729,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataMngC_GetER_OccurrenceCounte
 
     return retVal;
 }
-
+#endif  /* ( DEM_GETOCCURRENCECOUNTER_SUPPORT == STD_ON )   */
 
 /****************************************************************************/
 /* Function Name | Dem_DataMngC_SetEventRecord                              */
@@ -890,31 +896,30 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataMngC_CompareEventRecord
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-9-0      | no branch changed.                                       */
 /****************************************************************************/
-FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataMngM_GetEventRecord
+static FUNC( void, DEM_CODE ) Dem_DataMngM_GetEventRecord
 (
     VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex,
-    P2VAR( Dem_EventRecordType, AUTOMATIC, AUTOMATIC ) EventRecordPtr
+    P2VAR( Dem_EventRecordType, AUTOMATIC, DEM_VAR_NO_INIT ) EventRecordPtr
 )
 {
     VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) eventStorageNum;
-    VAR( Dem_u08_InternalReturnType, AUTOMATIC ) retVal;
 
-    retVal = DEM_IRT_NG;
     eventStorageNum = Dem_PrimaryMemEventStorageNum;
 
     if( EventStrgIndex < eventStorageNum )                                                                  /* [GUD:if]EventStrgIndex */
     {
-        Dem_DataMng_GetEventRecord_Ctl( EventStrgIndex, EventRecordPtr );
-        Dem_DataMng_GetEventRecord_MM( EventStrgIndex, EventRecordPtr );
-        retVal = DEM_IRT_OK;
-    }
-    else
-    {
-        /* No process */
+        Dem_DataMng_GetEventRecord_Ctl( EventStrgIndex, EventRecordPtr );       /* [GUD]EventStrgIndex */
+
+#if ( DEM_COMBINEDEVENT_ONSTORAGE_SUPPORT == STD_ON )    /* [FuncSw] */
+        Dem_EventMng_GetPassedBitmapData( EventStrgIndex, EventRecordPtr );     /* [GUD]EventStrgIndex */
+#endif /* ( DEM_COMBINEDEVENT_ONSTORAGE_SUPPORT == STD_ON )          */
+
+        Dem_DataMng_GetEventRecord_MM( EventStrgIndex, EventRecordPtr );        /* [GUD]EventStrgIndex */
     }
 
-    return retVal;
+    return ;
 }
 #endif /* DEM_NVM_SYNC_PROCESS_ENABLE -STD_ON- */
 
@@ -932,6 +937,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataMngM_GetEventRecord
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
+/*   v5-9-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_DataMngM_InitEventRecord
 (
@@ -946,6 +952,10 @@ FUNC( void, DEM_CODE ) Dem_DataMngM_InitEventRecord
     if( EventStrgIndex < eventStorageNum )                                                                  /* [GUD:if]EventStrgIndex */
     {
         Dem_DataMng_InitEventRecord_Ctl( EventStrgIndex );
+
+#if ( DEM_COMBINEDEVENT_ONSTORAGE_SUPPORT == STD_ON )    /* [FuncSw] */
+        Dem_EventMng_SetPassedBitmapData( &Dem_EventRecordList[EventStrgIndex], DEM_EVENTCTRLBITMAP_ALL_OFF );   /* [GUD]EventStrgIndex */
+#endif /* ( DEM_COMBINEDEVENT_ONSTORAGE_SUPPORT == STD_ON )          */
 
 #if ( DEM_EVENT_RECORD_PADDING_EXIST == STD_ON )    /* [FuncSw] */
         Dem_EventMng_InitRecord_Padding( &Dem_EventRecordList[EventStrgIndex] );                            /* [GUD]EventStrgIndex */
@@ -974,6 +984,7 @@ FUNC( void, DEM_CODE ) Dem_DataMngM_InitEventRecord
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
+/*   v5-9-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_DataMngC_InitEventCtlRecordData
 (
@@ -995,8 +1006,53 @@ FUNC( void, DEM_CODE ) Dem_DataMngC_InitEventCtlRecordData
     /* The counter of fail event. */
     EventRecordPtr->FailureCounter          = DEM_FAILURECYCLE_COUNT_INITIAL_VALUE;
 
+#if ( DEM_GETOCCURRENCECOUNTER_SUPPORT == STD_ON )    /* [FuncSw]   */
     /* The counter of event occurrence. */
     EventRecordPtr->OccurrenceCounter       = DEM_EVENT_OCCURRENCE_COUNT_INITIAL_VALUE;
+#endif  /* ( DEM_GETOCCURRENCECOUNTER_SUPPORT == STD_ON )           */
+
+    return ;
+}
+
+
+/****************************************************************************/
+/* Function Name | Dem_DataMngC_CopyEventCtlRecordData                      */
+/* Description   | copy the specified event record.                         */
+/* Preconditions |                                                          */
+/* Parameters    | [out] DestEventRecordPtr :                               */
+/*               | [in] SrcEventRecordPtr :                                 */
+/* Return Value  | void                                                     */
+/* Notes         |                                                          */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-7-0      | new created.                                             */
+/*   v5-9-0      | no branch changed.                                       */
+/****************************************************************************/
+FUNC( void, DEM_CODE ) Dem_DataMngC_CopyEventCtlRecordData
+(
+    P2VAR( Dem_EventRecordForCtlType, AUTOMATIC, AUTOMATIC ) DestEventRecordPtr,
+    P2CONST( Dem_EventRecordForCtlType, AUTOMATIC, DEM_VAR_NO_INIT ) SrcEventRecordPtr
+)
+{
+    /* Sets initial value to the specified event record. */
+
+    /* The fault index. */
+    DestEventRecordPtr->FaultIndex              = SrcEventRecordPtr->FaultIndex;
+
+    /* The status of DTC. */
+    DestEventRecordPtr->StatusOfDTC             = SrcEventRecordPtr->StatusOfDTC;
+
+    /* The status of DTC. */
+    DestEventRecordPtr->ExtendStatusOfDTC       = SrcEventRecordPtr->ExtendStatusOfDTC;
+    DestEventRecordPtr->ExtendStatusOfDTC2      = SrcEventRecordPtr->ExtendStatusOfDTC2;
+
+    /* The counter of fail event. */
+    DestEventRecordPtr->FailureCounter          = SrcEventRecordPtr->FailureCounter;
+
+#if ( DEM_GETOCCURRENCECOUNTER_SUPPORT == STD_ON )  /* [FuncSw] */
+    /* The counter of event occurrence. */
+    DestEventRecordPtr->OccurrenceCounter       = SrcEventRecordPtr->OccurrenceCounter;
+#endif  /* ( DEM_GETOCCURRENCECOUNTER_SUPPORT == STD_ON )       */
 
     return ;
 }
@@ -1134,6 +1190,7 @@ FUNC( void, DEM_CODE ) Dem_DataMng_UpdateEventRecordConsistencyId
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
+/*   v5-9-0      | no branch changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_DataMng_InitEventRecord_Ctl
 (
@@ -1148,7 +1205,9 @@ static FUNC( void, DEM_CODE ) Dem_DataMng_InitEventRecord_Ctl
     Dem_EventRecordList[EventStrgIndex].ExtendStatusOfDTC       = DEM_DTCSTATUSEX_BYTE_DEFAULT;                             /* [GUDCHK:CALLER]EventStrgIndex */
     Dem_EventRecordList[EventStrgIndex].ExtendStatusOfDTC2      = DEM_DTCSTATUSEX2_BYTE_DEFAULT;                            /* [GUDCHK:CALLER]EventStrgIndex */
     Dem_EventRecordList[EventStrgIndex].FailureCounter          = DEM_FAILURECYCLE_COUNT_INITIAL_VALUE;                     /* [GUDCHK:CALLER]EventStrgIndex */
+#if ( DEM_GETOCCURRENCECOUNTER_SUPPORT == STD_ON )  /* [FuncSw] */
     Dem_EventRecordList[EventStrgIndex].OccurrenceCounter       = DEM_EVENT_OCCURRENCE_COUNT_INITIAL_VALUE;                 /* [GUDCHK:CALLER]EventStrgIndex */
+#endif  /* ( DEM_GETOCCURRENCECOUNTER_SUPPORT == STD_ON )       */
 
     eventOBDKind    =   Dem_CfgInfoPm_CheckEventKindOfOBD_InEvtStrgGrp( EventStrgIndex );
     if( eventOBDKind == (boolean)TRUE ) /*  OBD     */
@@ -1184,6 +1243,7 @@ static FUNC( void, DEM_CODE ) Dem_DataMng_InitEventRecord_Ctl
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
+/*   v5-9-0      | no branch changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_DataMng_GetEventCtlRecord
 (
@@ -1196,7 +1256,9 @@ static FUNC( void, DEM_CODE ) Dem_DataMng_GetEventCtlRecord
     DestEventRecordPtr->ExtendStatusOfDTC       = Dem_EventRecordList[EventStrgIndex].ExtendStatusOfDTC;                    /* [GUDCHK:CALLER]EventStrgIndex */
     DestEventRecordPtr->ExtendStatusOfDTC2      = Dem_EventRecordList[EventStrgIndex].ExtendStatusOfDTC2;                   /* [GUDCHK:CALLER]EventStrgIndex */
     DestEventRecordPtr->FailureCounter          = Dem_EventRecordList[EventStrgIndex].FailureCounter;                       /* [GUDCHK:CALLER]EventStrgIndex */
+#if ( DEM_GETOCCURRENCECOUNTER_SUPPORT == STD_ON )  /* [FuncSw] */
     DestEventRecordPtr->OccurrenceCounter       = Dem_EventRecordList[EventStrgIndex].OccurrenceCounter;                    /* [GUDCHK:CALLER]EventStrgIndex */
+#endif  /* ( DEM_GETOCCURRENCECOUNTER_SUPPORT == STD_ON )       */
 
     return ;
 }
@@ -1219,6 +1281,7 @@ static FUNC( void, DEM_CODE ) Dem_DataMng_GetEventCtlRecord
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
+/*   v5-9-0      | no branch changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_DataMng_SetEventCtlRecord
 (
@@ -1234,8 +1297,9 @@ static FUNC( void, DEM_CODE ) Dem_DataMng_SetEventCtlRecord
     Dem_EventRecordList[EventStrgIndex].ExtendStatusOfDTC           = SrcEventRecordPtr->ExtendStatusOfDTC;                 /* [GUDCHK:CALLER]EventStrgIndex */
     Dem_EventRecordList[EventStrgIndex].ExtendStatusOfDTC2          = SrcEventRecordPtr->ExtendStatusOfDTC2;                /* [GUDCHK:CALLER]EventStrgIndex */
     Dem_EventRecordList[EventStrgIndex].FailureCounter              = SrcEventRecordPtr->FailureCounter;                    /* [GUDCHK:CALLER]EventStrgIndex */
+#if ( DEM_GETOCCURRENCECOUNTER_SUPPORT == STD_ON )  /* [FuncSw] */
     Dem_EventRecordList[EventStrgIndex].OccurrenceCounter           = SrcEventRecordPtr->OccurrenceCounter;                 /* [GUDCHK:CALLER]EventStrgIndex */
-
+#endif  /* ( DEM_GETOCCURRENCECOUNTER_SUPPORT == STD_ON )       */
     eventOBDKind    =   Dem_CfgInfoPm_CheckEventKindOfOBD_InEvtStrgGrp( EventStrgIndex );
     if( eventOBDKind == (boolean)TRUE ) /*  OBD     */
     {
@@ -1271,6 +1335,7 @@ static FUNC( void, DEM_CODE ) Dem_DataMng_SetEventCtlRecord
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
+/*   v5-9-0      | no branch changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_DataMng_GetEventRecord_Ctl
 (
@@ -1283,7 +1348,9 @@ static FUNC( void, DEM_CODE ) Dem_DataMng_GetEventRecord_Ctl
     DestEventRecordPtr->ExtendStatusOfDTC       = Dem_EventRecordList[EventStrgIndex].ExtendStatusOfDTC;                    /* [GUDCHK:CALLER]EventStrgIndex */
     DestEventRecordPtr->ExtendStatusOfDTC2      = Dem_EventRecordList[EventStrgIndex].ExtendStatusOfDTC2;                   /* [GUDCHK:CALLER]EventStrgIndex */
     DestEventRecordPtr->FailureCounter          = Dem_EventRecordList[EventStrgIndex].FailureCounter;                       /* [GUDCHK:CALLER]EventStrgIndex */
+#if ( DEM_GETOCCURRENCECOUNTER_SUPPORT == STD_ON )  /* [FuncSw] */
     DestEventRecordPtr->OccurrenceCounter       = Dem_EventRecordList[EventStrgIndex].OccurrenceCounter;                    /* [GUDCHK:CALLER]EventStrgIndex */
+#endif  /* ( DEM_GETOCCURRENCECOUNTER_SUPPORT == STD_ON )       */
     DestEventRecordPtr->ClearID                 = Dem_EventRecordList[EventStrgIndex].ClearID;                              /* [GUDCHK:CALLER]EventStrgIndex */
 
     return ;
@@ -1336,6 +1403,7 @@ static FUNC( void, DEM_CODE ) Dem_DataMng_GetEventRecord_MM
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | branch changed.                                          */
+/*   v5-9-0      | branch changed.                                          */
 /****************************************************************************/
 static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataMng_CmpWithEventRecord
 (
@@ -1358,10 +1426,12 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataMng_CmpWithEventReco
     {
         retVal = DEM_IRT_NG;
     }
+#if ( DEM_GETOCCURRENCECOUNTER_SUPPORT == STD_ON )  /* [FuncSw] */
     else if( eventRecordPtr->OccurrenceCounter != CheckEventRecordPtr->OccurrenceCounter )      /* [GUDCHK:CALLER]EventStrgIndex *//* [GUDCHK:CALLER]CheckEventRecordPtr */
     {
         retVal = DEM_IRT_NG;
     }
+#endif  /* ( DEM_GETOCCURRENCECOUNTER_SUPPORT == STD_ON )       */
     else if( eventRecordPtr->FaultIndex != CheckEventRecordPtr->FaultIndex )                    /* [GUDCHK:CALLER]EventStrgIndex *//* [GUDCHK:CALLER]CheckEventRecordPtr */
     {
         retVal = DEM_IRT_NG;
@@ -1512,6 +1582,7 @@ FUNC( void, DEM_CODE ) Dem_DataMng_InitER_FaultIndex
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
+/*   v5-9-0      | no branch changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_DataMng_InitSavedZoneOfEventRecord
 (
@@ -1521,11 +1592,17 @@ static FUNC( void, DEM_CODE ) Dem_DataMng_InitSavedZoneOfEventRecord
     Dem_EventRecordList[EventStrgIndex].FaultIndex                  = DEM_FAULTINDEX_INITIAL;                               /* [GUDCHK:CALLER]EventStrgIndex */
     Dem_EventRecordList[EventStrgIndex].StatusOfDTC                 = DEM_DTCSTATUS_FACTORY_DEFAULT;                        /* [GUDCHK:CALLER]EventStrgIndex */
     Dem_EventRecordList[EventStrgIndex].FailureCounter              = DEM_FAILURECYCLE_COUNT_FACTORY_DEFAULT;               /* [GUDCHK:CALLER]EventStrgIndex */
+#if ( DEM_GETOCCURRENCECOUNTER_SUPPORT == STD_ON )  /* [FuncSw] */
     Dem_EventRecordList[EventStrgIndex].OccurrenceCounter           = DEM_EVENT_OCCURRENCE_COUNT_FACTORY_DEFAULT;           /* [GUDCHK:CALLER]EventStrgIndex */
+#endif  /* ( DEM_GETOCCURRENCECOUNTER_SUPPORT == STD_ON )       */
     Dem_EventRecordList[EventStrgIndex].ConsistencyCounterForFault  = DEM_CONSISTENCY_INITIAL;                              /* [GUDCHK:CALLER]EventStrgIndex */
     Dem_EventRecordList[EventStrgIndex].ClearID                     = DEM_CLRINFO_RECORD_INITIAL;                           /* [GUDCHK:CALLER]EventStrgIndex */
     Dem_EventRecordList[EventStrgIndex].ExtendStatusOfDTC           = DEM_DTCSTATUSEX_FACTORY_DEFAULT;                      /* [GUDCHK:CALLER]EventStrgIndex */
     Dem_EventRecordList[EventStrgIndex].ExtendStatusOfDTC2          = DEM_DTCSTATUSEX2_FACTORY_DEFAULT;                     /* [GUDCHK:CALLER]EventStrgIndex */
+
+#if ( DEM_COMBINEDEVENT_ONSTORAGE_SUPPORT == STD_ON )    /* [FuncSw] */
+    Dem_EventMng_SetPassedBitmapData( &Dem_EventRecordList[EventStrgIndex], DEM_PASSEDBITMAP_FACTORY_DEFAULT );   /* [GUDCHK:CALLER]EventStrgIndex */
+#endif /* ( DEM_COMBINEDEVENT_ONSTORAGE_SUPPORT == STD_ON )          */
 
     return;
 }
@@ -1640,6 +1717,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_EventMng_DataVerify
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-9-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_EventMng_SetRecordMirror
 (
@@ -1647,7 +1725,7 @@ FUNC( void, DEM_CODE ) Dem_EventMng_SetRecordMirror
     P2VAR( Dem_DataMirrorInfoType, AUTOMATIC, AUTOMATIC ) BlockMirrorPtr
 )
 {
-    (void)Dem_DataMngM_GetEventRecord( (Dem_u16_EventStrgIndexType)BlockMirrorPtr->RecordIndex, &Dem_TmpEventMirror );  /* no return check required */
+    Dem_DataMngM_GetEventRecord( (Dem_u16_EventStrgIndexType)BlockMirrorPtr->RecordIndex, &Dem_TmpEventMirror );
 
     BlockMirrorPtr->MirrorPtr = &Dem_TmpEventMirror;
 
@@ -1725,6 +1803,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_EventMng_ClearAllNotVerifiedRec
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | branch changed.                                          */
+/*   v5-9-0      | no branch changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_EventMng_InitMirrorMemory
 ( void )
@@ -1735,11 +1814,17 @@ static FUNC( void, DEM_CODE ) Dem_EventMng_InitMirrorMemory
     Dem_TmpEventMirror.ExtendStatusOfDTC            = DEM_DTCSTATUSEX_BYTE_DEFAULT;
     Dem_TmpEventMirror.ExtendStatusOfDTC2           = DEM_DTCSTATUSEX2_BYTE_DEFAULT;
     Dem_TmpEventMirror.FailureCounter               = DEM_FAILURECYCLE_COUNT_INITIAL_VALUE;
+#if ( DEM_GETOCCURRENCECOUNTER_SUPPORT == STD_ON )  /* [FuncSw] */
     Dem_TmpEventMirror.OccurrenceCounter            = DEM_EVENT_OCCURRENCE_COUNT_INITIAL_VALUE;
+#endif  /* ( DEM_GETOCCURRENCECOUNTER_SUPPORT == STD_ON )       */
     Dem_TmpEventMirror.ConsistencyCounterForFault   = DEM_CONSISTENCY_INITIAL;
 
     /* Stores unused values to initialize the structure before reading */
     Dem_TmpEventMirror.ClearID                      = DEM_CLRINFO_RECORD_INITIAL;
+
+#if ( DEM_COMBINEDEVENT_ONSTORAGE_SUPPORT == STD_ON )    /* [FuncSw] */
+    Dem_EventMng_SetPassedBitmapData( &Dem_TmpEventMirror, DEM_EVENTCTRLBITMAP_ALL_OFF );
+#endif /* ( DEM_COMBINEDEVENT_ONSTORAGE_SUPPORT == STD_ON )          */
 
 #if ( DEM_EVENT_RECORD_PADDING_EXIST == STD_ON )    /* [FuncSw] */
     Dem_EventMng_InitRecord_Padding( &Dem_TmpEventMirror );
@@ -1761,10 +1846,12 @@ static FUNC( void, DEM_CODE ) Dem_EventMng_InitMirrorMemory
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | new created. based on Dem_FaultMng_InitFRData_Padding. */
+/*   v5-7-0      | no object changed.                                       */
+/*   v5-9-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_EventMng_InitRecord_Padding
 (
-    P2VAR( Dem_EventRecordType, AUTOMATIC, DEM_VAR_NO_INIT ) EventRecordPtr
+    P2VAR( Dem_EventRecordType, AUTOMATIC, DEM_VAR_SAVED_ZONE ) EventRecordPtr
 )
 {
     VAR( Dem_u16_PaddingIndexType, AUTOMATIC ) idx;
@@ -1773,7 +1860,7 @@ static FUNC( void, DEM_CODE ) Dem_EventMng_InitRecord_Padding
     eventRecordBlockPaddingSize = Dem_EventRecordBlockPaddingSize;
     for ( idx = (Dem_u16_PaddingIndexType)0U; idx < eventRecordBlockPaddingSize; idx++ )            /* [GUD:for]idx */
     {
-        EventRecordPtr->Reserve[idx] = DEM_DATA_RESERVE_INITIAL_VALUE;                              /* [GUD]idx */
+        EventRecordPtr->Reserve[idx] = DEM_DATA_RESERVE_INITIAL_VALUE;                              /* [GUD]idx *//* [ARYCHK] DEM_EVENT_RECORD_PADDINGSIZE_TO_BLOCKSIZE / 1 / idx */
     }
 
     return ;
@@ -1825,6 +1912,8 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_EventMng_GetEventIdFromRecordDa
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-7-0         :2024-05-29                                              */
+/*  v5-9-0         :2025-02-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/
