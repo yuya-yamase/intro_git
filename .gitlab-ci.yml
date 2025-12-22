@@ -6,7 +6,7 @@ variables:
   #VT実行用batファイル格納パス
   EXEC_DIR: 'C:\VTSystem\BEV3-CDC-VT\ExecFile\GitLabRunner'
   #VTスモークテスト実行batファイル名
-  VT_SMOKE_BAT: 'Start_OK.bat'
+  VT_SMOKE_BAT: 'StartSmokeTest.bat'
   #調停用ファイル格納パス
   ARBITATION_DIR: 'C:\VTSystem\Arbitration\DevArbitrationFolder'
   #調停ファイル名
