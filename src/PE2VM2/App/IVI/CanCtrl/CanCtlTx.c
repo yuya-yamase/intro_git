@@ -11,6 +11,7 @@
 #include    "CanCtlTx.h"
 #include    "oxcan.h"
 #include    "ivdsh.h"
+#include    "PictCtl.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
@@ -18,11 +19,15 @@
 #define    CANCTLTC_SIGINIT        (0U)
 
 #define    CANCTLTC_TXBYTE0        (0U)
+#define    CANCTLTC_TXBYTE6        (6U)
 
 #define    CANCTLTC_2BIT_MAX       (3U)
+
+#define    CANCTLTC_4BIT_SHIFT     (4U)
 #define    CANCTLTC_5BIT_SHIFT     (5U)
 
 #define    CANCTLTC_FLYNOP_MASK    (0x9FU)
+#define    CANCTLTC_CDSIZE_MASK    (0x0FU)
 
 #define    CANCTLTC_VM_1WORD       (1U)
 
@@ -118,6 +123,13 @@ void            vd_g_CanCtlTx_SendHk(const U4 u4_a_IPDU_RX, U1 * u1_ap_DATA)
             u1_ap_DATA[CANCTLTC_TXBYTE0]  = u1_ap_DATA[CANCTLTC_TXBYTE0] & (U1)CANCTLTC_FLYNOP_MASK;
             u1_ap_DATA[CANCTLTC_TXBYTE0] |= (U1)(u1_t_sig << CANCTLTC_5BIT_SHIFT);
             break;
+
+        case MSG_AVN1S97_TXCH0:
+            u1_t_sig = u1_g_PictCtl_CdsizeSnd();
+            u1_ap_DATA[CANCTLTC_TXBYTE6]  = u1_ap_DATA[CANCTLTC_TXBYTE6] & (U1)CANCTLTC_CDSIZE_MASK;
+            u1_ap_DATA[CANCTLTC_TXBYTE6] |= (U1)(u1_t_sig << CANCTLTC_4BIT_SHIFT);
+            break;
+
         default:
             break;
     }
