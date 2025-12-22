@@ -1167,28 +1167,28 @@ static U1   u1_s_wChimeCfgClesonVolGet(const U1 u1_a_REQ_SEL)
     for(u4_t_loopcnt = (U4)0U; u4_t_loopcnt < (U4)WCHIME_CSR_VOL_LIST_NUM; u4_t_loopcnt++){
         if(u1_a_REQ_SEL == st_sp_WCHIME_CSR_VOL_LIST[u4_t_loopcnt].u1_reqid){
             switch(u1_g_wchime_alrt_csr_vol_now){
-                case (U1)ALERT_REQ_S_CLESON_VOL_VOL0:
+                case (U1)ALERT_REQ_S_ADBZR_CSR_VOL_VOL0:
                     u1_t_volindex = (U1)WCHIME_CSR_VOL_INDEX_0;
                     break;
-                case (U1)ALERT_REQ_S_CLESON_VOL_VOL1:
+                case (U1)ALERT_REQ_S_ADBZR_CSR_VOL_VOL1:
                     u1_t_volindex = (U1)WCHIME_CSR_VOL_INDEX_1;
                     break;
-                case (U1)ALERT_REQ_S_CLESON_VOL_VOL2:
+                case (U1)ALERT_REQ_S_ADBZR_CSR_VOL_VOL2:
                     u1_t_volindex = (U1)WCHIME_CSR_VOL_INDEX_2;
                     break;
-                case (U1)ALERT_REQ_S_CLESON_VOL_VOL3:
+                case (U1)ALERT_REQ_S_ADBZR_CSR_VOL_VOL3:
                     u1_t_volindex = (U1)WCHIME_CSR_VOL_INDEX_3;
                     break;
-                case (U1)ALERT_REQ_S_CLESON_VOL_VOL4:
+                case (U1)ALERT_REQ_S_ADBZR_CSR_VOL_VOL4:
                     u1_t_volindex = (U1)WCHIME_CSR_VOL_INDEX_4;
                     break;
-                case (U1)ALERT_REQ_S_CLESON_VOL_VOL5:
+                case (U1)ALERT_REQ_S_ADBZR_CSR_VOL_VOL5:
                     u1_t_volindex = (U1)WCHIME_CSR_VOL_INDEX_5;
                     break;
-                case (U1)ALERT_REQ_S_CLESON_VOL_VOL6:
+                case (U1)ALERT_REQ_S_ADBZR_CSR_VOL_VOL6:
                     u1_t_volindex = (U1)WCHIME_CSR_VOL_INDEX_6;
                     break;
-                case (U1)ALERT_REQ_S_CLESON_VOL_VOL7:
+                case (U1)ALERT_REQ_S_ADBZR_CSR_VOL_VOL7:
                     u1_t_volindex = (U1)WCHIME_CSR_VOL_INDEX_7;
                     break;
                 default:
@@ -1261,6 +1261,7 @@ static U1   u1_s_wChimeCfgClesonVolGet(const U1 u1_a_REQ_SEL)
 /*  19PFv3-14 04/07/2025 SH       Change Reverse buzzer name                                                                         */
 /*  BEV-1     11/11/2025 SH       Configured for CONTBUZZ2-CSTD-0008                                                                 */
 /*  BEV-2     11/28/2025 HL       Add parameter of MET-S_TMBZR-CSTD-0-01-A-C0                                                        */
+/*  BEV-3     12/18/2025 ED       Change Macro name of MET-S_ADBZR-CSTD-0-06-A-C0                                                    */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
 /*  * ToN  = Toshiharu Nagata, Denso Techno                                                                                          */
@@ -1278,5 +1279,6 @@ static U1   u1_s_wChimeCfgClesonVolGet(const U1 u1_a_REQ_SEL)
 /*  * DR   = Dyan Reyes, DTPH                                                                                                        */
 /*  * TeN  = Tetsushi Nakano, Denso Techno                                                                                           */
 /*  * HL   = Harry Lapiceros, DTPH                                                                                                   */
+/*  * ED   = Emoh Dagasdas, DTPH                                                                                                     */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

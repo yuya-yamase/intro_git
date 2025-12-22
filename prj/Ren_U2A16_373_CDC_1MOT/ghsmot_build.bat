@@ -6,9 +6,11 @@ call build_cfg.bat
 rem ---------------------------------------------------------------------------------------------
 rem Target *.mot/x Definition
 rem ---------------------------------------------------------------------------------------------
-set GHS_MOT_OPB_TRGT=bs3ckpt_opbt
-set GHS_MOT_TSW_TGRT=bs3ckpt_usr_tsw.x
-set GHS_MOT_RFP_TGRT=%MOT_FILE%
+set GHS_MOT_OPB_TRGT=..\RFP\bin\bs3ckpt_opbt
+set GHS_MOT_TSW_TRGT=..\RFP\bin\bs3ckpt_1m_oth_usr_tsw
+set GHS_MOT_OTA_TRGT=..\RFP\bin\bs3ckpt_1m_oth_usr_ota
+set GHS_MOT_RFP_TRGT=..\RFP\bin\%MOT_FILE%
+set GHS_MOT_HSM_TRGT=..\RFP\bin\cychsm_v2716_rfp
 
 rem ---------------------------------------------------------------------------------------------
 echo -------------------------------------------------------------------------------------
@@ -45,18 +47,18 @@ echo ---------------------------------------------------------------------------
 echo -- OPBT --                                                                            >> build.log
 echo ------------------------------------------------------------------------------------- >> build.log
 rem ---------------------------------------------------------------------------------------------
-gbuild -top OPBT\OPBT.gpj -D__GMM_RH850_U2A16_OPBT_CFM_HSM__=0 -strict >> build.log 2>&1
-copy OPBT\dst\OPBT.mot RFP\bin\%GHS_MOT_OPB_TRGT%_ac_wo_hsm.mot
-rmdir /s /q OPBT\obj
-rmdir /s /q OPBT\dst
-gbuild -top OPBT\OPBT.gpj -D__GMM_RH850_U2A16_OPBT_CFM_HSM__=1 -strict >> build.log 2>&1
-copy OPBT\dst\OPBT.mot RFP\bin\%GHS_MOT_OPB_TRGT%_ac_w__hsm.mot
-rmdir /s /q OPBT\obj
-rmdir /s /q OPBT\dst
-gbuild -top OPBT\OPBT.gpj -D__GMM_RH850_U2A16_OPBT_CFM_HSM__=2 -strict >> build.log 2>&1
-copy OPBT\dst\OPBT.mot RFP\bin\%GHS_MOT_OPB_TRGT%_bd_wo_hsm.mot
-rmdir /s /q OPBT\obj
-rmdir /s /q OPBT\dst
+gbuild -top opbt.gpj -D__GMM_RH850_U2A16_OPBT_CFM_HSM__=0 -strict >> build.log 2>&1
+copy dst\opbt.mot %GHS_MOT_OPB_TRGT%_ac_wo_hsm.mot
+rmdir /s /q obj\opbt
+rmdir /s /q dst
+gbuild -top opbt.gpj -D__GMM_RH850_U2A16_OPBT_CFM_HSM__=1 -strict >> build.log 2>&1
+copy dst\opbt.mot %GHS_MOT_OPB_TRGT%_ac_w__hsm.mot
+rmdir /s /q obj\opbt
+rmdir /s /q dst
+gbuild -top opbt.gpj -D__GMM_RH850_U2A16_OPBT_CFM_HSM__=2 -strict >> build.log 2>&1
+copy dst\opbt.mot %GHS_MOT_OPB_TRGT%_bd_wo_hsm.mot
+rmdir /s /q obj\opbt
+rmdir /s /q dst
 
 rem ---------------------------------------------------------------------------------------------
 echo -- EHVM --
@@ -64,7 +66,7 @@ echo ---------------------------------------------------------------------------
 echo -- EHVM --                                                                            >> build.log
 echo ------------------------------------------------------------------------------------- >> build.log
 rem ---------------------------------------------------------------------------------------------
-gbuild -top EHVM\EHVM.gpj %GHS_MOT_MACRO% -strict >> build.log 2>&1
+gbuild -top ehvm.gpj %GHS_MOT_MACRO% -strict >> build.log 2>&1
 
 rem ---------------------------------------------------------------------------------------------
 echo -- PE0VM0 -- 
@@ -72,7 +74,7 @@ echo ---------------------------------------------------------------------------
 echo -- PE0VM0 --                                                                          >> build.log
 echo ------------------------------------------------------------------------------------- >> build.log
 rem ---------------------------------------------------------------------------------------------
-gbuild -top PE0VM0\PE0VM0.gpj %GHS_MOT_MACRO% -strict >> build.log 2>&1
+gbuild -top pe0vm0.gpj %GHS_MOT_MACRO% -strict >> build.log 2>&1
 
 rem ---------------------------------------------------------------------------------------------
 echo -- PE1VM1 --
@@ -80,7 +82,7 @@ echo ---------------------------------------------------------------------------
 echo -- PE1VM1 --                                                                          >> build.log
 echo ------------------------------------------------------------------------------------- >> build.log
 rem ---------------------------------------------------------------------------------------------
-gbuild -top PE1VM1\PE1VM1.gpj %GHS_MOT_MACRO% -strict >> build.log 2>&1
+gbuild -top pe1vm1.gpj %GHS_MOT_MACRO% -strict >> build.log 2>&1
 
 rem ---------------------------------------------------------------------------------------------
 echo -- PE2VM2 --
@@ -88,7 +90,7 @@ echo ---------------------------------------------------------------------------
 echo -- PE2VM2 --                                                                          >> build.log
 echo ------------------------------------------------------------------------------------- >> build.log
 rem ---------------------------------------------------------------------------------------------
-gbuild -top PE2VM2\PE2VM2.gpj %GHS_MOT_MACRO% -strict >> build.log 2>&1
+gbuild -top pe2vm2.gpj %GHS_MOT_MACRO% -strict >> build.log 2>&1
 
 rem ---------------------------------------------------------------------------------------------
 echo -- PE3VM3 --
@@ -96,7 +98,7 @@ echo ---------------------------------------------------------------------------
 echo -- PE3VM3 --                                                                          >> build.log
 echo ------------------------------------------------------------------------------------- >> build.log
 rem ---------------------------------------------------------------------------------------------
-gbuild -top PE3VM3\PE3VM3.gpj %GHS_MOT_MACRO% -strict >> build.log 2>&1
+gbuild -top pe3vm3.gpj %GHS_MOT_MACRO% -strict >> build.log 2>&1
 
 rem ---------------------------------------------------------------------------------------------
 echo -- RpgCAN --
@@ -113,55 +115,67 @@ echo ---------------------------------------------------------------------------
 echo -- RpgCAN : CRC Generation --                                                         >> build.log
 echo ------------------------------------------------------------------------------------- >> build.log
 rem ---------------------------------------------------------------------------------------------
-echo S0030000FC > RFP\bin\bs3ckpt_usr_tsw.mot
-%MOTTR_PY% PE1VM1\dst\PE1VM1_ac.mot RFP\bin\bs3ckpt_usr_tsw.mot
-%MOTTR_PY% PE0VM0\dst\PE0VM0_ac.mot RFP\bin\bs3ckpt_usr_tsw.mot
-%MOTTR_PY% EHVM\dst\EHVM_ac.mot     RFP\bin\bs3ckpt_usr_tsw.mot
-%MOTTR_PY% PE2VM2\dst\PE2VM2_ac.mot RFP\bin\bs3ckpt_usr_tsw.mot
-%MOTTR_PY% PE3VM3\dst\PE3VM3_ac.mot RFP\bin\bs3ckpt_usr_tsw.mot
-%MOTTR_PY% ..\..\src\DevRRPG\ReprogAPL_Info\env\out\Info_Full.run RFP\bin\bs3ckpt_usr_tsw.mot
-echo S70500000000FA >> RFP\bin\bs3ckpt_usr_tsw.mot
+echo S0030000FC > dst\bs3ckpt_usr_tsw.mot
+%MOTTR_PY% dst\pe1vm1_ac.mot dst\bs3ckpt_usr_tsw.mot
+%MOTTR_PY% dst\pe0vm0_ac.mot dst\bs3ckpt_usr_tsw.mot
+%MOTTR_PY% dst\ehvm_ac.mot   dst\bs3ckpt_usr_tsw.mot
+%MOTTR_PY% dst\pe2vm2_ac.mot dst\bs3ckpt_usr_tsw.mot
+%MOTTR_PY% dst\pe3vm3_ac.mot dst\bs3ckpt_usr_tsw.mot
+%MOTTR_PY% ..\..\src\DevRRPG\ReprogAPL_Info\env\out\Info_Full.run dst\bs3ckpt_usr_tsw.mot
+echo S70500000000FA >> dst\bs3ckpt_usr_tsw.mot
 
-copy RFP\bin\bs3ckpt_usr_tsw.mot ..\..\src\DevRRPG\Tool\Converter\bs3ckpt_usr_tsw.mot
+echo S0030000FC > dst\bs3ckpt_usr_ota.mot
+%MOTTR_PY% dst\bs3ckpt_usr_tsw.mot dst\bs3ckpt_usr_ota.mot
+%MOTTR_PY% ..\..\src\DevRRPG\ReprogAPL_Info\env\out\FpSig.run dst\bs3ckpt_usr_ota.mot
+echo S70500000000FA >> dst\bs3ckpt_usr_ota.mot
+
+copy dst\bs3ckpt_usr_tsw.mot ..\..\src\DevRRPG\Tool\Converter\bs3ckpt_usr_tsw.mot
+copy dst\bs3ckpt_usr_ota.mot ..\..\src\DevRRPG\Tool\Converter\bs3ckpt_usr_ota.mot
 pushd ..\..\src\DevRRPG\Tool\Converter
 python ReprogTargetConverter.py > convert.log 2>&1
 popd
 type ..\..\src\DevRRPG\Tool\Converter\convert.log >> build.log
+copy ..\..\src\DevRRPG\Tool\Converter\bs3ckpt_usr_ota.bin %GHS_MOT_OTA_TRGT%.bin
+copy ..\..\src\DevRRPG\Tool\Converter\bs3ckpt_usr_ota.crc %GHS_MOT_OTA_TRGT%.crc
 
 rem ---------------------------------------------------------------------------------------------
-echo -- %GHS_MOT_TSW_TGRT% --
+echo -- %GHS_MOT_TSW_TRGT%.x --
 echo ------------------------------------------------------------------------------------- >> build.log
-echo -- %GHS_MOT_TSW_TGRT% --                                                              >> build.log
+echo -- %GHS_MOT_TSW_TRGT%.x --                                                            >> build.log
 echo ------------------------------------------------------------------------------------- >> build.log
 rem ---------------------------------------------------------------------------------------------
-echo S0030000FC > RFP\bin\%GHS_MOT_TSW_TGRT%
-%MOTTR_PY% RFP\bin\bs3ckpt_usr_tsw.mot RFP\bin\%GHS_MOT_TSW_TGRT%
-%MOTTR_PY% ..\..\src\DevRRPG\ReprogProject\env\out\Reprog_SBL.run RFP\bin\%GHS_MOT_TSW_TGRT%
-echo S70500000000FA >> RFP\bin\%GHS_MOT_TSW_TGRT%
+echo S0030000FC > %GHS_MOT_TSW_TRGT%.x
+%MOTTR_PY% dst\bs3ckpt_usr_tsw.mot %GHS_MOT_TSW_TRGT%.x
+%MOTTR_PY% ..\..\src\DevRRPG\ReprogProject\env\out\Reprog_SBL.run %GHS_MOT_TSW_TRGT%.x
+echo S70500000000FA >> %GHS_MOT_TSW_TRGT%.x
 
 rem ---------------------------------------------------------------------------------------------
-echo -- %GHS_MOT_RFP_TGRT% --
+echo -- %GHS_MOT_RFP_TRGT%.mot --
 echo ------------------------------------------------------------------------------------- >> build.log
-echo -- %GHS_MOT_RFP_TGRT% --                                                              >> build.log
+echo -- %GHS_MOT_RFP_TRGT%.mot --                                                          >> build.log
 echo ------------------------------------------------------------------------------------- >> build.log
-echo S0030000FC > RFP\bin\%GHS_MOT_RFP_TGRT%
-%MOTTR_PY% ..\..\src\DevRRPG\ReprogProject\env\out\Reprog.run RFP\bin\%GHS_MOT_RFP_TGRT%
-%MOTTR_PY% ..\..\src\DevRRPG\ReprogAPL_Info\env\out\Keyword_OK.run RFP\bin\%GHS_MOT_RFP_TGRT%
-%MOTTR_PY% RFP\bin\bs3ckpt_usr_tsw.mot RFP\bin\%GHS_MOT_RFP_TGRT%
-del /q RFP\bin\bs3ckpt_usr_tsw.mot
+echo S0030000FC > %GHS_MOT_RFP_TRGT%.mot
+%MOTTR_PY% ..\..\src\DevRRPG\ReprogProject\env\out\Reprog.run %GHS_MOT_RFP_TRGT%.mot
+%MOTTR_PY% ..\..\src\DevRRPG\ReprogAPL_Info\env\out\Keyword_OK.run %GHS_MOT_RFP_TRGT%.mot
+%MOTTR_PY% dst\bs3ckpt_usr_ota.mot %GHS_MOT_RFP_TRGT%.mot
 
-%MOTTR_PY% ..\..\src\DevRRPG\ReprogProject\env\out\Reprog_B.run RFP\bin\%GHS_MOT_RFP_TGRT%
-%MOTTR_PY% ..\..\src\DevRRPG\ReprogAPL_Info\env\out\Keyword_OK_B.run RFP\bin\%GHS_MOT_RFP_TGRT%
-%MOTTR_PY% PE1VM1\dst\PE1VM1_bd.mot RFP\bin\%GHS_MOT_RFP_TGRT%
-%MOTTR_PY% PE0VM0\dst\PE0VM0_bd.mot RFP\bin\%GHS_MOT_RFP_TGRT%
-%MOTTR_PY% EHVM\dst\EHVM_bd.mot     RFP\bin\%GHS_MOT_RFP_TGRT%
-%MOTTR_PY% PE2VM2\dst\PE2VM2_bd.mot RFP\bin\%GHS_MOT_RFP_TGRT%
-%MOTTR_PY% PE3VM3\dst\PE3VM3_bd.mot RFP\bin\%GHS_MOT_RFP_TGRT%
-%MOTTR_PY% ..\..\src\DevRRPG\ReprogAPL_Info\env\out\Info_Full_B.run RFP\bin\%GHS_MOT_RFP_TGRT%
-echo S70500000000FA >> RFP\bin\%GHS_MOT_RFP_TGRT%
+%MOTTR_PY% ..\..\src\DevRRPG\ReprogProject\env\out\Reprog_B.run %GHS_MOT_RFP_TRGT%.mot
+%MOTTR_PY% ..\..\src\DevRRPG\ReprogAPL_Info\env\out\Keyword_OK_B.run %GHS_MOT_RFP_TRGT%.mot
+%MOTTR_PY% dst\pe1vm1_bd.mot %GHS_MOT_RFP_TRGT%.mot
+%MOTTR_PY% dst\pe0vm0_bd.mot %GHS_MOT_RFP_TRGT%.mot
+%MOTTR_PY% dst\ehvm_bd.mot   %GHS_MOT_RFP_TRGT%.mot
+%MOTTR_PY% dst\pe2vm2_bd.mot %GHS_MOT_RFP_TRGT%.mot
+%MOTTR_PY% dst\pe3vm3_bd.mot %GHS_MOT_RFP_TRGT%.mot
+%MOTTR_PY% ..\..\src\DevRRPG\ReprogAPL_Info\env\out\Info_Full_B.run %GHS_MOT_RFP_TRGT%.mot
+%MOTTR_PY% ..\..\src\DevRRPG\ReprogAPL_Info\env\out\FpSig_B.run %GHS_MOT_RFP_TRGT%.mot
+echo S70500000000FA >> %GHS_MOT_RFP_TRGT%.mot
 
-copy ..\..\src\PE0VM0\BSW\Aubist\CycurHSM\ecy_hsm_RH850_GHS_D7_DM\bin\HSM.hex RFP\bin\cychsm_v2716_rfp_ac.hex
-copy ..\..\src\PE0VM0\BSW\Aubist\CycurHSM\ecy_hsm_RH850_GHS_D7_DM\bin\HSM_B.hex RFP\bin\cychsm_v2716_rfp_bd.hex
+if not exist %GHS_MOT_HSM_TRGT%_ac.hex ( 
+    copy ..\..\src\PE0VM0\BSW\Aubist\CycurHSM\ecy_hsm_RH850_GHS_D7_DM\bin\HSM.hex   %GHS_MOT_HSM_TRGT%_ac.hex
+)
+if not exist %GHS_MOT_HSM_TRGT%_bd.hex ( 
+    copy ..\..\src\PE0VM0\BSW\Aubist\CycurHSM\ecy_hsm_RH850_GHS_D7_DM\bin\HSM_B.hex %GHS_MOT_HSM_TRGT%_bd.hex
+)
 
 call generate_USBRPG.bat %USB_REPROG_FILE%
 
@@ -180,11 +194,7 @@ echo selected_variation: %last8%
 
 pushd ..\..\tool\MemAnalysis
 python SectionAnalysis.py %last8%
-move "Section_Size_EHVM.xlsx" "%current%\EHVM"
-move "Section_Size_PE0VM0.xlsx" "%current%\PE0VM0"
-move "Section_Size_PE1VM1.xlsx" "%current%\PE1VM1"
-move "Section_Size_PE2VM2.xlsx" "%current%\PE2VM2"
-move "Section_Size_PE3VM3.xlsx" "%current%\PE3VM3"
+move "*.xlsx" "%current%"
 popd
 
 rem ---------------------------------------------------------------------------------------------

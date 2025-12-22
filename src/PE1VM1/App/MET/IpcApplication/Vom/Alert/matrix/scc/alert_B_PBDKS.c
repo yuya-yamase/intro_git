@@ -1,4 +1,4 @@
-/* 5.1.0 */
+/* 5.2.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define ALERT_B_PBDKS_C_MAJOR                    (5)
-#define ALERT_B_PBDKS_C_MINOR                    (1)
+#define ALERT_B_PBDKS_C_MINOR                    (2)
 #define ALERT_B_PBDKS_C_PATCH                    (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -32,7 +32,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define ALERT_B_PBDKS_PD_NUM_DST                 (16U)
+#define ALERT_B_PBDKS_NUM_DST                    (16U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -48,12 +48,12 @@ static U1      u1_s_alert_b_pbdks_msgsts;
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static U4      u4_s_AlertB_pbdksPdSrcchk  (const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS);
+static U4      u4_s_AlertB_pbdksSrcchk  (const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static const U1  u1_sp_ALERT_B_PBDKS_PD_DST[ALERT_B_PBDKS_PD_NUM_DST] = {
+static const U1  u1_sp_ALERT_B_PBDKS_DST[ALERT_B_PBDKS_NUM_DST] = {
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 00 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 01 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 02 UNKNOWN                                         */
@@ -63,8 +63,8 @@ static const U1  u1_sp_ALERT_B_PBDKS_PD_DST[ALERT_B_PBDKS_PD_NUM_DST] = {
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 06 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 07 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 08 UNKNOWN                                         */
-    (U1)ALERT_REQ_B_PBDKS_PD_UNAVLBL,                                          /* 09 UNAVLBL                                         */
-    (U1)ALERT_REQ_B_PBDKS_PD_MALFUNC,                                          /* 10 MALFUNC                                         */
+    (U1)ALERT_REQ_B_PBDKS_UNAVLBL,                                             /* 09 UNAVLBL                                         */
+    (U1)ALERT_REQ_B_PBDKS_MALFUNC,                                             /* 10 MALFUNC                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 11 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 12 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 13 UNKNOWN                                         */
@@ -75,14 +75,14 @@ static const U1  u1_sp_ALERT_B_PBDKS_PD_DST[ALERT_B_PBDKS_PD_NUM_DST] = {
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 const ST_ALERT_MTRX st_gp_ALERT_B_PBDKS_MTRX[1] = {
     {
-        &u4_s_AlertB_pbdksPdSrcchk,                                            /* fp_u4_SRC_CHK                                      */
+        &u4_s_AlertB_pbdksSrcchk,                                              /* fp_u4_SRC_CHK                                      */
         vdp_PTR_NA,                                                            /* fp_vd_XDST                                         */
 
         (const U4 *)vdp_PTR_NA,                                                /* u4p_MASK                                           */
         (const U4 *)vdp_PTR_NA,                                                /* u4p_CRIT                                           */
 
-        &u1_sp_ALERT_B_PBDKS_PD_DST[0],                                        /* u1p_DST                                            */
-        (U2)ALERT_B_PBDKS_PD_NUM_DST,                                          /* u2_num_srch                                        */
+        &u1_sp_ALERT_B_PBDKS_DST[0],                                           /* u1p_DST                                            */
+        (U2)ALERT_B_PBDKS_NUM_DST,                                             /* u2_num_srch                                        */
         (U1)ALERT_VOM_BAT_WT                                                   /* u1_vom_act                                         */
     }
 };
@@ -102,12 +102,12 @@ void    vd_g_AlertB_pbdksInit(void)
 }
 
 /*===================================================================================================================================*/
-/*  static U4      u4_s_AlertB_pbdksPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)                             */
+/*  static U4      u4_s_AlertB_pbdksSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)                               */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-static U4      u4_s_AlertB_pbdksPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
+static U4      u4_s_AlertB_pbdksSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
     static const U2 u2_s_ALERT_B_PBDKS_TO_THRESH = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_B_PBDKS_LSB_MSGSTS = (U1)2U;
@@ -148,6 +148,7 @@ static U4      u4_s_AlertB_pbdksPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  5.0.0     1/ 8/2024  KH       Newly added for 19PFv3.                                                                            */
 /*  5.1.0     4/ 1/2024  AA       Added remote warning of HPKW.                                                                      */
+/*  5.2.0    12/18/2025  KH       Delete RW for BEV Step3.                                                                           */
 /*                                                                                                                                   */
 /*  * KH   = Kiko Huerte, DTPH                                                                                                       */
 /*  * AA   = Anna Asuncion, Denso Techno                                                                                             */

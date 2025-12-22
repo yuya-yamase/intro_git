@@ -52,8 +52,8 @@
 #define ALERT_B_TTAIL_CH_NUM                     (1U)
 #define ALERT_B_WASLEV_CH_NUM                    (1U)
 #define ALERT_S_ADBZR_EDSS_CH_NUM                (1U)
-#define ALERT_S_LCA_CH_NUM                       (3U)
-#define ALERT_S_SCB_CH_NUM                       (1U)
+#define ALERT_S_ADBZR_LCA_CH_NUM                 (3U)
+#define ALERT_S_ADBZR_SCB_CH_NUM                 (1U)
 #define ALERT_B_BDOOR_CH_NUM                     (1U)
 #define ALERT_B_LEDHEA_CH_NUM                    (1U)
 #define ALERT_B_MLGT_CH_NUM                      (1U)
@@ -70,8 +70,8 @@
 #define ALERT_H_MAICER_CH_NUM                    (4U)
 #define ALERT_H_PEXI_CH_NUM                      (2U)
 #define ALERT_O_EIGCON_CH_NUM                    (1U)
-#define ALERT_S_CLESON_CH_NUM                    (2U)
-#define ALERT_S_SEA_CH_NUM                       (1U)
+#define ALERT_S_ADBZR_CSR_CH_NUM                 (2U)
+#define ALERT_S_ADBZR_SEA_CH_NUM                 (1U)
 #define ALERT_B_PEDPRO_CH_NUM                    (1U)
 #define ALERT_C_ABS_CH_NUM                       (2U)
 #define ALERT_C_BRKHLD_CH_NUM                    (3U)
@@ -94,29 +94,29 @@
 #define ALERT_M_BGLFSPD_CH_NUM                   (1U)
 #define ALERT_M_T120_CH_NUM                      (1U)
 #define ALERT_O_CHAMAL_CH_NUM                    (1U)
-#define ALERT_S_ACC_CH_NUM                       (1U)
-#define ALERT_S_APP_CH_NUM                       (1U)
-#define ALERT_S_BSM_CH_NUM                       (1U)
-#define ALERT_S_DMC_CH_NUM                       (1U)
-#define ALERT_S_FCTA_CH_NUM                      (1U)
-#define ALERT_S_LDA_CH_NUM                       (2U)
-#define ALERT_S_LTA_2_CH_NUM                     (2U)
-#define ALERT_S_PCS1_CH_NUM                      (1U)
-#define ALERT_S_RSA_CH_NUM                       (2U)
-#define ALERT_S_SWS_CH_NUM                       (1U)
-#define ALERT_S_TMN_CH_NUM                       (1U)
-#define ALERT_S_DA_CH_NUM                        (1U)
-#define ALERT_S_ITS_CH_NUM                       (1U)
+#define ALERT_S_ADBZR_ACC_CH_NUM                 (1U)
+#define ALERT_S_ADBZR_APP_CH_NUM                 (1U)
+#define ALERT_S_ADBZR_BSM_CH_NUM                 (1U)
+#define ALERT_S_ADBZR_DMC_CH_NUM                 (1U)
+#define ALERT_S_ADBZR_FCTA_CH_NUM                (1U)
+#define ALERT_S_ADBZR_LDA_CH_NUM                 (2U)
+#define ALERT_S_ADBZR_LTA_CH_NUM                 (2U)
+#define ALERT_S_ADBZR_PCS_CH_NUM                 (1U)
+#define ALERT_S_ADBZR_RSA_CH_NUM                 (2U)
+#define ALERT_S_ADBZR_SWS_CH_NUM                 (1U)
+#define ALERT_S_ADBZR_TMN_CH_NUM                 (1U)
+#define ALERT_S_ADBZR_DA_CH_NUM                  (1U)
+#define ALERT_S_ADBZR_ITS_CH_NUM                 (1U)
 #define ALERT_C_AVSWAR_CH_NUM                    (1U)
 #define ALERT_D_SFTPOS_CH_NUM                    (2U)
 #define ALERT_B_FMSEAT_CH_NUM                    (1U)
 #define ALERT_H_REGBRA_CH_NUM                    (1U)
 #define ALERT_B_SPAT_CH_NUM                      (1U)
-#define ALERT_S_TCHAR_CH_NUM                     (1U)
+#define ALERT_S_ADBZR_TCHAR_CH_NUM               (1U)
 #define ALERT_B_PBDKS_CH_NUM                     (1U)
-#define ALERT_S_PMAR_CH_NUM                      (1U)
+#define ALERT_S_ADBZR_PMAR_CH_NUM                (1U)
 #define ALERT_H_BATINS_CH_NUM                    (2U)
-#define ALERT_S_FRRADA_CH_NUM                    (2U)
+#define ALERT_S_ADBZR_FRRADA_CH_NUM              (2U)
 #define ALERT_H_LEAUNF_CH_NUM                    (1U)
 #define ALERT_B_TFFOG_CH_NUM                     (1U)
 #define ALERT_B_THESEN_CH_NUM                    (1U)
@@ -237,8 +237,8 @@ extern const ST_ALERT_MTRX         st_gp_ALERT_B_TRFOG_MTRX[ALERT_B_TRFOG_CH_NUM
 extern const ST_ALERT_MTRX         st_gp_ALERT_B_TTAIL_MTRX[ALERT_B_TTAIL_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_B_WASLEV_MTRX[ALERT_B_WASLEV_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_S_ADBZR_EDSS_MTRX[ALERT_S_ADBZR_EDSS_CH_NUM];
-extern const ST_ALERT_MTRX         st_gp_ALERT_S_LCA_MTRX[ALERT_S_LCA_CH_NUM];
-extern const ST_ALERT_MTRX         st_gp_ALERT_S_SCB_MTRX[ALERT_S_SCB_CH_NUM];
+extern const ST_ALERT_MTRX         st_gp_ALERT_S_ADBZR_LCA_MTRX[ALERT_S_ADBZR_LCA_CH_NUM];
+extern const ST_ALERT_MTRX         st_gp_ALERT_S_ADBZR_SCB_MTRX[ALERT_S_ADBZR_SCB_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_B_BDOOR_MTRX[ALERT_B_BDOOR_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_B_LEDHEA_MTRX[ALERT_B_LEDHEA_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_B_MLGT_MTRX[ALERT_B_MLGT_CH_NUM];
@@ -255,8 +255,8 @@ extern const ST_ALERT_MTRX         st_gp_ALERT_C_ECB_MTRX[ALERT_C_ECB_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_H_MAICER_MTRX[ALERT_H_MAICER_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_H_PEXI_MTRX[ALERT_H_PEXI_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_O_EIGCON_MTRX[ALERT_O_EIGCON_CH_NUM];
-extern const ST_ALERT_MTRX         st_gp_ALERT_S_CLESON_MTRX[ALERT_S_CLESON_CH_NUM];
-extern const ST_ALERT_MTRX         st_gp_ALERT_S_SEA_MTRX[ALERT_S_SEA_CH_NUM];
+extern const ST_ALERT_MTRX         st_gp_ALERT_S_ADBZR_CSR_MTRX[ALERT_S_ADBZR_CSR_CH_NUM];
+extern const ST_ALERT_MTRX         st_gp_ALERT_S_ADBZR_SEA_MTRX[ALERT_S_ADBZR_SEA_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_B_PEDPRO_MTRX[ALERT_B_PEDPRO_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_C_ABS_MTRX[ALERT_C_ABS_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_C_BRKHLD_MTRX[ALERT_C_BRKHLD_CH_NUM];
@@ -279,29 +279,29 @@ extern const ST_ALERT_MTRX         st_gp_ALERT_D_SBW_MTRX[ALERT_D_SBW_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_M_BGLFSPD_MTRX[ALERT_M_BGLFSPD_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_M_T120_MTRX[ALERT_M_T120_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_O_CHAMAL_MTRX[ALERT_O_CHAMAL_CH_NUM];
-extern const ST_ALERT_MTRX         st_gp_ALERT_S_ACC_MTRX[ALERT_S_ACC_CH_NUM];
-extern const ST_ALERT_MTRX         st_gp_ALERT_S_APP_MTRX[ALERT_S_APP_CH_NUM];
-extern const ST_ALERT_MTRX         st_gp_ALERT_S_BSM_MTRX[ALERT_S_BSM_CH_NUM];
-extern const ST_ALERT_MTRX         st_gp_ALERT_S_DMC_MTRX[ALERT_S_DMC_CH_NUM];
-extern const ST_ALERT_MTRX         st_gp_ALERT_S_FCTA_MTRX[ALERT_S_FCTA_CH_NUM];
-extern const ST_ALERT_MTRX         st_gp_ALERT_S_LDA_MTRX[ALERT_S_LDA_CH_NUM];
-extern const ST_ALERT_MTRX         st_gp_ALERT_S_LTA_2_MTRX[ALERT_S_LTA_2_CH_NUM];
-extern const ST_ALERT_MTRX         st_gp_ALERT_S_PCS1_MTRX[ALERT_S_PCS1_CH_NUM];
-extern const ST_ALERT_MTRX         st_gp_ALERT_S_RSA_MTRX[ALERT_S_RSA_CH_NUM];
-extern const ST_ALERT_MTRX         st_gp_ALERT_S_SWS_MTRX[ALERT_S_SWS_CH_NUM];
-extern const ST_ALERT_MTRX         st_gp_ALERT_S_TMN_MTRX[ALERT_S_TMN_CH_NUM];
-extern const ST_ALERT_MTRX         st_gp_ALERT_S_DA_MTRX[ALERT_S_DA_CH_NUM];
-extern const ST_ALERT_MTRX         st_gp_ALERT_S_ITS_MTRX[ALERT_S_ITS_CH_NUM];
+extern const ST_ALERT_MTRX         st_gp_ALERT_S_ADBZR_ACC_MTRX[ALERT_S_ADBZR_ACC_CH_NUM];
+extern const ST_ALERT_MTRX         st_gp_ALERT_S_ADBZR_APP_MTRX[ALERT_S_ADBZR_APP_CH_NUM];
+extern const ST_ALERT_MTRX         st_gp_ALERT_S_ADBZR_BSM_MTRX[ALERT_S_ADBZR_BSM_CH_NUM];
+extern const ST_ALERT_MTRX         st_gp_ALERT_S_ADBZR_DMC_MTRX[ALERT_S_ADBZR_DMC_CH_NUM];
+extern const ST_ALERT_MTRX         st_gp_ALERT_S_ADBZR_FCTA_MTRX[ALERT_S_ADBZR_FCTA_CH_NUM];
+extern const ST_ALERT_MTRX         st_gp_ALERT_S_ADBZR_LDA_MTRX[ALERT_S_ADBZR_LDA_CH_NUM];
+extern const ST_ALERT_MTRX         st_gp_ALERT_S_ADBZR_LTA_MTRX[ALERT_S_ADBZR_LTA_CH_NUM];
+extern const ST_ALERT_MTRX         st_gp_ALERT_S_ADBZR_PCS_MTRX[ALERT_S_ADBZR_PCS_CH_NUM];
+extern const ST_ALERT_MTRX         st_gp_ALERT_S_ADBZR_RSA_MTRX[ALERT_S_ADBZR_RSA_CH_NUM];
+extern const ST_ALERT_MTRX         st_gp_ALERT_S_ADBZR_SWS_MTRX[ALERT_S_ADBZR_SWS_CH_NUM];
+extern const ST_ALERT_MTRX         st_gp_ALERT_S_ADBZR_TMN_MTRX[ALERT_S_ADBZR_TMN_CH_NUM];
+extern const ST_ALERT_MTRX         st_gp_ALERT_S_ADBZR_DA_MTRX[ALERT_S_ADBZR_DA_CH_NUM];
+extern const ST_ALERT_MTRX         st_gp_ALERT_S_ADBZR_ITS_MTRX[ALERT_S_ADBZR_ITS_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_C_AVSWAR_MTRX[ALERT_C_AVSWAR_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_D_SFTPOS_MTRX[ALERT_D_SFTPOS_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_B_FMSEAT_MTRX[ALERT_B_FMSEAT_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_H_REGBRA_MTRX[ALERT_H_REGBRA_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_B_SPAT_MTRX[ALERT_B_SPAT_CH_NUM];
-extern const ST_ALERT_MTRX         st_gp_ALERT_S_TCHAR_MTRX[ALERT_S_TCHAR_CH_NUM];
+extern const ST_ALERT_MTRX         st_gp_ALERT_S_ADBZR_TCHAR_MTRX[ALERT_S_ADBZR_TCHAR_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_B_PBDKS_MTRX[ALERT_B_PBDKS_CH_NUM];
-extern const ST_ALERT_MTRX         st_gp_ALERT_S_PMAR_MTRX[ALERT_S_PMAR_CH_NUM];
+extern const ST_ALERT_MTRX         st_gp_ALERT_S_ADBZR_PMAR_MTRX[ALERT_S_ADBZR_PMAR_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_H_BATINS_MTRX[ALERT_H_BATINS_CH_NUM];
-extern const ST_ALERT_MTRX         st_gp_ALERT_S_FRRADA_MTRX[ALERT_S_FRRADA_CH_NUM];
+extern const ST_ALERT_MTRX         st_gp_ALERT_S_ADBZR_FRRADA_MTRX[ALERT_S_ADBZR_FRRADA_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_H_LEAUNF_MTRX[ALERT_H_LEAUNF_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_B_TFFOG_MTRX[ALERT_B_TFFOG_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_B_THESEN_MTRX[ALERT_B_THESEN_CH_NUM];

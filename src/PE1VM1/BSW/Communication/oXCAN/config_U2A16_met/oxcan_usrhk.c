@@ -20,7 +20,7 @@
 #include "oxcan.h"
 #include "oxcan_usrhk.h"
 
-#include "can_rscf4_cfg.h"      /* CAN_CFG_CONTROLLERNUM_MAX is defined in can_rscf4_cfg.h */
+/* #include "can_rscf4_cfg.h" */      /* CAN_CFG_CONTROLLERNUM_MAX is defined in can_rscf4_cfg.h */
 
 #include "illumi_comtx.h"
 #include "xspi_met_can.h"

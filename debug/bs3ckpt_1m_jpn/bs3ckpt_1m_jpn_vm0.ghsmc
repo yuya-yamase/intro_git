@@ -2,16 +2,16 @@ version = 1
 title = "title"
 core {
     0 {
-        download = { "../../prj/Ren_U2A16_373_CDC_1MJP/PE0VM0/dst/PE0VM0.elf" }
-        symbol = { "../../prj/Ren_U2A16_373_CDC_1MJP/EHVM/dst/EHVM.elf" }
+        download = { "../../prj/Ren_U2A16_373_CDC_1MJP/dst/pe0vm0.elf" }
+        symbol = { "../../prj/Ren_U2A16_373_CDC_1MJP/dst/ehvm.elf" }
     }
     1 {
-        symbol = { "../../prj/Ren_U2A16_373_CDC_1MJP/EHVM/dst/EHVM.elf", "../../prj/Ren_U2A16_373_CDC_1MJP/PE1VM1/dst/PE1VM1.elf" }
+        symbol = { "../../prj/Ren_U2A16_373_CDC_1MJP/dst/ehvm.elf", "../../prj/Ren_U2A16_373_CDC_1MJP/dst/pe1vm1.elf" }
     }
     2 {
-        symbol = { "../../prj/Ren_U2A16_373_CDC_1MJP/EHVM/dst/EHVM.elf", "../../prj/Ren_U2A16_373_CDC_1MJP/PE2VM2/dst/PE2VM2.elf" }
+        symbol = { "../../prj/Ren_U2A16_373_CDC_1MJP/dst/ehvm.elf", "../../prj/Ren_U2A16_373_CDC_1MJP/dst/pe2vm2.elf" }
     }
     3 {
-        symbol = { "../../prj/Ren_U2A16_373_CDC_1MJP/EHVM/dst/EHVM.elf", "../../prj/Ren_U2A16_373_CDC_1MJP/PE3VM3/dst/PE3VM3.elf" }
+        symbol = { "../../prj/Ren_U2A16_373_CDC_1MJP/dst/ehvm.elf", "../../prj/Ren_U2A16_373_CDC_1MJP/dst/pe3vm3.elf" }
     }
 }
