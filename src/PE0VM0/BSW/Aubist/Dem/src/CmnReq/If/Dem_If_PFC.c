@@ -1,7 +1,7 @@
-/* Dem_If_PFC_c(v5-5-0)                                                     */
+/* Dem_If_PFC_c(v5-6-0)                                                     */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -397,6 +397,37 @@ FUNC( Std_ReturnType, DEM_CODE ) Dem_EnablePFCRecordUpdate
 }
 #endif /* ( DEM_PFC_RECORD_SUPPRESSION_SUPPORT == STD_ON ) */
 
+/****************************************************************************/
+/* Function Name | Dem_ClearAllPFC                                          */
+/* Description   | Clear all PFC Record forcibly.                           */
+/* Preconditions | none                                                     */
+/* Parameters    | none                                                     */
+/* Return Value  | Std_ReturnType                                           */
+/*               |        E_OK : Operation was successful                   */
+/*               |        E_NOT_OK : Operation failed                       */
+/* Notes         | -                                                        */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-6-0      | new created.                                             */
+/****************************************************************************/
+FUNC( Std_ReturnType, DEM_CODE ) Dem_ClearAllPFC
+( void )
+{
+    VAR( Dem_u08_InternalReturnType, AUTOMATIC ) internalReturnValue;
+    VAR( Std_ReturnType, AUTOMATIC ) retVal;
+
+    retVal = E_NOT_OK;
+
+    internalReturnValue = Dem_Control_ClearAllPFC();
+
+    if( internalReturnValue == DEM_IRT_OK )
+    {
+        retVal = E_OK;
+    }
+
+    return retVal;
+}
+
 #endif  /* ( DEM_PFC_SUPPORT == STD_ON )    */
 
 
@@ -407,6 +438,7 @@ FUNC( Std_ReturnType, DEM_CODE ) Dem_EnablePFCRecordUpdate
 /* History                                                                  */
 /*  Version        :Date                                                    */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-6-0         :2024-01-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

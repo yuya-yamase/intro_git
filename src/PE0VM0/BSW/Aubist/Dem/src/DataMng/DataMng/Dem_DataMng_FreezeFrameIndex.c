@@ -1,7 +1,7 @@
-/* Dem_DataMng_FreezeFrameIndex_c(v5-5-0)                                   */
+/* Dem_DataMng_FreezeFrameIndex_c(v5-8-0)                                   */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -14,6 +14,7 @@
 /* Include Files                                                            */
 /*--------------------------------------------------------------------------*/
 #include <Dem.h>
+#include "../../../inc/Dem_CmnLib_ConfigInfo.h"
 #include "../../../inc/Dem_Rc_DataMng.h"
 #include "Dem_DataMng_FreezeFrame.h"
 #include "Dem_DataMng_local.h"
@@ -122,6 +123,9 @@ FUNC( void, DEM_CODE ) Dem_DataMngM_UpdateSearchFFDIndex
 /*               |        Index of Empty FreezeFrame Record for OBD         */
 /* Return Value  | void                                                     */
 /* Notes         | -                                                        */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-8-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_DataMngM_UpdateSearchObdFFDIndex
 (
@@ -130,7 +134,7 @@ FUNC( void, DEM_CODE ) Dem_DataMngM_UpdateSearchObdFFDIndex
 {
     VAR( Dem_u08_FFDIndexType, AUTOMATIC ) obdFFDRecordNum;
 
-    obdFFDRecordNum = Dem_ObdFFDRecordNum;
+    obdFFDRecordNum = Dem_CfgInfoPm_GetObdFFDRecordNum();
 
     if( EmptyFreezeFrameIndex < obdFFDRecordNum )
     {
@@ -208,6 +212,7 @@ FUNC( Dem_u08_FFDIndexType, DEM_CODE ) Dem_DataMngC_GetEmptyFFDIndex
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-8-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_FFDIndexType, DEM_CODE ) Dem_DataMngC_GetEmptyObdFFDIndex
 ( void )
@@ -217,7 +222,7 @@ FUNC( Dem_u08_FFDIndexType, DEM_CODE ) Dem_DataMngC_GetEmptyObdFFDIndex
     VAR( Dem_u08_FFDIndexType, AUTOMATIC ) obdFFDRecordNum;
     VAR( Dem_u16_FFDStoredIndexType, AUTOMATIC ) posRecordStatus;
 
-    obdFFDRecordNum = Dem_ObdFFDRecordNum;
+    obdFFDRecordNum = Dem_CfgInfoPm_GetObdFFDRecordNum();
     posRecordStatus = Dem_ObdFreezeFrameDataPosTable.RecordStatus;                                                                      /* [GUD:CFG]posRecordStatus */
 
     for( freezeFrameRecordIndex = Dem_DataMng_SearchObdFFDIndex; freezeFrameRecordIndex < obdFFDRecordNum; freezeFrameRecordIndex++)    /* [GUD:for]freezeFrameRecordIndex */
@@ -258,6 +263,7 @@ FUNC( Dem_u08_FFDIndexType, DEM_CODE ) Dem_DataMngC_GetEmptyObdFFDIndex
 /*  v5-0-0         :2021-09-28                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-8-0         :2024-10-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

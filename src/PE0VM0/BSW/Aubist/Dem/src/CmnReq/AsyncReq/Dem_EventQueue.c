@@ -1,7 +1,7 @@
-/* Dem_EventQueue_c(v5-5-0)                                                 */
+/* Dem_EventQueue_c(v5-10-0)                                                */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -32,8 +32,8 @@
 /*--------------------------------------------------------------------------*/
 /* Struct of event queue */
 typedef struct{
-    Dem_u08_AsyncReqTableIndexType   Kind;
     Dem_u16_AsyncReqItemAType        Index;
+    Dem_u08_AsyncReqTableIndexType   Kind;
     Dem_u08_AsyncReqItemBType        Status;
 } Dem_EventQueue_QueueData_St_Type;
 
@@ -169,7 +169,7 @@ FUNC( void, DEM_CODE_TRUST ) Dem_EventQueue_PreInit       /*  PreInit section   
 /* Preconditions | none                                                     */
 /* Parameters    | none                                                     */
 /* Return Value  | void                                                     */
-/* Notes         |                                                          */
+/* Notes         | Called within the exclusive Dem_EventQueueBufferAccess.  */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_EventQueue_Shutdown
 ( void )
@@ -187,7 +187,7 @@ FUNC( void, DEM_CODE ) Dem_EventQueue_Shutdown
 /* Preconditions | none                                                     */
 /* Parameters    | none                                                     */
 /* Return Value  | void                                                     */
-/* Notes         |                                                          */
+/* Notes         | Called within the exclusive Dem_EventQueueBufferAccess.  */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_EventQueue_SetClearStatus
 ( void )
@@ -215,10 +215,12 @@ FUNC( void, DEM_CODE ) Dem_EventQueue_SetClearStatus
 /*               | [in] DTCOrigin :                                         */
 /*               |        DTCOrigin specified at the time of Clear.         */
 /* Return Value  | void                                                     */
-/* Notes         |                                                          */
+/* Notes         | [!ATTENSSION!] This function is NOT called within        */
+/*               | the exclusive Dem_EventQueueBufferAccess.                */
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-10-0     | no branch changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_EventQueue_SetClearEvent
 (
@@ -230,34 +232,43 @@ FUNC( void, DEM_CODE ) Dem_EventQueue_SetClearEvent
     VAR( Dem_u16_EventQueueIndexType, AUTOMATIC ) dataNumberFromBufferStartToClearDestination;
     VAR( Dem_u16_EventQueueIndexType, AUTOMATIC ) dataNumberFromReadIndexToClearDestination;
     VAR( Dem_u16_EventQueueIndexType, AUTOMATIC ) eventQueueSize;
+    VAR( Dem_u16_EventQueueIndexType, DEM_VAR_NO_INIT ) eventQueueReadIndex;
+    VAR( Dem_u16_EventQueueIndexType, DEM_VAR_NO_INIT ) eventQueueClearDataNumber;
+
+    SchM_Enter_Dem_EventQueueBufferAccess();
+
+    eventQueueReadIndex         =   Dem_EventQueueReadIndex;
+    eventQueueClearDataNumber   =   Dem_EventQueueClearDataNumber;
+
+    SchM_Exit_Dem_EventQueueBufferAccess();
 
     eventQueueSize = Dem_EventQueueSize;
 
     /* Checks clear data number for lower limit */
-    if( Dem_EventQueueClearDataNumber > DEM_EVENT_QUEUE_CLEAR_NUMBER_NONE )
+    if( eventQueueClearDataNumber > DEM_EVENT_QUEUE_CLEAR_NUMBER_NONE )
     {
         /* Checks clear data number for upper limit */
-        if( Dem_EventQueueClearDataNumber <= eventQueueSize )
+        if( eventQueueClearDataNumber <= eventQueueSize )
         {
             /* Calcs clear destination index */
-            dataNumberFromReadIndexToBufferEnd = eventQueueSize - Dem_EventQueueReadIndex;
+            dataNumberFromReadIndexToBufferEnd = eventQueueSize - eventQueueReadIndex;
 
             /* Decisions index */
-            if( Dem_EventQueueClearDataNumber <= dataNumberFromReadIndexToBufferEnd )
+            if( eventQueueClearDataNumber <= dataNumberFromReadIndexToBufferEnd )
             {
                 /* Calcs data number from read index to clear destination */
-                dataNumberFromReadIndexToClearDestination = Dem_EventQueueReadIndex + Dem_EventQueueClearDataNumber;
+                dataNumberFromReadIndexToClearDestination = eventQueueReadIndex + eventQueueClearDataNumber;
 
                 /* Sets clear flag from read index to clear destination */
-                Dem_EventQueue_SetClearFlag( DTCGroup , DTCOrigin, Dem_EventQueueReadIndex , dataNumberFromReadIndexToClearDestination );
+                Dem_EventQueue_SetClearFlag( DTCGroup , DTCOrigin, eventQueueReadIndex , dataNumberFromReadIndexToClearDestination );
             }
             else
             {
                 /* Sets clear flag from read index to buffer end */
-                Dem_EventQueue_SetClearFlag( DTCGroup , DTCOrigin, Dem_EventQueueReadIndex , eventQueueSize );
+                Dem_EventQueue_SetClearFlag( DTCGroup , DTCOrigin, eventQueueReadIndex , eventQueueSize );
 
                 /* Calcs data number from buffer start index to clear destination */
-                dataNumberFromBufferStartToClearDestination = Dem_EventQueueClearDataNumber - dataNumberFromReadIndexToBufferEnd;
+                dataNumberFromBufferStartToClearDestination = eventQueueClearDataNumber - dataNumberFromReadIndexToBufferEnd;
 
                 /* Sets clear flag from buffer start index to clear destination */
                 Dem_EventQueue_SetClearFlag( DTCGroup , DTCOrigin, DEM_EVENT_QUEUE_MIN_INDEX , dataNumberFromBufferStartToClearDestination );
@@ -283,7 +294,8 @@ FUNC( void, DEM_CODE ) Dem_EventQueue_SetClearEvent
 /* Preconditions | none                                                     */
 /* Parameters    | none                                                     */
 /* Return Value  | Dem_u16_EventQueueIndexType                              */
-/* Notes         |                                                          */
+/* Notes         | [!ATTENSSION!] This function is NOT called within        */
+/*               | the exclusive Dem_EventQueueBufferAccess.                */
 /****************************************************************************/
 FUNC( Dem_u16_EventQueueIndexType, DEM_CODE ) Dem_EventQueue_GetReadIndex
 (void)
@@ -304,6 +316,7 @@ FUNC( Dem_u16_EventQueueIndexType, DEM_CODE ) Dem_EventQueue_GetReadIndex
 /*               |       DEM_IRT_OK                                         */
 /*               |       DEM_IRT_NG                                         */
 /* Notes         | Carry out exclusive control in an origin of use          */
+/* Notes         | Called within the exclusive Dem_EventQueueBufferAccess.  */
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
@@ -365,7 +378,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_EventQueue_CheckQueueNext
 /* Preconditions | none                                                     */
 /* Parameters    | none                                                     */
 /* Return Value  | void                                                     */
-/* Notes         |                                                          */
+/* Notes         | Called within the exclusive Dem_EventQueueBufferAccess.  */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_EventQueue_InitQueueMngInfo
 ( void )
@@ -398,7 +411,7 @@ static FUNC( void, DEM_CODE ) Dem_EventQueue_InitQueueMngInfo
 /* Return Value  | Dem_u08_InternalReturnType                               */
 /*               |        DEM_IRT_OK : queueing of event was successful.    */
 /*               |        DEM_IRT_NG : queueing of event failed.            */
-/* Notes         |                                                          */
+/* Notes         | Called within the exclusive Dem_EventQueueBufferAccess.  */
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
@@ -471,7 +484,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_EventQueue_Enqueue
 /*               |        ed.                                               */
 /*               |        DEM_IRT_NG : taking out of the event failed, or - */
 /*               |        there are no queueing event.                      */
-/* Notes         | -                                                        */
+/* Notes         | Called within the exclusive Dem_EventQueueBufferAccess.  */
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
@@ -538,7 +551,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_EventQueue_Dequeue
 /* Return Value  | boolean                                                  */
 /*               |      FALSE : Queue is not empty.                         */
 /*               |      TRUE  : Queue is empty.                             */
-/* Notes         | none                                                     */
+/* Notes         | Called within the exclusive Dem_EventQueueBufferAccess.  */
 /****************************************************************************/
 FUNC( boolean, DEM_CODE ) Dem_EventQueue_IsQueueEmpty
 ( void )
@@ -565,7 +578,7 @@ FUNC( boolean, DEM_CODE ) Dem_EventQueue_IsQueueEmpty
 /*               | [out] StatusPtr :                                        */
 /*               |        Monitor test result.                              */
 /* Return Value  | void                                                     */
-/* Notes         | -                                                        */
+/* Notes         | Called within the exclusive Dem_EventQueueBufferAccess.  */
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
@@ -595,7 +608,7 @@ static FUNC( void, DEM_CODE ) Dem_EventQueue_GetQueueData
 /* Preconditions | Exists event in event queue by Dem_EventQueue_Enqueue.   */
 /* Parameters    | none                                                     */
 /* Return Value  | void                                                     */
-/* Notes         |                                                          */
+/* Notes         | Called within the exclusive Dem_EventQueueBufferAccess.  */
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
@@ -652,7 +665,8 @@ static FUNC( void, DEM_CODE ) Dem_EventQueue_ProgressReadIndex
 /*               | [in] EndNumberOfForStatement :                           */
 /*               |        End number of for statement.                      */
 /* Return Value  | void                                                     */
-/* Notes         |                                                          */
+/* Notes         | [!ATTENSSION!] This function is NOT called within        */
+/*               | the exclusive Dem_EventQueueBufferAccess.                */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_EventQueue_SetClearFlag
 (
@@ -690,7 +704,8 @@ static FUNC( void, DEM_CODE ) Dem_EventQueue_SetClearFlag
 /*               | [in] EndNumberOfForStatement :                           */
 /*               |        End number of for statement.                      */
 /* Return Value  | void                                                     */
-/* Notes         |                                                          */
+/* Notes         | [!ATTENSSION!] This function is NOT called within        */
+/*               | the exclusive Dem_EventQueueBufferAccess.                */
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
@@ -807,7 +822,8 @@ static FUNC( void, DEM_CODE ) Dem_EventQueue_SetClearFlag_PrimaryMemory
 /*               | [in] EndNumberOfForStatement :                           */
 /*               |        End number of for statement.                      */
 /* Return Value  | void                                                     */
-/* Notes         |                                                          */
+/* Notes         | [!ATTENSSION!] This function is NOT called within        */
+/*               | the exclusive Dem_EventQueueBufferAccess.                */
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
@@ -968,6 +984,8 @@ static FUNC( void, DEM_CODE ) Dem_EventQueue_ReleaseDataQueAtSetClearFlag
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-6-0         :2024-01-29                                              */
+/*  v5-10-0        :2025-06-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

@@ -1,7 +1,7 @@
-/* Dem_Control_OpCycleUpdSpecific_c(v5-5-0)                                 */
+/* Dem_Control_OpCycleUpdSpecific_c(v5-10-0)                                */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -79,6 +79,11 @@ static FUNC( void, DEM_CODE ) Dem_Control_SimilarProcessPendingFaultRecovery
     VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex,
     P2VAR( Dem_OpCycleUpdInfoType, AUTOMATIC, AUTOMATIC ) OpCycleUpdInfoPtr
 );
+static FUNC( boolean, DEM_CODE ) Dem_Control_CheckBitOldStatusForSimilarProcess
+(
+    VAR( boolean, AUTOMATIC ) PendingDTC,
+    VAR( boolean, AUTOMATIC ) WirStatus
+);
 #endif  /*   ( DEM_SIMILAR_EVENT_CONFIGURED == STD_ON )     */
 
 #define DEM_STOP_SEC_CODE
@@ -128,8 +133,12 @@ static FUNC( void, DEM_CODE ) Dem_Control_SimilarProcessPendingFaultRecovery
 /* Return Value  | none                                                     */
 /* Notes         | none                                                     */
 /*--------------------------------------------------------------------------*/
+/* UpdateRecord  | [UpdRec]AltIUMPR                                         */
+/*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-6-0      | no object changed.                                       */
+/*   v5-10-0     | no branch changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_Control_UpdateSpecificEventMemoryEntryByOpCycle
 (
@@ -159,7 +168,6 @@ FUNC( void, DEM_CODE ) Dem_Control_UpdateSpecificEventMemoryEntryByOpCycle
 
     opCycleUpdInfo.ChkSpCond.Healing   = (boolean)TRUE;
     opCycleUpdInfo.ChkSpCond.Aging     = (boolean)TRUE;
-    opCycleUpdInfo.ChkSpCond.PendErase = (boolean)TRUE;
 
     eventCtrlIndex  =   (Dem_u16_EventCtrlIndexType)EventPos;                               /* [GUDCHK:CALLER]EventPos */
     eventStrgIndex  =   Dem_CmbEvt_CnvEventCtrlIndex_ToEventStrgIndex( eventCtrlIndex );    /* [GUDCHK:CALLER]EventPos *//* [GUD:RET:IF_GUARDED: EventCtrlIndex ]eventStrgIndex */
@@ -216,7 +224,7 @@ FUNC( void, DEM_CODE ) Dem_Control_UpdateSpecificEventMemoryEntryByOpCycle
 #if ( DEM_ALTIUMPR_SUPPORT == STD_ON ) /*  [FuncSw]    */
     if( HealingAgingCycleFlag != DEM_OPCYCUPD_HACYC_INITIALVALUE )
     {
-        Dem_AltIUMPR_IncNumeratorCounts( eventCtrlIndex );      /* [GUDCHK:CALLER]EventPos */
+        Dem_AltIUMPR_IncNumeratorCounts( eventCtrlIndex );      /* [GUDCHK:CALLER]EventPos *//* [UpdRec]AltIUMPR */
     }
 #endif  /*   ( DEM_ALTIUMPR_SUPPORT == STD_ON ) */
 
@@ -251,6 +259,8 @@ FUNC( void, DEM_CODE ) Dem_Control_UpdateSpecificEventMemoryEntryByOpCycle
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | branch changed.                                          */
+/*   v5-7-0      | no branch changed.                                       */
+/*   v5-9-0      | no branch changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_Control_UpdSpecEventByHealingAgingCycle
 (
@@ -312,7 +322,7 @@ static FUNC( void, DEM_CODE ) Dem_Control_UpdSpecEventByHealingAgingCycle
            /* Bit1 in the case of ON */
 #if ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )  /*  [FuncSw]    */
            /* In the case of Misfire Event */
-           Dem_Misfire_ProcessForEventFailed( EventStrgIndex, &OpCycleUpdInfoPtr->CheckBitOldStatus );
+           Dem_Misfire_ProcessForEventFailed( EventStrgIndex, &OpCycleUpdInfoPtr->CheckBitOldStatus, &OpCycleUpdInfoPtr->NewDTCStatusSt );
 #endif  /*   ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )         */
 
 #if ( DEM_SIMILAR_EVENT_CONFIGURED == STD_ON )  /*  [FuncSw]    */
@@ -330,7 +340,7 @@ static FUNC( void, DEM_CODE ) Dem_Control_UpdSpecEventByHealingAgingCycle
          && ( agingConditionFlag                              == (boolean)TRUE  )
          && ( OpCycleUpdInfoPtr->CheckBitOldStatus.TestFailedThisAgingCycle == (boolean)FALSE ) )
         {
-            Dem_Control_ProcessAging( HealingAgingCycleFlag, OpCycleUpdInfoPtr->ExecFlag.PendingRecoveryExec, EventStrgIndex, &OpCycleUpdInfoPtr->OldDTCStatusSt, &OpCycleUpdInfoPtr->ExecFlag.AgingExec );
+            Dem_Control_ProcessAging( HealingAgingCycleFlag, EventStrgIndex, &OpCycleUpdInfoPtr->OldDTCStatusSt, &OpCycleUpdInfoPtr->ExecFlag.AgingExec );
         }
     }
 
@@ -414,6 +424,7 @@ static FUNC( void, DEM_CODE ) Dem_Control_UpdSpecEventByHealingAgingCycle
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-9-0      | no branch changed.                                       */
 /****************************************************************************/
 static FUNC( boolean, DEM_CODE ) Dem_Control_ProcessForSpecificEventPassed
 (
@@ -458,7 +469,7 @@ static FUNC( boolean, DEM_CODE ) Dem_Control_ProcessForSpecificEventPassed
 
 #if ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )  /*  [FuncSw]    */
                     /* In the case of Misfire Event */
-                    Dem_Misfire_ProcessPendingFaultRecovery( EventStrgIndex );                  /* [GUD]EventStrgIndex */
+                    Dem_Misfire_ProcessPendingFaultRecovery( EventStrgIndex, &OpCycleUpdInfoPtr->NewDTCStatusSt );                  /* [GUD]EventStrgIndex */
 #endif  /*   ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )     */
                 }
             }
@@ -498,6 +509,10 @@ static FUNC( boolean, DEM_CODE ) Dem_Control_ProcessForSpecificEventPassed
 /*               | [in/out] OpCycleUpdInfoPtr :                             */
 /* Return Value  | none                                                     */
 /* Notes         |                                                          */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-9-0      | no branch changed.                                       */
+/*   v5-10-0     | branch changed.                                          */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_Control_SimilarProcessPendingFaultRecovery
 (
@@ -507,9 +522,9 @@ static FUNC( void, DEM_CODE ) Dem_Control_SimilarProcessPendingFaultRecovery
 {
     VAR( boolean, AUTOMATIC ) chkPendingRecoveryPossible;
     VAR( boolean, AUTOMATIC ) chkPendEraseCycCnt;
+    VAR( boolean, AUTOMATIC ) chkBitOldStatus;
 
-    if( ( OpCycleUpdInfoPtr->ExecFlag.PendingRecoveryExec == (boolean)FALSE )
-     && ( OpCycleUpdInfoPtr->ChkSpCond.PendErase          == (boolean)TRUE  ) )
+    if( OpCycleUpdInfoPtr->ExecFlag.PendingRecoveryExec == (boolean)FALSE )
     {
         /* Get config of SimilarOemIncrementType */
         chkPendingRecoveryPossible = Dem_Similar_CheckPendingRecoveryPossible();
@@ -517,8 +532,8 @@ static FUNC( void, DEM_CODE ) Dem_Control_SimilarProcessPendingFaultRecovery
         if( ( chkPendingRecoveryPossible                           == (boolean)FALSE  )
          || ( OpCycleUpdInfoPtr->CheckBitOldStatus.TestNotCompThisHealingCycle == (boolean)FALSE ) )
         {
-            if( ( OpCycleUpdInfoPtr->CheckBitOldStatus.PendingDTC == (boolean)TRUE  )
-             && ( OpCycleUpdInfoPtr->CheckBitOldStatus.WirStatus  == (boolean)FALSE ) )
+            chkBitOldStatus = Dem_Control_CheckBitOldStatusForSimilarProcess( OpCycleUpdInfoPtr->CheckBitOldStatus.PendingDTC, OpCycleUpdInfoPtr->CheckBitOldStatus.WirStatus );
+            if( chkBitOldStatus == (boolean)TRUE  )
             {
                 /* Bit2 in the case of ON and Bit7 in the case of OFF */
                 /* Check similar condition to carry out Pending Fault Recovery */
@@ -530,7 +545,7 @@ static FUNC( void, DEM_CODE ) Dem_Control_SimilarProcessPendingFaultRecovery
 
 #if ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )  /*  [FuncSw]    */
                     /* In the case of Misfire Event */
-                    Dem_Misfire_ProcessPendingFaultRecovery( EventStrgIndex );
+                    Dem_Misfire_ProcessPendingFaultRecovery( EventStrgIndex, &OpCycleUpdInfoPtr->NewDTCStatusSt );
 #endif  /* ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )           */
                 }
             }
@@ -540,6 +555,77 @@ static FUNC( void, DEM_CODE ) Dem_Control_SimilarProcessPendingFaultRecovery
     return;
 }
 
+#if ( DEM_PENDINGCLEARCOUNT_PATTERN2_SUPPORT == STD_OFF )
+/****************************************************************************/
+/* Function Name | Dem_Control_CheckBitOldStatusForSimilarProcess           */
+/* Description   | Check old DTCStatus bit for Dem_Control_SimilarProcessP- */
+/*               | endingFaultRecovery.                                     */
+/* Preconditions | none                                                     */
+/* Parameters    | [in] PendingDTC :                                        */
+/*               | [in] WirStatus :                                         */
+/* Return Value  |  TRUE  : Check OK                                        */
+/*               |  FALSE : Check NG                                        */
+/* Notes         |                                                          */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-10-0     | new created.                                             */
+/****************************************************************************/
+static FUNC( boolean, DEM_CODE ) Dem_Control_CheckBitOldStatusForSimilarProcess
+(
+    VAR( boolean, AUTOMATIC ) PendingDTC,
+    VAR( boolean, AUTOMATIC ) WirStatus
+)
+{
+    VAR( boolean, AUTOMATIC ) retExecSimilarProcess;
+
+    retExecSimilarProcess = (boolean)FALSE;
+
+    if( PendingDTC == (boolean)TRUE  )
+    {
+        if( WirStatus == (boolean)FALSE )
+        {
+            retExecSimilarProcess = (boolean)TRUE;
+        }
+    }
+
+    return retExecSimilarProcess;
+}
+#endif  /* ( DEM_PENDINGCLEARCOUNT_PATTERN2_SUPPORT == STD_OFF ) */
+
+#if ( DEM_PENDINGCLEARCOUNT_PATTERN2_SUPPORT == STD_ON )
+/****************************************************************************/
+/* Function Name | Dem_Control_CheckBitOldStatusForSimilarProcess           */
+/* Description   | Check old DTCStatus bit for Dem_Control_SimilarProcessP- */
+/*               | endingFaultRecovery.                                     */
+/* Preconditions | none                                                     */
+/* Parameters    | [in] PendingDTC :                                        */
+/*               | [in] WirStatus :                                         */
+/* Return Value  |  TRUE  : Check OK                                        */
+/*               |  FALSE : Check NG                                        */
+/* Notes         |                                                          */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-10-0     | new created.                                             */
+/****************************************************************************/
+static FUNC( boolean, DEM_CODE ) Dem_Control_CheckBitOldStatusForSimilarProcess
+(
+    VAR( boolean, AUTOMATIC ) PendingDTC,
+    VAR( boolean, AUTOMATIC ) WirStatus     /* MISRA DEVIATION */
+)
+{
+    VAR( boolean, AUTOMATIC ) retExecSimilarProcess;
+
+    retExecSimilarProcess = (boolean)FALSE;
+
+    if( PendingDTC == (boolean)TRUE  )
+    {
+        retExecSimilarProcess = (boolean)TRUE;
+    }
+
+    return retExecSimilarProcess;
+}
+
+#endif  /* ( DEM_PENDINGCLEARCOUNT_PATTERN2_SUPPORT == STD_ON ) */
 #endif  /* ( DEM_SIMILAR_EVENT_CONFIGURED == STD_ON ) */
 
 #define DEM_STOP_SEC_CODE
@@ -556,6 +642,10 @@ static FUNC( void, DEM_CODE ) Dem_Control_SimilarProcessPendingFaultRecovery
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-6-0         :2024-01-29                                              */
+/*  v5-7-0         :2024-05-29                                              */
+/*  v5-9-0         :2025-02-26                                              */
+/*  v5-10-0        :2025-06-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

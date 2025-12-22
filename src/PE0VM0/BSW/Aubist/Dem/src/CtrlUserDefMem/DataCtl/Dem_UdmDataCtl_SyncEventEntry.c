@@ -1,7 +1,7 @@
-/* Dem_UdmDataCtl_SyncEventeEntry_c(v5-5-0)                                 */
+/* Dem_UdmDataCtl_SyncEventEntry_c(v5-9-0)                                  */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -27,6 +27,11 @@
 #include "../../../inc/Dem_Rc_UdmMngTable.h"
 #include "Dem_UdmDataCtl_SyncEventEntry_local.h"
 #include "Dem_UdmDataCtl_local.h"
+
+#ifndef DEM_SIT_RANGE_CHECK
+#else   /* DEM_SIT_RANGE_CHECK */
+#include <Dem_SIT_RangeCheck.h>
+#endif /* DEM_SIT_RANGE_CHECK */
 
 /*--------------------------------------------------------------------------*/
 /* Macros                                                                   */
@@ -109,6 +114,7 @@ static VAR( Dem_UserDefMemTmpSyncEventMemoryEntryType, DEM_VAR_NO_INIT ) Dem_Udm
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | branch changed.                                          */
+/*   v5-9-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmData_SaveEventMemoryEntryToSyncTmp
 (
@@ -150,7 +156,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmData_SaveEventMemoryEntryToS
         Dem_UdmExcExitFnc_ForStack();
 #endif  /* JGXSTACK */
 
-        if( Dem_UdmTmpSyncEventMemoryEntry.EventRecord.UdmFaultIndex != DEM_FAULTINDEX_INITIAL )
+        if( Dem_UdmTmpSyncEventMemoryEntry.EventRecord.UdmFaultIndex != DEM_UDMFAULTINDEX_INITIAL )
         {
             resultOfGetFaultRec = Dem_UdmFaultMngC_GetRecord( Dem_UdmTmpSyncEventMemoryEntry.UdmGroupKindIndex, Dem_UdmTmpSyncEventMemoryEntry.EventRecord.UdmFaultIndex, &Dem_UdmTmpSyncEventMemoryEntry.FaultRecord );    /* [GUD]Dem_UdmTmpSyncEventMemoryEntry.UdmGroupKindIndex */
             if( resultOfGetFaultRec != DEM_IRT_OK )
@@ -303,6 +309,9 @@ FUNC( void, DEM_CODE ) Dem_UdmData_GetDTCStatusFromSyncTmp
 /*               |        tting succeeds or has been already set.           */
 /*               |        DEM_IRT_NG : Event memory overflows and occurs.   */
 /* Notes         |                                                          */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-9-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmData_SetFaultInfoForSyncEventEntry
 ( void )
@@ -313,7 +322,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmData_SetFaultInfoForSyncEven
     retVal = DEM_IRT_NG;
 
     /* Checks whether the fault index is valid. */
-    if( Dem_UdmTmpSyncEventMemoryEntry.EventRecord.UdmFaultIndex == DEM_FAULTINDEX_INITIAL )
+    if( Dem_UdmTmpSyncEventMemoryEntry.EventRecord.UdmFaultIndex == DEM_UDMFAULTINDEX_INITIAL )
     {
         /* Information related to the occurrence of a new failure is set in the event memory entry of the temporary area. */
         retSetFaultInfo = Dem_UdmData_SetNewFaultOccurrenceToSyncTmp();
@@ -454,6 +463,7 @@ FUNC( void, DEM_CODE ) Dem_UdmData_CaptureNonObdFreezeFrameToSyncTmp
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
+/*   v5-9-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmData_SetFFRecordIndexToSyncTmp
 ( void )
@@ -466,7 +476,7 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmData_SetFFRecordIndex
 
     retVal = DEM_IRT_NG;
 
-    if( Dem_UdmTmpSyncEventMemoryEntry.EventRecord.UdmFaultIndex == DEM_FAULTINDEX_INITIAL )
+    if( Dem_UdmTmpSyncEventMemoryEntry.EventRecord.UdmFaultIndex == DEM_UDMFAULTINDEX_INITIAL )
     {
         /* No Process */
     }
@@ -571,6 +581,8 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmData_SetNextFFRecordI
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
+/*   v5-6-0      | no branch changed.                                       */
+/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_UdmData_CaptureFreezeFrameDataToSyncTmp
 (
@@ -578,7 +590,8 @@ static FUNC( void, DEM_CODE ) Dem_UdmData_CaptureFreezeFrameDataToSyncTmp
     P2CONST( AB_83_ConstV Dem_FreezeFrameClassType, AUTOMATIC, DEM_CONFIG_DATA ) FreezeFrameClassPtr
 )
 {
-    P2VAR( uint8, AUTOMATIC, DEM_VAR_NO_INIT ) ffDataPtr;
+    VAR( Dem_u16_EventCtrlIndexType, AUTOMATIC ) eventCtrlIndex;
+    P2VAR( uint8, AUTOMATIC, DEM_VAR_SAVED_ZONE ) ffDataPtr;
 
     /* Set the event Index of the event memory entry of temporary area to the event Index of the freeze frame record. */
     Dem_UdmTmpSyncEventMemoryEntry.FFRMngInfo.UdmEventIndex = Dem_UdmTmpSyncEventMemoryEntry.UdmEventIndex;
@@ -605,8 +618,14 @@ static FUNC( void, DEM_CODE ) Dem_UdmData_CaptureFreezeFrameDataToSyncTmp
     ffDataPtr = Dem_UdmFFDMng_GetFreezeFrameStartDataPtr( Dem_UdmTmpSyncEventMemoryEntry.UdmGroupKindIndex, Dem_UdmTmpSyncEventMemoryEntry.OldestFreezeFrameRecordIndex );
     if( ffDataPtr != NULL_PTR )
     {
+        eventCtrlIndex = Dem_CfgInfoUdm_CnvUdmEventIndexToEventCtrlIndex( Dem_UdmTmpSyncEventMemoryEntry.UdmEventIndex );
+
         /* Store capture data in the freeze frame record data */
-        (void)Dem_Data_CaptureFreezeFrameClass( FreezeFrameClassPtr, ffDataPtr, monitorData0 ); /* no return check required */
+#ifndef DEM_SIT_RANGE_CHECK
+        Dem_Data_CaptureFreezeFrameClass( eventCtrlIndex, FreezeFrameClassPtr, ffDataPtr, monitorData0 );
+#else   /* DEM_SIT_RANGE_CHECK */
+        Dem_Data_CaptureFreezeFrameClass( DEM_SIT_R_CHK_UDM_FF_DATA_SIZE( Dem_UdmTmpSyncEventMemoryEntry.UdmGroupKindIndex ), eventCtrlIndex, FreezeFrameClassPtr, ffDataPtr , monitorData0 );
+#endif  /* DEM_SIT_RANGE_CHECK */
     }
 
     return;
@@ -760,6 +779,9 @@ static FUNC( void, DEM_CODE ) Dem_UdmData_StoreFreezeFrameRecordFromSyncTmp
 /*  Version        :Date                                                    */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-6-0         :2024-01-29                                              */
+/*  v5-7-0         :2024-05-29                                              */
+/*  v5-9-0         :2025-02-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

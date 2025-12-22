@@ -1,7 +1,7 @@
-/* Dcm_h(v5-4-0)                                                            */
+/* Dcm_h(v5-6-0)                                                            */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -243,6 +243,11 @@ FUNC( Std_ReturnType, DCM_CODE ) Dcm_GetRxPduID
     P2VAR( uint16, AUTOMATIC, DCM_APPL_DATA ) ptRxPduId
 );
 
+FUNC( Std_ReturnType, DCM_CODE ) Dcm_SetActiveClient
+(
+    const uint16 u2ConnectionId
+);
+
 /* Callback notifications */
 FUNC( BufReq_ReturnType, DCM_CODE ) Dcm_StartOfReception
 (
@@ -410,6 +415,7 @@ FUNC( Std_ReturnType, DCM_CODE ) Dcm_GetRoeEventStatus
 /*  v5-0-0         :2022-03-29                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-4-0         :2023-06-28                                              */
+/*  v5-6-0         :2024-02-27                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

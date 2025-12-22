@@ -1,7 +1,7 @@
-/* Dem_If_IUMPR_c(v5-5-0)                                                   */
+/* Dem_If_IUMPR_c(v5-10-0)                                                  */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -20,6 +20,7 @@
 #include <Dem/Dem_Common.h>
 #include "../../../cfg/Dem_Cfg.h"
 #include "../../../inc/Dem_Pm_Control_IUMPR.h"
+#include "../../../inc/Dem_CmnLib_ConfigInfo.h"
 
 /*--------------------------------------------------------------------------*/
 /* Macros                                                                   */
@@ -342,6 +343,7 @@ FUNC( Std_ReturnType, DEM_CODE ) Dem_GetIUMPRIGCycleCounter
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | new created. based on Dem_DcmGetInfoTypeValue08.         */
+/*   v5-10-0     | no branch changed.                                       */
 /****************************************************************************/
 FUNC( Std_ReturnType, DEM_CODE ) Dem_GetIUMPRInfoTypeValue
 (
@@ -352,6 +354,9 @@ FUNC( Std_ReturnType, DEM_CODE ) Dem_GetIUMPRInfoTypeValue
     VAR( Std_ReturnType, AUTOMATIC )                retVal;
     VAR( Dem_u08_InternalReturnType, AUTOMATIC )    retInfoTypeValue;
     VAR( uint8, AUTOMATIC )                         dataSize;
+    VAR( Dem_u08_IUMPRNODIValueType, AUTOMATIC )        nodiValue;
+    VAR( Dem_u08_IUMPRGroupIndexType, AUTOMATIC )       nodiGroupNum;
+    VAR( Dem_u08_IUMPRNODIOutputSizeType, AUTOMATIC )   nodiOutputSize;
 
     retVal = E_NOT_OK;
 
@@ -359,8 +364,9 @@ FUNC( Std_ReturnType, DEM_CODE ) Dem_GetIUMPRInfoTypeValue
     {
         if( IumprDataBufferSizePtr != NULL_PTR )
         {
+            Dem_CfgInfoPm_GetNODIInfo( &nodiValue, &nodiGroupNum, &nodiOutputSize );
             /*  set datasize and NODI size.     */
-            dataSize                = Dem_IUMPR_NODI_OutputSize + DEM_IUMPR_NODI_SIZE;
+            dataSize                = nodiOutputSize + DEM_IUMPR_NODI_SIZE;
             retInfoTypeValue        = Dem_Control_GetInfoTypeValue( IumprDataBufferPtr, &dataSize );
             if( retInfoTypeValue == DEM_IRT_OK )
             {
@@ -534,6 +540,7 @@ FUNC( Std_ReturnType, DEM_CODE ) Dem_JudgeMinimumRatioThanCurrentRatio
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-10-0        :2025-06-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

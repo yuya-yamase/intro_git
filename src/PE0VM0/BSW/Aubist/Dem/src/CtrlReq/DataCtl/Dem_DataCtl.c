@@ -1,7 +1,7 @@
-/* Dem_DataCtl_c(v5-5-0)                                                    */
+/* Dem_DataCtl_c(v5-9-0)                                                    */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -87,6 +87,9 @@ FUNC( void, DEM_CODE ) Dem_DataCtl_Init
 /* Parameters    | none                                                     */
 /* Return Value  | void                                                     */
 /* Notes         |                                                          */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-9-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_DataCtl_Init_AfterRecordCheckComplete
 ( void )
@@ -102,6 +105,10 @@ FUNC( void, DEM_CODE ) Dem_DataCtl_Init_AfterRecordCheckComplete
     /* Initialize Dem_DcEeo unit. */
     Dem_DcEeo_Init_AfterRecordCheckComplete();
 #endif  /*   ( DEM_EVENT_DISPLACEMENT_SUPPORT == STD_ON )           */
+
+#if ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )  /* [FuncSw] */
+    Dem_Misfire_Init_AfterRecordCheckComplete();
+#endif  /*   ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )     */
 
     return;
 }
@@ -149,6 +156,7 @@ FUNC( void, DEM_CODE ) Dem_Data_SetNumOfFaultAndFFD
 /*  v5-0-0         :2021-12-24                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-9-0         :2025-02-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

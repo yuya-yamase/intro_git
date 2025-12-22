@@ -1,7 +1,7 @@
-/* Dem_If_SetEvent_c(v5-5-0)                                                */
+/* Dem_If_SetEvent_c(v5-9-0)                                                */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -299,6 +299,38 @@ FUNC( Std_ReturnType, DEM_CODE ) Dem_NormalizeEventStatus
     return retVal;
 }
 
+/****************************************************************************/
+/* Function Name | Dem_ActiveFaultEventStatus                               */
+/* Description   |                                                          */
+/* Preconditions | none                                                     */
+/* Parameters    | [in] EventId    : Event identifier.                      */
+/* Return Value  | Std_ReturnType                                           */
+/*               |        E_OK     : Operation was successful.              */
+/*               |        E_NOT_OK : Operation failed.                      */
+/* Notes         | -                                                        */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-9-0      | new created. based on Dem_InitializeEventStatus.         */
+/****************************************************************************/
+FUNC( Std_ReturnType, DEM_CODE ) Dem_ActiveFaultEventStatus
+(
+    VAR( Dem_EventIdType, AUTOMATIC ) EventId
+)
+{
+    VAR( Dem_u08_InternalReturnType, AUTOMATIC )          internalReturnValue;
+    VAR( Std_ReturnType, AUTOMATIC ) retVal;
+
+    retVal = E_NOT_OK;
+
+    internalReturnValue = Dem_Control_SetActiveFaultEventStatus( EventId );
+    if( internalReturnValue == DEM_IRT_OK )
+    {
+        retVal = E_OK;
+    }
+
+    return retVal;
+}
+
 #if ( DEM_FF_PRESTORAGE_SUPPORT == STD_ON )
 /****************************************************************************/
 /* Function Name | Dem_PrestoreFreezeFrame                                  */
@@ -534,6 +566,7 @@ FUNC( Std_ReturnType, DEM_CODE ) Dem_SetEventFailedWithSyncFreezeFrame
 /* History                                                                  */
 /*  Version        :Date                                                    */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-9-0         :2025-02-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

@@ -1,7 +1,7 @@
-/* Dcm_Dsl_Ctrl_PrtSrv_c(v5-3-0)                                            */
+/* Dcm_Dsl_Ctrl_PrtSrv_c(v5-8-0)                                            */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -68,8 +68,8 @@
 
 /****************************************************************************/
 /* Function Name | Dcm_GetActiveProtocol                                    */
-/* Description   | This function returns the active protocol name.          */
-/*               |                                                          */
+/* Description   | This function returns the active protocol name           */
+/*               | except for OBD Protocol.                                 */
 /* Preconditions | none                                                     */
 /* Parameters    | [out] ActiveProtocolType   : Active ProtocolId           */
 /*               | [out] ConnectionId         : Active ConnectionId         */
@@ -352,6 +352,149 @@ FUNC( uint8, DCM_CODE ) Dcm_Dsl_GetActiveProtocolGroup
     return u1_Result;
 }
 
+#if ( DCM_SUPPORT_SID10 == STD_ON )
+/****************************************************************************/
+/* Function Name | Dcm_Dsl_GetActiveProtocol                                */
+/* Description   | This function returns the active protocol name           */
+/*               | including OBD protocol.                                  */
+/* Preconditions | none                                                     */
+/* Parameters    | [out] ptActiveProtocolType   : Active ProtocolId         */
+/*               | [out] ptConnectionId         : Active ConnectionId       */
+/*               | [out] ptTesterSourceAddress  : RxTesterSource Address    */
+/* Return Value  | none                                                     */
+/* Notes         | -                                                        */
+/****************************************************************************/
+FUNC( void, DCM_CODE ) Dcm_Dsl_GetActiveProtocol
+(
+    P2VAR( Dcm_ProtocolType, AUTOMATIC, DCM_APPL_DATA ) ptActiveProtocolType,
+    P2VAR( uint16, AUTOMATIC, DCM_APPL_DATA ) ptConnectionId,
+    P2VAR( uint16, AUTOMATIC, DCM_APPL_DATA ) ptTesterSourceAddress
+)
+{
+    uint16  u2_ConnectionIndex;
+    uint16  u2_PduMapIndex;
+    uint16  u2_RowIndex;
+    boolean b_InteractiveClient;
+
+    u2_PduMapIndex      = Dcm_Dsl_Ctrl_GetPduMapIndex();
+    b_InteractiveClient = Dcm_Dsl_Ctrl_IsInteractiveClient(u2_PduMapIndex);
+    Dcm_Dsl_Ctrl_ConvPMIdxToCnctIdx(u2_PduMapIndex, &u2_RowIndex, &u2_ConnectionIndex);
+
+    if( b_InteractiveClient == (boolean)FALSE )
+    {
+        if( ptActiveProtocolType != NULL_PTR )
+        {
+            *ptActiveProtocolType = DCM_NO_ACTIVE_PROTOCOL;
+        }
+
+        if( ptConnectionId != NULL_PTR )
+        {
+            *ptConnectionId = DCM_DSL_INVALID_U2_DATA;
+        }
+
+        if( ptTesterSourceAddress != NULL_PTR )
+        {
+            *ptTesterSourceAddress = DCM_DSL_INVALID_U2_DATA;
+        }
+    }
+    else
+    {
+        if( ptActiveProtocolType != NULL_PTR )
+        {
+            *ptActiveProtocolType = Dcm_Dsl_stRow[u2_RowIndex].u1ID;
+        }
+
+        if( ptConnectionId != NULL_PTR )
+        {
+            *ptConnectionId = Dcm_Dsl_stRow[u2_RowIndex].ptConnection[u2_ConnectionIndex].ptMainConnection[0].u2ConnectionId;
+        }
+
+        if( ptTesterSourceAddress != NULL_PTR )
+        {
+            *ptTesterSourceAddress = Dcm_Dsl_stRow[u2_RowIndex].ptConnection[u2_ConnectionIndex].ptMainConnection[0].u2ProtocolRxTesterSourceAddr;
+        }
+    }
+
+    return ;
+}
+#endif /* DCM_SUPPORT_SID10 == STD_ON */
+
+/****************************************************************************/
+/* Function Name | Dcm_SetActiveClient                                      */
+/* Description   | This function set active client during a conversation.   */
+/* Preconditions | none                                                     */
+/* Parameters    | [in] u2ConnectionId : Connection ID(ClientIndex)         */
+/* Return Value  | Std_ReturnType                                           */
+/*               |    E_OK : Sucessed                                       */
+/*               |    E_NOT_OK : Failed                                     */
+/*               |    E_REQUEST_NOT_ACCEPTED : Request Not Accepted         */
+/* Notes         | -                                                        */
+/****************************************************************************/
+FUNC( Std_ReturnType, DCM_CODE ) Dcm_SetActiveClient
+(
+    const uint16 u2ConnectionId
+)
+{
+    uint16         u2_PrePduMapIndex;
+    uint16         u2_PostPduMapIndex;
+    Std_ReturnType u1_RetVal;
+    boolean        b_Active;
+#if( DCM_AUTHENTICATION_USE == STD_ON )
+    boolean        b_AuthTimeOut;
+#endif /* DCM_AUTHENTICATION_USE == STD_ON */
+
+    u1_RetVal      = E_NOT_OK;
+    
+    /* lock */
+    SchM_Enter_Dcm_Dsl_Ctrl();
+    
+    u2_PrePduMapIndex = Dcm_Dsl_Ctrl_GetPduMapIndex();
+
+    /* unlock */
+    SchM_Exit_Dcm_Dsl_Ctrl();
+
+    if( u2_PrePduMapIndex != DCM_DSL_INVALID_U2_DATA )
+    {
+        u2_PostPduMapIndex = Dcm_Dsl_Ctrl_GetPduIdMapIndexByConnectionId(u2ConnectionId);
+        if( u2_PostPduMapIndex != DCM_DSL_INVALID_U2_DATA )
+        {
+            b_Active = Dcm_Dsl_Ctrl_IsActiveDiag();
+            if( b_Active == (boolean)FALSE )
+            {
+                Dcm_Dsl_CmHdl_CallActive(u2_PrePduMapIndex, DCM_DSL_REQ_INACTIVE, (boolean)TRUE);
+
+                /* lock */
+                SchM_Enter_Dcm_Dsl_Ctrl();
+
+                Dcm_Dsl_Ctrl_SetRxPduMapIndex(u2_PostPduMapIndex);
+                Dcm_Dsl_Ctrl_SetPduMapIndex(u2_PostPduMapIndex);
+
+                /* unlock */
+                SchM_Exit_Dcm_Dsl_Ctrl();
+
+                Dcm_Dsl_CmHdl_CallActive(u2_PostPduMapIndex, DCM_DSL_REQ_ACTIVE, (boolean)TRUE);
+
+#if( DCM_AUTHENTICATION_USE == STD_ON )
+                Dcm_Dsl_Ctrl_SetDeauthenticateAll();
+                b_AuthTimeOut = Dcm_Dsl_bAuthTimeOut;
+                if( b_AuthTimeOut == (boolean)TRUE )
+                {
+                    Dcm_Dsl_Ctrl_StopAuthAllTimers();
+                }  
+#endif /* DCM_AUTHENTICATION_USE == STD_ON */
+
+                u1_RetVal = E_OK;
+            }
+            else
+            {
+                u1_RetVal = E_REQUEST_NOT_ACCEPTED;
+            }
+        }
+    }
+
+    return u1_RetVal;
+}
+
 #define DCM_STOP_SEC_CODE
 #include <Dcm_MemMap.h>
 
@@ -362,6 +505,8 @@ FUNC( uint8, DCM_CODE ) Dcm_Dsl_GetActiveProtocolGroup
 /*  v3-2-0         :2020-10-28                                              */
 /*  v5-0-0         :2021-12-24                                              */
 /*  v5-3-0         :2023-03-29                                              */
+/*  v5-6-0         :2024-02-27                                              */
+/*  v5-8-0         :2024-10-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

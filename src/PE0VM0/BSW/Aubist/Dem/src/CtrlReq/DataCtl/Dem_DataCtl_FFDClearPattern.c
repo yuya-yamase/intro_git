@@ -1,7 +1,7 @@
-/* Dem_DataCtl_FFDClearPattern_c(v5-5-0)                                    */
+/* Dem_DataCtl_FFDClearPattern_c(v5-10-0)                                   */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -286,6 +286,9 @@ FUNC( void, DEM_CODE ) Dem_DataCtl_ClearTargetMisfCylinderFFD
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
+/*   v5-7-0      | no object changed.                                       */
+/*   v5-8-0      | branch changed.                                          */
+/*   v5-10-0     | no branch changed.                                       */
 /****************************************************************************/
 static FUNC( boolean, DEM_CODE ) Dem_DataCtl_GetClearTarget_OBDFFD
 (
@@ -304,12 +307,13 @@ static FUNC( boolean, DEM_CODE ) Dem_DataCtl_GetClearTarget_OBDFFD
     VAR( Dem_u08_StorageTriggerType, AUTOMATIC ) ffRecordTrigger;
     VAR( boolean, AUTOMATIC ) clearFFDFlag;
     VAR( boolean, AUTOMATIC ) updateFFDRecInfo;
+    VAR( boolean, AUTOMATIC ) chkIsFFD;
 
     P2CONST( AB_83_ConstV Dem_FreezeFrameRecNumClassType, AUTOMATIC, DEM_CONFIG_DATA ) freezeFrameRecNumClassPtr;
-    P2CONST( AB_83_ConstV Dem_FreezeFrameRecordClassType, AUTOMATIC, DEM_CONFIG_DATA ) freezeFrameRecordClassPtr;
 
     /* Initializes the auto variable. */
     updateFFDRecInfo = (boolean)FALSE;
+    chkIsFFD         = (boolean)TRUE;
 
     /* Checks the reference of freeze frame class. */
     Dem_CfgInfoPm_GetOBDFreezeFrameAndRecNumClassForClear( EventStrgIndex, &obdFreezeFrameClassRef, &obdFreezeframeRecNumClassRef );    /* [GUD:OUT:Not DEM_FFCLASSINDEX_INVALID] obdFreezeFrameClassRef *//* [GUD:OUT:Not DEM_FFRECNUMCLASSINDEX_INVALID] obdFreezeframeRecNumClassRef */
@@ -328,15 +332,14 @@ static FUNC( boolean, DEM_CODE ) Dem_DataCtl_GetClearTarget_OBDFFD
             {
                 /* Holds the DemFreezeFrameRecordIndex pointed to */
                 /* by the DemFreezeFrameRecordClassRef Index of the held FreezeFrameRecNumClass table. */
-                freezeFrameRecordClassIndex = freezeFrameRecNumClassPtr->DemFreezeFrameRecordClassRef[freezeFrameRecordClassRefIndex];          /* [GUD] freezeFrameRecordClassRefIndex */
+                freezeFrameRecordClassIndex = freezeFrameRecNumClassPtr->DemFreezeFrameRecordClassRef[freezeFrameRecordClassRefIndex];          /* [GUD] freezeFrameRecordClassRefIndex *//* [ARYCHK] DEM_FF_RECORD_CLASS_REF_MAX_NUM / 1 / freezeFrameRecordClassRefIndex */
                 if( freezeFrameRecordClassIndex < ffrRecordClassConfigureNum )                                                                  /* [GUD:if] freezeFrameRecordClassIndex */
                 {
                     /* Holds the FreezeFrameRecordClass table pointed to by DemFreezeFrameRecordIndex. */
-                    freezeFrameRecordClassPtr = &Dem_FreezeFrameRecordClassTable[freezeFrameRecordClassIndex];                                  /* [GUD] freezeFrameRecordClassIndex *//* [GUD:CFG:IF_GUARDED: freezeFrameRecordClassIndex ]freezeFrameRecordClassPtr */
-                    ffRecordTrigger = freezeFrameRecordClassPtr->DemFreezeFrameRecordTrigger;                                                   /* [GUD] freezeFrameRecordClassPtr */
+                    ffRecordTrigger =   Dem_CfgInfoPm_GetFreezeFrameRecordTriggerType( freezeFrameRecordClassIndex );                           /* [GUD] freezeFrameRecordClassIndex */
 
                     clearFFDFlag    =   Dem_DataCtl_GetExecClearOBDFFD( RecoveryMode, DTCStatus, ffRecordTrigger );
-                    ClearFFListRecordPtr->ObdFFRClrFlg[freezeFrameRecordClassRefIndex] = clearFFDFlag;                                          /* [GUD] freezeFrameRecordClassRefIndex */
+                    ClearFFListRecordPtr->ObdFFRClrFlg[freezeFrameRecordClassRefIndex] = clearFFDFlag;                                          /* [GUD] freezeFrameRecordClassRefIndex *//* [ARYCHK] DEM_OBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / freezeFrameRecordClassRefIndex */
                     if ( clearFFDFlag == (boolean)TRUE )
                     {
                         updateFFDRecInfo    =   (boolean)TRUE;
@@ -344,20 +347,29 @@ static FUNC( boolean, DEM_CODE ) Dem_DataCtl_GetClearTarget_OBDFFD
                 }
                 else
                 {
-                    ClearFFListRecordPtr->ObdFFRClrFlg[freezeFrameRecordClassRefIndex] = (boolean)FALSE;                                        /* [GUD] freezeFrameRecordClassRefIndex */
+                    ClearFFListRecordPtr->ObdFFRClrFlg[freezeFrameRecordClassRefIndex] = (boolean)FALSE;                                        /* [GUD] freezeFrameRecordClassRefIndex *//* [ARYCHK] DEM_OBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / freezeFrameRecordClassRefIndex */
                 }
             }
         }
         else
         {
             /* DTC without DemFreezeFrameRecNumClass */
-            /* No Process */
+            chkIsFFD     = (boolean)FALSE;
         }
     }
     else
     {
         /* DTC without DemFreezeFrameClass */
-        /* No Process */
+        chkIsFFD     = (boolean)FALSE;
+    }
+
+    if ( chkIsFFD == (boolean)FALSE )
+    {
+        /*  all clear.      */
+        for( freezeFrameRecordClassRefIndex = (Dem_u08_FFListIndexType)0U; freezeFrameRecordClassRefIndex < obdFFRClassPerDTCMaxNum; freezeFrameRecordClassRefIndex++ )     /* [GUD:for] freezeFrameRecordClassRefIndex */
+        {
+            ClearFFListRecordPtr->ObdFFRClrFlg[freezeFrameRecordClassRefIndex] = (boolean)FALSE;                                        /* [GUD] freezeFrameRecordClassRefIndex *//* [ARYCHK] DEM_OBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / freezeFrameRecordClassRefIndex */
+        }
     }
 
     return updateFFDRecInfo;
@@ -382,6 +394,9 @@ static FUNC( boolean, DEM_CODE ) Dem_DataCtl_GetClearTarget_OBDFFD
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-7-0      | no object changed.                                       */
+/*   v5-8-0      | branch changed.                                          */
+/*   v5-10-0     | no branch changed.                                       */
 /****************************************************************************/
 static FUNC( boolean, DEM_CODE ) Dem_DataCtl_GetClearTarget_NonOBDFFD
 (
@@ -400,12 +415,13 @@ static FUNC( boolean, DEM_CODE ) Dem_DataCtl_GetClearTarget_NonOBDFFD
     VAR( Dem_u08_StorageTriggerType, AUTOMATIC ) ffRecordTrigger;
     VAR( boolean, AUTOMATIC ) clearFFDFlag;
     VAR( boolean, AUTOMATIC ) updateFFDRecInfo;
+    VAR( boolean, AUTOMATIC ) chkIsFFD;
 
     P2CONST( AB_83_ConstV Dem_FreezeFrameRecNumClassType, AUTOMATIC, DEM_CONFIG_DATA ) freezeFrameRecNumClassPtr;
-    P2CONST( AB_83_ConstV Dem_FreezeFrameRecordClassType, AUTOMATIC, DEM_CONFIG_DATA ) freezeFrameRecordClassPtr;
 
     /* Initializes the auto variable. */
     updateFFDRecInfo = (boolean)FALSE;
+    chkIsFFD         = (boolean)TRUE;
 
     /* Checks the reference of freeze frame class. */
     Dem_CfgInfoPm_GetFreezeFrameAndRecNumClass( EventStrgIndex, &freezeFrameClassRef, &freezeframeRecNumClassRef ); /* [GUD:OUT:Not DEM_FFCLASSINDEX_INVALID] freezeFrameClassRef *//* [GUD:OUT:Not DEM_FFRECNUMCLASSINDEX_INVALID] freezeframeRecNumClassRef */
@@ -424,15 +440,14 @@ static FUNC( boolean, DEM_CODE ) Dem_DataCtl_GetClearTarget_NonOBDFFD
             {
                 /* Holds the DemFreezeFrameRecordIndex pointed to */
                 /* by the DemFreezeFrameRecordClassRef Index of the held FreezeFrameRecNumClass table. */
-                freezeFrameRecordClassIndex = freezeFrameRecNumClassPtr->DemFreezeFrameRecordClassRef[freezeFrameRecordClassRefIndex];  /* [GUD] freezeFrameRecordClassRefIndex */
+                freezeFrameRecordClassIndex = freezeFrameRecNumClassPtr->DemFreezeFrameRecordClassRef[freezeFrameRecordClassRefIndex];  /* [GUD] freezeFrameRecordClassRefIndex *//* [ARYCHK] DEM_FF_RECORD_CLASS_REF_MAX_NUM / 1 / freezeFrameRecordClassRefIndex */
                 if( freezeFrameRecordClassIndex < ffrRecordClassConfigureNum )                                                          /* [GUD:if] freezeFrameRecordClassIndex */
                 {
                     /* Holds the FreezeFrameRecordClass table pointed to by DemFreezeFrameRecordIndex. */
-                    freezeFrameRecordClassPtr = &Dem_FreezeFrameRecordClassTable[freezeFrameRecordClassIndex];                          /* [GUD] freezeFrameRecordClassIndex *//* [GUD:CFG:IF_GUARDED: freezeFrameRecordClassIndex ]freezeFrameRecordClassPtr */
-                    ffRecordTrigger = freezeFrameRecordClassPtr->DemFreezeFrameRecordTrigger;                                           /* [GUD] freezeFrameRecordClassPtr */
+                    ffRecordTrigger =   Dem_CfgInfoPm_GetFreezeFrameRecordTriggerType( freezeFrameRecordClassIndex );                   /* [GUD] freezeFrameRecordClassIndex */
 
                     clearFFDFlag    =   Dem_DataCtl_GetExecClearNonOBDFFD( RecoveryMode, DTCStatus, ffRecordTrigger );
-                    ClearFFListRecordPtr->FFRClrFlg[freezeFrameRecordClassRefIndex] = clearFFDFlag;                                     /* [GUD] freezeFrameRecordClassRefIndex */
+                    ClearFFListRecordPtr->FFRClrFlg[freezeFrameRecordClassRefIndex] = clearFFDFlag;                                     /* [GUD] freezeFrameRecordClassRefIndex *//* [ARYCHK] DEM_NONOBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / freezeFrameRecordClassRefIndex */
                     if ( clearFFDFlag == (boolean)TRUE )
                     {
                         updateFFDRecInfo    =   (boolean)TRUE;
@@ -440,20 +455,29 @@ static FUNC( boolean, DEM_CODE ) Dem_DataCtl_GetClearTarget_NonOBDFFD
                 }
                 else
                 {
-                    ClearFFListRecordPtr->FFRClrFlg[freezeFrameRecordClassRefIndex] = (boolean)FALSE;                                   /* [GUD] freezeFrameRecordClassRefIndex */
+                    ClearFFListRecordPtr->FFRClrFlg[freezeFrameRecordClassRefIndex] = (boolean)FALSE;                                   /* [GUD] freezeFrameRecordClassRefIndex *//* [ARYCHK] DEM_NONOBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / freezeFrameRecordClassRefIndex */
                 }
             }
         }
         else
         {
             /* DTC without DemFreezeFrameRecNumClass */
-            /* No Process */
+            chkIsFFD     = (boolean)FALSE;
         }
     }
     else
     {
         /* DTC without DemFreezeFrameClass */
-        /* No Process */
+        chkIsFFD     = (boolean)FALSE;
+    }
+
+    if ( chkIsFFD == (boolean)FALSE )
+    {
+        /*  all clear.      */
+        for( freezeFrameRecordClassRefIndex = (Dem_u08_FFListIndexType)0U; freezeFrameRecordClassRefIndex < nonOBDFFRClassPerDTCMaxNum; freezeFrameRecordClassRefIndex++ )  /* [GUD:for] freezeFrameRecordClassRefIndex */
+        {
+            ClearFFListRecordPtr->FFRClrFlg[freezeFrameRecordClassRefIndex] = (boolean)FALSE;                                   /* [GUD] freezeFrameRecordClassRefIndex *//* [ARYCHK] DEM_NONOBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / freezeFrameRecordClassRefIndex */
+        }
     }
 
     return updateFFDRecInfo;
@@ -476,6 +500,8 @@ static FUNC( boolean, DEM_CODE ) Dem_DataCtl_GetClearTarget_NonOBDFFD
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | branch changed.                                          */
+/*   v5-7-0      | no object changed.                                       */
+/*   v5-8-0      | branch changed.                                          */
 /****************************************************************************/
 static FUNC( boolean, DEM_CODE ) Dem_DataCtl_GetClearTarget_TSFFD
 (
@@ -505,14 +531,14 @@ static FUNC( boolean, DEM_CODE ) Dem_DataCtl_GetClearTarget_TSFFD
     {
         for( tsFFRecClassRefIndex = (Dem_u08_TSFFListPerDTCIndexType)0U; tsFFRecClassRefIndex < tsffRecordClassNumPerDTCMaxNum; tsFFRecClassRefIndex++ )    /* [GUD:for] tsFFRecClassRefIndex */
         {
-            tsFFRecClassRef = dtcAttributePtr->DemTimeSeriesFreezeFrameRecordClassRef[tsFFRecClassRefIndex];                                                /* [GUD]dtcAttributePtr *//* [GUD] tsFFRecClassRefIndex */
+            tsFFRecClassRef = dtcAttributePtr->DemTimeSeriesFreezeFrameRecordClassRef[tsFFRecClassRefIndex];                                                /* [GUD]dtcAttributePtr *//* [GUD] tsFFRecClassRefIndex *//* [ARYCHK] DEM_TSFF_RECORD_CLASS_NUM_PER_DTC_MAX_NUM / 1 / tsFFRecClassRefIndex */
 
             if( tsFFRecClassRef != DEM_TSFF_RECORD_CLASS_REF_INVALID )                                                                                      /* [GUD:if] tsFFRecClassRef */
             {
                 ffRecordTrigger = Dem_TSFFRecordClassTable[tsFFRecClassRef].DemTimeSeriesFreezeFrameTrigger;                                                /* [GUD] tsFFRecClassRef */
 
                 clearFFDFlag    =   Dem_DataCtl_GetExecClearNonOBDFFD( RecoveryMode, DTCStatus, ffRecordTrigger );
-                ClearFFListRecordPtr->TSFFLClrFlg[tsFFRecClassRefIndex] = clearFFDFlag;                                                                     /* [GUD] tsFFRecClassRefIndex */
+                ClearFFListRecordPtr->TSFFLClrFlg[tsFFRecClassRefIndex] = clearFFDFlag;                                                                     /* [GUD] tsFFRecClassRefIndex *//* [ARYCHK] DEM_TSFF_RECORD_CLASS_NUM_PER_DTC_MAX_NUM / 1 / tsFFRecClassRefIndex */
                 if ( clearFFDFlag == (boolean)TRUE )
                 {
                     updateFFDRecInfo    =   (boolean)TRUE;
@@ -521,11 +547,18 @@ static FUNC( boolean, DEM_CODE ) Dem_DataCtl_GetClearTarget_TSFFD
             else
             {
                 /* DTC without TimeSeriesFreezeFrameRecordClass */
-                /* No Process */
+                ClearFFListRecordPtr->TSFFLClrFlg[tsFFRecClassRefIndex] = (boolean)FALSE;                                                                   /* [GUD] tsFFRecClassRefIndex *//* [ARYCHK] DEM_TSFF_RECORD_CLASS_NUM_PER_DTC_MAX_NUM / 1 / tsFFRecClassRefIndex */
             }
         }
     }
-
+    else
+    {
+        for( tsFFRecClassRefIndex = (Dem_u08_TSFFListPerDTCIndexType)0U; tsFFRecClassRefIndex < tsffRecordClassNumPerDTCMaxNum; tsFFRecClassRefIndex++ )    /* [GUD:for] tsFFRecClassRefIndex */
+        {
+            /* DTC without TimeSeriesFreezeFrameRecordClass */
+            ClearFFListRecordPtr->TSFFLClrFlg[tsFFRecClassRefIndex] = (boolean)FALSE;                                                                   /* [GUD] tsFFRecClassRefIndex *//* [ARYCHK] DEM_TSFF_RECORD_CLASS_NUM_PER_DTC_MAX_NUM / 1 / tsFFRecClassRefIndex */
+        }
+    }
     return updateFFDRecInfo;
 }
 #endif  /*   ( DEM_TSFF_PM_SUPPORT == STD_ON )     */
@@ -763,6 +796,9 @@ static FUNC( Dem_u08_StorageTriggerType, DEM_CODE ) Dem_DataCtl_GetFFDRecordTrig
 /*  v5-0-0         :2022-03-29                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-7-0         :2024-05-29                                              */
+/*  v5-8-0         :2024-10-29                                              */
+/*  v5-10-0        :2025-06-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

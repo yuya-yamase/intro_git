@@ -1,7 +1,7 @@
-/* Dem_Control_cmn_local_h(v5-3-0)                                          */
+/* Dem_Control_cmn_local_h(v5-6-0)                                          */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -32,6 +32,20 @@
 /*--------------------------------------------------------------------------*/
 #define DEM_START_SEC_CODE
 #include <Dem_MemMap.h>
+FUNC( void, DEM_CODE ) Dem_Control_Init_DemInit
+( void );
+
+FUNC( void, DEM_CODE ) Dem_Control_Init_AfterRecordCheckComplete
+( void );
+
+FUNC( void, DEM_CODE ) Dem_Control_Init_GenFaultOrderLists
+( void );
+
+FUNC( void, DEM_CODE ) Dem_Control_Init_AfterOrderListGenAndNoExecEndJobOfOpCycRestart
+( void );
+
+FUNC( void, DEM_CODE ) Dem_Control_Init_AfterOrderListGenerateComplete
+( void );
 
 /*----------------------------------*/
 /*  Dem_Control_AsyncReq            */
@@ -91,6 +105,7 @@ FUNC( void, DEM_CODE ) Dem_Control_OpCycle_RefreshRAM
 /* History                                                                  */
 /*  Version        :Date                                                    */
 /*  v5-3-0         :2023-03-29                                              */
+/*  v5-6-0         :2024-01-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

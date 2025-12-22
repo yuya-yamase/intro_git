@@ -1,7 +1,7 @@
-/* Dem_MemSync_RecordKindIndexTable_c(v5-5-0)                               */
+/* Dem_MemSync_RecordKindIndexTable_c(v5-6-0)                               */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -44,10 +44,10 @@
 
 CONST( AB_83_ConstV Dem_u16_RecordKindIndexType    ,DEM_CONFIG_DATA ) Dem_DmSnc_RecordKindIndexTable[ DEM_RECMNGCMN_KIND_MAX ] =
 {
-     {   DEM_RECMNGCMN_KIND_CLRINFO                           },
-     {   DEM_RECMNGCMN_KIND_FFD                               },
-     {   DEM_RECMNGCMN_KIND_FAULT                             },
-     {   DEM_RECMNGCMN_KIND_EVENT                             }
+    DEM_RECMNGCMN_KIND_CLRINFO,
+    DEM_RECMNGCMN_KIND_FFD,
+    DEM_RECMNGCMN_KIND_FAULT,
+    DEM_RECMNGCMN_KIND_EVENT
 };
 
 #define DEM_STOP_SEC_CONST_CONFIG
@@ -58,11 +58,12 @@ CONST( AB_83_ConstV Dem_u16_RecordKindIndexType    ,DEM_CONFIG_DATA ) Dem_DmSnc_
 /* History                                                                  */
 /*  Version        :Date                                                    */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-6-0         :2024-01-29                                              */
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
 /*  Framework          :v2-1-0                                              */
-/*  BSW plug-in        :v5-5-0                                              */
+/*  BSW plug-in        :v5-10-0                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

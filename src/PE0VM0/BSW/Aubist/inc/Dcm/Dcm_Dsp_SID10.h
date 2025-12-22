@@ -1,7 +1,7 @@
-/* Dcm_Dsp_SID10_h(v5-0-0)                                                  */
+/* Dcm_Dsp_SID10_h(v5-8-0)                                                  */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -62,6 +62,16 @@ FUNC( void, DCM_CODE ) Dcm_Dsp_SID10_ChkSesCtrlCbk
     const uint8 u1EventId
 );
 
+FUNC( Std_ReturnType, DCM_CODE ) Dcm_Dsp_GetP2ServerValue
+(
+    const Dcm_SesCtrlType u1SesCtrlType,
+    const Dcm_ProtocolType u1ProtocolType,
+    P2VAR( uint16, AUTOMATIC, DCM_APPL_DATA ) ptP2ServerMax,
+    P2VAR( uint16, AUTOMATIC, DCM_APPL_DATA ) ptP2StarServerMax,
+    P2VAR( uint16, AUTOMATIC, DCM_APPL_DATA ) ptP2StarServerLsb,
+    P2VAR( uint16, AUTOMATIC, DCM_APPL_DATA ) ptP2StarServerMin
+);
+
 #define DCM_STOP_SEC_CODE
 #include <Dcm_MemMap.h>
 
@@ -94,6 +104,7 @@ FUNC( void, DCM_CODE ) Dcm_Dsp_SID10_ChkSesCtrlCbk
 /*  v1-0-0         :2018-03-20                                              */
 /*  v3-2-0         :2020-10-28                                              */
 /*  v5-0-0         :2022-03-29                                              */
+/*  v5-8-0         :2024-10-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

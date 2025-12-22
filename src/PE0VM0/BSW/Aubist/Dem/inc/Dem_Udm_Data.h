@@ -1,7 +1,7 @@
-/* Dem_Udm_Data_h(v5-5-0)                                                   */
+/* Dem_Udm_Data_h(v5-8-0)                                                   */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 /****************************************************************************/
 /* Object Name  | Dem/Udm_Data/HEADER                                       */
@@ -20,6 +20,11 @@
 #include <Dem/Dem_Common.h>
 #include "../cfg/Dem_UserDefMem_Cfg.h"
 #include "Dem_CmnLib_DataCtl_SamplingFFDAccess.h"
+
+#ifndef DEM_SIT_RANGE_CHECK
+#else   /* DEM_SIT_RANGE_CHECK */
+#include <Dem_SIT_RangeCheck.h>
+#endif  /* DEM_SIT_RANGE_CHECK */
 
 /*--------------------------------------------------------------------------*/
 /* Macros                                                                   */
@@ -99,7 +104,7 @@ FUNC( void, DEM_CODE ) Dem_UdmDTC_TranslateDTCStatusAfterUpdate
     P2VAR( Dem_UdsStatusByteType, AUTOMATIC, AUTOMATIC ) NewDTCStatusPtr
 );
 
-FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmDTC_GetDTCStatusOfEvent
+FUNC( void, DEM_CODE ) Dem_UdmDTC_GetDTCStatusOfEvent
 (
     VAR( Dem_u16_UdmEventIndexType, AUTOMATIC ) UdmEventIndex,
     P2VAR( Dem_UdsStatusByteType, AUTOMATIC, AUTOMATIC ) DTCStatusPtr
@@ -214,6 +219,10 @@ FUNC( boolean, DEM_CODE ) Dem_UdmDTC_JudgeUdmDTCClearTarget
 (
     VAR( Dem_u16_UdmEventIndexType, AUTOMATIC ) UdmEventIndex
 );
+FUNC( boolean, DEM_CODE ) Dem_UdmDTC_JudgeUdmDTCClearTargetOnClearProcessActive
+(
+    VAR( Dem_u16_UdmEventIndexType, AUTOMATIC ) UdmEventIndex
+);
 
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmDTC_GetDTCAndStatus
 (
@@ -223,21 +232,21 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmDTC_GetDTCAndStatus
     P2VAR( Dem_UdsStatusByteType, AUTOMATIC, AUTOMATIC ) DTCStatusPtr
 );
 
-FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmDTC_GetDTCStatus
+FUNC( void, DEM_CODE ) Dem_UdmDTC_GetDTCStatus
 (
     VAR( Dem_u16_UdmEventIndexType, AUTOMATIC ) UdmEventIndex,
     VAR( Dem_UdsStatusByteType, AUTOMATIC ) DTCStatusAvailabilityMask,
     P2VAR( Dem_UdsStatusByteType, AUTOMATIC, AUTOMATIC ) DTCStatusPtr
 );
 
-FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmDTC_TranslateDTCStatusForOutput
+FUNC( void, DEM_CODE ) Dem_UdmDTC_TranslateDTCStatusForOutput
 (
     VAR( Dem_u16_UdmEventIndexType, AUTOMATIC ) UdmEventIndex,
     P2VAR( Dem_UdsStatusByteType, AUTOMATIC, AUTOMATIC ) DTCStatusPtr
 );
 
 
-FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmDTC_GetDTCStatusOfDisabledRecord
+FUNC( void, DEM_CODE ) Dem_UdmDTC_GetDTCStatusOfDisabledRecord
 (
     VAR( Dem_u16_UdmEventIndexType, AUTOMATIC ) UdmEventIndex,
     VAR( Dem_UdsStatusByteType, AUTOMATIC ) DTCStatusAvailabilityMask,
@@ -339,6 +348,10 @@ FUNC( void, DEM_CODE ) Dem_UdmData_SaveRecordNumberByDTC
 #if ( DEM_TSFF_UDM_SUPPORT == STD_ON )
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmData_CaptureAfterTriggeredTSFFFromSample
 (
+#ifndef DEM_SIT_RANGE_CHECK
+#else   /* DEM_SIT_RANGE_CHECK */
+    VAR( Dem_u16_FFDStoredIndexType, AUTOMATIC ) SamplingFFRDataSize,
+#endif  /* DEM_SIT_RANGE_CHECK */
     VAR( Dem_u16_UdmDemMemKindIndexType, AUTOMATIC ) UdmGroupKindIndex,
     VAR( Dem_u08_UdmFaultIndexType, AUTOMATIC ) UdmFaultIndex,
     VAR( Dem_u16_TSFFDIndexType, AUTOMATIC ) TimeSeriesFreezeFrameRecordIndex,
@@ -373,6 +386,8 @@ FUNC( void, DEM_CODE ) Dem_UdmData_GenerateTSFFLRecordList
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-7-0         :2024-05-29                                              */
+/*  v5-8-0         :2024-10-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

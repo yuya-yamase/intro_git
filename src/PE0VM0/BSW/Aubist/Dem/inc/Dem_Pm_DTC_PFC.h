@@ -1,7 +1,7 @@
-/* Dem_Pm_DTC_PFC_h(v5-5-0)                                                 */
+/* Dem_Pm_DTC_PFC_h(v5-6-0)                                                 */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 /****************************************************************************/
 /* Object Name  | Dem/Pm_DTC_PFC/HEADER                                     */
@@ -146,6 +146,9 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DTC_CheckAvailableAndMILStatusB
     VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex
 );
 
+FUNC( void, DEM_CODE ) Dem_DTC_ClearAllPFC
+( void );
+
 #endif  /*   ( DEM_PFC_SUPPORT == STD_ON )  */
 
 
@@ -164,6 +167,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DTC_CheckAvailableAndMILStatusB
 /*  v5-0-0         :2021-09-28                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-6-0         :2024-01-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

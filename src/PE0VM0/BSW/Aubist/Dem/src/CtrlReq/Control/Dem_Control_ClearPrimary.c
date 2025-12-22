@@ -1,7 +1,7 @@
-/* Dem_Control_ClearPrimary_c(v5-5-0)                                       */
+/* Dem_Control_ClearPrimary_c(v5-6-0)                                       */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -103,8 +103,11 @@ FUNC( void, DEM_CODE ) Dem_Control_StartClearDTC_PrimaryMemory
 /*               |          DEM_IRT_PENDING                                 */
 /* Notes         | none                                                     */
 /*--------------------------------------------------------------------------*/
+/* UpdateRecord  | [UpdRec]AltIUMPR :   NotifySavedZone                     */
+/*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
+/*   v5-6-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_ClearRAM_PrimaryMemory
 (
@@ -125,6 +128,13 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_ClearRAM_PrimaryMemory
 
     retVal  =   DEM_IRT_PENDING;
 
+    /*--------------------------------------*/
+    /*  notify SAVED_ZONE update - start.   */
+#if ( DEM_ALTIUMPR_SUPPORT == STD_ON ) /*  [FuncSw]    */
+    Dem_NotifySavedZoneIUMPRUpdate_Enter();  /* notify start :  AltIUMPR savedzone area will be update.( no IUMPR record.)  */
+#endif  /* ( DEM_ALTIUMPR_SUPPORT == STD_ON )          */
+    /*--------------------------------------*/
+
     for( loopCount = (Dem_u16_AdjustCntByEventNumType)0U; loopCount < controlClearRamEventNumByCycle; loopCount++ )
     {
         retTempVal = Dem_Control_GetNextEventStrgIndexByDTCsForClearDTC( clearDTC, Dem_CtlClearEventStrgIndex, &nextEventStrgIndex );
@@ -137,10 +147,10 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_ClearRAM_PrimaryMemory
             if( clearAllowed == (boolean)TRUE )
             {
                 /* Clear the specified data */
-                Dem_Data_RequestFixedClear( Dem_CtlClearEventStrgIndex );
+                Dem_Data_RequestFixedClear( Dem_CtlClearEventStrgIndex );   /* [UpdRec]Event/Fault/FFD/OBDFFD/TSFFD/PreFFD/Similar/Misfire *//* [UpdRec]AltIUMPR */
 
 #if ( DEM_PFC_SUPPORT == STD_ON )   /*  [FuncSw]    */
-                Dem_DTC_ClearPFCClearCondition( Dem_CtlClearEventStrgIndex );
+                Dem_DTC_ClearPFCClearCondition( Dem_CtlClearEventStrgIndex );   /* [UpdRec]PFCQuaInfo */
 #endif  /*   ( DEM_PFC_SUPPORT == STD_ON )  */
 
                 /* Clear the specified data(WIRStatus) */
@@ -159,11 +169,11 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_ClearRAM_PrimaryMemory
         {
 #if ( DEM_PID_SUPPORT == STD_ON )   /*  [FuncSw]    */
             /* Clear DEM calculation PID */
-            Dem_PID_Clear();
+            Dem_PID_Clear();                                        /* [UpdRec]PID */
 #endif  /*   ( DEM_PID_SUPPORT == STD_ON )          */
 
 #if ( DEM_CYCLEQUALIFIED_SUPPORT == STD_ON )   /*  [FuncSw]    */
-            Dem_OpCycle_NotifyClearRAMData();
+            Dem_OpCycle_NotifyClearRAMData();                       /* [UpdRec]OpCycle */
 #endif  /*   ( DEM_CYCLEQUALIFIED_SUPPORT == STD_ON )          */
 #if ( DEM_CHECK_4000RPMOCCURRED_BY_EMISSION_SUPPORT == STD_ON ) /*  [FuncSw]    */
             /*  clear progress engine rpm condition.    */
@@ -172,12 +182,12 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_ClearRAM_PrimaryMemory
 
 
 #if ( DEM_PFC_SUPPORT == STD_ON )   /*  [FuncSw]    */
-            Dem_DTC_SetPFCClearDisable( (boolean)TRUE );
+            Dem_DTC_SetPFCClearDisable( (boolean)TRUE );           /* [UpdRec]OpCycle */
 #endif  /*   ( DEM_PFC_SUPPORT == STD_ON )          */
 
 #if ( DEM_DTR_SUPPORT == STD_ON )   /*  [FuncSw]    */
             /* Clear all TestResult */
-            Dem_DTR_ClearDTRData();
+            Dem_DTR_ClearDTRData();                                 /* [UpdRec]DTR */
 #endif  /*   ( DEM_DTR_SUPPORT == STD_ON )          */
 
 
@@ -191,6 +201,13 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_ClearRAM_PrimaryMemory
             break;
         }
     }
+
+    /*--------------------------------------*/
+    /*  notify SAVED_ZONE update - end.     */
+#if ( DEM_ALTIUMPR_SUPPORT == STD_ON ) /*  [FuncSw]    */
+    Dem_NotifySavedZoneIUMPRUpdate_Exit();  /*  notify end :  AltIUMPR savedzone area will be update. (no IUMPR record.)  */
+#endif  /* ( DEM_ALTIUMPR_SUPPORT == STD_ON )          */
+    /*--------------------------------------*/
 
     return retVal;
 }
@@ -491,6 +508,7 @@ static FUNC( void, DEM_CODE ) Dem_Control_TriggerInitMForEFnc_Clear
 /*  v5-0-0         :2022-03-29                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-6-0         :2024-01-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

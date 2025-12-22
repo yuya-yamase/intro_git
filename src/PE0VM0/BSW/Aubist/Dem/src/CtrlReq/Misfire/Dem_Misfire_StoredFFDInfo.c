@@ -1,7 +1,7 @@
-/* Dem_Misfire_GetCylinder_c(v5-5-0)                                        */
+/* Dem_Misfire_GetCylinder_c(v5-9-0)                                        */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -358,12 +358,13 @@ static FUNC( Dem_u16_MisfireStrgIndexType, DEM_CODE ) Dem_Misfire_CheckStoredFFD
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | new created.                                             */
+/*   v5-9-0      | branch changed.                                          */
 /****************************************************************************/
 FUNC( boolean, DEM_CODE ) Dem_Misfire_CheckOutputOBDFFDConditionByTrigger
 (
     VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex,
     VAR( Dem_u08_StorageTriggerType, AUTOMATIC ) Trigger,
-    P2VAR( Dem_MisfireCylinderNumberType, AUTOMATIC, AUTOMATIC ) MisfireCylinderNumberTypePtr
+    VAR( Dem_MisfireCylinderNumberType, AUTOMATIC ) MisfireCylinderNumber
 )
 {
     VAR( boolean, AUTOMATIC ) retVal;
@@ -373,6 +374,7 @@ FUNC( boolean, DEM_CODE ) Dem_Misfire_CheckOutputOBDFFDConditionByTrigger
     VAR( Dem_u08_MisfireObdFFDCylIndexType, AUTOMATIC ) misfireObdFFDCylIndex;
     VAR( Dem_u08_InternalReturnType, AUTOMATIC ) retCnvId;
     VAR( Dem_MisfireCylinderType, AUTOMATIC ) misfireObdFFDCyl;
+    VAR( Dem_MisfireCylinderType, AUTOMATIC ) misfireCylinderBitCheck;
 
     retVal      =   (boolean)FALSE;
 
@@ -392,17 +394,92 @@ FUNC( boolean, DEM_CODE ) Dem_Misfire_CheckOutputOBDFFDConditionByTrigger
             if( misfireIndexObdFFDConfig == misfireIndex )
             {
                 /*  output target record information        */
-                misfireObdFFDCyl = Dem_MisfireMng_GetObdFFDCyl( misfireIndex, misfireObdFFDCylIndex );          /* [GUD]misfireIndex *//* [GUD]misfireObdFFDCylIndex */
+                misfireObdFFDCyl = Dem_Misfire_GetOutputObdFFDCyl( misfireIndex, misfireObdFFDCylIndex );       /* [GUD]misfireIndex *//* [GUD]misfireObdFFDCylIndex */
 
-                *MisfireCylinderNumberTypePtr =   Dem_CfgInfoPm_GetMisfireCylinderNumberFromCylBit( misfireObdFFDCyl );
+                misfireCylinderBitCheck = misfireObdFFDCyl & (Dem_MisfireCylinderType)(DEM_MISFIRE_CHECK_CYLINDER_BIT << MisfireCylinderNumber);
+                if( misfireCylinderBitCheck != DEM_MISFIRE_CYLINDER_NON )
+                {
+                    /*  match cylinder number.  */
+                    retVal = (boolean)TRUE;
+                }
 
-                retVal = (boolean)TRUE;
             }
         }
     }
 
     return retVal;
 }
+
+#if ( DEM_MISFIRE_OUTPUT_UDSOBDFFD_MULTIPLE_FAILED_CYL_SUPPORT == STD_OFF )
+/****************************************************************************/
+/* Function Name | Dem_Misfire_GetOutputObdFFDCyl                           */
+/* Description   | Get Output OBDFFDCyl.                                    */
+/* Preconditions |                                                          */
+/* Parameters    | [in] MisfireIndex :                                      */
+/*               |        Identification of an event by assigned EventId.   */
+/* Parameters    | [in] MisfireObdFFDCylIndex :                             */
+/*               |        OBD FFD Cylinder Index.                           */
+/* Return Value  | Dem_MisfireCylinderType                                  */
+/* Notes         | -                                                        */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-9-0      | new created.                                             */
+/****************************************************************************/
+FUNC( Dem_MisfireCylinderType, DEM_CODE ) Dem_Misfire_GetOutputObdFFDCyl
+(
+    VAR( Dem_u16_MisfireStrgIndexType, AUTOMATIC ) MisfireIndex,
+    VAR( Dem_u08_MisfireObdFFDCylIndexType, AUTOMATIC ) MisfireObdFFDCylIndex
+)
+{
+    VAR( Dem_MisfireCylinderType, AUTOMATIC ) misfireOutputObdFFDCyl;
+
+    misfireOutputObdFFDCyl = Dem_MisfireMng_GetObdFFDCyl( MisfireIndex, MisfireObdFFDCylIndex );
+
+    return misfireOutputObdFFDCyl;
+}
+#endif  /* ( DEM_MISFIRE_OUTPUT_UDSOBDFFD_MULTIPLE_FAILED_CYL_SUPPORT == STD_OFF )  */
+
+#if ( DEM_MISFIRE_OUTPUT_UDSOBDFFD_MULTIPLE_FAILED_CYL_SUPPORT == STD_ON )
+/****************************************************************************/
+/* Function Name | Dem_Misfire_GetOutputObdFFDCyl                           */
+/* Description   | Get Output OBDFFDCyl.                                    */
+/* Preconditions |                                                          */
+/* Parameters    | [in] MisfireIndex :                                      */
+/*               |        Identification of an event by assigned EventId.   */
+/* Parameters    | [in] MisfireObdFFDCylIndex :                             */
+/*               |        OBD FFD Cylinder Index.                           */
+/* Return Value  | Dem_MisfireCylinderType                                  */
+/* Notes         | -                                                        */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-9-0      | new created.                                             */
+/****************************************************************************/
+FUNC( Dem_MisfireCylinderType, DEM_CODE ) Dem_Misfire_GetOutputObdFFDCyl
+(
+    VAR( Dem_u16_MisfireStrgIndexType, AUTOMATIC ) MisfireIndex,                /* MISRA DEVIATION */
+    VAR( Dem_u08_MisfireObdFFDCylIndexType, AUTOMATIC ) MisfireObdFFDCylIndex   /* MISRA DEVIATION */
+)
+{
+    VAR( Dem_MisfireCylinderType, AUTOMATIC ) misfireOutputObdFFDCyl;
+    VAR( Dem_MisfireCylinderType, AUTOMATIC ) bit2Cylinder;
+    VAR( Dem_MisfireCylinderType, AUTOMATIC ) bit3Cylinder;
+    VAR( Dem_u08_MisfireKindBitType, AUTOMATIC ) availableMisfireKind;
+
+    availableMisfireKind    =   Dem_DataAvl_GetMisfireCylDTCAvailable();
+
+    /*  get bit2 ON cylinder.                           */
+    bit2Cylinder = Dem_Misfire_GetBit2Cylinder( availableMisfireKind );
+
+    /*  get bit3 ON cylinder.                           */
+    bit3Cylinder = Dem_Misfire_GetBit3Cylinder( availableMisfireKind );
+
+    /*  output cylinder : bit2 or bit3 ON cylinder.     */
+    misfireOutputObdFFDCyl = bit2Cylinder | bit3Cylinder;
+
+    return misfireOutputObdFFDCyl;
+}
+#endif  /* ( DEM_MISFIRE_OUTPUT_UDSOBDFFD_MULTIPLE_FAILED_CYL_SUPPORT == STD_ON ) */
+
 #endif  /* ( DEM_OBDFFD_SUPPORT == STD_ON )             */
 
 /****************************************************************************/
@@ -480,6 +557,7 @@ FUNC( boolean, DEM_CODE ) Dem_Misfire_CheckOutputFFDConditionByTrigger
 /*  Version        :Date                                                    */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-9-0         :2025-02-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

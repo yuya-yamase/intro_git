@@ -1,7 +1,7 @@
-/* Dem_Control_OpCycleUpdNormal_c(v5-5-0)                                   */
+/* Dem_Control_OpCycleUpdNormal_c(v5-7-0)                                   */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -115,8 +115,12 @@ static FUNC( void, DEM_CODE ) Dem_Control_SetWIRStatusAtShortMI
 /* Return Value  | none                                                     */
 /* Notes         | none                                                     */
 /*--------------------------------------------------------------------------*/
+/* UpdateRecord  | [UpdRec]AltIUMPR                                         */
+/*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | branch changed.                                          */
+/*   v5-6-0      | no object changed.                                       */
+/*   v5-7-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_Control_NormalEventMemoryEntryByOpCycle
 (
@@ -200,7 +204,7 @@ FUNC( void, DEM_CODE ) Dem_Control_NormalEventMemoryEntryByOpCycle
                     /*  AgingCondition is OK and TestFailedThisAgingCycle(bit1 at Aging cycle) == OFF    */
                     if( ( agingConditionFlag == (boolean)TRUE ) && ( ( oldDTCStatusSt.ExtendDTCStatus & DEM_DTCSTATUSEX_STATUS_TFTOC_IN_AGINGCYCLE ) == DEM_DTCSTATUSEX_BYTE_ALL_OFF ) )
                     {
-                        Dem_Control_ProcessAging( HealingAgingCycleFlag, pendingRecoveryExecFlag, eventStrgIndex, &oldDTCStatusSt, &agingExecFlag );        /* [GUDCHK:CALLER]EventPos */
+                        Dem_Control_ProcessAging( HealingAgingCycleFlag, eventStrgIndex, &oldDTCStatusSt, &agingExecFlag );        /* [GUDCHK:CALLER]EventPos */
                     }
                     else
                     {
@@ -265,7 +269,7 @@ FUNC( void, DEM_CODE ) Dem_Control_NormalEventMemoryEntryByOpCycle
     if( HealingAgingCycleFlag != DEM_OPCYCUPD_HACYC_INITIALVALUE )
     {
         /*  TestNotCompThisHealingAgingCycle(bit6 at Healing cycle) == OFF    */
-        Dem_AltIUMPR_IncNumeratorCounts( eventCtrlIndex );          /* [GUDCHK:CALLER]EventPos */
+        Dem_AltIUMPR_IncNumeratorCounts( eventCtrlIndex );          /* [GUDCHK:CALLER]EventPos *//* [UpdRec]AltIUMPR */
     }
 #endif  /* ( DEM_ALTIUMPR_SUPPORT == STD_ON )   */
 
@@ -360,6 +364,8 @@ static FUNC( void, DEM_CODE ) Dem_Control_SetWIRStatusAtShortMI
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-6-0         :2024-01-29                                              */
+/*  v5-7-0         :2024-05-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

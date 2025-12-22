@@ -1,7 +1,7 @@
-/* Dem_Utl_h(v5-5-0)                                                        */
+/* Dem_Utl_h(v5-7-0)                                                        */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 /****************************************************************************/
 /* Object Name  | Dem/Utl/HEADER                                            */
@@ -68,6 +68,10 @@ FUNC( void, DEM_CODE ) Dem_UtlMem_SetMemory
 #if ( DEM_FF_CHECKSUM_SUPPORT == STD_ON)
 FUNC( void, DEM_CODE ) Dem_UtlMem_CopyMemoryWithChecksum
 (
+#ifndef DEM_SIT_RANGE_CHECK
+#else   /* DEM_SIT_RANGE_CHECK */
+    VAR( Dem_u16_FFDStoredIndexType, AUTOMATIC ) DestBufferSize,
+#endif  /* DEM_SIT_RANGE_CHECK */
     P2VAR( uint8, AUTOMATIC, DEM_VAR_SAVED_ZONE ) DestBufferPtr,
     P2CONST( uint8, AUTOMATIC , DEM_VAR_NO_INIT ) SrcBufferPtr,
     VAR( Dem_u16_FFDStoredIndexType, AUTOMATIC ) BufSize,
@@ -84,6 +88,10 @@ FUNC( Dem_u16_FFCheckSumType, DEM_CODE ) Dem_UtlMem_Checksum
 #if ( DEM_USERDEFINEDMEMORY_SUPPORT == STD_ON )
 FUNC( void, DEM_CODE ) Dem_UtlMem_SetChecksum
 (
+#ifndef DEM_SIT_RANGE_CHECK
+#else   /* DEM_SIT_RANGE_CHECK */
+    VAR( Dem_u16_FFDStoredIndexType, AUTOMATIC ) BufferSize,
+#endif  /* DEM_SIT_RANGE_CHECK */
     P2VAR( uint8, AUTOMATIC, DEM_VAR_SAVED_ZONE ) BufferPtr,
     VAR( Dem_u16_FFCheckSumType, AUTOMATIC ) Checksum,
     VAR( Dem_u16_FFDStoredIndexType, AUTOMATIC ) PosChecksumUpper,
@@ -116,6 +124,7 @@ FUNC( Dem_u08_ConsistencyIdType, DEM_CODE ) Dem_UtlCid_CalcConsistencyId
 /*  v5-0-0         :2022-03-29                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-7-0         :2024-05-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

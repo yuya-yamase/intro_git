@@ -1,7 +1,7 @@
-/* Dem_DataCtl_EventEntry02Make_FFD_c(v5-5-0)                               */
+/* Dem_DataCtl_EventEntry02Make_FFD_c(v5-10-0)                              */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -21,12 +21,18 @@
 #include "../../../inc/Dem_Pm_PreFFD.h"
 #include "../../../inc/Dem_Utl.h"
 #include "../../../inc/Dem_Pm_Misfire.h"
+#include "../../../inc/Dem_CmnLib_CmbEvt.h"
 #include "../../../inc/Dem_CmnLib_ConfigInfo.h"
 #include "../../../inc/Dem_CmnLib_DataCtl_CaptureFreezeFrameClass.h"
 #include "../../../inc/Dem_CmnLib_DataCtl_TSFFD.h"
 #include "Dem_DataCtl_EventEntry_local.h"
 #include "Dem_DataCtl_local.h"
 #include "Dem_DataCtl_TSFFD_local.h"
+
+#ifndef DEM_SIT_RANGE_CHECK
+#else   /* DEM_SIT_RANGE_CHECK */
+#include <Dem_SIT_RangeCheck.h>
+#endif  /* DEM_SIT_RANGE_CHECK */
 
 /*--------------------------------------------------------------------------*/
 /* Macros                                                                   */
@@ -82,7 +88,9 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_SetObdFFRecordIndex
 (
     VAR( Dem_u08_FFListIndexType, AUTOMATIC ) FreezeFrameRecordClassIndex,
     VAR( Dem_u08_UpdateRecordType, AUTOMATIC ) FreezeFrameRecordUpdate,
-    VAR( boolean, AUTOMATIC ) UpdatePendingFFD
+    VAR( boolean, AUTOMATIC ) UpdatePendingFFD,
+    VAR( Dem_u08_FFValidTriggerType, AUTOMATIC ) Trigger,
+    P2VAR( boolean, AUTOMATIC, AUTOMATIC ) CaptureFlgPtr
 );
 
 static FUNC( void, DEM_CODE ) Dem_Data_CaptureObdFreezeFrameDataToTmp
@@ -92,7 +100,8 @@ static FUNC( void, DEM_CODE ) Dem_Data_CaptureObdFreezeFrameDataToTmp
     VAR( Dem_u08_FFListIndexType, AUTOMATIC ) FreezeFrameRecordClassIndex,
     P2CONST( AB_83_ConstV Dem_FreezeFrameClassType, AUTOMATIC, DEM_CONFIG_DATA ) FreezeFrameClassPtr,
     VAR( Dem_u08_StorageTriggerType, AUTOMATIC ) FreezeFrameRecordTrigger,
-    VAR( Dem_MisfireCylinderType, AUTOMATIC ) MisfireCylinder
+    VAR( Dem_MisfireCylinderType, AUTOMATIC ) MisfireCylinder,
+    VAR( boolean, AUTOMATIC ) CaptureFlg
 );
 
 static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_SetOBDFFROverwritten
@@ -116,7 +125,7 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_SetFFRecordIndexToT
     VAR( Dem_u08_StorageTriggerType, AUTOMATIC ) FreezeFrameRecordTrigger
 );
 
-static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_CaptureFreezeFrameDataToTmp
+static FUNC( void, DEM_CODE ) Dem_Data_CaptureFreezeFrameDataToTmp
 (
     VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex,
     VAR( Dem_MonitorDataType, AUTOMATIC ) monitorData0,
@@ -163,6 +172,26 @@ static FUNC( void, DEM_CODE ) Dem_Data_UpdateTriggerToTmp
 (
     VAR( Dem_u08_StorageTriggerType, AUTOMATIC ) TargetTrigger
 );
+
+#if ( DEM_OBDONUDS_SUPPORT == STD_ON )
+#if ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )
+static FUNC( boolean, DEM_CODE ) Dem_Data_CopyObdFFRecordIndexToTmpFromPairMisfireEvent
+(
+    VAR( Dem_u08_FFListIndexType, AUTOMATIC ) FreezeFrameRecordClassIndex,
+    VAR( Dem_u08_UpdateRecordType, AUTOMATIC ) FreezeFrameRecordUpdate,
+    VAR( Dem_u08_FFValidTriggerType, AUTOMATIC ) Trigger,
+    P2VAR( boolean, AUTOMATIC, AUTOMATIC ) CaptureFlgPtr
+);
+static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_JudgeUpdateLatestObdFFD
+(
+    VAR( Dem_u08_FFValidTriggerType, AUTOMATIC ) Trigger
+);
+static FUNC( boolean, DEM_CODE ) Dem_Data_JudgeCaptureMisfireLatestObdFFD
+(
+    VAR( Dem_u08_FFValidTriggerType, AUTOMATIC ) Trigger
+);
+#endif /* ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON ) */
+#endif /* ( DEM_OBDONUDS_SUPPORT == STD_ON ) */
 
 #define DEM_STOP_SEC_CODE
 #include <Dem_MemMap.h>
@@ -297,6 +326,7 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_JudgeNeedToStoreFre
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
+/*   v5-8-0      | no branch changed.                                       */
 /****************************************************************************/
 static FUNC( boolean, DEM_CODE ) Dem_Data_CheckAlreadyFFRStoredOfTmp
 ( void )
@@ -314,8 +344,8 @@ static FUNC( boolean, DEM_CODE ) Dem_Data_CheckAlreadyFFRStoredOfTmp
     VAR( Dem_u08_FFDIndexType, AUTOMATIC ) nonObdFFDRecordNum;
 
 #if ( DEM_OBDFFD_SUPPORT == STD_ON ) /*  [FuncSw]    */
-    obdFFRClassPerDTCMaxNum = Dem_OBDFFRClassPerDTCMaxNum;
-    obdFFDRecordNum = Dem_ObdFFDRecordNum;
+    obdFFRClassPerDTCMaxNum = Dem_CfgInfoPm_GetOBDFFRClassPerDTCMaxNum();
+    obdFFDRecordNum = Dem_CfgInfoPm_GetObdFFDRecordNum();
 #endif  /* ( DEM_OBDFFD_SUPPORT == STD_ON )    */
 
     nonObdFFRClassPerDTCMaxNum = Dem_NonOBDFFRClassPerDTCMaxNum;
@@ -361,6 +391,7 @@ static FUNC( boolean, DEM_CODE ) Dem_Data_CheckAlreadyFFRStoredOfTmp
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
+/*   v5-8-0      | no branch changed.                                       */
 /****************************************************************************/
 #if ( DEM_EVENT_DISPLACEMENT_SUPPORT == STD_ON )
 static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_JudgeNeedToStoreFreezeFrameByDisplacement
@@ -381,7 +412,7 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_JudgeNeedToStoreFre
     VAR( Dem_u08_FFListIndexType, AUTOMATIC ) loopNonObdFFRClassIndex;
 
 #if ( DEM_OBDFFD_SUPPORT == STD_ON ) /*  [FuncSw]    */
-    obdFFRClassPerDTCMaxNum = Dem_OBDFFRClassPerDTCMaxNum;
+    obdFFRClassPerDTCMaxNum = Dem_CfgInfoPm_GetOBDFFRClassPerDTCMaxNum();
 #endif  /* ( DEM_OBDFFD_SUPPORT == STD_ON )    */
 
     nonObdFFRClassPerDTCMaxNum = Dem_NonOBDFFRClassPerDTCMaxNum;
@@ -505,6 +536,9 @@ static FUNC( void, DEM_CODE ) Dem_Data_CaptureFreezeFrameToTmp
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-7-0      | no object changed.                                       */
+/*   v5-9-0      | branch changed.                                          */
+/*   v5-10-0     | no branch changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_Data_CaptureObdFreezeFrameToTmp
 (
@@ -525,10 +559,11 @@ static FUNC( void, DEM_CODE ) Dem_Data_CaptureObdFreezeFrameToTmp
     VAR( Dem_u08_UpdateRecordType, AUTOMATIC ) freezeFrameRecordUpdate;
     VAR( boolean, AUTOMATIC ) readDataElementAllowed;
     VAR( boolean, AUTOMATIC ) updatePendingFFD;
+    VAR( boolean, AUTOMATIC ) captureFlg;
+
 
     P2CONST( AB_83_ConstV Dem_FreezeFrameClassType, AUTOMATIC, DEM_CONFIG_DATA) freezeFrameClassPtr;
     P2CONST( AB_83_ConstV Dem_FreezeFrameRecNumClassType, AUTOMATIC, DEM_CONFIG_DATA ) freezeFrameRecNumClassPtr;
-    P2CONST( AB_83_ConstV Dem_FreezeFrameRecordClassType, AUTOMATIC, DEM_CONFIG_DATA ) freezeFrameRecordClassPtr;
 
     /* Checks the reference of freeze frame class. */
     Dem_CfgInfoPm_GetOBDFreezeFrameAndRecNumClass( EventStrgIndex, &obdFreezeFrameClassRef, &obdFreezeframeRecNumClassRef );    /* [GUD:OUT:Not DEM_FFCLASSINDEX_INVALID] obdFreezeFrameClassRef *//* [GUD:OUT:Not DEM_FFRECNUMCLASSINDEX_INVALID] obdFreezeframeRecNumClassRef */
@@ -551,31 +586,38 @@ static FUNC( void, DEM_CODE ) Dem_Data_CaptureObdFreezeFrameToTmp
             {
                 /* Holds the DemFreezeFrameRecordIndex pointed to */
                 /* by the DemFreezeFrameRecordClassRef Index of the held FreezeFrameRecNumClass table. */
-                freezeFrameRecordClassIndex = freezeFrameRecNumClassPtr->DemFreezeFrameRecordClassRef[freezeFrameRecordClassRefIndex];          /* [GUD]freezeFrameRecordClassRefIndex  */
+                freezeFrameRecordClassIndex = freezeFrameRecNumClassPtr->DemFreezeFrameRecordClassRef[freezeFrameRecordClassRefIndex];          /* [GUD]freezeFrameRecordClassRefIndex  *//* [ARYCHK] DEM_FF_RECORD_CLASS_REF_MAX_NUM / 1 / freezeFrameRecordClassRefIndex */
 
                 if( freezeFrameRecordClassIndex < ffrRecordClassConfigureNum )                                                                  /* [GUD:if]freezeFrameRecordClassIndex  */
                 {
                     /* Holds the FreezeFrameRecordClass table pointed to by DemFreezeFrameRecordIndex. */
-                    freezeFrameRecordClassPtr = &Dem_FreezeFrameRecordClassTable[freezeFrameRecordClassIndex];                                  /* [GUD]freezeFrameRecordClassIndex  *//* [GUD:CFG:IF_GUARDED: freezeFrameRecordClassIndex ]freezeFrameRecordClassPtr */
-                    freezeFrameRecordTrigger = freezeFrameRecordClassPtr->DemFreezeFrameRecordTrigger;                                          /* [GUD]freezeFrameRecordClassPtr */
+                    freezeFrameRecordTrigger    =   Dem_CfgInfoPm_GetFreezeFrameRecordInfo_forCapture( freezeFrameRecordClassIndex, &freezeFrameRecordUpdate );         /* [GUD]freezeFrameRecordClassIndex  *//* [GUD:CFG:IF_GUARDED: freezeFrameRecordClassIndex ]freezeFrameRecordClassPtr */
+
                     /* Retrieves  allowed to ReadDataElement with the held freeze frame record class table's trigger and the specified trigger.  */
                     updatePendingFFD = (boolean)FALSE;
-                    readDataElementAllowed = Dem_CfgInfo_CheckObdTrigger( freezeFrameRecordTrigger, Trigger, &updatePendingFFD );
+                    readDataElementAllowed = Dem_CfgInfo_CheckObdTrigger( &freezeFrameRecordTrigger, Trigger, &updatePendingFFD );
 
                     /* Checks allowed to ReadDataElement is TRUE. */
                     if( readDataElementAllowed == (boolean)TRUE )
                     {
                         /* Gets the temporary freeze frame record in corresponding to */
                         /* the specific freeze frame record class index. */
-                        freezeFrameRecordUpdate  = freezeFrameRecordClassPtr->DemFreezeFrameRecordUpdate;
-                        resultOfRetrieve = Dem_Data_SetObdFFRecordIndexToTmp(freezeFrameRecordClassRefIndex, freezeFrameRecordUpdate, updatePendingFFD );   /* [GUD]freezeFrameRecordClassRefIndex  */
+                        captureFlg = (boolean)FALSE;
+                        resultOfRetrieve = Dem_Data_SetObdFFRecordIndexToTmp(freezeFrameRecordClassRefIndex, freezeFrameRecordUpdate, updatePendingFFD, Trigger, &captureFlg ); /* [GUD]freezeFrameRecordClassRefIndex  */
 
                         /* Checks the result of retrieve the temporary freeze frame record. */
                         if( resultOfRetrieve == DEM_IRT_OK )
                         {
-                            Dem_Data_SetResultOfCmpObdFFRecordToTmp( freezeFrameRecordClassRefIndex, DEM_IRT_NG );                              /* [GUD]freezeFrameRecordClassRefIndex  */
+#if ( DEM_OBDONUDS_SUPPORT == STD_ON )                  /*  [FuncSw]    */
+#if ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )      /*  [FuncSw]    */
+                            if ( captureFlg == (boolean)TRUE )
+#endif /* ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON ) */
+#endif /* ( DEM_OBDONUDS_SUPPORT == STD_ON )             */
+                            {
+                                Dem_Data_SetResultOfCmpObdFFRecordToTmp( freezeFrameRecordClassRefIndex, DEM_IRT_NG );                              /* [GUD]freezeFrameRecordClassRefIndex  */
+                            }
 
-                            Dem_Data_CaptureObdFreezeFrameDataToTmp( EventStrgIndex, monitorData0, freezeFrameRecordClassRefIndex, freezeFrameClassPtr, freezeFrameRecordTrigger, MisfireCylinder );    /* [GUD]freezeFrameRecordClassRefIndex  */
+                            Dem_Data_CaptureObdFreezeFrameDataToTmp( EventStrgIndex, monitorData0, freezeFrameRecordClassRefIndex, freezeFrameClassPtr, freezeFrameRecordTrigger, MisfireCylinder, captureFlg );    /* [GUD]freezeFrameRecordClassRefIndex  */
 
                         }
                     }
@@ -598,6 +640,10 @@ static FUNC( void, DEM_CODE ) Dem_Data_CaptureObdFreezeFrameToTmp
 /*               |                                                          */
 /*               | [in] UpdatePendingFFD :                                  */
 /*               |                                                          */
+/*               | [in] Trigger :                                           */
+/*               |                                                          */
+/*               | [in] CaptureFlgPtr :                                     */
+/*               |                                                          */
 /* Return Value  | Dem_u08_InternalReturnType                               */
 /*               |        DEM_IRT_OK :                                      */
 /*               |        DEM_IRT_NG :                                      */
@@ -605,22 +651,32 @@ static FUNC( void, DEM_CODE ) Dem_Data_CaptureObdFreezeFrameToTmp
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-8-0      | no branch changed.                                       */
+/*   v5-9-0      | branch changed.                                          */
 /****************************************************************************/
 static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_SetObdFFRecordIndexToTmp
 (
     VAR( Dem_u08_FFListIndexType, AUTOMATIC ) FreezeFrameRecordClassIndex,
     VAR( Dem_u08_UpdateRecordType, AUTOMATIC ) FreezeFrameRecordUpdate,
-    VAR( boolean, AUTOMATIC ) UpdatePendingFFD
+    VAR( boolean, AUTOMATIC ) UpdatePendingFFD,
+    VAR( Dem_u08_FFValidTriggerType, AUTOMATIC ) Trigger,   /* MISRA DEVIATION */
+    P2VAR( boolean, AUTOMATIC, AUTOMATIC ) CaptureFlgPtr
 )
 {
     VAR( Dem_u08_FFDIndexType, AUTOMATIC ) emptyIndexOfFreezeFrameRecords;
     VAR( Dem_u08_FFDIndexType, AUTOMATIC ) obdFFDRecordNum;
     VAR( Dem_u08_InternalReturnType, AUTOMATIC ) retVal;
     VAR( Dem_u08_FFListIndexType, AUTOMATIC ) obdFFRClassPerDTCMaxNum;
+#if ( DEM_OBDONUDS_SUPPORT == STD_ON )              /*  [FuncSw]    */
+#if ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )  /*  [FuncSw]    */
+    VAR( boolean, AUTOMATIC ) retCopyObdFFRecordIndex;
+#endif /* ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON ) */
+#endif /* ( DEM_OBDONUDS_SUPPORT == STD_ON )             */
 
     retVal = DEM_IRT_OK;
-    obdFFRClassPerDTCMaxNum = Dem_OBDFFRClassPerDTCMaxNum;
-    obdFFDRecordNum = Dem_ObdFFDRecordNum;
+    obdFFRClassPerDTCMaxNum = Dem_CfgInfoPm_GetOBDFFRClassPerDTCMaxNum();
+    obdFFDRecordNum = Dem_CfgInfoPm_GetObdFFDRecordNum();
+    *CaptureFlgPtr = (boolean)TRUE;
 
     if( FreezeFrameRecordClassIndex >= obdFFRClassPerDTCMaxNum )                                /* [GUD:if]FreezeFrameRecordClassIndex */
     {
@@ -636,25 +692,32 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_SetObdFFRecordIndex
         {
             if( Dem_TmpEventMemoryEntry.FaultRecord.ObdRecordNumberIndex[FreezeFrameRecordClassIndex] == DEM_FFRECINDEX_INITIAL )       /* [GUD]FreezeFrameRecordClassIndex */
             {
-
-                if( Dem_TmpEventMemoryEntry.EventMemoryRecordList.NumberOfObdFreezeFrameRecords < obdFFDRecordNum )
+#if ( DEM_OBDONUDS_SUPPORT == STD_ON )              /*  [FuncSw]    */
+#if ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )  /*  [FuncSw]    */
+                retCopyObdFFRecordIndex = Dem_Data_CopyObdFFRecordIndexToTmpFromPairMisfireEvent( FreezeFrameRecordClassIndex, FreezeFrameRecordUpdate, Trigger, CaptureFlgPtr );
+                if( retCopyObdFFRecordIndex == (boolean)FALSE )
+#endif /* ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )    */
+#endif /* ( DEM_OBDONUDS_SUPPORT == STD_ON )                */
                 {
-                    emptyIndexOfFreezeFrameRecords = Dem_DataMngC_GetEmptyObdFFDIndex();
-
-                    if( emptyIndexOfFreezeFrameRecords < obdFFDRecordNum )
+                    if( Dem_TmpEventMemoryEntry.EventMemoryRecordList.NumberOfObdFreezeFrameRecords < obdFFDRecordNum )
                     {
-                        Dem_TmpEventMemoryEntry.FaultRecord.ObdRecordNumberIndex[FreezeFrameRecordClassIndex] = emptyIndexOfFreezeFrameRecords; /* [GUD]FreezeFrameRecordClassIndex */
+                        emptyIndexOfFreezeFrameRecords = Dem_DataMngC_GetEmptyObdFFDIndex();
 
-                        Dem_TmpEventMemoryEntry.EventMemoryRecordList.NumberOfObdFreezeFrameRecords++;
+                        if( emptyIndexOfFreezeFrameRecords < obdFFDRecordNum )
+                        {
+                            Dem_TmpEventMemoryEntry.FaultRecord.ObdRecordNumberIndex[FreezeFrameRecordClassIndex] = emptyIndexOfFreezeFrameRecords; /* [GUD]FreezeFrameRecordClassIndex */
+
+                            Dem_TmpEventMemoryEntry.EventMemoryRecordList.NumberOfObdFreezeFrameRecords++;
+                        }
+                        else
+                        {
+                            retVal = DEM_IRT_NG;
+                        }
                     }
                     else
                     {
-                        retVal = DEM_IRT_NG;
+                        retVal = Dem_Data_SetOBDFFROverwritten( FreezeFrameRecordClassIndex );                  /* [GUD]FreezeFrameRecordClassIndex */
                     }
-                }
-                else
-                {
-                    retVal = Dem_Data_SetOBDFFROverwritten( FreezeFrameRecordClassIndex );                  /* [GUD]FreezeFrameRecordClassIndex */
                 }
             }
             else
@@ -668,7 +731,11 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_SetObdFFRecordIndex
                 }
                 else
                 {
-                    /* No Process */
+#if ( DEM_OBDONUDS_SUPPORT == STD_ON )              /*  [FuncSw]    */
+#if ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )  /*  [FuncSw]    */
+                    retVal = Dem_Data_JudgeUpdateLatestObdFFD( Trigger );
+#endif /* ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )    */
+#endif /* ( DEM_OBDONUDS_SUPPORT == STD_ON )                */
                 }
             }
         }
@@ -694,11 +761,16 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_SetObdFFRecordIndex
 /*               |        DemFreezeFrameRecordTrigger.                      */
 /*               | [in] MisfireCylinder :                                   */
 /*               |        Misfire cylinder.                                 */
+/*               | [in] CaptureFlg :                                        */
+/*               |        Whether to capture obd freeze frame.              */
 /* Return Value  | void                                                     */
 /* Notes         | -                                                        */
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-6-0      | branch changed.                                          */
+/*   v5-7-0      | no object changed.                                       */
+/*   v5-9-0      | branch changed.                                          */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_Data_CaptureObdFreezeFrameDataToTmp
 (
@@ -707,10 +779,11 @@ static FUNC( void, DEM_CODE ) Dem_Data_CaptureObdFreezeFrameDataToTmp
     VAR( Dem_u08_FFListIndexType, AUTOMATIC ) FreezeFrameRecordClassIndex,      /* [PRMCHK:CALLER] */
     P2CONST( AB_83_ConstV Dem_FreezeFrameClassType, AUTOMATIC, DEM_CONFIG_DATA ) FreezeFrameClassPtr,
     VAR( Dem_u08_StorageTriggerType, AUTOMATIC ) FreezeFrameRecordTrigger,  /* MISRA DEVIATION */
-    VAR( Dem_MisfireCylinderType, AUTOMATIC ) MisfireCylinder               /* MISRA DEVIATION */
+    VAR( Dem_MisfireCylinderType, AUTOMATIC ) MisfireCylinder,              /* MISRA DEVIATION */
+    VAR( boolean, AUTOMATIC ) CaptureFlg    /* MISRA DEVIATION */
 )
 {
-    VAR( Dem_u08_InternalReturnType, AUTOMATIC ) resultOfCapture;
+    VAR( Dem_u16_EventCtrlIndexType, AUTOMATIC ) eventCtrlIndex;
 
 #if ( DEM_FF_PRESTORAGE_SUPPORT == STD_ON )     /*  [FuncSw]    */
     VAR( boolean, AUTOMATIC ) triggerFFDCaptureFlag;
@@ -730,14 +803,24 @@ static FUNC( void, DEM_CODE ) Dem_Data_CaptureObdFreezeFrameDataToTmp
         /* Set "stored" to the record status of the OBD freeze frame record. */
         Dem_TmpEventMemoryEntry.ObdFreezeFrameRecordList[FreezeFrameRecordClassIndex].RecordStatus = DEM_FFD_STORED;    /* [GUDCHK:CALLER]FreezeFrameRecordClassIndex */
 
-        /* Store capture data in the freeze frame record data */
-        resultOfCapture = Dem_Data_CaptureFreezeFrameClass( FreezeFrameClassPtr, Dem_TmpEventMemoryEntry.ObdFreezeFrameRecordList[FreezeFrameRecordClassIndex].Data ,monitorData0 );    /* [GUDCHK:CALLER]FreezeFrameRecordClassIndex */
-        if( resultOfCapture == DEM_IRT_OK )
+#if ( DEM_OBDONUDS_SUPPORT == STD_ON )              /*  [FuncSw]    */
+#if ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )  /*  [FuncSw]    */
+        if( CaptureFlg == (boolean)TRUE )
+#endif /* ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )    */
+#endif /* ( DEM_OBDONUDS_SUPPORT == STD_ON )                */
         {
+            eventCtrlIndex = Dem_CmbEvt_GetDelegateEventCtrlIndex_InEvtStrgGrp( EventStrgIndex );
+
+            /* Store capture data in the freeze frame record data */
+#ifndef DEM_SIT_RANGE_CHECK
+            Dem_Data_CaptureFreezeFrameClass( eventCtrlIndex, FreezeFrameClassPtr, Dem_TmpEventMemoryEntry.ObdFreezeFrameRecordList[FreezeFrameRecordClassIndex].Data , monitorData0 );  /* [GUDCHK:CALLER]FreezeFrameRecordClassIndex */
+#else   /* DEM_SIT_RANGE_CHECK */
+            Dem_Data_CaptureFreezeFrameClass( Dem_ObdFFRMaxLength, eventCtrlIndex, FreezeFrameClassPtr, Dem_TmpEventMemoryEntry.ObdFreezeFrameRecordList[FreezeFrameRecordClassIndex].Data , monitorData0 );  /* [GUDCHK:CALLER]FreezeFrameRecordClassIndex */
+#endif  /* DEM_SIT_RANGE_CHECK */
+        }
 #if ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON )  /*  [FuncSw]    */
             Dem_Misfire_UpdateObdFFDInfo( EventStrgIndex, FreezeFrameRecordTrigger, MisfireCylinder );
 #endif  /*   ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON )         */
-        }
     }
 
     return ;
@@ -759,6 +842,8 @@ static FUNC( void, DEM_CODE ) Dem_Data_CaptureObdFreezeFrameDataToTmp
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-7-0      | no object changed.                                       */
+/*   v5-8-0      | no branch changed.                                       */
 /****************************************************************************/
 #if ( DEM_EVENT_DISPLACEMENT_SUPPORT == STD_ON )
 static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_SetOBDFFROverwritten
@@ -771,6 +856,7 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_SetOBDFFROverwritte
     VAR( Dem_u08_FaultIndexType, AUTOMATIC ) faultIndex;
     VAR( Dem_u08_FFDIndexType, AUTOMATIC ) obdFFDRecordNum;
     VAR( Dem_u08_FFDIndexType, AUTOMATIC ) obdRecordNumberIndex[DEM_OBD_FFR_CLASS_PER_DTC_MAX_NUM];
+    VAR( Dem_u08_FFListIndexType, AUTOMATIC ) obdFFRClassPerDTCMaxNum;
     VAR( Dem_u08_FFListIndexType, AUTOMATIC ) tmpFFListIndexNum;
     VAR( Dem_s16_FFListIndexType, AUTOMATIC ) ffListIndexNum;
     VAR( Dem_u08_FFListIndexType, AUTOMATIC ) frChkOverwrittenIndex;
@@ -783,7 +869,8 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_SetOBDFFROverwritte
 
     retVal = DEM_IRT_NG;
 
-    tmpFFListIndexNum = Dem_OBDFFRClassPerDTCMaxNum - (Dem_u08_FFListIndexType)1U;
+    obdFFRClassPerDTCMaxNum = Dem_CfgInfoPm_GetOBDFFRClassPerDTCMaxNum();
+    tmpFFListIndexNum = obdFFRClassPerDTCMaxNum - (Dem_u08_FFListIndexType)1U;
     frOverwrittenLmt = (Dem_s16_FFListIndexType)0U;
 
     ffListIndexNum = (Dem_s16_FFListIndexType)tmpFFListIndexNum;
@@ -810,26 +897,27 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_SetOBDFFROverwritte
     {
         eeoFaultInfo.EventPriority = Dem_CfgInfoPm_GetEventPriority( Dem_TmpEventMemoryEntry.EventStrgIndex );  /* [GUDCHK:SETVAL]Dem_TmpEventMemoryEntry.EventStrgIndex */
         eeoFaultInfo.StatusOfDTC = Dem_EventDisplacement.DTCStatusForFaultRecordOverwrite;
+        eeoFaultInfo.EventStrgIndex = Dem_TmpEventMemoryEntry.EventStrgIndex;
         faultIndex = Dem_DcEeo_GetFaultIndexOfOBDFFROverwrite( &eeoFaultInfo );
 
         eventStrgIndex = DEM_EVENTSTRGINDEX_INVALID;
 
-        resultOfGetEventStrgIndexAndRecNumIndex = Dem_DataMngC_GetFR_EventStrgIndex_ObdRecordNumberIndex( faultIndex, &eventStrgIndex, &obdRecordNumberIndex[0] );
+        resultOfGetEventStrgIndexAndRecNumIndex = Dem_DataMngC_GetFR_EventStrgIndex_ObdRecordNumberIndex( faultIndex, &eventStrgIndex, &obdRecordNumberIndex[0] );/* [ARYCHK] DEM_OBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / 0 */
 
         if( resultOfGetEventStrgIndexAndRecNumIndex == DEM_IRT_OK )
         {
-            obdFFDRecordNum = Dem_ObdFFDRecordNum;
+            obdFFDRecordNum = Dem_CfgInfoPm_GetObdFFDRecordNum();
 
             for( frNotOverwrittenIndex = ffListIndexNum; frNotOverwrittenIndex >= frOverwrittenLmt; frNotOverwrittenIndex-- )                   /* [GUD:for]frNotOverwrittenIndex */
             {
-                if( obdRecordNumberIndex[frNotOverwrittenIndex] < obdFFDRecordNum )                                                             /* [GUD]frNotOverwrittenIndex  */
+                if( obdRecordNumberIndex[frNotOverwrittenIndex] < obdFFDRecordNum )                                                             /* [GUD]frNotOverwrittenIndex  *//* [ARYCHK] DEM_OBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / frNotOverwrittenIndex */
                 {
                     /* In case the ObdRecordNumberIndex is valid to reuse. */
 
                     for( frChkOverwrittenIndex = (Dem_u08_FFListIndexType)0U; frChkOverwrittenIndex < FreezeFrameRecordClassIndex; frChkOverwrittenIndex++ )                /* [GUD:for]frChkOverwrittenIndex */
                     {
                         /* Checks if the ObdRecordNumberIndex retained in the fault record which to be overwritten was already used. */
-                        if( obdRecordNumberIndex[frNotOverwrittenIndex] == Dem_EventDisplacement.ObdFaultRecordOverwritten[frChkOverwrittenIndex].RecordNumberIndex )       /* [GUD]frNotOverwrittenIndex *//* [GUD]frChkOverwrittenIndex */
+                        if( obdRecordNumberIndex[frNotOverwrittenIndex] == Dem_EventDisplacement.ObdFaultRecordOverwritten[frChkOverwrittenIndex].RecordNumberIndex )       /* [GUD]frNotOverwrittenIndex *//* [GUD]frChkOverwrittenIndex *//* [ARYCHK] DEM_OBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / frNotOverwrittenIndex */
                         {
                             /* In case the ObdRecordNumberIndex was already used, try a next ObdRecordNumberIndex retained in the fault record which to be overwritten */
 
@@ -842,11 +930,11 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_SetOBDFFROverwritte
                     {
                         /* In case the ObdRecordNumberIndex is unused, retains ObdFaultRecordOverwritten pointed by the spcified FreezeFrameRecordClassIndex. */
 
-                        Dem_TmpEventMemoryEntry.FaultRecord.ObdRecordNumberIndex[FreezeFrameRecordClassIndex] = obdRecordNumberIndex[frNotOverwrittenIndex];    /* [GUDCHK:CALLER]FreezeFrameRecordClassIndex *//* [GUD]frNotOverwrittenIndex  */
+                        Dem_TmpEventMemoryEntry.FaultRecord.ObdRecordNumberIndex[FreezeFrameRecordClassIndex] = obdRecordNumberIndex[frNotOverwrittenIndex];    /* [GUDCHK:CALLER]FreezeFrameRecordClassIndex *//* [GUD]frNotOverwrittenIndex  *//* [ARYCHK] DEM_OBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / frNotOverwrittenIndex */
 
                         Dem_EventDisplacement.ObdFaultRecordOverwritten[FreezeFrameRecordClassIndex].FaultIndex = faultIndex;                                   /* [GUDCHK:CALLER]FreezeFrameRecordClassIndex */
                         Dem_EventDisplacement.ObdFaultRecordOverwritten[FreezeFrameRecordClassIndex].EventStrgIndex = eventStrgIndex;                           /* [GUDCHK:CALLER]FreezeFrameRecordClassIndex */
-                        Dem_EventDisplacement.ObdFaultRecordOverwritten[FreezeFrameRecordClassIndex].RecordNumberIndex = obdRecordNumberIndex[frNotOverwrittenIndex];   /* [GUDCHK:CALLER]FreezeFrameRecordClassIndex *//* [GUD]frNotOverwrittenIndex  */
+                        Dem_EventDisplacement.ObdFaultRecordOverwritten[FreezeFrameRecordClassIndex].RecordNumberIndex = obdRecordNumberIndex[frNotOverwrittenIndex];   /* [GUDCHK:CALLER]FreezeFrameRecordClassIndex *//* [GUD]frNotOverwrittenIndex  *//* [ARYCHK] DEM_OBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / frNotOverwrittenIndex */
 
                         Dem_DcEeo_SelectNextOBDFFROverwrite();
 
@@ -912,6 +1000,9 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_SetOBDFFROverwritte
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
+/*   v5-5-0      | branch changed.                                          */
+/*   v5-7-0      | no object changed.                                       */
+/*   v5-10-0     | no branch changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_Data_CaptureNonObdFreezeFrameToTmp
 (
@@ -923,7 +1014,6 @@ static FUNC( void, DEM_CODE ) Dem_Data_CaptureNonObdFreezeFrameToTmp
 {
     VAR( Dem_u16_FFClassIndexType, AUTOMATIC ) freezeFrameClassRef;
     VAR( Dem_u16_FFRecNumClassIndexType, AUTOMATIC ) freezeframeRecNumClassRef;
-    VAR( Dem_u08_InternalReturnType, AUTOMATIC ) resultOfCapture;
     VAR( Dem_u08_InternalReturnType, AUTOMATIC ) resultOfRetrieve;
     VAR( Dem_u08_FFListIndexType, AUTOMATIC ) freezeFrameRecordClassRefIndex;
     VAR( Dem_u08_FFRecordClassIndexType, AUTOMATIC ) freezeFrameRecordClassIndex;
@@ -935,7 +1025,6 @@ static FUNC( void, DEM_CODE ) Dem_Data_CaptureNonObdFreezeFrameToTmp
 
     P2CONST( AB_83_ConstV Dem_FreezeFrameClassType, AUTOMATIC, DEM_CONFIG_DATA) freezeFrameClassPtr;
     P2CONST( AB_83_ConstV Dem_FreezeFrameRecNumClassType, AUTOMATIC, DEM_CONFIG_DATA ) freezeFrameRecNumClassPtr;
-    P2CONST( AB_83_ConstV Dem_FreezeFrameRecordClassType, AUTOMATIC, DEM_CONFIG_DATA ) freezeFrameRecordClassPtr;
 
     /* Checks the reference of freeze frame class. */
     Dem_CfgInfoPm_GetFreezeFrameAndRecNumClass( EventStrgIndex, &freezeFrameClassRef, &freezeframeRecNumClassRef ); /* [GUD:OUT:Not DEM_FFCLASSINDEX_INVALID] freezeFrameClassRef *//* [GUD:OUT:Not DEM_FFRECNUMCLASSINDEX_INVALID] freezeframeRecNumClassRef */
@@ -958,23 +1047,21 @@ static FUNC( void, DEM_CODE ) Dem_Data_CaptureNonObdFreezeFrameToTmp
             {
                 /* Holds the DemFreezeFrameRecordIndex pointed to */
                 /* by the DemFreezeFrameRecordClassRef Index of the held FreezeFrameRecNumClass table. */
-                freezeFrameRecordClassIndex = freezeFrameRecNumClassPtr->DemFreezeFrameRecordClassRef[freezeFrameRecordClassRefIndex];      /* [GUD] freezeFrameRecordClassRefIndex */
+                freezeFrameRecordClassIndex = freezeFrameRecNumClassPtr->DemFreezeFrameRecordClassRef[freezeFrameRecordClassRefIndex];      /* [GUD] freezeFrameRecordClassRefIndex *//* [ARYCHK] DEM_FF_RECORD_CLASS_REF_MAX_NUM / 1 / freezeFrameRecordClassRefIndex */
 
                 if( freezeFrameRecordClassIndex < ffrRecordClassConfigureNum )                                                              /* [GUD:if] freezeFrameRecordClassIndex */
                 {
                     /* Holds the FreezeFrameRecordClass table pointed to by DemFreezeFrameRecordIndex. */
-                    freezeFrameRecordClassPtr = &Dem_FreezeFrameRecordClassTable[freezeFrameRecordClassIndex];                              /* [GUD] freezeFrameRecordClassIndex *//* [GUD:CFG:IF_GUARDED: freezeFrameRecordClassIndex ]freezeFrameRecordClassPtr */
-                    freezeFrameRecordTrigger = freezeFrameRecordClassPtr->DemFreezeFrameRecordTrigger;                                      /* [GUD] freezeFrameRecordClassPtr */
+                    freezeFrameRecordTrigger    =   Dem_CfgInfoPm_GetFreezeFrameRecordInfo_forCapture( freezeFrameRecordClassIndex, &freezeFrameRecordUpdate );     /* [GUD]freezeFrameRecordClassIndex  *//* [GUD:CFG:IF_GUARDED: freezeFrameRecordClassIndex ]freezeFrameRecordClassPtr */
 
                     /* Retrieves  allowed to ReadDataElement with the held freeze frame record class table's trigger and the specified trigger.  */
-                    readDataElementAllowed = Dem_CfgInfo_CheckTrigger( freezeFrameRecordTrigger, Trigger );
+                    readDataElementAllowed = Dem_CfgInfo_CheckTrigger( &freezeFrameRecordTrigger, Trigger );
 
                     /* Checks allowed to ReadDataElement is TRUE. */
                     if( readDataElementAllowed == (boolean)TRUE )
                     {
                         /* Gets the temporary freeze frame record in corresponding to */
                         /* the specific freeze frame record class index. */
-                        freezeFrameRecordUpdate  = freezeFrameRecordClassPtr->DemFreezeFrameRecordUpdate;
                         resultOfRetrieve = Dem_Data_SetFFRecordIndexToTmp( freezeFrameRecordClassRefIndex, freezeFrameRecordUpdate, freezeFrameRecordTrigger );
 
                         /* Checks the result of retrieve the temporary freeze frame record. */
@@ -982,14 +1069,9 @@ static FUNC( void, DEM_CODE ) Dem_Data_CaptureNonObdFreezeFrameToTmp
                         {
                             Dem_Data_SetResultOfCmpFFRecordToTmp( freezeFrameRecordClassRefIndex, DEM_IRT_NG );                             /* [GUD] freezeFrameRecordClassRefIndex */
 
-                            resultOfCapture = Dem_Data_CaptureFreezeFrameDataToTmp( EventStrgIndex, monitorData0, freezeFrameRecordClassRefIndex, freezeFrameClassPtr, freezeFrameRecordTrigger, MisfireCylinder );
-                            /* Checks the result of capture. */
-                            if( resultOfCapture == DEM_IRT_OK )
-                            {
-                                /* A callback function of the capture is registered and is conducted. */
-                                /* Sets the return value to OK( Capture executed ). */
-                                Dem_Data_UpdateTriggerToTmp( freezeFrameRecordTrigger );
-                            }
+                            Dem_Data_CaptureFreezeFrameDataToTmp( EventStrgIndex, monitorData0, freezeFrameRecordClassRefIndex, freezeFrameClassPtr, freezeFrameRecordTrigger, MisfireCylinder );   /* [GUD] freezeFrameRecordClassRefIndex */
+
+                            Dem_Data_UpdateTriggerToTmp( freezeFrameRecordTrigger );
                         }
                     }
                 }
@@ -1115,15 +1197,15 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_SetFFRecordIndexToT
 /*               |        DemFreezeFrameRecordTrigger.                      */
 /*               | [in] MisfireCylinder :                                   */
 /*               |        Misfire cylinder.                                 */
-/* Return Value  | Dem_u08_InternalReturnType                               */
-/*               |        DEM_IRT_OK :                                      */
-/*               |        DEM_IRT_NG :                                      */
+/* Return Value  | void                                                     */
 /* Notes         | -                                                        */
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-6-0      | branch changed.                                          */
+/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
-static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_CaptureFreezeFrameDataToTmp
+static FUNC( void, DEM_CODE ) Dem_Data_CaptureFreezeFrameDataToTmp
 (
     VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex,
     VAR( Dem_MonitorDataType, AUTOMATIC ) monitorData0,
@@ -1133,15 +1215,13 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_CaptureFreezeFrameD
     VAR( Dem_MisfireCylinderType, AUTOMATIC ) MisfireCylinder               /* MISRA DEVIATION */
 )
 {
-    VAR( Dem_u08_InternalReturnType, AUTOMATIC ) retVal;
-    VAR( Dem_u08_InternalReturnType, AUTOMATIC ) resultOfCapture;
+    VAR( Dem_u16_EventCtrlIndexType, AUTOMATIC ) eventCtrlIndex;
 #if ( DEM_FF_PRESTORAGE_SUPPORT == STD_ON )     /*  [FuncSw]    */
     VAR( boolean, AUTOMATIC ) triggerFFDCaptureFlag;
 #endif  /*   ( DEM_FF_PRESTORAGE_SUPPORT == STD_ON )            */
 
 
 #if ( DEM_FF_PRESTORAGE_SUPPORT == STD_ON )     /*  [FuncSw]    */
-    retVal = DEM_IRT_OK;
     triggerFFDCaptureFlag = Dem_PreFFD_SetPreFFDToTriggerFFD( EventStrgIndex, FreezeFrameClassPtr, FreezeFrameRecordTrigger, MisfireCylinder, &Dem_TmpEventMemoryEntry.FreezeFrameRecordList[FreezeFrameRecordClassIndex] );    /* [GUDCHK:CALLER]FreezeFrameRecordClassIndex */
     if( triggerFFDCaptureFlag == (boolean)TRUE )
 #endif  /*   ( DEM_FF_PRESTORAGE_SUPPORT == STD_ON )            */
@@ -1154,18 +1234,21 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_CaptureFreezeFrameD
         /* Set "stored" to the record status of the freeze frame record. */
         Dem_TmpEventMemoryEntry.FreezeFrameRecordList[FreezeFrameRecordClassIndex].RecordStatus = DEM_FFD_STORED;       /* [GUDCHK:CALLER]FreezeFrameRecordClassIndex */
 
+        eventCtrlIndex = Dem_CmbEvt_GetDelegateEventCtrlIndex_InEvtStrgGrp( EventStrgIndex );
+
         /* Store capture data in the freeze frame record data */
-        resultOfCapture = Dem_Data_CaptureFreezeFrameClass( FreezeFrameClassPtr, Dem_TmpEventMemoryEntry.FreezeFrameRecordList[FreezeFrameRecordClassIndex].Data ,monitorData0 );       /* [GUDCHK:CALLER]FreezeFrameRecordClassIndex */
-        if( resultOfCapture == DEM_IRT_OK )
-        {
+#ifndef DEM_SIT_RANGE_CHECK
+        Dem_Data_CaptureFreezeFrameClass( eventCtrlIndex, FreezeFrameClassPtr, Dem_TmpEventMemoryEntry.FreezeFrameRecordList[FreezeFrameRecordClassIndex].Data , monitorData0 ); /* [GUDCHK:CALLER]FreezeFrameRecordClassIndex */
+#else   /* DEM_SIT_RANGE_CHECK */
+        Dem_Data_CaptureFreezeFrameClass( Dem_FFRMaxLength, eventCtrlIndex, FreezeFrameClassPtr, Dem_TmpEventMemoryEntry.FreezeFrameRecordList[FreezeFrameRecordClassIndex].Data , monitorData0 ); /* [GUDCHK:CALLER]FreezeFrameRecordClassIndex */
+#endif  /* DEM_SIT_RANGE_CHECK */
+
 #if ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON )  /*  [FuncSw]    */
-            Dem_Misfire_UpdateFFDInfo( EventStrgIndex, FreezeFrameRecordTrigger, MisfireCylinder );
+        Dem_Misfire_UpdateFFDInfo( EventStrgIndex, FreezeFrameRecordTrigger, MisfireCylinder );
 #endif  /*   ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON )         */
-        }
-        retVal = resultOfCapture;
     }
 
-    return retVal;
+    return;
 }
 
 
@@ -1188,6 +1271,8 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_CaptureFreezeFrameD
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-7-0      | no object changed.                                       */
+/*   v5-8-0      | no branch changed.                                       */
 /*******************************************************************************/
 #if ( DEM_EVENT_DISPLACEMENT_SUPPORT == STD_ON )
 #if ( DEM_MAX_NUM_OF_FREEZE_FRAME_TRIGGER_SUPPORT == STD_OFF )
@@ -1239,11 +1324,12 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_SetNonOBDFFROverwri
     {
         eeoFaultInfo.EventPriority = Dem_CfgInfoPm_GetEventPriority( Dem_TmpEventMemoryEntry.EventStrgIndex );  /* [GUDCHK:SETVAL]Dem_TmpEventMemoryEntry.EventStrgIndex */
         eeoFaultInfo.StatusOfDTC = Dem_EventDisplacement.DTCStatusForFaultRecordOverwrite;
+        eeoFaultInfo.EventStrgIndex = Dem_TmpEventMemoryEntry.EventStrgIndex;
         faultIndex = Dem_DcEeo_GetFaultIndexOfNonOBDFFROverwrite( &eeoFaultInfo );
 
         eventStrgIndex = DEM_EVENTSTRGINDEX_INVALID;
 
-        resultOfGetEventStrgIndexAndRecNumIndex = Dem_DataMngC_GetFR_EventStrgIndex_RecordNumberIndex( faultIndex, &eventStrgIndex, &recordNumberIndex[0] );    /* [GUD:RET:DEM_IRT_OK] eventStrgIndex */
+        resultOfGetEventStrgIndexAndRecNumIndex = Dem_DataMngC_GetFR_EventStrgIndex_RecordNumberIndex( faultIndex, &eventStrgIndex, &recordNumberIndex[0] );    /* [GUD:RET:DEM_IRT_OK] eventStrgIndex *//* [ARYCHK] DEM_NONOBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / 0 */
 
         if( resultOfGetEventStrgIndexAndRecNumIndex == DEM_IRT_OK )
         {
@@ -1251,14 +1337,14 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_SetNonOBDFFROverwri
 
             for( frNotOverwrittenIndex = ffListIndexNum; frNotOverwrittenIndex >= frOverwrittenLmt; frNotOverwrittenIndex-- )   /* [GUD:for]frNotOverwrittenIndex */
             {
-                if( recordNumberIndex[frNotOverwrittenIndex] < nonObdFFDRecordNum )                                             /* [GUD]frNotOverwrittenIndex */
+                if( recordNumberIndex[frNotOverwrittenIndex] < nonObdFFDRecordNum )                                             /* [GUD]frNotOverwrittenIndex *//* [ARYCHK] DEM_NONOBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / frNotOverwrittenIndex */
                 {
                     /* In case the RecordNumberIndex is valid to reuse. */
 
                     for( frChkOverwrittenIndex = (Dem_u08_FFListIndexType)0U; frChkOverwrittenIndex < FreezeFrameRecordClassIndex; frChkOverwrittenIndex++ )    /* [GUD:for]frChkOverwrittenIndex */
                     {
                         /* Checks if the RecordNumberIndex retained in the fault record which to be overwritten was already used. */
-                        if( recordNumberIndex[frNotOverwrittenIndex] == Dem_EventDisplacement.FaultRecordOverwritten[frChkOverwrittenIndex].RecordNumberIndex ) /* [GUD]frNotOverwrittenIndex *//* [GUD]frChkOverwrittenIndex */
+                        if( recordNumberIndex[frNotOverwrittenIndex] == Dem_EventDisplacement.FaultRecordOverwritten[frChkOverwrittenIndex].RecordNumberIndex ) /* [GUD]frNotOverwrittenIndex *//* [GUD]frChkOverwrittenIndex *//* [ARYCHK] DEM_NONOBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / frNotOverwrittenIndex */
                         {
                             /* In case the RecordNumberIndex was already used, try a next RecordNumberIndex retained in the fault record which to be overwritten */
 
@@ -1271,11 +1357,11 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_SetNonOBDFFROverwri
                     {
                         /* In case the RecordNumberIndex is unused, retains FaultRecordOverwritten pointed by the spcified FreezeFrameRecordClassIndex. */
 
-                        Dem_TmpEventMemoryEntry.FaultRecord.RecordNumberIndex[FreezeFrameRecordClassIndex] = recordNumberIndex[frNotOverwrittenIndex];      /* [GUDCHK:CALLER]FreezeFrameRecordClassIndex *//* [GUD]frNotOverwrittenIndex */
+                        Dem_TmpEventMemoryEntry.FaultRecord.RecordNumberIndex[FreezeFrameRecordClassIndex] = recordNumberIndex[frNotOverwrittenIndex];      /* [GUDCHK:CALLER]FreezeFrameRecordClassIndex *//* [GUD]frNotOverwrittenIndex *//* [ARYCHK] DEM_NONOBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / frNotOverwrittenIndex */
 
                         Dem_EventDisplacement.FaultRecordOverwritten[FreezeFrameRecordClassIndex].FaultIndex = faultIndex;                                      /* [GUDCHK:CALLER]FreezeFrameRecordClassIndex */
                         Dem_EventDisplacement.FaultRecordOverwritten[FreezeFrameRecordClassIndex].EventStrgIndex = eventStrgIndex;                              /* [GUDCHK:CALLER]FreezeFrameRecordClassIndex */
-                        Dem_EventDisplacement.FaultRecordOverwritten[FreezeFrameRecordClassIndex].RecordNumberIndex = recordNumberIndex[frNotOverwrittenIndex]; /* [GUDCHK:CALLER]FreezeFrameRecordClassIndex *//* [GUD]frNotOverwrittenIndex */
+                        Dem_EventDisplacement.FaultRecordOverwritten[FreezeFrameRecordClassIndex].RecordNumberIndex = recordNumberIndex[frNotOverwrittenIndex]; /* [GUDCHK:CALLER]FreezeFrameRecordClassIndex *//* [GUD]frNotOverwrittenIndex *//* [ARYCHK] DEM_NONOBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / frNotOverwrittenIndex */
 
 #if ( DEM_TSFF_PM_SUPPORT == STD_ON )   /* [FuncSw] */
                         Dem_Data_DeleteTSFFListByFFRTrigger( eventStrgIndex, faultIndex, (Dem_u08_FFListIndexType)frNotOverwrittenIndex, FreezeFrameRecordClassIndex ); /* [GUD]eventStrgIndex *//* [GUD]frNotOverwrittenIndex *//* [GUDCHK:CALLER]FreezeFrameRecordClassIndex */
@@ -1318,6 +1404,8 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_SetNonOBDFFROverwri
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-7-0      | no object changed.                                       */
+/*   v5-8-0      | no branch changed.                                       */
 /*******************************************************************************/
 static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_SetNonOBDFFROverwritten
 (
@@ -1382,11 +1470,12 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_SetNonOBDFFROverwri
         {
             eeoFaultInfo.EventPriority = Dem_CfgInfoPm_GetEventPriority( Dem_TmpEventMemoryEntry.EventStrgIndex );  /* [GUDCHK:SETVAL]Dem_TmpEventMemoryEntry.EventStrgIndex */
             eeoFaultInfo.StatusOfDTC = Dem_EventDisplacement.DTCStatusForFaultRecordOverwrite;
+            eeoFaultInfo.EventStrgIndex = Dem_TmpEventMemoryEntry.EventStrgIndex;
             faultIndex = Dem_DcEeo_GetFaultIndexOfNonOBDFFROverwrite( &eeoFaultInfo );
 
             eventStrgIndex = DEM_EVENTSTRGINDEX_INVALID;
 
-            resultOfGetEventStrgIndexAndRecNumIndex = Dem_DataMngC_GetFR_EventStrgIndex_RecordNumberIndex( faultIndex, &eventStrgIndex, &recordNumberIndex[0] );    /* [GUD:RET:DEM_IRT_OK] eventStrgIndex */
+            resultOfGetEventStrgIndexAndRecNumIndex = Dem_DataMngC_GetFR_EventStrgIndex_RecordNumberIndex( faultIndex, &eventStrgIndex, &recordNumberIndex[0] );    /* [GUD:RET:DEM_IRT_OK] eventStrgIndex *//* [ARYCHK] DEM_NONOBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / 0 */
 
             if( resultOfGetEventStrgIndexAndRecNumIndex == DEM_IRT_OK )
             {
@@ -1394,14 +1483,14 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_SetNonOBDFFROverwri
 
                 for( frNotOverwrittenIndex = ffListIndexNum; frNotOverwrittenIndex >= frOverwrittenLmt; frNotOverwrittenIndex-- )   /* [GUD:for]frNotOverwrittenIndex */
                 {
-                    if( recordNumberIndex[frNotOverwrittenIndex] < nonObdFFDRecordNum )                                             /* [GUD]frNotOverwrittenIndex */
+                    if( recordNumberIndex[frNotOverwrittenIndex] < nonObdFFDRecordNum )                                             /* [GUD]frNotOverwrittenIndex *//* [ARYCHK] DEM_NONOBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / frNotOverwrittenIndex */
                     {
                         /* In case the RecordNumberIndex is valid to reuse. */
 
                         for( frChkOverwrittenIndex = (Dem_u08_FFListIndexType)0U; frChkOverwrittenIndex < FreezeFrameRecordClassIndex; frChkOverwrittenIndex++ )    /* [GUD:for]frChkOverwrittenIndex */
                         {
                             /* Checks if the RecordNumberIndex retained in the fault record which to be overwritten was already used. */
-                            if( recordNumberIndex[frNotOverwrittenIndex] == Dem_EventDisplacement.FaultRecordOverwritten[frChkOverwrittenIndex].RecordNumberIndex ) /* [GUD]frNotOverwrittenIndex *//* [GUD]frChkOverwrittenIndex */
+                            if( recordNumberIndex[frNotOverwrittenIndex] == Dem_EventDisplacement.FaultRecordOverwritten[frChkOverwrittenIndex].RecordNumberIndex ) /* [GUD]frNotOverwrittenIndex *//* [GUD]frChkOverwrittenIndex *//* [ARYCHK] DEM_NONOBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / frNotOverwrittenIndex */
                             {
                                 /* In case the RecordNumberIndex was already used, try a next RecordNumberIndex retained in the fault record which to be overwritten */
 
@@ -1414,14 +1503,14 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_SetNonOBDFFROverwri
                         {
                             /* In case the RecordNumberIndex is unused, retains FaultRecordOverwritten pointed by the spcified FreezeFrameRecordClassIndex. */
 
-                            Dem_TmpEventMemoryEntry.FaultRecord.RecordNumberIndex[FreezeFrameRecordClassIndex] = recordNumberIndex[frNotOverwrittenIndex];          /* [GUDCHK:CALLER]FreezeFrameRecordClassIndex *//* [GUD]frNotOverwrittenIndex */
+                            Dem_TmpEventMemoryEntry.FaultRecord.RecordNumberIndex[FreezeFrameRecordClassIndex] = recordNumberIndex[frNotOverwrittenIndex];          /* [GUDCHK:CALLER]FreezeFrameRecordClassIndex *//* [GUD]frNotOverwrittenIndex *//* [ARYCHK] DEM_NONOBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / frNotOverwrittenIndex */
 
                             overwrittenFreezeFrameRecordTrigger = Dem_Data_GetTriggerKindOfNonObdFFROverwrittenIndex( eventStrgIndex, frNotOverwrittenIndex );      /* [GUD]eventStrgIndex *//* [GUD]frNotOverwrittenIndex */
                             Dem_Data_RemoveLimitReachedTriggerToTmp( overwrittenFreezeFrameRecordTrigger );
 
                             Dem_EventDisplacement.FaultRecordOverwritten[FreezeFrameRecordClassIndex].FaultIndex = faultIndex;                                      /* [GUDCHK:CALLER]FreezeFrameRecordClassIndex */
                             Dem_EventDisplacement.FaultRecordOverwritten[FreezeFrameRecordClassIndex].EventStrgIndex = eventStrgIndex;                              /* [GUDCHK:CALLER]FreezeFrameRecordClassIndex */
-                            Dem_EventDisplacement.FaultRecordOverwritten[FreezeFrameRecordClassIndex].RecordNumberIndex = recordNumberIndex[frNotOverwrittenIndex]; /* [GUDCHK:CALLER]FreezeFrameRecordClassIndex *//* [GUD]frNotOverwrittenIndex */
+                            Dem_EventDisplacement.FaultRecordOverwritten[FreezeFrameRecordClassIndex].RecordNumberIndex = recordNumberIndex[frNotOverwrittenIndex]; /* [GUDCHK:CALLER]FreezeFrameRecordClassIndex *//* [GUD]frNotOverwrittenIndex *//* [ARYCHK] DEM_NONOBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / frNotOverwrittenIndex */
 
 #if ( DEM_TSFF_PM_SUPPORT == STD_ON )   /* [FuncSw] */
                             Dem_Data_DeleteTSFFListByFFRTrigger( eventStrgIndex, faultIndex, (Dem_u08_FFListIndexType)frNotOverwrittenIndex, FreezeFrameRecordClassIndex ); /* [GUD]eventStrgIndex *//* [GUD]frNotOverwrittenIndex *//* [GUDCHK:CALLER]FreezeFrameRecordClassIndex */
@@ -1488,6 +1577,8 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_SetNonOBDFFROverwri
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-7-0      | no object changed.                                       */
+/*   v5-8-0      | no branch changed.                                       */
 /*******************************************************************************/
 static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_SetNonOBDFFROverwrittenForSameTrigger
 (
@@ -1548,21 +1639,22 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_SetNonOBDFFROverwri
     {
         eeoFaultInfo.EventPriority = Dem_CfgInfoPm_GetEventPriority( Dem_TmpEventMemoryEntry.EventStrgIndex );  /* [GUDCHK:SETVAL]Dem_TmpEventMemoryEntry.EventStrgIndex */
         eeoFaultInfo.StatusOfDTC = Dem_EventDisplacement.DTCStatusForFaultRecordOverwrite;
+        eeoFaultInfo.EventStrgIndex = Dem_TmpEventMemoryEntry.EventStrgIndex;
         faultIndex = Dem_DcEeo_GetFaultIndexOfFFROverwriteFromTrigger( FreezeFrameRecordTrigger, &eeoFaultInfo );
         eventStrgIndex = DEM_EVENTSTRGINDEX_INVALID;
-        resultOfGetEventStrgIndexAndRecNumIndex = Dem_DataMngC_GetFR_EventStrgIndex_RecordNumberIndex( faultIndex, &eventStrgIndex, &recordNumberIndex[0] );    /* [GUD:RET:DEM_IRT_OK] eventStrgIndex */
+        resultOfGetEventStrgIndexAndRecNumIndex = Dem_DataMngC_GetFR_EventStrgIndex_RecordNumberIndex( faultIndex, &eventStrgIndex, &recordNumberIndex[0] );    /* [GUD:RET:DEM_IRT_OK] eventStrgIndex *//* [ARYCHK] DEM_NONOBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / 0 */
         if( resultOfGetEventStrgIndexAndRecNumIndex == DEM_IRT_OK )
         {
             nonObdFFDRecordNum = Dem_NonObdFFDRecordNum;
             for( frNotOverwrittenIndex = ffListIndexNum; frNotOverwrittenIndex >= frOverwrittenLmt; frNotOverwrittenIndex-- )                                   /* [GUD:for]frNotOverwrittenIndex */
             {
-                if( recordNumberIndex[frNotOverwrittenIndex] < nonObdFFDRecordNum )                                                                             /* [GUD]frNotOverwrittenIndex */
+                if( recordNumberIndex[frNotOverwrittenIndex] < nonObdFFDRecordNum )                                                                             /* [GUD]frNotOverwrittenIndex *//* [ARYCHK] DEM_NONOBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / frNotOverwrittenIndex */
                 {
                     /* In case the RecordNumberIndex is valid to reuse. */
                     for( frChkOverwrittenIndex = (Dem_u08_FFListIndexType)0U; frChkOverwrittenIndex < FreezeFrameRecordClassIndex; frChkOverwrittenIndex++ )    /* [GUD:for]frChkOverwrittenIndex */
                     {
                         /* Checks if the RecordNumberIndex retained in the fault record which to be overwritten was already used. */
-                        if( recordNumberIndex[frNotOverwrittenIndex] == Dem_EventDisplacement.FaultRecordOverwritten[frChkOverwrittenIndex].RecordNumberIndex ) /* [GUD]frNotOverwrittenIndex *//* [GUD]frChkOverwrittenIndex */
+                        if( recordNumberIndex[frNotOverwrittenIndex] == Dem_EventDisplacement.FaultRecordOverwritten[frChkOverwrittenIndex].RecordNumberIndex ) /* [GUD]frNotOverwrittenIndex *//* [GUD]frChkOverwrittenIndex *//* [ARYCHK] DEM_NONOBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / frNotOverwrittenIndex */
                         {
                             /* In case the RecordNumberIndex was already used, try a next RecordNumberIndex retained in the fault record which to be overwritten */
                             break;
@@ -1574,10 +1666,10 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_SetNonOBDFFROverwri
                         overwrittenFreezeFrameRecordTrigger = Dem_Data_GetTriggerKindOfNonObdFFROverwrittenIndex( eventStrgIndex, frNotOverwrittenIndex );          /* [GUD]eventStrgIndex *//* [GUD]frNotOverwrittenIndex */
                         if ( overwrittenFreezeFrameRecordTrigger == FreezeFrameRecordTrigger )
                         {
-                            Dem_TmpEventMemoryEntry.FaultRecord.RecordNumberIndex[FreezeFrameRecordClassIndex] = recordNumberIndex[frNotOverwrittenIndex];          /* [GUDCHK:CALLER]FreezeFrameRecordClassIndex *//* [GUD]frNotOverwrittenIndex */
+                            Dem_TmpEventMemoryEntry.FaultRecord.RecordNumberIndex[FreezeFrameRecordClassIndex] = recordNumberIndex[frNotOverwrittenIndex];          /* [GUDCHK:CALLER]FreezeFrameRecordClassIndex *//* [GUD]frNotOverwrittenIndex *//* [ARYCHK] DEM_NONOBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / frNotOverwrittenIndex */
                             Dem_EventDisplacement.FaultRecordOverwritten[FreezeFrameRecordClassIndex].FaultIndex = faultIndex;                                      /* [GUDCHK:CALLER]FreezeFrameRecordClassIndex */
                             Dem_EventDisplacement.FaultRecordOverwritten[FreezeFrameRecordClassIndex].EventStrgIndex = eventStrgIndex;                              /* [GUDCHK:CALLER]FreezeFrameRecordClassIndex */
-                            Dem_EventDisplacement.FaultRecordOverwritten[FreezeFrameRecordClassIndex].RecordNumberIndex = recordNumberIndex[frNotOverwrittenIndex]; /* [GUDCHK:CALLER]FreezeFrameRecordClassIndex *//* [GUD]frNotOverwrittenIndex */
+                            Dem_EventDisplacement.FaultRecordOverwritten[FreezeFrameRecordClassIndex].RecordNumberIndex = recordNumberIndex[frNotOverwrittenIndex]; /* [GUDCHK:CALLER]FreezeFrameRecordClassIndex *//* [GUD]frNotOverwrittenIndex *//* [ARYCHK] DEM_NONOBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / frNotOverwrittenIndex */
 #if ( DEM_TSFF_PM_SUPPORT == STD_ON )    /* [FuncSw] */
                             Dem_Data_DeleteTSFFListByFFRTrigger( eventStrgIndex, faultIndex, (Dem_u08_FFListIndexType)frNotOverwrittenIndex, FreezeFrameRecordClassIndex ); /* [GUD]eventStrgIndex *//* [GUD]frNotOverwrittenIndex *//* [GUDCHK:CALLER]FreezeFrameRecordClassIndex */
 #endif  /* ( DEM_TSFF_SUPPORT == STD_ON )   */
@@ -1612,6 +1704,8 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_SetNonOBDFFROverwri
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-7-0      | no object changed.                                       */
+/*   v5-10-0     | no branch changed.                                       */
 /****************************************************************************/
 static FUNC( Dem_u08_StorageTriggerType, AUTOMATIC ) Dem_Data_GetTriggerKindOfNonObdFFROverwrittenIndex
 (
@@ -1627,7 +1721,6 @@ static FUNC( Dem_u08_StorageTriggerType, AUTOMATIC ) Dem_Data_GetTriggerKindOfNo
     VAR( Dem_u08_FFRecordClassIndexType, AUTOMATIC ) ffrRecordClassConfigureNum;
 
     P2CONST( AB_83_ConstV Dem_FreezeFrameRecNumClassType, AUTOMATIC, DEM_CONFIG_DATA ) overwrittenFreezeFrameRecNumClassPtr;
-    P2CONST( AB_83_ConstV Dem_FreezeFrameRecordClassType, AUTOMATIC, DEM_CONFIG_DATA ) overwrittenFreezeFrameRecordClassPtr;
 
     eventStorageNum = Dem_PrimaryMemEventStorageNum;
     ffrRecordClassConfigureNum  = Dem_FFRRecordClassConfigureNum;
@@ -1639,11 +1732,10 @@ static FUNC( Dem_u08_StorageTriggerType, AUTOMATIC ) Dem_Data_GetTriggerKindOfNo
         if( overwrittenFreezeFrameRecNumClassRef != DEM_FFRECNUMCLASSINDEX_INVALID )                                                            /* [GUD:if] overwrittenFreezeFrameRecNumClassRef */
         {
             overwrittenFreezeFrameRecNumClassPtr = &Dem_FreezeFrameRecNumClassTable[overwrittenFreezeFrameRecNumClassRef];                      /* [GUD] overwrittenFreezeFrameRecNumClassRef *//* [GUD:CFG:IF_GUARDED: overwrittenFreezeFrameRecNumClassRef ]overwrittenFreezeFrameRecNumClassPtr */
-            overwrittenFreezeFrameRecordClassIndex = overwrittenFreezeFrameRecNumClassPtr->DemFreezeFrameRecordClassRef[FrOverwrittenIndex];    /* [GUD] overwrittenFreezeFrameRecNumClassPtr *//* [GUDCHK:CALLER]FrOverwrittenIndex */
+            overwrittenFreezeFrameRecordClassIndex = overwrittenFreezeFrameRecNumClassPtr->DemFreezeFrameRecordClassRef[FrOverwrittenIndex];    /* [GUD] overwrittenFreezeFrameRecNumClassPtr *//* [GUDCHK:CALLER]FrOverwrittenIndex *//* [ARYCHK] DEM_FF_RECORD_CLASS_REF_MAX_NUM / 1 / FrOverwrittenIndex */
             if( overwrittenFreezeFrameRecordClassIndex < ffrRecordClassConfigureNum )                                                           /* [GUD:if] overwrittenFreezeFrameRecordClassIndex */
             {
-                overwrittenFreezeFrameRecordClassPtr = &Dem_FreezeFrameRecordClassTable[overwrittenFreezeFrameRecordClassIndex];                /* [GUD] overwrittenFreezeFrameRecordClassIndex *//* [GUD:CFG:IF_GUARDED: overwrittenFreezeFrameRecordClassIndex ]overwrittenFreezeFrameRecordClassPtr */
-                overwrittenFreezeFrameRecordTrigger = overwrittenFreezeFrameRecordClassPtr->DemFreezeFrameRecordTrigger;                        /* [GUD] overwrittenFreezeFrameRecordClassPtr */
+                overwrittenFreezeFrameRecordTrigger =   Dem_CfgInfoPm_GetFreezeFrameRecordTriggerType( overwrittenFreezeFrameRecordClassIndex );    /* [GUD] overwrittenFreezeFrameRecordClassIndex */
             }
         }
     }
@@ -1790,6 +1882,225 @@ static FUNC( void, DEM_CODE ) Dem_Data_UpdateTriggerToTmp
     return;
 }
 
+#if ( DEM_OBDONUDS_SUPPORT == STD_ON )
+#if ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )
+/****************************************************************************/
+/* Function Name | Dem_Data_CopyObdFFRecordIndexToTmpFromPairMisfireEvent   */
+/* Description   | Copy obd freeze frame record index to temporary data fr- */
+/*               | om pair misfire event and, if copied, determine whether- */
+/*               |   capture of obd freeze frame is necessary.              */
+/* Preconditions | CaptureFlgPtr is set to TRUE on the caller.              */
+/* Parameters    | [in] FreezeFrameRecordClassIndex :                       */
+/*               |        The DemFreezeFrameRecordClassRef array's index    */
+/*               | [in] FreezeFrameRecordUpdate :                           */
+/*               |        Update setting value of obd freeze frame          */
+/*               | [in] Trigger :                                           */
+/*               |        The trigger for capture                           */
+/*               | [in] CaptureFlgPtr :                                     */
+/*               |      Flag to determine whether to capture obd freeze fr- */
+/*               |      ame                                                 */
+/* Return Value  | boolean                                                  */
+/*               |      TRUE  : Copied obd freeze frame record index        */
+/*               |      FALSE : Do not copy obd freeze frame record index   */
+/* Notes         | none                                                     */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-9-0      | new created.                                             */
+/****************************************************************************/
+static FUNC( boolean, DEM_CODE ) Dem_Data_CopyObdFFRecordIndexToTmpFromPairMisfireEvent
+(
+    VAR( Dem_u08_FFListIndexType, AUTOMATIC ) FreezeFrameRecordClassIndex,  /* [PRMCHK:CALLER] */
+    VAR( Dem_u08_UpdateRecordType, AUTOMATIC ) FreezeFrameRecordUpdate,
+    VAR( Dem_u08_FFValidTriggerType, AUTOMATIC ) Trigger,
+    P2VAR( boolean, AUTOMATIC, AUTOMATIC ) CaptureFlgPtr
+)
+{
+    VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) misfirePairEventStrgIndex;
+    VAR( boolean, AUTOMATIC ) retCopyFromPairMisfireEvent;
+    VAR( boolean, AUTOMATIC ) misfireEventKind;
+    VAR( Dem_u08_InternalReturnType, AUTOMATIC ) resultGetMisfirePairEvent;
+    VAR( Dem_u08_FaultIndexType, AUTOMATIC ) pairFaultIndex;
+    VAR( Dem_u08_InternalReturnType, AUTOMATIC ) resultOfGetFaultIndex;
+    VAR( Dem_u08_FaultIndexType, AUTOMATIC ) failRecordNum;
+    VAR( Dem_u08_FFDIndexType, AUTOMATIC ) pairObdFreezeFrameIndex;
+    VAR( Dem_u08_FFDIndexType, AUTOMATIC ) obdFFDRecordNum;
+
+    retCopyFromPairMisfireEvent = (boolean)FALSE;
+
+    misfireEventKind = Dem_CfgInfoPm_CheckEventKindOfMisfire_InEvtStrgGrp( Dem_TmpEventMemoryEntry.EventStrgIndex );    /* [GUDCHK:SETVAL]Dem_TmpEventMemoryEntry.EventStrgIndex */
+    if( misfireEventKind == (boolean)TRUE )
+    {
+        resultGetMisfirePairEvent= Dem_CfgInfoPm_GetMisfirePairEventStrgIndexByStrgIndex( Dem_TmpEventMemoryEntry.EventStrgIndex, &misfirePairEventStrgIndex );
+        if( resultGetMisfirePairEvent == DEM_IRT_OK )
+        {
+            resultOfGetFaultIndex = Dem_DataMngC_GetER_FaultIndex( misfirePairEventStrgIndex, &pairFaultIndex );    /* [GUD:RET:DEM_IRT_OK] misfirePairEventStrgIndex */
+            if( resultOfGetFaultIndex == DEM_IRT_OK )
+            {
+                failRecordNum = Dem_FailRecordNum;
+                if( pairFaultIndex < failRecordNum )    /* [GUD:if] pairFaultIndex */
+                {
+                    pairObdFreezeFrameIndex = DEM_FFRECINDEX_INITIAL;
+                    (void)Dem_DataMngC_GetFR_ObdFreezeFrameIndex( pairFaultIndex, FreezeFrameRecordClassIndex, &pairObdFreezeFrameIndex );  /* no return check required */  /* [GUD]pairFaltIndex *//* [GUDCHK:CALLER]FreezeFrameRecordClassIndex */
+                    obdFFDRecordNum = Dem_CfgInfoPm_GetObdFFDRecordNum();
+                    if( pairObdFreezeFrameIndex < obdFFDRecordNum )
+                    {
+                        Dem_TmpEventMemoryEntry.FaultRecord.ObdRecordNumberIndex[FreezeFrameRecordClassIndex] = pairObdFreezeFrameIndex; /* [GUDCHK:CALLER]FreezeFrameRecordClassIndex */
+                        if( FreezeFrameRecordUpdate == DEM_UPDATE_RECORD_NO )
+                        {
+                            /* first OBD FFD */
+                            *CaptureFlgPtr = (boolean)FALSE;
+                        }
+                        else
+                        {
+                            /* latest OBD FFD */
+                            *CaptureFlgPtr = Dem_Data_JudgeCaptureMisfireLatestObdFFD( Trigger );
+
+                        }
+                        retCopyFromPairMisfireEvent = (boolean)TRUE;
+                    }
+                }
+            }
+        }
+    }
+
+    return retCopyFromPairMisfireEvent;
+}
+
+/****************************************************************************/
+/* Function Name | Dem_Data_JudgeUpdateLatestObdFFD                         */
+/* Description   | Judge whether to update latest obd freeze frame          */
+/* Preconditions |                                                          */
+/* Parameters    | [in] Trigger :                                           */
+/*               |        The trigger for capture.                          */
+/* Return Value  | Dem_u08_InternalReturnType                               */
+/*               |        DEM_IRT_OK : Update                               */
+/*               |        DEM_IRT_NG : Don't update                         */
+/* Notes         | none                                                     */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-9-0      | new created.                                             */
+/****************************************************************************/
+static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_JudgeUpdateLatestObdFFD
+(
+    VAR( Dem_u08_FFValidTriggerType, AUTOMATIC ) Trigger
+)
+{
+    VAR( Dem_u08_InternalReturnType, AUTOMATIC ) retVal;
+    VAR( boolean, AUTOMATIC ) retJudgeCaptureMisfireLatestObdFFD;
+    VAR( boolean, AUTOMATIC ) misfireEventKind;
+
+    retVal = DEM_IRT_OK;
+    misfireEventKind = Dem_CfgInfoPm_CheckEventKindOfMisfire_InEvtStrgGrp( Dem_TmpEventMemoryEntry.EventStrgIndex );    /* [GUDCHK:SETVAL]Dem_TmpEventMemoryEntry.EventStrgIndex */
+    if( misfireEventKind == (boolean)TRUE )
+    {
+        retJudgeCaptureMisfireLatestObdFFD = Dem_Data_JudgeCaptureMisfireLatestObdFFD( Trigger );
+        if ( retJudgeCaptureMisfireLatestObdFFD == (boolean)FALSE )
+        {
+            retVal = DEM_IRT_NG;
+        }
+    }
+
+    return retVal;
+}
+
+/****************************************************************************/
+/* Function Name | Dem_Data_JudgeCaptureMisfireLatestObdFFD                 */
+/* Description   | Judge whether to capture misfire latest obd freeze frame */
+/* Preconditions | Dem_TmpEventMemoryEntry.EventStrgIndex is misfire event  */
+/* Parameters    | [in] Trigger :                                           */
+/*               |        The trigger for capture.                          */
+/* Return Value  | boolean                                                  */
+/*               |      TRUE  : Capture                                     */
+/*               |      FALSE : Don't capture                               */
+/* Notes         | none                                                     */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-9-0      | new created.                                             */
+/****************************************************************************/
+static FUNC( boolean, DEM_CODE ) Dem_Data_JudgeCaptureMisfireLatestObdFFD
+(
+    VAR( Dem_u08_FFValidTriggerType, AUTOMATIC ) Trigger
+)
+{
+    VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) misfirePairEventStrgIndex;
+    VAR( Dem_u08_DTCStatusEx2Type, AUTOMATIC )   pairExtendStatusOfDTC2;
+    VAR( Dem_UdsStatusByteType, AUTOMATIC ) pairStatusOfDTC;
+    VAR( Dem_UdsStatusByteType, AUTOMATIC ) statusOfDTC;
+    VAR( Dem_u08_InternalReturnType, AUTOMATIC ) resultOfGetFaultIndex;
+    VAR( Dem_u08_FaultIndexType, AUTOMATIC ) pairFaultIndex;
+    VAR( Dem_u08_FaultIndexType, AUTOMATIC ) failRecordNum;
+    VAR( boolean, AUTOMATIC ) retJudgeCaptureMisfireLatestObdFFD;
+    VAR( Dem_u08_InternalReturnType, AUTOMATIC ) resultGetMisfirePairEvent;
+
+    retJudgeCaptureMisfireLatestObdFFD = (boolean)FALSE;
+
+    resultGetMisfirePairEvent= Dem_CfgInfoPm_GetMisfirePairEventStrgIndexByStrgIndex( Dem_TmpEventMemoryEntry.EventStrgIndex, &misfirePairEventStrgIndex );
+    if( resultGetMisfirePairEvent == DEM_IRT_OK )
+    {
+        pairExtendStatusOfDTC2 = DEM_DTCSTATUSEX2_BYTE_ALL_OFF;
+        (void)Dem_DataMngC_GetER_ExtendDTCStatus2( misfirePairEventStrgIndex, &pairExtendStatusOfDTC2 );    /* no return check required */
+        pairStatusOfDTC = DEM_DTCSTATUS_BYTE_DEFAULT;
+        (void)Dem_DataMngC_GetER_StatusOfDTC( misfirePairEventStrgIndex, &pairStatusOfDTC );    /* no return check required */
+
+        if( ( pairExtendStatusOfDTC2 & DEM_DTCSTATUSEX2_STATUS_TFTOC_IN_FAILURECYCLE ) != DEM_DTCSTATUSEX2_STATUS_TFTOC_IN_FAILURECYCLE )
+        {
+            /* pair misfire event bit1 Off No failure within the same cycle */
+
+            retJudgeCaptureMisfireLatestObdFFD = (boolean)TRUE;
+
+            if( ( pairStatusOfDTC & DEM_UDS_STATUS_PDTC ) == DEM_UDS_STATUS_PDTC )
+            {
+                /* pair misfire event bit2 On */
+                if( ( pairStatusOfDTC & DEM_UDS_STATUS_CDTC ) != DEM_UDS_STATUS_CDTC )
+                {
+                    /* pair misfire event bit3 Off */
+                    statusOfDTC = DEM_DTCSTATUS_BYTE_DEFAULT;
+                    (void)Dem_DataMngC_GetER_StatusOfDTC( Dem_TmpEventMemoryEntry.EventStrgIndex, &statusOfDTC );    /* no return check required */
+                    if( ( statusOfDTC & DEM_UDS_STATUS_CDTC ) != DEM_UDS_STATUS_CDTC )
+                    {
+                        /* misfire event bit3 Off */
+                        if( ( Trigger & DEM_VALID_TRIGGER_CONFIRMED ) != DEM_VALID_TRIGGER_CONFIRMED )
+                        {
+                            /* Target event is not confirmed failure */
+                            retJudgeCaptureMisfireLatestObdFFD = (boolean)FALSE;
+                        }
+                    }
+                }
+            }
+        }
+        else
+        {
+            /*  bit1 On Failure in the same cycle */
+
+            resultOfGetFaultIndex = Dem_DataMngC_GetER_FaultIndex( misfirePairEventStrgIndex, &pairFaultIndex );    /* [GUD:RET:DEM_IRT_OK] misfirePairEventStrgIndex */
+            if( resultOfGetFaultIndex == DEM_IRT_OK )
+            {
+                failRecordNum = Dem_FailRecordNum;
+                if( pairFaultIndex < failRecordNum )    /* [GUD:if] pairFaultIndex */
+                {
+                    if( ( pairStatusOfDTC & DEM_UDS_STATUS_CDTC ) != DEM_UDS_STATUS_CDTC )
+                    {
+                        /* bit3 Off */
+                        if( ( Trigger & DEM_VALID_TRIGGER_CONFIRMED ) == DEM_VALID_TRIGGER_CONFIRMED )
+                        {
+                            /* Target event is confirmed failure */
+                            retJudgeCaptureMisfireLatestObdFFD = (boolean)TRUE;
+                        }
+                    }
+                }
+                else
+                {
+                    retJudgeCaptureMisfireLatestObdFFD = (boolean)TRUE;
+                }
+            }
+        }
+    }
+
+    return retJudgeCaptureMisfireLatestObdFFD;
+}
+#endif /* ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON ) */
+#endif /* ( DEM_OBDONUDS_SUPPORT == STD_ON ) */
+
 
 #define DEM_STOP_SEC_CODE
 #include <Dem_MemMap.h>
@@ -1803,6 +2114,11 @@ static FUNC( void, DEM_CODE ) Dem_Data_UpdateTriggerToTmp
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-6-0         :2024-01-29                                              */
+/*  v5-7-0         :2024-05-29                                              */
+/*  v5-8-0         :2024-10-29                                              */
+/*  v5-9-0         :2025-02-26                                              */
+/*  v5-10-0        :2025-06-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

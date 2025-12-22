@@ -1,7 +1,7 @@
-/* Dem_DataCtl_OBD_InfoPID_c(v5-5-0)                                        */
+/* Dem_DataCtl_OBD_InfoPID_c(v5-10-0)                                       */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -20,6 +20,11 @@
 #include "../../../inc/Dem_Pm_DataCtl.h"
 #include "../../../inc/Dem_CmnLib_ConfigInfo.h"
 #include "Dem_DataCtl_local.h"
+
+#ifndef DEM_SIT_RANGE_CHECK
+#else   /* DEM_SIT_RANGE_CHECK */
+#include <Dem_SIT_RangeCheck.h>
+#endif /* DEM_SIT_RANGE_CHECK */
 
 #if ( DEM_OBDONEDS_SUPPORT == STD_ON )
 /*--------------------------------------------------------------------------*/
@@ -114,6 +119,8 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE) Dem_Data_GetObdFFRecordByDidC
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-7-0      | no object changed.                                       */
+/*   v5-10-0     | branch changed.                                          */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE) Dem_Data_GetFFRecordByPidData
 (
@@ -136,7 +143,8 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE) Dem_Data_GetFFRecordByPidData
     VAR( Dem_u32_DIDClassIndexType, AUTOMATIC ) didClassIndex;
 
     P2CONST( AB_83_ConstV Dem_FreezeFrameRecNumClassType, AUTOMATIC, DEM_CONFIG_DATA ) freezeFrameRecNumClassPtr;
-    P2CONST( AB_83_ConstV Dem_FreezeFrameRecordClassType, AUTOMATIC, DEM_CONFIG_DATA ) freezeFrameRecordClassPtr;
+    VAR( Dem_u08_FFRecordNumberType, AUTOMATIC ) freezeFrameRecordNumber;
+    VAR( Dem_u08_StorageTriggerType, AUTOMATIC ) freezeFrameRecordTrigger;
 
     retVal = DEM_IRT_WRONG_RECORDNUMBER;
 
@@ -150,11 +158,11 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE) Dem_Data_GetFFRecordByPidData
 
         for( freezeFrameRecNumIndex = (Dem_u08_FFListIndexType)0U; freezeFrameRecNumIndex < obdFFRClassPerDTCMaxNum; freezeFrameRecNumIndex++ )     /* [GUD:for] freezeFrameRecNumIndex */
         {
-            freezeFrameRecordClassIndex = freezeFrameRecNumClassPtr->DemFreezeFrameRecordClassRef[freezeFrameRecNumIndex];                          /* [GUD] freezeFrameRecNumIndex */
+            freezeFrameRecordClassIndex = freezeFrameRecNumClassPtr->DemFreezeFrameRecordClassRef[freezeFrameRecNumIndex];                          /* [GUD] freezeFrameRecNumIndex *//* [ARYCHK] DEM_FF_RECORD_CLASS_REF_MAX_NUM / 1 / freezeFrameRecNumIndex */
             if( freezeFrameRecordClassIndex < ffrRecordClassConfigureNum )                                                                          /* [GUD:if] freezeFrameRecordClassIndex */
             {
-                freezeFrameRecordClassPtr = &Dem_FreezeFrameRecordClassTable[freezeFrameRecordClassIndex];                                          /* [GUD] freezeFrameRecordClassIndex *//* [GUD:CFG:IF_GUARDED: freezeFrameRecordClassIndex ]freezeFrameRecordClassPtr */
-                if( freezeFrameRecordClassPtr->DemFreezeFrameRecordNumber == RecordNumber )                                                         /* [GUD] freezeFrameRecordClassPtr */
+                Dem_CfgInfoPm_GetFreezeFrameRecordInfo_forOutputOBDFFD( freezeFrameRecordClassIndex, &freezeFrameRecordNumber, &freezeFrameRecordTrigger );       /* [GUD] freezeFrameRecordClassIndex */
+                if( freezeFrameRecordNumber == RecordNumber )
                 {
                     retGetDidClass = Dem_Data_GetDidClassByPID(PID, obdFreezeFrameClassRef, &didClassIndex );                                       /* [GUD:RET:DEM_IRT_OK]didClassIndex */
                     if( retGetDidClass == DEM_IRT_OK )
@@ -197,6 +205,8 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE) Dem_Data_GetFFRecordByPidData
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-6-0      | no object changed.                                       */
+/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_GetDidClassByPID
 (
@@ -206,8 +216,8 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_GetDidClassByPID
 )
 {
     VAR( Dem_u08_InternalReturnType, AUTOMATIC ) retVal;
-    VAR( Dem_u08_DIDClassPerFFIndexType, AUTOMATIC ) didClassNum;
-    VAR( Dem_u08_DIDClassPerFFIndexType, AUTOMATIC ) didClassRefIndex;
+    VAR( Dem_u16_DIDClassPerFFIndexType, AUTOMATIC ) didClassNum;
+    VAR( Dem_u16_DIDClassPerFFIndexType, AUTOMATIC ) didClassRefIndex;
     VAR( Dem_u32_DIDClassIndexType, AUTOMATIC ) didClassIndex;
 
     P2CONST( AB_83_ConstV Dem_FreezeFrameClassType, AUTOMATIC, DEM_CONFIG_DATA ) obdFreezeFrameClassTablePtr;
@@ -219,9 +229,9 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_GetDidClassByPID
         obdFreezeFrameClassTablePtr = &Dem_FreezeFrameClassTable[ObdFreezeFrameClassRef];       /* [GUD]ObdFreezeFrameClassRef *//* [GUD:CFG:IF_GUARDED: ObdFreezeFrameClassRef ]obdFreezeFrameClassTablePtr */
         didClassNum = obdFreezeFrameClassTablePtr->DemDidClassNum;                              /* [GUD]obdFreezeFrameClassTablePtr */
 
-        for( didClassRefIndex = (Dem_u08_DIDClassPerFFIndexType)0U; didClassRefIndex < didClassNum; didClassRefIndex++ )    /* [GUD:for]didClassRefIndex */
+        for( didClassRefIndex = (Dem_u16_DIDClassPerFFIndexType)0U; didClassRefIndex < didClassNum; didClassRefIndex++ )    /* [GUD:for]didClassRefIndex */
         {
-            didClassIndex = obdFreezeFrameClassTablePtr->DemDidClassRef[didClassRefIndex];      /* [GUD]obdFreezeFrameClassTablePtr *//* [GUD]didClassRefIndex *//* [GUD:CFG:IF_GUARDED: didClassRefIndex ]didClassIndex */
+            didClassIndex = obdFreezeFrameClassTablePtr->DemDidClassRef[didClassRefIndex];      /* [GUD]obdFreezeFrameClassTablePtr *//* [GUD]didClassRefIndex *//* [GUD:CFG:IF_GUARDED: didClassRefIndex ]didClassIndex *//* [ARYCHK] DEM_DID_NUM_PER_FRAME_MAX_NUM / 1 / didClassRefIndex */
 
             if( Dem_DIDClassTable[didClassIndex].DemPidIdentifier == PID )                      /* [GUD]didClassIndex */
             {
@@ -261,6 +271,7 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_GetDidClassByPID
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | branch changed.                                          */
+/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( Dem_u08_InternalReturnType, DEM_CODE) Dem_Data_GetObdFFRecordByDidClass
 (
@@ -310,7 +321,7 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE) Dem_Data_GetObdFFRecordByDidC
             if( resultOfGetFFRec == DEM_IRT_OK )
             {
                 pidDataOffset = Dem_DIDClassTable[DidClassIndex].DemPidPos;                                                     /* [GUDCHK:CALLER]DidClassIndex *//* [GUD:CFG:IF_GUARDED: DidClassIndex ]pidDataOffset */
-                Dem_UtlMem_CopyMemory( DestBufferPtr, &obdFreezeFrameRecord.DataPtr[pidDataOffset], dataElementSize );          /* [GUDCHK:CALLER]DidClassIndex */
+                Dem_UtlMem_CopyMemory( DestBufferPtr, &obdFreezeFrameRecord.DataPtr[pidDataOffset], dataElementSize );          /* [GUDCHK:CALLER]DidClassIndex *//* [ARYCHK] DEM_SIT_R_CHK_OBD_FF_DATA_SIZE / 1 / pidDataOffset */
                 *BufSizePtr = dataElementSize;
             }
             else
@@ -342,6 +353,9 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE) Dem_Data_GetObdFFRecordByDidC
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-6-0         :2024-01-29                                              */
+/*  v5-7-0         :2024-05-29                                              */
+/*  v5-10-0        :2025-06-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

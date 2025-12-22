@@ -114,6 +114,10 @@ BswConst BswU4 bsw_canif_stTxCanNmMskTbl[BSW_CANIF_TXCANNMPDUNUM] =
 BswConst Bsw_CanIf_TxPduTblType bsw_canif_stTxCanTpPduTbl[BSW_CANIF_TXCANTPPDUNUM] =
 {
    /* CAN ID      , Channel             , Extend   , Send Queue                 */
+     { 0x98DAE017UL, (BswU1)BSW_CANIF_CH0,  (BswU1)0U, (BswU2)BSW_CANIF_SNDREQ_QUE000 }  /* [0] Nsdu_TX_TxNPdu_Diag_Physical_Service */
+    ,{ 0x98DAE117UL, (BswU1)BSW_CANIF_CH0,  (BswU1)0U, (BswU2)BSW_CANIF_SNDREQ_QUE000 }  /* [1] Nsdu_TX_TxNPdu_Diag_Physical_Remote */
+    ,{ 0xD8DAE017UL, (BswU1)BSW_CANIF_CH0,  (BswU1)0U, (BswU2)BSW_CANIF_SNDREQ_QUE000 }  /* [2] Nsdu_TX_TxNPdu_Diag_Physical_FD_Service */
+    ,{ 0xD8DAE117UL, (BswU1)BSW_CANIF_CH0,  (BswU1)0U, (BswU2)BSW_CANIF_SNDREQ_QUE000 }  /* [3] Nsdu_TX_TxNPdu_Diag_Physical_FD_Remote */
 };
 
 #if(BSW_CANIF_CFG_METADATA_USE == BSW_CANIF_USE)
@@ -464,6 +468,12 @@ BswConst BswU4 bsw_canif_stRxCanNmMskTbl[BSW_CANIF_RXCANNMPDUNUM] =
 BswConst Bsw_CanIf_RxPduTblType bsw_canif_stRxCanTpPduTbl[BSW_CANIF_RXCANTPPDUNUM] =
 {
    /* CAN-ID      , DLC       , Channel             , Extend     */
+     { 0x98DA17E0UL, (BswU1) 8U, (BswU1)BSW_CANIF_CH0,  (BswU2)0U }  /* [0] Nsdu_RX_RxNPdu_Diag_Physical_Service */
+    ,{ 0x98DBEFE0UL, (BswU1) 8U, (BswU1)BSW_CANIF_CH0,  (BswU2)0U }  /* [1] Nsdu_RX_RxNPdu_Diag_Functional_Service */
+    ,{ 0x98DA17E1UL, (BswU1) 8U, (BswU1)BSW_CANIF_CH0,  (BswU2)0U }  /* [2] Nsdu_RX_RxNPdu_Diag_Physical_Remote */
+    ,{ 0xD8DA17E0UL, (BswU1)32U, (BswU1)BSW_CANIF_CH0,  (BswU2)0U }  /* [3] Nsdu_RX_RxNPdu_Diag_Physical_FD_Service */
+    ,{ 0xD8DBEFE0UL, (BswU1)32U, (BswU1)BSW_CANIF_CH0,  (BswU2)0U }  /* [4] Nsdu_RX_RxNPdu_Diag_Functional_FD_Service */
+    ,{ 0xD8DA17E1UL, (BswU1)32U, (BswU1)BSW_CANIF_CH0,  (BswU2)0U }  /* [5] Nsdu_RX_RxNPdu_Diag_Physical_FD_Remote */
 };
 
 #if(BSW_CANIF_CFG_CANID_MASK_TYPE == BSW_CANIF_MASK_RXMSG)

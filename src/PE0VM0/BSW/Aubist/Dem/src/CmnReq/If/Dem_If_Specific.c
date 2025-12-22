@@ -1,7 +1,7 @@
-/* Dem_If_Specific_c(v5-5-0)                                                */
+/* Dem_If_Specific_c(v5-9-0)                                                */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -122,6 +122,60 @@ FUNC( Std_ReturnType, DEM_CODE ) Dem_GetPendingClearCounter
 
     return retVal;
 }
+
+/****************************************************************************/
+/* Function Name | Dem_GetSimilarCondition                                  */
+/* Description   | Gets the similar condition of an event.                  */
+/* Preconditions | none                                                     */
+/* Parameters    | [in] EventId :                                           */
+/*               |        Identification of an event by assigned EventId.   */
+/*               | [out] SimilarConditionArrayPtr :                         */
+/*               |        Pointer to the area to get SimilarConditions.     */
+/*               | [out] SimilarConditionStatusPtr :                        */
+/*               |        Pointer to the area to get SimilarConditions sta- */
+/*               |        tus.                                              */
+/* Return Value  | Std_ReturnType                                           */
+/*               |        E_OK : get of similar condition was successful    */
+/*               |        E_NOT_OK : get of similar condition failed        */
+/* Notes         | -                                                        */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-9-0      | new created.                                             */
+/****************************************************************************/
+FUNC( Std_ReturnType, DEM_CODE ) Dem_GetSimilarCondition
+(
+    VAR( Dem_EventIdType, AUTOMATIC ) EventId,
+    P2VAR( Dem_SimilarConditionValueType, AUTOMATIC, DEM_APPL_DATA ) SimilarConditionArrayPtr,
+    P2VAR( Dem_SimilarConditionStatusType, AUTOMATIC, DEM_APPL_DATA ) SimilarConditionStatusPtr
+)
+{
+    VAR( Std_ReturnType, AUTOMATIC ) retVal;
+    VAR( Dem_u08_InternalReturnType, AUTOMATIC ) internalReturnValue;
+    VAR( Dem_SimilarConditionStatusType, AUTOMATIC ) similarConditionStatus;
+
+    retVal = E_NOT_OK;
+
+    if( SimilarConditionArrayPtr == NULL_PTR )
+    {
+        /* No Process */
+    }
+    else if( SimilarConditionStatusPtr == NULL_PTR )
+    {
+        /* No Process */
+    }
+    else
+    {
+        similarConditionStatus = DEM_SIMILARCONDITION_STATUS_NO_DATA;   /*  out paramter.   */
+        internalReturnValue = Dem_Control_GetSimilarCondition( EventId, SimilarConditionArrayPtr, &similarConditionStatus );
+        if( internalReturnValue == DEM_IRT_OK )
+        {
+            *SimilarConditionStatusPtr = similarConditionStatus;        /*  set value to out parameter. */
+            retVal = E_OK;
+        }
+    }
+
+    return retVal;
+}
 #endif  /* ( DEM_SIMILAR_EVENT_CONFIGURED == STD_ON )   */
 
 #if ( DEM_SPECIFIC_EVENT_SUPPORT == STD_ON )
@@ -176,6 +230,7 @@ FUNC( Std_ReturnType, DEM_CODE ) Dem_GetExceedanceCounter
 /* History                                                                  */
 /*  Version        :Date                                                    */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-9-0         :2025-02-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

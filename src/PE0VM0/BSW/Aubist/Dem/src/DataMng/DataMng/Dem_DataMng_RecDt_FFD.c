@@ -1,7 +1,7 @@
-/* Dem_DataMng_RecDt_FFD_c(v5-5-0)                                          */
+/* Dem_DataMng_RecDt_FFD_c(v5-10-0)                                         */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -16,6 +16,7 @@
 #include <Dem.h>
 #include <Dem/Dem_Common.h>
 #include "../../../cfg/Dem_Cfg.h"
+#include "../../../inc/Dem_CmnLib_ConfigInfo.h"
 #include "../../../inc/Dem_Rc_DataMng.h"
 #include "../../../inc/Dem_Utl.h"
 #include "../../../inc/Dem_Rc_RecMngCmn.h"
@@ -254,6 +255,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataMngC_GetFreezeFrameRecord
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataMngC_SetFreezeFrameRecord
 (
@@ -279,7 +281,11 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataMngC_SetFreezeFrameRecord
         ffrMaxLength = Dem_FFRMaxLength;
 
         /* Sets the captured freeze frame data record and the index of fault to storage format. */
+#ifndef DEM_SIT_RANGE_CHECK
         Dem_DataMng_SetCapturedFreezeFrame( &Dem_NonObdFreezeFrameDataPosTable, consistencyId, FreezeFrameRecordPtr->EventStrgIndex, FreezeFrameRecordPtr->RecordStatus, FreezeFrameRecordPtr->Data, ffrMaxLength, Dem_FreezeFrameRecordList[FreezeFrameIndex].Data );  /* [GUD]FreezeFrameIndex */
+#else   /* DEM_SIT_RANGE_CHECK */
+        Dem_DataMng_SetCapturedFreezeFrame( DEM_FREEZE_FRAME_DATA_STORED_FORMAT_SIZE, &Dem_NonObdFreezeFrameDataPosTable, consistencyId, FreezeFrameRecordPtr->EventStrgIndex, FreezeFrameRecordPtr->RecordStatus, FreezeFrameRecordPtr->Data, ffrMaxLength, Dem_FreezeFrameRecordList[FreezeFrameIndex].Data );  /* [GUD]FreezeFrameIndex */
+#endif  /* DEM_SIT_RANGE_CHECK */
         /* Change Dem_FFDNvMStatus */
         recMngCmnKindFFD = Dem_RecMngCmnKindFFD;
         Dem_RecMngCmn_SetNvMWriteStatus( recMngCmnKindFFD, ( Dem_u16_RecordIndexType )FreezeFrameIndex );
@@ -330,6 +336,9 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataMngC_ClearFreezeFrameRecord
 /*               |         AUTOMATIC                                        */
 /* Return Value  | void                                                     */
 /* Notes         | -                                                        */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_DataMngC_InitFreezeFrameRecordData
 (
@@ -347,7 +356,7 @@ FUNC( void, DEM_CODE ) Dem_DataMngC_InitFreezeFrameRecordData
 
     /* The data for freeze frame. */
     ffrMaxLength = Dem_FFRMaxLength;
-    Dem_UtlMem_SetMemory( &FreezeFrameRecordPtr->Data[0], DEM_FFD_INITIAL, ffrMaxLength );
+    Dem_UtlMem_SetMemory( &FreezeFrameRecordPtr->Data[0], DEM_FFD_INITIAL, ffrMaxLength ); /* [ARYCHK] DEM_FFR_MAX_LENGTH/1/0 */
 
     return ;
 }
@@ -369,6 +378,7 @@ FUNC( void, DEM_CODE ) Dem_DataMngC_InitFreezeFrameRecordData
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-10-0     | no branch changed.                                       */
 /****************************************************************************/
 static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataMng_ClearFreezeFrameRecord
 (
@@ -397,15 +407,15 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataMng_ClearFreezeFrame
         posLastEventStrgIndexLower = Dem_NonObdFreezeFrameDataPosTable.LastEventStrgIndexLower;     /* [GUD:CFG]posLastEventStrgIndexLower */
         posRecordStatus = Dem_NonObdFreezeFrameDataPosTable.RecordStatus;                           /* [GUD:CFG]posRecordStatus */
 
+        /* Sets "not stored" to the record status of the specified freeze frame record. */
+        Dem_FreezeFrameRecordList[FreezeFrameIndex].Data[posRecordStatus] = DEM_FFD_NOT_STORED;                 /* [GUD]FreezeFrameIndex *//* [GUD]posRecordStatus */
+
         /* Sets the initial value to the event index of the specified freeze frame record. */
         Dem_UtlMem_SplitByteData( (uint16)DEM_EVENTSTRGINDEX_INVALID, &eventStrgIndexUpper, &eventStrgIndexLower );
         Dem_FreezeFrameRecordList[FreezeFrameIndex].Data[posFirstEventStrgIndexUpper] = eventStrgIndexUpper;    /* [GUD]FreezeFrameIndex *//* [GUD]posFirstEventStrgIndexUpper */
         Dem_FreezeFrameRecordList[FreezeFrameIndex].Data[posFirstEventStrgIndexLower] = eventStrgIndexLower;    /* [GUD]FreezeFrameIndex *//* [GUD]posFirstEventStrgIndexLower */
         Dem_FreezeFrameRecordList[FreezeFrameIndex].Data[posLastEventStrgIndexUpper] = eventStrgIndexUpper;     /* [GUD]FreezeFrameIndex *//* [GUD]posLastEventStrgIndexUpper */
         Dem_FreezeFrameRecordList[FreezeFrameIndex].Data[posLastEventStrgIndexLower] = eventStrgIndexLower;     /* [GUD]FreezeFrameIndex *//* [GUD]posLastEventStrgIndexLower */
-
-        /* Sets "not stored" to the record status of the specified freeze frame record. */
-        Dem_FreezeFrameRecordList[FreezeFrameIndex].Data[posRecordStatus] = DEM_FFD_NOT_STORED;                 /* [GUD]FreezeFrameIndex *//* [GUD]posRecordStatus */
     }
     else
     {
@@ -567,6 +577,7 @@ FUNC( void, DEM_CODE ) Dem_FFDMng_SetRecordMirror
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-9-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_FFDMng_Verified
 (
@@ -591,7 +602,7 @@ FUNC( void, DEM_CODE ) Dem_FFDMng_Verified
     for( freezeFrameRecordIndex = (Dem_u08_FFListIndexType)0U; freezeFrameRecordIndex < nonOBDFFRClassPerDTCMaxNum; freezeFrameRecordIndex++ )  /* [GUD:for]freezeFrameRecordIndex */
     {
         faultRecordClearFlg = (boolean)FALSE;
-        freezeFrameIndex = DEM_FAULTINDEX_INITIAL;
+        freezeFrameIndex = DEM_FFRECINDEX_INITIAL;
         (void)Dem_DataMngC_GetFR_FreezeFrameIndex( FaultIndex, freezeFrameRecordIndex, &freezeFrameIndex );   /* no return check required */
         if( freezeFrameIndex < nonObdFFDRecordNum )                                             /* [GUD:if]freezeFrameIndex */
         {
@@ -744,6 +755,9 @@ FUNC( Dem_u08_FFDIndexType, DEM_CODE ) Dem_FFDMng_GetNumOfStoredNonObdFFD
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-7-0      | no object changed.                                       */
+/*   v5-9-0      | branch changed.                                          */
+/*   v5-10-0     | no branch changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_FFDMng_CheckToExistTriggerFFD
 (
@@ -754,7 +768,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_FFDMng_CheckToExistTriggerFFD
 )
 {
     P2CONST( AB_83_ConstV Dem_FreezeFrameRecNumClassType, AUTOMATIC, DEM_CONFIG_DATA ) freezeFrameRecNumClassPtr;
-    P2CONST( AB_83_ConstV Dem_FreezeFrameRecordClassType, AUTOMATIC, DEM_CONFIG_DATA ) freezeFrameRecordClassPtr;
     VAR( Dem_u16_FFRecNumClassIndexType, AUTOMATIC ) freezeframeRecNumClassRef;
     VAR( Dem_u08_FFListIndexType, AUTOMATIC ) freezeFrameRecordIndex;
     VAR( Dem_u08_FFRecordClassIndexType, AUTOMATIC ) freezeFrameRecordClassIndex;
@@ -763,6 +776,8 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_FFDMng_CheckToExistTriggerFFD
     VAR( Dem_u08_FFDIndexType, AUTOMATIC ) nonObdFFDRecordNum;
     VAR( Dem_u08_StorageTriggerType, AUTOMATIC ) trigger;
     VAR( Dem_u08_InternalReturnType, AUTOMATIC ) retVal;
+    VAR( Dem_u08_FFRecordNumberType, AUTOMATIC )        freezeFrameRecordNumber;
+    VAR( boolean, AUTOMATIC )                           freezeFrameRecordToDcm;
 
     nonOBDFFRClassPerDTCMaxNum = Dem_NonOBDFFRClassPerDTCMaxNum;
     nonObdFFDRecordNum = Dem_NonObdFFDRecordNum;
@@ -773,18 +788,21 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_FFDMng_CheckToExistTriggerFFD
 
     for( freezeFrameRecordIndex = (Dem_u08_FFListIndexType)0U; freezeFrameRecordIndex < nonOBDFFRClassPerDTCMaxNum; freezeFrameRecordIndex++ )  /* [GUD:for]freezeFrameRecordIndex */
     {
-        freezeFrameIndex = FaultRecordPtr->RecordNumberIndex[freezeFrameRecordIndex];                                           /* [GUD]freezeFrameRecordIndex */
+        freezeFrameIndex = FaultRecordPtr->RecordNumberIndex[freezeFrameRecordIndex];                                           /* [GUD]freezeFrameRecordIndex *//* [ARYCHK] DEM_NONOBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / freezeFrameRecordIndex */
         if( freezeFrameIndex < nonObdFFDRecordNum )                                                                             /* [GUD:if]freezeFrameIndex */
         {
-            freezeFrameRecordClassIndex = freezeFrameRecNumClassPtr->DemFreezeFrameRecordClassRef[freezeFrameRecordIndex];      /* [GUD]freezeFrameRecordIndex *//* [GUD:CFG:IF_GUARDED: freezeFrameRecordIndex ]freezeFrameRecordClassIndex */
-            freezeFrameRecordClassPtr = &Dem_FreezeFrameRecordClassTable[freezeFrameRecordClassIndex];                          /* [GUD]freezeFrameRecordClassIndex *//* [GUD:CFG:IF_GUARDED: freezeFrameRecordClassIndex ]freezeFrameRecordClassPtr */
-            trigger = freezeFrameRecordClassPtr->DemFreezeFrameRecordTrigger;                                                   /* [GUD]freezeFrameRecordClassPtr */
+            freezeFrameRecordClassIndex = freezeFrameRecNumClassPtr->DemFreezeFrameRecordClassRef[freezeFrameRecordIndex];      /* [GUD]freezeFrameRecordIndex *//* [GUD:CFG:IF_GUARDED: freezeFrameRecordIndex ]freezeFrameRecordClassIndex *//* [ARYCHK] DEM_FF_RECORD_CLASS_REF_MAX_NUM / 1 / freezeFrameRecordIndex */
+
+            Dem_CfgInfoPm_GetFreezeFrameRecordInfo_forOutput( freezeFrameRecordClassIndex, &freezeFrameRecordNumber, &trigger, &freezeFrameRecordToDcm );   /* [GUD] freezeFrameRecordClassIndex */
 
             if( TargetTrigger == trigger )
             {
-                *FreezeFrameIndexPtr = freezeFrameIndex;
-                retVal = DEM_IRT_OK;
-                break;
+                if ( freezeFrameRecordToDcm == (boolean)TRUE )
+                {
+                    *FreezeFrameIndexPtr = freezeFrameIndex;
+                    retVal = DEM_IRT_OK;
+                    break;
+                }
             }
         }
     }
@@ -1088,6 +1106,9 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_FFDMng_GetEventIdFromRecordData
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-7-0         :2024-05-29                                              */
+/*  v5-9-0         :2025-02-26                                              */
+/*  v5-10-0        :2025-06-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

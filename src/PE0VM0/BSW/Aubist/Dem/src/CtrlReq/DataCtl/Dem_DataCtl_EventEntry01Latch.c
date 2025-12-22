@@ -1,11 +1,11 @@
-/* Dem_DataCtl_EventEntry01Latch_c(v5-5-0)                                  */
+/* Dem_DataCtl_EventEntry01Latch_c(v5-10-0)                                 */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
-/* Object Name  | Dem/DataCtl_Dem_DataCtl_EventEntry01Latch/CODE            */
+/* Object Name  | Dem/DataCtl_EventEntry01Latch/CODE                        */
 /*--------------------------------------------------------------------------*/
 /* Notes        |                                                           */
 /****************************************************************************/
@@ -18,7 +18,6 @@
 #include "../../../cfg/Dem_Cfg.h"
 #include "../../../inc/Dem_Pm_DataCtl.h"
 #include "../../../inc/Dem_Pm_Misfire.h"
-#include "../../../inc/Dem_Pm_Similar.h"
 #include "../../../inc/Dem_CmnLib_ConfigInfo.h"
 #include "Dem_DataCtl_local.h"
 #include "Dem_DataCtl_EventEntry_local.h"
@@ -41,17 +40,6 @@
 /****************************************************************************/
 #define DEM_START_SEC_CODE
 #include <Dem_MemMap.h>
-
-static FUNC( void, DEM_CODE ) Dem_Data_InitTmpMemoryWithoutRecord
-( void );
-
-#if ( DEM_OBDFFD_SUPPORT == STD_ON )
-static FUNC( void, DEM_CODE ) Dem_Data_InitResultOfComparingObdFFRecords
-( void );
-#endif /* ( DEM_OBDFFD_SUPPORT == STD_ON ) */
-
-static FUNC( void, DEM_CODE ) Dem_Data_InitResultOfComparingFFRecords
-( void );
 
 static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_SaveFreezeFrameRecordToTmp
 ( void );
@@ -98,6 +86,9 @@ static FUNC( void, DEM_CODE ) Dem_Data_SaveReachedUpperLimitFFDTriggerToTmp
 /*               |        DEM_IRT_OK :                                      */
 /*               |        DEM_IRT_NG :                                      */
 /* Notes         | -                                                        */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-9-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_SaveEventMemoryEntry
 (
@@ -179,140 +170,15 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_SaveEventMemoryEntry
         /* no processing. */
     }
 
+#if ( DEM_OBDONUDS_SUPPORT == STD_ON )   /*  [FuncSw]    */
+#if ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )
+    /*  initialize data.                */
+    Dem_Misfire_SetObdRecordNumberIndexSyncStatus( (boolean)FALSE );
+#endif /* ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON ) */
+#endif /* ( DEM_OBDONUDS_SUPPORT == STD_ON )             */
+
+
     return retVal;
-}
-
-
-/****************************************************************************/
-/* Function Name | Dem_Data_InitTmpMemoryWithoutRecord                      */
-/* Description   | Initialization of temporary event memory entries.        */
-/*               | (excluding records)                                      */
-/* Preconditions |                                                          */
-/* Parameters    | none                                                     */
-/* Return Value  | none                                                     */
-/* Notes         | -                                                        */
-/*               |                                                          */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-5-0      | no branch changed.                                       */
-/****************************************************************************/
-static FUNC( void, DEM_CODE ) Dem_Data_InitTmpMemoryWithoutRecord
-( void )
-{
-#if ( DEM_OBDFFD_SUPPORT == STD_ON )    /* [FuncSw] */
-    /* Initializes the freeze frame record list for OBD. */
-    Dem_Data_InitResultOfComparingObdFFRecords();
-#endif  /* ( DEM_OBDFFD_SUPPORT == STD_ON )    */
-
-    /* Initializes the freeze frame record list for non-OBD. */
-    Dem_Data_InitResultOfComparingFFRecords();
-
-    /* Initializes the event index. */
-    Dem_TmpEventMemoryEntry.EventStrgIndex = DEM_EVENTSTRGINDEX_INVALID;
-
-    /* Initializes the trigger of event. */
-    Dem_TmpEventMemoryEntry.Trigger = DEM_VALID_TRIGGER_NONE;
-
-    /* Initializes the number of event memory entries before being updated. */
-    Dem_TmpEventMemoryEntry.BeforeNumberOfEventMemoryEntries = DEM_NUMOFEVTMEMENT_INITIAL;
-    Dem_TmpEventMemoryEntry.BeforeNumberOfConfirmedDTCs      = DEM_NUMOFEVTMEMENT_INITIAL;
-    Dem_TmpEventMemoryEntry.BeforeNumberOfObdMILDTCs         = DEM_NUMOFEVTMEMENT_INITIAL;
-
-    /* Initializes the result of retrieving of registering fault location. */
-    Dem_TmpEventMemoryEntry.ResultOfGetFaultRegistLocation          = DEM_IRT_NG;
-    Dem_TmpEventMemoryEntry.ResultOfGetConfirmedFaultRegistLocation = DEM_IRT_NG;
-    Dem_TmpEventMemoryEntry.ResultOfGetMILFaultRegistLocation       = DEM_IRT_NG;
-
-    /* Initializes the result of comparing each records with no differences. */
-    Dem_TmpEventMemoryEntry.ResultOfComparingEventRecords  = DEM_IRT_OK;
-    Dem_TmpEventMemoryEntry.ResultOfComparingFaultRecords  = DEM_IRT_OK;
-#if ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON )  /*  [FuncSw]    */
-    Dem_Misfire_InitCompareResultMisfireRecord();
-    Dem_Misfire_InitCompareResultMisfireComRecord();
-#endif  /* ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON )   */
-
-#if ( DEM_SIMILAR_EVENT_CONFIGURED == STD_ON )  /*  [FuncSw]    */
-    Dem_Similar_InitCompareResult();
-#endif  /* ( DEM_SIMILAR_EVENT_CONFIGURED == STD_ON )   */
-
-    Dem_TmpEventMemoryEntry.ConsistencyIdUpdatedFlg = (boolean)FALSE;
-
-#if ( DEM_EVENT_DISPLACEMENT_SUPPORT == STD_ON )    /* [FuncSw] */
-    Dem_Data_InitFaultRecordOverwrite();
-#endif  /* ( DEM_EVENT_DISPLACEMENT_SUPPORT == STD_ON ) */
-
-#if ( DEM_MAX_NUM_OF_FREEZE_FRAME_TRIGGER_SUPPORT == STD_ON )  /* [FuncSw] */
-    Dem_TmpUpperLimitReachedTrigger = DEM_VALID_TRIGGER_NONE;
-#endif /* ( DEM_MAX_NUM_OF_FREEZE_FRAME_TRIGGER_SUPPORT == STD_ON ) */
-
-    return;
-}
-
-
-/****************************************************************************/
-/* Function Name | Dem_Data_InitResultOfComparingObdFFRecords               */
-/* Description   | Initialization of result of comparing freeze frame reco- */
-/*               | rds for OBD in temporary event memory entries.           */
-/*               | (excluding records)                                      */
-/* Preconditions |                                                          */
-/* Parameters    | none                                                     */
-/* Return Value  | none                                                     */
-/* Notes         | -                                                        */
-/*               |                                                          */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-5-0      | no object changed.                                       */
-/****************************************************************************/
-#if ( DEM_OBDFFD_SUPPORT == STD_ON )
-static FUNC( void, DEM_CODE ) Dem_Data_InitResultOfComparingObdFFRecords
-( void )
-{
-    VAR( Dem_u08_FFListIndexType, AUTOMATIC ) freezeFrameRecordIndex;
-    VAR( Dem_u08_FFListIndexType, AUTOMATIC ) obdFFRClassPerDTCMaxNum;
-
-    obdFFRClassPerDTCMaxNum = Dem_OBDFFRClassPerDTCMaxNum;
-
-    /* Initializes the freeze frame record list. */
-    for( freezeFrameRecordIndex = (Dem_u08_FFListIndexType)0U; freezeFrameRecordIndex < obdFFRClassPerDTCMaxNum; freezeFrameRecordIndex++ )         /* [GUD:for]freezeFrameRecordIndex */
-    {
-        /* Initializes the result of comparing freeze frame records with no differences. */
-        Dem_TmpEventMemoryEntry.ResultOfComparingObdFFRecords[freezeFrameRecordIndex] = DEM_IRT_OK;                                                 /* [GUD]freezeFrameRecordIndex */
-    }
-
-    return;
-}
-#endif /* ( DEM_OBDFFD_SUPPORT == STD_ON ) */
-
-/****************************************************************************/
-/* Function Name | Dem_Data_InitResultOfComparingFFRecords                  */
-/* Description   | Initialization of result of comparing freeze frame reco- */
-/*               | rds for non-OBD in temporary event memory entries.       */
-/*               | (excluding records)                                      */
-/* Preconditions |                                                          */
-/* Parameters    | none                                                     */
-/* Return Value  | none                                                     */
-/* Notes         | -                                                        */
-/*               |                                                          */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-5-0      | no object changed.                                       */
-/****************************************************************************/
-static FUNC( void, DEM_CODE ) Dem_Data_InitResultOfComparingFFRecords
-( void )
-{
-    VAR( Dem_u08_FFListIndexType, AUTOMATIC ) freezeFrameRecordIndex;
-    VAR( Dem_u08_FFListIndexType, AUTOMATIC ) nonOBDFFRClassPerDTCMaxNum;
-
-    nonOBDFFRClassPerDTCMaxNum = Dem_NonOBDFFRClassPerDTCMaxNum;
-
-    /* Initializes the freeze frame record list. */
-    for( freezeFrameRecordIndex = (Dem_u08_FFListIndexType)0U; freezeFrameRecordIndex < nonOBDFFRClassPerDTCMaxNum; freezeFrameRecordIndex++ )      /* [GUD:for]freezeFrameRecordIndex */
-    {
-        /* Initializes the result of comparing freeze frame records with no differences. */
-        Dem_TmpEventMemoryEntry.ResultOfComparingFFRecords[freezeFrameRecordIndex] = DEM_IRT_OK;                                                    /* [GUD]freezeFrameRecordIndex */
-    }
-
-    return;
 }
 
 
@@ -380,6 +246,8 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_SaveFreezeFrameReco
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-7-0      | no object changed.                                       */
+/*   v5-10-0     | no branch changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_Data_SaveReachedUpperLimitFFDTriggerToTmp
 ( void )
@@ -407,7 +275,6 @@ static FUNC( void, DEM_CODE ) Dem_Data_SaveReachedUpperLimitFFDTriggerToTmp
     VAR( Dem_FaultRecordPtrForCtlType, AUTOMATIC ) faultRecordPtrCtl;
 
     P2CONST( AB_83_ConstV Dem_FreezeFrameRecNumClassType, AUTOMATIC, DEM_CONFIG_DATA ) freezeFrameRecNumClassPtr;
-    P2CONST( AB_83_ConstV Dem_FreezeFrameRecordClassType, AUTOMATIC, DEM_CONFIG_DATA ) freezeFrameRecordClassPtr;
 
 
     maxNumberOfFreezeFrameTriggerConfirmed    = Dem_MaxNumberOfFreezeFrameTriggerConfirmed;
@@ -441,13 +308,12 @@ static FUNC( void, DEM_CODE ) Dem_Data_SaveReachedUpperLimitFFDTriggerToTmp
 
                     for ( loopRecordNumberIndex = (Dem_u08_FFListIndexType)0U; loopRecordNumberIndex < nonOBDFFRClassPerDTCMaxNum; loopRecordNumberIndex++ )        /* [GUD:for] loopRecordNumberIndex */
                     {
-                        if ( faultRecordPtrCtl.FaultRecordPtr->RecordNumberIndex[loopRecordNumberIndex] != DEM_FFRECINDEX_INITIAL )                                 /* [GUD] loopRecordNumberIndex */
+                        if ( faultRecordPtrCtl.FaultRecordPtr->RecordNumberIndex[loopRecordNumberIndex] != DEM_FFRECINDEX_INITIAL )                                 /* [GUD] loopRecordNumberIndex *//* [ARYCHK] DEM_NONOBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / loopRecordNumberIndex */
                         {
-                            freezeFrameRecordClassIndex = freezeFrameRecNumClassPtr->DemFreezeFrameRecordClassRef[loopRecordNumberIndex];                           /* [GUD] loopRecordNumberIndex */
+                            freezeFrameRecordClassIndex = freezeFrameRecNumClassPtr->DemFreezeFrameRecordClassRef[loopRecordNumberIndex];                           /* [GUD] loopRecordNumberIndex *//* [ARYCHK] DEM_FF_RECORD_CLASS_REF_MAX_NUM / 1 / loopRecordNumberIndex */
                             if( freezeFrameRecordClassIndex < ffrRecordClassConfigureNum )                                                                          /* [GUD:if] freezeFrameRecordClassIndex */
                             {
-                                freezeFrameRecordClassPtr = &Dem_FreezeFrameRecordClassTable[freezeFrameRecordClassIndex];                                          /* [GUD] freezeFrameRecordClassIndex *//* [GUD:CFG:IF_GUARDED: freezeFrameRecordClassIndex ]freezeFrameRecordClassPtr */
-                                freezeFrameRecordTrigger = freezeFrameRecordClassPtr->DemFreezeFrameRecordTrigger;                                                  /* [GUD] freezeFrameRecordClassPtr */
+                                freezeFrameRecordTrigger =  Dem_CfgInfoPm_GetFreezeFrameRecordTriggerType( freezeFrameRecordClassIndex );                           /* [GUD] freezeFrameRecordClassIndex */
 
                                 if ( freezeFrameRecordTrigger == DEM_TRIGGER_ON_CONFIRMED )
                                 {
@@ -514,6 +380,7 @@ static FUNC( void, DEM_CODE ) Dem_Data_SaveReachedUpperLimitFFDTriggerToTmp
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-8-0      | no branch changed.                                       */
 /****************************************************************************/
 static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_SaveObdFreezeFrameRecordToTmp
 ( void )
@@ -526,8 +393,8 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_SaveObdFreezeFrameR
     VAR( Dem_u08_FFDIndexType, AUTOMATIC ) obdFFDRecordNum;
 
     retVal = DEM_IRT_OK;
-    obdFFRClassPerDTCMaxNum = Dem_OBDFFRClassPerDTCMaxNum;
-    obdFFDRecordNum = Dem_ObdFFDRecordNum;
+    obdFFRClassPerDTCMaxNum = Dem_CfgInfoPm_GetOBDFFRClassPerDTCMaxNum();
+    obdFFDRecordNum = Dem_CfgInfoPm_GetObdFFDRecordNum();
 
     for( freezeFrameRecordIndex = (Dem_u08_FFListIndexType)0U; freezeFrameRecordIndex < obdFFRClassPerDTCMaxNum; freezeFrameRecordIndex++ )             /* [GUD:for]freezeFrameRecordIndex */
     {
@@ -629,6 +496,11 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_SaveNonObdFreezeFra
 /*  v5-0-0         :2021-12-24                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-6-0         :2024-01-29                                              */
+/*  v5-7-0         :2024-05-29                                              */
+/*  v5-8-0         :2024-10-29                                              */
+/*  v5-9-0         :2025-02-26                                              */
+/*  v5-10-0        :2025-06-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

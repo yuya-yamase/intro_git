@@ -1,7 +1,7 @@
-/* Dem_Misfire_EventEntryMake_ObdFFDCyl_c(v5-5-0)                           */
+/* Dem_Misfire_EventEntryMake_ObdFFDCyl_c(v5-9-0)                           */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -132,6 +132,43 @@ FUNC( void, DEM_CODE ) Dem_Misfire_GetObdFFDCylToTmp
 }
 
 
+#if ( DEM_OBDONUDS_SUPPORT == STD_ON )
+#if ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )
+/****************************************************************************/
+/* Function Name | Dem_Misfire_GetPairObdFFDCylToTmp                        */
+/* Description   | Get pair FFDCyl in the temporary area.                   */
+/* Preconditions | none                                                     */
+/* Parameters    | [in] EventStrgIndex :                                    */
+/*               | [in] MisfireObdFFDCylIndex :                             */
+/*               | [out] FFDCylPtr :                                        */
+/* Return Value  | none                                                     */
+/* Notes         |                                                          */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-9-0      | new created.                                             */
+/****************************************************************************/
+FUNC( void, DEM_CODE ) Dem_Misfire_GetPairObdFFDCylToTmp
+(
+    VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex,
+    VAR( Dem_u08_MisfireObdFFDCylIndexType, AUTOMATIC ) MisfireObdFFDCylIndex,      /* [PRMCHK:CALLER] */
+    P2VAR( Dem_MisfireCylinderType, AUTOMATIC, AUTOMATIC ) FFDCylPtr
+)
+{
+    VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) misfirePairEventStrgIndex;
+    VAR( Dem_u08_InternalReturnType, AUTOMATIC ) resultGetMisfirePairEvent;
+
+    resultGetMisfirePairEvent= Dem_CfgInfoPm_GetMisfirePairEventStrgIndexByStrgIndex( EventStrgIndex, &misfirePairEventStrgIndex );
+    if( resultGetMisfirePairEvent == DEM_IRT_OK )
+    {
+        Dem_Misfire_GetObdFFDCylToTmp( misfirePairEventStrgIndex, MisfireObdFFDCylIndex, FFDCylPtr );   /* [GUDCHK:CALLER]MisfireObdFFDCylIndex */
+    }
+
+    return;
+}
+#endif /* ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON ) */
+#endif /* ( DEM_OBDONUDS_SUPPORT == STD_ON ) */
+
+
 /****************************************************************************/
 /* Function Name | Dem_Misfire_SetMisfireKindOfObdFFDToTmp                  */
 /* Description   | Set MisfireKindOfFFD in the temporary area.              */
@@ -190,6 +227,7 @@ FUNC( void, DEM_CODE ) Dem_Misfire_GetMisfireKindOfObdFFDToTmp
 /* History                                                                  */
 /*  Version        :Date                                                    */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-9-0         :2025-02-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

@@ -1,7 +1,7 @@
-/* Dem_Misfire_FilDTC_c(v5-5-0)                                             */
+/* Dem_Misfire_FilDTC_c(v5-6-0)                                             */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -101,6 +101,7 @@ static VAR( Dem_MisfireCylinderType, DEM_VAR_NO_INIT )  Dem_MisfireFilteredBit7C
 /* History       |                                                          */
 /*   v5-5-0      | rename from Dem_Misfire_SetFilteredDTCForUds(v5-3-0).    */
 /*   v5-5-0      | branch changed.                                          */
+/*   v5-6-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_Misfire_SetFilteredDTC
 (
@@ -115,12 +116,8 @@ FUNC( void, DEM_CODE ) Dem_Misfire_SetFilteredDTC
     Dem_MisfireObdFilteredCylinder = DEM_MISFIRE_CYLINDER_NON;
     Dem_MisfireObdSearchCylinderNum = (Dem_MisfireCylinderNumberType)0U;
 
-    SchM_Enter_Dem_EventMemory();
-
     /* prepare to generate DTCStatus */
     Dem_Misfire_PrepareBitDTCCylinder();
-
-    SchM_Exit_Dem_EventMemory();
 
     if( DTCKind == DEM_DTC_KIND_EMISSION_REL_DTCS )
     {
@@ -495,6 +492,7 @@ static FUNC( Dem_UdsStatusByteType, DEM_CODE ) Dem_Misfire_GetFilteredStatusOfDT
 /*  v5-0-0         :2022-03-29                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-6-0         :2024-01-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

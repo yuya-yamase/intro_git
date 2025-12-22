@@ -1,7 +1,7 @@
-/* Dem_Dcm_c(v5-5-0)                                                        */
+/* Dem_Dcm_c(v5-10-0)                                                       */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -69,20 +69,26 @@
 /* Return Value  | Dem_ReturnSetFilterType                                  */
 /*               |        DEM_FILTER_ACCEPTED : accepted                    */
 /*               |        DEM_WRONG_FILTER : wrong filter                   */
-/*               |        DEM_WRONG_CONDITION : wrong condition              */
+/*               |        DEM_WRONG_CONDITION : wrong condition             */
 /* Notes         | -                                                        */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-10-0     | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_ReturnSetFilterType, DEM_CODE ) Dem_DcmSetDTCFilterForReadiness
 (
-    VAR( uint8, AUTOMATIC ) ReadinessGroupId
+    VAR( uint8, AUTOMATIC ) ReadinessGroupId    /* MISRA DEVIATION */
 )
 {
+#if ( DEM_PID_READINESS_SUPPORT == STD_ON ) /*  [FuncSw]    */
     VAR( Dem_u08_InternalReturnType, AUTOMATIC ) internalReturnValue;
+#endif  /* ( DEM_PID_READINESS_SUPPORT == STD_ON )          */
     VAR( Dem_ReturnSetFilterType, AUTOMATIC ) retVal;
 
     retVal = DEM_WRONG_FILTER;
 
-    internalReturnValue = Dem_Control_SetDTCFilterForReadiness( (Dem_u08_ReadinessGroupIndexType)ReadinessGroupId );
+#if ( DEM_PID_READINESS_SUPPORT == STD_ON ) /*  [FuncSw]    */
+    internalReturnValue = Dem_Control_SetDTCFilterForReadiness( ReadinessGroupId );
 
     /* Convert return value */
     switch( internalReturnValue )
@@ -97,6 +103,67 @@ FUNC( Dem_ReturnSetFilterType, DEM_CODE ) Dem_DcmSetDTCFilterForReadiness
             /* No Process */
             break;
     }
+#endif  /* ( DEM_PID_READINESS_SUPPORT == STD_ON )          */
+
+    return retVal;
+}
+
+
+/****************************************************************************/
+/* Function Name | Dem_DcmGetNumberOfFilteredDTCForReadiness                */
+/* Description   | Gets the number of a filtered DTC.                       */
+/* Preconditions | none                                                     */
+/* Parameters    | [out] NumberOfFilteredDTCForReadinessPtr :               */
+/*               |        The number of DTCs matching the defined filter.   */
+/* Return Value  | Dem_ReturnGetNumberOfFilteredDTCType                     */
+/*               |        DEM_NUMBER_OK : Getting number of filtered DTCs - */
+/*               |        was successful.                                   */
+/*               |        DEM_NUMBER_FAILED : Getting number of filtered D- */
+/*               |        TCs failed.                                       */
+/*               |        DEM_NUMBER_PENDING : The requested values is cal- */
+/*               |        culated asynchronously and currently not availab- */
+/*               |        le. The caller can retry later.                   */
+/* Notes         | -                                                        */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-8-0      | new created. based on Dem_DcmGetNumberOfFilteredDTC().   */
+/*   v5-10-0     | no object changed.                                       */
+/****************************************************************************/
+FUNC( Dem_ReturnGetNumberOfFilteredDTCType, DEM_CODE ) Dem_DcmGetNumberOfFilteredDTCForReadiness
+(
+    P2VAR( uint16, AUTOMATIC, DEM_APPL_DATA ) NumberOfFilteredDTCForReadinessPtr    /* MISRA DEVIATION */
+)
+{
+#if ( DEM_PID_READINESS_SUPPORT == STD_ON ) /*  [FuncSw]    */
+    VAR( Dem_u08_InternalReturnType, AUTOMATIC ) internalReturnValue;
+    VAR( uint16, AUTOMATIC ) number;
+#endif  /* ( DEM_PID_READINESS_SUPPORT == STD_ON )          */
+    VAR( Dem_ReturnGetNumberOfFilteredDTCType, AUTOMATIC ) retVal;
+
+    retVal = DEM_NUMBER_FAILED;
+
+#if ( DEM_PID_READINESS_SUPPORT == STD_ON ) /*  [FuncSw]    */
+    if( NumberOfFilteredDTCForReadinessPtr != NULL_PTR )
+    {
+        number = (uint16)0U;    /*  out parameter.  */
+        internalReturnValue = Dem_Control_GetNumberOfFilteredDTCForReadiness( &number );
+
+        /* Convert return value */
+        switch( internalReturnValue )
+        {
+            case DEM_IRT_OK:
+                *NumberOfFilteredDTCForReadinessPtr = number;  /*  set value to out parameter. */
+                retVal = DEM_NUMBER_OK;
+                break;
+            case DEM_IRT_PENDING:
+                retVal = DEM_NUMBER_PENDING;
+                break;
+            default:  /* DEM_IRT_NG */
+                /* No Process */
+                break;
+        }
+    }
+#endif  /* ( DEM_PID_READINESS_SUPPORT == STD_ON )          */
 
     return retVal;
 }
@@ -124,21 +191,29 @@ FUNC( Dem_ReturnSetFilterType, DEM_CODE ) Dem_DcmSetDTCFilterForReadiness
 /* Return Value  | Dem_ReturnGetNextFilteredElementType                     */
 /*               |        DEM_FILTERED_OK : success                         */
 /*               |        DEM_FILTERED_NO_MATCHING_ELEMENT : no matching    */
+/*               |        DEM_FILTERED_PENDING : pending                    */
 /* Notes         | -                                                        */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-8-0      | branch changed.                                          */
+/*   v5-10-0     | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_ReturnGetNextFilteredElementType, DEM_CODE ) Dem_DcmGetNextFilteredDTCForReadiness
 (
-    P2VAR( uint32, AUTOMATIC, DEM_APPL_DATA ) DTCPtr,
-    P2VAR( Dem_UdsStatusByteType, AUTOMATIC, DEM_APPL_DATA ) DTCStatusPtr
+    P2VAR( uint32, AUTOMATIC, DEM_APPL_DATA ) DTCPtr,                       /* MISRA DEVIATION */
+    P2VAR( Dem_UdsStatusByteType, AUTOMATIC, DEM_APPL_DATA ) DTCStatusPtr   /* MISRA DEVIATION */
 )
 {
-    VAR( Dem_u08_InternalReturnType, AUTOMATIC ) internalReturnValue;
-    VAR( Dem_ReturnGetNextFilteredElementType, AUTOMATIC ) retVal;
+#if ( DEM_PID_READINESS_SUPPORT == STD_ON ) /*  [FuncSw]    */
     VAR( Dem_u32_DTCValueType, AUTOMATIC ) dtcvalue;
+    VAR( Dem_u08_InternalReturnType, AUTOMATIC ) internalReturnValue;
     VAR( Dem_UdsStatusByteType, AUTOMATIC ) status;
+#endif  /* ( DEM_PID_READINESS_SUPPORT == STD_ON )          */
+    VAR( Dem_ReturnGetNextFilteredElementType, AUTOMATIC ) retVal;
 
     retVal = DEM_FILTERED_NO_MATCHING_ELEMENT;
 
+#if ( DEM_PID_READINESS_SUPPORT == STD_ON ) /*  [FuncSw]    */
     if( DTCPtr == NULL_PTR )
     {
         /* No Process */
@@ -154,13 +229,23 @@ FUNC( Dem_ReturnGetNextFilteredElementType, DEM_CODE ) Dem_DcmGetNextFilteredDTC
         internalReturnValue = Dem_Control_GetNextFilteredDTCForReadiness( &dtcvalue , &status );
 
         /* Convert return value */
-        if( internalReturnValue == DEM_IRT_OK )
+        switch( internalReturnValue )
         {
-            *DTCPtr       = dtcvalue;  /*  set value to out parameter. */
-            *DTCStatusPtr = status;    /*  set value to out parameter. */
-            retVal = DEM_FILTERED_OK;
+            case DEM_IRT_OK:
+                *DTCPtr       = dtcvalue;  /*  set value to out parameter. */
+                *DTCStatusPtr = status;    /*  set value to out parameter. */
+                retVal = DEM_FILTERED_OK;
+                break;
+            case DEM_IRT_PENDING:
+                retVal = DEM_FILTERED_PENDING;
+                break;
+            default:
+                /* DEM_IRT_NO_MATCHING_ELEMENT */
+                /* No Process */
+                break;
         }
     }
+#endif  /* ( DEM_PID_READINESS_SUPPORT == STD_ON )          */
 
     return retVal;
 }
@@ -172,6 +257,8 @@ FUNC( Dem_ReturnGetNextFilteredElementType, DEM_CODE ) Dem_DcmGetNextFilteredDTC
 /* History                                                                  */
 /*  Version        :Date                                                    */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-8-0         :2024-10-29                                              */
+/*  v5-10-0        :2025-06-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

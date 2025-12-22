@@ -1,7 +1,7 @@
-/* Dem_SavedZone_Callout_c(v5-0-0)                                          */
+/* Dem_SavedZone_Callout_c(v5-10-0)                                         */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 /****************************************************************************/
 /* Object Name  | Dem/SavedZone_Callout/CODE                                */
@@ -99,7 +99,7 @@ FUNC( void, DEM_CODE_CALLOUT ) Dem_NotifySavedZoneUpdate_Enter
 }
 
 /****************************************************************************/
-/* Function Name | Dem_NotifySavedZoneUpdate_Enter                          */
+/* Function Name | Dem_NotifySavedZoneUpdate_Exit                           */
 /* Description   | Notify SAVED_ZONE area data update : update end.         */
 /* Preconditions | none                                                     */
 /* Parameters    | none.                                                    */
@@ -168,6 +168,60 @@ FUNC( void, DEM_CODE_CALLOUT ) Dem_NotifySavedZonePermanentUpdate_Exit
 }
 #endif  /* ( DEM_PFC_SUPPORT == STD_ON )        */
 
+#if ( DEM_IUMPR_SUPPORT == STD_ON )
+/****************************************************************************/
+/* Function Name | Dem_NotifySavedZoneIUMPRUpdate_Enter                     */
+/* Description   | Notify SAVED_ZONE_IUMPR area data update :               */
+/*               |                           update start.                  */
+/* Preconditions | none                                                     */
+/* Parameters    | none.                                                    */
+/* Return Value  | none                                                     */
+/* Notes         |                                                          */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-6-0      | new created.                                             */
+/****************************************************************************/
+FUNC( void, DEM_CODE_CALLOUT ) Dem_NotifySavedZoneIUMPRUpdate_Enter
+( void )
+{
+    /**********************************************/
+    /* The operation start that a user defined.   */
+    /**********************************************/
+
+    /**********************************************/
+    /* The operation end that a user defined.     */
+    /**********************************************/
+
+    return ;
+}
+
+/****************************************************************************/
+/* Function Name | Dem_NotifySavedZoneIUMPRUpdate_Exit                      */
+/* Description   | Notify SAVED_ZONE_IUMPR area data update :               */
+/*               |                           update end.                    */
+/* Preconditions | none                                                     */
+/* Parameters    | none.                                                    */
+/* Return Value  | none                                                     */
+/* Notes         |                                                          */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-6-0      | new created.                                             */
+/****************************************************************************/
+FUNC( void, DEM_CODE_CALLOUT ) Dem_NotifySavedZoneIUMPRUpdate_Exit
+( void )
+{
+    /**********************************************/
+    /* The operation start that a user defined.   */
+    /**********************************************/
+
+    /**********************************************/
+    /* The operation end that a user defined.     */
+    /**********************************************/
+
+    return ;
+}
+#endif  /* ( DEM_IUMPR_SUPPORT == STD_ON )        */
+
 #define DEM_STOP_SEC_CODE_CALLOUT
 #include <Dem_MemMap.h>
 
@@ -175,6 +229,8 @@ FUNC( void, DEM_CODE_CALLOUT ) Dem_NotifySavedZonePermanentUpdate_Exit
 /* History                                                                  */
 /*  Version        :Date                                                    */
 /*  v5-0-0         :2021-12-24                                              */
+/*  v5-6-0         :2024-01-29                                              */
+/*  v5-10-0        :2025-06-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

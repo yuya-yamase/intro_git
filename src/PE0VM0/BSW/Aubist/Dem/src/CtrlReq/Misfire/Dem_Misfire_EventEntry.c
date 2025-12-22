@@ -1,7 +1,7 @@
-/* Dem_MisfireEventEntry_c(v5-5-0)                                          */
+/* Dem_MisfireEventEntry_c(v5-6-0)                                          */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -438,6 +438,7 @@ FUNC( void, DEM_CODE ) Dem_Misfire_ClearMisfireInfoOfEvent
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
+/*   v5-6-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_Misfire_InitTmpEventMemoryEntry
 ( void )
@@ -471,6 +472,10 @@ FUNC( void, DEM_CODE ) Dem_Misfire_InitTmpEventMemoryEntry
     {
         Dem_TmpMisfireEventMemoryEntry.MisfireComRecord.MisfireKindOfFFD[misfireFFDCylIndex] = DEM_MISFIRE_KIND_INVALID;                /* [GUD]misfireFFDCylIndex */
     }
+
+#if ( DEM_GET_UDSDTC_BY_CONFIRMED_ORDER_SUPPORT == STD_ON )     /*  [FuncSw]    */
+    Dem_Misfire_ClearConfirmedOrderCylListToTmp();
+#endif  /* ( DEM_GET_UDSDTC_BY_CONFIRMED_ORDER_SUPPORT == STD_ON )  */
 
     /* Initializes the MisfireRecord. */
     for( misfireIndex = (Dem_u16_MisfireStrgIndexType)0U; misfireIndex < misfireEventNum; misfireIndex++ )                          /* [GUD:for]misfireIndex */
@@ -520,6 +525,7 @@ FUNC( void, DEM_CODE ) Dem_Misfire_InitTmpEventMemoryEntry
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-6-0         :2024-01-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

@@ -1,7 +1,7 @@
-/* Dem_DataCtl_EventEntry02Make_Event_c(v5-5-0)                             */
+/* Dem_DataCtl_EventEntry02Make_Event_c(v5-9-0)                             */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -203,7 +203,7 @@ FUNC( void, DEM_CODE ) Dem_Data_IncrementFailureCounterOfTmp
     return ;
 }
 
-
+#if ( DEM_GETOCCURRENCECOUNTER_SUPPORT == STD_ON )
 /****************************************************************************/
 /* Function Name | Dem_Data_IncrementEventOccurrenceCounterOfTmp            */
 /* Description   | Count up OccurrenceCounter when TestFailed bit of old    */
@@ -216,6 +216,7 @@ FUNC( void, DEM_CODE ) Dem_Data_IncrementFailureCounterOfTmp
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | new created. based on Dem_Data_IncrementFailureCounterOfTmp.*/
+/*   v5-9-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_Data_IncrementEventOccurrenceCounterOfTmp
 ( void )
@@ -227,6 +228,7 @@ FUNC( void, DEM_CODE ) Dem_Data_IncrementEventOccurrenceCounterOfTmp
 
     return ;
 }
+#endif  /* ( DEM_GETOCCURRENCECOUNTER_SUPPORT == STD_ON )   */
 
 #define DEM_STOP_SEC_CODE
 #include <Dem_MemMap.h>
@@ -239,6 +241,7 @@ FUNC( void, DEM_CODE ) Dem_Data_IncrementEventOccurrenceCounterOfTmp
 /*  v5-0-0         :2021-12-24                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-9-0         :2025-02-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

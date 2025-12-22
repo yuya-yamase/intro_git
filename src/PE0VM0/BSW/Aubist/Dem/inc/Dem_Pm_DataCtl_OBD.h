@@ -1,7 +1,7 @@
-/* Dem_Pm_DataCtl_OBD_h(v5-5-0)                                             */
+/* Dem_Pm_DataCtl_OBD_h(v5-8-0)                                             */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 /****************************************************************************/
 /* Object Name  | Dem/Pm_DataCtl_OBD/HEADER                                 */
@@ -95,15 +95,13 @@ FUNC( void, DEM_CODE ) Dem_Data_GetConfirmedOrderEventStrgIndex
 );
 #endif  /* ( DEM_OBD_SUPPORT == STD_ON )    */
 
-#if ( DEM_OBDFFD_SUPPORT == STD_ON )
-#if ( DEM_OBDFFD_DID_SUPPORT == STD_OFF )
+#if ( DEM_OBDONEDS_SUPPORT == STD_ON )
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_CheckStoredOBDFFDInFaultRecord
 (
     VAR( Dem_u08_FaultIndexType, AUTOMATIC ) FaultIndex
 );
 
-#endif  /* ( DEM_OBDFFD_DID_SUPPORT == STD_OFF )   */
-#endif  /* ( DEM_OBDFFD_SUPPORT == STD_ON )    */
+#endif  /* ( DEM_OBDONEDS_SUPPORT == STD_ON )    */
 
 #if ( DEM_PFC_ORDER_MIL_SUPPORT == STD_ON )
 FUNC( void, DEM_CODE ) Dem_Data_GetMILOrderEventStrgIndex
@@ -147,6 +145,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataCtl_SearchPriorityOBDFreeze
 /*  v5-1-0         :2022-03-29                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-8-0         :2024-10-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

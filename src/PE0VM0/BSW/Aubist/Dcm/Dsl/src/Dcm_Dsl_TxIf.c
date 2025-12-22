@@ -1,7 +1,7 @@
-/* Dcm_Dsl_TxIf_c(v5-0-0)                                                   */
+/* Dcm_Dsl_TxIf_c(v5-8-0)                                                   */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -199,10 +199,10 @@ FUNC(Std_ReturnType, DCM_CODE) Dcm_Dsl_TxIf_PeriodicTransmit
     Std_ReturnType u1_Retval;
     boolean        b_IsComEnable;
     boolean        b_IsNoResponsePduId;
-
     /* Measures to avoid worrying about member MetaDataPtr */
-    PduInfoType    st_Info = { 0U };
+    PduInfoType    st_Info;
 
+    Dcm_Main_SetMemory( (uint8*)&st_Info, (uint8)0U, (uint16)(sizeof(st_Info)) );
     st_Info.SduLength   = (PduLengthType)ptInfo->SduLength;
     st_Info.SduDataPtr  = ptInfo->SduDataPtr;
     pt_Info             = &st_Info;
@@ -366,6 +366,7 @@ static FUNC(uint16, DCM_CODE) Dcm_Dsl_TxIf_GetPduMapIndexByTxConfPduID
 /* History                                                                  */
 /*  Version        :Date                                                    */
 /*  v5-0-0         :2022-03-29                                              */
+/*  v5-8-0         :2024-10-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

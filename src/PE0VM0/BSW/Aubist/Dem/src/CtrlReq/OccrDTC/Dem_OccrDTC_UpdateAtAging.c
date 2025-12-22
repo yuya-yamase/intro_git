@@ -1,7 +1,7 @@
-/* Dem_OccrDTC_c(v5-5-0)                                                    */
+/* Dem_OccrDTC_c(v5-9-0)                                                    */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -122,6 +122,7 @@ FUNC( void, DEM_CODE ) Dem_OccrDTC_Init_AfterOrderListGenerateComplete
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
+/*   v5-9-0      | branch changed.                                          */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_OccrDTC_SetEvent
 (
@@ -143,65 +144,47 @@ FUNC( void, DEM_CODE ) Dem_OccrDTC_SetEvent
     VAR( Dem_UdsStatusByteType, AUTOMATIC ) oldDTCStatusTmp;
     VAR( Dem_UdsStatusByteType, AUTOMATIC ) newDTCStatusTmp;
 
-    dtcValue = (Dem_u32_DTCValueType)0U;
-
-    oldDTCStatusTmp =   OldDTCStatus;
-    newDTCStatusTmp =   NewDTCStatus;
-
-    /*------------------------------------------*/
-    /*  convert to output statusOfDTC.          */
-    /*------------------------------------------*/
-    Dem_DTC_CnvUpdateDTCStatus_ForOutput( &oldDTCStatusTmp, &newDTCStatusTmp );
-
-    /* Check DTC configured */
-    chekDTC = Dem_DataAvl_GetUDSDTCByEventStrgIndex( EventStrgIndex, &dtcValue );   /* [GUD:RET:DEM_IRT_OK] EventStrgIndex */
-    if( chekDTC == DEM_IRT_OK )
+    if ( OldDTCStatus != NewDTCStatus )
     {
-        /* Check the changed bit */
-        changeBit = (Dem_UdsStatusByteType)( oldDTCStatusTmp ^ newDTCStatusTmp );
+        dtcValue = (Dem_u32_DTCValueType)0U;
 
-        /* Get bit changed from 0 to 1 */
-        triggerBit = (Dem_UdsStatusByteType)( changeBit & newDTCStatusTmp );
+        oldDTCStatusTmp =   OldDTCStatus;
+        newDTCStatusTmp =   NewDTCStatus;
 
-        /* Get occurrence time record */
-        eventStrgIndex = Dem_OccrDTCMng_GetMostRecentConfirmedData();
-        lastConfirmedEventStrgIndex = Dem_OccrDTC_GetLastConfirmedEvent();
+        /*------------------------------------------*/
+        /*  convert to output statusOfDTC.          */
+        /*------------------------------------------*/
+        Dem_DTC_CnvUpdateDTCStatus_ForOutput( &oldDTCStatusTmp, &newDTCStatusTmp );
 
-        /* overwritten */
-        if( FaultRecordOverwriteFlag == (boolean)TRUE )
+        /* Check DTC configured */
+        chekDTC = Dem_DataAvl_GetUDSDTCByEventStrgIndex( EventStrgIndex, &dtcValue );   /* [GUD:RET:DEM_IRT_OK] EventStrgIndex */
+        if( chekDTC == DEM_IRT_OK )
         {
-            /* not confirmed */
-            if( (Dem_UdsStatusByteType)( triggerBit & DEM_UDS_STATUS_CDTC ) != DEM_UDS_STATUS_CDTC )
+            /* Check the changed bit */
+            changeBit = (Dem_UdsStatusByteType)( oldDTCStatusTmp ^ newDTCStatusTmp );
+
+            /* Get bit changed from 0 to 1 */
+            triggerBit = (Dem_UdsStatusByteType)( changeBit & newDTCStatusTmp );
+
+            /* Get occurrence time record */
+            eventStrgIndex = Dem_OccrDTCMng_GetMostRecentConfirmedData();
+            lastConfirmedEventStrgIndex = Dem_OccrDTC_GetLastConfirmedEvent();
+
+            /* overwritten */
+            if( FaultRecordOverwriteFlag == (boolean)TRUE )
             {
-                /* Latch data for Dcm notification */
-                Dem_TmpOccrDTCEventStrgIndex = EventStrgIndexOfFaultRecordOverwritten;
-                Dem_TmpOccrDTCOldDTCStatus = OldDTCStatusOverwritten;
-                Dem_OccrDTCUpdateFlg = DEM_BOOLEAN_TRUE;
-            }
-            else
-            {
-                /* confirmed */
-                if( eventStrgIndex != EventStrgIndex )
+                /* not confirmed */
+                if( (Dem_UdsStatusByteType)( triggerBit & DEM_UDS_STATUS_CDTC ) != DEM_UDS_STATUS_CDTC )
                 {
-                    /* Set occurrence time record */
-                    Dem_OccrDTCMng_SetMostRecentConfirmedData( EventStrgIndex, DEM_UPDNVM_UPD_NVM_RAMDIFF );    /* [GUD]EventStrgIndex */
-
-                    /* Notify DCM */
-                    Dem_OccrDTC_NotifyDTCStatusChanged( EventStrgIndex, oldDTCStatusTmp, newDTCStatusTmp );     /* [GUD]EventStrgIndex */
-
-                    /* Clear latch data */
-                    Dem_OccrDTC_ClearLatchedData();
+                    /* Latch data for Dcm notification */
+                    Dem_TmpOccrDTCEventStrgIndex = EventStrgIndexOfFaultRecordOverwritten;
+                    Dem_TmpOccrDTCOldDTCStatus = OldDTCStatusOverwritten;
+                    Dem_OccrDTCUpdateFlg = DEM_BOOLEAN_TRUE;
                 }
-            }
-        }
-        else
-        {
-            /* not overwritten and confirmed */
-            if( (Dem_UdsStatusByteType)( triggerBit & DEM_UDS_STATUS_CDTC ) == DEM_UDS_STATUS_CDTC )
-            {
-                if( eventStrgIndex != EventStrgIndex )
+                else
                 {
-                    if( EventStrgIndex == lastConfirmedEventStrgIndex )
+                    /* confirmed */
+                    if( eventStrgIndex != EventStrgIndex )
                     {
                         /* Set occurrence time record */
                         Dem_OccrDTCMng_SetMostRecentConfirmedData( EventStrgIndex, DEM_UPDNVM_UPD_NVM_RAMDIFF );    /* [GUD]EventStrgIndex */
@@ -214,20 +197,40 @@ FUNC( void, DEM_CODE ) Dem_OccrDTC_SetEvent
                     }
                 }
             }
-        }
-    }
-    else
-    {
-        /* DTC is not configured and overwritten */
-        if( FaultRecordOverwriteFlag == (boolean)TRUE )
-        {
-            /* Latch data for Dcm notification */
-            Dem_TmpOccrDTCEventStrgIndex = EventStrgIndexOfFaultRecordOverwritten;
-            Dem_TmpOccrDTCOldDTCStatus = OldDTCStatusOverwritten;
-            Dem_OccrDTCUpdateFlg = DEM_BOOLEAN_TRUE;
-        }
-    }
+            else
+            {
+                /* not overwritten and confirmed */
+                if( (Dem_UdsStatusByteType)( triggerBit & DEM_UDS_STATUS_CDTC ) == DEM_UDS_STATUS_CDTC )
+                {
+                    if( eventStrgIndex != EventStrgIndex )
+                    {
+                        if( EventStrgIndex == lastConfirmedEventStrgIndex )
+                        {
+                            /* Set occurrence time record */
+                            Dem_OccrDTCMng_SetMostRecentConfirmedData( EventStrgIndex, DEM_UPDNVM_UPD_NVM_RAMDIFF );    /* [GUD]EventStrgIndex */
 
+                            /* Notify DCM */
+                            Dem_OccrDTC_NotifyDTCStatusChanged( EventStrgIndex, oldDTCStatusTmp, newDTCStatusTmp );     /* [GUD]EventStrgIndex */
+
+                            /* Clear latch data */
+                            Dem_OccrDTC_ClearLatchedData();
+                        }
+                    }
+                }
+            }
+        }
+        else
+        {
+            /* DTC is not configured and overwritten */
+            if( FaultRecordOverwriteFlag == (boolean)TRUE )
+            {
+                /* Latch data for Dcm notification */
+                Dem_TmpOccrDTCEventStrgIndex = EventStrgIndexOfFaultRecordOverwritten;
+                Dem_TmpOccrDTCOldDTCStatus = OldDTCStatusOverwritten;
+                Dem_OccrDTCUpdateFlg = DEM_BOOLEAN_TRUE;
+            }
+        }
+    }
     return;
 }
 
@@ -490,6 +493,7 @@ static FUNC( Dem_u16_EventStrgIndexType, DEM_CODE ) Dem_OccrDTC_GetLastConfirmed
 /*  Version        :Date                                                    */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-9-0         :2025-02-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

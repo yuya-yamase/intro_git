@@ -1,7 +1,7 @@
-/* Dem_IUMPR_Ratio_c(v5-5-0)                                                */
+/* Dem_IUMPR_Ratio_c(v5-10-0)                                               */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -30,7 +30,7 @@
 /*--------------------------------------------------------------------------*/
 /* Macros                                                                   */
 /*--------------------------------------------------------------------------*/
-#define DEM_CALC_RATIO_ID_INDEX_INITIAL         ((Dem_u16_RatioIndexType)0x0000U)
+#define DEM_CALC_RATIO_ID_INITIAL         ((Dem_RatioIdType)0x0000U)
 
 /*--------------------------------------------------------------------------*/
 /* Types                                                                    */
@@ -118,11 +118,14 @@ static VAR( Dem_RatioIdType, DEM_VAR_NO_INIT )              Dem_NextCalcRatioId;
 /* Parameters    | none                                                     */
 /* Return Value  | void                                                     */
 /* Notes         |                                                          */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-9-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_IUMPR_Ratio_Init
 ( void )
 {
-    Dem_NextCalcRatioId     = DEM_CALC_RATIO_ID_INDEX_INITIAL;
+    Dem_NextCalcRatioId     = DEM_CALC_RATIO_ID_INITIAL;
 
     return;
 }
@@ -136,8 +139,12 @@ FUNC( void, DEM_CODE ) Dem_IUMPR_Ratio_Init
 /* Return Value  | none                                                     */
 /* Notes         | -                                                        */
 /*--------------------------------------------------------------------------*/
+/* UpdateRecord  | [UpdRec]IUMPR                                            */
+/*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-6-0      | no object changed.                                       */
+/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_IUMPR_UpdateEventRelatedNumerator
 (
@@ -155,11 +162,11 @@ FUNC( void, DEM_CODE ) Dem_IUMPR_UpdateEventRelatedNumerator
 
     for( tableIndex = (Dem_u16_RatioIndexType)0x00U; tableIndex < ratioIdTableNum; tableIndex++ )   /* [GUD:for]tableIndex */
     {
-        ratioId     = Dem_RatioIdListAdrTable[ ratioIdListAdrIndex ].RatioIdListAdr[ tableIndex ];  /* [GUDCHK:CALLER]EventCtrlIndex *//* [GUD]tableIndex *//* [GUD:CFG:IF_GUARDED: EventCtrlIndex ]ratioId */
+        ratioId     = Dem_RatioIdListAdrTable[ ratioIdListAdrIndex ].RatioIdListAdr[ tableIndex ];  /* [GUDCHK:CALLER]EventCtrlIndex *//* [GUD]tableIndex *//* [GUD:CFG:IF_GUARDED: EventCtrlIndex ]ratioId *//* [ARYCHK] ratioIdTableNum / 1 / tableIndex */
         ratioIdKind = Dem_RatioTable[ ratioId ].DemRatioKind;                                       /* [GUDCHK:CALLER]EventCtrlIndex *//* [GUD:CFG:IF_GUARDED: EventCtrlIndex ]ratioId */
         if( ratioIdKind == DEM_RATIO_OBSERVER )
         {
-            Dem_IUMPRMng_SetRatioNumeAdditionCondition( ratioId );
+            Dem_IUMPRMng_SetRatioNumeAdditionCondition( ratioId );  /*[UpdRec]IUMPR */
         }
     }
 
@@ -183,6 +190,8 @@ FUNC( void, DEM_CODE ) Dem_IUMPR_UpdateEventRelatedNumerator
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-8-0      | branch changed.                                          */
+/*   v5-9-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_IUMPR_GetDataByRatioId
 (
@@ -191,11 +200,10 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_IUMPR_GetDataByRatioId
     P2VAR( Dem_u16_IUMPRCycleCounterType, AUTOMATIC, AUTOMATIC )   DenominatorPtr
 )
 {
-    VAR( Dem_u08_InternalReturnType, AUTOMATIC )                     retVal;
-    VAR( Dem_u16_RatioIndexType, AUTOMATIC )    demRatioNum;
-    VAR( boolean, AUTOMATIC )                   availableStatus;
+    VAR( Dem_u08_InternalReturnType, AUTOMATIC )    retVal;
+    VAR( Dem_RatioIdType, AUTOMATIC )               demRatioNum;
+    VAR( boolean, AUTOMATIC )                       availableStatus;
     VAR( Dem_u16_EventCtrlIndexType, AUTOMATIC )    eventCtrlIndex;
-    VAR( boolean, AUTOMATIC ) eventOBDKind;
 
     retVal = DEM_IRT_NG;
     demRatioNum = Dem_RatioNum;
@@ -208,12 +216,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_IUMPR_GetDataByRatioId
 
         if( availableStatus == (boolean)TRUE )
         {
-            /*  check OBD event or not.     */
-            eventOBDKind    =   Dem_CfgInfoPm_CheckEventKindOfOBD_ByEvtCtrlIdx( eventCtrlIndex );           /* [GUD]eventCtrlIndex */
-            if( eventOBDKind == (boolean)TRUE ) /*  OBD     */
-            {
-                retVal = Dem_IUMPRMng_GetRatioByRatioId( RatioId, NumeratorPtr, DenominatorPtr );           /* [GUD]RatioId *//* [GUD]eventCtrlIndex */
-            }
+            retVal = Dem_IUMPRMng_GetRatioByRatioId( RatioId, NumeratorPtr, DenominatorPtr );   /* [GUD]RatioId *//* [GUD]eventCtrlIndex */
         }
     }
 
@@ -235,6 +238,8 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_IUMPR_GetDataByRatioId
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | new created. based on Dem_IUMPR_GetDataByRatioId.        */
+/*   v5-8-0      | branch changed.                                          */
+/*   v5-9-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_IUMPR_GetEventIdByRatioId
 (
@@ -242,12 +247,11 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_IUMPR_GetEventIdByRatioId
     P2VAR( Dem_EventIdType, AUTOMATIC, AUTOMATIC )  EventIdPtr
 )
 {
-    VAR( Dem_u08_InternalReturnType, AUTOMATIC )                     retVal;
-    VAR( Dem_u16_RatioIndexType, AUTOMATIC )        demRatioNum;
+    VAR( Dem_u08_InternalReturnType, AUTOMATIC )    retVal;
+    VAR( Dem_RatioIdType, AUTOMATIC )               demRatioNum;
     VAR( boolean, AUTOMATIC )                       availableStatus;
     VAR( Dem_u16_EventCtrlIndexType, AUTOMATIC )    eventCtrlIndex;
     VAR( Dem_EventIdType, AUTOMATIC )               eventId;
-    VAR( boolean, AUTOMATIC ) eventOBDKind;
 
     retVal = DEM_IRT_NG;
     demRatioNum = Dem_RatioNum;
@@ -260,16 +264,11 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_IUMPR_GetEventIdByRatioId
 
         if( availableStatus == (boolean)TRUE )
         {
-            /*  check OBD event or not.     */
-            eventOBDKind    =   Dem_CfgInfoPm_CheckEventKindOfOBD_ByEvtCtrlIdx( eventCtrlIndex );   /* [GUD]eventCtrlIndex */
-            if( eventOBDKind == (boolean)TRUE ) /*  OBD     */
+            eventId =   Dem_CfgInfoCmn_CnvEventCtrlIndexToEventId( eventCtrlIndex );    /* [GUD]eventCtrlIndex */
+            if( eventId != DEM_EVENTID_INVALID )
             {
-                eventId =   Dem_CfgInfoCmn_CnvEventCtrlIndexToEventId( eventCtrlIndex );            /* [GUD]eventCtrlIndex */
-                if( eventId != DEM_EVENTID_INVALID )
-                {
-                    retVal = DEM_IRT_OK;
-                    *EventIdPtr =   eventId;
-                }
+                retVal = DEM_IRT_OK;
+                *EventIdPtr =   eventId;
             }
         }
     }
@@ -291,6 +290,8 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_IUMPR_GetEventIdByRatioId
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | new created. based on Dem_IUMPR_UpdateEventRelatedNumerator. */
+/*   v5-7-0      | no object changed.                                       */
+/*   v5-9-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_IUMPR_GetRatioIdByEventId
 (
@@ -301,16 +302,16 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_IUMPR_GetRatioIdByEventId
 {
     VAR( Dem_u08_InternalReturnType, AUTOMATIC ) retVal;
     VAR( Dem_RatioIdType, AUTOMATIC )                       ratioId;
+    VAR( Dem_RatioIdType, AUTOMATIC )                       ratioIdBuffIndex;
+    VAR( Dem_RatioIdType, AUTOMATIC )                       ratioIdBuffSize;
     VAR( Dem_u16_RatioIndexType, AUTOMATIC )                tableIndex;
     VAR( Dem_u16_RatioIndexType, AUTOMATIC )                ratioIdTableNum;
-    VAR( Dem_u16_RatioIndexType, AUTOMATIC )                ratioIdBuffIndex;
-    VAR( Dem_u16_RatioIndexType, AUTOMATIC )                ratioIdBuffSize;
     VAR( Dem_u16_RatioIdListAdrIndexType, AUTOMATIC )       ratioIdListAdrIndex;
 
-    ratioIdBuffIndex    =   (Dem_u16_RatioIndexType)0U;
+    ratioIdBuffIndex    =   (Dem_RatioIdType)0U;
     ratioIdBuffSize     =   *RatioIdNumPtr;
 
-    if ( ratioIdBuffSize > (Dem_u16_RatioIndexType)0U )
+    if ( ratioIdBuffSize > (Dem_RatioIdType)0U )
     {
         retVal  =   DEM_IRT_OK;
         ratioIdTableNum     = Dem_RatioDataTable[ EventCtrlIndex ].TableNum;                /* [GUDCHK:CALLER]EventCtrlIndex *//* [GUD:CFG:IF_GUARDED: EventCtrlIndex ]ratioIdTableNum */
@@ -318,13 +319,13 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_IUMPR_GetRatioIdByEventId
 
         for( tableIndex = (Dem_u16_RatioIndexType)0x00U; tableIndex < ratioIdTableNum; tableIndex++ )   /* [GUD:for]tableIndex */
         {
-            ratioId     = Dem_RatioIdListAdrTable[ ratioIdListAdrIndex ].RatioIdListAdr[ tableIndex ];  /* [GUDCHK:CALLER]EventCtrlIndex *//* [GUD]tableIndex */
+            ratioId     = Dem_RatioIdListAdrTable[ ratioIdListAdrIndex ].RatioIdListAdr[ tableIndex ];  /* [GUDCHK:CALLER]EventCtrlIndex *//* [GUD]tableIndex *//* [ARYCHK] ratioIdTableNum / 1 / tableIndex */
 
             /*  set data.       */
             if ( ratioIdBuffIndex < ratioIdBuffSize )                                       /* [GUD:if]ratioIdBuffIndex */
             {
-                RatioIdBufferPtr[ ratioIdBuffIndex ]    =   ratioId;                        /* [GUD]ratioIdBuffIndex */
-                ratioIdBuffIndex    =   ratioIdBuffIndex + (Dem_u16_RatioIndexType)1U;
+                RatioIdBufferPtr[ ratioIdBuffIndex ]    =   ratioId;                        /* [GUD]ratioIdBuffIndex *//* [ARYCHK] *RatioIdNumPtr / 1 / ratioIdBuffIndex */
+                ratioIdBuffIndex    =   ratioIdBuffIndex + (Dem_RatioIdType)1U;
             }
             else
             {
@@ -356,15 +357,24 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_IUMPR_GetRatioIdByEventId
 /*               |          Buffer containing the contents of               */
 /*               |          InfoType 0x08 or 0x0B.                          */
 /*               |          The buffer is provided by the Dcm.              */
+/*               | [in] NODIGroupNum :                                      */
+/*               |          Number Of Data Items GroupNum                   */
 /* Return Value  | none                                                     */
 /* Notes         | -                                                        */
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-7-0      | no object changed.                                       */
+/*   v5-10-0     | no branch changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_IUMPR_Ratio_GetInfoTypeValue
 (
-    P2VAR( uint8, AUTOMATIC, DEM_APPL_DATA )        IumprdataPtr
+#ifndef DEM_SIT_RANGE_CHECK
+#else   /* DEM_SIT_RANGE_CHECK */
+    VAR( uint8, AUTOMATIC ) BuffSize,
+#endif  /* DEM_SIT_RANGE_CHECK */
+    P2VAR( uint8, AUTOMATIC, DEM_APPL_DATA )        IumprdataPtr,
+    VAR( Dem_u08_IUMPRGroupIndexType, AUTOMATIC )   NODIGroupNum
 )
 {
     VAR( Dem_u16_IUMPRCycleCounterType, AUTOMATIC )                        nume;
@@ -373,15 +383,15 @@ FUNC( void, DEM_CODE ) Dem_IUMPR_Ratio_GetInfoTypeValue
     VAR( Dem_u08_IUMPRGroupIndexType, AUTOMATIC )   reqIumprGroupNum;
     VAR( uint8, AUTOMATIC )                         dataPos;
 
-    reqIumprGroupNum                    = Dem_IUMPR_NODI_GroupNum;
+    reqIumprGroupNum                    = NODIGroupNum;
     for ( groupIndex = (Dem_u08_IUMPRGroupIndexType)0U; groupIndex < reqIumprGroupNum; groupIndex++ )   /* [GUD:for]groupIndex */
     {
         Dem_IUMPR_GetComponentRatio( groupIndex, &nume, &deno );        /* [GUD]groupIndex */
         dataPos = groupIndex * DEM_IUMPR_RATIO_DATA_SIZE;
-        IumprdataPtr[dataPos + DEM_IUMPR_POS5] = (uint8)(nume >> DEM_IUMPR_COUNTER_SHIFT);
-        IumprdataPtr[dataPos + DEM_IUMPR_POS6] = (uint8)(nume);
-        IumprdataPtr[dataPos + DEM_IUMPR_POS7] = (uint8)(deno >> DEM_IUMPR_COUNTER_SHIFT);
-        IumprdataPtr[dataPos + DEM_IUMPR_POS8] = (uint8)(deno);
+        IumprdataPtr[dataPos + DEM_IUMPR_POS5] = (uint8)(nume >> DEM_IUMPR_COUNTER_SHIFT);/* [ARYCHK] BuffSize / 1 / dataPos+DEM_IUMPR_POS5 */
+        IumprdataPtr[dataPos + DEM_IUMPR_POS6] = (uint8)(nume);/* [ARYCHK] BuffSize / 1 / dataPos+DEM_IUMPR_POS6 */
+        IumprdataPtr[dataPos + DEM_IUMPR_POS7] = (uint8)(deno >> DEM_IUMPR_COUNTER_SHIFT);/* [ARYCHK] BuffSize / 1 / dataPos+DEM_IUMPR_POS7 */
+        IumprdataPtr[dataPos + DEM_IUMPR_POS8] = (uint8)(deno);/* [ARYCHK] BuffSize / 1 / dataPos+DEM_IUMPR_POS8 */
     }
 
     return ;
@@ -403,6 +413,7 @@ FUNC( void, DEM_CODE ) Dem_IUMPR_Ratio_GetInfoTypeValue
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-9-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_IUMPR_CheckFaultDetectCondition
 (
@@ -410,7 +421,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_IUMPR_CheckFaultDetectCondition
 )
 {
     VAR( Dem_u08_InternalReturnType, AUTOMATIC )   retVal;
-    VAR( Dem_u16_RatioIndexType, AUTOMATIC )    demRatioNum;
+    VAR( Dem_RatioIdType, AUTOMATIC )              demRatioNum;
     VAR( Dem_u16_EventCtrlIndexType, AUTOMATIC )    eventCtrlIndex;
     VAR( boolean, AUTOMATIC )                   availableStatus;
     VAR( Dem_u08_IUMPRRatioKindType, AUTOMATIC )                     ratioKind;
@@ -447,6 +458,11 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_IUMPR_CheckFaultDetectCondition
 /*               |          monitor could have found a fault                */
 /* Return Value  | none                                                     */
 /* Notes         | -                                                        */
+/*--------------------------------------------------------------------------*/
+/* UpdateRecord  | [UpdRec]IUMPR                                            */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-6-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_IUMPR_RepIUMPRFaultDetect
 (
@@ -454,7 +470,7 @@ FUNC( void, DEM_CODE ) Dem_IUMPR_RepIUMPRFaultDetect
 )
 {
 
-    Dem_IUMPRMng_SetRatioNumeAdditionCondition( RatioId );
+    Dem_IUMPRMng_SetRatioNumeAdditionCondition( RatioId );  /*[UpdRec]IUMPR */
 
     return;
 }
@@ -477,6 +493,7 @@ FUNC( void, DEM_CODE ) Dem_IUMPR_RepIUMPRFaultDetect
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-9-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_IUMPR_CheckLockReleaseCondition
 (
@@ -486,7 +503,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_IUMPR_CheckLockReleaseCondition
     VAR( Dem_u08_InternalReturnType, AUTOMATIC )  retVal;
     VAR( Dem_u08_InternalReturnType, AUTOMATIC )  checkDenGroup;
     VAR( Dem_u08_IUMPRDenGroupType, AUTOMATIC )   ratioDenGroup;
-    VAR( Dem_u16_RatioIndexType, AUTOMATIC )    demRatioNum;
+    VAR( Dem_RatioIdType, AUTOMATIC )             demRatioNum;
     VAR( Dem_u16_EventCtrlIndexType, AUTOMATIC )    eventCtrlIndex;
     VAR( boolean, AUTOMATIC )                   availableStatus;
 
@@ -540,6 +557,11 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_IUMPR_CheckLockReleaseCondition
 /*               |          monitor could have found a fault                */
 /* Return Value  | none                                                     */
 /* Notes         | -                                                        */
+/*--------------------------------------------------------------------------*/
+/* UpdateRecord  | [UpdRec]IUMPR                                            */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-6-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_IUMPR_UpdateDenUnlockCondition
 (
@@ -547,7 +569,7 @@ FUNC( void, DEM_CODE ) Dem_IUMPR_UpdateDenUnlockCondition
 )
 {
 
-    Dem_IUMPRMng_SetRatioDenUnlockCondition( RatioId );
+    Dem_IUMPRMng_SetRatioDenUnlockCondition( RatioId ); /*[UpdRec]IUMPR */
 
     return;
 }
@@ -570,6 +592,7 @@ FUNC( void, DEM_CODE ) Dem_IUMPR_UpdateDenUnlockCondition
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_IUMPR_GetComponentRatio
 (
@@ -600,7 +623,7 @@ static FUNC( void, DEM_CODE ) Dem_IUMPR_GetComponentRatio
     ratioListNum = Dem_IUMPRGroupTable[ GroupIndex ].TableNum;                              /* [GUDCHK:CALLER]GroupIndex */
     for( loopCount = (Dem_u16_RatioIndexType)0U; loopCount < ratioListNum; loopCount++ )    /* [GUD:for]loopCount */
     {
-        ratioId     = Dem_IUMPRGroupTable[ GroupIndex ].RatioIdListAdr[ loopCount ];        /* [GUDCHK:CALLER]GroupIndex *//* [GUD]loopCount *//* [GUD:CFG:IF_GUARDED: GroupIndex/loopCount ]ratioId */
+        ratioId     = Dem_IUMPRGroupTable[ GroupIndex ].RatioIdListAdr[ loopCount ];        /* [GUDCHK:CALLER]GroupIndex *//* [GUD]loopCount *//* [GUD:CFG:IF_GUARDED: GroupIndex/loopCount ]ratioId *//* [ARYCHK] ratioListNum / 1 / loopCount */
         eventCtrlIndex  = Dem_RatioTable[ ratioId ].DemDiagnosticEventRef;                  /* [GUDCHK:CALLER]GroupIndex *//* [GUD:CFG:IF_GUARDED: ratioId ]eventCtrlIndex */
 
         /* Gets event available status */
@@ -727,6 +750,12 @@ FUNC( boolean, DEM_CODE ) Dem_IUMPR_JudgeMinThanCurrentRatio
 /*               |         TRUE: UpdateProcess is completed.                */
 /* Return Value  | void                                                     */
 /* Notes         | This function is in Dem_MainFunction process.            */
+/*--------------------------------------------------------------------------*/
+/* UpdateRecord  | [UpdRec]IUMPR                                            */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-6-0      | no object changed.                                       */
+/*   v5-9-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_IUMPR_UpdateRatioCounter
 (
@@ -736,10 +765,10 @@ FUNC( void, DEM_CODE ) Dem_IUMPR_UpdateRatioCounter
     P2VAR( boolean, AUTOMATIC, AUTOMATIC ) ProcessCompletePtr
 )
 {
-    VAR( Dem_u16_RatioIndexType, AUTOMATIC )        demRatioNum;
+    VAR( Dem_RatioIdType, AUTOMATIC )               demRatioNum;
     VAR( Dem_RatioIdType, AUTOMATIC )               ratioId;
-    VAR( Dem_u16_IUMPRCycleCounterType, AUTOMATIC )                        counterInCycle;
-    VAR( Dem_u16_RatioIndexType, AUTOMATIC )        demIUMPRNumberOfRatioIdsPerCycle;
+    VAR( Dem_u16_IUMPRCycleCounterType, AUTOMATIC ) counterInCycle;
+    VAR( Dem_u16_IUMPRCycleCounterType, AUTOMATIC ) demIUMPRNumberOfRatioIdsPerCycle;
 
     demRatioNum             = Dem_RatioNum;
     *ProcessCompletePtr     = (boolean)FALSE;
@@ -748,7 +777,7 @@ FUNC( void, DEM_CODE ) Dem_IUMPR_UpdateRatioCounter
     if( FirstTime == (boolean)TRUE )
     {
         /* Calculate General Denominator only for the first time. */
-        Dem_NextCalcRatioId         = DEM_CALC_RATIO_ID_INDEX_INITIAL;
+        Dem_NextCalcRatioId         = DEM_CALC_RATIO_ID_INITIAL;
     }
 
     counterInCycle                      = DEM_IUMPR_COUNTER_INITVALUE;
@@ -758,7 +787,7 @@ FUNC( void, DEM_CODE ) Dem_IUMPR_UpdateRatioCounter
     {
         ratioId = Dem_NextCalcRatioId;
 
-        Dem_IUMPR_UpdateRatioInfomation( ratioId, GenDenCondState, GenDenFidPermission );
+        Dem_IUMPR_UpdateRatioInfomation( ratioId, GenDenCondState, GenDenFidPermission );   /*[UpdRec]IUMPR */
 
         Dem_NextCalcRatioId = Dem_NextCalcRatioId + (Dem_RatioIdType)1U;
         counterInCycle = counterInCycle + (Dem_u16_IUMPRCycleCounterType)1U;
@@ -770,7 +799,7 @@ FUNC( void, DEM_CODE ) Dem_IUMPR_UpdateRatioCounter
 
     if( Dem_NextCalcRatioId >= demRatioNum )
     {
-        Dem_NextCalcRatioId     = DEM_CALC_RATIO_ID_INDEX_INITIAL;
+        Dem_NextCalcRatioId     = DEM_CALC_RATIO_ID_INITIAL;
         *ProcessCompletePtr     = (boolean)TRUE;
     }
 
@@ -980,8 +1009,11 @@ static FUNC( void, DEM_CODE ) Dem_IUMPR_UpdateHistCondition
 /* Return Value  | boolean                                                  */
 /* Notes         | This function is in Dem_MainFunction process.            */
 /*--------------------------------------------------------------------------*/
+/* UpdateRecord  | [UpdRec]IUMPR                                            */
+/*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-6-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_IUMPR_UpdateRatioInfomation
 (
@@ -1088,7 +1120,7 @@ static FUNC( void, DEM_CODE ) Dem_IUMPR_UpdateRatioInfomation
             }
         }
         /* Update Data */
-        Dem_IUMPRMng_SetRatioInformation( RatioId, ratioCondition, ratioNumeCounter, ratioDenCounter );             /* [GUD]RatioId */
+        Dem_IUMPRMng_SetRatioInformation( RatioId, ratioCondition, ratioNumeCounter, ratioDenCounter );             /* [GUD]RatioId */  /*[UpdRec]IUMPR */
 
     }
 
@@ -1188,6 +1220,11 @@ static FUNC( void, DEM_CODE ) Dem_IUMPR_UpdateDenEstRatioCond
 /*  Version        :Date                                                    */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-6-0         :2024-01-29                                              */
+/*  v5-7-0         :2024-05-29                                              */
+/*  v5-8-0         :2024-10-29                                              */
+/*  v5-9-0         :2025-02-26                                              */
+/*  v5-10-0        :2025-06-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

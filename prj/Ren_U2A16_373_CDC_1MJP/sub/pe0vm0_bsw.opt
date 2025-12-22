@@ -96,6 +96,7 @@
 ###    -I../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/DTC/PFC
 ###    -I../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/DTR
 ###    -I../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/EDR
+###    -I../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/Event
 ###    -I../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/Ind/MI
 ###    -I../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/IUMPR
 ###    -I../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/Misfire
@@ -104,6 +105,7 @@
 ###    -I../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/PID
 ###    -I../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/PreFFD
 ###    -I../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/Similar
+###    -I../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlUserDefMem/Control
 ###    -I../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlUserDefMem/DataCtl
 ###    -I../../src/PE0VM0/BSW/Aubist/Dem/src/DataMng/ClrInfoMng
 ###    -I../../src/PE0VM0/BSW/Aubist/Dem/src/DataMng/DataMng

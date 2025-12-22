@@ -1,7 +1,7 @@
-/* Dcm_Main_Common_c(v5-3-0)                                                */
+/* Dcm_Main_Common_c(v5-8-0)                                                */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -36,6 +36,24 @@
 /* Dcm Init Status */
 #define DCM_MAIN_ACTIVE         ((uint8)0xA5U)      /* Dcm Init             */
 #define DCM_MAIN_MIRROR_ACTIVE  ((uint8)0x5AU)      /* Dcm Init(Mirror)     */
+
+/* Dcm_Main_Memset */
+#define DCM_MAIN_REMAINED_BUFSIZE_8                             ((uint16)8U)
+#define DCM_MAIN_REMAINED_BUFSIZE_7                             ((uint16)7U)
+#define DCM_MAIN_REMAINED_BUFSIZE_6                             ((uint16)6U)
+#define DCM_MAIN_REMAINED_BUFSIZE_5                             ((uint16)5U)
+#define DCM_MAIN_REMAINED_BUFSIZE_4                             ((uint16)4U)
+#define DCM_MAIN_REMAINED_BUFSIZE_3                             ((uint16)3U)
+#define DCM_MAIN_REMAINED_BUFSIZE_2                             ((uint16)2U)
+#define DCM_MAIN_REMAINED_BUFSIZE_1                             ((uint16)1U)
+#define DCM_MAIN_BUFFER_INDEX_7                                 ((uint8)7U)
+#define DCM_MAIN_BUFFER_INDEX_6                                 ((uint8)6U)
+#define DCM_MAIN_BUFFER_INDEX_5                                 ((uint8)5U)
+#define DCM_MAIN_BUFFER_INDEX_4                                 ((uint8)4U)
+#define DCM_MAIN_BUFFER_INDEX_3                                 ((uint8)3U)
+#define DCM_MAIN_BUFFER_INDEX_2                                 ((uint8)2U)
+#define DCM_MAIN_BUFFER_INDEX_1                                 ((uint8)1U)
+#define DCM_MAIN_BUFFER_INDEX_0                                 ((uint8)0U)
 
 /*--------------------------------------------------------------------------*/
 /* Types                                                                    */
@@ -656,6 +674,99 @@ FUNC( void, DCM_CODE ) Dcm_PreWriteAll
 }
 
 /****************************************************************************/
+/* Function Name | Dcm_Main_SetMemory                                       */
+/* Description   | Set the specified data in memory.                        */
+/* Preconditions |                                                          */
+/* Parameters    | [out] ptBufferPtr :                                      */
+/*               |        Address to set the data.                          */
+/*               | [in] u1CharData :                                        */
+/*               |        Data to set.                                      */
+/*               | [in] u2BufferSize :                                      */
+/*               |        Memory size for setting data.                     */
+/*               |                                                          */
+/* Return Value  | void                                                     */
+/* Notes         | None                                                     */
+/****************************************************************************/
+FUNC( void, DCM_CODE ) Dcm_Main_SetMemory
+(
+    P2VAR( uint8, AUTOMATIC, DCM_APPL_DATA )    ptBufferPtr,
+    const uint8                                 u1CharData,
+    const uint16                                u2BufferSize
+)
+{
+    P2VAR( uint8, AUTOMATIC, DCM_APPL_DATA )    pt_DstPtr;
+    uint16                                      u2_RemainSize;
+
+    pt_DstPtr       = ptBufferPtr;
+    u2_RemainSize   = u2BufferSize;
+
+    while( u2_RemainSize >= DCM_MAIN_REMAINED_BUFSIZE_8 )
+    {
+        pt_DstPtr[DCM_MAIN_BUFFER_INDEX_7] = u1CharData;
+        pt_DstPtr[DCM_MAIN_BUFFER_INDEX_6] = u1CharData;
+        pt_DstPtr[DCM_MAIN_BUFFER_INDEX_5] = u1CharData;
+        pt_DstPtr[DCM_MAIN_BUFFER_INDEX_4] = u1CharData;
+        pt_DstPtr[DCM_MAIN_BUFFER_INDEX_3] = u1CharData;
+        pt_DstPtr[DCM_MAIN_BUFFER_INDEX_2] = u1CharData;
+        pt_DstPtr[DCM_MAIN_BUFFER_INDEX_1] = u1CharData;
+        pt_DstPtr[DCM_MAIN_BUFFER_INDEX_0] = u1CharData;
+        pt_DstPtr = &pt_DstPtr[DCM_MAIN_REMAINED_BUFSIZE_8];
+        u2_RemainSize -= DCM_MAIN_REMAINED_BUFSIZE_8;
+    }
+
+    switch( u2_RemainSize )
+    {
+        case DCM_MAIN_REMAINED_BUFSIZE_7:
+            pt_DstPtr[DCM_MAIN_BUFFER_INDEX_6] = u1CharData;
+            pt_DstPtr[DCM_MAIN_BUFFER_INDEX_5] = u1CharData;
+            pt_DstPtr[DCM_MAIN_BUFFER_INDEX_4] = u1CharData;
+            pt_DstPtr[DCM_MAIN_BUFFER_INDEX_3] = u1CharData;
+            pt_DstPtr[DCM_MAIN_BUFFER_INDEX_2] = u1CharData;
+            pt_DstPtr[DCM_MAIN_BUFFER_INDEX_1] = u1CharData;
+            pt_DstPtr[DCM_MAIN_BUFFER_INDEX_0] = u1CharData;
+            break;
+        case DCM_MAIN_REMAINED_BUFSIZE_6:
+            pt_DstPtr[DCM_MAIN_BUFFER_INDEX_5] = u1CharData;
+            pt_DstPtr[DCM_MAIN_BUFFER_INDEX_4] = u1CharData;
+            pt_DstPtr[DCM_MAIN_BUFFER_INDEX_3] = u1CharData;
+            pt_DstPtr[DCM_MAIN_BUFFER_INDEX_2] = u1CharData;
+            pt_DstPtr[DCM_MAIN_BUFFER_INDEX_1] = u1CharData;
+            pt_DstPtr[DCM_MAIN_BUFFER_INDEX_0] = u1CharData;
+            break;
+        case DCM_MAIN_REMAINED_BUFSIZE_5:
+            pt_DstPtr[DCM_MAIN_BUFFER_INDEX_4] = u1CharData;
+            pt_DstPtr[DCM_MAIN_BUFFER_INDEX_3] = u1CharData;
+            pt_DstPtr[DCM_MAIN_BUFFER_INDEX_2] = u1CharData;
+            pt_DstPtr[DCM_MAIN_BUFFER_INDEX_1] = u1CharData;
+            pt_DstPtr[DCM_MAIN_BUFFER_INDEX_0] = u1CharData;
+            break;
+        case DCM_MAIN_REMAINED_BUFSIZE_4:
+            pt_DstPtr[DCM_MAIN_BUFFER_INDEX_3] = u1CharData;
+            pt_DstPtr[DCM_MAIN_BUFFER_INDEX_2] = u1CharData;
+            pt_DstPtr[DCM_MAIN_BUFFER_INDEX_1] = u1CharData;
+            pt_DstPtr[DCM_MAIN_BUFFER_INDEX_0] = u1CharData;
+            break;
+        case DCM_MAIN_REMAINED_BUFSIZE_3:
+            pt_DstPtr[DCM_MAIN_BUFFER_INDEX_2] = u1CharData;
+            pt_DstPtr[DCM_MAIN_BUFFER_INDEX_1] = u1CharData;
+            pt_DstPtr[DCM_MAIN_BUFFER_INDEX_0] = u1CharData;
+            break;
+        case DCM_MAIN_REMAINED_BUFSIZE_2:
+            pt_DstPtr[DCM_MAIN_BUFFER_INDEX_1] = u1CharData;
+            pt_DstPtr[DCM_MAIN_BUFFER_INDEX_0] = u1CharData;
+            break;
+        case DCM_MAIN_REMAINED_BUFSIZE_1:
+            pt_DstPtr[DCM_MAIN_BUFFER_INDEX_0] = u1CharData;
+            break;
+        default:
+            /* No process */
+            break;
+    }
+
+    return;
+}
+
+/****************************************************************************/
 /* Internal Functions                                                       */
 /****************************************************************************/
 /****************************************************************************/
@@ -975,6 +1086,7 @@ static FUNC( void, DCM_CODE ) Dcm_Main_ClearMasterVin
 /*  v5-0-0         :2022-03-29                                              */
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
+/*  v5-8-0         :2024-10-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

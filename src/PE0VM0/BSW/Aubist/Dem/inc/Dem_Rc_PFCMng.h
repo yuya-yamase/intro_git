@@ -1,7 +1,7 @@
-/* Dem_Rc_PFCMng_h(v5-5-0)                                                  */
+/* Dem_Rc_PFCMng_h(v5-6-0)                                                  */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 /****************************************************************************/
 /* Object Name  | Dem/Rc_PFCMng/HEADER                                      */
@@ -124,6 +124,9 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_PFCMng_GetStoredMisfireSpaceEve
 );
 #endif /* ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON ) */
 
+FUNC( void, DEM_CODE ) Dem_PFCMng_ClearAllPFCRecord
+( void );
+
 /*----------------------------------*/
 /*  for Update NvM                  */
 /*----------------------------------*/
@@ -227,7 +230,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_PFCMng_QuaInfo_GetEventIdFromRe
     P2VAR( Dem_EventIdType, AUTOMATIC, AUTOMATIC ) EventIdPtr
 );
 #endif /* ( DEM_NVM_SYNC_PROCESS_ENABLE == STD_ON ) */
-
 #endif /* ( DEM_PFC_SUPPORT == STD_ON ) */
 
 
@@ -267,6 +269,7 @@ extern VAR( Dem_PFCQuaInfoRecordType, DEM_VAR_NO_INIT ) Dem_TmpPFCQuaInfoMirror;
 /*  v5-0-0         :2022-03-29                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-6-0         :2024-01-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

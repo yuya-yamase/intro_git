@@ -1,7 +1,7 @@
-/* Dem_FFD_FilRecord_c(v5-5-0)                                              */
+/* Dem_FFD_FilRecord_c(v5-6-0)                                              */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -20,6 +20,8 @@
 #include "../../../inc/Dem_Pm_Misfire.h"
 #include "../../../inc/Dem_Rc_DataMng.h"
 #include "../../../inc/Dem_Pm_DataCtl.h"
+#include "../../../inc/Dem_CmnLib_CmbEvt.h"
+#include "../../../inc/Dem_CmnLib_ConfigInfo.h"
 #include "../../../cfg/Dem_Data_Cfg.h"
 
 /*--------------------------------------------------------------------------*/
@@ -31,16 +33,6 @@
 /*--------------------------------------------------------------------------*/
 /* Types                                                                    */
 /*--------------------------------------------------------------------------*/
-/* Dem_FilteredRecordSearchInfoType */
-typedef struct {
-    Dem_u08_OrderIndexType OrderOfFaultIndex;
-    Dem_u08_FaultIndexType FaultIndex;
-    Dem_u08_FFListIndexType ObdRecordNumberIndex;
-    Dem_u08_FFListIndexType RecordNumberIndex;
-    Dem_u08_TSFFListPerDTCIndexType TSFFListIndex;
-    Dem_u16_TSFFDIndexType TSFFRecIndex;
-    boolean GetFaultIndexFlag;
-} Dem_FilteredRecordSearchInfoType;
 
 /*--------------------------------------------------------------------------*/
 /* Function Prototypes                                                      */
@@ -243,6 +235,9 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_FFD_GetNextFilteredRecord
 /* Parameters    | none                                                     */
 /* Return Value  | void                                                     */
 /* Notes         |                                                          */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-6-0      | no branch changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_FFD_ClearFilteredRecordSearchInfo
 ( void )
@@ -255,6 +250,11 @@ static FUNC( void, DEM_CODE ) Dem_FFD_ClearFilteredRecordSearchInfo
     Dem_FilteredRecordSearchInfo.TSFFListIndex          = (Dem_u08_TSFFListPerDTCIndexType)0U;
     Dem_FilteredRecordSearchInfo.TSFFRecIndex           = Dem_TSFFTotalTimeseriesFFRecordNum;
     Dem_FilteredRecordSearchInfo.GetFaultIndexFlag      = (boolean)TRUE;
+    Dem_FilteredRecordSearchInfo.FFRecNumStoredIndex    = (Dem_u16_FFRecNumStoredIndexType)0U;
+    Dem_FilteredRecordSearchInfo.MisfireCylinderNum     = DEM_MISFIRE_CYL_NUM_INVALID;
+#if ( DEM_COMBINEDEVENT_ONRETRIEVAL_SUPPORT == STD_ON ) /* [FuncSw] */
+    Dem_CmbEvt_StartOfCheckOutputFilteredDTC();
+#endif  /*  ( DEM_COMBINEDEVENT_ONRETRIEVAL_SUPPORT == STD_ON ) */
     return;
 }
 
@@ -271,6 +271,7 @@ static FUNC( void, DEM_CODE ) Dem_FFD_ClearFilteredRecordSearchInfo
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-6-0      | branch changed.                                          */
 /****************************************************************************/
 static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_FFD_CheckSearchFilteredRecordContinuation
 ( void )
@@ -278,6 +279,11 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_FFD_CheckSearchFilteredR
     VAR( Dem_u08_InternalReturnType, AUTOMATIC ) retVal;
     VAR( Dem_u08_InternalReturnType, AUTOMATIC ) retGetFaultIndex;
     VAR( Dem_u08_FaultIndexType, AUTOMATIC ) faultIndex;
+#if ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON ) /* [FuncSw] */
+    VAR( Dem_u08_InternalReturnType, AUTOMATIC ) resultOfGetEventStrgIndex;
+    VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) eventStrgIndex;
+    VAR( boolean, AUTOMATIC ) misfireEventKind;
+#endif /* DEM_MISFIRE_EVENT_CONFIGURED -STD_ON- */
 
     retVal = DEM_IRT_NG;
 
@@ -299,6 +305,27 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_FFD_CheckSearchFilteredR
             Dem_FilteredRecordSearchInfo.TSFFListIndex          = (Dem_u08_TSFFListPerDTCIndexType)0x00U;
             Dem_FilteredRecordSearchInfo.TSFFRecIndex           = Dem_TSFFTotalTimeseriesFFRecordNum;
             Dem_FilteredRecordSearchInfo.GetFaultIndexFlag      = (boolean)FALSE;
+            Dem_FilteredRecordSearchInfo.FFRecNumStoredIndex    = (Dem_u16_FFRecNumStoredIndexType)0U;
+#if ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON ) /* [FuncSw] */
+            resultOfGetEventStrgIndex = Dem_DataMngC_GetFR_EventStrgIndex( faultIndex, &eventStrgIndex );
+            if ( resultOfGetEventStrgIndex == DEM_IRT_OK )
+            {
+                misfireEventKind = Dem_CfgInfoPm_CheckEventKindOfMisfire_InEvtStrgGrp( eventStrgIndex );
+                if ( misfireEventKind == (boolean)TRUE )
+                {
+                    Dem_FilteredRecordSearchInfo.MisfireCylinderNum = (Dem_MisfireCylinderNumberType)0U;
+                }
+                else
+                {
+                    Dem_FilteredRecordSearchInfo.MisfireCylinderNum = DEM_MISFIRE_CYL_NUM_INVALID;
+                }
+            }
+            else
+#endif /* DEM_MISFIRE_EVENT_CONFIGURED -STD_ON- */
+            {
+                Dem_FilteredRecordSearchInfo.MisfireCylinderNum = DEM_MISFIRE_CYL_NUM_INVALID;
+            }
+
             retVal = DEM_IRT_OK;
         }
         else
@@ -331,6 +358,7 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_FFD_CheckSearchFilteredR
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-6-0      | no branch changed.                                       */
 /****************************************************************************/
 static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_FFD_ExecuteSearchFilteredRecord
 (
@@ -340,28 +368,15 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_FFD_ExecuteSearchFiltere
 {
     VAR( Dem_u08_InternalReturnType, AUTOMATIC ) resultGetRec;
     VAR( Dem_u08_FFRecordNumberType, AUTOMATIC ) recNum;
-    VAR( Dem_u08_TSFFListPerDTCIndexType, AUTOMATIC )  tsffListIndex;
-    VAR( Dem_u08_FFListIndexType, AUTOMATIC ) obdRecordNumberIndex;
-    VAR( Dem_u08_FFListIndexType, AUTOMATIC ) recordNumberIndex;
     VAR( Dem_u32_DTCValueType, AUTOMATIC ) dtcVal;
-    VAR( Dem_u16_TSFFDIndexType, AUTOMATIC ) tsffRecIndex;
     VAR( Dem_u08_InternalReturnType, AUTOMATIC ) retVal;
 
 
     dtcVal  = DEM_DTC_VALUE_MIN;
     recNum  = DEM_FFD_RECORD_NUMBER_MIN;
-    obdRecordNumberIndex    = Dem_FilteredRecordSearchInfo.ObdRecordNumberIndex;
-    recordNumberIndex       = Dem_FilteredRecordSearchInfo.RecordNumberIndex;
-    tsffListIndex           = Dem_FilteredRecordSearchInfo.TSFFListIndex;
-    tsffRecIndex            = Dem_FilteredRecordSearchInfo.TSFFRecIndex;
 
     /* Gets the filtered record. */
-    resultGetRec = Dem_Data_GetFilteredRecord( Dem_FreezeFrameRecordFilter, Dem_FilteredRecordSearchInfo.FaultIndex, &obdRecordNumberIndex, &recordNumberIndex, &tsffListIndex, &tsffRecIndex, &dtcVal, &recNum );
-
-    Dem_FilteredRecordSearchInfo.ObdRecordNumberIndex   = obdRecordNumberIndex;
-    Dem_FilteredRecordSearchInfo.RecordNumberIndex      = recordNumberIndex;
-    Dem_FilteredRecordSearchInfo.TSFFListIndex          = tsffListIndex;
-    Dem_FilteredRecordSearchInfo.TSFFRecIndex           = tsffRecIndex;
+    resultGetRec = Dem_Data_GetFilteredRecord( Dem_FreezeFrameRecordFilter, &Dem_FilteredRecordSearchInfo, &dtcVal, &recNum );
 
     if( resultGetRec == DEM_IRT_OK )
     {
@@ -405,6 +420,7 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_FFD_ExecuteSearchFiltere
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-6-0         :2024-01-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

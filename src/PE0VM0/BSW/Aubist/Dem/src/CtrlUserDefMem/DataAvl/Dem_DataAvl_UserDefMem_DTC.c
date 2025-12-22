@@ -1,7 +1,7 @@
-/* Dem_DataAvl_UserDefMem_DTC_c(v5-5-0)                                     */
+/* Dem_DataAvl_UserDefMem_DTC_c(v5-7-0)                                     */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -79,8 +79,11 @@
 /*               |        was failed.                                       */
 /* Notes         |                                                          */
 /*--------------------------------------------------------------------------*/
+/* VariableGuard | [GUD:RET:DEM_IRT_OK] UdmEventIndexPtr                    */
+/*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | branch changed.                                          */
+/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmDataAvl_GetUdmEventIndexByDTC
 (
@@ -128,7 +131,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmDataAvl_GetUdmEventIndexByDT
             for( udmEventIndex = udmEventIndexStart; udmEventIndex < udmEventIndexEnd; udmEventIndex++ )   /* [GUD:for]udmEventIndex */
             {
                 /* Holds the event table pointed to by the event index. */
-                udsDTCValue = Dem_CfgInfoUdm_GetUdsDTCValue( udmEventIndex );
+                udsDTCValue = Dem_CfgInfoUdm_GetUdsDTCValue( udmEventIndex );       /* [GUD]udmEventIndex */
 
                 /* Confirm comparison between DemDtcValue of the held DTC table and specified DTC value*/
                 if( udsDTCValue == DTCValue )
@@ -136,12 +139,12 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmDataAvl_GetUdmEventIndexByDT
                     /* Leave the loop. */
                     loopEndFlag = (boolean)TRUE;
                     /* Checks event available status */
-                    availableStatus = Dem_UdmDataAvl_GetEvtAvl( udmEventIndex );
+                    availableStatus = Dem_UdmDataAvl_GetEvtAvl( udmEventIndex );    /* [GUD]udmEventIndex */
 
                     if( availableStatus == (boolean)TRUE )
                     {
                         /* Store the event index in the specified event index storage area. */
-                        *UdmEventIndexPtr = udmEventIndex;
+                        *UdmEventIndexPtr = udmEventIndex;                          /* [GUD]udmEventIndex */
 
                         /* Sets the return value to OK. */
                         retVal = DEM_IRT_OK;
@@ -235,6 +238,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmDataAvl_GetDTCByUdmEventInde
 /*  Version        :Date                                                    */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-7-0         :2024-05-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

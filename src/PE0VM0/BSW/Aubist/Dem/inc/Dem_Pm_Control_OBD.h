@@ -1,7 +1,7 @@
-/* Dem_Pm_Control_OBD_h(v5-5-0)                                             */
+/* Dem_Pm_Control_OBD_h(v5-8-0)                                             */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 /****************************************************************************/
 /* Object Name  | Dem/Pm_Control_OBD/HEADER                                 */
@@ -96,10 +96,10 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_SetDataOfPID4E
 );
 #endif  /* ( DEM_PID_SUPPORT == STD_ON )    */
 
-#if ( DEM_OBDFFD_SUPPORT == STD_ON )
-#if ( DEM_OBDFFD_DID_SUPPORT == STD_OFF )
+#if ( DEM_OBDONEDS_SUPPORT == STD_ON )
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_GetDTCOfOBDFreezeFrame
 (
+    VAR( Dem_u08_RequestCallerType, AUTOMATIC ) Caller,
     VAR( Dem_u08_FFRecordNumberType, AUTOMATIC ) FrameNumber,
     P2VAR( Dem_u32_DTCValueType, AUTOMATIC, AUTOMATIC ) DTC
 );
@@ -111,8 +111,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_ReadDataOfOBDFreezeFram
     P2VAR( uint8, AUTOMATIC, DEM_APPL_DATA ) DestBuffer,
     P2VAR( Dem_u16_FFDStoredIndexType, AUTOMATIC, AUTOMATIC ) BufSize
 );
-#endif  /* ( DEM_OBDFFD_DID_SUPPORT == STD_OFF )   */
-#endif  /* ( DEM_OBDFFD_SUPPORT == STD_ON )    */
+#endif  /* ( DEM_OBDONEDS_SUPPORT == STD_ON )   */
 
 #if ( DEM_PID_READINESS_SUPPORT == STD_ON )
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_SetEvtDisable
@@ -158,6 +157,8 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_GetEventIdWithPermanent
     P2VAR( Dem_EventIdType, AUTOMATIC, DEM_APPL_DATA ) EventIdBufferPtr,
     P2VAR( uint16, AUTOMATIC, AUTOMATIC ) EventIdNumPtr
 );
+FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_ClearAllPFC
+( void );
 
 
 #endif  /* ( DEM_PFC_SUPPORT == STD_ON )    */
@@ -187,6 +188,8 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_ReadDataOfAltIUMPRDenom
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-6-0         :2024-01-29                                              */
+/*  v5-8-0         :2024-10-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

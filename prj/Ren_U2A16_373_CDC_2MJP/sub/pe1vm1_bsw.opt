@@ -59,6 +59,53 @@
     -I../../src/PE1VM1/BSW/Aubist/CS/inc
 ###    -I../../src/PE1VM1/BSW/Aubist/CS_System/cfg
 ###    -I../../src/PE1VM1/BSW/Aubist/CS_System/inc
+    -I../../src/PE1VM1/BSW/Aubist/Dcm/Dsd/cfg
+###    -I../../src/PE1VM1/BSW/Aubist/Dcm/Dsd/inc
+###    -I../../src/PE1VM1/BSW/Aubist/Dcm/Dsl/cfg
+###    -I../../src/PE1VM1/BSW/Aubist/Dcm/Dsl/inc
+###    -I../../src/PE1VM1/BSW/Aubist/Dcm/Dsl/usr
+    -I../../src/PE1VM1/BSW/Aubist/Dcm/Dsp/cfg
+###    -I../../src/PE1VM1/BSW/Aubist/Dcm/Dsp/inc
+###    -I../../src/PE1VM1/BSW/Aubist/Dcm/Dsp/usr
+###    -I../../src/PE1VM1/BSW/Aubist/Dcm/Main/cfg
+###    -I../../src/PE1VM1/BSW/Aubist/Dcm/Main/inc
+    -I../../src/PE1VM1/BSW/Aubist/Dem/cfg
+###    -I../../src/PE1VM1/BSW/Aubist/Dem/inc
+###    -I../../src/PE1VM1/BSW/Aubist/Dem/src/CmnReq/AsyncReq
+###    -I../../src/PE1VM1/BSW/Aubist/Dem/src/CmnReq/ConfigInfo
+###    -I../../src/PE1VM1/BSW/Aubist/Dem/src/CmnReq/Control
+###    -I../../src/PE1VM1/BSW/Aubist/Dem/src/CmnReq/DataCtl
+###    -I../../src/PE1VM1/BSW/Aubist/Dem/src/CmnReq/Ind
+###    -I../../src/PE1VM1/BSW/Aubist/Dem/src/CmnReq/OpCycle
+###    -I../../src/PE1VM1/BSW/Aubist/Dem/src/CtrlReq/Control
+###    -I../../src/PE1VM1/BSW/Aubist/Dem/src/CtrlReq/DataCtl
+###    -I../../src/PE1VM1/BSW/Aubist/Dem/src/CtrlReq/DTC
+###    -I../../src/PE1VM1/BSW/Aubist/Dem/src/CtrlReq/DTC/PFC
+###    -I../../src/PE1VM1/BSW/Aubist/Dem/src/CtrlReq/DTR
+###    -I../../src/PE1VM1/BSW/Aubist/Dem/src/CtrlReq/EDR
+###    -I../../src/PE1VM1/BSW/Aubist/Dem/src/CtrlReq/Event
+###    -I../../src/PE1VM1/BSW/Aubist/Dem/src/CtrlReq/Ind/MI
+###    -I../../src/PE1VM1/BSW/Aubist/Dem/src/CtrlReq/IUMPR
+###    -I../../src/PE1VM1/BSW/Aubist/Dem/src/CtrlReq/Misfire
+###    -I../../src/PE1VM1/BSW/Aubist/Dem/src/CtrlReq/MonSts
+###    -I../../src/PE1VM1/BSW/Aubist/Dem/src/CtrlReq/OccrDTC
+###    -I../../src/PE1VM1/BSW/Aubist/Dem/src/CtrlReq/PID
+###    -I../../src/PE1VM1/BSW/Aubist/Dem/src/CtrlReq/PreFFD
+###    -I../../src/PE1VM1/BSW/Aubist/Dem/src/CtrlReq/Similar
+###    -I../../src/PE1VM1/BSW/Aubist/Dem/src/CtrlUserDefMem/Control
+###    -I../../src/PE1VM1/BSW/Aubist/Dem/src/CtrlUserDefMem/DataCtl
+###    -I../../src/PE1VM1/BSW/Aubist/Dem/src/DataMng/ClrInfoMng
+###    -I../../src/PE1VM1/BSW/Aubist/Dem/src/DataMng/DataMng
+###    -I../../src/PE1VM1/BSW/Aubist/Dem/src/DataMng/DataMng/MisfireMng
+###    -I../../src/PE1VM1/BSW/Aubist/Dem/src/DataMng/DataMng/SimilarMng
+###    -I../../src/PE1VM1/BSW/Aubist/Dem/src/DataMng/IUMPRMng
+###    -I../../src/PE1VM1/BSW/Aubist/Dem/src/DataMng/OccrDTCMng
+###    -I../../src/PE1VM1/BSW/Aubist/Dem/src/DataMng/OrderList
+###    -I../../src/PE1VM1/BSW/Aubist/Dem/src/DataMng/PIDMng
+###    -I../../src/PE1VM1/BSW/Aubist/Dem/src/DataMng/UserDefMemMng
+###    -I../../src/PE1VM1/BSW/Aubist/Dem/src/MemSync/MemSync
+###    -I../../src/PE1VM1/BSW/Aubist/Dem/src/MemSync/MM
+    -I../../src/PE1VM1/BSW/Aubist/Dem/usr
 ###    -I../../src/PE1VM1/BSW/Aubist/E2E/inc
 ###    -I../../src/PE1VM1/BSW/Aubist/Fee/cfg
 ###    -I../../src/PE1VM1/BSW/Aubist/Fee/inc
@@ -80,6 +127,8 @@
 ###    -I../../src/PE1VM1/BSW/Aubist/inc/comm
 ###    -I../../src/PE1VM1/BSW/Aubist/inc/Compiler
 ###    -I../../src/PE1VM1/BSW/Aubist/inc/cs
+    -I../../src/PE1VM1/BSW/Aubist/inc/Dcm
+    -I../../src/PE1VM1/BSW/Aubist/inc/Dem
 ###    -I../../src/PE1VM1/BSW/Aubist/inc/ipdum
 ###    -I../../src/PE1VM1/BSW/Aubist/inc/ldcom
 ###    -I../../src/PE1VM1/BSW/Aubist/inc/nm
@@ -150,6 +199,8 @@
     -I../../src/PE1VM1/BSW/Communication/oXCAN/scc
     -I../../src/PE1VM1/BSW/ComplexDriver/Vehopemd/config_tybev3
     -I../../src/PE1VM1/BSW/ComplexDriver/Vehopemd/scc
+    -I../../src/PE1VM1/BSW/Diagnosis/oXDoCAN/lib/config
+    -I../../src/PE1VM1/BSW/Diagnosis/oXDoCAN/lib/scc
     -I../../src/PE1VM1/BSW/ehvm_if/include/ehvm
     -I../../src/PE1VM1/BSW/IoHwAbstract/iohw_adc/config_CDC_JP
 ###    -I../../src/PE1VM1/BSW/IoHwAbstract/iohw_adc/config_CDC_OT

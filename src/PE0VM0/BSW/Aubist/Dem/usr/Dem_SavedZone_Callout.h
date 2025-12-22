@@ -1,7 +1,7 @@
-/* Dem_SavedZone_Callout_h(v5-0-0)                                          */
+/* Dem_SavedZone_Callout_h(v5-6-0)                                          */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -54,6 +54,14 @@ FUNC( void, DEM_CODE_CALLOUT ) Dem_NotifySavedZonePermanentUpdate_Enter
 FUNC( void, DEM_CODE_CALLOUT ) Dem_NotifySavedZonePermanentUpdate_Exit
 ( void );
 #endif  /* ( DEM_PFC_SUPPORT == STD_ON )        */
+
+#if ( DEM_IUMPR_SUPPORT == STD_ON )
+FUNC( void, DEM_CODE_CALLOUT ) Dem_NotifySavedZoneIUMPRUpdate_Enter
+( void );
+FUNC( void, DEM_CODE_CALLOUT ) Dem_NotifySavedZoneIUMPRUpdate_Exit
+( void );
+#endif  /* ( DEM_IUMPR_SUPPORT == STD_ON )        */
+
 #define DEM_STOP_SEC_CODE_CALLOUT
 #include <Dem_MemMap.h>
 
@@ -84,6 +92,7 @@ FUNC( void, DEM_CODE_CALLOUT ) Dem_NotifySavedZonePermanentUpdate_Exit
 /* History                                                                  */
 /*  Version        :Date                                                    */
 /*  v5-0-0         :2021-12-24                                              */
+/*  v5-6-0         :2024-01-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

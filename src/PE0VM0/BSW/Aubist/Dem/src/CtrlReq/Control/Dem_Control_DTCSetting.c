@@ -1,7 +1,7 @@
-/* Dem_Control_DTCSetting_c(v5-5-0)                                         */
+/* Dem_Control_DTCSetting_c(v5-8-0)                                         */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -288,6 +288,54 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_EnableDTCSetting
     {
         /* No process */
     }
+    return retVal;
+}
+
+/****************************************************************************/
+/* Function Name | Dem_Control_GetDTCSettingStatusForIF                     */
+/* Description   | Get the DTC setting status.                              */
+/* Preconditions | none                                                     */
+/* Parameters    | [out] DTCSettingStatusPtr :                              */
+/*               |        DTC setting status.                               */
+/* Return Value  | Dem_u08_InternalReturnType                               */
+/*               |        DEM_IRT_OK : Operation was successful.            */
+/*               |        DEM_IRT_NG : Operation failed.                    */
+/* Notes         | -                                                        */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-8-0      | new created.                                             */
+/****************************************************************************/
+FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_GetDTCSettingStatusForIF
+(
+    P2VAR( Dem_DTCSettingStatusType, AUTOMATIC, AUTOMATIC ) DTCSettingStatusPtr
+)
+{
+    VAR( Dem_u08_InternalReturnType, AUTOMATIC ) retVal;
+    VAR( Dem_u08_InternalReturnType, AUTOMATIC ) checkStatus;
+    VAR( Dem_u08_DTCSettingStatusType, AUTOMATIC ) settingStatus;
+
+    retVal = DEM_IRT_NG;
+
+    checkStatus = Dem_Control_ChkAfterInit();
+    if( checkStatus == DEM_IRT_OK )
+    {
+        SchM_Enter_Dem_CheckControlDTCSetting();
+        settingStatus = Dem_Control_GetDTCSettingStatus();
+        SchM_Exit_Dem_CheckControlDTCSetting();
+
+        if( settingStatus == DEM_CTL_STS_DTC_SETTING_ENABLE )
+        {
+            /*  DTC setting status is enable    */
+            *DTCSettingStatusPtr = DEM_DTCSETTING_STATUS_ENABLE;
+        }
+        else
+        {
+            /*  DTC setting status is disable   */
+            *DTCSettingStatusPtr = DEM_DTCSETTING_STATUS_DISABLE;
+        }
+        retVal = DEM_IRT_OK;
+    }
+
     return retVal;
 }
 
@@ -685,6 +733,7 @@ FUNC( void, DEM_CODE ) Dem_Control_DTCSettingStatus_RefreshRAM
 /*  v5-0-0         :2021-09-28                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-8-0         :2024-10-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

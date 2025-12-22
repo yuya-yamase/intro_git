@@ -1,7 +1,7 @@
-/* Dem_BswM_Connector_h(v5-0-0)                                             */
+/* Dem_BswM_Connector_h(v5-10-0)                                            */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 /****************************************************************************/
 /* Object Name  | Dem/BswM_Connector/HEADER                                 */
@@ -38,12 +38,12 @@
 #define DEM_START_SEC_CODE
 #include <Dem_MemMap.h>
 
-
+#if ( DEM_TRIGGER_BSWM_REPORTS == STD_ON )
 FUNC( void, DEM_CODE ) Dem_BswM_RequestMode
 (
     VAR( uint16, AUTOMATIC ) Mode
 );
-
+#endif /* DEM_TRIGGER_BSWM_REPORTS */
 
 #define DEM_STOP_SEC_CODE
 #include <Dem_MemMap.h>
@@ -78,6 +78,7 @@ FUNC( void, DEM_CODE ) Dem_BswM_RequestMode
 /*  v1-1-0         :2018-10-29                                              */
 /*  v4-0-0         :2020-03-19                                              */
 /*  v5-0-0         :2021-03-29                                              */
+/*  v5-10-0        :2025-06-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

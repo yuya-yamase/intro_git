@@ -1,7 +1,7 @@
-/* Dem_DataCtl_DisReqUpd_GetFFIdx_c(v5-5-0)                                 */
+/* Dem_DataCtl_DisReqUpd_GetFFIdx_c(v5-7-0)                                 */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -27,7 +27,7 @@
 
 /*--------------------------------------------------------------------------*/
 /* Types                                                                    */
-/*--------------------------------------------------------------------------*/\
+/*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
 /* Function Prototypes                                                      */
@@ -78,6 +78,7 @@
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | new created.                                             */
+/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_FFDIndexType, DEM_CODE ) Dem_Data_GetDisabledObdRecordNumberIndex
 (
@@ -90,7 +91,7 @@ FUNC( Dem_u08_FFDIndexType, DEM_CODE ) Dem_Data_GetDisabledObdRecordNumberIndex
 {
     VAR( Dem_u08_FFDIndexType, AUTOMATIC ) freezeFrameIndex;
 
-    freezeFrameIndex = FFDIndexListStPtr->ObdRecordNumberIndex[ FreezeFrameRecordClassRefIndex ];   /* [GUDCHK:CALLER]FreezeFrameRecordClassRefIndex */
+    freezeFrameIndex = FFDIndexListStPtr->ObdRecordNumberIndex[ FreezeFrameRecordClassRefIndex ];   /* [GUDCHK:CALLER]FreezeFrameRecordClassRefIndex *//* [ARYCHK] DEM_OBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / FreezeFrameRecordClassRefIndex */
     ( *EventStrgIndexPtr ) = EventStrgIndex;
 
     return freezeFrameIndex;
@@ -117,6 +118,7 @@ FUNC( Dem_u08_FFDIndexType, DEM_CODE ) Dem_Data_GetDisabledObdRecordNumberIndex
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | new created.                                             */
+/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_FFDIndexType, DEM_CODE ) Dem_Data_GetDisabledRecordNumberIndex
 (
@@ -129,7 +131,7 @@ FUNC( Dem_u08_FFDIndexType, DEM_CODE ) Dem_Data_GetDisabledRecordNumberIndex
 {
     VAR( Dem_u08_FFDIndexType, AUTOMATIC ) freezeFrameIndex;
 
-    freezeFrameIndex = FFDIndexListStPtr->RecordNumberIndex[ FreezeFrameRecordClassRefIndex ];  /* [GUDCHK:CALLER]FreezeFrameRecordClassRefIndex */
+    freezeFrameIndex = FFDIndexListStPtr->RecordNumberIndex[ FreezeFrameRecordClassRefIndex ];  /* [GUDCHK:CALLER]FreezeFrameRecordClassRefIndex *//* [ARYCHK] DEM_NONOBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / FreezeFrameRecordClassRefIndex */
     ( *EventStrgIndexPtr ) = EventStrgIndex;
 
     return freezeFrameIndex;
@@ -151,7 +153,7 @@ FUNC( Dem_u08_FFDIndexType, DEM_CODE ) Dem_Data_GetDisabledRecordNumberIndex
 /*               |        The DemFreezeFrameRecordTrigger.(for TSFFD)       */
 /*               | [in] NumberOfSaveRecordForTriggerFFD :                   */
 /*               |        The number of saved Dem_TmpDisabledRecord array   */
-/*               {        for trigger FFD.                                  */
+/*               |        for trigger FFD.                                  */
 /*               | [in] FFDIndexListStPtr :                                 */
 /*               |        Dem_TmpDisabledRecord.FFDIndexListSt pointer.     */
 /*               | [out] EventStrgIndexPtr :                                */
@@ -161,6 +163,7 @@ FUNC( Dem_u08_FFDIndexType, DEM_CODE ) Dem_Data_GetDisabledRecordNumberIndex
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | new created.                                             */
+/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u16_TSFFListIndexType, DEM_CODE ) Dem_Data_GetDisabledTimeSeriesFreezeFrameListIndex
 (
@@ -174,7 +177,7 @@ FUNC( Dem_u16_TSFFListIndexType, DEM_CODE ) Dem_Data_GetDisabledTimeSeriesFreeze
 {
     VAR( Dem_u16_TSFFListIndexType, AUTOMATIC ) tsFFListIndex;
 
-    tsFFListIndex = FFDIndexListStPtr->TimeSeriesFreezeFrameListIndex[ TSFFRecClassRefIndex ];  /* [GUDCHK:CALLER]TSFFRecClassRefIndex */
+    tsFFListIndex = FFDIndexListStPtr->TimeSeriesFreezeFrameListIndex[ TSFFRecClassRefIndex ];  /* [GUDCHK:CALLER]TSFFRecClassRefIndex *//* [ARYCHK] DEM_TSFF_RECORD_CLASS_NUM_PER_DTC_MAX_NUM / 1 / TSFFRecClassRefIndex */
     ( *EventStrgIndexPtr ) = EventStrgIndex;
 
     return tsFFListIndex;
@@ -190,6 +193,8 @@ FUNC( Dem_u16_TSFFListIndexType, DEM_CODE ) Dem_Data_GetDisabledTimeSeriesFreeze
 /* History                                                                  */
 /*  Version        :Date                                                    */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-6-0         :2024-01-29                                              */
+/*  v5-7-0         :2024-05-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

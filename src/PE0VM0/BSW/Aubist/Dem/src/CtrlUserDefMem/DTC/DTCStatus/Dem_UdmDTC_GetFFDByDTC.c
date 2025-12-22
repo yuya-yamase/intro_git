@@ -1,7 +1,7 @@
-/* Dem_UdmDTC_GetFFDByDTC_c(v5-5-0)                                         */
+/* Dem_UdmDTC_GetFFDByDTC_c(v5-8-0)                                         */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 
@@ -66,7 +66,7 @@
 /****************************************************************************/
 /* Function Name | Dem_UdmDTC_GetDTCStatusOfDisabledRecord                  */
 /* Description   | Get the DTC status of the record disabled from update.   */
-/* Preconditions | none                                                     */
+/* Preconditions | UdmEventIndex is guarded at caller.                      */
 /* Parameters    | [in] UdmEventIndex :                                     */
 /*               | [in] DTCStatusAvailabilityMask :                         */
 /*               | [out] DTCStatusPtr :                                     */
@@ -75,68 +75,44 @@
 /*               |        unction call is other than DEM_STATUS_OK this pa- */
 /*               |        rameter does not contain valid data.0x00...0xFF - */
 /*               |        match DTCStatusMask as defined in ISO14229-1.     */
-/* Return Value  | Dem_u08_InternalReturnType                               */
-/*               |        DEM_IRT_OK : Status of DTC is OK                  */
-/*               |        DEM_IRT_NG : DTC failed                           */
+/* Return Value  | void                                                     */
 /* Notes         |                                                          */
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
+/*   v5-7-0      | branch changed.                                          */
+/*   v5-8-0      | no branch changed.                                       */
 /****************************************************************************/
-FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmDTC_GetDTCStatusOfDisabledRecord
+FUNC( void, DEM_CODE ) Dem_UdmDTC_GetDTCStatusOfDisabledRecord
 (
-    VAR( Dem_u16_UdmEventIndexType, AUTOMATIC ) UdmEventIndex,
+    VAR( Dem_u16_UdmEventIndexType, AUTOMATIC ) UdmEventIndex,              /* [PRMCHK:CALLER] */
     VAR( Dem_UdsStatusByteType, AUTOMATIC ) DTCStatusAvailabilityMask,
     P2VAR( Dem_UdsStatusByteType, AUTOMATIC, AUTOMATIC ) DTCStatusPtr
 )
 {
-    VAR( Dem_u08_InternalReturnType, AUTOMATIC ) retVal;
-    VAR( Dem_u08_InternalReturnType, AUTOMATIC ) resultTransStatus;
     VAR( boolean, AUTOMATIC ) retUdmDTCClerTarget;
     VAR( Dem_UdsStatusByteType, AUTOMATIC ) dtcStatusAvailabilityMask;
 
-    retUdmDTCClerTarget = Dem_UdmDTC_JudgeUdmDTCClearTarget( UdmEventIndex );
+    retUdmDTCClerTarget = Dem_UdmDTC_JudgeUdmDTCClearTargetOnClearProcessActive( UdmEventIndex );
     if( retUdmDTCClerTarget == (boolean)FALSE )
     {
         /* Gets DTCStatus from the record update was disabled */
         Dem_UdmData_GetDTCStatusOfDisabledRecord( DTCStatusPtr );
 
-        /* Translate the DTCStatus that got for the outside output. */
-        resultTransStatus = Dem_UdmDTC_TranslateDTCStatusForOutput( UdmEventIndex, DTCStatusPtr );
     }
     else
     {
         *DTCStatusPtr = DEM_DTCSTATUS_BYTE_DEFAULT ;
-        (void)Dem_UdmDTC_TranslateDTCStatusForOutput( UdmEventIndex, DTCStatusPtr ); /* no return check required */
-        resultTransStatus = DEM_IRT_OK;
     }
 
-    if( resultTransStatus == DEM_IRT_OK )
-    {
-        /* Calculate DTCStatus */
-        dtcStatusAvailabilityMask   =   DTCStatusAvailabilityMask;
-        (*DTCStatusPtr) &= dtcStatusAvailabilityMask;
-        retVal = DEM_IRT_OK;
-    }
-    else
-    {
-        /* Outside output translatetion of the DTCStatus failed. */
-        retVal = DEM_IRT_NG;
-    }
+    /* Translate the DTCStatus that got for the outside output. */
+    Dem_UdmDTC_TranslateDTCStatusForOutput( UdmEventIndex, DTCStatusPtr );
 
-    if( retVal == DEM_IRT_NG )
-    {
-        /*------------------------------------------*/
-        /*  convert to output statusOfDTC.          */
-        /*------------------------------------------*/
-        (*DTCStatusPtr) = Dem_DTC_CnvDTCStatus_ForOutput( DEM_DTCSTATUS_BYTE_DEFAULT );
-    }
-    else
-    {
-        /* No Process */
-    }
+    /* Calculate DTCStatus */
+    dtcStatusAvailabilityMask   =   DTCStatusAvailabilityMask;
+    (*DTCStatusPtr) &= dtcStatusAvailabilityMask;
 
-    return retVal;
+    return ;
 }
 
 
@@ -155,6 +131,8 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmDTC_GetDTCStatusOfDisabledRe
 /*  Version        :Date                                                    */
 /*  v5-0-0         :2022-03-29                                              */
 /*  v5-3-0         :2023-03-29                                              */
+/*  v5-7-0         :2024-05-29                                              */
+/*  v5-8-0         :2024-10-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

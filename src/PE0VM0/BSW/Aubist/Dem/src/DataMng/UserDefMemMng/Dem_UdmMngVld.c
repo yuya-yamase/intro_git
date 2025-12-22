@@ -1,7 +1,7 @@
-/* Dem_UdmMngVld_c(v5-5-0)                                                  */
+/* Dem_UdmMngVld_c(v5-7-0)                                                  */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -270,6 +270,7 @@ static FUNC( void, DEM_CODE ) Dem_UdmMngVld_VerifyEvent
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
+/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_UdmMngVld_VerifiedDiagData
 (
@@ -306,9 +307,9 @@ static FUNC( void, DEM_CODE ) Dem_UdmMngVld_VerifiedDiagData
 #if ( DEM_TSFF_UDM_SUPPORT == STD_ON ) /*  [FuncSw]    */
                 Dem_UdmTSFFDMng_Verified( udmEventIndex, UdmFaultIndex, UdmGroupKindIndex );            /* [GUDCHK:CALLER]UdmGroupKindIndex *//* [GUD]UdmFaultIndex */
 #endif /* (DEM_TSFF_UDM_SUPPORT == STD_ON) */
-                if( Dem_UdmFaultNvMStatus[ UdmGroupKindIndex ].DemUdmFaultNvMStatusPtr[ UdmFaultIndex ] == DEM_RECMNGCMN_NVM_STS_NOT_VERIFIED ) /* [GUDCHK:CALLER]UdmGroupKindIndex *//* [GUD]UdmFaultIndex */
+                if( Dem_UdmFaultNvMStatus[ UdmGroupKindIndex ].DemUdmFaultNvMStatusPtr[ UdmFaultIndex ] == DEM_RECMNGCMN_NVM_STS_NOT_VERIFIED ) /* [GUDCHK:CALLER]UdmGroupKindIndex *//* [GUD]UdmFaultIndex *//* [ARYCHK] Dem_UdmFaultRecordTable[UdmGroupKindIndex].DemFaultRecordNum / 1 / UdmFaultIndex *//* [ARYDESC] The registered data size of Dem_UdmFaultNvMStatus[ UdmGroupKindIndex ].DemUdmFaultNvMStatusPtr is the same as Dem_UdmFaultRecordTable[UdmGroupKindIndex].DemFaultRecordNum */
                 {
-                    Dem_UdmFaultNvMStatus[ UdmGroupKindIndex ].DemUdmFaultNvMStatusPtr[ UdmFaultIndex ] = DEM_RECMNGCMN_NVM_STS_NON_TARGET;     /* [GUDCHK:CALLER]UdmGroupKindIndex *//* [GUD]UdmFaultIndex */
+                    Dem_UdmFaultNvMStatus[ UdmGroupKindIndex ].DemUdmFaultNvMStatusPtr[ UdmFaultIndex ] = DEM_RECMNGCMN_NVM_STS_NON_TARGET;     /* [GUDCHK:CALLER]UdmGroupKindIndex *//* [GUD]UdmFaultIndex *//* [ARYCHK] Dem_UdmFaultRecordTable[UdmGroupKindIndex].DemFaultRecordNum / 1 / UdmFaultIndex *//* [ARYDESC] The registered data size of Dem_UdmFaultNvMStatus[ UdmGroupKindIndex ].DemUdmFaultNvMStatusPtr is the same as Dem_UdmFaultRecordTable[UdmGroupKindIndex].DemFaultRecordNum */
                 }
             }
         }
@@ -330,9 +331,9 @@ static FUNC( void, DEM_CODE ) Dem_UdmMngVld_VerifiedDiagData
         Dem_RecMngCmn_SetNvMWriteStatus( recMngCmnKindUdmEvent, ( Dem_u16_RecordIndexType )UdmEventStrgIndex );
     }
 
-    if( Dem_UdmEventNvMStatus[ UdmGroupKindIndex ].DemUdmEventNvMStatusPtr[ UdmEventStrgIndex ] == DEM_RECMNGCMN_NVM_STS_NOT_VERIFIED ) /* [GUDCHK:CALLER]UdmGroupKindIndex *//* [GUDCHK:CALLER]UdmEventStrgIndex */
+    if( Dem_UdmEventNvMStatus[ UdmGroupKindIndex ].DemUdmEventNvMStatusPtr[ UdmEventStrgIndex ] == DEM_RECMNGCMN_NVM_STS_NOT_VERIFIED ) /* [GUDCHK:CALLER]UdmGroupKindIndex *//* [GUDCHK:CALLER]UdmEventStrgIndex *//* [ARYCHK] Dem_UdmEventRecordTable[UdmGroupKindIndex].DemEventRecordNum / 1 / UdmEventStrgIndex *//* [ARYDESC] The registered data size of Dem_UdmEventNvMStatus[ UdmGroupKindIndex ].DemUdmEventNvMStatusPtr is the same as Dem_UdmEventRecordTable[UdmGroupKindIndex].DemEventRecordNum */
     {
-        Dem_UdmEventNvMStatus[ UdmGroupKindIndex ].DemUdmEventNvMStatusPtr[ UdmEventStrgIndex ] = DEM_RECMNGCMN_NVM_STS_NON_TARGET;     /* [GUDCHK:CALLER]UdmGroupKindIndex *//* [GUDCHK:CALLER]UdmEventStrgIndex */
+        Dem_UdmEventNvMStatus[ UdmGroupKindIndex ].DemUdmEventNvMStatusPtr[ UdmEventStrgIndex ] = DEM_RECMNGCMN_NVM_STS_NON_TARGET;     /* [GUDCHK:CALLER]UdmGroupKindIndex *//* [GUDCHK:CALLER]UdmEventStrgIndex *//* [ARYCHK] Dem_UdmEventRecordTable[UdmGroupKindIndex].DemEventRecordNum / 1 / UdmEventStrgIndex *//* [ARYDESC] The registered data size of Dem_UdmEventNvMStatus[ UdmGroupKindIndex ].DemUdmEventNvMStatusPtr is the same as Dem_UdmEventRecordTable[UdmGroupKindIndex].DemEventRecordNum */
     }
 
     return;
@@ -422,6 +423,7 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmMngVld_ClearAllNotVer
 /*  v5-0-0         :2022-03-29                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-7-0         :2024-05-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

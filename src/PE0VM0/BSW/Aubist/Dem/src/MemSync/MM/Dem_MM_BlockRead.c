@@ -1,7 +1,7 @@
-/* Dem_MM_BlockRead_c(v5-5-0)                                               */
+/* Dem_MM_BlockRead_c(v5-7-0)                                               */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -341,6 +341,7 @@ static FUNC( void, DEM_CODE ) Dem_MM_CheckReadComplete
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_MM_SetAllBlockReadFailure
 ( void )
@@ -370,7 +371,7 @@ static FUNC( void, DEM_CODE ) Dem_MM_SetAllBlockReadFailure
 
             /* Permanent RAM area clear request */
             /* Do not access outside the recStartPtr[recPtrOffset] because it is consistent with Aubist-Configurator */
-            Dem_MM_RAMInit( recKind, &recStartPtr[recPtrOffset], blockSize );               /* [GUD]recPtrOffset */
+            Dem_MM_RAMInit( recKind, &recStartPtr[recPtrOffset], blockSize );               /* [GUD]recPtrOffset *//* [ARYCHK] blockSize*blockIndexNumInKind / 1 / recPtrOffset */
         }
     }
     return;
@@ -454,7 +455,6 @@ static FUNC( boolean, DEM_CODE ) Dem_MM_JudgmentWaitReadAll
     return retVal;
 }
 
-#if ( DEM_PFC_SUPPORT == STD_ON )
 /****************************************************************************/
 /* Function Name | Dem_MM_RAMInit                                           */
 /* Description   | Initializes select RAM.                                  */
@@ -468,12 +468,19 @@ static FUNC( boolean, DEM_CODE ) Dem_MM_JudgmentWaitReadAll
 /* Return Value  | void                                                     */
 /* Notes         | none                                                     */
 /*--------------------------------------------------------------------------*/
+/* UpdateRecord  | [UpdRec]PFC          :   NotifySavedZone                 */
+/* UpdateRecord  | [UpdRec]PFCMisfire   :   NotifySavedZone                 */
+/* UpdateRecord  | [UpdRec]IUMPR        :   NotifySavedZone                 */
+/* UpdateRecord  | [UpdRec]AltIUMPR     :   NotifySavedZone                 */
+/*--------------------------------------------------------------------------*/
 /* History       |                                                          */
-/*   v5-5-0      | branch changed.                                          */
+/*   v5-5-0      | no object changed.                                       */
+/*   v5-6-0      | branch changed.                                          */
+/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_MM_RAMInit
 (
-    VAR( Dem_u16_MMBlockRecKindIndexType, AUTOMATIC ) BlockRecordKind,
+    VAR( Dem_u16_MMBlockRecKindIndexType, AUTOMATIC ) BlockRecordKind,  /* MISRA DEVIATION */
     P2VAR( uint8, AUTOMATIC, DEM_VAR_SAVED_ZONE ) DataPtr,
     VAR( Dem_u16_BlockSizeType, AUTOMATIC ) Length
 )
@@ -481,19 +488,41 @@ static FUNC( void, DEM_CODE ) Dem_MM_RAMInit
     /* Variable declaration */
     VAR( Dem_u16_BlockSizeType, AUTOMATIC  ) cnt;
     P2VAR( uint8, AUTOMATIC, DEM_VAR_SAVED_ZONE ) DemRamDataPtr;
+
+#if ( DEM_PFC_SUPPORT == STD_ON )   /*  [FuncSw]    */
     VAR( Dem_u16_MMBlockRecKindIndexType, AUTOMATIC ) recKindPFC;
+
 #if ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON )   /*  [FuncSw]    */
     VAR( Dem_u16_MMBlockRecKindIndexType, AUTOMATIC ) recKindPFCMisfire;
 #endif  /* ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON )    */
 
+#endif  /* ( DEM_PFC_SUPPORT == STD_ON )    */
+#if ( DEM_IUMPR_SUPPORT == STD_ON ) /*  [FuncSw]    */
+    VAR( Dem_u16_MMBlockRecKindIndexType, AUTOMATIC ) recKindIUMPR;
+#endif  /* ( DEM_IUMPR_SUPPORT == STD_ON )    */
+#if ( DEM_ALTIUMPR_SUPPORT == STD_ON )  /*  [FuncSw]    */
+    VAR( Dem_u16_MMBlockRecKindIndexType, AUTOMATIC ) recKindAltIUMPR;
+#endif  /* ( DEM_ALTIUMPR_SUPPORT == STD_ON )    */
+
     /* Data type cast processing */
     DemRamDataPtr = (P2VAR( uint8, AUTOMATIC, DEM_VAR_SAVED_ZONE )) DataPtr;
-    recKindPFC    = Dem_MMNvMRecKindPFC;
+
+#if ( DEM_PFC_SUPPORT == STD_ON )   /*  [FuncSw]    */
+    recKindPFC      =   Dem_MMNvMRecKindPFC;
 
 #if ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON )   /*  [FuncSw]    */
     recKindPFCMisfire   =   Dem_MMNvMRecKindPFCMisfire;
 #endif  /* ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON )    */
 
+#endif  /* ( DEM_PFC_SUPPORT == STD_ON )    */
+#if ( DEM_IUMPR_SUPPORT == STD_ON ) /*  [FuncSw]    */
+    recKindIUMPR    =   Dem_MMNvMRecKindIUMPR;
+#endif  /* ( DEM_IUMPR_SUPPORT == STD_ON )    */
+#if ( DEM_ALTIUMPR_SUPPORT == STD_ON )  /*  [FuncSw]    */
+    recKindAltIUMPR =   Dem_MMNvMRecKindAltIUMPR;
+#endif  /* ( DEM_ALTIUMPR_SUPPORT == STD_ON )    */
+
+#if ( DEM_PFC_SUPPORT == STD_ON )   /*  [FuncSw]    */
     if ( BlockRecordKind == recKindPFC )
     {
         /*--------------------------------------------------*/
@@ -505,7 +534,7 @@ static FUNC( void, DEM_CODE ) Dem_MM_RAMInit
         for( cnt = (Dem_u16_BlockSizeType)0U; cnt < Length; cnt++ )     /* [GUD:for]cnt */
         {
             /* Clear processing */
-            DemRamDataPtr[cnt]  = DEM_NVBLOCK_FACTORY_VALUE;            /* [GUD]cnt */
+            DemRamDataPtr[cnt]  = DEM_NVBLOCK_FACTORY_VALUE;            /* [GUD]cnt *//*[UpdRec]PFC *//* [ARYCHK] Length / 1 / cnt */
         }
 
         /*--------------------------------------------------*/
@@ -513,8 +542,9 @@ static FUNC( void, DEM_CODE ) Dem_MM_RAMInit
         Dem_NotifySavedZonePermanentUpdate_Exit();          /*  notify end :  savedzone area will be update.  */
         /*--------------------------------------------------*/
     }
+    else
 #if ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON )   /*  [FuncSw]    */
-    else if ( BlockRecordKind == recKindPFCMisfire )
+    if ( BlockRecordKind == recKindPFCMisfire )
     {
         /*--------------------------------------------------*/
         /*  notify SAVED_ZONE_PERMANENT update - start.     */
@@ -525,7 +555,7 @@ static FUNC( void, DEM_CODE ) Dem_MM_RAMInit
         for( cnt = (Dem_u16_BlockSizeType)0U; cnt < Length; cnt++ )     /* [GUD:for]cnt */
         {
             /* Clear processing */
-            DemRamDataPtr[cnt]  = DEM_NVBLOCK_FACTORY_VALUE;            /* [GUD]cnt */
+            DemRamDataPtr[cnt]  = DEM_NVBLOCK_FACTORY_VALUE;            /* [GUD]cnt *//*[UpdRec]PFCMisfire *//* [ARYCHK] Length / 1 / cnt */
         }
 
         /*--------------------------------------------------*/
@@ -533,8 +563,53 @@ static FUNC( void, DEM_CODE ) Dem_MM_RAMInit
         Dem_NotifySavedZonePermanentUpdate_Exit();          /*  notify end :  savedzone area will be update.  */
         /*--------------------------------------------------*/
     }
-#endif  /* ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON )    */
     else
+#endif  /* ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON )    */
+#endif  /* ( DEM_PFC_SUPPORT == STD_ON )    */
+#if ( DEM_IUMPR_SUPPORT == STD_ON ) /*  [FuncSw]    */
+    if ( BlockRecordKind == recKindIUMPR )
+    {
+        /*--------------------------------------------------*/
+        /*  notify SAVED_ZONE_IUMPR update - start.         */
+        Dem_NotifySavedZoneIUMPRUpdate_Enter();         /*  notify start :  savedzone area will be update.  */
+        /*--------------------------------------------------*/
+
+        /* Clear data of designated area */
+        for( cnt = (Dem_u16_BlockSizeType)0U; cnt < Length; cnt++ )     /* [GUD:for]cnt */
+        {
+            /* Clear processing */
+            DemRamDataPtr[cnt]  = DEM_NVBLOCK_FACTORY_VALUE;            /* [GUD]cnt *//*[UpdRec]IUMPR *//* [ARYCHK] Length / 1 / cnt */
+        }
+
+        /*--------------------------------------------------*/
+        /*  notify SAVED_ZONE_IUMPR update - end.           */
+        Dem_NotifySavedZoneIUMPRUpdate_Exit();          /*  notify end :  savedzone area will be update.  */
+        /*--------------------------------------------------*/
+    }
+    else
+#endif  /* ( DEM_IUMPR_SUPPORT == STD_ON )    */
+#if ( DEM_ALTIUMPR_SUPPORT == STD_ON )  /*  [FuncSw]    */
+    if ( BlockRecordKind == recKindAltIUMPR )
+    {
+        /*--------------------------------------------------*/
+        /*  notify SAVED_ZONE_IUMPR update - start.         */
+        Dem_NotifySavedZoneIUMPRUpdate_Enter();         /*  notify start :  savedzone area will be update.  */
+        /*--------------------------------------------------*/
+
+        /* Clear data of designated area */
+        for( cnt = (Dem_u16_BlockSizeType)0U; cnt < Length; cnt++ )     /* [GUD:for]cnt */
+        {
+            /* Clear processing */
+            DemRamDataPtr[cnt]  = DEM_NVBLOCK_FACTORY_VALUE;            /* [GUD]cnt *//*[UpdRec]AltIUMPR *//* [ARYCHK] Length / 1 / cnt */
+        }
+
+        /*--------------------------------------------------*/
+        /*  notify SAVED_ZONE_IUMPR update - end.           */
+        Dem_NotifySavedZoneIUMPRUpdate_Exit();          /*  notify end :  savedzone area will be update.  */
+        /*--------------------------------------------------*/
+    }
+    else
+#endif  /* ( DEM_ALTIUMPR_SUPPORT == STD_ON )    */
     {
         /*--------------------------------------*/
         /*  notify SAVED_ZONE update - start.   */
@@ -545,7 +620,7 @@ static FUNC( void, DEM_CODE ) Dem_MM_RAMInit
         for( cnt = (Dem_u16_BlockSizeType)0U; cnt < Length; cnt++ )     /* [GUD:for]cnt */
         {
             /* Clear processing */
-            DemRamDataPtr[cnt]  = DEM_NVBLOCK_FACTORY_VALUE;            /* [GUD]cnt */
+            DemRamDataPtr[cnt]  = DEM_NVBLOCK_FACTORY_VALUE;            /* [GUD]cnt *//* [ARYCHK] Length / 1 / cnt */
         }
 
         /*--------------------------------------*/
@@ -556,59 +631,6 @@ static FUNC( void, DEM_CODE ) Dem_MM_RAMInit
 
     return;
 }
-#endif  /* ( DEM_PFC_SUPPORT == STD_ON )    */
-#if ( DEM_PFC_SUPPORT == STD_OFF )
-/****************************************************************************/
-/* Function Name | Dem_MM_RAMInit                                           */
-/* Description   | Initializes select RAM.                                  */
-/* Preconditions | Usable only Dem_MM unit.                                 */
-/* Parameters    | [in] BlockRecordKind :                                   */
-/*               |        BlockRecordKind                                   */
-/*               | [in] DataPtr :                                           */
-/*               |        data address                                      */
-/*               | [in] Length :                                            */
-/*               |        data length                                       */
-/* Return Value  | void                                                     */
-/* Notes         | none                                                     */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-5-0      | no object changed.                                       */
-/****************************************************************************/
-static FUNC( void, DEM_CODE ) Dem_MM_RAMInit
-(
-    VAR( Dem_u16_MMBlockRecKindIndexType, AUTOMATIC ) BlockRecordKind,   /* MISRA DEVIATION */
-    P2VAR( uint8, AUTOMATIC, DEM_VAR_SAVED_ZONE ) DataPtr,
-    VAR( Dem_u16_BlockSizeType, AUTOMATIC ) Length
-)
-{
-    /* Variable declaration */
-    VAR( Dem_u16_BlockSizeType, AUTOMATIC  ) cnt;
-    P2VAR( uint8, AUTOMATIC, DEM_VAR_SAVED_ZONE ) DemRamDataPtr;
-
-    /* Data type cast processing */
-    DemRamDataPtr = (P2VAR( uint8, AUTOMATIC, DEM_VAR_SAVED_ZONE )) DataPtr;
-
-    /*--------------------------------------*/
-    /*  notify SAVED_ZONE update - start.   */
-    Dem_NotifySavedZoneUpdate_Enter();      /*  notify start :  savedzone area will be update.  */
-    /*--------------------------------------*/
-
-    /* Clear data of designated area */
-    for( cnt = (Dem_u16_BlockSizeType)0U; cnt < Length; cnt++ ) /* [GUD:for]cnt */
-    {
-        /* Clear processing */
-        DemRamDataPtr[cnt]  = DEM_NVBLOCK_FACTORY_VALUE;        /* [GUD]cnt */
-    }
-
-    /*--------------------------------------*/
-    /*  notify SAVED_ZONE update - end.     */
-    Dem_NotifySavedZoneUpdate_Exit();       /*  notify end :  savedzone area will be update.    */
-    /*--------------------------------------*/
-
-    return;
-}
-#endif  /* ( DEM_PFC_SUPPORT == STD_OFF )    */
-
 
 #define DEM_STOP_SEC_CODE
 #include <Dem_MemMap.h>
@@ -621,6 +643,8 @@ static FUNC( void, DEM_CODE ) Dem_MM_RAMInit
 /*  v5-0-0         :2022-03-29                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-6-0         :2024-01-29                                              */
+/*  v5-7-0         :2024-05-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

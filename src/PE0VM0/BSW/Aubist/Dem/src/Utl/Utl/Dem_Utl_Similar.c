@@ -1,7 +1,7 @@
-/* Dem_Utl_Similar_c(v5-5-0)                                                */
+/* Dem_Utl_Similar_c(v5-9-0)                                                */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -17,6 +17,11 @@
 
 #if ( DEM_SPECIFIC_EVENT_SUPPORT == STD_ON )
 #include "../../../inc/Dem_Utl_Similar.h"
+
+#ifndef DEM_SIT_RANGE_CHECK
+#else   /* DEM_SIT_RANGE_CHECK */
+#include <Dem_SIT_RangeCheck.h>
+#endif  /* DEM_SIT_RANGE_CHECK */
 
 /*--------------------------------------------------------------------------*/
 /* Macros                                                                   */
@@ -65,6 +70,7 @@
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_UtlSimilar_CnvBinaryToSimilarConditionArray
 (
@@ -81,10 +87,10 @@ FUNC( void, DEM_CODE ) Dem_UtlSimilar_CnvBinaryToSimilarConditionArray
     buffidx = (Dem_u08_SimilarConditionIndexType)0U;
     for ( idx = (Dem_u08_SimilarConditionIndexType)0U; idx < similartypeNum; idx++ )    /* [GUD:for]idx */
     {
-        SimilarConditionArrayPtr[ idx ] = ( Dem_SimilarConditionValueType )( ( (uint32)BufferPtr[ buffidx ]) |                              /* [GUD]buffidx */
-                                             ( ((uint32)BufferPtr[DEM_UTLSIM_BUF_UINT32POS_1 + buffidx ]) << DEM_UTLSIM_BITSHIFT_8  ) |     /* [GUD]buffidx */
-                                             ( ((uint32)BufferPtr[DEM_UTLSIM_BUF_UINT32POS_2 + buffidx ]) << DEM_UTLSIM_BITSHIFT_16 ) |     /* [GUD]buffidx */
-                                             ( ((uint32)BufferPtr[DEM_UTLSIM_BUF_UINT32POS_3 + buffidx ]) << DEM_UTLSIM_BITSHIFT_24 ) );    /* [GUD]buffidx */
+        SimilarConditionArrayPtr[ idx ] = ( Dem_SimilarConditionValueType )( ( (uint32)BufferPtr[ buffidx ]) |                              /* [GUD]buffidx *//* [ARYCHK] DEM_SIT_R_CHK_SIMILAR_CONDITION_ARRAY_SIZE / 1 / idx *//* [ARYCHK] DEM_ASYNCDATAQUE_SPEC_EVENT_ITEMSIZE-(DEM_ASYNCDATAQUE_EVENTSTATUS_POS+4) / 1 / buffidx *//* [ARYDESC]DEM_ASYNCDATAQUE_EVENTSTATUS_POS+4:DEM_SPCEVT_DATABUF_SIMILARCONDITION */
+                                             ( ((uint32)BufferPtr[DEM_UTLSIM_BUF_UINT32POS_1 + buffidx ]) << DEM_UTLSIM_BITSHIFT_8  ) |     /* [GUD]buffidx *//* [ARYCHK] DEM_ASYNCDATAQUE_SPEC_EVENT_ITEMSIZE-(DEM_ASYNCDATAQUE_EVENTSTATUS_POS+4) / 1 / DEM_UTLSIM_BUF_UINT32POS_1+buffidx *//* [ARYDESC]DEM_ASYNCDATAQUE_EVENTSTATUS_POS+4:DEM_SPCEVT_DATABUF_SIMILARCONDITION */
+                                             ( ((uint32)BufferPtr[DEM_UTLSIM_BUF_UINT32POS_2 + buffidx ]) << DEM_UTLSIM_BITSHIFT_16 ) |     /* [GUD]buffidx *//* [ARYCHK] DEM_ASYNCDATAQUE_SPEC_EVENT_ITEMSIZE-(DEM_ASYNCDATAQUE_EVENTSTATUS_POS+4) / 1 / DEM_UTLSIM_BUF_UINT32POS_2+buffidx *//* [ARYDESC]DEM_ASYNCDATAQUE_EVENTSTATUS_POS+4:DEM_SPCEVT_DATABUF_SIMILARCONDITION */
+                                             ( ((uint32)BufferPtr[DEM_UTLSIM_BUF_UINT32POS_3 + buffidx ]) << DEM_UTLSIM_BITSHIFT_24 ) );    /* [GUD]buffidx *//* [ARYCHK] DEM_ASYNCDATAQUE_SPEC_EVENT_ITEMSIZE-(DEM_ASYNCDATAQUE_EVENTSTATUS_POS+4) / 1 / DEM_UTLSIM_BUF_UINT32POS_3+buffidx *//* [ARYDESC]DEM_ASYNCDATAQUE_EVENTSTATUS_POS+4:DEM_SPCEVT_DATABUF_SIMILARCONDITION */
         buffidx = buffidx + DEM_UTLSIM_BUF_UINT32_SIZE;                         /* [GUD:logic]buffidx */
     }
     return ;
@@ -103,6 +109,7 @@ FUNC( void, DEM_CODE ) Dem_UtlSimilar_CnvBinaryToSimilarConditionArray
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_UtlSimilar_CnvSimilarConditionArrayToBinary
 (
@@ -119,10 +126,10 @@ FUNC( void, DEM_CODE ) Dem_UtlSimilar_CnvSimilarConditionArrayToBinary
     buffidx = (Dem_u08_SimilarConditionIndexType)0U;
     for ( idx = (Dem_u08_SimilarConditionIndexType)0U; idx < similartypeNum; idx++ )    /* [GUD:for]idx */
     {
-        BufferPtr[buffidx]  = (uint8)( SimilarConditionArrayPtr[ idx ] );       /* [GUD]buffidx *//* [GUD]idx */
-        BufferPtr[buffidx + DEM_UTLSIM_BUF_UINT32POS_1]  = (uint8)( ((uint32)SimilarConditionArrayPtr[ idx ]) >> DEM_UTLSIM_BITSHIFT_8  );      /* [GUD]buffidx *//* [GUD]idx */
-        BufferPtr[buffidx + DEM_UTLSIM_BUF_UINT32POS_2]  = (uint8)( ((uint32)SimilarConditionArrayPtr[ idx ]) >> DEM_UTLSIM_BITSHIFT_16 );      /* [GUD]buffidx *//* [GUD]idx */
-        BufferPtr[buffidx + DEM_UTLSIM_BUF_UINT32POS_3]  = (uint8)( ((uint32)SimilarConditionArrayPtr[ idx ]) >> DEM_UTLSIM_BITSHIFT_24 );      /* [GUD]buffidx *//* [GUD]idx */
+        BufferPtr[buffidx]  = (uint8)( SimilarConditionArrayPtr[ idx ] );       /* [GUD]buffidx *//* [GUD]idx *//* [ARYCHK] DEM_ASYNCDATAQUE_SPEC_EVENT_ITEMSIZE - (DEM_ASYNCDATAQUE_EVENTSTATUS_POS + 4) / 1 / buffidx *//* [ARYCHK] DEM_SIT_R_CHK_SIMILAR_CONDITION_ARRAY_SIZE / 1 / idx *//* [ARYDESC]DEM_ASYNCDATAQUE_EVENTSTATUS_POS+4:DEM_SPCEVT_DATABUF_SIMILARCONDITION */
+        BufferPtr[buffidx + DEM_UTLSIM_BUF_UINT32POS_1]  = (uint8)( ((uint32)SimilarConditionArrayPtr[ idx ]) >> DEM_UTLSIM_BITSHIFT_8  );      /* [GUD]buffidx *//* [GUD]idx *//* [ARYCHK] DEM_ASYNCDATAQUE_SPEC_EVENT_ITEMSIZE - (DEM_ASYNCDATAQUE_EVENTSTATUS_POS + 4) / 1 / buffidx+DEM_UTLSIM_BUF_UINT32POS_1 *//* [ARYCHK] DEM_SIT_R_CHK_SIMILAR_CONDITION_ARRAY_SIZE / 1 / idx *//* [ARYDESC]DEM_ASYNCDATAQUE_EVENTSTATUS_POS+4:DEM_SPCEVT_DATABUF_SIMILARCONDITION */
+        BufferPtr[buffidx + DEM_UTLSIM_BUF_UINT32POS_2]  = (uint8)( ((uint32)SimilarConditionArrayPtr[ idx ]) >> DEM_UTLSIM_BITSHIFT_16 );      /* [GUD]buffidx *//* [GUD]idx *//* [ARYCHK] DEM_ASYNCDATAQUE_SPEC_EVENT_ITEMSIZE - (DEM_ASYNCDATAQUE_EVENTSTATUS_POS + 4) / 1 / buffidx+DEM_UTLSIM_BUF_UINT32POS_2 *//* [ARYCHK] DEM_SIT_R_CHK_SIMILAR_CONDITION_ARRAY_SIZE / 1 / idx *//* [ARYDESC]DEM_ASYNCDATAQUE_EVENTSTATUS_POS+4:DEM_SPCEVT_DATABUF_SIMILARCONDITION */
+        BufferPtr[buffidx + DEM_UTLSIM_BUF_UINT32POS_3]  = (uint8)( ((uint32)SimilarConditionArrayPtr[ idx ]) >> DEM_UTLSIM_BITSHIFT_24 );      /* [GUD]buffidx *//* [GUD]idx *//* [ARYCHK] DEM_ASYNCDATAQUE_SPEC_EVENT_ITEMSIZE - (DEM_ASYNCDATAQUE_EVENTSTATUS_POS + 4) / 1 / buffidx+DEM_UTLSIM_BUF_UINT32POS_3 *//* [ARYCHK] DEM_SIT_R_CHK_SIMILAR_CONDITION_ARRAY_SIZE / 1 / idx *//* [ARYDESC]DEM_ASYNCDATAQUE_EVENTSTATUS_POS+4:DEM_SPCEVT_DATABUF_SIMILARCONDITION */
         buffidx = buffidx + DEM_UTLSIM_BUF_UINT32_SIZE;                         /* [GUD:logic]buffidx */
     }
     return ;
@@ -145,10 +152,12 @@ FUNC( void, DEM_CODE ) Dem_UtlSimilar_CnvSimilarConditionArrayToBinary
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-7-0      | no object changed.                                       */
+/*   v5-9-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_UtlSimilar_CopySimilarConditionArray
 (
-    P2VAR( Dem_SimilarConditionValueType, AUTOMATIC, DEM_VAR_SAVED_ZONE ) DestSimilarConditionArrayPtr,
+    P2VAR( Dem_SimilarConditionValueType, AUTOMATIC, DEM_APPL_DATA ) DestSimilarConditionArrayPtr,
     P2CONST( Dem_SimilarConditionValueType, AUTOMATIC, DEM_VAR_SAVED_ZONE ) SrcSimilarConditionArrayPtr
 )
 {
@@ -158,7 +167,7 @@ FUNC( void, DEM_CODE ) Dem_UtlSimilar_CopySimilarConditionArray
     similartypeNum  =   Dem_SimilartypeNum;
     for ( idx = (Dem_u08_SimilarConditionIndexType)0U; idx < similartypeNum; idx++ )    /* [GUD:for]idx */
     {
-        DestSimilarConditionArrayPtr[ idx ] = SrcSimilarConditionArrayPtr[ idx ];   /* [GUD]idx */
+        DestSimilarConditionArrayPtr[ idx ] = SrcSimilarConditionArrayPtr[ idx ];   /* [GUD]idx *//* [ARYCHK] DEM_SIMILARTYPE_NUM / 1 / idx *//* [ARYCHK] DEM_SIMILARTYPE_NUM / 1 / idx */
     }
     return ;
 }
@@ -178,6 +187,7 @@ FUNC( void, DEM_CODE ) Dem_UtlSimilar_CopySimilarConditionArray
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_UtlSimilar_SetSimilarConditionArray
 (
@@ -191,7 +201,7 @@ FUNC( void, DEM_CODE ) Dem_UtlSimilar_SetSimilarConditionArray
     similartypeNum  =   Dem_SimilartypeNum;
     for ( idx = (Dem_u08_SimilarConditionIndexType)0U; idx < similartypeNum; idx++ )    /* [GUD:for]idx */
     {
-        DestSimilarConditionArrayPtr[ idx ] = Value;    /* [GUD]idx */
+        DestSimilarConditionArrayPtr[ idx ] = Value;    /* [GUD]idx *//* [ARYCHK] DEM_SIMILARTYPE_NUM / 1 / idx */
     }
     return ;
 }
@@ -213,6 +223,8 @@ FUNC( void, DEM_CODE ) Dem_UtlSimilar_SetSimilarConditionArray
 /*  v5-0-0         :2021-12-24                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-7-0         :2024-05-29                                              */
+/*  v5-9-0         :2025-02-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

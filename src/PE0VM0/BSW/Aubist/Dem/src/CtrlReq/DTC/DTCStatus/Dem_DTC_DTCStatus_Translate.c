@@ -1,7 +1,7 @@
-/* Dem_DTC_DTCStatus_Translate_c(v5-5-0)                                    */
+/* Dem_DTC_DTCStatus_Translate_c(v5-9-0)                                    */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 
@@ -99,6 +99,7 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DTC_MergeOneSetOfWIRStat
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | branch changed.                                          */
+/*   v5-9-0      | branch changed.                                          */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_DTC_TranslateDTCStatusAfterUpdate
 (
@@ -116,46 +117,48 @@ FUNC( void, DEM_CODE ) Dem_DTC_TranslateDTCStatusAfterUpdate
     VAR( Dem_EventKindType, AUTOMATIC ) eventKind;
 #endif  /*   ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )         */
 
-    retGetEvent     = DEM_IRT_NG;
-    resultOfCallOut = E_NOT_OK;
-    eventId         = ((Dem_EventIdType)0x0000U);
-
-    eventStrgIndex  =   Dem_CmbEvt_CnvEventCtrlIndex_ToEventStrgIndex( EventCtrlIndex );                    /* [GUD:RET:IF_GUARDED: EventCtrlIndex ]eventStrgIndex */
-
-    /* Merge WIRStatus bit into bit7 of old and new DTCStatus. */
-    retMergeDTC = Dem_DTC_MergeOneSetOfWIRStatusBit( eventStrgIndex, OldDTCStatusPtr, NewDTCStatusPtr );
-
-    if( retMergeDTC == DEM_IRT_OK )
+    if ( *OldDTCStatusPtr != *NewDTCStatusPtr )
     {
-        /* Gets EventId. */
-        retGetEvent = Dem_CfgInfoPm_CnvEventCtrlIndexToEventId( EventCtrlIndex, &eventId );                         /* [GUD:RET:DEM_IRT_OK]EventCtrlIndex */
+        retGetEvent     = DEM_IRT_NG;
+        resultOfCallOut = E_NOT_OK;
+        eventId         = ((Dem_EventIdType)0x0000U);
 
-        if( retGetEvent == DEM_IRT_OK )
+        eventStrgIndex  =   Dem_CmbEvt_CnvEventCtrlIndex_ToEventStrgIndex( EventCtrlIndex );                    /* [GUD:RET:IF_GUARDED: EventCtrlIndex ]eventStrgIndex */
+
+        /* Merge WIRStatus bit into bit7 of old and new DTCStatus. */
+        retMergeDTC = Dem_DTC_MergeOneSetOfWIRStatusBit( eventStrgIndex, OldDTCStatusPtr, NewDTCStatusPtr );
+
+        if( retMergeDTC == DEM_IRT_OK )
         {
-#if ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )  /*  [FuncSw]    */
-            eventKind = Dem_CfgInfoPm_GetEventKindOfMisfire_InEvtStrgGrp( eventStrgIndex );                     /* [GUD:RET:Not DEM_EVTKIND_TYPE_NON_OBD_EVENT] EventStrgIndex  */
-            if( ( eventKind & DEM_EVTKIND_TYPE_MISFIRE_CAT_EVENT ) == DEM_EVTKIND_TYPE_MISFIRE_CAT_EVENT )
+            /* Gets EventId. */
+            retGetEvent = Dem_CfgInfoPm_CnvEventCtrlIndexToEventId( EventCtrlIndex, &eventId );                         /* [GUD:RET:DEM_IRT_OK]EventCtrlIndex */
+
+            if( retGetEvent == DEM_IRT_OK )
             {
-                Dem_Misfire_MergeWIRBitAtIndicatorBlinking_CAT( (*OldDTCStatusPtr), OldDTCStatusPtr );
-                Dem_Misfire_MergeWIRBitAtIndicatorBlinking_CAT( (*NewDTCStatusPtr), NewDTCStatusPtr );
-            }
+#if ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )  /*  [FuncSw]    */
+                eventKind = Dem_CfgInfoPm_GetEventKindOfMisfire_InEvtStrgGrp( eventStrgIndex );                     /* [GUD:RET:Not DEM_EVTKIND_TYPE_NON_OBD_EVENT] EventStrgIndex  */
+                if( ( eventKind & DEM_EVTKIND_TYPE_MISFIRE_CAT_EVENT ) == DEM_EVTKIND_TYPE_MISFIRE_CAT_EVENT )
+                {
+                    Dem_Misfire_MergeWIRBitAtIndicatorBlinking_CAT( (*OldDTCStatusPtr), OldDTCStatusPtr );
+                    Dem_Misfire_MergeWIRBitAtIndicatorBlinking_CAT( (*NewDTCStatusPtr), NewDTCStatusPtr );
+                }
 #endif  /*   ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )         */
 
-            /* Converts statusOfDTC into the format of the user definition. */
-            (void)Dem_DTC_TranslateStatusOfDTCToUserDefinedFormat( eventId, (*OldDTCStatusPtr), OldDTCStatusPtr, &resultOfCallOut );   /* no return check required */
+                /* Converts statusOfDTC into the format of the user definition. */
+                (void)Dem_DTC_TranslateStatusOfDTCToUserDefinedFormat( eventId, (*OldDTCStatusPtr), OldDTCStatusPtr, &resultOfCallOut );   /* no return check required */
 
-            (void)Dem_DTC_TranslateStatusOfDTCToUserDefinedFormat( eventId, (*NewDTCStatusPtr), NewDTCStatusPtr, &resultOfCallOut );   /* no return check required */
+                (void)Dem_DTC_TranslateStatusOfDTCToUserDefinedFormat( eventId, (*NewDTCStatusPtr), NewDTCStatusPtr, &resultOfCallOut );   /* no return check required */
 
+            }
+        }
+
+        if( retGetEvent != DEM_IRT_OK )
+        {
+            /* Output a fixation value */
+            (*OldDTCStatusPtr) = DEM_DTCSTATUS_BYTE_DEFAULT;
+            (*NewDTCStatusPtr) = DEM_DTCSTATUS_BYTE_DEFAULT;
         }
     }
-
-    if( retGetEvent != DEM_IRT_OK )
-    {
-        /* Output a fixation value */
-        (*OldDTCStatusPtr) = DEM_DTCSTATUS_BYTE_DEFAULT;
-        (*NewDTCStatusPtr) = DEM_DTCSTATUS_BYTE_DEFAULT;
-    }
-
     return ;
 }
 
@@ -502,6 +505,7 @@ static  FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DTC_MergeOneSetOfWIRSta
 /* History                                                                  */
 /*  Version        :Date                                                    */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-9-0         :2025-02-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

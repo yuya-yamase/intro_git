@@ -1,7 +1,7 @@
-/* Dem_DataMngVld_c(v5-5-0)                                                 */
+/* Dem_DataMngVld_c(v5-9-0)                                                 */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -228,6 +228,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataMng_DataVerify
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-8-0      | branch changed.                                          */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_DataMng_VerifyEvent
 (
@@ -243,13 +244,17 @@ static FUNC( void, DEM_CODE ) Dem_DataMng_VerifyEvent
 #if ( DEM_SIMILAR_EVENT_CONFIGURED == STD_ON )  /*  [FuncSw]    */
     VAR( Dem_EventKindType, AUTOMATIC ) eventKind;
 #endif  /* ( DEM_SIMILAR_EVENT_CONFIGURED == STD_ON )   */
+#if ( DEM_CLEAR_EVENT_ALLOWED_BY_CALLOUT_SUPPORT == STD_ON )
+    VAR( boolean, AUTOMATIC ) clearAllowedByCallout;
+#endif  /* ( DEM_CLEAR_EVENT_ALLOWED_BY_CALLOUT_SUPPORT == STD_ON ) */
+
     recMngCmnKindEvent = Dem_RecMngCmnKindEvent;
 
     /* Check factory default */
     resultOfFactoryCheck = Dem_DataMng_FactoryCheckEvent( EventStrgIndex );         /* [GUDCHK:CALLER]EventStrgIndex */
     if( resultOfFactoryCheck != (boolean)TRUE )
     {
-        clearAllowed = Dem_CfgInfoPm_ClearAllowed_InEvtStrgGrp( EventStrgIndex );   /* [GUDCHK:CALLER]EventStrgIndex */
+        clearAllowed = Dem_CfgInfoPm_ClearAllowedByConfig_InEvtStrgGrp( EventStrgIndex );   /* [GUDCHK:CALLER]EventStrgIndex */
         if( clearAllowed == (boolean)TRUE )
         {
             if( ClrInfoNvmReadResult != DEM_IRT_NG )
@@ -262,18 +267,31 @@ static FUNC( void, DEM_CODE ) Dem_DataMng_VerifyEvent
                 }
                 else
                 {
-                    /* EventRecord and SimilarRecord are clear(with write NvM), if event is similar event. */
-                    /* EventRecord is clear(without write NvM), if envet is not siimlar event. */
-#if ( DEM_SIMILAR_EVENT_CONFIGURED == STD_ON )  /*  [FuncSw]    */
-                    eventKind = Dem_CfgInfoPm_GetEventKindOfSpecific_InEvtStrgGrp( EventStrgIndex );                /* [GUDCHK:CALLER]EventStrgIndex */
+#if ( DEM_CLEAR_EVENT_ALLOWED_BY_CALLOUT_SUPPORT == STD_ON )
+                    /*  check clear allowed from callout function.  */
+                    clearAllowedByCallout   =   Dem_CfgInfoPm_JudgeClearAllowedByCallout( EventStrgIndex );             /* [GUDCHK:CALLER]EventStrgIndex */
 
-                    if(( eventKind & DEM_EVTKIND_TYPE_SIMILAR_EVENT ) == DEM_EVTKIND_TYPE_SIMILAR_EVENT )
+                    if ( clearAllowedByCallout == (boolean)FALSE )
                     {
-                        Dem_DataMngM_InitEventRecord( EventStrgIndex );                                             /* [GUDCHK:CALLER]EventStrgIndex */
-                        Dem_RecMngCmn_SetNvMWriteStatus( recMngCmnKindEvent, ( Dem_u16_RecordIndexType )EventStrgIndex );
-                        Dem_SimilarMng_NvMClearSimilarRecord_EventStrgIndex( EventStrgIndex );                      /* [GUDCHK:CALLER]EventStrgIndex */
+                        /*  It's not DTC clear target. so, no clear and start verify record.        */
+                        Dem_DataMng_VerifiedDiagData( EventStrgIndex );                                                 /* [GUDCHK:CALLER]EventStrgIndex */
                     }
+                    else
+#endif  /* ( DEM_CLEAR_EVENT_ALLOWED_BY_CALLOUT_SUPPORT == STD_ON ) */
+                    {
+                        /* EventRecord and SimilarRecord are clear(with write NvM), if event is similar event. */
+                        /* EventRecord is clear(without write NvM), if event is not similar event. */
+#if ( DEM_SIMILAR_EVENT_CONFIGURED == STD_ON )  /*  [FuncSw]    */
+                        eventKind = Dem_CfgInfoPm_GetEventKindOfSpecific_InEvtStrgGrp( EventStrgIndex );                /* [GUDCHK:CALLER]EventStrgIndex */
+
+                        if(( eventKind & DEM_EVTKIND_TYPE_SIMILAR_EVENT ) == DEM_EVTKIND_TYPE_SIMILAR_EVENT )
+                        {
+                            Dem_DataMngM_InitEventRecord( EventStrgIndex );                                             /* [GUDCHK:CALLER]EventStrgIndex */
+                            Dem_RecMngCmn_SetNvMWriteStatus( recMngCmnKindEvent, ( Dem_u16_RecordIndexType )EventStrgIndex );
+                            Dem_SimilarMng_NvMClearSimilarRecord_EventStrgIndex( EventStrgIndex );                      /* [GUDCHK:CALLER]EventStrgIndex */
+                        }
 #endif  /* ( DEM_SIMILAR_EVENT_CONFIGURED == STD_ON )   */
+                    }
                 }
             }
             else
@@ -426,6 +444,8 @@ static FUNC( void, DEM_CODE ) Dem_DataMng_VerifiedDiagData
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
+/*   v5-8-0      | no branch changed.                                       */
+/*   v5-9-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_DataMng_VerifyTrigger
 (
@@ -445,8 +465,8 @@ FUNC( void, DEM_CODE ) Dem_DataMng_VerifyTrigger
     VAR( Dem_u08_FFListIndexType, AUTOMATIC ) obdFFRClassPerDTCMaxNum;
     VAR( Dem_u08_FFDIndexType, AUTOMATIC ) obdFFDRecordNum;
 
-    obdFFDRecordNum = Dem_ObdFFDRecordNum;
-    obdFFRClassPerDTCMaxNum = Dem_OBDFFRClassPerDTCMaxNum;
+    obdFFDRecordNum = Dem_CfgInfoPm_GetObdFFDRecordNum();
+    obdFFRClassPerDTCMaxNum = Dem_CfgInfoPm_GetOBDFFRClassPerDTCMaxNum();
 #endif  /*   ( DEM_OBDFFD_SUPPORT == STD_ON )      */
 
     nonObdFFDRecordNum = Dem_NonObdFFDRecordNum;
@@ -462,7 +482,7 @@ FUNC( void, DEM_CODE ) Dem_DataMng_VerifyTrigger
         existFFRFlg = (boolean)FALSE;
         for( freezeFrameRecordIndex = (Dem_u08_FFListIndexType)0U; freezeFrameRecordIndex < nonOBDFFRClassPerDTCMaxNum; freezeFrameRecordIndex++ )
         {
-            freezeFrameIndex = DEM_FAULTINDEX_INITIAL;
+            freezeFrameIndex = DEM_FFRECINDEX_INITIAL;
             (void)Dem_DataMngC_GetFR_FreezeFrameIndex( FaultIndex, freezeFrameRecordIndex, &freezeFrameIndex );   /* no return check required */
             if( freezeFrameIndex < nonObdFFDRecordNum )
             {
@@ -477,7 +497,7 @@ FUNC( void, DEM_CODE ) Dem_DataMng_VerifyTrigger
             /* check whether OBD freeze frame is registered  */
             for( freezeFrameRecordIndex = (Dem_u08_FFListIndexType)0U; freezeFrameRecordIndex < obdFFRClassPerDTCMaxNum; freezeFrameRecordIndex++ )
             {
-                obdFreezeFrameIndex = DEM_FAULTINDEX_INITIAL;
+                obdFreezeFrameIndex = DEM_FFRECINDEX_INITIAL;
                 (void)Dem_DataMngC_GetFR_ObdFreezeFrameIndex( FaultIndex, freezeFrameRecordIndex, &obdFreezeFrameIndex );    /* no return check required */
                 if( obdFreezeFrameIndex < obdFFDRecordNum )
                 {
@@ -774,6 +794,8 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataMng_ClearAllNotVerif
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-8-0         :2024-10-29                                              */
+/*  v5-9-0         :2025-02-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

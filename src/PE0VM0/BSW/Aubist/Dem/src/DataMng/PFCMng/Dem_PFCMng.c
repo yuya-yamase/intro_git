@@ -1,7 +1,7 @@
-/* Dem_PFCMng_c(v5-5-0)                                                     */
+/* Dem_PFCMng_c(v5-10-0)                                                    */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -63,7 +63,7 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_PFCMng_MatchPFCAndPFCQua
 static FUNC( void, DEM_CODE ) Dem_PFCMng_ClearPFCRecordOfMisfire
 ( void );
 #endif  /*   ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON )         */
-static FUNC( void, DEM_CODE ) Dem_PFCMng_ClearPFCRecord
+static FUNC( void, DEM_CODE ) Dem_PFCMng_ClearPFCRecordForVerify
 (
     VAR( Dem_u08_PFCIndexType, AUTOMATIC ) PFCRecordIndex
 );
@@ -143,8 +143,11 @@ FUNC( void, DEM_CODE ) Dem_PFCMng_Init
 /* Return Value  | void                                                     */
 /* Notes         | none                                                     */
 /*--------------------------------------------------------------------------*/
+/* UpdateRecord  | [UpdRec]PFC  :   NotifySavedZone                         */
+/*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-6-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_PFCMng_InitSavedZone
 (
@@ -166,8 +169,8 @@ FUNC( void, DEM_CODE ) Dem_PFCMng_InitSavedZone
         /*--------------------------------------------------*/
         for( pfcIndex = (Dem_u08_PFCIndexType)0U; pfcIndex < pfcRecordNum; pfcIndex++ )     /* [GUD:for]pfcIndex */
         {
-            Dem_PFCRecord[pfcIndex].EventStrgIndex = DEM_EVENTSTRGINDEX_INVALID;            /* [GUD]pfcIndex */
-            Dem_PFCRecord[pfcIndex].DtcValue = DEM_PFC_DTCVALUE_INITIAL;                    /* [GUD]pfcIndex */
+            Dem_PFCRecord[pfcIndex].EventStrgIndex = DEM_EVENTSTRGINDEX_INVALID;            /* [GUD]pfcIndex */ /*[UpdRec]PFC */
+            Dem_PFCRecord[pfcIndex].DtcValue = DEM_PFC_DTCVALUE_INITIAL;                    /* [GUD]pfcIndex */ /*[UpdRec]PFC */
             Dem_RecMngCmn_SetNvMWriteStatus( recMngCmnKindPFC, ( Dem_u16_RecordIndexType )pfcIndex );   /* [GUD]pfcIndex */
         }
 
@@ -191,8 +194,12 @@ FUNC( void, DEM_CODE ) Dem_PFCMng_InitSavedZone
 /*               |          DEM_IRT_PENDING : Continue DataVerify.          */
 /* Notes         | none                                                     */
 /*--------------------------------------------------------------------------*/
+/* UpdateRecord  | [UpdRec]PFC  :   NotifySavedZone                         */
+/*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-6-0      | no branch changed.                                       */
+/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_PFCMng_DataVerify
 (
@@ -256,7 +263,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_PFCMng_DataVerify
             Dem_RecMngCmn_SetNvMWriteStatus( recMngCmnKindPFCQuaInfo, ( Dem_u16_RecordIndexType )pfcIndex );    /* [GUD]pfcIndex */
         }
 
-        Dem_PFCMng_MatchEventStrgIndexAndDTC( pfcIndex, &eventStrgIndex );                              /* [GUD]pfcIndex */
+        Dem_PFCMng_MatchEventStrgIndexAndDTC( pfcIndex, &eventStrgIndex );                              /* [GUD]pfcIndex */ /*[UpdRec]PFC */
 
         if( eventStrgIndex < eventStorageNum )                                                                  /* [GUD:if]eventStrgIndex */
         {
@@ -280,7 +287,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_PFCMng_DataVerify
             /*  initialize PFC record.      */
             if( Dem_PFCRecord[pfcIndex].EventStrgIndex != DEM_EVENTSTRGINDEX_INVALID )          /* [GUD]pfcIndex */
             {
-                Dem_PFCMng_ClearPFCRecord( pfcIndex );                                          /* [GUD]pfcIndex */
+                Dem_PFCMng_ClearPFCRecordForVerify( pfcIndex );                                 /* [GUD]pfcIndex */ /*[UpdRec]PFC */
             }
         }
         else
@@ -322,11 +329,11 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_PFCMng_DataVerify
 #if ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON )  /*  [FuncSw]    */
     clearMisfirePFCRecordFlag = (boolean)FALSE;
     /* verify PFCMisfireCom record */
-    Dem_MisfireMng_PFCMisfireComDataVerify( existMisfireFlag, &clearMisfirePFCRecordFlag );
+    Dem_MisfireMng_PFCMisfireComDataVerify( existMisfireFlag, &clearMisfirePFCRecordFlag ); /*[UpdRec]PFCMisfire */
 
     if( clearMisfirePFCRecordFlag == (boolean)TRUE )
     {
-        Dem_PFCMng_ClearPFCRecordOfMisfire();
+        Dem_PFCMng_ClearPFCRecordOfMisfire();   /*[UpdRec]PFC */
     }
 #endif  /*   ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON )         */
     /*--------------------------------------------------*/
@@ -348,8 +355,11 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_PFCMng_DataVerify
 /* Return Value  | void                                                     */
 /* Notes         | none                                                     */
 /*--------------------------------------------------------------------------*/
+/* UpdateRecord  | [UpdRec]PFC                                              */
+/*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-6-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_PFCMng_SetPFCRecordData
 (
@@ -373,14 +383,14 @@ FUNC( void, DEM_CODE ) Dem_PFCMng_SetPFCRecordData
         /* Starts exclusion. */
         SchM_Enter_Dem_PermanentMemory();
 
-        Dem_PFCRecord[PFCRecordIndex].EventStrgIndex = EventStrgIndex;          /* [GUD]PFCRecordIndex */
+        Dem_PFCRecord[PFCRecordIndex].EventStrgIndex = EventStrgIndex;          /* [GUD]PFCRecordIndex */   /*[UpdRec]PFC */
 
         resultGetDtc = Dem_DataAvl_GetUDSDTCByEventStrgIndex( EventStrgIndex, &dtcValue );  /* [GUD:RET:DEM_IRT_OK] EventStrgIndex */
         if( resultGetDtc != DEM_IRT_OK )
         {
             dtcValue = DEM_PFC_DTCVALUE_INITIAL;
         }
-        Dem_PFCRecord[PFCRecordIndex].DtcValue = dtcValue;                      /* [GUD]PFCRecordIndex */
+        Dem_PFCRecord[PFCRecordIndex].DtcValue = dtcValue;                      /* [GUD]PFCRecordIndex */   /*[UpdRec]PFC */
 
         Dem_PFCMng_QuaInfo_SetDtcValue( PFCRecordIndex, dtcValue );             /* [GUD]PFCRecordIndex */
 
@@ -411,7 +421,7 @@ FUNC( void, DEM_CODE ) Dem_PFCMng_SetPFCRecordData
 /* Parameters    | [in] PFCRecordIndex :                                    */
 /*               |        The event index corresponding to the Permanent    */
 /*               |        memory record Index.                              */
-/*               | [out] EventStrgIndexPtr :                                    */
+/*               | [out] EventStrgIndexPtr :                                */
 /*               |        The event index corresponding to the event ID.    */
 /* Return Value  | Dem_u08_InternalReturnType                               */
 /*               |        DEM_IRT_OK : success                              */
@@ -794,8 +804,11 @@ static FUNC( void, DEM_CODE ) Dem_PFCMng_InitMirrorMemory
 /* Return Value  | void                                                     */
 /* Notes         | none                                                     */
 /*--------------------------------------------------------------------------*/
+/* UpdateRecord  | [UpdRec]PFC                                              */
+/*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-6-0      | no branch changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_PFCMng_ClearPFCRecordOfMisfire
 (void)
@@ -816,7 +829,7 @@ static FUNC( void, DEM_CODE ) Dem_PFCMng_ClearPFCRecordOfMisfire
 
             if( ( eventKind & DEM_EVTKIND_TYPE_MISFIRE_EVENT ) == DEM_EVTKIND_TYPE_MISFIRE_EVENT )
             {
-                Dem_PFCMng_ClearPFCRecord( pfcIndex );                                  /* [GUD]pfcIndex */
+                Dem_PFCMng_ClearPFCRecordForVerify( pfcIndex );                         /* [GUD]pfcIndex */ /*[UpdRec]PFC */
             }
         }
     }
@@ -826,7 +839,7 @@ static FUNC( void, DEM_CODE ) Dem_PFCMng_ClearPFCRecordOfMisfire
 #endif  /*   ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON )         */
 
 /****************************************************************************/
-/* Function Name | Dem_PFCMng_ClearPFCRecord                                */
+/* Function Name | Dem_PFCMng_ClearPFCRecordForVerify                       */
 /* Description   | clear PFC record and PFCQuaInfo record                 . */
 /* Preconditions | none                                                     */
 /* Parameters    | [in]PFCRecordIndex :                                     */
@@ -834,10 +847,14 @@ static FUNC( void, DEM_CODE ) Dem_PFCMng_ClearPFCRecordOfMisfire
 /* Return Value  | void                                                     */
 /* Notes         | none                                                     */
 /*--------------------------------------------------------------------------*/
+/* UpdateRecord  | [UpdRec]PFC                                              */
+/*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-6-0      | rename from Dem_PFCMng_ClearPFCRecord(v5-5-0).           */
+/*   v5-6-0      | no object changed.                                       */
 /****************************************************************************/
-static FUNC( void, DEM_CODE ) Dem_PFCMng_ClearPFCRecord
+static FUNC( void, DEM_CODE ) Dem_PFCMng_ClearPFCRecordForVerify
 (
     VAR( Dem_u08_PFCIndexType, AUTOMATIC ) PFCRecordIndex               /* [PRMCHK:CALLER] */
 )
@@ -851,8 +868,8 @@ static FUNC( void, DEM_CODE ) Dem_PFCMng_ClearPFCRecord
     recMngCmnKindPFC = Dem_RecMngCmnKindPFC;
     recMngCmnKindPFCQuaInfo = Dem_RecMngCmnKindPFCQuaInfo;
 
-    Dem_PFCRecord[PFCRecordIndex].EventStrgIndex = DEM_EVENTSTRGINDEX_INVALID;                          /* [GUDCHK:CALLER]PFCRecordIndex */
-    Dem_PFCRecord[PFCRecordIndex].DtcValue = DEM_PFC_DTCVALUE_INITIAL;                                  /* [GUDCHK:CALLER]PFCRecordIndex */
+    Dem_PFCRecord[PFCRecordIndex].EventStrgIndex = DEM_EVENTSTRGINDEX_INVALID;                          /* [GUDCHK:CALLER]PFCRecordIndex */ /*[UpdRec]PFC */
+    Dem_PFCRecord[PFCRecordIndex].DtcValue = DEM_PFC_DTCVALUE_INITIAL;                                  /* [GUDCHK:CALLER]PFCRecordIndex */ /*[UpdRec]PFC */
     Dem_RecMngCmn_SetNvMWriteStatus( recMngCmnKindPFC, ( Dem_u16_RecordIndexType )PFCRecordIndex );     /* [GUDCHK:CALLER]PFCRecordIndex */
 
     Dem_PFCMng_QuaInfo_SetClearID( PFCRecordIndex, clearId );                                           /* [GUDCHK:CALLER]PFCRecordIndex */
@@ -875,8 +892,12 @@ static FUNC( void, DEM_CODE ) Dem_PFCMng_ClearPFCRecord
 /* Return Value  | void                                                     */
 /* Notes         | none                                                     */
 /*--------------------------------------------------------------------------*/
+/* UpdateRecord  | [UpdRec]PFC                                              */
+/*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
+/*   v5-6-0      | no object changed.                                       */
+/*   v5-10-0     | branch changed.                                          */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_PFCMng_MatchEventStrgIndexAndDTC
 (
@@ -886,6 +907,7 @@ static FUNC( void, DEM_CODE ) Dem_PFCMng_MatchEventStrgIndexAndDTC
 {
 
     VAR( boolean, AUTOMATIC ) chgEventIndexFlag;
+    VAR( boolean, AUTOMATIC ) availableStatus;
     VAR( Dem_u32_DTCValueType, AUTOMATIC ) dtcValue;
     VAR( Dem_u08_InternalReturnType, AUTOMATIC ) resultGetDtc;
     VAR( Dem_u08_InternalReturnType, AUTOMATIC ) resultGetEventIndex;
@@ -904,10 +926,18 @@ static FUNC( void, DEM_CODE ) Dem_PFCMng_MatchEventStrgIndexAndDTC
             {
                 chgEventIndexFlag = (boolean)TRUE;
             }
+            else
+            {
+                availableStatus = Dem_DataAvl_GetEvtAvl_InEvtStrgGrp( *EventStrgIndexPtr );
+                if( availableStatus != (boolean)TRUE )
+                {
+                    *EventStrgIndexPtr = DEM_EVENTSTRGINDEX_INVALID;
+                }
+            }
         }
         else
         {
-                chgEventIndexFlag = (boolean)TRUE;
+            chgEventIndexFlag = (boolean)TRUE;
         }
 
         if( chgEventIndexFlag == (boolean)TRUE )
@@ -916,7 +946,7 @@ static FUNC( void, DEM_CODE ) Dem_PFCMng_MatchEventStrgIndexAndDTC
             if( resultGetEventIndex == DEM_IRT_OK )
             {
                 recMngCmnKindPFC = Dem_RecMngCmnKindPFC;
-                Dem_PFCRecord[PFCRecordIndex].EventStrgIndex = *EventStrgIndexPtr;                              /* [GUDCHK:CALLER]PFCRecordIndex */
+                Dem_PFCRecord[PFCRecordIndex].EventStrgIndex = *EventStrgIndexPtr;                              /* [GUDCHK:CALLER]PFCRecordIndex */ /*[UpdRec]PFC */
                 Dem_RecMngCmn_SetNvMWriteStatus( recMngCmnKindPFC, ( Dem_u16_RecordIndexType )PFCRecordIndex ); /* [GUDCHK:CALLER]PFCRecordIndex */
             }
             else
@@ -1030,6 +1060,58 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_PFCMng_CheckPFCRecord
 }
 #endif  /* ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_OFF )    */
 
+/****************************************************************************/
+/* Function Name | Dem_PFCMng_ClearAllPFCRecord                             */
+/* Description   | Clear all Permanent memory record                        */
+/* Preconditions | none                                                     */
+/* Parameters    | none                                                     */
+/* Return Value  | void                                                     */
+/* Notes         | none                                                     */
+/*--------------------------------------------------------------------------*/
+/* UpdateRecord  | [UpdRec]PFC                                              */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-6-0      | new created.                                             */
+/****************************************************************************/
+FUNC( void, DEM_CODE ) Dem_PFCMng_ClearAllPFCRecord
+( void )
+{
+    VAR( Dem_u08_PFCIndexType, AUTOMATIC ) pfcIndex;
+    VAR( Dem_u08_PFCIndexType, AUTOMATIC ) pfcRecordNum;
+    VAR( Dem_u08_ClearIdType, AUTOMATIC ) tmpClearID;
+    VAR( Dem_u16_RecordKindIndexType, AUTOMATIC ) recMngCmnKindPFC;
+    VAR( Dem_u16_RecordKindIndexType, AUTOMATIC ) recMngCmnKindPFCQuaInfo;
+
+    pfcRecordNum = Dem_PFCRecordNum;
+
+    tmpClearID = Dem_ClrInfoMng_GetObdClearID();
+
+    for( pfcIndex = (Dem_u08_PFCIndexType)0U; pfcIndex < pfcRecordNum; pfcIndex++ )         /* [GUD:for]pfcIndex */
+    {
+        /* Starts exclusion. */
+        SchM_Enter_Dem_PermanentMemory();
+
+        Dem_PFCRecord[pfcIndex].EventStrgIndex = DEM_EVENTSTRGINDEX_INVALID;                    /* [GUD]pfcIndex */ /*[UpdRec]PFC */
+        Dem_PFCRecord[pfcIndex].DtcValue       = DEM_PFC_DTCVALUE_INITIAL;                      /* [GUD]pfcIndex */ /*[UpdRec]PFC */
+
+        Dem_PFCMng_QuaInfo_SetDtcValue( pfcIndex, DEM_PFC_DTCVALUE_INITIAL );                   /* [GUD]pfcIndex */
+        Dem_PFCMng_QuaInfo_SetCycleQualifiedInfo( pfcIndex, DEM_PFC_QUALIFIEDINFO_INITIAL );    /* [GUD]pfcIndex */
+        Dem_PFCMng_QuaInfo_SetClearID( pfcIndex, tmpClearID );                                  /* [GUD]pfcIndex */
+
+        /* Finishes exclusion. */
+        SchM_Exit_Dem_PermanentMemory();
+
+        /* Change PFCNvMStatus */
+        recMngCmnKindPFC = Dem_RecMngCmnKindPFC;
+        Dem_RecMngCmn_SetNvMWriteStatus( recMngCmnKindPFC, ( Dem_u16_RecordIndexType )pfcIndex );         /* [GUD]pfcIndex */
+        recMngCmnKindPFCQuaInfo = Dem_RecMngCmnKindPFCQuaInfo;
+        Dem_RecMngCmn_SetNvMWriteStatus( recMngCmnKindPFCQuaInfo, ( Dem_u16_RecordIndexType )pfcIndex );  /* [GUD]pfcIndex */
+    }
+
+    return ;
+}
+
+
 #define DEM_STOP_SEC_CODE
 #include <Dem_MemMap.h>
 
@@ -1045,6 +1127,9 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_PFCMng_CheckPFCRecord
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-6-0         :2024-01-29                                              */
+/*  v5-7-0         :2024-05-29                                              */
+/*  v5-10-0        :2025-06-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

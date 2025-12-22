@@ -1,7 +1,7 @@
-/* Dem_CmnLib_AsyncReqTable_h(v5-5-0)                                       */
+/* Dem_CmnLib_AsyncReqTable_h(v5-9-0)                                       */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -31,9 +31,10 @@
 #define DEM_ASYNCREQ_INITILIZE_EVENT_STATUS         ((Dem_u08_AsyncReqTableIndexType)2U)
 #define DEM_ASYNCREQ_AGING_EVENT_STATUS             ((Dem_u08_AsyncReqTableIndexType)3U)
 #define DEM_ASYNCREQ_NORMALIZE_EVENT_STATUS         ((Dem_u08_AsyncReqTableIndexType)4U)
+#define DEM_ASYNCREQ_ACTIVEFAULT_EVENT_STATUS       ((Dem_u08_AsyncReqTableIndexType)5U)
 
 /* Async Request Table Num */
-#define DEM_ASYNCREQ_NUM                            ((Dem_u08_AsyncReqTableIndexType)5U)
+#define DEM_ASYNCREQ_NUM                            ((Dem_u08_AsyncReqTableIndexType)6U)
 
 
 /* Data Queue Item Size Max */
@@ -94,11 +95,13 @@ extern CONST( AB_83_ConstV Dem_u08_AsyncReqTableIndexType        ,DEM_CONFIG_DAT
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-6-0         :2024-01-29                                              */
+/*  v5-9-0         :2025-02-26                                              */
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
 /*  Framework          :v2-1-0                                              */
-/*  BSW plug-in        :v5-5-0                                              */
+/*  BSW plug-in        :v5-10-0                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

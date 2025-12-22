@@ -1,7 +1,7 @@
-/* Dem_Control_EventUdsStatusHistory_c(v5-5-0)                              */
+/* Dem_Control_EventUdsStatusHistory_c(v5-6-0)                              */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -181,6 +181,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_SetEventUdsStatusHistor
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
+/*   v5-6-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_AsyncExecReturnType, DEM_CODE ) Dem_Control_ResetEventUdsStatusHistoryProcess
 (
@@ -224,11 +225,11 @@ FUNC( Dem_u08_AsyncExecReturnType, DEM_CODE ) Dem_Control_ResetEventUdsStatusHis
         if ( extendStatusOfDTCNew != extendStatusOfDTCOld )
         {
             /*  change value.               */
-            Dem_DataMngC_SetER_ExtendDTCStatus( eventStrgIndex, extendStatusOfDTCNew );
+            Dem_DataMngC_SetER_ExtendDTCStatus( eventStrgIndex, extendStatusOfDTCNew ); /* [UpdRec]Event */
 
         }
         /*  reset qualification .       */
-        Dem_Event_ClearFailedQualificationInfo_nochange( eventCtrlIndex );
+        Dem_Event_ClearFailedQualificationInfo_nochange( eventCtrlIndex );      /* no update AltIUMPR record.    */
 
         /*--------------------------------------*/
         /*  notify SAVED_ZONE update - end.     */
@@ -254,6 +255,7 @@ FUNC( Dem_u08_AsyncExecReturnType, DEM_CODE ) Dem_Control_ResetEventUdsStatusHis
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
+/*   v5-6-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_AsyncExecReturnType, DEM_CODE ) Dem_Control_SetEventUdsStatusHistoryProcess
 (
@@ -297,7 +299,7 @@ FUNC( Dem_u08_AsyncExecReturnType, DEM_CODE ) Dem_Control_SetEventUdsStatusHisto
             /*--------------------------------------*/
 
             /*  change value.               */
-            Dem_DataMngC_SetER_ExtendDTCStatus( eventStrgIndex, extendStatusOfDTCNew );
+            Dem_DataMngC_SetER_ExtendDTCStatus( eventStrgIndex, extendStatusOfDTCNew ); /* [UpdRec]Event */
 
             /*--------------------------------------*/
             /*  notify SAVED_ZONE update - end.     */
@@ -321,6 +323,7 @@ FUNC( Dem_u08_AsyncExecReturnType, DEM_CODE ) Dem_Control_SetEventUdsStatusHisto
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-6-0         :2024-01-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

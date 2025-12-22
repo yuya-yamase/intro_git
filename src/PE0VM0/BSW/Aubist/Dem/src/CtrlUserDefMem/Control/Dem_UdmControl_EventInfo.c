@@ -1,7 +1,7 @@
-/* Dem_UdmControl_EventInfo_c(v5-5-0)                                       */
+/* Dem_UdmControl_EventInfo_c(v5-7-0)                                       */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -89,6 +89,7 @@
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | branch changed.                                          */
+/*   v5-7-0      | branch changed.                                          */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmControl_GetStatusOfDTC
 (
@@ -102,6 +103,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmControl_GetStatusOfDTC
     VAR( Dem_u08_InternalReturnType, AUTOMATIC ) retTempVal;
     VAR( Dem_u08_InternalReturnType, AUTOMATIC ) resultGetEvent;
     VAR( Dem_u16_UdmEventIndexType, AUTOMATIC ) udmEventIndex;
+    VAR( Dem_u16_UdmEventIndexType, AUTOMATIC ) udmEventConfigureNum;
     VAR( Dem_u08_UdmMemoryInfoTableIndexType, AUTOMATIC ) udmInfoTableIndex;
     VAR( Dem_u16_UdmDemMemKindIndexType, AUTOMATIC ) udmGroupKindIndex;
     VAR( Dem_u16_UdmDemMemKindIndexType, AUTOMATIC ) userDefinedMemoryNum;
@@ -110,6 +112,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmControl_GetStatusOfDTC
 
     retVal = DEM_IRT_WRONG_DTCORIGIN;
     userDefinedMemoryNum = Dem_UserDefinedMemoryNum;
+    udmEventConfigureNum = Dem_UdmEventConfigureNum;
 
     /*  get availability mask.      */
     retAvailMask    =   Dem_CfgInfoUdm_GetDTCStatusAvailabilityMask_ByDTCOrigin( &dtcStatusAvailabilityMask, DTCOrigin );
@@ -148,14 +151,11 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmControl_GetStatusOfDTC
 
                 /* When specified DTC is in update disable status */
                 udmEventIndex = Dem_UdmControl_GetDisableDTCRecordEvent();
-                retTempVal = Dem_UdmDTC_GetDTCStatusOfDisabledRecord( udmEventIndex, dtcStatusAvailabilityMask, DTCStatusPtr );
-                if( retTempVal == DEM_IRT_OK )
+
+                if( udmEventIndex < udmEventConfigureNum )                 /* [GUD:if]udmEventIndex */
                 {
+                    Dem_UdmDTC_GetDTCStatusOfDisabledRecord( udmEventIndex, dtcStatusAvailabilityMask, DTCStatusPtr );  /* [GUD]udmEventIndex */
                     retVal = DEM_IRT_OK;
-                }
-                else
-                {
-                    /* No process */
                 }
             }
         }
@@ -176,12 +176,12 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmControl_GetStatusOfDTC
             else
             {
                 /* Get udm event index by DTCValue. */
-                resultGetEvent = Dem_UdmDataAvl_GetUdmEventIndexByDTC( DTCValue, udmInfoTableIndex, &udmEventIndex );                           /* [GUD]udmInfoTableIndex */
+                resultGetEvent = Dem_UdmDataAvl_GetUdmEventIndexByDTC( DTCValue, udmInfoTableIndex, &udmEventIndex );                           /* [GUD]udmInfoTableIndex *//* [GUD:RET:DEM_IRT_OK]udmEventIndex */
 
                 if( resultGetEvent == DEM_IRT_OK )
                 {
                     /* Get udm group index by event index. */
-                    udmGroupKindIndex = Dem_CfgInfoUdm_GetUserDefinedMemoryGroupKindIndexByEventIndex( udmInfoTableIndex, udmEventIndex );      /* [GUD]udmInfoTableIndex */
+                    udmGroupKindIndex = Dem_CfgInfoUdm_GetUserDefinedMemoryGroupKindIndexByEventIndex( udmInfoTableIndex, udmEventIndex );      /* [GUD]udmInfoTableIndex *//* [GUD]udmEventIndex */
 
                     if( udmGroupKindIndex < userDefinedMemoryNum )  /* [GUD:if]udmGroupKindIndex */
                     {
@@ -200,7 +200,8 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmControl_GetStatusOfDTC
 #endif  /* JGXSTACK */
                         /*--------------------------------------------------------------------------*/
 
-                        retVal = Dem_UdmDTC_GetDTCStatus( udmEventIndex, dtcStatusAvailabilityMask, DTCStatusPtr );
+                        Dem_UdmDTC_GetDTCStatus( udmEventIndex, dtcStatusAvailabilityMask, DTCStatusPtr );  /* [GUD]udmEventIndex */
+                        retVal = DEM_IRT_OK;
                     }
                     else
                     {
@@ -239,6 +240,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmControl_GetStatusOfDTC
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-7-0         :2024-05-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

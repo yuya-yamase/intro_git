@@ -1,7 +1,7 @@
-/* Dem_Rc_IndMIMng_h(v5-5-0)                                                */
+/* Dem_Rc_IndMIMng_h(v5-10-0)                                                */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 /****************************************************************************/
 /* Object Name  | Dem/Rc_IndMIMng/HEADER                                    */
@@ -52,7 +52,6 @@
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_IndMIMng_SetB1Counter
 (
     VAR( Dem_u16_IndMIIndexType, AUTOMATIC ) IndMIIndex,
-    VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex,
     VAR( Dem_u32_B1CounterType, AUTOMATIC ) B1Counter
 );
 
@@ -165,6 +164,7 @@ extern VAR( Dem_IndMIB1CounterRecordType, DEM_VAR_NO_INIT ) Dem_TmpIndMIB1Counte
 /* History                                                                  */
 /*  Version        :Date                                                    */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-10-0        :2025-06-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

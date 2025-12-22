@@ -1,7 +1,7 @@
-/* Dem_DataCtl_InfoFFD_c(v5-5-0)                                            */
+/* Dem_DataCtl_InfoFFD_c(v5-10-0)                                           */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -80,6 +80,8 @@
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-7-0      | no object changed.                                       */
+/*   v5-10-0     | no branch changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_GetFFRTriggerByFFRClassIndex
 (
@@ -114,12 +116,12 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_GetFFRTriggerByFFRClassInd
 
             /* Holds the DemFreezeFrameRecordIndex pointed to */
             /* by the DemFreezeFrameRecordClassRef Index of the held FreezeFrameRecNumClass table. */
-            freezeFrameRecordClassIndex = freezeFrameRecNumClassPtr->DemFreezeFrameRecordClassRef[FreezeFrameRecordClassIndex]; /* [GUDCHK:CALLER]FreezeFrameRecordClassIndex */
+            freezeFrameRecordClassIndex = freezeFrameRecNumClassPtr->DemFreezeFrameRecordClassRef[FreezeFrameRecordClassIndex]; /* [GUDCHK:CALLER]FreezeFrameRecordClassIndex *//* [ARYCHK] DEM_FF_RECORD_CLASS_REF_MAX_NUM / 1 / FreezeFrameRecordClassIndex */
 
             if( freezeFrameRecordClassIndex < ffrRecordClassConfigureNum )                                          /* [GUD:if] freezeFrameRecordClassIndex */
             {
                 /* Holds the FreezeFrameRecordClass table pointed to by DemFreezeFrameRecordIndex. */
-                *FreezeFrameRecordTriggerPtr = Dem_FreezeFrameRecordClassTable[freezeFrameRecordClassIndex].DemFreezeFrameRecordTrigger;    /* [GUD] freezeFrameRecordClassIndex */
+                *FreezeFrameRecordTriggerPtr = Dem_CfgInfoPm_GetFreezeFrameRecordTriggerType( freezeFrameRecordClassIndex );    /* [GUD] freezeFrameRecordClassIndex */
                 retVal = DEM_IRT_OK;
             }
         }
@@ -225,6 +227,8 @@ FUNC( boolean, DEM_CODE ) Dem_Data_JudgeOutputOBDFFDTrigger
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-7-0         :2024-05-29                                              */
+/*  v5-10-0        :2025-06-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

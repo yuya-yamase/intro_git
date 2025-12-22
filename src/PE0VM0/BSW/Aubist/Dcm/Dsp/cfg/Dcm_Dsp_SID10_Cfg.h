@@ -1,7 +1,7 @@
-/* Dcm_Dsp_SID10_Cfg_h(v5-5-0)                                              */
+/* Dcm_Dsp_SID10_Cfg_h(v5-8-0)                                              */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -25,6 +25,7 @@
 #define DCM_P_SESSIONROW_N                  ((uint8)3U)
 #define DCM_P_SESSIONROW_T                  ((uint8)(DCM_P_SESSIONROW_N + (uint8)1U))
 
+#define DCM_DSP_SID10_NOSUP_PROTOCOL        ((Dcm_ProtocolType)0xFFU)
 #define DCM_DSP_SID10_SETSES_IND            ((uint8)0U)
 #define DCM_DSP_SID10_SETSES_CNF            ((uint8)1U)
 
@@ -41,6 +42,7 @@ typedef struct
     uint16    u2P2StarServerMax;              /* DcmDspSessionP2StarServerMax       */
     uint16    u2P2StarServerTimeoutMin;       /* DcmDspSessionP2StarServerMin       */
     uint16    u2P2StarServerLsb;              /* DcmDspSessionP2StarServerLsb       */
+    Dcm_ProtocolType     u1ProtocolType;      /* DcmDspSessionProtocolRef           */
 }Dcm_Dsp_SessionRowType;                      /* DcmDspSessionRow (Container Name ) */
 
 /*--------------------------------------------------------------------------*/
@@ -88,6 +90,7 @@ extern CONST ( AB_83_ConstV Dcm_Dsp_SessionRowType, DCM_CONFIG_DATA ) Dcm_P_SID1
 extern CONST ( AB_83_ConstV uint8, DCM_CONFIG_DATA ) Dcm_P_SID10_u1SessionSetTiming;
 extern CONST( AB_83_ConstV uint8, DCM_CONFIG_DATA ) Dcm_P_u1SessionRow_N;
 extern CONST( AB_83_ConstV boolean, DCM_CONFIG_DATA ) Dcm_P_SID10_bNoSetSPREC;
+extern CONST( AB_83_ConstV boolean, DCM_CONFIG_DATA ) Dcm_P_SID10_bSupportProtocolInfo;
 #endif /* DCM_SUPPORT_SID10 == STD_ON */
 
 #define DCM_STOP_SEC_CONST_CONFIG
@@ -101,12 +104,13 @@ extern CONST( AB_83_ConstV boolean, DCM_CONFIG_DATA ) Dcm_P_SID10_bNoSetSPREC;
 /*  v1-0-0         :2018-03-20                                              */
 /*  v4-0-0         :2020-12-23                                              */
 /*  v5-0-0         :2022-03-29                                              */
-/*  v5-5-0         :2023-10-27                                              */
+/*  v5-6-0         :2024-02-27                                              */
+/*  v5-8-0         :2024-10-29                                              */
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
 /*  Framework          :v2-1-0                                              */
-/*  BSW plug-in        :v5-5-1                                              */
+/*  BSW plug-in        :v5-10-0                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

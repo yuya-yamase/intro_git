@@ -1,7 +1,7 @@
-/* Dem_Control_SpecificEventEntry_c(v5-5-0)                                 */
+/* Dem_Control_SpecificEventEntry_c(v5-10-0)                                */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -42,6 +42,11 @@
 #include "../../../inc/Dem_CmnLib_ConfigInfo.h"
 #include "../../../usr/Dem_SavedZone_Callout.h"
 #include "Dem_Control_local.h"
+
+#ifndef DEM_SIT_RANGE_CHECK
+#else   /* DEM_SIT_RANGE_CHECK */
+#include <Dem_SIT_RangeCheck.h>
+#endif /* DEM_SIT_RANGE_CHECK */
 
 /*--------------------------------------------------------------------------*/
 /* Macros                                                                   */
@@ -199,6 +204,7 @@ static FUNC( void, DEM_CODE ) Dem_Control_UpdateProgressEngine1000RPM
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_SetSpecificEventStatus
 (
@@ -245,9 +251,9 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_SetSpecificEventStatus
                     if( checkStatus == DEM_IRT_OK )
                     {
                         /* Converts SpecificCondition for data buffer */
-                        Dem_Control_SetSpecificEventReqData( EventStatus, SpecificConditionPtr, &data[0] );
+                        Dem_Control_SetSpecificEventReqData( EventStatus, SpecificConditionPtr, &data[0] );/* [ARYCHK] DEM_ASYNCDATAQUE_ITEMSIZE_MAX / 1 / 0 */
 
-                        retVal = Dem_AsyncReq_EnqueueWithData( DEM_ASYNCREQ_SPEC_EVENT, eventCtrlIndex, &data[0] );/* [GUD:FixVal]DEM_ASYNCREQ_SPEC_EVENT */
+                        retVal = Dem_AsyncReq_EnqueueWithData( DEM_ASYNCREQ_SPEC_EVENT, eventCtrlIndex, &data[0] );/* [GUD:FixVal]DEM_ASYNCREQ_SPEC_EVENT *//* [ARYCHK] DEM_ASYNCDATAQUE_ITEMSIZE_MAX / 1 / 0 */
                     }
                 }
             }
@@ -282,8 +288,12 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_SetSpecificEventStatus
 /*               |         "DemAsyncReqFncPTR" in Dem_Control_AsyncReq.h.   */
 /* Notes         | -                                                        */
 /*--------------------------------------------------------------------------*/
+/* UpdateRecord  | [UpdRec]IUMPR    :   NotifySavedZone                     */
+/* UpdateRecord  | [UpdRec]AltIUMPR :   NotifySavedZone                     */
+/*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | branch changed.                                          */
+/*   v5-6-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_AsyncExecReturnType, DEM_CODE ) Dem_Control_SetSpecificEventProcess
 (
@@ -330,22 +340,43 @@ FUNC( Dem_u08_AsyncExecReturnType, DEM_CODE ) Dem_Control_SetSpecificEventProces
     {
         if( eventStatus != DEM_EVENT_STATUS_FDC_THRESHOLD_REACHED )
         {
+            /*--------------------------------------*/
+            /*  notify SAVED_ZONE update - start.   */
+#if ( DEM_IUMPR_SUPPORT == STD_ON ) /*  [FuncSw]    */
+            Dem_NotifySavedZoneIUMPRUpdate_Enter(); /*  notify start :  savedzone area will be update.  */
+#endif  /* ( DEM_IUMPR_SUPPORT == STD_ON )          */
+            /*--------------------------------------*/
+
 #if ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON )  /*  [FuncSw]    */
             /* Latch cylinder DTCStatus */
             Dem_Misfire_LatchCylinderStatus( eventStrgIndex );
 #endif  /*   ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON )         */
 
-            Dem_Control_SetSpecificEventProcessSub( eventCtrlIndex, eventStrgIndex, eventStatus, &specificCondition, &updEvtCtrlFlagSt );
+            Dem_Control_SetSpecificEventProcessSub( eventCtrlIndex, eventStrgIndex, eventStatus, &specificCondition, &updEvtCtrlFlagSt );   /* [UpdRec]AltIUMPR *//* [UpdRec]more */
+
+#if ( DEM_GET_UDSDTC_BY_CONFIRMED_ORDER_SUPPORT == STD_ON )     /*  [FuncSw]    */
+#if ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON )  /*  [FuncSw]    */
+            Dem_Misfire_SetConfirmedOrderCylinder( eventStrgIndex );
+#endif /* ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON ) */
+#endif  /* ( DEM_GET_UDSDTC_BY_CONFIRMED_ORDER_SUPPORT == STD_ON )  */
 
 #if ( DEM_IUMPR_RATIO_SUPPORT == STD_ON ) /*  [FuncSw]    */
             /* IUMPR Count Trigger Update */
-            Dem_IUMPR_UpdateEventRelatedNumerator( eventCtrlIndex );
+            Dem_IUMPR_UpdateEventRelatedNumerator( eventCtrlIndex );    /* [UpdRec]IUMPR */
 #endif  /*   ( DEM_IUMPR_RATIO_SUPPORT == STD_ON )        */
 
 #if ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON )  /*  [FuncSw]    */
             /* Judge cylinder DTCStatus */
             Dem_Misfire_JudgeCylinderStatus( eventStrgIndex );
 #endif  /*   ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON )         */
+
+            /*--------------------------------------*/
+            /*  notify SAVED_ZONE update - end.     */
+#if ( DEM_IUMPR_SUPPORT == STD_ON ) /*  [FuncSw]    */
+            Dem_NotifySavedZoneIUMPRUpdate_Exit();  /*  notify end :  savedzone area will be update.  */
+#endif  /* ( DEM_IUMPR_SUPPORT == STD_ON )          */
+            /*--------------------------------------*/
+
         }
         else
         {
@@ -406,8 +437,12 @@ FUNC( Dem_u08_AsyncExecReturnType, DEM_CODE ) Dem_Control_SetSpecificEventProces
 /* Return Value  | none                                                     */
 /* Notes         | -                                                        */
 /*--------------------------------------------------------------------------*/
+/* UpdateRecord  | [UpdRec]AltIUMPR                                         */
+/* UpdateRecord  | [UpdRec]PFCMisfire   :   NotifySavedZone                 */
+/*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | branch changed.                                          */
+/*   v5-6-0      | no branch changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_Control_SetSpecificEventProcessSub
 (
@@ -429,7 +464,7 @@ static FUNC( void, DEM_CODE ) Dem_Control_SetSpecificEventProcessSub
     retCheckSpecificTypeSetEvent = Dem_Control_CheckSpecificTypeSetEvent( EventStrgIndex, EventStatus, SpecificConditionPtr, &resultOfCheckSpecificfault );
     if( retCheckSpecificTypeSetEvent == DEM_IRT_OK )
     {
-        Dem_Control_UpdateSpecificEventStatusProcess( EventCtrlIndex, EventStrgIndex, EventStatus, SpecificConditionPtr, resultOfCheckSpecificfault, UpdEvtCtrlFlagStPtr, &updateTmpAreaSt );
+        Dem_Control_UpdateSpecificEventStatusProcess( EventCtrlIndex, EventStrgIndex, EventStatus, SpecificConditionPtr, resultOfCheckSpecificfault, UpdEvtCtrlFlagStPtr, &updateTmpAreaSt );   /* [UpdRec]AltIUMPR */
     }
     else
     {
@@ -455,7 +490,17 @@ static FUNC( void, DEM_CODE ) Dem_Control_SetSpecificEventProcessSub
 #if ( DEM_PFC_SUPPORT == STD_ON )               /*  [FuncSw]    */
     if ( updateTmpAreaSt.UpdateTmpAreaMisfirePFCFlag == (boolean)TRUE )
     {
-        Dem_Misfire_UpdatePermanentMemoryEntryToTmp( EventStrgIndex );        /* Update permanent cylinder */
+        /*--------------------------------------------------*/
+        /*  notify SAVED_ZONE_PERMANENT update - start.     */
+        Dem_NotifySavedZonePermanentUpdate_Enter();         /*  notify start :  savedzone area will be update.  */
+        /*--------------------------------------------------*/
+
+        Dem_Misfire_UpdatePermanentMemoryEntryToTmp( EventStrgIndex );        /* Update permanent cylinder *//*[UpdRec]PFCMisfire */
+
+        /*--------------------------------------------------*/
+        /*  notify SAVED_ZONE_PERMANENT update - end.       */
+        Dem_NotifySavedZonePermanentUpdate_Exit();          /*  notify end :  savedzone area will be update.  */
+        /*--------------------------------------------------*/
     }
 #endif  /*   ( DEM_PFC_SUPPORT == STD_ON )                      */
 #endif  /*   ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON )         */
@@ -476,8 +521,12 @@ static FUNC( void, DEM_CODE ) Dem_Control_SetSpecificEventProcessSub
 /* Return Value  | void                                                     */
 /* Notes         |                                                          */
 /*--------------------------------------------------------------------------*/
+/* UpdateRecord  | [UpdRec]AltIUMPR                                         */
+/*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | new created. split from Dem_Control_SetSpecificEventProcessSub(v5-3-0). */
+/*   v5-6-0      | no branch changed.                                       */
+/*   v5-9-0      | branch changed.                                          */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_Control_UpdateSpecificEventStatusProcess
 (
@@ -498,7 +547,6 @@ static FUNC( void, DEM_CODE ) Dem_Control_UpdateSpecificEventStatusProcess
     VAR( Dem_OrderListOccurredFlagType, AUTOMATIC ) occurFlag;
     VAR( Dem_MonitorDataType, AUTOMATIC ) monitorData0;
     VAR( Dem_EventIdType, AUTOMATIC ) eventId;
-    VAR( boolean, AUTOMATIC ) isPassedToPassed;
     VAR( boolean, AUTOMATIC ) updateTmpAreaFlag;
     VAR( boolean, AUTOMATIC ) updateTmpAreaSpecificFlag;
 #if ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON )  /*  [FuncSw]    */
@@ -513,7 +561,6 @@ static FUNC( void, DEM_CODE ) Dem_Control_UpdateSpecificEventStatusProcess
     VAR( Dem_DTCStatusStType, AUTOMATIC ) tmpDTCStatusSt;
     VAR( Dem_DTCStatusStType, AUTOMATIC ) oldDTCStatusSt;
     VAR( Dem_DTCStatusStType, AUTOMATIC ) newDTCStatusSt;
-    VAR( Dem_DTCStatusStType, AUTOMATIC ) newDTCStatus2St;
 
     updateTmpAreaFlag           = (boolean)FALSE;
     updateTmpAreaSpecificFlag   = (boolean)FALSE;
@@ -541,7 +588,7 @@ static FUNC( void, DEM_CODE ) Dem_Control_UpdateSpecificEventStatusProcess
     newDTCStatusSt.ExtendDTCStatus2 = DEM_DTCSTATUSEX2_BYTE_ALL_OFF;
 
     /* Execute event status setting processing */
-    updateDataFlag = Dem_Event_SetQualificationInfo_Specific( EventCtrlIndex, EventStatus, &eventQualification, &isPassedToPassed );
+    updateDataFlag = Dem_Event_SetQualificationInfo_Specific( EventCtrlIndex, EventStatus, &eventQualification );    /* [UpdRec]AltIUMPR */
 
     if( ResultOfCheckSpecificFault == (boolean)TRUE )
     {
@@ -562,6 +609,7 @@ static FUNC( void, DEM_CODE ) Dem_Control_UpdateSpecificEventStatusProcess
     /* Gets DTC status from the temporary domain. */
     Dem_Data_GetDTCStatusStructFromTmp( &oldDTCStatusSt );
 
+#if ( DEM_GETOCCURRENCECOUNTER_SUPPORT == STD_ON )  /* [FuncSw] */
     /* check event occurrence counter increment condition.  */
     if ( EventStatus == DEM_EVENT_STATUS_FAILED )
     {
@@ -572,27 +620,13 @@ static FUNC( void, DEM_CODE ) Dem_Control_UpdateSpecificEventStatusProcess
             updateTmpAreaFlag   = (boolean)TRUE;
         }
     }
+#endif  /* ( DEM_GETOCCURRENCECOUNTER_SUPPORT == STD_ON )       */
 
     if( updateDataFlag == (boolean)TRUE )
     {
         /* When there is an event to be updated */
         /* Execute DTC status change processing */
-        retChangeDTC = Dem_DTC_ChangeDTCStatus( EventStrgIndex, eventQualification, &oldDTCStatusSt, &newDTCStatusSt, &occurFlag );
-        if( retChangeDTC != DEM_IRT_OK )
-        {
-            /* If StatusOfDTC does not change, it is initialized, so get temporary StatusOfDTC */
-            Dem_Data_GetDTCStatusFromTmp( &newDTCStatusSt.DTCStatus );
-        }
-    }
-    else
-    {
-        if ( isPassedToPassed == (boolean)TRUE )
-        {
-            Dem_Data_GetDTCStatusStructFromTmp( &newDTCStatus2St );
-            newDTCStatus2St.ExtendDTCStatus  = ( newDTCStatus2St.ExtendDTCStatus | DEM_UDS_STATUS_HISTORY_PASSED );
-            Dem_Data_SetDTCStatusStructToTmp( &newDTCStatus2St );
-            updateTmpAreaFlag   =   (boolean)TRUE;                /* Update EventMemoryEntry, Misfire, Similar */
-        }
+        retChangeDTC = Dem_DTC_ChangeDTCStatus( EventStrgIndex, eventQualification, (boolean)FALSE, &oldDTCStatusSt, &newDTCStatusSt, &occurFlag );
     }
 #if ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON )  /*  [FuncSw]    */
     /* If misfire event, update cylinder Infomation */
@@ -613,6 +647,10 @@ static FUNC( void, DEM_CODE ) Dem_Control_UpdateSpecificEventStatusProcess
             Dem_Data_SetDTCStatusForFaultRecordOverwrite( newDTCStatusSt.DTCStatus );
 #endif  /*   ( DEM_EVENT_DISPLACEMENT_SUPPORT == STD_ON )           */
             retEventRetntion = Dem_Control_ProcessEventRetention( &occurFlag, &faultOccurrenceFlag );
+            if( ( retEventRetntion == DEM_IRT_NG ) && ( faultOccurrenceFlag == (boolean)FALSE ) )
+            {
+                Dem_Event_ClearTargetQualificationInfo_NotTestedInCycle( EventCtrlIndex );      /* [GUDCHK:CALLER]EventCtrlIndex *//* [UpdRec]AltIUMPR */
+            }
 
             /* Checks if fault record will be overwritten. */
             UpdEvtCtrlFlagStPtr->FaultRecordOverwriteFlag = Dem_Data_CheckFaultRecordOverwrite( &( UpdEvtCtrlFlagStPtr->EventStrgIndexOfFaultRecordOverwritten ), &( UpdEvtCtrlFlagStPtr->OldDTCStatusOverwritten ) );
@@ -626,9 +664,9 @@ static FUNC( void, DEM_CODE ) Dem_Control_UpdateSpecificEventStatusProcess
         monitorData0 = ( (Dem_MonitorDataType)eventId ) | DEM_MONITORDATA_SPECIFICEVENTSTATUS;            /* Calc monitorData */
 
         /* Update statusOfDTC bit2, bit3, bit7 */
-        Dem_DTC_UpdateDTCStatusByRetentionResult( EventStrgIndex, retEventRetntion, occurFlag.ConfirmedOccurFlag, SpecificConditionPtr->MisfireInfo.MisfireCylinder, &oldDTCStatusSt,  &newDTCStatusSt );
+        Dem_DTC_UpdateDTCStatusByRetentionResult( EventStrgIndex, EventStatus, retEventRetntion, occurFlag.ConfirmedOccurFlag, SpecificConditionPtr->MisfireInfo.MisfireCylinder, &oldDTCStatusSt,  &newDTCStatusSt );
         Dem_Control_UpdateEventRelatedData( EventStrgIndex, EventStatus, monitorData0, faultOccurrenceFlag, oldDTCStatusSt.DTCStatus, newDTCStatusSt.DTCStatus, SpecificConditionPtr->MisfireInfo.MisfireCylinder );
-        Dem_Control_UpdateEventMemoryEntryFromTmp( DEM_EVTKINDPTN_PRIMEM_SPECIFIC );
+        Dem_Control_UpdateEventMemoryEntryFromTmp( DEM_EVTKINDPTN_PRIMEM_SPECIFIC, EventStatus );
         UpdEvtCtrlFlagStPtr->TSFFDeleteFlag = Dem_Data_CheckTSFFDeleteByFFROverwritten();
 #if ( DEM_FF_PRESTORAGE_SUPPORT == STD_ON )     /*  [FuncSw]    */
         Dem_Control_RemovePrestoredFreezeFrame( EventStrgIndex, EventStatus, oldDTCStatusSt.DTCStatus, newDTCStatusSt.DTCStatus );
@@ -737,6 +775,9 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_SaveSpecificEventMemory
 /*               |        DEM_IRT_OK :                                      */
 /*               |        DEM_IRT_NG :                                      */
 /* Notes         | -                                                        */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_CheckSpecificTypeSetEvent
 (
@@ -754,7 +795,7 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_CheckSpecificTyp
 
 #if ( DEM_SIMILAR_EVENT_CONFIGURED == STD_ON )  /*  [FuncSw]    */
         /* Similar condition check at the time of passed */
-        Dem_Similar_CheckPassedCondition( &SpecificConditionPtr->SimilarConditionArray[0] );
+        Dem_Similar_CheckPassedCondition( &SpecificConditionPtr->SimilarConditionArray[0] );/* [ARYCHK] DEM_SIMILARTYPE_NUM / 1 / 0 */
 #endif  /*   ( DEM_SIMILAR_EVENT_CONFIGURED == STD_ON )         */
 
         retVal = DEM_IRT_OK;
@@ -784,6 +825,9 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_CheckSpecificTyp
 /*               |        DEM_IRT_OK :                                      */
 /*               |        DEM_IRT_NG :                                      */
 /* Notes         | -                                                        */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_CheckSpecificTypeSetEvent_Failed
 (
@@ -816,7 +860,7 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_CheckSpecificTyp
     else
     {
         /* Other than MisfireEvent */
-        retVal = Dem_Control_CheckSimilarFailedCondition( EventStrgIndex, &SpecificConditionPtr->SimilarConditionArray[0], ResultOfCheckSpecificfaultPtr );
+        retVal = Dem_Control_CheckSimilarFailedCondition( EventStrgIndex, &SpecificConditionPtr->SimilarConditionArray[0], ResultOfCheckSpecificfaultPtr );/* [ARYCHK] DEM_SIMILARTYPE_NUM / 1 / 0 */
     }
     return retVal;
 }
@@ -886,6 +930,9 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_CheckSpecificTyp
 /*               |        DEM_IRT_OK :                                      */
 /*               |        DEM_IRT_NG :                                      */
 /* Notes         | -                                                        */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_CheckSpecificTypeSetEvent_Failed
 (
@@ -897,7 +944,7 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_CheckSpecificTyp
     VAR( Dem_u08_InternalReturnType, AUTOMATIC ) retVal;
 
     /* EVENT_STATUS_FAILED */
-    retVal = Dem_Control_CheckSimilarFailedCondition( EventStrgIndex, &SpecificConditionPtr->SimilarConditionArray[0], ResultOfCheckSpecificfaultPtr );
+    retVal = Dem_Control_CheckSimilarFailedCondition( EventStrgIndex, &SpecificConditionPtr->SimilarConditionArray[0], ResultOfCheckSpecificfaultPtr );/* [ARYCHK] DEM_SIT_R_CHK_SIMILAR_CONDITION_ARRAY_SIZE / 1 / 0 */
 
     return retVal;
 }
@@ -916,6 +963,9 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_CheckSpecificTyp
 /*               |        DEM_IRT_OK :                                      */
 /*               |        DEM_IRT_NG :                                      */
 /* Notes         | -                                                        */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_CheckEmissionFailedCondition
 (
@@ -944,7 +994,7 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_CheckEmissionFai
 
 #if ( DEM_SIMILAR_EVENT_CONFIGURED == STD_ON )  /*  [FuncSw]    */
             /* Latch the similar condition */
-            Dem_Similar_SetConditionLatchedToTmp( &SpecificConditionPtr->SimilarConditionArray[0] );
+            Dem_Similar_SetConditionLatchedToTmp( &SpecificConditionPtr->SimilarConditionArray[0] );/* [ARYCHK] DEM_SIMILARTYPE_NUM / 1 / 0 */
 #endif  /*   ( DEM_SIMILAR_EVENT_CONFIGURED == STD_ON )         */
 
             *ResultOfCheckSpecificfaultPtr = (boolean)TRUE;
@@ -961,7 +1011,7 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_CheckEmissionFai
                 /* Reached excess counter threshold */
                 *ResultOfCheckSpecificfaultPtr = (boolean)TRUE;
 #if ( DEM_SIMILAR_EVENT_CONFIGURED == STD_ON )  /*  [FuncSw]    */
-                Dem_Similar_ReachedExcessCntThreshold( EventStrgIndex, &SpecificConditionPtr->SimilarConditionArray[0], ResultOfCheckSpecificfaultPtr );
+                Dem_Similar_ReachedExcessCntThreshold( EventStrgIndex, &SpecificConditionPtr->SimilarConditionArray[0], ResultOfCheckSpecificfaultPtr );/* [ARYCHK] DEM_SIMILARTYPE_NUM / 1 / 0 */
 #endif  /*   ( DEM_SIMILAR_EVENT_CONFIGURED == STD_ON )         */
                 retVal = DEM_IRT_OK;
             }
@@ -969,7 +1019,7 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_CheckEmissionFai
             {
 #if ( DEM_SIMILAR_EVENT_CONFIGURED == STD_ON )  /*  [FuncSw]    */
                 /* Not reached excess counter threshold */
-                Dem_Similar_NotReachedExcessCntThreshold( EventStrgIndex, &SpecificConditionPtr->SimilarConditionArray[0] );
+                Dem_Similar_NotReachedExcessCntThreshold( EventStrgIndex, &SpecificConditionPtr->SimilarConditionArray[0] );/* [ARYCHK] DEM_SIMILARTYPE_NUM / 1 / 0 */
 #endif  /*   ( DEM_SIMILAR_EVENT_CONFIGURED == STD_ON )         */
             }
         }
@@ -995,6 +1045,9 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_CheckEmissionFai
 /*               |        DEM_IRT_OK :                                      */
 /*               |        DEM_IRT_NG :                                      */
 /* Notes         | -                                                        */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_CheckCATFailedCondition
 (
@@ -1035,7 +1088,7 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_CheckCATFailedCo
 
 #if ( DEM_SIMILAR_EVENT_CONFIGURED == STD_ON )  /*  [FuncSw]    */
                /* Latch the similar condition */
-               Dem_Similar_SetConditionLatchedToTmp( &SpecificConditionPtr->SimilarConditionArray[0] );
+               Dem_Similar_SetConditionLatchedToTmp( &SpecificConditionPtr->SimilarConditionArray[0] );/* [ARYCHK] DEM_SIMILARTYPE_NUM / 1 / 0 */
 #endif  /*   ( DEM_SIMILAR_EVENT_CONFIGURED == STD_ON )         */
 
                *ResultOfCheckSpecificfaultPtr = (boolean)TRUE;
@@ -1052,7 +1105,7 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_CheckCATFailedCo
                    /* Judge similar condition with similar condtion stored check */
                     *ResultOfCheckSpecificfaultPtr = (boolean)TRUE;
 #if ( DEM_SIMILAR_EVENT_CONFIGURED == STD_ON )  /*  [FuncSw]    */
-                   Dem_Similar_JudgeConditionWithCheckStored( EventStrgIndex, &SpecificConditionPtr->SimilarConditionArray[0], ResultOfCheckSpecificfaultPtr );
+                   Dem_Similar_JudgeConditionWithCheckStored( EventStrgIndex, &SpecificConditionPtr->SimilarConditionArray[0], ResultOfCheckSpecificfaultPtr );/* [ARYCHK] DEM_SIMILARTYPE_NUM / 1 / 0 */
 #endif  /*   ( DEM_SIMILAR_EVENT_CONFIGURED == STD_ON )         */
                    retVal = DEM_IRT_OK;
                }
@@ -1071,7 +1124,7 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_CheckCATFailedCo
 
 #if ( DEM_SIMILAR_EVENT_CONFIGURED == STD_ON )  /*  [FuncSw]    */
                            /* Store similar condition of Pending */
-                           Dem_Similar_ConditionStoredPending( &SpecificConditionPtr->SimilarConditionArray[0] );
+                           Dem_Similar_ConditionStoredPending( &SpecificConditionPtr->SimilarConditionArray[0] );/* [ARYCHK] DEM_SIMILARTYPE_NUM / 1 / 0 */
 #endif  /*   ( DEM_SIMILAR_EVENT_CONFIGURED == STD_ON )         */
                            *ResultOfCheckSpecificfaultPtr = (boolean)TRUE;
                            retVal = DEM_IRT_OK;
@@ -1081,7 +1134,7 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_CheckCATFailedCo
                            /* Not reached excess counter threshold */
 #if ( DEM_SIMILAR_EVENT_CONFIGURED == STD_ON )  /*  [FuncSw]    */
                            /* Store similar condition of first exceedance */
-                           Dem_Similar_ConditionStoredFirstExceedance( EventStrgIndex, &SpecificConditionPtr->SimilarConditionArray[0] );
+                           Dem_Similar_ConditionStoredFirstExceedance( EventStrgIndex, &SpecificConditionPtr->SimilarConditionArray[0] );/* [ARYCHK] DEM_SIMILARTYPE_NUM / 1 / 0 */
 #endif  /*   ( DEM_SIMILAR_EVENT_CONFIGURED == STD_ON )         */
                        }
                    }
@@ -1091,7 +1144,7 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_CheckCATFailedCo
 
 #if ( DEM_SIMILAR_EVENT_CONFIGURED == STD_ON )  /*  [FuncSw]    */
                        /* Latch the similar condition */
-                       Dem_Similar_SetConditionLatchedToTmp( &SpecificConditionPtr->SimilarConditionArray[0] );
+                       Dem_Similar_SetConditionLatchedToTmp( &SpecificConditionPtr->SimilarConditionArray[0] );/* [ARYCHK] DEM_SIMILARTYPE_NUM / 1 / 0 */
 #endif  /*   ( DEM_SIMILAR_EVENT_CONFIGURED == STD_ON )         */
 
                        *ResultOfCheckSpecificfaultPtr = (boolean)TRUE;
@@ -1244,6 +1297,9 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_CheckSimilarFail
 /*               | [out] SpecificConditionPtr :                             */
 /* Return Value  | none                                                     */
 /* Notes         | -                                                        */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_Control_ConvertSpecificEventReqData
 (
@@ -1253,17 +1309,17 @@ static FUNC( void, DEM_CODE ) Dem_Control_ConvertSpecificEventReqData
 )
 {
     /* EventStatus */
-    *EventStatusPtr = (Dem_EventStatusType)DataBuffPtr[DEM_SPCEVT_DATABUF_EVENTSTATUS];
+    *EventStatusPtr = (Dem_EventStatusType)DataBuffPtr[DEM_SPCEVT_DATABUF_EVENTSTATUS];/* [ARYCHK] DEM_ASYNCDATAQUE_SPEC_EVENT_ITEMSIZE / 1 / DEM_SPCEVT_DATABUF_EVENTSTATUS */
 
     /* MisfireCylinder */
-    SpecificConditionPtr->MisfireInfo.MisfireCylinder = (Dem_MisfireCylinderType) ( ( (uint16)DataBuffPtr[DEM_SPCEVT_DATABUF_MISFIRECYLINDER_0] )               |
-                                                                                      (uint16)( ( (uint16)DataBuffPtr[DEM_SPCEVT_DATABUF_MISFIRECYLINDER_1] ) << DEM_SPCEVT_BITSHIFT_8 ) );
+    SpecificConditionPtr->MisfireInfo.MisfireCylinder = (Dem_MisfireCylinderType) ( ( (uint16)DataBuffPtr[DEM_SPCEVT_DATABUF_MISFIRECYLINDER_0] )               |/* [ARYCHK] DEM_ASYNCDATAQUE_SPEC_EVENT_ITEMSIZE / 1 / DEM_SPCEVT_DATABUF_MISFIRECYLINDER_0 */
+                                                                                      (uint16)( ( (uint16)DataBuffPtr[DEM_SPCEVT_DATABUF_MISFIRECYLINDER_1] ) << DEM_SPCEVT_BITSHIFT_8 ) );/* [ARYCHK] DEM_ASYNCDATAQUE_SPEC_EVENT_ITEMSIZE / 1 / DEM_SPCEVT_DATABUF_MISFIRECYLINDER_1 */
 
     /* MisfireCondition */
-    SpecificConditionPtr->MisfireInfo.MisfireCondition = (Dem_MisfireConditionType)DataBuffPtr[DEM_SPCEVT_DATABUF_MISFIRECONDITION];
+    SpecificConditionPtr->MisfireInfo.MisfireCondition = (Dem_MisfireConditionType)DataBuffPtr[DEM_SPCEVT_DATABUF_MISFIRECONDITION];/* [ARYCHK] DEM_ASYNCDATAQUE_SPEC_EVENT_ITEMSIZE / 1 / DEM_SPCEVT_DATABUF_MISFIRECONDITION */
 
     /* SimilarCondition */
-    Dem_UtlSimilar_CnvBinaryToSimilarConditionArray( &SpecificConditionPtr->SimilarConditionArray[0], &DataBuffPtr[DEM_SPCEVT_DATABUF_SIMILARCONDITION] );
+    Dem_UtlSimilar_CnvBinaryToSimilarConditionArray( &SpecificConditionPtr->SimilarConditionArray[0], &DataBuffPtr[DEM_SPCEVT_DATABUF_SIMILARCONDITION] );/* [ARYCHK] DEM_SIT_R_CHK_SIMILAR_CONDITION_ARRAY_SIZE / 1 / 0 *//* [ARYCHK] DEM_ASYNCDATAQUE_SPEC_EVENT_ITEMSIZE / 1 / DEM_SPCEVT_DATABUF_SIMILARCONDITION */
 
     return ;
 }
@@ -1277,6 +1333,9 @@ static FUNC( void, DEM_CODE ) Dem_Control_ConvertSpecificEventReqData
 /*               | [out] DataBuffPtr : The pointer of the data buffer.      */
 /* Return Value  | none                                                     */
 /* Notes         | -                                                        */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_Control_SetSpecificEventReqData
 (
@@ -1293,22 +1352,22 @@ static FUNC( void, DEM_CODE ) Dem_Control_SetSpecificEventReqData
     dummyItemSize = DEM_ASYNCDATAQUE_ITEMSIZE_MAX - Dem_AsyncDataQueSpecEventItemSize;
 
     /* EventStatus */
-    DataBuffPtr[DEM_SPCEVT_DATABUF_EVENTSTATUS] = EventStatus;
+    DataBuffPtr[DEM_SPCEVT_DATABUF_EVENTSTATUS] = EventStatus;/* [ARYCHK] DEM_ASYNCDATAQUE_ITEMSIZE_MAX / 1 / DEM_SPCEVT_DATABUF_EVENTSTATUS */
 
     /* MisfireCylinder */
     misfireCylinder = SpecificConditionPtr->MisfireInfo.MisfireCylinder;
-    DataBuffPtr[DEM_SPCEVT_DATABUF_MISFIRECYLINDER_0] = (uint8)( misfireCylinder );
-    DataBuffPtr[DEM_SPCEVT_DATABUF_MISFIRECYLINDER_1] = (uint8)( ((uint16)misfireCylinder) >> DEM_SPCEVT_BITSHIFT_8);
+    DataBuffPtr[DEM_SPCEVT_DATABUF_MISFIRECYLINDER_0] = (uint8)( misfireCylinder );/* [ARYCHK] DEM_ASYNCDATAQUE_ITEMSIZE_MAX / 1 / DEM_SPCEVT_DATABUF_MISFIRECYLINDER_0 */
+    DataBuffPtr[DEM_SPCEVT_DATABUF_MISFIRECYLINDER_1] = (uint8)( ((uint16)misfireCylinder) >> DEM_SPCEVT_BITSHIFT_8);/* [ARYCHK] DEM_ASYNCDATAQUE_ITEMSIZE_MAX / 1 / DEM_SPCEVT_DATABUF_MISFIRECYLINDER_1 */
     /* MisfireCondition */
-    DataBuffPtr[DEM_SPCEVT_DATABUF_MISFIRECONDITION] = SpecificConditionPtr->MisfireInfo.MisfireCondition;
+    DataBuffPtr[DEM_SPCEVT_DATABUF_MISFIRECONDITION] = SpecificConditionPtr->MisfireInfo.MisfireCondition;/* [ARYCHK] DEM_ASYNCDATAQUE_ITEMSIZE_MAX / 1 / DEM_SPCEVT_DATABUF_MISFIRECONDITION */
 
     /* SimilarCondition */
-    Dem_UtlSimilar_CnvSimilarConditionArrayToBinary( &DataBuffPtr[DEM_SPCEVT_DATABUF_SIMILARCONDITION], &SpecificConditionPtr->SimilarConditionArray[0] );
+    Dem_UtlSimilar_CnvSimilarConditionArrayToBinary( &DataBuffPtr[DEM_SPCEVT_DATABUF_SIMILARCONDITION], &SpecificConditionPtr->SimilarConditionArray[0] );/* [ARYCHK] DEM_ASYNCDATAQUE_ITEMSIZE_MAX / 1 / DEM_SPCEVT_DATABUF_SIMILARCONDITION *//* [ARYCHK] DEM_SIT_R_CHK_SIMILAR_CONDITION_ARRAY_SIZE / 1 / 0 */
 
     /* Dummy */
     if( dummyItemSize != (uint16)0U )
     {
-        Dem_UtlMem_SetMemory( &DataBuffPtr[dummyIndex], (uint8)0U, (uint16)dummyItemSize );
+        Dem_UtlMem_SetMemory( &DataBuffPtr[dummyIndex], (uint8)0U, (uint16)dummyItemSize );/* [ARYCHK] DEM_ASYNCDATAQUE_ITEMSIZE_MAX / 1 / dummyIndex */
     }
 
     return ;
@@ -1361,6 +1420,9 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_CheckEventStatus
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
+/*   v5-8-0      | no branch changed.                                       */
+/*   v5-9-0      | no branch changed.                                       */
+/*   v5-10-0     | no branch changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_Control_SpecificPredictiveFFDProcess
 (
@@ -1370,13 +1432,26 @@ static FUNC( void, DEM_CODE ) Dem_Control_SpecificPredictiveFFDProcess
     P2VAR( Dem_UpdEvtCtrlFlagStType, AUTOMATIC, AUTOMATIC ) UpdEvtCtrlFlagStPtr
 )
 {
+#if ( DEM_EVENT_DISPLACEMENT_SUPPORT == STD_ON )    /*  [FuncSw]    */
+    VAR( Dem_UdsStatusByteType, AUTOMATIC ) tmpStatusOfDTC;
+#endif  /*   ( DEM_EVENT_DISPLACEMENT_SUPPORT == STD_ON )           */
     VAR( Dem_u08_InternalReturnType, AUTOMATIC ) retEventRetntion;
     VAR( Dem_u08_InternalReturnType, AUTOMATIC ) retCheckStorePredictiveFFD;
     VAR( boolean, AUTOMATIC ) retCheckExistsEventMemoryEntry;
-    VAR( boolean, AUTOMATIC ) faultOccurrenceFlag   = (boolean)FALSE;
-    VAR( Dem_OrderListOccurredFlagType, AUTOMATIC ) occurFlag = {(boolean)FALSE, (boolean)FALSE};
+    VAR( boolean, AUTOMATIC ) faultOccurrenceFlag;
+    VAR( Dem_OrderListOccurredFlagType, AUTOMATIC ) occurFlag;
     VAR( Dem_MonitorDataType, AUTOMATIC ) monitorData0;
     VAR( Dem_EventIdType, AUTOMATIC ) eventId;
+
+    faultOccurrenceFlag             = (boolean)FALSE;
+    occurFlag.ConfirmedOccurFlag    = (boolean)FALSE;
+    occurFlag.MILOccurFlag          = (boolean)FALSE;
+
+#if ( DEM_EVENT_DISPLACEMENT_SUPPORT == STD_ON )    /*  [FuncSw]    */
+    tmpStatusOfDTC = DEM_DTCSTATUS_BYTE_DEFAULT;
+    Dem_Data_GetDTCStatusFromTmp( &tmpStatusOfDTC );
+    Dem_Data_SetDTCStatusForFaultRecordOverwrite( tmpStatusOfDTC );
+#endif  /*   ( DEM_EVENT_DISPLACEMENT_SUPPORT == STD_ON )           */
 
     /* Check if FaultRecord is exists. */
     retCheckExistsEventMemoryEntry = Dem_Data_CheckExistsEventMemoryEntryOfTmp();
@@ -1393,10 +1468,6 @@ static FUNC( void, DEM_CODE ) Dem_Control_SpecificPredictiveFFDProcess
     else
     {
         /* FaultRecord not secured. */
-
-#if ( DEM_EVENT_DISPLACEMENT_SUPPORT == STD_ON )    /*  [FuncSw]    */
-        Dem_Data_SetDTCStatusForFaultRecordOverwrite( DEM_DTCSTATUS_BYTE_DEFAULT );
-#endif  /*   ( DEM_EVENT_DISPLACEMENT_SUPPORT == STD_ON )           */
 
         /* Bit3 and Bit7 are not turned on in PredictiveFFD Request. */
         /* (occurFlag.ConfirmedOccurFlag & MILOccurFlag is FALSE)  */
@@ -1420,7 +1491,7 @@ static FUNC( void, DEM_CODE ) Dem_Control_SpecificPredictiveFFDProcess
             /* Checks if fault record will be overwritten. */
             UpdEvtCtrlFlagStPtr->FaultRecordOverwriteFlag = Dem_Data_CheckFaultRecordOverwrite( &( UpdEvtCtrlFlagStPtr->EventStrgIndexOfFaultRecordOverwritten ), &( UpdEvtCtrlFlagStPtr->OldDTCStatusOverwritten) );
 
-            Dem_Control_UpdateEventMemoryEntryFromTmp( DEM_EVTKINDPTN_PRIMEM_SPECIFIC );
+            Dem_Control_UpdateEventMemoryEntryFromTmp( DEM_EVTKINDPTN_PRIMEM_SPECIFIC, DEM_EVENT_STATUS_FDC_THRESHOLD_REACHED );
             UpdEvtCtrlFlagStPtr->TSFFDeleteFlag = Dem_Data_CheckTSFFDeleteByFFROverwritten();
         }
     }
@@ -1478,6 +1549,11 @@ static FUNC( void, DEM_CODE ) Dem_Control_UpdateProgressEngine1000RPM
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-6-0         :2024-01-29                                              */
+/*  v5-7-0         :2024-05-29                                              */
+/*  v5-8-0         :2024-10-29                                              */
+/*  v5-9-0         :2025-02-26                                              */
+/*  v5-10-0        :2025-06-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

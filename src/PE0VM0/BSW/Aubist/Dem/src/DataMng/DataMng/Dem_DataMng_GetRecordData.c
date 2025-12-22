@@ -1,7 +1,7 @@
-/* Dem_DataMng_GetRecordData_c(v5-5-0)                                      */
+/* Dem_DataMng_GetRecordData_c(v5-8-0)                                      */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -168,6 +168,9 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataMng_GetEventStrgIndexFromFF
 /*               |        DEM_IRT_OK : success                              */
 /*               |        DEM_IRT_NG : failed                               */
 /* Notes         | -                                                        */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-8-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataMng_GetEventStrgIndexFromObdFFDRecord
 (
@@ -181,7 +184,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataMng_GetEventStrgIndexFromOb
     VAR( Dem_FreezeFrameRecordMngType, AUTOMATIC ) freezeFrameRecord;
 
     retVal = DEM_IRT_NG;
-    obdFFDRecordNum = Dem_ObdFFDRecordNum;
+    obdFFDRecordNum = Dem_CfgInfoPm_GetObdFFDRecordNum();
 
     if( FreezeFrameIndex < obdFFDRecordNum )
     {
@@ -252,6 +255,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataMng_GetEventStrgIndexFromTS
 /*  Version        :Date                                                    */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-8-0         :2024-10-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

@@ -1,7 +1,7 @@
-/* Dem_Pm_DataAvl_h(v5-5-0)                                                 */
+/* Dem_Pm_DataAvl_h(v5-8-0)                                                 */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 /****************************************************************************/
 /* Object Name  | Dem/Pm_DataAvl/HEADER                                     */
@@ -80,11 +80,13 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataAvl_GetUDSDTCByEventStrgInd
     VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex,
     P2VAR( Dem_u32_DTCValueType, AUTOMATIC, AUTOMATIC ) DTCValuePtr
 );
+#if ( DEM_OBDDTC_FORMAT_SUPPORT == STD_ON )
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataAvl_GetOBDDTCByEventStrgIndex
 (
     VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex,
     P2VAR( Dem_u32_DTCValueType, AUTOMATIC, AUTOMATIC ) DTCValuePtr
 );
+#endif  /*   ( DEM_OBDDTC_FORMAT_SUPPORT == STD_ON )               */
 
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataAvl_GetEventStrgIndexByDTC
 (
@@ -117,6 +119,7 @@ FUNC( Dem_u08_MisfireKindBitType, DEM_CODE ) Dem_DataAvl_GetMisfireCylDTCAvailab
 /* History                                                                  */
 /*  Version        :Date                                                    */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-8-0         :2024-10-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

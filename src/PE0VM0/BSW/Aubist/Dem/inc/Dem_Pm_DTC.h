@@ -1,7 +1,7 @@
-/* Dem_Pm_DTC_h(v5-5-0)                                                     */
+/* Dem_Pm_DTC_h(v5-10-0)                                                    */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 
@@ -40,6 +40,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DTC_ChangeDTCStatus
 (
     VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex,
     VAR( Dem_u08_EventQualificationType, AUTOMATIC ) EventQualification,
+    VAR( boolean, AUTOMATIC ) ActiveFaultReqFlag,
     CONSTP2VAR( Dem_DTCStatusStType, AUTOMATIC, AUTOMATIC ) OldDTCStatusStPtr,
     P2VAR( Dem_DTCStatusStType, AUTOMATIC, AUTOMATIC ) NewDTCStatusStPtr,
     P2VAR( Dem_OrderListOccurredFlagType, AUTOMATIC, AUTOMATIC ) OccurFlagPtr
@@ -105,6 +106,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DTC_GetDTCStatusAndUdsDTC
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DTC_GetDTCStatusAndUdsDTC_forFilDTC
 (
     VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex,
+    VAR( Dem_UdsStatusByteType, AUTOMATIC ) DTCStatusMask,
     VAR( boolean, AUTOMATIC ) FilterWithSeverity,
     VAR( Dem_DTCSeverityType, AUTOMATIC ) DTCSeverityMask,
     P2VAR( Dem_u32_DTCValueType, AUTOMATIC, AUTOMATIC ) DTCValuePtr,
@@ -135,6 +137,7 @@ FUNC( void, DEM_CODE ) Dem_DTC_TranslateDTCStatusForOutput_NoMergeWIRBit
 FUNC( void, DEM_CODE ) Dem_DTC_UpdateDTCStatusByRetentionResult
 (
     VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex,
+    VAR( Dem_EventStatusType, AUTOMATIC ) EventStatus,
     VAR( Dem_u08_InternalReturnType, AUTOMATIC ) EventRetentionResult,
     VAR( boolean, AUTOMATIC ) ConfirmedOccurFlag,
     VAR( Dem_MisfireCylinderType, AUTOMATIC ) MisfireCylinder,
@@ -145,8 +148,11 @@ FUNC( void, DEM_CODE ) Dem_DTC_UpdateDTCStatusByRetentionResult
 #if ( DEM_PID_READINESS_SUPPORT == STD_ON )
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DTC_SetDTCFilterForReadiness
 (
-    VAR( Dem_u08_ReadinessGroupIndexType, AUTOMATIC ) ReadinessGroupId
+    VAR( Dem_u08_ReadinessGroupIdType, AUTOMATIC ) ReadinessGroupId
 );
+
+FUNC( void, DEM_CODE ) Dem_DTC_RestartSetDTCFilterForReadiness
+( void );
 
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DTC_GetNextFilteredDTCForReadiness
 (
@@ -178,6 +184,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DTC_GetDTCStatusByDTC
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DTC_GetDTCStatusByDTCAndSeverity
 (
     VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) TargetEventStrgIndex,
+    VAR( Dem_UdsStatusByteType, AUTOMATIC ) DTCStatusMask,
     VAR( boolean, AUTOMATIC ) FilterWithSeverity,
     VAR( Dem_DTCSeverityType, AUTOMATIC ) DTCSeverityMask,
     P2VAR( Dem_UdsStatusByteType, AUTOMATIC, AUTOMATIC ) DTCStatusPtr,
@@ -202,6 +209,10 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DTC_GetDTCStatusByDTCAndSeverit
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-7-0         :2024-05-29                                              */
+/*  v5-8-0         :2024-10-29                                              */
+/*  v5-9-0         :2025-02-26                                              */
+/*  v5-10-0        :2025-06-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

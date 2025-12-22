@@ -1,7 +1,7 @@
 /* Dem_NotifyOverwrittenEventStatus_Callout_c(v5-3-0)                       */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 /****************************************************************************/
 /* Object Name  | Dem/Misfire_NotifyDTCStatus_Callout/CODE                  */

@@ -1,7 +1,7 @@
-/* Dem_Control_PID_c(v5-5-0)                                                */
+/* Dem_Control_PID_c(v5-10-0)                                               */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -66,6 +66,7 @@
 #define DEM_START_SEC_CODE
 #include <Dem_MemMap.h>
 
+#if ( DEM_CLEAR_EVENT_ALLOWED_BY_CALLOUT_SUPPORT == STD_OFF )
 /****************************************************************************/
 /* Function Name | Dem_Control_ReadDataOfPID01                              */
 /* Description   | Service to report the value of PID01                     */
@@ -76,6 +77,10 @@
 /*               |        SWC with the appropriate size.                    */
 /* Return Value  | void                                                     */
 /* Notes         | -                                                        */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-8-0      | no branch changed.                                       */
+/*   v5-10-0     | no branch changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_Control_ReadDataOfPID01
 (
@@ -85,14 +90,13 @@ FUNC( void, DEM_CODE ) Dem_Control_ReadDataOfPID01
 {
     VAR( Dem_u08_InternalReturnType, AUTOMATIC ) checkStatus;
     VAR( boolean, AUTOMATIC ) execClearDTC;
-    VAR( Dem_u32_DTCGroupType, AUTOMATIC ) getDTCGroup;
     VAR( Dem_DTCOriginType, AUTOMATIC ) getDTCOrigin;
 
     checkStatus = Dem_Control_ChkAfterCompleteInit();
     if( checkStatus == DEM_IRT_OK )
     {
-        execClearDTC = Dem_Control_CheckExecClearDTCProcess();
-        Dem_Control_GetClearType( &getDTCGroup, &getDTCOrigin );
+        execClearDTC = Dem_Control_CheckExecClearDTCProcessActive();
+        getDTCOrigin = Dem_Control_GetClearDTCOrigin();
 
         if ( ( execClearDTC == (boolean)TRUE ) && ( getDTCOrigin == DEM_DTC_ORIGIN_PRIMARY_MEMORY ) )
         {
@@ -110,6 +114,44 @@ FUNC( void, DEM_CODE ) Dem_Control_ReadDataOfPID01
 
     return;
 }
+#endif  /* ( DEM_CLEAR_EVENT_ALLOWED_BY_CALLOUT_SUPPORT == STD_OFF )            */
+
+#if ( DEM_CLEAR_EVENT_ALLOWED_BY_CALLOUT_SUPPORT == STD_ON )
+/****************************************************************************/
+/* Function Name | Dem_Control_ReadDataOfPID01                              */
+/* Description   | Service to report the value of PID01                     */
+/* Preconditions | none                                                     */
+/* Parameters    | [out] PID01value :                                       */
+/*               |        Buffer containing the contents of PID01 computed  */
+/*               |        by the Dem. The buffer is provided by the Dcm or  */
+/*               |        SWC with the appropriate size.                    */
+/* Return Value  | void                                                     */
+/* Notes         | -                                                        */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-8-0      | new created. based on Dem_Control_ReadDataOfPID01(DEM_CLEAR_EVENT_ALLOWED_BY_CALLOUT_SUPPORT == STD_OFF).  */
+/****************************************************************************/
+FUNC( void, DEM_CODE ) Dem_Control_ReadDataOfPID01
+(
+    VAR( Dem_u08_ReadinessKindType, AUTOMATIC ) ReadinessCaller,
+    CONSTP2VAR( uint8, AUTOMATIC, DEM_APPL_DATA ) PID01value
+)
+{
+    VAR( Dem_u08_InternalReturnType, AUTOMATIC ) checkStatus;
+
+    checkStatus = Dem_Control_ChkAfterCompleteInit();
+    if( checkStatus == DEM_IRT_OK )
+    {
+        Dem_PID_ReadDataOfPID01AndPIDF501( ReadinessCaller, DEM_READINESS_PIDF401, PID01value );
+    }
+    else
+    {
+        Dem_PID_ReadInitDataOfPID01( ReadinessCaller, PID01value );
+    }
+
+    return;
+}
+#endif  /* ( DEM_CLEAR_EVENT_ALLOWED_BY_CALLOUT_SUPPORT == STD_ON )         */
 
 /****************************************************************************/
 /* Function Name | Dem_Control_ReadDataOfPID1C                              */
@@ -274,6 +316,7 @@ FUNC( void, DEM_CODE ) Dem_Control_ReadDataOfPID31
 }
 
 
+#if ( DEM_CLEAR_EVENT_ALLOWED_BY_CALLOUT_SUPPORT == STD_OFF )
 /****************************************************************************/
 /* Function Name | Dem_Control_ReadDataOfPID41                              */
 /* Description   | Service to report the value of PID41                     */
@@ -284,6 +327,10 @@ FUNC( void, DEM_CODE ) Dem_Control_ReadDataOfPID31
 /*               |        SWC with the appropriate size.                    */
 /* Return Value  | void                                                     */
 /* Notes         | -                                                        */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-8-0      | no branch changed.                                       */
+/*   v5-10-0     | no branch changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_Control_ReadDataOfPID41
 (
@@ -293,14 +340,13 @@ FUNC( void, DEM_CODE ) Dem_Control_ReadDataOfPID41
 {
     VAR( Dem_u08_InternalReturnType, AUTOMATIC ) checkStatus;
     VAR( boolean, AUTOMATIC ) execClearDTC;
-    VAR( Dem_u32_DTCGroupType, AUTOMATIC ) getDTCGroup;
     VAR( Dem_DTCOriginType, AUTOMATIC ) getDTCOrigin;
 
     checkStatus = Dem_Control_ChkAfterCompleteInit();
     if( checkStatus == DEM_IRT_OK )
     {
-        execClearDTC = Dem_Control_CheckExecClearDTCProcess();
-        Dem_Control_GetClearType( &getDTCGroup, &getDTCOrigin );
+        execClearDTC = Dem_Control_CheckExecClearDTCProcessActive();
+        getDTCOrigin = Dem_Control_GetClearDTCOrigin();
 
         if ( ( execClearDTC == (boolean)TRUE ) && ( getDTCOrigin == DEM_DTC_ORIGIN_PRIMARY_MEMORY ) )
         {
@@ -318,7 +364,44 @@ FUNC( void, DEM_CODE ) Dem_Control_ReadDataOfPID41
 
     return;
 }
+#endif  /* ( DEM_CLEAR_EVENT_ALLOWED_BY_CALLOUT_SUPPORT == STD_OFF )            */
 
+#if ( DEM_CLEAR_EVENT_ALLOWED_BY_CALLOUT_SUPPORT == STD_ON )
+/****************************************************************************/
+/* Function Name | Dem_Control_ReadDataOfPID41                              */
+/* Description   | Service to report the value of PID41                     */
+/* Preconditions | none                                                     */
+/* Parameters    | [out] PID41value :                                       */
+/*               |        Buffer containing the contents of PID41 computed  */
+/*               |        by the Dem. The buffer is provided by the Dcm or  */
+/*               |        SWC with the appropriate size.                    */
+/* Return Value  | void                                                     */
+/* Notes         | -                                                        */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-8-0      | new created. based on Dem_Control_ReadDataOfPID41(DEM_CLEAR_EVENT_ALLOWED_BY_CALLOUT_SUPPORT == STD_OFF).  */
+/****************************************************************************/
+FUNC( void, DEM_CODE ) Dem_Control_ReadDataOfPID41
+(
+    VAR( Dem_u08_ReadinessKindType, AUTOMATIC ) ReadinessCaller,
+    CONSTP2VAR( uint8, AUTOMATIC, DEM_APPL_DATA ) PID41value
+)
+{
+    VAR( Dem_u08_InternalReturnType, AUTOMATIC ) checkStatus;
+
+    checkStatus = Dem_Control_ChkAfterCompleteInit();
+    if( checkStatus == DEM_IRT_OK )
+    {
+        Dem_PID_ReadDataOfPID41( ReadinessCaller, PID41value );
+    }
+    else
+    {
+        Dem_PID_ReadInitDataOfPID41( ReadinessCaller, PID41value );
+    }
+
+    return;
+}
+#endif  /* ( DEM_CLEAR_EVENT_ALLOWED_BY_CALLOUT_SUPPORT == STD_ON )         */
 
 /****************************************************************************/
 /* Function Name | Dem_Control_ReadDataOfPID4D                              */
@@ -384,6 +467,7 @@ FUNC( void, DEM_CODE ) Dem_Control_ReadDataOfPID4E
 }
 
 
+#if ( DEM_CLEAR_EVENT_ALLOWED_BY_CALLOUT_SUPPORT == STD_OFF )
 /****************************************************************************/
 /* Function Name | Dem_Control_ReadDataOfPIDF501                            */
 /* Description   | Service to report the value of PIDF501                   */
@@ -394,6 +478,10 @@ FUNC( void, DEM_CODE ) Dem_Control_ReadDataOfPID4E
 /*               |        or SWC with the appropriate size.                 */
 /* Return Value  | void                                                     */
 /* Notes         | -                                                        */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-8-0      | no branch changed.                                       */
+/*   v5-10-0     | no branch changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_Control_ReadDataOfPIDF501
 (
@@ -403,14 +491,13 @@ FUNC( void, DEM_CODE ) Dem_Control_ReadDataOfPIDF501
 {
     VAR( Dem_u08_InternalReturnType, AUTOMATIC ) checkStatus;
     VAR( boolean, AUTOMATIC ) execClearDTC;
-    VAR( Dem_u32_DTCGroupType, AUTOMATIC ) getDTCGroup;
     VAR( Dem_DTCOriginType, AUTOMATIC ) getDTCOrigin;
 
     checkStatus = Dem_Control_ChkAfterCompleteInit();
     if( checkStatus == DEM_IRT_OK )
     {
-        execClearDTC = Dem_Control_CheckExecClearDTCProcess();
-        Dem_Control_GetClearType( &getDTCGroup, &getDTCOrigin );
+        execClearDTC = Dem_Control_CheckExecClearDTCProcessActive();
+        getDTCOrigin = Dem_Control_GetClearDTCOrigin();
 
         if ( ( execClearDTC == (boolean)TRUE ) && ( getDTCOrigin == DEM_DTC_ORIGIN_PRIMARY_MEMORY ) )
         {
@@ -428,7 +515,44 @@ FUNC( void, DEM_CODE ) Dem_Control_ReadDataOfPIDF501
 
     return;
 }
+#endif  /* ( DEM_CLEAR_EVENT_ALLOWED_BY_CALLOUT_SUPPORT == STD_OFF )            */
 
+#if ( DEM_CLEAR_EVENT_ALLOWED_BY_CALLOUT_SUPPORT == STD_ON )
+/****************************************************************************/
+/* Function Name | Dem_Control_ReadDataOfPIDF501                            */
+/* Description   | Service to report the value of PIDF501                   */
+/* Preconditions | none                                                     */
+/* Parameters    | [out] PIDF501value :                                     */
+/*               |        Buffer containing the contents of PIDF501 comput- */
+/*               |        ed by the Dem. The buffer is provided by the Dcm  */
+/*               |        or SWC with the appropriate size.                 */
+/* Return Value  | void                                                     */
+/* Notes         | -                                                        */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-8-0      | new created. based on Dem_Control_ReadDataOfPIDF501(DEM_CLEAR_EVENT_ALLOWED_BY_CALLOUT_SUPPORT == STD_OFF).  */
+/****************************************************************************/
+FUNC( void, DEM_CODE ) Dem_Control_ReadDataOfPIDF501
+(
+    VAR( Dem_u08_ReadinessKindType, AUTOMATIC ) ReadinessCaller,
+    CONSTP2VAR( uint8, AUTOMATIC, DEM_APPL_DATA ) PIDF501value
+)
+{
+    VAR( Dem_u08_InternalReturnType, AUTOMATIC ) checkStatus;
+
+    checkStatus = Dem_Control_ChkAfterCompleteInit();
+    if( checkStatus == DEM_IRT_OK )
+    {
+        Dem_PID_ReadDataOfPID01AndPIDF501( ReadinessCaller, DEM_READINESS_PIDF501, PIDF501value );
+    }
+    else
+    {
+        Dem_PID_ReadInitDataOfPIDF501( ReadinessCaller, PIDF501value );
+    }
+
+    return;
+}
+#endif  /* ( DEM_CLEAR_EVENT_ALLOWED_BY_CALLOUT_SUPPORT == STD_ON )         */
 
 /****************************************************************************/
 /* Function Name | Dem_Control_SetDataOfPID21                               */
@@ -633,6 +757,8 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_SetDataOfPID4E
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-8-0         :2024-10-29                                              */
+/*  v5-10-0        :2025-06-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

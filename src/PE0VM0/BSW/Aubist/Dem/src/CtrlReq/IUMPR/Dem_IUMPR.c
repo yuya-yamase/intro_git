@@ -1,7 +1,7 @@
-/* Dem_IUMPR_c(v5-3-0)                                                      */
+/* Dem_IUMPR_c(v5-10-0)                                                     */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -24,6 +24,7 @@
 #include "../../../usr/Dem_IUMPR_Callout.h"
 #include "../../../usr/Dem_IUMPR_FiM_Connector.h"
 #include "../../../inc/Dem_CmnLib_OpCycle.h"
+#include "../../../inc/Dem_CmnLib_ConfigInfo.h"
 #include "../../../cfg/Dem_OpCycle_Cfg.h"
 #include "Dem_IUMPR_local.h"
 
@@ -112,13 +113,18 @@ FUNC( void, DEM_CODE ) Dem_IUMPR_Init
 /* Parameters    | none                                                     */
 /* Return Value  | none                                                     */
 /* Notes         | -                                                        */
+/*--------------------------------------------------------------------------*/
+/* UpdateRecord  | [UpdRec]IUMPR                                            */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-6-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_IUMPR_ClearIUMPRCondition
 ( void )
 {
     VAR( Dem_u08_OpCycleIndexType, AUTOMATIC )      opcycleIdxIGCycleCounter;
 
-    Dem_IUMPRMng_ClearCondition();
+    Dem_IUMPRMng_ClearCondition();      /*[UpdRec]IUMPR */
 
     opcycleIdxIGCycleCounter = Dem_ConfDemOperationCycleIGCycleCounter;
     Dem_OpCycle_SetCycleStartNoticeFlag( opcycleIdxIGCycleCounter, DEM_CYCLE_NOTIFY_END );
@@ -257,6 +263,10 @@ FUNC( void, DEM_CODE ) Dem_IUMPR_GetIGCycleCounter
 /*               |        DEM_IRT_OK : Operation was successful.            */
 /*               |        DEM_IRT_NG : Operation failed.                    */
 /* Notes         | -                                                        */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-7-0      | no object changed.                                       */
+/*   v5-10-0     | no branch changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_IUMPR_GetInitInfoTypeValue
 (
@@ -269,29 +279,34 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_IUMPR_GetInitInfoTypeValue
     VAR( uint8, AUTOMATIC )                         dataPos;
     VAR( Dem_u08_IUMPRGroupIndexType, AUTOMATIC )   reqIumprGroupNum;
     VAR( uint8, AUTOMATIC )                         dataSize;
+    VAR( Dem_u08_IUMPRNODIValueType, AUTOMATIC )        nodiValue;
+    VAR( Dem_u08_IUMPRGroupIndexType, AUTOMATIC )       nodiGroupNum;
+    VAR( Dem_u08_IUMPRNODIOutputSizeType, AUTOMATIC )   nodiOutputSize;
 
     retVal              = DEM_IRT_NG;
 
-    dataSize                        = Dem_IUMPR_NODI_OutputSize + DEM_IUMPR_NODI_SIZE;
+    Dem_CfgInfoPm_GetNODIInfo( &nodiValue, &nodiGroupNum, &nodiOutputSize );
+
+    dataSize            = nodiOutputSize + DEM_IUMPR_NODI_SIZE;
 
     if( *BuffSizePtr >= dataSize )
     {
-        reqIumprGroupNum                    = Dem_IUMPR_NODI_GroupNum;
+        reqIumprGroupNum                    = nodiGroupNum;
 
-        IumprdataPtr[DEM_IUMPR_POS0]        = Dem_IUMPR_NODI_Value;
-        IumprdataPtr[DEM_IUMPR_POS1]        = DEM_IUMPR_DATA_INITVALUE;
-        IumprdataPtr[DEM_IUMPR_POS2]        = DEM_IUMPR_DATA_INITVALUE;
+        IumprdataPtr[DEM_IUMPR_POS0]        = nodiValue;                /* [ARYCHK] *BuffSizePtr/1/DEM_IUMPR_POS0 */
+        IumprdataPtr[DEM_IUMPR_POS1]        = DEM_IUMPR_DATA_INITVALUE; /* [ARYCHK] *BuffSizePtr/1/DEM_IUMPR_POS1 */
+        IumprdataPtr[DEM_IUMPR_POS2]        = DEM_IUMPR_DATA_INITVALUE; /* [ARYCHK] *BuffSizePtr/1/DEM_IUMPR_POS2 */
 
-        IumprdataPtr[DEM_IUMPR_POS3]        = DEM_IUMPR_DATA_INITVALUE;
-        IumprdataPtr[DEM_IUMPR_POS4]        = DEM_IUMPR_DATA_INITVALUE;
+        IumprdataPtr[DEM_IUMPR_POS3]        = DEM_IUMPR_DATA_INITVALUE; /* [ARYCHK] *BuffSizePtr/1/DEM_IUMPR_POS3 */
+        IumprdataPtr[DEM_IUMPR_POS4]        = DEM_IUMPR_DATA_INITVALUE; /* [ARYCHK] *BuffSizePtr/1/DEM_IUMPR_POS4 */
 
         for( groupIndex = (Dem_u08_IUMPRGroupIndexType)0U; groupIndex < reqIumprGroupNum; groupIndex++ )
         {
             dataPos = groupIndex * DEM_IUMPR_RATIO_DATA_SIZE;
-            IumprdataPtr[dataPos + DEM_IUMPR_POS5] = DEM_IUMPR_DATA_INITVALUE;
-            IumprdataPtr[dataPos + DEM_IUMPR_POS6] = DEM_IUMPR_DATA_INITVALUE;
-            IumprdataPtr[dataPos + DEM_IUMPR_POS7] = DEM_IUMPR_DATA_INITVALUE;
-            IumprdataPtr[dataPos + DEM_IUMPR_POS8] = DEM_IUMPR_DATA_INITVALUE;
+            IumprdataPtr[dataPos + DEM_IUMPR_POS5] = DEM_IUMPR_DATA_INITVALUE;/* [ARYCHK] *BuffSizePtr/1/dataPos+DEM_IUMPR_POS5 */
+            IumprdataPtr[dataPos + DEM_IUMPR_POS6] = DEM_IUMPR_DATA_INITVALUE;/* [ARYCHK] *BuffSizePtr/1/dataPos+DEM_IUMPR_POS6 */
+            IumprdataPtr[dataPos + DEM_IUMPR_POS7] = DEM_IUMPR_DATA_INITVALUE;/* [ARYCHK] *BuffSizePtr/1/dataPos+DEM_IUMPR_POS7 */
+            IumprdataPtr[dataPos + DEM_IUMPR_POS8] = DEM_IUMPR_DATA_INITVALUE;/* [ARYCHK] *BuffSizePtr/1/dataPos+DEM_IUMPR_POS8 */
         }
         *BuffSizePtr    = dataSize;
         retVal          = DEM_IRT_OK;
@@ -319,6 +334,10 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_IUMPR_GetInitInfoTypeValue
 /*               |        DEM_IRT_OK : Operation was successful.            */
 /*               |        DEM_IRT_NG : Operation failed.                    */
 /* Notes         | -                                                        */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-7-0      | no object changed.                                       */
+/*   v5-10-0     | no branch changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_IUMPR_GetInfoTypeValue
 (
@@ -330,26 +349,35 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_IUMPR_GetInfoTypeValue
     VAR( Dem_u16_IUMPRCycleCounterType, AUTOMATIC )                        genDeno;
     VAR( Dem_u16_IUMPRCycleCounterType, AUTOMATIC )                        igCycCtr;
     VAR( uint8, AUTOMATIC )                         dataSize;
+    VAR( Dem_u08_IUMPRNODIValueType, AUTOMATIC )        nodiValue;
+    VAR( Dem_u08_IUMPRGroupIndexType, AUTOMATIC )       nodiGroupNum;
+    VAR( Dem_u08_IUMPRNODIOutputSizeType, AUTOMATIC )   nodiOutputSize;
 
     genDeno             = DEM_IUMPR_COUNTER_INITVALUE;
     igCycCtr            = DEM_IUMPR_COUNTER_INITVALUE;
     retVal              = DEM_IRT_NG;
 
-    dataSize                        = Dem_IUMPR_NODI_OutputSize + DEM_IUMPR_NODI_SIZE;
+    Dem_CfgInfoPm_GetNODIInfo( &nodiValue, &nodiGroupNum, &nodiOutputSize );
+
+    dataSize            = nodiOutputSize + DEM_IUMPR_NODI_SIZE;
 
     if( *BuffSizePtr >= dataSize )
     {
-        IumprdataPtr[DEM_IUMPR_POS0]        = Dem_IUMPR_NODI_Value;
+        IumprdataPtr[DEM_IUMPR_POS0]        = nodiValue;                                    /* [ARYCHK] *BuffSizePtr/1/DEM_IUMPR_POS0 */
 
         Dem_IUMPRMng_GetGeneralDenominator(&genDeno);
-        IumprdataPtr[DEM_IUMPR_POS1]        = (uint8)(genDeno >> DEM_IUMPR_COUNTER_SHIFT);
-        IumprdataPtr[DEM_IUMPR_POS2]        = (uint8)(genDeno);
+        IumprdataPtr[DEM_IUMPR_POS1]        = (uint8)(genDeno >> DEM_IUMPR_COUNTER_SHIFT);  /* [ARYCHK] *BuffSizePtr/1/DEM_IUMPR_POS1 */
+        IumprdataPtr[DEM_IUMPR_POS2]        = (uint8)(genDeno);                             /* [ARYCHK] *BuffSizePtr/1/DEM_IUMPR_POS2 */
 
         Dem_IUMPRMng_GetIGCycleCounter(&igCycCtr);
-        IumprdataPtr[DEM_IUMPR_POS3]        = (uint8)(igCycCtr >> DEM_IUMPR_COUNTER_SHIFT);
-        IumprdataPtr[DEM_IUMPR_POS4]        = (uint8)(igCycCtr);
+        IumprdataPtr[DEM_IUMPR_POS3]        = (uint8)(igCycCtr >> DEM_IUMPR_COUNTER_SHIFT); /* [ARYCHK] *BuffSizePtr/1/DEM_IUMPR_POS3 */
+        IumprdataPtr[DEM_IUMPR_POS4]        = (uint8)(igCycCtr);                            /* [ARYCHK] *BuffSizePtr/1/DEM_IUMPR_POS4 */
 
-        Dem_IUMPR_Ratio_GetInfoTypeValue( IumprdataPtr );
+#ifndef DEM_SIT_RANGE_CHECK
+        Dem_IUMPR_Ratio_GetInfoTypeValue( IumprdataPtr, nodiGroupNum );
+#else   /* DEM_SIT_RANGE_CHECK */
+        Dem_IUMPR_Ratio_GetInfoTypeValue( *BuffSizePtr, IumprdataPtr, nodiGroupNum );
+#endif  /* DEM_SIT_RANGE_CHECK */
 
         *BuffSizePtr    = dataSize;
         retVal          = DEM_IRT_OK;
@@ -369,6 +397,11 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_IUMPR_GetInfoTypeValue
 /*               |         TRUE: UpdateProcess is completed.                */
 /* Return Value  | void                                                     */
 /* Notes         | This function is in Dem_MainFunction process.            */
+/*--------------------------------------------------------------------------*/
+/* UpdateRecord  | [UpdRec]IUMPR                                            */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-6-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_IUMPR_UpdateIUMPRProcess
 (
@@ -381,11 +414,11 @@ FUNC( void, DEM_CODE ) Dem_IUMPR_UpdateIUMPRProcess
 
     if( FirstTime == (boolean)TRUE )
     {
-        Dem_IUMPR_UpdateIGCycleCounter();
+        Dem_IUMPR_UpdateIGCycleCounter();   /*[UpdRec]IUMPR */
 
         genDenFidPermission         = (boolean)FALSE;
 
-        Dem_IUMPR_UpdateGenDenominator( &genDenCondState, &genDenFidPermission );
+        Dem_IUMPR_UpdateGenDenominator( &genDenCondState, &genDenFidPermission );   /*[UpdRec]IUMPR */
 
 #if ( DEM_IUMPR_RATIO_SUPPORT == STD_ON )   /*  [FuncSw]    */
         Dem_GenDenCondState         = genDenCondState;
@@ -394,7 +427,7 @@ FUNC( void, DEM_CODE ) Dem_IUMPR_UpdateIUMPRProcess
     }
 
 #if ( DEM_IUMPR_RATIO_SUPPORT == STD_ON )   /*  [FuncSw]    */
-    Dem_IUMPR_UpdateRatioCounter( FirstTime, Dem_GenDenCondState, Dem_GenDenFidPermission, ProcessCompletePtr );
+    Dem_IUMPR_UpdateRatioCounter( FirstTime, Dem_GenDenCondState, Dem_GenDenFidPermission, ProcessCompletePtr );    /*[UpdRec]IUMPR */
 #endif  /* ( DEM_IUMPR_RATIO_SUPPORT == STD_ON )            */
 
     return;
@@ -459,6 +492,11 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_IUMPR_CheckCondSettingParameter
 /*               |          Status of the IUMPR denominator condition.      */
 /* Return Value  | none                                                     */
 /* Notes         | -                                                        */
+/*--------------------------------------------------------------------------*/
+/* UpdateRecord  | [UpdRec]IUMPR                                            */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-6-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_IUMPR_SetIUMPRDenCondition
 (
@@ -467,7 +505,7 @@ FUNC( void, DEM_CODE ) Dem_IUMPR_SetIUMPRDenCondition
 )
 {
 
-    Dem_IUMPRMng_SetIUMPRDenCondition( ConditionId, ConditionStatus );
+    Dem_IUMPRMng_SetIUMPRDenCondition( ConditionId, ConditionStatus );  /*[UpdRec]IUMPR */
 
     return;
 }
@@ -562,8 +600,11 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_IUMPR_CheckDenConditionS
 /* Return Value  | none                                                     */
 /* Notes         | This function is in Dem_MainFunction process.            */
 /*--------------------------------------------------------------------------*/
+/* UpdateRecord  | [UpdRec]IUMPR                                            */
+/*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-6-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_IUMPR_UpdateIGCycleCounter
 ( void )
@@ -610,7 +651,7 @@ static FUNC( void, DEM_CODE ) Dem_IUMPR_UpdateIGCycleCounter
                 }
 
                 addedCondition = (boolean)TRUE;
-                Dem_IUMPRMng_SetIGCycleInformation( addedCondition, igCycleCounter );
+                Dem_IUMPRMng_SetIGCycleInformation( addedCondition, igCycleCounter );   /*[UpdRec]IUMPR */
 
                 Dem_IUMPR_NotifyIGCycleCounterUpdate();
             }
@@ -632,6 +673,11 @@ static FUNC( void, DEM_CODE ) Dem_IUMPR_UpdateIGCycleCounter
 /*               |         Permission Status Of General Denominator         */
 /* Return Value  | boolean                                                  */
 /* Notes         | This function is in Dem_MainFunction process.            */
+/*--------------------------------------------------------------------------*/
+/* UpdateRecord  | [UpdRec]IUMPR                                            */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-6-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_IUMPR_UpdateGenDenominator
 (
@@ -679,7 +725,7 @@ static FUNC( void, DEM_CODE ) Dem_IUMPR_UpdateGenDenominator
                 }
 
                 genDenAdddedCondition   = (boolean)TRUE;
-                Dem_IUMPRMng_SetGenDenInformation( genDenAdddedCondition, genDenCounter );
+                Dem_IUMPRMng_SetGenDenInformation( genDenAdddedCondition, genDenCounter );  /*[UpdRec]IUMPR */
 
                 Dem_IUMPR_NotifyGeneralDenominatorUpdate();
             }
@@ -710,6 +756,9 @@ static FUNC( void, DEM_CODE ) Dem_IUMPR_UpdateGenDenominator
 /*  v5-0-0         :2022-03-29                                              */
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
+/*  v5-6-0         :2024-01-29                                              */
+/*  v5-7-0         :2024-05-29                                              */
+/*  v5-10-0        :2025-06-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

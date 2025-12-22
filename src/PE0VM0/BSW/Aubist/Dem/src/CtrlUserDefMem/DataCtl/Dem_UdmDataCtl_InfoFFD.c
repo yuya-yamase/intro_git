@@ -1,7 +1,7 @@
-/* Dem_UdmDataCtl_InfoFFD_c(v5-5-0)                                         */
+/* Dem_UdmDataCtl_InfoFFD_c(v5-8-0)                                         */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -26,7 +26,10 @@
 #include "Dem_UdmDataCtl_InfoTSFFD.h"
 #include "Dem_UdmDataCtl_local.h"
 
-
+#ifndef DEM_SIT_RANGE_CHECK
+#else   /* DEM_SIT_RANGE_CHECK */
+#include <Dem_SIT_RangeCheck.h>
+#endif /* DEM_SIT_RANGE_CHECK */
 
 /*--------------------------------------------------------------------------*/
 /* Macros                                                                   */
@@ -296,6 +299,8 @@ FUNC( void, DEM_CODE ) Dem_UdmData_ResetSearchStartPosition
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | branch changed.                                          */
+/*   v5-7-0      | no object changed.                                       */
+/*   v5-8-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmData_GetFreezeFrameData
 (
@@ -392,14 +397,18 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmData_GetFreezeFrameData
                         {
                             /* The RecordStatus of freeze frame record is STORED. */
 
-                            retUdmDTCClerTarget = Dem_UdmDTC_JudgeUdmDTCClearTarget( UdmEventIndex );
+                            retUdmDTCClerTarget = Dem_UdmDTC_JudgeUdmDTCClearTargetOnClearProcessActive( UdmEventIndex );
                             if( retUdmDTCClerTarget == (boolean)FALSE )
                             {
                                 /* Holds the FreezeFrameClass table pointed to by the FreezeFrameClass table list Index of the held DTCAttribute table. */
                                 freezeFrameClassPtr = &Dem_FreezeFrameClassTable[ freezeFrameClassRef ];                /* [GUD]freezeFrameClassRef */
 
                                 /* Edit FreezeFrame record to the specified format. [SWS_Dem_00071]Figure 7.51 */
+#ifndef DEM_SIT_RANGE_CHECK
                                 resultOfEditFFRec = Dem_Data_EditFreezeFrameRecord( RecordNumber, FreezeFrameGetInfoType, udmFreezeFrameRecord.DataPtr, freezeFrameClassPtr, DataPtr, DataSizePtr);
+#else   /* DEM_SIT_RANGE_CHECK */
+                                resultOfEditFFRec = Dem_Data_EditFreezeFrameRecord( DEM_SIT_R_CHK_UDM_FF_DATA_SIZE( udmGroupKindIndex ), RecordNumber, FreezeFrameGetInfoType, udmFreezeFrameRecord.DataPtr, freezeFrameClassPtr, DataPtr, DataSizePtr);
+#endif  /* DEM_SIT_RANGE_CHECK */
                                 /* Sets the return value to FreezeFrame record edit result. */
                                 retVal = resultOfEditFFRec;
                             }
@@ -442,7 +451,11 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmData_GetFreezeFrameData
 /*               | [out] RecordNumBufferPtr :                               */
 /*               |        the buffer, to which the freeze frame data recor- */
 /*               |        d shall be written to                             */
-/*               | [in/out] RecordNumPtr :                                  */
+/*               | [in] TotalLengthOfBuffer :                               */
+/*               |          total length of RecordNumBufferPtr.             */
+/*               | [in] OffsetPosOfBuffer   :                               */
+/*               |          setting offset position of RecordNumBufferPtr.  */
+/*               | [out] RecordNumPtr :                                     */
 /*               |        the actual number of written data bytes           */
 /* Return Value  | Dem_u08_InternalReturnType                               */
 /*               |        DEM_IRT_OK : Size successfully returned           */
@@ -452,11 +465,14 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmData_GetFreezeFrameData
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-7-0      | branch changed.                                          */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmData_GetAllFFRecordNumber
 (
     VAR( Dem_u16_UdmEventIndexType, AUTOMATIC ) UdmEventIndex,
     P2VAR( Dem_u08_FFRecordNumberType, AUTOMATIC, DEM_APPL_DATA ) RecordNumBufferPtr,
+    VAR( uint8, AUTOMATIC ) TotalLengthOfBuffer,
+    VAR( uint8, AUTOMATIC ) OffsetPosOfBuffer,
     P2VAR( uint8, AUTOMATIC, AUTOMATIC ) RecordNumPtr
 )
 {
@@ -465,11 +481,11 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmData_GetAllFFRecordNumber
     VAR( Dem_u08_FFStoredStatusType, AUTOMATIC ) recordStatus;
     VAR( Dem_u08_FFRecordNumberType, AUTOMATIC ) recordNumber;
     VAR( Dem_u08_InternalReturnType, AUTOMATIC ) retVal;
-    VAR( uint8, AUTOMATIC ) recordNumBuffMax;
     VAR( uint8, AUTOMATIC ) recordNumCnt;
+    VAR( uint8, AUTOMATIC ) recordIndex;
 
-    recordNumBuffMax    =   *RecordNumPtr;
-    recordNumCnt        =   (Dem_u08_FFRecordNumberType)0U;
+    recordIndex         =   OffsetPosOfBuffer;
+    recordNumCnt        =   (uint8)0U;
 
     /*  set OK value .  if buffer size is too small, update DEM_IRT_WRONG_BUFFERSIZE.   */
     retVal  =   DEM_IRT_OK;
@@ -490,9 +506,10 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmData_GetAllFFRecordNumber
                 recordNumber    =   Dem_UdmTmpRecordNumberByDTC[saveRecNumIndex].RecordNumber;                                      /* [GUD]saveRecNumIndex */
 
                 /*  check : remain buffer size          */
-                if ( recordNumCnt < recordNumBuffMax )                              /* [GUD:if]recordNumCnt */
+                if ( recordIndex < TotalLengthOfBuffer )                              /* [GUD:if]recordIndex */
                 {
-                    RecordNumBufferPtr[ recordNumCnt ]    =   recordNumber;         /* [GUD]recordNumCnt */
+                    RecordNumBufferPtr[ recordIndex ]    =   recordNumber;         /* [GUD]recordIndex *//* [ARYCHK] TotalLengthOfBuffer / 1 / recordIndex */
+                    recordIndex     =   recordIndex  + (uint8)1U;
                     recordNumCnt    =   recordNumCnt + (uint8)1U;
                 }
                 else
@@ -649,6 +666,8 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmData_GetSavedRecordNu
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-7-0         :2024-05-29                                              */
+/*  v5-8-0         :2024-10-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

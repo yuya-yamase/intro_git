@@ -1,7 +1,7 @@
-/* Dem_AltIUMPR_c(v5-5-0)                                                   */
+/* Dem_AltIUMPR_c(v5-9-0)                                                   */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -129,6 +129,8 @@ FUNC( void, DEM_CODE ) Dem_AltIUMPR_ReadDenominator
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
+/*   v5-7-0      | no object changed.                                       */
+/*   v5-9-0      | branch changed.                                          */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_AltIUMPR_ReadMonitorActivityData
 (
@@ -149,6 +151,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_AltIUMPR_ReadMonitorActivityDat
     VAR( Dem_u16_EventCtrlIndexType, AUTOMATIC ) eventCtrlIndexNum;
 
     VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) eventStrgIndex;
+    VAR( boolean, AUTOMATIC ) availableStatus;
 
 #if ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON )  /*  [FuncSw]    */
     VAR( Dem_EventKindType, AUTOMATIC ) eventKind;
@@ -197,10 +200,14 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_AltIUMPR_ReadMonitorActivityDat
 
                     for ( eventCtrlIndexCnt = ( Dem_u16_EventCtrlIndexType )0U; eventCtrlIndexCnt < eventCtrlIndexNum; eventCtrlIndexCnt++ )
                     {
-                        getNumeratorAndRatio    =   Dem_AltIUMPR_GetCurrentMonitorActivityData( eventCtrlIndex, &storeNumerator, &storeRatio );
-                        if ( getNumeratorAndRatio == DEM_IRT_OK )
+                        availableStatus = Dem_DataAvl_GetEvtAvl( eventCtrlIndex );
+                        if( availableStatus == (boolean)TRUE )
                         {
-                            retVal = DEM_IRT_OK;
+                            getNumeratorAndRatio    =   Dem_AltIUMPR_GetCurrentMonitorActivityData( eventCtrlIndex, &storeNumerator, &storeRatio );
+                            if ( getNumeratorAndRatio == DEM_IRT_OK )
+                            {
+                                retVal = DEM_IRT_OK;
+                            }
                         }
                         /*  get next Index.         */
                         eventCtrlIndex  =   Dem_CmbEvt_GetNextEventCtrlIndex_InEvtStrgGrp( eventCtrlIndex );
@@ -218,8 +225,8 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_AltIUMPR_ReadMonitorActivityDat
 
         if ( retVal == DEM_IRT_OK )
         {
-            BufferPtr[ DEM_ALTIUMPR_BUF_OFFSET_NUMERATOR ]  = storeNumerator;
-            BufferPtr[ DEM_ALTIUMPR_BUF_OFFSET_RATIO ]      = storeRatio;
+            BufferPtr[ DEM_ALTIUMPR_BUF_OFFSET_NUMERATOR ]  = storeNumerator;/* [ARYCHK] DEM_ALTIUMPR_RECORD_SIZE / 1 / DEM_ALTIUMPR_BUF_OFFSET_NUMERATOR */
+            BufferPtr[ DEM_ALTIUMPR_BUF_OFFSET_RATIO ]      = storeRatio;/* [ARYCHK] DEM_ALTIUMPR_RECORD_SIZE / 1 / DEM_ALTIUMPR_BUF_OFFSET_RATIO */
             (*BufSizePtr) = DEM_ALTIUMPR_RECORD_SIZE;
         }
     }
@@ -242,6 +249,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_AltIUMPR_ReadMonitorActivityDat
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
+/*   v5-8-0      | no branch changed.                                       */
 /****************************************************************************/
 static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_AltIUMPR_GetCurrentMonitorActivityData
 (
@@ -272,20 +280,19 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_AltIUMPR_GetCurrentMonit
             /*  get minimum numerator and ratio.        */
             storeNumerator  =   numerator;
             storeRatio      =   ratio;
-            retVal = DEM_IRT_OK;
         }
         else if ( storeNumerator == numerator )
         {
             if ( storeRatio > ratio )
             {
                 storeRatio      =   ratio;
-                retVal = DEM_IRT_OK;
             }
         }
         else
         {
             /*  no process.     */
         }
+        retVal = DEM_IRT_OK;
     }
     *CurrentNumeratorPtr    =   storeNumerator;
     *CurrentDenominatorPtr  =   storeRatio;
@@ -303,8 +310,11 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_AltIUMPR_GetCurrentMonit
 /* Return Value  | void                                                     */
 /* Notes         |                                                          */
 /*--------------------------------------------------------------------------*/
+/* UpdateRecord  | [UpdRec]AltIUMPR                                         */
+/*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-6-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_AltIUMPR_SetTestCompleteThisCycle
 (
@@ -316,7 +326,7 @@ FUNC( void, DEM_CODE ) Dem_AltIUMPR_SetTestCompleteThisCycle
     eventOBDKind    =   Dem_CfgInfoPm_CheckEventKindOfOBD_ByEvtCtrlIdx( EventCtrlIndex );   /* [GUDCHK:CALLER]EventCtrlIndex */
     if( eventOBDKind == (boolean)TRUE ) /*  OBD     */
     {
-        Dem_AltIUMPRMng_SetTestCompleteThisCycle( EventCtrlIndex, TestCompleteThisCycle );  /* [GUDCHK:CALLER]EventCtrlIndex */
+        Dem_AltIUMPRMng_SetTestCompleteThisCycle( EventCtrlIndex, TestCompleteThisCycle );  /* [GUDCHK:CALLER]EventCtrlIndex *//* [UpdRec]AltIUMPR */
     }
     return ;
 }
@@ -330,8 +340,11 @@ FUNC( void, DEM_CODE ) Dem_AltIUMPR_SetTestCompleteThisCycle
 /* Return Value  | void                                                     */
 /* Notes         |                                                          */
 /*--------------------------------------------------------------------------*/
+/* UpdateRecord  | [UpdRec]AltIUMPR                                         */
+/*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | branch changed.                                          */
+/*   v5-6-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_AltIUMPR_IncNumeratorCounts
 (
@@ -358,7 +371,7 @@ FUNC( void, DEM_CODE ) Dem_AltIUMPR_IncNumeratorCounts
 
             if( ( eventKind & DEM_EVTKIND_TYPE_MISFIRE_EVENT ) == DEM_EVTKIND_TYPE_MISFIRE_EVENT )
             {
-                Dem_AltIUMPR_IncNumeratorCountsForCylinder( eventStrgIndex );
+                Dem_AltIUMPR_IncNumeratorCountsForCylinder( eventStrgIndex );   /* [UpdRec]AltIUMPR */
             }
             else
 #endif /* ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON ) */
@@ -371,7 +384,7 @@ FUNC( void, DEM_CODE ) Dem_AltIUMPR_IncNumeratorCounts
                 {
                     if ( testCompleteThisCycle == DEM_ALTIUMPR_TCTOC_TESTCOMPLETE )
                     {
-                        Dem_AltIUMPRMng_IncNumeratorCounts( EventCtrlIndex );   /* [GUDCHK:CALLER]EventCtrlIndex */
+                        Dem_AltIUMPRMng_IncNumeratorCounts( EventCtrlIndex );   /* [GUDCHK:CALLER]EventCtrlIndex *//* [UpdRec]AltIUMPR */
                     }
                 }
             }
@@ -389,8 +402,11 @@ FUNC( void, DEM_CODE ) Dem_AltIUMPR_IncNumeratorCounts
 /* Return Value  | void                                                     */
 /* Notes         |                                                          */
 /*--------------------------------------------------------------------------*/
+/* UpdateRecord  | [UpdRec]AltIUMPR                                         */
+/*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | branch changed.                                          */
+/*   v5-6-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_AltIUMPR_IncDenominatorProccess
 ( void )
@@ -402,7 +418,7 @@ FUNC( void, DEM_CODE ) Dem_AltIUMPR_IncDenominatorProccess
         Dem_IUMPRMng_GetIUMPRDenCondition( DEM_IUMPR_GENERAL_DENOMINATOR, &conditionStatus );
         if( conditionStatus == DEM_IUMPR_DEN_STATUS_REACHED )
         {
-            Dem_AltIUMPRMng_IncDenominatorProccess();
+            Dem_AltIUMPRMng_IncDenominatorProccess();/* [UpdRec]AltIUMPR */
         }
     }
 
@@ -525,6 +541,10 @@ FUNC( void, DEM_CODE ) Dem_AltIUMPR_GetPendingAndMIL
 /*  v5-0-0         :2022-03-29                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-6-0         :2024-01-29                                              */
+/*  v5-7-0         :2024-05-29                                              */
+/*  v5-8-0         :2024-10-29                                              */
+/*  v5-9-0         :2025-02-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

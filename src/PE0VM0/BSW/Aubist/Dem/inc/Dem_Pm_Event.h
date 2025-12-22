@@ -1,7 +1,7 @@
-/* Dem_Pm_Event_h(v5-3-0)                                                   */
+/* Dem_Pm_Event_h(v5-9-0)                                                   */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -52,12 +52,15 @@ FUNC( void, DEM_CODE_TRUST ) Dem_Event_PreInitEventFailureCycleCounterThreshold 
 /*----------------------------------*/
 FUNC( void, DEM_CODE ) Dem_Event_InitQualification
 ( void );
+#if ( DEM_COMBINEDEVENT_ONSTORAGE_SUPPORT == STD_ON )
+FUNC( void, DEM_CODE ) Dem_Event_InitQualification_AfterRecordCheckComplete
+( void );
+#endif  /* ( DEM_COMBINEDEVENT_ONSTORAGE_SUPPORT == STD_ON ) */
 FUNC( boolean, DEM_CODE ) Dem_Event_SetQualificationInfo
 (
     VAR( Dem_u16_EventCtrlIndexType, AUTOMATIC ) EventCtrlIndex,
     VAR( Dem_EventStatusType, AUTOMATIC ) EventStatus,
-    P2VAR( Dem_u08_EventQualificationType, AUTOMATIC, AUTOMATIC ) EventQualificationPtr,
-    P2VAR( boolean, AUTOMATIC, AUTOMATIC ) IsPassedToPassedPtr
+    P2VAR( Dem_u08_EventQualificationType, AUTOMATIC, AUTOMATIC ) EventQualificationPtr
 );
 
 #if ( DEM_SPECIFIC_EVENT_SUPPORT == STD_ON )
@@ -65,8 +68,7 @@ FUNC( boolean, DEM_CODE ) Dem_Event_SetQualificationInfo_Specific
 (
     VAR( Dem_u16_EventCtrlIndexType, AUTOMATIC ) EventCtrlIndex,
     VAR( Dem_EventStatusType, AUTOMATIC ) EventStatus,
-    P2VAR( Dem_u08_EventQualificationType, AUTOMATIC, AUTOMATIC ) EventQualificationPtr,
-    P2VAR( boolean, AUTOMATIC, AUTOMATIC ) IsPassedToPassedPtr
+    P2VAR( Dem_u08_EventQualificationType, AUTOMATIC, AUTOMATIC ) EventQualificationPtr
 );
 #endif  /* ( DEM_SPECIFIC_EVENT_SUPPORT == STD_ON )     */
 
@@ -121,6 +123,12 @@ FUNC( Dem_u08_FailureCounterType, DEM_CODE ) Dem_Event_GetEventFailureCycleCount
     VAR( Dem_u16_EventStrgIndexType, AUTOMATIC )                EventStrgIndex
 );
 
+#if ( DEM_COMBINEDEVENT_ONSTORAGE_SUPPORT == STD_ON )
+FUNC( void, DEM_CODE ) Dem_Event_UpdateFCThresholdValue_InEvtStrgGrp
+(
+    VAR( Dem_u16_EventCtrlIndexType, AUTOMATIC ) EventCtrlIndex
+);
+#endif  /*   ( DEM_COMBINEDEVENT_ONSTORAGE_SUPPORT == STD_ON )      */
 
 
 #define DEM_STOP_SEC_CODE
@@ -140,6 +148,7 @@ FUNC( Dem_u08_FailureCounterType, DEM_CODE ) Dem_Event_GetEventFailureCycleCount
 /*  v4-0-0         :2020-12-23                                              */
 /*  v5-0-0         :2021-12-24                                              */
 /*  v5-3-0         :2023-03-29                                              */
+/*  v5-9-0         :2025-02-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

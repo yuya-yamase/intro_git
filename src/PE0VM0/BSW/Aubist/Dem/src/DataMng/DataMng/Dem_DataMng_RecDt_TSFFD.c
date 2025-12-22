@@ -1,7 +1,7 @@
-/* Dem_DataMng_RecDt_TSFFD_c(v5-5-0)                                        */
+/* Dem_DataMng_RecDt_TSFFD_c(v5-10-0)                                       */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -166,6 +166,7 @@ VAR(Dem_TSFFRecordType, DEM_VAR_SAVED_ZONE ) Dem_TimeSeriesFreezeFrameRecordList
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataMngC_SetBeforeTimeSeriesFreezeFrameRecord
 (
@@ -189,7 +190,11 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataMngC_SetBeforeTimeSeriesFre
 
         /* Dealing with the writing of TSFFD outside the exclusive section */
         /* In the case of before TSFFD, save in not stored state to be temporary */
+#ifndef DEM_SIT_RANGE_CHECK
         Dem_DataMng_SetCapturedFreezeFrame( &Dem_TimeSeriesFreezeFrameDataPosTable, ConsistencyId, EventStrgIndex, DEM_FFD_NOT_STORED, SamplingFreezeFrameRecordDataStartPtr, tsFFRecordMaxLength, Dem_TimeSeriesFreezeFrameRecordList[TimeSeriesFreezeFrameIndex].Data );  /* [GUD]TimeSeriesFreezeFrameIndex */
+#else   /* DEM_SIT_RANGE_CHECK */
+        Dem_DataMng_SetCapturedFreezeFrame( DEM_TSFF_STORED_FORMAT_SIZE, &Dem_TimeSeriesFreezeFrameDataPosTable, ConsistencyId, EventStrgIndex, DEM_FFD_NOT_STORED, SamplingFreezeFrameRecordDataStartPtr, tsFFRecordMaxLength, Dem_TimeSeriesFreezeFrameRecordList[TimeSeriesFreezeFrameIndex].Data );  /* [GUD]TimeSeriesFreezeFrameIndex */
+#endif  /* DEM_SIT_RANGE_CHECK */
         /* Change Dem_TSFFDNvMStatus */
         recMngCmnKindTSFFD = Dem_RecMngCmnKindTSFFD;
         Dem_RecMngCmn_SetNvMWriteStatus( recMngCmnKindTSFFD, ( Dem_u16_RecordIndexType )TimeSeriesFreezeFrameIndex );
@@ -232,6 +237,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataMngC_SetBeforeTimeSeriesFre
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataMngC_SetAfterTimeSeriesFreezeFrameRecord
 (
@@ -254,7 +260,11 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataMngC_SetAfterTimeSeriesFree
     {
         tsFFRecordMaxLength = Dem_TSFFRecordMaxLength;
 
+#ifndef DEM_SIT_RANGE_CHECK
         Dem_DataMng_SetCapturedFreezeFrame( &Dem_TimeSeriesFreezeFrameDataPosTable, ConsistencyId, EventStrgIndex, SamplingRecordStatus, SamplingFreezeFrameRecordDataStartPtr, tsFFRecordMaxLength, Dem_TimeSeriesFreezeFrameRecordList[TimeSeriesFreezeFrameIndex].Data );    /* [GUD]TimeSeriesFreezeFrameIndex */
+#else   /* DEM_SIT_RANGE_CHECK */
+        Dem_DataMng_SetCapturedFreezeFrame( DEM_TSFF_STORED_FORMAT_SIZE, &Dem_TimeSeriesFreezeFrameDataPosTable, ConsistencyId, EventStrgIndex, SamplingRecordStatus, SamplingFreezeFrameRecordDataStartPtr, tsFFRecordMaxLength, Dem_TimeSeriesFreezeFrameRecordList[TimeSeriesFreezeFrameIndex].Data );    /* [GUD]TimeSeriesFreezeFrameIndex */
+#endif  /* DEM_SIT_RANGE_CHECK */
         /* Change Dem_TSFFDNvMStatus */
         recMngCmnKindTSFFD = Dem_RecMngCmnKindTSFFD;
         Dem_RecMngCmn_SetNvMWriteStatus( recMngCmnKindTSFFD, ( Dem_u16_RecordIndexType )TimeSeriesFreezeFrameIndex );
@@ -460,6 +470,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataMngC_GetTimeSeriesFreezeFra
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-10-0     | no branch changed.                                       */
 /****************************************************************************/
 static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataMng_ClearTimeSeriesFreezeFrameRecord
 (
@@ -488,14 +499,15 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataMng_ClearTimeSeriesF
         posLastEventStrgIndexLower = Dem_TimeSeriesFreezeFrameDataPosTable.LastEventStrgIndexLower;     /* [GUD:CFG]posLastEventStrgIndexLower */
         posRecordStatus = Dem_TimeSeriesFreezeFrameDataPosTable.RecordStatus;                           /* [GUD:CFG]posRecordStatus */
 
+        /* Sets "not stored" to the record status of the specified time-series freeze frame record. */
+        Dem_TimeSeriesFreezeFrameRecordList[TimeSeriesFreezeFrameIndex].Data[posRecordStatus] = DEM_FFD_NOT_STORED;                 /* [GUD]TimeSeriesFreezeFrameIndex *//* [GUD]posRecordStatus */
+
         /* Sets the initial value to the event index of the specified time-series freeze frame record. */
         Dem_UtlMem_SplitByteData( (uint16)DEM_EVENTSTRGINDEX_INVALID, &eventStrgIndexUpper, &eventStrgIndexLower );
         Dem_TimeSeriesFreezeFrameRecordList[TimeSeriesFreezeFrameIndex].Data[posFirstEventStrgIndexUpper] = eventStrgIndexUpper;    /* [GUD]TimeSeriesFreezeFrameIndex *//* [GUD]posFirstEventStrgIndexUpper */
         Dem_TimeSeriesFreezeFrameRecordList[TimeSeriesFreezeFrameIndex].Data[posFirstEventStrgIndexLower] = eventStrgIndexLower;    /* [GUD]TimeSeriesFreezeFrameIndex *//* [GUD]posFirstEventStrgIndexLower */
         Dem_TimeSeriesFreezeFrameRecordList[TimeSeriesFreezeFrameIndex].Data[posLastEventStrgIndexUpper] = eventStrgIndexUpper;     /* [GUD]TimeSeriesFreezeFrameIndex *//* [GUD]posLastEventStrgIndexUpper */
         Dem_TimeSeriesFreezeFrameRecordList[TimeSeriesFreezeFrameIndex].Data[posLastEventStrgIndexLower] = eventStrgIndexLower;     /* [GUD]TimeSeriesFreezeFrameIndex *//* [GUD]posLastEventStrgIndexLower */
-        /* Sets "not stored" to the record status of the specified time-series freeze frame record. */
-        Dem_TimeSeriesFreezeFrameRecordList[TimeSeriesFreezeFrameIndex].Data[posRecordStatus] = DEM_FFD_NOT_STORED;                 /* [GUD]TimeSeriesFreezeFrameIndex *//* [GUD]posRecordStatus */
     }
     else
     {
@@ -658,6 +670,7 @@ FUNC( void, DEM_CODE ) Dem_TSFFDMng_SetRecordMirror
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | branch changed.                                          */
+/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_TSFFDMng_Verified
 (
@@ -694,7 +707,7 @@ FUNC( void, DEM_CODE ) Dem_TSFFDMng_Verified
             (void)Dem_DataMngC_GetFR_TSFFListIndex( FaultIndex, indexOfTSFFListIndex, &tsFFListRecIndex );    /* no return check required */    /* [GUD]indexOfTSFFListIndex */
             if( tsFFListRecIndex != DEM_INVALID_TSFF_RECORD_INDEX )
             {
-                tsFFRecClassRef = dtcAttributePtr->DemTimeSeriesFreezeFrameRecordClassRef[indexOfTSFFListIndex];                            /* [GUD]dtcAttributePtr *//* [GUD]indexOfTSFFListIndex *//* [GUD:CFG:IF_GUARDED: indexOfTSFFListIndex ]tsFFRecClassRef */
+                tsFFRecClassRef = dtcAttributePtr->DemTimeSeriesFreezeFrameRecordClassRef[indexOfTSFFListIndex];                            /* [GUD]dtcAttributePtr *//* [GUD]indexOfTSFFListIndex *//* [GUD:CFG:IF_GUARDED: indexOfTSFFListIndex ]tsFFRecClassRef *//* [ARYCHK] DEM_TSFF_RECORD_CLASS_NUM_PER_DTC_MAX_NUM / 1 / indexOfTSFFListIndex */
                 tsFFTrigger = Dem_TSFFRecordClassTable[tsFFRecClassRef].DemTimeSeriesFreezeFrameTrigger;                                    /* [GUD]tsFFRecClassRef */
 
                 (void)Dem_DataMngC_GetFaultRecordAddress_TSFF( FaultIndex, &faultRecordPtrCtl );        /* no return check required */
@@ -807,6 +820,7 @@ static FUNC( void, DEM_CODE ) Dem_TSFFDMng_VerifiedRecord
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-8-0      | branch changed.                                          */
 /****************************************************************************/
 static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_TSFFDMng_VerifiedBeforeTSFFD
 (
@@ -828,54 +842,57 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_TSFFDMng_VerifiedBeforeT
 
     retVal = DEM_IRT_OK;
 
-    tsFFRecStartIndex = Dem_TimeSeriesFreezeFrameTable[TimeSeriesFreezeFrameListRecordIndex].DemStartIndex; /* [GUDCHK:CALLER]TimeSeriesFreezeFrameListRecordIndex *//* [GUD:CFG:IF_GUARDED: TimeSeriesFreezeFrameListRecordIndex ]tsFFRecStartIndex */
-    beforeTSFFRecEndIndex = ( tsFFRecStartIndex + NumOfBeforeTSFFRecord ) - (Dem_u16_TSFFDIndexType)1U;
-
-    verifyNGIndex = DEM_TSFFDINDEX_INVALID;
-    existStoredTSFFDFlg = (boolean)FALSE;
-
-    for( tsFFRecIndex = tsFFRecStartIndex; tsFFRecIndex <= beforeTSFFRecEndIndex; tsFFRecIndex++ )          /* [GUD:for]tsFFRecIndex */
+    if( NumOfBeforeTSFFRecord > (Dem_u08_NumOfTSFFType)0U )
     {
-        recordStatus = Dem_DataMngC_GetRecordStatusOfTimeSeriesFreezeFrameRecord( tsFFRecIndex );           /* [GUD]tsFFRecIndex */
-        if( recordStatus == DEM_FFD_STORED )
-        {
-            retVerifyRecord = Dem_TSFFDMng_CheckConsistency( tsFFRecIndex, EventStrgIndex, TriggerFFDConsystencyId );
+        tsFFRecStartIndex = Dem_TimeSeriesFreezeFrameTable[TimeSeriesFreezeFrameListRecordIndex].DemStartIndex; /* [GUDCHK:CALLER]TimeSeriesFreezeFrameListRecordIndex *//* [GUD:CFG:IF_GUARDED: TimeSeriesFreezeFrameListRecordIndex ]tsFFRecStartIndex */
+        beforeTSFFRecEndIndex = ( tsFFRecStartIndex + NumOfBeforeTSFFRecord ) - (Dem_u16_TSFFDIndexType)1U;
 
-            if( retVerifyRecord == DEM_IRT_OK )
+        verifyNGIndex = DEM_TSFFDINDEX_INVALID;
+        existStoredTSFFDFlg = (boolean)FALSE;
+
+        for( tsFFRecIndex = tsFFRecStartIndex; tsFFRecIndex <= beforeTSFFRecEndIndex; tsFFRecIndex++ )          /* [GUD:for]tsFFRecIndex */
+        {
+            recordStatus = Dem_DataMngC_GetRecordStatusOfTimeSeriesFreezeFrameRecord( tsFFRecIndex );           /* [GUD]tsFFRecIndex */
+            if( recordStatus == DEM_FFD_STORED )
             {
-                existStoredTSFFDFlg = (boolean)TRUE;
-                *TSFreezeFrameStoredCntPtr = *TSFreezeFrameStoredCntPtr + (Dem_u16_TSFFDIndexType)1U;
-                Dem_TSFFDNvMStatus[ tsFFRecIndex ] = DEM_RECMNGCMN_NVM_STS_NON_TARGET;                      /* [GUD]tsFFRecIndex */
+                retVerifyRecord = Dem_TSFFDMng_CheckConsistency( tsFFRecIndex, EventStrgIndex, TriggerFFDConsystencyId );
+
+                if( retVerifyRecord == DEM_IRT_OK )
+                {
+                    existStoredTSFFDFlg = (boolean)TRUE;
+                    *TSFreezeFrameStoredCntPtr = *TSFreezeFrameStoredCntPtr + (Dem_u16_TSFFDIndexType)1U;
+                    Dem_TSFFDNvMStatus[ tsFFRecIndex ] = DEM_RECMNGCMN_NVM_STS_NON_TARGET;                      /* [GUD]tsFFRecIndex */
+                }
+                else
+                {
+                    verifyNGIndex = tsFFRecIndex;
+                }
             }
             else
             {
-                verifyNGIndex = tsFFRecIndex;
+                if( existStoredTSFFDFlg == (boolean)TRUE )
+                {
+                    verifyNGIndex = tsFFRecIndex;
+                }
             }
-        }
-        else
-        {
-            if( existStoredTSFFDFlg == (boolean)TRUE )
+
+            if( verifyNGIndex != DEM_TSFFDINDEX_INVALID )
             {
-                verifyNGIndex = tsFFRecIndex;
+                retVal = DEM_IRT_NG;
+                break;
             }
         }
 
-        if( verifyNGIndex != DEM_TSFFDINDEX_INVALID )
+        if( retVal == DEM_IRT_NG )
         {
-            retVal = DEM_IRT_NG;
-            break;
-        }
-    }
+            /* revert before TSFFD NvMstatus to not verified status */
+            for( tsFFRecIndex = tsFFRecStartIndex; tsFFRecIndex < verifyNGIndex; tsFFRecIndex++ )       /* [GUD:for]tsFFRecIndex */
+            {
+                Dem_TSFFDNvMStatus[ tsFFRecIndex ] = DEM_RECMNGCMN_NVM_STS_NOT_VERIFIED;                /* [GUD]tsFFRecIndex */
+            }
 
-    if( retVal == DEM_IRT_NG )
-    {
-        /* revert before TSFFD NvMstatus to not verified status */
-        for( tsFFRecIndex = tsFFRecStartIndex; tsFFRecIndex < verifyNGIndex; tsFFRecIndex++ )       /* [GUD:for]tsFFRecIndex */
-        {
-            Dem_TSFFDNvMStatus[ tsFFRecIndex ] = DEM_RECMNGCMN_NVM_STS_NOT_VERIFIED;                /* [GUD]tsFFRecIndex */
+            *TSFreezeFrameStoredCntPtr = (Dem_u16_TSFFDIndexType)0U;
         }
-
-        *TSFreezeFrameStoredCntPtr = (Dem_u16_TSFFDIndexType)0U;
     }
 
     return retVal;
@@ -1293,6 +1310,9 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_TSFFDMng_GetEventIdFromRecordDa
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-7-0         :2024-05-29                                              */
+/*  v5-8-0         :2024-10-29                                              */
+/*  v5-10-0        :2025-06-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

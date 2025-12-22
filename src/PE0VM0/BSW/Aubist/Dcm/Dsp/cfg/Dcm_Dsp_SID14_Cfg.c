@@ -1,7 +1,7 @@
-/* Dcm_Dsp_SID14_Cfg_c(v5-3-0)                                              */
+/* Dcm_Dsp_SID14_Cfg_c(v5-8-0)                                              */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -56,16 +56,18 @@
 /* Description   | This function starts the condition check function of the */
 /*               | SWC by a direct call, and return a result.               */
 /* Preconditions | None                                                     */
-/* Parameters    | [IN]  u4GoDTC     : Group of DTC                         */
+/* Parameters    | [IN]  u1OpStatus  : Status of operation                  */
+/*               | [IN]  u4GoDTC     : Group of DTC                         */
 /*               | [OUT] ptErrorCode : Negative Response Code Value         */
 /* Return Value  | Std_ReturnType                                           */
 /*               |   E_OK            : ClearDTC Condition Check OK          */
 /*               |   E_NOT_OK        : ClearDTC Condition Check NG          */
-/* Notes         | None                                                     */
+/* Notes         | Generated as DcmDspClearDTCAsyncCheck is FALSE           */
 /****************************************************************************/
 FUNC( Std_ReturnType, DCM_CODE ) Dcm_Dsp_SID14_CheckSWC
 (
-    const uint32 u4GoDTC,
+    const Dcm_OpStatusType u1OpStatus, /* MISRA DEVIATION */
+    const uint32           u4GoDTC,
     P2VAR( Dcm_NegativeResponseCodeType, AUTOMATIC, DCM_APPL_DATA ) ptErrorCode
 )
 {
@@ -122,11 +124,12 @@ FUNC( Std_ReturnType, DCM_CODE ) Dcm_Dsp_SID14_CheckTheClearDTCRequestIsAcceptab
 /*  v1-0-0         :2018-03-20                                              */
 /*  v5-0-0         :2022-03-29                                              */
 /*  v5-3-0         :2023-03-29                                              */
+/*  v5-8-0         :2024-10-29                                              */
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
 /*  Framework          :v2-1-0                                              */
-/*  BSW plug-in        :v5-5-1                                              */
+/*  BSW plug-in        :v5-10-0                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

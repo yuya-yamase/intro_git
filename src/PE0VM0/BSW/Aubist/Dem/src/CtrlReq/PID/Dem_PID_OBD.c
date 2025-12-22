@@ -1,7 +1,7 @@
-/* Dem_PID_OBD_c(v5-5-0)                                                    */
+/* Dem_PID_OBD_c(v5-7-0)                                                    */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -30,6 +30,11 @@
 
 #include "../../../cfg/Dem_PBcfg.h"
 #include "../../../cfg/Dem_Obd_Cfg.h"
+
+#ifndef DEM_SIT_RANGE_CHECK
+#else   /* DEM_SIT_RANGE_CHECK */
+#include <Dem_SIT_RangeCheck.h>
+#endif  /* DEM_SIT_RANGE_CHECK */
 
 /*--------------------------------------------------------------------------*/
 /* Macros                                                                   */
@@ -153,14 +158,17 @@ FUNC( void, DEM_CODE ) Dem_PID_ReadInitDataOfPID01
 /*               |        by the Dcm or SWC with the appropriate size.      */
 /* Return Value  | void                                                     */
 /* Notes         | -                                                        */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_PID_ReadInitDataOfPID21
 (
     CONSTP2VAR( uint8, AUTOMATIC, DEM_APPL_DATA ) PID21value
 )
 {
-    PID21value[DEM_PID_POS0] = DEM_PID_BYTE_A_INITVALUE;
-    PID21value[DEM_PID_POS1] = DEM_PID_BYTE_B_INITVALUE;
+    PID21value[DEM_PID_POS0] = DEM_PID_BYTE_A_INITVALUE;/* [ARYCHK] DEM_PID21_SIZE/1/DEM_PID_POS0 */
+    PID21value[DEM_PID_POS1] = DEM_PID_BYTE_B_INITVALUE;/* [ARYCHK] DEM_PID21_SIZE/1/DEM_PID_POS1 */
 
     return;
 }
@@ -196,14 +204,17 @@ FUNC( void, DEM_CODE ) Dem_PID_ReadInitDataOfPID30
 /*               |        SWC with the appropriate size.                    */
 /* Return Value  | void                                                     */
 /* Notes         | -                                                        */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_PID_ReadInitDataOfPID31
 (
     CONSTP2VAR( uint8, AUTOMATIC, DEM_APPL_DATA ) PID31value
 )
 {
-    PID31value[DEM_PID_POS0] = DEM_PID_BYTE_A_INITVALUE;
-    PID31value[DEM_PID_POS1] = DEM_PID_BYTE_B_INITVALUE;
+    PID31value[DEM_PID_POS0] = DEM_PID_BYTE_A_INITVALUE;/* [ARYCHK] DEM_PID31_SIZE/1/DEM_PID_POS0 */
+    PID31value[DEM_PID_POS1] = DEM_PID_BYTE_B_INITVALUE;/* [ARYCHK] DEM_PID31_SIZE/1/DEM_PID_POS1 */
 
     return;
 }
@@ -244,14 +255,17 @@ FUNC( void, DEM_CODE ) Dem_PID_ReadInitDataOfPID41
 /*               |        SWC with the appropriate size.                    */
 /* Return Value  | void                                                     */
 /* Notes         | -                                                        */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_PID_ReadInitDataOfPID4D
 (
     CONSTP2VAR( uint8, AUTOMATIC, DEM_APPL_DATA ) PID4Dvalue
 )
 {
-    PID4Dvalue[DEM_PID_POS0] = DEM_PID_BYTE_A_INITVALUE;
-    PID4Dvalue[DEM_PID_POS1] = DEM_PID_BYTE_B_INITVALUE;
+    PID4Dvalue[DEM_PID_POS0] = DEM_PID_BYTE_A_INITVALUE;/* [ARYCHK] DEM_PID4D_SIZE/1/DEM_PID_POS0 */
+    PID4Dvalue[DEM_PID_POS1] = DEM_PID_BYTE_B_INITVALUE;/* [ARYCHK] DEM_PID4D_SIZE/1/DEM_PID_POS1 */
 
     return;
 }
@@ -266,14 +280,17 @@ FUNC( void, DEM_CODE ) Dem_PID_ReadInitDataOfPID4D
 /*               |        SWC with the appropriate size.                    */
 /* Return Value  | void                                                     */
 /* Notes         | -                                                        */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_PID_ReadInitDataOfPID4E
 (
     CONSTP2VAR( uint8, AUTOMATIC, DEM_APPL_DATA ) PID4Evalue
 )
 {
-    PID4Evalue[DEM_PID_POS0] = DEM_PID_BYTE_A_INITVALUE;
-    PID4Evalue[DEM_PID_POS1] = DEM_PID_BYTE_B_INITVALUE;
+    PID4Evalue[DEM_PID_POS0] = DEM_PID_BYTE_A_INITVALUE;/* [ARYCHK] DEM_PID4E_SIZE/1/DEM_PID_POS0 */
+    PID4Evalue[DEM_PID_POS1] = DEM_PID_BYTE_B_INITVALUE;/* [ARYCHK] DEM_PID4E_SIZE/1/DEM_PID_POS1 */
 
     return;
 }
@@ -361,6 +378,7 @@ FUNC( void, DEM_CODE ) Dem_PID_ReadDataOfPID01AndPIDF501
 /* History       |                                                          */
 /*   v5-5-0      | rename from Dem_PID_ReadDataOfPID01AndPIDF501(v5-3-0).   */
 /*   v5-5-0      | branch changed.                                          */
+/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_PID_ReadDataOfPID01AndPIDF501_DataA
 (
@@ -375,16 +393,16 @@ static FUNC( void, DEM_CODE ) Dem_PID_ReadDataOfPID01AndPIDF501_DataA
 
     if( numberOfConfirmedOBDDTC > DEM_PID_BYTE_A_DTC_MAX )
     {
-        DataPtr[DEM_PID_POS0] = DEM_PID_BYTE_A_DTC_MAX;
+        DataPtr[DEM_PID_POS0] = DEM_PID_BYTE_A_DTC_MAX;/* [ARYCHK] DEM_SIT_R_CHK_PID01_SIZE / 1 / DEM_PID_POS0 */
     }
     else
     {
-        DataPtr[DEM_PID_POS0] = (uint8)( numberOfConfirmedOBDDTC );
+        DataPtr[DEM_PID_POS0] = (uint8)( numberOfConfirmedOBDDTC );/* [ARYCHK] DEM_SIT_R_CHK_PID01_SIZE / 1 / DEM_PID_POS0 */
     }
 
     if ( isActiveMIL == (boolean)TRUE )
     {
-        DataPtr[DEM_PID_POS0] |= DEM_PID_BYTE_A_MIL_ON;
+        DataPtr[DEM_PID_POS0] |= DEM_PID_BYTE_A_MIL_ON;/* [ARYCHK] DEM_SIT_R_CHK_PID01_SIZE / 1 / DEM_PID_POS0 */
     }
 
     return;
@@ -405,13 +423,14 @@ static FUNC( void, DEM_CODE ) Dem_PID_ReadDataOfPID01AndPIDF501_DataA
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | new created.                                             */
+/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_PID_ReadDataOfPID01AndPIDF501_DataA
 (
     CONSTP2VAR( uint8, AUTOMATIC, DEM_APPL_DATA ) DataPtr
 )
 {
-    DataPtr[DEM_PID_POS0]   =   DEM_PID_BYTE_A_INITVALUE;
+    DataPtr[DEM_PID_POS0]   =   DEM_PID_BYTE_A_INITVALUE;/* [ARYCHK] DEM_SIT_R_CHK_PID01_SIZE / 1 / DEM_PID_POS0 */
 
     return;
 }
@@ -773,6 +792,7 @@ static FUNC( void, DEM_CODE ) Dem_PID_GetActiveStatus_MILAndConfirmedDTC
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-7-0         :2024-05-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

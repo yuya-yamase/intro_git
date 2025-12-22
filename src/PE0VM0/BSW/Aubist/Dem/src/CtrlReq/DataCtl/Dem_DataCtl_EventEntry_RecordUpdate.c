@@ -1,7 +1,7 @@
-/* Dem_DataCtl_EventEntry_RecordUpdate_c(v5-5-0)                            */
+/* Dem_DataCtl_EventEntry_RecordUpdate_c(v5-9-0)                            */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -60,6 +60,15 @@ static FUNC( void, DEM_CODE ) Dem_Data_SetResultOfCmpFFRToTmp
     P2CONST( Dem_FaultRecordType, AUTOMATIC, AUTOMATIC ) FaultRecordPtr
 );
 
+static FUNC( void, DEM_CODE ) Dem_Data_LatchTmpEventMemoryData
+(
+    P2VAR( Dem_TmpEventMemoryEntryType, AUTOMATIC, DEM_VAR_NO_INIT ) TmpEventMemoryEntryStPtr,
+    P2VAR( Dem_u16_EventStrgIndexType, AUTOMATIC, AUTOMATIC ) EventStrgIndexPtr,
+    P2VAR( Dem_EventRecordForCtlType, AUTOMATIC, AUTOMATIC ) EventRecordPtr,
+    P2VAR( Dem_FaultRecordType, AUTOMATIC, AUTOMATIC ) FaultRecordPtr,
+    P2VAR( Dem_EventMemoryRecordType, AUTOMATIC, AUTOMATIC ) EventMemoryRecordPtr
+);
+
 #define DEM_STOP_SEC_CODE
 #include <Dem_MemMap.h>
 
@@ -92,6 +101,7 @@ static FUNC( void, DEM_CODE ) Dem_Data_SetResultOfCmpFFRToTmp
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
+/*   v5-7-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_Data_UpdEvtMemEntryOfTmp_InitializeEvent
 ( void )
@@ -103,10 +113,7 @@ FUNC( void, DEM_CODE ) Dem_Data_UpdEvtMemEntryOfTmp_InitializeEvent
     VAR( Dem_EventMemoryRecordType, AUTOMATIC ) eventMemoryRecord;
 
     /* Initialization of the automatic variable. */
-    eventStrgIndex  = Dem_TmpEventMemoryEntry.EventStrgIndex;       /* [GUDCHK:SETVAL]Dem_TmpEventMemoryEntry.EventStrgIndex */
-    eventRecord = Dem_TmpEventMemoryEntry.EventRecord;
-    faultRecord = Dem_TmpEventMemoryEntry.FaultRecord;
-    eventMemoryRecord     = Dem_TmpEventMemoryEntry.EventMemoryRecordList;
+    Dem_Data_LatchTmpEventMemoryData( &Dem_TmpEventMemoryEntry, &eventStrgIndex, &eventRecord, &faultRecord, &eventMemoryRecord );
 
     Dem_Data_SetResultOfCmpFFRToTmp( &faultRecord );
 
@@ -196,6 +203,8 @@ FUNC( void, DEM_CODE ) Dem_Data_UpdEvtMemEntryOfTmp_InitializeEvent
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | branch changed.                                          */
+/*   v5-7-0      | no branch changed.                                       */
+/*   v5-8-0      | branch changed.                                          */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_Data_UpdEvtMemEntryOfTmp_NormalizeEvent
 (
@@ -214,20 +223,22 @@ FUNC( void, DEM_CODE ) Dem_Data_UpdEvtMemEntryOfTmp_NormalizeEvent
     VAR( boolean, AUTOMATIC ) updateFFDRecInfo;
     VAR( boolean, AUTOMATIC ) judgeClearFaultFlag;
     VAR( boolean, AUTOMATIC ) clearFaultRecordFlag;
+    VAR( Dem_u08_FaultIndexType, AUTOMATIC ) failRecordNum;
 
     /* Initialization of the automatic variable. */
-    eventStrgIndex = Dem_TmpEventMemoryEntry.EventStrgIndex;                    /* [GUDCHK:SETVAL]Dem_TmpEventMemoryEntry.EventStrgIndex */
-    eventRecord = Dem_TmpEventMemoryEntry.EventRecord;
-    faultRecord = Dem_TmpEventMemoryEntry.FaultRecord;
-    eventMemoryRecord = Dem_TmpEventMemoryEntry.EventMemoryRecordList;
+    Dem_Data_LatchTmpEventMemoryData( &Dem_TmpEventMemoryEntry, &eventStrgIndex, &eventRecord, &faultRecord, &eventMemoryRecord );
 
+    failRecordNum           =   Dem_FailRecordNum;
     clearFaultRecordFlag    =   (boolean)FALSE;
 
     /* Compares the event record corresponding to the event index of temporary area from temporary area. */
     Dem_Data_CompareEventMemoryEntryToTmp();
 
-    /*  get clear FFD index in fault record.    */
-    updateFFDRecInfo    =   Dem_DataCtl_GetClearTargetFFRecord( DEM_RECOVERYTYPE_NORMALIZE, eventStrgIndex, DTCStatus, &clearFFListRecord );    /* [GUDCHK:SETVAL]Dem_TmpEventMemoryEntry.EventStrgIndex */
+    if( eventRecord.FaultIndex < failRecordNum )
+    {
+        /*  get clear FFD index in fault record.    */
+        updateFFDRecInfo    =   Dem_DataCtl_GetClearTargetFFRecord( DEM_RECOVERYTYPE_NORMALIZE, eventStrgIndex, DTCStatus, &clearFFListRecord );    /* [GUDCHK:SETVAL]Dem_TmpEventMemoryEntry.EventStrgIndex */
+    }
 
     /*--------------------------------------------------*/
     /*  Starts exclusion.                               */
@@ -240,9 +251,18 @@ FUNC( void, DEM_CODE ) Dem_Data_UpdEvtMemEntryOfTmp_NormalizeEvent
     Dem_PreFFD_RemovePrestoredFreezeFrame( eventStrgIndex );
 #endif  /*   ( DEM_FF_PRESTORAGE_SUPPORT == STD_ON )            */
 
-    if ( updateFFDRecInfo == (boolean)TRUE )
+    if( eventRecord.FaultIndex < failRecordNum )
     {
-        Dem_Data_ClearTargetFFRecordInFaultRecord( &clearFFListRecord, &faultRecord, &eventMemoryRecord );
+        /*--------------------------------------*/
+        /*  A) clear fault record.              */
+        /*  -> clearFaultRecordFlag == TRUE.    */
+        /*  B) update fault record.             */
+        /*  -> clearFaultRecordFlag == FALSE.   */
+        /*--------------------------------------*/
+        if ( updateFFDRecInfo == (boolean)TRUE )
+        {
+            Dem_Data_ClearTargetFFRecordInFaultRecord( &clearFFListRecord, &faultRecord, &eventMemoryRecord );
+        }
 
         /*  clear FFD record index in fault record.     */
         /*  get count of remain FFD record index.       */
@@ -261,7 +281,13 @@ FUNC( void, DEM_CODE ) Dem_Data_UpdEvtMemEntryOfTmp_NormalizeEvent
             }
         }
     }
-
+    else
+    {
+        /*--------------------------------------*/
+        /*  C) update event record only.        */
+        /*--------------------------------------*/
+        clearFaultRecordFlag    =   (boolean)TRUE;
+    }
 
     /*------------------------------------------*/
     /*  update event record.                    */
@@ -287,6 +313,10 @@ FUNC( void, DEM_CODE ) Dem_Data_UpdEvtMemEntryOfTmp_NormalizeEvent
 
     if ( clearFaultRecordFlag == (boolean)TRUE )
     {
+        /*--------------------------------------*/
+        /*  A) clear fault record.              */
+        /*  C) update event record only.        */
+        /*--------------------------------------*/
         /*  clear fault record.             */
         retClearFaultRecord         =   Dem_Data_ClearFaultRecord( eventRecord.FaultIndex );
 
@@ -301,6 +331,9 @@ FUNC( void, DEM_CODE ) Dem_Data_UpdEvtMemEntryOfTmp_NormalizeEvent
         /*------------------------------------------*/
         if( retClearFaultRecord == DEM_IRT_OK )
         {
+            /*--------------------------------------*/
+            /*  A) clear fault record.              */
+            /*--------------------------------------*/
             /* Subtracts 1 from number of event memory entries of event memory record of primary memory. */
             Dem_Data_SubtractOneFromNumOfEventMemoryEntries( &eventMemoryRecord );
         }
@@ -316,6 +349,9 @@ FUNC( void, DEM_CODE ) Dem_Data_UpdEvtMemEntryOfTmp_NormalizeEvent
     }
     else
     {
+        /*--------------------------------------*/
+        /*  B) update fault record.             */
+        /*--------------------------------------*/
         /*  update fault record.(healing/aging counter) */
         faultRecord.ConfirmedOccurrenceOrder    = DEM_FAIL_OCCURRENCE_NUM_INVALID;
         faultRecord.MILOccurrenceOrder          = DEM_FAIL_OCCURRENCE_NUM_INVALID;
@@ -385,6 +421,8 @@ FUNC( void, DEM_CODE ) Dem_Data_UpdEvtMemEntryOfTmp_NormalizeEvent
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
+/*   v5-7-0      | no branch changed.                                       */
+/*   v5-9-0      | branch changed.                                          */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_Data_UpdEvtMemEntryOfTmp_AgingEvent
 (
@@ -409,10 +447,7 @@ FUNC( void, DEM_CODE ) Dem_Data_UpdEvtMemEntryOfTmp_AgingEvent
 #endif  /* ( DEM_SPECIFIC_EVENT_SUPPORT == STD_ON )             */
 
     /* Initialization of the automatic variable. */
-    eventStrgIndex = Dem_TmpEventMemoryEntry.EventStrgIndex;                /* [GUDCHK:SETVAL]Dem_TmpEventMemoryEntry.EventStrgIndex */
-    eventRecord = Dem_TmpEventMemoryEntry.EventRecord;
-    faultRecord = Dem_TmpEventMemoryEntry.FaultRecord;
-    eventMemoryRecord = Dem_TmpEventMemoryEntry.EventMemoryRecordList;
+    Dem_Data_LatchTmpEventMemoryData( &Dem_TmpEventMemoryEntry, &eventStrgIndex, &eventRecord, &faultRecord, &eventMemoryRecord );
 
     clearFaultRecordFlag    =   (boolean)FALSE;
     consistencyId           =   DEM_CONSISTENCY_INITIAL;
@@ -433,22 +468,22 @@ FUNC( void, DEM_CODE ) Dem_Data_UpdEvtMemEntryOfTmp_AgingEvent
         if ( updateFFDRecInfo == (boolean)TRUE )
         {
             Dem_Data_ClearTargetFFRecordInFaultRecord( &clearFFListRecord, &faultRecord, &eventMemoryRecord );
+        }
 
-            /*  clear FFD record index in fault record.     */
-            /*  get count of remain FFD record index.       */
-            remainFFDCnt    =   Dem_Data_ClearTargetFFListRecord( &clearFFListRecord, &faultRecord );
+        /*  clear FFD record index in fault record.     */
+        /*  get count of remain FFD record index.       */
+        remainFFDCnt    =   Dem_Data_ClearTargetFFListRecord( &clearFFListRecord, &faultRecord );
 
-            /*--------------------------------------------------*/
-            /*  judge clear fault record.                       */
-            /*--------------------------------------------------*/
-            judgeClearFaultFlag     =   Dem_DataCtl_GetClearTargetFaultRecord( DEM_RECOVERYTYPE_AGING, DTCStatus );
+        /*--------------------------------------------------*/
+        /*  judge clear fault record.                       */
+        /*--------------------------------------------------*/
+        judgeClearFaultFlag     =   Dem_DataCtl_GetClearTargetFaultRecord( DEM_RECOVERYTYPE_AGING, DTCStatus );
 
-            if ( judgeClearFaultFlag == (boolean)TRUE )
+        if ( judgeClearFaultFlag == (boolean)TRUE )
+        {
+            if ( remainFFDCnt == ( Dem_u08_FFDIndexType )0U )
             {
-                if ( remainFFDCnt == ( Dem_u08_FFDIndexType )0U )
-                {
-                    clearFaultRecordFlag    =   (boolean)TRUE;
-                }
+                clearFaultRecordFlag    =   (boolean)TRUE;
             }
         }
 
@@ -593,6 +628,8 @@ FUNC( void, DEM_CODE ) Dem_Data_UpdEvtMemEntryOfTmp_AgingEvent
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
+/*   v5-7-0      | no branch changed.                                       */
+/*   v5-9-0      | branch changed.                                          */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_Data_UpdEvtMemEntryOfTmp_PendingOFFEvent
 (
@@ -619,10 +656,7 @@ FUNC( void, DEM_CODE ) Dem_Data_UpdEvtMemEntryOfTmp_PendingOFFEvent
 #endif  /* ( DEM_SPECIFIC_EVENT_SUPPORT == STD_ON )             */
 
     /* Initialization of the automatic variable. */
-    eventStrgIndex = Dem_TmpEventMemoryEntry.EventStrgIndex;                /* [GUDCHK:SETVAL]Dem_TmpEventMemoryEntry.EventStrgIndex */
-    eventRecord = Dem_TmpEventMemoryEntry.EventRecord;
-    faultRecord = Dem_TmpEventMemoryEntry.FaultRecord;
-    eventMemoryRecord = Dem_TmpEventMemoryEntry.EventMemoryRecordList;
+    Dem_Data_LatchTmpEventMemoryData( &Dem_TmpEventMemoryEntry, &eventStrgIndex, &eventRecord, &faultRecord, &eventMemoryRecord );
 
     clearFaultRecordFlag    =   (boolean)FALSE;
     consistencyId           =   DEM_CONSISTENCY_INITIAL;
@@ -638,22 +672,22 @@ FUNC( void, DEM_CODE ) Dem_Data_UpdEvtMemEntryOfTmp_PendingOFFEvent
     if ( updateFFDRecInfo == (boolean)TRUE )
     {
         Dem_Data_ClearTargetFFRecordInFaultRecord( &clearFFListRecord, &faultRecord, &eventMemoryRecord );
+    }
 
-        /*  clear FFD record index in fault record.     */
-        /*  get count of remain FFD record index.       */
-        remainFFDCnt    =   Dem_Data_ClearTargetFFListRecord( &clearFFListRecord, &faultRecord );
+    /*  clear FFD record index in fault record.     */
+    /*  get count of remain FFD record index.       */
+    remainFFDCnt    =   Dem_Data_ClearTargetFFListRecord( &clearFFListRecord, &faultRecord );
 
-        /*--------------------------------------------------*/
-        /*  judge clear fault record.                       */
-        /*--------------------------------------------------*/
-        judgeClearFaultFlag     =   Dem_DataCtl_GetClearTargetFaultRecord( DEM_RECOVERYTYPE_PENDINGOFF, DTCStatus );
+    /*--------------------------------------------------*/
+    /*  judge clear fault record.                       */
+    /*--------------------------------------------------*/
+    judgeClearFaultFlag     =   Dem_DataCtl_GetClearTargetFaultRecord( DEM_RECOVERYTYPE_PENDINGOFF, DTCStatus );
 
-        if ( judgeClearFaultFlag == (boolean)TRUE )
+    if ( judgeClearFaultFlag == (boolean)TRUE )
+    {
+        if ( remainFFDCnt == ( Dem_u08_FFDIndexType )0U )
         {
-            if ( remainFFDCnt == ( Dem_u08_FFDIndexType )0U )
-            {
-                clearFaultRecordFlag    =   (boolean)TRUE;
-            }
+            clearFaultRecordFlag    =   (boolean)TRUE;
         }
     }
 
@@ -797,6 +831,7 @@ FUNC( void, DEM_CODE ) Dem_Data_UpdEvtMemEntryOfTmp_PendingOFFEvent
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
+/*   v5-7-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_Data_UpdEvtMemEntryOfTmp_PendingOFFAndAgingEvent
 ( void )
@@ -808,10 +843,7 @@ FUNC( void, DEM_CODE ) Dem_Data_UpdEvtMemEntryOfTmp_PendingOFFAndAgingEvent
     VAR( Dem_EventMemoryRecordType, AUTOMATIC ) eventMemoryRecord;
 
     /* Initialization of the automatic variable. */
-    eventStrgIndex  = Dem_TmpEventMemoryEntry.EventStrgIndex;
-    eventRecord = Dem_TmpEventMemoryEntry.EventRecord;
-    faultRecord = Dem_TmpEventMemoryEntry.FaultRecord;
-    eventMemoryRecord     = Dem_TmpEventMemoryEntry.EventMemoryRecordList;
+    Dem_Data_LatchTmpEventMemoryData( &Dem_TmpEventMemoryEntry, &eventStrgIndex, &eventRecord, &faultRecord, &eventMemoryRecord );
 
     retClearFaultRecord = DEM_IRT_NG;
 
@@ -926,6 +958,8 @@ FUNC( void, DEM_CODE ) Dem_Data_UpdEvtMemEntryOfTmp_PendingOFFAndAgingEvent
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-7-0      | no object changed.                                       */
+/*   v5-8-0      | no branch changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_Data_SetResultOfCmpObdFFRToTmp
 (
@@ -935,12 +969,12 @@ static FUNC( void, DEM_CODE ) Dem_Data_SetResultOfCmpObdFFRToTmp
     VAR( Dem_u08_FFListIndexType, AUTOMATIC ) freezeFrameRecordIndex;
     VAR( Dem_u08_FFListIndexType, AUTOMATIC ) obdFFRClassPerDTCMaxNum;
 
-    obdFFRClassPerDTCMaxNum = Dem_OBDFFRClassPerDTCMaxNum;
+    obdFFRClassPerDTCMaxNum = Dem_CfgInfoPm_GetOBDFFRClassPerDTCMaxNum();
 
     for( freezeFrameRecordIndex = (Dem_u08_FFListIndexType)0U; freezeFrameRecordIndex < obdFFRClassPerDTCMaxNum; freezeFrameRecordIndex++ )     /* [GUD:for] freezeFrameRecordIndex */
     {
         /* Checks the OBD record number index corresponding to the loop counter of retrieved the OBD freeze frame list.  */
-        if( FaultRecordPtr->ObdRecordNumberIndex[freezeFrameRecordIndex] != DEM_FFRECINDEX_INITIAL  )                                           /* [GUD] freezeFrameRecordIndex */
+        if( FaultRecordPtr->ObdRecordNumberIndex[freezeFrameRecordIndex] != DEM_FFRECINDEX_INITIAL  )                                           /* [GUD] freezeFrameRecordIndex *//* [ARYCHK] DEM_OBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / freezeFrameRecordIndex */
         {
             Dem_Data_SetResultOfCmpObdFFRecordToTmp( freezeFrameRecordIndex, DEM_IRT_NG );                                                      /* [GUD] freezeFrameRecordIndex */
         }
@@ -960,6 +994,7 @@ static FUNC( void, DEM_CODE ) Dem_Data_SetResultOfCmpObdFFRToTmp
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
+/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_Data_SetResultOfCmpFFRToTmp
 (
@@ -978,7 +1013,7 @@ static FUNC( void, DEM_CODE ) Dem_Data_SetResultOfCmpFFRToTmp
     for( freezeFrameRecordIndex = (Dem_u08_FFListIndexType)0U; freezeFrameRecordIndex < nonOBDFFRClassPerDTCMaxNum; freezeFrameRecordIndex++ )  /* [GUD:for] freezeFrameRecordIndex */
     {
         /* Checks the record number index corresponding to the loop counter of retrieved the freeze frame list.  */
-        if( FaultRecordPtr->RecordNumberIndex[freezeFrameRecordIndex] != DEM_FFRECINDEX_INITIAL  )                                              /* [GUD] freezeFrameRecordIndex */
+        if( FaultRecordPtr->RecordNumberIndex[freezeFrameRecordIndex] != DEM_FFRECINDEX_INITIAL  )                                              /* [GUD] freezeFrameRecordIndex *//* [ARYCHK] DEM_NONOBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / freezeFrameRecordIndex */
         {
             Dem_Data_SetResultOfCmpFFRecordToTmp( freezeFrameRecordIndex, DEM_IRT_NG );                                                         /* [GUD] freezeFrameRecordIndex */
         }
@@ -986,6 +1021,39 @@ static FUNC( void, DEM_CODE ) Dem_Data_SetResultOfCmpFFRToTmp
 
     return;
 }
+
+/****************************************************************************/
+/* Function Name | Dem_Data_LatchTmpEventMemoryData                         */
+/* Description   | latch Dem_TmpEventMemoryEntry data.                      */
+/* Parameters    | [in]  TmpEventMemoryEntryStPtr    :                      */
+/*               | [out] EventStrgIndexPtr    :                             */
+/*               | [out] EventRecordPtr       :                             */
+/*               | [out] FaultRecordPtr       :                             */
+/*               | [out] EventMemoryRecordPtr :                             */
+/* Return Value  | void                                                     */
+/* Notes         | -                                                        */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-7-0      | new created.                                             */
+/****************************************************************************/
+static FUNC( void, DEM_CODE ) Dem_Data_LatchTmpEventMemoryData
+(
+    P2VAR( Dem_TmpEventMemoryEntryType, AUTOMATIC, DEM_VAR_NO_INIT ) TmpEventMemoryEntryStPtr,
+    P2VAR( Dem_u16_EventStrgIndexType, AUTOMATIC, AUTOMATIC ) EventStrgIndexPtr,
+    P2VAR( Dem_EventRecordForCtlType, AUTOMATIC, AUTOMATIC ) EventRecordPtr,
+    P2VAR( Dem_FaultRecordType, AUTOMATIC, AUTOMATIC ) FaultRecordPtr,
+    P2VAR( Dem_EventMemoryRecordType, AUTOMATIC, AUTOMATIC ) EventMemoryRecordPtr
+)
+{
+    *EventStrgIndexPtr  = TmpEventMemoryEntryStPtr->EventStrgIndex;       /* [GUDCHK:SETVAL]Dem_TmpEventMemoryEntry.EventStrgIndex */
+
+    Dem_DataMngC_CopyEventCtlRecordData( EventRecordPtr, &( TmpEventMemoryEntryStPtr->EventRecord ) );
+    Dem_DataMngC_CopyFaultRecord( FaultRecordPtr, &( TmpEventMemoryEntryStPtr->FaultRecord ) );
+    Dem_DataMngC_CopyEventMemoryRecord( EventMemoryRecordPtr, &( TmpEventMemoryEntryStPtr->EventMemoryRecordList ) );
+
+    return ;
+}
+
 
 #define DEM_STOP_SEC_CODE
 #include <Dem_MemMap.h>
@@ -995,6 +1063,9 @@ static FUNC( void, DEM_CODE ) Dem_Data_SetResultOfCmpFFRToTmp
 /*  Version        :Date                                                    */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-7-0         :2024-05-29                                              */
+/*  v5-8-0         :2024-10-29                                              */
+/*  v5-9-0         :2025-02-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

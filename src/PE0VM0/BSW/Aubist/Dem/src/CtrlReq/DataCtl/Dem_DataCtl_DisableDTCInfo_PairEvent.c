@@ -1,7 +1,7 @@
-/* Dem_DataCtl_DisableDTCInfo_PairEvent_c(v5-5-0)                           */
+/* Dem_DataCtl_DisableDTCInfo_PairEvent_c(v5-7-0)                           */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -32,7 +32,7 @@
 
 /*--------------------------------------------------------------------------*/
 /* Types                                                                    */
-/*--------------------------------------------------------------------------*/\
+/*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
 /* Function Prototypes                                                      */
@@ -158,6 +158,50 @@ FUNC( void, DEM_CODE ) Dem_DataCtl_SaveRecordNumberByPairEvent
     return;
 }
 
+#if ( DEM_COMBINEDEVENT_ONRETRIEVAL_SUPPORT == STD_ON )
+/****************************************************************************/
+/* Function Name | Dem_DataCtl_SaveRecordNumberByPairEventForFilteredRecord */
+/* Description   | Save pair event's FFD .                                  */
+/* Preconditions | none                                                     */
+/*               | [in] MisfireCylinderNumber :                             */
+/*               |        Cylinder Number.                                  */
+/*               | [in/out] NumberOfSaveRecordPtr :                         */
+/*               |        Total number of saved record numbers.             */
+/* Return Value  | void                                                     */
+/* Notes         | none                                                     */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-6-0      | new created. based on Dem_DataCtl_SaveRecordNumberByPairEvent. */
+/*   v5-7-0      | no branch changed.                                       */
+/****************************************************************************/
+FUNC( void, DEM_CODE ) Dem_DataCtl_SaveRecordNumberByPairEventForFilteredRecord
+(
+    VAR( Dem_MisfireCylinderNumberType, AUTOMATIC ) MisfireCylinderNumber,
+    P2VAR( Dem_u16_FFRecNumStoredIndexType, AUTOMATIC, AUTOMATIC ) NumberOfSaveRecordPtr
+)
+{
+    VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) pairEventStrgIndex;
+
+    if ( Dem_TmpDisabledRecordPairEvent.EventStrgIndex != DEM_EVENTSTRGINDEX_INVALID )
+    {
+        pairEventStrgIndex          =   Dem_TmpDisabledRecordPairEvent.EventStrgIndex;
+
+#if ( DEM_OBDFFD_SUPPORT == STD_ON )    /*  [FuncSw]    */
+        Dem_Data_SaveObdRecordNumberByDTCForFilteredRecord( pairEventStrgIndex, MisfireCylinderNumber, NumberOfSaveRecordPtr );
+#endif  /* ( DEM_OBDFFD_SUPPORT == STD_ON )             */
+
+        Dem_Data_SaveRecordNumberByDTCForFilteredRecord( pairEventStrgIndex, MisfireCylinderNumber, NumberOfSaveRecordPtr );
+
+#if ( DEM_TSFF_PM_SUPPORT == STD_ON )   /*  [FuncSw]    */
+        Dem_Data_SaveTSFFRecordNumberByDTCForFilteredRecord( pairEventStrgIndex, MisfireCylinderNumber, NumberOfSaveRecordPtr );
+#endif  /*   ( DEM_TSFF_PM_SUPPORT == STD_ON )         */
+
+    }
+
+    return;
+}
+#endif  /*   ( DEM_COMBINEDEVENT_ONRETRIEVAL_SUPPORT == STD_ON )    */
+
 /****************************************************************************/
 /* Function Name | Dem_DataCtl_ClearDisabledRecordPairEvent                 */
 /* Description   | Clears the disabled record of temporary area.            */
@@ -279,6 +323,8 @@ FUNC( void, DEM_CODE ) Dem_DataCtl_GetTmpDisabledRecordFFRIndexAtPairEvent
 /* History                                                                  */
 /*  Version        :Date                                                    */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-6-0         :2024-01-29                                              */
+/*  v5-7-0         :2024-05-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

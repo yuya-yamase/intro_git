@@ -1,7 +1,7 @@
-/* Dem_IUMPR_ReadDTCBased_c(v5-5-0)                                         */
+/* Dem_IUMPR_ReadDTCBased_c(v5-9-0)                                         */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -18,6 +18,7 @@
 
 #include <Dem/Dem_InternalDataElement.h>
 #include "../../../inc/Dem_CmnLib_CmbEvt.h"
+#include "../../../inc/Dem_Pm_DataAvl.h"
 #include "../../../inc/Dem_Pm_IUMPR.h"
 #include "../../../inc/Dem_Rc_IUMPRMng.h"
 /*--------------------------------------------------------------------------*/
@@ -90,6 +91,8 @@ static FUNC( void, DEM_CODE ) Dem_IUMPR_GetCurrentReadDTCBasedIUMPR
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-7-0      | no object changed.                                       */
+/*   v5-9-0      | branch changed.                                          */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_IUMPR_ReadDTCBasedIUMPR
 (
@@ -108,6 +111,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_IUMPR_ReadDTCBasedIUMPR
     VAR( Dem_u16_EventCtrlIndexType, AUTOMATIC ) eventCtrlIndexCnt;
     VAR( Dem_u16_EventCtrlIndexType, AUTOMATIC ) eventCtrlIndexNum;
     VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) eventStrgIndex;
+    VAR( boolean, AUTOMATIC ) availableStatus;
 
     currentNumerator = DEM_IUMPR_COUNTER_INITVALUE;
     currentDenominator = DEM_IUMPR_COUNTER_INITVALUE;
@@ -135,8 +139,11 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_IUMPR_ReadDTCBasedIUMPR
 
             for ( eventCtrlIndexCnt = ( Dem_u16_EventCtrlIndexType )0U; eventCtrlIndexCnt < eventCtrlIndexNum; eventCtrlIndexCnt++ )
             {
-                Dem_IUMPR_GetCurrentReadDTCBasedIUMPR( eventCtrlIndex, &currentNumerator, &currentDenominator );        /* [GUDCHK:CALLER]EventCtrlIndex */
-
+                availableStatus = Dem_DataAvl_GetEvtAvl( eventCtrlIndex );
+                if( availableStatus == (boolean)TRUE )
+                {
+                    Dem_IUMPR_GetCurrentReadDTCBasedIUMPR( eventCtrlIndex, &currentNumerator, &currentDenominator );        /* [GUDCHK:CALLER]EventCtrlIndex */
+                }
                 /*  get next Index.         */
                 eventCtrlIndex  =   Dem_CmbEvt_GetNextEventCtrlIndex_InEvtStrgGrp( eventCtrlIndex );
             }
@@ -149,10 +156,10 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_IUMPR_ReadDTCBasedIUMPR
             Dem_IUMPR_GetCurrentReadDTCBasedIUMPR( EventCtrlIndex, &currentNumerator, &currentDenominator );            /* [GUDCHK:CALLER]EventCtrlIndex */
         }
 
-        BufferPtr[DEM_IUMPR_DATABUF_NUMERATOR_0] = (uint8)( currentNumerator >> DEM_IUMPR_BITSHIFT_8 );
-        BufferPtr[DEM_IUMPR_DATABUF_NUMERATOR_1] = (uint8)( currentNumerator );
-        BufferPtr[DEM_IUMPR_DATABUF_DENOMINATOR_0] = (uint8)( currentDenominator >> DEM_IUMPR_BITSHIFT_8 );
-        BufferPtr[DEM_IUMPR_DATABUF_DENOMINATOR_1] = (uint8)( currentDenominator );
+        BufferPtr[DEM_IUMPR_DATABUF_NUMERATOR_0] = (uint8)( currentNumerator >> DEM_IUMPR_BITSHIFT_8 );/* [ARYCHK] *BufSizePtr/1/DEM_IUMPR_DATABUF_NUMERATOR_0 */
+        BufferPtr[DEM_IUMPR_DATABUF_NUMERATOR_1] = (uint8)( currentNumerator ); /* [ARYCHK] *BufSizePtr/1/DEM_IUMPR_DATABUF_NUMERATOR_1 */
+        BufferPtr[DEM_IUMPR_DATABUF_DENOMINATOR_0] = (uint8)( currentDenominator >> DEM_IUMPR_BITSHIFT_8 ); /* [ARYCHK] *BufSizePtr/1/DEM_IUMPR_DATABUF_DENOMINATOR_0 */
+        BufferPtr[DEM_IUMPR_DATABUF_DENOMINATOR_1] = (uint8)( currentDenominator ); /* [ARYCHK] *BufSizePtr/1/DEM_IUMPR_DATABUF_DENOMINATOR_1 */
         (*BufSizePtr) = DEM_IUMPR_DATABUF_SIZE;
     }
     return retVal;
@@ -170,6 +177,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_IUMPR_ReadDTCBasedIUMPR
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_IUMPR_GetCurrentReadDTCBasedIUMPR
 (
@@ -199,7 +207,7 @@ static FUNC( void, DEM_CODE ) Dem_IUMPR_GetCurrentReadDTCBasedIUMPR
 
     for( tableIndex = (Dem_u16_RatioIndexType)0U; tableIndex < ratioIdTableNum; tableIndex++ )
     {
-        ratioId = Dem_RatioIdListAdrTable[ ratioIdListAdrIndex ].RatioIdListAdr[ tableIndex ];          /* [GUDCHK:CALLER]EventCtrlIndex */
+        ratioId = Dem_RatioIdListAdrTable[ ratioIdListAdrIndex ].RatioIdListAdr[ tableIndex ];          /* [GUDCHK:CALLER]EventCtrlIndex *//* [ARYCHK] ratioIdTableNum / 1 / tableIndex */
 
         (void)Dem_IUMPRMng_GetRatioByRatioId( ratioId, &targetNumerator, &targetDenominator );  /* no return check required */
         resultJudge = Dem_IUMPR_JudgeMinThanCurrentRatio( currentNumerator, currentDenominator, targetNumerator, targetDenominator );
@@ -226,6 +234,8 @@ static FUNC( void, DEM_CODE ) Dem_IUMPR_GetCurrentReadDTCBasedIUMPR
 /*  v5-0-0         :2022-03-29                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-7-0         :2024-05-29                                              */
+/*  v5-9-0         :2025-02-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

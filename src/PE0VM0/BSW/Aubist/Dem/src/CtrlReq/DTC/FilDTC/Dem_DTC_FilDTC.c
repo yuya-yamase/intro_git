@@ -1,7 +1,7 @@
-/* Dem_DTC_FilDTC_c(v5-5-0)                                                 */
+/* Dem_DTC_FilDTC_c(v5-9-0)                                                 */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 
@@ -140,7 +140,7 @@ FUNC( void, DEM_CODE ) Dem_DTC_SetFilteredDTC
 
 #if ( DEM_PFC_OUTPUT_DEMINTERNALPFC_TODCM_SUPPORT == STD_ON )
 /****************************************************************************/
-/* Function Name | Dem_DTC_GetNextFilteredPFC                               */
+/* Function Name | Dem_DTC_SearchFilteredPFC                                */
 /* Description   | Gets the next filtered DTC and its DTC status.           */
 /* Preconditions | Dem_DTC_SetDTCFilter being executed.                     */
 /* Parameters    | [in] DTCFilterPtr :                                      */
@@ -159,14 +159,11 @@ FUNC( void, DEM_CODE ) Dem_DTC_SetFilteredDTC
 /*               |        DEM_IRT_OK : Returned next filtered element       */
 /*               |        DEM_IRT_NO_MATCHING_ELEMENT : No further element  */
 /*               |         (matching the filter criteria) found             */
-/*               |        DEM_IRT_PENDING : The requested value is calcula- */
-/*               |        ted asynchronously and currently not available. - */
-/*               |        The caller can retry later.Only used by asynchro- */
-/*               |        nous interfaces.                                  */
 /* Notes         | -                                                        */
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | branch changed.                                          */
+/*   v5-8-0      | branch changed.                                          */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DTC_SearchFilteredPFC
 (
@@ -204,21 +201,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DTC_SearchFilteredPFC
         filteredDTCSearchIndexforPfc = ( Dem_u08_PFCIndexType )Dem_FilteredDTCSearchIndex;
         retVal = Dem_DTC_GetFilteredPFC( DTCFilterPtr->DTCFormat, &filteredDTCSearchIndexforPfc, &filteredEventStrgIndex, DTCValuePtr, DTCStatusPtr );
         Dem_FilteredDTCSearchIndex = ( Dem_u08_OrderIndexType )filteredDTCSearchIndexforPfc;
-
-        if( retVal == DEM_IRT_OK )
-        {
-            if( DTCFilterPtr->DTCFormat == DEM_DTC_FORMAT_UDS )
-            {
-                /* translate DTCStatus for SID19-55 */
-                (void)Dem_DTC_TranslateDTCStatusForOutputByDTC( filteredEventStrgIndex, DTCStatusPtr ); /* no return check required */
-            }
-            else
-            {
-                /*------------------------------------------------------*/
-                /*  at DEM_DTC_FORMAT_OBD, no use (*DTCStatusPtr).      */
-                /*------------------------------------------------------*/
-            }
-        }
     }
 
     if( retVal == DEM_IRT_OK )
@@ -327,6 +309,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DTC_SearchFilteredEdsDTC_byOrde
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | branch changed.                                          */
+/*   v5-7-0      | branch changed.                                          */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DTC_SearchFilteredDTCAndSeverity    /* MISRA DEVIATION */
 (
@@ -342,7 +325,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DTC_SearchFilteredDTCAndSeverit
     VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) loopMaxNum;
     VAR( Dem_u08_InternalReturnType, AUTOMATIC ) retVal;
     VAR( Dem_u08_InternalReturnType, AUTOMATIC ) retGetDTCAndStatus;
-    VAR( Dem_u08_InternalReturnType, AUTOMATIC ) retChkDTCAndSeverity;
     VAR( boolean, AUTOMATIC ) loopEndFlag;
     VAR( boolean, AUTOMATIC ) execSearchFlag;
 
@@ -428,34 +410,20 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DTC_SearchFilteredDTCAndSeverit
                     /*----------------------------------*/
                     /*  get statusOfDTC and DTC         */
                     /*----------------------------------*/
-                    retGetDTCAndStatus  =   Dem_DTC_GetDTCStatusAndUdsDTC_forFilDTC( searchEventStrgIndex, DTCFilterPtr->FilterWithSeverity, DTCFilterPtr->DTCSeverityMask, DTCValuePtr, DTCStatusPtr, DTCSeverityPtr );
+                    retGetDTCAndStatus  =   Dem_DTC_GetDTCStatusAndUdsDTC_forFilDTC( searchEventStrgIndex, DTCFilterPtr->DTCStatusMask, DTCFilterPtr->FilterWithSeverity, DTCFilterPtr->DTCSeverityMask, DTCValuePtr, DTCStatusPtr, DTCSeverityPtr );
                     if ( retGetDTCAndStatus == DEM_IRT_OK )
                     {
-                        /*------------------------------------------*/
-                        /*  convert to output statusOfDTC.          */
-                        /*------------------------------------------*/
-                        (*DTCStatusPtr)     =   Dem_DTC_CnvDTCStatus_PmAvailabilityMask( (*DTCStatusPtr) );
+                        /* update next search index */
+                        Dem_FilteredDTCSearchEventStrgIndex = searchEventStrgIndex + (Dem_u16_EventStrgIndexType)1U;
+                        retVal = DEM_IRT_OK;
+                        loopEndFlag = (boolean)TRUE;
 
-                        /*----------------------------------*/
-                        /*  filter check                    */
-                        /*----------------------------------*/
-                        /* check DTCStatus and DTC Severity */
-                        retChkDTCAndSeverity = Dem_DTC_CheckDTCAndSeverityForFilter( DTCFilterPtr, *DTCStatusPtr, DTCSeverityPtr );
+                        /*======================================================*/
+                        /*  No reset of Dem_EventSearchCnt this timing.         */
+                        /*  next call of this function, only return pending.    */
+                        /*  Dem_EventSearchCnt is reset at return of pending.   */
+                        /*======================================================*/
 
-                        if( retChkDTCAndSeverity == DEM_IRT_OK )
-                        {
-                            /* update next search index */
-                            Dem_FilteredDTCSearchEventStrgIndex = searchEventStrgIndex + (Dem_u16_EventStrgIndexType)1U;
-                            retVal = DEM_IRT_OK;
-                            loopEndFlag = (boolean)TRUE;
-
-                            /*======================================================*/
-                            /*  No reset of Dem_EventSearchCnt this timing.         */
-                            /*  next call of this function, only return pending.    */
-                            /*  Dem_EventSearchCnt is reset at return of pending.   */
-                            /*======================================================*/
-
-                        }
                     }
                 }
                 Dem_EventSearchCnt++;
@@ -587,6 +555,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DTC_SearchFilteredDTCAndSeverit
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | new created.                                             */
+/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( boolean, DEM_CODE ) Dem_DTC_JudgeExecSearchFilter
 (
@@ -597,9 +566,9 @@ static FUNC( boolean, DEM_CODE ) Dem_DTC_JudgeExecSearchFilter
 {
     VAR( boolean, AUTOMATIC ) execSearchFlag;
     VAR( boolean, AUTOMATIC ) eventOBDKind;
-#if ( DEM_COMBINEDEVENT_ONRETRIEVAL_SUPPORT == STD_ON ) /*  [FuncSw]    */
+#if ( DEM_COMBINEDEVENT_ONRETRIEVAL_FILDTC_SUPPORT == STD_ON ) /*  [FuncSw]    */
     VAR( boolean, AUTOMATIC ) bDelegate;
-#endif  /*  ( DEM_COMBINEDEVENT_ONRETRIEVAL_SUPPORT == STD_ON )     */
+#endif  /*  ( DEM_COMBINEDEVENT_ONRETRIEVAL_FILDTC_SUPPORT == STD_ON )     */
 
     execSearchFlag  =   (boolean)TRUE;
     if( DTCKind == DEM_DTC_KIND_EMISSION_REL_DTCS )
@@ -612,12 +581,12 @@ static FUNC( boolean, DEM_CODE ) Dem_DTC_JudgeExecSearchFilter
         }
     }
 
-#if ( DEM_COMBINEDEVENT_ONRETRIEVAL_SUPPORT == STD_ON ) /*  [FuncSw]    */
+#if ( DEM_COMBINEDEVENT_ONRETRIEVAL_FILDTC_SUPPORT == STD_ON ) /*  [FuncSw]    */
     if ( execSearchFlag == (boolean)TRUE )
     {
-        /*----------------------------------------------------------*/
-        /*  this is DEM_COMBINEDEVENT_ONRETRIEVAL_SUPPORT job.      */
-        /*----------------------------------------------------------*/
+        /*-----------------------------------------------------------------*/
+        /*  this is DEM_COMBINEDEVENT_ONRETRIEVAL_FILDTC_SUPPORT job.      */
+        /*-----------------------------------------------------------------*/
 
         /*  check the event is delegate of DTC.                     */
         bDelegate    =   Dem_CmbEvt_CheckDelegateEventStrgIndex_InDTCGrp( EventStrgIndex );
@@ -626,7 +595,7 @@ static FUNC( boolean, DEM_CODE ) Dem_DTC_JudgeExecSearchFilter
             execSearchFlag  =   (boolean)FALSE; /*  search skip.    */
         }
     }
-#endif  /*  ( DEM_COMBINEDEVENT_ONRETRIEVAL_SUPPORT == STD_ON )     */
+#endif  /*  ( DEM_COMBINEDEVENT_ONRETRIEVAL_FILDTC_SUPPORT == STD_ON )     */
 
     return execSearchFlag;
 }
@@ -652,6 +621,9 @@ static FUNC( boolean, DEM_CODE ) Dem_DTC_JudgeExecSearchFilter
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-7-0         :2024-05-29                                              */
+/*  v5-8-0         :2024-10-29                                              */
+/*  v5-9-0         :2025-02-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

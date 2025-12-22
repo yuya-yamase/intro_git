@@ -1,7 +1,7 @@
-/* Dem_DTC_PFC_StoreRecord_c(v5-5-0)                                        */
+/* Dem_DTC_PFC_StoreRecord_c(v5-6-0)                                        */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -82,8 +82,11 @@
 /* Return Value  | none                                                     */
 /* Notes         |                                                          */
 /*--------------------------------------------------------------------------*/
+/* UpdateRecord  | [UpdRec]PFC                                              */
+/*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
+/*   v5-6-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_DTC_SetPFCRecordWithQualifiedInfo
 (
@@ -113,7 +116,7 @@ FUNC( void, DEM_CODE ) Dem_DTC_SetPFCRecordWithQualifiedInfo
 #endif  /*  ( DEM_COMBINEDEVENT_ONRETRIEVAL_SUPPORT == STD_ON )       */
 #endif  /*   ( DEM_OBDDTC_FORMAT_SUPPORT == STD_ON )   */
     {
-        Dem_PFCMng_SetPFCRecordData( PFCRecordIndex, EventStrgIndex );
+        Dem_PFCMng_SetPFCRecordData( PFCRecordIndex, EventStrgIndex );              /*[UpdRec]PFC */
         Dem_PFCMng_SetCycleQualifiedInfo( PFCRecordIndex, CycleQualifiedInfo );
     }
     return ;
@@ -129,8 +132,11 @@ FUNC( void, DEM_CODE ) Dem_DTC_SetPFCRecordWithQualifiedInfo
 /* Return Value  | none                                                     */
 /* Notes         |                                                          */
 /*--------------------------------------------------------------------------*/
+/* UpdateRecord  | [UpdRec]PFC                                              */
+/*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
+/*   v5-6-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_DTC_SetPFCRecordWithClearCondition
 (
@@ -139,7 +145,7 @@ FUNC( void, DEM_CODE ) Dem_DTC_SetPFCRecordWithClearCondition
 )
 {
     /* Set the PFCrecord. */
-    Dem_PFCMng_SetPFCRecordData( PFCRecordIndex, EventStrgIndex );
+    Dem_PFCMng_SetPFCRecordData( PFCRecordIndex, EventStrgIndex );                  /*[UpdRec]PFC */
     Dem_PFCMng_SetCycleQualifiedInfo( PFCRecordIndex, DEM_PFC_QUALIFIEDINFO_INITIAL );
     return ;
 }
@@ -222,6 +228,7 @@ FUNC( boolean, DEM_CODE ) Dem_DTC_CheckRegistPFCRecord
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-6-0         :2024-01-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

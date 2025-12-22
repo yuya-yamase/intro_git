@@ -1,7 +1,7 @@
-/* Dem_Ind_MI_ReadDTCBased_c(v5-5-0)                                        */
+/* Dem_Ind_MI_ReadDTCBased_c(v5-7-0)                                        */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -94,6 +94,7 @@
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | new created. based from Dem_IUMPR_ReadDTCBasedIUMPR.     */
+/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_IndMI_ReadDTCBasedIndMIB1Counter
 (
@@ -218,8 +219,8 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_IndMI_ReadDTCBasedIndMIB1Counte
         {
             if ( bufSizeIn >= DEM_INDMI_DATABUF_SIZE )
             {
-                BufferPtr[DEM_INDMI_DATABUF_B1COUNTER_HIGH] = (uint8)( b1Counter >> DEM_INDMI_BITSHIFT_8 );
-                BufferPtr[DEM_INDMI_DATABUF_B1COUNTER_LOW]  = (uint8)( b1Counter );
+                BufferPtr[DEM_INDMI_DATABUF_B1COUNTER_HIGH] = (uint8)( b1Counter >> DEM_INDMI_BITSHIFT_8 );/* [ARYCHK] *BufSizePtr / 1 / DEM_INDMI_DATABUF_B1COUNTER_HIGH */
+                BufferPtr[DEM_INDMI_DATABUF_B1COUNTER_LOW]  = (uint8)( b1Counter );/* [ARYCHK] *BufSizePtr / 1 / DEM_INDMI_DATABUF_B1COUNTER_LOW */
                 (*BufSizePtr) = DEM_INDMI_DATABUF_SIZE;
                 retVal = DEM_IRT_OK;
             }
@@ -242,8 +243,8 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_IndMI_ReadDTCBasedIndMIB1Counte
                 /*  get B1 counter.             */
                 Dem_IndMI_GetB1CounterByEventStrgIndex_By6Minutes( eventStrgIndex, &b1Counter );
 
-                BufferPtr[DEM_INDMI_DATABUF_B1COUNTER_HIGH] = (uint8)( b1Counter >> DEM_INDMI_BITSHIFT_8 );
-                BufferPtr[DEM_INDMI_DATABUF_B1COUNTER_LOW]  = (uint8)( b1Counter );
+                BufferPtr[DEM_INDMI_DATABUF_B1COUNTER_HIGH] = (uint8)( b1Counter >> DEM_INDMI_BITSHIFT_8 );/* [ARYCHK] *BufSizePtr / 1 / DEM_INDMI_DATABUF_B1COUNTER_HIGH */
+                BufferPtr[DEM_INDMI_DATABUF_B1COUNTER_LOW]  = (uint8)( b1Counter );/* [ARYCHK] *BufSizePtr / 1 / DEM_INDMI_DATABUF_B1COUNTER_LOW */
                 (*BufSizePtr) = DEM_INDMI_DATABUF_SIZE;
 
                 retVal = DEM_IRT_OK;
@@ -267,6 +268,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_IndMI_ReadDTCBasedIndMIB1Counte
 /* History                                                                  */
 /*  Version        :Date                                                    */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-7-0         :2024-05-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

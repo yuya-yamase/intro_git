@@ -1,7 +1,7 @@
-/* Dem_DataCtl_SamplingFFD_c(v5-5-0)                                        */
+/* Dem_DataCtl_SamplingFFD_c(v5-7-0)                                        */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -26,6 +26,11 @@
 #include "../../../inc/Dem_Rc_UdmMng.h"
 #include "../../../inc/Dem_Rc_UdmMngTable.h"
 #include "../../../inc/Dem_Udm_Data.h"
+
+#ifndef DEM_SIT_RANGE_CHECK
+#else   /* DEM_SIT_RANGE_CHECK */
+#include <Dem_SIT_RangeCheck.h>
+#endif  /* DEM_SIT_RANGE_CHECK */
 
 #if ( DEM_TSFF_SUPPORT == STD_ON )
 
@@ -260,6 +265,8 @@ FUNC( void, DEM_CODE ) Dem_Data_CaptureAfterTriggeredTimeSeriesFreezeFrame
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-6-0      | no branch changed.                                       */
+/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_Data_CaptureFreezeFrameClassToSample
 (
@@ -269,17 +276,21 @@ static FUNC( void, DEM_CODE ) Dem_Data_CaptureFreezeFrameClassToSample
 )
 {
     VAR( Dem_SamplingFreezeFrameRecordPosType, AUTOMATIC ) samplingFFRPos;
-    P2VAR( uint8, AUTOMATIC, DEM_VAR_SAVED_ZONE ) SamplingFreezeFrameRecordDataPtr;
+    P2VAR( uint8, AUTOMATIC, DEM_VAR_NO_INIT ) samplingFreezeFrameRecordDataPtr;
 
 
-    SamplingFreezeFrameRecordDataPtr = Dem_Data_GetSamplingFreezeFrameRecordDataPtr( SamplingFreezeFrameMemoryRef, SamplingFreezeFrameRecordIndex );    /* [GUD:RET:Not NULL_PTR ] SamplingFreezeFrameMemoryRef */
-    if( SamplingFreezeFrameRecordDataPtr != NULL_PTR )
+    samplingFreezeFrameRecordDataPtr = Dem_Data_GetSamplingFreezeFrameRecordDataPtr( SamplingFreezeFrameMemoryRef, SamplingFreezeFrameRecordIndex );    /* [GUD:RET:Not NULL_PTR ] SamplingFreezeFrameMemoryRef */
+    if( samplingFreezeFrameRecordDataPtr != NULL_PTR )
     {
         Dem_Data_GetSamplingFreezeFrameRecordPosition( SamplingFreezeFrameMemoryRef, &samplingFFRPos );     /* [GUD]SamplingFreezeFrameMemoryRef *//* [GUD:OUT:IF_GUARDED: SamplingFreezeFrameMemoryRef ] &samplingFFRPos */
 
-        (void)Dem_Data_CaptureFreezeFrameClass( FreezeFrameClassPtr, &SamplingFreezeFrameRecordDataPtr[samplingFFRPos.DataStart], DEM_MONITORDATA_TSFFD );/* no return check required */    /* [GUD]samplingFFRPos.DataStart */
+#ifndef DEM_SIT_RANGE_CHECK
+        Dem_Data_CaptureFreezeFrameClass( DEM_EVENTCTRLINDEX_INVALID, FreezeFrameClassPtr, &samplingFreezeFrameRecordDataPtr[samplingFFRPos.DataStart], DEM_MONITORDATA_TSFFD );    /* [GUD]samplingFFRPos.DataStart *//* [ARYCHK] (Dem_SamplingFreezeFrameRecordTable[SamplingFreezeFrameMemoryRef].DemFFDStoredFormatSize) / 1 / samplingFFRPos.DataStart */
+#else   /* DEM_SIT_RANGE_CHECK */
+        Dem_Data_CaptureFreezeFrameClass( (Dem_SamplingFreezeFrameRecordTable[SamplingFreezeFrameMemoryRef].DemFFDMaxLength), DEM_EVENTCTRLINDEX_INVALID, FreezeFrameClassPtr, &samplingFreezeFrameRecordDataPtr[samplingFFRPos.DataStart], DEM_MONITORDATA_TSFFD );    /* [GUD]samplingFFRPos.DataStart *//* [ARYCHK] (Dem_SamplingFreezeFrameRecordTable[SamplingFreezeFrameMemoryRef].DemFFDStoredFormatSize) / 1 / samplingFFRPos.DataStart */
+#endif  /* DEM_SIT_RANGE_CHECK */
 
-        SamplingFreezeFrameRecordDataPtr[samplingFFRPos.RecordStatus] = DEM_FFD_STORED;                     /* [GUD]samplingFFRPos.RecordStatus */
+        samplingFreezeFrameRecordDataPtr[samplingFFRPos.RecordStatus] = DEM_FFD_STORED;                     /* [GUD]samplingFFRPos.RecordStatus *//* [ARYCHK] (Dem_SamplingFreezeFrameRecordTable[SamplingFreezeFrameMemoryRef].DemFFDStoredFormatSize) / 1 / samplingFFRPos.RecordStatus */
 
     }
 
@@ -314,6 +325,8 @@ static FUNC( void, DEM_CODE ) Dem_Data_CaptureFreezeFrameClassToSample
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
+/*   v5-6-0      | no object changed.                                       */
+/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_CaptureAfterTriggeredTSFF
 (
@@ -332,7 +345,7 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_CaptureAfterTrigger
     VAR( Dem_u16_UdmDemMemKindIndexType, AUTOMATIC ) udmGroupKindIndex;
 #endif /* ( DEM_TSFF_UDM_SUPPORT == STD_ON ) */
     VAR( Dem_SamplingFreezeFrameRecordPosType, AUTOMATIC ) samplingFFRPos;
-    P2VAR( uint8, AUTOMATIC, DEM_VAR_SAVED_ZONE ) samplingFreezeFrameRecordDataPtr;
+    P2VAR( uint8, AUTOMATIC, DEM_VAR_NO_INIT ) samplingFreezeFrameRecordDataPtr;
 
     retVal = DEM_IRT_NG;
 
@@ -349,8 +362,11 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_CaptureAfterTrigger
             /* In case of user defined memory. */
 
             udmGroupKindIndex = (Dem_u16_UdmDemMemKindIndexType)SamplingFreezeFrameMemoryRef;   /* [GUDCHK:CALLER]SamplingFreezeFrameMemoryRef */
-
+#ifndef DEM_SIT_RANGE_CHECK
             retCapture = Dem_UdmData_CaptureAfterTriggeredTSFFFromSample( udmGroupKindIndex, (Dem_u08_UdmFaultIndexType)FaultIndex, TimeSeriesFreezeFrameRecordIndex, OffsetOfTimeSeriesFreezeFrameTableIndexPerDTC, &samplingFFRPos, samplingFreezeFrameRecordDataPtr );   /* [GUDCHK:CALLER]SamplingFreezeFrameMemoryRef( == udmGroupKindIndex ) */
+#else   /* DEM_SIT_RANGE_CHECK */
+            retCapture = Dem_UdmData_CaptureAfterTriggeredTSFFFromSample( (Dem_SamplingFreezeFrameRecordTable[SamplingFreezeFrameMemoryRef].DemFFDStoredFormatSize), udmGroupKindIndex, (Dem_u08_UdmFaultIndexType)FaultIndex, TimeSeriesFreezeFrameRecordIndex, OffsetOfTimeSeriesFreezeFrameTableIndexPerDTC, &samplingFFRPos, samplingFreezeFrameRecordDataPtr );   /* [GUDCHK:CALLER]SamplingFreezeFrameMemoryRef( == udmGroupKindIndex ) */
+#endif  /* DEM_SIT_RANGE_CHECK */
             if( retCapture == DEM_IRT_OK )
             {
                 retVal = DEM_IRT_OK;
@@ -362,8 +378,11 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_CaptureAfterTrigger
         if( SamplingFreezeFrameMemoryRef == samplingFFRecordPrimaryMemory )
         {
             /* In case of primary memory. */
-
+#ifndef DEM_SIT_RANGE_CHECK
             retCapture = Dem_Data_CaptureAfterTriggeredTSFFFromSample( FaultIndex, TimeSeriesFreezeFrameRecordIndex, TimeSeriesFreezeFrameTrigger, &samplingFFRPos, samplingFreezeFrameRecordDataPtr );
+#else   /* DEM_SIT_RANGE_CHECK */
+            retCapture = Dem_Data_CaptureAfterTriggeredTSFFFromSample( (Dem_SamplingFreezeFrameRecordTable[SamplingFreezeFrameMemoryRef].DemFFDStoredFormatSize), FaultIndex, TimeSeriesFreezeFrameRecordIndex, TimeSeriesFreezeFrameTrigger, &samplingFFRPos, samplingFreezeFrameRecordDataPtr );
+#endif  /* DEM_SIT_RANGE_CHECK */
             if( retCapture == DEM_IRT_OK )
             {
                 retVal = DEM_IRT_OK;
@@ -386,6 +405,8 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_CaptureAfterTrigger
 /*  Version        :Date                                                    */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
+/*  v5-6-0         :2024-01-29                                              */
+/*  v5-7-0         :2024-05-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/
