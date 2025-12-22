@@ -34,6 +34,7 @@
 /* 周波数：487.804878[kHz], デューティ：50[%], カウントクロック周波数：80[MHz] 分周なし */
 #define     PWRCTRL_SIP_PWM_DUTYCYCLE_OFF (0x0000U)
 #define     PWRCTRL_SIP_PWM_DUTYCYCLE_DEF (0x4000U)
+#define     PWRCTRL_SIP_PWM_DUTYCYCLE_MAX (0x8000U)
 
 /* SIP強制電源OFFシーケンス開始要求 */
 #define PWRCTRL_SIP_FORCEDOFF_NON         (0U)
