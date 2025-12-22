@@ -1624,12 +1624,13 @@ static void            vd_s_XspiIviClockUTCStuckBuff(const U1 u1_a_ID,const U2 u
     /*8byteアライメント*/
     if((u2_a_SIZE > (U2)8U) && (u2_a_SIZE <= (U2)16U)) {
         u1_t_utc_data_size = (U1)XSPI_IVI_HEADER + (U1)16U;
+        u1_t_jdg = u1_g_XspiIviQueueWriChkCanCommand(u1_t_utc_data_size);
     } else if(u2_a_SIZE <= (U2)8U){
         u1_t_utc_data_size = (U1)XSPI_IVI_HEADER + (U1)8U;
+        u1_t_jdg = u1_g_XspiIviQueueWriChkCanCommand(u1_t_utc_data_size);
     } else {
-
+        u1_t_jdg = (U1)FALSE;
     }
-    u1_t_jdg = u1_g_XspiIviQueueWriChkCanCommand(u1_t_utc_data_size);
 
     if(u1_t_jdg == (U1)TRUE)
     {
