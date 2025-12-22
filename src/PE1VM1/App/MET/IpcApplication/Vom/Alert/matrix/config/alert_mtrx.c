@@ -90,7 +90,7 @@ const ST_ALERT_TASK         st_gp_ALERT_TASK_CFG[]   = {
     {  &st_gp_ALERT_B_RPWSEA_MTRX[0],        (U2)ALERT_CH_B_RPWSEA,                 (U1)ALERT_B_RPWSEA_CH_NUM,          (U1)0U  },
     {  &st_gp_ALERT_C_BRPADW_MTRX[0],        (U2)ALERT_CH_C_BRPADW,                 (U1)ALERT_C_BRPADW_CH_NUM,          (U1)0U  },
     {  &st_gp_ALERT_C_HCS_MTRX[0],           (U2)ALERT_CH_C_HCS_TTB,                (U1)ALERT_C_HCS_CH_NUM,             (U1)0U  },
-    {  &st_gp_ALERT_H_BATTRW_MTRX[0],        (U2)ALERT_CH_H_BATTRW_BC,              (U1)ALERT_H_BATTRW_CH_NUM,          (U1)0U  },
+    {  &st_gp_ALERT_H_BATTRW_MTRX[0],        (U2)ALERT_CH_H_BATTRW,                 (U1)ALERT_H_BATTRW_CH_NUM,          (U1)0U  },
     {  &st_gp_ALERT_O_PDSMAL_MTRX[0],        (U2)ALERT_CH_O_PDSMAL_BC,              (U1)ALERT_O_PDSMAL_CH_NUM,          (U1)0U  },
     {  &st_gp_ALERT_B_TURHAZ_MTRX[0],        (U2)ALERT_CH_B_TURHAZ_L,               (U1)ALERT_B_TURHAZ_CH_NUM,          (U1)0U  },
     {  &st_gp_ALERT_B_AIRBAG_MTRX[0],        (U2)ALERT_CH_B_AIRBAG,                 (U1)ALERT_B_AIRBAG_CH_NUM,          (U1)1U  },
@@ -101,11 +101,11 @@ const ST_ALERT_TASK         st_gp_ALERT_TASK_CFG[]   = {
     {  &st_gp_ALERT_C_EPB_MTRX[0],           (U2)ALERT_CH_C_EPB_TT_PKB,             (U1)ALERT_C_EPB_CH_NUM,             (U1)1U  },
     {  &st_gp_ALERT_C_MCBW_MTRX[0],          (U2)ALERT_CH_C_MCBW,                   (U1)ALERT_C_MCBW_CH_NUM,            (U1)1U  },
     {  &st_gp_ALERT_C_SLIP_MTRX[0],          (U2)ALERT_CH_C_SLIP,                   (U1)ALERT_C_SLIP_CH_NUM,            (U1)1U  },
-    {  &st_gp_ALERT_C_TPMS_MTRX[0],          (U2)ALERT_CH_C_TPMS_BC,                (U1)ALERT_C_TPMS_CH_NUM,            (U1)1U  },
+    {  &st_gp_ALERT_C_TPMS_MTRX[0],          (U2)ALERT_CH_C_TPMS,                   (U1)ALERT_C_TPMS_CH_NUM,            (U1)1U  },
     {  &st_gp_ALERT_C_TRCOFF_MTRX[0],        (U2)ALERT_CH_C_TRCOFF,                 (U1)ALERT_C_TRCOFF_CH_NUM,          (U1)1U  },
     {  &st_gp_ALERT_C_VSCOFF_MTRX[0],        (U2)ALERT_CH_C_VSCOFF,                 (U1)ALERT_C_VSCOFF_CH_NUM,          (U1)1U  },
     {  &st_gp_ALERT_B_FMSEAT_MTRX[0],        (U2)ALERT_CH_B_FMSEAT,                 (U1)ALERT_B_FMSEAT_CH_NUM,          (U1)1U  },
-    {  &st_gp_ALERT_B_PBDKS_MTRX[0],         (U2)ALERT_CH_B_PBDKS_PD,               (U1)ALERT_B_PBDKS_CH_NUM,           (U1)1U  },
+    {  &st_gp_ALERT_B_PBDKS_MTRX[0],         (U2)ALERT_CH_B_PBDKS,                  (U1)ALERT_B_PBDKS_CH_NUM,           (U1)1U  },
     {  &st_gp_ALERT_B_BDOOR_MTRX[0],         (U2)ALERT_CH_B_BDOOR,                  (U1)ALERT_B_BDOOR_CH_NUM,           (U1)1U  },
     {  &st_gp_ALERT_B_LEDHEA_MTRX[0],        (U2)ALERT_CH_B_LEDHEA,                 (U1)ALERT_B_LEDHEA_CH_NUM,          (U1)1U  },
     {  &st_gp_ALERT_B_MLGT_MTRX[0],          (U2)ALERT_CH_B_MLGT,                   (U1)ALERT_B_MLGT_CH_NUM,            (U1)1U  },
@@ -166,7 +166,7 @@ const ST_ALERT_TASK         st_gp_ALERT_TASK_CFG[]   = {
     {  &st_gp_ALERT_B_TURHAZ_MTRX[0],        (U2)ALERT_CH_B_TURHAZ_L,               (U1)ALERT_B_TURHAZ_CH_NUM,          (U1)2U  },
     {  &st_gp_ALERT_B_GRISHU_MTRX[0],        (U2)ALERT_CH_B_GRISHU,                 (U1)ALERT_B_GRISHU_CH_NUM,          (U1)3U  },
     {  &st_gp_ALERT_D_SBW_MTRX[0],           (U2)ALERT_CH_D_SBW_BZ_BSFT,            (U1)ALERT_D_SBW_CH_NUM,             (U1)3U  },
-    {  &st_gp_ALERT_H_LEAUNF_MTRX[0],        (U2)ALERT_CH_H_LEAUNF_PD_EHV,          (U1)ALERT_H_LEAUNF_CH_NUM,          (U1)3U  },
+    {  &st_gp_ALERT_H_LEAUNF_MTRX[0],        (U2)ALERT_CH_H_LEAUNF,                 (U1)ALERT_H_LEAUNF_CH_NUM,          (U1)3U  },
     {  &st_gp_ALERT_M_BGLFSPD_MTRX[0],       (U2)ALERT_CH_M_BGLFSPD,                (U1)ALERT_M_BGLFSPD_CH_NUM,         (U1)3U  },
     {  &st_gp_ALERT_M_T120_MTRX[0],          (U2)ALERT_CH_M_T120,                   (U1)ALERT_M_T120_CH_NUM,            (U1)3U  },
     {  &st_gp_ALERT_O_CHAMAL_MTRX[0],        (U2)ALERT_CH_O_CHAMAL,                 (U1)ALERT_O_CHAMAL_CH_NUM,          (U1)3U  },
@@ -316,6 +316,7 @@ void    vd_g_AlertMtrxInit(void)
 /*  BEV-19   12/10/2025  DT       Change for BEV System_Consideration_ADAS TCW.(MET-S_ADBZR-CSTD-0-06-A-C0)                          */
 /*  BEV-20   12/12/2025  ED       Change for BEV System_Consideration_ADAS SEA.(MET-S_ADBZR-CSTD-0-06-A-C0)                          */
 /*  BEV-21   12/18/2025  ED       Change for BEV System_Consideration_ADAS ADBZR.(MET-S_ADBZR-CSTD-0-06-A-C0)                        */
+/*  BEV-22   12/18/2025  KH       Update for BEV System_Consideration_ADAS. (B_PBDKS / C_TPMS / H_BATTRW / H_LEAUNF)                 */
 /*                                                                                                                                   */
 /*  * YI   = Yoshiki Iwata, Denso                                                                                                    */
 /*  * RS   = Ryuki Sako,      Denso Techno                                                                                           */

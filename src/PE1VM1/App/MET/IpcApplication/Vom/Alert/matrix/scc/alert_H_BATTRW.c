@@ -1,4 +1,4 @@
-/* 5.5.0 */
+/* 5.6.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define ALERT_H_BATTRW_C_MAJOR                      (5)
-#define ALERT_H_BATTRW_C_MINOR                      (5)
+#define ALERT_H_BATTRW_C_MINOR                      (6)
 #define ALERT_H_BATTRW_C_PATCH                      (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -32,7 +32,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define ALERT_H_BATTRW_BC_NUM_DST                (16U)
+#define ALERT_H_BATTRW_NUM_DST                   (16U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -48,12 +48,12 @@ static U1      u1_s_alert_h_battrw_msgsts_bc;
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static U4      u4_s_AlertH_battrwBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS);
+static U4      u4_s_AlertH_battrwSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static const U1  u1_sp_ALERT_H_BATTRW_BC_DST[ALERT_H_BATTRW_BC_NUM_DST] = {
+static const U1  u1_sp_ALERT_H_BATTRW_DST[ALERT_H_BATTRW_NUM_DST] = {
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 00 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 01 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 02 UNKNOWN                                         */
@@ -63,7 +63,7 @@ static const U1  u1_sp_ALERT_H_BATTRW_BC_DST[ALERT_H_BATTRW_BC_NUM_DST] = {
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 06 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 07 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 08 UNKNOWN                                         */
-    (U1)ALERT_REQ_H_BATTRW_BC_THERMALBC,                                       /* 09 THERMALBC                                       */
+    (U1)ALERT_REQ_H_BATTRW_THERMALBC,                                          /* 09 THERMALBC                                       */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 10 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 11 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 12 UNKNOWN                                         */
@@ -76,14 +76,14 @@ static const U1  u1_sp_ALERT_H_BATTRW_BC_DST[ALERT_H_BATTRW_BC_NUM_DST] = {
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 const ST_ALERT_MTRX st_gp_ALERT_H_BATTRW_MTRX[1] = {
     {
-        &u4_s_AlertH_battrwBcSrcchk,                                           /* fp_u4_SRC_CHK                                      */
+        &u4_s_AlertH_battrwSrcchk,                                             /* fp_u4_SRC_CHK                                      */
         vdp_PTR_NA,                                                            /* fp_vd_XDST                                         */
 
         (const U4 *)vdp_PTR_NA,                                                /* u4p_MASK                                           */
         (const U4 *)vdp_PTR_NA,                                                /* u4p_CRIT                                           */
 
-        &u1_sp_ALERT_H_BATTRW_BC_DST[0],                                       /* u1p_DST                                            */
-        (U2)ALERT_H_BATTRW_BC_NUM_DST,                                         /* u2_num_srch                                        */
+        &u1_sp_ALERT_H_BATTRW_DST[0],                                          /* u1p_DST                                            */
+        (U2)ALERT_H_BATTRW_NUM_DST,                                            /* u2_num_srch                                        */
         (U1)ALERT_VOM_BAT_WT                                                   /* u1_vom_act                                         */
     }
 };
@@ -103,14 +103,14 @@ void    vd_g_AlertH_battrwInit(void)
 }
 
 /*===================================================================================================================================*/
-/*  static U4      u4_s_AlertH_battrwBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)                            */
+/*  static U4      u4_s_AlertH_battrwSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)                              */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      u1_a_VOM                                                                                                         */
 /*                  u4_a_IGN_TM                                                                                                      */
 /*                  u1_a_LAS                                                                                                         */
 /*  Return:         u4_t_src_chk                                                                                                     */
 /*===================================================================================================================================*/
-static U4      u4_s_AlertH_battrwBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
+static U4      u4_s_AlertH_battrwSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
     static const U2 u2_s_ALERT_H_BATTRW_BC_TO_THRESH   = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_H_BATTRW_BC_LSB_BAT1E48 = (U1)1U;
@@ -147,8 +147,10 @@ static U4      u4_s_AlertH_battrwBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  5.5.0    3/17/2025   SH       Newly created for 19PFv3                                                                           */
+/*  5.6.0   12/19/2025   KH       Update for BEV Step3.                                                                              */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  * SH   = Sae Hirose, Denso Techno                                                                                                */
+/*  * KH   = Kiko Huerte, DTPH                                                                                                       */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

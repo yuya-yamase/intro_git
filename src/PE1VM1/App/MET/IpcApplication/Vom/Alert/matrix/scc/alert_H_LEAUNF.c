@@ -1,4 +1,4 @@
-/* 5.1.0 */
+/* 5.2.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define ALERT_H_LEAUNF_C_MAJOR                   (5)
-#define ALERT_H_LEAUNF_C_MINOR                   (1)
+#define ALERT_H_LEAUNF_C_MINOR                   (2)
 #define ALERT_H_LEAUNF_C_PATCH                   (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -31,7 +31,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define ALERT_H_LEAUNF_PD_EHV_NUM_DST            (4U)
+#define ALERT_H_LEAUNF_NUM_DST                   (4U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -51,9 +51,9 @@ static U4      u4_s_AlertH_leaunfSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static const U1  u1_sp_ALERT_H_LEAUNF_PD_EHV_DST[ALERT_H_LEAUNF_PD_EHV_NUM_DST] = {
+static const U1  u1_sp_ALERT_H_LEAUNF_DST[ALERT_H_LEAUNF_NUM_DST] = {
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 00 UNKNOWN                                         */
-    (U1)ALERT_REQ_H_LEAUNF_PD_EHV_UNCOMP,                                      /* 01 UNCOMP                                          */
+    (U1)ALERT_REQ_H_LEAUNF_UNCOMP,                                             /* 01 UNCOMP                                          */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 02 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN                                                      /* 03 UNKNOWN                                         */
 };
@@ -67,8 +67,8 @@ const ST_ALERT_MTRX st_gp_ALERT_H_LEAUNF_MTRX[1] = {
         (const U4 *)vdp_PTR_NA,                                                /* u4p_MASK                                           */
         (const U4 *)vdp_PTR_NA,                                                /* u4p_CRIT                                           */
 
-        &u1_sp_ALERT_H_LEAUNF_PD_EHV_DST[0],                                   /* u1p_DST                                            */
-        (U2)ALERT_H_LEAUNF_PD_EHV_NUM_DST,                                     /* u2_num_srch                                        */
+        &u1_sp_ALERT_H_LEAUNF_DST[0],                                          /* u1p_DST                                            */
+        (U2)ALERT_H_LEAUNF_NUM_DST,                                            /* u2_num_srch                                        */
         (U1)ALERT_VOM_IGN_ON                                                   /* u1_vom_act                                         */
     }
 };
@@ -110,10 +110,12 @@ static U4      u4_s_AlertH_leaunfSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
 /*  5.0.1     3/26/2021  TN       Update for 840B CV(CAN flame define change).                                                       */
 /*  5.0.2     1/19/2022  HU       Update for 840B #2 CV(Version update).                                                             */
 /*  5.1.0     1/18/2024  AA       Update for 19pfv3                                                                                  */
+/*  5.2.0    12/18/2025  KH       Update for BEV Step3.                                                                              */
 /*                                                                                                                                   */
 /*  * RI   = Ren Itou, NTTD MSE                                                                                                      */
 /*  * TN   = Toshiaki Nagashima, NTTD MSE                                                                                            */
 /*  * HU   = Hidekazu Usui, NTTD MSE                                                                                                 */
 /*  * AA   = Anna Asuncion, DT                                                                                                       */
+/*  * KH   = Kiko Huerte, DTPH                                                                                                       */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
