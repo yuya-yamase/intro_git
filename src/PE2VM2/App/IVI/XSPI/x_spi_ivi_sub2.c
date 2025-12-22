@@ -142,6 +142,7 @@
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static U1 u1_s_xspi_ivi_com_start_flg;  /*Communication Start Request*/
+static U1 u1_s_xspi_ivi_com_start_response_flg;  /*Communication Start Response*/
 static U1 u1_s_xspi_ivi_ini_send_flg;   /*Initial Send Data Request*/
 static U1 u1_s_xspi_ivi_comp_com_start; /*Communication Start Complete*/
 
@@ -321,6 +322,7 @@ void            vd_g_XspiIviSub2Init(void)
     u4_s_xspi_ivi_pulse_count_tmp = (U4)0U;
 
 	u1_s_xspi_ivi_com_start_flg  = (U1)FALSE;                   /*通信開始フラグ初期化*/
+    u1_s_xspi_ivi_com_start_response_flg = (U1)FALSE;
     u1_s_xspi_ivi_ini_send_flg   = (U1)FALSE;                   /*初回送信開始フラグ初期化*/
     u1_s_xspi_ivi_comp_com_start = (U1)FALSE;                   /*通信開始応答完了フラグ初期化*/
     u2_s_xspi_ivi_ini_buf_cnt = (U2)0U;                         /*分割送信フレーム番号初期化*/
@@ -388,6 +390,7 @@ static void            vd_s_XspiIviSub2GyroAna(const U1 * u1_ap_SUB2_ADD, const 
     switch (u1_t_subtype)
     {
     case XSPI_IVI_GYRO_COM_START_REQ:
+        u1_s_xspi_ivi_com_start_response_flg = (U1)TRUE;
         u1_s_xspi_ivi_com_start_flg = (U1)TRUE;
         break;
     case XSPI_IVI_GYRO_INIT_DATA_REQ:
@@ -448,7 +451,7 @@ void            vd_g_XspiIviSub2Send(U1 * u1_ap_xspi_add)
     vd_g_MemfillU1(&u1_ap_xspi_add[0],(U1)0U,(U4)XSPI_IVI_SUBFRAME2_TOTAL_LENGTH);
 
     /*通信開始応答かそうじゃないか*/
-    if((u1_s_xspi_ivi_com_start_flg == (U1)TRUE)) {
+    if((u1_s_xspi_ivi_com_start_response_flg == (U1)TRUE)) {
         /* 通信開始応答 */
         vd_s_XspiIviSub2FrameHeader(u1_ap_xspi_add,(U2)XSPI_IVI_COM_START_RES_LENGTH,(U2)0U);
         u1_ap_xspi_add[8] = (U1)XSPI_IVI_GYRO_COM_START_RES;
@@ -457,7 +460,7 @@ void            vd_g_XspiIviSub2Send(U1 * u1_ap_xspi_add)
         u1_ap_xspi_add[11] = (U1)0x00;
 
         u1_s_xspi_ivi_comp_com_start = (U1)TRUE;
-        u1_s_xspi_ivi_com_start_flg = (U1)FALSE;
+        u1_s_xspi_ivi_com_start_response_flg = (U1)FALSE;
         u4_s_xspi_ivi_task_cnt[XSPI_TASK_CNT_GYRO] = (U4)0U;
     }else if(u1_s_xspi_ivi_comp_com_start == (U1)TRUE){
         /*Gyroセンサデータ取得処理*/
