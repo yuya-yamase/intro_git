@@ -1,0 +1,157 @@
+/* 5.2.1 */
+/*===================================================================================================================================*/
+/*  Copyright DENSO Corporation                                                                                                      */
+/*===================================================================================================================================*/
+/*  Alert S_ADBZR_APP                                                                                                                */
+/*                                                                                                                                   */
+/*===================================================================================================================================*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*  Version                                                                                                                          */
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+#define ALERT_S_ADBZR_APP_C_MAJOR                      (5)
+#define ALERT_S_ADBZR_APP_C_MINOR                      (2)
+#define ALERT_S_ADBZR_APP_C_PATCH                      (1)
+
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*  Include Files                                                                                                                    */
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+#include "alert_cfg_private.h"
+#include "alert_mtrx_cfg_private.h"
+
+#include "oxcan.h"
+
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*  Version Check                                                                                                                    */
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+#if (ALERT_S_ADBZR_APP_C_MAJOR != ALERT_CFG_H_MAJOR)
+#error "alert_S_ADBZR_APP.c and alert_cfg_private.h : source and header files are inconsistent!"
+#endif
+
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*  Literal Definitions                                                                                                              */
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+#define ALERT_S_ADBZR_APP_NUM_DST                (32U)
+
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*  Macro Definitions                                                                                                                */
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*  Type Definitions                                                                                                                 */
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*  Variable Definitions                                                                                                             */
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*  Static Function Prototypes                                                                                                       */
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+static U4      u4_s_AlertS_adbzr_appSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS);
+
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*  Constant Definitions                                                                                                             */
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+static const U1  u1_sp_ALERT_S_ADBZR_APP_DST[ALERT_S_ADBZR_APP_NUM_DST] = {
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 00 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 01 UNKNOWN                                         */
+    (U1)ALERT_REQ_S_ADBZR_APP_DISCONT,                                         /* 02 DISCONT                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 03 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 04 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 05 UNKNOWN                                         */
+    (U1)ALERT_REQ_S_ADBZR_APP_COMPLETION,                                      /* 06 COMPLETION                                      */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 07 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 08 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 09 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 10 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 11 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 12 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 13 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 14 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 15 UNKNOWN                                         */
+    (U1)ALERT_REQ_S_ADBZR_APP_DISCONT,                                         /* 16 DISCONT                                         */
+    (U1)ALERT_REQ_S_ADBZR_APP_DISCONT,                                         /* 17 DISCONT                                         */
+    (U1)ALERT_REQ_S_ADBZR_APP_DISCONT,                                         /* 18 DISCONT                                         */
+    (U1)ALERT_REQ_S_ADBZR_APP_DISCONT,                                         /* 19 DISCONT                                         */
+    (U1)ALERT_REQ_S_ADBZR_APP_DISCONT,                                         /* 20 DISCONT                                         */
+    (U1)ALERT_REQ_S_ADBZR_APP_DISCONT,                                         /* 21 DISCONT                                         */
+    (U1)ALERT_REQ_S_ADBZR_APP_DISCONT,                                         /* 22 DISCONT                                         */
+    (U1)ALERT_REQ_S_ADBZR_APP_DISCONT,                                         /* 23 DISCONT                                         */
+    (U1)ALERT_REQ_S_ADBZR_APP_DISCONT,                                         /* 24 DISCONT                                         */
+    (U1)ALERT_REQ_S_ADBZR_APP_DISCONT,                                         /* 25 DISCONT                                         */
+    (U1)ALERT_REQ_S_ADBZR_APP_DISCONT,                                         /* 26 DISCONT                                         */
+    (U1)ALERT_REQ_S_ADBZR_APP_DISCONT,                                         /* 27 DISCONT                                         */
+    (U1)ALERT_REQ_S_ADBZR_APP_DISCONT,                                         /* 28 DISCONT                                         */
+    (U1)ALERT_REQ_S_ADBZR_APP_DISCONT,                                         /* 29 DISCONT                                         */
+    (U1)ALERT_REQ_S_ADBZR_APP_DISCONT,                                         /* 30 DISCONT                                         */
+    (U1)ALERT_REQ_S_ADBZR_APP_DISCONT                                          /* 31 DISCONT                                         */
+};
+
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+const ST_ALERT_MTRX st_gp_ALERT_S_ADBZR_APP_MTRX[1] = {
+    {
+        &u4_s_AlertS_adbzr_appSrcchk,                                          /* fp_u4_SRC_CHK                                      */
+        vdp_PTR_NA,                                                            /* fp_vd_XDST                                         */
+
+        (const U4 *)vdp_PTR_NA,                                                /* u4p_MASK                                           */
+        (const U4 *)vdp_PTR_NA,                                                /* u4p_CRIT                                           */
+
+        &u1_sp_ALERT_S_ADBZR_APP_DST[0],                                       /* u1p_DST                                            */
+        (U2)ALERT_S_ADBZR_APP_NUM_DST,                                         /* u2_num_srch                                        */
+        (U1)ALERT_VOM_IGN_ON                                                   /* u1_vom_act                                         */
+    }
+};
+
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*  Function Definitions                                                                                                             */
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*===================================================================================================================================*/
+/*  static U4      u4_s_AlertS_adbzr_appSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)                           */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static U4      u4_s_AlertS_adbzr_appSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
+{
+    static const U2 u2_s_ALERT_S_ADBZR_APP_TRESH_TO = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
+    static const U1 u1_s_ALERT_S_ADBZR_APP_LSB_COM  = (U1)3U;
+    U4              u4_t_src_chk;
+    U1              u1_t_msgsts;
+    U1              u1_t_sgnl;
+
+    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_IPA1S05_CH0,
+                                      (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP,
+                                      u2_s_ALERT_S_ADBZR_APP_TRESH_TO) & (U1)(COM_TIMEOUT | COM_NO_RX);
+
+    u1_t_sgnl     = (U1)0U;
+    (void)Com_ReceiveSignal(ComConf_ComSignal_IPA_BZ2, &u1_t_sgnl);
+
+    u4_t_src_chk  = (U4)u1_t_sgnl;
+    u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_S_ADBZR_APP_LSB_COM);
+
+    return(u4_t_src_chk);
+}
+
+/*===================================================================================================================================*/
+/*                                                                                                                                   */
+/*  Change History                                                                                                                   */
+/*                                                                                                                                   */
+/*===================================================================================================================================*/
+/*                                                                                                                                   */
+/*  Version  Date        Author   Change Description                                                                                 */
+/* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
+/*  5.0.0     3/23/2020  KH       New.                                                                                               */
+/*  5.1.0     8/18/2020  ZS       Fix remote warning logic.                                                                          */
+/*  5.1.1     3/25/2021  MO       Update for 840B CV(Version update).                                                                */
+/*  5.1.2     1/19/2022  KAT      Update for 840B#2 CV(Version update).                                                              */
+/*  5.2.0     6/23/2025  HY       Change for BEV System_Consideration_2.(MET-S_ADMID-CSTD-0-02-A-C0,MET-S_ADTT-CSTD-0-02-A-C0)       */
+/*  5.2.1    12/17/2025  EA       Change for BEV System_Consideration_2.(MET-S_ADBZR-CSTD-0-06-A-C0)                                 */
+/*                                                                                                                                   */
+/*  * KH   = Koji Hattori, NTTD MSE                                                                                                  */
+/*  * ZS   = Zenjiro Shamoto, NTTD MSE                                                                                               */
+/*  * MO   = Masayuki Oofuji, NTTD MSE                                                                                               */
+/*  * KAT  = Katsushi Takahashi, NTTD MSE                                                                                            */
+/*  * HY   = Haruki Yagi, KSE                                                                                                        */
+/*  * EA   = Eunice Avelin, DTPH                                                                                                     */
+/*                                                                                                                                   */
+/*===================================================================================================================================*/

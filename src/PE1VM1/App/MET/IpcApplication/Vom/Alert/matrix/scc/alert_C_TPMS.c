@@ -1,4 +1,4 @@
-/* 5.2.0 */
+/* 5.3.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define ALERT_C_TPMS_C_MAJOR                     (5)
-#define ALERT_C_TPMS_C_MINOR                     (2)
+#define ALERT_C_TPMS_C_MINOR                     (3)
 #define ALERT_C_TPMS_C_PATCH                     (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -31,7 +31,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define ALERT_C_TPMS_BC_NUM_DST                  (8U)
+#define ALERT_C_TPMS_NUM_DST                     (8U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -46,15 +46,15 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static U4      u4_s_AlertC_tpmsBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS);
+static U4      u4_s_AlertC_tpmsSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static const U1  u1_sp_ALERT_C_TPMS_BC_DST[ALERT_C_TPMS_BC_NUM_DST] = {
+static const U1  u1_sp_ALERT_C_TPMS_DST[ALERT_C_TPMS_NUM_DST] = {
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 00 UNKNOWN                                         */
-    (U1)ALERT_REQ_C_TPMS_BC_SINGLE,                                            /* 01 SINGLE                                          */
-    (U1)ALERT_REQ_C_TPMS_BC_CYCL,                                              /* 02 CYCL                                            */
+    (U1)ALERT_REQ_C_TPMS_SINGLE,                                               /* 01 SINGLE                                          */
+    (U1)ALERT_REQ_C_TPMS_CYCL,                                                 /* 02 CYCL                                            */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 03 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 04 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 05 UNKNOWN                                         */
@@ -65,25 +65,25 @@ static const U1  u1_sp_ALERT_C_TPMS_BC_DST[ALERT_C_TPMS_BC_NUM_DST] = {
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 const ST_ALERT_MTRX st_gp_ALERT_C_TPMS_MTRX[1] = {
     {
-        &u4_s_AlertC_tpmsBcSrcchk,                                             /* fp_u4_SRC_CHK                                      */
+        &u4_s_AlertC_tpmsSrcchk,                                               /* fp_u4_SRC_CHK                                      */
         vdp_PTR_NA,                                                            /* fp_vd_XDST                                         */
 
         (const U4 *)vdp_PTR_NA,                                                /* u4p_MASK                                           */
         (const U4 *)vdp_PTR_NA,                                                /* u4p_CRIT                                           */
 
-        &u1_sp_ALERT_C_TPMS_BC_DST[0],                                         /* u1p_DST                                            */
-        (U2)ALERT_C_TPMS_BC_NUM_DST,                                           /* u2_num_srch                                        */
+        &u1_sp_ALERT_C_TPMS_DST[0],                                            /* u1p_DST                                            */
+        (U2)ALERT_C_TPMS_NUM_DST,                                              /* u2_num_srch                                        */
         (U1)ALERT_VOM_IGN_ON                                                   /* u1_vom_act                                         */
     }
 };
 
 /*===================================================================================================================================*/
-/*  static U4      u4_s_AlertC_tpmsBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)                              */
+/*  static U4      u4_s_AlertC_tpmsSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)                                */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-static U4      u4_s_AlertC_tpmsBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
+static U4      u4_s_AlertC_tpmsSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
     static const U1 u1_s_ALERT_C_TPMS_BC_LSB_MSGSTS = (U1)2U;
     U4              u4_t_src_chk;
@@ -119,6 +119,7 @@ static U4      u4_s_AlertC_tpmsBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
 /*  5.1.3    10/20/2022  HU       Update for 840B#2 MPT(Version update).                                                             */
 /*  5.1.4    12/12/2023  RO       Update for 19PFv3                    .                                                             */
 /*  5.2.0    11/19/2024  KH       Delete Compile switch                                                                              */
+/*  5.3.0    12/18/2025  KH       Delete TT and MID for BEV Step3.                                                                   */
 /*                                                                                                                                   */
 /*  * SN   = Shinichiro Naito, NTTD MSE                                                                                              */
 /*  * DS   = Daisuke Suzuki, NTTD MSE                                                                                                */

@@ -1,4 +1,4 @@
-/* 5.4.0 */
+/* 5.5.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define ALERT_O_EIGCON_C_MAJOR                   (5)
-#define ALERT_O_EIGCON_C_MINOR                   (4)
+#define ALERT_O_EIGCON_C_MINOR                   (5)
 #define ALERT_O_EIGCON_C_PATCH                   (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -32,7 +32,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define ALERT_O_EIGCON_ENG_NUM_DST               (64U)
+#define ALERT_O_EIGCON_NUM_DST                   (64U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -46,15 +46,15 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static U4      u4_s_AlertO_eigconEngSrcchk   (const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS);
+static U4      u4_s_AlertO_eigconSrcchk   (const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static const U1  u1_sp_ALERT_O_EIGCON_ENG_DST[ALERT_O_EIGCON_ENG_NUM_DST] = {
+static const U1  u1_sp_ALERT_O_EIGCON_DST[ALERT_O_EIGCON_NUM_DST] = {
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 00 UNKNOWN                                         */
-    (U1)ALERT_REQ_O_EIGCON_ENG_CYCLE,                                          /* 01 CYCLE                                           */
-    (U1)ALERT_REQ_O_EIGCON_ENG_ON,                                             /* 02 ON                                              */
+    (U1)ALERT_REQ_O_EIGCON_CYCLE,                                              /* 01 CYCLE                                           */
+    (U1)ALERT_REQ_O_EIGCON_ON,                                                 /* 02 ON                                              */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 03 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 04 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 05 UNKNOWN                                         */
@@ -121,25 +121,25 @@ static const U1  u1_sp_ALERT_O_EIGCON_ENG_DST[ALERT_O_EIGCON_ENG_NUM_DST] = {
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 const ST_ALERT_MTRX st_gp_ALERT_O_EIGCON_MTRX[1] = {
     {
-        &u4_s_AlertO_eigconEngSrcchk,                                          /* fp_u4_SRC_CHK                                      */
+        &u4_s_AlertO_eigconSrcchk,                                             /* fp_u4_SRC_CHK                                      */
         vdp_PTR_NA,                                                            /* fp_vd_XDST                                         */
 
         (const U4 *)vdp_PTR_NA,                                                /* u4p_MASK                                           */
         (const U4 *)vdp_PTR_NA,                                                /* u4p_CRIT                                           */
 
-        &u1_sp_ALERT_O_EIGCON_ENG_DST[0],                                      /* u1p_DST                                            */
-        (U2)ALERT_O_EIGCON_ENG_NUM_DST,                                        /* u2_num_srch                                        */
+        &u1_sp_ALERT_O_EIGCON_DST[0],                                          /* u1p_DST                                            */
+        (U2)ALERT_O_EIGCON_NUM_DST,                                            /* u2_num_srch                                        */
         (U1)ALERT_VOM_IGN_ON                                                   /* u1_vom_act                                         */
     }
 };
 
 /*===================================================================================================================================*/
-/*  static U4      u4_s_AlertO_eigconEngSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)                           */
+/*  static U4      u4_s_AlertO_eigconSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)                              */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-static U4      u4_s_AlertO_eigconEngSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
+static U4      u4_s_AlertO_eigconSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
     static const U2 u2_s_ALERT_O_EIGCON_ENG_TO_TRSH = ((U2)3600U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_O_EIGCON_ENG_LSB_MSG = (U1)4U;
@@ -172,10 +172,12 @@ static U4      u4_s_AlertO_eigconEngSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
 /*  5.2.0    12/ 7/2020  MO       Update for 800B 1A(Add PMN1F03).                                                                   */
 /*  5.3.0     4/ 8/2021  SO       Delete ACC Ch.                                                                                     */
 /*  5.4.0     6/24/2021  SO       Change matrix table for POWSTS.                                                                    */
+/*  5.5.0    12/18/2025  KH       Update for BEV Step3.                                                                              */
 /*                                                                                                                                   */
 /*  * DS   = Daisuke Suzuki, NTTD MSE                                                                                                */
 /*  * MY   = Masaki Yoshizawa, NTTD MSE                                                                                              */
 /*  * MO   = Masayuki Oofuji, NTTD MSE                                                                                               */
 /*  * SO   = Syuhei Ooshima, NTTD MSE                                                                                                */
+/*  * KH   = Kiko Huerte, DTPH                                                                                                       */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
