@@ -87,8 +87,6 @@
 /*PartialNM*/
 #define XSPI_IVI_PARTIALNM_DATASIZE         (7U)
 
-#define XSPI_IVI_MASK_04                    (0x0FU)
-
 #define XSPI_IVI_IVDSH_DREC_NWORD           (2U)
 #define XSPI_IVI_DATANM2_MASK               (0xC0U)
 #define XSPI_IVI_MET1D51_CANID              (0x4B600000U)
@@ -374,11 +372,6 @@ static void            vd_s_XspiIviSub4CanAna(const U1 * u1_ap_SUB4_ADD, const U
         
         if(u4_t_msg_aubistid != (U4)0xFFFFFFFFU){
         /* フレーム送信処理 */
-            if(u4_t_msg_aubistid ==(U4)MSG_AVN1S97_TXCH0){
-                u1_t_cd_size = u1_g_PictCtl_CdsizeSnd();
-                u1_tp_can_data[6] = u1_tp_can_data[6] & (U1)XSPI_IVI_MASK_04;
-                u1_tp_can_data[6] |= (U1)(u1_t_cd_size << XSPI_IVI_SFT_04);
-            }
             vd_g_CanCtlTx_SendHk(u4_t_msg_aubistid, &u1_tp_can_data[0]);
             (void)Com_SendIPDU((PduIdType)u4_t_msg_aubistid, &u1_tp_can_data[0] );
         }
