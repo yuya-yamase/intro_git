@@ -46,6 +46,7 @@
 #include "nvmc_mgr.h"
 #include "oxcan.h"
 #include "ivdsh.h"
+#include "fwush.h"
 
 #include "gpt_drv_ost.h"
 #include "wdg_drv.h"
@@ -259,7 +260,7 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
                                                                        /* called after vd_g_IoHwDifltSmplgTask                         */ 
 
     {&vd_g_Nvmc_Task,                   (U4)SCHDLR_TASKBIT___5MS    },
-
+    {&vd_g_FwushMainTask,               (U4)SCHDLR_TASKBIT___5MS    },
     /*-------------------------------------------------------------------*/
     /*                                                                   */
     /*  10ms A Non-Platform Task                                         */

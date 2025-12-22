@@ -11,7 +11,7 @@
 /*----------------------------------------------------------------------------
  *		Headers
  *--------------------------------------------------------------------------*/
-#include <stdint.h>
+/* #include <stdint.h> */
 #include <Std_Types.h>
 #include <SS_TYPE.h>
 #include <SS_Internal.h>
@@ -38,8 +38,8 @@
 /*----------------------------------------------------------------------------
  *		Symbols
  *--------------------------------------------------------------------------*/
-#define REG_u4RESF  (*(volatile uint32 *)((uintptr_t)0xFF988500UL)) /* RESF */
-#define REG_u4RESFC (*(volatile uint32 *)((uintptr_t)0xFF980C00UL)) /* RESFC */
+#define REG_u4RESF  (*(volatile uint32 *)(0xFF988500UL)) /* RESF */
+#define REG_u4RESFC (*(volatile uint32 *)(0xFF980C00UL)) /* RESFC */
 #if (SS_GEN_PRODUCT == SS_GEN_U2A)
 #define MSK_u4RESF_CAUSE (0x0003F5DDUL)
 #define VAL_u4RESFC_CLR  (0x0000F5DDUL) /* R_RESF_CLR */
@@ -51,7 +51,7 @@
 #endif
 #define VAL_u4RESF_ISO (0x00008000UL)
 
-#define REG_u4BOOTCTRL      (*(volatile uint32 *)((uintptr_t)0xFFFB2000UL))
+#define REG_u4BOOTCTRL      (*(volatile uint32 *)(0xFFFB2000UL))
 #define SS_BOOT_u4WAIT_TIME (0x4E20UL)
 
 /*----------------------------------------------------------------------------
@@ -111,31 +111,31 @@ static void SS_Boot_initStackTopBottom(void)
     if (u4CoreId == SS_CPUCORE_u4MASTERCORE)
 #endif
     {
-        (void)SS_Memory_set(__ghsbegin_ss_stack_top, 0UL, (uintptr_t)__ghssize_ss_stack_top);
-        (void)SS_Memory_set(__ghsbegin_ss_stack_bottom, 0UL, (uintptr_t)__ghssize_ss_stack_bottom);
+        (void)SS_Memory_set(__ghsbegin_ss_stack_top, 0UL, __ghssize_ss_stack_top);
+        (void)SS_Memory_set(__ghsbegin_ss_stack_bottom, 0UL, __ghssize_ss_stack_bottom);
     }
 #if (SS_USE_CORE_COUNT >= 2u)
     else if (u4CoreId == SS_CPUCORE_u4SLAVECORE1)
     {
         SS_ISeq_u4SyncCheck_1 = 0UL;
-        (void)SS_Memory_set(__ghsbegin_ss_stack1_top, 0UL, (uintptr_t)__ghssize_ss_stack1_top);
-        (void)SS_Memory_set(__ghsbegin_ss_stack1_bottom, 0UL, (uintptr_t)__ghssize_ss_stack1_bottom);
+        (void)SS_Memory_set(__ghsbegin_ss_stack1_top, 0UL, __ghssize_ss_stack1_top);
+        (void)SS_Memory_set(__ghsbegin_ss_stack1_bottom, 0UL, __ghssize_ss_stack1_bottom);
     }
 #endif
 #if (SS_USE_CORE_COUNT >= 3u)
     else if (u4CoreId == SS_CPUCORE_u4SLAVECORE2)
     {
         SS_ISeq_u4SyncCheck_2 = 0UL;
-        (void)SS_Memory_set(__ghsbegin_ss_stack2_top, 0UL, (uintptr_t)__ghssize_ss_stack2_top);
-        (void)SS_Memory_set(__ghsbegin_ss_stack2_bottom, 0UL, (uintptr_t)__ghssize_ss_stack2_bottom);
+        (void)SS_Memory_set(__ghsbegin_ss_stack2_top, 0UL, __ghssize_ss_stack2_top);
+        (void)SS_Memory_set(__ghsbegin_ss_stack2_bottom, 0UL, __ghssize_ss_stack2_bottom);
     }
 #endif
 #if (SS_USE_CORE_COUNT >= 4u)
     else if (u4CoreId == SS_CPUCORE_u4SLAVECORE3)
     {
         SS_ISeq_u4SyncCheck_3 = 0UL;
-        (void)SS_Memory_set(__ghsbegin_ss_stack3_top, 0UL, (uintptr_t)__ghssize_ss_stack3_top);
-        (void)SS_Memory_set(__ghsbegin_ss_stack3_bottom, 0UL, (uintptr_t)__ghssize_ss_stack3_bottom);
+        (void)SS_Memory_set(__ghsbegin_ss_stack3_top, 0UL, __ghssize_ss_stack3_top);
+        (void)SS_Memory_set(__ghsbegin_ss_stack3_bottom, 0UL, __ghssize_ss_stack3_bottom);
     }
 #endif
 #if (SS_USE_CORE_COUNT >= 2u)
@@ -170,7 +170,7 @@ void SS_Boot_CompleteHook(void)
         SS_CpuCore_entryMasterSection();
         {
             
-            (void)SS_Memory_set(__ghsbegin_ss_nvar_e_top, 0UL, (uintptr_t)SS_NVAR_E_SIZE);
+            (void)SS_Memory_set(__ghsbegin_ss_nvar_e_top, 0UL, (uint32)SS_NVAR_E_SIZE);
             
 
             
@@ -190,9 +190,9 @@ void SS_Boot_CompleteHook(void)
 #endif
         SS_CpuCore_entryMasterSection();
         {
-            (void)SS_Memory_set(__ghsbegin_ss_nvar_e_top, 0UL, (uintptr_t)SS_NVAR_E_SIZE);
+            (void)SS_Memory_set(__ghsbegin_ss_nvar_e_top, 0UL, (uint32)SS_NVAR_E_SIZE);
             
-            (void)SS_Memory_set(__ghsbegin_ss_rvar_e_top, 0UL, (uintptr_t)SS_RVAR_E_SIZE);
+            (void)SS_Memory_set(__ghsbegin_ss_rvar_e_top, 0UL, (uint32)SS_RVAR_E_SIZE);
         }
         SS_CpuCore_exitMasterSection();
         u4BootSource = SS_PM_BOOT_SUP;

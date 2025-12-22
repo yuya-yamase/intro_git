@@ -1176,7 +1176,7 @@
 /* Send-HOH Channel Number */
 #define BSW_CANIF_CFG_0_HTHNUM                  (2U)
 #define BSW_CANIF_CFG_1_HTHNUM                  (1U)
-#define BSW_CANIF_CFG_2_HTHNUM                  (1U)
+#define BSW_CANIF_CFG_2_HTHNUM                  (2U)
 #define BSW_CANIF_CFG_3_HTHNUM                  (1U)
 #define BSW_CANIF_CFG_4_HTHNUM                  (0U)
 #define BSW_CANIF_CFG_5_HTHNUM                  (0U)
@@ -2290,7 +2290,7 @@
 /* Transmission */
 #define BSW_CANIF_CFG_0_TXPDURPDUNUM            (0U)
 #define BSW_CANIF_CFG_1_TXPDURPDUNUM            (0U)
-#define BSW_CANIF_CFG_2_TXPDURPDUNUM            (0U)
+#define BSW_CANIF_CFG_2_TXPDURPDUNUM            (1U)
 #define BSW_CANIF_CFG_3_TXPDURPDUNUM            (0U)
 #define BSW_CANIF_CFG_4_TXPDURPDUNUM            (0U)
 #define BSW_CANIF_CFG_5_TXPDURPDUNUM            (0U)
@@ -3062,6 +3062,7 @@
 #define BSW_CANIF_CFG_METADATA_USE              (BSW_CANIF_NOUSE)
 
 /* PDU ID for Tx L-PDU */
+#define PDUID_QSEV_Tx_CANFD_VCC_1_BUS           (BSW_PDUR_LOCOMP_CANIF | 0x0000U)
 #define PDUID_Nsdu_TX_TxNPdu_Diag_Physical_Service (BSW_PDUR_LOCOMP_CANTP | 0x0000U)
 #define PDUID_Nsdu_TX_TxNPdu_Diag_Physical_Remote (BSW_PDUR_LOCOMP_CANTP | 0x0001U)
 #define PDUID_Nsdu_TX_TxNPdu_Diag_Physical_FD_Service (BSW_PDUR_LOCOMP_CANTP | 0x0002U)
@@ -3072,10 +3073,10 @@
 #define PDUID_CDCMN01_Tx_MM_SUB_BUS             (BSW_PDUR_LOCOMP_CANNM | 0x0003U)
 
 /* PDU ID for Rx L-PDU */
-#define PDUID_BDC1S52_Rx_CANFD_G2M_1_BUS        (BSW_PDUR_LOCOMP_CANIF | 0x0000U)
-#define PDUID_BDC1S60_Rx_CANFD_G2M_1_BUS        (BSW_PDUR_LOCOMP_CANIF | 0x0001U)
-#define PDUID_BDC1S81_Rx_CANFD_G2M_1_BUS        (BSW_PDUR_LOCOMP_CANIF | 0x0002U)
-#define PDUID_BDC1S91_Rx_CANFD_G2M_2_BUS        (BSW_PDUR_LOCOMP_CANIF | 0x0003U)
+#define PDUID_BDC1S52_Rx_CANFD_G2M_1_BUS        (BSW_PDUR_LOCOMP_CANIF | 0x0001U)
+#define PDUID_BDC1S60_Rx_CANFD_G2M_1_BUS        (BSW_PDUR_LOCOMP_CANIF | 0x0002U)
+#define PDUID_BDC1S81_Rx_CANFD_G2M_1_BUS        (BSW_PDUR_LOCOMP_CANIF | 0x0003U)
+#define PDUID_BDC1S91_Rx_CANFD_G2M_2_BUS        (BSW_PDUR_LOCOMP_CANIF | 0x0004U)
 #define PDUID_Nsdu_RX_RxNPdu_Diag_Physical_Service (BSW_PDUR_LOCOMP_CANTP | 0x0004U)
 #define PDUID_Nsdu_RX_RxNPdu_Diag_Functional_Service (BSW_PDUR_LOCOMP_CANTP | 0x0005U)
 #define PDUID_Nsdu_RX_RxNPdu_Diag_Physical_Remote (BSW_PDUR_LOCOMP_CANTP | 0x0006U)
@@ -3090,6 +3091,7 @@
 #define PDUID_MCDMN01_Rx_MM_SUB_BUS             (BSW_PDUR_LOCOMP_CANNM | 0x0009U)
 
 /* HOH Number for Tx L-PDU */
+#define HOH_QSEV_Tx_CANFD_VCC_1_BUS             (BSW_CANIF_HOH_VIRTUAL | 0x0008U)
 #define HOH_Nsdu_TX_TxNPdu_Diag_Physical_Service (0x00F9U)
 #define HOH_Nsdu_TX_TxNPdu_Diag_Physical_Remote (0x00F9U)
 #define HOH_Nsdu_TX_TxNPdu_Diag_Physical_FD_Service (0x00F9U)

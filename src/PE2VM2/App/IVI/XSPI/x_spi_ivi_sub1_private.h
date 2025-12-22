@@ -42,6 +42,7 @@
 void            vd_g_XspiIviSub1Init(void);
 void            vd_g_XspiIviSub1Ana(const U1 * u1_ap_XSPI_ADD);
 void            vd_g_XspiIviSub1Send(U1 * u1_ap_xspi_add);
+void            vd_g_XspiIviSub1Routine(void);
 void            vd_g_XspiIviSub1MISCStuckBuff(const U1 u1_a_TYPE, const U2 u2_a_SIZE,const U1 * u1_ap_SRC);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

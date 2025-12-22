@@ -90,7 +90,7 @@ const ST_CAN_LPR_ING * const    stp_gp_CAN_LPR_ING[CAN_LPR_NUM_ING] = {
     &st_s_CAN_LPR_ING_LOCAL,     /* 11 */
     &st_s_CAN_LPR_ING_VIR_0,     /* 12 */
     &st_s_CAN_LPR_ING_SECOC_TX,  /* 13 */
-    NULL_PTR                     /* 14 */
+    &st_s_CAN_LPR_ING_SECOC_RX   /* 14 */
 };
 const uint8                     u1_g_CAN_LPR_NUM_ING = (U1)CAN_LPR_NUM_ING;
 
@@ -116,7 +116,7 @@ const U4                        u4_gp_CAN_LPR_REGR_EN_BY_NET[CAN_LPR_NUM_NET * C
     /*   CAN_LPR_REGR_EN_SECOC_RX     (0x00000002U) */
     /*   CAN_LPR_REGR_EN_VIR_TX_0     (0x00000200U) */
     /*   CAN_LPR_REGR_EN_UDS_TX_VIR_0 (0x00000400U) */
-    (U4)0x00000600U,                     /* FUL_EEE */
+    (U4)0x00000602U,                     /* FUL_EEE */
     /* ----------------------------------------------------------------------------------------------------- */
     /* Warning :                                                                                             */
     /* ----------------------------------------------------------------------------------------------------- */
@@ -130,7 +130,7 @@ const U4                        u4_gp_CAN_LPR_REGR_EN_BY_NET[CAN_LPR_NUM_NET * C
     /* The above behavior is permitted and expected in CANLpR design since it's rare case.                   */
     /*                                                                                                       */
     /* ----------------------------------------------------------------------------------------------------- */
-    (U4)0x00000600U,                     /* FUL_DEE */
+    (U4)0x00000602U,                     /* FUL_DEE */
     (U4)0x00000000U,                     /* SIL_DDE */
 
     /* CAN_LPR_NET_LOCA  (3U)                       */

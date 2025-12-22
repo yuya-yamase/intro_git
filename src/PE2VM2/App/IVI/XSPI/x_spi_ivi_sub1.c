@@ -26,6 +26,7 @@
 #include    "x_spi_ivi_sub1_clock.h"
 #include    "x_spi_ivi_sub1_hdmi.h"
 #include    "x_spi_ivi_sub1_audio.h"
+#include    "x_spi_ivi_sub1_repro.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -101,6 +102,7 @@ void            vd_g_XspiIviSub1Init(void)
     vd_g_XspiIviSub1DiagInit();
     vd_g_XspiIviSub1ClockInit();
 	vd_g_XspiIviSub1VersionInit();
+    vd_g_XspiIviSub1ReproInit();
 }
 
 /*===================================================================================================================================*/
@@ -178,7 +180,8 @@ static void            vd_s_XspiIviSub1MiscAna(const U1 * u1_ap_SUB1_ADD, const 
             /*SOCで完結 skip*/
             break;
             case XSPI_IVI_MISC_REPRO:
-            /*シス検 skip*/
+                /* Repro Data解析処理 */
+                vd_s_FwupxPutReqData(&u1_ap_SUB1_ADD[u2_t_data_id + 8U], u2_t_datasize);
             break;
             case XSPI_IVI_MISC_HDMI:
                 vd_g_XspiIviSub1HdmiAna(&u1_ap_SUB1_ADD[u2_t_data_id + 8U],u2_t_datasize);
@@ -224,6 +227,18 @@ void            vd_g_XspiIviSub1Send(U1 * u1_ap_xspi_add)
     u1_ap_xspi_add[5] = (U1)(u2_t_data_size & (U2)0x00FFU);
     u1_ap_xspi_add[6] = (U1)0x8CU;
     u1_ap_xspi_add[7] = u1_t_data_num;
+}
+/*===================================================================================================================================*/
+/*  void            vd_g_XspiIviSub1Routine(void)                                                                                    */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    SubFlame1(MISC Data) Transmission data for routine                                                               */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void            vd_g_XspiIviSub1Routine(void)
+{
+    /* 定期監視処理 */
+    vd_g_XspiIviSub1ReproMainTask();
 }
 
 /*===================================================================================================================================*/
