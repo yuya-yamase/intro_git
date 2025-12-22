@@ -456,7 +456,7 @@ U2 u2_d_Nvmc_DTF_get_RAM_Block_Size(const U2 u2_a_ID)
 /*===================================================================================================================================*/
 static void    vd_s_Nvmc_RAMBlockInit(void)
 {
-    (void)SS_Memory_set(__ghsbegin_MEM_SEC_ADDR_STA_BSS_MS, 0UL, (uintptr_t)NVMC_RAM_SIZE);
+    (void)SS_Memory_set(__ghsbegin_MEM_SEC_ADDR_STA_BSS_MS, 0UL, (uint32)NVMC_RAM_SIZE);
     vd_g_Wdg_SetTriggerCondition((U2)0U);
 }
 

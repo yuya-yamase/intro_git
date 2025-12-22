@@ -11,7 +11,7 @@
 /*----------------------------------------------------------------------------
  *		Headers
  *--------------------------------------------------------------------------*/
-#include <stdint.h>
+/* #include <stdint.h> */
 #include <Std_Types.h>
 #include <SS_TYPE.h>
 #include <SS_Internal.h>
@@ -105,11 +105,11 @@ typedef struct REG_ST_SS_HSTM_TAUJ
     uint32 u4ReservedA8[2]; /* 0xA8 */
 } REG_ST_SS_HSTM_TAUJ;
 
-#define REG_ptTAUJn ((volatile REG_ST_SS_HSTM_TAUJ *)((uintptr_t)0xFFE81000UL)) /* TAUJ3_base */
+#define REG_ptTAUJn ((volatile REG_ST_SS_HSTM_TAUJ *)(0xFFE81000UL)) /* TAUJ3_base */
 
-#define REG_WUFMSK0_A2 (*(volatile uint32 *)((uintptr_t)0xFF98E024UL)) /* WUFMSK0_A2 */
-#define REG_WUF0_A2    (*(volatile uint32 *)((uintptr_t)0xFF98E020UL)) /* WUF0_A2 */
-#define REG_WUFC0_A2   (*(volatile uint32 *)((uintptr_t)0xFF98E028UL)) /* WUFC0_A2 */
+#define REG_WUFMSK0_A2 (*(volatile uint32 *)(0xFF98E024UL)) /* WUFMSK0_A2 */
+#define REG_WUF0_A2    (*(volatile uint32 *)(0xFF98E020UL)) /* WUF0_A2 */
+#define REG_WUFC0_A2   (*(volatile uint32 *)(0xFF98E028UL)) /* WUFC0_A2 */
 
 /* HST's pre-scaller */
 #define SS_HSTM_u1PRS_CK0 (0U)
@@ -411,15 +411,16 @@ void SS_HSTm_reload(uint32 u4AlarmPeriodCnt)
 
 uint32 SS_HSTm_convLsbRealToReg(uint32 u4RealTime)
 {
-    uint64 u8ConvertedReg;
+/*    uint64 u8ConvertedReg; */
 
-#if (SS_HSTM_u1PRS == SS_HSTM_u1PRS_CK3)
-    u8ConvertedReg = ((uint64)u4RealTime * (SS_HSTM_u4REGSLEEP_SRCCLK / SS_HSTM_u2PRESCAL_DIV_CALC)) / SS_HSTM_u4REGSLEEP_DIV; /* EDET_INT30 */
-#else
-    u8ConvertedReg = ((uint64)u4RealTime * SS_HSTM_u4REGSLEEP_SRCCLK) / SS_HSTM_u4REGSLEEP_DIV; /* EDET_INT30 */
-#endif
+/* #if (SS_HSTM_u1PRS == SS_HSTM_u1PRS_CK3) */
+/*     u8ConvertedReg = ((uint64)u4RealTime * (SS_HSTM_u4REGSLEEP_SRCCLK / SS_HSTM_u2PRESCAL_DIV_CALC)) / SS_HSTM_u4REGSLEEP_DIV; /\* EDET_INT30 *\/ */
+/* #else */
+/*     u8ConvertedReg = ((uint64)u4RealTime * SS_HSTM_u4REGSLEEP_SRCCLK) / SS_HSTM_u4REGSLEEP_DIV; /\* EDET_INT30 *\/ */
+/* #endif */
+/*    return ((uint32)u8ConvertedReg); */
 
-    return ((uint32)u8ConvertedReg);
+    return ((uint32)0);
 }
 
 /**---------------------------------------------------------------------------
@@ -432,11 +433,12 @@ uint32 SS_HSTm_convLsbRealToReg(uint32 u4RealTime)
 
 uint32 SS_HSTm_convLsbRegToReal(uint32 u4RegTime)
 {
-    uint64 u8ConvertedReal;
+    /* uint64 u8ConvertedReal; */
 
-    u8ConvertedReal = ((uint64)u4RegTime * SS_HSTM_u4REGSLEEP_DIV) / SS_HSTM_u4REGSLEEP_SRCCLK;
+    /* u8ConvertedReal = ((uint64)u4RegTime * SS_HSTM_u4REGSLEEP_DIV) / SS_HSTM_u4REGSLEEP_SRCCLK; */
 
-    return ((uint32)u8ConvertedReal);
+    /* return ((uint32)u8ConvertedReal); */
+    return ((uint32)0);
 }
 
 #endif /* (SS_USE_SLEEP == STD_ON) */

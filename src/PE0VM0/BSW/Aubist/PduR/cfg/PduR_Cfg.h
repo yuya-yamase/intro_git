@@ -31,12 +31,12 @@
 #define BSW_PDUR_CFG_MSGCOM_NUM            (4U)
 #define BSW_PDUR_CFG_MSGDCM_NUM            (10U)
 #define BSW_PDUR_CFG_MSGLDCOM_NUM          (0U)
-#define BSW_PDUR_CFG_MSGCDD1_NUM           (0U)
+#define BSW_PDUR_CFG_MSGCDD1_NUM           (1U)
 #define BSW_PDUR_CFG_MSGCDD2_NUM           (0U)
 #define BSW_PDUR_CFG_MSGJ1939TPUP_NUM      (0U)
 
 /* Lower Component */
-#define BSW_PDUR_CFG_MSGCANIF_NUM          (4U)
+#define BSW_PDUR_CFG_MSGCANIF_NUM          (5U)
 #define BSW_PDUR_CFG_MSGLINIF_NUM          (0U)
 #define BSW_PDUR_CFG_MSGSOADIF_NUM         (0U)
 #define BSW_PDUR_CFG_MSGDOIPIF_NUM         (0U)
@@ -53,6 +53,7 @@
 #define BSW_PDUR_CFG_ZEROCOSTOPERATION     (BSW_NOUSE)
 
 /* PDU ID for Tx UpperCdd-PDU */
+#define UPPERCDD1_QSEV_Tx_CANFD_VCC_1_BUS  (0x0000U)
 
 /* PDU ID for Rx UpperCdd-PDU */
 

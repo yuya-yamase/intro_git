@@ -1,22 +1,8 @@
 @echo OFF
 
-rmdir /s /q EHVM\dst
-rmdir /s /q EHVM\obj
+rmdir /s /q dst
+rmdir /s /q obj
 
-rmdir /s /q PE0VM0\dst
-rmdir /s /q PE0VM0\obj
-
-rmdir /s /q PE1VM1\dst
-rmdir /s /q PE1VM1\obj
-
-rmdir /s /q PE2VM2\dst
-rmdir /s /q PE2VM2\obj
-
-rmdir /s /q PE3VM3\dst
-rmdir /s /q PE3VM3\obj
-
-del RFP\bin\*.mot
-del RFP\bin\*.x
 del .\*.log
 del Section_Size_*.xlsx
 
@@ -81,3 +67,6 @@ rmdir /s /q ..\..\src\DevRRPG\ReprogAPL_Info\env\out
 rmdir /s /q ..\..\src\DevRRPG\ReprogProject\env\out
 del      /q ..\..\src\DevRRPG\Tool\Converter\*.mot
 del      /q ..\..\src\DevRRPG\Tool\Converter\*.log
+del      /q ..\..\src\DevRRPG\Tool\Converter\*.bin
+del      /q ..\..\src\DevRRPG\Tool\Converter\*.crc
+del      /q ..\..\src\DevRRPG\Tool\Converter\*.txt

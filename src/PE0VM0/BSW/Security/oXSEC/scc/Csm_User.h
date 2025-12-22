@@ -30,9 +30,9 @@
 /* Function Prototypes                                                      */
 /*--------------------------------------------------------------------------*/
 
-FUNC( void, CSM_CODE ) Test_CsmCallback_KeySetValid( uint32 jobId, Crypto_ResultType result );
+FUNC( void, CSM_CODE ) CsmCallback_KeySetValid( uint32 jobId, Crypto_ResultType result );
 
-FUNC( void, CSM_CODE ) Test_CsmCallback_General( uint32 jobId, Crypto_ResultType result );
+FUNC( void, CSM_CODE ) CsmCallback_General( uint32 jobId, Crypto_ResultType result );
 
 FUNC( void, CSM_CODE ) WrapCrypto_ErrorCallout( Csm_Ab_ErrorStatusType udErrorStatus );
 

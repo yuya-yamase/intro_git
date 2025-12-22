@@ -65,7 +65,7 @@
 /*===================================================================================================================================*/
 void    vd_g_Rim_InitBackupram(void)
 {
-    (void)SS_Memory_set(__ghsbegin_MEM_SEC_STA_BACK_APPL, 0UL, (uintptr_t)BSS_BACK_SIZE);
+    (void)SS_Memory_set(__ghsbegin_MEM_SEC_STA_BACK_APPL, 0UL, (uint32)BSS_BACK_SIZE);
     vd_g_Wdg_SetTriggerCondition((U2)0U);
 }
 

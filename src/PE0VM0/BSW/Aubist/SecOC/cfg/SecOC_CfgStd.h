@@ -21,12 +21,12 @@
 /*--------------------------------------------------------------------------*/
 /* Macros                                                                   */
 /*--------------------------------------------------------------------------*/
-#define SECOC_RX_PDU_PROCESSING_MAX (0U)
-#define SECOC_AB_RX_SECURED_MSG_IN_BUS_COUNT_MAX (0U)
+#define SECOC_RX_PDU_PROCESSING_MAX (29U)
+#define SECOC_AB_RX_SECURED_MSG_IN_BUS_COUNT_MAX (29U)
 #define SECOC_TX_PDU_PROCESSING_MAX (16U)
 #define SECOC_AB_TX_SECURED_MSG_IN_BUS_COUNT_MAX (15U)
 #define SECOC_AB_BUS_MAX (4U)
-#define SECOC_AB_VERIFICATION_FINAL_STATUS_CALLOUT_MAX (0U)
+#define SECOC_AB_VERIFICATION_FINAL_STATUS_CALLOUT_MAX (1U)
 #define SECOC_AB_RXMSG_OVERFLOW_DESTRUCTION_CALLOUT_MAX (0U)
 #define SECOC_AB_RXMSG_BUSY_DESTRUCTION_CALLOUT_MAX (0U)
 #define SECOC_AB_TXMSG_BUSY_DESTRUCTION_CALLOUT_MAX (0U)
@@ -87,6 +87,48 @@ typedef struct {
     uint16                               dummy2;
 } SecOC_Ab_BusCollectionType;
 
+typedef struct {
+    uint16                              Ab_AuthInfoLength;
+    uint16                              AuthInfoTruncLength;
+    uint16                              Ab_BusIndex;
+    uint16                              Ab_TxSecurityDataSize;
+    uint16                              dummy1;
+    uint16                              Ab_MessageTypeIndex;
+    uint8                               Ab_MessageType;
+    uint8                               VerifyStatusPropagationMode;
+    uint16                              AuthenticationBuildAttempts;
+    uint32                              Ab_DataId;
+    uint16                              AuthenticationVerifyAttempts;
+    uint16                              FreshnessValueId;
+    uint16                              FreshnessValueLength;
+    uint16                              FreshnessValueTruncLength;
+    SecOC_AuthServiceConfigRefType      RxAuthServiceConfigRef;
+    uint32                              SameBufferPduRef;
+    uint32                              Ab_BufferStartOffset;
+    uint32                              Ab_RxMakeAuthBufferSize;
+    uint32                              Ab_RxBufferStartOffset;
+    SecOC_Ab_FreshnessValueCalloutType  Ab_FreshnessValueCallout;
+    uint16                              RxSecuredLayerPduId;
+    uint16                              Ab_RxAuthenticLayerPduId;
+    SecOC_GetRxFreshnessType            Ab_FreshnessValueFuncName;
+    SecOC_VerificationFinalStatusCalloutType Ab_VerificationFinalStatusCallout[SECOC_AB_VERIFICATION_FINAL_STATUS_CALLOUT_MAX];
+    uint16                              Ab_QueryFreshnessValue;
+    uint16                              Ab_ProtDataPaddingSize;
+    SecOC_ErrorDetailNotifyCalloutType  Ab_ErrorDetailNotifyCallout;
+    uint32                              Ab_RxAuthTpCopySize;
+    uint8                               RxAuthPduType;
+    uint8                               Ab_RxSecuredPduType;
+    boolean                             Ab_ForceReceive;
+    uint8                               Ab_VerifyFinalStatusPropagationMode;
+    uint16                              Ab_RxAuthenticLayerPduRefId;
+    uint16                              Ab_RxSecuredLayerPduRefId;
+    uint32                              Ab_CsmReqSaSizeMax;
+    SecOC_Ab_RxMsgOverflowDestructionCalloutType  Ab_RxMsgOverflowDestructionCallout[1];
+    SecOC_Ab_RxMsgBusyDestructionCalloutType  Ab_RxMsgBusyDestructionCallout[1];
+    uint8                               Ab_CsmReqType;
+    boolean                             SecuredRxPduVerification;
+    uint16                              dummy2;
+} SecOC_RxPduProcessingType;
 
 typedef struct {
     uint16                              Ab_AuthInfoLength;
@@ -158,11 +200,14 @@ typedef struct {
 
 typedef struct {
     SecOC_SecOCGeneralConfigType          SecOCGeneral;
+    SecOC_SecOCRxPduProcessingConfigType  SecOCRxPduProcessing[SECOC_RX_PDU_PROCESSING_MAX];
     SecOC_SecOCTxPduProcessingConfigType  SecOCTxPduProcessing[SECOC_TX_PDU_PROCESSING_MAX];
     SecOC_SecOC_Ab_BusCollectionConfigType SecOCAbBusCollection[SECOC_AB_BUS_MAX];
 } SecOC_ConfigType;
 
 typedef struct {
+    uint16 Ab_RxSecuredMsgCount;
+    uint16 Ab_RxSecuredMsgIdxList[SECOC_AB_RX_SECURED_MSG_IN_BUS_COUNT_MAX];
     uint16 Ab_TxSecuredMsgCount;
     uint16 Ab_TxSecuredMsgIdxList[SECOC_AB_TX_SECURED_MSG_IN_BUS_COUNT_MAX];
 } SecOC_Ab_BusId2SecuredMsgIdxType;

@@ -11,7 +11,7 @@
 /*----------------------------------------------------------------------------
  *		Headers
  *--------------------------------------------------------------------------*/
-#include <stdint.h>
+/* #include <stdint.h> */
 #include <Std_Types.h>
 #include <SS_TYPE.h>
 #include <SS_Internal.h>
@@ -30,8 +30,8 @@
 /*----------------------------------------------------------------------------
  *		Symbols
  *--------------------------------------------------------------------------*/
-#define REG_u4SWSRESA                (*(volatile uint32 *)((uintptr_t)0xFF98840CUL)) /* SWSRESA */
-#define REG_u4RESKCPROT0             (*(volatile uint32 *)((uintptr_t)0xFF980F00UL)) /* RESKCPROT0 */
+#define REG_u4SWSRESA                (*(volatile uint32 *)(0xFF98840CUL)) /* SWSRESA */
+#define REG_u4RESKCPROT0             (*(volatile uint32 *)(0xFF980F00UL)) /* RESKCPROT0 */
 #define VAL_u4RESKCPROT0_KCE_ENABLE  (0xA5A5A501UL)
 #define VAL_u4RESKCPROT0_KCE_DISABLE (0xA5A5A500UL)
 

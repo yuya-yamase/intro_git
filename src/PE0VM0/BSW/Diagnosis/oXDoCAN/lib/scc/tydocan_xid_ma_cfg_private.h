@@ -31,8 +31,22 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#define TYDC_KZK_NUM_RX                          (2U)
+#define TYDC_KZK_RX_D902                         (0U)  /* RID 0xD902                  */
+#define TYDC_KZK_RX_D903                         (1U)  /* RID 0xD903                  */
+
+#define TYDC_KZK_RX_PDU_1                        (0U)  /* KZKSEND1~8                  */
+
+#define TYDC_KZK_RX_PDU_IUV                      (0U)  /* KZKID, KZKUSAGE, KZKVERI1~4 */
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define OXDC_DATA_REA_ANS_NB_A901                (16U)
+
+#define OXDC_ROUT_STA_REQ_NB_D902                (0U)
+#define OXDC_ROUT_STA_ANS_NB_D902                (1U)
+
+#define OXDC_ROUT_STA_REQ_NB_D903                (0U)
+#define OXDC_ROUT_STA_ANS_NB_D903                (1U)
 
 #define OXDC_ROUT_STA_REQ_NB_D904                (64U)
 #define OXDC_ROUT_STA_ANS_NB_D904                (50U)
@@ -46,6 +60,12 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+typedef struct{
+    const U1 *     u1p_KZK_RX;
+    U2             u2_pdu_min;
+    U2             u2_pdu_max;
+}ST_TYDC_KZK_RX;
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -61,6 +81,9 @@ U1      u1_g_oXDoCANRebyId_A901(U1 * u1_ap_ans, const U2 u2_a_ELPSD);         /*
 U1      u1_g_oXDoCANRoutCorchk_D904(const U1 u1_a_SUBF, const U1 * u1_ap_COR);
 U1      u1_g_oXDoCANRoutStart_D904(U1 * u1_ap_ans, const U2 u2_a_ELPSD, U2 * u2_ap_nbyte);
 U1      u1_g_oXDoCANRoutRslt_D904(U1 * u1_ap_ans, const U2 u2_a_ELPSD, U2 * u2_ap_nbyte);
+
+U1      u1_g_oXDoCANRoutStart_D902(U1 * u1_ap_ans, const U2 u2_a_ELPSD, U2 * u2_ap_nbyte);
+U1      u1_g_oXDoCANRoutStart_D903(U1 * u1_ap_ans, const U2 u2_a_ELPSD, U2 * u2_ap_nbyte);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 U1      u1_g_TyDoCANXidMaCfgSafeKeyNum(U1 * u1_ap_skn);             /* Return TRUE = Valid, FALSE = Invalid                          */
                                                                     /* The array size of u1_ap_skn = TYDC_DATA_REA_NB_A901 and it's  */
@@ -68,6 +91,8 @@ U1      u1_g_TyDoCANXidMaCfgSafeKeyNum(U1 * u1_ap_skn);             /* Return TR
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+extern const ST_TYDC_KZK_RX    st_gp_TYDC_KZK_RX[TYDC_KZK_NUM_RX];
+
 #endif      /* TYDOCAN_XID_MA_H */
 
 /*===================================================================================================================================*/

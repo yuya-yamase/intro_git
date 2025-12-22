@@ -1314,16 +1314,16 @@ EhvmConst ehvm_cfg_tbl_cmn_t ehvm_cfg_tbl_conmon =
     &ehvmSpidConfigData,          /* ehvm_SpidConfigData */
     &IntmCommonConfigData,        /* ehvm_IntmCommonConfigData */
     INTC2G_SWITCH_REGISTER,       /* ehvm_intc2g_switch_register */
-    EHVM_INT_OFF,    /* vm_status_update_int_no */
-    0U,  /* pwrgd_cnt_value_deep_stop */
-    EM_CONTEXT_VM0_PE0,                  /* master_vm */
+    EHVM_INT_OFF,                 /* vm_status_update_int_no */
+    0U,                           /* pwrgd_cnt_value_deep_stop */
+    EM_CONTEXT_VM0_PE0,           /* master_vm */
     0x00000000U,                  /* special_vm_mask */
-    VWDT_ENABLE,                /* VWdtEnable */
-    &HvcmInfoData,                /* HvcmInfo */
-    &UcConfigData,                /* ehvm_UcConfig */
-    6U,                          /* ehvm_sch_disable_vm_switch_upper_margin */
-    &ehvmMmCommonConfigData,      /* MmCommonConfigData */
-    &ehvm_hvm_get_lock_timeout_loop_count[0], /* ehvm_hvm_get_lock_timeout_loop_count_info */
+    VWDT_ENABLE,                  /* VWdtEnable */
+    &HvcmInfoData,                                                  /* HvcmInfo */
+    &UcConfigData,                                                  /* ehvm_UcConfig */
+    6U,                                                             /* ehvm_sch_disable_vm_switch_upper_margin */
+    &ehvmMmCommonConfigData,                                        /* MmCommonConfigData */
+    &ehvm_hvm_get_lock_timeout_loop_count[0],                       /* ehvm_hvm_get_lock_timeout_loop_count_info */
     EHVM_PSM_DEEPSTOP_PE_STOP_WAIT_TIMEOUT_LOOP_COUNT_INVALID       /* deep_stop_seq_core_stop_wait_timeout_loop_count */
 };
 

@@ -135,7 +135,7 @@ void    vd_g_oXCANRstInit(void)
 #endif /* #if (OXCAN_LIB_CFG_EN_VCT == 1U) */
 
 #if (OXCAN_LIB_CFG_EN_WRH == 1U)
-    vd_g_oXCANWrhInit();
+    vd_g_oXCANWrhInit((U1)TRUE);    /* u1_a_RST_INIT = TRUE  */
 #endif /* #if (OXCAN_LIB_CFG_EN_WRH == 1U) */
 
 #if (OXCAN_BACK_NWORD > 0U)
@@ -176,7 +176,7 @@ void    vd_g_oXCANWkupInit(void)
 #endif /* #if (OXCAN_LIB_CFG_EN_VCT == 1U) */
 
 #if (OXCAN_LIB_CFG_EN_WRH == 1U)
-    vd_g_oXCANWrhInit();
+    vd_g_oXCANWrhInit((U1)FALSE);    /* u1_a_RST_INIT = FALSE */
 #endif /* #if (OXCAN_LIB_CFG_EN_WRH == 1U) */
 
 #if (OXCAN_BACK_NWORD > 0U)

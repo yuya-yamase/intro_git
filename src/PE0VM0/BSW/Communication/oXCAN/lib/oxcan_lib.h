@@ -168,7 +168,7 @@ void    vd_g_oXCANvCtWrqDet(const U1 u1_a_CTRLR, const U1 u1_a_ENA);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #if (OXCAN_LIB_CFG_EN_WRH == 1U)
 
-void    vd_g_oXCANWrhInit(void);
+void    vd_g_oXCANWrhInit(const U1 u1_a_RST_INIT);
 void    vd_g_oXCANWrhMainTask(const U4 u4_a_SYS_ACT);
 U1      u1_g_oXCANWrhShtdwnOk(void);
 

@@ -148,6 +148,16 @@ U1      u1_g_RunMCfgWksrcIrqchk(void)
 /*===================================================================================================================================*/
 void    vd_g_RunMCfgWksrcCfgRefresh(void)
 {
+    vd_g_IcuWkSetCh((U1)ICU_WK_CH_INTP2,  (U1)ICU_WK_CFGBIT_ELC_RI | (U1)ICU_WK_CFGBIT_WRQ_ENA);  /* BOOT            */
+    vd_g_IcuWkSetCh((U1)ICU_WK_CH_INTP4,  (U1)ICU_WK_CFGBIT_ELC_RI | (U1)ICU_WK_CFGBIT_WRQ_ENA);  /* /BU-DET         */
+
+    /* vd_g_IcuWkSetCh((U1)ICU_WK_CH_INTP12, (U1)ICU_WK_CFGBIT_ELC_RI); */                        /* GVIF-RX/CAM-INT */
+    /* GVIF-RX(CAM)-INT is confirmed as unused according to GVIF3(CXD4984ER) Spec Ver6.0                             */
+    /* vd_g_IcuWkSetCh((U1)ICU_WK_CH_INTP30, (U1)ICU_WK_CFGBIT_ELC_RI); */                        /* EXT-PWR-SW      */
+    /* EXT-PWR-SW is being used as digital input, but not intp30 according to Matsukawa/DENSO Techno                 */ 
+    vd_g_IcuWkSetCh((U1)ICU_WK_CH_INTP33, (U1)ICU_WK_CFGBIT_ELC_FA);                              /* PM_PSAIL_ERR_N  */
+    vd_g_IcuWkSetCh((U1)ICU_WK_CH_INTP38, (U1)ICU_WK_CFGBIT_ELC_RI);                              /* V-IC_STATUS1    */
+    vd_g_IcuWkSetCh((U1)ICU_WK_CH_INTP39, (U1)ICU_WK_CFGBIT_ELC_FA);                              /* PMA_PS_HOLD     */
 }
 /*===================================================================================================================================*/
 /*  U1      u1_g_RunMCfghkShtdwnchk2nd(const U1 u1_a_1ST, const U2 u2_a_TM_ELPSD)                                                    */

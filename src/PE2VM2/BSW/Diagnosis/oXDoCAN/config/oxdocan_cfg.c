@@ -39,6 +39,15 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#define OXDC_PDU_RX_CL_POF_1CE0                    (4U)
+#define OXDC_PDU_RX_CL_FOF_EFE0                    (5U)
+#define OXDC_PDU_RX_CL_PON_1CE1                    (6U)
+#define OXDC_PDU_RX_CL_FON_EFE1                    (7U)
+#define OXDC_PDU_RX_FD_POF_1CE0                    (8U)
+#define OXDC_PDU_RX_FD_FOF_EFE0                    (9U)
+#define OXDC_PDU_RX_FD_PON_1CE1                    (10U)
+#define OXDC_PDU_RX_FD_FON_EFE1                    (11U)
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -99,6 +108,31 @@ void    vd_g_oXDoCANCfgMainbySid(const ST_OXDC_REQ * st_ap_REQ, ST_OXDC_ANS * st
     vd_s_oXDoCANMainSid28(st_ap_REQ->u1_ses_aft, st_ap_REQ->u1_ses_bfr);
     vd_s_oXDoCANRequest(st_ap_REQ, st_ap_ans);
     vd_g_DiagAppSID10Request(st_ap_REQ->u1_ses_aft, st_ap_REQ->u1_ses_bfr);
+    switch(st_ap_REQ->u1_pdu_rx) {
+        case OXDC_PDU_RX_CL_POF_1CE0:
+        case OXDC_PDU_RX_FD_POF_1CE0:
+            /* physical, offboard */
+            break;
+
+        case OXDC_PDU_RX_CL_FOF_EFE0:
+        case OXDC_PDU_RX_FD_FOF_EFE0:
+            /* functional, offboard */
+            break;
+
+        case OXDC_PDU_RX_CL_PON_1CE1:
+        case OXDC_PDU_RX_FD_PON_1CE1:
+            /* physical, onboard */
+            break;
+
+        case OXDC_PDU_RX_CL_FON_EFE1:
+        case OXDC_PDU_RX_FD_FON_EFE1:
+            /* functional, onboard */
+            break;
+
+        default:
+            /* out of configuration */
+            break;
+    }
 }
 /*===================================================================================================================================*/
 /*  static void    vd_s_oXDoCANMainSid28(const U1 u1_a_SES, const U1 u1_a_SES_BEF)                                                   */

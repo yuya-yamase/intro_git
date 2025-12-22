@@ -123,7 +123,7 @@ void           vd_g_DiagAppSID31Request(const ST_OXDC_REQ * st_ap_REQ, ST_OXDC_A
         st_s_diagapp_sid31_ans.u4_nbyte = st_ap_ans->u4_nbyte;
 
         /* Get Request ID */
-        u1_t_requestId = u1_g_DiagAppConvPduIdToRequestId(st_ap_REQ->u1_req_type);
+        u1_t_requestId = u1_g_DiagAppConvPduIdToRequestId(st_ap_REQ->u1_pdu_rx);
 
         u2_t_rid = (U2)(((U2)st_ap_REQ->u1p_RX[DIAGAPP_SID31_RID_HIGH_POS] << DIAGAPP_SFT_08) 
                  | (U2)st_ap_REQ->u1p_RX[DIAGAPP_SID31_RID_LOW_POS]);

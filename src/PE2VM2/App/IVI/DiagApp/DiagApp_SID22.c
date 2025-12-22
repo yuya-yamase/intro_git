@@ -110,7 +110,7 @@ void           vd_g_DiagAppSID22Request(const ST_OXDC_REQ * st_ap_REQ, ST_OXDC_A
 
     if (st_ap_REQ->u2_tim_elpsd == (U2)0U) {
         /* Get Request ID */
-        u1_t_requestId = u1_g_DiagAppConvPduIdToRequestId(st_ap_REQ->u1_req_type);
+        u1_t_requestId = u1_g_DiagAppConvPduIdToRequestId(st_ap_REQ->u1_pdu_rx);
         if(u1_t_requestId == (U1)DIAGAPP_REQUESTID_FUNCOFF) {
             vd_g_DiagAppAnsTxNRC((U1)DIAGAPP_NRC_NONSUP);
             return;
