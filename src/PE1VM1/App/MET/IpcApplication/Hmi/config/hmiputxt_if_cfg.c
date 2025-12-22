@@ -159,8 +159,8 @@ const ST_ALERT_REQBIT   st_gp_HMIPUTXTREQBIT_SLOTB[HMIPUTXTCFG_IF_SLOTB_NUM] = {
     {    (U2)ALERT_CH_C_EPB_WRN_IG,         (U1)ALERT_REQ_C_EPB_WRN_IG_MALFUNC,     (U1)24U,    (U4)0x00001000U    },
     {    (U2)ALERT_CH_C_EPB_WRN_IG,         (U1)ALERT_REQ_C_EPB_WRN_IG_ACTIVE,      (U1)24U,    (U4)0x00002000U    },
     {    (U2)ALERT_CH_C_EPB_WRN_IG,         (U1)ALERT_REQ_C_EPB_WRN_IG_DEACTIVE,    (U1)24U,    (U4)0x00004000U    },
-    {    (U2)ALERT_CH_B_PBDKS_PD,           (U1)ALERT_REQ_B_PBDKS_PD_UNAVLBL,       (U1)24U,    (U4)0x00200000U    },
-    {    (U2)ALERT_CH_B_PBDKS_PD,           (U1)ALERT_REQ_B_PBDKS_PD_MALFUNC,       (U1)24U,    (U4)0x00400000U    },
+    {    (U2)ALERT_CH_B_PBDKS,              (U1)ALERT_REQ_B_PBDKS_UNAVLBL,          (U1)24U,    (U4)0x00200000U    },
+    {    (U2)ALERT_CH_B_PBDKS,              (U1)ALERT_REQ_B_PBDKS_MALFUNC,          (U1)24U,    (U4)0x00400000U    },
     {    (U2)ALERT_CH_B_SPAT,               (U1)ALERT_REQ_B_SPAT_MALFUNC,           (U1)24U,    (U4)0x20000000U    },
     {    (U2)ALERT_CH_C_AVSWAR,             (U1)ALERT_REQ_C_AVSWAR_MALFUNC_RW,      (U1)25U,    (U4)0x01000000U    },
     {    (U2)ALERT_CH_B_PEDPRO,             (U1)ALERT_REQ_B_PEDPRO_DIAGDTRMN,       (U1)32U,    (U4)0x00000002U    },
@@ -282,7 +282,7 @@ const ST_ALERT_REQBIT   st_gp_HMIPUTXTREQBIT_SLOTD[HMIPUTXTCFG_IF_SLOTD_NUM] = {
     {    (U2)ALERT_CH_B_ESWUOC_PD,          (U1)ALERT_REQ_B_ESWUOC_PD_SPDATUNLCK,   (U1)25U,    (U4)0x00000040U    },
     {    (U2)ALERT_CH_B_ESWUOC_PDB,         (U1)ALERT_REQ_B_ESWUOC_PDB_SYSMLFNC,    (U1)25U,    (U4)0x00000080U    },
     {    (U2)ALERT_CH_B_ESWUOC_PD,          (U1)ALERT_REQ_B_ESWUOC_PD_UNLTCHFL,     (U1)25U,    (U4)0x00000100U    },
-    {    (U2)ALERT_CH_H_LEAUNF_PD_EHV,      (U1)ALERT_REQ_H_LEAUNF_PD_EHV_UNCOMP,   (U1)34U,    (U4)0x00000100U    },
+    {    (U2)ALERT_CH_H_LEAUNF,             (U1)ALERT_REQ_H_LEAUNF_UNCOMP,          (U1)34U,    (U4)0x00000100U    },
     {    (U2)ALERT_CH_D_SBW_PD_SFPF,        (U1)ALERT_REQ_D_SBW_PD_SFPF_MSG_42,     (U1)34U,    (U4)0x00000400U    }
 };
 
@@ -347,6 +347,7 @@ U2 u2_g_HmiputxtSizeReqbit(void){
 /*  BEV-9    06/23/2025  HY       Change for BEV System_Consideration_2.(MET-S_ADMID-CSTD-0-02-A-C0 / MET-S_ADTT-CSTD-0-02-A-C0)     */
 /*  BEV-10    7/07/2025  KT       Change for BEV System_Consideration_2.(MET-M_CONTDISP2-CSTD-0010-C0)                               */
 /*  BEV-11   12/05/2025  KH       Change for BEV System_Consideration_ADAS.(MET-C_STEER-CSTD-0-02-B-C0)                              */
+/*  BEV-12   12/19/2025  KH       Update for BEV System_Consideration_ADAS.(B_PBDKS / H_LEAUNF)                                      */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * TH   = Takahiro Hirano, Denso Techno                                                                                           */
