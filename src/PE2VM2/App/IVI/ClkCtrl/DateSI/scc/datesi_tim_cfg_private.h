@@ -1,4 +1,4 @@
-/* 0.0.0 */
+/* 0.0.1 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -14,7 +14,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define DATESI_TIM_CFG_H_MAJOR                  (0)
 #define DATESI_TIM_CFG_H_MINOR                  (0)
-#define DATESI_TIM_CFG_H_PATCH                  (0)
+#define DATESI_TIM_CFG_H_PATCH                  (1)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -94,7 +94,7 @@ typedef struct{
 void            vd_g_DateSITimBonInit(void);
 void            vd_g_DateSITimRstWkupInit(void);
 void            vd_g_DateSITimMainTask(void);
-void            vd_g_DateSITimAdjustOwnClk(const U4 u4_a_HHMMSS);
+U1              u1_g_DateSITimAdjustOwnClk(const U4 u4_a_HHMMSS);
 void            vd_g_DateSITimSetDispClk(const U4 u4_a_HHMMSS);
 
 void            vd_g_DateSITimAvnBonInit(void);

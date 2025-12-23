@@ -1,4 +1,4 @@
-/* 0.0.0 */
+/* 0.0.1 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -14,7 +14,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define DATESI_COM_H_MAJOR                      (0)
 #define DATESI_COM_H_MINOR                      (0)
-#define DATESI_COM_H_PATCH                      (0)
+#define DATESI_COM_H_PATCH                      (1)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -44,6 +44,10 @@
 #define DATESI_COM_SET_OK                   (0U)
 #define DATESI_COM_SET_NG                   (1U)
 
+/*Setting Status Kind*/
+#define DATESI_COM_KIND_TIM                 (0U)
+#define DATESI_COM_KIND_CAL                 (1U)
+#define DATESI_COM_KIND_NUM                 (2U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
@@ -81,12 +85,14 @@ typedef struct{
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Prototypes                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+void                         vd_g_DateSIComBonInit(void);
+void                         vd_g_DateSIComRstWkupInit(void);
 void                         vd_g_DateSIComInit(void);
 void                         vd_g_DateSIComCommandRx(const ST_DATESI_COMMAND_DATA st_a_DATA);
 void                         vd_g_DateSIComClockDispUpdate(const U1 u1_a_VAL, const U1 u1_a_SIGN, const U1 u1_a_EVENT_EI);
 void                         vd_g_DateSIComCommandTx(void);
 ST_DATESI_COMMAND_DATA       st_g_DateSIComRx(void);
-void                         vd_g_DateSIComSetCmp(void);
+void                         vd_g_DateSIComSetCmp(const U1 u1_a_RTC_UPDT, const U1 u1_a_KIND);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
