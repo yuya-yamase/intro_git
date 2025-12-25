@@ -42,13 +42,19 @@ build-1MUS-job:
     - popd
     - echo "Build 1MUS job completed"
     - |
-      if (!(Test-Path "./prj/Ren_U2A16_373_CDC_1MUS/RFP/bin/AA_BEVS3_CDC_MCU_1MUS_*.mot")) {
-        Write-Error "Artifact file(s) not found: ./prj/Ren_U2A16_373_CDC_1MUS/RFP/bin/AA_BEVS3_CDC_MCU_1MUS_*.mot"
+      if (!(Test-Path "./prj/RFP/bin/AA_BEVS3_CDC_MCU_1MUS_*.mot")) {
+        Write-Error "Artifact file(s) not found: ./prj/RFP/bin/AA_BEVS3_CDC_MCU_1MUS_*.mot"
         exit 1
       }
+
+    - mkdir .\smoketest_1MUS\RFP\bin
+    - Copy-Item -Path ".\prj\RFP\*" -Destination ".\smoketest_1MUS\RFP" -Recurse -Force -Exclude "bin"
+    - Move-Item -Path ".\prj\RFP\bin\*.mot",".\prj\RFP\bin\*.hex",".\prj\RFP\bin\*.x" -Destination ".\smoketest_1MUS\RFP\bin\" -Force
+    - echo "build result copy completed"
+
   artifacts:
     paths:
-      - ./prj/Ren_U2A16_373_CDC_1MUS/RFP/
+      - ./smoketest_1MUS/
     expire_in: 1 hour
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == $CI_TARGET_BRANCH'
@@ -75,13 +81,18 @@ build-1MJP-job:
     - popd
     - echo "Build 1MJP job completed"
     - |
-      if (!(Test-Path "./prj/Ren_U2A16_373_CDC_1MJP/RFP/bin/AA_BEVS3_CDC_MCU_1MJP_*.mot")) {
-        Write-Error "Artifact file(s) not found: ./prj/Ren_U2A16_373_CDC_1MJP/RFP/bin/AA_BEVS3_CDC_MCU_1MJP_*.mot"
+      if (!(Test-Path "./prj/RFP/bin/AA_BEVS3_CDC_MCU_1MJP_*.mot")) {
+        Write-Error "Artifact file(s) not found: ./prj/RFP/bin/AA_BEVS3_CDC_MCU_1MJP_*.mot"
         exit 1
       }
+
+    - mkdir .\smoketest_1MJP\RFP\bin
+    - Copy-Item -Path ".\prj\RFP\*" -Destination ".\smoketest_1MJP\RFP" -Recurse -Force -Exclude "bin"
+    - Move-Item -Path ".\prj\RFP\bin\*.mot",".\prj\RFP\bin\*.hex",".\prj\RFP\bin\*.x" -Destination ".\smoketest_1MJP\RFP\bin\" -Force
+    - echo "build result copy completed"
   artifacts:
     paths:
-      - ./prj/Ren_U2A16_373_CDC_1MJP/RFP/
+      - ./smoketest_1MJP/
     expire_in: 1 hour
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == $CI_TARGET_BRANCH'
@@ -108,13 +119,18 @@ build-1MOT-job:
     - popd
     - echo "Build 1MOT job completed"
     - |
-      if (!(Test-Path "./prj/Ren_U2A16_373_CDC_1MOT/RFP/bin/AA_BEVS3_CDC_MCU_1MOT_*.mot")) {
-        Write-Error "Artifact file(s) not found: ./prj/Ren_U2A16_373_CDC_1MOT/RFP/bin/AA_BEVS3_CDC_MCU_1MOT_*.mot"
+      if (!(Test-Path "./prj/RFP/bin/AA_BEVS3_CDC_MCU_1MOT_*.mot")) {
+        Write-Error "Artifact file(s) not found: ./prj/RFP/bin/AA_BEVS3_CDC_MCU_1MOT_*.mot"
         exit 1
       }
+
+    - mkdir .\smoketest_1MOT\RFP\bin
+    - Copy-Item -Path ".\prj\RFP\*" -Destination ".\smoketest_1MOT\RFP" -Recurse -Force -Exclude "bin"
+    - Move-Item -Path ".\prj\RFP\bin\*.mot",".\prj\RFP\bin\*.hex",".\prj\RFP\bin\*.x" -Destination ".\smoketest_1MOT\RFP\bin\" -Force
+    - echo "build result copy completed"
   artifacts:
     paths:
-      - ./prj/Ren_U2A16_373_CDC_1MOT/RFP/
+      - ./smoketest_1MOT/
     expire_in: 1 hour
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == $CI_TARGET_BRANCH'
@@ -244,7 +260,7 @@ vt_test_job:
         }
 
         # 成果物コピー
-        Copy-Item -Path ".\prj\Ren_U2A16_373_CDC_$env:SMOKE_TEST_PROJECT\RFP\*" -Destination "$env:MOT_DIR\RFP\" -Recurse -Force
+        Copy-Item -Path ".\smoketest_$env:SMOKE_TEST_PROJECT\RFP\*" -Destination "$env:MOT_DIR\RFP\" -Recurse -Force
 
         pushd $env:EXEC_DIR
         & ".\$env:VT_SMOKE_BAT"
