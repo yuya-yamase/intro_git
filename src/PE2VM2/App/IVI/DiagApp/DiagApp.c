@@ -123,14 +123,30 @@ U1             u1_g_DiagAppConvPduIdToRequestId(U1 u1_a_REQTYPE)
     /* 初期値 */
     u1_t_requestId = (U1)DIAGAPP_REQUESTID_UNKNOWN;
 
-    if(u1_a_REQTYPE == (U1)OXDC_REQ_TYPE_PHYS) {
-        /* Off-board tester(物理) */
-        u1_t_requestId = (U1)DIAGAPP_REQUESTID_PHYOFF;
-    } else if(u1_a_REQTYPE == (U1)OXDC_REQ_TYPE_FUNC) {
-        /* Off-board tester(機能) */
-        u1_t_requestId = (U1)DIAGAPP_REQUESTID_FUNCOFF;
-    } else {
-        /* Do Nothing */
+    switch(u1_a_REQTYPE) {
+        case DIAGAPP_PDU_RX_CL_POF:
+        case DIAGAPP_PDU_RX_FD_POF:
+            /* physical, offboard */
+            u1_t_requestId = (U1)DIAGAPP_REQUESTID_PHYOFF;
+            break;
+        case DIAGAPP_PDU_RX_CL_FOF:
+        case DIAGAPP_PDU_RX_FD_FOF:
+            /* functional, offboard */
+            u1_t_requestId = (U1)DIAGAPP_REQUESTID_FUNCOFF;
+            break;
+        case DIAGAPP_PDU_RX_CL_PON:
+        case DIAGAPP_PDU_RX_FD_PON:
+            /* physical, onboard */
+            u1_t_requestId = (U1)DIAGAPP_REQUESTID_PHYON;
+            break;
+        case DIAGAPP_PDU_RX_CL_FON:
+        case DIAGAPP_PDU_RX_FD_FON:
+            /* functional, onboard */
+            u1_t_requestId = (U1)DIAGAPP_REQUESTID_FUNCON;
+            break;
+        default:
+            break;
+
     }
 
     return u1_t_requestId;

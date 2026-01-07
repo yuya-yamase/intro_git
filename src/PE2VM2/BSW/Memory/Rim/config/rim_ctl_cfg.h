@@ -33,6 +33,7 @@
 #define RIMID_U1_TIMEZONE_DST_S30                (0x0003U)
 #define RIMID_U1_IVI_STR_MODE                    (0x0004U)
 #define RIMID_U1_TIME_FORMAT                     (0x0005U)
+#define RIMID_U1_RTC_STS                         (0x0006U)
 /* END : ##TOOL_OUT#RIM_ID_MOD_3B_U1## */
 /* START : ##TOOL_OUT#RIM_ID_MOD_3B_U2## */
 #define RIMID_U2_SAMPLE_BBB_2                    (0x4000U)

@@ -87,8 +87,6 @@
 /*PartialNM*/
 #define XSPI_IVI_PARTIALNM_DATASIZE         (7U)
 
-#define XSPI_IVI_MASK_04                    (0x0FU)
-
 #define XSPI_IVI_IVDSH_DREC_NWORD           (2U)
 #define XSPI_IVI_DATANM2_MASK               (0xC0U)
 #define XSPI_IVI_MET1D51_CANID              (0x4B600000U)
@@ -259,7 +257,7 @@ void            vd_g_XspiIviSub4Ana(const U1 * u1_ap_XSPI_ADD)
     }
     else if (u1_t_dt_type == u1_s_ID_REPRO_DARA_SOC2MCU) {
         /* Repro Data解析処理 */
-        /* skip */
+        vd_s_FwupxPutReqData(&u1_ap_XSPI_ADD[8], u2_t_dt_len);
     }
     else if (u1_t_dt_type == u1_s_ID_LCAN_DARA_SOC2MCU) {
         /* LCAN Data解析処理 */
@@ -374,11 +372,6 @@ static void            vd_s_XspiIviSub4CanAna(const U1 * u1_ap_SUB4_ADD, const U
         
         if(u4_t_msg_aubistid != (U4)0xFFFFFFFFU){
         /* フレーム送信処理 */
-            if(u4_t_msg_aubistid ==(U4)MSG_AVN1S97_TXCH0){
-                u1_t_cd_size = u1_g_PictCtl_CdsizeSnd();
-                u1_tp_can_data[6] = u1_tp_can_data[6] & (U1)XSPI_IVI_MASK_04;
-                u1_tp_can_data[6] |= (U1)(u1_t_cd_size << XSPI_IVI_SFT_04);
-            }
             vd_g_CanCtlTx_SendHk(u4_t_msg_aubistid, &u1_tp_can_data[0]);
             (void)Com_SendIPDU((PduIdType)u4_t_msg_aubistid, &u1_tp_can_data[0] );
         }
@@ -1631,12 +1624,13 @@ static void            vd_s_XspiIviClockUTCStuckBuff(const U1 u1_a_ID,const U2 u
     /*8byteアライメント*/
     if((u2_a_SIZE > (U2)8U) && (u2_a_SIZE <= (U2)16U)) {
         u1_t_utc_data_size = (U1)XSPI_IVI_HEADER + (U1)16U;
+        u1_t_jdg = u1_g_XspiIviQueueWriChkCanCommand(u1_t_utc_data_size);
     } else if(u2_a_SIZE <= (U2)8U){
         u1_t_utc_data_size = (U1)XSPI_IVI_HEADER + (U1)8U;
+        u1_t_jdg = u1_g_XspiIviQueueWriChkCanCommand(u1_t_utc_data_size);
     } else {
-
+        u1_t_jdg = (U1)FALSE;
     }
-    u1_t_jdg = u1_g_XspiIviQueueWriChkCanCommand(u1_t_utc_data_size);
 
     if(u1_t_jdg == (U1)TRUE)
     {

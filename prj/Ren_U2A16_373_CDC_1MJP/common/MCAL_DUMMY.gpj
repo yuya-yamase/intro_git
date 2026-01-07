@@ -1,9 +1,0 @@
-#!gbuild
-[Subproject]
-    :optionsFile=${CMN_DIR}/MCAL.opt
-
-    :sourceDir=${MCAL_DUMMY_SCC_DIR}
-
-    -I${LIB_DIR}
-
-int_drv.c

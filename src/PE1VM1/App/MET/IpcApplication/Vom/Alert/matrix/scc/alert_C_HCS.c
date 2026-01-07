@@ -258,8 +258,8 @@ const ST_ALERT_MTRX st_gp_ALERT_C_HCS_MTRX[3] = {
         &u4_s_AlertC_hcsTtbSrcchk,                                             /* fp_u4_SRC_CHK                                      */
         vdp_PTR_NA,                                                            /* fp_vd_XDST                                         */
 
-        (const U4*)vdp_PTR_NA,                                                /* u4p_MASK                                           */
-        (const U4*)vdp_PTR_NA,                                                /* u4p_CRIT                                           */
+        (const U4 *)vdp_PTR_NA,                                                /* u4p_MASK                                           */
+        (const U4 *)vdp_PTR_NA,                                                /* u4p_CRIT                                           */
 
         &u1_sp_ALERT_C_HCS_TTB_DST[0],                                         /* u1p_DST                                            */
         (U2)ALERT_C_HCS_TTB_NUM_DST,                                           /* u2_num_srch                                        */

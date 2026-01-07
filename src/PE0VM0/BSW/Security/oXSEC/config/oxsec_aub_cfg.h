@@ -28,7 +28,7 @@
 #define OXSEC_AUB_EN_CRY_HA                      (1U)  /* Crypto_Hardware                */
 #define OXSEC_AUB_EN_CRY_SO                      (0U)  /* Crypto_Software                */
 #define OXSEC_AUB_EN_SECOC                       (1U)  /* Security Onboard Communication */
-#define OXSEC_AUB_EN_IDSM                        (0U)
+#define OXSEC_AUB_EN_IDSM                        (1U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define OXSEC_MAIN_HIGH                          (1U)

@@ -1,4 +1,4 @@
-/* 0.0.0 */
+/* 0.0.1 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -11,7 +11,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define DATESI_TIM_CFG_C_MAJOR                  (0)
 #define DATESI_TIM_CFG_C_MINOR                  (0)
-#define DATESI_TIM_CFG_C_PATCH                  (0)
+#define DATESI_TIM_CFG_C_PATCH                  (1)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -572,7 +572,6 @@ void            vd_g_DateSITimCfgExec24(void)
         u4_t_24h_fmt = (U4)DATESI_TIM_FMT_VAL_24H;
     }
     vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM2TO1_TIMFMT, &u4_t_24h_fmt, (U2)DATESI_TIME_VM_1WORD);
-    vd_g_DateSIComSetCmp();
 }
 
 /*===================================================================================================================================*/
@@ -644,7 +643,6 @@ void            vd_g_DateSITimCfgSetOfstTime(const S4 s4_a_OFST)
     if(u1_s_datesi_tim_ofststs == (U1)DATESI_TIM_OFST_STS_ADJ){
         s4_s_datesi_tim_ofsttime = s4_a_OFST;
         u2_s_datesi_tim_ofstcnt  = (U2)DATESI_TIM_OFST_CNT_INIT;
-        vd_g_DateSIComSetCmp();
     }
 }
 
@@ -746,6 +744,11 @@ U1      u1_g_TimeZoneCfgRxDST_S30(U1 * u1p_a_rx)
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  0.0.0    04/23/2025  MN       New.                                                                                               */
+/*  0.0.1    12/18/2025  MN       Change for BEV Pre_CV                                                                              */
+/*                                                                                                                                   */
+/*  Revision Date        Author   Change Description                                                                                 */
+/* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
+/*  BEV-1    12/18/2025  MN       Addressing issues.                                                                                 */
 /*                                                                                                                                   */
 /*  * MN   = Mikiya Negishi, KSE                                                                                                     */
 /*                                                                                                                                   */
