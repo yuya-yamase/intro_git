@@ -406,7 +406,7 @@ const ST_VDF_ESO_CH    st_gp_VDF_ESO_CH[VDF_ESO_NUM_RX] = {
         }
     },
     {
-        vdp_PTR_NA,                             /* fp_u1_AVA_RX        */
+        &u1_g_VdfEsoRx_DRS,                     /* fp_u1_AVA_RX        */
         (U2)VDF_ESO_CH_DRS,                     /* u2_eso_ch           */
         (U1)VDF_ESO_INPUT_TYPE_CAN,             /* u1_input_type       */
         (U2)OXCAN_RXD_PDU_CAN_ARS1S90_CH0,      /* u2_msg_rx           */
@@ -1365,6 +1365,7 @@ U1      u1_g_VardefEsOptCfgEthRxEvcnt(const U2 u2_a_MSG_ID)
 /*  BEV-23    12/12/2025  KN      Change config for BEV System_Consideration_ADAS.(MET-C_HCSBSW-CSTD-0-)                             */
 /*  BEV-24    12/12/2025  MA      Added 10 function presence judgment processes.(MET-C_MSBBSW-CSTD-0-)                               */
 /*  BEV-25    12/12/2025  KO      Change config for BEV System_Consideration_ADAS.(MET-S_ADBB-CSTD-0)                                */
+/*  BEV-28    01/14/2026  TS      Change config for BEV FF2.(MET-C_DRS-CSTD-1)                                                       */
 /*                                                                                                                                   */
 /*  * YI     = Yoshiki Iwata, Denso                                                                                                  */
 /*  * TN     = Takashi Nagai, Denso                                                                                                  */

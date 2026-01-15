@@ -36,6 +36,7 @@
 ../../src/PE1VM1/App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_ADC1S14.c
 ../../src/PE1VM1/App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_ADC1S17.c
 ../../src/PE1VM1/App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_ADU1S07.c
+../../src/PE1VM1/App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_ARS1S90.c
 ../../src/PE1VM1/App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_BCC1S06.c
 ../../src/PE1VM1/App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_BDB1F02.c
 ../../src/PE1VM1/App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_BDB1S08.c
@@ -294,6 +295,6 @@
 
 # ----------------------------------------------------------------------------------------------------------------------------------
 # ghsprj version 1-0-0
-# Date generated: 2025/12/18 14:35:04
+# Date generated: 2026/01/14 18:00:14
 # ----------------------------------------------------------------------------------------------------------------------------------
 
