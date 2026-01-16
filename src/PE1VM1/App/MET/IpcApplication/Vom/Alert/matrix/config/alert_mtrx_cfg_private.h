@@ -1,4 +1,4 @@
-/* 5.2.0 */
+/* 5.4.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -68,7 +68,7 @@
 #define ALERT_C_BRLV_2_CH_NUM                    (2U)
 #define ALERT_C_ECB_CH_NUM                       (1U)
 #define ALERT_H_MAICER_CH_NUM                    (4U)
-#define ALERT_H_PEXI_CH_NUM                      (2U)
+#define ALERT_H_PEXI_CH_NUM                      (1U)
 #define ALERT_O_EIGCON_CH_NUM                    (1U)
 #define ALERT_S_ADBZR_CSR_CH_NUM                 (2U)
 #define ALERT_S_ADBZR_SEA_CH_NUM                 (1U)
@@ -134,6 +134,7 @@
 #define ALERT_S_TMBZR_CH_NUM                     (2U)
 #define ALERT_B_TURHAZ_CH_NUM                    (2U)
 #define ALERT_S_ADBZR_TCW_CH_NUM                 (1U)
+#define ALERT_O_FNCLIM_CH_NUM                    (1U)
 
 #define ALERT_SPD_STSBIT_VALID                   (VEHSPD_STSBIT_VALID)
 #define ALERT_SPD_STSBIT_UNKNOWN                 (VEHSPD_STSBIT_UNKNOWN)
@@ -219,6 +220,7 @@ void    vd_g_AlertC_hcsInit(void);
 void    vd_g_AlertH_battrwInit(void);
 void    vd_g_AlertO_pdsmalInit(void);
 void    vd_g_AlertB_turhazInit(void);
+void    vd_g_AlertO_fnclimInit(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* Required  */
@@ -319,6 +321,7 @@ extern const ST_ALERT_MTRX         st_gp_ALERT_S_TMTT_MTRX[ALERT_S_TMTT_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_S_TMBZR_MTRX[ALERT_S_TMBZR_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_B_TURHAZ_MTRX[ALERT_B_TURHAZ_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_S_ADBZR_TCW_MTRX[ALERT_S_ADBZR_TCW_CH_NUM];
+extern const ST_ALERT_MTRX         st_gp_ALERT_O_FNCLIM_MTRX[ALERT_O_FNCLIM_CH_NUM];
 
 #endif      /* ALERT_MTRX_CFG_H */
 
