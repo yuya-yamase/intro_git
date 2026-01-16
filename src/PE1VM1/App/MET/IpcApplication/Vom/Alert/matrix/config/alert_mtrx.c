@@ -320,7 +320,8 @@ void    vd_g_AlertMtrxInit(void)
 /*  BEV-20   12/12/2025  ED       Change for BEV System_Consideration_ADAS SEA.(MET-S_ADBZR-CSTD-0-06-A-C0)                          */
 /*  BEV-21   12/18/2025  ED       Change for BEV System_Consideration_ADAS ADBZR.(MET-S_ADBZR-CSTD-0-06-A-C0)                        */
 /*  BEV-22   12/18/2025  KH       Update for BEV System_Consideration_ADAS. (B_PBDKS / C_TPMS / H_BATTRW / H_LEAUNF)                 */
-/*  BEV-23    1/07/2026  SN       Change for BEV FF2.(MET-O_FNCLIM-CSTD-0-00-A-C0)                                                   */
+/*  BEV-23    1/14/2025  JS       Change for BEV System_Consideration_FF2.(MET-H_PEXI-CSTD-1-00-A-C0)                                */
+/*  BEV-24    1/16/2026  SN       Change for BEV FF2.(MET-O_FNCLIM-CSTD-0-00-A-C0)                                                   */
 /*                                                                                                                                   */
 /*  * YI   = Yoshiki Iwata, Denso                                                                                                    */
 /*  * RS   = Ryuki Sako,      Denso Techno                                                                                           */
