@@ -68,7 +68,7 @@
 #define ALERT_C_BRLV_2_CH_NUM                    (2U)
 #define ALERT_C_ECB_CH_NUM                       (1U)
 #define ALERT_H_MAICER_CH_NUM                    (4U)
-#define ALERT_H_PEXI_CH_NUM                      (2U)
+#define ALERT_H_PEXI_CH_NUM                      (1U)
 #define ALERT_O_EIGCON_CH_NUM                    (1U)
 #define ALERT_S_ADBZR_CSR_CH_NUM                 (2U)
 #define ALERT_S_ADBZR_SEA_CH_NUM                 (1U)

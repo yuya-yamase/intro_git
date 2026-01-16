@@ -73,7 +73,7 @@ const ST_ALERT_REQBIT   st_gp_HMIPUTXTREQBIT[HMIPUTXTCFG_IF_NUM] = {
     {    (U2)ALERT_CH_C_ECB,                (U1)ALERT_REQ_C_ECB_MFNC_DISP_RW,       (U1)2U,     (U4)0x00000040U    },
     {    (U2)ALERT_CH_C_ECB,                (U1)ALERT_REQ_C_ECB_UNABL_DISP,         (U1)2U,     (U4)0x00000040U    },
     {    (U2)ALERT_CH_C_ECB,                (U1)ALERT_REQ_C_ECB_UNABL_DISP_RW,      (U1)2U,     (U4)0x00000040U    },
-    {    (U2)ALERT_CH_H_PEXI_WARN,          (U1)ALERT_REQ_H_PEXI_WARN_MALFUNC,      (U1)3U,     (U4)0x00000400U    },
+    {    (U2)ALERT_CH_H_PEXI,               (U1)ALERT_REQ_H_PEXI_MALFUNC,           (U1)3U,     (U4)0x00000400U    },
     {    (U2)ALERT_CH_B_TDOOR,              (U1)ALERT_REQ_B_TDOOR_RUN,              (U1)9U,     (U4)0x00010000U    },
     {    (U2)ALERT_CH_B_TDOOR,              (U1)ALERT_REQ_B_TDOOR_RUN_ON,           (U1)9U,     (U4)0x00010000U    },
     {    (U2)ALERT_CH_B_TRWIP,              (U1)ALERT_REQ_B_TRWIP_WIPERMALF,        (U1)9U,     (U4)0x00020000U    },
