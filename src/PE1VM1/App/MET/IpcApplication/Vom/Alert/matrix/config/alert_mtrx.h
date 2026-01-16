@@ -1,4 +1,4 @@
-/* 5.2.0 */
+/* 5.4.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -168,7 +168,8 @@
 #define ALERT_CH_B_TURHAZ_L                      (149U)
 #define ALERT_CH_B_TURHAZ_R                      (150U)
 #define ALERT_CH_S_ADBZR_TCW                     (151U)
-#define ALERT_NUM_CH                             (152U)
+#define ALERT_CH_O_FNCLIM                        (152U)
+#define ALERT_NUM_CH                             (153U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* ALERT_REQ_[SYS]_[VIEW]_XXXX                            */
@@ -618,6 +619,8 @@
 #define ALERT_REQ_B_TURHAZ_L_ON                  (0U)
 #define ALERT_REQ_B_TURHAZ_R_ON                  (0U)
 #define ALERT_REQ_S_ADBZR_TCW_CYCL               (0U)
+#define ALERT_REQ_O_FNCLIM_WRN_POW               (0U)
+#define ALERT_REQ_O_FNCLIM_WRN_TMP               (1U)
 
 /* ALERT_CH dummy define */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
