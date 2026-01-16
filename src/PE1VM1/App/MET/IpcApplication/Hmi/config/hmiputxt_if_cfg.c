@@ -1,4 +1,4 @@
-/* 1.9.0 */
+/* 1.10.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define HMIPUTXT_IF_CFG_C_MAJOR                  (1)
-#define HMIPUTXT_IF_CFG_C_MINOR                  (9)
+#define HMIPUTXT_IF_CFG_C_MINOR                  (10)
 #define HMIPUTXT_IF_CFG_C_PATCH                  (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -171,6 +171,8 @@ const ST_ALERT_REQBIT   st_gp_HMIPUTXTREQBIT_SLOTB[HMIPUTXTCFG_IF_SLOTB_NUM] = {
 };
 
 const ST_ALERT_REQBIT   st_gp_HMIPUTXTREQBIT_SLOTC[HMIPUTXTCFG_IF_SLOTC_NUM] = {
+    {    (U2)ALERT_CH_O_FNCLIM,             (U1)ALERT_REQ_O_FNCLIM_WRN_POW,         (U1)0U,     (U4)0x00000100U    },
+    {    (U2)ALERT_CH_O_FNCLIM,             (U1)ALERT_REQ_O_FNCLIM_WRN_TMP,         (U1)0U,     (U4)0x00000200U    },
     {    (U2)ALERT_CH_H_BATINS_PD,          (U1)ALERT_REQ_H_BATINS_PD_DIAGNOSIS,    (U1)0U,     (U4)0x08000000U    },
     {    (U2)ALERT_CH_C_STEER_PD,           (U1)ALERT_REQ_C_STEER_PD_ASSIST_STOP,   (U1)2U,     (U4)0x00000008U    },
     {    (U2)ALERT_CH_C_STEER_PD,           (U1)ALERT_REQ_C_STEER_PD_POWSTOP,       (U1)2U,     (U4)0x00000400U    },
@@ -324,6 +326,7 @@ U2 u2_g_HmiputxtSizeReqbit(void){
 /*  1.7.0    10/25/2024  RS       Setting for BEV System_Consideration_1                                                             */
 /*  1.8.0    06/23/2025  HY       Setting for BEV System_Consideration_2                                                             */
 /*  1.9.0    07/07/2025  KT       Setting for BEV System_Consideration_2 (Delete for CONTDISP2)                                      */
+/*  1.10.0   01/07/2026  SN       Setting for BEV FF2                                                                                */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
@@ -348,6 +351,7 @@ U2 u2_g_HmiputxtSizeReqbit(void){
 /*  BEV-10    7/07/2025  KT       Change for BEV System_Consideration_2.(MET-M_CONTDISP2-CSTD-0010-C0)                               */
 /*  BEV-11   12/05/2025  KH       Change for BEV System_Consideration_ADAS.(MET-C_STEER-CSTD-0-02-B-C0)                              */
 /*  BEV-12   12/19/2025  KH       Update for BEV System_Consideration_ADAS.(B_PBDKS / H_LEAUNF)                                      */
+/*  BEV-13   01/07/2026  SN       Change for BEV FF2.(MET-O_FNCLIM-CSTD-0-00-A-C0)                                                   */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * TH   = Takahiro Hirano, Denso Techno                                                                                           */
@@ -361,5 +365,6 @@ U2 u2_g_HmiputxtSizeReqbit(void){
 /*  * HY   = Haruki Yagi, KSE                                                                                                        */
 /*  * KT   = Kenta Takaji,    Denso Techno                                                                                           */
 /*  * KH   = Kiko Huerte,     DTPH                                                                                                   */
+/*  * SN   = Shizuka Nakajima, KSE                                                                                                   */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
