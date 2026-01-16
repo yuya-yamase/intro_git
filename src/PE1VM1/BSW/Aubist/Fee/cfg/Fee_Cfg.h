@@ -54,7 +54,7 @@
 
 #define FEE_INTENT_RBLD_BLOCK_ID_A000       (FEE_INTENT_RBLD_BLOCK_ID_NONE)
 
-#define FEE_BLOCK_NUM_A000_LV1              (45U)
+#define FEE_BLOCK_NUM_A000_LV1              (48U)
 
 #define FEE_BLOCK_NUM_A000_LV2              (0U)
 

@@ -1,4 +1,4 @@
-/* 1.9.0 */
+/* 1.10.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -13,7 +13,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define HMIPUTXT_IF_CFG_H_MAJOR                  (1)
-#define HMIPUTXT_IF_CFG_H_MINOR                  (9)
+#define HMIPUTXT_IF_CFG_H_MINOR                  (10)
 #define HMIPUTXT_IF_CFG_H_PATCH                  (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -42,7 +42,7 @@
 #define HMIPUTXTCFG_IF_NUM                       (42U)
 #define HMIPUTXTCFG_IF_SLOTA_NUM                 (23U)
 #define HMIPUTXTCFG_IF_SLOTB_NUM                 (41U)
-#define HMIPUTXTCFG_IF_SLOTC_NUM                 (63U)
+#define HMIPUTXTCFG_IF_SLOTC_NUM                 (65U)
 #define HMIPUTXTCFG_IF_SLOTD_NUM                 (47U)
 /* #define HMIPUTXTCFG_IF_SLOTE_NUM                 (0U) */
 
