@@ -591,7 +591,7 @@ const ST_VDF_ESO_CH    st_gp_VDF_ESO_CH[VDF_ESO_NUM_RX] = {
         (U1)VDF_ESO_INPUT_TYPE_CAN,             /* u1_input_type       */
         (U2)OXCAN_RXD_PDU_CAN_VSC1G96_CH0,      /* u2_msg_rx           */
         (U2)0x0002U,                            /* u2_vom_act          */
-        ((U2)700U / (U2)VDF_MAIN_TICK),         /* u2_rxc_peri         */
+        ((U2)2100U / (U2)VDF_MAIN_TICK),        /* u2_rxc_peri         */
         {
             (U2)2U,                             /* u2_rxc_min[MIN_INA] */
             (U2)2U                              /* u2_rxc_min[MIN_ACT] */
@@ -1378,6 +1378,7 @@ U1      u1_g_VardefEsOptCfgEthRxEvcnt(const U2 u2_a_MSG_ID)
 /*  BEV-24    12/12/2025  MA      Added 10 function presence judgment processes.(MET-C_MSBBSW-CSTD-0-)                               */
 /*  BEV-25    12/12/2025  KO      Change config for BEV System_Consideration_ADAS.(MET-S_ADBB-CSTD-0)                                */
 /*  BEV-26    01/07/2026  YN      Change config for BEV FF2.(MET-B_CWHBB-CSTD-0-)                                                    */
+/*  BEV-27    01/08/2026  MA      BRPADW function check time changed from 700ms to 2100ms.(MET-C_BRPADW-CSTD-A0-)                    */
 /*                                                                                                                                   */
 /*  * YI     = Yoshiki Iwata, Denso                                                                                                  */
 /*  * TN     = Takashi Nagai, Denso                                                                                                  */
