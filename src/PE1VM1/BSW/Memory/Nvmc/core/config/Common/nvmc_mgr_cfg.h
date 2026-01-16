@@ -55,6 +55,7 @@
 #define NVMCID_U2_DATESI_CALENDAR                (0x000BU)
 #define NVMCID_U2_DATESI_OFFSET                  (0x000CU)
 #define NVMCID_U2_DATESI_TIMEFMT                 (0x000DU)
+#define NVMCID_U1_ODO_INHERIT_FLG                (0x000EU)
 /* END : ##TOOL_OUT#NVMC_NVMCID## */
 
 /* START : ##TOOL_OUT#NVMC_BLOCKID## */
