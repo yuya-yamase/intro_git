@@ -326,12 +326,7 @@ U1              u1_g_TripcomCfgGetM1FCRST(U1 * u1p_a_rst)
 /*===================================================================================================================================*/
 U1              u1_g_TripcomCfgGetTOECRST(U1 * u1p_a_rst)
 {
-#if 0   /* BEV Rebase provisionally */
-    (void)Com_ReceiveSignal(ComConf_ComSignal_TOEC_RST, u1p_a_rst);
-    return ((U1)Com_GetIPDUStatus(MSG_AVN1S07_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX));
-#else   /* BEV Rebase provisionally */
     return ((U1)COM_NO_RX);
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -706,6 +701,7 @@ void             vd_s_TripomCfgPostAppTask(void)
 /*  19PFv3-13 11/19/2024  KH       Delete Compile switch                                                                             */
 /*  19PFv3-14 01/14/2025  AA       Unapply Distance to Empty                                                                         */
 /*  19PFv3-15 04/21/2025  SN       Changed u1_g_TripcomCfgGetEVRunSts                                                                */
+/*  BEV-1     01/13/2026  PG       Delete Compile switch for u1_g_TripcomCfgGetTOECRST                                               */
 /*                                                                                                                                   */
 /*  * HY   = Hidefumi Yoshida, Denso                                                                                                 */
 /*  * YA   = Yuhei Aoyama, DensoTechno                                                                                               */
