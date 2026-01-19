@@ -271,7 +271,6 @@ void            vd_g_Gvif3txSeqCtl(const U1 u1_a_MODE)
     case (U1)MCU_STEP_GVIF3TX_OVERALL_4:
         /* HDCP認証用初期化処理 */
         Mcu_OnStep_GVIF3TX_HDCP     = (U2)MCU_STEP_GVIF3TX_HDCP_01;
-        u1_g_HDCP_Act_Hook          = (U1)FALSE;
         u1_g_HDCP_ErrCnt_AuthWait   = (U1)0U;
         u1_g_HDCP_ErrCnt_Encrypt    = (U1)0U;
         u1_g_HDCP_ErrCnt_PointD     = (U1)0U;
@@ -1292,6 +1291,8 @@ static U1       u1_s_GvifTx_Pwrno_HDCP( void )
             vd_g_XspiIviSub1Hdcp(u1_gp_HDCP_Act);
             /* 初期化完了通知 */
             vd_g_XspiIviSub1PowerDevInitCmpApp((U1)XSPI_IVI_POWER_GVIFSEND_INI);
+            /* HDCP認証開始トリガクリア */
+            u1_g_HDCP_Act_Hook          = (U1)FALSE;
             /* 次状態に遷移 */
             u1_t_return = (U1)TRUE;
             Mcu_OnStep_GVIF3TX_HDCP = (U2)MCU_STEP_GVIF3TX_HDCP_FIN;
@@ -1360,6 +1361,8 @@ static U1       u1_s_GvifTx_Pwrno_HDCP( void )
             vd_g_XspiIviSub1Hdcp(u1_gp_HDCP_Act);
             /* 初期化完了通知 */
             vd_g_XspiIviSub1PowerDevInitCmpApp((U1)XSPI_IVI_POWER_GVIFSEND_INI);
+            /* HDCP認証開始トリガクリア */
+            u1_g_HDCP_Act_Hook          = (U1)FALSE;
             /* 次状態へ遷移 */
             u1_t_return = (U1)TRUE;
             Mcu_OnStep_GVIF3TX_HDCP = (U2)MCU_STEP_GVIF3TX_HDCP_FIN;
