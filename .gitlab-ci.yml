@@ -1,0 +1,372 @@
+variables:
+  # GitLab Runner説明ページのURL
+  EXPLAIN_URL: "https://wiki.geniie.net/pages/viewpage.action?pageId=3433128148"
+  #VT実行時motファイル格納パス
+  MOT_DIR: 'C:\VTSystem\BEV3-CDC-VT\CANoe\SmokeTest_CDC\GitLabRunner\bat\CDC_MCU_Release_Package'
+  #VT実行用batファイル格納パス
+  EXEC_DIR: 'C:\VTSystem\BEV3-CDC-VT\ExecFile\GitLabRunner'
+  #VTスモークテスト実行batファイル名
+  VT_SMOKE_BAT: 'StartSmokeTest.bat'
+  #調停用ファイル格納パス
+  ARBITATION_DIR: 'C:\VTSystem\Arbitration\DevArbitrationFolder'
+  #調停ファイル名
+  ARBITATION_FILE: 'InDev.tmp'
+  # ターゲットブランチ名
+  CI_TARGET_BRANCH: 'develop'
+  # プロジェクト名（バリなしの場合は空白）
+  SMOKE_TEST_PROJECT: '1MUS'
+
+stages:          # List of stages for jobs, and their order of execution
+  - build_1MUS   # Stage for building 1MUS project
+  - build_1MJP   # Stage for building 1MJP project
+  - build_1MOT   # Stage for building 1MOT project
+  - notification
+  - vt_smoke_test
+  - vt_smoke_test_notification
+
+build-1MUS-job:
+  stage: build_1MUS
+  script:
+    #Merge target branch
+    - echo "Fetching target branch for merged results simulation..."
+    - git fetch origin $CI_MERGE_REQUEST_TARGET_BRANCH_NAME
+    - echo "Merging target branch into current branch..."
+    - git merge origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME --no-edit
+
+    - pushd .\tool\RenameMountDriveInfo
+    - .\x_sb.bat z
+    - popd
+    - echo "Build 1MUS job started"
+    - pushd Z:\prj\Ren_U2A16_373_CDC_1MUS\
+    - .\ghsmot_build.bat
+    - popd
+    - echo "Build 1MUS job completed"
+    - |
+      if (!(Test-Path "./prj/RFP/bin/AA_BEVS3_CDC_MCU_1MUS_*.mot")) {
+        Write-Error "Artifact file(s) not found: ./prj/RFP/bin/AA_BEVS3_CDC_MCU_1MUS_*.mot"
+        exit 1
+      }
+
+    - mkdir .\smoketest_1MUS\RFP\bin
+    - Copy-Item -Path ".\prj\RFP\*" -Destination ".\smoketest_1MUS\RFP" -Recurse -Force -Exclude "bin"
+    - Move-Item -Path ".\prj\RFP\bin\*.mot",".\prj\RFP\bin\*.hex",".\prj\RFP\bin\*.x" -Destination ".\smoketest_1MUS\RFP\bin\" -Force
+    - echo "build result copy completed"
+
+  artifacts:
+    paths:
+      - ./smoketest_1MUS/
+    expire_in: 1 hour
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == $CI_TARGET_BRANCH'
+      when: always
+      # Only run this job for merge requests targeting the develop branch
+  tags:
+    - ci_develop_cdc
+
+build-1MJP-job:
+  stage: build_1MJP
+  script:
+    #Merge target branch
+    - echo "Fetching target branch for merged results simulation..."
+    - git fetch origin $CI_MERGE_REQUEST_TARGET_BRANCH_NAME
+    - echo "Merging target branch into current branch..."
+    - git merge origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME --no-edit
+
+    - pushd .\tool\RenameMountDriveInfo
+    - .\x_sb.bat z
+    - popd
+    - echo "Build 1MJP job started"
+    - pushd Z:\prj\Ren_U2A16_373_CDC_1MJP\
+    - .\ghsmot_build.bat
+    - popd
+    - echo "Build 1MJP job completed"
+    - |
+      if (!(Test-Path "./prj/RFP/bin/AA_BEVS3_CDC_MCU_1MJP_*.mot")) {
+        Write-Error "Artifact file(s) not found: ./prj/RFP/bin/AA_BEVS3_CDC_MCU_1MJP_*.mot"
+        exit 1
+      }
+
+    - mkdir .\smoketest_1MJP\RFP\bin
+    - Copy-Item -Path ".\prj\RFP\*" -Destination ".\smoketest_1MJP\RFP" -Recurse -Force -Exclude "bin"
+    - Move-Item -Path ".\prj\RFP\bin\*.mot",".\prj\RFP\bin\*.hex",".\prj\RFP\bin\*.x" -Destination ".\smoketest_1MJP\RFP\bin\" -Force
+    - echo "build result copy completed"
+  artifacts:
+    paths:
+      - ./smoketest_1MJP/
+    expire_in: 1 hour
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == $CI_TARGET_BRANCH'
+      when: on_success
+      # Only run this job for merge requests targeting the develop branch
+  tags:
+    - ci_develop_cdc
+
+build-1MOT-job:
+  stage: build_1MOT
+  script:
+    #Merge target branch
+    - echo "Fetching target branch for merged results simulation..."
+    - git fetch origin $CI_MERGE_REQUEST_TARGET_BRANCH_NAME
+    - echo "Merging target branch into current branch..."
+    - git merge origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME --no-edit
+
+    - pushd .\tool\RenameMountDriveInfo
+    - .\x_sb.bat z
+    - popd
+    - echo "Build 1MOT job started"
+    - pushd Z:\prj\Ren_U2A16_373_CDC_1MOT\
+    - .\ghsmot_build.bat
+    - popd
+    - echo "Build 1MOT job completed"
+    - |
+      if (!(Test-Path "./prj/RFP/bin/AA_BEVS3_CDC_MCU_1MOT_*.mot")) {
+        Write-Error "Artifact file(s) not found: ./prj/RFP/bin/AA_BEVS3_CDC_MCU_1MOT_*.mot"
+        exit 1
+      }
+
+    - mkdir .\smoketest_1MOT\RFP\bin
+    - Copy-Item -Path ".\prj\RFP\*" -Destination ".\smoketest_1MOT\RFP" -Recurse -Force -Exclude "bin"
+    - Move-Item -Path ".\prj\RFP\bin\*.mot",".\prj\RFP\bin\*.hex",".\prj\RFP\bin\*.x" -Destination ".\smoketest_1MOT\RFP\bin\" -Force
+    - echo "build result copy completed"
+  artifacts:
+    paths:
+      - ./smoketest_1MOT/
+    expire_in: 1 hour
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == $CI_TARGET_BRANCH'
+      when: on_success
+      # Only run this job for merge requests targeting the develop branch
+  tags:
+    - ci_develop_cdc
+
+# ビルド成功時の通知
+notify_success:
+  stage: notification
+  script:
+    - |
+      # マージリクエスト情報を取得
+      $mrInfo = Invoke-RestMethod `
+        -Uri "$env:CI_API_V4_URL/projects/$env:CI_PROJECT_ID/merge_requests/$env:CI_MERGE_REQUEST_IID" `
+        -Headers @{ "PRIVATE-TOKEN" = "$env:GITLAB_API_TOKEN" }
+
+      # マージリクエスト作成者のユーザー名を取得
+      $authorUser = "@$($mrInfo.author.username)"
+
+      $reviewerUsers = @()
+      # レビュワーが存在する場合、レビュワーのユーザー名を取得
+      if ($mrInfo.reviewers -and $mrInfo.reviewers.Count -eq 1) {
+        $reviewerUsers = "@$($mrInfo.reviewers.username)"
+      }
+
+      # マージリクエストの現在のステータスを確認
+      $currentStatus = $mrInfo.state
+      echo "Current MR Status: $currentStatus"
+
+      # マージ済みの場合の警告メッセージを追加
+      $warningText = ""
+      if ($currentStatus -eq "merged") {
+        $warningText = "`n`n⚠️ **WARNING**: This merge request was merged without waiting for build results. Build verification was completed after merging."
+      }
+
+      # 成功通知メッセージの作成
+      $commentBody = "$warningText`n`n" +
+                    "***✅ Build Successful***`n`n" +
+                    "🔗Pipeline: $env:CI_PIPELINE_URL`n`n" +
+                    "📝Commit: $env:CI_COMMIT_SHORT_SHA`n`n" +
+                    #"`n`n作成者: " + $authorUser + "`nレビュワー: " + $reviewerUsers +
+                    "`n`n📖 GitLab Runner詳細: $env:EXPLAIN_URL"
+
+      # GitLab APIにコメントを投稿
+      $body = @{ body = $commentBody } | ConvertTo-Json
+      Invoke-RestMethod `
+        -Uri "$env:CI_API_V4_URL/projects/$env:CI_PROJECT_ID/merge_requests/$env:CI_MERGE_REQUEST_IID/notes" `
+        -Method Post `
+        -Headers @{"PRIVATE-TOKEN" = "$env:GITLAB_API_TOKEN"; "Content-Type" = "application/json"} `
+        -Body $body
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == $CI_TARGET_BRANCH'
+      when: on_success
+  tags:
+    - ci_develop_cdc
+
+# ビルド失敗時の通知
+notify_failure:
+  stage: notification
+  script:
+    - |
+      # マージリクエスト情報を取得
+      $mrInfo = Invoke-RestMethod `
+        -Uri "$env:CI_API_V4_URL/projects/$env:CI_PROJECT_ID/merge_requests/$env:CI_MERGE_REQUEST_IID" `
+        -Headers @{ "PRIVATE-TOKEN" = "$env:GITLAB_API_TOKEN" }
+
+      # マージリクエスト作成者のユーザー名を取得
+      $authorUser = "@$($mrInfo.author.username)"
+
+      $reviewerUsers = @()
+      # レビュワーが存在する場合、レビュワーのユーザー名を取得
+      if ($mrInfo.reviewers -and $mrInfo.reviewers.Count -eq 1) {
+        $reviewerUsers = "@$($mrInfo.reviewers.username)"
+      }
+
+      # マージリクエストの現在のステータスを確認
+      $currentStatus = $mrInfo.state
+      echo "Current MR Status: $currentStatus"
+
+      # マージ済みの場合の警告メッセージを追加
+      $warningText = ""
+      if ($currentStatus -eq "merged") {
+        $warningText = "> **⚠️ WARNING**:`n > This merge request was merged without waiting for build results and the build has FAILED. The merged code may be broken!"
+      }
+
+      # 失敗通知メッセージの作成
+      $commentBody = "$warningText`n`n" +
+                    "> ***❌ Build Failed***`n`n" +
+                    "Please check the Pipeline logs.`n`n" +
+                    "🔗 Pipeline: $env:CI_PIPELINE_URL`n`n" +
+                    "📝 Commit: $env:CI_COMMIT_SHORT_SHA`n`n" +
+                    #"`n`n作成者: " + $authorUser + "`nレビュワー: " + $reviewerUsers +
+                    "`n`n📖 GitLab Runner詳細: $env:EXPLAIN_URL"
+
+      # GitLab APIにコメントを投稿
+      $body = @{ body = $commentBody } | ConvertTo-Json
+      Invoke-RestMethod `
+        -Uri "$env:CI_API_V4_URL/projects/$env:CI_PROJECT_ID/merge_requests/$env:CI_MERGE_REQUEST_IID/notes" `
+        -Method Post `
+        -Headers @{"PRIVATE-TOKEN" = "$env:GITLAB_API_TOKEN"; "Content-Type" = "application/json"} `
+        -Body $body
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == $CI_TARGET_BRANCH'
+      when: on_failure
+  tags:
+    - ci_develop_cdc
+
+#スモークテスト実行
+vt_test_job:
+  stage: vt_smoke_test
+  needs:
+    - job: build-1MUS-job
+      optional: false
+  script:
+    - |
+      if (Test-Path "$env:ARBITATION_DIR\$env:ARBITATION_FILE") {
+        echo "Arbitration file is exist. Skipping VT Smoke Test."
+        echo 2 > vt_result.txt
+      } else {
+        # RFPフォルダの中身をクリア
+        if (Test-Path "$env:MOT_DIR\RFP") {
+          Remove-Item -Path "$env:MOT_DIR\RFP\*" -Recurse -Force
+        } else {
+          New-Item -ItemType Directory -Path "$env:MOT_DIR\RFP"
+        }
+
+        # 成果物コピー
+        Copy-Item -Path ".\smoketest_$env:SMOKE_TEST_PROJECT\RFP\*" -Destination "$env:MOT_DIR\RFP\" -Recurse -Force
+
+        pushd $env:EXEC_DIR
+        & ".\$env:VT_SMOKE_BAT"
+        $exitCode = $LASTEXITCODE
+        popd
+        echo "test job completed"
+
+        # 終了コードをファイルに保存
+        echo "test job completed with exit code: $exitCode"
+        echo $exitCode > vt_result.txt
+      }
+  artifacts:
+    paths:
+      - vt_result.txt
+    expire_in: 1 hour
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == $CI_TARGET_BRANCH'
+      when: on_success
+  tags:
+    - vt_smoke_test
+
+#スモークテスト結果の通知
+vt_smoke_test_notify:
+  stage: vt_smoke_test_notification
+  needs:
+    - job: vt_test_job
+      optional: false
+  script:
+    - |
+      # 結果ファイルから状態を取得
+      $result = Get-Content vt_result.txt
+      
+      # マージリクエスト情報を取得
+      $mrInfo = Invoke-RestMethod `
+        -Uri "$env:CI_API_V4_URL/projects/$env:CI_PROJECT_ID/merge_requests/$env:CI_MERGE_REQUEST_IID" `
+        -Headers @{ "PRIVATE-TOKEN" = "$env:GITLAB_API_TOKEN" }
+
+      # マージリクエスト作成者のユーザー名を取得
+      $authorUser = "@$($mrInfo.author.username)"
+
+      $reviewerUsers = @()
+      # レビュワーが存在する場合、レビュワーのユーザー名を取得
+      if ($mrInfo.reviewers -and $mrInfo.reviewers.Count -eq 1) {
+        $reviewerUsers = "@$($mrInfo.reviewers.username)"
+      }
+
+      # 結果に応じてメッセージ部分を作成
+      if ($result -eq "0") {
+        $messageHeader = "***✅ VT Smoke Test Result: OK***"
+      } elseif ($result -eq "1") {
+        $messageHeader = "***❌ VT Smoke Test Result: NG***"
+      } elseif ($result -eq "2") {
+        $messageHeader = "***ℹ️ VT Smoke Test Result: SKIP***"
+      } elseif ($result -eq "3") {
+        $messageHeader = "***ℹ️ VT Smoke Test Result: SKIP***"
+      } else {
+        $messageHeader = "***ℹ️ VT Smoke Test Result: SKIP***"
+      }
+
+      # 共通部分と結合してコメントを作成
+      $commentBody = "$messageHeader`n`n" +
+                    "🔗 Pipeline: $env:CI_PIPELINE_URL`n`n" +
+                    "📝 Commit: $env:CI_COMMIT_SHORT_SHA`n`n" +
+                    #"`n`n作成者: " + $authorUser + "`nレビュワー: " + $reviewerUsers +
+                    "`n`n📖 GitLab Runner詳細: $env:EXPLAIN_URL"
+
+      # GitLab APIにコメントを投稿
+      $body = @{ body = $commentBody } | ConvertTo-Json
+      Invoke-RestMethod `
+        -Uri "$env:CI_API_V4_URL/projects/$env:CI_PROJECT_ID/merge_requests/$env:CI_MERGE_REQUEST_IID/notes" `
+        -Method Post `
+        -Headers @{"PRIVATE-TOKEN" = "$env:GITLAB_API_TOKEN"; "Content-Type" = "application/json"} `
+        -Body $body
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == $CI_TARGET_BRANCH'
+      when: on_success
+  tags:
+    - vt_smoke_test
+
+# スモークテスト失敗時の通知
+vt_smoke_test_notify_failure: 
+  stage: vt_smoke_test_notification
+  needs:
+    - job: vt_test_job
+      optional: false
+  script:
+    - |
+      # マージリクエスト情報を取得
+      $mrInfo = Invoke-RestMethod `
+        -Uri "$env:CI_API_V4_URL/projects/$env:CI_PROJECT_ID/merge_requests/$env:CI_MERGE_REQUEST_IID" `
+        -Headers @{ "PRIVATE-TOKEN" = "$env:GITLAB_API_TOKEN" }
+      # コメントを作成
+      $commentBody = "***🚨VT Smoke Test Result: Pipeline Failed***`n`n" +
+                    "🔗 Pipeline: $env:CI_PIPELINE_URL`n`n" +
+                    "📝 Commit: $env:CI_COMMIT_SHORT_SHA`n`n" +
+                    "📖 GitLab Runner詳細: $env:EXPLAIN_URL"
+
+      # GitLab APIにコメントを投稿
+      $body = @{ body = $commentBody } | ConvertTo-Json
+      Invoke-RestMethod `
+        -Uri "$env:CI_API_V4_URL/projects/$env:CI_PROJECT_ID/merge_requests/$env:CI_MERGE_REQUEST_IID/notes" `
+        -Method Post `
+        -Headers @{"PRIVATE-TOKEN" = "$env:GITLAB_API_TOKEN"; "Content-Type" = "application/json"} `
+        -Body $body
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == $CI_TARGET_BRANCH'
+      when: on_failure
+  tags:
+    - vt_smoke_test
