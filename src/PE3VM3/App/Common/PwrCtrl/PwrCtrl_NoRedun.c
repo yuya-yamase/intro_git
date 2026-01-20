@@ -509,8 +509,8 @@ static void vd_s_PwrCtrlNoRedunMetBB( void )
     {
         /* OFF側のSTEP管理RAM,タイマをクリアしてOFF2週目も実行できるようにする */
         u1_s_PwrCtrl_NoRedun_MetBB_OffStep        = (U1)PWRCTRL_COMMON_PROCESS_STEP1;
-        u2_s_PwrCtrl_NoRedun_Gviftx_Mbwk_Off_Time = (U2)0U;
-        u2_s_PwrCtrl_NoRedun_MBoff_Time           = (U2)0U;
+        u2_s_PwrCtrl_NoRedun_Gviftx_Mbwk_Off_Time = (U2)PWRCTRL_NOREDUN_WAIT_TIME_INIT;
+        u2_s_PwrCtrl_NoRedun_MBoff_Time           = (U2)PWRCTRL_NOREDUN_WAIT_TIME_INIT;
 
         switch ( u1_s_PwrCtrl_NoRedun_MetBB_OnStep )
         {
@@ -536,7 +536,7 @@ static void vd_s_PwrCtrlNoRedunMetBB( void )
                     u1_s_PwrCtrl_NoRedun_MetBB_OnStep = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
                 }
                 /* 非冗長電源間ウェイトタイムをクリアしカウント開始する */
-                u2_s_PwrCtrl_NoRedun_BetWait_Time = (U2)0U;
+                u2_s_PwrCtrl_NoRedun_BetWait_Time = (U2)PWRCTRL_NOREDUN_WAIT_TIME_INIT;
                 break;
 
             case (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT:
@@ -553,8 +553,8 @@ static void vd_s_PwrCtrlNoRedunMetBB( void )
     {
         /* ON側のSTEP管理RAM,タイマをクリアしてON2週目も実行できるようにする */
         u1_s_PwrCtrl_NoRedun_MetBB_OnStep     = (U1)PWRCTRL_COMMON_PROCESS_STEP1;
-        u2_s_PwrCtrl_NoRedun_MBon_Time        = (U2)0U;
-        u2_s_PwrCtrl_NoRedun_Gviftx_Mbwk_Time = (U2)0U;
+        u2_s_PwrCtrl_NoRedun_MBon_Time        = (U2)PWRCTRL_NOREDUN_WAIT_TIME_INIT;
+        u2_s_PwrCtrl_NoRedun_Gviftx_Mbwk_Time = (U2)PWRCTRL_NOREDUN_WAIT_TIME_INIT;
 
         switch ( u1_s_PwrCtrl_NoRedun_MetBB_OffStep )
         {
@@ -713,8 +713,8 @@ static void vd_s_PwrCtrlNoRedunDisp( void )
       || ( u1_s_PwrCtrl_NoRedun_OnSequence == (U1)PWRCTRL_NOREDUN_ONSEQ_CNTDSP ) ){
         /* OFF側のSTEP管理RAM,タイマをクリアしてOFF2週目も実行できるようにする */
         u1_s_PwrCtrl_NoRedun_Disp_OffStep          = (U1)PWRCTRL_COMMON_PROCESS_STEP1;
-        u2_s_PwrCtrl_NoRedun_Gviftx_Dspwk_Off_Time = (U2)0U;
-        u2_s_PwrCtrl_NoRedun_Dspoff_Time           = (U2)0U;
+        u2_s_PwrCtrl_NoRedun_Gviftx_Dspwk_Off_Time = (U2)PWRCTRL_NOREDUN_WAIT_TIME_INIT;
+        u2_s_PwrCtrl_NoRedun_Dspoff_Time           = (U2)PWRCTRL_NOREDUN_WAIT_TIME_INIT;
 
         switch (u1_s_PwrCtrl_NoRedun_Disp_OnStep)
         {
@@ -738,7 +738,7 @@ static void vd_s_PwrCtrlNoRedunDisp( void )
                     u1_s_PwrCtrl_NoRedun_Disp_OnStep = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
                 }
                 /* 非冗長電源間ウェイトタイムをクリアしカウント開始する */
-                u2_s_PwrCtrl_NoRedun_BetWait_Time = (U2)0U;
+                u2_s_PwrCtrl_NoRedun_BetWait_Time = (U2)PWRCTRL_NOREDUN_WAIT_TIME_INIT;
                 break;
 
             case (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT:
@@ -754,8 +754,8 @@ static void vd_s_PwrCtrlNoRedunDisp( void )
     else if(u1_s_PwrCtrl_NoRedun_Disp_Chk == (U1)PWRCTRL_NOREDUN_PWR_OFF){
         /* ON側のSTEP管理RAM,タイマをクリアしてON2週目も実行できるようにする */
         u1_s_PwrCtrl_NoRedun_Disp_OnStep       = (U1)PWRCTRL_COMMON_PROCESS_STEP1;
-        u2_s_PwrCtrl_NoRedun_Dspon_Time        = (U2)0U;
-        u2_s_PwrCtrl_NoRedun_Gviftx_Dspwk_Time = (U2)0U;
+        u2_s_PwrCtrl_NoRedun_Dspon_Time        = (U2)PWRCTRL_NOREDUN_WAIT_TIME_INIT;
+        u2_s_PwrCtrl_NoRedun_Gviftx_Dspwk_Time = (U2)PWRCTRL_NOREDUN_WAIT_TIME_INIT;
 
         switch (u1_s_PwrCtrl_NoRedun_Disp_OffStep)
         {
@@ -903,8 +903,8 @@ static void vd_s_PwrCtrlNoRedunHub( void )
       || ( u1_s_PwrCtrl_NoRedun_OnSequence == (U1)PWRCTRL_NOREDUN_ONSEQ_DSRC ) ){
         /* Off側のSTEP管理RAM,タイマをクリアしてOFF2週目も実行できるようにする */
         u1_s_PwrCtrl_NoRedun_Hub_OffStep     = (U1)PWRCTRL_COMMON_PROCESS_STEP1;
-        u2_s_PwrCtrl_NoRedun_Hubwk_Off_Time  = (U2)0U;
-        u2_s_PwrCtrl_NoRedun_Huboff_Time     = (U2)0U;
+        u2_s_PwrCtrl_NoRedun_Hubwk_Off_Time  = (U2)PWRCTRL_NOREDUN_WAIT_TIME_INIT;
+        u2_s_PwrCtrl_NoRedun_Huboff_Time     = (U2)PWRCTRL_NOREDUN_WAIT_TIME_INIT;
 
         switch (u1_s_PwrCtrl_NoRedun_Hub_OnStep)
         {
@@ -928,7 +928,7 @@ static void vd_s_PwrCtrlNoRedunHub( void )
                     u1_s_PwrCtrl_NoRedun_Hub_OnStep = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
                 }
                 /* 非冗長電源間ウェイトタイムをクリアしカウント開始する */
-                u2_s_PwrCtrl_NoRedun_BetWait_Time = (U2)0U;
+                u2_s_PwrCtrl_NoRedun_BetWait_Time = (U2)PWRCTRL_NOREDUN_WAIT_TIME_INIT;
                 break;
 
             case (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT:
@@ -944,8 +944,8 @@ static void vd_s_PwrCtrlNoRedunHub( void )
     else if(u1_s_PwrCtrl_NoRedun_Hub_Chk == (U1)PWRCTRL_NOREDUN_PWR_OFF){
         /* ON側のSTEP管理RAM,タイマをクリアしてON2週目も実行できるようにする */
         u1_s_PwrCtrl_NoRedun_Hub_OnStep    = (U1)PWRCTRL_COMMON_PROCESS_STEP1;
-        u2_s_PwrCtrl_NoRedun_Hubon_Time    = (U2)0U;
-        u2_s_PwrCtrl_NoRedun_Hubwk_Time    = (U2)0U;
+        u2_s_PwrCtrl_NoRedun_Hubon_Time    = (U2)PWRCTRL_NOREDUN_WAIT_TIME_INIT;
+        u2_s_PwrCtrl_NoRedun_Hubwk_Time    = (U2)PWRCTRL_NOREDUN_WAIT_TIME_INIT;
         switch (u1_s_PwrCtrl_NoRedun_Hub_OffStep)
         {
             case (U1)PWRCTRL_COMMON_PROCESS_STEP1:

@@ -24,6 +24,7 @@
 #define     PWRCTRL_SYS_PWM_PERIOD_OFF          (0U)
 /* 周波数：487.804878[kHz], デューティ：50[%], カウントクロック周波数：80[MHz] 分周なし */
 #define     PWRCTRL_SYS_PWM_PERIOD              (163U)		/* 80MHz, (1/487.805)*80000 = 163.99[counts] */
+#define     PWRCTRL_SYS_PWM_DUTYCYC_OFF         (0U)
 #define     PWRCTRL_SYS_PWM_DUTYCYC_DEF         (5000U)
 #define     PWRCTRL_SYS_PWM_DUTYLSB             (10000U)
 

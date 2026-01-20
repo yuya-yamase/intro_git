@@ -63,6 +63,10 @@ U1      u1_g_VdfEsoRx_SW_LTA(void);
 U1      u1_g_VdfEsoRx_ADIEXIST(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+/* vardef_esopt_ARS1S90.c */
+U1      u1_g_VdfEsoRx_DRS(void);
+
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* vardef_esopt_BCC1S06.c */
 U1      u1_g_VdfEsoRx_RCD(void);
 
@@ -237,6 +241,7 @@ U1      u1_g_VdfEsoRx_SW_INTTIME_AJUST(void);
 U1      u1_g_VdfEsoRx_SW_REAR_WIPER(void);
 U1      u1_g_VdfEsoRx_SW_REAR_WIPER_INT(void);
 U1      u1_g_VdfEsoRx_SW_REAR_WASHER(void);
+U1      u1_g_VdfEsoRx_SYS_SW_CAMERA_WASHER(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
