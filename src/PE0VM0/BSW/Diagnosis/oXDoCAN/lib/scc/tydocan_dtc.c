@@ -297,8 +297,9 @@ static void    vd_s_TydcDtcInit(void)
     U2                         u2_t_nvmc_id;
     U2                         u2_t_nbyte;
 
+#if ((defined(NVMC_STATUS_ERRCOMP)) && (defined(NVMC_STATUS_COMP)))
     U1                         u1_t_nvm_chk;
-
+#endif
     u4_s_tydc_dtc_key_unlock = (U4)0U;
 
     u2_s_tydc_dtc_rxc_cyctim = (U2)U2_MAX;
@@ -333,6 +334,7 @@ static void    vd_s_TydcDtcInit(void)
     for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)u1_g_TYDC_DTC_NOW_LOG_RX; u4_t_lpcnt++){
 
         st_gp_tydc_dtc_log_rx[u4_t_lpcnt].u4_ev = (U4)0U;
+#if ((defined(NVMC_STATUS_ERRCOMP)) && (defined(NVMC_STATUS_COMP)))
         u1_t_nvm_chk = (U1)NVMC_STATUS_ERRCOMP;
         if(u1_t_nvm_chk == (U1)NVMC_STATUS_COMP){
             st_gp_tydc_dtc_log_rx[u4_t_lpcnt].u4_rx = u4_t_log_rx;
@@ -340,6 +342,9 @@ static void    vd_s_TydcDtcInit(void)
         else{
             st_gp_tydc_dtc_log_rx[u4_t_lpcnt].u4_rx = (U4)0U;
         }
+#else
+        st_gp_tydc_dtc_log_rx[u4_t_lpcnt].u4_rx = (U4)0U;
+#endif /* #if ((defined(NVMC_STATUS_ERRCOMP)) && (defined(NVMC_STATUS_COMP))) */
     }
 }
 /*===================================================================================================================================*/

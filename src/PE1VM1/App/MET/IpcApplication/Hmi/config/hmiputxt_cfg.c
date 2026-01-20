@@ -1,4 +1,4 @@
-/* 1.7.0 */
+/* 1.10.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define HMIPUTXT_CFG_C_MAJOR                     (1)
-#define HMIPUTXT_CFG_C_MINOR                     (8)
+#define HMIPUTXT_CFG_C_MINOR                     (10)
 #define HMIPUTXT_CFG_C_PATCH                     (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -19,26 +19,13 @@
 #include "hmiputxt_cfg_private.h"
 #include "hmiputxt_if_cfg.h"
 
-#include "oxcan.h"
-#if 0   /* BEV BSW provisionally */
-#else
-#include "oxcan_channel_STUB.h"
-#endif
+#include "memfill_u4.h"
+#include "memcpy_u4.h"
 #include "alert.h"
 #include "ambtmp.h"
-#include "odo_om_rst_if.h"
 #include "vptran_sel_typ.h"
 #include "veh_opemd.h"
-#if 0   /* BEV BSW provisionally */
-#else
-#include "veh_opemd_xmode_STUB.h"
-#endif
 #include "vardef.h"
-#include "rim_ctl.h"
-#if 0   /* BEV BSW provisionally */
-#else
-#include "rim_ctl_cfg_STUB.h"
-#endif
 #include "calibration.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -66,14 +53,11 @@
 #define HMIPUTXT_ICEWRN_IDX                 (427U)
 #define HMIPUTXT_SFTALT_IDX                 (1266U)
 
-#define HMIPUTXT_TASK_TIME                  (10U)
 #define HMIPUTXT_REQ_INIT                   (ALERT_REQ_UNKNOWN)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define HMIPUTXT_IDX_SFT                    (5U)
-
 #define HMIPUTXT_REQBIT                     (1U)
 #define HMIPUTXT_1BIT_SHIFT                 (1U)
 #define HMIPUTXT_2BIT_SHIFT                 (2U)
@@ -105,11 +89,6 @@ typedef struct{
     U2                          u2_eso_ch;
 }ST_HMIPUTXT_ESOPT;
 
-typedef struct{
-    U2                          u2_id;
-    U1                          u1_eso_result;
-}ST_HMIPUTXT_DI_ESOPT;
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -117,6 +96,11 @@ typedef struct{
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static U4      u4_s_HmiPuTxtIdx2Mask(const U2 u2_a_PUTXTIDX , U1 * u1p_a_bufpos);
+static U4      u4_sp_hmiputxt_slota_req[HMIPUTXT_NWORD];
+static U4      u4_sp_hmiputxt_slotb_req[HMIPUTXT_NWORD];
+static U4      u4_sp_hmiputxt_slotc_req[HMIPUTXT_NWORD];
+static U4      u4_sp_hmiputxt_slotd_req[HMIPUTXT_NWORD];
+static U4      u4_sp_hmiputxt_slote_req[HMIPUTXT_NWORD];
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
@@ -125,9 +109,9 @@ static U4      u4_s_HmiPuTxtIdx2Mask(const U2 u2_a_PUTXTIDX , U1 * u1p_a_bufpos)
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static void           vd_s_HmiPuTxtCfgIGOffInit(void);
 static void           vd_s_HmiPutTxtCfgSysmalMask(U4* u4_ap_varmask);
 static U1             u1_s_HmiPuTxtCfgSftaltReq(void);
+static void           vd_s_HmiPutTxtCfgAlertReq(U1 u1_a_slot);
 /*===================================================================================================================================*/
 /*  void    vd_g_HmiPuTxtCfgInit(void)                                                                                               */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
@@ -136,15 +120,11 @@ static U1             u1_s_HmiPuTxtCfgSftaltReq(void);
 /*===================================================================================================================================*/
 void    vd_g_HmiPuTxtCfgInit(void)
 {
-}
-/*===================================================================================================================================*/
-/*  static void    vd_s_HmiPuTxtCfgIGoffInit(void)                                                                                   */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void    vd_s_HmiPuTxtCfgIGOffInit(void)
-{
+    vd_g_MemfillU4(&u4_sp_hmiputxt_slota_req[0], (U4)0U, (U4)HMIPUTXT_NWORD);
+    vd_g_MemfillU4(&u4_sp_hmiputxt_slotb_req[0], (U4)0U, (U4)HMIPUTXT_NWORD);
+    vd_g_MemfillU4(&u4_sp_hmiputxt_slotc_req[0], (U4)0U, (U4)HMIPUTXT_NWORD);
+    vd_g_MemfillU4(&u4_sp_hmiputxt_slotd_req[0], (U4)0U, (U4)HMIPUTXT_NWORD);
+    vd_g_MemfillU4(&u4_sp_hmiputxt_slote_req[0], (U4)0U, (U4)HMIPUTXT_NWORD);
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_HmiPuTxtCfgReq(U4 * u4_ap_req)                                                                                      */
@@ -161,7 +141,6 @@ void    vd_g_HmiPuTxtCfgReq(U4 * u4_ap_req)
 
     U2              u2_t_num_reqbit;
     U4              u4_t_loop;
-    U1              u1_t_sts;
     U2              u2_t_blkpos;
     U2              u2_t_bitpos;
     U4              u4_t_num_tbl;
@@ -169,16 +148,25 @@ void    vd_g_HmiPuTxtCfgReq(U4 * u4_ap_req)
     U1              u1_t_req;
     U1              u1_t_exist;
     U1              u1_t_icewrn;
-    U1              u1_t_oilrststs;
     U1              u1_t_sftalt;
+    U1              u1_t_slot;
 
     for (u4_t_loop = (U4)0U; u4_t_loop < (U4)HMIPUTXT_NWORD; u4_t_loop++ ){
         u4_ap_req[u4_t_loop] = (U4)0U;
     }
 
     /* Alert */
+    u1_t_slot = u1_g_AlertGetReqSlot();
     u2_t_num_reqbit = u2_g_HmiputxtSizeReqbit();
     vd_g_AlertReqToBit(st_gp_HMIPUTXTREQBIT, u2_t_num_reqbit, u4_ap_req, (U1)HMIPUTXT_NWORD);
+    vd_s_HmiPutTxtCfgAlertReq(u1_t_slot);
+    for (u4_t_loop = (U4)0U; u4_t_loop < (U4)HMIPUTXT_NWORD; u4_t_loop++ ){
+        u4_ap_req[u4_t_loop] |= u4_sp_hmiputxt_slota_req[u4_t_loop];       
+        u4_ap_req[u4_t_loop] |= u4_sp_hmiputxt_slotb_req[u4_t_loop];
+        u4_ap_req[u4_t_loop] |= u4_sp_hmiputxt_slotc_req[u4_t_loop];
+        u4_ap_req[u4_t_loop] |= u4_sp_hmiputxt_slotd_req[u4_t_loop];
+        u4_ap_req[u4_t_loop] |= u4_sp_hmiputxt_slote_req[u4_t_loop];
+    }
 
     /* IceWrn */
     u1_t_icewrn = u1_g_AmbtmpIcyraWrnAct();
@@ -272,7 +260,6 @@ void    vd_g_HmiPuTxtCfgDetail(U2 * u2_ap_detail)
 void    vd_g_HmiPuTxtCfgVarmask(U4 * u4_ap_varmask)
 {
     static const ST_HMIPUTXT_ESOPT st_sp_HMIPUTXT_ESOPT[] = {
-        {    (U2)597U,    (U2)VDF_ESO_CH_AVSEXT   },
         {    (U2)678U,    (U2)VDF_ESO_CH_BRPADW   },
         {    (U2)824U,    (U2)VDF_ESO_CH_AVSEXT   },
         {    (U2)1025U,   (U2)VDF_ESO_CH_PEDPRO   },
@@ -418,6 +405,45 @@ void    vd_g_HmiPuTxtCfgCstmask(U4 * u4_ap_varmask)
 }
 
 /*===================================================================================================================================*/
+/*  static void    vd_s_HmiPutTxtCfgAlertReq(U1 u1_a_slot)                                                                           */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      u1_a_slot : slot number                                                                                          */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void    vd_s_HmiPutTxtCfgAlertReq(U1 u1_a_slot)
+{
+    U4    u4_tp_req[HMIPUTXT_NWORD];
+
+    vd_g_MemfillU4(&u4_tp_req[0], (U4)0U, (U4)HMIPUTXT_NWORD);
+
+    switch(u1_a_slot) {
+        case (U1)HMIPUTXTCFG_SLOT_A:
+            vd_g_AlertReqToBit(st_gp_HMIPUTXTREQBIT_SLOTA, (U2)HMIPUTXTCFG_IF_SLOTA_NUM, &u4_tp_req[0], (U1)HMIPUTXT_NWORD);
+            vd_g_MemcpyU4(&u4_sp_hmiputxt_slota_req[0], &u4_tp_req[0], (U4)HMIPUTXT_NWORD);
+            break;
+        case (U1)HMIPUTXTCFG_SLOT_B:
+            vd_g_AlertReqToBit(st_gp_HMIPUTXTREQBIT_SLOTB, (U2)HMIPUTXTCFG_IF_SLOTB_NUM, &u4_tp_req[0], (U1)HMIPUTXT_NWORD);
+            vd_g_MemcpyU4(&u4_sp_hmiputxt_slotb_req[0], &u4_tp_req[0], (U4)HMIPUTXT_NWORD);
+            break;
+        case (U1)HMIPUTXTCFG_SLOT_C:
+            vd_g_AlertReqToBit(st_gp_HMIPUTXTREQBIT_SLOTC, (U2)HMIPUTXTCFG_IF_SLOTC_NUM, &u4_tp_req[0], (U1)HMIPUTXT_NWORD);
+            vd_g_MemcpyU4(&u4_sp_hmiputxt_slotc_req[0], &u4_tp_req[0], (U4)HMIPUTXT_NWORD);
+            break;
+        case (U1)HMIPUTXTCFG_SLOT_D:
+            vd_g_AlertReqToBit(st_gp_HMIPUTXTREQBIT_SLOTD, (U2)HMIPUTXTCFG_IF_SLOTD_NUM, &u4_tp_req[0], (U1)HMIPUTXT_NWORD);
+            vd_g_MemcpyU4(&u4_sp_hmiputxt_slotd_req[0], &u4_tp_req[0], (U4)HMIPUTXT_NWORD);
+            break;
+/*        case (U1)HMIPUTXTCFG_SLOT_E: */
+/*            vd_g_AlertReqToBit(st_gp_HMIPUTXTREQBIT_SLOTE, (U2)HMIPUTXTCFG_IF_SLOTE_NUM, &u4_tp_req[0], (U1)HMIPUTXT_NWORD); */
+/*            vd_g_MemcpyU4(&u4_sp_hmiputxt_slote_req[0], &u4_tp_req[0], (U4)HMIPUTXT_NWORD); */
+/*            break; */
+        default:
+            /* Do Nothing */
+            break;
+    }
+}
+
+/*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
 /*                                                                                                                                   */
@@ -430,9 +456,11 @@ void    vd_g_HmiPuTxtCfgCstmask(U4 * u4_ap_varmask)
 /*  1.2.0    09/09/2020  TH       Setting for 800B CV-R.                                                                             */
 /*  1.3.0    01/06/2021  TH       Setting for 800B 1A.                                                                               */
 /*  1.4.0    06/04/2021  TH       Setting for 22-24FGM CV.                                                                           */
-/*  1.6.0    10/25/2024  RS       Setting for BEV System_Consideration_1                                                             */
-/*  1.7.0    06/23/2025  HY       Setting for BEV System_Consideration_2                                                             */
-/*  1.8.0    07/07/2025  KT       Setting for BEV System_Consideration_2 (Delete for CONTDISP2)                                      */
+/*  1.6.0    08/01/2024  TH       Change how to get alert table requests.                                                            */
+/*  1.7.0    10/25/2024  RS       Setting for BEV System_Consideration_1                                                             */
+/*  1.8.0    06/23/2025  HY       Setting for BEV System_Consideration_2                                                             */
+/*  1.9.0    07/07/2025  KT       Setting for BEV System_Consideration_2 (Delete for CONTDISP2)                                      */
+/*  1.10.0   01/07/2026  SN       Setting for BEV FF2                                                                                */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
@@ -444,11 +472,14 @@ void    vd_g_HmiPuTxtCfgCstmask(U4 * u4_ap_varmask)
 /*  19PFv3-5 05/17/2024  PG       Deleted PROSRV process                                                                             */
 /*  19PFv3-6 06/21/2024  JMH      Added LBW Mask Function                                                                            */
 /*  19PFv3-7 07/04/2024  TN       Delete Calibration Guard Process.                                                                  */
-/*  BEV-1    10/30/2024  RS       Change for BEV System_Consideration_1.(MET-H_SYSMAL-CSTD-2-00-A-C0)                                */
-/*  BEV-2    12/23/2024  MN       Change for BEV System_Consideration_1.(MET-B_LEDHEA-CSTD-1-01-A-C0)                                */
-/*  BEV-3     2/10/2025  HF       Change for BEV System_Consideration_1.(MET-D_SBW-CSTD-3-00-A-C0)                                   */
-/*  BEV-4    06/23/2025  HY       Change for BEV System_Consideration_2.(MET-S_ADMID-CSTD-0-02-A-C0 / MET-S_ADTT-CSTD-0-02-A-C0)     */
-/*  BEV-5     7/07/2025  KT       Change for BEV System_Consideration_2.(MET-M_CONTDISP2-CSTD-0010-C0)                               */
+/*  19PFv3-8 05/06/2025  PG       Delete MID Variation Mask of C_AVSWAR                                                              */
+/*  BEV-1    10/31/2025  MA       Change for BEV rebase                                                                              */
+/*  BEV-2    10/30/2024  RS       Change for BEV System_Consideration_1.(MET-H_SYSMAL-CSTD-2-00-A-C0)                                */
+/*  BEV-3    12/23/2024  MN       Change for BEV System_Consideration_1.(MET-B_LEDHEA-CSTD-1-01-A-C0)                                */
+/*  BEV-4     2/10/2025  HF       Change for BEV System_Consideration_1.(MET-D_SBW-CSTD-3-00-A-C0)                                   */
+/*  BEV-5    06/23/2025  HY       Change for BEV System_Consideration_2.(MET-S_ADMID-CSTD-0-02-A-C0 / MET-S_ADTT-CSTD-0-02-A-C0)     */
+/*  BEV-6     7/07/2025  KT       Change for BEV System_Consideration_2.(MET-M_CONTDISP2-CSTD-0010-C0)                               */
+/*  BEV-7     1/07/2026  SN       Change for BEV FF2.(MET-O_FNCLIM-CSTD-0-00-A-C0)                                                   */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
@@ -459,10 +490,12 @@ void    vd_g_HmiPuTxtCfgCstmask(U4 * u4_ap_varmask)
 /*  * PG   = Patrick Garcia, DTPH                                                                                                    */
 /*  * JMH  = James Michael D. Hilarion, DTPH                                                                                         */
 /*  * TN   = Tetsushi Nakano, Denso Techno                                                                                           */
+/*  * MA   = Misaki Aiki,  Denso Techno                                                                                              */
 /*  * RS   = Ryuki Sako,      Denso Techno                                                                                           */
 /*  * MN   = Mikiya Negishi,  KSE                                                                                                    */
 /*  * HF   = Hinari Fukamachi,KSE                                                                                                    */
 /*  * HY   = Haruki Yagi, KSE                                                                                                        */
 /*  * KT   = Kenta Takaji,    Denso Techno                                                                                           */
+/*  * SN   = Shizuka Nakajima,KSE                                                                                                    */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

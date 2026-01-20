@@ -832,8 +832,8 @@ static void vd_s_PwrCtrlSysPwrOffFlw( void )
         vd_g_McuDevPwronSetPort(PWRCTRL_CFG_PRIVATE_PORT_BOOST_DCDC     , MCU_DIO_LOW);
         vd_g_McuDevPwronSetPort(PWRCTRL_CFG_PRIVATE_PORT_ASIL_DCDC      , MCU_DIO_LOW);
 
-        vd_g_Pwm_SetPeriodAndDuty((U1)PWM_CH_00_DDC_FREQ , (U2)PWRCTRL_SYS_PWM_PERIOD_OFF, (U2)0U);
-        vd_g_Pwm_SetPeriodAndDuty((U1)PWM_CH_02_DDC_ASIL_FREQ , (U2)PWRCTRL_SYS_PWM_PERIOD_OFF, (U2)0U);
+        vd_g_Pwm_SetPeriodAndDuty((U1)PWM_CH_00_DDC_FREQ , (U2)PWRCTRL_SYS_PWM_PERIOD, (U2)PWRCTRL_SYS_PWM_DUTYCYC_OFF);
+        vd_g_Pwm_SetPeriodAndDuty((U1)PWM_CH_02_DDC_ASIL_FREQ , (U2)PWRCTRL_SYS_PWM_PERIOD, (U2)PWRCTRL_SYS_PWM_DUTYCYC_OFF);
 
         u1_s_PwrCtrl_Sys_Off_SubStep    = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
         break;

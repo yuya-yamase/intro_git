@@ -25,23 +25,24 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define XSPI_IVI_EXTSIG_NUM                  (16U)
+#define XSPI_IVI_EXTSIG_NUM                  (17U)
 #define XSPI_IVI_EXTSIG_TEST                 (0U)
-#define XSPI_IVI_EXTSIG_USB                  (1U)
-#define XSPI_IVI_EXTSIG_MIC                  (2U)
-#define XSPI_IVI_EXTSIG_MIC2                 (3U)
-#define XSPI_IVI_EXTSIG_MIC3                 (4U)
-#define XSPI_IVI_EXTSIG_MIC4                 (5U)
-#define XSPI_IVI_EXTSIG_WIFI                 (6U)
-#define XSPI_IVI_EXTSIG_WIFI2                (7U)
-#define XSPI_IVI_EXTSIG_DTV                  (8U)
-#define XSPI_IVI_EXTSIG_DTV2                 (9U)
-#define XSPI_IVI_EXTSIG_DTV3                 (10U)
-#define XSPI_IVI_EXTSIG_DTV4                 (11U)
-#define XSPI_IVI_EXTSIG_GNSS                 (12U)
-#define XSPI_IVI_EXTSIG_DAB                  (13U)
-#define XSPI_IVI_EXTSIG_DAB2                 (14U)
-#define XSPI_IVI_EXTSIG_PWR                  (15U)
+#define XSPI_IVI_EXTSIG_BOOT                 (1U)
+#define XSPI_IVI_EXTSIG_USB                  (2U)
+#define XSPI_IVI_EXTSIG_MIC                  (3U)
+#define XSPI_IVI_EXTSIG_MIC2                 (4U)
+#define XSPI_IVI_EXTSIG_MIC3                 (5U)
+#define XSPI_IVI_EXTSIG_MIC4                 (6U)
+#define XSPI_IVI_EXTSIG_WIFI                 (7U)
+#define XSPI_IVI_EXTSIG_WIFI2                (8U)
+#define XSPI_IVI_EXTSIG_DTV                  (9U)
+#define XSPI_IVI_EXTSIG_DTV2                 (10U)
+#define XSPI_IVI_EXTSIG_DTV3                 (11U)
+#define XSPI_IVI_EXTSIG_DTV4                 (12U)
+#define XSPI_IVI_EXTSIG_GNSS                 (13U)
+#define XSPI_IVI_EXTSIG_DAB                  (14U)
+#define XSPI_IVI_EXTSIG_DAB2                 (15U)
+#define XSPI_IVI_EXTSIG_PWR                  (16U)
 #define XSPI_IVI_EXTSIG_SNDSIZ               (2 + XSPI_IVI_EXTSIG_NUM*2)
 
 #define XSPI_IVI_TMUTE_UNDEF                 (0U)
@@ -69,7 +70,7 @@ typedef struct{
 void            vd_g_XspiIviSub1SystemInit(void);
 void            vd_g_XspiIviSub1SystemMainTask(void);
 void            vd_g_XspiIviSub1SystemAna(const U1 * u1_ap_XSPI_ADD, const U2 u2_a_DATA_SIZE);
-void            vd_g_XspiIviSub1DDconSend(const U1 u1_a_DATA);
+void            vd_g_XspiIviSub1DDconSend(const U1 * u1_ap_DATA);
 void            vd_g_XspiIviSub1GpsStsSend(void);
 void            vd_g_XspiIviSub1GpsStsPut(const U1 u1_a_DATA);
 void            vd_g_XspiIviSub1ExtSiGSend(void);

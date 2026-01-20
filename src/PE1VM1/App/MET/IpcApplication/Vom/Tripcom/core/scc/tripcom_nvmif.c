@@ -1,4 +1,4 @@
-/* 2.1.0 */
+/* 2.1.2 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -11,7 +11,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define TRIPCOM_NVMIF_C_MAJOR                (2)
 #define TRIPCOM_NVMIF_C_MINOR                (1)
-#define TRIPCOM_NVMIF_C_PATCH                (0)
+#define TRIPCOM_NVMIF_C_PATCH                (2)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -72,7 +72,8 @@
 #define TRIPCOM_NVMIF_CMPR_A_LT_B               (2U)
 #define TRIPCOM_NVMIF_CMPR_UNK                  (3U)
 
-#define TRIPCOM_NVMIF_CRC32_INIT                (0xEA0744F0U)
+#define TRIPCOM_NVMIF_CRC32_ZERO_INIT           (0xEA0744F0U)
+#define TRIPCOM_NVMIF_CRC32_MAX_INIT            (0x70DA6466U)
 
 #define TRIPCOM_NVMIF_SFT_DIV32                 (5U)
 #define TRIPCOM_NVMIF_MSK_MOD32                 (0x1FU)
@@ -147,10 +148,17 @@ static void    vd_s_TripcomNvmCrcChk(ST_TRIPCOM_NVMDATA * st_a_rdbk);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static const ST_TRIPCOM_NVMDATA    st_s_TRIPCOM_NVMDFLT = {
-    (U4)0x00000000U,                /* u4_value   */
-    (U4)0x00000000U,                /* u4_wrt_cnt */
-    (U4)TRIPCOM_NVMIF_CRC32_INIT    /* u4_crc32   */
+static const ST_TRIPCOM_NVMDATA    st_s_TRIPCOM_NVMDFLT[TRIPCOM_NVMIF_DEF_TYPE_NUM] = {
+    {
+        (U4)0x00000000U,                    /* u4_value   */
+        (U4)0x00000000U,                    /* u4_wrt_cnt */
+        (U4)TRIPCOM_NVMIF_CRC32_ZERO_INIT   /* u4_crc32   */
+    },
+    {
+        (U4)0xFFFFFFFFU,                    /* u4_value   */
+        (U4)0x00000000U,                    /* u4_wrt_cnt */
+        (U4)TRIPCOM_NVMIF_CRC32_MAX_INIT    /* u4_crc32   */
+    }
 };
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -375,7 +383,13 @@ void    vd_g_TripcomNvmIfRWFinhk(const U2 u2_a_BLOCKID,
            (st_sp_tripcom_nvmif_rw_data[TRIPCOM_NVMIF_RW_DAT_RDBK].u4_crc32   == (U4)0U) &&
            (st_sp_tripcom_nvmif_rw_data[TRIPCOM_NVMIF_RW_DAT_RDBK].u4_wrt_cnt == (U4)0U) &&
            (st_sp_tripcom_nvmif_rw_data[TRIPCOM_NVMIF_RW_DAT_RDBK].u4_value   == (U4)0U)){
-            st_sp_tripcom_nvmif_rw_data[TRIPCOM_NVMIF_RW_DAT_RDBK].u4_crc32 = (U4)TRIPCOM_NVMIF_CRC32_INIT;
+            st_sp_tripcom_nvmif_rw_data[TRIPCOM_NVMIF_RW_DAT_RDBK].u4_crc32 = (U4)TRIPCOM_NVMIF_CRC32_ZERO_INIT;
+        }
+        if((u1_s_tripcom_nvmif_diag_ctrl != (U1)TRIPCOM_NVMIF_DIAG_CTRL_CMP                ) &&
+           (st_sp_tripcom_nvmif_rw_data[TRIPCOM_NVMIF_RW_DAT_RDBK].u4_crc32   == (U4)0U    ) &&
+           (st_sp_tripcom_nvmif_rw_data[TRIPCOM_NVMIF_RW_DAT_RDBK].u4_wrt_cnt == (U4)0U    ) &&
+           (st_sp_tripcom_nvmif_rw_data[TRIPCOM_NVMIF_RW_DAT_RDBK].u4_value   == (U4)U4_MAX)){
+            st_sp_tripcom_nvmif_rw_data[TRIPCOM_NVMIF_RW_DAT_RDBK].u4_crc32 = (U4)TRIPCOM_NVMIF_CRC32_MAX_INIT;
         }
 
         if(u1_s_tripcom_nvmif_rdbk_cnt < (U1)U1_MAX){
@@ -676,9 +690,9 @@ static U1      u1_s_TripcomNvmIfReqchk(void)
 
             st_s_tripcom_nvmif_rw_ctrl.u1_rec_idx = u1_s_tripcom_nvmif_diag_idx;
 
-            st_tp_last->u4_value   = st_s_TRIPCOM_NVMDFLT.u4_value;
-            st_tp_last->u4_wrt_cnt = st_s_TRIPCOM_NVMDFLT.u4_wrt_cnt;
-            st_tp_last->u4_crc32   = st_s_TRIPCOM_NVMDFLT.u4_crc32;
+            st_tp_last->u4_value   = st_s_TRIPCOM_NVMDFLT[TRIPCOM_NVMIF_DEF_TYPE_ZERO].u4_value;
+            st_tp_last->u4_wrt_cnt = st_s_TRIPCOM_NVMDFLT[TRIPCOM_NVMIF_DEF_TYPE_ZERO].u4_wrt_cnt;
+            st_tp_last->u4_crc32   = st_s_TRIPCOM_NVMDFLT[TRIPCOM_NVMIF_DEF_TYPE_ZERO].u4_crc32;
 
             u1_t_sts_chk = (U1)TRIPCOM_NVMIF_CHK_REC_VALID;
 
@@ -688,8 +702,14 @@ static U1      u1_s_TripcomNvmIfReqchk(void)
             u1_t_bit_pos = u1_t_rec_idx  & (U1)TRIPCOM_NVMIF_MSK_MOD32;
             u4_s_tripcom_nvmif_diag_cmprchk[u1_t_ary_pos] &= ((U4)U4_MAX ^ ((U4)1U << u1_t_bit_pos));
 
-            /* search next idx */
             u1_t_num_rec  = st_g_TRIPCOM_NVMIF_REC_DATA.u1_num_rec;
+            if(u1_t_rec_idx < u1_t_num_rec){
+                st_tp_last->u4_value   = st_s_TRIPCOM_NVMDFLT[u1_g_TRIPCOM_NVMIF_DEF_TYPE[u1_t_rec_idx / (U1)TRIPCOM_NVMIF_NUM_REC]].u4_value;
+                st_tp_last->u4_wrt_cnt = st_s_TRIPCOM_NVMDFLT[u1_g_TRIPCOM_NVMIF_DEF_TYPE[u1_t_rec_idx / (U1)TRIPCOM_NVMIF_NUM_REC]].u4_wrt_cnt;
+                st_tp_last->u4_crc32   = st_s_TRIPCOM_NVMDFLT[u1_g_TRIPCOM_NVMIF_DEF_TYPE[u1_t_rec_idx / (U1)TRIPCOM_NVMIF_NUM_REC]].u4_crc32;
+            }
+
+            /* search next idx */
             u1_t_diag_idx = u1_s_TripcomNvmIfLsbSrch(&u4_s_tripcom_nvmif_diag_cmprchk[0], u1_t_num_rec);
             if(u1_t_diag_idx < u1_t_num_rec){
                 u1_s_tripcom_nvmif_diag_idx = u1_t_diag_idx;
@@ -1314,19 +1334,24 @@ static U1      u1_s_TripcomNvmIfCmprAwB(const ST_TRIPCOM_NVMDATA * st_ap_CMPR_A,
 /*===================================================================================================================================*/
 static void    vd_s_TripcomNvmIfCmprNvmDflt(const U1 u1_a_REC_IDX)
 {
-    ST_TRIPCOM_NVMDATA *    st_tp_rdbk;
-    U1                      u1_t_ary_pos;
-    U1                      u1_t_bit_pos;
-    U4                      u4_t_crc32_a;
-    U4                      u4_t_crc32_b;
+    ST_TRIPCOM_NVMDATA *        st_tp_rdbk;
+    const ST_TRIPCOM_NVMDATA *  st_tp_dflt;
+    U1                          u1_t_ary_pos;
+    U1                          u1_t_bit_pos;
+    U4                          u4_t_crc32_a;
+    U4                          u4_t_crc32_b;
 
     st_tp_rdbk   = &st_sp_tripcom_nvmif_rw_data[TRIPCOM_NVMIF_RW_DAT_RDBK];
     u4_t_crc32_a = st_tp_rdbk->u4_crc32;                /* Don't judge volatile variables for QAC */
-    u4_t_crc32_b = st_s_TRIPCOM_NVMDFLT.u4_crc32;
+    st_tp_dflt   = &st_s_TRIPCOM_NVMDFLT[TRIPCOM_NVMIF_DEF_TYPE_ZERO];
+    if(u1_a_REC_IDX < st_g_TRIPCOM_NVMIF_REC_DATA.u1_num_rec){
+        st_tp_dflt   = &st_s_TRIPCOM_NVMDFLT[u1_g_TRIPCOM_NVMIF_DEF_TYPE[u1_a_REC_IDX / (U1)TRIPCOM_NVMIF_NUM_REC]];
+    }
+    u4_t_crc32_b = st_tp_dflt->u4_crc32;
 
-    if((st_tp_rdbk->u4_value   == st_s_TRIPCOM_NVMDFLT.u4_value  ) &&
-       (st_tp_rdbk->u4_wrt_cnt == st_s_TRIPCOM_NVMDFLT.u4_wrt_cnt) &&
-       (u4_t_crc32_a           == u4_t_crc32_b                   )){
+    if((st_tp_rdbk->u4_value   == st_tp_dflt->u4_value  ) &&
+       (st_tp_rdbk->u4_wrt_cnt == st_tp_dflt->u4_wrt_cnt) &&
+       (u4_t_crc32_a           == u4_t_crc32_b          )){
         /* cmpr success : do nothing */
     }
     else{
@@ -1378,7 +1403,12 @@ static void    vd_s_TripcomNvmCrcChk(ST_TRIPCOM_NVMDATA * st_a_rdbk)
     if((st_a_rdbk->u4_crc32   == (U4)0U) &&
        (st_a_rdbk->u4_wrt_cnt == (U4)0U) &&
        (st_a_rdbk->u4_value   == (U4)0U)){
-        st_a_rdbk->u4_crc32 = (U4)TRIPCOM_NVMIF_CRC32_INIT;
+        st_a_rdbk->u4_crc32 = (U4)TRIPCOM_NVMIF_CRC32_ZERO_INIT;
+    }
+    if((st_a_rdbk->u4_crc32   == (U4)0U    ) &&
+       (st_a_rdbk->u4_wrt_cnt == (U4)0U    ) &&
+       (st_a_rdbk->u4_value   == (U4)U4_MAX)){
+        st_a_rdbk->u4_crc32 = (U4)TRIPCOM_NVMIF_CRC32_MAX_INIT;
     }
 }
 
@@ -1396,9 +1426,12 @@ static void    vd_s_TripcomNvmCrcChk(ST_TRIPCOM_NVMDATA * st_a_rdbk)
 /*  2.0.3    10/27/2021  TK       QAC supported.                                                                                     */
 /*  2.1.0    02/25/2022  TA(M)    Add vd_g_TripcomNvmIfSyncCmplt and                                                                 */
 /*                                  a process to call vd_g_TripcomNvmIfSyncCmplt when reading non-volatile memory data is completed. */
+/*  2.1.1    12/19/2024  TH       Fix NVMDFLT                                                                                        */
+/*  2.1.2    04/14/2025  TH       Fix u1_s_TripcomNvmIfReqchk NVMDFLT access                                                         */
 /*                                                                                                                                   */
 /*  * YA   = Yuhei Aoyama, DensoTechno                                                                                               */
 /*  * TA(M)= Teruyuki Anjima, NTT Data MSE                                                                                           */
 /*  * TK   = Takanori Kuno, Denso Techno                                                                                             */
+/*  * TH   = Taisuke Hirakawa, KSE                                                                                                   */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

@@ -1,4 +1,4 @@
-/* 0.0.0 */
+/* 0.0.1 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -11,7 +11,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define DATESI_TIM_CFG_C_MAJOR                  (0)
 #define DATESI_TIM_CFG_C_MINOR                  (0)
-#define DATESI_TIM_CFG_C_PATCH                  (0)
+#define DATESI_TIM_CFG_C_PATCH                  (1)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -123,8 +123,29 @@ void            vd_g_DateSITimCfgBonInit(void)
     u2_s_datesi_tim_bus_sts_old  = (U2)DATESI_TIM_NM_STS_UNINIT;
     u2_s_datesi_tim_ofstcnt      = (U2)DATESI_TIM_OFST_CNT_INIT;
     u1_s_datesi_tim_ofststs      = (U1)DATESI_TIM_OFST_STS_NON;
-    s4_s_datesi_tim_ofsttime     = (S4)DATESI_TIM_OFST_INIT;
     u1_s_datesi_tim_fmt          = (U1)DATESI_TIM_FMT_VAL_12H;
+
+    vd_g_Rim_WriteU1((U2)RIMID_U1_TIME_FORMAT, u1_s_datesi_tim_fmt);
+}
+
+/*===================================================================================================================================*/
+/* S4              s4_g_DateSITimCfgBonOfstTime(void)                                                                                */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+S4              s4_g_DateSITimCfgBonOfstTime(void)
+{
+    U2  u2_t_ofsttime;
+    S2  s2_t_ofsttime;
+
+    u2_t_ofsttime = (U2)DATESI_TIM_OFST_INIT;
+    
+    vd_g_Rim_WriteU2((U2)RIMID_U2_OFFSET_TIME, u2_t_ofsttime);
+    s2_t_ofsttime            = (S2)u2_t_ofsttime;
+    s4_s_datesi_tim_ofsttime = (S4)s2_t_ofsttime;
+
+    return(s4_s_datesi_tim_ofsttime);
 }
 
 /*===================================================================================================================================*/
@@ -135,12 +156,47 @@ void            vd_g_DateSITimCfgBonInit(void)
 /*===================================================================================================================================*/
 void            vd_g_DateSITimCfgRstWkupInit(void)
 {
+    U1  u1_t_rim_sts;
+    U1  u1_t_rim_data;
+
     u1_s_datesi_tim_tmchg_tx_cnt = (U1)DATESI_TIM_MIN_TX_NUM;
     u2_s_datesi_tim_bus_sts_old  = (U2)DATESI_TIM_NM_STS_UNINIT;
     u2_s_datesi_tim_ofstcnt      = (U2)DATESI_TIM_OFST_CNT_INIT;
     u1_s_datesi_tim_ofststs      = (U1)DATESI_TIM_OFST_STS_NON;
-    s4_s_datesi_tim_ofsttime     = (S4)DATESI_TIM_OFST_INIT;
     u1_s_datesi_tim_fmt          = (U1)DATESI_TIM_FMT_VAL_12H;
+
+    u1_t_rim_data = (U1)0U;
+    u1_t_rim_sts  = u1_g_Rim_ReadU1withStatus((U2)RIMID_U1_TIME_FORMAT, &u1_t_rim_data);
+    if(((u1_t_rim_sts & (U1)RIM_RESULT_KIND_MASK) == (U1)RIM_RESULT_KIND_OK) && (u1_t_rim_data < (U1)DATESI_TIM_FMT_NUM_VAL)){
+        u1_s_datesi_tim_fmt = u1_t_rim_data;
+    }
+
+}
+
+/*===================================================================================================================================*/
+/* S4              s4_g_DateSITimCfgWkupOfstTime(void)                                                                               */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+S4              s4_g_DateSITimCfgWkupOfstTime(void)
+{
+    U1  u1_t_rim_sts;
+    U2  u2_t_rim_data;
+    S2  s2_t_ofsttime;
+    S4  s4_t_ofsttime;
+
+    s4_t_ofsttime = (S4)DATESI_TIM_OFST_INIT;
+
+    u2_t_rim_data = (U2)0U;
+    u1_t_rim_sts  = u1_g_Rim_ReadU2withStatus((U2)RIMID_U2_OFFSET_TIME, &u2_t_rim_data);
+    if((u1_t_rim_sts & (U1)RIM_RESULT_KIND_MASK) == (U1)RIM_RESULT_KIND_OK){
+        s2_t_ofsttime = (S2)u2_t_rim_data;
+        s4_t_ofsttime = (S4)s2_t_ofsttime;
+    }
+    s4_s_datesi_tim_ofsttime = s4_t_ofsttime;
+
+    return(s4_s_datesi_tim_ofsttime);
 }
 
 /*===================================================================================================================================*/
@@ -157,12 +213,13 @@ U1              u1_g_DateSITimCfgInitOfstTime(S4 * s4p_a_offset_time)
     U1  u1_t_read_sts;
 
     u4_t_read        = (U4)0U;
-    u1_t_read_sts    = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_CPREQ_004, &u4_t_read, (U2)DATESI_TIME_VM_1WORD);
+    u1_t_read_sts    = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_VM1TO2_TIMOFST, &u4_t_read, (U2)DATESI_TIME_VM_1WORD);
     if((u1_t_read_sts != (U1)IVDSH_NO_REA) && (u4_t_read <= (U4)U2_MAX)){
         u2_t_ofsttime            = (U2)u4_t_read;
         s2_t_offset_time         = (S2)u2_t_ofsttime;
         (*s4p_a_offset_time)     = (S4)s2_t_offset_time;
         s4_s_datesi_tim_ofsttime = (S4)s2_t_offset_time;
+        vd_g_Rim_WriteU2((U2)RIMID_U2_OFFSET_TIME, u2_t_ofsttime);
     }
 
     return(u1_t_read_sts);
@@ -242,9 +299,12 @@ void            vd_g_DateSITimCfgCanTx(const U4 u4_a_HHMMSS_24H, const U1 u1_a_E
     U1  u1_t_ig_is_on;
 
     u4_t_fmt_is12h = (U4)0U;
-    u1_t_read_sts  = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_CPREQ_010, &u4_t_fmt_is12h, (U2)DATESI_TIME_VM_1WORD);
-    if((u1_t_read_sts != IVDSH_NO_REA) && (u4_t_fmt_is12h <= (U4)U1_MAX)){
-        u1_s_datesi_tim_fmt = (U1)u4_t_fmt_is12h;
+    u1_t_read_sts  = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_VM1TO2_TIMFMT, &u4_t_fmt_is12h, (U2)DATESI_TIME_VM_1WORD);
+    if((u1_t_read_sts != IVDSH_NO_REA) && (u4_t_fmt_is12h < (U4)DATESI_TIM_FMT_NUM_VAL)){
+        if(u1_s_datesi_tim_fmt != (U1)u4_t_fmt_is12h){
+            u1_s_datesi_tim_fmt = (U1)u4_t_fmt_is12h;
+            vd_g_Rim_WriteU1((U2)RIMID_U1_TIME_FORMAT, (U1)u4_t_fmt_is12h);
+        }
     }
     u4_t_hhmmss    = u4_a_HHMMSS_24H;
     u1_t_timeset   = (U1)DATESI_TIM_SET_24H;
@@ -500,18 +560,18 @@ void            vd_g_DateSITimCfgExec24(void)
     U1  u1_t_read_sts;
 
     u4_t_24h_ind  = (U4)0U;
-    u1_t_read_sts = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_CPREQ_010, &u4_t_24h_ind, (U2)DATESI_TIME_VM_1WORD);
-
-    if(u1_t_read_sts != (U1)IVDSH_NO_REA){
-        if(u4_t_24h_ind == (U4)DATESI_TIM_FMT_VAL_24H){
-            u4_t_24h_fmt = (U4)DATESI_TIM_FMT_VAL_12H;
-        }
-        else{
-            u4_t_24h_fmt = (U4)DATESI_TIM_FMT_VAL_24H;
-        }
-        vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_CPREQ_011, &u4_t_24h_fmt, (U2)DATESI_TIME_VM_1WORD);
-        vd_g_DateSIComSetCmp();
+    u1_t_read_sts = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_VM1TO2_TIMFMT, &u4_t_24h_ind, (U2)DATESI_TIME_VM_1WORD);
+    if((u1_t_read_sts == (U1)IVDSH_NO_REA) || (u4_t_24h_ind >= (U4)DATESI_TIM_FMT_NUM_VAL)){
+        u4_t_24h_ind = (U4)u1_s_datesi_tim_fmt;
     }
+
+    if(u4_t_24h_ind == (U4)DATESI_TIM_FMT_VAL_24H){
+        u4_t_24h_fmt = (U4)DATESI_TIM_FMT_VAL_12H;
+    }
+    else{
+        u4_t_24h_fmt = (U4)DATESI_TIM_FMT_VAL_24H;
+    }
+    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM2TO1_TIMFMT, &u4_t_24h_fmt, (U2)DATESI_TIME_VM_1WORD);
 }
 
 /*===================================================================================================================================*/
@@ -537,7 +597,8 @@ void            vd_g_DateSITimCfgOfstRoutine(void)
         if(u1_s_datesi_tim_ofststs == (U1)DATESI_TIM_OFST_STS_ADJ){
             u4_t_ofsttime = (U4)s4_s_datesi_tim_ofsttime;
             u4_t_ofsttime = (u4_t_ofsttime & (U4)U2_MAX);
-            vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_CPREQ_009, &u4_t_ofsttime, (U2)DATESI_TIME_VM_1WORD);
+            vd_g_Rim_WriteU2((U2)RIMID_U2_OFFSET_TIME, (U2)u4_t_ofsttime);
+            vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM2TO1_TIMOFST, &u4_t_ofsttime, (U2)DATESI_TIME_VM_1WORD);
             u1_s_datesi_tim_ofststs = (U1)DATESI_TIM_OFST_STS_NON;
         }
     }
@@ -551,20 +612,8 @@ void            vd_g_DateSITimCfgOfstRoutine(void)
 /*===================================================================================================================================*/
 void            vd_g_DateSITimCfgOfstAdjStart(void)
 {
-    U4  u4_t_read;
-    U2  u2_t_ofsttime;
-    S2  s2_t_offset_time;
-    U1  u1_t_read_sts;
-
     if(u1_s_datesi_tim_ofststs != (U1)DATESI_TIM_OFST_STS_ADJ){
-        u4_t_read     = (U4)0U;        
-        u1_t_read_sts = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_CPREQ_004, &u4_t_read, (U2)DATESI_TIME_VM_1WORD);
-        if((u1_t_read_sts != (U1)IVDSH_NO_REA) && (u4_t_read <= (U4)U2_MAX)){
-            u2_t_ofsttime            = (U2)u4_t_read;
-            s2_t_offset_time         = (S2)u2_t_ofsttime;
-            s4_s_datesi_tim_ofsttime = (S4)s2_t_offset_time;
-            u1_s_datesi_tim_ofststs  = (U1)DATESI_TIM_OFST_STS_ADJ;
-        }
+        u1_s_datesi_tim_ofststs = (U1)DATESI_TIM_OFST_STS_ADJ;
     }
 }
 
@@ -594,7 +643,6 @@ void            vd_g_DateSITimCfgSetOfstTime(const S4 s4_a_OFST)
     if(u1_s_datesi_tim_ofststs == (U1)DATESI_TIM_OFST_STS_ADJ){
         s4_s_datesi_tim_ofsttime = s4_a_OFST;
         u2_s_datesi_tim_ofstcnt  = (U2)DATESI_TIM_OFST_CNT_INIT;
-        vd_g_DateSIComSetCmp();
     }
 }
 
@@ -696,6 +744,11 @@ U1      u1_g_TimeZoneCfgRxDST_S30(U1 * u1p_a_rx)
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  0.0.0    04/23/2025  MN       New.                                                                                               */
+/*  0.0.1    12/18/2025  MN       Change for BEV Pre_CV                                                                              */
+/*                                                                                                                                   */
+/*  Revision Date        Author   Change Description                                                                                 */
+/* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
+/*  BEV-1    12/18/2025  MN       Addressing issues.                                                                                 */
 /*                                                                                                                                   */
 /*  * MN   = Mikiya Negishi, KSE                                                                                                     */
 /*                                                                                                                                   */

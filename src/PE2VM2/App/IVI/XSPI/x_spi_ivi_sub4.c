@@ -87,7 +87,10 @@
 /*PartialNM*/
 #define XSPI_IVI_PARTIALNM_DATASIZE         (7U)
 
-#define XSPI_IVI_MASK_04                    (0x0FU)
+#define XSPI_IVI_IVDSH_DREC_NWORD           (2U)
+#define XSPI_IVI_DATANM2_MASK               (0xC0U)
+#define XSPI_IVI_MET1D51_CANID              (0x4B600000U)
+#define XSPI_IVI_MET1D51_DLC                (8U)
 
 /* Provisional (CANSignal To VM1) */
 #define XSPI_IVI_IVDSH_NWORD                (1U)
@@ -122,6 +125,8 @@ static U1       u1_sp_Xspi_Ivi_CanBusSts5M_pre[XSPI_IVI_CANBUS_POS_TOTAL];
 static U1       u1_s_Xspi_Ivi_ClockUtc_recflg;
 static U1       u1_sp_Xspi_Ivi_ClockUtcdata[XSPI_IVI_CLOCKUTC_DATA_SIZE];
 static U1       u1_sp_Xspi_Ivi_ClockUtcdata_pre[XSPI_IVI_CLOCKUTC_DATA_SIZE];
+
+static U1       u1_s_Xspi_Ivi_DataNm2_Sgnl_pre;
 
 /* Provisional (CANSignal To VM1) */
 static U1       u1_sp_Xspi_Ivi_DMS1S02_Data[XSPI_IVI_CAN_DLC_08];
@@ -189,6 +194,8 @@ void            vd_g_XspiIviSub4Init(void)
     vd_g_MemfillU1(&u1_sp_Xspi_Ivi_MET1S62_Data[0], (U1)0U, (U4)XSPI_IVI_CAN_DLC_08);
     vd_g_MemfillU1(&u1_sp_Xspi_Ivi_MET1S70_Data[0], (U1)0U, (U4)XSPI_IVI_CAN_DLC_32);
     /* Provisional (CANSignal To VM1) */
+	
+	u1_s_Xspi_Ivi_DataNm2_Sgnl_pre = (U1)U1_MAX;
 }
 
 /*===================================================================================================================================*/
@@ -250,7 +257,7 @@ void            vd_g_XspiIviSub4Ana(const U1 * u1_ap_XSPI_ADD)
     }
     else if (u1_t_dt_type == u1_s_ID_REPRO_DARA_SOC2MCU) {
         /* Repro Data解析処理 */
-        /* skip */
+        vd_s_FwupxPutReqData(&u1_ap_XSPI_ADD[8], u2_t_dt_len);
     }
     else if (u1_t_dt_type == u1_s_ID_LCAN_DARA_SOC2MCU) {
         /* LCAN Data解析処理 */
@@ -365,11 +372,6 @@ static void            vd_s_XspiIviSub4CanAna(const U1 * u1_ap_SUB4_ADD, const U
         
         if(u4_t_msg_aubistid != (U4)0xFFFFFFFFU){
         /* フレーム送信処理 */
-            if(u4_t_msg_aubistid ==(U4)MSG_AVN1S97_TXCH0){
-                u1_t_cd_size = u1_g_PictCtl_CdsizeSnd();
-                u1_tp_can_data[6] = u1_tp_can_data[6] & (U1)XSPI_IVI_MASK_04;
-                u1_tp_can_data[6] |= (U1)(u1_t_cd_size << XSPI_IVI_SFT_04);
-            }
             vd_g_CanCtlTx_SendHk(u4_t_msg_aubistid, &u1_tp_can_data[0]);
             (void)Com_SendIPDU((PduIdType)u4_t_msg_aubistid, &u1_tp_can_data[0] );
         }
@@ -1271,7 +1273,7 @@ void            vd_g_XspiIviCANBusGet2M(void)
     u4_t_data   = (U4)0U;
 
     /* 2M-1 */
-    u1_t_sts    = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_CPREQ_029, &u4_t_data, u2_s_NWORD);
+    u1_t_sts    = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_CANBUS_STS_2M1, &u4_t_data, u2_s_NWORD);
     if(u1_t_sts != (U1)IVDSH_NO_REA){
         u1_sp_Xspi_Ivi_CanBusSts2M[0]   = (U1)0x00U;    /* 初期化 : 正常 */
         u1_sp_Xspi_Ivi_CanBusSts2M[1]   = (U1)0x00U;    /* 初期化 : 正常 */
@@ -1329,7 +1331,7 @@ void            vd_g_XspiIviCANBusGet5M(void)
     u4_t_data   = (U4)0U;
 
     /* 5M */
-    u1_t_sts    = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_CPREQ_032, &u4_t_data, u2_s_NWORD);
+    u1_t_sts    = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_CANBUS_STS_5M, &u4_t_data, u2_s_NWORD);
     if(u1_t_sts != (U1)IVDSH_NO_REA){
         u1_sp_Xspi_Ivi_CanBusSts5M[0]   = (U1)0x00U;    /* 初期化 : 正常 */
         u1_sp_Xspi_Ivi_CanBusSts5M[1]   = (U1)0x00U;    /* 初期化 : 正常 */
@@ -1364,6 +1366,42 @@ void            vd_g_XspiIviCANBusGet5M(void)
     }
     else{
         /* do nothing */
+    }
+}
+
+/*===================================================================================================================================*/
+/*  void            vd_g_XspiIviDrecSgnlGet(void)                                                                                    */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    MET送信信号取得処理(ドラレコ系信号)                                                                                 */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void            vd_g_XspiIviDrecSgnlGet(void)
+{
+    U1      u1_t_sts;
+    U4      u4_t_ivdsh_data[XSPI_IVI_IVDSH_DREC_NWORD];
+    U1      u1_t_data[XSPI_IVI_CAN_DLC_08];
+    U1      u1_t_datanm2_sgnl;
+    U4      u4_t_lpcnt;
+    U4      u4_t_time;
+
+    u1_t_sts    = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_VM1TO2_MET1D51, &u4_t_ivdsh_data[0], (U2)XSPI_IVI_IVDSH_DREC_NWORD);
+    if(u1_t_sts != (U1)IVDSH_NO_REA){
+        for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)XSPI_IVI_IVDSH_DREC_NWORD; u4_t_lpcnt++){
+            u1_t_data[u4_t_lpcnt * 4]     = (U1)(u4_t_ivdsh_data[u4_t_lpcnt]  & (U4)0x000000FFU);
+            u1_t_data[(u4_t_lpcnt * 4)+1] = (U1)((u4_t_ivdsh_data[u4_t_lpcnt] & (U4)0x0000FF00U) >> 8U);
+            u1_t_data[(u4_t_lpcnt * 4)+2] = (U1)((u4_t_ivdsh_data[u4_t_lpcnt] & (U4)0x00FF0000U) >> 16U);
+            u1_t_data[(u4_t_lpcnt * 4)+3] = (U1)((u4_t_ivdsh_data[u4_t_lpcnt] & (U4)0xFF000000U) >> 24U);
+        }
+        u1_t_datanm2_sgnl = u1_t_data[0] & (U1)XSPI_IVI_DATANM2_MASK;
+
+        if(u1_t_datanm2_sgnl != u1_s_Xspi_Ivi_DataNm2_Sgnl_pre) {
+            /* タイムスタンプ取得処理 */
+            u4_t_time = u4_g_Gpt_FrtGetUsElapsed(vdp_PTR_NA);
+            u4_t_time = (U4)(u4_t_time / MCU_FRT_1MS);
+            vd_s_XspiIviCANGWStuckBuff(u4_t_time, (U4)XSPI_IVI_MET1D51_CANID, (U1)XSPI_IVI_MET1D51_DLC, &u1_t_data[0]);
+        }
+        u1_s_Xspi_Ivi_DataNm2_Sgnl_pre = u1_t_datanm2_sgnl;
     }
 }
 
@@ -1586,12 +1624,13 @@ static void            vd_s_XspiIviClockUTCStuckBuff(const U1 u1_a_ID,const U2 u
     /*8byteアライメント*/
     if((u2_a_SIZE > (U2)8U) && (u2_a_SIZE <= (U2)16U)) {
         u1_t_utc_data_size = (U1)XSPI_IVI_HEADER + (U1)16U;
+        u1_t_jdg = u1_g_XspiIviQueueWriChkCanCommand(u1_t_utc_data_size);
     } else if(u2_a_SIZE <= (U2)8U){
         u1_t_utc_data_size = (U1)XSPI_IVI_HEADER + (U1)8U;
+        u1_t_jdg = u1_g_XspiIviQueueWriChkCanCommand(u1_t_utc_data_size);
     } else {
-
+        u1_t_jdg = (U1)FALSE;
     }
-    u1_t_jdg = u1_g_XspiIviQueueWriChkCanCommand(u1_t_utc_data_size);
 
     if(u1_t_jdg == (U1)TRUE)
     {

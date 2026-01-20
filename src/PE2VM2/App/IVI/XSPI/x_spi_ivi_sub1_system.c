@@ -59,6 +59,7 @@
 #define    XSPI_IVI_SYSTEM_SETTING_SEND    (0x91U)
 
 #define    XSPI_IVI_EXTSIG_ID_TEST         (0x01U)
+#define    XSPI_IVI_EXTSIG_ID_BOOT         (0x02U)
 #define    XSPI_IVI_EXTSIG_ID_USB          (0x10U)
 #define    XSPI_IVI_EXTSIG_ID_MIC          (0x20U)
 #define    XSPI_IVI_EXTSIG_ID_MIC2         (0x21U)
@@ -87,6 +88,10 @@
 #define    XSPI_IVI_TESTTERM_UNKNOWN       (0U)
 #define    XSPI_IVI_TESTTERM_OFF           (1U)
 #define    XSPI_IVI_TESTTERM_ON            (2U)
+
+#define    XSPI_IVI_BOOT_UNKNOWN           (0U)
+#define    XSPI_IVI_BOOT_OFF               (1U)
+#define    XSPI_IVI_BOOT_ON                (2U)
 
 #define    XSPI_IVI_PWR_OFF                (1U)
 #define    XSPI_IVI_PWR_ON                 (2U)
@@ -187,46 +192,42 @@ void            vd_g_XspiIviSub1SystemMainTask(void)
     U1    u1_t_perion;
     U1    u1_t_event_jdg;
     U1    u1_t_exsig_pwr;
+    U1    u1_t_exsig_boot;
 
     /*定期送信などのデータ作成をここで行う*/
     /*TEST端子読み出し*/
     /* TEST端子入力値取得処理 */
     u1_t_event_jdg = (U1)FALSE;
 
-    u4_t_task = u4_s_xspi_ivi_task_cnt[XSPI_TASK_CNT_SYSTEM_TEST];
-
-    u1_t_perion = Dio_ReadChannel(DIO_ID_PORT10_CH2);
-    if((u1_t_perion == (U1)STD_HIGH) &&
-       (u1_s_xspi_ivi_system_perion_flg == (U1)FALSE)){
-        u1_s_xspi_ivi_system_perion_flg = (U1)TRUE;
-        u4_s_xspi_ivi_task_cnt[XSPI_TASK_CNT_SYSTEM_TEST] = (U4)0U;
-    } else if(u1_t_perion == (U1)STD_LOW) {
-        u1_s_xspi_ivi_system_perion_flg = (U1)FALSE;
-    } else {
-        /*Do Nothing*/
+    u1_t_test  = ExtSigCtrl_GetSigSts(EXTSIGCTRL_KIND_TEST);
+    switch(u1_t_test){
+        case U1_EXTSIGCTRL_SIG_STS_UNKNOWN:
+            vd_g_XspiIviSub1ExtSgnlPut((U1)XSPI_IVI_EXTSIG_TEST, (U1)XSPI_IVI_TESTTERM_UNKNOWN);
+            break;
+        case U1_EXTSIGCTRL_SIG_STS_OFF:
+            vd_g_XspiIviSub1ExtSgnlPut((U1)XSPI_IVI_EXTSIG_TEST, (U1)XSPI_IVI_TESTTERM_OFF);
+            break;
+        case U1_EXTSIGCTRL_SIG_STS_ON:
+            vd_g_XspiIviSub1ExtSgnlPut((U1)XSPI_IVI_EXTSIG_TEST, (U1)XSPI_IVI_TESTTERM_ON);
+            break;
+        default:
+            break;
     }
-    
-    if(u1_s_xspi_ivi_system_perion_flg == (U1)TRUE) {
-        if(u4_t_task >= (U4)XSPI_IIV_SYSTEM_TEST_SAMPL_TASK){   /*100msごとのサンプリング */
-            u1_t_test = Dio_ReadChannel(DIO_ID_PORT5_CH6);
-            u1_s_xspi_ivi_system_extsig_testterm_data[2] = u1_s_xspi_ivi_system_extsig_testterm_data[1];
-            u1_s_xspi_ivi_system_extsig_testterm_data[1] = u1_s_xspi_ivi_system_extsig_testterm_data[0];
-            u1_s_xspi_ivi_system_extsig_testterm_data[0] = u1_t_test;
-            if((u1_s_xspi_ivi_system_extsig_testterm_data[0] == (U1)STD_HIGH) &&
-              (u1_s_xspi_ivi_system_extsig_testterm_data[1] == (U1)STD_HIGH) &&
-              (u1_s_xspi_ivi_system_extsig_testterm_data[2] == (U1)STD_HIGH))
-            {
-                vd_g_XspiIviSub1ExtSgnlPut((U1)XSPI_IVI_EXTSIG_TEST,(U1)XSPI_IVI_TESTTERM_ON);
-            } else if((u1_s_xspi_ivi_system_extsig_testterm_data[0] == (U1)STD_LOW) &&
-                     (u1_s_xspi_ivi_system_extsig_testterm_data[1] == (U1)STD_LOW) &&
-                     (u1_s_xspi_ivi_system_extsig_testterm_data[2] == (U1)STD_LOW))
-            {
-                vd_g_XspiIviSub1ExtSgnlPut((U1)XSPI_IVI_EXTSIG_TEST,(U1)XSPI_IVI_TESTTERM_OFF);
-            } else {
-                /*Do Nothing*/
-            }
-            u4_s_xspi_ivi_task_cnt[XSPI_TASK_CNT_SYSTEM_TEST] = (U4)0U;
-        }
+
+    /* BOOT端子入力取得処理 */
+    u1_t_exsig_boot  = ExtSigCtrl_GetSigSts(EXTSIGCTRL_KIND_BOOT);
+    switch(u1_t_exsig_boot){
+        case U1_EXTSIGCTRL_SIG_STS_UNKNOWN:
+            vd_g_XspiIviSub1ExtSgnlPut((U1)XSPI_IVI_EXTSIG_BOOT, (U1)XSPI_IVI_BOOT_UNKNOWN);
+            break;
+        case U1_EXTSIGCTRL_SIG_STS_OFF:
+            vd_g_XspiIviSub1ExtSgnlPut((U1)XSPI_IVI_EXTSIG_BOOT, (U1)XSPI_IVI_BOOT_OFF);
+            break;
+        case U1_EXTSIGCTRL_SIG_STS_ON:
+            vd_g_XspiIviSub1ExtSgnlPut((U1)XSPI_IVI_EXTSIG_BOOT, (U1)XSPI_IVI_BOOT_ON);
+            break;
+        default:
+            break;
     }
 
     /* PWR端子入力取得処理 */
@@ -291,7 +292,7 @@ void            vd_g_XspiIviSub1SystemAna(const U1 * u1_ap_XSPI_ADD, const U2 u2
     switch (u1_t_subtype)
     {
     case XSPI_IVI_SYSTEM_DDCON_REC:
-        vd_g_Ivi_PwrCtrl_DDFreq_ChgReq(u1_ap_XSPI_ADD[1]);
+        vd_g_Ivi_PwrCtrl_DDFreq_ChgReq(&u1_ap_XSPI_ADD[1]);
         break;
     case XSPI_IVI_SYSTEM_GPS_OPE_RECUEST:
         /*GPS動作要求の通知先IFをコール*/
@@ -336,19 +337,20 @@ static void            vd_s_XspiIviSub1SystemSetDataRec(const U1 * u1_ap_XSPI_AD
 }
 
 /*===================================================================================================================================*/
-/*  void            vd_g_XspiIviSub1DDconSend(const U1 u1_a_DATA)                                                                    */
+/*  void            vd_g_XspiIviSub1DDconSend(const U1 * u1_ap_DATA)                                                                 */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Description:    SubFlame1(MISC) Data Analysis                                                                                    */
-/*  Arguments:      u1_a_DATA : 切り替え周波数                                                                                        */
+/*  Arguments:      u1_ap_DATA : 切り替え周波数                                                                                      */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void            vd_g_XspiIviSub1DDconSend(const U1 u1_a_DATA)
+void            vd_g_XspiIviSub1DDconSend(const U1 * u1_ap_DATA)
 {
-    U2     u2_s_SYSTEM_DDCON_SIZE = (U2)2U;
-    U1     u1_tp_data[2];
+    U2     u2_s_SYSTEM_DDCON_SIZE = (U2)3U;
+    U1     u1_tp_data[3];
 
     u1_tp_data[0] = (U1)XSPI_IVI_SYSTEM_DDCON_SEND;
-    u1_tp_data[1] = u1_a_DATA;
+    u1_tp_data[1] = u1_ap_DATA[0];
+    u1_tp_data[2] = u1_ap_DATA[1];
     vd_s_XspiIviSub1SystemDataToQueue(u2_s_SYSTEM_DDCON_SIZE,u1_tp_data);
 }
 
@@ -410,52 +412,55 @@ void            vd_g_XspiIviSub1ExtSiGSend(void)
         u1_tp_data[u4_t_lo] = u1_sp_xspi_ivi_system_extsig_data[u4_t_loop];
         switch (u4_t_loop)
         {
-        case 0:
+        case XSPI_IVI_EXTSIG_TEST:
             u1_tp_data[u4_t_hi] = (U1)XSPI_IVI_EXTSIG_ID_TEST;
             break;
-        case 1:
+        case XSPI_IVI_EXTSIG_BOOT:
+            u1_tp_data[u4_t_hi] = (U1)XSPI_IVI_EXTSIG_ID_BOOT;
+            break;
+        case XSPI_IVI_EXTSIG_USB:
             u1_tp_data[u4_t_hi] = (U1)XSPI_IVI_EXTSIG_ID_USB;
             break;
-        case 2:
+        case XSPI_IVI_EXTSIG_MIC:
             u1_tp_data[u4_t_hi] = (U1)XSPI_IVI_EXTSIG_ID_MIC;
             break;
-        case 3:
+        case XSPI_IVI_EXTSIG_MIC2:
             u1_tp_data[u4_t_hi] = (U1)XSPI_IVI_EXTSIG_ID_MIC2;
             break;
-        case 4:
+        case XSPI_IVI_EXTSIG_MIC3:
             u1_tp_data[u4_t_hi] = (U1)XSPI_IVI_EXTSIG_ID_MIC3;
             break;
-        case 5:
+        case XSPI_IVI_EXTSIG_MIC4:
             u1_tp_data[u4_t_hi] = (U1)XSPI_IVI_EXTSIG_ID_MIC4;
             break;
-        case 6:
+        case XSPI_IVI_EXTSIG_WIFI:
             u1_tp_data[u4_t_hi] = (U1)XSPI_IVI_EXTSIG_ID_WIFI;
             break;
-        case 7:
+        case XSPI_IVI_EXTSIG_WIFI2:
             u1_tp_data[u4_t_hi] = (U1)XSPI_IVI_EXTSIG_ID_WIFI2;
             break;
-        case 8:
+        case XSPI_IVI_EXTSIG_DTV:
             u1_tp_data[u4_t_hi] = (U1)XSPI_IVI_EXTSIG_ID_DTV;
             break;
-        case 9:
+        case XSPI_IVI_EXTSIG_DTV2:
             u1_tp_data[u4_t_hi] = (U1)XSPI_IVI_EXTSIG_ID_DTV2;
             break;
-        case 10:
+        case XSPI_IVI_EXTSIG_DTV3:
             u1_tp_data[u4_t_hi] = (U1)XSPI_IVI_EXTSIG_ID_DTV3;
             break;
-        case 11:
+        case XSPI_IVI_EXTSIG_DTV4:
             u1_tp_data[u4_t_hi] = (U1)XSPI_IVI_EXTSIG_ID_DTV4;
             break;
-        case 12:
+        case XSPI_IVI_EXTSIG_GNSS:
             u1_tp_data[u4_t_hi] = (U1)XSPI_IVI_EXTSIG_ID_GNSS;
             break;
-        case 13:
+        case XSPI_IVI_EXTSIG_DAB:
             u1_tp_data[u4_t_hi] = (U1)XSPI_IVI_EXTSIG_ID_DAB;
             break;
-        case 14:
+        case XSPI_IVI_EXTSIG_DAB2:
             u1_tp_data[u4_t_hi] = (U1)XSPI_IVI_EXTSIG_ID_DAB2;
             break;
-        case 15:
+        case XSPI_IVI_EXTSIG_PWR:
             u1_tp_data[u4_t_hi] = (U1)XSPI_IVI_EXTSIG_ID_PWR;
             break;
         

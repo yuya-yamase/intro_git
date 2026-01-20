@@ -1,4 +1,4 @@
-/* 3.2.0 */
+/* 3.5.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -14,7 +14,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define THBLNKR_H_MAJOR                          (3)
-#define THBLNKR_H_MINOR                          (2)
+#define THBLNKR_H_MINOR                          (5)
 #define THBLNKR_H_PATCH                          (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -41,11 +41,6 @@
 #define THBLNKR_SPDMD_MID                        (1U)
 #define THBLNKR_SPDMD_HI                         (2U)
 
-#define THBLNKR_NUM_SNDPRS                       (3U)
-#define THBLNKR_SNDPRS_LO                        (0U)
-#define THBLNKR_SNDPRS_MID                       (1U)
-#define THBLNKR_SNDPRS_HI                        (2U)
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -59,9 +54,8 @@ void    vd_g_ThblnkrBonInit(void);
 void    vd_g_ThblnkrRstWkInit(void);
 void    vd_g_ThblnkrMainTask(void);
 
-U1      u1_g_ThblnkrTicTocReq(U1 * u1p_a_spdmd, U1 * u1p_a_sndprs);     /* Chime Request with Speed Mode and Desired Sound Prs. */
+U1      u1_g_ThblnkrTicTocReq(U1 * u1p_a_spdmd);                        /* Chime Request with Speed Mode */
 U1      u1_g_ThblnkrIndAct(void);                                       /* Return : THBLNKR_BIT_XXXX */
-U1      u1_g_ThblnkrNmAwake(void);                                      /* Return : TRUE/FALSE */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */

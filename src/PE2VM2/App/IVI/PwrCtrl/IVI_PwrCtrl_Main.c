@@ -22,6 +22,7 @@
 #include    "XMTunerCtl.h"
 #include    "PwrCtl.h"
 #include    "STRCtl.h"
+#include    "PMIC.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -71,6 +72,7 @@ void            vd_g_Ivi_PwrCtrl_Main_Bon_init(void)
     vd_g_XMTuner_Init();
     vd_g_Power_BonInit();
     vd_g_Str_Bon_Init();
+    vd_g_Pmic_Init();
 }
 
 /*===================================================================================================================================*/
@@ -88,6 +90,7 @@ void            vd_g_Ivi_PwrCtrl_Main_Wkup_init(void)
     vd_g_XMTuner_Init();
     vd_g_Power_WkupInit();
     vd_g_Str_Wkup_Init();
+    vd_g_Pmic_Init();
 }
 
 /*===================================================================================================================================*/
@@ -105,6 +108,7 @@ void            vd_g_Ivi_PwrCtrl_Main_Rst_init(void)
     vd_g_XMTuner_Init();
     vd_g_Power_WkupInit();
     vd_g_Str_Wkup_Init();
+    vd_g_Pmic_Init();
 }
 
 /*===================================================================================================================================*/
@@ -121,6 +125,7 @@ void            vd_g_Ivi_PwrCtrl_Main(void)
 	vd_g_Gnss_Routine();
     vd_g_XMTuner_MainTask();
     vd_g_Power_Routine();
+    vd_g_Pmic_Routine();
 }
 
 /*===================================================================================================================================*/

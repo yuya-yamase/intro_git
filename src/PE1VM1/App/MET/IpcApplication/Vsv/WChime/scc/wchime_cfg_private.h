@@ -100,6 +100,10 @@ extern  U1                          u1_g_wchime_alrt_csr_vol_old;
 extern  U1                          u1_g_wchime_alrt_csr_vol_now;
 
 extern  U1                          u1_g_wchime_silencetime_flag;
+#if 0   /* BEV Rebase provisionally */
+#else   /* BEV Rebase provisionally */
+extern  U1                          u1_g_wchime_metcstmvol;
+#endif   /* BEV Rebase provisionally */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Prototypes                                                                                                              */
@@ -118,6 +122,7 @@ U1      u1_g_wChimeCfgReqRead(const U4 * u4_ap_REQBIT, const U1 u1_a_REQ_ID);
 U1      u1_g_wChimeReqSwCtrl(const U1 u1_a_REQ_SEL);
 U1      u1_g_wChimeCfgSwWaitInsert(const U1 u1_a_REQ_SEL, const U1 u1_a_REQ_NEXT, U2 * u2p_a_wait_time);
 U1      u1_g_wChimeCfgVolGet(const U1 u1_a_REQ_SEL);
+U1      u1_g_wChimeCfgIntermSplCnd(const U1 u1_a_REQ_SEL, const U1 u1_a_REQ_NEXT);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */

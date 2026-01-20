@@ -65,10 +65,10 @@
 void    vd_g_TyDoCANAubIfSecVerifAck(const SecOC_VerificationStatusType st_a_RSLT);                                                         /* SecOC/cfg/SecOC_Cfg.c                  */
 void    vd_g_TyDoCANAubIfSecVerifFinAck(const SecOC_VerificationStatusType st_a_RSLT, const uint8* SduDataPtr, PduLengthType SduLength);    /* SecOC/cfg/SecOC_Cfg.c                  */
 
+#endif /* #ifdef SECOC_H */
+
 /* tydocan_xid_ma.c */
 void    vd_g_TyDoCANAubIfComKzkRx(const uint16 u2_a_PDU);
-void    vd_g_TyDoCANAubIfCsmAck(uint32 u4_a_jobId, Crypto_ResultType u1_a_RSLT);
-#endif /* #ifdef SECOC_H */
 void    vd_g_TyDoCANAubIfCsmAck(uint32 u4_a_jobId, Crypto_ResultType u1_a_RSLT);
 void    vd_g_TyDoCANAubIfCsmKeyAck(uint32 u4_a_jobId, Crypto_ResultType u1_a_RSLT);
 

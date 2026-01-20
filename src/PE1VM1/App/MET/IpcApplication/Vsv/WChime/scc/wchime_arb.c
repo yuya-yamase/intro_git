@@ -244,6 +244,32 @@ void    vd_g_wChimeMetBuzzInfo(U1 * u1p_a_level, U1 * u1p_a_length, U1 * u1p_a_e
     *u1p_a_length    = u1_s_wchime_longtone;
     *u1p_a_emergency = u1_s_wchime_emg;
 }
+#if 0   /* BEV Rebase provisionally */
+#else   /* BEV Rebase provisionally */
+/*===================================================================================================================================*/
+/*  void    vd_g_wChimePutMWVCope(U1 u1_a_mwvcope)                                                                                   */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      u1_a_mwvcope : Meter warning volume Cstm value                                                                   */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void    vd_g_wChimePutMWVCope(U1 u1_a_mwvcope)
+{
+    if(u1_a_mwvcope <= (U1)2U)
+    {
+        u1_g_wchime_metcstmvol = u1_a_mwvcope;
+    }
+}
+/*===================================================================================================================================*/
+/*  void    u1_g_wChimeGetMWVCope(void)                                                                                              */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         u1_g_wchime_metcstmvol : Meter warning volume Cstm value                                                         */
+/*===================================================================================================================================*/
+U1      u1_g_wChimeGetMWVCope(void)
+{
+    return(u1_g_wchime_metcstmvol);
+}
+#endif   /* BEV Rebase provisionally */
 /*===================================================================================================================================*/
 /*  static void    vd_s_wChimeReqmaskClr(const U4 * u4_ap_REQBIT, const U1 u1_a_CYC_CHK, const U1 u1_a_REQ_SEL,                      */
 /*                                       const U4 * u4_ap_CHBIT)                                                                     */
@@ -415,6 +441,10 @@ static U1      u1_s_wChimeSwReqchk(const U1 u1_a_REQ_SEL, const U1 u1_a_BFRWAIT_
             (u1_t_chk_next == (U1)0U      )) ||
            ((u1_a_REQ_NEXT >= u1_a_REQ_SEL)  &&
             (u4_t_bit      == (U4)0U      ))){
+            u1_t_sw_chk |= (U1)WCHIME_REQ_SWC_PRI_HI;
+        }
+        u1_t_chk = u1_g_wChimeCfgIntermSplCnd(u1_a_REQ_SEL, u1_a_REQ_NEXT);
+        if(u1_t_chk == (U1)TRUE){
             u1_t_sw_chk |= (U1)WCHIME_REQ_SWC_PRI_HI;
         }
 
@@ -664,7 +694,7 @@ static void    vd_s_wChimeMMInfo(void)
 /*                                depend on the buzzer condition.                                                                    */
 /*                                Improvement : u1_gp_WCHIME_REQ_SW_CTRL[] -> u1_g_wChimeReqSwCtrl(...)                              */
 /*  2.0.1    10/18/2021  TA(M)    Change the definition of the null pointer used.(BSW v115_r007)                                     */
-/*  2.1.0    11/14/2024  KO       Setting for BEV System_Consideration_1.                                                            */
+/*  2.1.0    11/12/2024  GM       Add function call for special condition switching to high priority from intermittent buzzer items  */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
 /*  * ToN  = Toshiharu Nagata, Denso Techno                                                                                          */
@@ -672,6 +702,6 @@ static void    vd_s_wChimeMMInfo(void)
 /*  * TF   = Tomohiro Furuichi, Denso Techno                                                                                         */
 /*  * YK   = Yuki Kawai, Denso Techno                                                                                                */
 /*  * TA(M)= Teruyuki Anjima, NTT Data MSE                                                                                           */
-/*  * KO   = Kazuto Oishi,  Denso Techno                                                                                             */
+/*  * GM   = Glen Monteposo, Denso Techno                                                                                            */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

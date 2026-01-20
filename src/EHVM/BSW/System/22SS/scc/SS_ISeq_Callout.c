@@ -12,7 +12,7 @@
 /*----------------------------------------------------------------------------
  *		Headers
  *--------------------------------------------------------------------------*/
-#include <stdint.h>
+/* #include <stdint.h> */
 #include <Std_Types.h>
 #include <SS.h>
 
@@ -33,6 +33,7 @@
 #include <SS_ISeq_Callout.h>
 #include <Ecu_Intg.h>
 #include <Ecu_IntgHAL.h>
+#include <22SS_Callout.h>
 
 #include <Ecu_Int.h>
 #ifdef ECU_SAMPLE_ON
@@ -68,12 +69,12 @@ void SS_Pm_preOsInitCallout(SS_BootType u4_BootSource)
     if (u4_CoreId == SS_CPUCORE_u4MASTERCORE)
     {
         (void)SS_Memory_set(__ghsbegin_bsw_e_nvar_top, 0UL, (uint32)BSW_E_NVAR_SIZE);
-        (void)SS_Memory_copy(__ghsbegin_bsw_e_nvar_withval_top, __ghsbegin_bsw_e_nvar_ival_top, (uintptr_t)BSW_E_NVAR_WITHVAL_SIZE);
+        (void)SS_Memory_copy(__ghsbegin_bsw_e_nvar_withval_top, __ghsbegin_bsw_e_nvar_ival_top, (uint32)BSW_E_NVAR_WITHVAL_SIZE);
 
         if (u4_BootSource == SS_PM_BOOT_SUP)
         {
-            (void)SS_Memory_set(__ghsbegin_bsw_e_rvar_top, 0UL, (uintptr_t)BSW_E_RVAR_SIZE);
-            (void)SS_Memory_copy(__ghsbegin_bsw_e_rvar_withval_top, __ghsbegin_bsw_e_rvar_ival_top, (uintptr_t)BSW_E_RVAR_WITHVAL_SIZE);
+            (void)SS_Memory_set(__ghsbegin_bsw_e_rvar_top, 0UL, (uint32)BSW_E_RVAR_SIZE);
+            (void)SS_Memory_copy(__ghsbegin_bsw_e_rvar_withval_top, __ghsbegin_bsw_e_rvar_ival_top, (uint32)BSW_E_RVAR_WITHVAL_SIZE);
         }
     }
 #if (SS_USE_CORE_COUNT >= 2u)
@@ -157,25 +158,25 @@ void SS_Pm_postClockUpCallout(SS_BootType u4_BootSource)
         (void)SS_Memory_copy(__ghsbegin_data, __ghsbegin_romdata, (uint32)DATA_SIZE);
         (void)SS_Memory_copy(__ghsbegin_data_vcc, __ghsbegin_romdata_vcc, (uint32)DATA_VCC_SIZE);
 
-        (void)SS_Memory_set(__ghsbegin_bsw_n_nvar_top, 0UL, (uintptr_t)BSW_N_NVAR_SIZE);
-        (void)SS_Memory_copy(__ghsbegin_bsw_n_nvar_withval_top, __ghsbegin_bsw_n_nvar_ival_top, (uintptr_t)BSW_N_NVAR_WITHVAL_SIZE);
+        (void)SS_Memory_set(__ghsbegin_bsw_n_nvar_top, 0UL, (uint32)BSW_N_NVAR_SIZE);
+        (void)SS_Memory_copy(__ghsbegin_bsw_n_nvar_withval_top, __ghsbegin_bsw_n_nvar_ival_top, (uint32)BSW_N_NVAR_WITHVAL_SIZE);
 
         if (u4_BootSource == SS_PM_BOOT_SUP)
         {
-            (void)SS_Memory_set(__ghsbegin_bsw_n_rvar_top, 0UL, (uintptr_t)BSW_N_RVAR_SIZE);
-            (void)SS_Memory_copy(__ghsbegin_bsw_n_rvar_withval_top, __ghsbegin_bsw_n_rvar_ival_top, (uintptr_t)BSW_N_RVAR_WITHVAL_SIZE);
+            (void)SS_Memory_set(__ghsbegin_bsw_n_rvar_top, 0UL, (uint32)BSW_N_RVAR_SIZE);
+            (void)SS_Memory_copy(__ghsbegin_bsw_n_rvar_withval_top, __ghsbegin_bsw_n_rvar_ival_top, (uint32)BSW_N_RVAR_WITHVAL_SIZE);
         }
 
-        (void)SS_Memory_copy(__ghsbegin_app_n_nvarLR0_withval, __ghsbegin_app_n_nvarLR0_ival, (uintptr_t)APP_N_NVARLR0_WITHVAL_SIZE);
-        (void)SS_Memory_set(__ghsbegin_ecu_n_nvarLR0_top, 0UL, (uintptr_t)ECU_N_NVAR_LR0_SIZE);
+        (void)SS_Memory_copy(__ghsbegin_app_n_nvarLR0_withval, __ghsbegin_app_n_nvarLR0_ival, (uint32)APP_N_NVARLR0_WITHVAL_SIZE);
+        (void)SS_Memory_set(__ghsbegin_ecu_n_nvarLR0_top, 0UL, (uint32)ECU_N_NVAR_LR0_SIZE);
 
-        (void)SS_Memory_copy(__ghsbegin_app_n_nvarCR0_withval, __ghsbegin_app_n_nvarCR0_ival, (uintptr_t)APP_N_NVARCR0_WITHVAL_SIZE);
-        (void)SS_Memory_copy(__ghsbegin_app_n_nvarCR1_withval, __ghsbegin_app_n_nvarCR1_ival, (uintptr_t)APP_N_NVARCR1_WITHVAL_SIZE);
+        (void)SS_Memory_copy(__ghsbegin_app_n_nvarCR0_withval, __ghsbegin_app_n_nvarCR0_ival, (uint32)APP_N_NVARCR0_WITHVAL_SIZE);
+        (void)SS_Memory_copy(__ghsbegin_app_n_nvarCR1_withval, __ghsbegin_app_n_nvarCR1_ival, (uint32)APP_N_NVARCR1_WITHVAL_SIZE);
 
-        (void)SS_Memory_set(__ghsbegin_ecu_n_nvarCR0_top, 0UL, (uintptr_t)ECU_N_NVAR_CR0_SIZE);
-        (void)SS_Memory_set(__ghsbegin_ecu_n_nvarCR1_top, 0UL, (uintptr_t)ECU_N_NVAR_CR1_SIZE);
+        (void)SS_Memory_set(__ghsbegin_ecu_n_nvarCR0_top, 0UL, (uint32)ECU_N_NVAR_CR0_SIZE);
+        (void)SS_Memory_set(__ghsbegin_ecu_n_nvarCR1_top, 0UL, (uint32)ECU_N_NVAR_CR1_SIZE);
 
-        (void)SS_Memory_set(__ghsbegin_cluster2_share_ramtop, 0UL, (uintptr_t)BSW_SHARE_DATA_SIZE);
+        (void)SS_Memory_set(__ghsbegin_cluster2_share_ramtop, 0UL, (uint32)BSW_SHARE_DATA_SIZE);
 
         Spi_PrePortInit();
         vd_g_tyPortPreInit();
@@ -196,6 +197,8 @@ void SS_Pm_postClockUpCallout(SS_BootType u4_BootSource)
             vd_g_IcuWkInit((U1)ICU_WK_CFG_MCU_STA_BY_WK);
         }
 
+        vd_g_22SSCallout_BattLowInit();
+
         Spi_Init1();
 
         Dma_Init();
@@ -205,22 +208,22 @@ void SS_Pm_postClockUpCallout(SS_BootType u4_BootSource)
 #if (SS_USE_CORE_COUNT >= 2u)
     else if (u4_CoreId == SS_CPUCORE_u4SLAVECORE1)
     {
-        (void)SS_Memory_copy(__ghsbegin_app_n_nvarLR1_withval, __ghsbegin_app_n_nvarLR1_ival, (uintptr_t)APP_N_NVARLR1_WITHVAL_SIZE);
-        (void)SS_Memory_set(__ghsbegin_ecu_n_nvarLR1_top, 0UL, (uintptr_t)ECU_N_NVAR_LR1_SIZE);
+        (void)SS_Memory_copy(__ghsbegin_app_n_nvarLR1_withval, __ghsbegin_app_n_nvarLR1_ival, (uint32)APP_N_NVARLR1_WITHVAL_SIZE);
+        (void)SS_Memory_set(__ghsbegin_ecu_n_nvarLR1_top, 0UL, (uint32)ECU_N_NVAR_LR1_SIZE);
     }
 #endif
 #if (SS_USE_CORE_COUNT >= 3u)
     else if (u4_CoreId == SS_CPUCORE_u4SLAVECORE2)
     {
-        (void)SS_Memory_copy(__ghsbegin_app_n_nvarLR2_withval, __ghsbegin_app_n_nvarLR2_ival, (uintptr_t)APP_N_NVARLR2_WITHVAL_SIZE);
-        (void)SS_Memory_set(__ghsbegin_ecu_n_nvarLR2_top, 0UL, (uintptr_t)ECU_N_NVAR_LR2_SIZE);
+        (void)SS_Memory_copy(__ghsbegin_app_n_nvarLR2_withval, __ghsbegin_app_n_nvarLR2_ival, (uint32)APP_N_NVARLR2_WITHVAL_SIZE);
+        (void)SS_Memory_set(__ghsbegin_ecu_n_nvarLR2_top, 0UL, (uint32)ECU_N_NVAR_LR2_SIZE);
     }
 #endif
 #if (SS_USE_CORE_COUNT >= 4u)
     else if (u4_CoreId == SS_CPUCORE_u4SLAVECORE3)
     {
-        (void)SS_Memory_copy(__ghsbegin_app_n_nvarLR3_withval, __ghsbegin_app_n_nvarLR3_ival, (uintptr_t)APP_N_NVARLR3_WITHVAL_SIZE);
-        (void)SS_Memory_set(__ghsbegin_ecu_n_nvarLR3_top, 0UL, (uintptr_t)ECU_N_NVAR_LR3_SIZE);
+        (void)SS_Memory_copy(__ghsbegin_app_n_nvarLR3_withval, __ghsbegin_app_n_nvarLR3_ival, (uint32)APP_N_NVARLR3_WITHVAL_SIZE);
+        (void)SS_Memory_set(__ghsbegin_ecu_n_nvarLR3_top, 0UL, (uint32)ECU_N_NVAR_LR3_SIZE);
     }
 #endif
 

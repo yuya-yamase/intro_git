@@ -1,4 +1,4 @@
-/* 0.0.0 */
+/* 0.0.1 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -14,7 +14,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define DATESI_CAL_CFG_H_MAJOR                  (0)
 #define DATESI_CAL_CFG_H_MINOR                  (0)
-#define DATESI_CAL_CFG_H_PATCH                  (0)
+#define DATESI_CAL_CFG_H_PATCH                  (1)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -68,7 +68,9 @@ void            vd_g_DateSICalSyncAct(void);
 void            vd_g_DateSICalExecTmSet(const U1 u1_a_ADD);
 void            vd_g_DateSICalClockUpdate(void);
 
-void            vd_g_DateSICalCfgInit(void);
+U2              u2_g_DateSICalCfgBonInit(void);
+U2              u2_g_DateSICalCfgRstWkupInit(void);
+U1              u1_g_DateSICalCfgInitCalmin(U2 * u2p_a_cal_min);
 U1              u1_g_DateSICalCfgCanRx(ST_DATESI_CAL_RX * stp_a_rx);
 void            vd_g_DateSICalCfgCanTx(const U4 u4_a_YYYYMMDD, const U1 u1_a_EVENT_EI);
 U1              u1_g_DateSICalCfgEsichk(void);

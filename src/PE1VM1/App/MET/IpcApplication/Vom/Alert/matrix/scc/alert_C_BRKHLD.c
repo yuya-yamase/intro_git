@@ -20,10 +20,6 @@
 #include "alert_mtrx_cfg_private.h"
 
 #include "oxcan.h"
-#if 0   /* BEV BSW provisionally */
-#else
-#include "oxcan_channel_STUB.h"
-#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -38,10 +34,6 @@
 #define ALERT_C_BRKHLD_STBY_NUM_DST              (32U)
 #define ALERT_C_BRKHLD_HLD_NUM_DST               (16U)
 #define ALERT_C_BRKHLD_WRN_NUM_DST               (32U)
-#define ALERT_C_BRKHLD_RW_NUM_DST                (4U)
-
-#define ALERT_C_BRKHLD_NUM_RWSGNL                (2U)
-#define ALERT_C_BRKHLD_BHEXIST_BIT               (0x80U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -59,8 +51,6 @@
 static U4      u4_s_AlertC_brkhldStbySrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS);
 static U4      u4_s_AlertC_brkhldHldSrcchk (const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS);
 static U4      u4_s_AlertC_brkhldWrnSrcchk (const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS);
-static U4      u4_s_AlertC_brkhldRwSrcchk  (const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS);
-static void    vd_s_AlertC_brkhldRwRwTx    (const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
@@ -151,27 +141,9 @@ static const U1  u1_sp_ALERT_C_BRKHLD_WRN_DST[ALERT_C_BRKHLD_WRN_NUM_DST] = {
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 30 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN                                                      /* 31 UNKNOWN                                         */
 };
-static const U4  u4_sp_ALERT_C_BRKHLD_RW_CRIT[ALERT_C_BRKHLD_RW_NUM_DST] = {
-    (U4)0x00000041U,                                                           /* 00 AHSW                                            */
-    (U4)0x00000042U,                                                           /* 01 AHSW                                            */
-    (U4)0x00000070U,                                                           /* 02 AHSWEXIST                                       */
-    (U4)0x00000100U                                                            /* 03 AHSWEXIST                                       */
-};
-static const U4  u4_sp_ALERT_C_BRKHLD_RW_MASK[ALERT_C_BRKHLD_RW_NUM_DST] = {
-    (U4)0x000001CFU,                                                           /* 00 AHSW                                            */
-    (U4)0x000001CFU,                                                           /* 01 AHSW                                            */
-    (U4)0x000001F0U,                                                           /* 02 AHSWEXIST                                       */
-    (U4)0x00000100U                                                            /* 03 AHSWEXIST                                       */
-};
-static const U1  u1_sp_ALERT_C_BRKHLD_RW_DST[ALERT_C_BRKHLD_RW_NUM_DST] = {
-    (U1)ALERT_REQ_C_BRKHLD_RW_AHSW,                                            /* 00 AHSW                                            */
-    (U1)ALERT_REQ_C_BRKHLD_RW_AHSW,                                            /* 01 AHSW                                            */
-    (U1)ALERT_REQ_C_BRKHLD_RW_AHSWEXIST,                                       /* 02 AHSWEXIST                                       */
-    (U1)ALERT_REQ_C_BRKHLD_RW_AHSWEXIST                                        /* 03 AHSWEXIST                                       */
-};
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-const ST_ALERT_MTRX st_gp_ALERT_C_BRKHLD_MTRX[4] = {
+const ST_ALERT_MTRX st_gp_ALERT_C_BRKHLD_MTRX[3] = {
     {
         &u4_s_AlertC_brkhldStbySrcchk,                                         /* fp_u4_SRC_CHK                                      */
         vdp_PTR_NA,                                                            /* fp_vd_XDST                                         */
@@ -204,17 +176,6 @@ const ST_ALERT_MTRX st_gp_ALERT_C_BRKHLD_MTRX[4] = {
         &u1_sp_ALERT_C_BRKHLD_WRN_DST[0],                                      /* u1p_DST                                            */
         (U2)ALERT_C_BRKHLD_WRN_NUM_DST,                                        /* u2_num_srch                                        */
         (U1)ALERT_VOM_IGN_ON                                                   /* u1_vom_act                                         */
-    },
-    {
-        &u4_s_AlertC_brkhldRwSrcchk,                                           /* fp_u4_SRC_CHK                                      */
-        &vd_s_AlertC_brkhldRwRwTx,                                             /* fp_vd_XDST                                         */
-
-        &u4_sp_ALERT_C_BRKHLD_RW_MASK[0],                                      /* u4p_MASK                                           */
-        &u4_sp_ALERT_C_BRKHLD_RW_CRIT[0],                                      /* u4p_CRIT                                           */
-
-        &u1_sp_ALERT_C_BRKHLD_RW_DST[0],                                       /* u1p_DST                                            */
-        (U2)ALERT_C_BRKHLD_RW_NUM_DST,                                         /* u2_num_srch                                        */
-        (U1)ALERT_VOM_IGN_ON                                                   /* u1_vom_act                                         */
     }
 };
 
@@ -229,7 +190,6 @@ const ST_ALERT_MTRX st_gp_ALERT_C_BRKHLD_MTRX[4] = {
 /*===================================================================================================================================*/
 static U4      u4_s_AlertC_brkhldStbySrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
-#if defined(OXCAN_RXD_PDU_CAN_DDM1S17_CH0) && defined(ComConf_ComSignal_B_DAINDC)
     static const U2 u2_s_ALERT_C_BRKHLD_STBY_THR_TO  = ((U2)3600U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_C_BRKHLD_STBY_LSB_VSC = (U1)3U;
     U4              u4_t_src_chk;
@@ -237,8 +197,8 @@ static U4      u4_s_AlertC_brkhldStbySrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN
     U1              u1_t_sgnl;
 
     u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_DDM1S17_CH0,
-                                          (U4)OXCAN_SYS_IGR,
-                                          u2_s_ALERT_C_BRKHLD_STBY_THR_TO) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+                                      (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP,
+                                      u2_s_ALERT_C_BRKHLD_STBY_THR_TO) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
     u4_t_src_chk  = ((U4)u1_t_msgsts << u1_s_ALERT_C_BRKHLD_STBY_LSB_VSC);
 
     u1_t_sgnl     = (U1)0U;
@@ -246,9 +206,6 @@ static U4      u4_s_AlertC_brkhldStbySrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN
     u4_t_src_chk |= (U4)u1_t_sgnl;
 
     return(u4_t_src_chk);
-#else
-    return((U4)0U);
-#endif /* defined(OXCAN_RXD_PDU_CAN_DDM1S17_CH0) && defined(ComConf_ComSignal_B_DAINDC) */
 }
 
 /*===================================================================================================================================*/
@@ -259,7 +216,6 @@ static U4      u4_s_AlertC_brkhldStbySrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN
 /*===================================================================================================================================*/
 static U4      u4_s_AlertC_brkhldHldSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
-#if defined(OXCAN_RXD_PDU_CAN_DDM1S17_CH0) && defined(ComConf_ComSignal_B_DAINDP)
     static const U2 u2_s_ALERT_C_BRKHLD_HLD_THR_TO  = ((U2)3600U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_C_BRKHLD_HLD_LSB_VSC = (U1)2U;
     U4              u4_t_src_chk;
@@ -267,8 +223,8 @@ static U4      u4_s_AlertC_brkhldHldSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
     U1              u1_t_sgnl;
 
     u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_DDM1S17_CH0,
-                                          (U4)OXCAN_SYS_IGR,
-                                          u2_s_ALERT_C_BRKHLD_HLD_THR_TO) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+                                      (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP,
+                                      u2_s_ALERT_C_BRKHLD_HLD_THR_TO) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
     u4_t_src_chk  = ((U4)u1_t_msgsts << u1_s_ALERT_C_BRKHLD_HLD_LSB_VSC);
 
     u1_t_sgnl     = (U1)0U;
@@ -276,9 +232,6 @@ static U4      u4_s_AlertC_brkhldHldSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
     u4_t_src_chk |= (U4)u1_t_sgnl;
 
     return(u4_t_src_chk);
-#else
-    return((U4)0U);
-#endif /* defined(OXCAN_RXD_PDU_CAN_DDM1S17_CH0) && defined(ComConf_ComSignal_B_DAINDP) */
 }
 
 /*===================================================================================================================================*/
@@ -289,15 +242,14 @@ static U4      u4_s_AlertC_brkhldHldSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
 /*===================================================================================================================================*/
 static U4      u4_s_AlertC_brkhldWrnSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
-#if defined(OXCAN_RXD_PDU_CAN_DDM1S17_CH0) && defined(ComConf_ComSignal_B_DAINFO)
     static const U1 u1_s_ALERT_C_BRKHLD_WRN_LSB_VSC = (U1)4U;
     U4              u4_t_src_chk;
     U1              u1_t_msgsts;
     U1              u1_t_sgnl;
 
     u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_DDM1S17_CH0,
-                                          (U4)OXCAN_SYS_IGR,
-                                          (U2)U2_MAX) & (U1)COM_NO_RX;
+                                      (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP,
+                                      (U2)U2_MAX) & (U1)COM_NO_RX;
     u4_t_src_chk  = ((U4)u1_t_msgsts << u1_s_ALERT_C_BRKHLD_WRN_LSB_VSC);
 
     u1_t_sgnl     = (U1)0U;
@@ -305,93 +257,6 @@ static U4      u4_s_AlertC_brkhldWrnSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
     u4_t_src_chk |= (U4)u1_t_sgnl;
 
     return(u4_t_src_chk);
-#else
-    return((U4)0U);
-#endif /* defined(OXCAN_RXD_PDU_CAN_DDM1S17_CH0) && defined(ComConf_ComSignal_B_DAINFO) */
-}
-
-/*===================================================================================================================================*/
-/*  static U4      u4_s_AlertC_brkhldRwSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)                            */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static U4      u4_s_AlertC_brkhldRwSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
-{
-#if defined(OXCAN_RXD_PDU_CAN_DDM1S17_CH0) && defined(ComConf_ComSignal_DDRTWV)
-    static const U2 u2_s_ALERT_C_BRKHLD_RW_THR_TO    = ((U2)1000U / (U2)OXCAN_MAIN_TICK);
-#ifdef ComConf_ComSignal_B_DAINDP
-    static const U1 u1_s_ALERT_C_BRKHLD_RW_LSB_NDP   = (U1)4U;
-#endif /* ComConf_ComSignal_B_DAINDP */
-    static const U1 u1_s_ALERT_C_BRKHLD_RW_LSB_DDRTW = (U1)6U;
-    static const U1 u1_s_ALERT_C_BRKHLD_RW_LSB_VSC   = (U1)7U;
-    U4              u4_t_src_chk;
-    U1              u1_t_msgsts;
-    U1              u1_t_sgnl;
-
-    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_DDM1S17_CH0,
-                                          (U4)OXCAN_SYS_IGR,
-                                          u2_s_ALERT_C_BRKHLD_RW_THR_TO) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
-    u4_t_src_chk  = ((U4)u1_t_msgsts << u1_s_ALERT_C_BRKHLD_RW_LSB_VSC);
-
-#ifdef ComConf_ComSignal_B_DAINFO
-    u1_t_sgnl     = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_B_DAINFO, &u1_t_sgnl);
-    u4_t_src_chk |= (U4)u1_t_sgnl;
-#endif /* ComConf_ComSignal_B_DAINFO */
-#ifdef ComConf_ComSignal_B_DAINDP
-    u1_t_sgnl     = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_B_DAINDP, &u1_t_sgnl);
-    u4_t_src_chk |= ((U4)u1_t_sgnl << u1_s_ALERT_C_BRKHLD_RW_LSB_NDP);
-#endif /* ComConf_ComSignal_B_DAINDP */
-    u1_t_sgnl     = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_DDRTWV, &u1_t_sgnl);
-    u4_t_src_chk |= ((U4)u1_t_sgnl << u1_s_ALERT_C_BRKHLD_RW_LSB_DDRTW);
-
-    return(u4_t_src_chk);
-#else
-    return((U4)0U);
-#endif /* defined(OXCAN_RXD_PDU_CAN_DDM1S17_CH0) && defined(ComConf_ComSignal_DDRTWV) */
-}
-
-/*===================================================================================================================================*/
-/*  static void    vd_s_AlertC_brkhldRwRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)                              */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void    vd_s_AlertC_brkhldRwRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)
-{
-    static const U1 u1_sp_ALERT_C_BRKHLD_RWTX_CRT[ALERT_C_BRKHLD_NUM_RWSGNL] = {
-        ((U1)((U1)1U << ALERT_REQ_C_BRKHLD_RW_AHSWEXIST) | (U1)ALERT_C_BRKHLD_BHEXIST_BIT),
-         (U1)((U1)1U << ALERT_REQ_C_BRKHLD_RW_AHSW     )   /* No need BHEXIST */
-    };
-    U4              u4_t_idx;
-    U1              u1_t_sgnl;
-    U1              u1_t_rw;
-    U1              u1_t_esopt_bh;
-
-    u1_t_esopt_bh = u1_g_AlertEsOptAvailable((U2)ALERT_OPT_ID_C_BRKHLD_BHEXIST);
-
-    u1_t_rw  = (U1)0U;
-    if(((u1_a_VOM & (U1)ALERT_VOM_RWT_EN) != (U1)0U               ) &&
-       (u1_a_DST                          != (U1)ALERT_REQ_UNKNOWN)){
-        u1_t_rw = ((U1)1U << u1_a_DST);
-        if(u1_t_esopt_bh == (U1)TRUE){
-            u1_t_rw |= (U1)ALERT_C_BRKHLD_BHEXIST_BIT;
-        }
-    }
-
-    u1_t_sgnl = (U1)ALERT_RW_SGNL_OFF;
-    for(u4_t_idx = (U4)0U; u4_t_idx < (U4)ALERT_C_BRKHLD_NUM_RWSGNL; u4_t_idx++){
-        if((u1_t_rw & u1_sp_ALERT_C_BRKHLD_RWTX_CRT[u4_t_idx]) == u1_sp_ALERT_C_BRKHLD_RWTX_CRT[u4_t_idx]){
-            u1_t_sgnl = (U1)ALERT_RW_SGNL_ON;
-        }
-    }
-
-#if 0   /* BEV BSW provisionally */
-    (void)Com_SendSignal(ComConf_ComSignal_AHSW, &u1_t_sgnl);    /* COM Tx STUB delete */
-#endif
 }
 
 /*===================================================================================================================================*/

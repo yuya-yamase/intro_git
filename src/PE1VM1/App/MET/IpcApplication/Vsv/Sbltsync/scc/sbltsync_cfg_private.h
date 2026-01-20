@@ -21,11 +21,9 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "aip_common.h"
 #include "sbltwrn.h"
+#if 0   /* BEV Rebase provisionally */
 #include "oxcan.h"
-#if 0   /* BEV BSW provisionally */
-#else
-#include "oxcan_channel_STUB.h"
-#endif
+#endif   /* BEV Rebase provisionally */
 #include "calibration.h"
 
 #include "sbltsync.h"

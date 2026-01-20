@@ -21,10 +21,6 @@
 #include "alert_brx.h"
 
 #include "oxcan.h"
-#if 0   /* BEV BSW provisionally */
-#else
-#include "oxcan_channel_STUB.h"
-#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -48,12 +44,8 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if defined(OXCAN_RXD_PDU_CAN_BDC1S46_CH0) && defined(ComConf_ComSignal_PDS_BUZ)
 static U1      u1_s_alert_o_pdsmal_cycl_sts;
-#endif /* defined(OXCAN_RXD_PDU_CAN_BDC1S46_CH0) && defined(ComConf_ComSignal_PDS_BUZ) */
-#if defined(OXCAN_RXD_PDU_CAN_BDC1S46_CH0) && defined(ComConf_ComSignal_PDS_DISP)
 static U1      u1_s_alert_o_pdsmal_mulfunc_sts;
-#endif /* defined(OXCAN_RXD_PDU_CAN_BDC1S46_CH0) && defined(ComConf_ComSignal_PDS_DISP) */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
@@ -138,12 +130,8 @@ const ST_ALERT_MTRX st_gp_ALERT_O_PDSMAL_MTRX[2] = {
 /*===================================================================================================================================*/
 void    vd_g_AlertO_pdsmalInit(void)
 {
-#if defined(OXCAN_RXD_PDU_CAN_BDC1S46_CH0) && defined(ComConf_ComSignal_PDS_BUZ)
     u1_s_alert_o_pdsmal_cycl_sts = (U1)COM_NO_RX;
-#endif /* defined(OXCAN_RXD_PDU_CAN_BDC1S46_CH0) && defined(ComConf_ComSignal_PDS_BUZ) */
-#if defined(OXCAN_RXD_PDU_CAN_BDC1S46_CH0) && defined(ComConf_ComSignal_PDS_DISP)
     u1_s_alert_o_pdsmal_mulfunc_sts = (U1)COM_NO_RX;
-#endif /* defined(OXCAN_RXD_PDU_CAN_BDC1S46_CH0) && defined(ComConf_ComSignal_PDS_DISP) */
 }
 
 /*===================================================================================================================================*/
@@ -154,7 +142,6 @@ void    vd_g_AlertO_pdsmalInit(void)
 /*===================================================================================================================================*/
 static U4      u4_s_AlertO_pdsmalBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
-#if defined(OXCAN_RXD_PDU_CAN_BDC1S46_CH0) && defined(ComConf_ComSignal_PDS_BUZ)
     static const U1 u1_s_ALERT_O_PDSMAL_LSB_BC_MSGSTS  = (U1)2U;
     static const U4 u4_s_ALERT_O_PDSMAL_BIT_BC_BTWT    = (U4)0x00000008U;
     U4              u4_t_src_chk;
@@ -162,8 +149,8 @@ static U4      u4_s_AlertO_pdsmalBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
     U1              u1_t_sgnl;
 
     u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_BDC1S46_CH0,
-                                          (U4)ALERT_CAN_SYS_PNC_ALL,
-                                          (U2)U2_MAX) & (U1)COM_NO_RX;
+                                      (U4)ALERT_CAN_SYS_ALL,
+                                      (U2)U2_MAX) & (U1)COM_NO_RX;
     vd_g_AlertBRxTrnsSts(&u1_s_alert_o_pdsmal_cycl_sts, u1_t_msgsts);
 
     u4_t_src_chk  = (((U4)u1_s_alert_o_pdsmal_cycl_sts & (U4)COM_NO_RX) << u1_s_ALERT_O_PDSMAL_LSB_BC_MSGSTS);
@@ -177,9 +164,6 @@ static U4      u4_s_AlertO_pdsmalBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
     }
 
     return(u4_t_src_chk);
-#else
-    return((U4)0U);
-#endif /* defined(OXCAN_RXD_PDU_CAN_BDC1S46_CH0) && defined(ComConf_ComSignal_PDS_BUZ) */
 }
 
 /*===================================================================================================================================*/
@@ -190,7 +174,6 @@ static U4      u4_s_AlertO_pdsmalBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
 /*===================================================================================================================================*/
 static U4      u4_s_AlertO_pdsmalPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
-#if defined(OXCAN_RXD_PDU_CAN_BDC1S46_CH0) && defined(ComConf_ComSignal_PDS_DISP)
     static const U1 u1_s_ALERT_O_PDSMAL_LSB_PD_MSGSTS  = (U1)2U;
     static const U4 u4_s_ALERT_O_PDSMAL_BIT_PD_BTWT    = (U4)0x00000008U;
     U4              u4_t_src_chk;
@@ -198,8 +181,8 @@ static U4      u4_s_AlertO_pdsmalPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
     U1              u1_t_sgnl;
 
     u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_BDC1S46_CH0,
-                                          (U4)ALERT_CAN_SYS_PNC_ALL,
-                                          (U2)U2_MAX) & (U1)COM_NO_RX;
+                                      (U4)ALERT_CAN_SYS_ALL,
+                                      (U2)U2_MAX) & (U1)COM_NO_RX;
     vd_g_AlertBRxTrnsSts(&u1_s_alert_o_pdsmal_mulfunc_sts, u1_t_msgsts);
 
     u4_t_src_chk  = (((U4)u1_s_alert_o_pdsmal_mulfunc_sts & (U4)COM_NO_RX) << u1_s_ALERT_O_PDSMAL_LSB_PD_MSGSTS);
@@ -213,9 +196,6 @@ static U4      u4_s_AlertO_pdsmalPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
     }
 
     return(u4_t_src_chk);
-#else
-    return((U4)0U);
-#endif /* defined(OXCAN_RXD_PDU_CAN_BDC1S46_CH0) && defined(ComConf_ComSignal_PDS_DISP) */
 }
 
 /*===================================================================================================================================*/

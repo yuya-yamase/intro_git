@@ -48,7 +48,7 @@ void    vd_g_Str_Bon_Init(void)
     u4_t_vmcom_str_mode = (U4)STR_VMCOM_STROFF;
     vd_g_Rim_WriteU1((U2)RIMID_U1_IVI_STR_MODE, (U1)u4_t_vmcom_str_mode);
     /* VM Communication : STR Mode Notification */
-    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_CPREQ_046, &u4_t_vmcom_str_mode, (U2)STR_VMCOM_WORD_1);  /* STR Mode : OFF */
+    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM2TO3_STRMODE, &u4_t_vmcom_str_mode, (U2)STR_VMCOM_WORD_1);  /* STR Mode : OFF */
     /* OS Command :STR Status Notification */
     vd_STR_OSCMD_STR_MODE_NOTIF((U1)STR_OSCMD_STROFF);
 }
@@ -71,7 +71,7 @@ void    vd_g_Str_Wkup_Init(void)
     if((u1_t_rim_sts & (U1)RIM_RESULT_KIND_MASK) == (U1)RIM_RESULT_KIND_OK){
         u4_t_vmcom_str_mode = (U4)u1_t_rim_readdata;
         /* VM Communication : STR Mode Notification */
-        vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_CPREQ_046, &u4_t_vmcom_str_mode, (U2)STR_VMCOM_WORD_1);  /* STR Mode */
+        vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM2TO3_STRMODE, &u4_t_vmcom_str_mode, (U2)STR_VMCOM_WORD_1);  /* STR Mode */
         if(u1_t_rim_readdata == (U1)STR_VMCOM_STROFF){                  /* STR Mode : OFF */
             /* OS Command :STR Status Notification */
             vd_STR_OSCMD_STR_MODE_NOTIF((U1)STR_OSCMD_STROFF);
@@ -97,7 +97,7 @@ void    vd_g_Str_ModeReq(U1 u1_a_strreq)
         u4_t_vmcom_str_mode = (U4)STR_VMCOM_STROFF;
         vd_g_Rim_WriteU1((U2)RIMID_U1_IVI_STR_MODE, (U1)u4_t_vmcom_str_mode);
         /* VM Communication : STR Mode Notification */
-        vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_CPREQ_046, &u4_t_vmcom_str_mode, (U2)STR_VMCOM_WORD_1);  /* STR Mode : OFF */
+        vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM2TO3_STRMODE, &u4_t_vmcom_str_mode, (U2)STR_VMCOM_WORD_1);  /* STR Mode : OFF */
         /* OS Command :STR Status Notification */
         vd_STR_OSCMD_STR_MODE_NOTIF((U1)STR_OSCMD_STROFF);
     }
@@ -105,7 +105,7 @@ void    vd_g_Str_ModeReq(U1 u1_a_strreq)
         u4_t_vmcom_str_mode = (U4)STR_VMCOM_STRON;
         vd_g_Rim_WriteU1((U2)RIMID_U1_IVI_STR_MODE, (U1)u4_t_vmcom_str_mode);
         /* VM Communication : STR Mode Notification */
-        vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_CPREQ_046, &u4_t_vmcom_str_mode, (U2)STR_VMCOM_WORD_1);  /* STR Mode : ON */
+        vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM2TO3_STRMODE, &u4_t_vmcom_str_mode, (U2)STR_VMCOM_WORD_1);  /* STR Mode : ON */
         /* OS Command :STR Status Notification */
         vd_STR_OSCMD_STR_MODE_NOTIF((U1)STR_OSCMD_STRON);
     }

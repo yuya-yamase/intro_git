@@ -1,4 +1,4 @@
-/* 2.2.1 */
+/* 2.2.4 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define HUDIMGADJ_C_MAJOR                        (2)
 #define HUDIMGADJ_C_MINOR                        (2)
-#define HUDIMGADJ_C_PATCH                        (1)
+#define HUDIMGADJ_C_PATCH                        (4)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -19,24 +19,11 @@
 
 #include "himgadj.h"
 
-#include "mcst.h"
 #include "vardef.h"
 
 #include "oxcan.h"
-#if 0   /* BEV BSW provisionally */
-#else
-#include "oxcan_channel_STUB.h"
-#endif
 #include "nvmc_mgr.h"
-#if 0   /* BEV BSW provisionally */
-#else
-#include "nvmc_mgr_cfg_STUB.h"
-#endif
 #include "veh_opemd.h"
-#if 0   /* BEV BSW provisionally */
-#else
-#include "veh_opemd_xmode_STUB.h"
-#endif
 
 #include "calibration.h"
 
@@ -165,7 +152,7 @@
 #define HUDIMGADJ_MOVEVT_MOVEREQ            (0x04U)
 #define HUDIMGADJ_MOVEVT_MAX                (0x08U)
 
-#define HUDIMGADJ_MOVSTS_TIMOUT             (1000U / 10U)
+#define HUDIMGADJ_MOVSTS_TIMOUT             (10000U / 10U)
 
 #define HUDIMGADJ_MOVSTS_STP                (0U)
 #define HUDIMGADJ_MOVSTS_MOV                (1U)
@@ -233,11 +220,6 @@
 #define HUDIMGADJ_RTCTL_INPTTIM             (1000U / 10U)
 #define HUDIMGADJ_RTCTL_RESTIME_LSB         (1000U / 10U)
 #define HUDIMGADJ_RTCTL_ZPDJDG              (0xFFFFU)
-
-#define HUDIMGADJ_RTCTLRSLT_NML             (0x00U)
-#define HUDIMGADJ_RTCTLRSLT_ERR             (0x01U)
-#define HUDIMGADJ_RTCTLRSLT_RUN             (0x02U)
-#define HUDIMGADJ_RTCTLRSLT_IDLE            (0xFFU)
 
 #define HUDIMGADJ_RTCTL_NON                 (0x00U)
 #define HUDIMGADJ_RTCTL_REQ                 (0xA5U)
@@ -316,6 +298,7 @@ static U1   u1_s_himgadj_dgrtinitreq;
 /*---------------------------------------------------------------------------*/
 static const U2 u2_sp_HUDIMGADJ_TBL_NVMCID_DRVPSDT[HUDIMGADJ_NUM_DRVPS_DT] =
 {
+#if 0   /* BEV Rebase provisionally */
     (U2)U2_MAX,                            /* Position Request None */
     (U2)NVMCID_U2_DRVPS_MRRPOS01,          /* User1 Memory No1      */
     (U2)NVMCID_U2_DRVPS_MRRPOS02,          /* User1 Memory No2      */
@@ -332,6 +315,24 @@ static const U2 u2_sp_HUDIMGADJ_TBL_NVMCID_DRVPSDT[HUDIMGADJ_NUM_DRVPS_DT] =
     (U2)NVMCID_U2_DRVPS_MRRPOS13,          /* Guest Memory No1      */
     (U2)NVMCID_U2_DRVPS_MRRPOS14,          /* Guest Memory No2      */
     (U2)NVMCID_U2_DRVPS_MRRPOS15           /* Guest Memory No3      */
+#else   /* BEV Rebase provisionally */
+    (U2)U2_MAX,
+    (U2)U2_MAX,
+    (U2)U2_MAX,
+    (U2)U2_MAX,
+    (U2)U2_MAX,
+    (U2)U2_MAX,
+    (U2)U2_MAX,
+    (U2)U2_MAX,
+    (U2)U2_MAX,
+    (U2)U2_MAX,
+    (U2)U2_MAX,
+    (U2)U2_MAX,
+    (U2)U2_MAX,
+    (U2)U2_MAX,
+    (U2)U2_MAX,
+    (U2)U2_MAX
+#endif   /* BEV Rebase provisionally */
 };
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -602,8 +603,13 @@ static U1   u1_s_HudImgAdjGetHudSts(void)
     U1  u1_t_ishudon;
 
     u1_t_ishudon  = (U1)FALSE;
+#if 0   /* BEV Rebase provisionally */
     u1_t_hudonoff = u1_g_McstBf((U1)MCST_BFI_HUD);
     if(u1_t_hudonoff == (U1)MCST_HUD_ON){
+#else   /* BEV Rebase provisionally */
+    u1_t_hudonoff = (U1)1U;
+    if(u1_t_hudonoff == (U1)1U){
+#endif   /* BEV Rebase provisionally */
         u1_t_ishudon = (U1)TRUE;
     }
     return(u1_t_ishudon);
@@ -871,6 +877,7 @@ static U2   u2_s_HudImgAdjowimgpos(const U1 u1_a_REQ)
     u2_t_imgpos_swupperlimit = u2_s_himgadj_gv_vipos_maxpos;
 
     u2_t_calpos = (U2)HUDIMGADJ_OWCTL_POS_NG_VAL;
+    u2_t_imgpos = (U2)HUDIMGADJ_OWCTL_POS_NG_VAL;
     if((u2_t_imgpos_nominal      != (U2)U2_MAX)               &&
        (u2_t_imgpos_swlowerlimit != (U2)U2_MAX)               &&
        (u2_t_imgpos_swupperlimit != (U2)U2_MAX)               &&
@@ -883,46 +890,44 @@ static U2   u2_s_HudImgAdjowimgpos(const U1 u1_a_REQ)
 
         switch (u1_a_REQ) {
             case (U1)HUDIMGADJ_OWCTL_POS_CNT:
-                u2_t_calpos = u2_t_calpos_nominal;
+                u2_t_imgpos = u2_t_imgpos_nominal;
                 break;
             case (U1)HUDIMGADJ_OWCTL_POS_L1:
                 /* nominal - ROUNDUP((nominal - Min)/3) */
                 u2_t_calpos = u2_t_calpos_nominal -
                               (((u2_t_calpos_nominal - u2_t_calpos_swlowerlimit) + (U2)HUDIMGADJ_OWCTL_POS_CALC_ROUND) / (U2)HUDIMGADJ_OWCTL_POS_CALC_DIV);
+                u2_t_imgpos = u2_t_calpos << (U2)HUDIMGADJ_OWCTL_POS_CALC_PLSLSB_SFT;
                 break;
             case (U1)HUDIMGADJ_OWCTL_POS_L2:
                 /* nominal - ROUNDUP((nominal - Min)*2/3) */
                 u2_t_calpos = u2_t_calpos_nominal -
                               (U2)(((((U4)u2_t_calpos_nominal - (U4)u2_t_calpos_swlowerlimit) * (U4)HUDIMGADJ_OWCTL_POS_CALC_CRCT) + (U4)HUDIMGADJ_OWCTL_POS_CALC_ROUND) / (U4)HUDIMGADJ_OWCTL_POS_CALC_DIV);     /* PRQA S 3383,3384 # over detection */
+                u2_t_imgpos = u2_t_calpos << (U2)HUDIMGADJ_OWCTL_POS_CALC_PLSLSB_SFT;
                 break;
             case (U1)HUDIMGADJ_OWCTL_POS_L3:
-                u2_t_calpos = u2_t_calpos_swlowerlimit;
+                u2_t_imgpos = u2_t_imgpos_swlowerlimit;
                 break;
             case (U1)HUDIMGADJ_OWCTL_POS_U1:
                 /* nominal + ROUNDUP((Max - nominal)/3) */
                 u2_t_calpos = u2_t_calpos_nominal +
                               (((u2_t_calpos_swupperlimit - u2_t_calpos_nominal) + (U2)HUDIMGADJ_OWCTL_POS_CALC_ROUND) / (U2)HUDIMGADJ_OWCTL_POS_CALC_DIV);
+                u2_t_imgpos = u2_t_calpos << (U2)HUDIMGADJ_OWCTL_POS_CALC_PLSLSB_SFT;
                 break;
             case (U1)HUDIMGADJ_OWCTL_POS_U2:
                 /* nominal + ROUNDUP((Max - nominal)*2/3) */
                 u2_t_calpos = u2_t_calpos_nominal +
                               (U2)(((((U4)u2_t_calpos_swupperlimit - (U4)u2_t_calpos_nominal) * (U4)HUDIMGADJ_OWCTL_POS_CALC_CRCT) + (U4)HUDIMGADJ_OWCTL_POS_CALC_ROUND) / (U4)HUDIMGADJ_OWCTL_POS_CALC_DIV);     /* PRQA S 3383,3384 # over detection */
+                u2_t_imgpos = u2_t_calpos << (U2)HUDIMGADJ_OWCTL_POS_CALC_PLSLSB_SFT;
                 break;
             case (U1)HUDIMGADJ_OWCTL_POS_U3:
-                u2_t_calpos = u2_t_calpos_swupperlimit;
+                u2_t_imgpos = u2_t_imgpos_swupperlimit;
                 break;
             default:
-                u2_t_calpos = (U2)HUDIMGADJ_OWCTL_POS_NG_VAL;
+                /* u2_t_imgpos = (U2)HUDIMGADJ_OWCTL_POS_NG_VAL; */
                 break;
         }
     }
 
-    if(u2_t_calpos != (U2)HUDIMGADJ_OWCTL_POS_NG_VAL){
-        u2_t_imgpos = u2_t_calpos << (U2)HUDIMGADJ_OWCTL_POS_CALC_PLSLSB_SFT;
-    }
-    else{
-        u2_t_imgpos = (U2)HUDIMGADJ_OWCTL_POS_NG_VAL;
-    }
     return(u2_t_imgpos);
 }
 
@@ -964,11 +969,11 @@ U1 u1_g_HudImgAdjReadDataImgPos(U1 * u1_ap_pos)
 
         /* L1(0x01) */
         /* ROUNDUP((U1 + Min)/2) */
-        u2_t_low1_judgeimgpos = (u2_t_up1_judgeimgpos + u2_t_lowerlimitimgpos + (U2)HUDIMGADJ_OWCTL_RDPOS_CALC_ROUND) / (U2)HUDIMGADJ_OWCTL_RDPOS_CALC_DIV;
+        u2_t_low1_judgeimgpos = (U2)(((U4)u2_t_up1_judgeimgpos + (U4)u2_t_lowerlimitimgpos + (U4)HUDIMGADJ_OWCTL_RDPOS_CALC_ROUND) / (U4)HUDIMGADJ_OWCTL_RDPOS_CALC_DIV); /* PRQA S 3383,3384 # over detection */
 
         /* U2(0xFE) */
         /* ROUNDUP((nominal + Max)/2) */
-        u2_t_up2_judgeimgpos  = (u2_t_nominalimgpos   + u2_t_upperlimitimgpos + (U2)HUDIMGADJ_OWCTL_RDPOS_CALC_ROUND) / (U2)HUDIMGADJ_OWCTL_RDPOS_CALC_DIV;
+        u2_t_up2_judgeimgpos  = (U2)(((U4)u2_t_nominalimgpos + (U4)u2_t_upperlimitimgpos + (U4)HUDIMGADJ_OWCTL_RDPOS_CALC_ROUND) / (U4)HUDIMGADJ_OWCTL_RDPOS_CALC_DIV);   /* PRQA S 3383,3384 # over detection */
 
         /* Center */
         if( u2_t_nowimgpos == u2_t_nominalimgpos ){
@@ -1042,7 +1047,11 @@ static void vd_s_HudImgAdjUpdtCustomDrvPs(void)
     U1  u1_t_sts;
 
     u4_t_data = (U4)HUDIMGADJ_CSTMZ_DRVPS_INITVAL;
+#if 0   /* BEV Rebase provisionally */
     u1_t_sts = u1_g_Nvmc_ReadU4withSts((U2)NVMCID_U4_DS_2E_2003, (&u4_t_data));
+#else   /* BEV Rebase provisionally */
+    u1_t_sts = (U1)NVMC_STATUS_NG;
+#endif   /* BEV Rebase provisionally */
     if((u1_t_sts == (U1)NVMC_STATUS_COMP   ) ||
        (u1_t_sts == (U1)NVMC_STATUS_READING)){
         u1_s_himgadj_cstmz_drvps = (U1)u4_t_data;
@@ -1216,9 +1225,7 @@ static void vd_s_HudImgAdjDrvPsInit(void)
     u1_s_himgadj_hudctrlsts = (U1)HUDIMGADJ_HUDCTLSTS_STP;
 
     u1_t_hudsts = (U1)HUDIMGADJ_HUDST_UNDET;
-#ifdef ComConf_ComSignal_HUD_ST
     (void)Com_SendSignal(ComConf_ComSignal_HUD_ST, &u1_t_hudsts);  /* No event sending occur. Depend on TyCAN config. */
-#endif
 }
 /*===================================================================================================================================*/
 /*  DRIVING_POSITION : static void vd_s_HudImgAdjDrvPsInvalidInit(void)                                                              */
@@ -1245,14 +1252,10 @@ static void vd_s_HudImgAdjDrvPsInvalidInit(void)
 
     u1_t_hudsts      = (U1)HUDIMGADJ_HUDST_UNDET;
     u1_t_hudsts_prev = (U1)HUDIMGADJ_HUDST_UNDET;
-#ifdef ComConf_ComSignal_HUD_ST
     (void)Com_ReceiveSignal(ComConf_ComSignal_HUD_ST, &u1_t_hudsts_prev);
     (void)Com_SendSignal(ComConf_ComSignal_HUD_ST, &u1_t_hudsts);
-#endif
     if(u1_t_hudsts_prev != u1_t_hudsts){
-#ifdef MSG_HUD1S01_TXCH0
         (void)Com_TriggerIPDUSend(MSG_HUD1S01_TXCH0);        /* Event send Trigger */
-#endif
     }
 }
 /*===================================================================================================================================*/
@@ -1270,7 +1273,11 @@ static U2 u2_s_HudImgAdjDrvPsReadData(const U1 u1_a_ID)
     u2_t_read_data = (U2)HUDIMGADJ_RDDTUNDEF;
     if(((U1)HUDIMGADJ_DRVPSDT_01 <= u1_a_ID                   ) &&
        (u1_a_ID                  <  (U1)HUDIMGADJ_NUM_DRVPS_DT)){
+#if 0   /* BEV Rebase provisionally */
         u1_t_nvmc_rsp = u1_g_Nvmc_ReadU2withSts(u2_sp_HUDIMGADJ_TBL_NVMCID_DRVPSDT[u1_a_ID], &u2_t_read_data);
+#else   /* BEV Rebase provisionally */
+        u1_t_nvmc_rsp = (U1)NVMC_STATUS_NG;
+#endif   /* BEV Rebase provisionally */
         if((u1_t_nvmc_rsp == (U1)NVMC_STATUS_COMP) ||
            (u1_t_nvmc_rsp == (U1)NVMC_STATUS_READING)){
             u2_t_data = u2_t_read_data;
@@ -1415,7 +1422,9 @@ static void vd_s_HudImgAdjDrvPsMemUpdt(const U4 u4_a_SGNL, const U1 u1_a_ID)
 
     if(u1_t_isvld == (U1)TRUE){
         u2_sp_himgadj_imgpos[u1_a_ID] = u2_t_imgpos;
+#if 0   /* BEV Rebase provisionally */
         vd_g_Nvmc_WriteU2(u2_sp_HUDIMGADJ_TBL_NVMCID_DRVPSDT[u1_a_ID], u2_t_imgpos);
+#endif   /* BEV Rebase provisionally */
     }
 }
 
@@ -1428,8 +1437,6 @@ static void vd_s_HudImgAdjDrvPsMemUpdt(const U4 u4_a_SGNL, const U1 u1_a_ID)
 static void vd_s_HudImgAdjDrvPsMovUpdt(const U4 u4_a_SGNL, const U1 u1_a_ID)
 {
     U2  u2_t_imgpos;
-    U2  u2_t_max;                                                                /* Motor Max                                       */
-    U2  u2_t_min;                                                                /* Motor Min                                       */
 
     U1  u1_t_id;
     U1  u1_t_custom;
@@ -1441,14 +1448,11 @@ static void vd_s_HudImgAdjDrvPsMovUpdt(const U4 u4_a_SGNL, const U1 u1_a_ID)
 
     u1_t_isvld = (U1)FALSE;
     u1_t_custom = u1_s_HudImgAdjGetCustomDrvPs((U1)HUDIMGADJ_CSTMZ_DRVPS_SWACT);
-    u2_t_max = u2_s_himgadj_gv_vipos_maxpos;
-    u2_t_min = u2_s_himgadj_gv_vipos_minpos;
     if((u1_a_ID < (U1)HUDIMGADJ_NUM_DRVPS_DT)                                               &&
        (u1_t_custom == (U1)TRUE)                                                            &&
        ((u4_a_SGNL & (U4)HUDIMGADJ_SGNL_MOVREQ) == (U4)HUDIMGADJ_SGNL_MOVREQ)               &&
        ((u4_a_SGNL & (U4)HUDIMGADJ_SGNL_RDVPSCHGMASK) == (U4)HUDIMGADJ_SGNL_RDVPSCHGONEDGE) &&
-       (u2_sp_himgadj_imgpos[u1_a_ID] != (U2)HUDIMGADJ_IMGPOSINVLD)                         &&
-       ((u2_sp_himgadj_imgpos[u1_a_ID] >= u2_t_min) && (u2_sp_himgadj_imgpos[u1_a_ID] <= u2_t_max))){
+       (u2_sp_himgadj_imgpos[u1_a_ID] != (U2)HUDIMGADJ_IMGPOSINVLD)){
         u1_t_id = u1_a_ID;
         u2_t_imgpos = u2_sp_himgadj_imgpos[u1_a_ID];
         u1_t_isvld = (U1)TRUE;
@@ -1642,14 +1646,10 @@ static void vd_s_HudImgAdjDrvPsHudStsActn(const U1 u1_a_EVT)
     }
 
     u1_t_hudsts_prev = (U1)HUDIMGADJ_HUDST_STP;
-#ifdef ComConf_ComSignal_HUD_ST
     (void)Com_ReceiveSignal(ComConf_ComSignal_HUD_ST, &u1_t_hudsts_prev);
     (void)Com_SendSignal(ComConf_ComSignal_HUD_ST, &u1_t_hudsts);
-#endif
     if(u1_t_hudsts_prev != u1_t_hudsts){
-#ifdef MSG_HUD1S01_TXCH0
         (void)Com_TriggerIPDUSend(MSG_HUD1S01_TXCH0);        /* Event send Trigger */
-#endif
     }
 }
 
@@ -1903,9 +1903,13 @@ U1      u1_g_HudImgAdjGetGvRtctlIniReq(void)
 /* 2.1.1              2022.06.27  HT      Removed write judgement from Motor Position Memory Update Function.                        */
 /* 2.2.0              2024.01.12  His     Applied calibration implementation                                                         */
 /* 2.2.1              2024.07.02  His     Delete Calibration Guard Process.                                                          */
+/* 2.2.2              2024.08.06  His     Routine Control Result Value was revised.                                                  */
+/* 2.2.3              2024.09.13  His     DID 280C was revised. (u2_s_HudImgAdjowimgpos and u1_g_HudImgAdjReadDataImgPos)            */
+/* 2.2.4              2025.03.17  YuK     Removed the max and min limits for HUD position regeneration.                              */
 /*                                                                                                                                   */
 /*  * HS  = Hidenobu Suzuki, NCOS                                                                                                    */
 /*  * HiS = Hidenobu Suzuki, MSE                                                                                                     */
 /*  * HT  = Hideki Takagi,   MSE                                                                                                     */
+/*  * YuK = Yuki Koshimae,   MSE                                                                                                     */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

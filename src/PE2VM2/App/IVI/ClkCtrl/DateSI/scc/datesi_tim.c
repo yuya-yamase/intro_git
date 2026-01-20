@@ -1,4 +1,4 @@
-/* 0.0.0 */
+/* 0.0.1 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -11,7 +11,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define DATESI_TIM_C_MAJOR                      (0)
 #define DATESI_TIM_C_MINOR                      (0)
-#define DATESI_TIM_C_PATCH                      (0)
+#define DATESI_TIM_C_PATCH                      (1)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -74,17 +74,16 @@ void            vd_g_DateSITimBonInit(void)
     u1_s_datesi_tim_adj_act   = (U1)FALSE;
 
     vd_g_DateSITimAvnBonInit();
+    vd_g_DateSITimCfgBonInit();
 
     vd_g_DateSITimCfgCanTx(u4_s_datesi_tim_now, (U1)FALSE);
-
-    vd_g_DateSITimCfgBonInit();
 
     /* iVDsh Initial Value Transmit*/
     u4_t_datesi_tim_ofset_write = (U4)U4_MAX;
     u4_t_datesi_tim_fmt_write   = (U4)U4_MAX;
-    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_CPREQ_009, &u4_t_datesi_tim_ofset_write, (U2)DATESI_TIME_VM_1WORD);
-    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_CPREQ_011, &u4_t_datesi_tim_fmt_write, (U2)DATESI_TIME_VM_1WORD);
-    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_CPREQ_013, &u4_s_datesi_tim_now, (U2)DATESI_TIME_VM_1WORD);
+    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM2TO1_TIMOFST, &u4_t_datesi_tim_ofset_write, (U2)DATESI_TIME_VM_1WORD);
+    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM2TO1_TIMFMT, &u4_t_datesi_tim_fmt_write, (U2)DATESI_TIME_VM_1WORD);
+    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM2TO1_DSPTIM, &u4_s_datesi_tim_now, (U2)DATESI_TIME_VM_1WORD);
 }
 
 /*===================================================================================================================================*/
@@ -102,17 +101,16 @@ void            vd_g_DateSITimRstWkupInit(void)
     u1_s_datesi_tim_adj_act   = (U1)FALSE;
 
     vd_g_DateSITimAvnWkupInit();
+    vd_g_DateSITimCfgRstWkupInit();
 
     vd_g_DateSITimCfgCanTx(u4_s_datesi_tim_now, (U1)FALSE);
-
-    vd_g_DateSITimCfgRstWkupInit();
 
     /* iVDsh Initial Value Transmit*/
     u4_t_datesi_tim_ofset_write = (U4)U4_MAX;
     u4_t_datesi_tim_fmt_write   = (U4)U4_MAX;
-    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_CPREQ_009, &u4_t_datesi_tim_ofset_write, (U2)DATESI_TIME_VM_1WORD);
-    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_CPREQ_011, &u4_t_datesi_tim_fmt_write, (U2)DATESI_TIME_VM_1WORD);
-    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_CPREQ_013, &u4_s_datesi_tim_now, (U2)DATESI_TIME_VM_1WORD);
+    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM2TO1_TIMOFST, &u4_t_datesi_tim_ofset_write, (U2)DATESI_TIME_VM_1WORD);
+    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM2TO1_TIMFMT, &u4_t_datesi_tim_fmt_write, (U2)DATESI_TIME_VM_1WORD);
+    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM2TO1_DSPTIM, &u4_s_datesi_tim_now, (U2)DATESI_TIME_VM_1WORD);
 }
 
 /*===================================================================================================================================*/
@@ -125,7 +123,7 @@ void            vd_g_DateSITimMainTask(void)
 {
     u1_s_datesi_tim_adj_act   = u1_g_DateSITimMainAvnTask(&u4_s_datesi_tim_now);
     vd_g_DateSITimCfgCanTx(u4_s_datesi_tim_now, (U1)TRUE);
-    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_CPREQ_013, &u4_s_datesi_tim_now, (U2)DATESI_TIME_VM_1WORD);
+    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM2TO1_DSPTIM, &u4_s_datesi_tim_now, (U2)DATESI_TIME_VM_1WORD);
 }
 
 /*===================================================================================================================================*/
@@ -151,17 +149,21 @@ U1              u1_g_DateSITimAdjAct(void)
 }
 
 /*===================================================================================================================================*/
-/* void            vd_g_DateSITimAdjustOwnClk(const U4 u4_a_HHMMSS)                                                                  */
+/* U1              u1_g_DateSITimAdjustOwnClk(const U4 u4_a_HHMMSS)                                                                  */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void            vd_g_DateSITimAdjustOwnClk(const U4 u4_a_HHMMSS)
+U1              u1_g_DateSITimAdjustOwnClk(const U4 u4_a_HHMMSS)
 {
+    U1  u1_t_ret;
+
     (void)u1_g_DateclkAdjUnLock((U1)DATE_CLK_ADJ_HHMMSS);
-    (void)u1_g_DateclkAdjHhmmss24h(u4_a_HHMMSS);
+    u1_t_ret = u1_g_DateclkAdjHhmmss24h(u4_a_HHMMSS);
     vd_g_DateclkSet();
     vd_g_DateclkAdjLock((U1)DATE_CLK_ADJ_HHMMSS);
+
+    return(u1_t_ret);
 }
 
 /*===================================================================================================================================*/
@@ -339,6 +341,11 @@ void            vd_g_DateSITimSetDispClk(const U4 u4_a_HHMMSS)
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  0.0.0    04/23/2025  MN       New.                                                                                               */
+/*  0.0.1    12/18/2025  MN       Change for BEV Pre_CV                                                                              */
+/*                                                                                                                                   */
+/*  Revision Date        Author   Change Description                                                                                 */
+/* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
+/*  BEV-1    12/18/2025  MN       Addressing issues.                                                                                 */
 /*                                                                                                                                   */
 /*  * MN   = Mikiya Negishi, KSE                                                                                                     */
 /*                                                                                                                                   */

@@ -19,12 +19,7 @@
 #include "wchime_grd_cfg.h"
 
 #include "oxcan.h"
-#if 0   /* BEV BSW provisionally */
-#else
-#include "oxcan_channel_STUB.h"
-#endif
 #include "hmiwchime.h"
-#include "hmimcst.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -48,7 +43,6 @@
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static U1 u1_s_wchime_master_pre;
-static U1 u1_s_wchime_cruise_pre;
 static U1 u1_s_wchime_mwvc_pre;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -69,29 +63,11 @@ static U1 u1_s_wchime_mwvc_pre;
 void    vd_g_wChimeGrdCfgInit(void)
 {
     u1_s_wchime_master_pre = (U1)HMIWCHIME_UNDEF;
-    u1_s_wchime_cruise_pre = (U1)HMIWCHIME_UNDEF;
+#if 0   /* BEV Rebase provisionally */
     u1_s_wchime_mwvc_pre   = (U1)HMIMCST_MWVC_OPE_INIT;
-}
-/*===================================================================================================================================*/
-/*  void    vd_g_wChimeCfgMMInfoTx(void)                                                                                             */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void    vd_g_wChimeCfgMMInfoTx(void)
-{
-    U1 u1_t_level;
-    U1 u1_t_length;
-    U1 u1_t_emergency;
-
-    /* Multimedia */
-    vd_g_wChimeMetBuzzInfo(&u1_t_level, &u1_t_length, &u1_t_emergency);
-
-#if 0   /* BEV BSW provisionally */
-    (void)Com_SendSignal(ComConf_ComSignal_EMERGENCY_ON, &u1_t_emergency);    /* COM Tx STUB delete */
-    (void)Com_SendSignal(ComConf_ComSignal_BUZZER_LV, &u1_t_level);    /* COM Tx STUB delete */
-    (void)Com_SendSignal(ComConf_ComSignal_BUZZER_LEN, &u1_t_length);    /* COM Tx STUB delete */
-#endif
+#else   /* BEV Rebase provisionally */
+    u1_s_wchime_mwvc_pre   = (U1)7U;
+#endif   /* BEV Rebase provisionally */
 }
 /*===================================================================================================================================*/
 /*  U1      u1_g_wChimeCfgRsaPermaReq(void)                                                                                          */
@@ -139,32 +115,6 @@ U1      u1_g_wChimeCfgMstrReq(void)
     return(u1_t_req);
 }
 /*===================================================================================================================================*/
-/*  U1      u1_g_wChimeCfgCruiseReq(void)                                                                                            */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1      u1_g_wChimeCfgCruiseReq(void)
-{
-    U1    u1_t_req;
-    U1    u1_t_hmiwchime[HMIWCHIME_NUM];
-
-    u1_t_req = (U1)FALSE;
-
-    vd_g_HmiWchime(&u1_t_hmiwchime[0], (U1)HMIWCHIME_NUM);
-
-    if(u1_s_wchime_cruise_pre != u1_t_hmiwchime[HMIWCHIME_CRUISE_RJCT]){
-        if(((U1)HMIWCHIME_ON1 == u1_t_hmiwchime[HMIWCHIME_CRUISE_RJCT]) ||
-           ((U1)HMIWCHIME_ON2 == u1_t_hmiwchime[HMIWCHIME_CRUISE_RJCT])){
-            u1_t_req = (U1)TRUE;
-        }
-    }
-
-    u1_s_wchime_cruise_pre = u1_t_hmiwchime[HMIWCHIME_CRUISE_RJCT];
-
-    return(u1_t_req);
-}
-/*===================================================================================================================================*/
 /*  U1      u1_g_wChimeCfgMWVCReq(void)                                                                                              */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
@@ -176,12 +126,21 @@ U1      u1_g_wChimeCfgMWVCReq(void)
     U1    u1_t_ope;
 
     u1_t_req = (U1)FALSE;
+#if 0   /* BEV Rebase provisionally */
     u1_t_ope = u1_g_HmiMcstGetMWVCOpe();
 
     if((u1_s_wchime_mwvc_pre != u1_t_ope    )&&
        (u1_t_ope <= (U1)HMIMCST_MWVC_OPE_MAX)){
             u1_t_req = (U1)TRUE;
     }
+#else   /* BEV Rebase provisionally */
+    u1_t_ope = u1_g_wchime_metcstmvol;
+
+    if((u1_s_wchime_mwvc_pre != u1_t_ope    )&&
+       (u1_t_ope <= (U1)2U)){
+            u1_t_req = (U1)TRUE;
+    }
+#endif   /* BEV Rebase provisionally */
     u1_s_wchime_mwvc_pre = u1_t_ope;
 
     return(u1_t_req);
@@ -199,7 +158,7 @@ U1      u1_g_wChimeCfgMWVCReq(void)
 /*  1.4.1    11/24/2020  TF       wchime_arb.c v1.4.0 -> v1.4.1.                                                                     */
 /*  1.5.0    12/23/2020  YK       wchime_arb.c v1.4.1 -> v1.5.0.                                                                     */
 /*  2.0.1    10/21/2021  MG       wchime_arb.c v1.5.0 -> v2.0.1.                                                                     */
-/*  2.1.0    11/14/2024  KO       wchime_arb.c v2.0.1 -> v2.1.0.                                                                     */
+/*  2.1.0    11/12/2024  GM       wchime_arb.c v2.0.1 -> v2.1.0.                                                                     */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
@@ -215,6 +174,5 @@ U1      u1_g_wChimeCfgMWVCReq(void)
 /*  * TF   = Tomohiro Furuichi, Denso Techno                                                                                         */
 /*  * MG   = Mei Godo, KSE                                                                                                           */
 /*  * SI   = Shugo Ichinose, Denso Techno                                                                                            */
-/*  * KO   = Kazuto Oishi,  Denso Techno                                                                                             */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

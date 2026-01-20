@@ -89,7 +89,7 @@ typedef struct{
 
     U2             u2_tim_elpsd;      /* resoluation = OXDOCAN_MAIN_TICK. Max = OXDC_SERV_TIM_MAX */
     U1             u1_sid;            /* OXDC_SID_XXX                                             */
-    U1             u1_req_type;
+    U1             u1_pdu_rx;
     U1             u1_ses_bfr;        /* OXDC_SESSION_XX                                          */
     U1             u1_ses_aft;        /* OXDC_SESSION_XX                                          */
 }ST_OXDC_REQ;

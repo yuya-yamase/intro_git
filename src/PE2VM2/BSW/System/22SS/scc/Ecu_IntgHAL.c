@@ -11,7 +11,7 @@
 /*----------------------------------------------------------------------------
  *		Headers
  *--------------------------------------------------------------------------*/
-#include <v800_ghs.h>
+/* #include <v800_ghs.h> */
 #include <Std_Types.h>
 #include <SS.h>
 
@@ -228,18 +228,18 @@ boolean Ecu_IntgHAL_isImmShutdown(void)
  *--------------------------------------------------------------------------*/
 void Ecu_IntgHAL_enableFpu(void)
 {
-    volatile uint32 u4RegVal_PSW;
+    /* volatile uint32 u4RegVal_PSW; */
 
-    u4RegVal_PSW = __STSR(REG_u4PSW_regID, REG_u4PSW_selID);
-    u4RegVal_PSW &= ~MSK_u4PSW_CU0;
-    u4RegVal_PSW |= VAL_u4PSW_CU0EN;
-    __LDSR(REG_u4PSW_regID, REG_u4PSW_selID, u4RegVal_PSW);
-    Ecu_Int_syncp();
+    /* u4RegVal_PSW = __STSR(REG_u4PSW_regID, REG_u4PSW_selID); */
+    /* u4RegVal_PSW &= ~MSK_u4PSW_CU0; */
+    /* u4RegVal_PSW |= VAL_u4PSW_CU0EN; */
+    /* __LDSR(REG_u4PSW_regID, REG_u4PSW_selID, u4RegVal_PSW); */
+    /* Ecu_Int_syncp(); */
 
-    __LDSR(REG_u4FPSR_regID, REG_u4FPSR_selID, VAL_u4FPSR);
-    Ecu_Int_syncp();
+    /* __LDSR(REG_u4FPSR_regID, REG_u4FPSR_selID, VAL_u4FPSR); */
+    /* Ecu_Int_syncp(); */
 
-    return;
+    /* return; */
 }
 
 /**---------------------------------------------------------------------------
@@ -252,8 +252,8 @@ void Ecu_IntgHAL_enableFpu(void)
 void Ecu_IntgHAL_setIntLevelMask(uint8 u1PriorityLevel)
 {
 
-    __LDSR(REG_u4PLMR_regID, REG_u4PLMR_selID, (unsigned int)u1PriorityLevel);
-    Ecu_Int_syncp();
+    /* __LDSR(REG_u4PLMR_regID, REG_u4PLMR_selID, (unsigned int)u1PriorityLevel); */
+    /* Ecu_Int_syncp(); */
 
     return;
 }
@@ -267,11 +267,12 @@ void Ecu_IntgHAL_setIntLevelMask(uint8 u1PriorityLevel)
  *--------------------------------------------------------------------------*/
 uint8 Ecu_IntgHAL_getIntLevelMask(void)
 {
-    unsigned int u4RegVal_PLMR;
+    /* unsigned int u4RegVal_PLMR; */
 
-    u4RegVal_PLMR = __STSR(REG_u4PLMR_regID, REG_u4PLMR_selID);
+    /* u4RegVal_PLMR = __STSR(REG_u4PLMR_regID, REG_u4PLMR_selID); */
 
-    return ((uint8)(u4RegVal_PLMR & MSK_u4PLMR));
+    /* return ((uint8)(u4RegVal_PLMR & MSK_u4PLMR)); */
+    return(0);
 }
 
 /**---------------------------------------------------------------------------

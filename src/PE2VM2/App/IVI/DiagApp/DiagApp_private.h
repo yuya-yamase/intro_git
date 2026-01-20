@@ -44,6 +44,15 @@
 #define DIAGAPP_NRC_INIT                            (0xFFU)
 #define DIAGAPP_NRC_POSRES                          (0x0U)
 #define DIAGAPP_NRC_NONSUP                          (0x11U)
+
+#define DIAGAPP_PDU_RX_CL_POF                       (4U)
+#define DIAGAPP_PDU_RX_CL_FOF                       (5U)
+#define DIAGAPP_PDU_RX_CL_PON                       (6U)
+#define DIAGAPP_PDU_RX_CL_FON                       (7U)
+#define DIAGAPP_PDU_RX_FD_POF                       (8U)
+#define DIAGAPP_PDU_RX_FD_FOF                       (9U)
+#define DIAGAPP_PDU_RX_FD_PON                       (10U)
+#define DIAGAPP_PDU_RX_FD_FON                       (11U)
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

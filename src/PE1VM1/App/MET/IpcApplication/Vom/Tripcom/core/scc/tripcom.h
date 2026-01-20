@@ -1,4 +1,4 @@
-/* 2.4.0 */
+/* 2.5.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -13,7 +13,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define TRIPCOM_H_MAJOR                         (2)
-#define TRIPCOM_H_MINOR                         (4)
+#define TRIPCOM_H_MINOR                         (5)
 #define TRIPCOM_H_PATCH                         (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -50,6 +50,7 @@
 #define TRIPCOM_RSTRQBIT_M_PTSRUNDIST_TR_B      (0x1000U)               /*  Trip B.     : Powertrain run distance                    */
 #define TRIPCOM_RSTRQBIT_M_PTSRUNTM_TR_A        (0x2000U)               /*  Trip A.     : Powertrain run time                        */
 #define TRIPCOM_RSTRQBIT_M_PTSRUNTM_TR_B        (0x4000U)               /*  Trip B.     : Powertrain run time                        */
+#define TRIPCOM_RSTRQBIT_M_DTE_RF               (0x8000U)               /*  Refuel      : Distance To Empty                          */
 /* #define TRIPCOM_RSTRQBIT_A_DRVCYC            (0x0001U)                   defined at tripcom_private.h                             */
 /* #define TRIPCOM_RSTRQBIT_A_FE_RECHRG         (0x0002U)                   defined at tripcom_private.h                             */
 /* #define TRIPCOM_RSTRQBIT_A_DTE_RECHRG        (0x0004U)                   defined at tripcom_private.h                             */
@@ -57,6 +58,7 @@
 /* #define TRIPCOM_RSTRQBIT_A_ECOSTP            (0x0010U)                   defined at tripcom_private.h                             */
 /* #define TRIPCOM_RSTRQBIT_A_UPDTFEHUSD        (0x0020U)                   defined at tripcom_private.h                             */
 /* #define TRIPCOM_RSTRQBIT_A_DRVCYC_OFF        (0x0040U)                   defined at tripcom_private.h                             */
+/* #define TRIPCOM_RSTRQBIT_A_UPDTEEUSD         (0x0080U)                   defined at tripcom_private.h                             */
 
 #define TRIPCOM_CANTX_UNKNOWN                   (0xFFFEU)
 #define TRIPCOM_CANTX_TIMEOUT                   (0xFFFFU)
@@ -132,6 +134,12 @@
 #define TRIPCOM_NVMR_RES_FAI                    (0x02U)
 #define TRIPCOM_NVMR_RES_UNK                    (0x03U)
 
+/* u1_g_XXXXRstImmwRslt */
+#define TRIPCOM_RSTIMMW_UNK                     (0x00U)
+#define TRIPCOM_RSTIMMW_RUN                     (0x01U)
+#define TRIPCOM_RSTIMMW_SUC                     (0x02U)
+#define TRIPCOM_RSTIMMW_FAI                     (0x04U)
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -149,30 +157,27 @@ void            vd_g_TripcomWkupInit(void);
 void            vd_g_TripcomMainTask(void);
 void            vd_g_TripcomSmoothingTask(void);
 
-U1              u1_g_AvgFeKmpl(const U1 u1_a_AVG_FE_CH, U4 * u4p_a_kmpl);
-U1              u1_g_AvgHeKmpkg(const U1 u1_a_AVG_HE_CH, U4 * u4p_a_kmpkg);
 U1              u1_g_AvgVehspdKmph(const U1 u1_a_AVG_VEHSPD_CH, U2 * u2p_a_kmph);
-U1              u1_g_DteKm(U4 * u4p_a_km);
-U1              u1_g_DteTrainedFeKmpl(U4 * u4p_a_kmpl);
-U1              u1_g_InstFeKmpl(U4 * u4p_a_kmpl);
-U1              u1_g_InstHeKmpkg(U4 * u4p_a_kmpkg);
 U1              u1_g_PtsRunDistKm(const U1 u1_a_PTSRUN_DIST_CH, U4 * u4p_a_km);
 U1              u1_g_PtsRunTmHrs(const U1 u1_a_PTSRUN_TM_CH, U4 * u4p_a_hhmmss);
-U1              u1_g_SaveFsMl(const U1 u1_a_SAVE_FS_CH, U4 * u4p_a_ml);
 U1              u1_g_InstEeKmpkwh(U4 * u4p_a_kmpkwh);
 U1              u1_g_AvgEeKmpkwh(const U1 u1_a_AVG_EE_CH, U4 * u4p_a_kmpkwh);
 U1              u1_g_EvDteKm(U4 * u4p_a_km, U1 * u1p_a_acsts);
 U1              u1_g_TripcomEvDteKmIgOffAcOn(U4 * u4p_a_km);
 U1              u1_g_TripcomEvDteKmIgOffAcOff(U4 * u4p_a_km);
 U1              u1_g_EvDtePct(U1 * u1p_a_pct);
-U1              u1_g_EvRunTmRatio(U1 * u1p_a_evratio);
 U2              u2_g_EvDteKmDiff(void);
+
+U1              u1_g_AvgVehspdRstImmwRslt(const U1 u1_a_AVG_VEHSPD_CH);/* called by Diagnosis */
+U1              u1_g_PtsRunTmRstImmwRslt(const U1 u1_a_PTSRUN_TM_CH);  /* called by Diagnosis */
+U1              u1_g_AvgEeRstImmwRslt(const U1 u1_a_AVG_EE_CH);        /* called by Diagnosis */
 
 void            vd_g_TripcomActRefuelEvHk(const U2 u2_a_DELTA, const U1 u1_a_VTM);
 void            vd_g_TripcomFrcRefuelEvHk(void);
+void            vd_g_TripcomFrcRefuelEvImmWr(void);                    /* called by Diagnosis */
 void            vd_g_TripcomRstRq(const U2 u2_a_RSTRQBIT);
+void            vd_g_TripcomRstRqImmWr(const U2 u2_a_RSTRQBIT);        /* called by Diagnosis */
 void            vd_g_TripcomGrphRstRq(const U2 u2_a_RSTRQBIT);
-void            vd_g_DteAccmltClr(void);
 U1              u1_g_TripcomNvmClear(const U1 u1_a_REQ, const U1 u1_a_RUN);
 
 void            vd_g_TripcomNvmIfRWTask(void);                         /* called by nvmc_mgr_cfg : st_NVMC_APP_FUNC_TABLE[].fp_p_vd_acs_func */

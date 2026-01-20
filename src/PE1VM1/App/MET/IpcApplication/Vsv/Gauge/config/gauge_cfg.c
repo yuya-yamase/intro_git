@@ -1,4 +1,4 @@
-/* 2.0.2 */
+/* 2.1.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,8 +10,8 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define GAUGE_CFG_C_MAJOR                        (2)
-#define GAUGE_CFG_C_MINOR                        (0)
-#define GAUGE_CFG_C_PATCH                        (2)
+#define GAUGE_CFG_C_MINOR                        (1)
+#define GAUGE_CFG_C_PATCH                        (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -20,23 +20,6 @@
 /* DIGITAL SPEED            */
 #include "vehspd_kmph.h"
 #include "gagdst_nxmph.h"
-/* LOW FUEL WARNING         */
-#if 0   /* BEV BSW provisionally */
-#include "fuelvol_tau_gag.h"
-#endif
-#include "gagdst_lowfuel.h"
-/* TEMP GAUGE - SEGMENT     */
-#include "ptsctmp_cel.h"
-#include "gagdst_tempseg.h"
-/* ENGSPD REV PEAK          */
-#include "engspd_rpm.h"
-#include "gagdst_revpeak.h"
-/* REV INDICATOR            */
-/* #include "engspd_rpm.h"  */
-#include "gagdst_revind.h"
-/* ATTEMP OVERHEAT INDICATOR  */
-#include "attmp_cel.h"
-#include "gagdst_attempovhtind.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -65,9 +48,6 @@ ST_GAUGE_OW_CTRL             st_gp_gauge_ow_ctrl[GAUGE_NUM_CH];
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static U1      u1_s_GagsrcKmph(U2 * u2p_a_src);         /* vehspd_kmph      */
-static U1      u1_s_GagsrcTempCel(U2 * u2p_a_src);      /* ptsctmp_cel      */
-static U1      u1_s_GagsrcRpm(U2 * u2p_a_src);          /* engspd_rpm       */
-static U1      u1_s_GagsrcATTempCel(U2 * u2p_a_src);    /* attemp_cel       */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
@@ -80,35 +60,6 @@ const ST_GAUGE_IF           st_gp_GAUGE_IF_CFG[GAUGE_NUM_CH] = {
     /* Digital Speed        */
         &u1_s_GagsrcKmph,                       /* fp_u1_SRC     */
         &vd_g_GagdstNxmphUpdt                   /* fp_vd_DST     */
-    },
-    /* Low Fuel Warning     */
-    {
-#if 0   /* BEV BSW provisionally */
-        &u1_g_FuelvolTauGagLitEst,              /* fp_u1_SRC     */
-#else
-        vdp_PTR_NA,                             /* fp_u1_SRC     */
-#endif
-        &vd_g_GagdstLowFuelUpdt                 /* fp_vd_DST     */
-    },
-    /* Temp Gauge Segment   */
-    {
-        &u1_s_GagsrcTempCel,                    /* fp_u1_SRC     */
-        &vd_g_GagdstTempSegUpdt                 /* fp_vd_DST     */
-    },
-    /* Engspd Rev Peak      */
-    {
-        &u1_s_GagsrcRpm,                        /* fp_u1_SRC     */
-        &vd_g_GagdstRevpeakUpdt                 /* fp_vd_DST     */
-    },
-    /* Engspd Rev Indicator */
-    {
-        &u1_s_GagsrcRpm,                        /* fp_u1_SRC     */
-        &vd_g_GagdstRevindUpdt                  /* fp_vd_DSP     */
-    },
-    /* ATTemp Overheat Indicator */
-    {
-        &u1_s_GagsrcATTempCel,                  /* fp_u1_SRC     */
-        &vd_g_GagdstATTempOvhtIndUpdt           /* fp_vd_DSP     */
     }
 };
 const U1                    u1_g_GAUGE_NUM_CH = (U1)GAUGE_NUM_CH;
@@ -125,11 +76,6 @@ const U1                    u1_g_GAUGE_NUM_CH = (U1)GAUGE_NUM_CH;
 void    vd_g_GaugeCfgBonInit(void)
 {
     vd_g_GagdstNxmphInit();
-    vd_g_GagdstLowFuelBonInit();
-    vd_g_GagdstTempSegInit();
-    vd_g_GagdstRevpeakInit();
-    vd_g_GagdstRevindInit();
-    vd_g_GagdstATTempOvhtIndInit();
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_GaugeCfgRstwkInit(void)                                                                                             */
@@ -140,11 +86,6 @@ void    vd_g_GaugeCfgBonInit(void)
 void    vd_g_GaugeCfgRstwkInit(void)
 {
     vd_g_GagdstNxmphInit();
-    vd_g_GagdstLowFuelRstwkInit();
-    vd_g_GagdstTempSegInit();
-    vd_g_GagdstRevpeakInit();
-    vd_g_GagdstRevindInit();
-    vd_g_GagdstATTempOvhtIndInit();
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_GaugeCfgOpemdEvhk(const U4 u4_a_EVTBIT)                                                                             */
@@ -154,8 +95,6 @@ void    vd_g_GaugeCfgRstwkInit(void)
 /*===================================================================================================================================*/
 void    vd_g_GaugeCfgOpemdEvhk(const U4 u4_a_EVTBIT)
 {
-    vd_g_GagdstLowFuelOpemdEvhk(u4_a_EVTBIT);
-    vd_g_GagdstTempSegOpemdEvhk(u4_a_EVTBIT);
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_GaugeCfgMainStart(void)                                                                                             */
@@ -195,50 +134,29 @@ static U1      u1_s_GagsrcKmph(U2 * u2p_a_src)
     return(u1_g_VehspdKmphBiased(u2p_a_src, (U1)FALSE));
 }
 /*===================================================================================================================================*/
-/*  static U1      u1_s_GagsrcTempCel(U2 * u2p_a_src)                                                                                */
+/*  U2      u2_g_GaugeCfgPowerChk(void)                                                                                              */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
+/*  Return:         u2_t_ret                                                                                                         */
 /*===================================================================================================================================*/
-static U1      u1_s_GagsrcTempCel(U2 * u2p_a_src)
+U2      u2_g_GaugeCfgPowerChk(void)
 {
-    U1  u1_t_sts;
-    U2  u2_t_src;
+    U2          u2_t_ret;
+    U1          u1_t_power_on;
 
-    u2_t_src = (U2)0U;
+    u2_t_ret = (U2)0U;
 
-    u1_t_sts = u1_g_PtsctmpCelFltrd(&u2_t_src);
-
-    if(u2_t_src < (U2)PTSCTMP_CEL_OFFSET){
-        u2_t_src = (U2)0U;
+    u1_t_power_on = u1_g_VehopemdAccOn();
+    if (u1_t_power_on == (U1)TRUE) {
+        u2_t_ret |= (U2)GAUGE_SRC_CHK_ACC_ON;
     }
-    else{
-        u2_t_src -= (U2)PTSCTMP_CEL_OFFSET;
-    }
-    (*u2p_a_src) = u2_t_src;
 
-    return(u1_t_sts);
-}
-/*===================================================================================================================================*/
-/*===================================================================================================================================*/
-/*  static U1      u1_s_GagsrcRpm(U2 * u2p_a_src)                                                                                    */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static U1      u1_s_GagsrcRpm(U2 * u2p_a_src)
-{
-    return(u1_g_EngspdRpmFltrd(u2p_a_src));
-}
-/*===================================================================================================================================*/
-/*  static U1      u1_s_GagsrcATTempCel(U2 * u2p_a_src)                                                                              */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static U1      u1_s_GagsrcATTempCel(U2 * u2p_a_src)
-{
-    return(u1_g_AttmpCelFltrd(u2p_a_src));
+    u1_t_power_on = u1_g_VehopemdIgnOn();
+    if (u1_t_power_on == (U1)TRUE) {
+        u2_t_ret |= (U2)GAUGE_SRC_CHK_IGN_ON;
+    }
+
+    return(u2_t_ret);
 }
 
 /*===================================================================================================================================*/
@@ -258,12 +176,15 @@ static U1      u1_s_GagsrcATTempCel(U2 * u2p_a_src)
 /*  2.0.0     6/04/2021  TA(M)    Renew.                                                                                             */
 /*  2.0.1    10/18/2021  TK       gauge v2.0.0 -> v2.0.1.                                                                            */
 /*  2.0.2    10/25/2021  TK       gauge v2.0.1 -> v2.0.2.                                                                            */
+/*  2.1.0    10/23/2025  SH       gauge v2.0.2 -> v2.1.0.                                                                            */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  800B-1   03/21/2020  SM       800B CV Correspondence                                                                             */
 /*  19PFv3-1 09/21/2023  SN       Delete tempseg,rpmzpos                                                                             */
 /*  19PFv3-2 02/01/2024  KH       Apply 19PFv3 configuration                                                                         */
+/*  19PFv3-3 10/03/2024  SN       Delete ATTemp Overheat                                                                             */
+/*  BEV-1    10/23/2025  SH       Configured for BEVstep3_Rebase                                                                     */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
 /*  * SM   = Shota Maegawa, Denso Techno                                                                                             */
@@ -273,5 +194,6 @@ static U1      u1_s_GagsrcATTempCel(U2 * u2p_a_src)
 /*  * TK   = Takanori Kuno, DensoTechno                                                                                              */
 /*  * SN   = Shimon Nambu, DensoTechno                                                                                               */
 /*  * KH   = Kiko Huerte, DTPH                                                                                                       */
+/*  * SH   = Sae Hirose, DensoTechno                                                                                                 */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

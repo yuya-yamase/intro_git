@@ -39,6 +39,7 @@
 #include "IVI_DspCtrl_Main.h"
 #include "IVI_DrcCtrl_Main.h"
 #include "IVI_CanCtrl_Main.h"
+#include "fwupx.h"
 #include "iVDTr_Main.h"
 #include "DiagApp.h"
 
@@ -103,6 +104,7 @@ void vd_g_22SSCallout_StaBonInit(void)
     vd_g_Ivi_DspCtrl_Main_Bon_init();
 	vd_g_Ivi_DrcCtrl_Main_Bon_init();
     vd_g_Ivi_CanCtrl_Main_Bon_init();
+    vd_g_FwupxInit();
     vd_g_iVDTrInit();
     vd_g_DiagAppInit();
 
@@ -154,6 +156,7 @@ void vd_g_22SSCallout_StaRstInit(void)
     vd_g_Ivi_GyrCtrl_Main_Rst_init();
     vd_g_Ivi_DspCtrl_Main_Rst_init();
     vd_g_Ivi_CanCtrl_Main_Rst_init();
+    vd_g_FwupxInit();
     vd_g_iVDTrInit();
     vd_g_DiagAppInit();
 
@@ -208,6 +211,7 @@ void vd_g_22SSCallout_StaWkupInit(void)
     vd_g_Ivi_DspCtrl_Main_Wkup_init();
     vd_g_Ivi_DrcCtrl_Main_Wkup_init();
     vd_g_Ivi_CanCtrl_Main_Wkup_init();
+    vd_g_FwupxInit();
 	vd_g_iVDTrInit();
     vd_g_DiagAppInit();
 

@@ -3,10 +3,10 @@
 /*   DO NOT EDIT BY HAND, or your modifications will be lost.  */
 /*  ---------------------------------------------------------  */
 /* [ BIN2TXT 2.02 */
-/*   CONVERTED : Wed Mar 12 11:14:42 2025 */
+/*   CONVERTED : Mon Dec 01 15:03:51 2025 */
 /*   OPTIONS   : -fc -b4 -e  -i  */
-/*   INPUT     : .\ADXAT_Data_for_TYT_20250314.acf 5280[byte] */
-/*   OUTPUT    : ..\ADXAT_Data_for_TYT_20250314\\ADXAT_Data_for_TYT_20250314.acf.h  */
+/*   INPUT     : .\ADXAT_Data_for_TYT_20251126.acf 5280[byte] */
+/*   OUTPUT    : ..\ADXAT_Data_for_TYT_20251126\\ADXAT_Data_for_TYT_20251126.acf.h  */
 
 	0x46545540, 0x78140000, 0x58010100, 0x77020000, 
 	0xB8050000, 0x00000000, 0x1F014000, 0x01000000, 

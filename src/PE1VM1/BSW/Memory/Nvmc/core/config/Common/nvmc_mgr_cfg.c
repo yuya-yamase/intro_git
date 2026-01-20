@@ -222,7 +222,8 @@ const ST_NVMC_MODULE_CFG    st_dp_NVMC_MODULE_CFG[NVMC_MODULE_NUM] = {
 /* START : ##TOOL_OUT#NVMC_MODULE_CFG## */
 /*    Read IF                       PreRead IF                    Write IF                     Size                 blocknum blocksize wordbuf_num rdnnum  attr     */
     {&u1_d_NvmcMod_U4R3Al_RdnData, &u1_d_NvmcMod_Lib_PreRdnData, &vd_d_NvmcMod_U4R3Al_WrData, (U1)NVMC_SIZE_4BYTE, (U1)1U,  (U1)4U,   (U1)1U,     (U1)3U, (U1)0x01U}, 
-    {&u1_d_NvmcMod_U2R3Lo_RdnData, &u1_d_NvmcMod_Lib_PreRdnData, &vd_d_NvmcMod_U2R3Lo_WrData, (U1)NVMC_SIZE_2BYTE, (U1)1U,  (U1)4U,   (U1)1U,     (U1)3U, (U1)0x01U}  
+    {&u1_d_NvmcMod_U2R3Lo_RdnData, &u1_d_NvmcMod_Lib_PreRdnData, &vd_d_NvmcMod_U2R3Lo_WrData, (U1)NVMC_SIZE_2BYTE, (U1)1U,  (U1)4U,   (U1)1U,     (U1)3U, (U1)0x01U}, 
+    {&u1_d_NvmcMod_U1R3P1_RdnData, &u1_d_NvmcMod_Lib_PreRdnData, &vd_d_NvmcMod_U1R3P1_WrData, (U1)NVMC_SIZE_1BYTE, (U1)1U,  (U1)4U,   (U1)1U,     (U1)3U, (U1)0x01U}  
 /* END : ##TOOL_OUT#NVMC_MODULE_CFG## */
 };
 

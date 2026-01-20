@@ -18,17 +18,8 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "locale_cfg_private.h"
 #include "vardef.h"
-#include "mcst.h"
 #include "oxcan.h"
-#if 0   /* BEV BSW provisionally */
-#else
-#include "oxcan_channel_STUB.h"
-#endif
 #include "rim_ctl.h"
-#if 0   /* BEV BSW provisionally */
-#else
-#include "rim_ctl_cfg_STUB.h"
-#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -71,10 +62,16 @@ typedef struct {
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if 0  /* BEV PreCV provisionally */
-#else
-static  U1                                      u1_s_locale_timfmt;
-#endif
+#if 0   /* BEV Rebase provisionally */
+#else   /* BEV Rebase provisionally */
+static U1                                       u1_s_locale_timfmt;
+static U1                                       u1_s_locale_unit_dist;
+static U1                                       u1_s_locale_unit_speed;
+static U1                                       u1_s_locale_unit_fueco;
+static U1                                       u1_s_locale_unit_eleco;
+static U1                                       u1_s_locale_unit_ambtmp;
+static U1                                       u1_s_locale_lang;
+#endif   /* BEV Rebase provisionally */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -84,38 +81,41 @@ static  U1                                      u1_s_locale_timfmt;
 const U1 u1_g_LANG_NUM = (U1)LANG_NUM_VAL;
 
 static const ST_UNITIDX st_sp_LOCALE_UNITIDX[UNIT_NUM_IDX] = {
+#if 0   /* BEV Rebase provisionally */
     { (U1)MCST_BFI_DIST,   (U1)VDF_DEST_DBF_DEFUNIT_SPD    }, /*   UNIT_IDX_DIST                       (0U) */
     { (U1)MCST_BFI_SPEED,  (U1)VDF_DEST_DBF_DEFUNIT_SPD    }, /*   UNIT_IDX_SPEED                      (1U) */
     { (U1)MCST_BFI_FUECO,  (U1)VDF_DEST_DBF_DEFUNIT_FUECO  }, /*   UNIT_IDX_FUECO                      (2U) */
     { (U1)MCST_BFI_ELECO,  (U1)VDF_DEST_DBF_DEFUNIT_ELECO  }, /*   UNIT_IDX_ELECO                      (3U) */
     { (U1)MCST_BFI_AMBTMP, (U1)VDF_DEST_DBF_AMBTMP         }  /*   UNIT_IDX_AMBTMP                     (4U) */
+#else   /* BEV Rebase provisionally */
+    { (U1)U1_MAX,          (U1)VDF_DEST_DBF_DEFUNIT_SPD    }, /*   UNIT_IDX_DIST                       (0U) */
+    { (U1)U1_MAX,          (U1)VDF_DEST_DBF_DEFUNIT_SPD    }, /*   UNIT_IDX_SPEED                      (1U) */
+    { (U1)U1_MAX,          (U1)VDF_DEST_DBF_DEFUNIT_FUECO  }, /*   UNIT_IDX_FUECO                      (2U) */
+    { (U1)U1_MAX,          (U1)VDF_DEST_DBF_DEFUNIT_ELECO  }, /*   UNIT_IDX_ELECO                      (3U) */
+    { (U1)U1_MAX,          (U1)VDF_DEST_DBF_AMBTMP         }  /*   UNIT_IDX_AMBTMP                     (4U) */
+#endif   /* BEV Rebase provisionally */
 };
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static const U1 u1_sp_LOCALE_COMTX_UNIT_CH2[UNIT_NUM_VAL_FUECO] = {
-    (U1)LOCALE_UNIT_CH2_KM, /* UNIT_VAL_FUECO_KMPL                 (0U) */
-    (U1)LOCALE_UNIT_CH2_KM, /* UNIT_VAL_FUECO_LP100KM              (1U) */
-    (U1)LOCALE_UNIT_CH2_MI, /* UNIT_VAL_FUECO_MPG_USA              (2U) */
-    (U1)LOCALE_UNIT_CH2_MI, /* UNIT_VAL_FUECO_MPG_UK               (3U) */
-    (U1)LOCALE_UNIT_CH2_MI, /* UNIT_VAL_FUECO_MPG_E                (4U) */
-    (U1)LOCALE_UNIT_CH2_KM, /* UNIT_VAL_FUECO_KMPKG                (5U) */
-    (U1)LOCALE_UNIT_CH2_KM  /* UNIT_VAL_FUECO_KGP100KM             (6U) */
+static const U1 u1_sp_LOCALE_COMTX_UNIT_CH2[UNIT_NUM_VAL_SPEED] = {
+    (U1)LOCALE_UNIT_CH2_KM, /* UNIT_VAL_SPEED_KMPH                 (0U) */
+    (U1)LOCALE_UNIT_CH2_MI  /* UNIT_VAL_SPEED_MPH                  (1U) */
 };
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static const U1 u1_sp_LOCALE_LNGDB_TBL[VDF_NUM_LNGDBTYPE][LOCALE_LNGDB_NUM] = {
   /* LNGDB1     LNGDB2    LNGDB3    LNGDB4    LNGDB5    LNGDB6   LNGDB7 */
-    {(U1)0xFFU,(U1)0xFFU,(U1)0xFFU,(U1)0xF1U,(U1)0xE7U,(U1)0x22U,(U1)0x80U},    /*    Type1    */
-    {(U1)0xFFU,(U1)0xFFU,(U1)0xFFU,(U1)0xF1U,(U1)0xE7U,(U1)0x22U,(U1)0x80U},    /*    Type2    */
-    {(U1)0xFFU,(U1)0xFFU,(U1)0xFFU,(U1)0xF1U,(U1)0xE7U,(U1)0x22U,(U1)0x80U},    /*    Type3    */
-    {(U1)0xFFU,(U1)0xFFU,(U1)0xFFU,(U1)0xF1U,(U1)0xE7U,(U1)0x22U,(U1)0x80U},    /*    Type4    */
-    {(U1)0xFFU,(U1)0xFFU,(U1)0xFFU,(U1)0xF1U,(U1)0xE7U,(U1)0x22U,(U1)0x80U},    /*    Type5    */
-    {(U1)0xFFU,(U1)0xFFU,(U1)0xFFU,(U1)0xF1U,(U1)0xE7U,(U1)0x22U,(U1)0x80U},    /*    Type6    */
-    {(U1)0xFFU,(U1)0xFFU,(U1)0xFFU,(U1)0xF1U,(U1)0xE7U,(U1)0x22U,(U1)0x80U},    /*    Type7    */
-    {(U1)0xFFU,(U1)0xFFU,(U1)0xFFU,(U1)0xF1U,(U1)0xE7U,(U1)0x22U,(U1)0x80U},    /*    Type8    */
-    {(U1)0xFFU,(U1)0xFFU,(U1)0xFFU,(U1)0xF1U,(U1)0xE7U,(U1)0x22U,(U1)0x80U},    /*    Type9    */
-    {(U1)0xFFU,(U1)0xFFU,(U1)0xFFU,(U1)0xF1U,(U1)0xE7U,(U1)0x22U,(U1)0x80U},    /*    Type10   */
-    {(U1)0xFFU,(U1)0xFFU,(U1)0xFFU,(U1)0xF1U,(U1)0xE7U,(U1)0x22U,(U1)0x80U}     /*    Type11   */
+    {(U1)0xFFU,(U1)0xFFU,(U1)0xFFU,(U1)0xF9U,(U1)0x67U,(U1)0x22U,(U1)0x80U},    /*    Type1    */
+    {(U1)0xFFU,(U1)0xFFU,(U1)0xFFU,(U1)0xF9U,(U1)0x67U,(U1)0x22U,(U1)0x80U},    /*    Type2    */
+    {(U1)0xFFU,(U1)0xFFU,(U1)0xFFU,(U1)0xF9U,(U1)0x67U,(U1)0x22U,(U1)0x80U},    /*    Type3    */
+    {(U1)0xFFU,(U1)0xFFU,(U1)0xFFU,(U1)0xF9U,(U1)0x67U,(U1)0x22U,(U1)0x80U},    /*    Type4    */
+    {(U1)0xFFU,(U1)0xFFU,(U1)0xFFU,(U1)0xF9U,(U1)0x67U,(U1)0x22U,(U1)0x80U},    /*    Type5    */
+    {(U1)0xFFU,(U1)0xFFU,(U1)0xFFU,(U1)0xF9U,(U1)0x67U,(U1)0x22U,(U1)0x80U},    /*    Type6    */
+    {(U1)0xFFU,(U1)0xFFU,(U1)0xFFU,(U1)0xF9U,(U1)0x67U,(U1)0x22U,(U1)0x80U},    /*    Type7    */
+    {(U1)0xFFU,(U1)0xFFU,(U1)0xFFU,(U1)0xF9U,(U1)0x67U,(U1)0x22U,(U1)0x80U},    /*    Type8    */
+    {(U1)0xFFU,(U1)0xFFU,(U1)0xFFU,(U1)0xF9U,(U1)0x67U,(U1)0x22U,(U1)0x80U},    /*    Type9    */
+    {(U1)0xFFU,(U1)0xFFU,(U1)0xFFU,(U1)0xF9U,(U1)0x67U,(U1)0x22U,(U1)0x80U},    /*    Type10   */
+    {(U1)0xFFU,(U1)0xFFU,(U1)0xFFU,(U1)0xF9U,(U1)0x67U,(U1)0x22U,(U1)0x80U}     /*    Type11   */
 };
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -205,7 +205,7 @@ static const U1 u1_sp_LOCALE_LNGDB_DEFSPA[VDF_NUM_LNGDBTYPE] = {
     (U1)LANG_VAL______SPANISH,    /*    Type5    */
     (U1)LANG_VAL______SPANISH,    /*    Type6    */
     (U1)LANG_VAL______SPANISH,    /*    Type7    */
-    (U1)LANG_VAL__MEX_SPANISH,    /*    Type8    */
+    (U1)LANG_VAL___SA_SPANISH,    /*    Type8    */
     (U1)LANG_VAL______SPANISH,    /*    Type9    */
     (U1)LANG_VAL______SPANISH,    /*    Type10   */
     (U1)LANG_VAL______SPANISH     /*    Type11   */
@@ -265,20 +265,19 @@ static const U1 u1_sp_LOCALE_LNGDB_DEFLANG[VDF_NUM_LNGDBTYPE] = {
 /*===================================================================================================================================*/
 void  vd_g_LocaleComTxInit(void)
 {
-    U1  u1_t_unit_fueco;
+    U1  u1_t_unit_speed;
     U1  u1_t_unit_ch2;
-
-    u1_t_unit_ch2   = (U1)LOCALE_UNIT_CH2_KM;
-    u1_t_unit_fueco = u1_g_Unit((U1)UNIT_IDX_FUECO);
-    if(u1_t_unit_fueco < (U1)UNIT_NUM_VAL_FUECO){
-        u1_t_unit_ch2 = u1_sp_LOCALE_COMTX_UNIT_CH2[u1_t_unit_fueco];
-    }
-    (void)Com_SendSignal(ComConf_ComSignal_UNIT_CH2 , &u1_t_unit_ch2);
-
-#if 0  /* BEV PreCV provisionally */
-#else
+#if 0   /* BEV Rebase provisionally */
+#else   /* BEV Rebase provisionally */
     U1  u1_t_nvm_sts;
     U2  u2_t_nvmc_frmt;
+
+    u1_s_locale_unit_dist    = (U1)U1_MAX;
+    u1_s_locale_unit_speed   = (U1)U1_MAX;
+    u1_s_locale_unit_fueco   = (U1)U1_MAX;
+    u1_s_locale_unit_eleco   = (U1)U1_MAX;
+    u1_s_locale_unit_ambtmp  = (U1)U1_MAX;
+    u1_s_locale_lang         = (U1)U1_MAX;
 
     u2_t_nvmc_frmt = (U2)0U;
     u1_t_nvm_sts   = u1_g_Nvmc_ReadStrValU2withSts((U2)NVMCID_U2_DATESI_TIMEFMT, &u2_t_nvmc_frmt);
@@ -288,7 +287,15 @@ void  vd_g_LocaleComTxInit(void)
     else{
         u1_s_locale_timfmt = (U1)TIMEFMT_NUM_VAL;
     }
-#endif
+#endif   /* BEV Rebase provisionally */
+
+    u1_t_unit_ch2   = (U1)LOCALE_UNIT_CH2_KM;
+    u1_t_unit_speed = u1_g_Unit((U1)UNIT_IDX_SPEED);
+    if(u1_t_unit_speed < (U1)UNIT_NUM_VAL_SPEED){
+        u1_t_unit_ch2 = u1_sp_LOCALE_COMTX_UNIT_CH2[u1_t_unit_speed];
+    }
+    (void)Com_SendSignal(ComConf_ComSignal_UNIT_CH2 , &u1_t_unit_ch2);
+
 }
 /*===================================================================================================================================*/
 /*  void  vd_g_LocaleComTxTask(void)                                                                                                 */
@@ -298,16 +305,16 @@ void  vd_g_LocaleComTxInit(void)
 /*===================================================================================================================================*/
 void  vd_g_LocaleComTxTask(void)
 {
-    U1  u1_t_unit_fueco;
+    U1  u1_t_unit_speed;
     U1  u1_t_pre_unit_ch2;
     U1  u1_t_unit_ch2;
 
     (void)Com_ReceiveSignal(ComConf_ComSignal_UNIT_CH2 , &u1_t_pre_unit_ch2);
 
     u1_t_unit_ch2   = (U1)LOCALE_UNIT_CH2_KM;
-    u1_t_unit_fueco = u1_g_Unit((U1)UNIT_IDX_FUECO);
-    if(u1_t_unit_fueco < (U1)UNIT_NUM_VAL_FUECO){
-        u1_t_unit_ch2 = u1_sp_LOCALE_COMTX_UNIT_CH2[u1_t_unit_fueco];
+    u1_t_unit_speed = u1_g_Unit((U1)UNIT_IDX_SPEED);
+    if(u1_t_unit_speed < (U1)UNIT_NUM_VAL_SPEED){
+        u1_t_unit_ch2 = u1_sp_LOCALE_COMTX_UNIT_CH2[u1_t_unit_speed];
     }
 
     (void)Com_SendSignal(ComConf_ComSignal_UNIT_CH2 , &u1_t_unit_ch2);
@@ -454,7 +461,11 @@ U1  u1_g_LocaleCfgSubSpd(const U1 u1_a_UNIT)
 /*===================================================================================================================================*/
 U1      u1_g_LocaleCfgLang(void)
 {
+#if 0   /* BEV Rebase provisionally */
     return(u1_g_McstBf((U1)MCST_BFI_LANG));
+#else   /* BEV Rebase provisionally */
+    return(u1_s_locale_lang);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -465,7 +476,11 @@ U1      u1_g_LocaleCfgLang(void)
 /*===================================================================================================================================*/
 void    vd_g_LocaleCfgLangPut(const U1 u1_a_LANG)
 {
+#if 0   /* BEV Rebase provisionally */
     vd_g_McstBfPut((U1)MCST_BFI_LANG, u1_a_LANG);
+#else   /* BEV Rebase provisionally */
+    u1_s_locale_lang = u1_a_LANG;
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -480,7 +495,30 @@ U1      u1_g_LocaleCfgUnit(const U1 u1_a_UNITIDX)
     U1  u1_t_unit;
 
     u1_t_idx   = st_sp_LOCALE_UNITIDX[u1_a_UNITIDX].u1_mcst_id;
+#if 0   /* BEV Rebase provisionally */
     u1_t_unit  = u1_g_McstBf(u1_t_idx);
+#else   /* BEV Rebase provisionally */
+    switch(u1_a_UNITIDX){
+    case  (U1)UNIT_IDX_DIST:
+        u1_t_unit  = u1_s_locale_unit_dist;
+        break;
+    case (U1)UNIT_IDX_SPEED:
+        u1_t_unit  = u1_s_locale_unit_speed;
+        break;
+    case (U1)UNIT_IDX_FUECO:
+        u1_t_unit  = u1_s_locale_unit_fueco;
+        break;
+    case (U1)UNIT_IDX_ELECO:
+        u1_t_unit  = u1_s_locale_unit_eleco;
+        break;
+    case (U1)UNIT_IDX_AMBTMP:
+        u1_t_unit  = u1_s_locale_unit_ambtmp;
+        break;
+    default:
+        u1_t_unit  = (U1)U1_MAX;
+        break;
+    }
+#endif   /* BEV Rebase provisionally */
     return(u1_t_unit);
 }
 
@@ -494,7 +532,30 @@ void    vd_g_LocaleCfgUnitPut(const U1 u1_a_UNITIDX, const U1 u1_a_VAL)
 {
     U1  u1_t_idx;
     u1_t_idx   = st_sp_LOCALE_UNITIDX[u1_a_UNITIDX].u1_mcst_id;
+#if 0   /* BEV Rebase provisionally */
     vd_g_McstBfPut(u1_t_idx , u1_a_VAL);
+#else   /* BEV Rebase provisionally */
+    switch(u1_a_UNITIDX){
+    case  (U1)UNIT_IDX_DIST:
+        u1_s_locale_unit_dist   = u1_a_VAL;
+        break;
+    case (U1)UNIT_IDX_SPEED:
+        u1_s_locale_unit_speed  = u1_a_VAL;
+        break;
+    case (U1)UNIT_IDX_FUECO:
+        u1_s_locale_unit_fueco  = u1_a_VAL;
+        break;
+    case (U1)UNIT_IDX_ELECO:
+        u1_s_locale_unit_eleco  = u1_a_VAL;
+        break;
+    case (U1)UNIT_IDX_AMBTMP:
+        u1_s_locale_unit_ambtmp = u1_a_VAL;
+        break;
+    default:
+        /* do nothing */
+        break;
+    }
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -505,14 +566,14 @@ void    vd_g_LocaleCfgUnitPut(const U1 u1_a_UNITIDX, const U1 u1_a_VAL)
 /*===================================================================================================================================*/
 void    vd_g_LocaleCfgTfmPut(const U1 u1_a_FRMT)
 {
-#if 0  /* BEV PreCV provisionally */
+#if 0   /* BEV Rebase provisionally */
     vd_g_McstBfPut((U1)MCST_BFI_TIMEFMT, u1_a_FRMT);
-#else
+#else   /* BEV Rebase provisionally */
     if(u1_a_FRMT != u1_s_locale_timfmt){
         vd_g_Nvmc_WriteU2((U2)NVMCID_U2_DATESI_TIMEFMT, (U2)u1_a_FRMT);
         u1_s_locale_timfmt = u1_a_FRMT;
     }
-#endif
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -523,11 +584,11 @@ void    vd_g_LocaleCfgTfmPut(const U1 u1_a_FRMT)
 /*===================================================================================================================================*/
 U1      u1_g_LocaleCfgTfm(void)
 {
-#if 0  /* BEV PreCV provisionally */
+#if 0   /* BEV Rebase provisionally */
     return(u1_g_McstBf((U1)MCST_BFI_TIMEFMT));
-#else
+#else   /* BEV Rebase provisionally */
     return(u1_s_locale_timfmt);
-#endif
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -575,7 +636,11 @@ U1      u1_g_LocaleCfgUnitdef(const U1 u1_a_UNITIDX)
 /*  025D182D-1 4/14/2022 SK       Change config for 025D182D 1A                                                                      */
 /*  296D235D 11/28/2022  TX       Add Lang Type18 and Type19                                                                         */
 /*  19PFv3-1 08/21/2023  SH       config merge                                                                                       */
+/*  19PFv3-2 04/24/2025  SF       Bug fixing for MET19PFV3-43718                                                                     */
 /*  BEV-1    07/04/2025  MN       BEV PreCV provisionally                                                                            */
+/*  BEV-2    10/15/2025  SN       Configured for BEVstep3_Rebase                                                                     */
+/*  BEV-3    11/14/2025  SN       Change initial value                                                                               */
+/*  BEV-4    12/08/2025  TS       Change UNIT_CH2 table and units referenced when sending UNIT_CH2                                   */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
 /*  * SF   = Seiya Fukutome, DensoTechno                                                                                             */
@@ -586,5 +651,7 @@ U1      u1_g_LocaleCfgUnitdef(const U1 u1_a_UNITIDX)
 /*  * TA(M)= Teruyuki Anjima, NTT Data MSE                                                                                           */
 /*  * SH   = Sae Hirose, Denso Techno                                                                                                */
 /*  * MN   = Mikiya Negishi, KSE                                                                                                     */
+/*  * SN   = Shimon Nambu, DensoTechno                                                                                               */
+/*  * TS   = Takuo Suganuma, Denso Techno                                                                                            */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

@@ -1,4 +1,4 @@
-/* 0.0.0 */
+/* 0.0.1 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -14,7 +14,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define DATESI_TIM_CFG_H_MAJOR                  (0)
 #define DATESI_TIM_CFG_H_MINOR                  (0)
-#define DATESI_TIM_CFG_H_PATCH                  (0)
+#define DATESI_TIM_CFG_H_PATCH                  (1)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -94,7 +94,7 @@ typedef struct{
 void            vd_g_DateSITimBonInit(void);
 void            vd_g_DateSITimRstWkupInit(void);
 void            vd_g_DateSITimMainTask(void);
-void            vd_g_DateSITimAdjustOwnClk(const U4 u4_a_HHMMSS);
+U1              u1_g_DateSITimAdjustOwnClk(const U4 u4_a_HHMMSS);
 void            vd_g_DateSITimSetDispClk(const U4 u4_a_HHMMSS);
 
 void            vd_g_DateSITimAvnBonInit(void);
@@ -121,6 +121,8 @@ void            vd_g_DateSITimCfgCanTxOffst(const S4 s4_a_SEC, const U1 u1_a_EVE
 void            vd_g_DateSITimCfgCanTxHk(void);
 U1              u1_g_DateSITimCfgBusSlpOk(void);
 U1              u1_g_DateSITimCfgCanRxHk(void);
+S4              s4_g_DateSITimCfgBonOfstTime(void);
+S4              s4_g_DateSITimCfgWkupOfstTime(void);
 U1              u1_g_DateSITimCfgInitOfstTime(S4 * s4p_a_offset_time);
 void            vd_g_DateSITimCfgOfstRoutine(void);
 void            vd_g_DateSITimCfgOfstAdjStart(void);

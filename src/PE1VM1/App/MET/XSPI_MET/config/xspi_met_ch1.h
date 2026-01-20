@@ -28,6 +28,12 @@
 #define XSPI_ETHER_UNDEF1                    (2U)
 #define XSPI_ETHER_UNDEF2                    (3U)
 
+#define XSPI_CANTX_VALID                     (0U)
+#define XSPI_CANTX_UNKOWN                    (1U)
+
+#define XSPI_CANTX_BUFSIZE2                  (2U)
+#define XSPI_CANTX_BUFSIZE8                  (8U)
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -44,11 +50,6 @@
 void    vd_g_XSpiCfgInitCh1(void);
 void    vd_g_XSpiCfgPduRxCh1(const U4 * u4_ap_PDU_RX);
 
-U1      u1_g_XSpiEtherComSts(void);
-U1      u1_g_XSpiMm2c100n_rxcnt(void);
-U1      u1_g_XSpiMm2c107n_rxcnt(void);
-U1      u1_g_XSpiMm2c112n_rxcnt(void);
-U1      u1_g_XSpiMm2c118n_rxcnt(void);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

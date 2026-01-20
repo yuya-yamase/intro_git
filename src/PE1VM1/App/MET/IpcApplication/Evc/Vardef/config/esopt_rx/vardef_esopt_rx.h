@@ -20,13 +20,7 @@
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "oxcan.h"
-#if 0   /* BEV BSW provisionally */
-#else
-#include "oxcan_channel_STUB.h"
-#endif
-#include "hmivardef.h"
 #include "xspi_met_ch0.h"
-#include "calibration.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
@@ -49,6 +43,7 @@ void    vd_g_VardefEsOptCfgABG1S01Init(void);
 
 U1      u1_g_VdfEsoRx_D_DPTZ(void);
 U1      u1_g_VdfEsoRx_P_DPTZ(void);
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* vardef_esopt_ACN1S04.c */
 U1      u1_g_VdfEsoRx_SW_WIPER_DEICER(void);
@@ -56,50 +51,24 @@ U1      u1_g_VdfEsoRx_SW_WIPER_DEICER(void);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* vardef_esopt_ADC1S14.c */
 U1      u1_g_VdfEsoRx_SW_OBBSAV(void);
+U1      u1_g_VdfEsoRx_SYS_ADDOT_TT(void);
+U1      u1_g_VdfEsoRx_TM(void);
+
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/* vardef_esopt_ADC1S17.c */
+U1      u1_g_VdfEsoRx_SW_LTA(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* vardef_esopt_ADU1S07.c */
 U1      u1_g_VdfEsoRx_ADIEXIST(void);
-U1      u1_g_VdfEsoRx_SW_DM_CAMERA(void);
-U1      u1_g_VdfEsoRx_SW_WRN_SEN(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-/* vardef_esopt_AVN1S98.c */
-U1      u1_g_VdfEsoRx_SW_PERSET(void);
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-/* vardef_esopt_AVNMC08.c */
-U1      u1_g_VdfEsoRx_AISMM(void);
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-/* vardef_esopt_AVNMS31.c */
-U1      u1_g_VdfEsoRx_MM_TEL(void);
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-/* vardef_esopt_AVNMS47.c */
-U1      u1_g_VdfEsoRx_MM_AUDIO(void);
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-/* vardef_esopt_AVNMS57.c */
-U1      u1_g_VdfEsoRx_NAVI_TAB(void);
-U1      u1_g_VdfEsoRx_MM_NAVI(void);
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-/* vardef_esopt_BAT1S01.c */
-U1      u1_g_VdfEsoRx_SW_BATWSW(void);
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-/* vardef_esopt_BAT1S11.c */
-U1      u1_g_VdfEsoRx_SOHDSP(void);
+/* vardef_esopt_ARS1S90.c */
+U1      u1_g_VdfEsoRx_DRS(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* vardef_esopt_BCC1S06.c */
 U1      u1_g_VdfEsoRx_RCD(void);
-U1      u1_g_VdfEsoRx_SW_RCD(void);
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-/* vardef_esopt_BDB1F01.c */
-U1      u1_g_VdfEsoRx_SW_THESEN(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* vardef_esopt_BDB1F02.c */
@@ -108,42 +77,19 @@ U1      u1_g_VdfEsoRx_SW_DPM2(void);
 U1      u1_g_VdfEsoRx_SW_DPM3(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-/* vardef_esopt_BDB1S03.c */
-U1      u1_g_VdfEsoRx_SW_RSR(void);
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* vardef_esopt_BDB1S08.c */
 U1      u1_g_VdfEsoRx_INDSPDALT(void);
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-/* vardef_esopt_BKD1S01.c */
-U1      u1_g_VdfEsoRx_SW_PBD(void);
-U1      u1_g_VdfEsoRx_SW_PBDHND(void);
-U1      u1_g_VdfEsoRx_SW_PBDFLLOPN(void);
-U1      u1_g_VdfEsoRx_SW_PBDVOL(void);
-U1      u1_g_VdfEsoRx_SW_PTL(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* vardef_esopt_BSR1S01.c */
 U1      u1_g_VdfEsoRx_BSM(void);
 U1      u1_g_VdfEsoRx_FHL(void);
 U1      u1_g_VdfEsoRx_RCTA(void);
-U1      u1_g_VdfEsoRx_SW_BSM(void);
-U1      u1_g_VdfEsoRx_SW_BSD_ITCR(void);
-U1      u1_g_VdfEsoRx_SW_BSD_ILCR(void);
-U1      u1_g_VdfEsoRx_SW_RCTA(void);
-U1      u1_g_VdfEsoRx_SW_BSM_BSDDISP1(void);
-U1      u1_g_VdfEsoRx_SW_BSM_BSDDISP2(void);
 U1      u1_g_VdfEsoRx_AVS(void);
-U1      u1_g_VdfEsoRx_SW_RTAN(void);
-U1      u1_g_VdfEsoRx_SW_RTANSUP(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* vardef_esopt_BSR1S02.c */
 U1      u1_g_VdfEsoRx_DOA(void);
-U1      u1_g_VdfEsoRx_SW_SEA(void);
-U1      u1_g_VdfEsoRx_SW_SEASNS(void);
-U1      u1_g_VdfEsoRx_SW_CVRS(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* vardef_esopt_BSR1S03.c */
@@ -152,8 +98,6 @@ U1      u1_g_VdfEsoRx_TRLR_EQ(void);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* vardef_esopt_CSR1S04.c */
 U1      u1_g_VdfEsoRx_ICS(void);
-U1      u1_g_VdfEsoRx_SW_CSR(void);
-U1      u1_g_VdfEsoRx_SW_PKSB(void);
 U1      u1_g_VdfEsoRx_PMAR(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -163,37 +107,20 @@ U1      u1_g_VdfEsoRx_CSR_TTR(void);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* vardef_esopt_DS11S37.c */
 U1      u1_g_VdfEsoRx_LCS(void);
-U1      u1_g_VdfEsoRx_SW_LCA(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* vardef_esopt_DS11S40.c */
-U1      u1_g_VdfEsoRx_SW_FCTA(void);
 U1      u1_g_VdfEsoRx_FCTA(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* vardef_esopt_DS12F02.c */
 U1      u1_g_VdfEsoRx_PCS(void);
-U1      u1_g_VdfEsoRx_SW_RTWUCT(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* vardef_esopt_DS12F03.c */
 U1      u1_g_VdfEsoRx_LTA(void);
 U1      u1_g_VdfEsoRx_DS1_LDA(void);
-U1      u1_g_VdfEsoRx_SW_LDA(void);
-U1      u1_g_VdfEsoRx_SW_ALTOPT_VB(void);
-U1      u1_g_VdfEsoRx_SW_ALTOPT_BOF(void);
-U1      u1_g_VdfEsoRx_SW_ALTOPT_VBOF(void);
-U1      u1_g_VdfEsoRx_SW_LDWTEXT(void);
-U1      u1_g_VdfEsoRx_SW_SWSEXIST(void);
 U1      u1_g_VdfEsoRx_SWS(void);
-U1      u1_g_VdfEsoRx_SW_DEPARTURE_PREVENT(void);
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-/* vardef_esopt_EHV1S97.c */
-U1      u1_g_VdfEsoRx_SW_AC100V_TESTMODE(void);
-U1      u1_g_VdfEsoRx_SW_ACINV_1500W(void);
-U1      u1_g_VdfEsoRx_SW_ACINV_2400W(void);
-U1      u1_g_VdfEsoRx_SW_ACINV_7200W(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* vardef_esopt_EHV1S99.c */
@@ -201,36 +128,21 @@ U1      u1_g_VdfEsoRx_EVMIL_RED(void);
 U1      u1_g_VdfEsoRx_EVMIL_AMBER(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-/* vardef_esopt_ENG1G13.c */
-U1      u1_g_VdfEsoRx_PTS_MILREQ(void);
-U1      u1_g_VdfEsoRx_SGAUGE(void);
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-/* vardef_esopt_ENG1G97.c */
-U1      u1_g_VdfEsoRx_GPF(void);
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* vardef_esopt_ENG1S60.c */
 U1      u1_g_VdfEsoRx_DSC(void);
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-/* vardef_esopt_ENG1S98.c */
-U1      u1_g_VdfEsoRx_NE_MET(void);
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-/* vardef_esopt_ENG1S99.c */
-U1      u1_g_VdfEsoRx_OILMNT(void);
-U1      u1_g_VdfEsoRx_OILLVG(void);
+U1      u1_g_VdfEsoRx_SW_MSBBSW_NORMAL(void);
+U1      u1_g_VdfEsoRx_SW_MSBBSW_SPORT(void);
+U1      u1_g_VdfEsoRx_SW_MSBBSW_ECO(void);
+U1      u1_g_VdfEsoRx_SW_MSBBSW_CUSTOM(void);
+U1      u1_g_VdfEsoRx_SW_MSBBSW_RANGE(void);
+U1      u1_g_VdfEsoRx_SW_MSBBSW_RCMFRT(void);
+U1      u1_g_VdfEsoRx_SW_MSBBSW_SNOW(void);
+U1      u1_g_VdfEsoRx_SW_MSBBSW_TRACK(void);
+U1      u1_g_VdfEsoRx_SW_MSBBSW_TRAIL(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* vardef_esopt_FCM1S12.c */
 U1      u1_g_VdfEsoRx_RSA(void);
-U1      u1_g_VdfEsoRx_SW_RSA_TSRSWEXT(void);
-U1      u1_g_VdfEsoRx_SW_RSA_NTFLVEXT(void);
-U1      u1_g_VdfEsoRx_SW_RSA_XSSPDEXT(void);
-U1      u1_g_VdfEsoRx_SW_RSA_SPBZEXT(void);
-U1      u1_g_VdfEsoRx_SW_NOETY(void);
-U1      u1_g_VdfEsoRx_SW_NOETY_RED(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* vardef_esopt_FCM1S39.c */
@@ -240,13 +152,6 @@ U1      u1_g_VdfEsoRx_SW_OBBMODE(void);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* vardef_esopt_FCM1S41.c */
 U1      u1_g_VdfEsoRx_ISA(void);
-U1      u1_g_VdfEsoRx_SW_ACCCRS(void);
-U1      u1_g_VdfEsoRx_SW_ACCAPP(void);
-U1      u1_g_VdfEsoRx_SW_ACCCURV(void);
-U1      u1_g_VdfEsoRx_SW_ECORUNLEV(void);
-U1      u1_g_VdfEsoRx_SW_INTERSECTION(void);
-U1      u1_g_VdfEsoRx_SW_SWITCH_CC(void);
-U1      u1_g_VdfEsoRx_SW_SPDLIM_OFFSET(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* vardef_esopt_FCM1S51.c */
@@ -255,76 +160,27 @@ U1      u1_g_VdfEsoRx_PDA(void);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* vardef_esopt_FCM1S52.c */
 U1      u1_g_VdfEsoRx_AHB(void);
-U1      u1_g_VdfEsoRx_SW_PDASA(void);
-U1      u1_g_VdfEsoRx_SW_PDADA(void);
-U1      u1_g_VdfEsoRx_SW_PDAOAA(void);
 U1      u1_g_VdfEsoRx_DMC(void);
 U1      u1_g_VdfEsoRx_EDSS(void);
 U1      u1_g_VdfEsoRx_CC(void);
 U1      u1_g_VdfEsoRx_ERM(void);
-U1      u1_g_VdfEsoRx_TM(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* vardef_esopt_FCM1S70.c */
 U1      u1_g_VdfEsoRx_MWL(void);
-U1      u1_g_VdfEsoRx_SW_SRPCUS(void);
-U1      u1_g_VdfEsoRx_SW_SWIVEL(void);
-U1      u1_g_VdfEsoRx_SW_SHADING_AREA(void);
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-/* vardef_esopt_FCM1S92.c */
-U1      u1_g_VdfEsoRx_SW_LTA(void);
-U1      u1_g_VdfEsoRx_SW_LTA_HOFDI(void);
-U1      u1_g_VdfEsoRx_SW_LTA_NA(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* vardef_esopt_FWD1S10.c */
 U1      u1_g_VdfEsoRx_4WDSYS(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-/* vardef_esopt_GVIF.c */
-U1      u1_g_VdfEsoRx_GVIF(void);
-U1      u1_g_VdfEsoRx_GVIF_METDISP(void);
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-/* vardef_esopt_GERPOS.c */
-U1      u1_g_VdfEsoRx_GERPOS(void);
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-/* vardef_esopt_HVSYSIND.c */
-U1      u1_g_VdfEsoRx_HVSYSIND(void);
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-/* vardef_esopt_IDT1S07.c */
-U1      u1_g_VdfEsoRx_SW_LCKCUS_UNLOCK(void);
-U1      u1_g_VdfEsoRx_SW_LCKCUS_AUTOLOCK(void);
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-/* vardef_esopt_IPA1S05.c */
+/* vardef_esopt_BDC1SV1.c */
 U1      u1_g_VdfEsoRx_AUTOP(void);
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-/* vardef_esopt_ITS1S04.c */
-U1      u1_g_VdfEsoRx_SW_INFRAEMGSET(void);
-U1      u1_g_VdfEsoRx_SW_TSGTM(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* vardef_esopt_LVN1S01.c */
 U1      u1_g_VdfEsoRx_TMN(void);
 U1      u1_g_VdfEsoRx_LVN(void);
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-/* vardef_esopt_MM2C107N.c */
-U1      u1_g_VdfEsoRx_ETH_TEL(void);
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-/* vardef_esopt_MM2C100N.c */
-U1      u1_g_VdfEsoRx_ETH_AUDIO(void);
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-/* vardef_esopt_MM2C112N.c */
-U1      u1_g_VdfEsoRx_ETH_NAVI_TAB(void);
-U1      u1_g_VdfEsoRx_ETH_NAVI(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* vardef_esopt_TPM1S02.c */
@@ -344,16 +200,8 @@ U1      u1_g_VdfEsoRx_AVSEXT(void);
 U1      u1_g_VdfEsoRx_SOLCHG(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-/* vardef_esopt_SW_BATCSW.c */
-U1      u1_g_VdfEsoRx_SW_BATCSW(void);
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* vardef_esopt_PDS1S01.c */
 U1      u1_g_VdfEsoRx_PEDPRO(void);
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-/* vardef_esopt_PLG1S21.c */
-U1      u1_g_VdfEsoRx_SW_PNCCUS(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* vardef_esopt_DDM1S17.c */
@@ -363,6 +211,7 @@ U1      u1_g_VdfEsoRx_BRKHLD(void);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* vardef_esopt_VSC1G96.c */
 U1      u1_g_VdfEsoRx_BRPADW(void);
+U1      u1_g_VdfEsoRx_SW_MSBBSW_DAC(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* vardef_esopt_ZN11S19.c */
@@ -392,6 +241,7 @@ U1      u1_g_VdfEsoRx_SW_INTTIME_AJUST(void);
 U1      u1_g_VdfEsoRx_SW_REAR_WIPER(void);
 U1      u1_g_VdfEsoRx_SW_REAR_WIPER_INT(void);
 U1      u1_g_VdfEsoRx_SW_REAR_WASHER(void);
+U1      u1_g_VdfEsoRx_SYS_SW_CAMERA_WASHER(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */

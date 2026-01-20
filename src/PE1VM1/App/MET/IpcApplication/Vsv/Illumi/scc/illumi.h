@@ -24,8 +24,6 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define ILLUMI_OW_UNLOCK                        (0x6e5d4c3bU)
-
 #define ILLUMI_OW_ONMAX                         (32768U)
 #define ILLUMI_OW_OFF                           (0U)
 
@@ -45,10 +43,6 @@ void    vd_g_IllumiBonInit(void);
 void    vd_g_IllumiRstInit(void);
 void    vd_g_IllumiWkupInit(void);
 void    vd_g_IllumiMainTask(void);
-
-void    vd_g_IllumiPctOwUnlock(const U4 u4_a_KEY);
-void    vd_g_IllumiPctOwAct(const U1 u1_a_ILLUMI_CH, const U2 u2_a_PCT);
-void    vd_g_IllumiPctOwDeAct(const U1 u1_a_ILLUMI_CH);
 
 U1      u1_g_IllumiShtdwnOk(void);
 U2      u2_g_IllumiLvlPct(const U1 u1_a_ILLUMI_CH);

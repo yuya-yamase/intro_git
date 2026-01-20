@@ -1,4 +1,4 @@
-/* 1.7.0 */
+/* 1.10.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define HMIPUTXT_C_MAJOR                         (1)
-#define HMIPUTXT_C_MINOR                         (8)
+#define HMIPUTXT_C_MINOR                         (10)
 #define HMIPUTXT_C_PATCH                         (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -132,9 +132,11 @@ void    vd_g_HmiPuTxt(U4 * u4_ap_req , const U1 u1_a_NWORD)
 /*  1.3.0    01/06/2021  TH       Setting for 800B 1A.                                                                               */
 /*  1.4.0    06/04/2021  TH       Setting for 22-24FGM CV.                                                                           */
 /*  1.5.0    04/23/2024  TR       Deleted 2 variation mask function call for 19PFV3 CV.                                              */
-/*  1.6.0    10/25/2024  RS       Setting for BEV System_Consideration_1 (hmiputxt_if_cfg.c v1.5.0 -> v1.6.0)                        */
-/*  1.7.0    06/23/2025  HY       Setting for BEV System_Consideration_2 (hmiputxt_if_cfg.c v1.6.0 -> v1.7.0)                        */
-/*  1.8.0    07/07/2025  KT       Setting for BEV System_Consideration_2 (Delete for CONTDISP2)                                      */
+/*  1.6.0    08/01/2024  TH       Change how to get alert table requests.                                                            */
+/*  1.7.0    10/25/2024  RS       Setting for BEV System_Consideration_1 (hmiputxt_if_cfg.c v1.5.0 -> v1.6.0)                        */
+/*  1.8.0    06/23/2025  HY       Setting for BEV System_Consideration_2 (hmiputxt_if_cfg.c v1.6.0 -> v1.7.0)                        */
+/*  1.9.0    07/07/2025  KT       Setting for BEV System_Consideration_2 (Delete for CONTDISP2)                                      */
+/*  1.10.0   01/07/2026  SN       Setting for BEV FF2 (hmiputxt_if_cfg.c v1.9.0 -> v1.10.0)                                          */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * TH   = Takahiro Hirano, Denso Techno                                                                                           */
@@ -142,5 +144,6 @@ void    vd_g_HmiPuTxt(U4 * u4_ap_req , const U1 u1_a_NWORD)
 /*  * RS   = Ryuki Sako,      Denso Techno                                                                                           */
 /*  * HY   = Haruki Yagi,     KSE                                                                                                    */
 /*  * KT   = Kenta Takaji,    Denso Techno                                                                                           */
+/*  * SN   = Shizuka Nakajima,KSE                                                                                                    */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

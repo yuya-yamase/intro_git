@@ -25,16 +25,10 @@
 
 #include "tripsnsr_elpsdtm.h"
 #include "tripsnsr_odocnt.h"
-#include "tripsnsr_fuelusd.h"
-#include "tripsnsr_hydrusd.h"
 #include "tripsnsr_avgee.h"
 #include "tripsnsr_instee.h"
 
 #include "veh_opemd.h"
-#if 0   /* BEV BSW provisionally */
-#else
-#include "veh_opemd_xmode_STUB.h"
-#endif
 #include "vehspd_kmph.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -47,9 +41,6 @@
 #define TRIPSNSR_EVDTE_VALID                    (0x00U)
 #define TRIPSNSR_EVDTE_UNKNOWN                  (0x01U)
 #define TRIPSNSR_EVDTE_INVALID                  (0x02U)
-
-/* PNC check */
-#define TRIPSNSR_CAN_SYS_PNC_ALL                        (OXCAN_SYS_PNC_16 | OXCAN_SYS_PNC_40 | OXCAN_SYS_PNC_43 | OXCAN_SYS_PNC_44)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -86,12 +77,6 @@ U1              u1_g_TripsnsrCfgGetECOMODE3(U1 * u1p_a_ecomode);
 
 void            vd_g_TripsnsrCfgElpsdtmInit(void);
 U4              u4_g_TripsnsrCfgElpsdtmGetDlt(void);
-
-U1              u1_g_TripsnsrCfgGetBFC(U4 * u4p_a_fuel_inst);
-U1              u1_g_TripsnsrCfgRxCntBFC(U1 * u1p_a_rollcnt);
-
-U1              u1_g_TripsnsrCfgGetCNSMH2(U4 * u4p_a_hydr_inst);
-U1              u1_g_TripsnsrCfgRxCntCNSMH2(U1 * u1p_a_rollcnt);
 
 void            vd_g_TripsnsrCfgEvDteDist(U2 * u2p_a_dist);
 void            vd_g_TripsnsrCfgEvDteSubRate(U1 * u1p_a_subrate);

@@ -1,4 +1,4 @@
-/* 2.2.0 */
+/* 2.2.1 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -11,25 +11,15 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define SBLTWRN_CFG_C_MAJOR                     (2)
 #define SBLTWRN_CFG_C_MINOR                     (2)
-#define SBLTWRN_CFG_C_PATCH                     (0)
+#define SBLTWRN_CFG_C_PATCH                     (1)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "sbltwrn_cfg_private.h"
 
-#include "nvmc_mgr.h"
-#if 0   /* BEV BSW provisionally */
-#else
-#include "nvmc_mgr_cfg_STUB.h"
-#endif
-#include "vardef.h"
 #include "vardef_dest.h"
 #include "oxcan.h"
-#if 0   /* BEV BSW provisionally */
-#else
-#include "oxcan_channel_STUB.h"
-#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -156,6 +146,7 @@ static inline  U1 u1_s_SbltwrnCfgCalibU1NumChk(const U1 u1_a_CALIBID, const U1 u
 /*  2.1.2    10/25/2021  TK       sbltwrn.c v2.1.1 -> v2.1.2.                                                                        */
 /*  2.1.3    04/05/2022  YI(M)    sbltwrn.c v2.1.2 -> v2.1.3.                                                                        */
 /*  2.2.0    02/29/2024  TH       sbltwrn.c v2.1.3 -> v2.2.0.                                                                        */
+/*  2.2.1    03/20/2025  TH       sbltwrn.c v2.2.0 -> v2.2.1.                                                                        */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  Revision     Date        Author   Change Description                                                                             */
@@ -164,6 +155,7 @@ static inline  U1 u1_s_SbltwrnCfgCalibU1NumChk(const U1 u1_a_CALIBID, const U1 u
 /*  200D-2       08/10/2022  MK       Update Toyota Standard Application                                                             */
 /*  330D-1       01/19/2023  KK       330D Correspondence (Disable 3rd-seat warnings)                                                */
 /*  19PFv3-1     12/26/2023  SH       Change seat variation to read calibration                                                      */
+/*  BEV-1        10/29/2025  YN       Change for BEV rebase.                                                                         */
 /*                                                                                                                                   */
 /*  * HY   = Hidefumi Yoshida, Denso                                                                                                 */
 /*  * YI   = Yoshiki  Iwata,   Denso                                                                                                 */
@@ -175,5 +167,6 @@ static inline  U1 u1_s_SbltwrnCfgCalibU1NumChk(const U1 u1_a_CALIBID, const U1 u
 /*  * YI(M)= Yoshiki  Iwata,   NTT Data MSE                                                                                          */
 /*  * SH   = Sae Hirose,       Denso Techno                                                                                          */
 /*  * TH   = Taisuke Hirakawa, KSE                                                                                                   */
+/*  * YN   = Yujiro Nagaya,    Denso Techno                                                                                          */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

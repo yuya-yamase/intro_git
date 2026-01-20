@@ -1,4 +1,4 @@
-/* 0.0.0 */
+/* 0.0.1 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -11,7 +11,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define DATESI_CAL_C_MAJOR                      (0)
 #define DATESI_CAL_C_MINOR                      (0)
-#define DATESI_CAL_C_PATCH                      (0)
+#define DATESI_CAL_C_PATCH                      (1)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -116,7 +116,9 @@ static        U2      u2_s_DateSICalRangeGuard(const U2 u2_a_RAW, const U2 u2_a_
 /*===================================================================================================================================*/
 void            vd_g_DateSICalBonInit(void)
 {
-    vd_g_DateSICalRstWkupInit();
+    u2_s_datesi_cal_year_min = u2_g_DateSICalCfgBonInit();
+    vd_s_DateSICalInit();
+    vd_g_DateSICalCfgCanTx(u4_s_datesi_cal_now, (U1)FALSE);
 }
 
 /*===================================================================================================================================*/
@@ -127,6 +129,7 @@ void            vd_g_DateSICalBonInit(void)
 /*===================================================================================================================================*/
 void            vd_g_DateSICalRstWkupInit(void)
 {
+    u2_s_datesi_cal_year_min = u2_g_DateSICalCfgRstWkupInit();
     vd_s_DateSICalInit();
     vd_g_DateSICalCfgCanTx(u4_s_datesi_cal_now, (U1)FALSE);
 }
@@ -143,7 +146,6 @@ static void     vd_s_DateSICalInit(void)
     U4  u4_t_min_yymmdd;
     U4  u4_t_daycnt_write;
 
-    u2_t_cal_min                  = u2_DATESI_CAL_YEAR_MIN;
     u4_s_datesi_cal_now           = (U4)DATESI_CAL_NOW_INIT;           /* YA=8CF MO=0 DA=00 WK =00 */
     u4_s_datesi_cal_adj_date      = (U4)YYMMDDWK_UNKNWN;
     u1_s_datesi_cal_timsync_act   = (U1)FALSE;
@@ -151,7 +153,7 @@ static void     vd_s_DateSICalInit(void)
 
     u4_s_datesi_cal_daycnt_last   = u4_g_YymmddToDaycnt(u4_s_datesi_cal_now);
 
-    u2_s_datesi_cal_year_min      = u2_t_cal_min;
+    u2_t_cal_min                  = u2_s_datesi_cal_year_min;
     u4_t_min_yymmdd               = (U4)DATESI_CAL_MIN_MM_DD;
     u4_t_min_yymmdd              |= ((U4)u2_t_cal_min << YYMMDDWK_LSB_YR);
     u4_s_datesi_cal_daycnt_min    = u4_g_YymmddToDaycnt(u4_t_min_yymmdd);
@@ -159,12 +161,10 @@ static void     vd_s_DateSICalInit(void)
 
     u1_s_datesi_cal_init_read_fin = (U1)FALSE;
 
-    vd_g_DateSICalCfgInit();
-
     /* iVDsh Initial Value Transmit*/
     u4_t_daycnt_write = (U4)U4_MAX;
-    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_CPREQ_015, &u4_s_datesi_cal_now, (U2)DATESI_CAL_VM_1WORD);
-    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_CPREQ_019, &u4_t_daycnt_write, (U2)DATESI_CAL_VM_1WORD);
+    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM2TO1_DSPCAL, &u4_s_datesi_cal_now, (U2)DATESI_CAL_VM_1WORD);
+    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM2TO1_CAL, &u4_t_daycnt_write, (U2)DATESI_CAL_VM_1WORD);
 }
 
 /*===================================================================================================================================*/
@@ -190,7 +190,7 @@ void            vd_g_DateSICalMainTask(void)
         vd_s_DateSICalSync(&u4_s_datesi_cal_now);
         vd_s_DateSICalWriteRtcDate();
         vd_g_DateSICalCfgCanTx(u4_s_datesi_cal_now, (U1)TRUE);
-        vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_CPREQ_015, &u4_s_datesi_cal_now, (U2)DATESI_CAL_VM_1WORD);
+        vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM2TO1_DSPCAL, &u4_s_datesi_cal_now, (U2)DATESI_CAL_VM_1WORD);
     }
     else{
         vd_s_DateSICalInit();
@@ -205,16 +205,16 @@ void            vd_g_DateSICalMainTask(void)
 /*===================================================================================================================================*/
 static U1       u1_s_DateSICalInitReadiVDsh(void)
 {
-    U4  u4_t_cal_min;
+    U2  u2_t_cal_min;
     U4  u4_t_min_yymmdd;
     U1  u1_t_read_sts;
 
-    u4_t_cal_min  = (U4)0U;
-    u1_t_read_sts = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_CPREQ_022, &u4_t_cal_min, (U2)DATESI_CAL_VM_1WORD);
-    if((u1_t_read_sts != (U1)IVDSH_NO_REA) && (u4_t_cal_min <= (U4)U2_MAX)){
-        u2_s_datesi_cal_year_min      = (U2)u4_t_cal_min;
+    u2_t_cal_min  = (U2)0U;
+    u1_t_read_sts = u1_g_DateSICalCfgInitCalmin(&u2_t_cal_min);
+    if(u1_t_read_sts != (U1)IVDSH_NO_REA){
+        u2_s_datesi_cal_year_min      = u2_t_cal_min;
         u4_t_min_yymmdd               = (U4)DATESI_CAL_MIN_MM_DD;
-        u4_t_min_yymmdd              |= (u4_t_cal_min << YYMMDDWK_LSB_YR);
+        u4_t_min_yymmdd              |= ((U4)u2_t_cal_min << YYMMDDWK_LSB_YR);
         u4_s_datesi_cal_daycnt_min    = u4_g_YymmddToDaycnt(u4_t_min_yymmdd);
         u4_s_datesi_cal_daycnt_absmin = u4_s_datesi_cal_daycnt_min - (U4)1U;
     }
@@ -236,7 +236,7 @@ static void     vd_s_DateSICalSync(U4 * u4p_a_offstd_now)
     U1                u1_t_result;
     ST_DATESI_CAL_RX  st_t_cal_rx;
 
-    u1_t_result                          = (U1)TRUE;
+    u1_t_result                          = (U1)FALSE;
     u4_t_yymmdd                          = (U4)YYMMDDWK_UNKNWN;
     st_t_cal_rx.u1_valid                 = (U1)FALSE;
     st_t_cal_rx.u1_act                   = (U1)FALSE;
@@ -258,12 +258,10 @@ static void     vd_s_DateSICalSync(U4 * u4p_a_offstd_now)
 
     if(u4_t_adj != (U4)YYMMDDWK_UNKNWN){
         u1_t_result = u1_s_DateSICalAdjustOwnClk(u4_t_adj);
-        if(u1_t_result == (U1)TRUE){
-            vd_g_DateSIComSetCmp();
-        }
     }
+    vd_g_DateSIComSetCmp(u1_t_result,(U1)DATESI_COM_KIND_CAL);
 
-    if((u1_t_result == (U1)TRUE) && (u4_t_now != (U4)YYMMDDWK_UNKNWN)){
+    if((u1_t_result == (U1)TRUE) || (u4_t_adj == (U4)YYMMDDWK_UNKNWN)){
         (*u4p_a_offstd_now) = u4_s_DateSICalToUpdtDate(u4_t_now, (U1)DATESI_CAL_DISP_DATE);
     }
 
@@ -341,7 +339,6 @@ void            vd_g_DateSICalExecTmSet(const U1 u1_a_ADD)
     U4  u4_t_yymmddwk_zerorst;
     U4  u4_t_daycnt_zerorst;
     U4  u4_t_abs_yymmdd;
-    U1  u1_t_result;
 
     u4_t_yymmddwk_zerorst = u4_s_datesi_cal_now;
     u4_t_daycnt_zerorst   = u4_g_YymmddToDaycnt(u4_t_yymmddwk_zerorst);
@@ -353,10 +350,7 @@ void            vd_g_DateSICalExecTmSet(const U1 u1_a_ADD)
 
     u4_t_yymmddwk_zerorst = u4_g_DaycntToYymmddwk(u4_t_daycnt_zerorst);
     u4_t_abs_yymmdd       = u4_s_DateSICalToUpdtDate(u4_t_yymmddwk_zerorst, (U1)DATESI_CAL_ABS_DATE);
-    u1_t_result           = u1_s_DateSICalAdjustOwnClk(u4_t_abs_yymmdd);
-    if(u1_t_result == (U1)TRUE){
-        vd_g_DateSIComSetCmp();
-    }
+    (void)u1_s_DateSICalAdjustOwnClk(u4_t_abs_yymmdd);
 }
 
 /*===================================================================================================================================*/
@@ -486,7 +480,7 @@ static void     vd_s_DateSICalWriteRtcDate(void)
     if((u1_t_esi_chk                == (U1)0U         ) &&
       ((u4_s_datesi_cal_daycnt_last != u4_t_daycnt_now) &&
        (u4_t_daycnt_write           != (U4)U4_MAX     ))){
-        vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_CPREQ_019, &u4_t_daycnt_write, (U2)DATESI_CAL_VM_1WORD);
+        vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM2TO1_CAL, &u4_t_daycnt_write, (U2)DATESI_CAL_VM_1WORD);
         u4_s_datesi_cal_daycnt_last = u4_t_daycnt_now;
     }
 }
@@ -830,7 +824,6 @@ void            vd_g_DateSICalAdjustdate(void)
             if(u1_t_result == (U1)TRUE){
                 u4_t_abs_yymmdd     = u4_g_DateclkYymmddwk();
                 u4_s_datesi_cal_now = u4_s_DateSICalToUpdtDate(u4_t_abs_yymmdd, (U1)DATESI_CAL_DISP_DATE);
-                vd_g_DateSIComSetCmp();
             }
         }
     }
@@ -845,6 +838,11 @@ void            vd_g_DateSICalAdjustdate(void)
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  0.0.0    04/23/2025  MN       New.                                                                                               */
+/*  0.0.1    12/18/2025  MN       Change for BEV Pre_CV                                                                              */
+/*                                                                                                                                   */
+/*  Revision Date        Author   Change Description                                                                                 */
+/* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
+/*  BEV-1    12/18/2025  MN       Addressing issues.                                                                                 */
 /*                                                                                                                                   */
 /*  * MN   = Mikiya Negishi, KSE                                                                                                     */
 /*                                                                                                                                   */

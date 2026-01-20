@@ -8,7 +8,8 @@
 /* -------------------------------------------------------------------------- */
 void EthSwt_SWIC_Time_Init(void);
 void EthSwt_SWIC_Time_HiProc(void);
-uint16 EthSwt_SWIC_Time_Get(void);
+uint32 EthSwt_SWIC_Time_GetCurrentTime(void);
+uint32 EthSwt_SWIC_Time_GetPastTime(uint32 start);
 /* -------------------------------------------------------------------------- */
 #endif /* ETHSWT_SWIC_TIME_H */
 /* -------------------------------------------------------------------------- */

@@ -1,4 +1,4 @@
-/* 2.2.1 */
+/* 2.3.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -13,8 +13,8 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define AMBTMP_CFG_H_MAJOR                     (2)
-#define AMBTMP_CFG_H_MINOR                     (2)
-#define AMBTMP_CFG_H_PATCH                     (1)
+#define AMBTMP_CFG_H_MINOR                     (3)
+#define AMBTMP_CFG_H_PATCH                     (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -22,16 +22,8 @@
 #include "aip_common.h"
 
 #include "rim_ctl.h"
-#if 0   /* BEV BSW provisionally */
-#else
-#include "rim_ctl_cfg_STUB.h"
-#endif
 
 #include "veh_opemd.h"
-#if 0   /* BEV BSW provisionally */
-#else
-#include "veh_opemd_xmode_STUB.h"
-#endif
 #include "vehspd_kmph.h"
 #include "ambtmp.h"
 
@@ -39,7 +31,6 @@
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define AMBTMP_IF_CAN               (0U)
-#define AMBTMP_IF_AD                (1U)
 
 #define AMBTMP_UNIT_CEL             (0U)
 #define AMBTMP_UNIT_FAH             (1U)
@@ -57,10 +48,6 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define vd_g_Ambtmp_Rim_WriteU2(id,data)    (vd_g_Rim_WriteU2(id,data))
-#define u1_g_Ambtmp_Rim_ReadU2(id,data)     (u1_g_Rim_ReadU2withStatus(id,data))
-#define u1_g_AmbtmpIgnon()                  (u1_g_VehopemdIgnOn())
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -70,22 +57,15 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Prototypes                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-void    vd_g_AmbtmpCfgOpemdEvhk(const U4 u4_a_MDBIT, const U4 u4_a_EVTBIT);
 U1      u1_g_AmbtmpCfgIFIdx(void);
 U1      u1_g_AmbtmpCfgUnit(void);
 U1      u1_g_AmbtmpCANCfg(U1 * u1p_a_acn_amb , U1 * u1p_a_ac_amb05);
-U4      u4_g_AmbtmpAdCfgIgoffMilliSec(void);
-U2      u2_g_AmbtmpAdCfgAd2Cel(const U2 u2_a_AD);
-U1      u1_g_AmbtmpAdCfgReAd(U2 * u2p_a_ad);
 void    vd_g_AmbtmpCfgMainStart(void);
 void    vd_g_AmbtmpCfgMainFinish(const U1 u1_a_STS, const U2 u2_a_CEL, const U2 u2_a_FAH);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-extern const U2 u2_g_AMBTMP_AD_RNG_H;
-extern const U2 u2_g_AMBTMP_AD_RNG_L;
-extern const U2 u2_g_AMBTMP_AD_RIMID_TOLD;
 
 #endif      /* AMBTMP_CFG_H */
 

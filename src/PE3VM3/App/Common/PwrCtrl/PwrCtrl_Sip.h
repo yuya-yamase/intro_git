@@ -34,6 +34,7 @@
 /* 周波数：487.804878[kHz], デューティ：50[%], カウントクロック周波数：80[MHz] 分周なし */
 #define     PWRCTRL_SIP_PWM_DUTYCYCLE_OFF (0x0000U)
 #define     PWRCTRL_SIP_PWM_DUTYCYCLE_DEF (0x4000U)
+#define     PWRCTRL_SIP_PWM_DUTYCYCLE_MAX (0x8000U)
 
 /* SIP強制電源OFFシーケンス開始要求 */
 #define PWRCTRL_SIP_FORCEDOFF_NON         (0U)
@@ -82,6 +83,11 @@ U1 u1_g_PwrCtrlSipStbyStepGetSts( const U1 u1_a_stby );
 void vd_g_PwrCtrlSipSoCOnComp( void );
 /* SoC異常検知通知関数 */
 void vd_g_PwrCtrlSipSoCOnError( void );
+
+/* SoCリセット起動要因通知関数 */
+U1 u1_g_PwrCtrlSipSoCRstSts( void );
+/* SoCリセット起動要因クリア関数 */
+void vd_g_PwrCtrlSipSoCRstClr( void );
 
 #endif /* PWRCTRL_SIP_H */
 

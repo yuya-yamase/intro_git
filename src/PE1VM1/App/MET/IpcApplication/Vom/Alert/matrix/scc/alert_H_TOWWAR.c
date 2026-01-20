@@ -20,10 +20,6 @@
 #include "alert_mtrx_cfg_private.h"
 
 #include "oxcan.h"
-#if 0   /* BEV BSW provisionally */
-#else
-#include "oxcan_channel_STUB.h"
-#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -51,7 +47,6 @@
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static U4      u4_s_AlertH_towwarSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS);
-static void    vd_s_AlertH_towwarRwTx  (const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
@@ -88,7 +83,7 @@ static const U1  u1_sp_ALERT_H_TOWWAR_DST[ALERT_H_TOWWAR_NUM_DST] = {
 const ST_ALERT_MTRX st_gp_ALERT_H_TOWWAR_MTRX[1] = {
     {
         &u4_s_AlertH_towwarSrcchk,                                             /* fp_u4_SRC_CHK                                      */
-        &vd_s_AlertH_towwarRwTx,                                               /* fp_vd_XDST                                         */
+        vdp_PTR_NA,                                                            /* fp_vd_XDST                                         */
 
         &u4_sp_ALERT_H_TOWWAR_MASK[0],                                         /* u4p_MASK                                           */
         &u4_sp_ALERT_H_TOWWAR_CRIT[0],                                         /* u4p_CRIT                                           */
@@ -110,7 +105,6 @@ const ST_ALERT_MTRX st_gp_ALERT_H_TOWWAR_MTRX[1] = {
 /*===================================================================================================================================*/
 static U4      u4_s_AlertH_towwarSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
-#if defined(OXCAN_RXD_PDU_CAN_EHV1S94_CH0) && defined(ComConf_ComSignal_TOWW)
     static const U2 u2_s_ALERT_H_TOWWAR_TO_THRESH  = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_H_TOWWAR_LSB_MSGSTS = (U1)2U;
     static const U1 u1_s_ALERT_H_TOWWAR_LSB_PTSYS  = (U1)4U;
@@ -119,8 +113,8 @@ static U4      u4_s_AlertH_towwarSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
     U1              u1_t_sgnl;
 
     u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_EHV1S94_CH0,
-                                          (U4)OXCAN_SYS_IGP,
-                                          u2_s_ALERT_H_TOWWAR_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+                                      (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP,
+                                      u2_s_ALERT_H_TOWWAR_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     u1_t_sgnl     = (U1)0U;
     (void)Com_ReceiveSignal(ComConf_ComSignal_TOWW, &u1_t_sgnl);
@@ -136,32 +130,6 @@ static U4      u4_s_AlertH_towwarSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
     u4_t_src_chk |= ((U4)u1_t_sgnl   << u1_s_ALERT_H_TOWWAR_LSB_PTSYS);
 
     return(u4_t_src_chk);
-#else
-    return((U4)0U);
-#endif /* defined(OXCAN_RXD_PDU_CAN_EHV1S94_CH0) && defined(ComConf_ComSignal_TOWW) */
-}
-
-/*===================================================================================================================================*/
-/*  static void    vd_s_AlertH_towwarRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)                                */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void    vd_s_AlertH_towwarRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)
-{
-    U1              u1_t_sgnl;
-
-    if(((u1_a_VOM & (U1)ALERT_VOM_RWT_EN) != (U1)0U               ) &&
-       (u1_a_DST                          != (U1)ALERT_REQ_UNKNOWN)){
-        u1_t_sgnl = (U1)ALERT_RW_SGNL_ON;
-    }
-    else{
-        u1_t_sgnl = (U1)ALERT_RW_SGNL_OFF;
-    }
-
-#if 0   /* BEV BSW provisionally */
-    (void)Com_SendSignal(ComConf_ComSignal_PULW, &u1_t_sgnl);    /* COM Tx STUB delete */
-#endif
 }
 
 /*===================================================================================================================================*/

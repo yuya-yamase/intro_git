@@ -19,11 +19,11 @@
 /*--------------------------------------------------------------------------*/
 /* 受信用 */
 /* DID */
-#define PWRCTRL_COM_VMRXID_VM1_STBY        (IVDSH_DID_REA_CPREQ_002)   /* VM1スタンバイ条件成立有無 */
-#define PWRCTRL_COM_VMRXID_VM2_STBY        (IVDSH_DID_REA_CPREQ_003)   /* VM2スタンバイ条件成立有無 */
-#define PWRCTRL_COM_VMRXID_VM1_FSLP        (IVDSH_DID_REA_CPREQ_044)   /* VM1強制スリープ条件成立有無 */
-#define PWRCTRL_COM_VMRXID_VM2_SOCSTS      (IVDSH_DID_REA_CPREQ_047)   /* VM2動作ステータス通知 */
-#define PWRCTRL_COM_VMRXID_VM2_STR         (IVDSH_DID_REA_CPREQ_046)   /* STRモード状態通知 */
+#define PWRCTRL_COM_VMRXID_VM1_STBY        (IVDSH_DID_REA_VM1TO3_STBY)    /* VM1スタンバイ条件成立有無 */
+#define PWRCTRL_COM_VMRXID_VM2_STBY        (IVDSH_DID_REA_VM2TO3_STBY)    /* VM2スタンバイ条件成立有無 */
+#define PWRCTRL_COM_VMRXID_VM1_FSLP        (IVDSH_DID_REA_VM1TO23_FSLP)   /* VM1強制スリープ条件成立有無 */
+#define PWRCTRL_COM_VMRXID_VM2_SOCSTS      (IVDSH_DID_REA_VM2TO3_OPESTS)  /* VM2動作ステータス通知 */
+#define PWRCTRL_COM_VMRXID_VM2_STR         (IVDSH_DID_REA_VM2TO3_STRMODE) /* STRモード状態通知 */
 
 /* データ長(word) */
 #define PWRCTRL_COM_STBY_LEN               (1U)         /* スタンバイ条件成立有無データ長 */
@@ -37,10 +37,10 @@
 
 /* 送信用 */
 /* DID */
-#define PWRCTRL_COM_VMTXID_VM2_PWRON       (IVDSH_DID_WRI_CPREQ_045)   /* SIP電源再起動通知 */
-#define PWRCTRL_COM_VMTXID_VM2_PWRERR      (IVDSH_DID_WRI_CPREQ_005)   /* SIP異常検知通知 */
-#define PWRCTRL_COM_VMTXID_VM2_SOCONCOUNT  (IVDSH_DID_WRI_CPREQ_048)   /* SoC起動回数カウンタ */
-#define PWRCTRL_COM_VMTXID_VM2_SOCONTIME   (IVDSH_DID_WRI_CPREQ_049)   /* Soc起動回数カウンタ更新時間 */
+#define PWRCTRL_COM_VMTXID_VM2_PWRON       (IVDSH_DID_WRI_VM3TO12_RESTART)    /* SIP電源再起動通知 */
+#define PWRCTRL_COM_VMTXID_VM2_PWRERR      (IVDSH_DID_WRI_VM3TO2_SIPERR_INF)  /* SIP異常検知通知 */
+#define PWRCTRL_COM_VMTXID_VM2_SOCONCOUNT  (IVDSH_DID_WRI_VM3TO2_BOOT_CNT)    /* SoC起動回数カウンタ */
+#define PWRCTRL_COM_VMTXID_VM2_SOCONTIME   (IVDSH_DID_WRI_VM3TO2_BOOT_TIME)   /* Soc起動回数カウンタ更新時間 */
 #define PWRCTRL_COM_VMTXID_VM2_BOOTLOGINF  (IVDSH_DID_WRI_VM3TO2_BOOTLOG_INF) /* 起動ログ計測点検知データ */
 
 /* データ長(word) */

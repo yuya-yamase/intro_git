@@ -18,11 +18,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "rcmmui_cfg_private.h"
 #include "oxcan.h"
-#if 0   /* BEV BSW provisionally */
-#else
-#include "oxcan_channel_STUB.h"
-#endif
-#include "vds_ci.h"
+#include "cantxapp_mettx.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -72,11 +68,7 @@ static  U1                                      u1_s_rcmmui_prereq;
 /*===================================================================================================================================*/
 void            vd_g_RcmmUIInitCfg(void)
 {
-#ifdef OXCAN_RXD_PDU_CAN_BDB1S13_CH0
     u1_s_rcmmui_rxcnt  = u1_g_oXCANRxdEvcnt((U2)OXCAN_RXD_PDU_CAN_BDB1S13_CH0);
-#else
-	u1_s_rcmmui_rxcnt  = (U1)0U;
-#endif
     u1_s_rcmmui_prereq = (U1)0U;
 }
 
@@ -92,7 +84,7 @@ void            vd_g_RcmmUICfgCanRx(U2 * u2p_a_rcmm)
     U1          u1_t_req1;
     U1          u1_t_req2;
 
-u1_t_rx_cnt = u1_g_oXCANRxdEvcnt((U2)OXCAN_RXD_PDU_CAN_BDB1S13_CH0);
+    u1_t_rx_cnt = u1_g_oXCANRxdEvcnt((U2)OXCAN_RXD_PDU_CAN_BDB1S13_CH0);
 
     if (u1_t_rx_cnt != u1_s_rcmmui_rxcnt) {
         u1_t_req1 = (U1)0U;
@@ -142,7 +134,7 @@ void            vd_g_RcmmUICfgCanTx(const U2 u2_a_RCMM, const U1 u1_a_RES)
 void    vd_g_RcmmUIPbdmswPut(const U1 u1_a_OPT)
 {
     if(u1_s_rcmmui_prereq != u1_a_OPT){
-        vd_g_VdsCIReqTx((U1)VDS_CI_SW_PBDMSW, u1_a_OPT);
+        vd_g_CanTxAppReqTx_PBDMSW(u1_a_OPT);
     }
     u1_s_rcmmui_prereq = u1_a_OPT;
 }
@@ -197,16 +189,6 @@ U1              u1_g_RcmmUICfgCheckPow(const U1 u1_a_REQID)
                 u1_t_chk = (U1)FALSE;
             }
             break;
-        case (U1)RCMMUI_STREQ_3_1_1:
-        case (U1)RCMMUI_STREQ_3_1_2:
-            if (u1_t_igr_sts  == (U1)FALSE)
-            {
-                u1_t_chk = (U1)TRUE;
-            }
-            else{
-                u1_t_chk = (U1)FALSE;
-            }
-            break;
         default:
             /* Do nothing */
             break;
@@ -232,10 +214,13 @@ U1              u1_g_RcmmUICfgCheckPow(const U1 u1_a_REQID)
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  220D-1   07/18/2022  TH       Configured for 220D                                                                                */
+/*  BEV-1    10/02/2025  KO       Configured for BEVstep3_Rebase                                                                     */
+/*  BEV-2    11/13/2025  YN       Change for BEV rebase.(Add CanTxApp)                                                               */
 /*                                                                                                                                   */
 /*  * HY   = Hidefumi Yoshida, Denso                                                                                                 */
 /*  * TH   = Takahiro Hirano,  Denso Techno                                                                                          */
 /*  * YR   = Yhana Regalario, DTPH                                                                                                   */
 /*  * KO   = Kazuto Oishi,  Denso Techno                                                                                             */
+/*  * YN   = Yujiro Nagaya, Denso Techno                                                                                             */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
