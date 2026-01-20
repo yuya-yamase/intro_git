@@ -643,7 +643,8 @@ static inline void    vd_s_XSpiCfgTxTripcom(       U4 * u4_ap_pdu_tx) {
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
 static inline void    vd_s_XSpiCfgTxTelltale(      U4 * u4_ap_pdu_tx) {
-    vd_g_HmiTt(&u4_ap_pdu_tx[0] , (U1)HMITT_NUM);
+    vd_g_HmiAsilTt(&u4_ap_pdu_tx[0] , (U1)HMITT_ASIL_NUM);
+    vd_g_HmiTt(&u4_ap_pdu_tx[2] , (U1)HMITT_NUM);
 }
 
 /*===================================================================================================================================*/
@@ -1109,7 +1110,7 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
     vd_s_XSpiCfgTxWrnmsg(        &u4_ap_pdu_tx[ 85]);      /* 085 - 129    : Wrnmsg                                        */
     vd_s_XSpiCfgTxMulmed(        &u4_ap_pdu_tx[130]);      /* 130 - 138    : Multimedia                                    */
     vd_s_XSpiCfgTxTripcom(       &u4_ap_pdu_tx[139]);      /* 139 - 184    : Tripcom                                       */
-    vd_s_XSpiCfgTxTelltale(      &u4_ap_pdu_tx[185]);      /* 185 - 230    : Telltale                                      */
+    vd_s_XSpiCfgTxTelltale(      &u4_ap_pdu_tx[183]);      /* 183 - 230    : Telltale                                      */
     vd_s_XSpiCfgTxMetcstm(       &u4_ap_pdu_tx[231]);      /* 231 - 238    : Meter Customize Reset                         */
                                                            /* 239 - 299    : Diagnosis                                     */
     vd_s_XSpiCfgTxHud(           &u4_ap_pdu_tx[300]);      /* 300 - 302    : Hud                                           */
@@ -1195,6 +1196,7 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*  BEV-13    10/30/2025 SN       Delete fueleco for BEVstep3_Locale_Rebase                                                          */
 /*  BEV-14    11/04/2025 TN       Change for BEV rebase                                                                              */
 /*  BEV-15    01/07/2026 YN       Change for BEV FF2.(MET-B_CWHBB-CSTD-0-)                                                           */
+/*  BEV-16    01/20/2026 KI       Change for BEV FF2.(ASIL TT)                                                                       */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * KM   = Keisuke Mashita, Denso Techno                                                                                           */
@@ -1217,5 +1219,6 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*  * KO     = Kazuto Oishi,  Denso Techno                                                                                           */
 /*  * TS   = Takuo Suganuma,  Denso Techno                                                                                           */
 /*  * YN   = Yujiro Nagaya, Denso Techno                                                                                             */
+/*  * KI   = Kanji Ito,  Denso Techno                                                                                                */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

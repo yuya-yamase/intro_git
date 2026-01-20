@@ -1,4 +1,4 @@
-/* 1.10.0 */
+/* 1.11.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define HMITT_CFG_C_MAJOR                     (1)
-#define HMITT_CFG_C_MINOR                     (10)
+#define HMITT_CFG_C_MINOR                     (11)
 #define HMITT_CFG_C_PATCH                     (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -126,6 +126,24 @@ void    vd_g_HmiTtCfgInit(void)
 {
 }
 /*===================================================================================================================================*/
+/*  void    vd_g_HmiTtCfgAsilReq(U4 * u4_ap_req)                                                                                     */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void    vd_g_HmiTtCfgAsilReq(U4 * u4_ap_req)
+{
+
+    U4  u4_t_loop;
+    U2  u2_t_num_reqbit;
+    for(u4_t_loop = (U4)0U ; u4_t_loop < (U4)HMITT_ASIL_NUM ; u4_t_loop++){
+        u4_ap_req[u4_t_loop] = (U4)0U;
+    }
+
+    u2_t_num_reqbit = u2_g_HmittSizeAsilReqbit();
+    vd_g_AlertReqToBit( st_gp_HMITTASILREQBIT, u2_t_num_reqbit, u4_ap_req, (U1)HMITT_ASIL_NUM);
+}
+/*===================================================================================================================================*/
 /*  void    vd_g_HmiTtCfgReq(U4 * u4_ap_req)                                                                                         */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
@@ -203,21 +221,21 @@ static void    vd_s_HmiTtTurn(U4 * u4_ap_req)
 }
 
 /*===================================================================================================================================*/
-/*  void    vd_g_HmiTtCfgVarmask(U4 * u4_ap_varmask)                                                                                 */
+/*  void    vd_g_HmiTtCfgAsilVarmask(U4 * u4_ap_varmask)                                                                             */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_HmiTtCfgVarmask(U4 * u4_ap_varmask)
+void    vd_g_HmiTtCfgAsilVarmask(U4 * u4_ap_varmask)
 {
-    static const ST_HMITT_ESOPT st_sp_HMITT_ESOPT[] = {
+    static const ST_HMITT_ESOPT st_sp_HMITT_ASIL_ESOPT[] = {
     /* u1_idx     u1_strtpos   u2_esopt                       u2_chid                           u1_req                                       */
-        {  (U1)0U,    (U1)16U,    (U2)VDF_ESO_CH_PEDPRO,        (U2)ALERT_CH_B_PEDPRO,             (U1)ALERT_REQ_B_PEDPRO_DIAGDTRMN             },
-        {  (U1)1U,    (U1)12U,    (U2)VDF_ESO_CH_VSC,           (U2)ALERT_CH_C_SLIP,               (U1)ALERT_REQ_C_SLIP_MALFUNC                 },
-        {  (U1)1U,    (U1)12U,    (U2)VDF_ESO_CH_VSC,           (U2)ALERT_CH_C_SLIP,               (U1)ALERT_REQ_C_SLIP_MALFUNC_RW              },
-        {  (U1)2U,    (U1)28U,    (U2)VDF_ESO_CH_BRPADW,        (U2)ALERT_CH_C_BRPADW,             (U1)ALERT_REQ_C_BRPADW_MALFUNC               },
-        {  (U1)3U,    (U1)4U,     (U2)VDF_ESO_CH_BRKHLD,        (U2)ALERT_CH_C_BRKHLD_HLD,         (U1)ALERT_REQ_C_BRKHLD_HLD_FLASH             },
-        {  (U1)24U,   (U1)24U,    (U2)VDF_ESO_CH_SYS_ADDOT_TT,  (U2)ALERT_CH_S_TMTT,               (U1)ALERT_REQ_S_TMTT_ON                      }
+        {  (U1)0U,    (U1)4U,     (U2)VDF_ESO_CH_VSC,           (U2)ALERT_CH_C_SLIP,               (U1)ALERT_REQ_C_SLIP_MALFUNC                 },
+        {  (U1)0U,    (U1)4U,     (U2)VDF_ESO_CH_VSC,           (U2)ALERT_CH_C_SLIP,               (U1)ALERT_REQ_C_SLIP_MALFUNC_RW              },
+        {  (U1)0U,    (U1)8U,     (U2)VDF_ESO_CH_PEDPRO,        (U2)ALERT_CH_B_PEDPRO,             (U1)ALERT_REQ_B_PEDPRO_DIAGDTRMN             },
+        {  (U1)0U,    (U1)28U,    (U2)VDF_ESO_CH_BRPADW,        (U2)ALERT_CH_C_BRPADW,             (U1)ALERT_REQ_C_BRPADW_MALFUNC               },
+        {  (U1)1U,    (U1)0U,     (U2)VDF_ESO_CH_SYS_ADDOT_TT,  (U2)ALERT_CH_S_TMTT,               (U1)ALERT_REQ_S_TMTT_ON                      },
+        {  (U1)1U,    (U1)12U,    (U2)VDF_ESO_CH_BRKHLD,        (U2)ALERT_CH_C_BRKHLD_HLD,         (U1)ALERT_REQ_C_BRKHLD_HLD_FLASH             }
     };
 
     U4  u4_t_loop;
@@ -227,17 +245,27 @@ void    vd_g_HmiTtCfgVarmask(U4 * u4_ap_varmask)
     U2  u2_t_chid;
     U1  u1_t_req;
 
-    u4_t_num = (U4)(sizeof(st_sp_HMITT_ESOPT) / sizeof(st_sp_HMITT_ESOPT[0]));
+    u4_t_num = (U4)(sizeof(st_sp_HMITT_ASIL_ESOPT) / sizeof(st_sp_HMITT_ASIL_ESOPT[0]));
     for(u4_t_loop = (U4)0U ; u4_t_loop < u4_t_num ; u4_t_loop++){
-        u1_t_exist = u1_g_VardefEsOptAvaByCh(st_sp_HMITT_ESOPT[u4_t_loop].u2_esopt);
-        u2_t_chid  = st_sp_HMITT_ESOPT[u4_t_loop].u2_chid;
+        u1_t_exist = u1_g_VardefEsOptAvaByCh(st_sp_HMITT_ASIL_ESOPT[u4_t_loop].u2_esopt);
+        u2_t_chid  = st_sp_HMITT_ASIL_ESOPT[u4_t_loop].u2_chid;
         u1_t_req   = u1_g_AlertReqByCh(u2_t_chid);
         if((u1_t_exist == (U1)0U) &&
-           (u1_t_req   == st_sp_HMITT_ESOPT[u4_t_loop].u1_req)){
-            u1_t_bufpos = st_sp_HMITT_ESOPT[u4_t_loop].u1_idx;
-            u4_ap_varmask[u1_t_bufpos] &= (~((U4)HMITT_VAR_MASK << st_sp_HMITT_ESOPT[u4_t_loop].u1_strtpos));
+           (u1_t_req   == st_sp_HMITT_ASIL_ESOPT[u4_t_loop].u1_req)){
+            u1_t_bufpos = st_sp_HMITT_ASIL_ESOPT[u4_t_loop].u1_idx;
+            u4_ap_varmask[u1_t_bufpos] &= (~((U4)HMITT_VAR_MASK << st_sp_HMITT_ASIL_ESOPT[u4_t_loop].u1_strtpos));
         }
     }
+}
+
+/*===================================================================================================================================*/
+/*  void    vd_g_HmiTtCfgVarmask(U4 * u4_ap_varmask)                                                                                 */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void    vd_g_HmiTtCfgVarmask(U4 * u4_ap_varmask)
+{
 }
 
 /*===================================================================================================================================*/
@@ -278,6 +306,8 @@ void    vd_g_HmiTtCfgDestmask(U4* u4_ap_varmask)
 /*  1.8.0    10/15/2024  KO       hmitt_if_cfg.c v1.6.0 -> v1.8.0. (Setting for BEV System_Consideration_1.)                         */
 /*  1.9.0    06/23/2025  HY       hmitt_if_cfg.c v1.8.0 -> v1.9.0. (Setting for BEV System_Consideration_2.)                         */
 /*  1.10.0   11/27/2025  PG       Setting for BEV System_Consideration_ADAS.                                                         */
+/*  1.11.0   01/20/2026  KI       hmitt.c,hmitt.h,hmitt_if_cfg.c,hmitt_if_cfg.h,hmitt_cfg.c,                                         */
+/*                                hmitt_cfg_private.h v1.10.0 -> v1.11.0. (Change for BEV FF2.)                                      */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
@@ -306,5 +336,6 @@ void    vd_g_HmiTtCfgDestmask(U4* u4_ap_varmask)
 /*  * RO   = Ryo Oohashi, KSE                                                                                                        */
 /*  * SF   = Shiro Furui, Denso Techno                                                                                               */
 /*  * HY   = Haruki Yagi, KSE                                                                                                        */
+/*  * KI   = Kanji Ito,  Denso Techno                                                                                                */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
