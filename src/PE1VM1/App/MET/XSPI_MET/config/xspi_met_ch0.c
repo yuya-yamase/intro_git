@@ -1196,7 +1196,7 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*  BEV-13    10/30/2025 SN       Delete fueleco for BEVstep3_Locale_Rebase                                                          */
 /*  BEV-14    11/04/2025 TN       Change for BEV rebase                                                                              */
 /*  BEV-15    01/07/2026 YN       Change for BEV FF2.(MET-B_CWHBB-CSTD-0-)                                                           */
-/*  BEV-15    01/20/2026 KI       Change for BEV FF2 (ASIL TT)                                                                       */
+/*  BEV-16    01/20/2026 KI       Change for BEV FF2.(ASIL TT)                                                                       */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * KM   = Keisuke Mashita, Denso Techno                                                                                           */
