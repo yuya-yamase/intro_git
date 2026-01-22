@@ -242,6 +242,7 @@ U1      u1_g_VdfEsoRx_SW_REAR_WIPER(void);
 U1      u1_g_VdfEsoRx_SW_REAR_WIPER_INT(void);
 U1      u1_g_VdfEsoRx_SW_REAR_WASHER(void);
 U1      u1_g_VdfEsoRx_SYS_SW_CAMERA_WASHER(void);
+U1      u1_g_VdfEsoRx_SYS_SW_OBBPBD(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
