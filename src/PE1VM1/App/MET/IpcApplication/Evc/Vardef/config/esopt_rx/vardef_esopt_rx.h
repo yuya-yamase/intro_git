@@ -233,6 +233,7 @@ U1      u1_g_VdfEsoRx_SW_HEDLMP_DRL(void);
 U1      u1_g_VdfEsoRx_SW_FRONT_FOG(void);
 U1      u1_g_VdfEsoRx_SW_REAR_FOG(void);
 U1      u1_g_VdfEsoRx_SW_TITE(void);
+U1      u1_g_VdfEsoRx_SYS_SW_OBBPBD(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* vardef_esopt_ZN11S26.c */
@@ -242,7 +243,6 @@ U1      u1_g_VdfEsoRx_SW_REAR_WIPER(void);
 U1      u1_g_VdfEsoRx_SW_REAR_WIPER_INT(void);
 U1      u1_g_VdfEsoRx_SW_REAR_WASHER(void);
 U1      u1_g_VdfEsoRx_SYS_SW_CAMERA_WASHER(void);
-U1      u1_g_VdfEsoRx_SYS_SW_OBBPBD(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
