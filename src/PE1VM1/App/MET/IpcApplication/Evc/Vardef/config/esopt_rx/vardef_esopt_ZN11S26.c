@@ -221,9 +221,7 @@ U1      u1_g_VdfEsoRx_SYS_SW_OBBPBD(void)
     U1                 u1_t_ava_rx;
 
     u1_t_rx = (U1)0U;
-
     (void)Com_ReceiveSignal(ComConf_ComSignal_PBD_PRE, &u1_t_rx);
-
     if(u1_t_rx == u1_s_VDF_ESO_SYS_SW_OBBPBD_ACT){
         u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
     }else{
