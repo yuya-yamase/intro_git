@@ -72,6 +72,7 @@ static ST_PWRCTRL_PINMONITOR_POLL_STS st_PwrCtrl_PinMonitor_PollSts[PWRCTRL_CFG_
 static void vd_s_PwrCtrlPinMonitorTrgTimCtrl(const U1 u1_a_Kind);
 static void vd_s_PwrCtrlPinMonitorPoll(const U1 u1_a_Kind);
 static void vd_s_PwrCtrlPinMonitorCyc(const U1 u1_a_Kind);
+static U1 u1_s_PwrCtrlPinMonitorPgAsilVbJdg(void);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -164,6 +165,62 @@ static const ST_PWRCTRL_PINMONITOR_STS st_PwrCtrl_PinMonitor_Sts[PWRCTRL_CFG_PRI
         (U1)PWRCTRL_CFG_PRIVATE_SAIL_ERR2_JUDGECOUNT,                      /* 同一論理判定確定回数 */
         (U1)PWRCTRL_CFG_PRIVATE_SAIL_ERR2_WAITTIME,                        /* ポーリング開始待ち時間 */
         u1_g_PwrCtrlSipLowPowerOnInfo,                                     /* LowPowerOn状態判定 */
+    },
+    /* PM_PSAIL_ERR_N */
+    {
+        (U2)DIO_ID_PORT8_CH4,                                              /* DIOチャネルID */
+        (U1)PWRCTRL_PINMONITOR_SAMPLING_TASK_5ms,                          /* サンプリング周期 */
+        (U1)PWRCTRL_CFG_PRIVATE_PM_PSAIL_ERR_N_JUDGECOUNT,                 /* 同一論理判定確定回数 */
+        (U1)PWRCTRL_CFG_PRIVATE_PM_PSAIL_ERR_N_WAITTIME,                   /* ポーリング開始待ち時間 */
+        u1_g_PwrCtrlSipLowPowerOnInfo,                                     /* LowPowerOn状態判定 */
+    },
+    /* PGOOD_ASIL_VB */
+    {
+        (U2)DIO_ID_APORT3_CH2,                                             /* DIOチャネルID */
+        (U1)PWRCTRL_PINMONITOR_SAMPLING_TASK_5ms,                          /* サンプリング周期 */
+        (U1)PWRCTRL_CFG_PRIVATE_PM_PSAIL_ERR_N_JUDGECOUNT,                 /* 同一論理判定確定回数 */
+        (U1)PWRCTRL_CFG_PRIVATE_PM_PSAIL_ERR_N_WAITTIME,                   /* ポーリング開始待ち時間 */
+        u1_s_PwrCtrlPinMonitorPgAsilVbJdg,                                 /* LOW-POWER-ON =Hi & SYS電源ON制御完了 */
+    },
+    /* PGOOD_ASIL_VSYS */
+    {
+        (U2)DIO_ID_APORT3_CH3,                                             /* DIOチャネルID */
+        (U1)PWRCTRL_PINMONITOR_SAMPLING_TASK_5ms,                          /* サンプリング周期 */
+        (U1)PWRCTRL_CFG_PRIVATE_PGOOD_ASIL_VSYS_JUDGECOUNT,                /* 同一論理判定確定回数 */
+        (U1)PWRCTRL_CFG_PRIVATE_PGOOD_ASIL_VSYS_WAITTIME,                  /* ポーリング開始待ち時間 */
+        u1_g_PwrCtrlSysPgdAslVsObsInfo,                                    /* V33-ASIL-ON =Hi & V18-ASIL-ON =Hi判定 */
+    },
+    /* PGOOD_ASIL_VSYS(V11) */
+    {
+        (U2)DIO_ID_PORT10_CH7,                                             /* DIOチャネルID */
+        (U1)PWRCTRL_PINMONITOR_SAMPLING_TASK_5ms,                          /* サンプリング周期 */
+        (U1)PWRCTRL_CFG_PRIVATE_PGOOD_ASIL_VSYS_V11_JUDGECOUNT,            /* 同一論理判定確定回数 */
+        (U1)PWRCTRL_CFG_PRIVATE_PGOOD_ASIL_VSYS_V11_WAITTIME,              /* ポーリング開始待ち時間 */
+        u1_g_PwrCtrlSysPgdAslV11ObsInfo,                                   /* V11-ASIL-ON =Hi判定 */
+    },
+    /* PGOOD_DIODE */
+    {
+        (U2)DIO_ID_PORT17_CH6,                                             /* DIOチャネルID */
+        (U1)PWRCTRL_PINMONITOR_SAMPLING_TASK_5ms,                          /* サンプリング周期 */
+        (U1)PWRCTRL_CFG_PRIVATE_PGOOD_DIODE_JUDGECOUNT,                    /* 同一論理判定確定回数 */
+        (U1)PWRCTRL_CFG_PRIVATE_PGOOD_DIODE_WAITTIME,                      /* ポーリング開始待ち時間 */
+        u1_g_PwrCtrlSysPgdDiodeObsInfo,                                    /* Bu-DD-MODE =Hi判定 */
+    },
+    /* PGOOD_VB */
+    {
+        (U2)DIO_ID_PORT10_CH9,                                             /* DIOチャネルID */
+        (U1)PWRCTRL_PINMONITOR_SAMPLING_TASK_5ms,                          /* サンプリング周期 */
+        (U1)PWRCTRL_CFG_PRIVATE_PGOOD_VB_JUDGECOUNT,                       /* 同一論理判定確定回数 */
+        (U1)PWRCTRL_CFG_PRIVATE_PGOOD_VB_WAITTIME,                         /* ポーリング開始待ち時間 */
+        u1_g_PwrCtrlWakeUpInfo,                                            /* MCU初期化処理、またはウェイクアップ処理完了状態判定 */
+    },
+    /* PGOOD_VSYS */
+    {
+        (U2)DIO_ID_APORT4_CH12,                                            /* DIOチャネルID */
+        (U1)PWRCTRL_PINMONITOR_SAMPLING_TASK_5ms,                          /* サンプリング周期 */
+        (U1)PWRCTRL_CFG_PRIVATE_PGOOD_VSYS_JUDGECOUNT,                     /* 同一論理判定確定回数 */
+        (U1)PWRCTRL_CFG_PRIVATE_PGOOD_VSYS_WAITTIME,                       /* ポーリング開始待ち時間 */
+        u1_g_PwrCtrlSysPgdVsObsInfo,                                       /* V33-PERI-ON =Hi & DD-FREQ =PWM信号 & V18-ON =Hi & AUDIO-ON =Hi & EIZO-ON = Hi判定 */
     },
 };
 
@@ -320,6 +377,33 @@ static void vd_s_PwrCtrlPinMonitorCyc(const U1 u1_a_Kind)
 
         return;
 
+}
+
+/**************************************************************************************************************************************
+  Function      : u1_s_PwrCtrlPinMonitorPgAsilVbJdg
+  Description   : 7-1.PGOOD_ASIL_VB端子モニタ開始条件判定
+  param[in/out] : none
+  return        : U1 u1_t_ret PGOOD_ASIL_VB端子モニタ条件判定結果
+  Note          : none
+**************************************************************************************************************************************/
+static U1 u1_s_PwrCtrlPinMonitorPgAsilVbJdg(void)
+{
+    U1 u1_t_lowpwr;
+    U1 u1_t_syspwr;
+    U1 u1_t_ret;
+
+    u1_t_ret = (U1)FALSE;
+    u1_t_lowpwr = u1_g_PwrCtrlSipLowPowerOnInfo();
+    u1_t_syspwr = u1_g_PwrCtrlMainSysPwrInfo();
+
+    /* LOW-POWER-ON =Hi & SYS電源ON制御完了 */
+    if( (u1_t_lowpwr == (U1)TRUE)
+     && (u1_t_syspwr == (U1)TRUE))
+    {
+        u1_t_ret = (U1)TRUE;
+    }
+
+    return(u1_t_ret);
 }
 
 /**** End of File ********************************************************************************************************************/

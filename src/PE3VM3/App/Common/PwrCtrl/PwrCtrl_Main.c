@@ -107,6 +107,7 @@ static U1  u1_s_PwrCtrl_Main_SipPwrSts;                   /* SIP電源状態    */
 
 static U1  u1_s_PwrCtrl_Main_ShtdwnOkFlag;
 static U1  u1_s_PwrCtrl_Main_StbyJdgFlag;
+static U1  u1_s_PwrCtrl_Main_SysPwrInfo;
 
 static U4  u4_s_PwrCtrl_Main_MmStby;
 static U4  u4_s_PwrCtrl_Main_Aoss;
@@ -147,7 +148,18 @@ U1 u1_g_PwrCtrlWakeUpInfo( void )
     /* MCUウェイクアップ中は常にTRUE */
     return( (U1)TRUE );
 }
-
+/*****************************************************************************
+  Function      : u1_g_PwrCtrlMainSysPwrInfo
+  Description   : SYS電源制御実施状態通知処理
+  param[in/out] : none
+  return        : FALSE(0) SYS電源OFF制御開始
+                  TRUE (1) SYS電源ON制御完了
+  Note          : PGOOD_ASIL_VB端子モニタ監視条件用
+*****************************************************************************/
+U1 u1_g_PwrCtrlMainSysPwrInfo( void )
+{
+    return( u1_s_PwrCtrl_Main_SysPwrInfo );
+}
 /*****************************************************************************
   Function      : vd_g_PwrCtrlMainProhibitSleep
   Description   : VM3スリープ禁止許可設定用処理
@@ -190,6 +202,7 @@ void vd_g_PwrCtrlMainBonReq( void )
 
     u1_s_PwrCtrl_Main_ShtdwnOkFlag = (U1)PWRCTRL_COMMON_SYS_PWR_OFF;
     u1_s_PwrCtrl_Main_StbyJdgFlag  = (U1)PWRCTRL_MAIN_STBYJDG_NG;    /* スタンバイ判定不可 */
+    u1_s_PwrCtrl_Main_SysPwrInfo   = (U1)FALSE;
 
     vd_g_PwrCtrlSipBonInit();                                        /* SIP電源状態+B初期化要求 */
     vd_g_PwrCtrlSysPwrOnStart();
@@ -207,6 +220,9 @@ void vd_g_PwrCtrlMainBonReq( void )
 
     /* VM間通信処理初期化 */
     vd_g_PwrCtrlComBonInit();
+
+    /* PGOOD_VB監視 開始 */
+    vd_s_PwrCtrlObservePgdVbReq((U1)PWRCTRL_OBSERVE_ON);
 
     return;
 }
@@ -275,6 +291,7 @@ void vd_g_PwrCtrlMainWakeupReq( void )
 
     u1_s_PwrCtrl_Main_ShtdwnOkFlag = (U1)PWRCTRL_COMMON_SYS_PWR_OFF;
     u1_s_PwrCtrl_Main_StbyJdgFlag  = (U1)PWRCTRL_MAIN_STBYJDG_NG;    /* スタンバイ判定不可 */
+    u1_s_PwrCtrl_Main_SysPwrInfo   = (U1)FALSE;
 
     vd_g_PwrCtrlSipWkupInit();                                       /* SIP電源状態Wakeup初期化要求 */
     vd_g_PwrCtrlSysPwrOnStart();
@@ -292,6 +309,9 @@ void vd_g_PwrCtrlMainWakeupReq( void )
 
     /* VM間通信処理初期化 */
     vd_g_PwrCtrlComWkupInit();
+
+    /* PGOOD_VB監視 開始 */
+    vd_s_PwrCtrlObservePgdVbReq((U1)PWRCTRL_OBSERVE_ON);
 
     return;
 }
@@ -396,6 +416,8 @@ static void vd_s_PwrCtrlMainForcedOffReq( const U1 u1_s_evtype )
        case (U1)PWRCTRL_MAIN_FORCEDOFF_STS_SOCERR:
         u1_s_PwrCtrl_Main_Sts       = (U1)PWRCTRL_MAIN_FORCEDOFF_REQ;
         u1_s_PwrCtrl_Main_SipPwrSts = (U1)PWRCTRL_MAIN_SIP_STS_INPRC;    /* SIP電源状態：実行中 */
+        vd_g_PwrCtrlObservePsailReq((U1)PWRCTRL_OBSERVE_OFF);            /* PM_PSAIL_ERR_N監視 終了 */
+        vd_g_PwrCtrlObservePsHoldReq((U1)PWRCTRL_OBSERVE_OFF);           /* PMA_PS_HOLD監視 終了 */
         vd_g_PwrCtrlSipForcedOffSTEP1Req();                              /* SIP強制OFFシーケンス STEP1から開始 */
         vd_g_PwrCtrlComTxSetPwrErr((U1)PWRCTRL_COM_PWRERR_FOFF_SOCERR);  /* 異常検知(SIP電源強制OFF:SOC異常系) */
         break;
@@ -403,6 +425,8 @@ static void vd_s_PwrCtrlMainForcedOffReq( const U1 u1_s_evtype )
        case (U1)PWRCTRL_MAIN_FORCEDOFF_STS_PMICERR:
         u1_s_PwrCtrl_Main_Sts       = (U1)PWRCTRL_MAIN_FORCEDOFF_REQ;
         u1_s_PwrCtrl_Main_SipPwrSts = (U1)PWRCTRL_MAIN_SIP_STS_INPRC;    /* SIP電源状態：実行中 */
+        vd_g_PwrCtrlObservePsailReq((U1)PWRCTRL_OBSERVE_OFF);            /* PM_PSAIL_ERR_N監視 終了 */
+        vd_g_PwrCtrlObservePsHoldReq((U1)PWRCTRL_OBSERVE_OFF);           /* PMA_PS_HOLD監視 終了 */
         vd_g_PwrCtrlSipForcedOffSTEP2Req();                              /* SIP強制OFFシーケンス STEP2から開始 */
         vd_g_PwrCtrlComTxSetPwrErr((U1)PWRCTRL_COM_PWRERR_FOFF_PMICERR); /* 異常検知(SIP電源強制OFF:SOC異常系) */
         break;
@@ -410,6 +434,8 @@ static void vd_s_PwrCtrlMainForcedOffReq( const U1 u1_s_evtype )
        case (U1)PWRCTRL_MAIN_FORCEDOFF_STS_DDERR:
         u1_s_PwrCtrl_Main_Sts       = (U1)PWRCTRL_MAIN_FORCEDOFF_REQ;
         u1_s_PwrCtrl_Main_SipPwrSts = (U1)PWRCTRL_MAIN_SIP_STS_INPRC;    /* SIP電源状態：実行中 */
+        vd_g_PwrCtrlObservePsailReq((U1)PWRCTRL_OBSERVE_OFF);            /* PM_PSAIL_ERR_N監視 終了 */
+        vd_g_PwrCtrlObservePsHoldReq((U1)PWRCTRL_OBSERVE_OFF);           /* PMA_PS_HOLD監視 終了 */
         vd_g_PwrCtrlSipForcedOffSTEP4Req();                              /* SIP強制OFFシーケンス STEP4から開始 */
         vd_g_PwrCtrlComTxSetPwrErr((U1)PWRCTRL_COM_PWRERR_FOFF_DDERR);   /* 異常検知(SIP電源強制OFF:PMIC異常系/DDコンOFF) */
         break;
@@ -434,6 +460,8 @@ static void vd_s_PwrCtrlMainStbyCancelSt1Req( void )
     u1_s_PwrCtrl_Main_SipPwrSts = (U1)PWRCTRL_MAIN_SIP_STS_INPRC;   /* SIP電源状態：実行中 */
     u1_s_PwrCtrl_Main_SysPwrSts = (U1)PWRCTRL_MAIN_SYS_STS_COMP;    /* SYS電源状態：完了 */
     vd_g_PwrCtrlSipStandbyCancelSTEP1Req();                         /* SIP電源強制OFF処理から開始 */
+    vd_g_PwrCtrlObservePsailReq((U1)PWRCTRL_OBSERVE_OFF);           /* PM_PSAIL_ERR_N監視 終了 */
+    vd_g_PwrCtrlObservePsHoldReq((U1)PWRCTRL_OBSERVE_OFF);          /* PMA_PS_HOLD監視 終了 */
 
     vd_g_PwrCtrlComTxSetPwrOn((U1)PWRCTRL_COM_PWRON_CANCEL_START);  /* SIP電源再起動通知設定 */
 
@@ -462,6 +490,8 @@ static void vd_s_PwrCtrlMainStbyCancelSt2Req( const U1 u1_a_pre_seq )
     u1_s_PwrCtrl_Main_SipPwrSts     = (U1)PWRCTRL_MAIN_SIP_STS_COMP;    /* SIP電源状態：完了 */
     u1_s_PwrCtrl_Main_SysPwrSts     = (U1)PWRCTRL_MAIN_SYS_STS_INPRC;   /* SYS電源状態：SYS電源実行状態 */
     u1_s_PwrCtrl_Main_NonRednPwrSts = (U1)PWRCTRL_MAIN_NRD_STS_INIT;    /* 非冗長電源：初期状態 */
+    vd_g_PwrCtrlObservePsailReq((U1)PWRCTRL_OBSERVE_OFF);               /* PM_PSAIL_ERR_N監視 終了 */
+    vd_g_PwrCtrlObservePsHoldReq((U1)PWRCTRL_OBSERVE_OFF);              /* PMA_PS_HOLD監視 終了 */
 
     /* スタンバイ処理中の起動トリガ時シーケンス要求(SIP電源強制OFF処理開始)以外 */
     if(u1_a_pre_seq != (U1)PWRCTRL_MAIN_STBYCANCEL_SIPOFF)
@@ -491,9 +521,9 @@ void vd_g_PwrCtrlMainTask( void )
 
     /* 端子モニタ定期処理 */
     vd_g_PwrCtrlPinMonitorMainFunc();
-    
-    /* 起動検知/スタンバイ要求検知処理 */
-    vd_g_PwrCtrlObserveOnOffTriggerDetect();
+
+    /* 監視定期処理 */
+    vd_g_PwrCtrlObserveMainFunc();
 
     /* スタンバイ/スタンバイ中断(再起動)開始判定 */
     vd_s_PwrCtrlMainOnOffJudge();
@@ -675,6 +705,8 @@ static void vd_s_PwrCtrlMainBonSeq( void )
         u1_t_syson_seq = u1_g_PwrCtrlSysGetSts();                              /* SYS電源シーケンス状態問い合わせ */
         if ( u1_t_syson_seq == (U1)TRUE )                                      /* 処理完了 */
         {
+            u1_s_PwrCtrl_Main_SysPwrInfo = (U1)TRUE;                           /* PGOOD_ASIL_VB端子モニタ条件(SYS電源ON制御完了)設定 */
+            vd_s_PwrCtrlObservePgdAsilVbSysPwrReq((U1)PWRCTRL_OBSERVE_ON);     /* PGOOD_ASIL_VB監視 開始(SYS電源ON制御完了条件成立) */
             u1_s_PwrCtrl_Main_SysPwrSts = (U1)PWRCTRL_MAIN_SYS_STS_COMP;       /* SYS電源状態：実行中→完了 */
             u1_s_PwrCtrl_Main_SipPwrSts = (U1)PWRCTRL_MAIN_SIP_STS_INPRC;      /* SIP電源状態：初期状態→実行中 */
             vd_g_PwrCtrlSipOnReq();                                            /* SIP電源ON要求(+B ON) */
@@ -798,6 +830,8 @@ static void vd_s_PwrCtrlMainWakeUpSeq( void )
         u1_t_syson_seq = u1_g_PwrCtrlSysGetSts();                                                         /* SYS電源シーケンス状態問い合わせ */
         if ( u1_t_syson_seq == (U1)TRUE )                                                                 /* 処理完了 */
         {
+            u1_s_PwrCtrl_Main_SysPwrInfo = (U1)TRUE;                                                      /* PGOOD_ASIL_VB端子モニタ条件(SYS電源ON制御完了)設定 */
+            vd_s_PwrCtrlObservePgdAsilVbSysPwrReq((U1)PWRCTRL_OBSERVE_ON);                                /* PGOOD_ASIL_VB監視 開始(SYS電源ON制御完了条件成立) */
 /* AOSS_SLEEP_ENTRY_EXIT＝Hi？(SIPがサスペンド状態であることを確認※1度のみ実施) */
             u1_t_read_lv = u1_g_PwrCtrl_PinMonitor_GetPinInfo((U1)PWRCTRL_CFG_PRIVATE_KIND_AOSS_SLP_ENTRY_EXIT); /* AOSS_SLEEP_ENTRY_EXIT端子の状態を取得    */
             if(u1_t_read_lv == (U1)MCU_DIO_HIGH)
@@ -845,12 +879,9 @@ static void vd_s_PwrCtrlMainWakeUpSeq( void )
            (u1_g_PwrCtrl_Main_DbgFailOffFlag == (U1)MCU_DIO_LOW))
 #endif
         {
+            vd_g_PwrCtrlObservePsailReq((U1)PWRCTRL_OBSERVE_ON);    /* PM_PSAIL_ERR_N監視 開始 */
+            vd_g_PwrCtrlObservePsHoldReq((U1)PWRCTRL_OBSERVE_ON);   /* PMA_PS_HOLD監視 開始 */
             u1_s_PwrCtrl_Main_SipPwrSts = (U1)PWRCTRL_MAIN_SIP_STS_CHK_SAILERR;                           /* SIP電源状態：AOSS_SLEEP_ENTRY_EXIT=Low判定中→SAIL-ERR端子判定 */
-            
-            /* 【todo】5-9. PM_PSAIL_ERR_N監視処理開始 */
-            /* 【todo】5-10. PMA_PS_HOLD監視処理開始 */
-            /* 【todo】4.0版参照 5-12-1. PGOOD_ASIL_VB監視処理開始 4.0版参照 */
-            /* 【todo】3.0版参照 5-7. SAIL UART Message監視開始 3.0版参照 */
         }
 
         else{
@@ -1107,6 +1138,8 @@ static void vd_s_PwrCtrlMainSipOffMcuStandbySysDevOffStep( void )
             u1_s_PwrCtrl_Main_SysPwrSts = (U1)PWRCTRL_MAIN_SYS_STS_INPRC;    /* SYS電源状態:SYSデバイス終了待ち→実行中 */
             /* SYS電源OFF要求 */
             vd_g_PwrCtrlSysPwrOffStart();                                    /* SYS電源OFF要求 */
+            u1_s_PwrCtrl_Main_SysPwrInfo = (U1)FALSE;                        /* PGOOD_ASIL_VB端子モニタ条件(SYS電源OFF制御開始)設定 */
+            vd_s_PwrCtrlObservePgdAsilVbSysPwrReq((U1)PWRCTRL_OBSERVE_OFF);  /* PGOOD_ASIL_VB監視 終了(SYS電源OFF制御完了条件成立) */
         }
     }
 
@@ -1302,6 +1335,8 @@ static void vd_s_PwrCtrlMainStandbySysDevOff( void )
             u1_s_PwrCtrl_Main_SysPwrSts = (U1)PWRCTRL_MAIN_SYS_STS_INPRC;    /* SYS電源状態:SYSデバイス終了待ち→実行中 */
             /* SYS電源OFF要求 */
             vd_g_PwrCtrlSysPwrOffStart();                                    /* SYS電源OFF要求 */
+            u1_s_PwrCtrl_Main_SysPwrInfo = (U1)FALSE;                        /* PGOOD_ASIL_VB端子モニタ条件(SYS電源OFF制御開始)設定 */
+            vd_s_PwrCtrlObservePgdAsilVbSysPwrReq((U1)PWRCTRL_OBSERVE_OFF);  /* PGOOD_ASIL_VB監視 終了(SYS電源OFF制御完了条件成立) */
         }
     }
 
@@ -1454,6 +1489,8 @@ static void vd_s_PwrCtrlMainStbyCancelSt1Seq( void )
                 u1_s_PwrCtrl_Main_SysPwrSts = (U1)PWRCTRL_MAIN_SYS_STS_INPRC;    /* SYS電源状態:SYSデバイス終了待ち→実行中 */
                 /* SYS電源OFF要求 */
                 vd_g_PwrCtrlSysPwrOffStart();                                    /* SYS電源OFF要求 */
+                u1_s_PwrCtrl_Main_SysPwrInfo = (U1)FALSE;                        /* PGOOD_ASIL_VB端子モニタ条件(SYS電源OFF制御開始)設定 */
+                vd_s_PwrCtrlObservePgdAsilVbSysPwrReq((U1)PWRCTRL_OBSERVE_OFF);  /* PGOOD_ASIL_VB監視 終了(SYS電源OFF制御完了条件成立) */
             }
         }
         /* SYS電源OFF制御 */
@@ -1493,6 +1530,8 @@ static void vd_s_PwrCtrlMainStbyCancelSt2Seq( void )
         if ( u1_t_syson_seq == (U1)TRUE )                                  /* 処理完了 */
         {
             u1_s_PwrCtrl_Main_SysPwrSts = (U1)PWRCTRL_MAIN_SYS_STS_COMP;   /* SYS電源状態：実行中→完了 */
+            u1_s_PwrCtrl_Main_SysPwrInfo = (U1)TRUE;                       /* PGOOD_ASIL_VB端子モニタ条件(SYS電源ON制御完了)設定 */
+            vd_s_PwrCtrlObservePgdAsilVbSysPwrReq((U1)PWRCTRL_OBSERVE_ON); /* PGOOD_ASIL_VB監視 開始(SYS電源ON制御完了条件成立) */
             /* SIP入力DDコン電源OFF処理実施要否を取得 */
             u1_t_sipfoff_seq = u1_g_PwrCtrlSipFOffGetSts();
             if(u1_t_sipfoff_seq == (U1)PWRCTRL_SIP_FOFF_DDCONV_ON){

@@ -80,6 +80,10 @@ void vd_g_PwrCtrlSysPwrOnStart( void );                /* SYS電源ON要求 */
 void vd_g_PwrCtrlSysPwrOffStart( void );               /* SYS電源OFF要求 */
 U1   u1_g_PwrCtrlSysGetSts( void );                    /* SYS電源シーケンス状態問い合わせ */
 U1   u1_g_PwrCtrlSysShtdwnGetSts( void );              /* SYS系デバイス終了状態問い合わせ */
+U1   u1_g_PwrCtrlSysPgdAslVsObsInfo( void );           /* PGOOD_ASIL_VSYS端子モニタ開始条件通知処理 */
+U1   u1_g_PwrCtrlSysPgdAslV11ObsInfo( void );          /* PGOOD_ASIL_VSYS(V11)端子モニタ開始条件通知処理 */
+U1   u1_g_PwrCtrlSysPgdDiodeObsInfo( void );           /* PGOOD_DIODE端子モニタ開始条件通知処理 */
+U1   u1_g_PwrCtrlSysPgdVsObsInfo( void );              /* PGOOD_VSYS端子モニタ開始条件通知処理 */
 
 void            vd_g_McuDev_Pwron(void);
 

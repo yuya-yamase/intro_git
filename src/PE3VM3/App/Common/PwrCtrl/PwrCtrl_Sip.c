@@ -1324,7 +1324,8 @@ static void vd_s_PwrCtrlSipOnStep2( void )
         if(u4_s_PwrCtrl_Sip_On_LOW_POWER_ON_Step2_Tim == (U4)PWRCTRL_SIP_TIME_INVALID){
             /* LOW-POWER-ON_HIを検知時に端子モニタ開始を設定 */
             u1_s_PwrCtrl_Sip_LOW_POWER_ON_Sts = (U1)TRUE;
-            
+            /* PGOOD_ASIL_VB監視 開始(LOW-POWER-ON=Hi条件成立) */
+            vd_s_PwrCtrlObservePgdAsilVbLowPwrReq((U1)PWRCTRL_OBSERVE_ON);
             /* LOW-POWER-ON_HIからtVB33-SIP-FREQ_HI経過後にVB33-SIP-FREQ = HI */
             /* STEP2-4 */
             vd_s_PwrCtrl_Sip_DioFreqAct(&u4_s_PwrCtrl_Sip_On_VB33_SIP_FREQ_Step2_Tim,
@@ -1498,6 +1499,9 @@ static void vd_s_PwrCtrlSipOnStep5( void )
         if((u4_s_PwrCtrl_Sip_On_POFF_COMPLETE_N_Chk_Tim == (U4)PWRCTRL_SIP_TIME_INVALID) ||
            (u1_g_PwrCtrl_Main_DbgFailOffFlag == (U1)MCU_DIO_LOW)){
 #endif
+            /* PM_PSAIL_ERR_N監視 開始 */
+            vd_g_PwrCtrlObservePsailReq((U1)PWRCTRL_OBSERVE_ON);
+
             u1_s_PwrCtrl_Sip_On_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP6;
             /* EtherSW起動要求を設定 */
             u1_s_PwrCtrl_Sip_EthReq_Sts = (U1)PWRCTRL_ETH_REQ_ON;
@@ -1620,6 +1624,9 @@ static void vd_s_PwrCtrlSipOnStep7( void )
            ((u1_g_PwrCtrl_Main_DbgFailOffFlag == (U1)MCU_DIO_LOW) &&
             (u4_s_PwrCtrl_Sip_On_PM_PWR_EN_N_Lo_ElapsedTim == (U4)PWRCTRL_SIP_ON_T_PM_PWR_EN_N_ELPSD))){
 #endif
+            /* PMA_PS_HOLD監視 開始 */
+            vd_g_PwrCtrlObservePsHoldReq((U1)PWRCTRL_OBSERVE_ON);
+
             u1_s_PwrCtrl_Sip_On_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP8;
 
             /* 【todo】5-10. PMA_PS_HOLD監視処理開始 */
@@ -1695,6 +1702,9 @@ static void vd_s_PwrCtrlSipRsmMainFunc( void )
         if(u4_s_PwrCtrl_Sip_Rsm_LOW_POWER_ON_Tim == (U4)PWRCTRL_SIP_TIME_INVALID){
             /* LOW-POWER-ON_HIを検知 */
             u1_s_PwrCtrl_Sip_LOW_POWER_ON_Sts = (U1)TRUE;
+            /* PGOOD_ASIL_VB監視 開始(LOW-POWER-ON=Hi条件成立) */
+            vd_s_PwrCtrlObservePgdAsilVbLowPwrReq((U1)PWRCTRL_OBSERVE_ON);
+
             u1_s_PwrCtrl_Sip_Rsm_Step     = (U1)PWRCTRL_COMMON_PROCESS_STEP2;
         }
     }
@@ -1816,6 +1826,9 @@ static void vd_s_PwrCtrlSipOffStep2( void )
         if ((u4_s_PwrCtrl_Sip_Off_MM_STBY_N_Chk_Tim == (U4)PWRCTRL_SIP_TIME_INVALID) ||
             (u1_g_PwrCtrl_Main_DbgFailOffFlag == (U1)MCU_DIO_LOW)){
 #endif
+            /* PMA_PS_HOLD監視 終了 */
+            vd_g_PwrCtrlObservePsHoldReq((U1)PWRCTRL_OBSERVE_OFF);
+
             u1_s_PwrCtrl_Sip_Off_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP3;
         }
         else{
@@ -1926,7 +1939,11 @@ static void vd_s_PwrCtrlSipOffStep4( void )
 #if (PWRCTRL_CFG_PRIVATE_ERR_CHK == PWRCTRL_CFG_PRIVATE_ERR_CHK_ENABLE)
         u1_s_pwrctrl_common_err_dbg_state = (U1)PWRCTRL_COMMON_ERR_SIPOFF_STEP4_3; /* TP */
 #endif
-
+        /* PM_PSAIL_ERR_N監視 終了 */
+        if(u4_s_PwrCtrl_Sip_Off_POFF_COMPLETE_N_Chk_Tim == (U4)PWRCTRL_SIP_TIME_INVALID)
+        {
+            vd_g_PwrCtrlObservePsailReq((U1)PWRCTRL_OBSERVE_OFF);
+        }
         /* STEP4-1~4-3が完了していれば次の処理に進める */
 #ifndef PWRCTRL_CFG_PRIVATE_DBG_FAIL_OFF
         if((u4_s_PwrCtrl_Sip_Off_SOC_RESOUT_N_Chk_Tim == (U4)PWRCTRL_SIP_TIME_INVALID) &&
@@ -2080,6 +2097,8 @@ static void vd_s_PwrCtrlSipOffStep6( void )
         if(u4_s_PwrCtrl_Sip_Off_LOW_POWER_ON_Tim == (U4)PWRCTRL_SIP_TIME_INVALID){
             /* LOW-POWER-ON_LOを検知時に端子モニタ停止を設定 */
             u1_s_PwrCtrl_Sip_LOW_POWER_ON_Sts = (U1)FALSE;
+            /* PGOOD_ASIL_VB監視 終了(LOW-POWER-ON=Lo条件成立) */
+            vd_s_PwrCtrlObservePgdAsilVbLowPwrReq((U1)PWRCTRL_OBSERVE_OFF);
         }
 
         /* STEP6-1～6-7が完了していれば次のSTEPに進める */
@@ -2178,6 +2197,11 @@ static void vd_s_PwrCtrlSipStbyMainFunc( void )
 
         /* STEP3-1が完了していれば次の処理に進める */
         if(u4_s_PwrCtrl_Sip_Stby_AOSS_Tim == (U4)PWRCTRL_SIP_TIME_INVALID){
+            /* PM_PSAIL_ERR_N監視 終了 */
+            vd_g_PwrCtrlObservePsailReq((U1)PWRCTRL_OBSERVE_OFF);
+            /* PMA_PS_HOLD監視 終了 */
+            vd_g_PwrCtrlObservePsHoldReq((U1)PWRCTRL_OBSERVE_OFF);
+
             u1_s_PwrCtrl_Sip_Stby_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP4;
         }
         else
@@ -2232,6 +2256,9 @@ static void vd_s_PwrCtrlSipStbyMainFunc( void )
         if(u4_s_PwrCtrl_Sip_Stby_LOW_POWER_ON_Tim == (U4)PWRCTRL_SIP_TIME_INVALID){
             /* LOW-POWER-ON_LOを検知時に端子モニタ停止を設定 */
             u1_s_PwrCtrl_Sip_LOW_POWER_ON_Sts = (U1)FALSE;
+            /* PGOOD_ASIL_VB監視 終了(LOW-POWER-ON=Lo条件成立) */
+            vd_s_PwrCtrlObservePgdAsilVbLowPwrReq((U1)PWRCTRL_OBSERVE_OFF);
+
             u1_s_PwrCtrl_Sip_Stby_Step    = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
             u1_s_PwrCtrl_Sip_Pwr_Sts      = (U1)PWRCTRL_SIP_STS_NON;
         }
@@ -2424,6 +2451,10 @@ static void vd_s_PwrCtrlSipForcedOffStep5( void )
         
         /* STEP5-1が完了していればSTEP5-2に進める */
         if(u4_s_PwrCtrl_Sip_ForcedOff_LOW_POWER_ON_Tim == (U4)PWRCTRL_SIP_TIME_INVALID){
+            /* LOW-POWER-ON_LOを検知時に端子モニタ停止を設定 */
+            u1_s_PwrCtrl_Sip_LOW_POWER_ON_Sts = (U1)FALSE;
+            /* PGOOD_ASIL_VB監視 終了(LOW-POWER-ON=Lo条件成立) */
+            vd_s_PwrCtrlObservePgdAsilVbLowPwrReq((U1)PWRCTRL_OBSERVE_OFF);
             /* STEP5-2 */
             vd_s_PwrCtrl_Sip_DioWriteCheck(&u4_s_PwrCtrl_Sip_ForcedOff_VB33_SIP_ON_Tim,
                                            (U1)PWRCTRL_SIP_FOFF_T_VB33_SIP_ON,

@@ -42,6 +42,13 @@
 #define PWRCTRL_MAIN_PINID_DBG_FAIL        (PWRCTRL_CFG_PRIVATE_KIND_DBG_FAIL_OFF)         /* DBG_FAIL_OFF        */
 #define PWRCTRL_MAIN_PINID_SAIL_ERR1       (PWRCTRL_CFG_PRIVATE_KIND_SAIL_ERR1)            /* SAIL-ERR1           */
 #define PWRCTRL_MAIN_PINID_SAIL_ERR2       (PWRCTRL_CFG_PRIVATE_KIND_SAIL_ERR2)            /* SAIL-ERR2           */
+#define PWRCTRL_MAIN_PINID_PM_PSAIL        (PWRCTRL_CFG_PRIVATE_KIND_PM_PSAIL_ERR_N)       /* PM_PSAIL_ERR_N      */
+#define PWRCTRL_MAIN_PINID_PG_ASIL_VB      (PWRCTRL_CFG_PRIVATE_KIND_PGOOD_ASIL_VB)        /* PGOOD_ASIL_VB       */
+#define PWRCTRL_MAIN_PINID_PG_ASIL_VSYS    (PWRCTRL_CFG_PRIVATE_KIND_PGOOD_ASIL_VSYS)      /* PGOOD_ASIL_VSYS     */
+#define PWRCTRL_MAIN_PINID_PG_ASIL_VSV11   (PWRCTRL_CFG_PRIVATE_KIND_PGOOD_ASIL_VSYS_V11)  /* PGOOD_ASIL_VSYS(V11) */
+#define PWRCTRL_MAIN_PINID_PG_DIODE        (PWRCTRL_CFG_PRIVATE_KIND_PGOOD_DIODE)          /* PGOOD_DIODE         */
+#define PWRCTRL_MAIN_PINID_PG_VB           (PWRCTRL_CFG_PRIVATE_KIND_PGOOD_VB)             /* PGOOD_VB            */
+#define PWRCTRL_MAIN_PINID_PG_VSYS         (PWRCTRL_CFG_PRIVATE_KIND_PGOOD_VSYS)           /* PGOOD_VSYS          */
 
 /* 端子モニタ取得値 */
 #define PWRCTRL_MAIN_PIN_LOW               (STD_LOW)
@@ -61,6 +68,7 @@ void vd_g_PwrCtrlMainTask( void );
 
 U1 u1_g_PwrCtrlMainShtdwnOk( void );
 U1 u1_g_PwrCtrlWakeUpInfo( void );
+U1 u1_g_PwrCtrlMainSysPwrInfo( void );
 
 void vd_g_PwrCtrlMainProhibitSleep( const U1 u1_a_ProhibitSleep );
 
