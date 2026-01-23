@@ -1392,7 +1392,7 @@ U1      u1_g_VardefEsOptCfgEthRxEvcnt(const U2 u2_a_MSG_ID)
 /*  BEV-26    01/07/2026  YN      Change config for BEV FF2.(MET-B_CWHBB-CSTD-0-)                                                    */
 /*  BEV-27    01/08/2026  MA      BRPADW function check time changed from 700ms to 2100ms.(MET-C_BRPADW-CSTD-A0-)                    */
 /*  BEV-28    01/14/2026  TS      Change config for BEV FF2.(MET-C_DRS-CSTD-1)                                                       */
-/*  BEV-29    01/22/2026  MA      Change config for BEV FF2.(MET-B_PBDBB-CSTD-0-)                                                   */
+/*  BEV-29    01/22/2026  MA      Change config for BEV FF2.(MET-B_PBDBB-CSTD-0-)                                                    */
 /*                                                                                                                                   */
 /*  * YI     = Yoshiki Iwata, Denso                                                                                                  */
 /*  * TN     = Takashi Nagai, Denso                                                                                                  */
