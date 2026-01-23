@@ -32,6 +32,7 @@
 #define PWRCTRL_COM_STR_LEN                (1U)         /* STRモード状態通知データ長 */
 
 /* SoC動作状態 */
+#define PWRCTRL_COM_SOCSTS_INIT            (0x00U)      /* SoC動作状態:未設定 */
 #define PWRCTRL_COM_SOCSTS_COMP            (0x04U)      /* SoC動作状態:SoC起動完了 */
 #define PWRCTRL_COM_RCVBUF_CLR             (0U)         /* 格納先バッファ初期化用 */
 
@@ -121,6 +122,8 @@ void vd_g_PwrCtrlComBonInit( void )
     u1_s_PwrCtrl_Com_Rx_Vm1StbyInfo = (U1)PWRCTRL_COM_STBY_OK;      /* VM1スタンバイ条件成立有無 */
     u1_s_PwrCtrl_Com_Rx_Vm2StbyInfo = (U1)PWRCTRL_COM_STBY_OK;      /* VM2スタンバイ条件成立有無 */
     u1_s_PwrCtrl_Com_Rx_FsleepInfo = (U1)PWRCTRL_COM_FSLP_OFF;      /* 強制スリープ条件成立有無 */
+    u1_s_PwrCtrl_Com_Rx_SoCSts = (U1)PWRCTRL_COM_SOCSTS_INIT;       /* SoC動作状態 */
+    u1_s_PwrCtrl_Com_Rx_SoCResetReq = (U1)PWRCTRL_COM_SOCRESET_NON; /* SoCリセット要求 */
     u1_s_PwrCtrl_Com_Rx_STRModeInfo = (U1)PWRCTRL_COM_STR_OFF;      /* STRモード状態 */
     u4_s_PwrCtrl_Com_Tx_PwrOn = (U4)PWRCTRL_COM_PWRON_NOINFO;       /* SIP電源再起動通知 */
     u4_s_PwrCtrl_Com_Tx_PwrErr = (U4)PWRCTRL_COM_PWRERR_NOERR;      /* SIP異常検知通知 */
@@ -152,6 +155,8 @@ void vd_g_PwrCtrlComWkupInit( void )
     u1_s_PwrCtrl_Com_Rx_Vm1StbyInfo = (U1)PWRCTRL_COM_STBY_OK;      /* VM1スタンバイ条件成立有無 */
     u1_s_PwrCtrl_Com_Rx_Vm2StbyInfo = (U1)PWRCTRL_COM_STBY_OK;      /* VM2スタンバイ条件成立有無 */
     u1_s_PwrCtrl_Com_Rx_FsleepInfo = (U1)PWRCTRL_COM_FSLP_OFF;      /* 強制スリープ条件成立有無 */
+    u1_s_PwrCtrl_Com_Rx_SoCSts = (U1)PWRCTRL_COM_SOCSTS_INIT;       /* SoC動作状態 */
+    u1_s_PwrCtrl_Com_Rx_SoCResetReq = (U1)PWRCTRL_COM_SOCRESET_NON; /* SoCリセット要求 */
     u1_s_PwrCtrl_Com_Rx_STRModeInfo = (U1)PWRCTRL_COM_STR_OFF;      /* STRモード状態 */
     u4_s_PwrCtrl_Com_Tx_PwrOn = (U4)PWRCTRL_COM_PWRON_NOINFO;       /* SIP電源再起動通知 */
     u4_s_PwrCtrl_Com_Tx_PwrErr = (U4)PWRCTRL_COM_PWRERR_NOERR;      /* SIP異常検知通知 */

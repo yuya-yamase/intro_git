@@ -24,6 +24,9 @@
 #define PWRCTRL_COM_FSLP_OFF                (0U)  /* 強制スリープ条件非成立 */
 #define PWRCTRL_COM_FSLP_ON                 (1U)  /* 強制スリープ条件成立 */
 
+/* SoCリセット要求状態 */
+#define PWRCTRL_COM_SOCRESET_NON            (0x00U) /* SoCリセット要求:未設定 */
+
 /* STRモード状態 */
 #define PWRCTRL_COM_STR_OFF                 (0U)  /* STRモードOFF */
 #define PWRCTRL_COM_STR_ON                  (1U)  /* STRモードON  */
