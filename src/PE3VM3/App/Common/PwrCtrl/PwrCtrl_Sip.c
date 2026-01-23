@@ -112,6 +112,18 @@
 #define PWRCTRL_SIP_FOFF_WAIT_POFF_COMP    ( 100U / PWRCTRL_CFG_TASK_TIME)   /* POFF_COMPLETE_N =Loチェック待機時間:100ms                            */
 #define PWRCTRL_SIP_FOFF_WAIT_POFF_COMP_P2 ( 100U / PWRCTRL_CFG_TASK_TIME)   /* POFF_COMPLETE_N =Loチェック待機時間:100ms                              */
 
+/* PM_PSAIL_ERR_N監視 */
+#define PWRCTRL_SIP_PSAILFS_T_POFF_COMPLETE_N      (0U)                              /* POFF_COMPLETE_N:0ms                                          */
+#define PWRCTRL_SIP_PSAILFS_WAIT_POFF_COMP         ( 100U / PWRCTRL_CFG_TASK_TIME)   /* POFF_COMPLETE_N =Loチェック待機時間:100ms                    */
+
+/* PMA_PS_HOLD監視 */
+#define PWRCTRL_SIP_PMAPSFS_T_SOC_RESOUT_N         (0U)                              /* SOC_RESOUT_N:0ms                                             */
+#define PWRCTRL_SIP_PMAPSFS_T_SAIL_RESOUT_N        (0U)                              /* SAIL_RESOUT_N:0ms                                            */
+#define PWRCTRL_SIP_PMAPSFS_T_POFF_COMPLETE_N      (0U)                              /* POFF_COMPLETE_N:0ms                                          */
+#define PWRCTRL_SIP_PMAPSFS_WAIT_SOC_RESOUT_N      ( 100U / PWRCTRL_CFG_TASK_TIME)   /* SOC_RESOUT_N    =Loチェック待機時間:100ms                    */
+#define PWRCTRL_SIP_PMAPSFS_WAIT_SAIL_RESOUT_N     ( 100U / PWRCTRL_CFG_TASK_TIME)   /* SAIL_RESOUT_N   =Loチェック待機時間:100ms                    */
+#define PWRCTRL_SIP_PMAPSFS_WAIT_POFF_COMP         ( 100U / PWRCTRL_CFG_TASK_TIME)   /* POFF_COMPLETE_N =Loチェック待機時間:100ms                    */
+
 /*--------------------------------------------------------------------------*/
 /* Types                                                                    */
 /*--------------------------------------------------------------------------*/
@@ -235,6 +247,18 @@ static U4 u4_s_PwrCtrl_Sip_ForcedOff_DDConvOFFWait_Tim;
 static U4 u4_s_PwrCtrl_Sip_ForcedOff_POFFCOMP_Wait_Tim;
 static U4 u4_s_PwrCtrl_Sip_ForcedOff_POFFCOMP_Wait_Step4_Tim;
 
+static U1 u1_s_PwrCtrl_Sip_PmPsailFs_Step;
+static U4 u4_s_PwrCtrl_Sip_PmPsailFs_POFF_COMPLETE_N_Chk_Tim;
+static U4 u4_s_PwrCtrl_Sip_PmPsailFs_POFF_COMPLETE_N_Wait_Tim;
+
+static U1 u1_s_PwrCtrl_Sip_PmaPsFs_Step;
+static U4 u4_s_PwrCtrl_Sip_PmaPsFs_SOC_RESOUT_N_Chk_Tim;
+static U4 u4_s_PwrCtrl_Sip_PmaPsFs_SOC_RESOUT_N_Wait_Tim;
+static U4 u4_s_PwrCtrl_Sip_PmaPsFs_SAIL_RESOUT_N_Chk_Tim;
+static U4 u4_s_PwrCtrl_Sip_PmaPsFs_SAIL_RESOUT_N_Wait_Tim;
+static U4 u4_s_PwrCtrl_Sip_PmaPsFs_POFF_COMPLETE_N_Chk_Tim;
+static U4 u4_s_PwrCtrl_Sip_PmaPsFs_POFF_COMPLETE_N_Wait_Tim;
+
 #if (PWRCTRL_CFG_PRIVATE_ERR_CHK == PWRCTRL_CFG_PRIVATE_ERR_CHK_ENABLE)
 /* 異常系チェック用STB定義 */
 U1 u1_s_pwrctrl_common_err_dbg_state;
@@ -275,6 +299,10 @@ static void vd_s_PwrCtrlSipForcedOffStep4( void );
 static void vd_s_PwrCtrlSipForcedOffStep5( void );
 /* SIP電源強制OFF初期化要求 共通変数初期化 */
 static void vd_s_PwrCtrlSipForcedOffInitReq( void );
+/* 監視フェールセーフ制御 */
+static void vd_s_PwrCtrlSipPmPsailFsMainFunc( void );
+static void vd_s_PwrCtrlSipPmaPsFsMainFunc( void );
+
 /* WAKEUP-STAT端子の設定関数 */
 static void vd_s_PwrCtrl_Sip_Write_WAKEUP_STAT(void);
 
@@ -452,7 +480,9 @@ void vd_g_PwrCtrlSipBonInit( void )
     u1_s_PwrCtrl_Sip_Off_Step                         = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
     u1_s_PwrCtrl_Sip_Stby_Step                        = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
     u1_s_PwrCtrl_Sip_ForcedOff_Step                   = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
-    
+    u1_s_PwrCtrl_Sip_PmPsailFs_Step                   = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
+    u1_s_PwrCtrl_Sip_PmaPsFs_Step                     = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
+
     /* WAKEUP-STAT端子状態の初期化 */
     u1_s_PwrCtrl_Sip_WAKEUP_STAT1                     = (U1)MCU_DIO_LOW;
     u1_s_PwrCtrl_Sip_WAKEUP_STAT2                     = (U1)MCU_DIO_LOW;
@@ -550,6 +580,18 @@ void vd_g_PwrCtrlSipBonInit( void )
     u4_s_PwrCtrl_Sip_ForcedOff_POFFCOMP_Wait_Tim       = (U4)PWRCTRL_SIP_TIME_INIT;
     u4_s_PwrCtrl_Sip_ForcedOff_POFFCOMP_Wait_Step4_Tim = (U4)PWRCTRL_SIP_TIME_INIT;
 
+    /* PM_PSAIL_ERR_N監視 */
+    u4_s_PwrCtrl_Sip_PmPsailFs_POFF_COMPLETE_N_Chk_Tim  = (U4)PWRCTRL_SIP_TIME_INIT;
+    u4_s_PwrCtrl_Sip_PmPsailFs_POFF_COMPLETE_N_Wait_Tim = (U4)PWRCTRL_SIP_TIME_INIT;
+
+    /* PMA_PS_HOLD監視 */
+    u4_s_PwrCtrl_Sip_PmaPsFs_SOC_RESOUT_N_Chk_Tim       = (U4)PWRCTRL_SIP_TIME_INIT;
+    u4_s_PwrCtrl_Sip_PmaPsFs_SOC_RESOUT_N_Wait_Tim      = (U4)PWRCTRL_SIP_TIME_INIT;
+    u4_s_PwrCtrl_Sip_PmaPsFs_SAIL_RESOUT_N_Chk_Tim      = (U4)PWRCTRL_SIP_TIME_INIT;
+    u4_s_PwrCtrl_Sip_PmaPsFs_SAIL_RESOUT_N_Wait_Tim     = (U4)PWRCTRL_SIP_TIME_INIT;
+    u4_s_PwrCtrl_Sip_PmaPsFs_POFF_COMPLETE_N_Chk_Tim    = (U4)PWRCTRL_SIP_TIME_INIT;
+    u4_s_PwrCtrl_Sip_PmaPsFs_POFF_COMPLETE_N_Wait_Tim   = (U4)PWRCTRL_SIP_TIME_INIT;
+
     return;
 }
 
@@ -581,7 +623,9 @@ void vd_g_PwrCtrlSipWkupInit( void )
     u1_s_PwrCtrl_Sip_Off_Step                         = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
     u1_s_PwrCtrl_Sip_Stby_Step                        = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
     u1_s_PwrCtrl_Sip_ForcedOff_Step                   = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
-    
+    u1_s_PwrCtrl_Sip_PmPsailFs_Step                   = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
+    u1_s_PwrCtrl_Sip_PmaPsFs_Step                     = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
+
     /* WAKEUP-STAT1初期化 */
     u1_t_wust1_buf = (U1)MCU_DIO_LOW;
     u1_t_wust1_ret = u1_g_Rim_ReadU1withStatus((U2)RIMID_U1_PWCTR_SOC_WU_STAT1, &u1_t_wust1_buf);
@@ -706,6 +750,18 @@ void vd_g_PwrCtrlSipWkupInit( void )
     u4_s_PwrCtrl_Sip_ForcedOff_POFFCOMP_Wait_Tim       = (U4)PWRCTRL_SIP_TIME_INIT;
     u4_s_PwrCtrl_Sip_ForcedOff_POFFCOMP_Wait_Step4_Tim = (U4)PWRCTRL_SIP_TIME_INIT;
 
+    /* PM_PSAIL_ERR_N監視 */
+    u4_s_PwrCtrl_Sip_PmPsailFs_POFF_COMPLETE_N_Chk_Tim  = (U4)PWRCTRL_SIP_TIME_INIT;
+    u4_s_PwrCtrl_Sip_PmPsailFs_POFF_COMPLETE_N_Wait_Tim = (U4)PWRCTRL_SIP_TIME_INIT;
+
+    /* PMA_PS_HOLD監視 */
+    u4_s_PwrCtrl_Sip_PmaPsFs_SOC_RESOUT_N_Chk_Tim       = (U4)PWRCTRL_SIP_TIME_INIT;
+    u4_s_PwrCtrl_Sip_PmaPsFs_SOC_RESOUT_N_Wait_Tim      = (U4)PWRCTRL_SIP_TIME_INIT;
+    u4_s_PwrCtrl_Sip_PmaPsFs_SAIL_RESOUT_N_Chk_Tim      = (U4)PWRCTRL_SIP_TIME_INIT;
+    u4_s_PwrCtrl_Sip_PmaPsFs_SAIL_RESOUT_N_Wait_Tim     = (U4)PWRCTRL_SIP_TIME_INIT;
+    u4_s_PwrCtrl_Sip_PmaPsFs_POFF_COMPLETE_N_Chk_Tim    = (U4)PWRCTRL_SIP_TIME_INIT;
+    u4_s_PwrCtrl_Sip_PmaPsFs_POFF_COMPLETE_N_Wait_Tim   = (U4)PWRCTRL_SIP_TIME_INIT;
+
     return;
 }
 
@@ -733,7 +789,9 @@ void vd_g_PwrCtrlSipOnReq( void )
     u1_s_PwrCtrl_Sip_Off_Step                         = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
     u1_s_PwrCtrl_Sip_Stby_Step                        = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
     u1_s_PwrCtrl_Sip_ForcedOff_Step                   = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
-    
+    u1_s_PwrCtrl_Sip_PmPsailFs_Step                   = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
+    u1_s_PwrCtrl_Sip_PmaPsFs_Step                     = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
+
     /* 待機時間測定用RAMの初期化 */
     u4_s_PwrCtrl_Sip_On_VB33SIPON_Tim                 = (U4)PWRCTRL_SIP_TIME_INIT;
     u4_s_PwrCtrl_Sip_On_LOPWON_S1_Tim                 = (U4)PWRCTRL_SIP_TIME_INIT;
@@ -792,7 +850,9 @@ void vd_g_PwrCtrlSipOnPwrOnReq( void )
     u1_s_PwrCtrl_Sip_Off_Step                         = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
     u1_s_PwrCtrl_Sip_Stby_Step                        = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
     u1_s_PwrCtrl_Sip_ForcedOff_Step                   = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
-    
+    u1_s_PwrCtrl_Sip_PmPsailFs_Step                   = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
+    u1_s_PwrCtrl_Sip_PmaPsFs_Step                     = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
+
     /* 待機時間測定用RAMの初期化 */
     u4_s_PwrCtrl_Sip_On_VB33SIPON_Tim                 = (U4)PWRCTRL_SIP_TIME_INIT;
     u4_s_PwrCtrl_Sip_On_LOPWON_S1_Tim                 = (U4)PWRCTRL_SIP_TIME_INIT;
@@ -850,7 +910,9 @@ void vd_g_PwrCtrlSipRsmReq( void )
     u1_s_PwrCtrl_Sip_Off_Step                 = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
     u1_s_PwrCtrl_Sip_Stby_Step                = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
     u1_s_PwrCtrl_Sip_ForcedOff_Step           = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
-    
+    u1_s_PwrCtrl_Sip_PmPsailFs_Step           = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
+    u1_s_PwrCtrl_Sip_PmaPsFs_Step             = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
+
     /* 待機時間測定用RAMの初期化 */
     u4_s_PwrCtrl_Sip_Rsm_LOW_POWER_ON_Tim     = (U4)PWRCTRL_SIP_TIME_INIT;
     u4_s_PwrCtrl_Sip_Rsm_VB33_SIP_FREQ_Tim    = (U4)PWRCTRL_SIP_TIME_INIT;
@@ -883,6 +945,8 @@ void vd_g_PwrCtrlSipOffReq( void )
     u1_s_PwrCtrl_Sip_Rsm_Step                     = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
     u1_s_PwrCtrl_Sip_Stby_Step                    = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
     u1_s_PwrCtrl_Sip_ForcedOff_Step               = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
+    u1_s_PwrCtrl_Sip_PmPsailFs_Step               = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
+    u1_s_PwrCtrl_Sip_PmaPsFs_Step                 = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
 
     /* 待機時間測定用RAMの初期化 */
     u4_s_PwrCtrl_Sip_Off_MM_OFF_REQ_Step1_Tim     = (U4)PWRCTRL_SIP_TIME_INIT;
@@ -929,6 +993,8 @@ void vd_g_PwrCtrlSipStbyReq( void )
     u1_s_PwrCtrl_Sip_Rsm_Step                  = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
     u1_s_PwrCtrl_Sip_Off_Step                  = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
     u1_s_PwrCtrl_Sip_ForcedOff_Step            = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
+    u1_s_PwrCtrl_Sip_PmPsailFs_Step            = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
+    u1_s_PwrCtrl_Sip_PmaPsFs_Step              = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
 
     /* 待機時間測定用RAMの初期化 */
     u4_s_PwrCtrl_Sip_Stby_MM_SUSPEND_REQ_N_Tim = (U4)PWRCTRL_SIP_TIME_INIT;
@@ -1014,6 +1080,72 @@ void vd_g_PwrCtrlSipStandbyCancelSTEP1Req( void )
     vd_s_PwrCtrlSipForcedOffInitReq();
 
     return;
+}
+
+/*****************************************************************************
+  Function      : vd_g_PwrCtrlSipPmPsailFsReq
+  Description   : 5-9.PM_PSAIL_ERR_N監視(フェールセーフ)開始要求
+  param[in/out] : none
+  return        : none
+  Note          : none
+*****************************************************************************/
+void vd_g_PwrCtrlSipPmPsailFsReq( void )
+{
+    u1_s_PwrCtrl_Sip_Pwr_Sts = (U1)PWRCTRL_SIP_STS_PMPSAIL_FS;
+    u1_s_PwrCtrl_Sip_FOff_Sts = (U1)PWRCTRL_SIP_FORCEDOFF_NON;
+
+    /* SIP OFFのため、EtherSW終了要求を設定 */
+    u1_s_PwrCtrl_Sip_EthReq_Sts = (U1)PWRCTRL_ETH_REQ_OFF;
+
+    /* 現在起動ステップの初期化 */
+    u1_s_PwrCtrl_Sip_PmPsailFs_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP1;
+
+    /* 他処理の無効化 */
+    u1_s_PwrCtrl_Sip_On_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
+    u1_s_PwrCtrl_Sip_Rsm_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
+    u1_s_PwrCtrl_Sip_Off_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
+    u1_s_PwrCtrl_Sip_Stby_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
+    u1_s_PwrCtrl_Sip_ForcedOff_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
+    u1_s_PwrCtrl_Sip_PmaPsFs_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
+
+    /* 待機時間測定用RAMの初期化 */
+    u4_s_PwrCtrl_Sip_PmPsailFs_POFF_COMPLETE_N_Chk_Tim = (U4)PWRCTRL_SIP_TIME_INIT;
+    u4_s_PwrCtrl_Sip_PmPsailFs_POFF_COMPLETE_N_Wait_Tim = (U4)PWRCTRL_SIP_TIME_INIT;
+}
+
+/*****************************************************************************
+  Function      : vd_g_PwrCtrlSipPmaPsFsReq
+  Description   : 5-10.PMA_PS_HOLD監視(フェールセーフ)開始要求
+  param[in/out] : none
+  return        : none
+  Note          : none
+*****************************************************************************/
+void vd_g_PwrCtrlSipPmaPsFsReq( void )
+{
+    u1_s_PwrCtrl_Sip_Pwr_Sts = (U1)PWRCTRL_SIP_STS_PMAPS_FS;
+    u1_s_PwrCtrl_Sip_FOff_Sts = (U1)PWRCTRL_SIP_FORCEDOFF_NON;
+
+    /* SIPOFFのため、EtherSW終了要求を設定 */
+    u1_s_PwrCtrl_Sip_EthReq_Sts = (U1)PWRCTRL_ETH_REQ_OFF;
+
+    /* 現在起動ステップの初期化 */
+    u1_s_PwrCtrl_Sip_PmaPsFs_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP1;
+
+    /* 他処理の無効化 */
+    u1_s_PwrCtrl_Sip_On_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
+    u1_s_PwrCtrl_Sip_Rsm_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
+    u1_s_PwrCtrl_Sip_Off_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
+    u1_s_PwrCtrl_Sip_Stby_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
+    u1_s_PwrCtrl_Sip_ForcedOff_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
+    u1_s_PwrCtrl_Sip_PmPsailFs_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
+
+    /* 待機時間測定用RAMの初期化 */
+    u4_s_PwrCtrl_Sip_PmaPsFs_SOC_RESOUT_N_Chk_Tim = (U4)PWRCTRL_SIP_TIME_INIT;
+    u4_s_PwrCtrl_Sip_PmaPsFs_SOC_RESOUT_N_Wait_Tim = (U4)PWRCTRL_SIP_TIME_INIT;
+    u4_s_PwrCtrl_Sip_PmaPsFs_SAIL_RESOUT_N_Chk_Tim = (U4)PWRCTRL_SIP_TIME_INIT;
+    u4_s_PwrCtrl_Sip_PmaPsFs_SAIL_RESOUT_N_Wait_Tim = (U4)PWRCTRL_SIP_TIME_INIT;
+    u4_s_PwrCtrl_Sip_PmaPsFs_POFF_COMPLETE_N_Chk_Tim = (U4)PWRCTRL_SIP_TIME_INIT;
+    u4_s_PwrCtrl_Sip_PmaPsFs_POFF_COMPLETE_N_Wait_Tim = (U4)PWRCTRL_SIP_TIME_INIT;
 }
 
 /*****************************************************************************
@@ -1114,6 +1246,8 @@ static void vd_s_PwrCtrlSipForcedOffInitReq( void )
     u1_s_PwrCtrl_Sip_Rsm_Step                          = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
     u1_s_PwrCtrl_Sip_Off_Step                          = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
     u1_s_PwrCtrl_Sip_Stby_Step                         = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
+    u1_s_PwrCtrl_Sip_PmPsailFs_Step                    = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
+    u1_s_PwrCtrl_Sip_PmaPsFs_Step                      = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
 
     /* 待機時間測定用RAMの初期化 */
     u4_s_PwrCtrl_Sip_ForcedOff_PMICFASTPOFF_Tim        = (U4)PWRCTRL_SIP_TIME_INIT;
@@ -1174,6 +1308,14 @@ void vd_g_PwrCtrlSipMainFunc( void )
 
         case (U1)PWRCTRL_SIP_STS_FORCEDOFF:    /* SIP電源強制OFFシーケンス */
             vd_s_PwrCtrlSipForcedOffMainFunc();
+            break;
+
+        case (U1)PWRCTRL_SIP_STS_PMPSAIL_FS:   /* PM_PSAIL_ERR_N監視(フェールセーフ) */
+            vd_s_PwrCtrlSipPmPsailFsMainFunc();
+            break;
+
+        case (U1)PWRCTRL_SIP_STS_PMAPS_FS:     /* PMA_PS_HOLD監視(フェールセーフ) */
+            vd_s_PwrCtrlSipPmaPsFsMainFunc();
             break;
 
         default:
@@ -1325,7 +1467,7 @@ static void vd_s_PwrCtrlSipOnStep2( void )
             /* LOW-POWER-ON_HIを検知時に端子モニタ開始を設定 */
             u1_s_PwrCtrl_Sip_LOW_POWER_ON_Sts = (U1)TRUE;
             /* PGOOD_ASIL_VB監視 開始(LOW-POWER-ON=Hi条件成立) */
-            vd_s_PwrCtrlObservePgdAsilVbLowPwrReq((U1)PWRCTRL_OBSERVE_ON);
+            vd_g_PwrCtrlObservePgdAsilVbLowPwrReq((U1)PWRCTRL_OBSERVE_ON);
             /* LOW-POWER-ON_HIからtVB33-SIP-FREQ_HI経過後にVB33-SIP-FREQ = HI */
             /* STEP2-4 */
             vd_s_PwrCtrl_Sip_DioFreqAct(&u4_s_PwrCtrl_Sip_On_VB33_SIP_FREQ_Step2_Tim,
@@ -1505,10 +1647,6 @@ static void vd_s_PwrCtrlSipOnStep5( void )
             u1_s_PwrCtrl_Sip_On_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP6;
             /* EtherSW起動要求を設定 */
             u1_s_PwrCtrl_Sip_EthReq_Sts = (U1)PWRCTRL_ETH_REQ_ON;
-
-            /* 【todo】5-9. PM_PSAIL_ERR_N監視処理開始 */
-            /* 【todo】4.0版参照 5-12-1. PGOOD_ASIL_VB監視処理開始 4.0版参照 */
-
         }
         
         else{
@@ -1628,10 +1766,6 @@ static void vd_s_PwrCtrlSipOnStep7( void )
             vd_g_PwrCtrlObservePsHoldReq((U1)PWRCTRL_OBSERVE_ON);
 
             u1_s_PwrCtrl_Sip_On_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP8;
-
-            /* 【todo】5-10. PMA_PS_HOLD監視処理開始 */
-            /* 【todo】5-7. SAIL UART Message監視開始 */
-
         }
 
         else{
@@ -1703,7 +1837,7 @@ static void vd_s_PwrCtrlSipRsmMainFunc( void )
             /* LOW-POWER-ON_HIを検知 */
             u1_s_PwrCtrl_Sip_LOW_POWER_ON_Sts = (U1)TRUE;
             /* PGOOD_ASIL_VB監視 開始(LOW-POWER-ON=Hi条件成立) */
-            vd_s_PwrCtrlObservePgdAsilVbLowPwrReq((U1)PWRCTRL_OBSERVE_ON);
+            vd_g_PwrCtrlObservePgdAsilVbLowPwrReq((U1)PWRCTRL_OBSERVE_ON);
 
             u1_s_PwrCtrl_Sip_Rsm_Step     = (U1)PWRCTRL_COMMON_PROCESS_STEP2;
         }
@@ -2098,7 +2232,7 @@ static void vd_s_PwrCtrlSipOffStep6( void )
             /* LOW-POWER-ON_LOを検知時に端子モニタ停止を設定 */
             u1_s_PwrCtrl_Sip_LOW_POWER_ON_Sts = (U1)FALSE;
             /* PGOOD_ASIL_VB監視 終了(LOW-POWER-ON=Lo条件成立) */
-            vd_s_PwrCtrlObservePgdAsilVbLowPwrReq((U1)PWRCTRL_OBSERVE_OFF);
+            vd_g_PwrCtrlObservePgdAsilVbLowPwrReq((U1)PWRCTRL_OBSERVE_OFF);
         }
 
         /* STEP6-1～6-7が完了していれば次のSTEPに進める */
@@ -2257,7 +2391,7 @@ static void vd_s_PwrCtrlSipStbyMainFunc( void )
             /* LOW-POWER-ON_LOを検知時に端子モニタ停止を設定 */
             u1_s_PwrCtrl_Sip_LOW_POWER_ON_Sts = (U1)FALSE;
             /* PGOOD_ASIL_VB監視 終了(LOW-POWER-ON=Lo条件成立) */
-            vd_s_PwrCtrlObservePgdAsilVbLowPwrReq((U1)PWRCTRL_OBSERVE_OFF);
+            vd_g_PwrCtrlObservePgdAsilVbLowPwrReq((U1)PWRCTRL_OBSERVE_OFF);
 
             u1_s_PwrCtrl_Sip_Stby_Step    = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
             u1_s_PwrCtrl_Sip_Pwr_Sts      = (U1)PWRCTRL_SIP_STS_NON;
@@ -2454,7 +2588,7 @@ static void vd_s_PwrCtrlSipForcedOffStep5( void )
             /* LOW-POWER-ON_LOを検知時に端子モニタ停止を設定 */
             u1_s_PwrCtrl_Sip_LOW_POWER_ON_Sts = (U1)FALSE;
             /* PGOOD_ASIL_VB監視 終了(LOW-POWER-ON=Lo条件成立) */
-            vd_s_PwrCtrlObservePgdAsilVbLowPwrReq((U1)PWRCTRL_OBSERVE_OFF);
+            vd_g_PwrCtrlObservePgdAsilVbLowPwrReq((U1)PWRCTRL_OBSERVE_OFF);
             /* STEP5-2 */
             vd_s_PwrCtrl_Sip_DioWriteCheck(&u4_s_PwrCtrl_Sip_ForcedOff_VB33_SIP_ON_Tim,
                                            (U1)PWRCTRL_SIP_FOFF_T_VB33_SIP_ON,
@@ -2513,6 +2647,126 @@ static void vd_s_PwrCtrlSipForcedOffStep5( void )
             
             else{
                u4_s_PwrCtrl_Sip_ForcedOff_DDConvOFFWait_Tim++;
+            }
+        }
+    }
+    
+    return;
+}
+
+/*****************************************************************************
+  Function      : vd_s_PwrCtrlSipPmPsailFsMainFunc
+  Description   : 5-9.PM_PSAIL_ERR_N監視フェールセーフ_定期処理
+  param[in/out] : none
+  return        : none
+  Note          : none
+*****************************************************************************/
+static void vd_s_PwrCtrlSipPmPsailFsMainFunc( void )
+{
+    if(u1_s_PwrCtrl_Sip_PmPsailFs_Step == (U1)PWRCTRL_COMMON_PROCESS_STEP1)
+    {
+        vd_s_PwrCtrl_Sip_DioReadCheck(&u4_s_PwrCtrl_Sip_PmPsailFs_POFF_COMPLETE_N_Chk_Tim, 
+                                      &u4_s_PwrCtrl_Sip_PmPsailFs_POFF_COMPLETE_N_Wait_Tim,
+                                      (U1)PWRCTRL_SIP_PSAILFS_T_POFF_COMPLETE_N,
+                                      (U1)PWRCTRL_CFG_PRIVATE_KIND_POFF_COMPLETE_N, 
+                                      (Dio_LevelType)MCU_DIO_LOW);
+        /* POFF_COMPLETE_N =Lo? */
+        if(u4_s_PwrCtrl_Sip_PmPsailFs_POFF_COMPLETE_N_Chk_Tim == (U4)PWRCTRL_SIP_TIME_INVALID)
+        {
+            /* PM_PSAIL_ERR_N監視フェールセーフ完了 */
+            u1_s_PwrCtrl_Sip_PmPsailFs_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
+            u1_s_PwrCtrl_Sip_Pwr_Sts = (U1)PWRCTRL_SIP_STS_NON;
+
+            /* 強制OFFシーケンス(DDコンOFF)要求を設定 */
+            u1_s_PwrCtrl_Sip_FOff_Sts = (U1)PWRCTRL_SIP_FORCEDOFF_DDCONV;
+        }
+        else
+        {
+            /* POFF_COMPLETE_N =Loで100ms経過した場合 */
+            if(u4_s_PwrCtrl_Sip_PmPsailFs_POFF_COMPLETE_N_Wait_Tim > (U1)PWRCTRL_SIP_PSAILFS_WAIT_POFF_COMP)
+            {
+                /* PM_PSAIL_ERR_N監視フェールセーフ完了 */
+                u1_s_PwrCtrl_Sip_PmPsailFs_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
+                u1_s_PwrCtrl_Sip_Pwr_Sts = (U1)PWRCTRL_SIP_STS_NON;
+
+                /* 強制OFFシーケンス(PMIC異常)要求を設定 */
+                u1_s_PwrCtrl_Sip_FOff_Sts = (U1)PWRCTRL_SIP_FORCEDOFF_PMICERR;
+
+                /* 【todo】異常内容保存[ID0034] */
+                /* SoC異常検知の設定 */
+                vd_g_PwrCtrlSipSoCOnError();
+            }
+        }
+    }
+}
+
+/*****************************************************************************
+  Function      : vd_s_PwrCtrlSipPmaPsFsMainFunc
+  Description   : 5-10.PMA_PS_HOLD監視フェールセーフ_定期処理
+  param[in/out] : none
+  return        : none
+  Note          : none
+*****************************************************************************/
+static void vd_s_PwrCtrlSipPmaPsFsMainFunc( void )
+{
+    if(u1_s_PwrCtrl_Sip_PmaPsFs_Step == (U1)PWRCTRL_COMMON_PROCESS_STEP1)
+    {
+        vd_s_PwrCtrl_Sip_DioReadCheck(&u4_s_PwrCtrl_Sip_PmaPsFs_SOC_RESOUT_N_Chk_Tim,
+                                      &u4_s_PwrCtrl_Sip_PmaPsFs_SOC_RESOUT_N_Wait_Tim,
+                                      (U1)PWRCTRL_SIP_PMAPSFS_T_SOC_RESOUT_N,
+                                      (U1)PWRCTRL_CFG_PRIVATE_KIND_SOC_RESOUT_N,
+                                      (Dio_LevelType)MCU_DIO_LOW);
+        vd_s_PwrCtrl_Sip_DioReadCheck(&u4_s_PwrCtrl_Sip_PmaPsFs_SAIL_RESOUT_N_Chk_Tim, 
+                                      &u4_s_PwrCtrl_Sip_PmaPsFs_SAIL_RESOUT_N_Wait_Tim,
+                                      (U1)PWRCTRL_SIP_PMAPSFS_T_SAIL_RESOUT_N,
+                                      (U1)PWRCTRL_CFG_PRIVATE_KIND_SAIL_RESOUT_N,
+                                      (Dio_LevelType)MCU_DIO_LOW);
+        /* SOC_RESOUT_N & SAIL_RESOUT_N =Lo? */
+        if((u4_s_PwrCtrl_Sip_PmaPsFs_SOC_RESOUT_N_Chk_Tim == (U4)PWRCTRL_SIP_TIME_INVALID) &&
+           (u4_s_PwrCtrl_Sip_PmaPsFs_SAIL_RESOUT_N_Chk_Tim == (U4)PWRCTRL_SIP_TIME_INVALID))
+        {
+            /* SOC_RESOUT_N & SAIL_RESOUT_N =Loなら次のSTEPに進める */
+            u1_s_PwrCtrl_Sip_PmaPsFs_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP2;
+        }
+        else
+        {
+            if((u4_s_PwrCtrl_Sip_PmaPsFs_SOC_RESOUT_N_Wait_Tim > (U4)PWRCTRL_SIP_PMAPSFS_WAIT_SOC_RESOUT_N) ||
+               (u4_s_PwrCtrl_Sip_PmaPsFs_SAIL_RESOUT_N_Wait_Tim > (U4)PWRCTRL_SIP_PMAPSFS_WAIT_SAIL_RESOUT_N))
+            {
+                /* 強制OFFシーケンス(SOC異常)要求を設定 */
+                u1_s_PwrCtrl_Sip_FOff_Sts = (U1)PWRCTRL_SIP_FORCEDOFF_SOCERR;
+
+                /* 【todo】異常内容の保存[ID0036/0037] */
+                vd_g_PwrCtrlSipSoCOnError();            /* SoC異常検知の設定 */
+            }
+        }
+    }
+    if(u1_s_PwrCtrl_Sip_PmaPsFs_Step == (U1)PWRCTRL_COMMON_PROCESS_STEP2){
+        vd_s_PwrCtrl_Sip_DioReadCheck(&u4_s_PwrCtrl_Sip_PmaPsFs_POFF_COMPLETE_N_Chk_Tim, 
+                                      &u4_s_PwrCtrl_Sip_PmaPsFs_POFF_COMPLETE_N_Wait_Tim,
+                                      (U1)PWRCTRL_SIP_PMAPSFS_T_POFF_COMPLETE_N,
+                                      (U1)PWRCTRL_CFG_PRIVATE_KIND_POFF_COMPLETE_N, 
+                                      (Dio_LevelType)MCU_DIO_LOW);
+        /* POFF_COMPLETE_N =Lo? */
+        if(u4_s_PwrCtrl_Sip_PmaPsFs_POFF_COMPLETE_N_Chk_Tim == (U4)PWRCTRL_SIP_TIME_INVALID)
+        {
+            /* PMA_PS_HOLD監視フェールセーフ処理完了 */
+            u1_s_PwrCtrl_Sip_PmaPsFs_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
+            u1_s_PwrCtrl_Sip_Pwr_Sts = (U1)PWRCTRL_SIP_STS_NON;
+
+            /* 【todo】異常内容の保存[ID0035] */
+            vd_g_PwrCtrlSipSoCOnError();            /* SoC異常検知の設定 */
+        }
+        else
+        {
+            /* POFF_COMPLETE_N =Loで100ms経過した場合 */
+            if(u4_s_PwrCtrl_Sip_PmaPsFs_POFF_COMPLETE_N_Wait_Tim > (U1)PWRCTRL_SIP_PMAPSFS_WAIT_POFF_COMP)
+            {
+                /* 強制OFFシーケンス(PMIC異常)要求を設定 */
+                u1_s_PwrCtrl_Sip_FOff_Sts = (U1)PWRCTRL_SIP_FORCEDOFF_PMICERR;
+
+                /* 【todo】異常内容保存[ID0034] */
+                vd_g_PwrCtrlSipSoCOnError();            /* SoC異常検知の設定 */
             }
         }
     }

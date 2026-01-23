@@ -25,6 +25,9 @@
 #define PWRCTRL_MAIN_FORCEDOFF_REQ         (0x05U) /* SIP電源強制OFFシーケンス要求           */
 #define PWRCTRL_MAIN_STBYCANCELST1_REQ     (0x06U) /* スタンバイ処理中の起動トリガ時シーケンス要求(SIP電源強制OFF処理開始) */
 #define PWRCTRL_MAIN_STBYCANCELST2_REQ     (0x07U) /* スタンバイ処理中の起動トリガ時シーケンス要求(SYS系電源ON、SIP電源ON) */
+#define PWRCTRL_MAIN_PMPSAIL_FS_REQ        (0x08U) /* PM_PSAIL_ERR_N監視(フェールセーフ)要求 */
+#define PWRCTRL_MAIN_PMAPS_FS_REQ          (0x09U) /* PMA_PS_HOLD監視(フェールセーフ)要求    */
+
 #define PWRCTRL_MAIN_NO_REQ                (0xFFU) /* 要求無し(処理完了)                     */
 
 #define PWRCTRL_MAIN_PROHIBITSLEEP_OFF     (0x00U)  /* スリープ許可 */

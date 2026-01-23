@@ -24,19 +24,6 @@
 #define PWRCTRL_OBSERVE_STBY_NG           (PWRCTRL_COM_STBY_NG)
 #define PWRCTRL_OBSERVE_FSLP_ON           (PWRCTRL_COM_FSLP_ON)
 #define PWRCTRL_OBSERVE_FSLP_OFF          (PWRCTRL_COM_FSLP_OFF)
-/* 異常監視 */
-#define PWRCTRL_OBSERVE_ERR_NON                 (0x0000)   /* 異常なし */
-#define PWRCTRL_OBSERVE_ERR_SAILUART            (0x0001)   /* 5-7.SAIL UART Message監視 異常検知 */
-#define PWRCTRL_OBSERVE_ERR_SAILERR             (0x0002)   /* 5-8.SAIL-ERR監視 異常検知  */
-#define PWRCTRL_OBSERVE_ERR_PMPSAIL             (0x0004)   /* 5-9.PM_PSAIL_ERR_N監視 異常検知  */
-#define PWRCTRL_OBSERVE_ERR_PMAPS               (0x0008)   /* 5-10.PMA_PS_HOLD監視 異常検知  */
-#define PWRCTRL_OBSERVE_ERR_SPI                 (0x0010)   /* 5-11.SPI通信途絶監視 異常検知  */
-#define PWRCTRL_OBSERVE_ERR_PGD_ASIL_VB         (0x0020)   /* 5-12-1. PGOOD_ASIL_VB監視 異常検知  */
-#define PWRCTRL_OBSERVE_ERR_PGD_ASIL_VSYS       (0x0040)   /* 5-12-2. PGOOD_ASIL_VSYS監視 異常検知  */
-#define PWRCTRL_OBSERVE_ERR_PGD_ASIL_VSYS_V11   (0x0080)   /* 5-12-3. PGOOD_ASIL_VSYS(V11)監視 異常検知  */
-#define PWRCTRL_OBSERVE_ERR_PGD_DIODE           (0x0100)   /* 5-12-4. PGOOD_DIODE監視 異常検知  */
-#define PWRCTRL_OBSERVE_ERR_PGD_VB              (0x0200)   /* 5-12-5. PGOOD_VB監視 異常検知  */
-#define PWRCTRL_OBSERVE_ERR_PGD_VSYS            (0x0400)   /* 5-12-5. PGOOD_VSYS監視 異常検知  */
 
 /*--------------------------------------------------------------------------*/
 /* Types                                                                    */
@@ -76,8 +63,9 @@ static U1 u1_s_PwrCtrl_Observe_PgdDiode_Sts;        /* PGOOD_DIODE監視状態 */
 static U1 u1_s_PwrCtrl_Observe_PgdVb_Sts;           /* PGOOD_VB監視状態 */
 static U1 u1_s_PwrCtrl_Observe_PgdVsys_Sts;         /* PGOOD_VSYS監視状態 */
 static U2 u2_s_PwrCtrl_Observe_Err_Sts;             /* 監視異常発生内容 */
+#if (PWRCTRL_CFG_PRIVATE_ERR_CHK == PWRCTRL_CFG_PRIVATE_ERR_CHK_ENABLE)
 U2 u2_g_PwrCtrl_Observe_Err_Sts_debug;              /* 監視異常発生内容(デバッグ用) */
-
+#endif
 /*--------------------------------------------------------------------------*/
 /* Constants                                                                */
 /*--------------------------------------------------------------------------*/
@@ -104,7 +92,6 @@ void vd_g_PwrCtrlObserveInit( void )
     u4_s_PwrCtrl_Observe_SleepTime = (U4)PWRCTRL_OBSERVE_SLEEP_CLR;
     /* 異常監視 */
     u2_s_PwrCtrl_Observe_Err_Sts = (U2)PWRCTRL_OBSERVE_ERR_NON;
-    u2_g_PwrCtrl_Observe_Err_Sts_debug = (U2)PWRCTRL_OBSERVE_ERR_NON;
     u1_s_PwrCtrl_Observe_Psail_Sts = (U1)PWRCTRL_OBSERVE_OFF;
     u1_s_PwrCtrl_Observe_PsHold_Sts = (U1)PWRCTRL_OBSERVE_OFF;
     u1_s_PwrCtrl_Observe_PgdAsilVbLowPwr_Sts = (U1)PWRCTRL_OBSERVE_OFF;
@@ -114,7 +101,9 @@ void vd_g_PwrCtrlObserveInit( void )
     u1_s_PwrCtrl_Observe_PgdDiode_Sts = (U1)PWRCTRL_OBSERVE_OFF;
     u1_s_PwrCtrl_Observe_PgdVb_Sts = (U1)PWRCTRL_OBSERVE_OFF;
     u1_s_PwrCtrl_Observe_PgdVsys_Sts = (U1)PWRCTRL_OBSERVE_OFF;
-
+#if (PWRCTRL_CFG_PRIVATE_ERR_CHK == PWRCTRL_CFG_PRIVATE_ERR_CHK_ENABLE)
+    u2_g_PwrCtrl_Observe_Err_Sts_debug = (U2)PWRCTRL_OBSERVE_ERR_NON;
+#endif
     return;
 }
 
@@ -152,8 +141,9 @@ void vd_g_PwrCtrlObserveMainFunc( void )
     u2_t_obserr |= u2_s_PwrCtrlObservePgdVsysSeq();         /* PGOOD_VSYS監視 */
 
     u2_s_PwrCtrl_Observe_Err_Sts = u2_t_obserr;             /* 監視異常発生内容を更新 */
+#if (PWRCTRL_CFG_PRIVATE_ERR_CHK == PWRCTRL_CFG_PRIVATE_ERR_CHK_ENABLE)
     u2_g_PwrCtrl_Observe_Err_Sts_debug |= u2_t_obserr;      /* 監視異常発生内容(デバッグ用)を更新(起動中保持) */
-
+#endif
     return;
 }
 
@@ -275,13 +265,13 @@ void vd_g_PwrCtrlObservePsHoldReq(const U1 u1_a_req )
 }
 
 /*****************************************************************************
-  Function      : vd_s_PwrCtrlObservePgdAsilVbSysPwrReq
+  Function      : vd_g_PwrCtrlObservePgdAsilVbSysPwrReq
   Description   : PGOOD_ASIL_VB監視開始/終了要求(SYS電源制御状態)通知処理
   param[in/out] :[ in ] u1_a_req:開始/終了要求
   return        : none
   Note          : none
 *****************************************************************************/
-void vd_s_PwrCtrlObservePgdAsilVbSysPwrReq(const U1 u1_a_req )
+void vd_g_PwrCtrlObservePgdAsilVbSysPwrReq(const U1 u1_a_req )
 {
     u1_s_PwrCtrl_Observe_PgdAsilVbSysPwr_Sts = u1_a_req;
 
@@ -289,13 +279,13 @@ void vd_s_PwrCtrlObservePgdAsilVbSysPwrReq(const U1 u1_a_req )
 }
 
 /*****************************************************************************
-  Function      : vd_s_PwrCtrlObservePgdAsilVbLowPwrReq
+  Function      : vd_g_PwrCtrlObservePgdAsilVbLowPwrReq
   Description   : PGOOD_ASIL_VB監視開始/終了要求(LOW-POWER-ON状態)通知処理
   param[in/out] :[ in ] u1_a_req:開始/終了要求
   return        : none
   Note          : none
 *****************************************************************************/
-void vd_s_PwrCtrlObservePgdAsilVbLowPwrReq(const U1 u1_a_req )
+void vd_g_PwrCtrlObservePgdAsilVbLowPwrReq(const U1 u1_a_req )
 {
     u1_s_PwrCtrl_Observe_PgdAsilVbLowPwr_Sts = u1_a_req;
 
@@ -303,13 +293,13 @@ void vd_s_PwrCtrlObservePgdAsilVbLowPwrReq(const U1 u1_a_req )
 }
 
 /*****************************************************************************
-  Function      : vd_s_PwrCtrlObservePgdAsilVsysReq
+  Function      : vd_g_PwrCtrlObservePgdAsilVsysReq
   Description   : PGOOD_ASIL_VSYS監視開始/終了要求通知処理
   param[in/out] :[ in ] u1_a_req:開始/終了要求
   return        : none
   Note          : none
 *****************************************************************************/
-void vd_s_PwrCtrlObservePgdAsilVsysReq(const U1 u1_a_req )
+void vd_g_PwrCtrlObservePgdAsilVsysReq(const U1 u1_a_req )
 {
     u1_s_PwrCtrl_Observe_PgdAsilVsys_Sts = u1_a_req;
 
@@ -317,13 +307,13 @@ void vd_s_PwrCtrlObservePgdAsilVsysReq(const U1 u1_a_req )
 }
 
 /*****************************************************************************
-  Function      : vd_s_PwrCtrlObservePgdAsilVsysV11Req
+  Function      : vd_g_PwrCtrlObservePgdAsilVsysV11Req
   Description   : PGOOD_ASIL_VSYS(V11)監視監視開始/終了要求通知処理
   param[in/out] :[ in ] u1_a_req:開始/終了要求
   return        : none
   Note          : none
 *****************************************************************************/
-void vd_s_PwrCtrlObservePgdAsilVsysV11Req(const U1 u1_a_req )
+void vd_g_PwrCtrlObservePgdAsilVsysV11Req(const U1 u1_a_req )
 {
     u1_s_PwrCtrl_Observe_PgdAsilVsysV11_Sts = u1_a_req;
 
@@ -331,13 +321,13 @@ void vd_s_PwrCtrlObservePgdAsilVsysV11Req(const U1 u1_a_req )
 }
 
 /*****************************************************************************
-  Function      : vd_s_PwrCtrlObservePgdDiodeReq
+  Function      : vd_g_PwrCtrlObservePgdDiodeReq
   Description   : PGOOD_DIODE監視開始/終了要求通知処理
   param[in/out] :[ in ] u1_a_req:開始/終了要求
   return        : none
   Note          : none
 *****************************************************************************/
-void vd_s_PwrCtrlObservePgdDiodeReq(const U1 u1_a_req )
+void vd_g_PwrCtrlObservePgdDiodeReq(const U1 u1_a_req )
 {
     u1_s_PwrCtrl_Observe_PgdDiode_Sts = u1_a_req;
 
@@ -345,13 +335,13 @@ void vd_s_PwrCtrlObservePgdDiodeReq(const U1 u1_a_req )
 }
 
 /*****************************************************************************
-  Function      : vd_s_PwrCtrlObservePgdVbReq
+  Function      : vd_g_PwrCtrlObservePgdVbReq
   Description   : PGOOD_VB監視開始/終了要求通知処理
   param[in/out] :[ in ] u1_a_req:開始/終了要求
   return        : none
   Note          : none
 *****************************************************************************/
-void vd_s_PwrCtrlObservePgdVbReq(const U1 u1_a_req )
+void vd_g_PwrCtrlObservePgdVbReq(const U1 u1_a_req )
 {
     u1_s_PwrCtrl_Observe_PgdVb_Sts = u1_a_req;
 
@@ -359,13 +349,13 @@ void vd_s_PwrCtrlObservePgdVbReq(const U1 u1_a_req )
 }
 
 /*****************************************************************************
-  Function      : vd_s_PwrCtrlObservePgdVsysReq
+  Function      : vd_g_PwrCtrlObservePgdVsysReq
   Description   : PGOOD_VSYS監視監視開始/終了要求通知処理
   param[in/out] :[ in ] u1_a_req:開始/終了要求
   return        : none
   Note          : none
 *****************************************************************************/
-void vd_s_PwrCtrlObservePgdVsysReq(const U1 u1_a_req )
+void vd_g_PwrCtrlObservePgdVsysReq(const U1 u1_a_req )
 {
     u1_s_PwrCtrl_Observe_PgdVsys_Sts = u1_a_req;
 

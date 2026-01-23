@@ -409,7 +409,7 @@ void vd_g_PwrCtrlSysPwrOnMainFunction( void )
                 if( u4_s_PwrCtrl_Sys_Bu_Dd_Mode_Time == (U4)PWRCTRL_SYS_COUNTTIME_FIN )
                 {
                     u1_s_PwrCtrl_Sys_PgdDiode_ObsFlg = (U1)TRUE;             /* PGOOD_DIODE端子モニタ 開始 */
-                    vd_s_PwrCtrlObservePgdDiodeReq((U1)PWRCTRL_OBSERVE_ON);  /* PGOOD_DIODE監視 開始 */
+                    vd_g_PwrCtrlObservePgdDiodeReq((U1)PWRCTRL_OBSERVE_ON);  /* PGOOD_DIODE監視 開始 */
                 }
 
                 /* STEP1-1とSTEP1-2が完了していれば次のSTEPに進める */
@@ -459,14 +459,14 @@ void vd_g_PwrCtrlSysPwrOnMainFunction( void )
                 if ( u4_s_PwrCtrl_Sys_V18_Asil_Time == (U4)PWRCTRL_SYS_COUNTTIME_FIN )
                 {
                     u1_s_PwrCtrl_Sys_PgdAslVs_ObsFlg = (U1)TRUE;                /* PGOOD_ASIL_VSYS端子モニタ 開始 */
-                    vd_s_PwrCtrlObservePgdAsilVsysReq((U1)PWRCTRL_OBSERVE_ON);  /* PGOOD_ASIL_VSYS監視 開始 */
+                    vd_g_PwrCtrlObservePgdAsilVsysReq((U1)PWRCTRL_OBSERVE_ON);  /* PGOOD_ASIL_VSYS監視 開始 */
                 }
 
                 /* V11-ASIL-ON =Hi */
                 if( u4_s_PwrCtrl_Sys_V11_Asil_Time == (U4)PWRCTRL_SYS_COUNTTIME_FIN )
                 {
                     u1_s_PwrCtrl_Sys_PgdAslV11_ObsFlg = (U1)TRUE;                  /* PGOOD_ASIL_VSYS(V11)端子モニタ 開始 */
-                    vd_s_PwrCtrlObservePgdAsilVsysV11Req((U1)PWRCTRL_OBSERVE_ON);  /* PGOOD_ASIL_VSYS(V11)監視 開始 */
+                    vd_g_PwrCtrlObservePgdAsilVsysV11Req((U1)PWRCTRL_OBSERVE_ON);  /* PGOOD_ASIL_VSYS(V11)監視 開始 */
                 }
 
                 /* V33-PERI-ON =Hi(STEP3で成立済み) & DD-FREQ =PWM信号(STEP3で成立済み) */
@@ -476,7 +476,7 @@ void vd_g_PwrCtrlSysPwrOnMainFunction( void )
                   && ( u4_s_PwrCtrl_Sys_Eizo_Time == (U4)PWRCTRL_SYS_COUNTTIME_FIN ) )
                 {
                     u1_s_PwrCtrl_Sys_PgdVs_ObsFlg = (U1)TRUE;               /* PGOOD_VSYS端子モニタ 開始 */
-                    vd_s_PwrCtrlObservePgdVsysReq((U1)PWRCTRL_OBSERVE_ON);  /* PGOOD_VSYS端子モニタ監視 開始 */
+                    vd_g_PwrCtrlObservePgdVsysReq((U1)PWRCTRL_OBSERVE_ON);  /* PGOOD_VSYS端子モニタ監視 開始 */
                 }
 
                 /* STEP4-1~STEP4-5が完了していれば正常起動を設定 */
@@ -932,19 +932,19 @@ static void vd_s_PwrCtrlSysPwrOffFlw( void )
 
         /* V33-ASIL-ON =Lo or V18-ASIL-ON =Lo */
         u1_s_PwrCtrl_Sys_PgdAslVs_ObsFlg = (U1)FALSE;                   /* PGOOD_ASIL_VSYS端子モニタ 終了 */
-        vd_s_PwrCtrlObservePgdAsilVsysReq((U1)PWRCTRL_OBSERVE_OFF);     /* PGOOD_ASIL_VSYS監視 終了 */
+        vd_g_PwrCtrlObservePgdAsilVsysReq((U1)PWRCTRL_OBSERVE_OFF);     /* PGOOD_ASIL_VSYS監視 終了 */
 
         /* V11-ASIL-ON =Lo */
         u1_s_PwrCtrl_Sys_PgdAslV11_ObsFlg = (U1)FALSE;                  /* PGOOD_ASIL_VSYS(V11)端子モニタ 終了 */
-        vd_s_PwrCtrlObservePgdAsilVsysV11Req((U1)PWRCTRL_OBSERVE_OFF);  /* PGOOD_ASIL_VSYS(V11)監視 終了 */
+        vd_g_PwrCtrlObservePgdAsilVsysV11Req((U1)PWRCTRL_OBSERVE_OFF);  /* PGOOD_ASIL_VSYS(V11)監視 終了 */
 
         /* Bu-DD-MODE =Lo */
         u1_s_PwrCtrl_Sys_PgdDiode_ObsFlg = (U1)FALSE;                   /* PGOOD_DIODE端子モニタ 終了 */
-        vd_s_PwrCtrlObservePgdDiodeReq((U1)PWRCTRL_OBSERVE_OFF);        /* PGOOD_DIODE監視 終了 */
+        vd_g_PwrCtrlObservePgdDiodeReq((U1)PWRCTRL_OBSERVE_OFF);        /* PGOOD_DIODE監視 終了 */
 
         /* V33-PERI-ON =Lo or DD-FREQ =Lo or V18-ON =Lo or AUDIO-ON =Lo or EIZO-ON =Lo */
         u1_s_PwrCtrl_Sys_PgdVs_ObsFlg = (U1)FALSE;                      /* PGOOD_VSYS端子モニタ 終了 */
-        vd_s_PwrCtrlObservePgdVsysReq((U1)PWRCTRL_OBSERVE_OFF);         /* PGOOD_VSYS端子監視 終了 */
+        vd_g_PwrCtrlObservePgdVsysReq((U1)PWRCTRL_OBSERVE_OFF);         /* PGOOD_VSYS端子監視 終了 */
 
         u1_s_PwrCtrl_Sys_Off_SubStep    = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
         break;
