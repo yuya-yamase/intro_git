@@ -336,7 +336,7 @@
 #define VDF_ESO_NVM_W5                           (0x0004076CU)
 #define VDF_ESO_NVM_W6                           (0x3F800000U)
 #define VDF_ESO_NVM_W7                           (0xBFEFFD00U)
-#define VDF_ESO_NVM_W8                           (0x00FFF714U)
+#define VDF_ESO_NVM_W8                           (0x00FFF715U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */

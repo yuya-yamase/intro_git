@@ -1244,7 +1244,7 @@ const ST_VDF_ESO_AVA   st_gp_VDF_ESO_AVA[VDF_ESO_NOW_AVA] = {
         (U4)VDF_ESO_INI_W8,                        /* u4_ini */
         (U4)VDF_ESO_NVM_W8,                        /* u4_nvm */
         (U4)0x007FE714U,                           /* u4_unk */
-        (U4)0x00FFF716U,                           /* u4_rx  */
+        (U4)0x00FFF717U,                           /* u4_rx  */
 
         (U2)NVMCID_U4_VDF_ESO_W8,                  /* u2_nid */
         (U2)RIMID_U4_VDF_ESO_W8                    /* u2_bid */
