@@ -86,6 +86,11 @@
 #define DATESI_COM_RTC_WEEK_SAT             (6U)                                         /* Saturday                             */
 #define DATESI_COM_RTC_WEEK_SUN             (7U)                                         /* Sunday                               */
 
+/* RtcIC write status */
+#define DATESI_COM_RTC_DATA_INVALID         (0U)                                         /* System date/time invalid             */
+#define DATESI_COM_RTC_DATA_TIM_VALID       (0x01U)                                      /* System time valid                    */
+#define DATESI_COM_RTC_DATA_CAL_VALID       (0x02U)                                      /* System date valid                    */
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -122,7 +127,7 @@ static U1                             u1_s_DateSIComSetCmpChk(void);
 /*===================================================================================================================================*/
 void           vd_g_DateSIComBonInit(void)
 {
-    u1_s_datesi_com_rtc_sts = (U1)FALSE;
+    u1_s_datesi_com_rtc_sts = (U1)DATESI_COM_RTC_DATA_INVALID;
     vd_g_Rim_WriteU1((U2)RIMID_U1_RTC_STS, u1_s_datesi_com_rtc_sts);
 
     vd_g_DateSIComInit();
@@ -139,7 +144,7 @@ void           vd_g_DateSIComRstWkupInit(void)
     U1  u1_t_rim_sts;
     U1  u1_t_rim_data;
 
-    u1_s_datesi_com_rtc_sts = (U1)FALSE;
+    u1_s_datesi_com_rtc_sts = (U1)DATESI_COM_RTC_DATA_INVALID;
     u1_t_rim_data           = (U1)0U;
 
     u1_t_rim_sts = u1_g_Rim_ReadU1withStatus((U2)RIMID_U1_RTC_STS, &u1_t_rim_data);
@@ -239,12 +244,6 @@ void            vd_g_DateSIComCommandRx(const ST_DATESI_COMMAND_DATA st_a_DATA)
     st_s_command_data.u1_clk_day_updt  = st_a_DATA.u1_clk_day_updt;
 
     u1_s_datesi_com_req_act = (U1)TRUE;
-
-    /* RTC v1.1 provisionally */
-    if(u1_s_datesi_com_rtc_sts != (U1)TRUE){
-        u1_s_datesi_com_rtc_sts = (U1)TRUE;
-        vd_g_Rim_WriteU1((U2)RIMID_U1_RTC_STS,u1_s_datesi_com_rtc_sts);
-    }
 
     vd_g_DateSITimCanRxHk();
     vd_g_DateSICalAdjustdate();
@@ -372,9 +371,10 @@ static ST_XSPI_IVI_CLOCK_RTC_DATA  st_s_DateSIComRtcSet(void)
     st_t_clock_rtc_data.u1_minute_rtc           = (U1)DATESI_COM_RTC_MINUTE_INVALID;
     st_t_clock_rtc_data.u1_second_rtc           = (U1)DATESI_COM_RTC_SECOND_INVALID;
     st_t_clock_rtc_data.u1_dow_rtc              = (U1)DATESI_COM_RTC_WEEK_INVALID;
-    st_t_clock_rtc_data.u1_clock_set_sts_rtc    = u1_s_datesi_com_rtc_sts;
+    st_t_clock_rtc_data.u1_clock_set_sts_rtc    = (U1)FALSE;
 
-    if(u1_s_datesi_com_rtc_sts == (U1)TRUE){
+    if(u1_s_datesi_com_rtc_sts == (U1)(DATESI_COM_RTC_DATA_TIM_VALID | DATESI_COM_RTC_DATA_CAL_VALID)){
+        st_t_clock_rtc_data.u1_clock_set_sts_rtc = (U1)TRUE;
         u4_t_now_tim = u4_g_DateclkHhmmss24h();
         u1_t_ans = u1_g_HhmmssFrmtIs24h(u4_t_now_tim, &u1_tp_time[0]);
         if(u1_t_ans == (U1)TRUE){
@@ -458,6 +458,37 @@ void            vd_g_DateSIComSetCmp(const U1 u1_a_RTC_UPDT, const U1 u1_a_KIND)
 {
     if(u1_a_KIND < (U1)DATESI_COM_KIND_NUM){
         u1_sp_datesi_com_setting_sts[u1_a_KIND] = u1_a_RTC_UPDT;
+    }
+}
+
+/*===================================================================================================================================*/
+/* void            vd_g_DateSIComSetRtcCmp(const U1 u1_a_TIM, const U1 u1_a_CAL)                                                     */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      u1_a_TIM : Write status of the RTC time to the RtcIC(True/False)                                                 */
+/*                  u1_a_CAL : Write status of the RTC Date to the RtcIC(True/False)                                                 */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void            vd_g_DateSIComSetRtcCmp(const U1 u1_a_TIM, const U1 u1_a_CAL)
+{
+    U1                u1_t_rim_updt_flg;
+    U1                u1_t_tim_setcmp_chk;
+    U1                u1_t_cal_setcmp_chk;
+
+    u1_t_rim_updt_flg   = (U1)FALSE;
+
+    u1_t_tim_setcmp_chk = u1_s_datesi_com_rtc_sts & (U1)DATESI_COM_RTC_DATA_TIM_VALID;
+    if((u1_a_TIM == (U1)TRUE) && (u1_t_tim_setcmp_chk == (U1)DATESI_COM_RTC_DATA_INVALID)){
+        u1_s_datesi_com_rtc_sts |= (U1)DATESI_COM_RTC_DATA_TIM_VALID;
+        u1_t_rim_updt_flg = (U1)TRUE;
+    }
+    u1_t_cal_setcmp_chk = u1_s_datesi_com_rtc_sts & (U1)DATESI_COM_RTC_DATA_CAL_VALID;
+    if((u1_a_CAL == (U1)TRUE) && (u1_t_cal_setcmp_chk == (U1)DATESI_COM_RTC_DATA_INVALID)){
+        u1_s_datesi_com_rtc_sts |= (U1)DATESI_COM_RTC_DATA_CAL_VALID;
+        u1_t_rim_updt_flg = (U1)TRUE;
+    }
+
+    if(u1_t_rim_updt_flg == (U1)TRUE){
+        vd_g_Rim_WriteU1((U2)RIMID_U1_RTC_STS, u1_s_datesi_com_rtc_sts);
     }
 }
 
