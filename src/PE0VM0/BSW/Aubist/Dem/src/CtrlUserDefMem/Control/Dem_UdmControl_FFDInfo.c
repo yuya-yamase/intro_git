@@ -1,7 +1,7 @@
-/* Dem_UdmControl_FFDInfo_c(v5-7-0)                                         */
+/* Dem_UdmControl_FFDInfo_c(v5-5-0)                                         */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -289,7 +289,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmControl_GetFreezeFrameDataBy
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | branch changed.                                          */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmControl_GetUserDefinedMemoryFreezeFrameRecordNumber
 (
@@ -332,7 +331,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmControl_GetUserDefinedMemory
         if( retGetEventIndex == DEM_IRT_OK )
         {
             /* Get udm group index by event index. */
-            udmGroupKindIndex = Dem_CfgInfoUdm_GetUserDefinedMemoryGroupKindIndexByEventIndex( udmInfoTableIndex, udmEventIndex );                  /* [GUD]udmInfoTableIndex *//* [GUD]udmEventIndex */
+            udmGroupKindIndex = Dem_CfgInfoUdm_GetUserDefinedMemoryGroupKindIndexByEventIndex( udmInfoTableIndex, udmEventIndex );                  /* [GUD]udmInfoTableIndex */
 
             if( udmGroupKindIndex < userDefinedMemoryNum )  /* [GUD:if]udmGroupKindIndex */
             {
@@ -402,7 +401,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmControl_GetUserDefinedMemory
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-7-0         :2024-05-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

@@ -1,7 +1,7 @@
-/* Dem_FFDOutputJugde_Callout_c(v5-10-0)                                    */
+/* Dem_FFDOutpuJugde_Callout_c(v5-0-0)                                      */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -72,11 +72,11 @@
 /* Parameters    | [in] DataId :                                            */
 /*               |        This parameter specifies the PID (ISO15031-5 map- */
 /*               |        ped in UDS range 0xF400 - 0xF4FF) or DID (ISO142- */
-/*               |        29-1) that shall be judge to output FFD.          */
+/*               |        29-1) that shall be judge to outpu FFD.           */
 /*               |                                                          */
 /* Return Value  | Dem_FFDOutputJudgeType                                   */
-/*               |        DEM_FFDOUTPUT_NOT_ALLOW : not allow output FFD.   */
-/*               |        DEM_FFDOUTPUT_ALLOW     : allow output FFD.       */
+/*               |        DEM_FFDOUTPUT_NOT_ALLOW : FFD output not allow.   */
+/*               |        DEM_FFDOUTPUT_ALLOW : FFD output not allow.       */
 /* Notes         |                                                          */
 /****************************************************************************/
 FUNC( Dem_FFDOutputJudgeType, DEM_CODE_CALLOUT ) Dem_GetFFDOutputJudge
@@ -105,7 +105,6 @@ FUNC( Dem_FFDOutputJudgeType, DEM_CODE_CALLOUT ) Dem_GetFFDOutputJudge
 /* History                                                                  */
 /*  Version        :Date                                                    */
 /*  v5-0-0         :2021-09-28                                              */
-/*  v5-10-0        :2025-06-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

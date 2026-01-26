@@ -1,7 +1,7 @@
-/* Dcm_Dsp_SID04_Cfg_c(v5-8-0)                                              */
+/* Dcm_Dsp_SID04_Cfg_c(v5-0-0)                                              */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -55,15 +55,13 @@
 /* Description   | This function does not perform the condition check       */
 /*               | by SWC. Always return OK.                                */
 /* Preconditions | None                                                     */
-/* Parameters    | [IN]  u1OpStatus  : Status of operation                  */
-/*               | [OUT] ptErrorCode : Negative Response Code Value         */
+/* Parameters    | [OUT] ptErrorCode : Negative Response Code Value         */
 /* Return Value  | Std_ReturnType                                           */
 /*               |   E_OK            : ClearDTC Condition Check OK          */
 /* Notes         | None                                                     */
 /****************************************************************************/
 FUNC( Std_ReturnType, DCM_CODE ) Dcm_Dsp_SID04_CheckSWC
 (
-    const Dcm_OpStatusType u1OpStatus, /* MISRA DEVIATION */
     P2VAR( Dcm_NegativeResponseCodeType, AUTOMATIC, DCM_APPL_DATA ) ptErrorCode
 )
 {
@@ -88,12 +86,11 @@ FUNC( Std_ReturnType, DCM_CODE ) Dcm_Dsp_SID04_CheckSWC
 /*  Version        :Date                                                    */
 /*  v3-0-0         :2019-05-29                                              */
 /*  v5-0-0         :2021-12-24                                              */
-/*  v5-8-0         :2024-10-29                                              */
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
 /*  Framework          :v2-1-0                                              */
-/*  BSW plug-in        :v5-10-0                                             */
+/*  BSW plug-in        :v5-5-1                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

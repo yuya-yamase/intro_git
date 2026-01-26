@@ -1,7 +1,7 @@
-/* Dem_If_GetRecordData_c(v5-8-0)                                           */
+/* Dem_If_GetRecordData_c(v5-5-0)                                           */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -332,95 +332,6 @@ FUNC( Std_ReturnType, DEM_CODE ) Dem_GetEventExtendedDataRecordEx
     return retVal;
 }
 
-#if ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON )
-/****************************************************************************/
-/* Function Name | Dem_GetCylinderExtendedDataRecordEx                      */
-/* Description   | Gets the data of an extended data record by event.       */
-/* Preconditions | none                                                     */
-/* Parameters    | [in] MisfireCylinderNumber :                             */
-/*               |        Cylinder Number.                                  */
-/*               | [in] RecordNumber :                                      */
-/*               |        Identification of requested Extended data record. */
-/*               |        Valid values are between 0x01 and 0xEF as defined */
-/*               |        in ISO14229-1.                                    */
-/*               | [out] DestBufferPtr :                                    */
-/*               |        This parameter contains a byte pointer that       */
-/*               |        points to the buffer, to which the extended data  */
-/*               |        shall be written to. The format is raw hexadecimal*/
-/*               |         values and contains no header-information.       */
-/*               | [inout] BufSizePtr :                                     */
-/*               |        When the function is called this parameter        */
-/*               |        contains the maximum number of data bytes that    */
-/*               |        can be written to the buffer. The function        */
-/*               |        returns the actual number of written data bytes   */
-/*               |        in this parameter.                                */
-/* Return Value  | Std_ReturnType                                           */
-/*               |        E_OK:                 Operation was successful    */
-/*               |        E_NOT_OK:             Operation could not be      */
-/*               |                              performed                   */
-/*               |        DEM_NO_SUCH_ELEMENT:  The requested event data is */
-/*               |                              not currently stored        */
-/*               |                              (but the request was valid) */
-/*               |                              OR the requested record     */
-/*               |                              umber is not supported by   */
-/*               |                              the event.                  */
-/*               |        DEM_BUFFER_TOO_SMALL: The provided buffer size    */
-/*               |                              is too small.               */
-/* Notes         | -                                                        */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-8-0      | new created.                                             */
-/****************************************************************************/
-FUNC( Std_ReturnType, DEM_CODE ) Dem_GetCylinderExtendedDataRecordEx
-(
-    VAR(Dem_MisfireCylinderNumberType, AUTOMATIC ) MisfireCylinderNumber,
-    VAR( uint8, AUTOMATIC ) RecordNumber,
-    P2VAR( uint8, AUTOMATIC, DEM_APPL_DATA ) DestBufferPtr,
-    P2VAR( uint16, AUTOMATIC, DEM_APPL_DATA ) BufSizePtr
-)
-{
-    VAR( Dem_u08_InternalReturnType, AUTOMATIC ) internalReturnValue;
-    VAR( Std_ReturnType, AUTOMATIC ) retVal;
-    VAR( uint16, AUTOMATIC ) bufferSize;
-
-    retVal           = E_NOT_OK;
-
-    if( DestBufferPtr == NULL_PTR )
-    {
-        /* No Process */
-    }
-    else if ( BufSizePtr == NULL_PTR )
-    {
-        /* No Process */
-    }
-    else
-    {
-        bufferSize  =   *BufSizePtr;
-        internalReturnValue = Dem_Control_GetCylinderExtendedData( MisfireCylinderNumber, RecordNumber, DestBufferPtr, &bufferSize );
-        *BufSizePtr    =   bufferSize;
-
-        /* Convert return value */
-        switch( internalReturnValue )
-        {
-            case DEM_IRT_OK:
-                retVal = E_OK;
-                break;
-            case DEM_IRT_WRONG_RECORDNUMBER:
-                retVal = DEM_NO_SUCH_ELEMENT;
-                break;
-            case DEM_IRT_WRONG_BUFFERSIZE:
-                retVal = DEM_BUFFER_TOO_SMALL;
-                break;
-            default:
-                /* DEM_IRT_NG */
-                /* No Process */
-                break;
-        }
-    }
-    return retVal;
-}
-#endif /* ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON ) */
-
 
 #define DEM_STOP_SEC_CODE
 #include <Dem_MemMap.h>
@@ -429,7 +340,6 @@ FUNC( Std_ReturnType, DEM_CODE ) Dem_GetCylinderExtendedDataRecordEx
 /* History                                                                  */
 /*  Version        :Date                                                    */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-8-0         :2024-10-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

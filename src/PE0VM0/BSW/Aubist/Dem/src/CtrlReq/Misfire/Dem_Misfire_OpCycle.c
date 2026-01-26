@@ -1,7 +1,7 @@
-/* Dem_Misfire_OpCycle_c(v5-9-0)                                            */
+/* Dem_Misfire_OpCycle_c(v5-5-0)                                            */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -72,18 +72,15 @@ static FUNC( void, DEM_CODE ) Dem_Misfire_GetMisfirePairEventStatus
 /* Description   | Process Pending Fault Recovery                           */
 /* Preconditions | none                                                     */
 /* Parameters    | [in]  EventStrgIndex : Event index                       */
-/*               | [in/out] NewDTCStatusStPtr                               */
 /* Return Value  | none                                                     */
 /* Notes         |                                                          */
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-9-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_Misfire_ProcessPendingFaultRecovery
 (
-    VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex,
-    P2VAR( Dem_DTCStatusStType, AUTOMATIC, AUTOMATIC ) NewDTCStatusStPtr
+    VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex
 )
 {
     VAR( Dem_EventKindType, AUTOMATIC ) eventKind;
@@ -93,8 +90,6 @@ FUNC( void, DEM_CODE ) Dem_Misfire_ProcessPendingFaultRecovery
     if(( eventKind & ( DEM_EVTKIND_TYPE_MISFIRE_EVENT | DEM_EVTKIND_TYPE_MISFIRE_CAT_EVENT ) ) == DEM_EVTKIND_TYPE_MISFIRE_EVENT )
     {
         /*  emission misfire event. ( not misfire CAT event. )  */
-        NewDTCStatusStPtr->ExtendDTCStatus2  =  Dem_DTC_ExDTC2_ResetPendingOfEmission( NewDTCStatusStPtr->ExtendDTCStatus2 );
-
         Dem_Misfire_SetPendingStoreOfEmission( (boolean)FALSE );
     }
 
@@ -107,19 +102,16 @@ FUNC( void, DEM_CODE ) Dem_Misfire_ProcessPendingFaultRecovery
 /* Preconditions | none                                                     */
 /* Parameters    | [in]  EventStrgIndex : Event index                       */
 /*               | [in]  ChkOldBitStatusPtr                                 */
-/*               | [in/out] NewDTCStatusStPtr                               */
 /* Return Value  | none                                                     */
 /* Notes         |                                                          */
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-9-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_Misfire_ProcessForEventFailed
 (
     VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex,
-    P2CONST( Dem_ChkBitDTCStatusType, AUTOMATIC, AUTOMATIC ) ChkOldBitStatusPtr,
-    P2VAR( Dem_DTCStatusStType, AUTOMATIC, AUTOMATIC ) NewDTCStatusStPtr
+    P2CONST( Dem_ChkBitDTCStatusType, AUTOMATIC, AUTOMATIC ) ChkOldBitStatusPtr
 )
 {
     VAR( Dem_EventKindType, AUTOMATIC ) eventKind;
@@ -130,8 +122,6 @@ FUNC( void, DEM_CODE ) Dem_Misfire_ProcessForEventFailed
         if(( eventKind & ( DEM_EVTKIND_TYPE_MISFIRE_EVENT | DEM_EVTKIND_TYPE_MISFIRE_CAT_EVENT ) ) == DEM_EVTKIND_TYPE_MISFIRE_EVENT )
         {
             /*  emission misfire event. ( not misfire CAT event. )  */
-            NewDTCStatusStPtr->ExtendDTCStatus2  =  Dem_DTC_ExDTC2_SetPendingOfEmission( NewDTCStatusStPtr->ExtendDTCStatus2 );
-
             Dem_Misfire_SetPendingStoreOfEmission( (boolean)TRUE );
         }
     }
@@ -150,9 +140,6 @@ FUNC( void, DEM_CODE ) Dem_Misfire_ProcessForEventFailed
 /*               | [in]  ChkOldBitStatusPtr                                 */
 /* Return Value  | none                                                     */
 /* Notes         |                                                          */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-6-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_Misfire_ClearTmpByCycleStart
 (
@@ -216,9 +203,6 @@ FUNC( void, DEM_CODE ) Dem_Misfire_ClearTmpByCycleStart
 
                 Dem_Misfire_SetFirstConfirmedCylToTmp( DEM_MISFIRE_CYLINDER_NON );
                 Dem_Misfire_SetFirstAccumConfirmedCylToTmp( DEM_MISFIRE_CYLINDER_NON );
-#if ( DEM_GET_UDSDTC_BY_CONFIRMED_ORDER_SUPPORT == STD_ON )
-                Dem_Misfire_ClearConfirmedOrderCylListToTmp();
-#endif /* ( DEM_GET_UDSDTC_BY_CONFIRMED_ORDER_SUPPORT == STD_ON ) */
             }
         }
 
@@ -559,8 +543,6 @@ static FUNC( void, DEM_CODE ) Dem_Misfire_GetMisfirePairEventStatus
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-6-0         :2024-01-29                                              */
-/*  v5-9-0         :2025-02-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

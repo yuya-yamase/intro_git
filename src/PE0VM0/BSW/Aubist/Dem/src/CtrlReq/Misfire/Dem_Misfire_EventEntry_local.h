@@ -1,7 +1,7 @@
-/* Dem_Misfire_EventEntry_local(v5-9-0)                                     */
+/* Dem_Misfire_EventEntry_local(v5-5-0)                                     */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -92,16 +92,6 @@ FUNC( void, DEM_CODE ) Dem_Misfire_GetObdFFDCylToTmp
     VAR( Dem_u08_MisfireObdFFDCylIndexType, AUTOMATIC ) MisfireObdFFDCylIndex,
     P2VAR( Dem_MisfireCylinderType, AUTOMATIC, AUTOMATIC ) FFDCylPtr
 );
-#if ( DEM_OBDONUDS_SUPPORT == STD_ON )
-#if ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )
-FUNC( void, DEM_CODE ) Dem_Misfire_GetPairObdFFDCylToTmp
-(
-    VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex,
-    VAR( Dem_u08_MisfireObdFFDCylIndexType, AUTOMATIC ) MisfireObdFFDCylIndex,
-    P2VAR( Dem_MisfireCylinderType, AUTOMATIC, AUTOMATIC ) FFDCylPtr
-);
-#endif /* ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON ) */
-#endif /* ( DEM_OBDONUDS_SUPPORT == STD_ON ) */
 FUNC( void, DEM_CODE ) Dem_Misfire_SetMisfireKindOfObdFFDToTmp
 (
     VAR( Dem_u08_MisfireObdFFDCylIndexType, AUTOMATIC ) MisfireObdFFDCylIndex,
@@ -198,7 +188,6 @@ extern VAR( Dem_TmpMisfireEventMemoryEntryType, DEM_VAR_NO_INIT ) Dem_TmpMisfire
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-9-0         :2025-02-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

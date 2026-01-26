@@ -1,7 +1,7 @@
-/* Dem_UdmDataCtl_EventEntry02Make_Fault_c(v5-9-0)                          */
+/* Dem_UdmDataCtl_EventEntry02Make_Fault_c(v5-5-0)                          */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -202,9 +202,6 @@ FUNC( void, DEM_CODE ) Dem_UdmData_ReplaceSearchFRIndex
 /*               |        tting succeeds or has been already set.           */
 /*               |        DEM_IRT_NG : Event memory overflows and occurs.   */
 /* Notes         |                                                          */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-9-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmData_SetFaultInfo
 (
@@ -224,7 +221,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmData_SetFaultInfo
     *TSFFListIndexOverwrittenPtr = DEM_TSFFLISTINDEX_INVALID;
 
     /* Checks whether the fault index is valid. */
-    if( Dem_UdmTmpEventMemoryEntry.EventRecord.UdmFaultIndex == DEM_UDMFAULTINDEX_INITIAL )
+    if( Dem_UdmTmpEventMemoryEntry.EventRecord.UdmFaultIndex == DEM_FAULTINDEX_INITIAL )
     {
         /* Information related to the occurrence of a new failure is set in the event memory entry of the temporary area. */
         retSetFaultInfo = Dem_UdmData_SetNewFaultOccurrenceToTmp( FaultRecordOverwriteFlagPtr, UdmEventIndexOverwrittenPtr, OldDTCStatusAtOverwrittenPtr, NewDTCStatusAtOverwrittenPtr, TSFFListIndexOverwrittenPtr );
@@ -273,7 +270,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmData_SetFaultInfo
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
-/*   v5-9-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmData_SetNewFaultOccurrenceToTmp
 (
@@ -338,7 +334,7 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmData_SetNewFaultOccur
         retVal  =   Dem_UdmData_SetEventDisplacement( udmInfoTableIndex, Dem_UdmTmpEventMemoryEntry.UdmEventIndex, UdmEventIndexOverwrittenPtr, OldDTCStatusAtOverwrittenPtr, NewDTCStatusAtOverwrittenPtr );   /* [GUD:RET:DEM_IRT_OK]UdmEventIndexOverwrittenPtr, OldDTCStatusAtOverwrittenPtr, NewDTCStatusAtOverwrittenPtr */
         if ( retVal == DEM_IRT_OK )
         {
-            udmFaultIndex = DEM_UDMFAULTINDEX_INITIAL;
+            udmFaultIndex = DEM_FAULTINDEX_INITIAL;
             (void)Dem_UdmEventMngC_GetER_FaultIndex( *UdmEventIndexOverwrittenPtr, &udmFaultIndex );    /* no return check required */
 
             Dem_UdmTmpEventMemoryEntry.EventRecord.UdmFaultIndex = udmFaultIndex;
@@ -400,7 +396,6 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmData_SetNewFaultOccur
 /*  v5-0-0         :2022-03-29                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-9-0         :2025-02-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

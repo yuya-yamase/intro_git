@@ -1,11 +1,11 @@
-/* Dem_DataCtl_DisReqUpd_GetFFIdx_RtvlOn_c(v5-10-0)                         */
+/* Dem_DataCtl_DisReqUpd_GetFFIdx_RtvlOn_c(v5-5-0)                          */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
-/* Object Name  | Dem/DataCtl_DisReqUpd_GetFFIdx_RtvlOn/CODE                */
+/* Object Name  | Dem/Dem_DataCtl_DisReqUpd_GetFFIdx_RtvlOn/CODE            */
 /*--------------------------------------------------------------------------*/
 /* Notes        |                                                           */
 /****************************************************************************/
@@ -36,7 +36,14 @@
 
 /*--------------------------------------------------------------------------*/
 /* Types                                                                    */
-/*--------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------*/\
+typedef struct {
+    Dem_u16_OccrOrderType               OccurrenceOrder;
+    Dem_u16_EventStrgIndexType          EventStrgIndex;
+    Dem_u08_FFDIndexType                FreezeFrameIndex;
+    Dem_u08_EventClassPriorityType      EventClassPriority;
+    Dem_u08_EventStatusPriorityType     EventStatusPriority;
+} Dem_TmpRecordNumberForOnRetrievalType;
 
 /*--------------------------------------------------------------------------*/
 /* Function Prototypes                                                      */
@@ -59,12 +66,23 @@ static FUNC( void, DEM_CODE ) Dem_Data_SetTmpObdRecordNumberForOnRetrieval
 );
 #endif  /* ( DEM_OBDFFD_SUPPORT == STD_ON )    */
 
+static FUNC( void, DEM_CODE ) Dem_Data_InitTmpRecordNumberForOnRetrieval
+(
+    P2VAR( Dem_TmpRecordNumberForOnRetrievalType, AUTOMATIC, AUTOMATIC ) TmpRecordNumberForOnRetrievalPtr
+);
+
 static FUNC( void, DEM_CODE ) Dem_Data_SetTmpRecordNumberForOnRetrieval
 (
     VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex,
     VAR( Dem_u08_FFDIndexType, AUTOMATIC ) NonObdFFDRecordNum,
     VAR( Dem_u08_FFListIndexType, AUTOMATIC ) FreezeFrameRecordClassRefIndex,
     VAR( Dem_u08_StorageTriggerType, AUTOMATIC ) FreezeFrameRecordTrigger,
+    P2VAR( Dem_TmpRecordNumberForOnRetrievalType, AUTOMATIC, AUTOMATIC ) TmpRecordNumberForOnRetrievalPtr
+);
+
+static FUNC( void, DEM_CODE ) Dem_Data_SetEventClassPriorityForOnRetrieval
+(
+    VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex,
     P2VAR( Dem_TmpRecordNumberForOnRetrievalType, AUTOMATIC, AUTOMATIC ) TmpRecordNumberForOnRetrievalPtr
 );
 
@@ -94,11 +112,24 @@ static FUNC( void, DEM_CODE ) Dem_Data_TransferTmpRecordNumberForOnRetrieval
 );
 
 #if ( DEM_TSFF_PM_SUPPORT == STD_ON )
+static FUNC( Dem_u16_EventStrgIndexType, DEM_CODE ) Dem_Data_SearchNonObdEventStrgIndexByTSFFRTrigger
+(
+    VAR( Dem_u08_FFRecordNumberType, AUTOMATIC ) TSFFRecordTrigger,
+    VAR( Dem_u16_FFRecNumStoredIndexType, AUTOMATIC ) NumberOfSaveRecordForTriggerFFD,
+    P2CONST( AB_83_ConstV Dem_FreezeFrameRecNumClassType, AUTOMATIC, DEM_CONFIG_DATA ) FreezeFrameRecNumClassPtr
+);
+
 static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_CheckFreezeFrameRecNumClass
 (
     VAR( Dem_u08_FFRecordNumberType, AUTOMATIC ) TmpRecordNumber,
     VAR( Dem_u08_FFRecordNumberType, AUTOMATIC ) TSFFRecordTrigger,
     P2CONST( AB_83_ConstV Dem_FreezeFrameRecNumClassType, AUTOMATIC, DEM_CONFIG_DATA ) FreezeFrameRecNumClassPtr
+);
+
+static FUNC( Dem_u16_TSFFListIndexType, DEM_CODE ) Dem_Data_GetTSFFListIndexByEventStrgIndex
+(
+    VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex,
+    VAR( Dem_u08_TSFFListPerDTCIndexType, AUTOMATIC ) TSFFRecClassRefIndex
 );
 #endif  /* ( DEM_TSFF_PM_SUPPORT == STD_ON ) */
 
@@ -142,8 +173,6 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_CheckFreezeFrameRec
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | new created.                                             */
-/*   v5-7-0      | no object changed.                                       */
-/*   v5-8-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_FFDIndexType, DEM_CODE ) Dem_Data_GetDisabledObdRecordNumberIndex
 (
@@ -163,7 +192,7 @@ FUNC( Dem_u08_FFDIndexType, DEM_CODE ) Dem_Data_GetDisabledObdRecordNumberIndex
     VAR( Dem_TmpRecordNumberForOnRetrievalType, AUTOMATIC ) baseTmpRecordNumberForOnRetrieval;
     VAR( Dem_TmpRecordNumberForOnRetrievalType, AUTOMATIC ) targetTmpRecordNumberForOnRetrieval;
 
-    obdFFDRecordNum = Dem_CfgInfoPm_GetObdFFDRecordNum();
+    obdFFDRecordNum = Dem_ObdFFDRecordNum;
     freezeFrameIndex = DEM_FFDINDEX_INVALID;
 
     /* get num of event index in DTC group. */
@@ -199,13 +228,13 @@ FUNC( Dem_u08_FFDIndexType, DEM_CODE ) Dem_Data_GetDisabledObdRecordNumberIndex
         {
             if( baseTmpRecordNumberForOnRetrieval.EventClassPriority == DEM_EVENTCLASS_PRIORITY_CLASS_NONE )
             {
-                FFDIndexListStPtr->ObdRecordNumberIndex[ FreezeFrameRecordClassRefIndex ] = DEM_FFDINDEX_INVALID;                                   /* [GUDCHK:CALLER]FreezeFrameRecordClassRefIndex *//* [ARYCHK] DEM_OBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / FreezeFrameRecordClassRefIndex */
+                FFDIndexListStPtr->ObdRecordNumberIndex[ FreezeFrameRecordClassRefIndex ] = DEM_FFDINDEX_INVALID;                                   /* [GUDCHK:CALLER]FreezeFrameRecordClassRefIndex */
             }
             else
             {
-                FFDIndexListStPtr->ObdRecordNumberIndex[ FreezeFrameRecordClassRefIndex ] = baseTmpRecordNumberForOnRetrieval.FreezeFrameIndex;     /* [GUDCHK:CALLER]FreezeFrameRecordClassRefIndex *//* [ARYCHK] DEM_OBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / FreezeFrameRecordClassRefIndex */
+                FFDIndexListStPtr->ObdRecordNumberIndex[ FreezeFrameRecordClassRefIndex ] = baseTmpRecordNumberForOnRetrieval.FreezeFrameIndex;     /* [GUDCHK:CALLER]FreezeFrameRecordClassRefIndex */
 
-                freezeFrameIndex = FFDIndexListStPtr->ObdRecordNumberIndex[ FreezeFrameRecordClassRefIndex ];                                       /* [GUDCHK:CALLER]FreezeFrameRecordClassRefIndex *//* [ARYCHK] DEM_OBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / FreezeFrameRecordClassRefIndex */
+                freezeFrameIndex = FFDIndexListStPtr->ObdRecordNumberIndex[ FreezeFrameRecordClassRefIndex ];                                       /* [GUDCHK:CALLER]FreezeFrameRecordClassRefIndex */
                 ( *EventStrgIndexPtr ) = baseTmpRecordNumberForOnRetrieval.EventStrgIndex;
             }
         }
@@ -235,7 +264,6 @@ FUNC( Dem_u08_FFDIndexType, DEM_CODE ) Dem_Data_GetDisabledObdRecordNumberIndex
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | new created.                                             */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_Data_SetTmpObdRecordNumberForOnRetrieval
 (
@@ -260,7 +288,7 @@ static FUNC( void, DEM_CODE ) Dem_Data_SetTmpObdRecordNumberForOnRetrieval
         resultOfGetFR = Dem_DataMngC_GetFaultRecord( faultIndex, &faultRecord );
         if( resultOfGetFR == DEM_IRT_OK )
         {
-            freezeFrameIndex = faultRecord.ObdRecordNumberIndex[ FreezeFrameRecordClassRefIndex ];      /* [GUDCHK:CALLER]FreezeFrameRecordClassRefIndex *//* [ARYCHK] DEM_OBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / FreezeFrameRecordClassRefIndex */
+            freezeFrameIndex = faultRecord.ObdRecordNumberIndex[ FreezeFrameRecordClassRefIndex ];      /* [GUDCHK:CALLER]FreezeFrameRecordClassRefIndex */
             if( freezeFrameIndex < ObdFFDRecordNum )
             {
                 TmpRecordNumberForOnRetrievalPtr->EventStrgIndex = EventStrgIndex;
@@ -287,8 +315,8 @@ static FUNC( void, DEM_CODE ) Dem_Data_SetTmpObdRecordNumberForOnRetrieval
 /*               |        The event ID for retrieving.                      */
 /*               | [in] FreezeFrameRecordClassRefIndex :                    */
 /*               |        The index to array of FreezeFrameRecordClassRef.  */
-/*               | [in] FreezeFrameRecordTrigger :                          */
-/*               |        FreezeFrameRecordTrigger.                         */
+/*               | [in] FreezeFrameRecordClassPtr :                         */
+/*               |        The pointer to Dem_FreezeFrameRecordClassTable.   */
 /*               | [out] FFDIndexListStPtr :                                */
 /*               |        Dem_TmpDisabledRecord.FFDIndexListSt pointer.     */
 /*               | [out] EventStrgIndexPtr :                                */
@@ -298,7 +326,6 @@ static FUNC( void, DEM_CODE ) Dem_Data_SetTmpObdRecordNumberForOnRetrieval
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | new created.                                             */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_FFDIndexType, DEM_CODE ) Dem_Data_GetDisabledRecordNumberIndex
 (
@@ -331,8 +358,10 @@ FUNC( Dem_u08_FFDIndexType, DEM_CODE ) Dem_Data_GetDisabledRecordNumberIndex
         {
             /* get next event index. */
             eventStrgIndex = Dem_CmbEvt_GetNextEventStrgIndex_InDTCGrp( EventStrgIndex );
+
             eventStrgIndexNum = eventStrgIndexNum - ( Dem_u16_EventStrgIndexType )1U;
-             for( eventStrgIndexCnt = ( Dem_u16_EventStrgIndexType )0U; eventStrgIndexCnt < eventStrgIndexNum; eventStrgIndexCnt++ )
+
+            for( eventStrgIndexCnt = ( Dem_u16_EventStrgIndexType )0U; eventStrgIndexCnt < eventStrgIndexNum; eventStrgIndexCnt++ )
             {
                 /* Checks event available status */
                 availableStatus = Dem_DataAvl_GetEvtAvl_InEvtStrgGrp( eventStrgIndex );
@@ -342,6 +371,7 @@ FUNC( Dem_u08_FFDIndexType, DEM_CODE ) Dem_Data_GetDisabledRecordNumberIndex
                     /* Judges the priority. */
                     Dem_Data_JudgePriorityOfTmpRecordNumberForOnRetrieval( &baseTmpRecordNumberForOnRetrieval, &targetTmpRecordNumberForOnRetrieval );
                 }
+
                 /* get next event index. */
                 eventStrgIndex = Dem_CmbEvt_GetNextEventStrgIndex_InDTCGrp( eventStrgIndex );
             }
@@ -349,9 +379,9 @@ FUNC( Dem_u08_FFDIndexType, DEM_CODE ) Dem_Data_GetDisabledRecordNumberIndex
 
         if( baseTmpRecordNumberForOnRetrieval.FreezeFrameIndex < nonObdFFDRecordNum )
         {
-            FFDIndexListStPtr->RecordNumberIndex[ FreezeFrameRecordClassRefIndex ] = baseTmpRecordNumberForOnRetrieval.FreezeFrameIndex;    /* [GUDCHK:CALLER]FreezeFrameRecordClassRefIndex *//* [ARYCHK] DEM_NONOBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / FreezeFrameRecordClassRefIndex */
+            FFDIndexListStPtr->RecordNumberIndex[ FreezeFrameRecordClassRefIndex ] = baseTmpRecordNumberForOnRetrieval.FreezeFrameIndex;    /* [GUDCHK:CALLER]FreezeFrameRecordClassRefIndex */
 
-            freezeFrameIndex = FFDIndexListStPtr->RecordNumberIndex[ FreezeFrameRecordClassRefIndex ];                                      /* [GUDCHK:CALLER]FreezeFrameRecordClassRefIndex *//* [ARYCHK] DEM_NONOBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / FreezeFrameRecordClassRefIndex */
+            freezeFrameIndex = FFDIndexListStPtr->RecordNumberIndex[ FreezeFrameRecordClassRefIndex ];                                      /* [GUDCHK:CALLER]FreezeFrameRecordClassRefIndex */
             ( *EventStrgIndexPtr ) = baseTmpRecordNumberForOnRetrieval.EventStrgIndex;
         }
     }
@@ -371,7 +401,7 @@ FUNC( Dem_u08_FFDIndexType, DEM_CODE ) Dem_Data_GetDisabledRecordNumberIndex
 /* History       |                                                          */
 /*   v5-5-0      | new created.                                             */
 /****************************************************************************/
-FUNC( void, DEM_CODE ) Dem_Data_InitTmpRecordNumberForOnRetrieval
+static FUNC( void, DEM_CODE ) Dem_Data_InitTmpRecordNumberForOnRetrieval
 (
     P2VAR( Dem_TmpRecordNumberForOnRetrievalType, AUTOMATIC, AUTOMATIC ) TmpRecordNumberForOnRetrievalPtr
 )
@@ -406,7 +436,6 @@ FUNC( void, DEM_CODE ) Dem_Data_InitTmpRecordNumberForOnRetrieval
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | new created.                                             */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_Data_SetTmpRecordNumberForOnRetrieval
 (
@@ -431,7 +460,7 @@ static FUNC( void, DEM_CODE ) Dem_Data_SetTmpRecordNumberForOnRetrieval
         resultOfGetFR = Dem_DataMngC_GetFaultRecord( faultIndex, &faultRecord );
         if( resultOfGetFR == DEM_IRT_OK )
         {
-            freezeFrameIndex = faultRecord.RecordNumberIndex[ FreezeFrameRecordClassRefIndex ];     /* [GUDCHK:CALLER]FreezeFrameRecordClassRefIndex *//* [ARYCHK] DEM_NONOBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / FreezeFrameRecordClassRefIndex */
+            freezeFrameIndex = faultRecord.RecordNumberIndex[ FreezeFrameRecordClassRefIndex ];     /* [GUDCHK:CALLER]FreezeFrameRecordClassRefIndex */
             if( freezeFrameIndex < NonObdFFDRecordNum )
             {
                 TmpRecordNumberForOnRetrievalPtr->EventStrgIndex = EventStrgIndex;
@@ -462,7 +491,7 @@ static FUNC( void, DEM_CODE ) Dem_Data_SetTmpRecordNumberForOnRetrieval
 /* History       |                                                          */
 /*   v5-5-0      | new created.                                             */
 /****************************************************************************/
-FUNC( void, DEM_CODE ) Dem_Data_SetEventClassPriorityForOnRetrieval
+static FUNC( void, DEM_CODE ) Dem_Data_SetEventClassPriorityForOnRetrieval
 (
     VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex,                /* [PRMCHK:CALLER] */
     P2VAR( Dem_TmpRecordNumberForOnRetrievalType, AUTOMATIC, AUTOMATIC ) TmpRecordNumberForOnRetrievalPtr
@@ -693,7 +722,7 @@ static FUNC( void, DEM_CODE ) Dem_Data_TransferTmpRecordNumberForOnRetrieval
 /*               |        The DemFreezeFrameRecordTrigger.(for TSFFD)       */
 /*               | [in] NumberOfSaveRecordForTriggerFFD :                   */
 /*               |        The number of saved Dem_TmpDisabledRecord array   */
-/*               |        for trigger FFD.                                  */
+/*               {        for trigger FFD.                                  */
 /*               | [out] FFDIndexListStPtr :                                */
 /*               |        Dem_TmpDisabledRecord.FFDIndexListSt pointer.     */
 /*               | [out] EventStrgIndexPtr :                                */
@@ -703,8 +732,6 @@ static FUNC( void, DEM_CODE ) Dem_Data_TransferTmpRecordNumberForOnRetrieval
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | new created.                                             */
-/*   v5-6-0      | branch changed.                                          */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u16_TSFFListIndexType, DEM_CODE ) Dem_Data_GetDisabledTimeSeriesFreezeFrameListIndex
 (
@@ -722,43 +749,29 @@ FUNC( Dem_u16_TSFFListIndexType, DEM_CODE ) Dem_Data_GetDisabledTimeSeriesFreeze
     VAR( Dem_u16_FFClassIndexType, AUTOMATIC ) freezeFrameClassRef;
     VAR( Dem_u16_FFRecNumClassIndexType, AUTOMATIC ) freezeframeRecNumClassRef;
     P2CONST( AB_83_ConstV Dem_FreezeFrameRecNumClassType, AUTOMATIC, DEM_CONFIG_DATA ) freezeFrameRecNumClassPtr;
-#if ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON )  /*  [FuncSw]    */
-    VAR( Dem_EventKindType, AUTOMATIC ) eventKind;
-#endif  /*   ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON )         */
 
     tsFFListIndex = DEM_TSFFLISTINDEX_INVALID;
     eventStrgIndex = DEM_EVENTSTRGINDEX_INVALID;
 
-#if ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON )  /*  [FuncSw]    */
-    eventKind = Dem_CfgInfoPm_GetEventKindOfSpecific_InEvtStrgGrp( EventStrgIndex );    /* [GUD]EventStrgIndex */
-    if( ( eventKind & DEM_EVTKIND_TYPE_MISFIRE_EVENT ) == DEM_EVTKIND_TYPE_MISFIRE_EVENT )
+    /* Gets the porint of non-OBD DemFreezeFrameRecNumClass's reference of the specified delegate event in the same DTC group. */
+    Dem_CfgInfoPm_GetFreezeFrameAndRecNumClass( EventStrgIndex, &freezeFrameClassRef, &freezeframeRecNumClassRef );  /* [GUD:OUT:Not DEM_FFCLASSINDEX_INVALID] freezeFrameClassRef *//* [GUD:OUT:Not DEM_FFRECNUMCLASSINDEX_INVALID] freezeframeRecNumClassRef */
+    if( freezeframeRecNumClassRef != DEM_FFRECNUMCLASSINDEX_INVALID )                                                   /* [GUD:if] freezeframeRecNumClassRef */
     {
-        tsFFListIndex = FFDIndexListStPtr->TimeSeriesFreezeFrameListIndex[ TSFFRecClassRefIndex ];  /* [GUDCHK:CALLER]TSFFRecClassRefIndex *//* [ARYCHK] DEM_TSFF_RECORD_CLASS_NUM_PER_DTC_MAX_NUM / 1 / TSFFRecClassRefIndex */
-        ( *EventStrgIndexPtr ) = EventStrgIndex;
-    }
-    else
-#endif  /*   ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON )         */
-    {
-        /* Gets the porint of non-OBD DemFreezeFrameRecNumClass's reference of the specified delegate event in the same DTC group. */
-        Dem_CfgInfoPm_GetFreezeFrameAndRecNumClass( EventStrgIndex, &freezeFrameClassRef, &freezeframeRecNumClassRef );  /* [GUD:OUT:Not DEM_FFCLASSINDEX_INVALID] freezeFrameClassRef *//* [GUD:OUT:Not DEM_FFRECNUMCLASSINDEX_INVALID] freezeframeRecNumClassRef */
-        if( freezeframeRecNumClassRef != DEM_FFRECNUMCLASSINDEX_INVALID )                                                   /* [GUD:if] freezeframeRecNumClassRef */
+        freezeFrameRecNumClassPtr = &Dem_FreezeFrameRecNumClassTable[ freezeframeRecNumClassRef ];                      /* [GUD] freezeframeRecNumClassRef */
+
+        eventStorageNum = Dem_PrimaryMemEventStorageNum;
+
+        eventStrgIndex = Dem_Data_SearchNonObdEventStrgIndexByTSFFRTrigger( TSFFRecordTrigger, NumberOfSaveRecordForTriggerFFD, freezeFrameRecNumClassPtr );
+        if( eventStrgIndex < eventStorageNum )      /* [GUD:if]eventStrgIndex */
         {
-            freezeFrameRecNumClassPtr = &Dem_FreezeFrameRecNumClassTable[ freezeframeRecNumClassRef ];                      /* [GUD] freezeframeRecNumClassRef */
-
-            eventStorageNum = Dem_PrimaryMemEventStorageNum;
-
-            eventStrgIndex = Dem_Data_SearchNonObdEventStrgIndexByTSFFRTrigger( TSFFRecordTrigger, NumberOfSaveRecordForTriggerFFD, freezeFrameRecNumClassPtr );
-            if( eventStrgIndex < eventStorageNum )      /* [GUD:if]eventStrgIndex */
-            {
-                /* Gets TimeSeriesFreezeFrameListIndex. */
-                tsFFListIndex = Dem_Data_GetTSFFListIndexByEventStrgIndex( eventStrgIndex, TSFFRecClassRefIndex );  /* [GUD]eventStrgIndex */ /* [GUDCHK:CALLER]TSFFRecClassRefIndex */
-            }
+            /* Gets TimeSeriesFreezeFrameListIndex. */
+            tsFFListIndex = Dem_Data_GetTSFFListIndexByEventStrgIndex( eventStrgIndex, TSFFRecClassRefIndex );  /* [GUD]eventStrgIndex */
         }
-
-        FFDIndexListStPtr->TimeSeriesFreezeFrameListIndex[ TSFFRecClassRefIndex ] = tsFFListIndex;      /* [GUDCHK:CALLER]TSFFRecClassRefIndex *//* [ARYCHK] DEM_TSFF_RECORD_CLASS_NUM_PER_DTC_MAX_NUM / 1 / TSFFRecClassRefIndex */
-
-        ( *EventStrgIndexPtr ) = eventStrgIndex;
     }
+
+    FFDIndexListStPtr->TimeSeriesFreezeFrameListIndex[ TSFFRecClassRefIndex ] = tsFFListIndex;      /* [GUDCHK:CALLER]TSFFRecClassRefIndex */
+
+    ( *EventStrgIndexPtr ) = eventStrgIndex;
 
     return tsFFListIndex;
 }
@@ -782,7 +795,7 @@ FUNC( Dem_u16_TSFFListIndexType, DEM_CODE ) Dem_Data_GetDisabledTimeSeriesFreeze
 /* History       |                                                          */
 /*   v5-5-0      | new created.                                             */
 /****************************************************************************/
-FUNC( Dem_u16_EventStrgIndexType, DEM_CODE ) Dem_Data_SearchNonObdEventStrgIndexByTSFFRTrigger
+static FUNC( Dem_u16_EventStrgIndexType, DEM_CODE ) Dem_Data_SearchNonObdEventStrgIndexByTSFFRTrigger
 (
     VAR( Dem_u08_FFRecordNumberType, AUTOMATIC ) TSFFRecordTrigger,
     VAR( Dem_u16_FFRecNumStoredIndexType, AUTOMATIC ) NumberOfSaveRecordForTriggerFFD,
@@ -834,8 +847,6 @@ FUNC( Dem_u16_EventStrgIndexType, DEM_CODE ) Dem_Data_SearchNonObdEventStrgIndex
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | new created.                                             */
-/*   v5-7-0      | no object changed.                                       */
-/*   v5-10-0     | no branch changed.                                       */
 /****************************************************************************/
 static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_CheckFreezeFrameRecNumClass
 (
@@ -851,7 +862,7 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_CheckFreezeFrameRec
     VAR( Dem_u08_FFRecordClassIndexType, AUTOMATIC ) freezeFrameRecordClassIndex;
     VAR( Dem_u08_FFRecordNumberType, AUTOMATIC ) freezeFrameRecordNumber;
     VAR( Dem_u08_StorageTriggerType, AUTOMATIC ) freezeFrameRecordTrigger;
-    VAR( boolean, AUTOMATIC ) freezeFrameRecordToDcm;
+    P2CONST( AB_83_ConstV Dem_FreezeFrameRecordClassType, AUTOMATIC, DEM_CONFIG_DATA ) freezeFrameRecordClassPtr;
 
     retVal = DEM_IRT_NG;
 
@@ -861,12 +872,14 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_CheckFreezeFrameRec
     {
         /* Holds the DemFreezeFrameRecordIndex pointed to */
         /* by the DemFreezeFrameRecordClassRef Index of the held FreezeFrameRecNumClass table. */
-        freezeFrameRecordClassIndex = FreezeFrameRecNumClassPtr->DemFreezeFrameRecordClassRef[freezeFrameRecordClassRefIndex];  /* [GUD] freezeFrameRecordClassRefIndex *//* [ARYCHK] DEM_FF_RECORD_CLASS_REF_MAX_NUM / 1 / freezeFrameRecordClassRefIndex */
+        freezeFrameRecordClassIndex = FreezeFrameRecNumClassPtr->DemFreezeFrameRecordClassRef[freezeFrameRecordClassRefIndex];  /* [GUD] freezeFrameRecordClassRefIndex */
         if( freezeFrameRecordClassIndex < ffrRecordClassConfigureNum )                                                          /* [GUD:if] freezeFrameRecordClassIndex */
         {
-            Dem_CfgInfoPm_GetFreezeFrameRecordInfo_forOutput( freezeFrameRecordClassIndex, &freezeFrameRecordNumber, &freezeFrameRecordTrigger, &freezeFrameRecordToDcm );   /* [GUD] freezeFrameRecordClassIndex */
+            freezeFrameRecordClassPtr = &Dem_FreezeFrameRecordClassTable[freezeFrameRecordClassIndex];                          /* [GUD] freezeFrameRecordClassIndex *//* [GUD:CFG:IF_GUARDED: freezeFrameRecordClassIndex ]freezeFrameRecordClassPtr */
+            freezeFrameRecordNumber = freezeFrameRecordClassPtr->DemFreezeFrameRecordNumber;                                    /* [GUD] freezeFrameRecordClassPtr */
             if( freezeFrameRecordNumber == TmpRecordNumber )
             {
+                freezeFrameRecordTrigger = freezeFrameRecordClassPtr->DemFreezeFrameRecordTrigger;                              /* [GUD] freezeFrameRecordClassPtr */
                 if( freezeFrameRecordTrigger == TSFFRecordTrigger )
                 {
                     retVal = DEM_IRT_OK;
@@ -894,9 +907,8 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_CheckFreezeFrameRec
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | new created.                                             */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
-FUNC( Dem_u16_TSFFListIndexType, DEM_CODE ) Dem_Data_GetTSFFListIndexByEventStrgIndex
+static FUNC( Dem_u16_TSFFListIndexType, DEM_CODE ) Dem_Data_GetTSFFListIndexByEventStrgIndex
 (
     VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex,
     VAR( Dem_u08_TSFFListPerDTCIndexType, AUTOMATIC ) TSFFRecClassRefIndex      /* [PRMCHK:CALLER] */
@@ -916,7 +928,7 @@ FUNC( Dem_u16_TSFFListIndexType, DEM_CODE ) Dem_Data_GetTSFFListIndexByEventStrg
         resultOfGetFR = Dem_DataMngC_GetFR_FFDIndexListSt( faultIndex, &ffdIndexListSt );
         if( resultOfGetFR == DEM_IRT_OK )
         {
-            tsFFListIndex = ffdIndexListSt.TimeSeriesFreezeFrameListIndex[ TSFFRecClassRefIndex ];      /* [GUDCHK:CALLER]TSFFRecClassRefIndex *//* [ARYCHK] DEM_TSFF_RECORD_CLASS_NUM_PER_DTC_MAX_NUM / 1 / TSFFRecClassRefIndex */
+            tsFFListIndex = ffdIndexListSt.TimeSeriesFreezeFrameListIndex[ TSFFRecClassRefIndex ];      /* [GUDCHK:CALLER]TSFFRecClassRefIndex */
         }
     }
 
@@ -933,10 +945,6 @@ FUNC( Dem_u16_TSFFListIndexType, DEM_CODE ) Dem_Data_GetTSFFListIndexByEventStrg
 /* History                                                                  */
 /*  Version        :Date                                                    */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-6-0         :2024-01-29                                              */
-/*  v5-7-0         :2024-05-29                                              */
-/*  v5-8-0         :2024-10-29                                              */
-/*  v5-10-0        :2025-06-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

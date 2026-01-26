@@ -1,7 +1,7 @@
-/* Dcm_Dsp_DidMng_c(v5-10-0)                                                 */
+/* Dcm_Dsp_DidMng_c(v5-5-0)                                                 */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -992,7 +992,7 @@ FUNC( Std_ReturnType, DCM_CODE ) Dcm_Dsp_DidMng_CallReadDynDidFnc
                             u1_RetReadFnc = DcmDspDidRangeTbl[ u2TargetIndex ].ptReadDidFnc( stSourceTable.u2SourceDid, ptData, u1OpStatus, u4_DataBufferLength, &u4_DataLength, &u1LocalErrorCode );
 #else  /* JGXSTACK */
                             u1_RetReadFnc = E_OK;
-                        /* user-defined */
+                            /* user-defined */
 #endif /* JGXSTACK */
                             u1_RetVal = u1_RetReadFnc;
                         }
@@ -2509,7 +2509,7 @@ FUNC( Std_ReturnType, DCM_CODE ) Dcm_Dsp_DidMng_CallReadFnc
 #endif /* DCM_SUPPORT_SID2F == STD_ON */
 
 
-#if ( ( DCM_SUPPORT_SID2C == STD_ON ) || ( DCM_SUPPORT_SID23 == STD_ON ) || ( DCM_SUPPORT_SID3D == STD_ON ) )
+#if ( ( DCM_SUPPORT_SID2C == STD_ON ) || ( DCM_SUPPORT_SID23 == STD_ON ) )
 /****************************************************************************/
 /* Function Name | Dcm_Dsp_DidMng_ChkALFID                                  */
 /* Description   | ALFID support check                                      */
@@ -2550,10 +2550,10 @@ FUNC( Std_ReturnType, DCM_CODE ) Dcm_Dsp_DidMng_ChkALFID
 
     return u1_RetVal;
 }
-#endif /* DCM_SUPPORT_SID2C == STD_ON || DCM_SUPPORT_SID23 == STD_ON || DCM_SUPPORT_SID3D == STD_ON */
+#endif /* DCM_SUPPORT_SID2C == STD_ON || DCM_SUPPORT_SID23 == STD_ON */
 
 
-#if ( ( DCM_PERIODIC_DDDID_USE == STD_ON ) || ( DCM_SUPPORT_SID22 == STD_ON ) || ( DCM_SUPPORT_SID23 == STD_ON ) || ( DCM_SUPPORT_SID2C == STD_ON ) || ( DCM_SUPPORT_SID2E == STD_ON ) || ( DCM_SUPPORT_SID2F == STD_ON ) || ( DCM_SUPPORT_SID3D == STD_ON ) )
+#if ( ( DCM_PERIODIC_DDDID_USE == STD_ON ) || ( DCM_SUPPORT_SID22 == STD_ON ) || ( DCM_SUPPORT_SID23 == STD_ON ) || ( DCM_SUPPORT_SID2C == STD_ON ) || ( DCM_SUPPORT_SID2E == STD_ON ) || ( DCM_SUPPORT_SID2F == STD_ON ) )
 /****************************************************************************/
 /* Function Name | Dcm_Dsp_DidMng_ChkMemAddress                             */
 /* Description   | Memory Address support check                             */
@@ -2616,7 +2616,7 @@ FUNC( Std_ReturnType, DCM_CODE ) Dcm_Dsp_DidMng_ChkMemAddress
         {
             if( u1ReadWrite == DCM_DSP_DIDMNG_MEM_READ )
             {
-                if( DcmDspMemory.ptMemoryIdInfo[u1_MemoryIdIndex].u1ReadMemoryRangeInfoNum != (uint8)0U )   /* If not Zero, then ptReadMemoryRangeInfo is not NULL_PTR */
+                if( DcmDspMemory.ptMemoryIdInfo[u1_MemoryIdIndex].u1ReadMemoryRangeInfoNum != (uint8)0U )
                 {
                     for( u1_MemoryRangeIndex = (uint8)0U; u1_MemoryRangeIndex < DcmDspMemory.ptMemoryIdInfo[u1_MemoryIdIndex].u1ReadMemoryRangeInfoNum; u1_MemoryRangeIndex++ )
                     {
@@ -2634,7 +2634,7 @@ FUNC( Std_ReturnType, DCM_CODE ) Dcm_Dsp_DidMng_ChkMemAddress
             }
             else
             {
-                if( DcmDspMemory.ptMemoryIdInfo[u1_MemoryIdIndex].u1WriteMemoryRangeInfoNum != (uint8)0U )   /* If not Zero, then ptWriteMemoryRangeInfo is not NULL_PTR */
+                if( DcmDspMemory.ptMemoryIdInfo[u1_MemoryIdIndex].u1WriteMemoryRangeInfoNum != (uint8)0U )
                 {
                     for( u1_MemoryRangeIndex = (uint8)0U; u1_MemoryRangeIndex < DcmDspMemory.ptMemoryIdInfo[u1_MemoryIdIndex].u1WriteMemoryRangeInfoNum; u1_MemoryRangeIndex++ )
                     {
@@ -2655,15 +2655,14 @@ FUNC( Std_ReturnType, DCM_CODE ) Dcm_Dsp_DidMng_ChkMemAddress
 
     return u1_RetVal;
 }
-#endif /* DCM_PERIODIC_DDDID_USE == STD_ON || DCM_SUPPORT_SID22 == STD_ON || DCM_SUPPORT_SID23 == STD_ON || DCM_SUPPORT_SID2C == STD_ON || DCM_SUPPORT_SID2E == STD_ON || DCM_SUPPORT_SID2F == STD_ON || DCM_SUPPORT_SID3D == STD_ON */
+#endif /* DCM_PERIODIC_DDDID_USE == STD_ON || DCM_SUPPORT_SID22 == STD_ON || DCM_SUPPORT_SID23 == STD_ON || DCM_SUPPORT_SID2C == STD_ON || DCM_SUPPORT_SID2E == STD_ON || DCM_SUPPORT_SID2F == STD_ON */
 
 
-#if ( ( DCM_SUPPORT_SID23 == STD_ON ) || ( DCM_SUPPORT_SID2C == STD_ON ) || ( DCM_SUPPORT_SID3D == STD_ON ) )
+#if ( DCM_SUPPORT_SID23 == STD_ON )
 /****************************************************************************/
 /* Function Name | Dcm_Dsp_DidMng_ChkMemSize                                */
 /* Description   | Memory Size support check                                */
-/* Preconditions | Before calling this function, ensure that the memory to  */
-/*               | be checked exists using Dcm_Dsp_DidMng_ChkMemAddress()   */
+/* Preconditions | None                                                     */
 /* Parameters    | [in] u1ReadWrite : Reading/Writing type                  */
 /*               | [in] u1MemoryIdIndex : Index of Memory Id Table          */
 /*               | [in] u1MemoryRangeIndex : Index of Memory Range Table    */
@@ -2689,102 +2688,33 @@ FUNC( Std_ReturnType, DCM_CODE ) Dcm_Dsp_DidMng_ChkMemSize
 
     u1_RetVal = E_NOT_OK;
 
-    if( u1ReadWrite == DCM_DSP_DIDMNG_MEM_READ )
+    if( DcmDspMemory.ptMemoryIdInfo != NULL_PTR )
     {
-        u4_MemoryRangeHigh = DcmDspMemory.ptMemoryIdInfo[u1MemoryIdIndex].ptReadMemoryRangeInfo[u1MemoryRangeIndex].u4MemoryRangeHigh;
-    }
-    else
-    {
-        u4_MemoryRangeHigh = DcmDspMemory.ptMemoryIdInfo[u1MemoryIdIndex].ptWriteMemoryRangeInfo[u1MemoryRangeIndex].u4MemoryRangeHigh;
-    }
-
-    if( (u4MemSize - (uint32)1U) <= (u4_MemoryRangeHigh - u4MemAddress) )   /* no wrap around */
-    {
-        u1_RetVal = E_OK;
-    }
-
-    return u1_RetVal;
-}
-#endif /* DCM_SUPPORT_SID23 == STD_ON || DCM_SUPPORT_SID2C == STD_ON || DCM_SUPPORT_SID3D == STD_ON */
-
-
-#if ( ( DCM_PERIODIC_DDDID_USE == STD_ON ) || ( DCM_SUPPORT_SID22 == STD_ON ) || ( DCM_SUPPORT_SID23 == STD_ON ) || ( DCM_SUPPORT_SID2C == STD_ON ) || ( DCM_SUPPORT_SID2E == STD_ON ) || ( DCM_SUPPORT_SID2F == STD_ON ) || ( DCM_SUPPORT_SID3D == STD_ON ) )
-/****************************************************************************/
-/* Function Name | Dcm_Dsp_DidMng_ChkMemSes                                 */
-/* Description   | Session check of designated area                         */
-/* Preconditions | Before calling this function, ensure that the memory to  */
-/*               | be checked exists using Dcm_Dsp_DidMng_ChkMemAddress()   */
-/* Parameters    | [in] u1ReadWrite : Reading/Writing type                  */
-/*               | [in] u1MemoryIdIndex : Index of Memory Id Table          */
-/*               | [in] u1MemoryRangeIndex : Index of Memory Range Table    */
-/*               | [in] u1CurrentSessionLevel : Current session level       */
-/*               |                                                          */
-/* Return Value  | Std_ReturnType                                           */
-/*               |        E_OK : Accessible                                 */
-/*               |        E_NOT_OK : Inaccessible                           */
-/* Notes         | None                                                     */
-/****************************************************************************/
-FUNC( Std_ReturnType, DCM_CODE ) Dcm_Dsp_DidMng_ChkMemSes
-(
-    const uint8 u1ReadWrite,
-    const uint8 u1MemoryIdIndex,
-    const uint8 u1MemoryRangeIndex,
-    const uint8 u1CurrentSessionLevel
-)
-{
-    Std_ReturnType u1_RetVal;
-    uint8 u1_cnt;
-
-    u1_RetVal = E_NOT_OK;
-
-    if( u1ReadWrite == DCM_DSP_DIDMNG_MEM_READ )
-    {
-        if( DcmDspMemory.ptMemoryIdInfo[u1MemoryIdIndex].ptReadMemoryRangeInfo[u1MemoryRangeIndex].u1MemoryRangeSessionLevelNum == (uint8)0U )
+        if( u1ReadWrite == DCM_DSP_DIDMNG_MEM_READ )
         {
-            u1_RetVal = E_OK;
+            u4_MemoryRangeHigh = DcmDspMemory.ptMemoryIdInfo[u1MemoryIdIndex].ptReadMemoryRangeInfo[u1MemoryRangeIndex].u4MemoryRangeHigh;
         }
         else
         {
-            for( u1_cnt = (uint8)0U; u1_cnt < DcmDspMemory.ptMemoryIdInfo[u1MemoryIdIndex].ptReadMemoryRangeInfo[u1MemoryRangeIndex].u1MemoryRangeSessionLevelNum; u1_cnt++ )
-            {
-                if( u1CurrentSessionLevel == DcmDspMemory.ptMemoryIdInfo[u1MemoryIdIndex].ptReadMemoryRangeInfo[u1MemoryRangeIndex].ptMemoryRangeSessionLevelRef[u1_cnt] )
-                {
-                    u1_RetVal = E_OK;
-                    break;
-                }
-            }
+            u4_MemoryRangeHigh = DcmDspMemory.ptMemoryIdInfo[u1MemoryIdIndex].ptWriteMemoryRangeInfo[u1MemoryRangeIndex].u4MemoryRangeHigh;
         }
-    }
-    else
-    {
-        if( DcmDspMemory.ptMemoryIdInfo[u1MemoryIdIndex].ptWriteMemoryRangeInfo[u1MemoryRangeIndex].u1MemoryRangeSessionLevelNum == (uint8)0U )
+
+        if( (u4MemSize - (uint32)1U) <= (u4_MemoryRangeHigh - u4MemAddress) )   /* no wrap around */
         {
             u1_RetVal = E_OK;
-        }
-        else
-        {
-            for( u1_cnt = (uint8)0U; u1_cnt < DcmDspMemory.ptMemoryIdInfo[u1MemoryIdIndex].ptWriteMemoryRangeInfo[u1MemoryRangeIndex].u1MemoryRangeSessionLevelNum; u1_cnt++ )
-            {
-                if( u1CurrentSessionLevel == DcmDspMemory.ptMemoryIdInfo[u1MemoryIdIndex].ptWriteMemoryRangeInfo[u1MemoryRangeIndex].ptMemoryRangeSessionLevelRef[u1_cnt] )
-                {
-                    u1_RetVal = E_OK;
-                    break;
-                }
-            }
         }
     }
 
     return u1_RetVal;
 }
-#endif /* DCM_PERIODIC_DDDID_USE == STD_ON || DCM_SUPPORT_SID22 == STD_ON || DCM_SUPPORT_SID23 == STD_ON || DCM_SUPPORT_SID2C == STD_ON || DCM_SUPPORT_SID2E == STD_ON || DCM_SUPPORT_SID2F == STD_ON || DCM_SUPPORT_SID3D == STD_ON */
+#endif /* DCM_SUPPORT_SID23 == STD_ON */
 
 
-#if ( ( DCM_PERIODIC_DDDID_USE == STD_ON ) || ( DCM_SUPPORT_SID22 == STD_ON ) || ( DCM_SUPPORT_SID23 == STD_ON ) || ( DCM_SUPPORT_SID2C == STD_ON ) || ( DCM_SUPPORT_SID2E == STD_ON ) || ( DCM_SUPPORT_SID2F == STD_ON ) || ( DCM_SUPPORT_SID3D == STD_ON ) )
+#if ( ( DCM_PERIODIC_DDDID_USE == STD_ON ) || ( DCM_SUPPORT_SID22 == STD_ON ) || ( DCM_SUPPORT_SID23 == STD_ON ) || ( DCM_SUPPORT_SID2C == STD_ON ) || ( DCM_SUPPORT_SID2E == STD_ON ) || ( DCM_SUPPORT_SID2F == STD_ON ) )
 /****************************************************************************/
 /* Function Name | Dcm_Dsp_DidMng_ChkMemSec                                 */
 /* Description   | Security check of designated area                        */
-/* Preconditions | Before calling this function, ensure that the memory to  */
-/*               | be checked exists using Dcm_Dsp_DidMng_ChkMemAddress()   */
+/* Preconditions | None                                                     */
 /* Parameters    | [in] u1ReadWrite : Reading/Writing type                  */
 /*               | [in] u1MemoryIdIndex : Index of Memory Id Table          */
 /*               | [in] u1MemoryRangeIndex : Index of Memory Range Table    */
@@ -2808,38 +2738,41 @@ FUNC( Std_ReturnType, DCM_CODE ) Dcm_Dsp_DidMng_ChkMemSec
 
     u1_RetVal = E_NOT_OK;
 
-    if( u1ReadWrite == DCM_DSP_DIDMNG_MEM_READ )
+    if( DcmDspMemory.ptMemoryIdInfo != NULL_PTR )
     {
-        if( DcmDspMemory.ptMemoryIdInfo[u1MemoryIdIndex].ptReadMemoryRangeInfo[u1MemoryRangeIndex].u1MemoryRangeSecurityLevelNum == (uint8)0U )
+        if( u1ReadWrite == DCM_DSP_DIDMNG_MEM_READ )
         {
-            u1_RetVal = E_OK;
-        }
-        else
-        {
-            for( u1_cnt = (uint8)0U; u1_cnt < DcmDspMemory.ptMemoryIdInfo[u1MemoryIdIndex].ptReadMemoryRangeInfo[u1MemoryRangeIndex].u1MemoryRangeSecurityLevelNum; u1_cnt++ )
+            if( DcmDspMemory.ptMemoryIdInfo[u1MemoryIdIndex].ptReadMemoryRangeInfo[u1MemoryRangeIndex].u1MemoryRangeSecurityLevelNum == (uint8)0U )
             {
-                if( u1CurrentSecurityLevel == DcmDspMemory.ptMemoryIdInfo[u1MemoryIdIndex].ptReadMemoryRangeInfo[u1MemoryRangeIndex].ptMemoryRangeSecurityLevelRef[u1_cnt] )
+                u1_RetVal = E_OK;
+            }
+            else
+            {
+                for( u1_cnt = (uint8)0U; u1_cnt < DcmDspMemory.ptMemoryIdInfo[u1MemoryIdIndex].ptReadMemoryRangeInfo[u1MemoryRangeIndex].u1MemoryRangeSecurityLevelNum; u1_cnt++ )
                 {
-                    u1_RetVal = E_OK;
-                    break;
+                    if( u1CurrentSecurityLevel == DcmDspMemory.ptMemoryIdInfo[u1MemoryIdIndex].ptReadMemoryRangeInfo[u1MemoryRangeIndex].ptMemoryRangeSecurityLevelRef[u1_cnt] )
+                    {
+                        u1_RetVal = E_OK;
+                        break;
+                    }
                 }
             }
         }
-    }
-    else
-    {
-        if( DcmDspMemory.ptMemoryIdInfo[u1MemoryIdIndex].ptWriteMemoryRangeInfo[u1MemoryRangeIndex].u1MemoryRangeSecurityLevelNum == (uint8)0U )
-        {
-            u1_RetVal = E_OK;
-        }
         else
         {
-            for( u1_cnt = (uint8)0U; u1_cnt < DcmDspMemory.ptMemoryIdInfo[u1MemoryIdIndex].ptWriteMemoryRangeInfo[u1MemoryRangeIndex].u1MemoryRangeSecurityLevelNum; u1_cnt++ )
+            if( DcmDspMemory.ptMemoryIdInfo[u1MemoryIdIndex].ptWriteMemoryRangeInfo[u1MemoryRangeIndex].u1MemoryRangeSecurityLevelNum == (uint8)0U )
             {
-                if( u1CurrentSecurityLevel == DcmDspMemory.ptMemoryIdInfo[u1MemoryIdIndex].ptWriteMemoryRangeInfo[u1MemoryRangeIndex].ptMemoryRangeSecurityLevelRef[u1_cnt] )
+                u1_RetVal = E_OK;
+            }
+            else
+            {
+                for( u1_cnt = (uint8)0U; u1_cnt < DcmDspMemory.ptMemoryIdInfo[u1MemoryIdIndex].ptWriteMemoryRangeInfo[u1MemoryRangeIndex].u1MemoryRangeSecurityLevelNum; u1_cnt++ )
                 {
-                    u1_RetVal = E_OK;
-                    break;
+                    if( u1CurrentSecurityLevel == DcmDspMemory.ptMemoryIdInfo[u1MemoryIdIndex].ptWriteMemoryRangeInfo[u1MemoryRangeIndex].ptMemoryRangeSecurityLevelRef[u1_cnt] )
+                    {
+                        u1_RetVal = E_OK;
+                        break;
+                    }
                 }
             }
         }
@@ -2847,7 +2780,7 @@ FUNC( Std_ReturnType, DCM_CODE ) Dcm_Dsp_DidMng_ChkMemSec
 
     return u1_RetVal;
 }
-#endif /* DCM_PERIODIC_DDDID_USE == STD_ON || DCM_SUPPORT_SID22 == STD_ON || DCM_SUPPORT_SID23 == STD_ON || DCM_SUPPORT_SID2C == STD_ON || DCM_SUPPORT_SID2E == STD_ON || DCM_SUPPORT_SID2F == STD_ON || DCM_SUPPORT_SID3D == STD_ON */
+#endif /* DCM_PERIODIC_DDDID_USE == STD_ON || DCM_SUPPORT_SID22 == STD_ON || DCM_SUPPORT_SID23 == STD_ON || DCM_SUPPORT_SID2C == STD_ON || DCM_SUPPORT_SID2E == STD_ON || DCM_SUPPORT_SID2F == STD_ON */
 
 
 #if ( DCM_SUPPORT_SID2C == STD_ON )
@@ -6675,20 +6608,23 @@ static FUNC( Std_ReturnType, DCM_CODE ) Dcm_Dsp_DidMng_InternalAddrInfo
 )
 {
     Std_ReturnType              u1_RetChkMemAddr;
-    Std_ReturnType              u1_RetChkMemSes;
     Std_ReturnType              u1_RetChkMemSec;
     Std_ReturnType              u1_RetVal;
+    boolean                     b_CheckMemAddrUseAsMemoryId;
     uint8                       u1_MemIdFlag;
     uint8                       u1_MemIdIndex;
     uint8                       u1_MemRangeIndex;
-    boolean                     b_CheckMemAddrUseAsMemoryId;
 
     u1_RetVal                   = E_NOT_OK;
     u1_MemIdIndex               = (uint8)0U;
     u1_MemRangeIndex            = (uint8)0U;
 
-    if( ( u1KindOfCheck == DCM_DSP_DIDMNG_CHECK_READ_SES ) ||
-        ( u1KindOfCheck == DCM_DSP_DIDMNG_CHECK_READ_SEC ) )
+    if( u1KindOfCheck == DCM_DSP_DIDMNG_CHECK_READ_SES )
+    {
+        /* The Check Result of Session is Always OK. */
+        u1_RetVal = E_OK;
+    }
+    else if( u1KindOfCheck == DCM_DSP_DIDMNG_CHECK_READ_SEC ) 
     {
         b_CheckMemAddrUseAsMemoryId = Dcm_Dsp_MemMng_GetUseAsMemoryId();
         if( b_CheckMemAddrUseAsMemoryId == (boolean)TRUE )
@@ -6699,6 +6635,7 @@ static FUNC( Std_ReturnType, DCM_CODE ) Dcm_Dsp_DidMng_InternalAddrInfo
         {
             u1_MemIdFlag = DCM_DSP_DIDMNG_MEM_ID_INVALID;
         }
+
         u1_RetChkMemAddr = Dcm_Dsp_DidMng_ChkMemAddress( DCM_DSP_DIDMNG_MEM_READ,
                                                          u4MemAddr,
                                                          u1_MemIdFlag,
@@ -6707,31 +6644,20 @@ static FUNC( Std_ReturnType, DCM_CODE ) Dcm_Dsp_DidMng_InternalAddrInfo
                                                          &u1_MemRangeIndex );
         if( u1_RetChkMemAddr == (Std_ReturnType)E_OK )
         {
-            if( u1KindOfCheck == DCM_DSP_DIDMNG_CHECK_READ_SES )
+            /* Check Security lock is canceled */
+            u1_RetChkMemSec = Dcm_Dsp_DidMng_ChkMemSec( DCM_DSP_DIDMNG_MEM_READ,
+                                                        u1_MemIdIndex,
+                                                        u1_MemRangeIndex,
+                                                        u1CheckElement );
+            if( u1_RetChkMemSec == (Std_ReturnType)E_OK )
             {
-                /* Check session support */
-                u1_RetChkMemSes = Dcm_Dsp_DidMng_ChkMemSes( DCM_DSP_DIDMNG_MEM_READ,
-                                                            u1_MemIdIndex,
-                                                            u1_MemRangeIndex,
-                                                            u1CheckElement );
-                if( u1_RetChkMemSes == (Std_ReturnType)E_OK )
-                {
-                    u1_RetVal = E_OK;
-                }
-            }
-            else
-            {
-                /* Check Security lock is canceled */
-                u1_RetChkMemSec = Dcm_Dsp_DidMng_ChkMemSec( DCM_DSP_DIDMNG_MEM_READ,
-                                                            u1_MemIdIndex,
-                                                            u1_MemRangeIndex,
-                                                            u1CheckElement );
-                if( u1_RetChkMemSec == (Std_ReturnType)E_OK )
-                {
-                    u1_RetVal = E_OK;
-                }
+                u1_RetVal = E_OK;
             }
         }
+    }
+    else
+    {
+        /* no process */
     }
     
     return u1_RetVal;
@@ -6918,8 +6844,7 @@ static FUNC( void, DCM_CODE ) Dcm_Dsp_DidMng_InitSourceElementId
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-4-0         :2023-06-28                                              */
-/*  v5-6-0         :2024-02-27                                              */
-/*  v5-10-0        :2025-06-26                                              */
+/*  v5-5-0         :2023-10-27                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

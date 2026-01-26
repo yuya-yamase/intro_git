@@ -1,7 +1,7 @@
-/* Dem_Ind_WIRStatus_c(v5-9-0)                                              */
+/* Dem_Ind_WIRStatus_c(v5-5-0)                                              */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -19,7 +19,6 @@
 #include "../../../inc/Dem_CmnLib_ConfigInfo.h"
 #include "../../../inc/Dem_CmnLib_CmbEvt.h"
 #include "../../../inc/Dem_CmnLib_Control.h"
-#include "../../../inc/Dem_Pm_DataAvl.h"
 #include "../../../inc/Dem_Pm_Ind.h"
 
 /*--------------------------------------------------------------------------*/
@@ -386,7 +385,6 @@ FUNC( Dem_IndicatorStatusType, DEM_CODE ) Dem_Ind_GetIndicatorStatusByWIRStatusA
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-9-0      | branch changed.                                          */
 /****************************************************************************/
 FUNC( Dem_IndicatorStatusType, DEM_CODE ) Dem_Ind_GetIndicatorStatusByWIRStatus
 ( void )
@@ -394,7 +392,6 @@ FUNC( Dem_IndicatorStatusType, DEM_CODE ) Dem_Ind_GetIndicatorStatusByWIRStatus
     VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) loopCount;
     VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) eventStorageNum;
     VAR( Dem_IndicatorStatusType, AUTOMATIC ) indicatorStatus;
-    VAR( boolean, AUTOMATIC ) availableStatus;
 
     eventStorageNum = Dem_PrimaryMemEventStorageNum;
 
@@ -402,27 +399,22 @@ FUNC( Dem_IndicatorStatusType, DEM_CODE ) Dem_Ind_GetIndicatorStatusByWIRStatus
 
     for( loopCount = (Dem_u16_EventStrgIndexType)0U ; loopCount < eventStorageNum ; loopCount++ )   /* [GUD:for]loopCount */
     {
-        availableStatus =   Dem_DataAvl_GetEvtAvl_InEvtStrgGrp( loopCount );
+        SchM_Enter_Dem_WIRStatusAccess();
 
-        if ( availableStatus == (boolean)TRUE )
+        if( Dem_WIRStatus[loopCount] != DEM_WIRSTATUS_OFF )         /* [GUD]loopCount */
         {
-            SchM_Enter_Dem_WIRStatusAccess();
+            indicatorStatus = DEM_INDICATOR_CONTINUOUS;
+        }
+        else
+        {
+            /* No process */
+        }
 
-            if( Dem_WIRStatus[loopCount] != DEM_WIRSTATUS_OFF )         /* [GUD]loopCount */
-            {
-                indicatorStatus = DEM_INDICATOR_CONTINUOUS;
-            }
-            else
-            {
-                /* No process */
-            }
+        SchM_Exit_Dem_WIRStatusAccess();
 
-            SchM_Exit_Dem_WIRStatusAccess();
-
-            if( indicatorStatus == DEM_INDICATOR_CONTINUOUS )
-            {
-                break;
-            }
+        if( indicatorStatus == DEM_INDICATOR_CONTINUOUS )
+        {
+            break;
         }
     }
 
@@ -438,7 +430,6 @@ FUNC( Dem_IndicatorStatusType, DEM_CODE ) Dem_Ind_GetIndicatorStatusByWIRStatus
 /*  Version        :Date                                                    */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-9-0         :2025-02-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

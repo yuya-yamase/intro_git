@@ -1,7 +1,7 @@
-/* Dem_DataMng_RecDt_TSFFList_c(v5-7-0)                                     */
+/* Dem_DataMng_RecDt_TSFFList_c(v5-5-0)                                     */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -125,7 +125,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataMngC_GetFR_TSFFListIndex
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_DataMng_InitTSFFListRecordData
 (
@@ -140,7 +139,7 @@ FUNC( void, DEM_CODE ) Dem_DataMng_InitTSFFListRecordData
     /* The time-series freeze frame record list index. */
     for( tsFFListIndex = (Dem_u08_TSFFListPerDTCIndexType)0U ; tsFFListIndex < tsffRecordClassNumPerDTCMaxNum; tsFFListIndex++ )    /* [GUD:for]tsFFListIndex */
     {
-        TimeSeriesFreezeFrameListIndexArrayPtr[tsFFListIndex] = DEM_INVALID_VACANT_TSFFLIST_INDEX;                                  /* [GUD]tsFFListIndex *//* [ARYCHK] DEM_TSFF_RECORD_CLASS_NUM_PER_DTC_MAX_NUM / 1 / tsFFListIndex */
+        TimeSeriesFreezeFrameListIndexArrayPtr[tsFFListIndex] = DEM_INVALID_VACANT_TSFFLIST_INDEX;                                  /* [GUD]tsFFListIndex */
     }
     return ;
 }
@@ -336,7 +335,6 @@ FUNC( boolean, DEM_CODE ) Dem_DataMngC_InitTimeSeriesFreezeFrameListIndexRemoveN
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_DataMng_GetTSFFListRecord_Ctl
 (
@@ -351,7 +349,7 @@ FUNC( void, DEM_CODE ) Dem_DataMng_GetTSFFListRecord_Ctl
 
     for( tsfflCnt = (Dem_u08_TSFFListPerDTCIndexType)0U; tsfflCnt < tsfflRecordClassNumPerDTCMaxNum; tsfflCnt++ )                       /* [GUD:for]tsfflCnt */
     {
-        TimeSeriesFreezeFrameListIndexArrayPtr[tsfflCnt] = Dem_FaultRecordList[FaultIndex].TimeSeriesFreezeFrameListIndex[tsfflCnt];    /* [GUD]tsffrIndex *//* [GUDCHK:CALLER]FaultIndex *//* [ARYCHK] DEM_TSFF_RECORD_CLASS_NUM_PER_DTC_MAX_NUM / 1 / tsfflCnt */
+        TimeSeriesFreezeFrameListIndexArrayPtr[tsfflCnt] = Dem_FaultRecordList[FaultIndex].TimeSeriesFreezeFrameListIndex[tsfflCnt];    /* [GUD]tsffrIndex *//* [GUDCHK:CALLER]FaultIndex */
     }
     return ;
 }
@@ -378,7 +376,6 @@ FUNC( void, DEM_CODE ) Dem_DataMng_GetTSFFListRecord_Ctl
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_DataMng_SetTSFFListRecord_Ctl
 (
@@ -393,7 +390,7 @@ FUNC( void, DEM_CODE ) Dem_DataMng_SetTSFFListRecord_Ctl
 
     for( tsfflCnt = (Dem_u08_TSFFListPerDTCIndexType)0U; tsfflCnt < tsfflRecordClassNumPerDTCMaxNum; tsfflCnt++ )                                   /* [GUD:for]tsfflCnt */
     {
-        Dem_FaultRecordList[FaultIndex].TimeSeriesFreezeFrameListIndex[tsfflCnt] = SrcFaultRecordPtr->TimeSeriesFreezeFrameListIndex[tsfflCnt];     /* [GUDCHK:CALLER]FaultIndex *//* [GUD]tsfflCnt *//* [ARYCHK] DEM_TSFF_RECORD_CLASS_NUM_PER_DTC_MAX_NUM / 1 / tsfflCnt */
+        Dem_FaultRecordList[FaultIndex].TimeSeriesFreezeFrameListIndex[tsfflCnt] = SrcFaultRecordPtr->TimeSeriesFreezeFrameListIndex[tsfflCnt];     /* [GUDCHK:CALLER]FaultIndex *//* [GUD]tsfflCnt */
     }
     return ;
 }
@@ -414,7 +411,6 @@ FUNC( void, DEM_CODE ) Dem_DataMng_SetTSFFListRecord_Ctl
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataMng_CmpWithTSFFListRecord
 (
@@ -433,7 +429,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataMng_CmpWithTSFFListRecord
     tsffRecordClassNumPerDTCMaxNum = Dem_TSFFRecordClassNumPerDTCMaxNum;
     for( indexOfTSFFList = (Dem_u08_TSFFListPerDTCIndexType)0U ; indexOfTSFFList < tsffRecordClassNumPerDTCMaxNum; indexOfTSFFList++ )                  /* [GUD:for]indexOfTSFFList */
     {
-        if( faultRecordPtr->TimeSeriesFreezeFrameListIndex[indexOfTSFFList] != CheckFaultRecordPtr->TimeSeriesFreezeFrameListIndex[indexOfTSFFList] )   /* [GUD]indexOfTSFFList *//* [ARYCHK] DEM_TSFF_RECORD_CLASS_NUM_PER_DTC_MAX_NUM / 1 / indexOfTSFFList *//* [ARYCHK] DEM_TSFF_RECORD_CLASS_NUM_PER_DTC_MAX_NUM / 1 / indexOfTSFFList */
+        if( faultRecordPtr->TimeSeriesFreezeFrameListIndex[indexOfTSFFList] != CheckFaultRecordPtr->TimeSeriesFreezeFrameListIndex[indexOfTSFFList] )   /* [GUD]indexOfTSFFList */
         {
             break;
         }
@@ -468,7 +464,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataMng_CmpWithTSFFListRecord
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-7-0         :2024-05-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

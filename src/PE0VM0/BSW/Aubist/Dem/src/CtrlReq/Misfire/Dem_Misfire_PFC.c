@@ -1,7 +1,7 @@
-/* Dem_Misfire_PFC_c(v5-7-0)                                                */
+/* Dem_Misfire_PFC_c(v5-5-0)                                                */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -104,11 +104,6 @@ FUNC( void, DEM_CODE ) Dem_Misfire_SavePermanentMemoryEntryToTmp
 /*               |        The event index corresponding to the event ID.    */
 /* Return Value  | void                                                     */
 /* Notes         | none                                                     */
-/*--------------------------------------------------------------------------*/
-/* UpdateRecord  | [UpdRec]PFCMisfire                                       */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-6-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_Misfire_UpdatePermanentMemoryEntryToTmp
 (
@@ -120,7 +115,7 @@ FUNC( void, DEM_CODE ) Dem_Misfire_UpdatePermanentMemoryEntryToTmp
     misfireEventKind = Dem_CfgInfoPm_CheckEventKindOfMisfire_InEvtStrgGrp( EventStrgIndex );
     if( misfireEventKind == (boolean)TRUE )
     {
-        Dem_MisfireMng_SetPFCMisfireComRecord( &Dem_TmpMisfirePermanent );      /*[UpdRec]PFCMisfire */
+        Dem_MisfireMng_SetPFCMisfireComRecord( &Dem_TmpMisfirePermanent );
     }
 
     return;
@@ -286,11 +281,6 @@ FUNC( void, DEM_CODE ) Dem_Misfire_ClearPermanentCylToTmp
 /* Parameters    | [in] EventStrgIndex :                                    */
 /* Return Value  | void                                                     */
 /* Notes         | none                                                     */
-/*--------------------------------------------------------------------------*/
-/* UpdateRecord  | [UpdRec]PFCMisfire                                       */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-6-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_Misfire_UpdatePermanentCylByOrder
 (
@@ -331,7 +321,7 @@ FUNC( void, DEM_CODE ) Dem_Misfire_UpdatePermanentCylByOrder
             getAccumConfirmedCyl = Dem_MisfireMng_GetAccumConfirmedCyl( misfireIndex );
             pfcMisfireComRecord.AccumPermanentCyl = (Dem_MisfireCylinderType)( pfcMisfireComRecord.AccumPermanentCyl | getAccumConfirmedCyl );
 
-            Dem_MisfireMng_SetPFCMisfireComRecord( &pfcMisfireComRecord );      /*[UpdRec]PFCMisfire */
+            Dem_MisfireMng_SetPFCMisfireComRecord( &pfcMisfireComRecord );
         }
     }
 
@@ -351,7 +341,6 @@ FUNC( void, DEM_CODE ) Dem_Misfire_UpdatePermanentCylByOrder
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | new created. based on Dem_Misfire_GetPermanentOBDDTC.    */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_Misfire_GetPermanentUDSDTC
 (
@@ -382,7 +371,7 @@ FUNC( void, DEM_CODE ) Dem_Misfire_GetPermanentUDSDTC
                 if( ( pfcMisfireComRecord.AccumPermanentCyl & (Dem_MisfireCylinderType)(DEM_MISFIRE_CHECK_CYLINDER_BIT << loopCnt) ) != DEM_MISFIRE_CYLINDER_NON )
                 {
                     dtcValue = Dem_CfgInfoPm_GetUdsDTCByMisfireCylinderNumber( loopCnt );
-                    PermanentDTCBufferPtr[ permanentDTCCnt ]    =   (uint32)dtcValue;           /* [GUD]loopCnt *//* [GUD:SPC:IF_GUARDED: loopCnt ]permanentDTCCnt *//* [ARYCHK] DEM_MAX_NUMBER_EVENT_ENTRY_PERMANENT+DEM_MISFIRE_CYLINDER_NUMBER / 1 / permanentDTCCnt */
+                    PermanentDTCBufferPtr[ permanentDTCCnt ]    =   (uint32)dtcValue;           /* [GUD]loopCnt *//* [GUD:SPC:IF_GUARDED: loopCnt ]permanentDTCCnt */
 
                     permanentDTCCnt = permanentDTCCnt + (uint8)1U;
                 }
@@ -409,7 +398,6 @@ FUNC( void, DEM_CODE ) Dem_Misfire_GetPermanentUDSDTC
 /* History       |                                                          */
 /*   v5-5-0      | rename from Dem_Misfire_GetPermanentDTC(v5-3-0).         */
 /*   v5-5-0      | branch changed.                                          */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_Misfire_GetPermanentOBDDTC
 (
@@ -440,7 +428,7 @@ FUNC( void, DEM_CODE ) Dem_Misfire_GetPermanentOBDDTC
                 if( ( pfcMisfireComRecord.AccumPermanentCyl & (Dem_MisfireCylinderType)(DEM_MISFIRE_CHECK_CYLINDER_BIT << loopCnt) ) != DEM_MISFIRE_CYLINDER_NON )
                 {
                     dtcValue = Dem_CfgInfoPm_GetOBDDTCByMisfireCylinderNumber( loopCnt );
-                    PermanentDTCBufferPtr[ permanentDTCCnt ]    =   (uint16)dtcValue;       /* [GUD]loopCnt *//* [GUD:SPC:IF_GUARDED: loopCnt ]permanentDTCCnt *//* [ARYCHK] DEM_MAX_NUMBER_EVENT_ENTRY_PERMANENT+DEM_MISFIRE_CYLINDER_NUMBER / 1 / permanentDTCCnt */
+                    PermanentDTCBufferPtr[ permanentDTCCnt ]    =   (uint16)dtcValue;       /* [GUD]loopCnt *//* [GUD:SPC:IF_GUARDED: loopCnt ]permanentDTCCnt */
 
                     permanentDTCCnt = permanentDTCCnt + (uint8)1U;
                 }
@@ -639,8 +627,6 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Misfire_CheckPFCRecord
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-6-0         :2024-01-29                                              */
-/*  v5-7-0         :2024-05-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

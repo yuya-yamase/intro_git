@@ -1,7 +1,7 @@
-/* Dem_Control_OpCycle_c(v5-6-0)                                            */
+/* Dem_Control_OpCycle_c(v5-5-0)                                            */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -229,11 +229,8 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_RestartOperationCycle
 /* Return Value  | none                                                     */
 /* Notes         | -                                                        */
 /*--------------------------------------------------------------------------*/
-/* UpdateRecord  | [UpdRec]AltIUMPR                                         */
-/*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
-/*   v5-6-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_Control_RestartOpCycleInitProcess
 (
@@ -301,7 +298,7 @@ FUNC( void, DEM_CODE ) Dem_Control_RestartOpCycleInitProcess
 #endif /* ( DEM_WWH_OBD_SUPPORT == STD_ON ) */
 
             /*  update operation cycle              */
-            (void)Dem_Control_UpdateEventMemEntryByOpCycle( opCycleIndex, numOfAllEventConfigured, &needGenOrderList, &execHealing );    /* no return check required *//*[UpdRec]AltIUMPR */
+            (void)Dem_Control_UpdateEventMemEntryByOpCycle( opCycleIndex, numOfAllEventConfigured, &needGenOrderList, &execHealing );    /* no return check required */
 
             /*  end of operation cycle restart.         */
             igCycleUpdated              =   (boolean)FALSE;
@@ -341,12 +338,8 @@ FUNC( void, DEM_CODE ) Dem_Control_RestartOpCycleInitProcess
 /* Return Value  | none                                                     */
 /* Notes         | -                                                        */
 /*--------------------------------------------------------------------------*/
-/* UpdateRecord  | [UpdRec]IUMPR                                            */
-/* UpdateRecord  | [UpdRec]AltIUMPR                                         */
-/*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | branch changed.                                          */
-/*   v5-6-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_Control_RestartOpCycleInitEndProcess
 (
@@ -357,7 +350,7 @@ FUNC( void, DEM_CODE ) Dem_Control_RestartOpCycleInitEndProcess
 {
 #if ( DEM_CYCLEQUALIFIED_SUPPORT == STD_ON )  /* [FuncSw] */
     /*  end of update operation cycle.      */
-    Dem_Control_EndOpCycUpd_ExecJobsAtOpcycUpd( DEM_OPERATION_CYCLE_INDEX_INVALID, IGCycleUpdated, OBDDCYQualified, WarmUpQualified );/* [UpdRec]IUMPR *//* [UpdRec]AltIUMPR */
+    Dem_Control_EndOpCycUpd_ExecJobsAtOpcycUpd( DEM_OPERATION_CYCLE_INDEX_INVALID, IGCycleUpdated, OBDDCYQualified, WarmUpQualified );
 #endif  /* ( DEM_CYCLEQUALIFIED_SUPPORT == STD_ON )    */
 
 
@@ -561,12 +554,6 @@ FUNC( Dem_u08_AsyncExecReturnType, DEM_CODE ) Dem_Control_RestartOpCycleContinue
 /*               |        DEM_IRT_NG : Setting state is failed.             */
 /*               |        DEM_IRT_PENDING : Setting state is remained.      */
 /* Notes         |                                                          */
-/*--------------------------------------------------------------------------*/
-/* UpdateRecord  | [UpdRec]IUMPR    :   NotifySavedZone                     */
-/* UpdateRecord  | [UpdRec]AltIUMPR :   NotifySavedZone                     */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-6-0      | no branch changed.                                       */
 /****************************************************************************/
 static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_RestartOpCycleProcess
 (
@@ -586,13 +573,10 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_RestartOpCyclePr
     /*--------------------------------------*/
     /*  notify SAVED_ZONE update - start.   */
     Dem_NotifySavedZoneUpdate_Enter();      /*  notify start :  savedzone area will be update.  */
-#if ( DEM_IUMPR_SUPPORT == STD_ON ) /*  [FuncSw]    */
-    Dem_NotifySavedZoneIUMPRUpdate_Enter(); /*  notify start :  IUMPR/AltIUMPR savedzone area will be update.  */
-#endif  /* ( DEM_IUMPR_SUPPORT == STD_ON )          */
     /*--------------------------------------*/
 
     /* When operation cycle bit initialization of DTC status is necessary */
-    retUpdateEventMemoryEntryByOC = Dem_Control_UpdateEventMemEntryByOpCycle( OperationCycleIndex, UpdateEventMaxNumAtCycle, &needGenOrderList, &execHealing ); /* [UpdRec]AltIUMPR *//* [UpdRec]more */
+    retUpdateEventMemoryEntryByOC = Dem_Control_UpdateEventMemEntryByOpCycle( OperationCycleIndex, UpdateEventMaxNumAtCycle, &needGenOrderList, &execHealing );
 
     /*  store information : delete FaultRecord or not.      */
     Dem_Control_StoreNeedGenOrderListFlag( needGenOrderList );
@@ -602,7 +586,7 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_RestartOpCyclePr
 
     if( retUpdateEventMemoryEntryByOC == DEM_IRT_OK )
     {
-        Dem_Control_EndOperationCycleUpdate( OperationCycleIndex );     /* [UpdRec]IUMPR *//* [UpdRec]AltIUMPR *//* [UpdRec]more */
+        Dem_Control_EndOperationCycleUpdate( OperationCycleIndex );
         retVal = DEM_IRT_OK;
     }
     else if( retUpdateEventMemoryEntryByOC == DEM_IRT_PENDING )
@@ -618,9 +602,6 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_RestartOpCyclePr
 
     /*--------------------------------------*/
     /*  notify SAVED_ZONE update - end.     */
-#if ( DEM_IUMPR_SUPPORT == STD_ON ) /*  [FuncSw]    */
-    Dem_NotifySavedZoneIUMPRUpdate_Exit();  /*  notify end :  IUMPR/AltIUMPR savedzone area will be update.  */
-#endif  /* ( DEM_IUMPR_SUPPORT == STD_ON )          */
     Dem_NotifySavedZoneUpdate_Exit();       /*  notify end :  savedzone area will be update.    */
     /*--------------------------------------*/
 
@@ -650,11 +631,8 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_RestartOpCyclePr
 /*               |        DEM_IRT_NG : error                                */
 /* Notes         | none                                                     */
 /*--------------------------------------------------------------------------*/
-/* UpdateRecord  | [UpdRec]AltIUMPR                                         */
-/*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-6-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_UpdateEventMemEntryByOpCycle
 (
@@ -690,7 +668,7 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_UpdateEventMemEn
             execHealing         =   (boolean)FALSE;
 
             /*  update eventmemory entry by event kind.     */
-            Dem_Control_UpdEventKindMemEntryByOpCycle( nextEventPos, healingAgingCycleFlag, failureCycleFlag, &needGenOrderList, &execHealing );    /* [GUD]nextEventPos *//* [UpdRec]AltIUMPR */
+            Dem_Control_UpdEventKindMemEntryByOpCycle( nextEventPos, healingAgingCycleFlag, failureCycleFlag, &needGenOrderList, &execHealing );    /* [GUD]nextEventPos */
 
             *NeedGenOrderListPtr    =   *NeedGenOrderListPtr | needGenOrderList;
             *ExecHealingPtr         =   *ExecHealingPtr  | execHealing;
@@ -742,11 +720,8 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_UpdateEventMemEn
 /* Return Value  | none                                                     */
 /* Notes         | none                                                     */
 /*--------------------------------------------------------------------------*/
-/* UpdateRecord  | [UpdRec]AltIUMPR                                         */
-/*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-6-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_Control_UpdEventKindMemEntryByOpCycle
 (
@@ -773,7 +748,7 @@ static FUNC( void, DEM_CODE ) Dem_Control_UpdEventKindMemEntryByOpCycle
 #endif  /*   ( DEM_USERDEFINEDMEMORY_SUPPORT == STD_ON )        */
     {
         /*  PrimaryMemory.      */
-        Dem_Control_UpdateEventMemEntryByOpCycle_PrimaryMemory( EventPos, HealingAgingCycleFlag, FailureCycleFlag, NeedGenOrderListPtr, ExecHealingPtr );   /* [GUDCHK:CALLER]EventPos *//* [UpdRec]AltIUMPR */
+        Dem_Control_UpdateEventMemEntryByOpCycle_PrimaryMemory( EventPos, HealingAgingCycleFlag, FailureCycleFlag, NeedGenOrderListPtr, ExecHealingPtr );   /* [GUDCHK:CALLER]EventPos */
     }
     return ;
 }
@@ -786,12 +761,8 @@ static FUNC( void, DEM_CODE ) Dem_Control_UpdEventKindMemEntryByOpCycle
 /* Parameters    | [in] OperationCycleIndex : Operation cycle index         */
 /* Notes         | none                                                     */
 /*--------------------------------------------------------------------------*/
-/* UpdateRecord  | [UpdRec]IUMPR                                            */
-/* UpdateRecord  | [UpdRec]AltIUMPR                                         */
-/*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-6-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_Control_EndOperationCycleUpdate
 (
@@ -813,7 +784,7 @@ static FUNC( void, DEM_CODE ) Dem_Control_EndOperationCycleUpdate
 
 #if ( DEM_CYCLEQUALIFIED_SUPPORT == STD_ON )  /* [FuncSw] */
     /*  Exec jobs at OBDDCY cycle updated.  */
-    Dem_Control_EndOpCycUpd_ExecJobsAtOpcycUpd( OperationCycleIndex, igCycleUpdated, drivingCycleQualified, warmUpCycleQualified );/* [UpdRec]IUMPR *//* [UpdRec]AltIUMPR */
+    Dem_Control_EndOpCycUpd_ExecJobsAtOpcycUpd( OperationCycleIndex, igCycleUpdated, drivingCycleQualified, warmUpCycleQualified );
 #endif  /* ( DEM_CYCLEQUALIFIED_SUPPORT == STD_ON )    */
 
     return ;
@@ -923,12 +894,8 @@ static FUNC( void, DEM_CODE ) Dem_Control_EndOpCycUpd_UpdateOpCycInfo
 /*               |                  FALSE   :   WarmUp Cycle isnot updated  */
 /* Notes         | none                                                     */
 /*--------------------------------------------------------------------------*/
-/* UpdateRecord  | [UpdRec]IUMPR                                            */
-/* UpdateRecord  | [UpdRec]AltIUMPR                                         */
-/*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
-/*   v5-6-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_Control_EndOpCycUpd_ExecJobsAtOpcycUpd
 (
@@ -955,12 +922,12 @@ static FUNC( void, DEM_CODE ) Dem_Control_EndOpCycUpd_ExecJobsAtOpcycUpd
 
 #if ( DEM_ALTIUMPR_SUPPORT == STD_ON )  /*  [FuncSw]    */
         /* IncDenominator */
-        Dem_AltIUMPR_IncDenominatorProccess();      /* [UpdRec]AltIUMPR */
+        Dem_AltIUMPR_IncDenominatorProccess();
 #endif  /* ( DEM_ALTIUMPR_SUPPORT == STD_ON )   */
 
 #if ( DEM_IUMPR_SUPPORT == STD_ON ) /*  [FuncSw]    */
         /*  clear IUMPR condition.          */
-        Dem_IUMPR_ClearIUMPRCondition();            /*[UpdRec]IUMPR */
+        Dem_IUMPR_ClearIUMPRCondition();
 #endif  /* ( DEM_IUMPR_SUPPORT == STD_ON )          */
 
 #if ( DEM_CHECK_4000RPMOCCURRED_BY_EMISSION_SUPPORT == STD_ON ) /*  [FuncSw]    */
@@ -1021,12 +988,12 @@ static FUNC( void, DEM_CODE ) Dem_Control_EndOpCycUpd_ExecJobsAtOpcycUpd
 
 #if ( DEM_ALTIUMPR_SUPPORT == STD_ON )  /*  [FuncSw]    */
                 /* IncDenominator */
-                Dem_AltIUMPR_IncDenominatorProccess();      /* [UpdRec]AltIUMPR */
+                Dem_AltIUMPR_IncDenominatorProccess();
 #endif  /* ( DEM_ALTIUMPR_SUPPORT == STD_ON )   */
 
 #if ( DEM_IUMPR_SUPPORT == STD_ON ) /*  [FuncSw]    */
                 /*  clear IUMPR condition.          */
-                Dem_IUMPR_ClearIUMPRCondition();            /*[UpdRec]IUMPR */
+                Dem_IUMPR_ClearIUMPRCondition();
 #endif  /* ( DEM_IUMPR_SUPPORT == STD_ON )          */
 
 #if ( DEM_CHECK_4000RPMOCCURRED_BY_EMISSION_SUPPORT == STD_ON ) /*  [FuncSw]    */
@@ -1296,7 +1263,6 @@ FUNC( void, DEM_CODE ) Dem_Control_OpCycle_RefreshRAM
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-6-0         :2024-01-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

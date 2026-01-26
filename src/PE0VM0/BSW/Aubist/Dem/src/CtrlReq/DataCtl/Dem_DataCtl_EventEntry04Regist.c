@@ -1,7 +1,7 @@
-/* Dem_DataCtl_EventEntry04Regist_c(v5-9-0)                                 */
+/* Dem_DataCtl_EventEntry04Regist_c(v5-5-0)                                 */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -16,7 +16,6 @@
 #include <Dem.h>
 #include <Dem/Dem_Common.h>
 #include "../../../cfg/Dem_Cfg.h"
-#include "../../../inc/Dem_CmnLib_ConfigInfo.h"
 #include "../../../inc/Dem_CmnLib_DataCtl_TSFFD.h"
 #include "../../../inc/Dem_Pm_DataCtl.h"
 #include "../../../inc/Dem_Rc_DataMng.h"
@@ -118,13 +117,6 @@ static FUNC( void, DEM_CODE ) Dem_Data_RemoveNonObdFreezeFrame
 ( void );
 #endif  /* ( DEM_EVENT_DISPLACEMENT_SUPPORT == STD_ON ) */
 
-#if ( DEM_OBDONUDS_SUPPORT == STD_ON )
-#if ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )
-static FUNC( void, DEM_CODE ) Dem_Data_SetPairObdFFRecordIndex
-( void );
-#endif /* ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON ) */
-#endif /* ( DEM_OBDONUDS_SUPPORT == STD_ON ) */
-
 #if ( DEM_PFC_ORDER_MIL_SUPPORT == STD_ON )
 static FUNC( void, DEM_CODE ) Dem_Data_NotifyMILFaultRegistComplete
 ( void );
@@ -170,7 +162,6 @@ static VAR( Dem_u08_EventMemoryUpdateStatusType, DEM_VAR_NO_INIT ) Dem_EventMemo
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-9-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_Data_StoreEventMemoryEntryFromTmp
 ( void )
@@ -225,12 +216,6 @@ FUNC( void, DEM_CODE ) Dem_Data_StoreEventMemoryEntryFromTmp
         /* In case that the invalid event index was given. */
         /* no processing. */
     }
-
-#if ( DEM_OBDONUDS_SUPPORT == STD_ON )              /*  [FuncSw]    */
-#if ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )  /*  [FuncSw]    */
-    Dem_Data_SetPairObdFFRecordIndex();
-#endif /* ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )    */
-#endif /* ( DEM_OBDONUDS_SUPPORT == STD_ON )                */
 
     /* Store Specific Event Memory from temporary area's one. */
     /* Called individually because it is an exclusive section. */
@@ -403,7 +388,7 @@ static FUNC( void, DEM_CODE ) Dem_Data_StoreEventRecordOverwrittenFromTmp
         Dem_Event_ClearQualificationInfo_nochange_InEvtStrg( Dem_EventDisplacement.EventStrgIndexOfFaultRecordOverwritten );
 
         /* Not check return value, as event index of fault record is valid. */
-        (void)Dem_DataMngC_SetEventRecord( Dem_EventDisplacement.EventStrgIndexOfFaultRecordOverwritten, &eventRecord );    /* no return check required *//* [UpdRec]Event */
+        (void)Dem_DataMngC_SetEventRecord( Dem_EventDisplacement.EventStrgIndexOfFaultRecordOverwritten, &eventRecord );    /* no return check required */
     }
 
     return;
@@ -520,7 +505,6 @@ static FUNC( void, DEM_CODE ) Dem_Data_StoreFaultRecordOverwrittenFromTmp
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-8-0      | no branch changed.                                       */
 /****************************************************************************/
 #if ( DEM_OBDFFD_SUPPORT == STD_ON )
 static FUNC( void, DEM_CODE ) Dem_Data_StoreObdFaultRecordOverwrittenFromTmp
@@ -534,7 +518,7 @@ static FUNC( void, DEM_CODE ) Dem_Data_StoreObdFaultRecordOverwrittenFromTmp
     VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) eventStrgIndex;
     VAR( Dem_u08_ConsistencyIdType, AUTOMATIC ) consistencyId;
 
-    obdFFRClassPerDTCMaxNum = Dem_CfgInfoPm_GetOBDFFRClassPerDTCMaxNum();
+    obdFFRClassPerDTCMaxNum = Dem_OBDFFRClassPerDTCMaxNum;
     failRecordNum = Dem_FailRecordNum;
 
     for( frOverwrittenIndex = (Dem_u08_FFListIndexType)0U; frOverwrittenIndex < obdFFRClassPerDTCMaxNum; frOverwrittenIndex++ ) /* [GUD:for] frOverwrittenIndex */
@@ -769,7 +753,6 @@ static FUNC( void, DEM_CODE ) Dem_Data_UpdateNextMILFaultOccurrenceOrderFromTmp
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-8-0      | no branch changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_Data_StoreObdFreezeFrameRecordFromTmp
 ( void )
@@ -781,8 +764,8 @@ static FUNC( void, DEM_CODE ) Dem_Data_StoreObdFreezeFrameRecordFromTmp
     VAR( Dem_u08_FFDIndexType, AUTOMATIC ) obdRecordNumberIndex;
     VAR( Dem_u08_FFDIndexType, AUTOMATIC ) obdFFDRecordNum;
 
-    obdFFRClassNumPerDTCMaxNum = Dem_CfgInfoPm_GetOBDFFRClassPerDTCMaxNum();
-    obdFFDRecordNum = Dem_CfgInfoPm_GetObdFFDRecordNum();
+    obdFFRClassNumPerDTCMaxNum = Dem_OBDFFRClassPerDTCMaxNum;
+    obdFFDRecordNum = Dem_ObdFFDRecordNum;
 
 #if ( DEM_EVENT_DISPLACEMENT_SUPPORT == STD_ON )    /* [FuncSw] */
     Dem_Data_StoreObdFFROverwriteFromTmp();
@@ -822,16 +805,10 @@ static FUNC( void, DEM_CODE ) Dem_Data_StoreObdFreezeFrameRecordFromTmp
 /* Preconditions |                                                          */
 /* Parameters    | none                                                     */
 /* Return Value  | void                                                     */
-/* Notes         | This function is not called from a misfire events.       */
-/*               | Normally, it is necessary to call Dem_DataMngC_ClearObdFreezeFrameRecord() */
-/*               | before calling Dem_Misfire_JudgeClearableObdFreezeFrame(),*/
-/*               | but there is no need to call it. Because this function   */
-/*               | is not called from a misfire events.                     */
+/* Notes         | none                                                     */
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-8-0      | no branch changed.                                       */
-/*   v5-9-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_Data_StoreObdFFROverwriteFromTmp
 ( void )
@@ -842,8 +819,8 @@ static FUNC( void, DEM_CODE ) Dem_Data_StoreObdFFROverwriteFromTmp
     VAR( Dem_u08_FFDIndexType, AUTOMATIC ) obdFFDRecordNum;
     VAR( Dem_u08_FFDIndexType, AUTOMATIC ) ffrIndex;
 
-    obdFFRClassPerDTCMaxNum = Dem_CfgInfoPm_GetOBDFFRClassPerDTCMaxNum();
-    obdFFDRecordNum = Dem_CfgInfoPm_GetObdFFDRecordNum();
+    obdFFRClassPerDTCMaxNum = Dem_OBDFFRClassPerDTCMaxNum;
+    obdFFDRecordNum = Dem_ObdFFDRecordNum;
 
     for( frOverwrittenIndex = (Dem_u08_FFListIndexType)0U; frOverwrittenIndex < obdFFRClassPerDTCMaxNum; frOverwrittenIndex++ ) /* [GUD:for] frOverwrittenIndex */
     {
@@ -1082,7 +1059,6 @@ static FUNC( void, DEM_CODE ) Dem_Data_StoreEventMemoryRecordFromTmp
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /*************************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_Data_RemoveNonObdFreezeFrame
 ( void )
@@ -1130,7 +1106,7 @@ static FUNC( void, DEM_CODE ) Dem_Data_RemoveNonObdFreezeFrame
 
                 for ( loopIndex = (Dem_u08_FFListIndexType)0U; loopIndex < nonOBDFFRClassPerDTCMaxNum; loopIndex++ )    /* [GUD:for] loopIndex */
                 {
-                    ffrIndex = faultRecord.RecordNumberIndex[loopIndex];                                                /* [GUD] loopIndex *//* [ARYCHK] DEM_NONOBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / loopIndex */
+                    ffrIndex = faultRecord.RecordNumberIndex[loopIndex];                                                /* [GUD] loopIndex */
                     if ( ffrIndex < nonObdFFDRecordNum )
                     {
                         eventStrgIndex = DEM_EVENTSTRGINDEX_INVALID;
@@ -1160,56 +1136,6 @@ static FUNC( void, DEM_CODE ) Dem_Data_RemoveNonObdFreezeFrame
     return ;
 }
 #endif  /* ( DEM_EVENT_DISPLACEMENT_SUPPORT == STD_ON ) */
-
-#if ( DEM_OBDONUDS_SUPPORT == STD_ON )
-#if ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )
-/****************************************************************************/
-/* Function Name | Dem_Data_SetPairObdFFRecordIndex                         */
-/* Description   | Set pair obd freeze frame record index                   */
-/* Preconditions |                                                          */
-/* Parameters    | [in] Trigger :                                           */
-/*               |        The trigger for capture.                          */
-/* Return Value  | Dem_u08_InternalReturnType                               */
-/*               |        DEM_IRT_OK : Update                               */
-/*               |        DEM_IRT_NG : Don't update                         */
-/* Notes         | none                                                     */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-9-0      | new created.                                             */
-/****************************************************************************/
-static FUNC( void, DEM_CODE ) Dem_Data_SetPairObdFFRecordIndex
-( void )
-{
-    VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) misfirePairEventStrgIndex;
-    VAR( Dem_u08_InternalReturnType, AUTOMATIC ) resultGetMisfirePairEvent;
-    VAR( Dem_u08_InternalReturnType, AUTOMATIC ) resultOfGetFaultIndex;
-    VAR( Dem_u08_FaultIndexType, AUTOMATIC ) pairFaultIndex;
-    VAR( Dem_u08_FaultIndexType, AUTOMATIC ) failRecordNum;
-    VAR( boolean, AUTOMATIC ) misfObdRecordNumberIndexSyncStatus;
-
-    misfObdRecordNumberIndexSyncStatus   =   Dem_Misfire_GetObdRecordNumberIndexSyncStatus();
-    if( misfObdRecordNumberIndexSyncStatus == (boolean)TRUE )
-    {
-        /*  sync ObdRecordNumberIndex. copy ObdRecordNumberIndex[] to pair fault record.    */
-        resultGetMisfirePairEvent= Dem_CfgInfoPm_GetMisfirePairEventStrgIndexByStrgIndex( Dem_TmpEventMemoryEntry.EventStrgIndex, &misfirePairEventStrgIndex );
-        if( resultGetMisfirePairEvent == DEM_IRT_OK )
-        {
-            resultOfGetFaultIndex = Dem_DataMngC_GetER_FaultIndex( misfirePairEventStrgIndex, &pairFaultIndex );    /* [GUD:RET:DEM_IRT_OK] misfirePairEventStrgIndex */
-            if( resultOfGetFaultIndex == DEM_IRT_OK )
-            {
-                failRecordNum = Dem_FailRecordNum;
-                if( pairFaultIndex < failRecordNum )
-                {
-                    Dem_DataMngC_CopyFR_AllObdRecordNumberIndex( pairFaultIndex, Dem_TmpEventMemoryEntry.EventRecord.FaultIndex );
-                }
-            }
-        }
-    }
-
-    return;
-}
-#endif /* ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON ) */
-#endif /* ( DEM_OBDONUDS_SUPPORT == STD_ON ) */
 
 #if ( DEM_PFC_ORDER_MIL_SUPPORT == STD_ON )
 /****************************************************************************/
@@ -1306,9 +1232,6 @@ static FUNC( void, DEM_CODE ) Dem_Data_NotifyConfirmedFaultRegistComplete
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-7-0         :2024-05-29                                              */
-/*  v5-8-0         :2024-10-29                                              */
-/*  v5-9-0         :2025-02-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

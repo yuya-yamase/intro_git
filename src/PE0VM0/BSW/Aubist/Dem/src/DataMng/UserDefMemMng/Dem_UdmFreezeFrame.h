@@ -1,7 +1,7 @@
-/* Dem_UdmFreezeFrame_h(v5-7-0)                                             */
+/* Dem_UdmFreezeFrame_h(v5-3-0)                                             */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -42,10 +42,6 @@
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_UdmFFDMng_SetCapturedFreezeFrame
 (
-#ifndef DEM_SIT_RANGE_CHECK
-#else   /* DEM_SIT_RANGE_CHECK */
-    VAR( Dem_u16_FFDStoredIndexType, AUTOMATIC ) StorageFormatDataSize,
-#endif  /* DEM_SIT_RANGE_CHECK */
     P2CONST( AB_83_ConstV Dem_UdmFreezeFrameDataPosType, AUTOMATIC, DEM_CONFIG_DATA ) FreezeFrameDataPosTablePtr,
     VAR( Dem_u08_ConsistencyIdType, AUTOMATIC ) ConsistencyID,
     P2CONST( Dem_UdmFFRMngInfoType, AUTOMATIC, AUTOMATIC ) UdmFFRMngInfoPtr,
@@ -55,22 +51,17 @@ FUNC( void, DEM_CODE ) Dem_UdmFFDMng_SetCapturedFreezeFrame
 );
 FUNC( void, DEM_CODE ) Dem_UdmFFDMng_SetMngInfoToFreezeFrame
 (
-#ifndef DEM_SIT_RANGE_CHECK
-#else   /* DEM_SIT_RANGE_CHECK */
-    VAR( Dem_u16_FFDStoredIndexType, AUTOMATIC ) StorageFormatDataSize,
-#endif  /* DEM_SIT_RANGE_CHECK */
     P2CONST( AB_83_ConstV Dem_UdmFreezeFrameDataPosType, AUTOMATIC, DEM_CONFIG_DATA ) FreezeFrameDataPosTablePtr,
     VAR( Dem_u08_ConsistencyIdType, AUTOMATIC ) ConsistencyID,
-    P2CONST( Dem_UdmFFRMngInfoType, AUTOMATIC, DEM_VAR_NO_INIT ) FFRMngInfoPtr,
+    VAR( Dem_u16_UdmEventIndexType, AUTOMATIC ) UdmEventIndex,
+    VAR( Dem_u08_ConsistencyIdType, AUTOMATIC ) CidUdmFreezeFrameRecords,
+    VAR( Dem_u32_UdmOccurrenceOrderType, AUTOMATIC ) OccurrenceOrder,
+    VAR( Dem_u08_FFStoredStatusType, AUTOMATIC ) RecordStatus,
     P2VAR( uint8, AUTOMATIC, DEM_VAR_SAVED_ZONE ) StorageFormatDataPtr,
     VAR( Dem_u16_FFDStoredIndexType, AUTOMATIC ) DataSize
 );
 FUNC( void, DEM_CODE ) Dem_UdmFFDMng_DisassembleOccurrenceOrder
 (
-#ifndef DEM_SIT_RANGE_CHECK
-#else   /* DEM_SIT_RANGE_CHECK */
-    VAR( Dem_u16_FFDStoredIndexType, AUTOMATIC ) StorageFormatDataSize,
-#endif  /* DEM_SIT_RANGE_CHECK */
     P2CONST( AB_83_ConstV Dem_UdmFreezeFrameDataPosType, AUTOMATIC, DEM_CONFIG_DATA ) FreezeFrameDataPosTablePtr,
     VAR( Dem_u32_UdmOccurrenceOrderType, AUTOMATIC ) OccurrenceOrder,
     P2VAR( uint8, AUTOMATIC, DEM_VAR_SAVED_ZONE ) StorageFormatDataPtr
@@ -78,10 +69,6 @@ FUNC( void, DEM_CODE ) Dem_UdmFFDMng_DisassembleOccurrenceOrder
 
 FUNC( Dem_u32_UdmOccurrenceOrderType, DEM_CODE ) Dem_UdmFFDMng_AssembleOccurrenceOrder
 (
-#ifndef DEM_SIT_RANGE_CHECK
-#else   /* DEM_SIT_RANGE_CHECK */
-    VAR( Dem_u16_FFDStoredIndexType, AUTOMATIC ) StorageFormatDataSize,
-#endif  /* DEM_SIT_RANGE_CHECK */
     P2CONST( AB_83_ConstV Dem_UdmFreezeFrameDataPosType, AUTOMATIC, DEM_CONFIG_DATA ) FreezeFrameDataPosTablePtr,
     P2CONST( uint8, AUTOMATIC, DEM_VAR_SAVED_ZONE ) StorageFormatDataPtr
 );
@@ -101,7 +88,6 @@ FUNC( Dem_u32_UdmOccurrenceOrderType, DEM_CODE ) Dem_UdmFFDMng_AssembleOccurrenc
 /* History                                                                  */
 /*  Version        :Date                                                    */
 /*  v5-3-0         :2023-03-29                                              */
-/*  v5-7-0         :2024-05-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

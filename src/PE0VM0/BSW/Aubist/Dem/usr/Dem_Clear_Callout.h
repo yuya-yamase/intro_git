@@ -1,7 +1,7 @@
-/* Dem_Clear_Callout_h(v5-8-0)                                              */
+/* Dem_Clear_Callout_h(v5-0-0)                                              */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -54,22 +54,6 @@ FUNC( Dem_CalloutReturnType, DEM_CODE_CALLOUT ) Dem_CheckClearCompleted
     VAR( Dem_DTCOriginType, AUTOMATIC ) DTCOrigin
 );
 
-FUNC( void, DEM_CODE_CALLOUT ) Dem_NotifyClearStart
-(
-    VAR( Dem_ClearDTCCallerType, AUTOMATIC ) Caller,
-    VAR( uint32, AUTOMATIC ) DTCValue,
-    VAR( Dem_DTCFormatType, AUTOMATIC ) DTCFormat,
-    VAR( Dem_DTCOriginType, AUTOMATIC ) DTCOrigin
-);
-
-#if ( DEM_CLEAR_EVENT_ALLOWED_BY_CALLOUT_SUPPORT == STD_ON )
-FUNC( boolean, DEM_CODE_CALLOUT ) Dem_JudgeClearAllowed
-(
-    VAR( Dem_EventIdType, AUTOMATIC ) EventId,
-    VAR( Dem_UdsStatusByteType, AUTOMATIC ) DTCStatus
-);
-#endif  /* ( DEM_CLEAR_EVENT_ALLOWED_BY_CALLOUT_SUPPORT == STD_ON ) */
-
 #define DEM_STOP_SEC_CODE_CALLOUT
 #include <Dem_MemMap.h>
 
@@ -103,8 +87,6 @@ FUNC( boolean, DEM_CODE_CALLOUT ) Dem_JudgeClearAllowed
 /*  v1-1-0         :2018-10-29                                              */
 /*  v4-0-0         :2020-03-19                                              */
 /*  v5-0-0         :2021-09-28                                              */
-/*  v5-6-0         :2024-01-29                                              */
-/*  v5-8-0         :2024-10-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

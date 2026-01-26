@@ -1,7 +1,7 @@
-/* Dem_TSFFD_cmn_c(v5-7-0)                                                  */
+/* Dem_TSFFD_cmn_c(v5-5-0)                                                  */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -106,7 +106,6 @@ FUNC( void, DEM_CODE ) Dem_TSFFD_Init
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_TSFFD_SampleFreezeFrame
 ( void )
@@ -126,15 +125,15 @@ FUNC( void, DEM_CODE ) Dem_TSFFD_SampleFreezeFrame
 
     for( loopSample = (Dem_u16_SmpTSFFRecClassIndexType)0U; loopSample < tsffSamplingFFClassConfigureNum; loopSample++ )    /* [GUD:for]loopSample */
     {
-        resultOfSample[loopSample] = DEM_IRT_NG;                                                                            /* [GUD]loopSample *//* [ARYCHK] DEM_TSFF_SAMPLING_FF_CLASS_CONFIGURE_NUM / 1 / loopSample */
+        resultOfSample[loopSample] = DEM_IRT_NG;                                                                            /* [GUD]loopSample */
 
         samplingAllowed = Dem_TSFFD_GetSamplingFreezeFrameAllowed( loopSample );                                            /* [GUD]loopSample */
 
         if( samplingAllowed == (boolean)TRUE )
         {
-            resultOfSample[loopSample] = Dem_Data_SampleFreezeFrame( loopSample );                                          /* [GUD]loopSample *//* [ARYCHK] DEM_TSFF_SAMPLING_FF_CLASS_CONFIGURE_NUM / 1 / loopSample */
+            resultOfSample[loopSample] = Dem_Data_SampleFreezeFrame( loopSample );                                          /* [GUD]loopSample */
 
-            if( resultOfSample[loopSample] == DEM_IRT_OK )                                                                  /* [GUD]loopSample *//* [ARYCHK] DEM_TSFF_SAMPLING_FF_CLASS_CONFIGURE_NUM / 1 / loopSample */
+            if( resultOfSample[loopSample] == DEM_IRT_OK )                                                                  /* [GUD]loopSample */
             {
                 sampled = (boolean)TRUE;
             }
@@ -151,7 +150,7 @@ FUNC( void, DEM_CODE ) Dem_TSFFD_SampleFreezeFrame
         {
             samplingFFRef = Dem_SamplingFreezeFrameBindTable[loopCapture].DemSamplingFreezeFrameRef;                        /* [GUD]loopCapture *//* [GUD:CFG:IF_GUARDED: loopCapture ]samplingFFRef */
 
-            if( resultOfSample[samplingFFRef] == DEM_IRT_OK )                                                               /* [GUD]samplingFFRef *//* [ARYCHK] DEM_TSFF_SAMPLING_FF_CLASS_CONFIGURE_NUM / 1 / samplingFFRef */
+            if( resultOfSample[samplingFFRef] == DEM_IRT_OK )                                                               /* [GUD]samplingFFRef */
             {
                 Dem_Data_CaptureAfterTriggeredTimeSeriesFreezeFrame( loopCapture );                                         /* [GUD]loopCapture */
             }
@@ -221,7 +220,6 @@ static FUNC( boolean, DEM_CODE ) Dem_TSFFD_GetSamplingFreezeFrameAllowed
 /*  Version        :Date                                                    */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-7-0         :2024-05-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

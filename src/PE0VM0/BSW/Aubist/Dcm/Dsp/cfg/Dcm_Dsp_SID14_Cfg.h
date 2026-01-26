@@ -1,7 +1,7 @@
-/* Dcm_Dsp_SID14_Cfg_h(v5-8-0)                                              */
+/* Dcm_Dsp_SID14_Cfg_h(v5-3-0)                                              */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -35,8 +35,7 @@
 
 FUNC( Std_ReturnType, DCM_CODE ) Dcm_Dsp_SID14_CheckSWC
 (
-    const Dcm_OpStatusType u1OpStatus,
-    const uint32           u4GoDTC,
+    const uint32 u4GoDTC,
     P2VAR( Dcm_NegativeResponseCodeType, AUTOMATIC, DCM_APPL_DATA ) ptErrorCode
 );
 
@@ -79,12 +78,11 @@ FUNC( Std_ReturnType, DCM_CODE ) Dcm_Dsp_SID14_CheckTheClearDTCRequestIsAcceptab
 /*  v1-0-0         :2018-03-20                                              */
 /*  v5-0-0         :2022-03-29                                              */
 /*  v5-3-0         :2023-03-29                                              */
-/*  v5-8-0         :2024-10-29                                              */
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
 /*  Framework          :v2-1-0                                              */
-/*  BSW plug-in        :v5-10-0                                             */
+/*  BSW plug-in        :v5-5-1                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

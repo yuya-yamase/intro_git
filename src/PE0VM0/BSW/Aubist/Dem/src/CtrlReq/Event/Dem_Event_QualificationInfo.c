@@ -1,7 +1,7 @@
-/* Dem_Event_QualificationInfo_c(v5-9-0)                                    */
+/* Dem_Event_QualificationInfo_c(v5-5-0)                                    */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -21,8 +21,6 @@
 #include "../../../inc/Dem_CmnLib_CmbEvt.h"
 #include "../../../inc/Dem_Pm_Event.h"
 #include "../../../inc/Dem_Pm_AltIUMPR.h"
-#include "../../../inc/Dem_Pm_DataAvl.h"
-#include "Dem_Event_QualificationInfo_local.h"
 
 /*--------------------------------------------------------------------------*/
 /* Macros                                                                   */
@@ -54,7 +52,8 @@ static FUNC( boolean, DEM_CODE ) Dem_Event_UpdateQualificationInfo_Failed_Specif
 static FUNC( boolean, DEM_CODE ) Dem_Event_UpdateQualificationInfo_Passed
 (
     VAR( Dem_u16_EventCtrlIndexType, AUTOMATIC ) EventCtrlIndex,
-    P2VAR( Dem_u08_EventQualificationType, AUTOMATIC, AUTOMATIC ) EventQualificationPtr
+    P2VAR( Dem_u08_EventQualificationType, AUTOMATIC, AUTOMATIC ) EventQualificationPtr,
+    P2VAR( boolean, AUTOMATIC, AUTOMATIC ) IsPassedToPassedPtr
 );
 static FUNC( boolean, DEM_CODE ) Dem_Event_JudgeUpdateToPassed_InEvtStrg
 (
@@ -74,7 +73,7 @@ static FUNC( void, DEM_CODE ) Dem_Event_UpdateFailedToNotQualified_InEvtStrg
 #include <Dem_MemMap.h>
 
 /*  event qualification info        */
-VAR( Dem_u08_EventQualificationType, DEM_VAR_NO_INIT ) Dem_EventQualificationList[ DEM_PRIMEM_EVENT_NUM ];
+static VAR( Dem_u08_EventQualificationType, DEM_VAR_NO_INIT ) Dem_EventQualificationList[ DEM_PRIMEM_EVENT_NUM ];
 
 #define DEM_STOP_SEC_VAR_NO_INIT
 #include <Dem_MemMap.h>
@@ -89,7 +88,13 @@ VAR( Dem_u08_EventQualificationType, DEM_VAR_NO_INIT ) Dem_EventQualificationLis
 /* Function Name | Dem_Event_InitQualification                              */
 /* Description   | Sets event status in event record(RAM).                  */
 /* Preconditions | Support only monitor internal debounce algorithm.        */
-/* Parameters    | none                                                     */
+/* Parameters    | [in] EventStatus :                                       */
+/*               |        report values of monitor test                     */
+/*               | [out] EventQualificationPtr :                            */
+/*               |        result of event qualification                     */
+/*               | [out] UpdateDataFlagPtr :                                */
+/*               |        Data update presence flag (TRUE:there is update,  */
+/*               |         FALSE: there is no update)                       */
 /* Return Value  | none                                                     */
 /* Notes         |                                                          */
 /*--------------------------------------------------------------------------*/
@@ -121,30 +126,28 @@ FUNC( void, DEM_CODE ) Dem_Event_InitQualification
 /*               | TRUE  : update.                                          */
 /* Notes         |                                                          */
 /*--------------------------------------------------------------------------*/
-/* UpdateRecord  | [UpdRec]AltIUMPR                                         */
-/*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-6-0      | no object changed.                                       */
-/*   v5-9-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( boolean, DEM_CODE ) Dem_Event_SetQualificationInfo
 (
     VAR( Dem_u16_EventCtrlIndexType, AUTOMATIC ) EventCtrlIndex,        /* [PRMCHK:CALLER] */
     VAR( Dem_EventStatusType, AUTOMATIC ) EventStatus,
-    P2VAR( Dem_u08_EventQualificationType, AUTOMATIC, AUTOMATIC ) EventQualificationPtr
+    P2VAR( Dem_u08_EventQualificationType, AUTOMATIC, AUTOMATIC ) EventQualificationPtr,
+    P2VAR( boolean, AUTOMATIC, AUTOMATIC ) IsPassedToPassedPtr
 )
 {
     VAR( boolean, AUTOMATIC ) updateFlag;
+    *IsPassedToPassedPtr    =   (boolean)FALSE;
 
     updateFlag          =   (boolean)FALSE;
     if ( EventStatus == DEM_EVENT_STATUS_PASSED )
     {
-        updateFlag  =   Dem_Event_UpdateQualificationInfo_Passed( EventCtrlIndex, EventQualificationPtr ); /* [GUDCHK:CALLER]EventCtrlIndex *//* [UpdRec]AltIUMPR */
+        updateFlag  =   Dem_Event_UpdateQualificationInfo_Passed( EventCtrlIndex, EventQualificationPtr, IsPassedToPassedPtr ); /* [GUDCHK:CALLER]EventCtrlIndex */
     }
     else if ( EventStatus == DEM_EVENT_STATUS_FAILED )
     {
-        updateFlag  =   Dem_Event_UpdateQualificationInfo_Failed( EventCtrlIndex, EventQualificationPtr );                      /* [GUDCHK:CALLER]EventCtrlIndex *//* [UpdRec]AltIUMPR */
+        updateFlag  =   Dem_Event_UpdateQualificationInfo_Failed( EventCtrlIndex, EventQualificationPtr );                      /* [GUDCHK:CALLER]EventCtrlIndex */
     }
     else
     {
@@ -163,30 +166,28 @@ FUNC( boolean, DEM_CODE ) Dem_Event_SetQualificationInfo
 /*               | TRUE  : update.                                          */
 /* Notes         |                                                          */
 /*--------------------------------------------------------------------------*/
-/* UpdateRecord  | [UpdRec]AltIUMPR                                         */
-/*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-6-0      | no object changed.                                       */
-/*   v5-9-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( boolean, DEM_CODE ) Dem_Event_SetQualificationInfo_Specific
 (
     VAR( Dem_u16_EventCtrlIndexType, AUTOMATIC ) EventCtrlIndex,        /* [PRMCHK:CALLER] */
     VAR( Dem_EventStatusType, AUTOMATIC ) EventStatus,
-    P2VAR( Dem_u08_EventQualificationType, AUTOMATIC, AUTOMATIC ) EventQualificationPtr
+    P2VAR( Dem_u08_EventQualificationType, AUTOMATIC, AUTOMATIC ) EventQualificationPtr,
+    P2VAR( boolean, AUTOMATIC, AUTOMATIC ) IsPassedToPassedPtr
 )
 {
     VAR( boolean, AUTOMATIC ) updateFlag;
+    *IsPassedToPassedPtr    =   (boolean)FALSE;
 
     updateFlag          =   (boolean)FALSE;
     if ( EventStatus == DEM_EVENT_STATUS_PASSED )
     {
-        updateFlag  =   Dem_Event_UpdateQualificationInfo_Passed( EventCtrlIndex, EventQualificationPtr ); /* [GUDCHK:CALLER]EventCtrlIndex *//* [UpdRec]AltIUMPR */
+        updateFlag  =   Dem_Event_UpdateQualificationInfo_Passed( EventCtrlIndex, EventQualificationPtr, IsPassedToPassedPtr ); /* [GUDCHK:CALLER]EventCtrlIndex */
     }
     else if ( EventStatus == DEM_EVENT_STATUS_FAILED )
     {
-        updateFlag  =   Dem_Event_UpdateQualificationInfo_Failed_Specific( EventCtrlIndex, EventQualificationPtr );             /* [GUDCHK:CALLER]EventCtrlIndex *//* [UpdRec]AltIUMPR */
+        updateFlag  =   Dem_Event_UpdateQualificationInfo_Failed_Specific( EventCtrlIndex, EventQualificationPtr );             /* [GUDCHK:CALLER]EventCtrlIndex */
     }
     else
     {
@@ -198,19 +199,15 @@ FUNC( boolean, DEM_CODE ) Dem_Event_SetQualificationInfo_Specific
 
 
 /****************************************************************************/
-/* Function Name | Dem_Event_ClearTargetQualificationInfo_NotTestedInCycle  */
+/* Function Name | Dem_Event_ClearFailedQualificationInfo_NotTestedInCycle  */
 /* Description   | Update qualification info : FAILED.                      */
 /* Preconditions |                                                          */
 /* Parameters    | [in] EventCtrlIndex :                                    */
 /* Return Value  | void                                                     */
 /* Notes         | call from Update operation cycle. / overflow event.      */
 /*--------------------------------------------------------------------------*/
-/* UpdateRecord  | [UpdRec]AltIUMPR                                         */
-/*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-6-0      | no object changed.                                       */
-/*   v5-9-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_Event_ClearTargetQualificationInfo_NotTestedInCycle
 (
@@ -219,12 +216,8 @@ FUNC( void, DEM_CODE ) Dem_Event_ClearTargetQualificationInfo_NotTestedInCycle
 {
     Dem_EventQualificationList[ EventCtrlIndex ]    =   DEM_EVENT_QUALIFICATION_NOTQUALIFIED;           /* [GUDCHK:CALLER]EventCtrlIndex */
 
-#if ( DEM_COMBINEDEVENT_ONSTORAGE_SUPPORT == STD_ON )    /*  [FuncSw]    */
-    Dem_Event_SavePassedTgtBit_ByEvtCtrlIdx( EventCtrlIndex, (boolean)FALSE );
-#endif  /* ( DEM_COMBINEDEVENT_ONSTORAGE_SUPPORT == STD_ON )             */
-
 #if ( DEM_ALTIUMPR_SUPPORT == STD_ON )  /*  [FuncSw]    */
-    Dem_AltIUMPR_SetTestCompleteThisCycle( EventCtrlIndex, DEM_ALTIUMPR_TCTOC_NOTTESTCOMPLETE );        /* [GUDCHK:CALLER]EventCtrlIndex *//* [UpdRec]AltIUMPR */
+    Dem_AltIUMPR_SetTestCompleteThisCycle( EventCtrlIndex, DEM_ALTIUMPR_TCTOC_NOTTESTCOMPLETE );        /* [GUDCHK:CALLER]EventCtrlIndex */
 #endif  /* ( DEM_ALTIUMPR_SUPPORT == STD_ON )           */
 
     return ;
@@ -232,19 +225,15 @@ FUNC( void, DEM_CODE ) Dem_Event_ClearTargetQualificationInfo_NotTestedInCycle
 
 
 /****************************************************************************/
-/* Function Name | Dem_Event_ClearTargetQualificationInfoAtOpCycUpd_NotTestedInCycle  */
+/* Function Name | Dem_Event_ClearFailedQualificationInfo_NotTestedInCycle  */
 /* Description   | Update qualification info : FAILED.                      */
 /* Preconditions |                                                          */
 /* Parameters    | [in] EventCtrlIndex :                                    */
 /* Return Value  | void                                                     */
 /* Notes         | call from Update operation cycle. / overflow event.      */
 /*--------------------------------------------------------------------------*/
-/* UpdateRecord  | [UpdRec]AltIUMPR                                         */
-/*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-6-0      | no object changed.                                       */
-/*   v5-9-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_Event_ClearTargetQualificationInfoAtOpCycUpd_NotTestedInCycle
 (
@@ -255,16 +244,12 @@ FUNC( void, DEM_CODE ) Dem_Event_ClearTargetQualificationInfoAtOpCycUpd_NotTeste
     if ( FailureCycleFlag != DEM_OPCYCUPD_FLCYC_INITIALVALUE )
     {
         Dem_EventQualificationList[ EventCtrlIndex ]    =   DEM_EVENT_QUALIFICATION_NOTQUALIFIED;       /* [GUDCHK:CALLER]EventCtrlIndex */
-
-#if ( DEM_COMBINEDEVENT_ONSTORAGE_SUPPORT == STD_ON )    /*  [FuncSw]    */
-        Dem_Event_SavePassedTgtBit_ByEvtCtrlIdx( EventCtrlIndex, (boolean)FALSE );
-#endif  /* ( DEM_COMBINEDEVENT_ONSTORAGE_SUPPORT == STD_ON )             */
     }
 
 #if ( DEM_ALTIUMPR_SUPPORT == STD_ON )  /*  [FuncSw]    */
     if (( FailureCycleFlag & DEM_OPCYCUPD_FLCYC_UPDSTATUS_TNCTOC ) == DEM_OPCYCUPD_FLCYC_UPDSTATUS_TNCTOC )
     {
-        Dem_AltIUMPR_SetTestCompleteThisCycle( EventCtrlIndex, DEM_ALTIUMPR_TCTOC_NOTTESTCOMPLETE );    /* [GUDCHK:CALLER]EventCtrlIndex *//* [UpdRec]AltIUMPR */
+        Dem_AltIUMPR_SetTestCompleteThisCycle( EventCtrlIndex, DEM_ALTIUMPR_TCTOC_NOTTESTCOMPLETE );    /* [GUDCHK:CALLER]EventCtrlIndex */
     }
 #endif  /* ( DEM_ALTIUMPR_SUPPORT == STD_ON )           */
     return ;
@@ -278,13 +263,8 @@ FUNC( void, DEM_CODE ) Dem_Event_ClearTargetQualificationInfoAtOpCycUpd_NotTeste
 /* Return Value  | void                                                     */
 /* Notes         | call from InitializeEventStatus.                         */
 /*--------------------------------------------------------------------------*/
-/* UpdateRecord  | [UpdRec]AltIUMPR                                         */
-/*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-6-0      | no object changed.                                       */
-/*   v5-8-0      | no branch changed.                                       */
-/*   v5-9-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_Event_ClearFailedQualificationInfo_NotTestedInCycle
 (
@@ -294,16 +274,9 @@ FUNC( void, DEM_CODE ) Dem_Event_ClearFailedQualificationInfo_NotTestedInCycle
     /*  update in EvtStrgGrp : FAILED => NOT_QUALIFIED.     */
     Dem_Event_UpdateFailedToNotQualified_InEvtStrg( EventCtrlIndex );                               /* [GUDCHK:CALLER]EventCtrlIndex */
 
-    /*  set DEM_EVENT_QUALIFICATION_NOTQUALIFIED to target EventCtrlIndex.        */
-    Dem_EventQualificationList[ EventCtrlIndex ]    =   DEM_EVENT_QUALIFICATION_NOTQUALIFIED;       /* [GUDCHK:CALLER]EventCtrlIndex */
-
-#if ( DEM_COMBINEDEVENT_ONSTORAGE_SUPPORT == STD_ON )    /*  [FuncSw]    */
-    Dem_Event_SavePassedAllBit_fromQualification( EventCtrlIndex );
-#endif  /* ( DEM_COMBINEDEVENT_ONSTORAGE_SUPPORT == STD_ON )             */
-
 #if ( DEM_ALTIUMPR_SUPPORT == STD_ON )  /*  [FuncSw]    */
     /*  update to NotTested.        */
-    Dem_AltIUMPR_SetTestCompleteThisCycle( EventCtrlIndex, DEM_ALTIUMPR_TCTOC_NOTTESTCOMPLETE );    /* [GUDCHK:CALLER]EventCtrlIndex *//* [UpdRec]AltIUMPR */
+    Dem_AltIUMPR_SetTestCompleteThisCycle( EventCtrlIndex, DEM_ALTIUMPR_TCTOC_NOTTESTCOMPLETE );    /* [GUDCHK:CALLER]EventCtrlIndex */
 #endif  /* ( DEM_ALTIUMPR_SUPPORT == STD_ON )           */
 
     return ;
@@ -320,7 +293,6 @@ FUNC( void, DEM_CODE ) Dem_Event_ClearFailedQualificationInfo_NotTestedInCycle
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-9-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_Event_ClearFailedQualificationInfo_nochange
 (
@@ -329,10 +301,6 @@ FUNC( void, DEM_CODE ) Dem_Event_ClearFailedQualificationInfo_nochange
 {
     /*  update in EvtStrgGrp : FAILED => NOT_QUALIFIED.     */
     Dem_Event_UpdateFailedToNotQualified_InEvtStrg( EventCtrlIndex );                           /* [GUDCHK:CALLER]EventCtrlIndex */
-
-#if ( DEM_COMBINEDEVENT_ONSTORAGE_SUPPORT == STD_ON )    /*  [FuncSw]    */
-    Dem_Event_SavePassedAllBit_fromQualification( EventCtrlIndex );
-#endif  /* ( DEM_COMBINEDEVENT_ONSTORAGE_SUPPORT == STD_ON )             */
 
     return ;
 }
@@ -346,12 +314,8 @@ FUNC( void, DEM_CODE ) Dem_Event_ClearFailedQualificationInfo_nochange
 /* Return Value  | void                                                     */
 /* Notes         | call from NormalizeEventStatus.                          */
 /*--------------------------------------------------------------------------*/
-/* UpdateRecord  | [UpdRec]AltIUMPR                                         */
-/*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-6-0      | no object changed.                                       */
-/*   v5-9-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_Event_ClearAndPassedQualificationInfo_TestedInCycle
 (
@@ -363,13 +327,9 @@ FUNC( void, DEM_CODE ) Dem_Event_ClearAndPassedQualificationInfo_TestedInCycle
     /*  update in EvtStrgGrp : FAILED => NOT_QUALIFIED.     */
     Dem_Event_UpdateFailedToNotQualified_InEvtStrg( EventCtrlIndex );                           /* [GUDCHK:CALLER]EventCtrlIndex */
 
-#if ( DEM_COMBINEDEVENT_ONSTORAGE_SUPPORT == STD_ON )    /*  [FuncSw]    */
-    Dem_Event_SavePassedAllBit_fromQualification( EventCtrlIndex );
-#endif  /* ( DEM_COMBINEDEVENT_ONSTORAGE_SUPPORT == STD_ON )             */
-
 #if ( DEM_ALTIUMPR_SUPPORT == STD_ON )  /*  [FuncSw]    */
     /*  update to NotTested.        */
-    Dem_AltIUMPR_SetTestCompleteThisCycle( EventCtrlIndex, DEM_ALTIUMPR_TCTOC_TESTCOMPLETE );   /* [GUDCHK:CALLER]EventCtrlIndex *//* [UpdRec]AltIUMPR */
+    Dem_AltIUMPR_SetTestCompleteThisCycle( EventCtrlIndex, DEM_ALTIUMPR_TCTOC_TESTCOMPLETE );   /* [GUDCHK:CALLER]EventCtrlIndex */
 #endif  /* ( DEM_ALTIUMPR_SUPPORT == STD_ON )           */
 
     return ;
@@ -384,12 +344,8 @@ FUNC( void, DEM_CODE ) Dem_Event_ClearAndPassedQualificationInfo_TestedInCycle
 /* Return Value  | void                                                     */
 /* Notes         | call from ClearDTC.                                      */
 /*--------------------------------------------------------------------------*/
-/* UpdateRecord  | [UpdRec]AltIUMPR                                         */
-/*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-6-0      | no object changed.                                       */
-/*   v5-9-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_Event_ClearQualificationInfo_NotTestedInCycle_InEvtStrg
 (
@@ -410,16 +366,12 @@ FUNC( void, DEM_CODE ) Dem_Event_ClearQualificationInfo_NotTestedInCycle_InEvtSt
 
 #if ( DEM_ALTIUMPR_SUPPORT == STD_ON )  /*  [FuncSw]    */
         /*  update to NotTested.        */
-        Dem_AltIUMPR_SetTestCompleteThisCycle( eventCtrlIndex, DEM_ALTIUMPR_TCTOC_NOTTESTCOMPLETE );    /* [GUDCHK:CALLER]EventStrgIndex *//* [UpdRec]AltIUMPR */
+        Dem_AltIUMPR_SetTestCompleteThisCycle( eventCtrlIndex, DEM_ALTIUMPR_TCTOC_NOTTESTCOMPLETE );    /* [GUDCHK:CALLER]EventStrgIndex */
 #endif  /* ( DEM_ALTIUMPR_SUPPORT == STD_ON )           */
 
         /*  get next Index.         */
         eventCtrlIndex  =   Dem_CmbEvt_GetNextEventCtrlIndex_InEvtStrgGrp( eventCtrlIndex );            /* [GUDCHK:CALLER]EventStrgIndex */
     }
-
-#if ( DEM_COMBINEDEVENT_ONSTORAGE_SUPPORT == STD_ON )    /*  [FuncSw]    */
-    Dem_Event_ClearPassedBit_InStrgGrp( EventStrgIndex );
-#endif  /* ( DEM_COMBINEDEVENT_ONSTORAGE_SUPPORT == STD_ON )             */
 
     return ;
 }
@@ -435,7 +387,6 @@ FUNC( void, DEM_CODE ) Dem_Event_ClearQualificationInfo_NotTestedInCycle_InEvtSt
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-9-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_Event_ClearQualificationInfo_nochange_InEvtStrg
 (
@@ -458,10 +409,6 @@ FUNC( void, DEM_CODE ) Dem_Event_ClearQualificationInfo_nochange_InEvtStrg
         eventCtrlIndex  =   Dem_CmbEvt_GetNextEventCtrlIndex_InEvtStrgGrp( eventCtrlIndex );        /* [GUDCHK:CALLER]EventStrgIndex */
     }
 
-#if ( DEM_COMBINEDEVENT_ONSTORAGE_SUPPORT == STD_ON )    /*  [FuncSw]    */
-    Dem_Event_ClearPassedBit_InStrgGrp( EventStrgIndex );
-#endif  /* ( DEM_COMBINEDEVENT_ONSTORAGE_SUPPORT == STD_ON )             */
-
     return ;
 }
 #endif  /*   ( DEM_EVENT_DISPLACEMENT_SUPPORT == STD_ON )   */
@@ -475,12 +422,8 @@ FUNC( void, DEM_CODE ) Dem_Event_ClearQualificationInfo_nochange_InEvtStrg
 /*               | TRUE  : update.                                          */
 /* Notes         |                                                          */
 /*--------------------------------------------------------------------------*/
-/* UpdateRecord  | [UpdRec]AltIUMPR                                         */
-/*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-6-0      | no object changed.                                       */
-/*   v5-9-0      | no branch changed.                                       */
 /****************************************************************************/
 static FUNC( boolean, DEM_CODE ) Dem_Event_UpdateQualificationInfo_Failed
 (
@@ -514,16 +457,11 @@ static FUNC( boolean, DEM_CODE ) Dem_Event_UpdateQualificationInfo_Failed
         updateFlag          =   (boolean)TRUE;
     }
     Dem_EventQualificationList[ EventCtrlIndex ]    =   newQualification;       /* [GUDCHK:CALLER]EventCtrlIndex */
-
-#if ( DEM_COMBINEDEVENT_ONSTORAGE_SUPPORT == STD_ON )    /*  [FuncSw]    */
-    Dem_Event_SavePassedTgtBit_ByEvtCtrlIdx( EventCtrlIndex, (boolean)FALSE );
-#endif  /* ( DEM_COMBINEDEVENT_ONSTORAGE_SUPPORT == STD_ON )             */
-
     *EventQualificationPtr  =   newQualification;
 
 #if ( DEM_ALTIUMPR_SUPPORT == STD_ON )  /*  [FuncSw]    */
     /*  update to Tested.       */
-    Dem_AltIUMPR_SetTestCompleteThisCycle( EventCtrlIndex, DEM_ALTIUMPR_TCTOC_TESTCOMPLETE );   /* [GUDCHK:CALLER]EventCtrlIndex *//* [UpdRec]AltIUMPR */
+    Dem_AltIUMPR_SetTestCompleteThisCycle( EventCtrlIndex, DEM_ALTIUMPR_TCTOC_TESTCOMPLETE );   /* [GUDCHK:CALLER]EventCtrlIndex */
 #endif  /* ( DEM_ALTIUMPR_SUPPORT == STD_ON )           */
 
     return updateFlag;
@@ -539,12 +477,8 @@ static FUNC( boolean, DEM_CODE ) Dem_Event_UpdateQualificationInfo_Failed
 /*               | TRUE  : update.                                          */
 /* Notes         |                                                          */
 /*--------------------------------------------------------------------------*/
-/* UpdateRecord  | [UpdRec]AltIUMPR                                         */
-/*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-6-0      | no object changed.                                       */
-/*   v5-9-0      | no branch changed.                                       */
 /****************************************************************************/
 static FUNC( boolean, DEM_CODE ) Dem_Event_UpdateQualificationInfo_Failed_Specific
 (
@@ -555,17 +489,12 @@ static FUNC( boolean, DEM_CODE ) Dem_Event_UpdateQualificationInfo_Failed_Specif
     VAR( boolean, AUTOMATIC ) updateFlag;
 
     Dem_EventQualificationList[ EventCtrlIndex ]    =   DEM_EVENT_QUALIFICATION_FAILED;         /* [GUDCHK:CALLER]EventCtrlIndex */
-
-#if ( DEM_COMBINEDEVENT_ONSTORAGE_SUPPORT == STD_ON )    /*  [FuncSw]    */
-    Dem_Event_SavePassedTgtBit_ByEvtCtrlIdx( EventCtrlIndex, (boolean)FALSE );
-#endif  /* ( DEM_COMBINEDEVENT_ONSTORAGE_SUPPORT == STD_ON )             */
-
     *EventQualificationPtr  =   DEM_EVENT_QUALIFICATION_FAILED;
     updateFlag          =   (boolean)TRUE;
 
 #if ( DEM_ALTIUMPR_SUPPORT == STD_ON )  /*  [FuncSw]    */
     /*  update to Tested.       */
-    Dem_AltIUMPR_SetTestCompleteThisCycle( EventCtrlIndex, DEM_ALTIUMPR_TCTOC_TESTCOMPLETE );   /* [GUDCHK:CALLER]EventCtrlIndex *//* [UpdRec]AltIUMPR */
+    Dem_AltIUMPR_SetTestCompleteThisCycle( EventCtrlIndex, DEM_ALTIUMPR_TCTOC_TESTCOMPLETE );   /* [GUDCHK:CALLER]EventCtrlIndex */
 #endif  /* ( DEM_ALTIUMPR_SUPPORT == STD_ON )           */
 
     return updateFlag;
@@ -582,45 +511,46 @@ static FUNC( boolean, DEM_CODE ) Dem_Event_UpdateQualificationInfo_Failed_Specif
 /*               | TRUE  : update.                                          */
 /* Notes         |                                                          */
 /*--------------------------------------------------------------------------*/
-/* UpdateRecord  | [UpdRec]AltIUMPR                                         */
-/*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-6-0      | no object changed.                                       */
-/*   v5-8-0      | branch changed.                                          */
-/*   v5-9-0      | branch changed.                                          */
 /****************************************************************************/
 static FUNC( boolean, DEM_CODE ) Dem_Event_UpdateQualificationInfo_Passed
 (
     VAR( Dem_u16_EventCtrlIndexType, AUTOMATIC ) EventCtrlIndex,        /* [PRMCHK:CALLER] */
-    P2VAR( Dem_u08_EventQualificationType, AUTOMATIC, AUTOMATIC ) EventQualificationPtr
+    P2VAR( Dem_u08_EventQualificationType, AUTOMATIC, AUTOMATIC ) EventQualificationPtr,
+    P2VAR( boolean, AUTOMATIC, AUTOMATIC ) IsPassedToPassedPtr
 )
 {
     VAR( boolean, AUTOMATIC ) updateFlag;
+    VAR( Dem_u08_EventQualificationType, AUTOMATIC ) oldQualification;
 
-    Dem_EventQualificationList[ EventCtrlIndex ]    =   DEM_EVENT_QUALIFICATION_PASSED;         /* [GUDCHK:CALLER]EventCtrlIndex */
-    *EventQualificationPtr  =   DEM_EVENT_QUALIFICATION_PASSED;
-
-    /*------------------------------------------------------------------------------*/
-    /*  OnStorage OFF :               updateFlag                                    */
-    /*      PASSED    => PASSED     : TRUE                                          */
-    /*      FAILED    => PASSED     : TRUE                                          */
-    /*      NotTested => PASSED     : TRUE                                          */
-    /*------------------------------------------------------------------------------*/
-    /*  OnStorage ON :                updateFlag                                    */
-    /*      PASSED    => PASSED     : all passed : TRUE / not all passed : FALSE    */
-    /*      FAILED    => PASSED     : all passed : TRUE / not all passed : FALSE    */
-    /*      NotTested => PASSED     : all passed : TRUE / not all passed : FALSE    */
-    /*------------------------------------------------------------------------------*/
-    updateFlag              =   Dem_Event_JudgeUpdateToPassed_InEvtStrg( EventCtrlIndex );      /* [GUDCHK:CALLER]EventCtrlIndex */
-
-#if ( DEM_COMBINEDEVENT_ONSTORAGE_SUPPORT == STD_ON )    /*  [FuncSw]    */
-    Dem_Event_SavePassedTgtBit_ByEvtCtrlIdx( EventCtrlIndex, (boolean)TRUE );
-#endif  /* ( DEM_COMBINEDEVENT_ONSTORAGE_SUPPORT == STD_ON )             */
+    oldQualification    =   Dem_EventQualificationList[ EventCtrlIndex ];                       /* [GUDCHK:CALLER]EventCtrlIndex */
+    *IsPassedToPassedPtr    =   (boolean)FALSE;
+    if ( oldQualification == DEM_EVENT_QUALIFICATION_PASSED )
+    {
+        /*  PASSED => PASSED    */
+        /*  no update.          */
+        Dem_EventQualificationList[ EventCtrlIndex ]    =   DEM_EVENT_QUALIFICATION_PASSED;     /* [GUDCHK:CALLER]EventCtrlIndex */
+        updateFlag          =   (boolean)FALSE;
+        *IsPassedToPassedPtr  =   (boolean)TRUE;
+    }
+    else if ( oldQualification == DEM_EVENT_QUALIFICATION_FAILED )
+    {
+        /*  FAILED => PASSED    */
+        Dem_EventQualificationList[ EventCtrlIndex ]    =   DEM_EVENT_QUALIFICATION_PASSED;     /* [GUDCHK:CALLER]EventCtrlIndex */
+        updateFlag          =   Dem_Event_JudgeUpdateToPassed_InEvtStrg( EventCtrlIndex );      /* [GUDCHK:CALLER]EventCtrlIndex */
+    }
+    else /* ( oldQualification == DEM_EVENT_QUALIFICATION_NOTQUALIFIED )    */
+    {
+        /*  NotTested => PASSED */
+        Dem_EventQualificationList[ EventCtrlIndex ]    =   DEM_EVENT_QUALIFICATION_PASSED;     /* [GUDCHK:CALLER]EventCtrlIndex */
+        updateFlag          =   Dem_Event_JudgeUpdateToPassed_InEvtStrg( EventCtrlIndex );      /* [GUDCHK:CALLER]EventCtrlIndex */
+    }
+    *EventQualificationPtr  =   Dem_EventQualificationList[ EventCtrlIndex ];                   /* [GUDCHK:CALLER]EventCtrlIndex */
 
 #if ( DEM_ALTIUMPR_SUPPORT == STD_ON )  /*  [FuncSw]    */
     /*  update to Tested.       */
-    Dem_AltIUMPR_SetTestCompleteThisCycle( EventCtrlIndex, DEM_ALTIUMPR_TCTOC_TESTCOMPLETE );   /* [GUDCHK:CALLER]EventCtrlIndex *//* [UpdRec]AltIUMPR */
+    Dem_AltIUMPR_SetTestCompleteThisCycle( EventCtrlIndex, DEM_ALTIUMPR_TCTOC_TESTCOMPLETE );   /* [GUDCHK:CALLER]EventCtrlIndex */
 #endif  /* ( DEM_ALTIUMPR_SUPPORT == STD_ON )           */
 
     return updateFlag;
@@ -638,53 +568,43 @@ static FUNC( boolean, DEM_CODE ) Dem_Event_UpdateQualificationInfo_Passed
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-9-0      | branch changed.                                          */
 /****************************************************************************/
 static FUNC( boolean, DEM_CODE ) Dem_Event_JudgeUpdateToPassed_InEvtStrg
 (
-    VAR( Dem_u16_EventCtrlIndexType, AUTOMATIC ) EventCtrlIndex     /* MISRA DEVIATION *//* [PRMCHK:CALLER] */
+    VAR( Dem_u16_EventCtrlIndexType, AUTOMATIC ) EventCtrlIndex     /* [PRMCHK:CALLER] */
 )
 {
     VAR( boolean, AUTOMATIC ) updateFlag;
 
-#if ( DEM_COMBINEDEVENT_ONSTORAGE_SUPPORT == STD_ON )   /*  [FuncSw]    */
     VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) eventStrgIndex;
     VAR( Dem_u16_EventCtrlIndexType, AUTOMATIC ) eventCtrlIndex;
     VAR( Dem_u16_EventCtrlIndexType, AUTOMATIC ) eventCtrlIndexCnt;
     VAR( Dem_u16_EventCtrlIndexType, AUTOMATIC ) eventCtrlIndexNum;
     VAR( Dem_u08_EventQualificationType, AUTOMATIC ) atherQualification;
-    VAR( boolean, AUTOMATIC ) availableStatus;
-#endif  /* ( DEM_COMBINEDEVENT_ONSTORAGE_SUPPORT == STD_ON )            */
 
-    updateFlag  =   (boolean)TRUE;
-
-#if ( DEM_COMBINEDEVENT_ONSTORAGE_SUPPORT == STD_ON )   /*  [FuncSw]    */
     eventStrgIndex      =   Dem_CmbEvt_CnvEventCtrlIndex_ToEventStrgIndex( EventCtrlIndex );    /*  get EventStrgIndex.                                 *//* [GUDCHK:CALLER]EventCtrlIndex *//* [GUD:RET:IF_GUARDED: EventCtrlIndex ]eventStrgIndex */
     eventCtrlIndexNum   =   Dem_CmbEvt_NumOfEventCtrlIndex_InEvtStrgGrp( eventStrgIndex );      /*  get EventCtrlIndex of EventStorageGroup max number  *//* [GUDCHK:CALLER]EventCtrlIndex */
     eventCtrlIndex      =   EventCtrlIndex;
 
+    updateFlag  =   (boolean)TRUE;
     /* ALL Qualification is PASSED in event storage group : update TRUE   */
     /* FAILED or NOT Qualification in storage group       : update FALSE  */
     for ( eventCtrlIndexCnt = ( Dem_u16_EventCtrlIndexType )0U; eventCtrlIndexCnt < eventCtrlIndexNum; eventCtrlIndexCnt++ )
     {
-        availableStatus = Dem_DataAvl_GetEvtAvl( eventCtrlIndex );                                      /* [GUD:RET:TRUE] eventCtrlIndex */
-        if( availableStatus == (boolean)TRUE )
+        atherQualification  =   Dem_EventQualificationList[ eventCtrlIndex ];                       /* [GUDCHK:CALLER]EventCtrlIndex */
+        if ( atherQualification != DEM_EVENT_QUALIFICATION_PASSED )
         {
-            atherQualification  =   Dem_EventQualificationList[ eventCtrlIndex ];                       /* [GUD]eventCtrlIndex */
-            if ( atherQualification != DEM_EVENT_QUALIFICATION_PASSED )
-            {
-                /*  there is FAILED or NOT Qualification status event in eventstorage group. */
-                /*  not update.             */
-                updateFlag  =   (boolean)FALSE;
-                break;
-            }
+            /*  there is FAILED or NOT Qualification status event in eventstorage group. */
+            /*  not update.             */
+            updateFlag  =   (boolean)FALSE;
+            break;
         }
         eventCtrlIndex      =   Dem_CmbEvt_GetNextEventCtrlIndex_InEvtStrgGrp( eventCtrlIndex );    /* [GUDCHK:CALLER]EventCtrlIndex *//*  get Delegate EventCtrlIndex                         */
     }
-#endif  /* ( DEM_COMBINEDEVENT_ONSTORAGE_SUPPORT == STD_ON )            */
 
     return updateFlag;
 }
+
 
 /****************************************************************************/
 /* Function Name | Dem_Event_UpdateFailedToNotQualified_InEvtStrg           */
@@ -736,9 +656,6 @@ static FUNC( void, DEM_CODE ) Dem_Event_UpdateFailedToNotQualified_InEvtStrg
 /*  Version        :Date                                                    */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-6-0         :2024-01-29                                              */
-/*  v5-8-0         :2024-10-29                                              */
-/*  v5-9-0         :2025-02-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

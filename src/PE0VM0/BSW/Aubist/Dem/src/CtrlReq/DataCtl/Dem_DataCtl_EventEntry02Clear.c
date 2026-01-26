@@ -1,7 +1,7 @@
-/* Dem_DataCtl_EventEntry02Clear_c(v5-9-0)                                  */
+/* Dem_DataCtl_EventEntry02Clear_c(v5-5-0)                                  */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -16,7 +16,6 @@
 #include <Dem.h>
 #include <Dem/Dem_Common.h>
 #include "../../../cfg/Dem_Cfg.h"
-#include "../../../inc/Dem_CmnLib_ConfigInfo.h"
 #include "../../../inc/Dem_Pm_DataCtl.h"
 #include "../../../inc/Dem_Pm_DTC.h"
 #include "../../../inc/Dem_Pm_Misfire.h"
@@ -188,9 +187,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_ClearFaultRecord
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
-/*   v5-8-0      | no branch changed.                                       */
-/*   v5-9-0      | branch changed.                                          */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_Data_ClearObdFreezeFrameRecord
 (
@@ -201,44 +197,35 @@ FUNC( void, DEM_CODE ) Dem_Data_ClearObdFreezeFrameRecord
     VAR( Dem_u08_InternalReturnType, AUTOMATIC ) resultOfSetFFRec;
     VAR( Dem_u08_FFListIndexType, AUTOMATIC ) freezeFrameRecordIndex;
     VAR( Dem_u08_FFListIndexType, AUTOMATIC ) obdFFRClassPerDTCMaxNum;
-#if ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )  /*  [FuncSw]    */
-    VAR( boolean, AUTOMATIC ) clearableOBDFFD;
-#endif  /* ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )           */
 
-#if ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )  /*  [FuncSw]    */
-    /*  check clearable OBDFFD.                                     */
-    clearableOBDFFD =   Dem_Misfire_JudgeClearableObdFreezeFrame( FaultRecordPtr->EventStrgIndex );
-    if ( clearableOBDFFD == (boolean)TRUE )
-#endif  /* ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )           */
+    /* Initializes the return value to OK. */
+    obdFFRClassPerDTCMaxNum = Dem_OBDFFRClassPerDTCMaxNum;
+
+    for( freezeFrameRecordIndex = (Dem_u08_FFListIndexType)0U; freezeFrameRecordIndex < obdFFRClassPerDTCMaxNum; freezeFrameRecordIndex++ )     /* [GUD:for]freezeFrameRecordIndex */
     {
-        /* Initializes the return value to OK. */
-        obdFFRClassPerDTCMaxNum = Dem_CfgInfoPm_GetOBDFFRClassPerDTCMaxNum();
-
-        for( freezeFrameRecordIndex = (Dem_u08_FFListIndexType)0U; freezeFrameRecordIndex < obdFFRClassPerDTCMaxNum; freezeFrameRecordIndex++ )     /* [GUD:for]freezeFrameRecordIndex */
+        /* Checks the record number index corresponding to the loop counter of retrieved the freeze frame list.  */
+        if( FaultRecordPtr->ObdRecordNumberIndex[freezeFrameRecordIndex] != DEM_FFRECINDEX_INITIAL )                                            /* [GUD]freezeFrameRecordIndex */
         {
-            /* Checks the record number index corresponding to the loop counter of retrieved the freeze frame list.  */
-            if( FaultRecordPtr->ObdRecordNumberIndex[freezeFrameRecordIndex] != DEM_FFRECINDEX_INITIAL )                                            /* [GUD]freezeFrameRecordIndex *//* [ARYCHK] DEM_OBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / freezeFrameRecordIndex */
+            /* The record number index corresponding to the loop counter is valid. */
+
+            /* Initialize the freeze frame record corresponding to the record number index. */
+            resultOfSetFFRec = Dem_DataMngC_ClearObdFreezeFrameRecord( FaultRecordPtr->ObdRecordNumberIndex[freezeFrameRecordIndex] );          /* [GUD]freezeFrameRecordIndex */
+
+            /* Checks the result of set to Dem_DataMng. */
+            if( resultOfSetFFRec == DEM_IRT_OK )
             {
-                /* The record number index corresponding to the loop counter is valid. */
+                /* The result means succeeded. */
 
-                /* Initialize the freeze frame record corresponding to the record number index. */
-                resultOfSetFFRec = Dem_DataMngC_ClearObdFreezeFrameRecord( FaultRecordPtr->ObdRecordNumberIndex[freezeFrameRecordIndex] );          /* [GUD]freezeFrameRecordIndex *//* [ARYCHK] DEM_OBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / freezeFrameRecordIndex */
-
-                /* Checks the result of set to Dem_DataMng. */
-                if( resultOfSetFFRec == DEM_IRT_OK )
+                /* Decrements the number of freeze frame record. */
+                if( EventMemoryRecordPtr->NumberOfObdFreezeFrameRecords > (uint16)0U )
                 {
-                    /* The result means succeeded. */
-
-                    /* Decrements the number of freeze frame record. */
-                    if( EventMemoryRecordPtr->NumberOfObdFreezeFrameRecords > (uint16)0U )
-                    {
-                        /* Decrement the number of freeze frame records. */
-                        EventMemoryRecordPtr->NumberOfObdFreezeFrameRecords--;
-                    }
+                    /* Decrement the number of freeze frame records. */
+                    EventMemoryRecordPtr->NumberOfObdFreezeFrameRecords--;
                 }
             }
         }
     }
+
     return ;
 }
 #endif  /* ( DEM_OBDFFD_SUPPORT == STD_ON ) */
@@ -256,7 +243,6 @@ FUNC( void, DEM_CODE ) Dem_Data_ClearObdFreezeFrameRecord
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_Data_ClearFreezeFrameRecord
 (
@@ -274,12 +260,12 @@ FUNC( void, DEM_CODE ) Dem_Data_ClearFreezeFrameRecord
     for( freezeFrameRecordIndex = (Dem_u08_FFListIndexType)0U; freezeFrameRecordIndex < nonOBDFFRClassPerDTCMaxNum; freezeFrameRecordIndex++ )      /* [GUD:for]freezeFrameRecordIndex */
     {
         /* Checks the record number index corresponding to the loop counter of retrieved the freeze frame list.  */
-        if( FaultRecordPtr->RecordNumberIndex[freezeFrameRecordIndex] != DEM_FFRECINDEX_INITIAL )                                                   /* [GUD]freezeFrameRecordIndex *//* [ARYCHK] DEM_NONOBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / freezeFrameRecordIndex */
+        if( FaultRecordPtr->RecordNumberIndex[freezeFrameRecordIndex] != DEM_FFRECINDEX_INITIAL )                                                   /* [GUD]freezeFrameRecordIndex */
         {
             /* The record number index corresponding to the loop counter is valid. */
 
             /* Initialize the freeze frame record corresponding to the record number index. */
-            resultOfSetFFRec = Dem_DataMngC_ClearFreezeFrameRecord( FaultRecordPtr->RecordNumberIndex[freezeFrameRecordIndex] );                    /* [GUD]freezeFrameRecordIndex *//* [ARYCHK] DEM_NONOBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / freezeFrameRecordIndex */
+            resultOfSetFFRec = Dem_DataMngC_ClearFreezeFrameRecord( FaultRecordPtr->RecordNumberIndex[freezeFrameRecordIndex] );                    /* [GUD]freezeFrameRecordIndex */
 
             /* Checks the result of set to Dem_DataMng. */
             if( resultOfSetFFRec == DEM_IRT_OK )
@@ -384,9 +370,6 @@ FUNC( void, DEM_CODE ) Dem_Data_ClearTargetFFRecordInFaultRecord
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
-/*   v5-8-0      | no branch changed.                                       */
-/*   v5-9-0      | branch changed.                                          */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_Data_ClearTargetObdFFRecord
 (
@@ -398,65 +381,55 @@ static FUNC( void, DEM_CODE ) Dem_Data_ClearTargetObdFFRecord
     VAR( Dem_u08_InternalReturnType, AUTOMATIC ) resultOfSetFFRec;
     VAR( Dem_u08_FFListIndexType, AUTOMATIC ) freezeFrameRecordIndex;
     VAR( Dem_u08_FFListIndexType, AUTOMATIC ) obdFFRClassPerDTCMaxNum;
-#if ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )  /*  [FuncSw]    */
-    VAR( boolean, AUTOMATIC ) clearableOBDFFD;
-#endif  /* ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )           */
 
-#if ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )  /*  [FuncSw]    */
-    /*  check clearable OBDFFD.                                     */
-    clearableOBDFFD =   Dem_Misfire_JudgeClearableObdFreezeFrame( FaultRecordPtr->EventStrgIndex );
-    if ( clearableOBDFFD == (boolean)TRUE )
-#endif  /* ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )           */
+    obdFFRClassPerDTCMaxNum = Dem_OBDFFRClassPerDTCMaxNum;
+
+    /* Initializes the return value to OK. */
+
+    for( freezeFrameRecordIndex = (Dem_u08_FFListIndexType)0U; freezeFrameRecordIndex < obdFFRClassPerDTCMaxNum; freezeFrameRecordIndex++ )     /* [GUD:for]freezeFrameRecordIndex */
     {
-        obdFFRClassPerDTCMaxNum = Dem_CfgInfoPm_GetOBDFFRClassPerDTCMaxNum();
-
-        /* Initializes the return value to OK. */
-
-        for( freezeFrameRecordIndex = (Dem_u08_FFListIndexType)0U; freezeFrameRecordIndex < obdFFRClassPerDTCMaxNum; freezeFrameRecordIndex++ )     /* [GUD:for]freezeFrameRecordIndex */
+        /* Checks the record number index corresponding to the loop counter of retrieved the freeze frame list.  */
+        if( FaultRecordPtr->ObdRecordNumberIndex[freezeFrameRecordIndex] != DEM_FFRECINDEX_INITIAL  )                                           /* [GUD]freezeFrameRecordIndex */
         {
-            /* Checks the record number index corresponding to the loop counter of retrieved the freeze frame list.  */
-            if( FaultRecordPtr->ObdRecordNumberIndex[freezeFrameRecordIndex] != DEM_FFRECINDEX_INITIAL  )                                           /* [GUD]freezeFrameRecordIndex *//* [ARYCHK] DEM_OBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / freezeFrameRecordIndex */
+            if( ClearFFListRecordPtr->ObdFFRClrFlg[freezeFrameRecordIndex] == (boolean)TRUE )                                                   /* [GUD]freezeFrameRecordIndex */
             {
-                if( ClearFFListRecordPtr->ObdFFRClrFlg[freezeFrameRecordIndex] == (boolean)TRUE )                                                   /* [GUD]freezeFrameRecordIndex *//* [ARYCHK] DEM_OBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / freezeFrameRecordIndex */
+                /* The record number index corresponding to the loop counter is valid. */
+
+                /* Initializes the freeze frame record corresponding to the record number index. */
+                resultOfSetFFRec = Dem_DataMngC_ClearObdFreezeFrameRecord( FaultRecordPtr->ObdRecordNumberIndex[freezeFrameRecordIndex] );      /* [GUD]freezeFrameRecordIndex */
+
+                /* Checks the result of set to Dem_DataMng. */
+                if( resultOfSetFFRec == DEM_IRT_OK )
                 {
-                    /* The record number index corresponding to the loop counter is valid. */
+                    /* The result means succeeded. */
 
-                    /* Initializes the freeze frame record corresponding to the record number index. */
-                    resultOfSetFFRec = Dem_DataMngC_ClearObdFreezeFrameRecord( FaultRecordPtr->ObdRecordNumberIndex[freezeFrameRecordIndex] );      /* [GUD]freezeFrameRecordIndex *//* [ARYCHK] DEM_OBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / freezeFrameRecordIndex */
+                    Dem_Data_SetResultOfCmpObdFFRecordToTmp( freezeFrameRecordIndex, DEM_IRT_NG );                                              /* [GUD]freezeFrameRecordIndex */
 
-                    /* Checks the result of set to Dem_DataMng. */
-                    if( resultOfSetFFRec == DEM_IRT_OK )
+                    /* Decrements the number of freeze frame record. */
+                    if( EventMemoryRecordPtr->NumberOfObdFreezeFrameRecords > (uint16)0U )
                     {
-                        /* The result means succeeded. */
+                        /* The number of freeze frame records is over 0. */
 
-                        Dem_Data_SetResultOfCmpObdFFRecordToTmp( freezeFrameRecordIndex, DEM_IRT_NG );                                              /* [GUD]freezeFrameRecordIndex */
-
-                        /* Decrements the number of freeze frame record. */
-                        if( EventMemoryRecordPtr->NumberOfObdFreezeFrameRecords > (uint16)0U )
-                        {
-                            /* The number of freeze frame records is over 0. */
-
-                            /* Decrement the number of freeze frame records. */
-                            EventMemoryRecordPtr->NumberOfObdFreezeFrameRecords--;
-                        }
-                        else
-                        {
-                            /* The number of freeze frame records is 0 or less. */
-
-                            /* no processing. */
-                        }
+                        /* Decrement the number of freeze frame records. */
+                        EventMemoryRecordPtr->NumberOfObdFreezeFrameRecords--;
                     }
                     else
                     {
-                        /* The result had not been succeeded. */
+                        /* The number of freeze frame records is 0 or less. */
+
+                        /* no processing. */
                     }
                 }
+                else
+                {
+                    /* The result had not been succeeded. */
+                }
             }
-            else
-            {
-                /* The record number index corresponding to the loop counter is invalid. */
-                /* no processing, because the fault without freeze frame. */
-            }
+        }
+        else
+        {
+            /* The record number index corresponding to the loop counter is invalid. */
+            /* no processing, because the fault without freeze frame. */
         }
     }
 
@@ -476,7 +449,6 @@ static FUNC( void, DEM_CODE ) Dem_Data_ClearTargetObdFFRecord
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_Data_ClearTargetFFRecord
 (
@@ -495,14 +467,14 @@ static FUNC( void, DEM_CODE ) Dem_Data_ClearTargetFFRecord
     for( freezeFrameRecordIndex = (Dem_u08_FFListIndexType)0U; freezeFrameRecordIndex < nonOBDFFRClassPerDTCMaxNum; freezeFrameRecordIndex++ )      /* [GUD:for]freezeFrameRecordIndex */
     {
         /* Checks the record number index corresponding to the loop counter of retrieved the freeze frame list.  */
-        if( FaultRecordPtr->RecordNumberIndex[freezeFrameRecordIndex] != DEM_FFRECINDEX_INITIAL  )                                                  /* [GUD]freezeFrameRecordIndex *//* [ARYCHK] DEM_NONOBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / freezeFrameRecordIndex */
+        if( FaultRecordPtr->RecordNumberIndex[freezeFrameRecordIndex] != DEM_FFRECINDEX_INITIAL  )                                                  /* [GUD]freezeFrameRecordIndex */
         {
-            if( ClearFFListRecordPtr->FFRClrFlg[freezeFrameRecordIndex] == (boolean)TRUE )                                                          /* [GUD]freezeFrameRecordIndex *//* [ARYCHK] DEM_NONOBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / freezeFrameRecordIndex */
+            if( ClearFFListRecordPtr->FFRClrFlg[freezeFrameRecordIndex] == (boolean)TRUE )                                                          /* [GUD]freezeFrameRecordIndex */
             {
                 /* The record number index corresponding to the loop counter is valid. */
 
                 /* Initializes the freeze frame record corresponding to the record number index. */
-                resultOfSetFFRec = Dem_DataMngC_ClearFreezeFrameRecord( FaultRecordPtr->RecordNumberIndex[freezeFrameRecordIndex] );                /* [GUD]freezeFrameRecordIndex *//* [ARYCHK] DEM_NONOBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / freezeFrameRecordIndex */
+                resultOfSetFFRec = Dem_DataMngC_ClearFreezeFrameRecord( FaultRecordPtr->RecordNumberIndex[freezeFrameRecordIndex] );                /* [GUD]freezeFrameRecordIndex */
 
                 /* Checks the result of set to Dem_DataMng. */
                 if( resultOfSetFFRec == DEM_IRT_OK )
@@ -554,7 +526,6 @@ static FUNC( void, DEM_CODE ) Dem_Data_ClearTargetFFRecord
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_Data_ClearTargetTSFFListRecord
 (
@@ -570,11 +541,11 @@ static FUNC( void, DEM_CODE ) Dem_Data_ClearTargetTSFFListRecord
 
     for( indexOfTSFFListIndex = (Dem_u08_TSFFListPerDTCIndexType)0U; indexOfTSFFListIndex < tsffRecordClassNumPerDTCMaxNum; indexOfTSFFListIndex++ )        /* [GUD:for]indexOfTSFFListIndex */
     {
-        tsFFListRecIndex = FaultRecordPtr->TimeSeriesFreezeFrameListIndex[indexOfTSFFListIndex];                    /* [GUD]indexOfTSFFListIndex *//* [ARYCHK] DEM_TSFF_RECORD_CLASS_NUM_PER_DTC_MAX_NUM / 1 / indexOfTSFFListIndex */
+        tsFFListRecIndex = FaultRecordPtr->TimeSeriesFreezeFrameListIndex[indexOfTSFFListIndex];                    /* [GUD]indexOfTSFFListIndex */
 
         if( tsFFListRecIndex != DEM_INVALID_TSFF_RECORD_INDEX )                                                     /* [GUD:if]tsFFListRecIndex */
         {
-            if( ClearFFListRecordPtr->TSFFLClrFlg[indexOfTSFFListIndex] == (boolean)TRUE )                          /* [GUD]indexOfTSFFListIndex *//* [ARYCHK] DEM_TSFF_RECORD_CLASS_NUM_PER_DTC_MAX_NUM / 1 / indexOfTSFFListIndex */
+            if( ClearFFListRecordPtr->TSFFLClrFlg[indexOfTSFFListIndex] == (boolean)TRUE )                          /* [GUD]indexOfTSFFListIndex */
             {
                 Dem_Data_ClearTSFFRecord( tsFFListRecIndex );                                                       /* [GUD:if]tsFFListRecIndex */
             }
@@ -655,8 +626,6 @@ FUNC( void, DEM_CODE ) Dem_Data_ClearSearchFFDIndex
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
-/*   v5-8-0      | no branch changed.                                       */
 /****************************************************************************/
 #if ( DEM_OBDFFD_SUPPORT == STD_ON )
 static FUNC( Dem_u08_FFDIndexType, DEM_CODE ) Dem_Data_ClearTargetObdRecordNumberIndexArray
@@ -669,17 +638,17 @@ static FUNC( Dem_u08_FFDIndexType, DEM_CODE ) Dem_Data_ClearTargetObdRecordNumbe
     VAR( Dem_u08_FFListIndexType, AUTOMATIC ) obdFFRClassPerDTCMaxNum;
     VAR( Dem_u08_FFDIndexType, AUTOMATIC ) remainFFDCnt;
 
-    obdFFRClassPerDTCMaxNum = Dem_CfgInfoPm_GetOBDFFRClassPerDTCMaxNum();
+    obdFFRClassPerDTCMaxNum = Dem_OBDFFRClassPerDTCMaxNum;
     remainFFDCnt    =   (Dem_u08_FFDIndexType)0U;
 
     for( ffrIndex = (Dem_u08_FFListIndexType)0U; ffrIndex < obdFFRClassPerDTCMaxNum; ffrIndex++ )       /* [GUD:for]ffrIndex */
     {
-        if( ClearFFListRecordPtr->ObdFFRClrFlg[ffrIndex] == (boolean)TRUE )                             /* [GUD]ffrIndex *//* [ARYCHK] DEM_OBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / ffrIndex */
+        if( ClearFFListRecordPtr->ObdFFRClrFlg[ffrIndex] == (boolean)TRUE )                             /* [GUD]ffrIndex */
         {
-            FaultRecordPtr->ObdRecordNumberIndex[ffrIndex] = DEM_FFRECINDEX_INITIAL;                    /* [GUD]ffrIndex *//* [ARYCHK] DEM_OBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / ffrIndex */
+            FaultRecordPtr->ObdRecordNumberIndex[ffrIndex] = DEM_FFRECINDEX_INITIAL;                    /* [GUD]ffrIndex */
         }
 
-        if ( FaultRecordPtr->ObdRecordNumberIndex[ffrIndex] != DEM_FFRECINDEX_INITIAL )                 /* [GUD]ffrIndex *//* [ARYCHK] DEM_OBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / ffrIndex */
+        if ( FaultRecordPtr->ObdRecordNumberIndex[ffrIndex] != DEM_FFRECINDEX_INITIAL )                 /* [GUD]ffrIndex */
         {
             remainFFDCnt    =   remainFFDCnt + (Dem_u08_FFDIndexType)1U;
         }
@@ -701,7 +670,6 @@ static FUNC( Dem_u08_FFDIndexType, DEM_CODE ) Dem_Data_ClearTargetObdRecordNumbe
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( Dem_u08_FFDIndexType, DEM_CODE ) Dem_Data_ClearTargetRecordNumberIndexArray
 (
@@ -718,12 +686,12 @@ static FUNC( Dem_u08_FFDIndexType, DEM_CODE ) Dem_Data_ClearTargetRecordNumberIn
 
     for( ffrIndex = (Dem_u08_FFListIndexType)0U; ffrIndex < nonOBDFFRClassPerDTCMaxNum; ffrIndex++ )        /* [GUD:for]ffrIndex */
     {
-        if( ClearFFListRecordPtr->FFRClrFlg[ffrIndex] == (boolean)TRUE )                                    /* [GUD]ffrIndex *//* [ARYCHK] DEM_NONOBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / ffrIndex */
+        if( ClearFFListRecordPtr->FFRClrFlg[ffrIndex] == (boolean)TRUE )                                    /* [GUD]ffrIndex */
         {
-            FaultRecordPtr->RecordNumberIndex[ffrIndex] = DEM_FFRECINDEX_INITIAL;                           /* [GUD]ffrIndex *//* [ARYCHK] DEM_NONOBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / ffrIndex */
+            FaultRecordPtr->RecordNumberIndex[ffrIndex] = DEM_FFRECINDEX_INITIAL;                           /* [GUD]ffrIndex */
         }
 
-        if ( FaultRecordPtr->RecordNumberIndex[ffrIndex] != DEM_FFRECINDEX_INITIAL )                        /* [GUD]ffrIndex *//* [ARYCHK] DEM_NONOBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / ffrIndex */
+        if ( FaultRecordPtr->RecordNumberIndex[ffrIndex] != DEM_FFRECINDEX_INITIAL )                        /* [GUD]ffrIndex */
         {
             remainFFDCnt    =   remainFFDCnt + (Dem_u08_FFDIndexType)1U;
         }
@@ -743,7 +711,6 @@ static FUNC( Dem_u08_FFDIndexType, DEM_CODE ) Dem_Data_ClearTargetRecordNumberIn
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 #if ( DEM_TSFF_PM_SUPPORT == STD_ON )
 static FUNC( void, DEM_CODE ) Dem_Data_ClearTargetTSFFListIndexArray
@@ -759,9 +726,9 @@ static FUNC( void, DEM_CODE ) Dem_Data_ClearTargetTSFFListIndexArray
 
     for( tsffrIndex = (Dem_u08_TSFFListPerDTCIndexType)0U; tsffrIndex < tsffRecordClassNumPerDTCMaxNum; tsffrIndex++ )      /* [GUD:for]tsffrIndex */
     {
-        if( ClearFFListRecordPtr->TSFFLClrFlg[tsffrIndex] == (boolean)TRUE )                                                /* [GUD]tsffrIndex *//* [ARYCHK] DEM_TSFF_RECORD_CLASS_NUM_PER_DTC_MAX_NUM / 1 / tsffrIndex */
+        if( ClearFFListRecordPtr->TSFFLClrFlg[tsffrIndex] == (boolean)TRUE )                                                /* [GUD]tsffrIndex */
         {
-            FaultRecordPtr->TimeSeriesFreezeFrameListIndex[tsffrIndex] = DEM_INVALID_VACANT_TSFFLIST_INDEX;                 /* [GUD]tsffrIndex *//* [ARYCHK] DEM_TSFF_RECORD_CLASS_NUM_PER_DTC_MAX_NUM / 1 / tsffrIndex */
+            FaultRecordPtr->TimeSeriesFreezeFrameListIndex[tsffrIndex] = DEM_INVALID_VACANT_TSFFLIST_INDEX;                 /* [GUD]tsffrIndex */
         }
     }
 
@@ -780,9 +747,6 @@ static FUNC( void, DEM_CODE ) Dem_Data_ClearTargetTSFFListIndexArray
 /*  v5-0-0         :2021-12-24                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-7-0         :2024-05-29                                              */
-/*  v5-8-0         :2024-10-29                                              */
-/*  v5-9-0         :2025-02-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

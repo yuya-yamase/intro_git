@@ -1,7 +1,7 @@
-/* Dem_UdmDataCtl_EventEntry01Latch_c(v5-9-0)                               */
+/* Dem_UdmDataCtl_EventEntry01Latch_c(v5-5-0)                               */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -80,7 +80,6 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmData_SaveNonObdFreeze
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | branch changed.                                          */
-/*   v5-9-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmData_SaveEventMemoryEntry
 (
@@ -112,7 +111,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmData_SaveEventMemoryEntry
 
         if( resultOfGetEventRec == DEM_IRT_OK )
         {
-            if( Dem_UdmTmpEventMemoryEntry.EventRecord.UdmFaultIndex != DEM_UDMFAULTINDEX_INITIAL )
+            if( Dem_UdmTmpEventMemoryEntry.EventRecord.UdmFaultIndex != DEM_FAULTINDEX_INITIAL )
             {
                 resultOfGetFaultRec = Dem_UdmFaultMngC_GetRecord( Dem_UdmTmpEventMemoryEntry.UdmGroupKindIndex, Dem_UdmTmpEventMemoryEntry.EventRecord.UdmFaultIndex, &Dem_UdmTmpEventMemoryEntry.FaultRecord );/* [GUD]Dem_UdmTmpEventMemoryEntry.UdmGroupKindIndex */
 
@@ -251,7 +250,6 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmData_SaveNonObdFreeze
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-9-0         :2025-02-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

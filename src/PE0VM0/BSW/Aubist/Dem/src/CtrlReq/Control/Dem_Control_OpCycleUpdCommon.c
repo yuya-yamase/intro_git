@@ -1,7 +1,7 @@
-/* Dem_Control_OpCycleUpdCommon_c(v5-7-0)                                   */
+/* Dem_Control_OpCycleUpdCommon_c(v5-5-0)                                   */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -95,11 +95,8 @@ static VAR( Dem_u16_WWHOBDTimeAgingCounterType, DEM_VAR_NO_INIT )      Dem_Contr
 /* Return Value  | none                                                     */
 /* Notes         | none                                                     */
 /*--------------------------------------------------------------------------*/
-/* UpdateRecord  | [UpdRec]AltIUMPR                                         */
-/*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-6-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_Control_UpdateEventMemEntryByOpCycle_PrimaryMemory
 (
@@ -117,15 +114,15 @@ FUNC( void, DEM_CODE ) Dem_Control_UpdateEventMemEntryByOpCycle_PrimaryMemory
     retCheckSpecificEvent = Dem_CfgInfoPm_CheckEventKindOfSpecific_ByEvtCtrlIdx( (Dem_u16_EventCtrlIndexType)EventPos );
     if( retCheckSpecificEvent == (boolean)TRUE )
     {
-        Dem_Control_UpdateSpecificEventMemoryEntryByOpCycle( EventPos, HealingAgingCycleFlag, FailureCycleFlag, NeedGenOrderListPtr, ExecHealingPtr  );     /* [GUDCHK:CALLER]EventPos *//* [UpdRec]AltIUMPR */
+        Dem_Control_UpdateSpecificEventMemoryEntryByOpCycle( EventPos, HealingAgingCycleFlag, FailureCycleFlag, NeedGenOrderListPtr, ExecHealingPtr  );     /* [GUDCHK:CALLER]EventPos */
     }
     else
 #endif  /*   ( DEM_SPECIFIC_EVENT_SUPPORT == STD_ON )   */
     {
-        Dem_Control_NormalEventMemoryEntryByOpCycle( EventPos, HealingAgingCycleFlag, FailureCycleFlag, NeedGenOrderListPtr, ExecHealingPtr  );             /* [GUDCHK:CALLER]EventPos *//* [UpdRec]AltIUMPR */
+        Dem_Control_NormalEventMemoryEntryByOpCycle( EventPos, HealingAgingCycleFlag, FailureCycleFlag, NeedGenOrderListPtr, ExecHealingPtr  );             /* [GUDCHK:CALLER]EventPos */
     }
 
-    Dem_Event_ClearTargetQualificationInfoAtOpCycUpd_NotTestedInCycle( (Dem_u16_EventCtrlIndexType)EventPos, FailureCycleFlag );        /* [GUDCHK:CALLER]EventPos *//* [UpdRec]AltIUMPR */
+    Dem_Event_ClearTargetQualificationInfoAtOpCycUpd_NotTestedInCycle( (Dem_u16_EventCtrlIndexType)EventPos, FailureCycleFlag );        /* [GUDCHK:CALLER]EventPos */
 
     return ;
 }
@@ -251,8 +248,6 @@ FUNC( void, DEM_CODE ) Dem_Control_UpdEvtMemEntryOfTmp_AtOpcycUpdate
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | new created.                                             */
-/*   v5-6-0      | no object changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_Control_JudgeAndGetTimeSinceEngineStartSinceLastDCY
 (
@@ -277,7 +272,7 @@ FUNC( void, DEM_CODE ) Dem_Control_JudgeAndGetTimeSinceEngineStartSinceLastDCY
             resultOfCallback = Dem_DataElement_ReadData( dataElementClassPtr, dataBuffer , DEM_MONITORDATA_OTHER );                 /* [GUD]dataElementClassIndex */
             if( resultOfCallback == (Std_ReturnType)E_OK )
             {
-                Dem_Control_TimeSinceEngineStartSinceLastDCY = ( Dem_u16_WWHOBDTimeAgingCounterType )(((( Dem_u16_WWHOBDTimeAgingCounterType)dataBuffer[DEM_WWHOBD_DATAPOS0]) << DEM_WWHOBD_DATA_BITSHIFT_8 ) | (( Dem_u16_WWHOBDTimeAgingCounterType)dataBuffer[DEM_WWHOBD_DATAPOS1] ));/* [ARYCHK] DEM_WWHOBD_CALCULATION_DATASIZE_TIMESES / 1 / DEM_WWHOBD_DATAPOS0 *//* [ARYCHK] DEM_WWHOBD_CALCULATION_DATASIZE_TIMESES / 1 / DEM_WWHOBD_DATAPOS1 */
+                Dem_Control_TimeSinceEngineStartSinceLastDCY = ( Dem_u16_WWHOBDTimeAgingCounterType )(((( Dem_u16_WWHOBDTimeAgingCounterType)dataBuffer[DEM_WWHOBD_DATAPOS0]) << DEM_WWHOBD_DATA_BITSHIFT_8 ) | (( Dem_u16_WWHOBDTimeAgingCounterType)dataBuffer[DEM_WWHOBD_DATAPOS1] ));
             }
             else
             {
@@ -285,7 +280,6 @@ FUNC( void, DEM_CODE ) Dem_Control_JudgeAndGetTimeSinceEngineStartSinceLastDCY
             }
         }
     }
-    return ;
 }
 
 /****************************************************************************/
@@ -316,8 +310,6 @@ FUNC( Dem_u16_WWHOBDTimeAgingCounterType, DEM_CODE ) Dem_Control_GetTimeSinceEng
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-6-0         :2024-01-29                                              */
-/*  v5-7-0         :2024-05-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

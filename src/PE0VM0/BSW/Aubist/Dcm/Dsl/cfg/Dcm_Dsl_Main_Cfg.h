@@ -1,7 +1,7 @@
-/* Dcm_Dsl_Main_Cfg_h(v5-9-0)                                               */
+/* Dcm_Dsl_Main_Cfg_h(v5-3-0)                                               */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -243,8 +243,7 @@ FUNC(Std_ReturnType, DCM_CODE) Dcm_Dsl_IndicateSecLevelChange
 
 FUNC(void, DCM_CODE) Dcm_Dsl_GetP2ServerValue
 (
-    const Dcm_SesCtrlType u1SesCtrlType,
-    const Dcm_ProtocolType u1ProtocolType,
+    const Dcm_SesCtrlType u1Level,
     P2VAR(uint16, AUTOMATIC, DCM_APPL_DATA) ptP2Server,
     P2VAR(uint16, AUTOMATIC, DCM_APPL_DATA) ptP2StarServerMax,
     P2VAR(uint16, AUTOMATIC, DCM_APPL_DATA) ptP2StarServerMin
@@ -323,14 +322,11 @@ extern CONST(AB_83_ConstV boolean, DCM_CONFIG_DATA) Dcm_Dsl_bSecLockOnlyDefSes;
 /*  v3-2-0         :2020-08-27                                              */
 /*  v5-0-0         :2021-12-24                                              */
 /*  v5-3-0         :2023-03-29                                              */
-/*  v5-6-0         :2024-02-27                                              */
-/*  v5-8-0         :2024-10-29                                              */
-/*  v5-9-0         :2025-02-26                                              */
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
 /*  Framework          :v2-1-0                                              */
-/*  BSW plug-in        :v5-10-0                                             */
+/*  BSW plug-in        :v5-5-1                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

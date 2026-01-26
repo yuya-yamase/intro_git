@@ -1,7 +1,7 @@
-/* Dem_CommonTypes_h(v5-10-0)                                               */
+/* Dem_CommonTypes_h(v5-5-0)                                                */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -65,13 +65,9 @@ typedef uint16       Dem_u16_DTCAttrIndexType;              /*  for DTCAttribute
 typedef uint16       Dem_u16_FFClassIndexType;              /*  for FreezeFrameClass table index        */
 #define DEM_FFCLASSINDEX_INVALID                ((Dem_u16_FFClassIndexType)0xFFFFU)
 
-typedef uint16       Dem_u16_DIDClassPerFFIndexType;        /*  for DIDClass per freezeframe index      */
+typedef uint8        Dem_u08_DIDClassPerFFIndexType;        /*  for DIDClass per freezeframe index      */
 typedef uint32       Dem_u32_DIDClassIndexType;             /*  for DIDClass table index                */
 #define DEM_DIDCLASSINDEX_INVALID               ((Dem_u32_DIDClassIndexType)0xFFFFFFFFU)
-
-#define DEM_OUTPUT_DIDNUMVAL_MAX                ((Dem_u16_DIDClassPerFFIndexType)0x00FFU)
-#define DEM_OUTPUT_DIDNUMVAL_OVRFLW             ((uint8)0x00U)
-
 typedef uint8        Dem_u08_DtElNumPerDIDIndexType;        /*  for DataElement per DID index           */
 typedef uint16       Dem_u16_DataElementClassIndexType;     /*  for DataElementClass index              */
 #define DEM_DATAELEMENTCLASSINDEX_INVALID       ((Dem_u16_DataElementClassIndexType)0xFFFFU)
@@ -122,7 +118,6 @@ typedef uint16       Dem_u16_EventQueueIndexType;           /*  for EventQueue i
 
 typedef uint16       Dem_u16_FilDTCSearchNumType;           /*  for FilteredDTC buffer index            */
 typedef uint16       Dem_u16_FilFFDSearchNumType;           /*  for FilteredFFD buffer index            */
-typedef uint16       Dem_u16_FilReadinessGroupSearchNumType;  /*  for FilteredDTCForReadiness index     */
 typedef uint16       Dem_u16_RecordIndexType;               /*  for Record index                        *//* [uint32->uint16]   */
 #define DEM_RECORDINDEX_INVALID                 ((Dem_u16_RecordIndexType)0xFFFFU)
 
@@ -174,9 +169,6 @@ typedef uint8   Dem_u08_UpdNvMType;
 typedef uint16       Dem_u16_DtrRefObdEventCtrlIndexType;       /*  for DTR Ref OBD Event Index             */
 #define DEM_DTRREFOBDEVENTINDEX_INVALID         ((Dem_u16_DtrRefObdEventCtrlIndexType)0xFFFFU)
 
-typedef uint16       Dem_u16_DtrOutputEdrTableIndexType;        /*  for Dem_DtrOutputEdrTable Index         */
-#define DEM_DTROUTPUTEDRTABLEINDEX_INVALID      ((Dem_u16_DtrOutputEdrTableIndexType)0xFFFFU)
-
 typedef Dem_DTRIdType       Dem_u16_DTRIndexType;           /*  for DTR table index                     */
 typedef uint8        Dem_u08_DTRMidIndexType;               /*  for DTR MID table index                 */
 typedef uint8        Dem_u08_DTRSupportObdMidIndexType;     /*  for DTR Support OBDMID table index      */
@@ -201,15 +193,12 @@ typedef uint8        Dem_u08_IUMPRGenDenCondType;           /*  IUMPR GeneralDen
 typedef uint8        Dem_u08_IUMPRGenAddedCondType;         /*  IUMPR GeneralDenominator Add Condition type */
 typedef uint8        Dem_u08_IUMPRRatioCondType;            /*  IUMPR RatioCondition type                   */
 
-typedef uint8        Dem_u08_IUMPRNODIValueType;            /*  IUMPR Number Of Data Items Value type       */
-typedef uint8        Dem_u08_IUMPRNODIOutputSizeType;       /*  IUMPR Number Of Data Items OutputSize type  */
+
 
 /* Readiness         */
 typedef uint8        Dem_u08_ReadinessGroupIndexType;           /*  for Readiness Group table index         */
 #define DEM_READINESSGROUPINDEX_INVALID          ((Dem_u08_ReadinessGroupIndexType)0xFFU)
 typedef uint8        Dem_u08_ReadinessDataPositionIndexType;    /*  for Readiness Data Position index       */
-#define DEM_READINESSDATAPOSITIONINDEX_INVALID   ((Dem_u08_ReadinessDataPositionIndexType)0xFFU)
-
 typedef uint8        Dem_u08_ReadinessGroupIdType;              /*  for Readiness Group Id                  */
 
 /* for PreFFD         */
@@ -485,7 +474,6 @@ typedef uint8        Dem_u08_MisfireIndStatusType;              /*  MisfireIndic
 #define DEM_MISFIRE_IND_BLINKING                            ((Dem_u08_MisfireIndStatusType)0x02U)
 
 typedef uint8        Dem_u08_MisfJudgeFFCylinderType;           /*  MisfireJudgeFreezeFrameCylinder type    */
-typedef uint8        Dem_u08_MisfireFilteredEDRType;            /*  Misfire Filtered EDR type               */
 
 typedef uint8        Dem_u08_MisfSimCondStoredTimingType;       /*  MisfireSimilarConditionStoredTiming type      */
 typedef uint8        Dem_u08_MisfExceedanceCounterType;         /*  Misfire ExceedanceCounter type                */
@@ -600,15 +588,6 @@ typedef uint8   Dem_u08_EventStatusPriorityType;    /*  Priority for EventStatus
 #define DEM_EVENTSTATUS_PRIORITY_POTENTIAL      ((Dem_u08_EventStatusPriorityType)0x02U)
 #endif  /*   ( DEM_COMBINEDEVENT_ONRETRIEVAL_SUPPORT == STD_ON )    */
 
-/*----------------------------------------------*/
-/*  EventStrgBitmap at CombinedEventOnStorage   */
-/*----------------------------------------------*/
-typedef uint8   Dem_u08_EventCtrlBitmapIndexType;       /*  EventStrg BitmapBuffer Index type   */
-typedef uint8   Dem_u08_EventCtrlBitmapWidthType;       /*  EventStrg Bitmap bit width type     */
-typedef uint8   Dem_u08_EventCtrlBitmapType;            /*  EventStrg Bitmap type               */
-#define DEM_EVENTCTRLBITMAP_BITWIDTH        ((Dem_u08_EventCtrlBitmapWidthType)8U)    /*  bit width of [Dem_u08_EventCtrlBitmapType]. */
-#define DEM_EVENTCTRLBITMAP_ALL_OFF         ((Dem_u08_EventCtrlBitmapType)0x00U)
-
 /*-------------------*/
 /* Return type       */
 /*-------------------*/
@@ -683,10 +662,6 @@ typedef struct {
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-6-0         :2024-01-29                                              */
-/*  v5-8-0         :2024-10-29                                              */
-/*  v5-9-0         :2025-02-26                                              */
-/*  v5-10-0        :2025-06-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

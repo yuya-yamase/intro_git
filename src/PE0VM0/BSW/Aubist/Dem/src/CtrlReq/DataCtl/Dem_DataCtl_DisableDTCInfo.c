@@ -1,7 +1,7 @@
-/* Dem_DataCtl_DisableDTCInfo_c(v5-7-0)                                     */
+/* Dem_DataCtl_DisableDTCInfo_c(v5-5-0)                                     */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -30,7 +30,7 @@
 
 /*--------------------------------------------------------------------------*/
 /* Types                                                                    */
-/*--------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------*/\
 
 /*--------------------------------------------------------------------------*/
 /* Function Prototypes                                                      */
@@ -54,14 +54,6 @@ static FUNC( void, DEM_CODE ) Dem_Data_SaveAllRecordNumber
     VAR( Dem_MisfireCylinderNumberType, AUTOMATIC ) MisfireCylinderNumber,
     P2VAR( Dem_FaultRecordPartsFFDIndexListStType, AUTOMATIC, DEM_VAR_NO_INIT ) FFDIndexListStPtr
 );
-
-#if ( DEM_COMBINEDEVENT_ONRETRIEVAL_SUPPORT == STD_ON )
-static FUNC( void, DEM_CODE ) Dem_Data_SaveAllRecordNumberForFilteredRecord
-(
-    VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex,
-    VAR( Dem_MisfireCylinderNumberType, AUTOMATIC ) MisfireCylinderNumber
-);
-#endif  /*   ( DEM_COMBINEDEVENT_ONRETRIEVAL_SUPPORT == STD_ON )    */
 
 #define DEM_STOP_SEC_CODE
 #include <Dem_MemMap.h>
@@ -224,54 +216,6 @@ FUNC( void, DEM_CODE ) Dem_Data_SaveDisabledRecord
 
 #if ( DEM_COMBINEDEVENT_ONRETRIEVAL_SUPPORT == STD_ON )
 /****************************************************************************/
-/* Function Name | Dem_Data_MakeTmpRecordNumberByDTC                        */
-/* Description   |                                                          */
-/* Preconditions |                                                          */
-/* Parameters    | [in] EventStrgIndex :                                    */
-/*               |        The event index corresponding to the specific DT- */
-/*               |        C value.                                          */
-/*               | [in] MisfireCylinderNumber :                             */
-/*               |        == DEM_MISFIRE_CYL_NUM_INVALID : no misfire event.*/
-/*               |        != DEM_MISFIRE_CYL_NUM_INVALID : misfire event.   */
-/*               |                                                          */
-/* Return Value  | void                                                     */
-/* Notes         | from SID19-03(OnRetrieval) only.                         */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-6-0      | new created. based on Dem_Data_SaveDisabledRecord        */
-/*   v5-7-0      | no branch changed.                                       */
-/****************************************************************************/
-FUNC( void, DEM_CODE ) Dem_Data_MakeTmpRecordNumberByDTC
-(
-    VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex,                    /* [PRMCHK:CALLER] */
-    VAR( Dem_MisfireCylinderNumberType, AUTOMATIC ) MisfireCylinderNumber
-)
-{
-    /* Initialize updating prohibition record of temporary RAM area. */
-    Dem_Data_ClearDisabledRecord();
-
-#if ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )   /*  [FuncSw]    */
-    if ( MisfireCylinderNumber != DEM_MISFIRE_CYL_NUM_INVALID )
-    {
-        /*-----------------------------------------------------------*/
-        /*  latch misfire cylinder value at enable pair event.       */
-        /*-----------------------------------------------------------*/
-        (void)Dem_DataCtl_SaveTmpDisabledRecordPairEvent( EventStrgIndex ); /* no return check required */
-    }
-#endif  /*  ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )  */
-
-    /*  initialize recordnumber temporary area. */
-    Dem_Data_InitSaveTmpRecordNumberForFilteredRecord();
-
-    /*--------------------------------------*/
-    /*  save record number.                 */
-    /*--------------------------------------*/
-    Dem_Data_SaveAllRecordNumberForFilteredRecord( EventStrgIndex, MisfireCylinderNumber );   /* [GUDCHK:CALLER]EventStrgIndex */
-
-    return;
-}
-
-/****************************************************************************/
 /* Function Name | Dem_Data_GetFFDIndexListStOfDisabledRecord               */
 /* Description   | Saves record number.                                     */
 /* Preconditions |                                                          */
@@ -384,50 +328,6 @@ static FUNC( void, DEM_CODE ) Dem_Data_SaveAllRecordNumber
     return ;
 }
 
-#if ( DEM_COMBINEDEVENT_ONRETRIEVAL_SUPPORT == STD_ON )
-/****************************************************************************/
-/* Function Name | Dem_Data_SaveAllRecordNumberForFilteredRecord            */
-/* Description   | Saves record number.                                     */
-/* Preconditions |                                                          */
-/* Parameters    | [in] EventStrgIndex :                                    */
-/*               |        The event index corresponding to the specific DT- */
-/*               |        C value.                                          */
-/* Return Value  | void                                                     */
-/* Notes         | -                                                        */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-6-0      | new created. based on Dem_Data_SaveAllRecordNumber       */
-/*   v5-7-0      | no branch changed.                                       */
-/****************************************************************************/
-static FUNC( void, DEM_CODE ) Dem_Data_SaveAllRecordNumberForFilteredRecord
-(
-    VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex,                    /* [PRMCHK:CALLER] */
-    VAR( Dem_MisfireCylinderNumberType, AUTOMATIC ) MisfireCylinderNumber
-)
-{
-    VAR( Dem_u16_FFRecNumStoredIndexType, AUTOMATIC ) numberOfSaveRecord;
-
-    numberOfSaveRecord = (Dem_u16_FFRecNumStoredIndexType)0U;
-
-#if ( DEM_OBDFFD_SUPPORT == STD_ON )   /*  [FuncSw]    */
-    Dem_Data_SaveObdRecordNumberByDTCForFilteredRecord( EventStrgIndex, MisfireCylinderNumber, &numberOfSaveRecord );     /* [GUDCHK:CALLER]EventStrgIndex */
-#endif  /*   ( DEM_OBDFFD_SUPPORT == STD_ON )          */
-
-    Dem_Data_SaveRecordNumberByDTCForFilteredRecord( EventStrgIndex, MisfireCylinderNumber, &numberOfSaveRecord );        /* [GUDCHK:CALLER]EventStrgIndex */
-
-#if ( DEM_TSFF_PM_SUPPORT == STD_ON )   /*  [FuncSw]    */
-    Dem_Data_SaveTSFFRecordNumberByDTCForFilteredRecord( EventStrgIndex, MisfireCylinderNumber, &numberOfSaveRecord );    /* [GUDCHK:CALLER]EventStrgIndex */
-#endif  /*   ( DEM_TSFF_PM_SUPPORT == STD_ON )         */
-
-#if ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )   /*  [FuncSw]    */
-    Dem_DataCtl_SaveRecordNumberByPairEventForFilteredRecord( MisfireCylinderNumber, &numberOfSaveRecord );
-#endif  /*  ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )          */
-
-    Dem_Data_SortTmpRecordNumber( numberOfSaveRecord );
-
-    return ;
-}
-#endif  /*   ( DEM_COMBINEDEVENT_ONRETRIEVAL_SUPPORT == STD_ON )    */
 
 /****************************************************************************/
 /* Function Name | Dem_Data_ClearDisabledRecord                             */
@@ -615,8 +515,6 @@ FUNC( Dem_u08_FFDIndexType, DEM_CODE ) Dem_Data_GetTmpDisabledRecordFFRIndex
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-6-0         :2024-01-29                                              */
-/*  v5-7-0         :2024-05-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

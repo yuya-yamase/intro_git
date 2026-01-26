@@ -1,7 +1,7 @@
-/* Dem_Ind_MI_GetMIStatus_WWH_c(v5-10-0)                                    */
+/* Dem_Ind_MI_GetMIStatus_WWH_c(v5-5-0)                                     */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -189,7 +189,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_IndMI_GetMILStatus
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | new created.                                             */
-/*   v5-10-0     | no branch changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_IndMI_GetMILStatusByEventStrgIndex
 (
@@ -200,16 +199,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_IndMI_GetMILStatusByEventStrgIn
     VAR( Dem_DTCSeverityType, AUTOMATIC ) dtcClass;
     VAR( boolean, AUTOMATIC ) isMILIndicator;
     VAR( Dem_u08_InternalReturnType, AUTOMATIC ) retVal;
-
-    /*--------------------------------------------------------------------------*/
-    /* Need to get exclusive [SchM_Enter_Dem_IndMI] for IndMI record.           */
-    /* These are the reasons why this function needs to get exclusive.          */
-    /*  - This function call [DataMng] function directory.                      */
-    /*  - This function called from SW-C/Dcm context.                           */
-    /*  Waits to finish the exclusive section in the Dem_MainFunction context.  */
-    SchM_Enter_Dem_IndMI(); /* waits completion of updating Diag record data by Dem_MainFunction.      */
-    SchM_Exit_Dem_IndMI();
-    /*--------------------------------------------------------------------------*/
 
     isMILIndicator = Dem_CfgInfoPm_ChkDTCCls_HasMILInd( EventStrgIndex );   /* [GUDCHK:CALLER]EventStrgIndex */
     if ( isMILIndicator == (boolean)TRUE )
@@ -415,7 +404,7 @@ static FUNC( Dem_IndicatorStatusType, DEM_CODE ) Dem_IndMI_GetMIStatusForClassB1
 
     if ( getB1CounterResult == DEM_IRT_OK )
     {
-        if ( ( b1Counter >= b1CounterThreshold ) &&
+        if ( ( b1Counter >= b1CounterThreshold ) && 
               ( ( statusOfDTC & DEM_UDS_STATUS_CDTC ) == DEM_UDS_STATUS_CDTC ) &&
               ( ( statusOfDTC & DEM_UDS_STATUS_PDTC ) == DEM_UDS_STATUS_PDTC ) )
         {
@@ -551,7 +540,6 @@ static FUNC( Dem_IndicatorStatusType, DEM_CODE ) Dem_IndMI_GetMIStatusForClassC
 /* History                                                                  */
 /*  Version        :Date                                                    */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-10-0        :2025-06-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

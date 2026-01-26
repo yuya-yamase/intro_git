@@ -1,7 +1,7 @@
-/* Dem_Misfire_c(v5-9-0)                                                    */
+/* Dem_Misfire_c(v5-5-0)                                                    */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -56,17 +56,6 @@ static FUNC( void, DEM_CODE ) Dem_Misfire_GetMisfireExcessConterThreshold
     P2VAR( Dem_u08_MisfExceedanceCounterType, AUTOMATIC, AUTOMATIC )  ExcessCntThresholdPtr
 );
 
-#if ( DEM_OBDONUDS_SUPPORT == STD_ON )
-#if ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )
-static FUNC( void, DEM_CODE ) Dem_Misfire_UpdatePairObdFFDInfo
-(
-    VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex,
-    VAR( Dem_u08_MisfireObdFFDCylIndexType, AUTOMATIC ) MisfireObdFFDCylIndex,
-    VAR( Dem_MisfireCylinderType, AUTOMATIC ) FFDCyl
-);
-#endif /* ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON ) */
-#endif /* ( DEM_OBDONUDS_SUPPORT == STD_ON ) */
-
 #define DEM_STOP_SEC_CODE
 #include <Dem_MemMap.h>
 
@@ -75,7 +64,7 @@ static FUNC( void, DEM_CODE ) Dem_Misfire_UpdatePairObdFFDInfo
 /*--------------------------------------------------------------------------*/
 #define DEM_START_SEC_VAR_NO_INIT
 #include <Dem_MemMap.h>
-static VAR( Dem_UdsStatusByteType, DEM_VAR_NO_INIT ) Dem_LatchCylDTCStatus[DEM_MISFIRE_CYLINDER_AND_RM_NUM];
+static VAR( Dem_UdsStatusByteType, DEM_VAR_NO_INIT ) Dem_LatchCylDTCStatus[DEM_MISFIRE_CYLINDER_NUM];
 
 #if ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )
 static VAR( boolean, DEM_VAR_NO_INIT ) Dem_PendingStoreOfEmission;
@@ -83,12 +72,6 @@ static VAR( boolean, DEM_VAR_NO_INIT ) Dem_PendingStoreOfEmission;
 
 /*  reflesh RAM.        */
 static VAR( volatile boolean, DEM_VAR_NO_INIT ) Dem_ExceedanceUsedOfEmission;
-
-#if ( DEM_OBDONUDS_SUPPORT == STD_ON )
-#if ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )
-static VAR( boolean, DEM_VAR_NO_INIT ) Dem_Misf_ObdRecordNumberIndexSyncStatus;
-#endif /* ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON ) */
-#endif /* ( DEM_OBDONUDS_SUPPORT == STD_ON ) */
 
 #define DEM_STOP_SEC_VAR_NO_INIT
 #include <Dem_MemMap.h>
@@ -141,45 +124,6 @@ FUNC( void, DEM_CODE ) Dem_Misfire_Init
 #endif  /*   ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON ) */
     return;
 }
-
-#if ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )
-/****************************************************************************/
-/* Function Name | Dem_Misfire_Init_AfterRecordCheckComplete                */
-/* Description   | Initialize data. after record checked.                   */
-/* Preconditions | none                                                     */
-/* Parameters    | none                                                     */
-/* Return Value  | void                                                     */
-/* Notes         | -                                                        */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-9-0      | new created.                                             */
-/****************************************************************************/
-FUNC( void, DEM_CODE ) Dem_Misfire_Init_AfterRecordCheckComplete
-( void )
-{
-    VAR( Dem_u08_DTCStatusEx2Type, AUTOMATIC ) extendStatusOfDTC2;
-    VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) misfireEmissionEventStrgIndex;
-
-    /*  get emission misfire event status   */
-    misfireEmissionEventStrgIndex = Dem_CfgInfoPm_GetEventStrgIndex_MisfireEmission();
-    extendStatusOfDTC2 = DEM_DTCSTATUSEX2_BYTE_ALL_OFF;
-
-    /*  get extend statusOfDTC2.            */
-    (void)Dem_DataMngC_GetER_ExtendDTCStatus2( misfireEmissionEventStrgIndex, &extendStatusOfDTC2 );   /* no return check required */
-
-    /*  check DEM_DTCSTATUSEX2_STATUS_MISF_PENDINGOFEMISSION bit.   */
-    if (( extendStatusOfDTC2 & DEM_DTCSTATUSEX2_STATUS_MISF_PENDINGOFEMISSION ) == DEM_DTCSTATUSEX2_STATUS_MISF_PENDINGOFEMISSION )
-    {
-        Dem_PendingStoreOfEmission = (boolean)TRUE;
-    }
-    else
-    {
-        Dem_PendingStoreOfEmission = (boolean)FALSE;
-    }
-
-    return;
-}
-#endif  /*   ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON ) */
 
 /****************************************************************************/
 /* Function Name | Dem_Misfire_JudgeDTCClearTarget                          */
@@ -623,7 +567,6 @@ FUNC( void, DEM_CODE ) Dem_Misfire_JudgeCylinderStatus
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
-/*   v5-9-0      | branch changed.                                          */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_Misfire_UpdateObdFFDInfo
 (
@@ -652,25 +595,10 @@ FUNC( void, DEM_CODE ) Dem_Misfire_UpdateObdFFDInfo
             Dem_Misfire_GetObdFFDCylToTmp( EventStrgIndex, misfireObdFFDCylIndex, &getMisfireCylinder );        /* [GUD]misfireObdFFDCylIndex */
             if( getMisfireCylinder == DEM_MISFIRE_CYLINDER_NON )
             {
-#if ( DEM_OBDONUDS_SUPPORT == STD_ON )              /*  [FuncSw]    */
-#if ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )  /*  [FuncSw]    */
-                retCylinder = DEM_MISFIRE_CYLINDER_NON;
-                Dem_Misfire_GetPairObdFFDCylToTmp( EventStrgIndex, misfireObdFFDCylIndex, &retCylinder );       /* [GUD]misfireObdFFDCylIndex */
-                if( retCylinder == DEM_MISFIRE_CYLINDER_NON  )
-#endif /* ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )    */
-#endif /* ( DEM_OBDONUDS_SUPPORT == STD_ON )                */
-                {
-                    retCylinder = Dem_Misfire_SetFFDAccumCylinder( EventStrgIndex, FreezeFrameRecordTrigger, MisfireCylinder );
-                    retCylinder = Dem_CfgInfoPm_MergeMultipleCylinderBit( retCylinder );
-                    retCylinder = Dem_CfgInfoPm_GetMisfireLowestCylinderBitFromCylBit( retCylinder );
-                }
+                retCylinder = Dem_Misfire_SetFFDAccumCylinder( EventStrgIndex, FreezeFrameRecordTrigger, MisfireCylinder );
+                retCylinder = Dem_CfgInfoPm_MergeMultipleCylinderBit( retCylinder );
+                retCylinder = Dem_CfgInfoPm_GetMisfireLowestCylinderBitFromCylBit( retCylinder );
                 Dem_Misfire_SetObdFFDCylToTmp( EventStrgIndex, misfireObdFFDCylIndex, retCylinder );            /* [GUD]misfireObdFFDCylIndex */
-
-#if ( DEM_OBDONUDS_SUPPORT == STD_ON )              /*  [FuncSw]    */
-#if ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )  /*  [FuncSw]    */
-                Dem_Misfire_UpdatePairObdFFDInfo( EventStrgIndex, misfireObdFFDCylIndex, retCylinder );         /* [GUD]misfireObdFFDCylIndex */
-#endif /* ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )    */
-#endif /* ( DEM_OBDONUDS_SUPPORT == STD_ON )                */
 
                 /* MisfireKindOfOBDFFD */
                 Dem_Misfire_GetMisfireKindOfObdFFDToTmp( misfireObdFFDCylIndex, &misfireKindOfFFD );            /* [GUD]misfireObdFFDCylIndex */
@@ -878,193 +806,6 @@ static FUNC( void, DEM_CODE ) Dem_Misfire_GetMisfireExcessConterThreshold
     return;
 }
 
-#if ( DEM_OBDONUDS_SUPPORT == STD_ON )
-#if ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )
-/****************************************************************************/
-/* Function Name | Dem_Misfire_UpdatePairObdFFDInfo                         */
-/* Description   | Update the freeze frame data Infomation of misfire.      */
-/* Preconditions | EventStrgIndex is misfire                                */
-/* Parameters    | [in] EventStrgIndex :                                    */
-/*               | [in] MisfireObdFFDCylIndex :                             */
-/*               | [in] FFDCyl :                                            */
-/* Return Value  | none                                                     */
-/* Notes         |                                                          */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-9-0      | new created.                                             */
-/****************************************************************************/
-static FUNC( void, DEM_CODE ) Dem_Misfire_UpdatePairObdFFDInfo
-(
-    VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex,
-    VAR( Dem_u08_MisfireObdFFDCylIndexType, AUTOMATIC ) MisfireObdFFDCylIndex,  /* [PRMCHK:CALLER] */
-    VAR( Dem_MisfireCylinderType, AUTOMATIC ) FFDCyl
-)
-{
-    VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) misfirePairEventStrgIndex;
-    VAR( Dem_MisfireCylinderType, AUTOMATIC ) pairCylinder;
-    VAR( Dem_u08_InternalReturnType, AUTOMATIC ) resultGetMisfirePairEvent;
-    VAR( Dem_u08_InternalReturnType, AUTOMATIC ) resultOfGetFaultIndex;
-    VAR( Dem_u08_FaultIndexType, AUTOMATIC ) pairFaultIndex;
-    VAR( Dem_u08_FaultIndexType, AUTOMATIC ) failRecordNum;
-    VAR( Dem_UdsStatusByteType, AUTOMATIC ) pairStatusOfDTC;
-
-    resultGetMisfirePairEvent= Dem_CfgInfoPm_GetMisfirePairEventStrgIndexByStrgIndex( EventStrgIndex, &misfirePairEventStrgIndex );
-    if( resultGetMisfirePairEvent == DEM_IRT_OK )
-    {
-        resultOfGetFaultIndex = Dem_DataMngC_GetER_FaultIndex( misfirePairEventStrgIndex, &pairFaultIndex );    /* [GUD:RET:DEM_IRT_OK] misfirePairEventStrgIndex */
-        if( resultOfGetFaultIndex == DEM_IRT_OK )
-        {
-            failRecordNum = Dem_FailRecordNum;
-            if( pairFaultIndex < failRecordNum )
-            {
-                pairStatusOfDTC = DEM_DTCSTATUS_BYTE_DEFAULT;
-                (void)Dem_DataMngC_GetER_StatusOfDTC( misfirePairEventStrgIndex, &pairStatusOfDTC );    /* no return check required */
-                if( (( pairStatusOfDTC & DEM_UDS_STATUS_PDTC ) == DEM_UDS_STATUS_PDTC ) || (( pairStatusOfDTC & DEM_UDS_STATUS_CDTC ) == DEM_UDS_STATUS_CDTC ) )
-                {
-                    Dem_Misfire_GetObdFFDCylToTmp( misfirePairEventStrgIndex, MisfireObdFFDCylIndex, &pairCylinder );        /* [GUDCHK:CALLER]MisfireObdFFDCylIndex */
-                    if( pairCylinder == DEM_MISFIRE_CYLINDER_NON  )
-                    {
-                        Dem_Misfire_SetObdFFDCylToTmp( misfirePairEventStrgIndex, MisfireObdFFDCylIndex, FFDCyl );      /* [GUDCHK:CALLER]MisfireObdFFDCylIndex */
-
-                        /*  Sync OBDFFD RecordIndex : between base and pair event.  */
-                        Dem_Misfire_SetObdRecordNumberIndexSyncStatus( (boolean)TRUE );
-                    }
-                }
-            }
-        }
-    }
-
-    return;
-}
-
-/****************************************************************************/
-/* Function Name | Dem_Misfire_SetObdRecordNumberIndexSyncStatus            */
-/* Description   | Set execute sync OBDFFD RecordNumberIndex or not.        */
-/* Preconditions | none                                                     */
-/* Parameters    | ObdRecordNumberIndexSyncStatus                           */
-/*               |             TRUE  : Sync OBDFFD RecordNumberIndex.       */
-/*               |             FALSE : not Sync OBDFFD RecordNumberIndex.   */
-/* Return Value  | boolean                                                  */
-/* Notes         |                                                          */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-9-0      | new created.                                             */
-/****************************************************************************/
-FUNC( void, DEM_CODE ) Dem_Misfire_SetObdRecordNumberIndexSyncStatus
-(
-    VAR( boolean, AUTOMATIC ) ObdRecordNumberIndexSyncStatus
-)
-{
-    Dem_Misf_ObdRecordNumberIndexSyncStatus   =   ObdRecordNumberIndexSyncStatus;
-    return ;
-}
-
-/****************************************************************************/
-/* Function Name | Dem_Misfire_GetObdRecordNumberIndexSyncStatus            */
-/* Description   | Get execute sync OBDFFD RecordNumberIndex or not.        */
-/* Preconditions | none                                                     */
-/* Parameters    | none                                                     */
-/* Return Value  | boolean                                                  */
-/*               |             TRUE  : Sync OBDFFD RecordNumberIndex.       */
-/*               |             FALSE : not Sync OBDFFD RecordNumberIndex.   */
-/* Notes         |                                                          */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-9-0      | new created.                                             */
-/****************************************************************************/
-FUNC( boolean, DEM_CODE ) Dem_Misfire_GetObdRecordNumberIndexSyncStatus
-( void )
-{
-    return Dem_Misf_ObdRecordNumberIndexSyncStatus;
-}
-
-#endif /* ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON ) */
-#endif /* ( DEM_OBDONUDS_SUPPORT == STD_ON ) */
-
-#if ( DEM_OBDFFD_SUPPORT == STD_ON )
-#if ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )
-/****************************************************************************/
-/* Function Name | Dem_Misfire_JudgeClearableObdFreezeFrame                 */
-/* Description   | judge clearable OBDFFD at clear EventStrgIndex's record. */
-/* Preconditions | none                                                     */
-/* Parameters    | [in] EventStrgIndex : event index.                       */
-/* Return Value  | TRUE  : clearable OBDFFD.                                */
-/*               | FALSE : not clearable OBDFFD.                            */
-/*               |                                                          */
-/* Notes         | at OBDonUDS :                                            */
-/*               |      No Pair EventStrgIndex :                            */
-/*               |        -> can clear OBDFFD .                             */
-/*               |      The paired Event does not have a FaultRecord.       */
-/*               |        -> can clear OBDFFD .                             */
-/*               |      The paired Event have a FaultRecord.                */
-/*               |        -> CANNOT clear OBDFFD.                           */
-/*               |                                                          */
-/*               | at OBDonEDS :                                            */
-/*               |        -> can clear OBDFFD always.                       */
-/*               |                                                          */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-9-0      | new created.                                             */
-/****************************************************************************/
-FUNC( boolean, DEM_CODE ) Dem_Misfire_JudgeClearableObdFreezeFrame
-(
-    VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex     /* MISRA DEVIATION */
-)
-{
-#if ( DEM_OBDONUDS_SUPPORT == STD_ON )  /*  [FuncSw]    */
-    VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) misfirePairEventStrgIndex;
-    VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) eventStorageNum;
-    VAR( Dem_u08_InternalReturnType, AUTOMATIC ) resultGetMisfirePairEvent;
-    VAR( Dem_u08_FaultIndexType, AUTOMATIC ) faultIndexPairEvent;
-    VAR( Dem_u08_FaultIndexType, AUTOMATIC ) failRecordNum;
-    VAR( boolean, AUTOMATIC ) misfireEventKind;
-    VAR( boolean, AUTOMATIC ) existOBDFFD;
-#endif  /* ( DEM_OBDONUDS_SUPPORT == STD_ON )               */
-
-    VAR( boolean, AUTOMATIC ) clearableOBDFFD;
-
-    clearableOBDFFD     =   (boolean)TRUE;          /*  clearable OBDFFD.   */
-
-#if ( DEM_OBDONUDS_SUPPORT == STD_ON )  /*  [FuncSw]    */
-
-    eventStorageNum = Dem_PrimaryMemEventStorageNum;
-
-    /*  check EventStrgIndex : Misfire event or not.    */
-    if ( EventStrgIndex < eventStorageNum )                                                                 /* [GUD:if]EventStrgIndex */
-    {
-        misfireEventKind    =   Dem_CfgInfoPm_CheckEventKindOfMisfire_InEvtStrgGrp( EventStrgIndex );       /* [GUD]EventStrgIndex */
-        if( misfireEventKind == (boolean)TRUE )
-        {
-            resultGetMisfirePairEvent= Dem_CfgInfoPm_GetMisfirePairEventStrgIndexByStrgIndex( EventStrgIndex, &misfirePairEventStrgIndex );     /* [GUD]EventStrgIndex */
-
-            if( resultGetMisfirePairEvent == DEM_IRT_OK )
-            {
-                /*  Get pair event's fault record index.        */
-                (void)Dem_DataMngC_GetER_FaultIndex( misfirePairEventStrgIndex, &faultIndexPairEvent );     /* no return check required */
-                failRecordNum = Dem_FailRecordNum;
-
-                if( faultIndexPairEvent < failRecordNum )
-                {
-                    /*  pair event's fault record is exist.                 */
-                    /*  check exist OBDFFD.                                 */
-                    existOBDFFD =   Dem_DataMngC_GetFR_CheckExistOBDFFD( faultIndexPairEvent );
-                    if ( existOBDFFD == (boolean)TRUE )
-                    {
-                        /*  pair event has OBDFFD. no clear OBDFFD.         */
-                        /*  ( because linked same OBD FreezeFrame between EventStrgIndex and PairEventStrgIndex.)       */
-                        clearableOBDFFD =   (boolean)FALSE;         /*  not clearable OBDFFD.   */
-                    }
-                }
-            }
-        }
-    }
-#endif  /* ( DEM_OBDONUDS_SUPPORT == STD_ON )               */
-
-    return clearableOBDFFD;
-}
-#endif  /*   ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON ) */
-#endif  /*   ( DEM_OBDFFD_SUPPORT == STD_ON )               */
-
 
 #define DEM_STOP_SEC_CODE
 #include <Dem_MemMap.h>
@@ -1080,8 +821,6 @@ FUNC( boolean, DEM_CODE ) Dem_Misfire_JudgeClearableObdFreezeFrame
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-6-0         :2024-01-29                                              */
-/*  v5-9-0         :2025-02-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

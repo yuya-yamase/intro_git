@@ -1,7 +1,7 @@
-/* Dem_BswM_Connector_c(v5-10-0)                                            */
+/* Dem_BswM_Connector_c(v5-0-0)                                             */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -81,6 +81,28 @@ FUNC( void, DEM_CODE ) Dem_BswM_RequestMode
 }
 #endif  /* DEM_TRIGGER_BSWM_REPORTS */
 
+
+#if ( DEM_TRIGGER_BSWM_REPORTS == STD_OFF )
+/****************************************************************************/
+/* Function Name | Dem_BswM_RequestMode                                     */
+/* Description   |                                                          */
+/* Preconditions | none.                                                    */
+/* Parameters    | [in] Mode :                                              */
+/*               |        Mode of Dem                                       */
+/* Return Value  | void                                                     */
+/* Notes         |                                                          */
+/****************************************************************************/
+FUNC( void, DEM_CODE ) Dem_BswM_RequestMode
+(
+    VAR( uint16, AUTOMATIC ) Mode       /* MISRA DEVIATION */
+)
+{
+    /* No process */
+    return;
+}
+#endif  /* DEM_TRIGGER_BSWM_REPORTS */
+
+
 #define DEM_STOP_SEC_CODE
 #include <Dem_MemMap.h>
 
@@ -92,7 +114,6 @@ FUNC( void, DEM_CODE ) Dem_BswM_RequestMode
 /*  v2-0-0         :2019-03-27                                              */
 /*  v4-0-0         :2020-03-19                                              */
 /*  v5-0-0         :2021-03-29                                              */
-/*  v5-10-0        :2025-06-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

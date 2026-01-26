@@ -1,7 +1,7 @@
-/* Dem_Data_Cfg_c(v5-10-0)                                                  */
+/* Dem_Data_Cfg_c(v5-5-0)                                                   */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -55,16 +55,17 @@ CONST( AB_83_ConstV Dem_DataElementClassType,DEM_CONFIG_DATA) Dem_DataElementCla
 CONST( AB_83_ConstV Dem_DidClassType                ,DEM_CONFIG_DATA )  Dem_DIDClassTable[ DEM_DID_NUM ] =
 {
     /*  DemDidIdentifier DemDidDataSize  */
+      /*  DemPidPos DemPidIdentifier  */
         /*  DemDataElementClassNum DemDataElementClassRef  */
-    {   0xA800U, 7U, 1U, {    0U  }  },
-    {   0xA002U, 6U, 1U, {    2U  }  },
-    {   0xA003U, 4U, 1U, {    1U  }  }
+    {   0xA800U, 7U, 1U, 0x00U, 1U, {    0U  }  },
+    {   0xA002U, 6U, 1U, 0x00U, 1U, {    2U  }  },
+    {   0xA003U, 4U, 1U, 0x00U, 1U, {    1U  }  }
 };
 
 CONST( AB_83_ConstV Dem_FreezeFrameClassType        ,DEM_CONFIG_DATA )  Dem_FreezeFrameClassTable[ DEM_DTC_FFR_CLASS_CONFIGURE_NUM ] =
 {
-    /*  DemFreezeFrameReadFnc DemDidClassRef DemDidClassNum DemDidClassSize  */
-    {   NULL_PTR, {   0U, 1U, 2U  }, 3U, 17U  }
+    /*  DemDidClassRef DemDidClassNum DemDidClassSize  */
+    {  {   0U, 1U, 2U  }, 3U, 17U  }
 };
 
 CONST( AB_83_ConstV Dem_DTCAttributeType            ,DEM_CONFIG_DATA )  Dem_DTCAttributeTable[ DEM_DTC_ATT_CONFIGURE_NUM + (uint16)1U ] =
@@ -81,7 +82,7 @@ CONST( AB_83_ConstV Dem_EventParameterType,DEM_CONFIG_DATA) Dem_EventParameterTa
 {
     /*  DemCallbackEventStatusChangedFnc DemCallbackInitMForEFnc  */
         /*  DemEventAttribute  */
-            /*  DemOperationCycleRef DemHealingAgingCycleRef  */
+           /*  DemOperationCycleRef DemHealingAgingCycleRef  */
     {     NULL_PTR,    NULL_PTR,    0x0200U,    0U,    0U   },   /* DemConf_DemEventParameter_DemEventDTC_U0100 */
     {     NULL_PTR,    NULL_PTR,    0x0200U,    0U,    0U   }    /* DemConf_DemEventParameter_DemEventDTC_B1500 */
 };
@@ -105,8 +106,8 @@ CONST( AB_83_ConstV Dem_FreezeFrameRecNumClassType,DEM_CONFIG_DATA )  Dem_Freeze
 
 CONST( AB_83_ConstV Dem_FreezeFrameRecordClassType,DEM_CONFIG_DATA)  Dem_FreezeFrameRecordClassTable[DEM_FFR_RECORD_CLASS_CONFIGURE_NUM] =
 {
-    /*  DemFreezeFrameRecordNumber DemFreezeFrameRecordTrigger DemFreezeFrameRecordUpdate DemFreezeFrameRecordToDcm */
-    {   1U, DEM_TRIGGER_ON_CONFIRMED, DEM_UPDATE_RECORD_NO, TRUE  }
+    /*  DemFreezeFrameRecordNumber DemFreezeFrameRecordTrigger DemFreezeFrameRecordUpdate */
+    {   1U, DEM_TRIGGER_ON_CONFIRMED, DEM_UPDATE_RECORD_NO  }
 };
 
 CONST( AB_83_ConstV Dem_u08_FFRecordClassIndexType     ,DEM_CONFIG_DATA )  Dem_FFRRecordClassConfigureNum           = DEM_FFR_RECORD_CLASS_CONFIGURE_NUM;
@@ -139,16 +140,11 @@ CONST( AB_83_ConstV Dem_u16_TSFFDIndexType             ,DEM_CONFIG_DATA )  Dem_T
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-6-0         :2024-01-29                                              */
-/*  v5-7-0         :2024-05-29                                              */
-/*  v5-8-0         :2024-10-29                                              */
-/*  v5-9-0         :2025-02-26                                              */
-/*  v5-10-0        :2025-06-26                                              */
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
 /*  Framework          :v2-1-0                                              */
-/*  BSW plug-in        :v5-10-0                                             */
+/*  BSW plug-in        :v5-5-0                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

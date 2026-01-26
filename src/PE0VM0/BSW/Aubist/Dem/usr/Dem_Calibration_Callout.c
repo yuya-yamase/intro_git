@@ -1,7 +1,7 @@
-/* Dem_Calibration_Callout_c(v5-10-0)                                       */
+/* Dem_Calibration_Callout_c(v5-5-0)                                        */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 /****************************************************************************/
 /* Object Name  | Dem/Calibration_Callout/CODE                              */
@@ -60,7 +60,6 @@
 /* Preconditions | none                                                     */
 /* Parameters    | [in] EventId  :  Event Id.                               */
 /* Return Value  | Dem_u08_FailureCounterType                               */
-/*               |        Failure cycle counter threshold.                  */
 /* Notes         |                                                          */
 /****************************************************************************/
 FUNC( Dem_u08_FailureCounterType, DEM_CODE_CALLOUT_TRUST ) Dem_Calib_GetFailureCycleCounterThreshold
@@ -78,8 +77,6 @@ FUNC( Dem_u08_FailureCounterType, DEM_CODE_CALLOUT_TRUST ) Dem_Calib_GetFailureC
 /* Preconditions | none                                                     */
 /* Parameters    | [in] EventId  :  Event Id.                               */
 /* Return Value  | boolean                                                  */
-/*               |          TRUE  : available.                              */
-/*               |          FALSE : not available.                          */
 /* Notes         |                                                          */
 /****************************************************************************/
 FUNC( boolean, DEM_CODE_CALLOUT_TRUST ) Dem_Calib_GetEventAvailable
@@ -138,8 +135,6 @@ FUNC( void, DEM_CODE_CALLOUT ) Dem_Calib_GetEventKind
 /* Preconditions | none                                                     */
 /* Parameters    | [in] EventId  :  Event Id.                               */
 /* Return Value  | boolean                                                  */
-/*               |         TRUE  : the Event has Indicator.                 */
-/*               |         FALSE : the Event don't have Indicator.          */
 /* Notes         |                                                          */
 /****************************************************************************/
 FUNC( boolean, DEM_CODE_CALLOUT ) Dem_Calib_GetIsWIRIndicator
@@ -156,8 +151,6 @@ FUNC( boolean, DEM_CODE_CALLOUT ) Dem_Calib_GetIsWIRIndicator
 /* Preconditions | none                                                     */
 /* Parameters    | [in] EventId  :  Event Id.                               */
 /* Return Value  | boolean                                                  */
-/*               |         TRUE  : the Event has active fault status.       */
-/*               |         FALSE : the Event don't have active fault status.*/
 /* Notes         |                                                          */
 /****************************************************************************/
 FUNC( boolean, DEM_CODE_CALLOUT ) Dem_Calib_GetIsActiveFault
@@ -168,18 +161,14 @@ FUNC( boolean, DEM_CODE_CALLOUT ) Dem_Calib_GetIsActiveFault
     return (boolean)FALSE;
 }
 
-#if ( DEM_EVENTPRIORITY_CALLOUT_SUPPORT == STD_ON )
+#if ( DEM_OBD_SUPPORT == STD_ON )
 /****************************************************************************/
 /* Function Name | Dem_Calib_GetEventPriority                               */
 /* Description   | get calibration data.                                    */
 /* Preconditions | none                                                     */
 /* Parameters    | [in] EventId  :  Event Id.                               */
 /* Return Value  | Dem_u08_EventPriorityType                                */
-/*               |        event priority.                                   */
 /* Notes         |                                                          */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-8-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_EventPriorityType, DEM_CODE_CALLOUT ) Dem_Calib_GetEventPriority
 (
@@ -188,7 +177,26 @@ FUNC( Dem_u08_EventPriorityType, DEM_CODE_CALLOUT ) Dem_Calib_GetEventPriority
 {
     return DEM_PRIORITY_NONOBD_DEFAULT;
 }
-#endif  /* ( DEM_EVENTPRIORITY_CALLOUT_SUPPORT == STD_ON )                */
+#endif  /* ( DEM_OBD_SUPPORT == STD_ON )                */
+#if ( DEM_OBD_SUPPORT == STD_OFF )
+#if ( DEM_EVENT_DISPLACEMENT_CALLOUT_SUPPORT == STD_ON )
+/****************************************************************************/
+/* Function Name | Dem_Calib_GetEventPriority                               */
+/* Description   | get calibration data.                                    */
+/* Preconditions | none                                                     */
+/* Parameters    | [in] EventId  :  Event Id.                               */
+/* Return Value  | Dem_u08_EventPriorityType                                */
+/* Notes         |                                                          */
+/****************************************************************************/
+FUNC( Dem_u08_EventPriorityType, DEM_CODE_CALLOUT ) Dem_Calib_GetEventPriority
+(
+    VAR( Dem_EventIdType, AUTOMATIC ) EventId
+)
+{
+    return DEM_PRIORITY_NONOBD_DEFAULT;
+}
+#endif  /* ( DEM_EVENT_DISPLACEMENT_CALLOUT_SUPPORT == STD_ON ) */
+#endif  /* ( DEM_OBD_SUPPORT == STD_OFF )               */
 
 #if ( DEM_INDICATOR_USE == STD_ON )
 /****************************************************************************/
@@ -197,7 +205,6 @@ FUNC( Dem_u08_EventPriorityType, DEM_CODE_CALLOUT ) Dem_Calib_GetEventPriority
 /* Preconditions | none                                                     */
 /* Parameters    | [in] EventId  :  Event Id.                               */
 /* Return Value  | Dem_u08_HealingCounterType                               */
-/*               |        Healing cycle counter threshold.                  */
 /* Notes         |                                                          */
 /****************************************************************************/
 FUNC( Dem_u08_HealingCounterType, DEM_CODE_CALLOUT ) Dem_Calib_GetHealingCycleCounterThreshold
@@ -252,7 +259,7 @@ FUNC( Dem_u08_AgingCounterType, DEM_CODE_CALLOUT ) Dem_Calib_GetAgingCycleCounte
 /* Parameters    | none                                                     */
 /* Return Value  | Dem_u16_WWHOBDTimeAgingCounterType                       */
 /*               |        Time aging counter threshold.                     */
-/* Notes         | LSB : 1minutes.                                          */
+/* Notes         |                                                          */
 /****************************************************************************/
 FUNC( Dem_u16_WWHOBDTimeAgingCounterType, DEM_CODE_CALLOUT ) Dem_Calib_GetTimeAgingCounterThreshold
 ( void )
@@ -289,7 +296,6 @@ FUNC( void, DEM_CODE_CALLOUT ) Dem_Calib_GetB1CounterThresholdAndHold
 /* Preconditions | none                                                     */
 /* Parameters    | [in] EventId  :  Event Id.                               */
 /* Return Value  | Dem_u32_DTCValueType                                     */
-/*               |          UDS DTC.                                        */
 /* Notes         |                                                          */
 /****************************************************************************/
 FUNC( Dem_u32_DTCValueType, DEM_CODE_CALLOUT ) Dem_Calib_GetUdsDTCValue
@@ -311,7 +317,6 @@ FUNC( Dem_u32_DTCValueType, DEM_CODE_CALLOUT ) Dem_Calib_GetUdsDTCValue
 /* Preconditions | none                                                     */
 /* Parameters    | [in] EventId  :  Event Id.                               */
 /* Return Value  | Dem_u16_ObdDTCValueType                                  */
-/*               |          OBD DTC.                                        */
 /* Notes         |                                                          */
 /****************************************************************************/
 FUNC( Dem_u16_ObdDTCValueType, DEM_CODE_CALLOUT ) Dem_Calib_GetObdDTCValue
@@ -334,10 +339,6 @@ FUNC( Dem_u16_ObdDTCValueType, DEM_CODE_CALLOUT ) Dem_Calib_GetObdDTCValue
 /* Preconditions | none                                                     */
 /* Parameters    | [in] EventId  :  Event Id.                               */
 /* Return Value  | boolean                                                  */
-/*               |         TRUE  : monitors subject to minimum              */
-/*               |                 in-use ratio requirement.                */
-/*               |         FALSE : monitors not subject to minimum          */
-/*               |                 in-use ratio requirement.                */
 /* Notes         |                                                          */
 /****************************************************************************/
 FUNC( boolean, DEM_CODE_CALLOUT ) Dem_Calib_GetPFCClearPattern
@@ -356,8 +357,6 @@ FUNC( boolean, DEM_CODE_CALLOUT ) Dem_Calib_GetPFCClearPattern
 /* Preconditions | none                                                     */
 /* Parameters    | [in] EventId  :  Event Id.                               */
 /* Return Value  | boolean                                                  */
-/*               |         TRUE  : output necessary.                        */
-/*               |         FALSE : output not necessary.                    */
 /* Notes         |                                                          */
 /****************************************************************************/
 FUNC( boolean, DEM_CODE_CALLOUT ) Dem_Calib_GetIUMPROutputNecessary
@@ -376,7 +375,6 @@ FUNC( boolean, DEM_CODE_CALLOUT ) Dem_Calib_GetIUMPROutputNecessary
 /* Preconditions | none                                                     */
 /* Parameters    | [in] EventId  :  Event Id.                               */
 /* Return Value  | Dem_u08_SimilarPendingClearCounterType                   */
-/*               |          pending clear counter threshold.                */
 /* Notes         |                                                          */
 /****************************************************************************/
 FUNC( Dem_u08_SimilarPendingClearCounterType, DEM_CODE_CALLOUT ) Dem_Calib_GetSimilarPendingClearCounterThreshold
@@ -396,7 +394,6 @@ FUNC( Dem_u08_SimilarPendingClearCounterType, DEM_CODE_CALLOUT ) Dem_Calib_GetSi
 /* Parameters    | [in] ReadinessGroupId  :                                 */
 /*               |        Readiness Group Id.                               */
 /* Return Value  | uint16                                                   */
-/*               |          number of event ids in readiness group.         */
 /* Notes         |                                                          */
 /****************************************************************************/
 FUNC( uint16, DEM_CODE_CALLOUT ) Dem_Calib_GetEventNumberOfReadinessGroup
@@ -417,7 +414,6 @@ FUNC( uint16, DEM_CODE_CALLOUT ) Dem_Calib_GetEventNumberOfReadinessGroup
 /*               |        Specifies the order from the beginning in the sp- */
 /*               |        ecified readiness group.                          */
 /* Return Value  | Dem_EventIdType                                          */
-/*               |          event id.                                       */
 /* Notes         |                                                          */
 /****************************************************************************/
 FUNC( Dem_EventIdType, DEM_CODE_CALLOUT ) Dem_Calib_GetEventIdOfReadinessGroup
@@ -438,7 +434,6 @@ FUNC( Dem_EventIdType, DEM_CODE_CALLOUT ) Dem_Calib_GetEventIdOfReadinessGroup
 /* Parameters    | [in] DTCValue  :                                         */
 /*               |        DTCValue.                                         */
 /* Return Value  | uint16                                                   */
-/*               |          number of event ids that have same DTCs.        */
 /* Notes         |                                                          */
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
@@ -459,7 +454,6 @@ FUNC( uint16, DEM_CODE ) Dem_Calib_GetEventNumberOfSameDTC
 /* Parameters    | [in] EventId  :                                          */
 /*               |        EventId.                                          */
 /* Return Value  | Dem_EventIdType                                          */
-/*               |          event id.                                       */
 /* Notes         |                                                          */
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
@@ -505,8 +499,6 @@ FUNC( boolean, DEM_CODE ) Dem_Calib_CheckDelegateEventIdOfSameDTC
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-8-0         :2024-10-29                                              */
-/*  v5-10-0        :2025-06-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

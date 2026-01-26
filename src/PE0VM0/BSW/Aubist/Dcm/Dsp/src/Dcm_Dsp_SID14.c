@@ -1,7 +1,7 @@
-/* Dcm_Dsp_SID14_c(v5-8-0)                                                  */
+/* Dcm_Dsp_SID14_c(v5-3-0)                                                  */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -183,45 +183,6 @@ FUNC(void, DCM_CODE) Dcm_Dsp_SID14_Cbk                   /* MISRA DEVIATION */
 
 
 /****************************************************************************/
-/* Function Name | Dcm_Dsp_SID14_ClearCheckCbk                              */
-/* Description   | Call Back Function to Continue SID14 Condition Check     */
-/*               | Processing                                               */
-/* Preconditions | None                                                     */
-/* Parameters    | [IN] u1EventId : Event ID                                */
-/* Return Value  | None                                                     */
-/* Notes         | None                                                     */
-/****************************************************************************/
-FUNC(void, DCM_CODE) Dcm_Dsp_SID14_ClearCheckCbk         /* MISRA DEVIATION */
-(
-    const uint8 u1EventId                                /* MISRA DEVIATION */
-)
-{
-    Dcm_NegativeResponseCodeType    u1_NegResCode;
-    Std_ReturnType                  u1_RetSwc;
-
-    u1_NegResCode = DCM_E_GENERALREJECT;
-    Dcm_Dsp_Main_SetUserNotifyFlag( (boolean)FALSE );
-
-    u1_RetSwc = Dcm_Dsp_SID14_CheckSWC( DCM_PENDING, Dcm_Dsp_SID14_u4GroupOfDTC, &u1_NegResCode );
-    if( u1_RetSwc == (Std_ReturnType)E_OK )
-    {
-        (void)Dcm_Dsp_SID14_ClearDTC();
-    }
-    else if( u1_RetSwc == (Std_ReturnType)DCM_E_PENDING )
-    {
-        Dcm_Dsp_Main_SetUserNotifyFlag( (boolean)TRUE );
-        (void)Dcm_Main_EvtDistr_SendEvent( DCM_M_EVTID_SID14_CLEARCHK ); /* no return check required */
-    }
-    else
-    {
-        Dcm_Dsp_MsgMaker_SendNegRes( &Dcm_Dsp_Main_stMsgContext, u1_NegResCode );
-    }
-
-    return ;
-}
-
-
-/****************************************************************************/
 /* Internal Functions                                                       */
 /****************************************************************************/
 
@@ -261,7 +222,6 @@ static FUNC(Std_ReturnType, DCM_CODE) Dcm_Dsp_SID14_InitialProc
     Dcm_Dsp_Main_stMsgContext = *ptMsgContext;
     Dcm_Dsp_SID14_u4GroupOfDTC = (uint32)0U;
     Dcm_Dsp_SID14_u2DTCOrigin = (uint16)DEM_DTC_ORIGIN_PRIMARY_MEMORY;
-    Dcm_Dsp_Main_SetUserNotifyFlag( (boolean)FALSE );
 
     if(( ptMsgContext->reqDataLen == (Dcm_MsgLenType)DCM_DSP_SID14_ReqDataLength ) ||
        ( ptMsgContext->reqDataLen == (Dcm_MsgLenType)DCM_DSP_SID14_REQ_DATA_AND_MEMSEL_LEN ))
@@ -343,7 +303,6 @@ static FUNC(Std_ReturnType, DCM_CODE) Dcm_Dsp_SID14_InitialProc
     Dcm_Dsp_Main_stMsgContext = *ptMsgContext;
     Dcm_Dsp_SID14_u4GroupOfDTC = (uint32)0U;
     Dcm_Dsp_SID14_u2DTCOrigin = (uint16)DEM_DTC_ORIGIN_PRIMARY_MEMORY;
-    Dcm_Dsp_Main_SetUserNotifyFlag( (boolean)FALSE );
 
     if( ptMsgContext->reqDataLen == (Dcm_MsgLenType)DCM_DSP_SID14_ReqDataLength )
     {
@@ -407,25 +366,10 @@ static FUNC(void, DCM_CODE) Dcm_Dsp_SID14_CancelProc
     void
 )
 {
-    Dcm_NegativeResponseCodeType    u1_NegResCode;
-    boolean                         b_UserNotifyFlag;
 
-    u1_NegResCode = DCM_E_GENERALREJECT;
-
-    b_UserNotifyFlag = Dcm_Dsp_Main_GetUserNotifyFlag();
-    if( b_UserNotifyFlag == (boolean)TRUE )
-    {
-        /* Cancel CheckSWC */
-        (void)Dcm_Dsp_SID14_CheckSWC( DCM_CANCEL, Dcm_Dsp_SID14_u4GroupOfDTC, &u1_NegResCode );     /* no return check required */
-        (void)Dcm_Main_EvtDistr_DeleteEvent( DCM_M_EVTID_SID14_CLEARCHK, (boolean)FALSE );          /* no return check required */
-        Dcm_Dsp_Main_SetUserNotifyFlag( (boolean)FALSE );
-    }
-    else
-    {
-        /* Cancel Clear DTC */
-        (void)Dem_DcmClearDTC( DEM_DTC_CANCEL_CLEAR_DTC, DEM_DTC_FORMAT_UDS, (Dem_DTCOriginType)Dcm_Dsp_SID14_u2DTCOrigin );    /* no return check required */
-        (void)Dcm_Main_EvtDistr_DeleteEvent( DCM_M_EVTID_SID14_CLEARDTC, (boolean)FALSE );                                      /* no return check required */
-    }
+    /* Cancel Clear DTC */
+    (void)Dem_DcmClearDTC( DEM_DTC_CANCEL_CLEAR_DTC, DEM_DTC_FORMAT_UDS, (Dem_DTCOriginType)Dcm_Dsp_SID14_u2DTCOrigin );    /* no return check required */
+    (void)Dcm_Main_EvtDistr_DeleteEvent( DCM_M_EVTID_SID14_CLEARDTC, (boolean)FALSE );                                      /* no return check required */
 
     /* Set Dcm_Dsp_Main_bIdleFlag in TRUE                                   */
     Dcm_Dsp_Main_SetIdleFlag( (boolean)TRUE );
@@ -498,7 +442,6 @@ static FUNC(Std_ReturnType, DCM_CODE) Dcm_Dsp_SID14_ClearDTC
 /* Return Value  | Std_ReturnType                                           */
 /*               |   E_OK              : Check OK                           */
 /*               |   E_NOT_OK          : Check NG                           */
-/*               |   DCM_E_PENDING     : Pending                            */
 /* Notes         | None                                                     */
 /****************************************************************************/
 static FUNC(Std_ReturnType, DCM_CODE) Dcm_Dsp_SID14_CheckClearDTC
@@ -518,16 +461,10 @@ static FUNC(Std_ReturnType, DCM_CODE) Dcm_Dsp_SID14_CheckClearDTC
     switch( u1_RetChkClear )
     {
         case DEM_CLEAR_OK:
-            u1_RetSwc = Dcm_Dsp_SID14_CheckSWC( DCM_INITIAL, Dcm_Dsp_SID14_u4GroupOfDTC, ptErrorCode );
+            u1_RetSwc = Dcm_Dsp_SID14_CheckSWC( Dcm_Dsp_SID14_u4GroupOfDTC, ptErrorCode );
             if( u1_RetSwc == (Std_ReturnType)E_OK )
             {
                 u1_RetVal = E_OK;
-            }
-            else if( u1_RetSwc == (Std_ReturnType)DCM_E_PENDING )
-            {
-                Dcm_Dsp_Main_SetUserNotifyFlag( (boolean)TRUE );
-                (void)Dcm_Main_EvtDistr_SendEvent( DCM_M_EVTID_SID14_CLEARCHK );    /* no return check required */
-                u1_RetVal = DCM_E_PENDING;
             }
             else
             {
@@ -610,7 +547,6 @@ static FUNC(void, DCM_CODE) Dcm_Dsp_SID14_SetGroupOfDTC
 /*  v4-0-0         :2020-12-23                                              */
 /*  v5-0-0         :2022-03-29                                              */
 /*  v5-3-0         :2023-03-29                                              */
-/*  v5-8-0         :2024-10-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

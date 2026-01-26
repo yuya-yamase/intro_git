@@ -1,7 +1,7 @@
-/* Dem_Control_c(v5-6-0)                                                    */
+/* Dem_Control_c(v5-5-0)                                                    */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -29,11 +29,16 @@
 #include "../../../inc/Dem_Pm_DTC_PFC.h"
 #include "../../../inc/Dem_Pm_StoredData.h"
 #include "../../../inc/Dem_Pm_Ind.h"
+#include "../../../inc/Dem_Pm_Ind_MI.h"
 #include "../../../inc/Dem_Pm_PID.h"
+#include "../../../inc/Dem_Pm_DTR.h"
 #include "../../../inc/Dem_Pm_IUMPR.h"
 #include "../../../inc/Dem_Pm_MonSts.h"
+#include "../../../inc/Dem_Pm_PreFFD.h"
 #include "../../../inc/Dem_Pm_Misfire.h"
+#include "../../../inc/Dem_Pm_Similar.h"
 #include "../../../inc/Dem_Pm_OccrDTC.h"
+#include "../../../inc/Dem_Pm_AltIUMPR.h"
 #include "../../../inc/Dem_Rc_ClrInfoMng.h"
 #include "../../../inc/Dem_Udm_Control.h"
 
@@ -57,7 +62,6 @@ typedef uint8        Dem_u08_CtlInitProcessType;                /*  Control Init
 /*--------------------------------------------------------------------------*/
 #define DEM_START_SEC_CODE
 #include <Dem_MemMap.h>
-
 
 #define DEM_STOP_SEC_CODE
 #include <Dem_MemMap.h>
@@ -147,15 +151,67 @@ FUNC( void, DEM_CODE ) Dem_Control_Init
     initStatus = Dem_CtlInitStatus;
     if( initStatus == DEM_CTL_STS_INIT_PREINIT_COMPLETE )
     {
-        /*==============================================================*/
-        /*  Initialize sub-modules :                                    */
-        /*       at Dem_Init.                                           */
-        /*--------------------------------------------------------------*/
-        /*  this function is under next conditions.                     */
-        /*   - BEFORE  record check completed.                          */
-        /*   - BEFORE  generate of fault order lists.                   */
-        /*==============================================================*/
-        Dem_Control_Init_DemInit();
+        /* Internal variable initialization */
+        Dem_Control_InitAsyncReq();
+        Dem_Control_Clear_ClearDTCInfo();
+        Dem_Control_InitDTCSettingStatus();
+        Dem_Control_InitDTCRecordUpdateInfo();
+        Dem_Control_InitDTCStoredDataStatus();
+        Dem_Control_InitInfoForOpCycleStart();
+
+#if ( DEM_PID_CALC_DEMINTERNALPID_SUPPORT == STD_ON )    /*  [FuncSw]    */
+        Dem_Control_InitPIDInfo();
+#endif  /* ( DEM_PID_CALC_DEMINTERNALPID_SUPPORT == STD_ON ) */
+
+#if ( DEM_IUMPR_SUPPORT == STD_ON ) /*  [FuncSw]    */
+        Dem_Control_InitIUMPRInfo();
+#endif  /*   ( DEM_IUMPR_SUPPORT == STD_ON )    */
+
+#if ( DEM_WWH_OBD_SUPPORT == STD_ON )    /*  [FuncSw]    */
+        Dem_Control_InitIndMI();
+#endif  /* ( DEM_WWH_OBD_SUPPORT == STD_ON ) */
+
+        /* Initialization of each unit */
+        Dem_Event_InitQualification();
+        Dem_DataCtl_Init();
+
+#if ( DEM_PFC_SUPPORT == STD_ON )   /*  [FuncSw]    */
+        Dem_DTC_InitForPFC();
+#endif  /* ( DEM_PFC_SUPPORT == STD_ON )            */
+
+#if ( DEM_PID_SUPPORT == STD_ON )   /*  [FuncSw]    */
+        Dem_PID_Init();
+#endif  /*   ( DEM_PID_SUPPORT == STD_ON )          */
+
+#if ( DEM_TSFF_SUPPORT == STD_ON )  /*  [FuncSw]    */
+        Dem_TSFFD_Init();
+#endif  /*   ( DEM_TSFF_SUPPORT == STD_ON )         */
+
+        Dem_StoredData_Init();
+
+#if ( DEM_DTC_OCCURRENCE_TIME_SUPPORT == STD_ON )   /*  [FuncSw]    */
+        Dem_OccrDTC_Init();
+#endif  /* ( DEM_DTC_OCCURRENCE_TIME_SUPPORT == STD_ON )            */
+
+#if ( DEM_TRIGGER_FIM_REPORTS == STD_ON )   /*  [FuncSw]    */
+        Dem_MonSts_Init();
+#endif  /*   ( DEM_TRIGGER_FIM_REPORTS == STD_ON )  */
+
+#if ( DEM_IUMPR_SUPPORT == STD_ON ) /*  [FuncSw]    */
+        Dem_IUMPR_Init();
+#endif  /*   ( DEM_IUMPR_SUPPORT == STD_ON )    */
+
+#if ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON )  /*  [FuncSw]    */
+        Dem_Misfire_Init();
+#endif  /*   ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON )         */
+
+#if ( DEM_USERDEFINEDMEMORY_SUPPORT == STD_ON ) /*  [FuncSw]    */
+        Dem_UdmControl_Init();
+#endif  /* ( DEM_USERDEFINEDMEMORY_SUPPORT == STD_ON )      */
+
+#if ( DEM_CHECK_4000RPMOCCURRED_BY_EMISSION_SUPPORT == STD_ON ) /*  [FuncSw]    */
+        Dem_OpCycle_ClearProgressEngine1000RPM();
+#endif  /* ( DEM_USERDEFINEDMEMORY_SUPPORT == STD_ON )                          */
 
         Dem_CtlInitProcess  =   DEM_CTL_INIT_PROCESS_NONE;
         Dem_CtlInitStatus   =   DEM_CTL_STS_INIT_INITIALIZING;
@@ -216,12 +272,8 @@ FUNC( void, DEM_CODE ) Dem_Control_Shutdown
 /*               |        DEM_IRT_NG : init failed                          */
 /* Notes         |                                                          */
 /*--------------------------------------------------------------------------*/
-/* UpdateRecord  | [UpdRec]IUMPR    :   NotifySavedZone                     */
-/* UpdateRecord  | [UpdRec]AltIUMPR :   NotifySavedZone                     */
-/*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
-/*   v5-6-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_InitProcess
 ( void )
@@ -246,65 +298,69 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_InitProcess
             /*--------------------------------------*/
             /*  notify SAVED_ZONE update - start.   */
             Dem_NotifySavedZoneUpdate_Enter();      /*  notify start :  savedzone area will be update.  */
-#if ( DEM_IUMPR_SUPPORT == STD_ON ) /*  [FuncSw]    */
-            Dem_NotifySavedZoneIUMPRUpdate_Enter(); /*  notify start :  IUMPR/AltIUMPR savedzone area will be update.  */
-#endif  /* ( DEM_IUMPR_SUPPORT == STD_ON )          */
             /*--------------------------------------*/
 
-            /*==============================================================*/
-            /*  Initialize sub-modules :                                    */
-            /*       after record check complete.                           */
-            /*--------------------------------------------------------------*/
-            /*  this function is under next conditions.                     */
-            /*   - AFTER  record check completed.                           */
-            /*   - BEFORE generate of fault order lists.                    */
-            /*==============================================================*/
-            Dem_Control_Init_AfterRecordCheckComplete();
+            Dem_Data_SetNumOfFaultAndFFD();
 
-            /*----------------------------------------------------------*/
-            /*  OperationCycle auto restart                             */
-            /*----------------------------------------------------------*/
+            /* Call Init of DataCtl after consistency check is finished */
+            Dem_DataCtl_Init_AfterRecordCheckComplete();
+
+#if ( DEM_TSFF_SUPPORT == STD_ON )    /* [FuncSw] */
+            /* Initializes time-series freeze frame related  memory. */
+            Dem_Data_InitTSFFD_AfterRecordCheckComplete();
+#endif  /*  ( DEM_TSFF_SUPPORT == STD_ON )  */
+
+#if ( DEM_DTR_SUPPORT == STD_ON )   /*  [FuncSw]    */
+            Dem_DTR_Init_AfterRecordCheckComplete();
+#endif  /* ( DEM_DTR_SUPPORT == STD_ON )    */
+
+#if ( DEM_USERDEFINEDMEMORY_SUPPORT == STD_ON ) /*  [FuncSw]    */
+            Dem_UdmControl_Init_AfterRecordCheckComplete();
+#endif  /*   ( DEM_USERDEFINEDMEMORY_SUPPORT == STD_ON )        */
+
+            /*----------------------------------------------*/
+            /*  OperationCycle auto restart     */
             igCycleUpdated              =   (boolean)FALSE;
             drivingCycleQualified       =   (boolean)FALSE;
             warmupCycleQualified        =   (boolean)FALSE;
-            Dem_Control_RestartOpCycleInitProcess( &igCycleUpdated, &drivingCycleQualified, &warmupCycleQualified );    /* [UpdRec]AltIUMPR *//* [UpdRec]more */
+            Dem_Control_RestartOpCycleInitProcess( &igCycleUpdated, &drivingCycleQualified, &warmupCycleQualified );
 
-            /*----------------------------------------------------------*/
-            /*  generate fault order lists.                             */
-            /*----------------------------------------------------------*/
-            Dem_Control_Init_GenFaultOrderLists();
+            /*  generate order list.              */
+            Dem_Data_GenerateFaultOrderList();
 
-            /*==============================================================*/
-            /*  Initialize sub-modules :                                    */
-            /*      after fault orderlist generate complete                 */
-            /*      and before execute exit job of operation cycle restart  */
-            /*--------------------------------------------------------------*/
-            /*  this function is under next conditions.                     */
-            /*   - AFTER generate of fault order lists.                     */
-            /*   - BEFORE exec exit job of operation cycle restart.         */
-            /*==============================================================*/
-            Dem_Control_Init_AfterOrderListGenAndNoExecEndJobOfOpCycRestart();
+#if ( DEM_ORDERTYPE_CONFIRMED_USE == STD_ON )   /* [FuncSw] */
+            Dem_Data_GenerateConfirmedFaultOrderList();
+#endif  /*   ( DEM_ORDERTYPE_CONFIRMED_USE == STD_ON )      */
 
-            /*----------------------------------------------------------*/
-            /*  OperationCycle auto restart : exec end job.             */
-            /*----------------------------------------------------------*/
-            Dem_Control_RestartOpCycleInitEndProcess( igCycleUpdated, drivingCycleQualified, warmupCycleQualified );    /* [UpdRec]IUMPR *//* [UpdRec]AltIUMPR */
+#if ( DEM_PFC_ORDER_MIL_SUPPORT == STD_ON ) /*  [FuncSw]    */
+            Dem_Data_GenerateMILFaultOrderList();
+#endif  /*   ( DEM_PFC_ORDER_MIL_SUPPORT == STD_ON )        */
 
-            /*==============================================================*/
-            /*  Initialize sub-modules :                                    */
-            /*      after fault orderlist generate complete                 */
-            /*--------------------------------------------------------------*/
-            /*  this function is under next conditions.                     */
-            /*   - AFTER generate of fault order lists.                     */
-            /*   - AFTER exec exit job of operation cycle restart.          */
-            /*==============================================================*/
-            Dem_Control_Init_AfterOrderListGenerateComplete();
+            Dem_Data_ClearSearchFFDIndex();
+
+#if ( DEM_USERDEFINEDMEMORY_SUPPORT == STD_ON ) /*  [FuncSw]    */
+            Dem_UdmControl_GenerateRecordInfo();
+#endif  /*   ( DEM_USERDEFINEDMEMORY_SUPPORT == STD_ON )        */
+
+#if ( DEM_WWH_OBD_SUPPORT == STD_ON ) /* [FuncSw] */
+            /* In  [OperationCycle auto restart : exec end job], exec B1Record Update. */
+            /* follow the order, Generate IndMIIndexList -> B1Record Update. */
+            Dem_IndMI_Init_AfterOrderListGenerateComplete();
+#endif /* ( DEM_WWH_OBD_SUPPORT == STD_ON ) */
+
+            /*  OperationCycle auto restart : exec end job.    */
+            Dem_Control_RestartOpCycleInitEndProcess( igCycleUpdated, drivingCycleQualified, warmupCycleQualified );
+
+#if ( DEM_PID_CALC_DEMINTERNALPID_SUPPORT == STD_ON )    /*  [FuncSw]    */
+            Dem_PID_ConfirmedDTCClear();
+#endif  /* ( DEM_PID_CALC_DEMINTERNALPID_SUPPORT == STD_ON )             */
+
+#if ( DEM_DTC_OCCURRENCE_TIME_SUPPORT == STD_ON )    /*  [FuncSw]    */
+            Dem_OccrDTC_Init_AfterOrderListGenerateComplete();
+#endif  /* ( DEM_DTC_OCCURRENCE_TIME_SUPPORT == STD_ON )             */
 
             /*--------------------------------------*/
             /*  notify SAVED_ZONE update - end.     */
-#if ( DEM_IUMPR_SUPPORT == STD_ON ) /*  [FuncSw]    */
-            Dem_NotifySavedZoneIUMPRUpdate_Exit();  /*  notify end :  IUMPR/AltIUMPR savedzone area will be update.  */
-#endif  /* ( DEM_IUMPR_SUPPORT == STD_ON )          */
             Dem_NotifySavedZoneUpdate_Exit();       /*  notify end :  savedzone area will be update.    */
             /*--------------------------------------*/
 
@@ -566,6 +622,8 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_ChkInitStatus
     return retVal;
 }
 
+
+
 /*--------------------------------------------------------------------------*/
 /* Empty functions for function switching.                                  */
 /*--------------------------------------------------------------------------*/
@@ -585,7 +643,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_ChkInitStatus
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-6-0         :2024-01-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

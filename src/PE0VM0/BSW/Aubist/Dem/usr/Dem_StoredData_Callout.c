@@ -1,7 +1,7 @@
-/* Dem_StoreData_Callout_c(v5-10-0)                                         */
+/* Dem_StoreData_Callout_c(v5-3-0)                                          */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 /****************************************************************************/
 /* Object Name  | Dem/StoredData_Callout/CODE                               */
@@ -117,7 +117,9 @@ FUNC( void, DEM_CODE_CALLOUT ) Dem_NotifyEndServiceOfDTCStoredData
 /*               |        DEM_GETSIZE_STOREDDATA_PENDING : Acquiring size   */
 /*               |        DEM_GETSIZE_STOREDDATA_WRONG_RECNUM : Invalid re- */
 /*               |        cord number                                       */
-/* Notes         | -                                                        */
+/* Notes         | At the caller, the value of SizeOfStoredDataPtr is       */
+/*               | guaranteed.                                              */
+/*               | Caller:Dem_StoredData_GetSizeOfDTCStoredDataByRecNum     */
 /****************************************************************************/
 FUNC( Dem_ReturnGetSizeOfDataByRecNumType, DEM_CODE_CALLOUT ) Dem_GetSizeOfDTCStoredDataByRecordNumber
 (
@@ -174,7 +176,9 @@ FUNC( Dem_ReturnGetSizeOfDataByRecNumType, DEM_CODE_CALLOUT ) Dem_GetSizeOfDTCSt
 /*               |         number                                           */
 /*               |        DEM_GET_STOREDDATA_WRONG_BUFFERSIZE : The buffer- */
 /*               |         size is smaller than the actual data             */
-/* Notes         | -                                                        */
+/* Notes         | At the caller, the value of DestBufferPtr and BufSizePtr */
+/*               | are guaranteed.                                          */
+/*               | Caller:Dem_StoredData_GetDTCStoredDataByRecNum           */
 /****************************************************************************/
 FUNC( Dem_ReturnGetDTCStoredDataByRecNumType, DEM_CODE_CALLOUT ) Dem_GetDTCStoredDataByRecordNumber
 (
@@ -216,7 +220,6 @@ FUNC( Dem_ReturnGetDTCStoredDataByRecNumType, DEM_CODE_CALLOUT ) Dem_GetDTCStore
 /*  v4-0-0         :2020-03-19                                              */
 /*  v5-0-0         :2022-03-29                                              */
 /*  v5-3-0         :2023-03-29                                              */
-/*  v5-10-0        :2025-06-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

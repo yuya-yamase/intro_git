@@ -1,7 +1,7 @@
-/* Dem_DataCtl_EventEntry_c(v5-10-0)                                        */
+/* Dem_DataCtl_EventeEntry_c(v5-5-0)                                        */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -255,8 +255,6 @@ FUNC( boolean, DEM_CODE ) Dem_Data_CheckTSFFDeleteByFFROverwritten
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
-/*   v5-10-0     | branch changed.                                          */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_CheckStorePredictiveFFDOfTmp
 (
@@ -271,10 +269,10 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_CheckStorePredictiveFFDOfT
     VAR( Dem_u08_FFListIndexType, AUTOMATIC ) nonOBDFFRClassPerDTCMaxNum;
     VAR( Dem_u08_FFRecordClassIndexType, AUTOMATIC ) ffrRecordClassConfigureNum;
     VAR( Dem_u08_FFDIndexType, AUTOMATIC ) nonObdFFDRecordNum;
-    VAR( Dem_u08_StorageTriggerType, AUTOMATIC ) freezeFrameRecordTrigger;
     P2VAR( Dem_FaultRecordType, AUTOMATIC, DEM_VAR_NO_INIT ) faultRecordPtr;
 
     P2CONST( AB_83_ConstV Dem_FreezeFrameRecNumClassType, AUTOMATIC, DEM_CONFIG_DATA ) freezeFrameRecNumClassPtr;
+    P2CONST( AB_83_ConstV Dem_FreezeFrameRecordClassType, AUTOMATIC, DEM_CONFIG_DATA ) freezeFrameRecordClassPtr;
 
     faultRecordPtr = &Dem_TmpEventMemoryEntry.FaultRecord;
     nonObdFFDRecordNum = Dem_NonObdFFDRecordNum;
@@ -297,15 +295,15 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_CheckStorePredictiveFFDOfT
             freezeFrameRecNumClassPtr = &Dem_FreezeFrameRecNumClassTable[ freezeframeRecNumClassRef ];                  /* [GUD] freezeframeRecNumClassRef */
             for( freezeFrameRecordClassRefIndex = (Dem_u08_FFListIndexType)0U; freezeFrameRecordClassRefIndex < nonOBDFFRClassPerDTCMaxNum; freezeFrameRecordClassRefIndex++ )  /* [GUD:for] freezeFrameRecordClassRefIndex */
             {
-                if( faultRecordPtr->RecordNumberIndex[freezeFrameRecordClassRefIndex] < nonObdFFDRecordNum )                                            /* [GUD] freezeFrameRecordClassRefIndex *//* [ARYCHK] DEM_NONOBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / freezeFrameRecordClassRefIndex */
+                if( faultRecordPtr->RecordNumberIndex[freezeFrameRecordClassRefIndex] < nonObdFFDRecordNum )                                            /* [GUD] freezeFrameRecordClassRefIndex */
                 {
                     /* Holds the DemFreezeFrameRecordIndex pointed to */
                     /* by the DemFreezeFrameRecordClassRef Index of the held FreezeFrameRecNumClass table. */
-                    freezeFrameRecordClassIndex = freezeFrameRecNumClassPtr->DemFreezeFrameRecordClassRef[freezeFrameRecordClassRefIndex];              /* [GUD] freezeFrameRecordClassRefIndex *//* [ARYCHK] DEM_FF_RECORD_CLASS_REF_MAX_NUM / 1 / freezeFrameRecordClassRefIndex */
+                    freezeFrameRecordClassIndex = freezeFrameRecNumClassPtr->DemFreezeFrameRecordClassRef[freezeFrameRecordClassRefIndex];              /* [GUD] freezeFrameRecordClassRefIndex */
                     if( freezeFrameRecordClassIndex < ffrRecordClassConfigureNum )                                                                      /* [GUD:if] freezeFrameRecordClassIndex */
                     {
-                        freezeFrameRecordTrigger    =   Dem_CfgInfoPm_GetFreezeFrameRecordTriggerType( freezeFrameRecordClassIndex );                   /* [GUD] freezeFrameRecordClassIndex */
-                        if( freezeFrameRecordTrigger == DEM_TRIGGER_ON_FDC_THRESHOLD )
+                        freezeFrameRecordClassPtr = &Dem_FreezeFrameRecordClassTable[freezeFrameRecordClassIndex];                                      /* [GUD] freezeFrameRecordClassIndex *//* [GUD:CFG:IF_GUARDED: freezeFrameRecordClassIndex ]freezeFrameRecordClassPtr */
+                        if( freezeFrameRecordClassPtr->DemFreezeFrameRecordTrigger == DEM_TRIGGER_ON_FDC_THRESHOLD )                                    /* [GUD] freezeFrameRecordClassPtr */
                         {
                             retVal = DEM_IRT_OK;
                             break;
@@ -340,8 +338,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_CheckStorePredictiveFFDOfT
 /*  v5-0-0         :2021-12-24                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-7-0         :2024-05-29                                              */
-/*  v5-10-0        :2025-06-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

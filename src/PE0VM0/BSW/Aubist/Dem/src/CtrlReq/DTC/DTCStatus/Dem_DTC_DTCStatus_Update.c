@@ -1,7 +1,7 @@
-/* Dem_DTC_DTCStatus_Update_c(v5-9-0)                                       */
+/* Dem_DTC_DTCStatus_Update_c(v5-5-0)                                       */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 
@@ -53,7 +53,6 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DTC_CheckDTCStatusChange
 (
     VAR( Dem_u08_EventQualificationType, AUTOMATIC ) EventQualification,
     VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex,
-    VAR( boolean, AUTOMATIC ) ActiveFaultReqFlag,
     CONSTP2VAR( Dem_DTCStatusStType, AUTOMATIC, AUTOMATIC ) OldDTCStatusStPtr,
     P2VAR( Dem_DTCStatusStType, AUTOMATIC, AUTOMATIC ) NewDTCStatusStPtr
 );
@@ -67,7 +66,6 @@ static FUNC( void, DEM_CODE ) Dem_DTC_UpdateDTCStatusByPassedEvent
 static FUNC( void, DEM_CODE ) Dem_DTC_UpdateDTCStatusByFailedEvent
 (
     VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex,
-    VAR( boolean, AUTOMATIC ) ActiveFaultReqFlag,
     CONSTP2VAR( Dem_DTCStatusStType, AUTOMATIC, AUTOMATIC ) OldDTCStatusStPtr,
     P2VAR( Dem_DTCStatusStType, AUTOMATIC, AUTOMATIC ) NewDTCStatusStPtr
 );
@@ -111,7 +109,6 @@ static FUNC( void, DEM_CODE ) Dem_DTC_UpdateDTCStatusByShortMIToContinuousMI
 /*               | [in] EventQualification :                                */
 /*               |        Qualification state of the event (passed, failed- */
 /*               |        , not qualified).                                 */
-/*               | [in] ActiveFaultReqFlag :                                */
 /*               | [out] OldDTCStatusStPtr :                                */
 /*               |        DTC status before the event reception.            */
 /*               | [out] NewDTCStatusStPtr :                                */
@@ -125,13 +122,11 @@ static FUNC( void, DEM_CODE ) Dem_DTC_UpdateDTCStatusByShortMIToContinuousMI
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | branch changed.                                          */
-/*   v5-9-0      | branch changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DTC_ChangeDTCStatus
 (
     VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex,            /* [PRMCHK:CALLER] */
     VAR( Dem_u08_EventQualificationType, AUTOMATIC ) EventQualification,
-    VAR( boolean, AUTOMATIC ) ActiveFaultReqFlag,
     CONSTP2VAR( Dem_DTCStatusStType, AUTOMATIC, AUTOMATIC ) OldDTCStatusStPtr,
     P2VAR( Dem_DTCStatusStType, AUTOMATIC, AUTOMATIC ) NewDTCStatusStPtr,
     P2VAR( Dem_OrderListOccurredFlagType, AUTOMATIC, AUTOMATIC ) OccurFlagPtr
@@ -154,7 +149,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DTC_ChangeDTCStatus
     NewDTCStatusStPtr->ExtendDTCStatus2  =   OldDTCStatusStPtr->ExtendDTCStatus2;
 
     /* The update of each bit is judged by Qualification and the DTC status retrieved. */
-    retCheckDTC = Dem_DTC_CheckDTCStatusChange( EventQualification, EventStrgIndex, ActiveFaultReqFlag, OldDTCStatusStPtr, NewDTCStatusStPtr ); /* [GUDCHK:CALLER]EventStrgIndex */
+    retCheckDTC = Dem_DTC_CheckDTCStatusChange( EventQualification, EventStrgIndex, OldDTCStatusStPtr, NewDTCStatusStPtr ); /* [GUDCHK:CALLER]EventStrgIndex */
 
     if( retCheckDTC == DEM_IRT_OK )
     {
@@ -193,6 +188,14 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DTC_ChangeDTCStatus
         retVal = DEM_IRT_OK;
     }
 
+    if( retVal != DEM_IRT_OK )
+    {
+        /* Output a fixation value */
+        NewDTCStatusStPtr->DTCStatus        = DEM_DTCSTATUS_BYTE_DEFAULT;
+        NewDTCStatusStPtr->ExtendDTCStatus  = DEM_DTCSTATUSEX_BYTE_DEFAULT;
+        NewDTCStatusStPtr->ExtendDTCStatus2 = DEM_DTCSTATUSEX2_BYTE_DEFAULT;
+    }
+
     return retVal;
 }
 
@@ -218,12 +221,10 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DTC_ChangeDTCStatus
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
-/*   v5-9-0      | branch changed.                                          */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_DTC_UpdateDTCStatusByRetentionResult
 (
     VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex,          /* MISRA DEVIATION */
-    VAR( Dem_EventStatusType, AUTOMATIC ) EventStatus,                    /* MISRA DEVIATION */
     VAR( Dem_u08_InternalReturnType, AUTOMATIC ) EventRetentionResult,
     VAR( boolean, AUTOMATIC ) ConfirmedOccurFlag,
     VAR( Dem_MisfireCylinderType, AUTOMATIC ) MisfireCylinder,    /* MISRA DEVIATION */
@@ -263,11 +264,8 @@ FUNC( void, DEM_CODE ) Dem_DTC_UpdateDTCStatusByRetentionResult
     Dem_Data_SetDTCStatusStructToTmp( NewDTCStatusStPtr );
 
 #if ( DEM_PFC_SUPPORT == STD_ON )   /*  [FuncSw]    */
-    if ( EventStatus == DEM_EVENT_STATUS_FAILED )
-    {
-        /* Set NewPFC to temporary area */
-        Dem_DTC_UpdatePFC( EventStrgIndex, OldDTCStatusStPtr, NewDTCStatusStPtr, MisfireCylinder );
-    }
+    /* Set NewPFC to temporary area */
+    Dem_DTC_UpdatePFC( EventStrgIndex, OldDTCStatusStPtr, NewDTCStatusStPtr, MisfireCylinder );
 #endif  /*   ( DEM_PFC_SUPPORT == STD_ON )  */
 
     /* Initialize FailureCounter when ConfirmedOccurFlag is TRUE and        */
@@ -289,9 +287,8 @@ FUNC( void, DEM_CODE ) Dem_DTC_UpdateDTCStatusByRetentionResult
 /* Function Name | Dem_DTC_CheckDTCStatusChange                             */
 /* Description   |                                                          */
 /* Preconditions | none                                                     */
-/* Parameters    | [in]  EventQualification :                               */
-/* Parameters    | [in]  EventStrgIndex    : EventStrgIndex                 */
-/* Parameters    | [in]  ActiveFaultReqFlag :                               */
+/* Parameters    | [in] EventQualification :                                */
+/*               |                                                          */
 /* Parameters    | [in]  OldDTCStatusStPtr : DTC status before the change.  */
 /* Parameters    | [out] NewDTCStatusStPtr : DTC status after the change.   */
 /*               |                                                          */
@@ -302,13 +299,11 @@ FUNC( void, DEM_CODE ) Dem_DTC_UpdateDTCStatusByRetentionResult
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
-/*   v5-9-0      | no branch changed.                                       */
 /****************************************************************************/
 static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DTC_CheckDTCStatusChange
 (
     VAR( Dem_u08_EventQualificationType, AUTOMATIC ) EventQualification,        /* [PRMCHK:CALLER] */
     VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex,
-    VAR( boolean, AUTOMATIC ) ActiveFaultReqFlag,
     CONSTP2VAR( Dem_DTCStatusStType, AUTOMATIC, AUTOMATIC ) OldDTCStatusStPtr,
     P2VAR( Dem_DTCStatusStType, AUTOMATIC, AUTOMATIC ) NewDTCStatusStPtr
 )
@@ -325,7 +320,7 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DTC_CheckDTCStatusChange
     else if( EventQualification == DEM_EVENT_QUALIFICATION_FAILED )
     {
         /* Each bit transition of DTCStatus when accepted FailedEvent. */
-        Dem_DTC_UpdateDTCStatusByFailedEvent( EventStrgIndex, ActiveFaultReqFlag, OldDTCStatusStPtr, NewDTCStatusStPtr );   /* [GUDCHK:CALLER]EventStrgIndex */
+        Dem_DTC_UpdateDTCStatusByFailedEvent( EventStrgIndex, OldDTCStatusStPtr, NewDTCStatusStPtr );   /* [GUDCHK:CALLER]EventStrgIndex */
     }
     else
     {
@@ -374,7 +369,6 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DTC_CheckDTCStatusChange
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | branch changed.                                          */
-/*   v5-9-0      | branch changed.                                          */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_DTC_UpdateDTCStatusByPassedEvent
 (
@@ -385,6 +379,7 @@ static FUNC( void, DEM_CODE ) Dem_DTC_UpdateDTCStatusByPassedEvent
 {
 #if ( DEM_WWH_OBD_SUPPORT == STD_ON ) /* [FuncSw] */
     VAR( Dem_IndicatorStatusType, AUTOMATIC )       indicatorStatus;
+    VAR( Dem_u08_DTCStatusExType, AUTOMATIC )       extendStatusOfDTC;
     VAR( Dem_u08_DemBooleanType, AUTOMATIC )        milAtShortMIFlg;
 #endif /* ( DEM_WWH_OBD_SUPPORT == STD_ON ) */
 
@@ -392,10 +387,11 @@ static FUNC( void, DEM_CODE ) Dem_DTC_UpdateDTCStatusByPassedEvent
     NewDTCStatusStPtr->DTCStatus        =   Dem_DTC_SetPassedDTCStatus( OldDTCStatusStPtr->DTCStatus );
 
 #if ( DEM_WWH_OBD_SUPPORT == STD_ON ) /* [FuncSw] */
-    if ( ( OldDTCStatusStPtr->ExtendDTCStatus & DEM_DTCSTATUSEX_STATUS_TNCTOC_IN_HEALINGCYCLE ) == DEM_DTCSTATUSEX_STATUS_TNCTOC_IN_HEALINGCYCLE )
+    (void)Dem_IndMI_GetMILStatusByEventStrgIndex( EventStrgIndex, &indicatorStatus ); /* no return check required */    /* [GUDCHK:CALLER]EventStrgIndex */
+    if ( indicatorStatus == DEM_INDICATOR_CONTINUOUS )
     {
-        (void)Dem_IndMI_GetMILStatusByEventStrgIndex( EventStrgIndex, &indicatorStatus ); /* no return check required */    /* [GUDCHK:CALLER]EventStrgIndex */
-        if ( indicatorStatus == DEM_INDICATOR_CONTINUOUS )
+        (void)Dem_DataMngC_GetER_ExtendDTCStatus( EventStrgIndex, &extendStatusOfDTC ); /* no return check required */  /* [GUDCHK:CALLER]EventStrgIndex */
+        if ( ( extendStatusOfDTC & DEM_DTCSTATUSEX_STATUS_TNCTOC_IN_HEALINGCYCLE ) == DEM_DTCSTATUSEX_STATUS_TNCTOC_IN_HEALINGCYCLE )
         {
             milAtShortMIFlg = Dem_IndMI_GetMILAtShortMIFlg();
             if ( milAtShortMIFlg != DEM_BOOLEAN_TRUE )
@@ -418,8 +414,6 @@ static FUNC( void, DEM_CODE ) Dem_DTC_UpdateDTCStatusByPassedEvent
 /* Function Name | Dem_DTC_UpdateDTCStatusByFailedEvent                     */
 /* Description   |                                                          */
 /* Preconditions | none                                                     */
-/* Parameters    | [in]  EventStrgIndex    : EventStrgIndex                 */
-/*               | [in]  ActiveFaultReqFlag :                               */
 /* Parameters    | [in]  OldDTCStatusStPtr : DTC status before the change.  */
 /* Parameters    | [out] NewDTCStatusStPtr : DTC status after the change.   */
 /* Return Value  | void                                                     */
@@ -427,12 +421,10 @@ static FUNC( void, DEM_CODE ) Dem_DTC_UpdateDTCStatusByPassedEvent
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | branch changed.                                          */
-/*   v5-9-0      | branch changed.                                          */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_DTC_UpdateDTCStatusByFailedEvent
 (
     VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex,        /* [PRMCHK:CALLER] */
-    VAR( boolean, AUTOMATIC ) ActiveFaultReqFlag,
     CONSTP2VAR( Dem_DTCStatusStType, AUTOMATIC, AUTOMATIC ) OldDTCStatusStPtr,
     P2VAR( Dem_DTCStatusStType, AUTOMATIC, AUTOMATIC ) NewDTCStatusStPtr
 )
@@ -469,26 +461,20 @@ static FUNC( void, DEM_CODE ) Dem_DTC_UpdateDTCStatusByFailedEvent
 #endif  /*   ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON ) */
     {
         Dem_Data_GetFailureCounterFromTmp( &failureCounter, &failureCounterThreshold );
-
-        if(  failureCounter >= failureCounterThreshold )
+        if( failureCounter >= failureCounterThreshold )
         {
-            changeDTCStatus=(boolean)TRUE;
-        }
-        else if( ActiveFaultReqFlag == (boolean)TRUE )
-        {
-            /* Whenever Called by Dem_ActiveFaultEventStatus, changeDTCStatus = TRUE */
             changeDTCStatus = (boolean)TRUE;
         }
+#if ( DEM_WWH_OBD_SUPPORT == STD_ON ) /* [FuncSw] */
         else
         {
-#if ( DEM_WWH_OBD_SUPPORT == STD_ON ) /* [FuncSw] */
             if ( ( ( OldDTCStatusStPtr->DTCStatus & DEM_UDS_STATUS_CDTC ) == DEM_UDS_STATUS_CDTC ) &&
                  ( ( OldDTCStatusStPtr->DTCStatus & DEM_UDS_STATUS_PDTC ) != DEM_UDS_STATUS_PDTC ) )
             {
                 changeDTCStatus = (boolean)TRUE;
             }
-#endif /* ( DEM_WWH_OBD_SUPPORT == STD_ON ) */
         }
+#endif /* ( DEM_WWH_OBD_SUPPORT == STD_ON ) */
     }
 
     if( changeDTCStatus == (boolean)TRUE )
@@ -600,7 +586,6 @@ static FUNC( void, DEM_CODE ) Dem_DTC_UpdateDTCStatusByShortMIToContinuousMI
 /*  Version        :Date                                                    */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-9-0         :2025-02-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

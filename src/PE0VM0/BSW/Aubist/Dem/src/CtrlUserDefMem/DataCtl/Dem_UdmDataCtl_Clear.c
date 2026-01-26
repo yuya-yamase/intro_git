@@ -1,7 +1,7 @@
-/* Dem_UdmDataCtl_Clear_c(v5-9-0)                                           */
+/* Dem_UdmDataCtl_Clear_c(v5-5-0)                                           */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -78,7 +78,6 @@
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
-/*   v5-9-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_UdmData_RequestFixedClear
 (
@@ -102,7 +101,7 @@ FUNC( void, DEM_CODE ) Dem_UdmData_RequestFixedClear
     Dem_UdmEventMngC_GetEventMemoryRecord( UdmGroupKindIndex, &udmEventMemoryRecord );
     /* Checks the result of retrieving the event memory record. */
 
-    udmFaultIndex = DEM_UDMFAULTINDEX_INITIAL;
+    udmFaultIndex = DEM_FAULTINDEX_INITIAL;
 
     /* Gets the fault index of the event record corresponding to the specified event index. */
     resultOfGetUdmFaultIndex = Dem_UdmEventMngC_GetER_FaultIndex( UdmEventIndex, &udmFaultIndex );  /* [GUD:RET:DEM_IRT_OK] UdmEventIndex */
@@ -112,7 +111,7 @@ FUNC( void, DEM_CODE ) Dem_UdmData_RequestFixedClear
     {
         /* Retrieving the event record was successful. */
         /* Checks whether the fault index is valid. */
-        if( udmFaultIndex != DEM_UDMFAULTINDEX_INITIAL )
+        if( udmFaultIndex != DEM_FAULTINDEX_INITIAL )
         {
             /* The fault index is valid. */
             /* Sets the fault occurrence flag to TRUE.  */
@@ -181,7 +180,6 @@ FUNC( void, DEM_CODE ) Dem_UdmData_RequestFixedClear
 /*  Version        :Date                                                    */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-9-0         :2025-02-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

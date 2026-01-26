@@ -1,7 +1,7 @@
-/* Dem_UdmDataCtl_InfoTSFFD_h(v5-7-0)                                       */
+/* Dem_UdmDataCtl_InfoTSFFD_h(v5-5-0)                                       */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -74,8 +74,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmData_GetFFDataFromTSFF
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmData_GetAllTSFFRecordNumber
 (
     P2VAR( Dem_u08_FFRecordNumberType, AUTOMATIC, DEM_APPL_DATA ) RecordNumBufferPtr,
-    VAR( uint8, AUTOMATIC ) TotalLengthOfBuffer,
-    VAR( uint8, AUTOMATIC ) OffsetPosOfBuffer,
     P2VAR( uint8, AUTOMATIC, AUTOMATIC ) RecordNumPtr
 );
 
@@ -103,7 +101,6 @@ extern VAR( Dem_UdmTmpRecordNumberByDTCType, DEM_VAR_NO_INIT ) Dem_UdmTmpTSFFRec
 /*  Version        :Date                                                    */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-7-0         :2024-05-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

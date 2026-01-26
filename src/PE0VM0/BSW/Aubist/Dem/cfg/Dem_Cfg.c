@@ -1,7 +1,7 @@
-/* Dem_Cfg_c(v5-10-0)                                                       */
+/* Dem_Cfg_c(v5-5-0)                                                        */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -87,6 +87,7 @@ CONST( AB_83_ConstV Dem_u08_ResetConfirmedBitOnOverflowType   ,DEM_CONFIG_DATA )
 CONST( AB_83_ConstV Dem_u08_DTCStatusBitHandlingType          ,DEM_CONFIG_DATA )  Dem_StatusBitHandlingTestFailedSinceLastClear = DEM_STATUS_BIT_NORMAL;               /* DemStatusBitHandlingTestFailedSinceLastClear */
 CONST( AB_83_ConstV Dem_u08_FaultIndexType                    ,DEM_CONFIG_DATA )  Dem_FailRecordNum                     = DEM_FAIL_RECORD_NUM;
 CONST( AB_83_ConstV Dem_UdsStatusByteType                     ,DEM_CONFIG_DATA )  Dem_DTCStatusProductSupportBit        = DEM_DTCSTATUS_PRODUCT_SUPPORT_BIT;
+CONST( AB_83_ConstV Dem_ModeType                              ,DEM_CONFIG_DATA )  Dem_NotifyDemModeMask                 = DEM_NOTIFY_DEM_MODE_MASK;
 CONST( AB_83_ConstV Dem_u08_ClearDTCBehaviorType              ,DEM_CONFIG_DATA )  Dem_ClearDTCBehavior                  = DEM_CLEAR_DTC_BEHAVIOR;
 CONST( AB_83_ConstV boolean                                   ,DEM_CONFIG_DATA )  Dem_AgingRequiresTestedCycle          = (boolean)FALSE;
 CONST( AB_83_ConstV Dem_u08_EDRBehaviorAt0xFEType             ,DEM_CONFIG_DATA )  Dem_DTCExtDataRecordsBehaviorAt0xFE             =   DEM_EDRNUM_FE_ALWAYS_NOT_SUPPORT;
@@ -143,14 +144,11 @@ CONST( AB_83_ConstV Dem_u16_FFDStoredIndexType         ,DEM_CONFIG_DATA )  Dem_F
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-8-0         :2024-10-29                                              */
-/*  v5-9-0         :2025-02-26                                              */
-/*  v5-10-0        :2025-06-26                                              */
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
 /*  Framework          :v2-1-0                                              */
-/*  BSW plug-in        :v5-10-0                                             */
+/*  BSW plug-in        :v5-5-0                                              */
 /****************************************************************************/
 
 /**** End of File *************************************************************/

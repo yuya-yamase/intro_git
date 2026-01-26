@@ -1,7 +1,7 @@
-/* Dem_DataCtl_InfoFFD_c(v5-9-0)                                            */
+/* Dem_DataCtl_InfoFFD_c(v5-5-0)                                            */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -82,8 +82,6 @@
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | new created. based on Dem_Data_GetEventFreezeFrameData.  */
-/*   v5-8-0      | no branch changed.                                       */
-/*   v5-9-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_CheckSupportedFreezeFrameRecordNumber
 (
@@ -93,6 +91,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_CheckSupportedFreezeFrameR
 )
 {
     P2CONST( AB_83_ConstV Dem_FreezeFrameRecNumClassType, AUTOMATIC, DEM_CONFIG_DATA ) freezeFrameRecNumClassPtr;
+    P2CONST( AB_83_ConstV Dem_FreezeFrameRecordClassType, AUTOMATIC, DEM_CONFIG_DATA ) freezeFrameRecordClassPtr;
 
     VAR( Dem_u16_FFClassIndexType, AUTOMATIC ) freezeFrameClassRef;
     VAR( Dem_u16_FFRecNumClassIndexType, AUTOMATIC ) freezeframeRecNumClassRef;
@@ -146,13 +145,14 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_CheckSupportedFreezeFrameR
             /* Holds the FreezeFrameClass table pointed to by the FreezeFrameClass table list Index of the held DTCAttribute table. */
             freezeFrameRecNumClassPtr = &Dem_FreezeFrameRecNumClassTable[freezeframeRecNumClassRef];                            /* [GUD]freezeframeRecNumClassRef */
 
+            freezeFrameRecordClassPtr = NULL_PTR;
             freezeFrameRecordClassIndex = 0U;
 
             /* Specify the FreezeFrameRecNumClass table and the specified record number,                 */
             /* the FreezeFrameRecordClass table storage area, and the FreezeFrameRecordClass table index */
             /* Call FreezeFrameRecordClass table acquisition processing.                                 */
 
-            resultOfGetFFRClass = Dem_Data_GetFreezeFrameRecordClassByRecordNumber( DEM_CALLER_DCM, freezeFrameRecNumClassPtr, RecordNumber, &freezeFrameRecordClassIndex, &freezeFrameRecordTrigger );     /* [GUD:RET:DEM_IRT_OK] freezeFrameRecordClassIndex */
+            resultOfGetFFRClass = Dem_Data_GetFreezeFrameRecordClassByRecordNumber( freezeFrameRecNumClassPtr, RecordNumber, &freezeFrameRecordClassPtr, &freezeFrameRecordClassIndex, &freezeFrameRecordTrigger );     /* [GUD:RET:DEM_IRT_OK] freezeFrameRecordClassIndex */
 
             /* Checks FreezeFrameRecordClass table acquisition result. */
             if( resultOfGetFFRClass == DEM_IRT_OK )
@@ -215,7 +215,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_CheckSupportedFreezeFrameR
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | branch changed.                                          */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_GetTSFFDInfoByEventAndRecNum
 (
@@ -255,7 +254,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_GetTSFFDInfoByEventAndRecN
         {
             for( tsFFRecClassRefIndex = (Dem_u08_TSFFListPerDTCIndexType)0U; tsFFRecClassRefIndex < tsffRecordClassNumPerDTCMaxNum; tsFFRecClassRefIndex++ )    /* [GUD:for]tsFFRecClassRefIndex */
             {
-                tsFFRecClassRef = dtcAttributePtr->DemTimeSeriesFreezeFrameRecordClassRef[tsFFRecClassRefIndex];                                                /* [GUD]dtcAttributePtr *//* [GUD]tsFFRecClassRefIndex *//* [ARYCHK] DEM_TSFF_RECORD_CLASS_NUM_PER_DTC_MAX_NUM / 1 / tsFFRecClassRefIndex */
+                tsFFRecClassRef = dtcAttributePtr->DemTimeSeriesFreezeFrameRecordClassRef[tsFFRecClassRefIndex];                                                /* [GUD]dtcAttributePtr *//* [GUD]tsFFRecClassRefIndex */
 
                 if( tsFFRecClassRef != DEM_TSFF_RECORD_CLASS_REF_INVALID )                                                                                      /* [GUD:if]tsFFRecClassRef */
                 {
@@ -313,9 +312,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_GetTSFFDInfoByEventAndRecN
 /* History                                                                  */
 /*  Version        :Date                                                    */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-7-0         :2024-05-29                                              */
-/*  v5-8-0         :2024-10-29                                              */
-/*  v5-9-0         :2025-02-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

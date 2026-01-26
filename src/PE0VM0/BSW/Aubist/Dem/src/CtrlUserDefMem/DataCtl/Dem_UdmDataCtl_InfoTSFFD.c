@@ -1,7 +1,7 @@
-/* Dem_UdmDataCtl_InfoTSFFD_c(v5-9-0)                                       */
+/* Dem_UdmDataCtl_InfoTSFFD_c(v5-5-0)                                       */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -24,11 +24,6 @@
 #include "../../../inc/Dem_Rc_UdmMng_rc.h"
 #include "../../../inc/Dem_Rc_UdmMngTable.h"
 #include "Dem_UdmDataCtl_InfoTSFFD.h"
-
-#ifndef DEM_SIT_RANGE_CHECK
-#else   /* DEM_SIT_RANGE_CHECK */
-#include <Dem_SIT_RangeCheck.h>
-#endif /* DEM_SIT_RANGE_CHECK */
 
 #if ( DEM_TSFF_UDM_SUPPORT == STD_ON )
 
@@ -133,8 +128,6 @@ static VAR( Dem_u08_FFRecordNumberType, DEM_VAR_NO_INIT ) Dem_UdmStoredTSFFRecor
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
-/*   v5-8-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmData_GetFFDataFromTSFF
 (
@@ -159,12 +152,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmData_GetFFDataFromTSFF
     P2VAR( Dem_UdmTmpRecordNumberByDTCType, AUTOMATIC, DEM_VAR_NO_INIT ) udmTmpTSFFRecordNumberPtr;
     VAR( Dem_UdmFreezeFrameRecordMngType, AUTOMATIC ) tsFFRecord;
 
-#ifndef DEM_SIT_RANGE_CHECK
-#else   /* DEM_SIT_RANGE_CHECK */
-    VAR( Dem_u08_UdmMemoryInfoTableIndexType, AUTOMATIC ) udmInfoTableIndex;
-    VAR( Dem_u16_UdmDemMemKindIndexType, AUTOMATIC ) udmGroupKindIndex;
-#endif  /* DEM_SIT_RANGE_CHECK */
-
     retVal = DEM_IRT_NG;
     eventConfigureNum = Dem_UdmEventConfigureNum;
 
@@ -184,18 +171,12 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmData_GetFFDataFromTSFF
                 resultOfGetTSFFRec = Dem_UdmData_GetTSFFRecord( UdmEventIndex, offsetOfRecordNumber, ( P2CONST( Dem_UdmTmpRecordNumberByDTCType, AUTOMATIC, DEM_VAR_NO_INIT ) )udmTmpTSFFRecordNumberPtr, &tsFFRecord );
                 if( resultOfGetTSFFRec == DEM_IRT_OK )
                 {
-                    retUdmDTCClerTarget = Dem_UdmDTC_JudgeUdmDTCClearTargetOnClearProcessActive( UdmEventIndex );
+                    retUdmDTCClerTarget = Dem_UdmDTC_JudgeUdmDTCClearTarget( UdmEventIndex );
                     if( retUdmDTCClerTarget == (boolean)FALSE )
                     {
                         freezeFrameClassPtr = &Dem_FreezeFrameClassTable[freezeFrameClassRef];          /* [GUD]freezeFrameClassRef */
 
-#ifndef DEM_SIT_RANGE_CHECK
                         resultOfEditFFRec = Dem_Data_EditFreezeFrameRecord( RecordNumber, FreezeFrameGetInfoType, tsFFRecord.DataPtr, freezeFrameClassPtr, DataPtr, DataSizePtr );
-#else   /* DEM_SIT_RANGE_CHECK */
-                        udmInfoTableIndex = Dem_CfgInfoUdm_GetMemoryDestination( UdmEventIndex );
-                        udmGroupKindIndex = Dem_CfgInfoUdm_GetUserDefinedMemoryGroupKindIndexByEventIndex( udmInfoTableIndex, UdmEventIndex );
-                        resultOfEditFFRec = Dem_Data_EditFreezeFrameRecord( DEM_SIT_R_CHK_UDM_TS_FF_DATA_SIZE( udmGroupKindIndex ), RecordNumber, FreezeFrameGetInfoType, tsFFRecord.DataPtr, freezeFrameClassPtr, DataPtr, DataSizePtr );
-#endif  /* DEM_SIT_RANGE_CHECK */
 
                         retVal = resultOfEditFFRec;
                     }
@@ -403,7 +384,6 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmData_GetSavedTSFFReco
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | branch changed.                                          */
-/*   v5-9-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmData_GetTSFFRecord
 (
@@ -429,7 +409,7 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmData_GetTSFFRecord
 
     retVal = DEM_IRT_NG;
     resultOfGetFaultRec = DEM_IRT_NG;
-    udmFaultIndex = DEM_UDMFAULTINDEX_INITIAL;
+    udmFaultIndex = DEM_FAULTINDEX_INITIAL;
     userDefinedMemoryNum = Dem_UserDefinedMemoryNum;
 
     /* Get udm group index. */
@@ -449,7 +429,7 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmData_GetTSFFRecord
 
         if( resultOfGetFaultIndex == DEM_IRT_OK )
         {
-            if( udmFaultIndex != DEM_UDMFAULTINDEX_INITIAL )
+            if( udmFaultIndex != DEM_FAULTINDEX_INITIAL )
             {
                 resultOfGetFaultRec = Dem_UdmFaultMngC_GetRecord( udmGroupKindIndex, udmFaultIndex, &udmFaultRecord );      /* [GUD]udmGroupKindIndex */
             }
@@ -887,11 +867,7 @@ static FUNC( void, DEM_CODE ) Dem_UdmData_SaveTSFFRecordNumberByTSFFListIndex
 /* Parameters    | [out] RecordNumBufferPtr :                               */
 /*               |        the buffer, to which the freeze frame data recor- */
 /*               |        d shall be written to                             */
-/*               | [in] TotalLengthOfBuffer :                               */
-/*               |          total length of RecordNumBufferPtr.             */
-/*               | [in] OffsetPosOfBuffer   :                               */
-/*               |          setting offset position of RecordNumBufferPtr.  */
-/*               | [out] RecordNumPtr :                                     */
+/*               | [in/out] RecordNumPtr :                                  */
 /*               |        the actual number of written data bytes           */
 /* Return Value  | Dem_u08_InternalReturnType                               */
 /*               |        DEM_IRT_OK : Size successfully returned           */
@@ -901,13 +877,10 @@ static FUNC( void, DEM_CODE ) Dem_UdmData_SaveTSFFRecordNumberByTSFFListIndex
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-7-0      | branch changed.                                          */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmData_GetAllTSFFRecordNumber
 (
     P2VAR( Dem_u08_FFRecordNumberType, AUTOMATIC, DEM_APPL_DATA ) RecordNumBufferPtr,
-    VAR( uint8, AUTOMATIC ) TotalLengthOfBuffer,
-    VAR( uint8, AUTOMATIC ) OffsetPosOfBuffer,
     P2VAR( uint8, AUTOMATIC, AUTOMATIC ) RecordNumPtr
 )
 {
@@ -916,11 +889,11 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmData_GetAllTSFFRecordNumber
     VAR( Dem_u08_FFStoredStatusType, AUTOMATIC ) recordStatus;
     VAR( Dem_u08_FFRecordNumberType, AUTOMATIC ) recordNumber;
     VAR( Dem_u08_InternalReturnType, AUTOMATIC ) retVal;
+    VAR( uint8, AUTOMATIC ) recordNumBuffMax;
     VAR( uint8, AUTOMATIC ) recordNumCnt;
-    VAR( uint8, AUTOMATIC ) recordIndex;
 
-    recordIndex         =   OffsetPosOfBuffer;
-    recordNumCnt        =   (uint8)0U;
+    recordNumBuffMax    =   *RecordNumPtr;
+    recordNumCnt        =   (Dem_u08_FFRecordNumberType)0U;
 
     udmMaxNumberTsffPerDTC = Dem_UdmMaxNumberTsffPerDTC;
 
@@ -941,10 +914,9 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmData_GetAllTSFFRecordNumber
                 recordNumber    =   Dem_UdmTmpTSFFRecordNumber[saveRecNumIndex].RecordNumber;                                   /* [GUD]saveRecNumIndex */
 
                 /*  check : remain buffer size          */
-                if ( recordIndex < TotalLengthOfBuffer )                       /* [GUD:if]recordIndex */
+                if ( recordNumCnt < recordNumBuffMax )                          /* [GUD:if]recordNumCnt */
                 {
-                    RecordNumBufferPtr[ recordIndex ]    =   recordNumber;     /* [GUD]recordIndex *//* [ARYCHK] TotalLengthOfBuffer / 1 / recordIndex */
-                    recordIndex     =   recordIndex  + (uint8)1U;
+                    RecordNumBufferPtr[ recordNumCnt ]    =   recordNumber;     /* [GUD]recordNumCnt */
                     recordNumCnt    =   recordNumCnt + (uint8)1U;
                 }
                 else
@@ -974,9 +946,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmData_GetAllTSFFRecordNumber
 /*  Version        :Date                                                    */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-7-0         :2024-05-29                                              */
-/*  v5-8-0         :2024-10-29                                              */
-/*  v5-9-0         :2025-02-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

@@ -1,7 +1,7 @@
-/* Dem_UdmFFDMng_c(v5-7-0)                                                  */
+/* Dem_UdmFFDMng_c(v5-5-0)                                                  */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -197,9 +197,6 @@ FUNC( Dem_u16_UdmFFDIndexType, DEM_CODE ) Dem_UdmFFDMng_GetFFDRecordNum
 /*               |         AUTOMATIC                                        */
 /* Return Value  | void                                                     */
 /* Notes         | none                                                     */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_UdmFFDMngC_InitFreezeFrameRecordData
 (
@@ -227,7 +224,7 @@ FUNC( void, DEM_CODE ) Dem_UdmFFDMngC_InitFreezeFrameRecordData
 
     /* The data for freeze frame. */
     ffdMaxLength = Dem_UdmFFDMaxLength;
-    Dem_UtlMem_SetMemory( &FreezeFrameRecordPtr->Data[0], DEM_FFD_INITIAL, ffdMaxLength );/* [ARYCHK] DEM_UDMFFD_MAX_LENGTH / 1 / 0 */
+    Dem_UtlMem_SetMemory( &FreezeFrameRecordPtr->Data[0], DEM_FFD_INITIAL, ffdMaxLength );
 
     return ;
 }
@@ -295,7 +292,6 @@ FUNC( void, DEM_CODE ) Dem_UdmFFDMng_InitRecord
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmFFDMng_ClearStoredRecord
 (
@@ -318,7 +314,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmFFDMng_ClearStoredRecord
         /*  check available data of Dem_UdmFreezeFrameDataPosTable[]    */
         if ( posRecordStatus != DEM_FFDSTOREDINDEX_INVALID )
         {
-            recordStatus = freezeFrameRecordDataPtr[posRecordStatus];                       /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posRecordStatus *//* [ARYCHK] Dem_UdmFreezeFrameRecordTable[UdmGroupKindIndex].DemFFDStoredFormatSize / 1 / posRecordStatus */
+            recordStatus = freezeFrameRecordDataPtr[posRecordStatus];                       /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posRecordStatus */
             if( recordStatus == DEM_FFD_STORED )
             {
                 retVal = DEM_IRT_OK;
@@ -347,7 +343,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmFFDMng_ClearStoredRecord
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_UdmFFDMng_ClearRecord
 (
@@ -380,16 +375,16 @@ static FUNC( void, DEM_CODE ) Dem_UdmFFDMng_ClearRecord
         {
             /* Sets the initial value to the event index of the specified freeze frame record. */
             Dem_UtlMem_SplitByteData( (uint16)DEM_UDMEVENTINDEX_INVALID, &udmEventIndexUpper, &udmEventIndexLower );
-            freezeFrameRecordDataPtr[posFirstUdmEventIndexUpper] = udmEventIndexUpper;              /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posFirstUdmEventIndexUpper *//* [ARYCHK] Dem_UdmFreezeFrameRecordTable[UdmGroupKindIndex].DemFFDStoredFormatSize / 1 / posFirstUdmEventIndexUpper */
-            freezeFrameRecordDataPtr[posFirstUdmEventIndexLower] = udmEventIndexLower;              /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posFirstUdmEventIndexLower *//* [ARYCHK] Dem_UdmFreezeFrameRecordTable[UdmGroupKindIndex].DemFFDStoredFormatSize / 1 / posFirstUdmEventIndexLower */
-            freezeFrameRecordDataPtr[posLastUdmEventIndexUpper] = udmEventIndexUpper;               /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posLastUdmEventIndexUpper  *//* [ARYCHK] Dem_UdmFreezeFrameRecordTable[UdmGroupKindIndex].DemFFDStoredFormatSize / 1 / posLastUdmEventIndexUpper */
-            freezeFrameRecordDataPtr[posLastUdmEventIndexLower] = udmEventIndexLower;               /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posLastUdmEventIndexLower  *//* [ARYCHK] Dem_UdmFreezeFrameRecordTable[UdmGroupKindIndex].DemFFDStoredFormatSize / 1 / posLastUdmEventIndexLower */
+            freezeFrameRecordDataPtr[posFirstUdmEventIndexUpper] = udmEventIndexUpper;              /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posFirstUdmEventIndexUpper */
+            freezeFrameRecordDataPtr[posFirstUdmEventIndexLower] = udmEventIndexLower;              /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posFirstUdmEventIndexLower */
+            freezeFrameRecordDataPtr[posLastUdmEventIndexUpper] = udmEventIndexUpper;               /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posLastUdmEventIndexUpper  */
+            freezeFrameRecordDataPtr[posLastUdmEventIndexLower] = udmEventIndexLower;               /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posLastUdmEventIndexLower  */
 
             /* Sets initial value to the offset of time-series freeze frame list record's index of the specified freeze frame record. */
-            freezeFrameRecordDataPtr[posOffsetOfTSFFListIndex] = (uint8)DEM_NUMOFTSFF_INVALID;      /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posOffsetOfTSFFListIndex *//* [ARYCHK] Dem_UdmFreezeFrameRecordTable[UdmGroupKindIndex].DemFFDStoredFormatSize / 1 / posOffsetOfTSFFListIndex */
+            freezeFrameRecordDataPtr[posOffsetOfTSFFListIndex] = (uint8)DEM_NUMOFTSFF_INVALID;      /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posOffsetOfTSFFListIndex */
 
             /* Sets "not stored" to the record status of the specified freeze frame record. */
-            freezeFrameRecordDataPtr[posRecordStatus] = (uint8)DEM_FFD_NOT_STORED;                  /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posRecordStatus *//* [ARYCHK] Dem_UdmFreezeFrameRecordTable[UdmGroupKindIndex].DemFFDStoredFormatSize / 1 / posRecordStatus */
+            freezeFrameRecordDataPtr[posRecordStatus] = (uint8)DEM_FFD_NOT_STORED;                  /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posRecordStatus */
         }
         /* Remains occurrence order and cid for udm freeze frame records */
     }
@@ -409,7 +404,6 @@ static FUNC( void, DEM_CODE ) Dem_UdmFFDMng_ClearRecord
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_UdmFFDMng_Init
 (
@@ -429,7 +423,7 @@ FUNC( void, DEM_CODE ) Dem_UdmFFDMng_Init
         udmFFDRecordNum = Dem_UdmFreezeFrameRecordTable[udmGroupKindIndex].DemFFDRecordNum;                                             /* [GUD]udmGroupKindIndex */
         for( udmFreezeFrameIndex = (Dem_u16_UdmFFDIndexType)0U; udmFreezeFrameIndex < udmFFDRecordNum; udmFreezeFrameIndex++ )          /* [GUD:for]udmFreezeFrameIndex */
         {
-            Dem_UdmFFDNvMStatus[ udmGroupKindIndex ].DemUdmFFDNvMStatusPtr[ udmFreezeFrameIndex ] = DEM_RECMNGCMN_NVM_STS_NOT_VERIFIED; /* [GUD]udmGroupKindIndex *//* [GUD]udmFreezeFrameIndex *//* [ARYCHK] udmFFDRecordNum / 1 / udmFreezeFrameIndex *//* [ARYDESC] The registered data size of Dem_UdmFFDNvMStatus[ udmGroupKindIndex ].DemUdmFFDNvMStatusPtr is the same as Dem_UdmFreezeFrameRecordTable[udmGroupKindIndex].DemFFDRecordNum */
+            Dem_UdmFFDNvMStatus[ udmGroupKindIndex ].DemUdmFFDNvMStatusPtr[ udmFreezeFrameIndex ] = DEM_RECMNGCMN_NVM_STS_NOT_VERIFIED; /* [GUD]udmGroupKindIndex *//* [GUD]udmFreezeFrameIndex */
         }
 #if ( DEM_NVM_SYNC_PROCESS_ENABLE == STD_ON )    /* [FuncSw] */
         Dem_UdmFFDMng_InitMirrorMemory( udmGroupKindIndex );                    /* [GUD]udmGroupKindIndex */
@@ -452,7 +446,6 @@ FUNC( void, DEM_CODE ) Dem_UdmFFDMng_Init
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_UdmFFDMng_InitSavedZone
 (
@@ -480,7 +473,7 @@ FUNC( void, DEM_CODE ) Dem_UdmFFDMng_InitSavedZone
             freezeFrameRecordDataPtr = Dem_UdmFFDMng_GetFreezeFrameRecordDataPtr( udmGroupKindIndex, udmFreezeFrameIndex ); /* [GUD:RET:Not NULL_PTR] UdmGroupKindIndex/UdmFreezeFrameIndex/freezeFrameRecordDataPtr */
             if( freezeFrameRecordDataPtr != NULL_PTR )                                                                      /* [GUD:if]freezeFrameRecordDataPtr */
             {
-                Dem_UtlMem_SetMemory( &freezeFrameRecordDataPtr[0], DEM_FFD_INITIAL, udmFfdStorageFormatsize );             /* [GUD]freezeFrameRecordDataPtr *//* [ARYCHK] Dem_UdmFreezeFrameRecordTable[udmGroupKindIndex].DemFFDStoredFormatSize / 1 / 0 */
+                Dem_UtlMem_SetMemory( &freezeFrameRecordDataPtr[0], DEM_FFD_INITIAL, udmFfdStorageFormatsize );             /* [GUD]freezeFrameRecordDataPtr */
             }
 
         }
@@ -526,7 +519,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmFFDMng_DataVerify
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_UdmFFDMng_SetRecordMirror
 (
@@ -561,7 +553,7 @@ FUNC( void, DEM_CODE ) Dem_UdmFFDMng_SetRecordMirror
                 if ( freezeFrameRecordDataPtr != NULL_PTR )     /* [GUD:if]freezeFrameRecordDataPtr */
                 {
                     /* copy data to mirror area. */
-                    Dem_UtlMem_CopyMemory( &tmpUdmFFDMirrorDataPtr[0], &(freezeFrameRecordDataPtr[0]), udmFfdStorageFormatsize );   /* [GUD]tmpUdmFFDMirrorDataPtr *//* [GUD]freezeFrameRecordDataPtr *//* [ARYCHK] Dem_UdmFreezeFrameRecordTable[udmGroupKindIndex].DemFFDStoredFormatSize / 1 / 0 *//* [ARYCHK] Dem_UdmFreezeFrameRecordTable[udmGroupKindIndex].DemFFDStoredFormatSize / 1 / 0 *//* [ARYDESC] The registered data size of Dem_UdmFreezeFrameRecordNvMTable[udmGroupKindIndex].DemTmpUdmFFDMirrorDataPtr is the same as Dem_UdmFreezeFrameRecordTable[udmGroupKindIndex].DemFFDStoredFormatSize */
+                    Dem_UtlMem_CopyMemory( &tmpUdmFFDMirrorDataPtr[0], &(freezeFrameRecordDataPtr[0]), udmFfdStorageFormatsize );   /* [GUD]tmpUdmFFDMirrorDataPtr *//* [GUD]freezeFrameRecordDataPtr */
                 }
             }
         }
@@ -569,7 +561,7 @@ FUNC( void, DEM_CODE ) Dem_UdmFFDMng_SetRecordMirror
         udmFfdDataIndex = Dem_UdmFreezeFrameRecordNvMTable[udmGroupKindIndex].DemUdmFFDRecordNvBlockSize * BlockMirrorPtr->RecordDataOffset;    /* [GUD]udmGroupKindIndex */
         if( udmFfdDataIndex < udmFfdStorageFormatsize )
         {
-            BlockMirrorPtr->MirrorPtr = &(Dem_UdmFreezeFrameRecordNvMTable[udmGroupKindIndex].DemTmpUdmFFDMirrorDataPtr[ udmFfdDataIndex ]);    /* [GUD]udmGroupKindIndex */    /* [GUD]udmFfdDataIndex *//* [ARYCHK] Dem_UdmFreezeFrameRecordTable[udmGroupKindIndex].DemFFDStoredFormatSize / 1 / udmFfdDataIndex *//* [ARYDESC] The registered data size of Dem_UdmFreezeFrameRecordNvMTable[udmGroupKindIndex].DemTmpUdmFFDMirrorDataPtr is the same as Dem_UdmFreezeFrameRecordTable[udmGroupKindIndex].DemFFDStoredFormatSize */
+            BlockMirrorPtr->MirrorPtr = &(Dem_UdmFreezeFrameRecordNvMTable[udmGroupKindIndex].DemTmpUdmFFDMirrorDataPtr[ udmFfdDataIndex ]);    /* [GUD]udmGroupKindIndex */    /* [GUD]udmFfdDataIndex */
         }
     }
 
@@ -753,7 +745,6 @@ static FUNC( void, DEM_CODE ) Dem_UdmFFDMng_CheckConsistencyOneRecordData
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_UdmFFDMng_CheckConsistencyWithOtherFFDRecord
 (
@@ -780,7 +771,7 @@ static FUNC( void, DEM_CODE ) Dem_UdmFFDMng_CheckConsistencyWithOtherFFDRecord
             {
                 if( LatestCidForOtherRecord == Dem_TmpVerifyUdmFreezeFrameRecord[udmFreezeFrameCnt].CidUdmFreezeFrameRecords )  /* [GUD]udmFreezeFrameCnt */
                 {
-                    Dem_UdmFFDNvMStatus[ UdmGroupKindIndex ].DemUdmFFDNvMStatusPtr[ udmFreezeFrameIndex ] = DEM_RECMNGCMN_NVM_STS_NON_TARGET;   /* [GUDCHK:CALLER]UdmGroupKindIndex *//* [GUD:if]udmFreezeFrameIndex *//* [ARYCHK] udmFFDRecordNum / 1 / udmFreezeFrameIndex *//* [ARYDESC] The registered data size of Dem_UdmFFDNvMStatus[ udmGroupKindIndex ].DemUdmFFDNvMStatusPtr is the same as Dem_UdmFreezeFrameRecordTable[udmGroupKindIndex].DemFFDRecordNum */
+                    Dem_UdmFFDNvMStatus[ UdmGroupKindIndex ].DemUdmFFDNvMStatusPtr[ udmFreezeFrameIndex ] = DEM_RECMNGCMN_NVM_STS_NON_TARGET;   /* [GUDCHK:CALLER]UdmGroupKindIndex *//* [GUD:if]udmFreezeFrameIndex */
                 }
                 else
                 {
@@ -810,7 +801,6 @@ static FUNC( void, DEM_CODE ) Dem_UdmFFDMng_CheckConsistencyWithOtherFFDRecord
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmFFDMng_ClearAllNotVerifiedRecord
 (
@@ -839,10 +829,10 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmFFDMng_ClearAllNotVerifiedRe
         {
             if( loopCount < *RestOfProcessableNumPtr )
             {
-                if( Dem_UdmFFDNvMStatus[ udmGroupKindIndex ].DemUdmFFDNvMStatusPtr[ udmFreezeFrameIndex ] == DEM_RECMNGCMN_NVM_STS_NOT_VERIFIED )       /* [GUD]udmGroupKindIndex *//* [GUD]udmFreezeFrameIndex *//* [ARYCHK] udmFFDRecordNum / 1 / udmFreezeFrameIndex *//* [ARYDESC] The registered data size of Dem_UdmFFDNvMStatus[ udmGroupKindIndex ].DemUdmFFDNvMStatusPtr is the same as Dem_UdmFreezeFrameRecordTable[udmGroupKindIndex].DemFFDRecordNum */
+                if( Dem_UdmFFDNvMStatus[ udmGroupKindIndex ].DemUdmFFDNvMStatusPtr[ udmFreezeFrameIndex ] == DEM_RECMNGCMN_NVM_STS_NOT_VERIFIED )       /* [GUD]udmGroupKindIndex *//* [GUD]udmFreezeFrameIndex */
                 {
                     Dem_UdmFFDMng_InitRecord( udmGroupKindIndex, udmFreezeFrameIndex );
-                    Dem_UdmFFDNvMStatus[ udmGroupKindIndex ].DemUdmFFDNvMStatusPtr[ udmFreezeFrameIndex ] = DEM_RECMNGCMN_NVM_STS_NON_TARGET;           /* [GUD]udmGroupKindIndex *//* [GUD]udmFreezeFrameIndex *//* [ARYCHK] udmFFDRecordNum / 1 / udmFreezeFrameIndex *//* [ARYDESC] The registered data size of Dem_UdmFFDNvMStatus[ udmGroupKindIndex ].DemUdmFFDNvMStatusPtr is the same as Dem_UdmFreezeFrameRecordTable[udmGroupKindIndex].DemFFDRecordNum */
+                    Dem_UdmFFDNvMStatus[ udmGroupKindIndex ].DemUdmFFDNvMStatusPtr[ udmFreezeFrameIndex ] = DEM_RECMNGCMN_NVM_STS_NON_TARGET;           /* [GUD]udmGroupKindIndex *//* [GUD]udmFreezeFrameIndex */
                 }
                 loopCount = loopCount + (Dem_u32_TotalRecordNumType)1U;
             }
@@ -874,7 +864,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmFFDMng_ClearAllNotVerifiedRe
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_UdmFFDMng_GetNumOfStoredUdmFFD
 (
@@ -904,9 +893,9 @@ FUNC( void, DEM_CODE ) Dem_UdmFFDMng_GetNumOfStoredUdmFFD
                 freezeFrameRecordDataPtr = ( P2CONST( uint8, TYPEDEF, DEM_VAR_SAVED_ZONE ) )Dem_UdmFFDMng_GetFreezeFrameRecordDataPtr( udmGroupKindIndex, udmFreezeFrameIndex );    /* [GUD:RET:Not NULL_PTR] UdmGroupKindIndex/UdmFreezeFrameIndex/freezeFrameRecordDataPtr */
                 if( freezeFrameRecordDataPtr != NULL_PTR )                                              /* [GUD:if]freezeFrameRecordDataPtr */
                 {
-                    if( freezeFrameRecordDataPtr[posRecordStatus] == DEM_FFD_STORED )                   /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posRecordStatus *//* [ARYCHK] Dem_UdmFreezeFrameRecordTable[udmGroupKindIndex].DemFFDStoredFormatSize / 1 / posRecordStatus */
+                    if( freezeFrameRecordDataPtr[posRecordStatus] == DEM_FFD_STORED )                   /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posRecordStatus */
                     {
-                        UdmEventMemoryRecordListPtr[udmGroupKindIndex].NumberOfFreezeFrameRecords = UdmEventMemoryRecordListPtr[udmGroupKindIndex].NumberOfFreezeFrameRecords + (Dem_u16_UdmFFDIndexType)1U;    /* [GUD]udmGroupKindIndex *//* [ARYCHK] DEM_USER_DEFINED_MEMORY_NUM / 1 / udmGroupKindIndex *//* [ARYCHK] DEM_USER_DEFINED_MEMORY_NUM / 1 / udmGroupKindIndex */
+                        UdmEventMemoryRecordListPtr[udmGroupKindIndex].NumberOfFreezeFrameRecords = UdmEventMemoryRecordListPtr[udmGroupKindIndex].NumberOfFreezeFrameRecords + (Dem_u16_UdmFFDIndexType)1U;    /* [GUD]udmGroupKindIndex */
                     }
                 }
             }
@@ -991,7 +980,6 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmFFDMng_CheckConsisten
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | branch changed.                                          */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_UdmFFDMng_GetFFDConsistencyInfo
 (
@@ -1026,12 +1014,12 @@ static FUNC( void, DEM_CODE ) Dem_UdmFFDMng_GetFFDConsistencyInfo
         /*  check available data of Dem_UdmFreezeFrameDataPosTable[]    */
         if ( posFirstCid != DEM_FFDSTOREDINDEX_INVALID )
         {
-            *FirstBlockCIdPtr = (Dem_u08_ConsistencyIdType)freezeFrameRecordDataPtr[posFirstCid];                       /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posFirstCid *//* [ARYCHK] Dem_UdmFreezeFrameRecordTable[UdmGroupKindIndex].DemFFDStoredFormatSize / 1 / posFirstCid */
-            *LastBlockCIdPtr = (Dem_u08_ConsistencyIdType)freezeFrameRecordDataPtr[posLastCid];                         /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posLastCid *//* [ARYCHK] Dem_UdmFreezeFrameRecordTable[UdmGroupKindIndex].DemFFDStoredFormatSize / 1 / posLastCid */
+            *FirstBlockCIdPtr = (Dem_u08_ConsistencyIdType)freezeFrameRecordDataPtr[posFirstCid];                       /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posFirstCid */
+            *LastBlockCIdPtr = (Dem_u08_ConsistencyIdType)freezeFrameRecordDataPtr[posLastCid];                         /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posLastCid */
 
-            firstUdmEventIndex = (Dem_u16_UdmEventIndexType)Dem_UtlMem_ConvertByteData( freezeFrameRecordDataPtr[posFirstUdmEventIndexUpper], freezeFrameRecordDataPtr[posFirstUdmEventIndexLower] );   /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posFirstUdmEventIndexUpper *//* [GUD]posFirstUdmEventIndexLower *//* [ARYCHK] Dem_UdmFreezeFrameRecordTable[UdmGroupKindIndex].DemFFDStoredFormatSize / 1 / posFirstUdmEventIndexUpper *//* [ARYCHK] Dem_UdmFreezeFrameRecordTable[UdmGroupKindIndex].DemFFDStoredFormatSize / 1 / posFirstUdmEventIndexLower */
+            firstUdmEventIndex = (Dem_u16_UdmEventIndexType)Dem_UtlMem_ConvertByteData( freezeFrameRecordDataPtr[posFirstUdmEventIndexUpper], freezeFrameRecordDataPtr[posFirstUdmEventIndexLower] );   /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posFirstUdmEventIndexUpper *//* [GUD]posFirstUdmEventIndexLower */
             *FirstBlockUdmEventIndexPtr = firstUdmEventIndex;
-            lastUdmEventIndex = (Dem_u16_UdmEventIndexType)Dem_UtlMem_ConvertByteData( freezeFrameRecordDataPtr[posLastUdmEventIndexUpper], freezeFrameRecordDataPtr[posLastUdmEventIndexLower] );      /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posLastUdmEventIndexUpper *//* [GUD]posLastUdmEventIndexLower *//* [ARYCHK] Dem_UdmFreezeFrameRecordTable[UdmGroupKindIndex].DemFFDStoredFormatSize / 1 / posLastUdmEventIndexUpper *//* [ARYCHK] Dem_UdmFreezeFrameRecordTable[UdmGroupKindIndex].DemFFDStoredFormatSize / 1 / posLastUdmEventIndexLower */
+            lastUdmEventIndex = (Dem_u16_UdmEventIndexType)Dem_UtlMem_ConvertByteData( freezeFrameRecordDataPtr[posLastUdmEventIndexUpper], freezeFrameRecordDataPtr[posLastUdmEventIndexLower] );      /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posLastUdmEventIndexUpper *//* [GUD]posLastUdmEventIndexLower */
             *LastBlockUdmEventIndexPtr = lastUdmEventIndex;
         }
         else
@@ -1068,7 +1056,6 @@ static FUNC( void, DEM_CODE ) Dem_UdmFFDMng_GetFFDConsistencyInfo
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | branch changed.                                          */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmFFDMng_VerifyChecksum
 (
@@ -1095,7 +1082,7 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmFFDMng_VerifyChecksum
         if ( posDataStart != DEM_FFDSTOREDINDEX_INVALID )
         {
             registeredChecksum = Dem_UdmFFDMng_GetChecksum( UdmGroupKindIndex, UdmFreezeFrameIndex );                   /* [GUD]UdmGroupKindIndex *//* [GUD]UdmFreezeFrameIndex */
-            calculatedChecksum = Dem_UtlMem_Checksum( &freezeFrameRecordDataPtr[posDataStart], udmFFDMaxLength );       /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posDataStart *//* [ARYCHK] Dem_UdmFreezeFrameRecordTable[UdmGroupKindIndex].DemFFDStoredFormatSize / 1 / posDataStart */
+            calculatedChecksum = Dem_UtlMem_Checksum( &freezeFrameRecordDataPtr[posDataStart], udmFFDMaxLength );       /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posDataStart */
 
             if( registeredChecksum == calculatedChecksum )
             {
@@ -1120,7 +1107,6 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmFFDMng_VerifyChecksum
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | branch changed.                                          */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( Dem_u16_FFCheckSumType, DEM_CODE ) Dem_UdmFFDMng_GetChecksum
 (
@@ -1147,8 +1133,8 @@ static FUNC( Dem_u16_FFCheckSumType, DEM_CODE ) Dem_UdmFFDMng_GetChecksum
 
         if ( posChecksumUpper != DEM_FFDSTOREDINDEX_INVALID )
         {
-            checksumUpper = (uint8)freezeFrameRecordDataPtr[posChecksumUpper];                      /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posChecksumUpper *//* [ARYCHK] Dem_UdmFreezeFrameRecordTable[UdmGroupKindIndex].DemFFDStoredFormatSize / 1 / posChecksumUpper */
-            checksumLower = (uint8)freezeFrameRecordDataPtr[posChecksumLower];                      /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posChecksumLower *//* [ARYCHK] Dem_UdmFreezeFrameRecordTable[UdmGroupKindIndex].DemFFDStoredFormatSize / 1 / posChecksumLower */
+            checksumUpper = (uint8)freezeFrameRecordDataPtr[posChecksumUpper];                      /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posChecksumUpper */
+            checksumLower = (uint8)freezeFrameRecordDataPtr[posChecksumLower];                      /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posChecksumLower */
 
             checksum = (Dem_u16_FFCheckSumType)checksumUpper << DEM_UDMMNG_CHECKSUM_SHIFT;
             checksum |= (Dem_u16_FFCheckSumType)checksumLower;
@@ -1201,7 +1187,6 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmFFDMng_VerifyChecksum
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | branch changed.                                          */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_ConsistencyIdType, DEM_CODE ) Dem_UdmFFDMng_GetFFDConsystencyId
 (
@@ -1223,7 +1208,7 @@ FUNC( Dem_u08_ConsistencyIdType, DEM_CODE ) Dem_UdmFFDMng_GetFFDConsystencyId
         posFirstCid     =   Dem_UdmFreezeFrameDataPosTable[UdmGroupKindIndex].FirstCID;         /* [GUD]UdmGroupKindIndex *//* [GUD:CFG:IF_GUARDED:UdmGroupKindIndex]posFirstCid */
         if ( posFirstCid != DEM_FFDSTOREDINDEX_INVALID )
         {
-            consistencyId = (Dem_u08_ConsistencyIdType)freezeFrameRecordDataPtr[posFirstCid];   /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posFirstCid *//* [ARYCHK] Dem_UdmFreezeFrameRecordTable[UdmGroupKindIndex].DemFFDStoredFormatSize / 1 / posFirstCid */
+            consistencyId = (Dem_u08_ConsistencyIdType)freezeFrameRecordDataPtr[posFirstCid];   /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posFirstCid */
         }
     }
 
@@ -1243,7 +1228,6 @@ FUNC( Dem_u08_ConsistencyIdType, DEM_CODE ) Dem_UdmFFDMng_GetFFDConsystencyId
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_UdmFFDMng_InitMirrorMemory
 (
@@ -1258,7 +1242,7 @@ static FUNC( void, DEM_CODE ) Dem_UdmFFDMng_InitMirrorMemory
         tmpUdmFFDMirrorDataPtr = Dem_UdmFreezeFrameRecordNvMTable[UdmGroupKindIndex].DemTmpUdmFFDMirrorDataPtr;     /* [GUDCHK:CALLER]UdmGroupKindIndex *//* [GUD:CFG:IF_GUARDED:UdmGroupKindIndex]tmpUdmFFDMirrorDataPtr */
 
         ffdStoredFormatSize = Dem_UdmFreezeFrameRecordTable[ UdmGroupKindIndex ].DemFFDStoredFormatSize;            /* [GUDCHK:CALLER]UdmGroupKindIndex */
-        Dem_UtlMem_SetMemory( &tmpUdmFFDMirrorDataPtr[0], DEM_FFD_INITIAL, ffdStoredFormatSize );                   /* [GUDCHK:CALLER]UdmGroupKindIndex *//* [ARYCHK] Dem_UdmFreezeFrameRecordTable[UdmGroupKindIndex].DemFFDStoredFormatSize / 1 / 0 *//* [ARYDESC] The registered data size of Dem_UdmFreezeFrameRecordNvMTable[udmGroupKindIndex].DemTmpUdmFFDMirrorDataPtr is the same as Dem_UdmFreezeFrameRecordTable[UdmGroupKindIndex].DemFFDStoredFormatSize */
+        Dem_UtlMem_SetMemory( &tmpUdmFFDMirrorDataPtr[0], DEM_FFD_INITIAL, ffdStoredFormatSize );                   /* [GUDCHK:CALLER]UdmGroupKindIndex */
     }
 
     return;
@@ -1291,7 +1275,6 @@ static FUNC( void, DEM_CODE ) Dem_UdmFFDMng_InitMirrorMemory
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | branch changed.                                          */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmFFDMng_GetFFR_MngInfo
 (
@@ -1324,24 +1307,20 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmFFDMng_GetFFR_MngInfo
         if ( posRecordStatus != DEM_FFDSTOREDINDEX_INVALID )
         {
             /* Gets UdmEventIndex from storage format. */
-            udmEventIndex = (Dem_u16_UdmEventIndexType)Dem_UtlMem_ConvertByteData( freezeFrameRecordDataPtr[posFirstUdmEventIndexUpper], freezeFrameRecordDataPtr[posFirstUdmEventIndexLower] );    /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posFirstUdmEventIndexUpper *//* [GUD]posFirstUdmEventIndexLower *//* [ARYCHK] Dem_UdmFreezeFrameRecordTable[UdmGroupKindIndex].DemFFDStoredFormatSize / 1 / posFirstUdmEventIndexUpper *//* [ARYCHK] Dem_UdmFreezeFrameRecordTable[UdmGroupKindIndex].DemFFDStoredFormatSize / 1 / posFirstUdmEventIndexLower */
+            udmEventIndex = (Dem_u16_UdmEventIndexType)Dem_UtlMem_ConvertByteData( freezeFrameRecordDataPtr[posFirstUdmEventIndexUpper], freezeFrameRecordDataPtr[posFirstUdmEventIndexLower] );    /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posFirstUdmEventIndexUpper *//* [GUD]posFirstUdmEventIndexLower */
             FreezeFrameRecordPtr->UdmEventIndex = udmEventIndex;
 
             /* Makes occurrence order from storage format. */
-#ifndef DEM_SIT_RANGE_CHECK
             FreezeFrameRecordPtr->OccurrenceOrder = Dem_UdmFFDMng_AssembleOccurrenceOrder( &Dem_UdmFreezeFrameDataPosTable[UdmGroupKindIndex], freezeFrameRecordDataPtr );  /* [GUD]UdmGroupKindIndex */
-#else   /* DEM_SIT_RANGE_CHECK */
-            FreezeFrameRecordPtr->OccurrenceOrder = Dem_UdmFFDMng_AssembleOccurrenceOrder( (Dem_UdmFreezeFrameRecordTable[UdmGroupKindIndex].DemFFDStoredFormatSize), &Dem_UdmFreezeFrameDataPosTable[UdmGroupKindIndex], freezeFrameRecordDataPtr );  /* [GUD]UdmGroupKindIndex */
-#endif  /* DEM_SIT_RANGE_CHECK */
 
             /* Gets CidUdmFreezeFrameRecords from storage format. */
-            FreezeFrameRecordPtr->CidUdmFreezeFrameRecords = (Dem_u08_ConsistencyIdType)freezeFrameRecordDataPtr[posCidUdmFreezeFrameRecords];  /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posCidUdmFreezeFrameRecords *//* [ARYCHK] Dem_UdmFreezeFrameRecordTable[UdmGroupKindIndex].DemFFDStoredFormatSize / 1 / posCidUdmFreezeFrameRecords */
+            FreezeFrameRecordPtr->CidUdmFreezeFrameRecords = (Dem_u08_ConsistencyIdType)freezeFrameRecordDataPtr[posCidUdmFreezeFrameRecords];  /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posCidUdmFreezeFrameRecords */
 
             /* Gets Offset of the time-series freeze frame list record's index from storage format. */
-            FreezeFrameRecordPtr->OffsetOfTSFFListIndex = Dem_UdmFFDMng_GetCheckedOffsetOfTSFFListIndex( udmEventIndex, (Dem_u08_NumOfTSFFType)freezeFrameRecordDataPtr[posOffsetOfTSFFListIndex] );    /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posOffsetOfTSFFListIndex *//* [ARYCHK] Dem_UdmFreezeFrameRecordTable[UdmGroupKindIndex].DemFFDStoredFormatSize / 1 / posOffsetOfTSFFListIndex */
+            FreezeFrameRecordPtr->OffsetOfTSFFListIndex = Dem_UdmFFDMng_GetCheckedOffsetOfTSFFListIndex( udmEventIndex, (Dem_u08_NumOfTSFFType)freezeFrameRecordDataPtr[posOffsetOfTSFFListIndex] );    /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posOffsetOfTSFFListIndex */
 
             /* Gets UdmFaultIndex from storage format. */
-            FreezeFrameRecordPtr->RecordStatus = (Dem_u08_FFStoredStatusType)freezeFrameRecordDataPtr[posRecordStatus];             /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posRecordStatus *//* [ARYCHK] Dem_UdmFreezeFrameRecordTable[UdmGroupKindIndex].DemFFDStoredFormatSize / 1 / posRecordStatus */
+            FreezeFrameRecordPtr->RecordStatus = (Dem_u08_FFStoredStatusType)freezeFrameRecordDataPtr[posRecordStatus];             /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posRecordStatus */
 
             /* Sets the return value to OK, cause the illegal value will not be returned. */
             retVal = DEM_IRT_OK;
@@ -1379,7 +1358,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmFFDMng_GetFFR_MngInfo
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | branch changed.                                          */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmFFDMng_GetFreezeFrameRecord
 (
@@ -1413,18 +1391,13 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmFFDMng_GetFreezeFrameRecord
         /*  check available data of Dem_UdmFreezeFrameDataPosTable[]    */
         if ( posRecordStatus != DEM_FFDSTOREDINDEX_INVALID )
         {
-            udmEventIndex = (Dem_u16_UdmEventIndexType)Dem_UtlMem_ConvertByteData( freezeFrameRecordDataPtr[posFirstUdmEventIndexUpper], freezeFrameRecordDataPtr[posFirstUdmEventIndexLower] );    /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posFirstUdmEventIndexUpper *//* [GUD]posFirstUdmEventIndexLower *//* [ARYCHK] Dem_UdmFreezeFrameRecordTable[UdmGroupKindIndex].DemFFDStoredFormatSize / 1 / posFirstUdmEventIndexUpper *//* [ARYCHK] Dem_UdmFreezeFrameRecordTable[UdmGroupKindIndex].DemFFDStoredFormatSize / 1 / posFirstUdmEventIndexLower */
+            udmEventIndex = (Dem_u16_UdmEventIndexType)Dem_UtlMem_ConvertByteData( freezeFrameRecordDataPtr[posFirstUdmEventIndexUpper], freezeFrameRecordDataPtr[posFirstUdmEventIndexLower] );    /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posFirstUdmEventIndexUpper *//* [GUD]posFirstUdmEventIndexLower */
 
-#ifndef DEM_SIT_RANGE_CHECK
             FreezeFrameRecordPtr->OccurrenceOrder = Dem_UdmFFDMng_AssembleOccurrenceOrder( &Dem_UdmFreezeFrameDataPosTable[UdmGroupKindIndex], freezeFrameRecordDataPtr );  /* [GUD]UdmGroupKindIndex *//* [GUD]freezeFrameRecordDataPtr */
-#else   /* DEM_SIT_RANGE_CHECK */
-            FreezeFrameRecordPtr->OccurrenceOrder = Dem_UdmFFDMng_AssembleOccurrenceOrder( (Dem_UdmFreezeFrameRecordTable[UdmGroupKindIndex].DemFFDStoredFormatSize), &Dem_UdmFreezeFrameDataPosTable[UdmGroupKindIndex], freezeFrameRecordDataPtr );  /* [GUD]UdmGroupKindIndex *//* [GUD]freezeFrameRecordDataPtr */
-#endif  /* DEM_SIT_RANGE_CHECK */
-
-            FreezeFrameRecordPtr->CidUdmFreezeFrameRecords = (Dem_u08_ConsistencyIdType)freezeFrameRecordDataPtr[posCidUdmFreezeFrameRecords];                              /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posCidUdmFreezeFrameRecords *//* [ARYCHK] Dem_UdmFreezeFrameRecordTable[UdmGroupKindIndex].DemFFDStoredFormatSize / 1 / posCidUdmFreezeFrameRecords */
-            FreezeFrameRecordPtr->RecordStatus = (Dem_u08_FFStoredStatusType)freezeFrameRecordDataPtr[posRecordStatus];                                                     /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posRecordStatus *//* [ARYCHK] Dem_UdmFreezeFrameRecordTable[UdmGroupKindIndex].DemFFDStoredFormatSize / 1 / posRecordStatus */
-            FreezeFrameRecordPtr->OffsetOfTSFFListIndex = Dem_UdmFFDMng_GetCheckedOffsetOfTSFFListIndex( udmEventIndex, (Dem_u08_NumOfTSFFType)freezeFrameRecordDataPtr[posOffsetOfTSFFListIndex] );    /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posOffsetOfTSFFListIndex *//* [ARYCHK] Dem_UdmFreezeFrameRecordTable[UdmGroupKindIndex].DemFFDStoredFormatSize / 1 / posOffsetOfTSFFListIndex */
-            FreezeFrameRecordPtr->DataPtr = &freezeFrameRecordDataPtr[posDataStart];                /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posDataStart *//* [ARYCHK] Dem_UdmFreezeFrameRecordTable[UdmGroupKindIndex].DemFFDStoredFormatSize / 1 / posDataStart */
+            FreezeFrameRecordPtr->CidUdmFreezeFrameRecords = (Dem_u08_ConsistencyIdType)freezeFrameRecordDataPtr[posCidUdmFreezeFrameRecords];                              /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posCidUdmFreezeFrameRecords */
+            FreezeFrameRecordPtr->RecordStatus = (Dem_u08_FFStoredStatusType)freezeFrameRecordDataPtr[posRecordStatus];                                                     /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posRecordStatus */
+            FreezeFrameRecordPtr->OffsetOfTSFFListIndex = Dem_UdmFFDMng_GetCheckedOffsetOfTSFFListIndex( udmEventIndex, (Dem_u08_NumOfTSFFType)freezeFrameRecordDataPtr[posOffsetOfTSFFListIndex] );    /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posOffsetOfTSFFListIndex */
+            FreezeFrameRecordPtr->DataPtr = &freezeFrameRecordDataPtr[posDataStart];                /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posDataStart */
 
             retVal = DEM_IRT_OK;
         }
@@ -1460,7 +1433,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmFFDMng_GetFreezeFrameRecord
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | branch changed.                                          */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmFFDMng_GetMngInfo
 (
@@ -1492,16 +1464,12 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmFFDMng_GetMngInfo
         /*  check available data of Dem_UdmFreezeFrameDataPosTable[]    */
         if ( posRecordStatus != DEM_FFDSTOREDINDEX_INVALID )
         {
-            udmEventIndex = (Dem_u16_UdmEventIndexType)Dem_UtlMem_ConvertByteData( freezeFrameRecordDataPtr[posFirstUdmEventIndexUpper], freezeFrameRecordDataPtr[posFirstUdmEventIndexLower] );    /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posFirstUdmEventIndexUpper *//* [GUD]posFirstUdmEventIndexLower *//* [ARYCHK] Dem_UdmFreezeFrameRecordTable[UdmGroupKindIndex].DemFFDStoredFormatSize / 1 / posFirstUdmEventIndexUpper *//* [ARYCHK] Dem_UdmFreezeFrameRecordTable[UdmGroupKindIndex].DemFFDStoredFormatSize / 1 / posFirstUdmEventIndexLower */
+            udmEventIndex = (Dem_u16_UdmEventIndexType)Dem_UtlMem_ConvertByteData( freezeFrameRecordDataPtr[posFirstUdmEventIndexUpper], freezeFrameRecordDataPtr[posFirstUdmEventIndexLower] );    /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posFirstUdmEventIndexUpper *//* [GUD]posFirstUdmEventIndexLower */
             FFRMngInfoPtr->UdmEventIndex = udmEventIndex;
-#ifndef DEM_SIT_RANGE_CHECK
-            FFRMngInfoPtr->OccurrenceOrder = Dem_UdmFFDMng_AssembleOccurrenceOrder( &Dem_UdmFreezeFrameDataPosTable[UdmGroupKindIndex], freezeFrameRecordDataPtr );      /* [GUD]UdmGroupKindIndex *//* [GUD]freezeFrameRecordDataPtr */
-#else   /* DEM_SIT_RANGE_CHECK */
-            FFRMngInfoPtr->OccurrenceOrder = Dem_UdmFFDMng_AssembleOccurrenceOrder( (Dem_UdmFreezeFrameRecordTable[UdmGroupKindIndex].DemFFDStoredFormatSize), &Dem_UdmFreezeFrameDataPosTable[UdmGroupKindIndex], freezeFrameRecordDataPtr );      /* [GUD]UdmGroupKindIndex *//* [GUD]freezeFrameRecordDataPtr */
-#endif  /* DEM_SIT_RANGE_CHECK */
-            FFRMngInfoPtr->CidUdmFreezeFrameRecords = (Dem_u08_ConsistencyIdType)freezeFrameRecordDataPtr[posCidUdmFreezeFrameRecords];                                                             /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posCidUdmFreezeFrameRecords *//* [ARYCHK] Dem_UdmFreezeFrameRecordTable[UdmGroupKindIndex].DemFFDStoredFormatSize / 1 / posCidUdmFreezeFrameRecords */
-            FFRMngInfoPtr->OffsetOfTSFFListIndex = Dem_UdmFFDMng_GetCheckedOffsetOfTSFFListIndex( udmEventIndex, (Dem_u08_NumOfTSFFType)freezeFrameRecordDataPtr[posOffsetOfTSFFListIndex] );       /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posOffsetOfTSFFListIndex *//* [ARYCHK] Dem_UdmFreezeFrameRecordTable[UdmGroupKindIndex].DemFFDStoredFormatSize / 1 / posOffsetOfTSFFListIndex */
-            FFRMngInfoPtr->RecordStatus = (Dem_u08_FFStoredStatusType)freezeFrameRecordDataPtr[posRecordStatus];        /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posRecordStatus *//* [ARYCHK] Dem_UdmFreezeFrameRecordTable[UdmGroupKindIndex].DemFFDStoredFormatSize / 1 / posRecordStatus */
+            FFRMngInfoPtr->OccurrenceOrder = Dem_UdmFFDMng_AssembleOccurrenceOrder( &Dem_UdmFreezeFrameDataPosTable[UdmGroupKindIndex], freezeFrameRecordDataPtr );                                 /* [GUD]UdmGroupKindIndex *//* [GUD]freezeFrameRecordDataPtr */
+            FFRMngInfoPtr->CidUdmFreezeFrameRecords = (Dem_u08_ConsistencyIdType)freezeFrameRecordDataPtr[posCidUdmFreezeFrameRecords];                                                             /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posCidUdmFreezeFrameRecords */
+            FFRMngInfoPtr->OffsetOfTSFFListIndex = Dem_UdmFFDMng_GetCheckedOffsetOfTSFFListIndex( udmEventIndex, (Dem_u08_NumOfTSFFType)freezeFrameRecordDataPtr[posOffsetOfTSFFListIndex] );       /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posOffsetOfTSFFListIndex */
+            FFRMngInfoPtr->RecordStatus = (Dem_u08_FFStoredStatusType)freezeFrameRecordDataPtr[posRecordStatus];        /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posRecordStatus */
 
             retVal = DEM_IRT_OK;
         }
@@ -1533,7 +1501,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmFFDMng_GetMngInfo
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | branch changed.                                          */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC_P2VAR( uint8, DEM_VAR_SAVED_ZONE, DEM_CODE ) Dem_UdmFFDMng_GetFreezeFrameStartDataPtr
 (
@@ -1554,7 +1521,7 @@ FUNC_P2VAR( uint8, DEM_VAR_SAVED_ZONE, DEM_CODE ) Dem_UdmFFDMng_GetFreezeFrameSt
         /*  check available data of Dem_UdmFreezeFrameDataPosTable[]    */
         if ( posDataStart != DEM_FFDSTOREDINDEX_INVALID )
         {
-            freezeFrameRecordStartDataPtr = &freezeFrameRecordDataPtr[posDataStart];        /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posDataStart *//* [ARYCHK] Dem_UdmFreezeFrameRecordTable[UdmGroupKindIndex].DemFFDStoredFormatSize / 1 / posDataStart */
+            freezeFrameRecordStartDataPtr = &freezeFrameRecordDataPtr[posDataStart];        /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posDataStart */
         }
     }
 
@@ -1583,7 +1550,6 @@ FUNC_P2VAR( uint8, DEM_VAR_SAVED_ZONE, DEM_CODE ) Dem_UdmFFDMng_GetFreezeFrameSt
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | branch changed.                                          */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_UdmFFDMng_SetFreezeFrameRecord
 (
@@ -1614,11 +1580,7 @@ FUNC( void, DEM_CODE ) Dem_UdmFFDMng_SetFreezeFrameRecord
         udmFFRMngInfo.RecordStatus = FreezeFrameRecordPtr->RecordStatus;
 
         /* Sets the captured freeze frame data record and the index of fault to storage format. */
-#ifndef DEM_SIT_RANGE_CHECK
         Dem_UdmFFDMng_SetCapturedFreezeFrame( &Dem_UdmFreezeFrameDataPosTable[UdmGroupKindIndex], consistencyId, &udmFFRMngInfo, FreezeFrameRecordPtr->Data, udmFFDMaxLength, freezeFrameRecordDataPtr );   /* [GUD]UdmGroupKindIndex *//* [GUD]freezeFrameRecordDataPtr */
-#else   /* DEM_SIT_RANGE_CHECK */
-        Dem_UdmFFDMng_SetCapturedFreezeFrame( (Dem_UdmFreezeFrameRecordTable[UdmGroupKindIndex].DemFFDStoredFormatSize), &Dem_UdmFreezeFrameDataPosTable[UdmGroupKindIndex], consistencyId, &udmFFRMngInfo, FreezeFrameRecordPtr->Data, udmFFDMaxLength, freezeFrameRecordDataPtr );   /* [GUD]UdmGroupKindIndex *//* [GUD]freezeFrameRecordDataPtr */
-#endif  /* DEM_SIT_RANGE_CHECK */
         /* Change Dem_FFDNvMStatus */
         recMngCmnKindUdmFFD = Dem_UdmFFDNvMStatus[ UdmGroupKindIndex ].DemRecMngCmnKindUdmFFD;          /* [GUD]UdmGroupKindIndex */
         Dem_RecMngCmn_SetNvMWriteStatus( recMngCmnKindUdmFFD, ( Dem_u16_RecordIndexType )UdmFreezeFrameIndex );
@@ -1654,7 +1616,6 @@ FUNC( void, DEM_CODE ) Dem_UdmFFDMng_SetFreezeFrameRecord
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | branch changed.                                          */
-/*   v5-7-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_UdmFFDMng_SetMngInfo
 (
@@ -1678,11 +1639,7 @@ FUNC( void, DEM_CODE ) Dem_UdmFFDMng_SetMngInfo
         udmFFDMaxLength = Dem_UdmFreezeFrameRecordTable[UdmGroupKindIndex].DemFFDMaxLength;             /* [GUD]UdmGroupKindIndex */
 
         /* Sets the captured freeze frame data record and the index of fault to storage format. */
-#ifndef DEM_SIT_RANGE_CHECK
-        Dem_UdmFFDMng_SetMngInfoToFreezeFrame( &Dem_UdmFreezeFrameDataPosTable[UdmGroupKindIndex], consistencyId, FFRMngInfoPtr, freezeFrameRecordDataPtr, udmFFDMaxLength );  /* [GUD]UdmGroupKindIndex */
-#else   /* DEM_SIT_RANGE_CHECK */
-        Dem_UdmFFDMng_SetMngInfoToFreezeFrame( (Dem_UdmFreezeFrameRecordTable[UdmGroupKindIndex].DemFFDStoredFormatSize), &Dem_UdmFreezeFrameDataPosTable[UdmGroupKindIndex], consistencyId, FFRMngInfoPtr, freezeFrameRecordDataPtr, udmFFDMaxLength );  /* [GUD]UdmGroupKindIndex */
-#endif  /* DEM_SIT_RANGE_CHECK */
+        Dem_UdmFFDMng_SetMngInfoToFreezeFrame( &Dem_UdmFreezeFrameDataPosTable[UdmGroupKindIndex], consistencyId, FFRMngInfoPtr->UdmEventIndex, FFRMngInfoPtr->CidUdmFreezeFrameRecords, FFRMngInfoPtr->OccurrenceOrder, FFRMngInfoPtr->RecordStatus, freezeFrameRecordDataPtr, udmFFDMaxLength );  /* [GUD]UdmGroupKindIndex */
 
         /* Change Dem_FFDNvMStatus */
         recMngCmnKindUdmFFD = Dem_UdmFFDNvMStatus[ UdmGroupKindIndex ].DemRecMngCmnKindUdmFFD;          /* [GUD]UdmGroupKindIndex */
@@ -1716,7 +1673,6 @@ FUNC( void, DEM_CODE ) Dem_UdmFFDMng_SetMngInfo
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC_P2VAR( uint8, DEM_VAR_SAVED_ZONE, DEM_CODE ) Dem_UdmFFDMng_GetFreezeFrameRecordDataPtr
 (
@@ -1743,7 +1699,7 @@ static FUNC_P2VAR( uint8, DEM_VAR_SAVED_ZONE, DEM_CODE ) Dem_UdmFFDMng_GetFreeze
 
             udmFFDOffset = (uint32)( (uint32)ffdStoredFormatSize * (uint32)UdmFreezeFrameIndex );   /* no wrap around *//* [GUD:CFG:IF_GUARDED UdmFreezeFrameIndex ]udmFFDOffset */
 
-            freezeFrameRecordDataPtr = &freezeFrameRecordDataPtr[udmFFDOffset];                 /* [GUD]freezeFrameRecordDataPtr *//* [GUD]udmFFDOffset *//* [ARYCHK] (ffdStoredFormatSize*udmFFDRecordNum) / 1 / udmFFDOffset */
+            freezeFrameRecordDataPtr = &freezeFrameRecordDataPtr[udmFFDOffset];                 /* [GUD]freezeFrameRecordDataPtr *//* [GUD]udmFFDOffset */
         }
     }
 
@@ -1786,7 +1742,6 @@ static FUNC_P2VAR( uint8, DEM_VAR_SAVED_ZONE, DEM_CODE ) Dem_UdmFFDMng_GetFreeze
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmFFDMng_GetNextFreezeFrameInfo
 (
@@ -1822,11 +1777,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmFFDMng_GetNextFreezeFrameInf
     {
         isOccurrenceOrderUnderflow = (boolean)FALSE;
 
-#ifndef DEM_SIT_RANGE_CHECK
         occurrenceOrder = Dem_UdmFFDMng_AssembleOccurrenceOrder( &Dem_UdmFreezeFrameDataPosTable[UdmGroupKindIndex], freezeFrameRecordDataPtr );    /* [GUD]UdmGroupKindIndex *//* [GUD]freezeFrameRecordDataPtr */
-#else   /* DEM_SIT_RANGE_CHECK */
-        occurrenceOrder = Dem_UdmFFDMng_AssembleOccurrenceOrder( (Dem_UdmFreezeFrameRecordTable[UdmGroupKindIndex].DemFFDStoredFormatSize), &Dem_UdmFreezeFrameDataPosTable[UdmGroupKindIndex], freezeFrameRecordDataPtr );    /* [GUD]UdmGroupKindIndex *//* [GUD]freezeFrameRecordDataPtr */
-#endif  /* DEM_SIT_RANGE_CHECK */
         if( occurrenceOrder == (Dem_u32_UdmOccurrenceOrderType)0U )
         {
             isOccurrenceOrderUnderflow = (boolean)TRUE;
@@ -1842,13 +1793,13 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmFFDMng_GetNextFreezeFrameInf
         /*  check available data of Dem_UdmFreezeFrameDataPosTable[]    */
         if ( posCidUdmFreezeFrameRecords != DEM_FFDSTOREDINDEX_INVALID )
         {
-            cidUdmFreezeFrameRecords = (Dem_u08_ConsistencyIdType)freezeFrameRecordDataPtr[posCidUdmFreezeFrameRecords];    /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posCidUdmFreezeFrameRecords *//* [ARYCHK] Dem_UdmFreezeFrameRecordTable[UdmGroupKindIndex].DemFFDStoredFormatSize / 1 / posCidUdmFreezeFrameRecords */
+            cidUdmFreezeFrameRecords = (Dem_u08_ConsistencyIdType)freezeFrameRecordDataPtr[posCidUdmFreezeFrameRecords];    /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posCidUdmFreezeFrameRecords */
             newestUdmNextFreezeFrameInfo.CidUdmFreezeFrameRecords = cidUdmFreezeFrameRecords;
             newestUdmNextFreezeFrameInfoUnderflow.CidUdmFreezeFrameRecords = cidUdmFreezeFrameRecords;
 
             ffdNotStoredFreezeFrameRecordIndex = DEM_UDMFFRECINDEX_INITIAL;
             posRecordStatus = Dem_UdmFreezeFrameDataPosTable[UdmGroupKindIndex].RecordStatus;                       /* [GUD]UdmGroupKindIndex *//* [GUD:CFG:IF_GUARDED:UdmGroupKindIndex]posRecordStatus */
-            recordStatus = (Dem_u08_FFStoredStatusType)freezeFrameRecordDataPtr[posRecordStatus];                   /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posRecordStatus *//* [ARYCHK] Dem_UdmFreezeFrameRecordTable[UdmGroupKindIndex].DemFFDStoredFormatSize / 1 / posRecordStatus */
+            recordStatus = (Dem_u08_FFStoredStatusType)freezeFrameRecordDataPtr[posRecordStatus];                   /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posRecordStatus */
             if( recordStatus == DEM_FFD_NOT_STORED )
             {
                 ffdNotStoredFreezeFrameRecordIndex = StartFreezeFrameRecordIndex;
@@ -1864,7 +1815,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmFFDMng_GetNextFreezeFrameInf
                 freezeFrameRecordDataPtr = ( P2CONST( uint8, TYPEDEF, DEM_VAR_SAVED_ZONE ) )Dem_UdmFFDMng_GetFreezeFrameRecordDataPtr( UdmGroupKindIndex, freezeFrameRecordIndex );     /* [GUD]UdmGroupKindIndex */
                 if( freezeFrameRecordDataPtr != NULL_PTR )                                                  /* [GUD:if]freezeFrameRecordDataPtr */
                 {
-                    recordStatus = (Dem_u08_FFStoredStatusType)freezeFrameRecordDataPtr[posRecordStatus];   /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posRecordStatus *//* [ARYCHK] Dem_UdmFreezeFrameRecordTable[UdmGroupKindIndex].DemFFDStoredFormatSize / 1 / posRecordStatus */
+                    recordStatus = (Dem_u08_FFStoredStatusType)freezeFrameRecordDataPtr[posRecordStatus];   /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posRecordStatus */
 
                     if( ffdNotStoredFreezeFrameRecordIndex == DEM_UDMFFRECINDEX_INITIAL )
                     {
@@ -1889,13 +1840,9 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmFFDMng_GetNextFreezeFrameInf
 
                     if( doGetNextFreezeFrameInfo == (boolean)TRUE )
                     {
-                        cidUdmFreezeFrameRecords = (Dem_u08_ConsistencyIdType)freezeFrameRecordDataPtr[posCidUdmFreezeFrameRecords];    /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posCidUdmFreezeFrameRecords *//* [ARYCHK] Dem_UdmFreezeFrameRecordTable[UdmGroupKindIndex].DemFFDStoredFormatSize / 1 / posCidUdmFreezeFrameRecords */
+                        cidUdmFreezeFrameRecords = (Dem_u08_ConsistencyIdType)freezeFrameRecordDataPtr[posCidUdmFreezeFrameRecords];    /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posCidUdmFreezeFrameRecords */
 
-#ifndef DEM_SIT_RANGE_CHECK
                         occurrenceOrder = Dem_UdmFFDMng_AssembleOccurrenceOrder( &Dem_UdmFreezeFrameDataPosTable[UdmGroupKindIndex], freezeFrameRecordDataPtr );    /* [GUD]UdmGroupKindIndex *//* [GUD]freezeFrameRecordDataPtr */
-#else   /* DEM_SIT_RANGE_CHECK */
-                        occurrenceOrder = Dem_UdmFFDMng_AssembleOccurrenceOrder( (Dem_UdmFreezeFrameRecordTable[UdmGroupKindIndex].DemFFDStoredFormatSize), &Dem_UdmFreezeFrameDataPosTable[UdmGroupKindIndex], freezeFrameRecordDataPtr );    /* [GUD]UdmGroupKindIndex *//* [GUD]freezeFrameRecordDataPtr */
-#endif  /* DEM_SIT_RANGE_CHECK */
                         if( occurrenceOrder == (Dem_u32_UdmOccurrenceOrderType)0U )
                         {
                             isOccurrenceOrderUnderflow = (boolean)TRUE;
@@ -2052,7 +1999,6 @@ static FUNC( void, DEM_CODE ) Dem_UdmFFDMng_GetNewerFreezeFrameInfo
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmFFDMng_GetRecordStatus
 (
@@ -2074,7 +2020,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmFFDMng_GetRecordStatus
         /*  check available data of Dem_UdmFreezeFrameDataPosTable[]    */
         if ( posRecordStatus != DEM_FFDSTOREDINDEX_INVALID )
         {
-            (*RecordStatusPtr) = (Dem_u08_FFStoredStatusType)freezeFrameRecordDataPtr[posRecordStatus];     /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posRecordStatus *//* [ARYCHK] Dem_UdmFreezeFrameRecordTable[UdmGroupKindIndex].DemFFDStoredFormatSize / 1 / posRecordStatus */
+            (*RecordStatusPtr) = (Dem_u08_FFStoredStatusType)freezeFrameRecordDataPtr[posRecordStatus];     /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posRecordStatus */
             retVal = DEM_IRT_OK;
         }
     }
@@ -2107,7 +2053,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmFFDMng_GetRecordStatus
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | branch changed.                                          */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_UdmFFDMng_ClearAndSetOffsetOfTSFFListIndex
 (
@@ -2146,10 +2091,10 @@ FUNC( void, DEM_CODE ) Dem_UdmFFDMng_ClearAndSetOffsetOfTSFFListIndex
                 freezeFrameRecordDataPtr = Dem_UdmFFDMng_GetFreezeFrameRecordDataPtr( UdmGroupKindIndex, udmFreezeFrameRecordIndex );   /* [GUD]UdmGroupKindIndex */
                 if( freezeFrameRecordDataPtr != NULL_PTR )                                                              /* [GUD:if]freezeFrameRecordDataPtr */
                 {
-                    offsetOfTSFFListIndex = (Dem_u08_NumOfTSFFType)freezeFrameRecordDataPtr[posOffsetOfTSFFListIndex];  /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posOffsetOfTSFFListIndex *//* [ARYCHK] Dem_UdmFreezeFrameRecordTable[UdmGroupKindIndex].DemFFDStoredFormatSize / 1 / posOffsetOfTSFFListIndex */
+                    offsetOfTSFFListIndex = (Dem_u08_NumOfTSFFType)freezeFrameRecordDataPtr[posOffsetOfTSFFListIndex];  /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posOffsetOfTSFFListIndex */
                     if( offsetOfTSFFListIndex == OffsetOfTSFFListIndex )
                     {
-                        freezeFrameRecordDataPtr[posOffsetOfTSFFListIndex] = (uint8)DEM_NUMOFTSFF_INVALID;              /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posOffsetOfTSFFListIndex *//* [ARYCHK] Dem_UdmFreezeFrameRecordTable[UdmGroupKindIndex].DemFFDStoredFormatSize / 1 / posOffsetOfTSFFListIndex */
+                        freezeFrameRecordDataPtr[posOffsetOfTSFFListIndex] = (uint8)DEM_NUMOFTSFF_INVALID;              /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posOffsetOfTSFFListIndex */
 
                         /* Change Dem_FFDNvMStatus */
                         recMngCmnKindUdmFFD = Dem_UdmFFDNvMStatus[ UdmGroupKindIndex ].DemRecMngCmnKindUdmFFD;                          /* [GUD]UdmGroupKindIndex */
@@ -2166,7 +2111,7 @@ FUNC( void, DEM_CODE ) Dem_UdmFFDMng_ClearAndSetOffsetOfTSFFListIndex
             freezeFrameRecordDataPtr = Dem_UdmFFDMng_GetFreezeFrameRecordDataPtr( UdmGroupKindIndex, CurrentUdmFreezeFrameRecordIndex );    /* [GUD]UdmGroupKindIndex */
             if( freezeFrameRecordDataPtr != NULL_PTR )                                                  /* [GUD:if]freezeFrameRecordDataPtr */
             {
-                freezeFrameRecordDataPtr[posOffsetOfTSFFListIndex] = (uint8)OffsetOfTSFFListIndex;      /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posOffsetOfTSFFListIndex *//* [ARYCHK] Dem_UdmFreezeFrameRecordTable[UdmGroupKindIndex].DemFFDStoredFormatSize / 1 / posOffsetOfTSFFListIndex */
+                freezeFrameRecordDataPtr[posOffsetOfTSFFListIndex] = (uint8)OffsetOfTSFFListIndex;      /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posOffsetOfTSFFListIndex */
                 /* No need to change Dem_FFDNvMStatus, cause it has been set. */
             }
         }
@@ -2191,7 +2136,6 @@ FUNC( void, DEM_CODE ) Dem_UdmFFDMng_ClearAndSetOffsetOfTSFFListIndex
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_UdmFFDMng_InitOffsetOfTSFFListIndex
 (
@@ -2209,7 +2153,7 @@ FUNC( void, DEM_CODE ) Dem_UdmFFDMng_InitOffsetOfTSFFListIndex
         /*  check available data of Dem_UdmFreezeFrameDataPosTable[]    */
         if ( posOffsetOfTSFFListIndex != DEM_FFDSTOREDINDEX_INVALID )
         {
-            freezeFrameRecordDataPtr[posOffsetOfTSFFListIndex] = (uint8)DEM_NUMOFTSFF_INVALID;              /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posOffsetOfTSFFListIndex *//* [ARYCHK] Dem_UdmFreezeFrameRecordTable[UdmGroupKindIndex].DemFFDStoredFormatSize / 1 / posOffsetOfTSFFListIndex */
+            freezeFrameRecordDataPtr[posOffsetOfTSFFListIndex] = (uint8)DEM_NUMOFTSFF_INVALID;              /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posOffsetOfTSFFListIndex */
         }
     }
 
@@ -2239,7 +2183,6 @@ FUNC( void, DEM_CODE ) Dem_UdmFFDMng_InitOffsetOfTSFFListIndex
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_NumOfTSFFType, DEM_CODE ) Dem_UdmFFDMng_GetLatestOffsetOfTSFFListIndex
 (
@@ -2285,18 +2228,14 @@ FUNC( Dem_u08_NumOfTSFFType, DEM_CODE ) Dem_UdmFFDMng_GetLatestOffsetOfTSFFListI
             /*  check available data of Dem_UdmFreezeFrameDataPosTable[]    */
             if ( posRecordStatus != DEM_FFDSTOREDINDEX_INVALID )
             {
-                recordStatus = (Dem_u08_FFStoredStatusType)freezeFrameRecordDataPtr[posRecordStatus];               /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posRecordStatus *//* [ARYCHK] Dem_UdmFreezeFrameRecordTable[UdmGroupKindIndex].DemFFDStoredFormatSize / 1 / posRecordStatus */
+                recordStatus = (Dem_u08_FFStoredStatusType)freezeFrameRecordDataPtr[posRecordStatus];               /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posRecordStatus */
                 if( recordStatus == DEM_FFD_STORED )
                 {
                     posOffsetOfTSFFListIndex = Dem_UdmFreezeFrameDataPosTable[UdmGroupKindIndex].OffsetOfTSFFListIndex;     /* [GUD]UdmGroupKindIndex *//* [GUD:CFG:IF_GUARDED:UdmGroupKindIndex]posOffsetOfTSFFListIndex */
-                    offsetOfTSFFListIndex = Dem_UdmFFDMng_GetCheckedOffsetOfTSFFListIndex( UdmEventIndex, (Dem_u08_NumOfTSFFType)freezeFrameRecordDataPtr[posOffsetOfTSFFListIndex] );  /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posOffsetOfTSFFListIndex *//* [ARYCHK] Dem_UdmFreezeFrameRecordTable[UdmGroupKindIndex].DemFFDStoredFormatSize / 1 / posOffsetOfTSFFListIndex */
+                    offsetOfTSFFListIndex = Dem_UdmFFDMng_GetCheckedOffsetOfTSFFListIndex( UdmEventIndex, (Dem_u08_NumOfTSFFType)freezeFrameRecordDataPtr[posOffsetOfTSFFListIndex] );  /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posOffsetOfTSFFListIndex */
                     if( offsetOfTSFFListIndex != DEM_NUMOFTSFF_INVALID )
                     {
-#ifndef DEM_SIT_RANGE_CHECK
                         targetOccurrenceOrder = Dem_UdmFFDMng_AssembleOccurrenceOrder( &Dem_UdmFreezeFrameDataPosTable[UdmGroupKindIndex], freezeFrameRecordDataPtr );  /* [GUD]UdmGroupKindIndex *//* [GUD]freezeFrameRecordDataPtr */
-#else   /* DEM_SIT_RANGE_CHECK */
-                        targetOccurrenceOrder = Dem_UdmFFDMng_AssembleOccurrenceOrder( (Dem_UdmFreezeFrameRecordTable[UdmGroupKindIndex].DemFFDStoredFormatSize), &Dem_UdmFreezeFrameDataPosTable[UdmGroupKindIndex], freezeFrameRecordDataPtr );  /* [GUD]UdmGroupKindIndex *//* [GUD]freezeFrameRecordDataPtr */
-#endif  /* DEM_SIT_RANGE_CHECK */
                         if( targetOccurrenceOrder != DEM_UDMOCCURRENCEORDER_INITIAL )
                         {
                             if( targetOccurrenceOrder == (Dem_u32_UdmOccurrenceOrderType)0U )
@@ -2360,7 +2299,6 @@ FUNC( Dem_u08_NumOfTSFFType, DEM_CODE ) Dem_UdmFFDMng_GetLatestOffsetOfTSFFListI
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u16_UdmFFDIndexType, DEM_CODE ) Dem_UdmFFDMng_GetFFRIndexByOffsetOfTSFFListIndex
 (
@@ -2395,11 +2333,11 @@ FUNC( Dem_u16_UdmFFDIndexType, DEM_CODE ) Dem_UdmFFDMng_GetFFRIndexByOffsetOfTSF
             /*  check available data of Dem_UdmFreezeFrameDataPosTable[]    */
             if ( posRecordStatus != DEM_FFDSTOREDINDEX_INVALID )
             {
-                recordStatus = (Dem_u08_FFStoredStatusType)freezeFrameRecordDataPtr[posRecordStatus];                       /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posRecordStatus *//* [ARYCHK] Dem_UdmFreezeFrameRecordTable[UdmGroupKindIndex].DemFFDStoredFormatSize / 1 / posRecordStatus */
+                recordStatus = (Dem_u08_FFStoredStatusType)freezeFrameRecordDataPtr[posRecordStatus];                       /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posRecordStatus */
                 if( recordStatus == DEM_FFD_STORED )
                 {
                     posOffsetOfTSFFListIndex = Dem_UdmFreezeFrameDataPosTable[UdmGroupKindIndex].OffsetOfTSFFListIndex;     /* [GUD]UdmGroupKindIndex *//* [GUD:CFG:IF_GUARDED:UdmGroupKindIndex]posOffsetOfTSFFListIndex */
-                    offsetOfTSFFListIndex = Dem_UdmFFDMng_GetCheckedOffsetOfTSFFListIndex( UdmEventIndex, (Dem_u08_NumOfTSFFType)freezeFrameRecordDataPtr[posOffsetOfTSFFListIndex] );  /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posOffsetOfTSFFListIndex *//* [ARYCHK] Dem_UdmFreezeFrameRecordTable[UdmGroupKindIndex].DemFFDStoredFormatSize / 1 / posOffsetOfTSFFListIndex */
+                    offsetOfTSFFListIndex = Dem_UdmFFDMng_GetCheckedOffsetOfTSFFListIndex( UdmEventIndex, (Dem_u08_NumOfTSFFType)freezeFrameRecordDataPtr[posOffsetOfTSFFListIndex] );  /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posOffsetOfTSFFListIndex */
                     if( offsetOfTSFFListIndex != DEM_NUMOFTSFF_INVALID )
                     {
                         if( offsetOfTSFFListIndex == OffsetOfTSFFListIndex )
@@ -2491,7 +2429,6 @@ static FUNC( Dem_u08_NumOfTSFFType, DEM_CODE ) Dem_UdmFFDMng_GetCheckedOffsetOfT
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | new created. based on Dem_UdmFFDMng_ClearAndSetOffsetOfTSFFListIndex. */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_UdmFFDMng_ClearFFDOtherThanTheFirstTime
 (
@@ -2524,7 +2461,7 @@ FUNC( void, DEM_CODE ) Dem_UdmFFDMng_ClearFFDOtherThanTheFirstTime
             if( freezeFrameRecordDataPtr != NULL_PTR )                                              /* [GUD:if]freezeFrameRecordDataPtr */
             {
                 /* Sets the RecordStatus to DEM_FFD_NOT_STORED even if the RecordStatus is DEM_FFD_STORED or DEM_FFD_NOT_STORED.  */
-                freezeFrameRecordDataPtr[posRecordStatus] = (uint8)DEM_FFD_NOT_STORED;              /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posRecordStatus *//* [ARYCHK] Dem_UdmFreezeFrameRecordTable[UdmGroupKindIndex].DemFFDStoredFormatSize / 1 / posRecordStatus */
+                freezeFrameRecordDataPtr[posRecordStatus] = (uint8)DEM_FFD_NOT_STORED;              /* [GUD]freezeFrameRecordDataPtr *//* [GUD]posRecordStatus */
 
                 /* Change Dem_FFDNvMStatus */
                 recMngCmnKindUdmFFD = Dem_UdmFFDNvMStatus[ UdmGroupKindIndex ].DemRecMngCmnKindUdmFFD;                              /* [GUD]UdmGroupKindIndex */
@@ -2623,7 +2560,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmFFDMng_GetEventIdFromRecordD
 /*  v5-0-0         :2022-03-29                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-7-0         :2024-05-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

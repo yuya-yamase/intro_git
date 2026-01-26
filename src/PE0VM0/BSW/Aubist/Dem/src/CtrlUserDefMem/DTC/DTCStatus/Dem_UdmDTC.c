@@ -1,7 +1,7 @@
-/* Dem_UdmDTC_c(v5-10-0)                                                    */
+/* Dem_UdmDTC_c(v5-5-0)                                                     */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -70,9 +70,6 @@
 /*               |        TRUE  : target to clear                           */
 /*               |        FALSE : not target to clear                       */
 /* Notes         | -                                                        */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-10-0     | no branch changed.                                       */
 /****************************************************************************/
 FUNC( boolean, DEM_CODE ) Dem_UdmDTC_JudgeUdmDTCClearTarget
 (
@@ -81,17 +78,18 @@ FUNC( boolean, DEM_CODE ) Dem_UdmDTC_JudgeUdmDTCClearTarget
 {
     VAR( boolean, AUTOMATIC ) retVal;
     VAR( boolean, AUTOMATIC ) execClearDTC;
+    VAR( Dem_u32_DTCGroupType, AUTOMATIC ) getDTCGroup;
     VAR( Dem_DTCOriginType, AUTOMATIC ) getDTCOrigin;
     VAR( Dem_DTCOriginType, AUTOMATIC ) memConfigId;
     VAR( Dem_DTCOriginType, AUTOMATIC ) memCheckId;
 
     retVal = (boolean)FALSE;
 
-    execClearDTC = Dem_Control_CheckExecClearDTCProcessActive();
+    execClearDTC = Dem_Control_CheckExecClearDTCProcess();
 
     if( execClearDTC == (boolean)TRUE )
     {
-        getDTCOrigin = Dem_Control_GetClearDTCOrigin();
+        Dem_Control_GetClearType( &getDTCGroup, &getDTCOrigin);
 
         if( (getDTCOrigin & ( Dem_DTCOriginType )DEM_DTC_ORIGIN_USERDEFINED_MEMORY) == ( Dem_DTCOriginType )DEM_DTC_ORIGIN_USERDEFINED_MEMORY )
         {
@@ -107,53 +105,6 @@ FUNC( boolean, DEM_CODE ) Dem_UdmDTC_JudgeUdmDTCClearTarget
     return retVal;
 }
 
-/****************************************************************************/
-/* Function Name | Dem_UdmDTC_JudgeUdmDTCClearTargetOnClearProcessActive    */
-/* Description   | Judge if UdmDTCinfo is a target for Clear                */
-/* Preconditions | none                                                     */
-/* Parameters    | [in] UdmEventIndex :                                     */
-/*               |        The Udm event index                               */
-/* Return Value  | boolean                                                  */
-/*               |        TRUE  : target to clear                           */
-/*               |        FALSE : not target to clear                       */
-/* Notes         | -                                                        */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-8-0      | new created. based on Dem_UdmDTC_JudgeUdmDTCClearTarget().*/
-/*   v5-10-0     | no branch changed.                                       */
-/****************************************************************************/
-FUNC( boolean, DEM_CODE ) Dem_UdmDTC_JudgeUdmDTCClearTargetOnClearProcessActive
-(
-    VAR( Dem_u16_UdmEventIndexType, AUTOMATIC ) UdmEventIndex
-)
-{
-    VAR( boolean, AUTOMATIC ) retVal;
-    VAR( boolean, AUTOMATIC ) execClearDTC;
-    VAR( Dem_DTCOriginType, AUTOMATIC ) getDTCOrigin;
-    VAR( Dem_DTCOriginType, AUTOMATIC ) memConfigId;
-    VAR( Dem_DTCOriginType, AUTOMATIC ) memCheckId;
-
-    retVal = (boolean)FALSE;
-
-    execClearDTC = Dem_Control_CheckExecClearDTCProcessActive();
-
-    if( execClearDTC == (boolean)TRUE )
-    {
-        getDTCOrigin = Dem_Control_GetClearDTCOrigin();
-
-        if( (getDTCOrigin & ( Dem_DTCOriginType )DEM_DTC_ORIGIN_USERDEFINED_MEMORY) == ( Dem_DTCOriginType )DEM_DTC_ORIGIN_USERDEFINED_MEMORY )
-        {
-            memCheckId  =   getDTCOrigin & ~( DEM_DTC_ORIGIN_USERDEFINED_MEMORY );
-            memConfigId = ( Dem_DTCOriginType )Dem_CfgInfoUdm_GetUserDefinedMemoryIdentifier( UdmEventIndex );
-            if ( memConfigId == memCheckId )
-            {
-                retVal = (boolean)TRUE;
-            }
-        }
-    }
-
-    return retVal;
-}
 
 /****************************************************************************/
 /* Internal Functions                                                       */
@@ -170,8 +121,6 @@ FUNC( boolean, DEM_CODE ) Dem_UdmDTC_JudgeUdmDTCClearTargetOnClearProcessActive
 /*  v5-0-0         :2022-03-29                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-8-0         :2024-10-29                                              */
-/*  v5-10-0        :2025-06-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

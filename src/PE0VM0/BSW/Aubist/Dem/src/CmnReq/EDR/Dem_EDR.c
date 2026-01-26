@@ -1,7 +1,7 @@
-/* Dem_EDR_c(v5-8-0)                                                        */
+/* Dem_EDR_c(v5-5-0)                                                        */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -59,16 +59,15 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_EDR_GetData
     VAR( Dem_u08_EDRClassIndexType, AUTOMATIC ) EdrClassIndex,
     VAR( Dem_u16_EventCtrlIndexType, AUTOMATIC ) EventCtrlIndex,
     VAR( Dem_u32_DTCValueType, AUTOMATIC ) DTCValue,
-    VAR( Dem_u08_EDRRecordNumberType, AUTOMATIC ) ExtendedDataNumber,
     VAR( Dem_u08_GetExtendDataModeType, AUTOMATIC ) GetExtendDataMode,
     P2VAR( uint8, AUTOMATIC, DEM_APPL_DATA ) DestBufferPtr,
     P2VAR( Dem_u16_EDRRecordSizeType, AUTOMATIC, AUTOMATIC ) BufSizePtr
 );
 
-static FUNC( boolean, DEM_CODE ) Dem_EDR_JudgeEventByRecordNumber
+static FUNC( boolean, DEM_CODE ) Dem_EDR_CheckContinueToGetData
 (
-    VAR( Dem_u16_EventCtrlIndexType, AUTOMATIC ) EventCtrlIndex,
-    VAR( Dem_u08_EDRRecordNumberType, AUTOMATIC ) ExtendedDataNumber
+    VAR( Dem_u08_EDRClassIndexType, AUTOMATIC ) ExtendedDataRecordNumber,
+    VAR( Dem_u16_EventCtrlIndexType, AUTOMATIC ) EventCtrlIndex
 );
 
 #define DEM_STOP_SEC_CODE
@@ -155,63 +154,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_EDR_GetEventExtendedData
 }
 
 
-#if ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON )
-/****************************************************************************/
-/* Function Name | Dem_EDR_GetDTCExtendedData                               */
-/* Description   | Gets extended data record by DTC.The function stores the */
-/*               | data in the provided DestBuffer.                         */
-/* Preconditions | none                                                     */
-/* Parameters    | [in] EventStrgIndex :                                    */
-/*               |        index of the event                                */
-/*               | [in] DTCValue                                            */
-/*               | [in] ExtendedDataNumber :                                */
-/*               |        Identification/Number of requested extended data  */
-/*               |        record. The values 0xFE and 0xFF are not allowed. */
-/*               | [out] DestBufferPtr :                                    */
-/*               |        This parameter contains a byte pointer that poin- */
-/*               |        ts to the buffer, to which the extended data rec- */
-/*               |        ord shall be written to. The format is raw hexad- */
-/*               |        ecimal values and contains no header-information. */
-/*               | [in/out] BufSizePtr :                                    */
-/*               |        When the function is called this parameter conta- */
-/*               |        ins the maximum number of data bytes that can be  */
-/*               |         written to the buffer.The function returns the - */
-/*               |        actual number of written data bytes in this para- */
-/*               |        meter.                                            */
-/* Return Value  | Dem_u08_InternalReturnType                               */
-/*               |        DEM_IRT_OK : Size successfully returned.          */
-/*               |        DEM_IRT_WRONG_RECORDNUMBER : Record number is no- */
-/*               |        t supported by configuration                      */
-/*               |        DEM_IRT_WRONG_BUFFERSIZE : provided buffer size - */
-/*               |        to small                                          */
-/* Notes         | -                                                        */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-8-0      | new created. based on Dem_EDR_GetEventExtendedData().    */
-/****************************************************************************/
-FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_EDR_GetDTCExtendedData
-(
-    VAR( Dem_u16_EventCtrlIndexType, AUTOMATIC ) EventCtrlIndex,            /* [PRMCHK:CALLER] */
-    VAR( Dem_u32_DTCValueType, AUTOMATIC ) DTCValue,
-    VAR( Dem_u08_EDRRecordNumberType, AUTOMATIC ) ExtendedDataNumber,
-    P2VAR( uint8, AUTOMATIC, DEM_APPL_DATA ) DestBufferPtr,
-    P2VAR( Dem_u16_EDRRecordSizeType, AUTOMATIC, AUTOMATIC ) BufSizePtr
-)
-{
-    VAR( Dem_u08_InternalReturnType, AUTOMATIC ) retVal;
-    VAR( Dem_u08_EDRRecordNumberType, AUTOMATIC ) nextExtendedDataNumber;
-    VAR( Dem_u08_EDRClassRefIndexType, AUTOMATIC ) nextSearchIndex;
-
-    /*  set search index in ExtendedTable by Event. */
-    nextSearchIndex =   (Dem_u08_EDRClassRefIndexType)0U;
-
-    retVal  =   Dem_EDR_SearchExtendedDataRecord( EventCtrlIndex, DTCValue, DEM_EDR_GETEDRMODE_DTC, ExtendedDataNumber, DestBufferPtr, BufSizePtr, &nextExtendedDataNumber, &nextSearchIndex );     /* [GUDCHK:CALLER]EventCtrlIndex */
-
-    return retVal;
-}
-#endif /* ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON ) */
-
-
 /****************************************************************************/
 /* Function Name | Dem_EDR_GetSizeOfExtendedDataRecord                      */
 /* Description   | Gets the size of extended data record.                   */
@@ -272,8 +214,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_EDR_GetSizeOfExtendedDataRecord
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
-/*   v5-6-0      | branch changed.                                          */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_EDR_GetExtendedDataRecord
 (
@@ -299,24 +239,20 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_EDR_GetExtendedDataRecord
     {
         nextSearchIndex     =   *SearchEDRClassRefIndexPtr;
         bufSize             =   *BufSizePtr  - DEM_EDR_DATA_POS;
+        destBufferDataPtr   =   &DestBufferPtr[DEM_EDR_DATA_POS];
 
-        if ( bufSize > ( Dem_u16_EDRRecordSizeType )0U )
+        retVal  =   Dem_EDR_SearchExtendedDataRecord( EventCtrlIndex, DTCValue, DEM_EDR_GETEDRMODE_DTC, ExtendedDataNumber, destBufferDataPtr, &bufSize, NextExtendedDataNumberPtr, &nextSearchIndex );     /* [GUDCHK:CALLER]EventCtrlIndex */
+        if ( retVal == DEM_IRT_OK )
         {
-            destBufferDataPtr   =   &DestBufferPtr[DEM_EDR_DATA_POS];/* [ARYCHK] *BufSizePtr / 1 / DEM_EDR_DATA_POS */
-
-            retVal  =   Dem_EDR_SearchExtendedDataRecord( EventCtrlIndex, DTCValue, DEM_EDR_GETEDRMODE_DTC, ExtendedDataNumber, destBufferDataPtr, &bufSize, NextExtendedDataNumberPtr, &nextSearchIndex );     /* [GUDCHK:CALLER]EventCtrlIndex */
-            if ( retVal == DEM_IRT_OK )
+            if ( bufSize > ( Dem_u16_EDRRecordSizeType )0U )
             {
-                if ( bufSize > ( Dem_u16_EDRRecordSizeType )0U )
-                {
-                    /*  set extendedRecordNumber.       */
-                    DestBufferPtr[DEM_EDR_REC_NUM_POS]  =   ExtendedDataNumber;/* [ARYCHK] *BufSizePtr / 1 / DEM_EDR_REC_NUM_POS */
-                    *BufSizePtr =   bufSize + DEM_EDR_DATA_POS;
-                }
-                else
-                {
-                    *BufSizePtr =   ( Dem_u16_EDRRecordSizeType )0U;
-                }
+                /*  set extendedRecordNumber.       */
+                DestBufferPtr[DEM_EDR_REC_NUM_POS]  =   ExtendedDataNumber;
+                *BufSizePtr =   bufSize + DEM_EDR_DATA_POS;
+            }
+            else
+            {
+                *BufSizePtr =   ( Dem_u16_EDRRecordSizeType )0U;
             }
         }
         /*  set next search index in ExtendedTable by Event.    */
@@ -349,8 +285,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_EDR_GetExtendedDataRecord
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | branch changed.                                          */
-/*   v5-7-0      | no object changed.                                       */
-/*   v5-8-0      | no branch changed.                                       */
 /****************************************************************************/
 static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_EDR_SearchExtendedDataRecord
 (
@@ -401,14 +335,14 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_EDR_SearchExtendedDataRe
         {
             /*  edrClassRefBuffPtr : Dem_ExDataClassTable[].DemEDRClassRef[]            */
             /*                       Dem_EDRClassRefNum : length of DemEDRClassRef[].   */
-            edrClassIndex = edrClassRefBuffPtr[edrClassRefIndex];                                                               /* [GUD]edrClassRefIndex *//* [ARYCHK] DEM_EDR_CLASS_REF_NUM / 1 / edrClassRefIndex */
+            edrClassIndex = edrClassRefBuffPtr[edrClassRefIndex];                                                               /* [GUD]edrClassRefIndex */
 
             if( edrClassIndex < edrClassMaxIndex )                                                                              /* [GUD:if]edrClassIndex */
             {
                 /*  configured.             */
                 if( Dem_EDRClassTable[edrClassIndex].DemEDRNumber == ExtendedDataNumber )                                       /* [GUD]edrClassIndex */
                 {
-                    retVal = Dem_EDR_GetData( edrClassIndex, EventCtrlIndex, DTCValue, ExtendedDataNumber, GetExtendDataMode, DestBufferPtr, BufSizePtr );  /* [GUD]edrClassIndex *//* [GUDCHK:CALLER]EventCtrlIndex */
+                    retVal = Dem_EDR_GetData( edrClassIndex, EventCtrlIndex, DTCValue, GetExtendDataMode, DestBufferPtr, BufSizePtr );  /* [GUD]edrClassIndex *//* [GUDCHK:CALLER]EventCtrlIndex */
 
                     if (( retVal == DEM_IRT_OK ) || ( retVal == DEM_IRT_WRONG_RECORDNUMBER ))
                     {
@@ -457,7 +391,7 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_EDR_SearchExtendedDataRe
         /* Set the number to be acquired next time */
         if( nextSearchEDRClassRefIndex < edrClassRefMaxNum )                                        /* [GUD:if]nextSearchEDRClassRefIndex */
         {
-            nextEDRClassIndex = edrClassRefBuffPtr[nextSearchEDRClassRefIndex];                     /* [GUD]nextSearchEDRClassRefIndex *//* [ARYCHK] DEM_EDR_CLASS_REF_NUM / 1 / nextSearchEDRClassRefIndex */
+            nextEDRClassIndex = edrClassRefBuffPtr[nextSearchEDRClassRefIndex];                     /* [GUD]nextSearchEDRClassRefIndex */
             if( nextEDRClassIndex < edrClassMaxIndex )                                              /* [GUD:if]nextEDRClassIndex */
             {
                 /* When the number to be acquired next time is configured */
@@ -483,8 +417,9 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_EDR_SearchExtendedDataRe
 /*               | [in] EventCtrlIndex :                                    */
 /*               |        index of the event                                */
 /*               | [in] DTCValue                                            */
-/*               | [in] ExtendedDataNumber                                  */
 /*               | [in] GetExtendDataMode                                   */
+/*               | [in] monitorData0 :                                      */
+/*               |        EventId to specify instead of MonitorData0        */
 /*               | [out] DestBufferPtr :                                    */
 /*               |        This parameter contains a byte pointer that poin- */
 /*               |        ts to the buffer, to which the extended data rec- */
@@ -506,14 +441,12 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_EDR_SearchExtendedDataRe
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | branch changed.                                          */
-/*   v5-8-0      | branch changed.                                          */
 /****************************************************************************/
 static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_EDR_GetData
 (
     VAR( Dem_u08_EDRClassIndexType, AUTOMATIC ) EdrClassIndex,          /* [PRMCHK:CALLER] */
     VAR( Dem_u16_EventCtrlIndexType, AUTOMATIC ) EventCtrlIndex,        /* [PRMCHK:CALLER] */
     VAR( Dem_u32_DTCValueType, AUTOMATIC ) DTCValue,
-    VAR( Dem_u08_EDRRecordNumberType, AUTOMATIC ) ExtendedDataNumber,
     VAR( Dem_u08_GetExtendDataModeType, AUTOMATIC ) GetExtendDataMode,
     P2VAR( uint8, AUTOMATIC, DEM_APPL_DATA ) DestBufferPtr,
     P2VAR( Dem_u16_EDRRecordSizeType, AUTOMATIC, AUTOMATIC ) BufSizePtr
@@ -525,9 +458,11 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_EDR_GetData
     P2CONST( AB_83_ConstV Dem_DataElementClassType, AUTOMATIC, DEM_CONFIG_DATA ) dataElementClassPtr;
     P2CONST( AB_83_ConstV Dem_InternalDataElementClassType, AUTOMATIC, DEM_CONFIG_DATA ) internalDataElementClassPtr;
     VAR( Dem_u16_DataElementClassIndexType, AUTOMATIC ) dataElementClassIndex;
+    VAR( Dem_u08_EDRRecordNumberType, AUTOMATIC ) extendedDataRecordNumber;
     VAR( Dem_u08_InternalReturnType, AUTOMATIC ) retVal;
     VAR( Std_ReturnType, AUTOMATIC ) resultOfCallback;
-    VAR( boolean, AUTOMATIC ) retJudgeEventByRecordNumber;
+    VAR( boolean, AUTOMATIC ) continueToGetData;
+    VAR( boolean, AUTOMATIC ) eventOBDKind;
 
 #if ( DEM_USERDEFINEDMEMORY_SUPPORT == STD_ON ) /*  [FuncSw]    */
     VAR( Dem_u08_MemoryKindType, AUTOMATIC ) memKind;
@@ -536,14 +471,17 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_EDR_GetData
     VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) eventStrgIndex;
     VAR( Dem_EventKindType, AUTOMATIC ) eventKind;
     VAR( Dem_MisfireCylinderNumberType, AUTOMATIC ) misfireCylinderNumber;
+
 #endif  /*  ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON )          */
 
-    retJudgeEventByRecordNumber = Dem_EDR_JudgeEventByRecordNumber( EventCtrlIndex, ExtendedDataNumber );   /* [GUDCHK:CALLER]EventCtrlIndex */
-    if( retJudgeEventByRecordNumber == (boolean)TRUE )
-    {
-        dataElementClassIndex = Dem_EDRClassTable[EdrClassIndex].DemDataElementClassRef;                /* [GUDCHK:CALLER]EdrClassIndex *//* [GUD:CFG:IF_GUARDED: EdrClassIndex ]dataElementClassIndex */
+    dataElementClassIndex = Dem_EDRClassTable[EdrClassIndex].DemDataElementClassRef;                /* [GUDCHK:CALLER]EdrClassIndex *//* [GUD:CFG:IF_GUARDED: EdrClassIndex ]dataElementClassIndex */
 
-        if( Dem_EDRClassTable[EdrClassIndex].DemDataElementKind == DEM_DATA_ELEMENT_KIND_CS_EXTERNAL )  /* [GUDCHK:CALLER]EdrClassIndex */
+    if( Dem_EDRClassTable[EdrClassIndex].DemDataElementKind == DEM_DATA_ELEMENT_KIND_CS_EXTERNAL )  /* [GUDCHK:CALLER]EdrClassIndex */
+    {
+        extendedDataRecordNumber = Dem_EDRClassTable[EdrClassIndex].DemEDRNumber;                   /* [GUDCHK:CALLER]EdrClassIndex *//* [GUD:CFG:IF_GUARDED: EdrClassIndex ]extendedDataRecordNumber */
+
+        continueToGetData = Dem_EDR_CheckContinueToGetData( extendedDataRecordNumber, EventCtrlIndex );
+        if( continueToGetData == (boolean)TRUE )
         {
             dataElementClassPtr = &Dem_DataElementClassTable[dataElementClassIndex];                    /* [GUDCHK:CALLER]EdrClassIndex *//* [GUD:CFG:IF_GUARDED: dataElementClassIndex ]dataElementClassPtr */
             if( dataElementClassPtr->DemDataElementSize <= *BufSizePtr )                                /* [GUDCHK:CALLER]EdrClassIndex */
@@ -597,80 +535,80 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_EDR_GetData
         }
         else
         {
-            /* DEM_DATA_ELEMENT_KIND_INTERNAL */
-            internalDataElementClassPtr = &Dem_InternalDataElementClassTable[dataElementClassIndex];        /* [GUDCHK:CALLER]EdrClassIndex *//* [GUD:CFG:IF_GUARDED: dataElementClassIndex ]internalDataElementClassPtr */
-
-#ifndef JGXSTACK
-            retVal = internalDataElementClassPtr->DemInternalDataElementReadFnc( EventCtrlIndex, DTCValue, GetExtendDataMode, DestBufferPtr, BufSizePtr );  /* [GUDCHK:CALLER]EdrClassIndex */
-#else /* JGXSTACK */
-            retVal = Dem_InternalDataElementReadFnc_ForStack( EventCtrlIndex, DTCValue, GetExtendDataMode, DestBufferPtr, BufSizePtr );
-#endif /* JGXSTACK */
+            retVal = DEM_IRT_WRONG_RECORDNUMBER;
         }
     }
     else
     {
-        retVal = DEM_IRT_WRONG_RECORDNUMBER;
-    }
-
-    return retVal;
-}
-
-/****************************************************************************/
-/* Function Name | Dem_EDR_JudgeEventByRecordNumber                         */
-/* Description   | Judge the event by extended data record number.          */
-/* Preconditions | none                                                     */
-/* Parameters    | [in] EventCtrlIndex :                                    */
-/*               | [in] ExtendedDataNumber :                                */
-/* Return Value  | boolean                                                  */
-/*               |      TRUE  : Judge result is OK.                         */
-/*               |      FALSE : Judge result is NG.                         */
-/* Notes         | -                                                        */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-8-0      | new created.                                             */
-/****************************************************************************/
-static FUNC( boolean, DEM_CODE ) Dem_EDR_JudgeEventByRecordNumber
-(
-    VAR( Dem_u16_EventCtrlIndexType, AUTOMATIC ) EventCtrlIndex,        /* [PRMCHK:CALLER] */
-    VAR( Dem_u08_EDRRecordNumberType, AUTOMATIC ) ExtendedDataNumber
-)
-{
-    VAR( boolean, AUTOMATIC ) retVal;
-    VAR( boolean, AUTOMATIC ) eventOBDKind;
 #if ( DEM_USERDEFINEDMEMORY_SUPPORT == STD_ON ) /*  [FuncSw]    */
-    VAR( Dem_u08_MemoryKindType, AUTOMATIC ) memKind;
-#endif  /* ( DEM_USERDEFINEDMEMORY_SUPPORT == STD_ON )          */
-
-    /*  Judge result is OK.     */
-    retVal = (boolean)TRUE;
-
-    if( ( DEM_EDR_RECNUM_90 <= ExtendedDataNumber ) && ( DEM_EDR_RECNUM_9F >= ExtendedDataNumber ) )
-    {
-        /*  OBD record number.      */
-#if ( DEM_USERDEFINEDMEMORY_SUPPORT == STD_ON ) /*  [FuncSw]    */
-        memKind = Dem_CfgInfoCmn_CheckMemoryTypeFromEventCtrlIndex( EventCtrlIndex );           /* [GUDCHK:CALLER]EventCtrlIndex */
+        memKind =   Dem_CfgInfoCmn_CheckMemoryTypeFromEventCtrlIndex( EventCtrlIndex );                 /* [GUDCHK:CALLER]EventCtrlIndex */
         if ( memKind == DEM_MEMKIND_USERDEFMEM )
         {
             /*  UserDefinedMemory   */
-            /*  Judge result is NG, because UserDefinedMemory event can not have OBD record number.     */
-            retVal = (boolean)FALSE;
+            retVal = DEM_IRT_WRONG_RECORDNUMBER;
         }
         else
 #endif  /* ( DEM_USERDEFINEDMEMORY_SUPPORT == STD_ON )          */
         {
-            /*  PrimaryMemory       */
-            eventOBDKind = Dem_CfgInfoPm_CheckEventKindOfOBD_ByEvtCtrlIdx( EventCtrlIndex );    /* [GUDCHK:CALLER]EventCtrlIndex */
-            if( eventOBDKind != (boolean)TRUE )
+            /*  check OBD Event or not.         */
+            eventOBDKind    =   Dem_CfgInfoPm_CheckEventKindOfOBD_ByEvtCtrlIdx( EventCtrlIndex );       /* [GUDCHK:CALLER]EventCtrlIndex */
+            if( eventOBDKind == (boolean)TRUE ) /*  OBD     */
             {
-                /*  nonOBD event.   */
-                /*  Judge result is NG, because nonOBD event can not have OBD record number.            */
-                retVal = (boolean)FALSE;
+                /* DEM_DATA_ELEMENT_KIND_INTERNAL */
+                internalDataElementClassPtr = &Dem_InternalDataElementClassTable[dataElementClassIndex];        /* [GUDCHK:CALLER]EdrClassIndex *//* [GUD:CFG:IF_GUARDED: dataElementClassIndex ]internalDataElementClassPtr */
+
+#ifndef JGXSTACK
+                retVal = internalDataElementClassPtr->DemInternalDataElementReadFnc( EventCtrlIndex, DTCValue, GetExtendDataMode, DestBufferPtr, BufSizePtr );  /* [GUDCHK:CALLER]EdrClassIndex */
+#else /* JGXSTACK */
+                retVal = Dem_InternalDataElementReadFnc_ForStack( EventCtrlIndex, DTCValue, GetExtendDataMode, DestBufferPtr, BufSizePtr );
+#endif /* JGXSTACK */
+            }
+            else
+            {
+                /*  not OBD event.      */
+                retVal = DEM_IRT_WRONG_RECORDNUMBER;
             }
         }
     }
 
     return retVal;
 }
+
+/****************************************************************************/
+/* Function Name | Dem_EDR_CheckContinueToGetData                           */
+/* Description   | Checks continuing to get data.                           */
+/* Preconditions | none                                                     */
+/* Parameters    | [in] ExtendedDataRecordNumber :                          */
+/*               |        Index to array elements of Dem_EDRClassTable      */
+/*               | [in] EventCtrlIndex :                                    */
+/*               |        index of the event                                */
+/* Return Value  | boolean                                                  */
+/*               |        TRUE : Do continue to get data.                   */
+/*               |        FALSE : Do not continue to get data.              */
+/* Notes         | none                                                     */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-5-0      | new created.                                             */
+/****************************************************************************/
+static FUNC( boolean, DEM_CODE ) Dem_EDR_CheckContinueToGetData
+(
+    VAR( Dem_u08_EDRClassIndexType, AUTOMATIC ) ExtendedDataRecordNumber,
+    VAR( Dem_u16_EventCtrlIndexType, AUTOMATIC ) EventCtrlIndex             /* [PRMCHK:CALLER] */
+)
+{
+    VAR( boolean, AUTOMATIC ) continueToGetData;
+
+    continueToGetData = ( boolean )TRUE;    /* In case DemEDRNumber is under 0x8F, continue to retrieve data. Therefore default value is "TRUE". */
+
+    if( ( DEM_EDR_RECNUM_90 <= ExtendedDataRecordNumber ) && ( DEM_EDR_RECNUM_9F >= ExtendedDataRecordNumber ) )
+    {
+        /* If the record number is between 0x90 to 0x9F, checks OBD Event or not. */
+        continueToGetData = Dem_CfgInfoPm_CheckEventKindOfOBD_ByEvtCtrlIdx( EventCtrlIndex );   /* [GUDCHK:CALLER]EventCtrlIndex */
+    }
+
+    return continueToGetData;
+}
+
 
 #define DEM_STOP_SEC_CODE
 #include <Dem_MemMap.h>
@@ -681,9 +619,6 @@ static FUNC( boolean, DEM_CODE ) Dem_EDR_JudgeEventByRecordNumber
 /*  v5-0-0         :2022-03-29                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-6-0         :2024-01-29                                              */
-/*  v5-7-0         :2024-05-29                                              */
-/*  v5-8-0         :2024-10-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

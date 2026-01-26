@@ -1,7 +1,7 @@
-/* Dem_PID_PIDCalc_c(v5-10-0)                                               */
+/* Dem_PID_PIDCalc_c(v5-5-0)                                                */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -35,7 +35,7 @@
 #define DEM_PID_DATAPOS0 ((uint8)0U)
 #define DEM_PID_DATAPOS1 ((uint8)1U)
 
-#define DEM_PID_CALCULATION_DATASIZE_DISTANCE  ((uint8)2U)
+#define DEM_PID_CALCULATION_DATASIZE_DISTANCE  ((uint8)4U)
 #define DEM_PID_CALCULATION_DATASIZE_TIMESES   ((uint8)2U)
 #define DEM_PID_FRACTION_DATA_INITVALUE        ((Dem_u16_PIDCalcValueType)0x0000U)
 #define DEM_PID_DATA_UPPER_LIMIT               ((Dem_u16_PIDCalcValueType)0xFFFFU)
@@ -250,7 +250,6 @@ FUNC( void, DEM_CODE ) Dem_PID_UpdateTimeSESInfo
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_PID_GetDataForCalcDistance
 (
@@ -276,7 +275,7 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_PID_GetDataForCalcDistan
 
         if( resultOfCallback == (Std_ReturnType)E_OK )
         {
-            *DistanceDataPtr = (Dem_u16_PIDCalcValueType)(( ((Dem_u16_PIDCalcValueType)getDistanceData[DEM_PID_DATAPOS0]) << DEM_PID_DATA_BITSHIFT_8  ) | ( ((Dem_u16_PIDCalcValueType)getDistanceData[DEM_PID_DATAPOS1]) )  );/* [ARYCHK] DEM_PID_CALCULATION_DATASIZE_DISTANCE / 1 / DEM_PID_DATAPOS0 *//* [ARYCHK] DEM_PID_CALCULATION_DATASIZE_DISTANCE / 1 / DEM_PID_DATAPOS1 */
+            *DistanceDataPtr = (Dem_u16_PIDCalcValueType)(( ((Dem_u16_PIDCalcValueType)getDistanceData[DEM_PID_DATAPOS0]) << DEM_PID_DATA_BITSHIFT_8  ) | ( ((Dem_u16_PIDCalcValueType)getDistanceData[DEM_PID_DATAPOS1]) )  );
             retVal = DEM_IRT_OK;
         }
         else
@@ -306,7 +305,6 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_PID_GetDataForCalcDistan
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_PID_GetDataForCalcTimeSES
 (
@@ -332,7 +330,7 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_PID_GetDataForCalcTimeSE
 
         if( resultOfCallback == (Std_ReturnType)E_OK )
         {
-            *TimeSESDataPtr = (Dem_u16_PIDCalcValueType)((Dem_u16_PIDCalcValueType)( ((Dem_u16_PIDCalcValueType)getTimeSESData[DEM_PID_DATAPOS0]) << DEM_PID_DATA_BITSHIFT_8  ) | ((Dem_u16_PIDCalcValueType)getTimeSESData[DEM_PID_DATAPOS1])   );/* [ARYCHK] DEM_PID_CALCULATION_DATASIZE_TIMESES / 1 / DEM_PID_DATAPOS0 *//* [ARYCHK] DEM_PID_CALCULATION_DATASIZE_TIMESES / 1 / DEM_PID_DATAPOS1 */
+            *TimeSESDataPtr = (Dem_u16_PIDCalcValueType)((Dem_u16_PIDCalcValueType)( ((Dem_u16_PIDCalcValueType)getTimeSESData[DEM_PID_DATAPOS0]) << DEM_PID_DATA_BITSHIFT_8  ) | ((Dem_u16_PIDCalcValueType)getTimeSESData[DEM_PID_DATAPOS1])   );
             retVal = DEM_IRT_OK;
         }
         else
@@ -359,7 +357,6 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_PID_GetDataForCalcTimeSE
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | branch changed.                                          */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_PID_CalclateDataOfPID21
 (
@@ -394,8 +391,8 @@ static FUNC( void, DEM_CODE ) Dem_PID_CalclateDataOfPID21
            if( updateCount != DEM_PID_DATA_UPDATE_COUNT_INITIAL )
            {
                Dem_PIDMngC_ReadDataOfPID21( pidValue );
-               convertPIDValue = (Dem_u16_PIDCalcValueType)pidValue[DEM_PID_DATAPOS0] << DEM_PID_DATA_BITSHIFT_8;/* [ARYCHK] DEM_PID21_SIZE / 1 / DEM_PID_DATAPOS0 */
-               convertPIDValue |= (Dem_u16_PIDCalcValueType)pidValue[DEM_PID_DATAPOS1];/* [ARYCHK] DEM_PID21_SIZE / 1 / DEM_PID_DATAPOS1 */
+               convertPIDValue = (Dem_u16_PIDCalcValueType)pidValue[DEM_PID_DATAPOS0] << DEM_PID_DATA_BITSHIFT_8;
+               convertPIDValue |= (Dem_u16_PIDCalcValueType)pidValue[DEM_PID_DATAPOS1];
                if( convertPIDValue != DEM_PID_DATA_UPPER_LIMIT)
                {
                    if( (Dem_u32_PIDCalcValueType)((Dem_u32_PIDCalcValueType)convertPIDValue + (Dem_u32_PIDCalcValueType)updateCount) > (Dem_u32_PIDCalcValueType)DEM_PID_DATA_UPPER_LIMIT )        /*  no wrap around      */
@@ -406,8 +403,8 @@ static FUNC( void, DEM_CODE ) Dem_PID_CalclateDataOfPID21
                    {
                        convertPIDValue = convertPIDValue + updateCount;
                    }
-                   pidValue[DEM_PID_DATAPOS0] = (uint8)( convertPIDValue >> DEM_PID_DATA_BITSHIFT_8 );/* [ARYCHK] DEM_PID21_SIZE / 1 / DEM_PID_DATAPOS0 */
-                   pidValue[DEM_PID_DATAPOS1] = (uint8)( convertPIDValue & DEM_PID_DATA_MASK );/* [ARYCHK] DEM_PID21_SIZE / 1 / DEM_PID_DATAPOS1 */
+                   pidValue[DEM_PID_DATAPOS0] = (uint8)( convertPIDValue >> DEM_PID_DATA_BITSHIFT_8 );
+                   pidValue[DEM_PID_DATAPOS1] = (uint8)( convertPIDValue & DEM_PID_DATA_MASK );
                    Dem_PIDMngC_SetDataOfPID21( pidValue );
                }
                else
@@ -436,7 +433,6 @@ static FUNC( void, DEM_CODE ) Dem_PID_CalclateDataOfPID21
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_PID_CalclateDataOfPID31
 (
@@ -453,8 +449,8 @@ static FUNC( void, DEM_CODE ) Dem_PID_CalclateDataOfPID31
     if( updateCount != DEM_PID_DATA_UPDATE_COUNT_INITIAL )
     {
         Dem_PIDMngC_ReadDataOfPID31( pidValue );
-        convertPIDValue = (Dem_u16_PIDCalcValueType)pidValue[DEM_PID_DATAPOS0] << DEM_PID_DATA_BITSHIFT_8;/* [ARYCHK] DEM_PID31_SIZE / 1 / DEM_PID_DATAPOS0 */
-        convertPIDValue |= (Dem_u16_PIDCalcValueType)pidValue[DEM_PID_DATAPOS1];/* [ARYCHK] DEM_PID31_SIZE / 1 / DEM_PID_DATAPOS1 */
+        convertPIDValue = (Dem_u16_PIDCalcValueType)pidValue[DEM_PID_DATAPOS0] << DEM_PID_DATA_BITSHIFT_8;
+        convertPIDValue |= (Dem_u16_PIDCalcValueType)pidValue[DEM_PID_DATAPOS1];
         if( convertPIDValue != DEM_PID_DATA_UPPER_LIMIT)
         {
             if( (Dem_u32_PIDCalcValueType)((Dem_u32_PIDCalcValueType)convertPIDValue + (Dem_u32_PIDCalcValueType)updateCount) > (Dem_u32_PIDCalcValueType)DEM_PID_DATA_UPPER_LIMIT )        /*  no wrap around      */
@@ -465,8 +461,8 @@ static FUNC( void, DEM_CODE ) Dem_PID_CalclateDataOfPID31
             {
                 convertPIDValue = convertPIDValue + updateCount;
             }
-            pidValue[DEM_PID_DATAPOS0] = (uint8)( convertPIDValue >> DEM_PID_DATA_BITSHIFT_8 );/* [ARYCHK] DEM_PID31_SIZE / 1 / DEM_PID_DATAPOS0 */
-            pidValue[DEM_PID_DATAPOS1] = (uint8)( convertPIDValue & DEM_PID_DATA_MASK );/* [ARYCHK] DEM_PID31_SIZE / 1 / DEM_PID_DATAPOS1 */
+            pidValue[DEM_PID_DATAPOS0] = (uint8)( convertPIDValue >> DEM_PID_DATA_BITSHIFT_8 );
+            pidValue[DEM_PID_DATAPOS1] = (uint8)( convertPIDValue & DEM_PID_DATA_MASK );
             Dem_PIDMngC_SetDataOfPID31( pidValue );
         }
         else
@@ -492,7 +488,6 @@ static FUNC( void, DEM_CODE ) Dem_PID_CalclateDataOfPID31
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | branch changed.                                          */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_PID_CalclateDataOfPID4D
 (
@@ -526,8 +521,8 @@ static FUNC( void, DEM_CODE ) Dem_PID_CalclateDataOfPID4D
             if( updateCount != DEM_PID_DATA_UPDATE_COUNT_INITIAL )
             {
                 Dem_PIDMngC_ReadDataOfPID4D( pidValue );
-                convertPIDValue = (Dem_u16_PIDCalcValueType)pidValue[DEM_PID_DATAPOS0] << DEM_PID_DATA_BITSHIFT_8;/* [ARYCHK] DEM_PID4D_SIZE / 1 / DEM_PID_DATAPOS0 */
-                convertPIDValue |= (Dem_u16_PIDCalcValueType)pidValue[DEM_PID_DATAPOS1];/* [ARYCHK] DEM_PID4D_SIZE / 1 / DEM_PID_DATAPOS1 */
+                convertPIDValue = (Dem_u16_PIDCalcValueType)pidValue[DEM_PID_DATAPOS0] << DEM_PID_DATA_BITSHIFT_8;
+                convertPIDValue |= (Dem_u16_PIDCalcValueType)pidValue[DEM_PID_DATAPOS1];
                 if( convertPIDValue != DEM_PID_DATA_UPPER_LIMIT )
                 {
                     if( (Dem_u32_PIDCalcValueType)((Dem_u32_PIDCalcValueType)convertPIDValue + (Dem_u32_PIDCalcValueType)updateCount) > (Dem_u32_PIDCalcValueType)DEM_PID_DATA_UPPER_LIMIT )        /*  no wrap around      */
@@ -538,8 +533,8 @@ static FUNC( void, DEM_CODE ) Dem_PID_CalclateDataOfPID4D
                     {
                         convertPIDValue = convertPIDValue + updateCount;
                     }
-                    pidValue[DEM_PID_DATAPOS0] = (uint8)( convertPIDValue >> DEM_PID_DATA_BITSHIFT_8 );/* [ARYCHK] DEM_PID4D_SIZE / 1 / DEM_PID_DATAPOS0 */
-                    pidValue[DEM_PID_DATAPOS1] = (uint8)( convertPIDValue & DEM_PID_DATA_MASK );/* [ARYCHK] DEM_PID4D_SIZE / 1 / DEM_PID_DATAPOS1 */
+                    pidValue[DEM_PID_DATAPOS0] = (uint8)( convertPIDValue >> DEM_PID_DATA_BITSHIFT_8 );
+                    pidValue[DEM_PID_DATAPOS1] = (uint8)( convertPIDValue & DEM_PID_DATA_MASK );
                     Dem_PIDMngC_SetDataOfPID4D( pidValue );
                 }
                 else
@@ -569,7 +564,6 @@ static FUNC( void, DEM_CODE ) Dem_PID_CalclateDataOfPID4D
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_PID_CalclateDataOfPID4E
 (
@@ -586,8 +580,8 @@ static FUNC( void, DEM_CODE ) Dem_PID_CalclateDataOfPID4E
     if( updateCount != DEM_PID_DATA_UPDATE_COUNT_INITIAL )
     {
         Dem_PIDMngC_ReadDataOfPID4E( pidValue );
-        convertPIDValue = (Dem_u16_PIDCalcValueType)pidValue[DEM_PID_DATAPOS0] << DEM_PID_DATA_BITSHIFT_8;/* [ARYCHK] DEM_PID4E_SIZE / 1 / DEM_PID_DATAPOS0 */
-        convertPIDValue |= (Dem_u16_PIDCalcValueType)pidValue[DEM_PID_DATAPOS1];/* [ARYCHK] DEM_PID4E_SIZE / 1 / DEM_PID_DATAPOS1 */
+        convertPIDValue = (Dem_u16_PIDCalcValueType)pidValue[DEM_PID_DATAPOS0] << DEM_PID_DATA_BITSHIFT_8;
+        convertPIDValue |= (Dem_u16_PIDCalcValueType)pidValue[DEM_PID_DATAPOS1];
         if( convertPIDValue != DEM_PID_DATA_UPPER_LIMIT )
         {
             if( (Dem_u32_PIDCalcValueType)((Dem_u32_PIDCalcValueType)convertPIDValue + (Dem_u32_PIDCalcValueType)updateCount) > (Dem_u32_PIDCalcValueType)DEM_PID_DATA_UPPER_LIMIT )        /*  no wrap around      */
@@ -598,8 +592,8 @@ static FUNC( void, DEM_CODE ) Dem_PID_CalclateDataOfPID4E
             {
                 convertPIDValue = convertPIDValue + updateCount;
             }
-            pidValue[DEM_PID_DATAPOS0] = (uint8)( convertPIDValue >> DEM_PID_DATA_BITSHIFT_8 );/* [ARYCHK] DEM_PID4E_SIZE / 1 / DEM_PID_DATAPOS0 */
-            pidValue[DEM_PID_DATAPOS1] = (uint8)( convertPIDValue & DEM_PID_DATA_MASK );/* [ARYCHK] DEM_PID4E_SIZE / 1 / DEM_PID_DATAPOS1 */
+            pidValue[DEM_PID_DATAPOS0] = (uint8)( convertPIDValue >> DEM_PID_DATA_BITSHIFT_8 );
+            pidValue[DEM_PID_DATAPOS1] = (uint8)( convertPIDValue & DEM_PID_DATA_MASK );
             Dem_PIDMngC_SetDataOfPID4E( pidValue );
         }
         else
@@ -894,8 +888,6 @@ static FUNC( void, DEM_CODE ) Dem_PID_GetActiveStatus_MILAndConfirmedDTC_AtClear
 /*  v5-0-0         :2022-03-29                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-7-0         :2024-05-29                                              */
-/*  v5-10-0        :2025-06-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

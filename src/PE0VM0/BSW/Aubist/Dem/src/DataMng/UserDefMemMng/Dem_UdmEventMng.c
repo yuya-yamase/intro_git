@@ -1,7 +1,7 @@
-/* Dem_UdmEventMng_c(v5-7-0)                                                */
+/* Dem_UdmEventMng_c(v5-5-0)                                                */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -890,7 +890,6 @@ static FUNC( void, DEM_CODE ) Dem_UdmEventMng_InitRecord_Ctl
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_UdmEventMng_Init
 (
@@ -910,7 +909,7 @@ FUNC( void, DEM_CODE ) Dem_UdmEventMng_Init
         udmEventRecordNum = Dem_UdmEventRecordTable[udmGroupKindIndex].DemEventRecordNum;   /* [GUD]udmGroupKindIndex */
         for( udmEventStrgIndex = (Dem_u16_UdmEventStrgIndexType)0U; udmEventStrgIndex < udmEventRecordNum; udmEventStrgIndex++ )
         {
-            Dem_UdmEventNvMStatus[ udmGroupKindIndex ].DemUdmEventNvMStatusPtr[ udmEventStrgIndex ] = DEM_RECMNGCMN_NVM_STS_NOT_VERIFIED;   /* [GUD]udmGroupKindIndex */    /* [GUD]udmEventStrgIndex *//* [ARYCHK] Dem_UdmEventRecordTable[udmGroupKindIndex].DemEventRecordNum / 1 / udmEventStrgIndex */
+            Dem_UdmEventNvMStatus[ udmGroupKindIndex ].DemUdmEventNvMStatusPtr[ udmEventStrgIndex ] = DEM_RECMNGCMN_NVM_STS_NOT_VERIFIED;   /* [GUD]udmGroupKindIndex */    /* [GUD]udmEventStrgIndex */
         }
     }
 
@@ -1045,7 +1044,6 @@ FUNC( void, DEM_CODE ) Dem_UdmEventMng_SetRecordMirror
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmEventMng_ClearAllNotVerifiedRecord
 (
@@ -1073,10 +1071,10 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmEventMng_ClearAllNotVerified
         {
             if( loopCount < *RestOfProcessableNumPtr )
             {
-                if( Dem_UdmEventNvMStatus[ udmGroupKindIndex ].DemUdmEventNvMStatusPtr[ udmEventStrgIndex ] == DEM_RECMNGCMN_NVM_STS_NOT_VERIFIED ) /* [GUD]udmGroupKindIndex *//* [GUD]udmEventStrgIndex *//* [ARYCHK] udmEventRecordNum / 1 / udmEventStrgIndex *//* [ARYDESC] The registered data size of Dem_UdmEventNvMStatus[ udmGroupKindIndex ].DemUdmEventNvMStatusPtr is the same as Dem_UdmEventRecordTable[udmGroupKindIndex].DemEventRecordNum */
+                if( Dem_UdmEventNvMStatus[ udmGroupKindIndex ].DemUdmEventNvMStatusPtr[ udmEventStrgIndex ] == DEM_RECMNGCMN_NVM_STS_NOT_VERIFIED ) /* [GUD]udmGroupKindIndex *//* [GUD]udmEventStrgIndex */
                 {
                     Dem_UdmEventMng_InitRecord( udmGroupKindIndex, udmEventStrgIndex );
-                    Dem_UdmEventNvMStatus[ udmGroupKindIndex ].DemUdmEventNvMStatusPtr[ udmEventStrgIndex ] = DEM_RECMNGCMN_NVM_STS_NON_TARGET;     /* [GUD]udmGroupKindIndex *//* [GUD]udmEventStrgIndex *//* [ARYCHK] udmEventRecordNum / 1 / udmEventStrgIndex *//* [ARYDESC] The registered data size of Dem_UdmEventNvMStatus[ udmGroupKindIndex ].DemUdmEventNvMStatusPtr is the same as Dem_UdmEventRecordTable[udmGroupKindIndex].DemEventRecordNum */
+                    Dem_UdmEventNvMStatus[ udmGroupKindIndex ].DemUdmEventNvMStatusPtr[ udmEventStrgIndex ] = DEM_RECMNGCMN_NVM_STS_NON_TARGET;     /* [GUD]udmGroupKindIndex *//* [GUD]udmEventStrgIndex */
                 }
                 loopCount = loopCount + (Dem_u32_TotalRecordNumType)1U;
             }
@@ -1345,7 +1343,6 @@ static FUNC( void, DEM_CODE ) Dem_UdmEventMng_InitMirrorMemory
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_UdmEventMng_InitRecord_Padding
 (
@@ -1360,7 +1357,7 @@ static FUNC( void, DEM_CODE ) Dem_UdmEventMng_InitRecord_Padding
     /* initialize padding area */
     for ( idx = (Dem_u16_PaddingIndexType)0U; idx < udmEventRecordBlockPaddingSize; idx++ ) /* [GUD:for]idx */
     {
-        UdmEventRecordPtr->Reserve[idx] = DEM_DATA_RESERVE_INITIAL_VALUE;                   /* [GUD]idx      *//* [ARYCHK] DEM_UDMEVENT_RECORD_PADDINGSIZE_TO_BLOCKSIZE / 1 / idx */
+        UdmEventRecordPtr->Reserve[idx] = DEM_DATA_RESERVE_INITIAL_VALUE;                   /* [GUD]idx      */
     }
 
     return;
@@ -1388,7 +1385,6 @@ static FUNC( void, DEM_CODE ) Dem_UdmEventMng_InitRecord_Padding
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC_P2VAR( Dem_UdmEventRecordType, DEM_VAR_SAVED_ZONE, DEM_CODE ) Dem_UdmEventMng_GetEventRecordPtr
 (
@@ -1408,7 +1404,7 @@ FUNC_P2VAR( Dem_UdmEventRecordType, DEM_VAR_SAVED_ZONE, DEM_CODE ) Dem_UdmEventM
         eventRecordNum = Dem_UdmEventRecordTable[UdmGroupKindIndex].DemEventRecordNum;      /* [GUD]UdmGroupKindIndex */
         if( UdmEventStrgIndex < eventRecordNum )                                            /* [GUD:if]UdmEventStrgIndex */
         {
-            udmEventRecordPtr = &(Dem_UdmEventRecordTable[UdmGroupKindIndex].DemEventRecordListStartPtr[UdmEventStrgIndex]);    /* [GUD]UdmGroupKindIndex *//* [GUD]UdmEventStrgIndex *//* [ARYCHK] Dem_UdmEventRecordTable[UdmGroupKindIndex].DemEventRecordNum / 1 / UdmEventStrgIndex */
+            udmEventRecordPtr = &(Dem_UdmEventRecordTable[UdmGroupKindIndex].DemEventRecordListStartPtr[UdmEventStrgIndex]);    /* [GUD]UdmGroupKindIndex *//* [GUD]UdmEventStrgIndex */
         }
     }
 
@@ -1462,7 +1458,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmEventMng_GetEventIdFromRecor
 /*  v5-0-0         :2022-03-29                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-7-0         :2024-05-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

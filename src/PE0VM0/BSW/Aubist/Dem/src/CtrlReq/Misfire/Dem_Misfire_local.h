@@ -1,7 +1,7 @@
-/* Dem_Misfire_local_h(v5-9-0)                                              */
+/* Dem_Misfire_local_h(v5-5-0)                                              */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 /****************************************************************************/
 /* Object Name  | Dem/Misfire_local/HEADER                                  */
@@ -108,14 +108,6 @@ FUNC( Dem_u16_MisfireStrgIndexType, DEM_CODE ) Dem_Misfire_JudgeMisfireStrgIndex
     VAR( Dem_u08_MisfireKindType, AUTOMATIC ) MisfireKindOfFFD
 );
 
-#if ( DEM_OBDFFD_SUPPORT == STD_ON )
-FUNC( Dem_MisfireCylinderType, DEM_CODE ) Dem_Misfire_GetOutputObdFFDCyl
-(
-    VAR( Dem_u16_MisfireStrgIndexType, AUTOMATIC ) MisfireIndex,
-    VAR( Dem_u08_MisfireObdFFDCylIndexType, AUTOMATIC ) MisfireObdFFDCylIndex
-);
-#endif /* ( DEM_OBDFFD_SUPPORT == STD_ON ) */
-
 #if ( DEM_PFC_SUPPORT == STD_ON )
 FUNC( void, DEM_CODE ) Dem_Misfire_RestoreAccumPermanentCylToTmp
 ( void );
@@ -144,7 +136,6 @@ FUNC( boolean, DEM_CODE )  Dem_Misfire_CheckWIRBitAtIndicatorBlinking_CAT
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-9-0         :2025-02-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

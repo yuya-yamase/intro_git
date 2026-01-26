@@ -1,7 +1,7 @@
-/* Dem_Control_DisableDTCInfo_c(v5-8-0)                                     */
+/* Dem_Control_DisableDTCInfo_c(v5-5-0)                                     */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -294,9 +294,6 @@ FUNC( Dem_u08_DTCRecordUpdateStatusType, DEM_CODE) Dem_Control_GetDTCRecordUpdat
 /*               |                                                          */
 /* Return Value  | void                                                     */
 /* Notes         |                                                          */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-8-0      | no branch changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_Control_SetDisableDTCInfo
 (
@@ -308,8 +305,6 @@ static FUNC( void, DEM_CODE ) Dem_Control_SetDisableDTCInfo
     Dem_CtlDisableDTCInfo.DTCValue = DTCValue;
     Dem_CtlDisableDTCInfo.DTCOrigin = DTCOrigin;
     Dem_CtlDisableDTCInfo.EventStrgIndex = EventStrgIndex;
-
-    Dem_Control_SetDisableRecordUpdateInfoForEDR();
 
     return;
 }
@@ -454,7 +449,6 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE) Dem_Control_CheckDTCUpdateAlr
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-8-0         :2024-10-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

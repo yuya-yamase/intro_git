@@ -1,7 +1,7 @@
-/* Dem_Pm_DataEeo_h(v5-8-0)                                                 */
+/* Dem_Pm_DataEeo_h(v5-5-0)                                                 */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 /****************************************************************************/
 /* Object Name  | Dem/Pm_DataEeo/HEADER                                     */
@@ -32,13 +32,9 @@ typedef struct {
     Dem_u08_EventPriorityType  EventPriority;
     Dem_u08_EventPriorityType  OrgEventPriority;
     Dem_UdsStatusByteType   StatusOfDTC;
-#if ( DEM_EVENT_DISPLACEMENT_BY_CDTC_NONOBDONLY_SUPPORT == STD_ON )
-    boolean                 EventOBDKind;
-#endif  /* ( DEM_EVENT_DISPLACEMENT_BY_CDTC_NONOBDONLY_SUPPORT == STD_ON )  */
 }Dem_EventEntryOverwriteType;
 
 typedef struct {
-    Dem_u16_EventStrgIndexType  EventStrgIndex;
     Dem_u08_EventPriorityType   EventPriority;
     Dem_UdsStatusByteType       StatusOfDTC;
 }Dem_EventEntryOverwriteFaultInfoType;
@@ -131,7 +127,6 @@ FUNC( Dem_u08_FaultIndexType, DEM_CODE ) Dem_DcEeo_GetFaultIndexOfLowestPriority
 /*  v5-0-0         :2022-03-29                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-8-0         :2024-10-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

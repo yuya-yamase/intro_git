@@ -1,7 +1,7 @@
-/* Dcm_Dsp_DidMng_Cfg_h(v5-6-0)                                             */
+/* Dcm_Dsp_DidMng_Cfg_h(v5-4-0)                                             */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -93,17 +93,9 @@
 
 /* DcmDspSourceElement */
 
-/* DcmDspReadMemoryRangeSecurityLevelRef */
-
-/* DcmDspReadMemoryRangeSessionLevelRef */
-
-/* DcmDspWriteMemoryRangeSecurityLevelRef */
-
-/* DcmDspWriteMemoryRangeSessionLevelRef */
+/* DcmDspMemoryXXXXXXSecurityLevelRef */
 
 /* DcmDspReadMemoryRange */
-
-/* DcmDspWriteMemoryRange */
 
 /* DcmDspALFId */
 
@@ -395,11 +387,9 @@ typedef struct
 typedef struct
 {
     P2CONST( AB_83_ConstV uint8, AUTOMATIC, DCM_APPL_CONST ) ptMemoryRangeSecurityLevelRef;
-    P2CONST( AB_83_ConstV uint8, AUTOMATIC, DCM_APPL_CONST ) ptMemoryRangeSessionLevelRef;
     uint32                                      u4MemoryRangeHigh;
     uint32                                      u4MemoryRangeLow;
     uint8                                       u1MemoryRangeSecurityLevelNum;
-    uint8                                       u1MemoryRangeSessionLevelNum;
 }Dcm_Dsp_MemoryRangeInfoType;
 
 typedef struct
@@ -525,9 +515,9 @@ extern CONST( AB_83_ConstV Dcm_Dsp_DDDidType, DCM_CONFIG_DATA ) DcmDspDDDidTbl[ 
 extern CONST( AB_83_ConstV Dcm_Dsp_DidRangeType, DCM_CONFIG_DATA ) DcmDspDidRangeTbl[ DCM_P_DIDRANGE_T ];
 #endif /* DCM_M_USE_VINDATAIDENTIFIER == STD_ON || DCM_PERIODIC_SEND_USE == STD_ON || DCM_PERIODIC_DDDID_USE == STD_ON || DCM_SUPPORT_SID22 == STD_ON || DCM_SUPPORT_SID2C == STD_ON || DCM_SUPPORT_SID2E == STD_ON || DCM_SUPPORT_SID2F == STD_ON */
 
-#if ( ( DCM_PERIODIC_DDDID_USE == STD_ON ) || ( DCM_SUPPORT_SID22 == STD_ON ) || ( DCM_SUPPORT_SID23 == STD_ON ) || ( DCM_SUPPORT_SID2C == STD_ON ) || ( DCM_SUPPORT_SID2E == STD_ON ) || ( DCM_SUPPORT_SID2F == STD_ON ) || ( DCM_SUPPORT_SID3D == STD_ON ) )
+#if ( ( DCM_PERIODIC_DDDID_USE == STD_ON ) || ( DCM_SUPPORT_SID22 == STD_ON ) || ( DCM_SUPPORT_SID23 == STD_ON ) || ( DCM_SUPPORT_SID2C == STD_ON ) || ( DCM_SUPPORT_SID2E == STD_ON ) || ( DCM_SUPPORT_SID2F == STD_ON ) )
 extern CONST( AB_83_ConstV Dcm_Dsp_MemoryType, DCM_CONFIG_DATA ) DcmDspMemory;
-#endif /* DCM_PERIODIC_DDDID_USE == STD_ON || DCM_SUPPORT_SID22 == STD_ON || DCM_SUPPORT_SID23 == STD_ON || DCM_SUPPORT_SID2C == STD_ON || DCM_SUPPORT_SID2E == STD_ON || DCM_SUPPORT_SID2F == STD_ON || DCM_SUPPORT_SID3D == STD_ON */
+#endif /* DCM_PERIODIC_DDDID_USE == STD_ON || DCM_SUPPORT_SID22 == STD_ON || DCM_SUPPORT_SID23 == STD_ON || DCM_SUPPORT_SID2C == STD_ON || DCM_SUPPORT_SID2E == STD_ON || DCM_SUPPORT_SID2F == STD_ON */
 
 #if ( ( DCM_PERIODIC_DDDID_USE == STD_ON ) || ( DCM_PERIODIC_SEND_USE == STD_ON ) || ( DCM_SUPPORT_SID22 == STD_ON ) || ( DCM_SUPPORT_SID2C == STD_ON ) || ( DCM_SUPPORT_SID2E == STD_ON ) || ( DCM_SUPPORT_SID2F == STD_ON ) )
 extern CONST( AB_83_ConstV boolean, DCM_CONFIG_DATA ) Dcm_P_DIDMNG_bChk_Per_Source_Did;
@@ -586,12 +576,12 @@ extern CONST( AB_83_ConstV uint16, DCM_CONFIG_DATA ) Dcm_P_u2Source_Did_Max_Data
 /*  v5-0-0         :2022-03-29                                              */
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
-/*  v5-6-0         :2024-02-27                                              */
+/*  v5-4-0         :2023-06-28                                              */
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
 /*  Framework          :v2-1-0                                              */
-/*  BSW plug-in        :v5-10-0                                             */
+/*  BSW plug-in        :v5-5-1                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

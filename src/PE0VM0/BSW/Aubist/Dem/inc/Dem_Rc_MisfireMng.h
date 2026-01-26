@@ -1,7 +1,7 @@
-/* Dem_Rc_MisfireMng_h(v5-6-0)                                              */
+/* Dem_Rc_MisfireMng_h(v5-5-0)                                              */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 /****************************************************************************/
 /* Object Name  | Dem/Rc_MisfireMng/HEADER                                  */
@@ -176,16 +176,6 @@ FUNC( Dem_u08_MisfireKindType, DEM_CODE ) Dem_MisfireMng_GetMisfireKindOfFFD
 (
     VAR( Dem_u08_MisfireFFDCylIndexType, AUTOMATIC ) MisfireFFDCylIndex
 );
-#if ( DEM_GET_UDSDTC_BY_CONFIRMED_ORDER_SUPPORT == STD_ON )
-FUNC( Dem_MisfireCylinderNumberType, DEM_CODE ) Dem_MisfireMng_GetConfirmedOrderCyl
-(
-    VAR( Dem_MisfireCylinderNumberType, AUTOMATIC ) MisfireConfirmedOrderIndex
-);
-FUNC( Dem_u16_OccrOrderType, DEM_CODE ) Dem_MisfireMng_GetConfirmedOccurrenceOrder
-(
-    VAR( Dem_MisfireCylinderNumberType, AUTOMATIC ) MisfireConfirmedOrderIndex
-);
-#endif  /* ( DEM_GET_UDSDTC_BY_CONFIRMED_ORDER_SUPPORT == STD_ON )  */
 FUNC( void, DEM_CODE ) Dem_MisfireMng_InitFFDCyl
 (
     VAR( Dem_u16_MisfireStrgIndexType, AUTOMATIC ) MisfireIndex,
@@ -208,14 +198,6 @@ FUNC( void, DEM_CODE ) Dem_MisfireMng_SetMisfireComRecord
 (
     P2CONST( Dem_MisfireComRecordType, AUTOMATIC, AUTOMATIC ) MisfireComRecordPtr
 );
-#if ( DEM_GET_UDSDTC_BY_CONFIRMED_ORDER_SUPPORT == STD_ON )     /*  [FuncSw]    */
-FUNC( void, DEM_CODE ) Dem_MisfireMng_SetConfirmedOrderCyl
-(
-    VAR( Dem_MisfireCylinderNumberType, AUTOMATIC ) ConfirmedOrderCylIndex,
-    VAR( Dem_MisfireCylinderNumberType, AUTOMATIC ) ConfirmedOrderCyl,
-    VAR( Dem_u16_OccrOrderType, AUTOMATIC ) ConfirmedOccurrenceOrder
-);
-#endif  /* ( DEM_GET_UDSDTC_BY_CONFIRMED_ORDER_SUPPORT == STD_ON )  */
 FUNC( void, DEM_CODE ) Dem_MisfireMng_ClearMisfireComRecord
 (void);
 FUNC( void, DEM_CODE ) Dem_MisfireMng_MisfireRecordInit
@@ -266,9 +248,6 @@ FUNC( void, DEM_CODE ) Dem_MisfireMng_SetPFCMisfireComRecord
 (
     P2CONST( Dem_PFCMisfireComRecordType, AUTOMATIC, AUTOMATIC ) PFCMisfireComRecordPtr
 );
-FUNC( void, DEM_CODE ) Dem_MisfireMng_ClearPFCMisfireComRecord
-( void );
-
 #if ( DEM_NVM_SYNC_PROCESS_ENABLE == STD_ON )
 FUNC( void, DEM_CODE ) Dem_MisfireMng_SetPFCMisfireComRecordMirror
 (
@@ -342,7 +321,6 @@ extern VAR( Dem_PFCMisfireComRecordType, DEM_VAR_NO_INIT ) Dem_TmpPFCMisfireComM
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-6-0         :2024-01-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

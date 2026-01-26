@@ -1,7 +1,7 @@
-/* Dem_OpCycleMng_c(v5-7-0)                                                 */
+/* Dem_OpCycleMng_c(v5-5-0)                                                 */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -486,7 +486,6 @@ FUNC( void, DEM_CODE ) Dem_OpCycleMng_CopyOpCycleStatusToMirror
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_OpCycleMng_InitRecordData
 (
@@ -501,7 +500,7 @@ static FUNC( void, DEM_CODE ) Dem_OpCycleMng_InitRecordData
     /* Init cycle state.        */
     for( cycleQualifiedIndex = (Dem_u08_CycleQualifiedIndexType)0U; cycleQualifiedIndex < cycleQualifiedNum; cycleQualifiedIndex++ )    /* [GUD:for]cycleQualifiedIndex */
     {
-        OpCycleRecordPtr->CycleState[cycleQualifiedIndex] = DEM_CYCLE_NOTIFY_END;   /* [GUD]cycleQualifiedIndex *//* [ARYCHK] DEM_OPERATION_CYCLE_RECORD_STATE_NUM / 1 / cycleQualifiedIndex */
+        OpCycleRecordPtr->CycleState[cycleQualifiedIndex] = DEM_CYCLE_NOTIFY_END;   /* [GUD]cycleQualifiedIndex */
     }
 
     /* Init clear identifier.   */
@@ -527,7 +526,6 @@ static FUNC( void, DEM_CODE ) Dem_OpCycleMng_InitRecordData
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_OpCycleMng_InitPadding
 (
@@ -541,7 +539,7 @@ static FUNC( void, DEM_CODE ) Dem_OpCycleMng_InitPadding
 
     for( paddingIndex = (Dem_u16_PaddingIndexType)0U; paddingIndex < opCycleRecordBlockPaddingSize; paddingIndex++ )    /* [GUD:for]paddingIndex */
     {
-        OpCycleRecordPtr->Reserve[paddingIndex] = DEM_CYCLE_NOTIFY_END;     /* [GUD]paddingIndex *//* [ARYCHK] DEM_OPCYCLE_RECORD_PADDINGSIZE_TO_BLOCKSIZE / 1 / paddingIndex */
+        OpCycleRecordPtr->Reserve[paddingIndex] = DEM_CYCLE_NOTIFY_END;     /* [GUD]paddingIndex */
     }
     return ;
 }
@@ -573,7 +571,6 @@ static FUNC( void, DEM_CODE ) Dem_OpCycleMng_InitOperationCycleMirror
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_OpCycleMng_GetRecordData
 (
@@ -591,7 +588,7 @@ static FUNC( void, DEM_CODE ) Dem_OpCycleMng_GetRecordData
     /* Get cycle state.         */
     for( cycleQualifiedIndex = (Dem_u08_CycleQualifiedIndexType)0U; cycleQualifiedIndex < cycleQualifiedNum; cycleQualifiedIndex++ )    /* [GUD:for]cycleQualifiedIndex */
     {
-        OpCycleRecordPtr->CycleState[cycleQualifiedIndex] = Dem_OpCycleRecord.CycleState[cycleQualifiedIndex];          /* [GUD]cycleQualifiedIndex *//* [ARYCHK] DEM_OPERATION_CYCLE_RECORD_STATE_NUM / 1 / cycleQualifiedIndex */
+        OpCycleRecordPtr->CycleState[cycleQualifiedIndex] = Dem_OpCycleRecord.CycleState[cycleQualifiedIndex];          /* [GUD]cycleQualifiedIndex */
     }
 
     /* Get clear identifier.    */
@@ -601,7 +598,7 @@ static FUNC( void, DEM_CODE ) Dem_OpCycleMng_GetRecordData
     /* Get padding area.        */
     for( paddingIndex = (Dem_u16_PaddingIndexType)0U; paddingIndex < opCycleRecordBlockPaddingSize; paddingIndex++ )    /* [GUD:for]paddingIndex */
     {
-        OpCycleRecordPtr->Reserve[paddingIndex] = Dem_OpCycleRecord.Reserve[paddingIndex];                              /* [GUD]paddingIndex *//* [ARYCHK] DEM_OPCYCLE_RECORD_PADDINGSIZE_TO_BLOCKSIZE / 1 / paddingIndex */
+        OpCycleRecordPtr->Reserve[paddingIndex] = Dem_OpCycleRecord.Reserve[paddingIndex];                              /* [GUD]paddingIndex */
     }
 
     return ;
@@ -688,7 +685,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_OpCycleMng_GetEventIdFromRecord
 /*  v5-1-0         :2022-03-29                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-7-0         :2024-05-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

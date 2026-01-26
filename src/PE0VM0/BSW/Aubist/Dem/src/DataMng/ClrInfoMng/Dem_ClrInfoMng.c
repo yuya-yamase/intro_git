@@ -1,7 +1,7 @@
-/* Dem_ClrInfoMng_c(v5-7-0)                                                 */
+/* Dem_ClrInfoMng_c(v5-5-0)                                                 */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -728,7 +728,6 @@ static FUNC( void, DEM_CODE ) Dem_ClrInfoMng_InitMirrorMemory
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_ClrInfoMng_InitPadding
 (
@@ -742,7 +741,7 @@ static FUNC( void, DEM_CODE ) Dem_ClrInfoMng_InitPadding
 
     for( paddingIndex = (Dem_u16_PaddingIndexType)0U; paddingIndex < paddingSize; paddingIndex++ )  /* [GUD:for]paddingIndex */
     {
-        ClrInfoRecordPtr->Reserve[paddingIndex] = (uint8)0U;                                        /* [GUD]paddingIndex *//* [ARYCHK] DEM_CLRINFO_RECORD_PADDINGSIZE_TO_BLOCKSIZE / 1 / paddingIndex */
+        ClrInfoRecordPtr->Reserve[paddingIndex] = (uint8)0U;                                        /* [GUD]paddingIndex */
     }
     return ;
 }
@@ -760,7 +759,6 @@ static FUNC( void, DEM_CODE ) Dem_ClrInfoMng_InitPadding
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_ClrInfoMng_InitPaddingVolatile
 (
@@ -774,7 +772,7 @@ static FUNC( void, DEM_CODE ) Dem_ClrInfoMng_InitPaddingVolatile
 
     for( paddingIndex = (Dem_u16_PaddingIndexType)0U; paddingIndex < paddingSize; paddingIndex++ )  /* [GUD:for]paddingIndex */
     {
-        ClrInfoRecordPtr->Reserve[paddingIndex] = (uint8)0U;                                        /* [GUD]paddingIndex *//* [ARYCHK] DEM_CLRINFO_RECORD_PADDINGSIZE_TO_BLOCKSIZE / 1 / paddingIndex */
+        ClrInfoRecordPtr->Reserve[paddingIndex] = (uint8)0U;                                        /* [GUD]paddingIndex */
     }
     return ;
 }
@@ -855,7 +853,6 @@ FUNC( void, DEM_CODE ) Dem_ClrInfoMng_RefreshRAM
 /*  v5-0-0         :2022-03-29                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-7-0         :2024-05-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

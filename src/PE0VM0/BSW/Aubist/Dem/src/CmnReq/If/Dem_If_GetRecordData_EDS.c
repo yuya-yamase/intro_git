@@ -1,7 +1,7 @@
-/* Dem_If_GetRecordData_EDS_c(v5-8-0)                                       */
+/* Dem_If_GetRecordData_EDS_c(v5-5-0)                                       */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -74,9 +74,6 @@
 /*               |        E_OK : operation was successful                   */
 /*               |        E_NOT_OK : no DTC available                       */
 /* Notes         | -                                                        */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-8-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( Std_ReturnType, DEM_CODE ) Dem_GetDTCOfOBDFreezeFrame
 (
@@ -97,7 +94,7 @@ FUNC( Std_ReturnType, DEM_CODE ) Dem_GetDTCOfOBDFreezeFrame
     else
     {
         dtcValue = (Dem_u32_DTCValueType)0U;  /*  out paramter.   */
-        internalRetVal = Dem_Control_GetDTCOfOBDFreezeFrame( DEM_CALLER_SWC, FrameNumber, &dtcValue );
+        internalRetVal = Dem_Control_GetDTCOfOBDFreezeFrame( FrameNumber, &dtcValue );
         *DTC = dtcValue;
 
         /* Convert return value */
@@ -194,7 +191,6 @@ FUNC( Std_ReturnType, DEM_CODE ) Dem_ReadDataOfOBDFreezeFrame
 /* History                                                                  */
 /*  Version        :Date                                                    */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-8-0         :2024-10-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

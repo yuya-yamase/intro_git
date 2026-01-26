@@ -1,7 +1,7 @@
-/* Dem_Control_EventInfo_c(v5-9-0)                                          */
+/* Dem_Control_EventInfo_c(v5-5-0)                                          */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -376,112 +376,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_GetAgingCounter
 
     return retVal;
 }
-
-#if ( DEM_WWH_OBD_SUPPORT == STD_ON )
-/****************************************************************************/
-/* Function Name | Dem_Control_GetAgingTime                                 */
-/* Description   | Gets the current aging counter of an event.              */
-/* Preconditions | none                                                     */
-/* Parameters    | [in] EventID :                                           */
-/*               |        Identification of an event by assigned EventId    */
-/*               | [out] AgingTimePtr :                                     */
-/*               |        Pointer to the area to get time.                  */
-/* Return Value  | Dem_u08_InternalReturnType                               */
-/*               |        DEM_IRT_OK : get of counter was successful        */
-/*               |        DEM_IRT_NG : get of counter failed                */
-/* Notes         | -                                                        */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-6-0      | new created. based on Dem_Control_GetAgingCounter.       */
-/*   v5-9-0      | no object changed.                                       */
-/****************************************************************************/
-FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_GetAgingTime
-(
-    VAR( Dem_EventIdType, AUTOMATIC ) EventID,
-    P2VAR( Dem_u16_WWHOBDTimeAgingCounterType, AUTOMATIC, AUTOMATIC ) AgingTimePtr
-)
-{
-    VAR( Dem_u08_InternalReturnType, AUTOMATIC ) retVal;
-
-    VAR( Dem_u08_InternalReturnType, AUTOMATIC ) retTempVal;
-    VAR( Dem_u08_InternalReturnType, AUTOMATIC ) checkStatus;
-    VAR( Dem_u08_InternalReturnType, AUTOMATIC ) retGetAgingTime;
-    VAR( Dem_u16_EventCtrlIndexType, AUTOMATIC ) eventCtrlIndex;
-    VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) eventStrgIndex;
-    VAR( Dem_u08_DTCStatusEx2Type, AUTOMATIC )   extendStatusOfDTC2;
-    VAR( Dem_u16_WWHOBDTimeAgingCounterType, AUTOMATIC ) agingTime;
-    VAR( Dem_u16_WWHOBDTimeAgingCounterType, AUTOMATIC ) agingTimeThreshold;
-    VAR( boolean, AUTOMATIC ) agingAllowed;
-    VAR( Dem_u08_FaultIndexType, AUTOMATIC ) faultIndex;
-
-    retVal = DEM_IRT_NG;
-    eventCtrlIndex = DEM_EVENTCTRLINDEX_INVALID;
-
-    checkStatus = Dem_Control_ChkAfterCompleteInit();
-    if( checkStatus == DEM_IRT_OK )
-    {
-        retTempVal = Dem_Control_GetEventCtrlIndexFromEventId( EventID, &eventCtrlIndex );                               /* [GUD:RET:DEM_IRT_OK] eventCtrlIndex */
-        if( retTempVal == DEM_IRT_OK )
-        {
-            eventStrgIndex  =   Dem_CmbEvt_CnvEventCtrlIndex_ToEventStrgIndex( eventCtrlIndex );    /* [GUD]eventCtrlIndex *//* [GUD:RET:IF_GUARDED: EventCtrlIndex ] eventStrgIndex */
-            agingAllowed    =   Dem_CfgInfoPm_GetAgingAllowed( eventStrgIndex );                    /* [GUD]eventStrgIndex */
-
-            if ( agingAllowed == (boolean)FALSE )
-            {
-                /*  aging is not allowed.           */
-                agingTime = DEM_TIME_AGING_COUNT_INITIAL_VALUE;
-            }
-            else
-            {
-                /*  aging is allowed.               */
-                /*--------------------------------------------------------------------------*/
-                /* Need to get exclusive [SchM_Enter_Dem_EventMemory].                      */
-                /* These are the reasons why this function needs to get exclusive.          */
-                /*  - This function call [DataMng] function directory.                      */
-                /*  - This function called from SW-C/Dcm context.                           */
-                /*  Waits to finish the exclusive section in the Dem_MainFunction context.  */
-                SchM_Enter_Dem_EventMemory();    /* waits completion of updating Diag record data by Dem_MainFunction.      */
-                SchM_Exit_Dem_EventMemory();
-                /*--------------------------------------------------------------------------*/
-
-                agingTime = DEM_TIME_AGING_COUNT_INITIAL_VALUE;
-                (void)Dem_DataMngC_GetER_FaultIndex( eventStrgIndex, &faultIndex );     /* no return check required */      /* [GUD] eventStrgIndex */
-
-                agingTimeThreshold   = Dem_CfgInfoPm_GetTimeAgingCounterThreshold();
-                retGetAgingTime      = Dem_DataMngC_GetFR_AgingTime( faultIndex, &agingTime );
-                if( retGetAgingTime != DEM_IRT_OK )
-                {
-                    /*  get extendStatusOfDTC.      */
-                    (void)Dem_DataMngC_GetER_ExtendDTCStatus2( eventStrgIndex, &extendStatusOfDTC2 );   /* no return check required */ /* [GUD] eventStrgIndex */
-
-                    if (( extendStatusOfDTC2 & DEM_DTCSTATUSEX2_STATUS_AGING_HISTORY ) == DEM_DTCSTATUSEX2_STATUS_AGING_HISTORY )
-                    {
-                        /*  there is Aging history.  get AgingCycleThreshold.    */
-                        agingTime = agingTimeThreshold;
-                    }
-                    else
-                    {
-                        /*  there is no Aging history.       */
-                        agingTime = DEM_TIME_AGING_COUNT_INITIAL_VALUE;
-                    }
-                }
-                else
-                {
-                    if ( agingTime > agingTimeThreshold )
-                    {
-                        agingTime = agingTimeThreshold;
-                    }
-                }
-            }
-            *AgingTimePtr    =   agingTime;
-
-            retVal = DEM_IRT_OK;
-        }
-    }
-
-    return retVal;
-}
-#endif  /* ( DEM_WWH_OBD_SUPPORT == STD_ON )    */
 
 #if ( DEM_OBD_SUPPORT == STD_ON )
 /****************************************************************************/
@@ -878,7 +772,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_GetEventFailureCycleCou
     return retVal;
 }
 
-#if ( DEM_GETOCCURRENCECOUNTER_SUPPORT == STD_ON )
+
 /****************************************************************************/
 /* Function Name | Dem_Control_GetEventOccurrenceCounter                    */
 /* Description   | Gets the current occurrence counter of an event.         */
@@ -894,7 +788,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_GetEventFailureCycleCou
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | new created. based on Dem_Control_GetAgingCounter.       */
-/*   v5-9-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_GetEventOccurrenceCounter
 (
@@ -953,7 +846,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_GetEventOccurrenceCount
 
     return retVal;
 }
-#endif  /* ( DEM_GETOCCURRENCECOUNTER_SUPPORT == STD_ON )   */
+
 
 /****************************************************************************/
 /* Function Name | Dem_Control_GetEventIdListByFaultRecordOrder             */
@@ -970,7 +863,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_GetEventOccurrenceCount
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | new created. based on Dem_Control_SearchFaultOrderedPriorityOBDFreezeFrame. */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_GetEventIdListByFaultRecordOrder
 (
@@ -1054,7 +946,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_GetEventIdListByFaultRe
                         if ( targetDataFlag == (boolean)TRUE )
                         {
                             /*  store data.     */
-                            EventIdBufferPtr[ eventIdCnt ]  =   eventId;                        /* [GUD]eventIdCnt *//* [ARYCHK] *EventIdNumPtr / 1 / eventIdCnt */
+                            EventIdBufferPtr[ eventIdCnt ]  =   eventId;                        /* [GUD]eventIdCnt */
                             eventIdCnt  =   eventIdCnt + ( Dem_u16_EventStrgIndexType )1U;
                             if ( eventIdCnt >= eventIdMax )                                     /* [GUD:if]eventIdCnt */
                             {
@@ -1090,7 +982,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_GetEventIdListByFaultRe
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | new created.                                             */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_GetEventIdListByConfirmedOrder
 (
@@ -1155,7 +1046,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_GetEventIdListByConfirm
                             if ( retCnvId == DEM_IRT_OK )
                             {
                                 /*  store data.     */
-                                EventIdBufferPtr[ eventIdCnt ]  =   eventId;                        /* [GUD]eventIdCnt *//* [ARYCHK] *EventIdNumPtr / 1 / eventIdCnt */
+                                EventIdBufferPtr[ eventIdCnt ]  =   eventId;                        /* [GUD]eventIdCnt */
                                 eventIdCnt  =   eventIdCnt + ( Dem_u16_EventStrgIndexType )1U;
                                 if ( eventIdCnt >= eventIdMax )                                     /* [GUD:if]eventIdCnt */
                                 {
@@ -1190,9 +1081,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_GetEventIdListByConfirm
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-6-0         :2024-01-29                                              */
-/*  v5-7-0         :2024-05-29                                              */
-/*  v5-9-0         :2025-02-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

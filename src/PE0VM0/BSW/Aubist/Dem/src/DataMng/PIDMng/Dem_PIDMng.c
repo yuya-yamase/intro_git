@@ -1,7 +1,7 @@
-/* Dem_PIDMng_c(v5-7-0)                                                     */
+/* Dem_PIDMng_c(v5-5-0)                                                     */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -193,9 +193,6 @@ FUNC( void, DEM_CODE ) Dem_PIDMngC_ClearDataOfPID30
 /*               |        by the Dcm or SWC with the appropriate size.      */
 /* Return Value  | void                                                     */
 /* Notes         | -                                                        */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void , DEM_CODE ) Dem_PIDMngC_ReadDataOfPID21
 (
@@ -205,8 +202,8 @@ FUNC( void , DEM_CODE ) Dem_PIDMngC_ReadDataOfPID21
     /* Starts exclusion. */
     SchM_Enter_Dem_PID();
 
-    PID21value[DEM_PID_POS0] = Dem_PIDRecord.PID21[DEM_PID_POS0];/* [ARYCHK] DEM_PID21_SIZE / 1 / DEM_PID_POS0 */
-    PID21value[DEM_PID_POS1] = Dem_PIDRecord.PID21[DEM_PID_POS1];/* [ARYCHK] DEM_PID21_SIZE / 1 / DEM_PID_POS1 */
+    PID21value[DEM_PID_POS0] = Dem_PIDRecord.PID21[DEM_PID_POS0];
+    PID21value[DEM_PID_POS1] = Dem_PIDRecord.PID21[DEM_PID_POS1];
 
     /* Finishes exclusion. */
     SchM_Exit_Dem_PID();
@@ -246,9 +243,6 @@ FUNC( Dem_u08_PIDByteValueType, DEM_CODE ) Dem_PIDMngC_ReadDataOfPID30
 /*               |        SWC with the appropriate size.                    */
 /* Return Value  | void                                                     */
 /* Notes         | -                                                        */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_PIDMngC_ReadDataOfPID31
 (
@@ -258,8 +252,8 @@ FUNC( void, DEM_CODE ) Dem_PIDMngC_ReadDataOfPID31
     /* Starts exclusion. */
     SchM_Enter_Dem_PID();
 
-    PID31value[DEM_PID_POS0] = Dem_PIDRecord.PID31[DEM_PID_POS0];/* [ARYCHK] DEM_PID31_SIZE / 1 / DEM_PID_POS0 */
-    PID31value[DEM_PID_POS1] = Dem_PIDRecord.PID31[DEM_PID_POS1];/* [ARYCHK] DEM_PID31_SIZE / 1 / DEM_PID_POS1 */
+    PID31value[DEM_PID_POS0] = Dem_PIDRecord.PID31[DEM_PID_POS0];
+    PID31value[DEM_PID_POS1] = Dem_PIDRecord.PID31[DEM_PID_POS1];
 
     /* Finishes exclusion. */
     SchM_Exit_Dem_PID();
@@ -278,9 +272,6 @@ FUNC( void, DEM_CODE ) Dem_PIDMngC_ReadDataOfPID31
 /*               |        SWC with the appropriate size.                    */
 /* Return Value  | void                                                     */
 /* Notes         | -                                                        */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_PIDMngC_ReadDataOfPID4D
 (
@@ -290,8 +281,8 @@ FUNC( void, DEM_CODE ) Dem_PIDMngC_ReadDataOfPID4D
     /* Starts exclusion. */
     SchM_Enter_Dem_PID();
 
-    PID4Dvalue[DEM_PID_POS0] = Dem_PIDRecord.PID4D[DEM_PID_POS0];/* [ARYCHK] DEM_PID4D_SIZE / 1 / DEM_PID_POS0 */
-    PID4Dvalue[DEM_PID_POS1] = Dem_PIDRecord.PID4D[DEM_PID_POS1];/* [ARYCHK] DEM_PID4D_SIZE / 1 / DEM_PID_POS1 */
+    PID4Dvalue[DEM_PID_POS0] = Dem_PIDRecord.PID4D[DEM_PID_POS0];
+    PID4Dvalue[DEM_PID_POS1] = Dem_PIDRecord.PID4D[DEM_PID_POS1];
 
     /* Finishes exclusion. */
     SchM_Exit_Dem_PID();
@@ -311,9 +302,6 @@ FUNC( void, DEM_CODE ) Dem_PIDMngC_ReadDataOfPID4D
 /*               |        SWC with the appropriate size.                    */
 /* Return Value  | void                                                     */
 /* Notes         | -                                                        */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_PIDMngC_ReadDataOfPID4E
 (
@@ -323,8 +311,8 @@ FUNC( void, DEM_CODE ) Dem_PIDMngC_ReadDataOfPID4E
     /* Starts exclusion. */
     SchM_Enter_Dem_PID();
 
-    PID4Evalue[DEM_PID_POS0] = Dem_PIDRecord.PID4E[DEM_PID_POS0];/* [ARYCHK] DEM_PID4E_SIZE / 1 / DEM_PID_POS0 */
-    PID4Evalue[DEM_PID_POS1] = Dem_PIDRecord.PID4E[DEM_PID_POS1];/* [ARYCHK] DEM_PID4E_SIZE / 1 / DEM_PID_POS1 */
+    PID4Evalue[DEM_PID_POS0] = Dem_PIDRecord.PID4E[DEM_PID_POS0];
+    PID4Evalue[DEM_PID_POS1] = Dem_PIDRecord.PID4E[DEM_PID_POS1];
 
     /* Finishes exclusion. */
     SchM_Exit_Dem_PID();
@@ -346,7 +334,6 @@ FUNC( void, DEM_CODE ) Dem_PIDMngC_ReadDataOfPID4E
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_PIDMngC_SetDataOfPID21
 (
@@ -367,8 +354,8 @@ FUNC( void, DEM_CODE ) Dem_PIDMngC_SetDataOfPID21
     }
     else
     {
-        if( (Dem_PIDRecord.PID21[DEM_PID_POS0] != PID21value[DEM_PID_POS0]) ||/* [ARYCHK] DEM_PID21_SIZE / 1 / DEM_PID_POS0 */
-            (Dem_PIDRecord.PID21[DEM_PID_POS1] != PID21value[DEM_PID_POS1]) )/* [ARYCHK] DEM_PID21_SIZE / 1 / DEM_PID_POS1 */
+        if( (Dem_PIDRecord.PID21[DEM_PID_POS0] != PID21value[DEM_PID_POS0]) ||
+            (Dem_PIDRecord.PID21[DEM_PID_POS1] != PID21value[DEM_PID_POS1]) )
         {
             nvmWrite = (boolean)TRUE;
         }
@@ -376,8 +363,8 @@ FUNC( void, DEM_CODE ) Dem_PIDMngC_SetDataOfPID21
 
     if (nvmWrite == (boolean)TRUE)
     {
-        Dem_PIDRecord.PID21[DEM_PID_POS0] = PID21value[DEM_PID_POS0];/* [ARYCHK] DEM_PID21_SIZE / 1 / DEM_PID_POS0 */
-        Dem_PIDRecord.PID21[DEM_PID_POS1] = PID21value[DEM_PID_POS1];/* [ARYCHK] DEM_PID21_SIZE / 1 / DEM_PID_POS1 */
+        Dem_PIDRecord.PID21[DEM_PID_POS0] = PID21value[DEM_PID_POS0];
+        Dem_PIDRecord.PID21[DEM_PID_POS1] = PID21value[DEM_PID_POS1];
 
         Dem_PIDRecord.ClearID = Dem_ClrInfoMng_GetObdClearID();
 
@@ -407,7 +394,6 @@ FUNC( void, DEM_CODE ) Dem_PIDMngC_SetDataOfPID21
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_PIDMngC_SetDataOfPID31
 (
@@ -428,8 +414,8 @@ FUNC( void, DEM_CODE ) Dem_PIDMngC_SetDataOfPID31
     }
     else
     {
-        if( (Dem_PIDRecord.PID31[DEM_PID_POS0] != PID31value[DEM_PID_POS0]) ||/* [ARYCHK] DEM_PID31_SIZE / 1 / DEM_PID_POS0 */
-            (Dem_PIDRecord.PID31[DEM_PID_POS1] != PID31value[DEM_PID_POS1]) )/* [ARYCHK] DEM_PID31_SIZE / 1 / DEM_PID_POS1 */
+        if( (Dem_PIDRecord.PID31[DEM_PID_POS0] != PID31value[DEM_PID_POS0]) ||
+            (Dem_PIDRecord.PID31[DEM_PID_POS1] != PID31value[DEM_PID_POS1]) )
         {
             nvmWrite = (boolean)TRUE;
         }
@@ -437,8 +423,8 @@ FUNC( void, DEM_CODE ) Dem_PIDMngC_SetDataOfPID31
 
     if (nvmWrite == (boolean)TRUE)
     {
-        Dem_PIDRecord.PID31[DEM_PID_POS0] = PID31value[DEM_PID_POS0];/* [ARYCHK] DEM_PID31_SIZE / 1 / DEM_PID_POS0 */
-        Dem_PIDRecord.PID31[DEM_PID_POS1] = PID31value[DEM_PID_POS1];/* [ARYCHK] DEM_PID31_SIZE / 1 / DEM_PID_POS1 */
+        Dem_PIDRecord.PID31[DEM_PID_POS0] = PID31value[DEM_PID_POS0];
+        Dem_PIDRecord.PID31[DEM_PID_POS1] = PID31value[DEM_PID_POS1];
 
         Dem_PIDRecord.ClearID = Dem_ClrInfoMng_GetObdClearID();
 
@@ -468,7 +454,6 @@ FUNC( void, DEM_CODE ) Dem_PIDMngC_SetDataOfPID31
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_PIDMngC_SetDataOfPID4D
 (
@@ -489,8 +474,8 @@ FUNC( void, DEM_CODE ) Dem_PIDMngC_SetDataOfPID4D
     }
     else
     {
-        if( (Dem_PIDRecord.PID4D[DEM_PID_POS0] != PID4Dvalue[DEM_PID_POS0]) ||/* [ARYCHK] DEM_PID4D_SIZE / 1 / DEM_PID_POS0 */
-            (Dem_PIDRecord.PID4D[DEM_PID_POS1] != PID4Dvalue[DEM_PID_POS1]) )/* [ARYCHK] DEM_PID4D_SIZE / 1 / DEM_PID_POS1 */
+        if( (Dem_PIDRecord.PID4D[DEM_PID_POS0] != PID4Dvalue[DEM_PID_POS0]) ||
+            (Dem_PIDRecord.PID4D[DEM_PID_POS1] != PID4Dvalue[DEM_PID_POS1]) )
         {
             nvmWrite = (boolean)TRUE;
         }
@@ -498,8 +483,8 @@ FUNC( void, DEM_CODE ) Dem_PIDMngC_SetDataOfPID4D
 
     if (nvmWrite == (boolean)TRUE)
     {
-        Dem_PIDRecord.PID4D[DEM_PID_POS0] = PID4Dvalue[DEM_PID_POS0];/* [ARYCHK] DEM_PID4D_SIZE / 1 / DEM_PID_POS0 */
-        Dem_PIDRecord.PID4D[DEM_PID_POS1] = PID4Dvalue[DEM_PID_POS1];/* [ARYCHK] DEM_PID4D_SIZE / 1 / DEM_PID_POS1 */
+        Dem_PIDRecord.PID4D[DEM_PID_POS0] = PID4Dvalue[DEM_PID_POS0];
+        Dem_PIDRecord.PID4D[DEM_PID_POS1] = PID4Dvalue[DEM_PID_POS1];
 
         Dem_PIDRecord.ClearID = Dem_ClrInfoMng_GetObdClearID();
 
@@ -529,7 +514,6 @@ FUNC( void, DEM_CODE ) Dem_PIDMngC_SetDataOfPID4D
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_PIDMngC_SetDataOfPID4E
 (
@@ -550,8 +534,8 @@ FUNC( void, DEM_CODE ) Dem_PIDMngC_SetDataOfPID4E
     }
     else
     {
-        if( (Dem_PIDRecord.PID4E[DEM_PID_POS0] != PID4Evalue[DEM_PID_POS0]) ||/* [ARYCHK] DEM_PID4E_SIZE / 1 / DEM_PID_POS0 */
-            (Dem_PIDRecord.PID4E[DEM_PID_POS1] != PID4Evalue[DEM_PID_POS1]) )/* [ARYCHK] DEM_PID4E_SIZE / 1 / DEM_PID_POS1 */
+        if( (Dem_PIDRecord.PID4E[DEM_PID_POS0] != PID4Evalue[DEM_PID_POS0]) ||
+            (Dem_PIDRecord.PID4E[DEM_PID_POS1] != PID4Evalue[DEM_PID_POS1]) )
         {
             nvmWrite = (boolean)TRUE;
         }
@@ -559,8 +543,8 @@ FUNC( void, DEM_CODE ) Dem_PIDMngC_SetDataOfPID4E
 
     if (nvmWrite == (boolean)TRUE)
     {
-        Dem_PIDRecord.PID4E[DEM_PID_POS0] = PID4Evalue[DEM_PID_POS0];/* [ARYCHK] DEM_PID4E_SIZE / 1 / DEM_PID_POS0 */
-        Dem_PIDRecord.PID4E[DEM_PID_POS1] = PID4Evalue[DEM_PID_POS1];/* [ARYCHK] DEM_PID4E_SIZE / 1 / DEM_PID_POS1 */
+        Dem_PIDRecord.PID4E[DEM_PID_POS0] = PID4Evalue[DEM_PID_POS0];
+        Dem_PIDRecord.PID4E[DEM_PID_POS1] = PID4Evalue[DEM_PID_POS1];
 
         Dem_PIDRecord.ClearID = Dem_ClrInfoMng_GetObdClearID();
 
@@ -860,7 +844,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_PIDMng_GetEventIdFromRecordData
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-7-0         :2024-05-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

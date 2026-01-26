@@ -1,7 +1,7 @@
-/* Dem_AltIUMPRMng_c(v5-8-0)                                                */
+/* Dem_AltIUMPRMng_c(v5-5-0)                                                */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -100,12 +100,12 @@ static VAR( boolean, DEM_VAR_NO_INIT ) Dem_AltIUMPR_VerifyMode;
 #include <Dem_MemMap.h>
 
 
-#define DEM_START_SEC_VAR_SAVED_ZONE_ALTIUMPR
+#define DEM_START_SEC_VAR_SAVED_ZONE
 #include <Dem_MemMap.h>
 
-VAR( Dem_AltIUMPRRecordType, DEM_VAR_SAVED_ZONE_ALTIUMPR ) Dem_AltIUMPRRecord[ DEM_ALTIUMPR_RECORD_NUM ];
+VAR( Dem_AltIUMPRRecordType, DEM_VAR_SAVED_ZONE ) Dem_AltIUMPRRecord[ DEM_ALTIUMPR_RECORD_NUM ];
 
-#define DEM_STOP_SEC_VAR_SAVED_ZONE_ALTIUMPR
+#define DEM_STOP_SEC_VAR_SAVED_ZONE
 #include <Dem_MemMap.h>
 
 
@@ -156,11 +156,8 @@ FUNC( void, DEM_CODE ) Dem_AltIUMPRMng_Init
 /* Return Value  | void                                                     */
 /* Notes         |                                                          */
 /*--------------------------------------------------------------------------*/
-/* UpdateRecord  | [UpdRec]AltIUMPR :   NotifySavedZone                     */
-/*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-6-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_AltIUMPRMng_InitSavedZone
 (
@@ -174,11 +171,6 @@ FUNC( void, DEM_CODE ) Dem_AltIUMPRMng_InitSavedZone
 
     recordNum = Dem_AltIUMPRRecordNum;
 
-    /*--------------------------------------*/
-    /*  notify SAVED_ZONE update - start.   */
-    Dem_NotifySavedZoneIUMPRUpdate_Enter();  /*  notify start :  AltIUMPR savedzone area will be update.  */
-    /*--------------------------------------*/
-
     if( InitType != DEM_SZINITTYPE_INITIALIZE_WITHOUT_PFC_AND_IUMPR )
     {
         /*--------------------------------------------------------------------------*/
@@ -186,19 +178,19 @@ FUNC( void, DEM_CODE ) Dem_AltIUMPRMng_InitSavedZone
         /*--------------------------------------------------------------------------*/
         recMngCmnKindAltIUMPR = Dem_RecMngCmnKindAltIUMPR;
 
-        Dem_AltIUMPRRecord[ DEM_ALTIUMPR_DENOMINATOR_RECORD_INDEX ].Data[ DEM_ALTIUMPR_DENOMINATOR_DATA_INDEX ]     = DEM_ALTIUMPR_DATA_FACTORY_DEFAULT;    /*[UpdRec]AltIUMPR */
-        Dem_AltIUMPRRecord[ DEM_ALTIUMPR_DENOMINATOR_RECORD_INDEX ].Data[ DEM_ALTIUMPR_DENOMINATOR_DATA_NON_INDEX ] = DEM_ALTIUMPR_DATA_FACTORY_DEFAULT;    /*[UpdRec]AltIUMPR */
-        Dem_AltIUMPRRecord[ DEM_ALTIUMPR_DENOMINATOR_RECORD_INDEX ].TestCompletedThisCycle = DEM_ALTIUMPR_TCTOC_NOTTESTCOMPLETE;                            /*[UpdRec]AltIUMPR */
-        Dem_AltIUMPRRecord[ DEM_ALTIUMPR_DENOMINATOR_RECORD_INDEX ].ClearID = DEM_CLRINFO_RECORD_INITIAL;                                                   /*[UpdRec]AltIUMPR */
+        Dem_AltIUMPRRecord[ DEM_ALTIUMPR_DENOMINATOR_RECORD_INDEX ].Data[ DEM_ALTIUMPR_DENOMINATOR_DATA_INDEX ]     = DEM_ALTIUMPR_DATA_FACTORY_DEFAULT;
+        Dem_AltIUMPRRecord[ DEM_ALTIUMPR_DENOMINATOR_RECORD_INDEX ].Data[ DEM_ALTIUMPR_DENOMINATOR_DATA_NON_INDEX ] = DEM_ALTIUMPR_DATA_FACTORY_DEFAULT;
+        Dem_AltIUMPRRecord[ DEM_ALTIUMPR_DENOMINATOR_RECORD_INDEX ].TestCompletedThisCycle = DEM_ALTIUMPR_TCTOC_NOTTESTCOMPLETE;
+        Dem_AltIUMPRRecord[ DEM_ALTIUMPR_DENOMINATOR_RECORD_INDEX ].ClearID = DEM_CLRINFO_RECORD_INITIAL;
 
         Dem_RecMngCmn_SetNvMWriteStatus( recMngCmnKindAltIUMPR, ( Dem_u16_RecordIndexType )DEM_ALTIUMPR_DENOMINATOR_RECORD_INDEX );
 
         for( idxRecord = DEM_ALTIUMPR_MON_ACT_RECORD_START_INDEX; idxRecord < recordNum; idxRecord++ )                          /* [GUD:for]idxRecord */
         {
-            Dem_AltIUMPRRecord[ idxRecord ].Data[ DEM_ALTIUMPR_NUMERATOR_DATA_INDEX ] = DEM_ALTIUMPR_DATA_FACTORY_DEFAULT;      /* [GUD]idxRecord */    /*[UpdRec]AltIUMPR */
-            Dem_AltIUMPRRecord[ idxRecord ].Data[ DEM_ALTIUMPR_RATIO_DATA_INDEX ]     = DEM_ALTIUMPR_DATA_FACTORY_DEFAULT;      /* [GUD]idxRecord */    /*[UpdRec]AltIUMPR */
-            Dem_AltIUMPRRecord[ idxRecord ].TestCompletedThisCycle                    = DEM_ALTIUMPR_TCTOC_NOTTESTCOMPLETE;     /* [GUD]idxRecord */    /*[UpdRec]AltIUMPR */
-            Dem_AltIUMPRRecord[ idxRecord ].ClearID = DEM_CLRINFO_RECORD_INITIAL;                                               /* [GUD]idxRecord */    /*[UpdRec]AltIUMPR */
+            Dem_AltIUMPRRecord[ idxRecord ].Data[ DEM_ALTIUMPR_NUMERATOR_DATA_INDEX ] = DEM_ALTIUMPR_DATA_FACTORY_DEFAULT;      /* [GUD]idxRecord */
+            Dem_AltIUMPRRecord[ idxRecord ].Data[ DEM_ALTIUMPR_RATIO_DATA_INDEX ]     = DEM_ALTIUMPR_DATA_FACTORY_DEFAULT;      /* [GUD]idxRecord */
+            Dem_AltIUMPRRecord[ idxRecord ].TestCompletedThisCycle                    = DEM_ALTIUMPR_TCTOC_NOTTESTCOMPLETE;     /* [GUD]idxRecord */
+            Dem_AltIUMPRRecord[ idxRecord ].ClearID = DEM_CLRINFO_RECORD_INITIAL;                                               /* [GUD]idxRecord */
 
             Dem_RecMngCmn_SetNvMWriteStatus( recMngCmnKindAltIUMPR, ( Dem_u16_RecordIndexType )idxRecord );                     /* [GUD]idxRecord */
         }
@@ -212,24 +204,19 @@ FUNC( void, DEM_CODE ) Dem_AltIUMPRMng_InitSavedZone
 
         recMngCmnKindAltIUMPR = Dem_RecMngCmnKindAltIUMPR;
 
-        Dem_AltIUMPRRecord[ DEM_ALTIUMPR_DENOMINATOR_RECORD_INDEX ].TestCompletedThisCycle = DEM_ALTIUMPR_TCTOC_NOTTESTCOMPLETE;    /*[UpdRec]AltIUMPR */
-        Dem_AltIUMPRRecord[ DEM_ALTIUMPR_DENOMINATOR_RECORD_INDEX ].ClearID = DEM_CLRINFO_RECORD_INITIAL;                           /*[UpdRec]AltIUMPR */
+        Dem_AltIUMPRRecord[ DEM_ALTIUMPR_DENOMINATOR_RECORD_INDEX ].TestCompletedThisCycle = DEM_ALTIUMPR_TCTOC_NOTTESTCOMPLETE;
+        Dem_AltIUMPRRecord[ DEM_ALTIUMPR_DENOMINATOR_RECORD_INDEX ].ClearID = DEM_CLRINFO_RECORD_INITIAL;
 
         Dem_RecMngCmn_SetNvMWriteStatus( recMngCmnKindAltIUMPR, ( Dem_u16_RecordIndexType )DEM_ALTIUMPR_DENOMINATOR_RECORD_INDEX );
 
         for( idxRecord = DEM_ALTIUMPR_MON_ACT_RECORD_START_INDEX; idxRecord < recordNum; idxRecord++ )              /* [GUD:for]idxRecord */
         {
-            Dem_AltIUMPRRecord[ idxRecord ].TestCompletedThisCycle  = DEM_ALTIUMPR_TCTOC_NOTTESTCOMPLETE;           /* [GUD]idxRecord */    /*[UpdRec]AltIUMPR */
-            Dem_AltIUMPRRecord[ idxRecord ].ClearID                 = DEM_CLRINFO_RECORD_INITIAL;                   /* [GUD]idxRecord */    /*[UpdRec]AltIUMPR */
+            Dem_AltIUMPRRecord[ idxRecord ].TestCompletedThisCycle  = DEM_ALTIUMPR_TCTOC_NOTTESTCOMPLETE;           /* [GUD]idxRecord */
+            Dem_AltIUMPRRecord[ idxRecord ].ClearID                 = DEM_CLRINFO_RECORD_INITIAL;                   /* [GUD]idxRecord */
 
             Dem_RecMngCmn_SetNvMWriteStatus( recMngCmnKindAltIUMPR, ( Dem_u16_RecordIndexType )idxRecord );
         }
     }
-    /*--------------------------------------*/
-    /*  notify SAVED_ZONE update - end.     */
-    Dem_NotifySavedZoneIUMPRUpdate_Exit();  /*  notify end :  AltIUMPR savedzone area will be update.    */
-    /*--------------------------------------*/
-
     return;
 }
 
@@ -245,11 +232,8 @@ FUNC( void, DEM_CODE ) Dem_AltIUMPRMng_InitSavedZone
 /*               |          DEM_IRT_PENDING : Continue DataVerify.          */
 /* Notes         |                                                          */
 /*--------------------------------------------------------------------------*/
-/* UpdateRecord  | [UpdRec]AltIUMPR :   NotifySavedZone                     */
-/*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | branch changed.                                          */
-/*   v5-6-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_AltIUMPRMng_DataVerify
 (
@@ -272,11 +256,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_AltIUMPRMng_DataVerify
     verifyLoopNumByCycle = Dem_AltIUMPRRecordNumForVerifyByCycle;
     retVal = DEM_IRT_OK;
 
-    /*--------------------------------------*/
-    /*  notify SAVED_ZONE update - start.   */
-    Dem_NotifySavedZoneIUMPRUpdate_Enter();  /*  notify start :  AltIUMPR savedzone area will be update.  */
-    /*--------------------------------------*/
-
     /*  check execute clearDTC.             */
     clrInfoNvmReadResult = Dem_ClrInfoMng_GetNvmReadResult();
     obdClearId = Dem_ClrInfoMng_GetObdClearID();
@@ -296,10 +275,10 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_AltIUMPRMng_DataVerify
             Dem_AltIUMPR_VerifyMode =   (boolean)TRUE;
 
             /* Write Denominator after Numerator and Ratio according to the update process */
-            Dem_AltIUMPRRecord[ DEM_ALTIUMPR_DENOMINATOR_RECORD_INDEX ].Data[ DEM_ALTIUMPR_DENOMINATOR_DATA_INDEX ]     = DEM_ALTIUMPR_DENOMINATOR_INIT_VAL;    /*[UpdRec]AltIUMPR */
-            Dem_AltIUMPRRecord[ DEM_ALTIUMPR_DENOMINATOR_RECORD_INDEX ].Data[ DEM_ALTIUMPR_DENOMINATOR_DATA_NON_INDEX ] = (uint8)0U;                            /*[UpdRec]AltIUMPR */
-            Dem_AltIUMPRRecord[ DEM_ALTIUMPR_DENOMINATOR_RECORD_INDEX ].TestCompletedThisCycle                          = DEM_ALTIUMPR_TCTOC_NOTTESTCOMPLETE;   /*[UpdRec]AltIUMPR */
-            Dem_AltIUMPRRecord[ DEM_ALTIUMPR_DENOMINATOR_RECORD_INDEX ].ClearID                                         = obdClearId;                           /*[UpdRec]AltIUMPR */
+            Dem_AltIUMPRRecord[ DEM_ALTIUMPR_DENOMINATOR_RECORD_INDEX ].Data[ DEM_ALTIUMPR_DENOMINATOR_DATA_INDEX ]     = DEM_ALTIUMPR_DENOMINATOR_INIT_VAL;
+            Dem_AltIUMPRRecord[ DEM_ALTIUMPR_DENOMINATOR_RECORD_INDEX ].Data[ DEM_ALTIUMPR_DENOMINATOR_DATA_NON_INDEX ] = (uint8)0U;
+            Dem_AltIUMPRRecord[ DEM_ALTIUMPR_DENOMINATOR_RECORD_INDEX ].TestCompletedThisCycle                          = DEM_ALTIUMPR_TCTOC_NOTTESTCOMPLETE;
+            Dem_AltIUMPRRecord[ DEM_ALTIUMPR_DENOMINATOR_RECORD_INDEX ].ClearID                                         = obdClearId;
 
             Dem_RecMngCmn_SetNvMWriteStatus( recMngCmnKindAltIUMPR, ( Dem_u16_RecordIndexType )DEM_ALTIUMPR_DENOMINATOR_RECORD_INDEX );
 
@@ -340,10 +319,10 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_AltIUMPRMng_DataVerify
                 /*------------------------------------------------------*/
                 /*  verify mode : data NG. all data clear.              */
                 /*------------------------------------------------------*/
-                Dem_AltIUMPRRecord[ idxRecord ].Data[ DEM_ALTIUMPR_NUMERATOR_DATA_INDEX ] = DEM_ALTIUMPR_NUMERATOR_INIT_VAL;            /* [GUD]idxRecord */    /*[UpdRec]AltIUMPR */
-                Dem_AltIUMPRRecord[ idxRecord ].Data[ DEM_ALTIUMPR_RATIO_DATA_INDEX ]     = DEM_ALTIUMPR_RATIO_INIT_VAL;                /* [GUD]idxRecord */    /*[UpdRec]AltIUMPR */
-                Dem_AltIUMPRRecord[ idxRecord ].TestCompletedThisCycle                    = DEM_ALTIUMPR_TCTOC_NOTTESTCOMPLETE;         /* [GUD]idxRecord */    /*[UpdRec]AltIUMPR */
-                Dem_AltIUMPRRecord[ idxRecord ].ClearID                                   = obdClearId;                                 /* [GUD]idxRecord */    /*[UpdRec]AltIUMPR */
+                Dem_AltIUMPRRecord[ idxRecord ].Data[ DEM_ALTIUMPR_NUMERATOR_DATA_INDEX ] = DEM_ALTIUMPR_NUMERATOR_INIT_VAL;            /* [GUD]idxRecord */
+                Dem_AltIUMPRRecord[ idxRecord ].Data[ DEM_ALTIUMPR_RATIO_DATA_INDEX ]     = DEM_ALTIUMPR_RATIO_INIT_VAL;                /* [GUD]idxRecord */
+                Dem_AltIUMPRRecord[ idxRecord ].TestCompletedThisCycle                    = DEM_ALTIUMPR_TCTOC_NOTTESTCOMPLETE;         /* [GUD]idxRecord */
+                Dem_AltIUMPRRecord[ idxRecord ].ClearID                                   = obdClearId;                                 /* [GUD]idxRecord */
 
                 Dem_RecMngCmn_SetNvMWriteStatus( recMngCmnKindAltIUMPR, ( Dem_u16_RecordIndexType )idxRecord );                         /* [GUD]idxRecord */
             }
@@ -362,9 +341,9 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_AltIUMPRMng_DataVerify
                         /*------------------------------------------------------*/
                         /*  verify mode : only clear TestCompletedThisCycle.    */
                         /*------------------------------------------------------*/
-                        Dem_AltIUMPRRecord[ idxRecord ].TestCompletedThisCycle  = DEM_ALTIUMPR_TCTOC_NOTTESTCOMPLETE;                   /* [GUD]idxRecord */    /*[UpdRec]AltIUMPR */
+                        Dem_AltIUMPRRecord[ idxRecord ].TestCompletedThisCycle  = DEM_ALTIUMPR_TCTOC_NOTTESTCOMPLETE;                   /* [GUD]idxRecord */
                         /*  set clear id and update NvM.    */
-                        Dem_AltIUMPRRecord[ idxRecord ].ClearID  = obdClearId;                                                          /* [GUD]idxRecord */    /*[UpdRec]AltIUMPR */
+                        Dem_AltIUMPRRecord[ idxRecord ].ClearID  = obdClearId;                                                          /* [GUD]idxRecord */
 
                         /*  read of ClearInfoRecord is NG       */
                         if ( clrInfoNvmReadResult != DEM_IRT_OK )
@@ -384,11 +363,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_AltIUMPRMng_DataVerify
         }
     }
 
-    /*--------------------------------------*/
-    /*  notify SAVED_ZONE update - end.     */
-    Dem_NotifySavedZoneIUMPRUpdate_Exit();  /*  notify end :  AltIUMPR savedzone area will be update.    */
-    /*--------------------------------------*/
-
     return retVal;
 }
 
@@ -402,11 +376,8 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_AltIUMPRMng_DataVerify
 /* Return Value  | void                                                     */
 /* Notes         |                                                          */
 /*--------------------------------------------------------------------------*/
-/* UpdateRecord  | [UpdRec]AltIUMPR                                         */
-/*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-6-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_AltIUMPRMng_SetTestCompleteThisCycle
 (
@@ -429,8 +400,8 @@ FUNC( void, DEM_CODE ) Dem_AltIUMPRMng_SetTestCompleteThisCycle
         oldTestCompletedThisCycle = Dem_AltIUMPRRecord[ recordIndex ].TestCompletedThisCycle;                       /* [GUD]recordIndex */
         if ( oldTestCompletedThisCycle != TestCompleteThisCycle )
         {
-            Dem_AltIUMPRRecord[ recordIndex ].TestCompletedThisCycle = TestCompleteThisCycle;                       /* [GUD]recordIndex */  /*[UpdRec]AltIUMPR */
-            Dem_AltIUMPRRecord[ recordIndex ].ClearID                = Dem_ClrInfoMng_GetObdClearID();              /* [GUD]recordIndex */  /*[UpdRec]AltIUMPR */
+            Dem_AltIUMPRRecord[ recordIndex ].TestCompletedThisCycle = TestCompleteThisCycle;                       /* [GUD]recordIndex */
+            Dem_AltIUMPRRecord[ recordIndex ].ClearID                = Dem_ClrInfoMng_GetObdClearID();              /* [GUD]recordIndex */
             Dem_RecMngCmn_SetNvMWriteStatus( recMngCmnKindAltIUMPR, ( Dem_u16_RecordIndexType )recordIndex );       /* [GUD]recordIndex */
         }
     }
@@ -509,11 +480,8 @@ FUNC( void, DEM_CODE ) Dem_AltIUMPRMng_GetDenominator
 /* Return Value  | void                                                     */
 /* Notes         |                                                          */
 /*--------------------------------------------------------------------------*/
-/* UpdateRecord  | [UpdRec]AltIUMPR                                         */
-/*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-6-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_AltIUMPRMng_IncNumeratorCounts
 (
@@ -536,8 +504,8 @@ FUNC( void, DEM_CODE ) Dem_AltIUMPRMng_IncNumeratorCounts
         if( numerator < DEM_ALTIUMPR_NUMERATOR_MAX_VAL )
         {
             numerator = numerator + (uint8)1U;
-            Dem_AltIUMPRRecord[ recordIndex ].Data[ DEM_ALTIUMPR_NUMERATOR_DATA_INDEX ] = numerator;            /* [GUD]recordIndex */  /*[UpdRec]AltIUMPR */
-            Dem_AltIUMPRRecord[ recordIndex ].ClearID                = Dem_ClrInfoMng_GetObdClearID();          /* [GUD]recordIndex */  /*[UpdRec]AltIUMPR */
+            Dem_AltIUMPRRecord[ recordIndex ].Data[ DEM_ALTIUMPR_NUMERATOR_DATA_INDEX ] = numerator;            /* [GUD]recordIndex */
+            Dem_AltIUMPRRecord[ recordIndex ].ClearID                = Dem_ClrInfoMng_GetObdClearID();          /* [GUD]recordIndex */
 
             Dem_RecMngCmn_SetNvMWriteStatus( recMngCmnKindAltIUMPR, ( Dem_u16_RecordIndexType )recordIndex );   /* [GUD]recordIndex */
         }
@@ -555,11 +523,8 @@ FUNC( void, DEM_CODE ) Dem_AltIUMPRMng_IncNumeratorCounts
 /* Return Value  | void                                                     */
 /* Notes         |                                                          */
 /*--------------------------------------------------------------------------*/
-/* UpdateRecord  | [UpdRec]AltIUMPR                                         */
-/*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-6-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_AltIUMPRMng_IncNumeratorCountsForCylinder
 (
@@ -584,8 +549,8 @@ FUNC( void, DEM_CODE ) Dem_AltIUMPRMng_IncNumeratorCountsForCylinder
         if( numerator < DEM_ALTIUMPR_NUMERATOR_MAX_VAL )
         {
             numerator = numerator + (uint8)1U;
-            Dem_AltIUMPRRecord[ recordIndex ].Data[ DEM_ALTIUMPR_NUMERATOR_DATA_INDEX ] = numerator;            /* [GUD]recordIndex */  /*[UpdRec]AltIUMPR */
-            Dem_AltIUMPRRecord[ recordIndex ].ClearID                = Dem_ClrInfoMng_GetObdClearID();          /* [GUD]recordIndex */  /*[UpdRec]AltIUMPR */
+            Dem_AltIUMPRRecord[ recordIndex ].Data[ DEM_ALTIUMPR_NUMERATOR_DATA_INDEX ] = numerator;            /* [GUD]recordIndex */
+            Dem_AltIUMPRRecord[ recordIndex ].ClearID                = Dem_ClrInfoMng_GetObdClearID();          /* [GUD]recordIndex */
 
             Dem_RecMngCmn_SetNvMWriteStatus( recMngCmnKindAltIUMPR, ( Dem_u16_RecordIndexType )recordIndex );   /* [GUD]recordIndex */
         }
@@ -705,11 +670,8 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_AltIUMPRMng_GetNumeratorAndRati
 /* Return Value  | void                                                     */
 /* Notes         |                                                          */
 /*--------------------------------------------------------------------------*/
-/* UpdateRecord  | [UpdRec]AltIUMPR                                         */
-/*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-6-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_AltIUMPRMng_IncDenominatorProccess
 ( void )
@@ -738,19 +700,19 @@ FUNC( void, DEM_CODE ) Dem_AltIUMPRMng_IncDenominatorProccess
             /* Enter exclusive area */
             SchM_Enter_Dem_IUMPRRatioData();
 
-            Dem_AltIUMPRRecord[ idxRecord ].Data[ DEM_ALTIUMPR_RATIO_DATA_INDEX ]     = Dem_AltIUMPRRecord[ idxRecord ].Data[ DEM_ALTIUMPR_NUMERATOR_DATA_INDEX ];      /* [GUD]idxRecord */    /*[UpdRec]AltIUMPR */
-            Dem_AltIUMPRRecord[ idxRecord ].Data[ DEM_ALTIUMPR_NUMERATOR_DATA_INDEX ] = DEM_ALTIUMPR_NUMERATOR_INIT_VAL;                                                /* [GUD]idxRecord */    /*[UpdRec]AltIUMPR */
+            Dem_AltIUMPRRecord[ idxRecord ].Data[ DEM_ALTIUMPR_RATIO_DATA_INDEX ]     = Dem_AltIUMPRRecord[ idxRecord ].Data[ DEM_ALTIUMPR_NUMERATOR_DATA_INDEX ];      /* [GUD]idxRecord */
+            Dem_AltIUMPRRecord[ idxRecord ].Data[ DEM_ALTIUMPR_NUMERATOR_DATA_INDEX ] = DEM_ALTIUMPR_NUMERATOR_INIT_VAL;                                                /* [GUD]idxRecord */
             /* Exit exclusive area */
             SchM_Exit_Dem_IUMPRRatioData();
 
-            Dem_AltIUMPRRecord[ idxRecord ].ClearID = obdClearId;                                                                                                       /* [GUD]idxRecord */    /*[UpdRec]AltIUMPR */
+            Dem_AltIUMPRRecord[ idxRecord ].ClearID = obdClearId;                                                                                                       /* [GUD]idxRecord */
             Dem_RecMngCmn_SetNvMWriteStatus( recMngCmnKindAltIUMPR, ( Dem_u16_RecordIndexType )idxRecord );                                                             /* [GUD]idxRecord */
         }
     }
 
     /* Write Denominator at the end */
-    Dem_AltIUMPRRecord[ DEM_ALTIUMPR_DENOMINATOR_RECORD_INDEX ].Data[ DEM_ALTIUMPR_DENOMINATOR_DATA_INDEX ] = denominator;  /*[UpdRec]AltIUMPR */
-    Dem_AltIUMPRRecord[ DEM_ALTIUMPR_DENOMINATOR_RECORD_INDEX ].ClearID                                     = obdClearId;   /*[UpdRec]AltIUMPR */
+    Dem_AltIUMPRRecord[ DEM_ALTIUMPR_DENOMINATOR_RECORD_INDEX ].Data[ DEM_ALTIUMPR_DENOMINATOR_DATA_INDEX ] = denominator;
+    Dem_AltIUMPRRecord[ DEM_ALTIUMPR_DENOMINATOR_RECORD_INDEX ].ClearID                                     = obdClearId;
 
     Dem_RecMngCmn_SetNvMWriteStatus( recMngCmnKindAltIUMPR, ( Dem_u16_RecordIndexType )DEM_ALTIUMPR_DENOMINATOR_RECORD_INDEX );
 
@@ -815,7 +777,6 @@ FUNC( void, DEM_CODE ) Dem_AltIUMPRMng_SetRecordMirror
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_AltIUMPRMng_InitPadding
 (
@@ -829,7 +790,7 @@ static FUNC( void, DEM_CODE ) Dem_AltIUMPRMng_InitPadding
 
     for( paddingIndex = (Dem_u16_PaddingIndexType)0U; paddingIndex < paddingSize; paddingIndex++ )      /* [GUD:for]paddingIndex */
     {
-        AltIUMPRRecordPtr->Reserve[paddingIndex] = (uint8)0U;                                           /* [GUD]paddingIndex *//* [ARYCHK] DEM_ALTIUMPR_RECORD_PADDINGSIZE_TO_BLOCKSIZE / 1 / paddingIndex */
+        AltIUMPRRecordPtr->Reserve[paddingIndex] = (uint8)0U;                                           /* [GUD]paddingIndex */
     }
 
     return;
@@ -939,9 +900,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_AltIUMPRMng_GetEventIdFromRecor
 /*  v5-0-0         :2022-03-29                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-6-0         :2024-01-29                                              */
-/*  v5-7-0         :2024-05-29                                              */
-/*  v5-8-0         :2024-10-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

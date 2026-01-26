@@ -1,7 +1,7 @@
-/* Dem_CmnLib_DataCtl_h(v5-9-0)                                             */
+/* Dem_CmnLib_DataCtl_h(v5-5-0)                                             */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -63,19 +63,15 @@ typedef struct
 /*  get freezeframe config information      */
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_GetFreezeFrameRecordClassByRecordNumber
 (
-    VAR( Dem_u08_RequestCallerType, AUTOMATIC ) Caller,
     P2CONST( AB_83_ConstV Dem_FreezeFrameRecNumClassType, AUTOMATIC, DEM_CONFIG_DATA ) FreezeFrameRecNumClassPtr,
     VAR( Dem_u08_FFRecordNumberType, AUTOMATIC ) RecordNumber,
+    P2CONST( AB_83_ConstV Dem_FreezeFrameRecordClassType, AUTOMATIC, DEM_CONFIG_DATA ) *FreezeFrameRecordClassPPtr,
     P2VAR( Dem_u08_FFListIndexType, AUTOMATIC, AUTOMATIC ) FreezeFrameRecordClassIndexPtr,
     P2VAR( Dem_u08_StorageTriggerType, AUTOMATIC, AUTOMATIC ) FreezeFrameRecordTriggerPtr
 );
 
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_EditFreezeFrameRecord
 (
-#ifndef DEM_SIT_RANGE_CHECK
-#else   /* DEM_SIT_RANGE_CHECK */
-    VAR( Dem_u16_FFDStoredIndexType, AUTOMATIC ) CapturedDataSize,
-#endif  /* DEM_SIT_RANGE_CHECK */
     VAR( Dem_u08_FFRecordNumberType, AUTOMATIC ) RecordNumber,
     VAR( Dem_u08_FFDGetInfoType, AUTOMATIC ) FreezeFrameGetInfoType,
     P2CONST( uint8, AUTOMATIC, AUTOMATIC ) CapturedDataPtr,
@@ -104,9 +100,6 @@ FUNC( void, DEM_CODE ) Dem_Data_SortSaveRecordNumber
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-7-0         :2024-05-29                                              */
-/*  v5-8-0         :2024-10-29                                              */
-/*  v5-9-0         :2025-02-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

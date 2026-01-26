@@ -1,7 +1,7 @@
-/* Dem_DTR_ReadDTCBased_c(v5-10-0)                                          */
+/* Dem_DTR_ReadDTCBased_c(v5-5-0)                                           */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -19,12 +19,9 @@
 
 #include <Dem/Dem_InternalDataElement.h>
 #include "../../../inc/Dem_CmnLib_CmbEvt.h"
-#include "../../../inc/Dem_CmnLib_ConfigInfo.h"
-#include "../../../inc/Dem_CmnLib_Control.h"
-#include "../../../inc/Dem_Pm_DataAvl.h"
 #include "../../../inc/Dem_Pm_DTR.h"
 #include "../../../inc/Dem_Rc_DTRMng.h"
-#include "Dem_DTR_ReadDTCBased.h"
+#include "../../../inc/Dem_CmnLib_Control.h"
 
 /*--------------------------------------------------------------------------*/
 /* Macros                                                                   */
@@ -54,6 +51,18 @@
 /*--------------------------------------------------------------------------*/
 #define DEM_START_SEC_CODE
 #include <Dem_MemMap.h>
+
+static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DTR_GetCurrentDTCBasedTestResult
+(
+    VAR( Dem_u16_EventCtrlIndexType, AUTOMATIC ) EventCtrlIndex,
+    VAR( boolean, AUTOMATIC ) ExecClearDTC,
+    VAR( Dem_DTCOriginType, AUTOMATIC ) DTCOriginInClear,
+    VAR( uint16, AUTOMATIC ) BufSizeIn,
+    P2VAR( uint8, AUTOMATIC, AUTOMATIC ) TestResultNumPtr,
+    P2VAR( uint16, AUTOMATIC, AUTOMATIC ) BufDtrWriteIndexPtr,
+    P2VAR( uint8, AUTOMATIC, DEM_APPL_DATA ) BufferPtr
+);
+
 
 #define DEM_STOP_SEC_CODE
 #include <Dem_MemMap.h>
@@ -95,10 +104,6 @@
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
-/*   v5-8-0      | branch changed.                                          */
-/*   v5-9-0      | branch changed.                                          */
-/*   v5-10-0     | no branch changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DTR_ReadDTCBasedTestResult
 (
@@ -115,23 +120,19 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DTR_ReadDTCBasedTestResult
     VAR( Dem_u08_InternalReturnType, AUTOMATIC ) retGetDTR;
     VAR( uint8, AUTOMATIC ) testResultNum;
     VAR( boolean, AUTOMATIC ) execClearDTC;
+    VAR( Dem_u32_DTCGroupType, AUTOMATIC ) getDTCGroup;
     VAR( Dem_DTCOriginType, AUTOMATIC ) getDTCOrigin;
     VAR( Dem_u16_EventCtrlIndexType, AUTOMATIC ) eventCtrlIndex;
     VAR( Dem_u16_EventCtrlIndexType, AUTOMATIC ) eventCtrlIndexCnt;
     VAR( Dem_u16_EventCtrlIndexType, AUTOMATIC ) eventCtrlIndexNum;
     VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) eventStrgIndex;
-    VAR( boolean, AUTOMATIC ) availableStatus;
-
-#if ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON )  /*  [FuncSw]    */
-    VAR( Dem_EventKindType, AUTOMATIC ) eventKind;
-#endif /* ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON ) */
 
     retVal = DEM_IRT_WRONG_RECORDNUMBER;
     bufSizeIn = (*BufSizePtr);
 
     /*  get current DTCclear information    */
-    execClearDTC = Dem_Control_CheckExecClearDTCProcessActive();
-    getDTCOrigin = Dem_Control_GetClearDTCOrigin();
+    execClearDTC = Dem_Control_CheckExecClearDTCProcess();
+    Dem_Control_GetClearType( &getDTCGroup, &getDTCOrigin );
 
     /*  initialize index and DTR number     */
     bufDtrWriteIndex = DEM_DTR_DATABUF_DTR;
@@ -145,45 +146,31 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DTR_ReadDTCBasedTestResult
         /*  primary event only.         */
         eventStrgIndex      =   Dem_CmbEvt_CnvEventCtrlIndex_ToEventStrgIndex( EventCtrlIndex );                    /* [GUD:RET:IF_GUARDED: EventCtrlIndex ]eventStrgIndex */
 
-#if ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON )  /*  [FuncSw]    */
-        eventKind       =   Dem_CfgInfoPm_GetEventKindOfSpecific_InEvtStrgGrp( eventStrgIndex );        /* [GUDCHK:CALLER]EventCtrlIndex */
+        /*  get target event    */
+        eventCtrlIndexNum   =   Dem_CmbEvt_NumOfEventCtrlIndex_InEvtStrgGrp( eventStrgIndex );          /*  get EventCtrlIndex of EventStorageGroup max number  */
+        eventCtrlIndex      =   EventCtrlIndex;    /*  get delegate eventCtrlIndex                         */
 
-        if( ( eventKind & DEM_EVTKIND_TYPE_MISFIRE_EVENT ) == DEM_EVTKIND_TYPE_MISFIRE_EVENT )
+        for ( eventCtrlIndexCnt = ( Dem_u16_EventCtrlIndexType )0U; eventCtrlIndexCnt < eventCtrlIndexNum; eventCtrlIndexCnt++ )
         {
-            retVal = Dem_DTR_ReadDTCBasedTestResultForCylinder( DTCValue, execClearDTC, getDTCOrigin, bufSizeIn, &testResultNum, &bufDtrWriteIndex, BufferPtr );
-        }
-        else
-#endif /* ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON ) */
-        {
-            /*  get target event    */
-            eventCtrlIndexNum   =   Dem_CmbEvt_NumOfEventCtrlIndex_InEvtStrgGrp( eventStrgIndex );          /*  get EventCtrlIndex of EventStorageGroup max number  */
-            eventCtrlIndex      =   EventCtrlIndex;    /*  get delegate eventCtrlIndex                         */
+            /*  get DTR data.           */
+            retGetDTR  =   Dem_DTR_GetCurrentDTCBasedTestResult( eventCtrlIndex, execClearDTC, getDTCOrigin, bufSizeIn, &testResultNum, &bufDtrWriteIndex, BufferPtr );
 
-            for ( eventCtrlIndexCnt = ( Dem_u16_EventCtrlIndexType )0U; eventCtrlIndexCnt < eventCtrlIndexNum; eventCtrlIndexCnt++ )
+            if ( retGetDTR == DEM_IRT_OK )
             {
-                availableStatus = Dem_DataAvl_GetEvtAvl( eventCtrlIndex );
-                if( availableStatus == (boolean)TRUE )
-                {
-                    /*  get DTR data.           */
-                    retGetDTR  =   Dem_DTR_GetCurrentDTCBasedTestResult( (Dem_u16_DtrOutputEdrTableIndexType)eventCtrlIndex, execClearDTC, getDTCOrigin, bufSizeIn, &testResultNum, &bufDtrWriteIndex, BufferPtr );
-
-                    if ( retGetDTR == DEM_IRT_OK )
-                    {
-                        retVal  =   DEM_IRT_OK;
-                    }
-                    else if ( retGetDTR == DEM_IRT_WRONG_BUFFERSIZE )
-                    {
-                        retVal  =   DEM_IRT_WRONG_BUFFERSIZE;
-                        break;
-                    }
-                    else
-                    {
-                        /*  DEM_IRT_NG : no process.    */
-                    }
-                }
-                /*  get next Index.         */
-                eventCtrlIndex  =   Dem_CmbEvt_GetNextEventCtrlIndex_InEvtStrgGrp( eventCtrlIndex );
+                retVal  =   DEM_IRT_OK;
             }
+            else if ( retGetDTR == DEM_IRT_WRONG_BUFFERSIZE )
+            {
+                retVal  =   DEM_IRT_WRONG_BUFFERSIZE;
+                break;
+            }
+            else
+            {
+                /*  DEM_IRT_NG : no process.    */
+            }
+
+            /*  get next Index.         */
+            eventCtrlIndex  =   Dem_CmbEvt_GetNextEventCtrlIndex_InEvtStrgGrp( eventCtrlIndex );
         }
     }
     else
@@ -192,34 +179,29 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DTR_ReadDTCBasedTestResult
         /*  event Id.                   */
         /*------------------------------*/
         /*  get DTR data.           */
-        retVal  =   Dem_DTR_GetCurrentDTCBasedTestResult( (Dem_u16_DtrOutputEdrTableIndexType)EventCtrlIndex, execClearDTC, getDTCOrigin, bufSizeIn, &testResultNum, &bufDtrWriteIndex, BufferPtr );
+        retVal  =   Dem_DTR_GetCurrentDTCBasedTestResult( EventCtrlIndex, execClearDTC, getDTCOrigin, bufSizeIn, &testResultNum, &bufDtrWriteIndex, BufferPtr );
     }
 
     if( retVal == DEM_IRT_OK )
     {
-        if( testResultNum != (uint8)0U )
-        {
-            /* Test Result Num */
-            BufferPtr[ DEM_DTR_DATABUF_TESTRESULT ] = testResultNum; /* [ARYCHK] bufSizeIn/1/DEM_DTR_DATABUF_TESTRESULT */
+        /* Test Result Num */
+        BufferPtr[ DEM_DTR_DATABUF_TESTRESULT ] = testResultNum;
 
-            /* BufferPtr size */
-            (*BufSizePtr) = bufDtrWriteIndex;
-        }
-        else
-        {
-            /* All data is DEM_DTR_CTL_INVISIBLE */
-            (*BufSizePtr) = (Dem_u16_EDRRecordSizeType)0U;
-        }
+        /* BufferPtr size */
+        (*BufSizePtr) = bufDtrWriteIndex;
     }
 
     return retVal;
 }
 
 /****************************************************************************/
+/* Internal Functions                                                       */
+/****************************************************************************/
+/****************************************************************************/
 /* Function Name | Dem_DTR_GetCurrentDTCBasedTestResult                     */
 /* Description   | Read DTC Based DTR                                       */
 /* Preconditions | none                                                     */
-/* Parameters    | [in]     DtrOutputEdrTableIndex                          */
+/* Parameters    | [in]     EventCtrlIndex                                  */
 /*               | [in]     ExecClearDTC                                    */
 /*               | [in]     DTCOriginInClear                                */
 /*               | [in]     BufSizeIn                                       */
@@ -234,12 +216,10 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DTR_ReadDTCBasedTestResult
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
-/*   v5-8-0      | branch changed.                                          */
 /****************************************************************************/
-FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DTR_GetCurrentDTCBasedTestResult
+static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DTR_GetCurrentDTCBasedTestResult
 (
-    VAR( Dem_u16_DtrOutputEdrTableIndexType, AUTOMATIC ) DtrOutputEdrTableIndex,
+    VAR( Dem_u16_EventCtrlIndexType, AUTOMATIC ) EventCtrlIndex,
     VAR( boolean, AUTOMATIC ) ExecClearDTC,
     VAR( Dem_DTCOriginType, AUTOMATIC ) DTCOriginInClear,
     VAR( uint16, AUTOMATIC ) BufSizeIn,
@@ -251,7 +231,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DTR_GetCurrentDTCBasedTestResul
     VAR( Dem_DtrDataType, AUTOMATIC ) dtrData;
     VAR( Dem_u16_DTRIndexType, AUTOMATIC ) dtrId;
     VAR( Dem_u16_DtrRefObdEventCtrlIndexType, AUTOMATIC ) cnt;
-    VAR( Dem_u16_DtrOutputEdrTableIndexType, AUTOMATIC ) dtrObdEventNum;
+    VAR( Dem_u16_EventCtrlIndexType, AUTOMATIC ) dtrObdEventNum;
     VAR( Dem_u16_DtrRefObdEventCtrlIndexType, AUTOMATIC ) dtrRefObdEventOffsetTop;
     VAR( Dem_u16_DtrRefObdEventCtrlIndexType, AUTOMATIC ) dtrRefObdEventNum;
     VAR( Dem_u16_DtrRefObdEventCtrlIndexType, AUTOMATIC ) dtrIndex;
@@ -264,13 +244,13 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DTR_GetCurrentDTCBasedTestResul
 
     retVal = DEM_IRT_WRONG_RECORDNUMBER;
 
-    if( DtrOutputEdrTableIndex < dtrObdEventNum )                   /* [GUD:if]DtrOutputEdrTableIndex */
+    if( EventCtrlIndex < dtrObdEventNum )                   /* [GUD:if]EventCtrlIndex */
     {
         bufDtrWriteIndex        =   *BufDtrWriteIndexPtr;
         testResultNum           =   *TestResultNumPtr;
 
-        dtrRefObdEventOffsetTop = Dem_DtrOutputEdrTable[ DtrOutputEdrTableIndex ].DtrRefObdEventOffsetTop;                                      /* [GUD]DtrOutputEdrTableIndex *//* [GUD:CFG:IF_GUARDED: DtrOutputEdrTableIndex ]dtrRefObdEventOffsetTop */
-        dtrRefObdEventNum       = (Dem_u16_DtrRefObdEventCtrlIndexType)Dem_DtrOutputEdrTable[ DtrOutputEdrTableIndex ].DtrRefObdEventNum;       /* [GUD]DtrOutputEdrTableIndex *//* [GUD:CFG:IF_GUARDED: DtrOutputEdrTableIndex ]dtrRefObdEventNum       */
+        dtrRefObdEventOffsetTop = Dem_DtrOutputEdrTable[ EventCtrlIndex ].DtrRefObdEventOffsetTop;                                      /* [GUD]EventCtrlIndex *//* [GUD:CFG:IF_GUARDED: EventCtrlIndex ]dtrRefObdEventOffsetTop */
+        dtrRefObdEventNum       = (Dem_u16_DtrRefObdEventCtrlIndexType)Dem_DtrOutputEdrTable[ EventCtrlIndex ].DtrRefObdEventNum;       /* [GUD]EventCtrlIndex *//* [GUD:CFG:IF_GUARDED: EventCtrlIndex ]dtrRefObdEventNum       */
 
         for( cnt = (Dem_u16_DtrRefObdEventCtrlIndexType)0U; cnt < dtrRefObdEventNum; cnt++ )        /* [GUD:for]cnt  */
         {
@@ -283,7 +263,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DTR_GetCurrentDTCBasedTestResul
             resultGetData = Dem_DTRMng_GetDTRRecordData( dtrId, &dtrData );                         /* [GUD:RET:DEM_IRT_OK] dtrId */
             if( resultGetData == DEM_IRT_OK )
             {
-                /* CtrlVal is DEM_DTR_CTL_NORMAL or DEM_DTR_CTL_RESET */
                 if ( ( ExecClearDTC == (boolean)TRUE ) && ( DTCOriginInClear == DEM_DTC_ORIGIN_PRIMARY_MEMORY ) )
                 {
                     dtrData.TestResult = (Dem_u16_DTRValueStoreType)0U;
@@ -294,20 +273,20 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DTR_GetCurrentDTCBasedTestResul
                 if( (uint32)( (uint32)bufDtrWriteIndex + (uint32)DEM_DTR_DATA_SIZE_PER_DTR ) <= (uint32)BufSizeIn )     /*  no wrap around      */
                 {
                     /* Unit And Scaling ID */
-                    BufferPtr[ bufDtrWriteIndex ] = (uint8)0U; /* [ARYCHK] BufSizeIn/1/bufDtrWriteIndex */
-                    BufferPtr[ bufDtrWriteIndex + DEM_DTR_BUF_OFFSET_UAS_ID_1 ] = Dem_DtrTable[ dtrId ].DemDtrUasid;  /* [GUD] dtrId *//* [ARYCHK] BufSizeIn/1/bufDtrWriteIndex+DEM_DTR_BUF_OFFSET_UAS_ID_1 */
+                    BufferPtr[ bufDtrWriteIndex ] = (uint8)0U;
+                    BufferPtr[ bufDtrWriteIndex + DEM_DTR_BUF_OFFSET_UAS_ID_1 ] = Dem_DtrTable[ dtrId ].DemDtrUasid;    /* [GUD] dtrId */
 
                     /* Test Value */
-                    BufferPtr[ bufDtrWriteIndex + DEM_DTR_BUF_OFFSET_TEST_VAL_0 ] = (uint8)( dtrData.TestResult >> DEM_DTR_BITSHIFT_8 ); /* [ARYCHK] BufSizeIn/1/bufDtrWriteIndex+DEM_DTR_BUF_OFFSET_TEST_VAL_0 */
-                    BufferPtr[ bufDtrWriteIndex + DEM_DTR_BUF_OFFSET_TEST_VAL_1 ] = (uint8)dtrData.TestResult; /* [ARYCHK] BufSizeIn/1/bufDtrWriteIndex+DEM_DTR_BUF_OFFSET_TEST_VAL_1 */
+                    BufferPtr[ bufDtrWriteIndex + DEM_DTR_BUF_OFFSET_TEST_VAL_0 ] = (uint8)( dtrData.TestResult >> DEM_DTR_BITSHIFT_8 );
+                    BufferPtr[ bufDtrWriteIndex + DEM_DTR_BUF_OFFSET_TEST_VAL_1 ] = (uint8)dtrData.TestResult;
 
                     /* Min. Test Limit */
-                    BufferPtr[ bufDtrWriteIndex + DEM_DTR_BUF_OFFSET_LIMIT_MIN_0 ] = (uint8)( dtrData.LowerLimit >> DEM_DTR_BITSHIFT_8 ); /* [ARYCHK] BufSizeIn/1/bufDtrWriteIndex+DEM_DTR_BUF_OFFSET_LIMIT_MIN_0 */
-                    BufferPtr[ bufDtrWriteIndex + DEM_DTR_BUF_OFFSET_LIMIT_MIN_1 ] = (uint8)dtrData.LowerLimit; /* [ARYCHK] BufSizeIn/1/bufDtrWriteIndex+DEM_DTR_BUF_OFFSET_LIMIT_MIN_1 */
+                    BufferPtr[ bufDtrWriteIndex + DEM_DTR_BUF_OFFSET_LIMIT_MIN_0 ] = (uint8)( dtrData.LowerLimit >> DEM_DTR_BITSHIFT_8 );
+                    BufferPtr[ bufDtrWriteIndex + DEM_DTR_BUF_OFFSET_LIMIT_MIN_1 ] = (uint8)dtrData.LowerLimit;
 
                     /* Max. Test Limit */
-                    BufferPtr[ bufDtrWriteIndex + DEM_DTR_BUF_OFFSET_LIMIT_MAX_0 ] = (uint8)( dtrData.UpperLimit >> DEM_DTR_BITSHIFT_8 ); /* [ARYCHK] BufSizeIn/1/bufDtrWriteIndex+DEM_DTR_BUF_OFFSET_LIMIT_MAX_0 */
-                    BufferPtr[ bufDtrWriteIndex + DEM_DTR_BUF_OFFSET_LIMIT_MAX_1 ] = (uint8)dtrData.UpperLimit; /* [ARYCHK] BufSizeIn/1/bufDtrWriteIndex+DEM_DTR_BUF_OFFSET_LIMIT_MAX_1 */
+                    BufferPtr[ bufDtrWriteIndex + DEM_DTR_BUF_OFFSET_LIMIT_MAX_0 ] = (uint8)( dtrData.UpperLimit >> DEM_DTR_BITSHIFT_8 );
+                    BufferPtr[ bufDtrWriteIndex + DEM_DTR_BUF_OFFSET_LIMIT_MAX_1 ] = (uint8)dtrData.UpperLimit;
 
                     testResultNum = testResultNum + (uint8)1U;
                     bufDtrWriteIndex = (uint16)( bufDtrWriteIndex + DEM_DTR_DATA_SIZE_PER_DTR );
@@ -319,12 +298,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DTR_GetCurrentDTCBasedTestResul
                     retVal = DEM_IRT_WRONG_BUFFERSIZE;
                     break;
                 }
-            }
-            else
-            {
-                /* Since dtrIndex is guaranteed, dtrId is also guaranteed by the configuration */
-                /* CtrlVal is DEM_DTR_CTL_INVISIBLE */
-                retVal = DEM_IRT_OK;
             }
         }
         *TestResultNumPtr       =   testResultNum;
@@ -345,10 +318,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DTR_GetCurrentDTCBasedTestResul
 /*  v5-0-0         :2022-03-29                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-7-0         :2024-05-29                                              */
-/*  v5-8-0         :2024-10-29                                              */
-/*  v5-9-0         :2025-02-26                                              */
-/*  v5-10-0        :2025-06-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

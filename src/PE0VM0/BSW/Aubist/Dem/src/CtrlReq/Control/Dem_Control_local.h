@@ -1,7 +1,7 @@
-/* Dem_Control_local_h(v5-9-0)                                              */
+/* Dem_Control_local_h(v5-5-0)                                              */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -66,8 +66,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_CheckDisableDTCInfo
     VAR( Dem_u32_DTCValueType, AUTOMATIC ) DTCValue,
     VAR( Dem_DTCOriginType, AUTOMATIC ) DTCOrigin
 );
-FUNC( void, DEM_CODE ) Dem_Control_SetDisableRecordUpdateInfoForEDR
-( void );
 
 /*----------------------------------*/
 /*  Dem_Control_EventEntry          */
@@ -78,8 +76,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_SaveEventMemoryEntryToT
 );
 FUNC( void, DEM_CODE ) Dem_Control_UpdateEventMemoryEntryFromTmp
 (
-    VAR( Dem_u08_EventKindPtnType, AUTOMATIC ) EventKindPattern,
-    VAR( Dem_EventStatusType, AUTOMATIC ) EventStatus
+    VAR( Dem_u08_EventKindPtnType, AUTOMATIC ) EventKindPattern
 );
 
 /*----------------------------------*/
@@ -163,6 +160,7 @@ FUNC( boolean, DEM_CODE ) Dem_Control_CheckAgingConditionByEventStrgIndex
 FUNC( void, DEM_CODE ) Dem_Control_ProcessAging
 (
     VAR( Dem_u08_OpcycUpdateHealingAgingCycleType, AUTOMATIC ) HealingAgingCycleFlag,
+    VAR( boolean, AUTOMATIC ) PendingRecoveryExecFlag,
     VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex,
     CONSTP2VAR( Dem_DTCStatusStType, AUTOMATIC, AUTOMATIC ) OldDTCStatusStPtr,
     P2VAR( boolean, AUTOMATIC, AUTOMATIC ) AgingExecFlagPtr
@@ -228,9 +226,6 @@ FUNC( void, DEM_CODE ) Dem_Control_UpdEvtMemEntryOfTmp_AtOpcycUpdate
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-7-0         :2024-05-29                                              */
-/*  v5-8-0         :2024-10-29                                              */
-/*  v5-9-0         :2025-02-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

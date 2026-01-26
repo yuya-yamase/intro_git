@@ -1,7 +1,7 @@
-/* Dem_UdmControl_DisableDTCInfo_c(v5-10-0)                                 */
+/* Dem_UdmControl_DisableDTCInfo_c(v5-5-0)                                  */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -25,7 +25,6 @@
 #if ( DEM_USERDEFINEDMEMORY_SUPPORT == STD_ON )
 #include "../../../inc/Dem_Udm_ExternalMem.h"
 #include "../../../inc/Dem_Rc_UdmMngTable.h"    /*  for Dem_UdmExcFncTable[]    */
-#include "Dem_Udm_Control_local.h"
 
 /*--------------------------------------------------------------------------*/
 /* Macros                                                                   */
@@ -187,9 +186,6 @@ FUNC( Dem_u08_DTCRecordUpdateStatusType, DEM_CODE) Dem_UdmControl_GetDTCRecordUp
 /* Parameters    | none                                                     */
 /* Return Value  | void                                                     */
 /* Notes         |                                                          */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-10-0     | no branch changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_UdmControl_EnableDTCRecordUpdate
 ( void )
@@ -206,16 +202,9 @@ FUNC( void, DEM_CODE ) Dem_UdmControl_EnableDTCRecordUpdate
     /* When update is disabled, discard the data held by Dem_Data */
     Dem_UdmData_ClearDisabledRecord();
 
-    /*--------------------------------------------------*/
-    /*  start of exclusive [Dem_UdmGetEventMemory].     */
-    SchM_Enter_Dem_UdmGetEventMemory();
-
     /* Initialize the information used in DTC update status management */
     Dem_UdmControl_InitDTCRecordUpdateInfo();
 
-    /*  end of exclusive [Dem_UdmGetEventMemory].       */
-    SchM_Exit_Dem_UdmGetEventMemory();
-    /*--------------------------------------------------*/
 
     return ;
 }
@@ -349,7 +338,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmControl_CheckDisableDTCInfo
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | branch changed.                                          */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmControl_DisableDTCRecUpdateFirstRequest
 (
@@ -391,12 +379,12 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmControl_DisableDTCRec
     else
     {
         /* Get udm event index by DTCValue. */
-        retGetEventIndex = Dem_UdmDataAvl_GetUdmEventIndexByDTC( DTCValue, udmInfoTableIndex, &udmEventIndex );                         /* [GUD]udmInfoTableIndex *//* [GUD:RET:DEM_IRT_OK]udmEventIndex */
+        retGetEventIndex = Dem_UdmDataAvl_GetUdmEventIndexByDTC( DTCValue, udmInfoTableIndex, &udmEventIndex );                         /* [GUD]udmInfoTableIndex */
 
         if( retGetEventIndex == DEM_IRT_OK )    /* [GUD:RET:DEM_IRT_OK]udmEventIndex */
         {
             /* Get udm group index by udm event index. */
-            udmGroupKindIndex = Dem_CfgInfoUdm_GetUserDefinedMemoryGroupKindIndexByEventIndex( udmInfoTableIndex, udmEventIndex );      /* [GUD]udmInfoTableIndex *//* [GUD]udmEventIndex */
+            udmGroupKindIndex = Dem_CfgInfoUdm_GetUserDefinedMemoryGroupKindIndexByEventIndex( udmInfoTableIndex, udmEventIndex );      /* [GUD]udmInfoTableIndex */
 
             if( udmGroupKindIndex < userDefinedMemoryNum )  /* [GUD:if]udmGroupKindIndex */
             {
@@ -415,11 +403,11 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmControl_DisableDTCRec
 #endif  /* JGXSTACK */
                 /*--------------------------------------------------------------------------*/
 
-                retSaveDisabledRecord = Dem_UdmData_SaveDisabledRecord( udmEventIndex );    /* [GUD]udmEventIndex *//* [GUD]udmEventIndex */
+                retSaveDisabledRecord = Dem_UdmData_SaveDisabledRecord( udmEventIndex );
                 if( retSaveDisabledRecord == DEM_IRT_OK )   /* [GUD:RET:DEM_IRT_OK]udmEventIndex */
                 {
                     /* Hold update disable information */
-                    Dem_UdmControl_SetDisableDTCInfo( DTCValue, DTCOrigin, udmEventIndex, memType, udmGroupKindIndex ); /* [GUD]udmGroupKindIndex *//* [GUD]udmEventIndex */
+                    Dem_UdmControl_SetDisableDTCInfo( DTCValue, DTCOrigin, udmEventIndex, memType, udmGroupKindIndex ); /* [GUD]udmGroupKindIndex */
 
                     retVal = DEM_IRT_OK;
                 }
@@ -473,7 +461,6 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmControl_DisableDTCRec
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
-/*   v5-8-0      | no branch changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_UdmControl_SetDisableDTCInfo
 (
@@ -489,8 +476,6 @@ static FUNC( void, DEM_CODE ) Dem_UdmControl_SetDisableDTCInfo
     Dem_UdmCtlDisableDTCInfo.UdmEventIndex = UdmEventIndex;
     Dem_UdmCtlDisableDTCInfo.UdmMemoryType = UdmMemoryType;
     Dem_UdmCtlDisableDTCInfo.UdmGroupKindIndex = UdmGroupKindIndex;
-
-    Dem_UdmControl_SetDisableRecordUpdateInfoForEDR();
 
     return;
 }
@@ -529,9 +514,6 @@ static FUNC( void, DEM_CODE ) Dem_UdmControl_SetDTCRecordUpdateStatus
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-7-0         :2024-05-29                                              */
-/*  v5-8-0         :2024-10-29                                              */
-/*  v5-10-0        :2025-06-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

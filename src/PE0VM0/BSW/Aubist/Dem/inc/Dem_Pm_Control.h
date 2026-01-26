@@ -1,7 +1,7 @@
-/* Dem_Pm_Control_h(v5-10-0)                                                 */
+/* Dem_Pm_Control_h(v5-5-0)                                                 */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -46,6 +46,7 @@ typedef struct {
 typedef struct {
     boolean  Healing;                   /* chkSpCondHealing */
     boolean  Aging;                     /* chkSpCondAging */
+    boolean  PendErase;                 /* chkSpCondPendErase */
 }Dem_ChkSpCondType;
 
 #endif  /*   ( DEM_SPECIFIC_EVENT_SUPPORT == STD_ON )           */
@@ -101,10 +102,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_EnableDTCSetting
     VAR( Dem_u32_DTCGroupType, AUTOMATIC ) DTCGroup,
     VAR( Dem_DTCKindType, AUTOMATIC ) DTCKind
 );
-FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_GetDTCSettingStatusForIF
-(
-    P2VAR( Dem_DTCSettingStatusType, AUTOMATIC, AUTOMATIC ) DTCSettingStatusPtr
-);
 FUNC( void, DEM_CODE ) Dem_Control_InitDTCSettingStatus
 ( void );
 
@@ -140,8 +137,7 @@ FUNC( Dem_u08_AsyncExecReturnType, DEM_CODE ) Dem_Control_SetEventCommon
 (
     VAR( Dem_u16_EventCtrlIndexType, AUTOMATIC ) EventCtrlIndex,
     VAR( Dem_EventStatusType, AUTOMATIC ) EventStatus,
-    VAR( Dem_MonitorDataType, AUTOMATIC ) monitorData0,
-    VAR( boolean, AUTOMATIC ) ActiveFaultReqFlag
+    VAR( Dem_MonitorDataType, AUTOMATIC ) monitorData0
 );
 
 /*----------------------------------*/
@@ -177,10 +173,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_SetNormalizeEventStatus
 (
     VAR( Dem_EventIdType, AUTOMATIC ) EventId
 );
-FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_SetActiveFaultEventStatus
-(
-    VAR( Dem_EventIdType, AUTOMATIC ) EventId
-);
 
 /*----------------------------------*/
 /*  Dem_Control_EventInfo           */
@@ -201,14 +193,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_GetAgingCounter
     VAR( Dem_EventIdType, AUTOMATIC ) EventID,
     P2VAR( Dem_u08_AgingCounterType, AUTOMATIC, AUTOMATIC ) AgingCounterPtr
 );
-#if ( DEM_WWH_OBD_SUPPORT == STD_ON )
-FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_GetAgingTime
-(
-    VAR( Dem_EventIdType, AUTOMATIC ) EventID,
-    P2VAR( Dem_u16_WWHOBDTimeAgingCounterType, AUTOMATIC, AUTOMATIC ) AgingTimePtr
-);
-#endif  /* ( DEM_WWH_OBD_SUPPORT == STD_ON )    */
-
 #if ( DEM_OBD_SUPPORT == STD_ON )
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_GetEventKind
 (
@@ -240,13 +224,11 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_GetEventFailureCycleCou
     VAR( Dem_EventIdType, AUTOMATIC ) EventId,
     P2VAR( Dem_u08_FailureCounterType, AUTOMATIC, AUTOMATIC ) FailureCounterPtr
 );
-#if ( DEM_GETOCCURRENCECOUNTER_SUPPORT == STD_ON )
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_GetEventOccurrenceCounter
 (
     VAR( Dem_EventIdType, AUTOMATIC ) EventId,
     P2VAR( Dem_u08_EventOccurrenceCounterType, AUTOMATIC, AUTOMATIC ) OccurrenceCounterPtr
 );
-#endif  /* ( DEM_GETOCCURRENCECOUNTER_SUPPORT == STD_ON )   */
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_GetEventIdListByFaultRecordOrder
 (
     VAR( Dem_u08_EventListModeType, AUTOMATIC ) EventListMode,
@@ -260,13 +242,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_GetEventIdListByConfirm
     P2VAR( Dem_EventIdType, AUTOMATIC, AUTOMATIC ) EventIdNumPtr
 );
 #endif  /* ( DEM_OBD_SUPPORT == STD_ON )    */
-#if ( DEM_GET_UDSDTC_BY_CONFIRMED_ORDER_SUPPORT == STD_ON )
-FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_GetUDSDTCByConfirmedDTCOrder
-(
-    P2VAR( uint32, AUTOMATIC, DEM_APPL_DATA ) UDSDTCBufferPtr,
-    P2VAR( uint16, AUTOMATIC, AUTOMATIC ) UDSDTCNumPtr
-);
-#endif  /* ( DEM_GET_UDSDTC_BY_CONFIRMED_ORDER_SUPPORT == STD_ON )  */
 
 /*----------------------------------*/
 /*  Dem_Control_EvtAvl              */
@@ -340,22 +315,15 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_GetNextFilteredDTCAndSe
     P2VAR( Dem_UdsStatusByteType, AUTOMATIC, AUTOMATIC ) DTCStatusPtr,
     P2VAR( Dem_DTCSeverityType, AUTOMATIC, AUTOMATIC ) DTCSeverityPtr
 );
-
-#if ( DEM_PID_READINESS_SUPPORT == STD_ON )
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_SetDTCFilterForReadiness
 (
-    VAR( Dem_u08_ReadinessGroupIdType, AUTOMATIC ) ReadinessGroupId
-);
-FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_GetNumberOfFilteredDTCForReadiness
-(
-    P2VAR( uint16, AUTOMATIC, AUTOMATIC ) NumberOfFilteredDTCForReadinessPtr
+    VAR( Dem_u08_ReadinessGroupIndexType, AUTOMATIC ) ReadinessGroupId
 );
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_GetNextFilteredDTCForReadiness
 (
     P2VAR( Dem_u32_DTCValueType, AUTOMATIC, AUTOMATIC ) DTCValuePtr,
     P2VAR( Dem_UdsStatusByteType, AUTOMATIC, AUTOMATIC ) DTCStatusPtr
 );
-#endif  /* ( DEM_PID_READINESS_SUPPORT == STD_ON )  */
 
 /*----------------------------------*/
 /*  Dem_Control_FilteredEDR         */
@@ -363,10 +331,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_GetNextFilteredDTCForRe
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_SetEDRNumberFilter
 (
     VAR( Dem_u08_EDRRecordNumberType, AUTOMATIC ) ExtendedDataNumber
-);
-FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_GetNumberOfEDRNumFilteredDTC
-(
-    P2VAR( uint16, AUTOMATIC, AUTOMATIC ) NumberOfEDRNumFilteredDTCPtr
 );
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_GetNextEDRNumFilteredDTC
 (
@@ -509,15 +473,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_GetEventExtendedData
     P2VAR( uint8, AUTOMATIC, DEM_APPL_DATA ) DestBufferPtr,
     P2VAR( Dem_u16_EDRRecordSizeType, AUTOMATIC, AUTOMATIC ) BufSizePtr
 );
-#if ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON )
-FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_GetCylinderExtendedData
-(
-    VAR(Dem_MisfireCylinderNumberType, AUTOMATIC ) MisfireCylinderNumber,
-    VAR( Dem_u08_EDRRecordNumberType, AUTOMATIC ) RecordNumber,
-    P2VAR( uint8, AUTOMATIC, DEM_APPL_DATA ) DestBufferPtr,
-    P2VAR( Dem_u16_EDRRecordSizeType, AUTOMATIC, AUTOMATIC ) BufSizePtr
-);
-#endif /* ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON ) */
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_GetSizeOfExtendedDataRecordByDTC
 (
     VAR( Dem_u32_DTCValueType, AUTOMATIC ) DTCValue,
@@ -569,10 +524,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_SetEventUdsStatusHistor
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-6-0         :2024-01-29                                              */
-/*  v5-8-0         :2024-10-29                                              */
-/*  v5-9-0         :2025-02-26                                              */
-/*  v5-10-0        :2025-06-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

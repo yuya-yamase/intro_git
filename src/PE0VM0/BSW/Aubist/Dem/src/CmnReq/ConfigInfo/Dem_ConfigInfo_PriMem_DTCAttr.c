@@ -1,11 +1,11 @@
-/* Dem_ConfigInfo_PriMem_DTCAttr_c(v5-8-0)                                  */
+/* Dem_ConfigInfo_c(v5-5-0)                                                 */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
-/* Object Name  | Dem/ConfigInfo_PriMem_DTCAttr/CODE                        */
+/* Object Name  | Dem/ConfigInfo/CODE                                       */
 /*--------------------------------------------------------------------------*/
 /* Notes        |                                                           */
 /****************************************************************************/
@@ -254,105 +254,6 @@ FUNC( void, DEM_CODE ) Dem_CfgInfoPm_GetOBDFreezeFrameAndRecNumClass
 }
 
 
-#if ( DEM_OBDONEDS_SUPPORT == STD_ON )
-/****************************************************************************/
-/* Function Name | Dem_CfgInfoPm_GetOBDFFClassRefAndFFRecNumClassRef        */
-/* Description   | GetData by EventIndex only OBD-DTC :                     */
-/*               | DemOBDFreezeFrameClassRef and DemOBDFreezeFrameRecNumClassRef */
-/* Preconditions | EventStrgIndex < Dem_PrimaryMemEventConfigureNum         */
-/* Parameters    | [in] EventStrgIndex :  EventStrgIndex                    */
-/*               | [out] ObdFFClassIndexPtr                                 */
-/*               |     <  DEM_FFCLASSINDEX_INVALID  :valid                  */
-/*               |     == DEM_FFCLASSINDEX_INVALID  :invalid                */
-/*               | [out] ObdFFRecNumClassIndexPtr                           */
-/*               |     <  DEM_FFRECNUMCLASSINDEX_INVALID  :valid            */
-/*               |     == DEM_FFRECNUMCLASSINDEX_INVALID  :invalid          */
-/* Return Value  | none.                                                    */
-/* Notes         | none                                                     */
-/*--------------------------------------------------------------------------*/
-/* VariableGuard | [GUD:OUT:Not DEM_FFCLASSINDEX_INVALID] ObdFFClassIndexPtr                */
-/* VariableGuard | [GUD:OUT:Not DEM_FFRECNUMCLASSINDEX_INVALID] ObdFFRecNumClassIndexPtr    */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-8-0      | new created.                                             */
-/****************************************************************************/
-static FUNC( void, DEM_CODE ) Dem_CfgInfoPm_GetOBDFFClassRefAndFFRecNumClassRef
-(
-    VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex,            /* [PRMCHK:CALLER] */
-    P2VAR( Dem_u16_FFClassIndexType, AUTOMATIC, AUTOMATIC ) ObdFFClassIndexPtr,
-    P2VAR( Dem_u16_FFRecNumClassIndexType, AUTOMATIC, AUTOMATIC ) ObdFFRecNumClassIndexPtr
-)
-{
-    VAR( Dem_u16_DTCAttrIndexType, AUTOMATIC ) dtcAttrRef;
-
-    /*  get DTCAttributeTable index.            */
-    dtcAttrRef    =   Dem_EventParameterStorageTable[ EventStrgIndex ].DemDTCAttributesRef;                     /* [GUDCHK:CALLER]EventStrgIndex *//* [GUD:CFG:IF_GUARDED: EventStrgIndex ]dtcAttrRef */
-
-    /*------------------------------------------------------------------------------------------------------*/
-    /*  If EventIndex do not have DTC Attribute, [dtcAttrRef] is point to the invalid information area.     */
-    /*  Therefore, it's no need dtcAttrRef value area guard.                                                */
-    /*------------------------------------------------------------------------------------------------------*/
-
-    /* get the reference of freeze frame class. */
-    ( *ObdFFClassIndexPtr ) =   Dem_DTCAttributeTable[ dtcAttrRef ].DemEDSOBDFreezeFrameClassRef;                  /* [GUD]dtcAttrRef */
-
-    /*  get config data.                        */
-    ( *ObdFFRecNumClassIndexPtr )   =   Dem_DTCAttributeTable[ dtcAttrRef ].DemEDSOBDFreezeFrameRecNumClassRef;    /* [GUD]dtcAttrRef */
-
-    return ;
-}
-#endif  /*  ( DEM_OBDONEDS_SUPPORT == STD_ON )   */
-
-#if ( DEM_OBDONUDS_SUPPORT == STD_ON )
-/****************************************************************************/
-/* Function Name | Dem_CfgInfoPm_GetOBDFFClassRefAndFFRecNumClassRef        */
-/* Description   | GetData by EventIndex only OBD-DTC :                     */
-/*               | DemOBDFreezeFrameClassRef and DemOBDFreezeFrameRecNumClassRef */
-/* Preconditions | EventStrgIndex < Dem_PrimaryMemEventConfigureNum         */
-/* Parameters    | [in] EventStrgIndex :  EventStrgIndex                    */
-/*               | [out] ObdFFClassIndexPtr                                 */
-/*               |     <  DEM_FFCLASSINDEX_INVALID  :valid                  */
-/*               |     == DEM_FFCLASSINDEX_INVALID  :invalid                */
-/*               | [out] ObdFFRecNumClassIndexPtr                           */
-/*               |     <  DEM_FFRECNUMCLASSINDEX_INVALID  :valid            */
-/*               |     == DEM_FFRECNUMCLASSINDEX_INVALID  :invalid          */
-/* Return Value  | none.                                                    */
-/* Notes         | none                                                     */
-/*--------------------------------------------------------------------------*/
-/* VariableGuard | [GUD:OUT:Not DEM_FFCLASSINDEX_INVALID] ObdFFClassIndexPtr                */
-/* VariableGuard | [GUD:OUT:Not DEM_FFRECNUMCLASSINDEX_INVALID] ObdFFRecNumClassIndexPtr    */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-8-0      | new created.                                             */
-/****************************************************************************/
-static FUNC( void, DEM_CODE ) Dem_CfgInfoPm_GetOBDFFClassRefAndFFRecNumClassRef
-(
-    VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex,            /* [PRMCHK:CALLER] */
-    P2VAR( Dem_u16_FFClassIndexType, AUTOMATIC, AUTOMATIC ) ObdFFClassIndexPtr,
-    P2VAR( Dem_u16_FFRecNumClassIndexType, AUTOMATIC, AUTOMATIC ) ObdFFRecNumClassIndexPtr
-)
-{
-    VAR( Dem_u16_DTCAttrIndexType, AUTOMATIC ) dtcAttrRef;
-
-    /*  get DTCAttributeTable index.            */
-    dtcAttrRef    =   Dem_EventParameterStorageTable[ EventStrgIndex ].DemDTCAttributesRef;                     /* [GUDCHK:CALLER]EventStrgIndex *//* [GUD:CFG:IF_GUARDED: EventStrgIndex ]dtcAttrRef */
-
-    /*------------------------------------------------------------------------------------------------------*/
-    /*  If EventIndex do not have DTC Attribute, [dtcAttrRef] is point to the invalid information area.     */
-    /*  Therefore, it's no need dtcAttrRef value area guard.                                                */
-    /*------------------------------------------------------------------------------------------------------*/
-
-    /* get the reference of freeze frame class. */
-    ( *ObdFFClassIndexPtr ) =   Dem_DTCAttributeTable[ dtcAttrRef ].DemUDSOBDFreezeFrameClassRef;                  /* [GUD]dtcAttrRef */
-
-    /*  get config data.                        */
-    ( *ObdFFRecNumClassIndexPtr )   =   Dem_DTCAttributeTable[ dtcAttrRef ].DemUDSOBDFreezeFrameRecNumClassRef;    /* [GUD]dtcAttrRef */
-
-    return ;
-}
-#endif  /*  ( DEM_OBDONUDS_SUPPORT == STD_ON )   */
-
-#if ( DEM_WWH_OBD_SUPPORT == STD_ON )
 /****************************************************************************/
 /* Function Name | Dem_CfgInfoPm_GetOBDFFClassRefAndFFRecNumClassRef        */
 /* Description   | GetData by EventIndex only OBD-DTC :                     */
@@ -373,7 +274,6 @@ static FUNC( void, DEM_CODE ) Dem_CfgInfoPm_GetOBDFFClassRefAndFFRecNumClassRef
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | new created.                                             */
-/*   v5-8-0      | no branch changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_CfgInfoPm_GetOBDFFClassRefAndFFRecNumClassRef
 (
@@ -393,14 +293,13 @@ static FUNC( void, DEM_CODE ) Dem_CfgInfoPm_GetOBDFFClassRefAndFFRecNumClassRef
     /*------------------------------------------------------------------------------------------------------*/
 
     /* get the reference of freeze frame class. */
-    ( *ObdFFClassIndexPtr ) =   Dem_DTCAttributeTable[ dtcAttrRef ].DemUDSOBDFreezeFrameClassRef;                  /* [GUD]dtcAttrRef */
+    ( *ObdFFClassIndexPtr ) =   Dem_DTCAttributeTable[ dtcAttrRef ].DemOBDFreezeFrameClassRef;                  /* [GUD]dtcAttrRef */
 
     /*  get config data.                        */
-    ( *ObdFFRecNumClassIndexPtr )   =   Dem_DTCAttributeTable[ dtcAttrRef ].DemEDSOBDFreezeFrameRecNumClassRef;    /* [GUD]dtcAttrRef */
+    ( *ObdFFRecNumClassIndexPtr )   =   Dem_DTCAttributeTable[ dtcAttrRef ].DemOBDFreezeFrameRecNumClassRef;    /* [GUD]dtcAttrRef */
 
     return ;
 }
-#endif  /*  ( DEM_WWH_OBD_SUPPORT == STD_ON )   */
 
 
 /****************************************************************************/
@@ -413,9 +312,6 @@ static FUNC( void, DEM_CODE ) Dem_CfgInfoPm_GetOBDFFClassRefAndFFRecNumClassRef
 /*               |     Number of FreezeFrameRecordClass per DTC.            */
 /* Return Value  | none.                                                    */
 /* Notes         | none                                                     */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-8-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_CfgInfoPm_GetNumOfOBDFreezeFrameRecordClass
 (
@@ -424,45 +320,12 @@ FUNC( void, DEM_CODE ) Dem_CfgInfoPm_GetNumOfOBDFreezeFrameRecordClass
 )
 {
     *FFRClassConfigureNumPtr    =   Dem_FFRRecordClassConfigureNum;
-    *OBDFFRClassPerDTCMaxNumPtr =   Dem_CfgInfoPm_GetOBDFFRClassPerDTCMaxNum();
+    *OBDFFRClassPerDTCMaxNumPtr =   Dem_OBDFFRClassPerDTCMaxNum;
 
     return ;
 }
-
-/****************************************************************************/
-/* Function Name | Dem_CfgInfoPm_GetOBDFFRClassPerDTCMaxNum                 */
-/* Description   | Get Max Number of FreezeFrameRecordClass per DTC.        */
-/* Preconditions | none                                                     */
-/* Parameters    | none                                                     */
-/* Return Value  | Dem_u08_FFListIndexType                                  */
-/* Notes         | -                                                        */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-8-0      | new created.                                             */
-/****************************************************************************/
-FUNC( Dem_u08_FFListIndexType, DEM_CODE ) Dem_CfgInfoPm_GetOBDFFRClassPerDTCMaxNum
-( void )
-{
-    return Dem_OBDFFRClassPerDTCMaxNum;
-}
 #endif  /*  ( DEM_OBDFFD_SUPPORT == STD_ON )   */
 
-/****************************************************************************/
-/* Function Name | Dem_CfgInfoPm_GetObdFFDRecordNum                         */
-/* Description   | Get the config ROM value of OBDMaxNumberFreezeFrame.     */
-/* Preconditions | none                                                     */
-/* Parameters    | none                                                     */
-/* Return Value  | Dem_u08_FFDIndexType                                     */
-/* Notes         | -                                                        */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-8-0      | new created.                                             */
-/****************************************************************************/
-FUNC( Dem_u08_FFDIndexType, DEM_CODE ) Dem_CfgInfoPm_GetObdFFDRecordNum
-( void )
-{
-    return Dem_ObdFFDRecordNum;
-}
 
 /****************************************************************************/
 /* Function Name | Dem_CfgInfoPm_GetExDataClassRef                            */
@@ -512,7 +375,6 @@ FUNC( void, DEM_CODE ) Dem_CfgInfoPm_GetExDataClassRef
 /*  v5-0-0         :2022-03-29                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-8-0         :2024-10-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

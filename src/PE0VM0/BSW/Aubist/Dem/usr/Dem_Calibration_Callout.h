@@ -1,7 +1,7 @@
-/* Dem_Calibration_Callout_h(v5-10-0)                                       */
+/* Dem_Calibration_Callout_h(v5-5-0)                                        */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -40,7 +40,6 @@
 #define     DEM_CALIB_OBDDTCVALUE_DEF                   ((Dem_u16_ObdDTCValueType)0x0000U)
 
 #define     DEM_CALIB_READINESS_EVT_ALWAYS_COMPLETE                 ((Dem_EventIdType)0x8000U)
-#define     DEM_CALIB_READINESS_EVT_DUPLICATE_DTC                   ((Dem_EventIdType)0x4000U)
 
 /*--------------------------------------------------------------------------*/
 /* Function Prototypes                                                      */
@@ -89,12 +88,20 @@ FUNC( boolean, DEM_CODE_CALLOUT ) Dem_Calib_GetIsActiveFault
     VAR( Dem_EventIdType, AUTOMATIC ) EventId
 );
 
-#if ( DEM_EVENTPRIORITY_CALLOUT_SUPPORT == STD_ON )
+#if ( DEM_OBD_SUPPORT == STD_ON )
 FUNC( Dem_u08_EventPriorityType, DEM_CODE_CALLOUT ) Dem_Calib_GetEventPriority
 (
     VAR( Dem_EventIdType, AUTOMATIC ) EventId
 );
-#endif  /* ( DEM_EVENTPRIORITY_CALLOUT_SUPPORT == STD_ON )                */
+#endif  /* ( DEM_OBD_SUPPORT == STD_ON )                */
+#if ( DEM_OBD_SUPPORT == STD_OFF )
+#if ( DEM_EVENT_DISPLACEMENT_CALLOUT_SUPPORT == STD_ON )
+FUNC( Dem_u08_EventPriorityType, DEM_CODE_CALLOUT ) Dem_Calib_GetEventPriority
+(
+    VAR( Dem_EventIdType, AUTOMATIC ) EventId
+);
+#endif  /* ( DEM_EVENT_DISPLACEMENT_CALLOUT_SUPPORT == STD_ON ) */
+#endif  /* ( DEM_OBD_SUPPORT == STD_OFF )               */
 
 #if ( DEM_INDICATOR_USE == STD_ON )
 FUNC( Dem_u08_HealingCounterType, DEM_CODE_CALLOUT ) Dem_Calib_GetHealingCycleCounterThreshold
@@ -220,8 +227,6 @@ FUNC( boolean, DEM_CODE ) Dem_Calib_CheckDelegateEventIdOfSameDTC
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-8-0         :2024-10-29                                              */
-/*  v5-10-0        :2025-06-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

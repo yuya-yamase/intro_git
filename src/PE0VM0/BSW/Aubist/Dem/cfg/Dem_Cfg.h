@@ -1,7 +1,7 @@
-/* Dem_Cfg_h(v5-10-0)                                                       */
+/* Dem_Cfg_h(v5-5-0)                                                        */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -147,6 +147,7 @@ extern CONST( AB_83_ConstV Dem_u08_ResetConfirmedBitOnOverflowType   ,DEM_CONFIG
 extern CONST( AB_83_ConstV Dem_u08_DTCStatusBitHandlingType   ,DEM_CONFIG_DATA )  Dem_StatusBitHandlingTestFailedSinceLastClear;
 extern CONST( AB_83_ConstV Dem_u08_FaultIndexType             ,DEM_CONFIG_DATA )  Dem_FailRecordNum;
 extern CONST( AB_83_ConstV Dem_UdsStatusByteType              ,DEM_CONFIG_DATA )  Dem_DTCStatusProductSupportBit;       /*  DemDTCStatusProductSupportBit            */
+extern CONST( AB_83_ConstV Dem_ModeType                       ,DEM_CONFIG_DATA )  Dem_NotifyDemModeMask;
 extern CONST( AB_83_ConstV Dem_u08_ClearDTCBehaviorType       ,DEM_CONFIG_DATA )  Dem_ClearDTCBehavior;
 extern CONST( AB_83_ConstV boolean                            ,DEM_CONFIG_DATA )  Dem_AgingRequiresTestedCycle;
 extern CONST( AB_83_ConstV Dem_u08_EDRBehaviorAt0xFEType                ,DEM_CONFIG_DATA )  Dem_DTCExtDataRecordsBehaviorAt0xFE;
@@ -192,14 +193,11 @@ extern CONST( AB_83_ConstV Dem_u16_FFDStoredIndexType         ,DEM_CONFIG_DATA )
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-8-0         :2024-10-29                                              */
-/*  v5-9-0         :2025-02-26                                              */
-/*  v5-10-0        :2025-06-26                                              */
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
 /*  Framework          :v2-1-0                                              */
-/*  BSW plug-in        :v5-10-0                                             */
+/*  BSW plug-in        :v5-5-0                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

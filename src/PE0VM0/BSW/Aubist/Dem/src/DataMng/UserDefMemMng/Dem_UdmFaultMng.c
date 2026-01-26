@@ -1,7 +1,7 @@
-/* Dem_UdmFaultMng_c(v5-8-0)                                                */
+/* Dem_UdmFaultMng_c(v5-5-0)                                                */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -86,12 +86,6 @@ static FUNC( void, DEM_CODE ) Dem_UdmFaultMng_GetRecord_MM
     VAR( Dem_u08_UdmFaultIndexType, AUTOMATIC ) UdmFaultIndex,
     P2VAR( Dem_UdmFaultRecordType, AUTOMATIC, DEM_VAR_NO_INIT ) DestUdmFaultRecordPtr
 );
-static FUNC( void, DEM_CODE ) Dem_UdmFaultMng_Get_PaddingRecord
-(
-    VAR( Dem_u16_UdmDemMemKindIndexType, AUTOMATIC ) UdmGroupKindIndex,
-    VAR( Dem_u08_UdmFaultIndexType, AUTOMATIC ) UdmFaultIndex,
-    P2VAR( Dem_UdmFaultRecordType, AUTOMATIC, AUTOMATIC ) UdmFaultRecordPtr
-);
 #endif /* DEM_NVM_SYNC_PROCESS_ENABLE -STD_ON- */
 static FUNC( void, DEM_CODE ) Dem_UdmMng_UpdateFaultRecordConsistencyId
 (
@@ -107,10 +101,12 @@ static FUNC( void, DEM_CODE ) Dem_UdmFaultMng_InitFaultRecord_Ctl
 );
 
 #if ( DEM_NVM_SYNC_PROCESS_ENABLE == STD_ON )
+#if ( DEM_UDMFAULT_RECORD_PADDING_EXIST == STD_ON )
 static FUNC( void, DEM_CODE ) Dem_UdmFaultMng_InitFRData_Padding
 (
     P2VAR( Dem_UdmFaultRecordType, AUTOMATIC, DEM_VAR_NO_INIT ) UdmFaultRecordPtr
 );
+#endif  /*   ( DEM_UDMFAULT_RECORD_PADDING_EXIST == STD_ON )        */
 
 static FUNC( void, DEM_CODE ) Dem_UdmFaultMng_InitMirrorMemory
 ( void );
@@ -1136,7 +1132,6 @@ static FUNC( void, DEM_CODE ) Dem_UdmFaultMng_GetRecord_Ctl
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | branch changed.                                          */
-/*   v5-8-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_UdmFaultMng_GetRecord_MM
 (
@@ -1154,8 +1149,10 @@ static FUNC( void, DEM_CODE ) Dem_UdmFaultMng_GetRecord_MM
         /*  copy CCid.              */
         DestUdmFaultRecordPtr->ConsistencyIdForFault = udmFaultRecordPtr->ConsistencyIdForFault;        /* [GUD]udmFaultRecordPtr */
 
+#if ( DEM_UDMFAULT_RECORD_PADDING_EXIST == STD_ON ) /*  [FuncSw]    */
         /*  copy padding.           */
         Dem_UdmFaultMng_Get_PaddingRecord( UdmGroupKindIndex, UdmFaultIndex, DestUdmFaultRecordPtr );   /* [GUD]UdmGroupKindIndex *//* [GUD]UdmFaultIndex */
+#endif /*   ( DEM_UDMFAULT_RECORD_PADDING_EXIST == STD_ON )  */
     }
     else
     {
@@ -1167,6 +1164,7 @@ static FUNC( void, DEM_CODE ) Dem_UdmFaultMng_GetRecord_MM
 
 
 #if ( DEM_NVM_SYNC_PROCESS_ENABLE == STD_ON )
+#if ( DEM_UDMFAULT_RECORD_PADDING_EXIST == STD_ON )
 /****************************************************************************/
 /* Function Name | Dem_UdmFaultMng_Get_PaddingRecord                        */
 /* Description   | Get UdmFaultRecord padding data.                         */
@@ -1184,10 +1182,8 @@ static FUNC( void, DEM_CODE ) Dem_UdmFaultMng_GetRecord_MM
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | branch changed.                                          */
-/*   v5-7-0      | no object changed.                                       */
-/*   v5-8-0      | no object changed.                                       */
 /****************************************************************************/
-static FUNC( void, DEM_CODE ) Dem_UdmFaultMng_Get_PaddingRecord
+FUNC( void, DEM_CODE ) Dem_UdmFaultMng_Get_PaddingRecord
 (
     VAR( Dem_u16_UdmDemMemKindIndexType, AUTOMATIC ) UdmGroupKindIndex,
     VAR( Dem_u08_UdmFaultIndexType, AUTOMATIC ) UdmFaultIndex,
@@ -1206,7 +1202,7 @@ static FUNC( void, DEM_CODE ) Dem_UdmFaultMng_Get_PaddingRecord
 
         for( padidx = (Dem_u16_PaddingIndexType)0U; padidx < udmFaultRecordBlockPaddingSize; padidx++ )     /* [GUD:for]padidx */
         {
-            UdmFaultRecordPtr->Reserve[padidx] = udmFaultRecordPtr->Reserve[padidx];    /* [GUD]udmFaultRecordPtr *//* [GUD]padidx *//* [ARYCHK] DEM_UDMFAULT_RECORD_PADDINGSIZE_TO_BLOCKSIZE / 1 / padidx *//* [ARYCHK] DEM_UDMFAULT_RECORD_PADDINGSIZE_TO_BLOCKSIZE / 1 / padidx */
+            UdmFaultRecordPtr->Reserve[padidx] = udmFaultRecordPtr->Reserve[padidx];    /* [GUD]udmFaultRecordPtr *//* [GUD]padidx */
         }
     }
     return ;
@@ -1223,7 +1219,6 @@ static FUNC( void, DEM_CODE ) Dem_UdmFaultMng_Get_PaddingRecord
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_UdmFaultMng_InitFRData_Padding
 (
@@ -1237,11 +1232,12 @@ static FUNC( void, DEM_CODE ) Dem_UdmFaultMng_InitFRData_Padding
     udmFaultRecordBlockPaddingSize = Dem_UdmFaultRecordBlockPaddingSize;
     for( padidx = (Dem_u16_PaddingIndexType)0U; padidx < udmFaultRecordBlockPaddingSize; padidx++ ) /* [GUD:for]padidx */
     {
-        UdmFaultRecordPtr->Reserve[padidx] = DEM_DATA_RESERVE_INITIAL_VALUE;                        /* [GUD]padidx *//* [ARYCHK] DEM_UDMFAULT_RECORD_PADDINGSIZE_TO_BLOCKSIZE / 1 / padidx */
+        UdmFaultRecordPtr->Reserve[padidx] = DEM_DATA_RESERVE_INITIAL_VALUE;                        /* [GUD]padidx */
     }
 
     return;
 }
+#endif /*   ( DEM_UDMFAULT_RECORD_PADDING_EXIST == STD_ON )  */
 
 #endif /* DEM_NVM_SYNC_PROCESS_ENABLE -STD_ON- */
 
@@ -1257,7 +1253,6 @@ static FUNC( void, DEM_CODE ) Dem_UdmFaultMng_InitFRData_Padding
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_UdmFaultMng_Init
 (
@@ -1277,7 +1272,7 @@ FUNC( void, DEM_CODE ) Dem_UdmFaultMng_Init
         udmFaultRecordNum = Dem_UdmFaultRecordTable[udmGroupKindIndex].DemFaultRecordNum;                           /* [GUD]udmGroupKindIndex */
         for( udmFaultIndex = (Dem_u08_UdmFaultIndexType)0U; udmFaultIndex < udmFaultRecordNum; udmFaultIndex++ )    /* [GUD:for]udmFaultIndex */
         {
-            Dem_UdmFaultNvMStatus[ udmGroupKindIndex ].DemUdmFaultNvMStatusPtr[ udmFaultIndex ] = DEM_RECMNGCMN_NVM_STS_NOT_VERIFIED;   /* [GUD]udmGroupKindIndex *//* [GUD]udmFaultIndex *//* [ARYCHK] udmFaultRecordNum / 1 / udmFaultIndex *//* [ARYDESC] The registered data size of Dem_UdmFaultNvMStatus[ udmGroupKindIndex ].DemUdmFaultNvMStatusPtr is the same as Dem_UdmFaultRecordTable[udmGroupKindIndex].DemFaultRecordNum */
+            Dem_UdmFaultNvMStatus[ udmGroupKindIndex ].DemUdmFaultNvMStatusPtr[ udmFaultIndex ] = DEM_RECMNGCMN_NVM_STS_NOT_VERIFIED;   /* [GUD]udmGroupKindIndex *//* [GUD]udmFaultIndex */
         }
     }
 
@@ -1409,7 +1404,6 @@ FUNC( void, DEM_CODE ) Dem_UdmFaultMng_SetRecordMirror
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmFaultMng_ClearAllNotVerifiedRecord
 (
@@ -1438,10 +1432,10 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmFaultMng_ClearAllNotVerified
         {
             if( loopCount < *RestOfProcessableNumPtr )
             {
-                if( Dem_UdmFaultNvMStatus[ udmGroupKindIndex ].DemUdmFaultNvMStatusPtr[ udmFaultIndex ] == DEM_RECMNGCMN_NVM_STS_NOT_VERIFIED ) /* [GUD]udmGroupKindIndex *//* [GUD]udmFaultIndex *//* [ARYCHK] udmFaultRecordNum / 1 / udmFaultIndex *//* [ARYDESC] The registered data size of Dem_UdmFaultNvMStatus[ udmGroupKindIndex ].DemUdmFaultNvMStatusPtr is the same as Dem_UdmFaultRecordTable[udmGroupKindIndex].DemFaultRecordNum */
+                if( Dem_UdmFaultNvMStatus[ udmGroupKindIndex ].DemUdmFaultNvMStatusPtr[ udmFaultIndex ] == DEM_RECMNGCMN_NVM_STS_NOT_VERIFIED ) /* [GUD]udmGroupKindIndex *//* [GUD]udmFaultIndex */
                 {
-                    Dem_UdmFaultMng_InitRecord_Ctl( udmGroupKindIndex, udmFaultIndex );                                                         /* [GUD]udmGroupKindIndex *//* [GUD]udmFaultIndex *//* [ARYDESC] The registered data size of Dem_UdmFaultNvMStatus[ udmGroupKindIndex ].DemUdmFaultNvMStatusPtr is the same as Dem_UdmFaultRecordTable[udmGroupKindIndex].DemFaultRecordNum */
-                    Dem_UdmFaultNvMStatus[ udmGroupKindIndex ].DemUdmFaultNvMStatusPtr[ udmFaultIndex ] = DEM_RECMNGCMN_NVM_STS_NON_TARGET;     /* [GUD]udmGroupKindIndex *//* [GUD]udmFaultIndex *//* [ARYCHK] udmFaultRecordNum / 1 / udmFaultIndex */
+                    Dem_UdmFaultMng_InitRecord_Ctl( udmGroupKindIndex, udmFaultIndex );                                                         /* [GUD]udmGroupKindIndex *//* [GUD]udmFaultIndex */
+                    Dem_UdmFaultNvMStatus[ udmGroupKindIndex ].DemUdmFaultNvMStatusPtr[ udmFaultIndex ] = DEM_RECMNGCMN_NVM_STS_NON_TARGET;     /* [GUD]udmGroupKindIndex *//* [GUD]udmFaultIndex */
                 }
                 loopCount = loopCount + (Dem_u32_TotalRecordNumType)1U;
             }
@@ -1473,7 +1467,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmFaultMng_ClearAllNotVerified
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_UdmFaultMng_GetNumOfStoredFault
 (
@@ -1502,7 +1495,7 @@ FUNC( void, DEM_CODE ) Dem_UdmFaultMng_GetNumOfStoredFault
 
             if( udmFaultRecordPtr->UdmEventIndex < udmEventConfigureNum )                                                               /* [GUD]udmFaultRecordPtr */
             {
-                UdmEventMemoryRecordListPtr[udmGroupKindIndex].NumberOfEventMemoryEntries = UdmEventMemoryRecordListPtr[udmGroupKindIndex].NumberOfEventMemoryEntries + (Dem_u08_OrderIndexType)1U;     /* [GUD]udmGroupKindIndex *//* [ARYCHK] DEM_USER_DEFINED_MEMORY_NUM / 1 / udmGroupKindIndex *//* [ARYCHK] DEM_USER_DEFINED_MEMORY_NUM / 1 / udmGroupKindIndex */
+                UdmEventMemoryRecordListPtr[udmGroupKindIndex].NumberOfEventMemoryEntries = UdmEventMemoryRecordListPtr[udmGroupKindIndex].NumberOfEventMemoryEntries + (Dem_u08_OrderIndexType)1U;     /* [GUD]udmGroupKindIndex */
 
                 /*  set last of occurrence number.      */
                 if ( udmFaultRecordPtr->UdmFaultOccurrenceOrder < DEM_FAIL_OCCURRENCE_NUM_INVALID )                                     /* [GUD]udmFaultRecordPtr */
@@ -1514,7 +1507,7 @@ FUNC( void, DEM_CODE ) Dem_UdmFaultMng_GetNumOfStoredFault
                 }
             }
         }
-        UdmEventMemoryRecordListPtr[udmGroupKindIndex].LastOfFaultOccurrenceOrder    =   lastOfFaultOccurrenceOrder + (Dem_u16_OccrOrderType)1U;        /* [GUD]udmGroupKindIndex *//* [ARYCHK] DEM_USER_DEFINED_MEMORY_NUM / 1 / udmGroupKindIndex */
+        UdmEventMemoryRecordListPtr[udmGroupKindIndex].LastOfFaultOccurrenceOrder    =   lastOfFaultOccurrenceOrder + (Dem_u16_OccrOrderType)1U;        /* [GUD]udmGroupKindIndex */
 
     }
 
@@ -1579,9 +1572,6 @@ static FUNC( void, DEM_CODE ) Dem_UdmMng_UpdateFaultRecordConsistencyId
 /* Parameters    | none                                                     */
 /* Return Value  | void                                                     */
 /* Notes         | none                                                     */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-8-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_UdmFaultMng_InitMirrorMemory
 ( void )
@@ -1590,7 +1580,9 @@ static FUNC( void, DEM_CODE ) Dem_UdmFaultMng_InitMirrorMemory
     Dem_UdmFaultMng_InitCtlRecordData( &Dem_TmpUdmFaultMirror );
     Dem_TmpUdmFaultMirror.ConsistencyIdForFault = DEM_CONSISTENCY_INITIAL;
 
+#if ( DEM_UDMFAULT_RECORD_PADDING_EXIST == STD_ON ) /*  [FuncSw]    */
     Dem_UdmFaultMng_InitFRData_Padding( &Dem_TmpUdmFaultMirror );
+#endif  /*   ( DEM_UDMFAULT_RECORD_PADDING_EXIST == STD_ON )        */
 
     return;
 }
@@ -1661,7 +1653,6 @@ static FUNC( void, DEM_CODE ) Dem_UdmFaultMng_InitFaultRecord_Ctl
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC_P2VAR( Dem_UdmFaultRecordType, DEM_VAR_SAVED_ZONE, DEM_CODE ) Dem_UdmFaultMng_GetFaultRecordPtr
 (
@@ -1681,7 +1672,7 @@ static FUNC_P2VAR( Dem_UdmFaultRecordType, DEM_VAR_SAVED_ZONE, DEM_CODE ) Dem_Ud
         faultRecordNum = Dem_UdmFaultRecordTable[UdmGroupKindIndex].DemFaultRecordNum;  /* [GUD]UdmGroupKindIndex */
         if( UdmFaultIndex < faultRecordNum )                                            /* [GUD:if]UdmFaultIndex */
         {
-            udmFaultRecordPtr = &(Dem_UdmFaultRecordTable[UdmGroupKindIndex].DemFaultRecordListStartPtr[UdmFaultIndex]);    /* [GUD]UdmGroupKindIndex *//* [GUD]UdmFaultIndex *//* [ARYCHK] faultRecordNum / 1 / UdmFaultIndex */
+            udmFaultRecordPtr = &(Dem_UdmFaultRecordTable[UdmGroupKindIndex].DemFaultRecordListStartPtr[UdmFaultIndex]);    /* [GUD]UdmGroupKindIndex *//* [GUD]UdmFaultIndex */
         }
     }
 
@@ -1774,8 +1765,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmFaultMng_GetEventIdFromRecor
 /*  v5-0-0         :2022-03-29                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-7-0         :2024-05-29                                              */
-/*  v5-8-0         :2024-10-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

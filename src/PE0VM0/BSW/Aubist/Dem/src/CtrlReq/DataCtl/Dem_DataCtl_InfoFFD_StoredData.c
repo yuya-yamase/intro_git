@@ -1,7 +1,7 @@
-/* Dem_DataCtl_InfoFFD_StoredData_c(v5-10-0)                                */
+/* Dem_DataCtl_InfoFFD_StoredData_c(v5-5-0)                                 */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -76,8 +76,6 @@
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
-/*   v5-10-0     | branch changed.                                          */
 /****************************************************************************/
 FUNC( Dem_u08_FFDIndexType, DEM_CODE ) Dem_Data_GetConfirmedTriggerNonOBDFFDIndex
 (
@@ -87,6 +85,7 @@ FUNC( Dem_u08_FFDIndexType, DEM_CODE ) Dem_Data_GetConfirmedTriggerNonOBDFFDInde
 {
     VAR( Dem_FaultRecordType, AUTOMATIC ) faultRecord;
     P2CONST( AB_83_ConstV Dem_FreezeFrameRecNumClassType, AUTOMATIC, DEM_CONFIG_DATA ) freezeFrameRecNumClassPtr;
+    P2CONST( AB_83_ConstV Dem_FreezeFrameRecordClassType, AUTOMATIC, DEM_CONFIG_DATA ) freezeFrameRecordClassPtr;
     VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) eventStorageNum;
     VAR( Dem_u16_FFRecNumClassIndexType, AUTOMATIC ) freezeFrameRecNumClassRef;
     VAR( Dem_u08_InternalReturnType, AUTOMATIC ) resultOfGetFaultRec;
@@ -96,7 +95,6 @@ FUNC( Dem_u08_FFDIndexType, DEM_CODE ) Dem_Data_GetConfirmedTriggerNonOBDFFDInde
     VAR( Dem_u08_FFListIndexType, AUTOMATIC ) ffListIndex;
     VAR( Dem_u08_FFRecordClassIndexType, AUTOMATIC ) ffrRecordClassConfigureNum;
     VAR( Dem_u08_FFRecordClassIndexType, AUTOMATIC ) freezeFrameRecordClassIndex;
-    VAR( Dem_u08_StorageTriggerType, AUTOMATIC ) freezeFrameRecordTrigger;
 
     confirmedTriggerNonOBDFFDIndex = DEM_FFRECINDEX_INITIAL;
 
@@ -122,15 +120,15 @@ FUNC( Dem_u08_FFDIndexType, DEM_CODE ) Dem_Data_GetConfirmedTriggerNonOBDFFDInde
 
         for( ffListIndex = (Dem_u08_FFListIndexType)0U; ffListIndex < nonOBDFFRClassPerDTCMaxNum; ffListIndex++ )       /* [GUD:for] ffListIndex */
         {
-            if( faultRecord.RecordNumberIndex[ffListIndex] < nonObdFFDRecordNum )                                       /* [GUD] ffListIndex *//* [ARYCHK] DEM_NONOBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / ffListIndex */
+            if( faultRecord.RecordNumberIndex[ffListIndex] < nonObdFFDRecordNum )                                       /* [GUD] ffListIndex */
             {
-                freezeFrameRecordClassIndex = freezeFrameRecNumClassPtr->DemFreezeFrameRecordClassRef[ffListIndex];     /* [GUD] ffListIndex *//* [ARYCHK] DEM_FF_RECORD_CLASS_REF_MAX_NUM / 1 / ffListIndex */
+                freezeFrameRecordClassIndex = freezeFrameRecNumClassPtr->DemFreezeFrameRecordClassRef[ffListIndex];     /* [GUD] ffListIndex */
                 if( freezeFrameRecordClassIndex < ffrRecordClassConfigureNum )                                          /* [GUD:if] freezeFrameRecordClassIndex */
                 {
-                    freezeFrameRecordTrigger =  Dem_CfgInfoPm_GetFreezeFrameRecordTriggerType( freezeFrameRecordClassIndex );   /* [GUD] freezeFrameRecordClassIndex */
-                    if( freezeFrameRecordTrigger == DEM_TRIGGER_ON_CONFIRMED )
+                    freezeFrameRecordClassPtr = &Dem_FreezeFrameRecordClassTable[freezeFrameRecordClassIndex];          /* [GUD] freezeFrameRecordClassIndex *//* [GUD:CFG:IF_GUARDED: freezeFrameRecordClassIndex ]freezeFrameRecordClassPtr */
+                    if( freezeFrameRecordClassPtr->DemFreezeFrameRecordTrigger == DEM_TRIGGER_ON_CONFIRMED )            /* [GUD] freezeFrameRecordClassPtr */
                     {
-                        confirmedTriggerNonOBDFFDIndex = faultRecord.RecordNumberIndex[ffListIndex];                    /* [GUD] ffListIndex *//* [ARYCHK] DEM_NONOBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / ffListIndex */
+                        confirmedTriggerNonOBDFFDIndex = faultRecord.RecordNumberIndex[ffListIndex];                    /* [GUD] ffListIndex */
                         break;
                     }
                 }
@@ -156,8 +154,6 @@ FUNC( Dem_u08_FFDIndexType, DEM_CODE ) Dem_Data_GetConfirmedTriggerNonOBDFFDInde
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | branch changed.                                          */
-/*   v5-7-0      | no object changed.                                       */
-/*   v5-8-0      | branch changed.                                          */
 /****************************************************************************/
 FUNC( Dem_u16_TSFFListIndexType, DEM_CODE ) Dem_Data_GetConfirmedTriggerBeforeTSFFListIndexAndInfo
 (
@@ -196,14 +192,14 @@ FUNC( Dem_u16_TSFFListIndexType, DEM_CODE ) Dem_Data_GetConfirmedTriggerBeforeTS
                 tsffRecordClassNumPerDTCMaxNum = Dem_TSFFRecordClassNumPerDTCMaxNum;
                 for( tsFFRecClassRefIndex = (Dem_u08_TSFFListPerDTCIndexType)0U; tsFFRecClassRefIndex < tsffRecordClassNumPerDTCMaxNum; tsFFRecClassRefIndex++ )    /* [GUD:for]tsFFRecClassRefIndex */
                 {
-                    if( faultRecord.TimeSeriesFreezeFrameListIndex[tsFFRecClassRefIndex] < tsffTotalDTCNum )                                                        /* [GUD]tsFFRecClassRefIndex *//* [ARYCHK] DEM_TSFF_RECORD_CLASS_NUM_PER_DTC_MAX_NUM / 1 / tsFFRecClassRefIndex */
+                    if( faultRecord.TimeSeriesFreezeFrameListIndex[tsFFRecClassRefIndex] < tsffTotalDTCNum )                                                        /* [GUD]tsFFRecClassRefIndex */
                     {
-                        tsFFRecClassRef = dtcAttributePtr->DemTimeSeriesFreezeFrameRecordClassRef[tsFFRecClassRefIndex];                                            /* [GUD]dtcAttributePtr *//* [GUD]tsFFRecClassRefIndex *//* [ARYCHK] DEM_TSFF_RECORD_CLASS_NUM_PER_DTC_MAX_NUM / 1 / tsFFRecClassRefIndex */
+                        tsFFRecClassRef = dtcAttributePtr->DemTimeSeriesFreezeFrameRecordClassRef[tsFFRecClassRefIndex];                                            /* [GUD]dtcAttributePtr *//* [GUD]tsFFRecClassRefIndex */
                         if( tsFFRecClassRef != DEM_TSFF_RECORD_CLASS_REF_INVALID )                                                                                  /* [GUD:if]tsFFRecClassRef */
                         {
                             if( Dem_TSFFRecordClassTable[tsFFRecClassRef].DemTimeSeriesFreezeFrameTrigger == DEM_TRIGGER_ON_CONFIRMED )                             /* [GUD]tsFFRecClassRef */
                             {
-                                confirmedTriggerTsffListIndex = faultRecord.TimeSeriesFreezeFrameListIndex[tsFFRecClassRefIndex];                                   /* [GUD:if]tsFFRecClassRefIndex *//* [ARYCHK] DEM_TSFF_RECORD_CLASS_NUM_PER_DTC_MAX_NUM / 1 / tsFFRecClassRefIndex */
+                                confirmedTriggerTsffListIndex = faultRecord.TimeSeriesFreezeFrameListIndex[tsFFRecClassRefIndex];                                   /* [GUD:if]tsFFRecClassRefIndex */
                                 break;
                             }
                         }
@@ -217,19 +213,12 @@ FUNC( Dem_u16_TSFFListIndexType, DEM_CODE ) Dem_Data_GetConfirmedTriggerBeforeTS
     {
         tsFFClassRef = Dem_TSFFRecordClassTable[tsFFRecClassRef].DemTimeSeriesFreezeFrameClassRef;                                                              /* [GUD]tsFFRecClassRef *//* [GUD:CFG:IF_GUARDED: tsFFRecClassRef ]tsFFClassRef */
         *NumberOfBeforeTriggeredRecordPtr = Dem_TSFFClassTable[tsFFClassRef].DemNumberOfBeforeTriggeredRecord;                                                  /* [GUD]tsFFClassRef */
-        if( (*NumberOfBeforeTriggeredRecordPtr) > ( Dem_u08_FFRecordNumberType )0U )
+        tsFFRecIndex = ( Dem_TimeSeriesFreezeFrameTable[confirmedTriggerTsffListIndex].DemStartIndex + ( (Dem_u16_TSFFDIndexType)(*NumberOfBeforeTriggeredRecordPtr) - (Dem_u16_TSFFDIndexType)1U ) );  /* [GUD]confirmedTriggerTsffListIndex */
+        recordStatus = Dem_DataMngC_GetRecordStatusOfTimeSeriesFreezeFrameRecord( tsFFRecIndex );
+        if( recordStatus == DEM_FFD_STORED )
         {
-            tsFFRecIndex = ( Dem_TimeSeriesFreezeFrameTable[confirmedTriggerTsffListIndex].DemStartIndex + ( (Dem_u16_TSFFDIndexType)(*NumberOfBeforeTriggeredRecordPtr) - (Dem_u16_TSFFDIndexType)1U ) );  /* [GUD]confirmedTriggerTsffListIndex */
-            recordStatus = Dem_DataMngC_GetRecordStatusOfTimeSeriesFreezeFrameRecord( tsFFRecIndex );
-            if( recordStatus == DEM_FFD_STORED )
-            {
-                samplingFFClassRef = Dem_TSFFRecordClassTable[tsFFRecClassRef].DemSamplingFreezeFrameClassRef;                                                      /* [GUD]tsFFRecClassRef *//* [GUD:CFG:IF_GUARDED: tsFFRecClassRef ]samplingFFClassRef */
-                *FreezeFrameClassRefPtr = Dem_TSFFClassTable[tsFFClassRef].Dem_SamplingFreezeFrameClass[samplingFFClassRef].DemFreezeFrameClassRef;                 /* [GUD]tsFFClassRef *//* [GUD]samplingFFClassRef */
-            }
-            else
-            {
-                confirmedTriggerTsffListIndex = DEM_INVALID_VACANT_TSFFLIST_INDEX;
-            }
+            samplingFFClassRef = Dem_TSFFRecordClassTable[tsFFRecClassRef].DemSamplingFreezeFrameClassRef;                                                      /* [GUD]tsFFRecClassRef *//* [GUD:CFG:IF_GUARDED: tsFFRecClassRef ]samplingFFClassRef */
+            *FreezeFrameClassRefPtr = Dem_TSFFClassTable[tsFFClassRef].Dem_SamplingFreezeFrameClass[samplingFFClassRef].DemFreezeFrameClassRef;                 /* [GUD]tsFFClassRef *//* [GUD]samplingFFClassRef */
         }
         else
         {
@@ -252,9 +241,6 @@ FUNC( Dem_u16_TSFFListIndexType, DEM_CODE ) Dem_Data_GetConfirmedTriggerBeforeTS
 /* History                                                                  */
 /*  Version        :Date                                                    */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-7-0         :2024-05-29                                              */
-/*  v5-8-0         :2024-10-29                                              */
-/*  v5-10-0        :2025-06-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

@@ -1,7 +1,7 @@
-/* Dem_IUMPRMng_c(v5-7-0)                                                   */
+/* Dem_IUMPRMng_c(v5-5-0)                                                   */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -92,12 +92,12 @@ static VAR( Dem_u16_IUMPRIndexType, DEM_VAR_NO_INIT ) Dem_IUMPRIndexForVerify;
 #include <Dem_MemMap.h>
 
 
-#define DEM_START_SEC_VAR_SAVED_ZONE_IUMPR
+#define DEM_START_SEC_VAR_SAVED_ZONE
 #include <Dem_MemMap.h>
 
-VAR( Dem_IUMPRCommonRecordType,      DEM_VAR_SAVED_ZONE_IUMPR ) Dem_IUMPRRecord[DEM_IUMPR_RECORD_NUM];
+VAR( Dem_IUMPRCommonRecordType,      DEM_VAR_SAVED_ZONE ) Dem_IUMPRRecord[DEM_IUMPR_RECORD_NUM];
 
-#define DEM_STOP_SEC_VAR_SAVED_ZONE_IUMPR
+#define DEM_STOP_SEC_VAR_SAVED_ZONE
 #include <Dem_MemMap.h>
 
 
@@ -144,11 +144,8 @@ FUNC( void, DEM_CODE ) Dem_IUMPRMng_Init
 /* Return Value  | void                                                     */
 /* Notes         |                                                          */
 /*--------------------------------------------------------------------------*/
-/* UpdateRecord  | [UpdRec]IUMPR    :   NotifySavedZone                     */
-/*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-6-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_IUMPRMng_InitSavedZone
 (
@@ -163,11 +160,6 @@ FUNC( void, DEM_CODE ) Dem_IUMPRMng_InitSavedZone
     recMngCmnKindIUMPR = Dem_RecMngCmnKindIUMPR;
     demIumprNum = Dem_IUMPRRecordNum;
 
-    /*--------------------------------------*/
-    /*  notify SAVED_ZONE update - start.   */
-    Dem_NotifySavedZoneIUMPRUpdate_Enter();  /*  notify start :  savedzone area will be update.  */
-    /*--------------------------------------*/
-
     for( iumprIndex = (Dem_u16_IUMPRIndexType)0U; iumprIndex < demIumprNum; iumprIndex++ )              /* [GUD:for]iumprIndex */
     {
         if( Dem_IUMPRRecord[iumprIndex].CommonCondition4 !=  DEM_IUMPR_CONDITION_FACTORY_DEFAULT )      /* [GUD]iumprIndex */
@@ -176,23 +168,18 @@ FUNC( void, DEM_CODE ) Dem_IUMPRMng_InitSavedZone
             {
                 /* DEM_SZINITTYPE_INITIALIZE_ALL */
                 /* DEM_SZINITTYPE_INITIALIZE_WITHOUT_PFC */
-                Dem_IUMPRRecord[iumprIndex].CommonCounter1      = (uint16)0U;                           /* [GUD]iumprIndex */   /*[UpdRec]IUMPR */
-                Dem_IUMPRRecord[iumprIndex].CommonCounter2      = (uint16)0U;                           /* [GUD]iumprIndex */   /*[UpdRec]IUMPR */
+                Dem_IUMPRRecord[iumprIndex].CommonCounter1      = (uint16)0U;                           /* [GUD]iumprIndex */
+                Dem_IUMPRRecord[iumprIndex].CommonCounter2      = (uint16)0U;                           /* [GUD]iumprIndex */
             }
 
-            Dem_IUMPRRecord[iumprIndex].CommonCondition1    = (uint8)0U;                                /* [GUD]iumprIndex */   /*[UpdRec]IUMPR */
-            Dem_IUMPRRecord[iumprIndex].CommonCondition2    = (uint8)0U;                                /* [GUD]iumprIndex */   /*[UpdRec]IUMPR */
-            Dem_IUMPRRecord[iumprIndex].CommonCondition3    = (uint8)0U;                                /* [GUD]iumprIndex */   /*[UpdRec]IUMPR */
-            Dem_IUMPRRecord[iumprIndex].CommonCondition4    = (uint8)0U;                                /* [GUD]iumprIndex */   /*[UpdRec]IUMPR */
+            Dem_IUMPRRecord[iumprIndex].CommonCondition1    = (uint8)0U;                                /* [GUD]iumprIndex */
+            Dem_IUMPRRecord[iumprIndex].CommonCondition2    = (uint8)0U;                                /* [GUD]iumprIndex */
+            Dem_IUMPRRecord[iumprIndex].CommonCondition3    = (uint8)0U;                                /* [GUD]iumprIndex */
+            Dem_IUMPRRecord[iumprIndex].CommonCondition4    = (uint8)0U;                                /* [GUD]iumprIndex */
 
             Dem_RecMngCmn_SetNvMWriteStatus( recMngCmnKindIUMPR, (Dem_u16_RecordIndexType)iumprIndex ); /* [GUD]iumprIndex */
         }
     }
-
-    /*--------------------------------------*/
-    /*  notify SAVED_ZONE update - end.     */
-    Dem_NotifySavedZoneIUMPRUpdate_Exit();  /*  notify end :  savedzone area will be update.    */
-    /*--------------------------------------*/
 
     return;
 }
@@ -251,11 +238,8 @@ FUNC( void, DEM_CODE ) Dem_IUMPRMng_SetRecordMirror
 /*               |          DEM_IRT_PENDING : Continue DataVerify.          */
 /* Notes         | none                                                     */
 /*--------------------------------------------------------------------------*/
-/* UpdateRecord  | [UpdRec]IUMPR    :   NotifySavedZone                     */
-/*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-6-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_IUMPRMng_DataVerify
 (
@@ -275,11 +259,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_IUMPRMng_DataVerify
     loopCount = ( Dem_u16_IUMPRIndexType )0U;
     retVal = DEM_IRT_OK;
 
-    /*--------------------------------------*/
-    /*  notify SAVED_ZONE update - start.   */
-    Dem_NotifySavedZoneIUMPRUpdate_Enter();  /*  notify start :  savedzone area will be update.  */
-    /*--------------------------------------*/
-
     for( iumprIndex = Dem_IUMPRIndexForVerify; iumprIndex < demIumprNum; iumprIndex++ )     /* [GUD:if]iumprIndex */
     {
 
@@ -290,12 +269,12 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_IUMPRMng_DataVerify
                 /*  CommonCondition4 value is default.      */
                 /*  invalid data.               */
                 /*  initialize IUMPR record.      */
-                Dem_IUMPRRecord[iumprIndex].CommonCounter1      = (uint16)0U;                                   /* [GUD]iumprIndex */   /*[UpdRec]IUMPR */
-                Dem_IUMPRRecord[iumprIndex].CommonCounter2      = (uint16)0U;                                   /* [GUD]iumprIndex */   /*[UpdRec]IUMPR */
-                Dem_IUMPRRecord[iumprIndex].CommonCondition1    = (uint8)0U;                                    /* [GUD]iumprIndex */   /*[UpdRec]IUMPR */
-                Dem_IUMPRRecord[iumprIndex].CommonCondition2    = (uint8)0U;                                    /* [GUD]iumprIndex */   /*[UpdRec]IUMPR */
-                Dem_IUMPRRecord[iumprIndex].CommonCondition3    = (uint8)0U;                                    /* [GUD]iumprIndex */   /*[UpdRec]IUMPR */
-                Dem_IUMPRRecord[iumprIndex].CommonCondition4    = (uint8)0U;                                    /* [GUD]iumprIndex */   /*[UpdRec]IUMPR */
+                Dem_IUMPRRecord[iumprIndex].CommonCounter1      = (uint16)0U;                                   /* [GUD]iumprIndex */
+                Dem_IUMPRRecord[iumprIndex].CommonCounter2      = (uint16)0U;                                   /* [GUD]iumprIndex */
+                Dem_IUMPRRecord[iumprIndex].CommonCondition1    = (uint8)0U;                                    /* [GUD]iumprIndex */
+                Dem_IUMPRRecord[iumprIndex].CommonCondition2    = (uint8)0U;                                    /* [GUD]iumprIndex */
+                Dem_IUMPRRecord[iumprIndex].CommonCondition3    = (uint8)0U;                                    /* [GUD]iumprIndex */
+                Dem_IUMPRRecord[iumprIndex].CommonCondition4    = (uint8)0U;                                    /* [GUD]iumprIndex */
                 Dem_RecMngCmn_SetNvMWriteStatus( recMngCmnKindIUMPR, (Dem_u16_RecordIndexType)iumprIndex );     /* [GUD]iumprIndex */
             }
 
@@ -309,11 +288,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_IUMPRMng_DataVerify
         }
     }
 
-    /*--------------------------------------*/
-    /*  notify SAVED_ZONE update - end.     */
-    Dem_NotifySavedZoneIUMPRUpdate_Exit();  /*  notify end :  savedzone area will be update.    */
-    /*--------------------------------------*/
-
     return retVal;
 }
 
@@ -325,11 +299,8 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_IUMPRMng_DataVerify
 /* Return Value  | void                                                     */
 /* Notes         | none                                                     */
 /*--------------------------------------------------------------------------*/
-/* UpdateRecord  | [UpdRec]IUMPR                                            */
-/*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-6-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_IUMPRMng_ClearCondition
 ( void )
@@ -359,15 +330,15 @@ FUNC( void, DEM_CODE ) Dem_IUMPRMng_ClearCondition
     if( changeRecord == (boolean)TRUE )
     {
         /* Condition to Initial Value */
-        Dem_IUMPRRecord[DEM_IUMPR_GENDEN_IGCC_REC_INDEX].CommonCondition1 = (uint8)0U;  /*  Dem_IUMPRInfoRecordType.DenominatorCondition        */  /*[UpdRec]IUMPR */
-        Dem_IUMPRRecord[DEM_IUMPR_GENDEN_IGCC_REC_INDEX].CommonCondition2 = (uint8)0U;  /*  Dem_IUMPRInfoRecordType.GeneralDenAddedCondition    */  /*[UpdRec]IUMPR */
-        Dem_IUMPRRecord[DEM_IUMPR_GENDEN_IGCC_REC_INDEX].CommonCondition3 = (uint8)0U;  /*  Dem_IUMPRInfoRecordType.IGCycleAddedCondition       */  /*[UpdRec]IUMPR */
-        Dem_IUMPRRecord[DEM_IUMPR_GENDEN_IGCC_REC_INDEX].CommonCondition4 = (uint8)0U;  /*  Dem_IUMPRInfoRecordType.Reserve1                    */  /*[UpdRec]IUMPR */
+        Dem_IUMPRRecord[DEM_IUMPR_GENDEN_IGCC_REC_INDEX].CommonCondition1 = (uint8)0U;  /*  Dem_IUMPRInfoRecordType.DenominatorCondition        */
+        Dem_IUMPRRecord[DEM_IUMPR_GENDEN_IGCC_REC_INDEX].CommonCondition2 = (uint8)0U;  /*  Dem_IUMPRInfoRecordType.GeneralDenAddedCondition    */
+        Dem_IUMPRRecord[DEM_IUMPR_GENDEN_IGCC_REC_INDEX].CommonCondition3 = (uint8)0U;  /*  Dem_IUMPRInfoRecordType.IGCycleAddedCondition       */
+        Dem_IUMPRRecord[DEM_IUMPR_GENDEN_IGCC_REC_INDEX].CommonCondition4 = (uint8)0U;  /*  Dem_IUMPRInfoRecordType.Reserve1                    */
         Dem_RecMngCmn_SetNvMWriteStatus( recMngCmnKindIUMPR, (Dem_u16_RecordIndexType)DEM_IUMPR_GENDEN_IGCC_REC_INDEX );
     }
 
 #if ( DEM_IUMPR_RATIO_SUPPORT == STD_ON )   /*  [FuncSw]    */
-    Dem_IUMPRMng_Ratio_ClearCondition();    /*[UpdRec]IUMPR */
+    Dem_IUMPRMng_Ratio_ClearCondition();
 #endif  /* ( DEM_IUMPR_RATIO_SUPPORT == STD_ON )            */
 
     return;
@@ -499,11 +470,6 @@ FUNC( void, DEM_CODE ) Dem_IUMPRMng_GetIGCycleInformation
 /*               |        IGCycleCounter value.                             */
 /* Return Value  | none                                                     */
 /* Notes         | -                                                        */
-/*--------------------------------------------------------------------------*/
-/* UpdateRecord  | [UpdRec]IUMPR                                            */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-6-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_IUMPRMng_SetIGCycleInformation
 (
@@ -536,7 +502,7 @@ FUNC( void, DEM_CODE ) Dem_IUMPRMng_SetIGCycleInformation
         /* Convert data */
         Dem_IUMPRMng_CnvInfoRecordToCommon( &iumprInfoRecord, &iumprRecord );
         /* Regist NvM Record */
-        Dem_IUMPRMng_SetIUMPRGenDenRecordData( &iumprRecord );  /*[UpdRec]IUMPR */
+        Dem_IUMPRMng_SetIUMPRGenDenRecordData( &iumprRecord );
     }
 
     return;
@@ -609,11 +575,6 @@ FUNC( void, DEM_CODE ) Dem_IUMPRMng_GetGenDenInformation
 /*               |        GeneralDenominator Counter value.                 */
 /* Return Value  | none                                                     */
 /* Notes         | -                                                        */
-/*--------------------------------------------------------------------------*/
-/* UpdateRecord  | [UpdRec]IUMPR                                            */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-6-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_IUMPRMng_SetGenDenInformation
 (
@@ -646,7 +607,7 @@ FUNC( void, DEM_CODE ) Dem_IUMPRMng_SetGenDenInformation
         /* Convert data */
         Dem_IUMPRMng_CnvInfoRecordToCommon( &iumprInfoRecord, &iumprRecord );
         /* Regist NvM Record */
-        Dem_IUMPRMng_SetIUMPRGenDenRecordData( &iumprRecord );  /*[UpdRec]IUMPR */
+        Dem_IUMPRMng_SetIUMPRGenDenRecordData( &iumprRecord );
     }
 
     return;
@@ -667,11 +628,6 @@ FUNC( void, DEM_CODE ) Dem_IUMPRMng_SetGenDenInformation
 /*               |          Status of the IUMPR denominator condition.      */
 /* Return Value  | none                                                     */
 /* Notes         | -                                                        */
-/*--------------------------------------------------------------------------*/
-/* UpdateRecord  | [UpdRec]IUMPR                                            */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-6-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_IUMPRMng_SetIUMPRDenCondition
 (
@@ -719,7 +675,7 @@ FUNC( void, DEM_CODE ) Dem_IUMPRMng_SetIUMPRDenCondition
         /* Convert data */
         Dem_IUMPRMng_CnvInfoRecordToCommon( &iumprInfoRecord, &iumprRecord );
         /* Regist NvM Record */
-        Dem_IUMPRMng_SetIUMPRGenDenRecordData( &iumprRecord );  /*[UpdRec]IUMPR */
+        Dem_IUMPRMng_SetIUMPRGenDenRecordData( &iumprRecord );
     }
 
     return;
@@ -769,7 +725,6 @@ static FUNC( void, DEM_CODE ) Dem_IUMPRMng_InitMirrorRecord
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_IUMPRMng_InitPadding
 (
@@ -783,7 +738,7 @@ static FUNC( void, DEM_CODE ) Dem_IUMPRMng_InitPadding
 
     for( paddingIndex = (Dem_u16_PaddingIndexType)0U; paddingIndex < paddingSize; paddingIndex++ )  /* [GUD:for]paddingIndex */
     {
-        IUMPRRecordPtr->Reserve[paddingIndex] = (uint8)0U;                                          /* [GUD]paddingIndex *//* [ARYCHK] DEM_IUMPR_RECORD_PADDINGSIZE_TO_BLOCKSIZE / 1 / paddingIndex */
+        IUMPRRecordPtr->Reserve[paddingIndex] = (uint8)0U;                                          /* [GUD]paddingIndex */
     }
     return ;
 }
@@ -799,11 +754,8 @@ static FUNC( void, DEM_CODE ) Dem_IUMPRMng_InitPadding
 /* Return Value  | void                                                     */
 /* Notes         |                                                          */
 /*--------------------------------------------------------------------------*/
-/* UpdateRecord  | [UpdRec]IUMPR                                            */
-/*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-6-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_IUMPRMng_SetIUMPRGenDenRecordData
 (
@@ -816,12 +768,12 @@ static FUNC( void, DEM_CODE ) Dem_IUMPRMng_SetIUMPRGenDenRecordData
     SchM_Enter_Dem_IUMPRRatioData();
 
     /* Set IumorRecord data for GenDen and IGCC */
-    Dem_IUMPRRecord[DEM_IUMPR_GENDEN_IGCC_REC_INDEX].CommonCounter1   = IUMPRDataPtr->CommonCounter1;   /*[UpdRec]IUMPR */
-    Dem_IUMPRRecord[DEM_IUMPR_GENDEN_IGCC_REC_INDEX].CommonCounter2   = IUMPRDataPtr->CommonCounter2;   /*[UpdRec]IUMPR */
-    Dem_IUMPRRecord[DEM_IUMPR_GENDEN_IGCC_REC_INDEX].CommonCondition1 = IUMPRDataPtr->CommonCondition1; /*[UpdRec]IUMPR */
-    Dem_IUMPRRecord[DEM_IUMPR_GENDEN_IGCC_REC_INDEX].CommonCondition2 = IUMPRDataPtr->CommonCondition2; /*[UpdRec]IUMPR */
-    Dem_IUMPRRecord[DEM_IUMPR_GENDEN_IGCC_REC_INDEX].CommonCondition3 = IUMPRDataPtr->CommonCondition3; /*[UpdRec]IUMPR */
-    Dem_IUMPRRecord[DEM_IUMPR_GENDEN_IGCC_REC_INDEX].CommonCondition4 = IUMPRDataPtr->CommonCondition4; /*[UpdRec]IUMPR */
+    Dem_IUMPRRecord[DEM_IUMPR_GENDEN_IGCC_REC_INDEX].CommonCounter1   = IUMPRDataPtr->CommonCounter1;
+    Dem_IUMPRRecord[DEM_IUMPR_GENDEN_IGCC_REC_INDEX].CommonCounter2   = IUMPRDataPtr->CommonCounter2;
+    Dem_IUMPRRecord[DEM_IUMPR_GENDEN_IGCC_REC_INDEX].CommonCondition1 = IUMPRDataPtr->CommonCondition1;
+    Dem_IUMPRRecord[DEM_IUMPR_GENDEN_IGCC_REC_INDEX].CommonCondition2 = IUMPRDataPtr->CommonCondition2;
+    Dem_IUMPRRecord[DEM_IUMPR_GENDEN_IGCC_REC_INDEX].CommonCondition3 = IUMPRDataPtr->CommonCondition3;
+    Dem_IUMPRRecord[DEM_IUMPR_GENDEN_IGCC_REC_INDEX].CommonCondition4 = IUMPRDataPtr->CommonCondition4;
 
     /* Exit exclusive area */
     SchM_Exit_Dem_IUMPRRatioData();
@@ -935,8 +887,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_IUMPRMng_GetEventIdFromRecordDa
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-6-0         :2024-01-29                                              */
-/*  v5-7-0         :2024-05-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

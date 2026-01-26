@@ -1,7 +1,7 @@
-/* Dcm_Dsp_MemMng_Callout_h(v5-6-0)                                         */
+/* Dcm_Dsp_MemMng_Callout_h(v5-5-0)                                         */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -47,8 +47,6 @@ FUNC( Dcm_ReturnReadMemoryType, DCM_CODE_CALLOUT ) Dcm_ReadMemory
 
 
 #endif /* DCM_PERIODIC_DDDID_USE == STD_ON || DCM_SUPPORT_SID22 == STD_ON || DCM_SUPPORT_SID23 == STD_ON */
-
-
 #define DCM_STOP_SEC_CODE_CALLOUT
 #include <Dcm_MemMap.h>
 
@@ -83,12 +81,11 @@ FUNC( Dcm_ReturnReadMemoryType, DCM_CODE_CALLOUT ) Dcm_ReadMemory
 /*  v5-0-0         :2022-03-29                                              */
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-6-0         :2024-02-27                                              */
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
 /*  Framework          :v2-1-0                                              */
-/*  BSW plug-in        :v5-10-0                                             */
+/*  BSW plug-in        :v5-5-1                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

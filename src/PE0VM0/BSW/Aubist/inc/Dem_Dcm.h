@@ -1,7 +1,7 @@
-/* Dem_Dcm_h(v5-8-0)                                                        */
+/* Dem_Dcm_h(v5-5-0)                                                        */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 /****************************************************************************/
 /* Object Name  | Dem/Dcm/HEADER                                            */
@@ -76,10 +76,6 @@ FUNC( Dem_ReturnSetFilterType, DEM_CODE ) Dem_DcmSetEDRNumberFilter
 (
     VAR( uint8, AUTOMATIC ) ExtendedDataNumber
 );
-FUNC( Dem_ReturnGetNumberOfFilteredDTCType, DEM_CODE ) Dem_DcmGetNumberOfEDRNumFilteredDTC
-(
-    P2VAR( uint16, AUTOMATIC, DEM_APPL_DATA ) NumberOfEDRNumFilteredDTCPtr
-);
 FUNC( Dem_ReturnGetNextFilteredElementType, DEM_CODE ) Dem_DcmGetNextEDRNumFilteredDTC
 (
     P2VAR( uint32, AUTOMATIC, DEM_APPL_DATA ) DTCPtr,
@@ -95,10 +91,6 @@ FUNC( Dem_ReturnGetNextFilteredElementType, DEM_CODE ) Dem_DcmGetNextFilteredDTC
 FUNC( Dem_ReturnSetFilterType, DEM_CODE ) Dem_DcmSetDTCFilterForReadiness
 (
     VAR( uint8, AUTOMATIC ) ReadinessGroupId
-);
-FUNC( Dem_ReturnGetNumberOfFilteredDTCType, DEM_CODE ) Dem_DcmGetNumberOfFilteredDTCForReadiness
-(
-    P2VAR( uint16, AUTOMATIC, DEM_APPL_DATA ) NumberOfFilteredDTCForReadinessPtr
 );
 FUNC( Dem_ReturnGetNextFilteredElementType, DEM_CODE ) Dem_DcmGetNextFilteredDTCForReadiness
 (
@@ -343,7 +335,6 @@ FUNC( Std_ReturnType, DEM_CODE ) Dem_DcmGetInfoTypeValue0B
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-8-0         :2024-10-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

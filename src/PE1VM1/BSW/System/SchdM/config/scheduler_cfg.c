@@ -44,7 +44,7 @@
 #include "run_m.h"
 #include "nvmc_mgr.h"
 #include "oxcan.h"
-#include "oxdocan.h"
+#include "oxsec.h"
 #include "ivdsh.h"
 
 #include "gpt_drv_ost.h"
@@ -218,6 +218,7 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     /*                                                                   */
     /*-------------------------------------------------------------------*/
     {&vd_g_iVDshMainReaTask,            (U4)SCHDLR_TASKBIT___5MS    },
+    {&vd_g_oXSECMainPreMid,             (U4)SCHDLR_TASKBIT___5MS    },
     {&vd_g_oXCANMainPreTask,            (U4)SCHDLR_TASKBIT___5MS    },
     {&vd_g_VehopemdMainTask,            (U4)SCHDLR_TASKBIT___5MS    }, /* In case of toyota product, vd_g_VehopemdMainTask shall be    */
                                                                        /* called after vd_g_IoHwDifltSmplgTask                         */ 
@@ -242,8 +243,8 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     /*   5ms Platform Post Task                                          */
     /*                                                                   */
     /*-------------------------------------------------------------------*/
-    {&vd_g_oXDoCANMainTask,             (U4)SCHDLR_TASKBIT___5MS    },
     {&vd_g_oXCANMainPosTask,            (U4)SCHDLR_TASKBIT___5MS    },
+    {&vd_g_oXSECMainPosMid,             (U4)SCHDLR_TASKBIT___5MS    },
     {&vd_g_iVDshMainWriTask,            (U4)SCHDLR_TASKBIT___5MS    },
 
     /*-------------------------------------------------------------------*/

@@ -1,7 +1,7 @@
-/* Dem_Event_FCThreshold_c(v5-9-0)                                          */
+/* Dem_Event_FCThreshold_c(v5-5-0)                                          */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -16,10 +16,9 @@
 #include <Dem.h>
 #include <Dem/Dem_Common.h>
 #include "../../../cfg/Dem_Cfg.h"
-#include "../../../inc/Dem_CmnLib_ConfigInfo.h"
 #include "../../../inc/Dem_CmnLib_CmbEvt.h"
-#include "../../../inc/Dem_Pm_DataAvl.h"
 #include "../../../inc/Dem_Pm_Event.h"
+#include "../../../inc/Dem_CmnLib_ConfigInfo.h"
 
 /*--------------------------------------------------------------------------*/
 /* Macros                                                                   */
@@ -62,6 +61,14 @@ static FUNC( void, DEM_CODE ) Dem_Event_SetFCThresholdValue
     VAR( Dem_u16_EventCtrlIndexType, AUTOMATIC ) EventCtrlIndex,
     VAR( Dem_u08_FailureCounterType, AUTOMATIC ) FailureCycleCounterThreshold
 );
+
+#if ( DEM_COMBINEDEVENT_ONSTORAGE_SUPPORT == STD_ON )
+static FUNC( void, DEM_CODE ) Dem_Event_UpdateFCThresholdValue_InEvtStrgGrp
+(
+    VAR( Dem_u16_EventCtrlIndexType, AUTOMATIC ) EventCtrlIndex
+);
+#endif  /*   ( DEM_COMBINEDEVENT_ONSTORAGE_SUPPORT == STD_ON )      */
+
 
 #define DEM_STOP_SEC_CODE
 #include <Dem_MemMap.h>
@@ -243,9 +250,8 @@ static FUNC( void, DEM_CODE ) Dem_Event_SetFCThresholdValue
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-9-0      | branch changed.                                          */
 /****************************************************************************/
-FUNC( void, DEM_CODE ) Dem_Event_UpdateFCThresholdValue_InEvtStrgGrp
+static FUNC( void, DEM_CODE ) Dem_Event_UpdateFCThresholdValue_InEvtStrgGrp
 (
     VAR( Dem_u16_EventCtrlIndexType, AUTOMATIC ) EventCtrlIndex             /* [PRMCHK:CALLER] */
 )
@@ -257,7 +263,6 @@ FUNC( void, DEM_CODE ) Dem_Event_UpdateFCThresholdValue_InEvtStrgGrp
 
     VAR( Dem_u08_FailureCounterType, AUTOMATIC ) failureCycleCounterThresholdStore;
     VAR( Dem_u08_FailureCounterType, AUTOMATIC ) failureCycleCounterThresholdRequest;
-    VAR( boolean, AUTOMATIC ) availableStatus;
 
     /*  set calibration / configuration value.  */
     eventStrgIndex      =   Dem_CmbEvt_CnvEventCtrlIndex_ToEventStrgIndex( EventCtrlIndex );        /* [GUDCHK:CALLER]EventCtrlIndex *//* [GUD:RET:IF_GUARDED: EventCtrlIndex ]eventStrgIndex */
@@ -269,18 +274,15 @@ FUNC( void, DEM_CODE ) Dem_Event_UpdateFCThresholdValue_InEvtStrgGrp
     failureCycleCounterThresholdStore    =   DEM_CALIB_FAILURECYCLECNT_THRESHOLD_MIN;
     for ( eventCtrlIndexCnt = ( Dem_u16_EventCtrlIndexType )0U; eventCtrlIndexCnt < eventCtrlIndexNum; eventCtrlIndexCnt++ )
     {
-        availableStatus = Dem_DataAvl_GetEvtAvl( eventCtrlIndex );
-        if( availableStatus == (boolean)TRUE )
+        /*  get failure cycle threshold     */
+        failureCycleCounterThresholdRequest  =   Dem_FailureCounterThresholdRequest[ eventCtrlIndex ];  /* [GUDCHK:CALLER]EventCtrlIndex */
+
+        /*  get maximum value in event storage group.       */
+        if ( failureCycleCounterThresholdStore < failureCycleCounterThresholdRequest )
         {
-            /*  get failure cycle threshold     */
-            failureCycleCounterThresholdRequest  =   Dem_FailureCounterThresholdRequest[ eventCtrlIndex ];  /* [GUDCHK:CALLER]EventCtrlIndex */
-    
-            /*  get maximum value in event storage group.       */
-            if ( failureCycleCounterThresholdStore < failureCycleCounterThresholdRequest )
-            {
-                failureCycleCounterThresholdStore    =   failureCycleCounterThresholdRequest;
-            }
+            failureCycleCounterThresholdStore    =   failureCycleCounterThresholdRequest;
         }
+
         /*  get next Index.         */
         eventCtrlIndex  =   Dem_CmbEvt_GetNextEventCtrlIndex_InEvtStrgGrp( eventCtrlIndex );            /* [GUDCHK:CALLER]EventCtrlIndex */
     }
@@ -472,7 +474,6 @@ FUNC( Dem_u08_FailureCounterType, DEM_CODE ) Dem_Event_GetEventFailureCycleCount
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-9-0         :2025-02-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

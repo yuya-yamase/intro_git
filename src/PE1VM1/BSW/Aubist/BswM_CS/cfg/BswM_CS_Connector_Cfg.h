@@ -16,8 +16,6 @@
 /* Include Files                                                            */
 /*--------------------------------------------------------------------------*/
 #include "oxcan_aubif.h"
-#include <Dcm_ComM.h>
-#include <Dcm.h>
 
 /*--------------------------------------------------------------------------*/
 /* Macros                                                                   */
@@ -31,29 +29,29 @@
 #define BSW_BSWM_CS_CFG_FN_BSWM_COMMCHP       (bsw_bswm_cs_BswMComMCrntChPnc_dummy)
 
 /* Dcm API Name */
-#define BSW_BSWM_CS_CFG_FN_DCM_NOCOM          (Dcm_ComM_NoComModeEntered)
-#define BSW_BSWM_CS_CFG_FN_DCM_SILCOM         (Dcm_ComM_SilentComModeEntered)
-#define BSW_BSWM_CS_CFG_FN_DCM_FULCOM         (Dcm_ComM_FullComModeEntered)
-#define BSW_BSWM_CS_CFG_FN_DCM_SOR            (Dcm_StartOfReception)
-#define BSW_BSWM_CS_CFG_FN_DCM_CPRXD          (Dcm_CopyRxData)
-#define BSW_BSWM_CS_CFG_FN_DCM_CPTXD          (Dcm_CopyTxData)
-#define BSW_BSWM_CS_CFG_FN_DCM_TPRXIN         (Dcm_TpRxIndication)
-#define BSW_BSWM_CS_CFG_FN_DCM_TPTXCN         (Dcm_TpTxConfirmation)
-#define BSW_BSWM_CS_CFG_FN_DCM_TXCN           (Dcm_TxConfirmation)
+#define BSW_BSWM_CS_CFG_FN_DCM_NOCOM          (bsw_bswm_cs_DcmNoComMode_dummy)
+#define BSW_BSWM_CS_CFG_FN_DCM_SILCOM         (bsw_bswm_cs_DcmSilentComMode_dummy)
+#define BSW_BSWM_CS_CFG_FN_DCM_FULCOM         (bsw_bswm_cs_DcmFullComMode_dummy)
+#define BSW_BSWM_CS_CFG_FN_DCM_SOR            (bsw_bswm_cs_DcmStartOfRecept_dummy)
+#define BSW_BSWM_CS_CFG_FN_DCM_CPRXD          (bsw_bswm_cs_DcmCopyRxData_dummy)
+#define BSW_BSWM_CS_CFG_FN_DCM_CPTXD          (bsw_bswm_cs_DcmCopyTxData_dummy)
+#define BSW_BSWM_CS_CFG_FN_DCM_TPRXIN         (bsw_bswm_cs_DcmTpRxIndication_dummy)
+#define BSW_BSWM_CS_CFG_FN_DCM_TPTXCN         (bsw_bswm_cs_DcmTpTxConfirm_dummy)
+#define BSW_BSWM_CS_CFG_FN_DCM_TXCN           (bsw_bswm_cs_DcmTxConfirm_dummy)
 
 /* EcuM API Name */
 #define BSW_BSWM_CS_CFG_FN_ECUM_SWUE          (Aubist_UsrSetWakeupEvent)
 
 
 /* CDD Upper(PduR) API Name */
-#define BSW_BSWM_CS_CFG_FN_CDD1UP_TRGT
-#define BSW_BSWM_CS_CFG_FN_CDD1UP_TC
-#define BSW_BSWM_CS_CFG_FN_CDD1UP_RI
-#define BSW_BSWM_CS_CFG_FN_CDD1UP_SOR
-#define BSW_BSWM_CS_CFG_FN_CDD1UP_CPRX
-#define BSW_BSWM_CS_CFG_FN_CDD1UP_CPTX
-#define BSW_BSWM_CS_CFG_FN_CDD1UP_TPRI
-#define BSW_BSWM_CS_CFG_FN_CDD1UP_TPTC
+#define BSW_BSWM_CS_CFG_FN_CDD1UP_TRGT        (BswM_CS_Cdd1UpTriggerTx)
+#define BSW_BSWM_CS_CFG_FN_CDD1UP_TC          (BswM_CS_Cdd1UpTxConfirmation)
+#define BSW_BSWM_CS_CFG_FN_CDD1UP_RI          (BswM_CS_Cdd1UpRxIndication)
+#define BSW_BSWM_CS_CFG_FN_CDD1UP_SOR         (BswM_CS_Cdd1UpStartOfReception)
+#define BSW_BSWM_CS_CFG_FN_CDD1UP_CPRX        (BswM_CS_Cdd1UpCopyRxData)
+#define BSW_BSWM_CS_CFG_FN_CDD1UP_CPTX        (BswM_CS_Cdd1UpCopyTxData)
+#define BSW_BSWM_CS_CFG_FN_CDD1UP_TPRI        (BswM_CS_Cdd1UpTpRxIndication)
+#define BSW_BSWM_CS_CFG_FN_CDD1UP_TPTC        (BswM_CS_Cdd1UpTpTxConfirmation)
 #define BSW_BSWM_CS_CFG_FN_CDD2UP_TRGT
 #define BSW_BSWM_CS_CFG_FN_CDD2UP_TC
 #define BSW_BSWM_CS_CFG_FN_CDD2UP_RI

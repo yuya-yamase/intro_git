@@ -1,7 +1,7 @@
-/* Dem_DTC_PFC_UpdateOrder_Misfire_c(v5-6-0)                                */
+/* Dem_DTC_PFC_UpdateOrder_Misfire_c(v5-5-0)                                */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -88,12 +88,8 @@ static FUNC( void, DEM_CODE ) Dem_DTC_SearchNextSpacePFCRecordIndex
 /* Return Value  | none                                                     */
 /* Notes         |                                                          */
 /*--------------------------------------------------------------------------*/
-/* UpdateRecord  | [UpdRec]PFC                                              */
-/* UpdateRecord  | [UpdRec]PFCMisfire                                       */
-/*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | branch changed.                                          */
-/*   v5-6-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_DTC_UpdatePFCRecordByOrder
 ( void )
@@ -158,8 +154,8 @@ FUNC( void, DEM_CODE ) Dem_DTC_UpdatePFCRecordByOrder
             Dem_DTC_SearchNextSpacePFCRecordIndex( eventStrgIndex, storedPFCMisFireEventStrgIndex, basePFCRecordIndex, &pfcRecordIndex );
 
             /* Set the PFCrecord. */
-            Dem_DTC_SetPFCRecordWithClearCondition( pfcRecordIndex, eventStrgIndex );   /*[UpdRec]PFC */
-            Dem_Misfire_UpdatePermanentCylByOrder( eventStrgIndex );        /*[UpdRec]PFCMisfire */
+            Dem_DTC_SetPFCRecordWithClearCondition( pfcRecordIndex, eventStrgIndex );
+            Dem_Misfire_UpdatePermanentCylByOrder( eventStrgIndex );
 
             if(( pfcRecordIndex != DEM_PFC_RECORD_INDEX_INITIAL ) && ( pfcRecordIndex != misfirePFCRecordIndex ))
             {
@@ -419,7 +415,6 @@ static FUNC( void, DEM_CODE ) Dem_DTC_SearchNextSpacePFCRecordIndex
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-6-0         :2024-01-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

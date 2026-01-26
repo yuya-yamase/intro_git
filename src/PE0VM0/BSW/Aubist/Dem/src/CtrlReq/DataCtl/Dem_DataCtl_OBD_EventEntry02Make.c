@@ -1,7 +1,7 @@
-/* Dem_DataCtl_OBD_EventEntry02Make_c(v5-6-0)                               */
+/* Dem_DataCtl_OBD_EventEntry02Make_c(v5-3-0)                               */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -85,6 +85,8 @@ FUNC( void, DEM_CODE ) Dem_Data_ClearMILOccurrenceOrderInfo
 ( void )
 {
     Dem_TmpEventMemoryEntry.FaultRecord.MILOccurrenceOrder = DEM_FAIL_OCCURRENCE_NUM_INVALID;
+    Dem_TmpEventMemoryEntry.EventMemoryRecordList.NumberOfObdMILDTCs = Dem_TmpEventMemoryEntry.EventMemoryRecordList.NumberOfObdMILDTCs - (Dem_u08_OrderIndexType)1U;
+    Dem_TmpEventMemoryEntry.ResultOfGetMILFaultRegistLocation = DEM_IRT_NG;
     return;
 }
 #endif /* ( DEM_INDICATOR_USE == STD_ON )   */
@@ -190,7 +192,6 @@ static FUNC( void, DEM_CODE ) Dem_Data_SetNextMILFaultOccurrenceOrderToTmp
 /*  v4-0-0         :2020-12-23                                              */
 /*  v5-0-0         :2022-03-29                                              */
 /*  v5-3-0         :2023-03-29                                              */
-/*  v5-6-0         :2024-01-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

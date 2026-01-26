@@ -1,7 +1,7 @@
-/* Dem_FuncTypes_h(v5-9-0)                                                  */
+/* Dem_FuncTypes_h(v5-5-0)                                                  */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 /****************************************************************************/
 /* Object Name  | Dem/FuncTypes/HEADER                                      */
@@ -61,13 +61,13 @@ FUNC( void, DEM_CODE ) Dem_GetVersionInfo
 #endif /* DEM_VERSION_INFO_API -STD_ON- */
 FUNC( Std_ReturnType, DEM_CODE ) Dem_SetEventStatus
 (
-    VAR( Dem_EventIdType, AUTOMATIC ) EventId,    /* port defined argument */
+    VAR( Dem_EventIdType, AUTOMATIC ) EventId,
     VAR( Dem_EventStatusType, AUTOMATIC ) EventStatus
 );
 #if  ( DEM_MONITORDATA_SUPPORT == STD_ON )
 FUNC( Std_ReturnType, DEM_CODE ) Dem_SetEventStatusWithMonitorData
 (
-    VAR( Dem_EventIdType, AUTOMATIC ) EventId,    /* port defined argument */
+    VAR( Dem_EventIdType, AUTOMATIC ) EventId,
     VAR( Dem_EventStatusType, AUTOMATIC ) EventStatus,
     VAR( Dem_MonitorDataType, AUTOMATIC ) monitorData0,
     VAR( Dem_MonitorDataType, AUTOMATIC ) monitorData1
@@ -76,33 +76,33 @@ FUNC( Std_ReturnType, DEM_CODE ) Dem_SetEventStatusWithMonitorData
 #if  ( DEM_USERDEFINEDMEMORY_SUPPORT == STD_ON )
 FUNC( Std_ReturnType, DEM_CODE ) Dem_SetEventFailedWithSyncFreezeFrame
 (
-    VAR( Dem_EventIdType, AUTOMATIC ) EventId    /* port defined argument */
+    VAR( Dem_EventIdType, AUTOMATIC ) EventId
 );
 FUNC( Std_ReturnType, DEM_CODE ) Dem_GetUserDefinedMemoryIdentifier
 (
-    VAR( Dem_EventIdType, AUTOMATIC ) EventId,    /* port defined argument */
+    VAR( Dem_EventIdType, AUTOMATIC ) EventId,
     P2VAR( uint8, AUTOMATIC, DEM_APPL_DATA ) MemoryIdentifierPtr
 );
 #endif /* (DEM_USERDEFINEDMEMORY_SUPPORT == STD_ON) */
 FUNC( Std_ReturnType, DEM_CODE ) Dem_SetWIRStatus
 (
-    VAR( Dem_EventIdType, AUTOMATIC ) EventId,    /* port defined argument */
+    VAR( Dem_EventIdType, AUTOMATIC ) EventId,
     VAR( boolean, AUTOMATIC ) WIRStatus
 );
 FUNC( Std_ReturnType, DEM_CODE ) Dem_GetEventUdsStatus
 (
-    VAR( Dem_EventIdType, AUTOMATIC ) EventId,    /* port defined argument */
+    VAR( Dem_EventIdType, AUTOMATIC ) EventId,
     P2VAR( Dem_UdsStatusByteType, AUTOMATIC, DEM_APPL_DATA ) UDSStatusByte
 );
 FUNC( Std_ReturnType, DEM_CODE ) Dem_GetEventUdsStatusHistory
 (
-    VAR( Dem_EventIdType, AUTOMATIC ) EventId,    /* port defined argument */
+    VAR( Dem_EventIdType, AUTOMATIC ) EventId,
     P2VAR( Dem_UdsStatusHistoryByteType, AUTOMATIC, DEM_APPL_DATA ) UDSStatusHistoryBytePtr
 );
 
 FUNC( Std_ReturnType, DEM_CODE ) Dem_GetDTCOfEvent
 (
-    VAR( Dem_EventIdType, AUTOMATIC ) EventId,    /* port defined argument */
+    VAR( Dem_EventIdType, AUTOMATIC ) EventId,
     VAR( Dem_DTCFormatType, AUTOMATIC ) DTCFormat,
     P2VAR( uint32, AUTOMATIC, DEM_APPL_DATA ) DTCOfEvent
 );
@@ -114,7 +114,7 @@ FUNC( Std_ReturnType, DEM_CODE ) Dem_ClearDTC
 );
 FUNC( Std_ReturnType, DEM_CODE ) Dem_GetEventFreezeFrameDataEx
 (
-    VAR( Dem_EventIdType, AUTOMATIC ) EventId,    /* port defined argument */
+    VAR( Dem_EventIdType, AUTOMATIC ) EventId,
     VAR( uint8, AUTOMATIC ) RecordNumber,
     VAR( uint16, AUTOMATIC ) DataId,
     P2VAR( uint8, AUTOMATIC, DEM_APPL_DATA ) DestBuffer,
@@ -122,43 +122,34 @@ FUNC( Std_ReturnType, DEM_CODE ) Dem_GetEventFreezeFrameDataEx
 );
 FUNC( Std_ReturnType, DEM_CODE ) Dem_GetEventExtendedDataRecordEx
 (
-    VAR( Dem_EventIdType, AUTOMATIC ) EventId,    /* port defined argument */
+    VAR( Dem_EventIdType, AUTOMATIC ) EventId,
     VAR( uint8, AUTOMATIC ) RecordNumber,
     P2VAR( uint8, AUTOMATIC, DEM_APPL_DATA ) DestBuffer,
     P2VAR( uint16, AUTOMATIC, DEM_APPL_DATA ) BufSize
 );
-#if ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON )
-FUNC( Std_ReturnType, DEM_CODE ) Dem_GetCylinderExtendedDataRecordEx
-(
-    VAR(Dem_MisfireCylinderNumberType, AUTOMATIC ) MisfireCylinderNumber,
-    VAR( uint8, AUTOMATIC ) RecordNumber,
-    P2VAR( uint8, AUTOMATIC, DEM_APPL_DATA ) DestBufferPtr,
-    P2VAR( uint16, AUTOMATIC, DEM_APPL_DATA ) BufSizePtr
-);
-#endif /* ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON ) */
 FUNC( Std_ReturnType, DEM_CODE ) Dem_GetNumberOfEventMemoryEntries
 (
-    VAR( Dem_DTCOriginType, AUTOMATIC ) DTCOrigin,    /* port defined argument */
+    VAR( Dem_DTCOriginType, AUTOMATIC ) DTCOrigin,
     P2VAR( uint8, AUTOMATIC, DEM_APPL_DATA ) NumberOfEventMemoryEntries
 );
 FUNC( Std_ReturnType, DEM_CODE ) Dem_RestartOperationCycle
 (
-    VAR( uint8, AUTOMATIC ) OperationCycleId    /* port defined argument */
+    VAR( uint8, AUTOMATIC ) OperationCycleId
 );
 FUNC( Std_ReturnType, DEM_CODE ) Dem_GetIndicatorStatus
 (
-    VAR( uint8, AUTOMATIC ) IndicatorId,    /* port defined argument */
+    VAR( uint8, AUTOMATIC ) IndicatorId,
     P2VAR( Dem_IndicatorStatusType, AUTOMATIC, DEM_APPL_DATA ) IndicatorStatus
 );
 FUNC( Std_ReturnType, DEM_CODE ) Dem_GetIndicatorStatusByEventId
 (
-    VAR( Dem_EventIdType, AUTOMATIC ) EventId,    /* port defined argument */
+    VAR( Dem_EventIdType, AUTOMATIC ) EventId,
     VAR( uint8, AUTOMATIC ) IndicatorId,
     P2VAR( Dem_IndicatorStatusType, AUTOMATIC, DEM_APPL_DATA ) IndicatorStatusPtr
 );
 FUNC( Std_ReturnType, DEM_CODE ) Dem_SetEventAvailable
 (
-    VAR( Dem_EventIdType, AUTOMATIC ) EventId,    /* port defined argument */
+    VAR( Dem_EventIdType, AUTOMATIC ) EventId,
     VAR( boolean, AUTOMATIC ) AvailableStatus
 );
 FUNC( Dem_ReturnControlDTCSettingType, DEM_CODE ) Dem_DisableDTCSetting
@@ -171,89 +162,74 @@ FUNC( Dem_ReturnControlDTCSettingType, DEM_CODE ) Dem_EnableDTCSetting
     VAR( uint32, AUTOMATIC ) DTCGroup,
     VAR( Dem_DTCKindType, AUTOMATIC ) DTCKind
 );
-FUNC( Std_ReturnType, DEM_CODE ) Dem_GetDTCSettingStatus
-(
-    P2VAR( Dem_DTCSettingStatusType, AUTOMATIC, DEM_APPL_DATA ) DTCSettingStatusPtr
-);
 #if ( DEM_TRIGGER_FIM_REPORTS == STD_ON )
 FUNC( Std_ReturnType, DEM_CODE ) Dem_GetMonitorStatus
 (
-    VAR( Dem_EventIdType, AUTOMATIC ) EventId,    /* port defined argument */
+    VAR( Dem_EventIdType, AUTOMATIC ) EventId,
     P2VAR( Dem_MonitorStatusType, AUTOMATIC, DEM_APPL_DATA ) MonitorStatus
 );
 #endif /* DEM_TRIGGER_FIM_REPORTS -STD_ON- */
 FUNC( Std_ReturnType, DEM_CODE ) Dem_SetEventFailureCycleCounterThreshold
 (
-    VAR( Dem_EventIdType, AUTOMATIC ) EventId,    /* port defined argument */
+    VAR( Dem_EventIdType, AUTOMATIC ) EventId,
     VAR( uint8, AUTOMATIC ) FailureCycleCounterThreshold
 );
 FUNC( Std_ReturnType, DEM_CODE ) Dem_ResetEventFailureCycleCounterThreshold
 (
-    VAR( Dem_EventIdType, AUTOMATIC ) EventId    /* port defined argument */
+    VAR( Dem_EventIdType, AUTOMATIC ) EventId
 );
 FUNC( Std_ReturnType, DEM_CODE ) Dem_GetEventFailureCycleCounterThreshold
 (
-    VAR( Dem_EventIdType, AUTOMATIC ) EventId,    /* port defined argument */
+    VAR( Dem_EventIdType, AUTOMATIC ) EventId,
     P2VAR( uint8, AUTOMATIC, AUTOMATIC ) FailureCycleCounterThresholdPtr
 );
 
 FUNC( Std_ReturnType, DEM_CODE ) Dem_InitializeEventStatus
 (
-    VAR( Dem_EventIdType, AUTOMATIC ) EventId    /* port defined argument */
+    VAR( Dem_EventIdType, AUTOMATIC ) EventId
 );
 FUNC( Std_ReturnType, DEM_CODE ) Dem_AgingEventStatus
 (
-    VAR( Dem_EventIdType, AUTOMATIC ) EventId    /* port defined argument */
+    VAR( Dem_EventIdType, AUTOMATIC ) EventId
 );
 FUNC( Std_ReturnType, DEM_CODE ) Dem_NormalizeEventStatus
 (
-    VAR( Dem_EventIdType, AUTOMATIC ) EventId    /* port defined argument */
-);
-FUNC( Std_ReturnType, DEM_CODE ) Dem_ActiveFaultEventStatus
-(
-    VAR( Dem_EventIdType, AUTOMATIC ) EventId    /* port defined argument */
+    VAR( Dem_EventIdType, AUTOMATIC ) EventId
 );
 #if ( DEM_FF_PRESTORAGE_SUPPORT == STD_ON )
 FUNC( Std_ReturnType, DEM_CODE ) Dem_PrestoreFreezeFrame
 (
-    VAR( Dem_EventIdType, AUTOMATIC ) EventId    /* port defined argument */
+    VAR( Dem_EventIdType, AUTOMATIC ) EventId
 );
 FUNC( Std_ReturnType, DEM_CODE ) Dem_ClearPrestoredFreezeFrame
 (
-    VAR( Dem_EventIdType, AUTOMATIC ) EventId    /* port defined argument */
+    VAR( Dem_EventIdType, AUTOMATIC ) EventId
 );
 #endif /* DEM_FF_PRESTORAGE_SUPPORT -STD_ON- */
 FUNC( Std_ReturnType, DEM_CODE ) Dem_GetHealingCounter
 (
-    VAR( Dem_EventIdType, AUTOMATIC ) EventId,    /* port defined argument */
+    VAR( Dem_EventIdType, AUTOMATIC ) EventId,
     P2VAR( uint8, AUTOMATIC, DEM_APPL_DATA ) HealingCounterPtr
 );
 FUNC( Std_ReturnType, DEM_CODE ) Dem_GetAgingCounter
 (
-    VAR( Dem_EventIdType, AUTOMATIC ) EventId,    /* port defined argument */
+    VAR( Dem_EventIdType, AUTOMATIC ) EventId,
     P2VAR( uint8, AUTOMATIC, DEM_APPL_DATA ) AgingCounterPtr
 );
-#if ( DEM_WWH_OBD_SUPPORT == STD_ON )
-FUNC( Std_ReturnType, DEM_CODE ) Dem_GetAgingTime
-(
-    VAR( Dem_EventIdType, AUTOMATIC ) EventId,    /* port defined argument */
-    P2VAR( uint16, AUTOMATIC, DEM_APPL_DATA ) AgingTimePtr
-);
-#endif  /* ( DEM_WWH_OBD_SUPPORT == STD_ON )    */
 FUNC( Std_ReturnType, DEM_CODE ) Dem_GetActiveFault
 (
-    VAR( Dem_EventIdType, AUTOMATIC ) EventId,    /* port defined argument */
+    VAR( Dem_EventIdType, AUTOMATIC ) EventId,
     P2VAR( boolean, AUTOMATIC, DEM_APPL_DATA ) ActiveFaultPtr
 );
 FUNC( Std_ReturnType, DEM_CODE ) Dem_GetFaultOccurrenceDTCOrder
 (
-    VAR( Dem_EventIdType, AUTOMATIC ) EventId,    /* port defined argument */
+    VAR( Dem_EventIdType, AUTOMATIC ) EventId,
     P2VAR( uint16, AUTOMATIC, DEM_APPL_DATA ) OrderPtr
 );
 #if ( DEM_ORDERTYPE_CONFIRMED_USE == STD_ON )
 FUNC( Std_ReturnType, DEM_CODE ) Dem_GetConfirmedDTCOrder
 (
-    VAR( Dem_EventIdType, AUTOMATIC ) EventId,    /* port defined argument */
+    VAR( Dem_EventIdType, AUTOMATIC ) EventId,
     P2VAR( uint16, AUTOMATIC, DEM_APPL_DATA ) OrderPtr
 );
 #endif  /* ( DEM_ORDERTYPE_CONFIRMED_USE == STD_ON )    */
@@ -270,12 +246,12 @@ FUNC( Std_ReturnType, DEM_CODE ) Dem_GetUserDefinedMemoryFreezeFrameRecordNumber
 #if ( DEM_PID_READINESS_SUPPORT == STD_ON )
 FUNC( Std_ReturnType, DEM_CODE ) Dem_ResetEventUdsStatusHistory
 (
-    VAR( Dem_EventIdType, AUTOMATIC ) EventId,    /* port defined argument */
+    VAR( Dem_EventIdType, AUTOMATIC ) EventId,
     VAR( Dem_UdsStatusHistoryByteType, AUTOMATIC ) UDSStatusHistoryByte
 );
 FUNC( Std_ReturnType, DEM_CODE ) Dem_SetEventUdsStatusHistory
 (
-    VAR( Dem_EventIdType, AUTOMATIC ) EventId,    /* port defined argument */
+    VAR( Dem_EventIdType, AUTOMATIC ) EventId,
     VAR( Dem_UdsStatusHistoryByteType, AUTOMATIC ) UDSStatusHistoryByte
 );
 #endif  /* ( DEM_PID_READINESS_SUPPORT == STD_ON )    */
@@ -289,16 +265,14 @@ FUNC( Std_ReturnType, DEM_CODE ) Dem_GetRecordInfoByNvMBlockId
 #endif  /* ( DEM_NVM_SYNC_PROCESS_ENABLE == STD_ON )    */
 FUNC( Std_ReturnType, DEM_CODE ) Dem_GetEventFailureCycleCounter
 (
-    VAR( Dem_EventIdType, AUTOMATIC ) EventId,    /* port defined argument */
+    VAR( Dem_EventIdType, AUTOMATIC ) EventId,
     P2VAR( uint8, AUTOMATIC, DEM_APPL_DATA ) FailureCycleCounterPtr
 );
-#if ( DEM_GETOCCURRENCECOUNTER_SUPPORT == STD_ON )
 FUNC( Std_ReturnType, DEM_CODE ) Dem_GetEventOccurrenceCounter
 (
-    VAR( Dem_EventIdType, AUTOMATIC ) EventId,    /* port defined argument */
+    VAR( Dem_EventIdType, AUTOMATIC ) EventId,
     P2VAR( uint8, AUTOMATIC, DEM_APPL_DATA ) OccurrenceCounterPtr
 );
-#endif  /* ( DEM_GETOCCURRENCECOUNTER_SUPPORT == STD_ON )   */
 FUNC( Std_ReturnType, DEM_CODE ) Dem_GetEventIdWithPendingDTC
 (
     P2VAR( Dem_EventIdType, AUTOMATIC, DEM_APPL_DATA ) EventIdBufferPtr,
@@ -316,13 +290,6 @@ FUNC( Std_ReturnType, DEM_CODE ) Dem_GetEventIdWithConfirmedDTC
     P2VAR( uint16, AUTOMATIC, DEM_APPL_DATA ) EventIdNumPtr
 );
 #endif  /* ( DEM_OBD_SUPPORT == STD_ON )    */
-#if ( DEM_GET_UDSDTC_BY_CONFIRMED_ORDER_SUPPORT == STD_ON )
-FUNC( Std_ReturnType, DEM_CODE ) Dem_GetUDSDTCByConfirmedDTCOrder
-(
-    P2VAR( uint32, AUTOMATIC, DEM_APPL_DATA ) UDSDTCBufferPtr,
-    P2VAR( uint16, AUTOMATIC, DEM_APPL_DATA ) UDSDTCNumPtr
-);
-#endif  /* ( DEM_GET_UDSDTC_BY_CONFIRMED_ORDER_SUPPORT == STD_ON )  */
 
 /*--------------------------------------*/
 /*  Dem_If_OBD                          */
@@ -384,11 +351,11 @@ FUNC( Std_ReturnType, DEM_CODE ) Dem_SetDataOfPID4E
 #if ( DEM_CYCLEQUALIFIED_SUPPORT == STD_ON )
 FUNC( Std_ReturnType, DEM_CODE ) Dem_SetCycleQualified
 (
-    VAR( uint8, AUTOMATIC ) OperationCycleId    /* port defined argument */
+    VAR( uint8, AUTOMATIC ) OperationCycleId
 );
 FUNC( Std_ReturnType, DEM_CODE ) Dem_GetCycleQualified
 (
-    VAR( uint8, AUTOMATIC ) OperationCycleId,    /* port defined argument */
+    VAR( uint8, AUTOMATIC ) OperationCycleId,
     P2VAR( boolean, AUTOMATIC, DEM_APPL_DATA ) IsQualified
 );
 #endif  /* ( DEM_CYCLEQUALIFIED_SUPPORT == STD_ON )     */
@@ -396,7 +363,7 @@ FUNC( Std_ReturnType, DEM_CODE ) Dem_GetCycleQualified
 #if ( DEM_OBD_SUPPORT == STD_ON )
 FUNC( Std_ReturnType, DEM_CODE ) Dem_GetEventKind
 (
-    VAR( Dem_EventIdType, AUTOMATIC ) EventId,    /* port defined argument */
+    VAR( Dem_EventIdType, AUTOMATIC ) EventId,
     P2VAR( Dem_EventKindType, AUTOMATIC, DEM_APPL_DATA ) EventKindPtr,
     P2VAR( Dem_DTCSeverityType, AUTOMATIC, DEM_APPL_DATA ) DTCClassPtr,
     P2VAR( boolean, AUTOMATIC, DEM_APPL_DATA ) IsMILIndicatorPtr
@@ -418,14 +385,14 @@ FUNC( Std_ReturnType, DEM_CODE ) Dem_GetPermanentOBDDTC
 #endif  /* ( DEM_OBDDTC_FORMAT_SUPPORT == STD_ON )             */
 FUNC( Std_ReturnType, DEM_CODE ) Dem_GetClearPFCCycleQualified
 (
-    VAR( Dem_EventIdType, AUTOMATIC ) EventId,    /* port defined argument */
+    VAR( Dem_EventIdType, AUTOMATIC ) EventId,
     P2VAR( boolean, AUTOMATIC, DEM_APPL_DATA ) PassedCycleQualifiedPtr,
     P2VAR( boolean, AUTOMATIC, DEM_APPL_DATA ) DrivingConditionQualifiedPtr,
     P2VAR( boolean, AUTOMATIC, DEM_APPL_DATA ) PFCCycleQualifiedPtr
 );
 FUNC( Std_ReturnType, DEM_CODE ) Dem_CheckExistPermanentDTCByEventId
 (
-    VAR( Dem_EventIdType, AUTOMATIC ) EventId,    /* port defined argument */
+    VAR( Dem_EventIdType, AUTOMATIC ) EventId,
     P2VAR( boolean, AUTOMATIC, DEM_APPL_DATA ) IsPermanentDTCPtr
 );
 FUNC( Std_ReturnType, DEM_CODE ) Dem_GetEventIdWithPermanentDTC
@@ -440,8 +407,6 @@ FUNC( Std_ReturnType, DEM_CODE ) Dem_DisablePFCRecordUpdate
 FUNC( Std_ReturnType, DEM_CODE ) Dem_EnablePFCRecordUpdate
 ( void );
 #endif /* DEM_PFC_RECORD_SUPPRESSION_SUPPORT -STD_ON- */
-FUNC( Std_ReturnType, DEM_CODE ) Dem_ClearAllPFC
-( void );
 #endif /* DEM_PFC_SUPPORT -STD_ON- */
 
 #if ( DEM_OBDONEDS_SUPPORT == STD_ON )
@@ -461,7 +426,7 @@ FUNC( Std_ReturnType, DEM_CODE ) Dem_ReadDataOfOBDFreezeFrame
 #if ( DEM_PID_READINESS_SUPPORT == STD_ON )
 FUNC( Std_ReturnType, DEM_CODE ) Dem_SetEventDisabled
 (
-    VAR( Dem_EventIdType, AUTOMATIC ) EventId    /* port defined argument */
+    VAR( Dem_EventIdType, AUTOMATIC ) EventId
 );
 #endif /* DEM_PID_READINESS_SUPPORT -STD_ON- */
 
@@ -478,7 +443,7 @@ FUNC( Std_ReturnType, DEM_CODE ) Dem_ReadDataOfAltIUMPRDenominator
 #if ( DEM_DTR_SUPPORT == STD_ON )
 FUNC( Std_ReturnType, DEM_CODE ) Dem_SetDTR
 (
-    VAR( uint16, AUTOMATIC ) DTRId,    /* port defined argument */
+    VAR( uint16, AUTOMATIC ) DTRId,
     VAR( sint32, AUTOMATIC ) TestResult,
     VAR( sint32, AUTOMATIC ) LowerLimit,
     VAR( sint32, AUTOMATIC ) UpperLimit,
@@ -487,22 +452,13 @@ FUNC( Std_ReturnType, DEM_CODE ) Dem_SetDTR
 #if ( DEM_DTR_RAWDATASTORAGE_SUPPORT == STD_ON )
 FUNC( Std_ReturnType, DEM_CODE ) Dem_GetDTR
 (
-    VAR( uint16, AUTOMATIC ) DTRId,    /* port defined argument */
+    VAR( uint16, AUTOMATIC ) DTRId,
     P2VAR( sint32, AUTOMATIC, DEM_APPL_DATA ) TestResultPtr,
     P2VAR( sint32, AUTOMATIC, DEM_APPL_DATA ) LowerLimitPtr,
     P2VAR( sint32, AUTOMATIC, DEM_APPL_DATA ) UpperLimitPtr,
     P2VAR( Dem_DTRControlType, AUTOMATIC, DEM_APPL_DATA ) CtrlvalPtr
 );
 #endif /* DEM_DTR_RAWDATASTORAGE_SUPPORT -STD_ON- */
-FUNC( Std_ReturnType, DEM_CODE ) Dem_GetDTRConvertInfo
-(
-    VAR( uint16, AUTOMATIC ) DTRId,    /* port defined argument */
-    P2VAR( uint8, AUTOMATIC, DEM_APPL_DATA ) DtrMidPtr,
-    P2VAR( uint8, AUTOMATIC, DEM_APPL_DATA ) DtrTidPtr,
-    P2VAR( uint8, AUTOMATIC, DEM_APPL_DATA ) DtrUasidPtr,
-    P2VAR( sint32, AUTOMATIC, DEM_APPL_DATA ) CompuN0DivD0Ptr,
-    P2VAR( sint32, AUTOMATIC, DEM_APPL_DATA ) CompuN1DivD0Ptr
-);
 #endif /* DEM_DTR_SUPPORT -STD_ON- */
 
 /*--------------------------------------*/
@@ -522,15 +478,15 @@ FUNC( Std_ReturnType, DEM_CODE ) Dem_SetIUMPRDenCondition
 #if ( DEM_IUMPR_RATIO_SUPPORT == STD_ON )
 FUNC( Std_ReturnType, DEM_CODE ) Dem_RepIUMPRDenRelease
 (
-    VAR( Dem_RatioIdType, AUTOMATIC ) RatioID    /* port defined argument */
+    VAR( Dem_RatioIdType, AUTOMATIC ) RatioID
 );
 FUNC( Std_ReturnType, DEM_CODE ) Dem_RepIUMPRFaultDetect
 (
-    VAR( Dem_RatioIdType, AUTOMATIC ) RatioID    /* port defined argument */
+    VAR( Dem_RatioIdType, AUTOMATIC ) RatioID
 );
 FUNC( Std_ReturnType, DEM_CODE ) Dem_GetIUMPRDataByRatioId
 (
-    VAR( Dem_RatioIdType, AUTOMATIC )           RatioID,    /* port defined argument */
+    VAR( Dem_RatioIdType, AUTOMATIC )           RatioID,
     P2VAR( uint16, AUTOMATIC, DEM_APPL_DATA )   NumeratorPtr,
     P2VAR( uint16, AUTOMATIC, DEM_APPL_DATA )   DenominatorPtr
 );
@@ -551,12 +507,12 @@ FUNC( Std_ReturnType, DEM_CODE ) Dem_GetIUMPRInfoTypeValue
 );
 FUNC( Std_ReturnType, DEM_CODE ) Dem_GetEventIdByRatioId
 (
-    VAR( Dem_RatioIdType, AUTOMATIC )                   RatioID,    /* port defined argument */
+    VAR( Dem_RatioIdType, AUTOMATIC )                   RatioID,
     P2VAR( Dem_EventIdType, AUTOMATIC, DEM_APPL_DATA )  EventIdPtr
 );
 FUNC( Std_ReturnType, DEM_CODE ) Dem_GetRatioIdByEventId
 (
-    VAR( Dem_EventIdType, AUTOMATIC ) EventId,    /* port defined argument */
+    VAR( Dem_EventIdType, AUTOMATIC ) EventId,
     P2VAR( Dem_RatioIdType, AUTOMATIC, DEM_APPL_DATA ) RatioIdBufferPtr,
     P2VAR( uint16, AUTOMATIC, DEM_APPL_DATA ) RatioIdNumPtr
 );
@@ -579,7 +535,7 @@ FUNC( Std_ReturnType, DEM_CODE ) Dem_JudgeMinimumRatioThanCurrentRatio
 #if ( DEM_SPECIFIC_EVENT_SUPPORT == STD_ON )
 FUNC( Std_ReturnType, DEM_CODE ) Dem_SetSpecificEventStatus
 (
-    VAR( Dem_EventIdType, AUTOMATIC ) EventId,    /* port defined argument */
+    VAR( Dem_EventIdType, AUTOMATIC ) EventId,
     VAR( Dem_EventStatusType, AUTOMATIC ) EventStatus,
     P2CONST( Dem_SpecificEventConditionType, AUTOMATIC, DEM_APPL_DATA ) SpecificConditionPtr
 );
@@ -587,22 +543,22 @@ FUNC( Std_ReturnType, DEM_CODE ) Dem_SetSpecificEventStatus
 #if ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON )
 FUNC( Std_ReturnType, DEM_CODE ) Dem_GetCurrentFailedCylinder
 (
-    VAR( Dem_EventIdType, AUTOMATIC ) EventId,    /* port defined argument */
+    VAR( Dem_EventIdType, AUTOMATIC ) EventId,
     P2VAR( Dem_MisfireCylinderStatusType, AUTOMATIC, DEM_APPL_DATA ) CylinderPtr
 );
 FUNC( Std_ReturnType, DEM_CODE ) Dem_GetFailedCylinderAtThisOC
 (
-    VAR( Dem_EventIdType, AUTOMATIC ) EventId,    /* port defined argument */
+    VAR( Dem_EventIdType, AUTOMATIC ) EventId,
     P2VAR( Dem_MisfireCylinderStatusType, AUTOMATIC, DEM_APPL_DATA ) CylinderPtr
 );
 FUNC( Std_ReturnType, DEM_CODE ) Dem_GetFailedCylinderSinceLastClear
 (
-    VAR( Dem_EventIdType, AUTOMATIC ) EventId,    /* port defined argument */
+    VAR( Dem_EventIdType, AUTOMATIC ) EventId,
     P2VAR( Dem_MisfireCylinderStatusType, AUTOMATIC, DEM_APPL_DATA ) CylinderPtr
 );
 FUNC( Std_ReturnType, DEM_CODE ) Dem_GetFailedCylinder
 (
-    VAR( Dem_EventIdType, AUTOMATIC ) EventId,    /* port defined argument */
+    VAR( Dem_EventIdType, AUTOMATIC ) EventId,
     P2VAR( Dem_MisfireCylinderStatusType, AUTOMATIC, DEM_APPL_DATA ) CylinderPtr
 );
 FUNC( Std_ReturnType, DEM_CODE ) Dem_SetExceedanceUsedForMisfireEmission
@@ -618,20 +574,14 @@ FUNC( Std_ReturnType, DEM_CODE ) Dem_GetCylinderDTCStatus
 #if ( DEM_SIMILAR_EVENT_CONFIGURED == STD_ON )
 FUNC( Std_ReturnType, DEM_CODE ) Dem_GetPendingClearCounter
 (
-    VAR( Dem_EventIdType, AUTOMATIC ) EventId,    /* port defined argument */
+    VAR( Dem_EventIdType, AUTOMATIC ) EventId,
     P2VAR( uint8, AUTOMATIC, DEM_APPL_DATA ) PendingClearCounterPtr
-);
-FUNC( Std_ReturnType, DEM_CODE ) Dem_GetSimilarCondition
-(
-    VAR( Dem_EventIdType, AUTOMATIC ) EventId,    /* port defined argument */
-    P2VAR( Dem_SimilarConditionValueType, AUTOMATIC, DEM_APPL_DATA ) SimilarConditionArrayPtr,
-    P2VAR( Dem_SimilarConditionStatusType, AUTOMATIC, DEM_APPL_DATA ) SimilarConditionStatusPtr
 );
 #endif  /* ( DEM_SIMILAR_EVENT_CONFIGURED == STD_ON )   */
 #if ( DEM_SPECIFIC_EVENT_SUPPORT == STD_ON )
 FUNC( Std_ReturnType, DEM_CODE ) Dem_GetExceedanceCounter
 (
-    VAR( Dem_EventIdType, AUTOMATIC ) EventId,    /* port defined argument */
+    VAR( Dem_EventIdType, AUTOMATIC ) EventId,
     P2VAR( uint8, AUTOMATIC, DEM_APPL_DATA ) ExceedanceCounterPtr
 );
 #endif  /* ( DEM_SPECIFIC_EVENT_SUPPORT == STD_ON )   */
@@ -651,7 +601,7 @@ FUNC( Std_ReturnType, DEM_CODE ) Dem_GetB1Counter
 );
 FUNC( Std_ReturnType, DEM_CODE ) Dem_GetB1CounterByEventId
 (
-    VAR( Dem_EventIdType, AUTOMATIC ) EventId,    /* port defined argument */
+    VAR( Dem_EventIdType, AUTOMATIC ) EventId,
     P2VAR( uint16, AUTOMATIC, DEM_APPL_DATA ) B1CounterPtr
 );
 
@@ -670,9 +620,6 @@ FUNC( Std_ReturnType, DEM_CODE ) Dem_GetB1CounterByEventId
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-6-0         :2024-01-29                                              */
-/*  v5-8-0         :2024-10-29                                              */
-/*  v5-9-0         :2025-02-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

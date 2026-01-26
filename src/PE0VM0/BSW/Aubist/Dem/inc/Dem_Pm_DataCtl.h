@@ -1,7 +1,7 @@
-/* Dem_Pm_DataCtl_h(v5-9-0)                                                 */
+/* Dem_Pm_DataCtl_h(v5-5-0)                                                 */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -45,18 +45,6 @@ typedef struct
     boolean                             JudgeOutputTSFFDFlag;
     boolean                             AlreadyOutputBeforeTSFFDStatus;
 } Dem_TmpCheckRecordDataType;
-
-typedef struct {
-    Dem_u16_TSFFDIndexType TSFFRecIndex;
-    Dem_u16_FFRecNumStoredIndexType FFRecNumStoredIndex;
-    Dem_u08_OrderIndexType OrderOfFaultIndex;
-    Dem_u08_FaultIndexType FaultIndex;
-    Dem_u08_FFListIndexType ObdRecordNumberIndex;
-    Dem_u08_FFListIndexType RecordNumberIndex;
-    Dem_u08_TSFFListPerDTCIndexType TSFFListIndex;
-    Dem_MisfireCylinderNumberType MisfireCylinderNum;
-    boolean GetFaultIndexFlag;
-} Dem_FilteredRecordSearchInfoType;
 
 /*--------------------------------------------------------------------------*/
 /* Function Prototypes                                                      */
@@ -102,15 +90,6 @@ FUNC( void, DEM_CODE ) Dem_Data_SaveDisabledRecord
     VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex,
     VAR( Dem_MisfireCylinderNumberType, AUTOMATIC ) MisfireCylinderNumber
 );
-
-#if ( DEM_COMBINEDEVENT_ONRETRIEVAL_SUPPORT == STD_ON )
-FUNC( void, DEM_CODE ) Dem_Data_MakeTmpRecordNumberByDTC
-(
-    VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex,
-    VAR( Dem_MisfireCylinderNumberType, AUTOMATIC ) MisfireCylinderNumber
-);
-#endif  /*   ( DEM_COMBINEDEVENT_ONRETRIEVAL_SUPPORT == STD_ON )    */
-
 FUNC( void, DEM_CODE ) Dem_Data_ClearDisabledRecord
 ( void );
 FUNC( Dem_UdsStatusByteType, DEM_CODE ) Dem_Data_GetDTCStatusOfDisabledRecord
@@ -200,10 +179,8 @@ FUNC( void, DEM_CODE ) Dem_Data_GetFailureCounterFromTmp
 );
 FUNC( void, DEM_CODE ) Dem_Data_IncrementFailureCounterOfTmp
 ( void );
-#if ( DEM_GETOCCURRENCECOUNTER_SUPPORT == STD_ON )
 FUNC( void, DEM_CODE ) Dem_Data_IncrementEventOccurrenceCounterOfTmp
 ( void );
-#endif  /* ( DEM_GETOCCURRENCECOUNTER_SUPPORT == STD_ON )   */
 
 /*--------------------------------------*/
 /*  Dem_DataCtl_EventEntry02Make_Fault  */
@@ -297,7 +274,11 @@ FUNC( void, DEM_CODE ) Dem_Data_GetNumberOfFilteredRecords
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_GetFilteredRecord
 (
     VAR( Dem_DTCFormatType, AUTOMATIC ) DTCFormat,
-    P2VAR( Dem_FilteredRecordSearchInfoType, AUTOMATIC, DEM_VAR_NO_INIT ) FilteredRecordSearchInfoPtr,
+    VAR( Dem_u08_FaultIndexType, AUTOMATIC ) FaultIndex,
+    P2VAR( Dem_u08_FFListIndexType, AUTOMATIC, AUTOMATIC ) ObdRecordNumberIndexPtr,
+    P2VAR( Dem_u08_FFListIndexType, AUTOMATIC, AUTOMATIC ) RecordNumberIndexPtr,
+    P2VAR( Dem_u08_TSFFListPerDTCIndexType, AUTOMATIC, AUTOMATIC ) TSFFListIndexPtr,
+    P2VAR( Dem_u16_TSFFDIndexType, AUTOMATIC, AUTOMATIC ) TSFFRecIndexPtr,
     P2VAR( Dem_u32_DTCValueType, AUTOMATIC, AUTOMATIC ) DTCValuePtr,
     P2VAR( Dem_u08_FFRecordNumberType, AUTOMATIC, AUTOMATIC ) RecordNumberPtr
 );
@@ -366,7 +347,8 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_GetEventFreezeFrameData
     P2VAR( uint8, AUTOMATIC, DEM_APPL_DATA ) DestBufferPtr,
     P2VAR( Dem_u16_FFDStoredIndexType, AUTOMATIC, AUTOMATIC ) BufSizePtr
 );
-#if ( DEM_OBDONEDS_SUPPORT == STD_ON )
+#if ( DEM_OBDFFD_SUPPORT == STD_ON )
+#if ( DEM_OBDFFD_DID_SUPPORT == STD_OFF )
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_GetFFRecordByPidData
 (
     VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex,
@@ -376,7 +358,8 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_GetFFRecordByPidData
     P2VAR( uint8, AUTOMATIC, DEM_APPL_DATA ) DestBufferPtr,
     P2VAR( Dem_u16_FFDStoredIndexType, AUTOMATIC, AUTOMATIC ) BufSizePtr
 );
-#endif  /*   ( DEM_OBDONEDS_SUPPORT == STD_ON )      */
+#endif  /* ( DEM_OBDFFD_DID_SUPPORT == STD_OFF )       */
+#endif  /*   ( DEM_OBDFFD_SUPPORT == STD_ON )      */
 
 FUNC( void, DEM_CODE ) Dem_Data_ResetSearchStartPosition
 ( void );
@@ -459,17 +442,6 @@ FUNC( void, DEM_CODE ) Dem_Data_UpdateSpecificEventMemoryEntryFromTmp
 );
 #endif  /* ( DEM_SPECIFIC_EVENT_SUPPORT == STD_ON )    */
 
-/*---------------------------------------*/
-/*  Dem_DataCtl_SpecificEventEntry.c     */
-/*---------------------------------------*/
-#if ( DEM_GET_UDSDTC_BY_CONFIRMED_ORDER_SUPPORT == STD_ON )
-FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_GetConfirmedUDSDTCAndOrder
-(
-    P2VAR( Dem_u08_OrderIndexType, AUTOMATIC, AUTOMATIC ) ConfirmedOrderListIndexPtr,
-    P2VAR( Dem_u32_DTCValueType, AUTOMATIC, AUTOMATIC ) ConfirmedDTCPtr,
-    P2VAR( Dem_u16_OccrOrderType, AUTOMATIC, AUTOMATIC ) ConfirmedOccurrenceOrderPtr
-);
-#endif  /* ( DEM_GET_UDSDTC_BY_CONFIRMED_ORDER_SUPPORT== STD_ON )   */
 
 #define DEM_STOP_SEC_CODE
 #include <Dem_MemMap.h>
@@ -488,10 +460,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_GetConfirmedUDSDTCAndOrder
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-6-0         :2024-01-29                                              */
-/*  v5-7-0         :2024-05-29                                              */
-/*  v5-8-0         :2024-10-29                                              */
-/*  v5-9-0         :2025-02-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

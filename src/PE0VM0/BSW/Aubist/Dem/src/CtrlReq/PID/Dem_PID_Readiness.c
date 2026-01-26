@@ -1,7 +1,7 @@
-/* Dem_PID_Readiness_c(v5-7-0)                                              */
+/* Dem_PID_Readiness_c(v5-5-0)                                              */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -32,11 +32,6 @@
 #include "../../../inc/Dem_CmnLib_ConfigInfo.h"
 #include "../../../inc/Dem_Rc_OpCycleMng.h"
 #include "../../../usr/Dem_Readiness_Callout.h"
-
-#ifndef DEM_SIT_RANGE_CHECK
-#else   /* DEM_SIT_RANGE_CHECK */
-#include <Dem_SIT_RangeCheck.h>
-#endif  /* DEM_SIT_RANGE_CHECK */
 
 /*--------------------------------------------------------------------------*/
 /* Macros                                                                   */
@@ -82,10 +77,6 @@
 
 static FUNC( void, DEM_CODE ) Dem_PID_CalcReadinessData
 (
-#ifndef DEM_SIT_RANGE_CHECK
-#else   /* DEM_SIT_RANGE_CHECK */
-    VAR( uint8, AUTOMATIC ) ReadinessDataSize,
-#endif  /* DEM_SIT_RANGE_CHECK */
     CONSTP2VAR( uint8, AUTOMATIC, DEM_APPL_DATA ) ReadinessDataPtr,
     VAR( Dem_u08_ReadinessCondType, AUTOMATIC )   Supportinfo,
     VAR( Dem_u08_ReadinessCondType, AUTOMATIC )   Completeinfo,
@@ -94,10 +85,6 @@ static FUNC( void, DEM_CODE ) Dem_PID_CalcReadinessData
 );
 static FUNC( void, DEM_CODE ) Dem_PID_CalcInitReadinessData
 (
-#ifndef DEM_SIT_RANGE_CHECK
-#else   /* DEM_SIT_RANGE_CHECK */
-    VAR( uint8, AUTOMATIC ) ReadinessDataSize,
-#endif  /* DEM_SIT_RANGE_CHECK */
     CONSTP2VAR( uint8, AUTOMATIC, DEM_APPL_DATA ) ReadinessDataPtr,
     VAR( Dem_u08_ReadinessCondType, AUTOMATIC )   Supportinfo,
     VAR( Dem_u08_ReadinessCondType, AUTOMATIC )   Completeinfo,
@@ -201,7 +188,6 @@ static FUNC( void, DEM_CODE ) Dem_PID_CalcInitReadinessCompleteInfo
 /* History       |                                                          */
 /*   v5-5-0      | rename from Dem_PID_ReadDataOfPID01AndPIDF501(v5-3-0).   */
 /*   v5-5-0      | branch changed.                                          */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_PID_ReadReadinessDataOfPID01AndPIDF501
 (
@@ -234,11 +220,6 @@ FUNC( void, DEM_CODE ) Dem_PID_ReadReadinessDataOfPID01AndPIDF501
     VAR( Dem_OperationCycleStateType, AUTOMATIC ) cycleState;
 #endif  /*   ( DEM_OBD_MASTER_SUPPORT == STD_ON )           */
 
-#ifndef DEM_SIT_RANGE_CHECK
-#else   /* DEM_SIT_RANGE_CHECK */
-    VAR( uint8, AUTOMATIC ) readinessDataSize;
-#endif  /* DEM_SIT_RANGE_CHECK */
-
     extreaminfoB   = DEM_PID_EXINFO_INITVALUE;
     extreaminfoC   = DEM_PID_EXINFO_INITVALUE;
     extreaminfoD   = DEM_PID_EXINFO_INITVALUE;
@@ -252,11 +233,11 @@ FUNC( void, DEM_CODE ) Dem_PID_ReadReadinessDataOfPID01AndPIDF501
     supportinfoE   = DEM_READINESS_SUPPORTCOND_ALL;
     supportinfoF   = DEM_READINESS_SUPPORTCOND_ALL;
 
-    passedHistoryCheckEnableInfo[DEM_PID_COMPLETE_POS0] = DEM_PID_PASSEDHISTORY_CHKENABLE_INITVALUE;/* [ARYCHK] DEM_PID_DATA_NUM_PIDF501 / 1 / DEM_PID_COMPLETE_POS0 */
-    passedHistoryCheckEnableInfo[DEM_PID_COMPLETE_POS1] = DEM_PID_PASSEDHISTORY_CHKENABLE_INITVALUE;/* [ARYCHK] DEM_PID_DATA_NUM_PIDF501 / 1 / DEM_PID_COMPLETE_POS1 */
-    passedHistoryCheckEnableInfo[DEM_PID_COMPLETE_POS2] = DEM_PID_PASSEDHISTORY_CHKENABLE_INITVALUE;/* [ARYCHK] DEM_PID_DATA_NUM_PIDF501 / 1 / DEM_PID_COMPLETE_POS2 */
-    passedHistoryCheckEnableInfo[DEM_PID_COMPLETE_POS3] = DEM_PID_PASSEDHISTORY_CHKENABLE_INITVALUE;/* [ARYCHK] DEM_PID_DATA_NUM_PIDF501 / 1 / DEM_PID_COMPLETE_POS3 */
-    passedHistoryCheckEnableInfo[DEM_PID_COMPLETE_POS4] = DEM_PID_PASSEDHISTORY_CHKENABLE_INITVALUE;/* [ARYCHK] DEM_PID_DATA_NUM_PIDF501 / 1 / DEM_PID_COMPLETE_POS4 */
+    passedHistoryCheckEnableInfo[DEM_PID_COMPLETE_POS0] = DEM_PID_PASSEDHISTORY_CHKENABLE_INITVALUE;
+    passedHistoryCheckEnableInfo[DEM_PID_COMPLETE_POS1] = DEM_PID_PASSEDHISTORY_CHKENABLE_INITVALUE;
+    passedHistoryCheckEnableInfo[DEM_PID_COMPLETE_POS2] = DEM_PID_PASSEDHISTORY_CHKENABLE_INITVALUE;
+    passedHistoryCheckEnableInfo[DEM_PID_COMPLETE_POS3] = DEM_PID_PASSEDHISTORY_CHKENABLE_INITVALUE;
+    passedHistoryCheckEnableInfo[DEM_PID_COMPLETE_POS4] = DEM_PID_PASSEDHISTORY_CHKENABLE_INITVALUE;
 
     readinessKind   =   ReadinessCaller + ReadinessDataKind;
 #if ( DEM_READINESSSUPPORT_BY_CALLOUT_SUPPORT == STD_ON )   /*  [FuncSw]    */
@@ -264,36 +245,31 @@ FUNC( void, DEM_CODE ) Dem_PID_ReadReadinessDataOfPID01AndPIDF501
 #endif  /* ( DEM_READINESSSUPPORT_BY_CALLOUT_SUPPORT == STD_ON )            */
     Dem_JudgeReadinessConditions( readinessKind, &extreaminfoB, &extreaminfoC, &extreaminfoD, &extreaminfoE, &extreaminfoF, &completeinfoB );
 
-    completeinfo[DEM_PID_COMPLETE_POS0] = completeinfoB | extreaminfoB;/* [ARYCHK] DEM_PID_DATA_NUM_PIDF501 / 1 / DEM_PID_COMPLETE_POS0 */
-    supportinfo[DEM_PID_COMPLETE_POS0]  = supportinfoB;/* [ARYCHK] DEM_PID_DATA_NUM_PIDF501 / 1 / DEM_PID_COMPLETE_POS0 */
+    completeinfo[DEM_PID_COMPLETE_POS0] = completeinfoB | extreaminfoB;
+    supportinfo[DEM_PID_COMPLETE_POS0]  = supportinfoB;
 
     if( ReadinessDataKind == DEM_READINESS_PIDF401 )
     {
         Dem_PID_SetInitFixedValue( ReadinessDataPtr );
         numberOfReadinesData = DEM_PID_DATA_NUM_PID01;
         dataByteKind = DEM_PID_CALC_PID01_TYPEB;
-        completeinfo[DEM_PID_COMPLETE_POS1] = extreaminfoD;/* [ARYCHK] DEM_PID_DATA_NUM_PIDF501 / 1 / DEM_PID_COMPLETE_POS1 */
-        supportinfo[DEM_PID_COMPLETE_POS1]  = supportinfoC;/* [ARYCHK] DEM_PID_DATA_NUM_PIDF501 / 1 / DEM_PID_COMPLETE_POS1 */
-
-#ifndef DEM_SIT_RANGE_CHECK
-#else   /* DEM_SIT_RANGE_CHECK */
-        readinessDataSize = DEM_SIT_R_CHK_PID01_SIZE;
-#endif  /* DEM_SIT_RANGE_CHECK */
+        completeinfo[DEM_PID_COMPLETE_POS1] = extreaminfoD;
+        supportinfo[DEM_PID_COMPLETE_POS1]  = supportinfoC;
     }
     else
     {
         Dem_PID_SetInitFixedValueOfPIDF501( ReadinessDataPtr );
         numberOfReadinesData = DEM_PID_DATA_NUM_PIDF501;
         dataByteKind = DEM_PID_CALC_PIDF501_TYPEB;
-        completeinfo[DEM_PID_COMPLETE_POS1] = extreaminfoC;/* [ARYCHK] DEM_PID_DATA_NUM_PIDF501 / 1 / DEM_PID_COMPLETE_POS1 */
-        completeinfo[DEM_PID_COMPLETE_POS2] = extreaminfoD;/* [ARYCHK] DEM_PID_DATA_NUM_PIDF501 / 1 / DEM_PID_COMPLETE_POS2 */
-        completeinfo[DEM_PID_COMPLETE_POS3] = extreaminfoE;/* [ARYCHK] DEM_PID_DATA_NUM_PIDF501 / 1 / DEM_PID_COMPLETE_POS3 */
-        completeinfo[DEM_PID_COMPLETE_POS4] = extreaminfoF;/* [ARYCHK] DEM_PID_DATA_NUM_PIDF501 / 1 / DEM_PID_COMPLETE_POS4 */
+        completeinfo[DEM_PID_COMPLETE_POS1] = extreaminfoC;
+        completeinfo[DEM_PID_COMPLETE_POS2] = extreaminfoD;
+        completeinfo[DEM_PID_COMPLETE_POS3] = extreaminfoE;
+        completeinfo[DEM_PID_COMPLETE_POS4] = extreaminfoF;
 
-        supportinfo[DEM_PID_COMPLETE_POS1]  = supportinfoC;/* [ARYCHK] DEM_PID_DATA_NUM_PIDF501 / 1 / DEM_PID_COMPLETE_POS1 */
-        supportinfo[DEM_PID_COMPLETE_POS2]  = supportinfoD;/* [ARYCHK] DEM_PID_DATA_NUM_PIDF501 / 1 / DEM_PID_COMPLETE_POS2 */
-        supportinfo[DEM_PID_COMPLETE_POS3]  = supportinfoE;/* [ARYCHK] DEM_PID_DATA_NUM_PIDF501 / 1 / DEM_PID_COMPLETE_POS3 */
-        supportinfo[DEM_PID_COMPLETE_POS4]  = supportinfoF;/* [ARYCHK] DEM_PID_DATA_NUM_PIDF501 / 1 / DEM_PID_COMPLETE_POS4 */
+        supportinfo[DEM_PID_COMPLETE_POS1]  = supportinfoC;
+        supportinfo[DEM_PID_COMPLETE_POS2]  = supportinfoD;
+        supportinfo[DEM_PID_COMPLETE_POS3]  = supportinfoE;
+        supportinfo[DEM_PID_COMPLETE_POS4]  = supportinfoF;
 
 #if ( DEM_OBD_MASTER_SUPPORT == STD_ON )    /*  [FuncSw]    */
         engine4000rpmOccurredIndex  =   Dem_ConfDemOperationCycleEngine4000RPMOccurred;
@@ -304,26 +280,15 @@ FUNC( void, DEM_CODE ) Dem_PID_ReadReadinessDataOfPID01AndPIDF501
         {
             /*  engine 4000prm is not occurred.     */
             /*  OFF the passed history check enable flag(DEM_PIDF5XX_EXTREMEBIT_MISF).  */
-            passedHistoryCheckEnableInfo[DEM_PID_COMPLETE_POS0] = DEM_PID_PASSEDHISTORY_CHKENABLE_INITVALUE & ~DEM_PIDF5XX_EXTREMEBIT_MISF;/* [ARYCHK] DEM_PID_DATA_NUM_PIDF501 / 1 / DEM_PID_COMPLETE_POS0 */
+            passedHistoryCheckEnableInfo[DEM_PID_COMPLETE_POS0] = DEM_PID_PASSEDHISTORY_CHKENABLE_INITVALUE & ~DEM_PIDF5XX_EXTREMEBIT_MISF;
         }
 #endif  /* ( DEM_OBD_MASTER_SUPPORT == STD_ON )             */
-
-#ifndef DEM_SIT_RANGE_CHECK
-#else   /* DEM_SIT_RANGE_CHECK */
-        readinessDataSize = DEM_SIT_R_CHK_PIDF501_SIZE;
-#endif  /* DEM_SIT_RANGE_CHECK */
-
     }
 
     /* Caluculate Readiness Info */
     for( loopCount = (uint8)0U; loopCount < numberOfReadinesData; loopCount++ )
     {
-#ifndef DEM_SIT_RANGE_CHECK
-        Dem_PID_CalcReadinessData( ReadinessDataPtr, supportinfo[loopCount], completeinfo[loopCount], passedHistoryCheckEnableInfo[loopCount], dataByteKind );/* [ARYCHK] DEM_PID_DATA_NUM_PIDF501 / 1 / loopCount *//* [ARYCHK] DEM_PID_DATA_NUM_PIDF501 / 1 / loopCount *//* [ARYCHK] DEM_PID_DATA_NUM_PIDF501 / 1 / loopCount */
-#else   /* DEM_SIT_RANGE_CHECK */
-        Dem_PID_CalcReadinessData( readinessDataSize, ReadinessDataPtr, supportinfo[loopCount], completeinfo[loopCount], passedHistoryCheckEnableInfo[loopCount], dataByteKind );/* [ARYCHK] DEM_PID_DATA_NUM_PIDF501 / 1 / loopCount *//* [ARYCHK] DEM_PID_DATA_NUM_PIDF501 / 1 / loopCount *//* [ARYCHK] DEM_PID_DATA_NUM_PIDF501 / 1 / loopCount */
-#endif  /* DEM_SIT_RANGE_CHECK */
-
+        Dem_PID_CalcReadinessData( ReadinessDataPtr, supportinfo[loopCount], completeinfo[loopCount], passedHistoryCheckEnableInfo[loopCount], dataByteKind );
         dataByteKind = dataByteKind + (Dem_u08_ReadinessDataPositionIndexType)1U;
     }
 
@@ -344,7 +309,6 @@ FUNC( void, DEM_CODE ) Dem_PID_ReadReadinessDataOfPID01AndPIDF501
 /* History       |                                                          */
 /*   v5-5-0      | rename from Dem_PID_ReadDataOfPID41(v5-3-0).             */
 /*   v5-5-0      | branch changed.                                          */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_PID_ReadReadinessDataOfPID41
 (
@@ -383,7 +347,7 @@ FUNC( void, DEM_CODE ) Dem_PID_ReadReadinessDataOfPID41
     supportinfoF   = DEM_READINESS_SUPPORTCOND_ALL;
 #endif  /* ( DEM_READINESSSUPPORT_BY_CALLOUT_SUPPORT == STD_ON )            */
 
-    PID41value[DEM_PID_POS0] = DEM_PID41_BYTE_A;/* [ARYCHK] DEM_SIT_R_CHK_PID41_SIZE / 1 / DEM_PID_POS0 */
+    PID41value[DEM_PID_POS0] = DEM_PID41_BYTE_A;
 
     readinessKind   =   ReadinessCaller + DEM_READINESS_PIDF441;
 #if ( DEM_READINESSSUPPORT_BY_CALLOUT_SUPPORT == STD_ON )   /*  [FuncSw]    */
@@ -396,13 +360,8 @@ FUNC( void, DEM_CODE ) Dem_PID_ReadReadinessDataOfPID41
     Dem_PID_SetInitFixedValue( PID41value );
 
     /* Caluculate PID41 Readiness Info */
-#ifndef DEM_SIT_RANGE_CHECK
     Dem_PID_CalcReadinessData( PID41value, supportinfoB, completeinfoB, DEM_PID_PASSEDHISTORY_CHKENABLE_INITVALUE, DEM_PID_CALC_PID41_TYPEB );
     Dem_PID_CalcReadinessData( PID41value, supportinfoC, extreaminfoD, DEM_PID_PASSEDHISTORY_CHKENABLE_INITVALUE, DEM_PID_CALC_PID41_TYPECD );
-#else   /* DEM_SIT_RANGE_CHECK */
-    Dem_PID_CalcReadinessData( DEM_SIT_R_CHK_PID41_SIZE, PID41value, supportinfoB, completeinfoB, DEM_PID_PASSEDHISTORY_CHKENABLE_INITVALUE, DEM_PID_CALC_PID41_TYPEB );
-    Dem_PID_CalcReadinessData( DEM_SIT_R_CHK_PID41_SIZE, PID41value, supportinfoC, extreaminfoD, DEM_PID_PASSEDHISTORY_CHKENABLE_INITVALUE, DEM_PID_CALC_PID41_TYPECD );
-#endif  /* DEM_SIT_RANGE_CHECK */
 
     return;
 }
@@ -417,9 +376,6 @@ FUNC( void, DEM_CODE ) Dem_PID_ReadReadinessDataOfPID41
 /*               |        by the Dem.                                       */
 /* Return Value  | void                                                     */
 /* Notes         | -                                                        */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_PID_SetInitFixedValue
 (
@@ -432,14 +388,14 @@ FUNC( void, DEM_CODE ) Dem_PID_SetInitFixedValue
 
     if( obdEngineType == (Dem_u08_OBDEngineType)DEM_IGNITION_SPARK )
     {
-        PIDvalue[DEM_PID_POS1] = DEM_PID_BYTE_B_SPARK;/* [ARYCHK] DEM_SIT_R_CHK_PID01_SIZE / 1 / DEM_PID_POS1 */
+        PIDvalue[DEM_PID_POS1] = DEM_PID_BYTE_B_SPARK;
     }
     else
     {
-        PIDvalue[DEM_PID_POS1] = DEM_PID_BYTE_B_COMPRESSION;/* [ARYCHK] DEM_SIT_R_CHK_PID01_SIZE / 1 / DEM_PID_POS1 */
+        PIDvalue[DEM_PID_POS1] = DEM_PID_BYTE_B_COMPRESSION;
     }
-    PIDvalue[DEM_PID_POS2] = DEM_PID_BYTE_DATA_COMMON;/* [ARYCHK] DEM_SIT_R_CHK_PID01_SIZE / 1 / DEM_PID_POS2 */
-    PIDvalue[DEM_PID_POS3] = DEM_PID_BYTE_DATA_COMMON;/* [ARYCHK] DEM_SIT_R_CHK_PID01_SIZE / 1 / DEM_PID_POS3 */
+    PIDvalue[DEM_PID_POS2] = DEM_PID_BYTE_DATA_COMMON;
+    PIDvalue[DEM_PID_POS3] = DEM_PID_BYTE_DATA_COMMON;
 
     return;
 }
@@ -453,9 +409,6 @@ FUNC( void, DEM_CODE ) Dem_PID_SetInitFixedValue
 /*               |        by the Dem.                                       */
 /* Return Value  | void                                                     */
 /* Notes         | -                                                        */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_PID_SetEngType
 (
@@ -472,7 +425,7 @@ FUNC( void, DEM_CODE ) Dem_PID_SetEngType
     }
     else
     {
-        PIDvalue[DEM_PID_POS1] |= DEM_PID_BYTE_B_COMPRESSION;/* [ARYCHK] DEM_SIT_R_CHK_PID01_SIZE / 1 / DEM_PID_POS1 */
+        PIDvalue[DEM_PID_POS1] |= DEM_PID_BYTE_B_COMPRESSION;
     }
 
     return;
@@ -488,20 +441,17 @@ FUNC( void, DEM_CODE ) Dem_PID_SetEngType
 /*               |        by the Dem.                                       */
 /* Return Value  | void                                                     */
 /* Notes         | -                                                        */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_PID_SetInitFixedValueOfPIDF501
 (
     CONSTP2VAR( uint8, AUTOMATIC, DEM_APPL_DATA ) PIDvalue
 )
 {
-    PIDvalue[DEM_PID_POS1] = DEM_PID_BYTE_DATA_COMMON;/* [ARYCHK] DEM_SIT_R_CHK_PIDF501_SIZE / 1 / DEM_PID_POS1 */
-    PIDvalue[DEM_PID_POS2] = DEM_PID_BYTE_DATA_COMMON;/* [ARYCHK] DEM_SIT_R_CHK_PIDF501_SIZE / 1 / DEM_PID_POS2 */
-    PIDvalue[DEM_PID_POS3] = DEM_PID_BYTE_DATA_COMMON;/* [ARYCHK] DEM_SIT_R_CHK_PIDF501_SIZE / 1 / DEM_PID_POS3 */
-    PIDvalue[DEM_PID_POS4] = DEM_PID_BYTE_DATA_COMMON;/* [ARYCHK] DEM_SIT_R_CHK_PIDF501_SIZE / 1 / DEM_PID_POS4 */
-    PIDvalue[DEM_PID_POS5] = DEM_PID_BYTE_DATA_COMMON;/* [ARYCHK] DEM_SIT_R_CHK_PIDF501_SIZE / 1 / DEM_PID_POS5 */
+    PIDvalue[DEM_PID_POS1] = DEM_PID_BYTE_DATA_COMMON;
+    PIDvalue[DEM_PID_POS2] = DEM_PID_BYTE_DATA_COMMON;
+    PIDvalue[DEM_PID_POS3] = DEM_PID_BYTE_DATA_COMMON;
+    PIDvalue[DEM_PID_POS4] = DEM_PID_BYTE_DATA_COMMON;
+    PIDvalue[DEM_PID_POS5] = DEM_PID_BYTE_DATA_COMMON;
 
     return;
 }
@@ -530,14 +480,9 @@ FUNC( void, DEM_CODE ) Dem_PID_SetInitFixedValueOfPIDF501
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_PID_CalcReadinessData
 (
-#ifndef DEM_SIT_RANGE_CHECK
-#else   /* DEM_SIT_RANGE_CHECK */
-    VAR( uint8, AUTOMATIC ) ReadinessDataSize,
-#endif  /* DEM_SIT_RANGE_CHECK */
     CONSTP2VAR( uint8, AUTOMATIC, DEM_APPL_DATA ) ReadinessDataPtr,
     VAR( Dem_u08_ReadinessCondType, AUTOMATIC )   Supportinfo,
     VAR( Dem_u08_ReadinessCondType, AUTOMATIC )   Completeinfo,
@@ -557,11 +502,11 @@ static FUNC( void, DEM_CODE ) Dem_PID_CalcReadinessData
 
     if( ( CalcType == DEM_PID_CALC_PID41_TYPEB ) || ( CalcType == DEM_PID_CALC_PID41_TYPECD ) )
     {
-        Dem_PID_CalcReadinessInfoPID41(  &ReadinessDataPtr[supportByte], &ReadinessDataPtr[readinessStsByte], Supportinfo, Completeinfo, statusSetPos, readinessGrpNum, CalcType );                                         /* [GUDCHK:CALLER]CalcType *//* [ARYCHK] ReadinessDataSize / 1 / supportByte *//* [ARYCHK] ReadinessDataSize / 1 / readinessStsByte */
+        Dem_PID_CalcReadinessInfoPID41(  &ReadinessDataPtr[supportByte], &ReadinessDataPtr[readinessStsByte], Supportinfo, Completeinfo, statusSetPos, readinessGrpNum, CalcType );                                         /* [GUDCHK:CALLER]CalcType */
     }
     else
     {
-        Dem_PID_CalcReadinessInfoPID01AndPIDF501(  &ReadinessDataPtr[supportByte], &ReadinessDataPtr[readinessStsByte], Supportinfo, Completeinfo, PassedHistoryCheckEnableInfo, statusSetPos, readinessGrpNum, CalcType ); /* [GUDCHK:CALLER]CalcType *//* [ARYCHK] ReadinessDataSize / 1 / supportByte *//* [ARYCHK] ReadinessDataSize / 1 / readinessStsByte */
+        Dem_PID_CalcReadinessInfoPID01AndPIDF501(  &ReadinessDataPtr[supportByte], &ReadinessDataPtr[readinessStsByte], Supportinfo, Completeinfo, PassedHistoryCheckEnableInfo, statusSetPos, readinessGrpNum, CalcType ); /* [GUDCHK:CALLER]CalcType */
     }
 
     return;
@@ -588,14 +533,9 @@ static FUNC( void, DEM_CODE ) Dem_PID_CalcReadinessData
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_PID_CalcInitReadinessData
 (
-#ifndef DEM_SIT_RANGE_CHECK
-#else   /* DEM_SIT_RANGE_CHECK */
-    VAR( uint8, AUTOMATIC ) ReadinessDataSize,
-#endif  /* DEM_SIT_RANGE_CHECK */
     CONSTP2VAR( uint8, AUTOMATIC, DEM_APPL_DATA ) ReadinessDataPtr,
     VAR( Dem_u08_ReadinessCondType, AUTOMATIC )   Supportinfo,
     VAR( Dem_u08_ReadinessCondType, AUTOMATIC )   Completeinfo,
@@ -610,7 +550,7 @@ static FUNC( void, DEM_CODE ) Dem_PID_CalcInitReadinessData
     statusSetPos = Dem_ReadinessDataPositionTable[CalcType].StatusSetPos;               /* [GUDCHK:CALLER]CalcType *//* [GUD:CFG:IF_GUARDED: CalcType ]statusSetPos */
     readinessGrpNum = Dem_ReadinessDataPositionTable[CalcType].ReadinessGrpNum;         /* [GUDCHK:CALLER]CalcType *//* [GUD:CFG:IF_GUARDED: CalcType ]readinessGrpNum */
 
-    Dem_PID_CalcInitReadinessInfo( &ReadinessDataPtr[readinessStsByte], Supportinfo, Completeinfo, statusSetPos, readinessGrpNum, CalcType );   /* [GUDCHK:CALLER]CalcType *//* [ARYCHK] ReadinessDataSize / 1 / readinessStsByte */
+    Dem_PID_CalcInitReadinessInfo( &ReadinessDataPtr[readinessStsByte], Supportinfo, Completeinfo, statusSetPos, readinessGrpNum, CalcType );   /* [GUDCHK:CALLER]CalcType */
 
     return;
 }
@@ -1223,14 +1163,9 @@ FUNC( void, DEM_CODE ) Dem_PID_ClearAllEventDisable
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_PID_CalcInitReadinessBaseSupportAndCompleteData
 (
-#ifndef DEM_SIT_RANGE_CHECK
-#else   /* DEM_SIT_RANGE_CHECK */
-    VAR( uint8, AUTOMATIC ) ReadinessDataSize,
-#endif  /* DEM_SIT_RANGE_CHECK */
     CONSTP2VAR( uint8, AUTOMATIC, DEM_APPL_DATA ) ReadinessDataPtr,
     VAR( Dem_u08_ReadinessDataPositionIndexType, AUTOMATIC )    CalcType        /* [PRMCHK:CALLER] */
 )
@@ -1245,9 +1180,9 @@ FUNC( void, DEM_CODE ) Dem_PID_CalcInitReadinessBaseSupportAndCompleteData
     statusSetPos = Dem_ReadinessDataPositionTable[CalcType].StatusSetPos;           /* [GUDCHK:CALLER]CalcType *//* [GUD:CFG:IF_GUARDED: CalcType ]statusSetPos */
     readinessGrpNum = Dem_ReadinessDataPositionTable[CalcType].ReadinessGrpNum;     /* [GUDCHK:CALLER]CalcType *//* [GUD:CFG:IF_GUARDED: CalcType ]readinessGrpNum */
 
-    ReadinessDataPtr[supportByte]       =   (uint8)0U;  /*  initialize  */          /* [GUDCHK:CALLER]CalcType *//* [ARYCHK] ReadinessDataSize / 1 / supportByte */
-    ReadinessDataPtr[readinessStsByte]  =   (uint8)0U;  /*  initialize  */          /* [GUDCHK:CALLER]CalcType *//* [ARYCHK] ReadinessDataSize / 1 / readinessStsByte */
-    Dem_PID_CalcInitReadinessCompleteInfo(  &ReadinessDataPtr[supportByte], &ReadinessDataPtr[readinessStsByte],  statusSetPos,  readinessGrpNum,  CalcType );  /* [GUDCHK:CALLER]CalcType *//* [ARYCHK] ReadinessDataSize / 1 / supportByte *//* [ARYCHK] ReadinessDataSize / 1 / readinessStsByte */
+    ReadinessDataPtr[supportByte]       =   (uint8)0U;  /*  initialize  */          /* [GUDCHK:CALLER]CalcType */
+    ReadinessDataPtr[readinessStsByte]  =   (uint8)0U;  /*  initialize  */          /* [GUDCHK:CALLER]CalcType */
+    Dem_PID_CalcInitReadinessCompleteInfo(  &ReadinessDataPtr[supportByte], &ReadinessDataPtr[readinessStsByte],  statusSetPos,  readinessGrpNum,  CalcType );  /* [GUDCHK:CALLER]CalcType */
 
     return;
 }
@@ -1314,7 +1249,6 @@ static FUNC( void, DEM_CODE ) Dem_PID_CalcInitReadinessCompleteInfo
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_PID_GetInitDataOfReadinessBaseSupportAndComplete
 (
@@ -1332,19 +1266,19 @@ FUNC( void, DEM_CODE ) Dem_PID_GetInitDataOfReadinessBaseSupportAndComplete
     {
         initNoCmpData0 = Dem_InitNoCompletePID01Data;
 
-        ReadinessDataPtr[DEM_PID_POS0] = (uint8)( initNoCmpData0 >> DEM_PID_DATA_BITSHIFT_24 );/* [ARYCHK] 4 / 1 / DEM_PID_POS0 */
-        ReadinessDataPtr[DEM_PID_POS1] = (uint8)( initNoCmpData0 >> DEM_PID_DATA_BITSHIFT_16 );/* [ARYCHK] 4 / 1 / DEM_PID_POS1 */
-        ReadinessDataPtr[DEM_PID_POS2] = (uint8)( initNoCmpData0 >> DEM_PID_DATA_BITSHIFT_8 );/* [ARYCHK] 4 / 1 / DEM_PID_POS2 */
-        ReadinessDataPtr[DEM_PID_POS3] = (uint8)( initNoCmpData0 );/* [ARYCHK] 4 / 1 / DEM_PID_POS3 */
+        ReadinessDataPtr[DEM_PID_POS0] = (uint8)( initNoCmpData0 >> DEM_PID_DATA_BITSHIFT_24 );
+        ReadinessDataPtr[DEM_PID_POS1] = (uint8)( initNoCmpData0 >> DEM_PID_DATA_BITSHIFT_16 );
+        ReadinessDataPtr[DEM_PID_POS2] = (uint8)( initNoCmpData0 >> DEM_PID_DATA_BITSHIFT_8 );
+        ReadinessDataPtr[DEM_PID_POS3] = (uint8)( initNoCmpData0 );
     }
     else if ( readinessKind == DEM_READINESS_PIDF441 )
     {
         initNoCmpData0 = Dem_InitNoCompletePID41Data;
 
-        ReadinessDataPtr[DEM_PID_POS0] = (uint8)( initNoCmpData0 >> DEM_PID_DATA_BITSHIFT_24 );/* [ARYCHK] 4 / 1 / DEM_PID_POS0 */
-        ReadinessDataPtr[DEM_PID_POS1] = (uint8)( initNoCmpData0 >> DEM_PID_DATA_BITSHIFT_16 );/* [ARYCHK] 4 / 1 / DEM_PID_POS1 */
-        ReadinessDataPtr[DEM_PID_POS2] = (uint8)( initNoCmpData0 >> DEM_PID_DATA_BITSHIFT_8 );/* [ARYCHK] 4 / 1 / DEM_PID_POS2 */
-        ReadinessDataPtr[DEM_PID_POS3] = (uint8)( initNoCmpData0 );/* [ARYCHK] 4 / 1 / DEM_PID_POS3 */
+        ReadinessDataPtr[DEM_PID_POS0] = (uint8)( initNoCmpData0 >> DEM_PID_DATA_BITSHIFT_24 );
+        ReadinessDataPtr[DEM_PID_POS1] = (uint8)( initNoCmpData0 >> DEM_PID_DATA_BITSHIFT_16 );
+        ReadinessDataPtr[DEM_PID_POS2] = (uint8)( initNoCmpData0 >> DEM_PID_DATA_BITSHIFT_8 );
+        ReadinessDataPtr[DEM_PID_POS3] = (uint8)( initNoCmpData0 );
     }
     else
     {
@@ -1352,12 +1286,12 @@ FUNC( void, DEM_CODE ) Dem_PID_GetInitDataOfReadinessBaseSupportAndComplete
         initNoCmpData0 = Dem_InitNoCompletePIDF501Data0;
         initNoCmpData1 = Dem_InitNoCompletePIDF501Data1;
 
-        ReadinessDataPtr[DEM_PID_POS0] = (uint8)( initNoCmpData0 >> DEM_PID_DATA_BITSHIFT_24 );/* [ARYCHK] 6 / 1 / DEM_PID_POS0 */
-        ReadinessDataPtr[DEM_PID_POS1] = (uint8)( initNoCmpData0 >> DEM_PID_DATA_BITSHIFT_16 );/* [ARYCHK] 6 / 1 / DEM_PID_POS1 */
-        ReadinessDataPtr[DEM_PID_POS2] = (uint8)( initNoCmpData0 >> DEM_PID_DATA_BITSHIFT_8 );/* [ARYCHK] 6 / 1 / DEM_PID_POS2 */
-        ReadinessDataPtr[DEM_PID_POS3] = (uint8)( initNoCmpData0 );/* [ARYCHK] 6 / 1 / DEM_PID_POS3 */
-        ReadinessDataPtr[DEM_PID_POS4] = (uint8)( initNoCmpData1 >> DEM_PID_DATA_BITSHIFT_24 );/* [ARYCHK] 6 / 1 / DEM_PID_POS4 */
-        ReadinessDataPtr[DEM_PID_POS5] = (uint8)( initNoCmpData1 >> DEM_PID_DATA_BITSHIFT_16 );/* [ARYCHK] 6 / 1 / DEM_PID_POS5 */
+        ReadinessDataPtr[DEM_PID_POS0] = (uint8)( initNoCmpData0 >> DEM_PID_DATA_BITSHIFT_24 );
+        ReadinessDataPtr[DEM_PID_POS1] = (uint8)( initNoCmpData0 >> DEM_PID_DATA_BITSHIFT_16 );
+        ReadinessDataPtr[DEM_PID_POS2] = (uint8)( initNoCmpData0 >> DEM_PID_DATA_BITSHIFT_8 );
+        ReadinessDataPtr[DEM_PID_POS3] = (uint8)( initNoCmpData0 );
+        ReadinessDataPtr[DEM_PID_POS4] = (uint8)( initNoCmpData1 >> DEM_PID_DATA_BITSHIFT_24 );
+        ReadinessDataPtr[DEM_PID_POS5] = (uint8)( initNoCmpData1 >> DEM_PID_DATA_BITSHIFT_16 );
     }
 
     return;
@@ -1380,7 +1314,6 @@ FUNC( void, DEM_CODE ) Dem_PID_GetInitDataOfReadinessBaseSupportAndComplete
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_PID_GetInitDataOfReadinessBaseSupportAndComplete
 (
@@ -1391,10 +1324,6 @@ FUNC( void, DEM_CODE ) Dem_PID_GetInitDataOfReadinessBaseSupportAndComplete
     VAR( uint8, AUTOMATIC ) loopCount;
     VAR( uint8, AUTOMATIC ) numberOfReadinesData;
     VAR( Dem_u08_ReadinessDataPositionIndexType, AUTOMATIC ) dataByteKind;
-#ifndef DEM_SIT_RANGE_CHECK
-#else   /* DEM_SIT_RANGE_CHECK */
-    VAR( uint8, AUTOMATIC ) readinessDataSize;
-#endif  /* DEM_SIT_RANGE_CHECK */
 
     VAR( Dem_u08_ReadinessKindType, AUTOMATIC ) readinessKind;
     readinessKind   =   ReadinessDataKind;
@@ -1404,54 +1333,39 @@ FUNC( void, DEM_CODE ) Dem_PID_GetInitDataOfReadinessBaseSupportAndComplete
         numberOfReadinesData = DEM_PID_DATA_NUM_PID01;
         dataByteKind = DEM_PID_CALC_PID01_TYPEB;
 
-        ReadinessDataPtr[DEM_PID_POS0] = (uint8)0U;/* [ARYCHK] DEM_SIT_R_CHK_PID01_SIZE / 1 / DEM_PID_POS0 */
-        ReadinessDataPtr[DEM_PID_POS1] = (uint8)0U;/* [ARYCHK] DEM_SIT_R_CHK_PID01_SIZE / 1 / DEM_PID_POS1 */
-        ReadinessDataPtr[DEM_PID_POS2] = (uint8)0U;/* [ARYCHK] DEM_SIT_R_CHK_PID01_SIZE / 1 / DEM_PID_POS2 */
-        ReadinessDataPtr[DEM_PID_POS3] = (uint8)0U;/* [ARYCHK] DEM_SIT_R_CHK_PID01_SIZE / 1 / DEM_PID_POS3 */
-#ifndef DEM_SIT_RANGE_CHECK
-#else   /* DEM_SIT_RANGE_CHECK */
-        readinessDataSize = DEM_SIT_R_CHK_PID01_SIZE;
-#endif  /* DEM_SIT_RANGE_CHECK */
+        ReadinessDataPtr[DEM_PID_POS0] = (uint8)0U;
+        ReadinessDataPtr[DEM_PID_POS1] = (uint8)0U;
+        ReadinessDataPtr[DEM_PID_POS2] = (uint8)0U;
+        ReadinessDataPtr[DEM_PID_POS3] = (uint8)0U;
+
     }
     else if( readinessKind == DEM_READINESS_PIDF441 )
     {
         numberOfReadinesData = DEM_PID_DATA_NUM_PID41;
         dataByteKind = DEM_PID_CALC_PID41_TYPEB;
 
-        ReadinessDataPtr[DEM_PID_POS0] = (uint8)0U;/* [ARYCHK] DEM_SIT_R_CHK_PID41_SIZE / 1 / DEM_PID_POS0 */
-        ReadinessDataPtr[DEM_PID_POS1] = (uint8)0U;/* [ARYCHK] DEM_SIT_R_CHK_PID41_SIZE / 1 / DEM_PID_POS1 */
-        ReadinessDataPtr[DEM_PID_POS2] = (uint8)0U;/* [ARYCHK] DEM_SIT_R_CHK_PID41_SIZE / 1 / DEM_PID_POS2 */
-        ReadinessDataPtr[DEM_PID_POS3] = (uint8)0U;/* [ARYCHK] DEM_SIT_R_CHK_PID41_SIZE / 1 / DEM_PID_POS3 */
-#ifndef DEM_SIT_RANGE_CHECK
-#else   /* DEM_SIT_RANGE_CHECK */
-        readinessDataSize = DEM_SIT_R_CHK_PID41_SIZE;
-#endif  /* DEM_SIT_RANGE_CHECK */
+        ReadinessDataPtr[DEM_PID_POS0] = (uint8)0U;
+        ReadinessDataPtr[DEM_PID_POS1] = (uint8)0U;
+        ReadinessDataPtr[DEM_PID_POS2] = (uint8)0U;
+        ReadinessDataPtr[DEM_PID_POS3] = (uint8)0U;
     }
     else
     {
         numberOfReadinesData = DEM_PID_DATA_NUM_PIDF501;
         dataByteKind = DEM_PID_CALC_PIDF501_TYPEB;
 
-        ReadinessDataPtr[DEM_PID_POS0] = (uint8)0U;/* [ARYCHK] DEM_SIT_R_CHK_PIDF501_SIZE / 1 / DEM_PID_POS0 */
-        ReadinessDataPtr[DEM_PID_POS1] = (uint8)0U;/* [ARYCHK] DEM_SIT_R_CHK_PIDF501_SIZE / 1 / DEM_PID_POS1 */
-        ReadinessDataPtr[DEM_PID_POS2] = (uint8)0U;/* [ARYCHK] DEM_SIT_R_CHK_PIDF501_SIZE / 1 / DEM_PID_POS2 */
-        ReadinessDataPtr[DEM_PID_POS3] = (uint8)0U;/* [ARYCHK] DEM_SIT_R_CHK_PIDF501_SIZE / 1 / DEM_PID_POS3 */
-        ReadinessDataPtr[DEM_PID_POS4] = (uint8)0U;/* [ARYCHK] DEM_SIT_R_CHK_PIDF501_SIZE / 1 / DEM_PID_POS4 */
-        ReadinessDataPtr[DEM_PID_POS5] = (uint8)0U;/* [ARYCHK] DEM_SIT_R_CHK_PIDF501_SIZE / 1 / DEM_PID_POS5 */
-#ifndef DEM_SIT_RANGE_CHECK
-#else   /* DEM_SIT_RANGE_CHECK */
-        readinessDataSize = DEM_SIT_R_CHK_PIDF501_SIZE;
-#endif  /* DEM_SIT_RANGE_CHECK */
+        ReadinessDataPtr[DEM_PID_POS0] = (uint8)0U;
+        ReadinessDataPtr[DEM_PID_POS1] = (uint8)0U;
+        ReadinessDataPtr[DEM_PID_POS2] = (uint8)0U;
+        ReadinessDataPtr[DEM_PID_POS3] = (uint8)0U;
+        ReadinessDataPtr[DEM_PID_POS4] = (uint8)0U;
+        ReadinessDataPtr[DEM_PID_POS5] = (uint8)0U;
     }
 
     /* Caluculate Readiness Info */
     for( loopCount = (uint8)0U; loopCount < numberOfReadinesData; loopCount++ )
     {
-#ifndef DEM_SIT_RANGE_CHECK
         Dem_PID_CalcInitReadinessBaseSupportAndCompleteData( ReadinessDataPtr, dataByteKind );
-#else   /* DEM_SIT_RANGE_CHECK */
-        Dem_PID_CalcInitReadinessBaseSupportAndCompleteData( readinessDataSize, ReadinessDataPtr, dataByteKind );
-#endif  /* DEM_SIT_RANGE_CHECK */
         dataByteKind = dataByteKind + (Dem_u08_ReadinessDataPositionIndexType)1U;
     }
 
@@ -1475,7 +1389,6 @@ FUNC( void, DEM_CODE ) Dem_PID_GetInitDataOfReadinessBaseSupportAndComplete
 /* History       |                                                          */
 /*   v5-5-0      | rename from Dem_PID_InitReadData(v5-3-0).                */
 /*   v5-5-0      | no branch changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_PID_InitReadReadinessData
 (
@@ -1503,11 +1416,6 @@ FUNC( void, DEM_CODE ) Dem_PID_InitReadReadinessData
     VAR( uint8, AUTOMATIC ) loopCount;
     VAR( Dem_u08_ReadinessKindType, AUTOMATIC ) readinessKind;
 
-#ifndef DEM_SIT_RANGE_CHECK
-#else   /* DEM_SIT_RANGE_CHECK */
-    VAR( uint8, AUTOMATIC ) readinessDataSize;
-#endif  /* DEM_SIT_RANGE_CHECK */
-
     extreaminfoB   = DEM_PID_EXINFO_INITVALUE;
     extreaminfoC   = DEM_PID_EXINFO_INITVALUE;
     extreaminfoD   = DEM_PID_EXINFO_INITVALUE;
@@ -1527,60 +1435,44 @@ FUNC( void, DEM_CODE ) Dem_PID_InitReadReadinessData
 #endif  /* ( DEM_READINESSSUPPORT_BY_CALLOUT_SUPPORT == STD_ON )            */
     Dem_JudgeReadinessConditions( readinessKind, &extreaminfoB, &extreaminfoC, &extreaminfoD, &extreaminfoE, &extreaminfoF, &completeinfoB );
 
-    completeinfo[DEM_PID_COMPLETE_POS0] = completeinfoB | extreaminfoB;/* [ARYCHK] DEM_PID_DATA_NUM_PIDF501 / 1 / DEM_PID_COMPLETE_POS0 */
-    supportinfo[DEM_PID_COMPLETE_POS0]  = supportinfoB;/* [ARYCHK] DEM_PID_DATA_NUM_PIDF501 / 1 / DEM_PID_COMPLETE_POS0 */
+    completeinfo[DEM_PID_COMPLETE_POS0] = completeinfoB | extreaminfoB;
+    supportinfo[DEM_PID_COMPLETE_POS0]  = supportinfoB;
 
     if( ReadinessDataKind == DEM_READINESS_PIDF401 )
     {
         Dem_PID_SetEngType( ReadinessDataPtr );
         numberOfReadinesData = DEM_PID_DATA_NUM_PID01;
         dataByteKind = DEM_PID_CALC_PID01_TYPEB;
-        completeinfo[DEM_PID_COMPLETE_POS1] = extreaminfoD;/* [ARYCHK] DEM_PID_DATA_NUM_PIDF501 / 1 / DEM_PID_COMPLETE_POS1 */
-        supportinfo[DEM_PID_COMPLETE_POS1]  = supportinfoC;/* [ARYCHK] DEM_PID_DATA_NUM_PIDF501 / 1 / DEM_PID_COMPLETE_POS1 */
-#ifndef DEM_SIT_RANGE_CHECK
-#else   /* DEM_SIT_RANGE_CHECK */
-        readinessDataSize = DEM_SIT_R_CHK_PID01_SIZE;
-#endif  /* DEM_SIT_RANGE_CHECK */
+        completeinfo[DEM_PID_COMPLETE_POS1] = extreaminfoD;
+        supportinfo[DEM_PID_COMPLETE_POS1]  = supportinfoC;
     }
     else if( ReadinessDataKind == DEM_READINESS_PIDF441 )
     {
         Dem_PID_SetEngType( ReadinessDataPtr );
         numberOfReadinesData = DEM_PID_DATA_NUM_PID41;
         dataByteKind = DEM_PID_CALC_PID41_TYPEB;
-        completeinfo[DEM_PID_COMPLETE_POS1] = extreaminfoD;/* [ARYCHK] DEM_PID_DATA_NUM_PIDF501 / 1 / DEM_PID_COMPLETE_POS1 */
-        supportinfo[DEM_PID_COMPLETE_POS1]  = supportinfoC;/* [ARYCHK] DEM_PID_DATA_NUM_PIDF501 / 1 / DEM_PID_COMPLETE_POS1 */
-#ifndef DEM_SIT_RANGE_CHECK
-#else   /* DEM_SIT_RANGE_CHECK */
-        readinessDataSize = DEM_SIT_R_CHK_PID41_SIZE;
-#endif  /* DEM_SIT_RANGE_CHECK */
+        completeinfo[DEM_PID_COMPLETE_POS1] = extreaminfoD;
+        supportinfo[DEM_PID_COMPLETE_POS1]  = supportinfoC;
     }
     else
     {
         numberOfReadinesData = DEM_PID_DATA_NUM_PIDF501;
         dataByteKind = DEM_PID_CALC_PIDF501_TYPEB;
-        completeinfo[DEM_PID_COMPLETE_POS1] = extreaminfoC;/* [ARYCHK] DEM_PID_DATA_NUM_PIDF501 / 1 / DEM_PID_COMPLETE_POS1 */
-        completeinfo[DEM_PID_COMPLETE_POS2] = extreaminfoD;/* [ARYCHK] DEM_PID_DATA_NUM_PIDF501 / 1 / DEM_PID_COMPLETE_POS2 */
-        completeinfo[DEM_PID_COMPLETE_POS3] = extreaminfoE;/* [ARYCHK] DEM_PID_DATA_NUM_PIDF501 / 1 / DEM_PID_COMPLETE_POS3 */
-        completeinfo[DEM_PID_COMPLETE_POS4] = extreaminfoF;/* [ARYCHK] DEM_PID_DATA_NUM_PIDF501 / 1 / DEM_PID_COMPLETE_POS4 */
+        completeinfo[DEM_PID_COMPLETE_POS1] = extreaminfoC;
+        completeinfo[DEM_PID_COMPLETE_POS2] = extreaminfoD;
+        completeinfo[DEM_PID_COMPLETE_POS3] = extreaminfoE;
+        completeinfo[DEM_PID_COMPLETE_POS4] = extreaminfoF;
 
-        supportinfo[DEM_PID_COMPLETE_POS1]  = supportinfoC;/* [ARYCHK] DEM_PID_DATA_NUM_PIDF501 / 1 / DEM_PID_COMPLETE_POS1 */
-        supportinfo[DEM_PID_COMPLETE_POS2]  = supportinfoD;/* [ARYCHK] DEM_PID_DATA_NUM_PIDF501 / 1 / DEM_PID_COMPLETE_POS2 */
-        supportinfo[DEM_PID_COMPLETE_POS3]  = supportinfoE;/* [ARYCHK] DEM_PID_DATA_NUM_PIDF501 / 1 / DEM_PID_COMPLETE_POS3 */
-        supportinfo[DEM_PID_COMPLETE_POS4]  = supportinfoF;/* [ARYCHK] DEM_PID_DATA_NUM_PIDF501 / 1 / DEM_PID_COMPLETE_POS4 */
-#ifndef DEM_SIT_RANGE_CHECK
-#else   /* DEM_SIT_RANGE_CHECK */
-        readinessDataSize = DEM_SIT_R_CHK_PIDF501_SIZE;
-#endif  /* DEM_SIT_RANGE_CHECK */
+        supportinfo[DEM_PID_COMPLETE_POS1]  = supportinfoC;
+        supportinfo[DEM_PID_COMPLETE_POS2]  = supportinfoD;
+        supportinfo[DEM_PID_COMPLETE_POS3]  = supportinfoE;
+        supportinfo[DEM_PID_COMPLETE_POS4]  = supportinfoF;
     }
 
     /* Caluculate Readiness Info */
     for( loopCount = (uint8)0U; loopCount < numberOfReadinesData; loopCount++ )
     {
-#ifndef DEM_SIT_RANGE_CHECK
-        Dem_PID_CalcInitReadinessData( ReadinessDataPtr, supportinfo[loopCount], completeinfo[loopCount], dataByteKind );/* [ARYCHK] DEM_PID_DATA_NUM_PIDF501 / 1 / loopCount *//* [ARYCHK] DEM_PID_DATA_NUM_PIDF501 / 1 / loopCount */
-#else   /* DEM_SIT_RANGE_CHECK */
-        Dem_PID_CalcInitReadinessData( readinessDataSize, ReadinessDataPtr, supportinfo[loopCount], completeinfo[loopCount], dataByteKind );/* [ARYCHK] DEM_PID_DATA_NUM_PIDF501 / 1 / loopCount *//* [ARYCHK] DEM_PID_DATA_NUM_PIDF501 / 1 / loopCount */
-#endif  /* DEM_SIT_RANGE_CHECK */
+        Dem_PID_CalcInitReadinessData( ReadinessDataPtr, supportinfo[loopCount], completeinfo[loopCount], dataByteKind );
         dataByteKind = dataByteKind + (Dem_u08_ReadinessDataPositionIndexType)1U;
     }
 
@@ -1600,7 +1492,6 @@ FUNC( void, DEM_CODE ) Dem_PID_InitReadReadinessData
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-7-0         :2024-05-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

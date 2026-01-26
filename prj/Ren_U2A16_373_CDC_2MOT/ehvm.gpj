@@ -23,10 +23,13 @@ primaryTarget=v800_standalone.tgt
 
     -o dst/ehvm.elf
 
-    :macro=GSR_CLI="gsrec -sort -S3 -noS5 -bytes 16"
-    :macro=GSR_PAR="-pad1 0x003c0000 0x003fffff 0xff -start 0x003c0000 -end 0x003fffff"
-    :postexec="${GSR_CLI} ${GSR_PAR}                     -o dst/ehvm_ac.mot dst/ehvm.elf"
-    :postexec="${GSR_CLI} ${GSR_PAR} -romaddr 0x023c0000 -o dst/ehvm_bd.mot dst/ehvm.elf"
+    :macro=GCLI_PAR="0x003c0000 0x003fffff 0xff -start 0x003c0000 -end 0x003fffff"
+    :macro=GCLI_MOT="gsrec -sort -S3 -noS5 -bytes 16 -pad1"
+    :macro=GCLI_BIN="gmemfile -fill1"
+
+    :postexec="${GCLI_MOT} ${GCLI_PAR}                     -o dst/ehvm_ac.mot dst/ehvm.elf"
+    :postexec="${GCLI_MOT} ${GCLI_PAR} -romaddr 0x023c0000 -o dst/ehvm_bd.mot dst/ehvm.elf"
+    :postexec="${GCLI_BIN} ${GCLI_PAR}                     -o dst/ehvm.bin dst/ehvm.elf"
 
 # ----------------------------------------------------------------------------------------------------------------------------------
 # includes
@@ -126,8 +129,10 @@ primaryTarget=v800_standalone.tgt
 ../../src/EHVM/BSW/MCAL/Ren_U2Ax/Common/DIO/scc/Dio_Cfg.c
 ../../src/EHVM/BSW/MCAL/Ren_U2Ax/Common/DMA/scc/Dma.c
 ../../src/EHVM/BSW/MCAL/Ren_U2Ax/Common/DMA/scc/Dma_Cfg.c
+../../src/EHVM/BSW/MCAL/Ren_U2Ax/Common/DMA/scc/Dma_Desc.c
 ../../src/EHVM/BSW/MCAL/Ren_U2Ax/Common/DMA/scc/Dma_Irq.c
 ../../src/EHVM/BSW/MCAL/Ren_U2Ax/Common/DMA/scc/pil_dmac.c
+../../src/EHVM/BSW/MCAL/Ren_U2Ax/Common/DMA/scc/pil_dmac_desc.c
 ../../src/EHVM/BSW/MCAL/Ren_U2Ax/Common/DMA/scc/pil_dts.c
 ../../src/EHVM/BSW/MCAL/Ren_U2Ax/Common/DMA/scc/pil_intc.c
 ../../src/EHVM/BSW/MCAL/Ren_U2Ax/Common/DUMMY/scc/int_drv.c
@@ -142,6 +147,7 @@ primaryTarget=v800_standalone.tgt
 ../../src/EHVM/BSW/MCAL/Ren_U2Ax/Common/ErrH/scc/ErrH_slg.c
 ../../src/EHVM/BSW/MCAL/Ren_U2Ax/Common/ErrH/scc/ErrH_Ucfg.c
 ../../src/EHVM/BSW/MCAL/Ren_U2Ax/Common/ErrH/scc/pil_ecc.c
+../../src/EHVM/BSW/MCAL/Ren_U2Ax/Common/Gpt/scc/gpt_busywait.850
 ../../src/EHVM/BSW/MCAL/Ren_U2Ax/Common/Gpt/scc/gpt_drv_frt.c
 ../../src/EHVM/BSW/MCAL/Ren_U2Ax/Common/Icu/scc/icu_drv_wk.c
 ../../src/EHVM/BSW/MCAL/Ren_U2Ax/Common/Intc/scc/int_handler.c
@@ -194,7 +200,6 @@ primaryTarget=v800_standalone.tgt
 ../../src/EHVM/LIB/Common/scc/bitcnt.c
 ../../src/EHVM/LIB/Common/scc/crc32.c
 ../../src/EHVM/LIB/Common/scc/fpcall_u1_and.c
-../../src/EHVM/LIB/Common/scc/gpt_busywait.850
 ../../src/EHVM/LIB/Common/scc/lsbsrch.c
 ../../src/EHVM/LIB/Common/scc/memcpy_u1.c
 ../../src/EHVM/LIB/Common/scc/memcpy_u2.c
@@ -226,7 +231,7 @@ primaryTarget=v800_standalone.tgt
 ../../src/EHVM/BSW/MCAL/Ren_U2Ax/A16_373/SECTION/config_CDC/section.ld
 
 # ----------------------------------------------------------------------------------------------------------------------------------
-# ghsprj version 1-0-0
-# Date generated: 2025/11/27 07:51:42
+# ghsprj version 1-1-0
+# Date generated: 2026/01/22 23:22:22
 # ----------------------------------------------------------------------------------------------------------------------------------
 

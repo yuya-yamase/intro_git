@@ -1,7 +1,7 @@
-/* Dem_CmnLib_EDR_h(v5-8-0)                                                 */
+/* Dem_CmnLib_EDR_h(v5-3-0)                                                 */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 
@@ -45,16 +45,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_EDR_GetEventExtendedData
     P2VAR( uint8, AUTOMATIC, DEM_APPL_DATA ) DestBufferPtr,
     P2VAR( Dem_u16_EDRRecordSizeType, AUTOMATIC, AUTOMATIC ) BufSizePtr
 );
-#if ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON )
-FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_EDR_GetDTCExtendedData
-(
-    VAR( Dem_u16_EventCtrlIndexType, AUTOMATIC ) EventCtrlIndex,
-    VAR( Dem_u32_DTCValueType, AUTOMATIC ) DTCValue,
-    VAR( Dem_u08_EDRRecordNumberType, AUTOMATIC ) ExtendedDataNumber,
-    P2VAR( uint8, AUTOMATIC, DEM_APPL_DATA ) DestBufferPtr,
-    P2VAR( Dem_u16_EDRRecordSizeType, AUTOMATIC, AUTOMATIC ) BufSizePtr
-);
-#endif /* ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON ) */
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_EDR_GetSizeOfExtendedDataRecord
 (
     P2VAR( Dem_u16_EDRRecordSizeType, AUTOMATIC, AUTOMATIC ) SizeOfExtendedDataRecordPtr
@@ -99,7 +89,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_EDR_GetExtendedDataRecord
 /* History                                                                  */
 /*  Version        :Date                                                    */
 /*  v5-3-0         :2023-03-29                                              */
-/*  v5-8-0         :2024-10-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

@@ -1,7 +1,7 @@
-/* Dem_DataCtl_Clear_c(v5-6-0)                                              */
+/* Dem_DataCtl_Clear_c(v5-5-0)                                              */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -79,11 +79,8 @@
 /* Return Value  | void                                                     */
 /* Notes         | -                                                        */
 /*--------------------------------------------------------------------------*/
-/* UpdateRecord  | [UpdRec]AltIUMPR                                         */
-/*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
-/*   v5-6-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_Data_RequestFixedClear
 (
@@ -167,7 +164,7 @@ FUNC( void, DEM_CODE ) Dem_Data_RequestFixedClear
         Dem_Data_ClearEventRecord( EventStrgIndex );
 
         /*  clear qualification.                        */
-        Dem_Event_ClearQualificationInfo_NotTestedInCycle_InEvtStrg( EventStrgIndex );  /* [UpdRec]AltIUMPR */
+        Dem_Event_ClearQualificationInfo_NotTestedInCycle_InEvtStrg( EventStrgIndex );
     }
 
     /* Checks whether the fault is occurring in this event.  */
@@ -204,7 +201,6 @@ FUNC( void, DEM_CODE ) Dem_Data_RequestFixedClear
 /*  v5-0-0         :2021-12-24                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-6-0         :2024-01-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

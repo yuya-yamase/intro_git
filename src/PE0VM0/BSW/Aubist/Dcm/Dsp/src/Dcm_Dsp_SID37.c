@@ -1,7 +1,7 @@
-/* Dcm_Dsp_SID37_c(v5-9-0)                                                  */
+/* Dcm_Dsp_SID37_c(v5-3-0)                                                  */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -210,7 +210,6 @@ FUNC( void, DCM_CODE ) Dcm_Dsp_SID37_ProcReqTfrExitCbk
 /* Return Value  | None                                                     */
 /* Notes         | None                                                     */
 /****************************************************************************/
-#if ( DCM_NO_TRANSIT_TO_NONE == STD_OFF )
 FUNC( void, DCM_CODE ) Dcm_Dsp_SID37_Confirmation
 (
     const Dcm_IdContextType u1IdContext,
@@ -226,20 +225,6 @@ FUNC( void, DCM_CODE ) Dcm_Dsp_SID37_Confirmation
 
     return;
 }
-#endif  /* DCM_NO_TRANSIT_TO_NONE == STD_OFF */
-#if ( DCM_NO_TRANSIT_TO_NONE == STD_ON )
-FUNC( void, DCM_CODE ) Dcm_Dsp_SID37_Confirmation
-(
-    const Dcm_IdContextType u1IdContext,
-    const uint16 u2ConnectionId,
-    const Dcm_ConfirmationStatusType u1Status
-)
-{
-    /* no process */
-
-    return;
-}
-#endif  /* DCM_NO_TRANSIT_TO_NONE == STD_ON */
 
 /****************************************************************************/
 /* Internal Functions                                                       */
@@ -575,7 +560,6 @@ static FUNC( Std_ReturnType, DCM_CODE ) Dcm_Dsp_SID37_CancelProc
 /* History                                                                  */
 /*  Version        :Date                                                    */
 /*  v5-3-0         :2023-03-29                                              */
-/*  v5-9-0         :2025-02-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

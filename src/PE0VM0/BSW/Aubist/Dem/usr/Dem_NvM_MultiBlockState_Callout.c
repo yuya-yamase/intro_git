@@ -1,7 +1,7 @@
-/* Dem_NvM_MultiBlockState_Callout_c(v5-10-0)                               */
+/* Dem_NvM_MultiBlockState_Callout_c(v5-0-0)                                */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 /****************************************************************************/
 /* Object Name  | Dem/NvM_MultiBlockState_Callout/CODE                      */
@@ -59,8 +59,7 @@
 /* Preconditions | none                                                     */
 /* Parameters    | none                                                     */
 /* Return Value  | boolean                                                  */
-/*               |        TRUE  : ReadAll is executed.                      */
-/*               |        FALSE : ReadAll is not executed.(now processing.) */
+/*               |        TRUE  : ReadAll was executed.                     */
 /* Notes         |                                                          */
 /****************************************************************************/
 FUNC( boolean, DEM_CODE_CALLOUT ) Dem_NvM_GetReadAllExecState
@@ -94,7 +93,6 @@ FUNC( boolean, DEM_CODE_CALLOUT ) Dem_NvM_GetReadAllExecState
 /*  v1-1-0         :2018-10-29                                              */
 /*  v4-0-0         :2020-03-19                                              */
 /*  v5-0-0         :2021-09-28                                              */
-/*  v5-10-0        :2025-06-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

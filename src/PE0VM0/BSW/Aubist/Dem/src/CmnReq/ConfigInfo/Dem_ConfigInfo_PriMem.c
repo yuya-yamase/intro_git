@@ -1,7 +1,7 @@
-/* Dem_ConfigInfo_PriMem_c(v5-10-0)                                         */
+/* Dem_ConfigInfo_PriMem_c(v5-5-0)                                          */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -17,7 +17,6 @@
 #include <Dem/Dem_Common.h>
 #include "../../../cfg/Dem_Cfg.h"
 #include "../../../cfg/Dem_Data_Cfg.h"
-#include "../../../cfg/Dem_Readiness_Cfg.h"
 
 #include "../../../inc/Dem_CmnLib_ConfigInfo.h"
 #include "../../../inc/Dem_CmnLib_DTC_DTCStatus.h"
@@ -472,6 +471,105 @@ FUNC( boolean, DEM_CODE ) Dem_CfgInfoPm_GetPreFFSupported_InEvtStrgGrp
 #endif /* DEM_FF_PRESTORAGE_SUPPORT == STD_ON */
 
 /****************************************************************************/
+/* Function Name | Dem_CfgInfoPm_ClearAllowed_ByEvtCtrlIdx                  */
+/* Description   | Gets Clear Allowed.                                      */
+/* Preconditions | EventIndex < Dem_PrimaryMemEventConfigureNum             */
+/* Parameters    | [in] EventIndex : Event index.                           */
+/* Return Value  | boolean                                                  */
+/*               |        TRUE  : Clear allowed                             */
+/*               |        FALSE : Clear not allowed                         */
+/* Notes         | The caller of this function must guarantee the range     */
+/*               | of EventIndex values                                     */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-5-0      | no object changed.                                       */
+/****************************************************************************/
+FUNC( boolean, DEM_CODE ) Dem_CfgInfoPm_ClearAllowed_ByEvtCtrlIdx
+(
+    VAR( Dem_u16_EventCtrlIndexType, AUTOMATIC ) EventCtrlIndex
+)
+{
+    VAR( boolean, AUTOMATIC ) clearAllowed;
+    VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) eventStrgIndex;
+    VAR( Dem_u16_EventCtrlIndexType, AUTOMATIC ) eventConfigureNum;
+
+    eventConfigureNum = Dem_PrimaryMemEventConfigureNum;
+
+    clearAllowed  =   (boolean)FALSE;
+    if( EventCtrlIndex < eventConfigureNum )                                                                /* [GUD:if]EventCtrlIndex */
+    {
+        eventStrgIndex  =   Dem_CmbEvt_CnvEventCtrlIndex_ToEventStrgIndex( EventCtrlIndex );                /* [GUD]EventCtrlIndex *//* [GUD:RET:IF_GUARDED: EventCtrlIndex ]eventStrgIndex */
+        clearAllowed    =   Dem_CfgInfoPm_ClearAllowed_InEvtStrgGrp( eventStrgIndex );                      /* [GUD]eventStrgIndex */
+    }
+
+    return clearAllowed;
+}
+
+#if ( DEM_CLEAR_EVENT_NOT_ALLOWED_SUPPORT == STD_ON )
+/****************************************************************************/
+/* Function Name | Dem_CfgInfoPm_ClearAllowed_InEvtStrgGrp                  */
+/* Description   | Gets Clear Allowed.                                      */
+/* Preconditions | EventIndex < Dem_PrimaryMemEventConfigureNum             */
+/* Parameters    | [in] EventIndex : Event index.                           */
+/* Return Value  | boolean                                                  */
+/*               |        TRUE  : Clear allowed                             */
+/*               |        FALSE : Clear not allowed                         */
+/* Notes         | The caller of this function must guarantee the range     */
+/*               | of EventIndex values                                     */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-5-0      | no object changed.                                       */
+/****************************************************************************/
+FUNC( boolean, DEM_CODE ) Dem_CfgInfoPm_ClearAllowed_InEvtStrgGrp
+(
+    VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex
+)
+{
+    VAR( boolean, AUTOMATIC ) clearAllowed;
+    VAR( Dem_u16_EventAttributeType, AUTOMATIC ) eventAttr;
+    VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) eventStorageNum;
+
+    clearAllowed  =   (boolean)FALSE;
+
+    eventStorageNum = Dem_PrimaryMemEventStorageNum;
+
+    if ( EventStrgIndex < eventStorageNum )                                                                 /* [GUD:if]EventStrgIndex */
+    {
+        eventAttr       =   Dem_EventParameterStorageTable[ EventStrgIndex ].DemEventAttribute;             /* [GUD]EventStrgIndex */
+        if (( eventAttr & DEM_EVTATTR_CLEARALLOWED ) == DEM_EVTATTR_CLEARALLOWED )
+        {
+            clearAllowed  =   (boolean)TRUE;
+        }
+    }
+    return clearAllowed;
+}
+
+#endif  /* ( DEM_CLEAR_EVENT_NOT_ALLOWED_SUPPORT == STD_ON ) */
+
+
+#if ( DEM_CLEAR_EVENT_NOT_ALLOWED_SUPPORT == STD_OFF )
+/****************************************************************************/
+/* Function Name | Dem_CfgInfoPm_ClearAllowed_InEvtStrgGrp                  */
+/* Description   | Gets Clear Allowed.                                      */
+/* Preconditions | EventIndex < Dem_PrimaryMemEventConfigureNum             */
+/* Parameters    | [in] EventIndex : Event index.                           */
+/* Return Value  | boolean                                                  */
+/*               |        TRUE  : Clear allowed                             */
+/*               |        FALSE : Clear not allowed                         */
+/* Notes         | none                                                     */
+/****************************************************************************/
+FUNC( boolean, DEM_CODE ) Dem_CfgInfoPm_ClearAllowed_InEvtStrgGrp
+(
+    VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex     /* MISRA DEVIATION */
+)
+{
+    /*  This is empty function for function switching.  */
+    return (boolean)TRUE;
+}
+#endif  /* ( DEM_CLEAR_EVENT_NOT_ALLOWED_SUPPORT == STD_OFF ) */
+
+
+/****************************************************************************/
 /* Function Name | Dem_CfgInfoPm_TriggerInitMForEFnc                        */
 /* Description   | Calls callback function "InitMonitorForEvent" correspon- */
 /*               | ding to specified event index.                           */
@@ -640,6 +738,46 @@ FUNC_P2CONST( AB_83_ConstV Dem_DTCAttributeType, DEM_CONFIG_DATA, DEM_CODE ) Dem
 }
 
 #endif  /*   ( DEM_TSFF_PM_SUPPORT == STD_ON )     */
+
+#if ( DEM_FF_PRESTORAGE_SUPPORT == STD_ON )
+/****************************************************************************/
+/* Function Name | Dem_CfgInfoPm_GetDTCAttrTablePtr_PreFF                    */
+/* Description   | GetData by EventIndex : address of Dem_DTCAttributeTable[] */
+/* Preconditions | EventIndex < Dem_PrimaryMemEventConfigureNum             */
+/* Parameters    | [in] EventStrgIndex :  EventIndex                        */
+/* Return Value  | Dem_DTCAttributeType*                                    */
+/*               |                      != NULL_PTR : available address.    */
+/*               |                      == NULL_PTR : INVALID               */
+/* Notes         | none                                                     */
+/*--------------------------------------------------------------------------*/
+/* VariableGuard | [GUD:RET:Not NULL_PTR] EventStrgIndex                    */
+/* VariableGuard | [GUD:RET:Not NULL_PTR] ReturnValue                       */
+/*--------------------------------------------------------------------------*/
+/* History       |                                                          */
+/*   v5-5-0      | new created. based on Dem_CfgInfoPm_GetDTCAttrTablePtr_TSFF. */
+/****************************************************************************/
+FUNC_P2CONST( AB_83_ConstV Dem_DTCAttributeType, DEM_CONFIG_DATA, DEM_CODE ) Dem_CfgInfoPm_GetDTCAttrTablePtr_PreFF
+(
+    VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex
+)
+{
+    P2CONST( AB_83_ConstV Dem_DTCAttributeType, AUTOMATIC, DEM_CONFIG_DATA ) dtcAttributePtr;
+    VAR( Dem_u16_DTCAttrIndexType, AUTOMATIC ) dtcAttrRef;
+    VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) eventStorageNum;
+
+    dtcAttributePtr =   NULL_PTR;
+    eventStorageNum = Dem_PrimaryMemEventStorageNum;
+
+    if( EventStrgIndex < eventStorageNum )              /* [GUD:if]EventStrgIndex */
+    {
+        /* The DTCAttribute table indicated by the DTCAttribute table list Index of the held DTC table is held. */
+        dtcAttrRef      =   Dem_EventParameterStorageTable[ EventStrgIndex ].DemDTCAttributesRef;       /* [GUD]EventStrgIndex *//* [GUD:CFG:IF_GUARDED: EventStrgIndex ]dtcAttrRef */
+        dtcAttributePtr =   &Dem_DTCAttributeTable[dtcAttrRef];                                         /* [GUD]dtcAttrRef *//* [GUD:CFG:IF_GUARDED: dtcAttrRef ]dtcAttributePtr */
+    }
+    return dtcAttributePtr;
+}
+
+#endif  /*   ( DEM_FF_PRESTORAGE_SUPPORT == STD_ON )    */
 
 /****************************************************************************/
 /* Function Name | Dem_CfgInfoPm_CheckEventKindOfOBD_InEvtStrgGrp           */
@@ -819,32 +957,6 @@ FUNC( Dem_EventKindType, DEM_CODE ) Dem_CfgInfoPm_GetEventKindOfSpecific_InEvtSt
 }
 #endif  /*   ( DEM_SPECIFIC_EVENT_SUPPORT == STD_ON )   */
 
-#if ( DEM_PID_READINESS_SUPPORT == STD_ON )
-/****************************************************************************/
-/* Function Name | Dem_CfgInfoPm_CnvReadinessGroupIdToGroupIndex            */
-/* Description   | Convert to ReadinessGroupId to ReadinessGroupTable Index.*/
-/* Preconditions |                                                          */
-/* Parameters    | [in] ReadinessGroupId :  ReadinessGroupId.               */
-/* Return Value  | Dem_u08_ReadinessGroupIndexType                          */
-/*               |        Dem_ReadinessGroupTable[] index.                  */
-/* Notes         | call from SID19 sf56.                                    */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-10-0     | new created.                                             */
-/****************************************************************************/
-FUNC( Dem_u08_ReadinessGroupIndexType, DEM_CODE ) Dem_CfgInfoPm_CnvReadinessGroupIdToGroupIndex
-(
-    VAR( Dem_u08_ReadinessGroupIdType, AUTOMATIC ) ReadinessGroupId
-)
-{
-    VAR( Dem_u08_ReadinessGroupIndexType, AUTOMATIC ) readinessGroupIndex;
-
-    readinessGroupIndex =   (Dem_u08_ReadinessGroupIndexType)ReadinessGroupId;
-
-    return readinessGroupIndex;
-}
-#endif  /* ( DEM_PID_READINESS_SUPPORT == STD_ON )  */
-
 #define DEM_STOP_SEC_CODE
 #include <Dem_MemMap.h>
 
@@ -855,8 +967,6 @@ FUNC( Dem_u08_ReadinessGroupIndexType, DEM_CODE ) Dem_CfgInfoPm_CnvReadinessGrou
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-8-0         :2024-10-29                                              */
-/*  v5-10-0        :2025-06-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

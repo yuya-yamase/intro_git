@@ -1,7 +1,7 @@
-/* Dcm_Dsp_SID10_c(v5-8-0)                                                  */
+/* Dcm_Dsp_SID10_c(v5-5-0)                                                  */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -336,93 +336,6 @@ FUNC( void, DCM_CODE ) Dcm_Dsp_SID10_ChkSesCtrlCbk    /* MISRA DEVIATION */
     return;
 }
 
-/****************************************************************************/
-/* Function Name | Dcm_Dsp_GetP2ServerValue                                 */
-/* Description   | Get P2Server Value Information                           */
-/* Preconditions | None                                                     */
-/* Parameters    | [IN] u1SesCtrlType        : SesCtrlType                  */
-/*               | [IN] u1ProtocolType       : Protocol type                */
-/*               | [OUT] ptP2ServerMax       : P2ServerMax                  */
-/*               | [OUT] ptP2StarServerMax   : P2StarServerMax              */
-/*               | [OUT] ptP2StarServerLsb   : P2StarServerLsb              */
-/*               | [OUT] ptP2StarServerMin   : P2StarServerMin              */
-/* Return Value  | Std_ReturnType                                           */
-/*               |   E_OK     : Processing normal                           */
-/*               |   E_NOT_OK : Processing abnormal                         */
-/* Notes         | This function could be called from other than            */
-/*               | Dcm_MainFunction, so use exclusive control if setting    */
-/*               | or referencing RAM.                                      */
-/****************************************************************************/
-FUNC( Std_ReturnType, DCM_CODE ) Dcm_Dsp_GetP2ServerValue
-(
-    const Dcm_SesCtrlType u1SesCtrlType,
-    const Dcm_ProtocolType u1ProtocolType,
-    P2VAR( uint16, AUTOMATIC, DCM_APPL_DATA ) ptP2ServerMax,
-    P2VAR( uint16, AUTOMATIC, DCM_APPL_DATA ) ptP2StarServerMax,
-    P2VAR( uint16, AUTOMATIC, DCM_APPL_DATA ) ptP2StarServerLsb,
-    P2VAR( uint16, AUTOMATIC, DCM_APPL_DATA ) ptP2StarServerMin
-)
-{
-    uint8   u1_SesIndex;
-    uint8   u1_SessionRowNum;
-    Std_ReturnType u1_RetVal;
-    boolean b_SerchHit;
-    boolean b_SupProtocolInfo;
-
-    u1_RetVal = E_NOT_OK;
-    u1_SessionRowNum = Dcm_P_u1SessionRow_N;
-    b_SerchHit = (boolean)FALSE;
-    b_SupProtocolInfo = Dcm_P_SID10_bSupportProtocolInfo;
-
-    if( b_SupProtocolInfo == (boolean)TRUE )
-    {
-        for( u1_SesIndex = (uint8)0U; u1_SesIndex <= u1_SessionRowNum; u1_SesIndex++ )
-        {
-            if( u1SesCtrlType == (Dcm_SesCtrlType)Dcm_P_SID10_stSessionRow_Tbl[u1_SesIndex].u1Level )
-            {
-                if( u1ProtocolType == Dcm_P_SID10_stSessionRow_Tbl[u1_SesIndex].u1ProtocolType )
-                {
-                    b_SerchHit = (boolean)TRUE;
-                    break;
-                }
-            }
-        }
-    }
-    else
-    {
-        for( u1_SesIndex = (uint8)0U; u1_SesIndex <= u1_SessionRowNum; u1_SesIndex++ )
-        {
-            if( u1SesCtrlType == (Dcm_SesCtrlType)Dcm_P_SID10_stSessionRow_Tbl[u1_SesIndex].u1Level )
-            {
-                b_SerchHit = (boolean)TRUE;
-                break;
-            }
-        }
-    }
-
-    if( b_SerchHit == (boolean)TRUE )
-    {
-        if( ptP2ServerMax != NULL_PTR )
-        {
-            *ptP2ServerMax = Dcm_P_SID10_stSessionRow_Tbl[u1_SesIndex].u2P2ServerMax;
-        }
-        if( ptP2StarServerMax != NULL_PTR )
-        {
-            *ptP2StarServerMax = Dcm_P_SID10_stSessionRow_Tbl[u1_SesIndex].u2P2StarServerMax;
-        }
-        if( ptP2StarServerLsb != NULL_PTR )
-        {
-            *ptP2StarServerLsb = Dcm_P_SID10_stSessionRow_Tbl[u1_SesIndex].u2P2StarServerLsb;
-        }
-        if( ptP2StarServerMin != NULL_PTR )
-        {
-            *ptP2StarServerMin = Dcm_P_SID10_stSessionRow_Tbl[u1_SesIndex].u2P2StarServerTimeoutMin;
-        }
-        u1_RetVal = E_OK;
-    }
-
-    return u1_RetVal;
-}
 
 /****************************************************************************/
 /* Internal Functions                                                       */
@@ -673,25 +586,22 @@ static FUNC ( Std_ReturnType, DCM_CODE ) Dcm_Dsp_SID10_SesCtrlProc
     Dcm_OpStatusType u1OpStatus
 )
 {
-    uint8   u1_SesIndex;
-    uint8   u1_SessionRowNum;
-    uint8   u1_SubFunction;
-    Std_ReturnType  u1_RetVal;
-    Std_ReturnType  u1_RetCheck;
-    Dcm_NegativeResponseCodeType u1_ErrorCode;
-    Dcm_ProtocolType u1_ActiveProtocolType;
     boolean b_IndexFlag;
     boolean b_NoSetSPREC;
     boolean b_NrcFlag;
-    boolean b_SupProtocolInfo;
+    uint8   u1_Loop;
+    uint8   u1_SesIndex;
+    uint8   u1_SessionRowNum;
+    Std_ReturnType  u1_RetVal;
+    Std_ReturnType  u1_RetCheck;
+    Dcm_NegativeResponseCodeType u1_ErrorCode;
 
     u1_RetVal = E_OK;
     b_NrcFlag = (boolean)FALSE;
     u1_SessionRowNum = Dcm_P_u1SessionRow_N;
     u1_ErrorCode = (Dcm_NegativeResponseCodeType)0x00U;
-    u1_SubFunction = Dcm_Dsp_SID10_u1SubFunction;
 
-    u1_RetCheck = Dcm_Dsp_SID10_CheckSesCtrl( u1_SubFunction, u1OpStatus, &u1_ErrorCode );
+    u1_RetCheck = Dcm_Dsp_SID10_CheckSesCtrl( Dcm_Dsp_SID10_u1SubFunction, u1OpStatus, &u1_ErrorCode );
 
     if( u1_RetCheck == (Std_ReturnType)E_OK )
     {
@@ -699,35 +609,14 @@ static FUNC ( Std_ReturnType, DCM_CODE ) Dcm_Dsp_SID10_SesCtrlProc
 
         /* Get session index */
         b_IndexFlag = (boolean)FALSE;
-        b_SupProtocolInfo = Dcm_P_SID10_bSupportProtocolInfo;
-        if( b_SupProtocolInfo == (boolean)TRUE )
+        for( u1_Loop = (uint8)0U; u1_Loop <= u1_SessionRowNum; u1_Loop++ ) /* MISRA DEVIATION */
         {
-            u1_ActiveProtocolType = DCM_NO_ACTIVE_PROTOCOL;
-            /* Get ActiveProtocolType */
-            Dcm_Dsl_GetActiveProtocol( &u1_ActiveProtocolType, NULL_PTR, NULL_PTR );
-            for( u1_SesIndex = (uint8)0U; u1_SesIndex <= u1_SessionRowNum; u1_SesIndex++ )
+            if( Dcm_Dsp_SID10_u1SubFunction == Dcm_P_SID10_stSessionRow_Tbl[u1_Loop].u1Level )
             {
-                if( u1_SubFunction == Dcm_P_SID10_stSessionRow_Tbl[u1_SesIndex].u1Level )
-                {
-                    if( u1_ActiveProtocolType == Dcm_P_SID10_stSessionRow_Tbl[u1_SesIndex].u1ProtocolType )
-                    {
-                        Dcm_Dsp_SID10_u1SesIndex = u1_SesIndex;
-                        b_IndexFlag = (boolean)TRUE;
-                        break;
-                    }
-                }
-            }
-        }
-        else
-        {
-            for( u1_SesIndex = (uint8)0U; u1_SesIndex <= u1_SessionRowNum; u1_SesIndex++ )
-            {
-                if( u1_SubFunction == Dcm_P_SID10_stSessionRow_Tbl[u1_SesIndex].u1Level )
-                {
-                    Dcm_Dsp_SID10_u1SesIndex = u1_SesIndex;
-                    b_IndexFlag = (boolean)TRUE;
-                    break;
-                }
+                Dcm_Dsp_SID10_u1SesIndex = u1_Loop;
+                u1_SesIndex = u1_Loop;
+                b_IndexFlag = (boolean)TRUE;
+                break;
             }
         }
 
@@ -738,6 +627,7 @@ static FUNC ( Std_ReturnType, DCM_CODE ) Dcm_Dsp_SID10_SesCtrlProc
                 ( Dcm_P_SID10_stSessionRow_Tbl[u1_SesIndex].u1ForBoot == DCM_SYS_BOOT_RESPAPP ) )
             {
                 /* Not boot jump or Boot jump(RESPAPP) */
+            
                 b_NoSetSPREC = Dcm_P_SID10_bNoSetSPREC;
                 if( b_NoSetSPREC == (boolean)TRUE )
                 {
@@ -789,11 +679,6 @@ static FUNC ( Std_ReturnType, DCM_CODE ) Dcm_Dsp_SID10_SesCtrlProc
                 b_NrcFlag = (boolean)TRUE;
                 u1_ErrorCode = DCM_E_REQUESTCORRECTLYRECEIVEDRESPONSEPENDING;
             }
-        }
-        else
-        {
-            b_NrcFlag = (boolean)TRUE;
-            u1_ErrorCode = DCM_E_GENERALREJECT;
         }
     }
     else if( u1_RetCheck == (Std_ReturnType)E_NOT_OK )
@@ -884,7 +769,6 @@ static FUNC ( void, DCM_CODE ) Dcm_Dsp_SID10_SetSesCtrlTypeAndChgEcuReset
 /*  v4-0-0         :2020-12-23                                              */
 /*  v5-0-0         :2022-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-8-0         :2024-10-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

@@ -1,7 +1,7 @@
-/* Dcm_Dsp_DidMng_Cfg_c(v5-6-0)                                             */
+/* Dcm_Dsp_DidMng_Cfg_c(v5-4-0)                                             */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -156,6 +156,7 @@ CONST( AB_83_ConstV Dcm_Dsp_DidType, DCM_CONFIG_DATA ) DcmDspDidTbl[ DCM_P_DID_T
 #if ( ( DCM_PERIODIC_DDDID_USE == STD_ON ) || ( DCM_SUPPORT_SID22 == STD_ON ) || ( DCM_SUPPORT_SID2C == STD_ON ) || ( DCM_SUPPORT_SID2E == STD_ON ) || ( DCM_SUPPORT_SID2F == STD_ON ) )
 CONST( AB_83_ConstV Dcm_Dsp_DDDidType, DCM_CONFIG_DATA ) DcmDspDDDidTbl[ DCM_P_DDDID_T ] = 
 {
+
     { NULL_PTR, (uint16)0x0000U }
 };
 #endif /* DCM_PERIODIC_DDDID_USE == STD_ON || DCM_SUPPORT_SID22 == STD_ON || DCM_SUPPORT_SID2C == STD_ON || DCM_SUPPORT_SID2E == STD_ON || DCM_SUPPORT_SID2F == STD_ON */
@@ -188,24 +189,18 @@ CONST( AB_83_ConstV uint16, DCM_CONFIG_DATA ) Dcm_P_DIDMNG_u2DDDidNumber = DCM_P
 /*--------------*/
 /* DcmDspMemory */
 /*--------------*/
-/* DcmDspReadMemoryRangeSecurityLevelRef */
-
-/* DcmDspReadMemoryRangeSessionLevelRef */
-
-/* DcmDspWriteMemoryRangeSecurityLevelRef */
-
-/* DcmDspWriteMemoryRangeSessionLevelRef */
+/* DcmDspMemoryXXXXXXSecurityLevelRef */
 
 
 
 
-#if ( ( DCM_PERIODIC_DDDID_USE == STD_ON ) || ( DCM_SUPPORT_SID22 == STD_ON ) || ( DCM_SUPPORT_SID23 == STD_ON ) || ( DCM_SUPPORT_SID2C == STD_ON ) || ( DCM_SUPPORT_SID2E == STD_ON ) || ( DCM_SUPPORT_SID2F == STD_ON ) || ( DCM_SUPPORT_SID3D == STD_ON ) )
+#if ( ( DCM_PERIODIC_DDDID_USE == STD_ON ) || ( DCM_SUPPORT_SID22 == STD_ON ) || ( DCM_SUPPORT_SID23 == STD_ON ) || ( DCM_SUPPORT_SID2C == STD_ON ) || ( DCM_SUPPORT_SID2E == STD_ON ) || ( DCM_SUPPORT_SID2F == STD_ON ) )
 CONST( AB_83_ConstV Dcm_Dsp_MemoryType, DCM_CONFIG_DATA ) DcmDspMemory = 
 {
     NULL_PTR, NULL_PTR, (uint8)0U
 };
 
-#endif /* DCM_PERIODIC_DDDID_USE == STD_ON || DCM_SUPPORT_SID22 == STD_ON || DCM_SUPPORT_SID23 == STD_ON || DCM_SUPPORT_SID2C == STD_ON || DCM_SUPPORT_SID2E == STD_ON || DCM_SUPPORT_SID2F == STD_ON || DCM_SUPPORT_SID3D == STD_ON */
+#endif /* DCM_PERIODIC_DDDID_USE == STD_ON || DCM_SUPPORT_SID22 == STD_ON || DCM_SUPPORT_SID23 == STD_ON || DCM_SUPPORT_SID2C == STD_ON || DCM_SUPPORT_SID2E == STD_ON || DCM_SUPPORT_SID2F == STD_ON */
 #if ( ( DCM_PERIODIC_DDDID_USE == STD_ON ) || ( DCM_PERIODIC_SEND_USE == STD_ON ) || ( DCM_SUPPORT_SID22 == STD_ON ) || ( DCM_SUPPORT_SID2C == STD_ON ) || ( DCM_SUPPORT_SID2E == STD_ON ) || ( DCM_SUPPORT_SID2F == STD_ON ) )
 CONST( AB_83_ConstV boolean, DCM_CONFIG_DATA ) Dcm_P_DIDMNG_bChk_Per_Source_Did = (boolean)FALSE;
 #endif /* DCM_PERIODIC_DDDID_USE == STD_ON || DCM_PERIODIC_SEND_USE == STD_ON || DCM_SUPPORT_SID22 == STD_ON || DCM_SUPPORT_SID2C == STD_ON || DCM_SUPPORT_SID2E == STD_ON || DCM_SUPPORT_SID2F == STD_ON */
@@ -633,12 +628,12 @@ FUNC( Std_ReturnType, DCM_CODE ) Dcm_Dsp_DidMng_CheckSupportedDid
 /*  v5-0-0         :2022-03-29                                              */
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
-/*  v5-6-0         :2024-02-27                                              */
+/*  v5-4-0         :2023-06-28                                              */
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
 /*  Framework          :v2-1-0                                              */
-/*  BSW plug-in        :v5-10-0                                             */
+/*  BSW plug-in        :v5-5-1                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

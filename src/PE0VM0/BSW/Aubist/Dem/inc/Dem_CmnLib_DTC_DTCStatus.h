@@ -1,7 +1,7 @@
-/* Dem_CmnLib_DTC_DTCStatus_h(v5-9-0)                                       */
+/* Dem_CmnLib_DTC_DTCStatus_h(v5-5-0)                                       */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -237,16 +237,6 @@ FUNC( Dem_u08_DTCStatusEx2Type, DEM_CODE ) Dem_DTC_ExDTC2_ResetContMIHistAndIndA
 (
     VAR( Dem_u08_DTCStatusEx2Type, AUTOMATIC ) ExtendDTCStatus2
 );
-#if ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )
-FUNC( Dem_u08_DTCStatusEx2Type, DEM_CODE ) Dem_DTC_ExDTC2_SetPendingOfEmission
-(
-    VAR( Dem_u08_DTCStatusEx2Type, AUTOMATIC ) ExtendDTCStatus2
-);
-FUNC( Dem_u08_DTCStatusEx2Type, DEM_CODE ) Dem_DTC_ExDTC2_ResetPendingOfEmission
-(
-    VAR( Dem_u08_DTCStatusEx2Type, AUTOMATIC ) ExtendDTCStatus2
-);
-#endif  /* ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )   */
 
 /*==================================*/
 /*  Convert to output DTCStatus     */
@@ -278,7 +268,6 @@ FUNC( void, DEM_CODE ) Dem_DTC_CnvUpdateDTCStatus_ForOutput
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-9-0         :2025-02-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

@@ -1,7 +1,7 @@
-/* Dem_Control_EventEntryCmn_c(v5-9-0)                                      */
+/* Dem_Control_EventEntryCmn_c(v5-5-0)                                      */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -186,7 +186,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_SetEventStatus
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE) Dem_Control_SetEventStatusWithMonitorData
 (
@@ -232,13 +231,13 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE) Dem_Control_SetEventStatusWithMonito
                     retTempVal = Dem_AsyncReq_JudgeReqCondition( DEM_ASYNCREQ_EVENT_WITH_MONITORDATA, eventCtrlIndex, EventStatus );
                     if( retTempVal == DEM_IRT_OK )
                     {
-                        data[DEM_DATABUF_EVENTSTATUS]   = (uint8)EventStatus;/* [ARYCHK] DEM_ASYNCDATAQUE_MONITORDATA_ITEMSIZE / 1 / DEM_DATABUF_EVENTSTATUS */
-                        data[DEM_DATABUF_MONITORDATA_0] = (uint8)monitorData0;/* [ARYCHK] DEM_ASYNCDATAQUE_MONITORDATA_ITEMSIZE / 1 / DEM_DATABUF_MONITORDATA_0 */
-                        data[DEM_DATABUF_MONITORDATA_1] = (uint8)( monitorData0 >> DEM_MONTORDATA_BITSHIFT_8 );/* [ARYCHK] DEM_ASYNCDATAQUE_MONITORDATA_ITEMSIZE / 1 / DEM_DATABUF_MONITORDATA_1 */
-                        data[DEM_DATABUF_MONITORDATA_2] = (uint8)( monitorData0 >> DEM_MONTORDATA_BITSHIFT_16 );/* [ARYCHK] DEM_ASYNCDATAQUE_MONITORDATA_ITEMSIZE / 1 / DEM_DATABUF_MONITORDATA_2 */
-                        data[DEM_DATABUF_MONITORDATA_3] = (uint8)( monitorData0 >> DEM_MONTORDATA_BITSHIFT_24 );/* [ARYCHK] DEM_ASYNCDATAQUE_MONITORDATA_ITEMSIZE / 1 / DEM_DATABUF_MONITORDATA_3 */
+                        data[DEM_DATABUF_EVENTSTATUS]   = (uint8)EventStatus;
+                        data[DEM_DATABUF_MONITORDATA_0] = (uint8)monitorData0;
+                        data[DEM_DATABUF_MONITORDATA_1] = (uint8)( monitorData0 >> DEM_MONTORDATA_BITSHIFT_8 );
+                        data[DEM_DATABUF_MONITORDATA_2] = (uint8)( monitorData0 >> DEM_MONTORDATA_BITSHIFT_16 );
+                        data[DEM_DATABUF_MONITORDATA_3] = (uint8)( monitorData0 >> DEM_MONTORDATA_BITSHIFT_24 );
 
-                        retTempVal = Dem_AsyncReq_EnqueueWithData( DEM_ASYNCREQ_EVENT_WITH_MONITORDATA, eventCtrlIndex, &data[0]);  /* [GUD:FixVal]DEM_ASYNCREQ_EVENT_WITH_MONITORDATA *//* [ARYCHK] DEM_ASYNCDATAQUE_MONITORDATA_ITEMSIZE / 1 / 0 */
+                        retTempVal = Dem_AsyncReq_EnqueueWithData( DEM_ASYNCREQ_EVENT_WITH_MONITORDATA, eventCtrlIndex, &data[0]);  /* [GUD:FixVal]DEM_ASYNCREQ_EVENT_WITH_MONITORDATA */
                         if( retTempVal == DEM_IRT_OK )
                         {
                             retVal = DEM_IRT_OK;
@@ -382,7 +381,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_SetEventFailedWithSyncF
 /*               |       : See the description of the return value of       */
 /*               |         "DemAsyncReqFncPTR" in Dem_Control_AsyncReq.h.   */
 /* Notes         | -                                                        */
-/*   v5-9-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_AsyncExecReturnType, DEM_CODE ) Dem_Control_SetEvent
 (
@@ -398,7 +396,7 @@ FUNC( Dem_u08_AsyncExecReturnType, DEM_CODE ) Dem_Control_SetEvent
     eventId =   Dem_CfgInfoCmn_CnvEventCtrlIndexToEventId( (Dem_u16_EventCtrlIndexType)Index );
     monitorData0 = ( (Dem_MonitorDataType)eventId ) | DEM_MONITORDATA_SETEVENTSTATUS;
 
-    retVal  =   Dem_Control_SetEventCommon( (Dem_u16_EventCtrlIndexType)Index, ( Dem_EventStatusType )Status, monitorData0, (boolean)FALSE );
+    retVal  =   Dem_Control_SetEventCommon( (Dem_u16_EventCtrlIndexType)Index, ( Dem_EventStatusType )Status, monitorData0 );
 
     return retVal;
 }
@@ -415,10 +413,6 @@ FUNC( Dem_u08_AsyncExecReturnType, DEM_CODE ) Dem_Control_SetEvent
 /*               | [in] Deque data Buffer                                   */
 /* Return Value  | Dem_u08_AsyncExecReturnType                              */
 /* Notes         | -                                                        */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-7-0      | no object changed.                                       */
-/*   v5-9-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_AsyncExecReturnType, DEM_CODE ) Dem_Control_SetEventWithMonitorData
 (
@@ -431,13 +425,13 @@ FUNC( Dem_u08_AsyncExecReturnType, DEM_CODE ) Dem_Control_SetEventWithMonitorDat
     VAR( Dem_EventStatusType , AUTOMATIC ) DequeStatus;
     VAR( Dem_MonitorDataType, AUTOMATIC ) monitorData0;
 
-    DequeStatus = (Dem_EventStatusType)DataBuffPtr[DEM_DATABUF_EVENTSTATUS];/* [ARYCHK] DEM_ASYNCDATAQUE_MONITORDATA_ITEMSIZE / 1 / DEM_DATABUF_EVENTSTATUS */
-    monitorData0 = (Dem_MonitorDataType)( (Dem_MonitorDataType)DataBuffPtr[DEM_DATABUF_MONITORDATA_0] |/* [ARYCHK] DEM_ASYNCDATAQUE_MONITORDATA_ITEMSIZE / 1 / DEM_DATABUF_MONITORDATA_0 */
-                   ( (Dem_MonitorDataType)DataBuffPtr[DEM_DATABUF_MONITORDATA_1] << DEM_MONTORDATA_BITSHIFT_8 ) |/* [ARYCHK] DEM_ASYNCDATAQUE_MONITORDATA_ITEMSIZE / 1 / DEM_DATABUF_MONITORDATA_1 */
-                   ( (Dem_MonitorDataType)DataBuffPtr[DEM_DATABUF_MONITORDATA_2] << DEM_MONTORDATA_BITSHIFT_16 ) |/* [ARYCHK] DEM_ASYNCDATAQUE_MONITORDATA_ITEMSIZE / 1 / DEM_DATABUF_MONITORDATA_2 */
-                   ( (Dem_MonitorDataType)DataBuffPtr[DEM_DATABUF_MONITORDATA_3] << DEM_MONTORDATA_BITSHIFT_24 ) );/* [ARYCHK] DEM_ASYNCDATAQUE_MONITORDATA_ITEMSIZE / 1 / DEM_DATABUF_MONITORDATA_3 */
+    DequeStatus = (Dem_EventStatusType)DataBuffPtr[DEM_DATABUF_EVENTSTATUS];
+    monitorData0 = (Dem_MonitorDataType)( (Dem_MonitorDataType)DataBuffPtr[DEM_DATABUF_MONITORDATA_0] |
+                   ( (Dem_MonitorDataType)DataBuffPtr[DEM_DATABUF_MONITORDATA_1] << DEM_MONTORDATA_BITSHIFT_8 ) |
+                   ( (Dem_MonitorDataType)DataBuffPtr[DEM_DATABUF_MONITORDATA_2] << DEM_MONTORDATA_BITSHIFT_16 ) |
+                   ( (Dem_MonitorDataType)DataBuffPtr[DEM_DATABUF_MONITORDATA_3] << DEM_MONTORDATA_BITSHIFT_24 ) );
 
-    retVal  =   Dem_Control_SetEventCommon( (Dem_u16_EventCtrlIndexType)Index, DequeStatus, monitorData0, (boolean)FALSE );
+    retVal  =   Dem_Control_SetEventCommon( (Dem_u16_EventCtrlIndexType)Index, DequeStatus, monitorData0 );
 
     return retVal;
 }
@@ -612,8 +606,6 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_CheckStatusForSe
 /*  v5-0-0         :2022-03-29                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-7-0         :2024-05-29                                              */
-/*  v5-9-0         :2025-02-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

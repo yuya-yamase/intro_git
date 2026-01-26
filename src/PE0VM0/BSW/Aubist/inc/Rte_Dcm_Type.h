@@ -1,7 +1,7 @@
-/* Rte_Dcm_Type_h(v5-6-0)                                                   */
+/* Rte_Dcm_Type_h(v5-3-0)                                                   */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -683,6 +683,7 @@ typedef uint8 Rte_ModeType_DcmAuthenticationState_00;
 #define DCM_EXE_ROE                  ((Dcm_ActiveStateType)0x02U)
 #endif /* DCM_EXE_ROE */
 
+
 #ifndef DCM_DID_REQTYPE_READ
 #define DCM_DID_REQTYPE_READ ((Dcm_DidRequestType)0x00U)
 #endif /* DCM_DID_REQTYPE_READ */
@@ -767,12 +768,11 @@ typedef uint8 Rte_ModeType_DcmAuthenticationState_00;
 /*  v4-0-0         :2020-12-23                                              */
 /*  v5-0-0         :2021-09-28                                              */
 /*  v5-3-0         :2023-03-29                                              */
-/*  v5-6-0         :2024-02-27                                              */
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
 /*  Framework          :v2-1-0                                              */
-/*  BSW plug-in        :v5-10-0                                             */
+/*  BSW plug-in        :v5-5-1                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

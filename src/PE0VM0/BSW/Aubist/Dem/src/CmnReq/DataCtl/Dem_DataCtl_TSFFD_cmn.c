@@ -1,7 +1,7 @@
-/* Dem_DataCtl_TSFFD_cmn_c(v5-7-0)                                          */
+/* Dem_DataCtl_TSFFD_cmn_c(v5-5-0)                                          */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -147,7 +147,6 @@ static FUNC( void, DEM_CODE ) Dem_Data_InitAllSmplFFRecordList
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
-/*   v5-6-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_Data_InitSmplFFRecordList
 (
@@ -157,7 +156,7 @@ FUNC( void, DEM_CODE ) Dem_Data_InitSmplFFRecordList
     VAR( Dem_u16_FFDStoredIndexType, AUTOMATIC ) ffdStoredFormatSize;
     VAR( Dem_u16_TSFFDIndexType, AUTOMATIC ) ffdRecordIndex;
     VAR( Dem_u16_TSFFDIndexType, AUTOMATIC ) ffdRecordNum;
-    P2VAR( uint8, AUTOMATIC, DEM_VAR_NO_INIT ) samplingFreezeFrameRecordDataPtr;
+    P2VAR( uint8, AUTOMATIC, DEM_VAR_SAVED_ZONE ) samplingFreezeFrameRecordDataPtr;
 
     ffdStoredFormatSize = Dem_SamplingFreezeFrameRecordTable[SamplingRecMemIndex].DemFFDStoredFormatSize;   /* [GUDCHK:CALLER]SamplingRecMemIndex */
     ffdRecordNum = Dem_SamplingFreezeFrameRecordTable[SamplingRecMemIndex].DemFFDRecordNum;                 /* [GUDCHK:CALLER]SamplingRecMemIndex */
@@ -455,7 +454,6 @@ static FUNC( void, DEM_CODE ) Dem_Data_InitTSFFCtrlRecord
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_Data_SaveTSFFListRecordList
 (
@@ -469,8 +467,8 @@ FUNC( void, DEM_CODE ) Dem_Data_SaveTSFFListRecordList
 
     for( tsFFListRecIndex = ( Dem_u16_TSFFListIndexType )0U; tsFFListRecIndex < tsffTotalDTCNum; tsFFListRecIndex++ )   /* [GUD:for]tsFFListRecIndex */
     {
-        TimeSeriesFreezeFrameListRecordListPtr[tsFFListRecIndex].FaultIndex = Dem_TimeSeriesFreezeFrameListRecordList[tsFFListRecIndex].FaultIndex;                                                 /* [GUD]tsFFListRecIndex *//* [ARYCHK] DEM_TSFF_TOTAL_DTC_NUM / 1 / tsFFListRecIndex */
-        TimeSeriesFreezeFrameListRecordListPtr[tsFFListRecIndex].NumberOfStoredAfterTriggeredRecord = Dem_TimeSeriesFreezeFrameListRecordList[tsFFListRecIndex].NumberOfStoredAfterTriggeredRecord; /* [GUD]tsFFListRecIndex *//* [ARYCHK] DEM_TSFF_TOTAL_DTC_NUM / 1 / tsFFListRecIndex */
+        TimeSeriesFreezeFrameListRecordListPtr[tsFFListRecIndex].FaultIndex = Dem_TimeSeriesFreezeFrameListRecordList[tsFFListRecIndex].FaultIndex;                                                 /* [GUD]tsFFListRecIndex */
+        TimeSeriesFreezeFrameListRecordListPtr[tsFFListRecIndex].NumberOfStoredAfterTriggeredRecord = Dem_TimeSeriesFreezeFrameListRecordList[tsFFListRecIndex].NumberOfStoredAfterTriggeredRecord; /* [GUD]tsFFListRecIndex */
     }
 
     return;
@@ -491,7 +489,6 @@ FUNC( void, DEM_CODE ) Dem_Data_SaveTSFFListRecordList
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_Data_UpdateNumberOfStoredAfterTriggeredRecord
 (
@@ -523,10 +520,10 @@ FUNC( void, DEM_CODE ) Dem_Data_UpdateNumberOfStoredAfterTriggeredRecord
 
         for( tsFFListRecSavedIndex = Dem_TimeSeriesFreezeFrameBindTable[TimeSeriesFreezeFrameBindTableRef].DemStartIndex; tsFFListRecSavedIndex <= Dem_TimeSeriesFreezeFrameBindTable[TimeSeriesFreezeFrameBindTableRef].DemEndIndex; tsFFListRecSavedIndex++ ) /* [GUD:for]tsFFListRecSavedIndex */
         {
-            if( TimeSeriesFreezeFrameListRecordListPtr[tsFFListRecSavedIndex].FaultIndex == FaultIndex )        /* [GUD]tsFFListRecSavedIndex *//* [ARYCHK] DEM_TSFF_TOTAL_DTC_NUM / 1 / tsFFListRecSavedIndex */
+            if( TimeSeriesFreezeFrameListRecordListPtr[tsFFListRecSavedIndex].FaultIndex == FaultIndex )        /* [GUD]tsFFListRecSavedIndex */
             {
                 Dem_TimeSeriesFreezeFrameListRecordList[tsFFListRecStoreIndex].FaultIndex = FaultIndex;         /* [GUD]tsFFListRecStoreIndex */
-                Dem_TimeSeriesFreezeFrameListRecordList[tsFFListRecStoreIndex].NumberOfStoredAfterTriggeredRecord = TimeSeriesFreezeFrameListRecordListPtr[tsFFListRecSavedIndex].NumberOfStoredAfterTriggeredRecord;   /* [GUD]tsFFListRecStoreIndex *//* [GUD]tsFFListRecSavedIndex *//* [ARYCHK] DEM_TSFF_TOTAL_DTC_NUM / 1 / tsFFListRecSavedIndex */
+                Dem_TimeSeriesFreezeFrameListRecordList[tsFFListRecStoreIndex].NumberOfStoredAfterTriggeredRecord = TimeSeriesFreezeFrameListRecordListPtr[tsFFListRecSavedIndex].NumberOfStoredAfterTriggeredRecord;   /* [GUD]tsFFListRecStoreIndex *//* [GUD]tsFFListRecSavedIndex */
 
                 tsFFListRecStoreIndex = tsFFListRecStoreIndex + (Dem_u16_TSFFListIndexType)1U;
                 if( tsFFListRecStoreIndex >= tsFFListRecStoreLimit )                                            /* [GUD:if]tsFFListRecStoreIndex */
@@ -619,8 +616,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_UpdateVacantTSFFListRecord
 /*  Version        :Date                                                    */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-6-0         :2024-01-29                                              */
-/*  v5-7-0         :2024-05-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

@@ -1,7 +1,7 @@
-/* Dem_Control_Clear_c(v5-10-0)                                             */
+/* Dem_Control_Clear_c(v5-5-0)                                              */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -107,9 +107,6 @@ static FUNC( void, DEM_CODE ) Dem_Control_ReCalcMonSts
 ( void );
 
 static FUNC( void, DEM_CODE ) Dem_Control_ClearCheckCompleted
-( void );
-
-static FUNC( void, DEM_CODE ) Dem_Control_NotifyClearStart
 ( void );
 
 static FUNC( void, DEM_CODE ) Dem_Control_SetClearStatusComplete
@@ -333,7 +330,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_ClearDTC
 /*               |        DEM_IRT_OK : ClearDTC can be executed.            */
 /*               |        DEM_IRT_NG : ClearDTC cannot be executed.         */
 /*               |        DEM_IRT_PENDING :                                 */
-/* Notes         | Called within the exclusive Dem_CheckClearDTCStatus.     */
+/* Notes         |                                                          */
 /****************************************************************************/
 static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_CheckStatusOtherThanClear
 ( void )
@@ -411,7 +408,7 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_CheckStatusOther
 /*               |        DEM_CTL_CLEAR_TARGET_OTHER : Not equals data for  */
 /*               |         clear                                            */
 /*               |        DEM_CTL_CLEAR_TARGET_CANCEL :                     */
-/* Notes         | Called within the exclusive Dem_CheckClearDTCStatus.     */
+/* Notes         | This Function is in CheckClearDTCStatus exclusive sec..  */
 /****************************************************************************/
 static FUNC( Dem_u08_CtlClearTargetType , DEM_CODE ) Dem_Control_CheckClearTarget
 (
@@ -484,7 +481,7 @@ static FUNC( Dem_u08_CtlClearTargetType , DEM_CODE ) Dem_Control_CheckClearTarge
 /*               | [in] DTCOrigin :                                         */
 /*               |                                                          */
 /* Return Value  | void                                                     */
-/* Notes         | Called within the exclusive Dem_CheckClearDTCStatus.     */
+/* Notes         | This Function is in CheckClearDTCStatus exclusive sec..  */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_Control_SetClearTarget
 (
@@ -517,7 +514,6 @@ static FUNC( void, DEM_CODE ) Dem_Control_SetClearTarget
 /*               |         DEM_IRT_MEMORY_ERROR:                            */
 /*               |         DEM_IRT_OK:                                      */
 /* Notes         | This function is in DCM main process.                    */
-/* Notes         | Called within the exclusive Dem_CheckClearDTCStatus.     */
 /****************************************************************************/
 static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_ClearDTCTargetSame
 ( void )
@@ -562,7 +558,6 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_ClearDTCTargetSa
 /* Parameters    | none                                                     */
 /* Return Value  | none                                                     */
 /* Notes         | This function is in DCM main process.                    */
-/* Notes         | Called within the exclusive Dem_CheckClearDTCStatus.     */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_Control_ClearDTCTargetCancel
 ( void )
@@ -685,10 +680,7 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_ClearDTCFirstReq
 /*               | [out] DTCOriginPtr :                                     */
 /*               |        Address to Set DTCOrigin                          */
 /* Return Value  | void                                                     */
-/* Notes         |                                                          */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-10-0     | no branch changed.                                       */
+/* Notes         | This function is in Dem_MainFunction process.            */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_Control_GetClearType
 (
@@ -696,34 +688,12 @@ FUNC( void, DEM_CODE ) Dem_Control_GetClearType
     P2VAR( Dem_DTCOriginType, AUTOMATIC, AUTOMATIC ) DTCOriginPtr
 )
 {
-    SchM_Enter_Dem_CheckClearDTCStatus();
-
     *DTCGroupPtr = Dem_CtlClearTargetInfo.DTCGroup;
-    *DTCOriginPtr = Dem_Control_GetClearDTCOrigin();    /*  call function to avoid the QAC warning on Dem_Control_GetClearDTCOrigin().  */
-
-    SchM_Exit_Dem_CheckClearDTCStatus();
+    *DTCOriginPtr = Dem_CtlClearTargetInfo.DTCOrigin;
 
     return;
 }
 
-/****************************************************************************/
-/* Function Name | Dem_Control_GetClearDTCOrigin                            */
-/* Description   | get DTCOrigin.                                           */
-/* Preconditions | none                                                     */
-/* Parameters    | void                                                     */
-/* Return Value  | Dem_DTCOriginType                                        */
-/*               |       ClearDTC Origin.                                   */
-/* Notes         | This function is used in [DEM_OBD_SUPPORT] is [STD_ON]   */
-/*               |  or [DEM_USERDEFINEDMEMORY_SUPPORT] is [STD_ON].         */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-10-0     | new created.                                             */
-/****************************************************************************/
-FUNC( Dem_DTCOriginType, DEM_CODE ) Dem_Control_GetClearDTCOrigin
-( void )
-{
-    return Dem_CtlClearTargetInfo.DTCOrigin;
-}
 
 /*--------------------------------------------------------------------------*/
 /* Unit Internal functions(process)                                         */
@@ -735,9 +705,6 @@ FUNC( Dem_DTCOriginType, DEM_CODE ) Dem_Control_GetClearDTCOrigin
 /* Parameters    | none                                                     */
 /* Return Value  | void                                                     */
 /* Notes         |                                                          */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-6-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_Control_ClearDTCProcess
 ( void )
@@ -751,10 +718,6 @@ FUNC( void, DEM_CODE ) Dem_Control_ClearDTCProcess
             /* No process */
             break;
         case DEM_CTL_STS_CLEAR_PREPARE_CLEAR:
-
-            /* notify clear start. */
-            Dem_Control_NotifyClearStart();
-
             /*--------------------------------------*/
             /*  notify SAVED_ZONE update - start.   */
             Dem_NotifySavedZoneUpdate_Enter();      /*  notify start :  savedzone area will be update.  */
@@ -1057,37 +1020,6 @@ static FUNC( void, DEM_CODE ) Dem_Control_ClearCheckCompleted
 }
 
 /****************************************************************************/
-/* Function Name | Dem_Control_NotifyClearStart                             */
-/* Description   | Notify the clear process is start.                       */
-/* Preconditions | none                                                     */
-/* Parameters    | none                                                     */
-/* Return Value  | void                                                     */
-/* Notes         | This function is in Dem_MainFunction process.            */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-6-0      | new created. based on Dem_Control_ClearCheckCompleted.   */
-/****************************************************************************/
-static FUNC( void, DEM_CODE ) Dem_Control_NotifyClearStart
-( void )
-{
-    VAR( Dem_ClearDTCCallerType, AUTOMATIC ) calloutCaller;
-
-    if( Dem_CtlClearTargetInfo.Caller == DEM_CALLER_DCM )
-    {
-        calloutCaller = DEM_CALLER_TYPE_DCM;
-    }
-    else
-    {
-        /* Currently just use DCM or CDD value, so if it is not DCM */
-        calloutCaller = DEM_CALLER_TYPE_SWC;
-    }
-
-    Dem_NotifyClearStart( calloutCaller, Dem_CtlClearTargetInfo.DTCGroup, Dem_CtlClearTargetInfo.DTCFormat, Dem_CtlClearTargetInfo.DTCOrigin );
-
-    return;
-}
-
-/****************************************************************************/
 /* Function Name | Dem_Control_SetClearStatusComplete                       */
 /* Description   | Sets clear status complete.                              */
 /* Preconditions | none                                                     */
@@ -1095,35 +1027,12 @@ static FUNC( void, DEM_CODE ) Dem_Control_NotifyClearStart
 /*               |                                                          */
 /* Return Value  | void                                                     */
 /* Notes         | This function is in Dem_MainFunction process.            */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-10-0     | branch changed.                                          */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_Control_SetClearStatusComplete
 (
     VAR( Dem_u08_ClearCompleteType, AUTOMATIC ) ClearResult
 )
 {
-    if ( Dem_CtlClearTargetInfo.DTCOrigin == DEM_DTC_ORIGIN_PRIMARY_MEMORY )
-    {
-        Dem_Control_EndClearDTC_PrimaryMemory( Dem_CtlClearTargetInfo.DTCGroup, ClearResult );
-    }
-    else
-    {
-#if ( DEM_USERDEFINEDMEMORY_SUPPORT == STD_ON ) /*  [FuncSw]    */
-        /*  UserDefinedMemory clear.        */
-        Dem_UdmControl_EndClearDTC( Dem_CtlClearTargetInfo.DTCOrigin, ClearResult );
-#endif  /*   ( DEM_USERDEFINEDMEMORY_SUPPORT == STD_ON )        */
-    }
-
-    Dem_ModeMng_ClearMode( DEM_MODE_PROCESSING_CLEAR_DTC );
-
-    /*----------------------------------------------------------------------------------------------------------*/
-    /*  DemMode [DEM_MODE_PROCESSING_CLEAR_DTC] OFF                                                             */
-    /*   => clear complete : switch IDLE status in Dem_Control_ClearDTCTargetSame() at requester context.       */
-    /*      cancel request : call Dem_Control_Clear_ClearDTCInfo().                                             */
-    /*----------------------------------------------------------------------------------------------------------*/
-
     SchM_Enter_Dem_CheckClearDTCStatus();
 
     if( Dem_CtlCancelClearRequest == (boolean)TRUE )
@@ -1144,6 +1053,20 @@ static FUNC( void, DEM_CODE ) Dem_Control_SetClearStatusComplete
     }
 
     SchM_Exit_Dem_CheckClearDTCStatus();
+
+    if ( Dem_CtlClearTargetInfo.DTCOrigin == DEM_DTC_ORIGIN_PRIMARY_MEMORY )
+    {
+        Dem_Control_EndClearDTC_PrimaryMemory( Dem_CtlClearTargetInfo.DTCGroup, ClearResult );
+    }
+    else
+    {
+#if ( DEM_USERDEFINEDMEMORY_SUPPORT == STD_ON ) /*  [FuncSw]    */
+        /*  UserDefinedMemory clear.        */
+        Dem_UdmControl_EndClearDTC( Dem_CtlClearTargetInfo.DTCOrigin );
+#endif  /*   ( DEM_USERDEFINEDMEMORY_SUPPORT == STD_ON )        */
+    }
+
+    Dem_ModeMng_ClearMode( DEM_MODE_PROCESSING_CLEAR_DTC );
 
     return;
 }
@@ -1193,9 +1116,7 @@ FUNC( void, DEM_CODE ) Dem_Control_Clear_ClearDTCInfo
 /* Parameters    | none                                                     */
 /* Return Value  | boolean                                                  */
 /*               |        TRUE  :   Active ClearDTC process.                */
-/*               |                  => start of Dem_ClearDTC() job.         */
 /*               |        FALSE :   Not Active ClearDTC process.            */
-/*               |                  => complete of Dem_ClearDTC() job.      */
 /* Notes         | This function is in SW-C  main process.                  */
 /****************************************************************************/
 FUNC( boolean, DEM_CODE ) Dem_Control_CheckExecClearDTCProcess
@@ -1204,39 +1125,6 @@ FUNC( boolean, DEM_CODE ) Dem_Control_CheckExecClearDTCProcess
     return Dem_CtlExecClearDTCFlag;
 }
 
-/****************************************************************************/
-/* Function Name | Dem_Control_CheckExecClearDTCProcessActive               */
-/* Description   | Check execute clearDTC process is active.                */
-/* Preconditions | none                                                     */
-/* Parameters    | none                                                     */
-/* Return Value  | boolean                                                  */
-/*               |        TRUE  :   Active ClearDTC process.                */
-/*               |                  => DEM_MODE_PROCESSING_CLEAR_DTC is ON. */
-/*               |        FALSE :   Not Active ClearDTC process.            */
-/*               |                  => DEM_MODE_PROCESSING_CLEAR_DTC is OFF.*/
-/* Notes         |                                                          */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-8-0      | new created.                                             */
-/****************************************************************************/
-FUNC( boolean, DEM_CODE ) Dem_Control_CheckExecClearDTCProcessActive
-( void )
-{
-    VAR( Dem_ModeType, AUTOMATIC )  demMode;
-    VAR( boolean, AUTOMATIC )       activeClearDTCMode;
-
-    /*  get DemMode.                        */
-    demMode = Dem_ModeMng_GetMode();
-
-    activeClearDTCMode  =   (boolean)FALSE;
-    if( ( demMode & DEM_MODE_PROCESSING_CLEAR_DTC ) == DEM_MODE_PROCESSING_CLEAR_DTC )
-    {
-        /*  clearDTC process is active.     */
-        activeClearDTCMode  =   (boolean)TRUE;
-    }
-
-    return activeClearDTCMode;
-}
 
 /****************************************************************************/
 /* Function Name | Dem_Control_Clear_RefreshRAM                             */
@@ -1281,9 +1169,6 @@ FUNC( void, DEM_CODE ) Dem_Control_Clear_RefreshRAM
 /*  v5-0-0         :2022-03-29                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-6-0         :2024-01-29                                              */
-/*  v5-8-0         :2024-10-29                                              */
-/*  v5-10-0        :2025-06-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

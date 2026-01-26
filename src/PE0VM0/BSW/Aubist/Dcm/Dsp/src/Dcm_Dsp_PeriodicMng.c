@@ -1,7 +1,7 @@
-/* Dcm_Dsp_PeriodicMng_c(v5-8-0)                                            */
+/* Dcm_Dsp_PeriodicMng_c(v5-3-0)                                            */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -307,11 +307,10 @@ FUNC( void, DCM_CODE ) Dcm_Dsp_PeriodicMng_SetActiveResponse
     const Dcm_ActiveStateType u1ActiveStatus
 )
 {
-    uint16    u2_ConnectionIdList[DCM_DSP_PERIODIC_CONNECTIONID_LISTNUM];
+    uint16    u2_ConnectionIdList[DCM_DSP_PERIODIC_CONNECTIONID_LISTNUM] = {0};
     uint8     u1_ListNum;
     
     u1_ListNum = (uint8)0U;
-    Dcm_Main_SetMemory( (uint8*)&u2_ConnectionIdList[0], (uint8)0U, (uint16)(sizeof(u2_ConnectionIdList)) );
     
     if( (u1ActiveStatus & DCM_EXE_PERIODIC) == DCM_EXE_PERIODIC )
     {
@@ -350,7 +349,7 @@ FUNC( void, DCM_CODE ) Dcm_Dsp_PeriodicMng_UpdatePDIDTbl
     uint32        u4_DownCounter;
     uint16        u2_ReqPDIDNum;
     uint16        u2_CntReq;
-    uint16        u2_ConnectionIdList[DCM_DSP_PERIODIC_CONNECTIONID_LISTNUM];
+    uint16        u2_ConnectionIdList[DCM_DSP_PERIODIC_CONNECTIONID_LISTNUM] = {0};
     uint8         u1_Status;
     uint8         u1_PDIDNum;
     uint8         u1_UpdPDIDNum;
@@ -360,7 +359,6 @@ FUNC( void, DCM_CODE ) Dcm_Dsp_PeriodicMng_UpdatePDIDTbl
     boolean       b_DelFlg;
 
     u1_ListNum = (uint8)0U;
-    Dcm_Main_SetMemory( (uint8*)&u2_ConnectionIdList[0], (uint8)0U, (uint16)(sizeof(u2_ConnectionIdList)) );
     if( u1PdidNumNew == (uint8)0U )
     {
         Dcm_Dsp_PeriodicMng_GetConnectionIdList( &u2_ConnectionIdList[DCM_DSP_PERIODIC_START_POS], &u1_ListNum );
@@ -508,7 +506,7 @@ FUNC( void, DCM_CODE ) Dcm_Dsp_PeriodicMng_NotifySecCtrl /* MISRA DEVIATION */
 {
     uint16                          u2_Did;
     uint16                          u2_Index;
-    uint16                          u2_ConnectionIdList[DCM_DSP_PERIODIC_CONNECTIONID_LISTNUM];
+    uint16                          u2_ConnectionIdList[DCM_DSP_PERIODIC_CONNECTIONID_LISTNUM] = {0};
     uint8                           u1_KindOfDid;
     uint8                           u1_PDIDNum;
     uint8                           u1_UpdPDIDNum;
@@ -527,7 +525,6 @@ FUNC( void, DCM_CODE ) Dcm_Dsp_PeriodicMng_NotifySecCtrl /* MISRA DEVIATION */
         u1_PDIDNum    = Dcm_Dsp_Periodic_u1DidInfo_RegNum;
         u1_UpdPDIDNum = u1_PDIDNum;
         u1_ListNum    = (uint8)0U;
-        Dcm_Main_SetMemory( (uint8*)&u2_ConnectionIdList[0], (uint8)0U, (uint16)(sizeof(u2_ConnectionIdList)) );
         /* Check and Update PDID information table */
         for( u1_Cnt = (uint8)0U; u1_Cnt < u1_PDIDNum; u1_Cnt++ )
         {
@@ -582,7 +579,7 @@ FUNC( void, DCM_CODE ) Dcm_Dsp_PeriodicMng_NotifySesCtrl /* MISRA DEVIATION */
 {
     uint16                          u2_Did;
     uint16                          u2_Index;
-    uint16                          u2_ConnectionIdList[DCM_DSP_PERIODIC_CONNECTIONID_LISTNUM];
+    uint16                          u2_ConnectionIdList[DCM_DSP_PERIODIC_CONNECTIONID_LISTNUM] = {0};
     PduIdType                       u2_RxPduId;
     uint8                           u1_KindOfDid;
     uint8                           u1_PDIDNum;
@@ -601,7 +598,6 @@ FUNC( void, DCM_CODE ) Dcm_Dsp_PeriodicMng_NotifySesCtrl /* MISRA DEVIATION */
     {
         u1_TMUpdType = Dcm_Dsp_Periodic_u1TransmissonUpdType;
         u1_ListNum    = (uint8)0U;
-        Dcm_Main_SetMemory( (uint8*)&u2_ConnectionIdList[0], (uint8)0U, (uint16)(sizeof(u2_ConnectionIdList)) );
         if( u1_TMUpdType == DCM_DSP_PERIODIC_TRANSMISSIONUPD_TYPE1 )
         {
             b_DelFlg      = (boolean)FALSE;
@@ -734,7 +730,7 @@ FUNC( void, DCM_CODE ) Dcm_Dsp_PeriodicMng_UpdPDidInfDDDidClr
 {
     uint16                          u2_Did;
     uint16                          u2_Index;
-    uint16                          u2_ConnectionIdList[DCM_DSP_PERIODIC_CONNECTIONID_LISTNUM];
+    uint16                          u2_ConnectionIdList[DCM_DSP_PERIODIC_CONNECTIONID_LISTNUM] = {0};
     uint16                          u2_DynamicIndex;
     uint8                           u1_KindOfDid;
     uint8                           u1_NumOfSourceDid;
@@ -753,7 +749,6 @@ FUNC( void, DCM_CODE ) Dcm_Dsp_PeriodicMng_UpdPDidInfDDDidClr
     u2_DynamicIndex   = (uint16)0U;
     u1_ListNum        = (uint8)0U;
     b_DeleteFlg = (boolean)FALSE;
-    Dcm_Main_SetMemory( (uint8*)&u2_ConnectionIdList[0], (uint8)0U, (uint16)(sizeof(u2_ConnectionIdList)) );
     
     for( u1_Cnt = (uint8)0U; u1_Cnt < u1_PDIDNum; u1_Cnt++ )
     {
@@ -811,7 +806,7 @@ FUNC( void, DCM_CODE ) Dcm_Dsp_PeriodicMng_UpdPDidInfSpecDDDidClr
     const uint8 u1ClrDDDid
 )
 {
-    uint16                          u2_ConnectionIdList[DCM_DSP_PERIODIC_CONNECTIONID_LISTNUM];
+    uint16                          u2_ConnectionIdList[DCM_DSP_PERIODIC_CONNECTIONID_LISTNUM] = {0};
     uint16                          u2_PdidConnectionId;
     uint8                           u1_PDIDNum;
     uint8                           u1_Cnt;
@@ -820,7 +815,6 @@ FUNC( void, DCM_CODE ) Dcm_Dsp_PeriodicMng_UpdPDidInfSpecDDDidClr
 
     u1_PDIDNum    = Dcm_Dsp_Periodic_u1DidInfo_RegNum;
     u1_ListNum    = (uint8)0U;
-    Dcm_Main_SetMemory( (uint8*)&u2_ConnectionIdList[0], (uint8)0U, (uint16)(sizeof(u2_ConnectionIdList)) );
 
     for( u1_Cnt = (uint8)0U; u1_Cnt < u1_PDIDNum; u1_Cnt++ )
     {
@@ -1304,13 +1298,12 @@ static FUNC( Std_ReturnType, DCM_CODE ) Dcm_Dsp_PeriodicMng_SendResult
 static FUNC( void, DCM_CODE ) Dcm_Dsp_PeriodicMng_SendStop
 ( void ) 
 {
-    uint16  u2_ConnectionIdList[DCM_DSP_PERIODIC_CONNECTIONID_LISTNUM];
+    uint16  u2_ConnectionIdList[DCM_DSP_PERIODIC_CONNECTIONID_LISTNUM] = {0};
     uint8   u1_OpStatus;
     uint8   u1_Pdid;
     uint8   u1_ListNum;
     
     u1_ListNum = (uint8)0U;
-    Dcm_Main_SetMemory( (uint8*)&u2_ConnectionIdList[0], (uint8)0U, (uint16)(sizeof(u2_ConnectionIdList)) );
     
     if( Dcm_Dsp_Periodic_u4PendingCnt != (uint32)0U )
     {
@@ -1561,13 +1554,13 @@ static FUNC( void, DCM_CODE ) Dcm_Dsp_PeriodicMng_SendDownCount
     uint8   u1_PdidRegNum;
     uint8   u1_PdidCnt;
     uint8   u1_PdidCnt2;
-    uint8   u1_RateEndPdid[ DCM_DSP_PERIODIC_RATEMODE_NUM ];
+    uint8   u1_RateEndPdid[ DCM_DSP_PERIODIC_RATEMODE_NUM ] = {0};
     boolean b_SkipFlag;
     Std_ReturnType u1_RetSetQue;
     
     u1_PdidRegNum = Dcm_Dsp_Periodic_u1DidInfo_RegNum;
     b_SkipFlag    = (boolean)FALSE;
-    Dcm_Main_SetMemory( (uint8*)&u1_RateEndPdid[0], (uint8)0U, (uint16)(sizeof(u1_RateEndPdid)) );
+    
 
     for( u1_PdidCnt = (uint8)0U; u1_PdidCnt < u1_PdidRegNum; u1_PdidCnt++ )
     {
@@ -2142,7 +2135,6 @@ static FUNC( Std_ReturnType, DCM_CODE ) Dcm_Dsp_PeriodicMng_CallReadDynDidFnc
 /*  v5-0-0         :2022-03-29                                              */
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
-/*  v5-8-0         :2024-10-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

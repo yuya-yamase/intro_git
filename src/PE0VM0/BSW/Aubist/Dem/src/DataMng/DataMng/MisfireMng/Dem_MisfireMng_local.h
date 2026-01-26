@@ -1,7 +1,7 @@
-/* Dem_MisfireMng_local_h(v5-9-0)                                           */
+/* Dem_MisfireMng_local_h(v5-5-0)                                           */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 /****************************************************************************/
 /* Object Name  | Dem/MisfireMng_local/HEADER                               */
@@ -82,18 +82,6 @@ FUNC( boolean, DEM_CODE ) Dem_MisfireMng_CheckConsistencyIdOfMisfireComRecord
     VAR( Dem_u08_ConsistencyIdType, AUTOMATIC ) ConsistencyId
 );
 
-#if ( DEM_OBDFFD_SUPPORT == STD_ON )
-#if ( DEM_OBDONUDS_SUPPORT == STD_ON )
-#if ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )
-FUNC( void, DEM_CODE ) Dem_MisfireMng_CopyAllObdFFDCyl
-(
-    VAR( Dem_u16_MisfireStrgIndexType, AUTOMATIC ) MisfireIndexDest,
-    VAR( Dem_u16_MisfireStrgIndexType, AUTOMATIC ) MisfireIndexSrc
-);
-#endif  /* ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )   */
-#endif  /* ( DEM_OBDONUDS_SUPPORT == STD_ON )               */
-#endif  /* ( DEM_OBDFFD_SUPPORT == STD_ON )                 */
-
 #endif  /* ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON )   */
 
 #define DEM_STOP_SEC_CODE
@@ -109,7 +97,6 @@ FUNC( void, DEM_CODE ) Dem_MisfireMng_CopyAllObdFFDCyl
 /*  v5-0-0         :2021-12-24                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-9-0         :2025-02-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

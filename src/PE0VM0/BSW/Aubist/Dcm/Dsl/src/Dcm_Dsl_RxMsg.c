@@ -1,7 +1,7 @@
-/* Dcm_Dsl_RxMsg_c(v5-10-0)                                                 */
+/* Dcm_Dsl_RxMsg_c(v5-3-0)                                                  */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -50,6 +50,7 @@ static FUNC(BufReq_ReturnType, DCM_CODE) Dcm_Dsl_RxMsg_StartOfReceptionCore
 (
     const PduIdType uvId,
     P2CONST(AB_83_DcmPduInfoType , AUTOMATIC, DCM_APPL_DATA) ptInfo,
+    const AB_83_DcmPduLengthType u4TpSduLength,
     P2VAR(AB_83_DcmPduLengthType, AUTOMATIC, DCM_APPL_DATA) ptBufferSizePtr
 );
 
@@ -109,7 +110,7 @@ static VAR(volatile uint8, DCM_VAR_NO_INIT) Dcm_Dsl_u1RxState[DCM_DSL_PDUID_NUM]
 /* Description   | This function is called at the start of receiving.       */
 /* Preconditions | none                                                     */
 /* Parameters    | [in] id              : PduId(Rx)                         */
-/*               | [in] info            : RxData information                */
+/*               | [in] info            : RxData information()              */
 /*               | [in] TpSduLength     : Total Length from PduR            */
 /*               | [out] bufferSizePtr  : The length that Dcm can receive   */
 /*               |                                                          */
@@ -133,24 +134,33 @@ FUNC(BufReq_ReturnType, DCM_CODE) Dcm_StartOfReception
     AB_83_DcmPduLengthType  u4_bufferSizePtr;
     BufReq_ReturnType       u1_RetVal;
 
-    st_Info.SduLength  = (AB_83_DcmPduLengthType)TpSduLength;
     if( info != NULL_PTR )
     {
+        st_Info.SduLength  = info->SduLength;
         st_Info.SduDataPtr = info->SduDataPtr;
     }
     else
     {
+        st_Info.SduLength  = TpSduLength;
         st_Info.SduDataPtr = NULL_PTR;
     }
     pt_Info = &st_Info;
 
-    u1_RetVal = Dcm_Dsl_RxMsg_StartOfReceptionCore(id, pt_Info, &u4_bufferSizePtr);
+    u1_RetVal = Dcm_Dsl_RxMsg_StartOfReceptionCore(id, pt_Info, (AB_83_DcmPduLengthType)TpSduLength, &u4_bufferSizePtr);
     if( u1_RetVal == (BufReq_ReturnType)BUFREQ_OK )
     {
         if( bufferSizePtr != NULL_PTR )
         {
             *bufferSizePtr = (PduLengthType)u4_bufferSizePtr;
         }
+        else
+        {
+            /* none */
+        }
+    }
+    else
+    {
+        /* none */
     }
 
     return u1_RetVal;
@@ -161,7 +171,7 @@ FUNC(BufReq_ReturnType, DCM_CODE) Dcm_StartOfReception
 /* Description   | This function is called at the start of receiving.       */
 /* Preconditions | none                                                     */
 /* Parameters    | [in] id              : PduId(Rx)                         */
-/*               | [in] info            : RxData information                */
+/*               | [in] info            : RxData information()              */
 /*               | [in] TpSduLength     : Total Length from PduR            */
 /*               | [out] bufferSizePtr  : The length that Dcm can receive   */
 /*               |                                                          */
@@ -185,24 +195,32 @@ FUNC(BufReq_ReturnType, DCM_CODE) Dcm_StartOfReception32
     AB_83_DcmPduLengthType  u4_bufferSizePtr;
     BufReq_ReturnType       u1_RetVal;
 
-    st_Info.SduLength  = TpSduLength;
     if( info != NULL_PTR )
     {
-        st_Info.SduDataPtr = info->SduDataPtr;
+        pt_Info = info;
     }
     else
     {
+        st_Info.SduLength  = TpSduLength;
         st_Info.SduDataPtr = NULL_PTR;
+        pt_Info            = &st_Info;
     }
-    pt_Info = &st_Info;
 
-    u1_RetVal = Dcm_Dsl_RxMsg_StartOfReceptionCore(id, pt_Info, &u4_bufferSizePtr);
+    u1_RetVal = Dcm_Dsl_RxMsg_StartOfReceptionCore(id, pt_Info, TpSduLength, &u4_bufferSizePtr);
     if( u1_RetVal == (BufReq_ReturnType)BUFREQ_OK )
     {
         if( bufferSizePtr != NULL_PTR )
         {
             *bufferSizePtr = u4_bufferSizePtr;
         }
+        else
+        {
+            /* none */
+        }
+    }
+    else
+    {
+        /* none */
     }
 
     return u1_RetVal;
@@ -629,6 +647,7 @@ FUNC(void, DCM_CODE) Dcm_Dsl_RxMsg_Refresh
 /* Preconditions | none                                                     */
 /* Parameters    | [in] uvId              : PduId(Rx)                       */
 /*               | [in] ptInfo            : RxData information              */
+/*               | [in] u4TpSduLength     : Total Length from PduR          */
 /*               | [out] ptBufferSizePtr  : The length that Dcm can receive */
 /*               |                                                          */
 /* Return Value  | BufReq_ReturnType                                        */
@@ -641,13 +660,14 @@ FUNC(void, DCM_CODE) Dcm_Dsl_RxMsg_Refresh
 static FUNC(BufReq_ReturnType, DCM_CODE) Dcm_Dsl_RxMsg_StartOfReceptionCore
 (
     const PduIdType uvId,
-    P2CONST(AB_83_DcmPduInfoType, AUTOMATIC, DCM_APPL_DATA) ptInfo,
+    P2CONST(AB_83_DcmPduInfoType , AUTOMATIC, DCM_APPL_DATA) ptInfo,
+    const AB_83_DcmPduLengthType u4TpSduLength,
     P2VAR(AB_83_DcmPduLengthType, AUTOMATIC, DCM_APPL_DATA) ptBufferSizePtr
 )
 {
-    AB_83_DcmPduLengthType u4_RxBufSize;
     BufReq_ReturnType u1_RetVal;
     uint32  u4_RxFailSafe;
+    uint32  u4_RxBufSize;
     uint16  u2_PdurCount;
     uint16  u2_PduIdNum;
     uint8   u1_ReqKind;
@@ -669,8 +689,11 @@ static FUNC(BufReq_ReturnType, DCM_CODE) Dcm_Dsl_RxMsg_StartOfReceptionCore
         {
             break;
         }
+        else
+        {
+            /* none */
+        }
     }
-
     if( u2_PdurCount < u2_PduIdNum )
     {
         b_DslComEnable = Dcm_Dsl_CmHdl_IsComEnable(u2_PdurCount, DCM_DSL_COMTYPE_RECEIVE);
@@ -679,7 +702,7 @@ static FUNC(BufReq_ReturnType, DCM_CODE) Dcm_Dsl_RxMsg_StartOfReceptionCore
             b_CancelRxFlag = Dcm_Dsl_bCancelRxFlag;
             if( b_CancelRxFlag == (boolean)FALSE )
             {
-                if( ptInfo->SduLength == (AB_83_DcmPduLengthType)0 )
+                if( u4TpSduLength == (AB_83_DcmPduLengthType)0 )
                 {
                     u4_RxBufSize = Dcm_Dsl_Ctrl_GetRxBufSize(u2_PdurCount);
                     *ptBufferSizePtr = u4_RxBufSize;
@@ -687,7 +710,7 @@ static FUNC(BufReq_ReturnType, DCM_CODE) Dcm_Dsl_RxMsg_StartOfReceptionCore
                 else
                 {
                     u4_RxBufSize = Dcm_Dsl_Ctrl_GetRxBufSize(u2_PdurCount);
-                    if( ptInfo->SduLength <= u4_RxBufSize )
+                    if( u4TpSduLength <= u4_RxBufSize )
                     {
                         u1_ReqKind  = DCM_DSL_RX_REQ_OTHER;
                         if( Dcm_Dsl_u1RxState[u2_PdurCount] == DCM_DSL_RX_ST_IDLE )
@@ -739,6 +762,10 @@ static FUNC(BufReq_ReturnType, DCM_CODE) Dcm_Dsl_RxMsg_StartOfReceptionCore
                                 u1_RetVal = (BufReq_ReturnType)BUFREQ_E_OVFL;
                             }
                         }
+                        else
+                        {
+                            /* none */
+                        }
                     }
                     else
                     {
@@ -746,7 +773,19 @@ static FUNC(BufReq_ReturnType, DCM_CODE) Dcm_Dsl_RxMsg_StartOfReceptionCore
                     }
                 }
             }
+            else
+            {
+                /* none */
+            }
         }
+        else
+        {
+            /* none */
+        }
+    }
+    else
+    {
+        /* none */
     }
 
     return u1_RetVal;
@@ -1015,7 +1054,6 @@ static FUNC(boolean, DCM_CODE ) Dcm_Dsl_RxMsg_IsParallelRx
 /*  v3-2-0         :2020-10-28                                              */
 /*  v5-0-0         :2021-12-24                                              */
 /*  v5-3-0         :2022-12-23                                              */
-/*  v5-10-0        :2025-08-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

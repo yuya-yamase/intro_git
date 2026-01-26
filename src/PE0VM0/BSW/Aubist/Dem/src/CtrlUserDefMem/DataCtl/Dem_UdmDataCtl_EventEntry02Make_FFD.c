@@ -1,7 +1,7 @@
-/* Dem_UdmDataCtl_EventEntry02Make_FFD_c(v5-9-0)                            */
+/* Dem_UdmDataCtl_EventEntry02Make_FFD_c(v5-5-0)                            */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -24,11 +24,6 @@
 #include "../../../cfg/Dem_UserDefMem_Cfg.h"
 #include "../../../inc/Dem_Udm_Data.h"
 #include "Dem_UdmDataCtl_EventEntry_local.h"
-
-#ifndef DEM_SIT_RANGE_CHECK
-#else   /* DEM_SIT_RANGE_CHECK */
-#include <Dem_SIT_RangeCheck.h>
-#endif  /* DEM_SIT_RANGE_CHECK */
 
 /*--------------------------------------------------------------------------*/
 /* Macros                                                                   */
@@ -188,7 +183,6 @@ static FUNC( void, DEM_CODE ) Dem_UdmData_CaptureNonObdFreezeFrameToTmp
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
-/*   v5-9-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmData_SetFFRecordIndexToTmp
 ( void )
@@ -202,7 +196,7 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmData_SetFFRecordIndex
 
     retVal = DEM_IRT_NG;
 
-    if( Dem_UdmTmpEventMemoryEntry.EventRecord.UdmFaultIndex == DEM_UDMFAULTINDEX_INITIAL )
+    if( Dem_UdmTmpEventMemoryEntry.EventRecord.UdmFaultIndex == DEM_FAULTINDEX_INITIAL )
     {
         /* No Process */
     }
@@ -304,10 +298,6 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmData_SetNextFFRecordI
 /*               |        The pointer of DemFreezeFrameClass.               */
 /* Return Value  | void                                                     */
 /* Notes         | -                                                        */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-6-0      | no branch changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_UdmData_CaptureFreezeFrameDataToTmp
 (
@@ -315,22 +305,14 @@ static FUNC( void, DEM_CODE ) Dem_UdmData_CaptureFreezeFrameDataToTmp
     P2CONST( AB_83_ConstV Dem_FreezeFrameClassType, AUTOMATIC, DEM_CONFIG_DATA ) FreezeFrameClassPtr
 )
 {
-    VAR( Dem_u16_EventCtrlIndexType, AUTOMATIC ) eventCtrlIndex;
-
     /* Set the event Index of the event memory entry of temporary area to the event Index of the freeze frame record. */
     Dem_UdmTmpEventMemoryEntry.FreezeFrameRecord.UdmEventIndex = Dem_UdmTmpEventMemoryEntry.UdmEventIndex;
 
     /* Set "stored" to the record status of the freeze frame record. */
     Dem_UdmTmpEventMemoryEntry.FreezeFrameRecord.RecordStatus = DEM_FFD_STORED;
 
-    eventCtrlIndex = Dem_CfgInfoUdm_CnvUdmEventIndexToEventCtrlIndex( Dem_UdmTmpEventMemoryEntry.UdmEventIndex );
-
     /* Store capture data in the freeze frame record data */
-#ifndef DEM_SIT_RANGE_CHECK
-    Dem_Data_CaptureFreezeFrameClass( eventCtrlIndex, FreezeFrameClassPtr, Dem_UdmTmpEventMemoryEntry.FreezeFrameRecord.Data , monitorData0 );
-#else   /* DEM_SIT_RANGE_CHECK */
-    Dem_Data_CaptureFreezeFrameClass( Dem_UdmFFDMaxLength, eventCtrlIndex, FreezeFrameClassPtr, Dem_UdmTmpEventMemoryEntry.FreezeFrameRecord.Data , monitorData0 );
-#endif  /* DEM_SIT_RANGE_CHECK */
+    (void)Dem_Data_CaptureFreezeFrameClass( FreezeFrameClassPtr, Dem_UdmTmpEventMemoryEntry.FreezeFrameRecord.Data , monitorData0 );    /* no return check required */
 
     return;
 }
@@ -348,9 +330,6 @@ static FUNC( void, DEM_CODE ) Dem_UdmData_CaptureFreezeFrameDataToTmp
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-6-0         :2024-01-29                                              */
-/*  v5-7-0         :2024-05-29                                              */
-/*  v5-9-0         :2025-02-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

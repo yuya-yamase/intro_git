@@ -1,7 +1,7 @@
-/* Dem_Control_PID_EdsFFD_c(v5-8-0)                                         */
+/* Dem_Control_PID_EdsFFD_c(v5-5-0)                                         */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -90,11 +90,9 @@ static VAR( Dem_u16_EventStrgIndexType, DEM_VAR_NO_INIT ) Dem_HighPriorityEventS
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | branch changed.                                          */
-/*   v5-8-0      | branch changed.                                          */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_GetDTCOfOBDFreezeFrame
 (
-    VAR( Dem_u08_RequestCallerType, AUTOMATIC ) Caller,
     VAR( Dem_u08_FFRecordNumberType, AUTOMATIC ) FrameNumber,
     P2VAR( Dem_u32_DTCValueType, AUTOMATIC, AUTOMATIC ) DTC
 )
@@ -128,10 +126,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_GetDTCOfOBDFreezeFrame
             SchM_Exit_Dem_EventMemory();
             /*--------------------------------------------------------------------------*/
             retSearchPriority = Dem_DataCtl_SearchPriorityOBDFreezeFrame( &eventStrgIndex, &faultIndex );
-            if( Caller == DEM_CALLER_DCM )
-            {
-                Dem_HighPriorityEventStrgIndex  =   eventStrgIndex;
-            }
+            Dem_HighPriorityEventStrgIndex  =   eventStrgIndex;
             if( retSearchPriority == DEM_IRT_OK )
             {
 #if ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON )  /*  [FuncSw]    */
@@ -210,7 +205,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_GetDTCOfOBDFreezeFrame
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
-/*   v5-8-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_ReadDataOfOBDFreezeFrame
 (
@@ -245,16 +239,15 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_ReadDataOfOBDFreezeFram
         /*--------------------------------------------------------------------------*/
         if( Caller == DEM_CALLER_DCM )
         {
-            eventStrgIndex  =   Dem_HighPriorityEventStrgIndex;
-            if ( eventStrgIndex < eventStorageNum )
+            if ( Dem_HighPriorityEventStrgIndex < eventStorageNum )
             {
-                retVal = Dem_PID_ReadDataOfOBDFreezeFrame( eventStrgIndex, PID, DataElementIndexOfPID, DestBuffer, BufSize );   /* [GUDCHK:CALLER]DataElementIndexOfPID */
+                retVal = Dem_PID_ReadDataOfOBDFreezeFrame( Dem_HighPriorityEventStrgIndex, PID, DataElementIndexOfPID, DestBuffer, BufSize );   /* [GUDCHK:CALLER]DataElementIndexOfPID */
             }
         }
         else
         {
             retSearchPriority = Dem_DataCtl_SearchPriorityOBDFreezeFrame( &eventStrgIndex, &faultIndex );
-
+            Dem_HighPriorityEventStrgIndex  =   eventStrgIndex;
             if( retSearchPriority == DEM_IRT_OK )
             {
                 retVal = Dem_PID_ReadDataOfOBDFreezeFrame( eventStrgIndex, PID, DataElementIndexOfPID, DestBuffer, BufSize );                   /* [GUDCHK:CALLER]DataElementIndexOfPID */
@@ -279,7 +272,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_ReadDataOfOBDFreezeFram
 /*  Version        :Date                                                    */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-8-0         :2024-10-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

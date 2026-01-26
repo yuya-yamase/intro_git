@@ -1,7 +1,7 @@
-/* Dem_DataMng_EventMemoryRecord_c(v5-10-0)                                 */
+/* Dem_DataMng_EventMemoryRecord_c(v5-5-0)                                  */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -123,7 +123,6 @@ FUNC( void, DEM_CODE ) Dem_DataMngC_GetEventMemoryRecord
     return ;
 }
 
-#if ( DEM_TSFF_PM_SUPPORT == STD_ON )
 #if ( DEM_DTCSTOREDDATA_DEMINTERNAL_SUPPORT == STD_ON )
 /****************************************************************************/
 /* Function Name | Dem_DataMngC_GetNumberOfConfirmedDTCs                    */
@@ -139,8 +138,6 @@ FUNC( Dem_u08_OrderIndexType, DEM_CODE ) Dem_DataMngC_GetNumberOfConfirmedDTCs
     return Dem_EventMemoryRecordList.NumberOfConfirmedDTCs;
 }
 #endif  /* ( DEM_DTCSTOREDDATA_DEMINTERNAL_SUPPORT == STD_ON )     */
-#endif  /* ( DEM_TSFF_PM_SUPPORT == STD_ON )     */
-
 #if ( DEM_WWH_OBD_SUPPORT == STD_ON )
 #if ( DEM_PFC_ORDER_MIL_SUPPORT == STD_ON )
 /****************************************************************************/
@@ -216,36 +213,6 @@ FUNC( void, DEM_CODE ) Dem_DataMngC_SetEventMemoryRecord
     return ;
 }
 
-/****************************************************************************/
-/* Function Name | Dem_DataMngC_CopyEventMemoryRecord                       */
-/* Description   | copy the specified event record.                         */
-/* Preconditions | none                                                     */
-/* Parameters    | [out] DestEventMemoryRecordPtr :                         */
-/*               | [in]  SrcEventMemoryRecordPtr :                          */
-/* Return Value  | void                                                     */
-/*               |                                                          */
-/* Notes         | -                                                        */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-7-0      | new created.                                             */
-/****************************************************************************/
-FUNC( void, DEM_CODE ) Dem_DataMngC_CopyEventMemoryRecord
-(
-    P2VAR( Dem_EventMemoryRecordType, AUTOMATIC, AUTOMATIC ) DestEventMemoryRecordPtr,
-    P2CONST( Dem_EventMemoryRecordType, AUTOMATIC, DEM_VAR_NO_INIT ) SrcEventMemoryRecordPtr
-)
-{
-    DestEventMemoryRecordPtr->NumberOfFreezeFrameRecords    = SrcEventMemoryRecordPtr->NumberOfFreezeFrameRecords;
-#if ( DEM_OBDFFD_SUPPORT == STD_ON )    /*  [FuncSw]    */
-    DestEventMemoryRecordPtr->NumberOfObdFreezeFrameRecords = SrcEventMemoryRecordPtr->NumberOfObdFreezeFrameRecords;
-#endif  /* ( DEM_OBDFFD_SUPPORT == STD_ON )             */
-    DestEventMemoryRecordPtr->NumberOfEventMemoryEntries    = SrcEventMemoryRecordPtr->NumberOfEventMemoryEntries;
-    DestEventMemoryRecordPtr->NumberOfConfirmedDTCs         = SrcEventMemoryRecordPtr->NumberOfConfirmedDTCs;
-    DestEventMemoryRecordPtr->NumberOfObdMILDTCs            = SrcEventMemoryRecordPtr->NumberOfObdMILDTCs;
-
-    return ;
-}
-
 
 /****************************************************************************/
 /* Function Name | Dem_DataMng_RefreshRAM                                   */
@@ -316,9 +283,6 @@ FUNC( void, DEM_CODE ) Dem_DataMng_RefreshRAM
 /*  v5-0-0         :2021-09-28                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-6-0         :2024-01-29                                              */
-/*  v5-7-0         :2024-05-29                                              */
-/*  v5-10-0        :2025-06-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

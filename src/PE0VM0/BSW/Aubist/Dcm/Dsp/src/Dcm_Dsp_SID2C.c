@@ -1,7 +1,7 @@
-/* Dcm_Dsp_SID2C_c(v5-10-0)                                                  */
+/* Dcm_Dsp_SID2C_c(v5-3-0)                                                  */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -143,12 +143,6 @@ static FUNC ( Std_ReturnType, DCM_CODE ) Dcm_Dsp_SID2C_MemAddrProc
     const uint8  u1MemAddrByteNum,
     const uint8  u1MemSizeByteNum,
     const uint32 u4MemAddrNum
-);
-
-static FUNC ( Std_ReturnType, DCM_CODE ) Dcm_Dsp_SID2C_ChkMemAddrSesSupport
-(
-    const uint8 u1MemIdIndex,
-    const uint8 u1MemRangeIndex
 );
 
 static FUNC ( Std_ReturnType, DCM_CODE ) Dcm_Dsp_SID2C_ChkMemAddrSecSupport
@@ -1414,39 +1408,8 @@ static FUNC ( Std_ReturnType, DCM_CODE ) Dcm_Dsp_SID2C_MemAddrProc
 }
 
 /****************************************************************************/
-/* Function Name | Dcm_Dsp_SID2C_ChkMemAddrSesSupport                       */
-/* Description   | Session support check Memory Address of request data     */
-/* Preconditions | None                                                     */
-/* Parameters    | None                                                     */
-/* Return Value  | Std_ReturnType                                           */
-/*               |   E_OK              : Check OK                           */
-/*               |   E_NOT_OK          : Check NG                           */
-/* Notes         | None                                                     */
-/****************************************************************************/
-static FUNC ( Std_ReturnType, DCM_CODE ) Dcm_Dsp_SID2C_ChkMemAddrSesSupport
-(
-    const uint8 u1MemIdIndex,
-    const uint8 u1MemRangeIndex
-)
-{
-    Std_ReturnType        u1_RetVal;
-    Dcm_SesCtrlType       u1_SesCtrlType;
-
-    /* Get active session */
-    u1_SesCtrlType = DCM_DEFAULT_SESSION;
-    (void)Dcm_GetSesCtrlType( &u1_SesCtrlType ); /* no return check required */
-    /* Check session support */
-    u1_RetVal = Dcm_Dsp_DidMng_ChkMemSes( DCM_DSP_DIDMNG_MEM_READ,
-                                                u1MemIdIndex,
-                                                u1MemRangeIndex,
-                                                u1_SesCtrlType );
-
-    return u1_RetVal;
-}
-
-/****************************************************************************/
 /* Function Name | Dcm_Dsp_SID2C_ChkMemAddrSecSupport                       */
-/* Description   | Security support check Memory Address of request data    */
+/* Description   | Security support check Memory Adress of request data     */
 /* Preconditions | None                                                     */
 /* Parameters    | None                                                     */
 /* Return Value  | Std_ReturnType                                           */
@@ -1499,7 +1462,7 @@ static FUNC ( Std_ReturnType, DCM_CODE ) Dcm_Dsp_SID2C_ChkALFID
 
 /****************************************************************************/
 /* Function Name | Dcm_Dsp_SID2C_ChkMemAddr                                 */
-/* Description   | Check Memory Address of request data                     */
+/* Description   | Check MemoryAdress of request data                       */
 /* Preconditions | None                                                     */
 /* Parameters    | [IN] u1MemAddrByteNum  : Number of Memory Address Bytes  */
 /*               | [IN] u1MemSizeByteNum  : Number of Memory Size Bytes     */
@@ -1523,11 +1486,11 @@ static FUNC ( Std_ReturnType, DCM_CODE ) Dcm_Dsp_SID2C_ChkMemAddr
     uint32                          u4_MemSizeTotal;
     uint16                          u2_Did;
     uint16                          u2_DidIndex;
+    boolean                         b_BreakFlag;
+    boolean                         b_CheckMemAddrUseAsMemoryId;
     Std_ReturnType                  u1_RetVal;
     Std_ReturnType                  u1_RetChkMemAddr;
-    Std_ReturnType                  u1_RetChkMemAddrSes;
     Std_ReturnType                  u1_RetChkMemAddrSec;
-    Std_ReturnType                  u1_RetChkMemRange;
     Std_ReturnType                  u1_RetChkLimitAddr;
     Std_ReturnType                  u1_RetChkMemSize;
     Std_ReturnType                  u1_ChkSDidSize;
@@ -1538,8 +1501,6 @@ static FUNC ( Std_ReturnType, DCM_CODE ) Dcm_Dsp_SID2C_ChkMemAddr
     uint8                           u1_MemRangeIndex;
     uint8                           u1_CRWSupport;
     uint8                           u1_MemSizeCnt;
-    boolean                         b_BreakFlag;
-    boolean                         b_CheckMemAddrUseAsMemoryId;
 
     b_BreakFlag     = (boolean)FALSE;
     u1_RetVal       = E_OK;
@@ -1558,56 +1519,45 @@ static FUNC ( Std_ReturnType, DCM_CODE ) Dcm_Dsp_SID2C_ChkMemAddr
     for( u4_MemAddrCnt = (uint32)0U; u4_MemAddrCnt < u4MemAddrNum; u4_MemAddrCnt++ )
     {
         u4_MemAddrPos = (uint32)((u4_MemAddrCnt * ((uint32)u1MemAddrByteNum + (uint32)u1MemSizeByteNum)) + (uint32)DCM_DSP_SID2C_REQDATA_MEMADDR_POS);  /* no wrap around */
-        u4_MemSize = (uint32)0U;
-        for( u1_MemSizeCnt = (uint8)0U; u1_MemSizeCnt < u1MemSizeByteNum; u1_MemSizeCnt++ )
-        {
-            u4_MemSize <<= DCM_DSP_SID2C_MEMSIZE_SHIFT8;
-            u4_MemSize += Dcm_Dsp_Main_stMsgContext.reqData[u4_MemAddrPos + u1MemAddrByteNum + u1_MemSizeCnt];  /* no wrap around */
-        }
-        
-        u1_RetChkMemRange = E_NOT_OK;
-        if( u4_MemSize > (uint32)0U )
-        {
-            /* Check DcmDspMemAddrUseAsMemId */
-            if( b_CheckMemAddrUseAsMemoryId == (boolean)TRUE )
-            {
-                u1_MemId = Dcm_Dsp_Main_stMsgContext.reqData[u4_MemAddrPos];
-                u1_MemIdFlag = DCM_DSP_DIDMNG_MEM_ID_VALID;
-                u1_MemAddrConvertCnt = DCM_DSP_SID2C_MEMID_SET;
-            }
-            else
-            {
-                u1_MemId = (uint8)0U;
-                u1_MemIdFlag = DCM_DSP_DIDMNG_MEM_ID_INVALID;
-                u1_MemAddrConvertCnt = DCM_DSP_SID2C_MEMID_NOT_SET;
-            }
 
-            u4_MemAddr = (uint32)0U;
-            /* Convert MemoryAddress into uint32 */
-            for( ; u1_MemAddrConvertCnt < u1MemAddrByteNum; u1_MemAddrConvertCnt++ )
-            {
-                u4_MemAddr <<= DCM_DSP_SID2C_MEMADDR_SHIFT8;
-                u4_MemAddr += Dcm_Dsp_Main_stMsgContext.reqData[u4_MemAddrPos + u1_MemAddrConvertCnt];  /* no wrap around */
-            }
-            /* Check MemoryAddress */
-            u1_RetChkMemAddr = Dcm_Dsp_DidMng_ChkMemAddress( DCM_DSP_DIDMNG_MEM_READ,
-                                                             u4_MemAddr,
-                                                             u1_MemIdFlag,
-                                                             u1_MemId,
-                                                             &u1_MemIdIndex,
-                                                             &u1_MemRangeIndex );
-            if( u1_RetChkMemAddr == (Std_ReturnType)E_OK )
-            {
-                u1_RetChkMemRange = Dcm_Dsp_DidMng_ChkMemSize( DCM_DSP_DIDMNG_MEM_READ,
-                                                               u1_MemIdIndex,
-                                                               u1_MemRangeIndex,
-                                                               u4_MemAddr,
-                                                               u4_MemSize );
-            }
+        /* Check DcmDspMemAddrUseAsMemId */
+        if( b_CheckMemAddrUseAsMemoryId == (boolean)TRUE )
+        {
+            u1_MemId = Dcm_Dsp_Main_stMsgContext.reqData[u4_MemAddrPos];
+            u1_MemIdFlag = DCM_DSP_DIDMNG_MEM_ID_VALID;
+            u1_MemAddrConvertCnt = DCM_DSP_SID2C_MEMID_SET;
+        }
+        else
+        {
+            u1_MemId = (uint8)0U;
+            u1_MemIdFlag = DCM_DSP_DIDMNG_MEM_ID_INVALID;
+            u1_MemAddrConvertCnt = DCM_DSP_SID2C_MEMID_NOT_SET;
         }
 
-        if( u1_RetChkMemRange == (Std_ReturnType)E_OK )
+        u4_MemAddr = (uint32)0U;
+        /* Convert MemoryAddress into uint32 */
+        for( ; u1_MemAddrConvertCnt < u1MemAddrByteNum; u1_MemAddrConvertCnt++ )
         {
+            u4_MemAddr <<= DCM_DSP_SID2C_MEMADDR_SHIFT8;
+            u4_MemAddr += Dcm_Dsp_Main_stMsgContext.reqData[u4_MemAddrPos + u1_MemAddrConvertCnt];  /* no wrap around */
+        }
+
+        /* Check MemoryAddress */
+        u1_RetChkMemAddr = Dcm_Dsp_DidMng_ChkMemAddress( DCM_DSP_DIDMNG_MEM_READ,
+                                                         u4_MemAddr,
+                                                         u1_MemIdFlag,
+                                                         u1_MemId,
+                                                         &u1_MemIdIndex,
+                                                         &u1_MemRangeIndex );
+
+        if( u1_RetChkMemAddr == (Std_ReturnType)E_OK )
+        {
+            u4_MemSize = (uint32)0U;
+            for( u1_MemSizeCnt = (uint8)0U; u1_MemSizeCnt < u1MemSizeByteNum; u1_MemSizeCnt++ )
+            {
+                u4_MemSize <<= DCM_DSP_SID2C_MEMSIZE_SHIFT8;
+                u4_MemSize += Dcm_Dsp_Main_stMsgContext.reqData[u4_MemAddrPos + u1MemAddrByteNum + u1_MemSizeCnt];  /* no wrap around */
+            }
             u4_MemSizeTotal += u4_MemSize;  /* no wrap around */
 
             u1_RetChkLimitAddr = Dcm_Dsp_DidMng_ChkDDDIDLimitMemAddr( u2_DidIndex, u4MemAddrNum, u4_MemSizeTotal );
@@ -1627,28 +1577,18 @@ static FUNC ( Std_ReturnType, DCM_CODE ) Dcm_Dsp_SID2C_ChkMemAddr
 
         if( b_BreakFlag == (boolean)FALSE )
         {
-            u1_RetChkMemAddrSes = Dcm_Dsp_SID2C_ChkMemAddrSesSupport( u1_MemIdIndex, u1_MemRangeIndex );
-            if( u1_RetChkMemAddrSes == (Std_ReturnType)E_OK )
+            u1_RetChkMemAddrSec = Dcm_Dsp_SID2C_ChkMemAddrSecSupport( u1_MemIdIndex, u1_MemRangeIndex );
+            if( u1_RetChkMemAddrSec == (Std_ReturnType)E_OK )
             {
-                u1_RetChkMemAddrSec = Dcm_Dsp_SID2C_ChkMemAddrSecSupport( u1_MemIdIndex, u1_MemRangeIndex );
-                if( u1_RetChkMemAddrSec == (Std_ReturnType)E_OK )
+                /* Check MemorySize */
+                u1_RetChkMemSize = Dcm_Dsp_SID2C_ChkMemSize( u4_MemSize );
+                if( u1_RetChkMemSize == (Std_ReturnType)E_OK )
                 {
-                    /* Check MemorySize */
-                    u1_RetChkMemSize = Dcm_Dsp_SID2C_ChkMemSize( u4_MemSize );
-                    if( u1_RetChkMemSize == (Std_ReturnType)E_OK )
+                    /* Check Source Did Data Length */
+                    u1_ChkSDidSize = Dcm_Dsp_DidMng_ChkSDidSize( u4_MemSize );
+                    if( u1_ChkSDidSize == (Std_ReturnType)E_OK )
                     {
-                        /* Check Source Did Data Length */
-                        u1_ChkSDidSize = Dcm_Dsp_DidMng_ChkSDidSize( u4_MemSize );
-                        if( u1_ChkSDidSize == (Std_ReturnType)E_OK )
-                        {
-                            /* No process */
-                        }
-                        else
-                        {
-                            /* NRC 0x31 */
-                            Dcm_Dsp_MsgMaker_SendNegRes( &Dcm_Dsp_Main_stMsgContext, DCM_E_REQUESTOUTOFRANGE );
-                            b_BreakFlag = (boolean)TRUE;
-                        }
+                        /* No process */
                     }
                     else
                     {
@@ -1659,15 +1599,15 @@ static FUNC ( Std_ReturnType, DCM_CODE ) Dcm_Dsp_SID2C_ChkMemAddr
                 }
                 else
                 {
-                    /* NRC 0x33 */
-                    Dcm_Dsp_MsgMaker_SendNegRes( &Dcm_Dsp_Main_stMsgContext, DCM_E_SECURITYACCESSDENIED );
+                    /* NRC 0x31 */
+                    Dcm_Dsp_MsgMaker_SendNegRes( &Dcm_Dsp_Main_stMsgContext, DCM_E_REQUESTOUTOFRANGE );
                     b_BreakFlag = (boolean)TRUE;
                 }
             }
             else
             {
-                /* NRC 0x31 */
-                Dcm_Dsp_MsgMaker_SendNegRes( &Dcm_Dsp_Main_stMsgContext, DCM_E_REQUESTOUTOFRANGE );
+                /* NRC 0x33 */
+                Dcm_Dsp_MsgMaker_SendNegRes( &Dcm_Dsp_Main_stMsgContext, DCM_E_SECURITYACCESSDENIED );
                 b_BreakFlag = (boolean)TRUE;
             }
         }
@@ -1704,7 +1644,7 @@ static FUNC ( Std_ReturnType, DCM_CODE ) Dcm_Dsp_SID2C_ChkMemSize
     u1_RetVal       = E_NOT_OK;
 
 
-    u4_MaxMemorySize = Dcm_Dsp_MemMng_GetMaxReadMemorySize();
+    u4_MaxMemorySize = Dcm_Dsp_MemMng_GetMaxMemorySize();
     if( u4MemSize <= u4_MaxMemorySize )
     {
         u1_RetVal = E_OK;
@@ -2064,8 +2004,6 @@ static FUNC ( void, DCM_CODE ) Dcm_Dsp_SID2C_PDidInfoChkByDDDidClr
 /*  v5-0-0         :2022-03-29                                              */
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
-/*  v5-6-0         :2024-02-27                                              */
-/*  v5-10-0        :2025-06-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

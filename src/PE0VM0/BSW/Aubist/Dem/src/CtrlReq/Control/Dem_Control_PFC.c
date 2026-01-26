@@ -1,7 +1,7 @@
-/* Dem_Control_PFC_c(v5-7-0)                                                */
+/* Dem_Control_PFC_c(v5-5-0)                                                */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -16,7 +16,6 @@
 #include <Dem.h>
 #include <Dem/Dem_Common.h>
 #include "../../../cfg/Dem_Cfg.h"
-#include "../../../cfg/Dem_OpCycle_Cfg.h"
 #include "../../../inc/Dem_CmnLib_AsyncReq.h"
 #include "../../../inc/Dem_CmnLib_AsyncReqTable.h"
 #include "../../../inc/Dem_CmnLib_Control_AsyncReq.h"
@@ -27,13 +26,7 @@
 #include "../../../inc/Dem_Pm_Control_OBD.h"
 #include "../../../inc/Dem_Pm_DTC_PFC.h"
 #include "../../../inc/Dem_Pm_Misfire.h"
-#include "../../../inc/Dem_Rc_OpCycleMng.h"
 #include "Dem_Control_local.h"
-
-#ifndef DEM_SIT_RANGE_CHECK
-#else   /* DEM_SIT_RANGE_CHECK */
-#include <Dem_SIT_RangeCheck.h>
-#endif /* DEM_SIT_RANGE_CHECK */
 
 /*--------------------------------------------------------------------------*/
 /* Macros                                                                   */
@@ -89,7 +82,6 @@
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | new created. based on Dem_Control_GetPermanentOBDDTC.    */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_GetPermanentUDSDTC
 (
@@ -121,7 +113,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_GetPermanentUDSDTC
 
 #if ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON )  /*  [FuncSw]    */
         permanentDTCMisfireNum  =   (uint8)0U;
-        Dem_Misfire_GetPermanentUDSDTC( &PermanentDTCBufferPtr[0], &permanentDTCMisfireNum );/* [ARYCHK] DEM_MAX_NUMBER_EVENT_ENTRY_PERMANENT+DEM_MISFIRE_CYLINDER_NUMBER / 1 / 0 */
+        Dem_Misfire_GetPermanentUDSDTC( &PermanentDTCBufferPtr[0], &permanentDTCMisfireNum );
         permanentDTCNum         =   permanentDTCMisfireNum;                                                 /* [GUD:SPC]permanentDTCNum */
 #endif  /*   ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON )           */
 
@@ -134,7 +126,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_GetPermanentUDSDTC
                 resultValidateDTC   =   Dem_DataAvl_ValidateDTC( permanentDTC );
                 if ( resultValidateDTC == (boolean)TRUE )
                 {
-                    PermanentDTCBufferPtr[permanentDTCNum] = (uint32)permanentDTC;      /* [GUD]pfcSearchIndex *//* [GUD:SPC:IF_GUARDED: pfcSearchIndex ]permanentDTCNum *//* [ARYCHK] DEM_SIT_R_CHK_PERMANENT_DTC_BUFFER_SIZE / 1 / permanentDTCNum */
+                    PermanentDTCBufferPtr[permanentDTCNum] = (uint32)permanentDTC;      /* [GUD]pfcSearchIndex *//* [GUD:SPC:IF_GUARDED: pfcSearchIndex ]permanentDTCNum */
                     permanentDTCNum = permanentDTCNum + (uint8)1U;
                 }
             }
@@ -171,7 +163,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_GetPermanentUDSDTC
 /* History       |                                                          */
 /*   v5-5-0      | rename from Dem_Control_GetPermanentDTC(v5-3-0).         */
 /*   v5-5-0      | no branch changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_GetPermanentOBDDTC
 (
@@ -202,7 +193,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_GetPermanentOBDDTC
 
 #if ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON )  /*  [FuncSw]    */
         permanentDTCMisfireNum  =   (uint8)0U;
-        Dem_Misfire_GetPermanentOBDDTC( &PermanentDTCBufferPtr[0], &permanentDTCMisfireNum );/* [ARYCHK] DEM_MAX_NUMBER_EVENT_ENTRY_PERMANENT+DEM_MISFIRE_CYLINDER_NUMBER / 1 / 0 */
+        Dem_Misfire_GetPermanentOBDDTC( &PermanentDTCBufferPtr[0], &permanentDTCMisfireNum );
         permanentDTCNum         =   permanentDTCMisfireNum;                         /* [GUD:SPC]permanentDTCNum */
 #endif  /*   ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON )           */
 
@@ -212,7 +203,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_GetPermanentOBDDTC
             /* Convert return value */
             if( internalRetVal == DEM_IRT_OK )
             {
-                PermanentDTCBufferPtr[permanentDTCNum] = (uint16)permanentDTC;      /* [GUD]pfcSearchIndex *//* [GUD:SPC:IF_GUARDED: pfcSearchIndex ]permanentDTCNum *//* [ARYCHK] DEM_SIT_R_CHK_PERMANENT_DTC_BUFFER_SIZE / 1 / permanentDTCNum */
+                PermanentDTCBufferPtr[permanentDTCNum] = (uint16)permanentDTC;      /* [GUD]pfcSearchIndex *//* [GUD:SPC:IF_GUARDED: pfcSearchIndex ]permanentDTCNum */
                 permanentDTCNum = permanentDTCNum + (uint8)1U;
             }
             else
@@ -409,7 +400,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_CheckExistPermanentDTCB
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | new created.based on Dem_Control_GetClearPFCCycleQualified. */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_GetEventIdWithPermanentDTC
 (
@@ -453,7 +443,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_GetEventIdWithPermanent
                 if ( retCnvId == DEM_IRT_OK )
                 {
                     /*  store data.     */
-                    EventIdBufferPtr[ eventIdCnt ]  =   eventId;                        /* [GUD:SPC:IF_GUARDED: pfcSearchIndex ]eventIdCnt *//* [ARYCHK] DEM_SIT_R_CHK_EVENTID_BUFFER_WITH_PERMANENT_DTC_SIZE / 1 / eventIdCnt */
+                    EventIdBufferPtr[ eventIdCnt ]  =   eventId;                        /* [GUD:SPC:IF_GUARDED: pfcSearchIndex ]eventIdCnt */
                     eventIdCnt  =   eventIdCnt + ( Dem_EventIdType )1U;
                 }
             }
@@ -601,100 +591,6 @@ FUNC( Dem_u08_AsyncExecReturnType, DEM_CODE ) Dem_Control_PFCRecordUpdateProcess
 }
 #endif /* DEM_PFC_RECORD_SUPPRESSION_SUPPORT -STD_ON- */
 
-/****************************************************************************/
-/* Function Name | Dem_Control_ClearAllPFC                                  */
-/* Description   | Clear all PFC Record forcibly.                           */
-/* Preconditions | none                                                     */
-/* Parameters    | none                                                     */
-/* Return Value  | Dem_u08_InternalReturnType                               */
-/*               |        DEM_IRT_OK : success                              */
-/*               |        DEM_IRT_NG : failed                               */
-/* Notes         | -                                                        */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-6-0      | new created.                                             */
-/****************************************************************************/
-FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_ClearAllPFC
-( void )
-{
-    VAR( Dem_u08_InternalReturnType, AUTOMATIC ) retVal;
-    VAR( Dem_u08_InternalReturnType, AUTOMATIC ) retTempVal;
-
-    retVal = DEM_IRT_NG;
-
-    retTempVal = Dem_AsyncReq_JudgeReqCondition( DEM_ASYNCREQ_CLEAR_ALLPFC, DEM_ASYNCREQ_PARAM_INDEX_INVALID, DEM_ASYNCREQ_PARAM_STATUS_INVALID );
-    if( retTempVal == DEM_IRT_OK )
-    {
-        retTempVal = Dem_AsyncReq_Enqueue( DEM_ASYNCREQ_CLEAR_ALLPFC, DEM_ASYNCREQ_PARAM_INDEX_INVALID, DEM_ASYNCREQ_PARAM_STATUS_INVALID );
-        if( retTempVal == DEM_IRT_OK )
-        {
-            retVal = DEM_IRT_OK;
-        }
-        else
-        {
-            /* When it can not be stored in the event queue */
-            /* Receiving event is discarded because processing can not be done */
-            /* No process */
-        }
-    }
-    else
-    {
-        /* When the result of request condition judgment is not OK */
-        /* No process */
-    }
-
-    return retVal;
-}
-
-/****************************************************************************/
-/* Function Name | Dem_Control_ClearAllPFCProcess                           */
-/* Description   | Asynchronous processing function of ClearAllPFC.         */
-/* Preconditions | none                                                     */
-/* Parameters    | [in] Index       :                                       */
-/*               | [in] Status      :                                       */
-/*               | [in] DataBuffPtr :                                       */
-/* Return Value  | Dem_u08_AsyncExecReturnType                              */
-/*               |       : See the description of the return value of       */
-/*               |         "DemAsyncReqFncPTR" in Dem_CmnLib_Control_AsyncReq.h.   */
-/* Notes         | -                                                        */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-6-0      | new created.                                             */
-/****************************************************************************/
-FUNC( Dem_u08_AsyncExecReturnType, DEM_CODE ) Dem_Control_ClearAllPFCProcess
-(
-    VAR( Dem_u16_AsyncReqItemAType, AUTOMATIC ) Index,  /* MISRA DEVIATION */
-    VAR( Dem_u08_AsyncReqItemBType, AUTOMATIC ) Status, /* MISRA DEVIATION */
-    P2VAR( uint8, AUTOMATIC, AUTOMATIC ) DataBuffPtr    /* MISRA DEVIATION */
-)
-{
-    VAR( Dem_u08_AsyncExecReturnType, AUTOMATIC )   retVal;
-    VAR( Dem_u08_CycleQualifiedIndexType, AUTOMATIC )      opCyclePFCCycle;
-
-    opCyclePFCCycle = Dem_ConfDemOperationCyclePFCCycle;
-
-    /* Set return value. */
-    /* Fault record is not updated, No need re-generate orderlist, Continue asynchronous processing. */
-    retVal = ( DEM_ASYNCRET_NOUPD_FR | DEM_ASYNCRET_NONEED_REGEN_ODR | DEM_ASYNCRET_CONTINUE_ASYNC_PROC );
-
-    /*--------------------------------------*/
-    /*  notify SAVED_ZONE update - start.   */
-    Dem_NotifySavedZoneUpdate_Enter();      /*  notify start :  savedzone area will be update.  */
-    /*--------------------------------------*/
-
-    /* Clear related to PFC */
-    Dem_DTC_ClearAllPFC(); /*[UpdRec]PFC *//*[UpdRec]PFCMisfire */
-
-    Dem_OpCycleMng_SetCycleState( opCyclePFCCycle, DEM_CYCLE_NOTIFY_END );
-
-    /*--------------------------------------*/
-    /*  notify SAVED_ZONE update - end.     */
-    Dem_NotifySavedZoneUpdate_Exit();       /*  notify end :  savedzone area will be update.    */
-    /*--------------------------------------*/
-
-    return retVal;
-}
-
 #endif /* DEM_PFC_SUPPORT -STD_ON- */
 
 /****************************************************************************/
@@ -712,8 +608,6 @@ FUNC( Dem_u08_AsyncExecReturnType, DEM_CODE ) Dem_Control_ClearAllPFCProcess
 /*  v5-0-0         :2022-03-29                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-6-0         :2024-01-29                                              */
-/*  v5-7-0         :2024-05-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

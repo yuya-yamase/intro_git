@@ -1,7 +1,7 @@
 /* Dem_RecMngCmn_Table_c(v5-5-0)                                            */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -105,7 +105,7 @@ CONST( AB_83_ConstV Dem_u16_RecordKindIndexType       ,DEM_CONFIG_DATA ) Dem_Rec
 /* Notes         | none                                                     */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_RecMngCmnInitFnc_ForStack
-(
+( 
     VAR( Dem_u16_RecordFieldIndexType, AUTOMATIC ) RecordFieldIndex
 )
 {
@@ -274,7 +274,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_RecMngClrNotVerifiedRecordFunc_
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
 /*  Framework          :v2-1-0                                              */
-/*  BSW plug-in        :v5-10-0                                             */
+/*  BSW plug-in        :v5-5-0                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

@@ -1,7 +1,7 @@
-/* Dcm_Dsl_Ctrl_ComSrv_c(v5-10-0)                                           */
+/* Dcm_Dsl_Ctrl_ComSrv_c(v5-5-2)                                            */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -34,8 +34,6 @@
 /* Macros                                                                   */
 /*--------------------------------------------------------------------------*/
 #define DCM_DSL_COMSRV_RXBUFSIZE ((uint32)2UL)
-#define DCM_DSL_ID_SID10_REQUEST ((uint8)0x10U)
-#define DCM_DSL_ID_SID11_REQUEST ((uint8)0x11U)
 
 /*--------------------------------------------------------------------------*/
 /* Types                                                                    */
@@ -483,67 +481,54 @@ FUNC( void, DCM_CODE ) Dcm_Dsl_SetupProgConditions
 )
 {
     uint16          u2_PduMapIndex;
-    uint8           u1_SID;
     Dcm_SesCtrlType u1_InitSession;
-    Dcm_SesCtrlType u1_ChgNotifProhibNonDefSession;
+    boolean         b_ValidSid;
     boolean         b_StartInNonDefaultSession;
 
-    u2_PduMapIndex = Dcm_Dsl_Ctrl_GetPduIdMapIndexBySourceAddr(ptProgConditions->TesterAddress);
-    u1_SID = ptProgConditions->Sid;
+    b_StartInNonDefaultSession = (boolean)FALSE;
+    u1_InitSession             = DCM_DEFAULT_SESSION;
 
+    u2_PduMapIndex = Dcm_Dsl_Ctrl_GetPduIdMapIndexBySourceAddr(ptProgConditions->TesterAddress);
     if( u2_PduMapIndex != DCM_DSL_INVALID_U2_DATA )
     {
-        if( u1_SID == DCM_DSL_ID_SID10_REQUEST )
+        if( ptProgConditions->ReprogramingRequest == (boolean)TRUE )
         {
-            /* Typecasting for comparising session values */
-            u1_InitSession = (Dcm_SesCtrlType)ptProgConditions->SubFncId;
-
-            b_StartInNonDefaultSession = (boolean)FALSE;
-            u1_ChgNotifProhibNonDefSession = Dcm_M_u1InitRpgSession;
-
-            if( u1_InitSession == DCM_DEFAULT_SESSION )
-            {
-                Dcm_Dsl_SessionMng_SetInitialSession(u1_InitSession);
-            }
-            else if( u1_InitSession == u1_ChgNotifProhibNonDefSession )
-            {
-                Dcm_Dsl_SessionMng_SetInitialSession(u1_InitSession);
-                b_StartInNonDefaultSession = (boolean)TRUE;
-            }
-            else
-            {
-                Dcm_Dsl_Ctrl_SetSesCtrlType(u1_InitSession, (boolean)FALSE);
-                b_StartInNonDefaultSession = (boolean)TRUE;
-            }
-
-            if( ptProgConditions->ResponseRequired == (boolean)TRUE )
-            {
-                Dcm_Dsl_Ctrl_RespReqAfterEcuReset(u2_PduMapIndex, u1_SID, ptProgConditions->SubFncId);
-            }
-            else
-            {
-                if( b_StartInNonDefaultSession == (boolean)TRUE )
-                {
-                    /* Send DCM_M_EVTID_DSL_COMM_ACTIVE event. Return value ignoring */
-                    (void)Dcm_Main_EvtDistr_SendEvent(DCM_M_EVTID_DSL_COMM_ACTIVE);
-
-                    Dcm_Dsl_bInteractiveClient = (boolean)TRUE;
-                    Dcm_Dsl_Ctrl_SetRxPduMapIndex(u2_PduMapIndex);
-                    Dcm_Dsl_Ctrl_SetPduMapIndex(u2_PduMapIndex);
-                    Dcm_Dsl_Ctrl_StartS3TimerCore(u2_PduMapIndex, (boolean)FALSE);
-                }
-            }
+            u1_InitSession = Dcm_M_u1InitRpgSession;
+            Dcm_Dsl_SessionMng_SetInitialSession(u1_InitSession);
         }
-        else if( u1_SID == DCM_DSL_ID_SID11_REQUEST )
+
+        if( ptProgConditions->ResponseRequired == (boolean)TRUE )
         {
-            if( ptProgConditions->ResponseRequired == (boolean)TRUE )
+            b_ValidSid = Dcm_Dsl_IsValidSid(ptProgConditions->Sid);
+            if( b_ValidSid == (boolean)TRUE )
             {
                 Dcm_Dsl_Ctrl_RespReqAfterEcuReset(u2_PduMapIndex, ptProgConditions->Sid, ptProgConditions->SubFncId);
+            }
+            else
+            {
+                if( u1_InitSession != DCM_DEFAULT_SESSION )
+                {
+                    b_StartInNonDefaultSession = (boolean)TRUE;
+                }
             }
         }
         else
         {
-            /* no process */
+            if( u1_InitSession != DCM_DEFAULT_SESSION )
+            {
+                b_StartInNonDefaultSession = (boolean)TRUE;
+            }
+        }
+
+        if( b_StartInNonDefaultSession == (boolean)TRUE )
+        {
+            /* Send DCM_M_EVTID_DSL_COMM_ACTIVE event. Return value ignoring */
+            (void)Dcm_Main_EvtDistr_SendEvent(DCM_M_EVTID_DSL_COMM_ACTIVE);
+
+            Dcm_Dsl_bInteractiveClient = (boolean)TRUE;
+            Dcm_Dsl_Ctrl_SetRxPduMapIndex(u2_PduMapIndex);
+            Dcm_Dsl_Ctrl_SetPduMapIndex(u2_PduMapIndex);
+            Dcm_Dsl_Ctrl_StartS3TimerCore(u2_PduMapIndex, (boolean)FALSE);
         }
     }
 
@@ -633,31 +618,6 @@ FUNC( void, DCM_CODE ) Dcm_Dsl_Ctrl_RedoOfReception
 }
 
 /****************************************************************************/
-/* Function Name | Dcm_Dsl_Ctrl_NotifyPseudoKALasNoKAL                      */
-/* Description   | This function performs processing when the request is    */
-/*               | considered pseudoKAL but not KAL.                        */
-/* Preconditions | none                                                     */
-/* Parameters    | [in] u2PduMapIndex : PduMapIndex Value                   */
-/* Return Value  | none                                                     */
-/* Notes         | -                                                        */
-/****************************************************************************/
-FUNC( void, DCM_CODE ) Dcm_Dsl_Ctrl_NotifyPseudoKALasNoKAL
-(
-    const uint16 u2PduMapIndex
-)
-{
-    /* lock */
-    SchM_Enter_Dcm_Dsl_Ctrl();
-
-    Dcm_Dsl_Ctrl_SetDslState(u2PduMapIndex, DCM_DSL_ST_RECEIVING);
-
-    /* unlock */
-    SchM_Exit_Dcm_Dsl_Ctrl();
-
-    return;
-}
-
-/****************************************************************************/
 /* Function Name | Dcm_Dsl_Ctrl_Accept                                      */
 /* Description   | This function accepts a request and processes            */
 /*               | the request.                                             */
@@ -687,24 +647,7 @@ FUNC( void, DCM_CODE ) Dcm_Dsl_Ctrl_Accept
 
     if( u1_DslState != DCM_DSL_ST_RECEIVING )
     {
-        /* lock */
-        SchM_Enter_Dcm_Dsl_Ctrl();
-
-        Dcm_Dsl_Ctrl_SetDslState(u2PduMapIndex, DCM_DSL_ST_IDLE);
-
-        /* unlock */
-        SchM_Exit_Dcm_Dsl_Ctrl();
-
-        /* Return value ignoring */
-        (void)Dcm_Main_EvtDistr_DeleteEvent(DCM_M_EVTID_DSL_SETDEFSES, (boolean)TRUE);
-
-        Dcm_Dsl_Ctrl_StartS3Timer(u2PduMapIndex);
-#if( DCM_AUTHENTICATION_USE == STD_ON )
-        Dcm_Dsl_Ctrl_StartAuthCtrl(u2PduMapIndex);
-#endif /* DCM_AUTHENTICATION_USE == STD_ON */        
-
-        Dcm_Dsl_Ctrl_ReleaseRxResource(u2PduMapIndex);
-        Dcm_Dsl_Ctrl_ReleaseKALResource(u2PduMapIndex);
+        /* No Process */
     }
     else
     {
@@ -1192,7 +1135,6 @@ FUNC( void, DCM_CODE ) Dcm_Dsl_Ctrl_CancelConfirmation
 FUNC( void, DCM_CODE ) Dcm_Dsl_Ctrl_ChgInteractiveClient
 ( void )
 {
-    boolean b_ServiceToRespondTo;
     uint8   u1_DslState;
     uint16  u2_PduMapIndex;
 
@@ -1217,17 +1159,12 @@ FUNC( void, DCM_CODE ) Dcm_Dsl_Ctrl_ChgInteractiveClient
         {
             u2_PduMapIndex = Dcm_Dsl_Ctrl_GetRxPduMapIndex4Tx();
             Dcm_Dsl_TxAbt_CancelReq(u2_PduMapIndex);
-
-            b_ServiceToRespondTo = Dcm_Dsl_Ctrl_IsServiceToRespondTo(u2_PduMapIndex);
-            if( b_ServiceToRespondTo == (boolean)TRUE )
-            {
 #if( DCM_DSL_ARBT_TYPE1 == STD_ON )
-                Dcm_Dsl_Ctrl_SetServiceToRespondToResUseId(u2_PduMapIndex, (boolean)FALSE);
+            Dcm_Dsl_Ctrl_SetServiceToRespondToResUseId(u2_PduMapIndex, (boolean)FALSE);
 #endif /* DCM_DSL_ARBT_TYPE1 == STD_ON */
 #if( DCM_DSL_ARBT_TYPE1 == STD_OFF )
-                Dcm_Dsl_Ctrl_ReleaseServiceToRespondToResUseId(u2_PduMapIndex);
+            Dcm_Dsl_Ctrl_ReleaseServiceToRespondToResUseId(u2_PduMapIndex);
 #endif /* DCM_DSL_ARBT_TYPE1 == STD_OFF */
-            }
         }
 
         /* lock */
@@ -2855,10 +2792,7 @@ static FUNC( uint16, DCM_CODE ) Dcm_Dsl_Ctrl_GetPduIdMapIndexBySourceAddr
 /*  v5-0-0         :2021-12-24                                              */
 /*  v5-3-0         :2022-12-23                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-6-0         :2024-02-27                                              */
-/*  v5-6-2         :2024-05-29                                              */
-/*  v5-9-0         :2025-02-26                                              */
-/*  v5-10-0        :2025-08-26                                              */
+/*  v5-5-2         :2024-05-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

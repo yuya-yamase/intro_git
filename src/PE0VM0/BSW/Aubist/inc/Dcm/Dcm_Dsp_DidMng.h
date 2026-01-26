@@ -1,7 +1,7 @@
-/* Dcm_Dsp_DidMng_h(v5-10-0)                                                 */
+/* Dcm_Dsp_DidMng_h(v5-3-0)                                                 */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -296,13 +296,13 @@ FUNC( Std_ReturnType, DCM_CODE ) Dcm_Dsp_DidMng_CallReadFnc
     P2VAR(Dcm_NegativeResponseCodeType, AUTOMATIC, DCM_APPL_DATA) ptErrorCode
 );
 #endif /* DCM_SUPPORT_SID2F == STD_ON */
-#if ( ( DCM_SUPPORT_SID2C == STD_ON ) || ( DCM_SUPPORT_SID23 == STD_ON ) || ( DCM_SUPPORT_SID3D == STD_ON ) )
+#if ( ( DCM_SUPPORT_SID2C == STD_ON ) || ( DCM_SUPPORT_SID23 == STD_ON ) )
 FUNC( Std_ReturnType, DCM_CODE ) Dcm_Dsp_DidMng_ChkALFID
 (
     const uint8 u1ALFId
 );
-#endif /* DCM_SUPPORT_SID2C == STD_ON || DCM_SUPPORT_SID23 == STD_ON || DCM_SUPPORT_SID3D == STD_ON */
-#if ( ( DCM_PERIODIC_DDDID_USE == STD_ON ) || ( DCM_SUPPORT_SID22 == STD_ON ) || ( DCM_SUPPORT_SID23 == STD_ON ) || ( DCM_SUPPORT_SID2C == STD_ON) || ( DCM_SUPPORT_SID2E == STD_ON ) || ( DCM_SUPPORT_SID2F == STD_ON ) || ( DCM_SUPPORT_SID3D == STD_ON ) )
+#endif /* DCM_SUPPORT_SID2C == STD_ON || DCM_SUPPORT_SID23 == STD_ON */
+#if ( ( DCM_PERIODIC_DDDID_USE == STD_ON ) || ( DCM_SUPPORT_SID22 == STD_ON ) || ( DCM_SUPPORT_SID23 == STD_ON ) || ( DCM_SUPPORT_SID2C == STD_ON) || ( DCM_SUPPORT_SID2E == STD_ON ) || ( DCM_SUPPORT_SID2F == STD_ON ) )
 FUNC( Std_ReturnType, DCM_CODE ) Dcm_Dsp_DidMng_ChkMemAddress
 (
     const uint8 u1ReadWrite,
@@ -312,8 +312,8 @@ FUNC( Std_ReturnType, DCM_CODE ) Dcm_Dsp_DidMng_ChkMemAddress
     P2VAR(uint8, AUTOMATIC, DCM_APPL_DATA) ptMemoryIdIndex,
     P2VAR(uint8, AUTOMATIC, DCM_APPL_DATA) ptMemoryRangeIndex
 );
-#endif /* DCM_PERIODIC_DDDID_USE == STD_ON || DCM_SUPPORT_SID22 == STD_ON || DCM_SUPPORT_SID23 == STD_ON || DCM_SUPPORT_SID2C == STD_ON || DCM_SUPPORT_SID2E == STD_ON || DCM_SUPPORT_SID2F == STD_ON || DCM_SUPPORT_SID3D == STD_ON */
-#if ( ( DCM_SUPPORT_SID23 == STD_ON ) || ( DCM_SUPPORT_SID2C == STD_ON ) || ( DCM_SUPPORT_SID3D == STD_ON ) )
+#endif /* DCM_PERIODIC_DDDID_USE == STD_ON || DCM_SUPPORT_SID22 == STD_ON || DCM_SUPPORT_SID23 == STD_ON || DCM_SUPPORT_SID2C == STD_ON || DCM_SUPPORT_SID2E == STD_ON || DCM_SUPPORT_SID2F == STD_ON */
+#if ( DCM_SUPPORT_SID23 == STD_ON )
 FUNC( Std_ReturnType, DCM_CODE ) Dcm_Dsp_DidMng_ChkMemSize
 (
     const uint8 u1ReadWrite,
@@ -322,17 +322,8 @@ FUNC( Std_ReturnType, DCM_CODE ) Dcm_Dsp_DidMng_ChkMemSize
     const uint32 u4MemAddress,
     const uint32 u4MemSize
 );
-#endif /* DCM_SUPPORT_SID23 == STD_ON || DCM_SUPPORT_SID2C == STD_ON || DCM_SUPPORT_SID3D == STD_ON */
-#if ( ( DCM_PERIODIC_DDDID_USE == STD_ON ) || ( DCM_SUPPORT_SID22 == STD_ON ) || ( DCM_SUPPORT_SID23 == STD_ON ) || ( DCM_SUPPORT_SID2C == STD_ON ) || ( DCM_SUPPORT_SID2E == STD_ON ) || ( DCM_SUPPORT_SID2F == STD_ON ) || ( DCM_SUPPORT_SID3D == STD_ON ) )
-FUNC( Std_ReturnType, DCM_CODE ) Dcm_Dsp_DidMng_ChkMemSes
-(
-    const uint8 u1ReadWrite,
-    const uint8 u1MemoryIdIndex,
-    const uint8 u1MemoryRangeIndex,
-    const uint8 u1CurrentSessionLevel
-);
-#endif /* DCM_PERIODIC_DDDID_USE == STD_ON || DCM_SUPPORT_SID22 == STD_ON || DCM_SUPPORT_SID23 == STD_ON || DCM_SUPPORT_SID2C == STD_ON || DCM_SUPPORT_SID2E == STD_ON || DCM_SUPPORT_SID2F == STD_ON || DCM_SUPPORT_SID3D == STD_ON */
-#if ( ( DCM_PERIODIC_DDDID_USE == STD_ON ) || ( DCM_SUPPORT_SID22 == STD_ON ) || ( DCM_SUPPORT_SID23 == STD_ON ) || ( DCM_SUPPORT_SID2C == STD_ON ) || ( DCM_SUPPORT_SID2E == STD_ON ) || ( DCM_SUPPORT_SID2F == STD_ON ) || ( DCM_SUPPORT_SID3D == STD_ON ) )
+#endif /* DCM_SUPPORT_SID23 == STD_ON */
+#if ( ( DCM_PERIODIC_DDDID_USE == STD_ON ) || ( DCM_SUPPORT_SID22 == STD_ON ) || ( DCM_SUPPORT_SID23 == STD_ON ) || ( DCM_SUPPORT_SID2C == STD_ON ) || ( DCM_SUPPORT_SID2E == STD_ON ) || ( DCM_SUPPORT_SID2F == STD_ON ) )
 FUNC( Std_ReturnType, DCM_CODE ) Dcm_Dsp_DidMng_ChkMemSec
 (
     const uint8 u1ReadWrite,
@@ -340,7 +331,7 @@ FUNC( Std_ReturnType, DCM_CODE ) Dcm_Dsp_DidMng_ChkMemSec
     const uint8 u1MemoryRangeIndex,
     const uint8 u1CurrentSecurityLevel
 );
-#endif /* DCM_PERIODIC_DDDID_USE == STD_ON || DCM_SUPPORT_SID22 == STD_ON || DCM_SUPPORT_SID23 == STD_ON || DCM_SUPPORT_SID2C == STD_ON || DCM_SUPPORT_SID2E == STD_ON || DCM_SUPPORT_SID2F == STD_ON || DCM_SUPPORT_SID3D == STD_ON */
+#endif /* DCM_PERIODIC_DDDID_USE == STD_ON || DCM_SUPPORT_SID22 == STD_ON || DCM_SUPPORT_SID23 == STD_ON || DCM_SUPPORT_SID2C == STD_ON || DCM_SUPPORT_SID2E == STD_ON || DCM_SUPPORT_SID2F == STD_ON */
 #if ( DCM_SUPPORT_SID2C == STD_ON )
 FUNC( Std_ReturnType, DCM_CODE ) Dcm_Dsp_DidMng_ChkDDDIDLimit
 (
@@ -523,8 +514,6 @@ FUNC( void, DCM_CODE ) Dcm_Dsp_DidMng_Refresh
 /*  v5-0-0         :2022-03-29                                              */
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
-/*  v5-6-0         :2024-02-27                                              */
-/*  v5-10-0        :2025-06-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

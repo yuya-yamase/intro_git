@@ -1,7 +1,7 @@
-/* Dem_DataCtl_TSFFD_c(v5-7-0)                                              */
+/* Dem_DataCtl_TSFFD_c(v5-5-0)                                              */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -22,11 +22,6 @@
 #include "../../../inc/Dem_CmnLib_DataCtl_TSFFD.h"
 #include "../../../inc/Dem_Rc_DataMng.h"
 #include "../../../inc/Dem_Pm_TSFFD.h"
-
-#ifndef DEM_SIT_RANGE_CHECK
-#else   /* DEM_SIT_RANGE_CHECK */
-#include <Dem_SIT_RangeCheck.h>
-#endif  /* DEM_SIT_RANGE_CHECK */
 
 /*--------------------------------------------------------------------------*/
 /* Macros                                                                   */
@@ -93,14 +88,9 @@ static FUNC( void, DEM_CODE ) Dem_Data_MakeTSFFListRecord
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | branch changed.                                          */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_CaptureAfterTriggeredTSFFFromSample
 (
-#ifndef DEM_SIT_RANGE_CHECK
-#else   /* DEM_SIT_RANGE_CHECK */
-    VAR( Dem_u16_FFDStoredIndexType, AUTOMATIC ) SamplingFFRDataSize,
-#endif  /* DEM_SIT_RANGE_CHECK */
     VAR( Dem_u08_FaultIndexType, AUTOMATIC ) FaultIndex,
     VAR( Dem_u16_TSFFDIndexType, AUTOMATIC ) TimeSeriesFreezeFrameRecordIndex,
     VAR( Dem_u08_StorageTriggerType, AUTOMATIC ) TimeSeriesFreezeFrameTrigger,
@@ -135,7 +125,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_CaptureAfterTriggeredTSFFF
 
                 SchM_Enter_Dem_EventMemory();
 
-                resultOfSetTSFFRec = Dem_DataMngC_SetAfterTimeSeriesFreezeFrameRecord( TimeSeriesFreezeFrameRecordIndex, eventStrgIndex, triggerFFDConsistencyId, (Dem_u08_FFStoredStatusType)SamplingFreezeFrameRecordDataPtr[SamplingFreezeFrameRecorPosPtr->RecordStatus], &SamplingFreezeFrameRecordDataPtr[SamplingFreezeFrameRecorPosPtr->DataStart] );   /* [GUDCHK:CALLER]SamplingFreezeFrameRecorPosPtr *//* [ARYCHK] SamplingFFRDataSize / 1 / SamplingFreezeFrameRecorPosPtr->RecordStatus *//* [ARYCHK] SamplingFFRDataSize / 1 / SamplingFreezeFrameRecorPosPtr->DataStart */
+                resultOfSetTSFFRec = Dem_DataMngC_SetAfterTimeSeriesFreezeFrameRecord( TimeSeriesFreezeFrameRecordIndex, eventStrgIndex, triggerFFDConsistencyId, (Dem_u08_FFStoredStatusType)SamplingFreezeFrameRecordDataPtr[SamplingFreezeFrameRecorPosPtr->RecordStatus], &SamplingFreezeFrameRecordDataPtr[SamplingFreezeFrameRecorPosPtr->DataStart] );   /* [GUDCHK:CALLER]SamplingFreezeFrameRecorPosPtr */
 
                 SchM_Exit_Dem_EventMemory();
 
@@ -211,7 +201,6 @@ FUNC( void, DEM_CODE ) Dem_Data_MakeTSFFListRecordList
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | branch changed.                                          */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_Data_MakeTSFFListRecord
 (
@@ -250,11 +239,11 @@ static FUNC( void, DEM_CODE ) Dem_Data_MakeTSFFListRecord
         {
             for( tsFFListIndex = (Dem_u08_TSFFListPerDTCIndexType)0U; tsFFListIndex < tsffRecordClassNumPerDTCMaxNum; tsFFListIndex++ ) /* [GUD:for]tsFFListIndex */
             {
-                tsFFRecClassRef = dtcAttributePtr->DemTimeSeriesFreezeFrameRecordClassRef[tsFFListIndex];                               /* [GUD]dtcAttributePtr *//* [GUD]tsFFListIndex *//* [ARYCHK] DEM_TSFF_RECORD_CLASS_NUM_PER_DTC_MAX_NUM / 1 / tsFFListIndex */
+                tsFFRecClassRef = dtcAttributePtr->DemTimeSeriesFreezeFrameRecordClassRef[tsFFListIndex];                               /* [GUD]dtcAttributePtr *//* [GUD]tsFFListIndex */
 
                 if( tsFFRecClassRef != DEM_TSFF_RECORD_CLASS_REF_INVALID )                                                              /* [GUD:if]tsFFRecClassRef */
                 {
-                    tsFFListRecIndex = FaultRecordPtr->TimeSeriesFreezeFrameListIndex[tsFFListIndex];                                   /* [GUD]tsFFListIndex *//* [ARYCHK] DEM_TSFF_RECORD_CLASS_NUM_PER_DTC_MAX_NUM / 1 / tsFFListIndex */
+                    tsFFListRecIndex = FaultRecordPtr->TimeSeriesFreezeFrameListIndex[tsFFListIndex];                                   /* [GUD]tsFFListIndex */
 
                     if( tsFFListRecIndex < tsffTotalDTCNum )                                                                            /* [GUD:if]tsFFListRecIndex */
                     {
@@ -288,7 +277,6 @@ static FUNC( void, DEM_CODE ) Dem_Data_MakeTSFFListRecord
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-7-0         :2024-05-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

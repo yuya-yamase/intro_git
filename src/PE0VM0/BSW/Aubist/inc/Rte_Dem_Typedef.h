@@ -1,7 +1,7 @@
-/* Rte_Dem_Typedef_h(v5-9-0)                                                */
+/* Rte_Dem_Typedef_h(v5-5-0)                                                */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -25,7 +25,6 @@ typedef uint8 Dem_DTCFormatType;
 typedef uint8 Dem_DTCKindType;
 typedef uint16 Dem_DTCOriginType;
 typedef uint8 Dem_DTCRequestType;
-typedef uint8 Dem_DTCSettingStatusType;
 typedef uint8 Dem_DTCSeverityType;
 typedef uint8 Dem_DTCTranslationFormatType;
 typedef uint8 Dem_DTRControlType;
@@ -62,7 +61,6 @@ typedef uint8 Dem_UdsStatusHistoryByteType;
 typedef uint8 Dem_ReturnStartStoredDataType;
 typedef uint8 Dem_ReturnGetSizeOfDataByRecNumType;
 typedef uint8 Dem_ReturnGetDTCStoredDataByRecNumType;
-typedef uint8 Dem_SimilarConditionStatusType;
 typedef uint32 Dem_SimilarConditionValueType;
 typedef uint8 Dem_MisfireCylinderNumberType;
 typedef uint16 Dem_MisfireCylinderType;
@@ -96,13 +94,11 @@ struct Rte_struct_Dem_SpecificEventConditionType {
 /*  v5-0-0         :2021-12-24                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-8-0         :2024-10-29                                              */
-/*  v5-9-0         :2025-02-26                                              */
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
 /*  Framework          :v2-1-0                                              */
-/*  BSW plug-in        :v5-10-0                                             */
+/*  BSW plug-in        :v5-5-0                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

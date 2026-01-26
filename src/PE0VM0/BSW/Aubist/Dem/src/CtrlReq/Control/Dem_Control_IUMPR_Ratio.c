@@ -1,7 +1,7 @@
-/* Dem_Control_IUMPR_c(v5-8-0)                                              */
+/* Dem_Control_IUMPR_c(v5-5-0)                                              */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -148,7 +148,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_GetEventIdByRatioId
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | new created. based on Dem_Control_GetIUMPRDataByRatioId. */
-/*   v5-8-0      | branch changed.                                          */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_GetRatioIdByEventId
 (
@@ -157,10 +156,11 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_GetRatioIdByEventId
     P2VAR( Dem_RatioIdType, AUTOMATIC, AUTOMATIC ) RatioIdNumPtr
 )
 {
-    VAR( Dem_u08_InternalReturnType, AUTOMATIC )    retVal;
-    VAR( Dem_u08_InternalReturnType, AUTOMATIC )    retResult;
-    VAR( Dem_u08_InternalReturnType, AUTOMATIC )    checkStatus;
-    VAR( Dem_u16_EventCtrlIndexType, AUTOMATIC )    eventCtrlIndex;
+    VAR( Dem_u08_InternalReturnType, AUTOMATIC )     retVal;
+    VAR( Dem_u08_InternalReturnType, AUTOMATIC )     retResult;
+    VAR( Dem_u08_InternalReturnType, AUTOMATIC )     checkStatus;
+    VAR( Dem_u16_EventCtrlIndexType, AUTOMATIC )     eventCtrlIndex;
+    VAR( boolean, AUTOMATIC ) eventOBDKind;
 
     retVal = DEM_IRT_NG;
 
@@ -173,7 +173,11 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_GetRatioIdByEventId
         /* If the Event is Within Range */
         if( retResult == DEM_IRT_OK )
         {
-            retVal = Dem_IUMPR_GetRatioIdByEventId( eventCtrlIndex, RatioIdBufferPtr, RatioIdNumPtr );  /* [GUD]eventCtrlIndex */
+            eventOBDKind    =   Dem_CfgInfoPm_CheckEventKindOfOBD_ByEvtCtrlIdx( eventCtrlIndex );   /* [GUD]eventCtrlIndex */
+            if( eventOBDKind == (boolean)TRUE ) /*  OBD     */
+            {
+                retVal = Dem_IUMPR_GetRatioIdByEventId( eventCtrlIndex, RatioIdBufferPtr, RatioIdNumPtr );  /* [GUD]eventCtrlIndex */
+            }
         }
     }
 
@@ -301,11 +305,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_RepIUMPRDenRelease
 /*               |       : See the description of the return value of       */
 /*               |         "DemAsyncReqFncPTR" in Dem_CmnLib_Control_AsyncReq.h.   */
 /* Notes         | -                                                        */
-/*--------------------------------------------------------------------------*/
-/* UpdateRecord  | [UpdRec]IUMPR    :   NotifySavedZone                     */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-6-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_AsyncExecReturnType, DEM_CODE ) Dem_Control_NotifyIUMPRDenRelease
 (
@@ -325,14 +324,14 @@ FUNC( Dem_u08_AsyncExecReturnType, DEM_CODE ) Dem_Control_NotifyIUMPRDenRelease
 
     /*--------------------------------------*/
     /*  notify SAVED_ZONE update - start.   */
-    Dem_NotifySavedZoneIUMPRUpdate_Enter();      /*  notify start :  savedzone area will be update.  */
+    Dem_NotifySavedZoneUpdate_Enter();      /*  notify start :  savedzone area will be update.  */
     /*--------------------------------------*/
 
-    Dem_IUMPR_UpdateDenUnlockCondition( ratioId );      /* [UpdRec]IUMPR */
+    Dem_IUMPR_UpdateDenUnlockCondition( ratioId );
 
     /*--------------------------------------*/
     /*  notify SAVED_ZONE update - end.     */
-    Dem_NotifySavedZoneIUMPRUpdate_Exit();       /*  notify end :  savedzone area will be update.    */
+    Dem_NotifySavedZoneUpdate_Exit();       /*  notify end :  savedzone area will be update.    */
     /*--------------------------------------*/
 
     return retVal;
@@ -350,11 +349,6 @@ FUNC( Dem_u08_AsyncExecReturnType, DEM_CODE ) Dem_Control_NotifyIUMPRDenRelease
 /*               |       : See the description of the return value of       */
 /*               |         "DemAsyncReqFncPTR" in Dem_CmnLib_Control_AsyncReq.h.   */
 /* Notes         | -                                                        */
-/*--------------------------------------------------------------------------*/
-/* UpdateRecord  | [UpdRec]IUMPR    :   NotifySavedZone                     */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-6-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_AsyncExecReturnType, DEM_CODE ) Dem_Control_NotifyIUMPRFaultDetect
 (
@@ -374,14 +368,14 @@ FUNC( Dem_u08_AsyncExecReturnType, DEM_CODE ) Dem_Control_NotifyIUMPRFaultDetect
 
     /*--------------------------------------*/
     /*  notify SAVED_ZONE update - start.   */
-    Dem_NotifySavedZoneIUMPRUpdate_Enter();      /*  notify start :  savedzone area will be update.  */
+    Dem_NotifySavedZoneUpdate_Enter();      /*  notify start :  savedzone area will be update.  */
     /*--------------------------------------*/
 
-    Dem_IUMPR_RepIUMPRFaultDetect( ratioId );       /* [UpdRec]IUMPR */
+    Dem_IUMPR_RepIUMPRFaultDetect( ratioId );
 
     /*--------------------------------------*/
     /*  notify SAVED_ZONE update - end.     */
-    Dem_NotifySavedZoneIUMPRUpdate_Exit();       /*  notify end :  savedzone area will be update.    */
+    Dem_NotifySavedZoneUpdate_Exit();       /*  notify end :  savedzone area will be update.    */
     /*--------------------------------------*/
 
     return retVal;
@@ -400,8 +394,6 @@ FUNC( Dem_u08_AsyncExecReturnType, DEM_CODE ) Dem_Control_NotifyIUMPRFaultDetect
 /*  Version        :Date                                                    */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-6-0         :2024-01-29                                              */
-/*  v5-8-0         :2024-10-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

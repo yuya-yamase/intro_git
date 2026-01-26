@@ -1,7 +1,7 @@
-/* Dem_Utl_Similar_h(v5-9-0)                                                */
+/* Dem_Utl_Similar_h(v5-3-0)                                                */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 /****************************************************************************/
 /* Object Name  | Dem/Utl_Similar/HEADER                                    */
@@ -55,7 +55,7 @@ FUNC( void, DEM_CODE ) Dem_UtlSimilar_CnvSimilarConditionArrayToBinary
 #if ( DEM_SIMILAR_EVENT_CONFIGURED == STD_ON )
 FUNC( void, DEM_CODE ) Dem_UtlSimilar_CopySimilarConditionArray
 (
-    P2VAR( Dem_SimilarConditionValueType, AUTOMATIC, DEM_APPL_DATA ) DestSimilarConditionArrayPtr,
+    P2VAR( Dem_SimilarConditionValueType, AUTOMATIC, DEM_VAR_SAVED_ZONE ) DestSimilarConditionArrayPtr,
     P2CONST( Dem_SimilarConditionValueType, AUTOMATIC, DEM_VAR_SAVED_ZONE ) SrcSimilarConditionArrayPtr
 );
 
@@ -80,7 +80,6 @@ FUNC( void, DEM_CODE ) Dem_UtlSimilar_SetSimilarConditionArray
 /*  Version        :Date                                                    */
 /*  v5-0-0         :2021-09-28                                              */
 /*  v5-3-0         :2023-03-29                                              */
-/*  v5-9-0         :2025-02-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

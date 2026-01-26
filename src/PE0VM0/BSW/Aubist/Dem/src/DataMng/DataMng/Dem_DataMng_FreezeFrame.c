@@ -1,7 +1,7 @@
-/* Dem_DataMng_FreezeFrame_c(v5-7-0)                                        */
+/* Dem_DataMng_FreezeFrame_c(v5-5-0)                                        */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -28,10 +28,6 @@
 /*--------------------------------------------------------------------------*/
 static FUNC( void, DEM_CODE ) Dem_DataMng_SetCapturedFFD
 (
-#ifndef DEM_SIT_RANGE_CHECK
-#else   /* DEM_SIT_RANGE_CHECK */
-    VAR( Dem_u16_FFDStoredIndexType, AUTOMATIC ) StorageFormatDataSize,
-#endif  /* DEM_SIT_RANGE_CHECK */
     P2CONST( AB_83_ConstV Dem_FreezeFrameDataPosType, AUTOMATIC, DEM_CONFIG_DATA ) FreezeFrameDataPosTablePtr,
     P2CONST( uint8, AUTOMATIC, DEM_VAR_NO_INIT ) CapturedDataPtr,
     VAR( Dem_u16_FFDStoredIndexType, AUTOMATIC ) CapturedDataSize,
@@ -91,16 +87,9 @@ static FUNC( void, DEM_CODE ) Dem_DataMng_SetCapturedFFD
 /*               |        cord with storage format.                         */
 /* Return Value  | void                                                     */
 /* Notes         | -                                                        */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_DataMng_SetCapturedFreezeFrame
 (
-#ifndef DEM_SIT_RANGE_CHECK
-#else   /* DEM_SIT_RANGE_CHECK */
-    VAR( Dem_u16_FFDStoredIndexType, AUTOMATIC ) StorageFormatDataSize,
-#endif  /* DEM_SIT_RANGE_CHECK */
     P2CONST( AB_83_ConstV Dem_FreezeFrameDataPosType, AUTOMATIC, DEM_CONFIG_DATA ) FreezeFrameDataPosTablePtr,
     VAR( Dem_u08_ConsistencyIdType, AUTOMATIC ) ConsistencyID,
     VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex,
@@ -129,27 +118,23 @@ FUNC( void, DEM_CODE ) Dem_DataMng_SetCapturedFreezeFrame
     posRecordStatus = FreezeFrameDataPosTablePtr->RecordStatus;
 
     /* Stores the specified consistency ID. */
-    StorageFormatDataPtr[posFirstCID] = (uint8)ConsistencyID; /* [ARYCHK] StorageFormatDataSize/1/posFirstCID */
-    StorageFormatDataPtr[posLastCID] = (uint8)ConsistencyID; /* [ARYCHK] StorageFormatDataSize/1/posLastCID */
+    StorageFormatDataPtr[posFirstCID] = (uint8)ConsistencyID;
+    StorageFormatDataPtr[posLastCID] = (uint8)ConsistencyID;
 
     /* Stores the specified event index. */
     eventStrgIndexUpper = DEM_UTILMEM_BYTE_INVALID;
     eventStrgIndexLower = DEM_UTILMEM_BYTE_INVALID;
     Dem_UtlMem_SplitByteData( (uint16)EventStrgIndex, &eventStrgIndexUpper, &eventStrgIndexLower );
-    StorageFormatDataPtr[posFirstEventStrgIndexUpper] = eventStrgIndexUpper; /* [ARYCHK] StorageFormatDataSize/1/posFirstEventStrgIndexUpper */
-    StorageFormatDataPtr[posFirstEventStrgIndexLower] = eventStrgIndexLower; /* [ARYCHK] StorageFormatDataSize/1/posFirstEventStrgIndexLower */
-    StorageFormatDataPtr[posLastEventStrgIndexUpper] = eventStrgIndexUpper; /* [ARYCHK] StorageFormatDataSize/1/posLastEventStrgIndexUpper */
-    StorageFormatDataPtr[posLastEventStrgIndexLower] = eventStrgIndexLower; /* [ARYCHK] StorageFormatDataSize/1/posLastEventStrgIndexLower */
+    StorageFormatDataPtr[posFirstEventStrgIndexUpper] = eventStrgIndexUpper;
+    StorageFormatDataPtr[posFirstEventStrgIndexLower] = eventStrgIndexLower;
+    StorageFormatDataPtr[posLastEventStrgIndexUpper] = eventStrgIndexUpper;
+    StorageFormatDataPtr[posLastEventStrgIndexLower] = eventStrgIndexLower;
 
     /* Stores the specified record status. */
-    StorageFormatDataPtr[posRecordStatus] = (uint8)RecordStatus; /* [ARYCHK] StorageFormatDataSize/1/posRecordStatus */
+    StorageFormatDataPtr[posRecordStatus] = (uint8)RecordStatus;
 
     /* Stores the specified freeze frame data.  */
-#ifndef DEM_SIT_RANGE_CHECK
     Dem_DataMng_SetCapturedFFD( FreezeFrameDataPosTablePtr, CapturedDataPtr, CapturedDataSize, StorageFormatDataPtr );
-#else   /* DEM_SIT_RANGE_CHECK */
-    Dem_DataMng_SetCapturedFFD( StorageFormatDataSize, FreezeFrameDataPosTablePtr, CapturedDataPtr, CapturedDataSize, StorageFormatDataPtr );
-#endif  /* DEM_SIT_RANGE_CHECK */
 
     return;
 }
@@ -175,17 +160,10 @@ FUNC( void, DEM_CODE ) Dem_DataMng_SetCapturedFreezeFrame
 /*               |        cord with storage format.                         */
 /* Return Value  | void                                                     */
 /* Notes         | -                                                        */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 #if ( DEM_FF_CHECKSUM_SUPPORT == STD_ON )
 static FUNC( void, DEM_CODE ) Dem_DataMng_SetCapturedFFD
 (
-#ifndef DEM_SIT_RANGE_CHECK
-#else   /* DEM_SIT_RANGE_CHECK */
-    VAR( Dem_u16_FFDStoredIndexType, AUTOMATIC ) StorageFormatDataSize,
-#endif  /* DEM_SIT_RANGE_CHECK */
     P2CONST( AB_83_ConstV Dem_FreezeFrameDataPosType, AUTOMATIC, DEM_CONFIG_DATA ) FreezeFrameDataPosTablePtr,
     P2CONST( uint8, AUTOMATIC, DEM_VAR_NO_INIT ) CapturedDataPtr,
     VAR( Dem_u16_FFDStoredIndexType, AUTOMATIC ) CapturedDataSize,
@@ -201,11 +179,7 @@ static FUNC( void, DEM_CODE ) Dem_DataMng_SetCapturedFFD
     posChecksumLower = FreezeFrameDataPosTablePtr->ChecksumLower;
 
     /* Stores the specified freeze frame data with checksum.  */
-#ifndef DEM_SIT_RANGE_CHECK
     Dem_UtlMem_CopyMemoryWithChecksum( StorageFormatDataPtr, CapturedDataPtr, CapturedDataSize, posDataStart, posChecksumUpper, posChecksumLower );
-#else   /* DEM_SIT_RANGE_CHECK */
-    Dem_UtlMem_CopyMemoryWithChecksum( StorageFormatDataSize, StorageFormatDataPtr, CapturedDataPtr, CapturedDataSize, posDataStart, posChecksumUpper, posChecksumLower );
-#endif  /* DEM_SIT_RANGE_CHECK */
 
     return;
 }
@@ -213,10 +187,6 @@ static FUNC( void, DEM_CODE ) Dem_DataMng_SetCapturedFFD
 #if ( DEM_FF_CHECKSUM_SUPPORT == STD_OFF )
 static FUNC( void, DEM_CODE ) Dem_DataMng_SetCapturedFFD
 (
-#ifndef DEM_SIT_RANGE_CHECK
-#else   /* DEM_SIT_RANGE_CHECK */
-    VAR( Dem_u16_FFDStoredIndexType, AUTOMATIC ) StorageFormatDataSize,
-#endif  /* DEM_SIT_RANGE_CHECK */
     P2CONST( AB_83_ConstV Dem_FreezeFrameDataPosType, AUTOMATIC, DEM_CONFIG_DATA ) FreezeFrameDataPosTablePtr,
     P2CONST( uint8, AUTOMATIC, DEM_VAR_NO_INIT ) CapturedDataPtr,
     VAR( Dem_u16_FFDStoredIndexType, AUTOMATIC ) CapturedDataSize,
@@ -228,7 +198,7 @@ static FUNC( void, DEM_CODE ) Dem_DataMng_SetCapturedFFD
     posDataStart = FreezeFrameDataPosTablePtr->DataStart;
 
     /* Stores the specified freeze frame data.  */
-    Dem_UtlMem_CopyMemory( &StorageFormatDataPtr[posDataStart], CapturedDataPtr, CapturedDataSize ); /* [ARYCHK] StorageFormatDataSize/1/posDataStart */
+    Dem_UtlMem_CopyMemory( &StorageFormatDataPtr[posDataStart], CapturedDataPtr, CapturedDataSize );
 
     return;
 }
@@ -248,7 +218,6 @@ static FUNC( void, DEM_CODE ) Dem_DataMng_SetCapturedFFD
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-7-0         :2024-05-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

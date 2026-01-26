@@ -1,7 +1,7 @@
-/* Dem_CmnLib_Control_AsyncReq_h(v5-9-0)                                    */
+/* Dem_CmnLib_Control_AsyncReq_h(v5-5-0)                                    */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -117,12 +117,6 @@ FUNC( Dem_u08_AsyncExecReturnType, DEM_CODE ) Dem_Control_NormalizeEventStatus
     VAR( Dem_u08_AsyncReqItemBType, AUTOMATIC ) Status,
     P2VAR( uint8, AUTOMATIC, AUTOMATIC ) DataBuffPtr
 );
-FUNC( Dem_u08_AsyncExecReturnType, DEM_CODE ) Dem_Control_ActiveFaultEventStatus
-(
-    VAR( Dem_u16_AsyncReqItemAType, AUTOMATIC ) Index,
-    VAR( Dem_u08_AsyncReqItemBType, AUTOMATIC ) Status,
-    P2VAR( uint8, AUTOMATIC, AUTOMATIC ) DataBuffPtr
-);
 
 /*----------------------------------*/
 /*  Dem_Control_OpCycle             */
@@ -157,15 +151,6 @@ FUNC( Dem_u08_AsyncExecReturnType, DEM_CODE ) Dem_Control_PFCRecordUpdateProcess
     P2VAR( uint8, AUTOMATIC, AUTOMATIC ) DataBuffPtr
 );
 #endif /* DEM_PFC_RECORD_SUPPRESSION_SUPPORT -STD_ON- */
-
-#if ( DEM_PFC_SUPPORT == STD_ON )
-FUNC( Dem_u08_AsyncExecReturnType, DEM_CODE ) Dem_Control_ClearAllPFCProcess
-(
-    VAR( Dem_u16_AsyncReqItemAType, AUTOMATIC ) Index,
-    VAR( Dem_u08_AsyncReqItemBType, AUTOMATIC ) Status,
-    P2VAR( uint8, AUTOMATIC, AUTOMATIC ) DataBuffPtr
-);
-#endif /* DEM_PFC_SUPPORT -STD_ON- */
 
 /*----------------------------------*/
 /*  Dem_Control_DTR                 */
@@ -298,8 +283,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_SetMILAtShortMIProcess
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-6-0         :2024-01-29                                              */
-/*  v5-9-0         :2025-02-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

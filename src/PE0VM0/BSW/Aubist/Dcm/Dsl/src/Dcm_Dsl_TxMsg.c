@@ -1,7 +1,7 @@
-/* Dcm_Dsl_TxMsg_c(v5-8-0)                                                  */
+/* Dcm_Dsl_TxMsg_c(v5-3-0)                                                  */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -766,10 +766,10 @@ static FUNC(Std_ReturnType, DCM_CODE) Dcm_Dsl_TxMsg_TransmitCore
     PduIdType      uv_TxPduId;
     Std_ReturnType u1_Result;
     boolean        b_Extended;
-    /* Measures to avoid worrying about member MetaDataPtr */
-    PduInfoType    st_wrpInfo;
 
-    Dcm_Main_SetMemory( (uint8*)&st_wrpInfo, (uint8)0U, (uint16)(sizeof(st_wrpInfo)) );
+    /* Measures to avoid worrying about member MetaDataPtr */
+    PduInfoType    st_wrpInfo = { 0U };
+
     uv_TxPduId = Dcm_Dsl_TxMsg_GetTxPduID(u2PduMapIndex);
     if( uv_TxPduId != DCM_DSL_INVALID_U2_DATA )
     {
@@ -1597,7 +1597,6 @@ static FUNC(AB_83_DcmPduLengthType, DCM_CODE) Dcm_Dsl_TxMsg_GetMaximumResponseSi
 /*  v3-2-0         :2020-10-28                                              */
 /*  v5-0-0         :2022-03-29                                              */
 /*  v5-3-0         :2022-08-30                                              */
-/*  v5-8-0         :2024-10-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

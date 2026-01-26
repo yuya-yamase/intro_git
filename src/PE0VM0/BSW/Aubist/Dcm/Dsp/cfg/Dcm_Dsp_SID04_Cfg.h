@@ -1,7 +1,7 @@
-/* Dcm_Dsp_SID04_Cfg_h(v5-8-0)                                              */
+/* Dcm_Dsp_SID04_Cfg_h(v5-0-0)                                              */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -35,7 +35,6 @@
 
 FUNC( Std_ReturnType, DCM_CODE ) Dcm_Dsp_SID04_CheckSWC
 (
-    const Dcm_OpStatusType u1OpStatus,
     P2VAR( Dcm_NegativeResponseCodeType, AUTOMATIC, DCM_APPL_DATA ) ptErrorCode
 );
 
@@ -57,12 +56,11 @@ FUNC( Std_ReturnType, DCM_CODE ) Dcm_Dsp_SID04_CheckSWC
 /*  Version        :Date                                                    */
 /*  v3-0-0         :2019-05-29                                              */
 /*  v5-0-0         :2021-12-24                                              */
-/*  v5-8-0         :2024-10-29                                              */
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
 /*  Framework          :v2-1-0                                              */
-/*  BSW plug-in        :v5-10-0                                             */
+/*  BSW plug-in        :v5-5-1                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

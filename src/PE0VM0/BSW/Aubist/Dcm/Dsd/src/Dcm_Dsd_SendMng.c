@@ -1,7 +1,7 @@
-/* Dcm_Dsd_SendMng_c(v5-10-0)                                               */
+/* Dcm_Dsd_SendMng_c(v5-4-0)                                                */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -760,7 +760,7 @@ static FUNC(void, DCM_CODE) Dcm_Dsd_SendMng_SendResponse
 
     if( Dcm_M_General.bRespondAllRequest != (boolean)TRUE )
     {
-        if( ( u1_SID & DCM_DSD_NORES_RANGE_MASK ) == DCM_DSD_NORES_RANGE_MASK )
+        if( (u1_SID & DCM_DSD_NORES_RANGE_MASK) == DCM_DSD_NORES_RANGE_MASK )
         {
             if( Dcm_Dsd_u1ErrorCode == DCM_DSD_NRC_INVALID )
             {
@@ -863,9 +863,8 @@ static FUNC(boolean, DCM_CODE) Dcm_Dsd_SendMng_IsSuppressNegInSpecific
     uint8   u1_SupportObdSystem;
     uint8   u1_ProtocolGroup;
     boolean b_NoSuppressNegResIMLOIFToOBDClient;
-    boolean b_NoSuppressNegResToUDSClient;
     boolean b_SuppressResponse;
-    
+
     b_SuppressResponse = (boolean)FALSE;
     u1_SupportObdSystem = Dcm_Dsd_u1SupportObdSystem;
     
@@ -910,40 +909,15 @@ static FUNC(boolean, DCM_CODE) Dcm_Dsd_SendMng_IsSuppressNegInSpecific
         /* checks negative response of OBD excluding NRC 0x21 and NRC 0x22 */
         if( u1SID <= DCM_DSD_OBD_SID_MAX )
         {
-            u1_ProtocolGroup = Dcm_Dsl_GetActiveProtocolGroup( u2ConnectionId );
-            if( u1_ProtocolGroup == DCM_DSL_UDS_PROTOCOL )
+            /* NRC 0x21 and NRC 0x22 */
+            if( (u1Nrc == (uint8)DCM_E_BUSYREPEATREQUEST) ||
+                (u1Nrc == (uint8)DCM_E_CONDITIONSNOTCORRECT) )
             {
-                b_NoSuppressNegResToUDSClient = Dcm_Dsd_bNoSuppressNegResToUDSClient;
-                if( b_NoSuppressNegResToUDSClient == (boolean)TRUE )
-                {
-                    /* No process */
-                }
-                else
-                {
-                    /* NRC 0x21 and NRC 0x22 */
-                    if( ( u1Nrc == (uint8)DCM_E_BUSYREPEATREQUEST ) ||
-                        ( u1Nrc == (uint8)DCM_E_CONDITIONSNOTCORRECT ) )
-                    {
-                        /* No process */
-                    }
-                    else
-                    {
-                        b_SuppressResponse = (boolean)TRUE;
-                    }
-                }
+                /* No process */
             }
             else
             {
-                /* NRC 0x21 and NRC 0x22 */
-                if( ( u1Nrc == (uint8)DCM_E_BUSYREPEATREQUEST ) ||
-                    ( u1Nrc == (uint8)DCM_E_CONDITIONSNOTCORRECT ) )
-                {
-                    /* No process */
-                }
-                else
-                {
-                    b_SuppressResponse = (boolean)TRUE;
-                }
+                b_SuppressResponse = (boolean)TRUE;
             }
         }
     }
@@ -1097,7 +1071,6 @@ static FUNC(boolean, DCM_CODE) Dcm_Dsd_SendMng_IsSuppressNegResInFuncAddr
 /*  v5-0-0         :2022-03-29                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-4-0         :2023-06-28                                              */
-/*  v5-10-0        :2025-06-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

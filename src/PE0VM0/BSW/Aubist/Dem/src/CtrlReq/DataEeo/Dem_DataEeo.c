@@ -1,7 +1,7 @@
-/* Dem_DataEeo_c(v5-8-0)                                                    */
+/* Dem_DataEeo_c(v5-5-0)                                                    */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -87,12 +87,6 @@ static FUNC( boolean, DEM_CODE ) Dem_DcEeo_SelectOverwrite
 );
 
 #if ( DEM_EVENT_DISPLACEMENT_BY_DTCSTATUS_SUPPORT == STD_ON )
-static FUNC( Dem_u08_OvwTargetCompareType, DEM_CODE ) Dem_DcEeo_JudgePriorityByConfirmedDTCByTarget
-(
-    P2CONST( Dem_EventEntryOverwriteType, AUTOMATIC, AUTOMATIC ) NewEventEntryOverwritePtr,
-    P2CONST( Dem_EventEntryOverwriteType, AUTOMATIC, AUTOMATIC ) OldEventEntryOverwritePtr
-);
-
 static FUNC( Dem_u08_OvwTargetCompareType, DEM_CODE ) Dem_DcEeo_JudgePriorityByConfirmedDTC
 (
     P2CONST( Dem_EventEntryOverwriteType, AUTOMATIC, AUTOMATIC ) NewEventEntryOverwritePtr,
@@ -101,8 +95,8 @@ static FUNC( Dem_u08_OvwTargetCompareType, DEM_CODE ) Dem_DcEeo_JudgePriorityByC
 
 static FUNC( Dem_u08_OvwTargetCompareType, DEM_CODE ) Dem_DcEeo_SelectDTCStatusByConfirmedDTC
 (
-    P2CONST( Dem_EventEntryOverwriteFaultInfoType, AUTOMATIC, AUTOMATIC ) EventEntryOverwriteFaultInfoPtr,
-    P2CONST( Dem_EventEntryOverwriteType, AUTOMATIC, AUTOMATIC ) TargetEventEntryOverwritePtr
+    VAR( Dem_UdsStatusByteType, AUTOMATIC ) NewDTCStatus,
+    VAR( Dem_UdsStatusByteType, AUTOMATIC ) OldDTCStatus
 );
 #endif  /* ( DEM_EVENT_DISPLACEMENT_BY_DTCSTATUS_SUPPORT == STD_ON )        */
 
@@ -268,7 +262,6 @@ FUNC( void, DEM_CODE ) Dem_DcEeo_InitializeNonOBDFFROverwriteForEachTrigger
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-8-0      | no branch changed.                                       */
 /****************************************************************************/
 #if ( DEM_OBDFFD_SUPPORT == STD_ON )
 FUNC( void, DEM_CODE ) Dem_DcEeo_InitializeOBDFFROverwrite
@@ -277,7 +270,7 @@ FUNC( void, DEM_CODE ) Dem_DcEeo_InitializeOBDFFROverwrite
     VAR( Dem_u08_EventEntryOverwriteIndexType, AUTOMATIC ) loopIndex;
     VAR( Dem_u08_EventEntryOverwriteIndexType, AUTOMATIC ) obdFFRClassPerDTCMaxNum;
 
-    obdFFRClassPerDTCMaxNum = Dem_CfgInfoPm_GetOBDFFRClassPerDTCMaxNum();
+    obdFFRClassPerDTCMaxNum = Dem_OBDFFRClassPerDTCMaxNum;
 
     Dem_OBDFFROverwrite.EventEntryOverwriteIndex = (Dem_u08_EventEntryOverwriteIndexType)0U;
     for( loopIndex = (Dem_u08_EventEntryOverwriteIndexType)0U; loopIndex < obdFFRClassPerDTCMaxNum ;loopIndex++ )   /* [GUD:for]loopIndex */
@@ -430,7 +423,6 @@ FUNC( void, DEM_CODE ) Dem_DcEeo_SelectNonOBDFFROverwrite
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | branch changed.                                          */
-/*   v5-8-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_DcEeo_SelectOBDFFROverwrite
 (
@@ -472,7 +464,7 @@ FUNC( void, DEM_CODE ) Dem_DcEeo_SelectOBDFFROverwrite
         /* EventEntryOverwrite has higher priority than OBD requirements */
     }
 
-    obdFFRClassPerDTCMaxNum = Dem_CfgInfoPm_GetOBDFFRClassPerDTCMaxNum();
+    obdFFRClassPerDTCMaxNum = Dem_OBDFFRClassPerDTCMaxNum;
 
     /* Set overwrite target */
     for( loopIndex = (Dem_u08_EventEntryOverwriteIndexType)0U ; loopIndex < obdFFRClassPerDTCMaxNum; loopIndex++ )                          /* [GUD:for]loopIndex */
@@ -516,7 +508,6 @@ FUNC( void, DEM_CODE ) Dem_DcEeo_SelectOBDFFROverwrite
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-8-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_FaultIndexType, DEM_CODE ) Dem_DcEeo_GetFaultIndexOfFaultRecordOverwrite
 (
@@ -539,7 +530,7 @@ FUNC( Dem_u08_FaultIndexType, DEM_CODE ) Dem_DcEeo_GetFaultIndexOfFaultRecordOve
         /* EventPriority has the same priority as the current overwrite target */
 
 #if ( DEM_EVENT_DISPLACEMENT_BY_DTCSTATUS_SUPPORT == STD_ON )   /*  [FuncSw]    */
-        resultOfSelect = Dem_DcEeo_SelectDTCStatusByConfirmedDTC( EventEntryOverwriteFaultInfoPtr, &Dem_FaultRecordOverwrite.EventEntryOverwrite );
+        resultOfSelect = Dem_DcEeo_SelectDTCStatusByConfirmedDTC( EventEntryOverwriteFaultInfoPtr->StatusOfDTC, Dem_FaultRecordOverwrite.EventEntryOverwrite.StatusOfDTC );
         if( resultOfSelect == DEM_EEO_NEW_IS_HIGH )
         {
             /* new event's confirmedDTC is on, and old event's confirmedDTC is off. */
@@ -570,7 +561,6 @@ FUNC( Dem_u08_FaultIndexType, DEM_CODE ) Dem_DcEeo_GetFaultIndexOfFaultRecordOve
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-8-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_FaultIndexType, DEM_CODE ) Dem_DcEeo_GetFaultIndexOfNonOBDFFROverwrite
 (
@@ -623,7 +613,7 @@ FUNC( Dem_u08_FaultIndexType, DEM_CODE ) Dem_DcEeo_GetFaultIndexOfNonOBDFFROverw
             /* EventPriority has the same priority as the current overwrite target */
 
 #if ( DEM_EVENT_DISPLACEMENT_BY_DTCSTATUS_SUPPORT == STD_ON )   /*  [FuncSw]    */
-            resultOfSelect = Dem_DcEeo_SelectDTCStatusByConfirmedDTC( EventEntryOverwriteFaultInfoPtr, &Dem_NonOBDFFROverwrite.EventEntryOverwrite[overwriteIndex] );   /* [GUD]overwriteIndex */
+            resultOfSelect = Dem_DcEeo_SelectDTCStatusByConfirmedDTC( EventEntryOverwriteFaultInfoPtr->StatusOfDTC, Dem_NonOBDFFROverwrite.EventEntryOverwrite[overwriteIndex].StatusOfDTC );   /* [GUD]overwriteIndex */
             if( resultOfSelect == DEM_EEO_NEW_IS_HIGH )
             {
                 /* new event's confirmedDTC is on, and old event's confirmedDTC is off. */
@@ -716,7 +706,6 @@ FUNC( void, DEM_CODE ) Dem_DcEeo_DisableNonOBDFFROverwrite
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-8-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_FaultIndexType, DEM_CODE ) Dem_DcEeo_GetFaultIndexOfOBDFFROverwrite
 (
@@ -731,7 +720,7 @@ FUNC( Dem_u08_FaultIndexType, DEM_CODE ) Dem_DcEeo_GetFaultIndexOfOBDFFROverwrit
     VAR( Dem_u08_OvwTargetCompareType, AUTOMATIC ) resultOfSelect;
 #endif  /* ( DEM_EVENT_DISPLACEMENT_BY_DTCSTATUS_SUPPORT == STD_ON )        */
 
-    obdFFRClassPerDTCMaxNum = Dem_CfgInfoPm_GetOBDFFRClassPerDTCMaxNum();
+    obdFFRClassPerDTCMaxNum = Dem_OBDFFRClassPerDTCMaxNum;
     faultIndex = DEM_FAULTINDEX_INITIAL;
 
     overwriteIndex = Dem_OBDFFROverwrite.EventEntryOverwriteIndex;
@@ -749,7 +738,7 @@ FUNC( Dem_u08_FaultIndexType, DEM_CODE ) Dem_DcEeo_GetFaultIndexOfOBDFFROverwrit
             /* EventPriority has the same priority as the current overwrite target */
 
 #if ( DEM_EVENT_DISPLACEMENT_BY_DTCSTATUS_SUPPORT == STD_ON )   /*  [FuncSw]    */
-            resultOfSelect = Dem_DcEeo_SelectDTCStatusByConfirmedDTC( EventEntryOverwriteFaultInfoPtr, &Dem_OBDFFROverwrite.EventEntryOverwrite[overwriteIndex] );  /* [GUD]overwriteIndex */
+            resultOfSelect = Dem_DcEeo_SelectDTCStatusByConfirmedDTC( EventEntryOverwriteFaultInfoPtr->StatusOfDTC, Dem_OBDFFROverwrite.EventEntryOverwrite[overwriteIndex].StatusOfDTC );  /* [GUD]overwriteIndex */
             if( resultOfSelect == DEM_EEO_NEW_IS_HIGH )
             {
                 /* new event's confirmedDTC is on, and old event's confirmedDTC is off. */
@@ -774,16 +763,13 @@ FUNC( Dem_u08_FaultIndexType, DEM_CODE ) Dem_DcEeo_GetFaultIndexOfOBDFFROverwrit
 /* Preconditions | none                                                     */
 /* Parameters    | none                                                     */
 /* Return Value  | void                                                     */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-8-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_DcEeo_SelectNextOBDFFROverwrite
 (void)
 {
     VAR( Dem_u08_EventEntryOverwriteIndexType, AUTOMATIC ) obdFFRClassPerDTCMaxNum;
 
-    obdFFRClassPerDTCMaxNum = Dem_CfgInfoPm_GetOBDFFRClassPerDTCMaxNum();
+    obdFFRClassPerDTCMaxNum = Dem_OBDFFRClassPerDTCMaxNum;
 
     if( Dem_OBDFFROverwrite.EventEntryOverwriteIndex < obdFFRClassPerDTCMaxNum )
     {
@@ -808,8 +794,6 @@ FUNC( void, DEM_CODE ) Dem_DcEeo_SelectNextOBDFFROverwrite
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-7-0      | no branch changed.                                       */
-/*   v5-8-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_FaultIndexType, DEM_CODE ) Dem_DcEeo_GetFaultIndexOfFFROverwriteFromTrigger
 (
@@ -830,19 +814,19 @@ FUNC( Dem_u08_FaultIndexType, DEM_CODE ) Dem_DcEeo_GetFaultIndexOfFFROverwriteFr
 
     if ( TargetTrigger == DEM_TRIGGER_ON_CONFIRMED )
     {
-        Dem_DcEeo_TransferEventEntryOverwrite( &targetEventEntryOverwrite, &Dem_NonOBDFFROverwriteForEachTrigger.EventEntryOverwriteConfirmedTrigger );
+        targetEventEntryOverwrite = Dem_NonOBDFFROverwriteForEachTrigger.EventEntryOverwriteConfirmedTrigger;
     }
     else if ( TargetTrigger == DEM_TRIGGER_ON_FDC_THRESHOLD )
     {
-        Dem_DcEeo_TransferEventEntryOverwrite( &targetEventEntryOverwrite, &Dem_NonOBDFFROverwriteForEachTrigger.EventEntryOverwriteFDCThresholdTrigger );
+        targetEventEntryOverwrite = Dem_NonOBDFFROverwriteForEachTrigger.EventEntryOverwriteFDCThresholdTrigger;
     }
     else if ( TargetTrigger == DEM_TRIGGER_ON_PENDING )
     {
-        Dem_DcEeo_TransferEventEntryOverwrite( &targetEventEntryOverwrite, &Dem_NonOBDFFROverwriteForEachTrigger.EventEntryOverwritePendingTrigger );
+        targetEventEntryOverwrite = Dem_NonOBDFFROverwriteForEachTrigger.EventEntryOverwritePendingTrigger;
     }
     else if ( TargetTrigger == DEM_TRIGGER_ON_TEST_FAILED_THIS_OPERATION_CYCLE )
     {
-        Dem_DcEeo_TransferEventEntryOverwrite( &targetEventEntryOverwrite, &Dem_NonOBDFFROverwriteForEachTrigger.EventEntryOverwriteTFTOCTrigger );
+        targetEventEntryOverwrite = Dem_NonOBDFFROverwriteForEachTrigger.EventEntryOverwriteTFTOCTrigger;
     }
     else
     {
@@ -863,7 +847,7 @@ FUNC( Dem_u08_FaultIndexType, DEM_CODE ) Dem_DcEeo_GetFaultIndexOfFFROverwriteFr
             /* EventPriority has the same priority as the current overwrite target */
 
 #if ( DEM_EVENT_DISPLACEMENT_BY_DTCSTATUS_SUPPORT == STD_ON )   /*  [FuncSw]    */
-            resultOfSelect = Dem_DcEeo_SelectDTCStatusByConfirmedDTC( EventEntryOverwriteFaultInfoPtr, &targetEventEntryOverwrite );
+            resultOfSelect = Dem_DcEeo_SelectDTCStatusByConfirmedDTC( EventEntryOverwriteFaultInfoPtr->StatusOfDTC, targetEventEntryOverwrite.StatusOfDTC );
             if( resultOfSelect == DEM_EEO_NEW_IS_HIGH )
             {
                 /* new event's confirmedDTC is on, and old event's confirmedDTC is off. */
@@ -893,7 +877,6 @@ FUNC( Dem_u08_FaultIndexType, DEM_CODE ) Dem_DcEeo_GetFaultIndexOfFFROverwriteFr
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************************/
 FUNC( Dem_u08_FaultIndexType, DEM_CODE ) Dem_DcEeo_GetFaultIndexOfLowestPriorityNonOBDDTCtoStoreFreezeFrame
 ( void )
@@ -945,7 +928,7 @@ FUNC( Dem_u08_FaultIndexType, DEM_CODE ) Dem_DcEeo_GetFaultIndexOfLowestPriority
                 freezeCheckResult = (boolean)FALSE;
                 for( freezeFrameRecordIndex = (Dem_u08_FFListIndexType)0U; freezeFrameRecordIndex < nonOBDFFRClassPerDTCMaxNum; freezeFrameRecordIndex++ )  /* [GUD:for]freezeFrameRecordIndex */
                 {
-                    if ( faultRecordPtrCtl.FaultRecordPtr->RecordNumberIndex[freezeFrameRecordIndex] != DEM_FFRECINDEX_INITIAL )                            /* [GUD]freezeFrameRecordIndex *//* [ARYCHK] DEM_NONOBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / freezeFrameRecordIndex */
+                    if ( faultRecordPtrCtl.FaultRecordPtr->RecordNumberIndex[freezeFrameRecordIndex] != DEM_FFRECINDEX_INITIAL )                            /* [GUD]freezeFrameRecordIndex */
                     {
                         freezeCheckResult = (boolean)TRUE;
                         break;
@@ -985,7 +968,6 @@ FUNC( Dem_u08_FaultIndexType, DEM_CODE ) Dem_DcEeo_GetFaultIndexOfLowestPriority
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
-/*   v5-8-0      | no branch changed.                                       */
 /****************************************************************************/
 static FUNC( boolean, DEM_CODE ) Dem_DcEeo_SelectOverwrite
 (
@@ -1017,7 +999,7 @@ static FUNC( boolean, DEM_CODE ) Dem_DcEeo_SelectOverwrite
         else if( NewEventEntryOverwritePtr->OrgEventPriority == OldEventEntryOverwritePtr->OrgEventPriority )
         {
 #if ( DEM_EVENT_DISPLACEMENT_BY_DTCSTATUS_SUPPORT == STD_ON )   /*  [FuncSw]    */
-            resultOfSelect = Dem_DcEeo_JudgePriorityByConfirmedDTCByTarget( NewEventEntryOverwritePtr, OldEventEntryOverwritePtr );
+            resultOfSelect = Dem_DcEeo_JudgePriorityByConfirmedDTC( NewEventEntryOverwritePtr, OldEventEntryOverwritePtr );
             if( resultOfSelect == DEM_EEO_OLD_IS_HIGH )
             {
                 /* new event's confirmedDTC is off, and old event's confirmedDTC is on. */
@@ -1059,41 +1041,6 @@ static FUNC( boolean, DEM_CODE ) Dem_DcEeo_SelectOverwrite
 }
 
 #if ( DEM_EVENT_DISPLACEMENT_BY_DTCSTATUS_SUPPORT == STD_ON )
-/****************************************************************************/
-/* Function Name | Dem_DcEeo_JudgePriorityByConfirmedDTCByTarget            */
-/* Description   | Select DTC Status by ConfirmedDTC                        */
-/* Preconditions | none                                                     */
-/* Parameters    | [in] NewEventEntryOverwritePtr : new event               */
-/*               |      OldEventEntryOverwritePtr : old event               */
-/* Return Value  | Dem_u08_OvwTargetCompareType                             */
-/*               |    DEM_EEO_BOTH_ARE_SAME : new and old are the same      */
-/*               |    DEM_EEO_NEW_IS_HIGH: new is high priority than old    */
-/*               |    DEM_EEO_OLD_IS_HIGH: old is high priority than new    */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-8-0      | new created.                                             */
-/****************************************************************************/
-static FUNC( Dem_u08_OvwTargetCompareType, DEM_CODE ) Dem_DcEeo_JudgePriorityByConfirmedDTCByTarget
-(
-    P2CONST( Dem_EventEntryOverwriteType, AUTOMATIC, AUTOMATIC ) NewEventEntryOverwritePtr,
-    P2CONST( Dem_EventEntryOverwriteType, AUTOMATIC, AUTOMATIC ) OldEventEntryOverwritePtr
-)
-{
-    VAR( Dem_u08_OvwTargetCompareType, AUTOMATIC ) retVal;
-
-#if ( DEM_EVENT_DISPLACEMENT_BY_CDTC_NONOBDONLY_SUPPORT == STD_ON ) /* [FuncSw] */
-    retVal = DEM_EEO_BOTH_ARE_SAME;
-
-    if( ( NewEventEntryOverwritePtr->EventOBDKind == (boolean)FALSE ) && ( OldEventEntryOverwritePtr->EventOBDKind == (boolean)FALSE ) )
-#endif  /* ( DEM_EVENT_DISPLACEMENT_BY_CDTC_NONOBDONLY_SUPPORT == STD_ON )  */
-    {
-        retVal = Dem_DcEeo_JudgePriorityByConfirmedDTC( NewEventEntryOverwritePtr, OldEventEntryOverwritePtr );
-    }
-
-    return retVal;
-}
-
-
 /****************************************************************************/
 /* Function Name | Dem_DcEeo_JudgePriorityByConfirmedDTC                    */
 /* Description   | Select DTC Status by ConfirmedDTC                        */
@@ -1174,8 +1121,8 @@ static FUNC( Dem_u08_OvwTargetCompareType, DEM_CODE ) Dem_DcEeo_JudgePriorityByC
 /* Function Name | Dem_DcEeo_SelectDTCStatusByConfirmedDTC                  */
 /* Description   | Select DTC Status by ConfirmedDTC                        */
 /* Preconditions | none                                                     */
-/* Parameters    | [in] EventEntryOverwriteFaultInfoPtr :  new event data   */
-/*               |      TargetEventEntryOverwritePtr : old event data       */
+/* Parameters    | [in] NewDTCStatus : new DTC Status                       */
+/*               |      OldDTCStatus : old DTC Status                       */
 /* Return Value  | Dem_u08_OvwTargetCompareType                             */
 /*               |    DEM_EEO_BOTH_ARE_SAME : new and old are the same      */
 /*               |    DEM_EEO_NEW_IS_HIGH: new is high priority than old    */
@@ -1183,47 +1130,37 @@ static FUNC( Dem_u08_OvwTargetCompareType, DEM_CODE ) Dem_DcEeo_JudgePriorityByC
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | branch changed.                                          */
-/*   v5-8-0      | branch changed.                                          */
 /****************************************************************************/
 static FUNC( Dem_u08_OvwTargetCompareType, DEM_CODE ) Dem_DcEeo_SelectDTCStatusByConfirmedDTC
 (
-    P2CONST( Dem_EventEntryOverwriteFaultInfoType, AUTOMATIC, AUTOMATIC ) EventEntryOverwriteFaultInfoPtr,
-    P2CONST( Dem_EventEntryOverwriteType, AUTOMATIC, AUTOMATIC ) TargetEventEntryOverwritePtr
+    VAR( Dem_UdsStatusByteType, AUTOMATIC ) NewDTCStatus,
+    VAR( Dem_UdsStatusByteType, AUTOMATIC ) OldDTCStatus
 )
 {
     VAR( Dem_u08_OvwTargetCompareType, AUTOMATIC ) retVal;
     VAR( Dem_UdsStatusByteType, AUTOMATIC ) newConfirmedDTC;
     VAR( Dem_UdsStatusByteType, AUTOMATIC ) oldConfirmedDTC;
-#if ( DEM_EVENT_DISPLACEMENT_BY_CDTC_NONOBDONLY_SUPPORT == STD_ON ) /* [FuncSw] */
-    VAR( boolean, AUTOMATIC ) eventOBDKind;
-#endif  /* ( DEM_EVENT_DISPLACEMENT_BY_CDTC_NONOBDONLY_SUPPORT == STD_ON )  */
 
     retVal = DEM_EEO_BOTH_ARE_SAME;
 
-#if ( DEM_EVENT_DISPLACEMENT_BY_CDTC_NONOBDONLY_SUPPORT == STD_ON ) /* [FuncSw] */
-    eventOBDKind = Dem_CfgInfoPm_CheckEventKindOfOBD_InEvtStrgGrp( EventEntryOverwriteFaultInfoPtr->EventStrgIndex );
-    if( ( eventOBDKind == (boolean)FALSE ) && ( TargetEventEntryOverwritePtr->EventOBDKind == (boolean)FALSE ) )
-#endif  /* ( DEM_EVENT_DISPLACEMENT_BY_CDTC_NONOBDONLY_SUPPORT == STD_ON )  */
-    {
-        /*--------------------------------------------------*/
-        /*  DemEventDisplacementByDTCStatus is TRUE.        */
-        /*--------------------------------------------------*/
+    /*--------------------------------------------------*/
+    /*  DemEventDisplacementByDTCStatus is TRUE.        */
+    /*--------------------------------------------------*/
 
-        newConfirmedDTC = ( EventEntryOverwriteFaultInfoPtr->StatusOfDTC & DEM_UDS_STATUS_CDTC );   /*  statusOfDTC : bit3  */
-        oldConfirmedDTC = ( TargetEventEntryOverwritePtr->StatusOfDTC & DEM_UDS_STATUS_CDTC );      /*  statusOfDTC : bit3  */
-        if( newConfirmedDTC > oldConfirmedDTC )
-        {
-            retVal = DEM_EEO_NEW_IS_HIGH;
-        }
-        else if( newConfirmedDTC < oldConfirmedDTC )
-        {
-            retVal = DEM_EEO_OLD_IS_HIGH;
-        }
-        else
-        {
-            /* new and old are the same */
-            /* No process */
-        }
+    newConfirmedDTC = ( NewDTCStatus & DEM_UDS_STATUS_CDTC );   /*  statusOfDTC : bit3  */
+    oldConfirmedDTC = ( OldDTCStatus & DEM_UDS_STATUS_CDTC );   /*  statusOfDTC : bit3  */
+    if( newConfirmedDTC > oldConfirmedDTC )
+    {
+        retVal = DEM_EEO_NEW_IS_HIGH;
+    }
+    else if( newConfirmedDTC < oldConfirmedDTC )
+    {
+        retVal = DEM_EEO_OLD_IS_HIGH;
+    }
+    else
+    {
+        /* new and old are the same */
+        /* No process */
     }
 
     return retVal;
@@ -1302,9 +1239,6 @@ static FUNC( void, DEM_CODE ) Dem_DcEeo_SelectNonOBDFFROverwriteForEachTrigger
 /* Preconditions | none                                                     */
 /* Parameters    | [out] EventEntryOverwritePtr : The record to initialize  */
 /* Return Value  | void                                                     */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-8-0      | no branch changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_DcEeo_InitializeEventEntryOverwrite
 (
@@ -1315,9 +1249,6 @@ static FUNC( void, DEM_CODE ) Dem_DcEeo_InitializeEventEntryOverwrite
     EventEntryOverwritePtr->OrgEventPriority = DEM_PRIORITY_INITIAL;
     EventEntryOverwritePtr->FaultIndex       = DEM_FAULTINDEX_INITIAL;
     EventEntryOverwritePtr->StatusOfDTC      = DEM_DTCSTATUS_BYTE_DEFAULT;
-#if ( DEM_EVENT_DISPLACEMENT_BY_CDTC_NONOBDONLY_SUPPORT == STD_ON ) /* [FuncSw] */
-    EventEntryOverwritePtr->EventOBDKind     = (boolean)FALSE;
-#endif  /* ( DEM_EVENT_DISPLACEMENT_BY_CDTC_NONOBDONLY_SUPPORT == STD_ON )  */
 
     return;
 }
@@ -1333,7 +1264,6 @@ static FUNC( void, DEM_CODE ) Dem_DcEeo_InitializeEventEntryOverwrite
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-8-0      | no branch changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_DcEeo_TransferEventEntryOverwrite
 (
@@ -1345,9 +1275,6 @@ static FUNC( void, DEM_CODE ) Dem_DcEeo_TransferEventEntryOverwrite
     DstEventEntryOverwritePtr->OrgEventPriority = SrcEventEntryOverwritePtr->OrgEventPriority;  /* [GUDCHK:CALLER]DstEventEntryOverwritePtr *//* [GUDCHK:CALLER]SrcEventEntryOverwritePtr */
     DstEventEntryOverwritePtr->FaultIndex       = SrcEventEntryOverwritePtr->FaultIndex;        /* [GUDCHK:CALLER]DstEventEntryOverwritePtr *//* [GUDCHK:CALLER]SrcEventEntryOverwritePtr */
     DstEventEntryOverwritePtr->StatusOfDTC      = SrcEventEntryOverwritePtr->StatusOfDTC;       /* [GUDCHK:CALLER]DstEventEntryOverwritePtr *//* [GUDCHK:CALLER]SrcEventEntryOverwritePtr */
-#if ( DEM_EVENT_DISPLACEMENT_BY_CDTC_NONOBDONLY_SUPPORT == STD_ON ) /* [FuncSw] */
-    DstEventEntryOverwritePtr->EventOBDKind     = SrcEventEntryOverwritePtr->EventOBDKind;      /* [GUDCHK:CALLER]DstEventEntryOverwritePtr *//* [GUDCHK:CALLER]SrcEventEntryOverwritePtr */
-#endif  /* ( DEM_EVENT_DISPLACEMENT_BY_CDTC_NONOBDONLY_SUPPORT == STD_ON )  */
 
     return;
 }
@@ -1486,8 +1413,6 @@ static FUNC( Dem_u08_OvwTargetByConfirmedOrderType, DEM_CODE ) Dem_DcEeo_JudgeOv
 /*  v5-0-0         :2022-03-29                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-7-0         :2024-05-29                                              */
-/*  v5-8-0         :2024-10-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

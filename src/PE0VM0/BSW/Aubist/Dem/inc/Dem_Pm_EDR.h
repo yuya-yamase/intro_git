@@ -1,7 +1,7 @@
-/* Dem_Pm_EDR_h(v5-8-0)                                                     */
+/* Dem_Pm_EDR_h(v5-3-0)                                                     */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 
@@ -45,8 +45,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_EDR_SetEDRNumberFilter
 (
     VAR( Dem_u08_EDRRecordNumberType, AUTOMATIC ) ExtendedDataNumber
 );
-FUNC( void, DEM_CODE ) Dem_EDR_RestartSetEDRNumberFilter
-( void );
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_EDR_GetNextEDRNumFilteredDTC
 (
     P2VAR( Dem_u32_DTCValueType, AUTOMATIC, AUTOMATIC ) DTCValuePtr,
@@ -55,8 +53,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_EDR_GetNextEDRNumFilteredDTC
 
 FUNC( boolean, DEM_CODE ) Dem_EDR_CheckExtendedDataNumberSupportByRange
 (
-    VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex,
-    VAR( Dem_u32_DTCValueType, AUTOMATIC ) DTCValue
+    VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex
 );
 
 #define DEM_STOP_SEC_CODE
@@ -89,7 +86,6 @@ FUNC( boolean, DEM_CODE ) Dem_EDR_CheckExtendedDataNumberSupportByRange
 /*  Version        :Date                                                    */
 /*  v5-0-0         :2022-03-29                                              */
 /*  v5-3-0         :2023-03-29                                              */
-/*  v5-8-0         :2024-10-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

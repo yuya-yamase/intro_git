@@ -1,7 +1,7 @@
 /* Dem_Misfire_NotifyCylinderStatus_Callout_c(v5-0-0)                       */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 /****************************************************************************/
 /* Object Name  | Dem/Misfire_NotifyCylinderStatus_Callout/CODE             */

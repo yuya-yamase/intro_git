@@ -1,7 +1,7 @@
-/* Dem_UserDTC_OBD_Callout_c(v5-10-0)                                       */
+/* Dem_UserDTC_OBD_Callout_c(v5-5-0)                                        */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 /****************************************************************************/
 /* Object Name  | Dem/Dem_UserDTC_OBD_Callout/CODE                          */
@@ -68,6 +68,8 @@
 /*               |        igured.                                           */
 /*               | [Out] DTCNumPtr :                                        */
 /*               |        DTC Number                                        */
+/*               | [Out] MILStatusPtr :                                     */
+/*               |        MIL On(TRUE) or Off(FALSE)                        */
 /* Return Value  | void                                                     */
 /*               |                                                          */
 /* Notes         | -                                                        */
@@ -103,7 +105,6 @@ FUNC( void, DEM_CODE_CALLOUT ) Dem_GetNumberOfUserDTC
 /*  v4-0-0         :2020-03-19                                              */
 /*  v5-0-0         :2022-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-10-0        :2025-06-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

@@ -1,7 +1,7 @@
-/* Dcm_Dsp_SID2F_Cfg_h(v5-8-0)                                              */
+/* Dcm_Dsp_SID2F_Cfg_h(v5-3-0)                                              */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -25,9 +25,6 @@
 /*--------------------------------------------------------------------------*/
 #define Dcm_Dsp_SID2F_RetCtrlToECUBySec( u1SecLevelOld, u1SecLevelNew ) Dcm_IOCReturnControlToECUBySec( (u1SecLevelOld), (u1SecLevelNew) ) /* MISRA DEVIATION */
 #define Dcm_Dsp_SID2F_RetCtrlToECUBySes( u1SesCtrlTypeOld, u1SesCtrlTypeNew ) Dcm_IOCReturnControlToECUBySes( (u1SesCtrlTypeOld), (u1SesCtrlTypeNew) ) /* MISRA DEVIATION */
-#define DCM_DSP_SID2F_CONTROLSTATE_ALLSET       ((uint8)0U)
-#define DCM_DSP_SID2F_CONTROLSTATE_IOCP03SET    ((uint8)1U)
-#define DCM_DSP_SID2F_CONTROLSTATE_ALLNOSET     ((uint8)2U)
 
 /*--------------------------------------------------------------------------*/
 /* Types                                                                    */
@@ -57,7 +54,7 @@
 #define DCM_START_SEC_CONST_CONFIG
 #include <Dcm_MemMap.h>
 
-extern CONST ( AB_83_ConstV uint8, DCM_CONFIG_DATA ) Dcm_Dsp_Sid2F_u1SetReportControlState;
+extern CONST ( AB_83_ConstV boolean, DCM_CONFIG_DATA ) Dcm_Dsp_Sid2F_bReportControlStateOnlyIOCP03;
 
 #define DCM_STOP_SEC_CONST_CONFIG
 #include <Dcm_MemMap.h>
@@ -70,12 +67,11 @@ extern CONST ( AB_83_ConstV uint8, DCM_CONFIG_DATA ) Dcm_Dsp_Sid2F_u1SetReportCo
 /*  Version        :Date                                                    */
 /*  v1-0-0         :2018-03-20                                              */
 /*  v5-3-0         :2023-03-29                                              */
-/*  v5-8-0         :2024-10-29                                              */
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
 /*  Framework          :v2-1-0                                              */
-/*  BSW plug-in        :v5-10-0                                             */
+/*  BSW plug-in        :v5-5-1                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

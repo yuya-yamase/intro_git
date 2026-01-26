@@ -1,7 +1,7 @@
-/* Dem_DataCtl_SamplingFFDAccess_c(v5-7-0)                                  */
+/* Dem_DataCtl_SamplingFFDAccess_c(v5-5-0)                                  */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -80,10 +80,8 @@
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-6-0      | no object changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
-FUNC_P2VAR( uint8, DEM_VAR_NO_INIT, DEM_CODE ) Dem_Data_GetSamplingFreezeFrameRecordDataPtr
+FUNC_P2VAR( uint8, DEM_VAR_SAVED_ZONE, DEM_CODE ) Dem_Data_GetSamplingFreezeFrameRecordDataPtr
 (
     VAR( Dem_u16_SmpRecMemIndexType, AUTOMATIC ) SamplingFreezeFrameMemoryRef,
     VAR( Dem_u16_UdmFFDIndexType, AUTOMATIC ) SamplingFreezeFrameRecordIndex
@@ -93,7 +91,7 @@ FUNC_P2VAR( uint8, DEM_VAR_NO_INIT, DEM_CODE ) Dem_Data_GetSamplingFreezeFrameRe
     VAR( Dem_u16_UdmFFDIndexType, AUTOMATIC ) smplFFDRecordNum;
     VAR( Dem_u16_UdmFFDIndexType, AUTOMATIC ) ffdStoredFormatSize;
     VAR( uint32, AUTOMATIC ) udmFFDOffset;
-    P2VAR( uint8, AUTOMATIC, DEM_VAR_NO_INIT ) samplingFreezeFrameRecordDataPtr;
+    P2VAR( uint8, AUTOMATIC, DEM_VAR_SAVED_ZONE ) samplingFreezeFrameRecordDataPtr;
 
     samplingFreezeFrameRecordDataPtr = NULL_PTR;
 
@@ -108,7 +106,7 @@ FUNC_P2VAR( uint8, DEM_VAR_NO_INIT, DEM_CODE ) Dem_Data_GetSamplingFreezeFrameRe
 
             udmFFDOffset = (uint32)( (uint32)ffdStoredFormatSize * (uint32)SamplingFreezeFrameRecordIndex );/* no wrap around */                        /* [GUD:CFG:IF_GUARDED: ffdStoredFormatSize,SamplingFreezeFrameRecordIndex ]udmFFDOffset */
 
-            samplingFreezeFrameRecordDataPtr = &samplingFreezeFrameRecordDataPtr[udmFFDOffset];                                                         /* [GUD]udmFFDOffset *//* [ARYCHK] (ffdStoredFormatSize*smplFFDRecordNum) / 1 / udmFFDOffset */
+            samplingFreezeFrameRecordDataPtr = &samplingFreezeFrameRecordDataPtr[udmFFDOffset];                                                         /* [GUD]udmFFDOffset */
         }
     }
 
@@ -207,8 +205,6 @@ FUNC( Dem_u16_SmpTSFFDIndexType, DEM_CODE ) Dem_Data_GetSamplingFFDRecordNum
 /*  Version        :Date                                                    */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-6-0         :2024-01-29                                              */
-/*  v5-7-0         :2024-05-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

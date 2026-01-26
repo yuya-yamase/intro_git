@@ -1,7 +1,7 @@
-/* Dem_UdmDataCtl_TSFFD_c(v5-7-0)                                           */
+/* Dem_UdmDataCtl_TSFFD_c(v5-5-0)                                           */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -23,11 +23,6 @@
 #include "../../../inc/Dem_Rc_UdmMng.h"
 #include "../../../inc/Dem_Rc_UdmMngTable.h"
 #include "Dem_UdmDataCtl_TSFFD_local.h"
-
-#ifndef DEM_SIT_RANGE_CHECK
-#else   /* DEM_SIT_RANGE_CHECK */
-#include <Dem_SIT_RangeCheck.h>
-#endif  /* DEM_SIT_RANGE_CHECK */
 
 #if ( DEM_TSFF_UDM_SUPPORT == STD_ON )
 
@@ -116,14 +111,9 @@ static FUNC( boolean, DEM_CODE ) Dem_UdmData_CheckTSFFRecordStored
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmData_CaptureAfterTriggeredTSFFFromSample
 (
-#ifndef DEM_SIT_RANGE_CHECK
-#else   /* DEM_SIT_RANGE_CHECK */
-    VAR( Dem_u16_FFDStoredIndexType, AUTOMATIC ) SamplingFFRDataSize,
-#endif  /* DEM_SIT_RANGE_CHECK */
     VAR( Dem_u16_UdmDemMemKindIndexType, AUTOMATIC ) UdmGroupKindIndex,     /* [PRMCHK:CALLER] */
     VAR( Dem_u08_UdmFaultIndexType, AUTOMATIC ) UdmFaultIndex,
     VAR( Dem_u16_TSFFDIndexType, AUTOMATIC ) TimeSeriesFreezeFrameRecordIndex,
@@ -158,7 +148,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmData_CaptureAfterTriggeredTS
                 Dem_UdmExcEnterFnc_ForStack();
 #endif  /* JGXSTACK */
 
-                resultOfSetTSFFRec = Dem_UdmTSFFDMng_SetAfterTimeSeriesFreezeFrameRecord( UdmGroupKindIndex, udmFreezeFrameRecordIndex, TimeSeriesFreezeFrameRecordIndex, udmFaultRecord.UdmEventIndex, triggerFFDConsistencyId, (Dem_u08_FFStoredStatusType)SamplingFreezeFrameRecordDataPtr[SamplingFreezeFrameRecorPosPtr->RecordStatus], &SamplingFreezeFrameRecordDataPtr[SamplingFreezeFrameRecorPosPtr->DataStart] );    /* [GUDCHK:CALLER]UdmGroupKindIndex *//* [ARYCHK] SamplingFFRDataSize / 1 / SamplingFreezeFrameRecorPosPtr->RecordStatus *//* [ARYCHK] SamplingFFRDataSize / 1 / SamplingFreezeFrameRecorPosPtr->DataStart */
+                resultOfSetTSFFRec = Dem_UdmTSFFDMng_SetAfterTimeSeriesFreezeFrameRecord( UdmGroupKindIndex, udmFreezeFrameRecordIndex, TimeSeriesFreezeFrameRecordIndex, udmFaultRecord.UdmEventIndex, triggerFFDConsistencyId, (Dem_u08_FFStoredStatusType)SamplingFreezeFrameRecordDataPtr[SamplingFreezeFrameRecorPosPtr->RecordStatus], &SamplingFreezeFrameRecordDataPtr[SamplingFreezeFrameRecorPosPtr->DataStart] );    /* [GUDCHK:CALLER]UdmGroupKindIndex */
 
 #ifndef JGXSTACK
             /* Finishes exclusion. */
@@ -540,7 +530,6 @@ static FUNC( boolean, DEM_CODE ) Dem_UdmData_CheckTSFFRecordStored
 /*  Version        :Date                                                    */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-7-0         :2024-05-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

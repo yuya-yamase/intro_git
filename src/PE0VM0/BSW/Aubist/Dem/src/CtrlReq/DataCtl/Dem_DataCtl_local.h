@@ -1,7 +1,7 @@
-/* Dem_DataCtl_local_h(v5-7-0)                                              */
+/* Dem_DataCtl_local_h(v5-5-0)                                              */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -65,16 +65,6 @@ typedef struct {
 
 } Dem_TmpDisabledRecordType;
 
-#if ( DEM_COMBINEDEVENT_ONRETRIEVAL_SUPPORT == STD_ON )
-typedef struct {
-    Dem_u16_OccrOrderType               OccurrenceOrder;
-    Dem_u16_EventStrgIndexType          EventStrgIndex;
-    Dem_u08_FFDIndexType                FreezeFrameIndex;
-    Dem_u08_EventClassPriorityType      EventClassPriority;
-    Dem_u08_EventStatusPriorityType     EventStatusPriority;
-} Dem_TmpRecordNumberForOnRetrievalType;
-#endif  /*   ( DEM_COMBINEDEVENT_ONRETRIEVAL_SUPPORT == STD_ON )    */
-
 /*--------------------------------------------------------------------------*/
 /* Function Prototypes                                                      */
 /*--------------------------------------------------------------------------*/
@@ -114,15 +104,6 @@ FUNC( void, DEM_CODE ) Dem_DataCtl_SaveRecordNumberByPairEvent
     VAR( Dem_MisfireCylinderNumberType, AUTOMATIC ) MisfireCylinderNumber,
     P2VAR( Dem_u16_FFRecNumStoredIndexType, AUTOMATIC, AUTOMATIC ) NumberOfSaveRecordPtr
 );
-
-#if ( DEM_COMBINEDEVENT_ONRETRIEVAL_SUPPORT == STD_ON )
-FUNC( void, DEM_CODE ) Dem_DataCtl_SaveRecordNumberByPairEventForFilteredRecord
-(
-    VAR( Dem_MisfireCylinderNumberType, AUTOMATIC ) MisfireCylinderNumber,
-    P2VAR( Dem_u16_FFRecNumStoredIndexType, AUTOMATIC, AUTOMATIC ) NumberOfSaveRecordPtr
-);
-#endif  /*   ( DEM_COMBINEDEVENT_ONRETRIEVAL_SUPPORT == STD_ON )    */
-
 FUNC( void, DEM_CODE ) Dem_DataCtl_ClearDisabledRecordPairEvent
 ( void );
 
@@ -149,15 +130,6 @@ FUNC( void, DEM_CODE ) Dem_DataCtl_GetTmpDisabledRecordFFRIndexAtPairEvent
 /*----------------------------------*/
 /*  Dem_DataCtl_FilteredRecord      */
 /*----------------------------------*/
-FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_GetFilteredRecordSub
-(
-    VAR( Dem_u08_FaultIndexType, AUTOMATIC ) FaultIndex,
-    VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex,
-    VAR( Dem_u32_DTCValueType, AUTOMATIC ) DTCValue,
-    P2VAR( Dem_FilteredRecordSearchInfoType, AUTOMATIC, DEM_VAR_NO_INIT ) FilteredRecordSearchInfoPtr,
-    P2VAR( Dem_u32_DTCValueType, AUTOMATIC, AUTOMATIC ) DTCValuePtr,
-    P2VAR( Dem_u08_FFRecordNumberType, AUTOMATIC, AUTOMATIC ) RecordNumberPtr
-);
 
 /*----------------------------------*/
 /*  Dem_DataCtl_OrderList           */
@@ -246,12 +218,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_GetTSFFRecord
 /*----------------------------------------------*/
 FUNC( void, DEM_CODE ) Dem_Data_InitSaveTmpRecordNumber
 ( void );
-
-#if ( DEM_COMBINEDEVENT_ONRETRIEVAL_SUPPORT == STD_ON )
-FUNC( void, DEM_CODE ) Dem_Data_InitSaveTmpRecordNumberForFilteredRecord
-( void );
-#endif  /*   ( DEM_COMBINEDEVENT_ONRETRIEVAL_SUPPORT == STD_ON )    */
-
 FUNC( void, DEM_CODE ) Dem_Data_SortTmpRecordNumber
 (
     VAR( Dem_u16_FFRecNumStoredIndexType, AUTOMATIC ) NumberOfSaveRecord
@@ -264,14 +230,6 @@ FUNC( void, DEM_CODE ) Dem_Data_SaveObdRecordNumberByDTC
     P2VAR( Dem_FaultRecordPartsFFDIndexListStType, AUTOMATIC, DEM_VAR_NO_INIT ) FFDIndexListStPtr,
     P2VAR( Dem_u16_FFRecNumStoredIndexType, AUTOMATIC, AUTOMATIC ) NumberOfSaveRecordPtr
 );
-#if ( DEM_COMBINEDEVENT_ONRETRIEVAL_SUPPORT == STD_ON )
-FUNC( void, DEM_CODE ) Dem_Data_SaveObdRecordNumberByDTCForFilteredRecord
-(
-    VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex,
-    VAR( Dem_MisfireCylinderNumberType, AUTOMATIC ) MisfireCylinderNumber,
-    P2VAR( Dem_u16_FFRecNumStoredIndexType, AUTOMATIC, AUTOMATIC ) NumberOfSaveRecordPtr
-);
-#endif  /*   ( DEM_COMBINEDEVENT_ONRETRIEVAL_SUPPORT == STD_ON )    */
 #endif  /*   ( DEM_OBDFFD_SUPPORT == STD_ON )      */
 FUNC( void, DEM_CODE ) Dem_Data_SaveRecordNumberByDTC
 (
@@ -280,14 +238,6 @@ FUNC( void, DEM_CODE ) Dem_Data_SaveRecordNumberByDTC
     P2VAR( Dem_FaultRecordPartsFFDIndexListStType, AUTOMATIC, DEM_VAR_NO_INIT ) FFDIndexListStPtr,
     P2VAR( Dem_u16_FFRecNumStoredIndexType, AUTOMATIC, AUTOMATIC ) NumberOfSaveRecordPtr
 );
-#if ( DEM_COMBINEDEVENT_ONRETRIEVAL_SUPPORT == STD_ON )
-FUNC( void, DEM_CODE ) Dem_Data_SaveRecordNumberByDTCForFilteredRecord
-(
-    VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex,
-    VAR( Dem_MisfireCylinderNumberType, AUTOMATIC ) MisfireCylinderNumber,
-    P2VAR( Dem_u16_FFRecNumStoredIndexType, AUTOMATIC, AUTOMATIC ) NumberOfSaveRecordPtr
-);
-#endif  /*   ( DEM_COMBINEDEVENT_ONRETRIEVAL_SUPPORT == STD_ON )    */
 #if ( DEM_TSFF_PM_SUPPORT == STD_ON )
 FUNC( void, DEM_CODE ) Dem_Data_SaveTSFFRecordNumberByDTC
 (
@@ -296,14 +246,6 @@ FUNC( void, DEM_CODE ) Dem_Data_SaveTSFFRecordNumberByDTC
     P2VAR( Dem_FaultRecordPartsFFDIndexListStType, AUTOMATIC, DEM_VAR_NO_INIT ) FFDIndexListStPtr,
     P2VAR( Dem_u16_FFRecNumStoredIndexType, AUTOMATIC, AUTOMATIC ) NumberOfSaveRecordPtr
 );
-#if ( DEM_COMBINEDEVENT_ONRETRIEVAL_SUPPORT == STD_ON )
-FUNC( void, DEM_CODE ) Dem_Data_SaveTSFFRecordNumberByDTCForFilteredRecord
-(
-    VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex,
-    VAR( Dem_MisfireCylinderNumberType, AUTOMATIC ) MisfireCylinderNumber,      /* MISRA DEVIATION */
-    P2VAR( Dem_u16_FFRecNumStoredIndexType, AUTOMATIC, AUTOMATIC ) NumberOfSaveRecordPtr
-);
-#endif  /*   ( DEM_COMBINEDEVENT_ONRETRIEVAL_SUPPORT == STD_ON )    */
 #endif  /*   ( DEM_TSFF_PM_SUPPORT == STD_ON )      */
 
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_JudgeOutputFFDByFFDType
@@ -337,31 +279,6 @@ FUNC( void, DEM_CODE ) Dem_Data_SetAlreadyOutputBeforeTSFFDStatus
 );
 #endif  /* (DEM_TSFF_PM_SUPPORT == STD_ON) */
 
-#if ( DEM_COMBINEDEVENT_ONRETRIEVAL_SUPPORT == STD_ON )
-FUNC( void, DEM_CODE ) Dem_Data_InitTmpRecordNumberForOnRetrieval
-(
-    P2VAR( Dem_TmpRecordNumberForOnRetrievalType, AUTOMATIC, AUTOMATIC ) TmpRecordNumberForOnRetrievalPtr
-);
-FUNC( void, DEM_CODE ) Dem_Data_SetEventClassPriorityForOnRetrieval
-(
-    VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex,
-    P2VAR( Dem_TmpRecordNumberForOnRetrievalType, AUTOMATIC, AUTOMATIC ) TmpRecordNumberForOnRetrievalPtr
-);
-#if ( DEM_TSFF_PM_SUPPORT == STD_ON )
-FUNC( Dem_u16_EventStrgIndexType, DEM_CODE ) Dem_Data_SearchNonObdEventStrgIndexByTSFFRTrigger
-(
-    VAR( Dem_u08_FFRecordNumberType, AUTOMATIC ) TSFFRecordTrigger,
-    VAR( Dem_u16_FFRecNumStoredIndexType, AUTOMATIC ) NumberOfSaveRecordForTriggerFFD,
-    P2CONST( AB_83_ConstV Dem_FreezeFrameRecNumClassType, AUTOMATIC, DEM_CONFIG_DATA ) FreezeFrameRecNumClassPtr
-);
-FUNC( Dem_u16_TSFFListIndexType, DEM_CODE ) Dem_Data_GetTSFFListIndexByEventStrgIndex
-(
-    VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex,
-    VAR( Dem_u08_TSFFListPerDTCIndexType, AUTOMATIC ) TSFFRecClassRefIndex
-);
-#endif  /* ( DEM_TSFF_PM_SUPPORT == STD_ON ) */
-#endif  /*   ( DEM_COMBINEDEVENT_ONRETRIEVAL_SUPPORT == STD_ON )    */
-
 #if ( DEM_OBDFFD_SUPPORT == STD_ON )
 FUNC( Dem_u08_FFDIndexType, DEM_CODE ) Dem_Data_GetDisabledObdRecordNumberIndex
 (
@@ -371,14 +288,6 @@ FUNC( Dem_u08_FFDIndexType, DEM_CODE ) Dem_Data_GetDisabledObdRecordNumberIndex
     P2VAR( Dem_FaultRecordPartsFFDIndexListStType, AUTOMATIC, DEM_VAR_NO_INIT ) FFDIndexListStPtr,
     P2VAR( Dem_u16_EventStrgIndexType, AUTOMATIC, AUTOMATIC ) EventStrgIndexPtr
 );
-#if ( DEM_COMBINEDEVENT_ONRETRIEVAL_SUPPORT == STD_ON )
-FUNC( Dem_u08_FFDIndexType, DEM_CODE ) Dem_Data_GetDisabledObdRecordNumberIndexForFilteredRecord
-(
-    VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex,
-    VAR( Dem_u08_FFListIndexType, AUTOMATIC ) FreezeFrameRecordClassRefIndex,
-    P2VAR( Dem_u16_EventStrgIndexType, AUTOMATIC, AUTOMATIC ) EventStrgIndexPtr
-);
-#endif  /*   ( DEM_COMBINEDEVENT_ONRETRIEVAL_SUPPORT == STD_ON )    */
 #endif  /* ( DEM_OBDFFD_SUPPORT == STD_ON )    */
 
 FUNC( Dem_u08_FFDIndexType, DEM_CODE ) Dem_Data_GetDisabledRecordNumberIndex
@@ -389,14 +298,6 @@ FUNC( Dem_u08_FFDIndexType, DEM_CODE ) Dem_Data_GetDisabledRecordNumberIndex
     P2VAR( Dem_FaultRecordPartsFFDIndexListStType, AUTOMATIC, DEM_VAR_NO_INIT ) FFDIndexListStPtr,
     P2VAR( Dem_u16_EventStrgIndexType, AUTOMATIC, AUTOMATIC ) EventStrgIndexPtr
 );
-#if ( DEM_COMBINEDEVENT_ONRETRIEVAL_SUPPORT == STD_ON )
-FUNC( Dem_u08_FFDIndexType, DEM_CODE ) Dem_Data_GetDisabledRecordNumberIndexForFilteredRecord
-(
-    VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex,
-    VAR( Dem_u08_FFListIndexType, AUTOMATIC ) FreezeFrameRecordClassRefIndex,
-    P2VAR( Dem_u16_EventStrgIndexType, AUTOMATIC, AUTOMATIC ) EventStrgIndexPtr
-);
-#endif  /*   ( DEM_COMBINEDEVENT_ONRETRIEVAL_SUPPORT == STD_ON )    */
 
 #if ( DEM_TSFF_PM_SUPPORT == STD_ON )
 FUNC( Dem_u16_TSFFListIndexType, DEM_CODE ) Dem_Data_GetDisabledTimeSeriesFreezeFrameListIndex
@@ -408,35 +309,7 @@ FUNC( Dem_u16_TSFFListIndexType, DEM_CODE ) Dem_Data_GetDisabledTimeSeriesFreeze
     P2VAR( Dem_FaultRecordPartsFFDIndexListStType, AUTOMATIC, DEM_VAR_NO_INIT ) FFDIndexListStPtr,
     P2VAR( Dem_u16_EventStrgIndexType, AUTOMATIC, AUTOMATIC ) EventStrgIndexPtr
 );
-#if ( DEM_COMBINEDEVENT_ONRETRIEVAL_SUPPORT == STD_ON )
-FUNC( Dem_u16_TSFFListIndexType, DEM_CODE ) Dem_Data_GetDisabledTimeSeriesFreezeFrameListIndexForFilteredRecord
-(
-    VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex,
-    VAR( Dem_u08_TSFFListPerDTCIndexType, AUTOMATIC ) TSFFRecClassRefIndex,
-    VAR( Dem_u08_StorageTriggerType, AUTOMATIC ) TSFFRecordTrigger,
-    VAR( Dem_u16_FFRecNumStoredIndexType, AUTOMATIC ) NumberOfSaveRecordForTriggerFFD,
-    P2VAR( Dem_u16_EventStrgIndexType, AUTOMATIC, AUTOMATIC ) EventStrgIndexPtr
-);
-#endif  /*   ( DEM_COMBINEDEVENT_ONRETRIEVAL_SUPPORT == STD_ON )    */
 #endif  /* ( DEM_TSFF_PM_SUPPORT == STD_ON ) */
-
-#if ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON )
-#if ( DEM_OBDFFD_SUPPORT == STD_ON )
-FUNC( boolean, DEM_CODE ) Dem_DataCtl_CheckOutputRecordByTrigger_OBDFFD
-(
-    VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex,
-    VAR( Dem_MisfireCylinderNumberType, AUTOMATIC ) MisfireCylinderNumber,
-    VAR( Dem_u08_StorageTriggerType, AUTOMATIC ) Trigger
-);
-#endif  /* ( DEM_OBDFFD_SUPPORT == STD_ON )     */
-
-FUNC( boolean, DEM_CODE ) Dem_DataCtl_CheckOutputRecordByTrigger_FFD
-(
-    VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex,
-    VAR( Dem_MisfireCylinderNumberType, AUTOMATIC ) MisfireCylinderNumber,
-    VAR( Dem_u08_StorageTriggerType, AUTOMATIC ) Trigger
-);
-#endif  /* ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON )       */
 
 /*----------------------------------*/
 /*  Dem_DataCtl_EventEntry04Regist  */
@@ -542,8 +415,6 @@ extern VAR( Dem_TmpRecordNumberByDTCType, DEM_VAR_NO_INIT ) Dem_TmpRecordNumberB
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-6-0         :2024-01-29                                              */
-/*  v5-7-0         :2024-05-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

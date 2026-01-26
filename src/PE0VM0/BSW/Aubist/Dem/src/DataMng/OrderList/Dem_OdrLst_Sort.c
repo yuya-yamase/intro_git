@@ -1,7 +1,7 @@
-/* Dem_OdrLst_Sort_c(v5-7-0)                                                */
+/* Dem_OdrLst_Sort_c(v5-3-0)                                                */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 /****************************************************************************/
 /* Object Name  | Dem/OdrLst_Sort/CODE                                      */
@@ -74,9 +74,6 @@ VAR( Dem_FaultRegistType, DEM_VAR_NO_INIT ) Dem_OdrLst_TmpFaultOrderList[DEM_FAI
 /*               |                  &Dem_DataMng_ConfirmedFaultOrderList[x] */
 /* Return Value  | void                                                     */
 /* Notes         | -                                                        */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_OdrLst_SortFaultOrderList
 (
@@ -98,17 +95,17 @@ FUNC( void, DEM_CODE ) Dem_OdrLst_SortFaultOrderList
         for( rootNodeIndex = (Dem_s16_OrderIndexType)indexOfLastRootNode; rootNodeIndex >= (Dem_s16_OrderIndexType)0; rootNodeIndex-- )
         {
             /* Down heap */
-            Dem_OdrLst_DownHeap( (Dem_u08_OrderIndexType)rootNodeIndex, lastIndexOfList, &DataPtr[0] ); /* [ARYCHK] DEM_FAIL_RECORD_NUM/1/0 */
+            Dem_OdrLst_DownHeap( (Dem_u08_OrderIndexType)rootNodeIndex, lastIndexOfList, &DataPtr[0] );
         }
 
         /* Sorts heap */
         for( ; lastIndexOfList > (Dem_u08_OrderIndexType)0U; lastIndexOfList-- )
         {
             /* Swaps occurrence order list data */
-            Dem_OdrLst_SwapFaultOrderListData( &DataPtr[0], &DataPtr[lastIndexOfList] ); /* [ARYCHK] DEM_FAIL_RECORD_NUM/1/0 *//* [ARYCHK] DEM_FAIL_RECORD_NUM/1/lastIndexOfList */
+            Dem_OdrLst_SwapFaultOrderListData( &DataPtr[0], &DataPtr[lastIndexOfList] );
 
             /* Down heap */
-            Dem_OdrLst_DownHeap( (Dem_u08_OrderIndexType)0U, ( lastIndexOfList - (Dem_u08_OrderIndexType)1U ), &DataPtr[0] ); /* [ARYCHK] DEM_FAIL_RECORD_NUM/1/0 */
+            Dem_OdrLst_DownHeap( (Dem_u08_OrderIndexType)0U, ( lastIndexOfList - (Dem_u08_OrderIndexType)1U ), &DataPtr[0] );
         }
     }
     else
@@ -176,9 +173,6 @@ static FUNC( void, DEM_CODE ) Dem_OdrLst_SwapFaultOrderListData
 /*               |                                                          */
 /* Return Value  | void                                                     */
 /* Notes         |                                                          */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_OdrLst_DownHeap
 (
@@ -197,8 +191,8 @@ static FUNC( void, DEM_CODE ) Dem_OdrLst_DownHeap
 
     /* Saves the original root node. */
     rootNodeIndex = (Dem_u16_OrderSortIndexType)IndexOfRoot;
-    originalRootNode.FaultIndex      = DataPtr[rootNodeIndex].FaultIndex; /* [ARYCHK] DEM_FAIL_RECORD_NUM/1/rootNodeIndex */
-    originalRootNode.OccurrenceOrder = DataPtr[rootNodeIndex].OccurrenceOrder; /* [ARYCHK] DEM_FAIL_RECORD_NUM/1/rootNodeIndex */
+    originalRootNode.FaultIndex      = DataPtr[rootNodeIndex].FaultIndex;
+    originalRootNode.OccurrenceOrder = DataPtr[rootNodeIndex].OccurrenceOrder;
 
     breakLoop = (boolean)FALSE;
 
@@ -227,7 +221,7 @@ static FUNC( void, DEM_CODE ) Dem_OdrLst_DownHeap
                 rightChildNodeIndex = leftChildNodeIndex + (Dem_u16_OrderSortIndexType)1U;
 
                 /* Compares the left child node's occurrence order with the right child node's one. */
-                if( DataPtr[leftChildNodeIndex].OccurrenceOrder < DataPtr[rightChildNodeIndex].OccurrenceOrder ) /* [ARYCHK] DEM_FAIL_RECORD_NUM/1/leftChildNodeIndex *//* [ARYCHK] DEM_FAIL_RECORD_NUM/1/rightChildNodeIndex */
+                if( DataPtr[leftChildNodeIndex].OccurrenceOrder < DataPtr[rightChildNodeIndex].OccurrenceOrder )
                 {
                     /* In case the right child node's occurrence order is greater than the left's one. */
 
@@ -245,11 +239,11 @@ static FUNC( void, DEM_CODE ) Dem_OdrLst_DownHeap
             }
 
             /* Compares the root node's occurrence order of with the max child node's one. */
-            if( originalRootNode.OccurrenceOrder < DataPtr[maxChildNodeIndex].OccurrenceOrder ) /* [ARYCHK] DEM_FAIL_RECORD_NUM/1/maxChildNodeIndex */
+            if( originalRootNode.OccurrenceOrder < DataPtr[maxChildNodeIndex].OccurrenceOrder )
             {
                 /* The max child node's occurrence order is greater than the root node's one, so stores the max child node to the root. */
-                DataPtr[rootNodeIndex].FaultIndex      = DataPtr[maxChildNodeIndex].FaultIndex; /* [ARYCHK] DEM_FAIL_RECORD_NUM/1/rootNodeIndex *//* [ARYCHK] DEM_FAIL_RECORD_NUM/1/maxChildNodeIndex */
-                DataPtr[rootNodeIndex].OccurrenceOrder = DataPtr[maxChildNodeIndex].OccurrenceOrder; /* [ARYCHK] DEM_FAIL_RECORD_NUM/1/rootNodeIndex *//* [ARYCHK] DEM_FAIL_RECORD_NUM/1/maxChildNodeIndex */
+                DataPtr[rootNodeIndex].FaultIndex      = DataPtr[maxChildNodeIndex].FaultIndex;
+                DataPtr[rootNodeIndex].OccurrenceOrder = DataPtr[maxChildNodeIndex].OccurrenceOrder;
 
                 /* Sets the max child node's index to the root's one. */
                 rootNodeIndex = maxChildNodeIndex;
@@ -264,8 +258,8 @@ static FUNC( void, DEM_CODE ) Dem_OdrLst_DownHeap
     }
 
     /* Stores the saved original node to the root. */
-    DataPtr[rootNodeIndex].FaultIndex      = originalRootNode.FaultIndex; /* [ARYCHK] DEM_FAIL_RECORD_NUM/1/rootNodeIndex */
-    DataPtr[rootNodeIndex].OccurrenceOrder = originalRootNode.OccurrenceOrder; /* [ARYCHK] DEM_FAIL_RECORD_NUM/1/rootNodeIndex */
+    DataPtr[rootNodeIndex].FaultIndex      = originalRootNode.FaultIndex;
+    DataPtr[rootNodeIndex].OccurrenceOrder = originalRootNode.OccurrenceOrder;
 
     return;
 }
@@ -280,7 +274,6 @@ static FUNC( void, DEM_CODE ) Dem_OdrLst_DownHeap
 /*  v4-0-0         :2020-03-19                                              */
 /*  v5-0-0         :2021-09-28                                              */
 /*  v5-3-0         :2023-03-29                                              */
-/*  v5-7-0         :2024-05-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

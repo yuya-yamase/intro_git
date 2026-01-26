@@ -1,7 +1,7 @@
-/* Dem_Ind_UserIndicator_c(v5-9-0)                                          */
+/* Dem_Ind_UserIndicator_c(v5-5-0)                                          */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -19,7 +19,6 @@
 #include "../../../cfg/Dem_Indicator_Cfg.h"
 #include "../../../inc/Dem_CmnLib_ConfigInfo.h"
 #include "../../../inc/Dem_CmnLib_CmbEvt.h"
-#include "../../../inc/Dem_CmnLib_DataAvl.h"
 #include "../../../inc/Dem_Pm_Ind.h"
 #include "../../../inc/Dem_Udm_Ind.h"
 #include "Dem_Ind_cmn_local.h"
@@ -92,9 +91,6 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Ind_GetUserDefinedIndica
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
-/*   v5-8-0      | no object changed.                                       */
-/*   v5-9-0      | branch changed.                                          */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Ind_GetUserDefinedIndicatorStatus
 (
@@ -107,8 +103,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Ind_GetUserDefinedIndicatorStat
     VAR( Dem_u16_EventCtrlIndexType, AUTOMATIC ) eventCtrlIndex;
     VAR( Dem_u16_EventCtrlIndexType, AUTOMATIC ) eventCtrlIndexNum;
     VAR( Dem_u08_IndicatorInfoIndexType, AUTOMATIC ) indicatorConfigureNum;
-    P2CONST( AB_83_ConstV Dem_u16_EventCtrlIndexType, AUTOMATIC, DEM_CONFIG_DATA ) eventIdxListPtr;
-    VAR( boolean, AUTOMATIC ) availableStatus;
+    P2CONST( AB_83_ConstV Dem_u16_EventStrgIndexType, AUTOMATIC, DEM_CONFIG_DATA ) eventIdxListPtr;
 
     retVal = DEM_IRT_NG;
     indicatorConfigureNum = Dem_IndicatorInfoConfigureNum;
@@ -122,17 +117,12 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Ind_GetUserDefinedIndicatorStat
 
         for( loopCount = (Dem_u16_EventCtrlIndexType)0U ; loopCount < eventCtrlIndexNum ; loopCount++ )     /* [GUD:for]loopCount */
         {
-            eventCtrlIndex = (Dem_u16_EventCtrlIndexType)eventIdxListPtr[loopCount];                        /* [GUD]loopCount *//* [ARYCHK] eventCtrlIndexNum / 1 / loopCount *//* [ARYDESC] Dem_IndicatorInfoTable[].EventIdxListPtr size is output in Dem_IndicatorInfoTable[].EventNum. */
+            eventCtrlIndex = (Dem_u16_EventStrgIndexType)eventIdxListPtr[loopCount];                        /* [GUD]loopCount */
 
-            availableStatus = Dem_DataAvl_GetEvtAvlCommon( eventCtrlIndex );
-
-            if( availableStatus == (boolean)TRUE )
+            (void)Dem_Ind_GetUserDefinedIndicatorWIRStatus( eventCtrlIndex, IndicatorStatusPtr );    /* no return check required */
+            if( *IndicatorStatusPtr == DEM_INDICATOR_CONTINUOUS )
             {
-                (void)Dem_Ind_GetUserDefinedIndicatorWIRStatus( eventCtrlIndex, IndicatorStatusPtr );    /* no return check required */
-                if( *IndicatorStatusPtr == DEM_INDICATOR_CONTINUOUS )
-                {
-                    break;
-                }
+                break;
             }
         }
         retVal = DEM_IRT_OK;
@@ -159,8 +149,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Ind_GetUserDefinedIndicatorStat
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
-/*   v5-8-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Ind_GetUserDefinedIndicatorStatusByEventCtrlIndex
 (
@@ -175,7 +163,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Ind_GetUserDefinedIndicatorStat
     VAR( Dem_u16_EventCtrlIndexType, AUTOMATIC ) eventCtrlIndexInTable;
     VAR( Dem_u16_EventCtrlIndexType, AUTOMATIC ) eventCtrlIndexNum;
     VAR( Dem_u08_IndicatorInfoIndexType, AUTOMATIC ) indicatorConfigureNum;
-    P2CONST( AB_83_ConstV Dem_u16_EventCtrlIndexType, AUTOMATIC, DEM_CONFIG_DATA ) eventIdxListPtr;
+    P2CONST( AB_83_ConstV Dem_u16_EventStrgIndexType, AUTOMATIC, DEM_CONFIG_DATA ) eventIdxListPtr;
 
     *IndicatorStatusPtr = DEM_INDICATOR_OFF;
     indicatorConfigureNum = Dem_IndicatorInfoConfigureNum;
@@ -186,9 +174,9 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Ind_GetUserDefinedIndicatorStat
         eventCtrlIndexNum = Dem_IndicatorInfoTable[IndicatorId].EventNum;                                   /* [GUD]IndicatorId */
         eventIdxListPtr = Dem_IndicatorInfoTable[IndicatorId].EventIdxListPtr;                              /* [GUD]IndicatorId */
 
-        for( loopCount = (Dem_u16_EventCtrlIndexType)0U ; loopCount < eventCtrlIndexNum ; loopCount++ )     /* [GUD:for]loopCount */
+        for( loopCount = (Dem_u16_EventStrgIndexType)0U ; loopCount < eventCtrlIndexNum ; loopCount++ )     /* [GUD:for]loopCount */
         {
-            eventCtrlIndexInTable = (Dem_u16_EventCtrlIndexType)eventIdxListPtr[loopCount];                     /* [GUD]loopCount *//* [ARYCHK] eventCtrlIndexNum / 1 / loopCount *//* [ARYDESC] Dem_IndicatorInfoTable[].EventIdxListPtr size is output in Dem_IndicatorInfoTable[].EventNum. */
+            eventCtrlIndexInTable = (Dem_u16_EventStrgIndexType)eventIdxListPtr[loopCount];                     /* [GUD]loopCount */
 
             if( eventCtrlIndexInTable == EventCtrlIndex )
             {
@@ -330,9 +318,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Ind_GetUserDefinedIndicatorStat
 /*  Version        :Date                                                    */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-7-0         :2024-05-29                                              */
-/*  v5-8-0         :2024-10-29                                              */
-/*  v5-9-0         :2025-02-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

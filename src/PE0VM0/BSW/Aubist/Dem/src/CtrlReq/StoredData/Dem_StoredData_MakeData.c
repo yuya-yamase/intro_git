@@ -1,7 +1,7 @@
-/* Dem_StoredData_MakeData_c(v5-7-0)                                        */
+/* Dem_StoredData_MakeData_c(v5-5-0)                                        */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -69,10 +69,6 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_StoredData_GetHeaderStor
 );
 static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_StoredData_GetBodyStoredData
 (
-#ifndef DEM_SIT_RANGE_CHECK
-#else   /* DEM_SIT_RANGE_CHECK */
-    VAR( Dem_u16_FFDStoredIndexType, AUTOMATIC ) CapturedDataSize,
-#endif  /* DEM_SIT_RANGE_CHECK */
     P2CONST( uint8, AUTOMATIC, DEM_VAR_SAVED_ZONE ) CapturedDataPtr,
     VAR( Dem_u16_FFClassIndexType, AUTOMATIC ) FreezeFrameClassRef,
     P2VAR( uint8, AUTOMATIC, DEM_APPL_DATA ) DestBufferPtr,
@@ -171,14 +167,9 @@ FUNC( void, DEM_CODE ) Dem_StoredData_SetDTCAndStatusOfStoredData
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_StoredData_GetStoredData
 (
-#ifndef DEM_SIT_RANGE_CHECK
-#else   /* DEM_SIT_RANGE_CHECK */
-    VAR( Dem_u16_FFDStoredIndexType, AUTOMATIC ) CapturedDataSize,
-#endif  /* DEM_SIT_RANGE_CHECK */
     VAR( Dem_u08_StoredDataRecordNumberType, AUTOMATIC ) RecordNumber,
     P2CONST( uint8, AUTOMATIC, DEM_VAR_SAVED_ZONE ) CapturedDataPtr,
     VAR( Dem_u16_FFClassIndexType, AUTOMATIC ) FreezeFrameClassRef,
@@ -196,11 +187,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_StoredData_GetStoredData
     retGetHeader = Dem_StoredData_GetHeaderStoredData( RecordNumber, DestBufferPtr, *BufSizePtr, &storedDataSize );
     if( retGetHeader == DEM_IRT_OK )
     {
-#ifndef DEM_SIT_RANGE_CHECK
         retVal = Dem_StoredData_GetBodyStoredData( CapturedDataPtr, FreezeFrameClassRef, DestBufferPtr, *BufSizePtr, &storedDataSize );
-#else   /* DEM_SIT_RANGE_CHECK */
-        retVal = Dem_StoredData_GetBodyStoredData( CapturedDataSize, CapturedDataPtr, FreezeFrameClassRef, DestBufferPtr, *BufSizePtr, &storedDataSize );
-#endif  /* DEM_SIT_RANGE_CHECK */
     }
     else
     {
@@ -239,9 +226,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_StoredData_GetStoredData
 /*               |        DEM_IRT_WRONG_BUFFERSIZE : Provided buffer size - */
 /*               |        to small                                          */
 /* Notes         | -                                                        */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_StoredData_GetHeaderStoredData
 (
@@ -257,15 +241,15 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_StoredData_GetHeaderStor
     /* Write RecordNumber, DTC, StatusOfDTC */
     if( BufSize >= DEM_STOREDDATA_HEADER_SIZE )
     {
-        DestBufferPtr[DEM_STOREDDATA_RECNUM_POS] = RecordNumber;/* [ARYCHK] BufSize / 1 / DEM_STOREDDATA_RECNUM_POS */
+        DestBufferPtr[DEM_STOREDDATA_RECNUM_POS] = RecordNumber;
 
         dtcVal = Dem_StoredData_DTCOfStoredData;
         dtcVal &= DEM_DTC_VALUE_ALL;
-        DestBufferPtr[DEM_STOREDDATA_DTC_POS_HI] = (uint8)(dtcVal >> DEM_DTC_TRANS_3BYTE_SHIFT_DTC_HI);/* [ARYCHK] BufSize / 1 / DEM_STOREDDATA_DTC_POS_HI */
-        DestBufferPtr[DEM_STOREDDATA_DTC_POS_MI] = (uint8)(dtcVal >> DEM_DTC_TRANS_3BYTE_SHIFT_DTC_MI);/* [ARYCHK] BufSize / 1 / DEM_STOREDDATA_DTC_POS_MI */
-        DestBufferPtr[DEM_STOREDDATA_DTC_POS_LO] = (uint8)(dtcVal);/* [ARYCHK] BufSize / 1 / DEM_STOREDDATA_DTC_POS_LO */
+        DestBufferPtr[DEM_STOREDDATA_DTC_POS_HI] = (uint8)(dtcVal >> DEM_DTC_TRANS_3BYTE_SHIFT_DTC_HI);
+        DestBufferPtr[DEM_STOREDDATA_DTC_POS_MI] = (uint8)(dtcVal >> DEM_DTC_TRANS_3BYTE_SHIFT_DTC_MI);
+        DestBufferPtr[DEM_STOREDDATA_DTC_POS_LO] = (uint8)(dtcVal);
 
-        DestBufferPtr[DEM_STOREDDATA_DTDSTATUS_POS] = Dem_StoredData_DTCStatusOfStoredData;/* [ARYCHK] BufSize / 1 / DEM_STOREDDATA_DTDSTATUS_POS */
+        DestBufferPtr[DEM_STOREDDATA_DTDSTATUS_POS] = Dem_StoredData_DTCStatusOfStoredData;
 
         *StoredDataSizePtr = DEM_STOREDDATA_HEADER_SIZE;
 
@@ -301,15 +285,9 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_StoredData_GetHeaderStor
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-6-0      | branch changed.                                          */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_StoredData_GetBodyStoredData
 (
-#ifndef DEM_SIT_RANGE_CHECK
-#else   /* DEM_SIT_RANGE_CHECK */
-    VAR( Dem_u16_FFDStoredIndexType, AUTOMATIC ) CapturedDataSize,
-#endif  /* DEM_SIT_RANGE_CHECK */
     P2CONST( uint8, AUTOMATIC, DEM_VAR_SAVED_ZONE ) CapturedDataPtr,
     VAR( Dem_u16_FFClassIndexType, AUTOMATIC ) FreezeFrameClassRef,     /* [PRMCHK:CALLER] */
     P2VAR( uint8, AUTOMATIC, DEM_APPL_DATA ) DestBufferPtr,
@@ -322,14 +300,12 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_StoredData_GetBodyStored
     VAR( Dem_u32_DIDClassIndexType, AUTOMATIC ) didClassIndex;
     VAR( Dem_u16_DIDNumberType, AUTOMATIC ) didIdentifier;
     VAR( Dem_u16_FFDStoredIndexType, AUTOMATIC ) didDataSize;
-    VAR( Dem_u32_FFDStoredIndexType, AUTOMATIC ) capturedIndex;
-    VAR( Dem_u32_StoredDataRecordSizeType, AUTOMATIC ) storeDataSize;
+    VAR( Dem_u16_FFDStoredIndexType, AUTOMATIC ) capturedIndex;
 
-    VAR( Dem_u16_DIDClassPerFFIndexType, AUTOMATIC ) didClassRefIndex;
+    VAR( Dem_u08_DIDClassPerFFIndexType, AUTOMATIC ) didClassRefIndex;
     VAR( boolean, AUTOMATIC ) ffdOutputAllow;
-    VAR( Dem_u16_DIDClassPerFFIndexType, AUTOMATIC ) numOfStoredDids;
+    VAR( uint8, AUTOMATIC ) numOfStoredDids;
     VAR( Dem_u08_InternalReturnType, AUTOMATIC ) retVal;
-    VAR( boolean, AUTOMATIC ) loopEnd;
 
     retVal = DEM_IRT_WRONG_BUFFERSIZE;
 
@@ -339,59 +315,46 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_StoredData_GetBodyStored
 
         freezeFrameClassPtr = &Dem_FreezeFrameClassTable[FreezeFrameClassRef];              /* [GUDCHK:CALLER]FreezeFrameClassRef *//* [GUD:CFG:IF_GUARDED: FreezeFrameClassRef ]freezeFrameClassPtr */
 
-        capturedIndex = (Dem_u32_FFDStoredIndexType)0U;
-        numOfStoredDids = (Dem_u16_DIDClassPerFFIndexType)0U;
+        capturedIndex = (Dem_u16_FFDStoredIndexType)0U;
+        numOfStoredDids = (uint8)0U;
 
-        loopEnd =   (boolean)FALSE;
-        for( didClassRefIndex = (Dem_u16_DIDClassPerFFIndexType)0U; didClassRefIndex < freezeFrameClassPtr->DemDidClassNum; didClassRefIndex++ )    /* [GUDCHK:CALLER]FreezeFrameClassRef *//* [GUD:CFG:IF_GUARDED: FreezeFrameClassRef ]didClassRefIndex */
+        for( didClassRefIndex = (Dem_u08_DIDClassPerFFIndexType)0U; didClassRefIndex < freezeFrameClassPtr->DemDidClassNum; didClassRefIndex++ )    /* [GUDCHK:CALLER]FreezeFrameClassRef *//* [GUD:CFG:IF_GUARDED: FreezeFrameClassRef ]didClassRefIndex */
         {
-            didClassIndex = freezeFrameClassPtr->DemDidClassRef[didClassRefIndex];                                                                  /* [GUDCHK:CALLER]FreezeFrameClassRef *//* [GUD:CFG:IF_GUARDED: FreezeFrameClassRef ]didClassIndex *//* [ARYCHK] DEM_DID_NUM_PER_FRAME_MAX_NUM / 1 / didClassRefIndex */
+            didClassIndex = freezeFrameClassPtr->DemDidClassRef[didClassRefIndex];                                                                  /* [GUDCHK:CALLER]FreezeFrameClassRef *//* [GUD:CFG:IF_GUARDED: FreezeFrameClassRef ]didClassIndex */
 
             didIdentifier   = Dem_DIDClassTable[didClassIndex].DemDidIdentifier;                                                                    /* [GUDCHK:CALLER]FreezeFrameClassRef */
             didDataSize     = Dem_DIDClassTable[didClassIndex].DemDidDataSize;                                                                      /* [GUDCHK:CALLER]FreezeFrameClassRef */
 
-            ffdOutputAllow = Dem_Data_GetFFDOutputAllow( didClassIndex, CapturedDataPtr[capturedIndex], &capturedIndex );/* [ARYCHK] CapturedDataSize / 1 / capturedIndex */
+            ffdOutputAllow = Dem_Data_GetFFDOutputAllow( didClassIndex, CapturedDataPtr[capturedIndex], &capturedIndex );
             if( ffdOutputAllow == (boolean)TRUE )
             {
-                storeDataSize   =   (Dem_u32_StoredDataRecordSizeType)(*StoredDataSizePtr + DEM_DC_FFRLEN_DID + didDataSize );  /*  no wrap around      */
-                if( BufSize >= storeDataSize )
+                if( BufSize >= (*StoredDataSizePtr + DEM_DC_FFRLEN_DID + didDataSize) )     /*  no wrap around      */
                 {
-                    DestBufferPtr[*StoredDataSizePtr] = (uint8)( didIdentifier >> DEM_DC_DIDIDENTIFIER_SHIFT );/* [ARYCHK] BufSize / 1 / *StoredDataSizePtr */
+                    DestBufferPtr[*StoredDataSizePtr] = (uint8)( didIdentifier >> DEM_DC_DIDIDENTIFIER_SHIFT );
                     *StoredDataSizePtr = *StoredDataSizePtr + DEM_DC_FFRLEN_DID_MSB;        /*  no wrap around      */
 
-                    DestBufferPtr[*StoredDataSizePtr] = (uint8)( didIdentifier & DEM_DC_DIDIDENTIFIER_MASK );/* [ARYCHK] BufSize / 1 / *StoredDataSizePtr */
+                    DestBufferPtr[*StoredDataSizePtr] = (uint8)( didIdentifier & DEM_DC_DIDIDENTIFIER_MASK );
                     *StoredDataSizePtr = *StoredDataSizePtr + DEM_DC_FFRLEN_DID_LSB;        /*  no wrap around      */
 
-                    Dem_UtlMem_CopyMemory( &DestBufferPtr[*StoredDataSizePtr], &CapturedDataPtr[capturedIndex], didDataSize );/* [ARYCHK] BufSize / 1 / *StoredDataSizePtr *//* [ARYCHK] CapturedDataSize / 1 / capturedIndex */
+                    Dem_UtlMem_CopyMemory( &DestBufferPtr[*StoredDataSizePtr], &CapturedDataPtr[capturedIndex], didDataSize );
 
                     *StoredDataSizePtr = *StoredDataSizePtr + (Dem_u32_StoredDataRecordSizeType)didDataSize;                  /*  no wrap around      */
 
-                    numOfStoredDids = numOfStoredDids + (Dem_u16_DIDClassPerFFIndexType)1U;
+                    numOfStoredDids = numOfStoredDids + (uint8)1U;
                 }
                 else
                 {
-                    loopEnd = (boolean)TRUE;
+                    break;
                 }
             }
-            if ( loopEnd == (boolean)TRUE )
-            {
-                break;
-            }
 
-            capturedIndex = capturedIndex + (Dem_u32_FFDStoredIndexType)didDataSize;    /*  no wrap around      */
+            capturedIndex = capturedIndex + didDataSize;
         }
 
         if( didClassRefIndex >= freezeFrameClassPtr->DemDidClassNum )
         {
             retVal = DEM_IRT_OK;
-            if ( numOfStoredDids <= DEM_OUTPUT_DIDNUMVAL_MAX )
-            {
-                DestBufferPtr[DEM_STOREDDATA_HEADER_SIZE] = (uint8)numOfStoredDids;/* [ARYCHK] BufSize / 1 / DEM_STOREDDATA_HEADER_SIZE */
-            }
-            else
-            {
-                DestBufferPtr[DEM_STOREDDATA_HEADER_SIZE] = DEM_OUTPUT_DIDNUMVAL_OVRFLW;/* [ARYCHK] BufSize / 1 / DEM_STOREDDATA_HEADER_SIZE */
-            }
+            DestBufferPtr[DEM_STOREDDATA_HEADER_SIZE] = numOfStoredDids;
         }
     }
 
@@ -410,8 +373,6 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_StoredData_GetBodyStored
 /*  Version        :Date                                                    */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-6-0         :2024-01-29                                              */
-/*  v5-7-0         :2024-05-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

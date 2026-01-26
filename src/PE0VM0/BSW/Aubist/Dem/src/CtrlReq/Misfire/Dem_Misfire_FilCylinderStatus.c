@@ -1,7 +1,7 @@
-/* Dem_Misfire_GetCylinder_c(v5-8-0)                                        */
+/* Dem_Misfire_GetCylinder_c(v5-5-0)                                        */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -27,7 +27,6 @@
 /*--------------------------------------------------------------------------*/
 /* Macros                                                                   */
 /*--------------------------------------------------------------------------*/
-#define DEM_MISFIRE_CYLINDER_SEARCH_START_POS_CYLINDER_1    ((Dem_MisfireCylinderNumberType)1U)
 
 /*--------------------------------------------------------------------------*/
 /* Types                                                                    */
@@ -62,62 +61,21 @@ static VAR( Dem_MisfireCylinderNumberType, DEM_VAR_NO_INIT )   Dem_MisfireCylind
 #define DEM_START_SEC_CODE
 #include <Dem_MemMap.h>
 
+
 /****************************************************************************/
-/* Function Name | Dem_Misfire_SetFilteredDTCForCylinderForEDR              */
+/* Function Name | Dem_Misfire_SetFilteredDTCForCylinder                    */
 /* Description   | The function set the Misfire DTC filter For Cylinder.    */
 /* Preconditions |                                                          */
-/* Parameters    | [in] ExtendedDataNumber :                                */
-/*               |        Identification/Number of requested extended data  */
-/*               |        record.                                           */
+/* Parameters    | [in] MisfireCylinderNumber : Cylinder Number.            */
 /* Return Value  | void                                                     */
 /* Notes         | none                                                     */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-8-0      | new created. based on Dem_Misfire_SetFilteredDTCForCylinder(v5-5-0). */
 /****************************************************************************/
-FUNC( void, DEM_CODE ) Dem_Misfire_SetFilteredDTCForCylinderForEDR
-(
-    VAR( Dem_u08_EDRRecordNumberType, AUTOMATIC ) ExtendedDataNumber
-)
-{
-    VAR( Dem_u08_MisfireFilteredEDRType, AUTOMATIC ) misfireFilteredEDRN92;
-
-    Dem_MisfireCylinderSearchCylinderNum = ( Dem_MisfireCylinderNumberType )0U;
-
-    if( ExtendedDataNumber == DEM_EDR_RECNUM_92 )
-    {
-        misfireFilteredEDRN92 = Dem_MisfireFilteredEDRN92;
-        if( misfireFilteredEDRN92 == DEM_MF_RM_CYL_NOT_OUTPUT )
-        {
-            Dem_MisfireCylinderSearchCylinderNum = DEM_MISFIRE_CYLINDER_SEARCH_START_POS_CYLINDER_1;
-        }
-    }
-
-    return;
-}
-
-
-#if ( DEM_PID_READINESS_SUPPORT == STD_ON )
-/****************************************************************************/
-/* Function Name | Dem_Misfire_SetFilteredDTCForCylinderForReadiness        */
-/* Description   | The function set the Misfire DTC filter For Cylinder.    */
-/* Preconditions |                                                          */
-/* Parameters    | none                                                     */
-/* Return Value  | void                                                     */
-/* Notes         | none                                                     */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-8-0      | rename from Dem_Misfire_SetFilteredDTCForCylinder(v5-5-0). */
-/*   v5-8-0      | no object changed.                                       */
-/****************************************************************************/
-FUNC( void, DEM_CODE ) Dem_Misfire_SetFilteredDTCForCylinderForReadiness
+FUNC( void, DEM_CODE ) Dem_Misfire_SetFilteredDTCForCylinder
 (void)
 {
     Dem_MisfireCylinderSearchCylinderNum = ( Dem_MisfireCylinderNumberType )0U;
     return;
 }
-#endif  /* ( DEM_PID_READINESS_SUPPORT == STD_ON )    */
-
 
 /****************************************************************************/
 /* Function Name | Dem_Misfire_GetNextFilterdDTCForCylinder                 */
@@ -194,7 +152,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Misfire_GetNextFilterdDTCForCyl
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-8-0         :2024-10-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

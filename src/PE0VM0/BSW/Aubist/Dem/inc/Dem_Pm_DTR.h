@@ -1,7 +1,7 @@
-/* Dem_Pm_DTR_h(v5-9-0)                                                     */
+/* Dem_Pm_DTR_h(v5-3-0)                                                     */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 /****************************************************************************/
 /* Object Name  | Dem/Pm_DTR/HEADER                                         */
@@ -65,16 +65,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DTR_GetDTR
 );
 #endif  /* ( DEM_DTR_RAWDATASTORAGE_SUPPORT == STD_ON ) */
 
-FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DTR_GetDTRConvertInfo
-(
-    VAR( Dem_u16_DTRIndexType, AUTOMATIC ) DTRId,
-    P2VAR( Dem_u08_DTRObdMidType, AUTOMATIC, AUTOMATIC ) DtrMidPtr,
-    P2VAR( Dem_u08_DTRTidIndexType, AUTOMATIC, AUTOMATIC ) DtrTidPtr,
-    P2VAR( Dem_u08_DTRUasidType, AUTOMATIC, AUTOMATIC ) DtrUasidPtr,
-    P2VAR( Dem_s32_DTRValueRawType, AUTOMATIC, AUTOMATIC ) CompuN0DivD0Ptr,
-    P2VAR( Dem_s32_DTRValueRawType, AUTOMATIC, AUTOMATIC ) CompuN1DivD0Ptr
-);
-
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DTR_GetAvailableOBDMIDs
 (
     VAR( Dem_u08_DTRObdMidType, AUTOMATIC) Obdmid,
@@ -109,7 +99,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DTR_GetDTRData
 /*  v5-0-0         :2021-12-24                                              */
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
-/*  v5-9-0         :2025-02-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

@@ -1,7 +1,7 @@
-/* Dem_ModeMng_c(v5-10-0)                                                   */
+/* Dem_ModeMng_c(v5-3-0)                                                    */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 /****************************************************************************/
 /* Object Name  | Dem/ModeMng/CODE                                          */
@@ -37,13 +37,10 @@
 #define DEM_START_SEC_CODE
 #include <Dem_MemMap.h>
 
-#if ( DEM_TRIGGER_BSWM_REPORTS == STD_ON )
 static FUNC( void, DEM_CODE ) Dem_ModeMng_NotifyMode
 (
-    VAR( Dem_ModeType, AUTOMATIC ) OldMode,
-    VAR( Dem_ModeType, AUTOMATIC ) NewMode
+    VAR( Dem_ModeType, AUTOMATIC ) Mode
 );
-#endif  /* ( DEM_TRIGGER_BSWM_REPORTS == STD_ON )       */
 
 
 #define DEM_STOP_SEC_CODE
@@ -98,27 +95,20 @@ FUNC( void, DEM_CODE_TRUST ) Dem_ModeMng_PreInit    /*  PreInit section         
 /* Parameters    | none                                                     */
 /* Return Value  | void                                                     */
 /* Notes         |                                                          */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-10-0     | no branch changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_ModeMng_Init
 ( void )
 {
     VAR( Dem_ModeType, AUTOMATIC ) tmpDemMode;
-    VAR( Dem_ModeType, AUTOMATIC ) tmpBeforeDemMode;
 
     SchM_Enter_Dem_ModeAccess();
-    tmpBeforeDemMode  =   Dem_Mode;
-    tmpDemMode  =   (Dem_ModeType)( tmpBeforeDemMode & (Dem_ModeType)~(DEM_MODE_INITIALIZE_MODE_MASK) );
+    tmpDemMode  =   (Dem_ModeType)( Dem_Mode & (Dem_ModeType)~(DEM_MODE_INITIALIZE_MODE_MASK) );
     tmpDemMode  =   (Dem_ModeType)( tmpDemMode | DEM_MODE_INITIALIZING );       /*  DEM_MODE_INITIALIZING   */
     Dem_Mode    =   tmpDemMode;
     SchM_Exit_Dem_ModeAccess();
 
-#if ( DEM_TRIGGER_BSWM_REPORTS == STD_ON )  /* [FuncSw] */
     /*  notify mode     */
-    Dem_ModeMng_NotifyMode( tmpBeforeDemMode, tmpDemMode );
-#endif  /* ( DEM_TRIGGER_BSWM_REPORTS == STD_ON )       */
+    Dem_ModeMng_NotifyMode( tmpDemMode );
 
     return;
 }
@@ -131,29 +121,22 @@ FUNC( void, DEM_CODE ) Dem_ModeMng_Init
 /* Parameters    | none                                                     */
 /* Return Value  | void                                                     */
 /* Notes         |                                                          */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-10-0     | no branch changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_ModeMng_InitComplete
 ( void )
 {
     VAR( Dem_ModeType, AUTOMATIC ) tmpDemMode;
-    VAR( Dem_ModeType, AUTOMATIC ) tmpBeforeDemMode;
 
     SchM_Enter_Dem_ModeAccess();
 
-    tmpBeforeDemMode  =   Dem_Mode;
-    tmpDemMode  =   (Dem_ModeType)( tmpBeforeDemMode & (Dem_ModeType)~(DEM_MODE_INITIALIZE_MODE_MASK) );
+    tmpDemMode  =   (Dem_ModeType)( Dem_Mode & (Dem_ModeType)~(DEM_MODE_INITIALIZE_MODE_MASK) );
     tmpDemMode  =   (Dem_ModeType)( tmpDemMode | DEM_MODE_INITIALIZED );        /*  DEM_MODE_INITIALIZED    */
     Dem_Mode    =   tmpDemMode;
 
     SchM_Exit_Dem_ModeAccess();
 
-#if ( DEM_TRIGGER_BSWM_REPORTS == STD_ON )  /* [FuncSw] */
     /*  notify mode     */
-    Dem_ModeMng_NotifyMode( tmpBeforeDemMode, tmpDemMode );
-#endif  /* ( DEM_TRIGGER_BSWM_REPORTS == STD_ON )       */
+    Dem_ModeMng_NotifyMode( tmpDemMode );
 
     return;
 }
@@ -165,28 +148,21 @@ FUNC( void, DEM_CODE ) Dem_ModeMng_InitComplete
 /* Parameters    | none                                                     */
 /* Return Value  | void                                                     */
 /* Notes         |                                                          */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-10-0     | no branch changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_ModeMng_Shutdown
 ( void )
 {
     VAR( Dem_ModeType, AUTOMATIC ) tmpDemMode;
-    VAR( Dem_ModeType, AUTOMATIC ) tmpBeforeDemMode;
 
     SchM_Enter_Dem_ModeAccess();
 
-    tmpBeforeDemMode  =   Dem_Mode;
-    tmpDemMode  = (Dem_ModeType)( tmpBeforeDemMode & (Dem_ModeType)~(DEM_MODE_INITIALIZE_MODE_MASK) );
+    tmpDemMode  = (Dem_ModeType)( Dem_Mode & (Dem_ModeType)~(DEM_MODE_INITIALIZE_MODE_MASK) );
     Dem_Mode    = tmpDemMode;
 
     SchM_Exit_Dem_ModeAccess();
 
-#if ( DEM_TRIGGER_BSWM_REPORTS == STD_ON )  /* [FuncSw] */
     /*  notify mode     */
-    Dem_ModeMng_NotifyMode( tmpBeforeDemMode, tmpDemMode );
-#endif  /* ( DEM_TRIGGER_BSWM_REPORTS == STD_ON )       */
+    Dem_ModeMng_NotifyMode( tmpDemMode );
 
     return;
 }
@@ -200,9 +176,6 @@ FUNC( void, DEM_CODE ) Dem_ModeMng_Shutdown
 /*               |        The Dem-mode to set.                              */
 /* Return Value  | void                                                     */
 /* Notes         |                                                          */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-10-0     | no branch changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_ModeMng_SetMode
 (
@@ -219,16 +192,14 @@ FUNC( void, DEM_CODE ) Dem_ModeMng_SetMode
 
     SchM_Exit_Dem_ModeAccess();
 
-#if ( DEM_TRIGGER_BSWM_REPORTS == STD_ON )  /* [FuncSw] */
     /*  Notify mode timing is DEM_MODE_INITIALIZING == ON or DEM_MODE_INITIALIZED == ON.  */
     if( tmpBeforeDemMode != tmpDemMode )
     {
         if (( tmpDemMode & DEM_MODE_INITIALIZE_MODE_MASK ) != (Dem_ModeType)0U )
         {
-            Dem_ModeMng_NotifyMode( tmpBeforeDemMode, tmpDemMode );
+            Dem_ModeMng_NotifyMode( tmpDemMode );
         }
     }
-#endif  /* ( DEM_TRIGGER_BSWM_REPORTS == STD_ON )       */
 
     return;
 }
@@ -242,9 +213,6 @@ FUNC( void, DEM_CODE ) Dem_ModeMng_SetMode
 /*               |        The Dem-mode to clear.                            */
 /* Return Value  | void                                                     */
 /* Notes         |                                                          */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-10-0     | no branch changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_ModeMng_ClearMode
 (
@@ -262,16 +230,14 @@ FUNC( void, DEM_CODE ) Dem_ModeMng_ClearMode
 
     SchM_Exit_Dem_ModeAccess();
 
-#if ( DEM_TRIGGER_BSWM_REPORTS == STD_ON )  /* [FuncSw] */
     /*  Notify mode timing is DEM_MODE _INITIALIZING == ON or DEM_MODE_INITIALIZED == ON.  */
     if( tmpBeforeDemMode != tmpDemMode )
     {
         if (( tmpDemMode & DEM_MODE_INITIALIZE_MODE_MASK ) != (Dem_ModeType)0U )
         {
-            Dem_ModeMng_NotifyMode( tmpBeforeDemMode, tmpDemMode );
+            Dem_ModeMng_NotifyMode( tmpDemMode );
         }
     }
-#endif  /* ( DEM_TRIGGER_BSWM_REPORTS == STD_ON )       */
 
     return;
 }
@@ -304,7 +270,6 @@ FUNC( Dem_ModeType, DEM_CODE ) Dem_ModeMng_GetMode
     return tmpDemMode;
 }
 
-#if ( DEM_TRIGGER_BSWM_REPORTS == STD_ON )
 /****************************************************************************/
 /* Function Name | Dem_ModeMng_NotifyMode                                   */
 /* Description   | Notify mode of Dem.                                      */
@@ -313,47 +278,32 @@ FUNC( Dem_ModeType, DEM_CODE ) Dem_ModeMng_GetMode
 /*               |        The Dem-mode to set.                              */
 /* Return Value  | void                                                     */
 /* Notes         |                                                          */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-10-0     | branch changed.                                          */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_ModeMng_NotifyMode
 (
-    VAR( Dem_ModeType, AUTOMATIC ) OldMode,
-    VAR( Dem_ModeType, AUTOMATIC ) NewMode
+    VAR( Dem_ModeType, AUTOMATIC ) Mode
 )
 {
     VAR( Dem_ModeType, AUTOMATIC ) tmpDemMode;
-    VAR( Dem_ModeType, AUTOMATIC ) tmpOldDemMode;
-    VAR( Dem_ModeType, AUTOMATIC ) updDemMode;
     VAR( Dem_ModeType, AUTOMATIC ) notifyDemModeMask;
 
     notifyDemModeMask   =   Dem_NotifyDemModeMask;
 
     /*  check Busy      */
-    tmpDemMode  =   NewMode;
-    if( ( NewMode & DEM_MODE_BUSY_DETAIL ) != (Dem_ModeType)0U )
+    tmpDemMode  =   Mode;
+    if( ( Mode & DEM_MODE_BUSY_DETAIL ) != (Dem_ModeType)0U )
     {
-        tmpDemMode = (Dem_ModeType)( NewMode | (Dem_ModeType)DEM_MODE_BUSY );
+        tmpDemMode = (Dem_ModeType)( Mode | (Dem_ModeType)DEM_MODE_BUSY );
     }
 
-    /*  check Busy : old mode   */
-    tmpOldDemMode   =   OldMode;
-    if( ( OldMode & DEM_MODE_BUSY_DETAIL ) != (Dem_ModeType)0U )
-    {
-        tmpOldDemMode = (Dem_ModeType)( OldMode | (Dem_ModeType)DEM_MODE_BUSY );
-    }
-
-    /*  check Mask : check change bit.      */
-    updDemMode  =   tmpOldDemMode ^ tmpDemMode;
-    if (( updDemMode & notifyDemModeMask ) != (Dem_ModeType)0U )
+    /*  check Mask      */
+    if (( tmpDemMode & notifyDemModeMask ) != (Dem_ModeType)0U )
     {
         /*  notify mode     */
         Dem_BswM_RequestMode( tmpDemMode );
     }
     return ;
 }
-#endif  /* ( DEM_TRIGGER_BSWM_REPORTS == STD_ON )       */
 
 /****************************************************************************/
 /* Function Name | Dem_ModeMng_RefreshRAM                                   */
@@ -392,7 +342,6 @@ FUNC( void, DEM_CODE ) Dem_ModeMng_RefreshRAM
 /*  v4-0-0         :2020-03-19                                              */
 /*  v5-0-0         :2021-09-28                                              */
 /*  v5-3-0         :2023-03-29                                              */
-/*  v5-10-0        :2025-06-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

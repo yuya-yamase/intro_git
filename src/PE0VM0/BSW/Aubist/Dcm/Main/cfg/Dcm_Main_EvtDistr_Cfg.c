@@ -1,7 +1,7 @@
-/* Dcm_Main_EvtDistr_Cfg_c(v5-9-0)                                          */
+/* Dcm_Main_EvtDistr_Cfg_c(v5-5-0)                                          */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -69,15 +69,12 @@ CONST( AB_83_ConstV uint8, DCM_CONFIG_DATA ) Dcm_M_EvtDistr_IdToIndex[ DCM_M_EVT
     DCM_M_EVTDISTR_INVALID_VAL,   /* DCM_M_EVTID_DSL_RESPREQ_AFRST      */
     DCM_M_EVTDISTR_INVALID_VAL,   /* DCM_M_EVTID_DSL_COMM_ACTIVE        */
     DCM_M_EVTDISTR_INVALID_VAL,   /* DCM_M_EVTID_DSL_PAGEDBUFFER        */
-    DCM_M_EVTDISTR_INVALID_VAL,   /* DCM_M_EVTID_DSL_RESETTODEFSES      */
     DCM_M_EVTDISTR_INVALID_VAL,   /* DCM_M_EVTID_SID04_ALLCLEARDTC      */
-    DCM_M_EVTDISTR_INVALID_VAL,   /* DCM_M_EVTID_SID04_CLEARCHK         */
     DCM_M_EVTDISTR_INVALID_VAL,   /* DCM_M_EVTID_SID09_GET_INFOTYPE     */
     (uint8)7U,                    /* DCM_M_EVTID_SID10_SETPROG          */
     (uint8)8U,                    /* DCM_M_EVTID_SID10_CHKSESCTRL       */
     DCM_M_EVTDISTR_INVALID_VAL,   /* DCM_M_EVTID_SID11_GETPRERESET      */
     (uint8)9U,                    /* DCM_M_EVTID_SID14_CLEARDTC         */
-    (uint8)10U,                   /* DCM_M_EVTID_SID14_CLEARCHK         */
     DCM_M_EVTDISTR_INVALID_VAL,   /* DCM_M_EVTID_SID19_SUB01_GETNOD     */
     DCM_M_EVTDISTR_INVALID_VAL,   /* DCM_M_EVTID_SID19_SUB02_GETSIZE    */
     DCM_M_EVTDISTR_INVALID_VAL,   /* DCM_M_EVTID_SID19_SUB02_GETDTC     */
@@ -102,13 +99,10 @@ CONST( AB_83_ConstV uint8, DCM_CONFIG_DATA ) Dcm_M_EvtDistr_IdToIndex[ DCM_M_EVT
     DCM_M_EVTDISTR_INVALID_VAL,   /* DCM_M_EVTID_SID19_SUB18_GETFFDT    */
     DCM_M_EVTDISTR_INVALID_VAL,   /* DCM_M_EVTID_SID19_SUB19_DISREC     */
     DCM_M_EVTDISTR_INVALID_VAL,   /* DCM_M_EVTID_SID19_SUB19_GETEDR     */
-    DCM_M_EVTDISTR_INVALID_VAL,   /* DCM_M_EVTID_SID19_SUB1A_GETSIZE    */
     DCM_M_EVTDISTR_INVALID_VAL,   /* DCM_M_EVTID_SID19_SUB1A_GETDTC     */
     DCM_M_EVTDISTR_INVALID_VAL,   /* DCM_M_EVTID_SID19_SUB42_GETSIZE    */
     DCM_M_EVTDISTR_INVALID_VAL,   /* DCM_M_EVTID_SID19_SUB42_GETDTC     */
     DCM_M_EVTDISTR_INVALID_VAL,   /* DCM_M_EVTID_SID19_SUB55_GETDTC     */
-    DCM_M_EVTDISTR_INVALID_VAL,   /* DCM_M_EVTID_SID19_SUB56_GETSIZE    */
-    DCM_M_EVTDISTR_INVALID_VAL,   /* DCM_M_EVTID_SID19_SUB56_GETDTC     */
     DCM_M_EVTDISTR_INVALID_VAL,   /* DCM_M_EVTID_SID22_DIDAVAILABLE     */
     DCM_M_EVTDISTR_INVALID_VAL,   /* DCM_M_EVTID_SID22_RANGE_DATA_LEN   */
     DCM_M_EVTDISTR_INVALID_VAL,   /* DCM_M_EVTID_SID22_CHKSUP_CYCLE     */
@@ -121,7 +115,7 @@ CONST( AB_83_ConstV uint8, DCM_CONFIG_DATA ) Dcm_M_EvtDistr_IdToIndex[ DCM_M_EVT
     DCM_M_EVTDISTR_INVALID_VAL,   /* DCM_M_EVTID_SID27_GET_SEED         */
     DCM_M_EVTDISTR_INVALID_VAL,   /* DCM_M_EVTID_SID27_COMPARE_KEY      */
     DCM_M_EVTDISTR_INVALID_VAL,   /* DCM_M_EVTID_SID27_READCONF         */
-    (uint8)11U,                   /* DCM_M_EVTID_SID28_COMPCOMCTRL      */
+    (uint8)10U,                   /* DCM_M_EVTID_SID28_COMPCOMCTRL      */
     DCM_M_EVTDISTR_INVALID_VAL,   /* DCM_M_EVTID_SID29_VRFYCERTUNIDIR   */
     DCM_M_EVTDISTR_INVALID_VAL,   /* DCM_M_EVTID_SID29_VRFYCERTBIDIR    */
     DCM_M_EVTDISTR_INVALID_VAL,   /* DCM_M_EVTID_SID29_VRFYPOWN         */
@@ -150,14 +144,12 @@ CONST( AB_83_ConstV uint8, DCM_CONFIG_DATA ) Dcm_M_EvtDistr_IdToIndex[ DCM_M_EVT
     DCM_M_EVTDISTR_INVALID_VAL,   /* DCM_M_EVTID_SID36_PROCTFRDATAREAD */
     DCM_M_EVTDISTR_INVALID_VAL,   /* DCM_M_EVTID_SID37_CHKPROGPROCFIN   */
     DCM_M_EVTDISTR_INVALID_VAL,   /* DCM_M_EVTID_SID37_PROCREQTFREXIT   */
-    DCM_M_EVTDISTR_INVALID_VAL,   /* DCM_M_EVTID_SID3D_WRITEMEM         */
     DCM_M_EVTDISTR_INVALID_VAL,   /* DCM_M_EVTID_SID85_SUB01_ENA_DTC    */
     DCM_M_EVTDISTR_INVALID_VAL,   /* DCM_M_EVTID_SID85_SUB02_DIS_DTC    */
     DCM_M_EVTDISTR_INVALID_VAL,   /* DCM_M_EVTID_SID86_SERVTORESPTO     */
     DCM_M_EVTDISTR_INVALID_VAL,   /* DCM_M_EVTID_SID86_RESPQUEOVER      */
     DCM_M_EVTDISTR_INVALID_VAL,   /* DCM_M_EVTID_SID86_READCOMP         */
     DCM_M_EVTDISTR_INVALID_VAL,   /* DCM_M_EVTID_SIDA4_CLEARDTC         */
-    DCM_M_EVTDISTR_INVALID_VAL,   /* DCM_M_EVTID_SIDA4_CLEARCHK         */
     DCM_M_EVTDISTR_INVALID_VAL,   /* DCM_M_EVTID_SIDA4_CLEAROBS         */
     DCM_M_EVTDISTR_INVALID_VAL,   /* DCM_M_EVTID_SIDBA_GETBEHAVIORMEMORY */
     DCM_M_EVTDISTR_INVALID_VAL,   /* DCM_M_EVTID_DSL_TXIFRETRY          */
@@ -180,7 +172,6 @@ CONST( AB_83_ConstV Dcm_M_EvtDistr_FuncType, DCM_CONFIG_DATA ) Dcm_M_EvtDistr_No
     &Dcm_Dsp_SID10_Cbk,                     /* DCM_M_EVTID_SID10_SETPROG          */
     &Dcm_Dsp_SID10_ChkSesCtrlCbk,           /* DCM_M_EVTID_SID10_CHKSESCTRL       */
     &Dcm_Dsp_SID14_Cbk,                     /* DCM_M_EVTID_SID14_CLEARDTC         */
-    &Dcm_Dsp_SID14_ClearCheckCbk,           /* DCM_M_EVTID_SID14_CLEARCHK         */
     &Dcm_Dsp_SID28_Cbk                      /* DCM_M_EVTID_SID28_COMPCOMCTRL      */
 };
 
@@ -218,15 +209,13 @@ CONST( AB_83_ConstV uint8, DCM_CONFIG_DATA ) Dcm_M_EvtDistr_u1EventIdExNum = DCM
 /*  v4-0-0         :2020-12-23                                              */
 /*  v5-0-0         :2021-12-24                                              */
 /*  v5-3-0         :2023-03-29                                              */
+/*  v5-4-0         :2023-06-28                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-6-0         :2024-02-27                                              */
-/*  v5-8-0         :2024-10-29                                              */
-/*  v5-9-0         :2025-02-26                                              */
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
 /*  Framework          :v2-1-0                                              */
-/*  BSW plug-in        :v5-10-0                                             */
+/*  BSW plug-in        :v5-5-1                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

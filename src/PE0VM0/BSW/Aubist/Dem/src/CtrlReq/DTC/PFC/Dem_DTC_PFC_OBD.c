@@ -1,7 +1,7 @@
-/* Dem_DTC_PFC_OBD_c(v5-8-0)                                                */
+/* Dem_DTC_PFC_OBD_c(v5-5-0)                                                */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -226,11 +226,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DTC_SavePermanentMemoryEntryToT
 /* Parameters    | none                                                     */
 /* Return Value  | void                                                     */
 /* Notes         | none                                                     */
-/*--------------------------------------------------------------------------*/
-/* UpdateRecord  | [UpdRec]PFC  :   NotifySavedZone                         */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-6-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_DTC_UpdatePermanentMemoryEntryToTmp
 ( void )
@@ -242,7 +237,7 @@ FUNC( void, DEM_CODE ) Dem_DTC_UpdatePermanentMemoryEntryToTmp
         Dem_NotifySavedZonePermanentUpdate_Enter();         /*  notify start :  savedzone area will be update.  */
         /*--------------------------------------------------*/
 
-        Dem_DTC_StorePermanentFaultRecordFromTmp(); /*[UpdRec]PFC */
+        Dem_DTC_StorePermanentFaultRecordFromTmp();
 
         /*--------------------------------------------------*/
         /*  notify SAVED_ZONE_PERMANENT update - end.       */
@@ -265,11 +260,6 @@ FUNC( void, DEM_CODE ) Dem_DTC_UpdatePermanentMemoryEntryToTmp
 /* Parameters    | none                                                     */
 /* Return Value  | void                                                     */
 /* Notes         | none                                                     */
-/*--------------------------------------------------------------------------*/
-/* UpdateRecord  | [UpdRec]PFC  :   NotifySavedZone                         */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-6-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_DTC_UpdateSpecificPermanentMemoryEntryToTmp
 ( void )
@@ -281,7 +271,7 @@ FUNC( void, DEM_CODE ) Dem_DTC_UpdateSpecificPermanentMemoryEntryToTmp
         Dem_NotifySavedZonePermanentUpdate_Enter();         /*  notify start :  savedzone area will be update.  */
         /*--------------------------------------------------*/
 
-        Dem_DTC_StorePermanentFaultRecordFromTmp(); /*[UpdRec]PFC */
+        Dem_DTC_StorePermanentFaultRecordFromTmp();
 
         /*--------------------------------------------------*/
         /*  notify SAVED_ZONE_PERMANENT update - end.       */
@@ -304,12 +294,8 @@ FUNC( void, DEM_CODE ) Dem_DTC_UpdateSpecificPermanentMemoryEntryToTmp
 /* Return Value  | void                                                     */
 /* Notes         | none                                                     */
 /*--------------------------------------------------------------------------*/
-/* UpdateRecord  | [UpdRec]PFC          :   NotifySavedZone                 */
-/* UpdateRecord  | [UpdRec]PFCMisfire   :   NotifySavedZone                 */
-/*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-6-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_DTC_UpdateSpecificPermanentMemoryEntryToTmp
 ( void )
@@ -344,11 +330,11 @@ FUNC( void, DEM_CODE ) Dem_DTC_UpdateSpecificPermanentMemoryEntryToTmp
         Dem_NotifySavedZonePermanentUpdate_Enter();         /*  notify start :  savedzone area will be update.  */
         /*--------------------------------------------------*/
 
-        Dem_DTC_StorePermanentFaultRecordFromTmp(); /*[UpdRec]PFC */
+        Dem_DTC_StorePermanentFaultRecordFromTmp();
 
         if( eventStrgIndex < eventStorageNum )                                                                  /* [GUD:if]eventStrgIndex */
         {
-            Dem_Misfire_UpdatePermanentMemoryEntryToTmp( eventStrgIndex );  /* [UpdRec]PFCMisfire */
+            Dem_Misfire_UpdatePermanentMemoryEntryToTmp( eventStrgIndex );
         }
 
         /*--------------------------------------------------*/
@@ -665,12 +651,6 @@ FUNC( void, DEM_CODE ) Dem_DTC_ClearPFCByCycleStart
 /* Parameters    | none                                                     */
 /* Return Value  | void                                                     */
 /* Notes         | -                                                        */
-/*--------------------------------------------------------------------------*/
-/* UpdateRecord  | [UpdRec]PFC          :   NotifySavedZone                 */
-/* UpdateRecord  | [UpdRec]PFCMisfire   :   NotifySavedZone                 */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-6-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_DTC_UpdatePFCRecord
 ( void )
@@ -682,7 +662,7 @@ FUNC( void, DEM_CODE ) Dem_DTC_UpdatePFCRecord
         Dem_NotifySavedZonePermanentUpdate_Enter();         /*  notify start :  savedzone area will be update.  */
         /*--------------------------------------------------*/
 
-        Dem_DTC_UpdatePFCRecordByOrder();   /*[UpdRec]PFC *//*[UpdRec]PFCMisfire */
+        Dem_DTC_UpdatePFCRecordByOrder();
 
         /*--------------------------------------------------*/
         /*  notify SAVED_ZONE_PERMANENT update - end.       */
@@ -750,7 +730,6 @@ FUNC( void, DEM_CODE ) Dem_DTC_ClearPFCClearCondition
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | branch changed.                                          */
-/*   v5-8-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DTC_GetFilteredPFC
 (
@@ -825,14 +804,10 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DTC_GetFilteredPFC
                     if( retDTCClerTarget == (boolean)FALSE )
                     {
                         (void)Dem_DTC_GetDTCStatusByDTC( eventStrgIndex, &statusOfDTC ); /* no return check required *//* [GUD]eventStrgIndex */
-
-                        (void)Dem_DTC_TranslateDTCStatusForOutputByDTC( eventStrgIndex, &statusOfDTC ); /* no return check required *//* [GUD]eventStrgIndex */
                     }
                     else
                     {
                         statusOfDTC = DEM_DTCSTATUS_BYTE_DEFAULT;
-
-                        Dem_DTC_TranslateDTCStatusForOutput_NoMergeWIRBit( eventStrgIndex, &statusOfDTC );          /* [GUD]eventStrgIndex */
                     }
 
                     retVal = DEM_IRT_OK;
@@ -1134,11 +1109,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_PFC_GetNextSpacePFCRecordIndex
 /* Parameters    | none                                                     */
 /* Return Value  | void                                                     */
 /* Notes         | -                                                        */
-/*--------------------------------------------------------------------------*/
-/* UpdateRecord  | [UpdRec]PFC                                              */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-6-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_DTC_StorePermanentFaultRecordFromTmp
 ( void )
@@ -1162,7 +1132,7 @@ static FUNC( void, DEM_CODE ) Dem_DTC_StorePermanentFaultRecordFromTmp
             cycleQualifiedInfo = Dem_TmpPermanentMemoryEntry.PermanentFaultRecord.CycleQualifiedInfo;
 
             /* In the pfc record, there was difference between RAM and temporary. */
-            Dem_DTC_SetPFCRecordWithQualifiedInfo( pfcRecordIndex, eventStrgIndex, cycleQualifiedInfo );    /*[UpdRec]PFC */
+            Dem_DTC_SetPFCRecordWithQualifiedInfo( pfcRecordIndex, eventStrgIndex, cycleQualifiedInfo );
         }
         else if( eventStrgIndex != DEM_EVENTSTRGINDEX_INVALID )
         {
@@ -1324,47 +1294,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DTC_CheckAvailableAndMILStatusB
     return retVal;
 }
 
-/****************************************************************************/
-/* Function Name | Dem_DTC_ClearAllPFC                                      */
-/* Description   | Clear all records related to PFC.                        */
-/* Preconditions | none                                                     */
-/* Parameters    | none                                                     */
-/* Return Value  | void                                                     */
-/* Notes         | none                                                     */
-/*--------------------------------------------------------------------------*/
-/* UpdateRecord  | [UpdRec]PFC          :   NotifySavedZone                 */
-/* UpdateRecord  | [UpdRec]PFCMisfire   :   NotifySavedZone                 */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-6-0      | new created.                                             */
-/****************************************************************************/
-FUNC( void, DEM_CODE ) Dem_DTC_ClearAllPFC
-( void )
-{
-    /*--------------------------------------------------*/
-    /*  notify SAVED_ZONE_PERMANENT update - start.     */
-    Dem_NotifySavedZonePermanentUpdate_Enter();         /*  notify start :  savedzone area will be update.  */
-    /*--------------------------------------------------*/
-
-#if ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON )
-    Dem_MisfireMng_ClearPFCMisfireComRecord();      /*[UpdRec]PFCMisfire */
-#endif /* ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON )    */
-
-    Dem_PFCMng_ClearAllPFCRecord();      /*[UpdRec]PFC */
-
-    if ( Dem_PFCRecordUpdateStatus != DEM_PFC_RECORD_UPDATE_DISABLE )
-    {
-        Dem_DTC_UpdatePFCRecordByOrder();    /*[UpdRec]PFC *//*[UpdRec]PFCMisfire */
-    }
-
-    /*--------------------------------------------------*/
-    /*  notify SAVED_ZONE_PERMANENT update - end.       */
-    Dem_NotifySavedZonePermanentUpdate_Exit();          /*  notify end :  savedzone area will be update.  */
-    /*--------------------------------------------------*/
-
-    return;
-}
-
 #define DEM_STOP_SEC_CODE
 #include <Dem_MemMap.h>
 
@@ -1381,8 +1310,6 @@ FUNC( void, DEM_CODE ) Dem_DTC_ClearAllPFC
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-6-0         :2024-01-29                                              */
-/*  v5-8-0         :2024-10-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

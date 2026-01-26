@@ -1,7 +1,7 @@
-/* Dem_Rc_DataMng_h(v5-10-0)                                                */
+/* Dem_Rc_DataMng_h(v5-5-0)                                                 */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 /****************************************************************************/
 /* Object Name  | Dem/DataMng/HEADER                                        */
@@ -34,7 +34,6 @@
 #define DEM_DTCSTATUS_FACTORY_DEFAULT                    ((Dem_UdsStatusByteType)DEM_NVBLOCK_FACTORY_VALUE)
 #define DEM_DTCSTATUSEX_FACTORY_DEFAULT                  ((Dem_u08_DTCStatusExType)DEM_NVBLOCK_FACTORY_VALUE)
 #define DEM_DTCSTATUSEX2_FACTORY_DEFAULT                 ((Dem_u08_DTCStatusEx2Type)DEM_NVBLOCK_FACTORY_VALUE)
-#define DEM_PASSEDBITMAP_FACTORY_DEFAULT                 ((Dem_u08_EventCtrlBitmapType)DEM_NVBLOCK_FACTORY_VALUE)
 
 #define DEM_FFD_INITIAL                                  ((uint8)0xFFU)
 #define DEM_NUMOFEVTMEMENT_INITIAL                       ((Dem_u08_OrderIndexType)0x00U)
@@ -55,9 +54,7 @@ typedef struct
     Dem_u08_DTCStatusExType             ExtendStatusOfDTC;
     Dem_u08_DTCStatusEx2Type            ExtendStatusOfDTC2;
     Dem_u08_FailureCounterType          FailureCounter;
-#if ( DEM_GETOCCURRENCECOUNTER_SUPPORT == STD_ON )
     Dem_u08_EventOccurrenceCounterType  OccurrenceCounter;
-#endif  /* ( DEM_GETOCCURRENCECOUNTER_SUPPORT == STD_ON )   */
 } Dem_EventRecordForCtlType;
 
 typedef struct
@@ -164,12 +161,10 @@ FUNC( void, DEM_CODE ) Dem_DataMngC_GetEventMemoryRecord
 (
     P2VAR( Dem_EventMemoryRecordType, AUTOMATIC, DEM_VAR_NO_INIT ) EventMemoryRecordPtr
 );
-#if ( DEM_TSFF_PM_SUPPORT == STD_ON )
 #if ( DEM_DTCSTOREDDATA_DEMINTERNAL_SUPPORT == STD_ON )
 FUNC( Dem_u08_OrderIndexType, DEM_CODE ) Dem_DataMngC_GetNumberOfConfirmedDTCs
 ( void );
 #endif  /* ( DEM_DTCSTOREDDATA_DEMINTERNAL_SUPPORT == STD_ON )     */
-#endif  /* ( DEM_TSFF_PM_SUPPORT == STD_ON )     */
 #if ( DEM_WWH_OBD_SUPPORT == STD_ON )
 #if ( DEM_PFC_ORDER_MIL_SUPPORT == STD_ON )
 FUNC( Dem_u08_OrderIndexType, DEM_CODE ) Dem_DataMngC_GetNumberOfObdMILDTCs
@@ -182,12 +177,6 @@ FUNC( void, DEM_CODE ) Dem_DataMngC_SetEventMemoryRecord
 (
     P2CONST( Dem_EventMemoryRecordType, AUTOMATIC, DEM_VAR_NO_INIT ) EventMemoryRecordPtr
 );
-FUNC( void, DEM_CODE ) Dem_DataMngC_CopyEventMemoryRecord
-(
-    P2VAR( Dem_EventMemoryRecordType, AUTOMATIC, AUTOMATIC ) DestEventMemoryRecordPtr,
-    P2CONST( Dem_EventMemoryRecordType, AUTOMATIC, DEM_VAR_NO_INIT ) SrcEventMemoryRecordPtr
-);
-
 FUNC( void, DEM_CODE ) Dem_DataMng_RefreshRAM
 ( void );
 
@@ -267,13 +256,11 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataMngC_GetER_FailureCounter
     VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex,
     P2VAR( Dem_u08_FailureCounterType, AUTOMATIC, AUTOMATIC ) FailureCounterPtr
 );
-#if ( DEM_GETOCCURRENCECOUNTER_SUPPORT == STD_ON )
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataMngC_GetER_OccurrenceCounter
 (
     VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex,
     P2VAR( Dem_u08_EventOccurrenceCounterType, AUTOMATIC, AUTOMATIC ) OccurrenceCounterPtr
 );
-#endif  /* ( DEM_GETOCCURRENCECOUNTER_SUPPORT == STD_ON )   */
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataMngC_SetEventRecord
 (
     VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex,
@@ -290,6 +277,13 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataMngC_CompareEventRecord
     VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex,
     P2CONST( Dem_EventRecordForCtlType, AUTOMATIC, DEM_VAR_NO_INIT ) EventRecordPtr
 );
+#if ( DEM_NVM_SYNC_PROCESS_ENABLE == STD_ON )
+FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataMngM_GetEventRecord
+(
+    VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex,
+    P2VAR( Dem_EventRecordType, AUTOMATIC, AUTOMATIC ) EventRecordPtr
+);
+#endif /* DEM_NVM_SYNC_PROCESS_ENABLE -STD_ON- */
 FUNC( void, DEM_CODE ) Dem_DataMngM_InitEventRecord
 (
     VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex
@@ -297,11 +291,6 @@ FUNC( void, DEM_CODE ) Dem_DataMngM_InitEventRecord
 FUNC( void, DEM_CODE ) Dem_DataMngC_InitEventCtlRecordData
 (
     P2VAR( Dem_EventRecordForCtlType, AUTOMATIC, DEM_VAR_NO_INIT ) EventRecordPtr
-);
-FUNC( void, DEM_CODE ) Dem_DataMngC_CopyEventCtlRecordData
-(
-    P2VAR( Dem_EventRecordForCtlType, AUTOMATIC, DEM_VAR_NO_INIT ) DestEventRecordPtr,
-    P2CONST( Dem_EventRecordForCtlType, AUTOMATIC, DEM_VAR_NO_INIT ) SrcEventRecordPtr
 );
 FUNC( boolean, DEM_CODE ) Dem_DataMng_GetFactoryCheckResultOfEventRecord
 (
@@ -358,29 +347,6 @@ FUNC( void, DEM_CODE ) Dem_EventMng_SetRecordMirror
     P2VAR( Dem_DataMirrorInfoType, AUTOMATIC, AUTOMATIC ) BlockMirrorPtr
 );
 #endif /* DEM_NVM_SYNC_PROCESS_ENABLE -STD_ON- */
-
-/*--------------------------------------*/
-/*  Dem_DataMng_RecDt_Event_CmbStrgON.c */
-/*--------------------------------------*/
-#if ( DEM_COMBINEDEVENT_ONSTORAGE_SUPPORT == STD_ON )
-FUNC( void, DEM_CODE ) Dem_DataMngC_SetER_PassedBitmap_InEvtStrgGrp
-(
-    VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex,
-    VAR( Dem_u08_EventCtrlBitmapIndexType, AUTOMATIC ) PassedBitmapIndex,
-    VAR( Dem_u08_EventCtrlBitmapType, AUTOMATIC ) PassedBitmapData
-);
-FUNC( void, DEM_CODE ) Dem_DataMngC_SetER_PassedBitmapAll_InEvtStrgGrp
-(
-    VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex,
-    VAR( Dem_u08_EventCtrlBitmapType, AUTOMATIC ) PassedBitmapData
-);
-FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataMngC_GetER_PassedBitmap_InEvtStrgGrp
-(
-    VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex,
-    VAR( Dem_u08_EventCtrlBitmapIndexType, AUTOMATIC ) PassedBitmapIndex,
-    P2VAR( Dem_u08_EventCtrlBitmapType, AUTOMATIC, AUTOMATIC ) PassedBitmapDataPtr
-);
-#endif  /* ( DEM_COMBINEDEVENT_ONSTORAGE_SUPPORT == STD_ON ) */
 
 /*--------------------------------------*/
 /*  Dem_DataMng_RecDt_Fault.c           */
@@ -449,15 +415,6 @@ FUNC( boolean, DEM_CODE ) Dem_DataMngC_GetFR_CheckExistOBDFFD
     VAR( Dem_u08_FaultIndexType, AUTOMATIC ) FaultIndex
 );
 #endif  /*   ( DEM_OBDONEDS_SUPPORT == STD_ON )     */
-#if ( DEM_OBDONUDS_SUPPORT == STD_ON )
-#if ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )
-FUNC( boolean, DEM_CODE ) Dem_DataMngC_GetFR_CheckExistOBDFFD
-(
-    VAR( Dem_u08_FaultIndexType, AUTOMATIC ) FaultIndex
-);
-#endif  /*   ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )     */
-#endif  /*   ( DEM_OBDONUDS_SUPPORT == STD_ON )     */
-
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataMngC_GetFR_ObdFreezeFrameIndex
 (
     VAR( Dem_u08_FaultIndexType, AUTOMATIC ) FaultIndex,
@@ -476,14 +433,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataMngC_GetFR_AgingCounter
     VAR( Dem_u08_FaultIndexType, AUTOMATIC ) FaultIndex,
     P2VAR( Dem_u08_AgingCounterType, AUTOMATIC, AUTOMATIC ) AgingCounterPtr
 );
-
-#if ( DEM_WWH_OBD_SUPPORT == STD_ON )
-FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataMngC_GetFR_AgingTime
-(
-    VAR( Dem_u08_FaultIndexType, AUTOMATIC ) FaultIndex,
-    P2VAR( Dem_u16_WWHOBDTimeAgingCounterType, AUTOMATIC, AUTOMATIC ) AgingTimePtr
-);
-#endif  /* ( DEM_WWH_OBD_SUPPORT == STD_ON )    */
 
 #if ( DEM_INDICATOR_USE == STD_ON )
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataMngC_GetFR_HealingCounter
@@ -509,12 +458,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataMngC_GetFR_ConfirmedOccurre
 );
 #endif  /* ( DEM_OBDONEDS_SUPPORT == STD_ON )    */
 #endif  /* ( DEM_EVENT_DISPLACEMENT_BY_DTCSTATUS_SUPPORT == STD_OFF )    */
-#if ( DEM_GET_UDSDTC_BY_CONFIRMED_ORDER_SUPPORT == STD_ON )
-FUNC( Dem_u16_OccrOrderType, DEM_CODE ) Dem_DataMngC_ConfirmedOccurrenceOrder
-(
-    VAR( Dem_u08_FaultIndexType, AUTOMATIC ) FaultIndex
-);
-#endif  /* ( DEM_GET_UDSDTC_BY_CONFIRMED_ORDER_SUPPORT== STD_ON )   */
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataMngC_GetFR_FFDIndexListSt
 (
     VAR( Dem_u08_FaultIndexType, AUTOMATIC ) FaultIndex,
@@ -561,11 +504,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataMngM_GetFaultRecord
 FUNC( void, DEM_CODE ) Dem_DataMngC_InitFaultCtlRecordData
 (
     P2VAR( Dem_FaultRecordType, AUTOMATIC, DEM_VAR_NO_INIT ) FaultRecordPtr
-);
-FUNC( void, DEM_CODE ) Dem_DataMngC_CopyFaultRecord
-(
-    P2VAR( Dem_FaultRecordType, AUTOMATIC, AUTOMATIC ) DestFaultRecordPtr,
-    P2CONST( Dem_FaultRecordType, AUTOMATIC, DEM_VAR_NO_INIT ) SrcFaultRecordPtr
 );
 FUNC( void, DEM_CODE ) Dem_DataMngC_InitFR_FFDIndexListStData
 (
@@ -615,20 +553,6 @@ FUNC( void, DEM_CODE ) Dem_DataMngC_InitRecordNumberIndexFFROverwritten
 );
 #endif  /* ( DEM_EVENT_DISPLACEMENT_SUPPORT == STD_ON ) */
 #if ( DEM_OBDFFD_SUPPORT == STD_ON )
-#if ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )
-#if ( DEM_OBDONUDS_SUPPORT == STD_ON )
-FUNC( void, DEM_CODE ) Dem_DataMngC_CopyFR_AllObdRecordNumberIndex
-(
-    VAR( Dem_u08_FaultIndexType, AUTOMATIC ) FaultIndexDest,
-    VAR( Dem_u08_FaultIndexType, AUTOMATIC ) FaultIndexSrc
-);
-FUNC( boolean, DEM_CODE ) Dem_DataMngC_CompareFR_ObdRecordNumberIndex
-(
-    VAR( Dem_u08_FaultIndexType, AUTOMATIC ) FaultIndexDest,
-    VAR( Dem_u08_FaultIndexType, AUTOMATIC ) FaultIndexSrc
-);
-#endif  /* ( DEM_OBDONUDS_SUPPORT == STD_ON )   */
-#endif  /* ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )   */
 FUNC( void, DEM_CODE ) Dem_DataMng_InitSpecificObdRecordNumberIndex
 (
     VAR( Dem_u08_FaultIndexType, AUTOMATIC ) FaultIndex,
@@ -997,10 +921,6 @@ extern VAR( Dem_TSFFRecordType, DEM_VAR_NO_INIT ) Dem_TmpTSFFDMirror;
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-6-0         :2024-01-29                                              */
-/*  v5-7-0         :2024-05-29                                              */
-/*  v5-9-0         :2025-02-26                                              */
-/*  v5-10-0        :2025-06-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

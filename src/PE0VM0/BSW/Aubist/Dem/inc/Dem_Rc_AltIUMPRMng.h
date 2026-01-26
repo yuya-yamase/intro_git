@@ -1,7 +1,7 @@
-/* Dem_Rc_AltIUMPRMng_h(v5-10-0)                                            */
+/* Dem_Rc_AltIUMPRMng_h(v5-5-0)                                             */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -124,16 +124,10 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_AltIUMPRMng_GetEventIdFromRecor
 /*--------------------------------------------------------------------------*/
 /* Data                                                                     */
 /*--------------------------------------------------------------------------*/
-#define DEM_START_SEC_VAR_NO_INIT
-#include <Dem_MemMap.h>
-
 #if ( DEM_NVM_SYNC_PROCESS_ENABLE == STD_ON )
 extern VAR( Dem_u08_RecMngMtxStsType, DEM_VAR_NO_INIT ) Dem_AltIUMPRNvMStatus[ DEM_ALTIUMPR_RECORD_NUM ];
 extern VAR( Dem_AltIUMPRRecordType, DEM_VAR_NO_INIT ) Dem_TmpAltIUMPRMirror;
 #endif /* ( DEM_NVM_SYNC_PROCESS_ENABLE == STD_ON ) */
-
-#define DEM_STOP_SEC_VAR_NO_INIT
-#include <Dem_MemMap.h>
 
 /*--------------------------------------------------------------------------*/
 /* Constants                                                                */
@@ -149,7 +143,6 @@ extern VAR( Dem_AltIUMPRRecordType, DEM_VAR_NO_INIT ) Dem_TmpAltIUMPRMirror;
 /*  v5-0-0         :2021-12-24                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-10-0        :2025-06-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

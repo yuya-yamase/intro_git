@@ -1,7 +1,7 @@
-/* Dcm_Dsp_SID86_c(v5-8-0)                                                  */
+/* Dcm_Dsp_SID86_c(v5-4-0)                                                  */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -1591,13 +1591,12 @@ FUNC( void, DCM_CODE ) Dcm_Dsp_SID86_NotifySesCtrl       /* MISRA DEVIATION */
     const Dcm_SesCtrlType   u1SesCtrlTypeNew
 )
 {
-    uint16                  u2_ConnIdList[DCM_DSP_SID86_CONNID_LIST_NUM];
+    uint16                  u2_ConnIdList[DCM_DSP_SID86_CONNID_LIST_NUM] = {0};
     uint8                   u1_ListNum;
     uint8                   u1_RoeStopTransmissionSessionUpdate;
     boolean                 b_EventStart;
 
     u1_ListNum              = (uint8)0U;
-    Dcm_Main_SetMemory( (uint8*)&u2_ConnIdList[0], (uint8)0U, (uint16)(sizeof(u2_ConnIdList)) );
 
     /* Make ConnectionID from EventLogicTable */
     Dcm_Dsp_SID86_MakeActConnectionIdList( &u1_ListNum, &u2_ConnIdList[DCM_DSP_SID86_LIST_START_POS] );
@@ -1907,11 +1906,10 @@ FUNC( void, DCM_CODE ) Dcm_Dsp_SID86_SetActiveResponse  /* MISRA DEVIATION  */
     const Dcm_ActiveStateType u1ServiceActiveStatus
 )
 {
-    uint16    u2_ConnIdList[DCM_DSP_SID86_CONNID_LIST_NUM];
+    uint16    u2_ConnIdList[DCM_DSP_SID86_CONNID_LIST_NUM] = {0};
     uint8     u1_ListNum;
     
     u1_ListNum = (uint8)0U;
-    Dcm_Main_SetMemory( (uint8*)&u2_ConnIdList[0], (uint8)0U, (uint16)(sizeof(u2_ConnIdList)) );
     
     if( DCM_EXE_ROE == (Dcm_ActiveStateType)(u1ServiceActiveStatus & DCM_EXE_ROE) )
     {
@@ -2800,7 +2798,7 @@ static FUNC( void, DCM_CODE ) Dcm_Dsp_SID86_ClearAllEvents
     void
 )
 {
-    uint16              u2_ConnIdList[DCM_DSP_SID86_CONNID_LIST_NUM];
+    uint16              u2_ConnIdList[DCM_DSP_SID86_CONNID_LIST_NUM] = {0};
     uint16              u2_ConnId;
     uint8               u1_ExecEventId;
     uint8               u1_NumOfRoeEvent;
@@ -2816,7 +2814,6 @@ static FUNC( void, DCM_CODE ) Dcm_Dsp_SID86_ClearAllEvents
     /* unlock */
     SchM_Exit_Dcm_Dsp_Roe();
     u1_ListNum              = (uint8)0U;
-    Dcm_Main_SetMemory( (uint8*)&u2_ConnIdList[0], (uint8)0U, (uint16)(sizeof(u2_ConnIdList)) );
 
     Dcm_Dsp_SID86_u2StartRequestConnectionId    = DCM_DSP_SID86_CONID_INVALID;
 
@@ -3134,7 +3131,7 @@ static FUNC( void, DCM_CODE ) Dcm_Dsp_SID86_StopAllEvents
     void
 )
 {
-    uint16              u2_ConnIdList[DCM_DSP_SID86_CONNID_LIST_NUM];
+    uint16              u2_ConnIdList[DCM_DSP_SID86_CONNID_LIST_NUM] = {0};
     uint16              u2_ConnId;
     uint8               u1_ExecEventId;
     uint8               u1_NumOfRoeEvent;
@@ -3149,7 +3146,6 @@ static FUNC( void, DCM_CODE ) Dcm_Dsp_SID86_StopAllEvents
     /* unlock */
     SchM_Exit_Dcm_Dsp_Roe();
     u1_ListNum              = (uint8)0U;
-    Dcm_Main_SetMemory( (uint8*)&u2_ConnIdList[0], (uint8)0U, (uint16)(sizeof(u2_ConnIdList)) );
 
     Dcm_Dsp_SID86_u2StartRequestConnectionId    = DCM_DSP_SID86_CONID_INVALID;
     /* Dcm_Dsp_SID86_u1ExecEventId is not Invalid */
@@ -6299,7 +6295,6 @@ static FUNC( void, DCM_CODE ) Dcm_Dsp_SID86_SetComActive
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-4-0         :2023-06-28                                              */
-/*  v5-8-0         :2024-10-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

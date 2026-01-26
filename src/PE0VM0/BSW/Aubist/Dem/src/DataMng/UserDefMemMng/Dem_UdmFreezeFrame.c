@@ -1,7 +1,7 @@
-/* Dem_UdmFreezeFrame_c(v5-7-0)                                             */
+/* Dem_UdmFreezeFrame_c(v5-5-0)                                             */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -42,10 +42,6 @@
 
 static FUNC( void, DEM_CODE ) Dem_UdmFFDMng_SetCapturedFFD
 (
-#ifndef DEM_SIT_RANGE_CHECK
-#else   /* DEM_SIT_RANGE_CHECK */
-    VAR( Dem_u16_FFDStoredIndexType, AUTOMATIC ) StorageFormatDataSize,
-#endif  /* DEM_SIT_RANGE_CHECK */
     P2CONST( AB_83_ConstV Dem_UdmFreezeFrameDataPosType, AUTOMATIC, DEM_CONFIG_DATA ) FreezeFrameDataPosTablePtr,
     P2CONST( uint8, AUTOMATIC, DEM_VAR_NO_INIT ) CapturedDataPtr,
     VAR( Dem_u16_FFDStoredIndexType, AUTOMATIC ) CapturedDataSize,
@@ -55,10 +51,6 @@ static FUNC( void, DEM_CODE ) Dem_UdmFFDMng_SetCapturedFFD
 #if ( DEM_FF_CHECKSUM_SUPPORT == STD_ON )
 static FUNC( void, DEM_CODE ) Dem_UdmFFDMng_SetChecksum
 (
-#ifndef DEM_SIT_RANGE_CHECK
-#else   /* DEM_SIT_RANGE_CHECK */
-    VAR( Dem_u16_FFDStoredIndexType, AUTOMATIC ) StorageFormatDataSize,
-#endif  /* DEM_SIT_RANGE_CHECK */
     P2CONST( AB_83_ConstV Dem_UdmFreezeFrameDataPosType, AUTOMATIC, DEM_CONFIG_DATA ) FreezeFrameDataPosTablePtr,
     P2VAR( uint8, AUTOMATIC, DEM_VAR_SAVED_ZONE ) StorageFormatDataPtr,
     VAR( Dem_u16_FFDStoredIndexType, AUTOMATIC ) DataSize
@@ -112,16 +104,9 @@ static FUNC( void, DEM_CODE ) Dem_UdmFFDMng_SetChecksum
 /*               |        cord with storage format.                         */
 /* Return Value  | void                                                     */
 /* Notes         | -                                                        */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_UdmFFDMng_SetCapturedFreezeFrame
 (
-#ifndef DEM_SIT_RANGE_CHECK
-#else   /* DEM_SIT_RANGE_CHECK */
-    VAR( Dem_u16_FFDStoredIndexType, AUTOMATIC ) StorageFormatDataSize,
-#endif  /* DEM_SIT_RANGE_CHECK */
     P2CONST( AB_83_ConstV Dem_UdmFreezeFrameDataPosType, AUTOMATIC, DEM_CONFIG_DATA ) FreezeFrameDataPosTablePtr,
     VAR( Dem_u08_ConsistencyIdType, AUTOMATIC ) ConsistencyID,
     P2CONST( Dem_UdmFFRMngInfoType, AUTOMATIC, AUTOMATIC ) UdmFFRMngInfoPtr,
@@ -155,43 +140,35 @@ FUNC( void, DEM_CODE ) Dem_UdmFFDMng_SetCapturedFreezeFrame
     if ( posRecordStatus != DEM_FFDSTOREDINDEX_INVALID )
     {
         /* Stores the specified consistency ID. */
-        StorageFormatDataPtr[posFirstCID] = (uint8)ConsistencyID;/* [ARYCHK] StorageFormatDataSize / 1 / posFirstCID */
-        StorageFormatDataPtr[posLastCID] = (uint8)ConsistencyID;/* [ARYCHK] StorageFormatDataSize / 1 / posLastCID */
+        StorageFormatDataPtr[posFirstCID] = (uint8)ConsistencyID;
+        StorageFormatDataPtr[posLastCID] = (uint8)ConsistencyID;
 
         /* Stores the specified event index. */
         udmEventIndexUpper = DEM_UTILMEM_BYTE_INVALID;
         udmEventIndexLower = DEM_UTILMEM_BYTE_INVALID;
         Dem_UtlMem_SplitByteData( (uint16)(UdmFFRMngInfoPtr->UdmEventIndex), &udmEventIndexUpper, &udmEventIndexLower );
-        StorageFormatDataPtr[posFirstUdmEventIndexUpper] = udmEventIndexUpper;/* [ARYCHK] StorageFormatDataSize / 1 / posFirstUdmEventIndexUpper */
-        StorageFormatDataPtr[posFirstUdmEventIndexLower] = udmEventIndexLower;/* [ARYCHK] StorageFormatDataSize / 1 / posFirstUdmEventIndexLower */
-        StorageFormatDataPtr[posLastUdmEventIndexUpper] = udmEventIndexUpper;/* [ARYCHK] StorageFormatDataSize / 1 / posLastUdmEventIndexUpper */
-        StorageFormatDataPtr[posLastUdmEventIndexLower] = udmEventIndexLower;/* [ARYCHK] StorageFormatDataSize / 1 / posLastUdmEventIndexLower */
+        StorageFormatDataPtr[posFirstUdmEventIndexUpper] = udmEventIndexUpper;
+        StorageFormatDataPtr[posFirstUdmEventIndexLower] = udmEventIndexLower;
+        StorageFormatDataPtr[posLastUdmEventIndexUpper] = udmEventIndexUpper;
+        StorageFormatDataPtr[posLastUdmEventIndexLower] = udmEventIndexLower;
 
         /* Stores the consistency ID between udm freeze frame records. */
-        StorageFormatDataPtr[posCidUdmFreezeFrameRecords] = (uint8)UdmFFRMngInfoPtr->CidUdmFreezeFrameRecords;/* [ARYCHK] StorageFormatDataSize / 1 / posCidUdmFreezeFrameRecords */
+        StorageFormatDataPtr[posCidUdmFreezeFrameRecords] = (uint8)UdmFFRMngInfoPtr->CidUdmFreezeFrameRecords;
 
         /* Stores the specified occurrence order. */
-#ifndef DEM_SIT_RANGE_CHECK
         Dem_UdmFFDMng_DisassembleOccurrenceOrder( FreezeFrameDataPosTablePtr, UdmFFRMngInfoPtr->OccurrenceOrder, StorageFormatDataPtr );
-#else   /* DEM_SIT_RANGE_CHECK */
-        Dem_UdmFFDMng_DisassembleOccurrenceOrder( StorageFormatDataSize, FreezeFrameDataPosTablePtr, UdmFFRMngInfoPtr->OccurrenceOrder, StorageFormatDataPtr );
-#endif  /* DEM_SIT_RANGE_CHECK */
 
         if( posOffsetOfTSFFListIndex != DEM_FFDSTOREDINDEX_INVALID )
         {
             /* Stores the specified offset of time-series freeze frame list record's index. */
-            StorageFormatDataPtr[posOffsetOfTSFFListIndex] = (uint8)UdmFFRMngInfoPtr->OffsetOfTSFFListIndex;/* [ARYCHK] StorageFormatDataSize / 1 / posOffsetOfTSFFListIndex */
+            StorageFormatDataPtr[posOffsetOfTSFFListIndex] = (uint8)UdmFFRMngInfoPtr->OffsetOfTSFFListIndex;
         }
 
         /* Stores the specified record status. */
-        StorageFormatDataPtr[posRecordStatus] = (uint8)UdmFFRMngInfoPtr->RecordStatus;/* [ARYCHK] StorageFormatDataSize / 1 / posRecordStatus */
+        StorageFormatDataPtr[posRecordStatus] = (uint8)UdmFFRMngInfoPtr->RecordStatus;
 
         /* Stores the specified freeze frame data.  */
-#ifndef DEM_SIT_RANGE_CHECK
         Dem_UdmFFDMng_SetCapturedFFD( FreezeFrameDataPosTablePtr, CapturedDataPtr, CapturedDataSize, StorageFormatDataPtr );
-#else   /* DEM_SIT_RANGE_CHECK */
-        Dem_UdmFFDMng_SetCapturedFFD( StorageFormatDataSize, FreezeFrameDataPosTablePtr, CapturedDataPtr, CapturedDataSize, StorageFormatDataPtr );
-#endif  /* DEM_SIT_RANGE_CHECK */
     }
     return;
 }
@@ -222,19 +199,15 @@ FUNC( void, DEM_CODE ) Dem_UdmFFDMng_SetCapturedFreezeFrame
 /*               |        d.                                                */
 /* Return Value  | void                                                     */
 /* Notes         | -                                                        */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-7-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_UdmFFDMng_SetMngInfoToFreezeFrame
 (
-#ifndef DEM_SIT_RANGE_CHECK
-#else   /* DEM_SIT_RANGE_CHECK */
-    VAR( Dem_u16_FFDStoredIndexType, AUTOMATIC ) StorageFormatDataSize,
-#endif  /* DEM_SIT_RANGE_CHECK */
     P2CONST( AB_83_ConstV Dem_UdmFreezeFrameDataPosType, AUTOMATIC, DEM_CONFIG_DATA ) FreezeFrameDataPosTablePtr,
     VAR( Dem_u08_ConsistencyIdType, AUTOMATIC ) ConsistencyID,
-    P2CONST( Dem_UdmFFRMngInfoType, AUTOMATIC, DEM_VAR_NO_INIT ) FFRMngInfoPtr,
+    VAR( Dem_u16_UdmEventIndexType, AUTOMATIC ) UdmEventIndex,
+    VAR( Dem_u08_ConsistencyIdType, AUTOMATIC ) CidUdmFreezeFrameRecords,
+    VAR( Dem_u32_UdmOccurrenceOrderType, AUTOMATIC ) OccurrenceOrder,
+    VAR( Dem_u08_FFStoredStatusType, AUTOMATIC ) RecordStatus,
     P2VAR( uint8, AUTOMATIC, DEM_VAR_SAVED_ZONE ) StorageFormatDataPtr,
     VAR( Dem_u16_FFDStoredIndexType, AUTOMATIC ) DataSize       /* MISRA DEVIATION */
 )
@@ -263,38 +236,30 @@ FUNC( void, DEM_CODE ) Dem_UdmFFDMng_SetMngInfoToFreezeFrame
     if ( posRecordStatus != DEM_FFDSTOREDINDEX_INVALID )
     {
         /* Stores the specified consistency ID. */
-        StorageFormatDataPtr[posFirstCID] = (uint8)ConsistencyID;/* [ARYCHK] StorageFormatDataSize / 1 / posFirstCID */
-        StorageFormatDataPtr[posLastCID] = (uint8)ConsistencyID;/* [ARYCHK] StorageFormatDataSize / 1 / posLastCID */
+        StorageFormatDataPtr[posFirstCID] = (uint8)ConsistencyID;
+        StorageFormatDataPtr[posLastCID] = (uint8)ConsistencyID;
 
         /* Stores the specified event index. */
         udmEventIndexUpper = DEM_UTILMEM_BYTE_INVALID;
         udmEventIndexLower = DEM_UTILMEM_BYTE_INVALID;
-        Dem_UtlMem_SplitByteData( (uint16)(FFRMngInfoPtr->UdmEventIndex), &udmEventIndexUpper, &udmEventIndexLower );
-        StorageFormatDataPtr[posFirstUdmEventIndexUpper] = udmEventIndexUpper;/* [ARYCHK] StorageFormatDataSize / 1 / posFirstUdmEventIndexUpper */
-        StorageFormatDataPtr[posFirstUdmEventIndexLower] = udmEventIndexLower;/* [ARYCHK] StorageFormatDataSize / 1 / posFirstUdmEventIndexLower */
-        StorageFormatDataPtr[posLastUdmEventIndexUpper] = udmEventIndexUpper;/* [ARYCHK] StorageFormatDataSize / 1 / posLastUdmEventIndexUpper */
-        StorageFormatDataPtr[posLastUdmEventIndexLower] = udmEventIndexLower;/* [ARYCHK] StorageFormatDataSize / 1 / posLastUdmEventIndexLower */
+        Dem_UtlMem_SplitByteData( (uint16)UdmEventIndex, &udmEventIndexUpper, &udmEventIndexLower );
+        StorageFormatDataPtr[posFirstUdmEventIndexUpper] = udmEventIndexUpper;
+        StorageFormatDataPtr[posFirstUdmEventIndexLower] = udmEventIndexLower;
+        StorageFormatDataPtr[posLastUdmEventIndexUpper] = udmEventIndexUpper;
+        StorageFormatDataPtr[posLastUdmEventIndexLower] = udmEventIndexLower;
 
 
         /* Stores the consistency ID between udm freeze frame records. */
-        StorageFormatDataPtr[posCidUdmFreezeFrameRecords] = (uint8)(FFRMngInfoPtr->CidUdmFreezeFrameRecords);/* [ARYCHK] StorageFormatDataSize / 1 / posCidUdmFreezeFrameRecords */
+        StorageFormatDataPtr[posCidUdmFreezeFrameRecords] = (uint8)CidUdmFreezeFrameRecords;
 
         /* Stores the specified occurrence order. */
-#ifndef DEM_SIT_RANGE_CHECK
-        Dem_UdmFFDMng_DisassembleOccurrenceOrder( FreezeFrameDataPosTablePtr, FFRMngInfoPtr->OccurrenceOrder, StorageFormatDataPtr );
-#else   /* DEM_SIT_RANGE_CHECK */
-        Dem_UdmFFDMng_DisassembleOccurrenceOrder( StorageFormatDataSize, FreezeFrameDataPosTablePtr, FFRMngInfoPtr->OccurrenceOrder, StorageFormatDataPtr );
-#endif  /* DEM_SIT_RANGE_CHECK */
+        Dem_UdmFFDMng_DisassembleOccurrenceOrder( FreezeFrameDataPosTablePtr, OccurrenceOrder, StorageFormatDataPtr );
 
         /* Stores the specified record status. */
-        StorageFormatDataPtr[posRecordStatus] = (uint8)(FFRMngInfoPtr->RecordStatus);/* [ARYCHK] StorageFormatDataSize / 1 / posRecordStatus */
+        StorageFormatDataPtr[posRecordStatus] = (uint8)RecordStatus;
 
 #if ( DEM_FF_CHECKSUM_SUPPORT == STD_ON )    /* [FuncSw] */
-#ifndef DEM_SIT_RANGE_CHECK
         Dem_UdmFFDMng_SetChecksum( FreezeFrameDataPosTablePtr, StorageFormatDataPtr, DataSize );
-#else   /* DEM_SIT_RANGE_CHECK */
-        Dem_UdmFFDMng_SetChecksum( StorageFormatDataSize, FreezeFrameDataPosTablePtr, StorageFormatDataPtr, DataSize );
-#endif  /* DEM_SIT_RANGE_CHECK */
 #endif  /* ( DEM_FF_CHECKSUM_SUPPORT == STD_ON ) */
     }
     return;
@@ -314,16 +279,9 @@ FUNC( void, DEM_CODE ) Dem_UdmFFDMng_SetMngInfoToFreezeFrame
 /*               |        cord with storage format.                         */
 /* Return Value  | void                                                     */
 /* Notes         | -                                                        */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_UdmFFDMng_DisassembleOccurrenceOrder
 (
-#ifndef DEM_SIT_RANGE_CHECK
-#else   /* DEM_SIT_RANGE_CHECK */
-    VAR( Dem_u16_FFDStoredIndexType, AUTOMATIC ) StorageFormatDataSize,
-#endif  /* DEM_SIT_RANGE_CHECK */
     P2CONST( AB_83_ConstV Dem_UdmFreezeFrameDataPosType, AUTOMATIC, DEM_CONFIG_DATA ) FreezeFrameDataPosTablePtr,
     VAR( Dem_u32_UdmOccurrenceOrderType, AUTOMATIC ) OccurrenceOrder,
     P2VAR( uint8, AUTOMATIC, DEM_VAR_SAVED_ZONE ) StorageFormatDataPtr
@@ -340,9 +298,9 @@ FUNC( void, DEM_CODE ) Dem_UdmFFDMng_DisassembleOccurrenceOrder
     /*  check available data of Dem_UdmFreezeFrameDataPosTable[]    */
     if ( posOccurrenceOrderUpper != DEM_FFDSTOREDINDEX_INVALID )
     {
-        StorageFormatDataPtr[posOccurrenceOrderUpper] = (uint8)( OccurrenceOrder >> DEM_UDM_OCCURRENCEORDER_UPPER_STORE_SHIFT );/* [ARYCHK] StorageFormatDataSize / 1 / posOccurrenceOrderUpper */
-        StorageFormatDataPtr[posOccurrenceOrderMiddle] = (uint8)( OccurrenceOrder >> DEM_UDM_OCCURRENCEORDER_MIDDLE_STORE_SHIFT );/* [ARYCHK] StorageFormatDataSize / 1 / posOccurrenceOrderMiddle */
-        StorageFormatDataPtr[posOccurrenceOrderLower] = (uint8)OccurrenceOrder;/* [ARYCHK] StorageFormatDataSize / 1 / posOccurrenceOrderLower */
+        StorageFormatDataPtr[posOccurrenceOrderUpper] = (uint8)( OccurrenceOrder >> DEM_UDM_OCCURRENCEORDER_UPPER_STORE_SHIFT );
+        StorageFormatDataPtr[posOccurrenceOrderMiddle] = (uint8)( OccurrenceOrder >> DEM_UDM_OCCURRENCEORDER_MIDDLE_STORE_SHIFT );
+        StorageFormatDataPtr[posOccurrenceOrderLower] = (uint8)OccurrenceOrder;
     }
     return;
 }
@@ -359,16 +317,9 @@ FUNC( void, DEM_CODE ) Dem_UdmFFDMng_DisassembleOccurrenceOrder
 /*               |        cord with storage format.                         */
 /* Return Value  | Dem_u32_UdmOccurrenceOrderType                           */
 /* Notes         | -                                                        */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u32_UdmOccurrenceOrderType, DEM_CODE ) Dem_UdmFFDMng_AssembleOccurrenceOrder
 (
-#ifndef DEM_SIT_RANGE_CHECK
-#else   /* DEM_SIT_RANGE_CHECK */
-    VAR( Dem_u16_FFDStoredIndexType, AUTOMATIC ) StorageFormatDataSize,
-#endif  /* DEM_SIT_RANGE_CHECK */
     P2CONST( AB_83_ConstV Dem_UdmFreezeFrameDataPosType, AUTOMATIC, DEM_CONFIG_DATA ) FreezeFrameDataPosTablePtr,
     P2CONST( uint8, AUTOMATIC, DEM_VAR_SAVED_ZONE ) StorageFormatDataPtr
 )
@@ -386,9 +337,9 @@ FUNC( Dem_u32_UdmOccurrenceOrderType, DEM_CODE ) Dem_UdmFFDMng_AssembleOccurrenc
     /*  check available data of Dem_UdmFreezeFrameDataPosTable[]    */
     if ( posOccurrenceOrderUpper != DEM_FFDSTOREDINDEX_INVALID )
     {
-        occurrenceOrder = (Dem_u32_UdmOccurrenceOrderType)StorageFormatDataPtr[posOccurrenceOrderUpper] << DEM_UDM_OCCURRENCEORDER_UPPER_STORE_SHIFT;/* [ARYCHK] StorageFormatDataSize / 1 / posOccurrenceOrderUpper */
-        occurrenceOrder |= (Dem_u32_UdmOccurrenceOrderType)StorageFormatDataPtr[posOccurrenceOrderMiddle] << DEM_UDM_OCCURRENCEORDER_MIDDLE_STORE_SHIFT;/* [ARYCHK] StorageFormatDataSize / 1 / posOccurrenceOrderMiddle */
-        occurrenceOrder |= (Dem_u32_UdmOccurrenceOrderType)StorageFormatDataPtr[posOccurrenceOrderLower];/* [ARYCHK] StorageFormatDataSize / 1 / posOccurrenceOrderLower */
+        occurrenceOrder = (Dem_u32_UdmOccurrenceOrderType)StorageFormatDataPtr[posOccurrenceOrderUpper] << DEM_UDM_OCCURRENCEORDER_UPPER_STORE_SHIFT;
+        occurrenceOrder |= (Dem_u32_UdmOccurrenceOrderType)StorageFormatDataPtr[posOccurrenceOrderMiddle] << DEM_UDM_OCCURRENCEORDER_MIDDLE_STORE_SHIFT;
+        occurrenceOrder |= (Dem_u32_UdmOccurrenceOrderType)StorageFormatDataPtr[posOccurrenceOrderLower];
     }
     return occurrenceOrder;
 }
@@ -415,17 +366,10 @@ FUNC( Dem_u32_UdmOccurrenceOrderType, DEM_CODE ) Dem_UdmFFDMng_AssembleOccurrenc
 /*               |        cord with storage format.                         */
 /* Return Value  | void                                                     */
 /* Notes         | -                                                        */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 #if ( DEM_FF_CHECKSUM_SUPPORT == STD_ON )
 static FUNC( void, DEM_CODE ) Dem_UdmFFDMng_SetCapturedFFD
 (
-#ifndef DEM_SIT_RANGE_CHECK
-#else   /* DEM_SIT_RANGE_CHECK */
-    VAR( Dem_u16_FFDStoredIndexType, AUTOMATIC ) StorageFormatDataSize,
-#endif  /* DEM_SIT_RANGE_CHECK */
     P2CONST( AB_83_ConstV Dem_UdmFreezeFrameDataPosType, AUTOMATIC, DEM_CONFIG_DATA ) FreezeFrameDataPosTablePtr,
     P2CONST( uint8, AUTOMATIC, DEM_VAR_NO_INIT ) CapturedDataPtr,
     VAR( Dem_u16_FFDStoredIndexType, AUTOMATIC ) CapturedDataSize,
@@ -444,11 +388,7 @@ static FUNC( void, DEM_CODE ) Dem_UdmFFDMng_SetCapturedFFD
     /*  check available data of Dem_UdmFreezeFrameDataPosTable[]    */
     if ( posDataStart != DEM_FFDSTOREDINDEX_INVALID )
     {
-#ifndef DEM_SIT_RANGE_CHECK
         Dem_UtlMem_CopyMemoryWithChecksum( StorageFormatDataPtr, CapturedDataPtr, CapturedDataSize, posDataStart, posChecksumUpper, posChecksumLower );
-#else   /* DEM_SIT_RANGE_CHECK */
-        Dem_UtlMem_CopyMemoryWithChecksum( StorageFormatDataSize, StorageFormatDataPtr, CapturedDataPtr, CapturedDataSize, posDataStart, posChecksumUpper, posChecksumLower );
-#endif  /* DEM_SIT_RANGE_CHECK */
     }
     return;
 }
@@ -456,10 +396,6 @@ static FUNC( void, DEM_CODE ) Dem_UdmFFDMng_SetCapturedFFD
 #if ( DEM_FF_CHECKSUM_SUPPORT == STD_OFF )
 static FUNC( void, DEM_CODE ) Dem_UdmFFDMng_SetCapturedFFD
 (
-#ifndef DEM_SIT_RANGE_CHECK
-#else   /* DEM_SIT_RANGE_CHECK */
-    VAR( Dem_u16_FFDStoredIndexType, AUTOMATIC ) StorageFormatDataSize,
-#endif  /* DEM_SIT_RANGE_CHECK */
     P2CONST( AB_83_ConstV Dem_UdmFreezeFrameDataPosType, AUTOMATIC, DEM_CONFIG_DATA ) FreezeFrameDataPosTablePtr,
     P2CONST( uint8, AUTOMATIC, DEM_VAR_NO_INIT ) CapturedDataPtr,
     VAR( Dem_u16_FFDStoredIndexType, AUTOMATIC ) CapturedDataSize,
@@ -474,7 +410,7 @@ static FUNC( void, DEM_CODE ) Dem_UdmFFDMng_SetCapturedFFD
     if ( posDataStart != DEM_FFDSTOREDINDEX_INVALID )
     {
         /* Stores the specified freeze frame data.  */
-        Dem_UtlMem_CopyMemory( &StorageFormatDataPtr[posDataStart], CapturedDataPtr, CapturedDataSize );/* [ARYCHK] StorageFormatDataSize / 1 / posDataStart */
+        Dem_UtlMem_CopyMemory( &StorageFormatDataPtr[posDataStart], CapturedDataPtr, CapturedDataSize );
     }
     return;
 }
@@ -501,14 +437,9 @@ static FUNC( void, DEM_CODE ) Dem_UdmFFDMng_SetCapturedFFD
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_UdmFFDMng_SetChecksum
 (
-#ifndef DEM_SIT_RANGE_CHECK
-#else   /* DEM_SIT_RANGE_CHECK */
-    VAR( Dem_u16_FFDStoredIndexType, AUTOMATIC ) StorageFormatDataSize,
-#endif  /* DEM_SIT_RANGE_CHECK */
     P2CONST( AB_83_ConstV Dem_UdmFreezeFrameDataPosType, AUTOMATIC, DEM_CONFIG_DATA ) FreezeFrameDataPosTablePtr,
     P2VAR( uint8, AUTOMATIC, DEM_VAR_SAVED_ZONE ) StorageFormatDataPtr,
     VAR( Dem_u16_FFDStoredIndexType, AUTOMATIC ) DataSize
@@ -526,13 +457,9 @@ static FUNC( void, DEM_CODE ) Dem_UdmFFDMng_SetChecksum
     /*  check available data of Dem_UdmFreezeFrameDataPosTable[]    */
     if ( posDataStart != DEM_FFDSTOREDINDEX_INVALID )
     {
-        calculatedChecksum = Dem_UtlMem_Checksum( &StorageFormatDataPtr[posDataStart], DataSize );/* [ARYCHK] StorageFormatDataSize / 1 / posDataStart */
+        calculatedChecksum = Dem_UtlMem_Checksum( &StorageFormatDataPtr[posDataStart], DataSize );
 
-#ifndef DEM_SIT_RANGE_CHECK
         Dem_UtlMem_SetChecksum( StorageFormatDataPtr, calculatedChecksum, posChecksumUpper, posChecksumLower );
-#else   /* DEM_SIT_RANGE_CHECK */
-        Dem_UtlMem_SetChecksum( StorageFormatDataSize, StorageFormatDataPtr, calculatedChecksum, posChecksumUpper, posChecksumLower );
-#endif  /* DEM_SIT_RANGE_CHECK */
     }
     return;
 }
@@ -549,7 +476,6 @@ static FUNC( void, DEM_CODE ) Dem_UdmFFDMng_SetChecksum
 /*  Version        :Date                                                    */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-7-0         :2024-05-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

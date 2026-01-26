@@ -1,7 +1,7 @@
-/* Dem_UdmDataCtl_InfoFFD_Sort_c(v5-7-0)                                    */
+/* Dem_UdmDataCtl_InfoFFD_Sort_c(v5-3-0)                                    */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -92,9 +92,6 @@ static FUNC( void, DEM_CODE ) Dem_UdmDataCtl_CopyTmpRecordNumberByDTCWithoutReco
 /*               |                  &Dem_TmpRecordNumberByDTC[x]            */
 /* Return Value  | void                                                     */
 /* Notes         | -                                                        */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_UdmData_SortSaveRecordNumber
 (
@@ -117,21 +114,21 @@ FUNC( void, DEM_CODE ) Dem_UdmData_SortSaveRecordNumber
         for( rootNodeIndex = (Dem_s32_FFRecNumStoredIndexType)indexOfLastRootNode; rootNodeIndex >= (Dem_s32_FFRecNumStoredIndexType)0; rootNodeIndex-- )
         {
             /* Down heap */
-            Dem_UdmDataCtl_DownHeapSaveRecordNumber( (Dem_u16_FFRecNumStoredIndexType)rootNodeIndex, lastIndexOfList, &DataPtr[0] );/* [ARYCHK] DEM_UDM_MAX_NUMBER_FF_PER_DTC / 1 / 0 */
+            Dem_UdmDataCtl_DownHeapSaveRecordNumber( (Dem_u16_FFRecNumStoredIndexType)rootNodeIndex, lastIndexOfList, &DataPtr[0] );
         }
         /* Sorts heap */
         for( ; lastIndexOfList > (Dem_u16_FFRecNumStoredIndexType)0U; lastIndexOfList-- )
         {
             /* Swaps occurrence order list data */
             recordNumber = Dem_UdmDataCtl_CalculateRecordNumber( lastIndexOfList );
-            Dem_UdmDataCtl_SwapSaveRecordNumber( recordNumber, &DataPtr[0], &DataPtr[lastIndexOfList] );/* [ARYCHK] DEM_UDM_MAX_NUMBER_FF_PER_DTC / 1 / 0 *//* [ARYCHK] DEM_UDM_MAX_NUMBER_FF_PER_DTC / 1 / lastIndexOfList */
+            Dem_UdmDataCtl_SwapSaveRecordNumber( recordNumber, &DataPtr[0], &DataPtr[lastIndexOfList] );
 
             /* Down heap */
-            Dem_UdmDataCtl_DownHeapSaveRecordNumber( (Dem_u16_FFRecNumStoredIndexType)0U, ( lastIndexOfList - (Dem_u16_FFRecNumStoredIndexType)1U ), &DataPtr[0] );/* [ARYCHK] DEM_UDM_MAX_NUMBER_FF_PER_DTC / 1 / 0 */
+            Dem_UdmDataCtl_DownHeapSaveRecordNumber( (Dem_u16_FFRecNumStoredIndexType)0U, ( lastIndexOfList - (Dem_u16_FFRecNumStoredIndexType)1U ), &DataPtr[0] );
 
             /* Sets record number for the oldeset item. */
             recordNumber = Dem_UdmDataCtl_CalculateRecordNumber( lastIndexOfList - (Dem_u16_FFRecNumStoredIndexType)1U );
-            DataPtr[0].RecordNumber = recordNumber;/* [ARYCHK] DEM_UDM_MAX_NUMBER_FF_PER_DTC / 1 / 0 */
+            DataPtr[0].RecordNumber = recordNumber;
         }
     }
     else
@@ -142,7 +139,7 @@ FUNC( void, DEM_CODE ) Dem_UdmData_SortSaveRecordNumber
         {
             /* Sets record number for the oldeset item. */
             recordNumber = Dem_UdmDataCtl_CalculateRecordNumber( (Dem_u16_FFRecNumStoredIndexType)0U );
-            DataPtr[0].RecordNumber = recordNumber;/* [ARYCHK] DEM_UDM_MAX_NUMBER_FF_PER_DTC / 1 / 0 */
+            DataPtr[0].RecordNumber = recordNumber;
         }
     }
 
@@ -159,9 +156,6 @@ FUNC( void, DEM_CODE ) Dem_UdmData_SortSaveRecordNumber
 /*               |                  &Dem_TmpRecordNumberByDTC[x]            */
 /* Return Value  | void                                                     */
 /* Notes         | -                                                        */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_UdmDataCtl_DownHeapSaveRecordNumber
 (
@@ -180,8 +174,8 @@ static FUNC( void, DEM_CODE ) Dem_UdmDataCtl_DownHeapSaveRecordNumber
 
     /* Saves the original root node. */
     rootNodeIndex                           = (Dem_u32_FFRecNumStoredSortIndexType)IndexOfRoot;
-    Dem_UdmDataCtl_CopyTmpRecordNumberByDTCWithoutRecordNumber( &originalRootNode, &DataPtr[rootNodeIndex] );/* [ARYCHK] DEM_UDM_MAX_NUMBER_FF_PER_DTC / 1 / rootNodeIndex */
-    originalRootNode.RecordNumber           = DataPtr[rootNodeIndex].RecordNumber;/* [ARYCHK] DEM_UDM_MAX_NUMBER_FF_PER_DTC / 1 / rootNodeIndex */
+    Dem_UdmDataCtl_CopyTmpRecordNumberByDTCWithoutRecordNumber( &originalRootNode, &DataPtr[rootNodeIndex] );
+    originalRootNode.RecordNumber           = DataPtr[rootNodeIndex].RecordNumber;
 
     breakLoop = (boolean)FALSE;
 
@@ -210,7 +204,7 @@ static FUNC( void, DEM_CODE ) Dem_UdmDataCtl_DownHeapSaveRecordNumber
                 rightChildNodeIndex = leftChildNodeIndex + (Dem_u32_FFRecNumStoredSortIndexType)1U;     /*  no wrap around      */
 
                 /* Compares the left child node's occurrence order with the right child node's one. */
-                if( DataPtr[leftChildNodeIndex].OccurrenceOrder > DataPtr[rightChildNodeIndex].OccurrenceOrder )/* [ARYCHK] DEM_UDM_MAX_NUMBER_FF_PER_DTC / 1 / leftChildNodeIndex *//* [ARYCHK] DEM_UDM_MAX_NUMBER_FF_PER_DTC / 1 / rightChildNodeIndex */
+                if( DataPtr[leftChildNodeIndex].OccurrenceOrder > DataPtr[rightChildNodeIndex].OccurrenceOrder )
                 {
                     /* In case the right child node's occurrence order is greater than the left's one. */
 
@@ -228,11 +222,11 @@ static FUNC( void, DEM_CODE ) Dem_UdmDataCtl_DownHeapSaveRecordNumber
             }
 
             /* Compares the root node's occurrence order of with the max child node's one. */
-            if( originalRootNode.OccurrenceOrder > DataPtr[maxChildNodeIndex].OccurrenceOrder )/* [ARYCHK] DEM_UDM_MAX_NUMBER_FF_PER_DTC / 1 / maxChildNodeIndex */
+            if( originalRootNode.OccurrenceOrder > DataPtr[maxChildNodeIndex].OccurrenceOrder )
             {
                 /* The max child node's occurrence order is greater than the root node's one, so stores the max child node to the root. */
-                Dem_UdmDataCtl_CopyTmpRecordNumberByDTCWithoutRecordNumber( &DataPtr[rootNodeIndex], &DataPtr[maxChildNodeIndex] );/* [ARYCHK] DEM_UDM_MAX_NUMBER_FF_PER_DTC / 1 / rootNodeIndex *//* [ARYCHK] DEM_UDM_MAX_NUMBER_FF_PER_DTC / 1 / maxChildNodeIndex */
-                DataPtr[rootNodeIndex].RecordNumber            = DataPtr[maxChildNodeIndex].RecordNumber;/* [ARYCHK] DEM_UDM_MAX_NUMBER_FF_PER_DTC / 1 / rootNodeIndex *//* [ARYCHK] DEM_UDM_MAX_NUMBER_FF_PER_DTC / 1 / maxChildNodeIndex */
+                Dem_UdmDataCtl_CopyTmpRecordNumberByDTCWithoutRecordNumber( &DataPtr[rootNodeIndex], &DataPtr[maxChildNodeIndex] );
+                DataPtr[rootNodeIndex].RecordNumber            = DataPtr[maxChildNodeIndex].RecordNumber;
 
                 /* Sets the max child node's index to the root's one. */
                 rootNodeIndex = maxChildNodeIndex;
@@ -247,8 +241,8 @@ static FUNC( void, DEM_CODE ) Dem_UdmDataCtl_DownHeapSaveRecordNumber
     }
 
     /* Stores the saved original node to the root. */
-    Dem_UdmDataCtl_CopyTmpRecordNumberByDTCWithoutRecordNumber( &DataPtr[rootNodeIndex], &originalRootNode );/* [ARYCHK] DEM_UDM_MAX_NUMBER_FF_PER_DTC / 1 / rootNodeIndex */
-    DataPtr[rootNodeIndex].RecordNumber            = originalRootNode.RecordNumber;/* [ARYCHK] DEM_UDM_MAX_NUMBER_FF_PER_DTC / 1 / rootNodeIndex */
+    Dem_UdmDataCtl_CopyTmpRecordNumberByDTCWithoutRecordNumber( &DataPtr[rootNodeIndex], &originalRootNode );
+    DataPtr[rootNodeIndex].RecordNumber            = originalRootNode.RecordNumber;
 
     return;
 }
@@ -339,7 +333,6 @@ static FUNC( void, DEM_CODE ) Dem_UdmDataCtl_CopyTmpRecordNumberByDTCWithoutReco
 /* History                                                                  */
 /*  Version        :Date                                                    */
 /*  v5-3-0         :2023-03-29                                              */
-/*  v5-7-0         :2024-05-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

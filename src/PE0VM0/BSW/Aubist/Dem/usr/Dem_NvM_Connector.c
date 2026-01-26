@@ -1,7 +1,7 @@
-/* Dem_NvM_Connector_c(v5-10-0)                                             */
+/* Dem_NvM_Connector_c(v5-0-0)                                              */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -70,7 +70,11 @@
 /* Return Value  | Std_ReturnType                                           */
 /*               |        E_OK : success                                    */
 /*               |        E_NOT_OK : failed                                 */
-/* Notes         | -                                                        */
+/* Notes         | At the caller, the value of RequestResultPtr is          */
+/*               | guaranteed.                                              */
+/*               | Caller:Dem_NvM_If_GetReadAllStatus                       */
+/*               |        Dem_NvM_If_GetWriteBlockStatus                    */
+/*               |        Dem_NvM_If_GetReadBlockStatus                     */
 /****************************************************************************/
 FUNC( Std_ReturnType, DEM_CODE ) Dem_NvM_GetErrorStatus
 (
@@ -97,7 +101,7 @@ FUNC( Std_ReturnType, DEM_CODE ) Dem_NvM_GetErrorStatus
 /* Return Value  | Std_ReturnType                                           */
 /*               |        E_OK : success                                    */
 /*               |        E_NOT_OK : failed                                 */
-/* Notes         | -                                                        */
+/* Notes         |                                                          */
 /****************************************************************************/
 FUNC( Std_ReturnType, DEM_CODE ) Dem_NvM_WriteBlock
 (
@@ -127,7 +131,7 @@ FUNC( Std_ReturnType, DEM_CODE ) Dem_NvM_WriteBlock
 /* Return Value  | Std_ReturnType                                           */
 /*               |        E_OK : success                                    */
 /*               |        E_NOT_OK : failed                                 */
-/* Notes         | -                                                        */
+/* Notes         |                                                          */
 /****************************************************************************/
 FUNC( Std_ReturnType, DEM_CODE ) Dem_NvM_CancelJobs
 (
@@ -154,7 +158,6 @@ FUNC( Std_ReturnType, DEM_CODE ) Dem_NvM_CancelJobs
 /*  v2-0-0         :2019-03-27                                              */
 /*  v4-0-0         :2020-03-19                                              */
 /*  v5-0-0         :2021-09-28                                              */
-/*  v5-10-0        :2025-06-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

@@ -290,7 +290,6 @@
 ###../../src/PE0VM0/BSW/Aubist/Dcm/Dsp/src/Dcm_Dsp_SID35.c
 ../../src/PE0VM0/BSW/Aubist/Dcm/Dsp/src/Dcm_Dsp_SID36.c
 ../../src/PE0VM0/BSW/Aubist/Dcm/Dsp/src/Dcm_Dsp_SID37.c
-###../../src/PE0VM0/BSW/Aubist/Dcm/Dsp/src/Dcm_Dsp_SID3D.c
 ../../src/PE0VM0/BSW/Aubist/Dcm/Dsp/src/Dcm_Dsp_SID3E.c
 ../../src/PE0VM0/BSW/Aubist/Dcm/Dsp/src/Dcm_Dsp_SID85.c
 ../../src/PE0VM0/BSW/Aubist/Dcm/Dsp/src/Dcm_Dsp_SID86.c
@@ -376,11 +375,8 @@
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CmnReq/ConfigInfo/Dem_ConfigInfo_PriMem.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CmnReq/ConfigInfo/Dem_ConfigInfo_PriMem_Calib.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CmnReq/ConfigInfo/Dem_ConfigInfo_PriMem_CalibByCallout.c
-../../src/PE0VM0/BSW/Aubist/Dem/src/CmnReq/ConfigInfo/Dem_ConfigInfo_PriMem_ClearAllowed.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CmnReq/ConfigInfo/Dem_ConfigInfo_PriMem_DTCAttr.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CmnReq/ConfigInfo/Dem_ConfigInfo_PriMem_DTCFormat.c
-../../src/PE0VM0/BSW/Aubist/Dem/src/CmnReq/ConfigInfo/Dem_ConfigInfo_PriMem_FFRec.c
-###../../src/PE0VM0/BSW/Aubist/Dem/src/CmnReq/ConfigInfo/Dem_ConfigInfo_PriMem_IUMPR.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CmnReq/ConfigInfo/Dem_ConfigInfo_PriMem_MI.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CmnReq/ConfigInfo/Dem_ConfigInfo_PriMem_MI_WWH.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CmnReq/ConfigInfo/Dem_ConfigInfo_PriMem_Misfire.c
@@ -399,7 +395,6 @@
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CmnReq/Control/Dem_Control_FilteredDTC.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CmnReq/Control/Dem_Control_IFCmn.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CmnReq/Control/Dem_Control_Ind.c
-../../src/PE0VM0/BSW/Aubist/Dem/src/CmnReq/Control/Dem_Control_InitModules.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CmnReq/Control/Dem_Control_OpCycle.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CmnReq/Control/Dem_Control_OpCycleQualified.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CmnReq/DataAvl/Dem_DataAvl.c
@@ -436,7 +431,6 @@
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CmnReq/If/Dem_If_AltIUMPR.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CmnReq/If/Dem_If_DTCCtrl.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CmnReq/If/Dem_If_DTR.c
-###../../src/PE0VM0/BSW/Aubist/Dem/src/CmnReq/If/Dem_If_GetConfirmedDTCOrder.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CmnReq/If/Dem_If_GetEventCtrlInfo.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CmnReq/If/Dem_If_GetEventInfo.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CmnReq/If/Dem_If_GetEventList.c
@@ -489,7 +483,6 @@
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/Control/Dem_Control_FilteredDTC_ReadinessGrp.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/Control/Dem_Control_FilteredEDR.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/Control/Dem_Control_FilteredRecord.c
-###../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/Control/Dem_Control_GetUDSDTCByConfirmedDTCOrder.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/Control/Dem_Control_Healing.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/Control/Dem_Control_IndPrimary.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/Control/Dem_Control_IUMPR.c
@@ -518,9 +511,7 @@
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/DataCtl/Dem_DataCtl_DisableDTCInfo.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/DataCtl/Dem_DataCtl_DisableDTCInfo_PairEvent.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/DataCtl/Dem_DataCtl_DisableDTCInfo_RecNumMng.c
-###../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/DataCtl/Dem_DataCtl_DisableDTCInfo_RecNumMng_FilRec.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/DataCtl/Dem_DataCtl_DisReqUpd_GetFFIdx.c
-###../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/DataCtl/Dem_DataCtl_DisReqUpd_GetFFIdx_FilRec.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/DataCtl/Dem_DataCtl_DisReqUpd_GetFFIdx_RtvlOn.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/DataCtl/Dem_DataCtl_EdsFFD.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/DataCtl/Dem_DataCtl_EventEntry.c
@@ -537,9 +528,6 @@
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/DataCtl/Dem_DataCtl_FFDClearPattern.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/DataCtl/Dem_DataCtl_FFDClearPatternTable.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/DataCtl/Dem_DataCtl_FilteredRecord.c
-../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/DataCtl/Dem_DataCtl_FilteredRecord_RtvlOff.c
-###../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/DataCtl/Dem_DataCtl_FilteredRecord_RtvlOn.c
-###../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/DataCtl/Dem_DataCtl_GetUDSDTCByConfirmedDTCOrder.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/DataCtl/Dem_DataCtl_InfoEvent.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/DataCtl/Dem_DataCtl_InfoFFD.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/DataCtl/Dem_DataCtl_InfoFFD_ChkSptFFDRecNum.c
@@ -562,7 +550,6 @@
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/DTC/DTCStatus/Dem_DTC_DTCStatus_Translate.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/DTC/DTCStatus/Dem_DTC_DTCStatus_Update.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/DTC/DTCStatus/Dem_DTC_GetDTCStatusByDTC.c
-../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/DTC/DTCStatus/Dem_DTC_GetDTCStatusByDTC_FilDTC.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/DTC/DTCStatus/Dem_DTC_JudgeClearTarget.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/DTC/DTCStatus/Dem_DTC_PreFFD.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/DTC/FilDTC/Dem_DTC_FilDTC.c
@@ -576,12 +563,10 @@
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/DTR/Dem_DTR.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/DTR/Dem_DTR_Convert.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/DTR/Dem_DTR_ReadDTCBased.c
-###../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/DTR/Dem_DTR_ReadDTCBased_Misfire.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/EDR/Dem_EDR_CheckRecNumSupport.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/EDR/Dem_EDR_FilEDR.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/Event/Dem_Event_FCThreshold.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/Event/Dem_Event_QualificationInfo.c
-###../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/Event/Dem_Event_QualificationInfo_CmbStrgON.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/FFD/Dem_FFD.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/FFD/Dem_FFD_FilRecord.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/FFD/Dem_FFD_GetFFDByDTC.c
@@ -599,7 +584,6 @@
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/IUMPR/Dem_IUMPR_Ratio_OFF.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/IUMPR/Dem_IUMPR_ReadDTCBased.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/Misfire/Dem_Misfire.c
-###../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/Misfire/Dem_Misfire_ConfirmedOrderCylinder.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/Misfire/Dem_Misfire_CylinderStatus.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/Misfire/Dem_Misfire_EventEntry.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/Misfire/Dem_Misfire_EventEntryCompare.c
@@ -690,7 +674,6 @@
 ../../src/PE0VM0/BSW/Aubist/Dem/src/DataMng/DataMng/Dem_DataMng_FreezeFrameIndex.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/DataMng/DataMng/Dem_DataMng_GetRecordData.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/DataMng/DataMng/Dem_DataMng_RecDt_Event.c
-###../../src/PE0VM0/BSW/Aubist/Dem/src/DataMng/DataMng/Dem_DataMng_RecDt_Event_CmbStrgON.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/DataMng/DataMng/Dem_DataMng_RecDt_Fault.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/DataMng/DataMng/Dem_DataMng_RecDt_FFD.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/DataMng/DataMng/Dem_DataMng_RecDt_OBD_FFD.c
@@ -712,7 +695,6 @@
 ../../src/PE0VM0/BSW/Aubist/Dem/src/DataMng/OpCycleMng/Dem_OpCycleMng.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/DataMng/OpCycleMng/Dem_OpCycleMng_nonOBD.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/DataMng/OrderList/Dem_OdrLst_Confirmed.c
-###../../src/PE0VM0/BSW/Aubist/Dem/src/DataMng/OrderList/Dem_OdrLst_Confirmed_Misfire.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/DataMng/OrderList/Dem_OdrLst_Fault.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/DataMng/OrderList/Dem_OdrLst_MIL.c
 ../../src/PE0VM0/BSW/Aubist/Dem/src/DataMng/OrderList/Dem_OdrLst_Sort.c
@@ -764,7 +746,6 @@
 ../../src/PE0VM0/BSW/Aubist/Dem/usr/Dem_FiM_Connector.c
 ../../src/PE0VM0/BSW/Aubist/Dem/usr/Dem_IUMPR_Callout.c
 ../../src/PE0VM0/BSW/Aubist/Dem/usr/Dem_IUMPR_FiM_Connector.c
-###../../src/PE0VM0/BSW/Aubist/Dem/usr/Dem_IUMPR_NODI_Callout.c
 ../../src/PE0VM0/BSW/Aubist/Dem/usr/Dem_Misfire_NotifyCylinderStatus_Callout.c
 ../../src/PE0VM0/BSW/Aubist/Dem/usr/Dem_NotifyError_Callout.c
 ../../src/PE0VM0/BSW/Aubist/Dem/usr/Dem_NotifyOpCycleUpdate_Callout.c
@@ -824,15 +805,6 @@
 ###../../src/PE0VM0/BSW/Aubist/Fls/src/Fls_Drv_asm.850
 ###../../src/PE0VM0/BSW/Aubist/Fls/usr/Fls_Callout.c
 ###../../src/PE0VM0/BSW/Aubist/Fls/usr/Fls_Cdd_Callout.c
-../../src/PE0VM0/BSW/Aubist/IdsM/cfg/IdsM_Cfg.c
-../../src/PE0VM0/BSW/Aubist/IdsM/src/IdsM_Context.c
-../../src/PE0VM0/BSW/Aubist/IdsM/src/IdsM_Event.c
-../../src/PE0VM0/BSW/Aubist/IdsM/src/IdsM_Filter.c
-../../src/PE0VM0/BSW/Aubist/IdsM/src/IdsM_General.c
-../../src/PE0VM0/BSW/Aubist/IdsM/src/IdsM_InterSEv.c
-../../src/PE0VM0/BSW/Aubist/IdsM/src/IdsM_Sink.c
-../../src/PE0VM0/BSW/Aubist/IdsM/src/IdsM_Std.c
-../../src/PE0VM0/BSW/Aubist/IdsM/usr/IdsM_Connector.c
 ###../../src/PE0VM0/BSW/Aubist/LdCom/cfg/LdCom_PBcfg.c
 ###../../src/PE0VM0/BSW/Aubist/LdCom/src/bsw_ldcom_cmn.c
 ###../../src/PE0VM0/BSW/Aubist/Mem/cfg/CodeFls_Cfg.c
@@ -927,7 +899,6 @@
 ../../src/PE0VM0/BSW/Aubist/SchM/usr/SchM_Csm.c
 ../../src/PE0VM0/BSW/Aubist/SchM/usr/SchM_Dcm.c
 ../../src/PE0VM0/BSW/Aubist/SchM/usr/SchM_Dem.c
-../../src/PE0VM0/BSW/Aubist/SchM/usr/SchM_IdsM.c
 ../../src/PE0VM0/BSW/Aubist/SchM/usr/SchM_SecOC.c
 ../../src/PE0VM0/BSW/Aubist/SecOC/cfg/SecOC_Cfg.c
 ../../src/PE0VM0/BSW/Aubist/SecOC/src/SecOC_Buff.c
@@ -936,7 +907,6 @@
 ../../src/PE0VM0/BSW/Aubist/SecOC/src/SecOC_If.c
 ../../src/PE0VM0/BSW/Aubist/SecOC/src/SecOC_Rx.c
 ../../src/PE0VM0/BSW/Aubist/SecOC/src/SecOC_Tx.c
-../../src/PE0VM0/BSW/Aubist/SecOC/usr/SecOC_Connector.c
 ../../src/PE0VM0/BSW/Aubist/SecOC_CD_FV/src/SecOC_CD_FV_Full.c
 ../../src/PE0VM0/BSW/Aubist/SecOC_CD_FV/src/SecOC_CD_FV_If.c
 ../../src/PE0VM0/BSW/Aubist/SecOC_CD_FV/src/SecOC_CD_FV_Trunc.c
@@ -964,8 +934,8 @@
 ../../src/PE0VM0/BSW/Communication/iVDsh/scc/ivdsh.c
 ../../src/PE0VM0/BSW/Communication/iVDsh/scc/ivdsh_fqif.c
 ###../../src/PE0VM0/BSW/Communication/oXCAN/config_U2A16_met/can_lpr_test.c
+../../src/PE0VM0/BSW/Communication/oXCAN/config_U2A16_met/oxcan_acex_cfg.c
 ../../src/PE0VM0/BSW/Communication/oXCAN/config_U2A16_met/oxcan_cfg.c
-../../src/PE0VM0/BSW/Communication/oXCAN/config_U2A16_met/oxcan_e2e_cfg.c
 ../../src/PE0VM0/BSW/Communication/oXCAN/config_U2A16_met/oxcan_nmc_cfg.c
 ###../../src/PE0VM0/BSW/Communication/oXCAN/config_U2A16_met/oxcan_rxd_cfg.c
 ../../src/PE0VM0/BSW/Communication/oXCAN/config_U2A16_met/oxcan_usrhk.c
@@ -1067,8 +1037,10 @@
 ../../src/PE0VM0/BSW/MCAL/Ren_U2Ax/Common/DIO/scc/Dio_Cfg.c
 ../../src/PE0VM0/BSW/MCAL/Ren_U2Ax/Common/DMA/scc/Dma.c
 ../../src/PE0VM0/BSW/MCAL/Ren_U2Ax/Common/DMA/scc/Dma_Cfg.c
+../../src/PE0VM0/BSW/MCAL/Ren_U2Ax/Common/DMA/scc/Dma_Desc.c
 ../../src/PE0VM0/BSW/MCAL/Ren_U2Ax/Common/DMA/scc/Dma_Irq.c
 ../../src/PE0VM0/BSW/MCAL/Ren_U2Ax/Common/DMA/scc/pil_dmac.c
+../../src/PE0VM0/BSW/MCAL/Ren_U2Ax/Common/DMA/scc/pil_dmac_desc.c
 ../../src/PE0VM0/BSW/MCAL/Ren_U2Ax/Common/DMA/scc/pil_dts.c
 ../../src/PE0VM0/BSW/MCAL/Ren_U2Ax/Common/DMA/scc/pil_intc.c
 ../../src/PE0VM0/BSW/MCAL/Ren_U2Ax/Common/DUMMY/scc/int_drv.c
@@ -1083,6 +1055,7 @@
 ../../src/PE0VM0/BSW/MCAL/Ren_U2Ax/Common/ErrH/scc/ErrH_slg.c
 ../../src/PE0VM0/BSW/MCAL/Ren_U2Ax/Common/ErrH/scc/ErrH_Ucfg.c
 ../../src/PE0VM0/BSW/MCAL/Ren_U2Ax/Common/ErrH/scc/pil_ecc.c
+../../src/PE0VM0/BSW/MCAL/Ren_U2Ax/Common/Gpt/scc/gpt_busywait.850
 ../../src/PE0VM0/BSW/MCAL/Ren_U2Ax/Common/Gpt/scc/gpt_drv_d16.c
 ../../src/PE0VM0/BSW/MCAL/Ren_U2Ax/Common/Gpt/scc/gpt_drv_frt.c
 ../../src/PE0VM0/BSW/MCAL/Ren_U2Ax/Common/Gpt/scc/gpt_drv_j32.c
@@ -1151,11 +1124,11 @@
 ../../src/PE0VM0/BSW/Memory/Rim/scc/rim_mod_3bram.c
 ../../src/PE0VM0/BSW/Memory/Rim/scc/rim_mod_3cram.c
 ../../src/PE0VM0/BSW/Security/oXSEC/config/oxsec_cfg.c
-../../src/PE0VM0/BSW/Security/oXSEC/scc/Csm_Callout_User.c
-../../src/PE0VM0/BSW/Security/oXSEC/scc/IdsM_Callout_User.c
 ../../src/PE0VM0/BSW/Security/oXSEC/scc/oxsec.c
+../../src/PE0VM0/BSW/Security/oXSEC/scc/oxsec_aubif_csm.c
+###../../src/PE0VM0/BSW/Security/oXSEC/scc/oxsec_aubif_idsm.c
+../../src/PE0VM0/BSW/Security/oXSEC/scc/oxsec_aubif_secoc.c
 ../../src/PE0VM0/BSW/Security/oXSEC/scc/oxsec_rh850u2a.c
-../../src/PE0VM0/BSW/Security/oXSEC/scc/SecOC_Callout_User.c
 ../../src/PE0VM0/BSW/System/22SS/config/22SS_Callout.c
 ../../src/PE0VM0/BSW/System/22SS/scc/Ecu_Arb.c
 ../../src/PE0VM0/BSW/System/22SS/scc/Ecu_Arb_Callout.c
@@ -1221,7 +1194,6 @@
 ../../src/PE0VM0/LIB/Common/scc/bitcnt.c
 ../../src/PE0VM0/LIB/Common/scc/crc32.c
 ../../src/PE0VM0/LIB/Common/scc/fpcall_u1_and.c
-../../src/PE0VM0/LIB/Common/scc/gpt_busywait.850
 ../../src/PE0VM0/LIB/Common/scc/lsbsrch.c
 ../../src/PE0VM0/LIB/Common/scc/memcpy_u1.c
 ../../src/PE0VM0/LIB/Common/scc/memcpy_u2.c
@@ -1244,7 +1216,7 @@
 ../../src/PE0VM0/BSW/MCAL/Ren_U2Ax/A16_373/SECTION/config_CDC/section.ld
 
 # ----------------------------------------------------------------------------------------------------------------------------------
-# ghsprj version 1-0-0
-# Date generated: 2025/11/27 07:51:42
+# ghsprj version 1-1-0
+# Date generated: 2026/01/22 23:22:22
 # ----------------------------------------------------------------------------------------------------------------------------------
 

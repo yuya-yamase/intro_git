@@ -1,7 +1,7 @@
-/* Dem_Control_DTR_c(v5-9-0)                                                */
+/* Dem_Control_DTR_c(v5-5-0)                                                */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -97,7 +97,6 @@
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_SetDTR
 (
@@ -124,22 +123,22 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_SetDTR
         if ( (DtrId < dtrNum) && (Ctrlval <= DEM_DTR_CTL_MAX_NUM) )
         {
             /* Converts DTR result for data buffer */
-            data[DEM_CTLDTR_DATABUF_TESTRES_0]  = (uint8)( TestResult );/* [ARYCHK] DEM_ASYNCDATAQUE_DTR_ITEMSIZE / 1 / DEM_CTLDTR_DATABUF_TESTRES_0 */
-            data[DEM_CTLDTR_DATABUF_TESTRES_1]  = (uint8)( ((Dem_u32_DTRValueRawType)TestResult) >> DEM_CTLDTR_BITSHIFT_8  );/* [ARYCHK] DEM_ASYNCDATAQUE_DTR_ITEMSIZE / 1 / DEM_CTLDTR_DATABUF_TESTRES_1 */
-            data[DEM_CTLDTR_DATABUF_TESTRES_2]  = (uint8)( ((Dem_u32_DTRValueRawType)TestResult) >> DEM_CTLDTR_BITSHIFT_16 );/* [ARYCHK] DEM_ASYNCDATAQUE_DTR_ITEMSIZE / 1 / DEM_CTLDTR_DATABUF_TESTRES_2 */
-            data[DEM_CTLDTR_DATABUF_TESTRES_3]  = (uint8)( ((Dem_u32_DTRValueRawType)TestResult) >> DEM_CTLDTR_BITSHIFT_24 );/* [ARYCHK] DEM_ASYNCDATAQUE_DTR_ITEMSIZE / 1 / DEM_CTLDTR_DATABUF_TESTRES_3 */
-            data[DEM_CTLDTR_DATABUF_LOWERLIM_0] = (uint8)( LowerLimit );/* [ARYCHK] DEM_ASYNCDATAQUE_DTR_ITEMSIZE / 1 / DEM_CTLDTR_DATABUF_LOWERLIM_0 */
-            data[DEM_CTLDTR_DATABUF_LOWERLIM_1] = (uint8)( ((Dem_u32_DTRValueRawType)LowerLimit) >> DEM_CTLDTR_BITSHIFT_8  );/* [ARYCHK] DEM_ASYNCDATAQUE_DTR_ITEMSIZE / 1 / DEM_CTLDTR_DATABUF_LOWERLIM_1 */
-            data[DEM_CTLDTR_DATABUF_LOWERLIM_2] = (uint8)( ((Dem_u32_DTRValueRawType)LowerLimit) >> DEM_CTLDTR_BITSHIFT_16 );/* [ARYCHK] DEM_ASYNCDATAQUE_DTR_ITEMSIZE / 1 / DEM_CTLDTR_DATABUF_LOWERLIM_2 */
-            data[DEM_CTLDTR_DATABUF_LOWERLIM_3] = (uint8)( ((Dem_u32_DTRValueRawType)LowerLimit) >> DEM_CTLDTR_BITSHIFT_24 );/* [ARYCHK] DEM_ASYNCDATAQUE_DTR_ITEMSIZE / 1 / DEM_CTLDTR_DATABUF_LOWERLIM_3 */
-            data[DEM_CTLDTR_DATABUF_UPPERLIM_0] = (uint8)( UpperLimit );/* [ARYCHK] DEM_ASYNCDATAQUE_DTR_ITEMSIZE / 1 / DEM_CTLDTR_DATABUF_UPPERLIM_0 */
-            data[DEM_CTLDTR_DATABUF_UPPERLIM_1] = (uint8)( ((Dem_u32_DTRValueRawType)UpperLimit) >> DEM_CTLDTR_BITSHIFT_8  );/* [ARYCHK] DEM_ASYNCDATAQUE_DTR_ITEMSIZE / 1 / DEM_CTLDTR_DATABUF_UPPERLIM_1 */
-            data[DEM_CTLDTR_DATABUF_UPPERLIM_2] = (uint8)( ((Dem_u32_DTRValueRawType)UpperLimit) >> DEM_CTLDTR_BITSHIFT_16 );/* [ARYCHK] DEM_ASYNCDATAQUE_DTR_ITEMSIZE / 1 / DEM_CTLDTR_DATABUF_UPPERLIM_2 */
-            data[DEM_CTLDTR_DATABUF_UPPERLIM_3] = (uint8)( ((Dem_u32_DTRValueRawType)UpperLimit) >> DEM_CTLDTR_BITSHIFT_24 );/* [ARYCHK] DEM_ASYNCDATAQUE_DTR_ITEMSIZE / 1 / DEM_CTLDTR_DATABUF_UPPERLIM_3 */
-            data[DEM_CTLDTR_DATABUF_CTRLVAL]    = (uint8)( Ctrlval );/* [ARYCHK] DEM_ASYNCDATAQUE_DTR_ITEMSIZE / 1 / DEM_CTLDTR_DATABUF_CTRLVAL */
+            data[DEM_CTLDTR_DATABUF_TESTRES_0]  = (uint8)( TestResult );
+            data[DEM_CTLDTR_DATABUF_TESTRES_1]  = (uint8)( ((Dem_u32_DTRValueRawType)TestResult) >> DEM_CTLDTR_BITSHIFT_8  );
+            data[DEM_CTLDTR_DATABUF_TESTRES_2]  = (uint8)( ((Dem_u32_DTRValueRawType)TestResult) >> DEM_CTLDTR_BITSHIFT_16 );
+            data[DEM_CTLDTR_DATABUF_TESTRES_3]  = (uint8)( ((Dem_u32_DTRValueRawType)TestResult) >> DEM_CTLDTR_BITSHIFT_24 );
+            data[DEM_CTLDTR_DATABUF_LOWERLIM_0] = (uint8)( LowerLimit );
+            data[DEM_CTLDTR_DATABUF_LOWERLIM_1] = (uint8)( ((Dem_u32_DTRValueRawType)LowerLimit) >> DEM_CTLDTR_BITSHIFT_8  );
+            data[DEM_CTLDTR_DATABUF_LOWERLIM_2] = (uint8)( ((Dem_u32_DTRValueRawType)LowerLimit) >> DEM_CTLDTR_BITSHIFT_16 );
+            data[DEM_CTLDTR_DATABUF_LOWERLIM_3] = (uint8)( ((Dem_u32_DTRValueRawType)LowerLimit) >> DEM_CTLDTR_BITSHIFT_24 );
+            data[DEM_CTLDTR_DATABUF_UPPERLIM_0] = (uint8)( UpperLimit );
+            data[DEM_CTLDTR_DATABUF_UPPERLIM_1] = (uint8)( ((Dem_u32_DTRValueRawType)UpperLimit) >> DEM_CTLDTR_BITSHIFT_8  );
+            data[DEM_CTLDTR_DATABUF_UPPERLIM_2] = (uint8)( ((Dem_u32_DTRValueRawType)UpperLimit) >> DEM_CTLDTR_BITSHIFT_16 );
+            data[DEM_CTLDTR_DATABUF_UPPERLIM_3] = (uint8)( ((Dem_u32_DTRValueRawType)UpperLimit) >> DEM_CTLDTR_BITSHIFT_24 );
+            data[DEM_CTLDTR_DATABUF_CTRLVAL]    = (uint8)( Ctrlval );
 
             /* Queues the DTR report */
-            retVal = Dem_AsyncReq_EnqueueWithData( DEM_ASYNCREQ_DTR, (Dem_u16_AsyncReqItemAType)DtrId, &data[0] );  /* [GUD:FixVal]DEM_ASYNCREQ_EVENT_WITH_MONITORDATA *//* [ARYCHK] DEM_ASYNCDATAQUE_DTR_ITEMSIZE / 1 / 0 */
+            retVal = Dem_AsyncReq_EnqueueWithData( DEM_ASYNCREQ_DTR, (Dem_u16_AsyncReqItemAType)DtrId, &data[0] );  /* [GUD:FixVal]DEM_ASYNCREQ_EVENT_WITH_MONITORDATA */
         }
     }
 
@@ -157,9 +156,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_SetDTR
 /*               |       : See the description of the return value of       */
 /*               |         "DemAsyncReqFncPTR" in Dem_CmnLib_Control_AsyncReq.h.   */
 /* Notes         | -                                                        */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_AsyncExecReturnType, DEM_CODE ) Dem_Control_SetDTRProcess
 (
@@ -189,25 +185,25 @@ FUNC( Dem_u08_AsyncExecReturnType, DEM_CODE ) Dem_Control_SetDTRProcess
     if ( dtrId < dtrNum )
     {
         /* Converts data buffer for DTR result */
-        tmpResult = (Dem_u32_DTRValueRawType)(  ((Dem_u32_DTRValueRawType)DataBuffPtr[DEM_CTLDTR_DATABUF_TESTRES_0])                  |/* [ARYCHK] DEM_ASYNCDATAQUE_DTR_ITEMSIZE / 1 / DEM_CTLDTR_DATABUF_TESTRES_0 */
-                              ( ((Dem_u32_DTRValueRawType)DataBuffPtr[DEM_CTLDTR_DATABUF_TESTRES_1]) << DEM_CTLDTR_BITSHIFT_8  ) |/* [ARYCHK] DEM_ASYNCDATAQUE_DTR_ITEMSIZE / 1 / DEM_CTLDTR_DATABUF_TESTRES_1 */
-                              ( ((Dem_u32_DTRValueRawType)DataBuffPtr[DEM_CTLDTR_DATABUF_TESTRES_2]) << DEM_CTLDTR_BITSHIFT_16 ) |/* [ARYCHK] DEM_ASYNCDATAQUE_DTR_ITEMSIZE / 1 / DEM_CTLDTR_DATABUF_TESTRES_2 */
-                              ( ((Dem_u32_DTRValueRawType)DataBuffPtr[DEM_CTLDTR_DATABUF_TESTRES_3]) << DEM_CTLDTR_BITSHIFT_24 )  );/* [ARYCHK] DEM_ASYNCDATAQUE_DTR_ITEMSIZE / 1 / DEM_CTLDTR_DATABUF_TESTRES_3 */
+        tmpResult = (Dem_u32_DTRValueRawType)(  ((Dem_u32_DTRValueRawType)DataBuffPtr[DEM_CTLDTR_DATABUF_TESTRES_0])                  |
+                              ( ((Dem_u32_DTRValueRawType)DataBuffPtr[DEM_CTLDTR_DATABUF_TESTRES_1]) << DEM_CTLDTR_BITSHIFT_8  ) |
+                              ( ((Dem_u32_DTRValueRawType)DataBuffPtr[DEM_CTLDTR_DATABUF_TESTRES_2]) << DEM_CTLDTR_BITSHIFT_16 ) |
+                              ( ((Dem_u32_DTRValueRawType)DataBuffPtr[DEM_CTLDTR_DATABUF_TESTRES_3]) << DEM_CTLDTR_BITSHIFT_24 )  );
         testResult = (Dem_s32_DTRValueRawType)tmpResult;
 
-        tmpLowerLimit = (Dem_u32_DTRValueRawType)(  ((Dem_u32_DTRValueRawType)DataBuffPtr[DEM_CTLDTR_DATABUF_LOWERLIM_0])                  |/* [ARYCHK] DEM_ASYNCDATAQUE_DTR_ITEMSIZE / 1 / DEM_CTLDTR_DATABUF_LOWERLIM_0 */
-                              ( ((Dem_u32_DTRValueRawType)DataBuffPtr[DEM_CTLDTR_DATABUF_LOWERLIM_1]) << DEM_CTLDTR_BITSHIFT_8  ) |/* [ARYCHK] DEM_ASYNCDATAQUE_DTR_ITEMSIZE / 1 / DEM_CTLDTR_DATABUF_LOWERLIM_1 */
-                              ( ((Dem_u32_DTRValueRawType)DataBuffPtr[DEM_CTLDTR_DATABUF_LOWERLIM_2]) << DEM_CTLDTR_BITSHIFT_16 ) |/* [ARYCHK] DEM_ASYNCDATAQUE_DTR_ITEMSIZE / 1 / DEM_CTLDTR_DATABUF_LOWERLIM_2 */
-                              ( ((Dem_u32_DTRValueRawType)DataBuffPtr[DEM_CTLDTR_DATABUF_LOWERLIM_3]) << DEM_CTLDTR_BITSHIFT_24 )  );/* [ARYCHK] DEM_ASYNCDATAQUE_DTR_ITEMSIZE / 1 / DEM_CTLDTR_DATABUF_LOWERLIM_3 */
+        tmpLowerLimit = (Dem_u32_DTRValueRawType)(  ((Dem_u32_DTRValueRawType)DataBuffPtr[DEM_CTLDTR_DATABUF_LOWERLIM_0])                  |
+                              ( ((Dem_u32_DTRValueRawType)DataBuffPtr[DEM_CTLDTR_DATABUF_LOWERLIM_1]) << DEM_CTLDTR_BITSHIFT_8  ) |
+                              ( ((Dem_u32_DTRValueRawType)DataBuffPtr[DEM_CTLDTR_DATABUF_LOWERLIM_2]) << DEM_CTLDTR_BITSHIFT_16 ) |
+                              ( ((Dem_u32_DTRValueRawType)DataBuffPtr[DEM_CTLDTR_DATABUF_LOWERLIM_3]) << DEM_CTLDTR_BITSHIFT_24 )  );
         lowerLimit = (Dem_s32_DTRValueRawType)tmpLowerLimit;
 
-        tmpUpperLimit = (Dem_u32_DTRValueRawType)(  ((Dem_u32_DTRValueRawType)DataBuffPtr[DEM_CTLDTR_DATABUF_UPPERLIM_0])                  |/* [ARYCHK] DEM_ASYNCDATAQUE_DTR_ITEMSIZE / 1 / DEM_CTLDTR_DATABUF_UPPERLIM_0 */
-                              ( ((Dem_u32_DTRValueRawType)DataBuffPtr[DEM_CTLDTR_DATABUF_UPPERLIM_1]) << DEM_CTLDTR_BITSHIFT_8  ) |/* [ARYCHK] DEM_ASYNCDATAQUE_DTR_ITEMSIZE / 1 / DEM_CTLDTR_DATABUF_UPPERLIM_1 */
-                              ( ((Dem_u32_DTRValueRawType)DataBuffPtr[DEM_CTLDTR_DATABUF_UPPERLIM_2]) << DEM_CTLDTR_BITSHIFT_16 ) |/* [ARYCHK] DEM_ASYNCDATAQUE_DTR_ITEMSIZE / 1 / DEM_CTLDTR_DATABUF_UPPERLIM_2 */
-                              ( ((Dem_u32_DTRValueRawType)DataBuffPtr[DEM_CTLDTR_DATABUF_UPPERLIM_3]) << DEM_CTLDTR_BITSHIFT_24 )  );/* [ARYCHK] DEM_ASYNCDATAQUE_DTR_ITEMSIZE / 1 / DEM_CTLDTR_DATABUF_UPPERLIM_3 */
+        tmpUpperLimit = (Dem_u32_DTRValueRawType)(  ((Dem_u32_DTRValueRawType)DataBuffPtr[DEM_CTLDTR_DATABUF_UPPERLIM_0])                  |
+                              ( ((Dem_u32_DTRValueRawType)DataBuffPtr[DEM_CTLDTR_DATABUF_UPPERLIM_1]) << DEM_CTLDTR_BITSHIFT_8  ) |
+                              ( ((Dem_u32_DTRValueRawType)DataBuffPtr[DEM_CTLDTR_DATABUF_UPPERLIM_2]) << DEM_CTLDTR_BITSHIFT_16 ) |
+                              ( ((Dem_u32_DTRValueRawType)DataBuffPtr[DEM_CTLDTR_DATABUF_UPPERLIM_3]) << DEM_CTLDTR_BITSHIFT_24 )  );
         upperLimit = (Dem_s32_DTRValueRawType)tmpUpperLimit;
 
-        ctrlval    = ((Dem_DTRControlType)DataBuffPtr[DEM_CTLDTR_DATABUF_CTRLVAL]);/* [ARYCHK] DEM_ASYNCDATAQUE_DTR_ITEMSIZE / 1 / DEM_CTLDTR_DATABUF_CTRLVAL */
+        ctrlval    = ((Dem_DTRControlType)DataBuffPtr[DEM_CTLDTR_DATABUF_CTRLVAL]);
 
         /* Sets DTR result in DtrRecord */
         /*--------------------------------------*/
@@ -260,42 +256,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_GetDTR
     return retVal;
 }
 #endif  /* ( DEM_DTR_RAWDATASTORAGE_SUPPORT == STD_ON ) */
-
-/****************************************************************************/
-/* Function Name | Dem_Control_GetDTRConvertInfo                            */
-/* Description   | Gets the DTR convert information.                        */
-/* Preconditions | none                                                     */
-/* Parameters    | [in]  DTRId           : DTR identifier.                  */
-/*               | [out] DtrMidPtr       : MonitorID of DTR.                */
-/*               | [out] DtrTidPtr       : TestID of DTR.                   */
-/*               | [out] DtrUasidPtr     : Unit and ScalingID of DTR.       */
-/*               | [out] CompuN0DivD0Ptr : The value of CompuNumerator0 divided by CompuDenominator0. */
-/*               | [out] CompuN1DivD0Ptr : The value of CompuNumerator1 divided by CompuDenominator0. */
-/* Return Value  | Dem_u08_InternalReturnType                               */
-/*               |        DEM_IRT_OK : success                              */
-/*               |        DEM_IRT_NG : failed                               */
-/* Notes         | -                                                        */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-9-0      | new created. based on Dem_DTR_GetDTR.                    */
-/****************************************************************************/
-FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_GetDTRConvertInfo
-(
-    VAR( Dem_u16_DTRIndexType, AUTOMATIC ) DTRId,
-    P2VAR( Dem_u08_DTRObdMidType, AUTOMATIC, AUTOMATIC ) DtrMidPtr,
-    P2VAR( Dem_u08_DTRTidIndexType, AUTOMATIC, AUTOMATIC ) DtrTidPtr,
-    P2VAR( Dem_u08_DTRUasidType, AUTOMATIC, AUTOMATIC ) DtrUasidPtr,
-    P2VAR( Dem_s32_DTRValueRawType, AUTOMATIC, AUTOMATIC ) CompuN0DivD0Ptr,
-    P2VAR( Dem_s32_DTRValueRawType, AUTOMATIC, AUTOMATIC ) CompuN1DivD0Ptr
-)
-{
-    VAR( Dem_u08_InternalReturnType, AUTOMATIC ) retVal;
-
-    /* Gets the DTR convert info */
-    retVal = Dem_DTR_GetDTRConvertInfo( DTRId, DtrMidPtr, DtrTidPtr, DtrUasidPtr, CompuN0DivD0Ptr, CompuN1DivD0Ptr );
-
-    return retVal;
-}
 
 /****************************************************************************/
 /* Function Name | Dem_Control_GetAvailableOBDMIDs                          */
@@ -412,8 +372,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Control_GetDTRData
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-7-0         :2024-05-29                                              */
-/*  v5-9-0         :2025-02-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

@@ -1,7 +1,7 @@
-/* Dem_IUMPR_local_h(v5-10-0)                                               */
+/* Dem_IUMPR_local_h(v5-5-0)                                                */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -54,12 +54,7 @@
 
 FUNC( void, DEM_CODE ) Dem_IUMPR_Ratio_GetInfoTypeValue
 (
-#ifndef DEM_SIT_RANGE_CHECK
-#else   /* DEM_SIT_RANGE_CHECK */
-    VAR( uint8, AUTOMATIC ) BuffSize,
-#endif  /* DEM_SIT_RANGE_CHECK */
-    P2VAR( uint8, AUTOMATIC, DEM_APPL_DATA )        IumprdataPtr,
-    VAR( Dem_u08_IUMPRGroupIndexType, AUTOMATIC )   NODIGroupNum
+    P2VAR( uint8, AUTOMATIC, DEM_APPL_DATA )        IumprdataPtr
 );
 
 #if ( DEM_IUMPR_RATIO_SUPPORT == STD_ON )
@@ -85,8 +80,6 @@ FUNC( void, DEM_CODE ) Dem_IUMPR_UpdateRatioCounter
 /*  Version        :Date                                                    */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-7-0         :2024-05-29                                              */
-/*  v5-10-0        :2025-06-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

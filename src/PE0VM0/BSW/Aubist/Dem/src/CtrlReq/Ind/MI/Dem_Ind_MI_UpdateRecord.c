@@ -1,7 +1,7 @@
-/* Dem_Ind_MI_UpdateRecord_c(v5-10-0)                                       */
+/* Dem_Ind_MI_UpdateRecord_c(v5-5-0)                                        */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -88,7 +88,6 @@ static FUNC( boolean, DEM_CODE ) Dem_IndMI_UpdateMILOrder
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | new created.                                             */
-/*   v5-10-0     | no branch changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_IndMI_UpdateRecordWithMILInfo
 (
@@ -172,19 +171,9 @@ FUNC( void, DEM_CODE ) Dem_IndMI_UpdateRecordWithMILInfo
     {
         if ( updatedERFlag == (boolean)TRUE )
         {
-            /*--------------------------------------------------*/
-            /*  Starts exclusion.                               */
-            /*--------------------------------------------------*/
-            SchM_Enter_Dem_EventMemory();
-
             /*  update event record.            */
             /*  update only data.               */
             Dem_DataMngC_SetER_DTCStatusSt( EventStrgIndex, NewDTCStatusStPtr );
-
-            /*--------------------------------------------------*/
-            /*  Finishes exclusion.                             */
-            /*--------------------------------------------------*/
-            SchM_Exit_Dem_EventMemory();
         }
     }
 
@@ -263,7 +252,6 @@ static FUNC( boolean, DEM_CODE ) Dem_IndMI_UpdateMILOrder
 /* History                                                                  */
 /*  Version        :Date                                                    */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-10-0        :2025-06-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

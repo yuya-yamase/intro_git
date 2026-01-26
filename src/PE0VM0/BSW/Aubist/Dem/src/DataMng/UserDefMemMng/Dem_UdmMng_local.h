@@ -1,7 +1,7 @@
-/* Dem_UdmMng_local_h(v5-10-0)                                              */
+/* Dem_UdmMng_local_h(v5-5-0)                                              */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 /****************************************************************************/
 /* Object Name  | Dem/UdmMng_local/HEADER                                   */
@@ -41,6 +41,20 @@
 #include <Dem_MemMap.h>
 
 /*--------------------------------------*/
+/*  Dem_UdmFaultMng.c                   */
+/*--------------------------------------*/
+#if ( DEM_NVM_SYNC_PROCESS_ENABLE == STD_ON )
+#if ( DEM_UDMFAULT_RECORD_PADDING_EXIST == STD_ON )
+FUNC( void, DEM_CODE ) Dem_UdmFaultMng_Get_PaddingRecord
+(
+    VAR( Dem_u16_UdmDemMemKindIndexType, AUTOMATIC ) UdmGroupKindIndex,
+    VAR( Dem_u08_UdmFaultIndexType, AUTOMATIC ) UdmFaultIndex,
+    P2VAR( Dem_UdmFaultRecordType, AUTOMATIC, AUTOMATIC ) UdmFaultRecordPtr
+);
+#endif /*   ( DEM_UDMFAULT_RECORD_PADDING_EXIST == STD_ON )  */
+#endif /* DEM_NVM_SYNC_PROCESS_ENABLE -STD_ON- */
+
+/*--------------------------------------*/
 /*  Dem_DataMng_RecDt_UdmFFD.c          */
 /*--------------------------------------*/
 FUNC( void, DEM_CODE ) Dem_UdmFFDMng_Verified
@@ -68,13 +82,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmMngVld_DataVerify
 /*--------------------------------------------------------------------------*/
 /* Data                                                                     */
 /*--------------------------------------------------------------------------*/
-#define DEM_START_SEC_VAR_NO_INIT
-#include <Dem_MemMap.h>
-
 extern VAR( Dem_UdmFreezeFrameRecordMngType, DEM_VAR_NO_INIT ) Dem_TmpVerifyUdmFreezeFrameRecord[DEM_UDM_MAX_NUMBER_FF_PER_DTC];
-
-#define DEM_STOP_SEC_VAR_NO_INIT
-#include <Dem_MemMap.h>
 
 #endif /* ( DEM_USERDEFINEDMEMORY_SUPPORT == STD_ON ) */
 
@@ -86,8 +94,6 @@ extern VAR( Dem_UdmFreezeFrameRecordMngType, DEM_VAR_NO_INIT ) Dem_TmpVerifyUdmF
 /*  v5-0-0         :2022-03-29                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-8-0         :2024-10-29                                              */
-/*  v5-10-0        :2025-06-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

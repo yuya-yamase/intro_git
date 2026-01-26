@@ -1,7 +1,7 @@
-/* Dcm_Dsl_Ctrl_TxSrv_c(v5-8-0)                                             */
+/* Dcm_Dsl_Ctrl_TxSrv_c(v5-5-2)                                             */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -3593,12 +3593,16 @@ static FUNC( uint16, DCM_CODE ) Dcm_Dsl_Ctrl_GetP2Server
     const uint8 u1SesInfo
 )
 {
-    Dcm_ProtocolType u1_ProtocolType;
-    Dcm_SesCtrlType u1_Session;
-    uint16 u2_P2Server;
-    uint16 u2_Result;
     uint16 u2_RowIndex;
+    uint16 u2_Result;
+    uint16 u2_P2Server;
     uint16 u2_RxPduMapIndex;
+    Dcm_SesCtrlType u1_Session;
+
+    u2_RxPduMapIndex = Dcm_Dsl_Ctrl_GetRxPduMapIndex4Tx();
+    u2_RowIndex      = Dcm_Dsl_PduIdMapTable[u2_RxPduMapIndex].u2RowIndex;
+    u1_Session       = DCM_DEFAULT_SESSION;
+    u2_P2Server      = (uint16)0U;
 
     if( bP2kind == (boolean)TRUE )
     {
@@ -3606,26 +3610,13 @@ static FUNC( uint16, DCM_CODE ) Dcm_Dsl_Ctrl_GetP2Server
     }
     else
     {
-        u1_Session = DCM_DEFAULT_SESSION;
         if( u1SesInfo == DCM_DSL_CURRENTSESSION )
         {
             /* Return value ignoring */
             (void)Dcm_GetSesCtrlType(&u1_Session);
         }
 
-        u2_RxPduMapIndex = Dcm_Dsl_Ctrl_GetRxPduMapIndex4Tx();
-        u2_RowIndex = Dcm_Dsl_PduIdMapTable[u2_RxPduMapIndex].u2RowIndex;
-        u1_ProtocolType = Dcm_Dsl_stRow[u2_RowIndex].u1ID;
-
-        u2_P2Server = (uint16)0;
-        Dcm_Dsl_stP2StoredData.u2P2StarServer = (uint16)0;
-        Dcm_Dsl_stP2StoredData.u2P2StarServerMin = (uint16)0;
-
-        Dcm_Dsl_GetP2ServerValue( u1_Session,
-                                  u1_ProtocolType,
-                                  &u2_P2Server,
-                                  &Dcm_Dsl_stP2StoredData.u2P2StarServer,
-                                  &Dcm_Dsl_stP2StoredData.u2P2StarServerMin );
+        Dcm_Dsl_GetP2ServerValue(u1_Session, &u2_P2Server, &Dcm_Dsl_stP2StoredData.u2P2StarServer, &Dcm_Dsl_stP2StoredData.u2P2StarServerMin);
 
         if( u2_P2Server > Dcm_Dsl_stRow[u2_RowIndex].u2P2ServerAdjust )
         {
@@ -3648,9 +3639,11 @@ static FUNC( uint16, DCM_CODE ) Dcm_Dsl_Ctrl_GetP2Server
 
         Dcm_Dsl_stP2StoredData.u1NumRespPend = (uint8)0U;
         u2_Result                            = u2_P2Server;
+
     }
 
     return u2_Result;
+
 }
 
 /****************************************************************************/
@@ -3711,7 +3704,6 @@ static FUNC( Dcm_StatusType, DCM_CODE ) Dcm_Dsl_Ctrl_JudgeStartOfRoe
 )
 {
     uint16         u2_ActivePduMapIndex;
-    uint16         u2_ActiveRxPduMapIndex;
     uint8          u1_DslState;
     uint8          u1_ReqState;
     Dcm_StatusType u1_Result;
@@ -3726,8 +3718,7 @@ static FUNC( Dcm_StatusType, DCM_CODE ) Dcm_Dsl_Ctrl_JudgeStartOfRoe
     b_CanRoe = Dcm_Dsl_TxAbt_CanStartRoe(u2PduMapIndex, u2_ActivePduMapIndex);
     if( b_CanRoe == (boolean)TRUE )
     {
-        u2_ActiveRxPduMapIndex = Dcm_Dsl_Ctrl_GetRxPduMapIndex();
-        u1_DslState = Dcm_Dsl_Ctrl_GetDslState(u2_ActiveRxPduMapIndex);
+        u1_DslState = Dcm_Dsl_Ctrl_GetDslState(u2_ActivePduMapIndex);
         if( u1_DslState == DCM_DSL_ST_IDLE )
         {
             if( u2_ActivePduMapIndex != u2PduMapIndex )
@@ -3792,9 +3783,7 @@ static FUNC( Dcm_StatusType, DCM_CODE ) Dcm_Dsl_Ctrl_JudgeStartOfRoe
 /*  v5-0-0         :2021-12-24                                              */
 /*  v5-3-0         :2022-12-23                                              */
 /*  v5-5-0         :2023-07-27                                              */
-/*  v5-6-0         :2024-02-27                                              */
-/*  v5-6-2         :2024-06-24                                              */
-/*  v5-8-0         :2024-10-29                                              */
+/*  v5-5-2         :2024-06-24                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

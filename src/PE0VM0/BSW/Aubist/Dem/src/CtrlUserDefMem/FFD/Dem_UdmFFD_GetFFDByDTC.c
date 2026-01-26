@@ -1,7 +1,7 @@
-/* Dem_UdmFFD_GetFFDByDTC_c(v5-8-0)                                         */
+/* Dem_UdmFFD_GetFFDByDTC_c(v5-5-0)                                         */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -81,9 +81,6 @@
 /*               |        DEM_IRT_OK : Size successfully returned           */
 /*               |        DEM_IRT_WRONG_RECORDNUMBER :                      */
 /* Notes         |                                                          */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-8-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmFFD_GetSizeOfFreezeFrame
 (
@@ -101,7 +98,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmFFD_GetSizeOfFreezeFrame
     retVal = Dem_UdmData_GetSizeOfFreezeFrameOfDisabledRecord( UdmEventIndex, RecordNumber, &allSize );
 
     /*  execute DTC clear ?         */
-    retUdmDTCClerTarget = Dem_UdmDTC_JudgeUdmDTCClearTargetOnClearProcessActive( UdmEventIndex );
+    retUdmDTCClerTarget = Dem_UdmDTC_JudgeUdmDTCClearTarget( UdmEventIndex );
     if( retUdmDTCClerTarget == (boolean)TRUE )
     {
         /*  clear target.           */
@@ -157,7 +154,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmFFD_GetSizeOfFreezeFrame
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | branch changed.                                          */
-/*   v5-8-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmFFD_GetFreezeFrameData
 (
@@ -186,7 +182,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmFFD_GetFreezeFrameData
     /*------------------------------------------*/
     /*  judge of output NextRecordNumberPtr.    */
     /*------------------------------------------*/
-    retUdmDTCClerTarget = Dem_UdmDTC_JudgeUdmDTCClearTargetOnClearProcessActive( UdmEventIndex );
+    retUdmDTCClerTarget = Dem_UdmDTC_JudgeUdmDTCClearTarget( UdmEventIndex );
     if( retUdmDTCClerTarget == (boolean)FALSE )
     {
         if(( retVal == DEM_IRT_OK ) || ( retVal == DEM_IRT_WRONG_RECORDNUMBER ))
@@ -232,7 +228,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmFFD_GetFreezeFrameData
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-8-0         :2024-10-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

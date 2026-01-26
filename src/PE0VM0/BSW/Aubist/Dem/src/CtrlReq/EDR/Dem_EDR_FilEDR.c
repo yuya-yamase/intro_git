@@ -1,7 +1,7 @@
-/* Dem_EDR_FilEDR_c(v5-8-0)                                                 */
+/* Dem_EDR_FilEDR_c(v5-5-0)                                                 */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -128,7 +128,6 @@ static VAR( boolean, DEM_VAR_NO_INIT )                           Dem_SearchCylin
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
-/*   v5-8-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_EDR_SetEDRNumberFilter
 (
@@ -157,39 +156,11 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_EDR_SetEDRNumberFilter
 #if ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON )  /*  [FuncSw]    */
         Dem_SearchCylinderMode                  = (boolean)FALSE;
         /* misfire filtering */
-        Dem_Misfire_SetFilteredDTCForCylinderForEDR( ExtendedDataNumber );
+        Dem_Misfire_SetFilteredDTCForCylinder();
 #endif  /*   ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON )         */
     }
     return retVal;
 }
-
-/****************************************************************************/
-/* Function Name | Dem_EDR_RestartSetEDRNumberFilter                        */
-/* Description   | Restarts the extended data record number filter.         */
-/* Preconditions | none                                                     */
-/* Parameters    | none                                                     */
-/* Return Value  | void                                                     */
-/* Notes         | none                                                     */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-8-0      | new created.                                             */
-/****************************************************************************/
-FUNC( void, DEM_CODE ) Dem_EDR_RestartSetEDRNumberFilter
-( void )
-{
-    Dem_EDRSupDTCBmpIndex                   = (Dem_u08_EDRSupDTCBmpIndexType)0U;
-    Dem_DtcBitmapTablePos                   = (Dem_u16_EventStrgIndexType)0U;
-    Dem_FilteredEDRSearchLoopNum            = (Dem_u16_EventStrgIndexType)0U;
-
-#if ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON )  /*  [FuncSw]    */
-    Dem_SearchCylinderMode                  = (boolean)FALSE;
-    /* misfire filtering */
-    Dem_Misfire_SetFilteredDTCForCylinderForEDR( Dem_EDRRequestExtendedDataNumber );
-#endif  /*   ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON )         */
-
-    return;
-}
-
 
 /****************************************************************************/
 /* Function Name | Dem_EDR_GetNextEDRNumFilteredDTC                         */
@@ -711,7 +682,6 @@ static FUNC( boolean, DEM_CODE ) Dem_EDR_CheckObdEventStrgIndexAvl
 /*  v5-0-0         :2022-03-29                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-8-0         :2024-10-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

@@ -1,7 +1,7 @@
-/* Dem_DataCtl_InfoFFD_c(v5-9-0)                                            */
+/* Dem_DataCtl_InfoFFD_c(v5-5-0)                                            */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -23,11 +23,6 @@
 #include "../../../inc/Dem_Pm_DataCtl_OBD.h"
 
 #include "Dem_DataCtl_local.h"
-
-#ifndef DEM_SIT_RANGE_CHECK
-#else   /* DEM_SIT_RANGE_CHECK */
-#include <Dem_SIT_RangeCheck.h>
-#endif /* DEM_SIT_RANGE_CHECK */
 
 /*--------------------------------------------------------------------------*/
 /* Macros                                                                   */
@@ -105,9 +100,6 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_JudgeOutputFFD
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | branch changed.                                          */
-/*   v5-7-0      | no object changed.                                       */
-/*   v5-8-0      | no branch changed.                                       */
-/*   v5-9-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_GetObdFreezeFrameData
 (
@@ -136,6 +128,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_GetObdFreezeFrameData
     VAR( Dem_FreezeFrameRecordMngType, AUTOMATIC ) freezeFrameRecord;
 
     P2CONST( AB_83_ConstV Dem_FreezeFrameRecNumClassType, AUTOMATIC, DEM_CONFIG_DATA ) freezeFrameRecNumClassPtr;
+    P2CONST( AB_83_ConstV Dem_FreezeFrameRecordClassType, AUTOMATIC, DEM_CONFIG_DATA ) freezeFrameRecordClassPtr;
     P2CONST( AB_83_ConstV Dem_FreezeFrameClassType, AUTOMATIC, DEM_CONFIG_DATA ) freezeFrameClassPtr;
 
     eventStorageNum = Dem_PrimaryMemEventStorageNum;
@@ -162,13 +155,14 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_GetObdFreezeFrameData
             /* Holds the FreezeFrameClass table pointed to by the FreezeFrameClass table list Index of the held DTCAttribute table. */
             freezeFrameRecNumClassPtr = &Dem_FreezeFrameRecNumClassTable[freezeframeRecNumClassRef];                            /* [GUD]freezeframeRecNumClassRef */
 
+            freezeFrameRecordClassPtr = NULL_PTR;
             freezeFrameRecordClassIndex = 0U;
             freezeFrameRecordTrigger = DEM_TRIGGER_ON_NONE;
 
             /* Specify the FreezeFrameRecNumClass table and the specified record number,                 */
             /* the FreezeFrameRecordClass table storage area, and the FreezeFrameRecordClass table index */
             /* Call FreezeFrameRecordClass table acquisition processing.                                 */
-            resultOfGetFFRClass = Dem_Data_GetFreezeFrameRecordClassByRecordNumber( DEM_CALLER_DCM, freezeFrameRecNumClassPtr, RecordNumber, &freezeFrameRecordClassIndex, &freezeFrameRecordTrigger ); /* [GUD:RET:DEM_IRT_OK] freezeFrameRecordClassIndex */
+            resultOfGetFFRClass = Dem_Data_GetFreezeFrameRecordClassByRecordNumber( freezeFrameRecNumClassPtr, RecordNumber, &freezeFrameRecordClassPtr, &freezeFrameRecordClassIndex, &freezeFrameRecordTrigger ); /* [GUD:RET:DEM_IRT_OK] freezeFrameRecordClassIndex */
             /* Checks FreezeFrameRecordClass table acquisition result. */
             if( resultOfGetFFRClass != DEM_IRT_OK )
             {
@@ -212,11 +206,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_GetObdFreezeFrameData
                                 freezeFrameClassPtr = &Dem_FreezeFrameClassTable[ freezeFrameClassRef ];                                                                                /* [GUD]freezeFrameClassRef */
 
                                 /* Edit FreezeFrame record to the specified format. [SWS_Dem_00071]Figure 7.51 */
-#ifndef DEM_SIT_RANGE_CHECK
                                 resultOfEditFFRec = Dem_Data_EditFreezeFrameRecord( RecordNumber, FreezeFrameGetInfoType, freezeFrameRecord.DataPtr, freezeFrameClassPtr, DataPtr, DataSizePtr);
-#else   /* DEM_SIT_RANGE_CHECK */
-                                resultOfEditFFRec = Dem_Data_EditFreezeFrameRecord( DEM_SIT_R_CHK_OBD_FF_DATA_SIZE, RecordNumber, FreezeFrameGetInfoType, freezeFrameRecord.DataPtr, freezeFrameClassPtr, DataPtr, DataSizePtr);
-#endif  /* DEM_SIT_RANGE_CHECK */
                                 /* Sets the return value to FreezeFrame record edit result. */
                                 retVal = resultOfEditFFRec;
                             }
@@ -281,9 +271,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_GetObdFreezeFrameData
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | branch changed.                                          */
-/*   v5-7-0      | no object changed.                                       */
-/*   v5-8-0      | no branch changed.                                       */
-/*   v5-9-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_GetFreezeFrameData
 (
@@ -313,6 +300,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_GetFreezeFrameData
     VAR( Dem_FreezeFrameRecordMngType, AUTOMATIC ) freezeFrameRecord;
 
     P2CONST( AB_83_ConstV Dem_FreezeFrameRecNumClassType, AUTOMATIC, DEM_CONFIG_DATA ) freezeFrameRecNumClassPtr;
+    P2CONST( AB_83_ConstV Dem_FreezeFrameRecordClassType, AUTOMATIC, DEM_CONFIG_DATA ) freezeFrameRecordClassPtr;
     P2CONST( AB_83_ConstV Dem_FreezeFrameClassType, AUTOMATIC, DEM_CONFIG_DATA ) freezeFrameClassPtr;
 
     eventStorageNum = Dem_PrimaryMemEventStorageNum;
@@ -340,13 +328,14 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_GetFreezeFrameData
             /* Holds the FreezeFrameClass table pointed to by the FreezeFrameClass table list Index of the held DTCAttribute table. */
             freezeFrameRecNumClassPtr = &Dem_FreezeFrameRecNumClassTable[freezeframeRecNumClassRef];                    /* [GUD] freezeframeRecNumClassRef */
 
+            freezeFrameRecordClassPtr = NULL_PTR;
             freezeFrameRecordClassIndex = 0U;
             freezeFrameRecordTrigger = DEM_TRIGGER_ON_NONE;
 
             /* Specify the FreezeFrameRecNumClass table and the specified record number,                 */
             /* the FreezeFrameRecordClass table storage area, and the FreezeFrameRecordClass table index */
             /* Call FreezeFrameRecordClass table acquisition processing.                                 */
-            resultOfGetFFRClass = Dem_Data_GetFreezeFrameRecordClassByRecordNumber( DEM_CALLER_DCM, freezeFrameRecNumClassPtr, RecordNumber, &freezeFrameRecordClassIndex, &freezeFrameRecordTrigger );     /* [GUD:RET:DEM_IRT_OK] freezeFrameRecordClassIndex */
+            resultOfGetFFRClass = Dem_Data_GetFreezeFrameRecordClassByRecordNumber( freezeFrameRecNumClassPtr, RecordNumber, &freezeFrameRecordClassPtr, &freezeFrameRecordClassIndex, &freezeFrameRecordTrigger );     /* [GUD:RET:DEM_IRT_OK] freezeFrameRecordClassIndex */
             /* Checks FreezeFrameRecordClass table acquisition result. */
             if( resultOfGetFFRClass != DEM_IRT_OK )
             {
@@ -394,11 +383,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_GetFreezeFrameData
                             freezeFrameClassPtr = &Dem_FreezeFrameClassTable[ freezeFrameClassRef ];                            /* [GUD] freezeFrameClassRef */
 
                             /* Edit FreezeFrame record to the specified format. [SWS_Dem_00071]Figure 7.51 */
-#ifndef DEM_SIT_RANGE_CHECK
                             resultOfEditFFRec = Dem_Data_EditFreezeFrameRecord( RecordNumber, FreezeFrameGetInfoType, freezeFrameRecord.DataPtr, freezeFrameClassPtr, DataPtr, DataSizePtr);
-#else   /* DEM_SIT_RANGE_CHECK */
-                            resultOfEditFFRec = Dem_Data_EditFreezeFrameRecord( DEM_SIT_R_CHK_NONOBD_FF_DATA_SIZE, RecordNumber, FreezeFrameGetInfoType, freezeFrameRecord.DataPtr, freezeFrameClassPtr, DataPtr, DataSizePtr);
-#endif  /* DEM_SIT_RANGE_CHECK */
                             /* Sets the return value to FreezeFrame record edit result. */
                             retVal = resultOfEditFFRec;
                         }
@@ -461,7 +446,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_GetFreezeFrameData
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | branch changed.                                          */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_GetFFDataFromTSFF
 (
@@ -514,11 +498,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_GetFFDataFromTSFF
                 {
                     freezeFrameClassPtr = &Dem_FreezeFrameClassTable[freezeFrameClassRef];                                                                              /* [GUD]freezeFrameClassRef */
 
-#ifndef DEM_SIT_RANGE_CHECK
                     resultOfEditFFRec = Dem_Data_EditFreezeFrameRecord( RecordNumber, FreezeFrameGetInfoType, tsFFRecord.DataPtr, freezeFrameClassPtr, DataPtr, DataSizePtr );
-#else   /* DEM_SIT_RANGE_CHECK */
-                    resultOfEditFFRec = Dem_Data_EditFreezeFrameRecord( DEM_SIT_R_CHK_TS_FF_DATA_SIZE, RecordNumber, FreezeFrameGetInfoType, tsFFRecord.DataPtr, freezeFrameClassPtr, DataPtr, DataSizePtr );
-#endif  /* DEM_SIT_RANGE_CHECK */
 
                     retVal = resultOfEditFFRec;
                 }
@@ -577,7 +557,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_GetFFDataFromTSFF
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | branch changed.                                          */
-/*   v5-9-0      | branch changed.                                          */
 /****************************************************************************/
 static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_JudgeOutputFFD
 (
@@ -591,13 +570,6 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_JudgeOutputFFD
     VAR( Dem_u08_InternalReturnType, AUTOMATIC ) retVal;
     VAR( Dem_u08_InternalReturnType, AUTOMATIC ) resultOfCheckTmpCheckRecordData;
 
-#if ( DEM_OBDONUDS_SUPPORT == STD_ON )              /*  [FuncSw]    */
-#if ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )  /*  [FuncSw]    */
-    VAR( boolean, AUTOMATIC ) misfireEventKind;
-    VAR( boolean, AUTOMATIC ) misfireEventKindOfFFR;
-#endif /* ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )    */
-#endif /* ( DEM_OBDONUDS_SUPPORT == STD_ON )                */
-
     retVal = DEM_IRT_OK;
 
     if( FreezeFrameRecordPtr->RecordStatus != DEM_FFD_STORED )
@@ -605,25 +577,9 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_JudgeOutputFFD
         retVal = DEM_IRT_NG;
     }
 
-#if ( DEM_OBDONUDS_SUPPORT == STD_ON )              /*  [FuncSw]    */
-#if ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )  /*  [FuncSw]    */
-    misfireEventKind = Dem_CfgInfoPm_CheckEventKindOfMisfire_InEvtStrgGrp( EventStrgIndex );
-    if( ( misfireEventKind == (boolean)TRUE ) && ( FreezeFrameDataType == DEM_FFD_TYPE_OBDFFD ) )
+    if( EventStrgIndex != FreezeFrameRecordPtr->EventStrgIndex )
     {
-        misfireEventKindOfFFR = Dem_CfgInfoPm_CheckEventKindOfMisfire_InEvtStrgGrp( FreezeFrameRecordPtr->EventStrgIndex );
-        if( misfireEventKindOfFFR != (boolean)TRUE )
-        {
-            retVal = DEM_IRT_NG;
-        }
-    }
-    else
-#endif /* ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )    */
-#endif /* ( DEM_OBDONUDS_SUPPORT == STD_ON )                */
-    {
-        if( EventStrgIndex != FreezeFrameRecordPtr->EventStrgIndex )
-        {
-            retVal = DEM_IRT_NG;
-        }
+        retVal = DEM_IRT_NG;
     }
 
     resultOfCheckTmpCheckRecordData = Dem_Data_JudgeOutputFFDByFFDType( FreezeFrameDataType, FreezeFrameRecordIndex, FreezeFrameRecordTrigger, FreezeFrameRecordPtr->ConsistencyId );
@@ -643,9 +599,6 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_JudgeOutputFFD
 /* History                                                                  */
 /*  Version        :Date                                                    */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-7-0         :2024-05-29                                              */
-/*  v5-8-0         :2024-10-29                                              */
-/*  v5-9-0         :2025-02-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

@@ -1,7 +1,7 @@
-/* Dcm_Dsl_Ctrl_h(v5-9-0)                                                   */
+/* Dcm_Dsl_Ctrl_h(v5-3-0)                                                   */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -119,12 +119,6 @@ FUNC( void, DCM_CODE ) Dcm_Dsl_RoeRetryTOCbk
 );
 #endif /* DCM_DSL_ROE_ENABLE == STD_ON */
 
-#if( DCM_ASYNC_RESETTODEFAULTSESSION == STD_ON )
-FUNC( void, DCM_CODE ) Dcm_Dsl_ResetToDefaultSessionCbk
-(
-    const uint8 u1EventId
-);
-#endif /* DCM_ASYNC_RESETTODEFAULTSESSION == STD_ON */
 
 FUNC( void, DCM_CODE ) Dcm_Dsl_SendForcePendingResponse
 (
@@ -326,15 +320,6 @@ FUNC( uint8, DCM_CODE ) Dcm_Dsl_GetActiveProtocolGroup
     const uint16 u2ConnectionId
 );
 
-#if ( DCM_SUPPORT_SID10 == STD_ON )
-FUNC( void, DCM_CODE ) Dcm_Dsl_GetActiveProtocol
-(
-    P2VAR( Dcm_ProtocolType, AUTOMATIC, DCM_APPL_DATA ) ptActiveProtocolType,
-    P2VAR( uint16, AUTOMATIC, DCM_APPL_DATA ) ptConnectionId,
-    P2VAR( uint16, AUTOMATIC, DCM_APPL_DATA ) ptTesterSourceAddress
-);
-#endif /* DCM_SUPPORT_SID10 == STD_ON */
-
 #define DCM_STOP_SEC_CODE
 #include <Dcm_MemMap.h>
 
@@ -356,8 +341,6 @@ FUNC( void, DCM_CODE ) Dcm_Dsl_GetActiveProtocol
 /*  v3-2-0         :2020-10-28                                              */
 /*  v5-0-0         :2021-12-24                                              */
 /*  v5-3-0         :2023-03-29                                              */
-/*  v5-8-0         :2024-10-29                                              */
-/*  v5-9-0         :2025-02-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

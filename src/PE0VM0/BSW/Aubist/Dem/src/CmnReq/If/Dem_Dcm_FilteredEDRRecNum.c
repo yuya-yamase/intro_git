@@ -1,7 +1,7 @@
-/* Dem_Dcm_c(v5-8-0)                                                        */
+/* Dem_Dcm_c(v5-5-0)                                                        */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -101,59 +101,6 @@ FUNC( Dem_ReturnSetFilterType, DEM_CODE ) Dem_DcmSetEDRNumberFilter
     return retVal;
 }
 
-/****************************************************************************/
-/* Function Name | Dem_DcmGetNumberOfEDRNumFilteredDTC                      */
-/* Description   | Gets the number of a filtered DTC.                       */
-/* Preconditions | none                                                     */
-/* Parameters    | [Out] NumberOfEDRNumFilteredDTCPtr :                     */
-/*               |       The number of DTCs matching the defined filter.    */
-/* Return Value  | Dem_ReturnGetNumberOfFilteredDTCType                     */
-/*               |        DEM_NUMBER_OK : Getting number of filtered DTCs - */
-/*               |        was successful.                                   */
-/*               |        DEM_NUMBER_FAILED : Getting number of filtered D- */
-/*               |        TCs failed.                                       */
-/*               |        DEM_NUMBER_PENDING : The requested values is cal- */
-/*               |        culated asynchronously and currently not availab- */
-/*               |        le. The caller can retry later.                   */
-/* Notes         | -                                                        */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-8-0      | new created.                                             */
-/****************************************************************************/
-FUNC( Dem_ReturnGetNumberOfFilteredDTCType, DEM_CODE ) Dem_DcmGetNumberOfEDRNumFilteredDTC
-(
-    P2VAR( uint16, AUTOMATIC, DEM_APPL_DATA ) NumberOfEDRNumFilteredDTCPtr
-)
-{
-    VAR( Dem_u08_InternalReturnType, AUTOMATIC ) internalReturnValue;
-    VAR( Dem_ReturnGetNumberOfFilteredDTCType, AUTOMATIC ) retVal;
-    VAR( uint16, AUTOMATIC ) number;
-
-    retVal = DEM_NUMBER_FAILED;
-
-    if ( NumberOfEDRNumFilteredDTCPtr != NULL_PTR )
-    {
-        number = (uint16)0U; /* Initialize Out Parameter. */
-        internalReturnValue = Dem_Control_GetNumberOfEDRNumFilteredDTC( &number );
-
-        /* Convert return value */
-        switch( internalReturnValue )
-        {
-            case DEM_IRT_OK:
-                *NumberOfEDRNumFilteredDTCPtr = number;  /*  set value to out parameter. */
-                retVal = DEM_NUMBER_OK;
-                break;
-            case DEM_IRT_PENDING:
-                retVal = DEM_NUMBER_PENDING;
-                break;
-            default: /* DEM_IRT_NG or Other */
-                /* No Process */
-                break;
-        }
-    }
-
-    return retVal;
-}
 
 /****************************************************************************/
 /* Function Name | Dem_DcmGetNextEDRNumFilteredDTC                          */
@@ -236,7 +183,6 @@ FUNC( Dem_ReturnGetNextFilteredElementType, DEM_CODE ) Dem_DcmGetNextEDRNumFilte
 /* History                                                                  */
 /*  Version        :Date                                                    */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-8-0         :2024-10-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

@@ -1,7 +1,7 @@
-/* Dem_OdrLst_MIL_c(v5-10-0)                                                */
+/* Dem_OdrLst_MIL_c(v5-5-0)                                                 */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 /****************************************************************************/
 /* Object Name  | Dem/Dem_OdrLst_MIL/CODE                                   */
@@ -291,9 +291,6 @@ FUNC( void, DEM_CODE ) Dem_OdrLst_MIL_ClearList
 /* Parameters    | none                                                     */
 /* Return Value  | void                                                     */
 /* Notes         |                                                          */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-10-0     | no branch changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_OdrLst_MIL_ExecSort
 ( void )
@@ -302,6 +299,8 @@ FUNC( void, DEM_CODE ) Dem_OdrLst_MIL_ExecSort
     VAR( Dem_u08_OrderIndexType, AUTOMATIC ) failRecordNum;
 
     failRecordNum = (Dem_u08_OrderIndexType)Dem_FailRecordNum;
+
+    Dem_EventMemoryRecordList.NumberOfObdMILDTCs = DEM_NUMOFEVTMEMENT_INITIAL;
 
     /* Acquisition of Fault Record occurrence order information */
     numOfOrderItemsToSort = Dem_OdrLst_MIL_BringValidDataToTopEdge( (uint8)0U, failRecordNum );
@@ -570,7 +569,6 @@ static FUNC( Dem_u08_OrderIndexType, DEM_CODE ) Dem_OdrLst_MIL_BringValidDataToT
 /*  v5-0-0         :2021-09-28                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-10-0        :2025-06-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

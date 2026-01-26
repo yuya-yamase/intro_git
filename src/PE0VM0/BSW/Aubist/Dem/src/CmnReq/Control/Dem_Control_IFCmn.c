@@ -1,7 +1,7 @@
-/* Dem_Control_IFCmn_c(v5-8-0)                                              */
+/* Dem_Control_IFCmn_c(v5-5-0)                                              */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -81,7 +81,6 @@
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | branch changed.                                          */
-/*   v5-7-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_ControlIFCmn_GetEventStatus
 (
@@ -157,8 +156,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_ControlIFCmn_GetEventStatus
                             Dem_UdmExcExitFnc_ForStack();
 #endif  /* JGXSTACK */
                             /*--------------------------------------------------------------------------*/
-                            Dem_UdmDTC_GetDTCStatusOfEvent( udmEventIndex , &udsStatus );              /* [GUD] udmEventIndex */
-                            retTempVal = DEM_IRT_OK;
+                            retTempVal = Dem_UdmDTC_GetDTCStatusOfEvent( udmEventIndex , &udsStatus );              /* [GUD] udmEventIndex */
                         }
                         else
                         {
@@ -306,7 +304,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_ControlIFCmn_GetEventUdsStatusH
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-8-0      | branch changed.                                          */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_ControlIFCmn_GetDTCOfEvent
 (
@@ -340,46 +337,42 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_ControlIFCmn_GetDTCOfEvent
 
         if( retEventIdRange == DEM_IRT_OK )
         {
-            retTempVal = Dem_CfgInfoPm_CheckDTCFormat( DTCFormat );
-            if( retTempVal == DEM_IRT_OK )
+            availableStatus = Dem_DataAvl_GetEvtAvlCommon( eventCtrlIndex );
+
+            if( availableStatus == (boolean)TRUE )
             {
-                availableStatus = Dem_DataAvl_GetEvtAvlCommon( eventCtrlIndex );
-
-                if( availableStatus == (boolean)TRUE )
-                {
 #if ( DEM_USERDEFINEDMEMORY_SUPPORT == STD_ON ) /*  [FuncSw]    */
-                    /* check eventIndex kind. */
-                    memKind = Dem_CfgInfoCmn_CheckMemoryTypeFromEventCtrlIndex( eventCtrlIndex );
+                /* check eventIndex kind. */
+                memKind = Dem_CfgInfoCmn_CheckMemoryTypeFromEventCtrlIndex( eventCtrlIndex );
 
-                    if( memKind != DEM_MEMKIND_PRIMARY )
-                    {
-                        /* Convert eventIndex to UdmEventIndex. */
-                        retTempVal = Dem_CfgInfoUdm_CnvEventCtrlIndexToUdmEventIndex( eventCtrlIndex, &udmEventIndex );     /* [GUD:RET:DEM_IRT_OK] udmEventIndex */
-                        if( retTempVal == DEM_IRT_OK )
-                        {
-                            retTempVal = Dem_UdmDataAvl_GetDTCByUdmEventIndex( udmEventIndex, DTCFormat, DTCOfEventPtr );   /* [GUD] udmEventIndex */
-                        }
-                    }
-                    else
-#endif  /* ( DEM_USERDEFINEDMEMORY_SUPPORT == STD_ON )          */
-                    {
-                        eventStrgIndex  =   Dem_CmbEvt_CnvEventCtrlIndex_ToEventStrgIndex( eventCtrlIndex );                /* [GUD:RET:IF_GUARDED: EventCtrlIndex ]eventStrgIndex */
-                        retTempVal = Dem_DataAvl_GetDTCByEventStrgIndex( eventStrgIndex, DTCFormat, DTCOfEventPtr );
-                    }
-
+                if( memKind != DEM_MEMKIND_PRIMARY )
+                {
+                    /* Convert eventIndex to UdmEventIndex. */
+                    retTempVal = Dem_CfgInfoUdm_CnvEventCtrlIndexToUdmEventIndex( eventCtrlIndex, &udmEventIndex );     /* [GUD:RET:DEM_IRT_OK] udmEventIndex */
                     if( retTempVal == DEM_IRT_OK )
                     {
-                        retVal = DEM_IRT_OK;
+                        retTempVal = Dem_UdmDataAvl_GetDTCByUdmEventIndex( udmEventIndex, DTCFormat, DTCOfEventPtr );   /* [GUD] udmEventIndex */
                     }
-                    else if( retTempVal == DEM_IRT_NODATAAVAILABLE )
-                    {
-                        retVal = DEM_IRT_NODATAAVAILABLE;
-                    }
-                    else
-                    {
-                        /*  no process.         */
-                        /*  DEM_IRT_NG.         */
-                    }
+                }
+                else
+#endif  /* ( DEM_USERDEFINEDMEMORY_SUPPORT == STD_ON )          */
+                {
+                    eventStrgIndex  =   Dem_CmbEvt_CnvEventCtrlIndex_ToEventStrgIndex( eventCtrlIndex );                /* [GUD:RET:IF_GUARDED: EventCtrlIndex ]eventStrgIndex */
+                    retTempVal = Dem_DataAvl_GetDTCByEventStrgIndex( eventStrgIndex, DTCFormat, DTCOfEventPtr );
+                }
+
+                if( retTempVal == DEM_IRT_OK )
+                {
+                    retVal = DEM_IRT_OK;
+                }
+                else if( retTempVal == DEM_IRT_NODATAAVAILABLE )
+                {
+                    retVal = DEM_IRT_NODATAAVAILABLE;
+                }
+                else
+                {
+                    /*  no process.         */
+                    /*  DEM_IRT_NG.         */
                 }
             }
         }
@@ -689,8 +682,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_ControlIFCmn_GetUserDefinedMemo
 /*  v5-0-0         :2022-03-29                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-7-0         :2024-05-29                                              */
-/*  v5-8-0         :2024-10-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

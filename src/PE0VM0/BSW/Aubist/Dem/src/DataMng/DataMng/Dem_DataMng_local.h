@@ -1,7 +1,7 @@
-/* Dem_DataMng_local_h(v5-9-0)                                              */
+/* Dem_DataMng_local_h(v5-5-0)                                              */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 /****************************************************************************/
 /* Object Name  | Dem/Dem_DataMng_local_h/HEADER                            */
@@ -36,23 +36,6 @@
 #define DEM_START_SEC_CODE
 #include <Dem_MemMap.h>
 
-/*--------------------------------------*/
-/*  Dem_DataMng_RecDt_Event_CmbStrgON.c */
-/*--------------------------------------*/
-#if ( DEM_COMBINEDEVENT_ONSTORAGE_SUPPORT == STD_ON )
-FUNC( void, DEM_CODE ) Dem_EventMng_SetPassedBitmapData
-(
-    P2VAR( Dem_EventRecordType, AUTOMATIC, DEM_VAR_SAVED_ZONE ) EventRecordPtr,
-    VAR( Dem_u08_EventCtrlBitmapType, AUTOMATIC ) PassedBitmapData
-);
-#if ( DEM_NVM_SYNC_PROCESS_ENABLE == STD_ON )
-FUNC( void, DEM_CODE ) Dem_EventMng_GetPassedBitmapData
-(
-    VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex,
-    P2VAR( Dem_EventRecordType, AUTOMATIC, DEM_VAR_NO_INIT ) EventRecordPtr
-);
-#endif /* ( DEM_NVM_SYNC_PROCESS_ENABLE == STD_ON )          */
-#endif /* ( DEM_COMBINEDEVENT_ONSTORAGE_SUPPORT == STD_ON )          */
 
 /*--------------------------------------*/
 /*  Dem_DataMng_RecDt_Fault.c           */
@@ -126,15 +109,6 @@ FUNC( void, DEM_CODE ) Dem_ObdFFDMng_Verified
     VAR( Dem_u08_FaultIndexType, AUTOMATIC ) FaultIndex,
     P2VAR( boolean, AUTOMATIC, AUTOMATIC ) ConsistencyIdUpdateFlgPtr
 );
-#if ( DEM_OBDONUDS_SUPPORT == STD_ON )
-#if ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )
-FUNC( void, DEM_CODE ) Dem_ObdFFDMng_SetVerifiedStatus_ObdFreezeFrameRecord
-(
-    VAR( Dem_u08_FaultIndexType, AUTOMATIC ) FaultIndex_Delete,
-    VAR( Dem_u08_FaultIndexType, AUTOMATIC ) FaultIndex_Remain
-);
-#endif  /* ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )   */
-#endif  /* ( DEM_OBDONUDS_SUPPORT == STD_ON )               */
 #endif /* ( DEM_OBDFFD_SUPPORT == STD_ON) */
 
 /*--------------------------------------*/
@@ -165,7 +139,6 @@ FUNC( void, DEM_CODE ) Dem_DataMng_VerifyTrigger
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-9-0         :2025-02-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

@@ -1,7 +1,7 @@
-/* Dem_Data_Cfg_h(v5-10-0)                                                  */
+/* Dem_Data_Cfg_h(v5-5-0)                                                   */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -33,7 +33,7 @@
 #define DEM_FFR_RECORD_CLASS_CONFIGURE_NUM  ((Dem_u08_FFRecordClassIndexType)1U)        /* Number of DemFreezeFrameRecordClass */
 
 #define DEM_FF_RECORD_CLASS_REF_MAX_NUM     ((Dem_u08_FFListIndexType)1U)               /* Max Number of DemFreezeFrameRecordClassRef for all DemFreezeFrameRecNumClass */
-#define DEM_DID_NUM_PER_FRAME_MAX_NUM       ((Dem_u16_DIDClassPerFFIndexType)3U)        /* Max Number of DemDidClass in DemFreezeFrameClass in all DemFreezeFrameClass  */
+#define DEM_DID_NUM_PER_FRAME_MAX_NUM       ((Dem_u08_DIDClassPerFFIndexType)3U)        /* Max Number of DemDidClass in DemFreezeFrameClass in all DemFreezeFrameClass  */
 #define DEM_DATAELEMENT_NUM_PER_DID_MAX_NUM ((Dem_u08_DtElNumPerDIDIndexType)1U)        /* Max Number of DemDataElementClass in DemDidClass in all DemDidClass          */
 
 #define DEM_OBD_EVENT_CONFIGURE_NUM         ((Dem_u16_EventStrgIndexType)0U)              /* Number of OBD DemEventParameter */
@@ -107,9 +107,8 @@ typedef struct {
 /* FreezeFrame    */
 /******************/
 typedef struct {
-    DemFreezeFrameReadFncPTR            DemFreezeFrameReadFnc;
     Dem_u32_DIDClassIndexType           DemDidClassRef[ DEM_DID_NUM_PER_FRAME_MAX_NUM ];
-    Dem_u16_DIDClassPerFFIndexType      DemDidClassNum;
+    Dem_u08_DIDClassPerFFIndexType      DemDidClassNum;
     Dem_u16_FFDStoredIndexType          DemDidClassSize;
 } Dem_FreezeFrameClassType;   /*  DID number and DID index by FreezeFrame - ROM -    */
 
@@ -119,6 +118,8 @@ typedef struct {
 typedef struct {
     Dem_u16_DIDNumberType                DemDidIdentifier;
     Dem_u16_FFDStoredIndexType           DemDidDataSize;
+    Dem_u16_FFDStoredIndexType           DemPidPos;
+    Dem_u08_PIDNumberType                DemPidIdentifier;
     Dem_u08_DtElNumPerDIDIndexType       DemDataElementClassNum;
     Dem_u16_DataElementClassIndexType    DemDataElementClassRef[ DEM_DATAELEMENT_NUM_PER_DID_MAX_NUM ];
 } Dem_DidClassType;
@@ -136,7 +137,6 @@ typedef struct {
     Dem_u08_FFRecordNumberType       DemFreezeFrameRecordNumber;
     Dem_u08_StorageTriggerType       DemFreezeFrameRecordTrigger;
     Dem_u08_UpdateRecordType         DemFreezeFrameRecordUpdate;
-    boolean                          DemFreezeFrameRecordToDcm;
 } Dem_FreezeFrameRecordClassType;
 
 
@@ -197,15 +197,11 @@ extern CONST( AB_83_ConstV Dem_u16_TSFFDIndexType             ,DEM_CONFIG_DATA )
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-6-0         :2024-01-29                                              */
-/*  v5-8-0         :2024-10-29                                              */
-/*  v5-9-0         :2025-02-26                                              */
-/*  v5-10-0        :2025-06-26                                              */
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
 /*  Framework          :v2-1-0                                              */
-/*  BSW plug-in        :v5-10-0                                             */
+/*  BSW plug-in        :v5-5-0                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

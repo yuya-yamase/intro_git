@@ -1,7 +1,7 @@
-/* Dcm_Dsp_SID27_TypeG_c(v5-6-0)                                            */
+/* Dcm_Dsp_SID27_TypeG_c(v5-3-0)                                            */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -35,7 +35,6 @@
 #define DCM_DSP_SID27_DTMR_START        ((uint8)0x01U)              /* delay timer start */
 #define DCM_DSP_SID27_DTMR_STATUS_STOP  ((uint8)0x00U)              /* For checking delay timer activation */
 #define DCM_DSP_SID27_DTMR_NOT_START    ((uint32)0UL)               /* Do not start timer */
-#define DCM_DSP_SID27_ATTCNT_NOT_FAILURE ((uint8)0UL)               /* AttCnt not Failure */
 
 /*----------------------------------------------------------------------------*/
 /* Internal Function Prototypes                                               */
@@ -292,66 +291,6 @@ FUNC( void, DCM_CODE) Dcm_Dsp_SID27_ClearSeed            /* MISRA DEVIATION */
     }
 
     return;
-}
-
-/****************************************************************************/
-/* Function Name | Dcm_Dsp_SID27_GetSecDelayTimerFactor                     */
-/* Description   | Get the security delaytimer factor                       */
-/* Preconditions | None                                                     */
-/* Parameters    | [IN]     u1SecLevel          : SecurityLevel             */
-/*               | [OUT]    ptDelayTimerActive  : DelayTimer Active         */
-/*               | [OUT]    ptDelayTimerFactor  : DelayTimer Factor         */
-/* Return Value  | Std_ReturnType                                           */
-/*               | E_OK                                                     */
-/*               | E_NOT_OK                                                 */
-/* Notes         | None                                                     */
-/****************************************************************************/
-FUNC(Std_ReturnType, DCM_CODE) Dcm_Dsp_SID27_GetSecDelayTimerFactor
-(
-    const Dcm_SecLevelType u1SecLevel,
-    P2VAR( boolean, AUTOMATIC, DCM_APPL_DATA ) ptDelayTimerActive,
-    P2VAR( Dcm_DelayTimerFactorType, AUTOMATIC, DCM_APPL_DATA ) ptDelayTimerFactor
-)
-{
-    uint32      u4_ChkDelayTimerSt;
-    uint8       u1_SecurityNum;
-    uint8       u1_SecLvIndex;
-    Std_ReturnType u1_RetVal;
-
-    u1_RetVal        = E_NOT_OK;
-    u1_SecurityNum   = Dcm_Dsp_u1Security_N;
-
-    for( u1_SecLvIndex = (uint8)0U; u1_SecLvIndex < u1_SecurityNum; u1_SecLvIndex++ )
-    {
-        /* Judgment is always true on config settings */
-        if( u1SecLevel == Dcm_Dsp_SecurityParamTbl[u1_SecLvIndex].u1Level )
-        {
-            u4_ChkDelayTimerSt = DCM_DSP_SID27_STATUS_1BIT << u1_SecLvIndex;
-            u4_ChkDelayTimerSt &= Dcm_Dsp_SID27_u4DelayTimerSt;
-
-            if( u4_ChkDelayTimerSt != (uint32)DCM_DSP_SID27_DTMR_STATUS_STOP )
-            {
-                *ptDelayTimerActive = (boolean)TRUE;
-                if( Dcm_Dsp_SID27_u1AttCntTmp[u1_SecLvIndex] > DCM_DSP_SID27_ATTCNT_NOT_FAILURE )
-                {
-                    *ptDelayTimerFactor = DCM_DELAYTIMER_FACTOR_KEY_FAILED;
-                }
-                else
-                {
-                    *ptDelayTimerFactor = DCM_DELAYTIMER_FACTOR_ONBOOT;
-                }
-            }
-            else
-            {
-                *ptDelayTimerActive = (boolean)FALSE;
-                *ptDelayTimerFactor = DCM_DSP_MAIN_DTMR_FACTOR_INVALID;
-            }
-            u1_RetVal = E_OK;
-            break;
-        }
-    }
-
-    return u1_RetVal;
 }
 
 /****************************************************************************/
@@ -896,7 +835,6 @@ static FUNC( void, DCM_CODE ) Dcm_Dsp_SID27_SetDelayTimerSt
 /*  v4-0-0         :2020-12-23                                              */
 /*  v5-0-0         :2022-03-29                                              */
 /*  v5-3-0         :2023-03-29                                              */
-/*  v5-6-0         :2024-02-27                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

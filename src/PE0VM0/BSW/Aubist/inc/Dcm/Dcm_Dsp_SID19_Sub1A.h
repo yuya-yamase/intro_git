@@ -1,7 +1,7 @@
-/* Dcm_Dsp_SID19_Sub1A_h(v5-8-0)                                            */
+/* Dcm_Dsp_SID19_Sub1A_h(v5-3-0)                                            */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -40,25 +40,10 @@ FUNC(Std_ReturnType, DCM_CODE) Dcm_SID19_Sub1A
     Dcm_OpStatusType OpStatus,
     P2CONST(Dcm_MsgContextType, AUTOMATIC, DCM_APPL_DATA) pMsgContext
 );
-FUNC(void, DCM_CODE) Dcm_Dsp_SID19_Sub1A_GetDTCCbk
+FUNC(void, DCM_CODE) Dcm_Dsp_SID19_Sub1A_Cbk
 (
     const uint8 u1EventId
 );
-#if ( DCM_PAGEDBUFFER_SID19_SUB1A_ENABLED == STD_ON )
-FUNC(void, DCM_CODE) Dcm_Dsp_SID19_Sub1A_GetSizeOfDTCCbk
-(
-    const uint8 u1EventId
-);
-FUNC(Std_ReturnType, DCM_CODE) Dcm_Dsp_SID19_Sub1A_UpdatePage
-(
-    Dcm_MsgType     ptResData,
-    Dcm_MsgLenType  u4ResMaxDataLen
-);
-FUNC(void, DCM_CODE) Dcm_Dsp_SID19_Sub1A_CancelPage
-(
-    void
-);
-#endif /* DCM_PAGEDBUFFER_SID19_SUB1A_ENABLED == STD_ON */
 
 #define DCM_STOP_SEC_CODE
 #include <Dcm_MemMap.h>
@@ -95,7 +80,6 @@ FUNC(void, DCM_CODE) Dcm_Dsp_SID19_Sub1A_CancelPage
 /*  Version        :Date                                                    */
 /*  v5-2-0         :2021-12-24                                              */
 /*  v5-3-0         :2023-03-29                                              */
-/*  v5-8-0         :2024-10-29                                              */
 /****************************************************************************/
 
 /**** End of File************************************************************/

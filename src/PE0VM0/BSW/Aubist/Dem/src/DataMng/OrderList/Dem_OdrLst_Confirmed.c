@@ -1,7 +1,7 @@
-/* Dem_OdrLst_Confirmed_c(v5-10-0)                                          */
+/* Dem_OdrLst_Confirmed_c(v5-5-0)                                           */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 /****************************************************************************/
 /* Object Name  | Dem/Dem_OdrLst_Confirmed/CODE                             */
@@ -17,7 +17,6 @@
 #if ( DEM_ORDERTYPE_CONFIRMED_USE == STD_ON )
 #include "../../../inc/Dem_Rc_DataMng.h"
 #include "../../../inc/Dem_Rc_OdrLst.h"
-#include "../../../inc/Dem_Pm_Misfire.h"
 #include "Dem_OdrLst_local.h"
 
 /*--------------------------------------------------------------------------*/
@@ -376,9 +375,6 @@ FUNC( void, DEM_CODE ) Dem_OdrLst_Confirmed_ClearList
 /* Parameters    | none                                                     */
 /* Return Value  | void                                                     */
 /* Notes         |                                                          */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-10-0     | no branch changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_OdrLst_Confirmed_ExecSort
 ( void )
@@ -387,6 +383,8 @@ FUNC( void, DEM_CODE ) Dem_OdrLst_Confirmed_ExecSort
     VAR( Dem_u08_OrderIndexType, AUTOMATIC ) failRecordNum;
 
     failRecordNum = (Dem_u08_OrderIndexType)Dem_FailRecordNum;
+
+    Dem_EventMemoryRecordList.NumberOfConfirmedDTCs = DEM_NUMOFEVTMEMENT_INITIAL;
 
     /* Acquisition of Fault Record occurrence order information */
     numOfOrderItemsToSort = Dem_OdrLst_Confirmed_BringValidDataToTopEdge( (Dem_u08_OrderIndexType)0U, failRecordNum );
@@ -496,55 +494,6 @@ FUNC( void, DEM_CODE ) Dem_OdrLst_Confirmed_UpdateNextOccurrenceOrder
 }
 #endif  /* ( DEM_EVENT_DISPLACEMENT_SUPPORT == STD_ON ) */
 
-#if ( DEM_GET_UDSDTC_BY_CONFIRMED_ORDER_SUPPORT == STD_ON )
-#if ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON )
-/****************************************************************************/
-/* Function Name | Dem_OdrLst_Confirmed_GetAndUpdateNextOccurrenceOrder     */
-/* Description   | Get and update the confirmed occurrence order.           */
-/* Preconditions |                                                          */
-/*               | [out] OccurrenceOrderPtr :                               */
-/*               |                                                          */
-/* Return Value  | Dem_u08_InternalReturnType                               */
-/*               |        DEM_IRT_OK :                                      */
-/*               |        DEM_IRT_NG :                                      */
-/* Notes         | -                                                        */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-6-0      | new created. based on Dem_OdrLst_Confirmed_GetNextOccurrenceOrder.  */
-/****************************************************************************/
-FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_OdrLst_Confirmed_GetAndUpdateNextOccurrenceOrder
-(
-    P2VAR( Dem_u16_OccrOrderType, AUTOMATIC, AUTOMATIC ) OccurrenceOrderPtr
-)
-{
-    VAR( Dem_u08_InternalReturnType, AUTOMATIC ) retVal;
-
-    if( Dem_OdrLst_Confirmed_NextOccurrenceOrder > DEM_FAIL_OCCURRENCE_NUM_LIMIT )
-    {
-        /* Can't get an ConfirmedOccurrenceOrder */
-        retVal = DEM_IRT_NG;
-    }
-    else
-    {
-        *OccurrenceOrderPtr = Dem_OdrLst_Confirmed_NextOccurrenceOrder;
-        if( Dem_OdrLst_Confirmed_NextOccurrenceOrder < DEM_FAIL_OCCURRENCE_NUM_LIMIT )
-        {
-            Dem_OdrLst_Confirmed_NextOccurrenceOrder = Dem_OdrLst_Confirmed_NextOccurrenceOrder + (Dem_u16_OccrOrderType)1U;
-        }
-        else
-        {
-            Dem_OdrLst_Confirmed_NextOccurrenceOrder = DEM_FAIL_OCCURRENCE_NUM_INVALID;
-        }
-
-        retVal = DEM_IRT_OK;
-    }
-
-    return retVal;
-
-}
-#endif /* ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON ) */
-#endif /* ( DEM_GET_UDSDTC_BY_CONFIRMED_ORDER_SUPPORT == STD_ON ) */
-
 
 /****************************************************************************/
 /* Internal Functions                                                       */
@@ -560,17 +509,10 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_OdrLst_Confirmed_GetAndUpdateNe
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-6-0      | branch changed.                                          */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_OdrLst_Confirmed_CheckLastOccurrenceOrder
 ( void )
 {
-#if ( DEM_GET_UDSDTC_BY_CONFIRMED_ORDER_SUPPORT == STD_ON )     /*  [FuncSw]    */
-#if ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON )  /*  [FuncSw]    */
-    VAR( Dem_u16_OccrOrderType, AUTOMATIC ) misfireNextConfirmedOccurrenceOrder;
-#endif /* ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON ) */
-#endif  /* ( DEM_GET_UDSDTC_BY_CONFIRMED_ORDER_SUPPORT == STD_ON )  */
-
     /* Variable declaration */
     VAR( Dem_u08_OrderIndexType, AUTOMATIC ) orderListIndex;
 
@@ -580,18 +522,6 @@ static FUNC( void, DEM_CODE ) Dem_OdrLst_Confirmed_CheckLastOccurrenceOrder
         orderListIndex = Dem_EventMemoryRecordList.NumberOfConfirmedDTCs - (Dem_u08_OrderIndexType)1U;      /* [GUDCHK:SETVAL]Dem_EventMemoryRecordList.NumberOfConfirmedDTCs *//* [GUD:IF_GUARDED Dem_EventMemoryRecordList.NumberOfConfirmedDTCs]orderListIndex */
         /* From the maximum value set the next order */
         Dem_OdrLst_Confirmed_NextOccurrenceOrder = Dem_OdrLst_TmpFaultOrderList[ orderListIndex ].OccurrenceOrder + (Dem_u16_OccrOrderType)1U;  /* [GUDCHK:SETVAL]Dem_EventMemoryRecordList.NumberOfConfirmedDTCs */
-
-#if ( DEM_GET_UDSDTC_BY_CONFIRMED_ORDER_SUPPORT == STD_ON )     /*  [FuncSw]    */
-#if ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON )  /*  [FuncSw]    */
-        misfireNextConfirmedOccurrenceOrder = Dem_OdrLst_Confirmed_Misfire_GetLargestOccurrenceOrder();
-        misfireNextConfirmedOccurrenceOrder = misfireNextConfirmedOccurrenceOrder + (Dem_u16_OccrOrderType)1U;
-        if( misfireNextConfirmedOccurrenceOrder > Dem_OdrLst_Confirmed_NextOccurrenceOrder )
-        {
-            Dem_OdrLst_Confirmed_NextOccurrenceOrder = misfireNextConfirmedOccurrenceOrder;
-        }
-#endif /* ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON ) */
-#endif  /* ( DEM_GET_UDSDTC_BY_CONFIRMED_ORDER_SUPPORT == STD_ON )  */
-
     }
     else
     {
@@ -681,8 +611,6 @@ static FUNC( Dem_u08_OrderIndexType, DEM_CODE ) Dem_OdrLst_Confirmed_BringValidD
 /*  v5-0-0         :2021-09-28                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-6-0         :2024-01-29                                              */
-/*  v5-10-0        :2025-06-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

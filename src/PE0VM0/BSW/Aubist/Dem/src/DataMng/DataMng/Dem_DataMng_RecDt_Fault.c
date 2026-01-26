@@ -1,11 +1,11 @@
-/* Dem_DataMng_RecDt_Fault_c(v5-9-0)                                        */
+/* Dem_DataMng_RecDt_Fault_c(v5-5-0)                                        */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
-/* Object Name  | Dem/DataMng_RecDt_Fault/CODE                              */
+/* Object Name  | Dem/Dem_DataMng_RecDt_Fault_c/CODE                        */
 /*--------------------------------------------------------------------------*/
 /* Notes        |                                                           */
 /****************************************************************************/
@@ -442,8 +442,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataMngC_GetFR_EventStrgIndex
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
-/*   v5-8-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( uint8, DEM_CODE ) Dem_DataMngC_GetNumberOfDTCsToStoreFreezeFrame
 (
@@ -476,8 +474,8 @@ FUNC( uint8, DEM_CODE ) Dem_DataMngC_GetNumberOfDTCsToStoreFreezeFrame
 
 #if ( DEM_OBDFFD_SUPPORT == STD_ON )    /*  [FuncSw]    */
     numberOfObdDTCsToStoreFreezeFrame = (uint8)0U;
-    obdFFRClassPerDTCMaxNum = Dem_CfgInfoPm_GetOBDFFRClassPerDTCMaxNum();
-    obdFFDRecordNum = Dem_CfgInfoPm_GetObdFFDRecordNum();
+    obdFFRClassPerDTCMaxNum = Dem_OBDFFRClassPerDTCMaxNum;
+    obdFFDRecordNum = Dem_ObdFFDRecordNum;
 #endif  /* ( DEM_OBDFFD_SUPPORT == STD_ON )             */
 
     for ( loopfailRecordIndex = (Dem_u08_FaultIndexType)0U; loopfailRecordIndex < failRecordNum; loopfailRecordIndex++ )    /* [GUD:for] loopfailRecordIndex */
@@ -490,7 +488,7 @@ FUNC( uint8, DEM_CODE ) Dem_DataMngC_GetNumberOfDTCsToStoreFreezeFrame
             obdDTCFlag = Dem_CfgInfoPm_CheckEventKindOfOBD_InEvtStrgGrp( tmpFaultRecordPtr->EventStrgIndex );
             for ( obdFFRClassIndex = (Dem_u08_FFListIndexType)0U; obdFFRClassIndex < obdFFRClassPerDTCMaxNum; obdFFRClassIndex++ )  /* [GUD:for] obdFFRClassIndex */
             {
-                if ( tmpFaultRecordPtr->ObdRecordNumberIndex[ obdFFRClassIndex ] < obdFFDRecordNum )                                /* [GUD] obdFFRClassIndex *//* [ARYCHK] DEM_OBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / obdFFRClassIndex */
+                if ( tmpFaultRecordPtr->ObdRecordNumberIndex[ obdFFRClassIndex ] < obdFFDRecordNum )                                /* [GUD] obdFFRClassIndex */
                 {
                     numberOfDTCsToStoreFreezeFrame = numberOfDTCsToStoreFreezeFrame + (uint8)1U;
                     numberOfObdDTCsToStoreFreezeFrame = numberOfObdDTCsToStoreFreezeFrame + (uint8)1U;
@@ -502,7 +500,7 @@ FUNC( uint8, DEM_CODE ) Dem_DataMngC_GetNumberOfDTCsToStoreFreezeFrame
             {
                 for ( nonObdFFRClassIndex = (Dem_u08_FFListIndexType)0U; nonObdFFRClassIndex < nonObdFFRClassPerDTCMaxNum; nonObdFFRClassIndex++ )  /* [GUD:for] nonObdFFRClassIndex */
                 {
-                    if ( tmpFaultRecordPtr->RecordNumberIndex[ nonObdFFRClassIndex ] < nonObdFFDRecordNum )                         /* [GUD] nonObdFFRClassIndex *//* [ARYCHK] DEM_NONOBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / nonObdFFRClassIndex */
+                    if ( tmpFaultRecordPtr->RecordNumberIndex[ nonObdFFRClassIndex ] < nonObdFFDRecordNum )                         /* [GUD] nonObdFFRClassIndex */
                     {
                         numberOfDTCsToStoreFreezeFrame = numberOfDTCsToStoreFreezeFrame + (uint8)1U;
 #if ( DEM_OBDFFD_SUPPORT == STD_ON )    /*  [FuncSw]    */
@@ -555,8 +553,6 @@ FUNC( uint8, DEM_CODE ) Dem_DataMngC_GetNumberOfDTCsToStoreFreezeFrame
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
-/*   v5-8-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataMngC_GetFR_EventStrgIndex_ObdRecordNumberIndex
 (
@@ -574,7 +570,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataMngC_GetFR_EventStrgIndex_O
 
     retVal = DEM_IRT_NG;
     failRecordNum = Dem_FailRecordNum;
-    obdFFRClassNumPerDTCMaxNum = Dem_CfgInfoPm_GetOBDFFRClassPerDTCMaxNum();
+    obdFFRClassNumPerDTCMaxNum = Dem_OBDFFRClassPerDTCMaxNum;
     eventStorageNum = Dem_PrimaryMemEventStorageNum;
 
     if( FaultIndex < failRecordNum )                                            /* [GUD:if] FaultIndex */
@@ -586,7 +582,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataMngC_GetFR_EventStrgIndex_O
             *EventStrgIndexPtr = eventStrgIndex;
             for( ffrCnt = (Dem_u08_FFListIndexType)0U; ffrCnt < obdFFRClassNumPerDTCMaxNum; ffrCnt++ )  /* [GUD:for]ffrCnt */
             {
-                ObdRecordNumberIndexPtr[ffrCnt] = Dem_FaultRecordList[FaultIndex].ObdRecordNumberIndex[ffrCnt]; /* [GUD]ffrCnt *//* [GUD]FaultIndex *//* [ARYCHK] DEM_OBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / ffrCnt */
+                ObdRecordNumberIndexPtr[ffrCnt] = Dem_FaultRecordList[FaultIndex].ObdRecordNumberIndex[ffrCnt]; /* [GUD]ffrCnt *//* [GUD]FaultIndex */
             }
             retVal = DEM_IRT_OK;
         }
@@ -624,7 +620,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataMngC_GetFR_EventStrgIndex_O
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataMngC_GetFR_EventStrgIndex_RecordNumberIndex
 (
@@ -654,7 +649,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataMngC_GetFR_EventStrgIndex_R
             *EventStrgIndexPtr = eventStrgIndex;
             for( ffrCnt = (Dem_u08_FFListIndexType)0U; ffrCnt < nonOBDFFRClassNumPerDTCMaxNum; ffrCnt++ )   /* [GUD:for]ffrCnt */
             {
-                RecordNumberIndexPtr[ffrCnt] = Dem_FaultRecordList[FaultIndex].RecordNumberIndex[ffrCnt];   /* [GUD]ffrCnt *//* [GUD]FaultIndex *//* [ARYCHK] DEM_NONOBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / ffrCnt */
+                RecordNumberIndexPtr[ffrCnt] = Dem_FaultRecordList[FaultIndex].RecordNumberIndex[ffrCnt];   /* [GUD]ffrCnt *//* [GUD]FaultIndex */
             }
             retVal = DEM_IRT_OK;
         }
@@ -684,7 +679,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataMngC_GetFR_EventStrgIndex_R
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-8-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( boolean, DEM_CODE ) Dem_DataMngC_GetFR_CheckExistOBDFFD
 (
@@ -699,7 +693,7 @@ FUNC( boolean, DEM_CODE ) Dem_DataMngC_GetFR_CheckExistOBDFFD
 
     existDataFlag = (boolean)FALSE;
     failRecordNum = Dem_FailRecordNum;
-    obdFFRClassNumPerDTCMaxNum = Dem_CfgInfoPm_GetOBDFFRClassPerDTCMaxNum();
+    obdFFRClassNumPerDTCMaxNum = Dem_OBDFFRClassPerDTCMaxNum;
 
     if( FaultIndex < failRecordNum )                                            /* [GUD:if] FaultIndex */
     {
@@ -716,65 +710,6 @@ FUNC( boolean, DEM_CODE ) Dem_DataMngC_GetFR_CheckExistOBDFFD
     return existDataFlag;
 }
 #endif  /*   ( DEM_OBDONEDS_SUPPORT == STD_ON )     */
-#if ( DEM_OBDONUDS_SUPPORT == STD_ON )
-#if ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )
-/****************************************************************************/
-/* Function Name | Dem_DataMngC_GetFR_CheckExistOBDFFD                      */
-/* Description   | whether FaultRecord has OBDFFD or not.                   */
-/* Preconditions |                                                          */
-/* Parameters    | [in] FaultIndex :                                        */
-/* Return Value  | boolean                                                  */
-/*               |        TRUE  : FaultRecord has OBDFFD.                   */
-/*               |        FALSE : FaultRecord has no OBDFFD.                */
-/*               |                (or parameter error.)                     */
-/* Notes         | none.                                                    */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-9-0      | new created.based on Dem_DataMngC_GetFR_CheckExistOBDFFD( DEM_OBDONEDS_SUPPORT == STD_ON ). */
-/****************************************************************************/
-FUNC( boolean, DEM_CODE ) Dem_DataMngC_GetFR_CheckExistOBDFFD
-(
-    VAR( Dem_u08_FaultIndexType, AUTOMATIC ) FaultIndex
-)
-{
-    VAR( Dem_u08_FaultIndexType, AUTOMATIC ) failRecordNum;
-    VAR( Dem_u08_FFListIndexType, AUTOMATIC ) ffrCnt;
-    VAR( Dem_u08_FFListIndexType, AUTOMATIC ) obdFFRClassNumPerDTCMaxNum;
-    VAR( Dem_u08_FFDIndexType, AUTOMATIC ) obdffdIndex;
-    VAR( boolean, AUTOMATIC ) existDataFlag_1;
-    VAR( boolean, AUTOMATIC ) existDataFlag_ALL;
-
-    existDataFlag_1   = (boolean)FALSE;
-    existDataFlag_ALL = (boolean)FALSE;
-
-    failRecordNum = Dem_FailRecordNum;
-    obdFFRClassNumPerDTCMaxNum = Dem_CfgInfoPm_GetOBDFFRClassPerDTCMaxNum();
-
-    if( FaultIndex < failRecordNum )                                            /* [GUD:if] FaultIndex */
-    {
-        for( ffrCnt = (Dem_u08_FFListIndexType)0U; ffrCnt < obdFFRClassNumPerDTCMaxNum; ffrCnt++ )  /* [GUD:for]ffrCnt */
-        {
-            obdffdIndex =   Dem_FaultRecordList[FaultIndex].ObdRecordNumberIndex[ffrCnt];           /* [GUD]ffrCnt */
-            if( obdffdIndex != DEM_FFRECINDEX_INITIAL )
-            {
-                if ( existDataFlag_1 == (boolean)FALSE )
-                {
-                    /*  1st OBD frezeframe. */
-                    existDataFlag_1 = (boolean)TRUE;
-                }
-                else
-                {
-                    /*  2nd OBD frezeframe. that's all. */
-                    existDataFlag_ALL = (boolean)TRUE;
-                    break;
-                }
-            }
-        }
-    }
-    return existDataFlag_ALL;
-}
-#endif  /*   ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )     */
-#endif  /*   ( DEM_OBDONUDS_SUPPORT == STD_ON )     */
 
 /****************************************************************************/
 /* Function Name | Dem_DataMngC_GetFR_ObdFreezeFrameIndex                   */
@@ -792,7 +727,6 @@ FUNC( boolean, DEM_CODE ) Dem_DataMngC_GetFR_CheckExistOBDFFD
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-8-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataMngC_GetFR_ObdFreezeFrameIndex
 (
@@ -807,7 +741,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataMngC_GetFR_ObdFreezeFrameIn
 
     retVal = DEM_IRT_NG;
     failRecordNum = Dem_FailRecordNum;
-    obdFFRClassNumPerDTCMaxNum = Dem_CfgInfoPm_GetOBDFFRClassPerDTCMaxNum();
+    obdFFRClassNumPerDTCMaxNum = Dem_OBDFFRClassPerDTCMaxNum;
 
     if( FaultIndex < failRecordNum )                                            /* [GUD:if] FaultIndex */
     {
@@ -904,48 +838,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataMngC_GetFR_AgingCounter
 
     return retVal;
 }
-
-#if ( DEM_WWH_OBD_SUPPORT == STD_ON )
-/****************************************************************************/
-/* Function Name | Dem_DataMngC_GetFR_AgingTime                             */
-/* Description   | Gets the aging counter of the fault record list corresp- */
-/*               | onding to the specified fault index.                     */
-/* Preconditions | The specified fault index be within the range of the fa- */
-/*               | ult record list.                                         */
-/* Parameters    | [in] FaultIndex :                                        */
-/*               |        The fault index corresponding to the specific fa- */
-/*               |        ult record.                                       */
-/*               | [out] AgingTimePtr :                                     */
-/*               |        The pointer of the aging time.                    */
-/* Return Value  | Dem_u08_InternalReturnType                               */
-/*               |        DEM_IRT_OK :                                      */
-/*               |        DEM_IRT_NG :                                      */
-/* Notes         |                                                          */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-6-0      | new created. based on Dem_DataMngC_GetFR_AgingCounter.   */
-/****************************************************************************/
-FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataMngC_GetFR_AgingTime
-(
-    VAR( Dem_u08_FaultIndexType, AUTOMATIC ) FaultIndex,
-    P2VAR( Dem_u16_WWHOBDTimeAgingCounterType, AUTOMATIC, AUTOMATIC ) AgingTimePtr
-)
-{
-    VAR( Dem_u08_FaultIndexType, AUTOMATIC ) failRecordNum;
-    VAR( Dem_u08_InternalReturnType, AUTOMATIC ) retVal;
-
-    retVal = DEM_IRT_NG;
-    failRecordNum = Dem_FailRecordNum;
-
-    if( FaultIndex < failRecordNum )                                            /* [GUD:if] FaultIndex */
-    {
-        *AgingTimePtr = Dem_FaultRecordList[FaultIndex].TimeAgingCounter;        /* [GUD] FaultIndex */
-        retVal = DEM_IRT_OK;
-    }
-
-    return retVal;
-}
-#endif  /* ( DEM_WWH_OBD_SUPPORT == STD_ON )    */
 
 #if ( DEM_INDICATOR_USE == STD_ON )
 /****************************************************************************/
@@ -1074,35 +966,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataMngC_GetFR_ConfirmedOccurre
 #endif  /* ( DEM_OBDONEDS_SUPPORT == STD_ON )    */
 #endif  /* ( DEM_EVENT_DISPLACEMENT_BY_DTCSTATUS_SUPPORT == STD_OFF )    */
 
-#if ( DEM_GET_UDSDTC_BY_CONFIRMED_ORDER_SUPPORT == STD_ON )
-/****************************************************************************/
-/* Function Name | Dem_DataMngC_ConfirmedOccurrenceOrder                    */
-/* Description   | Gets the confirmed occurrence order of the fault record  */
-/*               | list corresponding to the specified fault index.         */
-/* Preconditions | The specified fault index be within the range of the fa- */
-/*               | ult record list.                                         */
-/* Parameters    | [in] FaultIndex :                                        */
-/*               |        The fault index corresponding to the specific fa- */
-/*               |        ult record.                                       */
-/* Return Value  | Dem_u16_OccrOrderType                                    */
-/* Notes         |                                                          */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-6-0      | new created.                                             */
-/****************************************************************************/
-FUNC( Dem_u16_OccrOrderType, DEM_CODE ) Dem_DataMngC_ConfirmedOccurrenceOrder
-(
-    VAR( Dem_u08_FaultIndexType, AUTOMATIC ) FaultIndex /* [PRMCHK:CALLER] */
-)
-{
-    VAR( Dem_u16_OccrOrderType, AUTOMATIC ) retConfirmedOccurrenceOrder;
-
-    retConfirmedOccurrenceOrder = Dem_FaultRecordList[FaultIndex].ConfirmedOccurrenceOrder;    /* [GUDCHK:CALLER]FaultIndex */
-
-    return retConfirmedOccurrenceOrder;
-}
-#endif  /* ( DEM_GET_UDSDTC_BY_CONFIRMED_ORDER_SUPPORT== STD_ON )   */
-
 /****************************************************************************/
 /* Function Name | Dem_DataMngC_GetFR_FFDIndexListSt                        */
 /* Description   | Get frezeframe record index list in fault record.        */
@@ -1119,7 +982,6 @@ FUNC( Dem_u16_OccrOrderType, DEM_CODE ) Dem_DataMngC_ConfirmedOccurrenceOrder
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | new created.                                             */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataMngC_GetFR_FFDIndexListSt
 (
@@ -1136,16 +998,16 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataMngC_GetFR_FFDIndexListSt
     if( FaultIndex < failRecordNum )                                            /* [GUD:if] FaultIndex */
     {
         /*  get FFList data.       */
-        Dem_DataMng_GetRecordNumberIndexCtl( FaultIndex, &( FFDIndexListStPtr->RecordNumberIndex[0] ) );/* [ARYCHK] DEM_NONOBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / 0 */
+        Dem_DataMng_GetRecordNumberIndexCtl( FaultIndex, &( FFDIndexListStPtr->RecordNumberIndex[0] ) );
 
 #if ( DEM_OBDFFD_SUPPORT == STD_ON )   /*  [FuncSw]    */
         /*  get OBD FFList data.       */
-        Dem_DataMng_GetObdRecordNumberIndex_Ctl( FaultIndex, &( FFDIndexListStPtr->ObdRecordNumberIndex[0] ) );/* [ARYCHK] DEM_OBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / 0 */
+        Dem_DataMng_GetObdRecordNumberIndex_Ctl( FaultIndex, &( FFDIndexListStPtr->ObdRecordNumberIndex[0] ) );
 #endif  /* ( DEM_OBDFFD_SUPPORT == STD_ON )            */
 
 #if ( DEM_TSFF_PM_SUPPORT == STD_ON )   /*  [FuncSw]    */
         /*  get TSFFList data.     */
-        Dem_DataMng_GetTSFFListRecord_Ctl( FaultIndex, &( FFDIndexListStPtr->TimeSeriesFreezeFrameListIndex[0] ) );/* [ARYCHK] DEM_TSFF_RECORD_CLASS_NUM_PER_DTC_MAX_NUM / 1 / 0 */
+        Dem_DataMng_GetTSFFListRecord_Ctl( FaultIndex, &( FFDIndexListStPtr->TimeSeriesFreezeFrameListIndex[0] ) );
 #endif  /*   ( DEM_TSFF_PM_SUPPORT == STD_ON )         */
         retVal = DEM_IRT_OK;
     }
@@ -1476,7 +1338,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataMngM_GetFaultRecord
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_DataMngC_InitFaultCtlRecordData
 (
@@ -1500,91 +1361,19 @@ FUNC( void, DEM_CODE ) Dem_DataMngC_InitFaultCtlRecordData
 
 #if ( DEM_OBDFFD_SUPPORT == STD_ON )   /*  [FuncSw]    */
     /* Initialize OBD FFList. */
-    Dem_DataMng_InitObdRecordNumberIndexData( &FaultRecordPtr->ObdRecordNumberIndex[0] );/* [ARYCHK] DEM_OBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / 0 */
+    Dem_DataMng_InitObdRecordNumberIndexData( &FaultRecordPtr->ObdRecordNumberIndex[0] );
 #endif  /*   ( DEM_OBDFFD_SUPPORT == STD_ON )          */
 
     /* Initialize FFList. */
-    Dem_DataMng_InitRecordNumberIndexData( &FaultRecordPtr->RecordNumberIndex[0] );/* [ARYCHK] DEM_NONOBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / 0 */
+    Dem_DataMng_InitRecordNumberIndexData( &FaultRecordPtr->RecordNumberIndex[0] );
 
 #if ( DEM_TSFF_PM_SUPPORT == STD_ON )   /*  [FuncSw]    */
     /* Initialize TSFFList. */
-    Dem_DataMng_InitTSFFListRecordData( &FaultRecordPtr->TimeSeriesFreezeFrameListIndex[0] );/* [ARYCHK] DEM_TSFF_RECORD_CLASS_NUM_PER_DTC_MAX_NUM / 1 / 0 */
+    Dem_DataMng_InitTSFFListRecordData( &FaultRecordPtr->TimeSeriesFreezeFrameListIndex[0] );
 #endif  /*   ( DEM_TSFF_PM_SUPPORT == STD_ON )         */
 
     return ;
 }
-
-/****************************************************************************/
-/* Function Name | Dem_DataMngC_CopyFaultRecord                             */
-/* Description   | copy fault record data.                                  */
-/* Preconditions | -                                                        */
-/* Parameters    | [out] DestFaultRecordPtr :                               */
-/*               | [in]  SrcFaultRecordPtr :                                */
-/* Return Value  | none.                                                    */
-/* Notes         |                                                          */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-7-0      | new created.                                             */
-/*   v5-8-0      | no branch changed.                                       */
-/****************************************************************************/
-FUNC( void, DEM_CODE ) Dem_DataMngC_CopyFaultRecord
-(
-    P2VAR( Dem_FaultRecordType, AUTOMATIC, AUTOMATIC ) DestFaultRecordPtr,
-    P2CONST( Dem_FaultRecordType, AUTOMATIC, DEM_VAR_NO_INIT ) SrcFaultRecordPtr
-)
-{
-    VAR( Dem_u08_FFListIndexType, AUTOMATIC ) ffrCnt;
-    VAR( Dem_u08_FFListIndexType, AUTOMATIC ) nonOBDFFRClassNumPerDTCMaxNum;
-#if ( DEM_OBDFFD_SUPPORT == STD_ON )   /*  [FuncSw]    */
-    VAR( Dem_u08_FFListIndexType, AUTOMATIC ) obdFFRClassNumPerDTCMaxNum;
-#endif  /* ( DEM_OBDFFD_SUPPORT == STD_ON )            */
-#if ( DEM_TSFF_PM_SUPPORT == STD_ON )   /*  [FuncSw]    */
-    /*  get TSFFList data.     */
-    VAR( Dem_u08_TSFFListPerDTCIndexType, AUTOMATIC ) tsfflCnt;
-    VAR( Dem_u08_TSFFListPerDTCIndexType, AUTOMATIC ) tsfflRecordClassNumPerDTCMaxNum;
-#endif  /*   ( DEM_TSFF_PM_SUPPORT == STD_ON )         */
-
-    /*  get fault data.        */
-    DestFaultRecordPtr->EventStrgIndex             = SrcFaultRecordPtr->EventStrgIndex;
-    DestFaultRecordPtr->OccurrenceOrder            = SrcFaultRecordPtr->OccurrenceOrder;
-    DestFaultRecordPtr->ConfirmedOccurrenceOrder   = SrcFaultRecordPtr->ConfirmedOccurrenceOrder;
-    DestFaultRecordPtr->MILOccurrenceOrder         = SrcFaultRecordPtr->MILOccurrenceOrder;
-    DestFaultRecordPtr->AgingCounter               = SrcFaultRecordPtr->AgingCounter;
-#if ( DEM_WWH_OBD_SUPPORT == STD_ON ) /* [FuncSw] */
-    DestFaultRecordPtr->TimeAgingCounter           = SrcFaultRecordPtr->TimeAgingCounter;
-#endif /* ( DEM_WWH_OBD_SUPPORT == STD_ON ) */
-    DestFaultRecordPtr->HealingCounter             = SrcFaultRecordPtr->HealingCounter;
-    DestFaultRecordPtr->ConsistencyCounterForFault = SrcFaultRecordPtr->ConsistencyCounterForFault;
-
-#if ( DEM_OBDFFD_SUPPORT == STD_ON )   /*  [FuncSw]    */
-    /*  get OBD FFList data.       */
-    obdFFRClassNumPerDTCMaxNum = Dem_CfgInfoPm_GetOBDFFRClassPerDTCMaxNum();
-    for( ffrCnt = (Dem_u08_FFListIndexType)0U; ffrCnt < obdFFRClassNumPerDTCMaxNum; ffrCnt++ )                  /* [GUD:for]ffrCnt */
-    {
-        DestFaultRecordPtr->ObdRecordNumberIndex[ffrCnt] = SrcFaultRecordPtr->ObdRecordNumberIndex[ffrCnt];    /* [GUD]ffrCnt *//* [ARYCHK] DEM_OBD_FFR_CLASS_PER_DTC_MAX_NUM /1/ffrCnt *//* [ARYCHK] DEM_OBD_FFR_CLASS_PER_DTC_MAX_NUM /1/ffrCnt */
-    }
-#endif  /* ( DEM_OBDFFD_SUPPORT == STD_ON )            */
-
-    /*  get FFList data.       */
-    nonOBDFFRClassNumPerDTCMaxNum = Dem_NonOBDFFRClassPerDTCMaxNum;
-    for( ffrCnt = (Dem_u08_FFListIndexType)0U; ffrCnt < nonOBDFFRClassNumPerDTCMaxNum; ffrCnt++ )          /* [GUD:for]ffrCnt */
-    {
-        DestFaultRecordPtr->RecordNumberIndex[ffrCnt] = SrcFaultRecordPtr->RecordNumberIndex[ffrCnt];      /* [GUD]ffrCnt *//* [ARYCHK] DEM_NONOBD_FFR_CLASS_PER_DTC_MAX_NUM /1/ffrCnt *//* [ARYCHK] DEM_NONOBD_FFR_CLASS_PER_DTC_MAX_NUM /1/ffrCnt */
-    }
-
-
-#if ( DEM_TSFF_PM_SUPPORT == STD_ON )   /*  [FuncSw]    */
-    /*  get TSFFList data.     */
-    tsfflRecordClassNumPerDTCMaxNum = Dem_TSFFRecordClassNumPerDTCMaxNum;
-    for( tsfflCnt = (Dem_u08_TSFFListPerDTCIndexType)0U; tsfflCnt < tsfflRecordClassNumPerDTCMaxNum; tsfflCnt++ )                       /* [GUD:for]tsfflCnt */
-    {
-        DestFaultRecordPtr->TimeSeriesFreezeFrameListIndex[tsfflCnt] = SrcFaultRecordPtr->TimeSeriesFreezeFrameListIndex[tsfflCnt];    /* [GUD]tsffrIndex *//* [ARYCHK] DEM_TSFF_RECORD_CLASS_NUM_PER_DTC_MAX_NUM /1/ tsfflCnt *//* [ARYCHK] DEM_TSFF_RECORD_CLASS_NUM_PER_DTC_MAX_NUM /1/ tsfflCnt */
-    }
-#endif  /*   ( DEM_TSFF_PM_SUPPORT == STD_ON )         */
-
-    return ;
-}
-
 
 /****************************************************************************/
 /* Function Name | Dem_DataMngC_GetFR_FFDIndexListSt                        */
@@ -1602,7 +1391,6 @@ FUNC( void, DEM_CODE ) Dem_DataMngC_CopyFaultRecord
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | new created.                                             */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_DataMngC_InitFR_FFDIndexListStData
 (
@@ -1610,114 +1398,23 @@ FUNC( void, DEM_CODE ) Dem_DataMngC_InitFR_FFDIndexListStData
 )
 {
     /*  get FFList data.       */
-    Dem_DataMng_InitRecordNumberIndexData( &( FFDIndexListStPtr->RecordNumberIndex[0] ) );/* [ARYCHK] DEM_NONOBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / 0 */
+    Dem_DataMng_InitRecordNumberIndexData( &( FFDIndexListStPtr->RecordNumberIndex[0] ) );
 
 #if ( DEM_OBDFFD_SUPPORT == STD_ON )   /*  [FuncSw]    */
     /*  get OBD FFList data.       */
-    Dem_DataMng_InitObdRecordNumberIndexData( &( FFDIndexListStPtr->ObdRecordNumberIndex[0] ) );/* [ARYCHK] DEM_OBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / 0 */
+    Dem_DataMng_InitObdRecordNumberIndexData( &( FFDIndexListStPtr->ObdRecordNumberIndex[0] ) );
 #endif  /* ( DEM_OBDFFD_SUPPORT == STD_ON )            */
 
 #if ( DEM_TSFF_PM_SUPPORT == STD_ON )   /*  [FuncSw]    */
     /*  get TSFFList data.     */
-    Dem_DataMng_InitTSFFListRecordData( &( FFDIndexListStPtr->TimeSeriesFreezeFrameListIndex[0] ) );/* [ARYCHK] DEM_TSFF_RECORD_CLASS_NUM_PER_DTC_MAX_NUM / 1 / 0 */
+    Dem_DataMng_InitTSFFListRecordData( &( FFDIndexListStPtr->TimeSeriesFreezeFrameListIndex[0] ) );
 #endif  /*   ( DEM_TSFF_PM_SUPPORT == STD_ON )         */
 
     return ;
 }
+
+
 #if ( DEM_OBDFFD_SUPPORT == STD_ON )
-#if ( DEM_OBDONUDS_SUPPORT == STD_ON )
-#if ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )
-/****************************************************************************/
-/* Function Name | Dem_DataMngC_CopyFR_AllObdRecordNumberIndex              */
-/* Description   | copy ObdRecordNumberIndex[] between fault records.       */
-/* Preconditions |                                                          */
-/* Parameters    | [in]  FaultIndexDest : fault record index(copy dest.)    */
-/*               | [in]  FaultIndexSrc : fault record index(copy src.)      */
-/* Return Value  | void                                                     */
-/* Notes         | none                                                     */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-9-0      | new created.                                             */
-/****************************************************************************/
-FUNC( void, DEM_CODE ) Dem_DataMngC_CopyFR_AllObdRecordNumberIndex
-(
-    VAR( Dem_u08_FaultIndexType, AUTOMATIC ) FaultIndexDest,
-    VAR( Dem_u08_FaultIndexType, AUTOMATIC ) FaultIndexSrc
-)
-{
-    VAR( Dem_u16_RecordKindIndexType, AUTOMATIC ) recMngCmnKindFault;
-    VAR( Dem_u08_FFListIndexType, AUTOMATIC ) ffrCnt;
-    VAR( Dem_u08_FFListIndexType, AUTOMATIC ) obdFFRClassNumPerDTCMaxNum;
-    VAR( Dem_u08_FaultIndexType, AUTOMATIC ) failRecordNum;
-
-    failRecordNum = Dem_FailRecordNum;
-
-    if (( FaultIndexDest < failRecordNum ) && ( FaultIndexSrc < failRecordNum ))    /* [GUD:if] FaultIndexDest *//* [GUD:if] FaultIndexSrc */
-    {
-        obdFFRClassNumPerDTCMaxNum = Dem_CfgInfoPm_GetOBDFFRClassPerDTCMaxNum();
-
-        /* copy OBDFFD index list. */
-        for( ffrCnt = (Dem_u08_FFListIndexType)0U; ffrCnt < obdFFRClassNumPerDTCMaxNum; ffrCnt++ )  /* [GUD:for] ffrCnt */
-        {
-            Dem_FaultRecordList[FaultIndexDest].ObdRecordNumberIndex[ffrCnt] = Dem_FaultRecordList[FaultIndexSrc].ObdRecordNumberIndex[ffrCnt];    /* [GUD]FaultIndexDest *//* [GUD]FaultIndexSrc *//* [GUD]ffrCnt */
-        }
-
-        recMngCmnKindFault = Dem_RecMngCmnKindFault;
-        Dem_RecMngCmn_SetNvMWriteStatus( recMngCmnKindFault, ( Dem_u16_RecordIndexType )FaultIndexDest );
-    }
-    return;
-}
-
-/****************************************************************************/
-/* Function Name | Dem_DataMngC_CompareFR_ObdRecordNumberIndex              */
-/* Description   | vompare ObdRecordNumberIndex[] between fault records.    */
-/* Preconditions |                                                          */
-/* Parameters    | [in]  FaultIndexDest : fault record index(copy dest.)    */
-/*               | [in]  FaultIndexSrc : fault record index(copy src.)      */
-/* Return Value  | boolean                                                  */
-/*               |              TRUE  : same.                               */
-/*               |              FALSE : different.                          */
-/* Notes         | none                                                     */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-9-0      | new created.                                             */
-/****************************************************************************/
-FUNC( boolean, DEM_CODE ) Dem_DataMngC_CompareFR_ObdRecordNumberIndex
-(
-    VAR( Dem_u08_FaultIndexType, AUTOMATIC ) FaultIndexDest,
-    VAR( Dem_u08_FaultIndexType, AUTOMATIC ) FaultIndexSrc
-)
-{
-    VAR( Dem_u08_FFListIndexType, AUTOMATIC ) ffrCnt;
-    VAR( Dem_u08_FFListIndexType, AUTOMATIC ) obdFFRClassNumPerDTCMaxNum;
-    VAR( Dem_u08_FaultIndexType, AUTOMATIC ) failRecordNum;
-    VAR( boolean, AUTOMATIC ) compareResult;
-
-    failRecordNum   =   Dem_FailRecordNum;
-
-    compareResult   =   (boolean)FALSE;
-    if (( FaultIndexDest < failRecordNum ) && ( FaultIndexSrc < failRecordNum ))    /* [GUD:if] FaultIndexDest *//* [GUD:if] FaultIndexSrc */
-    {
-        compareResult   =   (boolean)TRUE;
-        obdFFRClassNumPerDTCMaxNum = Dem_CfgInfoPm_GetOBDFFRClassPerDTCMaxNum();
-
-        /* copy OBDFFD index list. */
-        for( ffrCnt = (Dem_u08_FFListIndexType)0U; ffrCnt < obdFFRClassNumPerDTCMaxNum; ffrCnt++ )  /* [GUD:for] ffrCnt */
-        {
-            if ( Dem_FaultRecordList[FaultIndexDest].ObdRecordNumberIndex[ffrCnt] != Dem_FaultRecordList[FaultIndexSrc].ObdRecordNumberIndex[ffrCnt] )    /* [GUD]FaultIndexDest *//* [GUD]FaultIndexSrc *//* [GUD]ffrCnt */
-            {
-                compareResult   =   (boolean)FALSE;
-                break;
-            }
-        }
-    }
-    return compareResult;
-}
-#endif  /* ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )   */
-#endif  /* ( DEM_OBDONUDS_SUPPORT == STD_ON )               */
-
-
-
 /****************************************************************************/
 /* Function Name | Dem_DataMng_InitObdRecordNumberIndexData                 */
 /* Description   | Initializes ObdRecordNumberIndex of the specified fault  */
@@ -1733,8 +1430,6 @@ FUNC( boolean, DEM_CODE ) Dem_DataMngC_CompareFR_ObdRecordNumberIndex
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
-/*   v5-8-0      | no branch changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_DataMng_InitObdRecordNumberIndexData
 (
@@ -1744,12 +1439,12 @@ static FUNC( void, DEM_CODE ) Dem_DataMng_InitObdRecordNumberIndexData
     VAR( Dem_u08_FFListIndexType, AUTOMATIC ) ffrCnt;
     VAR( Dem_u08_FFListIndexType, AUTOMATIC ) obdFFRClassNumPerDTCMaxNum;
 
-    obdFFRClassNumPerDTCMaxNum = Dem_CfgInfoPm_GetOBDFFRClassPerDTCMaxNum();
+    obdFFRClassNumPerDTCMaxNum = Dem_OBDFFRClassPerDTCMaxNum;
 
     /* Initialize OBD FFList. */
     for( ffrCnt = (Dem_u08_FFListIndexType)0U; ffrCnt < obdFFRClassNumPerDTCMaxNum; ffrCnt++ )  /* [GUD:for] ffrCnt */
     {
-        ObdRecordNumberIndexArrayPtr[ffrCnt] = DEM_FFRECINDEX_INITIAL;                          /* [GUD] ffrCnt *//* [ARYCHK] DEM_OBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / ffrCnt */
+        ObdRecordNumberIndexArrayPtr[ffrCnt] = DEM_FFRECINDEX_INITIAL;                          /* [GUD] ffrCnt */
     }
 
     return ;
@@ -1800,7 +1495,6 @@ FUNC( void, DEM_CODE ) Dem_DataMng_InitSpecificObdRecordNumberIndex
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_DataMng_InitRecordNumberIndexData
 (
@@ -1815,7 +1509,7 @@ static FUNC( void, DEM_CODE ) Dem_DataMng_InitRecordNumberIndexData
     /* Initialize FFList. */
     for( ffrCnt = (Dem_u08_FFListIndexType)0U; ffrCnt < nonOBDFFRClassNumPerDTCMaxNum; ffrCnt++ )   /* [GUD:for] ffrCnt */
     {
-        RecordNumberIndexArrayPtr[ffrCnt] = DEM_FFRECINDEX_INITIAL;                                 /* [GUD] ffrCnt *//* [ARYCHK] DEM_NONOBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / ffrCnt */
+        RecordNumberIndexArrayPtr[ffrCnt] = DEM_FFRECINDEX_INITIAL;                                 /* [GUD] ffrCnt */
     }
 
     return ;
@@ -2067,7 +1761,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataMng_GetFaultRecordConsisten
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-8-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_DataMngC_InitObdRecordNumberIndexFFROverwritten
 (
@@ -2084,7 +1777,7 @@ FUNC( void, DEM_CODE ) Dem_DataMngC_InitObdRecordNumberIndexFFROverwritten
     VAR( Dem_u08_ConsistencyIdType, AUTOMATIC ) consistencyId;
 
     failRecordNum = Dem_FailRecordNum;
-    obdFFRClassNumPerDTCMaxNum = Dem_CfgInfoPm_GetOBDFFRClassPerDTCMaxNum();
+    obdFFRClassNumPerDTCMaxNum = Dem_OBDFFRClassPerDTCMaxNum;
 
     if( FaultIndex < failRecordNum )                                            /* [GUD:if] FaultIndex */
     {
@@ -2315,7 +2008,6 @@ static FUNC( void, DEM_CODE ) Dem_DataMng_InitRecordNumberIndex
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_DataMng_GetFaultRecord_Ctl
 (
@@ -2337,15 +2029,15 @@ static FUNC( void, DEM_CODE ) Dem_DataMng_GetFaultRecord_Ctl
 
 #if ( DEM_OBDFFD_SUPPORT == STD_ON )   /*  [FuncSw]    */
     /*  get OBD FFList data.       */
-    Dem_DataMng_GetObdRecordNumberIndex_Ctl( FaultIndex, &( DestFaultRecordPtr->ObdRecordNumberIndex[0] ) );        /* [GUDCHK:CALLER]FaultIndex *//* [ARYCHK] DEM_OBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / 0 */
+    Dem_DataMng_GetObdRecordNumberIndex_Ctl( FaultIndex, &( DestFaultRecordPtr->ObdRecordNumberIndex[0] ) );        /* [GUDCHK:CALLER]FaultIndex */
 #endif  /* ( DEM_OBDFFD_SUPPORT == STD_ON )            */
 
     /*  get FFList data.       */
-    Dem_DataMng_GetRecordNumberIndexCtl( FaultIndex, &( DestFaultRecordPtr->RecordNumberIndex[0] ) );               /* [GUDCHK:CALLER]FaultIndex *//* [ARYCHK] DEM_NONOBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / 0 */
+    Dem_DataMng_GetRecordNumberIndexCtl( FaultIndex, &( DestFaultRecordPtr->RecordNumberIndex[0] ) );               /* [GUDCHK:CALLER]FaultIndex */
 
 #if ( DEM_TSFF_PM_SUPPORT == STD_ON )   /*  [FuncSw]    */
     /*  get TSFFList data.     */
-    Dem_DataMng_GetTSFFListRecord_Ctl( FaultIndex, &( DestFaultRecordPtr->TimeSeriesFreezeFrameListIndex[0] ) );    /* [GUDCHK:CALLER]FaultIndex *//* [ARYCHK] DEM_TSFF_RECORD_CLASS_NUM_PER_DTC_MAX_NUM / 1 / 0 */
+    Dem_DataMng_GetTSFFListRecord_Ctl( FaultIndex, &( DestFaultRecordPtr->TimeSeriesFreezeFrameListIndex[0] ) );    /* [GUDCHK:CALLER]FaultIndex */
 #endif  /*   ( DEM_TSFF_PM_SUPPORT == STD_ON )         */
 
     return ;
@@ -2372,8 +2064,6 @@ static FUNC( void, DEM_CODE ) Dem_DataMng_GetFaultRecord_Ctl
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
-/*   v5-8-0      | no branch changed.                                       */
 /****************************************************************************/
 #if ( DEM_OBDFFD_SUPPORT == STD_ON )
 static FUNC( void, DEM_CODE ) Dem_DataMng_GetObdRecordNumberIndex_Ctl
@@ -2385,12 +2075,12 @@ static FUNC( void, DEM_CODE ) Dem_DataMng_GetObdRecordNumberIndex_Ctl
     VAR( Dem_u08_FFListIndexType, AUTOMATIC ) ffrCnt;
     VAR( Dem_u08_FFListIndexType, AUTOMATIC ) obdFFRClassNumPerDTCMaxNum;
 
-    obdFFRClassNumPerDTCMaxNum = Dem_CfgInfoPm_GetOBDFFRClassPerDTCMaxNum();
+    obdFFRClassNumPerDTCMaxNum = Dem_OBDFFRClassPerDTCMaxNum;
 
     /*  get OBD FFList data.       */
     for( ffrCnt = (Dem_u08_FFListIndexType)0U; ffrCnt < obdFFRClassNumPerDTCMaxNum; ffrCnt++ )                  /* [GUD:for]ffrCnt */
     {
-        ObdRecordNumberIndexArrayPtr[ffrCnt] = Dem_FaultRecordList[FaultIndex].ObdRecordNumberIndex[ffrCnt];    /* [GUDCHK:CALLER]FaultIndex *//* [GUD]ffrCnt *//* [ARYCHK] DEM_OBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / ffrCnt */
+        ObdRecordNumberIndexArrayPtr[ffrCnt] = Dem_FaultRecordList[FaultIndex].ObdRecordNumberIndex[ffrCnt];    /* [GUDCHK:CALLER]FaultIndex *//* [GUD]ffrCnt */
     }
 
     return ;
@@ -2418,7 +2108,6 @@ static FUNC( void, DEM_CODE ) Dem_DataMng_GetObdRecordNumberIndex_Ctl
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_DataMng_GetRecordNumberIndexCtl
 (
@@ -2434,7 +2123,7 @@ static FUNC( void, DEM_CODE ) Dem_DataMng_GetRecordNumberIndexCtl
     /*  get FFList data.       */
     for( ffrCnt = (Dem_u08_FFListIndexType)0U; ffrCnt < nonOBDFFRClassNumPerDTCMaxNum; ffrCnt++ )           /* [GUD:for]ffrCnt */
     {
-        RecordNumberIndexArrayPtr[ffrCnt] = Dem_FaultRecordList[FaultIndex].RecordNumberIndex[ffrCnt];      /* [GUDCHK:CALLER]FaultIndex *//* [GUD]ffrCnt *//* [ARYCHK] DEM_NONOBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / ffrCnt */
+        RecordNumberIndexArrayPtr[ffrCnt] = Dem_FaultRecordList[FaultIndex].RecordNumberIndex[ffrCnt];      /* [GUDCHK:CALLER]FaultIndex *//* [GUD]ffrCnt */
     }
 
     return ;
@@ -2551,8 +2240,6 @@ static FUNC( void, DEM_CODE ) Dem_DataMng_SetFaultRecord_Ctl
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
-/*   v5-8-0      | no branch changed.                                       */
 /****************************************************************************/
 #if ( DEM_OBDFFD_SUPPORT == STD_ON )
 static FUNC( void, DEM_CODE ) Dem_DataMng_SetObdRecordNumberIndex_Ctl
@@ -2564,12 +2251,12 @@ static FUNC( void, DEM_CODE ) Dem_DataMng_SetObdRecordNumberIndex_Ctl
     VAR( Dem_u08_FFListIndexType, AUTOMATIC ) ffrCnt;
     VAR( Dem_u08_FFListIndexType, AUTOMATIC ) obdFFRClassNumPerDTCMaxNum;
 
-    obdFFRClassNumPerDTCMaxNum = Dem_CfgInfoPm_GetOBDFFRClassPerDTCMaxNum();
+    obdFFRClassNumPerDTCMaxNum = Dem_OBDFFRClassPerDTCMaxNum;
 
     /*  set OBD FFList data.       */
     for( ffrCnt = (Dem_u08_FFListIndexType)0U; ffrCnt < obdFFRClassNumPerDTCMaxNum; ffrCnt++ )                              /* [GUD:for]ffrCnt */
     {
-        Dem_FaultRecordList[FaultIndex].ObdRecordNumberIndex[ffrCnt] = SrcFaultRecordPtr->ObdRecordNumberIndex[ffrCnt];     /* [GUDCHK:CALLER]FaultIndex *//* [GUD]ffrCnt *//* [ARYCHK] DEM_OBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / ffrCnt */
+        Dem_FaultRecordList[FaultIndex].ObdRecordNumberIndex[ffrCnt] = SrcFaultRecordPtr->ObdRecordNumberIndex[ffrCnt];     /* [GUDCHK:CALLER]FaultIndex *//* [GUD]ffrCnt */
     }
 
     return ;
@@ -2595,7 +2282,6 @@ static FUNC( void, DEM_CODE ) Dem_DataMng_SetObdRecordNumberIndex_Ctl
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_DataMng_SetRecordNumberIndex_Ctl
 (
@@ -2611,7 +2297,7 @@ static FUNC( void, DEM_CODE ) Dem_DataMng_SetRecordNumberIndex_Ctl
     /*  set FFList data.       */
     for( ffrCnt = (Dem_u08_FFListIndexType)0U; ffrCnt < nonOBDFFRClassNumPerDTCMaxNum; ffrCnt++ )                           /* [GUD:for]ffrCnt */
     {
-        Dem_FaultRecordList[FaultIndex].RecordNumberIndex[ffrCnt] = SrcFaultRecordPtr->RecordNumberIndex[ffrCnt];           /* [GUDCHK:CALLER]FaultIndex *//* [GUD]ffrCnt *//* [ARYCHK] DEM_NONOBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / ffrCnt */
+        Dem_FaultRecordList[FaultIndex].RecordNumberIndex[ffrCnt] = SrcFaultRecordPtr->RecordNumberIndex[ffrCnt];           /* [GUDCHK:CALLER]FaultIndex *//* [GUD]ffrCnt */
     }
 
     return ;
@@ -2754,8 +2440,6 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataMng_CmpWithRecordNum
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
-/*   v5-8-0      | no branch changed.                                       */
 /****************************************************************************/
 static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataMng_CmpWithObdRecordNumberIndex
 (
@@ -2770,12 +2454,12 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataMng_CmpWithObdRecord
 
     retVal = DEM_IRT_OK;    /* same. */
     faultRecordPtr = &Dem_FaultRecordList[FaultIndex];              /* [GUDCHK:CALLER]FaultIndex *//* [GUD:CFG:IF_GUARDED: FaultIndex ]faultRecordPtr */
-    obdFFRClassNumPerDTCMaxNum = Dem_CfgInfoPm_GetOBDFFRClassPerDTCMaxNum();
+    obdFFRClassNumPerDTCMaxNum = Dem_OBDFFRClassPerDTCMaxNum;
 
     /* check OBD freezeframe list. */
     for( indexOfRecNum = (Dem_u08_FFListIndexType)0U; indexOfRecNum < obdFFRClassNumPerDTCMaxNum; indexOfRecNum++ )             /* [GUD:for]indexOfRecNum */
     {
-        if( faultRecordPtr->ObdRecordNumberIndex[indexOfRecNum] != CheckFaultRecordPtr->ObdRecordNumberIndex[indexOfRecNum] )   /* [GUDCHK:CALLER]FaultIndex *//* [GUDCHK:CALLER]CheckFaultRecordPtr *//* [GUD]indexOfRecNum *//* [ARYCHK] DEM_OBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / indexOfRecNum *//* [ARYCHK] DEM_OBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / indexOfRecNum */
+        if( faultRecordPtr->ObdRecordNumberIndex[indexOfRecNum] != CheckFaultRecordPtr->ObdRecordNumberIndex[indexOfRecNum] )   /* [GUDCHK:CALLER]FaultIndex *//* [GUDCHK:CALLER]CheckFaultRecordPtr *//* [GUD]indexOfRecNum */
         {
             break;
         }
@@ -2805,7 +2489,6 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataMng_CmpWithObdRecord
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataMng_CmpWithNonObdRecordNumberIndex
 (
@@ -2825,7 +2508,7 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataMng_CmpWithNonObdRec
     /* check freezeframe list. */
     for( indexOfRecNum = (Dem_u08_FFListIndexType)0U; indexOfRecNum < nonOBDFFRClassNumPerDTCMaxNum; indexOfRecNum++ )      /* [GUD:for]indexOfRecNum */
     {
-        if( faultRecordPtr->RecordNumberIndex[indexOfRecNum] != CheckFaultRecordPtr->RecordNumberIndex[indexOfRecNum] )     /* [GUDCHK:CALLER]FaultIndex *//* [GUDCHK:CALLER]CheckFaultRecordPtr *//* [GUD]indexOfRecNum *//* [ARYCHK] DEM_NONOBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / indexOfRecNum *//* [ARYCHK] DEM_NONOBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / indexOfRecNum */
+        if( faultRecordPtr->RecordNumberIndex[indexOfRecNum] != CheckFaultRecordPtr->RecordNumberIndex[indexOfRecNum] )     /* [GUDCHK:CALLER]FaultIndex *//* [GUDCHK:CALLER]CheckFaultRecordPtr *//* [GUD]indexOfRecNum */
         {
             break;
         }
@@ -2858,7 +2541,6 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DataMng_CmpWithNonObdRec
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_DataMng_GetFR_PaddingRecord
 (
@@ -2873,7 +2555,7 @@ FUNC( void, DEM_CODE ) Dem_DataMng_GetFR_PaddingRecord
 
     for( padidx = (Dem_u16_PaddingIndexType)0U; padidx < faultRecordBlockPaddingSize; padidx++ )        /* [GUD:for]padidx */
     {
-        FaultRecordPtr->Reserve[padidx] = Dem_FaultRecordList[FaultIndex].Reserve[padidx];              /* [GUD]padidx *//* [GUDCHK:CALLER]FaultIndex *//* [ARYCHK] DEM_FAIL_RECORD_PADDINGSIZE_TO_BLOCKSIZE / 1 / padidx */
+        FaultRecordPtr->Reserve[padidx] = Dem_FaultRecordList[FaultIndex].Reserve[padidx];              /* [GUD]padidx *//* [GUDCHK:CALLER]FaultIndex */
     }
     return ;
 }
@@ -2889,7 +2571,6 @@ FUNC( void, DEM_CODE ) Dem_DataMng_GetFR_PaddingRecord
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_FaultMng_InitFRData_Padding
 (
@@ -2903,7 +2584,7 @@ static FUNC( void, DEM_CODE ) Dem_FaultMng_InitFRData_Padding
     faultRecordBlockPaddingSize = Dem_FaultRecordBlockPaddingSize;
     for( padidx = (Dem_u16_PaddingIndexType)0U; padidx < faultRecordBlockPaddingSize; padidx++ )        /* [GUD:for]padidx */
     {
-        FaultRecordPtr->Reserve[padidx] = DEM_DATA_RESERVE_INITIAL_VALUE;                               /* [GUD]padidx *//* [ARYCHK] DEM_FAIL_RECORD_PADDINGSIZE_TO_BLOCKSIZE / 1 / padidx */
+        FaultRecordPtr->Reserve[padidx] = DEM_DATA_RESERVE_INITIAL_VALUE;                               /* [GUD]padidx */
     }
 
     return;
@@ -3223,10 +2904,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_FaultMng_GetEventIdFromRecordDa
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-6-0         :2024-01-29                                              */
-/*  v5-7-0         :2024-05-29                                              */
-/*  v5-8-0         :2024-10-29                                              */
-/*  v5-9-0         :2025-02-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

@@ -1,7 +1,7 @@
-/* Dem_CmnLib_ConfigInfo_h(v5-10-0)                                         */
+/* Dem_CmnLib_ConfigInfo_h(v5-5-0)                                          */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -22,8 +22,6 @@
 /*--------------------------------------------------------------------------*/
 /* Macros                                                                   */
 /*--------------------------------------------------------------------------*/
-#define DEM_OBDFFR_CLASS_PER_DTC_NUM_RECNUM00_ONLY      ((Dem_u08_FFListIndexType)1U)
-#define DEM_OBDFFR_CLASS_PER_DTC_NUM_RECNUM00_F0        ((Dem_u08_FFListIndexType)2U)
 
 /*--------------------------------------------------------------------------*/
 /* Types                                                                    */
@@ -73,7 +71,9 @@ FUNC( Dem_DTCTranslationFormatType, DEM_CODE ) Dem_CfgInfo_GetTranslationType
 
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_CfgInfo_JudgeAgingRequire
 (
-    CONSTP2VAR( Dem_DTCStatusStType, AUTOMATIC, AUTOMATIC ) DTCStatusStPtr
+    CONSTP2VAR( Dem_DTCStatusStType, AUTOMATIC, AUTOMATIC ) DTCStatusStPtr,
+    VAR( Dem_u08_OpcycUpdateHealingAgingCycleType, AUTOMATIC ) HealingAgingCycleFlag,   /* MISRA DEVIATION */
+    VAR( boolean, AUTOMATIC ) PendingRecoveryExecFlag                                   /* MISRA DEVIATION */
 );
 
 /*----------------------------------*/
@@ -98,13 +98,13 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_CfgInfo_CheckDTCReadDTCParamete
 );
 FUNC( boolean, DEM_CODE ) Dem_CfgInfo_CheckTrigger
 (
-    P2VAR( Dem_u08_StorageTriggerType, AUTOMATIC, AUTOMATIC ) TargetTriggerPtr,
+    VAR( Dem_u08_StorageTriggerType, AUTOMATIC ) TargetTrigger,
     VAR( Dem_u08_FFValidTriggerType, AUTOMATIC ) TriggerFromCaller
 );
 #if ( DEM_OBDFFD_SUPPORT == STD_ON )
 FUNC( boolean, DEM_CODE ) Dem_CfgInfo_CheckObdTrigger
 (
-    P2VAR( Dem_u08_StorageTriggerType, AUTOMATIC, AUTOMATIC ) TargetTriggerPtr,
+    VAR( Dem_u08_StorageTriggerType, AUTOMATIC ) TargetTrigger,
     VAR( Dem_u08_FFValidTriggerType, AUTOMATIC ) TriggerFromCaller,
     P2VAR( boolean, AUTOMATIC, AUTOMATIC ) UpdatePendingFFDPtr
 );
@@ -225,16 +225,6 @@ FUNC( boolean, DEM_CODE ) Dem_CfgInfoPm_ClearAllowed_InEvtStrgGrp
 (
     VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex
 );
-FUNC( boolean, DEM_CODE ) Dem_CfgInfoPm_ClearAllowedByConfig_InEvtStrgGrp
-(
-    VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex
-);
-#if ( DEM_CLEAR_EVENT_ALLOWED_BY_CALLOUT_SUPPORT == STD_ON )
-FUNC( boolean, DEM_CODE ) Dem_CfgInfoPm_JudgeClearAllowedByCallout
-(
-    VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex
-);
-#endif  /* ( DEM_CLEAR_EVENT_ALLOWED_BY_CALLOUT_SUPPORT == STD_ON ) */
 
 FUNC( void, DEM_CODE ) Dem_CfgInfoPm_TriggerInitMForEFnc
 (
@@ -257,12 +247,12 @@ FUNC_P2CONST( AB_83_ConstV Dem_DTCAttributeType, DEM_CONFIG_DATA, DEM_CODE ) Dem
 );
 #endif  /* ( DEM_TSFF_PM_SUPPORT == STD_ON )   */
 
-#if ( DEM_PID_READINESS_SUPPORT == STD_ON )
-FUNC( Dem_u08_ReadinessGroupIndexType, DEM_CODE ) Dem_CfgInfoPm_CnvReadinessGroupIdToGroupIndex
+#if ( DEM_FF_PRESTORAGE_SUPPORT == STD_ON )
+FUNC_P2CONST( AB_83_ConstV Dem_DTCAttributeType, DEM_CONFIG_DATA, DEM_CODE ) Dem_CfgInfoPm_GetDTCAttrTablePtr_PreFF
 (
-    VAR( Dem_u08_ReadinessGroupIdType, AUTOMATIC ) ReadinessGroupId
+    VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex
 );
-#endif  /* ( DEM_PID_READINESS_SUPPORT == STD_ON )  */
+#endif  /*   ( DEM_FF_PRESTORAGE_SUPPORT == STD_ON )    */
 
 /*----------------------------------*/
 /*  PrimaryMemory:Similar           */
@@ -415,44 +405,13 @@ FUNC( void, DEM_CODE ) Dem_CfgInfoPm_GetNumOfOBDFreezeFrameRecordClass
     P2VAR( Dem_u08_FFRecordClassIndexType, AUTOMATIC, AUTOMATIC ) FFRClassConfigureNumPtr,
     P2VAR( Dem_u08_FFListIndexType, AUTOMATIC, AUTOMATIC ) OBDFFRClassPerDTCMaxNumPtr
 );
-FUNC( Dem_u08_FFListIndexType, DEM_CODE ) Dem_CfgInfoPm_GetOBDFFRClassPerDTCMaxNum
-( void );
+
 #endif  /*  ( DEM_OBDFFD_SUPPORT == STD_ON )   */
-FUNC( Dem_u08_FFDIndexType, DEM_CODE ) Dem_CfgInfoPm_GetObdFFDRecordNum
-( void );
 
 FUNC( void, DEM_CODE ) Dem_CfgInfoPm_GetExDataClassRef
 (
     VAR( Dem_u16_EventCtrlIndexType, AUTOMATIC ) EventCtrlIndex,
     P2VAR( Dem_u16_ExDataClassIndexType, AUTOMATIC, AUTOMATIC ) ExDataClassRefPtr
-);
-
-/*----------------------------------*/
-/*  PrimaryMemory.FreezeFrameRecord */
-/*----------------------------------*/
-FUNC( void, DEM_CODE ) Dem_CfgInfoPm_GetFreezeFrameRecordInfo_forOutput
-(
-    VAR( Dem_u08_FFRecordClassIndexType, AUTOMATIC ) FreezeFrameRecordClassIndex,
-    P2VAR( Dem_u08_FFRecordNumberType, AUTOMATIC, AUTOMATIC ) FreezeFrameRecordNumberPtr,
-    P2VAR( Dem_u08_StorageTriggerType, AUTOMATIC, AUTOMATIC ) FreezeFrameRecordTriggerPtr,
-    P2VAR( boolean, AUTOMATIC, AUTOMATIC ) FreezeFrameRecordToDcmPtr
-);
-#if ( DEM_OBDFFD_SUPPORT == STD_ON )
-FUNC( void, DEM_CODE ) Dem_CfgInfoPm_GetFreezeFrameRecordInfo_forOutputOBDFFD
-(
-    VAR( Dem_u08_FFRecordClassIndexType, AUTOMATIC ) FreezeFrameRecordClassIndex,
-    P2VAR( Dem_u08_FFRecordNumberType, AUTOMATIC, AUTOMATIC ) FreezeFrameRecordNumberPtr,
-    P2VAR( Dem_u08_StorageTriggerType, AUTOMATIC, AUTOMATIC ) FreezeFrameRecordTriggerPtr
-);
-#endif  /* ( DEM_OBDFFD_SUPPORT == STD_ON ) */
-FUNC( Dem_u08_StorageTriggerType, DEM_CODE ) Dem_CfgInfoPm_GetFreezeFrameRecordTriggerType
-(
-    VAR( Dem_u08_FFRecordClassIndexType, AUTOMATIC ) FreezeFrameRecordClassIndex
-);
-FUNC( Dem_u08_StorageTriggerType, DEM_CODE ) Dem_CfgInfoPm_GetFreezeFrameRecordInfo_forCapture
-(
-    VAR( Dem_u08_FFRecordClassIndexType, AUTOMATIC ) FreezeFrameRecordClassIndex,
-    P2VAR( Dem_u08_UpdateRecordType, AUTOMATIC, AUTOMATIC ) FreezeFrameRecordUpdatePtr
 );
 
 /*----------------------------------*/
@@ -499,12 +458,20 @@ FUNC( Dem_EventKindType, DEM_CODE ) Dem_CfgInfoPm_GetEventKindOfSpecific_InEvtSt
 );
 #endif  /*   ( DEM_SPECIFIC_EVENT_SUPPORT == STD_ON )      */
 
-#if ( DEM_EVENTPRIORITY_PM_SUPPORT == STD_ON )
+#if ( DEM_EVENT_DISPLACEMENT_SUPPORT == STD_ON )
 FUNC( Dem_u08_EventPriorityType, DEM_CODE ) Dem_CfgInfoPm_GetEventPriority
 (
     VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex
 );
-#endif  /* ( DEM_EVENTPRIORITY_PM_SUPPORT == STD_ON ) */
+#endif  /* ( DEM_EVENT_DISPLACEMENT_SUPPORT == STD_ON ) */
+#if ( DEM_EVENT_DISPLACEMENT_SUPPORT == STD_OFF )
+#if ( DEM_OBDONEDS_SUPPORT == STD_ON )
+FUNC( Dem_u08_EventPriorityType, DEM_CODE ) Dem_CfgInfoPm_GetEventPriority
+(
+    VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex
+);
+#endif  /* ( DEM_OBDONEDS_SUPPORT == STD_ON )                */
+#endif  /* ( DEM_EVENT_DISPLACEMENT_SUPPORT == STD_OFF ) */
 
 FUNC( Dem_u32_DTCValueType, DEM_CODE ) Dem_CfgInfoPm_GetUdsDTCValue
 (
@@ -584,15 +551,6 @@ FUNC( boolean, DEM_CODE ) Dem_CfgInfoPm_GetIUMPROutputNecessary
 #endif  /* ( DEM_CALIBRATION_BY_CALLOUT_SUPPORT == STD_ON )    */
 #endif  /* ( DEM_IUMPR_RATIO_SUPPORT == STD_ON )  */
 
-#if ( DEM_IUMPR_SUPPORT == STD_ON )
-FUNC( void, DEM_CODE ) Dem_CfgInfoPm_GetNODIInfo
-(
-    P2VAR( Dem_u08_IUMPRNODIValueType, AUTOMATIC, AUTOMATIC ) NODIValuePtr,
-    P2VAR( Dem_u08_IUMPRGroupIndexType, AUTOMATIC, AUTOMATIC ) NODIGroupNumPtr,
-    P2VAR( Dem_u08_IUMPRNODIOutputSizeType, AUTOMATIC, AUTOMATIC ) NODIOutputSizePtr
-);
-#endif  /* ( DEM_IUMPR_SUPPORT == STD_ON ) */
-
 #if ( DEM_PID_READINESS_SUPPORT == STD_ON )
 FUNC( Dem_u16_EventCtrlIndexType, DEM_CODE ) Dem_CfgInfoPm_GetEventNumberOfReadinessGroup
 (
@@ -606,16 +564,6 @@ FUNC( Dem_u16_EventCtrlIndexType, DEM_CODE ) Dem_CfgInfoPm_GetEventCtrlIndexOfRe
     VAR( Dem_u08_ReadinessGroupIndexType, AUTOMATIC )    ReadinessGroupIndex,
     VAR( Dem_u16_EventCtrlIndexType, AUTOMATIC )    EventListIndex
 );
-
-#if ( DEM_CALIBRATION_BY_CALLOUT_SUPPORT == STD_OFF )
-#if ( DEM_COMBINEDEVENT_ONSTORAGE_SUPPORT == STD_ON )
-FUNC( Dem_u08_ReadinessGroupIdType, DEM_CODE ) Dem_CfgInfoPm_GetReadinessGroupIdForSID1956
-(
-    VAR( Dem_u16_EventCtrlIndexType, AUTOMATIC )    EventCtrlIndex
-);
-#endif  /* ( DEM_COMBINEDEVENT_ONSTORAGE_SUPPORT == STD_ON )    */
-#endif  /* ( DEM_CALIBRATION_BY_CALLOUT_SUPPORT == STD_ON )     */
-
 #endif  /* ( DEM_PID_READINESS_SUPPORT == STD_ON ) */
 
 #if ( DEM_OBDFFD_SUPPORT == STD_ON )
@@ -915,9 +863,6 @@ FUNC( Dem_u08_EventPriorityType, DEM_CODE ) Dem_CfgInfoUdm_GetEventPriority
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-7-0         :2024-05-29                                              */
-/*  v5-8-0         :2024-10-29                                              */
-/*  v5-10-0        :2025-06-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

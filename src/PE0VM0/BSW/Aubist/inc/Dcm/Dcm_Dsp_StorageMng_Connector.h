@@ -1,7 +1,7 @@
-/* Dcm_Dsp_StorageMng_Connector_h(v5-8-0)                                   */
+/* Dcm_Dsp_StorageMng_Connector_h(v5-0-0)                                   */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -30,6 +30,7 @@
 #define DCM_NVM_REQ_BLOCK_SKIPPED        NVM_REQ_BLOCK_SKIPPED
 #define DCM_NVM_REQ_NV_INVALIDATED       NVM_REQ_NV_INVALIDATED
 #define DCM_NVM_REQ_CANCELED             NVM_REQ_CANCELED
+#define DCM_NVM_REQ_REDUNDANCY_FAILED    NVM_REQ_REDUNDANCY_FAILED
 #define DCM_NVM_REQ_RESTORED_FROM_ROM    NVM_REQ_RESTORED_FROM_ROM
 
 /*--------------------------------------------------------------------------*/
@@ -88,7 +89,6 @@ FUNC (Std_ReturnType, DCM_CODE ) Dcm_Dsp_StorageMng_Cnct_NvMCancelJob
 /* History                                                                  */
 /*  Version        :Date                                                    */
 /*  v5-0-0         :2021-12-24                                              */
-/*  v5-8-0         :2024-10-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

@@ -1,7 +1,7 @@
-/* Dem_MisfireMngVld_c(v5-10-0)                                             */
+/* Dem_MisfireMngVld_c(v5-5-0)                                              */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -97,18 +97,6 @@ static FUNC( void, DEM_CODE ) Dem_MisfireMng_ConsistencyUpdateMisfireEvent
     VAR( Dem_u08_FaultIndexType, AUTOMATIC ) FaultIndex
 );
 
-#if ( DEM_OBDFFD_SUPPORT == STD_ON )
-#if ( DEM_OBDONUDS_SUPPORT == STD_ON )
-#if ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )
-static FUNC( void, DEM_CODE ) Dem_MisfireMng_CorrectMisfireOBDFFDLink
-(
-    VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndexBase,
-    VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndexPair
-);
-#endif /* ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )    */
-#endif /* ( DEM_OBDONUDS_SUPPORT == STD_ON )                */
-#endif /* ( DEM_OBDFFD_SUPPORT == STD_ON )                  */
-
 #define DEM_STOP_SEC_CODE
 #include <Dem_MemMap.h>
 
@@ -142,7 +130,6 @@ static FUNC( void, DEM_CODE ) Dem_MisfireMng_CorrectMisfireOBDFFDLink
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-9-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_MisfireMng_DataVerify
 (
@@ -200,12 +187,6 @@ FUNC( void, DEM_CODE ) Dem_MisfireMng_DataVerify
         {
             Dem_EventNvMStatus[ misfirePairEventStrgIndex ] = DEM_RECMNGCMN_NVM_STS_NON_TARGET;                                 /* [GUD] misfirePairEventStrgIndex */
         }
-
-#if ( DEM_OBDFFD_SUPPORT == STD_ON )    /*  [FuncSw]    */
-#if ( DEM_OBDONUDS_SUPPORT == STD_ON )  /*  [FuncSw]    */
-        Dem_MisfireMng_CorrectMisfireOBDFFDLink( EventStrgIndex, misfirePairEventStrgIndex );
-#endif  /* ( DEM_OBDONUDS_SUPPORT == STD_ON )           */
-#endif  /* ( DEM_OBDFFD_SUPPORT == STD_ON )             */
 
 #endif  /* ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )           */
     }
@@ -730,8 +711,6 @@ static FUNC( void, DEM_CODE ) Dem_MisfireMng_NvMClearMisfireEvent
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
-/*   v5-10-0     | no branch changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_MisfireMng_UpdateObdFFDInfoByInitRecordNumberIndex
 (
@@ -741,6 +720,7 @@ FUNC( void, DEM_CODE ) Dem_MisfireMng_UpdateObdFFDInfoByInitRecordNumberIndex
 )
 {
     P2CONST( AB_83_ConstV Dem_FreezeFrameRecNumClassType, AUTOMATIC, DEM_CONFIG_DATA ) freezeFrameRecNumClassPtr;
+    P2CONST( AB_83_ConstV Dem_FreezeFrameRecordClassType, AUTOMATIC, DEM_CONFIG_DATA ) freezeFrameRecordClassPtr;
     VAR( Dem_u16_FFClassIndexType, AUTOMATIC ) obdFreezeFrameClassRef;
     VAR( Dem_u16_FFRecNumClassIndexType, AUTOMATIC ) obdFreezeframeRecNumClassRef;
     VAR( Dem_u08_FFRecordClassIndexType, AUTOMATIC ) freezeFrameRecordClassIndex;
@@ -765,9 +745,10 @@ FUNC( void, DEM_CODE ) Dem_MisfireMng_UpdateObdFFDInfoByInitRecordNumberIndex
         Dem_CfgInfoPm_GetOBDFreezeFrameAndRecNumClass( EventStrgIndex, &obdFreezeFrameClassRef, &obdFreezeframeRecNumClassRef );        /* [GUD]EventStrgIndex *//* [GUD:OUT:IF_GUARDED: EventStrgIndex] obdFreezeFrameClassRef *//* [GUD:OUT:IF_GUARDED: EventStrgIndex] obdFreezeframeRecNumClassRef */
 
         freezeFrameRecNumClassPtr = &Dem_FreezeFrameRecNumClassTable[obdFreezeframeRecNumClassRef];                                     /* [GUD]obdFreezeframeRecNumClassRef *//* [GUD:CFG:IF_GUARDED: obdFreezeframeRecNumClassRef] freezeFrameRecNumClassPtr */
-        freezeFrameRecordClassIndex = freezeFrameRecNumClassPtr->DemFreezeFrameRecordClassRef[ObdFreezeFrameRecordIndex];               /* [GUD]freezeFrameRecNumClassPtr    *//* [GUDCHK:CALLER]ObdFreezeFrameRecordIndex    *//* [GUD:CFG:IF_GUARDED: freezeFrameRecNumClassPtr/ObdFreezeFrameRecordIndex] freezeFrameRecordClassIndex *//* [ARYCHK] DEM_FF_RECORD_CLASS_REF_MAX_NUM / 1 / ObdFreezeFrameRecordIndex */
+        freezeFrameRecordClassIndex = freezeFrameRecNumClassPtr->DemFreezeFrameRecordClassRef[ObdFreezeFrameRecordIndex];               /* [GUD]freezeFrameRecNumClassPtr    *//* [GUDCHK:CALLER]ObdFreezeFrameRecordIndex    *//* [GUD:CFG:IF_GUARDED: freezeFrameRecNumClassPtr/ObdFreezeFrameRecordIndex] freezeFrameRecordClassIndex */
+        freezeFrameRecordClassPtr = &Dem_FreezeFrameRecordClassTable[freezeFrameRecordClassIndex];                                      /* [GUDCHK:CALLER]ObdFreezeFrameRecordIndex *//* [GUD:CFG:IF_GUARDED: freezeFrameRecordClassIndex] freezeFrameRecordClassPtr */
 
-        trigger =   Dem_CfgInfoPm_GetFreezeFrameRecordTriggerType( freezeFrameRecordClassIndex );                                       /* [GUDCHK:CALLER]ObdFreezeFrameRecordIndex */
+        trigger = freezeFrameRecordClassPtr->DemFreezeFrameRecordTrigger;                                                               /* [GUDCHK:CALLER]ObdFreezeFrameRecordIndex */
 
         retCnvId = Dem_CfgInfoPm_CnvEventStrgIndexToMisfireStrgIndex( EventStrgIndex, &misfireIndex );                                  /* [GUD]EventStrgIndex */
         if( retCnvId == DEM_IRT_OK )
@@ -835,8 +816,6 @@ FUNC( void, DEM_CODE ) Dem_MisfireMng_UpdateObdFFDInfoByInitRecordNumberIndex
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
-/*   v5-10-0     | no branch changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_MisfireMng_UpdateFFDInfoByInitRecordNumberIndex
 (
@@ -847,6 +826,7 @@ FUNC( void, DEM_CODE ) Dem_MisfireMng_UpdateFFDInfoByInitRecordNumberIndex
 {
 
     P2CONST( AB_83_ConstV Dem_FreezeFrameRecNumClassType, AUTOMATIC, DEM_CONFIG_DATA ) freezeFrameRecNumClassPtr;
+    P2CONST( AB_83_ConstV Dem_FreezeFrameRecordClassType, AUTOMATIC, DEM_CONFIG_DATA ) freezeFrameRecordClassPtr;
     VAR( Dem_u16_FFClassIndexType, AUTOMATIC ) freezeFrameClassRef;
     VAR( Dem_u16_FFRecNumClassIndexType, AUTOMATIC ) freezeframeRecNumClassRef;
     VAR( Dem_u08_FFRecordClassIndexType, AUTOMATIC ) freezeFrameRecordClassIndex;
@@ -871,9 +851,10 @@ FUNC( void, DEM_CODE ) Dem_MisfireMng_UpdateFFDInfoByInitRecordNumberIndex
         Dem_CfgInfoPm_GetFreezeFrameAndRecNumClass( EventStrgIndex, &freezeFrameClassRef, &freezeframeRecNumClassRef ); /* [GUD:OUT:IF_GUARDED: EventStrgIndex] freezeFrameClassRef *//* [GUD:OUT:IF_GUARDED: EventStrgIndex] freezeframeRecNumClassRef */
 
         freezeFrameRecNumClassPtr = &Dem_FreezeFrameRecNumClassTable[freezeframeRecNumClassRef];                        /* [GUD]freezeframeRecNumClassRef *//* [GUD:CFG:IF_GUARDED: freezeframeRecNumClassRef] freezeFrameRecNumClassPtr */
-        freezeFrameRecordClassIndex = freezeFrameRecNumClassPtr->DemFreezeFrameRecordClassRef[FreezeFrameRecordIndex];  /* [GUD]freezeFrameRecNumClassPtr *//* [GUDCHK:CALLER]FreezeFrameRecordIndex    *//* [GUD:CFG:IF_GUARDED: freezeFrameRecNumClassPtr/FreezeFrameRecordIndex] freezeFrameRecordClassIndex *//* [ARYCHK] DEM_FF_RECORD_CLASS_REF_MAX_NUM / 1 / FreezeFrameRecordIndex */
+        freezeFrameRecordClassIndex = freezeFrameRecNumClassPtr->DemFreezeFrameRecordClassRef[FreezeFrameRecordIndex];  /* [GUD]freezeFrameRecNumClassPtr *//* [GUDCHK:CALLER]FreezeFrameRecordIndex    *//* [GUD:CFG:IF_GUARDED: freezeFrameRecNumClassPtr/FreezeFrameRecordIndex] freezeFrameRecordClassIndex */
+        freezeFrameRecordClassPtr = &Dem_FreezeFrameRecordClassTable[freezeFrameRecordClassIndex];                      /* [GUDCHK:CALLER]FreezeFrameRecordIndex *//* [GUD:CFG:IF_GUARDED: freezeFrameRecordClassIndex] freezeFrameRecordClassPtr */
 
-        trigger =   Dem_CfgInfoPm_GetFreezeFrameRecordTriggerType( freezeFrameRecordClassIndex );                       /* [GUDCHK:CALLER]FreezeFrameRecordIndex */
+        trigger = freezeFrameRecordClassPtr->DemFreezeFrameRecordTrigger;                                               /* [GUDCHK:CALLER]FreezeFrameRecordIndex */
 
         retCnvId = Dem_CfgInfoPm_CnvEventStrgIndexToMisfireStrgIndex( EventStrgIndex, &misfireIndex );
         if( retCnvId == DEM_IRT_OK )
@@ -990,193 +971,6 @@ static FUNC( void, DEM_CODE ) Dem_MisfireMng_ConsistencyUpdateMisfireEvent
     return;
 }
 
-#if ( DEM_OBDFFD_SUPPORT == STD_ON )
-#if ( DEM_OBDONUDS_SUPPORT == STD_ON )
-#if ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )
-/****************************************************************************/
-/* Function Name | Dem_MisfireMng_CorrectMisfireOBDFFDLink                  */
-/* Description   | correct Misfire OBDFFD link.                             */
-/* Preconditions |                                                          */
-/* Parameters    | [in]  EventStrgIndexBase : event index.                  */
-/*               | [in]  EventStrgIndexPair : event index.                  */
-/* Return Value  | void                                                     */
-/* Notes         | none                                                     */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-9-0      | new created.                                             */
-/****************************************************************************/
-static FUNC( void, DEM_CODE ) Dem_MisfireMng_CorrectMisfireOBDFFDLink
-(
-    VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndexBase,
-    VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndexPair
-)
-{
-    VAR( Dem_u16_MisfireStrgIndexType, AUTOMATIC ) misfireIndexDest;
-    VAR( Dem_u16_MisfireStrgIndexType, AUTOMATIC ) misfireIndexSrc;
-    VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) eventStrgIndexDest;
-    VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) eventStrgIndexSrc;
-    VAR( Dem_UdsStatusByteType, AUTOMATIC ) statusOfDTC_Dest;
-
-    VAR( Dem_u08_FaultIndexType, AUTOMATIC ) faultIndexBase;
-    VAR( Dem_u08_FaultIndexType, AUTOMATIC ) faultIndexPair;
-    VAR( Dem_u08_FaultIndexType, AUTOMATIC ) faultIndexSrc;
-    VAR( Dem_u08_FaultIndexType, AUTOMATIC ) faultIndexDest;
-    VAR( Dem_u08_FaultIndexType, AUTOMATIC ) failRecordNum;
-
-    VAR( Dem_u08_MisfireObdFFDCylIndexType, AUTOMATIC ) misfireObdFFDCylIndex;
-    VAR( Dem_u08_MisfireKindType, AUTOMATIC ) misfireKindOfFFD;
-
-    VAR( boolean, AUTOMATIC ) existOBDFFDBase;
-    VAR( boolean, AUTOMATIC ) existOBDFFDPair;
-    VAR( boolean, AUTOMATIC ) compareResult;
-
-    VAR( boolean, AUTOMATIC ) updateCorrectOBDFFDFlag;
-
-    failRecordNum = Dem_FailRecordNum;
-
-    /*  get faultIndex.             */
-    (void)Dem_DataMngC_GetER_FaultIndex( EventStrgIndexBase, &faultIndexBase );     /* no return check required */
-    (void)Dem_DataMngC_GetER_FaultIndex( EventStrgIndexPair, &faultIndexPair );     /* no return check required */
-
-    /*  Check EventStrgIndexBase and EventStrgIndexPair have fault records.         */
-    /*  If only one side has a fault record, the process ends without any action.   */
-    if (( faultIndexBase < failRecordNum ) && ( faultIndexPair < failRecordNum ))
-    {
-        /*  copy OBDFFD flag : FALSE.           */
-        updateCorrectOBDFFDFlag =   (boolean)FALSE;
-
-        /*  Check if both have OBD FFDs or if both do not have OBD FFDs.            */
-        existOBDFFDBase =   Dem_DataMngC_GetFR_CheckExistOBDFFD( faultIndexBase );
-        existOBDFFDPair =   Dem_DataMngC_GetFR_CheckExistOBDFFD( faultIndexPair );
-
-        /*  If only one side has OBD FFD        */
-        if ( existOBDFFDBase != existOBDFFDPair )
-        {
-            /*  Copy OBDFFD index : have OBD FFD side to don't have OBDFFD side.    */
-            if ( existOBDFFDBase == (boolean)TRUE )
-            {
-                /*  have OBD FFD side : faultIndexBase   */
-                faultIndexSrc       =   faultIndexBase;
-                eventStrgIndexSrc   =   EventStrgIndexBase;
-
-                faultIndexDest      =   faultIndexPair;
-                eventStrgIndexDest  =   EventStrgIndexPair;
-            }
-            else
-            {
-                /*  have OBD FFD side : faultIndexPair   */
-                faultIndexSrc       =   faultIndexPair;
-                eventStrgIndexSrc   =   EventStrgIndexPair;
-
-                faultIndexDest      =   faultIndexBase;
-                eventStrgIndexDest  =   EventStrgIndexBase;
-            }
-
-            /*  check CopyDest's statusOfDTC.            */
-            (void)Dem_DataMngC_GetER_StatusOfDTC( eventStrgIndexDest, &statusOfDTC_Dest );  /* no return check required */
-            if (( statusOfDTC_Dest & ( DEM_UDS_STATUS_PDTC | DEM_UDS_STATUS_CDTC ) ) == DEM_DTCSTATUS_BYTE_ALL_OFF )
-            {
-                /*  CopyDest fault record not have fault information.       */
-                /*  no action.                                              */
-            }
-            else
-            {
-                /*  copy OBDFFD index.                  */
-                /*  copy OBDFFD flag : TRUE.            */
-                updateCorrectOBDFFDFlag =   (boolean)TRUE;
-            }
-        }
-        else
-        {
-            if ( existOBDFFDBase == (boolean)TRUE )
-            {
-                /*----------------------------------------------*/
-                /*  Both misfire events have OBD FFDs.          */
-                /*----------------------------------------------*/
-                /*  Compare OBD FFD indexes.                    */
-                compareResult   =   Dem_DataMngC_CompareFR_ObdRecordNumberIndex( faultIndexBase, faultIndexPair );
-                if ( compareResult == (boolean)TRUE )
-                {
-                    /*------------------------------------------*/
-                    /*  same OBDFFDs. no update.                */
-                    /*------------------------------------------*/
-                }
-                else
-                {
-                    /*------------------------------------------*/
-                    /*  different OBDFFDs.                      */
-                    /*------------------------------------------*/
-                    /*  check correct MisfireInfo from Dem_MisfireComRecord.MisfireKindOfOBDFFD[].  */
-                    misfireObdFFDCylIndex   =   Dem_CfgInfoPm_GetObdFFDCylIndexOfMisfire( DEM_TRIGGER_ON_TEST_FAILED_THIS_OPERATION_CYCLE );
-                    misfireKindOfFFD        =   Dem_MisfireMng_GetMisfireKindOfObdFFD( misfireObdFFDCylIndex );
-
-                    if ( misfireKindOfFFD != DEM_MISFIRE_KIND_INVALID )
-                    {
-                        if ( misfireKindOfFFD == DEM_MISFIRE_KIND_EMISSION )
-                        {
-                            /*  correct Misfire : Emission(faultIndexBase). */
-                            faultIndexSrc       =   faultIndexBase;
-                            eventStrgIndexSrc   =   EventStrgIndexBase;
-
-                            faultIndexDest      =   faultIndexPair;
-                            eventStrgIndexDest  =   EventStrgIndexPair;
-                        }
-                        else
-                        {
-                            /*  correct Misfire : CAT(faultIndexPair).      */
-                            faultIndexSrc       =   faultIndexPair;
-                            eventStrgIndexSrc   =   EventStrgIndexPair;
-
-                            faultIndexDest      =   faultIndexBase;
-                            eventStrgIndexDest  =   EventStrgIndexBase;
-                        }
-
-                        /*  copy OBDFFD index.                  */
-                        updateCorrectOBDFFDFlag =   (boolean)TRUE;
-                    }
-                    else
-                    {
-                        /*  There's no OBD FFD information in MisfireCom record.    */
-                        /*  Because after verified, it's impossible for a fault record's OBD FFD are exist but no MisfireCom record's OBD FFD are not exist.    */
-                        /*  no update.                                              */
-                    }
-                }
-            }
-            else
-            {
-                /*----------------------------------------------*/
-                /*  Both misfire events don't have OBD FFDs.    */
-                /*  no update.                                  */
-                /*----------------------------------------------*/
-            }
-        }
-
-        /*  update OBD FFD information from correct Misfire event's information.    */
-        if ( updateCorrectOBDFFDFlag == (boolean)TRUE )
-        {
-            /*  get MisfireRecord index.        */
-            (void)Dem_CfgInfoPm_CnvEventStrgIndexToMisfireStrgIndex( eventStrgIndexDest, &misfireIndexDest );   /* no return check required */
-            (void)Dem_CfgInfoPm_CnvEventStrgIndexToMisfireStrgIndex( eventStrgIndexSrc, &misfireIndexSrc );     /* no return check required */
-
-            /*  set to NotVerified status to illegal OBD FFDs.  */
-            Dem_ObdFFDMng_SetVerifiedStatus_ObdFreezeFrameRecord( faultIndexDest, faultIndexSrc );
-
-            /*  Copy OBDFFD index.                              */
-            Dem_DataMngC_CopyFR_AllObdRecordNumberIndex( faultIndexDest, faultIndexSrc );
-
-            /*  Copy MisfireRecord.OBDFFDCyl[].                 */
-            Dem_MisfireMng_CopyAllObdFFDCyl( misfireIndexDest, misfireIndexSrc );
-
-            /*  update consistencyId to Misfire event's EventRecord/FaultRecord/MisfireRecord/MisfireComRecord. */
-            /*  because update FaultRecord and MisfireRecord, always update consistencyId.                      */
-            Dem_MisfireMng_ConsistencyUpdateMisfireEvent( eventStrgIndexDest, faultIndexDest );         /* [GUD] faultIndexDest */
-        }
-    }
-    return;
-}
-#endif /* ( DEM_MISFIRE_CAT_EVENT_CONFIGURED == STD_ON )    */
-#endif /* ( DEM_OBDONUDS_SUPPORT == STD_ON )                */
-#endif /* ( DEM_OBDFFD_SUPPORT == STD_ON )                  */
 
 #define DEM_STOP_SEC_CODE
 #include <Dem_MemMap.h>
@@ -1188,9 +982,6 @@ static FUNC( void, DEM_CODE ) Dem_MisfireMng_CorrectMisfireOBDFFDLink
 /*  Version        :Date                                                    */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-7-0         :2024-05-29                                              */
-/*  v5-9-0         :2025-02-26                                              */
-/*  v5-10-0        :2025-06-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

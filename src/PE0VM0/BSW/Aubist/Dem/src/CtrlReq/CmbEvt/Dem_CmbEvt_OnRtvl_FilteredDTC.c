@@ -1,7 +1,7 @@
-/* Dem_CmbEvt_OnRtvl_FilteredDTC_c(v5-7-0)                                  */
+/* Dem_CmbEvt_OnRtvl_FilteredDTC_c(v5-5-0)                                  */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -14,6 +14,9 @@
 /* Include Files                                                            */
 /*--------------------------------------------------------------------------*/
 #include <Dem.h>
+
+#if ( DEM_OBD_SUPPORT == STD_ON )
+#if ( DEM_COMBINEDEVENT_ONRETRIEVAL_SUPPORT == STD_ON )
 
 #include "../../../inc/Dem_CmnLib_CmbEvt.h"
 #include "../../../inc/Dem_Rc_PFCMng.h"
@@ -47,10 +50,8 @@
 #define DEM_START_SEC_VAR_NO_INIT
 #include <Dem_MemMap.h>
 
-#if ( DEM_COMBINEDEVENT_ONRETRIEVAL_SUPPORT == STD_ON )
 static VAR( Dem_u08_FaultIndexType, DEM_VAR_NO_INIT ) Dem_NumOfOutputCompletedEventOfFilteredDTC;
 static VAR( Dem_u16_EventStrgIndexType, DEM_VAR_NO_INIT ) Dem_OutputCompletedEventStrgIndex[DEM_FAIL_RECORD_NUM];
-#endif  /* ( DEM_COMBINEDEVENT_ONRETRIEVAL_SUPPORT == STD_ON )    */
 
 #define DEM_STOP_SEC_VAR_NO_INIT
 #include <Dem_MemMap.h>
@@ -71,7 +72,6 @@ static VAR( Dem_u16_EventStrgIndexType, DEM_VAR_NO_INIT ) Dem_OutputCompletedEve
 #define DEM_START_SEC_CODE
 #include <Dem_MemMap.h>
 
-#if ( DEM_COMBINEDEVENT_ONRETRIEVAL_SUPPORT == STD_ON )
 /****************************************************************************/
 /* Function Name | Dem_CmbEvt_StartOfCheckOutputFilteredDTC                 */
 /* Description   | start of check output OBDDTC.                            */
@@ -91,9 +91,7 @@ FUNC( void, DEM_CODE ) Dem_CmbEvt_StartOfCheckOutputFilteredDTC
 
     return ;
 }
-#endif  /* ( DEM_COMBINEDEVENT_ONRETRIEVAL_SUPPORT == STD_ON )    */
 
-#if ( DEM_COMBINEDEVENT_ONRETRIEVAL_FILDTC_SUPPORT == STD_ON )
 #if ( DEM_OBDDTC_FORMAT_SUPPORT == STD_ON )
 /****************************************************************************/
 /* Function Name | Dem_CmbEvt_CheckOutputFilteredObdDTC                     */
@@ -164,9 +162,7 @@ FUNC( boolean, DEM_CODE ) Dem_CmbEvt_CheckOutputFilteredObdDTC
     return retVal;
 }
 #endif  /* ( DEM_OBDDTC_FORMAT_SUPPORT == STD_ON )    */
-#endif  /* ( DEM_COMBINEDEVENT_ONRETRIEVAL_FILDTC_SUPPORT == STD_ON )    */
 
-#if ( DEM_COMBINEDEVENT_ONRETRIEVAL_SUPPORT == STD_ON )
 /****************************************************************************/
 /* Function Name | Dem_CmbEvt_CheckOutputFilteredUdsDTC                     */
 /* Description   | check output UdsDTC.                                     */
@@ -249,11 +245,12 @@ FUNC( boolean, DEM_CODE ) Dem_CmbEvt_CheckOutputFilteredUdsDTC
     }
     return retVal;
 }
-#endif  /* ( DEM_COMBINEDEVENT_ONRETRIEVAL_SUPPORT == STD_ON )    */
 
 #define DEM_STOP_SEC_CODE
 #include <Dem_MemMap.h>
 
+#endif  /* ( DEM_COMBINEDEVENT_ONRETRIEVAL_SUPPORT == STD_ON )    */
+#endif  /* ( DEM_OBD_SUPPORT == STD_ON )    */
 
 /****************************************************************************/
 /* History                                                                  */
@@ -261,8 +258,6 @@ FUNC( boolean, DEM_CODE ) Dem_CmbEvt_CheckOutputFilteredUdsDTC
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-6-0         :2024-01-29                                              */
-/*  v5-7-0         :2024-05-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

@@ -1,7 +1,7 @@
-/* Dem_AltIUMPR_Misfire_c(v5-6-0)                                           */
+/* Dem_AltIUMPR_Misfire_c(v5-5-0)                                           */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -139,11 +139,6 @@ FUNC( void, DEM_CODE ) Dem_AltIUMPR_PrepareIncNumeratorCountsForCylinder
 /* Parameters    | [in] EventStrgIndex   : Event index.                     */
 /* Return Value  | void                                                     */
 /* Notes         |                                                          */
-/*--------------------------------------------------------------------------*/
-/* UpdateRecord  | [UpdRec]AltIUMPR                                         */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-6-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_AltIUMPR_IncNumeratorCountsForCylinder
 (
@@ -167,7 +162,7 @@ FUNC( void, DEM_CODE ) Dem_AltIUMPR_IncNumeratorCountsForCylinder
             /* Check Status of DTC bit6 OFF */
             if( checkCylinderBit6 == DEM_MISFIRE_CYLINDER_NON )
             {
-                Dem_AltIUMPRMng_IncNumeratorCountsForCylinder( misfireCylinderCnt );/* [UpdRec]AltIUMPR */
+                Dem_AltIUMPRMng_IncNumeratorCountsForCylinder( misfireCylinderCnt );
             }
         }
     }
@@ -190,7 +185,6 @@ FUNC( void, DEM_CODE ) Dem_AltIUMPR_IncNumeratorCountsForCylinder
 /*  Version        :Date                                                    */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-6-0         :2024-01-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

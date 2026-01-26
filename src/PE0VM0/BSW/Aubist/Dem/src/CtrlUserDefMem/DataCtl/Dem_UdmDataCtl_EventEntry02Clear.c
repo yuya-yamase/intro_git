@@ -1,7 +1,7 @@
-/* Dem_UdmDataCtl_EventEntry02Clear_c(v5-9-0)                               */
+/* Dem_UdmDataCtl_EventEntry02Clear_c(v5-5-0)                               */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -100,7 +100,6 @@ FUNC( void, DEM_CODE ) Dem_UdmData_ClearEventRecord
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
-/*   v5-9-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_UdmData_ClearFaultRecord
 (
@@ -108,7 +107,7 @@ FUNC( void, DEM_CODE ) Dem_UdmData_ClearFaultRecord
     VAR( Dem_u08_UdmFaultIndexType, AUTOMATIC ) UdmFaultIndex
 )
 {
-    if( UdmFaultIndex != DEM_UDMFAULTINDEX_INITIAL )
+    if( UdmFaultIndex != DEM_FAULTINDEX_INITIAL )
     {
         (void)Dem_UdmFaultMngC_ClearFaultRecord( UdmGroupKindIndex, UdmFaultIndex ); /* no return check required */
     }
@@ -244,7 +243,6 @@ FUNC( void, DEM_CODE ) Dem_UdmData_SubtractOneFromNumOfEventMemoryEntries
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-9-0         :2025-02-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

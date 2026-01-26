@@ -1,7 +1,7 @@
-/* Dem_StoredData_CalcRecNum_c(v5-10-0)                                     */
+/* Dem_StoredData_CalcRecNum_c(v5-5-0)                                      */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -30,11 +30,6 @@
 #if ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON )
 #include "../../../inc/Dem_Pm_Misfire.h"
 #endif /* ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON ) */
-
-#ifndef DEM_SIT_RANGE_CHECK
-#else   /* DEM_SIT_RANGE_CHECK */
-#include <Dem_SIT_RangeCheck.h>
-#endif /* DEM_SIT_RANGE_CHECK */
 
 /*--------------------------------------------------------------------------*/
 /* Macros                                                                   */
@@ -272,7 +267,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_StoredData_GetSizeOfDTCStoredDa
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | branch changed.                                          */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_StoredData_GetDTCStoredDataByRecNum
 (
@@ -382,12 +376,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_StoredData_GetDTCStoredDataByRe
                                         if( Dem_StoredData_SearchedRecordNumber == RecordNumber )
                                         {
                                             Dem_StoredData_SetDTCAndStatusOfStoredData( eventStrgIndex );
-
-#ifndef DEM_SIT_RANGE_CHECK
                                             retVal = Dem_StoredData_GetStoredData( RecordNumber, freezeFrameRecord.DataPtr, freezeFrameClassRef, DestBufferPtr, BufSizePtr );
-#else   /* DEM_SIT_RANGE_CHECK */
-                                            retVal = Dem_StoredData_GetStoredData( DEM_SIT_R_CHK_NONOBD_FF_DATA_SIZE, RecordNumber, freezeFrameRecord.DataPtr, freezeFrameClassRef, DestBufferPtr, BufSizePtr );
-#endif  /* DEM_SIT_RANGE_CHECK */
                                             loopEndFlg = (boolean)TRUE;
                                         }
                                     }
@@ -453,7 +442,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_StoredData_GetDTCStoredDataByRe
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-10-0     | branch changed.                                          */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_StoredData_StoreTmpOutputData
 ( void )
@@ -462,7 +450,7 @@ static FUNC( void, DEM_CODE ) Dem_StoredData_StoreTmpOutputData
     VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) eventStorageNum;
     VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) eventStrgIndex;
     VAR( Dem_u08_OrderIndexType, AUTOMATIC ) orderListIndex;
-    VAR( Dem_u08_FaultIndexType, AUTOMATIC ) failRecordNum;
+    VAR( Dem_u08_OrderIndexType, AUTOMATIC ) numOfConfirmedDTCs;
     VAR( Dem_u08_InternalReturnType, AUTOMATIC ) retGetFaultRegistOrderListData;
     VAR( Dem_u08_FaultIndexType, AUTOMATIC ) faultIndex;
     VAR( boolean, AUTOMATIC ) availableStatus;
@@ -471,8 +459,8 @@ static FUNC( void, DEM_CODE ) Dem_StoredData_StoreTmpOutputData
     Dem_StoredData_TmpOutputDataNum = (Dem_u08_FaultIndexType)0U;
     eventStorageNum = Dem_PrimaryMemEventStorageNum;
 
-    failRecordNum = Dem_FailRecordNum;
-    for( orderListIndex = ( Dem_u08_OrderIndexType )0U; orderListIndex < failRecordNum; orderListIndex++ )     /* [GUD:for]orderListIndex/Dem_StoredData_TmpOutputDataNum */
+    numOfConfirmedDTCs = Dem_DataMngC_GetNumberOfConfirmedDTCs();
+    for( orderListIndex = ( Dem_u08_OrderIndexType )0U; orderListIndex < numOfConfirmedDTCs; orderListIndex++ )     /* [GUD:for]orderListIndex/Dem_StoredData_TmpOutputDataNum */
     {
         retGetFaultRegistOrderListData = Dem_OdrLst_Confirmed_GetFaultIndexByOrder( orderListIndex, &faultIndex );
         if( retGetFaultRegistOrderListData == DEM_IRT_OK )
@@ -550,7 +538,6 @@ static FUNC( void, DEM_CODE ) Dem_StoredData_ResetControlDataForTSFFD
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | branch changed.                                          */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_StoredData_GetDTCStoredDataFromTSFFDTC
 (
@@ -635,11 +622,7 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_StoredData_GetDTCStoredD
 
                                     if( Dem_StoredData_SearchedRecordNumber == RecordNumber )
                                     {
-#ifndef DEM_SIT_RANGE_CHECK
                                         retVal = Dem_StoredData_GetStoredData( RecordNumber, freezeFrameRecord.DataPtr, freezeFrameClassRef, DestBufferPtr, BufSizePtr );
-#else   /* DEM_SIT_RANGE_CHECK */
-                                        retVal = Dem_StoredData_GetStoredData( DEM_SIT_R_CHK_NONOBD_FF_DATA_SIZE, RecordNumber, freezeFrameRecord.DataPtr, freezeFrameClassRef, DestBufferPtr, BufSizePtr );
-#endif  /* DEM_SIT_RANGE_CHECK */
                                         getConfirmedTriggerNonOBDFFDFlg = (boolean)TRUE;
                                         loopEndFlg = (boolean)TRUE;
                                     }
@@ -734,9 +717,6 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_StoredData_GetDTCStoredD
 /*               |        DEM_IRT_NO_MATCHING_ELEMENT : Could not find Sto- */
 /*               |        redData to be output from target TSFFD.           */
 /* Notes         |                                                          */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_StoredData_GetDTCStoredDataFromTSFFD
 (
@@ -784,11 +764,7 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_StoredData_GetDTCStoredD
                         Dem_StoredData_OutputTargetTSFFDFlg = (boolean)TRUE;
                         if( Dem_StoredData_SearchedRecordNumber == RecordNumber )
                         {
-#ifndef DEM_SIT_RANGE_CHECK
                             retVal = Dem_StoredData_GetStoredData( RecordNumber, tsFFRecord.DataPtr, freezeFrameClassRef, DestBufferPtr, BufSizePtr );
-#else   /* DEM_SIT_RANGE_CHECK */
-                            retVal = Dem_StoredData_GetStoredData( DEM_SIT_R_CHK_TS_FF_DATA_SIZE, RecordNumber, tsFFRecord.DataPtr, freezeFrameClassRef, DestBufferPtr, BufSizePtr );
-#endif  /* DEM_SIT_RANGE_CHECK */
                             serchTSFFDloopEndFlg = (boolean)TRUE;
                         }
                     }
@@ -841,8 +817,6 @@ static FUNC( boolean, DEM_CODE ) Dem_StoredData_CheckOutputDTCFromTSFFD
 /*  Version        :Date                                                    */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-7-0         :2024-05-29                                              */
-/*  v5-10-0        :2025-06-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

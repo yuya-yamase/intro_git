@@ -1,7 +1,7 @@
-/* Dem_SimilarMng_c(v5-9-0)                                                 */
+/* Dem_SimilarMng_c(v5-5-0)                                                 */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -140,7 +140,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_SimilarMng_DataVerify
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_SimilarMng_GetSimilarRecordList
 (
@@ -157,8 +156,8 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_SimilarMng_GetSimilarRecordList
 
     if( SimilarStrgIndex < similarEventNum )    /* [GUD:if]SimilarStrgIndex */
     {
-        Dem_UtlSimilar_CopySimilarConditionArray( &SimilarRecordPtr->SimilarConditionStoredList[0], &Dem_SimilarRecordList[SimilarStrgIndex].SimilarConditionStoredList[0] );   /* [GUD]SimilarStrgIndex *//* [ARYCHK] DEM_SIMILARTYPE_NUM / 1 / 0 */
-        Dem_UtlSimilar_CopySimilarConditionArray( &SimilarRecordPtr->SimilarConditionLatchedList[0], &Dem_SimilarRecordList[SimilarStrgIndex].SimilarConditionLatchedList[0] ); /* [GUD]SimilarStrgIndex *//* [ARYCHK] DEM_SIMILARTYPE_NUM / 1 / 0 */
+        Dem_UtlSimilar_CopySimilarConditionArray( &SimilarRecordPtr->SimilarConditionStoredList[0], &Dem_SimilarRecordList[SimilarStrgIndex].SimilarConditionStoredList[0] );   /* [GUD]SimilarStrgIndex */
+        Dem_UtlSimilar_CopySimilarConditionArray( &SimilarRecordPtr->SimilarConditionLatchedList[0], &Dem_SimilarRecordList[SimilarStrgIndex].SimilarConditionLatchedList[0] ); /* [GUD]SimilarStrgIndex */
         SimilarRecordPtr->SimilarConditionStoredflg = Dem_SimilarRecordList[SimilarStrgIndex].SimilarConditionStoredflg;    /* [GUD]SimilarStrgIndex */
         SimilarRecordPtr->PendingEraseCycCounter = Dem_SimilarRecordList[SimilarStrgIndex].PendingEraseCycCounter;          /* [GUD]SimilarStrgIndex */
         SimilarRecordPtr->ExceedanceCounter = Dem_SimilarRecordList[SimilarStrgIndex].ExceedanceCounter;                    /* [GUD]SimilarStrgIndex */
@@ -186,7 +185,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_SimilarMng_GetSimilarRecordList
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_SimilarMng_SetSimilarRecordList
 (
@@ -202,8 +200,8 @@ FUNC( void, DEM_CODE ) Dem_SimilarMng_SetSimilarRecordList
 
     if( SimilarStrgIndex < similarEventNum )    /* [GUD:if]SimilarStrgIndex */
     {
-        Dem_UtlSimilar_CopySimilarConditionArray( &Dem_SimilarRecordList[SimilarStrgIndex].SimilarConditionStoredList[0], &SimilarRecordPtr->SimilarConditionStoredList[0] );   /* [GUD]SimilarStrgIndex *//* [ARYCHK] DEM_SIMILARTYPE_NUM / 1 / 0 */
-        Dem_UtlSimilar_CopySimilarConditionArray( &Dem_SimilarRecordList[SimilarStrgIndex].SimilarConditionLatchedList[0], &SimilarRecordPtr->SimilarConditionLatchedList[0] ); /* [GUD]SimilarStrgIndex *//* [ARYCHK] DEM_SIMILARTYPE_NUM / 1 / 0 */
+        Dem_UtlSimilar_CopySimilarConditionArray( &Dem_SimilarRecordList[SimilarStrgIndex].SimilarConditionStoredList[0], &SimilarRecordPtr->SimilarConditionStoredList[0] );   /* [GUD]SimilarStrgIndex */
+        Dem_UtlSimilar_CopySimilarConditionArray( &Dem_SimilarRecordList[SimilarStrgIndex].SimilarConditionLatchedList[0], &SimilarRecordPtr->SimilarConditionLatchedList[0] ); /* [GUD]SimilarStrgIndex */
         Dem_SimilarRecordList[SimilarStrgIndex].SimilarConditionStoredflg = SimilarRecordPtr->SimilarConditionStoredflg;    /* [GUD]SimilarStrgIndex */
         Dem_SimilarRecordList[SimilarStrgIndex].PendingEraseCycCounter = SimilarRecordPtr->PendingEraseCycCounter;          /* [GUD]SimilarStrgIndex */
         Dem_SimilarRecordList[SimilarStrgIndex].ExceedanceCounter = SimilarRecordPtr->ExceedanceCounter;                    /* [GUD]SimilarStrgIndex */
@@ -340,72 +338,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_SimilarMng_GetPendingClearCount
         retVal = DEM_IRT_OK;
     }
     return retVal;
-}
-
-/****************************************************************************/
-/* Function Name | Dem_SimilarMng_GetSimilarConditionStoredflg              */
-/* Description   | Get SimilarConditions stored flag.                       */
-/* Preconditions | none                                                     */
-/* Parameters    | [in] SimilarStrgIndex :                                  */
-/*               | [out] SimilarConditionStoredflgPtr :                     */
-/* Return Value  | none                                                     */
-/* Notes         | none                                                     */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-9-0      | new created.                                             */
-/****************************************************************************/
-FUNC( void, DEM_CODE ) Dem_SimilarMng_GetSimilarConditionStoredflg
-(
-    VAR( Dem_u16_SimilarStrgIndexType, AUTOMATIC ) SimilarStrgIndex,    /* [PRMCHK:CALLER] */
-    P2VAR( boolean, AUTOMATIC, AUTOMATIC ) SimilarConditionStoredflgPtr
-)
-{
-    *SimilarConditionStoredflgPtr = Dem_SimilarRecordList[SimilarStrgIndex].SimilarConditionStoredflg;      /* [GUDCHK:CALLER]SimilarStrgIndex */
-    return ;
-}
-
-/****************************************************************************/
-/* Function Name | Dem_SimilarMng_GetSimilarConditionStoredList             */
-/* Description   | Get SimilarConditions stored list data.                  */
-/* Preconditions | none                                                     */
-/* Parameters    | [in] SimilarStrgIndex :                                  */
-/*               | [out] SimilarConditionArrayPtr :                         */
-/* Return Value  | none                                                     */
-/* Notes         | none                                                     */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-9-0      | new created.                                             */
-/****************************************************************************/
-FUNC( void, DEM_CODE ) Dem_SimilarMng_GetSimilarConditionStoredList
-(
-    VAR( Dem_u16_SimilarStrgIndexType, AUTOMATIC ) SimilarStrgIndex,    /* [PRMCHK:CALLER] */
-    P2VAR( Dem_SimilarConditionValueType, AUTOMATIC, DEM_APPL_DATA ) SimilarConditionArrayPtr
-)
-{
-    Dem_UtlSimilar_CopySimilarConditionArray( SimilarConditionArrayPtr, &Dem_SimilarRecordList[SimilarStrgIndex].SimilarConditionStoredList[0] );   /* [GUDCHK:CALLER]SimilarStrgIndex */
-    return ;
-}
-
-/****************************************************************************/
-/* Function Name | Dem_SimilarMng_GetSimilarConditionLatchedList            */
-/* Description   | Get SimilarConditions latched list data.                 */
-/* Preconditions | none                                                     */
-/* Parameters    | [in] SimilarStrgIndex :                                  */
-/*               | [out] SimilarConditionArrayPtr :                         */
-/* Return Value  | none                                                     */
-/* Notes         | none                                                     */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-9-0      | new created.                                             */
-/****************************************************************************/
-FUNC( void, DEM_CODE ) Dem_SimilarMng_GetSimilarConditionLatchedList
-(
-    VAR( Dem_u16_SimilarStrgIndexType, AUTOMATIC ) SimilarStrgIndex,    /* [PRMCHK:CALLER] */
-    P2VAR( Dem_SimilarConditionValueType, AUTOMATIC, DEM_APPL_DATA ) SimilarConditionArrayPtr
-)
-{
-    Dem_UtlSimilar_CopySimilarConditionArray( SimilarConditionArrayPtr, &Dem_SimilarRecordList[SimilarStrgIndex].SimilarConditionLatchedList[0] );  /* [GUDCHK:CALLER]SimilarStrgIndex */
-    return ;
 }
 
 /****************************************************************************/
@@ -554,7 +486,6 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_SimilarMng_CmpWithCondit
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_SimilarMng_CmpWithConditionStoredList
 (
@@ -572,7 +503,7 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_SimilarMng_CmpWithCondit
     /* check SimilarConditionStoredList. */
     for( idx = (Dem_u08_SimilarConditionIndexType)0U; idx < similartypeNum; idx++ ) /* [GUD:for]idx */
     {
-        if( Dem_SimilarRecordList[SimilarStrgIndex].SimilarConditionStoredList[idx] != CheckSimilarRecordPtr->SimilarConditionStoredList[idx] ) /* [GUDCHK:CALLER]SimilarStrgIndex *//* [GUD]idx *//* [ARYCHK] DEM_SIMILARTYPE_NUM / 1 / idx */
+        if( Dem_SimilarRecordList[SimilarStrgIndex].SimilarConditionStoredList[idx] != CheckSimilarRecordPtr->SimilarConditionStoredList[idx] ) /* [GUDCHK:CALLER]SimilarStrgIndex *//* [GUD]idx */
         {
             retVal = DEM_IRT_NG;
             break;
@@ -594,7 +525,6 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_SimilarMng_CmpWithCondit
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_SimilarMng_CmpWithConditionLatchedList
 (
@@ -612,7 +542,7 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_SimilarMng_CmpWithCondit
     /* check SimilarConditionStoredList. */
     for( idx = (Dem_u08_SimilarConditionIndexType)0U; idx < similartypeNum; idx++ ) /* [GUD:for]idx */
     {
-        if( Dem_SimilarRecordList[SimilarStrgIndex].SimilarConditionLatchedList[idx] != CheckSimilarRecordPtr->SimilarConditionLatchedList[idx] )   /* [GUDCHK:CALLER]SimilarStrgIndex *//* [GUD]idx *//* [ARYCHK] DEM_SIMILARTYPE_NUM / 1 / idx */
+        if( Dem_SimilarRecordList[SimilarStrgIndex].SimilarConditionLatchedList[idx] != CheckSimilarRecordPtr->SimilarConditionLatchedList[idx] )   /* [GUDCHK:CALLER]SimilarStrgIndex *//* [GUD]idx */
         {
             retVal = DEM_IRT_NG;
             break;
@@ -911,7 +841,6 @@ static FUNC( void, DEM_CODE ) Dem_SimilarMng_InitMirrorRecord
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_SimilarMng_InitPadding
 (
@@ -925,7 +854,7 @@ static FUNC( void, DEM_CODE ) Dem_SimilarMng_InitPadding
 
     for( paddingIndex = (Dem_u16_PaddingIndexType)0U; paddingIndex < paddingSize; paddingIndex++ )  /* [GUD:for]paddingIndex */
     {
-        SimilarRecordPtr->Reserve[paddingIndex] = DEM_DATA_RESERVE_INITIAL_VALUE;   /* [GUD]paddingIndex *//* [ARYCHK] DEM_SIMILAR_RECORD_PADDINGSIZE_TO_BLOCKSIZE / 1 / paddingIndex */
+        SimilarRecordPtr->Reserve[paddingIndex] = DEM_DATA_RESERVE_INITIAL_VALUE;   /* [GUD]paddingIndex */
     }
 
     return ;
@@ -947,8 +876,6 @@ static FUNC( void, DEM_CODE ) Dem_SimilarMng_InitPadding
 /*  v5-1-0         :2022-03-29                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-7-0         :2024-05-29                                              */
-/*  v5-9-0         :2025-02-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

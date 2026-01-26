@@ -1,7 +1,7 @@
-/* Dcm_Dsp_SIDA4_c(v5-8-0)                                                  */
+/* Dcm_Dsp_SIDA4_c(v5-3-0)                                                  */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -163,58 +163,6 @@ FUNC( void, DCM_CODE ) Dcm_Dsp_SIDA4_Cbk  /* MISRA DEVIATION */
 
 
 /****************************************************************************/
-/* Function Name | Dcm_Dsp_SIDA4_ClearCheckCbk                              */
-/* Description   | Call Back Function to Continue SIDA4 Condition Check     */
-/*               | Processing                                               */
-/* Preconditions | None                                                     */
-/* Parameters    | [IN]   const uint8                    u1EventId          */
-/* Return Value  | None                                                     */
-/* Notes         | None                                                     */
-/****************************************************************************/
-FUNC(void, DCM_CODE) Dcm_Dsp_SIDA4_ClearCheckCbk         /* MISRA DEVIATION */
-(
-    const uint8 u1EventId                                /* MISRA DEVIATION */
-)
-{
-    uint8                           u1_ClearOpt;
-    Dcm_NegativeResponseCodeType    u1_NegResCode;
-    Std_ReturnType                  u1_RetSwc;
-
-    u1_NegResCode = DCM_E_GENERALREJECT;
-    u1_ClearOpt   = Dcm_Dsp_Main_stMsgContext.reqData[DCM_DSP_SIDA4_REQ_CLEAROPT_POS];
-    Dcm_Dsp_Main_SetUserNotifyFlag( (boolean)FALSE );
-
-    u1_RetSwc = Dcm_Dsp_SIDA4_CheckSWC( DCM_PENDING, u1_ClearOpt, &u1_NegResCode );
-    if( u1_RetSwc == (Std_ReturnType)E_OK )
-    {
-        /* clearOption Check */
-        if( ( u1_ClearOpt == DCM_DSP_SIDA4_CLEAROPT10 )||( u1_ClearOpt == DCM_DSP_SIDA4_CLEAROPT20 ) )
-        {
-            /* Return value ignoring */
-            (void)Dcm_Dsp_SIDA4_ClearDTC();
-        }
-        else
-        {
-            /* Return value ignoring */
-            (void)Dcm_Dsp_SIDA4_ClearMarketabilityOBS( DCM_INITIAL );
-        }
-    }
-    else if( u1_RetSwc == (Std_ReturnType)DCM_E_PENDING )
-    {
-        Dcm_Dsp_Main_SetUserNotifyFlag( (boolean)TRUE );
-        /* Return value ignoring */
-        (void)Dcm_Main_EvtDistr_SendEvent( DCM_M_EVTID_SIDA4_CLEARCHK );
-    }
-    else
-    {
-        Dcm_Dsp_MsgMaker_SendNegRes( &Dcm_Dsp_Main_stMsgContext, u1_NegResCode );
-    }
-
-    return ;
-}
-
-
-/****************************************************************************/
 /* Internal Functions                                                       */
 /****************************************************************************/
 
@@ -279,21 +227,10 @@ static FUNC( Std_ReturnType, DCM_CODE ) Dcm_Dsp_SIDA4_InitialProc
             if( Dcm_Dsp_Main_stMsgContext.reqDataLen == DCM_DSP_SIDA4_REQ_DATA_LENGTH )
             {
                 /* Clear DTC/OBS Condition Check */
-                u1_RetChkStatus = Dcm_Dsp_SIDA4_CheckSWC( DCM_INITIAL, u1_ClearOpt, &u1_NegResCode );
+                u1_RetChkStatus = Dcm_Dsp_SIDA4_CheckSWC( u1_ClearOpt, &u1_NegResCode );
                 if( u1_RetChkStatus == (Std_ReturnType)E_OK )
                 {
                     b_clearFlag = (boolean)TRUE;
-                }
-                else if( u1_RetChkStatus == (Std_ReturnType)DCM_E_PENDING )
-                {
-                    Dcm_Dsp_Main_SetUserNotifyFlag( (boolean)TRUE );
-                    /* Return value ignoring */
-                    (void)Dcm_Main_EvtDistr_SendEvent( DCM_M_EVTID_SIDA4_CLEARCHK );
-                    u1_RetVal = DCM_E_PENDING;
-                }
-                else
-                {
-                    /* No process (u1_NegResCode have been already set by Dcm_Dsp_SIDA4_CheckSWC function) */
                 }
             }
             else
@@ -330,10 +267,7 @@ static FUNC( Std_ReturnType, DCM_CODE ) Dcm_Dsp_SIDA4_InitialProc
     }
     else
     {
-        if( u1_RetVal != (Std_ReturnType)DCM_E_PENDING )
-        {
-            Dcm_Dsp_MsgMaker_SendNegRes( &Dcm_Dsp_Main_stMsgContext, u1_NegResCode );
-        }
+        Dcm_Dsp_MsgMaker_SendNegRes( &Dcm_Dsp_Main_stMsgContext, u1_NegResCode );
     }
 
 
@@ -354,51 +288,34 @@ static FUNC( void, DCM_CODE ) Dcm_Dsp_SIDA4_CancelProc
     void
 )
 {
-    uint8                           u1_ClearOpt;
-    Dcm_NegativeResponseCodeType    u1_NegResCode;
-    Dcm_Main_EvtDistr_RetType       u1_RetDel;
-    boolean                         b_UserNotifyFlag;
-
-    u1_NegResCode = DCM_E_GENERALREJECT;
+    boolean  b_UserNotifyFlag;
+    uint8    u1_ClearOpt;
 
     b_UserNotifyFlag = Dcm_Dsp_Main_GetUserNotifyFlag();
     if( b_UserNotifyFlag == (boolean)TRUE )
     {
         u1_ClearOpt = Dcm_Dsp_Main_stMsgContext.reqData[DCM_DSP_SIDA4_REQ_CLEAROPT_POS];
-
-        /* Delete CheckSWC Callback Event */
-        u1_RetDel = Dcm_Main_EvtDistr_DeleteEvent( DCM_M_EVTID_SIDA4_CLEARCHK, (boolean)FALSE );
-
-        if ( u1_RetDel == DCM_MAIN_EVTDISTR_E_OK )
+        if( ( u1_ClearOpt == DCM_DSP_SIDA4_CLEAROPT10 )||
+            ( u1_ClearOpt == DCM_DSP_SIDA4_CLEAROPT20 ) )
         {
-            /* Cancel CheckSWC */
+            /* Cancel Clear DTC */
             /* Return value ignoring */
-            (void)Dcm_Dsp_SIDA4_CheckSWC( DCM_CANCEL, u1_ClearOpt, &u1_NegResCode );
+            (void)Dem_DcmClearDTC( DEM_DTC_CANCEL_CLEAR_DTC, DEM_DTC_FORMAT_OBD, DEM_DTC_ORIGIN_PRIMARY_MEMORY );
+            /* Return value ignoring */
+            (void)Dcm_Main_EvtDistr_DeleteEvent( DCM_M_EVTID_SIDA4_CLEARDTC , (boolean)FALSE );
+        }
+        else if( u1_ClearOpt == DCM_DSP_SIDA4_CLEAROPT30 )
+        {
+            /* Cancel Clear OBS */
+            /* Return value ignoring */
+            (void)Dcm_Dsp_SIDA4_ClearOBS( DCM_CANCEL );
+            /* Return value ignoring */
+            (void)Dcm_Main_EvtDistr_DeleteEvent( DCM_M_EVTID_SIDA4_CLEAROBS , (boolean)FALSE );
         }
         else
         {
-            if( ( u1_ClearOpt == DCM_DSP_SIDA4_CLEAROPT10 )||( u1_ClearOpt == DCM_DSP_SIDA4_CLEAROPT20 ) )
-            {
-                /* Cancel Clear DTC */
-                /* Return value ignoring */
-                (void)Dem_DcmClearDTC( DEM_DTC_CANCEL_CLEAR_DTC, DEM_DTC_FORMAT_UDS, DEM_DTC_ORIGIN_PRIMARY_MEMORY );
-                /* Return value ignoring */
-                (void)Dcm_Main_EvtDistr_DeleteEvent( DCM_M_EVTID_SIDA4_CLEARDTC, (boolean)FALSE );
-            }
-            else if( u1_ClearOpt == DCM_DSP_SIDA4_CLEAROPT30 )
-            {
-                /* Cancel Clear OBS */
-                /* Return value ignoring */
-                (void)Dcm_Dsp_SIDA4_ClearOBS( DCM_CANCEL );
-                /* Return value ignoring */
-                (void)Dcm_Main_EvtDistr_DeleteEvent( DCM_M_EVTID_SIDA4_CLEAROBS, (boolean)FALSE );
-            }
-            else
-            {
-                 /* No process */
-            }
+            /* No process */
         }
-
         /* Return value ignoring */
         (void)Dcm_Dsp_Main_SetUserNotifyFlag( (boolean)FALSE );
 
@@ -431,7 +348,7 @@ static FUNC( Std_ReturnType, DCM_CODE ) Dcm_Dsp_SIDA4_ClearDTC
     u1_RetVal = E_OK;
 
     /* DTC Clear */
-    u1_RetClearDTC = Dem_DcmClearDTC( DEM_DTC_GROUP_ALL_DTCS, DEM_DTC_FORMAT_UDS, DEM_DTC_ORIGIN_PRIMARY_MEMORY );
+    u1_RetClearDTC = Dem_DcmClearDTC( DEM_DTC_GROUP_ALL_DTCS, DEM_DTC_FORMAT_OBD, DEM_DTC_ORIGIN_PRIMARY_MEMORY );
     switch( u1_RetClearDTC )
     {
         case DEM_CLEAR_OK:
@@ -523,7 +440,4 @@ static FUNC( Std_ReturnType, DCM_CODE ) Dcm_Dsp_SIDA4_ClearMarketabilityOBS
 /*  Version        :Date                                                    */
 /*  v3-0-0         :2019-09-26                                              */
 /*  v5-3-0         :2023-03-29                                              */
-/*  v5-8-0         :2024-10-29                                              */
 /****************************************************************************/
-
-/**** End of File ***********************************************************/

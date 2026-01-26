@@ -1,7 +1,7 @@
-/* Dem_DataCtl_EventEntry02Make_Fault_c(v5-8-0)                             */
+/* Dem_DataCtl_EventEntry02Make_Fault_c(v5-5-0)                             */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -305,7 +305,6 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_SetNewFaultOccurren
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
-/*   v5-8-0      | no branch changed.                                       */
 /****************************************************************************/
 #if ( DEM_EVENT_DISPLACEMENT_SUPPORT == STD_ON )
 static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_SetEventDisplacement
@@ -327,7 +326,6 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_SetEventDisplacemen
     /* Gets event priority by event index of temporary area. */
     eeoFaultInfo.EventPriority = Dem_CfgInfoPm_GetEventPriority( Dem_TmpEventMemoryEntry.EventStrgIndex );  /* [GUDCHK:SETVAL]Dem_TmpEventMemoryEntry.EventStrgIndex */
     eeoFaultInfo.StatusOfDTC = Dem_EventDisplacement.DTCStatusForFaultRecordOverwrite;
-    eeoFaultInfo.EventStrgIndex = Dem_TmpEventMemoryEntry.EventStrgIndex;
 
     /* Gets a fault index to overwrite fault record. */
     faultIndex = Dem_DcEeo_GetFaultIndexOfFaultRecordOverwrite( &eeoFaultInfo );
@@ -414,8 +412,6 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_Data_SetEventDisplacemen
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
-/*   v5-8-0      | no branch changed.                                       */
 /****************************************************************************/
 #if ( DEM_OBDFFD_SUPPORT == STD_ON )
 static FUNC( void, DEM_CODE ) Dem_Data_SetObdFaultRecOverwritten
@@ -428,16 +424,16 @@ static FUNC( void, DEM_CODE ) Dem_Data_SetObdFaultRecOverwritten
     VAR( Dem_u08_FFListIndexType, AUTOMATIC ) obdFFRClassPerDTCMaxNum;
     VAR( Dem_u08_FFDIndexType, AUTOMATIC ) obdFFDRecordNum;
 
-    obdFFRClassPerDTCMaxNum = Dem_CfgInfoPm_GetOBDFFRClassPerDTCMaxNum();
-    obdFFDRecordNum = Dem_CfgInfoPm_GetObdFFDRecordNum();
+    obdFFRClassPerDTCMaxNum = Dem_OBDFFRClassPerDTCMaxNum;
+    obdFFDRecordNum = Dem_ObdFFDRecordNum;
 
     for( indexOfRecordNumberIndex = (Dem_u08_FFListIndexType)0U; indexOfRecordNumberIndex < obdFFRClassPerDTCMaxNum; indexOfRecordNumberIndex++ )                           /* [GUD:for]indexOfRecordNumberIndex */
     {
-        if( FaultRecordPtr->ObdRecordNumberIndex[indexOfRecordNumberIndex] < obdFFDRecordNum )                                                                              /* [GUD]indexOfRecordNumberIndex *//* [ARYCHK] DEM_OBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / indexOfRecordNumberIndex */
+        if( FaultRecordPtr->ObdRecordNumberIndex[indexOfRecordNumberIndex] < obdFFDRecordNum )                                                                              /* [GUD]indexOfRecordNumberIndex */
         {
             Dem_EventDisplacement.ObdFaultRecordOverwritten[indexOfRecordNumberIndex].FaultIndex = FaultIndex;                                                              /* [GUD]indexOfRecordNumberIndex */
             Dem_EventDisplacement.ObdFaultRecordOverwritten[indexOfRecordNumberIndex].EventStrgIndex = FaultRecordPtr->EventStrgIndex;                                      /* [GUD]indexOfRecordNumberIndex */
-            Dem_EventDisplacement.ObdFaultRecordOverwritten[indexOfRecordNumberIndex].RecordNumberIndex = FaultRecordPtr->ObdRecordNumberIndex[indexOfRecordNumberIndex];   /* [GUD]indexOfRecordNumberIndex *//* [ARYCHK] DEM_OBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / indexOfRecordNumberIndex */
+            Dem_EventDisplacement.ObdFaultRecordOverwritten[indexOfRecordNumberIndex].RecordNumberIndex = FaultRecordPtr->ObdRecordNumberIndex[indexOfRecordNumberIndex];   /* [GUD]indexOfRecordNumberIndex */
         }
     }
 
@@ -459,7 +455,6 @@ static FUNC( void, DEM_CODE ) Dem_Data_SetObdFaultRecOverwritten
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_Data_SetFaultRecOverwritten
 (
@@ -476,11 +471,11 @@ static FUNC( void, DEM_CODE ) Dem_Data_SetFaultRecOverwritten
 
     for( indexOfRecordNumberIndex = (Dem_u08_FFListIndexType)0U; indexOfRecordNumberIndex < nonOBDFFRClassPerDTCMaxNum; indexOfRecordNumberIndex++ )                /* [GUD:for]indexOfRecordNumberIndex */
     {
-        if( FaultRecordPtr->RecordNumberIndex[indexOfRecordNumberIndex] < nonObdFFDRecordNum )                                                                      /* [GUD]indexOfRecordNumberIndex *//* [ARYCHK] DEM_NONOBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / indexOfRecordNumberIndex */
+        if( FaultRecordPtr->RecordNumberIndex[indexOfRecordNumberIndex] < nonObdFFDRecordNum )                                                                      /* [GUD]indexOfRecordNumberIndex */
         {
             Dem_EventDisplacement.FaultRecordOverwritten[indexOfRecordNumberIndex].FaultIndex = FaultIndex;                                                         /* [GUD]indexOfRecordNumberIndex */
             Dem_EventDisplacement.FaultRecordOverwritten[indexOfRecordNumberIndex].EventStrgIndex = FaultRecordPtr->EventStrgIndex;                                 /* [GUD]indexOfRecordNumberIndex */
-            Dem_EventDisplacement.FaultRecordOverwritten[indexOfRecordNumberIndex].RecordNumberIndex = FaultRecordPtr->RecordNumberIndex[indexOfRecordNumberIndex]; /* [GUD]indexOfRecordNumberIndex *//* [ARYCHK] DEM_NONOBD_FFR_CLASS_PER_DTC_MAX_NUM / 1 / indexOfRecordNumberIndex */
+            Dem_EventDisplacement.FaultRecordOverwritten[indexOfRecordNumberIndex].RecordNumberIndex = FaultRecordPtr->RecordNumberIndex[indexOfRecordNumberIndex]; /* [GUD]indexOfRecordNumberIndex */
         }
     }
 
@@ -531,7 +526,6 @@ static FUNC( void, AUTOMATIC ) Dem_Data_Copy_FaultRecordOverwritten
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 #if ( DEM_TSFF_PM_SUPPORT == STD_ON )
 static FUNC( void, DEM_CODE ) Dem_Data_SetFaultRecordTSFFRemove
@@ -549,9 +543,9 @@ static FUNC( void, DEM_CODE ) Dem_Data_SetFaultRecordTSFFRemove
 
     for( indexOfTSFFListIndex = (Dem_u08_TSFFListPerDTCIndexType)0U; indexOfTSFFListIndex < tsffRecordClassNumPerDTCMaxNum; indexOfTSFFListIndex++ )    /* [GUD:for]indexOfTSFFListIndex */
     {
-        if( FaultRecordPtr->TimeSeriesFreezeFrameListIndex[indexOfTSFFListIndex] < tsffTotalDTCNum )                                                    /* [GUD]indexOfTSFFListIndex *//* [ARYCHK] DEM_TSFF_RECORD_CLASS_NUM_PER_DTC_MAX_NUM / 1 / indexOfTSFFListIndex */
+        if( FaultRecordPtr->TimeSeriesFreezeFrameListIndex[indexOfTSFFListIndex] < tsffTotalDTCNum )                                                    /* [GUD]indexOfTSFFListIndex */
         {
-            Dem_EventDisplacement.FaultRecordTSFFRemove[indexOfTSFFListIndex] = FaultRecordPtr->TimeSeriesFreezeFrameListIndex[indexOfTSFFListIndex];   /* [GUD]indexOfTSFFListIndex *//* [ARYCHK] DEM_TSFF_RECORD_CLASS_NUM_PER_DTC_MAX_NUM / 1 / indexOfTSFFListIndex */
+            Dem_EventDisplacement.FaultRecordTSFFRemove[indexOfTSFFListIndex] = FaultRecordPtr->TimeSeriesFreezeFrameListIndex[indexOfTSFFListIndex];   /* [GUD]indexOfTSFFListIndex */
         }
     }
 
@@ -966,8 +960,6 @@ FUNC( void, DEM_CODE ) Dem_Data_SetDTCStatusForFaultRecordOverwrite
 /*  v5-0-0         :2022-03-29                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-7-0         :2024-05-29                                              */
-/*  v5-8-0         :2024-10-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

@@ -1,11 +1,11 @@
-/* Dem_DataCtl_DisableDTCInfo_RecNumMng_c(v5-10-0)                          */
+/* Dem_DataCtl_DisableDTCInfo_RecNumMng_c(v5-5-0)                           */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
-/* Object Name  | Dem/DataCtl_DisableDTCInfo_RecNumMng/CODE                 */
+/* Object Name  | Dem/DataCtl_DisableDTCInfo/CODE                           */
 /*--------------------------------------------------------------------------*/
 /* Notes        |                                                           */
 /****************************************************************************/
@@ -32,7 +32,7 @@
 
 /*--------------------------------------------------------------------------*/
 /* Types                                                                    */
-/*--------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------*/\
 
 /*--------------------------------------------------------------------------*/
 /* Function Prototypes                                                      */
@@ -46,6 +46,25 @@
 
 static FUNC( void, DEM_CODE ) Dem_Data_InitTmpCheckRecordData
 ( void );
+
+#if ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON )
+#if ( DEM_OBDFFD_SUPPORT == STD_ON )
+static FUNC( boolean, DEM_CODE ) Dem_DataCtl_CheckOutputRecordByTrigger_OBDFFD
+(
+    VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex,
+    VAR( Dem_MisfireCylinderNumberType, AUTOMATIC ) MisfireCylinderNumber,
+    VAR( Dem_u08_StorageTriggerType, AUTOMATIC ) Trigger
+);
+#endif  /* ( DEM_OBDFFD_SUPPORT == STD_ON )     */
+
+static FUNC( boolean, DEM_CODE ) Dem_DataCtl_CheckOutputRecordByTrigger_FFD
+(
+    VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex,
+    VAR( Dem_MisfireCylinderNumberType, AUTOMATIC ) MisfireCylinderNumber,
+    VAR( Dem_u08_StorageTriggerType, AUTOMATIC ) Trigger
+);
+#endif  /* ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON )       */
+
 
 #define DEM_STOP_SEC_CODE
 #include <Dem_MemMap.h>
@@ -168,9 +187,6 @@ FUNC( void, DEM_CODE ) Dem_Data_SortTmpRecordNumber
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | branch changed.                                          */
-/*   v5-7-0      | no object changed.                                       */
-/*   v5-8-0      | no branch changed.                                       */
-/*   v5-10-0     | no branch changed.                                       */
 /****************************************************************************/
 #if ( DEM_OBDFFD_SUPPORT == STD_ON )
 FUNC( void, DEM_CODE ) Dem_Data_SaveObdRecordNumberByDTC
@@ -182,6 +198,7 @@ FUNC( void, DEM_CODE ) Dem_Data_SaveObdRecordNumberByDTC
 )
 {
     P2CONST( AB_83_ConstV Dem_FreezeFrameRecNumClassType, AUTOMATIC, DEM_CONFIG_DATA )  freezeFrameRecNumClassPtr;
+    P2CONST( AB_83_ConstV Dem_FreezeFrameRecordClassType, AUTOMATIC, DEM_CONFIG_DATA )  freezeFrameRecordClassPtr;
     VAR( Dem_u16_FFClassIndexType, AUTOMATIC )                                          obdFreezeFrameClassRef;
     VAR( Dem_u16_FFRecNumClassIndexType, AUTOMATIC )                                    obdFreezeframeRecNumClassRef;
     VAR( Dem_u16_FFRecNumStoredIndexType, AUTOMATIC )                                   numberOfSaveRecord;
@@ -202,9 +219,8 @@ FUNC( void, DEM_CODE ) Dem_Data_SaveObdRecordNumberByDTC
     VAR( Dem_u08_FFRecordNumberType, AUTOMATIC )                                        storedObdFFRecordNumber;
     VAR( Dem_u16_FFRecNumStoredIndexType, AUTOMATIC )                                   storedObdFFDCount;
     VAR( Dem_u16_FFDStoredIndexType, AUTOMATIC )                                        sizeAtFFD;
-    VAR( Dem_u08_FFRecordNumberType, AUTOMATIC )                                        freezeFrameRecordNumber;
 
-    obdFFDRecordNum = Dem_CfgInfoPm_GetObdFFDRecordNum();
+    obdFFDRecordNum = Dem_ObdFFDRecordNum;
     Dem_CfgInfoPm_GetOBDFreezeFrameAndRecNumClass( EventStrgIndex, &obdFreezeFrameClassRef, &obdFreezeframeRecNumClassRef );                    /* [GUD:OUT:Not DEM_FFCLASSINDEX_INVALID] obdFreezeFrameClassRef *//* [GUD:OUT:Not DEM_FFRECNUMCLASSINDEX_INVALID] obdFreezeframeRecNumClassRef */
 
     if ( obdFreezeframeRecNumClassRef != DEM_FFRECNUMCLASSINDEX_INVALID )                                                                       /* [GUD:if]obdFreezeframeRecNumClassRef */
@@ -225,12 +241,13 @@ FUNC( void, DEM_CODE ) Dem_Data_SaveObdRecordNumberByDTC
 
             for( freezeFrameRecordClassRefIndex = (Dem_u08_FFListIndexType)0U; freezeFrameRecordClassRefIndex < obdFFRClassPerDTCMaxNum; freezeFrameRecordClassRefIndex++ )     /* [GUD:for] freezeFrameRecordClassRefIndex */
             {
-                freezeFrameRecordClassIndex = freezeFrameRecNumClassPtr->DemFreezeFrameRecordClassRef[freezeFrameRecordClassRefIndex];                  /* [GUD]freezeFrameRecNumClassPtr *//* [GUD] freezeFrameRecordClassRefIndex *//* [ARYCHK] DEM_FF_RECORD_CLASS_REF_MAX_NUM / 1 / freezeFrameRecordClassRefIndex */
+                freezeFrameRecordClassIndex = freezeFrameRecNumClassPtr->DemFreezeFrameRecordClassRef[freezeFrameRecordClassRefIndex];                  /* [GUD]freezeFrameRecNumClassPtr *//* [GUD] freezeFrameRecordClassRefIndex */
 
                 if( freezeFrameRecordClassIndex < ffrRecordClassConfigureNum )                                                                          /* [GUD:if] freezeFrameRecordClassIndex */
                 {
                     /* Holds the FreezeFrameRecordClass table pointed to by DemFreezeFrameRecordIndex. */
-                    Dem_CfgInfoPm_GetFreezeFrameRecordInfo_forOutputOBDFFD( freezeFrameRecordClassIndex, &freezeFrameRecordNumber, &freezeFrameRecordTrigger );       /* [GUD] freezeFrameRecordClassIndex */
+                    freezeFrameRecordClassPtr = &Dem_FreezeFrameRecordClassTable[freezeFrameRecordClassIndex];                                          /* [GUD] freezeFrameRecordClassIndex *//* [GUD:CFG:IF_GUARDED: freezeFrameRecordClassIndex ]freezeFrameRecordClassPtr */
+                    freezeFrameRecordTrigger = freezeFrameRecordClassPtr->DemFreezeFrameRecordTrigger;                                                  /* [GUD] freezeFrameRecordClassPtr */
 
                     freezeFrameIndex = Dem_Data_GetDisabledObdRecordNumberIndex( EventStrgIndex, freezeFrameRecordClassRefIndex, freezeFrameRecordTrigger, FFDIndexListStPtr, &eventStrgIndex );
 
@@ -247,7 +264,7 @@ FUNC( void, DEM_CODE ) Dem_Data_SaveObdRecordNumberByDTC
                             /* Therefore, numberOfSaveRecord does not point to an element outside       */
                             /* the range of Dem_TmpRecordNumberByDTC.                                   */
                             Dem_TmpRecordNumberByDTC[numberOfSaveRecord].EventStrgIndex         = eventStrgIndex;                                           /* [GUD] numberOfSaveRecord */
-                            Dem_TmpRecordNumberByDTC[numberOfSaveRecord].RecordNumber           = freezeFrameRecordNumber;                                  /* [GUD] numberOfSaveRecord */
+                            Dem_TmpRecordNumberByDTC[numberOfSaveRecord].RecordNumber           = freezeFrameRecordClassPtr->DemFreezeFrameRecordNumber;    /* [GUD] numberOfSaveRecord *//* [GUD] freezeFrameRecordClassPtr */
                             Dem_TmpRecordNumberByDTC[numberOfSaveRecord].FreezeFrameDataIndex   = (Dem_u16_AllFFDIndexType)freezeFrameIndex;                /* [GUD] numberOfSaveRecord */
                             Dem_TmpRecordNumberByDTC[numberOfSaveRecord].FreezeFrameDataType    = DEM_FFD_TYPE_OBDFFD;                                      /* [GUD] numberOfSaveRecord */
                             /*--------------------------------------------------------------------------*/
@@ -304,9 +321,6 @@ FUNC( void, DEM_CODE ) Dem_Data_SaveObdRecordNumberByDTC
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | branch changed.                                          */
-/*   v5-7-0      | no object changed.                                       */
-/*   v5-9-0      | branch changed.                                          */
-/*   v5-10-0     | branch changed.                                          */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_Data_SaveRecordNumberByDTC
 (
@@ -317,6 +331,7 @@ FUNC( void, DEM_CODE ) Dem_Data_SaveRecordNumberByDTC
 )
 {
     P2CONST( AB_83_ConstV Dem_FreezeFrameRecNumClassType, AUTOMATIC, DEM_CONFIG_DATA )  freezeFrameRecNumClassPtr;
+    P2CONST( AB_83_ConstV Dem_FreezeFrameRecordClassType, AUTOMATIC, DEM_CONFIG_DATA )  freezeFrameRecordClassPtr;
     VAR( Dem_u16_FFRecNumStoredIndexType, AUTOMATIC )                                   tmpRecordNumberMaxNum;
     VAR( Dem_u16_FFClassIndexType, AUTOMATIC )                                          freezeFrameClassRef;
     VAR( Dem_u16_FFRecNumClassIndexType, AUTOMATIC )                                    freezeframeRecNumClassRef;
@@ -337,8 +352,6 @@ FUNC( void, DEM_CODE ) Dem_Data_SaveRecordNumberByDTC
     VAR( Dem_u08_FFRecordNumberType, AUTOMATIC )                                        storedFFRecordNumber;
     VAR( Dem_u16_FFRecNumStoredIndexType, AUTOMATIC )                                   storedFFDCount;
     VAR( Dem_u16_FFDStoredIndexType, AUTOMATIC )                                        sizeAtFFD;
-    VAR( Dem_u08_FFRecordNumberType, AUTOMATIC )                                        freezeFrameRecordNumber;
-    VAR( boolean, AUTOMATIC )                                                           freezeFrameRecordToDcm;
 
     nonObdFFDRecordNum = Dem_NonObdFFDRecordNum;
     Dem_CfgInfoPm_GetFreezeFrameAndRecNumClass( EventStrgIndex, &freezeFrameClassRef, &freezeframeRecNumClassRef );     /* [GUD:OUT:Not DEM_FFCLASSINDEX_INVALID] freezeFrameClassRef *//* [GUD:OUT:Not DEM_FFRECNUMCLASSINDEX_INVALID] freezeframeRecNumClassRef */
@@ -362,57 +375,55 @@ FUNC( void, DEM_CODE ) Dem_Data_SaveRecordNumberByDTC
 
             for( freezeFrameRecordClassRefIndex = (Dem_u08_FFListIndexType)0U; freezeFrameRecordClassRefIndex < nonOBDFFRClassPerDTCMaxNum; freezeFrameRecordClassRefIndex++ )  /* [GUD:for] freezeFrameRecordClassRefIndex */
             {
-                freezeFrameRecordClassIndex = freezeFrameRecNumClassPtr->DemFreezeFrameRecordClassRef[freezeFrameRecordClassRefIndex];                                          /* [GUD] freezeFrameRecordClassRefIndex *//* [ARYCHK] DEM_FF_RECORD_CLASS_REF_MAX_NUM / 1 / freezeFrameRecordClassRefIndex */
+                freezeFrameRecordClassIndex = freezeFrameRecNumClassPtr->DemFreezeFrameRecordClassRef[freezeFrameRecordClassRefIndex];                                          /* [GUD] freezeFrameRecordClassRefIndex */
 
                 if( freezeFrameRecordClassIndex < ffrRecordClassConfigureNum )                                                                                                  /* [GUD:if] freezeFrameRecordClassIndex */
                 {
                     /* Holds the FreezeFrameRecordClass table pointed to by DemFreezeFrameRecordIndex. */
-                    Dem_CfgInfoPm_GetFreezeFrameRecordInfo_forOutput( freezeFrameRecordClassIndex, &freezeFrameRecordNumber, &freezeFrameRecordTrigger, &freezeFrameRecordToDcm );  /* [GUD] freezeFrameRecordClassIndex */
+                    freezeFrameRecordClassPtr = &Dem_FreezeFrameRecordClassTable[freezeFrameRecordClassIndex];                                                                  /* [GUD] freezeFrameRecordClassIndex *//* [GUD:CFG:IF_GUARDED: freezeFrameRecordClassIndex ]freezeFrameRecordClassPtr */
+                    freezeFrameRecordTrigger = freezeFrameRecordClassPtr->DemFreezeFrameRecordTrigger;                                                                          /* [GUD] freezeFrameRecordClassPtr */
 
-                    if ( freezeFrameRecordToDcm == (boolean)TRUE )
+                    freezeFrameIndex = Dem_Data_GetDisabledRecordNumberIndex( EventStrgIndex, freezeFrameRecordClassRefIndex, freezeFrameRecordTrigger, FFDIndexListStPtr, &eventStrgIndex );   /* [GUD] freezeFrameRecordClassRefIndex */
+                    if ( freezeFrameIndex < nonObdFFDRecordNum )                                                                                                                /* [GUD:if] freezeFrameIndex */
                     {
-                        freezeFrameIndex = Dem_Data_GetDisabledRecordNumberIndex( EventStrgIndex, freezeFrameRecordClassRefIndex, freezeFrameRecordTrigger, FFDIndexListStPtr, &eventStrgIndex );   /* [GUD] freezeFrameRecordClassRefIndex */
-                        if ( freezeFrameIndex < nonObdFFDRecordNum )                                                                                                                /* [GUD:if] freezeFrameIndex */
-                        {
 #if ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON )  /*  [FuncSw]    */
-                            checkOutputRecord = Dem_DataCtl_CheckOutputRecordByTrigger_FFD( eventStrgIndex, MisfireCylinderNumber, freezeFrameRecordTrigger );
-                            if( checkOutputRecord == (boolean)TRUE )
+                        checkOutputRecord = Dem_DataCtl_CheckOutputRecordByTrigger_FFD( eventStrgIndex, MisfireCylinderNumber, freezeFrameRecordTrigger );
+                        if( checkOutputRecord == (boolean)TRUE )
 #endif  /*   ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON )         */
+                        {
+                            /*--------------------------------------------------------------------------*/
+                            /* Due to the processing structure, the value of numberOfSaveRecord         */
+                            /* does not exceed the number of configs of FFD.                            */
+                            /* Therefore, numberOfSaveRecord does not point to an element outside       */
+                            /* the range of Dem_TmpRecordNumberByDTC.                                   */
+                            Dem_TmpRecordNumberByDTC[numberOfSaveRecord].EventStrgIndex         = eventStrgIndex;                                               /* [GUD] numberOfSaveRecord */
+                            Dem_TmpRecordNumberByDTC[numberOfSaveRecord].RecordNumber           = freezeFrameRecordClassPtr->DemFreezeFrameRecordNumber;        /* [GUD] numberOfSaveRecord */
+                            Dem_TmpRecordNumberByDTC[numberOfSaveRecord].FreezeFrameDataIndex   = (Dem_u16_AllFFDIndexType)freezeFrameIndex;                    /* [GUD] numberOfSaveRecord */
+                            Dem_TmpRecordNumberByDTC[numberOfSaveRecord].FreezeFrameDataType    = DEM_FFD_TYPE_NONOBDFFD;                                       /* [GUD] numberOfSaveRecord */
+                            /*--------------------------------------------------------------------------*/
+
+                            storedFFDCount = storedFFDCount + ( Dem_u16_FFRecNumStoredIndexType )1U;
+                            if ( storedFFRecordNumber == DEM_FFRECNUM_INVALID )
                             {
-                                /*--------------------------------------------------------------------------*/
-                                /* Due to the processing structure, the value of numberOfSaveRecord         */
-                                /* does not exceed the number of configs of FFD.                            */
-                                /* Therefore, numberOfSaveRecord does not point to an element outside       */
-                                /* the range of Dem_TmpRecordNumberByDTC.                                   */
-                                Dem_TmpRecordNumberByDTC[numberOfSaveRecord].EventStrgIndex         = eventStrgIndex;                                               /* [GUD] numberOfSaveRecord */
-                                Dem_TmpRecordNumberByDTC[numberOfSaveRecord].RecordNumber           = freezeFrameRecordNumber;                                      /* [GUD] numberOfSaveRecord */
-                                Dem_TmpRecordNumberByDTC[numberOfSaveRecord].FreezeFrameDataIndex   = (Dem_u16_AllFFDIndexType)freezeFrameIndex;                    /* [GUD] numberOfSaveRecord */
-                                Dem_TmpRecordNumberByDTC[numberOfSaveRecord].FreezeFrameDataType    = DEM_FFD_TYPE_NONOBDFFD;                                       /* [GUD] numberOfSaveRecord */
-                                /*--------------------------------------------------------------------------*/
+                                storedFFEventStrgIndex = Dem_TmpRecordNumberByDTC[numberOfSaveRecord].EventStrgIndex;                                           /* [GUD] numberOfSaveRecord */
+                                storedFFRecordNumber = Dem_TmpRecordNumberByDTC[numberOfSaveRecord].RecordNumber;                                               /* [GUD] numberOfSaveRecord */
+                            }
 
-                                storedFFDCount = storedFFDCount + ( Dem_u16_FFRecNumStoredIndexType )1U;
-                                if ( storedFFRecordNumber == DEM_FFRECNUM_INVALID )
-                                {
-                                    storedFFEventStrgIndex = Dem_TmpRecordNumberByDTC[numberOfSaveRecord].EventStrgIndex;                                           /* [GUD] numberOfSaveRecord */
-                                    storedFFRecordNumber = Dem_TmpRecordNumberByDTC[numberOfSaveRecord].RecordNumber;                                               /* [GUD] numberOfSaveRecord */
-                                }
+                            numberOfSaveRecord = numberOfSaveRecord + (Dem_u16_FFRecNumStoredIndexType)1U;
 
-                                numberOfSaveRecord = numberOfSaveRecord + (Dem_u16_FFRecNumStoredIndexType)1U;
-
-                                if( Dem_TmpCheckRecordDataNum < nonOBDFFRClassPerDTCMaxNum )                                                                        /* [GUD:if] Dem_TmpCheckRecordDataNum */
-                                {
-                                    Dem_TmpCheckRecordData[Dem_TmpCheckRecordDataNum].TriggerFFDIndex = freezeFrameIndex;                                           /* [GUD] Dem_TmpCheckRecordDataNum */
-                                    Dem_TmpCheckRecordData[Dem_TmpCheckRecordDataNum].TriggerFFDStorageTrigger = freezeFrameRecordTrigger;                          /* [GUD] Dem_TmpCheckRecordDataNum */
-                                    Dem_TmpCheckRecordData[Dem_TmpCheckRecordDataNum].TriggerFFDConsistencyId = Dem_FFDMng_GetFFDConsystencyId( freezeFrameIndex ); /* [GUD] Dem_TmpCheckRecordDataNum */
-                                    Dem_TmpCheckRecordData[Dem_TmpCheckRecordDataNum].TriggerFFDExistStatus = (boolean)TRUE;                                        /* [GUD] Dem_TmpCheckRecordDataNum */
-                                    Dem_TmpCheckRecordData[Dem_TmpCheckRecordDataNum].JudgeOutputTSFFDFlag = (boolean)TRUE;                                         /* [GUD] Dem_TmpCheckRecordDataNum */
-                                    Dem_TmpCheckRecordDataNum = Dem_TmpCheckRecordDataNum + (Dem_u08_FFListIndexType)1U;
-                                }
-                                /*  range check : Dem_TmpRecordNumberByDTC[]        */
-                                if ( numberOfSaveRecord >= tmpRecordNumberMaxNum )                                              /* [GUD:if] numberOfSaveRecord */
-                                {
-                                    break;
-                                }
+                            if( Dem_TmpCheckRecordDataNum < nonOBDFFRClassPerDTCMaxNum )                                                                        /* [GUD:if] Dem_TmpCheckRecordDataNum */
+                            {
+                                Dem_TmpCheckRecordData[Dem_TmpCheckRecordDataNum].TriggerFFDIndex = freezeFrameIndex;                                           /* [GUD] Dem_TmpCheckRecordDataNum */
+                                Dem_TmpCheckRecordData[Dem_TmpCheckRecordDataNum].TriggerFFDStorageTrigger = freezeFrameRecordTrigger;                          /* [GUD] Dem_TmpCheckRecordDataNum */
+                                Dem_TmpCheckRecordData[Dem_TmpCheckRecordDataNum].TriggerFFDConsistencyId = Dem_FFDMng_GetFFDConsystencyId( freezeFrameIndex ); /* [GUD] Dem_TmpCheckRecordDataNum */
+                                Dem_TmpCheckRecordData[Dem_TmpCheckRecordDataNum].TriggerFFDExistStatus = (boolean)TRUE;                                        /* [GUD] Dem_TmpCheckRecordDataNum */
+                                Dem_TmpCheckRecordData[Dem_TmpCheckRecordDataNum].JudgeOutputTSFFDFlag = (boolean)TRUE;                                         /* [GUD] Dem_TmpCheckRecordDataNum */
+                                Dem_TmpCheckRecordDataNum = Dem_TmpCheckRecordDataNum + (Dem_u08_FFListIndexType)1U;
+                            }
+                            /*  range check : Dem_TmpRecordNumberByDTC[]        */
+                            if ( numberOfSaveRecord >= tmpRecordNumberMaxNum )                                              /* [GUD:if] numberOfSaveRecord */
+                            {
+                                break;
                             }
                         }
                     }
@@ -452,7 +463,6 @@ FUNC( void, DEM_CODE ) Dem_Data_SaveRecordNumberByDTC
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | branch changed.                                          */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_Data_SaveTSFFRecordNumberByDTC
 (
@@ -502,7 +512,7 @@ FUNC( void, DEM_CODE ) Dem_Data_SaveTSFFRecordNumberByDTC
         {
             for( tsFFRecClassRefIndex = (Dem_u08_TSFFListPerDTCIndexType)0U; tsFFRecClassRefIndex < tsffRecordClassNumPerDTCMaxNum; tsFFRecClassRefIndex++ )    /* [GUD:for] tsFFRecClassRefIndex */
             {
-                tsFFRecClassRef = dtcAttributePtr->DemTimeSeriesFreezeFrameRecordClassRef[tsFFRecClassRefIndex];                                                /* [GUD] dtcAttributePtr *//* [GUD] tsFFRecClassRefIndex *//* [ARYCHK] DEM_TSFF_RECORD_CLASS_NUM_PER_DTC_MAX_NUM / 1 / tsFFRecClassRefIndex */
+                tsFFRecClassRef = dtcAttributePtr->DemTimeSeriesFreezeFrameRecordClassRef[tsFFRecClassRefIndex];                                                /* [GUD] dtcAttributePtr *//* [GUD] tsFFRecClassRefIndex */
 
                 if( tsFFRecClassRef != DEM_TSFF_RECORD_CLASS_REF_INVALID )                                                                                      /* [GUD:if] tsFFRecClassRef */
                 {
@@ -582,6 +592,7 @@ FUNC( void, DEM_CODE ) Dem_Data_SaveTSFFRecordNumberByDTC
 }
 #endif  /* ( DEM_TSFF_PM_SUPPORT == STD_ON ) */
 
+
 #if ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON )
 #if ( DEM_OBDFFD_SUPPORT == STD_ON )
 /****************************************************************************/
@@ -598,9 +609,8 @@ FUNC( void, DEM_CODE ) Dem_Data_SaveTSFFRecordNumberByDTC
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | new created.                                             */
-/*   v5-9-0      | branch changed.                                          */
 /****************************************************************************/
-FUNC( boolean, DEM_CODE ) Dem_DataCtl_CheckOutputRecordByTrigger_OBDFFD
+static FUNC( boolean, DEM_CODE ) Dem_DataCtl_CheckOutputRecordByTrigger_OBDFFD
 (
     VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex,
     VAR( Dem_MisfireCylinderNumberType, AUTOMATIC ) MisfireCylinderNumber,
@@ -608,6 +618,7 @@ FUNC( boolean, DEM_CODE ) Dem_DataCtl_CheckOutputRecordByTrigger_OBDFFD
 )
 {
     VAR( boolean, AUTOMATIC ) retVal;
+    VAR( Dem_MisfireCylinderNumberType, AUTOMATIC ) misfireCylinderNumberOutput;
 
     if ( MisfireCylinderNumber == DEM_MISFIRE_CYL_NUM_INVALID )
     {
@@ -618,7 +629,15 @@ FUNC( boolean, DEM_CODE ) Dem_DataCtl_CheckOutputRecordByTrigger_OBDFFD
     else
     {
         /*  check misfire cylinder condition.       */
-        retVal  =   Dem_Misfire_CheckOutputOBDFFDConditionByTrigger( EventStrgIndex, Trigger, MisfireCylinderNumber );
+        retVal  =   Dem_Misfire_CheckOutputOBDFFDConditionByTrigger( EventStrgIndex, Trigger, &misfireCylinderNumberOutput );
+        if ( retVal == (boolean)TRUE )
+        {
+            if ( MisfireCylinderNumber != misfireCylinderNumberOutput )
+            {
+                /*  mismatch cylinder number.       */
+                retVal  =   (boolean)FALSE;
+            }
+        }
     }
     return retVal;
 }
@@ -639,7 +658,7 @@ FUNC( boolean, DEM_CODE ) Dem_DataCtl_CheckOutputRecordByTrigger_OBDFFD
 /* History       |                                                          */
 /*   v5-5-0      | new created.                                             */
 /****************************************************************************/
-FUNC( boolean, DEM_CODE ) Dem_DataCtl_CheckOutputRecordByTrigger_FFD
+static FUNC( boolean, DEM_CODE ) Dem_DataCtl_CheckOutputRecordByTrigger_FFD
 (
     VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex,
     VAR( Dem_MisfireCylinderNumberType, AUTOMATIC ) MisfireCylinderNumber,
@@ -1048,11 +1067,6 @@ FUNC( Dem_u32_FFDOutputTotalSizeType, DEM_CODE ) Dem_Data_GetSizeOfAllStoredFree
 /* History                                                                  */
 /*  Version        :Date                                                    */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-6-0         :2024-01-29                                              */
-/*  v5-7-0         :2024-05-29                                              */
-/*  v5-8-0         :2024-10-29                                              */
-/*  v5-9-0         :2025-02-26                                              */
-/*  v5-10-0        :2025-06-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

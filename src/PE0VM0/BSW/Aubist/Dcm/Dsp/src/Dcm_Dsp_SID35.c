@@ -1,7 +1,7 @@
-/* Dcm_Dsp_SID35_c(v5-6-0)                                                  */
+/* Dcm_Dsp_SID35_c(v5-3-0)                                                  */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -34,18 +34,18 @@
                                                                             /* memoryAddress(1byte) +             */
                                                                             /* memorySize(1byte)                  */
 #define DCM_DSP_SID35_REQ_LEN_DFIDANDALFID    ((uint32)2U)
-#define DCM_DSP_SID35_REQ_LEN_VALID_MEMADDR   ((uint8)4U)
-#define DCM_DSP_SID35_REQ_LEN_VALID_MEMSIZE   ((uint8)4U)
+#define DCM_DSP_SID35_REQ_LEN_NOMEMID_MEMADDR ((uint32)4U)
 #define DCM_DSP_SID35_REQ_DATA_OFFMEMADDR     ((uint32)0x0000000FU)
-#define DCM_DSP_SID35_REQ_DATA_ALFID45        ((uint8)0x45U)
 #define DCM_DSP_SID35_REQ_POS_DFID            ((uint8)0x00U)
 #define DCM_DSP_SID35_REQ_POS_ALFID           ((uint8)0x01U)
-#define DCM_DSP_SID35_REQ_POS_MEMADDR1_OFS    ((uint8)0x01U)
-#define DCM_DSP_SID35_REQ_POS_MEMADDR2_OFS    ((uint8)0x02U)
-#define DCM_DSP_SID35_REQ_POS_MEMADDR3_OFS    ((uint8)0x03U)
-#define DCM_DSP_SID35_REQ_POS_MEMSIZE1_OFS    ((uint8)0x01U)
-#define DCM_DSP_SID35_REQ_POS_MEMSIZE2_OFS    ((uint8)0x02U)
-#define DCM_DSP_SID35_REQ_POS_MEMSIZE3_OFS    ((uint8)0x03U)
+#define DCM_DSP_SID35_REQ_POS_MEMADDR0        ((uint8)0x02U)
+#define DCM_DSP_SID35_REQ_POS_MEMADDR1        ((uint8)0x03U)
+#define DCM_DSP_SID35_REQ_POS_MEMADDR2        ((uint8)0x04U)
+#define DCM_DSP_SID35_REQ_POS_MEMADDR3        ((uint8)0x05U)
+#define DCM_DSP_SID35_REQ_POS_MEMSIZE0        ((uint8)0x06U)
+#define DCM_DSP_SID35_REQ_POS_MEMSIZE1        ((uint8)0x07U)
+#define DCM_DSP_SID35_REQ_POS_MEMSIZE2        ((uint8)0x08U)
+#define DCM_DSP_SID35_REQ_POS_MEMSIZE3        ((uint8)0x09U)
 #define DCM_DSP_SID35_REQ_POS_MEMID_MEMADDR0  ((uint8)0x02U)
 #define DCM_DSP_SID35_REQ_POS_MEMID_MEMADDR1  ((uint8)0x03U)
 #define DCM_DSP_SID35_REQ_POS_MEMID_MEMADDR2  ((uint8)0x04U)
@@ -78,7 +78,6 @@
 #define DCM_DSP_SID35_MNROB_LEN_2BMAX          ((uint32)0x0000FFFFU)
 #define DCM_DSP_SID35_MNROB_2BMAX_H            ((uint8)0xFFU)
 #define DCM_DSP_SID35_MNROB_2BMAX_L            ((uint8)0xFFU)
-#define DCM_DSP_SID35_VALID_REQDATA            ((uint8)0x00U)
 
 /*--------------------------------------------------------------------------*/
 /* Types                                                                    */
@@ -380,20 +379,10 @@ static FUNC( Std_ReturnType, DCM_CODE ) Dcm_Dsp_SID35_ChkAndStoredRequestData
     uint32                        u4_DataFullLen;
     uint32                        u4_MemorySizeLen;
     uint32                        u4_MemoryAddressLen;
-    uint8                         u1_InvalidMemAddrLen;
-    uint8                         u1_InvalidMemSizeLen;
-    uint8                         u1_InvalidMemAddrIdx;
-    uint8                         u1_InvalidMemSizeIdx;
-    uint8                         u1_InvalidMemAddrLenCnt;
-    uint8                         u1_InvalidMemSizeLenCnt;
-    uint8                         u1_MemAddrIdx;
-    uint8                         u1_MemSizeIdx;
     Std_ReturnType                u1_RetChkAlfid;
     Std_ReturnType                u1_RetVal;
     Dcm_NegativeResponseCodeType  u1_ErrorCode;
     boolean                       b_SendNegResFlag;
-    boolean                       b_IsValidMemAddr;
-    boolean                       b_IsValidMemSize;
 
     u1_RetVal = E_NOT_OK;
     b_SendNegResFlag = (boolean)FALSE;
@@ -409,7 +398,20 @@ static FUNC( Std_ReturnType, DCM_CODE ) Dcm_Dsp_SID35_ChkAndStoredRequestData
                          u4_MemoryAddressLen;
         if( Dcm_Dsp_Main_stMsgContext.reqDataLen == (Dcm_MsgLenType)u4_DataFullLen )
         {
-            if( Dcm_Dsp_Main_stMsgContext.reqData[DCM_DSP_SID35_REQ_POS_ALFID] == DCM_DSP_SID35_REQ_DATA_ALFID45 )
+            if( u4_MemoryAddressLen == DCM_DSP_SID35_REQ_LEN_NOMEMID_MEMADDR )
+            {
+                Dcm_Dsp_SID35_u1MemoryId = (uint8)0U;
+                Dcm_Dsp_SID35_u4MemoryAddress = (uint32)((uint32)Dcm_Dsp_Main_stMsgContext.reqData[DCM_DSP_SID35_REQ_POS_MEMADDR0] << DCM_DSP_SID35_BITSHIFT_24 ) |
+                                                (uint32)((uint32)Dcm_Dsp_Main_stMsgContext.reqData[DCM_DSP_SID35_REQ_POS_MEMADDR1] << DCM_DSP_SID35_BITSHIFT_16 ) |
+                                                (uint32)((uint32)Dcm_Dsp_Main_stMsgContext.reqData[DCM_DSP_SID35_REQ_POS_MEMADDR2] << DCM_DSP_SID35_BITSHIFT_8 ) |
+                                                (uint32)Dcm_Dsp_Main_stMsgContext.reqData[DCM_DSP_SID35_REQ_POS_MEMADDR3];
+
+                Dcm_Dsp_SID35_u4MemorySize = (uint32)((uint32)Dcm_Dsp_Main_stMsgContext.reqData[DCM_DSP_SID35_REQ_POS_MEMSIZE0] << DCM_DSP_SID35_BITSHIFT_24 ) |
+                                             (uint32)((uint32)Dcm_Dsp_Main_stMsgContext.reqData[DCM_DSP_SID35_REQ_POS_MEMSIZE1] << DCM_DSP_SID35_BITSHIFT_16 ) |
+                                             (uint32)((uint32)Dcm_Dsp_Main_stMsgContext.reqData[DCM_DSP_SID35_REQ_POS_MEMSIZE2] << DCM_DSP_SID35_BITSHIFT_8 ) |
+                                             (uint32)Dcm_Dsp_Main_stMsgContext.reqData[DCM_DSP_SID35_REQ_POS_MEMSIZE3];
+            }
+            else
             {
                 Dcm_Dsp_SID35_u1MemoryId = Dcm_Dsp_Main_stMsgContext.reqData[DCM_DSP_SID35_REQ_POS_MEMID_MEMADDR0];
                 Dcm_Dsp_SID35_u4MemoryAddress = (uint32)((uint32)Dcm_Dsp_Main_stMsgContext.reqData[DCM_DSP_SID35_REQ_POS_MEMID_MEMADDR1] << DCM_DSP_SID35_BITSHIFT_24 ) |
@@ -421,73 +423,9 @@ static FUNC( Std_ReturnType, DCM_CODE ) Dcm_Dsp_SID35_ChkAndStoredRequestData
                                              (uint32)((uint32)Dcm_Dsp_Main_stMsgContext.reqData[DCM_DSP_SID35_REQ_POS_MEMID_MEMSIZE1] << DCM_DSP_SID35_BITSHIFT_16 ) |
                                              (uint32)((uint32)Dcm_Dsp_Main_stMsgContext.reqData[DCM_DSP_SID35_REQ_POS_MEMID_MEMSIZE2] << DCM_DSP_SID35_BITSHIFT_8 ) |
                                              (uint32)Dcm_Dsp_Main_stMsgContext.reqData[DCM_DSP_SID35_REQ_POS_MEMID_MEMSIZE3];
-                u1_RetVal = E_OK;
             }
-            else
-            {
-                b_IsValidMemAddr = (boolean)TRUE;
 
-                /* u4_MemoryAddressLen is always 4byte or higher, since DcmDspSupportedAddressAndLengthFormatIdentifier cannot set less than 0x44 */
-                u1_InvalidMemAddrLen = (uint8)( (uint8)u4_MemoryAddressLen - DCM_DSP_SID35_REQ_LEN_VALID_MEMADDR );
-                for( u1_InvalidMemAddrLenCnt = (uint8)0U; u1_InvalidMemAddrLenCnt < u1_InvalidMemAddrLen; u1_InvalidMemAddrLenCnt++ )
-                {
-                    /* Check if MemoryAddress data value outside the valid range is 0x00 */
-                    u1_InvalidMemAddrIdx = (uint8)( (uint8)DCM_DSP_SID35_REQ_LEN_DFIDANDALFID + u1_InvalidMemAddrLenCnt );
-                    if( Dcm_Dsp_Main_stMsgContext.reqData[u1_InvalidMemAddrIdx] != DCM_DSP_SID35_VALID_REQDATA )
-                    {
-                        b_IsValidMemAddr = (boolean)FALSE;
-                        break;
-                    }
-                }
-
-                if( b_IsValidMemAddr == (boolean)TRUE )
-                {
-                    b_IsValidMemSize = (boolean)TRUE;
-
-                    /* u4_MemorySizeLen is always 4byte or higher, since DcmDspSupportedAddressAndLengthFormatIdentifier cannot set less than 0x44 */
-                    u1_InvalidMemSizeLen = (uint8)( (uint8)u4_MemorySizeLen - DCM_DSP_SID35_REQ_LEN_VALID_MEMSIZE );
-                    for( u1_InvalidMemSizeLenCnt = (uint8)0U; u1_InvalidMemSizeLenCnt < u1_InvalidMemSizeLen; u1_InvalidMemSizeLenCnt++ )
-                    {
-                        /* Check if MemorySize data value outside the valid range is 0x00 */
-                        u1_InvalidMemSizeIdx = (uint8)( (uint8)DCM_DSP_SID35_REQ_LEN_DFIDANDALFID + (uint8)u4_MemoryAddressLen + u1_InvalidMemSizeLenCnt );
-                        if( Dcm_Dsp_Main_stMsgContext.reqData[u1_InvalidMemSizeIdx] != DCM_DSP_SID35_VALID_REQDATA )
-                        {
-                            b_IsValidMemSize = (boolean)FALSE;
-                            break;
-                        }
-                    }
-
-                    if( b_IsValidMemSize == (boolean)TRUE )
-                    {
-                        u1_MemAddrIdx = (uint8)( (uint8)DCM_DSP_SID35_REQ_LEN_DFIDANDALFID + u1_InvalidMemAddrLen );
-                        u1_MemSizeIdx = (uint8)( (uint8)DCM_DSP_SID35_REQ_LEN_DFIDANDALFID + (uint8)u4_MemoryAddressLen + u1_InvalidMemSizeLen );
-
-                        Dcm_Dsp_SID35_u1MemoryId = (uint8)0U;
-                        Dcm_Dsp_SID35_u4MemoryAddress = (uint32)((uint32)Dcm_Dsp_Main_stMsgContext.reqData[u1_MemAddrIdx] << DCM_DSP_SID35_BITSHIFT_24 ) |
-                                                        (uint32)((uint32)Dcm_Dsp_Main_stMsgContext.reqData[u1_MemAddrIdx + DCM_DSP_SID35_REQ_POS_MEMADDR1_OFS] << DCM_DSP_SID35_BITSHIFT_16 ) |
-                                                        (uint32)((uint32)Dcm_Dsp_Main_stMsgContext.reqData[u1_MemAddrIdx + DCM_DSP_SID35_REQ_POS_MEMADDR2_OFS] << DCM_DSP_SID35_BITSHIFT_8 ) |
-                                                        (uint32)Dcm_Dsp_Main_stMsgContext.reqData[u1_MemAddrIdx + DCM_DSP_SID35_REQ_POS_MEMADDR3_OFS];
-
-                        Dcm_Dsp_SID35_u4MemorySize = (uint32)((uint32)Dcm_Dsp_Main_stMsgContext.reqData[u1_MemSizeIdx] << DCM_DSP_SID35_BITSHIFT_24 ) |
-                                                     (uint32)((uint32)Dcm_Dsp_Main_stMsgContext.reqData[u1_MemSizeIdx + DCM_DSP_SID35_REQ_POS_MEMSIZE1_OFS] << DCM_DSP_SID35_BITSHIFT_16 ) |
-                                                     (uint32)((uint32)Dcm_Dsp_Main_stMsgContext.reqData[u1_MemSizeIdx + DCM_DSP_SID35_REQ_POS_MEMSIZE2_OFS] << DCM_DSP_SID35_BITSHIFT_8 ) |
-                                                     (uint32)Dcm_Dsp_Main_stMsgContext.reqData[u1_MemSizeIdx + DCM_DSP_SID35_REQ_POS_MEMSIZE3_OFS];
-                        u1_RetVal = E_OK;
-                    }
-                    else
-                    {
-                        /* NRC0x31 */
-                        u1_ErrorCode = DCM_E_REQUESTOUTOFRANGE;
-                        b_SendNegResFlag = (boolean)TRUE;
-                    }
-                }
-                else
-                {
-                    /* NRC0x31 */
-                    u1_ErrorCode = DCM_E_REQUESTOUTOFRANGE;
-                    b_SendNegResFlag = (boolean)TRUE;
-                }
-            }
+            u1_RetVal = E_OK;
         }
         else
         {
@@ -666,7 +604,6 @@ static FUNC( Std_ReturnType, DCM_CODE ) Dcm_Dsp_SID35_CancelProc
 /* History                                                                  */
 /*  Version        :Date                                                    */
 /*  v5-3-0         :2023-03-29                                              */
-/*  v5-6-0         :2024-02-27                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

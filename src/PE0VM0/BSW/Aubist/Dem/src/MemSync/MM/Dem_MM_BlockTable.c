@@ -1,7 +1,7 @@
-/* Dem_MM_BlockTable_c(v5-7-0)                                              */
+/* Dem_MM_BlockTable_c(v5-5-0)                                              */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -110,7 +110,6 @@ FUNC( void, DEM_CODE ) Dem_MM_GetNvBlockIndex
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_MM_GetNvBlockInfo
 (
@@ -145,7 +144,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_MM_GetNvBlockInfo
             recPtrOffset                           = (Dem_u16_BlockSizeType)( nvBlockIndexInRecKind * NvBlockTypePtr->DemNvBlockLength );   /* [GUD:logic]recPtrOffset */
 
             /* Do not access outside the targetPtr[recPtrOffset] because it is consistent with Aubist-Configurator */
-            NvBlockTypePtr->DemRamBlockDataAddress = (P2VAR( uint8, AUTOMATIC, DEM_VAR_SAVED_ZONE ))&targetPtr[recPtrOffset];           /* [GUD]recPtrOffset *//* [ARYCHK] (Dem_RecordInfo_NvBlockTable[recKind].DemBlockSize)*(Dem_RecordInfo_NvBlockTable[recKind].DemBlockTotalNum) / 1 / recPtrOffset */
+            NvBlockTypePtr->DemRamBlockDataAddress = (P2VAR( uint8, AUTOMATIC, DEM_VAR_SAVED_ZONE ))&targetPtr[recPtrOffset];           /* [GUD]recPtrOffset */
 
             NvBlockTypePtr->BlockRecordKind = recKind;
 
@@ -170,7 +169,6 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_MM_GetNvBlockInfo
 /*  v5-0-0         :2022-03-29                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-7-0         :2024-05-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

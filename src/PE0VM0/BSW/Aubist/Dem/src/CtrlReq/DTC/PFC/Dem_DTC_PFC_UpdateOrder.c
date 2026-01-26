@@ -1,7 +1,7 @@
-/* Dem_DTC_PFC_UpdateOrder_c(v5-6-0)                                        */
+/* Dem_DTC_PFC_UpdateOrder_c(v5-5-0)                                        */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -83,7 +83,6 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DTC_SearchPFCUpdateTarge
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | branch changed.                                          */
-/*   v5-6-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DTC_SearchPFCUpdateTarget
 (
@@ -107,7 +106,7 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DTC_SearchPFCUpdateTarge
     if( OrderExistFlag != (boolean)FALSE )
     {
         /* Check event available status, MIL indicator and OBD. */
-        retCheckResult = Dem_DTC_CheckAvailableAndMILStatusByEventStrgIndex( eventStrgIndex );  /* [GUD:RET:DEM_IRT_OK]eventStrgIndex */
+        retCheckResult = Dem_DTC_CheckAvailableAndMILStatusByEventStrgIndex( eventStrgIndex );  /* [GUD]eventStrgIndex */
         if( retCheckResult == DEM_IRT_OK )
         {
             retPFCRegist    =   Dem_DTC_CheckRegistPFCRecord( eventStrgIndex );
@@ -129,12 +128,8 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_DTC_SearchPFCUpdateTarge
 /* Return Value  | void                                                     */
 /* Notes         |                                                          */
 /*--------------------------------------------------------------------------*/
-/* UpdateRecord  | [UpdRec]PFC                                              */
-/* UpdateRecord  | [UpdRec]PFCMisfire                                       */
-/*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no branch changed.                                       */
-/*   v5-6-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_DTC_UpdatePFCRecordByOrder
 ( void )
@@ -174,10 +169,10 @@ FUNC( void, DEM_CODE ) Dem_DTC_UpdatePFCRecordByOrder
             if( retSearchPFCUpdateTarget == DEM_IRT_OK )
             {
                 /* Set the PFCrecord. */
-                Dem_DTC_SetPFCRecordWithClearCondition( pfcRecordIndex, eventStrgIndex );   /*[UpdRec]PFC */
+                Dem_DTC_SetPFCRecordWithClearCondition( pfcRecordIndex, eventStrgIndex );
                 nextSearchFlag = (boolean)TRUE;
 #if ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON )  /*  [FuncSw]    */
-                Dem_Misfire_UpdatePermanentCylByOrder( eventStrgIndex );        /*[UpdRec]PFCMisfire */
+                Dem_Misfire_UpdatePermanentCylByOrder( eventStrgIndex );
 #endif  /*   ( DEM_MISFIRE_EVENT_CONFIGURED == STD_ON )         */
             }
             else
@@ -205,7 +200,6 @@ FUNC( void, DEM_CODE ) Dem_DTC_UpdatePFCRecordByOrder
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-6-0         :2024-01-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

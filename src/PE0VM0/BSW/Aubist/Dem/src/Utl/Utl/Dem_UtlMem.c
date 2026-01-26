@@ -1,7 +1,7 @@
-/* Dem_UtlMem_c(v5-7-0)                                                     */
+/* Dem_UtlMem_c(v5-5-0)                                                     */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -133,7 +133,6 @@ FUNC( uint16, DEM_CODE ) Dem_UtlMem_ConvertByteData
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_UtlMem_CopyMemory
 (
@@ -152,62 +151,62 @@ FUNC( void, DEM_CODE ) Dem_UtlMem_CopyMemory
 
     while( bufSize >= DEM_UTILMEM_REMAINED_BUFSIZE_8 )
     {
-        dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_7] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_7];/* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_7 *//* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_7 */
-        dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_6] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_6];/* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_6 *//* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_6 */
-        dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_5] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_5];/* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_5 *//* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_5 */
-        dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_4] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_4];/* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_4 *//* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_4 */
-        dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_3] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_3];/* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_3 *//* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_3 */
-        dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2];/* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_2 *//* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_2 */
-        dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1];/* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_1 *//* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_1 */
-        dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0];/* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_0 *//* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_0 */
-        dstPtr = &dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_8];                                   /* [OUTOFTGT_ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_8 */
-        srcPtr = &srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_8];                                   /* [OUTOFTGT_ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_8 */
+        dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_7] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_7];
+        dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_6] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_6];
+        dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_5] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_5];
+        dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_4] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_4];
+        dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_3] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_3];
+        dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2];
+        dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1];
+        dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0];
+        dstPtr = &dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_8];
+        srcPtr = &srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_8];
         bufSize -= DEM_UTILMEM_REMAINED_BUFSIZE_8;
     }
 
     switch( bufSize )
     {
         case DEM_UTILMEM_REMAINED_BUFSIZE_7:
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_6] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_6];/* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_6 *//* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_6 */
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_5] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_5];/* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_5 *//* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_5 */
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_4] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_4];/* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_4 *//* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_4 */
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_3] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_3];/* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_3 *//* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_3 */
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2];/* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_2 *//* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_2 */
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1];/* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_1 *//* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_1 */
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0];/* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_0 *//* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_0 */
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_6] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_6];
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_5] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_5];
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_4] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_4];
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_3] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_3];
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2];
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1];
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0];
             break;
         case DEM_UTILMEM_REMAINED_BUFSIZE_6:
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_5] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_5];/* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_5 *//* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_5 */
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_4] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_4];/* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_4 *//* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_4 */
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_3] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_3];/* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_3 *//* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_3 */
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2];/* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_2 *//* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_2 */
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1];/* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_1 *//* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_1 */
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0];/* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_0 *//* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_0 */
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_5] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_5];
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_4] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_4];
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_3] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_3];
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2];
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1];
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0];
             break;
         case DEM_UTILMEM_REMAINED_BUFSIZE_5:
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_4] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_4];/* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_4 *//* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_4 */
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_3] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_3];/* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_3 *//* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_3 */
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2];/* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_2 *//* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_2 */
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1];/* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_1 *//* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_1 */
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0];/* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_0 *//* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_0 */
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_4] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_4];
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_3] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_3];
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2];
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1];
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0];
             break;
         case DEM_UTILMEM_REMAINED_BUFSIZE_4:
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_3] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_3];/* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_3 *//* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_3 */
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2];/* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_2 *//* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_2 */
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1];/* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_1 *//* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_1 */
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0];/* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_0 *//* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_0 */
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_3] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_3];
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2];
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1];
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0];
             break;
         case DEM_UTILMEM_REMAINED_BUFSIZE_3:
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2];/* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_2 *//* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_2 */
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1];/* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_1 *//* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_1 */
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0];/* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_0 *//* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_0 */
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2];
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1];
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0];
             break;
         case DEM_UTILMEM_REMAINED_BUFSIZE_2:
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1];/* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_1 *//* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_1 */
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0];/* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_0 *//* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_0 */
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1];
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0];
             break;
         case DEM_UTILMEM_REMAINED_BUFSIZE_1:
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0];/* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_0 *//* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_0 */
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0];
             break;
         default:
             /* No process */
@@ -231,9 +230,6 @@ FUNC( void, DEM_CODE ) Dem_UtlMem_CopyMemory
 /*               |                                                          */
 /* Return Value  | void                                                     */
 /* Notes         | -                                                        */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_UtlMem_SetMemory
 (
@@ -250,61 +246,61 @@ FUNC( void, DEM_CODE ) Dem_UtlMem_SetMemory
 
     while( loopCnt >= DEM_UTILMEM_REMAINED_BUFSIZE_8 )
     {
-        dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_7] = CharData;/* [ARYCHK] loopCnt / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_7 */
-        dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_6] = CharData;/* [ARYCHK] loopCnt / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_6 */
-        dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_5] = CharData;/* [ARYCHK] loopCnt / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_5 */
-        dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_4] = CharData;/* [ARYCHK] loopCnt / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_4 */
-        dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_3] = CharData;/* [ARYCHK] loopCnt / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_3 */
-        dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2] = CharData;/* [ARYCHK] loopCnt / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_2 */
-        dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1] = CharData;/* [ARYCHK] loopCnt / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_1 */
-        dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0] = CharData;/* [ARYCHK] loopCnt / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_0 */
-        dstPtr = &dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_8];       /* [OUTOFTGT_ARYCHK] loopCnt/1/DEM_UTILMEM_REMAINED_BUFSIZE_8 */
+        dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_7] = CharData;
+        dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_6] = CharData;
+        dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_5] = CharData;
+        dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_4] = CharData;
+        dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_3] = CharData;
+        dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2] = CharData;
+        dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1] = CharData;
+        dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0] = CharData;
+        dstPtr = &dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_8];
         loopCnt -= DEM_UTILMEM_REMAINED_BUFSIZE_8;
     }
 
     switch( loopCnt )
     {
         case DEM_UTILMEM_REMAINED_BUFSIZE_7:
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_6] = CharData;/* [ARYCHK] loopCnt / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_6 */
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_5] = CharData;/* [ARYCHK] loopCnt / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_5 */
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_4] = CharData;/* [ARYCHK] loopCnt / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_4 */
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_3] = CharData;/* [ARYCHK] loopCnt / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_3 */
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2] = CharData;/* [ARYCHK] loopCnt / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_2 */
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1] = CharData;/* [ARYCHK] loopCnt / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_1 */
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0] = CharData;/* [ARYCHK] loopCnt / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_0 */
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_6] = CharData;
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_5] = CharData;
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_4] = CharData;
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_3] = CharData;
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2] = CharData;
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1] = CharData;
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0] = CharData;
             break;
         case DEM_UTILMEM_REMAINED_BUFSIZE_6:
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_5] = CharData;/* [ARYCHK] loopCnt / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_5 */
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_4] = CharData;/* [ARYCHK] loopCnt / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_4 */
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_3] = CharData;/* [ARYCHK] loopCnt / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_3 */
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2] = CharData;/* [ARYCHK] loopCnt / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_2 */
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1] = CharData;/* [ARYCHK] loopCnt / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_1 */
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0] = CharData;/* [ARYCHK] loopCnt / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_0 */
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_5] = CharData;
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_4] = CharData;
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_3] = CharData;
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2] = CharData;
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1] = CharData;
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0] = CharData;
             break;
         case DEM_UTILMEM_REMAINED_BUFSIZE_5:
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_4] = CharData;/* [ARYCHK] loopCnt / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_4 */
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_3] = CharData;/* [ARYCHK] loopCnt / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_3 */
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2] = CharData;/* [ARYCHK] loopCnt / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_2 */
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1] = CharData;/* [ARYCHK] loopCnt / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_1 */
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0] = CharData;/* [ARYCHK] loopCnt / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_0 */
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_4] = CharData;
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_3] = CharData;
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2] = CharData;
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1] = CharData;
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0] = CharData;
             break;
         case DEM_UTILMEM_REMAINED_BUFSIZE_4:
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_3] = CharData;/* [ARYCHK] loopCnt / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_3 */
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2] = CharData;/* [ARYCHK] loopCnt / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_2 */
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1] = CharData;/* [ARYCHK] loopCnt / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_1 */
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0] = CharData;/* [ARYCHK] loopCnt / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_0 */
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_3] = CharData;
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2] = CharData;
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1] = CharData;
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0] = CharData;
             break;
         case DEM_UTILMEM_REMAINED_BUFSIZE_3:
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2] = CharData;/* [ARYCHK] loopCnt / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_2 */
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1] = CharData;/* [ARYCHK] loopCnt / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_1 */
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0] = CharData;/* [ARYCHK] loopCnt / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_0 */
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2] = CharData;
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1] = CharData;
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0] = CharData;
             break;
         case DEM_UTILMEM_REMAINED_BUFSIZE_2:
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1] = CharData;/* [ARYCHK] loopCnt / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_1 */
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0] = CharData;/* [ARYCHK] loopCnt / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_0 */
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1] = CharData;
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0] = CharData;
             break;
         case DEM_UTILMEM_REMAINED_BUFSIZE_1:
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0] = CharData;/* [ARYCHK] loopCnt / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_0 */
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0] = CharData;
             break;
         default:
             /* No process */
@@ -337,14 +333,9 @@ FUNC( void, DEM_CODE ) Dem_UtlMem_SetMemory
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_UtlMem_CopyMemoryWithChecksum
 (
-#ifndef DEM_SIT_RANGE_CHECK
-#else   /* DEM_SIT_RANGE_CHECK */
-    VAR( Dem_u16_FFDStoredIndexType, AUTOMATIC ) DestBufferSize,
-#endif  /* DEM_SIT_RANGE_CHECK */
     P2VAR( uint8, AUTOMATIC, DEM_VAR_SAVED_ZONE ) DestBufferPtr,
     P2CONST( uint8, AUTOMATIC , DEM_VAR_NO_INIT ) SrcBufferPtr,
     VAR( Dem_u16_FFDStoredIndexType, AUTOMATIC ) BufSize,
@@ -360,105 +351,105 @@ FUNC( void, DEM_CODE ) Dem_UtlMem_CopyMemoryWithChecksum
     VAR( Dem_u16_FFCheckSumType, AUTOMATIC ) chksum;
     VAR( Dem_u32_FFCheckSumAddCarryType, AUTOMATIC ) sum;
 
-    dstPtr = &DestBufferPtr[PosDataStart]; /* [ARYCHK] DestBufferSize/1/PosDataStart */
+    dstPtr = &DestBufferPtr[PosDataStart];
     srcPtr = SrcBufferPtr;
     bufSize = BufSize;
     sum = (Dem_u32_FFCheckSumAddCarryType)0U;
 
     while( bufSize >= DEM_UTILMEM_REMAINED_BUFSIZE_8 )
     {
-        dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_7] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_7];    /* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_7 *//* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_7 */
-        dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_6] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_6];    /* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_6 *//* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_6 */
-        dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_5] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_5];    /* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_5 *//* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_5 */
-        dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_4] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_4];    /* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_4 *//* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_4 */
-        dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_3] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_3];    /* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_3 *//* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_3 */
-        dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2];    /* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_2 *//* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_2 */
-        dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1];    /* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_1 *//* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_1 */
-        dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0];    /* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_0 *//* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_0 */
-        sum = sum + dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_7];     /*  no wrap around      */  /* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_7 */
-        sum = sum + dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_6];     /*  no wrap around      */  /* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_6 */
-        sum = sum + dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_5];     /*  no wrap around      */  /* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_5 */
-        sum = sum + dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_4];     /*  no wrap around      */  /* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_4 */
-        sum = sum + dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_3];     /*  no wrap around      */  /* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_3 */
-        sum = sum + dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2];     /*  no wrap around      */  /* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_2 */
-        sum = sum + dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1];     /*  no wrap around      */  /* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_1 */
-        sum = sum + dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0];     /*  no wrap around      */  /* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_0 */
-        dstPtr = &dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_8];                                   /* [OUTOFTGT_ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_8 */
-        srcPtr = &srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_8];                                   /* [OUTOFTGT_ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_8 */
+        dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_7] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_7];
+        dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_6] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_6];
+        dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_5] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_5];
+        dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_4] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_4];
+        dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_3] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_3];
+        dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2];
+        dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1];
+        dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0];
+        sum = sum + dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_7];     /*  no wrap around      */
+        sum = sum + dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_6];     /*  no wrap around      */
+        sum = sum + dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_5];     /*  no wrap around      */
+        sum = sum + dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_4];     /*  no wrap around      */
+        sum = sum + dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_3];     /*  no wrap around      */
+        sum = sum + dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2];     /*  no wrap around      */
+        sum = sum + dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1];     /*  no wrap around      */
+        sum = sum + dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0];     /*  no wrap around      */
+        dstPtr = &dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_8];
+        srcPtr = &srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_8];
         bufSize -= DEM_UTILMEM_REMAINED_BUFSIZE_8;
     }
 
     switch( bufSize )
     {
         case DEM_UTILMEM_REMAINED_BUFSIZE_7:
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_6] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_6];    /* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_6 *//* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_6 */
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_5] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_5];    /* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_5 *//* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_5 */
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_4] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_4];    /* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_4 *//* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_4 */
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_3] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_3];    /* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_3 *//* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_3 */
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2];    /* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_2 *//* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_2 */
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1];    /* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_1 *//* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_1 */
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0];    /* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_0 *//* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_0 */
-            sum = sum + dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_6];     /*  no wrap around      */  /* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_6 */
-            sum = sum + dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_5];     /*  no wrap around      */  /* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_5 */
-            sum = sum + dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_4];     /*  no wrap around      */  /* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_4 */
-            sum = sum + dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_3];     /*  no wrap around      */  /* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_3 */
-            sum = sum + dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2];     /*  no wrap around      */  /* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_2 */
-            sum = sum + dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1];     /*  no wrap around      */  /* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_1 */
-            sum = sum + dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0];     /*  no wrap around      */  /* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_0 */
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_6] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_6];
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_5] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_5];
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_4] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_4];
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_3] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_3];
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2];
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1];
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0];
+            sum = sum + dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_6];     /*  no wrap around      */
+            sum = sum + dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_5];     /*  no wrap around      */
+            sum = sum + dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_4];     /*  no wrap around      */
+            sum = sum + dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_3];     /*  no wrap around      */
+            sum = sum + dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2];     /*  no wrap around      */
+            sum = sum + dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1];     /*  no wrap around      */
+            sum = sum + dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0];     /*  no wrap around      */
             break;
         case DEM_UTILMEM_REMAINED_BUFSIZE_6:
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_5] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_5];    /* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_5 *//* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_5 */
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_4] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_4];    /* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_4 *//* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_4 */
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_3] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_3];    /* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_3 *//* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_3 */
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2];    /* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_2 *//* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_2 */
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1];    /* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_1 *//* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_1 */
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0];    /* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_0 *//* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_0 */
-            sum = sum + dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_5];     /*  no wrap around      */  /* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_5 */
-            sum = sum + dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_4];     /*  no wrap around      */  /* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_4 */
-            sum = sum + dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_3];     /*  no wrap around      */  /* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_3 */
-            sum = sum + dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2];     /*  no wrap around      */  /* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_2 */
-            sum = sum + dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1];     /*  no wrap around      */  /* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_1 */
-            sum = sum + dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0];     /*  no wrap around      */  /* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_0 */
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_5] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_5];
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_4] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_4];
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_3] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_3];
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2];
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1];
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0];
+            sum = sum + dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_5];     /*  no wrap around      */
+            sum = sum + dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_4];     /*  no wrap around      */
+            sum = sum + dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_3];     /*  no wrap around      */
+            sum = sum + dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2];     /*  no wrap around      */
+            sum = sum + dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1];     /*  no wrap around      */
+            sum = sum + dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0];     /*  no wrap around      */
             break;
         case DEM_UTILMEM_REMAINED_BUFSIZE_5:
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_4] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_4];    /* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_4 *//* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_4 */
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_3] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_3];    /* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_3 *//* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_3 */
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2];    /* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_2 *//* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_2 */
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1];    /* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_1 *//* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_1 */
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0];    /* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_0 *//* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_0 */
-            sum = sum + dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_4];     /*  no wrap around      */  /* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_4 */
-            sum = sum + dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_3];     /*  no wrap around      */  /* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_3 */
-            sum = sum + dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2];     /*  no wrap around      */  /* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_2 */
-            sum = sum + dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1];     /*  no wrap around      */  /* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_1 */
-            sum = sum + dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0];     /*  no wrap around      */  /* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_0 */
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_4] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_4];
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_3] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_3];
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2];
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1];
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0];
+            sum = sum + dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_4];     /*  no wrap around      */
+            sum = sum + dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_3];     /*  no wrap around      */
+            sum = sum + dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2];     /*  no wrap around      */
+            sum = sum + dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1];     /*  no wrap around      */
+            sum = sum + dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0];     /*  no wrap around      */
             break;
         case DEM_UTILMEM_REMAINED_BUFSIZE_4:
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_3] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_3];    /* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_3 *//* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_3 */
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2];    /* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_2 *//* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_2 */
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1];    /* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_1 *//* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_1 */
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0];    /* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_0 *//* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_0 */
-            sum = sum + dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_3];     /*  no wrap around      */  /* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_3 */
-            sum = sum + dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2];     /*  no wrap around      */  /* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_2 */
-            sum = sum + dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1];     /*  no wrap around      */  /* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_1 */
-            sum = sum + dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0];     /*  no wrap around      */  /* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_0 */
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_3] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_3];
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2];
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1];
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0];
+            sum = sum + dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_3];     /*  no wrap around      */
+            sum = sum + dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2];     /*  no wrap around      */
+            sum = sum + dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1];     /*  no wrap around      */
+            sum = sum + dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0];     /*  no wrap around      */
             break;
         case DEM_UTILMEM_REMAINED_BUFSIZE_3:
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2];    /* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_2 *//* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_2 */
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1];    /* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_1 *//* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_1 */
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0];    /* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_0 *//* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_0 */
-            sum = sum + dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2];     /*  no wrap around      */  /* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_2 */
-            sum = sum + dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1];     /*  no wrap around      */  /* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_1 */
-            sum = sum + dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0];     /*  no wrap around      */  /* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_0 */
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2];
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1];
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0];
+            sum = sum + dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2];     /*  no wrap around      */
+            sum = sum + dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1];     /*  no wrap around      */
+            sum = sum + dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0];     /*  no wrap around      */
             break;
         case DEM_UTILMEM_REMAINED_BUFSIZE_2:
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1];    /* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_1 *//* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_1 */
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0];    /* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_0 *//* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_0 */
-            sum = sum + dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1];     /*  no wrap around      */  /* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_1 */
-            sum = sum + dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0];     /*  no wrap around      */  /* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_0 */
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1];
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0];
+            sum = sum + dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1];     /*  no wrap around      */
+            sum = sum + dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0];     /*  no wrap around      */
             break;
         case DEM_UTILMEM_REMAINED_BUFSIZE_1:
-            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0];    /* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_0 *//* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_0 */
-            sum = sum + dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0];     /*  no wrap around      */  /* [ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_0 */
+            dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0] = srcPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0];
+            sum = sum + dstPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0];     /*  no wrap around      */
             break;
         default:
             /* No process */
@@ -468,8 +459,8 @@ FUNC( void, DEM_CODE ) Dem_UtlMem_CopyMemoryWithChecksum
     sum = Dem_UtlMem_AddCarry( sum );
     chksum = (Dem_u16_FFCheckSumType)sum;
 
-    DestBufferPtr[PosChecksumUpper] = (uint8)( chksum >> DEM_UTILMEM_CHECKSUM_STORE_SHIFT );    /* [ARYCHK] DestBufferSize/1/PosChecksumUpper */
-    DestBufferPtr[PosChecksumLower] = (uint8)( chksum & DEM_UTILMEM_CHECKSUM_STORE_MASK );      /* [ARYCHK] DestBufferSize/1/PosChecksumLower */
+    DestBufferPtr[PosChecksumUpper] = (uint8)( chksum >> DEM_UTILMEM_CHECKSUM_STORE_SHIFT );
+    DestBufferPtr[PosChecksumLower] = (uint8)( chksum & DEM_UTILMEM_CHECKSUM_STORE_MASK );
 
     return;
 }
@@ -488,7 +479,6 @@ FUNC( void, DEM_CODE ) Dem_UtlMem_CopyMemoryWithChecksum
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( Dem_u16_FFCheckSumType, DEM_CODE ) Dem_UtlMem_Checksum
 (
@@ -508,62 +498,62 @@ FUNC( Dem_u16_FFCheckSumType, DEM_CODE ) Dem_UtlMem_Checksum
 
     while( bufSize >= DEM_UTILMEM_REMAINED_BUFSIZE_8 )
     {
-        sum = sum + bufferPtr[DEM_UTILMEM_REMAINED_BUFSIZE_7];      /*  no wrap around      *//* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_7 */
-        sum = sum + bufferPtr[DEM_UTILMEM_REMAINED_BUFSIZE_6];      /*  no wrap around      *//* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_6 */
-        sum = sum + bufferPtr[DEM_UTILMEM_REMAINED_BUFSIZE_5];      /*  no wrap around      *//* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_5 */
-        sum = sum + bufferPtr[DEM_UTILMEM_REMAINED_BUFSIZE_4];      /*  no wrap around      *//* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_4 */
-        sum = sum + bufferPtr[DEM_UTILMEM_REMAINED_BUFSIZE_3];      /*  no wrap around      *//* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_3 */
-        sum = sum + bufferPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2];      /*  no wrap around      *//* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_2 */
-        sum = sum + bufferPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1];      /*  no wrap around      *//* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_1 */
-        sum = sum + bufferPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0];      /*  no wrap around      *//* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_0 */
+        sum = sum + bufferPtr[DEM_UTILMEM_REMAINED_BUFSIZE_7];      /*  no wrap around      */
+        sum = sum + bufferPtr[DEM_UTILMEM_REMAINED_BUFSIZE_6];      /*  no wrap around      */
+        sum = sum + bufferPtr[DEM_UTILMEM_REMAINED_BUFSIZE_5];      /*  no wrap around      */
+        sum = sum + bufferPtr[DEM_UTILMEM_REMAINED_BUFSIZE_4];      /*  no wrap around      */
+        sum = sum + bufferPtr[DEM_UTILMEM_REMAINED_BUFSIZE_3];      /*  no wrap around      */
+        sum = sum + bufferPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2];      /*  no wrap around      */
+        sum = sum + bufferPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1];      /*  no wrap around      */
+        sum = sum + bufferPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0];      /*  no wrap around      */
 
-        bufferPtr = &bufferPtr[DEM_UTILMEM_REMAINED_BUFSIZE_8];                                 /* [OUTOFTGT_ARYCHK] bufSize/1/DEM_UTILMEM_REMAINED_BUFSIZE_8 */
+        bufferPtr = &bufferPtr[DEM_UTILMEM_REMAINED_BUFSIZE_8];
         bufSize -= DEM_UTILMEM_REMAINED_BUFSIZE_8;
     }
 
     switch( bufSize )
     {
         case DEM_UTILMEM_REMAINED_BUFSIZE_7:
-            sum = sum + bufferPtr[DEM_UTILMEM_REMAINED_BUFSIZE_6];      /*  no wrap around      *//* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_6 */
-            sum = sum + bufferPtr[DEM_UTILMEM_REMAINED_BUFSIZE_5];      /*  no wrap around      *//* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_5 */
-            sum = sum + bufferPtr[DEM_UTILMEM_REMAINED_BUFSIZE_4];      /*  no wrap around      *//* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_4 */
-            sum = sum + bufferPtr[DEM_UTILMEM_REMAINED_BUFSIZE_3];      /*  no wrap around      *//* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_3 */
-            sum = sum + bufferPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2];      /*  no wrap around      *//* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_2 */
-            sum = sum + bufferPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1];      /*  no wrap around      *//* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_1 */
-            sum = sum + bufferPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0];      /*  no wrap around      *//* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_0 */
+            sum = sum + bufferPtr[DEM_UTILMEM_REMAINED_BUFSIZE_6];      /*  no wrap around      */
+            sum = sum + bufferPtr[DEM_UTILMEM_REMAINED_BUFSIZE_5];      /*  no wrap around      */
+            sum = sum + bufferPtr[DEM_UTILMEM_REMAINED_BUFSIZE_4];      /*  no wrap around      */
+            sum = sum + bufferPtr[DEM_UTILMEM_REMAINED_BUFSIZE_3];      /*  no wrap around      */
+            sum = sum + bufferPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2];      /*  no wrap around      */
+            sum = sum + bufferPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1];      /*  no wrap around      */
+            sum = sum + bufferPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0];      /*  no wrap around      */
             break;
         case DEM_UTILMEM_REMAINED_BUFSIZE_6:
-            sum = sum + bufferPtr[DEM_UTILMEM_REMAINED_BUFSIZE_5];      /*  no wrap around      *//* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_5 */
-            sum = sum + bufferPtr[DEM_UTILMEM_REMAINED_BUFSIZE_4];      /*  no wrap around      *//* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_4 */
-            sum = sum + bufferPtr[DEM_UTILMEM_REMAINED_BUFSIZE_3];      /*  no wrap around      *//* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_3 */
-            sum = sum + bufferPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2];      /*  no wrap around      *//* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_2 */
-            sum = sum + bufferPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1];      /*  no wrap around      *//* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_1 */
-            sum = sum + bufferPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0];      /*  no wrap around      *//* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_0 */
+            sum = sum + bufferPtr[DEM_UTILMEM_REMAINED_BUFSIZE_5];      /*  no wrap around      */
+            sum = sum + bufferPtr[DEM_UTILMEM_REMAINED_BUFSIZE_4];      /*  no wrap around      */
+            sum = sum + bufferPtr[DEM_UTILMEM_REMAINED_BUFSIZE_3];      /*  no wrap around      */
+            sum = sum + bufferPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2];      /*  no wrap around      */
+            sum = sum + bufferPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1];      /*  no wrap around      */
+            sum = sum + bufferPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0];      /*  no wrap around      */
             break;
         case DEM_UTILMEM_REMAINED_BUFSIZE_5:
-            sum = sum + bufferPtr[DEM_UTILMEM_REMAINED_BUFSIZE_4];      /*  no wrap around      *//* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_4 */
-            sum = sum + bufferPtr[DEM_UTILMEM_REMAINED_BUFSIZE_3];      /*  no wrap around      *//* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_3 */
-            sum = sum + bufferPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2];      /*  no wrap around      *//* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_2 */
-            sum = sum + bufferPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1];      /*  no wrap around      *//* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_1 */
-            sum = sum + bufferPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0];      /*  no wrap around      *//* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_0 */
+            sum = sum + bufferPtr[DEM_UTILMEM_REMAINED_BUFSIZE_4];      /*  no wrap around      */
+            sum = sum + bufferPtr[DEM_UTILMEM_REMAINED_BUFSIZE_3];      /*  no wrap around      */
+            sum = sum + bufferPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2];      /*  no wrap around      */
+            sum = sum + bufferPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1];      /*  no wrap around      */
+            sum = sum + bufferPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0];      /*  no wrap around      */
             break;
         case DEM_UTILMEM_REMAINED_BUFSIZE_4:
-            sum = sum + bufferPtr[DEM_UTILMEM_REMAINED_BUFSIZE_3];      /*  no wrap around      *//* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_3 */
-            sum = sum + bufferPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2];      /*  no wrap around      *//* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_2 */
-            sum = sum + bufferPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1];      /*  no wrap around      *//* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_1 */
-            sum = sum + bufferPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0];      /*  no wrap around      *//* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_0 */
+            sum = sum + bufferPtr[DEM_UTILMEM_REMAINED_BUFSIZE_3];      /*  no wrap around      */
+            sum = sum + bufferPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2];      /*  no wrap around      */
+            sum = sum + bufferPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1];      /*  no wrap around      */
+            sum = sum + bufferPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0];      /*  no wrap around      */
             break;
         case DEM_UTILMEM_REMAINED_BUFSIZE_3:
-            sum = sum + bufferPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2];      /*  no wrap around      *//* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_2 */
-            sum = sum + bufferPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1];      /*  no wrap around      *//* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_1 */
-            sum = sum + bufferPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0];      /*  no wrap around      *//* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_0 */
+            sum = sum + bufferPtr[DEM_UTILMEM_REMAINED_BUFSIZE_2];      /*  no wrap around      */
+            sum = sum + bufferPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1];      /*  no wrap around      */
+            sum = sum + bufferPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0];      /*  no wrap around      */
             break;
         case DEM_UTILMEM_REMAINED_BUFSIZE_2:
-            sum = sum + bufferPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1];      /*  no wrap around      *//* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_1 */
-            sum = sum + bufferPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0];      /*  no wrap around      *//* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_0 */
+            sum = sum + bufferPtr[DEM_UTILMEM_REMAINED_BUFSIZE_1];      /*  no wrap around      */
+            sum = sum + bufferPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0];      /*  no wrap around      */
             break;
         case DEM_UTILMEM_REMAINED_BUFSIZE_1:
-            sum = sum + bufferPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0];      /*  no wrap around      *//* [ARYCHK] bufSize / 1 / DEM_UTILMEM_REMAINED_BUFSIZE_0 */
+            sum = sum + bufferPtr[DEM_UTILMEM_REMAINED_BUFSIZE_0];      /*  no wrap around      */
             break;
         default:
             /* No process */
@@ -594,22 +584,17 @@ FUNC( Dem_u16_FFCheckSumType, DEM_CODE ) Dem_UtlMem_Checksum
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-7-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_UtlMem_SetChecksum
 (
-#ifndef DEM_SIT_RANGE_CHECK
-#else   /* DEM_SIT_RANGE_CHECK */
-    VAR( Dem_u16_FFDStoredIndexType, AUTOMATIC ) BufferSize,
-#endif  /* DEM_SIT_RANGE_CHECK */
     P2VAR( uint8, AUTOMATIC, DEM_VAR_SAVED_ZONE ) BufferPtr,
     VAR( Dem_u16_FFCheckSumType, AUTOMATIC ) Checksum,
     VAR( Dem_u16_FFDStoredIndexType, AUTOMATIC ) PosChecksumUpper,
     VAR( Dem_u16_FFDStoredIndexType, AUTOMATIC ) PosChecksumLower
 )
 {
-    BufferPtr[PosChecksumUpper] = (uint8)( Checksum >> DEM_UTILMEM_CHECKSUM_STORE_SHIFT ); /* [ARYCHK] BufferSize/1/PosChecksumUpper */
-    BufferPtr[PosChecksumLower] = (uint8)( Checksum & DEM_UTILMEM_CHECKSUM_STORE_MASK ); /* [ARYCHK] BufferSize/1/PosChecksumLower */
+    BufferPtr[PosChecksumUpper] = (uint8)( Checksum >> DEM_UTILMEM_CHECKSUM_STORE_SHIFT );
+    BufferPtr[PosChecksumLower] = (uint8)( Checksum & DEM_UTILMEM_CHECKSUM_STORE_MASK );
 
     return;
 }
@@ -663,7 +648,6 @@ static FUNC( Dem_u32_FFCheckSumAddCarryType, DEM_CODE ) Dem_UtlMem_AddCarry
 /*  v5-0-0         :2022-03-29                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-7-0         :2024-05-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

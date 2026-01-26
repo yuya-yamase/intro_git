@@ -1,7 +1,7 @@
-/* Dem_Control_Aging_c(v5-7-0)                                              */
+/* Dem_Control_Aging_c(v5-5-0)                                              */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -99,6 +99,8 @@ FUNC( boolean, DEM_CODE ) Dem_Control_CheckAgingConditionByEventStrgIndex
 /* Preconditions | none                                                     */
 /* Parameters    | [in] HealingAgingCycleFlag :                             */
 /*               |          check HealingAgingCycle or not.                 */
+/*               | [in] PendingRecoveryExecFlag :                           */
+/*               |          check pending recovery was executed.            */
 /*               | [in] EventStrgIndex : Event index.                       */
 /*               | [in] OldDTCStatusStPtr : statusOfDTC.                    */
 /*               | [out] AgingExecFlagPtr : Aging condition flag.           */
@@ -107,11 +109,11 @@ FUNC( boolean, DEM_CODE ) Dem_Control_CheckAgingConditionByEventStrgIndex
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | branch changed.                                          */
-/*   v5-7-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_Control_ProcessAging
 (
     VAR( Dem_u08_OpcycUpdateHealingAgingCycleType, AUTOMATIC ) HealingAgingCycleFlag,
+    VAR( boolean, AUTOMATIC ) PendingRecoveryExecFlag,
     VAR( Dem_u16_EventStrgIndexType, AUTOMATIC ) EventStrgIndex,
     CONSTP2VAR( Dem_DTCStatusStType, AUTOMATIC, AUTOMATIC ) OldDTCStatusStPtr,
     P2VAR( boolean, AUTOMATIC, AUTOMATIC ) AgingExecFlagPtr
@@ -139,7 +141,7 @@ FUNC( void, DEM_CODE ) Dem_Control_ProcessAging
     retCheckAgingCondition = Dem_Control_CheckAgingConditionByDTCStatus( OldDTCStatusStPtr, HealingAgingCycleFlag );
     if( retCheckAgingCondition == (boolean)TRUE )
     {
-        retCheckAgingRequire = Dem_CfgInfo_JudgeAgingRequire( OldDTCStatusStPtr );
+        retCheckAgingRequire = Dem_CfgInfo_JudgeAgingRequire( OldDTCStatusStPtr, HealingAgingCycleFlag, PendingRecoveryExecFlag );
         if( ( HealingAgingCycleFlag & DEM_OPCYCUPD_HACYC_EXEC_AGING ) == DEM_OPCYCUPD_HACYC_EXEC_AGING )
         {
             if( retCheckAgingRequire == DEM_IRT_OK )
@@ -389,7 +391,6 @@ static FUNC( boolean, DEM_CODE ) Dem_Control_CheckAgingConditionByDTCStatus
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-7-0         :2024-05-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

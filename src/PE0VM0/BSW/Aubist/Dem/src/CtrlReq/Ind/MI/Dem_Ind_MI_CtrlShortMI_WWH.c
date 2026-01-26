@@ -1,7 +1,7 @@
-/* Dem_Ind_MI_CtrlShortMI_WWH_c(v5-7-0)                                     */
+/* Dem_Ind_MI_CtrlShortMI_WWH_c(v5-5-0)                                     */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -73,28 +73,8 @@ static VAR( Dem_u08_DemBooleanType, DEM_VAR_NO_INIT )  Dem_IndMI_SetWIRAtShortMI
 #include <Dem_MemMap.h>
 
 /****************************************************************************/
-/* Function Name | Dem_IndMI_Init_AfterRecordCheckComplete                  */
-/* Description   | Init Dem_IndMI(After record check complete)              */
-/* Preconditions |                                                          */
-/* Parameters    | void                                                     */
-/* Return Value  | void                                                     */
-/* Notes         | -                                                        */
-/*--------------------------------------------------------------------------*/
-/* History       |                                                          */
-/*   v5-7-0      | new created.                                             */
-/****************************************************************************/
-FUNC( void, DEM_CODE ) Dem_IndMI_Init_AfterRecordCheckComplete
-( void )
-{
-    Dem_IndMI_GenerateEventStrgIndexToIndMIIndexList();
-    Dem_IndMI_SetWIRAtShortMIFlg = (Dem_u08_DemBooleanType)DEM_BOOLEAN_TRUE;
-
-    return;
-}
-
-/****************************************************************************/
 /* Function Name | Dem_IndMI_Init_AfterOrderListGenerateComplete            */
-/* Description   | Init Dem_IndMI(After orderList generate complete)        */
+/* Description   | Init Dem_IndMI                                           */
 /* Preconditions |                                                          */
 /* Parameters    | void                                                     */
 /* Return Value  | void                                                     */
@@ -102,12 +82,14 @@ FUNC( void, DEM_CODE ) Dem_IndMI_Init_AfterRecordCheckComplete
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | new created.                                             */
-/*   v5-7-0      | no branch changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_IndMI_Init_AfterOrderListGenerateComplete
 ( void )
 {
     Dem_IndMI_SetWIRStatusForShortMIEvent();
+    Dem_IndMI_SetWIRAtShortMIFlg = (Dem_u08_DemBooleanType)DEM_BOOLEAN_TRUE;
+
+    Dem_IndMI_GenerateEventStrgIndexToIndMIIndexList();
 
     return;
 }
@@ -296,8 +278,6 @@ static FUNC( void, DEM_CODE ) Dem_IndMI_ResetWIRStatusForShortMIEvent
 /* History                                                                  */
 /*  Version        :Date                                                    */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-6-0         :2024-01-29                                              */
-/*  v5-7-0         :2024-05-29                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

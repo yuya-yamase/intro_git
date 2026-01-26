@@ -1,7 +1,7 @@
-/* Dem_IUMPRMng_Ratio_c(v5-9-0)                                             */
+/* Dem_IUMPRMng_Ratio_c(v5-5-0)                                             */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -29,7 +29,7 @@
 /*--------------------------------------------------------------------------*/
 /* Macros                                                                   */
 /*--------------------------------------------------------------------------*/
-#define DEM_IUMPR_RATIO_REC_CNV_OFFSET          ((Dem_u16_IUMPRIndexType)0x01U)
+#define DEM_IUMPR_RATIO_REC_CNV_OFFSET          ((uint8)0x01U)
 #define DEM_IUMPR_RATIO_HIST_INF_BIT_MASK       ((Dem_u08_IUMPRRatioCondType)DEM_IUMPRMNG_RTO_COND_HST_500 | DEM_IUMPRMNG_RTO_COND_HST_GDN)
 
 /*--------------------------------------------------------------------------*/
@@ -103,11 +103,8 @@ static FUNC( void, DEM_CODE ) Dem_IUMPRMng_SetIUMPRRecordData
 /* Return Value  | void                                                     */
 /* Notes         | none                                                     */
 /*--------------------------------------------------------------------------*/
-/* UpdateRecord  | [UpdRec]IUMPR                                            */
-/*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-6-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_IUMPRMng_Ratio_ClearCondition
 ( void )
@@ -128,7 +125,7 @@ FUNC( void, DEM_CODE ) Dem_IUMPRMng_Ratio_ClearCondition
         tempCondition = (uint8)( (uint8)Dem_IUMPRRecord[ iumprIndex ].CommonCondition1 & DEM_IUMPR_RATIO_HIST_INF_BIT_MASK );   /*  Dem_IUMPRRatioRecordType.RatioCondition */  /* [GUD]iumprIndex */
         if( tempCondition != Dem_IUMPRRecord[ iumprIndex ].CommonCondition1 )       /*  Dem_IUMPRRatioRecordType.RatioCondition :   check bit status of another (DEM_IUMPRMNG_RTO_COND_HST_500 or DEM_IUMPRMNG_RTO_COND_HST_GDN )   */      /* [GUD]iumprIndex */
         {
-            Dem_IUMPRRecord[ iumprIndex ].CommonCondition1 = tempCondition;         /*  clear bit : DEM_IUMPRMNG_RTO_COND_NUME_EST or DEM_IUMPRMNG_RTO_COND_NUME_ADD or DEM_IUMPRMNG_RTO_COND_DEN_EST or DEM_IUMPRMNG_RTO_COND_DEN_ADD  */  /* [GUD]iumprIndex */   /*[UpdRec]IUMPR */
+            Dem_IUMPRRecord[ iumprIndex ].CommonCondition1 = tempCondition;         /*  clear bit : DEM_IUMPRMNG_RTO_COND_NUME_EST or DEM_IUMPRMNG_RTO_COND_NUME_ADD or DEM_IUMPRMNG_RTO_COND_DEN_EST or DEM_IUMPRMNG_RTO_COND_DEN_ADD  */  /* [GUD]iumprIndex */
             Dem_RecMngCmn_SetNvMWriteStatus( recMngCmnKindIUMPR, (Dem_u16_RecordIndexType)iumprIndex );     /* [GUD]iumprIndex */
         }
     }
@@ -245,11 +242,8 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_IUMPRMng_GetRatioInformation
 /* Return Value  | none                                                     */
 /* Notes         |                                                          */
 /*--------------------------------------------------------------------------*/
-/* UpdateRecord  | [UpdRec]IUMPR                                            */
-/*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-6-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_IUMPRMng_SetRatioInformation
 (
@@ -293,7 +287,7 @@ FUNC( void, DEM_CODE ) Dem_IUMPRMng_SetRatioInformation
             recordIndex =   (Dem_u16_IUMPRIndexType)0U;
             (void)Dem_IUMPRMng_CnvRatioIdToRecordIndex( RatioId, &recordIndex );    /* no return check required *//* [GUD]RatioId *//* [GUD:RET:DEM_IRT_OK]recordIndex */
             /* Regist NvM Record */
-            Dem_IUMPRMng_SetIUMPRRecordData( recordIndex, &iumprRecord );           /* [GUD]recordIndex *//*[UpdRec]IUMPR */
+            Dem_IUMPRMng_SetIUMPRRecordData( recordIndex, &iumprRecord );           /* [GUD]recordIndex */
         }
 
     }
@@ -313,11 +307,8 @@ FUNC( void, DEM_CODE ) Dem_IUMPRMng_SetRatioInformation
 /* Return Value  | none                                                     */
 /* Notes         | -                                                        */
 /*--------------------------------------------------------------------------*/
-/* UpdateRecord  | [UpdRec]IUMPR                                            */
-/*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-6-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_IUMPRMng_SetRatioNumeAdditionCondition
 (
@@ -342,7 +333,7 @@ FUNC( void, DEM_CODE ) Dem_IUMPRMng_SetRatioNumeAdditionCondition
             recordIndex =   (Dem_u16_IUMPRIndexType)0U;
             (void)Dem_IUMPRMng_CnvRatioIdToRecordIndex( RatioId, &recordIndex );    /* no return check required *//* [GUD]RatioId *//* [GUD:RET:DEM_IRT_OK]recordIndex */
             /* Regist NvM Record */
-            Dem_IUMPRMng_SetIUMPRRecordData( recordIndex, &iumprRecord );           /* [GUD]recordIndex *//*[UpdRec]IUMPR */
+            Dem_IUMPRMng_SetIUMPRRecordData( recordIndex, &iumprRecord );           /* [GUD]recordIndex */
         }
     }
 
@@ -361,11 +352,8 @@ FUNC( void, DEM_CODE ) Dem_IUMPRMng_SetRatioNumeAdditionCondition
 /* Return Value  | none                                                     */
 /* Notes         | -                                                        */
 /*--------------------------------------------------------------------------*/
-/* UpdateRecord  | [UpdRec]IUMPR                                            */
-/*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-6-0      | no object changed.                                       */
 /****************************************************************************/
 FUNC( void, DEM_CODE ) Dem_IUMPRMng_SetRatioDenUnlockCondition
 (
@@ -390,7 +378,7 @@ FUNC( void, DEM_CODE ) Dem_IUMPRMng_SetRatioDenUnlockCondition
             recordIndex =   (Dem_u16_IUMPRIndexType)0U;
             (void)Dem_IUMPRMng_CnvRatioIdToRecordIndex( RatioId, &recordIndex );    /* no return check required *//* [GUD]RatioId *//* [GUD:RET:DEM_IRT_OK]recordIndex */
             /* Regist NvM Record */
-            Dem_IUMPRMng_SetIUMPRRecordData( recordIndex, &iumprRecord );           /* [GUD]recordIndex *//*[UpdRec]IUMPR */
+            Dem_IUMPRMng_SetIUMPRRecordData( recordIndex, &iumprRecord );           /* [GUD]recordIndex */
         }
     }
 
@@ -465,7 +453,6 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_IUMPRMng_GetRatioRecord
 /*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-9-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_IUMPRMng_CnvRatioIdToRecordIndex
 (
@@ -480,7 +467,7 @@ static FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_IUMPRMng_CnvRatioIdToRec
     demIumprNum     = Dem_IUMPRRecordNum;
     retVal          = DEM_IRT_NG;
 
-    recordIndex     = (Dem_u16_IUMPRIndexType)( (Dem_u16_IUMPRIndexType)RatioId + DEM_IUMPR_RATIO_REC_CNV_OFFSET );
+    recordIndex     = (Dem_u16_RatioIndexType)( (Dem_u16_RatioIndexType)RatioId + (Dem_u16_RatioIndexType)DEM_IUMPR_RATIO_REC_CNV_OFFSET );
 
     if( recordIndex < demIumprNum )     /* [GUD:if]recordIndex */
     {
@@ -529,11 +516,8 @@ static FUNC( void, DEM_CODE ) Dem_IUMPRMng_CnvRatioRecordToCommon
 /* Return Value  | void                                                     */
 /* Notes         |                                                          */
 /*--------------------------------------------------------------------------*/
-/* UpdateRecord  | [UpdRec]IUMPR                                            */
-/*--------------------------------------------------------------------------*/
 /* History       |                                                          */
 /*   v5-5-0      | no object changed.                                       */
-/*   v5-6-0      | no object changed.                                       */
 /****************************************************************************/
 static FUNC( void, DEM_CODE ) Dem_IUMPRMng_SetIUMPRRecordData
 (
@@ -547,12 +531,12 @@ static FUNC( void, DEM_CODE ) Dem_IUMPRMng_SetIUMPRRecordData
     SchM_Enter_Dem_IUMPRRatioData();
 
     /* Set IumorRecord data for GenDen and IGCC */
-    Dem_IUMPRRecord[RecordIndex].CommonCounter1   = IUMPRDataPtr->CommonCounter1;       /* [GUDCHK:CALLER]RecordIndex */    /*[UpdRec]IUMPR */
-    Dem_IUMPRRecord[RecordIndex].CommonCounter2   = IUMPRDataPtr->CommonCounter2;       /* [GUDCHK:CALLER]RecordIndex */    /*[UpdRec]IUMPR */
-    Dem_IUMPRRecord[RecordIndex].CommonCondition1 = IUMPRDataPtr->CommonCondition1;     /* [GUDCHK:CALLER]RecordIndex */    /*[UpdRec]IUMPR */
-    Dem_IUMPRRecord[RecordIndex].CommonCondition2 = IUMPRDataPtr->CommonCondition2;     /* [GUDCHK:CALLER]RecordIndex */    /*[UpdRec]IUMPR */
-    Dem_IUMPRRecord[RecordIndex].CommonCondition3 = IUMPRDataPtr->CommonCondition3;     /* [GUDCHK:CALLER]RecordIndex */    /*[UpdRec]IUMPR */
-    Dem_IUMPRRecord[RecordIndex].CommonCondition4 = IUMPRDataPtr->CommonCondition4;     /* [GUDCHK:CALLER]RecordIndex */    /*[UpdRec]IUMPR */
+    Dem_IUMPRRecord[RecordIndex].CommonCounter1   = IUMPRDataPtr->CommonCounter1;       /* [GUDCHK:CALLER]RecordIndex */
+    Dem_IUMPRRecord[RecordIndex].CommonCounter2   = IUMPRDataPtr->CommonCounter2;       /* [GUDCHK:CALLER]RecordIndex */
+    Dem_IUMPRRecord[RecordIndex].CommonCondition1 = IUMPRDataPtr->CommonCondition1;     /* [GUDCHK:CALLER]RecordIndex */
+    Dem_IUMPRRecord[RecordIndex].CommonCondition2 = IUMPRDataPtr->CommonCondition2;     /* [GUDCHK:CALLER]RecordIndex */
+    Dem_IUMPRRecord[RecordIndex].CommonCondition3 = IUMPRDataPtr->CommonCondition3;     /* [GUDCHK:CALLER]RecordIndex */
+    Dem_IUMPRRecord[RecordIndex].CommonCondition4 = IUMPRDataPtr->CommonCondition4;     /* [GUDCHK:CALLER]RecordIndex */
 
     /* Exit exclusive area */
     SchM_Exit_Dem_IUMPRRatioData();
@@ -574,8 +558,6 @@ static FUNC( void, DEM_CODE ) Dem_IUMPRMng_SetIUMPRRecordData
 /*  Version        :Date                                                    */
 /*  v5-3-0         :2023-03-29                                              */
 /*  v5-5-0         :2023-10-27                                              */
-/*  v5-6-0         :2024-01-29                                              */
-/*  v5-9-0         :2025-02-26                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/
