@@ -373,8 +373,7 @@ void          vd_g_AvgEeUpdt(const U1 u1_a_CNTTID)
     U4                                          u4_t_usd;
     U4                                          u4_t_odocnt;
     U4                                          u4_t_economy;
-    U1                                          u1_t_dt_unit;
-    U1                                          u1_tp_unittype[TRIPCOM_NUM_CANTXUNIT];
+
 
 
     if (u1_a_CNTTID < (U1)AVGEE_CALC_CNTTS_NUM) {
