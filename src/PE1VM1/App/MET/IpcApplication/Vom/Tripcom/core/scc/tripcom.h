@@ -75,11 +75,16 @@
 #define AVGHE_CNTT_DC                           (1U)
 #define AVGHE_CNTT_RF                           (2U)
 /* 02 Average Electric Economy                   */
-#define AVGEE_NUM_CNTTS                         (4U)
+#define AVGEE_NUM_CNTTS                         (6U)
 #define AVGEE_CNTT_TA                           (0U)
 #define AVGEE_CNTT_DC                           (1U)
 #define AVGEE_CNTT_ONEM                         (2U)
 #define AVGEE_CNTT_FIVEM                        (3U)
+/* avgee send data ID*/
+#define AVGEE_CNTT_DC_DT                        (4U)
+#define AVGEE_CNTT_DC_EC                        (5U)
+/* avgee total calc cntt ID */
+#define AVGEE_CALC_CNTTS_NUM                    (4U)
 /* 03 Inst. Fuel Economy                         */
 #define INSTFE_NUM_CNTTS                        (2U)
 #define INSTFE_CNTT_RX                          (0U)
