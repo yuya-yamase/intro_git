@@ -474,7 +474,6 @@ static U2 u2_s_PwrCtrlObservePgdAsilVbSeq( void )
     u2_t_ret = (U2)PWRCTRL_OBSERVE_ERR_NON;
 
     /* PGOOD_ASIL_VBäƒéãé¿çsèÛë‘(LOW-POWER-ON =Hi & SYSìdåπONêßå‰äÆóπ)ÇÃèÍçá */
-    /*  */
     if((u1_s_PwrCtrl_Observe_PgdAsilVbLowPwr_Sts == (U1)PWRCTRL_OBSERVE_ON)
      &&(u1_s_PwrCtrl_Observe_PgdAsilVbSysPwr_Sts == (U1)PWRCTRL_OBSERVE_ON))
     {

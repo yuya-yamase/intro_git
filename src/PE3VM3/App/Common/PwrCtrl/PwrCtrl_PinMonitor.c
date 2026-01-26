@@ -178,8 +178,8 @@ static const ST_PWRCTRL_PINMONITOR_STS st_PwrCtrl_PinMonitor_Sts[PWRCTRL_CFG_PRI
     {
         (U2)DIO_ID_APORT3_CH2,                                             /* DIOチャネルID */
         (U1)PWRCTRL_PINMONITOR_SAMPLING_TASK_5ms,                          /* サンプリング周期 */
-        (U1)PWRCTRL_CFG_PRIVATE_PM_PSAIL_ERR_N_JUDGECOUNT,                 /* 同一論理判定確定回数 */
-        (U1)PWRCTRL_CFG_PRIVATE_PM_PSAIL_ERR_N_WAITTIME,                   /* ポーリング開始待ち時間 */
+        (U1)PWRCTRL_CFG_PRIVATE_PGOOD_ASIL_VB_JUDGECOUNT,                  /* 同一論理判定確定回数 */
+        (U1)PWRCTRL_CFG_PRIVATE_PGOOD_ASIL_VB_WAITTIME,                    /* ポーリング開始待ち時間 */
         u1_s_PwrCtrlPinMonitorPgAsilVbJdg,                                 /* LOW-POWER-ON =Hi & SYS電源ON制御完了 */
     },
     /* PGOOD_ASIL_VSYS */

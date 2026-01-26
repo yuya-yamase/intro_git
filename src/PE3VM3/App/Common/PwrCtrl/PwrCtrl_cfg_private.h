@@ -149,12 +149,12 @@
 #define     PWRCTRL_CFG_PRIVATE_SAIL_ERR1_WAITTIME               (0U) /* SAIL-ERR1のウェイト時間(0ms) */
 #define     PWRCTRL_CFG_PRIVATE_SAIL_ERR2_WAITTIME               (0U) /* SAIL-ERR2のウェイト時間(0ms) */
 #define     PWRCTRL_CFG_PRIVATE_PM_PSAIL_ERR_N_WAITTIME          (0U) /* PM_PSAIL_ERR_Nのウェイト時間(0ms) */
-#define     PWRCTRL_CFG_PRIVATE_PGOOD_ASIL_VB_WAITTIME           (1U) /* PGOOD_ASIL_VBのウェイト時間(1ms(5ms扱い)) */
-#define     PWRCTRL_CFG_PRIVATE_PGOOD_ASIL_VSYS_WAITTIME         (3U) /* PGOOD_ASIL_VSYSのウェイト時間(15ms) */
-#define     PWRCTRL_CFG_PRIVATE_PGOOD_ASIL_VSYS_V11_WAITTIME     (1U) /* PGOOD_ASIL_VSYS(V11)のウェイト時間(2ms(5ms扱い)) */
-#define     PWRCTRL_CFG_PRIVATE_PGOOD_DIODE_WAITTIME             (2U) /* PGOOD_DIODEのウェイト時間(6ms(10ms扱い)) */
+#define     PWRCTRL_CFG_PRIVATE_PGOOD_ASIL_VB_WAITTIME           ( 5U / PWRCTRL_CFG_TASK_TIME)  /* PGOOD_ASIL_VBのウェイト時間(1ms(5ms扱い)) */
+#define     PWRCTRL_CFG_PRIVATE_PGOOD_ASIL_VSYS_WAITTIME         (15U / PWRCTRL_CFG_TASK_TIME)  /* PGOOD_ASIL_VSYSのウェイト時間(15ms) */
+#define     PWRCTRL_CFG_PRIVATE_PGOOD_ASIL_VSYS_V11_WAITTIME     ( 5U / PWRCTRL_CFG_TASK_TIME)  /* PGOOD_ASIL_VSYS(V11)のウェイト時間(2ms(5ms扱い)) */
+#define     PWRCTRL_CFG_PRIVATE_PGOOD_DIODE_WAITTIME             (10U / PWRCTRL_CFG_TASK_TIME)  /* PGOOD_DIODEのウェイト時間(6ms(10ms扱い)) */
 #define     PWRCTRL_CFG_PRIVATE_PGOOD_VB_WAITTIME                (0U) /* PGOOD_VBのウェイト時間(0ms) */
-#define     PWRCTRL_CFG_PRIVATE_PGOOD_VSYS_WAITTIME              (2U) /* PGOOD_VSYSのウェイト時間(10ms) */
+#define     PWRCTRL_CFG_PRIVATE_PGOOD_VSYS_WAITTIME              (10U / PWRCTRL_CFG_TASK_TIME)  /* PGOOD_VSYSのウェイト時間(10ms) */
 #define     PWRCTRL_CFG_PRIVATE_DBG_FAIL_OFF                     (0U) /* 開発期間のみの実装：DBG_FAIL_OFF */
 
 typedef enum {
