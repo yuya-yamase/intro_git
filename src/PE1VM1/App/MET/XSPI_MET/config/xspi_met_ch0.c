@@ -266,7 +266,6 @@ static inline void    vd_s_XSpiCfgTxVariation(     U4 * u4_ap_pdu_tx) {
     u4_ap_pdu_tx[11] |= (U4)TRUE << 3;                                 /*  SYS_DMTOTM               */ /* BEV SV1 provisionally */
     u4_ap_pdu_tx[11] |= (U4)TRUE << 4;                                 /*  SYS_DMTOSP               */ /* BEV SV1 provisionally */
     u4_ap_pdu_tx[11] |= (U4)TRUE << 5;                                 /*  SYS_DMINEC               */ /* BEV SV1 provisionally */
-    u4_ap_pdu_tx[11] |= (U4)TRUE << 7;                                 /*  SYS_PERSET               */ /* BEV SV1 provisionally */
     u4_ap_pdu_tx[11] |= (U4)TRUE << 9;                                 /*  SYS_EPS_EPSSBW           */ /* BEV SV1 provisionally */
     u4_ap_pdu_tx[11] |= (U4)TRUE << 20;                                /*  SYS_SW_MULTI_WEATHERLAMP */ /* BEV SV1 provisionally */
 
@@ -1194,7 +1193,8 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*  BEV-14    11/04/2025 TN       Change for BEV rebase                                                                              */
 /*  BEV-15    01/07/2026 YN       Change for BEV FF2.(MET-B_CWHBB-CSTD-0-)                                                           */
 /*  BEV-16    01/20/2026 KI       Change for BEV FF2.(ASIL TT)                                                                       */
-/*  BEV-17    01/22/2026 YN       Change for BEV FF2.(MET-D_4WDSYS-CSTD-2-02-A-C1)                                                   */
+/*  BEV-17    01/16/2026 KEM      Update for BEV FF2. (B_PERSET)                                                                     */
+/*  BEV-19    01/22/2026 YN       Change for BEV FF2.(MET-D_4WDSYS-CSTD-2-02-A-C1)                                                   */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * KM   = Keisuke Mashita, Denso Techno                                                                                           */
@@ -1218,5 +1218,6 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*  * TS   = Takuo Suganuma,  Denso Techno                                                                                           */
 /*  * YN   = Yujiro Nagaya, Denso Techno                                                                                             */
 /*  * KI   = Kanji Ito,  Denso Techno                                                                                                */
+/*  * KEM   = Kane Edward Malapo, DTPH                                                                                               */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

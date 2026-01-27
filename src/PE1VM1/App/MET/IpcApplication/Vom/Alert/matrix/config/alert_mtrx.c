@@ -56,7 +56,6 @@ const ST_ALERT_TASK         st_gp_ALERT_TASK_CFG[]   = {
     {  &st_gp_ALERT_B_BLGT_MTRX[0],          (U2)ALERT_CH_B_BLGT,                   (U1)ALERT_B_BLGT_CH_NUM,            (U1)0U  },
     {  &st_gp_ALERT_B_BVOOPE_MTRX[0],        (U2)ALERT_CH_B_BVOOPE,                 (U1)ALERT_B_BVOOPE_CH_NUM,          (U1)0U  },
     {  &st_gp_ALERT_B_PBD_MTRX[0],           (U2)ALERT_CH_B_PBD,                    (U1)ALERT_B_PBD_CH_NUM,             (U1)0U  },
-    {  &st_gp_ALERT_B_PERSET_MTRX[0],        (U2)ALERT_CH_B_PERSET,                 (U1)ALERT_B_PERSET_CH_NUM,          (U1)0U  },
     {  &st_gp_ALERT_B_THEAD_MTRX[0],         (U2)ALERT_CH_B_THEAD,                  (U1)ALERT_B_THEAD_CH_NUM,           (U1)0U  },
     {  &st_gp_ALERT_B_TRFOG_MTRX[0],         (U2)ALERT_CH_B_TRFOG,                  (U1)ALERT_B_TRFOG_CH_NUM,           (U1)0U  },
     {  &st_gp_ALERT_B_TTAIL_MTRX[0],         (U2)ALERT_CH_B_TTAIL,                  (U1)ALERT_B_TTAIL_CH_NUM,           (U1)0U  },
@@ -248,7 +247,6 @@ void    vd_g_AlertMtrxInit(void)
         &vd_g_AlertB_blgtInit,
         &vd_g_AlertB_bvoopeInit,
         &vd_g_AlertB_pbdInit,
-        &vd_g_AlertB_persetInit,
         &vd_g_AlertB_theadInit,
         &vd_g_AlertB_trfogInit,
         &vd_g_AlertB_ttailInit,
@@ -322,6 +320,7 @@ void    vd_g_AlertMtrxInit(void)
 /*  BEV-22   12/18/2025  KH       Update for BEV System_Consideration_ADAS. (B_PBDKS / C_TPMS / H_BATTRW / H_LEAUNF)                 */
 /*  BEV-23    1/14/2025  JS       Change for BEV System_Consideration_FF2.(MET-H_PEXI-CSTD-1-00-A-C0)                                */
 /*  BEV-24    1/16/2026  SN       Change for BEV FF2.(MET-O_FNCLIM-CSTD-0-00-A-C0)                                                   */
+/*  BEV-25   01/16/2026  KM       Update for BEV FF2. (B_PERSET)                                                                     */
 /*                                                                                                                                   */
 /*  * YI   = Yoshiki Iwata, Denso                                                                                                    */
 /*  * RS   = Ryuki Sako,      Denso Techno                                                                                           */
@@ -338,5 +337,6 @@ void    vd_g_AlertMtrxInit(void)
 /*  * DT   = Dj Tutanes,      DTPH                                                                                                   */
 /*  * ED   = Emoh Dagasdas,   DTPH                                                                                                   */
 /*  * SN   = Shizuka Nakajima,KSE                                                                                                    */
+/*  * KM   = Kane Malapo,     DTPH                                                                                                   */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
