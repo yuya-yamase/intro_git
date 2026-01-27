@@ -572,17 +572,9 @@ static inline void    vd_s_XSpiCfgTxTripcom(       U4 * u4_ap_pdu_tx) {
     u4_ap_pdu_tx[15]  = u4_t_data;                                                  /* TRIPB_DIST_KM_USRRST                 */
 
     u4_t_data         = (U4)0U;
-    u1_t_sts          = u1_g_PtsRunDistKm((U1)PTSRUNDIST_CNTT_LC, &u4_t_data);
-    u4_ap_pdu_tx[16]  = ((U4)u1_t_sts << XSPI_STS_SHIFT);                           /* DIST_KM_USRRST_STS                   */
-
-    u4_t_data         = (U4)0U;
     u1_t_sts          = u1_g_PtsRunDistKm((U1)PTSRUNDIST_CNTT_DC, &u4_t_data);
     u4_ap_pdu_tx[18]  = ((U4)u1_t_sts << XSPI_STS_SHIFT);                           /* DIST_KM_AFTSTRT_STS                  */
     u4_ap_pdu_tx[19]  = u4_t_data;                                                  /* DIST_KM_AFTSTRT                      */
-
-    u4_t_data         = (U4)0U;
-    u1_t_sts          = u1_g_PtsRunTmHrs((U1)PTSRUNTM_CNTT_LC , &u4_t_data);
-    u4_ap_pdu_tx[20]  = ((U4)u1_t_sts << XSPI_STS_SHIFT);                           /* DRVTIME_USRRST_STS                   */
 
     u4_t_data         = (U4)0U;
     u1_t_sts          = u1_g_PtsRunTmHrs((U1)PTSRUNTM_CNTT_DC , &u4_t_data);
@@ -1197,6 +1189,7 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*  BEV-14    11/04/2025 TN       Change for BEV rebase                                                                              */
 /*  BEV-15    01/07/2026 YN       Change for BEV FF2.(MET-B_CWHBB-CSTD-0-)                                                           */
 /*  BEV-16    01/20/2026 KI       Change for BEV FF2.(ASIL TT)                                                                       */
+/*  BEV-17    01/22/2026 TN       Change for BEV FF2 Json.                                                                           */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * KM   = Keisuke Mashita, Denso Techno                                                                                           */
