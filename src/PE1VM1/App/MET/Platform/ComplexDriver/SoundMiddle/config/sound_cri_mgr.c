@@ -28,6 +28,8 @@
 #include "cri_xpt.h"
 #include "cri_atom_at_def.h"
 #include "cri_sfr_config_rh850u2a.h"
+#include "ADXAT_Data_TYT.h"
+#include "ADXAT_Data_LEX.h"
 
 /* CRI driver header file */
 #include "sound_cri_drv.h"
@@ -78,7 +80,10 @@
 
 #define SOUND_CUEID_INVALID                    (U2_MAX)                    /* Invalid timbre cue ID                                  */
 
-#define SOUND_VOLUMEID_DEFAULT                 (WCHIME_VOL_BASE_NOTICE1_MID) /* Default volume ID : BASE_NOTICE1_MID                 */
+#define SOUND_VOLUMEID_DEFAULT_TYT             (WCHIME_VOL_BASE_NOTICE1_MID) /* Default volume ID : BASE_NOTICE1_MID                 */
+#define SOUND_VOLUMEID_DEFAULT_LEX             (WCHIME_VOL_BASE_NOTICE1_MID) /* Default volume ID : BASE_NOTICE1_MID                 */
+#define SOUND_NUM_VOL_TYT                      (WCHIME_NUM_VOL)
+#define SOUND_NUM_VOL_LEX                      (WCHIME_NUM_VOL)
 
 #define SOUND_CUEVOLUME_MUTE                   (0.0F)                      /* Cue volume : Mute                                      */
 
@@ -131,9 +136,6 @@
 #ifndef vd_s_SoundCriMgrUnusedParam
 #define vd_s_SoundCriMgrUnusedParam(prm)       { if (&(prm) == &(prm)) {} }
 #endif
-
-/* vehicle type switching */
-#define SOUND_VEHICLE_TYPE_TYT                 (FALSE)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
@@ -224,6 +226,9 @@ static        void    vd_s_SoundCriMgrSetVolume(const U1 u1_a_GRP_NO, const U1 u
 static        void    vd_s_SoundCriMgrStartByCueId(const U1 u1_a_GRP_NO, const U2 u2_a_CUE_ID);
 static        void    vd_s_SoundCriMgrStop(const U1 u1_a_GRP_NO);
 
+
+static        void    vd_s_SoundCriMgrTYTSetUp(void);
+static        void    vd_s_SoundCriMgrLEXSetUp(void);
 #if (SOUND_CRI_DEBUGMODE == TRUE)
 static        void    vd_s_SoundCriMgrErrorCallback(const CriChar8 * s1p_a_ERRID, const CriUint32 u4_a_P1, const CriUint32 u4_a_P2, CriUint32 * u4p_a_parray);
 #endif /* SOUND_CRI_DEBUGMODE */
@@ -235,50 +240,44 @@ static        U1      u1_s_SoundDiagnosis(void);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if (SOUND_VEHICLE_TYPE_TYT == TRUE)
-#include "ADXAT_Data_TYT.h"
 #define CRI_CUESHEET_0_TYT_CUENUM_ADX          (CRI_CUESHEET_0_TYT_CUENUM - 1U)
 /* ACF data table */
-static const CriUint32 u4_sp_SOUND_ACF_DATA[] = {
+static const CriUint32 u4_sp_SOUND_ACF_DATA_TYT[] = {
     #include "ADXAT_Data_acf_TYT.h"
 };
-static const CriSint32 s4_s_SOUND_ACF_DATA_SIZE = s4_s_SoundCriMgrArraySize(u4_sp_SOUND_ACF_DATA);
+static const CriSint32 s4_s_SOUND_ACF_DATA_SIZE_TYT = s4_s_SoundCriMgrArraySize(u4_sp_SOUND_ACF_DATA_TYT);
 
 /* AWB data table */
-static const CriUint32 u4_sp_SOUND_AWB_DATA[] = {
+static const CriUint32 u4_sp_SOUND_AWB_DATA_TYT[] = {
     #include "ADXAT_Data_awb_TYT.h"
 };
-static const CriSint32 s4_s_SOUND_AWB_DATA_SIZE = s4_s_SoundCriMgrArraySize(u4_sp_SOUND_AWB_DATA);
+static const CriSint32 s4_s_SOUND_AWB_DATA_SIZE_TYT = s4_s_SoundCriMgrArraySize(u4_sp_SOUND_AWB_DATA_TYT);
 
 /* ACB data table */
-static const CriUint32 u4_sp_SOUND_ACB_DATA[] = {
+static const CriUint32 u4_sp_SOUND_ACB_DATA_TYT[] = {
     #include "ADXAT_Data_c_acb_TYT.h"
 };
-static const CriSint32 s4_s_SOUND_ACB_DATA_SIZE = s4_s_SoundCriMgrArraySize(u4_sp_SOUND_ACB_DATA);
+static const CriSint32 s4_s_SOUND_ACB_DATA_SIZE_TYT = s4_s_SoundCriMgrArraySize(u4_sp_SOUND_ACB_DATA_TYT);
 
-#else
-#include "ADXAT_Data_LEX.h"
 #define CRI_CUESHEET_0_LEX_CUENUM_ADX          (CRI_CUESHEET_0_LEX_CUENUM - 1U)
 /* ACF data table */
-static const CriUint32 u4_sp_SOUND_ACF_DATA[] = {
+static const CriUint32 u4_sp_SOUND_ACF_DATA_LEX[] = {
     #include "ADXAT_Data_acf_LEX.h"
 };
-static const CriSint32 s4_s_SOUND_ACF_DATA_SIZE = s4_s_SoundCriMgrArraySize(u4_sp_SOUND_ACF_DATA);
+static const CriSint32 s4_s_SOUND_ACF_DATA_SIZE_LEX = s4_s_SoundCriMgrArraySize(u4_sp_SOUND_ACF_DATA_LEX);
 
 /* AWB data table */
-static const CriUint32 u4_sp_SOUND_AWB_DATA[] = {
+static const CriUint32 u4_sp_SOUND_AWB_DATA_LEX[] = {
     #include "ADXAT_Data_awb_LEX.h"
 };
-static const CriSint32 s4_s_SOUND_AWB_DATA_SIZE = s4_s_SoundCriMgrArraySize(u4_sp_SOUND_AWB_DATA);
+static const CriSint32 s4_s_SOUND_AWB_DATA_SIZE_LEX = s4_s_SoundCriMgrArraySize(u4_sp_SOUND_AWB_DATA_LEX);
 
 /* ACB data table */
-static const CriUint32 u4_sp_SOUND_ACB_DATA[] = {
+static const CriUint32 u4_sp_SOUND_ACB_DATA_LEX[] = {
     #include "ADXAT_Data_c_acb_LEX.h"
 };
-static const CriSint32 s4_s_SOUND_ACB_DATA_SIZE = s4_s_SoundCriMgrArraySize(u4_sp_SOUND_ACB_DATA);
-#endif
+static const CriSint32 s4_s_SOUND_ACB_DATA_SIZE_LEX = s4_s_SoundCriMgrArraySize(u4_sp_SOUND_ACB_DATA_LEX);
 
-#if (SOUND_VEHICLE_TYPE_TYT == TRUE)
 /* Table of sound cycle every timbre */
 static const U2 u2_sp_SOUND_WAV_CYCLETIME_TYT[CRI_CUESHEET_0_TYT_CUENUM_ADX] = {
     (U2)90U,               /* CRI_CUESHEET_0_TYT_TAN_MET_CBZ_BASE_NOTICE1_0_01           */
@@ -305,7 +304,7 @@ static const U2 u2_sp_SOUND_WAV_CYCLETIME_TYT[CRI_CUESHEET_0_TYT_CUENUM_ADX] = {
     (U2)200U,              /* CRI_CUESHEET_0_TYT_DAN_MET_CBZ_AD_DOT_0_00                 */
     (U2)42U                /* CRI_CUESHEET_0_TYT_3REN_MET_CBZ_BASE_INTWARNH_0_01         */
 };
-#else
+
 /* Table of sound cycle every timbre */
 static const U2 u2_sp_SOUND_WAV_CYCLETIME_LEX[CRI_CUESHEET_0_LEX_CUENUM_ADX] = {
     (U2)90U,               /* CRI_CUESHEET_0_LEX_TAN_MET_CBZ_BASE_NOTICE1_0_01           */
@@ -332,7 +331,6 @@ static const U2 u2_sp_SOUND_WAV_CYCLETIME_LEX[CRI_CUESHEET_0_LEX_CUENUM_ADX] = {
     (U2)200U,              /* CRI_CUESHEET_0_LEX_DAN_MET_CBZ_AD_DOT_0_00                 */
     (U2)42U                /* CRI_CUESHEET_0_LEX_3REN_MET_CBZ_BASE_INTWARNH_0_01         */
 };
-#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
@@ -364,13 +362,14 @@ void    vd_g_SoundCriMgrInitialize(void)
 static void    vd_s_SoundCriMgrStartup(void)
 {
     CriAtomExConfig_Rh850u2a                st_t_config_rh850u2a;             /* Configuration structure for library initialization  */
-    CriAtomExAdxVoicePoolConfig             st_t_sound_voice_pool_config_adx; /* Configuration structure for ADX voice-pool creation */
     CriAtomExPlayerConfig                   st_t_sound_player_config;         /* Configuration structure for AtomEx player creation  */
     U1                                      u1_t_grp_no;                      /* Sound group number                                  */
+    U1                                      u1_t_brand;                       /* From MCUCONST Brand Info                            */
 
     criAtomEx_PreInitialize_Rh850u2a();
 
     vd_g_SoundCriDrvInitialize();
+    u1_t_brand           = u1_CALIB_MCUID0024_BRAND;
 
     __DI();
     Dma_SetInterrupt( (U1)DMA_CH_DATA_ID_7, (U1)OFF, (U1)ON );
@@ -412,48 +411,15 @@ static void    vd_s_SoundCriMgrStartup(void)
     /* Library initialization */
     criAtomEx_Initialize_Rh850u2a(&st_t_config_rh850u2a, s1_sp_sound_cri_init_work, (CriSint32)SOUND_CRI_INIT_WORK_SIZE);
 
-#if (SOUND_CRI_DEBUGMODE == TRUE)
-    s4_s_acfdata_size = (CriSint32)criAtomEx_CalculateWorkSizeForRegisterAcfDataAt((void *)u4_sp_SOUND_ACF_DATA, s4_s_SOUND_ACF_DATA_SIZE);
-    s4_s_acfdata_size = s4_s_acfdata_size;                                /* QAC countermeasure */
-#endif /* SOUND_CRI_DEBUGMODE */
-    /* On-memory ACF data registration */
-    criAtomEx_RegisterAcfDataAt((void *)u4_sp_SOUND_ACF_DATA,
-                              s4_s_SOUND_ACF_DATA_SIZE,
-                              u1_sp_sound_acfdata_alloc,
-                              (CriSint32)SOUND_ACFDATA_SIZE);
-
-#if (SOUND_CRI_DEBUGMODE == TRUE)
-    s4_s_awbdata_size = (CriSint32)CRIATOMAWB_WORKSIZE_FOR_LOADFROMMEMORYAT;
-    s4_s_awbdata_size = s4_s_awbdata_size;                                /* QAC countermeasure */
-#endif /* SOUND_CRI_DEBUGMODE */
-    /* On-memory AWB handle creation */
-    stp_s_sound_awb_hn = criAtomAwb_LoadFromMemoryAt(u4_sp_SOUND_AWB_DATA,
-                                                     s4_s_SOUND_AWB_DATA_SIZE,
-                                                     u1_sp_sound_awbdata_alloc,
-                                                     (CriSint32)SOUND_AWBDATA_SIZE);
-
-#if (SOUND_CRI_DEBUGMODE == TRUE)
-    s4_s_acbdata_size = (CriSint32)criAtomExAcb_CalculateWorkSizeForLoadAcbDataWithAwbHnAt((void *)u4_sp_SOUND_ACB_DATA, s4_s_SOUND_ACB_DATA_SIZE, stp_s_sound_awb_hn);
-    s4_s_acbdata_size = s4_s_acbdata_size;                                /* QAC countermeasure */
-#endif /* SOUND_CRI_DEBUGMODE */
-    /* On-memory ACB data loading */
-    stp_s_sound_acb_hn = criAtomExAcb_LoadAcbDataWithAwbHnAt((void *)u4_sp_SOUND_ACB_DATA,
-                                                           s4_s_SOUND_ACB_DATA_SIZE,
-                                                           stp_s_sound_awb_hn,
-                                                           u1_sp_sound_acbdata_alloc,
-                                                           (CriSint32)SOUND_ACBDATA_SIZE);
-
-    /* Set configuration structure for ADX voice-pool creation in default value */
-    criAtomExVoicePool_SetDefaultConfigForAdxVoicePool(&st_t_sound_voice_pool_config_adx);
-    st_t_sound_voice_pool_config_adx.num_voices = (CriSint32)SOUND_OVERLAP_ADX_NUM;     /* Assign number of play voices at the same time in this codec */
-#if (SOUND_CRI_DEBUGMODE == TRUE)
-    s4_s_voicepooladxdata_size = (CriSint32)criAtomExVoicePool_CalculateWorkSizeForAdxVoicePool(&st_t_sound_voice_pool_config_adx);
-    s4_s_voicepooladxdata_size = s4_s_voicepooladxdata_size;              /* QAC countermeasure */
-#endif /* SOUND_CRI_DEBUGMODE */
-    /* ADX voice-pool creation */
-    stp_s_sound_voicepooladx_hn = criAtomExVoicePool_AllocateAdxVoicePool(&st_t_sound_voice_pool_config_adx,
-                                                                          u1_sp_sound_voicepooladx_alloc,
-                                                                          (CriSint32)SOUND_VOICEPOOLADXDATA_SIZE);
+    if(u1_t_brand == (U1)CALIB_MCUID0024_TOYOTA){
+        vd_s_SoundCriMgrTYTSetUp();
+    }
+    else if(u1_t_brand == (U1)CALIB_MCUID0024_LEXUS){
+        vd_s_SoundCriMgrLEXSetUp();
+    }
+    else{
+        vd_s_SoundCriMgrTYTSetUp();
+    }
 
     /* Set configuration structure for AtomEx player creation in default value */
     criAtomExPlayer_SetDefaultConfig(&st_t_sound_player_config);
@@ -482,6 +448,114 @@ static void    vd_s_SoundCriMgrStartup(void)
 
     u4_s_sound_ow_unlock    = (U4)0U;
     u1_s_sound_ow_reqid     = (U1)U1_MAX;
+}
+
+/*===================================================================================================================================*/
+/*  static  void    vd_s_SoundCriMgrTYTSetUp(void)                                                                                   */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static  void    vd_s_SoundCriMgrTYTSetUp(void)
+{
+    CriAtomExAdxVoicePoolConfig             st_t_sound_voice_pool_config_adx; /* Configuration structure for ADX voice-pool creation */
+
+#if (SOUND_CRI_DEBUGMODE == TRUE)
+    s4_s_acfdata_size = (CriSint32)criAtomEx_CalculateWorkSizeForRegisterAcfDataAt((void *)u4_sp_SOUND_ACF_DATA_TYT, s4_s_SOUND_ACF_DATA_SIZE_TYT);
+    s4_s_acfdata_size = s4_s_acfdata_size;                                /* QAC countermeasure */
+#endif /* SOUND_CRI_DEBUGMODE */
+    /* On-memory ACF data registration */
+    criAtomEx_RegisterAcfDataAt((void *)u4_sp_SOUND_ACF_DATA_TYT,
+                              s4_s_SOUND_ACF_DATA_SIZE_TYT,
+                              u1_sp_sound_acfdata_alloc,
+                              (CriSint32)SOUND_ACFDATA_SIZE);
+
+#if (SOUND_CRI_DEBUGMODE == TRUE)
+    s4_s_awbdata_size = (CriSint32)CRIATOMAWB_WORKSIZE_FOR_LOADFROMMEMORYAT;
+    s4_s_awbdata_size = s4_s_awbdata_size;                                /* QAC countermeasure */
+#endif /* SOUND_CRI_DEBUGMODE */
+    /* On-memory AWB handle creation */
+    stp_s_sound_awb_hn = criAtomAwb_LoadFromMemoryAt(u4_sp_SOUND_AWB_DATA_TYT,
+                                                     s4_s_SOUND_AWB_DATA_SIZE_TYT,
+                                                     u1_sp_sound_awbdata_alloc,
+                                                     (CriSint32)SOUND_AWBDATA_SIZE);
+
+#if (SOUND_CRI_DEBUGMODE == TRUE)
+    s4_s_acbdata_size = (CriSint32)criAtomExAcb_CalculateWorkSizeForLoadAcbDataWithAwbHnAt((void *)u4_sp_SOUND_ACB_DATA_TYT, s4_s_SOUND_ACB_DATA_SIZE_TYT, stp_s_sound_awb_hn);
+    s4_s_acbdata_size = s4_s_acbdata_size;                                /* QAC countermeasure */
+#endif /* SOUND_CRI_DEBUGMODE */
+    /* On-memory ACB data loading */
+    stp_s_sound_acb_hn = criAtomExAcb_LoadAcbDataWithAwbHnAt((void *)u4_sp_SOUND_ACB_DATA_TYT,
+                                                           s4_s_SOUND_ACB_DATA_SIZE_TYT,
+                                                           stp_s_sound_awb_hn,
+                                                           u1_sp_sound_acbdata_alloc,
+                                                           (CriSint32)SOUND_ACBDATA_SIZE);
+
+    /* Set configuration structure for ADX voice-pool creation in default value */
+    criAtomExVoicePool_SetDefaultConfigForAdxVoicePool(&st_t_sound_voice_pool_config_adx);
+    st_t_sound_voice_pool_config_adx.num_voices = (CriSint32)SOUND_OVERLAP_ADX_NUM;     /* Assign number of play voices at the same time in this codec */
+#if (SOUND_CRI_DEBUGMODE == TRUE)
+    s4_s_voicepooladxdata_size = (CriSint32)criAtomExVoicePool_CalculateWorkSizeForAdxVoicePool(&st_t_sound_voice_pool_config_adx);
+    s4_s_voicepooladxdata_size = s4_s_voicepooladxdata_size;              /* QAC countermeasure */
+#endif /* SOUND_CRI_DEBUGMODE */
+    /* ADX voice-pool creation */
+    stp_s_sound_voicepooladx_hn = criAtomExVoicePool_AllocateAdxVoicePool(&st_t_sound_voice_pool_config_adx,
+                                                                          u1_sp_sound_voicepooladx_alloc,
+                                                                          (CriSint32)SOUND_VOICEPOOLADXDATA_SIZE);
+}
+
+/*===================================================================================================================================*/
+/*  static        void    vd_s_SoundCriMgrLEXSetUp(void)                                                                             */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static        void    vd_s_SoundCriMgrLEXSetUp(void)
+{
+    CriAtomExAdxVoicePoolConfig             st_t_sound_voice_pool_config_adx; /* Configuration structure for ADX voice-pool creation */
+
+#if (SOUND_CRI_DEBUGMODE == TRUE)
+    s4_s_acfdata_size = (CriSint32)criAtomEx_CalculateWorkSizeForRegisterAcfDataAt((void *)u4_sp_SOUND_ACF_DATA_LEX, s4_s_SOUND_ACF_DATA_SIZE_LEX);
+    s4_s_acfdata_size = s4_s_acfdata_size;                                /* QAC countermeasure */
+#endif /* SOUND_CRI_DEBUGMODE */
+    /* On-memory ACF data registration */
+    criAtomEx_RegisterAcfDataAt((void *)u4_sp_SOUND_ACF_DATA_LEX,
+                              s4_s_SOUND_ACF_DATA_SIZE_LEX,
+                              u1_sp_sound_acfdata_alloc,
+                              (CriSint32)SOUND_ACFDATA_SIZE);
+
+#if (SOUND_CRI_DEBUGMODE == TRUE)
+    s4_s_awbdata_size = (CriSint32)CRIATOMAWB_WORKSIZE_FOR_LOADFROMMEMORYAT;
+    s4_s_awbdata_size = s4_s_awbdata_size;                                /* QAC countermeasure */
+#endif /* SOUND_CRI_DEBUGMODE */
+    /* On-memory AWB handle creation */
+    stp_s_sound_awb_hn = criAtomAwb_LoadFromMemoryAt(u4_sp_SOUND_AWB_DATA_LEX,
+                                                     s4_s_SOUND_AWB_DATA_SIZE_LEX,
+                                                     u1_sp_sound_awbdata_alloc,
+                                                     (CriSint32)SOUND_AWBDATA_SIZE);
+
+#if (SOUND_CRI_DEBUGMODE == TRUE)
+    s4_s_acbdata_size = (CriSint32)criAtomExAcb_CalculateWorkSizeForLoadAcbDataWithAwbHnAt((void *)u4_sp_SOUND_ACB_DATA_LEX, s4_s_SOUND_ACB_DATA_SIZE_LEX, stp_s_sound_awb_hn);
+    s4_s_acbdata_size = s4_s_acbdata_size;                                /* QAC countermeasure */
+#endif /* SOUND_CRI_DEBUGMODE */
+    /* On-memory ACB data loading */
+    stp_s_sound_acb_hn = criAtomExAcb_LoadAcbDataWithAwbHnAt((void *)u4_sp_SOUND_ACB_DATA_LEX,
+                                                           s4_s_SOUND_ACB_DATA_SIZE_LEX,
+                                                           stp_s_sound_awb_hn,
+                                                           u1_sp_sound_acbdata_alloc,
+                                                           (CriSint32)SOUND_ACBDATA_SIZE);
+
+    /* Set configuration structure for ADX voice-pool creation in default value */
+    criAtomExVoicePool_SetDefaultConfigForAdxVoicePool(&st_t_sound_voice_pool_config_adx);
+    st_t_sound_voice_pool_config_adx.num_voices = (CriSint32)SOUND_OVERLAP_ADX_NUM;     /* Assign number of play voices at the same time in this codec */
+#if (SOUND_CRI_DEBUGMODE == TRUE)
+    s4_s_voicepooladxdata_size = (CriSint32)criAtomExVoicePool_CalculateWorkSizeForAdxVoicePool(&st_t_sound_voice_pool_config_adx);
+    s4_s_voicepooladxdata_size = s4_s_voicepooladxdata_size;              /* QAC countermeasure */
+#endif /* SOUND_CRI_DEBUGMODE */
+    /* ADX voice-pool creation */
+    stp_s_sound_voicepooladx_hn = criAtomExVoicePool_AllocateAdxVoicePool(&st_t_sound_voice_pool_config_adx,
+                                                                          u1_sp_sound_voicepooladx_alloc,
+                                                                          (CriSint32)SOUND_VOICEPOOLADXDATA_SIZE);
 }
 
 /*===================================================================================================================================*/
@@ -544,7 +618,6 @@ void    vd_g_SoundCriMgrMainTask(void)
 /*===================================================================================================================================*/
 static  U1      u1_s_SoundCriMgrWavNext(void)
 {
-#if (SOUND_VEHICLE_TYPE_TYT == TRUE)
     /* Table to convert the requested buzzer ID to the cue ID */
     static const U2 u2_sp_SOUND_REQ_TO_WAV_TYT[WCHIME_NUM_REQ] = {
         (U2)CRI_CUESHEET_0_TYT_REN_MET_CBZ_BASE_CONTWARN_0_01,                                /* WCHIME_REQ_CO_PCS_TSTMD1              */
@@ -724,7 +797,7 @@ static  U1      u1_s_SoundCriMgrWavNext(void)
         (U2)CRI_CUESHEET_0_TYT_REN_MET_CBZ_BASE_CONTWARN_0_01,                                /* WCHIME_REQ_CO_TMBZR_CONT_PRI0         */
         (U2)CRI_CUESHEET_0_TYT_DAN_MET_CBZ_BASE_INTWARNL_0_01                                 /* WCHIME_REQ_IN_TMBZR_TEN_PRI0          */
     };
-#else
+
     static const U2 u2_sp_SOUND_REQ_TO_WAV_LEX[WCHIME_NUM_REQ] = {
         (U2)CRI_CUESHEET_0_LEX_REN_MET_CBZ_BASE_CONTWARN_0_01,                                /* WCHIME_REQ_CO_PCS_TSTMD1              */
         (U2)CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNL_0_01,                                /* WCHIME_REQ_IN_PCS_TSTMD5              */
@@ -903,8 +976,9 @@ static  U1      u1_s_SoundCriMgrWavNext(void)
         (U2)CRI_CUESHEET_0_LEX_REN_MET_CBZ_BASE_CONTWARN_0_01,                                /* WCHIME_REQ_CO_TMBZR_CONT_PRI0         */
         (U2)CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNL_0_01                                 /* WCHIME_REQ_IN_TMBZR_TEN_PRI0          */
     };
-#endif
 
+    const U2    * u2_tp_wav_cycletime;                                                     /* Sound cycle for each brand            */
+    U2          u2_t_cri_cuemax;                                                           /* CueMax from CRI                       */
     U2          u2_t_curcueid;                                                             /* Current sounding timbre cue ID        */
     U1          u1_t_playnum;                                                              /* Number of playing sound groups        */
     U1          u1_t_grp_no;                                                               /* Sound group number                    */
@@ -912,8 +986,23 @@ static  U1      u1_s_SoundCriMgrWavNext(void)
     U1          u1_t_reqvol;                                                               /* Index of requested volume             */
     U1          u1_t_cyclchk;                                                              /* Sound cycle complete check            */
     U1          u1_t_ow_sts;                                                               /* Active test current status            */
+    U1          u1_t_brand;                                                                /* MCUCONST brand                        */
 
     u1_t_playnum = (U1)0U;
+    u1_t_brand = u1_CALIB_MCUID0024_BRAND;
+
+    if (u1_t_brand == (U1)CALIB_MCUID0024_TOYOTA){
+        u2_t_cri_cuemax = (U2)CRI_CUESHEET_0_TYT_CUENUM;
+        u2_tp_wav_cycletime = &u2_sp_SOUND_WAV_CYCLETIME_TYT[0];
+    }
+    else if (u1_t_brand == (U1)CALIB_MCUID0024_LEXUS){
+        u2_t_cri_cuemax = (U2)CRI_CUESHEET_0_LEX_CUENUM;
+        u2_tp_wav_cycletime = &u2_sp_SOUND_WAV_CYCLETIME_LEX[0];
+    }
+    else{
+        u2_t_cri_cuemax = (U2)CRI_CUESHEET_0_TYT_CUENUM;
+        u2_tp_wav_cycletime = &u2_sp_SOUND_WAV_CYCLETIME_TYT[0];
+    }
 
     for(u1_t_grp_no = (U1)SOUND_GROUP1; u1_t_grp_no < (U1)SOUND_GROUP_NUM; u1_t_grp_no++){
         /* Count sound cycle */
@@ -939,24 +1028,20 @@ static  U1      u1_s_SoundCriMgrWavNext(void)
             u1_t_reqidx = u1_s_SoundCriMgrUpdtNext(u1_t_grp_no, u1_t_reqidx, &u1_t_reqvol);
 
             if(u1_t_reqidx < (U1)WCHIME_NUM_REQ){
-#if (SOUND_VEHICLE_TYPE_TYT == TRUE)
-                u2_t_curcueid = u2_sp_SOUND_REQ_TO_WAV_TYT[u1_t_reqidx];
-#else
-                u2_t_curcueid = u2_sp_SOUND_REQ_TO_WAV_LEX[u1_t_reqidx];
-#endif
+                if (u1_t_brand == (U1)CALIB_MCUID0024_TOYOTA){
+                    u2_t_curcueid = u2_sp_SOUND_REQ_TO_WAV_TYT[u1_t_reqidx];
+                }
+                else if (u1_t_brand == (U1)CALIB_MCUID0024_LEXUS){
+                    u2_t_curcueid = u2_sp_SOUND_REQ_TO_WAV_LEX[u1_t_reqidx];
+                }
+                else{
+                    u2_t_curcueid = u2_sp_SOUND_REQ_TO_WAV_TYT[u1_t_reqidx];
+                }
             }
         }
-#if (SOUND_VEHICLE_TYPE_TYT == TRUE)
-        if(u2_t_curcueid < (U2)CRI_CUESHEET_0_TYT_CUENUM_ADX){
-#else
-        if(u2_t_curcueid < (U2)CRI_CUESHEET_0_LEX_CUENUM_ADX){
-#endif
+        if(u2_t_curcueid < u2_t_cri_cuemax){
             u1_t_playnum++;
-#if (SOUND_VEHICLE_TYPE_TYT == TRUE)
-            u2_sp_sound_cur_cycletim[u1_t_grp_no] = u2_sp_SOUND_WAV_CYCLETIME_TYT[u2_t_curcueid];
-#else
-            u2_sp_sound_cur_cycletim[u1_t_grp_no] = u2_sp_SOUND_WAV_CYCLETIME_LEX[u2_t_curcueid];
-#endif
+            u2_sp_sound_cur_cycletim[u1_t_grp_no] = u2_tp_wav_cycletime[u2_t_curcueid];
             /* Check clear counter of sound cycle */
             if((u1_t_reqidx  != u1_sp_sound_pre_reqidx[u1_t_grp_no]) ||
                (u1_t_reqvol  != u1_sp_sound_pre_reqvol[u1_t_grp_no]) ||
@@ -1218,7 +1303,6 @@ void    vd_g_SoundCriMgrOwDeAct(const U1 u1_a_SO_MDL_CH)
 /*===================================================================================================================================*/
 static  U1      u1_s_SoundCriMgrOwChk(const U1 u1_a_GRP_NO, const U1 u1_a_CYCLCHK, U2 * u2p_a_cueid, U1 * u1p_a_cuevol)
 {
-#if (SOUND_VEHICLE_TYPE_TYT == TRUE)
     /* Table to control the active test */
     static const ST_SOUND_OW_BUZ_INFO st_sp_SOUND_OW_BUZ_INFO_TYT[SOUND_OW_WAV_IDX_NUM] = {
         {   /* SOUND_AT_CLESON_FRS */
@@ -1322,7 +1406,7 @@ static  U1      u1_s_SoundCriMgrOwChk(const U1 u1_a_GRP_NO, const U1 u1_a_CYCLCH
             (U1)SOUND_OW_TYPE_EVENT                                                                                                                                                                                                                                                                   /* TYPE    */
         }
     };
-#else
+
     static const ST_SOUND_OW_BUZ_INFO st_sp_SOUND_OW_BUZ_INFO_LEX[SOUND_OW_WAV_IDX_NUM] = {
         {   /* SOUND_AT_CLESON_FRS */
             {(U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)CRI_CUESHEET_0_LEX_REN_MET_LBZ_CLESON_FRS_24_00,    (U2)U2_MAX,                                             (U2)U2_MAX                                            }, /* CUE_ID  */
@@ -1425,10 +1509,10 @@ static  U1      u1_s_SoundCriMgrOwChk(const U1 u1_a_GRP_NO, const U1 u1_a_CYCLCH
             (U1)SOUND_OW_TYPE_EVENT                                                                                                                                                                                                                                                                   /* TYPE    */
         }
     };
-#endif
 
     const ST_SOUND_OW_BUZ_INFO * stp_t_OW_BUZ_INFO;
     ST_SOUND_OW_CTRL           * stp_t_ow_ctrl;
+    U2                           u2_t_cuemax;
     U2                           u2_t_cueid;
     U1                           u1_t_ow_sts;
     U1                           u1_t_brand;
@@ -1440,26 +1524,20 @@ static  U1      u1_s_SoundCriMgrOwChk(const U1 u1_a_GRP_NO, const U1 u1_a_CYCLCH
     if(u1_a_GRP_NO < (U1)SOUND_GROUP_NUM){
         stp_t_ow_ctrl        = &st_sp_sound_ow_ctrl[u1_a_GRP_NO];
         if(u1_s_sound_ow_reqid < (U1)SOUND_OW_WAV_IDX_NUM){
-#if 0   /* BEV BSW provisionally */
-            if(u1_t_brand == (U1)CALIB_MCUID0024_LEXUS){
+            if(u1_t_brand == (U1)CALIB_MCUID0024_TOYOTA){
+                stp_t_OW_BUZ_INFO = &st_sp_SOUND_OW_BUZ_INFO_TYT[u1_s_sound_ow_reqid];
+                u2_t_cuemax = (U2)CRI_CUESHEET_0_TYT_CUENUM;
+            }
+            else if (u1_t_brand == (U1)CALIB_MCUID0024_LEXUS){
                 stp_t_OW_BUZ_INFO = &st_sp_SOUND_OW_BUZ_INFO_LEX[u1_s_sound_ow_reqid];
+                u2_t_cuemax = (U2)CRI_CUESHEET_0_LEX_CUENUM;
             }
             else{
                 stp_t_OW_BUZ_INFO = &st_sp_SOUND_OW_BUZ_INFO_TYT[u1_s_sound_ow_reqid];
+                u2_t_cuemax = (U2)CRI_CUESHEET_0_TYT_CUENUM;
             }
-#else
-#if (SOUND_VEHICLE_TYPE_TYT == TRUE)
-                stp_t_OW_BUZ_INFO = &st_sp_SOUND_OW_BUZ_INFO_TYT[u1_s_sound_ow_reqid];
-#else
-                stp_t_OW_BUZ_INFO = &st_sp_SOUND_OW_BUZ_INFO_LEX[u1_s_sound_ow_reqid];
-#endif
-#endif
             u2_t_cueid        = stp_t_OW_BUZ_INFO->u2_cueid[u1_a_GRP_NO];
-#if (SOUND_VEHICLE_TYPE_TYT == TRUE)
-            if(u2_t_cueid < (U2)CRI_CUESHEET_0_TYT_CUENUM_ADX){
-#else
-            if(u2_t_cueid < (U2)CRI_CUESHEET_0_LEX_CUENUM_ADX){
-#endif
+            if(u2_t_cueid < u2_t_cuemax){
                 u1_t_ow_sts = u1_s_SoundCriMgrOwStsChk(u1_a_CYCLCHK, stp_t_OW_BUZ_INFO->u1_type, stp_t_ow_ctrl);
                 if((u1_t_ow_sts == (U1)SOUND_OW_CTRL_RUN) ||
                 (u1_t_ow_sts == (U1)SOUND_OW_CTRL_STA)) {
@@ -1552,7 +1630,187 @@ static  void    vd_s_SoundCriMgrSetVolume(const U1 u1_a_GRP_NO, const U1 u1_a_RE
 {
     static volatile const U2 u2_s_VOL_MULTI_CH_PLAY_RATE_1 = (U2)SOUND_VOL_MULTI_CH_PLAY_RATE_1;
 
-    static volatile const U2 *const u2p_sp_SOUND_VOL[WCHIME_NUM_VOL] = {
+    static volatile const U2 *const u2p_sp_SOUND_VOL_TYT[SOUND_NUM_VOL_TYT] = {
+        &u2_CALIB_MCUID0029_REV_IN_MID,                     /* WCHIME_VOL_REVERSE_IN_MID                                             */
+        &u2_CALIB_MCUID0746_REV_IN_MAX,                     /* WCHIME_VOL_REVERSE_IN_MAX                                             */
+        &u2_CALIB_MCUID0030_SBELT_FMV_MID,                  /* WCHIME_VOL_SEAREM_FMV_MID                                             */
+        &u2_CALIB_MCUID0747_SBELT_FMV_MAX,                  /* WCHIME_VOL_SEAREM_FMV_MAX                                             */
+        &u2_CALIB_MCUID0031_SBELT_LV1_MID,                  /* WCHIME_VOL_SEAREM_LV1_MID                                             */
+        &u2_CALIB_MCUID0748_SBELT_LV1_MAX,                  /* WCHIME_VOL_SEAREM_LV1_MAX                                             */
+        &u2_CALIB_MCUID0032_SBELT_LV2_MID,                  /* WCHIME_VOL_SEAREM_LV2_MID                                             */
+        &u2_CALIB_MCUID0749_SBELT_LV2_MAX,                  /* WCHIME_VOL_SEAREM_LV2_MAX                                             */
+        &u2_CALIB_MCUID0033_SBELT_SI_MID,                   /* WCHIME_VOL_SEAREM_SI_MID                                              */
+        &u2_CALIB_MCUID0750_SBELT_SI_MAX,                   /* WCHIME_VOL_SEAREM_SI_MAX                                              */
+        &u2_CALIB_MCUID0067_CSR_FRSD0,                      /* WCHIME_VOL_CSR_FR_SD_0                                                */
+        &u2_CALIB_MCUID0068_CSR_FRSD1,                      /* WCHIME_VOL_CSR_FR_SD_1                                                */
+        &u2_CALIB_MCUID0069_CSR_FRSD2,                      /* WCHIME_VOL_CSR_FR_SD_2                                                */
+        &u2_CALIB_MCUID0070_CSR_FRSD3,                      /* WCHIME_VOL_CSR_FR_SD_3                                                */
+        &u2_CALIB_MCUID0071_CSR_FRSD4,                      /* WCHIME_VOL_CSR_FR_SD_4                                                */
+        &u2_CALIB_MCUID0072_CSR_FRSD5,                      /* WCHIME_VOL_CSR_FR_SD_5                                                */
+        &u2_CALIB_MCUID0073_CSR_FRSD6,                      /* WCHIME_VOL_CSR_FR_SD_6                                                */
+        &u2_CALIB_MCUID0074_CSR_FRSD7,                      /* WCHIME_VOL_CSR_FR_SD_7                                                */
+        &u2_CALIB_MCUID0075_CSR_FRMD0,                      /* WCHIME_VOL_CSR_FR_MD_0                                                */
+        &u2_CALIB_MCUID0076_CSR_FRMD1,                      /* WCHIME_VOL_CSR_FR_MD_1                                                */
+        &u2_CALIB_MCUID0077_CSR_FRMD2,                      /* WCHIME_VOL_CSR_FR_MD_2                                                */
+        &u2_CALIB_MCUID0078_CSR_FRMD3,                      /* WCHIME_VOL_CSR_FR_MD_3                                                */
+        &u2_CALIB_MCUID0079_CSR_FRMD4,                      /* WCHIME_VOL_CSR_FR_MD_4                                                */
+        &u2_CALIB_MCUID0080_CSR_FRMD5,                      /* WCHIME_VOL_CSR_FR_MD_5                                                */
+        &u2_CALIB_MCUID0081_CSR_FRMD6,                      /* WCHIME_VOL_CSR_FR_MD_6                                                */
+        &u2_CALIB_MCUID0082_CSR_FRMD7,                      /* WCHIME_VOL_CSR_FR_MD_7                                                */
+        &u2_CALIB_MCUID0083_CSR_FRLD0,                      /* WCHIME_VOL_CSR_FR_LD_0                                                */
+        &u2_CALIB_MCUID0084_CSR_FRLD1,                      /* WCHIME_VOL_CSR_FR_LD_1                                                */
+        &u2_CALIB_MCUID0085_CSR_FRLD2,                      /* WCHIME_VOL_CSR_FR_LD_2                                                */
+        &u2_CALIB_MCUID0086_CSR_FRLD3,                      /* WCHIME_VOL_CSR_FR_LD_3                                                */
+        &u2_CALIB_MCUID0087_CSR_FRLD4,                      /* WCHIME_VOL_CSR_FR_LD_4                                                */
+        &u2_CALIB_MCUID0088_CSR_FRLD5,                      /* WCHIME_VOL_CSR_FR_LD_5                                                */
+        &u2_CALIB_MCUID0089_CSR_FRLD6,                      /* WCHIME_VOL_CSR_FR_LD_6                                                */
+        &u2_CALIB_MCUID0090_CSR_FRLD7,                      /* WCHIME_VOL_CSR_FR_LD_7                                                */
+        &u2_CALIB_MCUID0091_CSR_FRFD0,                      /* WCHIME_VOL_CSR_FR_FD_0                                                */
+        &u2_CALIB_MCUID0092_CSR_FRFD1,                      /* WCHIME_VOL_CSR_FR_FD_1                                                */
+        &u2_CALIB_MCUID0093_CSR_FRFD2,                      /* WCHIME_VOL_CSR_FR_FD_2                                                */
+        &u2_CALIB_MCUID0094_CSR_FRFD3,                      /* WCHIME_VOL_CSR_FR_FD_3                                                */
+        &u2_CALIB_MCUID0095_CSR_FRFD4,                      /* WCHIME_VOL_CSR_FR_FD_4                                                */
+        &u2_CALIB_MCUID0096_CSR_FRFD5,                      /* WCHIME_VOL_CSR_FR_FD_5                                                */
+        &u2_CALIB_MCUID0097_CSR_FRFD6,                      /* WCHIME_VOL_CSR_FR_FD_6                                                */
+        &u2_CALIB_MCUID0098_CSR_FRFD7,                      /* WCHIME_VOL_CSR_FR_FD_7                                                */
+        &u2_CALIB_MCUID0099_CSR_RRSD0,                      /* WCHIME_VOL_CSR_RR_SD_0                                                */
+        &u2_CALIB_MCUID0100_CSR_RRSD1,                      /* WCHIME_VOL_CSR_RR_SD_1                                                */
+        &u2_CALIB_MCUID0101_CSR_RRSD2,                      /* WCHIME_VOL_CSR_RR_SD_2                                                */
+        &u2_CALIB_MCUID0102_CSR_RRSD3,                      /* WCHIME_VOL_CSR_RR_SD_3                                                */
+        &u2_CALIB_MCUID0103_CSR_RRSD4,                      /* WCHIME_VOL_CSR_RR_SD_4                                                */
+        &u2_CALIB_MCUID0104_CSR_RRSD5,                      /* WCHIME_VOL_CSR_RR_SD_5                                                */
+        &u2_CALIB_MCUID0105_CSR_RRSD6,                      /* WCHIME_VOL_CSR_RR_SD_6                                                */
+        &u2_CALIB_MCUID0106_CSR_RRSD7,                      /* WCHIME_VOL_CSR_RR_SD_7                                                */
+        &u2_CALIB_MCUID0107_CSR_RRMD0,                      /* WCHIME_VOL_CSR_RR_MD_0                                                */
+        &u2_CALIB_MCUID0108_CSR_RRMD1,                      /* WCHIME_VOL_CSR_RR_MD_1                                                */
+        &u2_CALIB_MCUID0109_CSR_RRMD2,                      /* WCHIME_VOL_CSR_RR_MD_2                                                */
+        &u2_CALIB_MCUID0110_CSR_RRMD3,                      /* WCHIME_VOL_CSR_RR_MD_3                                                */
+        &u2_CALIB_MCUID0111_CSR_RRMD4,                      /* WCHIME_VOL_CSR_RR_MD_4                                                */
+        &u2_CALIB_MCUID0112_CSR_RRMD5,                      /* WCHIME_VOL_CSR_RR_MD_5                                                */
+        &u2_CALIB_MCUID0113_CSR_RRMD6,                      /* WCHIME_VOL_CSR_RR_MD_6                                                */
+        &u2_CALIB_MCUID0114_CSR_RRMD7,                      /* WCHIME_VOL_CSR_RR_MD_7                                                */
+        &u2_CALIB_MCUID0115_CSR_RRLD0,                      /* WCHIME_VOL_CSR_RR_LD_0                                                */
+        &u2_CALIB_MCUID0116_CSR_RRLD1,                      /* WCHIME_VOL_CSR_RR_LD_1                                                */
+        &u2_CALIB_MCUID0117_CSR_RRLD2,                      /* WCHIME_VOL_CSR_RR_LD_2                                                */
+        &u2_CALIB_MCUID0118_CSR_RRLD3,                      /* WCHIME_VOL_CSR_RR_LD_3                                                */
+        &u2_CALIB_MCUID0119_CSR_RRLD4,                      /* WCHIME_VOL_CSR_RR_LD_4                                                */
+        &u2_CALIB_MCUID0120_CSR_RRLD5,                      /* WCHIME_VOL_CSR_RR_LD_5                                                */
+        &u2_CALIB_MCUID0121_CSR_RRLD6,                      /* WCHIME_VOL_CSR_RR_LD_6                                                */
+        &u2_CALIB_MCUID0122_CSR_RRLD7,                      /* WCHIME_VOL_CSR_RR_LD_7                                                */
+        &u2_CALIB_MCUID0123_CSR_RRFD0,                      /* WCHIME_VOL_CSR_RR_FD_0                                                */
+        &u2_CALIB_MCUID0124_CSR_RRFD1,                      /* WCHIME_VOL_CSR_RR_FD_1                                                */
+        &u2_CALIB_MCUID0125_CSR_RRFD2,                      /* WCHIME_VOL_CSR_RR_FD_2                                                */
+        &u2_CALIB_MCUID0126_CSR_RRFD3,                      /* WCHIME_VOL_CSR_RR_FD_3                                                */
+        &u2_CALIB_MCUID0127_CSR_RRFD4,                      /* WCHIME_VOL_CSR_RR_FD_4                                                */
+        &u2_CALIB_MCUID0128_CSR_RRFD5,                      /* WCHIME_VOL_CSR_RR_FD_5                                                */
+        &u2_CALIB_MCUID0129_CSR_RRFD6,                      /* WCHIME_VOL_CSR_RR_FD_6                                                */
+        &u2_CALIB_MCUID0130_CSR_RRFD7,                      /* WCHIME_VOL_CSR_RR_FD_7                                                */
+        &u2_CALIB_MCUID0131_CSR_FRRRSD0,                    /* WCHIME_VOL_CSR_FRRR_SD_0                                              */
+        &u2_CALIB_MCUID0132_CSR_FRRRSD1,                    /* WCHIME_VOL_CSR_FRRR_SD_1                                              */
+        &u2_CALIB_MCUID0133_CSR_FRRRSD2,                    /* WCHIME_VOL_CSR_FRRR_SD_2                                              */
+        &u2_CALIB_MCUID0134_CSR_FRRRSD3,                    /* WCHIME_VOL_CSR_FRRR_SD_3                                              */
+        &u2_CALIB_MCUID0135_CSR_FRRRSD4,                    /* WCHIME_VOL_CSR_FRRR_SD_4                                              */
+        &u2_CALIB_MCUID0136_CSR_FRRRSD5,                    /* WCHIME_VOL_CSR_FRRR_SD_5                                              */
+        &u2_CALIB_MCUID0137_CSR_FRRRSD6,                    /* WCHIME_VOL_CSR_FRRR_SD_6                                              */
+        &u2_CALIB_MCUID0138_CSR_FRRRSD7,                    /* WCHIME_VOL_CSR_FRRR_SD_7                                              */
+        &u2_CALIB_MCUID0139_CSR_FRRRMD0,                    /* WCHIME_VOL_CSR_FRRR_MD_FR_0                                           */
+        &u2_CALIB_MCUID0140_CSR_FRRRMD1,                    /* WCHIME_VOL_CSR_FRRR_MD_FR_1                                           */
+        &u2_CALIB_MCUID0141_CSR_FRRRMD2,                    /* WCHIME_VOL_CSR_FRRR_MD_FR_2                                           */
+        &u2_CALIB_MCUID0142_CSR_FRRRMD3,                    /* WCHIME_VOL_CSR_FRRR_MD_FR_3                                           */
+        &u2_CALIB_MCUID0143_CSR_FRRRMD4,                    /* WCHIME_VOL_CSR_FRRR_MD_FR_4                                           */
+        &u2_CALIB_MCUID0144_CSR_FRRRMD5,                    /* WCHIME_VOL_CSR_FRRR_MD_FR_5                                           */
+        &u2_CALIB_MCUID0145_CSR_FRRRMD6,                    /* WCHIME_VOL_CSR_FRRR_MD_FR_6                                           */
+        &u2_CALIB_MCUID0146_CSR_FRRRMD7,                    /* WCHIME_VOL_CSR_FRRR_MD_FR_7                                           */
+        &u2_CALIB_MCUID0139_CSR_FRRRMD0,                    /* WCHIME_VOL_CSR_FRRR_MD_RR_0                                           */
+        &u2_CALIB_MCUID0140_CSR_FRRRMD1,                    /* WCHIME_VOL_CSR_FRRR_MD_RR_1                                           */
+        &u2_CALIB_MCUID0141_CSR_FRRRMD2,                    /* WCHIME_VOL_CSR_FRRR_MD_RR_2                                           */
+        &u2_CALIB_MCUID0142_CSR_FRRRMD3,                    /* WCHIME_VOL_CSR_FRRR_MD_RR_3                                           */
+        &u2_CALIB_MCUID0143_CSR_FRRRMD4,                    /* WCHIME_VOL_CSR_FRRR_MD_RR_4                                           */
+        &u2_CALIB_MCUID0144_CSR_FRRRMD5,                    /* WCHIME_VOL_CSR_FRRR_MD_RR_5                                           */
+        &u2_CALIB_MCUID0145_CSR_FRRRMD6,                    /* WCHIME_VOL_CSR_FRRR_MD_RR_6                                           */
+        &u2_CALIB_MCUID0146_CSR_FRRRMD7,                    /* WCHIME_VOL_CSR_FRRR_MD_RR_7                                           */
+        &u2_CALIB_MCUID0155_CSR_FRRRLD0,                    /* WCHIME_VOL_CSR_FRRR_LD_FR_0                                           */
+        &u2_CALIB_MCUID0156_CSR_FRRRLD1,                    /* WCHIME_VOL_CSR_FRRR_LD_FR_1                                           */
+        &u2_CALIB_MCUID0157_CSR_FRRRLD2,                    /* WCHIME_VOL_CSR_FRRR_LD_FR_2                                           */
+        &u2_CALIB_MCUID0158_CSR_FRRRLD3,                    /* WCHIME_VOL_CSR_FRRR_LD_FR_3                                           */
+        &u2_CALIB_MCUID0159_CSR_FRRRLD4,                    /* WCHIME_VOL_CSR_FRRR_LD_FR_4                                           */
+        &u2_CALIB_MCUID0160_CSR_FRRRLD5,                    /* WCHIME_VOL_CSR_FRRR_LD_FR_5                                           */
+        &u2_CALIB_MCUID0161_CSR_FRRRLD6,                    /* WCHIME_VOL_CSR_FRRR_LD_FR_6                                           */
+        &u2_CALIB_MCUID0162_CSR_FRRRLD7,                    /* WCHIME_VOL_CSR_FRRR_LD_FR_7                                           */
+        &u2_CALIB_MCUID0155_CSR_FRRRLD0,                    /* WCHIME_VOL_CSR_FRRR_LD_RR_0                                           */
+        &u2_CALIB_MCUID0156_CSR_FRRRLD1,                    /* WCHIME_VOL_CSR_FRRR_LD_RR_1                                           */
+        &u2_CALIB_MCUID0157_CSR_FRRRLD2,                    /* WCHIME_VOL_CSR_FRRR_LD_RR_2                                           */
+        &u2_CALIB_MCUID0158_CSR_FRRRLD3,                    /* WCHIME_VOL_CSR_FRRR_LD_RR_3                                           */
+        &u2_CALIB_MCUID0159_CSR_FRRRLD4,                    /* WCHIME_VOL_CSR_FRRR_LD_RR_4                                           */
+        &u2_CALIB_MCUID0160_CSR_FRRRLD5,                    /* WCHIME_VOL_CSR_FRRR_LD_RR_5                                           */
+        &u2_CALIB_MCUID0161_CSR_FRRRLD6,                    /* WCHIME_VOL_CSR_FRRR_LD_RR_6                                           */
+        &u2_CALIB_MCUID0162_CSR_FRRRLD7,                    /* WCHIME_VOL_CSR_FRRR_LD_RR_7                                           */
+        &u2_CALIB_MCUID0171_CSR_FRRRFD0,                    /* WCHIME_VOL_CSR_FRRR_FD_FR_0                                           */
+        &u2_CALIB_MCUID0172_CSR_FRRRFD1,                    /* WCHIME_VOL_CSR_FRRR_FD_FR_1                                           */
+        &u2_CALIB_MCUID0173_CSR_FRRRFD2,                    /* WCHIME_VOL_CSR_FRRR_FD_FR_2                                           */
+        &u2_CALIB_MCUID0174_CSR_FRRRFD3,                    /* WCHIME_VOL_CSR_FRRR_FD_FR_3                                           */
+        &u2_CALIB_MCUID0175_CSR_FRRRFD4,                    /* WCHIME_VOL_CSR_FRRR_FD_FR_4                                           */
+        &u2_CALIB_MCUID0176_CSR_FRRRFD5,                    /* WCHIME_VOL_CSR_FRRR_FD_FR_5                                           */
+        &u2_CALIB_MCUID0177_CSR_FRRRFD6,                    /* WCHIME_VOL_CSR_FRRR_FD_FR_6                                           */
+        &u2_CALIB_MCUID0178_CSR_FRRRFD7,                    /* WCHIME_VOL_CSR_FRRR_FD_FR_7                                           */
+        &u2_CALIB_MCUID0171_CSR_FRRRFD0,                    /* WCHIME_VOL_CSR_FRRR_FD_RR_0                                           */
+        &u2_CALIB_MCUID0172_CSR_FRRRFD1,                    /* WCHIME_VOL_CSR_FRRR_FD_RR_1                                           */
+        &u2_CALIB_MCUID0173_CSR_FRRRFD2,                    /* WCHIME_VOL_CSR_FRRR_FD_RR_2                                           */
+        &u2_CALIB_MCUID0174_CSR_FRRRFD3,                    /* WCHIME_VOL_CSR_FRRR_FD_RR_3                                           */
+        &u2_CALIB_MCUID0175_CSR_FRRRFD4,                    /* WCHIME_VOL_CSR_FRRR_FD_RR_4                                           */
+        &u2_CALIB_MCUID0176_CSR_FRRRFD5,                    /* WCHIME_VOL_CSR_FRRR_FD_RR_5                                           */
+        &u2_CALIB_MCUID0177_CSR_FRRRFD6,                    /* WCHIME_VOL_CSR_FRRR_FD_RR_6                                           */
+        &u2_CALIB_MCUID0178_CSR_FRRRFD7,                    /* WCHIME_VOL_CSR_FRRR_FD_RR_7                                           */
+        &u2_CALIB_MCUID0187_FLSTA_LOLO,                     /* WCHIME_VOL_TURHAZ_STA_LCSTM_LSPD                                      */
+        &u2_CALIB_MCUID0188_FLSTA_LOMI,                     /* WCHIME_VOL_TURHAZ_STA_LCSTM_MSPD                                      */
+        &u2_CALIB_MCUID0189_FLSTA_LOHI,                     /* WCHIME_VOL_TURHAZ_STA_LCSTM_HSPD                                      */
+        &u2_CALIB_MCUID0190_FLSTA_MILO,                     /* WCHIME_VOL_TURHAZ_STA_MCSTM_LSPD                                      */
+        &u2_CALIB_MCUID0191_FLSTA_MIMI,                     /* WCHIME_VOL_TURHAZ_STA_MCSTM_MSPD                                      */
+        &u2_CALIB_MCUID0192_FLSTA_MIHI,                     /* WCHIME_VOL_TURHAZ_STA_MCSTM_HSPD                                      */
+        &u2_CALIB_MCUID0193_FLSTA_HILO,                     /* WCHIME_VOL_TURHAZ_STA_HCSTM_LSPD                                      */
+        &u2_CALIB_MCUID0194_FLSTA_HIMI,                     /* WCHIME_VOL_TURHAZ_STA_HCSTM_MSPD                                      */
+        &u2_CALIB_MCUID0195_FLSTA_HIHI,                     /* WCHIME_VOL_TURHAZ_STA_HCSTM_HSPD                                      */
+        &u2_CALIB_MCUID0196_FLFIN_LOLO,                     /* WCHIME_VOL_TURHAZ_FIN_LCSTM_LSPD                                      */
+        &u2_CALIB_MCUID0197_FLFIN_LOMI,                     /* WCHIME_VOL_TURHAZ_FIN_LCSTM_MSPD                                      */
+        &u2_CALIB_MCUID0198_FLFIN_LOHI,                     /* WCHIME_VOL_TURHAZ_FIN_LCSTM_HSPD                                      */
+        &u2_CALIB_MCUID0199_FLFIN_MILO,                     /* WCHIME_VOL_TURHAZ_FIN_MCSTM_LSPD                                      */
+        &u2_CALIB_MCUID0200_FLFIN_MIMI,                     /* WCHIME_VOL_TURHAZ_FIN_MCSTM_MSPD                                      */
+        &u2_CALIB_MCUID0201_FLFIN_MIHI,                     /* WCHIME_VOL_TURHAZ_FIN_MCSTM_HSPD                                      */
+        &u2_CALIB_MCUID0202_FLFIN_HILO,                     /* WCHIME_VOL_TURHAZ_FIN_HCSTM_LSPD                                      */
+        &u2_CALIB_MCUID0203_FLFIN_HIMI,                     /* WCHIME_VOL_TURHAZ_FIN_HCSTM_MSPD                                      */
+        &u2_CALIB_MCUID0204_FLFIN_HIHI,                     /* WCHIME_VOL_TURHAZ_FIN_HCSTM_HSPD                                      */
+        &u2_CALIB_MCUID0915_CSR_RCTA_0,                     /* WCHIME_VOL_CSR_RCTA_0                                                 */
+        &u2_CALIB_MCUID0916_CSR_RCTA_1,                     /* WCHIME_VOL_CSR_RCTA_1                                                 */
+        &u2_CALIB_MCUID0917_CSR_RCTA_2,                     /* WCHIME_VOL_CSR_RCTA_2                                                 */
+        &u2_CALIB_MCUID0918_CSR_RCTA_3,                     /* WCHIME_VOL_CSR_RCTA_3                                                 */
+        &u2_CALIB_MCUID0919_CSR_RCTA_4,                     /* WCHIME_VOL_CSR_RCTA_4                                                 */
+        &u2_CALIB_MCUID0920_CSR_RCTA_5,                     /* WCHIME_VOL_CSR_RCTA_5                                                 */
+        &u2_CALIB_MCUID0921_CSR_RCTA_6,                     /* WCHIME_VOL_CSR_RCTA_6                                                 */
+        &u2_CALIB_MCUID0922_CSR_RCTA_7,                     /* WCHIME_VOL_CSR_RCTA_7                                                 */
+        &u2_CALIB_MCUID3002_ANUNC_MID,                      /* WCHIME_VOL_BASE_NOTICE1_MID                                           */
+        &u2_CALIB_MCUID3011_ANUNC_MAX,                      /* WCHIME_VOL_BASE_NOTICE1_MAX                                           */
+        &u2_CALIB_MCUID3003_ANUNC_SP_MID,                   /* WCHIME_VOL_BASE_NOTICE2_MID                                           */
+        &u2_CALIB_MCUID3012_ANUNC_SP_MAX,                   /* WCHIME_VOL_BASE_NOTICE2_MAX                                           */
+        &u2_CALIB_MCUID3004_RECEP_MID,                      /* WCHIME_VOL_BASE_ACCEPT_MID                                            */
+        &u2_CALIB_MCUID3013_RECEP_MAX,                      /* WCHIME_VOL_BASE_ACCEPT_MAX                                            */
+        &u2_CALIB_MCUID3005_REJECT_MID,                     /* WCHIME_VOL_BASE_REJECT_MID                                            */
+        &u2_CALIB_MCUID3014_REJECT_MAX,                     /* WCHIME_VOL_BASE_REJECT_MAX                                            */
+        &u2_CALIB_MCUID3006_URGEN_MIN_MID,                  /* WCHIME_VOL_BASE_INTWARNL_MID                                          */
+        &u2_CALIB_MCUID3015_URGEN_MIN_MAX,                  /* WCHIME_VOL_BASE_INTWARNL_MAX                                          */
+        &u2_CALIB_MCUID3007_URGEN_MID_MID,                  /* WCHIME_VOL_BASE_INTWARNM_MID                                          */
+        &u2_CALIB_MCUID3016_URGEN_MID_MAX,                  /* WCHIME_VOL_BASE_INTWARNM_MAX                                          */
+        &u2_CALIB_MCUID3008_URGEN_MAX_MID,                  /* WCHIME_VOL_BASE_INTWARNH_MID                                          */
+        &u2_CALIB_MCUID3017_URGEN_MAX_MAX,                  /* WCHIME_VOL_BASE_INTWARNH_MAX                                          */
+        &u2_CALIB_MCUID3009_CONTIN_MID,                     /* WCHIME_VOL_BASE_CONTWARN_MID                                          */
+        &u2_CALIB_MCUID3018_CONTIN_MAX,                     /* WCHIME_VOL_BASE_CONTWARN_MAX                                          */
+        &u2_CALIB_MCUID3010_PREDOT_MID,                     /* WCHIME_VOL_AD_DOT_MID                                                 */
+        &u2_CALIB_MCUID3019_PREDOT_MAX,                     /* WCHIME_VOL_AD_DOT_MAX                                                 */
+        &u2_CALIB_MCUID3021_SEA_MID,                        /* WCHIME_VOL_SEA_REJECT_MID                                             */
+        &u2_CALIB_MCUID3022_SEA_MAX,                        /* WCHIME_VOL_SEA_REJECT_MAX                                             */
+        &u2_CALIB_MCUID3023_PCS_MID,                        /* WCHIME_VOL_PCS_SEA_INTWARNH_MID                                       */
+        &u2_CALIB_MCUID3024_PCS_MAX                         /* WCHIME_VOL_PCS_SEA_INTWARNH_MAX                                       */
+    };
+    static volatile const U2 *const u2p_sp_SOUND_VOL_LEX[SOUND_NUM_VOL_LEX] = {
         &u2_CALIB_MCUID0029_REV_IN_MID,                     /* WCHIME_VOL_REVERSE_IN_MID                                             */
         &u2_CALIB_MCUID0746_REV_IN_MAX,                     /* WCHIME_VOL_REVERSE_IN_MAX                                             */
         &u2_CALIB_MCUID0030_SBELT_FMV_MID,                  /* WCHIME_VOL_SEAREM_FMV_MID                                             */
@@ -1749,6 +2007,9 @@ static  void    vd_s_SoundCriMgrSetVolume(const U1 u1_a_GRP_NO, const U1 u1_a_RE
     U2          u2_t_sound_vol;
     U2          u2_t_multi_ch_play_rate_reqvol;
     U4          u4_t_calc_buf;
+    U1          u1_t_brand;
+
+    u1_t_brand    = u1_CALIB_MCUID0024_BRAND;
 
 #if 0   /* BEV Rebase provisionally */ /* for xm-authentication */
     u4_t_xmauth   = u4_g_VardefDs2E_Las32((U2)VDF_DS_2E_2021);
@@ -1758,10 +2019,25 @@ static  void    vd_s_SoundCriMgrSetVolume(const U1 u1_a_GRP_NO, const U1 u1_a_RE
     if((u4_t_xmauth & (U4)VDF_DS_2E_XM_MODE) == (U4)0U){
 #endif   /* BEV Rebase provisionally */ /* for xm-authentication */
         u1_t_reqvol = u1_a_REQ_VOL;
-        if(u1_a_REQ_VOL >= (U1)WCHIME_NUM_VOL){
-            u1_t_reqvol = (U1)SOUND_VOLUMEID_DEFAULT;
+        if(u1_t_brand == (U1)CALIB_MCUID0024_TOYOTA){
+            if(u1_a_REQ_VOL >= (U1)SOUND_NUM_VOL_TYT){
+               u1_t_reqvol = (U1)SOUND_VOLUMEID_DEFAULT_TYT;
+            }
+            u2_t_sound_vol = *(u2p_sp_SOUND_VOL_TYT[u1_t_reqvol]);
         }
-        u2_t_sound_vol = *(u2p_sp_SOUND_VOL[u1_t_reqvol]);
+        else if (u1_t_brand == (U1)CALIB_MCUID0024_LEXUS){
+            if(u1_a_REQ_VOL >= (U1)SOUND_NUM_VOL_LEX){
+               u1_t_reqvol = (U1)SOUND_VOLUMEID_DEFAULT_LEX;
+            }
+            u2_t_sound_vol = *(u2p_sp_SOUND_VOL_LEX[u1_t_reqvol]);
+        }
+        else{
+            if(u1_a_REQ_VOL >= (U1)SOUND_NUM_VOL_TYT){
+               u1_t_reqvol = (U1)SOUND_VOLUMEID_DEFAULT_TYT;
+            }
+            u2_t_sound_vol = *(u2p_sp_SOUND_VOL_TYT[u1_t_reqvol]);
+        }
+
         u4_t_calc_buf = (U4)u2_t_sound_vol;
         f4_t_cuevol = (CriFloat32)u4_t_calc_buf / (CriFloat32)SOUND_CALIBVOLUME_CHANGE_LSB;
 #if 0   /* BEV Rebase provisionally */ /* for xm-authentication */

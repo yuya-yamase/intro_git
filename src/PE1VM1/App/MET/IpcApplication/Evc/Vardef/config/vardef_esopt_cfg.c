@@ -36,7 +36,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define VDF_ESO_NUM_RX                           (91U)
+#define VDF_ESO_NUM_RX                           (92U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -682,6 +682,18 @@ const ST_VDF_ESO_CH    st_gp_VDF_ESO_CH[VDF_ESO_NUM_RX] = {
         }
     },
     {
+        &u1_g_VdfEsoRx_PERSET,                  /* fp_u1_AVA_RX        */
+        (U2)VDF_ESO_CH_SYS_PERSET,              /* u2_eso_ch           */
+        (U1)VDF_ESO_INPUT_TYPE_CAN,             /* u1_input_type       */
+        (U2)OXCAN_RXD_PDU_CAN_UCB1S01_CH0,      /* u2_msg_rx           */
+        (U2)0x0080U,                            /* u2_vom_act          */
+        ((U2)2100U / (U2)VDF_MAIN_TICK),        /* u2_rxc_peri         */
+        {
+            (U2)2U,                             /* u2_rxc_min[MIN_INA] */
+            (U2)2U                              /* u2_rxc_min[MIN_ACT] */
+        }
+    },
+    {
         &u1_g_VdfEsoRx_SW_TITE,                 /* fp_u1_AVA_RX        */
         (U2)VDF_ESO_CH_SW_TITE,                 /* u2_eso_ch           */
         (U1)VDF_ESO_INPUT_TYPE_CAN,             /* u1_input_type       */
@@ -1223,7 +1235,7 @@ const ST_VDF_ESO_AVA   st_gp_VDF_ESO_AVA[VDF_ESO_NOW_AVA] = {
         (U4)VDF_ESO_INI_W7,                        /* u4_ini */
         (U4)VDF_ESO_NVM_W7,                        /* u4_nvm */
         (U4)0xBFEFFD00U,                           /* u4_unk */
-        (U4)0xFFEFFD00U,                           /* u4_rx  */
+        (U4)0xFFEFFD80U,                           /* u4_rx  */
 
         (U2)NVMCID_U4_VDF_ESO_W7,                  /* u2_nid */
         (U2)RIMID_U4_VDF_ESO_W7                    /* u2_bid */
@@ -1380,6 +1392,7 @@ U1      u1_g_VardefEsOptCfgEthRxEvcnt(const U2 u2_a_MSG_ID)
 /*  BEV-26    01/07/2026  YN      Change config for BEV FF2.(MET-B_CWHBB-CSTD-0-)                                                    */
 /*  BEV-27    01/08/2026  MA      BRPADW function check time changed from 700ms to 2100ms.(MET-C_BRPADW-CSTD-A0-)                    */
 /*  BEV-28    01/14/2026  TS      Change config for BEV FF2.(MET-C_DRS-CSTD-1)                                                       */
+/*  BEV-29    01/16/2026  KEM     Update for BEV FF2. (B_PERSET)                                                                     */
 /*                                                                                                                                   */
 /*  * YI     = Yoshiki Iwata, Denso                                                                                                  */
 /*  * TN     = Takashi Nagai, Denso                                                                                                  */
@@ -1414,5 +1427,6 @@ U1      u1_g_VardefEsOptCfgEthRxEvcnt(const U2 u2_a_MSG_ID)
 /*  * TS   = Takuo Suganuma, Denso Techno                                                                                            */
 /*  * KN   = kazuo Nishigaki, Denso Techno                                                                                           */
 /*  * YN   = Yujiro Nagaya, Denso Techno                                                                                             */
+/*  * KEM  = Kane Edward Malapo, DTPH                                                                                                */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
