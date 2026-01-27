@@ -37,6 +37,8 @@
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define CAN_LPFQ_RWCT_UNK                         (0xffffU)
+#define CAN_LPFQ_RWCT_WO_0                        (0U)
+#define CAN_LPFQ_RWCT_WO_1                        (1U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -72,22 +74,23 @@ static inline void    vd_s_CANLpFqCpyWord(U4 * u4_ap_dst, const U4 * u4_ap_SRC, 
 /*===================================================================================================================================*/
 void    vd_g_CANLpFqInit(void)
 {
-    ST_CAN_LPFQ_RWCT *                   st_tp_rwct;
-
+    volatile U4 *                        u4_tp_rwct_w;
     U4                                   u4_t_ch;
     U4                                   u4_t_gli;
 
     for(u4_t_ch = (U4)0U; u4_t_ch < (U4)u2_g_CAN_LPFQ_NUM_CH; u4_t_ch++){
 
-        st_tp_rwct = &st_gp_can_lpfq_rwct[u4_t_ch];
+        u4_tp_rwct_w = (volatile U4 *)&st_gp_can_lpfq_rwct[u4_t_ch];
 
         /* --------------------------------------------------------------- */
         u4_t_gli = u4_g_CANLpFq_IRQ_DI();
         /* --------------------------------------------------------------- */
 
-        st_tp_rwct->u2_rea = (U2)0U;
-        st_tp_rwct->u2_wri = (U2)0U;
-        st_tp_rwct->u2_enq = (U2)0U;
+     /* st_tp_rwct->u2_rea = (U2)0U; */
+     /* st_tp_rwct->u2_wri = (U2)0U; */
+     /* st_tp_rwct->u2_enq = (U2)0U; */
+        u4_tp_rwct_w[CAN_LPFQ_RWCT_WO_0] = (U4)0U;
+        u4_tp_rwct_w[CAN_LPFQ_RWCT_WO_1] = (U4)0U;
 
         /* --------------------------------------------------------------- */
         vd_g_CANLpFq_IRQ_EI(u4_t_gli);
@@ -102,20 +105,22 @@ void    vd_g_CANLpFqInit(void)
 /*===================================================================================================================================*/
 void    vd_g_CANLpFqResCh(const uint16 u2_a_FQ_CH)
 {
-    ST_CAN_LPFQ_RWCT *                   st_tp_rwct;
+    volatile U4 *                        u4_tp_rwct_w;
     U4                                   u4_t_gli;
 
     if(u2_a_FQ_CH < u2_g_CAN_LPFQ_NUM_CH){
 
-        st_tp_rwct = &st_gp_can_lpfq_rwct[u2_a_FQ_CH];
+        u4_tp_rwct_w = (volatile U4 *)&st_gp_can_lpfq_rwct[u2_a_FQ_CH];
 
         /* --------------------------------------------------------------- */
         u4_t_gli = u4_g_CANLpFq_IRQ_DI();
         /* --------------------------------------------------------------- */
 
-        st_tp_rwct->u2_rea = (U2)0U;
-        st_tp_rwct->u2_wri = (U2)0U;
-        st_tp_rwct->u2_enq = (U2)0U;
+     /* st_tp_rwct->u2_rea = (U2)0U; */
+     /* st_tp_rwct->u2_wri = (U2)0U; */
+     /* st_tp_rwct->u2_enq = (U2)0U; */
+        u4_tp_rwct_w[CAN_LPFQ_RWCT_WO_0] = (U4)0U;
+        u4_tp_rwct_w[CAN_LPFQ_RWCT_WO_1] = (U4)0U;
 
         /* --------------------------------------------------------------- */
         vd_g_CANLpFq_IRQ_EI(u4_t_gli);
@@ -212,6 +217,7 @@ uint8   u1_g_CANLpFqDeqCh(const uint16 u2_a_FQ_CH, uint32 * u4_ap_can, const uin
     const U4 *                           u4_tp_SRC;
 
     ST_CAN_LPFQ_RWCT *                   st_tp_rwct;
+    volatile U4 *                        u4_tp_rwct_w;
     U4 *                                 u4_tp_dst;
 
     U4                                   u4_t_gli;
@@ -262,9 +268,12 @@ uint8   u1_g_CANLpFqDeqCh(const uint16 u2_a_FQ_CH, uint32 * u4_ap_can, const uin
                             (U1)CAN_LPFQ_EAS_FER_NBSD |
                             (U1)CAN_LPFQ_EAS_QUE_EMPT);
 
-                st_tp_rwct->u2_rea = (U2)0U;
-                st_tp_rwct->u2_wri = (U2)0U;
-                st_tp_rwct->u2_enq = (U2)0U;
+             /* st_tp_rwct->u2_rea = (U2)0U; */
+             /* st_tp_rwct->u2_wri = (U2)0U; */
+             /* st_tp_rwct->u2_enq = (U2)0U; */
+                u4_tp_rwct_w = (volatile U4 *)st_tp_rwct;
+                u4_tp_rwct_w[CAN_LPFQ_RWCT_WO_0] = (U4)0U;
+                u4_tp_rwct_w[CAN_LPFQ_RWCT_WO_1] = (U4)0U;
             }
             else if(u4_t_enq < u4_t_deq){
 
@@ -273,9 +282,12 @@ uint8   u1_g_CANLpFqDeqCh(const uint16 u2_a_FQ_CH, uint32 * u4_ap_can, const uin
                             (U1)CAN_LPFQ_EAS_FER_NBSD |
                             (U1)CAN_LPFQ_EAS_QUE_EMPT);
 
-                st_tp_rwct->u2_rea = (U2)0U;
-                st_tp_rwct->u2_wri = (U2)0U;
-                st_tp_rwct->u2_enq = (U2)0U;
+             /* st_tp_rwct->u2_rea = (U2)0U; */
+             /* st_tp_rwct->u2_wri = (U2)0U; */
+             /* st_tp_rwct->u2_enq = (U2)0U; */
+                u4_tp_rwct_w = (volatile U4 *)st_tp_rwct;
+                u4_tp_rwct_w[CAN_LPFQ_RWCT_WO_0] = (U4)0U;
+                u4_tp_rwct_w[CAN_LPFQ_RWCT_WO_1] = (U4)0U;
             }
             else{
 
@@ -292,9 +304,12 @@ uint8   u1_g_CANLpFqDeqCh(const uint16 u2_a_FQ_CH, uint32 * u4_ap_can, const uin
 
                 if(u4_t_enq == u4_t_deq){
 
-                    st_tp_rwct->u2_rea = (U2)0U;
-                    st_tp_rwct->u2_wri = (U2)0U;
-                    st_tp_rwct->u2_enq = (U2)0U;
+                 /* st_tp_rwct->u2_rea = (U2)0U; */
+                 /* st_tp_rwct->u2_wri = (U2)0U; */
+                 /* st_tp_rwct->u2_enq = (U2)0U; */
+                    u4_tp_rwct_w = (volatile U4 *)st_tp_rwct;
+                    u4_tp_rwct_w[CAN_LPFQ_RWCT_WO_0] = (U4)0U;
+                    u4_tp_rwct_w[CAN_LPFQ_RWCT_WO_1] = (U4)0U;
                 }
                 else{
 
@@ -426,6 +441,8 @@ uint8   u1_g_CANLpFqEnqCAN(const uint16 u2_a_FQ_CH, const uint16 u2_a_PDU_ID, co
 /*===================================================================================================================================*/
 static inline U1      u1_s_CANLpFqRwctOk(const U4 u4_a_NQUE, ST_CAN_LPFQ_RWCT * st_ap_rwct)
 {
+    volatile U4 *                        u4_tp_rwct_w;
+
     U4                                   u4_t_rea;
     U4                                   u4_t_wri;
     U4                                   u4_t_enq;
@@ -450,9 +467,12 @@ static inline U1      u1_s_CANLpFqRwctOk(const U4 u4_a_NQUE, ST_CAN_LPFQ_RWCT * 
     else{
         u1_t_eas = (U1)CAN_LPFQ_EAS_FER_RWCT;
 
-        st_ap_rwct->u2_rea = (U2)0U;
-        st_ap_rwct->u2_wri = (U2)0U;
-        st_ap_rwct->u2_enq = (U2)0U;
+     /* st_ap_rwct->u2_rea = (U2)0U; */
+     /* st_ap_rwct->u2_wri = (U2)0U; */
+     /* st_ap_rwct->u2_enq = (U2)0U; */
+        u4_tp_rwct_w = (volatile U4 *)st_ap_rwct;
+        u4_tp_rwct_w[CAN_LPFQ_RWCT_WO_0] = (U4)0U;
+        u4_tp_rwct_w[CAN_LPFQ_RWCT_WO_1] = (U4)0U;
     }
 
     return(u1_t_eas);

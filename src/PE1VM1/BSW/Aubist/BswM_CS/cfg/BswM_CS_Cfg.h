@@ -25,7 +25,7 @@
 #define BSW_BSWM_CS_CFG_FUNC_CS               (BSW_USE)
 #define BSW_BSWM_CS_CFG_FUNC_COM              (BSW_USE)
 #define BSW_BSWM_CS_CFG_FUNC_LDCOM            (BSW_NOUSE)
-#define BSW_BSWM_CS_CFG_FUNC_UPPERCDD1        (BSW_NOUSE)
+#define BSW_BSWM_CS_CFG_FUNC_UPPERCDD1        (BSW_USE)
 #define BSW_BSWM_CS_CFG_FUNC_UPPERCDD2        (BSW_NOUSE)
 #define BSW_BSWM_CS_CFG_FUNC_DCM              (BSW_NOUSE)
 #define BSW_BSWM_CS_CFG_FUNC_BSWMCS           (BSW_USE)

@@ -499,9 +499,9 @@ void vd_g_SoundCriDrvTaudStart(CriUint16 master_CDR, CriUint16 slave_CDR)
     REG_PBGERRSLV50.PBGKCPROT.U32 = 0xA5A5A501U;
     REG_PBG51.PBGPROT0_2.U32 = 0x00000043U;
 
-    vd_g_Gpt_D16Start((U1)GPT_D16_UN_1_CH_0_DD_PWM_M, &u2_sp_CARSPDPLS_OPEN_TAUD_START[0]);
-    vd_g_Gpt_D16Start((U1)GPT_D16_UN_1_CH_1_DD_PWM_S, &u2_sp_CARSPDPLS_OPEN_TAUD_START[0]);
-    vd_g_Gpt_D16Start((U1)GPT_D16_UN_1_CH_2_DD_PWM_S, &u2_sp_CARSPDPLS_OPEN_TAUD_START[0]);
+    vd_g_Gpt_D16Start((U1)GPT_D16_UN_1_CH_00_BUZZER_M, &u2_sp_CARSPDPLS_OPEN_TAUD_START[0]);
+    vd_g_Gpt_D16Start((U1)GPT_D16_UN_1_CH_01_BUZZER_S1, &u2_sp_CARSPDPLS_OPEN_TAUD_START[0]);
+    vd_g_Gpt_D16Start((U1)GPT_D16_UN_1_CH_02_BUZZER_S2, &u2_sp_CARSPDPLS_OPEN_TAUD_START[0]);
 
 
     REG_TAUD1.TAUDnCDRm[HW_TAUD_CH_MASTER].U16 = master_CDR;
@@ -544,9 +544,9 @@ void vd_g_SoundCriDrvTaudStop(void)
     rsrc_dummy_read16(&REG_TAUD1.TAUDnTT.U16);
     __SYNCP();
 
-    vd_g_Gpt_D16Stop((U1)GPT_D16_UN_1_CH_0_DD_PWM_M);
-    vd_g_Gpt_D16Stop((U1)GPT_D16_UN_1_CH_1_DD_PWM_S);
-    vd_g_Gpt_D16Stop((U1)GPT_D16_UN_1_CH_2_DD_PWM_S);
+    vd_g_Gpt_D16Stop((U1)GPT_D16_UN_1_CH_00_BUZZER_M);
+    vd_g_Gpt_D16Stop((U1)GPT_D16_UN_1_CH_01_BUZZER_S1);
+    vd_g_Gpt_D16Stop((U1)GPT_D16_UN_1_CH_02_BUZZER_S2);
 }
 
 /*===================================================================================================================================*/
