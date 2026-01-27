@@ -1,13 +1,15 @@
 @echo OFF
 SETLOCAL ENABLEDELAYEDEXPANSION
 
+call build_cfg.bat
+
 rem ---------------------------------------------------------------------------------------------
 rem Target *.mot/x Definition
 rem ---------------------------------------------------------------------------------------------
 set GHS_MOT_OPB_TRGT=..\RFP\bin\bs3ckpt_opbt
 set GHS_MOT_TSW_TRGT=..\RFP\bin\bs3ckpt_2m_usa_usr_tsw
 set GHS_MOT_OTA_TRGT=..\RFP\bin\bs3ckpt_2m_usa_usr_ota
-set GHS_MOT_RFP_TRGT=..\RFP\bin\bs3ckpt_2m_usa_usr_acbd
+set GHS_MOT_RFP_TRGT=..\RFP\bin\%MOT_FILE%
 set GHS_MOT_HSM_TRGT=..\RFP\bin\cychsm_v2716_rfp
 
 rem ---------------------------------------------------------------------------------------------
@@ -174,6 +176,8 @@ if not exist %GHS_MOT_HSM_TRGT%_ac.hex (
 if not exist %GHS_MOT_HSM_TRGT%_bd.hex ( 
     copy ..\..\src\PE0VM0\BSW\Aubist\CycurHSM\ecy_hsm_RH850_GHS_D7_DM\bin\HSM_B.hex %GHS_MOT_HSM_TRGT%_bd.hex
 )
+
+call generate_USBRPG.bat %USB_REPROG_FILE%
 
 rem ---------------------------------------------------------------------------------------------
 @echo OFF

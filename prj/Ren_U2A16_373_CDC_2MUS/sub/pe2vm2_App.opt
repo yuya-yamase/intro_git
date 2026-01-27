@@ -1,0 +1,51 @@
+#!gbuild
+[Options File]
+    :macro=CMPSW_DIR=../CmpSW
+
+    # US
+    :macro=COUNTRY_SW_US=
+
+    :optionsFile=${CMPSW_DIR}/PE2VM2_CmpSW.opt
+
+    # CompileSW (ProcessingLoad)
+    # Enter the measurement time in milliseconds
+    # Set to 0 to disable. Enable with any positive value (recommended: 10000).
+    -DPROCESSING_LOAD_MEASURE_TIME=0U
+
+# ----------------------------------------------------------------------------------------------------------------------------------
+# includes
+# ----------------------------------------------------------------------------------------------------------------------------------
+    -I../../src/PE2VM2/App/Common/ExtSigCtrl
+    -I../../src/PE2VM2/App/Common/xspi
+    -I../../src/PE2VM2/App/IVI/CanCtrl
+    -I../../src/PE2VM2/App/IVI/ClkCtrl/Common/scc
+    -I../../src/PE2VM2/App/IVI/ClkCtrl/Dateclk/config
+    -I../../src/PE2VM2/App/IVI/ClkCtrl/Dateclk/scc
+    -I../../src/PE2VM2/App/IVI/ClkCtrl/DateSI/scc
+    -I../../src/PE2VM2/App/IVI/ClkCtrl/RtcIcDrv/config
+    -I../../src/PE2VM2/App/IVI/ClkCtrl/RtcIcDrv/scc
+    -I../../src/PE2VM2/App/IVI/ClkCtrl/STUB/config
+    -I../../src/PE2VM2/App/IVI/DiagApp
+    -I../../src/PE2VM2/App/IVI/DrcCtrl
+    -I../../src/PE2VM2/App/IVI/DspCtrl/config
+    -I../../src/PE2VM2/App/IVI/DspCtrl
+    -I../../src/PE2VM2/App/IVI/DspCtrl/VolumeMute
+    -I../../src/PE2VM2/App/IVI/ExtSigCtrl
+    -I../../src/PE2VM2/App/IVI/ExtSigCtrl/MicDetect
+    -I../../src/PE2VM2/App/IVI/FwuPx
+    -I../../src/PE2VM2/App/IVI/GyrCtrl
+    -I../../src/PE2VM2/App/IVI/GyrCtrl/config
+    -I../../src/PE2VM2/App/IVI/I2cCtrl
+    -I../../src/PE2VM2/App/IVI/iVDTr
+    -I../../src/PE2VM2/App/IVI/PictCtrl/config
+    -I../../src/PE2VM2/App/IVI/PictCtrl
+    -I../../src/PE2VM2/App/IVI/PwrCtrl/DDFreq
+    -I../../src/PE2VM2/App/IVI/PwrCtrl
+    -I../../src/PE2VM2/App/IVI/XSPI
+    -I../../src/PE2VM2/App/Stub
+
+# ----------------------------------------------------------------------------------------------------------------------------------
+# ghsprj version 1-0-0
+# Date generated: 2026/01/16 19:29:14
+# ----------------------------------------------------------------------------------------------------------------------------------
+

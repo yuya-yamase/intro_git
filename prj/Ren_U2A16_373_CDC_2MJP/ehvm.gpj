@@ -28,6 +28,11 @@ primaryTarget=v800_standalone.tgt
     :postexec="${GSR_CLI} ${GSR_PAR}                     -o dst/ehvm_ac.mot dst/ehvm.elf"
     :postexec="${GSR_CLI} ${GSR_PAR} -romaddr 0x023c0000 -o dst/ehvm_bd.mot dst/ehvm.elf"
 
+    # CompileSW (ProcessingLoad)
+    # Enter the measurement time in milliseconds
+    # Set to 0 to disable. Enable with any positive value (recommended: 10000).
+    -DPROCESSING_LOAD_MEASURE_TIME=0U
+
 # ----------------------------------------------------------------------------------------------------------------------------------
 # includes
 # ----------------------------------------------------------------------------------------------------------------------------------
