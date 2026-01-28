@@ -46,7 +46,6 @@
 #define ALERT_B_BLGT_CH_NUM                      (1U)
 #define ALERT_B_BVOOPE_CH_NUM                    (1U)
 #define ALERT_B_PBD_CH_NUM                       (1U)
-#define ALERT_B_PERSET_CH_NUM                    (1U)
 #define ALERT_B_THEAD_CH_NUM                     (1U)
 #define ALERT_B_TRFOG_CH_NUM                     (1U)
 #define ALERT_B_TTAIL_CH_NUM                     (1U)
@@ -191,7 +190,6 @@
 void    vd_g_AlertB_blgtInit(void);
 void    vd_g_AlertB_bvoopeInit(void);
 void    vd_g_AlertB_pbdInit(void);
-void    vd_g_AlertB_persetInit(void);
 void    vd_g_AlertB_theadInit(void);
 void    vd_g_AlertB_trfogInit(void);
 void    vd_g_AlertB_ttailInit(void);
@@ -233,7 +231,6 @@ extern const ST_ALERT_MTRX         st_gp_ALERT_B_AVAS_MTRX[ALERT_B_AVAS_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_B_BLGT_MTRX[ALERT_B_BLGT_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_B_BVOOPE_MTRX[ALERT_B_BVOOPE_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_B_PBD_MTRX[ALERT_B_PBD_CH_NUM];
-extern const ST_ALERT_MTRX         st_gp_ALERT_B_PERSET_MTRX[ALERT_B_PERSET_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_B_THEAD_MTRX[ALERT_B_THEAD_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_B_TRFOG_MTRX[ALERT_B_TRFOG_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_B_TTAIL_MTRX[ALERT_B_TTAIL_CH_NUM];
