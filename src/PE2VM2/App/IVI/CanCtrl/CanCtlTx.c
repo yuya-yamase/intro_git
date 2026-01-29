@@ -124,7 +124,7 @@ void            vd_g_CanCtlTx_SendHk(const U4 u4_a_IPDU_RX, U1 * u1_ap_DATA)
             u1_ap_DATA[CANCTLTC_TXBYTE0] |= (U1)(u1_t_sig << CANCTLTC_5BIT_SHIFT);
             break;
 
-        case MSG_AVN1S97_TXCH0:
+        case MSG_AVN1S73_TXCH0:
             u1_t_sig = u1_g_PictCtl_CdsizeSnd();
             u1_ap_DATA[CANCTLTC_TXBYTE6]  = u1_ap_DATA[CANCTLTC_TXBYTE6] & (U1)CANCTLTC_CDSIZE_MASK;
             u1_ap_DATA[CANCTLTC_TXBYTE6] |= (U1)(u1_t_sig << CANCTLTC_4BIT_SHIFT);

@@ -93,6 +93,7 @@ void                         vd_g_DateSIComClockDispUpdate(const U1 u1_a_VAL, co
 void                         vd_g_DateSIComCommandTx(void);
 ST_DATESI_COMMAND_DATA       st_g_DateSIComRx(void);
 void                         vd_g_DateSIComSetCmp(const U1 u1_a_RTC_UPDT, const U1 u1_a_KIND);
+void                         vd_g_DateSIComSetRtcCmp(const U1 u1_a_TIM, const U1 u1_a_CAL);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
