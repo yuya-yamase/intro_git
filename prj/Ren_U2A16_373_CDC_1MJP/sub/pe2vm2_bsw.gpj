@@ -279,8 +279,8 @@
 ../../src/PE2VM2/BSW/Communication/iVDsh/scc/ivdsh.c
 ../../src/PE2VM2/BSW/Communication/iVDsh/scc/ivdsh_fqif.c
 ###../../src/PE2VM2/BSW/Communication/oXCAN/config_U2A16_met/can_lpr_test.c
+../../src/PE2VM2/BSW/Communication/oXCAN/config_U2A16_met/oxcan_acex_cfg.c
 ../../src/PE2VM2/BSW/Communication/oXCAN/config_U2A16_met/oxcan_cfg.c
-../../src/PE2VM2/BSW/Communication/oXCAN/config_U2A16_met/oxcan_e2e_cfg.c
 ../../src/PE2VM2/BSW/Communication/oXCAN/config_U2A16_met/oxcan_rxd_cfg.c
 ../../src/PE2VM2/BSW/Communication/oXCAN/config_U2A16_met/oxcan_usrhk.c
 ../../src/PE2VM2/BSW/Communication/oXCAN/config_U2A16_met/oxcan_vct_cfg.c
@@ -364,11 +364,14 @@
 ../../src/PE2VM2/BSW/MCAL/Ren_U2Ax/Common/DIO/scc/Dio_Cfg.c
 ../../src/PE2VM2/BSW/MCAL/Ren_U2Ax/Common/DMA/scc/Dma.c
 ../../src/PE2VM2/BSW/MCAL/Ren_U2Ax/Common/DMA/scc/Dma_Cfg.c
+../../src/PE2VM2/BSW/MCAL/Ren_U2Ax/Common/DMA/scc/Dma_Desc.c
 ../../src/PE2VM2/BSW/MCAL/Ren_U2Ax/Common/DMA/scc/Dma_Irq.c
 ../../src/PE2VM2/BSW/MCAL/Ren_U2Ax/Common/DMA/scc/pil_dmac.c
+../../src/PE2VM2/BSW/MCAL/Ren_U2Ax/Common/DMA/scc/pil_dmac_desc.c
 ../../src/PE2VM2/BSW/MCAL/Ren_U2Ax/Common/DMA/scc/pil_dts.c
 ../../src/PE2VM2/BSW/MCAL/Ren_U2Ax/Common/DMA/scc/pil_intc.c
 ../../src/PE2VM2/BSW/MCAL/Ren_U2Ax/Common/DUMMY/scc/int_drv.c
+../../src/PE2VM2/BSW/MCAL/Ren_U2Ax/Common/Gpt/scc/gpt_busywait.850
 ../../src/PE2VM2/BSW/MCAL/Ren_U2Ax/Common/Gpt/scc/gpt_drv_d16.c
 ../../src/PE2VM2/BSW/MCAL/Ren_U2Ax/Common/Gpt/scc/gpt_drv_frt.c
 ../../src/PE2VM2/BSW/MCAL/Ren_U2Ax/Common/Gpt/scc/gpt_drv_j32.c
@@ -462,7 +465,6 @@
 ../../src/PE2VM2/LIB/Common/scc/bitcnt.c
 ../../src/PE2VM2/LIB/Common/scc/crc32.c
 ../../src/PE2VM2/LIB/Common/scc/fpcall_u1_and.c
-../../src/PE2VM2/LIB/Common/scc/gpt_busywait.850
 ../../src/PE2VM2/LIB/Common/scc/lsbsrch.c
 ../../src/PE2VM2/LIB/Common/scc/memcpy_u1.c
 ../../src/PE2VM2/LIB/Common/scc/memcpy_u2.c
@@ -485,7 +487,7 @@
 ../../src/PE2VM2/BSW/MCAL/Ren_U2Ax/A16_373/SECTION/config_CDC/section.ld
 
 # ----------------------------------------------------------------------------------------------------------------------------------
-# ghsprj version 1-0-0
-# Date generated: 2025/11/27 07:51:42
+# ghsprj version 1-1-0
+# Date generated: 2026/01/22 23:22:22
 # ----------------------------------------------------------------------------------------------------------------------------------
 

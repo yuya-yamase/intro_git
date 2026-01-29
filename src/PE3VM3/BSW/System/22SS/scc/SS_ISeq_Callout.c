@@ -22,6 +22,7 @@
 #include "gpt_drv_ost.h"
 #include "spi_uart.h"
 #include "wdg_drv.h"
+#include "Port.h"
 
 /* Iohw */
 #include "iohw_diflt.h"
@@ -173,6 +174,8 @@ void SS_Pm_postClockUpCallout(SS_BootType u4_BootSource)
         (void)SS_Memory_set(__ghsbegin_bsw_n_rvar_top, 0UL, (uint32)BSW_N_RVAR_SIZE);
         (void)SS_Memory_copy(__ghsbegin_bsw_n_rvar_withval_top, __ghsbegin_bsw_n_rvar_ival_top, (uint32)BSW_N_RVAR_WITHVAL_SIZE);
     }
+
+    Port_SetConfigPtr( &cstPort_Config[0] );
 
     vd_g_Gpt_OstInit();    /* call in each VM that use OSTM */
 
