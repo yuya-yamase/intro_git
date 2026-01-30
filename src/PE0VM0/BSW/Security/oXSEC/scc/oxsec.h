@@ -40,9 +40,7 @@ U1      u1_g_oXSECShtdwnOk(void);
 void    vd_g_oXSECMainPreMid(void);
 void    vd_g_oXSECMainPosMid(void);
 
-#if (OXSEC_AUB_EN_CSM == 1U)
 void    vd_g_oXSECBonKeyInit(void);
-#endif /* #if (OXSEC_AUB_EN_CSM == 1U) */
 
 #if (OXSEC_MAIN_HIGH == 1U)
 void    vd_g_oXSECMainPreHigh(void);

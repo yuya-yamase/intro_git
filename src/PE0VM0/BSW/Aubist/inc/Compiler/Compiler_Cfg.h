@@ -32,6 +32,7 @@
 #include "./Compiler_NvM_Cfg.h"
 #include "./Compiler_Mem_Cfg.h"
 #include "./Compiler_SecOC_Cfg.h"
+#include "./Compiler_IdsM_Cfg.h"
 
 #include "./Compiler_ExtDefs.h" /* SWS_COMPILER_00050 */
 

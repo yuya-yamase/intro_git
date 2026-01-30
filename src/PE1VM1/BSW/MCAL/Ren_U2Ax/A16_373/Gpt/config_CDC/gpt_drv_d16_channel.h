@@ -53,9 +53,9 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define GPT_D16_UNIT_1                           (1U)
 
-#define GPT_D16_UN_1_CH_00_BUZZER_M              (16U)  /* PWM master for signal "SG02" and "SG03"      */
-#define GPT_D16_UN_1_CH_01_BUZZER_S1             (17U)  /* PWM slave  for signal "SG02"                 */
-#define GPT_D16_UN_1_CH_02_BUZZER_S2             (18U)  /* PWM slave  for signal "SG03"                 */
+#define GPT_D16_UN_1_CH_00                       (16U)
+#define GPT_D16_UN_1_CH_01                       (17U)
+#define GPT_D16_UN_1_CH_02                       (18U)
 #define GPT_D16_UN_1_CH_03                       (19U)
 #define GPT_D16_UN_1_CH_04                       (20U)
 #define GPT_D16_UN_1_CH_05                       (21U)

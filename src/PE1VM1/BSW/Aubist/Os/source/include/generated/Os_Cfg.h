@@ -140,9 +140,9 @@
 #define AR_OS_NUM_ALARMS                                    ((uint16)0x0000U)
 #define AR_OS_NUM_OSAPPLICATIONS                            ((uint16)0x0000U)
 #define AR_OS_NUM_APPMODES                                  ((uint16)0x0001U)
-#define AR_OS_NUM_ISRS                                      ((uint16)0x0003U)
+#define AR_OS_NUM_ISRS                                      ((uint16)0x0005U)
 #define AR_OS_NUM_C1ISRS                                    ((uint16)0x0000U)
-#define AR_OS_NUM_C2ISRS                                    ((uint16)0x0003U)
+#define AR_OS_NUM_C2ISRS                                    ((uint16)0x0005U)
 #define AR_OS_NUM_IOC_COMMUNICATIONS                        ((uint16)0x0000U)
 #define AR_OS_NUM_IOC_RECEIVERS                             ((uint16)0x0000U)
 #define AR_OS_NUM_IOC_SENDERS                               ((uint16)0x0000U)
@@ -178,9 +178,11 @@
  * ISR ID
  */
 /* Category 2 ISRs */
-#define eMCOS_ISR_INTSDMAC0CH7                              ((uint16)0x0000U)
+#define eMCOS_ISR_INTSDMAC1CH0                              ((uint16)0x0000U)
 #define eMCOS_ISR_INTOSTM0TINT                              ((uint16)0x0001U)
 #define eMCOS_ISR_INTOSTM6TINT                              ((uint16)0x0002U)
+#define eMCOS_ISR_INTSDMAC1CH1                              ((uint16)0x0003U)
+#define eMCOS_ISR_INTSDMAC1CH2                              ((uint16)0x0004U)
 
 
 

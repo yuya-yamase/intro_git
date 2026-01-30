@@ -9,12 +9,11 @@ import pandas as pd
 from ruamel.yaml import YAML
 
 #バージョン
-SCRIPT_VERSION = "ghsprj version 1-1-0"
+SCRIPT_VERSION = "ghsprj version 1-0-0"
 
 #更新履歴
 '''
 1-0-0 2025/11/12 初版
-1-1-0 2025/11/21 elf生成マクロ例変更 (USB/OTAリプロ書き換えイメージ生成要件対応)
 '''
 
 _LINE_SEP_ = '# ' + '-' * 130     # 行セパレータ
@@ -38,13 +37,10 @@ template = [
 [[0,1,0,0], '    -o dst/$GPJ_NAME$.a'],
 [[1,1,1,0], ''],
 [[1,1,1,0], ''],
-[[1,0,0,0], '#    :macro=GCLI_PAR="0x003c0000 0x003fffff 0xff -start 0x003c0000 -end 0x003fffff"'],
-[[1,0,0,0], '#    :macro=GCLI_MOT="gsrec -sort -S3 -noS5 -bytes 16 -pad1"'],
-[[1,0,0,0], '#    :macro=GCLI_BIN="gmemfile -fill1"'],
-[[1,0,0,0], ''],
-[[1,0,0,0], '#    :postexec="${GCLI_MOT} ${GCLI_PAR}                     -o dst/$GPJ_NAME$_ac.mot dst/$GPJ_NAME$.elf"'],
-[[1,0,0,0], '#    :postexec="${GCLI_MOT} ${GCLI_PAR} -romaddr 0x023c0000 -o dst/$GPJ_NAME$_bd.mot dst/$GPJ_NAME$.elf"'],
-[[1,0,0,0], '#    :postexec="${GCLI_BIN} ${GCLI_PAR}                     -o dst/$GPJ_NAME$_ac.bin dst/$GPJ_NAME$.elf"'],
+[[1,0,0,0], '#    :macro=GSR_CLI="gsrec -sort -S3 -noS5 -bytes 16"'],
+[[1,0,0,0], '#    :macro=GSR_PAR="-pad1 0x003c0000 0x003fffff 0xff -start 0x003c0000 -end 0x003fffff"'],
+[[1,0,0,0], '#    :postexec="${GSR_CLI} ${GSR_PAR}                     -o dst/$GPJ_NAME$_ac.mot dst/$GPJ_NAME$.elf"'],
+[[1,0,0,0], '#    :postexec="${GSR_CLI} ${GSR_PAR} -romaddr 0x023c0000 -o dst/$GPJ_NAME$_bd.mot dst/$GPJ_NAME$.elf"'],
 [[1,0,0,0], ''],
 [[1,1,0,0], SUB_LINKER_OPT],
 [[1,1,0,1], INCLUDE_FILE],
@@ -263,4 +259,13 @@ def main(args=None) -> None:
 if __name__ == '__main__':
 
     main()
+
+
+
+
+
+
+
+
+
 

@@ -7,13 +7,10 @@ primaryTarget=v800_standalone.tgt
 
     -o dst/pe0vm0.elf
 
-    :macro=GCLI_PAR="0x00210000 0x003bffff 0xff -start 0x00210000 -end 0x003bffff"
-    :macro=GCLI_MOT="gsrec -sort -S3 -noS5 -bytes 16 -pad1"
-    :macro=GCLI_BIN="gmemfile -fill1"
-
-    :postexec="${GCLI_MOT} ${GCLI_PAR}                     -o dst/pe0vm0_ac.mot dst/pe0vm0.elf"
-    :postexec="${GCLI_MOT} ${GCLI_PAR} -romaddr 0x02210000 -o dst/pe0vm0_bd.mot dst/pe0vm0.elf"
-    :postexec="${GCLI_BIN} ${GCLI_PAR}                     -o dst/pe0vm0.bin dst/pe0vm0.elf"
+    :macro=GSR_CLI="gsrec -sort -S3 -noS5 -bytes 16"
+    :macro=GSR_PAR="-pad1 0x00210000 0x003bffff 0xff -start 0x00210000 -end 0x003bffff"
+    :postexec="${GSR_CLI} ${GSR_PAR}                     -o dst/pe0vm0_ac.mot dst/pe0vm0.elf"
+    :postexec="${GSR_CLI} ${GSR_PAR} -romaddr 0x02210000 -o dst/pe0vm0_bd.mot dst/pe0vm0.elf"
 
 # ----------------------------------------------------------------------------------------------------------------------------------
 # Subprojects : C Compiler/Assembler/Linker Options
@@ -26,7 +23,7 @@ primaryTarget=v800_standalone.tgt
 sub/pe0vm0_bsw.gpj
 
 # ----------------------------------------------------------------------------------------------------------------------------------
-# ghsprj version 1-1-0
-# Date generated: 2026/01/22 23:22:22
+# ghsprj version 1-0-0
+# Date generated: 2025/11/27 07:51:42
 # ----------------------------------------------------------------------------------------------------------------------------------
 

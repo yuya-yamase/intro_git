@@ -45,8 +45,7 @@
 typedef struct{
     volatile U2            u2_rea;
     volatile U2            u2_wri;
-    volatile U2            u2_enq;               /* number of word enqued                               */
-    volatile U2            u2_rsrvd;             /* not used/reserved for 4 byte/RAM-ECC initialization */
+    volatile U2            u2_enq;  /* number of word enqued */
 }ST_CAN_LPFQ_RWCT;
 
 typedef struct{
