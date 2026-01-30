@@ -26,6 +26,8 @@
 #define PWRCTRL_SIP_STS_STANDBY           (4U)
 #define PWRCTRL_SIP_STS_BUDET             (5U)
 #define PWRCTRL_SIP_STS_FORCEDOFF         (6U)
+#define PWRCTRL_SIP_STS_PMPSAIL_FS        (7U)
+#define PWRCTRL_SIP_STS_PMAPS_FS          (8U)
 
 /* PWMêßå‰ */
 #define     PWRCTRL_SIP_PWM_PERIOD_OFF    (0U)
@@ -63,6 +65,8 @@ void vd_g_PwrCtrlSipForcedOffSTEP2Req( void );
 void vd_g_PwrCtrlSipForcedOffSTEP4Req( void );
 void vd_g_PwrCtrlSipStandbyCancelSTEP1Req( void );
 void vd_g_PwrCtrlSipSetDDConvOff( const U1 u1_a_ddconv );
+void vd_g_PwrCtrlSipPmPsailFsReq( void );
+void vd_g_PwrCtrlSipPmaPsFsReq( void );
 
 /* íËä˙èàóù */
 void vd_g_PwrCtrlSipMainFunc( void );
