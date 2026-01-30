@@ -323,7 +323,7 @@ void    vd_g_AlertMtrxInit(void)
 /*  BEV-25   01/16/2026  KM       Update for BEV FF2. (B_PERSET)                                                                     */
 /*  BEV-26   01/23/2026  NI       Change for BEV Full_functioin2                                                                     */
 /*                                MET-D_SFTPOS-CSTD-1-00-B-C0,MET-H_SYSMAL-CSTD-2-00-C-C0                                            */
-/*                                Alert_REQ for SFTPOS AND Alert_CH for SYSMAL.                                                      */
+/*                                Change Alert_REQ for SFTPOS AND Change Alert_CH for SYSMAL.                                        */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  * YI   = Yoshiki Iwata, Denso                                                                                                    */

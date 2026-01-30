@@ -234,7 +234,7 @@ static U4      u4_s_AlertD_sftposBRsbwSrcchk(const U1 u1_a_VOM, const U4 u4_a_IG
 /*  5.5.0    11/13/2025  SH       Config BevStep3                                                                                    */
 /*  5.5.1    01/13/2026  NI       Change config for Full_Function_2                                                                  */
 /*                                MET-D_SFTPOS-CSTD-1-00-B-C0                                                                        */
-/*                                Change Name RJTB_DBL1 ÅÀ RJTB_DBL                                                                  */
+/*                                Change Name from RJTB_DBL1 to RJTB_DBL                                                             */
 /*                                                                                                                                   */
 /*  * SM   = Shingo Miyamoto, NTTD MSE                                                                                               */
 /*  * TN   = Toshiaki Nagashima, NTTD MSE                                                                                            */

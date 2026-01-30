@@ -859,7 +859,7 @@ static  void    vd_s_wChimeCfgReqDel(U4 * u4_ap_reqbit, const U1 u1_a_REQ_ID)
 /*  BEV-8      1/14/2025 JS       Change for BEV3CDCMET-2608                                                                         */
 /*  BEV-9     01/23/2026 NI       Change config for BEV Full_Function2                                                               */
 /*                                MET-D_SFTPOS-CSTD-1-00-B-C0.                                                                       */
-/*                                Change Macro name of B_RJTB_DBL1 ÅÀ B_RJTB_DBL                                                     */
+/*                                Change Name from RJTB_DBL1 to RJTB_DBL                                                             */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
 /*  * ToN  = Toshiharu Nagata, Denso Techno                                                                                          */
