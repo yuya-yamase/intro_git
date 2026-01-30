@@ -8,9 +8,9 @@
 MEMORY {
 // Address Space:Code flash (User Area 3) (Bank D)
     vector_core         : ORIGIN = 0x005F0000, LENGTH = 0x000200                  //LENGTH:0.5KB
-    rom_memory          : ORIGIN = 0x005F0200, LENGTH = 0x1CFBE0                  //LENGTH:1854.97KB(2112KB-0.5KB-256K(SEC)-0.53125KB(RPRG))
+    rom_memory          : ORIGIN = 0x005F0200, LENGTH = 0x1CFA00                  //LENGTH:1854.5KB(2112KB-0.5KB-256K(SEC)-1KB(RPRG))
 
-// 0x007BFDE0 - 0x007BFFFF: reserved for RPRG section.
+// 0x007BFC00 - 0x007BFFFF: reserved for RPRG section.
 // 0x007C0000 - 0x007FFFFF: reserved for SEC section.
 
 // Address Space:Local RAM (CPU3)
@@ -44,6 +44,7 @@ DEFAULTS {
 //1byte (0xFE430000 - 0xFE430100)
 //2byte (0xFE430100 - 0xFE430300)
 //4byte (0xFE430300 - 0xFE430700)
+    SHARE_PORT_CONF_ADDR        = 0xFE430300
 //Struct
     SHARE_DMA_NOTICATION_ADDR   = 0xFE431200
     SHARE_SPI_MODEA_CHANNELDATA_ADDR   = 0xFE431300

@@ -367,7 +367,7 @@ void	Pil_Dmac_SetTransModeTwoStepReload( uint8 t_u1ChannelID, uint8 t_u1DmaType,
 	uint16		t_u2DesCnt;			/* Descriptor counters */
 
 	t_pstRegDmac = (volatile Reg_Dma_Type*)cstPil_Dmac_Reg[t_u1DmaType];
-	t_pstRegDmacDesRAM = (volatile Reg_Dram_Type*)cstPil_DmacDesRAM_Reg[t_u1DmaType];		/* Descriptor RAM */
+	t_pstRegDmacDesRAM = (volatile Reg_Dram_Type*)cstPil_DmacDesRAM_Reg[t_u1DmaType];		/* Discriptor RAM */
 
 	/* DI_ALL()";" */ /* No interrupts are required because there is no use case for calling Enable, SetInterrupt, this function */
 	                /* from a high-priority task during SetTransMode for the same DMAC channel.								   */

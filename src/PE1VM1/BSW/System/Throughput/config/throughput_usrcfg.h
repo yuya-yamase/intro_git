@@ -22,25 +22,27 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define THRPTM_NUM_IRQ_CH                        (8U)
+#define THRPTM_NUM_IRQ_CH                        (10U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* eMCOS Isr */
-#define THRPTM_TASK_ISR_INTSDMAC0CH7             (0U)
-#define THRPTM_TASK_ISR_INTGTMA0TIM32            (1U)
-#define THRPTM_TASK_ISR_INTGTMA0MCS14            (2U)
-#define THRPTM_TASK_ISR_INTOSTM0TINT             (3U)
-#define THRPTM_TASK_ISR_INTOSTM6TINT             (4U)
+#define THRPTM_TASK_ISR_INTSDMAC1CH0             (0U)
+#define THRPTM_TASK_ISR_INTSDMAC1CH1             (1U)
+#define THRPTM_TASK_ISR_INTSDMAC1CH2             (2U)
+#define THRPTM_TASK_ISR_INTGTMA0TIM32            (3U)
+#define THRPTM_TASK_ISR_INTGTMA0MCS14            (4U)
+#define THRPTM_TASK_ISR_INTOSTM0TINT             (5U)
+#define THRPTM_TASK_ISR_INTOSTM6TINT             (6U)
 
 /* eMCOS Task */
-#define THRPTM_TASK_EMCOS_TASK_IDLE              (5U)
-#define THRPTM_TASK_EMCOS_TASK_HIGH              (6U)
-#define THRPTM_TASK_EMCOS_TASK_MEDIUM            (7U)
+#define THRPTM_TASK_EMCOS_TASK_IDLE              (7U)
+#define THRPTM_TASK_EMCOS_TASK_HIGH              (8U)
+#define THRPTM_TASK_EMCOS_TASK_MEDIUM            (9U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* Main Task */
-#define THRPTM_TASK_SCHDLR_MAIN_RUN_CHK          (8U)     /* u1_g_SchdlrCfgMainRunnablechk     */
-#define THRPTM_TASK_SCHDLR_MAIN_STA              (9U)     /* vd_g_SchdlrCfgMainStart           */
+#define THRPTM_TASK_SCHDLR_MAIN_RUN_CHK          (10U)     /* u1_g_SchdlrCfgMainRunnablechk     */
+#define THRPTM_TASK_SCHDLR_MAIN_STA              (11U)     /* vd_g_SchdlrCfgMainStart           */
 
 
 
@@ -50,31 +52,31 @@
 
 
 
-#define THRPTM_TASK_SCHDLR_RGLR_1ST              (10U)     /* vd_s_SchdlrCfgWdgTimRestart       */
-                                              /* (11U)        vd_g_iVDshMainReaTask             */
-                                              /* (12U)        vd_g_oXCANMainPreTask             */
-                                              /* (13U)        vd_g_VehopemdMainTask             */
-                                              /* (14U)        vd_g_Nvmc_Task                    */
-                                              /* (15U)        vd_g_Stub10msTask                 */
-                                              /* (16U)        vd_g_Nvmc_PeriodicTask            */
-                                              /* (17U)        vd_g_oXCANMainPostTask            */
-                                              /* (18U)        vd_g_iVDshMainWriTask             */
-                                              /* (19U)        vd_g_Rim_Task                     */
-                                              /* (20U)        vd_g_RunMMainTask                 */
-                                              /* (21U)        SS_Mm_mainFunction                */
+#define THRPTM_TASK_SCHDLR_RGLR_1ST              (12U)     /* vd_s_SchdlrCfgWdgTimRestart       */
+                                              /* (13U)        vd_g_iVDshMainReaTask             */
+                                              /* (14U)        vd_g_oXCANMainPreTask             */
+                                              /* (15U)        vd_g_VehopemdMainTask             */
+                                              /* (16U)        vd_g_Nvmc_Task                    */
+                                              /* (17U)        vd_g_Stub10msTask                 */
+                                              /* (18U)        vd_g_Nvmc_PeriodicTask            */
+                                              /* (19U)        vd_g_oXCANMainPostTask            */
+                                              /* (20U)        vd_g_iVDshMainWriTask             */
+                                              /* (21U)        vd_g_Rim_Task                     */
+                                              /* (22U)        vd_g_RunMMainTask                 */
+                                              /* (23U)        SS_Mm_mainFunction                */
 
-#define THRPTM_TASK_SCHDLR_MAIN_FIN              (22U)     /* vd_g_SchdlrCfgMainFinishhk        */
+#define THRPTM_TASK_SCHDLR_MAIN_FIN              (24U)     /* vd_g_SchdlrCfgMainFinishhk        */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* Idle Task */
 /* #define THRPTM_TASK_SCHDLR_IDLE_STA           (xxU)        vd_g_SchdlrCfgIdleStart           */
 
-#define THRPTM_TASK_SCHDLR_IDLE_1ST              (23U)     /* vd_s_SchdlrCfgIdleChkptRchd       */
+#define THRPTM_TASK_SCHDLR_IDLE_1ST              (25U)     /* vd_s_SchdlrCfgIdleChkptRchd       */
 
 /* #define THRPTM_TASK_SCHDLR_IDLE_FIN           (xxU)        vd_g_SchdlrCfgIdleFinish          */
-#define THRPTM_TASK_SCHDLR_SHTDWN_CHK            (24U)     /* u1_g_SchdlrCfgShtdwnchk           */
+#define THRPTM_TASK_SCHDLR_SHTDWN_CHK            (26U)     /* u1_g_SchdlrCfgShtdwnchk           */
 
-#define THRPTM_NUM_TASK                          (25U)
+#define THRPTM_NUM_TASK                          (27U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define THRPTM_NUM_CSC                           (1U)

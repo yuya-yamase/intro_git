@@ -22,7 +22,6 @@
 #include "aip_common.h"
 #include "oxcan.h"
 #include "oxcan_usrhk.h"
-#include "oxcan_acex_def.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* #include "tydocan_dtc_nmgbl.h" */
@@ -42,10 +41,6 @@
 #define OXCAN_E2E_NUM_REC                        (6U)
 #define OXCAN_E2E_REC_MIN                        (MSG_ADC1S14_RXCH0)
 #define OXCAN_E2E_REC_MAX                        (MSG_PDS1S01_RXCH0)
-
-/* #define OXCAN_OMA_NUM_REC                      */  /* It is defined in oxcan_acex_def.h."  */
-#define OXCAN_OMA_REC_MIN                        (MSG_BDC1S13_RXCH0)
-#define OXCAN_OMA_REC_MAX                        (MSG_PCN1S01_RXCH0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -67,23 +62,17 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* Transmission */
 #if (OXCAN_E2E_NUM_TRA > 0U)
-extern const U2                           u2_gp_OXCAN_E2E_TRA_BY_IPDU[];
+extern const U2                           u2_gp_OXCAN_E2E_TRA_BY_PDU[];
 extern const U1                           u1_gp_OXCAN_E2E_TRA_LEN[OXCAN_E2E_NUM_TRA];
 #endif /* #if (OXCAN_E2E_NUM_TRA > 0U) */
 
 /* Reception   */
 #if (OXCAN_E2E_NUM_REC > 0U)
-extern const U2                           u2_gp_OXCAN_E2E_REC_BY_IPDU[];
+extern const U2                           u2_gp_OXCAN_E2E_REC_BY_PDU[];
 extern const U1                           u1_gp_OXCAN_E2E_REC_LEN[OXCAN_E2E_NUM_REC];
 #endif /* #if (OXCAN_E2E_NUM_REC > 0U) */
 
 #endif      /* OXCAN_AUBIF_CFG_H */
-
-/* OMA = On-Board MAC Authentication */
-#if (OXCAN_OMA_NUM_REC > 0U)
-extern const U2                           u2_gp_OXCAN_OMA_REC_BY_IPDU[];
-extern const U1                           u1_gp_OXCAN_OMA_REC_LEN[OXCAN_OMA_NUM_REC];
-#endif /* #if (OXCAN_OMA_NUM_REC > 0U) */
 
 /*===================================================================================================================================*/
 /*                                                                                                                                   */

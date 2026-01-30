@@ -25,9 +25,6 @@
     :postexec="gsrec -S3 -pad1 0x007BFE00 0x007BFFFF 0xff -start 0x007BFE00 -end 0x007BFFFF -bytes 16                     ../out/ReprogAPL.elf -o ../out/FpSig.run"
     :postexec="gsrec -S3 -pad1 0x007BFE00 0x007BFFFF 0xff -start 0x007BFE00 -end 0x007BFFFF -bytes 16 -romaddr 0x027BFE00 ../out/ReprogAPL.elf -o ../out/FpSig_B.run"
 
-    :postexec="gmemfile -fill2 0x007bfde0 0x007bfdff 0x5aa5 -start 0x007bfde0 -end 0x007bfdff  ../out/ReprogAPL.elf -o ../out/Info_Full.bin"
-    :postexec="gmemfile -fill1 0x007bfe00 0x007bffff 0xff   -start 0x007bfe00 -end 0x007bffff  ../out/ReprogAPL.elf -o ../out/FpSig.bin"
-
 ../../cfg/APL_Cfg.c
 
 ./Section.ld

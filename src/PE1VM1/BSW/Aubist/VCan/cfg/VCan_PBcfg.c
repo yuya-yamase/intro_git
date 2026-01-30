@@ -65,9 +65,9 @@ BswConst BswU1 bsw_vcan_stVirtualHohTbl[ BSW_VCAN_VHOHNUM ] =
     ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [1] */
     ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [2] */
     ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [3] */
-  /*--- VM Transmission(VHTH) -----------------------------*/
     ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [4] */
     ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [5] */
+  /*--- VM Transmission(VHTH) -----------------------------*/
     ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [6] */
     ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [7] */
     ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [8] */
@@ -87,6 +87,8 @@ BswConst BswU1 bsw_vcan_stVirtualHohTbl[ BSW_VCAN_VHOHNUM ] =
     ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [22] */
     ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [23] */
     ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [24] */
+    ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [25] */
+    ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [26] */
 };
 
 /************************************************/
@@ -101,6 +103,8 @@ BswConst Bsw_VCan_RxTblType bsw_vcan_stRxMessageTbl[ BSW_VCAN_VHRHNUM ] =
     ,{ 0x00000400UL, 0xBFFFFF00UL }   /* [1] */
     ,{ 0x40000500UL, 0xFFFFFF00UL }   /* [2] */
     ,{ 0x40000600UL, 0xFFFFFF00UL }   /* [3] */
+    ,{ 0x98DA17E0UL, 0xBFFFFFFEUL }   /* [4] */
+    ,{ 0x98DBEFE0UL, 0xBFFFFFFFUL }   /* [5] */
 };
 #endif /* ( BSW_VCAN_VHRHNUM != 0U ) */
 

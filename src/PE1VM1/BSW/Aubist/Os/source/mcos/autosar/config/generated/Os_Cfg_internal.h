@@ -39,9 +39,11 @@ extern TASK(eMCOS_TASK_Medium);
 
 #define OS_START_SEC_CODE_GLOBAL
 #include "Os_MemMap.h"
-extern ISR(eMCOS_ISR_INTSDMAC0CH7);
+extern ISR(eMCOS_ISR_INTSDMAC1CH0);
 extern ISR(eMCOS_ISR_INTOSTM0TINT);
 extern ISR(eMCOS_ISR_INTOSTM6TINT);
+extern ISR(eMCOS_ISR_INTSDMAC1CH1);
+extern ISR(eMCOS_ISR_INTSDMAC1CH2);
 #define OS_STOP_SEC_CODE_GLOBAL
 #include "Os_MemMap.h"
 
@@ -55,7 +57,7 @@ extern ISR(eMCOS_ISR_INTOSTM6TINT);
 #define OS_START_SEC_VAR_LOCAL0_NO_INIT_32
 #include "Os_MemMap.h"
 
-extern ar_isrcb_t ar_isrcb_eMCOS_ISR_INTSDMAC0CH7;
+extern ar_isrcb_t ar_isrcb_eMCOS_ISR_INTSDMAC1CH0;
 
 #define OS_STOP_SEC_VAR_LOCAL0_NO_INIT_32
 #include "Os_MemMap.h"
@@ -74,6 +76,24 @@ extern ar_isrcb_t ar_isrcb_eMCOS_ISR_INTOSTM0TINT;
 #include "Os_MemMap.h"
 
 extern ar_isrcb_t ar_isrcb_eMCOS_ISR_INTOSTM6TINT;
+
+#define OS_STOP_SEC_VAR_LOCAL0_NO_INIT_32
+#include "Os_MemMap.h"
+
+
+#define OS_START_SEC_VAR_LOCAL0_NO_INIT_32
+#include "Os_MemMap.h"
+
+extern ar_isrcb_t ar_isrcb_eMCOS_ISR_INTSDMAC1CH1;
+
+#define OS_STOP_SEC_VAR_LOCAL0_NO_INIT_32
+#include "Os_MemMap.h"
+
+
+#define OS_START_SEC_VAR_LOCAL0_NO_INIT_32
+#include "Os_MemMap.h"
+
+extern ar_isrcb_t ar_isrcb_eMCOS_ISR_INTSDMAC1CH2;
 
 #define OS_STOP_SEC_VAR_LOCAL0_NO_INIT_32
 #include "Os_MemMap.h"

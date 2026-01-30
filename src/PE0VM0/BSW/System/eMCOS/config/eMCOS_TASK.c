@@ -23,7 +23,6 @@
 #include "run_m.h"
 
 #include "oxcan.h"
-#include "oxdocan.h"
 #include "oxsec.h"
 
 #if ((defined(__AIP_THROUGHPUT__)) && (__AIP_THROUGHPUT__ == 1))

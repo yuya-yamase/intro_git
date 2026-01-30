@@ -20,11 +20,9 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "oxsec_cfg_private.h"
 
-#if (OXSEC_AUB_EN_CSM == 1U)
 #include "Csm.h"
 #include "CryIf.h"
 #include "SchM_Csm.h"
-#endif /* #if (OXSEC_AUB_EN_CSM == 1U) */
 
 #if (OXSEC_AUB_EN_CRY_SW == 1U)
 #include "Crypto_83_sw.h"
@@ -42,6 +40,7 @@
 #if (OXSEC_AUB_EN_IDSM == 1U)
 #include "IdsM.h"
 #include "SchM_IdsM.h"
+#include "oxcan.h"
 #endif /* #if (OXSEC_AUB_EN_IDSM == 1U) */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -77,12 +76,11 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if (OXSEC_AUB_EN_SEV_HB == 1U)
-#define OXSEC_MAIN_TICK_MID         (5U)     /* Unit: ms */
-#define OXSEC_HEARTBEAT_CYCLIC_TIME (10000U) /* Heartbeat Cyclic Transmission Time. Unit:ms.                                         */
-                                             /* Set in multiples of OXSEC_MAIN_TICK_MID. If set to 0, transmission is disabled.      */
-#define OXSEC_HEARTBEAT_FIRST_DELAY (10000U) /* Heartbeat first transmission time. Unit:ms. Set in multiples of OXSEC_MAIN_TICK_MID */
-#endif /* #if (OXSEC_AUB_EN_SEV_HB == 1U) */
+#if (OXSEC_AUB_EN_IDSM == 1U)
+#define OXSEC_MAIN_TICK_MID         (5U)
+#define OXSEC_HEARTBEAT_CYCLIC_TIME              (10000U) /* Heartbeat Cyclic Transmission Time.  Unit: ms */
+#define OXSEC_HEARTBEAT_FIRST_DELAY              (10000U) /* Heartbeat first transmission time.  Unit: ms */
+#endif /* #if (OXSEC_AUB_EN_IDSM == 1U) */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -101,19 +99,15 @@ static U1               u1_s_oxsec_shtdwn_ok;
 #if (OXSEC_AUB_EN_SECOC == 1U)
 static U4               u4_s_oxsec_tripcnt                  __attribute__((section(".bss_BACK_BSW")));
 #endif /* #if (OXSEC_AUB_EN_SECOC == 1U) */
-
-#if (OXSEC_AUB_EN_SEV_HB == 1U)
-static U4               u4_s_oxsec_tim_elpsd;
-static U4               u4_s_oxsec_hb_intvl;
-#endif /* #if (OXSEC_AUB_EN_SEV_HB == 1U) */
-
+#if (OXSEC_AUB_EN_IDSM == 1U)
+static U2               u2_s_oxsec_tim_elpsd;
+static U2               u2_s_oxsec_hb_intvl;
+#endif /* #if (OXSEC_AUB_EN_IDSM == 1U) */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static void    vd_s_oXSECReset(void);
-#if (OXSEC_AUB_EN_CSM == 1U)
 static U4      u4_s_oXSECCsmMaEchk(void);
-#endif /* #if (OXSEC_AUB_EN_CSM == 1U) */
 
 #if (OXSEC_AUB_EN_CRY_SO == 1U)
 static U4      u4_s_oXSECCrySoMaEchk(void);
@@ -124,43 +118,42 @@ static U4      u4_s_oXSECSecOCMaEchk(void);
 static void    vd_s_oXSECSecOCFvSet(void);
 #endif /* #if (OXSEC_AUB_EN_SECOC == 1U) */
 
-#if (OXSEC_AUB_EN_SEV_HB == 1U)
+#if (OXSEC_AUB_EN_IDSM == 1U)
 static void    vd_s_oXCEC_Idsm_Heartbeat(void);
-#endif /* #if (OXSEC_AUB_EN_SEV_HB == 1U) */
+#endif /* #if (OXSEC_AUB_EN_IDSM == 1U) */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if (OXSEC_AUB_EN_CSM == 1U)
 /* Key data(Concatenation of M1, M2, and M3) */
-/* Authentication key: MASTER_ECU_KEY(1)ï¼š00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 */
-/* Registration key:   MASTER_ECU_KEY(1)ï¼š11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 */
-/* FID(Flag)ï¼š- */
-/* UIDï¼š00000000:00000000:00000000:000000 */
-/* Cidï¼š1 */
+/* Authentication key: MASTER_ECU_KEY(1)F00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 */
+/* Registration key:   MASTER_ECU_KEY(1)F11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 */
+/* FID(Flag)F- */
+/* UIDF00000000:00000000:00000000:000000 */
+/* CidF1 */
 const U1  u1_g_MasterEcuKey[OXSEC_KEY_DATASIZE] = {
-(U1)0x00, (U1)0x00, (U1)0x00, (U1)0x00, (U1)0x00, (U1)0x00, (U1)0x00, (U1)0x00, (U1)0x00, (U1)0x00, (U1)0x00, (U1)0x00, (U1)0x00, (U1)0x00, (U1)0x00, (U1)0x11,
-(U1)0xff, (U1)0x8b, (U1)0x75, (U1)0xf7, (U1)0x3e, (U1)0x6a, (U1)0xd5, (U1)0xa1, (U1)0x72, (U1)0x94, (U1)0x23, (U1)0xc6, (U1)0xe9, (U1)0x31, (U1)0x1f, (U1)0x1a,
-(U1)0x81, (U1)0xb9, (U1)0xf9, (U1)0x69, (U1)0xd4, (U1)0x03, (U1)0x6a, (U1)0x5b, (U1)0x22, (U1)0x1e, (U1)0x76, (U1)0xfa, (U1)0x91, (U1)0x38, (U1)0xae, (U1)0x21,
-(U1)0xa2, (U1)0xc2, (U1)0xe0, (U1)0x11, (U1)0xdd, (U1)0xc4, (U1)0x27, (U1)0x8f, (U1)0x61, (U1)0xaa, (U1)0xea, (U1)0xcf, (U1)0xb9, (U1)0x6e, (U1)0xaa, (U1)0xd9
+0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x11,
+0xff, 0x8b, 0x75, 0xf7, 0x3e, 0x6a, 0xd5, 0xa1, 0x72, 0x94, 0x23, 0xc6, 0xe9, 0x31, 0x1f, 0x1a,
+0x81, 0xb9, 0xf9, 0x69, 0xd4, 0x03, 0x6a, 0x5b, 0x22, 0x1e, 0x76, 0xfa, 0x91, 0x38, 0xae, 0x21,
+0xa2, 0xc2, 0xe0, 0x11, 0xdd, 0xc4, 0x27, 0x8f, 0x61, 0xaa, 0xea, 0xcf, 0xb9, 0x6e, 0xaa, 0xd9
 };
-/* Authentication key:  MASTER_ECU_KEY(1)ï¼š11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 */
-/* Registration key:    KEY_1(4)         ï¼š11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 */
-/* FID(Flag)ï¼šKEY_USAGE */
-/* UIDï¼š00000000:00000000:00000000:000000 */
-/* Cidï¼š1 */
+/* Authentication key:  MASTER_ECU_KEY(1)F11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 */
+/* Registration key:    KEY_1(4)         F11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 */
+/* FID(Flag)FKEY_USAGE */
+/* UIDF00000000:00000000:00000000:000000 */
+/* CidF1 */
 const U1  u1_g_SafetyMACkey[OXSEC_KEY_DATASIZE] = {
-(U1)0x00, (U1)0x00, (U1)0x00, (U1)0x00, (U1)0x00, (U1)0x00, (U1)0x00, (U1)0x00, (U1)0x00, (U1)0x00, (U1)0x00, (U1)0x00, (U1)0x00, (U1)0x00, (U1)0x00, (U1)0x41,
-(U1)0xb7, (U1)0x93, (U1)0x65, (U1)0xde, (U1)0x83, (U1)0xb9, (U1)0xb4, (U1)0x78, (U1)0xbd, (U1)0xf5, (U1)0x28, (U1)0xb0, (U1)0x19, (U1)0x6a, (U1)0x88, (U1)0x71,
-(U1)0x03, (U1)0x91, (U1)0xcb, (U1)0x95, (U1)0xa1, (U1)0xb9, (U1)0x13, (U1)0x12, (U1)0xe9, (U1)0x9a, (U1)0x03, (U1)0x1a, (U1)0x61, (U1)0x45, (U1)0xb0, (U1)0x04,
-(U1)0x86, (U1)0xcf, (U1)0x0d, (U1)0x0c, (U1)0x00, (U1)0x53, (U1)0x25, (U1)0x6c, (U1)0x16, (U1)0x25, (U1)0xb3, (U1)0x04, (U1)0x61, (U1)0x03, (U1)0x55, (U1)0x00
+0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x41,
+0xb7, 0x93, 0x65, 0xde, 0x83, 0xb9, 0xb4, 0x78, 0xbd, 0xf5, 0x28, 0xb0, 0x19, 0x6a, 0x88, 0x71,
+0x03, 0x91, 0xcb, 0x95, 0xa1, 0xb9, 0x13, 0x12, 0xe9, 0x9a, 0x03, 0x1a, 0x61, 0x45, 0xb0, 0x04,
+0x86, 0xcf, 0x0d, 0x0c, 0x00, 0x53, 0x25, 0x6c, 0x16, 0x25, 0xb3, 0x04, 0x61, 0x03, 0x55, 0x00
 };
 
 const ST_OXSEC_KEY_IF            st_gp_OXSEC_KEY_IF_CFG[] = {
-/*   u4_Crypto_keyId                                           u4_KeyId                          u4_KeyElementId           u1_ap_KeyPtr              u4_KeyLength           */
-    {(U4)CryptoConf_CryptoKey_CryptoKey_MASTER_ECU_KEY,        (U4)CsmConf_CsmKey_MasterEcuKey,  (U4)CRYPTO_KE_MAC_KEY,    &u1_g_MasterEcuKey[0],    (U4)OXSEC_KEY_DATASIZE},
-    {(U4)CryptoConf_CryptoKey_CryptoKey_KeyVerify_SecOC_Mac,   (U4)CsmConf_CsmKey_MacKey,        (U4)CRYPTO_KE_MAC_KEY,    &u1_g_SafetyMACkey[0],    (U4)OXSEC_KEY_DATASIZE}
+/*   u4_Crypto_keyId                                       u4_KeyId                      u4_KeyElementId       u1_ap_KeyPtr              u4_KeyLength */
+    {CryptoConf_CryptoKey_CryptoKey_MASTER_ECU_KEY,        CsmConf_CsmKey_MasterEcuKey,  CRYPTO_KE_MAC_KEY,    &u1_g_MasterEcuKey[0],    OXSEC_KEY_DATASIZE},
+    {CryptoConf_CryptoKey_CryptoKey_KeyVerify_SecOC_Mac,   CsmConf_CsmKey_MacKey,        CRYPTO_KE_MAC_KEY,    &u1_g_SafetyMACkey[0],    OXSEC_KEY_DATASIZE}
 };
-#endif /* #if (OXSEC_AUB_EN_CSM == 1U) */
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -182,10 +175,8 @@ void    vd_g_oXSECInit(void)
     vd_g_oXSECCryHaInit();
 #endif /* #if (OXSEC_AUB_EN_CRY_HA == 1U) */
 
-#if (OXSEC_AUB_EN_CSM == 1U)
     CryIf_Init(NULL_PTR);
     Csm_Init(NULL_PTR);
-#endif /* #if (OXSEC_AUB_EN_CSM == 1U) */
 
 #if (OXSEC_AUB_EN_SECOC == 1U)
     SecOC_Init(NULL_PTR);         /* ./inc/Compiler.h:52:#define NULL_PTR            ((void *)0).. */
@@ -194,13 +185,9 @@ void    vd_g_oXSECInit(void)
 
 #if (OXSEC_AUB_EN_IDSM == 1U)
     IdsM_Init(NULL_PTR);
+    u2_s_oxsec_tim_elpsd = (U2)0U;
+    u2_s_oxsec_hb_intvl  = (U2)((U2)OXSEC_HEARTBEAT_FIRST_DELAY / (U2)OXSEC_MAIN_TICK_MID);
 #endif /* #if (OXSEC_AUB_EN_IDSM == 1U) */
-
-#if (OXSEC_AUB_EN_SEV_HB == 1U)
-    u4_s_oxsec_tim_elpsd = (U4)0U;
-    u4_s_oxsec_hb_intvl  = (U4)((U4)OXSEC_HEARTBEAT_FIRST_DELAY / (U4)OXSEC_MAIN_TICK_MID);
-#endif /* #if (OXSEC_AUB_EN_SEV_HB == 1U) */
-
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_oXSECDeInit(void)                                                                                                   */
@@ -259,7 +246,7 @@ void    vd_g_oXSECMainPreMid(void)
 /*===================================================================================================================================*/
 void    vd_g_oXSECMainPosMid(void)
 {
-    U4                  u4_t_mae;
+    U2                  u4_t_mae;
     U1                  u1_t_shtdwn_ok;
 
 /* --------------------------------------------------------------------------------------------------------------------------------- */
@@ -275,36 +262,22 @@ void    vd_g_oXSECMainPosMid(void)
 #endif /* #if (OXSEC_MAIN_HIGH == 1U) */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 
-    u4_t_mae = (U4)0U;
-
 #if (OXSEC_AUB_EN_CRY_SO == 1U)
     Crypto_83_sw_Ab_MainFunctionIn();
 #endif  /* #if (OXSEC_AUB_EN_CRY_SO == 1U) */
 
-#if (OXSEC_AUB_EN_SEV_HB == 1U)
-    vd_s_oXCEC_Idsm_Heartbeat();
-#endif  /* #if (OXSEC_AUB_EN_SEV_HB == 1U) */
-
 #if (OXSEC_AUB_EN_IDSM == 1U)
+    vd_s_oXCEC_Idsm_Heartbeat();
     IdsM_MainFunction();
     IdsM_Ab_MainFunctionTx();
 #endif  /* #if (OXSEC_AUB_EN_IDSM == 1U) */
 
-#if (OXSEC_AUB_EN_CSM == 1U)
     u4_t_mae  = u4_s_oXSECCsmMaEchk();
-#endif /* #if (OXSEC_AUB_EN_CSM == 1U) */
-
-#if (OXSEC_AUB_EN_SECOC == 1U)
     u4_t_mae |= u4_s_oXSECSecOCMaEchk();
-#endif  /* #if (OXSEC_AUB_EN_SECOC == 1U) */
-
 #if (OXSEC_AUB_EN_CRY_SO == 1U)
     u4_t_mae |= u4_s_oXSECCrySoMaEchk();
 #endif /* #if (OXSEC_AUB_EN_CRY_SO == 1U) */
-
-#if (OXSEC_AUB_EN_CRY_HA == 1U)
     u4_t_mae |= u4_g_oXSECCryHaMaEchk();
-#endif /* #if (OXSEC_AUB_EN_CRY_HA == 1U) */
 
     u1_t_shtdwn_ok = (U1)TRUE;
     if(u4_t_mae >= (U4)OXSEC_ERR_RES_CSM){
@@ -340,10 +313,7 @@ void    vd_g_oXSECMainPreHigh(void)
     vd_g_oXSECCryHaMainOut();
 #endif /* #if (OXSEC_AUB_EN_CRY_HA == 1U) */
 
-#if (OXSEC_AUB_EN_CSM == 1U)
     Csm_MainFunction();
-#endif /* #if (OXSEC_AUB_EN_CSM == 1U) */
-
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_oXSECMainPosHigh(void)                                                                                              */
@@ -361,7 +331,6 @@ void    vd_g_oXSECMainPosHigh(void)
 
 #endif /* #if (OXSEC_MAIN_HIGH == 1U) */
 
-#if (OXSEC_AUB_EN_CSM == 1U)
 /*===================================================================================================================================*/
 /*  static U4      u4_s_oXSECCsmMaEchk(void)                                                                                         */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
@@ -400,7 +369,6 @@ static U4      u4_s_oXSECCsmMaEchk(void)
     return(u4_t_chk);
 }
 /*===================================================================================================================================*/
-#endif /* #if (OXSEC_AUB_EN_CSM == 1U) */
 
 #if (OXSEC_AUB_EN_SECOC == 1U)
 
@@ -487,10 +455,8 @@ static void    vd_s_oXSECReset(void)
     vd_g_oXSECCryHaInit();
 #endif /* #if (OXSEC_AUB_EN_CRY_HA == 1U) */
 
-#if (OXSEC_AUB_EN_CSM == 1U)
     CryIf_Init(NULL_PTR);
     Csm_Init(NULL_PTR);
-#endif /* #if (OXSEC_AUB_EN_CSM == 1U) */
 
 #if (OXSEC_AUB_EN_SECOC == 1U)
     SecOC_Init(NULL_PTR);
@@ -559,7 +525,6 @@ static void    vd_s_oXSECSecOCFvSet(void)
 }
 #endif  /* #if (OXSEC_AUB_EN_SECOC == 1U) */
 
-#if (OXSEC_AUB_EN_CSM == 1U)
 /*===================================================================================================================================*/
 /*  void    vd_g_oXSECBonKeyInit(void)                                                                                               */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
@@ -575,7 +540,7 @@ void    vd_g_oXSECBonKeyInit(void)
 
        u1_t_ret = u1_g_oXSECCryHaKeyGetValid(st_gp_OXSEC_KEY_IF_CFG[u4_t_loop_cnt].u4_Crypto_keyId);
 
-       if( u1_t_ret == (U1)FALSE){
+       if( u1_t_ret == FALSE){
             u1_t_ret = Csm_KeyElementSet (st_gp_OXSEC_KEY_IF_CFG[u4_t_loop_cnt].u4_KeyId,
                                         st_gp_OXSEC_KEY_IF_CFG[u4_t_loop_cnt].u4_KeyElementId,
                                         st_gp_OXSEC_KEY_IF_CFG[u4_t_loop_cnt].u1_ap_KeyPtr,
@@ -590,10 +555,8 @@ void    vd_g_oXSECBonKeyInit(void)
     }
     return;
 }
-#endif /* #if (OXSEC_AUB_EN_CSM == 1U) */
 
-
-#if (OXSEC_AUB_EN_SEV_HB == 1U)
+#if (OXSEC_AUB_EN_IDSM == 1U)
 /*===================================================================================================================================*/
 /*  static void    vd_s_oXCEC_Idsm_Heartbeat(void)                                                                                   */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
@@ -602,19 +565,23 @@ void    vd_g_oXSECBonKeyInit(void)
 /*===================================================================================================================================*/
 static void    vd_s_oXCEC_Idsm_Heartbeat(void)
 {
-
-#if (OXSEC_HEARTBEAT_CYCLIC_TIME > 0U)
-    u4_s_oxsec_tim_elpsd++;
-    if(u4_s_oxsec_tim_elpsd >= u4_s_oxsec_hb_intvl){
-        IdsM_SetSecurityEvent((IdsM_SecurityEventIdType)IdsMConf_IdsMEvent_Event_C500);
-        u4_s_oxsec_tim_elpsd = (U4)0U;
-        u4_s_oxsec_hb_intvl  = (U4)((U4)OXSEC_HEARTBEAT_CYCLIC_TIME / (U4)OXSEC_MAIN_TICK_MID);
+    U4    u4_t_sys_act;
+    
+    u4_t_sys_act = u4_g_oXCANSysActvtd();
+    
+    if((u4_t_sys_act & OXCAN_SYS_VIR_0) == OXCAN_SYS_VIR_0){
+        u2_s_oxsec_tim_elpsd++;
+        if(u2_s_oxsec_tim_elpsd >= u2_s_oxsec_hb_intvl){
+            IdsM_SetSecurityEvent((IdsM_SecurityEventIdType)IdsMConf_IdsMEvent_RkIdsMEvent_C500);
+            u2_s_oxsec_tim_elpsd = (U2)0U;
+            u2_s_oxsec_hb_intvl  = (U2)((U2)OXSEC_HEARTBEAT_CYCLIC_TIME / (U2)OXSEC_MAIN_TICK_MID);
+        }
+    }else{
+        u2_s_oxsec_tim_elpsd = (U2)0U;
     }
-    return;
-#endif /* #if (OXSEC_HEARTBEAT_CYCLIC_TIME > 0U) */
 
 }
-#endif /* #if (OXSEC_AUB_EN_SEV_HB == 1U) */
+#endif /* #if (OXSEC_AUB_EN_IDSM == 1U) */
 
 
 /*===================================================================================================================================*/
