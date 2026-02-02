@@ -266,7 +266,6 @@ static inline void    vd_s_XSpiCfgTxVariation(     U4 * u4_ap_pdu_tx) {
     u4_ap_pdu_tx[11] |= (U4)TRUE << 3;                                 /*  SYS_DMTOTM               */ /* BEV SV1 provisionally */
     u4_ap_pdu_tx[11] |= (U4)TRUE << 4;                                 /*  SYS_DMTOSP               */ /* BEV SV1 provisionally */
     u4_ap_pdu_tx[11] |= (U4)TRUE << 5;                                 /*  SYS_DMINEC               */ /* BEV SV1 provisionally */
-    u4_ap_pdu_tx[11] |= (U4)TRUE << 9;                                 /*  SYS_EPS_EPSSBW           */ /* BEV SV1 provisionally */
     u4_ap_pdu_tx[11] |= (U4)TRUE << 20;                                /*  SYS_SW_MULTI_WEATHERLAMP */ /* BEV SV1 provisionally */
 
     u4_ap_pdu_tx[12] |= (U4)TRUE << 5;                                 /*  SYS_DMEVRNGE             */ /* BEV SV1 provisionally */
@@ -277,9 +276,9 @@ static inline void    vd_s_XSpiCfgTxVariation(     U4 * u4_ap_pdu_tx) {
     u1_t_sys_hcs      = u1_g_VardefHcsAva();
     u4_ap_pdu_tx[13]  = ((U4)u1_t_sys_hcs & (U4)0x01U) << 22;          /*  SYS_HCS                                              */
 
-    /*  Variation:Dynamic Variartion No.1               */
-    /*  Variation:Dynamic Variartion No.2               */
-    /*  Variation:Dynamic Variartion No.3               */
+    /*  Variation:Dynamic Variation No.1               */
+    /*  Variation:Dynamic Variation No.2               */
+    /*  Variation:Dynamic Variation No.3               */
 
 }
 
@@ -1189,6 +1188,9 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*  BEV-19    01/26/2026 EA       Change for BEV FF2.(MET-M_DMTOEC-CSTD-1-02-A-C0)                                                   */
 /*  BEV-20    01/22/2026 MA       Change for BEV FF2.(MET-B_PBDBB-CSTD-0-)                                                           */
 /*  BEV-21    01/22/2026 YN       Change for BEV FF2.(MET-D_4WDSYS-CSTD-2-02-A-C1)                                                   */
+/*  BEV-22    01/23/2026 HY       Change config for BEV Full_Function_2.                                                             */
+/*                                MET-C_GMN-CSTD-0-02-A-C1                                                                           */
+/*                                Add the judgement of EPS & EPSSBW function.                                                        */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
@@ -1216,5 +1218,6 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*  * KEM   = Kane Edward Malapo, DTPH                                                                                               */
 /*  * EA   = Eunice Avelin, Denso Techno                                                                                             */
 /*  * MA = Misaki Aiki, Denso Techno                                                                                                 */
+/*  * HY   = Haruki Yagi, KSE                                                                                                        */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
