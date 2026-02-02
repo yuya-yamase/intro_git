@@ -22,18 +22,19 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define RTCIC_RTC_NORMAL                         (0U)
-#define RTCIC_RTC_INITIAL                        (1U)
-#define RTCIC_I2C_ERROR                          (2U)
-
-#define RTCIC_DRV_BASE_CYCLE                     (10U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define RTCLK_STSBIT_TMCNT_RUN                   (0x00U)
-#define RTCLK_STSBIT_HHMMSS_INVLD                (0x04U)
-#define RTCLK_STSBIT_CALB_INCRRCT                (0x02U)
-#define RTCLK_STSBIT_I2C_ERROR                   (0x10U)
-#define RTCLK_STSBIT_INITIAL                     (0x20U)
+#define RTCLK_STSBIT_RTC_RUN                     (0x00U)
+#define RTCLK_STSBIT_HHMMSS_INVLD                (0x01U)
+#define RTCLK_STSBIT_YYMMDD_INVLD                (0x02U)
+#define RTCLK_STSBIT_RTC_INITIAL                 (0x10U)
+#define RTCLK_STSBIT_RTC_RESET                   (0x20U)
+#define RTCLK_STSBIT_I2C_ERROR                   (0x40U)
+#define RTCLK_STSBIT_TIM_NOREAD                  (0x80U)
+#define RTCLK_STSBIT_CLKDAY_SET                  (0x04U)
+#define RTCLK_STSBIT_DAY_SET                     (0x08U)
+#define RTCLK_STSBIT_CLKDAY_SET_MASK             (0xF3U)
+
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -47,18 +48,15 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Prototypes                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-void    vd_g_RtcIc_MainInitial(void);
+void    vd_g_RtcIcBonInit(void);
+void    vd_g_RtcIcRstwkInit(void);
 void    vd_g_RtcIc_MainTask(void);
+U1      u1_g_RtcIcDrvShtdwnOk(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-void    vd_g_RtcIc_RtclkRtartReq(const U4 u4_a_settime);
-U1      u1_g_RtcIc_RtclkStaProv(void);
-void    vd_g_RtcIc_RtclkProv(U4* u4_a_realtime);
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-U1      u1_g_RtclkStart(const U4 u4_a_HHMMSS_24H, const S2 s2_a_CAL_SUBSE, const U1 u1_a_IRQ_ENA);
-U1      u1_g_RtclkRead(const S2 s2_a_CAL_SUBSE, U4 * u4_ap_hhmmss_24h);
-U1      u1_g_RtclkSts(void);
+U1      u1_g_RtclkStart(const U4 u4_a_hhmmss_24h, const U4 u4_a_daycnt);
+U1      u1_g_RtclkRead(U4 * u4_ap_hhmmss_24h, U4 * u4_ap_daycnt);
+U1      u1_g_RtclkDaySet(const U4 u4_a_daycnt);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */

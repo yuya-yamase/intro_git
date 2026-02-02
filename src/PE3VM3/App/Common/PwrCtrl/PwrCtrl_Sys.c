@@ -148,6 +148,12 @@ static U2 u2_s_PwrCtrl_Polling_VIcRst;
 static U2 u2_s_PwrCtrl_Polling_GvifRxRst;
 static U2 u2_s_PwrCtrl_Polling_GvifTxRst;
 
+/* 端子モニタ開始条件 */
+static U1 u1_s_PwrCtrl_Sys_PgdAslVs_ObsFlg;
+static U1 u1_s_PwrCtrl_Sys_PgdAslV11_ObsFlg;
+static U1 u1_s_PwrCtrl_Sys_PgdVs_ObsFlg;
+static U1 u1_s_PwrCtrl_Sys_PgdDiode_ObsFlg;
+
 /* GNSS制御仕様 */
 static uint8    Mcu_OnStep_GNSS;                /* 4制御シーケンス */
 static uint32   Mcu_GNSS_LinkTimer;             /* GNSS Wati処理用タイマ */
@@ -174,6 +180,58 @@ static uint16   Mcu_PowerIc_OffTime;        /* Power-IC Off Wait処理用タイ�
 /****************************************************************************/
 /* Service API                                                              */
 /****************************************************************************/
+/*****************************************************************************
+  Function      : u1_g_PwrCtrlSysPgdAslVsObsInfo
+  Description   : PGOOD_ASIL_VSYS端子モニタ開始条件通知処理
+  param[in/out] : none
+  return        : FALSE(0) 条件非成立
+                  TRUE (1) 条件成立
+  Note          : none
+*****************************************************************************/
+U1 u1_g_PwrCtrlSysPgdAslVsObsInfo( void )
+{
+    return(u1_s_PwrCtrl_Sys_PgdAslVs_ObsFlg);
+}
+
+/*****************************************************************************
+  Function      : u1_g_PwrCtrlSysPgdAslV11ObsInfo
+  Description   : PGOOD_ASIL_VSYS(V11)端子モニタ開始条件通知処理
+  param[in/out] : none
+  return        : FALSE(0) 条件非成立
+                  TRUE (1) 条件成立
+  Note          : none
+*****************************************************************************/
+U1 u1_g_PwrCtrlSysPgdAslV11ObsInfo( void )
+{
+    return(u1_s_PwrCtrl_Sys_PgdAslV11_ObsFlg);
+}
+
+/*****************************************************************************
+  Function      : u1_g_PwrCtrlSysPgdDiodeObsInfo
+  Description   : PGOOD_DIODE端子モニタ開始条件通知処理
+  param[in/out] : none
+  return        : FALSE(0) 条件非成立
+                  TRUE (1) 条件成立
+  Note          : none
+*****************************************************************************/
+U1 u1_g_PwrCtrlSysPgdDiodeObsInfo( void )
+{
+    return(u1_s_PwrCtrl_Sys_PgdDiode_ObsFlg);
+}
+
+/*****************************************************************************
+  Function      : u1_g_PwrCtrlSysPgdVsObsInfo
+  Description   : PGOOD_VSYS端子モニタ開始条件通知処理
+  param[in/out] : none
+  return        : FALSE(0) 条件非成立
+                  TRUE (1) 条件成立
+  Note          : none
+*****************************************************************************/
+U1 u1_g_PwrCtrlSysPgdVsObsInfo( void )
+{
+    return(u1_s_PwrCtrl_Sys_PgdVs_ObsFlg);
+}
+
 /*****************************************************************************
   Function      : PwrCtrl_Sys_PwrOn_GetSts
   Description   : SYS電源状態問い合わせ
@@ -286,6 +344,12 @@ void vd_g_PwrCtrlSysInit( void )
     u4_s_PwrCtrl_Sys_V11_Asil_Time           = (U4)PWRCTRL_SYS_WAIT_TIME_INIT;
     u4_s_PwrCtrl_Sys_Eizo_Time               = (U4)PWRCTRL_SYS_WAIT_TIME_INIT;
 
+    /* 端子監視開始条件の初期化 */
+    u1_s_PwrCtrl_Sys_PgdAslVs_ObsFlg  = (U1)FALSE;
+    u1_s_PwrCtrl_Sys_PgdAslV11_ObsFlg = (U1)FALSE;
+    u1_s_PwrCtrl_Sys_PgdVs_ObsFlg     = (U1)FALSE;
+    u1_s_PwrCtrl_Sys_PgdDiode_ObsFlg  = (U1)FALSE;
+
     /* デバイス起動用カウンタの初期化 */
     u4_s_PwrCtrl_Polling_V33PERI         = (uint32)0U;
     u4_s_PwrCtrl_Polling_EIZO            = (uint32)0U;
@@ -341,6 +405,13 @@ void vd_g_PwrCtrlSysPwrOnMainFunction( void )
                 vd_s_PwrCtrlSysPwrOnBuDdMode(); /* STEP1-2 */
                 vd_s_PwrCtrlSysPwrOnDisCharge();  /* STEP1-1 */
 
+                /* Bu-DD-MODE =Hi */
+                if( u4_s_PwrCtrl_Sys_Bu_Dd_Mode_Time == (U4)PWRCTRL_SYS_COUNTTIME_FIN )
+                {
+                    u1_s_PwrCtrl_Sys_PgdDiode_ObsFlg = (U1)TRUE;             /* PGOOD_DIODE端子モニタ 開始 */
+                    vd_g_PwrCtrlObservePgdDiodeReq((U1)PWRCTRL_OBSERVE_ON);  /* PGOOD_DIODE監視 開始 */
+                }
+
                 /* STEP1-1とSTEP1-2が完了していれば次のSTEPに進める */
                 if ( ( u4_s_PwrCtrl_Sys_Bu_Dd_Mode_Time == (U4)PWRCTRL_SYS_COUNTTIME_FIN )
                   && ( u4_s_PwrCtrl_Sys_DisCharge_Time == (U4)PWRCTRL_SYS_COUNTTIME_FIN ) )
@@ -383,6 +454,30 @@ void vd_g_PwrCtrlSysPwrOnMainFunction( void )
                 vd_s_PwrCtrlSysPwrOnAudio();   /* STEP4-3 */
                 vd_s_PwrCtrlSysPwrOnV11Asil(); /* STEP4-4 */
                 vd_s_PwrCtrlSysPwrOnEizo();    /* STEP4-5 */
+
+                /* V33-ASIL-ON =Hi(STEP3で成立済み) & V18-ASIL-ON =Hi */
+                if ( u4_s_PwrCtrl_Sys_V18_Asil_Time == (U4)PWRCTRL_SYS_COUNTTIME_FIN )
+                {
+                    u1_s_PwrCtrl_Sys_PgdAslVs_ObsFlg = (U1)TRUE;                /* PGOOD_ASIL_VSYS端子モニタ 開始 */
+                    vd_g_PwrCtrlObservePgdAsilVsysReq((U1)PWRCTRL_OBSERVE_ON);  /* PGOOD_ASIL_VSYS監視 開始 */
+                }
+
+                /* V11-ASIL-ON =Hi */
+                if( u4_s_PwrCtrl_Sys_V11_Asil_Time == (U4)PWRCTRL_SYS_COUNTTIME_FIN )
+                {
+                    u1_s_PwrCtrl_Sys_PgdAslV11_ObsFlg = (U1)TRUE;                  /* PGOOD_ASIL_VSYS(V11)端子モニタ 開始 */
+                    vd_g_PwrCtrlObservePgdAsilVsysV11Req((U1)PWRCTRL_OBSERVE_ON);  /* PGOOD_ASIL_VSYS(V11)監視 開始 */
+                }
+
+                /* V33-PERI-ON =Hi(STEP3で成立済み) & DD-FREQ =PWM信号(STEP3で成立済み) */
+                /* &V18-ON =Hi & AUDIO-ON =Hi & EIZO-ON =Hi */
+                if ( ( u4_s_PwrCtrl_Sys_V18_Time == (U4)PWRCTRL_SYS_COUNTTIME_FIN )
+                  && ( u4_s_PwrCtrl_Sys_Audio_Time == (U4)PWRCTRL_SYS_COUNTTIME_FIN )
+                  && ( u4_s_PwrCtrl_Sys_Eizo_Time == (U4)PWRCTRL_SYS_COUNTTIME_FIN ) )
+                {
+                    u1_s_PwrCtrl_Sys_PgdVs_ObsFlg = (U1)TRUE;               /* PGOOD_VSYS端子モニタ 開始 */
+                    vd_g_PwrCtrlObservePgdVsysReq((U1)PWRCTRL_OBSERVE_ON);  /* PGOOD_VSYS端子モニタ監視 開始 */
+                }
 
                 /* STEP4-1~STEP4-5が完了していれば正常起動を設定 */
                 if ( ( u4_s_PwrCtrl_Sys_V18_Time == (U4)PWRCTRL_SYS_COUNTTIME_FIN )
@@ -834,6 +929,22 @@ static void vd_s_PwrCtrlSysPwrOffFlw( void )
 
         vd_g_Pwm_SetPeriodAndDuty((U1)PWM_CH_00_DDC_FREQ , (U2)PWRCTRL_SYS_PWM_PERIOD, (U2)PWRCTRL_SYS_PWM_DUTYCYC_OFF);
         vd_g_Pwm_SetPeriodAndDuty((U1)PWM_CH_02_DDC_ASIL_FREQ , (U2)PWRCTRL_SYS_PWM_PERIOD, (U2)PWRCTRL_SYS_PWM_DUTYCYC_OFF);
+
+        /* V33-ASIL-ON =Lo or V18-ASIL-ON =Lo */
+        u1_s_PwrCtrl_Sys_PgdAslVs_ObsFlg = (U1)FALSE;                   /* PGOOD_ASIL_VSYS端子モニタ 終了 */
+        vd_g_PwrCtrlObservePgdAsilVsysReq((U1)PWRCTRL_OBSERVE_OFF);     /* PGOOD_ASIL_VSYS監視 終了 */
+
+        /* V11-ASIL-ON =Lo */
+        u1_s_PwrCtrl_Sys_PgdAslV11_ObsFlg = (U1)FALSE;                  /* PGOOD_ASIL_VSYS(V11)端子モニタ 終了 */
+        vd_g_PwrCtrlObservePgdAsilVsysV11Req((U1)PWRCTRL_OBSERVE_OFF);  /* PGOOD_ASIL_VSYS(V11)監視 終了 */
+
+        /* Bu-DD-MODE =Lo */
+        u1_s_PwrCtrl_Sys_PgdDiode_ObsFlg = (U1)FALSE;                   /* PGOOD_DIODE端子モニタ 終了 */
+        vd_g_PwrCtrlObservePgdDiodeReq((U1)PWRCTRL_OBSERVE_OFF);        /* PGOOD_DIODE監視 終了 */
+
+        /* V33-PERI-ON =Lo or DD-FREQ =Lo or V18-ON =Lo or AUDIO-ON =Lo or EIZO-ON =Lo */
+        u1_s_PwrCtrl_Sys_PgdVs_ObsFlg = (U1)FALSE;                      /* PGOOD_VSYS端子モニタ 終了 */
+        vd_g_PwrCtrlObservePgdVsysReq((U1)PWRCTRL_OBSERVE_OFF);         /* PGOOD_VSYS端子監視 終了 */
 
         u1_s_PwrCtrl_Sys_Off_SubStep    = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
         break;
