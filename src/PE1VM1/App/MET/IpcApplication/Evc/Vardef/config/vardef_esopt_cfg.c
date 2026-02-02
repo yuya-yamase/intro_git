@@ -2,7 +2,7 @@
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-/*  Toyota IPC/MET : Vadef Electrical System Option.                                                                                 */
+/*  Toyota IPC/MET : Vardef Electrical System Option.                                                                                */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -36,7 +36,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define VDF_ESO_NUM_RX                           (94U)
+#define VDF_ESO_NUM_RX                           (95U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -706,6 +706,18 @@ const ST_VDF_ESO_CH    st_gp_VDF_ESO_CH[VDF_ESO_NUM_RX] = {
         }
     },
     {
+        vdp_PTR_NA,                             /* fp_u1_AVA_RX        */
+        (U2)VDF_ESO_CH_SYS_EPS_EPSSBW,          /* u2_eso_ch           */
+        (U1)VDF_ESO_INPUT_TYPE_CAN,             /* u1_input_type       */
+        (U2)OXCAN_RXD_PDU_CAN_EPS1S11_CH0,      /* u2_msg_rx           */
+        (U2)0x0080U,                            /* u2_vom_act          */
+        ((U2)200U / (U2)VDF_MAIN_TICK),         /* u2_rxc_peri         */
+        {
+            (U2)U2_MAX,                         /* u2_rxc_min[MIN_INA] */
+            (U2)2U                              /* u2_rxc_min[MIN_ACT] */
+        }
+    },
+    {
         &u1_g_VdfEsoRx_SW_HEDLMP_AUT,           /* fp_u1_AVA_RX        */
         (U2)VDF_ESO_CH_SW_HEDLMP_AUT,           /* u2_eso_ch           */
         (U1)VDF_ESO_INPUT_TYPE_CAN,             /* u1_input_type       */
@@ -1259,7 +1271,7 @@ const ST_VDF_ESO_AVA   st_gp_VDF_ESO_AVA[VDF_ESO_NOW_AVA] = {
         (U4)VDF_ESO_INI_W7,                        /* u4_ini */
         (U4)VDF_ESO_NVM_W7,                        /* u4_nvm */
         (U4)0xBFEFFD00U,                           /* u4_unk */
-        (U4)0xFFEFFD80U,                           /* u4_rx  */
+        (U4)0xFFEFFF80U,                           /* u4_rx  */
 
         (U2)NVMCID_U4_VDF_ESO_W7,                  /* u2_nid */
         (U2)RIMID_U4_VDF_ESO_W7                    /* u2_bid */
@@ -1422,6 +1434,9 @@ U1      u1_g_VardefEsOptCfgEthRxEvcnt(const U2 u2_a_MSG_ID)
 /*  BEV-32    01/23/2026  RO      Change config for BEV Full_Function_2.                                                             */
 /*                                MET-S_ADBB-CSTD-0-04-A-C0                                                                          */
 /*                                Changed ERM function from disabled to enabled for NVM abnormality.                                 */
+/*  BEV-33    01/23/2026  HY      Change config for BEV Full_Function_2.                                                             */
+/*                                MET-C_GMN-CSTD-0-02-A-C1                                                                           */
+/*                                Add the judgement of EPS & EPSSBW function.                                                        */
 /*                                                                                                                                   */
 /*  * YI     = Yoshiki Iwata, Denso                                                                                                  */
 /*  * TN     = Takashi Nagai, Denso                                                                                                  */
