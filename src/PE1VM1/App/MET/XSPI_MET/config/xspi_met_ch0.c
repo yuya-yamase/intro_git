@@ -1197,7 +1197,8 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*  BEV-15    01/07/2026 YN       Change for BEV FF2.(MET-B_CWHBB-CSTD-0-)                                                           */
 /*  BEV-16    01/20/2026 KI       Change for BEV FF2.(ASIL TT)                                                                       */
 /*  BEV-17    01/16/2026 KEM      Update for BEV FF2. (B_PERSET)                                                                     */
-/*  BEV-18    01/26/2026 EA       Change for BEV FF2.(MET-M_DMTOEC-CSTD-1-02-A-C0)                                                   */
+/*  BEV-18    01/22/2026 TN       Change for BEV FF2 Json.                                                                           */
+/*  BEV-19    01/26/2026 EA       Change for BEV FF2.(MET-M_DMTOEC-CSTD-1-02-A-C0)                                                   */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * KM   = Keisuke Mashita, Denso Techno                                                                                           */
