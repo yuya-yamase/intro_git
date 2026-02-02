@@ -1240,7 +1240,7 @@ const ST_VDF_ESO_AVA   st_gp_VDF_ESO_AVA[VDF_ESO_NOW_AVA] = {
     {
         (U4)VDF_ESO_INI_W5,                        /* u4_ini */
         (U4)VDF_ESO_NVM_W5,                        /* u4_nvm */
-        (U4)0x00000000U,                           /* u4_unk */
+        (U4)0x00000020U,                           /* u4_unk */
         (U4)0x0244077CU,                           /* u4_rx  */
 
         (U2)NVMCID_U4_VDF_ESO_W5,                  /* u2_nid */
@@ -1419,6 +1419,9 @@ U1      u1_g_VardefEsOptCfgEthRxEvcnt(const U2 u2_a_MSG_ID)
 /*  BEV-29    01/16/2026  KEM     Update for BEV FF2. (B_PERSET)                                                                     */
 /*  BEV-30    01/22/2026  MA      Change config for BEV FF2.(MET-B_PBDBB-CSTD-0-)                                                    */
 /*  BEV-31    01/23/2026  YN      Change config for BEV FF2.(MET-D_4WDSYS-CSTD-2)                                                    */
+/*  BEV-32    01/23/2026  RO      Change config for BEV Full_Function_2.                                                             */
+/*                                MET-S_ADBB-CSTD-0-04-A-C0                                                                          */
+/*                                Changed ERM function from disabled to enabled for NVM abnormality.                                 */
 /*                                                                                                                                   */
 /*  * YI     = Yoshiki Iwata, Denso                                                                                                  */
 /*  * TN     = Takashi Nagai, Denso                                                                                                  */
