@@ -36,6 +36,11 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define HDIM_IFTIMEOUT_MAX                  (65534)         /* Don't change!!! */
 
+#define HDIM_IF_STEP_IND_OFFSET             (1)
+#define HDIM_IF_STEP_IND_MAX                (10)
+#define HDIM_IF_STEP_IND_MIN                (0)
+#define HDIM_IF_STEP_IND_DEF                (6)
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macros                                                                                                                           */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -53,8 +58,6 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static U2   u2_s_hdimif_timout;
 static U2   u2_s_hdimif_outduty;
-static U1   u1_s_hdimif_upsw;
-static U1   u1_s_hdimif_dwsw;
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -68,8 +71,6 @@ void    vd_g_HdimmgrIfInit(void)
 {
     u2_s_hdimif_timout    = (U2)HDIM_IFTIMEOUT_MAX;
     u2_s_hdimif_outduty   = (U2)0;
-    u1_s_hdimif_upsw      = (U1)FALSE;
-    u1_s_hdimif_dwsw      = (U1)FALSE;
 }
 
 /*===================================================================================================================================*/
@@ -131,35 +132,30 @@ U1      u1_g_HdimmgrIfGetOwduty(U2 * u2_ap_owduty)
     (*u2_ap_owduty) = u2_t_owduty;                                      /* LSB : see:HDIMMGR_IF_DUTYLSB */
     return(u1_t_isactv);
 }
-U1      u1_g_HdimmgrIfGet_L_HUDBR_S(void)
+/*===================================================================================================================================*/
+/*  U1      u1_g_HdimmgrIfGetIllStepVal(void)                                                                                        */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments   -                                                                                                                    */
+/*  Return      -                                                                                                                    */
+/*===================================================================================================================================*/
+U1      u1_g_HdimmgrIfGetIllStepVal(void)
 {
-    static const U1    u1_sp_HDIMSTEP_CNVRT_L_HUDBR_S[(U1)HDIMSTEP_STEP_MAX + (U1)1]={
-        (U1)U1_MAX,  /* Don't change!!! */
-        (U1) 1, /* lvl 01 */                                                /* lvl 01 */
-        (U1) 4, /* lvl 04 */                                                /* lvl 02 */
-        (U1) 7, /* lvl 07 */                                                /* lvl 03 */
-        (U1)10, /* lvl 10 */                                                /* lvl 04 */
-        (U1)13, /* lvl 13 */                                                /* lvl 05 */ 
-        (U1)16, /* lvl 16 */                                                /* lvl 06 */
-        (U1)19, /* lvl 19 */                                                /* lvl 07 */
-        (U1)22, /* lvl 22 */                                                /* lvl 08 */
-        (U1)25, /* lvl 25 */                                                /* lvl 09 */
-        (U1)28, /* lvl 28 */                                                /* lvl 10 */
-        (U1)31  /* lvl 31 */                                                /* lvl 11 */
-    };
+    U4      u4_t_step;
+    U1      u1_t_step;
 
-    U4      u4_t_l_hudbr_s;
-    U1      u1_t_l_hudbr_s;
+    u4_t_step = (U4)0U;
+    u1_t_step = (U1)HDIM_IF_STEP_IND_DEF;
 
-    u4_t_l_hudbr_s = (U4)0;
-    (void)u1_g_HdimstepGetExtrlStepVal(&u4_t_l_hudbr_s);
-    u1_t_l_hudbr_s = u1_sp_HDIMSTEP_CNVRT_L_HUDBR_S[(U1)HDIMSTEP_STEP_DEF];
-    if(((U4)HDIMSTEP_STEP_MIN <= u4_t_l_hudbr_s       ) &&
-       (u4_t_l_hudbr_s        <= (U4)HDIMSTEP_STEP_MAX)){
-        u1_t_l_hudbr_s = u1_sp_HDIMSTEP_CNVRT_L_HUDBR_S[u4_t_l_hudbr_s];
+    (void)u1_g_HdimstepGetExtrlStepVal(&u4_t_step);
+    if((u4_t_step >= (U4)HDIMSTEP_STEP_MIN) &&
+       (u4_t_step <= (U4)HDIMSTEP_STEP_MAX)){
+        u1_t_step = (U1)u4_t_step;
+        u1_t_step -= (U1)HDIM_IF_STEP_IND_OFFSET;
     }
-    return(u1_t_l_hudbr_s);
+
+    return(u1_t_step);
 }
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*                                                                                                                                   */
 /*                                                                                                                                   */
@@ -185,48 +181,21 @@ void    vd_g_HdimmgrIfSetOutduty(const U2 u2_a_OUTDUTY)
 }
 
 /*===================================================================================================================================*/
-/*  U1      u1_g_HdimmgrIfGetIsHudOn(void)                                                                                           */
+/*  void    vd_g_HdimmgrIfSetIllStepVal(const U1 u1_a_STEP)                                                                          */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments   -                                                                                                                    */
 /*  Return      -                                                                                                                    */
 /*===================================================================================================================================*/
-U1      u1_g_HdimmgrIfGetIsHudOn(void)
+void    vd_g_HdimmgrIfSetIllStepVal(const U1 u1_a_STEP)
 {
-    U1  u1_t_hudonoff;
-    U1  u1_t_ishudon;
+    U1      u1_t_updtdstep;
 
-    u1_t_ishudon  = (U1)FALSE;
-#if 0   /* BEV Rebase provisionally */
-    u1_t_hudonoff = u1_g_McstBf((U1)MCST_BFI_HUD);
-    if(u1_t_hudonoff == (U1)MCST_HUD_ON){
-#else   /* BEV Rebase provisionally */
-    u1_t_hudonoff = (U1)1U;
-    if(u1_t_hudonoff == (U1)1U){
-#endif   /* BEV Rebase provisionally */
-        u1_t_ishudon = (U1)TRUE;
+    u1_t_updtdstep = u1_a_STEP;
+    if(u1_t_updtdstep <= (U1)HDIM_IF_STEP_IND_MAX){
+        u1_t_updtdstep += (U1)HDIM_IF_STEP_IND_OFFSET;
+        (void)u1_g_HdimstepCfgWriteStep(u1_t_updtdstep);
     }
-    return(u1_t_ishudon);
-}
-/*===================================================================================================================================*/
-/*  U1      u1_g_HdimmgrIfIsXXSwOn(void)                                                                                             */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments   -                                                                                                                    */
-/*  Return      -                                                                                                                    */
-/*===================================================================================================================================*/
-U1      u1_g_HdimmgrIfIsUpSwOn(void)
-{
-    return(u1_s_hdimif_upsw);
-}
 
-U1      u1_g_HdimmgrIfIsDwSwOn(void)
-{
-    return(u1_s_hdimif_dwsw);
-}
-
-void    vd_g_HdimmgrIfSetUpDwSw(const U1 u1_a_UPSW, const U1 u1_a_DWSW)
-{
-    u1_s_hdimif_upsw = u1_a_UPSW;
-    u1_s_hdimif_dwsw = u1_a_DWSW;
     u2_s_hdimif_timout = (U2)0;
 }
 
@@ -240,6 +209,11 @@ void    vd_g_HdimmgrIfSetUpDwSw(const U1 u1_a_UPSW, const U1 u1_a_DWSW)
 /* ---------------  ----------  ------  -------------------------------------------------------------------------------------------  */
 /*  2.0.0           2020.02.27  MaO     New                                                                                          */
 /*                                                                                                                                   */
+/*  Revision        Date        Author  Change Description                                                                           */
+/* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
+/*  BEV-1           02/02/2026  TS      Change config for BEV FF2.(MET-M_HUDILL-CSTD-1)                                              */
+/*                                                                                                                                   */
 /*  * MaO = Masayuki Okada,     DENSO                                                                                                */
+/*  * TS  = Takuo Suganuma,     Denso Techno                                                                                         */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

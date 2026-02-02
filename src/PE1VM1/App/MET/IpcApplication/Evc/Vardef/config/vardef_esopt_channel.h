@@ -19,6 +19,8 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#include "vardef_esopt_input.h"
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -169,7 +171,7 @@
 #define VDF_ESO_CH_SYS_NOT_USED_W4_10            (138U)
 #define VDF_ESO_CH_SYS_NOT_USED_W4_11            (139U)
 #define VDF_ESO_CH_SYS_NOT_USED_W4_12            (140U)
-#define VDF_ESO_CH_SYS_NOT_USED_W4_13            (141U)
+#define VDF_ESO_CH_GVIF2                         (141U)
 #define VDF_ESO_CH_SYS_NOT_USED_W4_14            (142U)
 #define VDF_ESO_CH_SYS_NOT_USED_W4_15            (143U)
 #define VDF_ESO_CH_SYS_NOT_USED_W4_16            (144U)
@@ -311,7 +313,6 @@
 
 #if 0   /* BEV Rebase provisionally */
 #else   /* BEV Rebase provisionally */
-#define VDF_ESO_CH_GVIF2                         (65535U)
 #define VDF_ESO_CH_AISETH                        (65535U)
 #endif   /* BEV Rebase provisionally */
 
@@ -332,7 +333,7 @@
 #define VDF_ESO_NVM_W1                           (0x00000001U)
 #define VDF_ESO_NVM_W2                           (0x00000100U)
 #define VDF_ESO_NVM_W3                           (0x048C0000U)
-#define VDF_ESO_NVM_W4                           (0x10000000U)
+#define VDF_ESO_NVM_W4                           (0x10002000U)
 #define VDF_ESO_NVM_W5                           (0x0004076CU)
 #define VDF_ESO_NVM_W6                           (0x3F800000U)
 #define VDF_ESO_NVM_W7                           (0xBFEFFD80U)
