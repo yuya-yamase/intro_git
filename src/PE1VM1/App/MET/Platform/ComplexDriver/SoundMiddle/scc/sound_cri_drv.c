@@ -16,8 +16,6 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#include <v800_ghs.h>           /* GHS: Intrinsic Functions */
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
 
 #include "aip_common.h"
 #include "sound_cri_drv.h"
@@ -35,17 +33,6 @@
 #include "reg_dma.h"
 #include "int_handler.h"
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-
-
-/* MCAL */
-#include "Dma.h"
-#if 0   /* BEV BSW provisionally */
-#include "gpt_drv_j32.h"
-#else
-#include "gpt_drv_j32_channel_STUB.h"
-#include "dma_drv_STUB.h"
-#endif
-#include "int_drv.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -92,15 +79,15 @@ static U2 get_descriptor_ptr_from_id(CriSfrDrvDescriptorId descriptor_id)
     switch (descriptor_id)
     {
         case CRISFRDRVDESCRIPTORID_P_0:
-            return u2_DMAC_DESC_PTR_CH_P_0;
+            return u2_DMAC_DESC_PTR_BUZ_S1_0;
         case CRISFRDRVDESCRIPTORID_N_0: 
-            return u2_DMAC_DESC_PTR_CH_N_0;
+            return u2_DMAC_DESC_PTR_BUZ_S2_0;
         case CRISFRDRVDESCRIPTORID_P_1:
-            return u2_DMAC_DESC_PTR_CH_P_1;
+            return u2_DMAC_DESC_PTR_BUZ_S1_1;
         case CRISFRDRVDESCRIPTORID_N_1:
-            return u2_DMAC_DESC_PTR_CH_N_1;
+            return u2_DMAC_DESC_PTR_BUZ_S2_1;
         default:
-            return u2_DMAC_DESC_PTR_CH_P_0;
+            return u2_DMAC_DESC_PTR_BUZ_S1_0;
     }
 }
 
@@ -187,7 +174,7 @@ void vd_g_SoundCriDrvDmacStart(const CriUint32 src_addr_tbl[CRISFRDRVDMACH_NUM],
 
     Dma_SetTransModeDoubleBufferReload( DMA_CH_DATA_ID_7, u1DMA_TRANSSIZE_2, DMA_DESCMODE0, src_addr_P, (volatile const void*)HW_TAUD_CH_SLAVE_P_CDR_ADDR , (U2)transfer_count, descriptor_ptr_P );
     Dma_SetTransModeDoubleBufferReload( DMA_CH_DATA_ID_8, u1DMA_TRANSSIZE_2, DMA_DESCMODE1, src_addr_N, (volatile const void*)HW_TAUD_CH_SLAVE_N_CDR_ADDR, (U2)transfer_count, descriptor_ptr_N );
-    Dma_SetTransModeDoubleBufferReload( DMA_CH_DATA_ID_9, u1DMA_TRANSSIZE_2, DMA_DESCMODE2, src_addr_Master, (volatile const void*)HW_TAUD_RDT_ADDR, (U2)HW_DMAC_CH_MASTER_TRNSFR_BYTE_SIZE, u2_DMAC_DESC_PTR_MASTER_0 );
+    Dma_SetTransModeDoubleBufferReload( DMA_CH_DATA_ID_9, u1DMA_TRANSSIZE_2, DMA_DESCMODE2, src_addr_Master, (volatile const void*)HW_TAUD_RDT_ADDR, (U2)HW_DMAC_CH_MASTER_TRNSFR_BYTE_SIZE, u2_DMAC_DESC_PTR_BUZ_M_0 );
 
     Dma_EnableTrans(DMA_CH_DATA_ID_7);
     Dma_EnableTrans(DMA_CH_DATA_ID_8);
@@ -278,9 +265,9 @@ void vd_g_SoundCriDrvTaudStart(CriUint16 master_CDR, CriUint16 slave_CDR)
         (U2)(slave_CDR + 1)
     };
 
-    vd_g_Gpt_D16Start((U1)GPT_D16_UN_1_CH_0_DD_PWM_M, &u2_sp_CARSPDPLS_OPEN_TAUD_MASTER[0]);
-    vd_g_Gpt_D16Start((U1)GPT_D16_UN_1_CH_1_DD_PWM_S, &u2_sp_CARSPDPLS_OPEN_TAUD_SLAVE[0]);
-    vd_g_Gpt_D16Start((U1)GPT_D16_UN_1_CH_2_DD_PWM_S, &u2_sp_CARSPDPLS_OPEN_TAUD_SLAVE[0]);
+    vd_g_Gpt_D16Start((U1)GPT_D16_UN_1_CH_00_BUZZER_M, &u2_sp_CARSPDPLS_OPEN_TAUD_MASTER[0]);
+    vd_g_Gpt_D16Start((U1)GPT_D16_UN_1_CH_01_BUZZER_S1, &u2_sp_CARSPDPLS_OPEN_TAUD_SLAVE[0]);
+    vd_g_Gpt_D16Start((U1)GPT_D16_UN_1_CH_02_BUZZER_S2, &u2_sp_CARSPDPLS_OPEN_TAUD_SLAVE[0]);
 
     /* ADXATで利用する3ch同時スタート */
     vd_g_Gpt_D16SyncStart( (U1)GPT_D16_UNIT_1, u2_a_D16_CHBIT );
