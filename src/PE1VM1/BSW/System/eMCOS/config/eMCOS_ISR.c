@@ -20,6 +20,7 @@
 
 
 #include "scheduler.h"
+#include "xspi.h"
 #include "Dma.h"
 
 #if ((defined(__AIP_THROUGHPUT__)) && (__AIP_THROUGHPUT__ == 1))
@@ -27,9 +28,6 @@
 #endif
 
 #include <Ecu_Memmap_SdaDisableE_env.h>
-
-#include "xspi.h"
-#include "Dma.h"
 
 /*----------------------------------------------------------------------------
  *		Defines
@@ -115,6 +113,7 @@ ISR(eMCOS_ISR_INTOSTM0TINT)
 {
     /*    INTOSTM0_ISR;*/
     vd_g_ThroughputIntrptStart();
+    xspi_Main( XSPI_CH_02 );
     vd_g_ThroughputIntrptFinish((U2)THRPTM_TASK_ISR_INTOSTM0TINT);
 }
 
