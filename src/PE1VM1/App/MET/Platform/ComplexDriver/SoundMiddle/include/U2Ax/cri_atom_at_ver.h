@@ -29,8 +29,8 @@
  ***************************************************************************/
 /* バージョン情報 */
 /* Version Number */
-#define CRI_ATOM_AT_VERSION				(0x00830000U)
-#define CRI_ATOM_AT_VER_NUM				".83.00"
+#define CRI_ATOM_AT_VERSION				(0x00840000U)
+#define CRI_ATOM_AT_VER_NUM				".84.00"
 #define CRI_ATOM_AT_VER_NAME			"CRI Atom Automotive"
 
 /***************************************************************************
