@@ -36,7 +36,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define VDF_ESO_NUM_RX                           (92U)
+#define VDF_ESO_NUM_RX                           (93U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -958,6 +958,18 @@ const ST_VDF_ESO_CH    st_gp_VDF_ESO_CH[VDF_ESO_NUM_RX] = {
         }
     },
     {
+        &u1_g_VdfEsoRx_SYS_SW_OBBPBD,           /* fp_u1_AVA_RX        */
+        (U2)VDF_ESO_CH_SYS_SW_OBBPBD,           /* u2_eso_ch           */
+        (U1)VDF_ESO_INPUT_TYPE_CAN,             /* u1_input_type       */
+        (U2)OXCAN_RXD_PDU_CAN_ZN11S19_CH0,      /* u2_msg_rx           */
+        (U2)0x0002U,                            /* u2_vom_act          */
+        ((U2)2100U / (U2)VDF_MAIN_TICK),        /* u2_rxc_peri         */
+        {
+            (U2)2U,                             /* u2_rxc_min[MIN_INA] */
+            (U2)2U                              /* u2_rxc_min[MIN_ACT] */
+        }
+    },
+    {
         &u1_g_VdfEsoRx_VHCOBBSD,                /* fp_u1_AVA_RX        */
         (U2)VDF_ESO_CH_VHCOBBSD,                /* u2_eso_ch           */
         (U1)VDF_ESO_INPUT_TYPE_CAN,             /* u1_input_type       */
@@ -1243,8 +1255,8 @@ const ST_VDF_ESO_AVA   st_gp_VDF_ESO_AVA[VDF_ESO_NOW_AVA] = {
     {
         (U4)VDF_ESO_INI_W8,                        /* u4_ini */
         (U4)VDF_ESO_NVM_W8,                        /* u4_nvm */
-        (U4)0x007FE714U,                           /* u4_unk */
-        (U4)0x007FF716U,                           /* u4_rx  */
+        (U4)0x007FE715U,                           /* u4_unk */
+        (U4)0x007FF717U,                           /* u4_rx  */
 
         (U2)NVMCID_U4_VDF_ESO_W8,                  /* u2_nid */
         (U2)RIMID_U4_VDF_ESO_W8                    /* u2_bid */
@@ -1393,6 +1405,7 @@ U1      u1_g_VardefEsOptCfgEthRxEvcnt(const U2 u2_a_MSG_ID)
 /*  BEV-27    01/08/2026  MA      BRPADW function check time changed from 700ms to 2100ms.(MET-C_BRPADW-CSTD-A0-)                    */
 /*  BEV-28    01/14/2026  TS      Change config for BEV FF2.(MET-C_DRS-CSTD-1)                                                       */
 /*  BEV-29    01/16/2026  KEM     Update for BEV FF2. (B_PERSET)                                                                     */
+/*  BEV-30    01/22/2026  MA      Change config for BEV FF2.(MET-B_PBDBB-CSTD-0-)                                                    */
 /*                                                                                                                                   */
 /*  * YI     = Yoshiki Iwata, Denso                                                                                                  */
 /*  * TN     = Takashi Nagai, Denso                                                                                                  */

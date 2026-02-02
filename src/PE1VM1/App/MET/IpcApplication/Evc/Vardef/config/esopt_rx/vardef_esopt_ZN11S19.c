@@ -482,6 +482,29 @@ U1      u1_g_VdfEsoRx_SW_TITE(void)
 }
 
 /*===================================================================================================================================*/
+/*  U1      u1_g_VdfEsoRx_SYS_SW_OBBPBD(void)                                                                                        */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         U1 u1_t_ava_rx  : signal status (active/inactive)                                                                */
+/*===================================================================================================================================*/
+U1      u1_g_VdfEsoRx_SYS_SW_OBBPBD(void)
+{
+    U1                 u1_t_rx;
+    U1                 u1_t_ava_rx;
+
+    u1_t_rx = (U1)0U;
+    (void)Com_ReceiveSignal(ComConf_ComSignal_PBD_PRE, &u1_t_rx);
+    if(u1_t_rx != (U1)0U){
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
+    }
+    else{
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_INA;
+    }
+
+    return(u1_t_ava_rx);
+}
+
+/*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
 /*                                                                                                                                   */
@@ -502,6 +525,7 @@ U1      u1_g_VdfEsoRx_SW_TITE(void)
 /*  BEV-5     5/30/2025   SN      Added function for BEV System_Consideration_2.(MET-B_TITEBB-CSTD-0-)                               */
 /*  BEV-6    12/03/2025   KO      Added function for BEV System_Consideration_ADAS.(MET-B_OMRBB-CSTD-0-)                             */
 /*  BEV-7    12/03/2025   MA      SW_TITE Function presence judgment processing changed to bidirectional.(MET-B_TITEBB-CSTD-0-)      */
+/*  BEV-8    01/22/2026   MA      Added function for BEV FF2.(MET-B_PBDBB-CSTD-0-)                                                   */
 /*                                                                                                                                   */
 /*  * KT = Kenta Takaji, Denso Techno                                                                                                */
 /*  * HY = Haruki Yagi, KSE                                                                                                          */
