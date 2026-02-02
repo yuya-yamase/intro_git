@@ -938,7 +938,6 @@ static inline void    vd_s_XSpiCfgRxTripcom(    const U4 * u4_ap_PDU_RX) {
     ST_HMITRIPCOM st_t_hmitripcom;
 
     st_t_hmitripcom.u2_avg_vehspd_kmph_ta  = (U2)u4_ap_PDU_RX[0];       /* AVG_SPD_KMPH_USRRST                  */
-    st_t_hmitripcom.u4_avg_ee_kmpl_ta      = u4_ap_PDU_RX[2];           /* AVG_EE_KMPL_USRRST                   */
     st_t_hmitripcom.u4_dist_km_tr_a        = u4_ap_PDU_RX[5];           /* TRIPA_DIST_KM_USRRST                 */
     st_t_hmitripcom.u4_dist_km_tr_b        = u4_ap_PDU_RX[6];           /* TRIPB_DIST_KM_USRRST                 */
     st_t_hmitripcom.u2_avg_vehspd_tr_a     = (U2)u4_ap_PDU_RX[7];       /* TRIPA_AVG_SPD_KMPH_USRRST            */
@@ -949,6 +948,7 @@ static inline void    vd_s_XSpiCfgRxTripcom(    const U4 * u4_ap_PDU_RX) {
     st_t_hmitripcom.u4_ptsruntm_tr_b       = u4_ap_PDU_RX[10];          /* TRIPB_DRVTIME_HHHH_USRRST            */
                                                                         /* TRIPB_DRVTIME_MM_USRRST              */
                                                                         /* TRIPB_DRVTIME_SS_USRRST              */
+    st_t_hmitripcom.u4_avg_ee_kmpl_ta      = (U4)XSPI_UNKNOWN;      /* AVG_EE_KMPL_USRRST is not Applicable  */
     st_t_hmitripcom.u4_avg_he_kmpkg_ta     = (U4)XSPI_UNKNOWN;      /* AVG_HE_KMPL_USRRST is not Applicable  */
     st_t_hmitripcom.u4_idlstp_time_hrs_lc  = (U4)XSPI_UNKNOWN;      /* IDLSTP_USRRST is not Applicable       */
     st_t_hmitripcom.u4_save_fs_ml_lc       = (U4)XSPI_UNKNOWN;      /* FUELSAVE_ML_USRRST is not Applicable  */
@@ -1189,7 +1189,8 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*  BEV-16    01/20/2026 KI       Change for BEV FF2.(ASIL TT)                                                                       */
 /*  BEV-17    01/16/2026 KEM      Update for BEV FF2. (B_PERSET)                                                                     */
 /*  BEV-18    01/22/2026 TN       Change for BEV FF2 Json.                                                                           */
-/*  BEV-19    01/22/2026 MA       Change for BEV FF2.(MET-B_PBDBB-CSTD-0-)                                                           */
+/*  BEV-19    01/26/2026 EA       Change for BEV FF2.(MET-M_DMTOEC-CSTD-1-02-A-C0)                                                   */
+/*  BEV-20    01/22/2026 MA       Change for BEV FF2.(MET-B_PBDBB-CSTD-0-)                                                           */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
@@ -1215,6 +1216,7 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*  * YN   = Yujiro Nagaya, Denso Techno                                                                                             */
 /*  * KI   = Kanji Ito,  Denso Techno                                                                                                */
 /*  * KEM   = Kane Edward Malapo, DTPH                                                                                               */
+/*  * EA   = Eunice Avelin, Denso Techno                                                                                             */
 /*  * MA = Misaki Aiki, Denso Techno                                                                                                 */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
