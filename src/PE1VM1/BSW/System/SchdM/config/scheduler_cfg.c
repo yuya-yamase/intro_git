@@ -255,13 +255,8 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     /*                                                                   */
     /*-------------------------------------------------------------------*/
     {&vd_g_iVDshMainReaTask,            (U4)SCHDLR_TASKBIT___5MS    },
-#warning "BEVCDCFD-2393"
-#if 0 /* BEVCDCFD-2393 */  
     {&vd_g_XSpiMETPduRx,                (U4)SCHDLR_TASKBIT___5MS    },
-#else /* BEVCDCFD-2393 */ /* 1/22版BSWで&vd_g_oXSECMainPreMidが追加されたため、&vd_g_XSpiMETPduRxの位置に問題ないか確認をお願いいたします。 */
     {&vd_g_oXSECMainPreMid,             (U4)SCHDLR_TASKBIT___5MS    },
-    {&vd_g_XSpiMETPduRx,                (U4)SCHDLR_TASKBIT___5MS    },
-#endif /* BEVCDCFD-2393 */
     {&vd_g_oXCANMainPreTask,            (U4)SCHDLR_TASKBIT___5MS    },
     {&vd_g_VehopemdMainTask,            (U4)SCHDLR_TASKBIT___5MS    }, /* In case of toyota product, vd_g_VehopemdMainTask shall be    */
                                                                        /* called after vd_g_IoHwDifltSmplgTask                         */ 

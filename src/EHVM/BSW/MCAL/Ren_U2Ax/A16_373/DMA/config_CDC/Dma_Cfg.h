@@ -11,12 +11,7 @@
 /*	DMA common configuration																	*/
 /*==============================================================================================*/
 /* Total number of channels using Dma */
-#warning "BEVCDCFD-2393"
-#if 0 /* BEVCDCFD-2393 */
-#define	DMA_UCFG_CHDATA_NUM				(9u)
-#else /* BEVCDCFD-2393 */
 #define	DMA_UCFG_CHDATA_NUM				(10u)
-#endif /* BEVCDCFD-2393 */
 
 /* Uninterruptible/Uninterruptible */
 #define DMA_ENTER_CRITICAL_SECTION()			SuspendAllInterrupts()							/* Do not interrupt */
@@ -81,24 +76,17 @@
 #define	DMA_UCFG_CHDATA5_PRILEVEL			(DMA_PRIORITY_NOUSE)				/* See DMA_UCFG_CHDATA0_PRILEVEL for range		*/
 #define	DMA_UCFG_CHDATA5_NOTIFICATION		(NULL_PTR)							/* See DMA_UCFG_CHDATA0_NOTIFICATION for range	*/
 
-/* CRI */
 /* [DMA_CH_DATA_ID_6] config */
+#warning "BEVCDCFD-2393"
+#if 0 /* BEVCDCFD-2393 */
+#else /* BEVCDCFD-2393 */
 #define	DMA_UCFG_CHDATA6_TYPE				(DMA_DMAC1)							/* See DMA_UCFG_CHDATA0_TYPE			*/
 #define	DMA_UCFG_CHDATA6_REQ				(PIL_DMAC_GR0_INTTAUD1I0)			/* See DMA_UCFG_CHDATA0_REQ for range			*/
 #define	DMA_UCFG_CHDATA6_HWCH				(PIL_DMAC_CH0)						/* See DMA_UCFG_CHDATA0_HWCH for range			*/
 #define	DMA_UCFG_CHDATA6_PRILEVEL			(DMA_PRIORITY_NOUSE)				/* See DMA_UCFG_CHDATA0_PRILEVEL for range		*/
 #define	DMA_UCFG_CHDATA6_NOTIFICATION		(NULL_PTR)							/* See DMA_UCFG_CHDATA0_NOTIFICATION for range	*/
+#endif /* BEVCDCFD-2393 */
 
-#warning "BEVCDCFD-2393"
-#if 0 /* BEVCDCFD-2393 */
-/* [DMA_CH_DATA_ID_7] config */
-#define	DMA_UCFG_CHDATA7_TYPE				(DMA_DMAC1)							/* See DMA_UCFG_CHDATA0_TYPE			*/
-#define	DMA_UCFG_CHDATA7_REQ				(PIL_DMAC_GR0_INTTAUD1I0)			/* See DMA_UCFG_CHDATA0_REQ for range			*/
-#define	DMA_UCFG_CHDATA7_HWCH				(PIL_DMAC_CH1)						/* See DMA_UCFG_CHDATA0_HWCH for range			*/
-#define	DMA_UCFG_CHDATA7_PRILEVEL			(DMA_PRIORITY_NOUSE)				/* See DMA_UCFG_CHDATA0_PRILEVEL for range		*/
-#define	DMA_UCFG_CHDATA7_NOTIFICATION		(Dma_INTSDMAC1CH1)					/* See DMA_UCFG_CHDATA0_NOTIFICATION for range	*/
-
-#else /* BEVCDCFD-2393 */
 /* [DMA_CH_DATA_ID_7] config */
 #define	DMA_UCFG_CHDATA7_TYPE				(DMA_DMAC0)							/* See DMA_UCFG_CHDATA0_TYPE			*/
 #define	DMA_UCFG_CHDATA7_REQ				(PIL_DMAC_GR0_INTTAUD1I0)			/* See DMA_UCFG_CHDATA0_REQ for range			*/
@@ -106,16 +94,6 @@
 #define	DMA_UCFG_CHDATA7_PRILEVEL			(DMA_PRIORITY_NOUSE)				/* See DMA_UCFG_CHDATA0_PRILEVEL for range		*/
 #define	DMA_UCFG_CHDATA7_NOTIFICATION		(NULL_PTR)							/* See DMA_UCFG_CHDATA0_NOTIFICATION for range	*/
 
-#endif /* BEVCDCFD-2393 */
-#warning "BEVCDCFD-2393"
-#if 0 /* BEVCDCFD-2393 */
-/* [DMA_CH_DATA_ID_8] config */
-#define	DMA_UCFG_CHDATA8_TYPE				(DMA_DMAC1)							/* See DMA_UCFG_CHDATA0_TYPE			*/
-#define	DMA_UCFG_CHDATA8_REQ				(PIL_DMAC_GR0_INTTAUD1I0)			/* See DMA_UCFG_CHDATA0_REQ for range			*/
-#define	DMA_UCFG_CHDATA8_HWCH				(PIL_DMAC_CH2)						/* See DMA_UCFG_CHDATA0_HWCH for range			*/
-#define	DMA_UCFG_CHDATA8_PRILEVEL			(DMA_PRIORITY_NOUSE)				/* See DMA_UCFG_CHDATA0_PRILEVEL for range		*/
-#define	DMA_UCFG_CHDATA8_NOTIFICATION		(NULL_PTR)							/* See DMA_UCFG_CHDATA0_NOTIFICATION for range	*/
-#else /* BEVCDCFD-2393 */
 /* [DMA_CH_DATA_ID_8] config */
 #define	DMA_UCFG_CHDATA8_TYPE				(DMA_DMAC0)							/* See DMA_UCFG_CHDATA0_TYPE			*/
 #define	DMA_UCFG_CHDATA8_REQ				(PIL_DMAC_GR0_INTTAUD1I0)			/* See DMA_UCFG_CHDATA0_REQ for range			*/
@@ -123,7 +101,6 @@
 #define	DMA_UCFG_CHDATA8_PRILEVEL			(DMA_PRIORITY_NOUSE)				/* See DMA_UCFG_CHDATA0_PRILEVEL for range		*/
 #define	DMA_UCFG_CHDATA8_NOTIFICATION		(NULL_PTR)							/* See DMA_UCFG_CHDATA0_NOTIFICATION for range	*/
 
-#endif /* BEVCDCFD-2393 */
 /* [DMA_CH_DATA_ID_9] config */
 #define	DMA_UCFG_CHDATA9_TYPE				(DMA_DMAC0)							/* See DMA_UCFG_CHDATA0_TYPE			*/
 #define	DMA_UCFG_CHDATA9_REQ				(PIL_DMAC_GR0_INTTAUD1I0)			/* See DMA_UCFG_CHDATA0_REQ for range			*/

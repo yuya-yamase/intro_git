@@ -75,21 +75,6 @@ ISR(eMCOS_ISR_INTOSTM0TINT)
     xspi_Main( XSPI_CH_02 );
 }
 
-#warning "BEVCDCFD-2393" 
-#if 0 /* BEVCDCFD-2393 */
-/**---------------------------------------------------------------------------
- * [Format]		ISR(eMCOS_ISR_INTSDMAC1CH1)
- * [Function]	
- * [Arguments]	None
- * [Return]		None
- * [Notes]		
- *--------------------------------------------------------------------------*/
-ISR(eMCOS_ISR_INTSDMAC1CH1)
-{
-    Dma_INTSDMAC1CH1();
-}
-
-#endif /* BEVCDCFD-2393 */
 /**---------------------------------------------------------------------------
  * [Format]		ISR(eMCOS_ISR_INTSDMAC0CH7)
  * [Function]	

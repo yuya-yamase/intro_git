@@ -70,13 +70,13 @@ const ST_PWM           st_gp_PWM_DRV_CFG[PWM_DRV_NUM_CH] = {
     {
         (U2)PWM_DRV_GPT_D16,                    /* u2_gpt     */
         (U1)GPT_D16_UN_1_CH_00_BUZZER_M,        /* u1_peri_ch */
-        (U1)GPT_D16_UN_1_CH_01_BUZZER_S1         /* u1_duty_ch */
+        (U1)GPT_D16_UN_1_CH_01_BUZZER_S1        /* u1_duty_ch */
     },
     /* PWM_CH_04 */
     {
         (U2)PWM_DRV_GPT_D16,                    /* u2_gpt     */
         (U1)GPT_D16_UN_1_CH_00_BUZZER_M,        /* u1_peri_ch */
-        (U1)GPT_D16_UN_1_CH_02_BUZZER_S2         /* u1_duty_ch */
+        (U1)GPT_D16_UN_1_CH_02_BUZZER_S2        /* u1_duty_ch */
     }
 };
 const U1               u1_g_PWM_DRV_NUM_CH = (U1)PWM_DRV_NUM_CH;
