@@ -1,4 +1,4 @@
-/* 1.3.0 */
+/* 1.4.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define RCMMUI_C_MAJOR                          (1)
-#define RCMMUI_C_MINOR                          (3)
+#define RCMMUI_C_MINOR                          (4)
 #define RCMMUI_C_PATCH                          (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -70,28 +70,29 @@ static  U2                                      u2_s_rcmmui_reqelpsd;
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static  U1      u1_s_RcmmUISearchReq(const U2 u2_a_RCMM);
 static  U1      u1_s_RcmmUICheckPow(const U1 u1_a_REQID);
+void            vd_s_RcmmUICheckPowSts(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static  const   ST_RCMMUI_REQUEST               st_sp_RCMMUI_REQUESTS[RCMMUI_NUM_REQ]    = {
     /* START REQUEST */
-    {   (U2)0x0109U,            (U1)0x10U,              (U1)0x1BU       },      /* 00 RCMMUI_STREQ_1_1   */
-    {   (U2)0x0119U,            (U1)0x10U,              (U1)0x18U       },      /* 01 RCMMUI_STREQ_1_3   */
-    {   (U2)0x0209U,            (U1)0x10U,              (U1)0x18U       },      /* 02 RCMMUI_STREQ_2_1   */
-    {   (U2)0x0309U,            (U1)0x10U,              (U1)0x18U       },      /* 03 RCMMUI_STREQ_3_1_1 */
-    {   (U2)0x0409U,            (U1)0x10U,              (U1)0x18U       },      /* 04 RCMMUI_STREQ_3_1_2 */
+    {   (U2)0x0109U,            (U1)0x10U,              (U1)0x13U       },      /* 00 RCMMUI_STREQ_1_1   */
+    {   (U2)0x0119U,            (U1)0x10U,              (U1)0x10U       },      /* 01 RCMMUI_STREQ_1_3   */
+    {   (U2)0x0209U,            (U1)0x10U,              (U1)0x10U       },      /* 02 RCMMUI_STREQ_2_1   */
+    {   (U2)0x0309U,            (U1)0x10U,              (U1)0x10U       },      /* 03 RCMMUI_STREQ_3_1_1 */
+    {   (U2)0x0409U,            (U1)0x10U,              (U1)0x10U       },      /* 04 RCMMUI_STREQ_3_1_2 */
     {   (U2)0x0000U,            (U1)0x00U,              (U1)0x00U       },      /* 05 No use             */
-    {   (U2)0x0609U,            (U1)0x10U,              (U1)0x1BU       },      /* 06 RCMMUI_STREQ_6_1   */
-    {   (U2)0x0611U,            (U1)0x10U,              (U1)0x1CU       },      /* 07 RCMMUI_STREQ_6_2   */
-    {   (U2)0x0619U,            (U1)0x10U,              (U1)0x18U       },      /* 08 RCMMUI_STREQ_6_3   */
-    {   (U2)0x0809U,            (U1)0x10U,              (U1)0x1BU       },      /* 09 RCMMUI_STREQ_8_1   */
-    {   (U2)0x0811U,            (U1)0x10U,              (U1)0x1CU       },      /* 10 RCMMUI_STREQ_8_2   */
-    {   (U2)0x0819U,            (U1)0x10U,              (U1)0x18U       },      /* 11 RCMMUI_STREQ_8_3   */
-    {   (U2)0x0B09U,            (U1)0x10U,              (U1)0x1BU       },      /* 12 RCMMUI_STREQ_11_1  */
-    {   (U2)0x0B19U,            (U1)0x10U,              (U1)0x18U       },      /* 13 RCMMUI_STREQ_11_3  */
-    {   (U2)0x0C09U,            (U1)0x10U,              (U1)0x1BU       },      /* 14 RCMMUI_STREQ_12_1  */
-    {   (U2)0x0C19U,            (U1)0x10U,              (U1)0x18U       },      /* 15 RCMMUI_STREQ_12_3  */
+    {   (U2)0x0609U,            (U1)0x10U,              (U1)0x13U       },      /* 06 RCMMUI_STREQ_6_1   */
+    {   (U2)0x0611U,            (U1)0x10U,              (U1)0x14U       },      /* 07 RCMMUI_STREQ_6_2   */
+    {   (U2)0x0619U,            (U1)0x10U,              (U1)0x10U       },      /* 08 RCMMUI_STREQ_6_3   */
+    {   (U2)0x0809U,            (U1)0x10U,              (U1)0x13U       },      /* 09 RCMMUI_STREQ_8_1   */
+    {   (U2)0x0811U,            (U1)0x10U,              (U1)0x14U       },      /* 10 RCMMUI_STREQ_8_2   */
+    {   (U2)0x0819U,            (U1)0x10U,              (U1)0x10U       },      /* 11 RCMMUI_STREQ_8_3   */
+    {   (U2)0x0B09U,            (U1)0x10U,              (U1)0x13U       },      /* 12 RCMMUI_STREQ_11_1  */
+    {   (U2)0x0B19U,            (U1)0x10U,              (U1)0x10U       },      /* 13 RCMMUI_STREQ_11_3  */
+    {   (U2)0x0C09U,            (U1)0x10U,              (U1)0x13U       },      /* 14 RCMMUI_STREQ_12_1  */
+    {   (U2)0x0C19U,            (U1)0x10U,              (U1)0x10U       },      /* 15 RCMMUI_STREQ_12_3  */
     /* END REQUEST */
     {   (U2)0x0178U,            (U1)0x30U,              (U1)0x00U       },
     {   (U2)0x0278U,            (U1)0x30U,              (U1)0x00U       },
@@ -154,6 +155,8 @@ void            vd_g_RcmmUIMainTask(void)
         u1_s_rcmmui_reqid = (U1)RCMMUI_REQ_NONE;
     }
 
+    /*  Power state check */
+    vd_s_RcmmUICheckPowSts(); 
 
     /* Start end request */
     u2_t_rcmm   = (U2)0U;
@@ -283,6 +286,25 @@ static  U1      u1_s_RcmmUICheckPow(const U1 u1_a_REQID)
 }
 
 /*===================================================================================================================================*/
+/*  void              vd_s_RcmmUICheckPowSts(void)                                                                                   */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void            vd_s_RcmmUICheckPowSts(void)
+{
+    U1 u1_t_powsts_chk;
+
+    if (u1_s_rcmmui_reqid != (U1)RCMMUI_REQ_NONE) {
+        u1_t_powsts_chk = u1_s_RcmmUICheckPow(u1_s_rcmmui_reqid);
+        if (u1_t_powsts_chk == (U1)FALSE) {
+            u1_s_rcmmui_reqid = (U1)RCMMUI_REQ_NONE;
+            u2_s_rcmmui_reqelpsd = (U2)U2_MAX;
+        }
+    }
+}
+
+/*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
 /*                                                                                                                                   */
@@ -294,6 +316,10 @@ static  U1      u1_s_RcmmUICheckPow(const U1 u1_a_REQID)
 /*  1.1.0    10/07/2020  TH       Add to send PBDMSW and getting elapsed time of rcmmui display start.                               */
 /*  1.2.0    10/01/2025  YR       Change config for 19PFv3                                                                           */
 /*  1.3.0    07/03/2025  KO       Change config for BEV System_Consideration_2.                                                      */
+/*  1.4.0    01/26/2026  SN       Change for MET-B_PROSRV-CSTD-1-02-A-C0                                                             */
+/*                                "TOP" button removed from all messages by parameter.                                               */
+/*                                Bugfix(BEVCDCMON-258)                                                                              */
+/*                                Display is hidden by mask processing when not in operating power state.                            */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
@@ -305,5 +331,6 @@ static  U1      u1_s_RcmmUICheckPow(const U1 u1_a_REQID)
 /*  * PG   = Patrick Garcia, DTPH                                                                                                    */
 /*  * YR   = Yhana Regalario, DTPH                                                                                                   */
 /*  * KO   = Kazuto Oishi,  Denso Techno                                                                                             */
+/*  * SN   = Shizuka Nakajima,  KSE                                                                                                  */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
