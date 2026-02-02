@@ -268,29 +268,6 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     /*  10ms A Non-Platform Task                                         */
     /*                                                                   */
     /*-------------------------------------------------------------------*/
-
-    /*-------------------------------------------------------------------*/
-    /*                                                                   */
-    /*  20ms B Task                                                      */
-    /*                                                                   */
-    /*-------------------------------------------------------------------*/
-    {&vd_g_Nvmc_PeriodicTask,           (U4)SCHDLR_TASKBIT__20MS_B  },
-
-    /*-------------------------------------------------------------------*/
-    /*                                                                   */
-    /*   5ms Platform Post Task                                          */
-    /*                                                                   */
-    /*-------------------------------------------------------------------*/
-    {&vd_g_oXCANMainPosTask,            (U4)SCHDLR_TASKBIT___5MS    },
-    {&vd_g_oXSECMainPosMid,             (U4)SCHDLR_TASKBIT___5MS    },
-    {&vd_g_iVDshMainWriTask,            (U4)SCHDLR_TASKBIT___5MS    },
-
-    /*-------------------------------------------------------------------*/
-    /*                                                                   */
-    /*  10ms A Platform Post Task                                        */
-    /*                                                                   */
-    /*-------------------------------------------------------------------*/
-    {&vd_g_Rim_Task,                    (U4)SCHDLR_TASKBIT__10MS_A  },
     /*-------------------------------------------------------------------*/
     /*                                                                   */
     /*  Platform Pre Task                                                */
@@ -354,11 +331,33 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     /*                                                                   */
     /*  Platform Post Task                                               */
     /*                                                                   */
-    /*  WARNING "DO NOT EXECUTE APPLICATION AT HERE"                     */
     /*-------------------------------------------------------------------*/
     {&vd_g_DrectxMainTask,              (U4)SCHDLR_TASKBIT__50MS_A  },
+
+    /*-------------------------------------------------------------------*/
+    /*                                                                   */
+    /*  20ms B Task                                                      */
+    /*                                                                   */
+    /*-------------------------------------------------------------------*/
+    {&vd_g_Nvmc_PeriodicTask,           (U4)SCHDLR_TASKBIT__20MS_B  },
+
+    /*-------------------------------------------------------------------*/
+    /*                                                                   */
+    /*   5ms Platform Post Task                                          */
+    /*                                                                   */
+    /*-------------------------------------------------------------------*/
+    {&vd_g_oXCANMainPosTask,            (U4)SCHDLR_TASKBIT___5MS    },
+    {&vd_g_oXSECMainPosMid,             (U4)SCHDLR_TASKBIT___5MS    },
     {&vd_g_XSpiMETPduTx,                (U4)SCHDLR_TASKBIT___5MS    },
     {&vd_g_XSpiCalibMainTask,           (U4)SCHDLR_TASKBIT_100MS_A  },      /* This task is not needed to be called before vd_g_XSpiMETPduTx  */
+    {&vd_g_iVDshMainWriTask,            (U4)SCHDLR_TASKBIT___5MS    },
+
+    /*-------------------------------------------------------------------*/
+    /*                                                                   */
+    /*  10ms A Platform Post Task                                        */
+    /*                                                                   */
+    /*-------------------------------------------------------------------*/
+    {&vd_g_Rim_Task,                    (U4)SCHDLR_TASKBIT__10MS_A  },
 
     /*-------------------------------------------------------------------*/
     /*  WARNING "DO NOT EXECUTE APPLICATION AT HERE"                     */
