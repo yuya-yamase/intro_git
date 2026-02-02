@@ -228,7 +228,6 @@ static inline void    vd_s_XSpiCfgTxVariation(     U4 * u4_ap_pdu_tx) {
 
     U4  u4_t_loop;
     U1  u1_t_subdigspd;
-    U1  u1_t_var_4wdsys_disp;                                          /*  VAR_4WDSYS_DISP                                      */
     U1  u1_t_sys_hcs;                                                  /*  SYS_HCS                                              */
 
     u4_ap_pdu_tx[0] = (U4)u1_g_VardefDestinationByPid();               /*  DESTINATION                                          */
@@ -273,12 +272,10 @@ static inline void    vd_s_XSpiCfgTxVariation(     U4 * u4_ap_pdu_tx) {
     u4_ap_pdu_tx[12] |= (U4)TRUE << 5;                                 /*  SYS_DMEVRNGE             */ /* BEV SV1 provisionally */
     u4_ap_pdu_tx[12] |= (U4)TRUE << 6;                                 /*  SYS_DMTOEC               */ /* BEV SV1 provisionally */
     u4_ap_pdu_tx[12] |= (U4)TRUE << 7;                                 /*  SYS_DMM1EC               */ /* BEV SV1 provisionally */
+    u4_ap_pdu_tx[12] |= (U4)TRUE << 23;                                /*  SYS_4WDSYS_DISCON        */ /* BEV FF2 provisionally */
 
     u1_t_sys_hcs      = u1_g_VardefHcsAva();
     u4_ap_pdu_tx[13]  = ((U4)u1_t_sys_hcs & (U4)0x01U) << 22;          /*  SYS_HCS                                              */
-
-    u1_t_var_4wdsys_disp = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_4WDSYS);
-    u4_ap_pdu_tx[13] |= ((U4)u1_t_var_4wdsys_disp & (U4)0x01U) << 23;  /*  VAR_4WDSYS_DISP                                      */
 
     /*  Variation:Dynamic Variartion No.1               */
     /*  Variation:Dynamic Variartion No.2               */
@@ -1191,6 +1188,7 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*  BEV-18    01/22/2026 TN       Change for BEV FF2 Json.                                                                           */
 /*  BEV-19    01/26/2026 EA       Change for BEV FF2.(MET-M_DMTOEC-CSTD-1-02-A-C0)                                                   */
 /*  BEV-20    01/22/2026 MA       Change for BEV FF2.(MET-B_PBDBB-CSTD-0-)                                                           */
+/*  BEV-21    01/22/2026 YN       Change for BEV FF2.(MET-D_4WDSYS-CSTD-2-02-A-C1)                                                   */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
