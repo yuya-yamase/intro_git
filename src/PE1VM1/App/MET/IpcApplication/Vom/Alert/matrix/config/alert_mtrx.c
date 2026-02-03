@@ -321,6 +321,10 @@ void    vd_g_AlertMtrxInit(void)
 /*  BEV-23    1/14/2025  JS       Change for BEV System_Consideration_FF2.(MET-H_PEXI-CSTD-1-00-A-C0)                                */
 /*  BEV-24    1/16/2026  SN       Change for BEV FF2.(MET-O_FNCLIM-CSTD-0-00-A-C0)                                                   */
 /*  BEV-25   01/16/2026  KM       Update for BEV FF2. (B_PERSET)                                                                     */
+/*  BEV-26   01/23/2026  NI       Change for BEV Full_functioin2                                                                     */
+/*                                MET-D_SFTPOS-CSTD-1-00-B-C0,MET-H_SYSMAL-CSTD-2-00-C-C0                                            */
+/*                                Change Alert_REQ for SFTPOS AND Change Alert_CH for SYSMAL.                                        */
+/*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  * YI   = Yoshiki Iwata, Denso                                                                                                    */
 /*  * RS   = Ryuki Sako,      Denso Techno                                                                                           */
@@ -338,5 +342,6 @@ void    vd_g_AlertMtrxInit(void)
 /*  * ED   = Emoh Dagasdas,   DTPH                                                                                                   */
 /*  * SN   = Shizuka Nakajima,KSE                                                                                                    */
 /*  * KM   = Kane Malapo,     DTPH                                                                                                   */
+/*  * NI   = Naoki Inagaki,   KSE                                                                                                    */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

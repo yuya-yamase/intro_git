@@ -1,4 +1,4 @@
-/* 1.3.0 */
+/* 1.4.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define RCMMUI_CFG_C_MAJOR                      (1)
-#define RCMMUI_CFG_C_MINOR                      (3)
+#define RCMMUI_CFG_C_MINOR                      (4)
 #define RCMMUI_CFG_C_PATCH                      (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -178,6 +178,7 @@ U1              u1_g_RcmmUICfgCheckPow(const U1 u1_a_REQID)
             }        
             break;
         case (U1)RCMMUI_STREQ_2_1:
+        case (U1)RCMMUI_STREQ_6_1:
         case (U1)RCMMUI_STREQ_8_1:
         case (U1)RCMMUI_STREQ_8_2:
         case (U1)RCMMUI_STREQ_8_3:
@@ -209,6 +210,7 @@ U1              u1_g_RcmmUICfgCheckPow(const U1 u1_a_REQID)
 /*  1.1.0    10/07/2020  TH       Change config for 800B CV-R.                                                                       */
 /*  1.2.0    10/01/2025  YR       Change config for 19PFv3                                                                           */
 /*  1.3.0    07/03/2025  KO       Change config for BEV System_Consideration_2.                                                      */
+/*  1.4.0    01/26/2026  SN       rcmmui v1.3.0 -> v1.4.0.                                                                           */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
@@ -216,11 +218,15 @@ U1              u1_g_RcmmUICfgCheckPow(const U1 u1_a_REQID)
 /*  220D-1   07/18/2022  TH       Configured for 220D                                                                                */
 /*  BEV-1    10/02/2025  KO       Configured for BEVstep3_Rebase                                                                     */
 /*  BEV-2    11/13/2025  YN       Change for BEV rebase.(Add CanTxApp)                                                               */
+/*  BEV-3    01/26/2026  SN       Change config for BEV Full_Function_2.                                                             */
+/*                                MET-B_PROSRV-CSTD-1-02-A-C0                                                                        */
+/*                                "Added REQ08 (Display No. 6-1) to IGR power state mask targets.                                    */
 /*                                                                                                                                   */
 /*  * HY   = Hidefumi Yoshida, Denso                                                                                                 */
 /*  * TH   = Takahiro Hirano,  Denso Techno                                                                                          */
 /*  * YR   = Yhana Regalario, DTPH                                                                                                   */
 /*  * KO   = Kazuto Oishi,  Denso Techno                                                                                             */
 /*  * YN   = Yujiro Nagaya, Denso Techno                                                                                             */
+/*  * SN   = Shizuka Nakajima,  KSE                                                                                                  */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

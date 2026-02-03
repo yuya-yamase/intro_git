@@ -485,7 +485,7 @@ static  void    vd_s_wChimeCfgSftposRjctReqchk(U4* u4p_a_reqbit)
     u1_t_edge_jdg = u1_s_wchime_sftpos_si_last ^ u1_t_sftpos_rjct_req;
 
     if(u1_t_edge_jdg != (U1)0U){
-        if(u1_t_sftpos_rjct_req == (U1)ALERT_REQ_D_SFTPOS_B_RJTB_DBL1){
+        if(u1_t_sftpos_rjct_req == (U1)ALERT_REQ_D_SFTPOS_B_RJTB_DBL){
             vd_s_wChimeCfgReqOn(u4p_a_reqbit, (U1)WCHIME_REQ_SI_SFTPOS_NML);
         }
     }
@@ -857,6 +857,9 @@ static  void    vd_s_wChimeCfgReqDel(U4 * u4_ap_reqbit, const U1 u1_a_REQ_ID)
 /*  BEV-6     12/18/2025 ED       Change Macro name of MET-S_ADBZR-CSTD-0-06-A-C0                                                    */
 /*  BEV-7     12/19/2025 KH       Update for BEV System_Consideration_ADAS.(C_TPMS / H_BATTRW)                                       */
 /*  BEV-8      1/14/2025 JS       Change for BEV3CDCMET-2608                                                                         */
+/*  BEV-9     01/23/2026 NI       Change config for BEV Full_Function2                                                               */
+/*                                MET-D_SFTPOS-CSTD-1-00-B-C0.                                                                       */
+/*                                Change Name from RJTB_DBL1 to RJTB_DBL                                                             */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
 /*  * ToN  = Toshiharu Nagata, Denso Techno                                                                                          */
@@ -881,5 +884,6 @@ static  void    vd_s_wChimeCfgReqDel(U4 * u4_ap_reqbit, const U1 u1_a_REQ_ID)
 /*  * ED   = Emoh Dagasdas, DTPH                                                                                                     */
 /*  * KH   = Kiko Huerte, DTPH                                                                                                       */
 /*  * JS   = Jun Sugiyama, KSE                                                                                                       */
+/*  * NI   = Naoki Inagaki, KSE                                                                                                      */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
