@@ -1319,6 +1319,7 @@ const U1               u1_g_VDF_ESO_RXC_MAX = (U1)OXCAN_RXD_EVC_MAX;
 void    vd_g_VardefEsOptCfgInit(void)
 {
     vd_g_VardefEsOptCfgABG1S01Init();
+    vd_g_VardefEsOptCfgGvifInit();
 }
 /*===================================================================================================================================*/
 /*  U1      u1_g_VardefEsOptCfgCanRxEvcnt(const U2 u2_a_MSG_ID)                                                                      */
