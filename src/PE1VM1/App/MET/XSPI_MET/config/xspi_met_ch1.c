@@ -53,13 +53,13 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static inline void    vd_s_XSpiCanTx_AVN1S03(const U4 u4_a_TX_STS, const U4* u4_ap_tx_data);
-static inline void    vd_s_XSpiCanTx_MET1S02(const U4 u4_a_TX_STS, const U4* u4_ap_tx_data);
-static inline void    vd_s_XSpiCanTx_MET1S27(const U4 u4_a_TX_STS, const U4* u4_ap_tx_data);
-static inline void    vd_s_XSpiCanTx_MET1S29(const U4 u4_a_TX_STS, const U4* u4_ap_tx_data);
-static inline void    vd_s_XSpiCanTx_MET1S30(const U4 u4_a_TX_STS, const U4* u4_ap_tx_data);
-static inline void    vd_s_XSpiCanTx_MET1S62(const U4 u4_a_TX_STS, const U4* u4_ap_tx_data);
-static inline void    vd_s_XSpiCanTx_MET1S70(const U4 u4_a_TX_STS, const U4* u4_ap_tx_data);
+static inline void    vd_s_XSpiCanTx_AVN1S03(const U4* u4_ap_tx_data);
+static inline void    vd_s_XSpiCanTx_MET1S02(const U4* u4_ap_tx_data);
+static inline void    vd_s_XSpiCanTx_MET1S27(const U4* u4_ap_tx_data);
+static inline void    vd_s_XSpiCanTx_MET1S29(const U4* u4_ap_tx_data);
+static inline void    vd_s_XSpiCanTx_MET1S30(const U4* u4_ap_tx_data);
+static inline void    vd_s_XSpiCanTx_MET1S62(const U4* u4_ap_tx_data);
+static inline void    vd_s_XSpiCanTx_MET1S70(const U4* u4_ap_tx_data);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -84,13 +84,13 @@ void    vd_g_XSpiCfgInitCh1(void)
 /*===================================================================================================================================*/
 void    vd_g_XSpiCfgPduRxCh1(const U4 * u4_ap_PDU_RX)
 {
-    vd_s_XSpiCanTx_AVN1S03(u4_ap_PDU_RX[0],&u4_ap_PDU_RX[47]);
-    vd_s_XSpiCanTx_MET1S02(u4_ap_PDU_RX[0],&u4_ap_PDU_RX[69]);
-    vd_s_XSpiCanTx_MET1S27(u4_ap_PDU_RX[0],&u4_ap_PDU_RX[21]);
-    vd_s_XSpiCanTx_MET1S29(u4_ap_PDU_RX[0],&u4_ap_PDU_RX[23]);
-    vd_s_XSpiCanTx_MET1S30(u4_ap_PDU_RX[1],&u4_ap_PDU_RX[91]);
-    vd_s_XSpiCanTx_MET1S62(u4_ap_PDU_RX[0],&u4_ap_PDU_RX[37]);
-    vd_s_XSpiCanTx_MET1S70(u4_ap_PDU_RX[0],&u4_ap_PDU_RX[39]);
+    vd_s_XSpiCanTx_AVN1S03(&u4_ap_PDU_RX[47]);
+    vd_s_XSpiCanTx_MET1S02(&u4_ap_PDU_RX[69]);
+    vd_s_XSpiCanTx_MET1S27(&u4_ap_PDU_RX[21]);
+    vd_s_XSpiCanTx_MET1S29(&u4_ap_PDU_RX[23]);
+    vd_s_XSpiCanTx_MET1S30(&u4_ap_PDU_RX[91]);
+    vd_s_XSpiCanTx_MET1S62(&u4_ap_PDU_RX[37]);
+    vd_s_XSpiCanTx_MET1S70(&u4_ap_PDU_RX[39]);
 }
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -104,122 +104,115 @@ void    vd_g_XSpiCfgPduRxCh1(const U4 * u4_ap_PDU_RX)
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 
 /*===================================================================================================================================*/
-/*  static inline void    vd_s_XSpiCanTx_AVN1S03(const U4 u4_a_TX_STS, const U4 * u4_ap_tx_data)                                     */
+/*  static inline void    vd_s_XSpiCanTx_AVN1S03(const U4 * u4_ap_tx_data)                                                           */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:     u4_a_TX_STS                                                                                                       */
-/*                 u4_ap_tx_data                                                                                                     */
+/*  Arguments:     u4_ap_tx_data                                                                                                     */
 /*  Return:                                                                                                                          */
 /*===================================================================================================================================*/
-static inline void    vd_s_XSpiCanTx_AVN1S03(const U4 u4_a_TX_STS, const U4 * u4_ap_tx_data)
+static inline void    vd_s_XSpiCanTx_AVN1S03(const U4 * u4_ap_tx_data)
 {
     U1 u1_t_txsts;
 
-    u1_t_txsts = u1_XSPI_MET_READ__BIT(u4_a_TX_STS, (U1)20U, (U1)2U);
+    u1_t_txsts = u1_g_XSpiMETRxRdAccessSts((U1)XSPI_MET_XSPI_RX_AGLBE);
 
-    if (u1_t_txsts == (U1)XSPI_CANTX_VALID) {
+    if (u1_t_txsts == (U1)XSPI_MET_XSPI_RX_READ_VALID) {
         vd_g_CanTxAppAVN1S03_Put(&u4_ap_tx_data[0], (U1)XSPI_CANTX_BUFSIZE8);
     }
 }
 
 /*===================================================================================================================================*/
-/*  static inline void    vd_s_XSpiCanTx_MET1S02(const U4 u4_a_TX_STS, const U4 * u4_ap_tx_data)                                     */
+/*  static inline void    vd_s_XSpiCanTx_MET1S02(const U4 * u4_ap_tx_data)                                                           */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:     u4_a_TX_STS                                                                                                       */
-/*                 u4_ap_tx_data                                                                                                     */
+/*  Arguments:     u4_ap_tx_data                                                                                                     */
 /*  Return:                                                                                                                          */
 /*===================================================================================================================================*/
-static inline void    vd_s_XSpiCanTx_MET1S02(const U4 u4_a_TX_STS, const U4 * u4_ap_tx_data)
+static inline void    vd_s_XSpiCanTx_MET1S02(const U4 * u4_ap_tx_data)
 {
     U1 u1_t_txsts;
 
-    u1_t_txsts = u1_XSPI_MET_READ__BIT(u4_a_TX_STS, (U1)30U, (U1)2U);
+    u1_t_txsts = u1_g_XSpiMETRxRdAccessSts((U1)XSPI_MET_XSPI_RX_AGLBE);
 
-    if (u1_t_txsts == (U1)XSPI_CANTX_VALID) {
+    if (u1_t_txsts == (U1)XSPI_MET_XSPI_RX_READ_VALID) {
         vd_g_CanTxAppMET1S02_Put(&u4_ap_tx_data[0], (U1)XSPI_CANTX_BUFSIZE2);
     }
 }
 /*===================================================================================================================================*/
-/*  static inline void    vd_s_XSpiCanTx_MET1S27(const U4 u4_a_TX_STS, const U4 * u4_ap_tx_data)                                     */
+/*  static inline void    vd_s_XSpiCanTx_MET1S27(const U4 * u4_ap_tx_data)                                                           */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:     u4_a_TX_STS                                                                                                       */
-/*                 u4_ap_tx_data                                                                                                     */
+/*  Arguments:     u4_ap_tx_data                                                                                                     */
 /*  Return:                                                                                                                          */
 /*===================================================================================================================================*/
-static inline void    vd_s_XSpiCanTx_MET1S27(const U4 u4_a_TX_STS, const U4 * u4_ap_tx_data)
+static inline void    vd_s_XSpiCanTx_MET1S27(const U4 * u4_ap_tx_data)
 {
     U1 u1_t_txsts;
 
-    u1_t_txsts = u1_XSPI_MET_READ__BIT(u4_a_TX_STS, (U1)6U, (U1)2U);
+    u1_t_txsts = u1_g_XSpiMETRxRdAccessSts((U1)XSPI_MET_XSPI_RX_AGLBE);
 
-    if (u1_t_txsts == (U1)XSPI_CANTX_VALID) {
+    if (u1_t_txsts == (U1)XSPI_MET_XSPI_RX_READ_VALID) {
         vd_g_CanTxAppMET1S27_Put(&u4_ap_tx_data[0], (U1)XSPI_CANTX_BUFSIZE2);
     }
 }
 /*===================================================================================================================================*/
-/*  static inline void    vd_s_XSpiCanTx_MET1S29(const U4 u4_a_TX_STS, const U4 * u4_ap_tx_data)                                     */
+/*  static inline void    vd_s_XSpiCanTx_MET1S29(const U4 * u4_ap_tx_data)                                                           */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:     u4_a_TX_STS                                                                                                       */
-/*                 u4_ap_tx_data                                                                                                     */
+/*  Arguments:     u4_ap_tx_data                                                                                                     */
 /*  Return:                                                                                                                          */
 /*===================================================================================================================================*/
-static inline void    vd_s_XSpiCanTx_MET1S29(const U4 u4_a_TX_STS, const U4 * u4_ap_tx_data)
+static inline void    vd_s_XSpiCanTx_MET1S29(const U4 * u4_ap_tx_data)
 {
     U1 u1_t_txsts;
 
-    u1_t_txsts = u1_XSPI_MET_READ__BIT(u4_a_TX_STS, (U1)8U, (U1)2U);
+    u1_t_txsts = u1_g_XSpiMETRxRdAccessSts((U1)XSPI_MET_XSPI_RX_AGLBE);
 
-    if (u1_t_txsts == (U1)XSPI_CANTX_VALID) {
+    if (u1_t_txsts == (U1)XSPI_MET_XSPI_RX_READ_VALID) {
         vd_g_CanTxAppMET1S29_Put(&u4_ap_tx_data[0], (U1)XSPI_CANTX_BUFSIZE2);
     }
 }
 /*===================================================================================================================================*/
-/*  static inline void    vd_s_XSpiCanTx_MET1S30(const U4 u4_a_TX_STS, const U4 * u4_ap_tx_data)                                     */
+/*  static inline void    vd_s_XSpiCanTx_MET1S30(const U4 * u4_ap_tx_data)                                                           */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:     u4_a_TX_STS                                                                                                       */
-/*                 u4_ap_tx_data                                                                                                     */
+/*  Arguments:     u4_ap_tx_data                                                                                                     */
 /*  Return:                                                                                                                          */
 /*===================================================================================================================================*/
-static inline void    vd_s_XSpiCanTx_MET1S30(const U4 u4_a_TX_STS, const U4 * u4_ap_tx_data)
+static inline void    vd_s_XSpiCanTx_MET1S30(const U4 * u4_ap_tx_data)
 {
     U1 u1_t_txsts;
 
-    u1_t_txsts = u1_XSPI_MET_READ__BIT(u4_a_TX_STS, (U1)8U, (U1)2U);
+    u1_t_txsts = u1_g_XSpiMETRxRdAccessSts((U1)XSPI_MET_XSPI_RX_AGLBE);
 
-    if (u1_t_txsts == (U1)XSPI_CANTX_VALID) {
+    if (u1_t_txsts == (U1)XSPI_MET_XSPI_RX_READ_VALID) {
         vd_g_CanTxAppMET1S30_Put(&u4_ap_tx_data[0], (U1)XSPI_CANTX_BUFSIZE8);
     }
 }
 /*===================================================================================================================================*/
-/*  static inline void    vd_s_XSpiCanTx_MET1S62(const U4 u4_a_TX_STS, const U4 * u4_ap_tx_data)                                     */
+/*  static inline void    vd_s_XSpiCanTx_MET1S62(const U4 * u4_ap_tx_data)                                                           */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:     u4_a_TX_STS                                                                                                       */
-/*                 u4_ap_tx_data                                                                                                     */
+/*  Arguments:     u4_ap_tx_data                                                                                                     */
 /*  Return:                                                                                                                          */
 /*===================================================================================================================================*/
-static inline void    vd_s_XSpiCanTx_MET1S62(const U4 u4_a_TX_STS, const U4 * u4_ap_tx_data)
+static inline void    vd_s_XSpiCanTx_MET1S62(const U4 * u4_ap_tx_data)
 {
     U1 u1_t_txsts;
 
-    u1_t_txsts = u1_XSPI_MET_READ__BIT(u4_a_TX_STS, (U1)16U, (U1)2U);
+    u1_t_txsts = u1_g_XSpiMETRxRdAccessSts((U1)XSPI_MET_XSPI_RX_AGLBE);
 
-    if (u1_t_txsts == (U1)XSPI_CANTX_VALID) {
+    if (u1_t_txsts == (U1)XSPI_MET_XSPI_RX_READ_VALID) {
         vd_g_CanTxAppMET1S62_Put(&u4_ap_tx_data[0], (U1)XSPI_CANTX_BUFSIZE2);
     }
 }
 /*===================================================================================================================================*/
-/*  static inline void    vd_s_XSpiCanTx_MET1S70(const U4 u4_a_TX_STS, const U4 * u4_ap_tx_data)                                     */
+/*  static inline void    vd_s_XSpiCanTx_MET1S70(const U4 * u4_ap_tx_data)                                                           */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:     u4_a_TX_STS                                                                                                       */
-/*                 u4_ap_tx_data                                                                                                     */
+/*  Arguments:     u4_ap_tx_data                                                                                                     */
 /*  Return:                                                                                                                          */
 /*===================================================================================================================================*/
-static inline void    vd_s_XSpiCanTx_MET1S70(const U4 u4_a_TX_STS, const U4 * u4_ap_tx_data)
+static inline void    vd_s_XSpiCanTx_MET1S70(const U4 * u4_ap_tx_data)
 {
     U1 u1_t_txsts;
 
-    u1_t_txsts = u1_XSPI_MET_READ__BIT(u4_a_TX_STS, (U1)18U, (U1)2U);
+    u1_t_txsts = u1_g_XSpiMETRxRdAccessSts((U1)XSPI_MET_XSPI_RX_AGLBE);
 
-    if (u1_t_txsts == (U1)XSPI_CANTX_VALID) {
+    if (u1_t_txsts == (U1)XSPI_MET_XSPI_RX_READ_VALID) {
         vd_g_CanTxAppMET1S70_Put(&u4_ap_tx_data[0], (U1)XSPI_CANTX_BUFSIZE8);
     }
 }
@@ -279,6 +272,7 @@ static inline void    vd_s_XSpiCanTx_MET1S70(const U4 u4_a_TX_STS, const U4 * u4
 /*           10/22/2025  TS       Change for BEV rebase.                                                                             */
 /*           11/13/2025  YN       Change for BEV rebase.(Add CanTxApp)                                                               */
 /*           12/08/2025  YN       Change for BEV rebase.(Add CanTxApp_2)                                                             */
+/*           01/30/2026  TN       Fix initial value issue (BEV3CDCMET-3693).                                                         */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * KM   = Keisuke Mashita, Denso Techno                                                                                           */
