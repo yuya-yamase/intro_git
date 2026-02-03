@@ -37,10 +37,10 @@
 #define XSPI_MET_XSPI_RX_QNXBE                (3U)
 #define XSPI_MET_XSPI_RX_DAE                  (4U)
 
-#define XSPI_MET_XSPI_RX_READ_STS_INVALID_0   (0U)
-#define XSPI_MET_XSPI_RX_READ_STS_VALID       (1U)
-#define XSPI_MET_XSPI_RX_READ_STS_INVALID_2   (2U)
-#define XSPI_MET_XSPI_RX_READ_STS_INVALID_3   (3U)
+#define XSPI_MET_XSPI_RX_READ_INVALID_0       (0U)
+#define XSPI_MET_XSPI_RX_READ_VALID           (1U)
+#define XSPI_MET_XSPI_RX_READ_INVALID_2       (2U)
+#define XSPI_MET_XSPI_RX_READ_INVALID_3       (3U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

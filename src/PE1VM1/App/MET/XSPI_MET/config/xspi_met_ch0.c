@@ -810,7 +810,7 @@ static inline void    vd_s_XSpiCfgRxDispsts(    const U4 * u4_ap_PDU_RX) {
     U1  u1_t_display_sts;
 
     u1_t_sts = u1_g_XSpiMETRxRdAccessSts((U1)XSPI_MET_XSPI_RX_AGLBE);
-    if(u1_t_sts == (U1)XSPI_MET_XSPI_RX_READ_STS_VALID){
+    if(u1_t_sts == (U1)XSPI_MET_XSPI_RX_READ_VALID){
         u1_t_display_sts = u1_XSPI_MET_READ__BIT(u4_ap_PDU_RX[0], (U1)0U, (U1)2U);            /* DISPLAY_STS         */
         if(u1_t_display_sts == (U1)0x01U){
             vd_g_HmiScreenPut((U1)TRUE);
@@ -836,7 +836,7 @@ static inline void    vd_s_XSpiCfgRxMetcstm(    const U4 * u4_ap_PDU_RX) {
 
 /* CSTM_VOL_CHANGE */
     u1_t_sts = u1_g_XSpiMETRxRdAccessSts((U1)XSPI_MET_XSPI_RX_AGLBE);
-    if(u1_t_sts == (U1)XSPI_MET_XSPI_RX_READ_STS_VALID){
+    if(u1_t_sts == (U1)XSPI_MET_XSPI_RX_READ_VALID){
         u1_t_cstmvol = u1_XSPI_MET_READ__BIT(u4_ap_PDU_RX[3] , (U1)19U, 3U);
         vd_g_wChimePutMWVCope(u1_t_cstmvol);
 #endif   /* BEV Rebase provisionally */
@@ -871,7 +871,7 @@ static inline void    vd_s_XSpiCfgRxWchime(     const U4 * u4_ap_PDU_RX) {
     U1  u1_t_wchime[HMIWCHIME_NUM];
     
     u1_t_sts = u1_g_XSpiMETRxRdAccessSts((U1)XSPI_MET_XSPI_RX_AGLBE);
-    if(u1_t_sts == (U1)XSPI_MET_XSPI_RX_READ_STS_VALID){
+    if(u1_t_sts == (U1)XSPI_MET_XSPI_RX_READ_VALID){
         u1_t_wchime[HMIWCHIME_TSR_A]       = (U1)0U;                                                            /* -              */
         u1_t_wchime[HMIWCHIME_TSR_P]       = (U1)0U;                                                            /* -              */
         u1_t_wchime[HMIWCHIME_MASTER]      = u1_XSPI_MET_READ__BIT(u4_ap_PDU_RX[1] , (U1)0U , (U1)2U);          /* MASTER_BZ      */
@@ -890,7 +890,7 @@ static inline void    vd_s_XSpiCfgRxLocale(     const U4 * u4_ap_PDU_RX) {
     ST_HMILOCALE st_t_hmilocale;
 
     u1_t_sts = u1_g_XSpiMETRxRdAccessSts((U1)XSPI_MET_XSPI_RX_AGLBE);
-    if(u1_t_sts == (U1)XSPI_MET_XSPI_RX_READ_STS_VALID){
+    if(u1_t_sts == (U1)XSPI_MET_XSPI_RX_READ_VALID){
         st_t_hmilocale.u1_language    = (U1)u4_ap_PDU_RX[0];
         st_t_hmilocale.u1_unit_dist   = u1_XSPI_MET_READ__BIT(u4_ap_PDU_RX[1] , (U1) 0U , (U1)2U);
         st_t_hmilocale.u1_unit_speed  = u1_XSPI_MET_READ__BIT(u4_ap_PDU_RX[1] , (U1) 2U , (U1)2U);
@@ -914,7 +914,7 @@ static inline void    vd_s_XSpiCfgRxRcmmui(     const U4 * u4_ap_PDU_RX) {
     U1                 u1_t_usract;
 
     u1_t_sts = u1_g_XSpiMETRxRdAccessSts((U1)XSPI_MET_XSPI_RX_AGLBE);
-    if(u1_t_sts == (U1)XSPI_MET_XSPI_RX_READ_STS_VALID){
+    if(u1_t_sts == (U1)XSPI_MET_XSPI_RX_READ_VALID){
         u1_t_cid    = u1_XSPI_MET_READ_BYTE(u4_ap_PDU_RX[0] , (U1)1U);
         u1_t_usract = u1_XSPI_MET_READ_BYTE(u4_ap_PDU_RX[0] , (U1)0U);
         vd_g_RcmmUIUserAct(u1_t_cid , u1_t_usract);
@@ -934,7 +934,7 @@ static inline void    vd_s_XSpiCfgRxOdo(        const U4 * u4_ap_PDU_RX) {
     U4  u4_t_trip_b;
 
     u1_t_sts = u1_g_XSpiMETRxRdAccessSts((U1)XSPI_MET_XSPI_RX_AGLBE);
-    if(u1_t_sts == (U1)XSPI_MET_XSPI_RX_READ_STS_VALID){
+    if(u1_t_sts == (U1)XSPI_MET_XSPI_RX_READ_VALID){
         u4_t_trip_a    = u4_ap_PDU_RX[0];                                        /* TRIP_A                               */
         u4_t_trip_b    = u4_ap_PDU_RX[2];                                        /* TRIP_B                               */
 
@@ -953,7 +953,7 @@ static inline void    vd_s_XSpiCfgRxTripcom(    const U4 * u4_ap_PDU_RX) {
     ST_HMITRIPCOM st_t_hmitripcom;
 
     u1_t_sts = u1_g_XSpiMETRxRdAccessSts((U1)XSPI_MET_XSPI_RX_AGLBE);
-    if(u1_t_sts == (U1)XSPI_MET_XSPI_RX_READ_STS_VALID){
+    if(u1_t_sts == (U1)XSPI_MET_XSPI_RX_READ_VALID){
         st_t_hmitripcom.u2_avg_vehspd_kmph_ta  = (U2)u4_ap_PDU_RX[0];       /* AVG_SPD_KMPH_USRRST                  */
         st_t_hmitripcom.u4_dist_km_tr_a        = u4_ap_PDU_RX[5];           /* TRIPA_DIST_KM_USRRST                 */
         st_t_hmitripcom.u4_dist_km_tr_b        = u4_ap_PDU_RX[6];           /* TRIPB_DIST_KM_USRRST                 */
@@ -1025,7 +1025,7 @@ static inline void    vd_s_XSpiCfgRxAvgGrph(const U4 * u4_ap_PDU_RX) {
     U1  u1_t_sts;
     
     u1_t_sts = u1_g_XSpiMETRxRdAccessSts((U1)XSPI_MET_XSPI_RX_AGLBE);
-    if(u1_t_sts == (U1)XSPI_MET_XSPI_RX_READ_STS_VALID){
+    if(u1_t_sts == (U1)XSPI_MET_XSPI_RX_READ_VALID){
         vd_g_HmiTripcomGrphPut(&u4_ap_PDU_RX[0]);
     }
 }

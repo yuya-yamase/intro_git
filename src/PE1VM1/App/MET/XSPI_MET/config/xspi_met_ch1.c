@@ -115,7 +115,7 @@ static inline void    vd_s_XSpiCanTx_AVN1S03(const U4 * u4_ap_tx_data)
 
     u1_t_txsts = u1_g_XSpiMETRxRdAccessSts((U1)XSPI_MET_XSPI_RX_AGLBE);
 
-    if (u1_t_txsts == (U1)XSPI_MET_XSPI_RX_READ_STS_VALID) {
+    if (u1_t_txsts == (U1)XSPI_MET_XSPI_RX_READ_VALID) {
         vd_g_CanTxAppAVN1S03_Put(&u4_ap_tx_data[0], (U1)XSPI_CANTX_BUFSIZE8);
     }
 }
@@ -132,7 +132,7 @@ static inline void    vd_s_XSpiCanTx_MET1S02(const U4 * u4_ap_tx_data)
 
     u1_t_txsts = u1_g_XSpiMETRxRdAccessSts((U1)XSPI_MET_XSPI_RX_AGLBE);
 
-    if (u1_t_txsts == (U1)XSPI_MET_XSPI_RX_READ_STS_VALID) {
+    if (u1_t_txsts == (U1)XSPI_MET_XSPI_RX_READ_VALID) {
         vd_g_CanTxAppMET1S02_Put(&u4_ap_tx_data[0], (U1)XSPI_CANTX_BUFSIZE2);
     }
 }
@@ -148,7 +148,7 @@ static inline void    vd_s_XSpiCanTx_MET1S27(const U4 * u4_ap_tx_data)
 
     u1_t_txsts = u1_g_XSpiMETRxRdAccessSts((U1)XSPI_MET_XSPI_RX_AGLBE);
 
-    if (u1_t_txsts == (U1)XSPI_MET_XSPI_RX_READ_STS_VALID) {
+    if (u1_t_txsts == (U1)XSPI_MET_XSPI_RX_READ_VALID) {
         vd_g_CanTxAppMET1S27_Put(&u4_ap_tx_data[0], (U1)XSPI_CANTX_BUFSIZE2);
     }
 }
@@ -164,7 +164,7 @@ static inline void    vd_s_XSpiCanTx_MET1S29(const U4 * u4_ap_tx_data)
 
     u1_t_txsts = u1_g_XSpiMETRxRdAccessSts((U1)XSPI_MET_XSPI_RX_AGLBE);
 
-    if (u1_t_txsts == (U1)XSPI_MET_XSPI_RX_READ_STS_VALID) {
+    if (u1_t_txsts == (U1)XSPI_MET_XSPI_RX_READ_VALID) {
         vd_g_CanTxAppMET1S29_Put(&u4_ap_tx_data[0], (U1)XSPI_CANTX_BUFSIZE2);
     }
 }
@@ -180,7 +180,7 @@ static inline void    vd_s_XSpiCanTx_MET1S30(const U4 * u4_ap_tx_data)
 
     u1_t_txsts = u1_g_XSpiMETRxRdAccessSts((U1)XSPI_MET_XSPI_RX_AGLBE);
 
-    if (u1_t_txsts == (U1)XSPI_MET_XSPI_RX_READ_STS_VALID) {
+    if (u1_t_txsts == (U1)XSPI_MET_XSPI_RX_READ_VALID) {
         vd_g_CanTxAppMET1S30_Put(&u4_ap_tx_data[0], (U1)XSPI_CANTX_BUFSIZE8);
     }
 }
@@ -196,7 +196,7 @@ static inline void    vd_s_XSpiCanTx_MET1S62(const U4 * u4_ap_tx_data)
 
     u1_t_txsts = u1_g_XSpiMETRxRdAccessSts((U1)XSPI_MET_XSPI_RX_AGLBE);
 
-    if (u1_t_txsts == (U1)XSPI_MET_XSPI_RX_READ_STS_VALID) {
+    if (u1_t_txsts == (U1)XSPI_MET_XSPI_RX_READ_VALID) {
         vd_g_CanTxAppMET1S62_Put(&u4_ap_tx_data[0], (U1)XSPI_CANTX_BUFSIZE2);
     }
 }
@@ -212,7 +212,7 @@ static inline void    vd_s_XSpiCanTx_MET1S70(const U4 * u4_ap_tx_data)
 
     u1_t_txsts = u1_g_XSpiMETRxRdAccessSts((U1)XSPI_MET_XSPI_RX_AGLBE);
 
-    if (u1_t_txsts == (U1)XSPI_MET_XSPI_RX_READ_STS_VALID) {
+    if (u1_t_txsts == (U1)XSPI_MET_XSPI_RX_READ_VALID) {
         vd_g_CanTxAppMET1S70_Put(&u4_ap_tx_data[0], (U1)XSPI_CANTX_BUFSIZE8);
     }
 }

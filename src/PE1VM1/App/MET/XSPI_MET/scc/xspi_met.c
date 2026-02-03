@@ -55,7 +55,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static U4                u4_sp_xspi_met_db_tra[XSPI_MET_PDU_NWORD];
-static U4                u4_s_xspi_met_rx_read_access_sts;
+static U4                u4_s_xspi_met_rx_rd_access_sts;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
@@ -89,7 +89,7 @@ void    vd_g_XSpiMETInit(void)
         u4_sp_xspi_met_db_tra[u4_t_lpcnt] = (U4)U4_MAX;
     }
     /* ALL Status INVALID */
-    u4_s_xspi_met_rx_read_access_sts = (U4)0U;
+    u4_s_xspi_met_rx_rd_access_sts = (U4)0U;
 
     vd_g_XSpiMETCANGWInit();
     vd_g_XSpiCfgInitCh0();
@@ -110,13 +110,13 @@ void    vd_g_XSpiMETPduRx(void)
 
     u1_t_read_sts = xspi_Read((U1)XSPI_CH_02, &u4p_t_data[0],(U4)XSPI_FRM_MAX_WORD);
     if((u1_t_read_sts == (U1)XSPI_OK) && (u4p_t_data != vdp_PTR_NA)) {
-        u4_s_xspi_met_rx_read_access_sts = u4p_t_data[2];
+        u4_s_xspi_met_rx_rd_access_sts = u4p_t_data[2];
         vd_g_XSpiCfgPduRxCh0(&u4p_t_data[0]);
         vd_g_XSpiCfgPduRxCh1(&u4p_t_data[700]);
     }
     else{
         /* ALL Status INVALID */
-        u4_s_xspi_met_rx_read_access_sts = (U4)0U;
+        u4_s_xspi_met_rx_rd_access_sts = (U4)0U;
     }
 }
 
@@ -180,7 +180,7 @@ U1    u1_g_XSpiMETRxRdAccessSts(const U1 u1_a_KIND)
     /* ALL Status INVALID */
     u1_t_sts = (U1)0U;
     if(u1_a_KIND < (U1)XSPI_MET_XSPI_RX_READ_STS_NUM){ 
-        u1_t_sts = (U1)(u4_s_xspi_met_rx_read_access_sts >> (U4)(u1_a_KIND << 1)) & (U1)XSPI_MET_XSPI_RX_READ_STS_MASK;
+        u1_t_sts = (U1)(u4_s_xspi_met_rx_rd_access_sts >> (U4)(u1_a_KIND << 1)) & (U1)XSPI_MET_XSPI_RX_READ_STS_MASK;
     }
     return (u1_t_sts);
 }   
