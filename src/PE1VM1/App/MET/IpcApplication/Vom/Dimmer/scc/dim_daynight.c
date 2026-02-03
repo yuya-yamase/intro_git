@@ -1,4 +1,4 @@
-/* 1.1.0 */
+/* 1.2.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define DIM_DAYNIGHT_C_MAJOR                     (1)
-#define DIM_DAYNIGHT_C_MINOR                     (1)
+#define DIM_DAYNIGHT_C_MINOR                     (2)
 #define DIM_DAYNIGHT_C_PATCH                     (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -170,7 +170,7 @@ static U1      u1_s_DimDaynightAdimUpdt(const U1 u1_a_ACT, const U1 u1_a_LAST, c
         case DIM_ADIM_ACT_TO_RT_1ST:
             u2_s_dim_adim_tocnt   = (U2)U2_MAX;
             u1_s_dim_adim_rx_chk  = (U1)DIM_ADIM_RX_CHK_RT_1ST;
-            u1_t_daynight         = (U1)DIM_DAYNIGHT_LVL_DAY;
+            u1_t_daynight         = (U1)DIM_DAYNIGHT_LVL_NIGHT;
             break;
         case DIM_ADIM_ACT_TO_RT_2ND:
             u2_s_dim_adim_tocnt   = (U2)U2_MAX;
@@ -202,7 +202,9 @@ static U1      u1_s_DimDaynightAdimUpdt(const U1 u1_a_ACT, const U1 u1_a_LAST, c
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  1.0.0     3/18/2018  TN       New.                                                                                               */
 /*  1.1.0     2/22/2019  TN       vd_g_DimDaynightCfgDnInfTx was implemented.                                                        */
+/*  1.2.0     1/21/2026  KO       Change fail-safe process of ADIM2 signal for BEV FF2.                                              */
 /*                                                                                                                                   */
 /*  * TN = Takashi Nagai, DENSO                                                                                                      */
+/*  * KO = Kazuto Oishi,  Denso Techno                                                                                               */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

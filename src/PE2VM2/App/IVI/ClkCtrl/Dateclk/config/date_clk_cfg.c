@@ -16,13 +16,13 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#include "aip_common.h"
+
+#include "date_clk.h"
 #include "date_clk_cfg_private.h"
-#include "date_clk_sca.h"
 
 #include "ivdsh.h"
-// #include "esi_ssc.h"
-// #include "ecu_m.h"
-// #include "calibration.h"
+#include "rim_ctl.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -36,16 +36,14 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define DATE_CLK_DAYCNT_MIN                      (737424U)                             /* [days] Dec-31st-2018 */
-#define DATE_CLK_DAYCNT_MAX                      (767010U)                             /* [days] Jan-1st-2100  */
 #define DATE_CLK_OFFSET_2000DAYCUNT              (730485U)                              /* [days] Jan-1st-2000  */
 #define DATE_CLK_DAYCNT_DISP_MAX                 (DATE_CLK_OFFSET_2000DAYCUNT + 36524U) /* [days] Dec-31st-2099 */
 #define DATE_CLK_CAL_MIN_MM_DD                   (0x00001010U)
 #define DATE_CLK_CAL_DEF_MM_DD                   (0x00001010U)
 #define DATE_CLK_CAL_MIN_MINUS                   (1U)
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define u2_DATESI_CAL_DEF                       ((U2)2050U)                                  /* Disp Default Year                    */
-#define u2_DATESI_CAL_YEAR_MIN                  ((U2)2021U)                                  /* Disp Min Year                        */
+#define u2_DATESI_CAL_DEF                        ((U2)2050U)                            /* Disp Default Year                         */
+#define u2_DATESI_CAL_YEAR_MIN                   ((U2)2000U)                            /* Disp Min Year                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -57,8 +55,6 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-U4                  u4_gp_dateclk_etm_frt[DATE_CLK_ETM_NUM_CH] __attribute__((section(".bss_BACK")));
-
 #if (__DATE_CLK_DET__ == 1U)
 static U1                  u1_s_dateclk_errcnt                 __attribute__((section(".bss_BACK")));
 static ST_DATE_CLK_LOG     st_s_dateclk_log_latest             __attribute__((section(".bss_BACK")));
@@ -82,17 +78,7 @@ static        U4      u4_s_DateclkCfgGetDayCntMin(void);
 const U4            u4_g_DATE_CLK_DAYCNT_MIN = (U4)DATE_CLK_DAYCNT_MIN;
 const U4            u4_g_DATE_CLK_DAYCNT_MAX = (U4)DATE_CLK_DAYCNT_MAX;
 
-/* ----------------------------------------------------------------------------------- */
-/* Attention :                                                                         */
-/* ----------------------------------------------------------------------------------- */
-/* u4_g_DATE_CLK_RTC_SYNC_MAX shall be configured based on MCU wake-up period.         */
-/* Check the configuration "st_g_RTC_DRV_CFG.u1_ctrl_1" in rtc_drv_cfg.c about the     */
-/* period.                                                                             */
-/* ----------------------------------------------------------------------------------- */
-const U4            u4_g_DATE_CLK_RTC_SYNC_MAX = (U4)HHMMSS_MI_TO_SE * (U4)3U;         /* [seconds]            */
 const U2            u2_g_DATE_CLK_ADJ_TOUT     = (U2)1000U / (U2)DATE_CLK_MAIN_TICK;
-
-const U1            u1_g_DATE_CLK_ETM_NUM_CH   = (U1)DATE_CLK_ETM_NUM_CH;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
@@ -120,17 +106,31 @@ U4      u4_g_DateclkCfgHhmmss24hInit(void)
 U4      u4_g_DateclkCfgDaycntInit(void)
 {
     U4  u4_t_date_calendar;
+    U2  u2_t_date_calendar_rim;
     U4  u4_t_daycnt;
     U4  u4_t_ret;
+    U1  u1_t_sts;
     U1  u1_t_read_sts;
     U4  u4_t_daycnt_min;
 
+    u1_t_sts           = (U1)FALSE;
     u4_t_ret           = u4_s_DateclkCfgCaldefValJdg();
     u4_t_date_calendar = (U4)0U;
     u1_t_read_sts      = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_VM1TO2_CAL, &u4_t_date_calendar, (U2)1U);
     u4_t_daycnt_min    = u4_s_DateclkCfgGetDayCntMin();
     
-    if(u1_t_read_sts != (U1)IVDSH_NO_REA){
+    if(u1_t_read_sts == (U1)IVDSH_NO_REA){
+        u1_t_read_sts = u1_g_Rim_ReadU2withStatus((U2)RIMID_U2_CAL_DATE, &u2_t_date_calendar_rim);
+        if ((u1_t_read_sts  & (U1)RIM_RESULT_KIND_MASK) == (U1)RIM_RESULT_KIND_OK) {
+            u4_t_date_calendar = (U4)u2_t_date_calendar_rim;
+            u1_t_sts           = (U1)TRUE;
+        }
+    }
+    else {
+        u1_t_sts = (U1)TRUE;
+    }
+
+    if (u1_t_sts == (U1)TRUE) {
         u4_t_daycnt = u4_t_date_calendar + (U4)DATE_CLK_OFFSET_2000DAYCUNT;
         /* The type of u2_t_date_calendar is U2, so max value of u2_t_date_calendar is 65535.        */
         /* Therefor (u2_t_date_calendar + DATE_CLK_OFFSET_2000DAYCUNT) is always lower than U4_MAX   */
@@ -144,41 +144,6 @@ U4      u4_g_DateclkCfgDaycntInit(void)
         vd_g_DateclkYymmdd_Commit((U1)FALSE);
     }
     return(u4_t_ret);
-}
-/*===================================================================================================================================*/
-/*  S2      s2_g_DateclkCfgCalSubsecond(void)                                                                                        */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-S2      s2_g_DateclkCfgCalSubsecond(void)
-{
-    return((S2)0U);
-}
-/*===================================================================================================================================*/
-/*  U4      u4_g_DateclkCfgTmrwkTimout(void)                                                                                         */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U4      u4_g_DateclkCfgTmrwkTimout(void)
-{
-    /* ----------------------------------------------------------------------------------------------- */
-    /* Attention :                                                                                     */
-    /* ----------------------------------------------------------------------------------------------- */
-    /* If u4_g_DateclkCfgTmrwkTimout returns the value which is greater than DATE_CLK_TMRWK_NO_TOUT,   */
-    /* The MCU low power mode "RTC DEEP STOP", i.g. "Timer Wakeup" is always enabled.                  */
-    /*                                                                                                 */
-    /* Use case #1 :                                                                                   */
-    /* If Date/Time value requires to be displayed, the return value shall be always greater than      */
-    /* DATE_CLK_ETM_MAX.                                                                               */
-    /*                                                                                                 */
-    /* Use case #2 :                                                                                   */
-    /* If a feature requirs to measure and count IG-OFF time and save current drain once the time      */
-    /* expired, the threshold expects to be returned.                                                  */
-    /* ----------------------------------------------------------------------------------------------- */
-
-    return((U4)DATE_CLK_TMRWK_NO_TOUT);
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_DateclkCfgLogCapt(const ST_DATE_CLK_LOG * st_ap_LOG, const U1 u1_a_ADJ)                                             */
@@ -218,20 +183,6 @@ void    vd_g_DateclkCfgLogCapt(const ST_DATE_CLK_LOG * st_ap_LOG, const U1 u1_a_
         /* keep last */
     }
 #endif
-#if 0
-    U4                 u4_tp_ss[ESI_SSC_SS_NWORD];
-    U1                 u1_t_cae;
-
-    u1_t_cae = st_ap_LOG->u1_rtc_rea & (U1)RTCLK_STSBIT_CALB_INCRRCT;
-    if((st_ap_LOG->u1_callpt     >= (U1)DATE_CLK_LOG_CP_MAI) &&
-       (st_ap_LOG->u1_callpt     <= (U1)DATE_CLK_LOG_CP_SET) &&
-       (u1_t_cae                 != (U1)0U                 )){
-
-        u4_tp_ss[ESI_SSC_W0_MISC] = (U4)ESI_SSC_MISC_RTC_CAE;
-        u4_tp_ss[ESI_SSC_W1_LCOM] = (U4)0U;
-        vd_g_ESISscEvDtct(&u4_tp_ss[0]);
-    }
-#endif
 }
 /*===================================================================================================================================*/
 /*  U4      u4_g_DateclkCfgDayCntMinValJdg(void)                                                                                     */
@@ -258,13 +209,32 @@ U4      u4_g_DateclkCfgDayCntMinValJdg(void)
 /*===================================================================================================================================*/
 static U4    u4_s_DateclkCfgCaldefValJdg(void)
 {
-    U2                 u2_t_caldef_val;
+    U4                 u4_t_caldef_val;
+    U2                 u2_t_caldef_val_rim;
     U4                 u4_t_def_yymmdd;
     U4                 u4_t_def_daycnt;
+    U1                 u1_t_sts;
+    U1                 u1_t_read_sts;
 
-    u2_t_caldef_val  = u2_DATESI_CAL_DEF;
+    u1_t_sts         = (U1)FALSE;
+    u4_t_caldef_val  = (U4)0U;
+    u1_t_read_sts = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_VM1TO2_CALDEF, &u4_t_caldef_val, (U2)1U);
+    if(u1_t_read_sts == (U1)IVDSH_NO_REA){
+        u1_t_read_sts = u1_g_Rim_ReadU2withStatus((U2)RIMID_U2_CAL_DEF, &u2_t_caldef_val_rim);
+        if ((u1_t_read_sts  & (U1)RIM_RESULT_KIND_MASK) == (U1)RIM_RESULT_KIND_OK) {
+            u4_t_caldef_val = (U4)u2_t_caldef_val_rim;
+            u1_t_sts = (U1)TRUE;
+        }
+    }
+    else {
+        u1_t_sts = (U1)TRUE;
+    }
+
+    if((u1_t_sts == (U1)FALSE) || (u4_t_caldef_val > (U4)U2_MAX)){
+        u4_t_caldef_val  = (U4)u2_DATESI_CAL_DEF;
+    }
     u4_t_def_yymmdd  = (U4)DATE_CLK_CAL_DEF_MM_DD;
-    u4_t_def_yymmdd |= ((U4)u2_t_caldef_val << YYMMDDWK_LSB_YR);
+    u4_t_def_yymmdd |= (u4_t_caldef_val << YYMMDDWK_LSB_YR);
     u4_t_def_daycnt  = u4_g_YymmddToDaycnt(u4_t_def_yymmdd);
 
     return(u4_t_def_daycnt);
@@ -277,13 +247,32 @@ static U4    u4_s_DateclkCfgCaldefValJdg(void)
 /*===================================================================================================================================*/
 static U4    u4_s_DateclkCfgGetDayCntMin(void)
 {
-    U2                 u2_t_calmin_val;
+    U4                 u4_t_calmin_val;
+    U2                 u2_t_calmin_val_rim;
     U4                 u4_t_min_yymmdd;
     U4                 u4_t_min_daycnt;
+    U1                 u1_t_sts;
+    U1                 u1_t_read_sts;
 
-    u2_t_calmin_val  = u2_DATESI_CAL_YEAR_MIN;
+    u1_t_sts        = (U1)FALSE;
+    u4_t_calmin_val = (U4)0U;
+    u1_t_read_sts = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_VM1TO2_CALMIN, &u4_t_calmin_val, (U2)1U);
+    if(u1_t_read_sts == (U1)IVDSH_NO_REA){
+        u1_t_read_sts = u1_g_Rim_ReadU2withStatus((U2)RIMID_U2_CAL_MIN, &u2_t_calmin_val_rim);
+        if ((u1_t_read_sts & (U1)RIM_RESULT_KIND_MASK) == (U1)RIM_RESULT_KIND_OK) {
+            u4_t_calmin_val = (U4)u2_t_calmin_val_rim;
+            u1_t_sts = (U1)TRUE;
+        }
+    }
+    else {
+        u1_t_sts = (U1)TRUE;
+    }
+
+    if((u1_t_sts == (U1)FALSE) || (u4_t_calmin_val > (U4)U2_MAX)){
+        u4_t_calmin_val  = (U4)u2_DATESI_CAL_YEAR_MIN;
+    }
     u4_t_min_yymmdd  = (U4)DATE_CLK_CAL_MIN_MM_DD;
-    u4_t_min_yymmdd |= ((U4)u2_t_calmin_val << YYMMDDWK_LSB_YR);
+    u4_t_min_yymmdd |= (u4_t_calmin_val << YYMMDDWK_LSB_YR);
     u4_t_min_daycnt  = u4_g_YymmddToDaycnt(u4_t_min_yymmdd);
 
     return(u4_t_min_daycnt);

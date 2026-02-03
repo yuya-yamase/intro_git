@@ -33,12 +33,13 @@
 /*  Defines                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* START : ##TOOL_OUT#NVMC_MODULE_NUM## */
-#define NVMC_MODULE_NUM                          (2U)
+#define NVMC_MODULE_NUM                          (3U)
 /* END : ##TOOL_OUT#NVMC_MODULE_NUM## */
 
 /* START : ##TOOL_OUT#NVMC_MODULE_ID## */
 #define NVMC_MODULE_U4_TRPL                      (0U)
 #define NVMC_MODULE_U2_LO_TRPL                   (1U)
+#define NVMC_MODULE_U1_P1_TRPL                   (2U)
 /* END : ##TOOL_OUT#NVMC_MODULE_ID## */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

@@ -24,6 +24,7 @@
 #define     PWRCTRL_SYS_PWM_PERIOD_OFF          (0U)
 /* 周波数：487.804878[kHz], デューティ：50[%], カウントクロック周波数：80[MHz] 分周なし */
 #define     PWRCTRL_SYS_PWM_PERIOD              (163U)		/* 80MHz, (1/487.805)*80000 = 163.99[counts] */
+#define     PWRCTRL_SYS_PWM_DUTYCYC_OFF         (0U)
 #define     PWRCTRL_SYS_PWM_DUTYCYC_DEF         (5000U)
 #define     PWRCTRL_SYS_PWM_DUTYLSB             (10000U)
 
@@ -79,6 +80,10 @@ void vd_g_PwrCtrlSysPwrOnStart( void );                /* SYS電源ON要求 */
 void vd_g_PwrCtrlSysPwrOffStart( void );               /* SYS電源OFF要求 */
 U1   u1_g_PwrCtrlSysGetSts( void );                    /* SYS電源シーケンス状態問い合わせ */
 U1   u1_g_PwrCtrlSysShtdwnGetSts( void );              /* SYS系デバイス終了状態問い合わせ */
+U1   u1_g_PwrCtrlSysPgdAslVsObsInfo( void );           /* PGOOD_ASIL_VSYS端子モニタ開始条件通知処理 */
+U1   u1_g_PwrCtrlSysPgdAslV11ObsInfo( void );          /* PGOOD_ASIL_VSYS(V11)端子モニタ開始条件通知処理 */
+U1   u1_g_PwrCtrlSysPgdDiodeObsInfo( void );           /* PGOOD_DIODE端子モニタ開始条件通知処理 */
+U1   u1_g_PwrCtrlSysPgdVsObsInfo( void );              /* PGOOD_VSYS端子モニタ開始条件通知処理 */
 
 void            vd_g_McuDev_Pwron(void);
 
