@@ -14,18 +14,18 @@ variables:
   # ターゲットブランチ名
   CI_TARGET_BRANCH: 'develop'
   # プロジェクト名（バリなしの場合は空白）
-  SMOKE_TEST_PROJECT: '1MUS'
+  SMOKE_TEST_PROJECT: '2MUS'
 
 stages:          # List of stages for jobs, and their order of execution
-  - build_1MUS   # Stage for building 1MUS project
-  - build_1MJP   # Stage for building 1MJP project
-  - build_1MOT   # Stage for building 1MOT project
+  - build_2MUS   # Stage for building 2MUS project
+  - build_2MJP   # Stage for building 2MJP project
+  - build_2MOT   # Stage for building 2MOT project
   - notification
   - vt_smoke_test
   - vt_smoke_test_notification
 
-build-1MUS-job:
-  stage: build_1MUS
+build-2MUS-job:
+  stage: build_2MUS
   script:
     #Merge target branch
     - echo "Fetching target branch for merged results simulation..."
@@ -36,25 +36,25 @@ build-1MUS-job:
     - pushd .\tool\RenameMountDriveInfo
     - .\x_sb.bat z
     - popd
-    - echo "Build 1MUS job started"
-    - pushd Z:\prj\Ren_U2A16_373_CDC_1MUS\
+    - echo "Build 2MUS job started"
+    - pushd Z:\prj\Ren_U2A16_373_CDC_2MUS\
     - .\ghsmot_build.bat
     - popd
-    - echo "Build 1MUS job completed"
+    - echo "Build 2MUS job completed"
     - |
-      if (!(Test-Path "./prj/RFP/bin/AA_BEVS3_CDC_MCU_1MUS_*.mot")) {
-        Write-Error "Artifact file(s) not found: ./prj/RFP/bin/AA_BEVS3_CDC_MCU_1MUS_*.mot"
+      if (!(Test-Path "./prj/RFP/bin/AA_BEVS3_CDC_MCU_2MUS_*.mot")) {
+        Write-Error "Artifact file(s) not found: ./prj/RFP/bin/AA_BEVS3_CDC_MCU_2MUS_*.mot"
         exit 1
       }
 
-    - mkdir .\smoketest_1MUS\RFP\bin
-    - Copy-Item -Path ".\prj\RFP\*" -Destination ".\smoketest_1MUS\RFP" -Recurse -Force -Exclude "bin"
-    - Move-Item -Path ".\prj\RFP\bin\*.mot",".\prj\RFP\bin\*.hex",".\prj\RFP\bin\*.x" -Destination ".\smoketest_1MUS\RFP\bin\" -Force
+    - mkdir .\smoketest_2MUS\RFP\bin
+    - Copy-Item -Path ".\prj\RFP\*" -Destination ".\smoketest_2MUS\RFP" -Recurse -Force -Exclude "bin"
+    - Move-Item -Path ".\prj\RFP\bin\*.mot",".\prj\RFP\bin\*.hex",".\prj\RFP\bin\*.x" -Destination ".\smoketest_2MUS\RFP\bin\" -Force
     - echo "build result copy completed"
 
   artifacts:
     paths:
-      - ./smoketest_1MUS/
+      - ./smoketest_2MUS/
     expire_in: 1 hour
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == $CI_TARGET_BRANCH'
@@ -63,8 +63,8 @@ build-1MUS-job:
   tags:
     - ci_develop_cdc
 
-build-1MJP-job:
-  stage: build_1MJP
+build-2MJP-job:
+  stage: build_2MJP
   script:
     #Merge target branch
     - echo "Fetching target branch for merged results simulation..."
@@ -75,24 +75,24 @@ build-1MJP-job:
     - pushd .\tool\RenameMountDriveInfo
     - .\x_sb.bat z
     - popd
-    - echo "Build 1MJP job started"
-    - pushd Z:\prj\Ren_U2A16_373_CDC_1MJP\
+    - echo "Build 2MJP job started"
+    - pushd Z:\prj\Ren_U2A16_373_CDC_2MJP\
     - .\ghsmot_build.bat
     - popd
-    - echo "Build 1MJP job completed"
+    - echo "Build 2MJP job completed"
     - |
-      if (!(Test-Path "./prj/RFP/bin/AA_BEVS3_CDC_MCU_1MJP_*.mot")) {
-        Write-Error "Artifact file(s) not found: ./prj/RFP/bin/AA_BEVS3_CDC_MCU_1MJP_*.mot"
+      if (!(Test-Path "./prj/RFP/bin/AA_BEVS3_CDC_MCU_2MJP_*.mot")) {
+        Write-Error "Artifact file(s) not found: ./prj/RFP/bin/AA_BEVS3_CDC_MCU_2MJP_*.mot"
         exit 1
       }
 
-    - mkdir .\smoketest_1MJP\RFP\bin
-    - Copy-Item -Path ".\prj\RFP\*" -Destination ".\smoketest_1MJP\RFP" -Recurse -Force -Exclude "bin"
-    - Move-Item -Path ".\prj\RFP\bin\*.mot",".\prj\RFP\bin\*.hex",".\prj\RFP\bin\*.x" -Destination ".\smoketest_1MJP\RFP\bin\" -Force
+    - mkdir .\smoketest_2MJP\RFP\bin
+    - Copy-Item -Path ".\prj\RFP\*" -Destination ".\smoketest_2MJP\RFP" -Recurse -Force -Exclude "bin"
+    - Move-Item -Path ".\prj\RFP\bin\*.mot",".\prj\RFP\bin\*.hex",".\prj\RFP\bin\*.x" -Destination ".\smoketest_2MJP\RFP\bin\" -Force
     - echo "build result copy completed"
   artifacts:
     paths:
-      - ./smoketest_1MJP/
+      - ./smoketest_2MJP/
     expire_in: 1 hour
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == $CI_TARGET_BRANCH'
@@ -101,8 +101,8 @@ build-1MJP-job:
   tags:
     - ci_develop_cdc
 
-build-1MOT-job:
-  stage: build_1MOT
+build-2MOT-job:
+  stage: build_2MOT
   script:
     #Merge target branch
     - echo "Fetching target branch for merged results simulation..."
@@ -113,24 +113,24 @@ build-1MOT-job:
     - pushd .\tool\RenameMountDriveInfo
     - .\x_sb.bat z
     - popd
-    - echo "Build 1MOT job started"
-    - pushd Z:\prj\Ren_U2A16_373_CDC_1MOT\
+    - echo "Build 2MOT job started"
+    - pushd Z:\prj\Ren_U2A16_373_CDC_2MOT\
     - .\ghsmot_build.bat
     - popd
-    - echo "Build 1MOT job completed"
+    - echo "Build 2MOT job completed"
     - |
-      if (!(Test-Path "./prj/RFP/bin/AA_BEVS3_CDC_MCU_1MOT_*.mot")) {
-        Write-Error "Artifact file(s) not found: ./prj/RFP/bin/AA_BEVS3_CDC_MCU_1MOT_*.mot"
+      if (!(Test-Path "./prj/RFP/bin/AA_BEVS3_CDC_MCU_2MOT_*.mot")) {
+        Write-Error "Artifact file(s) not found: ./prj/RFP/bin/AA_BEVS3_CDC_MCU_2MOT_*.mot"
         exit 1
       }
 
-    - mkdir .\smoketest_1MOT\RFP\bin
-    - Copy-Item -Path ".\prj\RFP\*" -Destination ".\smoketest_1MOT\RFP" -Recurse -Force -Exclude "bin"
-    - Move-Item -Path ".\prj\RFP\bin\*.mot",".\prj\RFP\bin\*.hex",".\prj\RFP\bin\*.x" -Destination ".\smoketest_1MOT\RFP\bin\" -Force
+    - mkdir .\smoketest_2MOT\RFP\bin
+    - Copy-Item -Path ".\prj\RFP\*" -Destination ".\smoketest_2MOT\RFP" -Recurse -Force -Exclude "bin"
+    - Move-Item -Path ".\prj\RFP\bin\*.mot",".\prj\RFP\bin\*.hex",".\prj\RFP\bin\*.x" -Destination ".\smoketest_2MOT\RFP\bin\" -Force
     - echo "build result copy completed"
   artifacts:
     paths:
-      - ./smoketest_1MOT/
+      - ./smoketest_2MOT/
     expire_in: 1 hour
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == $CI_TARGET_BRANCH'
@@ -244,7 +244,7 @@ notify_failure:
 vt_test_job:
   stage: vt_smoke_test
   needs:
-    - job: build-1MUS-job
+    - job: build-2MUS-job
       optional: false
   script:
     - |
