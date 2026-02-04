@@ -55,11 +55,6 @@
 ../../src/PE3VM3/App/Common/PwrCtrl/PwrCtrl_Sys.c
 ../../src/PE3VM3/App/Common/xspi/xspi.c
 ../../src/PE3VM3/App/Common/xspi/xspi_sub.c
-###../../src/PE3VM3/App/Product/config_1MJP/product_cfg.c
-###../../src/PE3VM3/App/Product/config_1MOT/product_cfg.c
-###../../src/PE3VM3/App/Product/config_1MUS/product_cfg.c
-###../../src/PE3VM3/App/Product/config_1SJP/product_cfg.c
-###../../src/PE3VM3/App/Product/config_1SUS/product_cfg.c
 ###../../src/PE3VM3/App/Product/config_2MJP/product_cfg.c
 ../../src/PE3VM3/App/Product/config_2MOT/product_cfg.c
 ###../../src/PE3VM3/App/Product/config_2MUS/product_cfg.c
@@ -69,7 +64,7 @@
 # ----------------------------------------------------------------------------------------------------------------------------------
 
 # ----------------------------------------------------------------------------------------------------------------------------------
-# ghsprj version 1-0-0
-# Date generated: 2026/01/16 19:29:37
+# ghsprj version 1-1-0
+# Date generated: 2026/02/04 14:04:55
 # ----------------------------------------------------------------------------------------------------------------------------------
 
