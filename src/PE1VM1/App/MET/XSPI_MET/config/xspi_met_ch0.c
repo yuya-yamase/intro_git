@@ -662,6 +662,8 @@ static inline void    vd_s_XSpiCfgTxHud(           U4 * u4_ap_pdu_tx) {
 
     u4_ap_pdu_tx[0]  = (U4)0U;
     u4_ap_pdu_tx[0] |= (U4)u2_g_HdimmgrIfGetAdjduty() << 16;                                /* HUD_GV_DIM_ILLMN     */
+    u4_ap_pdu_tx[1]  = (U4)0U;
+    u4_ap_pdu_tx[1] |= (U4)((U4)u1_g_HmiHudGetHudOnoff() & (U4)0x00000001U) << 2;           /* HUD_ONOFF            */
     u4_ap_pdu_tx[2]  = (U4)((U4)u1_g_HdimmgrIfGetIllStepVal() & (U4)0x0000000FU);           /* HUD_ILL_STEP         */
     u4_ap_pdu_tx[3]  = (U4)u2_t_owduty;                                                     /* HUD_BLDUTY_OW        */
     u4_ap_pdu_tx[5]  = (U4)0U;
@@ -1203,6 +1205,7 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*                                MET-C_GMN-CSTD-0-02-A-C1                                                                           */
 /*                                Add the judgement of EPS & EPSSBW function.                                                        */
 /*  BEV-23    02/02/2026 TS       Change for BEV FF2.(MET-M_HUDILL-CSTD-1)                                                           */
+/*  BEV-24    02/03/2026 TS       Change for BEV FF2.(MET-M_HUDONOFF-CSTD-1)                                                         */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * KM   = Keisuke Mashita, Denso Techno                                                                                           */

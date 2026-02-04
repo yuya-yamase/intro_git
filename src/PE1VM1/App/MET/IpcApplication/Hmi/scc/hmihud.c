@@ -19,6 +19,9 @@
 #include "hmiproxy_cfg_private.h"
 #include "hmihud.h"
 
+#include "mcst.h"
+#include "vardef.h"
+#include "veh_opemd.h"
 #include "himgadj.h"
 #include "hdimmgr_if.h"
 
@@ -46,8 +49,17 @@
 #define HMIHUD_GVIF_DTA_START                  (1U)
 #define HMIHUD_GVIF_DTA_END                    (2U)
 
-#define HMIHUD_SIG_NUM                         (1U)
+#define HMIHUD_SIG_NUM                         (2U)
 #define HMIHUD_SIG_HUD_ILL_STEP_IND            (0U)
+#define HMIHUD_SIG_CSTM_HUD_ONOFF_ACT          (1U)
+
+#define HMIHUD_VAL_OFF                         (0U)
+#define HMIHUD_VAL_ON                          (1U)
+
+#define HMIHUD_VAL_CSTM_HUD_ONOFF_ACT_NON      (0U)
+#define HMIHUD_VAL_CSTM_HUD_ONOFF_ACT_ON       (1U)
+#define HMIHUD_VAL_CSTM_HUD_ONOFF_ACT_OFF      (2U)
+#define HMIHUD_VAL_CSTM_HUD_ONOFF_ACT_UNDEF    (3U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
@@ -62,18 +74,21 @@ typedef struct{
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static U4   u4_sp_hmihud_dtabuf[HMIHUD_DTA_NUM];
+static U1   u1_s_hmihud_hud_onoff_act_pre;
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static U4   u4_s_HmiHudReadSig(const U1 u1_a_SIG_IDX, const U4 * u4_ap_REQ);
 
 static void vd_s_HmiHudSetIllStep(void);
+static void vd_s_HmiHudSetHudOnOffAct(void);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static const ST_HMIHUD_SIGCONVERT st_sp_HMIHUD_SIGCONVERT[HMIHUD_SIG_NUM] = {
 /*  u4_buf      u1_bitpos    u4_bitmask                            */
-    {(U4)0U,    (U1)0U,      (U4)0xFFU  }     /* HUD_ILL_STEP_IND */
+    {(U4)0U,    (U1)0U,      (U4)0xFFU  },    /* HUD_ILL_STEP_IND */
+    {(U4)0U,    (U1)13U,     (U4)0x03U  }     /* CSTM_HUD_ONOFF_ACT */
 };
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
@@ -91,6 +106,7 @@ void    vd_g_HmiHudInit(void)
     for(u4_t_loop = (U4)0U ; u4_t_loop < (U4)HMIHUD_DTA_NUM ; u4_t_loop++){
         u4_sp_hmihud_dtabuf[u4_t_loop] = (U4)0xFFFFFFFFU;
     }
+    u1_s_hmihud_hud_onoff_act_pre = (U1)HMIHUD_VAL_CSTM_HUD_ONOFF_ACT_UNDEF;
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_HmiHudMainTask(void)                                                                                                */
@@ -101,6 +117,7 @@ void    vd_g_HmiHudInit(void)
 void    vd_g_HmiHudMainTask(void)
 {
     vd_s_HmiHudSetIllStep();
+    vd_s_HmiHudSetHudOnOffAct();
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_HmiHudSocDataPut(const U4 * u4_ap_REQ)                                                                              */
@@ -169,7 +186,52 @@ static void vd_s_HmiHudSetIllStep(void){
 
     vd_g_HdimmgrIfSetIllStepVal(u1_t_step);
 }
+/*===================================================================================================================================*/
+/*  static void    vd_s_HmiHudSetHudOnOffAct(void)                                                                                   */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void vd_s_HmiHudSetHudOnOffAct(void){
+    U1 u1_t_gvif;
+    U1 u1_t_igon;
+    U1 u1_t_act;    /* recieve signal */
 
+    u1_t_gvif = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_GVIF2);
+    u1_t_igon = u1_g_VehopemdIgnOn();
+    u1_t_act = (U1)u4_s_HmiHudReadSig((U1)HMIHUD_SIG_CSTM_HUD_ONOFF_ACT, &u4_sp_hmihud_dtabuf[HMIHUD_FIRST_DTA]);
+
+    if((u1_t_gvif == (U1)TRUE)
+    && (u1_t_igon == (U1)TRUE)) {
+        if(u1_t_act != u1_s_hmihud_hud_onoff_act_pre) {
+            if(u1_t_act == (U1)HMIHUD_VAL_CSTM_HUD_ONOFF_ACT_ON) {
+                vd_g_McstBfPut((U1)MCST_BFI_HUD, (U4)HMIHUD_VAL_ON);
+            }
+            else if(u1_t_act == (U1)HMIHUD_VAL_CSTM_HUD_ONOFF_ACT_OFF) {
+                vd_g_McstBfPut((U1)MCST_BFI_HUD, (U4)HMIHUD_VAL_OFF);
+            }
+            else{
+                /* Do Nothing */
+            }
+        }
+    }
+
+    u1_s_hmihud_hud_onoff_act_pre = u1_t_act;
+}
+/*===================================================================================================================================*/
+/*  U1      u1_g_HmiHudGetHudOnoff(void)                                                                                             */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         u1_t_onoff    :  hud on/off                                                                                      */
+/*===================================================================================================================================*/
+U1      u1_g_HmiHudGetHudOnoff(void)
+{
+    U1 u1_t_onoff;
+
+    u1_t_onoff = (U1)(u4_g_McstBf((U1)MCST_BFI_HUD));
+
+    return(u1_t_onoff);
+}
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
@@ -181,6 +243,11 @@ static void vd_s_HmiHudSetIllStep(void){
 /*  1.0.0    04/13/2020  TH       New.                                                                                               */
 /*  1.1.0    10/07/2020  TH       Fix HudSetViposUpdn.                                                                               */
 /*  1.2.0    02/02/2026  TS       Change for BEV FF2.(MET-M_HUDILL-CSTD-1)                                                           */
+/*                                                                                                                                   */
+/*                                                                                                                                   */
+/*  Revision Date        Author   Change Description                                                                                 */
+/* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
+/*  BEV-1    02/03/2026  TS       Change for BEV FF2.(MET-M_HUDONOFF-CSTD-1)                                                           */
 /*                                                                                                                                   */
 /*  * TH   = Takahiro Hirano, Denso Techno                                                                                           */
 /*  * TS   = Takuo Suganuma,  Denso Techno                                                                                           */
