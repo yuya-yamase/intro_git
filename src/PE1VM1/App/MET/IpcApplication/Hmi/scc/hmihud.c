@@ -247,7 +247,7 @@ U1      u1_g_HmiHudGetHudOnoff(void)
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  BEV-1    02/03/2026  TS       Change for BEV FF2.(MET-M_HUDONOFF-CSTD-1)                                                           */
+/*  BEV-1    02/03/2026  TS       Change for BEV FF2.(MET-M_HUDONOFF-CSTD-1)                                                         */
 /*                                                                                                                                   */
 /*  * TH   = Takahiro Hirano, Denso Techno                                                                                           */
 /*  * TS   = Takuo Suganuma,  Denso Techno                                                                                           */
