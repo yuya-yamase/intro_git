@@ -19,15 +19,10 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#include "locale_lang.h"
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define LOCALE_VAL_UNDEF                    (255U)
-
-/* Definitions of language:See config/locale_lang.h */
-
 
 #define UNIT_NUM_IDX                        (5U)
 #define UNIT_IDX_DIST                       (0U)
@@ -98,10 +93,6 @@
 void    vd_g_LocaleBonInit(void);
 void    vd_g_LocaleRstWkupInit(void);
 void    vd_g_LocaleMainTask(void);
-
-U1      u1_g_Language(const U1 u1_a_MET);                   /* Current */
-U1      u1_g_LanguageDef(void);                             /* Default */
-void    vd_g_LanguagePut(const U1 u1_a_LANG);
 
 U1      u1_g_Unit(const U1 u1_a_IDX);                       /* Current */
 U1      u1_g_UnitDef(const U1 u1_a_IDX);                    /* Default */

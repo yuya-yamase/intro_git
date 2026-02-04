@@ -321,8 +321,6 @@ static inline void    vd_s_XSpiCfgTxLocale(        U4 * u4_ap_pdu_tx) {
 
     U1    u1_t_convert_eleco;
 
-    u4_ap_pdu_tx[0]  = (U4)u1_g_Language((U1)TRUE);                                 /* LANG         */
-
     u4_ap_pdu_tx[1]  = ((U4)u1_g_Unit((U1)UNIT_IDX_DIST)     & (U4)0x03U);          /* DISTANCE     */
     u4_ap_pdu_tx[1]  |= (((U4)u1_g_Unit((U1)UNIT_IDX_SPEED)  & (U4)0x03U)  << 2 );  /* SPEED        */
 
@@ -878,7 +876,6 @@ static inline void    vd_s_XSpiCfgRxWchime(     const U4 * u4_ap_PDU_RX) {
 static inline void    vd_s_XSpiCfgRxLocale(     const U4 * u4_ap_PDU_RX) {
     ST_HMILOCALE st_t_hmilocale;
 
-    st_t_hmilocale.u1_language    = (U1)u4_ap_PDU_RX[0];
     st_t_hmilocale.u1_unit_dist   = u1_XSPI_MET_READ__BIT(u4_ap_PDU_RX[1] , (U1) 0U , (U1)2U);
     st_t_hmilocale.u1_unit_speed  = u1_XSPI_MET_READ__BIT(u4_ap_PDU_RX[1] , (U1) 2U , (U1)2U);
     st_t_hmilocale.u1_unit_eleco  = u1_XSPI_MET_READ__BIT(u4_ap_PDU_RX[1] , (U1) 8U , (U1)4U);
@@ -1191,6 +1188,7 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*  BEV-22    01/23/2026 HY       Change config for BEV Full_Function_2.                                                             */
 /*                                MET-C_GMN-CSTD-0-02-A-C1                                                                           */
 /*                                Add the judgement of EPS & EPSSBW function.                                                        */
+/*  BEV-23    01/30/2026 YN       Change for BEV FF2.(MET-M_DESTVARI-CSTD-0-01)                                                      */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */

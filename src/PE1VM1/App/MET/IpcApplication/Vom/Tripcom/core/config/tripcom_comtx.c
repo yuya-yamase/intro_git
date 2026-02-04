@@ -534,7 +534,7 @@ static  U1     u1_s_TripcomCfgCanTxUNIT6Cnvt(const U1 u1_a_UNIT)
     if(u1_t_unittype == (U1)VDF_UNIT_TYPE_H) { /* PTSYS = BEV and DEST = NA/UK */
         if((u1_a_UNIT == u1_sp_TRIPCOM_TX_XECON_UNTCNV[UNIT_VAL_FUECO_MPG_USA]) || 
            (u1_a_UNIT == u1_sp_TRIPCOM_TX_XECON_UNTCNV[UNIT_VAL_FUECO_MPG_UK])) {
-            u1_t_unitdest = u1_g_VardefDestDbfByPid((U1)VDF_DEST_DBF_UNITSLCT_DEST);
+            u1_t_unitdest = u1_g_VardefDestLawDbfByPid((U1)VDF_DEST_LAW_DBF_UNITSLCT_DEST);
             switch(u1_t_unitdest) {
                 case (U1)VDF_UNIT_TYPE_NA:
                     u1_t_unitsndval = u1_sp_TRIPCOM_TX_XECON_UNTCNV[UNIT_VAL_FUECO_MPG_USA];
@@ -1246,6 +1246,7 @@ static  void    vd_s_TripcomCfgCanDrTx(void)
 /*  19PFv3-10 04/24/2025 PG       Added vd_s_TripcomCfgCanTxEMGF250ms                                                                */
 /*  19PFv3-11 07/17/2025 SK       Added Convert Function of UNIT_6 for 410D MPT                                                      */
 /*  BEV3-01   01/20/2026 DR       Added AS_EVDT and AS_TOEC for BEV FF2                                                              */
+/*  BEV3-02   01/30/2026 YN       Configured for BEVstep3_FF2.(MET-M_DESTVARI-CSTD-0-01)                                             */
 /*                                                                                                                                   */
 /*  * HY   = Hidefumi Yoshida, Denso                                                                                                 */
 /*  * YA   = Yuhei Aoyama, DensoTechno                                                                                               */
@@ -1263,5 +1264,6 @@ static  void    vd_s_TripcomCfgCanDrTx(void)
 /*  * KM   = Kazuma Miyazawa, Denso Techno                                                                                           */
 /*  * RS   = Ryuki Sako, Denso Techno                                                                                                */
 /*  * DR   = Dyan Reyes, DTPH                                                                                                        */
+/*  * YN   = Yujiro Nagaya, Denso Techno                                                                                             */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

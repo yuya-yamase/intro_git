@@ -32,7 +32,7 @@
 #define RIMID_U1_VDF_DEST_BDB                    (0x0002U)
 #define RIMID_U1_VDF_STRG_WHL                    (0x0003U)
 #define RIMID_U1_VDF_DST_IDX                     (0x0004U)
-#define RIMID_U1_VDF_LANG_DST_IDX                (0x0005U)
+#define RIMID_U1_VDF_DST_LAW_IDX                 (0x0005U)
 #define RIMID_U1_NVMC_DA_DTF_WRI_012             (0x0006U)
 #define RIMID_U1_NVMC_ST_DTF_000                 (0x0007U)
 #define RIMID_U1_NVMC_ST_DTF_001                 (0x0008U)
