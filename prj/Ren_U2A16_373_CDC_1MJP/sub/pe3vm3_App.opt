@@ -17,6 +17,9 @@
 # ----------------------------------------------------------------------------------------------------------------------------------
     -I../../src/PE3VM3/App/Central/CanIfProxy/inc
     -I../../src/PE3VM3/App/Central/chipcom/inc
+    -I../../src/PE3VM3/App/Central/esw/EthDebugLog/Config
+    -I../../src/PE3VM3/App/Central/esw/EthDebugLog/Core
+    -I../../src/PE3VM3/App/Central/esw/EthDebugLog
     -I../../src/PE3VM3/App/Central/esw/EthDLC/Config
     -I../../src/PE3VM3/App/Central/esw/EthDLC/Core
     -I../../src/PE3VM3/App/Central/esw/EthDLC
