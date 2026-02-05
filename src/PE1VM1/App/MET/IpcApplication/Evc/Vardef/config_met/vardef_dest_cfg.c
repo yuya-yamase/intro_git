@@ -245,7 +245,6 @@ const ST_VDF_DST_LAW_C_CODE    st_gp_VDF_DST_LAW_C_CODE[VDF_DST_LAW_NUM_C_CODE] 
 };
 
 const U2    u2_gp_VDF_DST_C_CODE[VDF_DST_NUM_C_CODE] = {
-/*  u2_t_c_code                                          */
     (U2)0x0102U,             /* Canada                   */
     (U2)0x0719U,             /* Rep of Korea             */
     (U2)0x0408U,             /* United Kingdom           */
