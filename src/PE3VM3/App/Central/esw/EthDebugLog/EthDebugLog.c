@@ -17,11 +17,12 @@ void EthDebugLog_Init(void)
 /* -------------------------------------------------------------------------- */
 void EthDebugLog_Notify(const uint32 EventId)
 {
-    if (EventId < D_ETHDEBUGLOG_EVENT_NUM) {
+    if (EventId < E_ETHDEBUGLOG_EV_NUM) {
         if (G_ETHDEBUGLOG_NOTIFYLIST[EventId] != NULL_PTR) {
             G_ETHDEBUGLOG_NOTIFYLIST[EventId]();
         }
     }
+    
     return;
 }
 /* -------------------------------------------------------------------------- */
