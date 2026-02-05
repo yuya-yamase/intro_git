@@ -245,28 +245,28 @@ const ST_VDF_DST_LAW_C_CODE    st_gp_VDF_DST_LAW_C_CODE[VDF_DST_LAW_NUM_C_CODE] 
 };
 
 const U2    u2_gp_VDF_DST_C_CODE[VDF_DST_NUM_C_CODE] = {
-/*  u2_t_c_code                                            */
-    { (U2)0x0102U },           /* Canada                   */
-    { (U2)0x0719U },           /* Rep of Korea             */
-    { (U2)0x0408U },           /* United Kingdom           */
-    { (U2)0x0209U },           /* Mexico                   */
-    { (U2)0x0537U },           /* South Africa             */
-    { (U2)0x0709U },           /* India                    */
-    { (U2)0x0707U },           /* China                    */
-    { (U2)0x0611U },           /* Bahrain                  */
-    { (U2)0x0612U },           /* Qatar                    */
-    { (U2)0x0613U },           /* Kuwait                   */
-    { (U2)0x0615U },           /* UAE                      */
-    { (U2)0x0618U },           /* Saudi Arabia             */
-    { (U2)0x0620U },           /* Oman                     */
-    { (U2)0x0708U },           /* Hong Kong                */
-    { (U2)0x0726U },           /* Macao                    */
-    { (U2)0x0801U },           /* Australia                */
-    { (U2)0x0808U },           /* Papua New Guinea         */
-    { (U2)0x0809U },           /* New Zealand              */
-    { (U2)0x0813U },           /* Solomon Islands          */
-    { (U2)0x0721U },           /* Taiwan                   */
-    { (U2)0x0718U }            /* Singapore                */
+/*  u2_t_c_code                                          */
+    (U2)0x0102U,             /* Canada                   */
+    (U2)0x0719U,             /* Rep of Korea             */
+    (U2)0x0408U,             /* United Kingdom           */
+    (U2)0x0209U,             /* Mexico                   */
+    (U2)0x0537U,             /* South Africa             */
+    (U2)0x0709U,             /* India                    */
+    (U2)0x0707U,             /* China                    */
+    (U2)0x0611U,             /* Bahrain                  */
+    (U2)0x0612U,             /* Qatar                    */
+    (U2)0x0613U,             /* Kuwait                   */
+    (U2)0x0615U,             /* UAE                      */
+    (U2)0x0618U,             /* Saudi Arabia             */
+    (U2)0x0620U,             /* Oman                     */
+    (U2)0x0708U,             /* Hong Kong                */
+    (U2)0x0726U,             /* Macao                    */
+    (U2)0x0801U,             /* Australia                */
+    (U2)0x0808U,             /* Papua New Guinea         */
+    (U2)0x0809U,             /* New Zealand              */
+    (U2)0x0813U,             /* Solomon Islands          */
+    (U2)0x0721U,             /* Taiwan                   */
+    (U2)0x0718U              /* Singapore                */
 };
 
 const ST_VDF_DST_LAW_DEST_BDB_JDGIDX st_gp_VDF_DST_LAW_DEST_BDB_JDGIDX[VDF_DST_LAW_NUM_DEST_BDB] = {
