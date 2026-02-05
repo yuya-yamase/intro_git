@@ -1,4 +1,4 @@
-/* 1.3.0 */
+/* 1.4.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define HMILOCALE_C_MAJOR                         (1)
-#define HMILOCALE_C_MINOR                         (3)
+#define HMILOCALE_C_MINOR                         (4)
 #define HMILOCALE_C_PATCH                         (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -152,10 +152,7 @@ void    vd_g_HmiLocalePut(const ST_HMILOCALE * stp_a_HMILOCALE)
 /*  1.1.0    09/02/2020  TA       See hmiproxy.c                                                                                     */
 /*  1.2.0    02/28/2025  RS       Change for BEV System_Consideration_1.(Requests from the SOC team for electricity cost units)      */
 /*  1.3.0    07/07/2025  MN       Change for BEV PreCV.(Delete timeformat)                                                           */
-/*                                                                                                                                   */
-/*  Revision Date        Author   Change Description                                                                                 */
-/* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  BEV-1     1/30/2026  YN       Configured for BEVstep3_FF2.(MET-M_DESTVARI-CSTD-0-01)                                             */
+/*  1.4.0    01/30/2026  YN       Change for BEV FF2.(MET-M_DESTVARI-CSTD-0-01)                                                      */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * RS   = Ryuki Sako, Denso Techno                                                                                                */

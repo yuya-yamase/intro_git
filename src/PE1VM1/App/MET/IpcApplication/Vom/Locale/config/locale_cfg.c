@@ -1,4 +1,4 @@
-/* 2.0.2 */
+/* 2.1.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,8 +10,8 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define LOCALE_CFG_C_MAJOR                     (2)
-#define LOCALE_CFG_C_MINOR                     (0)
-#define LOCALE_CFG_C_PATCH                     (2)
+#define LOCALE_CFG_C_MINOR                     (1)
+#define LOCALE_CFG_C_PATCH                     (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -345,6 +345,7 @@ U1      u1_g_LocaleCfgUnitdef(const U1 u1_a_UNITIDX)
 /*  2.0.0    07/09/2021  TA       See locale.c v2.0.0.                                                                               */
 /*  2.0.1    12/08/2022  TA(M)    See locale.c v2.0.1                                                                                */
 /*  2.0.2    07/04/2025  MN       See locale.c v2.0.2                                                                                */
+/*  2.1.0    01/30/2026  yn       See locale.c v2.1.0                                                                                */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
@@ -363,7 +364,6 @@ U1      u1_g_LocaleCfgUnitdef(const U1 u1_a_UNITIDX)
 /*  BEV-2    10/15/2025  SN       Configured for BEVstep3_Rebase                                                                     */
 /*  BEV-3    11/14/2025  SN       Change initial value                                                                               */
 /*  BEV-4    12/08/2025  TS       Change UNIT_CH2 table and units referenced when sending UNIT_CH2                                   */
-/*  BEV-5     1/30/2026  YN       Configured for BEVstep3_FF2.(MET-M_DESTVARI-CSTD-0-01)                                             */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
 /*  * SF   = Seiya Fukutome, DensoTechno                                                                                             */

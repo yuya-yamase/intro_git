@@ -1,4 +1,4 @@
-/* 2.2.0 */
+/* 3.0.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -9,8 +9,8 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define VARDEF_DEST_C_MAJOR                     (2)
-#define VARDEF_DEST_C_MINOR                     (2)
+#define VARDEF_DEST_C_MAJOR                     (3)
+#define VARDEF_DEST_C_MINOR                     (0)
 #define VARDEF_DEST_C_PATCH                     (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -119,7 +119,7 @@ void    vd_g_VardefDestBonInit(void)
     u1_s_vdf_dst_dest_bdb_idx      = u1_g_VDF_DST_DEST_BDB_IDX_DEF;
     u1_s_vdf_dst_law_spec_ccode_idx = u1_g_VDF_DST_LAW_SPEC_IDX_DEF;
     u1_s_vdf_dst_law_c_code_idx    = u1_g_VDF_DST_LAW_C_CODE_IDX_DEF;
-    u1_s_vdf_dst_law_dest_bdb_idx  = (U1)u1_g_VardefDestLawCfgBdbDefJdg();
+    u1_s_vdf_dst_law_dest_bdb_idx  = u1_g_VardefDestLawCfgBdbDefJdg();
 
     u1_s_vdf_dst_law_idx            = u1_g_VDF_DST_IDX_DEF;
     vd_g_Rim_WriteU1(u2_g_VDF_DST_LAW_IDX_RIM_U1, u1_s_vdf_dst_law_idx);
@@ -391,21 +391,22 @@ static void    vd_s_VardefDestLawDBIdxJdg(void)
         }
     }
 
-    if ((u1_t_law_destbdb_idx == u1_g_VDF_DST_LAW_DEST_BDB_B_GNR_L) ||
-       ((u1_t_law_destbdb_idx == u1_g_VDF_DST_LAW_DEST_BDB_B_GNR_R) && (u1_CALIB_MCUID3020_GEN_LOW == CALIB_MCUID3020_FMVSS))) {
+    if (((u1_t_law_destbdb_idx == u1_g_VDF_DST_LAW_DEST_BDB_B_GNR_L) ||
+         (u1_t_law_destbdb_idx == u1_g_VDF_DST_LAW_DEST_BDB_B_GNR_R)) &&
+         (u1_CALIB_MCUID3020_GEN_LOW == CALIB_MCUID3020_FMVSS)) {
         u1_t_law_destbdb_idx = u1_g_VDF_DST_LAW_DEST_BDB_B_GNR_FMVSS;
     }
 
     if (u1_t_spec_ccode_idx < u1_g_VDF_DST_SPEC_NUM_C_CODE) {
         u1_s_vdf_dst_law_spec_ccode_idx = u1_t_spec_ccode_idx;
         u1_s_vdf_dst_law_c_code_idx = u1_g_VDF_DST_LAW_C_CODE_IDX_DEF;
-        u1_s_vdf_dst_law_dest_bdb_idx = (U1)u1_g_VardefDestLawCfgBdbDefJdg();
+        u1_s_vdf_dst_law_dest_bdb_idx = u1_g_VardefDestLawCfgBdbDefJdg();
         u1_s_vdf_dst_law_idx = u1_s_vdf_dst_law_spec_ccode_idx;
     }
     else if (u1_t_law_ccode_idx < u1_g_VDF_DST_LAW_NUM_C_CODE_REG) {
         u1_s_vdf_dst_law_spec_ccode_idx = u1_g_VDF_DST_LAW_SPEC_IDX_DEF;
         u1_s_vdf_dst_law_c_code_idx = u1_t_law_ccode_idx;
-        u1_s_vdf_dst_law_dest_bdb_idx = (U1)u1_g_VardefDestLawCfgBdbDefJdg();
+        u1_s_vdf_dst_law_dest_bdb_idx = u1_g_VardefDestLawCfgBdbDefJdg();
         u1_s_vdf_dst_law_idx = u1_s_vdf_dst_law_c_code_idx + u1_g_VDF_DST_SPEC_NUM_C_CODE;
     }
     else if (u1_t_law_destbdb_idx < u1_g_VDF_DST_LAW_NUM_DEST_BDB_REG) {
@@ -417,12 +418,12 @@ static void    vd_s_VardefDestLawDBIdxJdg(void)
     else if (u1_s_vdf_dst_law_idx < u1_g_VDF_DST_SPEC_NUM_C_CODE) {
         u1_s_vdf_dst_law_spec_ccode_idx = u1_s_vdf_dst_law_idx;
         u1_s_vdf_dst_law_c_code_idx = u1_g_VDF_DST_LAW_C_CODE_IDX_DEF;
-        u1_s_vdf_dst_law_dest_bdb_idx = (U1)u1_g_VardefDestLawCfgBdbDefJdg();
+        u1_s_vdf_dst_law_dest_bdb_idx = u1_g_VardefDestLawCfgBdbDefJdg();
     }
     else if (u1_s_vdf_dst_law_idx < (U1)(u1_g_VDF_DST_SPEC_NUM_C_CODE + u1_g_VDF_DST_LAW_NUM_C_CODE_REG)) {
         u1_s_vdf_dst_law_spec_ccode_idx = u1_g_VDF_DST_LAW_SPEC_IDX_DEF;
         u1_s_vdf_dst_law_c_code_idx = (U1)(u1_s_vdf_dst_law_idx - u1_g_VDF_DST_SPEC_NUM_C_CODE);
-        u1_s_vdf_dst_law_dest_bdb_idx = (U1)u1_g_VardefDestLawCfgBdbDefJdg();
+        u1_s_vdf_dst_law_dest_bdb_idx = u1_g_VardefDestLawCfgBdbDefJdg();
     }
     else if (u1_s_vdf_dst_law_idx < (U1)(u1_g_VDF_DST_SPEC_NUM_C_CODE + u1_g_VDF_DST_LAW_NUM_C_CODE_REG + u1_g_VDF_DST_LAW_NUM_DEST_BDB_REG)) {
         u1_s_vdf_dst_law_spec_ccode_idx = u1_g_VDF_DST_LAW_SPEC_IDX_DEF;
@@ -432,7 +433,7 @@ static void    vd_s_VardefDestLawDBIdxJdg(void)
     else {
         u1_s_vdf_dst_law_spec_ccode_idx = u1_g_VDF_DST_LAW_SPEC_IDX_DEF;
         u1_s_vdf_dst_law_c_code_idx = u1_g_VDF_DST_LAW_C_CODE_IDX_DEF;
-        u1_s_vdf_dst_law_dest_bdb_idx = (U1)u1_g_VardefDestLawCfgBdbDefJdg();
+        u1_s_vdf_dst_law_dest_bdb_idx = u1_g_VardefDestLawCfgBdbDefJdg();
         u1_s_vdf_dst_law_idx = u1_g_VDF_DST_LAW_IDX_DEF;
     }
     vd_g_Rim_WriteU1(u2_g_VDF_DST_LAW_IDX_RIM_U1, u1_s_vdf_dst_law_idx);
@@ -528,10 +529,7 @@ static void    vd_s_VardefDestHdlJdg(const U1 u1_a_STRG_WHL)
 /*  2.0.0     1/19/2024  HF       for 19PFv3.                                                                                        */
 /*  2.1.0    10/28/2024  AA       M_DESTVARI-CSTD-A0-07 spec update                                                                  */
 /*  2.2.0     6/27/2025  SN       for BEV System_Consideration_2.(MET-M_DESTVARI-CSTD-A0-06)                                         */
-/*                                                                                                                                   */
-/*  Revision Date        Author   Change Description                                                                                 */
-/* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  BEV-1     1/30/2026  YN       Configured for BEVstep3_FF2.(MET-M_DESTVARI-CSTD-0-01)                                             */
+/*  3.0.0     1/20/2026  YN       for BEV FF2.(MET-M_DESTVARI-CSTD-0-01)                                                             */
 /*                                                                                                                                   */
 /*  * SF = Seiya Fukutome, DENSO-TECHNO                                                                                              */
 /*  * HF = Hinari Fukamachi, KSE                                                                                                     */

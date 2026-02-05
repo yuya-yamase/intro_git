@@ -1,4 +1,4 @@
-/* 2.0.2 */
+/* 2.1.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,8 +10,8 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define LOCALE_C_MAJOR                         (2)
-#define LOCALE_C_MINOR                         (0)
-#define LOCALE_C_PATCH                         (2)
+#define LOCALE_C_MINOR                         (1)
+#define LOCALE_C_PATCH                         (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -213,10 +213,7 @@ U1      u1_g_UnitSubSpd(void)
 /*  2.0.0    07/09/2021  TA(M)    Delete Timezone. Change to Config join with Mcst.                                                  */
 /*  2.0.1    12/08/2022  TA(M)    Add u1_g_LANG_NUM to configure language information.                                               */
 /*  2.0.2    07/04/2025  MN       Change Timeformat                                                                                  */
-/*                                                                                                                                   */
-/*  Revision Date        Author   Change Description                                                                                 */
-/* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  BEV-1     1/30/2026  YN       Configured for BEVstep3_FF2.(MET-M_DESTVARI-CSTD-0-01)                                             */
+/*  2.1.0    01/30/2026  YN       Change for BEV FF2.(MET-M_DESTVARI-CSTD-0-01)                                                      */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * SF   = Seiya Fukutome, DensoTechno                                                                                             */

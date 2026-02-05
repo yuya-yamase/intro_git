@@ -1,4 +1,4 @@
-/* 2.2.0 */
+/* 3.0.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -9,8 +9,8 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define VARDEF_DEST_CFG_C_MAJOR                 (2)
-#define VARDEF_DEST_CFG_C_MINOR                 (2)
+#define VARDEF_DEST_CFG_C_MAJOR                 (3)
+#define VARDEF_DEST_CFG_C_MINOR                 (0)
 #define VARDEF_DEST_CFG_C_PATCH                 (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -616,7 +616,7 @@ U1      u1_g_VardefDestLawCfgDBSup(const U1 u1_a_LAW_DBF, const U1 u1_a_SPEC_C_C
     U1  u1_t_law_destbdb_idx_def;
 
     u1_t_sup = (U1)U1_MAX;
-    u1_t_law_destbdb_idx_def = (U1)u1_g_VardefDestLawCfgBdbDefJdg();
+    u1_t_law_destbdb_idx_def = u1_g_VardefDestLawCfgBdbDefJdg();
 
     if (u1_a_LAW_DBF < (U1)VDF_DEST_LAW_DBF_NBYTE) {
 
@@ -813,6 +813,7 @@ U1      u1_g_VardefDestLawCfgBdbDefJdg(void)
 /*  2.0.0     1/24/2024  HF       19PFv3.                                                                                            */
 /*  2.1.0    10/28/2024  AA       M_DESTVARI-CSTD-A0-07 spec update                                                                  */
 /*  2.2.0     6/27/2025  SNk      for BEV System_Consideration_2.(MET-M_DESTVARI-CSTD-A0-06)                                         */
+/*  3.0.0     1/30/2026  YN       for BEVstep3_FF2.(MET-M_DESTVARI-CSTD-0-01)                                                        */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
@@ -864,7 +865,6 @@ U1      u1_g_VardefDestLawCfgBdbDefJdg(void)
 /*  BEV-2     6/27/2025  SNk      Setting for BEV System_Consideration_2.(MET-M_DESTVARI-CSTD-A0-06)                                 */
 /*  BEV-3    10/15/2025  SN       Configured for BEVstep3_Rebase                                                                     */
 /*  BEV-4     1/22/2026  YN       Change config for BEV FF2(MET-D_4WDSYS-CSTD-2-02-A-C1)                                             */
-/*  BEV-5     1/30/2026  YN       Configured for BEVstep3_FF2.(MET-M_DESTVARI-CSTD-0-01)                                             */
 /*                                                                                                                                   */
 /*  * SF   = Seiya Fukutome, DENSO TECHNO                                                                                            */
 /*  * AT   = Ayano Tomimoto, KSE                                                                                                     */
