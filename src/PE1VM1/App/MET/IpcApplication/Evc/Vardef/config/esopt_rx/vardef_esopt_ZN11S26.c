@@ -177,6 +177,37 @@ U1      u1_g_VdfEsoRx_SW_REAR_WASHER(void)
 }
 
 /*===================================================================================================================================*/
+/*  U1      u1_g_VdfEsoRx_SYS_SW_CAMERA_WASHER(void)                                                                                 */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         U1 u1_t_ava_rx  : signal status (active/inactive)                                                                */
+/*===================================================================================================================================*/
+U1      u1_g_VdfEsoRx_SYS_SW_CAMERA_WASHER(void)
+{
+    static const U1 u1_s_VDF_ESO_SW_CAMERA_WASHER_WCSW = (U1)1U;
+    static const U1 u1_s_VDF_ESO_SW_CAMERA_WASHER_WRSW = (U1)0U;
+
+    U1                 u1_t_wcswfnc;
+    U1                 u1_t_wrswfnc;
+    U1                 u1_t_ava_rx;
+
+    u1_t_wcswfnc = (U1)0U;
+    u1_t_wrswfnc = (U1)0U;
+
+    (void)Com_ReceiveSignal(ComConf_ComSignal_WCSW_FNC, &u1_t_wcswfnc);
+    (void)Com_ReceiveSignal(ComConf_ComSignal_WRSW_FNC, &u1_t_wrswfnc);
+
+    if((u1_t_wcswfnc == u1_s_VDF_ESO_SW_CAMERA_WASHER_WCSW) &&
+       (u1_t_wrswfnc == u1_s_VDF_ESO_SW_CAMERA_WASHER_WRSW)){
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
+    }else{
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_INA;
+    }
+
+    return(u1_t_ava_rx);
+}
+
+/*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
 /*                                                                                                                                   */
@@ -190,8 +221,10 @@ U1      u1_g_VdfEsoRx_SW_REAR_WASHER(void)
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  BEV-1    12/16/2024  HT       Added function for BEV System_Consideration_1.(MET-B_WPBB-CSTD-0-)                                 */
+/*  BEV-2    01/07/2026  YN       Added function for BEV FF2.(MET-B_CWHBB-CSTD-0-)                                                   */
 /*                                                                                                                                   */
 /*  * HT = Hibiki Tanii, KSE                                                                                                         */
 /*  * SN = Shizuka Nakajima, KSE                                                                                                     */
+/*  * YN = Yujiro Nagaya, Denso Techno                                                                                               */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

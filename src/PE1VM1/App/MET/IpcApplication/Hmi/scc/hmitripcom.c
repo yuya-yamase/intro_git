@@ -197,6 +197,7 @@ void  vd_g_HmiTripcomGrphPut(const U4 * const u4_ap_GRPHRST)
     u1_t_req = (U1)(u4_t_grphrst & (U4)HMITRIPCOM_GRPHRSTREQ_BIT);
     if(u1_t_req == (U1)TRUE){
         u2_s_hmitripcom_grphrst |= (U2)TRIPCOM_RSTRQBIT_M_AVGEE_TA;             /*  AVG_EE_KMPL_USRRST_HIST_CLR         */
+        u2_s_hmitripcom_rstbit  |= (U2)TRIPCOM_RSTRQBIT_M_AVGEE_TA;             /*  AVG_EE_KMPL_USRRST_CLR              */
         if(u1_s_hmitripcom_ee_rst_hst == (U1)HMITRIPCOM_CNTREQ_INACT){
 #if 0   /* BEV Rebase provisionally */
             vd_s_HmiTripcomSWCount((U2)RIMID_U2_DS_22_10B2_EE_USRRST_HIST_CLR);
@@ -263,6 +264,7 @@ static void    vd_s_HmiTripcomSWCount(const U2 u2_a_RIMID)
 /*  19PFv3-2 09/23/2024  SI       Add Reset Count Logic (DID-10B2)                                                                   */
 /*  19PFv3-3 04/22/2025  KM       Bug fix : added additional reset of 1MIN_AVGFUEL and 1MIN_AVGEE when history clear is requested    */
 /*  BEV-1    10/31/2025  MA       Change for BEV rebase                                                                              */
+/*  BEV-2    01/26/2026  EA       Added reset request process for M_DMTOEC                                                           */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * YK   = Yuta kusunoki, Denso Techno                                                                                             */
@@ -270,5 +272,6 @@ static void    vd_s_HmiTripcomSWCount(const U2 u2_a_RIMID)
 /*  * SI   = Shugo Ichinose, Denso Techno                                                                                            */
 /*  * KM   = Kazuma Miyazawa, Denso Techno                                                                                           */
 /*  * MA   = Misaki Aiki,  Denso Techno                                                                                              */
+/*  * EA   = Eunice Avelin, DTPH                                                                                                     */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

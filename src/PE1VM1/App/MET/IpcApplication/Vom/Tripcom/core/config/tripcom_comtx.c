@@ -111,6 +111,8 @@ static  void    vd_s_TripcomCfgCanTxM1FC1(const U2 u2_a_VALUE);
 static  void    vd_s_TripcomCfgCanTxTOEC(const U2 u2_a_VALUE);
 static  void    vd_s_TripcomCfgCanTxM1EC1(const U2 u2_a_VALUE);
 static  void    vd_s_TripcomCfgCanTxASEC(const U2 u2_a_VALUE);
+static  void    vd_s_TripcomCfgCanTxASEVDT(const U2 u2_a_VALUE);
+static  void    vd_s_TripcomCfgCanTxASTOEC(const U2 u2_a_VALUE);
 static  void    vd_s_TripcomCfgCanTxINFC(const U2 u2_a_VALUE);
 static  void    vd_s_TripcomCfgCanTxINFCC(const U2 u2_a_VALUE);
 static  void    vd_s_TripcomCfgCanTxINEC(const U2 u2_a_VALUE);
@@ -205,31 +207,33 @@ void            vd_g_TripcomComTxTask(void)
         &vd_s_TripcomCfgCanTxASEC,              /*  08 AVGEE_CNTT_DC            */
         &vd_s_TripcomCfgCanTxM1EC1,             /*  09 AVGEE_CNTT_ONEM          */
         vdp_PTR_NA,                             /*  10 AVGEE_CNTT_FIVEM         */
-        &vd_s_TripcomCfgCanTxINFC,              /*  11 INSTFE_CNTT_RX           */
-        &vd_s_TripcomCfgCanTxINFCC,             /*  12 INSTFEC_CNTT_RX          */
-        vdp_PTR_NA,                             /*  13 INSTHE_CNTT_RX           */
-        &vd_s_TripcomCfgCanTxINEC,              /*  14 INSTEE_CNTT_RX           */
-        vdp_PTR_NA,                             /*  15 DTE_CNTT_FU              */
-        &vd_s_TripcomCfgCanTxEVRANGE,           /*  16 EVDTE_CNTT_EP            */
-        vdp_PTR_NA,                             /*  17 AVGVEHSPD_CNTT_TA        */
-        &vd_s_TripcomCfgCanTxASSP,              /*  18 AVGVEHSPD_CNTT_DC        */
-        vdp_PTR_NA,                             /*  19 AVGVEHSPD_CNTT_TR_A      */
-        vdp_PTR_NA,                             /*  20 AVGVEHSPD_CNTT_TR_B      */
-        vdp_PTR_NA,                             /*  21 PTSRUNTM_CNTT_LC         */
-        &vd_s_TripcomCfgCanTxASTM,              /*  22 PTSRUNTM_CNTT_DC         */
-        vdp_PTR_NA,                             /*  23 PTSRUNTM_CNTT_TR_A       */
-        vdp_PTR_NA,                             /*  24 PTSRUNTM_CNTT_TR_B       */
-        vdp_PTR_NA,                             /*  25 ECOSTPTM_CNTT_LC         */
-        vdp_PTR_NA,                             /*  26 ECOSTPTM_CNTT_DC         */
-        vdp_PTR_NA,                             /*  27 ECOSTPTM_CNTT_ST         */
-        vdp_PTR_NA,                             /*  28 SAVEFS_CNTT_LC           */
-        vdp_PTR_NA,                             /*  29 SAVEFS_CNTT_DC           */
-        vdp_PTR_NA,                             /*  30 PTSRUNDIST_CNTT_LC       */
-        &vd_s_TripcomCfgCanTxASDT,              /*  31 PTSRUNDIST_CNTT_DC       */
-        vdp_PTR_NA,                             /*  32 PTSRUNDIST_CNTT_TR_A     */
-        vdp_PTR_NA,                             /*  33 PTSRUNDIST_CNTT_TR_B     */
-        vdp_PTR_NA,                             /*  34 EVRATIO_CNTT_DC          */
-        &vd_s_TripcomCfgCanTxRANGE              /*  35 DTE_ED_CNTT_FU           */
+        &vd_s_TripcomCfgCanTxASEVDT,            /*  11 AVGEE_CNTT_DC_DT         */
+        &vd_s_TripcomCfgCanTxASTOEC,            /*  12 AVGEE_CNTT_DC_EC         */
+        &vd_s_TripcomCfgCanTxINFC,              /*  13 INSTFE_CNTT_RX           */
+        &vd_s_TripcomCfgCanTxINFCC,             /*  14 INSTFEC_CNTT_RX          */
+        vdp_PTR_NA,                             /*  15 INSTHE_CNTT_RX           */
+        &vd_s_TripcomCfgCanTxINEC,              /*  16 INSTEE_CNTT_RX           */
+        vdp_PTR_NA,                             /*  17 DTE_CNTT_FU              */
+        &vd_s_TripcomCfgCanTxEVRANGE,           /*  18 EVDTE_CNTT_EP            */
+        vdp_PTR_NA,                             /*  19 AVGVEHSPD_CNTT_TA        */
+        &vd_s_TripcomCfgCanTxASSP,              /*  20 AVGVEHSPD_CNTT_DC        */
+        vdp_PTR_NA,                             /*  21 AVGVEHSPD_CNTT_TR_A      */
+        vdp_PTR_NA,                             /*  22 AVGVEHSPD_CNTT_TR_B      */
+        vdp_PTR_NA,                             /*  23 PTSRUNTM_CNTT_LC         */
+        &vd_s_TripcomCfgCanTxASTM,              /*  24 PTSRUNTM_CNTT_DC         */
+        vdp_PTR_NA,                             /*  25 PTSRUNTM_CNTT_TR_A       */
+        vdp_PTR_NA,                             /*  26 PTSRUNTM_CNTT_TR_B       */
+        vdp_PTR_NA,                             /*  27 ECOSTPTM_CNTT_LC         */
+        vdp_PTR_NA,                             /*  28 ECOSTPTM_CNTT_DC         */
+        vdp_PTR_NA,                             /*  29 ECOSTPTM_CNTT_ST         */
+        vdp_PTR_NA,                             /*  30 SAVEFS_CNTT_LC           */
+        vdp_PTR_NA,                             /*  31 SAVEFS_CNTT_DC           */
+        vdp_PTR_NA,                             /*  32 PTSRUNDIST_CNTT_LC       */
+        &vd_s_TripcomCfgCanTxASDT,              /*  33 PTSRUNDIST_CNTT_DC       */
+        vdp_PTR_NA,                             /*  34 PTSRUNDIST_CNTT_TR_A     */
+        vdp_PTR_NA,                             /*  35 PTSRUNDIST_CNTT_TR_B     */
+        vdp_PTR_NA,                             /*  36 EVRATIO_CNTT_DC          */
+        &vd_s_TripcomCfgCanTxRANGE              /*  37 DTE_ED_CNTT_FU           */
     };
     static  const   ST_TRIPCOM_COMUNITTX        st_sp_TRIPCOM_TX_UNIT[TRIPCOM_COMTX_NUM_UNITSIG]        = {
         {   &vd_s_TripcomCfgCanTxUNIT6,         (U1)TRIPCOM_CANTXUNIT_XECON     }
@@ -342,28 +346,32 @@ static  void    vd_s_TripcomCfgCanTxInit(void)
 
     (void)Com_SendSignal(ComConf_ComSignal_AS_EC,   &u2_sp_tripcom_tx_value[8]);
 
+    (void)Com_SendSignal(ComConf_ComSignal_AS_EVDT,   &u2_sp_tripcom_tx_value[11]);
+
+    (void)Com_SendSignal(ComConf_ComSignal_AS_TOEC,   &u2_sp_tripcom_tx_value[12]);
+
 #if 0   /* BEV Rebase provisionally */
-    (void)Com_SendSignal(ComConf_ComSignal_IN_FC,   &u2_sp_tripcom_tx_value[11]);
+    (void)Com_SendSignal(ComConf_ComSignal_IN_FC,   &u2_sp_tripcom_tx_value[13]);
 #if defined(ComConf_ComSignal_IN_FC_C)
-    (void)Com_SendSignal(ComConf_ComSignal_IN_FC_C, &u2_sp_tripcom_tx_value[12]);
+    (void)Com_SendSignal(ComConf_ComSignal_IN_FC_C, &u2_sp_tripcom_tx_value[14]);
 #endif
 #endif   /* BEV Rebase provisionally */
-    (void)Com_SendSignal(ComConf_ComSignal_IN_EC,    &u2_sp_tripcom_tx_value[14]);
+    (void)Com_SendSignal(ComConf_ComSignal_IN_EC,    &u2_sp_tripcom_tx_value[16]);
 
 #if 0   /* BEV Rebase provisionally */
-    (void)Com_SendSignal(ComConf_ComSignal_RANGE,   &u2_sp_tripcom_tx_value[35]);
+    (void)Com_SendSignal(ComConf_ComSignal_RANGE,   &u2_sp_tripcom_tx_value[37]);
 #endif   /* BEV Rebase provisionally */
 
-    (void)Com_SendSignal(ComConf_ComSignal_EV_RANGE, &u2_sp_tripcom_tx_value[16]);
+    (void)Com_SendSignal(ComConf_ComSignal_EV_RANGE, &u2_sp_tripcom_tx_value[18]);
 
 #if 0   /* BEV Rebase provisionally */
-    (void)Com_SendSignal(ComConf_ComSignal_AS_SP,   &u2_sp_tripcom_tx_value[18]);
+    (void)Com_SendSignal(ComConf_ComSignal_AS_SP,   &u2_sp_tripcom_tx_value[20]);
 #endif   /* BEV Rebase provisionally */
 
-    (void)Com_SendSignal(ComConf_ComSignal_AS_TM,   &u2_sp_tripcom_tx_value[20]);
+    (void)Com_SendSignal(ComConf_ComSignal_AS_TM,   &u2_sp_tripcom_tx_value[24]);
 
 #if 0   /* BEV Rebase provisionally */
-    (void)Com_SendSignal(ComConf_ComSignal_AS_DT,   &u2_sp_tripcom_tx_value[27]);
+    (void)Com_SendSignal(ComConf_ComSignal_AS_DT,   &u2_sp_tripcom_tx_value[33]);
 #endif   /* BEV Rebase provisionally */
 
     (void)Com_SendSignal(ComConf_ComSignal_UNIT_6,  &u1_t_unitsndval);
@@ -749,14 +757,49 @@ static  void    vd_s_TripcomCfgCanTxASEC(const U2 u2_a_VALUE)
     U2          u2_t_presndval;
 
     u2_t_presndval = (U2)0U;
-#if 0   /* BEV Rebase provisionally */
+
     (void)Com_ReceiveSignal(ComConf_ComSignal_AS_EC, &u2_t_presndval);
-#endif   /* BEV Rebase provisionally */
     if (u2_t_presndval != u2_a_VALUE) {
-#if 0   /* BEV Rebase provisionally */
         (void)Com_SendSignal(ComConf_ComSignal_AS_EC, &u2_a_VALUE);
-        (void)Com_TriggerIPDUSend(MSG_MET1S56_TXCH0);
-#endif   /* BEV Rebase provisionally */
+        (void)Com_TriggerIPDUSend(MSG_MET1S55_TXCH0);
+    }
+}
+
+/*===================================================================================================================================*/
+/* static  void    vd_s_TripcomCfgCanTxASEVDT(const U2 u2_a_VALUE)                                                                   */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static  void    vd_s_TripcomCfgCanTxASEVDT(const U2 u2_a_VALUE)
+{
+    U2          u2_t_presndval;
+
+    u2_t_presndval = (U2)0U;
+
+    (void)Com_ReceiveSignal(ComConf_ComSignal_AS_EVDT, &u2_t_presndval);
+    if (u2_t_presndval != u2_a_VALUE) {
+        (void)Com_SendSignal(ComConf_ComSignal_AS_EVDT, &u2_a_VALUE);
+        (void)Com_TriggerIPDUSend(MSG_MET1S55_TXCH0);
+    }
+}
+
+/*===================================================================================================================================*/
+/* static  void    vd_s_TripcomCfgCanTxASTOEC(const U2 u2_a_VALUE)                                                                   */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static  void    vd_s_TripcomCfgCanTxASTOEC(const U2 u2_a_VALUE)
+{
+    U2          u2_t_presndval;
+
+    u2_t_presndval = (U2)0U;
+
+    (void)Com_ReceiveSignal(ComConf_ComSignal_AS_TOEC, &u2_t_presndval);
+    if (u2_t_presndval != u2_a_VALUE) {
+        (void)Com_SendSignal(ComConf_ComSignal_AS_TOEC, &u2_a_VALUE);
+        (void)Com_TriggerIPDUSend(MSG_MET1S55_TXCH0);
     }
 }
 
@@ -1202,6 +1245,7 @@ static  void    vd_s_TripcomCfgCanDrTx(void)
 /*  19PFv3-9 06/27/2024  TN       Delete Calibration Guard Process.                                                                  */
 /*  19PFv3-10 04/24/2025 PG       Added vd_s_TripcomCfgCanTxEMGF250ms                                                                */
 /*  19PFv3-11 07/17/2025 SK       Added Convert Function of UNIT_6 for 410D MPT                                                      */
+/*  BEV3-01   01/20/2026 DR       Added AS_EVDT and AS_TOEC for BEV FF2                                                              */
 /*                                                                                                                                   */
 /*  * HY   = Hidefumi Yoshida, Denso                                                                                                 */
 /*  * YA   = Yuhei Aoyama, DensoTechno                                                                                               */
@@ -1218,5 +1262,6 @@ static  void    vd_s_TripcomCfgCanDrTx(void)
 /*  * MaO(M) = Masayuki Okada, NTT Data MSE                                                                                          */
 /*  * KM   = Kazuma Miyazawa, Denso Techno                                                                                           */
 /*  * RS   = Ryuki Sako, Denso Techno                                                                                                */
+/*  * DR   = Dyan Reyes, DTPH                                                                                                        */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

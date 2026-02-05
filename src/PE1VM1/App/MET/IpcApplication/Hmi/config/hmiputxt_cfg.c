@@ -1,4 +1,4 @@
-/* 1.9.0 */
+/* 1.10.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define HMIPUTXT_CFG_C_MAJOR                     (1)
-#define HMIPUTXT_CFG_C_MINOR                     (9)
+#define HMIPUTXT_CFG_C_MINOR                     (10)
 #define HMIPUTXT_CFG_C_PATCH                     (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -460,6 +460,7 @@ static void    vd_s_HmiPutTxtCfgAlertReq(U1 u1_a_slot)
 /*  1.7.0    10/25/2024  RS       Setting for BEV System_Consideration_1                                                             */
 /*  1.8.0    06/23/2025  HY       Setting for BEV System_Consideration_2                                                             */
 /*  1.9.0    07/07/2025  KT       Setting for BEV System_Consideration_2 (Delete for CONTDISP2)                                      */
+/*  1.10.0   01/07/2026  SN       Setting for BEV FF2                                                                                */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
@@ -478,6 +479,7 @@ static void    vd_s_HmiPutTxtCfgAlertReq(U1 u1_a_slot)
 /*  BEV-4     2/10/2025  HF       Change for BEV System_Consideration_1.(MET-D_SBW-CSTD-3-00-A-C0)                                   */
 /*  BEV-5    06/23/2025  HY       Change for BEV System_Consideration_2.(MET-S_ADMID-CSTD-0-02-A-C0 / MET-S_ADTT-CSTD-0-02-A-C0)     */
 /*  BEV-6     7/07/2025  KT       Change for BEV System_Consideration_2.(MET-M_CONTDISP2-CSTD-0010-C0)                               */
+/*  BEV-7     1/07/2026  SN       Change for BEV FF2.(MET-O_FNCLIM-CSTD-0-00-A-C0)                                                   */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
@@ -494,5 +496,6 @@ static void    vd_s_HmiPutTxtCfgAlertReq(U1 u1_a_slot)
 /*  * HF   = Hinari Fukamachi,KSE                                                                                                    */
 /*  * HY   = Haruki Yagi, KSE                                                                                                        */
 /*  * KT   = Kenta Takaji,    Denso Techno                                                                                           */
+/*  * SN   = Shizuka Nakajima,KSE                                                                                                    */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

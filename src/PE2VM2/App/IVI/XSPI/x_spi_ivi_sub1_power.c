@@ -25,6 +25,7 @@
 #include    "BootLogCtl.h"
 #include    "veh_opemd.h"
 #include    "ivdsh.h"
+#include    "ExtSigCtrl.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -490,8 +491,8 @@ void            vd_g_XspiIviSub1PowerGetSts(U1* u1_ap_data)
 
     /* シス検暫定対応 */
     /* BOOT入力値取得処理 */
-    u1_t_boot = Dio_ReadChannel(DIO_ID_PORT0_CH2);
-    if(u1_t_boot == (U1)STD_HIGH){   /* BOOT=Hiを検知した場合、どの状態でも下記状態に上書き */
+    u1_t_boot = ExtSigCtrl_GetSigSts(EXTSIGCTRL_KIND_BOOT);
+    if(u1_t_boot == (U1)U1_EXTSIGCTRL_SIG_STS_ON){   /* BOOT=Hiを検知した場合、どの状態でも下記状態に上書き */
         u1_ap_data[XSPI_IVI_POWER_01_BYTE2] = (U1)XSPI_IVI_POWER_STATE_POWERON;   /* 基本ステート：POWERON通常 */
         u1_ap_data[XSPI_IVI_POWER_01_BYTE3] = (U1)XSPI_IVI_POWER_STATE_OFF;       /* 特殊ステート：未設定 */
         u1_ap_data[XSPI_IVI_POWER_01_BYTE4] = (U1)0U;                             /* OTAステート ：未設定 */

@@ -1,4 +1,4 @@
-/* 0.0.0 */
+/* 0.1.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -12,9 +12,9 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define DATESI_MET_CFG_C_MAJOR                   (0)
-#define DATESI_MET_CFG_C_MINOR                   (0)
-#define DATESI_MET_CFG_C_PATCH                   (0)
+#define DATESI_MET_CFG_H_MAJOR                   (0)
+#define DATESI_MET_CFG_H_MINOR                   (1)
+#define DATESI_MET_CFG_H_PATCH                   (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -25,6 +25,7 @@
 #include "nvmc_mgr.h"
 #include "calibration.h"
 #include "locale.h"
+#include "veh_opemd_xmode.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -35,6 +36,22 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+/* Nvmc */
+#define u1_g_DateSI_NvmcReadStrValU2withSts(u2_a_NVMCID, u2_ap_data)            (u1_g_Nvmc_ReadStrValU2withSts(u2_a_NVMCID, u2_ap_data))
+#define vd_g_DateSI_NvmcWriteU2(u2_a_NVMCID, u2_a_DATA)                         (vd_g_Nvmc_WriteU2(u2_a_NVMCID, u2_a_DATA))
+
+/* iVDsh */
+#define u1_g_DateSI_iVDshReabyDid(u2_a_DID, u4_ap_rea, u2_a_NWORD)              (u1_g_iVDshReabyDid(u2_a_DID, u4_ap_rea, u2_a_NWORD))
+#define vd_g_DateSI_iVDshWribyDid(u2_a_DID, u4_ap_WRI, u2_a_NWORD)              (vd_g_iVDshWribyDid(u2_a_DID, u4_ap_WRI, u2_a_NWORD))
+
+/* Locale */
+#define u1_g_DateSI_TimeFormat12H24H()                                          (u1_g_TimeFormat12H24H())
+#define vd_g_DateSI_TimeFormat12H24HPut(u1_a_FRMT)                              (vd_g_TimeFormat12H24HPut(u1_a_FRMT))
+
+/* Calibration */
+#define u2_g_DATESI_CALIB_CAL_DEF                                               (u2_CALIB_MCUID0574_CAL_DEF)
+#define u2_g_DATESI_CALIB_CAL_MIN                                               (u2_CALIB_MCUID0575_CAL_MIN)
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -44,18 +61,27 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Prototypes                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-void            vd_g_DateSIMETCfgInit(void);
-void            vd_g_DateSIMETCfgiVDshRx(void);
-void            vd_g_DateSIMETCfgiVDshTx(void);
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+/* Nvmc */
+extern const U2    u2_g_DATESI_NVMCID_OFST;
+extern const U2    u2_g_DATESI_NVMCID_CALE;
+
+/* iVDsh */
+extern const U2    u2_g_DATESI_DID_WRI_CALDEF;
+extern const U2    u2_g_DATESI_DID_WRI_CALMIN;
+extern const U2    u2_g_DATESI_DID_WRI_FMT;
+extern const U2    u2_g_DATESI_DID_WRI_OFST;
+extern const U2    u2_g_DATESI_DID_WRI_CAL;
+extern const U2    u2_g_DATESI_DID_REA_FMT;
+extern const U2    u2_g_DATESI_DID_REA_OFST;
+extern const U2    u2_g_DATESI_DID_REA_CAL;
 
 #endif      /* DATESI_MET_CFG_H */
 
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
-/*  Change History  :  datesi_met_cfg.c                                                                                              */
+/*  Change History  :  datesi_met.c                                                                                                  */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

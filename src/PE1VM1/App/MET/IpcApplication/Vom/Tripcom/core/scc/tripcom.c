@@ -694,6 +694,7 @@ static  void    vd_s_TripcomCanTx(const U2 u2_a_VARBIT)
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  19PFv3-1 04/03/2024  DR       Deleted engine type and info functions                                                             */
+/*  BEV-01   01/20/2026  DR       Added send data cntt ID for AS_EVDT and AS_TOEC for FF2                                            */
 /*                                                                                                                                   */
 /*  * HY   = Hidefumi Yoshida, Denso                                                                                                 */
 /*  * YA   = Yuhei Aoyama, DensoTechno                                                                                               */

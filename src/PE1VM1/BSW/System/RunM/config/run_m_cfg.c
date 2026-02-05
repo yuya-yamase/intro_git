@@ -40,7 +40,6 @@
 /* Application           */
 
 #include "alert.h"
-#include "illumi.h"
 #include "hmiproxy.h"
 #include "vardef.h"
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -109,7 +108,6 @@ U1      u1_g_RunMCfghkShtdwnchk1st(void)
         &u1_g_oXSECShtdwnOk,
         &u1_g_Nvmc_IsShtdwnOk,
         &u1_g_SoundCriMgrShtdwnOk,
-        &u1_g_IllumiShtdwnOk,
         &u1_g_HmiProxyShtdwnOK
     };
     static const ST_ALERT_REQBIT   st_sp_REQBIT[] = {
@@ -217,6 +215,7 @@ U1      u1_g_RunMCfghkShtdwnchk2nd(const U1 u1_a_1ST)
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  BEV-1    10/22/2025  TS       Change for BEV rebase.                                                                             */
+/*  BEV-2    01/23/2026  RS       Delete u1_g_IllumiShtdwnOk for BEV FF2.                                                            */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
 /*  * RS   = Ryuki Sako, Denso Techno                                                                                                */

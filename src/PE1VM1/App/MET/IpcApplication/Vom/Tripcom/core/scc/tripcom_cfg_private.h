@@ -46,7 +46,7 @@
 #define TRIPCOM_APPL_EVRATIO                    (13U)           /*  EV Ratio                                                         */
 #define TRIPCOM_APPL_DTE_ED                     (14U)           /*  Distance To Empty for Electric Delay                             */
 
-#define TRIPCOM_NUM_CNTTS                       (36U)
+#define TRIPCOM_NUM_CNTTS                       (38U)
 #define TRIPCOM_NUM_ENGPARAM                    (5U)
 
 #define TRIPCOM_NUM_CANTXUNIT                   (4U)

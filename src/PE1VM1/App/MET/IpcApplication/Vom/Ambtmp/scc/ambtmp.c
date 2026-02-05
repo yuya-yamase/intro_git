@@ -1,8 +1,8 @@
-/* 2.3.0 */
+/* 2.4.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-/*  Ambient Temprature Celsius/Fahrenheit                                                                                            */
+/*  Ambient Temperature Celsius/Fahrenheit                                                                                           */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
 
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define AMBTMP_C_MAJOR                         (2)
-#define AMBTMP_C_MINOR                         (3)
+#define AMBTMP_C_MINOR                         (4)
 #define AMBTMP_C_PATCH                         (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -268,7 +268,7 @@ U1      u1_g_AmbtmpIcyraWrnActCel(void)
 }
 
 /*===================================================================================================================================*/
-/*  U1      u1_g_AmbtmpIceWrnActCel(void)                                                                                            */
+/*  U1      u1_g_AmbtmpIceWrnActFah(void)                                                                                            */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
@@ -279,7 +279,7 @@ U1      u1_g_AmbtmpIceWrnActFah(void)
 }
 
 /*===================================================================================================================================*/
-/*  U1      u1_g_AmbtmpIcyraWrnActCel(void)                                                                                          */
+/*  U1      u1_g_AmbtmpIcyraWrnActFah(void)                                                                                          */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
@@ -371,12 +371,15 @@ static void vd_s_AmbtmpIceWrnChk(void)
         {(U2)8100U, (U2)7700U},     /* 41.0 degree Fahrenheit: 4000 + 41.0 * 100, 37.0 degree Fahrenheit: 4000 + 37.0 * 100          */
     };
     U1 u1_t_trvl_dst_flg;               /* Travelling Distance Flag         */
+    U1 u1_t_igon;
     U4 u4_t_loop;
 
     u1_t_trvl_dst_flg = u1_g_VehopemdPtsOn((U1)VEH_OPEMD_PTS_INV_OFF);
 
     for(u4_t_loop = (U4)0U ; u4_t_loop < (U4)AMBTMP_NUM_DEGREE ; u4_t_loop++){
-        if(u1_s_ambtmp_sts != (U1)AMBTMP_STS_VALID){
+        u1_t_igon = u1_g_VehopemdIgnOn();
+        if((u1_t_igon == (U1)FALSE) ||
+           (u1_s_ambtmp_sts != (U1)AMBTMP_STS_VALID)){
             st_sp_ambtmp[u4_t_loop].u1_icew = (U1)FALSE;
         }
         else{
@@ -455,10 +458,14 @@ static void vd_s_AmbtmpTrvlFlgChk(void)
 /*  2.2.0    03/07/2022  TA(M)    Change the processing when unknows of ambtmp_ad                                                    */
 /*  2.2.1    06/28/2022  TA(M)    Change rounding logic of u2_s_AmbtmpDspCel/u2_s_AmbtmpDspFah                                       */
 /*  2.3.0    10/28/2025  SN       Delete vd_g_AmbtmpOpemdEvhk                                                                        */
+/*  2.4.0     1/21/2026  JS       Change config for BEV Full_function_2                                                              */
+/*                                MET-M_OSTEMP-CSTD-0-05-A-C1                                                                        */
+/*                                Add function power status check                                                                    */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * YN   = Yasuhiro Nakamura, Denso Techno                                                                                         */
 /*  * TA(M)= Teruyuki Anjima, NTT Data MSE                                                                                           */
 /*  * SN   = Shimon Nambu, Denso Techno                                                                                              */
+/*  * JS   = Jun Sugiyama, KSE                                                                                                       */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

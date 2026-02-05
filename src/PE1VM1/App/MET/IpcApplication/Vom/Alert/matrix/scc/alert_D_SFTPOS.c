@@ -1,4 +1,4 @@
-/* 5.5.0 */
+/* 5.5.1 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -11,7 +11,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define ALERT_D_SFTPOS_C_MAJOR                   (5)
 #define ALERT_D_SFTPOS_C_MINOR                   (5)
-#define ALERT_D_SFTPOS_C_PATCH                   (0)
+#define ALERT_D_SFTPOS_C_PATCH                   (1)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -54,7 +54,7 @@ static U4      u4_s_AlertD_sftposBRsbwSrcchk(const U1 u1_a_VOM, const U4 u4_a_IG
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static const U1  u1_sp_ALERT_D_SFTPOS_B_RJTB_DST[ALERT_D_SFTPOS_B_RJTB_NUM_DST] = {
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 00 UNKNOWN                                         */
-    (U1)ALERT_REQ_D_SFTPOS_B_RJTB_DBL1,                                        /* 01 DBL1                                            */
+    (U1)ALERT_REQ_D_SFTPOS_B_RJTB_DBL,                                         /* 01 DBL                                             */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 02 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN                                                      /* 03 UNKNOWN                                         */
 };
@@ -232,6 +232,9 @@ static U4      u4_s_AlertD_sftposBRsbwSrcchk(const U1 u1_a_VOM, const U4 u4_a_IG
 /*            2/ 6/2025  SF       Setting for BEV System_Consideration_1.                                                            */
 /*  5.4.0    05/26/2025  YR       Fix logic for SBW buzer request                                                                    */
 /*  5.5.0    11/13/2025  SH       Config BevStep3                                                                                    */
+/*  5.5.1    01/13/2026  NI       Change config for Full_Function_2                                                                  */
+/*                                MET-D_SFTPOS-CSTD-1-00-B-C0                                                                        */
+/*                                Change Name from RJTB_DBL1 to RJTB_DBL                                                             */
 /*                                                                                                                                   */
 /*  * SM   = Shingo Miyamoto, NTTD MSE                                                                                               */
 /*  * TN   = Toshiaki Nagashima, NTTD MSE                                                                                            */
@@ -242,5 +245,6 @@ static U4      u4_s_AlertD_sftposBRsbwSrcchk(const U1 u1_a_VOM, const U4 u4_a_IG
 /*  * YR   = Yhana Regalario, DTPH                                                                                                   */
 /*  * HF   = Hinari Fukamachi, KSE                                                                                                   */
 /*  * SH   = Sae Hirose, Denso Techno                                                                                                */
+/*  * NI   = Naoki Inagaki, KSE                                                                                                      */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
