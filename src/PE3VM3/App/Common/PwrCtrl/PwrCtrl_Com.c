@@ -662,6 +662,11 @@ static void vd_s_PwrCtrlComEthLinkupStsApply( void )
         vd_g_PwrCtrlComTxClrBootLog((U1)PWRCTRL_COM_BOOTLOG_ETHREQ);
     }
     
+    /* Ethリンクアップ状態:異常値の場合 */
+    else{
+        /* 何もしない */
+    }
+    
     return;
 }
 
