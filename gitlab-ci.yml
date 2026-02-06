@@ -12,7 +12,7 @@ variables:
   #調停ファイル名
   ARBITATION_FILE: 'InDev.tmp'
   # ターゲットブランチ名
-  CI_TARGET_BRANCH: 'develop'
+  CI_TARGET_BRANCH: 'feature/Integ/integ_gitlabrunner_add_2m_target'
   # プロジェクト名（バリなしの場合は空白）
   SMOKE_TEST_PROJECT: '2MUS'
 
