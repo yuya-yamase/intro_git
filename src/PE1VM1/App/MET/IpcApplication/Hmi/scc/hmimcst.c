@@ -1,133 +1,135 @@
-/* 1.4.0 */
+/* 3.0.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-/*  DENSO ICT1 Coding Style Standard Template                                                                                        */
+/*  DENSO ICT1 Coding Style Standard Hmiodo                                                                                        */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define HMIPROXY_CFG_C_MAJOR                     (1)
-#define HMIPROXY_CFG_C_MINOR                     (4)
-#define HMIPROXY_CFG_C_PATCH                     (0)
+#define HMIMCST_C_MAJOR                         (3)
+#define HMIMCST_C_MINOR                         (0)
+#define HMIMCST_C_PATCH                         (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "hmiproxy_cfg_private.h"
-
-#include "hmihud.h"
-#include "hmilocale.h"
-#include "hmimaint.h"
-#include "hmiodo.h"
-#include "hmiputxt.h"
-#include "hmitt.h"
-#include "hmiwchime.h"
-#include "hmitripcom.h"
 #include "hmimcst.h"
-#include "hmiscreen.h"
+
+#include "mcst.h"
+#include "oxcan.h"
+#include "xspi_met_ch0.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if ((HMIPROXY_CFG_C_MAJOR != HMIPROXY_H_MAJOR) || \
-     (HMIPROXY_CFG_C_MINOR != HMIPROXY_H_MINOR) || \
-     (HMIPROXY_CFG_C_PATCH != HMIPROXY_H_PATCH))
-#error "hmiproxy_cfg.c and hmiputxt.h : source and header files are inconsistent!"
-#endif
-
-#if ((HMIPROXY_CFG_C_MAJOR != HMIPROXY_CFG_H_MAJOR) || \
-     (HMIPROXY_CFG_C_MINOR != HMIPROXY_CFG_H_MINOR) || \
-     (HMIPROXY_CFG_C_PATCH != HMIPROXY_CFG_H_PATCH))
-#error "hmiproxy_cfg.c and hmiproxy_cfg_private.h : source and header files are inconsistent!"
+#if ((HMIMCST_C_MAJOR != HMIMCST_H_MAJOR) || \
+     (HMIMCST_C_MINOR != HMIMCST_H_MINOR) || \
+     (HMIMCST_C_PATCH != HMIMCST_H_PATCH))
+#error "hmimcst.c and hmimcst.h : source and header files are inconsistent!"
 #endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#define    HMIMCST_MAIN_TICK                    (20U)        /* 20 milliseconds */
+
+#define    HMIMCST_RESET_NO_REQ                    (0U)
+#define    HMIMCST_RESET_REQ                       (1U)
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#define    u1_HMIMCST_READ__BIT(u4_buf , u1_pos , u1_len) ((U1)((U1)((u4_buf)  >> (u1_pos)) & (U1)((1U << (u1_len)) - 1U)))
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+/* Customize  RAM                                                               */
+static U1   u1_s_hmimcst_reset_req_pre;
+static U1   u1_s_hmimcst_mwvc_ope;
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-void ( * const              fp_gp_vd_HMIPROXY_BON_INIT[HMIPROXY_INIT_NUM])(void) = {
-     &vd_g_HmiHudInit,
-     &vd_g_HmiLocaleInit,
-     &vd_g_HmiMaintInit,
-     &vd_g_HmiOdoInit,
-     &vd_g_HmiPuTxtInit,
-     &vd_g_HmiTtInit,
-     &vd_g_HmiWchimeInit,
-     &vd_g_HmiTripcomInit,
-     &vd_g_HmiMcstInit,
-     &vd_g_HmiScreenInit
-};
-
-void ( * const              fp_gp_vd_HMIPROXY_RST_INIT[HMIPROXY_INIT_NUM])(void) = {
-     &vd_g_HmiHudInit,
-     &vd_g_HmiLocaleInit,
-     &vd_g_HmiMaintInit,
-     &vd_g_HmiOdoInit,
-     &vd_g_HmiPuTxtInit,
-     &vd_g_HmiTtInit,
-     &vd_g_HmiWchimeInit,
-     &vd_g_HmiTripcomInit,
-     &vd_g_HmiMcstInit,
-     &vd_g_HmiScreenInit
-};
-
-void ( * const              fp_gp_vd_HMIPROXY_WKUP_INIT[HMIPROXY_INIT_NUM])(void) = {
-     &vd_g_HmiHudInit,
-     &vd_g_HmiLocaleInit,
-     &vd_g_HmiMaintInit,
-     &vd_g_HmiOdoInit,
-     &vd_g_HmiPuTxtInit,
-     &vd_g_HmiTtInit,
-     &vd_g_HmiWchimeInit,
-     &vd_g_HmiTripcomInit,
-     &vd_g_HmiMcstInit,
-     &vd_g_HmiScreenInit
-};
-
-U1   ( * const              fp_gp_u1_HMIPROXY_SHTDWN_CHK[HMIPROXY_SHTDWN_NUM])(void) = {
-     &u1_g_HmiScreenShtdwnOK
-};
-
-const ST_HMIPROXY     st_gp_HMIPROXY[HMIPROXY_MAINTASK_NUM] = {
-     {&vd_g_HmiHudMainTask ,     (U4)SCHDLR_TASKBIT__10MS_A  },
-     {&vd_g_HmiLocaleMainTask,   (U4)SCHDLR_TASKBIT__20MS_B  },
-     {&vd_g_HmiMaintMainTask,    (U4)SCHDLR_TASKBIT__50MS_C  },
-     {&vd_g_HmiOdoMainTask,      (U4)SCHDLR_TASKBIT__50MS_C  },
-     {&vd_g_HmiPuTxtMainTask,    (U4)SCHDLR_TASKBIT__10MS_A  },
-     {&vd_g_HmiTtMainTask,       (U4)SCHDLR_TASKBIT__10MS_A  },
-     {&vd_g_HmiWchimeMainTask,   (U4)SCHDLR_TASKBIT__10MS_A  },
-     {&vd_g_HmiTripcomMainTask,  (U4)SCHDLR_TASKBIT__50MS_E  },
-     {&vd_g_HmiMcstMainTask,     (U4)SCHDLR_TASKBIT__20MS_B  },
-     {&vd_g_HmiScreenMainTask,   (U4)SCHDLR_TASKBIT__50MS_A  },
-     {vdp_PTR_NA,                (U4)SCHDLR_TASKBIT_RGLR     }   /* <- Terminator. Do Not Delete! */
-};
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*===================================================================================================================================*/
-/*                                                                                                                                   */
+/*  void    vd_g_HmiMcstInit(void)                                                                                                   */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
+void    vd_g_HmiMcstInit(void)
+{
+
+    u1_s_hmimcst_reset_req_pre          = (U1)HMIMCST_RESET_NO_REQ;
+
+    u1_s_hmimcst_mwvc_ope               = (U1)HMIMCST_MWVC_NO_OPE;
+
+}
+
+/*===================================================================================================================================*/
+/*  void    vd_g_HmiMcstMainTask(void)                                                                                               */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void    vd_g_HmiMcstMainTask(void)
+{
+
+}
+
+/*===================================================================================================================================*/
+/*  void    vd_g_HmiCstmPut(    const U4 * u4_ap_PDU_RX)                                                                             */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      const U4 * u4_ap_PDU_RX                                                                                          */
+/*                                                                                                                                   */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void    vd_g_HmiCstmPut(const U4 * u4_ap_PDU_RX)
+{
+
+    U1 u1_t_rxdata;
+
+    /*CSTM_VOL_CHANGE*/
+    u1_t_rxdata = u1_HMIMCST_READ__BIT(u4_ap_PDU_RX[3], (U1)19U, (U1)3U);
+
+    if(u1_t_rxdata <= (U1)HMIMCST_MWVC_OPE_MAX){
+        vd_g_McstBfPut((U1)MCST_BFI_METWRNCSTM, (U4)u1_t_rxdata);
+        u1_s_hmimcst_mwvc_ope = u1_t_rxdata;
+    }
+
+    /*reset*/
+    u1_t_rxdata = u1_HMIMCST_READ__BIT(u4_ap_PDU_RX[3], (U1)24U, (U1)1U);
+    if((u1_t_rxdata == (U1)HMIMCST_RESET_REQU) && (u1_t_rxdata != u1_s_hmimcst_reset_req_pre)){
+        (void)u1_g_McstReset((U1)HMIMCST_RESET_REQ);
+    }
+    u1_s_hmimcst_reset_req_pre = u1_t_rxdata;
+}
+
+/*===================================================================================================================================*/
+/* U1    u1_g_HmiMcstGetMWVCOpe(void)                                                                                                */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+U1    u1_g_HmiMcstGetMWVCOpe(void)
+{
+    return(u1_s_hmimcst_mwvc_ope);
+}
+
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
@@ -137,32 +139,23 @@ const ST_HMIPROXY     st_gp_HMIPROXY[HMIPROXY_MAINTASK_NUM] = {
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  1.0.0    07/16/2017  TA       New.                                                                                               */
-/*  1.1.0    03/20/2020  TH       Setting for 800B CV.                                                                               */
-/*  1.2.0    10/07/2020  TH       Setting for 800B CV-R.                                                                             */
-/*  1.3.0    01/06/2021  TH       Follow 775B 1A.                                                                                    */
-/*  1.4.0    05/08/2025  MN       Change for BEV PreCV.                                                                              */
+/*  1.1.0    04/21/2020  TH       Setting for 800B CV.                                                                               */
+/*  2.0.0    10/06/2020  TM       Re-designed.                                                                                       */
+/*  2.1.0     1/13/2021  TM       Setting for 800B 1A.                                                                               */
+/*  2.2.0     4/23/2021  TM       Fixed METHUD800B-16508 and METHUD800B-16509.                                                       */
+/*  2.3.0    11/16/2021  SI       Setting for 22-24FGM 1A                                                                            */
+/*  2.4.0    09/23/2022  TX       Add Trailer Setting                                                                                */
+/*  3.0.0    01/30/2026  SN       Change B_PERMEM for BEV                                                                            */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/* 19PFv3-1  10/31/2023  SH       Add HmiDate IF                                                                                     */
-/* 19PFv3-2  04/04/2024  KH       Delete VRCTRL function                                                                             */
-/* 19PFv3-3  05/17/2024  PG       Delete hmircmmui                                                                                   */
-/* 19PFv3-4  07/22/2024  AA       Change function for shutdown check                                                                 */
-/* 19PFv3-5  08/22/2024  TN       Delete hmitaste function.                                                                          */
-/* 19PFv3-6  05/20/2025  PG       Add HmiAdu module                                                                                  */
-/* 19PFv3-7  06/27/2025  SH       Add HmiTdoor module                                                                                */
-/* BEV-1     10/31/2025  MA       Change for BEV rebase                                                                              */
-/* BEV-2     05/08/2025  MN       Change for BEV PreCV.(MET-M_CLKCTL-CSTD-0-/MET-M_CAL-CSTD-0-) Delete hmidate and hmiclock          */
-/* BEV-3     02/05/2026  SN       Change B_PERMEM for BEV FF2. Add vd_g_HmiMcstInit                                                  */
+/*  BEV-1    01/30/2026  SN       Change B_PERMEM for BEV                                                                            */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * TH   = Takahiro Hirano, Denso Techno                                                                                           */
-/*  * SH   = Sae Hirose, Denso Techno                                                                                                */
-/*  * KH   = Kiko Huerte, DTPH                                                                                                       */
-/*  * PG   = Patrick Garcia, DTPH                                                                                                    */
-/*  * AA   = Anna Asuncion, Denso Techno                                                                                             */
-/*  * TN   = Tetsushi Nakanao, Denso Techno                                                                                          */
-/*  * MN   = Mikiya Negishi, KSE                                                                                                     */
+/*  * TM   = Takuya   Mitsui, Denso Techno                                                                                           */
+/*  * SI   = Shugo  Ichinose, Denso Techno                                                                                           */
+/*  * TX   = Tong Xinyuan   , DNST                                                                                                   */
 /*  * SN   = Shimon Nambu, Denso Techno                                                                                              */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
