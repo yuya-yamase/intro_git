@@ -63,6 +63,10 @@ U1      u1_g_VdfEsoRx_SW_LTA(void);
 U1      u1_g_VdfEsoRx_ADIEXIST(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+/* vardef_esopt_ARS1S90.c */
+U1      u1_g_VdfEsoRx_DRS(void);
+
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* vardef_esopt_BCC1S06.c */
 U1      u1_g_VdfEsoRx_RCD(void);
 
@@ -174,6 +178,10 @@ U1      u1_g_VdfEsoRx_4WDSYS(void);
 U1      u1_g_VdfEsoRx_AUTOP(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+/* vardef_esopt_BDC1SV1.c */
+U1      u1_g_VdfEsoRx_SYS_4WDSYS_DISCON(void);
+
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* vardef_esopt_LVN1S01.c */
 U1      u1_g_VdfEsoRx_TMN(void);
 U1      u1_g_VdfEsoRx_LVN(void);
@@ -229,6 +237,7 @@ U1      u1_g_VdfEsoRx_SW_HEDLMP_DRL(void);
 U1      u1_g_VdfEsoRx_SW_FRONT_FOG(void);
 U1      u1_g_VdfEsoRx_SW_REAR_FOG(void);
 U1      u1_g_VdfEsoRx_SW_TITE(void);
+U1      u1_g_VdfEsoRx_SYS_SW_OBBPBD(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* vardef_esopt_ZN11S26.c */
@@ -237,6 +246,11 @@ U1      u1_g_VdfEsoRx_SW_INTTIME_AJUST(void);
 U1      u1_g_VdfEsoRx_SW_REAR_WIPER(void);
 U1      u1_g_VdfEsoRx_SW_REAR_WIPER_INT(void);
 U1      u1_g_VdfEsoRx_SW_REAR_WASHER(void);
+U1      u1_g_VdfEsoRx_SYS_SW_CAMERA_WASHER(void);
+
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/* vardef_esopt_UCB1S01.c */
+U1      u1_g_VdfEsoRx_PERSET(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */

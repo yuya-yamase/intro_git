@@ -127,7 +127,7 @@ const           ST_TRIPCOM_CALCTX               st_gp_TRIPCOM_CALCTX_CFG[TRIPCOM
     {   vdp_PTR_NA,                     (U1)U1_MAX                              },  /*  04 Inst. Fuel Economy for IN_FC_C            */
     {   vdp_PTR_NA,                     (U1)U1_MAX                              },  /*  05 Inst. Hydrogen Economy                    */
     {   &u2_g_InstEeCalcTx,             (U1)TRIPCOM_CANTXUNIT_EECON             },  /*  06 Inst. Electric Economy                    */
-    {   vdp_PTR_NA,                     (U1)U1_MAX                              },  /*  07 Distance To Empty                         */
+    {   vdp_PTR_NA,                     (U1)U1_MAX                              },  /*  07 Distance To Empty for tau                 */
     {   &u2_g_EvDteCalcTx,              (U1)TRIPCOM_CANTXUNIT_DIST              },  /*  08 EV Distance To Empty                      */
     {   &u2_g_AvgVehspdCalcTx,          (U1)TRIPCOM_CANTXUNIT_SPEED             },  /*  09 Average Vehicle Speed                     */
     {   &u2_g_PtsRunTmCalcTx,           (U1)U1_MAX                              },  /*  10 Powertrain System Run Time                */
@@ -148,6 +148,8 @@ const           ST_TRIPCOM_CNTT                 st_gp_TRIPCOM_CNTTS_CFG[TRIPCOM_
     {   (U1)TRIPCOM_APPL_AVGEE,         (U1)AVGEE_CNTT_DC,         (U2)0x0100U     },  /*  Driving Cycle                                */
     {   (U1)TRIPCOM_APPL_AVGEE,         (U1)AVGEE_CNTT_ONEM,       (U2)0x0100U     },  /*  One min Cycle                                */
     {   (U1)TRIPCOM_APPL_AVGEE,         (U1)AVGEE_CNTT_FIVEM,      (U2)0x0000U     },  /*  Five mins Cycle                              */
+    {   (U1)TRIPCOM_APPL_AVGEE,         (U1)AVGEE_CNTT_DC_DT,      (U2)0x0100U     },  /*  Driving Cycle                                */
+    {   (U1)TRIPCOM_APPL_AVGEE,         (U1)AVGEE_CNTT_DC_EC,      (U2)0x0100U     },  /*  Driving Cycle                                */
     {   (U1)TRIPCOM_APPL_INSTFE,        (U1)INSTFE_CNTT_RX,        (U2)0x0000U     },  /*  Rx Signal Cycle                              */
     {   (U1)TRIPCOM_APPL_INSTFEC,       (U1)INSTFEC_CNTT_RX,       (U2)0x0000U     },  /*  Rx Signal Cycle                              */
     {   (U1)TRIPCOM_APPL_INSTHE,        (U1)INSTHE_CNTT_RX,        (U2)0x0000U     },  /*  Rx Signal Cycle                              */
@@ -326,12 +328,7 @@ U1              u1_g_TripcomCfgGetM1FCRST(U1 * u1p_a_rst)
 /*===================================================================================================================================*/
 U1              u1_g_TripcomCfgGetTOECRST(U1 * u1p_a_rst)
 {
-#if 0   /* BEV Rebase provisionally */
-    (void)Com_ReceiveSignal(ComConf_ComSignal_TOEC_RST, u1p_a_rst);
-    return ((U1)Com_GetIPDUStatus(MSG_AVN1S07_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX));
-#else   /* BEV Rebase provisionally */
     return ((U1)COM_NO_RX);
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -706,6 +703,8 @@ void             vd_s_TripomCfgPostAppTask(void)
 /*  19PFv3-13 11/19/2024  KH       Delete Compile switch                                                                             */
 /*  19PFv3-14 01/14/2025  AA       Unapply Distance to Empty                                                                         */
 /*  19PFv3-15 04/21/2025  SN       Changed u1_g_TripcomCfgGetEVRunSts                                                                */
+/*  BEV-01    01/13/2026  PG       Delete Compile switch for u1_g_TripcomCfgGetTOECRST                                               */
+/*  BEV-02    01/22/2026  DR       Added CNTTID for AS_EVDT and AS_TOEC                                                              */
 /*                                                                                                                                   */
 /*  * HY   = Hidefumi Yoshida, Denso                                                                                                 */
 /*  * YA   = Yuhei Aoyama, DensoTechno                                                                                               */

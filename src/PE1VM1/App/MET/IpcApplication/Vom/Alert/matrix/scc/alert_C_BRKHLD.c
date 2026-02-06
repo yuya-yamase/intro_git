@@ -1,4 +1,4 @@
-/* 5.4.0 */
+/* 5.5.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define ALERT_C_BRKHLD_C_MAJOR                   (5)
-#define ALERT_C_BRKHLD_C_MINOR                   (4)
+#define ALERT_C_BRKHLD_C_MINOR                   (5)
 #define ALERT_C_BRKHLD_C_PATCH                   (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -33,7 +33,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define ALERT_C_BRKHLD_STBY_NUM_DST              (32U)
 #define ALERT_C_BRKHLD_HLD_NUM_DST               (16U)
-#define ALERT_C_BRKHLD_WRN_NUM_DST               (32U)
+#define ALERT_C_BRKHLD_WRN_NUM_DST               (64U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -139,7 +139,39 @@ static const U1  u1_sp_ALERT_C_BRKHLD_WRN_DST[ALERT_C_BRKHLD_WRN_NUM_DST] = {
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 28 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 29 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 30 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN                                                      /* 31 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 31 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 32 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 33 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 34 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 35 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 36 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 37 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 38 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 39 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 40 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 41 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 42 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 43 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 44 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 45 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 46 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 47 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 48 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 49 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 50 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 51 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 52 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 53 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 54 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 55 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 56 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 57 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 58 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 59 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 60 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 61 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 62 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN                                                      /* 63 UNKNOWN                                         */
 };
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -242,7 +274,7 @@ static U4      u4_s_AlertC_brkhldHldSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
 /*===================================================================================================================================*/
 static U4      u4_s_AlertC_brkhldWrnSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
-    static const U1 u1_s_ALERT_C_BRKHLD_WRN_LSB_VSC = (U1)4U;
+    static const U1 u1_s_ALERT_C_BRKHLD_WRN_LSB_VSC = (U1)5U;
     U4              u4_t_src_chk;
     U1              u1_t_msgsts;
     U1              u1_t_sgnl;
@@ -274,6 +306,9 @@ static U4      u4_s_AlertC_brkhldWrnSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
 /*  5.3.1     6/27/2022  YN       Update for 840B#2 1A(Version update).                                                              */
 /*  5.3.2     01/22/2024 YR       Update for 19PFv3(Version update)                                                                  */
 /*  5.4.0     3/21/2025  KO       Change for BEV System_Consideration_1.                                                             */
+/*  5.5.0     12/23/2025 YH       Change for BEV Full_Function_2.                                                                    */
+/*                                MET-C_BRKHLD-CSTD-2-01-B-C0                                                                        */
+/*                                Change BZR,MID function from the constant for the bit shift count from 4 to 5                      */
 /*                                                                                                                                   */
 /*  * MY   = Masaki Yoshizawa, NTTD MSE                                                                                              */
 /*  * DS   = Daisuke Suzuki, NTTD MSE                                                                                                */
@@ -282,5 +317,6 @@ static U4      u4_s_AlertC_brkhldWrnSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
 /*  * YN   = Yuma Nagahara, NTTD MSE                                                                                                 */
 /*  * YR   = Yhana Regalario, Denso Techno Phil. Inc.                                                                                */
 /*  * KO   = Kazuto Oishi,  Denso Techno                                                                                             */
+/*  * YH   = Yuki Hatakeyama,  KSE                                                                                                   */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
