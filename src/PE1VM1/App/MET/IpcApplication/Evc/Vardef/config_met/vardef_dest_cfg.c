@@ -737,6 +737,7 @@ static inline U1    u1_s_VardefDestCfgCalibU1NumChk(const U1 u1_a_CALIBID, const
 /*  BEV-2     6/27/2025  SNk      Setting for BEV System_Consideration_2.(MET-M_DESTVARI-CSTD-A0-06)                                 */
 /*  BEV-3    10/15/2025  SN       Configured for BEVstep3_Rebase                                                                     */
 /*  BEV-4     1/22/2026  YN       Change config for BEV FF2(MET-D_4WDSYS-CSTD-2-02-A-C1)                                             */
+/*  BEV-5     2/09/2026  MA       Change config for BEV FF2(MET-P_TMNT-CSTD-1-00-B-C0)                                               */
 /*                                                                                                                                   */
 /*  * SF   = Seiya Fukutome, DENSO TECHNO                                                                                            */
 /*  * AT   = Ayano Tomimoto, KSE                                                                                                     */
@@ -755,5 +756,6 @@ static inline U1    u1_s_VardefDestCfgCalibU1NumChk(const U1 u1_a_CALIBID, const
 /*  * SN   = Shimon Nambu, Denso Techno                                                                                              */
 /*  * TR   = Tebs Ramos, DTPH                                                                                                        */
 /*  * YN   = Yujiro Nagaya, Denso Techno                                                                                             */
+/*  * MA   = Misaki Aiki, Denso Techno                                                                                               */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

@@ -495,6 +495,7 @@ static inline void    vd_s_XSpiCfgTxOdo(           U4 * u4_ap_pdu_tx) {
     U1  u1_t_tripb_sts;
     U4  u4_t_odo_km_dat;                                                /* ODO_KM                                         */
     U1  u1_t_tmnt_reset_sts;
+    U4  u4_t_tmnt_reset_dat;
 
 
     u4_t_odo_dat       = (U4)0U;
@@ -508,6 +509,8 @@ static inline void    vd_s_XSpiCfgTxOdo(           U4 * u4_ap_pdu_tx) {
 
     /* TMNT */
     u1_t_tmnt_reset_sts = u1_g_OdoCfgGetOmRstSts();
+    u4_t_tmnt_reset_dat = (U1)0U;
+    vd_g_OdoCfgGetOmRstVal(&u4_t_tmnt_reset_dat);
 
     u4_ap_pdu_tx[0]   = u1_t_tmnt_reset_sts;                           /* TMNT_RESET_RESULT                              */
     u4_ap_pdu_tx[0]  |= ((U4)u1_t_odo_sts   << XSPI_STS_SHIFT);        /* ODO_STS                                        */
@@ -517,7 +520,7 @@ static inline void    vd_s_XSpiCfgTxOdo(           U4 * u4_ap_pdu_tx) {
     u4_ap_pdu_tx[4]   = ((U4)u1_t_tripb_sts << XSPI_STS_SHIFT);        /* TRIPB_STS                                      */
     u4_ap_pdu_tx[5]   = u4_t_tripb_dat;                                /* TRIP_B                                         */
     u4_ap_pdu_tx[6]   = u4_t_odo_km_dat;                               /* ODO_KM                                         */
-    u4_ap_pdu_tx[8]   = (U4)0U;                                        /* TMNT_RESET_ODO_VALUE  BEV Rebase provisionally */
+    u4_ap_pdu_tx[8]   = u4_t_tmnt_reset_dat;                           /* TMNT_RESET_ODO_VALUE                           */
 
 }
 
@@ -1186,6 +1189,7 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*                                MET-C_GMN-CSTD-0-02-A-C1                                                                           */
 /*                                Add the judgement of EPS & EPSSBW function.                                                        */
 /*  BEV-23    01/30/2026 TN       Fix initial value issue (BEV3CDCMET-3693).                                                         */
+/*  BEV-24    02/09/2026 MA       Change TMNT function for Bev rebase (BEV3CDCMET-2650).                                             */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
