@@ -269,7 +269,6 @@ void  vd_g_LocaleComTxInit(void)
     U1  u1_t_unit_ch2;
 #if 0   /* BEV Rebase provisionally */
 #else   /* BEV Rebase provisionally */
-
     u1_s_locale_unit_dist    = (U1)U1_MAX;
     u1_s_locale_unit_speed   = (U1)U1_MAX;
     u1_s_locale_unit_fueco   = (U1)U1_MAX;

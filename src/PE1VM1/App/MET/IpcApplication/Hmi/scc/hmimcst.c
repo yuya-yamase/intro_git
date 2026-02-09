@@ -35,8 +35,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define    HMIMCST_MAIN_TICK                    (20U)        /* 20 milliseconds */
-
+/* MET-M_USERST-CSTD*/
 #define    HMIMCST_RESET_NO_REQ                    (0U)
 #define    HMIMCST_RESET_REQ                       (1U)
 
@@ -92,13 +91,13 @@ void    vd_g_HmiMcstMainTask(void)
 }
 
 /*===================================================================================================================================*/
-/*  void    vd_g_HmiCstmPut(    const U4 * u4_ap_PDU_RX)                                                                             */
+/*  void    vd_g_HmiMcstCstmPut(    const U4 * u4_ap_PDU_RX)                                                                         */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      const U4 * u4_ap_PDU_RX                                                                                          */
 /*                                                                                                                                   */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_HmiCstmPut(const U4 * u4_ap_PDU_RX)
+void    vd_g_HmiMcstCstmPut(const U4 * u4_ap_PDU_RX)
 {
 
     U1 u1_t_rxdata;
@@ -113,7 +112,7 @@ void    vd_g_HmiCstmPut(const U4 * u4_ap_PDU_RX)
 
     /*reset*/
     u1_t_rxdata = u1_HMIMCST_READ__BIT(u4_ap_PDU_RX[3], (U1)24U, (U1)1U);
-    if((u1_t_rxdata == (U1)HMIMCST_RESET_REQU) && (u1_t_rxdata != u1_s_hmimcst_reset_req_pre)){
+    if((u1_t_rxdata == (U1)HMIMCST_RESET_REQ) && (u1_t_rxdata != u1_s_hmimcst_reset_req_pre)){
         (void)u1_g_McstReset((U1)HMIMCST_RESET_REQ);
     }
     u1_s_hmimcst_reset_req_pre = u1_t_rxdata;
