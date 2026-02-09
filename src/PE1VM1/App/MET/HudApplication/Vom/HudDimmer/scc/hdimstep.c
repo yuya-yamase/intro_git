@@ -51,6 +51,7 @@ static U1   u1_s_hdimstep_step;
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static U1   u1_s_HdimstepDecStep(const U1 u1_a_STEP);
+static void vd_s_HdimstepWriteStep(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
@@ -100,6 +101,7 @@ void    vd_g_HdimstepWkup(void)
 void    vd_g_HdimstepUpdt(void)
 {
     u1_s_hdimstep_step = u1_s_HdimstepDecStep(u1_s_hdimstep_step);
+    vd_s_HdimstepWriteStep();
 }
 
 /*===================================================================================================================================*/
@@ -168,12 +170,32 @@ static U1   u1_s_HdimstepDecStep(const U1 u1_a_STEP)
     U1 u1_t_step;
 
     u1_t_step = u1_g_HdimstepCfgReadStep();
-    if((u1_t_step < (U1)HDIMSTEP_STEP_MIN) ||
-       (u1_t_step > (U1)HDIMSTEP_STEP_MAX)){
+    if(((U1)HDIMSTEP_STEP_MIN <= u1_t_step            ) &&
+       (u1_t_step             <= (U1)HDIMSTEP_STEP_MAX)){
+        /* Do Nothing */
+    }
+    else{
         u1_t_step = u1_a_STEP;
     }
 
     return(u1_t_step);
+}
+
+/*===================================================================================================================================*/
+/* static void vd_s_HdimstepWriteStep(void)                                                                                          */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments   -                                                                                                                    */
+/*  Return      -                                                                                                                    */
+/*===================================================================================================================================*/
+static void vd_s_HdimstepWriteStep(void)
+{
+    U1 u1_t_step;
+
+    u1_t_step = u1_g_HdimmgrIfIsStepInd();
+    if(((U1)HDIMSTEP_STEP_MIN <= u1_t_step            ) &&
+       (u1_t_step             <= (U1)HDIMSTEP_STEP_MAX)){
+        (void)u1_g_HdimstepCfgWriteStep(u1_t_step);
+    }
 }
 
 /*===================================================================================================================================*/

@@ -19,7 +19,6 @@
 #include "hmiproxy_cfg_private.h"
 #include "hmihud.h"
 
-#include "himgadj.h"
 #include "hdimmgr_if.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -162,8 +161,9 @@ static U4 u4_s_HmiHudReadSig(const U1 u1_a_SIG_IDX, const U4 * u4_ap_REQ)
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-static void vd_s_HmiHudSetIllStep(void){
-    U1 u1_t_step;    /* recieve signal */
+static void vd_s_HmiHudSetIllStep(void)
+{
+    U1 u1_t_step;
 
     u1_t_step = (U1)u4_s_HmiHudReadSig((U1)HMIHUD_SIG_HUD_ILL_STEP_IND, &u4_sp_hmihud_dtabuf[HMIHUD_FIRST_DTA]);
 

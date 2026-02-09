@@ -159,9 +159,6 @@ typedef struct{
 static U1           u1_s_xspi_vipos_disp;
 #endif   /* BEV Rebase provisionally */
 static U1           u1_s_xspi_dimsw;
-static U1           u1_s_xspi_disp_gvifsts;
-static U1           u1_s_xspi_hudgvifctl_up_sts;
-static U1           u1_s_xspi_aglbe_up_sts;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
@@ -186,7 +183,6 @@ static inline void    vd_s_XSpiCfgTxMetcstm(       U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxAvgGrph(       U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxMetcstmMcst(   U4 * u4_ap_pdu_tx);
 
-static inline void    vd_s_XSpiCfgRxComsts(     const U4 * u4_ap_PDU_RX);
 static inline void    vd_s_XSpiCfgRxDispsts(    const U4 * u4_ap_PDU_RX);
 static inline void    vd_s_XSpiCfgRxWchime(     const U4 * u4_ap_PDU_RX);
 static inline void    vd_s_XSpiCfgRxLocale(     const U4 * u4_ap_PDU_RX);
@@ -807,17 +803,6 @@ static inline void    vd_s_XSpiCfgTxAvgGrph(         U4 * u4_ap_pdu_tx)
 }
 
 /*===================================================================================================================================*/
-/*  static void    vd_s_XSpiCfgRxComsts(U4 * u4_ap_PDU_RX)                                                                           */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static inline void    vd_s_XSpiCfgRxComsts(     const U4 * u4_ap_PDU_RX) {
-    u1_s_xspi_hudgvifctl_up_sts = u1_XSPI_MET_READ__BIT(u4_ap_PDU_RX[0], (U1)2U, (U1)2U);
-    u1_s_xspi_aglbe_up_sts = u1_XSPI_MET_READ__BIT(u4_ap_PDU_RX[0], (U1)4U, (U1)2U);
-}
-
-/*===================================================================================================================================*/
 /*  static void    vd_s_XSpiCfgRxDispsts(U4 * u4_ap_pdu_tx)                                                                          */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
@@ -1003,13 +988,18 @@ static inline void    vd_s_XSpiCfgRxTripcom(    const U4 * u4_ap_PDU_RX) {
 /*===================================================================================================================================*/
 static inline void    vd_s_XSpiCfgRxHUD(        const U4 * u4_ap_PDU_RX) {
 
-    U1 u1_t_rxdata;    /* Receive data */
+    U1 u1_t_rxdata;
+    U1 u1_t_aglbe_sts;
+    U1 u1_t_hudgvifctl_sts;
 
-    if (u1_s_xspi_aglbe_up_sts == (U1)XSPI_COM_STATUS_NML) {
+    u1_t_aglbe_sts = u1_g_XSpiMETRxRdAccessSts((U1)XSPI_MET_XSPI_RX_AGLBE);
+    u1_t_hudgvifctl_sts = u1_g_XSpiMETRxRdAccessSts((U1)XSPI_MET_XSPI_RX_HUDGVIFCTL);
+
+    if (u1_t_aglbe_sts == (U1)XSPI_MET_XSPI_RX_READ_VALID) {
         vd_g_HmiHudSocDataPut(&u4_ap_PDU_RX[0]);
     }
 
-    if (u1_s_xspi_hudgvifctl_up_sts == (U1)XSPI_COM_STATUS_NML) {
+    if (u1_t_hudgvifctl_sts == (U1)XSPI_MET_XSPI_RX_READ_VALID) {
         vd_g_HmiHudGvifDataPut(&u4_ap_PDU_RX[0]);
 #if 0   /* BEV Rebase provisionally */
         u1_s_xspi_vipos_disp = u1_XSPI_MET_READ__BIT(u4_ap_PDU_RX[15] , (U1)0U , (U1)1U);
@@ -1052,9 +1042,6 @@ void    vd_g_XSpiCfgInitCh0(void)
     u1_s_xspi_vipos_disp                      = (U1)0U;
 #endif   /* BEV Rebase provisionally */
     u1_s_xspi_dimsw                           = (U1)0U;
-    u1_s_xspi_disp_gvifsts                    = (U1)XSPI_GVIF_METDSP_UNDEF;
-    u1_s_xspi_hudgvifctl_up_sts               = (U1)XSPI_COM_STATUS_UNDEF;
-    u1_s_xspi_aglbe_up_sts                    = (U1)XSPI_COM_STATUS_UNDEF;
 
 }
 
@@ -1066,7 +1053,6 @@ void    vd_g_XSpiCfgInitCh0(void)
 /*===================================================================================================================================*/
 void    vd_g_XSpiCfgPduRxCh0(const U4 * u4_ap_PDU_RX)
 {
-    vd_s_XSpiCfgRxComsts(     &u4_ap_PDU_RX[  2]);
     vd_s_XSpiCfgRxDispsts(    &u4_ap_PDU_RX[ 10]);
     vd_s_XSpiCfgRxWchime(     &u4_ap_PDU_RX[ 15]);
     vd_s_XSpiCfgRxLocale(     &u4_ap_PDU_RX[ 17]);
@@ -1075,7 +1061,6 @@ void    vd_g_XSpiCfgPduRxCh0(const U4 * u4_ap_PDU_RX)
     vd_s_XSpiCfgRxOdo(        &u4_ap_PDU_RX[ 40]);
     vd_s_XSpiCfgRxTripcom(    &u4_ap_PDU_RX[ 44]);
     vd_s_XSpiCfgRxHUD(        &u4_ap_PDU_RX[ 57]);
-    vd_s_XSpiCfgRxMETDISP(    &u4_ap_PDU_RX[121]);
     vd_s_XSpiCfgRxMetcstm(    &u4_ap_PDU_RX[212]);
 }
 

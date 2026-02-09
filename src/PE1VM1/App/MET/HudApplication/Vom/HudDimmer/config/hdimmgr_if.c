@@ -39,7 +39,8 @@
 #define HDIM_IF_STEP_IND_OFFSET             (1)
 #define HDIM_IF_STEP_IND_MAX                (10)
 #define HDIM_IF_STEP_IND_MIN                (0)
-#define HDIM_IF_STEP_IND_DEF                (6)
+#define HDIM_IF_STEP_IND_DEF                ((U1)HDIMSTEP_STEP_DEF - (U1)HDIM_IF_STEP_IND_OFFSET)
+#define HDIM_IF_STEP_IND_UNDEF              (255)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macros                                                                                                                           */
@@ -58,6 +59,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static U2   u2_s_hdimif_timout;
 static U2   u2_s_hdimif_outduty;
+static U1   u1_s_hdimif_step_ind;
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -71,6 +73,7 @@ void    vd_g_HdimmgrIfInit(void)
 {
     u2_s_hdimif_timout    = (U2)HDIM_IFTIMEOUT_MAX;
     u2_s_hdimif_outduty   = (U2)0;
+    u1_s_hdimif_step_ind  = (U1)HDIM_IF_STEP_IND_UNDEF;
 }
 
 /*===================================================================================================================================*/
@@ -193,10 +196,21 @@ void    vd_g_HdimmgrIfSetIllStepVal(const U1 u1_a_STEP)
     u1_t_updtdstep = u1_a_STEP;
     if(u1_t_updtdstep <= (U1)HDIM_IF_STEP_IND_MAX){
         u1_t_updtdstep += (U1)HDIM_IF_STEP_IND_OFFSET;
-        (void)u1_g_HdimstepCfgWriteStep(u1_t_updtdstep);
+        u1_s_hdimif_step_ind = u1_t_updtdstep;
     }
 
     u2_s_hdimif_timout = (U2)0;
+}
+
+/*===================================================================================================================================*/
+/*  U1      u1_g_HdimmgrIfIsStepInd(void)                                                                                            */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments   -                                                                                                                    */
+/*  Return      u1_s_hdimif_step_ind : step_ind                                                                                      */
+/*===================================================================================================================================*/
+U1      u1_g_HdimmgrIfIsStepInd(void)
+{
+    return(u1_s_hdimif_step_ind);
 }
 
 /*===================================================================================================================================*/

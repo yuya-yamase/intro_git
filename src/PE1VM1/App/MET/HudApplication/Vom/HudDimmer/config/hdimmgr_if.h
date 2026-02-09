@@ -51,6 +51,8 @@ U2      u2_g_HdimmgrIfGetOutduty(void);
 void    vd_g_HdimmgrIfSetOutduty(const U2 u2_a_OUTDUTY);
 void    vd_g_HdimmgrIfSetIllStepVal(const U1 u1_a_STEP);
 
+U1      u1_g_HdimmgrIfIsStepInd(void);
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
