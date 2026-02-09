@@ -1437,6 +1437,7 @@ U1      u1_g_VardefEsOptCfgEthRxEvcnt(const U2 u2_a_MSG_ID)
 /*  BEV-33    01/23/2026  HY      Change config for BEV Full_Function_2.                                                             */
 /*                                MET-C_GMN-CSTD-0-02-A-C1                                                                           */
 /*                                Add the judgement of EPS & EPSSBW function.                                                        */
+/*  BEV-34    02/09/2026  MA      Change config for BEV FF2(MET-P_TMNT-CSTD-1-00-B-C0)                                               */
 /*                                                                                                                                   */
 /*  * YI     = Yoshiki Iwata, Denso                                                                                                  */
 /*  * TN     = Takashi Nagai, Denso                                                                                                  */

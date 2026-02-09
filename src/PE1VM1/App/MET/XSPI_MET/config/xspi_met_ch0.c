@@ -509,7 +509,7 @@ static inline void    vd_s_XSpiCfgTxOdo(           U4 * u4_ap_pdu_tx) {
 
     /* TMNT */
     u1_t_tmnt_reset_sts = u1_g_OdoCfgGetOmRstSts();
-    u4_t_tmnt_reset_dat = (U1)0U;
+    u4_t_tmnt_reset_dat = (U4)0U;
     vd_g_OdoCfgGetOmRstVal(&u4_t_tmnt_reset_dat);
 
     u4_ap_pdu_tx[0]   = u1_t_tmnt_reset_sts;                           /* TMNT_RESET_RESULT                              */
