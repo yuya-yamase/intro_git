@@ -214,6 +214,7 @@ static inline void    vd_s_XSpiCfgTxPowerMd(       U4 * u4_ap_pdu_tx) {
     u4_ap_pdu_tx[0]   |= ((U4)u1_g_VehopemdIgnpOn() << 7);                              /* IGP_ON                                    */
     u4_ap_pdu_tx[0]   |= ((U4)u1_g_VehopemdBaOn() << 8);                                /* BA ON                                     */
     u4_ap_pdu_tx[0]   |= ((U4)u1_g_VehspdGetStopFlg() << 9);                            /* STOP_JDG_FLAG                             */
+    u4_ap_pdu_tx[0]   |= ((U4)u1_g_VehopemdApofrqOn() << 10);                           /* APOFRQ_ON                                 */
 }
 
 /*===================================================================================================================================*/
@@ -1186,6 +1187,7 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*                                MET-C_GMN-CSTD-0-02-A-C1                                                                           */
 /*                                Add the judgement of EPS & EPSSBW function.                                                        */
 /*  BEV-23    01/30/2026 TN       Fix initial value issue (BEV3CDCMET-3693).                                                         */
+/*  BEV-24    02/06/2026 TS       Change for BEV FF2.(MET-M_ONOFF-CSTD-1)                                                            */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
