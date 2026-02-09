@@ -54,8 +54,15 @@
 #define NVMCID_U4_VDF_ESO_W8                     (0x000AU)
 #define NVMCID_U2_DATESI_CALENDAR                (0x000BU)
 #define NVMCID_U2_DATESI_OFFSET                  (0x000CU)
-#define NVMCID_U2_DATESI_TIMEFMT                 (0x000DU)
-#define NVMCID_U1_ODO_INHERIT_FLG                (0x000EU)
+#define NVMCID_U1_ODO_INHERIT_FLG                (0x000DU)
+#define NVMCID_OTR_MCST_IDX_USER1_1              (0x000EU)
+#define NVMCID_OTR_MCST_IDX_USER1_2              (0x000FU)
+#define NVMCID_OTR_MCST_IDX_USER2_1              (0x0010U)
+#define NVMCID_OTR_MCST_IDX_USER2_2              (0x0011U)
+#define NVMCID_OTR_MCST_IDX_USER3_1              (0x0012U)
+#define NVMCID_OTR_MCST_IDX_USER3_2              (0x0013U)
+#define NVMCID_OTR_MCST_IDX_GUEST_1              (0x0014U)
+#define NVMCID_OTR_MCST_IDX_GUEST_2              (0x0015U)
 /* END : ##TOOL_OUT#NVMC_NVMCID## */
 
 /* START : ##TOOL_OUT#NVMC_BLOCKID## */
