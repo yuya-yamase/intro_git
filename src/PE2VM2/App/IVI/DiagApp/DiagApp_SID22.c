@@ -50,7 +50,7 @@
 #define DIAGAPP_SID22_SUPPORT_DID_A001  (0xA001U)
 #define DIAGAPP_SID22_SUPPORT_DID_F1A0  (0xF1A0U)
 #define DIAGAPP_SID22_SUPPORT_DID_1010  (0x1010U)
-#define DIAGAPP_SID22_SUPPORT_DID_10F2  (0x10F2U)
+#define DIAGAPP_SID22_SUPPORT_DID_102F  (0x102FU)
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -160,7 +160,7 @@ void           vd_g_DiagAppSID22Request(const ST_OXDC_REQ * st_ap_REQ, ST_OXDC_A
                 case DIAGAPP_REQUESTID_FUNCON:
                     if(((u2_t_chk_did >= (U2)DIAGAPP_SID22_SUPPORT_DID_0101) && (u2_t_chk_did <= (U2)DIAGAPP_SID22_SUPPORT_DID_0121)) ||
                        ((u2_t_chk_did >= (U2)DIAGAPP_SID22_SUPPORT_DID_A001) && (u2_t_chk_did <= (U2)DIAGAPP_SID22_SUPPORT_DID_F1A0)) ||
-                       ((u2_t_chk_did >= (U2)DIAGAPP_SID22_SUPPORT_DID_1010) && (u2_t_chk_did <= (U2)DIAGAPP_SID22_SUPPORT_DID_10F2))) {
+                       ((u2_t_chk_did >= (U2)DIAGAPP_SID22_SUPPORT_DID_1010) && (u2_t_chk_did <= (U2)DIAGAPP_SID22_SUPPORT_DID_102F))) {
                         u2_tp_did[u1_t_did_supnum] = u2_t_chk_did;
                         u1_t_did_supnum++;
                     }

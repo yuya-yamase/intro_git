@@ -249,7 +249,6 @@
 #define u1_g_VardefUnitSlctDstByPid()                  (u1_g_VardefDestDbfByPid((U1)VDF_DEST_DBF_UNITSLCT_DEST))
 #define u1_g_VardefUnitSlctTypeByPid()                 (u1_g_VardefCfgUnitType())
 #define u1_g_VardefDefTmFmtByPid()                     (u1_g_VardefDestDbfByPid((U1)VDF_DEST_DBF_TIMEFMT))
-#define u1_g_Vardef4wdSysByPid()                       (u1_g_VardefCfg4wdSys())
 #define u1_g_VardefCalenderDispTypeByPid()             (u1_g_VardefDestDbfByPid((U1)VDF_DEST_DBF_CALDSPTYP))
 #define u1_g_VardefSmaStaMIDByPid()                    (u1_g_VardefDestDbfByPid((U1)VDF_DEST_DBF_SMASTAMID))
 #define u1_g_VardefTempChrByPid()                      (u1_g_VardefDestDbfByPid((U1)VDF_DEST_DBF_TEMPCHR))
@@ -289,7 +288,6 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 U1      u1_g_VardefCfgUnitType(void);
 U1      u1_g_VardefCfgBltDst(void);
-U1      u1_g_VardefCfg4wdSys(void);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

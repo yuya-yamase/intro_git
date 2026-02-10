@@ -1,4 +1,4 @@
-/* 2.2.0 */
+/* 2.3.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define ILLUMI_C_MAJOR                          (2)
-#define ILLUMI_C_MINOR                          (2)
+#define ILLUMI_C_MINOR                          (3)
 #define ILLUMI_C_PATCH                          (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -46,8 +46,6 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static U1       u1_s_illumi_shtdwn_ok;
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -166,8 +164,6 @@ void    vd_g_IllumiBonInit(void)
 {
     U4      u4_t_lpcnt;
 
-    u1_s_illumi_shtdwn_ok = (U1)TRUE;
-
     for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)u1_g_ILLUMI_NUM_CH; u4_t_lpcnt++) {
         u2_gp_illumi_lvl_pct[u4_t_lpcnt]          = (U2)0U;
         st_gp_illumi_ow_ctrl[u4_t_lpcnt].u2_tocnt = (U2)ILLUMI_OW_TOC_MAX;
@@ -185,8 +181,6 @@ void    vd_g_IllumiBonInit(void)
 void    vd_g_IllumiRstInit(void)
 {
     U4      u4_t_lpcnt;
-
-    u1_s_illumi_shtdwn_ok = (U1)TRUE;
 
     for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)u1_g_ILLUMI_NUM_CH; u4_t_lpcnt++) {
         u2_gp_illumi_lvl_pct[u4_t_lpcnt]          = (U2)0U;
@@ -206,8 +200,6 @@ void    vd_g_IllumiWkupInit(void)
 {
     U4      u4_t_lpcnt;
 
-    u1_s_illumi_shtdwn_ok = (U1)TRUE;
-
     for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)u1_g_ILLUMI_NUM_CH; u4_t_lpcnt++) {
         u2_gp_illumi_lvl_pct[u4_t_lpcnt]          = (U2)0U;
         st_gp_illumi_ow_ctrl[u4_t_lpcnt].u2_tocnt = (U2)ILLUMI_OW_TOC_MAX;
@@ -225,14 +217,10 @@ void    vd_g_IllumiWkupInit(void)
 void    vd_g_IllumiMainTask(void)
 {
     U4      u4_t_lpcnt;
-    U4      u4_t_shtdwn_chk;
-    U4      u4_t_chbit;
 
     U2      u2_tp_dim_lvl[ILLUMI_NUM_DIM_LVL];
     U2      u2_t_pct;
     U2      u2_t_ow;
-
-    U1      u1_t_shtdwn_ok;
 
     vd_g_IllumiCfgMainStart();
 
@@ -240,8 +228,6 @@ void    vd_g_IllumiMainTask(void)
     u2_tp_dim_lvl[ILLUMI_DIM_LVL_USADJ_NIGHT] = u2_g_DimLvlUsadjust((U1)DIM_DAYNIGHT_LVL_NIGHT);
     u2_tp_dim_lvl[ILLUMI_DIM_LVL_DAYNIGHT]    = (U2)u1_g_DimLvlDaynight();
 
-    u1_t_shtdwn_ok  = (U1)TRUE;
-    u4_t_shtdwn_chk = u4_g_ILLUMI_SHTDWN_CHK_BY_CH;
     for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)u1_g_ILLUMI_NUM_CH; u4_t_lpcnt++) {
 
         if(fp_gp_u2_ILLUMI_LVL_UPDT[u4_t_lpcnt] != vdp_PTR_NA) {
@@ -269,28 +255,10 @@ void    vd_g_IllumiMainTask(void)
         }
 
         u2_gp_illumi_lvl_pct[u4_t_lpcnt] = u2_t_pct;
-        u4_t_chbit = u4_t_shtdwn_chk & (U4)1U;
-        if((u4_t_chbit != (U4)0U) &&
-           (u2_t_pct   >  (U2)0U)){
-            u1_t_shtdwn_ok = (U1)FALSE;
-        }
 
-        u4_t_shtdwn_chk >>= 1;
     }
 
-    u1_s_illumi_shtdwn_ok = u1_t_shtdwn_ok;
-
     vd_g_IllumiCfgMainFinish();
-}
-/*===================================================================================================================================*/
-/*  U1      u1_g_IllumiShtdwnOk(void)                                                                                                */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1      u1_g_IllumiShtdwnOk(void)
-{
-    return(u1_s_illumi_shtdwn_ok & (U1)TRUE);
 }
 /*===================================================================================================================================*/
 /*  U2      u2_g_IllumiLvlPct(const U1 u1_a_ILLUMI_CH)                                                                               */
@@ -381,6 +349,7 @@ U1      u1_g_IllumiTftAlpha(void)
 /*  2.0.1    10/18/2021  TA(M)    Change the definition of the null pointer used.(BSW v115_r007)                                     */
 /*  2.1.0    02/01/2022  TA(M)    Change to decompose initialization function into Bon / Reset / Wakeup                              */
 /*  2.2.0    02/15/2024  TH       for 19PFv3                                                                                         */
+/*  2.3.0    01/23/2026  RS       Delete u1_g_IllumiShtdwnOk for BEV FF2.                                                            */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
@@ -392,5 +361,6 @@ U1      u1_g_IllumiTftAlpha(void)
 /*  * TA(M)= Teruyuki Anjima, NTT Data MSE                                                                                           */
 /*  * TH = Taisuke Hirakawa, KSE                                                                                                     */
 /*  * SaH  = Sae Hirose, Denso Techno                                                                                                */
+/*  * RS   = Ryuki Sako, Denso Techno                                                                                                */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

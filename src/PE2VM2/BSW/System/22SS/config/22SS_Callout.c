@@ -109,7 +109,7 @@ void vd_g_22SSCallout_StaBonInit(void)
     vd_g_DiagAppInit();
 
     /* ClkCtrl */
-    vd_g_RtcIc_MainInitial();
+    vd_g_RtcIcBonInit();
     vd_g_DateclkBonInit();
     vd_g_DateSIBonInit();
     /* ^^ User Hook end   ^^ */
@@ -161,7 +161,7 @@ void vd_g_22SSCallout_StaRstInit(void)
     vd_g_DiagAppInit();
 
     /* ClkCtrl */
-    vd_g_RtcIc_MainInitial();
+    vd_g_RtcIcRstwkInit();
     vd_g_DateclkRstwkInit();
     vd_g_DateSIRstWkupInit();
     vd_g_Ivi_DrcCtrl_Main_Rst_init();
@@ -216,7 +216,7 @@ void vd_g_22SSCallout_StaWkupInit(void)
     vd_g_DiagAppInit();
 
     /* ClkCtrl */
-    vd_g_RtcIc_MainInitial();
+    vd_g_RtcIcRstwkInit();
     vd_g_DateclkRstwkInit();
     vd_g_DateSIRstWkupInit();
     /* ^^ User Hook end   ^^ */

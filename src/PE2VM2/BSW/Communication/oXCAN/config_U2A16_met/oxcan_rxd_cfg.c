@@ -186,295 +186,298 @@ const U4                    u4_gp_OXCAN_RXD_SYS_BY_PDU[] = {
     (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [188]    MSG_BDC1S48_RXCH0  */
     (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [189]    MSG_BDC1S52_RXCH0  */
     (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [190]    MSG_BDC1S60_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [191]    MSG_BDC1S81_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [192]    MSG_BDC1S82_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [193]    MSG_BDC1S83_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [194]    MSG_BDC1S87_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [195]    MSG_BDC1S89_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [196]    MSG_BDC1S91_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [197]    MSG_BDC1S97_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [198]    MSG_BDC1S98_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [199]    MSG_BDC1S99_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [200]    MSG_BDC1SA0_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [201]    MSG_BDC1SA1_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [202]    MSG_BDC1SC1_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [203]    MSG_BDC1SC2_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [204]    MSG_BDC1SC3_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [205]    MSG_BDC1SC4_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [206]    MSG_BDC1SC5_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [207]    MSG_BDC1SC6_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [208]    MSG_BDC1SC7_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [209]    MSG_BDC1SC8_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [210]    MSG_BDC1SC9_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [211]    MSG_BDC1SD1_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [212]    MSG_BDC1SD2_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [213]    MSG_BDC1SD3_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [214]    MSG_BDC1SD4_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [215]    MSG_BDC1SD5_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [216]    MSG_BDC1SD6_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [217]    MSG_BDC1SD7_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [218]    MSG_BDC1SD8_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [219]    MSG_BDC1SD9_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [220]    MSG_BDC1SE1_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [221]    MSG_BDC1SE2_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [222]    MSG_BDC1SE3_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [223]    MSG_BDC1SE4_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [224]    MSG_BDC1SE5_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [225]    MSG_BDC1SE6_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [226]    MSG_BDC1SE7_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [227]    MSG_BDC1SE8_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [228]    MSG_BDC1SE9_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [229]    MSG_BDC1SF1_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [230]    MSG_BDC1SF2_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [231]    MSG_BDC1SF3_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [232]    MSG_BDC1SF4_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [233]    MSG_BDC1SF5_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [234]    MSG_BDC1SF6_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [235]    MSG_BDC1SG4_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [236]    MSG_BDC1SG6_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [237]    MSG_BDC1SG7_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [238]    MSG_BDC1SG8_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [239]    MSG_BDC1SG9_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [240]    MSG_BDC1SH3_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [241]    MSG_BDC1SH4_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [242]    MSG_BDC1SH5_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [243]    MSG_BDC1SH6_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [244]    MSG_BDC1SH8_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [245]    MSG_BDC1SI0_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [246]    MSG_BDC1SI1_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [247]    MSG_BDC1SI2_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [248]    MSG_BDC1SI3_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [249]    MSG_BDC1SI4_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [250]    MSG_BDC1SI5_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [251]    MSG_BDC1SI6_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [252]    MSG_BDC1SI7_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [253]    MSG_BDC1SI8_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [254]    MSG_BDC1SI9_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [255]    MSG_BDC1SJ0_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [256]    MSG_BDC1SJ1_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [257]    MSG_BDC1SJ2_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [258]    MSG_BDC1SJ3_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [259]    MSG_BDC1SJ4_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [260]    MSG_BDC1SJ5_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [261]    MSG_BDC1SJ6_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [262]    MSG_BDC1SJ7_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [263]    MSG_BDC1SJ8_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [264]    MSG_BDC1SV1_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [265]    MSG_BDC1SV2_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [266]    MSG_BDC1SV3_RXCH0  */
-    (U4)0x00000016U,  /* IGR, IGP, ACC,                                */    /* [267]    MSG_BDF3S01_RXCH0  */
-    (U4)0x00000016U,  /* IGR, IGP, ACC,                                */    /* [268]    MSG_BDF3S02_RXCH0  */
-    (U4)0x00000016U,  /* IGR, IGP, ACC,                                */    /* [269]    MSG_BDR3S02_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [270]    MSG_BKD1S01_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [271]    MSG_BKD1S02_RXCH0  */
-    (U4)0x00000016U,  /* IGR, IGP, ACC,                                */    /* [272]    MSG_BSR1S01_RXCH0  */
-    (U4)0x00000016U,  /* IGR, IGP, ACC,                                */    /* [273]    MSG_BSR1S02_RXCH0  */
-    (U4)0x00000016U,  /* IGR, IGP, ACC,                                */    /* [274]    MSG_BSR1S03_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [275]    MSG_CDC1S01_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [276]    MSG_CMB1S03_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [277]    MSG_CMB1S04_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [278]    MSG_CSR1G10_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [279]    MSG_CSR1S04_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [280]    MSG_CSR1S07_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [281]    MSG_CSR1S08_RXCH0  */
-    (U4)0x00010016U,  /* IGR, IGP, ACC, PNC_16,                        */    /* [282]    MSG_DCM1S01_RXCH0  */
-    (U4)0x00000016U,  /* IGR, IGP, ACC,                                */    /* [283]    MSG_DCM1S03_RXCH0  */
-    (U4)0x00010016U,  /* IGR, IGP, ACC, PNC_16,                        */    /* [284]    MSG_DCM1S04_RXCH0  */
-    (U4)0x00010016U,  /* IGR, IGP, ACC, PNC_16,                        */    /* [285]    MSG_DCM1S08_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [286]    MSG_DDM1S00_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [287]    MSG_DDM1S09_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [288]    MSG_DDM1S12_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [289]    MSG_DDM1S16_RXCH0  */
-    (U4)0x00030016U,  /* IGR, IGP, ACC, PNC_16, PNC_40,                */    /* [290]    MSG_DDM1S17_RXCH0  */
-    (U4)0x00030016U,  /* IGR, IGP, ACC, PNC_16, PNC_40,                */    /* [291]    MSG_DDM1S20_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [292]    MSG_DDM1S32_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [293]    MSG_DDM1S35_RXCH0  */
-    (U4)0x00000016U,  /* IGR, IGP, ACC,                                */    /* [294]    MSG_DDM1S77_RXCH0  */
-    (U4)0x00030016U,  /* IGR, IGP, ACC, PNC_16, PNC_40,                */    /* [295]    MSG_DDM1SFH_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [296]    MSG_DKY1S26_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [297]    MSG_DRL1S03_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [298]    MSG_DRR1S03_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [299]    MSG_DS11S27_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [300]    MSG_DS11S37_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [301]    MSG_DS11S40_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [302]    MSG_DS12F02_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [303]    MSG_DS12F03_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [304]    MSG_DST1S02_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [305]    MSG_EBU1D01_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [306]    MSG_ECT1G01_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [307]    MSG_ECT1G92_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [308]    MSG_ECT1S93_RXCH0  */
-    (U4)0x00000016U,  /* IGR, IGP, ACC,                                */    /* [309]    MSG_EHV1E96_RXCH0  */
-    (U4)0x00000004U,  /*      IGP,                                     */    /* [310]    MSG_EHV1F02_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [311]    MSG_EHV1F04_RXCH0  */
-    (U4)0x00000016U,  /* IGR, IGP, ACC,                                */    /* [312]    MSG_EHV1G30_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [313]    MSG_EHV1G70_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [314]    MSG_EHV1G71_RXCH0  */
-    (U4)0x00000004U,  /*      IGP,                                     */    /* [315]    MSG_EHV1S23_RXCH0  */
-    (U4)0x00000004U,  /*      IGP,                                     */    /* [316]    MSG_EHV1S26_RXCH0  */
-    (U4)0x00000004U,  /*      IGP,                                     */    /* [317]    MSG_EHV1S31_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [318]    MSG_EHV1S90_RXCH0  */
-    (U4)0x00000004U,  /*      IGP,                                     */    /* [319]    MSG_EHV1S94_RXCH0  */
-    (U4)0x00030016U,  /* IGR, IGP, ACC, PNC_16, PNC_40,                */    /* [320]    MSG_EHV1S95_RXCH0  */
-    (U4)0x00000004U,  /*      IGP,                                     */    /* [321]    MSG_EHV1S96_RXCH0  */
-    (U4)0x00000016U,  /* IGR, IGP, ACC,                                */    /* [322]    MSG_EHV1S97_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [323]    MSG_EHV1S99_RXCH0  */
-    (U4)0x00030016U,  /* IGR, IGP, ACC, PNC_16, PNC_40,                */    /* [324]    MSG_EHV1SL2_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [325]    MSG_EHV2G02_RXCH0  */
-    (U4)0x00000004U,  /*      IGP,                                     */    /* [326]    MSG_EHV2G10_RXCH0  */
-    (U4)0x00000004U,  /*      IGP,                                     */    /* [327]    MSG_EHV2G20_RXCH0  */
-    (U4)0x00000016U,  /* IGR, IGP, ACC,                                */    /* [328]    MSG_EIM1S01_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [329]    MSG_ENG1C01_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [330]    MSG_ENG1C02_RXCH0  */
-    (U4)0x00000004U,  /*      IGP,                                     */    /* [331]    MSG_ENG1D51_RXCH0  */
-    (U4)0x00000004U,  /*      IGP,                                     */    /* [332]    MSG_ENG1D52_RXCH0  */
-    (U4)0x00000004U,  /*      IGP,                                     */    /* [333]    MSG_ENG1D53_RXCH0  */
-    (U4)0x00000004U,  /*      IGP,                                     */    /* [334]    MSG_ENG1D55_RXCH0  */
-    (U4)0x00000004U,  /*      IGP,                                     */    /* [335]    MSG_ENG1D56_RXCH0  */
-    (U4)0x00000004U,  /*      IGP,                                     */    /* [336]    MSG_ENG1D59_RXCH0  */
-    (U4)0x00000004U,  /*      IGP,                                     */    /* [337]    MSG_ENG1D60_RXCH0  */
-    (U4)0x00000016U,  /* IGR, IGP, ACC,                                */    /* [338]    MSG_ENG1G03_RXCH0  */
-    (U4)0x00000004U,  /*      IGP,                                     */    /* [339]    MSG_ENG1G13_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [340]    MSG_ENG1G90_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [341]    MSG_ENG1G92_RXCH0  */
-    (U4)0x00000004U,  /*      IGP,                                     */    /* [342]    MSG_ENG1S51_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [343]    MSG_ENG1S60_RXCH0  */
-    (U4)0x00000004U,  /*      IGP,                                     */    /* [344]    MSG_ENG1S99_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [345]    MSG_EPS1D50_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [346]    MSG_EPS1S11_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [347]    MSG_EPS1S90_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [348]    MSG_FCM1C01_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [349]    MSG_FCM1C03_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [350]    MSG_FCM1S10_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [351]    MSG_FCM1S12_RXCH0  */
-    (U4)0x00000016U,  /* IGR, IGP, ACC,                                */    /* [352]    MSG_FCM1S39_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [353]    MSG_FCM1S40_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [354]    MSG_FCM1S41_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [355]    MSG_FCM1S49_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [356]    MSG_FCM1S51_RXCH0  */
-    (U4)0x00000016U,  /* IGR, IGP, ACC,                                */    /* [357]    MSG_FCM1S52_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [358]    MSG_FCM1S58_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [359]    MSG_FCM1S66_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [360]    MSG_FCM1S70_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [361]    MSG_FCM1S76_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [362]    MSG_FCM1S78_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [363]    MSG_FCM1S79_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [364]    MSG_FCM1S88_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [365]    MSG_FCM1S90_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [366]    MSG_FCM1S92_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [367]    MSG_FCM1S95_RXCH0  */
-    (U4)0x00000004U,  /*      IGP,                                     */    /* [368]    MSG_FWD1S10_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [369]    MSG_IDT1S02_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [370]    MSG_IDT1S07_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [371]    MSG_IDT1S08_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [372]    MSG_IDT1S15_RXCH0  */
-    (U4)0x00000016U,  /* IGR, IGP, ACC,                                */    /* [373]    MSG_IMS1S01_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [374]    MSG_IPA1S05_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [375]    MSG_ITS1S01_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [376]    MSG_ITS1S04_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [377]    MSG_ITS1S05_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [378]    MSG_ITS1S08_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [379]    MSG_LVN1S01_RXCH0  */
-    (U4)0x000F0016U,  /* IGR, IGP, ACC, PNC_16, PNC_40, PNC_43, PNC_44 */    /* [380]    MSG_MET1S02_RXCH0  */
-    (U4)0x000F0016U,  /* IGR, IGP, ACC, PNC_16, PNC_40, PNC_43, PNC_44 */    /* [381]    MSG_MET1S38_RXCH0  */
-    (U4)0x000F0016U,  /* IGR, IGP, ACC, PNC_16, PNC_40, PNC_43, PNC_44 */    /* [382]    MSG_MET1S47_RXCH0  */
-    (U4)0x00000016U,  /* IGR, IGP, ACC,                                */    /* [383]    MSG_MET1S55_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [384]    MSG_MGC1F13_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [385]    MSG_PDC1G01_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [386]    MSG_PDC1G02_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [387]    MSG_PDS1S01_RXCH0  */
-    (U4)0x00030016U,  /* IGR, IGP, ACC, PNC_16, PNC_40,                */    /* [388]    MSG_PLG1G15_RXCH0  */
-    (U4)0x00030016U,  /* IGR, IGP, ACC, PNC_16, PNC_40,                */    /* [389]    MSG_PLG1G16_RXCH0  */
-    (U4)0x00030016U,  /* IGR, IGP, ACC, PNC_16, PNC_40,                */    /* [390]    MSG_PLG1S01_RXCH0  */
-    (U4)0x00030016U,  /* IGR, IGP, ACC, PNC_16, PNC_40,                */    /* [391]    MSG_PLG1S06_RXCH0  */
-    (U4)0x00030016U,  /* IGR, IGP, ACC, PNC_16, PNC_40,                */    /* [392]    MSG_PLG1S20_RXCH0  */
-    (U4)0x00030016U,  /* IGR, IGP, ACC, PNC_16, PNC_40,                */    /* [393]    MSG_PLG1S21_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [394]    MSG_PMN1G03_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [395]    MSG_PST1S01_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [396]    MSG_PST1S02_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [397]    MSG_RCP1S01_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [398]    MSG_RCP1S02_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [399]    MSG_RCP1S03_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [400]    MSG_RCP1S04_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [401]    MSG_RCP1S05_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [402]    MSG_RCP1S06_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [403]    MSG_RSE1G20_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [404]    MSG_RSE1G24_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [405]    MSG_RSE1G25_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [406]    MSG_RSE1G26_RXCH0  */
-    (U4)0x00000016U,  /* IGR, IGP, ACC,                                */    /* [407]    MSG_RSE1S02_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [408]    MSG_RST1S03_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [191]    MSG_BDC1S74_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [192]    MSG_BDC1S81_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [193]    MSG_BDC1S82_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [194]    MSG_BDC1S83_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [195]    MSG_BDC1S87_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [196]    MSG_BDC1S89_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [197]    MSG_BDC1S91_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [198]    MSG_BDC1S97_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [199]    MSG_BDC1S98_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [200]    MSG_BDC1S99_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [201]    MSG_BDC1SA0_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [202]    MSG_BDC1SA1_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [203]    MSG_BDC1SC1_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [204]    MSG_BDC1SC2_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [205]    MSG_BDC1SC3_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [206]    MSG_BDC1SC4_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [207]    MSG_BDC1SC5_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [208]    MSG_BDC1SC6_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [209]    MSG_BDC1SC7_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [210]    MSG_BDC1SC8_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [211]    MSG_BDC1SC9_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [212]    MSG_BDC1SD1_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [213]    MSG_BDC1SD2_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [214]    MSG_BDC1SD3_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [215]    MSG_BDC1SD4_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [216]    MSG_BDC1SD5_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [217]    MSG_BDC1SD6_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [218]    MSG_BDC1SD7_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [219]    MSG_BDC1SD8_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [220]    MSG_BDC1SD9_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [221]    MSG_BDC1SE1_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [222]    MSG_BDC1SE2_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [223]    MSG_BDC1SE3_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [224]    MSG_BDC1SE4_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [225]    MSG_BDC1SE5_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [226]    MSG_BDC1SE6_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [227]    MSG_BDC1SE7_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [228]    MSG_BDC1SE8_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [229]    MSG_BDC1SE9_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [230]    MSG_BDC1SF1_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [231]    MSG_BDC1SF2_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [232]    MSG_BDC1SF3_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [233]    MSG_BDC1SF4_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [234]    MSG_BDC1SF5_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [235]    MSG_BDC1SF6_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [236]    MSG_BDC1SG4_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [237]    MSG_BDC1SG6_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [238]    MSG_BDC1SG7_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [239]    MSG_BDC1SG8_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [240]    MSG_BDC1SG9_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [241]    MSG_BDC1SH3_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [242]    MSG_BDC1SH4_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [243]    MSG_BDC1SH5_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [244]    MSG_BDC1SH6_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [245]    MSG_BDC1SH8_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [246]    MSG_BDC1SI0_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [247]    MSG_BDC1SI1_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [248]    MSG_BDC1SI2_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [249]    MSG_BDC1SI3_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [250]    MSG_BDC1SI4_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [251]    MSG_BDC1SI5_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [252]    MSG_BDC1SI6_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [253]    MSG_BDC1SI7_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [254]    MSG_BDC1SI8_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [255]    MSG_BDC1SI9_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [256]    MSG_BDC1SJ0_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [257]    MSG_BDC1SJ1_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [258]    MSG_BDC1SJ2_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [259]    MSG_BDC1SJ3_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [260]    MSG_BDC1SJ4_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [261]    MSG_BDC1SJ5_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [262]    MSG_BDC1SJ6_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [263]    MSG_BDC1SJ7_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [264]    MSG_BDC1SJ8_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [265]    MSG_BDC1SV1_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [266]    MSG_BDC1SV2_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [267]    MSG_BDC1SV3_RXCH0  */
+    (U4)0x00000016U,  /* IGR, IGP, ACC,                                */    /* [268]    MSG_BDF3S01_RXCH0  */
+    (U4)0x00000016U,  /* IGR, IGP, ACC,                                */    /* [269]    MSG_BDF3S02_RXCH0  */
+    (U4)0x00000016U,  /* IGR, IGP, ACC,                                */    /* [270]    MSG_BDR3S02_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [271]    MSG_BKD1S01_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [272]    MSG_BKD1S02_RXCH0  */
+    (U4)0x00000016U,  /* IGR, IGP, ACC,                                */    /* [273]    MSG_BSR1S01_RXCH0  */
+    (U4)0x00000016U,  /* IGR, IGP, ACC,                                */    /* [274]    MSG_BSR1S02_RXCH0  */
+    (U4)0x00000016U,  /* IGR, IGP, ACC,                                */    /* [275]    MSG_BSR1S03_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [276]    MSG_CDC1S01_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [277]    MSG_CMB1S03_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [278]    MSG_CMB1S04_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [279]    MSG_CSR1G10_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [280]    MSG_CSR1S04_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [281]    MSG_CSR1S07_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [282]    MSG_CSR1S08_RXCH0  */
+    (U4)0x00010016U,  /* IGR, IGP, ACC, PNC_16,                        */    /* [283]    MSG_DCM1S01_RXCH0  */
+    (U4)0x00000016U,  /* IGR, IGP, ACC,                                */    /* [284]    MSG_DCM1S03_RXCH0  */
+    (U4)0x00010016U,  /* IGR, IGP, ACC, PNC_16,                        */    /* [285]    MSG_DCM1S04_RXCH0  */
+    (U4)0x00010016U,  /* IGR, IGP, ACC, PNC_16,                        */    /* [286]    MSG_DCM1S08_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [287]    MSG_DDM1S00_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [288]    MSG_DDM1S09_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [289]    MSG_DDM1S12_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [290]    MSG_DDM1S16_RXCH0  */
+    (U4)0x00030016U,  /* IGR, IGP, ACC, PNC_16, PNC_40,                */    /* [291]    MSG_DDM1S17_RXCH0  */
+    (U4)0x00030016U,  /* IGR, IGP, ACC, PNC_16, PNC_40,                */    /* [292]    MSG_DDM1S20_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [293]    MSG_DDM1S32_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [294]    MSG_DDM1S35_RXCH0  */
+    (U4)0x00000016U,  /* IGR, IGP, ACC,                                */    /* [295]    MSG_DDM1S77_RXCH0  */
+    (U4)0x00030016U,  /* IGR, IGP, ACC, PNC_16, PNC_40,                */    /* [296]    MSG_DDM1SFH_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [297]    MSG_DKY1S26_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [298]    MSG_DRL1S03_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [299]    MSG_DRR1S03_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [300]    MSG_DS11S27_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [301]    MSG_DS11S37_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [302]    MSG_DS11S40_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [303]    MSG_DS12F02_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [304]    MSG_DS12F03_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [305]    MSG_DST1S02_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [306]    MSG_EBU1D01_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [307]    MSG_ECT1G01_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [308]    MSG_ECT1G92_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [309]    MSG_ECT1S93_RXCH0  */
+    (U4)0x00000016U,  /* IGR, IGP, ACC,                                */    /* [310]    MSG_EHV1E96_RXCH0  */
+    (U4)0x00000004U,  /*      IGP,                                     */    /* [311]    MSG_EHV1F02_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [312]    MSG_EHV1F04_RXCH0  */
+    (U4)0x00000016U,  /* IGR, IGP, ACC,                                */    /* [313]    MSG_EHV1G30_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [314]    MSG_EHV1G70_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [315]    MSG_EHV1G71_RXCH0  */
+    (U4)0x00000004U,  /*      IGP,                                     */    /* [316]    MSG_EHV1S23_RXCH0  */
+    (U4)0x00000004U,  /*      IGP,                                     */    /* [317]    MSG_EHV1S26_RXCH0  */
+    (U4)0x00000004U,  /*      IGP,                                     */    /* [318]    MSG_EHV1S31_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [319]    MSG_EHV1S90_RXCH0  */
+    (U4)0x00000004U,  /*      IGP,                                     */    /* [320]    MSG_EHV1S94_RXCH0  */
+    (U4)0x00030016U,  /* IGR, IGP, ACC, PNC_16, PNC_40,                */    /* [321]    MSG_EHV1S95_RXCH0  */
+    (U4)0x00000004U,  /*      IGP,                                     */    /* [322]    MSG_EHV1S96_RXCH0  */
+    (U4)0x00000016U,  /* IGR, IGP, ACC,                                */    /* [323]    MSG_EHV1S97_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [324]    MSG_EHV1S99_RXCH0  */
+    (U4)0x00030016U,  /* IGR, IGP, ACC, PNC_16, PNC_40,                */    /* [325]    MSG_EHV1SL2_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [326]    MSG_EHV2G02_RXCH0  */
+    (U4)0x00000004U,  /*      IGP,                                     */    /* [327]    MSG_EHV2G10_RXCH0  */
+    (U4)0x00000004U,  /*      IGP,                                     */    /* [328]    MSG_EHV2G20_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [329]    MSG_EHV2G70_RXCH0  */
+    (U4)0x00000016U,  /* IGR, IGP, ACC,                                */    /* [330]    MSG_EIM1S01_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [331]    MSG_ENG1C01_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [332]    MSG_ENG1C02_RXCH0  */
+    (U4)0x00000004U,  /*      IGP,                                     */    /* [333]    MSG_ENG1D51_RXCH0  */
+    (U4)0x00000004U,  /*      IGP,                                     */    /* [334]    MSG_ENG1D52_RXCH0  */
+    (U4)0x00000004U,  /*      IGP,                                     */    /* [335]    MSG_ENG1D53_RXCH0  */
+    (U4)0x00000004U,  /*      IGP,                                     */    /* [336]    MSG_ENG1D55_RXCH0  */
+    (U4)0x00000004U,  /*      IGP,                                     */    /* [337]    MSG_ENG1D56_RXCH0  */
+    (U4)0x00000004U,  /*      IGP,                                     */    /* [338]    MSG_ENG1D59_RXCH0  */
+    (U4)0x00000004U,  /*      IGP,                                     */    /* [339]    MSG_ENG1D60_RXCH0  */
+    (U4)0x00000016U,  /* IGR, IGP, ACC,                                */    /* [340]    MSG_ENG1G03_RXCH0  */
+    (U4)0x00000004U,  /*      IGP,                                     */    /* [341]    MSG_ENG1G13_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [342]    MSG_ENG1G90_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [343]    MSG_ENG1G92_RXCH0  */
+    (U4)0x00000004U,  /*      IGP,                                     */    /* [344]    MSG_ENG1S51_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [345]    MSG_ENG1S60_RXCH0  */
+    (U4)0x00000004U,  /*      IGP,                                     */    /* [346]    MSG_ENG1S99_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [347]    MSG_EPS1D50_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [348]    MSG_EPS1S11_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [349]    MSG_EPS1S90_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [350]    MSG_FCM1C01_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [351]    MSG_FCM1C03_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [352]    MSG_FCM1S10_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [353]    MSG_FCM1S12_RXCH0  */
+    (U4)0x00000016U,  /* IGR, IGP, ACC,                                */    /* [354]    MSG_FCM1S39_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [355]    MSG_FCM1S40_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [356]    MSG_FCM1S41_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [357]    MSG_FCM1S49_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [358]    MSG_FCM1S51_RXCH0  */
+    (U4)0x00000016U,  /* IGR, IGP, ACC,                                */    /* [359]    MSG_FCM1S52_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [360]    MSG_FCM1S58_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [361]    MSG_FCM1S66_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [362]    MSG_FCM1S70_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [363]    MSG_FCM1S76_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [364]    MSG_FCM1S78_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [365]    MSG_FCM1S79_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [366]    MSG_FCM1S88_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [367]    MSG_FCM1S90_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [368]    MSG_FCM1S92_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [369]    MSG_FCM1S95_RXCH0  */
+    (U4)0x00000004U,  /*      IGP,                                     */    /* [370]    MSG_FWD1S10_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [371]    MSG_IDT1S02_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [372]    MSG_IDT1S07_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [373]    MSG_IDT1S08_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [374]    MSG_IDT1S15_RXCH0  */
+    (U4)0x00000016U,  /* IGR, IGP, ACC,                                */    /* [375]    MSG_IMS1S01_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [376]    MSG_IPA1S05_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [377]    MSG_ITS1S01_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [378]    MSG_ITS1S04_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [379]    MSG_ITS1S05_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [380]    MSG_ITS1S08_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [381]    MSG_LVN1S01_RXCH0  */
+    (U4)0x000F0016U,  /* IGR, IGP, ACC, PNC_16, PNC_40, PNC_43, PNC_44 */    /* [382]    MSG_MET1S02_RXCH0  */
+    (U4)0x000F0016U,  /* IGR, IGP, ACC, PNC_16, PNC_40, PNC_43, PNC_44 */    /* [383]    MSG_MET1S38_RXCH0  */
+    (U4)0x000F0016U,  /* IGR, IGP, ACC, PNC_16, PNC_40, PNC_43, PNC_44 */    /* [384]    MSG_MET1S47_RXCH0  */
+    (U4)0x00000016U,  /* IGR, IGP, ACC,                                */    /* [385]    MSG_MET1S55_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [386]    MSG_MGC1F13_RXCH0  */
+    (U4)0x00030016U,  /* IGR, IGP, ACC, PNC_16, PNC_40,                */    /* [387]    MSG_PCN1S01_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [388]    MSG_PDC1G01_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [389]    MSG_PDC1G02_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [390]    MSG_PDS1S01_RXCH0  */
+    (U4)0x00030016U,  /* IGR, IGP, ACC, PNC_16, PNC_40,                */    /* [391]    MSG_PLG1G15_RXCH0  */
+    (U4)0x00030016U,  /* IGR, IGP, ACC, PNC_16, PNC_40,                */    /* [392]    MSG_PLG1G16_RXCH0  */
+    (U4)0x00030016U,  /* IGR, IGP, ACC, PNC_16, PNC_40,                */    /* [393]    MSG_PLG1S01_RXCH0  */
+    (U4)0x00030016U,  /* IGR, IGP, ACC, PNC_16, PNC_40,                */    /* [394]    MSG_PLG1S06_RXCH0  */
+    (U4)0x00030016U,  /* IGR, IGP, ACC, PNC_16, PNC_40,                */    /* [395]    MSG_PLG1S20_RXCH0  */
+    (U4)0x00030016U,  /* IGR, IGP, ACC, PNC_16, PNC_40,                */    /* [396]    MSG_PLG1S21_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [397]    MSG_PMN1G03_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [398]    MSG_PST1S01_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [399]    MSG_PST1S02_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [400]    MSG_RCP1S01_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [401]    MSG_RCP1S02_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [402]    MSG_RCP1S03_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [403]    MSG_RCP1S04_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [404]    MSG_RCP1S05_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [405]    MSG_RCP1S06_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [406]    MSG_RSE1G20_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [407]    MSG_RSE1G24_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [408]    MSG_RSE1G25_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [409]    MSG_RSE1G26_RXCH0  */
+    (U4)0x00000016U,  /* IGR, IGP, ACC,                                */    /* [410]    MSG_RSE1S02_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [411]    MSG_RST1S03_RXCH0  */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* Attention :                                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* Although PNC_## is not assigned to IG/ACC system messages as a rule, SBW1G02 received on the CAN-FD Bus/G5M,                      */
 /* which is an IG/ACC system bus, is defined as a +B system message in CAN BitAssign v7.30, so PNC_16 is assigned as an exception.   */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-    (U4)0x00010016U,  /* IGR, IGP, ACC, PNC_16                         */    /* [409]    MSG_SBW1G02_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [410]    MSG_SCN1S01_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [411]    MSG_SCN1S02_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [412]    MSG_SCS1D50_RXCH0  */
-    (U4)0x00000016U,  /* IGR, IGP, ACC,                                */    /* [413]    MSG_SCS1S10_RXCH0  */
-    (U4)0x00030016U,  /* IGR, IGP, ACC, PNC_16, PNC_40,                */    /* [414]    MSG_SCS1S11_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [415]    MSG_SCS1S14_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [416]    MSG_SOL1S02_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [417]    MSG_SOL1S03_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [418]    MSG_SOL1S04_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [419]    MSG_SOL1S05_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [420]    MSG_SOL1S06_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [421]    MSG_TPM1S02_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [422]    MSG_TPM1S03_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [423]    MSG_TPM1S04_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [424]    MSG_TPM1S05_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [425]    MSG_TPM1S06_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [426]    MSG_TPM1S07_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [427]    MSG_TPM1S08_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [428]    MSG_TPM1S09_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [429]    MSG_TPM1S10_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [430]    MSG_TPM1S11_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [431]    MSG_TPM1S12_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [432]    MSG_TRA1S01_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [433]    MSG_TRA1S02_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [434]    MSG_UCB1S01_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [435]    MSG_VAS1S01_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [436]    MSG_VGR1D50_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [437]    MSG_VSC1D51_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [438]    MSG_VSC1F01_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [439]    MSG_VSC1G12_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [440]    MSG_VSC1G13_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [441]    MSG_VSC1G14_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [442]    MSG_VSC1G96_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [443]    MSG_VUM1S01_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [444]    MSG_WIP1S01_RXCH0  */
-    (U4)0x00010016U,  /* IGR, IGP, ACC, PNC_16,                        */    /* [445]    MSG_YGW1S01_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [446]    MSG_ZN11S02_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [447]    MSG_ZN11S03_RXCH0  */
-    (U4)0x00000016U,  /* IGR, IGP, ACC,                                */    /* [448]    MSG_ZN11S08_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [449]    MSG_ZN11S14_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [450]    MSG_ZN11S17_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [451]    MSG_ZN11S19_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [452]    MSG_ZN11S25_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [453]    MSG_ZN11S26_RXCH0  */
-    (U4)0x00000016U,  /* IGR, IGP, ACC,                                */    /* [454]    MSG_ZN11S32_RXCH0  */
-    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [455]    MSG_ZN11S38_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [456]    MSG_ZN11S60_RXCH0  */
-    (U4)0x00000016U,  /* IGR, IGP, ACC,                                */    /* [457]    MSG_ZN11S63_RXCH0  */
-    (U4)0x00000016U,  /* IGR, IGP, ACC,                                */    /* [458]    MSG_ZN11S64_RXCH0  */
-    (U4)0x00000016U,  /* IGR, IGP, ACC,                                */    /* [459]    MSG_ZN11S65_RXCH0  */
-    (U4)0x00000016U,  /* IGR, IGP, ACC,                                */    /* [460]    MSG_ZN11S66_RXCH0  */
-    (U4)0x00000016U,  /* IGR, IGP, ACC,                                */    /* [461]    MSG_ZN11S67_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [462]    MSG_ZN11SF6_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [463]    MSG_ZN11SF7_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [464]    MSG_ZN11SF8_RXCH0  */
-    (U4)0x00000016U,  /* IGR, IGP, ACC,                                */    /* [465]    MSG_ZN11SF9_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [466]    MSG_ZN21S05_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [467]    MSG_ZN21S13_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [468]    MSG_ZN21S28_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [469]    MSG_ZN21S52_RXCH0  */
-    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [470]    MSG_ZN21S72_RXCH0  */
-    (U4)0x00100016U,  /* IGR, IGP, ACC,                         PNC_60 */    /* [471]    MSG_MCDMS01_RXCH0  */
-    (U4)0x00100016U,  /* IGR, IGP, ACC,                         PNC_60 */    /* [472]    MSG_MCDMS02_RXCH0  */
-    (U4)0x00100016U   /* IGR, IGP, ACC,                         PNC_60 */    /* [473]    MSG_MCDMN01_RXCH0  */
+    (U4)0x00010016U,  /* IGR, IGP, ACC, PNC_16                         */    /* [412]    MSG_SBW1G02_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [413]    MSG_SCN1S01_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [414]    MSG_SCN1S02_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [415]    MSG_SCS1D50_RXCH0  */
+    (U4)0x00000016U,  /* IGR, IGP, ACC,                                */    /* [416]    MSG_SCS1S10_RXCH0  */
+    (U4)0x00030016U,  /* IGR, IGP, ACC, PNC_16, PNC_40,                */    /* [417]    MSG_SCS1S11_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [418]    MSG_SCS1S14_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [419]    MSG_SOL1S02_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [420]    MSG_SOL1S03_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [421]    MSG_SOL1S04_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [422]    MSG_SOL1S05_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [423]    MSG_SOL1S06_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [424]    MSG_TPM1S02_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [425]    MSG_TPM1S03_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [426]    MSG_TPM1S04_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [427]    MSG_TPM1S05_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [428]    MSG_TPM1S06_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [429]    MSG_TPM1S07_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [430]    MSG_TPM1S08_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [431]    MSG_TPM1S09_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [432]    MSG_TPM1S10_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [433]    MSG_TPM1S11_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [434]    MSG_TPM1S12_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [435]    MSG_TRA1S01_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [436]    MSG_TRA1S02_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [437]    MSG_UCB1S01_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [438]    MSG_VAS1S01_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [439]    MSG_VGR1D50_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [440]    MSG_VSC1D51_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [441]    MSG_VSC1F01_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [442]    MSG_VSC1G12_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [443]    MSG_VSC1G13_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [444]    MSG_VSC1G14_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [445]    MSG_VSC1G96_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [446]    MSG_VUM1S01_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [447]    MSG_WIP1S01_RXCH0  */
+    (U4)0x00010016U,  /* IGR, IGP, ACC, PNC_16,                        */    /* [448]    MSG_YGW1S01_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [449]    MSG_ZN11S02_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [450]    MSG_ZN11S03_RXCH0  */
+    (U4)0x00000016U,  /* IGR, IGP, ACC,                                */    /* [451]    MSG_ZN11S08_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [452]    MSG_ZN11S14_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [453]    MSG_ZN11S17_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [454]    MSG_ZN11S19_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [455]    MSG_ZN11S25_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [456]    MSG_ZN11S26_RXCH0  */
+    (U4)0x00000016U,  /* IGR, IGP, ACC,                                */    /* [457]    MSG_ZN11S32_RXCH0  */
+    (U4)0x00000014U,  /* IGR, IGP,                                     */    /* [458]    MSG_ZN11S38_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [459]    MSG_ZN11S60_RXCH0  */
+    (U4)0x00000016U,  /* IGR, IGP, ACC,                                */    /* [460]    MSG_ZN11S63_RXCH0  */
+    (U4)0x00000016U,  /* IGR, IGP, ACC,                                */    /* [461]    MSG_ZN11S64_RXCH0  */
+    (U4)0x00000016U,  /* IGR, IGP, ACC,                                */    /* [462]    MSG_ZN11S65_RXCH0  */
+    (U4)0x00000016U,  /* IGR, IGP, ACC,                                */    /* [463]    MSG_ZN11S66_RXCH0  */
+    (U4)0x00000016U,  /* IGR, IGP, ACC,                                */    /* [464]    MSG_ZN11S67_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [465]    MSG_ZN11SF6_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [466]    MSG_ZN11SF7_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [467]    MSG_ZN11SF8_RXCH0  */
+    (U4)0x00000016U,  /* IGR, IGP, ACC,                                */    /* [468]    MSG_ZN11SF9_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [469]    MSG_ZN21S05_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [470]    MSG_ZN21S13_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [471]    MSG_ZN21S28_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [472]    MSG_ZN21S52_RXCH0  */
+    (U4)0x00090016U,  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */    /* [473]    MSG_ZN21S72_RXCH0  */
+    (U4)0x00100016U,  /* IGR, IGP, ACC,                         PNC_60 */    /* [474]    MSG_MCDMS01_RXCH0  */
+    (U4)0x00100016U,  /* IGR, IGP, ACC,                         PNC_60 */    /* [475]    MSG_MCDMS02_RXCH0  */
+    (U4)0x00100016U   /* IGR, IGP, ACC,                         PNC_60 */    /* [476]    MSG_MCDMN01_RXCH0  */
 };
 const U2                    u2_g_OXCAN_RXD_NUM_PDU = (U2)OXCAN_RXD_NUM_PDU;
 
@@ -568,6 +571,7 @@ static const U2             u2_sp_OXCAN_RXD_BY_ACK[] = {
     (U2)OXCAN_RXD_PDU_CAN_BDC1S48_CH0,
     (U2)OXCAN_RXD_PDU_CAN_BDC1S52_CH0,
     (U2)OXCAN_RXD_PDU_CAN_BDC1S60_CH0,
+    (U2)OXCAN_RXD_PDU_CAN_BDC1S74_CH0,
     (U2)OXCAN_RXD_PDU_CAN_BDC1S81_CH0,
     (U2)OXCAN_RXD_PDU_CAN_BDC1S82_CH0,
     (U2)OXCAN_RXD_PDU_CAN_BDC1S83_CH0,
@@ -705,6 +709,7 @@ static const U2             u2_sp_OXCAN_RXD_BY_ACK[] = {
     (U2)OXCAN_RXD_PDU_CAN_EHV2G02_CH0,
     (U2)OXCAN_RXD_PDU_CAN_EHV2G10_CH0,
     (U2)OXCAN_RXD_PDU_CAN_EHV2G20_CH0,
+    (U2)OXCAN_RXD_PDU_CAN_EHV2G70_CH0,
     (U2)OXCAN_RXD_PDU_CAN_EIM1S01_CH0,
     (U2)OXCAN_RXD_PDU_CAN_ENG1C01_CH0,
     (U2)OXCAN_RXD_PDU_CAN_ENG1C02_CH0,
@@ -762,6 +767,7 @@ static const U2             u2_sp_OXCAN_RXD_BY_ACK[] = {
     (U2)OXCAN_RXD_PDU_CAN_MET1S47_CH0,
     (U2)OXCAN_RXD_PDU_CAN_MET1S55_CH0,
     (U2)OXCAN_RXD_PDU_CAN_MGC1F13_CH0,
+    (U2)OXCAN_RXD_PDU_CAN_PCN1S01_CH0,
     (U2)OXCAN_RXD_PDU_CAN_PDC1G01_CH0,
     (U2)OXCAN_RXD_PDU_CAN_PDC1G02_CH0,
     (U2)OXCAN_RXD_PDU_CAN_PDS1S01_CH0,
