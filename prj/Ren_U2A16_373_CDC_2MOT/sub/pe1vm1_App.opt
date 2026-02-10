@@ -22,6 +22,8 @@
     -I../../src/PE1VM1/App/MET/HudApplication/Vom/HudDimmer/scc
     -I../../src/PE1VM1/App/MET/HudApplication/Vom/HudImgadj/config_met
     -I../../src/PE1VM1/App/MET/IpcApplication/Evc/Calibration/config
+    -I../../src/PE1VM1/App/MET/IpcApplication/Evc/Mcst/config
+    -I../../src/PE1VM1/App/MET/IpcApplication/Evc/Mcst/scc
     -I../../src/PE1VM1/App/MET/IpcApplication/Evc/Vardef/config/esopt_rx
     -I../../src/PE1VM1/App/MET/IpcApplication/Evc/Vardef/config
     -I../../src/PE1VM1/App/MET/IpcApplication/Evc/Vardef/config_met_common

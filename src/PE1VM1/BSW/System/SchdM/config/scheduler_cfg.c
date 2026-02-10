@@ -73,6 +73,7 @@
 #include "sbltsync.h"
 #include "locale.h"
 #include "vardef.h"
+#include "mcst.h"
 #include "cantxapp.h"
 #include "cantxappdum.h"
 #include "hmiproxy.h"
@@ -310,6 +311,7 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     /*                                                                   */
     /*-------------------------------------------------------------------*/
     {&vd_g_VardefMainTask,              (U4)SCHDLR_TASKBIT__20MS_B  },
+    {&vd_g_McstMainTask,                (U4)SCHDLR_TASKBIT__20MS_B  },
     /*-------------------------------------------------------------------*/
     /*                                                                   */
     /*                                                                   */
@@ -493,10 +495,12 @@ static void    vd_s_SchdlrCfgWdgTimRestart(void)
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  BEV-1    10/22/2025  TS       Change for BEV rebase.                                                                             */
 /*  BEV-2    11/13/2025  YN       Change for BEV rebase.(Add CanTxApp)                                                               */
+/*  BEV-3    01/30/2025  SN       Change for BEV B_PERMEM.(Add Mcst)                                                                 */
 /*                                                                                                                                   */
 /*  * TN      = Takashi Nagai, Denso                                                                                                 */
 /*  * AM      = Akira Motomatsu, Denso Create                                                                                        */
 /*  * TS      = Takuo Suganuma, Denso Techno                                                                                         */
 /*  * YN      = Yujiro Nagaya, Denso Techno                                                                                          */
+/*  * SN      = Shimon Nambu, Denso Techno                                                                                           */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
