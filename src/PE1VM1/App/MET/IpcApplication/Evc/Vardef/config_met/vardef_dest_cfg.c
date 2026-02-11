@@ -18,8 +18,6 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "vardef_dest_cfg_private.h"
 
-#include "vardef_dest.h"
-
 #include "locale.h"
 
 #include "oxcan.h"
@@ -46,6 +44,47 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#define VDF_DEST_NUM_LAW_DESTID         (16U)
+#define VDF_DEST_SPEC_DESTID0001        (0U)
+#define VDF_DEST_SPEC_DESTID0002        (1U)
+#define VDF_DEST_SPEC_DESTID0014        (2U)
+#define VDF_DEST_SPEC_DESTID0017        (3U)
+#define VDF_DEST_SPEC_DESTID0018        (4U)
+#define VDF_DEST_SPEC_DESTID0019        (5U)
+#define VDF_DEST_SPEC_DESTID0020        (6U)
+#define VDF_DEST_SPEC_DESTID0021        (7U)
+#define VDF_DEST_SPEC_DESTID0022        (8U)
+#define VDF_DEST_SPEC_DESTID0023        (9U)
+#define VDF_DEST_SPEC_DESTID0024        (10U)
+#define VDF_DEST_SPEC_DESTID0025        (11U)
+#define VDF_DEST_SPEC_DESTID0026        (12U)
+#define VDF_DEST_SPEC_DESTID0027        (13U)
+#define VDF_DEST_SPEC_DESTID0028        (14U)
+#define VDF_DEST_SPEC_DESTID0029        (15U)
+
+#define VDF_DEST_SPEC_LAW_DESTID        (4U)
+
+#define VDF_NUM_UNIT_DEF_CFG            (4U)
+#define VDF_DEST_UNIT_DEF_MPGIMP        (0U)
+#define VDF_DEST_UNIT_DEF_MPGUSA        (1U)
+#define VDF_DEST_UNIT_DEF_KMPH          (2U)
+#define VDF_DEST_UNIT_DEF_LP100KM       (3U)
+
+#define VDF_NUM_VEH_SPD_UNIT            (4U)
+#define VDF_VEH_SPD_UNIT_KMH            (0U)
+#define VDF_VEH_SPD_UNIT_MPHKMH         (1U)
+#define VDF_VEH_SPD_UNIT_KMHMPH         (2U)
+#define VDF_VEH_SPD_UNIT_MPH            (3U)
+
+#define VDF_NUM_VEH_SPD_UNIT_MSSW       (4U)
+#define VDF_VEH_SPD_UNIT_MSSW_WITHOUT   (0U)
+#define VDF_VEH_SPD_UNIT_MSSW_WITH      (1U)
+
+#define VDF_NUM_VEH_SPD_UNIT_DSP        (3U)
+#define VDF_VEH_SPD_UNIT_DSP_WITHOUT    (0U)
+#define VDF_VEH_SPD_UNIT_DSP_ALWAYS     (1U)
+#define VDF_VEH_SPD_UNIT_DSP_NONDEF     (2U)
+
 #define VDF_DST_NUM_C_CODE              (21U)
 #define VDF_DST_LAW_NUM_C_CODE          (21U)
 
@@ -180,7 +219,6 @@ const U1        u1_g_VDF_DST_LAW_SPEC_IDX_DEF   = (U1)U1_MAX;
 const U1        u1_g_VDF_DST_C_CODE_IDX_DEF     = (U1)U1_MAX;
 const U1        u1_g_VDF_DST_LAW_C_CODE_IDX_DEF = (U1)U1_MAX;
 const U1        u1_g_VDF_DST_DEST_BDB_IDX_DEF   = (U1)VDF_DST_DEST_BDB_B_GNR_L;
-const U1        u1_g_VDF_DST_LAW_BDB_IDX_DEF    = (U1)VDF_DST_LAW_DEST_BDB_B_GNR_L;
 const U1        u1_g_VDF_DST_IDX_DEF            = (U1)U1_MAX;
 const U1        u1_g_VDF_DST_LAW_IDX_DEF        = (U1)U1_MAX;
 
@@ -199,7 +237,6 @@ const U1        u1_g_VDF_DST_LAW_MEX_FMVSS      = (U1)VDF_DST_LAW_C_CODE_MEX_FMV
 
 const U1        u1_g_VDF_DST_SPEC_NUM_C_CODE    = (U1)VDF_DST_SPEC_NUM_C_CODE_REG;
 
-const U1        u1_g_VDF_DST_LAW_BDB_IDX_DEF_FMVSS    = (U1)VDF_DST_LAW_DEST_BDB_B_GNR_FMVSS;
 const U1        u1_g_VDF_DST_LAW_NUM_DEST_BDB_REG     = (U1)VDF_DST_LAW_NUM_DEST_BDB_REG;
 const U1        u1_g_VDF_DST_LAW_DEST_BDB_B_GNR_L     = (U1)VDF_DST_LAW_DEST_BDB_B_GNR_L;
 const U1        u1_g_VDF_DST_LAW_DEST_BDB_B_GNR_R     = (U1)VDF_DST_LAW_DEST_BDB_B_GNR_R;
@@ -793,9 +830,9 @@ U1      u1_g_VardefDestLawCfgBdbDefJdg(void)
 {
     U1 u1_t_law_idx_def;
 
-    u1_t_law_idx_def = u1_g_VDF_DST_LAW_BDB_IDX_DEF;
-    if(u1_CALIB_MCUID3020_GEN_LOW == (U1)CALIB_MCUID3020_FMVSS){
-        u1_t_law_idx_def = u1_g_VDF_DST_LAW_BDB_IDX_DEF_FMVSS;
+    u1_t_law_idx_def = VDF_DST_LAW_DEST_BDB_B_GNR_FMVSS;
+    if(u1_CALIB_MCUID3020_GEN_LOW == (U1)CALIB_MCUID3020_UNR){
+        u1_t_law_idx_def = VDF_DST_LAW_DEST_BDB_B_GNR_L;
     }
 
     return(u1_t_law_idx_def);

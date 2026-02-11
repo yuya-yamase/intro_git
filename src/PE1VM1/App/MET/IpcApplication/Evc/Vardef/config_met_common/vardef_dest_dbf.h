@@ -21,26 +21,6 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
-#define VDF_DEST_NUM_LAW_DESTID         (16U)
-#define VDF_DEST_SPEC_DESTID0001        (0U)
-#define VDF_DEST_SPEC_DESTID0002        (1U)
-#define VDF_DEST_SPEC_DESTID0014        (2U)
-#define VDF_DEST_SPEC_DESTID0017        (3U)
-#define VDF_DEST_SPEC_DESTID0018        (4U)
-#define VDF_DEST_SPEC_DESTID0019        (5U)
-#define VDF_DEST_SPEC_DESTID0020        (6U)
-#define VDF_DEST_SPEC_DESTID0021        (7U)
-#define VDF_DEST_SPEC_DESTID0022        (8U)
-#define VDF_DEST_SPEC_DESTID0023        (9U)
-#define VDF_DEST_SPEC_DESTID0024        (10U)
-#define VDF_DEST_SPEC_DESTID0025        (11U)
-#define VDF_DEST_SPEC_DESTID0026        (12U)
-#define VDF_DEST_SPEC_DESTID0027        (13U)
-#define VDF_DEST_SPEC_DESTID0028        (14U)
-#define VDF_DEST_SPEC_DESTID0029        (15U)
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define VDF_DEST_SPEC_LAW_DESTID        (4U)
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define VDF_DEST_LAW_DBF_NBYTE          (18U)
 #define VDF_DEST_LAW_DBF_DEFUNIT_SPD    (0U)
 #define VDF_DEST_LAW_DBF_DEFUNIT_DST    (1U)
@@ -72,12 +52,6 @@
 #define VDF_DEST_DBF_TTVSCEXP           (7U)
 #define VDF_DEST_DBF_STPIND             (8U)
 #define VDF_DEST_DBF_AMBTMP             (9U)
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define VDF_NUM_UNIT_DEF_CFG            (4U)
-#define VDF_DEST_UNIT_DEF_MPGIMP        (0U)
-#define VDF_DEST_UNIT_DEF_MPGUSA        (1U)
-#define VDF_DEST_UNIT_DEF_KMPH          (2U)
-#define VDF_DEST_UNIT_DEF_LP100KM       (3U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define VDF_NUM_DEST                    (15U)
@@ -221,23 +195,6 @@
 #define VDF_SEATBLT_DEST_CHN            (2U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define VDF_NUM_VEH_SPD_UNIT            (4U)
-#define VDF_VEH_SPD_UNIT_KMH            (0U)
-#define VDF_VEH_SPD_UNIT_MPHKMH         (1U)
-#define VDF_VEH_SPD_UNIT_KMHMPH         (2U)
-#define VDF_VEH_SPD_UNIT_MPH            (3U)
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define VDF_NUM_VEH_SPD_UNIT_MSSW                (2U)
-#define VDF_VEH_SPD_UNIT_MSSW_WITHOUT            (0U)
-#define VDF_VEH_SPD_UNIT_MSSW_WITH               (1U)
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define VDF_NUM_VEH_SPD_UNIT_DSP                (3U)
-#define VDF_VEH_SPD_UNIT_DSP_WITHOUT            (0U)
-#define VDF_VEH_SPD_UNIT_DSP_ALWAYS             (1U)
-#define VDF_VEH_SPD_UNIT_DSP_NONDEF             (2U)
-
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define u1_g_VardefDestinationByPid()                  (u1_g_VardefDestDbfByPid((U1)VDF_DEST_DBF_DESTINATION))

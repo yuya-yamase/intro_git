@@ -534,7 +534,7 @@ static  U1     u1_s_TripcomCfgCanTxUNIT6Cnvt(const U1 u1_a_UNIT)
     if(u1_t_unittype == (U1)VDF_UNIT_TYPE_H) { /* PTSYS = BEV and DEST = NA/UK */
         if((u1_a_UNIT == u1_sp_TRIPCOM_TX_XECON_UNTCNV[UNIT_VAL_FUECO_MPG_USA]) || 
            (u1_a_UNIT == u1_sp_TRIPCOM_TX_XECON_UNTCNV[UNIT_VAL_FUECO_MPG_UK])) {
-            u1_t_unitdest = u1_g_VardefDestLawDbfByPid((U1)VDF_DEST_LAW_DBF_UNITSLCT_DEST);
+            u1_t_unitdest = u1_g_VardefUnitSlctDstByPid();
             switch(u1_t_unitdest) {
                 case (U1)VDF_UNIT_TYPE_NA:
                     u1_t_unitsndval = u1_sp_TRIPCOM_TX_XECON_UNTCNV[UNIT_VAL_FUECO_MPG_USA];

@@ -80,6 +80,7 @@ U1      u1_g_VardefDestCfgDBSup(const U1 u1_a_DBF, const U1 u1_a_C_CODE_IDX, con
 U1      u1_g_VardefDestSpecCfgDBSup(const U1 u1_a_LAW_DBF, const U1 u1_a_SPEC_C_CODE_IDX);
 U1      u1_g_VardefDestLawCfgDBSup(const U1 u1_a_LAW_DBF, const U1 u1_a_SPEC_C_CODE_IDX, const U1 u1_a_LAW_C_CODE_IDX, const U1 u1_a_LAW_DEST_BDB_IDX);
 U1      u1_g_VardefDestLawCfgBdbDefJdg(void);
+U1      u1_g_VardefLawIdx(void);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -121,7 +122,6 @@ extern const ST_VDF_DST_SPEC_C_CODE            st_gp_VDF_DST_SPEC_C_CODE[];
 extern const U1                                u1_g_VDF_DST_SPEC_NUM_C_CODE;
 extern const U1                                u1_g_VDF_DST_LAW_SPEC_IDX_DEF;
 
-extern const U1                                u1_g_VDF_DST_LAW_BDB_IDX_DEF_FMVSS;
 extern const U1                                u1_g_VDF_DST_LAW_NUM_DEST_BDB_REG;
 extern const U1                                u1_g_VDF_DST_LAW_DEST_BDB_B_GNR_L;
 extern const U1                                u1_g_VDF_DST_LAW_DEST_BDB_B_GNR_R;
