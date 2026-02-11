@@ -255,13 +255,8 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     /*                                                                   */
     /*-------------------------------------------------------------------*/
     {&vd_g_iVDshMainReaTask,            (U4)SCHDLR_TASKBIT___5MS    },
-#warning "BEVCDCFD-2393"
-#if 0 /* BEVCDCFD-2393 */  
     {&vd_g_XSpiMETPduRx,                (U4)SCHDLR_TASKBIT___5MS    },
-#else /* BEVCDCFD-2393 */ /* 1/22版BSWで&vd_g_oXSECMainPreMidが追加されたため、&vd_g_XSpiMETPduRxの位置に問題ないか確認をお願いいたします。 */
     {&vd_g_oXSECMainPreMid,             (U4)SCHDLR_TASKBIT___5MS    },
-    {&vd_g_XSpiMETPduRx,                (U4)SCHDLR_TASKBIT___5MS    },
-#endif /* BEVCDCFD-2393 */
     {&vd_g_oXCANMainPreTask,            (U4)SCHDLR_TASKBIT___5MS    },
     {&vd_g_VehopemdMainTask,            (U4)SCHDLR_TASKBIT___5MS    }, /* In case of toyota product, vd_g_VehopemdMainTask shall be    */
                                                                        /* called after vd_g_IoHwDifltSmplgTask                         */ 
@@ -273,29 +268,6 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     /*  10ms A Non-Platform Task                                         */
     /*                                                                   */
     /*-------------------------------------------------------------------*/
-
-    /*-------------------------------------------------------------------*/
-    /*                                                                   */
-    /*  20ms B Task                                                      */
-    /*                                                                   */
-    /*-------------------------------------------------------------------*/
-    {&vd_g_Nvmc_PeriodicTask,           (U4)SCHDLR_TASKBIT__20MS_B  },
-
-    /*-------------------------------------------------------------------*/
-    /*                                                                   */
-    /*   5ms Platform Post Task                                          */
-    /*                                                                   */
-    /*-------------------------------------------------------------------*/
-    {&vd_g_oXCANMainPosTask,            (U4)SCHDLR_TASKBIT___5MS    },
-    {&vd_g_oXSECMainPosMid,             (U4)SCHDLR_TASKBIT___5MS    },
-    {&vd_g_iVDshMainWriTask,            (U4)SCHDLR_TASKBIT___5MS    },
-
-    /*-------------------------------------------------------------------*/
-    /*                                                                   */
-    /*  10ms A Platform Post Task                                        */
-    /*                                                                   */
-    /*-------------------------------------------------------------------*/
-    {&vd_g_Rim_Task,                    (U4)SCHDLR_TASKBIT__10MS_A  },
     /*-------------------------------------------------------------------*/
     /*                                                                   */
     /*  Platform Pre Task                                                */
@@ -359,11 +331,33 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     /*                                                                   */
     /*  Platform Post Task                                               */
     /*                                                                   */
-    /*  WARNING "DO NOT EXECUTE APPLICATION AT HERE"                     */
     /*-------------------------------------------------------------------*/
     {&vd_g_DrectxMainTask,              (U4)SCHDLR_TASKBIT__50MS_A  },
+
+    /*-------------------------------------------------------------------*/
+    /*                                                                   */
+    /*  20ms B Task                                                      */
+    /*                                                                   */
+    /*-------------------------------------------------------------------*/
+    {&vd_g_Nvmc_PeriodicTask,           (U4)SCHDLR_TASKBIT__20MS_B  },
+
+    /*-------------------------------------------------------------------*/
+    /*                                                                   */
+    /*   5ms Platform Post Task                                          */
+    /*                                                                   */
+    /*-------------------------------------------------------------------*/
+    {&vd_g_oXCANMainPosTask,            (U4)SCHDLR_TASKBIT___5MS    },
+    {&vd_g_oXSECMainPosMid,             (U4)SCHDLR_TASKBIT___5MS    },
     {&vd_g_XSpiMETPduTx,                (U4)SCHDLR_TASKBIT___5MS    },
     {&vd_g_XSpiCalibMainTask,           (U4)SCHDLR_TASKBIT_100MS_A  },      /* This task is not needed to be called before vd_g_XSpiMETPduTx  */
+    {&vd_g_iVDshMainWriTask,            (U4)SCHDLR_TASKBIT___5MS    },
+
+    /*-------------------------------------------------------------------*/
+    /*                                                                   */
+    /*  10ms A Platform Post Task                                        */
+    /*                                                                   */
+    /*-------------------------------------------------------------------*/
+    {&vd_g_Rim_Task,                    (U4)SCHDLR_TASKBIT__10MS_A  },
 
     /*-------------------------------------------------------------------*/
     /*  WARNING "DO NOT EXECUTE APPLICATION AT HERE"                     */
