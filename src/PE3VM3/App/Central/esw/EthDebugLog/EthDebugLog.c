@@ -2,6 +2,7 @@
 /* file name   : EthDebugLog.c                                                     */
 /* -------------------------------------------------------------------------- */
 #include <Std_Types.h>
+#include <EthDebugLog.h>
 #include <EthDebugLog_Cfg.h>
 /* -------------------------------------------------------------------------- */
 void EthDebugLog_Init(void)

@@ -2,7 +2,9 @@
 /* file name   : EthDebugLog_StartUp.c                                        */
 /* -------------------------------------------------------------------------- */
 #include <Std_Types.h>
-#include <EthDebugLog_Cfg.h>
+#include <EthDebugLog.h>
+#include <EthDebugLog_StartUp.h>
+#include <EthDebugLog_StartUp_Cfg.h>
 /* -------------------------------------------------------------------------- */
 static uint32 G_StartUp_Notified[E_ETHDEBUGLOG_EV_NUM];
 /* -------------------------------------------------------------------------- */

@@ -462,6 +462,7 @@ static void ethswt_swic_stm_changeStatus(const uint32 nextStatus) {
         ETHSWT_SWIC_SET_RELAY_OFF_START();
         break;
     default:
+        /* nothing */
         break;
     };
 
