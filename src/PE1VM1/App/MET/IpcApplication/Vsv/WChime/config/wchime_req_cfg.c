@@ -23,6 +23,7 @@
 #include "alert.h"
 #include "sbltsync.h"
 
+#include "mcst.h"
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -116,10 +117,6 @@ U2                           u2_gp_wchime_wt_tim[WCHIME_NUM_CH];          /* Res
 static U1                    u1_s_wchime_rcta_vol;                        /* Last volume kind of RCTA.                               */
 
 U1                           u1_g_wchime_silencetime_flag;                /*  silencetime_flag                                       */
-#if 0   /* BEV Rebase provisionally */
-#else   /* BEV Rebase provisionally */
-U1                           u1_g_wchime_metcstmvol;                      /*  Meter Alarm Volume Customized                          */
-#endif   /* BEV Rebase provisionally */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
@@ -553,10 +550,6 @@ static const U1              u1_sp2_WCHIME_REQ_VOL_INFO[WCHIME_NUM_REQ][WCHIME_V
 void    vd_g_wChimeReqCfgInit(void)
 {
     u1_s_wchime_rcta_vol = (U1)WCHIME_VOL_CSR_RCTA_5;
-#if 0   /* BEV Rebase provisionally */
-#else   /* BEV Rebase provisionally */
-    u1_g_wchime_metcstmvol = (U1)1U;  /* Default value for metcstm volume */
-#endif   /* BEV Rebase provisionally */
 }
 /*===================================================================================================================================*/
 /*  U1      u1_g_wChimeCfgOpemdchk(void)                                                                                             */
@@ -858,17 +851,10 @@ U1      u1_g_wChimeCfgVolGet(const U1 u1_a_REQ_SEL)
     U1    u1_t_metcstmvol;
 
     if(u1_a_REQ_SEL < (U1)WCHIME_NUM_REQ){
-#if 0   /* BEV Rebase provisionally */
-        u1_t_metcstmvol = u1_g_McstBf((U1)MCST_BFI_METWRNCSTM);
+        u1_t_metcstmvol = (U1)u4_g_McstBf((U1)MCST_BFI_METWRNCSTM);
         if(u1_t_metcstmvol >= (U1)MCST_METWRNCSTM_VOL_NUM){
             u1_t_metcstmvol = (U1)MCST_METWRNCSTM_VOL_MID;
         }
-#else
-        u1_t_metcstmvol = u1_g_wchime_metcstmvol;
-        if(u1_t_metcstmvol >= (U1)3U){
-            u1_t_metcstmvol = (U1)1U;
-        }
-#endif   /* BEV Rebase provisionally */
         u1_t_reqvol = u1_sp2_WCHIME_REQ_VOL_INFO[u1_a_REQ_SEL][u1_t_metcstmvol];
 
         switch(u1_t_reqvol){
@@ -1262,6 +1248,7 @@ static U1   u1_s_wChimeCfgClesonVolGet(const U1 u1_a_REQ_SEL)
 /*  BEV-1     11/11/2025 SH       Configured for CONTBUZZ2-CSTD-0008                                                                 */
 /*  BEV-2     11/28/2025 HL       Add parameter of MET-S_TMBZR-CSTD-0-01-A-C0                                                        */
 /*  BEV-3     12/18/2025 ED       Change Macro name of MET-S_ADBZR-CSTD-0-06-A-C0                                                    */
+/*  BEV-4    02/05/2026  SN       Change B_PERMEM for BEV FF2. Change Mcst                                                           */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
 /*  * ToN  = Toshiharu Nagata, Denso Techno                                                                                          */
@@ -1280,5 +1267,6 @@ static U1   u1_s_wChimeCfgClesonVolGet(const U1 u1_a_REQ_SEL)
 /*  * TeN  = Tetsushi Nakano, Denso Techno                                                                                           */
 /*  * HL   = Harry Lapiceros, DTPH                                                                                                   */
 /*  * ED   = Emoh Dagasdas, DTPH                                                                                                     */
+/*  * SN   = Shimon Nambu, DensoTechno                                                                                               */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

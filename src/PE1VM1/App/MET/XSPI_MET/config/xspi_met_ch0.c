@@ -62,6 +62,7 @@
 #include "hmitt.h"
 #include "hmiwchime.h"
 #include "hmitripcom.h"
+#include "hmimcst.h"
 #include "hmiscreen.h"
 #include "hmihud.h"
 
@@ -69,6 +70,7 @@
 #include "vardef.h"
 #include "vardef_dest.h"
 #include "vardef_esopt.h"
+#include "mcst.h"
 #include "calibration.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -704,8 +706,7 @@ static inline void    vd_s_XSpiCfgTxMulmed(        U4 * u4_ap_pdu_tx) {
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
 static inline void    vd_s_XSpiCfgTxMetcstm(    U4 * u4_ap_pdu_tx) {
-    static const U1  u1_s_XSPI_RESET_DUM = 0x03U; /* Unknown */
-    u4_ap_pdu_tx[3]  = (((U4)u1_s_XSPI_RESET_DUM & (U4)XSPI_MSK_02BIT) << 22);           /* Customize Reset                */
+    u4_ap_pdu_tx[0]  = (((U4)u1_g_McstReset((U1)FALSE) & (U4)XSPI_MSK_02BIT) << 22);           /* Customize Reset                */
 }
 
 /*===================================================================================================================================*/
@@ -715,10 +716,7 @@ static inline void    vd_s_XSpiCfgTxMetcstm(    U4 * u4_ap_pdu_tx) {
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
 static inline void    vd_s_XSpiCfgTxMetcstmMcst(    U4 * u4_ap_pdu_tx) {
-#if 0   /* BEV Rebase provisionally */
-#else   /* BEV Rebase provisionally */
-    u4_ap_pdu_tx[17] = (U4)(((U4)u1_g_wChimeGetMWVCope() & (U4)0x00000007U) << (U1)28U);
-#endif  /* BEV Rebase provisionally */
+    u4_ap_pdu_tx[0] = (U4)((u4_g_McstBf((U1)MCST_BFI_METWRNCSTM) & (U4)0x00000007U) << (U1)28U);
 }
 
 /*===================================================================================================================================*/
@@ -829,17 +827,12 @@ static inline void    vd_s_XSpiCfgRxDispsts(    const U4 * u4_ap_PDU_RX) {
 /*===================================================================================================================================*/
 static inline void    vd_s_XSpiCfgRxMetcstm(    const U4 * u4_ap_PDU_RX) {
 
-#if 0   /* BEV Rebase provisionally */
-#else   /* BEV Rebase provisionally */
     U1  u1_t_sts;
-    U1  u1_t_cstmvol;
 
 /* CSTM_VOL_CHANGE */
     u1_t_sts = u1_g_XSpiMETRxRdAccessSts((U1)XSPI_MET_XSPI_RX_AGLBE);
     if(u1_t_sts == (U1)XSPI_MET_XSPI_RX_READ_VALID){
-        u1_t_cstmvol = u1_XSPI_MET_READ__BIT(u4_ap_PDU_RX[3] , (U1)19U, 3U);
-        vd_g_wChimePutMWVCope(u1_t_cstmvol);
-#endif   /* BEV Rebase provisionally */
+        vd_g_HmiMcstCstmPut(&u4_ap_PDU_RX[0]);
 
         /* Maint */
         vd_g_HmiMaintMetCstmPut(&u4_ap_PDU_RX[6]);
@@ -1091,10 +1084,10 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
     vd_s_XSpiCfgTxMulmed(        &u4_ap_pdu_tx[130]);      /* 130 - 138    : Multimedia                                    */
     vd_s_XSpiCfgTxTripcom(       &u4_ap_pdu_tx[139]);      /* 139 - 184    : Tripcom                                       */
     vd_s_XSpiCfgTxTelltale(      &u4_ap_pdu_tx[183]);      /* 183 - 230    : Telltale                                      */
-    vd_s_XSpiCfgTxMetcstm(       &u4_ap_pdu_tx[231]);      /* 231 - 238    : Meter Customize Reset                         */
+    vd_s_XSpiCfgTxMetcstm(       &u4_ap_pdu_tx[234]);      /* 231 - 238    : Meter Customize Reset                         */
                                                            /* 239 - 299    : Diagnosis                                     */
     vd_s_XSpiCfgTxHud(           &u4_ap_pdu_tx[300]);      /* 300 - 302    : Hud                                           */
-    vd_s_XSpiCfgTxMetcstmMcst(   &u4_ap_pdu_tx[566]);      /* 566 - 584    : Meter Customize                               */
+    vd_s_XSpiCfgTxMetcstmMcst(   &u4_ap_pdu_tx[583]);      /* 566 - 584    : Meter Customize                               */
     vd_s_XSpiCfgTxCalib(         &u4_ap_pdu_tx[585]);      /* 585 - 625    : Calibration                                   */
 
     u4_ap_pdu_tx[482]  = u4_s_XSPI_LOCALCOMSPEC;           /* __LOCALCOMSPEC__                                             */
@@ -1186,6 +1179,7 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*                                MET-C_GMN-CSTD-0-02-A-C1                                                                           */
 /*                                Add the judgement of EPS & EPSSBW function.                                                        */
 /*  BEV-23    01/30/2026 TN       Fix initial value issue (BEV3CDCMET-3693).                                                         */
+/*  BEV-24    02/05/2026 SN       Update for BEV FF2. (B_PERMEM)                                                                     */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */

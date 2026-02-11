@@ -65,10 +65,6 @@ typedef struct {
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #if 0   /* BEV Rebase provisionally */
 #else   /* BEV Rebase provisionally */
-static U1                                       u1_s_locale_unit_dist;
-static U1                                       u1_s_locale_unit_speed;
-static U1                                       u1_s_locale_unit_fueco;
-static U1                                       u1_s_locale_unit_eleco;
 static U1                                       u1_s_locale_unit_ambtmp;
 static U1                                       u1_s_locale_lang;
 #endif   /* BEV Rebase provisionally */
@@ -269,10 +265,6 @@ void  vd_g_LocaleComTxInit(void)
     U1  u1_t_unit_ch2;
 #if 0   /* BEV Rebase provisionally */
 #else   /* BEV Rebase provisionally */
-    u1_s_locale_unit_dist    = (U1)U1_MAX;
-    u1_s_locale_unit_speed   = (U1)U1_MAX;
-    u1_s_locale_unit_fueco   = (U1)U1_MAX;
-    u1_s_locale_unit_eleco   = (U1)U1_MAX;
     u1_s_locale_unit_ambtmp  = (U1)U1_MAX;
     u1_s_locale_lang         = (U1)U1_MAX;
 #endif   /* BEV Rebase provisionally */
@@ -449,11 +441,7 @@ U1  u1_g_LocaleCfgSubSpd(const U1 u1_a_UNIT)
 /*===================================================================================================================================*/
 U1      u1_g_LocaleCfgLang(void)
 {
-#if 0   /* BEV Rebase provisionally */
-    return(u1_g_McstBf((U1)MCST_BFI_LANG));
-#else   /* BEV Rebase provisionally */
     return(u1_s_locale_lang);
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -464,11 +452,7 @@ U1      u1_g_LocaleCfgLang(void)
 /*===================================================================================================================================*/
 void    vd_g_LocaleCfgLangPut(const U1 u1_a_LANG)
 {
-#if 0   /* BEV Rebase provisionally */
-    vd_g_McstBfPut((U1)MCST_BFI_LANG, u1_a_LANG);
-#else   /* BEV Rebase provisionally */
     u1_s_locale_lang = u1_a_LANG;
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -483,30 +467,22 @@ U1      u1_g_LocaleCfgUnit(const U1 u1_a_UNITIDX)
     U1  u1_t_unit;
 
     u1_t_idx   = st_sp_LOCALE_UNITIDX[u1_a_UNITIDX].u1_mcst_id;
-#if 0   /* BEV Rebase provisionally */
-    u1_t_unit  = u1_g_McstBf(u1_t_idx);
-#else   /* BEV Rebase provisionally */
     switch(u1_a_UNITIDX){
-    case  (U1)UNIT_IDX_DIST:
-        u1_t_unit  = u1_s_locale_unit_dist;
-        break;
+    case (U1)UNIT_IDX_DIST:
     case (U1)UNIT_IDX_SPEED:
-        u1_t_unit  = u1_s_locale_unit_speed;
-        break;
-    case (U1)UNIT_IDX_FUECO:
-        u1_t_unit  = u1_s_locale_unit_fueco;
-        break;
     case (U1)UNIT_IDX_ELECO:
-        u1_t_unit  = u1_s_locale_unit_eleco;
+        u1_t_unit  = (U1)u4_g_McstBf(u1_t_idx);
         break;
     case (U1)UNIT_IDX_AMBTMP:
+#if 0   /* BEV Rebase provisionally */
+#else   /* BEV Rebase provisionally */
         u1_t_unit  = u1_s_locale_unit_ambtmp;
+#endif   /* BEV Rebase provisionally */
         break;
     default:
         u1_t_unit  = (U1)U1_MAX;
         break;
     }
-#endif   /* BEV Rebase provisionally */
     return(u1_t_unit);
 }
 
@@ -520,30 +496,22 @@ void    vd_g_LocaleCfgUnitPut(const U1 u1_a_UNITIDX, const U1 u1_a_VAL)
 {
     U1  u1_t_idx;
     u1_t_idx   = st_sp_LOCALE_UNITIDX[u1_a_UNITIDX].u1_mcst_id;
-#if 0   /* BEV Rebase provisionally */
-    vd_g_McstBfPut(u1_t_idx , u1_a_VAL);
-#else   /* BEV Rebase provisionally */
     switch(u1_a_UNITIDX){
-    case  (U1)UNIT_IDX_DIST:
-        u1_s_locale_unit_dist   = u1_a_VAL;
-        break;
+    case (U1)UNIT_IDX_DIST:
     case (U1)UNIT_IDX_SPEED:
-        u1_s_locale_unit_speed  = u1_a_VAL;
-        break;
-    case (U1)UNIT_IDX_FUECO:
-        u1_s_locale_unit_fueco  = u1_a_VAL;
-        break;
     case (U1)UNIT_IDX_ELECO:
-        u1_s_locale_unit_eleco  = u1_a_VAL;
+        vd_g_McstBfPut(u1_t_idx , (U4)u1_a_VAL);
         break;
     case (U1)UNIT_IDX_AMBTMP:
+#if 0   /* BEV Rebase provisionally */
+#else   /* BEV Rebase provisionally */
         u1_s_locale_unit_ambtmp = u1_a_VAL;
+#endif   /* BEV Rebase provisionally */
         break;
     default:
         /* do nothing */
         break;
     }
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

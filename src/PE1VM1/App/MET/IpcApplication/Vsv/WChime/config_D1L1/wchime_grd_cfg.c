@@ -20,6 +20,7 @@
 
 #include "oxcan.h"
 #include "hmiwchime.h"
+#include "hmimcst.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -63,11 +64,7 @@ static U1 u1_s_wchime_mwvc_pre;
 void    vd_g_wChimeGrdCfgInit(void)
 {
     u1_s_wchime_master_pre = (U1)HMIWCHIME_UNDEF;
-#if 0   /* BEV Rebase provisionally */
-    u1_s_wchime_mwvc_pre   = (U1)HMIMCST_MWVC_OPE_INIT;
-#else   /* BEV Rebase provisionally */
-    u1_s_wchime_mwvc_pre   = (U1)7U;
-#endif   /* BEV Rebase provisionally */
+    u1_s_wchime_mwvc_pre   = (U1)HMIMCST_MWVC_NO_OPE;
 }
 /*===================================================================================================================================*/
 /*  U1      u1_g_wChimeCfgRsaPermaReq(void)                                                                                          */
@@ -126,21 +123,12 @@ U1      u1_g_wChimeCfgMWVCReq(void)
     U1    u1_t_ope;
 
     u1_t_req = (U1)FALSE;
-#if 0   /* BEV Rebase provisionally */
     u1_t_ope = u1_g_HmiMcstGetMWVCOpe();
 
     if((u1_s_wchime_mwvc_pre != u1_t_ope    )&&
        (u1_t_ope <= (U1)HMIMCST_MWVC_OPE_MAX)){
             u1_t_req = (U1)TRUE;
     }
-#else   /* BEV Rebase provisionally */
-    u1_t_ope = u1_g_wchime_metcstmvol;
-
-    if((u1_s_wchime_mwvc_pre != u1_t_ope    )&&
-       (u1_t_ope <= (U1)2U)){
-            u1_t_req = (U1)TRUE;
-    }
-#endif   /* BEV Rebase provisionally */
     u1_s_wchime_mwvc_pre = u1_t_ope;
 
     return(u1_t_req);
@@ -167,6 +155,7 @@ U1      u1_g_wChimeCfgMWVCReq(void)
 /*                                (For RSA buzzer)                                                                                   */
 /*  893B-1   11/24/2021  MG       Add processing for Multimedia.                                                                     */
 /*  19PFv3-1 12/27/2023  SI       Add u1_g_wChimeCfgMWVCReq()                                                                        */
+/*  BEV-1    02/02/2026  SN       Delete comment out                                                                                 */
 /*                                                                                                                                   */
 /*  * TN   = Toshiharu Nagata, Denso Techno                                                                                          */
 /*  * SK   = Sakae Kitamura, Denso Techno                                                                                            */
@@ -174,5 +163,6 @@ U1      u1_g_wChimeCfgMWVCReq(void)
 /*  * TF   = Tomohiro Furuichi, Denso Techno                                                                                         */
 /*  * MG   = Mei Godo, KSE                                                                                                           */
 /*  * SI   = Shugo Ichinose, Denso Techno                                                                                            */
+/*  * SN   = Shimon Nambu, Denso Techno                                                                                              */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
