@@ -5,6 +5,7 @@
 #define ETHSWT_SWIC_CFG_H
 /* -------------------------------------------------------------------------- */
 #include <Std_Types.h>
+#include <EthDebugLog.h>
 /* -------------------------------------------------------------------------- */
 /* Common */
 #include <EthSwt_BSW_define.h>								/* BSWに合わせてヘッダファイル変更 */
@@ -37,6 +38,13 @@ void EthSwt_SWIC_Cfg_SetResetDeassert(void);
 /* -------------------------------------------------------------------------- */
 /* Config for EthSwt_SWIC_STM.c                                               */
 /* -------------------------------------------------------------------------- */
+#define ETHSWT_SWIC_UNINIT_START()
+#define ETHSWT_SWIC_INIT_START()
+#define ETHSWT_SWIC_PORT_INIT_COMPLETED_START()
+#define ETHSWT_SWIC_SET_RELAY_ON_START()
+#define ETHSWT_SWIC_ACTIVE_START()					EthDebugLog_Notify(E_ETHDEBUGLOG_EV_LINKUPREADY)
+#define ETHSWT_SWIC_SET_RELAY_OFF_START()
+
 Std_ReturnType EthSwt_SWIC_Cfg_AllowRelay(void);
 
 /* -------------------------------------------------------------------------- */

@@ -40,16 +40,17 @@ static void ethswt_swic_stm_activeProc (void);
 static void ethswt_swic_stm_setRelayOffProc (void);
 static void ethswt_swic_stm_action (const uint32 event);
 static void ethswt_swic_stm_error (const uint32 resetFactor);
-static uint32 ethswt_swic_stm_act_move_init (void);
-static uint32 ethswt_swic_stm_act_move_port_init_completed (void);
-static uint32 ethswt_swic_stm_act_move_set_relay_on (void);
-static uint32 ethswt_swic_stm_act_move_active (void);
-static uint32 ethswt_swic_stm_act_move_set_relay_off (void);
-static uint32 ethswt_swic_stm_act_unavailable (void);
-static uint32 ethswt_swic_stm_act_reset (void);
-static uint32 ethswt_swic_stm_act_none (void);
+static void ethswt_swic_stm_act_move_init (void);
+static void ethswt_swic_stm_act_move_port_init_completed (void);
+static void ethswt_swic_stm_act_move_set_relay_on (void);
+static void ethswt_swic_stm_act_move_active (void);
+static void ethswt_swic_stm_act_move_set_relay_off (void);
+static void ethswt_swic_stm_act_unavailable (void);
+static void ethswt_swic_stm_act_reset (void);
+static void ethswt_swic_stm_act_none (void);
 static void ethswt_swic_stm_relayOffClear (void);
 static void ethswt_swic_stm_resetClear (void);
+static void ethswt_swic_stm_changeStatus(const uint32 nextStatus);
 /* -------------------------------------------------------------------------- */
 void EthSwt_SWIC_STM_Init (void)
 {
@@ -292,7 +293,7 @@ static void ethswt_swic_stm_error (const uint32 resetFactor)
     return;
 }
 /* -------------------------------------------------------------------------- */
-typedef uint32 (*SWIC_STM_ACT)();
+typedef void (*SWIC_STM_ACT)();
 /* -------------------------------------------------------------------------- */
 static void ethswt_swic_stm_action (const uint32 event)
 {
@@ -314,66 +315,103 @@ static void ethswt_swic_stm_action (const uint32 event)
     /* EV_NO_PROC       */  , {ethswt_swic_stm_act_none         , ethswt_swic_stm_act_reset                     , ethswt_swic_stm_act_reset             , ethswt_swic_stm_act_reset         , ethswt_swic_stm_act_reset                 , ethswt_swic_stm_act_reset                     }
     };
 
-    uint32 nextStatus;
+    action_tbl[event][G_SWIC_Status]();
 
-    nextStatus = action_tbl[event][G_SWIC_Status]();
-    LIB_DI();
-    G_SWIC_Status = nextStatus;
-    LIB_EI();
+    return;
+}
+/* -------------------------------------------------------------------------- */
+static void ethswt_swic_stm_act_move_init (void)
+{
+    /* End Action */
+
+    /* Event Action */
+    
+    /* Change Status */
+    ethswt_swic_stm_changeStatus(D_ETHSWT_SWIC_ST_INIT);
     
     return;
 }
 /* -------------------------------------------------------------------------- */
-static uint32 ethswt_swic_stm_act_move_init (void)
-{
-    /* do nothing */
-    return D_ETHSWT_SWIC_ST_INIT;
-}
-/* -------------------------------------------------------------------------- */
-static uint32 ethswt_swic_stm_act_move_port_init_completed (void)
+static void ethswt_swic_stm_act_move_port_init_completed (void)
 {   
-    /* do nothing */
-    return D_ETHSWT_SWIC_ST_PORT_INIT_COMPLETED;
-}
-/* -------------------------------------------------------------------------- */
-static uint32 ethswt_swic_stm_act_move_set_relay_on (void)
-{
-    /* do nothing */
-    return D_ETHSWT_SWIC_ST_SET_RELAY_ON;
-}
-/* -------------------------------------------------------------------------- */
-static uint32 ethswt_swic_stm_act_move_active (void)
-{
-    /* do nothing */
-    return D_ETHSWT_SWIC_ST_ACTIVE;
-}
-/* -------------------------------------------------------------------------- */
-static uint32 ethswt_swic_stm_act_move_set_relay_off (void)
-{
-    ethswt_swic_stm_relayOffClear();
+    /* End Action */
 
-    return D_ETHSWT_SWIC_ST_SET_RELAY_OFF;
+    /* Event Action */
+    
+    /* Change Status */
+    ethswt_swic_stm_changeStatus(D_ETHSWT_SWIC_ST_PORT_INIT_COMPLETED);
+    
+    return;
 }
 /* -------------------------------------------------------------------------- */
-static uint32 ethswt_swic_stm_act_unavailable (void)
+static void ethswt_swic_stm_act_move_set_relay_on (void)
 {
+    /* End Action */
+
+    /* Event Action */
+    
+    /* Change Status */
+    ethswt_swic_stm_changeStatus(D_ETHSWT_SWIC_ST_SET_RELAY_ON);
+
+    return;
+}
+/* -------------------------------------------------------------------------- */
+static void ethswt_swic_stm_act_move_active (void)
+{
+    /* End Action */
+
+    /* Event Action */
+    
+    /* Change Status */
+    ethswt_swic_stm_changeStatus(D_ETHSWT_SWIC_ST_ACTIVE);
+    
+    return;
+}
+/* -------------------------------------------------------------------------- */
+static void ethswt_swic_stm_act_move_set_relay_off (void)
+{
+    /* End Action */
+
+    /* Event Action */
+    ethswt_swic_stm_relayOffClear();
+    
+    /* Change Status */
+    ethswt_swic_stm_changeStatus(D_ETHSWT_SWIC_ST_SET_RELAY_OFF);
+
+    return;
+}
+/* -------------------------------------------------------------------------- */
+static void ethswt_swic_stm_act_unavailable (void)
+{
+    /* End Action */
+
+    /* Event Action */
     ethswt_swic_stm_resetClear();
 
-    return D_ETHSWT_SWIC_ST_UNINIT;
+    /* Change Status */
+    ethswt_swic_stm_changeStatus(D_ETHSWT_SWIC_ST_UNINIT);
+
+    return;
 }
 /* -------------------------------------------------------------------------- */
-static uint32 ethswt_swic_stm_act_reset (void)
+static void ethswt_swic_stm_act_reset (void)
 {
+    /* End Action */
+    
+    /* Event Action */
     EthSwt_SWIC_PWR_ResetReq();
     ethswt_swic_stm_resetClear();
 
-    return D_ETHSWT_SWIC_ST_UNINIT;
+    /* Change Status */
+    ethswt_swic_stm_changeStatus(D_ETHSWT_SWIC_ST_UNINIT);
+
+    return;
 }
 /* -------------------------------------------------------------------------- */
-static uint32 ethswt_swic_stm_act_none (void)
+static void ethswt_swic_stm_act_none (void)
 {
     /* do nothing */
-    return G_SWIC_Status;
+    return;
 }
 /* -------------------------------------------------------------------------- */
 static void ethswt_swic_stm_relayOffClear (void)
@@ -394,6 +432,38 @@ static void ethswt_swic_stm_resetClear (void)
     for (idx = 0u; idx < D_ETHSWT_SWIC_STM_RESETCLEAR_NUM; idx++) {
         G_ETHSWT_SWIC_STM_RESETCLEAR[idx]();
     }
+
+    return;
+}
+/* -------------------------------------------------------------------------- */
+static void ethswt_swic_stm_changeStatus(const uint32 nextStatus) {
+    
+    LIB_DI();
+    G_SWIC_Status = nextStatus;
+    LIB_EI();
+
+    switch (nextStatus) {
+    case D_ETHSWT_SWIC_ST_UNINIT:
+        ETHSWT_SWIC_UNINIT_START();
+        break;
+    case D_ETHSWT_SWIC_ST_INIT:
+        ETHSWT_SWIC_INIT_START();
+        break;
+    case D_ETHSWT_SWIC_ST_PORT_INIT_COMPLETED:
+        ETHSWT_SWIC_PORT_INIT_COMPLETED_START();
+        break;
+    case D_ETHSWT_SWIC_ST_SET_RELAY_ON:
+        ETHSWT_SWIC_SET_RELAY_ON_START();
+        break;
+    case D_ETHSWT_SWIC_ST_ACTIVE:
+        ETHSWT_SWIC_ACTIVE_START();
+        break;
+    case D_ETHSWT_SWIC_ST_SET_RELAY_OFF:
+        ETHSWT_SWIC_SET_RELAY_OFF_START();
+        break;
+    default:
+        break;
+    };
 
     return;
 }

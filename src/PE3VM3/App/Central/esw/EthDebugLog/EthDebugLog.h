@@ -5,6 +5,7 @@
 #define ETHDEBUGLOG_H
 /* -------------------------------------------------------------------------- */
 #include <Std_Types.h>
+#include <EthDebugLog_Cfg.h>
 /* -------------------------------------------------------------------------- */
 void EthDebugLog_Init(void);
 void EthDebugLog_Notify(const uint32 EventId);
