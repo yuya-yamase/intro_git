@@ -77,17 +77,17 @@ static U1                                       u1_s_locale_lang;
 const U1 u1_g_LANG_NUM = (U1)LANG_NUM_VAL;
 
 static const ST_UNITIDX st_sp_LOCALE_UNITIDX[UNIT_NUM_IDX] = {
-#if 0   /* BEV Rebase provisionally */
     { (U1)MCST_BFI_DIST,   (U1)VDF_DEST_DBF_DEFUNIT_SPD    }, /*   UNIT_IDX_DIST                       (0U) */
     { (U1)MCST_BFI_SPEED,  (U1)VDF_DEST_DBF_DEFUNIT_SPD    }, /*   UNIT_IDX_SPEED                      (1U) */
+#if 0   /* BEV Rebase provisionally */
     { (U1)MCST_BFI_FUECO,  (U1)VDF_DEST_DBF_DEFUNIT_FUECO  }, /*   UNIT_IDX_FUECO                      (2U) */
+#else   /* BEV Rebase provisionally */
+    { (U1)U1_MAX,          (U1)VDF_DEST_DBF_DEFUNIT_FUECO  }, /*   UNIT_IDX_FUECO                      (2U) */
+#endif   /* BEV Rebase provisionally */
     { (U1)MCST_BFI_ELECO,  (U1)VDF_DEST_DBF_DEFUNIT_ELECO  }, /*   UNIT_IDX_ELECO                      (3U) */
+#if 0   /* BEV Rebase provisionally */
     { (U1)MCST_BFI_AMBTMP, (U1)VDF_DEST_DBF_AMBTMP         }  /*   UNIT_IDX_AMBTMP                     (4U) */
 #else   /* BEV Rebase provisionally */
-    { (U1)U1_MAX,          (U1)VDF_DEST_DBF_DEFUNIT_SPD    }, /*   UNIT_IDX_DIST                       (0U) */
-    { (U1)U1_MAX,          (U1)VDF_DEST_DBF_DEFUNIT_SPD    }, /*   UNIT_IDX_SPEED                      (1U) */
-    { (U1)U1_MAX,          (U1)VDF_DEST_DBF_DEFUNIT_FUECO  }, /*   UNIT_IDX_FUECO                      (2U) */
-    { (U1)U1_MAX,          (U1)VDF_DEST_DBF_DEFUNIT_ELECO  }, /*   UNIT_IDX_ELECO                      (3U) */
     { (U1)U1_MAX,          (U1)VDF_DEST_DBF_AMBTMP         }  /*   UNIT_IDX_AMBTMP                     (4U) */
 #endif   /* BEV Rebase provisionally */
 };
@@ -495,11 +495,12 @@ U1      u1_g_LocaleCfgUnit(const U1 u1_a_UNITIDX)
 void    vd_g_LocaleCfgUnitPut(const U1 u1_a_UNITIDX, const U1 u1_a_VAL)
 {
     U1  u1_t_idx;
-    u1_t_idx   = st_sp_LOCALE_UNITIDX[u1_a_UNITIDX].u1_mcst_id;
+
     switch(u1_a_UNITIDX){
     case (U1)UNIT_IDX_DIST:
     case (U1)UNIT_IDX_SPEED:
     case (U1)UNIT_IDX_ELECO:
+        u1_t_idx   = st_sp_LOCALE_UNITIDX[u1_a_UNITIDX].u1_mcst_id;
         vd_g_McstBfPut(u1_t_idx , (U4)u1_a_VAL);
         break;
     case (U1)UNIT_IDX_AMBTMP:
