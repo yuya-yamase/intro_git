@@ -716,7 +716,7 @@ static inline void    vd_s_XSpiCfgTxMetcstm(    U4 * u4_ap_pdu_tx) {
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
 static inline void    vd_s_XSpiCfgTxMetcstmMcst(    U4 * u4_ap_pdu_tx) {
-    u4_ap_pdu_tx[0] = (U4)((u4_g_McstBf((U1)MCST_BFI_METWRNCSTM) & (U4)0x00000007U) << (U1)28U);
+    u4_ap_pdu_tx[0] = ((u4_g_McstBf((U1)MCST_BFI_METWRNCSTM) & (U4)0x00000007U) << (U1)28);
 }
 
 /*===================================================================================================================================*/
