@@ -182,11 +182,11 @@ U1      u1_g_DimDaynightCfgAdimRxEvt(U1 * u1_ap_daynight)
 
     u1_t_rx_evt = (U1)FALSE;
 
-    u1_t_rx_cnt = u1_g_oXCANRxdEvcnt((U2)OXCAN_RXD_PDU_CAN_BDB1S01_CH0);
+    u1_t_rx_cnt = u1_g_oXCANRxdEvcnt((U2)OXCAN_RXD_PDU_CAN_ZN11S14_CH0);
     if(u1_t_rx_cnt != u1_s_dim_adim_rxcnt){
 
         u1_t_adim = (U1)0U;
-        (void)Com_ReceiveSignal(ComConf_ComSignal_ADIM, &u1_t_adim);
+        (void)Com_ReceiveSignal(ComConf_ComSignal_ADIM2, &u1_t_adim);
         if(u1_t_adim == (U1)DIM_DAYNIGHT_ADIM_DAY){
             (*u1_ap_daynight) = (U1)DIM_DAYNIGHT_LVL_DAY;
             u1_t_rx_evt       = (U1)TRUE;
@@ -413,6 +413,7 @@ static inline U1    u1_s_DimCfgCalibU1MaxChk(const U1 u1_a_CALIBID, const U1 u1_
 /*  19PFv3-3 07/12/2024  TN(DT)   Add Calibration Guard to Avoid out of array references.                                            */
 /*  BEV-1    06/30/2025  SF       BSW Update:u1_g_DimDaynightCfgRxEnabled was modified                                               */
 /*  BEV-2    10/10/2025  KO       Configured for BEVstep3_Rebase                                                                     */
+/*  BEV-3    01/21/2026  KO       Change dimming judgment signal from ADIM to ADIM2 for FF2                                          */
 /*                                                                                                                                   */
 /*  * TN     = Takashi Nagai, DENSO                                                                                                  */
 /*  * SH     = Shota Higashide                                                                                                       */

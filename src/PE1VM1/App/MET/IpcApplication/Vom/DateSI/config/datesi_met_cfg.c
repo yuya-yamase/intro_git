@@ -1,4 +1,4 @@
-/* 0.0.0 */
+/* 0.1.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define DATESI_MET_CFG_C_MAJOR                   (0)
-#define DATESI_MET_CFG_C_MINOR                   (0)
+#define DATESI_MET_CFG_C_MINOR                   (1)
 #define DATESI_MET_CFG_C_PATCH                   (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -36,7 +36,6 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define DATESI_MET_CFG_VM_1WORD                 (1U)
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -46,230 +45,29 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static  U2                                      u2_s_datesi_met_ofsttime;
-static  U2                                      u2_s_datesi_met_cal;
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static  void    vd_s_DateSIMETCfgTxCalibCalDef(void);
-static  void    vd_s_DateSIMETCfgTxCalibMinYear(void);
-static  void    vd_s_DateSIMETCfgTxNvmcTimfmt(void);
-static  void    vd_s_DateSIMETCfgTxNvmcTimoffset(void);
-static  void    vd_s_DateSIMETCfgTxNvmcCal(void);
-static  void    vd_s_DateSIMETCfgRxNvmcTimfmt(void);
-static  void    vd_s_DateSIMETCfgRxNvmcTimoffset(void);
-static  void    vd_s_DateSIMETCfgRxNvmcCal(void);
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-const  U2                                      u2_g_DATESI_MET_CFG_NVMCID_OFST = (U2)NVMCID_U2_DATESI_OFFSET;
-const  U2                                      u2_g_DATESI_MET_CFG_NVMCID_CALE = (U2)NVMCID_U2_DATESI_CALENDAR;
+/* Nvmc */
+const U2    u2_g_DATESI_NVMCID_OFST    = (U2)NVMCID_U2_DATESI_OFFSET;
+const U2    u2_g_DATESI_NVMCID_CALE    = (U2)NVMCID_U2_DATESI_CALENDAR;
+
+/* iVDsh */
+const U2    u2_g_DATESI_DID_WRI_CALDEF = (U2)IVDSH_DID_WRI_VM1TO2_CALDEF;
+const U2    u2_g_DATESI_DID_WRI_CALMIN = (U2)IVDSH_DID_WRI_VM1TO2_CALMIN;
+const U2    u2_g_DATESI_DID_WRI_FMT    = (U2)IVDSH_DID_WRI_VM1TO2_TIMFMT;
+const U2    u2_g_DATESI_DID_WRI_OFST   = (U2)IVDSH_DID_WRI_VM1TO2_TIMOFST;
+const U2    u2_g_DATESI_DID_WRI_CAL    = (U2)IVDSH_DID_WRI_VM1TO2_CAL;
+const U2    u2_g_DATESI_DID_REA_FMT    = (U2)IVDSH_DID_REA_VM2TO1_TIMFMT;
+const U2    u2_g_DATESI_DID_REA_OFST   = (U2)IVDSH_DID_REA_VM2TO1_TIMOFST;
+const U2    u2_g_DATESI_DID_REA_CAL    = (U2)IVDSH_DID_REA_VM2TO1_CAL;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-
-/*===================================================================================================================================*/
-/* void            vd_g_DateSIcfgInit(void)                                                                                          */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void           vd_g_DateSIMETCfgInit(void)
-{
-    U1  u1_t_nvm_sts;
-
-    /* Nvmc Read */
-    u2_s_datesi_met_ofsttime = (U2)0U;
-    u2_s_datesi_met_cal      = (U2)0U;
-
-    u1_t_nvm_sts = u1_g_Nvmc_ReadStrValU2withSts(u2_g_DATESI_MET_CFG_NVMCID_OFST, &u2_s_datesi_met_ofsttime);
-    if(u1_t_nvm_sts != (U1)NVMC_STATUS_COMP){
-        u2_s_datesi_met_ofsttime = (U2)0U; 
-    }
-
-    u1_t_nvm_sts  = u1_g_Nvmc_ReadStrValU2withSts(u2_g_DATESI_MET_CFG_NVMCID_CALE, &u2_s_datesi_met_cal);
-    if(u1_t_nvm_sts != (U1)NVMC_STATUS_COMP){
-        u2_s_datesi_met_cal = (U2)U2_MAX; 
-    }
-
-    /* iVDsh Init set value */
-    vd_s_DateSIMETCfgTxCalibCalDef();               /* Calib : CAL_DEF         */
-    vd_s_DateSIMETCfgTxCalibMinYear();              /* Calib : CAL_MIN         */
-    vd_s_DateSIMETCfgTxNvmcTimfmt();                /* Nvmc  : DATESI_TIMEFMT  */
-    vd_s_DateSIMETCfgTxNvmcTimoffset();             /* Nvmc  : DATESI_OFFSET   */
-    vd_s_DateSIMETCfgTxNvmcCal();                   /* Nvmc  : DATESI_CALENDAR */
-
-}
-
-/*===================================================================================================================================*/
-/* void            vd_g_DateSIcfgiVDshTx(void)                                                                                       */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void           vd_g_DateSIMETCfgiVDshTx(void)
-{
-    vd_s_DateSIMETCfgTxNvmcTimfmt();
-    vd_s_DateSIMETCfgTxNvmcTimoffset();
-    vd_s_DateSIMETCfgTxNvmcCal();
-}
-
-/*===================================================================================================================================*/
-/* void            vd_g_DateSIcfgiVDshRx(void)                                                                                       */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void           vd_g_DateSIMETCfgiVDshRx(void)
-{
-    vd_s_DateSIMETCfgRxNvmcTimfmt();
-    vd_s_DateSIMETCfgRxNvmcTimoffset();
-    vd_s_DateSIMETCfgRxNvmcCal();
-}
-
-/*===================================================================================================================================*/
-/* static void     vd_s_DateSIcfgTxCalibCalDef(void)                                                                                 */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void    vd_s_DateSIMETCfgTxCalibCalDef(void)
-{
-    U4  u4_t_calib_cal_def;
-
-    u4_t_calib_cal_def = (U4)u2_CALIB_MCUID0574_CAL_DEF;
-    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM1TO2_CALDEF, &u4_t_calib_cal_def, (U2)DATESI_MET_CFG_VM_1WORD);
-}
-
-/*===================================================================================================================================*/
-/* static void     vd_s_DateSIcfgTxCalibMinYear(void)                                                                                */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void    vd_s_DateSIMETCfgTxCalibMinYear(void)
-{
-    U4  u4_t_calib_cal_min;
-
-    u4_t_calib_cal_min = (U4)u2_CALIB_MCUID0575_CAL_MIN;
-    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM1TO2_CALMIN, &u4_t_calib_cal_min, (U2)DATESI_MET_CFG_VM_1WORD);
-}
-
-/*===================================================================================================================================*/
-/* static void     vd_s_DateSIcfgTxNvmcTimfmt(void)                                                                                  */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void    vd_s_DateSIMETCfgTxNvmcTimfmt(void)
-{
-    U1  u1_t_24h_ind;
-    U4  u4_t_24h_vmtx;
-
-    u1_t_24h_ind  = u1_g_TimeFormat12H24H();
-    u4_t_24h_vmtx = (U4)u1_t_24h_ind;
-    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM1TO2_TIMFMT, &u4_t_24h_vmtx, (U2)DATESI_MET_CFG_VM_1WORD);
-}
-
-/*===================================================================================================================================*/
-/* static void     vd_s_DateSIcfgTxNvmcTimoffset(void)                                                                               */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void    vd_s_DateSIMETCfgTxNvmcTimoffset(void)
-{
-    U4  u4_t_time_offset;
-
-    u4_t_time_offset = (U4)u2_s_datesi_met_ofsttime;
-    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM1TO2_TIMOFST, &u4_t_time_offset, (U2)DATESI_MET_CFG_VM_1WORD);
-}
-
-/*===================================================================================================================================*/
-/* static void     vd_s_DateSIcfgTxNvmcCal(void)                                                                                     */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void    vd_s_DateSIMETCfgTxNvmcCal(void)
-{
-    U4  u4_t_date_calendar;
-
-    u4_t_date_calendar = (U4)u2_s_datesi_met_cal;
-    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM1TO2_CAL, &u4_t_date_calendar, (U2)DATESI_MET_CFG_VM_1WORD);
-}
-
-/*===================================================================================================================================*/
-/* static void     vd_s_DateSIcfgRxNvmcTimfmt(void)                                                                                  */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void    vd_s_DateSIMETCfgRxNvmcTimfmt(void)
-{
-    U4  u4_t_read;
-    U1  u1_t_read_sts;
-    U1  u1_t_24h_ind;
-
-    u4_t_read     = (U4)0U;  
-    u1_t_read_sts = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_VM2TO1_TIMFMT, &u4_t_read, (U2)DATESI_MET_CFG_VM_1WORD);
-
-    if(u1_t_read_sts != (U1)IVDSH_NO_REA){
-        u1_t_24h_ind = u1_g_TimeFormat12H24H();
-        if((u4_t_read != (U4)u1_t_24h_ind) && (u4_t_read < (U4)TIMEFMT_NUM_VAL)){
-            vd_g_TimeFormat12H24HPut((U1)u4_t_read);
-        }
-    }
-}
-
-/*===================================================================================================================================*/
-/* static void     vd_s_DateSIcfgRxNvmcTimoffset(void)                                                                               */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void    vd_s_DateSIMETCfgRxNvmcTimoffset(void)
-{
-    U4  u4_t_read;
-    U1  u1_t_read_sts;
-
-    u4_t_read     = (U4)0U;
-    u1_t_read_sts = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_VM2TO1_TIMOFST, &u4_t_read, (U2)DATESI_MET_CFG_VM_1WORD);
-
-    if(u1_t_read_sts != (U1)IVDSH_NO_REA){
-        if(((U2)u4_t_read != u2_s_datesi_met_ofsttime) && (u4_t_read <= (U4)U2_MAX)){
-            vd_g_Nvmc_WriteU2(u2_g_DATESI_MET_CFG_NVMCID_OFST, (U2)u4_t_read);
-            u2_s_datesi_met_ofsttime = (U2)u4_t_read;
-        }
-    }
-}
-
-/*===================================================================================================================================*/
-/* static void     vd_s_DateSIcfgRxNvmcCal(void)                                                                                     */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void    vd_s_DateSIMETCfgRxNvmcCal(void)
-{
-
-    U4  u4_t_read;
-    U1  u1_t_read_sts;
-
-    u4_t_read     = (U4)0U;  
-    u1_t_read_sts = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_VM2TO1_CAL, &u4_t_read, (U2)DATESI_MET_CFG_VM_1WORD);
-
-    if(u1_t_read_sts != (U1)IVDSH_NO_REA){
-        if(((U2)u4_t_read != u2_s_datesi_met_cal) && (u4_t_read <= (U4)U2_MAX)){
-            vd_g_Nvmc_WriteU2(u2_g_DATESI_MET_CFG_NVMCID_CALE, (U2)u4_t_read);
-            u2_s_datesi_met_cal = (U2)u4_t_read;
-        }
-    }
-
-}
-
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
@@ -279,6 +77,11 @@ static void    vd_s_DateSIMETCfgRxNvmcCal(void)
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  0.0.0    06/27/2025  MN       New.                                                                                               */
+/*  0.1.0    01/06/2026  MN       datesi_met.c v0.0.0 -> v0.1.0                                                                      */
+/*                                                                                                                                   */
+/*  Revision Date        Author   Change Description                                                                                 */
+/* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
+/*  BEV-1    01/30/2026  MN       CHG: DateSI module structure update.                                                               */
 /*                                                                                                                                   */
 /*  * MN   = Mikiya Negishi, KSE                                                                                                     */
 /*                                                                                                                                   */

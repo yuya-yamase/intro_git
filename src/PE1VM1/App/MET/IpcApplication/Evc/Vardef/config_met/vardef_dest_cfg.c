@@ -655,28 +655,6 @@ U1      u1_g_VardefCfgBltDst(void)
 }
 
 /*===================================================================================================================================*/
-/*  U1      u1_g_VardefCfg4wdSys(void)                                                                                               */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1      u1_g_VardefCfg4wdSys(void)
-{
-    U1 u1_t_brand;
-    U1 u1_t_4wdsys;
-
-    u1_t_brand   = u1_s_VardefDestCfgCalibU1NumChk(u1_CALIB_MCUID0024_BRAND, (U1)CALIB_MCUID0024_NUM, (U1)CALIB_MCUID0024_DEF);
-    u1_t_4wdsys  = u1_g_VardefDestDbfByPid((U1)VDF_DEST_DBF_4WDSYS);
-
-    if((u1_t_brand == (U1)CALIB_MCUID0024_LEXUS)  ||
-       (u1_t_brand == (U1)CALIB_MCUID0024_SUBARU)){
-        u1_t_4wdsys = (U1)VDF_4WDSYS_AWD;
-    }
-
-    return(u1_t_4wdsys);
-}
-
-/*===================================================================================================================================*/
 /*  static inline U1    u1_s_VardefDestCfgCalibU1NumChk(const U1 u1_a_CALIBID, const U1 u1_a_NUM, const U1 u1_a_DEF)                 */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      const U1 u1_a_CALIBID                                                                                            */
@@ -758,6 +736,7 @@ static inline U1    u1_s_VardefDestCfgCalibU1NumChk(const U1 u1_a_CALIBID, const
 /*  BEV-1     3/06/2025  SF       Setting for BEV System_Consideration_1.(Requests from the SOC team)                                */
 /*  BEV-2     6/27/2025  SNk      Setting for BEV System_Consideration_2.(MET-M_DESTVARI-CSTD-A0-06)                                 */
 /*  BEV-3    10/15/2025  SN       Configured for BEVstep3_Rebase                                                                     */
+/*  BEV-4     1/22/2026  YN       Change config for BEV FF2(MET-D_4WDSYS-CSTD-2-02-A-C1)                                             */
 /*                                                                                                                                   */
 /*  * SF   = Seiya Fukutome, DENSO TECHNO                                                                                            */
 /*  * AT   = Ayano Tomimoto, KSE                                                                                                     */
@@ -775,5 +754,6 @@ static inline U1    u1_s_VardefDestCfgCalibU1NumChk(const U1 u1_a_CALIBID, const
 /*  * SNk  = Shizuka Nakajima, KSE                                                                                                   */
 /*  * SN   = Shimon Nambu, Denso Techno                                                                                              */
 /*  * TR   = Tebs Ramos, DTPH                                                                                                        */
+/*  * YN   = Yujiro Nagaya, Denso Techno                                                                                             */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

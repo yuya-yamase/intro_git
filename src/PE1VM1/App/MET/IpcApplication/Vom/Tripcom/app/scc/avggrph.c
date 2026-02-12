@@ -1,4 +1,4 @@
-/* 1.3.0 */
+/* 1.4.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define AVGGRPH_C_MAJOR                         (1)
-#define AVGGRPH_C_MINOR                         (3)
+#define AVGGRPH_C_MINOR                         (4)
 #define AVGGRPH_C_PATCH                         (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -24,13 +24,13 @@
 #if ((AVGGRPH_C_MAJOR != AVGGRPH_H_MAJOR) || \
      (AVGGRPH_C_MINOR != AVGGRPH_H_MINOR) || \
      (AVGGRPH_C_PATCH != AVGGRPH_H_PATCH))
-#error "avgecon.c and avgecon.h : source and header files are inconsistent!"
+#error "avggrph.c and avggrph.h : source and header files are inconsistent!"
 #endif
 
 #if ((AVGGRPH_C_MAJOR != AVGGRPH_CFG_H_MAJOR) || \
      (AVGGRPH_C_MINOR != AVGGRPH_CFG_H_MINOR) || \
      (AVGGRPH_C_PATCH != AVGGRPH_CFG_H_PATCH))
-#error "avgecon.c and avgecon_cfg_private.h : source and header files are inconsistent!"
+#error "avggrph.c and avggrph_cfg_private.h : source and header files are inconsistent!"
 #endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -94,6 +94,9 @@ static  U1    u1_sp_avggrph_noncnt[AVGGRPH_NUM_CNTT];
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+static  void    vd_s_AvgGrphEcon(const ST_AVGGRPH_CNTT * st_ap_CFG, const U4 u4_a_DATA, const U1 u1_a_RWRQST, const U1 u1_a_NEXT);
+static  void    vd_s_AvgGrphDate(const ST_AVGGRPH_CNTT * st_ap_CFG, const U1 u1_a_RWRQST, const U1 u1_a_NEXT);
+static  void    vd_s_AvgGrphMax(const ST_AVGGRPH_CNTT * st_ap_CFG, const U4 u4_a_DATA, const U1 u1_a_RWRQST);
 static  U1      u1_s_AvgGrphGetRslt(const U1 u1_a_CNTTID, const U1 u1_a_before);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -221,9 +224,6 @@ void            vd_g_AvgGrphUpdt(const U1 u1_a_CNTTID, const U4 u4_a_data, const
 {
     U1                          u1_t_next;
     const ST_AVGGRPH_CNTT *     st_tp_cfg;
-    U1                          u1_t_msid;
-    U1                          u1_t_read_sts;
-    U4                          u4_t_yymmddwk;
 
     if(u1_a_CNTTID < (U1)AVGGRPH_NUM_CNTT){
         st_tp_cfg = &st_sp_AVGGRPH_CNTTS_CFG[u1_a_CNTTID];
@@ -232,49 +232,95 @@ void            vd_g_AvgGrphUpdt(const U1 u1_a_CNTTID, const U4 u4_a_data, const
         } else {
             u1_t_next = (U1)0U;
         }
-        if(u4_a_data > (U4)AVGGRPH_ECON_MAX){
-            st_tp_cfg->u4p_econ[u1_t_next] = (U4)AVGGRPH_ECON_MAX;
-        }
-        else{
-            st_tp_cfg->u4p_econ[u1_t_next] = u4_a_data;
-        }
-        u1_t_msid = st_tp_cfg->u1_msid_econ + u1_t_next;
-        vd_g_TripcomMsSetAccmltVal(u1_t_msid, st_tp_cfg->u4p_econ[u1_t_next]);
-        if(u1_a_rwrqst == (U1)TRUE){
-            vd_g_TripcomMsSetNvmRqst(u1_t_msid);
-        }
-        if(st_tp_cfg->u2p_date != vdp_PTR_NA){
-            u4_t_yymmddwk = (U4)0U;  
-            u1_t_read_sts = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_VM2TO1_DSPCAL, &u4_t_yymmddwk, (U2)AVGGRPH_VM_1WORD);
-            if(u1_t_read_sts == (U1)IVDSH_NO_REA){
-                u4_t_yymmddwk = (U4)0U;
-            }
-            st_tp_cfg->u2p_date[u1_t_next] = (U2)((u4_t_yymmddwk & (U4)((U4)YYMMDDWK_BIT_DA | (U4)YYMMDDWK_BIT_MO)) >> YYMMDDWK_LSB_DA);
-            u1_t_msid = st_tp_cfg->u1_msid_date + u1_t_next;
-            vd_g_TripcomMsSetAccmltVal(u1_t_msid, (U4)(st_tp_cfg->u2p_date[u1_t_next]));
-            if(u1_a_rwrqst == (U1)TRUE){
-                vd_g_TripcomMsSetNvmRqst(u1_t_msid);
-            }
-        }
-        if(st_tp_cfg->u4p_max != vdp_PTR_NA){
-            if((*(st_tp_cfg->u4p_max) < u4_a_data) || (*(st_tp_cfg->u4p_max) == (U4)U4_MAX)){
-                if(u4_a_data > (U4)AVGGRPH_PAST_MAX){
-                    *(st_tp_cfg->u4p_max) = (U4)AVGGRPH_PAST_MAX;
-                }
-                else{
-                    *(st_tp_cfg->u4p_max) = u4_a_data;
-                }
-                vd_g_TripcomMsSetAccmltVal(st_tp_cfg->u1_msid_max, *(st_tp_cfg->u4p_max));
-            }
-            if(u1_a_rwrqst == (U1)TRUE){
-                vd_g_TripcomMsSetNvmRqst(st_tp_cfg->u1_msid_max);
-            }
-        }
+        vd_s_AvgGrphEcon(st_tp_cfg, u4_a_data, u1_a_rwrqst, u1_t_next);
+        vd_s_AvgGrphDate(st_tp_cfg, u1_a_rwrqst, u1_t_next);
+        vd_s_AvgGrphMax(st_tp_cfg, u4_a_data, u1_a_rwrqst);
         *(st_tp_cfg->u1p_latest) = u1_t_next;
         vd_g_TripcomMsSetAccmltVal(st_tp_cfg->u1_msid_ltst, (U4)u1_t_next);
         if(u1_a_rwrqst == (U1)TRUE){
             vd_g_TripcomMsSetNvmRqst(st_tp_cfg->u1_msid_ltst);
             vd_g_AvgGrphUpdtRslt();
+        }
+    }
+}
+
+/*===================================================================================================================================*/
+/* static void     vd_s_AvgGrphEcon(const ST_AVGGRPH_CNTT * st_ap_CFG, const U4 u4_a_DATA, const U1 u1_a_RWRQST, const U1 u1_a_NEXT) */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      st_ap_CFG   : AVGGRPH_CNTT_XXX                                                                                   */
+/*                  u4_a_DATA   : Economy Data                                                                                       */
+/*                  u1_a_RWRQST : DTF Write Request                                                                                  */
+/*                  u1_a_NEXT   : Memory location                                                                                    */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void     vd_s_AvgGrphEcon(const ST_AVGGRPH_CNTT * st_ap_CFG, const U4 u4_a_DATA, const U1 u1_a_RWRQST, const U1 u1_a_NEXT)
+{
+    U1                          u1_t_msid;
+
+    if(u4_a_DATA > (U4)AVGGRPH_ECON_MAX){
+        st_ap_CFG->u4p_econ[u1_a_NEXT] = (U4)AVGGRPH_ECON_MAX;
+    }
+    else{
+        st_ap_CFG->u4p_econ[u1_a_NEXT] = u4_a_DATA;
+    }
+    u1_t_msid = st_ap_CFG->u1_msid_econ + u1_a_NEXT;
+    vd_g_TripcomMsSetAccmltVal(u1_t_msid, st_ap_CFG->u4p_econ[u1_a_NEXT]);
+    if(u1_a_RWRQST == (U1)TRUE){
+        vd_g_TripcomMsSetNvmRqst(u1_t_msid);
+    }
+}
+
+/*===================================================================================================================================*/
+/* static void     vd_s_AvgGrphDate(const ST_AVGGRPH_CNTT * st_ap_CFG, const U1 u1_a_RWRQST, const U1 u1_a_NEXT)                     */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      st_ap_CFG   : AVGGRPH_CNTT_XXX                                                                                   */
+/*                  u1_a_RWRQST : DTF Write Request                                                                                  */
+/*                  u1_a_NEXT   : Memory location                                                                                    */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void     vd_s_AvgGrphDate(const ST_AVGGRPH_CNTT * st_ap_CFG, const U1 u1_a_RWRQST, const U1 u1_a_NEXT)
+{
+    U1                          u1_t_msid;
+    U1                          u1_t_read_sts;
+    U4                          u4_t_yymmddwk;
+
+    if(st_ap_CFG->u2p_date != vdp_PTR_NA){
+        u4_t_yymmddwk = (U4)0U;  
+        u1_t_read_sts = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_VM2TO1_DSPCAL, &u4_t_yymmddwk, (U2)AVGGRPH_VM_1WORD);
+        if(u1_t_read_sts == (U1)IVDSH_NO_REA){
+            u4_t_yymmddwk = (U4)0U;
+        }
+        st_ap_CFG->u2p_date[u1_a_NEXT] = (U2)((u4_t_yymmddwk & (U4)((U4)YYMMDDWK_BIT_DA | (U4)YYMMDDWK_BIT_MO)) >> YYMMDDWK_LSB_DA);
+        u1_t_msid = st_ap_CFG->u1_msid_date + u1_a_NEXT;
+        vd_g_TripcomMsSetAccmltVal(u1_t_msid, (U4)(st_ap_CFG->u2p_date[u1_a_NEXT]));
+        if(u1_a_RWRQST == (U1)TRUE){
+            vd_g_TripcomMsSetNvmRqst(u1_t_msid);
+        }
+    }
+}
+
+/*===================================================================================================================================*/
+/* static void     vd_s_AvgGrphMax(const ST_AVGGRPH_CNTT * st_ap_CFG, const U4 u4_a_DATA, const U1 u1_a_RWRQST)                      */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      st_ap_CFG   : AVGGRPH_CNTT_XXX                                                                                   */
+/*                  u4_a_DATA   : Economy Data                                                                                       */
+/*                  u1_a_RWRQST : DTF Write Request                                                                                  */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void     vd_s_AvgGrphMax(const ST_AVGGRPH_CNTT * st_ap_CFG, const U4 u4_a_DATA, const U1 u1_a_RWRQST)
+{
+    if(st_ap_CFG->u4p_max != vdp_PTR_NA){
+        if((*(st_ap_CFG->u4p_max) < u4_a_DATA) || (*(st_ap_CFG->u4p_max) == (U4)U4_MAX)){
+            if(u4_a_DATA > (U4)AVGGRPH_PAST_MAX){
+                *(st_ap_CFG->u4p_max) = (U4)AVGGRPH_PAST_MAX;
+            }
+            else{
+                *(st_ap_CFG->u4p_max) = u4_a_DATA;
+            }
+            vd_g_TripcomMsSetAccmltVal(st_ap_CFG->u1_msid_max, *(st_ap_CFG->u4p_max));
+        }
+        if(u1_a_RWRQST == (U1)TRUE){
+            vd_g_TripcomMsSetNvmRqst(st_ap_CFG->u1_msid_max);
         }
     }
 }
@@ -500,6 +546,7 @@ void            vd_g_AvgGrphTimeCnt(void)
 /*  1.2.1    04/18/2025  TH       Fix: Update Result when GrphUpdt                                                                   */
 /*  1.2.2    05/20/2025  KM       Add delay count for TRIPCOM_MS_NVMSTS_NON                                                          */
 /*  1.3.0    05/08/2025  MN       Change for BEV PreCV.                                                                              */
+/*  1.4.0    01/13/2025  MN       CHG: QAC countermeasure, "vd_g_AvgGrphUpdt" function was refactored into subroutines.              */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
