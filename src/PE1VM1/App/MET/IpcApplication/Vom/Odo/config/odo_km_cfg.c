@@ -584,9 +584,7 @@ void    vd_g_OdoCfgGetOmRstVal(U4* u4p_a_0p001kmmile)
 /*  1.0.0    02/26/2020  YN       Transmission handling of ODO_01 and ODO_UNI2 addition                                              */
 /*  19PFv3-1 10/03/2023  SH       Remove unnecessary config and rename config_t300d_met to config                                    */
 /*  19PFv3-2  2/23/2024  DR       Changed function presence of TMNT                                                                  */
-/*  BEV-1    02/09/2026  MA       Change TMNT function for Bev rebase                                                                */
-/*                                Addition of notification processing of Odo display value at reset                                  */
-/*                                OM_MLG, PR_OM_FL Send Processing Delete                                                            */
+/*  BEV-1    02/09/2026  MA       Add vd_g_OdoCfgGetOmRstVal and Delete OM_MLG, PR_OM_FL send process                                */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
 /*  * YN   = Yasuhiro Nakamura, Denso Techno                                                                                         */

@@ -119,8 +119,7 @@ void    vd_g_HmiMaintMetCstmPut(const U4 * u4_ap_REQ)
 /*  1.1.0    03/18/2020  TH       Setting for 800B CV.                                                                               */
 /*  1.2.0    01/06/2021  TH       Follow 775B 1A.                                                                                    */
 /*  1.3.0    06/15/2021  TH       Add to Meter Custmize.                                                                             */
-/*  1.4.0    02/09/2026  MA       Change TMNT function for Bev rebase                                                                */
-/*                                Deletion of separate processing with application of MM for ais                                     */
+/*  1.4.0    02/09/2026  MA       Delete separate process of AisMM application                                                       */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
