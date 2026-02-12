@@ -11,6 +11,10 @@
 #include <VIS.h>
 #include <EthSwt_SWIC_PWR.h>
 #include <PwrCtrl_Main.h>
+#include <ivdsh.h>
+/* -------------------------------------------------------------------------- */
+#define D_ETHSWT_SWIC_CFG_MCUPMIC_ON        (1U)
+#define D_ETHSWT_SWIC_CFG_DIN2STAT_SIZE     (1U)
 /* -------------------------------------------------------------------------- */
 /* Common */
 const Eth_ModeType G_ETHSWT_SWIC_PORT_DEFINE[D_ETHSWT_SWIC_PORT_NUM] =
@@ -84,12 +88,15 @@ Std_ReturnType EthSwt_SWIC_Cfg_CheckPowerCond(void)
 Std_ReturnType EthSwt_SWIC_Cfg_CheckSuplyState(void)
 {
     Std_ReturnType  ret = STD_OFF;
-    Std_ReturnType  din2_stat = STD_OFF;
+    uint8           readResult;
+    uint32          din2_stat;
 
-    din2_stat = STD_ON;                  /* ébíË ÇÃÇøÇ…ëºAPIÇ…ïœçX */
+    readResult = u1_g_iVDshReabyDid(IVDSH_DID_REA_VM2TO3_DIN2_STAT, &din2_stat, (uint16)D_ETHSWT_SWIC_CFG_DIN2STAT_SIZE);
 
-    if (din2_stat == STD_ON) {
-        ret = STD_ON;
+    if(readResult != IVDSH_NO_REA) {
+        if (din2_stat == (uint32)D_ETHSWT_SWIC_CFG_MCUPMIC_ON) {
+            ret = STD_ON;
+        }
     }
 
     return ret;
