@@ -9,6 +9,7 @@
 #include <Port_Cfg.h>
 #include <Port.h>
 #include <VIS.h>
+#include <LIB.h>
 #include <EthSwt_SWIC_PWR.h>
 #include <PwrCtrl_Main.h>
 #include <ivdsh.h>
@@ -94,7 +95,7 @@ Std_ReturnType EthSwt_SWIC_Cfg_CheckSuplyState(void)
 
     readResult = u1_g_iVDshReabyDid(IVDSH_DID_REA_VM2TO3_DIN2_STAT, &din2_stat, (uint16)D_ETHSWT_SWIC_CFG_DIN2STAT_SIZE);
 
-    if(readResult != IVDSH_NO_REA) {
+    if(readResult != IVDSH_NO_REA) {    /* DIN2_STAT情報取得の条件確認 */
         if (din2_stat == (uint32)D_ETHSWT_SWIC_CFG_MCUPMIC_ON) {
             ret = STD_ON;
         }
@@ -230,12 +231,16 @@ Std_ReturnType EthSwt_SWIC_RstDtct_IsNeedDtct()
     uint8           sail_resout_n;
     uint8           aoss_sleep_entry_exit;
     
+    LIB_DI();
     readResult  = u1_g_iVDshReabyDid(IVDSH_DID_REA_VM2TO3_DIN2_STAT, &din2_stat, (uint16)D_ETHSWT_SWIC_CFG_DIN2STAT_SIZE);
+    LIB_EI();
     sail_resout_n = u1_g_PwrCtrlMainGetPinInfo(PWRCTRL_MAIN_PINID_SAIL_RES);
     aoss_sleep_entry_exit = u1_g_PwrCtrlMainGetPinInfo(PWRCTRL_MAIN_PINID_AOSS_SLP);
 
-    if(readResult != IVDSH_NO_REA) {
-        if (din2_stat == (uint32)D_ETHSWT_SWIC_CFG_MCUPMIC_ON && sail_resout_n == STD_HIGH && aoss_sleep_entry_exit == STD_LOW) {
+    if(readResult != IVDSH_NO_REA) {    /* DIN2_STAT情報取得の条件確認 */
+        if (din2_stat == D_ETHSWT_SWIC_CFG_MCUPMIC_ON
+            && sail_resout_n == STD_HIGH
+            && aoss_sleep_entry_exit == STD_LOW) {
             ret = E_OK;
         }
     }
