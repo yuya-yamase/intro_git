@@ -61,6 +61,9 @@
 /* 端子モニタ取得処理 */
 #define u1_g_PwrCtrlMainGetPinInfo         (u1_g_PwrCtrl_PinMonitor_GetPinInfo)
 
+/* Ethリンクアップ状態通知処理 */
+#define vd_g_PwrCtrlMainBootLogEthLinkup   (vd_g_PwrCtrlComEthLinkup)
+
 /* Ethリンクアップ状態 */
 #define PWRCTRL_MAIN_ETH_LINKUP_NODETECT   (PWRCTRL_COM_ETH_LINKUP_NODETECT)
 #define PWRCTRL_MAIN_ETH_LINKUP_DETECT     (PWRCTRL_COM_ETH_LINKUP_DETECT)
@@ -78,9 +81,6 @@ U1 u1_g_PwrCtrlWakeUpInfo( void );
 U1 u1_g_PwrCtrlMainSysPwrInfo( void );
 
 void vd_g_PwrCtrlMainProhibitSleep( const U1 u1_a_ProhibitSleep );
-
-/* Ethリンクアップ状態通知処理 */
-void vd_g_PwrCtrlMainBootLogEthLinkup( const U1 u1_a_det);
 
 #endif /* PWRCTRL_MAIN_H */
 

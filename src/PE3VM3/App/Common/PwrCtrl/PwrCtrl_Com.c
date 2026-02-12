@@ -85,7 +85,7 @@ static void vd_s_PwrCtrlComRxVm2Stby( void );
 static void vd_s_PwrCtrlComRxForceSleep( void );
 static void vd_s_PwrCtrlComRxSoCSts( void );
 static void vd_s_PwrCtrlComRxSTR( void );
-static void vd_s_PwrCtrlComEthLinkupStsApply( void );
+static void vd_s_PwrCtrlComEthLinkupStsSet( void );
 
 /*--------------------------------------------------------------------------*/
 /* Data                                                                     */
@@ -315,9 +315,8 @@ void vd_g_PwrCtrlComTxTask( void )
     /* SoC起動回数カウンタ更新時の時間 */
     vd_g_iVDshWribyDid((U2)PWRCTRL_COM_VMTXID_VM2_SOCONTIME, &u4_s_PwrCtrl_Com_Tx_SoCOnTime, (U2)PWRCTRL_COM_TIME_LEN);
 
-    /* Ethリンクアップ状態更新処理 */
-    vd_s_PwrCtrlComEthLinkupStsApply();
     /* 起動ログ計測点検知データ */
+    vd_s_PwrCtrlComEthLinkupStsSet(); /* Ethリンクアップ状態更新処理 */
     vd_g_iVDshWribyDid((U2)PWRCTRL_COM_VMTXID_VM2_BOOTLOGINF, &u4_s_PwrCtrl_Com_Tx_BootLog, (U2)PWRCTRL_COM_BOOTLOG_LEN);
 
     return;
@@ -548,10 +547,14 @@ static void vd_s_PwrCtrlComRxSTR( void )
   return        : none
   Note          : none
 *****************************************************************************/
-void vd_g_PwrCtrlComEthLinkup( const U1 u1_a_det)
+void vd_g_PwrCtrlComEthLinkup( const U1 u1_a_det )
 {
-    /* Ethリンクアップ状態を更新 */
-    u1_s_PwrCtrl_Com_Eth_LinkupSts = u1_a_det;
+    /* 正常値が通知された場合のみ状態を更新する */
+    if((u1_a_det == (U1)PWRCTRL_COM_ETH_LINKUP_NODETECT) ||
+      (u1_a_det == (U1)PWRCTRL_COM_ETH_LINKUP_DETECT)){
+        /* Ethリンクアップ状態を更新 */
+        u1_s_PwrCtrl_Com_Eth_LinkupSts = u1_a_det;
+    }
     
     return;
 }
@@ -642,26 +645,24 @@ void vd_g_PwrCtrlComTxSetSoCOnStart( void )
 }
 
 /*****************************************************************************
-  Function      : vd_s_PwrCtrlComEthLinkupStsApply
+  Function      : vd_s_PwrCtrlComEthLinkupStsSet
   Description   : Ethリンクアップ状態反映処理
   param[in/out] : none
   return        : none
   Note          : none
 *****************************************************************************/
-static void vd_s_PwrCtrlComEthLinkupStsApply( void )
+static void vd_s_PwrCtrlComEthLinkupStsSet( void )
 {
     /* Ethリンクアップ状態:検知の場合 */
     if(u1_s_PwrCtrl_Com_Eth_LinkupSts == (U1)PWRCTRL_COM_ETH_LINKUP_DETECT){
         /* 起動ログ計測点検知設定処理をコール */
         vd_g_PwrCtrlComTxSetBootLog((U1)PWRCTRL_COM_BOOTLOG_ETHREQ);
     }
-    
     /* Ethリンクアップ状態:未検知の場合 */
     else if(u1_s_PwrCtrl_Com_Eth_LinkupSts == (U1)PWRCTRL_COM_ETH_LINKUP_NODETECT){
         /* 起動ログ計測点未検知設定処理をコール */
         vd_g_PwrCtrlComTxClrBootLog((U1)PWRCTRL_COM_BOOTLOG_ETHREQ);
     }
-    
     /* Ethリンクアップ状態:異常値の場合 */
     else{
         /* 何もしない */

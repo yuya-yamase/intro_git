@@ -180,21 +180,6 @@ void vd_g_PwrCtrlMainProhibitSleep( const U1 u1_a_ProhibitSleep )
     return;
 }
 
-/*****************************************************************************
-  Function      : vd_g_PwrCtrlMainBootLogEthLinkup
-  Description   : Ethリンクアップ状態通知処理
-  param[in/out] : [in] const u1_a_det Ethリンクアップ状態
-  return        : none
-  Note          : none
-*****************************************************************************/
-void vd_g_PwrCtrlMainBootLogEthLinkup( const U1 u1_a_det)
-{
-    /* Ethリンクアップ状態通知処理 */
-    vd_g_PwrCtrlComEthLinkup(u1_a_det);
-    
-    return;
-}
-
 /****************************************************************************/
 /* Scheduled Functions                                                      */
 /****************************************************************************/

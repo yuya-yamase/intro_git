@@ -78,7 +78,7 @@ void vd_g_PwrCtrlComTxSetPwrErr( const U1 u1_a_data );
 void vd_g_PwrCtrlComTxSetSoCOnStart( void );
 void vd_g_PwrCtrlComTxSetBootLog( const U1 u1_a_req );
 void vd_g_PwrCtrlComTxClrBootLog( const U1 u1_a_req );
-void vd_g_PwrCtrlComEthLinkup( const U1 u1_a_det);
+void vd_g_PwrCtrlComEthLinkup( const U1 u1_a_det );
 
 #endif /* PWRCTRL_COM_H */
 
