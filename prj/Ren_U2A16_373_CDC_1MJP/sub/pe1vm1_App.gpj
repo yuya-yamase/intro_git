@@ -31,6 +31,8 @@
 ../../src/PE1VM1/App/MET/HudApplication/Vom/HudDimmer/scc/hdimstep.c
 ../../src/PE1VM1/App/MET/HudApplication/Vom/HudImgadj/config_met/himgadj.c
 ../../src/PE1VM1/App/MET/IpcApplication/Evc/Calibration/config/calibration.c
+../../src/PE1VM1/App/MET/IpcApplication/Evc/Mcst/config/mcst_cfg.c
+../../src/PE1VM1/App/MET/IpcApplication/Evc/Mcst/scc/mcst.c
 ../../src/PE1VM1/App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_ABG1S01.c
 ../../src/PE1VM1/App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_ACN1S04.c
 ../../src/PE1VM1/App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_ADC1S14.c
@@ -88,6 +90,7 @@
 ../../src/PE1VM1/App/MET/IpcApplication/Hmi/scc/hmihud.c
 ../../src/PE1VM1/App/MET/IpcApplication/Hmi/scc/hmilocale.c
 ../../src/PE1VM1/App/MET/IpcApplication/Hmi/scc/hmimaint.c
+../../src/PE1VM1/App/MET/IpcApplication/Hmi/scc/hmimcst.c
 ../../src/PE1VM1/App/MET/IpcApplication/Hmi/scc/hmiodo.c
 ../../src/PE1VM1/App/MET/IpcApplication/Hmi/scc/hmiproxy.c
 ../../src/PE1VM1/App/MET/IpcApplication/Hmi/scc/hmiputxt.c
