@@ -1186,7 +1186,7 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*                                Add the judgement of EPS & EPSSBW function.                                                        */
 /*  BEV-23    01/30/2026 TN       Fix initial value issue (BEV3CDCMET-3693).                                                         */
 /*  BEV-24    02/02/2026 TS       Change for BEV FF2.(MET-M_HUDILL-CSTD-1)                                                           */
-/*  BEV-25    02/11/2026 TS       Change for BEV FF2.(MET-M_HUDONOFF-CSTD-1)                                                         */
+/*  BEV-25    02/03/2026 TS       Change for BEV FF2.(MET-M_HUDONOFF-CSTD-1)                                                         */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * KM   = Keisuke Mashita, Denso Techno                                                                                           */
