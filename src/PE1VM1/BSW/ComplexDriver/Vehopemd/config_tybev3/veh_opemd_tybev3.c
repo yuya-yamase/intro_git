@@ -59,7 +59,6 @@ static U2      u2_s_veh_opemd_unk_tocnt;
 
 static U1                       u1_s_veh_opemd_pts_chk;
 
-static U1      u1_s_veh_opemd_apofrq_pre;
 static U1      u1_s_veh_opemd_apofrq_onoff;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -88,7 +87,6 @@ void    vd_g_VehopemdCfgRstInit(void)
 {
     u2_s_veh_opemd_unk_tocnt = (U2)U2_MAX;
     u1_s_veh_opemd_pts_chk       = (U1)VEH_OPEMD_COMRX_UNKNOWN;
-    u1_s_veh_opemd_apofrq_pre = (U1)0U;
     u1_s_veh_opemd_apofrq_onoff = (U1)0U;
 }
 /*===================================================================================================================================*/
@@ -101,7 +99,6 @@ void    vd_g_VehopemdCfgWkupInit(void)
 {
     u2_s_veh_opemd_unk_tocnt = (U2)U2_MAX;
     u1_s_veh_opemd_pts_chk       = (U1)VEH_OPEMD_COMRX_UNKNOWN;
-    u1_s_veh_opemd_apofrq_pre = (U1)0U;
     u1_s_veh_opemd_apofrq_onoff = (U1)0U;
 }
 /*===================================================================================================================================*/
@@ -361,18 +358,22 @@ static void     vd_s_VehopemdApofrqchk(void)
         (void)Com_ReceiveSignal(ComConf_ComSignal_APOFRQ, &u1_t_apofrq_sig);
         u1_s_veh_opemd_apofrq_onoff = u1_t_apofrq_sig;
     }
+    else if(u1_t_ipdu_st == (U1)COM_NO_RX){
+        u1_s_veh_opemd_apofrq_onoff = (U1)0U;
+    }
     else{
         u1_t_ipdu_st = (U1)Com_GetIPDUStatus((U2)MSG_BDC1S91_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
         if(u1_t_ipdu_st == (U1)0U){
             (void)Com_ReceiveSignal(ComConf_ComSignal_APOFRQS, &u1_t_apofrq_sig);
             u1_s_veh_opemd_apofrq_onoff = u1_t_apofrq_sig;
         }
+        else if(u1_t_ipdu_st == (U1)COM_NO_RX){
+            u1_s_veh_opemd_apofrq_onoff = (U1)0U;
+        }
         else{
-            u1_s_veh_opemd_apofrq_onoff = u1_s_veh_opemd_apofrq_pre;
+            /* Do Nothing */
         }
     }
-
-    u1_s_veh_opemd_apofrq_pre = u1_s_veh_opemd_apofrq_onoff;
 }
 /*===================================================================================================================================*/
 /*  U1      u1_g_VehopemdApofrqOn(void)                                                                                              */
@@ -403,6 +404,8 @@ U1      u1_g_VehopemdApofrqOn(void)
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  BEV-1    02/06/2026  TS       Change for BEV FF2.(MET-M_ONOFF-CSTD-1)                                                            */
+/*                                Add visual OFF flag determination and notification processing during riding.                       */
+/*                                Change power status judgment process so that VPSINFO6 and VPSINFO7 signals are not referenced.     */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
 /*  * HU   = Hayato Usui, Denso Create                                                                                               */
