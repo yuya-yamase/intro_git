@@ -22,7 +22,6 @@
 #include "mcst.h"
 #include "vardef.h"
 #include "veh_opemd.h"
-#include "himgadj.h"
 #include "hdimmgr_if.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -52,13 +51,10 @@
 #define HMIHUD_SIG_HUD_ILL_STEP_IND            (0U)
 #define HMIHUD_SIG_CSTM_HUD_ONOFF_ACT          (1U)
 
-#define HMIHUD_VAL_OFF                         (0U)
-#define HMIHUD_VAL_ON                          (1U)
-
-#define HMIHUD_VAL_CSTM_HUD_ONOFF_ACT_NON      (0U)
-#define HMIHUD_VAL_CSTM_HUD_ONOFF_ACT_ON       (1U)
-#define HMIHUD_VAL_CSTM_HUD_ONOFF_ACT_OFF      (2U)
-#define HMIHUD_VAL_CSTM_HUD_ONOFF_ACT_UNDEF    (3U)
+#define HMIHUD_VAL_HUD_ONOFF_ACT_NON           (0U)
+#define HMIHUD_VAL_HUD_ONOFF_ACT_ON            (1U)
+#define HMIHUD_VAL_HUD_ONOFF_ACT_OFF           (2U)
+#define HMIHUD_VAL_HUD_ONOFF_ACT_UNDEF         (3U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
@@ -105,7 +101,7 @@ void    vd_g_HmiHudInit(void)
     for(u4_t_loop = (U4)0U ; u4_t_loop < (U4)HMIHUD_DTA_NUM ; u4_t_loop++){
         u4_sp_hmihud_dtabuf[u4_t_loop] = (U4)0xFFFFFFFFU;
     }
-    u1_s_hmihud_hud_onoff_act_pre = (U1)HMIHUD_VAL_CSTM_HUD_ONOFF_ACT_UNDEF;
+    u1_s_hmihud_hud_onoff_act_pre = (U1)HMIHUD_VAL_HUD_ONOFF_ACT_UNDEF;
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_HmiHudMainTask(void)                                                                                                */
@@ -192,23 +188,24 @@ static void vd_s_HmiHudSetIllStep(void)
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-static void vd_s_HmiHudSetHudOnOffAct(void){
+static void vd_s_HmiHudSetHudOnOffAct(void)
+{
     U1 u1_t_gvif;
     U1 u1_t_igon;
-    U1 u1_t_act;    /* recieve signal */
+    U1 u1_t_act;
 
     u1_t_gvif = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_GVIF2);
     u1_t_igon = u1_g_VehopemdIgnOn();
     u1_t_act = (U1)u4_s_HmiHudReadSig((U1)HMIHUD_SIG_CSTM_HUD_ONOFF_ACT, &u4_sp_hmihud_dtabuf[HMIHUD_FIRST_DTA]);
 
-    if((u1_t_gvif == (U1)TRUE)
-    && (u1_t_igon == (U1)TRUE)) {
+    if((u1_t_gvif == (U1)TRUE) &&
+       (u1_t_igon == (U1)TRUE)) {
         if(u1_t_act != u1_s_hmihud_hud_onoff_act_pre) {
-            if(u1_t_act == (U1)HMIHUD_VAL_CSTM_HUD_ONOFF_ACT_ON) {
-                vd_g_McstBfPut((U1)MCST_BFI_HUD, (U4)HMIHUD_VAL_ON);
+            if(u1_t_act == (U1)HMIHUD_VAL_HUD_ONOFF_ACT_ON) {
+                vd_g_McstBfPut((U1)MCST_BFI_HUD, (U4)MCST_HUD_ON);
             }
-            else if(u1_t_act == (U1)HMIHUD_VAL_CSTM_HUD_ONOFF_ACT_OFF) {
-                vd_g_McstBfPut((U1)MCST_BFI_HUD, (U4)HMIHUD_VAL_OFF);
+            else if(u1_t_act == (U1)HMIHUD_VAL_HUD_ONOFF_ACT_OFF) {
+                vd_g_McstBfPut((U1)MCST_BFI_HUD, (U4)MCST_HUD_OFF);
             }
             else{
                 /* Do Nothing */
