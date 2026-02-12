@@ -30,14 +30,6 @@
 #define XSPI_SPN_NBYTE                      (12U)
 #define XSPI_SPN_NWORD                      ((XSPI_SPN_NBYTE + 3U) / 4U)
 
-#define XSPI_GVIF_METDSP_FAIL               (0U)
-#define XSPI_GVIF_METDSP_NML                (1U)
-#define XSPI_GVIF_METDSP_UNDEF              (3U)
-
-#define XSPI_COM_STATUS_FAIL                (0U)
-#define XSPI_COM_STATUS_NML                 (1U)
-#define XSPI_COM_STATUS_UNDEF               (3U)
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -57,7 +49,6 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx);
 
 
 U1      u1_g_XSpiDimSw(void);
-U1      u1_g_XSpiGvifSts_METDISP(void);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
