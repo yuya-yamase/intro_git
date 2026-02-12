@@ -322,8 +322,6 @@ static void ethswt_swic_stm_action (const uint32 event)
 /* -------------------------------------------------------------------------- */
 static void ethswt_swic_stm_act_move_init (void)
 {
-    /* End Action */
-
     /* Event Action */
     
     /* Change Status */
@@ -334,8 +332,6 @@ static void ethswt_swic_stm_act_move_init (void)
 /* -------------------------------------------------------------------------- */
 static void ethswt_swic_stm_act_move_port_init_completed (void)
 {   
-    /* End Action */
-
     /* Event Action */
     
     /* Change Status */
@@ -346,8 +342,6 @@ static void ethswt_swic_stm_act_move_port_init_completed (void)
 /* -------------------------------------------------------------------------- */
 static void ethswt_swic_stm_act_move_set_relay_on (void)
 {
-    /* End Action */
-
     /* Event Action */
     
     /* Change Status */
@@ -358,8 +352,6 @@ static void ethswt_swic_stm_act_move_set_relay_on (void)
 /* -------------------------------------------------------------------------- */
 static void ethswt_swic_stm_act_move_active (void)
 {
-    /* End Action */
-
     /* Event Action */
     
     /* Change Status */
@@ -370,8 +362,6 @@ static void ethswt_swic_stm_act_move_active (void)
 /* -------------------------------------------------------------------------- */
 static void ethswt_swic_stm_act_move_set_relay_off (void)
 {
-    /* End Action */
-
     /* Event Action */
     ethswt_swic_stm_relayOffClear();
     
@@ -383,8 +373,6 @@ static void ethswt_swic_stm_act_move_set_relay_off (void)
 /* -------------------------------------------------------------------------- */
 static void ethswt_swic_stm_act_unavailable (void)
 {
-    /* End Action */
-
     /* Event Action */
     ethswt_swic_stm_resetClear();
 
@@ -395,9 +383,7 @@ static void ethswt_swic_stm_act_unavailable (void)
 }
 /* -------------------------------------------------------------------------- */
 static void ethswt_swic_stm_act_reset (void)
-{
-    /* End Action */
-    
+{ 
     /* Event Action */
     EthSwt_SWIC_PWR_ResetReq();
     ethswt_swic_stm_resetClear();
