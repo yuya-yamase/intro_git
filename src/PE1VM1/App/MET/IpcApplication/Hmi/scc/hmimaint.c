@@ -104,7 +104,7 @@ void    vd_g_HmiMaintMetCstmPut(const U4 * u4_ap_REQ)
     if(u4_ap_REQ != vdp_PTR_NA) {
         u1_s_hmimaint_rstreq = (U1)(u4_ap_REQ[0] & (U4)HMIMAINT_BITMASK);
     }
-    u2_s_hmimaint_to   = (U2)HMIPROXY_TOC_INI;
+    u2_s_hmimaint_to = (U2)HMIPROXY_TOC_INI;
 }
 
 /*===================================================================================================================================*/
@@ -120,6 +120,7 @@ void    vd_g_HmiMaintMetCstmPut(const U4 * u4_ap_REQ)
 /*  1.2.0    01/06/2021  TH       Follow 775B 1A.                                                                                    */
 /*  1.3.0    06/15/2021  TH       Add to Meter Custmize.                                                                             */
 /*  1.4.0    02/09/2026  MA       Change TMNT function for Bev rebase                                                                */
+/*                                Deletion of separate processing with application of MM for ais                                     */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */

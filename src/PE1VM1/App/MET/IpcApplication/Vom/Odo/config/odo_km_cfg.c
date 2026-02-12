@@ -557,7 +557,7 @@ void    vd_g_OdoCfgGetOmRstVal(U4* u4p_a_0p001kmmile)
             }
         }
     }else{
-    (*u4p_a_0p001kmmile) = (U4)0U;
+        (*u4p_a_0p001kmmile) = (U4)0U;
     }
 }
 /*===================================================================================================================================*/
@@ -585,6 +585,8 @@ void    vd_g_OdoCfgGetOmRstVal(U4* u4p_a_0p001kmmile)
 /*  19PFv3-1 10/03/2023  SH       Remove unnecessary config and rename config_t300d_met to config                                    */
 /*  19PFv3-2  2/23/2024  DR       Changed function presence of TMNT                                                                  */
 /*  BEV-1    02/09/2026  MA       Change TMNT function for Bev rebase                                                                */
+/*                                Addition of notification processing of Odo display value at reset                                  */
+/*                                OM_MLG, PR_OM_FL Send Processing Delete                                                            */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
 /*  * YN   = Yasuhiro Nakamura, Denso Techno                                                                                         */
