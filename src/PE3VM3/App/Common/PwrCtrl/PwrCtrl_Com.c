@@ -551,7 +551,7 @@ void vd_g_PwrCtrlComEthLinkup( const U1 u1_a_det )
 {
     /* 正常値が通知された場合のみ状態を更新する */
     if((u1_a_det == (U1)PWRCTRL_COM_ETH_LINKUP_NODETECT) ||
-      (u1_a_det == (U1)PWRCTRL_COM_ETH_LINKUP_DETECT)){
+       (u1_a_det == (U1)PWRCTRL_COM_ETH_LINKUP_DETECT)){
         /* Ethリンクアップ状態を更新 */
         u1_s_PwrCtrl_Com_Eth_LinkupSts = u1_a_det;
     }
