@@ -39,7 +39,6 @@
 #define HDIM_IF_STEP_IND_OFFSET             (1)
 #define HDIM_IF_STEP_IND_MAX                (10)
 #define HDIM_IF_STEP_IND_MIN                (0)
-#define HDIM_IF_STEP_IND_DEF                ((U1)HDIMSTEP_STEP_DEF - (U1)HDIM_IF_STEP_IND_OFFSET)
 #define HDIM_IF_STEP_IND_UNDEF              (255)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -143,17 +142,32 @@ U1      u1_g_HdimmgrIfGetOwduty(U2 * u2_ap_owduty)
 /*===================================================================================================================================*/
 U1      u1_g_HdimmgrIfGetIllStepVal(void)
 {
+    static const U1    u1_sp_HDIMSTEP_CNVRT[(U1)HDIMSTEP_STEP_MAX + (U1)1]={
+        (U1)U1_MAX,  /* Don't change!!! */
+        (U1) 0,                                                         /* lvl 01 */
+        (U1) 1,                                                         /* lvl 02 */
+        (U1) 2,                                                         /* lvl 03 */
+        (U1) 3,                                                         /* lvl 04 */
+        (U1) 4,                                                         /* lvl 05 */ 
+        (U1) 5,                                                         /* lvl 06 */
+        (U1) 6,                                                         /* lvl 07 */
+        (U1) 7,                                                         /* lvl 08 */
+        (U1) 8,                                                         /* lvl 09 */
+        (U1) 9,                                                         /* lvl 10 */
+        (U1)10                                                          /* lvl 11 */
+    };
+
     U4      u4_t_step;
     U1      u1_t_step;
 
     u4_t_step = (U4)0U;
-    u1_t_step = (U1)HDIM_IF_STEP_IND_DEF;
 
     (void)u1_g_HdimstepGetExtrlStepVal(&u4_t_step);
-    if((u4_t_step >= (U4)HDIMSTEP_STEP_MIN) &&
-       (u4_t_step <= (U4)HDIMSTEP_STEP_MAX)){
-        u1_t_step = (U1)u4_t_step;
-        u1_t_step -= (U1)HDIM_IF_STEP_IND_OFFSET;
+    u1_t_step = u1_sp_HDIMSTEP_CNVRT[(U1)HDIMSTEP_STEP_DEF];
+
+    if(((U4)HDIMSTEP_STEP_MIN <= u4_t_step            ) &&
+       (u4_t_step             <= (U4)HDIMSTEP_STEP_MAX)){
+        u1_t_step = u1_sp_HDIMSTEP_CNVRT[u4_t_step];
     }
 
     return(u1_t_step);

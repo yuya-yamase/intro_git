@@ -39,11 +39,10 @@
 #define HMIHUD_FIRST_DTA                       (0U)
 
 #define HMIHUD_DTA_NUM                         (3U)
+#define HMIHUD_SOC_DTA_NUM                     (1U)
+#define HMIHUD_GVIF_DTA_NUM                    (2U)
 
-#define HMIHUD_SOC_DTA_START                   (0U)
-#define HMIHUD_SOC_DTA_END                     (0U)
-#define HMIHUD_GVIF_DTA_START                  (1U)
-#define HMIHUD_GVIF_DTA_END                    (2U)
+#define HMIHUD_GVIF_DTA_OFFSET                 (HMIHUD_SOC_DTA_NUM)
 
 #define HMIHUD_SIG_NUM                         (1U)
 #define HMIHUD_SIG_HUD_ILL_STEP_IND            (0U)
@@ -104,7 +103,7 @@ void    vd_g_HmiHudMainTask(void)
 /*===================================================================================================================================*/
 /*  void    vd_g_HmiHudSocDataPut(const U4 * u4_ap_REQ)                                                                              */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      u4_ap_REQ   : hud first address                                                                                  */
+/*  Arguments:      u4_ap_REQ   : soc first address                                                                                  */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
 void    vd_g_HmiHudSocDataPut(const U4 * u4_ap_REQ)
@@ -112,7 +111,7 @@ void    vd_g_HmiHudSocDataPut(const U4 * u4_ap_REQ)
     U4 u4_t_loop;    /* loop counter */
 
     if(u4_ap_REQ != vdp_PTR_NA) {
-        for(u4_t_loop = (U4)HMIHUD_SOC_DTA_START ; u4_t_loop <= (U4)HMIHUD_SOC_DTA_END ; u4_t_loop++){
+        for(u4_t_loop = (U4)0U ; u4_t_loop < (U4)HMIHUD_SOC_DTA_NUM ; u4_t_loop++){
             u4_sp_hmihud_dtabuf[u4_t_loop] = u4_ap_REQ[u4_t_loop];
         }
     }
@@ -120,7 +119,7 @@ void    vd_g_HmiHudSocDataPut(const U4 * u4_ap_REQ)
 /*===================================================================================================================================*/
 /*  void    vd_g_HmiHudGvifDataPut(const U4 * u4_ap_REQ)                                                                             */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      u4_ap_REQ   : hud first address                                                                                  */
+/*  Arguments:      u4_ap_REQ   : gvif first address                                                                                 */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
 void    vd_g_HmiHudGvifDataPut(const U4 * u4_ap_REQ)
@@ -128,8 +127,8 @@ void    vd_g_HmiHudGvifDataPut(const U4 * u4_ap_REQ)
     U4 u4_t_loop;    /* loop counter */
 
     if(u4_ap_REQ != vdp_PTR_NA) {
-        for(u4_t_loop = (U4)HMIHUD_GVIF_DTA_START ; u4_t_loop <= (U4)HMIHUD_GVIF_DTA_END ; u4_t_loop++){
-            u4_sp_hmihud_dtabuf[u4_t_loop] = u4_ap_REQ[u4_t_loop];
+        for(u4_t_loop = (U4)0U ; u4_t_loop < (U4)HMIHUD_GVIF_DTA_NUM ; u4_t_loop++){
+            u4_sp_hmihud_dtabuf[u4_t_loop + (U4)HMIHUD_GVIF_DTA_OFFSET] = u4_ap_REQ[u4_t_loop];
         }
     }
 }

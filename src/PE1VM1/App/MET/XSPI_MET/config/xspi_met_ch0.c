@@ -131,8 +131,6 @@
 
 #define XSPI_VM_1WORD                       (1U)
 
-#define XSPI_GVIF_UNDEF2                    (3U)
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -1000,7 +998,7 @@ static inline void    vd_s_XSpiCfgRxHUD(        const U4 * u4_ap_PDU_RX) {
     }
 
     if (u1_t_hudgvifctl_sts == (U1)XSPI_MET_XSPI_RX_READ_VALID) {
-        vd_g_HmiHudGvifDataPut(&u4_ap_PDU_RX[0]);
+        vd_g_HmiHudGvifDataPut(&u4_ap_PDU_RX[1]);
 #if 0   /* BEV Rebase provisionally */
         u1_s_xspi_vipos_disp = u1_XSPI_MET_READ__BIT(u4_ap_PDU_RX[15] , (U1)0U , (U1)1U);
 #endif   /* BEV Rebase provisionally */
@@ -1011,7 +1009,7 @@ static inline void    vd_s_XSpiCfgRxHUD(        const U4 * u4_ap_PDU_RX) {
 #if 0   /* BEV Rebase provisionally */
         u1_s_xspi_vipos_disp = (U1)0U;
 #endif   /* BEV Rebase provisionally */
-        vd_g_VdfEsoIn_Put_GVIF_HUD((U1)XSPI_GVIF_UNDEF2);
+        vd_g_VdfEsoIn_Put_GVIF_HUD((U1)VDF_ESO_GVIF_UNDEF2);
     }
 }
 
