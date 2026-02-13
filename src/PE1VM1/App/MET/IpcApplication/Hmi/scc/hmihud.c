@@ -98,7 +98,7 @@ static void vd_s_HmiHudSetIllStep(void);
 static void vd_s_HmiHudSetHudOnOffAct(void);
 static void vd_s_HmiHudSetHudRot(void);
 static void vd_s_HmiHudCalcHudRot(const U1 u1_a_DIRECTION);
-static void vd_s_HmiHudChkHudRotLimit(S1 * s1_ap_lmt_ccw, S1 * s1_ap_lmt_cw)
+static void vd_s_HmiHudChkHudRotLimit(S1 * s1_ap_lmt_ccw, S1 * s1_ap_lmt_cw);
 static inline U1 u1_s_HmihudCalibU1MinChk(const U1 u1_a_CALIBID, const U1 u1_a_MIN, const U1 u1_a_DEF);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
@@ -127,10 +127,10 @@ void    vd_g_HmiHudInit(void)
         u4_sp_hmihud_dtabuf[u4_t_loop] = (U4)0xFFFFFFFFU;
     }
     u1_s_hmihud_hud_onoff_act_pre = (U1)HMIHUD_VAL_HUD_ONOFF_ACT_UNDEF;
-    u1_s_hmihud_hud_rot_sw_pre = (U1)HMIHUD_VAL_ROT_SW_UNDEF;
-    u1_t_hud_rot = (U1)u4_g_McstBf((U1)MCST_BFI_HUD_ROT);
-    s1_s_hmihud_hud_rot = (S1)u1_t_hud_rot;
-    s1_s_hmihud_hud_rot_pre = s1_s_hmihud_hud_rot;
+    u1_s_hmihud_hud_rot_sw_pre    = (U1)HMIHUD_VAL_ROT_SW_UNDEF;
+    u1_t_hud_rot                  = (U1)u4_g_McstBf((U1)MCST_BFI_HUD_ROT);
+    s1_s_hmihud_hud_rot           = (S1)u1_t_hud_rot;
+    s1_s_hmihud_hud_rot_pre       = s1_s_hmihud_hud_rot;
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_HmiHudMainTask(void)                                                                                                */
@@ -186,8 +186,8 @@ void    vd_g_HmiHudMcstHook(void)
 {
     U1  u1_t_hud_rot;
 
-    u1_t_hud_rot = (U1)u4_g_McstBf((U1)MCST_BFI_HUD_ROT);
-    s1_s_hmihud_hud_rot = (S1)u1_t_hud_rot;
+    u1_t_hud_rot            = (U1)u4_g_McstBf((U1)MCST_BFI_HUD_ROT);
+    s1_s_hmihud_hud_rot     = (S1)u1_t_hud_rot;
     s1_s_hmihud_hud_rot_pre = s1_s_hmihud_hud_rot;
 }
 /*===================================================================================================================================*/
@@ -271,7 +271,7 @@ static void vd_s_HmiHudSetHudRot(void)
     U1 u1_t_sw;
 
     u1_t_gvif = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_GVIF2);
-    u1_t_sw = (U1)u4_s_HmiHudReadSig((U1)HMIHUD_SIG_HUD_ROT_SW, &u4_sp_hmihud_dtabuf[HMIHUD_FIRST_DTA]);
+    u1_t_sw   = (U1)u4_s_HmiHudReadSig((U1)HMIHUD_SIG_HUD_ROT_SW, &u4_sp_hmihud_dtabuf[HMIHUD_FIRST_DTA]);
 
     if(u1_t_gvif == (U1)TRUE) {
         if(u1_t_sw != u1_s_hmihud_hud_rot_sw_pre) {
@@ -292,7 +292,7 @@ static void vd_s_HmiHudSetHudRot(void)
     }
 
     u1_s_hmihud_hud_rot_sw_pre = u1_t_sw;
-    s1_s_hmihud_hud_rotpre = s1_s_hmihud_hud_rot;
+    s1_s_hmihud_hud_rot_pre    = s1_s_hmihud_hud_rot;
 }
 /*===================================================================================================================================*/
 /* static  void    vd_s_HmiHudCalcHudRot                                                                                             */
@@ -312,7 +312,7 @@ static void    vd_s_HmiHudCalcHudRot(const U1 u1_a_DIRECTION)
     u1_t_now = (U1)u4_g_McstBf((U1)MCST_BFI_HUD_ROT);
     s1_t_now = (S1)u1_t_now;
 
-    if (u1_a_DIRECTION == (U1)HMIHUD_VAL_HUD_ROT_STEP_DOWN){
+    if (u1_a_DIRECTION == (U1)HMIHUD_VAL_ROT_STEP_DOWN){
         if (s1_t_now > s1_t_lmt_ccw){
             s1_s_hmihud_hud_rot = s1_t_now - (S1)HMIHUD_VAL_ROT_STEP_ONE;
         }
