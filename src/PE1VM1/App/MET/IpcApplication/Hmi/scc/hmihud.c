@@ -343,10 +343,10 @@ static void    vd_s_HmiHudChkHudRotLimit(S1 * s1_ap_lmt_ccw, S1 * s1_ap_lmt_cw)
         s2_t_lmt_tmp = (((S2)((U2)u1_CALIB_MCUID0577_DEGCCW) - (S2)((U2)U1_MAX)) * s2_s_HMIHUD_HUDDEGSTEPLSB) / (S2)((U2)u1_t_lsb);
         /* ((Min:0 Max:255) - 255) * 10 / (Min:1 Max:255) */
         if(s2_t_lmt_tmp < (S2)((S1)MCST_HUDROT_CCW_LMT)){
-            s1_ap_lmt_ccw = (S1)MCST_HUDROT_CCW_LMT;
+            (*s1_ap_lmt_ccw) = (S1)MCST_HUDROT_CCW_LMT;
         }
         else{
-            s1_ap_lmt_ccw = (S1)s2_t_lmt_tmp;
+            (*s1_ap_lmt_ccw) = (S1)s2_t_lmt_tmp;
         }
     }
 
@@ -354,10 +354,10 @@ static void    vd_s_HmiHudChkHudRotLimit(S1 * s1_ap_lmt_ccw, S1 * s1_ap_lmt_cw)
         s2_t_lmt_tmp = ((S2)((U2)u1_CALIB_MCUID0576_DEGCW) * s2_s_HMIHUD_HUDDEGSTEPLSB) / (S2)((U2)u1_t_lsb);
         /* (Min:0 Max:255)         * 10 / (Min:1 Max:255) */
         if(s2_t_lmt_tmp > (S2)MCST_HUDROT_CW_LMT){
-            s1_ap_lmt_cw  = (S1)MCST_HUDROT_CW_LMT;
+            (*s1_ap_lmt_cw)  = (S1)MCST_HUDROT_CW_LMT;
         }
         else{
-            s1_ap_lmt_cw  = (S1)s2_t_lmt_tmp;
+            (*s1_ap_lmt_cw)  = (S1)s2_t_lmt_tmp;
         }
     }
 }
