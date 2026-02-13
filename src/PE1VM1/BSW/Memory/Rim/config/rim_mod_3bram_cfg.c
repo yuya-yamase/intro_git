@@ -45,18 +45,18 @@
 /*  Defines                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* START : ##TOOL_OUT#RIM_MOD_3B_SIZE## */
-#define RIM_MOD_3BRAM_U1_ID_NUM                  (19U)
-#define RIM_MOD_3BRAM_U2_ID_NUM                  (4U)
-#define RIM_MOD_3BRAM_U4_ID_NUM                  (19U)
-#define RIM_MOD_3BRAM_OTHER_ID_NUM               (1U)
+#define RIM_MOD_3BRAM_U1_ID_NUM                  (62U)
+#define RIM_MOD_3BRAM_U2_ID_NUM                  (5U)
+#define RIM_MOD_3BRAM_U4_ID_NUM                  (20U)
+#define RIM_MOD_3BRAM_OTHER_ID_NUM               (0U)
 /* END : ##TOOL_OUT#RIM_MOD_3B_SIZE## */
 /* START : ##TOOL_OUT#RIM_MOD_3B_OTR_TBL_SIZE## */
-#define RIM_MOD_3BRAM_OTHER_BUF_NUM              (1U)
+#define RIM_MOD_3BRAM_OTHER_BUF_NUM              (0U)
 /* END : ##TOOL_OUT#RIM_MOD_3B_OTR_TBL_SIZE## */
 
 /* Set st_d_RIM_MOD_3BRAM_OTR_SZ_CFG's max size */
 /* START : ##TOOL_OUT#RIM_MOD_3B_OTR_SIZE_MAX## */
-#define RIM_MOD_3BRAM_OTHER_ID_CFGMAX            (4U)
+#define RIM_MOD_3BRAM_OTHER_ID_CFGMAX            (0U)
 /* END : ##TOOL_OUT#RIM_MOD_3B_OTR_SIZE_MAX## */
 
 #if (__RIM_MOD_3BRAM_OTHER_USE__ == TRUE)
@@ -123,7 +123,6 @@ const U2 u2_d_RIM_MOD_3BRAM_OTR_ID_NUM = (U2)RIM_MOD_3BRAM_OTHER_ID_NUM;
 const ST_RIM_MOD_3BRAM_SIZE st_d_RIM_MOD_3BRAM_OTR_SZ_CFG[RIM_MOD_3BRAM_OTHER_ID_NUM] = {
 /*  index           size    */
 /* START : ##TOOL_OUT#RIM_MOD_3B_OTR_TABLE## */
-    {(U2)0U,        (U2)4U      }       /* 0    : RIMID_OTR_SAMPLE_BBB_OTH */
 /* END : ##TOOL_OUT#RIM_MOD_3B_OTR_TABLE## */
 };
 
