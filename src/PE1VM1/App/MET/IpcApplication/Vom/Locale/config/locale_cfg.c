@@ -1,4 +1,4 @@
-/* 2.0.2 */
+/* 2.1.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,8 +10,8 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define LOCALE_CFG_C_MAJOR                     (2)
-#define LOCALE_CFG_C_MINOR                     (0)
-#define LOCALE_CFG_C_PATCH                     (2)
+#define LOCALE_CFG_C_MINOR                     (1)
+#define LOCALE_CFG_C_PATCH                     (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -67,7 +67,6 @@ typedef struct {
 #else   /* BEV Rebase provisionally */
 static U1                                       u1_s_locale_unit_dist;
 static U1                                       u1_s_locale_unit_speed;
-static U1                                       u1_s_locale_unit_fueco;
 static U1                                       u1_s_locale_unit_eleco;
 static U1                                       u1_s_locale_unit_ambtmp;
 static U1                                       u1_s_locale_lang;
@@ -84,15 +83,13 @@ static const ST_UNITIDX st_sp_LOCALE_UNITIDX[UNIT_NUM_IDX] = {
 #if 0   /* BEV Rebase provisionally */
     { (U1)MCST_BFI_DIST,   (U1)VDF_DEST_DBF_DEFUNIT_SPD    }, /*   UNIT_IDX_DIST                       (0U) */
     { (U1)MCST_BFI_SPEED,  (U1)VDF_DEST_DBF_DEFUNIT_SPD    }, /*   UNIT_IDX_SPEED                      (1U) */
-    { (U1)MCST_BFI_FUECO,  (U1)VDF_DEST_DBF_DEFUNIT_FUECO  }, /*   UNIT_IDX_FUECO                      (2U) */
-    { (U1)MCST_BFI_ELECO,  (U1)VDF_DEST_DBF_DEFUNIT_ELECO  }, /*   UNIT_IDX_ELECO                      (3U) */
-    { (U1)MCST_BFI_AMBTMP, (U1)VDF_DEST_DBF_AMBTMP         }  /*   UNIT_IDX_AMBTMP                     (4U) */
+    { (U1)MCST_BFI_ELECO,  (U1)VDF_DEST_DBF_DEFUNIT_ELECO  }, /*   UNIT_IDX_ELECO                      (2U) */
+    { (U1)MCST_BFI_AMBTMP, (U1)VDF_DEST_DBF_AMBTMP         }  /*   UNIT_IDX_AMBTMP                     (3U) */
 #else   /* BEV Rebase provisionally */
     { (U1)U1_MAX,          (U1)VDF_DEST_DBF_DEFUNIT_SPD    }, /*   UNIT_IDX_DIST                       (0U) */
     { (U1)U1_MAX,          (U1)VDF_DEST_DBF_DEFUNIT_SPD    }, /*   UNIT_IDX_SPEED                      (1U) */
-    { (U1)U1_MAX,          (U1)VDF_DEST_DBF_DEFUNIT_FUECO  }, /*   UNIT_IDX_FUECO                      (2U) */
-    { (U1)U1_MAX,          (U1)VDF_DEST_DBF_DEFUNIT_ELECO  }, /*   UNIT_IDX_ELECO                      (3U) */
-    { (U1)U1_MAX,          (U1)VDF_DEST_DBF_AMBTMP         }  /*   UNIT_IDX_AMBTMP                     (4U) */
+    { (U1)U1_MAX,          (U1)VDF_DEST_DBF_DEFUNIT_ELECO  }, /*   UNIT_IDX_ELECO                      (2U) */
+    { (U1)U1_MAX,          (U1)VDF_DEST_DBF_AMBTMP         }  /*   UNIT_IDX_AMBTMP                     (3U) */
 #endif   /* BEV Rebase provisionally */
 };
 
@@ -271,7 +268,6 @@ void  vd_g_LocaleComTxInit(void)
 #else   /* BEV Rebase provisionally */
     u1_s_locale_unit_dist    = (U1)U1_MAX;
     u1_s_locale_unit_speed   = (U1)U1_MAX;
-    u1_s_locale_unit_fueco   = (U1)U1_MAX;
     u1_s_locale_unit_eleco   = (U1)U1_MAX;
     u1_s_locale_unit_ambtmp  = (U1)U1_MAX;
     u1_s_locale_lang         = (U1)U1_MAX;
@@ -493,9 +489,6 @@ U1      u1_g_LocaleCfgUnit(const U1 u1_a_UNITIDX)
     case (U1)UNIT_IDX_SPEED:
         u1_t_unit  = u1_s_locale_unit_speed;
         break;
-    case (U1)UNIT_IDX_FUECO:
-        u1_t_unit  = u1_s_locale_unit_fueco;
-        break;
     case (U1)UNIT_IDX_ELECO:
         u1_t_unit  = u1_s_locale_unit_eleco;
         break;
@@ -529,9 +522,6 @@ void    vd_g_LocaleCfgUnitPut(const U1 u1_a_UNITIDX, const U1 u1_a_VAL)
         break;
     case (U1)UNIT_IDX_SPEED:
         u1_s_locale_unit_speed  = u1_a_VAL;
-        break;
-    case (U1)UNIT_IDX_FUECO:
-        u1_s_locale_unit_fueco  = u1_a_VAL;
         break;
     case (U1)UNIT_IDX_ELECO:
         u1_s_locale_unit_eleco  = u1_a_VAL;
@@ -600,6 +590,7 @@ U1      u1_g_LocaleCfgUnitdef(const U1 u1_a_UNITIDX)
 /*  2.0.0    07/09/2021  TA       See locale.c v2.0.0.                                                                               */
 /*  2.0.1    12/08/2022  TA(M)    See locale.c v2.0.1                                                                                */
 /*  2.0.2    07/04/2025  MN       See locale.c v2.0.2                                                                                */
+/*  2.1.0    02/09/2026  SN(K)    See locale.c v2.1.0                                                                                */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
@@ -618,7 +609,7 @@ U1      u1_g_LocaleCfgUnitdef(const U1 u1_a_UNITIDX)
 /*  BEV-2    10/15/2025  SN       Configured for BEVstep3_Rebase                                                                     */
 /*  BEV-3    11/14/2025  SN       Change initial value                                                                               */
 /*  BEV-4    12/08/2025  TS       Change UNIT_CH2 table and units referenced when sending UNIT_CH2                                   */
-/*  BEV-5    02/05/2026  SN       Change B_PERMEM for BEV FF2. Change Mcst                                                           */
+/*  BEV-5    02/09/2026  SN(K)    Delete the u1_s_locale_unit_fueco definition and related handling.(BEV3CDCMET-3860)                */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
 /*  * SF   = Seiya Fukutome, DensoTechno                                                                                             */
@@ -631,5 +622,6 @@ U1      u1_g_LocaleCfgUnitdef(const U1 u1_a_UNITIDX)
 /*  * MN   = Mikiya Negishi, KSE                                                                                                     */
 /*  * SN   = Shimon Nambu, DensoTechno                                                                                               */
 /*  * TS   = Takuo Suganuma, Denso Techno                                                                                            */
+/*  * SN(K)= Shizuka Nakajima, KSE                                                                                                   */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
