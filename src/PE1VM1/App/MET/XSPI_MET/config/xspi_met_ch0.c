@@ -891,7 +891,6 @@ static inline void    vd_s_XSpiCfgRxLocale(     const U4 * u4_ap_PDU_RX) {
         st_t_hmilocale.u1_unit_eleco  = u1_XSPI_MET_READ__BIT(u4_ap_PDU_RX[1] , (U1) 8U , (U1)4U);
         st_t_hmilocale.u1_unit_ambtmp = u1_XSPI_MET_READ__BIT(u4_ap_PDU_RX[1] , (U1)12U , (U1)2U);
         st_t_hmilocale.u1_timeformat  = u1_XSPI_MET_READ__BIT(u4_ap_PDU_RX[1] , (U1)14U , (U1)2U);
-        st_t_hmilocale.u1_unit_fueco  = (U1)U1_MAX;
         vd_g_HmiLocalePut(&st_t_hmilocale);
     }
 }
@@ -1183,6 +1182,7 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*  BEV-24    02/06/2026 RO       Change for BEV Full_Function_2.                                                                    */
 /*                                MET-M_CONTBUZZ2-CSTD-0009-C1                                                                       */
 /*                                Delete TSR_P/TSR_A buzzers and update to the master caution buzzer request                         */
+/*  BEV-25    02/09/2026 SN(K)    Remove handling for st_t_hmilocale.u1_unit_fueco. (BEV3CDCMET-3860).                               */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * KM   = Keisuke Mashita, Denso Techno                                                                                           */
