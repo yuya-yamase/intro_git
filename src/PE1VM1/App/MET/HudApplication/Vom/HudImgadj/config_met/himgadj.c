@@ -542,7 +542,7 @@ static U1   u1_s_HudImgAdjGetHudSts(void)
     U1  u1_t_ishudon;
 
     u1_t_ishudon  = (U1)FALSE;
-    u1_t_hudonoff = (U1)(u4_g_McstBf((U1)MCST_BFI_HUD));
+    u1_t_hudonoff = (U1)u4_g_McstBf((U1)MCST_BFI_HUD);
     if(u1_t_hudonoff == (U1)MCST_HUD_ON){
         u1_t_ishudon = (U1)TRUE;
     }

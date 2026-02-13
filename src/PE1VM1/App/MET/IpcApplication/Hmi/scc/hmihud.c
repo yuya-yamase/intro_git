@@ -468,7 +468,7 @@ U1      u1_g_HmiHudGetHudOnoff(void)
 {
     U1 u1_t_onoff;
 
-    u1_t_onoff = (U1)(u4_g_McstBf((U1)MCST_BFI_HUD));
+    u1_t_onoff = (U1)u4_g_McstBf((U1)MCST_BFI_HUD);
 
     return(u1_t_onoff);
 }
@@ -530,7 +530,7 @@ U1      u1_g_HmiHudGetHudViposSwSts(void)
     U2 u2_t_adjminpos;
     U2 u2_t_adjmaxpos;
 
-    u1_t_sw_sts    = (U1)HMIHUD_VAL_POS_STS_ENABLE;
+    u1_t_sw_sts    = (U1)HMIHUD_VAL_POS_STS_UNDEF;
     u2_t_movpos    = (U2)u4_s_HmiHudReadSig((U1)HMIHUD_SIG_MOVPOS, &u4_sp_hmihud_dtabuf[HMIHUD_FIRST_DTA]);
     u2_t_adjminpos = (U2)u4_s_HmiHudReadSig((U1)HMIHUD_SIG_ADJMINPOS, &u4_sp_hmihud_dtabuf[HMIHUD_FIRST_DTA]);
     u2_t_adjmaxpos = (U2)u4_s_HmiHudReadSig((U1)HMIHUD_SIG_ADJMAXPOS, &u4_sp_hmihud_dtabuf[HMIHUD_FIRST_DTA]);
