@@ -26,6 +26,7 @@
 #include "hmitt.h"
 #include "hmiwchime.h"
 #include "hmitripcom.h"
+#include "hmimcst.h"
 #include "hmiscreen.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -70,6 +71,7 @@ void ( * const              fp_gp_vd_HMIPROXY_BON_INIT[HMIPROXY_INIT_NUM])(void)
      &vd_g_HmiTtInit,
      &vd_g_HmiWchimeInit,
      &vd_g_HmiTripcomInit,
+     &vd_g_HmiMcstInit,
      &vd_g_HmiScreenInit
 };
 
@@ -82,6 +84,7 @@ void ( * const              fp_gp_vd_HMIPROXY_RST_INIT[HMIPROXY_INIT_NUM])(void)
      &vd_g_HmiTtInit,
      &vd_g_HmiWchimeInit,
      &vd_g_HmiTripcomInit,
+     &vd_g_HmiMcstInit,
      &vd_g_HmiScreenInit
 };
 
@@ -94,6 +97,7 @@ void ( * const              fp_gp_vd_HMIPROXY_WKUP_INIT[HMIPROXY_INIT_NUM])(void
      &vd_g_HmiTtInit,
      &vd_g_HmiWchimeInit,
      &vd_g_HmiTripcomInit,
+     &vd_g_HmiMcstInit,
      &vd_g_HmiScreenInit
 };
 
@@ -110,6 +114,7 @@ const ST_HMIPROXY     st_gp_HMIPROXY[HMIPROXY_MAINTASK_NUM] = {
      {&vd_g_HmiTtMainTask,       (U4)SCHDLR_TASKBIT__10MS_A  },
      {&vd_g_HmiWchimeMainTask,   (U4)SCHDLR_TASKBIT__10MS_A  },
      {&vd_g_HmiTripcomMainTask,  (U4)SCHDLR_TASKBIT__50MS_E  },
+     {&vd_g_HmiMcstMainTask,     (U4)SCHDLR_TASKBIT__20MS_B  },
      {&vd_g_HmiScreenMainTask,   (U4)SCHDLR_TASKBIT__50MS_A  },
      {vdp_PTR_NA,                (U4)SCHDLR_TASKBIT_RGLR     }   /* <- Terminator. Do Not Delete! */
 };
@@ -148,6 +153,7 @@ const ST_HMIPROXY     st_gp_HMIPROXY[HMIPROXY_MAINTASK_NUM] = {
 /* 19PFv3-7  06/27/2025  SH       Add HmiTdoor module                                                                                */
 /* BEV-1     10/31/2025  MA       Change for BEV rebase                                                                              */
 /* BEV-2     05/08/2025  MN       Change for BEV PreCV.(MET-M_CLKCTL-CSTD-0-/MET-M_CAL-CSTD-0-) Delete hmidate and hmiclock          */
+/* BEV-3     02/05/2026  SN       Change B_PERMEM for BEV FF2. Add vd_g_HmiMcstInit                                                  */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * TH   = Takahiro Hirano, Denso Techno                                                                                           */
@@ -157,5 +163,6 @@ const ST_HMIPROXY     st_gp_HMIPROXY[HMIPROXY_MAINTASK_NUM] = {
 /*  * AA   = Anna Asuncion, Denso Techno                                                                                             */
 /*  * TN   = Tetsushi Nakanao, Denso Techno                                                                                          */
 /*  * MN   = Mikiya Negishi, KSE                                                                                                     */
+/*  * SN   = Shimon Nambu, Denso Techno                                                                                              */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

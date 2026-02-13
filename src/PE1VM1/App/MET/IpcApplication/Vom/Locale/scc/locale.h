@@ -1,4 +1,4 @@
-/* 2.0.2 */
+/* 2.1.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -13,8 +13,8 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define LOCALE_H_MAJOR                         (2)
-#define LOCALE_H_MINOR                         (0)
-#define LOCALE_H_PATCH                         (2)
+#define LOCALE_H_MINOR                         (1)
+#define LOCALE_H_PATCH                         (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -29,12 +29,11 @@
 /* Definitions of language:See config/locale_lang.h */
 
 
-#define UNIT_NUM_IDX                        (5U)
+#define UNIT_NUM_IDX                        (4U)
 #define UNIT_IDX_DIST                       (0U)
 #define UNIT_IDX_SPEED                      (1U)
-#define UNIT_IDX_FUECO                      (2U)
-#define UNIT_IDX_ELECO                      (3U)
-#define UNIT_IDX_AMBTMP                     (4U)
+#define UNIT_IDX_ELECO                      (2U)
+#define UNIT_IDX_AMBTMP                     (3U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* Unit Distance */
@@ -46,16 +45,6 @@
 #define UNIT_NUM_VAL_SPEED                  (2U)
 #define UNIT_VAL_SPEED_KMPH                 (0U)
 #define UNIT_VAL_SPEED_MPH                  (1U)
-
-/* Unit Fuel Economy */
-#define UNIT_NUM_VAL_FUECO                  (7U)
-#define UNIT_VAL_FUECO_KMPL                 (0U)
-#define UNIT_VAL_FUECO_LP100KM              (1U)
-#define UNIT_VAL_FUECO_MPG_USA              (2U)
-#define UNIT_VAL_FUECO_MPG_UK               (3U)
-#define UNIT_VAL_FUECO_MPG_E                (4U)
-#define UNIT_VAL_FUECO_KMPKG                (5U)
-#define UNIT_VAL_FUECO_KGP100KM             (6U)
 
 /* Unit Electronic Economy */
 #define UNIT_NUM_VAL_ELECO                  (7U)   /* Electricity cost Number                      */
