@@ -1,4 +1,4 @@
-/* 0.0.0 */
+/* 1.0.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -9,7 +9,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define XSPI_VPTRAN_C_MAJOR                     (0)
+#define XSPI_VPTRAN_C_MAJOR                     (1)
 #define XSPI_VPTRAN_C_MINOR                     (0)
 #define XSPI_VPTRAN_C_PATCH                     (0)
 
@@ -140,16 +140,10 @@ U1      u1_g_XSpiCfgCvtVptranGsi(void)
     static const U2     u2_s_GSI_MSK = (U2)0x0003U;
     U2                  u2_t_gsi;
     U1                  u1_t_sts;
-    U1                  u1_t_hide_disp_jdg;
 
     u2_t_gsi          = (U2)0x0000U;
     u1_t_sts          = u1_g_VptranGearShiftIndicator(&u2_t_gsi);
-    u1_t_hide_disp_jdg = u1_s_XSpiCfgVptranHideDispJdg();
 
-    /* Turn-Off the GSI if a shift range is not shown OR shift range is other than DMS range. */
-    if (u1_t_hide_disp_jdg == (U1)TRUE){
-        u2_t_gsi = (U2)0x0000U;
-    }
     if ((u1_t_sts & (U1)(VPTRAN_INVALID | VPTRAN_UNKNOWN)) != (U1)0U) {
         u2_t_gsi = (U2)0x0000U;
     }
@@ -306,6 +300,9 @@ static  U1      u1_s_XSpiCfgVptranHideDispJdg(void)
 /*  1.6.0     4/12/2024  GM       Fix a bug (Send Shift Pos Blink Pattern 1 when N Range and Double parking mode)                    */
 /*  1.7.0    10/10/2024  HF       Change config for BEV System_Consideration_1.(MET-D_SFTPOS-CSTD-1-)                                */
 /*  1.8.0     6/ 6/2025  JS       Fix a bug (Change Shift Pos to XSPI_VPTRAN_SFT_S XSPI_VPTRAN_SFT_M when inactive)                  */
+/*  1.9.0     2/ 9/2026  JS       Change for BEV Full_Function2                                                                      */
+/*                                MET-D_SFTPOS-CSTD-1-00-B-C0                                                                        */
+/*                                Remove the gear-position display check from the gear shift indicator display conditions.           */
 /*                                                                                                                                   */
 /*  * KM   = Keisuke Mashita, Denso Techno                                                                                           */
 /*  * KK   = Kohei Kato,      Denso Techno                                                                                           */

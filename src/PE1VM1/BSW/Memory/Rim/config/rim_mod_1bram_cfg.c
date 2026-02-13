@@ -45,18 +45,18 @@
 /*  Defines                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* START : ##TOOL_OUT#RIM_MOD_1B_SIZE## */
-#define RIM_MOD_1BRAM_U1_ID_NUM                  (2U)
+#define RIM_MOD_1BRAM_U1_ID_NUM                  (11U)
 #define RIM_MOD_1BRAM_U2_ID_NUM                  (1U)
 #define RIM_MOD_1BRAM_U4_ID_NUM                  (2U)
-#define RIM_MOD_1BRAM_OTHER_ID_NUM               (1U)
+#define RIM_MOD_1BRAM_OTHER_ID_NUM               (9U)
 /* END : ##TOOL_OUT#RIM_MOD_1B_SIZE## */
 /* START : ##TOOL_OUT#RIM_MOD_1B_OTR_TBL_SIZE## */
-#define RIM_MOD_1BRAM_OTHER_BUF_NUM              (1U)
+#define RIM_MOD_1BRAM_OTHER_BUF_NUM              (33U)
 /* END : ##TOOL_OUT#RIM_MOD_1B_OTR_TBL_SIZE## */
 
 /* Set st_d_RIM_MOD_1BRAM_OTR_SZ_CFG's max size */
 /* START : ##TOOL_OUT#RIM_MOD_1B_OTR_SIZE_MAX## */
-#define RIM_MOD_1BRAM_OTHER_ID_CFGMAX            (4U)
+#define RIM_MOD_1BRAM_OTHER_ID_CFGMAX            (16U)
 /* END : ##TOOL_OUT#RIM_MOD_1B_OTR_SIZE_MAX## */
 
 #if (__RIM_MOD_1BRAM_OTHER_USE__ == TRUE)
@@ -110,7 +110,15 @@ const U2 u2_d_RIM_MOD_1BRAM_OTHER_ID_NUM = (U2)RIM_MOD_1BRAM_OTHER_ID_NUM;
 const ST_RIM_MOD_1BRAM_SIZE st_d_RIM_MOD_1BRAM_OTR_SZ_CFG[RIM_MOD_1BRAM_OTHER_ID_NUM] = {
 /*  index           size    */
 /* START : ##TOOL_OUT#RIM_MOD_1B_OTR_TABLE## */
-    {(U2)0U,        (U2)4U      }       /* 0    : RIMID_OTR_SAMPLE_B_OTH */
+    {(U2)0U,        (U2)4U      },      /* 0    : RIMID_OTR_SAMPLE_B_OTH */
+    {(U2)1U,        (U2)16U     },      /* 1    : RIMID_OTR_NVMC_DA_DTF_WRI_012 */
+    {(U2)5U,        (U2)16U     },      /* 2    : RIMID_OTR_NVMC_DA_DTF_WRI_013 */
+    {(U2)9U,        (U2)16U     },      /* 3    : RIMID_OTR_NVMC_DA_DTF_WRI_014 */
+    {(U2)13U,       (U2)16U     },      /* 4    : RIMID_OTR_NVMC_DA_DTF_WRI_015 */
+    {(U2)17U,       (U2)16U     },      /* 5    : RIMID_OTR_NVMC_DA_DTF_WRI_016 */
+    {(U2)21U,       (U2)16U     },      /* 6    : RIMID_OTR_NVMC_DA_DTF_WRI_017 */
+    {(U2)25U,       (U2)16U     },      /* 7    : RIMID_OTR_NVMC_DA_DTF_WRI_018 */
+    {(U2)29U,       (U2)16U     }       /* 8    : RIMID_OTR_NVMC_DA_DTF_WRI_019 */
 /* END : ##TOOL_OUT#RIM_MOD_1B_OTR_TABLE## */
 };
 
