@@ -326,7 +326,7 @@ void    vd_g_DimUsadjbySwCfgNvmWrite(const U2 * u2_ap_LVL)
 #if 0   /* BEV Rebase provisionally */
     u1_t_esi_chk = u1_g_ESInspectMdBfield();
 #else   /* BEV Rebase provisionally */
-    u1_t_esi_chk = (U1)1U;
+    u1_t_esi_chk = (U1)0U;
 #endif   /* BEV Rebase provisionally */
     if(u1_t_esi_chk == (U1)0U){
         vd_g_McstBfPut((U1)MCST_BFI_RHEO_DAY,   (U4)u2_ap_LVL[DIM_DAYNIGHT_LVL_DAY]  );
