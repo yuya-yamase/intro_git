@@ -23,6 +23,7 @@
 #include "vardef.h"
 #include "veh_opemd.h"
 #include "hdimmgr_if.h"
+#include "calibration.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
