@@ -90,6 +90,7 @@
 
 /* START : ##TOOL_OUT#RIM_ID_MOD_1B_U1## */
 #define RIMID_U1_SAMPLE_B_1                      (0x0400U)
+#define RIMID_U1_DREC_TX                         (0x0030U)
 #define RIMID_U1_ILLUMI_LOUNGE                   (0x0401U)
 #define RIMID_U1_MCST_USRNUM_D                   (0x0402U)
 #define RIMID_U1_NVMC_ST_DTF_012                 (0x0403U)

@@ -47,6 +47,8 @@ void    vd_g_IllumiRheoTxAck(void);
 U1      u1_g_IllumiRheoTxNmwk(const U2 u2_a_TOUT);  /* Return : TRUE = Network Management Wakeup is being requested, FALSE = Not */
 U1      u1_g_IllumiTcTxNmwk(const U2 u2_a_TOUT);    /* Return : TRUE = Network Management Wakeup is being requested, FALSE = Not */
 
+U1      u1_g_IllumiRheoDrTxRheoin(void);
+U1      u1_g_IllumiTftbkDrTxIllout(void);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
