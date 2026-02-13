@@ -44,6 +44,7 @@ void      vd_g_HmiHudMcstHook(void);
 U1        u1_g_HmiHudGetHudOnoff(void);
 U1        u1_g_HmiHudGetHudRot(void);
 U1        u1_g_HmiHudGetHudRotSwSts(void);
+U1        u1_g_HmiHudGetHudViposSwSts(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */

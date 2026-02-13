@@ -153,9 +153,6 @@ typedef struct{
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if 0   /* BEV Rebase provisionally */
-static U1           u1_s_xspi_vipos_disp;
-#endif   /* BEV Rebase provisionally */
 static U1           u1_s_xspi_dimsw;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -659,19 +656,17 @@ static inline void    vd_s_XSpiCfgTxHud(           U4 * u4_ap_pdu_tx) {
     u4_ap_pdu_tx[1] |= (U4)((U4)u1_g_HmiHudGetHudOnoff() & (U4)0x00000001U) << 2;           /* HUD_ONOFF            */
     u4_ap_pdu_tx[2]  = (U4)((U4)u1_g_HdimmgrIfGetIllStepVal() & (U4)0x0000000FU);           /* HUD_ILL_STEP         */
     u4_ap_pdu_tx[2] |= (U4)((U4)u1_g_HmiHudGetHudRotSwSts() & (U4)0x00000003U) << 8;        /* HUD_ROT_SW_STS       */
+    u4_ap_pdu_tx[2] |= (U4)((U4)u1_g_HmiHudGetHudViposSwSts() & (U4)0x00000003U) << 10;     /* HUD_VIPOS_SW_STS     */
     u4_ap_pdu_tx[2] |= (U4)((U4)u1_g_HmiHudGetHudRot() & (U4)0x000000FFU) << 24;            /* HUD_ROT              */
     u4_ap_pdu_tx[3]  = (U4)u2_t_owduty;                                                     /* HUD_BLDUTY_OW        */
+    u4_ap_pdu_tx[3] |= (U4)u2_g_HudImgAdjGetGvOwPos() << 16;                                /* HUD_VIPOS_POS_OW     */
     u4_ap_pdu_tx[5]  = (U4)0U;
     u4_ap_pdu_tx[5] |= (U4)((U4)u1_t_owdutyreq & (U4)0x00000001U) << 8;                     /* HUD_BLDUTY_OWREQ     */
+    u4_ap_pdu_tx[5] |= (U4)((U4)u1_g_HudImgAdjGetGvOwReq() & (U4)0x00000001U) << 9;         /* HUD_VIPOS_POS_OWREQ  */
+    u4_ap_pdu_tx[5] |= (U4)((U4)u1_g_HudImgAdjGetGvRtctlIniReq() & (U4)0x00000001U) << 10;  /* HUD_VIPOS_INIT_OWREQ */
 #if 0   /* BEV Rebase provisionally */
-    u4_ap_pdu_tx[0] |= (U4)u2_g_HudImgAdjGetGvOwPos() << 16;                                /* HUD_VIPOS_POS_OW     */
     u4_ap_pdu_tx[1]  = (U4)u2_g_HudImgAdjGetMovReqPos();                                    /* HUD_VIPOS_REQPOS     */
     u4_ap_pdu_tx[2]  = (U4)u1_g_HudImgAdjGetMovReqID();                                     /* HUD_VIPOS_REQID      */
-    u4_ap_pdu_tx[2] |= (U4)((U4)u1_s_xspi_vipos_disp & (U4)0x00000001U) << 14;              /* GV_VIPOS_DISP        */
-    u4_ap_pdu_tx[2] |= (U4)((U4)u1_g_HudImgAdjGetGvOwReq() & (U4)0x00000001U) << 15;        /* HUD_VIPOS_POS_OWREQ  */
-    u4_ap_pdu_tx[2] |= (U4)((U4)u1_g_HudImgAdjGetGvRtctlIniReq() & (U4)0x00000001U) << 16;  /* HUD_VIPOS_INIT_OWREQ */
-    u4_ap_pdu_tx[2] |= (U4)((U4)u1_g_HudImgAdjIsUpSwOn() & (U4)0x00000001U) << 17;          /* HUD_VIPOS_UPSW       */
-    u4_ap_pdu_tx[2] |= (U4)((U4)u1_g_HudImgAdjIsDnSwOn() & (U4)0x01U) << 18;                /* HUD_VIPOS_DNSW       */
 #endif   /* BEV Rebase provisionally */
 }
 
@@ -1003,16 +998,10 @@ static inline void    vd_s_XSpiCfgRxHUD(        const U4 * u4_ap_PDU_RX) {
 
     if (u1_t_hudgvifctl_sts == (U1)XSPI_MET_XSPI_RX_READ_VALID) {
         vd_g_HmiHudGvifDataPut(&u4_ap_PDU_RX[1]);
-#if 0   /* BEV Rebase provisionally */
-        u1_s_xspi_vipos_disp = u1_XSPI_MET_READ__BIT(u4_ap_PDU_RX[15] , (U1)0U , (U1)1U);
-#endif   /* BEV Rebase provisionally */
 
         u1_t_rxdata = (U1)((u4_ap_PDU_RX[2]) & (U4)0x03U);
         vd_g_VdfEsoIn_Put_GVIF_HUD(u1_t_rxdata);
     } else {
-#if 0   /* BEV Rebase provisionally */
-        u1_s_xspi_vipos_disp = (U1)0U;
-#endif   /* BEV Rebase provisionally */
         vd_g_VdfEsoIn_Put_GVIF_HUD((U1)VDF_ESO_GVIF_UNDEF2);
     }
 }
@@ -1040,9 +1029,6 @@ static inline void    vd_s_XSpiCfgRxAvgGrph(const U4 * u4_ap_PDU_RX) {
 /*===================================================================================================================================*/
 void    vd_g_XSpiCfgInitCh0(void)
 {
-#if 0   /* BEV Rebase provisionally */
-    u1_s_xspi_vipos_disp                      = (U1)0U;
-#endif   /* BEV Rebase provisionally */
     u1_s_xspi_dimsw                           = (U1)0U;
 
 }
@@ -1190,6 +1176,7 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*  BEV-24    02/02/2026 TS       Change for BEV FF2.(MET-M_HUDILL-CSTD-1)                                                           */
 /*  BEV-25    02/03/2026 TS       Change for BEV FF2.(MET-M_HUDONOFF-CSTD-1)                                                         */
 /*  BEV-26    02/12/2026 KN       Add HUD_ROT_SW_STS and HUD_ROT.                                                                    */
+/*  BEV-27    02/13/2026 HH       Add HUD_POS_SW_STS and HUD_POS_OW.                                                                 */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * KM   = Keisuke Mashita, Denso Techno                                                                                           */
@@ -1218,5 +1205,6 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*  * MA = Misaki Aiki, Denso Techno                                                                                                 */
 /*  * HY   = Haruki Yagi, KSE                                                                                                        */
 /*  * KN   = Kazuo Nishigaki, Denso Techno                                                                                           */
+/*  * HH   = Hiroki Hara, Denso Techno                                                                                               */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
