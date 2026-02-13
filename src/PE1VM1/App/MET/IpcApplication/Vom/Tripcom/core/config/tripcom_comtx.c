@@ -22,7 +22,6 @@
 #include "vardef.h"
 #include "veh_opemd.h"
 #include "locale.h"
-#include "calibration.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -1077,10 +1076,10 @@ static  void    vd_s_TripcomCfgCanTxEC_SCL(void)
 
     switch(u1_t_ptsys){
         case (U1)VDF_PTS_RX_04_HYB_PLU:
-            u1_t_sndval = u1_CALIB_MCUID0254_PE_PHV;
+            u1_t_sndval = u1_g_VardefOmusMCUID0254();
             break;
         case (U1)VDF_PTS_RX_05_ELE_BAT:
-            u1_t_sndval = u1_CALIB_MCUID0255_PE_EV;
+            u1_t_sndval = u1_g_VardefOmusMCUID0255();
             break;
         default:
             /* Do Nothing */
@@ -1114,18 +1113,18 @@ static  void    vd_s_TripcomCfgCanTxFC_SCL(void)
     switch(u1_t_ptsys){
         case (U1)VDF_PTS_RX_01_GAS:
         case (U1)VDF_PTS_RX_02_GAS_ISS:
-            u1_t_sndval = u1_CALIB_MCUID0250_FE_CONV;
+            u1_t_sndval = u1_g_VardefOmusMCUID0250();
             break;
         case (U1)VDF_PTS_RX_03_HYB:
         case (U1)VDF_PTS_RX_06_HYB_MOT:
         case (U1)VDF_PTS_RX_08_48V:
-            u1_t_sndval = u1_CALIB_MCUID0251_FE_HV;
+            u1_t_sndval = u1_g_VardefOmusMCUID0251();
             break;
         case (U1)VDF_PTS_RX_04_HYB_PLU:
-            u1_t_sndval = u1_CALIB_MCUID0252_FE_PHV;
+            u1_t_sndval = u1_g_VardefOmusMCUID0252();
             break;
         case (U1)VDF_PTS_RX_07_ELE_HYD:
-            u1_t_sndval = u1_CALIB_MCUID0253_FE_FC;
+            u1_t_sndval = u1_g_VardefOmusMCUID0253();
             break;
         default:
             /* Do Nothing */
@@ -1246,6 +1245,7 @@ static  void    vd_s_TripcomCfgCanDrTx(void)
 /*  19PFv3-10 04/24/2025 PG       Added vd_s_TripcomCfgCanTxEMGF250ms                                                                */
 /*  19PFv3-11 07/17/2025 SK       Added Convert Function of UNIT_6 for 410D MPT                                                      */
 /*  BEV3-01   01/20/2026 DR       Added AS_EVDT and AS_TOEC for BEV FF2                                                              */
+/*  BEV3-02   02/10/2026 SH       Change MCUID0250-0255 from Calibration to OMUSVIID                                                 */
 /*                                                                                                                                   */
 /*  * HY   = Hidefumi Yoshida, Denso                                                                                                 */
 /*  * YA   = Yuhei Aoyama, DensoTechno                                                                                               */
@@ -1263,5 +1263,6 @@ static  void    vd_s_TripcomCfgCanDrTx(void)
 /*  * KM   = Kazuma Miyazawa, Denso Techno                                                                                           */
 /*  * RS   = Ryuki Sako, Denso Techno                                                                                                */
 /*  * DR   = Dyan Reyes, DTPH                                                                                                        */
+/*  * SH   = Sae Hirose, Denso Techno                                                                                                */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

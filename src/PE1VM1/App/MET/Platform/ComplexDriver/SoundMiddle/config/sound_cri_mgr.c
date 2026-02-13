@@ -36,6 +36,8 @@
 
 /* calibration header file */
 #include "calibration.h"
+#include "vardef.h"
+
 #include "reg_dma.h"
 
 #include "Port.h"
@@ -369,7 +371,7 @@ static void    vd_s_SoundCriMgrStartup(void)
     criAtomEx_PreInitialize_Rh850u2a();
 
     vd_g_SoundCriDrvInitialize();
-    u1_t_brand           = u1_CALIB_MCUID0024_BRAND;
+    u1_t_brand           = u1_g_VardefOmusMCUID0024();
 
     __DI();
     Dma_SetInterrupt( (U1)DMA_CH_DATA_ID_7, (U1)OFF, (U1)ON );
@@ -411,10 +413,7 @@ static void    vd_s_SoundCriMgrStartup(void)
     /* Library initialization */
     criAtomEx_Initialize_Rh850u2a(&st_t_config_rh850u2a, s1_sp_sound_cri_init_work, (CriSint32)SOUND_CRI_INIT_WORK_SIZE);
 
-    if(u1_t_brand == (U1)CALIB_MCUID0024_TOYOTA){
-        vd_s_SoundCriMgrTYTSetUp();
-    }
-    else if(u1_t_brand == (U1)CALIB_MCUID0024_LEXUS){
+    if(u1_t_brand == (U1)CALIB_MCUID0024_LEXUS){
         vd_s_SoundCriMgrLEXSetUp();
     }
     else{
@@ -989,13 +988,9 @@ static  U1      u1_s_SoundCriMgrWavNext(void)
     U1          u1_t_brand;                                                                /* MCUCONST brand                        */
 
     u1_t_playnum = (U1)0U;
-    u1_t_brand = u1_CALIB_MCUID0024_BRAND;
+    u1_t_brand = u1_g_VardefOmusMCUID0024();
 
-    if (u1_t_brand == (U1)CALIB_MCUID0024_TOYOTA){
-        u2_t_cri_cuemax = (U2)CRI_CUESHEET_0_TYT_CUENUM;
-        u2_tp_wav_cycletime = &u2_sp_SOUND_WAV_CYCLETIME_TYT[0];
-    }
-    else if (u1_t_brand == (U1)CALIB_MCUID0024_LEXUS){
+    if(u1_t_brand == (U1)CALIB_MCUID0024_LEXUS){
         u2_t_cri_cuemax = (U2)CRI_CUESHEET_0_LEX_CUENUM;
         u2_tp_wav_cycletime = &u2_sp_SOUND_WAV_CYCLETIME_LEX[0];
     }
@@ -1028,10 +1023,7 @@ static  U1      u1_s_SoundCriMgrWavNext(void)
             u1_t_reqidx = u1_s_SoundCriMgrUpdtNext(u1_t_grp_no, u1_t_reqidx, &u1_t_reqvol);
 
             if(u1_t_reqidx < (U1)WCHIME_NUM_REQ){
-                if (u1_t_brand == (U1)CALIB_MCUID0024_TOYOTA){
-                    u2_t_curcueid = u2_sp_SOUND_REQ_TO_WAV_TYT[u1_t_reqidx];
-                }
-                else if (u1_t_brand == (U1)CALIB_MCUID0024_LEXUS){
+                if(u1_t_brand == (U1)CALIB_MCUID0024_LEXUS){
                     u2_t_curcueid = u2_sp_SOUND_REQ_TO_WAV_LEX[u1_t_reqidx];
                 }
                 else{
@@ -1519,16 +1511,12 @@ static  U1      u1_s_SoundCriMgrOwChk(const U1 u1_a_GRP_NO, const U1 u1_a_CYCLCH
 
     u1_t_ow_sts          = (U1)SOUND_OW_CTRL_INA;
     u4_s_sound_ow_unlock = (U4)0U;
-    u1_t_brand           = u1_CALIB_MCUID0024_BRAND;
+    u1_t_brand           = u1_g_VardefOmusMCUID0024();
 
     if(u1_a_GRP_NO < (U1)SOUND_GROUP_NUM){
         stp_t_ow_ctrl        = &st_sp_sound_ow_ctrl[u1_a_GRP_NO];
         if(u1_s_sound_ow_reqid < (U1)SOUND_OW_WAV_IDX_NUM){
-            if(u1_t_brand == (U1)CALIB_MCUID0024_TOYOTA){
-                stp_t_OW_BUZ_INFO = &st_sp_SOUND_OW_BUZ_INFO_TYT[u1_s_sound_ow_reqid];
-                u2_t_cuemax = (U2)CRI_CUESHEET_0_TYT_CUENUM;
-            }
-            else if (u1_t_brand == (U1)CALIB_MCUID0024_LEXUS){
+            if(u1_t_brand == (U1)CALIB_MCUID0024_LEXUS){
                 stp_t_OW_BUZ_INFO = &st_sp_SOUND_OW_BUZ_INFO_LEX[u1_s_sound_ow_reqid];
                 u2_t_cuemax = (U2)CRI_CUESHEET_0_LEX_CUENUM;
             }
@@ -2009,7 +1997,7 @@ static  void    vd_s_SoundCriMgrSetVolume(const U1 u1_a_GRP_NO, const U1 u1_a_RE
     U4          u4_t_calc_buf;
     U1          u1_t_brand;
 
-    u1_t_brand    = u1_CALIB_MCUID0024_BRAND;
+    u1_t_brand    = u1_g_VardefOmusMCUID0024();
 
 #if 0   /* BEV Rebase provisionally */ /* for xm-authentication */
     u4_t_xmauth   = u4_g_VardefDs2E_Las32((U2)VDF_DS_2E_2021);
@@ -2019,13 +2007,7 @@ static  void    vd_s_SoundCriMgrSetVolume(const U1 u1_a_GRP_NO, const U1 u1_a_RE
     if((u4_t_xmauth & (U4)VDF_DS_2E_XM_MODE) == (U4)0U){
 #endif   /* BEV Rebase provisionally */ /* for xm-authentication */
         u1_t_reqvol = u1_a_REQ_VOL;
-        if(u1_t_brand == (U1)CALIB_MCUID0024_TOYOTA){
-            if(u1_a_REQ_VOL >= (U1)SOUND_NUM_VOL_TYT){
-               u1_t_reqvol = (U1)SOUND_VOLUMEID_DEFAULT_TYT;
-            }
-            u2_t_sound_vol = *(u2p_sp_SOUND_VOL_TYT[u1_t_reqvol]);
-        }
-        else if (u1_t_brand == (U1)CALIB_MCUID0024_LEXUS){
+        if(u1_t_brand == (U1)CALIB_MCUID0024_LEXUS){
             if(u1_a_REQ_VOL >= (U1)SOUND_NUM_VOL_LEX){
                u1_t_reqvol = (U1)SOUND_VOLUMEID_DEFAULT_LEX;
             }
@@ -2246,6 +2228,7 @@ void  vd_g_SoundCriMgr_DeInit(void)
 /*  BEV-6    11/11/2025  SH       Configured for CONTBUZZ2-CSTD-0008                                                                 */
 /*  BEV-7    11/28/2025  HL       Change for BEV System_Consideration_ADAS.(MET-S_TMBZR-CSTD-0-01-A-C0)                              */
 /*  BEV-8    12/10/2025  HY       Change sound file(CUE_ID) for RCTA buzzer                                                          */
+/*  BEV-9    02/10/2026  SH       Change MCUID0024 from Calibration to OMUSVIID                                                      */
 /*                                                                                                                                   */
 /*  * YK       = Yuuki Kato, Denso Techno                                                                                            */
 /*  * TN       = Toshiharu Nagata, Denso Techno                                                                                      */

@@ -1,122 +1,185 @@
-/* 2.0.2 */
+/* 1.0.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-/*  Vehicle Status Viewer / Toyota IPC/MET Gauge Digital Vehicle Speed - Numerical Xmph                                              */
+/*  Variation Defines / Organized Master Unified System Vehicle Information                                                          */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define GAGDST_NXMPH_CFG_C_MAJOR                 (2)
-#define GAGDST_NXMPH_CFG_C_MINOR                 (0)
-#define GAGDST_NXMPH_CFG_C_PATCH                 (2)
+#define VARDEF_OMUS_C_MAJOR                     (1)
+#define VARDEF_OMUS_C_MINOR                     (0)
+#define VARDEF_OMUS_C_PATCH                     (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#include "gagdst_nxmph_cfg_private.h"
-
-#include "vehspd_kmph.h"
-#include "vardef.h"
+#include "vardef_omus_cfg_private.h"
+#include "vardef.h" /* vardef_omus.h is included in vardef_dbf.h */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if ((GAGDST_NXMPH_CFG_C_MAJOR != GAGDST_NXMPH_CFG_H_MAJOR) || \
-     (GAGDST_NXMPH_CFG_C_MINOR != GAGDST_NXMPH_CFG_H_MINOR) || \
-     (GAGDST_NXMPH_CFG_C_PATCH != GAGDST_NXMPH_CFG_H_PATCH))
-#error "gagdst_nxmph_cfg.c and gagdst_nxmph_cfg_private.h : source and header files are inconsistent!"
+#if ((VARDEF_OMUS_C_MAJOR != VARDEF_OMUS_H_MAJOR) || \
+     (VARDEF_OMUS_C_MINOR != VARDEF_OMUS_H_MINOR) || \
+     (VARDEF_OMUS_C_PATCH != VARDEF_OMUS_H_PATCH))
+#error "vardef_omus.c and vardef_omus.h : source and header files are inconsistent!"
+#endif
+
+#if ((VARDEF_OMUS_C_MAJOR != VARDEF_OMUS_CFG_H_MAJOR) || \
+     (VARDEF_OMUS_C_MINOR != VARDEF_OMUS_CFG_H_MINOR) || \
+     (VARDEF_OMUS_C_PATCH != VARDEF_OMUS_CFG_H_PATCH))
+#error "vardef_omus.c and vardef_omus_cfg_private.h : source and header files are inconsistent!"
 #endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define GAGDST_NXMPH_NUM_TMIDX                   (4U)
-
-#define GAGDST_NXMPH_ADC_MAX                     (1023U)
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#define VDF_OMUS_RXC_AVA             (2U)
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+typedef struct{
+    U1                 u1_tim_elpsd;
+    U1                 u1_rxc_sta;
+    U1                 u1_rx_las;
+}ST_VDF_OMUS_CAN_RX_INFO;
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+static ST_VDF_OMUS_CAN_RX_INFO  st_sp_vdf_omus_can_rx_info[VDF_OMUS_CAN_NUM];
+static U1                       u1_s_vdf_omus_can_ava_val[VDF_OMUS_CAN_NUM];
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+static void    vd_s_VardefOmusSigJdg(void);
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-const U2                     u2_g_GAGDST_NXMPH_SRC_CHK = ((U2)GAUGE_SRC_CHK_IGN_ON  |
-                                                          (U2)VEHSPD_STSBIT_UNKNOWN |
-                                                          (U2)VEHSPD_STSBIT_INVALID);
-
-const U2                     u2_g_GAGDST_NXMPH_SRC_VAL = (U2)GAUGE_SRC_CHK_IGN_ON;  /* Source Singale valid */
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-static const U2              u2_sp_GAGDST_NXMPH_AT_10BIT_LMT[GAGDST_NXMPH_NUM_TMIDX << 1] = {
-    (U2)0U,   (U2)551U, (U2)703U, (U2)794U,
-    (U2)520U, (U2)673U, (U2)759U, (U2)1023U
-};
-
-const ST_RNG_CMPR_U2         st_g_GAGDST_NXMPH_AT_CHK = {
-    &u2_sp_GAGDST_NXMPH_AT_10BIT_LMT[0],    /* u2p_LIMIT   */
-    (U2)0U,                                 /* u2_idx_init */ 
-    (U2)GAGDST_NXMPH_NUM_TMIDX              /* u2_num_rng  */
-};
-
-const U2                     u2_gp_GAGDST_NXMPH_TMUPDT[GAGDST_NXMPH_NUM_TMIDX] = {
-    (U2)280U  / (U2)20U,
-    (U2)500U  / (U2)20U,
-    (U2)1000U / (U2)20U,
-    (U2)1500U / (U2)20U
-};
-const U2                     u2_g_GAGDST_NXMPH_TMUPDT_MIN = (U2)280U / (U2)20U;  /* 0.28 seconds */
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*===================================================================================================================================*/
-/*  U2      u2_g_GagdstNxmphCfgAtlv(void)                                                                                            */
+/*  void    vd_g_VardefOmusBonInit(void)                                                                                             */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-U2      u2_g_GagdstNxmphCfgAtlv(void)
+void    vd_g_VardefOmusBonInit(void)
 {
-    return((U2)0U);
-}
-/*===================================================================================================================================*/
-/*  U2      u2_g_GagdstNxmphCfgDsplyMax(const U1 u1_a_UNIT)                                                                          */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U2      u2_g_GagdstNxmphCfgDsplyMax(const U1 u1_a_UNIT)
-{
-    U2  u2_t_max;
+    U4                  u4_t_loop;
 
-    u2_t_max = u2_g_VardefOmusMCUID0263();
+    for (u4_t_loop = (U4)0U; u4_t_loop < (U4)VDF_OMUS_CAN_NUM; u4_t_loop++) {
+        st_sp_vdf_omus_can_rx_info[u4_t_loop].u1_tim_elpsd = (U1)U1_MAX;
+        st_sp_vdf_omus_can_rx_info[u4_t_loop].u1_rxc_sta   = u1_g_VDF_OMUS_RXC_UNK;
+        st_sp_vdf_omus_can_rx_info[u4_t_loop].u1_rx_las    = (U1)VDF_OMUS_FF_NRX;
 
-    if(u1_a_UNIT == (U1)GAGDST_NXMPH_KMPH){
-        u2_t_max = u2_g_VardefOmusMCUID0262();
+        u1_s_vdf_omus_can_ava_val[u4_t_loop] = (U1)VDF_OMUS_FF_NRX;
     }
-    return(u2_t_max);
+    vd_g_VardefOmusCfgMCUIDBonInt();
 }
+
 /*===================================================================================================================================*/
-/*  void    vd_g_GagdstNxmphCfgComTx(const U2 u2_a_SRC_CHK, const U2 u2_a_KMPH , const U2 u2_a_MPH)                                  */
+/*  void    vd_g_VardefOmusRstwkInit(void)                                                                                           */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_GagdstNxmphCfgComTx(const U2 u2_a_SRC_CHK, const U2 u2_a_KMPH , const U2 u2_a_MPH)
+void    vd_g_VardefOmusRstwkInit(void)
 {
+    U4                  u4_t_loop;
+
+    for (u4_t_loop = (U4)0U; u4_t_loop < (U4)VDF_OMUS_CAN_NUM; u4_t_loop++) {
+        st_sp_vdf_omus_can_rx_info[u4_t_loop].u1_tim_elpsd = (U1)U1_MAX;
+        st_sp_vdf_omus_can_rx_info[u4_t_loop].u1_rxc_sta   = u1_g_VDF_OMUS_RXC_UNK;
+        st_sp_vdf_omus_can_rx_info[u4_t_loop].u1_rx_las    = (U1)VDF_OMUS_FF_NRX;
+
+        u1_s_vdf_omus_can_ava_val[u4_t_loop] = (U1)VDF_OMUS_FF_NRX;
+    }
+    vd_g_VardefOmusCfgMCUIDRstwkInt();
 }
+
+/*===================================================================================================================================*/
+/*  void    vd_g_VardefOmusMainTask(void)                                                                                            */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void    vd_g_VardefOmusMainTask(void)
+{
+    vd_s_VardefOmusSigJdg();
+    vd_g_VardefOmusCfgMCUIDJDG(&u1_s_vdf_omus_can_ava_val[0]);
+}
+
+/*===================================================================================================================================*/
+/*  static void    vd_s_VardefOmusSigJdg(void)                                                                                       */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void    vd_s_VardefOmusSigJdg(void)
+{
+    static const U1     u1_s_VDF_OMUS_RXC_PERI = ((U2)2100U/ ((U2)VDF_MAIN_TICK * (U2)VDF_NUM_TSLOT));
+
+    const ST_VDF_OMUS_CAN_RX_CFG *        st_tp_RX_CFG;
+    ST_VDF_OMUS_CAN_RX_INFO *             st_tp_RX_INFO;
+    U4                  u4_t_loop;
+    U1                  u1_t_cnt;
+    U1                  u1_t_rx;
+    U1                  u1_t_sig_ava;
+    U4                  u4_t_elpsd;
+    U2                  u2_t_rxcnt;
+    U2                  u2_t_rxcnt_masked;
+    U2                  u2_t_inc;
+
+    for (u4_t_loop = (U4)0U; u4_t_loop < (U4)VDF_OMUS_CAN_NUM; u4_t_loop++) {
+        st_tp_RX_CFG = &st_gp_VDF_OMUS_CAN_RX_CFG[u4_t_loop];
+        st_tp_RX_INFO = &st_sp_vdf_omus_can_rx_info[u4_t_loop];
+        u1_t_rx       = (U1)VDF_OMUS_FF_NRX;
+        u1_t_cnt      = (st_tp_RX_CFG->fp_u1_MSGRX)();
+        u1_t_sig_ava  = (st_tp_RX_CFG->fp_u1_CANRX)(&u1_t_rx);
+
+        if ((u1_t_sig_ava               != (U1)TRUE            ) ||
+            (st_tp_RX_INFO->u1_rxc_sta   >  u1_g_VDF_OMUS_RXC_MAX) ||
+            (u1_t_cnt                    > u1_g_VDF_OMUS_RXC_MAX )){
+            st_tp_RX_INFO->u1_rxc_sta   = u1_t_cnt;
+            st_tp_RX_INFO->u1_rx_las    = (U1)VDF_OMUS_FF_NRX;
+        }
+        else if (u1_t_rx == st_tp_RX_INFO->u1_rx_las) { 
+            u2_t_rxcnt        = (U2)((U2)u1_t_cnt - (U2)st_tp_RX_INFO->u1_rxc_sta);
+            u2_t_rxcnt_masked = u2_t_rxcnt & (U2)u1_g_VDF_OMUS_RXC_MAX;
+            u2_t_inc          = u2_t_rxcnt_masked + (U2)1U;
+            if (u2_t_inc >= (U2)VDF_OMUS_RXC_AVA) {
+                u1_s_vdf_omus_can_ava_val[u4_t_loop] = u1_t_rx;
+            }
+        }
+        else if (u1_t_cnt != st_tp_RX_INFO->u1_rxc_sta) {
+            st_tp_RX_INFO->u1_rxc_sta   = u1_t_cnt;
+            st_tp_RX_INFO->u1_rx_las    = u1_t_rx;
+        }
+        else {
+            /* do nothing */
+        }
+
+        u4_t_elpsd = (U4)st_tp_RX_INFO->u1_tim_elpsd + (U4)1U;
+        if (u4_t_elpsd >= (U4)u1_s_VDF_OMUS_RXC_PERI) {
+            st_tp_RX_INFO->u1_rxc_sta   = u1_t_cnt;
+            st_tp_RX_INFO->u1_rx_las    = (U1)VDF_OMUS_FF_NRX;
+            u4_t_elpsd                  = (U4)0U;
+        }
+        st_tp_RX_INFO->u1_tim_elpsd = (U1)u4_t_elpsd;
+    }
+}
+
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
@@ -125,25 +188,8 @@ void    vd_g_GagdstNxmphCfgComTx(const U2 u2_a_SRC_CHK, const U2 u2_a_KMPH , con
 /*                                                                                                                                   */
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  1.0.0     3/ 8/2018  TN       New.                                                                                               */
-/*  1.1.0     6/ 3/2019  TN       gagdst_nxmph v1.0.0 -> v1.1.0.                                                                     */
-/*  2.0.0     6/ 9/2021  TA       gagdst_nxmph v1.1.0 -> v2.0.0.                                                                     */
-/*  2.0.1    10/25/2021  TK       gagdst_nxmph v2.0.0 -> v2.0.1.                                                                     */
-/*  2.0.2    12/13/2022  TA(M)    gagdst_nxmph v2.0.1 -> v2.0.2.                                                                     */
+/*  1.0.0     1/22/2026  SH       New.                                                                                               */
 /*                                                                                                                                   */
-/*                                                                                                                                   */
-/*  Revision Date        Author   Change Description                                                                                 */
-/* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  Phase2   09/04/2022  SK       Changed for Phase2 1A                                                                              */
-/* 19PFv3-1  09/21/2023  SN       Delete Tolerance Information Table                                                                 */
-/*  BEV-1    02/10/2026  SH       Change MCUID0262-0263 from Calibration to OMUSVIID                                                 */
-/*                                                                                                                                   */
-/*  * TN   = Takashi Nagai, Denso                                                                                                    */
-/*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
-/*  * TK   = Takanori Kuno, Denso Techno                                                                                             */
-/*  * SK   = Shintaro Kano, Denso Techno                                                                                             */
-/*  * TA(M) = Teruyuki Anjima, NTT Data MSE                                                                                          */
-/*  * SN   = Shimon Nambu, DensoTechno                                                                                               */
-/*  * SH   = Sae Hirose, Denso Techno                                                                                                */
+/*  * SH = Sae Hirose, DENSO-TECHNO                                                                                                  */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
