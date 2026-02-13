@@ -19,7 +19,7 @@
 #include "VIS_Pwrcfg.h"
 #include "LIB.h"
 #include "chipcom_config.h"
-#include "chipcom.h"
+#include "ChipCom.h"
 #include "iohw_adc_sh.h"
 
 /*==============================================================================================*/
@@ -243,7 +243,7 @@ static void vd_s_VISPwrJudgeBasicState(const U1 u1_t_ipdu_st, const U1 u1_t_recv
         /* 車両電源ステート(基本ステート)を判定する */
         switch (u1_t_recv) {
         case VIS_PWR_RCV_CHECKING:
-            u1_s_vispwr_vpsinfo_responsestate = VIS_BASICSTATE_CHECKING;
+            /* 判定中の場合、車両電源ステート及び状態は前回値を保持する */
             break;
         case VIS_PWR_RCV_PARKING:
             u1_s_vispwr_basicstate = VIS_BASICSTATE_PARKING;

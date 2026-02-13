@@ -16,7 +16,7 @@
 #include "VIS.h"
 #include "VIS_Can.h"
 #include "LIB.h"
-#include "chipcom.h"
+#include "ChipCom.h"
 #include "chipcom_config.h"
 /* -------------------------------------------------------------------------- */
 
