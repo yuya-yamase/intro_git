@@ -1,4 +1,4 @@
-/* 1.4.0 */
+/* 1.4.1 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -11,7 +11,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define AVGGRPH_C_MAJOR                         (1)
 #define AVGGRPH_C_MINOR                         (4)
-#define AVGGRPH_C_PATCH                         (0)
+#define AVGGRPH_C_PATCH                         (1)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -48,6 +48,8 @@
 #define AVGGRPH_PAST_MAX                (0xFFFFFFFEU)
 
 #define AVGGRPH_DELAY_TIM               (2U)
+
+#define AVGGRPH_DATE_UNKNWN             (0U)
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -199,7 +201,7 @@ void            vd_g_AvgGrphDataSync(void)
     for (u4_t_loop = (U4)0U; u4_t_loop < (U4)AVGGRPH_NUM_CNTT; u4_t_loop++) {
         st_tp_cfg = &st_sp_AVGGRPH_CNTTS_CFG[u4_t_loop];
         *(st_tp_cfg->u1p_latest) = (U1)u4_g_TripcomMsGetAccmltVal(st_tp_cfg->u1_msid_ltst);
-        for(u4_t_loop2 = (U1)0U; u4_t_loop2 < st_tp_cfg->u1_size; u4_t_loop2++) {
+        for(u4_t_loop2 = (U4)0U; u4_t_loop2 < st_tp_cfg->u1_size; u4_t_loop2++) {
             u1_t_msid = st_tp_cfg->u1_msid_econ + (U1)u4_t_loop2;
             st_tp_cfg->u4p_econ[u4_t_loop2] = u4_g_TripcomMsGetAccmltVal(u1_t_msid);
             if(st_tp_cfg->u2p_date != vdp_PTR_NA){
@@ -285,10 +287,10 @@ static void     vd_s_AvgGrphDate(const ST_AVGGRPH_CNTT * st_ap_CFG, const U1 u1_
     U4                          u4_t_yymmddwk;
 
     if(st_ap_CFG->u2p_date != vdp_PTR_NA){
-        u4_t_yymmddwk = (U4)0U;  
+        u4_t_yymmddwk = (U4)AVGGRPH_DATE_UNKNWN;  
         u1_t_read_sts = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_VM2TO1_DSPCAL, &u4_t_yymmddwk, (U2)AVGGRPH_VM_1WORD);
         if(u1_t_read_sts == (U1)IVDSH_NO_REA){
-            u4_t_yymmddwk = (U4)0U;
+            u4_t_yymmddwk = (U4)AVGGRPH_DATE_UNKNWN;
         }
         st_ap_CFG->u2p_date[u1_a_NEXT] = (U2)((u4_t_yymmddwk & (U4)((U4)YYMMDDWK_BIT_DA | (U4)YYMMDDWK_BIT_MO)) >> YYMMDDWK_LSB_DA);
         u1_t_msid = st_ap_CFG->u1_msid_date + u1_a_NEXT;
@@ -547,6 +549,7 @@ void            vd_g_AvgGrphTimeCnt(void)
 /*  1.2.2    05/20/2025  KM       Add delay count for TRIPCOM_MS_NVMSTS_NON                                                          */
 /*  1.3.0    05/08/2025  MN       Change for BEV PreCV.                                                                              */
 /*  1.4.0    01/13/2025  MN       CHG: QAC countermeasure, "vd_g_AvgGrphUpdt" function was refactored into subroutines.              */
+/*  1.4.1    02/12/2025  MN       CHG: Casting and add a macro definition for when the date is unavailable.                          */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */

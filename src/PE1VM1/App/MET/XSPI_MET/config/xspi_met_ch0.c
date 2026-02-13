@@ -868,20 +868,14 @@ U1  u1_g_XSpiDimSw(void) {
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
 static inline void    vd_s_XSpiCfgRxWchime(     const U4 * u4_ap_PDU_RX) {
-    U1  u1_t_sts;
-    U1  u1_t_wchime[HMIWCHIME_NUM];
-    
-    u1_t_sts = u1_g_XSpiMETRxRdAccessSts((U1)XSPI_MET_XSPI_RX_AGLBE);
-    if(u1_t_sts == (U1)XSPI_MET_XSPI_RX_READ_VALID){
-        u1_t_wchime[HMIWCHIME_TSR_A]       = (U1)0U;                                                            /* -              */
-        u1_t_wchime[HMIWCHIME_TSR_P]       = (U1)0U;                                                            /* -              */
-        u1_t_wchime[HMIWCHIME_MASTER]      = u1_XSPI_MET_READ__BIT(u4_ap_PDU_RX[1] , (U1)0U , (U1)2U);          /* MASTER_BZ      */
-        vd_g_HmiWchimePut(&u1_t_wchime[0] , (U1)HMIWCHIME_NUM);
-    }
+    U1  u1_t_wchimemstrreq;
+
+    u1_t_wchimemstrreq = u1_XSPI_MET_READ__BIT(u4_ap_PDU_RX[0] , (U1)0U , (U1)2U);          /* MASTER_BZ      */
+    vd_g_HmiWchimeMstrReqPut(u1_t_wchimemstrreq);
 }
 
 /*===================================================================================================================================*/
-/*  static void    vd_s_XSpiCfgRxWchime(U4 * u4_ap_pdu_tx)                                                                           */
+/*  static void    vd_s_XSpiCfgRxLocale(U4 * u4_ap_pdu_tx)                                                                           */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
@@ -898,7 +892,6 @@ static inline void    vd_s_XSpiCfgRxLocale(     const U4 * u4_ap_PDU_RX) {
         st_t_hmilocale.u1_unit_eleco  = u1_XSPI_MET_READ__BIT(u4_ap_PDU_RX[1] , (U1) 8U , (U1)4U);
         st_t_hmilocale.u1_unit_ambtmp = u1_XSPI_MET_READ__BIT(u4_ap_PDU_RX[1] , (U1)12U , (U1)2U);
         st_t_hmilocale.u1_timeformat  = u1_XSPI_MET_READ__BIT(u4_ap_PDU_RX[1] , (U1)14U , (U1)2U);
-        st_t_hmilocale.u1_unit_fueco  = (U1)U1_MAX;
         vd_g_HmiLocalePut(&st_t_hmilocale);
     }
 }
@@ -1056,7 +1049,7 @@ void    vd_g_XSpiCfgInitCh0(void)
 void    vd_g_XSpiCfgPduRxCh0(const U4 * u4_ap_PDU_RX)
 {
     vd_s_XSpiCfgRxDispsts(    &u4_ap_PDU_RX[ 10]);
-    vd_s_XSpiCfgRxWchime(     &u4_ap_PDU_RX[ 15]);
+    vd_s_XSpiCfgRxWchime(     &u4_ap_PDU_RX[ 16]);
     vd_s_XSpiCfgRxLocale(     &u4_ap_PDU_RX[ 17]);
     vd_s_XSpiCfgRxRcmmui(     &u4_ap_PDU_RX[ 19]);
     vd_s_XSpiCfgRxAvgGrph(    &u4_ap_PDU_RX[ 38]);
@@ -1187,7 +1180,11 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*                                MET-C_GMN-CSTD-0-02-A-C1                                                                           */
 /*                                Add the judgement of EPS & EPSSBW function.                                                        */
 /*  BEV-23    01/30/2026 TN       Fix initial value issue (BEV3CDCMET-3693).                                                         */
-/*  BEV-24    02/06/2026 TS       Change for BEV FF2.(MET-M_ONOFF-CSTD-1)                                                            */
+/*  BEV-24    02/06/2026 RO       Change for BEV Full_Function_2.                                                                    */
+/*                                MET-M_CONTBUZZ2-CSTD-0009-C1                                                                       */
+/*                                Delete TSR_P/TSR_A buzzers and update to the master caution buzzer request                         */
+/*  BEV-25    02/09/2026 SN(K)    Remove handling for st_t_hmilocale.u1_unit_fueco. (BEV3CDCMET-3860).                               */
+/*  BEV-26    02/06/2026 TS       Change for BEV FF2.(MET-M_ONOFF-CSTD-1)                                                            */
 /*                                Add APOFRQ_ON storage process.                                                                     */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
