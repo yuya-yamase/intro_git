@@ -55,16 +55,6 @@ typedef struct {
     volatile const U1          *u1p_t_C_CODE_IDX;
 }ST_VDF_DST_SPEC_C_CODE;
 
-typedef struct {
-    U2          u1_t_sub_spd_cfg; /* Subspeed Configuration Table (Result after Bit Operations) */
-    U1          u1_t_sub_dig_spd; /* Final Output Result */
-}ST_VDF_DST_SUB_VEHSPD;
-
-typedef struct{
-    U1          u1_t_law_if_name; /* Regulation Project Inquiry Interface Name */
-    U1          u1_t_law_destid;  /* Regulation Project DestID */
-}ST_VDF_DST_LAW_IFID_IDX;
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

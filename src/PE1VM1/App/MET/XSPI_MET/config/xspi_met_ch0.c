@@ -228,22 +228,22 @@ static inline void    vd_s_XSpiCfgTxVariation(     U4 * u4_ap_pdu_tx) {
 
     U4  u4_t_loop;
     U1  u1_t_subdigspd;
-    U1  u1_t_sys_hcs;                                                  /*  SYS_HCS                                              */
+    U1  u1_t_sys_hcs;                                                         /*  SYS_HCS                                       */
 
-    u4_ap_pdu_tx[0] = (U4)u1_g_VardefDestinationByPid();               /*  DESTINATION                                          */
+    u4_ap_pdu_tx[0] = (U4)u1_g_VardefDestinationByPid();                      /*  DESTINATION                                   */
 
     /* Change for 970B/850B */
-    u4_ap_pdu_tx[1] = ((U4)u1_g_VardefTtTrcoff() & (U4)0x01U);         /*  VAR_TT_TRCOFF                                        */
+    u4_ap_pdu_tx[1] = ((U4)u1_g_VardefTtTrcoff() & (U4)0x01U);                /*  VAR_TT_TRCOFF                                 */
 
-    u4_ap_pdu_tx[1] |= ((U4)u1_g_VardefTtBrake() & (U4)0x01U) << 1;    /*  VAR_TT_BRAKE                                         */
+    u4_ap_pdu_tx[1] |= ((U4)u1_g_VardefTtBrake() & (U4)0x01U) << 1;           /*  VAR_TT_BRAKE                                  */
 
-    u4_ap_pdu_tx[1] |= ((U4)u1_g_VardefTtAbs() & (U4)0x01U) << 2;      /*  VAR_TT_ABS                                           */
+    u4_ap_pdu_tx[1] |= ((U4)u1_g_VardefTtAbs() & (U4)0x01U) << 2;             /*  VAR_TT_ABS                                    */
 
-    u4_ap_pdu_tx[1] |= ((U4)u1_g_VardefTtEpbPkb() & (U4)0x01U) << 3;   /*  VAR_TT_EPBPKB                                        */
+    u4_ap_pdu_tx[1] |= ((U4)u1_g_VardefTtEpbPkb() & (U4)0x01U) << 3;          /*  VAR_TT_EPBPKB                                 */
 
-    u4_ap_pdu_tx[1] |= ((U4)u1_g_VardefTtTailHead() & (U4)0x01U) << 4; /*  VAR_TT_TAILHEAD                                      */
+    u4_ap_pdu_tx[1] |= ((U4)u1_g_VardefTtTailHead() & (U4)0x01U) << 4;        /*  VAR_TT_TAILHEAD                               */
 
-    u4_ap_pdu_tx[1] |= ((U4)u1_g_VardefPtsRx() & (U4)0x1fU) << 16;     /*  VAR_PTSYS                                            */
+    u4_ap_pdu_tx[1] |= ((U4)u1_g_VardefPtsRx() & (U4)0x1fU) << 16;            /*  VAR_PTSYS                                     */
 
     u4_ap_pdu_tx[1] |= ((U4)u1_g_VardefBltDstByPid() & (U4)0x03U) << 24;      /*  DEST_BELT_TT_TYPE                             */
 
