@@ -465,13 +465,18 @@ U1      u1_g_LocaleCfgUnit(const U1 u1_a_UNITIDX)
 {
     U1  u1_t_idx;
     U1  u1_t_unit;
+    U4  u4_t_chk_value;
 
-    u1_t_idx   = st_sp_LOCALE_UNITIDX[u1_a_UNITIDX].u1_mcst_id;
     switch(u1_a_UNITIDX){
     case (U1)UNIT_IDX_DIST:
     case (U1)UNIT_IDX_SPEED:
     case (U1)UNIT_IDX_ELECO:
-        u1_t_unit  = (U1)u4_g_McstBf(u1_t_idx);
+        u1_t_idx   = st_sp_LOCALE_UNITIDX[u1_a_UNITIDX].u1_mcst_id;
+        u4_t_chk_value = u4_g_McstBf(u1_t_idx);
+        if(u4_t_chk_value > (U4)U1_MAX){
+            u4_t_chk_value = (U4)U1_MAX;
+        }
+        u1_t_unit  = (U1)u4_t_chk_value;
         break;
     case (U1)UNIT_IDX_AMBTMP:
 #if 0   /* BEV Rebase provisionally */
@@ -534,7 +539,13 @@ void    vd_g_LocaleCfgTfmPut(const U1 u1_a_FRMT)
 /*===================================================================================================================================*/
 U1      u1_g_LocaleCfgTfm(void)
 {
-    return((U1)u4_g_McstBf((U1)MCST_BFI_TIMEFMT));
+    U4  u4_t_timfmt;
+
+    u4_t_timfmt = u4_g_McstBf((U1)MCST_BFI_TIMEFMT);
+    if(u4_t_timfmt > (U4)U1_MAX){
+        u4_t_timfmt = (U4)U1_MAX;
+    }
+    return((U1)u4_t_timfmt);
 }
 
 /*===================================================================================================================================*/
