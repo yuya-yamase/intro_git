@@ -493,6 +493,7 @@ static inline void    vd_s_XSpiCfgTxOdo(           U4 * u4_ap_pdu_tx) {
     U1  u1_t_tripb_sts;
     U4  u4_t_odo_km_dat;                                                /* ODO_KM                                         */
     U1  u1_t_tmnt_reset_sts;
+    U4  u4_t_tmnt_reset_dat;
 
 
     u4_t_odo_dat       = (U4)0U;
@@ -506,6 +507,8 @@ static inline void    vd_s_XSpiCfgTxOdo(           U4 * u4_ap_pdu_tx) {
 
     /* TMNT */
     u1_t_tmnt_reset_sts = u1_g_OdoCfgGetOmRstSts();
+    u4_t_tmnt_reset_dat = (U4)0U;
+    vd_g_OdoCfgGetOmRstVal(&u4_t_tmnt_reset_dat);
 
     u4_ap_pdu_tx[0]   = u1_t_tmnt_reset_sts;                           /* TMNT_RESET_RESULT                              */
     u4_ap_pdu_tx[0]  |= ((U4)u1_t_odo_sts   << XSPI_STS_SHIFT);        /* ODO_STS                                        */
@@ -515,7 +518,7 @@ static inline void    vd_s_XSpiCfgTxOdo(           U4 * u4_ap_pdu_tx) {
     u4_ap_pdu_tx[4]   = ((U4)u1_t_tripb_sts << XSPI_STS_SHIFT);        /* TRIPB_STS                                      */
     u4_ap_pdu_tx[5]   = u4_t_tripb_dat;                                /* TRIP_B                                         */
     u4_ap_pdu_tx[6]   = u4_t_odo_km_dat;                               /* ODO_KM                                         */
-    u4_ap_pdu_tx[8]   = (U4)0U;                                        /* TMNT_RESET_ODO_VALUE  BEV Rebase provisionally */
+    u4_ap_pdu_tx[8]   = u4_t_tmnt_reset_dat;                           /* TMNT_RESET_ODO_VALUE                           */
 
 }
 
@@ -947,7 +950,6 @@ static inline void    vd_s_XSpiCfgRxTripcom(    const U4 * u4_ap_PDU_RX) {
 
     u1_t_sts = u1_g_XSpiMETRxRdAccessSts((U1)XSPI_MET_XSPI_RX_AGLBE);
     if(u1_t_sts == (U1)XSPI_MET_XSPI_RX_READ_VALID){
-        st_t_hmitripcom.u2_avg_vehspd_kmph_ta  = (U2)u4_ap_PDU_RX[0];       /* AVG_SPD_KMPH_USRRST                  */
         st_t_hmitripcom.u4_dist_km_tr_a        = u4_ap_PDU_RX[5];           /* TRIPA_DIST_KM_USRRST                 */
         st_t_hmitripcom.u4_dist_km_tr_b        = u4_ap_PDU_RX[6];           /* TRIPB_DIST_KM_USRRST                 */
         st_t_hmitripcom.u2_avg_vehspd_tr_a     = (U2)u4_ap_PDU_RX[7];       /* TRIPA_AVG_SPD_KMPH_USRRST            */
@@ -958,13 +960,6 @@ static inline void    vd_s_XSpiCfgRxTripcom(    const U4 * u4_ap_PDU_RX) {
         st_t_hmitripcom.u4_ptsruntm_tr_b       = u4_ap_PDU_RX[10];          /* TRIPB_DRVTIME_HHHH_USRRST            */
                                                                             /* TRIPB_DRVTIME_MM_USRRST              */
                                                                             /* TRIPB_DRVTIME_SS_USRRST              */
-        st_t_hmitripcom.u4_avg_ee_kmpl_ta      = (U4)XSPI_UNKNOWN;      /* AVG_EE_KMPL_USRRST is not Applicable  */
-        st_t_hmitripcom.u4_avg_he_kmpkg_ta     = (U4)XSPI_UNKNOWN;      /* AVG_HE_KMPL_USRRST is not Applicable  */
-        st_t_hmitripcom.u4_idlstp_time_hrs_lc  = (U4)XSPI_UNKNOWN;      /* IDLSTP_USRRST is not Applicable       */
-        st_t_hmitripcom.u4_save_fs_ml_lc       = (U4)XSPI_UNKNOWN;      /* FUELSAVE_ML_USRRST is not Applicable  */
-        st_t_hmitripcom.u4_avg_fe_kmpl_ta      = (U4)XSPI_UNKNOWN;      /* AVG_FE_KMPL_USRRST is not Applicable  */
-        st_t_hmitripcom.u4_ptsrun_dist_km_lc   = (U4)XSPI_UNKNOWN;      /* DIST_KM_USRRST is not Applicable      */
-        st_t_hmitripcom.u4_ptsrun_time_hrs_lc  = (U4)XSPI_UNKNOWN;      /* DRVTIME_HHHH_USRRST is not Applicable */
 
         vd_g_HmiTripcomPut(&st_t_hmitripcom);
     }
@@ -1184,7 +1179,9 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*                                Delete analog vehicle speed display notification processing                                        */
 /*  BEV-27    02/06/2026 TS       Change for BEV FF2.(MET-M_ONOFF-CSTD-1)                                                            */
 /*                                Add APOFRQ_ON storage process.                                                                     */
-/*  BEV-28    02/02/2026 TS       Change for BEV FF2.(MET-M_HUDILL-CSTD-1)                                                           */
+/*  BEV-28    02/09/2026 MA       Add notification process of odo display value at reset                                             */
+/*  BEV-29    02/16/2026 EA       Deleted/deactivated the not applied process in BEV                                                 */
+/*  BEV-30    02/02/2026 TS       Change for BEV FF2.(MET-M_HUDILL-CSTD-1)                                                           */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
@@ -1213,5 +1210,6 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*  * EA   = Eunice Avelin, Denso Techno                                                                                             */
 /*  * MA = Misaki Aiki, Denso Techno                                                                                                 */
 /*  * HY   = Haruki Yagi, KSE                                                                                                        */
+/*  * EA   = Eunice Avelin, DTPH                                                                                                     */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

@@ -196,6 +196,8 @@ void SS_Pm_postClockUpCallout(SS_BootType u4_BootSource)
         (void)SS_Memory_copy(__ghsbegin_bsw_n_rvar_withval_top, __ghsbegin_bsw_n_rvar_ival_top, (uint32)BSW_N_RVAR_WITHVAL_SIZE);
     }
 
+    Port_SetConfigPtr( &cstPort_Config[0] );
+
 /*  Spi_PrePortInit(); */           /* call in Host side */
 
 /*  if((u4BootCause == ECU_INTG_u4BTCAUSE_PON  ) || */           /* call in Host side */

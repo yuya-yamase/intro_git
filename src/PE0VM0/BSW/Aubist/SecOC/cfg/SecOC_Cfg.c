@@ -16,7 +16,7 @@
 #include "SecOC_Cfg.h"
 #include <Csm.h>
 #include <SecOC_CD_FV.h>
-#include "SecOC_User.h"
+#include "oxsec_aubif_secoc.h"
 
 /*--------------------------------------------------------------------------*/
 /* Macros                                                                   */
@@ -108,7 +108,7 @@ CONST(uint32, SECOC_CONST_CONFIG) SecOC_Ab_TxAuthTpCopyTotalSize = 1U;
 
 CONST(SecOC_SPduTxConfirmationType, SECOC_CONST_CONFIG) SecOC_Ab_FullFVCallout[SECOC_AB_FULL_FRESHNESS_VALUE_CALLOUT_MAX] = 
 {
-    &SecOC_Callout_User_FullFreshnessValue
+    &vd_g_oXSECAubIfSecFullFVAck
 
 };
 
@@ -120,7 +120,7 @@ CONST(SecOC_Ab_BusCollectionType, SECOC_CONST_CONFIG) SecOC_Ab_BusCollection[SEC
       0U, /* Ab_BusID */
       SECOC_AB_PROTOCOL_CAN, /* Ab_Protocol */
       0U, /* Ab_VerifyStartCount */
-      0U, /* Ab_FreshnessValueID */
+      45U, /* Ab_FreshnessValueID */
       15U, /* Ab_ClearAcceptanceWindow */
       0U, /* dummy1 */
       SECOC_AB_FV_FULL, /* Ab_FvType */
@@ -132,7 +132,7 @@ CONST(SecOC_Ab_BusCollectionType, SECOC_CONST_CONFIG) SecOC_Ab_BusCollection[SEC
       1U, /* Ab_BusID */
       SECOC_AB_PROTOCOL_CAN, /* Ab_Protocol */
       0U, /* Ab_VerifyStartCount */
-      1U, /* Ab_FreshnessValueID */
+      46U, /* Ab_FreshnessValueID */
       15U, /* Ab_ClearAcceptanceWindow */
       0U, /* dummy1 */
       SECOC_AB_FV_FULL, /* Ab_FvType */
@@ -144,7 +144,7 @@ CONST(SecOC_Ab_BusCollectionType, SECOC_CONST_CONFIG) SecOC_Ab_BusCollection[SEC
       2U, /* Ab_BusID */
       SECOC_AB_PROTOCOL_CAN, /* Ab_Protocol */
       0U, /* Ab_VerifyStartCount */
-      2U, /* Ab_FreshnessValueID */
+      47U, /* Ab_FreshnessValueID */
       15U, /* Ab_ClearAcceptanceWindow */
       0U, /* dummy1 */
       SECOC_AB_FV_FULL, /* Ab_FvType */
@@ -156,7 +156,7 @@ CONST(SecOC_Ab_BusCollectionType, SECOC_CONST_CONFIG) SecOC_Ab_BusCollection[SEC
       3U, /* Ab_BusID */
       SECOC_AB_PROTOCOL_CAN, /* Ab_Protocol */
       0U, /* Ab_VerifyStartCount */
-      3U, /* Ab_FreshnessValueID */
+      48U, /* Ab_FreshnessValueID */
       15U, /* Ab_ClearAcceptanceWindow */
       0U, /* dummy1 */
       SECOC_AB_FV_FULL, /* Ab_FvType */
@@ -229,7 +229,7 @@ CONST(SecOC_RxPduProcessingType, SECOC_CONST_CONFIG) SecOC_RxPduProcessing[SECOC
         1U, /* AuthenticationBuildAttempts */
         786U, /* Ab_DataId */
         0U, /* AuthenticationVerifyAttempts */
-        6U, /* FreshnessValueId */
+        0U, /* FreshnessValueId */
         56U, /* FreshnessValueLength */
         56U, /* FreshnessValueTruncLength */
         { 16U, CRYPTO_PROCESSING_ASYNC, {0U, 0U, 0U} }, /* RxAuthServiceConfigRef */
@@ -241,7 +241,7 @@ CONST(SecOC_RxPduProcessingType, SECOC_CONST_CONFIG) SecOC_RxPduProcessing[SECOC
         0U, /* RxSecuredLayerPduId */
         0U, /* Ab_RxAuthenticLayerPduId */
         &SecOC_CD_FV_GetRxFreshness, /* Ab_FreshnessValueFuncName */
-        {&SecOC_Callout_User_VerificationFinalStatus}, /* Ab_VerificationFinalStatusCallout */
+        {&vd_g_oXSECAubIfSecVerifFinAck}, /* Ab_VerificationFinalStatusCallout */
         SECOC_AB_FV_CFUNC, /* Ab_QueryFreshnessValue */
         0U, /* Ab_ProtDataPaddingSize */
         NULL_PTR, /* Ab_ErrorDetailNotifyCallout */
@@ -271,7 +271,7 @@ CONST(SecOC_RxPduProcessingType, SECOC_CONST_CONFIG) SecOC_RxPduProcessing[SECOC
         1U, /* AuthenticationBuildAttempts */
         915U, /* Ab_DataId */
         0U, /* AuthenticationVerifyAttempts */
-        12U, /* FreshnessValueId */
+        1U, /* FreshnessValueId */
         56U, /* FreshnessValueLength */
         56U, /* FreshnessValueTruncLength */
         { 17U, CRYPTO_PROCESSING_ASYNC, {0U, 0U, 0U} }, /* RxAuthServiceConfigRef */
@@ -283,7 +283,7 @@ CONST(SecOC_RxPduProcessingType, SECOC_CONST_CONFIG) SecOC_RxPduProcessing[SECOC
         1U, /* RxSecuredLayerPduId */
         1U, /* Ab_RxAuthenticLayerPduId */
         &SecOC_CD_FV_GetRxFreshness, /* Ab_FreshnessValueFuncName */
-        {&SecOC_Callout_User_VerificationFinalStatus}, /* Ab_VerificationFinalStatusCallout */
+        {&vd_g_oXSECAubIfSecVerifFinAck}, /* Ab_VerificationFinalStatusCallout */
         SECOC_AB_FV_CFUNC, /* Ab_QueryFreshnessValue */
         0U, /* Ab_ProtDataPaddingSize */
         NULL_PTR, /* Ab_ErrorDetailNotifyCallout */
@@ -313,7 +313,7 @@ CONST(SecOC_RxPduProcessingType, SECOC_CONST_CONFIG) SecOC_RxPduProcessing[SECOC
         1U, /* AuthenticationBuildAttempts */
         917U, /* Ab_DataId */
         0U, /* AuthenticationVerifyAttempts */
-        13U, /* FreshnessValueId */
+        2U, /* FreshnessValueId */
         56U, /* FreshnessValueLength */
         56U, /* FreshnessValueTruncLength */
         { 18U, CRYPTO_PROCESSING_ASYNC, {0U, 0U, 0U} }, /* RxAuthServiceConfigRef */
@@ -325,7 +325,7 @@ CONST(SecOC_RxPduProcessingType, SECOC_CONST_CONFIG) SecOC_RxPduProcessing[SECOC
         2U, /* RxSecuredLayerPduId */
         2U, /* Ab_RxAuthenticLayerPduId */
         &SecOC_CD_FV_GetRxFreshness, /* Ab_FreshnessValueFuncName */
-        {&SecOC_Callout_User_VerificationFinalStatus}, /* Ab_VerificationFinalStatusCallout */
+        {&vd_g_oXSECAubIfSecVerifFinAck}, /* Ab_VerificationFinalStatusCallout */
         SECOC_AB_FV_CFUNC, /* Ab_QueryFreshnessValue */
         0U, /* Ab_ProtDataPaddingSize */
         NULL_PTR, /* Ab_ErrorDetailNotifyCallout */
@@ -355,7 +355,7 @@ CONST(SecOC_RxPduProcessingType, SECOC_CONST_CONFIG) SecOC_RxPduProcessing[SECOC
         1U, /* AuthenticationBuildAttempts */
         918U, /* Ab_DataId */
         0U, /* AuthenticationVerifyAttempts */
-        14U, /* FreshnessValueId */
+        3U, /* FreshnessValueId */
         56U, /* FreshnessValueLength */
         56U, /* FreshnessValueTruncLength */
         { 19U, CRYPTO_PROCESSING_ASYNC, {0U, 0U, 0U} }, /* RxAuthServiceConfigRef */
@@ -367,7 +367,7 @@ CONST(SecOC_RxPduProcessingType, SECOC_CONST_CONFIG) SecOC_RxPduProcessing[SECOC
         3U, /* RxSecuredLayerPduId */
         3U, /* Ab_RxAuthenticLayerPduId */
         &SecOC_CD_FV_GetRxFreshness, /* Ab_FreshnessValueFuncName */
-        {&SecOC_Callout_User_VerificationFinalStatus}, /* Ab_VerificationFinalStatusCallout */
+        {&vd_g_oXSECAubIfSecVerifFinAck}, /* Ab_VerificationFinalStatusCallout */
         SECOC_AB_FV_CFUNC, /* Ab_QueryFreshnessValue */
         0U, /* Ab_ProtDataPaddingSize */
         NULL_PTR, /* Ab_ErrorDetailNotifyCallout */
@@ -397,7 +397,7 @@ CONST(SecOC_RxPduProcessingType, SECOC_CONST_CONFIG) SecOC_RxPduProcessing[SECOC
         1U, /* AuthenticationBuildAttempts */
         922U, /* Ab_DataId */
         0U, /* AuthenticationVerifyAttempts */
-        15U, /* FreshnessValueId */
+        4U, /* FreshnessValueId */
         56U, /* FreshnessValueLength */
         56U, /* FreshnessValueTruncLength */
         { 20U, CRYPTO_PROCESSING_ASYNC, {0U, 0U, 0U} }, /* RxAuthServiceConfigRef */
@@ -409,7 +409,7 @@ CONST(SecOC_RxPduProcessingType, SECOC_CONST_CONFIG) SecOC_RxPduProcessing[SECOC
         4U, /* RxSecuredLayerPduId */
         4U, /* Ab_RxAuthenticLayerPduId */
         &SecOC_CD_FV_GetRxFreshness, /* Ab_FreshnessValueFuncName */
-        {&SecOC_Callout_User_VerificationFinalStatus}, /* Ab_VerificationFinalStatusCallout */
+        {&vd_g_oXSECAubIfSecVerifFinAck}, /* Ab_VerificationFinalStatusCallout */
         SECOC_AB_FV_CFUNC, /* Ab_QueryFreshnessValue */
         0U, /* Ab_ProtDataPaddingSize */
         NULL_PTR, /* Ab_ErrorDetailNotifyCallout */
@@ -439,7 +439,7 @@ CONST(SecOC_RxPduProcessingType, SECOC_CONST_CONFIG) SecOC_RxPduProcessing[SECOC
         1U, /* AuthenticationBuildAttempts */
         923U, /* Ab_DataId */
         0U, /* AuthenticationVerifyAttempts */
-        16U, /* FreshnessValueId */
+        5U, /* FreshnessValueId */
         56U, /* FreshnessValueLength */
         56U, /* FreshnessValueTruncLength */
         { 21U, CRYPTO_PROCESSING_ASYNC, {0U, 0U, 0U} }, /* RxAuthServiceConfigRef */
@@ -451,7 +451,7 @@ CONST(SecOC_RxPduProcessingType, SECOC_CONST_CONFIG) SecOC_RxPduProcessing[SECOC
         5U, /* RxSecuredLayerPduId */
         5U, /* Ab_RxAuthenticLayerPduId */
         &SecOC_CD_FV_GetRxFreshness, /* Ab_FreshnessValueFuncName */
-        {&SecOC_Callout_User_VerificationFinalStatus}, /* Ab_VerificationFinalStatusCallout */
+        {&vd_g_oXSECAubIfSecVerifFinAck}, /* Ab_VerificationFinalStatusCallout */
         SECOC_AB_FV_CFUNC, /* Ab_QueryFreshnessValue */
         0U, /* Ab_ProtDataPaddingSize */
         NULL_PTR, /* Ab_ErrorDetailNotifyCallout */
@@ -481,7 +481,7 @@ CONST(SecOC_RxPduProcessingType, SECOC_CONST_CONFIG) SecOC_RxPduProcessing[SECOC
         1U, /* AuthenticationBuildAttempts */
         925U, /* Ab_DataId */
         0U, /* AuthenticationVerifyAttempts */
-        17U, /* FreshnessValueId */
+        6U, /* FreshnessValueId */
         56U, /* FreshnessValueLength */
         56U, /* FreshnessValueTruncLength */
         { 22U, CRYPTO_PROCESSING_ASYNC, {0U, 0U, 0U} }, /* RxAuthServiceConfigRef */
@@ -493,7 +493,7 @@ CONST(SecOC_RxPduProcessingType, SECOC_CONST_CONFIG) SecOC_RxPduProcessing[SECOC
         6U, /* RxSecuredLayerPduId */
         6U, /* Ab_RxAuthenticLayerPduId */
         &SecOC_CD_FV_GetRxFreshness, /* Ab_FreshnessValueFuncName */
-        {&SecOC_Callout_User_VerificationFinalStatus}, /* Ab_VerificationFinalStatusCallout */
+        {&vd_g_oXSECAubIfSecVerifFinAck}, /* Ab_VerificationFinalStatusCallout */
         SECOC_AB_FV_CFUNC, /* Ab_QueryFreshnessValue */
         0U, /* Ab_ProtDataPaddingSize */
         NULL_PTR, /* Ab_ErrorDetailNotifyCallout */
@@ -523,7 +523,7 @@ CONST(SecOC_RxPduProcessingType, SECOC_CONST_CONFIG) SecOC_RxPduProcessing[SECOC
         1U, /* AuthenticationBuildAttempts */
         926U, /* Ab_DataId */
         0U, /* AuthenticationVerifyAttempts */
-        18U, /* FreshnessValueId */
+        7U, /* FreshnessValueId */
         56U, /* FreshnessValueLength */
         56U, /* FreshnessValueTruncLength */
         { 23U, CRYPTO_PROCESSING_ASYNC, {0U, 0U, 0U} }, /* RxAuthServiceConfigRef */
@@ -535,7 +535,7 @@ CONST(SecOC_RxPduProcessingType, SECOC_CONST_CONFIG) SecOC_RxPduProcessing[SECOC
         7U, /* RxSecuredLayerPduId */
         7U, /* Ab_RxAuthenticLayerPduId */
         &SecOC_CD_FV_GetRxFreshness, /* Ab_FreshnessValueFuncName */
-        {&SecOC_Callout_User_VerificationFinalStatus}, /* Ab_VerificationFinalStatusCallout */
+        {&vd_g_oXSECAubIfSecVerifFinAck}, /* Ab_VerificationFinalStatusCallout */
         SECOC_AB_FV_CFUNC, /* Ab_QueryFreshnessValue */
         0U, /* Ab_ProtDataPaddingSize */
         NULL_PTR, /* Ab_ErrorDetailNotifyCallout */
@@ -565,7 +565,7 @@ CONST(SecOC_RxPduProcessingType, SECOC_CONST_CONFIG) SecOC_RxPduProcessing[SECOC
         1U, /* AuthenticationBuildAttempts */
         927U, /* Ab_DataId */
         0U, /* AuthenticationVerifyAttempts */
-        19U, /* FreshnessValueId */
+        8U, /* FreshnessValueId */
         56U, /* FreshnessValueLength */
         56U, /* FreshnessValueTruncLength */
         { 24U, CRYPTO_PROCESSING_ASYNC, {0U, 0U, 0U} }, /* RxAuthServiceConfigRef */
@@ -577,7 +577,7 @@ CONST(SecOC_RxPduProcessingType, SECOC_CONST_CONFIG) SecOC_RxPduProcessing[SECOC
         8U, /* RxSecuredLayerPduId */
         8U, /* Ab_RxAuthenticLayerPduId */
         &SecOC_CD_FV_GetRxFreshness, /* Ab_FreshnessValueFuncName */
-        {&SecOC_Callout_User_VerificationFinalStatus}, /* Ab_VerificationFinalStatusCallout */
+        {&vd_g_oXSECAubIfSecVerifFinAck}, /* Ab_VerificationFinalStatusCallout */
         SECOC_AB_FV_CFUNC, /* Ab_QueryFreshnessValue */
         0U, /* Ab_ProtDataPaddingSize */
         NULL_PTR, /* Ab_ErrorDetailNotifyCallout */
@@ -607,7 +607,7 @@ CONST(SecOC_RxPduProcessingType, SECOC_CONST_CONFIG) SecOC_RxPduProcessing[SECOC
         1U, /* AuthenticationBuildAttempts */
         933U, /* Ab_DataId */
         0U, /* AuthenticationVerifyAttempts */
-        20U, /* FreshnessValueId */
+        9U, /* FreshnessValueId */
         56U, /* FreshnessValueLength */
         56U, /* FreshnessValueTruncLength */
         { 25U, CRYPTO_PROCESSING_ASYNC, {0U, 0U, 0U} }, /* RxAuthServiceConfigRef */
@@ -619,7 +619,7 @@ CONST(SecOC_RxPduProcessingType, SECOC_CONST_CONFIG) SecOC_RxPduProcessing[SECOC
         9U, /* RxSecuredLayerPduId */
         9U, /* Ab_RxAuthenticLayerPduId */
         &SecOC_CD_FV_GetRxFreshness, /* Ab_FreshnessValueFuncName */
-        {&SecOC_Callout_User_VerificationFinalStatus}, /* Ab_VerificationFinalStatusCallout */
+        {&vd_g_oXSECAubIfSecVerifFinAck}, /* Ab_VerificationFinalStatusCallout */
         SECOC_AB_FV_CFUNC, /* Ab_QueryFreshnessValue */
         0U, /* Ab_ProtDataPaddingSize */
         NULL_PTR, /* Ab_ErrorDetailNotifyCallout */
@@ -649,7 +649,7 @@ CONST(SecOC_RxPduProcessingType, SECOC_CONST_CONFIG) SecOC_RxPduProcessing[SECOC
         1U, /* AuthenticationBuildAttempts */
         940U, /* Ab_DataId */
         0U, /* AuthenticationVerifyAttempts */
-        21U, /* FreshnessValueId */
+        10U, /* FreshnessValueId */
         56U, /* FreshnessValueLength */
         56U, /* FreshnessValueTruncLength */
         { 26U, CRYPTO_PROCESSING_ASYNC, {0U, 0U, 0U} }, /* RxAuthServiceConfigRef */
@@ -661,7 +661,7 @@ CONST(SecOC_RxPduProcessingType, SECOC_CONST_CONFIG) SecOC_RxPduProcessing[SECOC
         10U, /* RxSecuredLayerPduId */
         10U, /* Ab_RxAuthenticLayerPduId */
         &SecOC_CD_FV_GetRxFreshness, /* Ab_FreshnessValueFuncName */
-        {&SecOC_Callout_User_VerificationFinalStatus}, /* Ab_VerificationFinalStatusCallout */
+        {&vd_g_oXSECAubIfSecVerifFinAck}, /* Ab_VerificationFinalStatusCallout */
         SECOC_AB_FV_CFUNC, /* Ab_QueryFreshnessValue */
         0U, /* Ab_ProtDataPaddingSize */
         NULL_PTR, /* Ab_ErrorDetailNotifyCallout */
@@ -691,7 +691,7 @@ CONST(SecOC_RxPduProcessingType, SECOC_CONST_CONFIG) SecOC_RxPduProcessing[SECOC
         1U, /* AuthenticationBuildAttempts */
         942U, /* Ab_DataId */
         0U, /* AuthenticationVerifyAttempts */
-        22U, /* FreshnessValueId */
+        11U, /* FreshnessValueId */
         56U, /* FreshnessValueLength */
         56U, /* FreshnessValueTruncLength */
         { 27U, CRYPTO_PROCESSING_ASYNC, {0U, 0U, 0U} }, /* RxAuthServiceConfigRef */
@@ -703,7 +703,7 @@ CONST(SecOC_RxPduProcessingType, SECOC_CONST_CONFIG) SecOC_RxPduProcessing[SECOC
         11U, /* RxSecuredLayerPduId */
         11U, /* Ab_RxAuthenticLayerPduId */
         &SecOC_CD_FV_GetRxFreshness, /* Ab_FreshnessValueFuncName */
-        {&SecOC_Callout_User_VerificationFinalStatus}, /* Ab_VerificationFinalStatusCallout */
+        {&vd_g_oXSECAubIfSecVerifFinAck}, /* Ab_VerificationFinalStatusCallout */
         SECOC_AB_FV_CFUNC, /* Ab_QueryFreshnessValue */
         0U, /* Ab_ProtDataPaddingSize */
         NULL_PTR, /* Ab_ErrorDetailNotifyCallout */
@@ -733,7 +733,7 @@ CONST(SecOC_RxPduProcessingType, SECOC_CONST_CONFIG) SecOC_RxPduProcessing[SECOC
         1U, /* AuthenticationBuildAttempts */
         946U, /* Ab_DataId */
         0U, /* AuthenticationVerifyAttempts */
-        23U, /* FreshnessValueId */
+        12U, /* FreshnessValueId */
         56U, /* FreshnessValueLength */
         56U, /* FreshnessValueTruncLength */
         { 28U, CRYPTO_PROCESSING_ASYNC, {0U, 0U, 0U} }, /* RxAuthServiceConfigRef */
@@ -745,7 +745,7 @@ CONST(SecOC_RxPduProcessingType, SECOC_CONST_CONFIG) SecOC_RxPduProcessing[SECOC
         12U, /* RxSecuredLayerPduId */
         12U, /* Ab_RxAuthenticLayerPduId */
         &SecOC_CD_FV_GetRxFreshness, /* Ab_FreshnessValueFuncName */
-        {&SecOC_Callout_User_VerificationFinalStatus}, /* Ab_VerificationFinalStatusCallout */
+        {&vd_g_oXSECAubIfSecVerifFinAck}, /* Ab_VerificationFinalStatusCallout */
         SECOC_AB_FV_CFUNC, /* Ab_QueryFreshnessValue */
         0U, /* Ab_ProtDataPaddingSize */
         NULL_PTR, /* Ab_ErrorDetailNotifyCallout */
@@ -775,7 +775,7 @@ CONST(SecOC_RxPduProcessingType, SECOC_CONST_CONFIG) SecOC_RxPduProcessing[SECOC
         1U, /* AuthenticationBuildAttempts */
         947U, /* Ab_DataId */
         0U, /* AuthenticationVerifyAttempts */
-        24U, /* FreshnessValueId */
+        13U, /* FreshnessValueId */
         56U, /* FreshnessValueLength */
         56U, /* FreshnessValueTruncLength */
         { 29U, CRYPTO_PROCESSING_ASYNC, {0U, 0U, 0U} }, /* RxAuthServiceConfigRef */
@@ -787,7 +787,7 @@ CONST(SecOC_RxPduProcessingType, SECOC_CONST_CONFIG) SecOC_RxPduProcessing[SECOC
         13U, /* RxSecuredLayerPduId */
         13U, /* Ab_RxAuthenticLayerPduId */
         &SecOC_CD_FV_GetRxFreshness, /* Ab_FreshnessValueFuncName */
-        {&SecOC_Callout_User_VerificationFinalStatus}, /* Ab_VerificationFinalStatusCallout */
+        {&vd_g_oXSECAubIfSecVerifFinAck}, /* Ab_VerificationFinalStatusCallout */
         SECOC_AB_FV_CFUNC, /* Ab_QueryFreshnessValue */
         0U, /* Ab_ProtDataPaddingSize */
         NULL_PTR, /* Ab_ErrorDetailNotifyCallout */
@@ -817,7 +817,7 @@ CONST(SecOC_RxPduProcessingType, SECOC_CONST_CONFIG) SecOC_RxPduProcessing[SECOC
         1U, /* AuthenticationBuildAttempts */
         953U, /* Ab_DataId */
         0U, /* AuthenticationVerifyAttempts */
-        25U, /* FreshnessValueId */
+        14U, /* FreshnessValueId */
         56U, /* FreshnessValueLength */
         56U, /* FreshnessValueTruncLength */
         { 30U, CRYPTO_PROCESSING_ASYNC, {0U, 0U, 0U} }, /* RxAuthServiceConfigRef */
@@ -829,7 +829,7 @@ CONST(SecOC_RxPduProcessingType, SECOC_CONST_CONFIG) SecOC_RxPduProcessing[SECOC
         14U, /* RxSecuredLayerPduId */
         14U, /* Ab_RxAuthenticLayerPduId */
         &SecOC_CD_FV_GetRxFreshness, /* Ab_FreshnessValueFuncName */
-        {&SecOC_Callout_User_VerificationFinalStatus}, /* Ab_VerificationFinalStatusCallout */
+        {&vd_g_oXSECAubIfSecVerifFinAck}, /* Ab_VerificationFinalStatusCallout */
         SECOC_AB_FV_CFUNC, /* Ab_QueryFreshnessValue */
         0U, /* Ab_ProtDataPaddingSize */
         NULL_PTR, /* Ab_ErrorDetailNotifyCallout */
@@ -859,7 +859,7 @@ CONST(SecOC_RxPduProcessingType, SECOC_CONST_CONFIG) SecOC_RxPduProcessing[SECOC
         1U, /* AuthenticationBuildAttempts */
         956U, /* Ab_DataId */
         0U, /* AuthenticationVerifyAttempts */
-        26U, /* FreshnessValueId */
+        15U, /* FreshnessValueId */
         56U, /* FreshnessValueLength */
         56U, /* FreshnessValueTruncLength */
         { 31U, CRYPTO_PROCESSING_ASYNC, {0U, 0U, 0U} }, /* RxAuthServiceConfigRef */
@@ -871,7 +871,7 @@ CONST(SecOC_RxPduProcessingType, SECOC_CONST_CONFIG) SecOC_RxPduProcessing[SECOC
         15U, /* RxSecuredLayerPduId */
         15U, /* Ab_RxAuthenticLayerPduId */
         &SecOC_CD_FV_GetRxFreshness, /* Ab_FreshnessValueFuncName */
-        {&SecOC_Callout_User_VerificationFinalStatus}, /* Ab_VerificationFinalStatusCallout */
+        {&vd_g_oXSECAubIfSecVerifFinAck}, /* Ab_VerificationFinalStatusCallout */
         SECOC_AB_FV_CFUNC, /* Ab_QueryFreshnessValue */
         0U, /* Ab_ProtDataPaddingSize */
         NULL_PTR, /* Ab_ErrorDetailNotifyCallout */
@@ -901,7 +901,7 @@ CONST(SecOC_RxPduProcessingType, SECOC_CONST_CONFIG) SecOC_RxPduProcessing[SECOC
         1U, /* AuthenticationBuildAttempts */
         966U, /* Ab_DataId */
         0U, /* AuthenticationVerifyAttempts */
-        27U, /* FreshnessValueId */
+        16U, /* FreshnessValueId */
         56U, /* FreshnessValueLength */
         56U, /* FreshnessValueTruncLength */
         { 32U, CRYPTO_PROCESSING_ASYNC, {0U, 0U, 0U} }, /* RxAuthServiceConfigRef */
@@ -913,7 +913,7 @@ CONST(SecOC_RxPduProcessingType, SECOC_CONST_CONFIG) SecOC_RxPduProcessing[SECOC
         16U, /* RxSecuredLayerPduId */
         16U, /* Ab_RxAuthenticLayerPduId */
         &SecOC_CD_FV_GetRxFreshness, /* Ab_FreshnessValueFuncName */
-        {&SecOC_Callout_User_VerificationFinalStatus}, /* Ab_VerificationFinalStatusCallout */
+        {&vd_g_oXSECAubIfSecVerifFinAck}, /* Ab_VerificationFinalStatusCallout */
         SECOC_AB_FV_CFUNC, /* Ab_QueryFreshnessValue */
         0U, /* Ab_ProtDataPaddingSize */
         NULL_PTR, /* Ab_ErrorDetailNotifyCallout */
@@ -943,7 +943,7 @@ CONST(SecOC_RxPduProcessingType, SECOC_CONST_CONFIG) SecOC_RxPduProcessing[SECOC
         1U, /* AuthenticationBuildAttempts */
         967U, /* Ab_DataId */
         0U, /* AuthenticationVerifyAttempts */
-        28U, /* FreshnessValueId */
+        17U, /* FreshnessValueId */
         56U, /* FreshnessValueLength */
         56U, /* FreshnessValueTruncLength */
         { 33U, CRYPTO_PROCESSING_ASYNC, {0U, 0U, 0U} }, /* RxAuthServiceConfigRef */
@@ -955,7 +955,7 @@ CONST(SecOC_RxPduProcessingType, SECOC_CONST_CONFIG) SecOC_RxPduProcessing[SECOC
         17U, /* RxSecuredLayerPduId */
         17U, /* Ab_RxAuthenticLayerPduId */
         &SecOC_CD_FV_GetRxFreshness, /* Ab_FreshnessValueFuncName */
-        {&SecOC_Callout_User_VerificationFinalStatus}, /* Ab_VerificationFinalStatusCallout */
+        {&vd_g_oXSECAubIfSecVerifFinAck}, /* Ab_VerificationFinalStatusCallout */
         SECOC_AB_FV_CFUNC, /* Ab_QueryFreshnessValue */
         0U, /* Ab_ProtDataPaddingSize */
         NULL_PTR, /* Ab_ErrorDetailNotifyCallout */
@@ -985,7 +985,7 @@ CONST(SecOC_RxPduProcessingType, SECOC_CONST_CONFIG) SecOC_RxPduProcessing[SECOC
         1U, /* AuthenticationBuildAttempts */
         973U, /* Ab_DataId */
         0U, /* AuthenticationVerifyAttempts */
-        29U, /* FreshnessValueId */
+        18U, /* FreshnessValueId */
         56U, /* FreshnessValueLength */
         56U, /* FreshnessValueTruncLength */
         { 34U, CRYPTO_PROCESSING_ASYNC, {0U, 0U, 0U} }, /* RxAuthServiceConfigRef */
@@ -997,7 +997,7 @@ CONST(SecOC_RxPduProcessingType, SECOC_CONST_CONFIG) SecOC_RxPduProcessing[SECOC
         18U, /* RxSecuredLayerPduId */
         18U, /* Ab_RxAuthenticLayerPduId */
         &SecOC_CD_FV_GetRxFreshness, /* Ab_FreshnessValueFuncName */
-        {&SecOC_Callout_User_VerificationFinalStatus}, /* Ab_VerificationFinalStatusCallout */
+        {&vd_g_oXSECAubIfSecVerifFinAck}, /* Ab_VerificationFinalStatusCallout */
         SECOC_AB_FV_CFUNC, /* Ab_QueryFreshnessValue */
         0U, /* Ab_ProtDataPaddingSize */
         NULL_PTR, /* Ab_ErrorDetailNotifyCallout */
@@ -1027,7 +1027,7 @@ CONST(SecOC_RxPduProcessingType, SECOC_CONST_CONFIG) SecOC_RxPduProcessing[SECOC
         1U, /* AuthenticationBuildAttempts */
         979U, /* Ab_DataId */
         0U, /* AuthenticationVerifyAttempts */
-        30U, /* FreshnessValueId */
+        19U, /* FreshnessValueId */
         56U, /* FreshnessValueLength */
         56U, /* FreshnessValueTruncLength */
         { 35U, CRYPTO_PROCESSING_ASYNC, {0U, 0U, 0U} }, /* RxAuthServiceConfigRef */
@@ -1039,7 +1039,7 @@ CONST(SecOC_RxPduProcessingType, SECOC_CONST_CONFIG) SecOC_RxPduProcessing[SECOC
         19U, /* RxSecuredLayerPduId */
         19U, /* Ab_RxAuthenticLayerPduId */
         &SecOC_CD_FV_GetRxFreshness, /* Ab_FreshnessValueFuncName */
-        {&SecOC_Callout_User_VerificationFinalStatus}, /* Ab_VerificationFinalStatusCallout */
+        {&vd_g_oXSECAubIfSecVerifFinAck}, /* Ab_VerificationFinalStatusCallout */
         SECOC_AB_FV_CFUNC, /* Ab_QueryFreshnessValue */
         0U, /* Ab_ProtDataPaddingSize */
         NULL_PTR, /* Ab_ErrorDetailNotifyCallout */
@@ -1069,7 +1069,7 @@ CONST(SecOC_RxPduProcessingType, SECOC_CONST_CONFIG) SecOC_RxPduProcessing[SECOC
         1U, /* AuthenticationBuildAttempts */
         982U, /* Ab_DataId */
         0U, /* AuthenticationVerifyAttempts */
-        31U, /* FreshnessValueId */
+        20U, /* FreshnessValueId */
         56U, /* FreshnessValueLength */
         56U, /* FreshnessValueTruncLength */
         { 36U, CRYPTO_PROCESSING_ASYNC, {0U, 0U, 0U} }, /* RxAuthServiceConfigRef */
@@ -1081,7 +1081,7 @@ CONST(SecOC_RxPduProcessingType, SECOC_CONST_CONFIG) SecOC_RxPduProcessing[SECOC
         20U, /* RxSecuredLayerPduId */
         20U, /* Ab_RxAuthenticLayerPduId */
         &SecOC_CD_FV_GetRxFreshness, /* Ab_FreshnessValueFuncName */
-        {&SecOC_Callout_User_VerificationFinalStatus}, /* Ab_VerificationFinalStatusCallout */
+        {&vd_g_oXSECAubIfSecVerifFinAck}, /* Ab_VerificationFinalStatusCallout */
         SECOC_AB_FV_CFUNC, /* Ab_QueryFreshnessValue */
         0U, /* Ab_ProtDataPaddingSize */
         NULL_PTR, /* Ab_ErrorDetailNotifyCallout */
@@ -1111,7 +1111,7 @@ CONST(SecOC_RxPduProcessingType, SECOC_CONST_CONFIG) SecOC_RxPduProcessing[SECOC
         1U, /* AuthenticationBuildAttempts */
         989U, /* Ab_DataId */
         0U, /* AuthenticationVerifyAttempts */
-        32U, /* FreshnessValueId */
+        21U, /* FreshnessValueId */
         56U, /* FreshnessValueLength */
         56U, /* FreshnessValueTruncLength */
         { 37U, CRYPTO_PROCESSING_ASYNC, {0U, 0U, 0U} }, /* RxAuthServiceConfigRef */
@@ -1123,7 +1123,7 @@ CONST(SecOC_RxPduProcessingType, SECOC_CONST_CONFIG) SecOC_RxPduProcessing[SECOC
         21U, /* RxSecuredLayerPduId */
         21U, /* Ab_RxAuthenticLayerPduId */
         &SecOC_CD_FV_GetRxFreshness, /* Ab_FreshnessValueFuncName */
-        {&SecOC_Callout_User_VerificationFinalStatus}, /* Ab_VerificationFinalStatusCallout */
+        {&vd_g_oXSECAubIfSecVerifFinAck}, /* Ab_VerificationFinalStatusCallout */
         SECOC_AB_FV_CFUNC, /* Ab_QueryFreshnessValue */
         0U, /* Ab_ProtDataPaddingSize */
         NULL_PTR, /* Ab_ErrorDetailNotifyCallout */
@@ -1153,7 +1153,7 @@ CONST(SecOC_RxPduProcessingType, SECOC_CONST_CONFIG) SecOC_RxPduProcessing[SECOC
         1U, /* AuthenticationBuildAttempts */
         993U, /* Ab_DataId */
         0U, /* AuthenticationVerifyAttempts */
-        33U, /* FreshnessValueId */
+        22U, /* FreshnessValueId */
         56U, /* FreshnessValueLength */
         56U, /* FreshnessValueTruncLength */
         { 38U, CRYPTO_PROCESSING_ASYNC, {0U, 0U, 0U} }, /* RxAuthServiceConfigRef */
@@ -1165,7 +1165,7 @@ CONST(SecOC_RxPduProcessingType, SECOC_CONST_CONFIG) SecOC_RxPduProcessing[SECOC
         22U, /* RxSecuredLayerPduId */
         22U, /* Ab_RxAuthenticLayerPduId */
         &SecOC_CD_FV_GetRxFreshness, /* Ab_FreshnessValueFuncName */
-        {&SecOC_Callout_User_VerificationFinalStatus}, /* Ab_VerificationFinalStatusCallout */
+        {&vd_g_oXSECAubIfSecVerifFinAck}, /* Ab_VerificationFinalStatusCallout */
         SECOC_AB_FV_CFUNC, /* Ab_QueryFreshnessValue */
         0U, /* Ab_ProtDataPaddingSize */
         NULL_PTR, /* Ab_ErrorDetailNotifyCallout */
@@ -1195,7 +1195,7 @@ CONST(SecOC_RxPduProcessingType, SECOC_CONST_CONFIG) SecOC_RxPduProcessing[SECOC
         1U, /* AuthenticationBuildAttempts */
         1003U, /* Ab_DataId */
         0U, /* AuthenticationVerifyAttempts */
-        34U, /* FreshnessValueId */
+        23U, /* FreshnessValueId */
         56U, /* FreshnessValueLength */
         56U, /* FreshnessValueTruncLength */
         { 39U, CRYPTO_PROCESSING_ASYNC, {0U, 0U, 0U} }, /* RxAuthServiceConfigRef */
@@ -1207,7 +1207,7 @@ CONST(SecOC_RxPduProcessingType, SECOC_CONST_CONFIG) SecOC_RxPduProcessing[SECOC
         23U, /* RxSecuredLayerPduId */
         23U, /* Ab_RxAuthenticLayerPduId */
         &SecOC_CD_FV_GetRxFreshness, /* Ab_FreshnessValueFuncName */
-        {&SecOC_Callout_User_VerificationFinalStatus}, /* Ab_VerificationFinalStatusCallout */
+        {&vd_g_oXSECAubIfSecVerifFinAck}, /* Ab_VerificationFinalStatusCallout */
         SECOC_AB_FV_CFUNC, /* Ab_QueryFreshnessValue */
         0U, /* Ab_ProtDataPaddingSize */
         NULL_PTR, /* Ab_ErrorDetailNotifyCallout */
@@ -1237,7 +1237,7 @@ CONST(SecOC_RxPduProcessingType, SECOC_CONST_CONFIG) SecOC_RxPduProcessing[SECOC
         1U, /* AuthenticationBuildAttempts */
         1007U, /* Ab_DataId */
         0U, /* AuthenticationVerifyAttempts */
-        35U, /* FreshnessValueId */
+        24U, /* FreshnessValueId */
         56U, /* FreshnessValueLength */
         56U, /* FreshnessValueTruncLength */
         { 40U, CRYPTO_PROCESSING_ASYNC, {0U, 0U, 0U} }, /* RxAuthServiceConfigRef */
@@ -1249,7 +1249,7 @@ CONST(SecOC_RxPduProcessingType, SECOC_CONST_CONFIG) SecOC_RxPduProcessing[SECOC
         24U, /* RxSecuredLayerPduId */
         24U, /* Ab_RxAuthenticLayerPduId */
         &SecOC_CD_FV_GetRxFreshness, /* Ab_FreshnessValueFuncName */
-        {&SecOC_Callout_User_VerificationFinalStatus}, /* Ab_VerificationFinalStatusCallout */
+        {&vd_g_oXSECAubIfSecVerifFinAck}, /* Ab_VerificationFinalStatusCallout */
         SECOC_AB_FV_CFUNC, /* Ab_QueryFreshnessValue */
         0U, /* Ab_ProtDataPaddingSize */
         NULL_PTR, /* Ab_ErrorDetailNotifyCallout */
@@ -1279,7 +1279,7 @@ CONST(SecOC_RxPduProcessingType, SECOC_CONST_CONFIG) SecOC_RxPduProcessing[SECOC
         1U, /* AuthenticationBuildAttempts */
         1013U, /* Ab_DataId */
         0U, /* AuthenticationVerifyAttempts */
-        36U, /* FreshnessValueId */
+        25U, /* FreshnessValueId */
         56U, /* FreshnessValueLength */
         56U, /* FreshnessValueTruncLength */
         { 41U, CRYPTO_PROCESSING_ASYNC, {0U, 0U, 0U} }, /* RxAuthServiceConfigRef */
@@ -1291,7 +1291,7 @@ CONST(SecOC_RxPduProcessingType, SECOC_CONST_CONFIG) SecOC_RxPduProcessing[SECOC
         25U, /* RxSecuredLayerPduId */
         25U, /* Ab_RxAuthenticLayerPduId */
         &SecOC_CD_FV_GetRxFreshness, /* Ab_FreshnessValueFuncName */
-        {&SecOC_Callout_User_VerificationFinalStatus}, /* Ab_VerificationFinalStatusCallout */
+        {&vd_g_oXSECAubIfSecVerifFinAck}, /* Ab_VerificationFinalStatusCallout */
         SECOC_AB_FV_CFUNC, /* Ab_QueryFreshnessValue */
         0U, /* Ab_ProtDataPaddingSize */
         NULL_PTR, /* Ab_ErrorDetailNotifyCallout */
@@ -1321,7 +1321,7 @@ CONST(SecOC_RxPduProcessingType, SECOC_CONST_CONFIG) SecOC_RxPduProcessing[SECOC
         1U, /* AuthenticationBuildAttempts */
         1332U, /* Ab_DataId */
         0U, /* AuthenticationVerifyAttempts */
-        37U, /* FreshnessValueId */
+        26U, /* FreshnessValueId */
         56U, /* FreshnessValueLength */
         56U, /* FreshnessValueTruncLength */
         { 42U, CRYPTO_PROCESSING_ASYNC, {0U, 0U, 0U} }, /* RxAuthServiceConfigRef */
@@ -1333,7 +1333,7 @@ CONST(SecOC_RxPduProcessingType, SECOC_CONST_CONFIG) SecOC_RxPduProcessing[SECOC
         26U, /* RxSecuredLayerPduId */
         26U, /* Ab_RxAuthenticLayerPduId */
         &SecOC_CD_FV_GetRxFreshness, /* Ab_FreshnessValueFuncName */
-        {&SecOC_Callout_User_VerificationFinalStatus}, /* Ab_VerificationFinalStatusCallout */
+        {&vd_g_oXSECAubIfSecVerifFinAck}, /* Ab_VerificationFinalStatusCallout */
         SECOC_AB_FV_CFUNC, /* Ab_QueryFreshnessValue */
         0U, /* Ab_ProtDataPaddingSize */
         NULL_PTR, /* Ab_ErrorDetailNotifyCallout */
@@ -1363,7 +1363,7 @@ CONST(SecOC_RxPduProcessingType, SECOC_CONST_CONFIG) SecOC_RxPduProcessing[SECOC
         1U, /* AuthenticationBuildAttempts */
         888U, /* Ab_DataId */
         0U, /* AuthenticationVerifyAttempts */
-        38U, /* FreshnessValueId */
+        27U, /* FreshnessValueId */
         56U, /* FreshnessValueLength */
         56U, /* FreshnessValueTruncLength */
         { 43U, CRYPTO_PROCESSING_ASYNC, {0U, 0U, 0U} }, /* RxAuthServiceConfigRef */
@@ -1375,7 +1375,7 @@ CONST(SecOC_RxPduProcessingType, SECOC_CONST_CONFIG) SecOC_RxPduProcessing[SECOC
         27U, /* RxSecuredLayerPduId */
         27U, /* Ab_RxAuthenticLayerPduId */
         &SecOC_CD_FV_GetRxFreshness, /* Ab_FreshnessValueFuncName */
-        {&SecOC_Callout_User_VerificationFinalStatus}, /* Ab_VerificationFinalStatusCallout */
+        {&vd_g_oXSECAubIfSecVerifFinAck}, /* Ab_VerificationFinalStatusCallout */
         SECOC_AB_FV_CFUNC, /* Ab_QueryFreshnessValue */
         0U, /* Ab_ProtDataPaddingSize */
         NULL_PTR, /* Ab_ErrorDetailNotifyCallout */
@@ -1405,7 +1405,7 @@ CONST(SecOC_RxPduProcessingType, SECOC_CONST_CONFIG) SecOC_RxPduProcessing[SECOC
         1U, /* AuthenticationBuildAttempts */
         957U, /* Ab_DataId */
         0U, /* AuthenticationVerifyAttempts */
-        46U, /* FreshnessValueId */
+        28U, /* FreshnessValueId */
         56U, /* FreshnessValueLength */
         56U, /* FreshnessValueTruncLength */
         { 44U, CRYPTO_PROCESSING_ASYNC, {0U, 0U, 0U} }, /* RxAuthServiceConfigRef */
@@ -1417,7 +1417,7 @@ CONST(SecOC_RxPduProcessingType, SECOC_CONST_CONFIG) SecOC_RxPduProcessing[SECOC
         28U, /* RxSecuredLayerPduId */
         28U, /* Ab_RxAuthenticLayerPduId */
         &SecOC_CD_FV_GetRxFreshness, /* Ab_FreshnessValueFuncName */
-        {&SecOC_Callout_User_VerificationFinalStatus}, /* Ab_VerificationFinalStatusCallout */
+        {&vd_g_oXSECAubIfSecVerifFinAck}, /* Ab_VerificationFinalStatusCallout */
         SECOC_AB_FV_CFUNC, /* Ab_QueryFreshnessValue */
         0U, /* Ab_ProtDataPaddingSize */
         NULL_PTR, /* Ab_ErrorDetailNotifyCallout */
@@ -1448,7 +1448,7 @@ CONST(SecOC_TxPduProcessingType, SECOC_CONST_CONFIG) SecOC_TxPduProcessing[SECOC
         1U, /* AuthenticationBuildAttempts */
         SECOC_AB_FV_CFUNC, /* Ab_QueryFreshnessValue */
         722U, /* Ab_DataId */
-        53U, /* FreshnessValueId */
+        29U, /* FreshnessValueId */
         56U, /* FreshnessValueLength */
         56U, /* FreshnessValueTruncLength */
         0U, /* Ab_ProtDataPaddingSize */
@@ -1484,7 +1484,7 @@ CONST(SecOC_TxPduProcessingType, SECOC_CONST_CONFIG) SecOC_TxPduProcessing[SECOC
         1U, /* AuthenticationBuildAttempts */
         SECOC_AB_FV_CFUNC, /* Ab_QueryFreshnessValue */
         724U, /* Ab_DataId */
-        54U, /* FreshnessValueId */
+        30U, /* FreshnessValueId */
         56U, /* FreshnessValueLength */
         56U, /* FreshnessValueTruncLength */
         0U, /* Ab_ProtDataPaddingSize */
@@ -1520,7 +1520,7 @@ CONST(SecOC_TxPduProcessingType, SECOC_CONST_CONFIG) SecOC_TxPduProcessing[SECOC
         1U, /* AuthenticationBuildAttempts */
         SECOC_AB_FV_CFUNC, /* Ab_QueryFreshnessValue */
         725U, /* Ab_DataId */
-        55U, /* FreshnessValueId */
+        31U, /* FreshnessValueId */
         56U, /* FreshnessValueLength */
         56U, /* FreshnessValueTruncLength */
         0U, /* Ab_ProtDataPaddingSize */
@@ -1556,7 +1556,7 @@ CONST(SecOC_TxPduProcessingType, SECOC_CONST_CONFIG) SecOC_TxPduProcessing[SECOC
         1U, /* AuthenticationBuildAttempts */
         SECOC_AB_FV_CFUNC, /* Ab_QueryFreshnessValue */
         726U, /* Ab_DataId */
-        56U, /* FreshnessValueId */
+        32U, /* FreshnessValueId */
         56U, /* FreshnessValueLength */
         56U, /* FreshnessValueTruncLength */
         0U, /* Ab_ProtDataPaddingSize */
@@ -1592,7 +1592,7 @@ CONST(SecOC_TxPduProcessingType, SECOC_CONST_CONFIG) SecOC_TxPduProcessing[SECOC
         1U, /* AuthenticationBuildAttempts */
         SECOC_AB_FV_CFUNC, /* Ab_QueryFreshnessValue */
         727U, /* Ab_DataId */
-        57U, /* FreshnessValueId */
+        33U, /* FreshnessValueId */
         56U, /* FreshnessValueLength */
         56U, /* FreshnessValueTruncLength */
         0U, /* Ab_ProtDataPaddingSize */
@@ -1628,7 +1628,7 @@ CONST(SecOC_TxPduProcessingType, SECOC_CONST_CONFIG) SecOC_TxPduProcessing[SECOC
         1U, /* AuthenticationBuildAttempts */
         SECOC_AB_FV_CFUNC, /* Ab_QueryFreshnessValue */
         735U, /* Ab_DataId */
-        58U, /* FreshnessValueId */
+        34U, /* FreshnessValueId */
         56U, /* FreshnessValueLength */
         56U, /* FreshnessValueTruncLength */
         0U, /* Ab_ProtDataPaddingSize */
@@ -1664,7 +1664,7 @@ CONST(SecOC_TxPduProcessingType, SECOC_CONST_CONFIG) SecOC_TxPduProcessing[SECOC
         1U, /* AuthenticationBuildAttempts */
         SECOC_AB_FV_CFUNC, /* Ab_QueryFreshnessValue */
         736U, /* Ab_DataId */
-        59U, /* FreshnessValueId */
+        35U, /* FreshnessValueId */
         56U, /* FreshnessValueLength */
         56U, /* FreshnessValueTruncLength */
         0U, /* Ab_ProtDataPaddingSize */
@@ -1700,7 +1700,7 @@ CONST(SecOC_TxPduProcessingType, SECOC_CONST_CONFIG) SecOC_TxPduProcessing[SECOC
         1U, /* AuthenticationBuildAttempts */
         SECOC_AB_FV_CFUNC, /* Ab_QueryFreshnessValue */
         737U, /* Ab_DataId */
-        60U, /* FreshnessValueId */
+        36U, /* FreshnessValueId */
         56U, /* FreshnessValueLength */
         56U, /* FreshnessValueTruncLength */
         0U, /* Ab_ProtDataPaddingSize */
@@ -1736,7 +1736,7 @@ CONST(SecOC_TxPduProcessingType, SECOC_CONST_CONFIG) SecOC_TxPduProcessing[SECOC
         1U, /* AuthenticationBuildAttempts */
         SECOC_AB_FV_CFUNC, /* Ab_QueryFreshnessValue */
         738U, /* Ab_DataId */
-        61U, /* FreshnessValueId */
+        37U, /* FreshnessValueId */
         56U, /* FreshnessValueLength */
         56U, /* FreshnessValueTruncLength */
         0U, /* Ab_ProtDataPaddingSize */
@@ -1772,7 +1772,7 @@ CONST(SecOC_TxPduProcessingType, SECOC_CONST_CONFIG) SecOC_TxPduProcessing[SECOC
         1U, /* AuthenticationBuildAttempts */
         SECOC_AB_FV_CFUNC, /* Ab_QueryFreshnessValue */
         751U, /* Ab_DataId */
-        62U, /* FreshnessValueId */
+        38U, /* FreshnessValueId */
         56U, /* FreshnessValueLength */
         56U, /* FreshnessValueTruncLength */
         0U, /* Ab_ProtDataPaddingSize */
@@ -1808,7 +1808,7 @@ CONST(SecOC_TxPduProcessingType, SECOC_CONST_CONFIG) SecOC_TxPduProcessing[SECOC
         1U, /* AuthenticationBuildAttempts */
         SECOC_AB_FV_CFUNC, /* Ab_QueryFreshnessValue */
         752U, /* Ab_DataId */
-        63U, /* FreshnessValueId */
+        39U, /* FreshnessValueId */
         56U, /* FreshnessValueLength */
         56U, /* FreshnessValueTruncLength */
         0U, /* Ab_ProtDataPaddingSize */
@@ -1844,7 +1844,7 @@ CONST(SecOC_TxPduProcessingType, SECOC_CONST_CONFIG) SecOC_TxPduProcessing[SECOC
         1U, /* AuthenticationBuildAttempts */
         SECOC_AB_FV_CFUNC, /* Ab_QueryFreshnessValue */
         754U, /* Ab_DataId */
-        64U, /* FreshnessValueId */
+        40U, /* FreshnessValueId */
         56U, /* FreshnessValueLength */
         56U, /* FreshnessValueTruncLength */
         0U, /* Ab_ProtDataPaddingSize */
@@ -1880,7 +1880,7 @@ CONST(SecOC_TxPduProcessingType, SECOC_CONST_CONFIG) SecOC_TxPduProcessing[SECOC
         1U, /* AuthenticationBuildAttempts */
         SECOC_AB_FV_CFUNC, /* Ab_QueryFreshnessValue */
         757U, /* Ab_DataId */
-        65U, /* FreshnessValueId */
+        41U, /* FreshnessValueId */
         56U, /* FreshnessValueLength */
         56U, /* FreshnessValueTruncLength */
         0U, /* Ab_ProtDataPaddingSize */
@@ -1916,7 +1916,7 @@ CONST(SecOC_TxPduProcessingType, SECOC_CONST_CONFIG) SecOC_TxPduProcessing[SECOC
         1U, /* AuthenticationBuildAttempts */
         SECOC_AB_FV_CFUNC, /* Ab_QueryFreshnessValue */
         819U, /* Ab_DataId */
-        66U, /* FreshnessValueId */
+        42U, /* FreshnessValueId */
         56U, /* FreshnessValueLength */
         56U, /* FreshnessValueTruncLength */
         0U, /* Ab_ProtDataPaddingSize */
@@ -1952,7 +1952,7 @@ CONST(SecOC_TxPduProcessingType, SECOC_CONST_CONFIG) SecOC_TxPduProcessing[SECOC
         1U, /* AuthenticationBuildAttempts */
         SECOC_AB_FV_CFUNC, /* Ab_QueryFreshnessValue */
         1006U, /* Ab_DataId */
-        67U, /* FreshnessValueId */
+        43U, /* FreshnessValueId */
         56U, /* FreshnessValueLength */
         56U, /* FreshnessValueTruncLength */
         0U, /* Ab_ProtDataPaddingSize */
@@ -1988,7 +1988,7 @@ CONST(SecOC_TxPduProcessingType, SECOC_CONST_CONFIG) SecOC_TxPduProcessing[SECOC
         1U, /* AuthenticationBuildAttempts */
         SECOC_AB_FV_CFUNC, /* Ab_QueryFreshnessValue */
         589U, /* Ab_DataId */
-        74U, /* FreshnessValueId */
+        44U, /* FreshnessValueId */
         56U, /* FreshnessValueLength */
         56U, /* FreshnessValueTruncLength */
         0U, /* Ab_ProtDataPaddingSize */

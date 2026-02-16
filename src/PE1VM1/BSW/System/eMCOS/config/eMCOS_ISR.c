@@ -20,16 +20,14 @@
 
 
 #include "scheduler.h"
+#include "xspi.h"
+#include "Dma.h"
 
 #if ((defined(__AIP_THROUGHPUT__)) && (__AIP_THROUGHPUT__ == 1))
 #include "throughput.h"
 #endif
 
 #include <Ecu_Memmap_SdaDisableE_env.h>
-
-#include "xspi.h"
-#include "Dma.h"
-
 /*----------------------------------------------------------------------------
  *		Defines
  *--------------------------------------------------------------------------*/
@@ -39,9 +37,7 @@
  *--------------------------------------------------------------------------*/
 ISR(eMCOS_ISR_INTOSTM6TINT);
 ISR(eMCOS_ISR_INTOSTM0TINT);
-ISR(eMCOS_ISR_INTSDMAC1CH0);
-ISR(eMCOS_ISR_INTSDMAC1CH1);
-ISR(eMCOS_ISR_INTSDMAC1CH2);
+ISR(eMCOS_ISR_INTSDMAC0CH7);
 
 /*----------------------------------------------------------------------------
  *		Codes
@@ -77,39 +73,16 @@ ISR(eMCOS_ISR_INTOSTM0TINT)
 }
 
 /**---------------------------------------------------------------------------
- * [Format]		ISR(eMCOS_ISR_INTSDMAC1CH0)
+ * [Format]		ISR(eMCOS_ISR_INTSDMAC0CH7)
  * [Function]	
  * [Arguments]	None
  * [Return]		None
  * [Notes]		
  *--------------------------------------------------------------------------*/
-ISR(eMCOS_ISR_INTSDMAC1CH0)
+ISR(eMCOS_ISR_INTSDMAC0CH7)
 {
-    /* INTSDMAC1CH0 */
-}
-
-/**---------------------------------------------------------------------------
- * [Format]		ISR(eMCOS_ISR_INTSDMAC1CH1)
- * [Function]	
- * [Arguments]	None
- * [Return]		None
- * [Notes]		
- *--------------------------------------------------------------------------*/
-ISR(eMCOS_ISR_INTSDMAC1CH1)
-{
-    Dma_INTSDMAC1CH1();
-}
-
-/**---------------------------------------------------------------------------
- * [Format]		ISR(eMCOS_ISR_INTSDMAC1CH2)
- * [Function]	
- * [Arguments]	None
- * [Return]		None
- * [Notes]		
- *--------------------------------------------------------------------------*/
-ISR(eMCOS_ISR_INTSDMAC1CH2)
-{
-    /* INTSDMAC1CH2 */
+    /* INTSDMAC0CH7 */
+    Dma_INTSDMAC0CH7();
 }
 
 #else /* #if ((defined(__AIP_THROUGHPUT__)) && (__AIP_THROUGHPUT__ == 1)) */
@@ -139,49 +112,23 @@ ISR(eMCOS_ISR_INTOSTM0TINT)
 {
     /*    INTOSTM0_ISR;*/
     vd_g_ThroughputIntrptStart();
+    xspi_Main( XSPI_CH_02 );
     vd_g_ThroughputIntrptFinish((U2)THRPTM_TASK_ISR_INTOSTM0TINT);
 }
 
 /**---------------------------------------------------------------------------
- * [Format]		ISR(eMCOS_ISR_INTSDMAC1CH0)
+ * [Format]		ISR(eMCOS_ISR_INTSDMAC0CH7)
  * [Function]	
  * [Arguments]	None
  * [Return]		None
  * [Notes]		
  *--------------------------------------------------------------------------*/
-ISR(eMCOS_ISR_INTSDMAC1CH0)
+ISR(eMCOS_ISR_INTSDMAC0CH7)
 {
-    /* INTSDMAC1CH0 */
+    /* INTSDMAC0CH7 */
     vd_g_ThroughputIntrptStart();
-    vd_g_ThroughputIntrptFinish((U2)THRPTM_TASK_ISR_INTSDMAC1CH0);
-}
-
-/**---------------------------------------------------------------------------
- * [Format]		ISR(eMCOS_ISR_INTSDMAC1CH1)
- * [Function]	
- * [Arguments]	None
- * [Return]		None
- * [Notes]		
- *--------------------------------------------------------------------------*/
-ISR(eMCOS_ISR_INTSDMAC1CH1)
-{
-    /* INTSDMAC1CH1 */
-    vd_g_ThroughputIntrptStart();
-    vd_g_ThroughputIntrptFinish((U2)THRPTM_TASK_ISR_INTSDMAC1CH1);
-}
-
-/**---------------------------------------------------------------------------
- * [Format]		ISR(eMCOS_ISR_INTSDMAC1CH2)
- * [Function]	
- * [Arguments]	None
- * [Return]		None
- * [Notes]		
- *--------------------------------------------------------------------------*/
-ISR(eMCOS_ISR_INTSDMAC1CH2)
-{
-    /* INTSDMAC1CH2 */
-    vd_g_ThroughputIntrptStart();
-    vd_g_ThroughputIntrptFinish((U2)THRPTM_TASK_ISR_INTSDMAC1CH2);
+    Dma_INTSDMAC0CH7();
+    vd_g_ThroughputIntrptFinish((U2)THRPTM_TASK_ISR_INTSDMAC0CH7);
 }
 #endif /* #if (__AIP_THROUGHPUT__ != 1) */
 
