@@ -85,9 +85,9 @@ static void    vd_s_DrectxMsg_MET1D51(const U1  u1_a_BR);
 /*===================================================================================================================================*/
 void    vd_g_DrectxBonInit(void)
 {
-    U1                  u1_t_tx;
     U4                  u4_t_loop;
     U4                  u4_tp_tx_data[DREC_TX_VM_2WORD];
+    U1                  u1_t_tx;
 
     u1_s_drec_com_cnt     = (U1)0U;
     u1_s_drec_datanm2_pre = (U1)0U;
@@ -135,11 +135,11 @@ void    vd_g_DrectxBonInit(void)
 /*===================================================================================================================================*/
 void    vd_g_DrectxRstInit(void)
 {
-    U1                  u1_t_tx;
     U4                  u4_t_loop;
     U4                  u4_tp_tx_data[DREC_TX_VM_2WORD];
     U1                  u1_t_br;
     U1                  u1_t_rimsts;
+    U1                  u1_t_tx;
 
     u1_s_drec_com_cnt     = (U1)0U;
     u1_s_drec_datanm2_pre = (U1)0U;
@@ -193,11 +193,11 @@ void    vd_g_DrectxRstInit(void)
 /*===================================================================================================================================*/
 void    vd_g_DrectxWkupInit(void)
 {
-    U1                  u1_t_tx;
     U4                  u4_t_loop;
     U4                  u4_tp_tx_data[DREC_TX_VM_2WORD];
     U1                  u1_t_br;
     U1                  u1_t_rimsts;
+    U1                  u1_t_tx;
 
     u1_s_drec_com_cnt     = (U1)0U;
     u1_s_drec_datanm2_pre = (U1)0U;
@@ -287,11 +287,11 @@ static void    vd_s_DrectxMsg_MET1D51(const U1  u1_a_BR)
     static const U2     u2_s_DREC_TX_VOL_MUL     = (U2)1243U;
     static const U2     u2_s_DREC_TX_VOL_DIV     = (U2)20480U;
 
-    U1                  u1_t_tx;
     U4                  u4_t_loop;
     U4                  u4_tp_tx_data[DREC_TX_VM_2WORD];
     U4                  u4_t_vol;
     U2                  u2_t_adc;
+    U1                  u1_t_tx;
 
     for(u4_t_loop = (U4)0U; u4_t_loop < (U4)DREC_TX_VM_2WORD; u4_t_loop++){
         u4_tp_tx_data[u4_t_loop] = (U4)0U;
