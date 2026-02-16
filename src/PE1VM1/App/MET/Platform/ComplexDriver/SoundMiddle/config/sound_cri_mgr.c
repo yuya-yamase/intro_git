@@ -40,6 +40,7 @@
 
 #include "Port.h"
 #include "Dio.h"
+#include "trpl_rdndnt.h"
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -105,20 +106,23 @@
 #define SOUND_VOL_MULTI_CH_PLAY_RATE_1         (1000U)                     /* Single channel playing(Fixed at 100%)                  */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define SOUND_INITIAL_MODESET_END_TIM          (2U)
+#define SOUND_DRV_MODESET                      (0U)
+#define SOUND_DRV_ERRCHECK_WAIT                (1U)
+#define SOUND_DRV_ERRCHECK                     (2U)
 
-#define SOUND_INITIAL_WAIT_TIM                 (SOUND_INITIAL_MODESET_END_TIM+23U)
-#define SOUND_INITIAL_FLTBCHK_WAIT_TIM         (50U)
+#define SOUND_DRV_MODESET_END_TIM              (3U)
+#define SOUND_DRV_ERRCHECK_WAIT_TIM            (55U)
 
+#define SOUND_DRV_INITIAL                      (0x00U)
+#define SOUND_DRV_INITIAL_END                  (0xFFU)
 
-#define SOUND_INITIAL_WAIT                     (0U)
-#define SOUND_INITIAL_WAIT_END                 (1U)
+#define SOUND_IC_ERROR_COUNT                   (6U)
 
-#define SOUND_FLTBCHECK_WAIT_TIM               (10U)
-#define SOUND_FLTBCHECK_WAIT_TIM_INITIAL       (5U)
-#define SOUND_IC_ERROR_COUNT                   (2U)
-#define SOUND_IC_ERROR                         (1U)
-#define SOUND_IC_NORMAL                        (0U)
+#define SOUND_ACTIVE_TIME_RDN_NUM              (3U)
+#define SOUND_ACTIVE_TIME_RDN_1ST              (0U)
+#define SOUND_ACTIVE_TIME_RDN_2ND              (1U)
+#define SOUND_ACTIVE_TIME_RDN_3RD              (2U)
+#define SOUND_ACTIVE_TIME_DEF                  (0U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -169,6 +173,8 @@ typedef struct{
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+static U1                   u1_s_sound_drv_active_time_val1;
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
 #if (SOUND_CRI_DEBUGMODE == TRUE)
 static CriSint32            s4_s_initialize_size;                                          /* Size of work-space for library initialization              */
 static CriSint32            s4_s_acfdata_size;                                             /* Size of work-space for on-memory ACF data registration     */
@@ -205,11 +211,17 @@ static U1                   u1_s_sound_ow_reqid;                                
 static ST_SOUND_OW_CTRL     st_sp_sound_ow_ctrl[SOUND_GROUP_NUM];                          /* Active test control data                                   */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static U1                   u1_s_sound_initialwait;
-static U1                   u1_s_sound_fltbcheck_cycle;
-static U1                   u1_s_fltb_befor;
+static U1                   u1_s_sound_drv_active_time_val2;
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+static U1                   u1_s_sound_drv_initial;
+
+static U1                   u1_s_sound_ic_fltb_befor;
+static U1                   u1_s_sound_ic_fltb_count;
+static U1                   u1_s_sound_ic_fltb_initial;
 static U1                   u1_s_sound_ic_error;
 
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+static U1                   u1_s_sound_drv_active_time_val3;
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -236,6 +248,7 @@ static        void    vd_s_SoundCriMgrErrorCallback(const CriChar8 * s1p_a_ERRID
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static        void    vd_s_SoundCriMgrStartup(void);
 static        U1      u1_s_SoundDiagnosis(void);
+static        U1      u1_s_SoundGetActiveTime(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
@@ -343,10 +356,15 @@ static const U2 u2_sp_SOUND_WAV_CYCLETIME_LEX[CRI_CUESHEET_0_LEX_CUENUM_ADX] = {
 /*===================================================================================================================================*/
 void    vd_g_SoundCriMgrInitialize(void)
 {
-    u1_s_sound_initialwait     = (U1)0U;
-    u1_s_sound_fltbcheck_cycle = (U1)SOUND_FLTBCHECK_WAIT_TIM_INITIAL;
-    u1_s_fltb_befor            = (U1)STD_HIGH;
-    u1_s_sound_ic_error        = (U1)SOUND_IC_NORMAL;
+    u1_s_sound_drv_initial          = (U1)SOUND_DRV_INITIAL;
+    u1_s_sound_drv_active_time_val1 = (U1)0U;
+    u1_s_sound_drv_active_time_val2 = (U1)0U;
+    u1_s_sound_drv_active_time_val3 = (U1)0U;
+
+    u1_s_sound_ic_fltb_befor        = (U1)STD_HIGH;
+    u1_s_sound_ic_fltb_count        = (U1)0U;
+    u1_s_sound_ic_fltb_initial      = (U1)SOUND_DRV_INITIAL;
+    u1_s_sound_ic_error             = (U1)SOUND_IC_NORMAL;
 
     Dio_WriteChannel((U1)DIO_ID_PORT20_CH1, (U1)STD_HIGH);
     Dio_WriteChannel((U1)DIO_ID_PORT20_CH2, (U1)STD_HIGH);
@@ -373,8 +391,6 @@ static void    vd_s_SoundCriMgrStartup(void)
 
     __DI();
     Dma_SetInterrupt( (U1)DMA_CH_DATA_ID_7, (U1)OFF, (U1)ON );
-    Port_SetPinMode((U2)PORT_ID_PORT20_PIN1,   (U4)PORT_MODE_CFG_P20_1_TAUD1O1); 
-    Port_SetPinMode((U2)PORT_ID_PORT20_PIN2,   (U4)PORT_MODE_CFG_P20_2_TAUD1O2);
     __EI();
 
 #if (SOUND_CRI_DEBUGMODE == TRUE)
@@ -448,6 +464,8 @@ static void    vd_s_SoundCriMgrStartup(void)
 
     u4_s_sound_ow_unlock    = (U4)0U;
     u1_s_sound_ow_reqid     = (U1)U1_MAX;
+    Port_SetPinMode((U2)PORT_ID_PORT20_PIN1,   (U4)PORT_MODE_CFG_P20_1_TAUD1O1); 
+    Port_SetPinMode((U2)PORT_ID_PORT20_PIN2,   (U4)PORT_MODE_CFG_P20_2_TAUD1O2);
 }
 
 /*===================================================================================================================================*/
@@ -589,25 +607,30 @@ void    vd_g_SoundCriMgrMainTask(void)
 {
     U1          u1_t_playnum;                                                               /* Number of playing sound groups        */
     U1          u1_t_errsts;
-    U1          u1_t_initial;
+    U1          u1_t_mode;
 
-    u1_t_initial = u1_s_SoundDiagnosis();
+    u1_t_mode = u1_s_SoundDiagnosis();
 
-    if (u1_t_initial != (U1)SOUND_INITIAL_WAIT) {
-#if 0   /* BEV BSW provisionally */
-        u1_t_errsts = (U1)Dma_CheckDmaError((U1)SOUND_CRI_DRV_DMA_CH) & (U1)DMA_DTSER_DTSER;
-#else
-        u1_t_errsts = (U1)0U;
-#endif
-        if(u1_t_errsts == (U1)DMA_DTSER_DTSER_ERR){
-            vd_g_SoundCriMgrFinalize();
+    if (u1_t_mode != (U1)SOUND_DRV_MODESET) {
+        if (u1_s_sound_drv_initial != (U1)SOUND_DRV_INITIAL_END) {
             vd_s_SoundCriMgrStartup();
+            u1_s_sound_drv_initial = (U1)SOUND_DRV_INITIAL_END;
+        }
+        else {
+#if 0   /* BEV BSW provisionally */
+            u1_t_errsts = (U1)Dma_CheckDmaError((U1)SOUND_CRI_DRV_DMA_CH) & (U1)DMA_DTSER_DTSER;
+#else
+            u1_t_errsts = (U1)0U;
+#endif
+            if(u1_t_errsts == (U1)DMA_DTSER_DTSER_ERR){
+                vd_g_SoundCriMgrFinalize();
+                vd_s_SoundCriMgrStartup();
+            }
         }
 
         u1_t_playnum = u1_s_SoundCriMgrWavNext();                                           /* Control buzzer sounding every CH      */
         vd_s_SoundCriMgrUpdtLib(u1_t_playnum);                                              /* Library periodic process              */
     }
-
 }
 
 /*===================================================================================================================================*/
@@ -992,15 +1015,15 @@ static  U1      u1_s_SoundCriMgrWavNext(void)
     u1_t_brand = u1_CALIB_MCUID0024_BRAND;
 
     if (u1_t_brand == (U1)CALIB_MCUID0024_TOYOTA){
-        u2_t_cri_cuemax = (U2)CRI_CUESHEET_0_TYT_CUENUM;
+        u2_t_cri_cuemax = (U2)CRI_CUESHEET_0_TYT_CUENUM_ADX;
         u2_tp_wav_cycletime = &u2_sp_SOUND_WAV_CYCLETIME_TYT[0];
     }
     else if (u1_t_brand == (U1)CALIB_MCUID0024_LEXUS){
-        u2_t_cri_cuemax = (U2)CRI_CUESHEET_0_LEX_CUENUM;
+        u2_t_cri_cuemax = (U2)CRI_CUESHEET_0_LEX_CUENUM_ADX;
         u2_tp_wav_cycletime = &u2_sp_SOUND_WAV_CYCLETIME_LEX[0];
     }
     else{
-        u2_t_cri_cuemax = (U2)CRI_CUESHEET_0_TYT_CUENUM;
+        u2_t_cri_cuemax = (U2)CRI_CUESHEET_0_TYT_CUENUM_ADX;
         u2_tp_wav_cycletime = &u2_sp_SOUND_WAV_CYCLETIME_TYT[0];
     }
 
@@ -1526,15 +1549,15 @@ static  U1      u1_s_SoundCriMgrOwChk(const U1 u1_a_GRP_NO, const U1 u1_a_CYCLCH
         if(u1_s_sound_ow_reqid < (U1)SOUND_OW_WAV_IDX_NUM){
             if(u1_t_brand == (U1)CALIB_MCUID0024_TOYOTA){
                 stp_t_OW_BUZ_INFO = &st_sp_SOUND_OW_BUZ_INFO_TYT[u1_s_sound_ow_reqid];
-                u2_t_cuemax = (U2)CRI_CUESHEET_0_TYT_CUENUM;
+                u2_t_cuemax = (U2)CRI_CUESHEET_0_TYT_CUENUM_ADX;
             }
             else if (u1_t_brand == (U1)CALIB_MCUID0024_LEXUS){
                 stp_t_OW_BUZ_INFO = &st_sp_SOUND_OW_BUZ_INFO_LEX[u1_s_sound_ow_reqid];
-                u2_t_cuemax = (U2)CRI_CUESHEET_0_LEX_CUENUM;
+                u2_t_cuemax = (U2)CRI_CUESHEET_0_LEX_CUENUM_ADX;
             }
             else{
                 stp_t_OW_BUZ_INFO = &st_sp_SOUND_OW_BUZ_INFO_TYT[u1_s_sound_ow_reqid];
-                u2_t_cuemax = (U2)CRI_CUESHEET_0_TYT_CUENUM;
+                u2_t_cuemax = (U2)CRI_CUESHEET_0_TYT_CUENUM_ADX;
             }
             u2_t_cueid        = stp_t_OW_BUZ_INFO->u2_cueid[u1_a_GRP_NO];
             if(u2_t_cueid < u2_t_cuemax){
@@ -2114,39 +2137,87 @@ static  U1  u1_s_SoundDiagnosis(void)
 {
     U1 u1_t_fltb;
     U1 u1_t_ret;
+    U1 u1_t_time;
 
-    u1_t_ret = (U1)SOUND_INITIAL_WAIT;
+    u1_t_ret = (U1)SOUND_DRV_MODESET;
 
-    u1_s_sound_initialwait++;
-    if (u1_s_sound_initialwait <= (U1)SOUND_INITIAL_WAIT_TIM) {
-        if (u1_s_sound_initialwait >= (U1)SOUND_INITIAL_MODESET_END_TIM) {
-            Dio_WriteChannel((U1)DIO_ID_PORT20_CH1, (U1)STD_LOW);
-            Dio_WriteChannel((U1)DIO_ID_PORT20_CH2, (U1)STD_LOW);
-            if (u1_s_sound_initialwait == (U1)SOUND_INITIAL_WAIT_TIM) {
-                vd_s_SoundCriMgrStartup();
-            }
-        }
+    u1_t_time  = u1_s_SoundGetActiveTime();
+
+    if (u1_t_time < (U1)SOUND_DRV_MODESET_END_TIM) {
+        u1_t_ret = (U1)SOUND_DRV_MODESET;
     }
-    else if (u1_s_sound_initialwait >= (U1)SOUND_INITIAL_FLTBCHK_WAIT_TIM){
-        u1_s_sound_fltbcheck_cycle++;
-        if (u1_s_sound_fltbcheck_cycle > (U1)SOUND_FLTBCHECK_WAIT_TIM) {
-            u1_t_fltb = Dio_ReadChannel((U1)DIO_ID_PORT20_CH10);
-            if (u1_t_fltb == u1_s_fltb_befor) {
-                if (u1_t_fltb == (U1)STD_LOW) {
+    else if (u1_t_time == (U1)SOUND_DRV_MODESET_END_TIM) {
+        Dio_WriteChannel((U1)DIO_ID_PORT20_CH1, (U1)STD_LOW);
+        Dio_WriteChannel((U1)DIO_ID_PORT20_CH2, (U1)STD_LOW);
+        u1_t_ret = (U1)SOUND_DRV_ERRCHECK_WAIT;
+
+    }
+    else if (u1_t_time <= (U1)SOUND_DRV_ERRCHECK_WAIT_TIM) {
+        u1_t_ret = (U1)SOUND_DRV_ERRCHECK_WAIT;
+    }
+    else {
+        u1_t_fltb = Dio_ReadChannel((U1)DIO_ID_PORT20_CH10);
+
+        if (u1_s_sound_ic_fltb_befor != u1_t_fltb) {
+            u1_s_sound_ic_fltb_count = (U1)0U;
+        }
+
+        if (u1_s_sound_ic_fltb_count < (U1)U1_MAX) {
+            u1_s_sound_ic_fltb_count++;
+        }
+
+        if (u1_s_sound_ic_fltb_count >= (U1)SOUND_IC_ERROR_COUNT) {
+            if (u1_t_fltb == (U1)STD_LOW) {
+                if (u1_s_sound_ic_fltb_initial == (U1)SOUND_DRV_INITIAL) {
                     u1_s_sound_ic_error  = (U1)SOUND_IC_ERROR;
                 }
             }
-            u1_s_fltb_befor = u1_t_fltb;
-            u1_s_sound_fltbcheck_cycle = (U1)0U;
+            u1_s_sound_ic_fltb_initial = (U1)SOUND_DRV_INITIAL_END;
         }
-        u1_t_ret = (U1)SOUND_INITIAL_WAIT_END;
-        u1_s_sound_initialwait    = (U1)SOUND_INITIAL_FLTBCHK_WAIT_TIM;
-    }
-    else {
-        u1_t_ret = (U1)SOUND_INITIAL_WAIT_END;
+
+        u1_s_sound_ic_fltb_befor = u1_t_fltb;
+
+        u1_t_ret = (U1)SOUND_DRV_ERRCHECK;
     }
 
     return(u1_t_ret);
+}
+
+/*===================================================================================================================================*/
+/*  static U1    u1_s_SoundGetActiveTime(void)                                                                                       */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static U1    u1_s_SoundGetActiveTime(void)
+{
+    U1 u1_t_chk;
+    U4 u4_tp_time_val[SOUND_ACTIVE_TIME_RDN_NUM];
+    U4 u4_t_rdnrslt;
+
+    u4_tp_time_val[SOUND_ACTIVE_TIME_RDN_1ST] = (U4)u1_s_sound_drv_active_time_val1;
+    u4_tp_time_val[SOUND_ACTIVE_TIME_RDN_2ND] = (U4)u1_s_sound_drv_active_time_val2;
+    u4_tp_time_val[SOUND_ACTIVE_TIME_RDN_3RD] = (U4)u1_s_sound_drv_active_time_val3;
+    u1_t_chk = u1_g_TrplRdndntchk(u4_tp_time_val, &u4_t_rdnrslt);
+    if (u1_t_chk == (U1)0U) {
+        /* Redundant data is all incorrect. */
+        u4_t_rdnrslt = (U4)SOUND_ACTIVE_TIME_DEF;
+        vd_g_SoundCriMgrFinalize();
+        u1_s_sound_drv_initial = (U1)SOUND_DRV_INITIAL;
+    }
+
+    if (u4_t_rdnrslt < (U4)U1_MAX) {
+        u4_t_rdnrslt++;
+    }
+    else {
+        u4_t_rdnrslt = (U4)U1_MAX;
+    }
+
+    u1_s_sound_drv_active_time_val1 = (U1)u4_t_rdnrslt;
+    u1_s_sound_drv_active_time_val2 = (U1)u4_t_rdnrslt;
+    u1_s_sound_drv_active_time_val3 = (U1)u4_t_rdnrslt;
+
+    return ((U1)u4_t_rdnrslt);
 }
 
 /*===================================================================================================================================*/
@@ -2157,7 +2228,18 @@ static  U1  u1_s_SoundDiagnosis(void)
 /*===================================================================================================================================*/
 U1  u1_g_SoundIcErrorStatus(void)
 {
-   return(u1_s_sound_ic_error);
+    return(u1_s_sound_ic_error);
+}
+
+/*===================================================================================================================================*/
+/*  U1  vd_g_SoundIcClearErrorStatus(void)                                                                                           */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         U1 u1_s_sound_ic_error                                                                                           */
+/*===================================================================================================================================*/
+void  vd_g_SoundIcClearErrorStatus(void)
+{
+    u1_s_sound_ic_error = (U1)SOUND_IC_NORMAL;
 }
 
 /*===================================================================================================================================*/
@@ -2176,6 +2258,7 @@ void  vd_g_SoundCriMgr_DeInit(void)
 
     Dio_WriteChannel((U1)DIO_ID_PORT0_CH5, (U1)STD_LOW);
 }
+
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
