@@ -42,6 +42,7 @@
 #define DREC_TX_CYC_TIME                         ((U1)1200U / (U1)DREC_TX_MAIN_TICK)
 #define DREC_TX_CYC_INIT                         (1U)
 #define DREC_TX_CNT_SIG                          (1U)
+
 #define DREC_TX_SHIFT_DATA_NM2                   (6U)
 #define DREC_TX_SHIFT_RHEO_IN                    (8U)
 #define DREC_TX_SHIFT_ILL_OUT                    (16U)
@@ -49,9 +50,11 @@
 #define DREC_TX_SHIFT_DISP_TMP                   (8U)
 #define DREC_TX_SHIFT_LN_FC                      (16U)
 #define DREC_TX_SHIFT_RF_FC                      (24U)
+
 #define DREC_TX_VM_2WORD                         (2U)
 #define DREC_TX_BUF0                             (0U)
 #define DREC_TX_BUF1                             (1U)
+
 #define DREC_TX_SIG_MASK_2BIT                    (0x3U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -64,12 +67,12 @@
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static U1                        u1_s_drec_com_cnt;
-static U1                        u1_s_drec_datanm2_pre;
+static U1                        u1_s_drec_tx_datanm2;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static void    vd_s_DrectxMsg_MET1D51(const U1  u1_a_BR);
+static void    vd_s_DrectxMsg_MET1D51(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
@@ -90,13 +93,13 @@ void    vd_g_DrectxBonInit(void)
     U1                  u1_t_tx;
 
     u1_s_drec_com_cnt     = (U1)0U;
-    u1_s_drec_datanm2_pre = (U1)0U;
+    u1_s_drec_tx_datanm2  = (U1)0U;
+
+    vd_g_Rim_WriteU1((U2)RIMID_U1_DREC_TX, u1_s_drec_tx_datanm2);
 
     for(u4_t_loop = (U4)0U; u4_t_loop < (U4)DREC_TX_VM_2WORD; u4_t_loop++){
         u4_tp_tx_data[u4_t_loop] = (U4)0U;
     }
-
-    vd_g_Rim_WriteU1((U2)RIMID_U1_DREC_TX, (U1)0U);
 
   /* u1_t_tx = (U1)0U; */
   /* u4_tp_tx_data[DREC_TX_BUF0] |= (U4)u1_t_tx << DREC_TX_SHIFT_DATA_NM2; */   /* DATA_NM2 is 0 transmission */
@@ -142,22 +145,23 @@ void    vd_g_DrectxRstInit(void)
     U1                  u1_t_tx;
 
     u1_s_drec_com_cnt     = (U1)0U;
-    u1_s_drec_datanm2_pre = (U1)0U;
-
-    for(u4_t_loop = (U4)0U; u4_t_loop < (U4)DREC_TX_VM_2WORD; u4_t_loop++){
-        u4_tp_tx_data[u4_t_loop] = (U4)0U;
-    }
+    u1_s_drec_tx_datanm2  = (U1)0U;
 
     u1_t_br = (U1)0U;
     u1_t_rimsts = u1_g_Rim_ReadU1withStatus((U2)RIMID_U1_DREC_TX, &u1_t_br);
 
     if((u1_t_rimsts & (U1)RIM_RESULT_KIND_MASK) == (U1)RIM_RESULT_KIND_OK){
-        u1_t_tx = (u1_t_br & (U1)DREC_TX_SIG_MASK_2BIT);
+        u1_s_drec_tx_datanm2 = (u1_t_br & (U1)DREC_TX_SIG_MASK_2BIT);
     }
     else{
-        u1_t_tx = (U1)0U;
+        vd_g_Rim_WriteU1((U2)RIMID_U1_DREC_TX, u1_s_drec_tx_datanm2);
     }
-    u4_tp_tx_data[DREC_TX_BUF0] |= (U4)u1_t_tx << DREC_TX_SHIFT_DATA_NM2;                  /* DATA_NM2 */
+
+    for(u4_t_loop = (U4)0U; u4_t_loop < (U4)DREC_TX_VM_2WORD; u4_t_loop++){
+        u4_tp_tx_data[u4_t_loop] = (U4)0U;
+    }
+
+    u4_tp_tx_data[DREC_TX_BUF0] |= (U4)u1_s_drec_tx_datanm2 << DREC_TX_SHIFT_DATA_NM2;     /* DATA_NM2 */
 
   /* u1_t_tx = (U1)0U; */
   /* u4_tp_tx_data[DREC_TX_BUF0] |= (U4)u1_t_tx; */                                        /* D_N_INF is 0 transmission */
@@ -200,22 +204,23 @@ void    vd_g_DrectxWkupInit(void)
     U1                  u1_t_tx;
 
     u1_s_drec_com_cnt     = (U1)0U;
-    u1_s_drec_datanm2_pre = (U1)0U;
-    
-    for(u4_t_loop = (U4)0U; u4_t_loop < (U4)DREC_TX_VM_2WORD; u4_t_loop++){
-        u4_tp_tx_data[u4_t_loop] = (U4)0U;
-    }
+    u1_s_drec_tx_datanm2  = (U1)0U;
 
     u1_t_br = (U1)0U;
     u1_t_rimsts = u1_g_Rim_ReadU1withStatus((U2)RIMID_U1_DREC_TX, &u1_t_br);
 
     if((u1_t_rimsts & (U1)RIM_RESULT_KIND_MASK) == (U1)RIM_RESULT_KIND_OK){
-        u1_t_tx = (u1_t_br & (U1)DREC_TX_SIG_MASK_2BIT);
+        u1_s_drec_tx_datanm2 = (u1_t_br & (U1)DREC_TX_SIG_MASK_2BIT);
     }
     else{
-        u1_t_tx = (U1)0U;
+        vd_g_Rim_WriteU1((U2)RIMID_U1_DREC_TX, u1_s_drec_tx_datanm2);
     }
-    u4_tp_tx_data[DREC_TX_BUF0] |= (U4)u1_t_tx << DREC_TX_SHIFT_DATA_NM2;                  /* DATA_NM2 */
+
+    for(u4_t_loop = (U4)0U; u4_t_loop < (U4)DREC_TX_VM_2WORD; u4_t_loop++){
+        u4_tp_tx_data[u4_t_loop] = (U4)0U;
+    }
+
+    u4_tp_tx_data[DREC_TX_BUF0] |= (U4)u1_s_drec_tx_datanm2 << DREC_TX_SHIFT_DATA_NM2;     /* DATA_NM2 */
 
   /* u1_t_tx = (U1)0U; */
   /* u4_tp_tx_data[DREC_TX_BUF0] |= (U4)u1_t_tx; */                                        /* D_N_INF is 0 transmission */
@@ -251,37 +256,25 @@ void    vd_g_DrectxWkupInit(void)
 /*===================================================================================================================================*/
 void    vd_g_DrectxMainTask(void)
 {
-    U1                  u1_t_br;
-    U1                  u1_t_rimsts;
-
     if(u1_s_drec_com_cnt < (U1)U1_MAX){
         u1_s_drec_com_cnt++;
     }
 
-    u1_t_br = (U1)0U;
-    u1_t_rimsts = u1_g_Rim_ReadU1withStatus((U2)RIMID_U1_DREC_TX, &u1_t_br);
-
-    if((u1_t_rimsts & (U1)RIM_RESULT_KIND_MASK) == (U1)RIM_RESULT_KIND_OK){
-        if(u1_s_drec_com_cnt > (U1)DREC_TX_CYC_TIME){
-            u1_t_br = (u1_t_br + (U1)DREC_TX_CNT_SIG) & (U1)DREC_TX_FNC_BIT_MAX;
-            vd_g_Rim_WriteU1((U2)RIMID_U1_DREC_TX, u1_t_br);
-            u1_s_drec_com_cnt = (U1)DREC_TX_CYC_INIT;
-        }
+    if(u1_s_drec_com_cnt > (U1)DREC_TX_CYC_TIME){
+        u1_s_drec_tx_datanm2 = (u1_s_drec_tx_datanm2 + (U1)DREC_TX_CNT_SIG) & (U1)DREC_TX_FNC_BIT_MAX;
+        vd_g_Rim_WriteU1((U2)RIMID_U1_DREC_TX, u1_s_drec_tx_datanm2);
+        u1_s_drec_com_cnt = (U1)DREC_TX_CYC_INIT;
     }
-    else{
-        u1_t_br = u1_s_drec_datanm2_pre;
-    }
-    u1_s_drec_datanm2_pre = u1_t_br;
 
-    vd_s_DrectxMsg_MET1D51(u1_t_br);
+    vd_s_DrectxMsg_MET1D51();
 }
 /*===================================================================================================================================*/
-/*  static void    vd_s_DrectxMsg_MET1D51(const U1  u1_a_BR)                                                                         */
+/*  static void    vd_s_DrectxMsg_MET1D51(void)                                                                                      */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-static void    vd_s_DrectxMsg_MET1D51(const U1  u1_a_BR)
+static void    vd_s_DrectxMsg_MET1D51(void)
 {
     static const U2     u2_s_DREC_TX_VOL_ADC_MAX = (U2)0x0fffU;
     static const U2     u2_s_DREC_TX_VOL_MUL     = (U2)1243U;
@@ -297,7 +290,7 @@ static void    vd_s_DrectxMsg_MET1D51(const U1  u1_a_BR)
         u4_tp_tx_data[u4_t_loop] = (U4)0U;
     }
 
-    u1_t_tx = (u1_a_BR & (U1)DREC_TX_SIG_MASK_2BIT);
+    u1_t_tx = (u1_s_drec_tx_datanm2 & (U1)DREC_TX_SIG_MASK_2BIT);
     u4_tp_tx_data[DREC_TX_BUF0] |= (U4)u1_t_tx << DREC_TX_SHIFT_DATA_NM2;       /* DATA_NM2 */
 
     u1_t_tx = (u1_g_DimDrTxDninf() & (U1)DREC_TX_SIG_MASK_2BIT);
