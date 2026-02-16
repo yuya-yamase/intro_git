@@ -54,9 +54,6 @@
 #define VIS_CAN_ODO_MAX_MILE                    ((U4)621117U)       /* オドメータ情報最大値(mile) */
 #define VIS_CAN_ODO_FAIL                        ((U4)0x00000000U)   /* オドメータ情報Fail値 */
 
-/* 時間情報 */
-#define VIS_CAN_TRIP_FAIL                       ((U2)0xFFFFU)       /* TripカウンタFail値 */
-
 /* 車速 */
 #define VIS_CAN_SPD_MAX                         ((U2)0x00FFU)       /* 車速最大値 */
 #define VIS_CAN_SPD_LSB                         ((U2)100U)          /* LSB変換(0.01km/h→1km/h) */
