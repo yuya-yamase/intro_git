@@ -102,7 +102,7 @@ void    vd_g_DrectxBonInit(void)
   /* u4_tp_tx_data[DREC_TX_BUF0] |= (U4)u1_t_tx << DREC_TX_SHIFT_DATA_NM2; */   /* DATA_NM2 is 0 transmission */
 
   /* u1_t_tx = (U1)0U; */
-  /* u4_tp_tx_data[DREC_TX_BUF0] |= u1_t_tx; */                                 /* D_N_INF is 0 transmission  */
+  /* u4_tp_tx_data[DREC_TX_BUF0] |= (U4)u1_t_tx; */                             /* D_N_INF is 0 transmission  */
 
     u1_t_tx = (U1)U1_MAX;
     u4_tp_tx_data[DREC_TX_BUF0] |= (U4)u1_t_tx << DREC_TX_SHIFT_RHEO_IN;        /* RHEO_IN  */
@@ -114,7 +114,7 @@ void    vd_g_DrectxBonInit(void)
   /* u4_tp_tx_data[DREC_TX_BUF0] |= (U4)u1_t_tx << DREC_TX_SHIFT_SW_INF; */     /* SW_INF is 0 transmission   */
 
     u1_t_tx = (U1)U1_MAX;
-    u4_tp_tx_data[DREC_TX_BUF1] |= u1_t_tx;                                     /* IG_VOL   */
+    u4_tp_tx_data[DREC_TX_BUF1] |= (U4)u1_t_tx;                                 /* IG_VOL   */
 
     u1_t_tx = (U1)U1_MAX;
     u4_tp_tx_data[DREC_TX_BUF1] |= (U4)u1_t_tx << DREC_TX_SHIFT_DISP_TMP;       /* DISP_TMP */
@@ -160,7 +160,7 @@ void    vd_g_DrectxRstInit(void)
     u4_tp_tx_data[DREC_TX_BUF0] |= (U4)u1_t_tx << DREC_TX_SHIFT_DATA_NM2;                  /* DATA_NM2 */
 
   /* u1_t_tx = (U1)0U; */
-  /* u4_tp_tx_data[DREC_TX_BUF0] |= u1_t_tx; */                                            /* D_N_INF is 0 transmission */
+  /* u4_tp_tx_data[DREC_TX_BUF0] |= (U4)u1_t_tx; */                                        /* D_N_INF is 0 transmission */
 
     u1_t_tx = (U1)U1_MAX;
     u4_tp_tx_data[DREC_TX_BUF0] |= (U4)u1_t_tx << DREC_TX_SHIFT_RHEO_IN;                   /* RHEO_IN  */
@@ -172,7 +172,7 @@ void    vd_g_DrectxRstInit(void)
   /* u4_tp_tx_data[DREC_TX_BUF0] |= (U4)u1_t_tx << DREC_TX_SHIFT_SW_INF; */                /* SW_INF is 0 transmission  */
 
     u1_t_tx = (U1)U1_MAX;
-    u4_tp_tx_data[DREC_TX_BUF1] |= u1_t_tx;                                                /* IG_VOL   */
+    u4_tp_tx_data[DREC_TX_BUF1] |= (U4)u1_t_tx;                                            /* IG_VOL   */
 
     u1_t_tx = (U1)U1_MAX;
     u4_tp_tx_data[DREC_TX_BUF1] |= (U4)u1_t_tx << DREC_TX_SHIFT_DISP_TMP;                  /* DISP_TMP */
@@ -218,7 +218,7 @@ void    vd_g_DrectxWkupInit(void)
     u4_tp_tx_data[DREC_TX_BUF0] |= (U4)u1_t_tx << DREC_TX_SHIFT_DATA_NM2;                  /* DATA_NM2 */
 
   /* u1_t_tx = (U1)0U; */
-  /* u4_tp_tx_data[DREC_TX_BUF0] |= u1_t_tx; */                                            /* D_N_INF is 0 transmission */
+  /* u4_tp_tx_data[DREC_TX_BUF0] |= (U4)u1_t_tx; */                                        /* D_N_INF is 0 transmission */
 
     u1_t_tx = (U1)U1_MAX;
     u4_tp_tx_data[DREC_TX_BUF0] |= (U4)u1_t_tx << DREC_TX_SHIFT_RHEO_IN;                   /* RHEO_IN  */
@@ -230,7 +230,7 @@ void    vd_g_DrectxWkupInit(void)
   /* u4_tp_tx_data[DREC_TX_BUF0] |= (U4)u1_t_tx << DREC_TX_SHIFT_SW_INF; */                /* SW_INF is 0 transmission  */
 
     u1_t_tx = (U1)U1_MAX;
-    u4_tp_tx_data[DREC_TX_BUF1] |= u1_t_tx;                                                /* IG_VOL   */
+    u4_tp_tx_data[DREC_TX_BUF1] |= (U4)u1_t_tx;                                            /* IG_VOL   */
 
     u1_t_tx = (U1)U1_MAX;
     u4_tp_tx_data[DREC_TX_BUF1] |= (U4)u1_t_tx << DREC_TX_SHIFT_DISP_TMP;                  /* DISP_TMP */
@@ -324,7 +324,7 @@ static void    vd_s_DrectxMsg_MET1D51(const U1  u1_a_BR)
     }
 
     u1_t_tx = (U1)u4_t_vol;
-    u4_tp_tx_data[DREC_TX_BUF1] |= u1_t_tx;                                     /* IG_VOL   */
+    u4_tp_tx_data[DREC_TX_BUF1] |= (U4)u1_t_tx;                                 /* IG_VOL   */
 
     u1_t_tx = (U1)U1_MAX;
     u4_tp_tx_data[DREC_TX_BUF1] |= (U4)u1_t_tx << DREC_TX_SHIFT_DISP_TMP;       /* DISP_TMP */
