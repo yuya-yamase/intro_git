@@ -295,8 +295,13 @@ void    vd_g_DimUsadjbySwCfgNvmRead(U2 * u2_ap_lvl)
 {
     U1         u1_t_rheo_pos;
     U2         u2_t_lvl;
-    
-    u2_t_lvl = (U2)u4_g_McstBf((U1)MCST_BFI_RHEO_DAY);
+    U4         u4_t_chk_value;
+
+    u4_t_chk_value = u4_g_McstBf((U1)MCST_BFI_RHEO_DAY);
+    if(u4_t_chk_value > (U4)U2_MAX){
+        u4_t_chk_value = (U4)U2_MAX;
+    }
+    u2_t_lvl = (U2)u4_t_chk_value;
     if(u2_t_lvl > (U2)DIM_USADJ_BY_SW_LVL_MAX){
         u2_ap_lvl[DIM_DAYNIGHT_LVL_DAY] = (U2)DIM_USADJ_BY_SW_LVL_MAX;
     }
@@ -304,7 +309,11 @@ void    vd_g_DimUsadjbySwCfgNvmRead(U2 * u2_ap_lvl)
         u2_ap_lvl[DIM_DAYNIGHT_LVL_DAY] = u2_t_lvl;
     }
 
-    u2_t_lvl = (U2)u4_g_McstBf((U1)MCST_BFI_RHEO_NIGHT);
+    u4_t_chk_value = u4_g_McstBf((U1)MCST_BFI_RHEO_NIGHT);
+    if(u4_t_chk_value > (U4)U2_MAX){
+        u4_t_chk_value = (U4)U2_MAX;
+    }
+    u2_t_lvl = (U2)u4_t_chk_value;
     if(u2_t_lvl > (U2)DIM_USADJ_BY_SW_LVL_MAX){
         u1_t_rheo_pos = u1_s_DimCfgCalibU1MaxChk(u1_CALIB_MCUID0340_RHEOPOS_NIGHT, (U1)CALIB_MCUID0340_MAX, (U1)CALIB_MCUID0340_DEF);
         u2_ap_lvl[DIM_DAYNIGHT_LVL_NIGHT] = (U2)u1_t_rheo_pos;

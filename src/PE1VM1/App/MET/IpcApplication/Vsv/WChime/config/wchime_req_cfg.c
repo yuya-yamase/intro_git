@@ -849,9 +849,14 @@ U1      u1_g_wChimeCfgVolGet(const U1 u1_a_REQ_SEL)
 {
     U1    u1_t_reqvol;
     U1    u1_t_metcstmvol;
+    U4    u4_t_chk_value;
 
     if(u1_a_REQ_SEL < (U1)WCHIME_NUM_REQ){
-        u1_t_metcstmvol = (U1)u4_g_McstBf((U1)MCST_BFI_METWRNCSTM);
+        u4_t_chk_value = u4_g_McstBf((U1)MCST_BFI_METWRNCSTM);
+        if(u4_t_chk_value > (U4)U1_MAX){
+            u4_t_chk_value = (U4)U1_MAX;
+        }
+        u1_t_metcstmvol = (U1)u4_t_chk_value;
         if(u1_t_metcstmvol >= (U1)MCST_METWRNCSTM_VOL_NUM){
             u1_t_metcstmvol = (U1)MCST_METWRNCSTM_VOL_MID;
         }
