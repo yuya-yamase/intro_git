@@ -1,4 +1,4 @@
-/* 2.1.0 */
+/* 2.2.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define ODO_KM_CFG_C_MAJOR                       (2)
-#define ODO_KM_CFG_C_MINOR                       (1)
+#define ODO_KM_CFG_C_MINOR                       (2)
 #define ODO_KM_CFG_C_PATCH                       (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -22,8 +22,6 @@
 #include "odo_om_rst_if.h"
 
 #include "veh_opemd.h"
-
-#include "oxcan.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -54,10 +52,13 @@
 #define ODO_DIST_TX_TRIP_A                       (1U)
 #define ODO_DIST_TX_TRIP_B                       (2U)
 #define ODO_DIST_TX_ODO_01                       (3U)
+#define ODO_DIST_TX_ODO_MET                      (4U)
 #define ODO_DIST_ODO_TX_MAX                      (999999U)
 #define ODO_DIST_ODO_01_TX_MAX                   (9999999U)
+#define ODO_DIST_ODO_MET_TX_MAX                  (9999999U)
 #define ODO_DIST_TRIP_TX_MOD                     (100000U)
 
+#define ODO_BECU_INHERIT_VAL_MAX                 (9999999U)
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -265,6 +266,7 @@ U1      u1_g_OdoCfgKmNextToNvm(const U4 u4_a_0P001KM_NEXT, const U4 u4_a_0P001KM
     U4                 u4_t_km_nvm;
     U1                 u1_t_rqst;
     U1                 u1_t_igon;
+    U1                 u1_t_writeflg;
 
     u1_t_rqst = (U1)FALSE;
     u1_t_igon = u1_g_VehopemdIgnOn();
@@ -272,7 +274,10 @@ U1      u1_g_OdoCfgKmNextToNvm(const U4 u4_a_0P001KM_NEXT, const U4 u4_a_0P001KM
 
         u4_t_km_next = u4_a_0P001KM_NEXT / (U4)ODO_1_KM;
         u4_t_km_nvm  = u4_a_0P001KM_NVM  / (U4)ODO_1_KM;
-        if(u4_t_km_next > u4_t_km_nvm){
+
+        u1_t_writeflg = u1_g_OdoGetInheritWriteflg();
+        if((u4_t_km_next > u4_t_km_nvm) ||
+           (u1_t_writeflg == (U1)TRUE)){
             u1_t_rqst = (U1)TRUE;
         }
     }
@@ -374,6 +379,7 @@ static void    vd_s_OdoComTxInit(const U4 u4_a_0P001KM)
         u4_sp_odo_dist_tx[ODO_DIST_TX_TRIP_A]   = (U4)0U;
         u4_sp_odo_dist_tx[ODO_DIST_TX_TRIP_B]   = (U4)0U;
         u4_sp_odo_dist_tx[ODO_DIST_TX_ODO_01]   = (U4)0U;
+        u4_sp_odo_dist_tx[ODO_DIST_TX_ODO_MET]  = (U4)0U;
     }
     else if(u1_t_unit_def == (U1)UNIT_VAL_DIST_MILE){
 
@@ -391,6 +397,8 @@ static void    vd_s_OdoComTxInit(const U4 u4_a_0P001KM)
         u4_t_tx = u4_g_UnitconvtrKmtoMi(u4_a_0P001KM) / (U4)ODO_0P1_KM;
         u4_sp_odo_dist_tx[ODO_DIST_TX_ODO_01] = u4_t_tx;
 
+        u4_t_tx = u4_a_0P001KM / (U4)ODO_0P1_KM;                        /* km only  */
+        u4_sp_odo_dist_tx[ODO_DIST_TX_ODO_MET]  = u4_t_tx;
     }
     else{
 
@@ -408,6 +416,8 @@ static void    vd_s_OdoComTxInit(const U4 u4_a_0P001KM)
         u4_t_tx = u4_a_0P001KM / (U4)ODO_0P1_KM;
         u4_sp_odo_dist_tx[ODO_DIST_TX_ODO_01] = u4_t_tx;
 
+        u4_t_tx = u4_a_0P001KM / (U4)ODO_0P1_KM;
+        u4_sp_odo_dist_tx[ODO_DIST_TX_ODO_MET]  = u4_t_tx;
     }
 
     if(u4_sp_odo_dist_tx[ODO_DIST_TX_ODO] >= (U4)ODO_DIST_ODO_TX_MAX){
@@ -416,6 +426,10 @@ static void    vd_s_OdoComTxInit(const U4 u4_a_0P001KM)
 
     if(u4_sp_odo_dist_tx[ODO_DIST_TX_ODO_01] >= (U4)ODO_DIST_ODO_01_TX_MAX){
         u4_sp_odo_dist_tx[ODO_DIST_TX_ODO_01] = (U4)ODO_DIST_ODO_01_TX_MAX;
+    }
+
+    if(u4_sp_odo_dist_tx[ODO_DIST_TX_ODO_MET] >= (U4)ODO_DIST_ODO_MET_TX_MAX){
+        u4_sp_odo_dist_tx[ODO_DIST_TX_ODO_MET] = (U4)ODO_DIST_ODO_MET_TX_MAX;
     }
 
     u4_sp_odo_dist_tx[ODO_DIST_TX_TRIP_A] = u4_sp_odo_dist_tx[ODO_DIST_TX_TRIP_A] % (U4)ODO_DIST_TRIP_TX_MOD;
@@ -440,22 +454,26 @@ static void    vd_s_OdoComTxUpdtOdo(const U4 u4_a_0P001KM)
     U1                 u1_t_unit_def;
     U1                 u1_t_odo_unit_tx;
     U4                 u4_t_odo01_tx;
+    U4                 u4_t_odomet_tx;
 
     u1_t_unit_def = u1_g_UnitDef((U1)UNIT_IDX_DIST);
     if(u4_a_0P001KM > (U4)ODO_KM_MAX){
         u1_t_odo_unit_tx = (U1)0U;
         u4_t_odo_tx      = (U4)0U;
         u4_t_odo01_tx    = (U4)0U;
+        u4_t_odomet_tx   = (U4)0U;
     }
     else if(u1_t_unit_def == (U1)UNIT_VAL_DIST_MILE){
         u1_t_odo_unit_tx = (U1)ODO_UNIT_TX_MI;
         u4_t_odo_tx      = u4_g_UnitconvtrKmtoMi(u4_a_0P001KM) / (U4)ODO_1_KM;
         u4_t_odo01_tx    = u4_g_UnitconvtrKmtoMi(u4_a_0P001KM) / (U4)ODO_0P1_KM;
+        u4_t_odomet_tx   = u4_a_0P001KM / (U4)ODO_0P1_KM;                                         /* km only  */
     }
     else{
         u1_t_odo_unit_tx = (U1)ODO_UNIT_TX_KM;
         u4_t_odo_tx      = u4_a_0P001KM / (U4)ODO_1_KM;
         u4_t_odo01_tx    = u4_a_0P001KM / (U4)ODO_0P1_KM;
+        u4_t_odomet_tx   = u4_a_0P001KM / (U4)ODO_0P1_KM;                                         /* km only  */
     }
 
     if(u4_t_odo_tx >= (U4)ODO_DIST_ODO_TX_MAX){
@@ -464,6 +482,10 @@ static void    vd_s_OdoComTxUpdtOdo(const U4 u4_a_0P001KM)
 
     if(u4_t_odo01_tx >= (U4)ODO_DIST_ODO_01_TX_MAX){
         u4_t_odo01_tx = (U4)ODO_DIST_ODO_01_TX_MAX;
+    }
+
+    if(u4_t_odomet_tx >= (U4)ODO_DIST_ODO_MET_TX_MAX){
+        u4_t_odomet_tx = (U4)ODO_DIST_ODO_MET_TX_MAX;
     }
 
     (void)Com_SendSignal(ComConf_ComSignal_ODO_UNIT, &u1_t_odo_unit_tx);                          /* MET1S02 */
@@ -479,6 +501,12 @@ static void    vd_s_OdoComTxUpdtOdo(const U4 u4_a_0P001KM)
         (void)Com_TriggerIPDUSend(MSG_MET1S52_TXCH0);
     }
     u4_sp_odo_dist_tx[ODO_DIST_TX_ODO_01] = u4_t_odo01_tx;
+
+    if(u4_t_odomet_tx != u4_sp_odo_dist_tx[ODO_DIST_TX_ODO_MET]){
+
+        (void)Com_SendSignal(ComConf_ComSignal_ODO_MET, &u4_t_odomet_tx);                         /* CDC1S01 */
+    }
+    u4_sp_odo_dist_tx[ODO_DIST_TX_ODO_MET] = u4_t_odomet_tx;
 
 }
 
@@ -560,6 +588,44 @@ void    vd_g_OdoCfgGetOmRstVal(U4* u4p_a_0p001kmmile)
         (*u4p_a_0p001kmmile) = (U4)0U;
     }
 }
+
+/*===================================================================================================================================*/
+/*  U4    u4_g_OdoCfgGetOdoBecu(void)                                                                                                */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+U4    u4_g_OdoCfgGetOdoBecu(void)
+{
+    U4                 u4_t_odo_becu;
+
+    u4_t_odo_becu = (U4)ODO_KM_UNK;
+    (void)Com_ReceiveSignal(ComConf_ComSignal_ODO_BECU, &u4_t_odo_becu);
+    if(u4_t_odo_becu <= (U4)ODO_BECU_INHERIT_VAL_MAX){
+        u4_t_odo_becu = u4_t_odo_becu * (U4)ODO_0P1_KM;
+    }else{
+        if(u4_t_odo_becu == (U4)ODO_KM_UNK){
+            /* u4_t_odo_becu = (U4)ODO_KM_UNK; */
+        }else{
+            u4_t_odo_becu = (U4)ODO_BECU_INHERIT_VAL_MAX * (U4)ODO_0P1_KM;
+        }
+        
+    }
+        
+    return(u4_t_odo_becu);
+}
+
+/*===================================================================================================================================*/
+/*  U1    u1_g_OdoCfgGetOdoBecuRxSts(void)                                                                                           */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+U1    u1_g_OdoCfgGetOdoBecuRxSts(void)
+{
+    return((U1)Com_GetIPDUStatus(MSG_BDC1S13_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX));
+}
+
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
@@ -578,6 +644,7 @@ void    vd_g_OdoCfgGetOmRstVal(U4* u4p_a_0p001kmmile)
 /*  1.3.2    08/18/2020  YN       odo_nvmif_km.c v1.3.1 -> v1.3.2                                                                    */
 /*  2.0.1    10/18/2021  TA(M)    odo_km.c v1.3.2 -> v2.0.1.                                                                         */
 /*  2.1.0    01/21/2025  RS       Change for BEV System_Consideration_1                                                              */
+/*  2.2.0    02/10/2026  RS       Add Odo Inherit function for BEV FF2                                                               */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
