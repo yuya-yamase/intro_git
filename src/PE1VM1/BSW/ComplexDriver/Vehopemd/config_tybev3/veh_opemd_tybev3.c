@@ -31,7 +31,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define VEH_OPEMD_VPS_NUM_CHK                    (6U)
+#define VEH_OPEMD_VPS_NUM_CHK                    (4U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define VEH_OPEMD_MDLSB_NM_0                     (31U)
@@ -59,6 +59,8 @@ static U2      u2_s_veh_opemd_unk_tocnt;
 
 static U1                       u1_s_veh_opemd_pts_chk;
 
+static U1      u1_s_veh_opemd_apofrq_onoff;
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -67,6 +69,7 @@ static U2             u2_s_VehopemdReadbdc1s81(void);
 static U2             u2_s_VehopemdReadbdc1s91(void);
 static        void     vd_s_VehopemdPtschk(const U4 u4_a_MDBIT, const U4 u4_a_EVTBIT);
 static        U1       u1_s_VehopemdPtschk_RDYIND(const U4 u4_a_MDBIT, const U4 u4_a_EVTBIT);
+static void            vd_s_VehopemdApofrqchk(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
@@ -84,6 +87,7 @@ void    vd_g_VehopemdCfgRstInit(void)
 {
     u2_s_veh_opemd_unk_tocnt = (U2)U2_MAX;
     u1_s_veh_opemd_pts_chk       = (U1)VEH_OPEMD_COMRX_UNKNOWN;
+    u1_s_veh_opemd_apofrq_onoff = (U1)0U;
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_VehopemdCfgWkupInit(void)                                                                                           */
@@ -95,6 +99,7 @@ void    vd_g_VehopemdCfgWkupInit(void)
 {
     u2_s_veh_opemd_unk_tocnt = (U2)U2_MAX;
     u1_s_veh_opemd_pts_chk       = (U1)VEH_OPEMD_COMRX_UNKNOWN;
+    u1_s_veh_opemd_apofrq_onoff = (U1)0U;
 }
 /*===================================================================================================================================*/
 /*  U4      u4_g_VehopemdCfgMdupdt(const U4 u4_a_MDBIT, U4 * u4_ap_evbit)                                                            */
@@ -105,12 +110,10 @@ void    vd_g_VehopemdCfgWkupInit(void)
 U4      u4_g_VehopemdCfgMdupdt(const U4 u4_a_MDBIT, U4 * u4_ap_evbit)
 {
     static const ST_VEH_OPEMD_VPS_CHK    st_sp_VEH_OPEMD_VPS_CHK[VEH_OPEMD_VPS_NUM_CHK] = {
-        {(U2)0x0062U, (U2)0x0068U},   /*              PBA        | IGCT | IGBD */
-        {(U2)0x0022U, (U2)0x0028U},   /*              PBA        | IGCT        */
-        {(U2)0x0076U, (U2)0x007aU},   /* ACC |        PBA | IG_R | IGCT | IGBD */
-        {(U2)0x007eU, (U2)0x007eU},   /* ACC | IG_P | PBA | IG_R | IGCT | IGBD */
-        {(U2)0x0066U, (U2)0x006aU},   /* ACC |        PBA        | IGCT | IGBD */
-        {(U2)0x0002U, (U2)0x0008U}    /*              PBA                      */
+        {(U2)0x0016U, (U2)0x001aU},   /* ACC |        PBA | IG_R */
+        {(U2)0x001eU, (U2)0x001eU},   /* ACC | IG_P | PBA | IG_R */
+        {(U2)0x0006U, (U2)0x000aU},   /* ACC |        PBA        */
+        {(U2)0x0002U, (U2)0x0008U}    /*              PBA        */
     };
 
     static const U2                      u2_s_VEH_OPEMD_UNK_TOUT = (U2)3000U / (U2)10U;
@@ -183,6 +186,8 @@ U4      u4_g_VehopemdCfgMdupdt(const U4 u4_a_MDBIT, U4 * u4_ap_evbit)
     (*u4_ap_evbit) = u4_t_ev_off | u4_t_ev_on;
     vd_s_VehopemdPtschk(u4_t_mdbit, (*u4_ap_evbit));
 
+    vd_s_VehopemdApofrqchk();
+
     return(u4_t_mdbit);
 }
 /*===================================================================================================================================*/
@@ -229,10 +234,6 @@ static U2      u2_s_VehopemdReadbdc1s81(void)
     u2_t_vps_rx |= (U2)u1_t_vps_inf << 3U;
     Com_ReceiveSignal(ComConf_ComSignal_VPSINFO5, &u1_t_vps_inf);
     u2_t_vps_rx |= (U2)u1_t_vps_inf << 4U;
-    Com_ReceiveSignal(ComConf_ComSignal_VPSINFO6, &u1_t_vps_inf);
-    u2_t_vps_rx |= (U2)u1_t_vps_inf << 5U;
-    Com_ReceiveSignal(ComConf_ComSignal_VPSINFO7, &u1_t_vps_inf);
-    u2_t_vps_rx |= (U2)u1_t_vps_inf << 6U;
 
     return(u2_t_vps_rx);
 }
@@ -260,10 +261,6 @@ static U2      u2_s_VehopemdReadbdc1s91(void)
     u2_t_vps_rx |= (U2)u1_t_vps_inf << 3U;
     Com_ReceiveSignal(ComConf_ComSignal_VPSINF5S, &u1_t_vps_inf);
     u2_t_vps_rx |= (U2)u1_t_vps_inf << 4U;
-    Com_ReceiveSignal(ComConf_ComSignal_VPSINF6S, &u1_t_vps_inf);
-    u2_t_vps_rx |= (U2)u1_t_vps_inf << 5U;
-    Com_ReceiveSignal(ComConf_ComSignal_VPSINF7S, &u1_t_vps_inf);
-    u2_t_vps_rx |= (U2)u1_t_vps_inf << 6U;
             
     return(u2_t_vps_rx);
 }
@@ -344,6 +341,51 @@ static U1       u1_s_VehopemdPtschk_RDYIND(const U4 u4_a_MDBIT, const U4 u4_a_EV
     return(u1_t_pts_chk);
 }
 /*===================================================================================================================================*/
+/*  static void     vd_s_VehopemdApofrqchk(void)                                                                                     */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void     vd_s_VehopemdApofrqchk(void)
+{
+    U1  u1_t_ipdu_st;
+    U1  u1_t_apofrq_sig;
+
+    u1_t_apofrq_sig = (U1)0U;
+    u1_t_ipdu_st = (U1)Com_GetIPDUStatus((U2)MSG_BDC1S81_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+
+    if(u1_t_ipdu_st == (U1)0U){
+        (void)Com_ReceiveSignal(ComConf_ComSignal_APOFRQ, &u1_t_apofrq_sig);
+        u1_s_veh_opemd_apofrq_onoff = u1_t_apofrq_sig;
+    }
+    else if(u1_t_ipdu_st == (U1)COM_NO_RX){
+        u1_s_veh_opemd_apofrq_onoff = (U1)0U;
+    }
+    else{
+        u1_t_ipdu_st = (U1)Com_GetIPDUStatus((U2)MSG_BDC1S91_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+        if(u1_t_ipdu_st == (U1)0U){
+            (void)Com_ReceiveSignal(ComConf_ComSignal_APOFRQS, &u1_t_apofrq_sig);
+            u1_s_veh_opemd_apofrq_onoff = u1_t_apofrq_sig;
+        }
+        else if(u1_t_ipdu_st == (U1)COM_NO_RX){
+            u1_s_veh_opemd_apofrq_onoff = (U1)0U;
+        }
+        else{
+            /* Do Nothing */
+        }
+    }
+}
+/*===================================================================================================================================*/
+/*  U1      u1_g_VehopemdApofrqOn(void)                                                                                              */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         u1_s_veh_opemd_apofrq_onoff                                                                                      */
+/*===================================================================================================================================*/
+U1      u1_g_VehopemdApofrqOn(void)
+{
+    return(u1_s_veh_opemd_apofrq_onoff);
+}
+/*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
 /*                                                                                                                                   */
@@ -359,8 +401,15 @@ static U1       u1_s_VehopemdPtschk_RDYIND(const U4 u4_a_MDBIT, const U4 u4_a_EV
 /*  2.0.0     2/ 3/2025  ST       Supported vehicle power state.                                                                     */
 /*  2.1.0     2/ 7/2025  TN       BEVStep3 Vehicle Power State requirement was implemented.                                          */
 /*                                                                                                                                   */
+/*  Revision Date        Author   Change Description                                                                                 */
+/* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
+/*  BEV-1    02/06/2026  TS       Change for BEV FF2.(MET-M_ONOFF-CSTD-1)                                                            */
+/*                                Add visual OFF flag determination and notification processing during riding.                       */
+/*                                Change power status judgment process so that VPSINFO6 and VPSINFO7 signals are not referenced.     */
+/*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
 /*  * HU   = Hayato Usui, Denso Create                                                                                               */
 /*  * ST   = Satoshi Tanaka, Denso Create                                                                                            */
+/*  * TS   = Takuo Suganuma, Denso Techno                                                                                            */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
