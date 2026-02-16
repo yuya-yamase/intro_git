@@ -121,7 +121,7 @@ U1                   u1_dp_nvmc_recovery_retry[NVMC_DEVICE_TYPE_NUM];
 /*  Constant Variable Definitions                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* START : ##TOOL_OUT#NVMC_NVMC_SHTDWN_TO_MAX## */
-const U2 u2_d_NVMC_SHTDWN_TO_MAX    = (U2)2100U;      /* Resolution : 20 [ms] */
+const U2 u2_d_NVMC_SHTDWN_TO_MAX    = (U2)805U;      /* Resolution : 20 [ms] */
 /* END : ##TOOL_OUT#NVMC_NVMC_SHTDWN_TO_MAX## */
 const U1 u1_d_NVMC_DEVICE_TYPE_NUM = (U1)NVMC_DEVICE_TYPE_NUM;
 const U1 u1_d_NVMC_APP_ACS_NUM = (U1)NVMC_APP_ACS_NUM;

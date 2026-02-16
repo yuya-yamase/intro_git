@@ -63,6 +63,21 @@
 #define NVMCID_OTR_MCST_IDX_USER3_2              (0x0013U)
 #define NVMCID_OTR_MCST_IDX_GUEST_1              (0x0014U)
 #define NVMCID_OTR_MCST_IDX_GUEST_2              (0x0015U)
+#define NVMCID_U2_DRVPS_MRRPOS01                 (0x0016U)
+#define NVMCID_U2_DRVPS_MRRPOS02                 (0x0017U)
+#define NVMCID_U2_DRVPS_MRRPOS03                 (0x0018U)
+#define NVMCID_U2_DRVPS_MRRPOS04                 (0x0019U)
+#define NVMCID_U2_DRVPS_MRRPOS05                 (0x001AU)
+#define NVMCID_U2_DRVPS_MRRPOS06                 (0x001BU)
+#define NVMCID_U2_DRVPS_MRRPOS07                 (0x001CU)
+#define NVMCID_U2_DRVPS_MRRPOS08                 (0x001DU)
+#define NVMCID_U2_DRVPS_MRRPOS09                 (0x001EU)
+#define NVMCID_U2_DRVPS_MRRPOS10                 (0x001FU)
+#define NVMCID_U2_DRVPS_MRRPOS11                 (0x0020U)
+#define NVMCID_U2_DRVPS_MRRPOS12                 (0x0021U)
+#define NVMCID_U2_DRVPS_MRRPOS13                 (0x0022U)
+#define NVMCID_U2_DRVPS_MRRPOS14                 (0x0023U)
+#define NVMCID_U2_DRVPS_MRRPOS15                 (0x0024U)
 /* END : ##TOOL_OUT#NVMC_NVMCID## */
 
 /* START : ##TOOL_OUT#NVMC_BLOCKID## */
