@@ -53,7 +53,7 @@ U1      u1_g_DimDaynightCfgRxEnabled(void);
 U1      u1_g_DimDaynightCfgAdimRxEvt(U1 * u1_ap_daynight);
 
 void    vd_g_DimDaynightCfgAdimRxchk(const U1 u1_a_RX_CHK, const U1 u1_a_DAYNIGHT);
-U1      u1_g_DimDaynightCfgDrTxDninf(void);
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

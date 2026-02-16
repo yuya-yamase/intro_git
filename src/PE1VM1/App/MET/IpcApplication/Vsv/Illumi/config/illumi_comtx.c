@@ -267,20 +267,10 @@ static volatile const U1 * u1p_sp_ILLUMI_BL_NGT[ILLUMI_DIM_LVL_NUM] = {
 /*===================================================================================================================================*/
 void    vd_g_IllumiComTxInit(void)
 {
-#if 0   /* BEV Rebase provisionally */
-    U1                   u1_t_tx;
-#endif   /* BEV Rebase provisionally */
-
-
     u2_s_illumi_tc_nmwk_tout   = (U2)U2_MAX;
     u2_s_illumi_rheo_nmwk_tout = (U2)U2_MAX;
     u2_s_illumi_rheo_evt_tout  = (U2)U2_MAX;
     u1_s_illumi_rheo_tx_ctrl   = (U1)ILLUMI_RHEO_EVTX_STS_FIN;
-
-    u1_s_illumi_rheo_tx_pct = (U1)0U;
-#if 0   /* BEV Rebase provisionally */
-    u1_t_tx = (U1)U1_MAX;
-#endif   /* BEV Rebase provisionally */
 
     u1_s_illumi_tail_cn_tx     = (U1)ILLUMI_TAIL_CN_INACT;
     u1_s_illumi_rheo_tx_ack    = (U1)0U;

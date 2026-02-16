@@ -126,10 +126,6 @@ const U2                    u2_g_DIM_USADJ_BY_SW_LP_ACT   = (U2)800U / (U2)DIM_M
 /*===================================================================================================================================*/
 void    vd_g_DimCfgInit(void)
 {
-    U1                      u1_t_tx;
-
-    u1_t_tx = (U1)0U;
-
     u1_s_dim_tx_dninf = (U1)0U;
 
     vd_g_DimDaynightInit();
@@ -232,7 +228,6 @@ void    vd_g_DimDaynightCfgAdimRxchk(const U1 u1_a_RX_CHK, const U1 u1_a_DAYNIGH
     }
 
     u1_s_dim_tx_dninf = u1_t_tx;
-
 }
 /*===================================================================================================================================*/
 /*  U1      u1_g_DimUsadjbySwCfgAdjstbl(void)                                                                                        */
@@ -424,6 +419,7 @@ U1      u1_g_DimDaynightCfgDrTxDninf(void)
 /*  BEV-1    06/30/2025  SF       BSW Update:u1_g_DimDaynightCfgRxEnabled was modified                                               */
 /*  BEV-2    10/10/2025  KO       Configured for BEVstep3_Rebase                                                                     */
 /*  BEV-3    01/21/2026  KO       Change dimming judgment signal from ADIM to ADIM2 for FF2                                          */
+/*  BEV-4    02/16/2026  YN       Configured for BEVstep3_FF2.(MET-M_DVRD-CSTD-2-02)                                                 */
 /*                                                                                                                                   */
 /*  * TN     = Takashi Nagai, DENSO                                                                                                  */
 /*  * SH     = Shota Higashide                                                                                                       */
