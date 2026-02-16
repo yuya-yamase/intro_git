@@ -214,6 +214,7 @@ static inline void    vd_s_XSpiCfgTxPowerMd(       U4 * u4_ap_pdu_tx) {
     u4_ap_pdu_tx[0]   |= ((U4)u1_g_VehopemdIgnpOn() << 7);                              /* IGP_ON                                    */
     u4_ap_pdu_tx[0]   |= ((U4)u1_g_VehopemdBaOn() << 8);                                /* BA ON                                     */
     u4_ap_pdu_tx[0]   |= ((U4)u1_g_VehspdGetStopFlg() << 9);                            /* STOP_JDG_FLAG                             */
+    u4_ap_pdu_tx[0]   |= ((U4)u1_g_VehopemdApofrqOn() << 10);                           /* APOFRQ_ON                                 */
 }
 
 /*===================================================================================================================================*/
@@ -1184,6 +1185,9 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*  BEV-26    02/10/2026 JS       Change for BEV Full_Function2                                                                      */
 /*                                MET-M_SP-CSTD-1-03-A-C3                                                                            */
 /*                                Delete analog vehicle speed display notification processing                                        */
+/*  BEV-27    02/06/2026 TS       Change for BEV FF2.(MET-M_ONOFF-CSTD-1)                                                            */
+/*                                Add APOFRQ_ON storage process.                                                                     */
+/*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * KM   = Keisuke Mashita, Denso Techno                                                                                           */
