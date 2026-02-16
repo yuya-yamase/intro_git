@@ -364,9 +364,7 @@ static inline void    vd_s_XSpiCfgTxVehSpd(        U4 * u4_ap_pdu_tx) {
     u4_ap_pdu_tx[0]   = (U4)u2_t_kmph;                                         /* VEHICLE_SPD                                  */
     u4_ap_pdu_tx[0]  |= ((U4)u1_t_sts << XSPI_STS_SHIFT);                      /* VEHSPD_STS                                   */
 
-    u1_t_sts           = u1_g_VehspdKmphBiased(&u2_t_kmph , (U1)FALSE);
-    u4_ap_pdu_tx[1]   = (U4)u2_t_kmph;                                         /* VEHICLE_SPD_ANALOG                           */
-    u4_ap_pdu_tx[1]  |= ((U4)u1_t_sts << XSPI_STS_SHIFT);                      /* VEHSPD_ANA_STS                               */
+    u4_ap_pdu_tx[1]   = (U4)0U;                                                /* VEHICLE_SPD_ANALOG, VEHSPD_ANA_STS           */
 
     u2_t_kmph          = u2_g_GagdstNxmphDsplyd((U1)GAGDST_NXMPH_KMPH);
     u4_ap_pdu_tx[2]   = (U4)u2_t_kmph;                                         /* VEHICLE_SPD_DIGITAL_KM                       */
@@ -1184,7 +1182,10 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*                                MET-M_CONTBUZZ2-CSTD-0009-C1                                                                       */
 /*                                Delete TSR_P/TSR_A buzzers and update to the master caution buzzer request                         */
 /*  BEV-25    02/09/2026 SN(K)    Remove handling for st_t_hmilocale.u1_unit_fueco. (BEV3CDCMET-3860).                               */
-/*  BEV-26    02/06/2026 TS       Change for BEV FF2.(MET-M_ONOFF-CSTD-1)                                                            */
+/*  BEV-26    02/10/2026 JS       Change for BEV Full_Function2                                                                      */
+/*                                MET-M_SP-CSTD-1-03-A-C3                                                                            */
+/*                                Delete analog vehicle speed display notification processing                                        */
+/*  BEV-27    02/06/2026 TS       Change for BEV FF2.(MET-M_ONOFF-CSTD-1)                                                            */
 /*                                Add APOFRQ_ON storage process.                                                                     */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
