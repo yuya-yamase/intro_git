@@ -65,7 +65,7 @@ U1      u1_g_HdimstepCfgReadStep(void)
 {
     U1      u1_t_step;
 
-    u1_t_step = (U1)(u4_g_McstBf((U1)MCST_BFI_HUDILL));
+    u1_t_step = (U1)u4_g_McstBf((U1)MCST_BFI_HUDILL);
 
     return(u1_t_step);
 }
