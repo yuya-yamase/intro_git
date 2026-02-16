@@ -935,6 +935,15 @@ extern CONST(Port_ConfigType, PORT_CONST) cstPort_Config[];
 /* API Functions																				*/
 /*----------------------------------------------------------------------------------------------*/
 /************************************************************************************************/
+/* Service name		:	Port_SetConfigPtr														*/
+/* Reentrancy		:	Non Re-entrant															*/
+/* Parameters(in)	:	ConfigPtr - Pointer to configuration set								*/
+/* Return value		:	none																	*/
+/* Limitation		:	none																	*/
+/************************************************************************************************/
+FUNC(void, PORT_CODE) Port_SetConfigPtr( P2CONST(Port_ConfigType, AUTOMATIC, PORT_APPL_CONST) ConfigPtr );
+
+/************************************************************************************************/
 /* Service name		:	Port_Init																*/
 /* Reentrancy		:	Non Re-entrant															*/
 /* Parameters(in)	:	ConfigPtr - Pointer to configuration set								*/
@@ -950,6 +959,8 @@ FUNC(void, PORT_CODE) Port_Init( P2CONST(Port_ConfigType, AUTOMATIC, PORT_APPL_C
 /* Parameters(in)	:	Direction - Port pin direction											*/
 /* Return value		:	none																	*/
 /* Limitation		:	This function must be called after executing Port_Init().				*/
+/*						Additionally, in any VM where Port_Init() has not been executed,		*/
+/*						please call this function after calling Port_SetConfigPointer().		*/
 /*					:	Do not call this API with a pin whose both of							*/
 /*						Direction Changeable and Mode Changeable are set to 1.					*/
 /************************************************************************************************/
@@ -961,6 +972,8 @@ FUNC(void, PORT_CODE) Port_SetPinDirection( CONST(Port_PinType, AUTOMATIC) Pin, 
 /* Parameters(in)	:	none																	*/
 /* Return value		:	none																	*/
 /* Limitation		:	This function must be called after executing Port_Init().				*/
+/*						Additionally, in any VM where Port_Init() has not been executed,		*/
+/*						please call this function after calling Port_SetConfigPointer().		*/
 /************************************************************************************************/
 FUNC(void, PORT_CODE) Port_RefreshPortDirection( void );
 
@@ -982,6 +995,8 @@ FUNC(void, PORT_CODE) Port_SetPinMode( CONST(Port_PinType, AUTOMATIC) Pin, CONST
 /* Parameters(in)	:	none																	*/
 /* Return value		:	Check Result															*/
 /* Limitation		:	This function must be called after executing Port_Init().				*/
+/*						Additionally, in any VM where Port_Init() has not been executed,		*/
+/*						please call this function after calling Port_SetConfigPointer().		*/
 /************************************************************************************************/
 FUNC(uint32, PORT_CODE) Port_Regchk_All( void );
 
@@ -1046,6 +1061,8 @@ FUNC(uint32, PORT_CODE) Port_Regchk_NoiseFilterMode( CONST(Port_PinModeType, AUT
 /* Parameters(in)	:	none																	*/
 /* Return value		:	Check Result															*/
 /* Limitation		:	This function must be called after executing Port_Init().				*/
+/*						Additionally, in any VM where Port_Init() has not been executed,		*/
+/*						please call this function after calling Port_SetConfigPointer().		*/
 /************************************************************************************************/
 FUNC(uint32, PORT_CODE) Port_Regchk_IOHOLD( void );
 #endif /* (PORT_CFG_REL_IO_BUF_HOLD_STATE == STD_ON) */
@@ -1057,6 +1074,8 @@ FUNC(uint32, PORT_CODE) Port_Regchk_IOHOLD( void );
 /* Parameters(in)	:	none																	*/
 /* Return value		:	Check Result															*/
 /* Limitation		:	This function must be called after executing Port_Init().				*/
+/*						Additionally, in any VM where Port_Init() has not been executed,		*/
+/*						please call this function after calling Port_SetConfigPointer().		*/
 /************************************************************************************************/
 FUNC(uint32, PORT_CODE) Port_Regchk_ECM( void );
 
@@ -1067,6 +1086,8 @@ FUNC(uint32, PORT_CODE) Port_Regchk_ECM( void );
 /* Parameters(in)	:	none																	*/
 /* Return value		:	Check Result															*/
 /* Limitation		:	This function must be called after executing Port_Init().				*/
+/*						Additionally, in any VM where Port_Init() has not been executed,		*/
+/*						please call this function after calling Port_SetConfigPointer().		*/
 /************************************************************************************************/
 FUNC(uint32, PORT_CODE) Port_Regchk_PULVSEL( void );
 #endif /* (MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2B) */

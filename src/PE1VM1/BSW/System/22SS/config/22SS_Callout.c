@@ -20,6 +20,7 @@
 
 #include "veh_opemd.h"
 #include "oxcan.h"
+#include "oxsec.h"
 #include "ivdsh.h"
 
 /* Memory               */
@@ -125,6 +126,7 @@ void vd_g_22SSCallout_StaBonInit(void)
         u1_t_rslt = u1_g_Nvmc_BonRead();
     }while(u1_t_rslt != (U1)FALSE);
 
+    vd_g_oXSECInit();
     vd_g_oXCANRstInit();
     vd_g_VehopemdRstInit();
     vd_g_iVDshInit();
@@ -188,6 +190,7 @@ void vd_g_22SSCallout_StaRstInit(void)
         u1_t_rslt = u1_g_Nvmc_WkupRead();
     }while(u1_t_rslt != (U1)FALSE);
 
+    vd_g_oXSECInit();
     vd_g_oXCANRstInit();
     vd_g_VehopemdRstInit();
     vd_g_iVDshInit();
@@ -251,6 +254,7 @@ void vd_g_22SSCallout_StaWkupInit(void)
         u1_t_rslt = u1_g_Nvmc_WkupRead();
     }while(u1_t_rslt != (U1)FALSE);
 
+    vd_g_oXSECInit();
     vd_g_oXCANWkupInit();
     vd_g_VehopemdWkupInit();
     vd_g_iVDshInit();
