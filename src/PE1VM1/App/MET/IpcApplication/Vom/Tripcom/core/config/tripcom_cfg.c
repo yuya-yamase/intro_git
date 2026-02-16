@@ -30,7 +30,6 @@
 #include "tripcom_nvmif.h"
 
 #include "oxcan.h"
-#include "vardef.h"
 
 #include "alert.h"
 #include "alert_mtrx.h"
