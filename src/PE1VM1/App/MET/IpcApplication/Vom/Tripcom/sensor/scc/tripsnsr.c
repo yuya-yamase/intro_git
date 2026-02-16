@@ -38,9 +38,6 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define TRIPSNSR_ECOMODE_IDLSTP                 (0x03U)
-#define TRIPSNSR_ECORUNSTS_CNVT                 (2U)
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -174,8 +171,6 @@ static  U2      u2_s_TripsnsrMakeVehstsbit(void)
 {
     U2          u2_t_vehmode;
     U1          u1_t_igsts;
-    U1          u1_t_signal;
-    U1          u1_t_ecosts;
     U1          u1_t_vehsts;
     U2          u2_t_kmph;
     U1          u1_t_spdsts;
@@ -201,22 +196,6 @@ static  U2      u2_s_TripsnsrMakeVehstsbit(void)
         u2_s_tripsnsr_drvcyc_sts = (U2)0U;
     }
     u2_t_vehmode |= u2_s_tripsnsr_drvcyc_sts;
-
-    u1_t_ecosts = u1_g_TripsnsrCfgEcoMode();
-    u1_t_signal = (U1)0U;
-    if (u1_t_ecosts == (U1)TRUE) {
-        u1_t_vehsts = u1_g_TripsnsrCfgGetECOMODE3(&u1_t_signal);
-        u2_t_vehmode |= (U2)((U2)u1_t_vehsts << TRIPSNSR_ECORUNSTS_CNVT);
-    }
-    else {
-        u2_t_vehmode |= (U2)TRIPCOM_VEHSTS_ECORUNINV;
-    }
-
-    if (((u2_t_vehmode & (U2)(TRIPCOM_VEHSTS_ECORUNUNK | TRIPCOM_VEHSTS_ECORUNINV)) == (U2)0U) &&
-        (u1_t_signal == (U1)TRIPSNSR_ECOMODE_IDLSTP)) {
-
-        u2_t_vehmode |= (U2)TRIPCOM_VEHSTS_ECOSTP;
-    }
     
     u2_t_kmph   = (U2)0U;
     u1_t_spdsts = u1_g_TripsnsrVspKmph(&u2_t_kmph);
@@ -250,8 +229,7 @@ static  void    vd_s_TripsnsrSnpshtDelta(void)
         }
     }
 
-    if (((u1_t_resetbit & (U1)TRIPCOM_INSTFEHE_UPD) != (U1)0U) ||
-        ((u1_t_resetbit & (U1)TRIPCOM_INSTEE_UPD  ) != (U1)0U)) {
+    if ((u1_t_resetbit & (U1)TRIPCOM_INSTEE_UPD) != (U1)0U) {
         vd_g_TripsnsrOdocntSnpshtDelta(u1_t_resetbit);
         u1_s_tripsnsr_rxrst = u1_t_resetbit;
     }
@@ -274,11 +252,16 @@ static  void    vd_s_TripsnsrSnpshtDelta(void)
 /*  2.1.1    08/08/2022  YI       Add vd_g_TripsnsrCfgEvDtePIEVE06.                                                                  */
 /*  2.2.0    06/23/2025  RS       Change for BEV System_Consideration_2.(tripsnsr_cfg.c v2.1.1 -> v2.2.0.)                           */
 /*                                                                                                                                   */
+/*  Revision Date        Author   Change Description                                                                                 */
+/* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
+/*  BEV-01   02/12/2026  DT       Deleted unapplied parameter for BEV FF2                                                            */
+/*                                                                                                                                   */
 /*  * HY   = Hidefumi Yoshida, Denso                                                                                                 */
 /*  * YA   = Yuhei Aoyama, DensoTechno                                                                                               */
 /*  * TA(M)= Teruyuki Anjima, NTT Data MSE                                                                                           */
 /*  * TK   = Takanori Kuno, Denso Techno                                                                                             */
 /*  * YI   = Yoshiki Iwata, NTT Data MSE                                                                                             */
 /*  * RS   = Ryuki Sako, Denso Techno                                                                                                */
+/*  * DT   = Dj Tutanes, DTPH                                                                                                        */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
