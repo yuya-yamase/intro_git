@@ -108,11 +108,7 @@ const U1                           u1_g_OXCAN_SYSEA_EA2_BGN = (U1)0U;
 /*===================================================================================================================================*/
 static void    vd_s_oXCANSysEvTxAccOn250ms(void)
 {
-    /* Users Configration */
-
-    /* Sample Code */
-/*  Com_TriggerIPDUSend(MSG_MET1H01_H_FD); */
-/*  Com_TriggerIPDUSend(MSG_MET1H02_H_FD); */
+/*  No can message to send */
 }
 /*===================================================================================================================================*/
 /*  static void    vd_s_oXCANSysEvTxAccOn2p5s(void)                                                                                  */
@@ -122,11 +118,8 @@ static void    vd_s_oXCANSysEvTxAccOn250ms(void)
 /*===================================================================================================================================*/
 static void    vd_s_oXCANSysEvTxAccOn2p5s(void)
 {
-    /* Sample Code */
-/*  Com_TriggerIPDUSend(MSG_MET1H01_H_FD); */
-/*  Com_TriggerIPDUSend(MSG_MET1H11_H_FD); */
-/*  Com_TriggerIPDUSend(MSG_MET1H18_H_FD); */
-/*  Com_TriggerIPDUSend(MSG_MET1H04_H_FD); */
+    Com_TriggerIPDUSend(MSG_MET1S38_TXCH0);
+    Com_TriggerIPDUSend(MSG_MET1S55_TXCH0);
 }
 /*===================================================================================================================================*/
 /*  static void    vd_s_oXCANSysEvTxIgnOn250ms(void)                                                                                 */
@@ -136,14 +129,8 @@ static void    vd_s_oXCANSysEvTxAccOn2p5s(void)
 /*===================================================================================================================================*/
 static void    vd_s_oXCANSysEvTxIgnOn250ms(void)
 {
-    /* Sample Code */
-/*  Com_TriggerIPDUSend(MSG_MET1H01_H_FD); */
-/*  Com_TriggerIPDUSend(MSG_MET1H02_H_FD); */
-/*  Com_TriggerIPDUSend(MSG_MET1H10_H_FD); */
-/*  Com_TriggerIPDUSend(MSG_MET1H11_H_FD); */
-/*  Com_TriggerIPDUSend(MSG_MET1H18_H_FD); */
-/*  Com_TriggerIPDUSend(MSG_MET1H04_H_FD); */
-/*  Com_TriggerIPDUSend(MSG_MET1H24_H_FD); */
+    Com_TriggerIPDUSend(MSG_MET1S38_TXCH0);
+    Com_TriggerIPDUSend(MSG_MET1S55_TXCH0);
 }
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
@@ -157,7 +144,9 @@ static void    vd_s_oXCANSysEvTxIgnOn250ms(void)
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
+/*  BEV3-01   2/09/2026  DT       Added can message (MSG_MET1S38_TXCH0, MSG_MET1S55_TXCH0)                                           */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, DENSO                                                                                                    */
+/*  * DT   = Dj Tutanes, DTPH                                                                                                        */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

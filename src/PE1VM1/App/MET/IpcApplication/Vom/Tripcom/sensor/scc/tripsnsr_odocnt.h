@@ -38,8 +38,6 @@ void            vd_g_TripsnsrOdocntInit(void);
 void            vd_g_TripsnsrOdocntSmplngTask(const U2 u2_a_VEHSYSSTS, const U1 u1_a_PTSSTS);
 U2              u2_g_TripsnsrOdocntGetDelta(U4 * u4_ap_delta);
 void            vd_g_TripsnsrOdocntSnpshtDelta(const U1 u1_a_RESETBIT);
-U2              u2_g_TripsnsrOdocntEmgfGetDelta(U4 * u4_ap_delta);
-U2              u2_g_TripsnsrOdocntEmgfSts(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
