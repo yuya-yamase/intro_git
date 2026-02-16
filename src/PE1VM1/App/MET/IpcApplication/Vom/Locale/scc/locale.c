@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define LOCALE_C_MAJOR                         (2)
-#define LOCALE_C_MINOR                         (1)
+#define LOCALE_C_MINOR                         (2)
 #define LOCALE_C_PATCH                         (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -102,7 +102,6 @@ U1      u1_g_Unit(const U1 u1_a_IDX)
     static const U1 u1_sp_LOCALE_UNIT_MAX_VAL[UNIT_NUM_IDX] = {
         (U1)UNIT_NUM_VAL_DIST,      /*  UNIT_IDX_DIST      */
         (U1)UNIT_NUM_VAL_SPEED,     /*  UNIT_IDX_SPEED     */
-        (U1)UNIT_NUM_VAL_FUECO,     /*  UNIT_IDX_FUECO     */
         (U1)UNIT_NUM_VAL_ELECO,     /*  UNIT_IDX_ELECO     */
         (U1)UNIT_NUM_VAL_AMBTMP     /*  UNIT_IDX_AMBTMP    */
     };
@@ -213,12 +212,14 @@ U1      u1_g_UnitSubSpd(void)
 /*  2.0.0    07/09/2021  TA(M)    Delete Timezone. Change to Config join with Mcst.                                                  */
 /*  2.0.1    12/08/2022  TA(M)    Add u1_g_LANG_NUM to configure language information.                                               */
 /*  2.0.2    07/04/2025  MN       Change Timeformat                                                                                  */
-/*  2.1.0    01/30/2026  YN       Change for BEV FF2.(MET-M_DESTVARI-CSTD-0-01)                                                      */
+/*  2.1.0    02/09/2026  SN       Delete UNIT_IDX_FUECO from u1_sp_LOCALE_UNIT_MAX_VAL.(BEV3CDCMET-1988)                             */
+/*  2.2.0    01/30/2026  YN       Change for BEV FF2.(MET-M_DESTVARI-CSTD-0-01)                                                      */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * SF   = Seiya Fukutome, DensoTechno                                                                                             */
 /*  * TA(M)= Teruyuki Anjima, NTT Data MSE                                                                                           */
 /*  * MN   = Mikiya Negishi, KSE                                                                                                     */
+/*  * SN   = Shizuka Nakajima, KSE                                                                                                   */
 /*  * YN   = Yujiro Nagaya, Denso Techno                                                                                             */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

@@ -33,7 +33,7 @@
 #define RIMID_U1_VDF_STRG_WHL                    (0x0003U)
 #define RIMID_U1_VDF_DST_IDX                     (0x0004U)
 #define RIMID_U1_VDF_DST_LAW_IDX                 (0x0005U)
-#define RIMID_U1_NVMC_DA_DTF_WRI_012             (0x0006U)
+#define RIMID_U1_NVMC_DA_DTF_WRI_011             (0x0006U)
 #define RIMID_U1_NVMC_ST_DTF_000                 (0x0007U)
 #define RIMID_U1_NVMC_ST_DTF_001                 (0x0008U)
 #define RIMID_U1_NVMC_ST_DTF_002                 (0x0009U)
@@ -46,14 +46,12 @@
 #define RIMID_U1_NVMC_ST_DTF_009                 (0x0010U)
 #define RIMID_U1_NVMC_ST_DTF_010                 (0x0011U)
 #define RIMID_U1_NVMC_ST_DTF_011                 (0x0012U)
-#define RIMID_U1_NVMC_ST_DTF_012                 (0x0013U)
 /* END : ##TOOL_OUT#RIM_ID_MOD_3B_U1## */
 /* START : ##TOOL_OUT#RIM_ID_MOD_3B_U2## */
 #define RIMID_U2_SAMPLE_BBB_2                    (0x4000U)
 #define RIMID_U2_VDF_C_CODE                      (0x4001U)
 #define RIMID_U2_NVMC_DA_DTF_WRI_009             (0x4002U)
 #define RIMID_U2_NVMC_DA_DTF_WRI_010             (0x4003U)
-#define RIMID_U2_NVMC_DA_DTF_WRI_011             (0x4004U)
 /* END : ##TOOL_OUT#RIM_ID_MOD_3B_U2## */
 /* START : ##TOOL_OUT#RIM_ID_MOD_3B_U4## */
 #define RIMID_U4_SAMPLE_BBB_4                    (0x8000U)
@@ -93,6 +91,15 @@
 /* START : ##TOOL_OUT#RIM_ID_MOD_1B_U1## */
 #define RIMID_U1_SAMPLE_B_1                      (0x0400U)
 #define RIMID_U1_ILLUMI_LOUNGE                   (0x0401U)
+#define RIMID_U1_MCST_USRNUM_D                   (0x0402U)
+#define RIMID_U1_NVMC_ST_DTF_012                 (0x0403U)
+#define RIMID_U1_NVMC_ST_DTF_013                 (0x0404U)
+#define RIMID_U1_NVMC_ST_DTF_014                 (0x0405U)
+#define RIMID_U1_NVMC_ST_DTF_015                 (0x0406U)
+#define RIMID_U1_NVMC_ST_DTF_016                 (0x0407U)
+#define RIMID_U1_NVMC_ST_DTF_017                 (0x0408U)
+#define RIMID_U1_NVMC_ST_DTF_018                 (0x0409U)
+#define RIMID_U1_NVMC_ST_DTF_019                 (0x040AU)
 /* END : ##TOOL_OUT#RIM_ID_MOD_1B_U1## */
 /* START : ##TOOL_OUT#RIM_ID_MOD_1B_U2## */
 #define RIMID_U2_SAMPLE_B_2                      (0x4400U)
@@ -103,6 +110,14 @@
 /* END : ##TOOL_OUT#RIM_ID_MOD_1B_U4## */
 /* START : ##TOOL_OUT#RIM_ID_MOD_1B_OTR## */
 #define RIMID_OTR_SAMPLE_B_OTH                   (0xC400U)
+#define RIMID_OTR_NVMC_DA_DTF_WRI_012            (0xC401U)
+#define RIMID_OTR_NVMC_DA_DTF_WRI_013            (0xC402U)
+#define RIMID_OTR_NVMC_DA_DTF_WRI_014            (0xC403U)
+#define RIMID_OTR_NVMC_DA_DTF_WRI_015            (0xC404U)
+#define RIMID_OTR_NVMC_DA_DTF_WRI_016            (0xC405U)
+#define RIMID_OTR_NVMC_DA_DTF_WRI_017            (0xC406U)
+#define RIMID_OTR_NVMC_DA_DTF_WRI_018            (0xC407U)
+#define RIMID_OTR_NVMC_DA_DTF_WRI_019            (0xC408U)
 /* END : ##TOOL_OUT#RIM_ID_MOD_1B_OTR## */
 
 /* START : ##TOOL_OUT#RIM_ID_MOD_3C_U1## */

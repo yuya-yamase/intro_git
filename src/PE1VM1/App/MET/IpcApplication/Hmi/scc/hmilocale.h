@@ -13,7 +13,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define HMILOCALE_H_MAJOR                         (1)
-#define HMILOCALE_H_MINOR                         (4)
+#define HMILOCALE_H_MINOR                         (5)
 #define HMILOCALE_H_PATCH                         (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -37,7 +37,6 @@
 typedef struct{
     U1  u1_unit_dist   ;
     U1  u1_unit_speed  ;
-    U1  u1_unit_fueco  ;
     U1  u1_unit_eleco  ;
     U1  u1_unit_ambtmp ;
     U1  u1_timeformat  ;
