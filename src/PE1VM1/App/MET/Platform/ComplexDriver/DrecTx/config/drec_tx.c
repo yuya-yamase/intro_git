@@ -1,8 +1,8 @@
-/* 1.0.2 */
+/* 1.1.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-/* Drive Recorder / CAN Communication Tx                                                                                             */
+/* Drive Recorder Tx                                                                                                                 */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
 
@@ -10,8 +10,8 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define DREC_TX_C_MAJOR                          (1)
-#define DREC_TX_C_MINOR                          (0)
-#define DREC_TX_C_PATCH                          (2)
+#define DREC_TX_C_MINOR                          (1)
+#define DREC_TX_C_PATCH                          (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -37,9 +37,9 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define DREC_TX_FNC_BIT_MAX                      (0x3U)
+#define DREC_TX_FNC_BIT_MAX                      (0x03U)
 #define DREC_TX_MAIN_TICK                        (50U)
-#define DREC_TX_CYC_TIME                         ((U1)1200U / (U1)DREC_TX_MAIN_TICK)
+#define DREC_TX_CYC_TIME                         (1200U / DREC_TX_MAIN_TICK)
 #define DREC_TX_CYC_INIT                         (1U)
 #define DREC_TX_CNT_SIG                          (1U)
 
@@ -81,7 +81,7 @@ static void    vd_s_DrectxMsg_MET1D51(void);
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*===================================================================================================================================*/
-/*  void    vd_g_DrectxRstInit(void)                                                                                                 */
+/*  void    vd_g_DrectxBonInit(void)                                                                                                 */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
@@ -151,7 +151,7 @@ void    vd_g_DrectxRstInit(void)
     u1_t_rimsts = u1_g_Rim_ReadU1withStatus((U2)RIMID_U1_DREC_TX, &u1_t_br);
 
     if((u1_t_rimsts & (U1)RIM_RESULT_KIND_MASK) == (U1)RIM_RESULT_KIND_OK){
-        u1_s_drec_tx_datanm2 = (u1_t_br & (U1)DREC_TX_SIG_MASK_2BIT);
+        u1_s_drec_tx_datanm2 = u1_t_br;
     }
     else{
         vd_g_Rim_WriteU1((U2)RIMID_U1_DREC_TX, u1_s_drec_tx_datanm2);
@@ -161,7 +161,8 @@ void    vd_g_DrectxRstInit(void)
         u4_tp_tx_data[u4_t_loop] = (U4)0U;
     }
 
-    u4_tp_tx_data[DREC_TX_BUF0] |= (U4)u1_s_drec_tx_datanm2 << DREC_TX_SHIFT_DATA_NM2;     /* DATA_NM2 */
+    u1_t_tx = u1_s_drec_tx_datanm2 & (U1)DREC_TX_SIG_MASK_2BIT;
+    u4_tp_tx_data[DREC_TX_BUF0] |= (U4)u1_t_tx << DREC_TX_SHIFT_DATA_NM2;                  /* DATA_NM2 */
 
  /* u1_t_tx = (U1)0U; */
  /* u4_tp_tx_data[DREC_TX_BUF0] |= (U4)u1_t_tx; */                                         /* D_N_INF is 0 transmission */
@@ -210,7 +211,7 @@ void    vd_g_DrectxWkupInit(void)
     u1_t_rimsts = u1_g_Rim_ReadU1withStatus((U2)RIMID_U1_DREC_TX, &u1_t_br);
 
     if((u1_t_rimsts & (U1)RIM_RESULT_KIND_MASK) == (U1)RIM_RESULT_KIND_OK){
-        u1_s_drec_tx_datanm2 = (u1_t_br & (U1)DREC_TX_SIG_MASK_2BIT);
+        u1_s_drec_tx_datanm2 = u1_t_br;
     }
     else{
         vd_g_Rim_WriteU1((U2)RIMID_U1_DREC_TX, u1_s_drec_tx_datanm2);
@@ -220,7 +221,8 @@ void    vd_g_DrectxWkupInit(void)
         u4_tp_tx_data[u4_t_loop] = (U4)0U;
     }
 
-    u4_tp_tx_data[DREC_TX_BUF0] |= (U4)u1_s_drec_tx_datanm2 << DREC_TX_SHIFT_DATA_NM2;     /* DATA_NM2 */
+    u1_t_tx = u1_s_drec_tx_datanm2 & (U1)DREC_TX_SIG_MASK_2BIT;
+    u4_tp_tx_data[DREC_TX_BUF0] |= (U4)u1_t_tx << DREC_TX_SHIFT_DATA_NM2;                  /* DATA_NM2 */
 
  /* u1_t_tx = (U1)0U; */
  /* u4_tp_tx_data[DREC_TX_BUF0] |= (U4)u1_t_tx; */                                         /* D_N_INF is 0 transmission */
@@ -290,10 +292,10 @@ static void    vd_s_DrectxMsg_MET1D51(void)
         u4_tp_tx_data[u4_t_loop] = (U4)0U;
     }
 
-    u1_t_tx = (u1_s_drec_tx_datanm2 & (U1)DREC_TX_SIG_MASK_2BIT);
+    u1_t_tx = u1_s_drec_tx_datanm2 & (U1)DREC_TX_SIG_MASK_2BIT;
     u4_tp_tx_data[DREC_TX_BUF0] |= (U4)u1_t_tx << DREC_TX_SHIFT_DATA_NM2;       /* DATA_NM2 */
 
-    u1_t_tx = (u1_g_DimDrTxDninf() & (U1)DREC_TX_SIG_MASK_2BIT);
+    u1_t_tx = u1_g_DimDrTxDninf() & (U1)DREC_TX_SIG_MASK_2BIT;
     u4_tp_tx_data[DREC_TX_BUF0] |= (U4)u1_t_tx;                                 /* D_N_INF  */
 
     u1_t_tx = u1_g_IllumiRheoDrTxRheoin();
@@ -341,6 +343,7 @@ static void    vd_s_DrectxMsg_MET1D51(void)
 /*  1.0.0    12/20/2018  TN       New.                                                                                               */
 /*  1.0.1    07/22/2020  YA       Sw information acquisition changed from SwPxy to DioIf                                             */
 /*  1.0.2    10/18/2021  AS       Response to QAC.                                                                                   */
+/*  1.1.0    02/16/2026  YN       drec_tx v1.0.2 -> v1.1.0.                                                                          */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
