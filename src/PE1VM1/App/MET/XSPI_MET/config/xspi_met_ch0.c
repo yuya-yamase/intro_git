@@ -659,9 +659,13 @@ static inline void    vd_s_XSpiCfgTxHud(           U4 * u4_ap_pdu_tx) {
 
     u4_ap_pdu_tx[0]  = (U4)u2_t_owduty;                                                     /* HUD_BLDUTY_OW        */
     u4_ap_pdu_tx[0] |= (U4)u2_g_HudImgAdjGetGvOwPos() << 16;                                /* HUD_VIPOS_POS_OW     */
-    u4_ap_pdu_tx[1]  = (U4)u2_g_HudImgAdjGetMovReqPos();                                    /* HUD_VIPOS_REQPOS     */
+#endif   /* BEV Rebase provisionally */
+    u4_ap_pdu_tx[4]  = (U4)u2_g_HudImgAdjGetMovReqPos();                                    /* HUD_VIPOS_REQPOS     */
+#if 0   /* BEV Rebase provisionally */
     u4_ap_pdu_tx[1] |= (U4)u2_g_HdimmgrIfGetAdjduty() << 16;                                /* HUD_DIM_ILLMN        */
-    u4_ap_pdu_tx[2]  = (U4)u1_g_HudImgAdjGetMovReqID();                                     /* HUD_VIPOS_REQID      */
+#endif   /* BEV Rebase provisionally */
+    u4_ap_pdu_tx[5]  = (U4)u1_g_HudImgAdjGetMovReqID();                                     /* HUD_VIPOS_REQID      */
+#if 0   /* BEV Rebase provisionally */
     u4_ap_pdu_tx[2] |= (U4)((U4)u1_g_HdimmgrIfGet_L_HUDBR_S() & (U4)0x0000001FU) << 8;      /* HUD_L_HUDBR_S        */
     u4_ap_pdu_tx[2] |= (U4)((U4)u1_t_owdutyreq & (U4)0x00000001U) << 13;                    /* HUD_BLDUTY_OWREQ     */
     u4_ap_pdu_tx[2] |= (U4)((U4)u1_s_xspi_vipos_disp & (U4)0x00000001U) << 14;              /* GV_VIPOS_DISP        */
@@ -1191,6 +1195,7 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*  BEV-27    02/06/2026 TS       Change for BEV FF2.(MET-M_ONOFF-CSTD-1)                                                            */
 /*                                Add APOFRQ_ON storage process.                                                                     */
 /*  BEV-28    02/09/2026 MA       Add notification process of odo display value at reset                                             */
+/*  BEV-29    02/03/2026 SN(K)    Change for BEV FF2.(BEV3CDCMET-3779 Restore HUD display position save/notification processing.)    */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
