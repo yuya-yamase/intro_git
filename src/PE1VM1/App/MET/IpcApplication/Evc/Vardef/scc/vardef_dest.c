@@ -393,7 +393,7 @@ static void    vd_s_VardefDestLawDBIdxJdg(void)
 
     if (((u1_t_law_destbdb_idx == u1_g_VDF_DST_LAW_DEST_BDB_B_GNR_L) ||
          (u1_t_law_destbdb_idx == u1_g_VDF_DST_LAW_DEST_BDB_B_GNR_R)) &&
-         (u1_CALIB_MCUID3020_GEN_LOW == CALIB_MCUID3020_FMVSS)) {
+         (u1_CALIB_MCUID3020_GEN_LOW == (U1)CALIB_MCUID3020_FMVSS)) {
         u1_t_law_destbdb_idx = u1_g_VDF_DST_LAW_DEST_BDB_B_GNR_FMVSS;
     }
 
