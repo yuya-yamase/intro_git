@@ -1,92 +1,103 @@
-/* 1.0.0 */
+/* 2.0.0 */
 /*===================================================================================================================================*/
-/*  FW Update State Handler                                                                                                          */
+/*  Copyright DENSO Corporation                                                                                                      */
+/*===================================================================================================================================*/
+/* FW Update State Handler                                                                                                           */
+/*                                                                                                                                   */
 /*===================================================================================================================================*/
 
 #ifndef FWUSH_H
 #define FWUSH_H
-
-#include <Std_Types.h>
-#include "fwumemacc.h"
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define FWUSH_H_MAJOR                              (1U)
-#define FWUSH_H_MINOR                              (0U)
-#define FWUSH_H_PATCH                              (0U)
+#define FWUSH_H_MAJOR                       (2U)
+#define FWUSH_H_MINOR                       (0U)
+#define FWUSH_H_PATCH                       (0U)
+
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*  Include Files                                                                                                                    */
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+#include "fwumemacc.h"
+#include "aip_common.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define FWUSH_REQ_WORD_BYTE                        (4U)
-#define FWUSH_REQ_H_WORDS                          (2U)
-#define FWUSH_REQ_D_WORDS                          (1U)
-#define FWUSH_REQ_H_SIZE                           (FWUSH_REQ_H_WORDS * FWUSH_REQ_WORD_BYTE)
-#define FWUSH_RES_WORDS                            (2U)
+/* Request frame definition */
+#define FWUSH_REQ_WORD_BYTE                     (4U)
+#define FWUSH_REQ_H_WORDS                       (2U)
+#define FWUSH_REQ_D_WORDS                       (1U)
+#define FWUSH_REQ_H_SIZE                        (FWUSH_REQ_H_WORDS * FWUSH_REQ_WORD_BYTE)
+#define FWUSH_RES_WORDS                         (2U)
 
-#define FWUSH_REQ_PREP_DATA_SIZE                   (328U)
-#define FWUSH_REQ_RUN_DATA_SIZE                    (1024U)
+#define FWUSH_REQ_PREP_DATA_SIZE                (328U)
+#define FWUSH_REQ_RUN_DATA_SIZE                 (1024U)
 
-/* 4-State State Machine Definitions */
-#define FWUSH_NUM_STS                              (4U)
-#define FWUSH_STS_PREP                             (0U)  /* PREP */
-#define FWUSH_STS_RUN                              (1U)  /* RUN */
-#define FWUSH_STS_VERI                             (2U)  /* VERI */
-#define FWUSH_STS_ACT                              (3U)  /* ACT */
+/* Response definition */
+#define FWUSH_ACK_OK                            (0x00U)
+#define FWUSH_ACK_NG                            (0x01U)
 
-/* Type03h frame markers - Request Subtypes */
-#define FWUSH_REQ_SUBTYPE_OFFSET                   (0U)
-#define FWUSH_REQ_SUBTYPE_PREP                     (0x01U)  /* Repro Subtype=01h */
-#define FWUSH_REQ_SUBTYPE_RUN                      (0x02U)  /* Repro Subtype=02h */
-#define FWUSH_REQ_SUBTYPE_VERI                     (0x18U)  /* Misc Subtype=18h */
-#define FWUSH_REQ_SUBTYPE_ACT                      (0x37U)  /* Misc Subtype=37h */
-#define FWUSH_REQ_SUBTYPE_NA                       (0xFFU)  /* Not Applicable Subtype */
-
-#define FWUSH_MEMACC_STATUS_PREP_IDLE              (FWUMEMACC_ERASE_STS_NON)
-#define FWUSH_MEMACC_STATUS_PREP_RUNNING           (FWUMEMACC_ERASE_STS_ACT)
-#define FWUSH_MEMACC_STATUS_PREP_SUCCESS           (FWUMEMACC_ERASE_STS_COMP)
-#define FWUSH_MEMACC_STATUS_PREP_ERROR             (FWUMEMACC_ERASE_STS_ERR)
-
-#define FWUSH_MEMACC_STATUS_RUN_IDLE               (FWUMEMACC_UPDT_STS_NON)
-#define FWUSH_MEMACC_STATUS_RUN_RUNNING            (FWUMEMACC_UPDT_STS_WRITE)
-#define FWUSH_MEMACC_STATUS_RUN_SUCCESS_MIDWAY     (FWUMEMACC_UPDT_STS_1B_COMP)
-#define FWUSH_MEMACC_STATUS_RUN_CRC_CHECK          (FWUMEMACC_UPDT_STS_CRC)
-#define FWUSH_MEMACC_STATUS_RUN_SUCCESS_FINAL      (FWUMEMACC_UPDT_STS_ALL_COMP)
-#define FWUSH_MEMACC_STATUS_RUN_ERROR              (FWUMEMACC_UPDT_STS_ERR)
-
-#define FWUSH_MEMACC_STATUS_ACT_IDLE               (FWUMEMACC_SWITCH_STS_NON)
-#define FWUSH_MEMACC_STATUS_ACT_RUNNING            (FWUMEMACC_SWITCH_STS_ACT)
-#define FWUSH_MEMACC_STATUS_ACT_SUCCESS            (FWUMEMACC_SWITCH_STS_COMP)
-#define FWUSH_MEMACC_STATUS_ACT_ERROR              (FWUMEMACC_SWITCH_STS_ERR)
-
-/* Type38h frame markers */
-#define FWUSH_ACK_OK                               (0x00U)
-#define FWUSH_ACK_NG                               (0x01U)
-
-/* subtype01h  frame markers */
-#if 0   /* debug */
-#define FWUSH_REQ_PREP_DATA_ADR_OFFSET              (0U)
-#define FWUSH_REQ_PREP_DATA_LEN_OFFSET              (4U)
-#define FWUSH_REQ_PREP_DATA_CRC_OFFSET              (8U)
-#else   /* debug */
-#define FWUSH_REQ_PREP_DATA_CRC_OFFSET              (0U)
-#endif   /* debug */
-/* subtype02h  frame markers */
-#define FWUSH_REQ_RUN_BLKOFS_OFFSET                (2U)
-#define FWUSH_REQ_RUN_LEN_OFFSET                   (4U)
-
-/* Response data structure offsets */
-/* T.B.D. */
+/* Request frame offset */
+#define FWUSH_REQ_SUBTYPE_OFFSET                (0U)
+#define FWUSH_REQ_PREP_DATA_CRC_OFFSET          (0U)
+#define FWUSH_REQ_RUN_BLKOFS_OFFSET             (2U)
+#define FWUSH_REQ_RUN_LEN_OFFSET                (4U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-/*  Type Definitions                                                                                                                 */
+/*  Type Definitions - Phase 2: State Machine                                                                                        */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+
+/* Main states */
+#define FWUSH_MAIN_STATE_MAX                    (5U)
+#define FWUSH_MAIN_STATE_PREP                   (0U)           /* Prepare phase */
+#define FWUSH_MAIN_STATE_RUN                    (1U)           /* Run phase */
+#define FWUSH_MAIN_STATE_VERI                   (2U)           /* Verify phase */
+#define FWUSH_MAIN_STATE_ACT                    (3U)           /* Activate phase */
+#define FWUSH_MAIN_STATE_ROLLBACK               (4U)           /* Rollback phase (when special flag present) */
+
+/* Sub states */
+#define FWUSH_SUB_STATE_MAX                     (2U)
+#define FWUSH_SUB_STATE_WAITING                 (0U)           /* Waiting for request */
+#define FWUSH_SUB_STATE_PROCESSING              (1U)           /* MemAcc job processing */
+
+/* NOTE: ERROR condition is managed via abort_active flag. */
+/* NOTE: After ACT completes, transition to ROLLBACK or reset->PREP_WAITING. */
+
+/* Event definitions (with CANCEL support) */
+#define FWUSH_EVENT_MAX                         (8U)
+#define FWUSH_EVENT_NONE                        (0U)           /* No event */
+#define FWUSH_EVENT_NEW_REQUEST                 (1U)           /* New request received */
+#define FWUSH_EVENT_SAME_REQUEST                (2U)           /* Same request received (continue) */
+#define FWUSH_EVENT_MEMACC_SUCCESS              (3U)           /* MemAcc job success */
+#define FWUSH_EVENT_MEMACC_PROGRESS             (4U)           /* MemAcc job in progress */
+#define FWUSH_EVENT_MEMACC_ERROR                (5U)           /* MemAcc job error */
+#define FWUSH_EVENT_INVALID_REQUEST             (6U)           /* Invalid request */
+#define FWUSH_EVENT_CANCEL                      (7U)           /* Cancel requested */
+
+/* Request subtypes */
+#define FWUSH_REQ_SUBTYPE_NA                    (0xFFU)        /* Not Applicable */
+#define FWUSH_REQ_SUBTYPE_PREP                  (0x01U)        /* Prepare */
+#define FWUSH_REQ_SUBTYPE_RUN                   (0x02U)        /* Run */
+#define FWUSH_REQ_SUBTYPE_VERI                  (0x18U)        /* Verify */
+#define FWUSH_REQ_SUBTYPE_ACT                   (0x37U)        /* Activate */
+#define FWUSH_REQ_SUBTYPE_CANCEL                (0xFFU)        /* Cancel (reserved for future) */
+
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Prototypes                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-void            vd_g_FwushInit(void);
-void            vd_g_FwushMainTask(void);
+
+/* Phase 2 main functions */
+void vd_g_FwushInit(void);
+void vd_g_FwushMainTask(void);
+
+/* Accept CANCEL request from external (reserved for future) */
+void vd_g_FwushRequestCancel(void);
+
+/* Debug: get current state */
+U1 u1_g_FwushGetMainState(void);
+U1 u1_g_FwushGetSubState(void);
 
 #endif /* FWUSH_H */
 /*===================================================================================================================================*/

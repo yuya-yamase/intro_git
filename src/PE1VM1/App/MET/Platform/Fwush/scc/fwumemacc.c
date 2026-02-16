@@ -1,515 +1,618 @@
-/* 1.0.0 */
+/* 2.0.0 */
+/*===================================================================================================================================*/
+/*  Copyright DENSO Corporation                                                                                                      */
+/*===================================================================================================================================*/
 /*===================================================================================================================================*/
 /*  FW Update Memory Access                                                                                                          */
 /*===================================================================================================================================*/
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define FWUMEMACC_C_MAJOR                   (1U)
+#define FWUMEMACC_C_MAJOR                   (2U)
 #define FWUMEMACC_C_MINOR                   (0U)
 #define FWUMEMACC_C_PATCH                   (0U)
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#include "aip_common.h"
+#include "fwumemacc.h"
 
 #include "MemAcc.h"
 #include "crc32.h"
 
-#include "fwumemacc.h"
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define FWUMEMACC_JOBSTS_NON                (0U)
-#define FWUMEMACC_JOBSTS_ERASE              (1U)
-#define FWUMEMACC_JOBSTS_UPDATE             (2U)
-#define FWUMEMACC_JOBSTS_SWITCH             (3U)
-
-#define FWUMEMACC_ADRS_INV_OFFSET           (0x02000000U)
-
-/* MemAcc Update */
-#define FWUMEMACC_WRITE_LENGTH              (1024U)
-
-#define FWUMEMACC_CRCCHK_LENGTH             (16384U)        /* 1Periodic Erase Size : 16kByte */
-#define FWUMEMACC_CRCCHK_INIT_VAL           (0xFFFFFFFFU)
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+
+/* Job status is declared in the header (U1) */
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-/*  Variable Definitions                                                                                                             */
+/*  Variable Definitions (managed via individual static variables per existing pattern)                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static U1                u1_s_fwumemacc_job_sts;
 
-static U1                u1_s_fwumemacc_erase_sts;
-static U1                u1_s_fwumemacc_updt_sts;
-static U1                u1_s_fwumemacc_switch_sts;
+/* Job type and job status */
+static U1     u1_s_job_type;
+static U1     u1_s_job_status;
 
-static U2                u2_s_fwumemacc_blkofst_cnt;
-static U4                u4_s_fwumemacc_crc_result;
-static U2                u2_s_fwumemacc_crcofst_cnt;
+/* Erase/Update common parameters */
+static U4 u4_s_start_address;      /* Erase/Update: start address */
+static U4 u4_s_data_length;        /* Erase: data length, Update: total data length */
+static U4 u4_s_expected_crc;       /* Erase/Update: expected CRC value */
 
-static U4                u4_s_fwumemacc_rcv_start_adrs;
-static U4                u4_s_fwumemacc_rcv_rprgdat_len;
-static U4                u4_s_fwumemacc_rcv_crc_data;
-static U2                u2_s_fwumemacc_rcv_blkofst;
-static U4*               u4_sp_fwumemacc_rcv_wrt;
+/* Update processing parameters */
+static U2         u2_s_block_offset;       /* Update: current block offset */
+static const U4*  u4p_sp_write_data;        /* Update: write data pointer */
+static U2         u2_s_block_counter;      /* Update: written block count */
+
+/* CRC segmented processing (WDG mitigation: split per 16KB) */
+static U4 u4_s_crc_result;         /* CRC intermediate result */
+static U2 u2_s_crc_offset;         /* CRC checked offset (16KB units) */
+
+/* Error information */
+static U1 u1_s_last_error;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static U1               u1_s_FwuMemAccEraseTask(void);
 
-static U1               u1_s_FwuMemAccUpdateTask(void);
-static U1               u1_s_FwuMemAccUpdt_ReqTask(void);
-static U1               u1_s_FwuMemAccUpdt_WrtTask(void);
-static U1               u1_s_FwuMemAccUpdt_CrcTask(void);
-static U1               u1_s_FwuMemAccUpdt_OfstChk(void);
+/* Job execution tasks (simplified: state machine not required) */
+static void vd_s_FwuMemAccEraseTask(void);
+static void vd_s_FwuMemAccUpdateTask(void);
+static void vd_s_FwuMemAccSwitchTask(void);
 
-static U1               u1_s_FwuMemAccSwitchTask(void);
+/* CRC segmented task (WDG mitigation) */
+static void vd_s_FwuMemAccCrcCalc(void);
+
+/* Helper functions */
+static U1 u1_s_FwuMemAccValidateEraseParams(U4 u4_addr, U4 u4_len);
+static U1 u1_s_FwuMemAccValidateUpdateParams(U2 u2_offset, const U4* u4p_data);
+static U1 u1_s_FwuMemAccCheckOffsetSequence(U2 u2_expected, U2 u2_actual);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-/*  Constant Definitions                                                                                                             */
+/*  Literal Definitions for CRC                                                                                                      */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#define FWUMEMACC_CRCCHK_LENGTH  (16384U)  /* CRC split unit: 16KB (WDG mitigation) */
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+
 /*===================================================================================================================================*/
-/*  void    vd_g_FwuMemAccInit(void)                                                                                                 */
+/* void vd_g_FwuMemAccInit(void)                                                                                                     */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_FwuMemAccInit(void)
+void vd_g_FwuMemAccInit(void)
 {
-    u1_s_fwumemacc_job_sts = (U1)FWUMEMACC_JOBSTS_NON;
-
-    u1_s_fwumemacc_erase_sts = (U1)FWUMEMACC_ERASE_STS_NON;
-    u1_s_fwumemacc_updt_sts = (U1)FWUMEMACC_UPDT_STS_NON;
-    u1_s_fwumemacc_switch_sts = (U1)FWUMEMACC_SWITCH_STS_NON;
-
-    u2_s_fwumemacc_blkofst_cnt = (U2)0U;
-    u4_s_fwumemacc_crc_result = (U4)FWUMEMACC_CRCCHK_INIT_VAL;
-    u2_s_fwumemacc_crcofst_cnt = (U2)0U;
-
-    u4_s_fwumemacc_rcv_start_adrs = (U4)0U;
-    u4_s_fwumemacc_rcv_rprgdat_len = (U4)0U;
-    u4_s_fwumemacc_rcv_crc_data = (U4)0U;
-    u2_s_fwumemacc_rcv_blkofst = (U2)0U;
-    u4_sp_fwumemacc_rcv_wrt = (U4)0U;
+    /* Initialize job type and status */
+    u1_s_job_type = (U1)FWUMEMACC_JOB_TYPE_NONE;
+    u1_s_job_status = (U1)FWUMEMACC_JOB_STATUS_IDLE;
+    
+    /* Clear parameters */
+    u4_s_start_address = (U4)0U;
+    u4_s_data_length = (U4)0U;
+    u4_s_expected_crc = (U4)0U;
+    u2_s_block_offset = (U2)0U;
+    u4p_sp_write_data = (U4 *)vdp_PTR_NA;
+    
+    /* Clear counters */
+    u2_s_block_counter = (U2)0U;
+    u4_s_crc_result = (U4)FWUMEMACC_CRC_INIT_VAL;
+    u2_s_crc_offset = (U2)0U;
+    
+    /* Clear error information */
+    u1_s_last_error = (U1)FWUMEMACC_ERROR_NONE;
 }
 
 /*===================================================================================================================================*/
-/*  void    vd_g_FwuMemAccMainTask(void)                                                                                             */
+/* void vd_g_FwuMemAccMainTask(void)                                                                                                 */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_FwuMemAccMainTask(void)
+void vd_g_FwuMemAccMainTask(void)
 {
-    U1  u1_t_end;
-
-    u1_t_end = (U1)FALSE;
-
-    switch(u1_s_fwumemacc_job_sts){
-        case (U1)FWUMEMACC_JOBSTS_ERASE:
-            u1_t_end = u1_s_FwuMemAccEraseTask();
+    /* Execute processing according to job type (simplified: no state machine required) */
+    switch (u1_s_job_type) {
+        case (U1)FWUMEMACC_JOB_TYPE_ERASE:
+            vd_s_FwuMemAccEraseTask();
             break;
-        case (U1)FWUMEMACC_JOBSTS_UPDATE:
-            u1_t_end = u1_s_FwuMemAccUpdateTask();
+        case (U1)FWUMEMACC_JOB_TYPE_UPDATE:
+            vd_s_FwuMemAccUpdateTask();
             break;
-        case (U1)FWUMEMACC_JOBSTS_SWITCH:
-            u1_t_end = u1_s_FwuMemAccSwitchTask();
+        case (U1)FWUMEMACC_JOB_TYPE_SWITCH:
+            vd_s_FwuMemAccSwitchTask();
             break;
         default:
-            /* Do nothing */
-        break;
-    }
-
-    if(u1_t_end == (U1)TRUE){
-        u1_s_fwumemacc_job_sts = (U1)FWUMEMACC_JOBSTS_NON;
+            /* IDLE: do nothing */
+            break;
     }
 }
 
 /*===================================================================================================================================*/
-/*  void    vd_g_FwuMemAccEraseReqTrg(const U4 u4_a_CRC_DATA)                                                                        */
+/*  U1 u1_g_FwuMemAccEraseReq(U4 u4_a_start_adrs, U4 u4_a_length, U4 u4_a_expected_crc)                                            */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
+/*  Arguments:      U4 u4_a_start_adrs    : Start address                                                                           */
+/*                  U4 u4_a_length        : Data length                                                                              */
+/*                  U4 u4_a_expected_crc  : Expected CRC value                                                                       */
+/*  Return:         U1 : FWUMEMACC_RET_OK / FWUMEMACC_RET_NG                                                                        */
 /*===================================================================================================================================*/
-void    vd_g_FwuMemAccEraseReqTrg(const U4 u4_a_START_ADRS, const U4 u4_a_RPRGDAT_LEN, const U4 u4_a_CRC_DATA)
+U1 u1_g_FwuMemAccEraseReq(U4 u4_a_start_adrs, U4 u4_a_length, U4 u4_a_expected_crc)
 {
-    u1_s_fwumemacc_job_sts = (U1)FWUMEMACC_JOBSTS_ERASE;
-    u1_s_fwumemacc_erase_sts = (U1)FWUMEMACC_ERASE_STS_NON;
+    U1 u1_t_ret;
 
-    u4_s_fwumemacc_rcv_start_adrs = u4_a_START_ADRS + (U4)FWUMEMACC_ADRS_INV_OFFSET;
-    u4_s_fwumemacc_rcv_rprgdat_len = u4_a_RPRGDAT_LEN;
-    u4_s_fwumemacc_rcv_crc_data = u4_a_CRC_DATA;
-}
+    /* Only proceed when not busy */
+    u1_t_ret = (U1)FWUMEMACC_RET_NG;
+    if (u1_s_job_status == (U1)FWUMEMACC_JOB_STATUS_IDLE ||
+        u1_s_job_status == (U1)FWUMEMACC_JOB_STATUS_COMPLETED ||
+        u1_s_job_status == (U1)FWUMEMACC_JOB_STATUS_ERROR) {
+        /* Parameter validation */
+        if (u1_s_FwuMemAccValidateEraseParams(u4_a_start_adrs, u4_a_length) != (U1)FALSE) {
+            /* Set job request */
+            u1_s_job_type = (U1)FWUMEMACC_JOB_TYPE_ERASE;
+            u1_s_job_status = (U1)FWUMEMACC_JOB_STATUS_IDLE;  /* task will start it */
+            u4_s_start_address = u4_a_start_adrs + (U4)FWUMEMACC_ADRS_INV_OFFSET;
+            u4_s_data_length = u4_a_length;
+            u4_s_expected_crc = u4_a_expected_crc;
+            u1_s_last_error = (U1)FWUMEMACC_ERROR_NONE;
 
-/*===================================================================================================================================*/
-/*  void    vd_g_FwuMemAccUpdateReqTrg(const U2 u2_a_BLK_OFFSET, const U4* u4_ap_WRT_DATA)                                           */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void    vd_g_FwuMemAccUpdateReqTrg(const U2 u2_a_BLK_OFFSET, const U4* u4_ap_WRT_DATA)
-{
-    u1_s_fwumemacc_job_sts = (U1)FWUMEMACC_JOBSTS_UPDATE;
-    u1_s_fwumemacc_updt_sts = (U1)FWUMEMACC_UPDT_STS_NON;
-
-    u2_s_fwumemacc_rcv_blkofst = u2_a_BLK_OFFSET;
-    u4_sp_fwumemacc_rcv_wrt = u4_ap_WRT_DATA;
-}
-
-/*===================================================================================================================================*/
-/*  void    vd_g_FwuMemAccSwitchReqTrg(void)                                                                                         */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void    vd_g_FwuMemAccSwitchReqTrg(void)
-{
-    u1_s_fwumemacc_job_sts = (U1)FWUMEMACC_JOBSTS_SWITCH;
-    u1_s_fwumemacc_switch_sts = (U1)FWUMEMACC_SWITCH_STS_NON;
-}
-
-/*===================================================================================================================================*/
-/*  U1    u1_g_FwuMemAccEraseSts(void)                                                                                               */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1      u1_g_FwuMemAccEraseSts(void)
-{
-    return(u1_s_fwumemacc_erase_sts);
-}
-
-/*===================================================================================================================================*/
-/*  U1    u1_g_FwuMemAccUpdateSts(void)                                                                                              */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1      u1_g_FwuMemAccUpdateSts(void)
-{
-    return(u1_s_fwumemacc_updt_sts);
-}
-
-/*===================================================================================================================================*/
-/*  U1    u1_g_FwuMemAccSwitchSts(void)                                                                                              */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1      u1_g_FwuMemAccSwitchSts(void)
-{
-    return(u1_s_fwumemacc_switch_sts);
-}
-
-/*===================================================================================================================================*/
-/*  static U1 u1_s_FwuMemAccEraseTask(void)                                                                                          */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static U1 u1_s_FwuMemAccEraseTask(void)
-{
-    U1  u1_t_ret;
-    U1  u1_t_jobsts;
-    U1  u1_t_erasests;
-    U1  u1_t_jobrslt;
-
-    u1_t_ret = (U1)FALSE;
-
-    u1_t_jobsts = (U1)MemAcc_GetJobStatus((U2)MEMACC_ADDRAREA_1);
-    if(u1_t_jobsts == (U1)MEMACC_JOB_IDLE){
-        if(u1_s_fwumemacc_erase_sts == (U1)FWUMEMACC_ERASE_STS_NON){
-            u1_t_erasests = (U1)MemAcc_Erase((U2)MEMACC_ADDRAREA_1, u4_s_fwumemacc_rcv_start_adrs, u4_s_fwumemacc_rcv_rprgdat_len);
-            if(u1_t_erasests == (U1)E_OK){
-                u1_s_fwumemacc_erase_sts = (U1)FWUMEMACC_ERASE_STS_ACT;
-                /* u1_t_ret = (U1)FALSE; */
-            }
-            else{
-                u1_s_fwumemacc_erase_sts = (U1)FWUMEMACC_ERASE_STS_ERR;
-                u1_t_ret = (U1)TRUE;
-            }
+            u1_t_ret = (U1)FWUMEMACC_RET_OK;
         }
-        else{
-            u1_t_jobrslt = (U1)MemAcc_GetJobResult((U2)MEMACC_ADDRAREA_1);
-            if(u1_t_jobrslt == (U1)MEMACC_MEM_OK){
-                u2_s_fwumemacc_blkofst_cnt = (U2)0U;
-
-                u1_s_fwumemacc_erase_sts = (U1)FWUMEMACC_ERASE_STS_COMP;
-                u1_t_ret = (U1)TRUE;
-            }
-            else{
-                u1_s_fwumemacc_erase_sts = (U1)FWUMEMACC_ERASE_STS_ERR;
-                u1_t_ret = (U1)TRUE;
-            }
-        }
-    }
-    else{
-        u1_s_fwumemacc_erase_sts = (U1)FWUMEMACC_ERASE_STS_ACT;
-        /* u1_t_ret = (U1)FALSE; */
     }
 
     return(u1_t_ret);
 }
 
 /*===================================================================================================================================*/
-/*  static U1 u1_s_FwuMemAccUpdateTask(void)                                                                                         */
+/*  U1 u1_g_FwuMemAccUpdateReq(U2 u2_a_block_offset, const U4* u4p_a_write_data)                                                     */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
+/*  Arguments:      U2 u2_a_block_offset  : Block offset                                                                             */
+/*                  const U4* u4p_a_write_data : Write data pointer                                                                  */
+/*  Return:         U1 : FWUMEMACC_RET_OK / FWUMEMACC_RET_NG                                                                         */
 /*===================================================================================================================================*/
-static U1 u1_s_FwuMemAccUpdateTask(void)
+U1 u1_g_FwuMemAccUpdateReq(U2 u2_a_block_offset, const U4* u4p_a_write_data)
 {
-    U1  u1_t_ret;
+    U1 u1_t_ret;
 
-    u1_t_ret = (U1)FALSE;
+    /* Only proceed when not busy */
+    u1_t_ret = (U1)FWUMEMACC_RET_NG;
+    if (u1_s_job_status == (U1)FWUMEMACC_JOB_STATUS_IDLE ||
+        u1_s_job_status == (U1)FWUMEMACC_JOB_STATUS_COMPLETED ||
+        u1_s_job_status == (U1)FWUMEMACC_JOB_STATUS_ERROR) {
+        /* Parameter validation */
+        if (u1_s_FwuMemAccValidateUpdateParams(u2_a_block_offset, u4p_a_write_data) != (U1)FALSE) {
+            /* Check offset sequence */
+            if (u1_s_FwuMemAccCheckOffsetSequence(u2_s_block_counter, u2_a_block_offset) != (U1)FALSE) {
+                /* Set job request */
+                u1_s_job_type = (U1)FWUMEMACC_JOB_TYPE_UPDATE;
+                u1_s_job_status = (U1)FWUMEMACC_JOB_STATUS_IDLE;  /* task will start it */
+                u2_s_block_offset = u2_a_block_offset;
+                u4p_sp_write_data = u4p_a_write_data;
+                u1_s_last_error = (U1)FWUMEMACC_ERROR_NONE;
 
-    switch(u1_s_fwumemacc_updt_sts){
-        case (U1)FWUMEMACC_UPDT_STS_NON:
-            u1_t_ret = u1_s_FwuMemAccUpdt_ReqTask();
-            break;
-        case (U1)FWUMEMACC_UPDT_STS_WRITE:
-            u1_t_ret = u1_s_FwuMemAccUpdt_WrtTask();
-            break;
-        case (U1)FWUMEMACC_UPDT_STS_CRC:
-            u1_t_ret = u1_s_FwuMemAccUpdt_CrcTask();
-            break;
-        default:
-            /* Do nothing */
-            /* u1_t_ret = (U1)FALSE; */
-            break;
+                u1_t_ret = (U1)FWUMEMACC_RET_OK;
+            } else {
+                u1_s_last_error = (U1)FWUMEMACC_ERROR_OFFSET_MISMATCH;
+            }
+        }
     }
+
     return(u1_t_ret);
 }
 
 /*===================================================================================================================================*/
-/*  static U1 u1_s_FwuMemAccUpdt_ReqTask(void)                                                                                       */
+/*  U1 u1_g_FwuMemAccSwitchReq(void)                                                                                                */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         U1 : FWUMEMACC_RET_OK / FWUMEMACC_RET_NG                                                                        */
+/*===================================================================================================================================*/
+U1 u1_g_FwuMemAccSwitchReq(void)
+{
+    U1 u1_t_ret;
+
+    /* Only proceed when not busy */
+    u1_t_ret = (U1)FWUMEMACC_RET_NG;
+    if (u1_s_job_status == (U1)FWUMEMACC_JOB_STATUS_IDLE ||
+        u1_s_job_status == (U1)FWUMEMACC_JOB_STATUS_COMPLETED ||
+        u1_s_job_status == (U1)FWUMEMACC_JOB_STATUS_ERROR) {
+        /* Set job request */
+        u1_s_job_type = (U1)FWUMEMACC_JOB_TYPE_SWITCH;
+        u1_s_job_status = (U1)FWUMEMACC_JOB_STATUS_IDLE;  /* task will start it */
+        u1_s_last_error = (U1)FWUMEMACC_ERROR_NONE;
+        u1_t_ret = (U1)FWUMEMACC_RET_OK;
+    }
+
+    return(u1_t_ret);
+}
+
+/*===================================================================================================================================*/
+/*  void vd_g_FwuMemAccGetStatus(U1* u1p_a_job_type, U1* u1p_a_main_status)                                                          */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      U1* u1p_a_job_type    : Job type output pointer                                                                  */
+/*                  U1* u1p_a_main_status : Main status output pointer                                                               */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void vd_g_FwuMemAccGetStatus(U1* u1p_a_job_type, U1* u1p_a_main_status)
+{
+    if (u1p_a_job_type != vdp_PTR_NA) {
+        *u1p_a_job_type = u1_s_job_type;
+    }
+    if (u1p_a_main_status != vdp_PTR_NA) {
+        /* Map JobStatus to MainStatus */
+        switch (u1_s_job_status) {
+            case (U1)FWUMEMACC_JOB_STATUS_IDLE:
+                *u1p_a_main_status = (U1)FWUMEMACC_MAIN_STATUS_IDLE;
+                break;
+            case (U1)FWUMEMACC_JOB_STATUS_ERASE_ACTIVE:
+            case (U1)FWUMEMACC_JOB_STATUS_WRITE_ACTIVE:
+            case (U1)FWUMEMACC_JOB_STATUS_CRC_ACTIVE:
+            case (U1)FWUMEMACC_JOB_STATUS_SWITCH_ACTIVE:
+                *u1p_a_main_status = (U1)FWUMEMACC_MAIN_STATUS_ACTIVE;
+                break;
+            case (U1)FWUMEMACC_JOB_STATUS_COMPLETED:
+                *u1p_a_main_status = (U1)FWUMEMACC_MAIN_STATUS_COMPLETED;
+                break;
+            case (U1)FWUMEMACC_JOB_STATUS_ERROR:
+                *u1p_a_main_status = (U1)FWUMEMACC_MAIN_STATUS_ERROR;
+                break;
+            default:
+                *u1p_a_main_status = (U1)FWUMEMACC_MAIN_STATUS_IDLE;
+                break;
+        }
+    }
+}
+
+/*===================================================================================================================================*/
+/* U1 u1_g_FwuMemAccGetUpdateStatus(void)                                                                                            */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         U1 : Update status (IDLE / IN_PROGRESS / ALL_COMP)                                                               */
+/*===================================================================================================================================*/
+U1 u1_g_FwuMemAccGetUpdateStatus(void)
+{
+    U1 u1_t_status;
+    U2 u2_t_max_blocks;
+    
+    u2_t_max_blocks = (U2)(u4_s_data_length / (U4)FWUMEMACC_WRITE_LENGTH);
+    
+    if (u1_s_job_status == (U1)FWUMEMACC_JOB_STATUS_IDLE) {
+        u1_t_status = (U1)FWUMEMACC_UPDT_STS_IDLE;
+    } else if (u2_s_block_counter >= u2_t_max_blocks) {
+        u1_t_status = (U1)FWUMEMACC_UPDT_STS_ALL_COMP;
+    } else {
+        u1_t_status = (U1)FWUMEMACC_UPDT_STS_IN_PROGRESS;
+    }
+    
+    return (u1_t_status);
+}
+
+/*===================================================================================================================================*/
+/* U1 u1_g_FwuMemAccGetError(void)                                                                                                   */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         U1 : Error information                                                                                           */
+/*===================================================================================================================================*/
+U1 u1_g_FwuMemAccGetError(void)
+{
+    return(u1_s_last_error);
+}
+
+/*===================================================================================================================================*/
+/* U1 u1_g_FwuMemAccGetJobType(void)                                                                                                 */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         U1 : Job type                                                                                                    */
+/*===================================================================================================================================*/
+U1 u1_g_FwuMemAccGetJobType(void)
+{
+    return(u1_s_job_type);
+}
+
+/*===================================================================================================================================*/
+/* U1 u1_g_FwuMemAccIsJobActive(void)                                                                                                */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         U1 : TRUE(active) / FALSE(not active)                                                                            */
+/*===================================================================================================================================*/
+U1 u1_g_FwuMemAccIsJobActive(void)
+{
+    U1 u1_ret;
+    if (u1_s_job_status == (U1)FWUMEMACC_JOB_STATUS_ERASE_ACTIVE ||
+        u1_s_job_status == (U1)FWUMEMACC_JOB_STATUS_WRITE_ACTIVE ||
+        u1_s_job_status == (U1)FWUMEMACC_JOB_STATUS_CRC_ACTIVE ||
+        u1_s_job_status == (U1)FWUMEMACC_JOB_STATUS_SWITCH_ACTIVE) {
+        u1_ret = (U1)TRUE;
+    } else {
+        u1_ret = (U1)FALSE;
+    }
+    return(u1_ret);
+}
+
+/*===================================================================================================================================*/
+/* void vd_g_FwuMemAccCancelJob(void)                                                                                                */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-static U1 u1_s_FwuMemAccUpdt_ReqTask(void)
+void vd_g_FwuMemAccCancelJob(void)
 {
-    U1  u1_t_ret;
-    U1  u1_t_offsetchk;
-    U1  u1_t_jobsts;
-    U4  u4_t_tgt_address;
-    U1  u1_t_wrtsts;
+    /* TODO Phase3: implement cancel handling */
+    /* Abort current job and return to IDLE */
+    vd_g_FwuMemAccInit();
+}
 
-    u1_t_ret = (U1)FALSE;
+/*===================================================================================================================================*/
+/*  Task implementations (ERASE/UPDATE/SWITCH/CRC)                                                                                   */
+/*===================================================================================================================================*/
 
-    u1_t_offsetchk = u1_s_FwuMemAccUpdt_OfstChk();
-    if(u1_t_offsetchk == (U1)TRUE){
-         u1_t_jobsts = (U1)MemAcc_GetJobStatus((U2)MEMACC_ADDRAREA_1);
-        if(u1_t_jobsts == (U1)MEMACC_JOB_IDLE){
-            u4_t_tgt_address = u4_s_fwumemacc_rcv_start_adrs + ((U4)FWUMEMACC_WRITE_LENGTH * (U4)u2_s_fwumemacc_rcv_blkofst);
-            u1_t_wrtsts = (U1)MemAcc_Write((U2)MEMACC_ADDRAREA_1, u4_t_tgt_address, (U1 *)u4_sp_fwumemacc_rcv_wrt, (U4)FWUMEMACC_WRITE_LENGTH);
-            if(u1_t_wrtsts == (U1)E_OK){
-                u1_s_fwumemacc_updt_sts = (U1)FWUMEMACC_UPDT_STS_WRITE;
-                /* u1_t_ret = (U1)FALSE; */
-            }
-            else{
-                u1_s_fwumemacc_updt_sts = (U1)FWUMEMACC_UPDT_STS_ERR;
-                u1_t_ret = (U1)TRUE;
+/*===================================================================================================================================*/
+/* static void vd_s_FwuMemAccEraseTask(void)                                                                                         */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void vd_s_FwuMemAccEraseTask(void)
+{
+    U1 u1_t_job_status;
+    U1 u1_t_job_result;
+    U1 u1_t_erase_result;
+    
+    if (u1_s_job_status == (U1)FWUMEMACC_JOB_STATUS_IDLE) {
+        /* MemAcc erase request */
+        u1_t_erase_result = (U1)MemAcc_Erase((U2)MEMACC_ADDRAREA_1, 
+                                              u4_s_start_address, 
+                                              u4_s_data_length);
+        
+        if (u1_t_erase_result == (U1)MEMACC_MEM_OK) {
+            /* Erase start succeeded */
+            u1_s_job_status = (U1)FWUMEMACC_JOB_STATUS_ERASE_ACTIVE;
+        } else {
+            /* Erase start failed */
+            u1_s_job_status = (U1)FWUMEMACC_JOB_STATUS_ERROR;
+            u1_s_last_error = (U1)FWUMEMACC_ERROR_MEMACC_FAILED;
+        }
+    } else if (u1_s_job_status == (U1)FWUMEMACC_JOB_STATUS_ERASE_ACTIVE) {
+        /* Check MemAcc job status */
+        u1_t_job_status = (U1)MemAcc_GetJobStatus((U2)MEMACC_ADDRAREA_1);
+        
+        if (u1_t_job_status == (U1)MEMACC_JOB_IDLE) {
+            /* Job completed -> check result */
+            u1_t_job_result = (U1)MemAcc_GetJobResult((U2)MEMACC_ADDRAREA_1);
+            if (u1_t_job_result == (U1)MEMACC_MEM_OK) {
+                /* Erase completed */
+                u1_s_job_status = (U1)FWUMEMACC_JOB_STATUS_COMPLETED;
+                u1_s_last_error = (U1)FWUMEMACC_ERROR_NONE;
+                u2_s_block_counter = (U2)0U;  /* Initialize update counter */
+            } else {
+                /* Erase failed */
+                u1_s_job_status = (U1)FWUMEMACC_JOB_STATUS_ERROR;
+                u1_s_last_error = (U1)FWUMEMACC_ERROR_MEMACC_FAILED;
             }
         }
-        else{
-            u1_s_fwumemacc_updt_sts = (U1)FWUMEMACC_UPDT_STS_ERR;
-            u1_t_ret = (U1)TRUE;
+        /* MEMACC_JOB_BUSY: in progress - continue */
+    }
+}
+
+/*===================================================================================================================================*/
+/* static void vd_s_FwuMemAccUpdateTask(void)                                                                                        */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void vd_s_FwuMemAccUpdateTask(void)
+{
+    U1 u1_t_job_status;
+    U1 u1_t_job_result;
+    U1 u1_t_write_result;
+    U4 u4_t_write_address;
+    U2 u2_t_max_blocks;
+    
+    if (u1_s_job_status == (U1)FWUMEMACC_JOB_STATUS_IDLE) {
+        /* Start write */
+        u4_t_write_address = u4_s_start_address + 
+                             ((U4)FWUMEMACC_WRITE_LENGTH * (U4)u2_s_block_offset);
+        
+        u1_t_write_result = (U1)MemAcc_Write((U2)MEMACC_ADDRAREA_1,
+                                              u4_t_write_address,
+                                              (U1*)u4p_sp_write_data,
+                                              (U4)FWUMEMACC_WRITE_LENGTH);
+        
+        if (u1_t_write_result == (U1)MEMACC_MEM_OK) {
+            /* Write start succeeded */
+            u1_s_job_status = (U1)FWUMEMACC_JOB_STATUS_WRITE_ACTIVE;
+        } else {
+            /* Write start failed */
+            u1_s_job_status = (U1)FWUMEMACC_JOB_STATUS_ERROR;
+            u1_s_last_error = (U1)FWUMEMACC_ERROR_MEMACC_FAILED;
+        }
+    } else if (u1_s_job_status == (U1)FWUMEMACC_JOB_STATUS_WRITE_ACTIVE) {
+        /* Check MemAcc job status */
+        u1_t_job_status = (U1)MemAcc_GetJobStatus((U2)MEMACC_ADDRAREA_1);
+        
+        if (u1_t_job_status == (U1)MEMACC_JOB_IDLE) {
+            /* Job completed -> check result */
+            u1_t_job_result = (U1)MemAcc_GetJobResult((U2)MEMACC_ADDRAREA_1);
+            if (u1_t_job_result == (U1)MEMACC_MEM_OK) {
+                /* Write completed - move to next block */
+                if (u2_s_block_counter < (U2)U2_MAX) {
+                    u2_s_block_counter++;
+                }
+
+                /* All blocks completion check */
+                u2_t_max_blocks = (U2)(u4_s_data_length / (U4)FWUMEMACC_WRITE_LENGTH);
+                if (u2_s_block_counter >= u2_t_max_blocks) {
+                    /* All blocks complete -> proceed to CRC verification */
+                    u1_s_job_status = (U1)FWUMEMACC_JOB_STATUS_CRC_ACTIVE;
+                    u4_s_crc_result = (U4)FWUMEMACC_CRC_INIT_VAL;
+                    u2_s_crc_offset = (U2)0U;
+                } else {
+                    /* Prepare for next block write */
+                    u1_s_job_status = (U1)FWUMEMACC_JOB_STATUS_COMPLETED;  /* used to notify block completion */
+                }
+            } else {
+                /* Write failed */
+                u1_s_job_status = (U1)FWUMEMACC_JOB_STATUS_ERROR;
+                u1_s_last_error = (U1)FWUMEMACC_ERROR_MEMACC_FAILED;
+            }
+        }
+        /* MEMACC_JOB_BUSY: in progress - continue */
+    } else if (u1_s_job_status == (U1)FWUMEMACC_JOB_STATUS_CRC_ACTIVE) {
+        /* Execute CRC calculation */
+        vd_s_FwuMemAccCrcCalc();
+    } else{  /* u1_s_job_status == FWUMEMACC_JOB_STATUS_COMPLETED */
+        /* Waiting for next block request (wait for UpdateReq from Fwush) */
+    }
+}
+
+/*===================================================================================================================================*/
+/* static void vd_s_FwuMemAccSwitchTask(void)                                                                                        */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void vd_s_FwuMemAccSwitchTask(void)
+{
+    U1 u1_t_switch_result;
+    U1 u1_t_data_dummy;
+    U4 u4_t_length_dummy;
+    
+    u1_t_data_dummy = (U1)0U;
+    u4_t_length_dummy = (U4)0U;
+    
+    if (u1_s_job_status == (U1)FWUMEMACC_JOB_STATUS_IDLE) {
+        /* Execute MemAcc HwSpecificService (SWITCHVALIDAREA) */
+        u1_t_switch_result = (U1)MemAcc_HwSpecificService(
+            (U2)MEMACC_ADDRAREA_1,
+            (U4)MEMACC_HWID_CODEFLASH,
+            (U4)MEMACC_SRV_ID_SWITCHVALIDAREA,
+            &u1_t_data_dummy,
+            &u4_t_length_dummy);
+        
+        if (u1_t_switch_result == (U1)MEMACC_MEM_OK) {
+            /* Switch completed (immediate) */
+            u1_s_job_status = (U1)FWUMEMACC_JOB_STATUS_COMPLETED;
+            u1_s_last_error = (U1)FWUMEMACC_ERROR_NONE;
+        } else {
+            /* Switch failed */
+            u1_s_job_status = (U1)FWUMEMACC_JOB_STATUS_ERROR;
+            u1_s_last_error = (U1)FWUMEMACC_ERROR_MEMACC_FAILED;
         }
     }
-    else{
-        u1_s_fwumemacc_updt_sts = (U1)FWUMEMACC_UPDT_STS_ERR;
+}
+
+/*===================================================================================================================================*/
+/* static void vd_s_FwuMemAccCrcCalc(void)                                                                                           */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void vd_s_FwuMemAccCrcCalc(void)
+{
+    U4  u4_t_remaining_length;
+    U4  u4_t_check_length;
+    U1* u1p_t_check_start_ptr;
+    U1  u1_t_is_final;
+    
+    if (u1_s_job_status == (U1)FWUMEMACC_JOB_STATUS_CRC_ACTIVE) {
+        /* Calculate remaining size */
+        u4_t_remaining_length = u4_s_data_length - ((U4)u2_s_crc_offset * (U4)FWUMEMACC_CRCCHK_LENGTH);
+        
+        if (u4_t_remaining_length > (U4)FWUMEMACC_CRCCHK_LENGTH) {
+            u4_t_check_length = (U4)FWUMEMACC_CRCCHK_LENGTH;
+            u1_t_is_final = (U1)FALSE;
+        } else {
+            u4_t_check_length = u4_t_remaining_length;
+            u1_t_is_final = (U1)TRUE;
+        }
+        
+        /* Compute CRC (16KB chunks) */
+        u1p_t_check_start_ptr = (U1*)(u4_s_start_address + ((U4)u2_s_crc_offset * (U4)FWUMEMACC_CRCCHK_LENGTH));
+        u4_s_crc_result = u4_g_Crc32(u4_s_crc_result,
+                                      u1p_t_check_start_ptr,
+                                      u4_t_check_length,
+                                      u1_t_is_final);
+        
+        u2_s_crc_offset++;
+        
+        /* Final chunk check */
+        if (u1_t_is_final == (U1)TRUE) {
+            /* Compare CRC */
+            if (u4_s_crc_result == u4_s_expected_crc) {
+                /* CRC OK */
+                u1_s_job_status = (U1)FWUMEMACC_JOB_STATUS_COMPLETED;
+                u1_s_last_error = (U1)FWUMEMACC_ERROR_NONE;
+            } else {
+                /* CRC mismatch */
+                u1_s_job_status = (U1)FWUMEMACC_JOB_STATUS_ERROR;
+                u1_s_last_error = (U1)FWUMEMACC_ERROR_CRC_MISMATCH;
+            }
+        }
+        /* If remaining chunks exist, continue in next MainTask() call */
+    }
+}
+
+/*===================================================================================================================================*/
+/*  Helper functions                                                                                                                 */
+/*===================================================================================================================================*/
+/*===================================================================================================================================*/
+/* static U1 u1_s_FwuMemAccValidateEraseParams(U4 u4_a_addr, U4 u4_a_len)                                                            */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      U4 u4_a_addr          : Address                                                                                  */
+/*                  U4 u4_a_len           : Length                                                                                   */
+/*  Return:         U1 : TRUE / FALSE                                                                                                */
+/*===================================================================================================================================*/
+static U1 u1_s_FwuMemAccValidateEraseParams(U4 u4_a_addr, U4 u4_a_len)
+{
+    U1 u1_t_ret;
+    if (u4_a_addr == (U4)0U || u4_a_len == (U4)0U) {
+        u1_t_ret = (U1)FALSE;
+    } else {
+        /* TODO Phase3: add address range and alignment checks */
         u1_t_ret = (U1)TRUE;
     }
-
     return(u1_t_ret);
 }
 
 /*===================================================================================================================================*/
-/*  static U1 u1_s_FwuMemAccUpdt_WrtTask(void)                                                                                       */
+/* static U1 u1_s_FwuMemAccValidateUpdateParams(U2 u2_a_offset, const U4* u4p_a_data)                                                */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
+/*  Arguments:      U2 u2_a_offset        : Block offset                                                                             */
+/*                  const U4* u4p_a_data  : Write data pointer                                                                       */
+/*  Return:         U1 : TRUE / FALSE                                                                                                */
 /*===================================================================================================================================*/
-static U1 u1_s_FwuMemAccUpdt_WrtTask(void)
+static U1 u1_s_FwuMemAccValidateUpdateParams(U2 u2_a_offset, const U4* u4p_a_data)
 {
-    U1  u1_t_ret;
-    U1  u1_t_jobsts;
-    U1  u1_t_jobrslt;
-    U1  u1_t_offsetchk;
-    U2  u2_t_blkofst_max;
-
-    u1_t_ret = (U1)FALSE;
-
-    u1_t_jobsts = (U1)MemAcc_GetJobStatus((U2)MEMACC_ADDRAREA_1);
-    if(u1_t_jobsts == (U1)MEMACC_JOB_IDLE){
-        u1_t_jobrslt = (U1)MemAcc_GetJobResult((U2)MEMACC_ADDRAREA_1);
-        if(u1_t_jobrslt == (U1)MEMACC_MEM_OK){
-            u1_t_offsetchk = u1_s_FwuMemAccUpdt_OfstChk();
-            if(u1_t_offsetchk == (U1)TRUE){
-                u2_t_blkofst_max = (U2)(u4_s_fwumemacc_rcv_rprgdat_len / (U4)FWUMEMACC_WRITE_LENGTH) - (U2)1U;
-                if(u2_s_fwumemacc_rcv_blkofst < u2_t_blkofst_max){
-                    u2_s_fwumemacc_blkofst_cnt++;
-
-                    u1_s_fwumemacc_updt_sts = (U1)FWUMEMACC_UPDT_STS_1B_COMP;
-                    u1_t_ret = (U1)TRUE;
-                }
-                else{
-                    u4_s_fwumemacc_crc_result = (U4)FWUMEMACC_CRCCHK_INIT_VAL;
-                    u2_s_fwumemacc_crcofst_cnt = (U2)0U;
-
-                    u1_s_fwumemacc_updt_sts = (U1)FWUMEMACC_UPDT_STS_CRC;
-                    /* u1_t_ret = (U1)FALSE; */
-                }
-            }
-            else{
-                u1_s_fwumemacc_updt_sts = (U1)FWUMEMACC_UPDT_STS_ERR;
-                u1_t_ret = (U1)TRUE;
-            }
-        }
-        else{
-            u1_s_fwumemacc_updt_sts = (U1)FWUMEMACC_UPDT_STS_ERR;
-            u1_t_ret = (U1)TRUE;
-        }
+    U1 u1_t_ret;
+    if (u4p_a_data == (U4 *)vdp_PTR_NA) {
+        u1_t_ret = (U1)FALSE;
+    } else {
+        /* TODO Phase3: add offset range check */
+        u1_t_ret = (U1)TRUE;
     }
-    else{
-        u1_s_fwumemacc_updt_sts = (U1)FWUMEMACC_UPDT_STS_WRITE;
-        /* u1_t_ret = (U1)FALSE; */
-    }
-
     return(u1_t_ret);
 }
 
 /*===================================================================================================================================*/
-/*  static U1 u1_s_FwuMemAccUpdt_CrcTask(void)                                                                                       */
+/* static U1 u1_s_FwuMemAccCheckOffsetSequence(U2 u2_a_expected, U2 u2_a_actual)                                                     */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
+/*  Arguments:      U2 u2_a_expected      : Expected offset                                                                          */
+/*                  U2 u2_a_actual        : Actual offset                                                                            */
+/*  Return:         U1 : TRUE / FALSE                                                                                                */
 /*===================================================================================================================================*/
-static U1 u1_s_FwuMemAccUpdt_CrcTask(void)
+static U1 u1_s_FwuMemAccCheckOffsetSequence(U2 u2_a_expected, U2 u2_a_actual)
 {
-    U1  u1_t_ret;
-    U1* u1_tp_crc_data;
-    U2  u2_t_crcchk_max;
-
-    u1_t_ret = (U1)FALSE;
-
-    u2_t_crcchk_max = (U2)(u4_s_fwumemacc_rcv_rprgdat_len / (U4)FWUMEMACC_CRCCHK_LENGTH) - (U2)1U;
-    if(u2_s_fwumemacc_crcofst_cnt < u2_t_crcchk_max){
-        u1_tp_crc_data = (U1*)(u4_s_fwumemacc_rcv_start_adrs + ((U4)FWUMEMACC_CRCCHK_LENGTH * (U4)u2_s_fwumemacc_crcofst_cnt));
-        u4_s_fwumemacc_crc_result = u4_g_Crc32(u4_s_fwumemacc_crc_result, u1_tp_crc_data, (U4)FWUMEMACC_CRCCHK_LENGTH, (U1)FALSE);
-
-        u2_s_fwumemacc_crcofst_cnt++;
-
-        u1_s_fwumemacc_updt_sts = (U1)FWUMEMACC_UPDT_STS_CRC;
-        /* u1_t_ret = (U1)FALSE; */
+    U1 u1_t_ret;
+    if (u2_a_expected == u2_a_actual) {
+        u1_t_ret = (U1)TRUE;
+    } else {
+        u1_t_ret = (U1)FALSE;
     }
-    else{
-        u1_tp_crc_data = (U1*)(u4_s_fwumemacc_rcv_start_adrs + ((U4)FWUMEMACC_CRCCHK_LENGTH * (U4)u2_s_fwumemacc_crcofst_cnt));
-        u4_s_fwumemacc_crc_result = u4_g_Crc32(u4_s_fwumemacc_crc_result, u1_tp_crc_data, (U4)FWUMEMACC_CRCCHK_LENGTH, (U1)TRUE);
-
-        if(u4_s_fwumemacc_crc_result == u4_s_fwumemacc_rcv_crc_data){
-            u1_s_fwumemacc_updt_sts = (U1)FWUMEMACC_UPDT_STS_ALL_COMP;
-            u1_t_ret = (U1)TRUE;
-        }
-        else{
-            u1_s_fwumemacc_updt_sts = (U1)FWUMEMACC_UPDT_STS_ERR;
-            u1_t_ret = (U1)TRUE;
-        }
-    }
-
     return(u1_t_ret);
 }
 
-/*===================================================================================================================================*/
-/*  static U1 u1_s_FwuMemAccUpdt_OfstChk(void)                                                                                       */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static U1 u1_s_FwuMemAccUpdt_OfstChk(void)
-{
-    U1  u1_t_ret;
-    U2  u2_t_blkofst_max;
-
-    u1_t_ret = (U1)FALSE;
-
-    u2_t_blkofst_max = (U2)(u4_s_fwumemacc_rcv_rprgdat_len / (U4)FWUMEMACC_WRITE_LENGTH);
-    if(u2_s_fwumemacc_rcv_blkofst < u2_t_blkofst_max){
-        if(u2_s_fwumemacc_rcv_blkofst == u2_s_fwumemacc_blkofst_cnt){
-            u1_t_ret = (U1)TRUE;
-        }
-        else{
-            /* u1_t_ret = (U1)FALSE; */
-        }
-    }
-    else{
-        /* u1_t_ret = (U1)FALSE; */
-    }
-
-    return(u1_t_ret);
-}
-
-/*===================================================================================================================================*/
-/*  static U1 u1_s_FwuMemAccSwitchTask(void)                                                                                         */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static U1 u1_s_FwuMemAccSwitchTask(void)
-{
-    U1  u1_t_ret;
-    U1  u1_t_jobsts;
-    U1  u1_t_jobrslt;
-    U1  u1_t_srvsts;
-    U1  u1_t_dataptr;
-    U4  u4_t_lengthptr;
-
-    u1_t_ret = (U1)FALSE;
-    u1_t_dataptr = (U1)0U;
-    u4_t_lengthptr = (U4)0U;
-
-    u1_t_jobsts = (U1)MemAcc_GetJobStatus((U2)MEMACC_ADDRAREA_1);
-    if(u1_t_jobsts == (U1)MEMACC_JOB_IDLE){
-        if(u1_s_fwumemacc_switch_sts == (U1)FWUMEMACC_SWITCH_STS_NON){
-            u1_t_srvsts = (U1)MemAcc_HwSpecificService((U2)MEMACC_ADDRAREA_1, (U4)MEMACC_HWID_CODEFLASH, (U4)MEMACC_SRV_ID_SWITCHVALIDAREA, &u1_t_dataptr, &u4_t_lengthptr);
-            if(u1_t_srvsts == (U1)E_OK){
-                u1_s_fwumemacc_switch_sts = (U1)FWUMEMACC_SWITCH_STS_ACT;
-                /* u1_t_ret = (U1)FALSE; */
-            }
-            else{
-                u1_s_fwumemacc_switch_sts = (U1)FWUMEMACC_SWITCH_STS_ERR;
-                u1_t_ret = (U1)TRUE;
-            }
-        }
-        else{
-            u1_t_jobrslt = (U1)MemAcc_GetJobResult((U2)MEMACC_ADDRAREA_1);
-            if(u1_t_jobrslt == (U1)MEMACC_MEM_OK){
-                u1_s_fwumemacc_switch_sts = (U1)FWUMEMACC_SWITCH_STS_COMP;
-                u1_t_ret = (U1)TRUE;
-            }
-            else{
-                u1_s_fwumemacc_switch_sts = (U1)FWUMEMACC_SWITCH_STS_ERR;
-                u1_t_ret = (U1)TRUE;
-            }
-        }
-    }
-    else{
-        u1_s_fwumemacc_switch_sts = (U1)FWUMEMACC_SWITCH_STS_ACT;
-        /* u1_t_ret = (U1)FALSE; */
-    }
-
-    return(u1_t_ret);
-}
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
@@ -519,8 +622,10 @@ static U1 u1_s_FwuMemAccSwitchTask(void)
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  1.0.0    11/18/2025  ST       New.                                                                                               */
+/*  2.0.0    02/16/2026  KI       Refactoring - State machine reconstruction and optimization                                        */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
-/* * ST   = Syo Toyoda                                                                                                               */
+/* * ST   = Syo Toyoda, KSE                                                                                                          */
+/* * KI   = Kanji Ito, Denso Techno                                                                                                  */
 /*                                                                                                                                   */
-/*===================================================================================================================================*/
+
