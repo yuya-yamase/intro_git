@@ -231,6 +231,8 @@
 ../../src/PE1VM1/App/MET/IpcApplication/Vom/Seatbelt/scc/sblt_seat.c
 ../../src/PE1VM1/App/MET/IpcApplication/Vom/Seatbelt/scc/sblt_vclsts.c
 ../../src/PE1VM1/App/MET/IpcApplication/Vom/Seatbelt/scc/sbltwrn.c
+../../src/PE1VM1/App/MET/IpcApplication/Vom/Seatbelt/scc/sbltwrn_common.c
+../../src/PE1VM1/App/MET/IpcApplication/Vom/Seatbelt/scc/sbltwrn_fm.c
 ../../src/PE1VM1/App/MET/IpcApplication/Vom/Tripcom/app/scc/avgecon.c
 ../../src/PE1VM1/App/MET/IpcApplication/Vom/Tripcom/app/scc/avgee_kmpkwh.c
 ../../src/PE1VM1/App/MET/IpcApplication/Vom/Tripcom/app/scc/avggrph.c

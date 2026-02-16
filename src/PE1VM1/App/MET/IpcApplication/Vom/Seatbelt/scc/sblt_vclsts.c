@@ -1,4 +1,4 @@
-/* 2.1.3 */
+/* 2.2.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,8 +10,8 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define SBLT_VCLSTS_C_MAJOR                     (2)
-#define SBLT_VCLSTS_C_MINOR                     (1)
-#define SBLT_VCLSTS_C_PATCH                     (3)
+#define SBLT_VCLSTS_C_MINOR                     (2)
+#define SBLT_VCLSTS_C_PATCH                     (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -57,6 +57,7 @@ static  U1      u1_s_sblt_vclsts_prksts;
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static  U4      u4_s_SbltVclstsGetSgnl(const U2 u2_a_IGONTMR, const U1 * u1_ap_MSGSTS, const U2 u2_a_SIGMSK);
 static  U4      u4_s_SbltVclstsSpdChk(const U2 u2_a_KMPH, const U2 *u2_ap_SPD_THR);
+static  U4      u4_s_SbltVclstsGetSgnl_FM(const U2 u2_a_IGONTMR, const U1 * u1_ap_MSGSTS, const U2 u2_a_SIGMSK);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
@@ -142,6 +143,75 @@ U4              u4_g_SbltVclsts(const U2 u2_a_IGONTMR, const U1 * u1_ap_MSGSTS, 
 }
 
 /*===================================================================================================================================*/
+/* U4              u4_g_SbltVclsts_FM(const U2 u2_a_IGONTMR, const U1 * u1_ap_MSGSTS, const U2 *u2_ap_SPD_THR)                       */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+U4              u4_g_SbltVclsts_FM(const U2 u2_a_IGONTMR, const U1 * u1_ap_MSGSTS, const U2 *u2_ap_SPD_THR)
+{
+    U4                                          u4_t_vclsts;
+    U2                                          u2_t_kmph;
+    U1                                          u1_t_spdsts;
+    U1                                          u1_t_mtsts;
+    U2                                          u2_t_sigmsk;
+
+    u2_t_sigmsk = (U2)(~(u2_g_SBLT_VCLSIG_MT_MSK | u2_g_SBLT_VCLSIG_NOTMT_MSK));
+
+    u2_t_kmph   = (U2)0U;
+    u1_t_spdsts = u1_g_VehspdKmphInst(&u2_t_kmph, (U1)TRUE);
+    if (u1_t_spdsts != (U1)VEHSPD_STSBIT_VALID) {
+        u2_t_kmph = (U2)0U;
+    }
+
+    u4_t_vclsts = (U4)0U;
+    u1_t_mtsts = u1_g_SbltVclstsCfgMT();
+    if (u1_t_mtsts == (U1)TRUE) {
+        u2_t_sigmsk |= u2_g_SBLT_VCLSIG_MT_MSK;
+    } else {
+        u2_t_sigmsk |= u2_g_SBLT_VCLSIG_NOTMT_MSK;
+    }
+    if (u2_a_IGONTMR > (U2)0U) {
+        u4_t_vclsts |= (U4)SBLTWRN_VCLSTS_IG_ONSTS;
+        if (u2_a_IGONTMR > (U2)SBLTWRN_IGTIM_OVER500JDG) {
+            u4_t_vclsts |= (U4)SBLTWRN_VCLSTS_IGTIM_OVER500;
+        }
+
+    }
+
+    u4_t_vclsts |= u4_s_SbltVclstsGetSgnl_FM(u2_a_IGONTMR, u1_ap_MSGSTS, u2_t_sigmsk);
+    u4_t_vclsts |= u4_s_SbltVclstsSpdChk(u2_t_kmph, u2_ap_SPD_THR);
+
+    if ((u4_t_vclsts & (U4)SBLTWRN_VCLSTS_SHIFT_R) != (U4)0U) {
+        if (u2_s_sblt_vclsts_rsfttm < (U2)SBLT_VCLSTS_RSFT_TO) {
+            u4_t_vclsts &= (~(U4)SBLTWRN_VCLSTS_SHIFT_R);
+        }
+        if (u2_s_sblt_vclsts_rsfttm < (U2)U2_MAX) {
+            u2_s_sblt_vclsts_rsfttm++;
+        }
+        else {
+            u2_s_sblt_vclsts_rsfttm = (U2)U2_MAX;
+        }
+    }
+    else {
+        u2_s_sblt_vclsts_rsfttm = (U2)0U;
+    }
+    if ((u4_t_vclsts & (U4)SBLTWRN_VCLSTS_PARK) != (U4)0U) {
+        if (u1_s_sblt_vclsts_prksts == (U1)FALSE) {
+            u4_t_vclsts |= (U4)SBLTWRN_VCLSTS_PARKEDG;
+        }
+        u1_s_sblt_vclsts_prksts = (U1)TRUE;
+    } else {
+        if (u1_s_sblt_vclsts_prksts == (U1)TRUE) {
+            u4_t_vclsts |= (U4)SBLTWRN_VCLSTS_UNPARKEDG;
+        }
+        u1_s_sblt_vclsts_prksts = (U1)FALSE;
+    }
+
+    return (u4_t_vclsts);
+}
+
+/*===================================================================================================================================*/
 /* static  U4      u4_s_SbltVclstsSpdChk(const U2 u2_a_KMPH, const U2 *u2_ap_SPD_THR)                                                */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
@@ -157,10 +227,15 @@ static  U4      u4_s_SbltVclstsSpdChk(const U2 u2_a_KMPH, const U2 *u2_ap_SPD_TH
     for (u4_t_loop = (U4)0U; u4_t_loop < (U4)SBLTWRN_NUM_SPD; u4_t_loop++) {
         if (u2_a_KMPH >= u2_ap_SPD_THR[u4_t_loop]) {
             u4_t_vclsts |= ((U4)1U << (u4_t_loop + u4_s_SPD_SFT));
-            /* The maximum value of u4_t_loop is 4. The value of u4_s_SPD_SFT is 7.         */
+            /* The maximum value of u4_t_loop is 4. The value of u4_s_SPD_SFT is 10.         */
             /* so (u4_t_loop + u4_s_SPD_SFT) is always less than U4_MAX.                    */
         }
     }
+
+    if (u2_a_KMPH > (U2)SBLT_VCLSTS_SPD_STOP_THSLD) {
+        u4_t_vclsts |= (U4)SBLTWRN_VCLSTS_SPD_STP_OVER;
+    }
+    
     return (u4_t_vclsts);
 }
 
@@ -214,6 +289,55 @@ static  U4      u4_s_SbltVclstsGetSgnl(const U2 u2_a_IGONTMR, const U1 * u1_ap_M
 }
 
 /*===================================================================================================================================*/
+/* static  U4      u4_s_SbltVclstsGetSgnl_FM(const U2 u2_a_IGONTMR, const U1 * u1_ap_MSGSTS, const U2 u2_a_SIGMSK)                   */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static  U4      u4_s_SbltVclstsGetSgnl_FM(const U2 u2_a_IGONTMR, const U1 * u1_ap_MSGSTS, const U2 u2_a_SIGMSK)
+{
+    U4                                          u4_t_vclsts;
+    U4                                          u4_t_loop;
+    U2                                          u2_t_tmpsig;
+    U1                                          u1_t_sgnl;
+    const   ST_SBLT_VCLSIG_SGNLCFG *            stp_t_CFG;
+
+    u2_t_tmpsig = (U2)0U;
+    for (u4_t_loop = (U4)0U; u4_t_loop < (U4)u1_g_SBLT_VCLSTS_NUM_SGNL_FM; u4_t_loop++) {
+        stp_t_CFG   = &st_gp_SBLT_VCLSIG_SGNLCFG[u4_t_loop];
+
+        switch (u1_ap_MSGSTS[stp_t_CFG->u1_msghndlr]) {
+            case (U1)SBLTWRN_VALID:
+                if (u2_a_IGONTMR > (U2)(stp_t_CFG->u1_mskperiod)) {
+                    u1_t_sgnl = (*stp_t_CFG->fp_SGNL)() & stp_t_CFG->u1_rngmsk;
+                }
+                else {
+                    u1_t_sgnl = stp_t_CFG->u1_initval;
+                }
+                break;
+            case (U1)SBLTWRN_INVALID:
+                u1_t_sgnl = stp_t_CFG->u1_failval;
+                break;
+            /* case (U1)SBLTWRN_UNKNOWN: */
+            default:
+                u1_t_sgnl = stp_t_CFG->u1_initval;
+                break;
+        }
+        u2_t_tmpsig |= (U2)((U2)u1_t_sgnl << u4_t_loop);
+    }
+    u2_t_tmpsig &= u2_a_SIGMSK;
+
+    u4_t_vclsts = (U4)0U;
+    for (u4_t_loop = (U4)0U; u4_t_loop < (U4)SBLT_VCLSTS_NUM_APP; u4_t_loop++) {
+        if ((u2_sp_SBLT_VCLSIG_MSKCFG_FM[u4_t_loop] & u2_t_tmpsig) != (U2)0U) {
+            u4_t_vclsts |= ((U4)1U << u4_t_loop);
+        }
+    }
+
+    return (u4_t_vclsts);
+}
+
+/*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
 /*                                                                                                                                   */
@@ -227,6 +351,7 @@ static  U4      u4_s_SbltVclstsGetSgnl(const U2 u2_a_IGONTMR, const U1 * u1_ap_M
 /*  2.1.1    10/18/2021  TA(M)    Change the definition of the null pointer used.(BSW v115_r007)                                     */
 /*  2.1.2    10/25/2021  TK       QAC supported.                                                                                     */
 /*  2.1.3    02/28/2024  TH       for 19PFv3.                                                                                        */
+/*  2.2.0    09/16/2025  NA       Legal compliance.(FMVSS208_2025 SBR regulations)                                                   */
 /*                                                                                                                                   */
 /*  * HY   = Hidefumi Yoshida, Denso                                                                                                 */
 /*  * YI   = Yoshiki  Iwata,   Denso                                                                                                 */
@@ -234,5 +359,6 @@ static  U4      u4_s_SbltVclstsGetSgnl(const U2 u2_a_IGONTMR, const U1 * u1_ap_M
 /*  * TA(M)= Teruyuki Anjima, NTT Data MSE                                                                                           */
 /*  * TK   = Takanori Kuno, Denso Techno                                                                                             */
 /*  * TH   = Taisuke Hirakawa, KSE                                                                                                   */
+/*  * NA   = Nazirul Afham,    PXT                                                                                                   */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
