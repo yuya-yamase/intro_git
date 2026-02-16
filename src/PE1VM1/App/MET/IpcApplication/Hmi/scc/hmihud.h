@@ -40,6 +40,7 @@ void      vd_g_HmiHudInit(void);
 void      vd_g_HmiHudMainTask(void);
 void      vd_g_HmiHudSocDataPut(const U4 * u4_ap_REQ);
 void      vd_g_HmiHudGvifDataPut(const U4 * u4_ap_REQ);
+U1        u1_g_HmiHudGetHudOnoff(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
