@@ -18,6 +18,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "locale_cfg_private.h"
 #include "vardef.h"
+#include "mcst.h"
 #include "oxcan.h"
 #include "rim_ctl.h"
 
@@ -64,7 +65,6 @@ typedef struct {
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #if 0   /* BEV Rebase provisionally */
 #else   /* BEV Rebase provisionally */
-static U1                                       u1_s_locale_timfmt;
 static U1                                       u1_s_locale_unit_dist;
 static U1                                       u1_s_locale_unit_speed;
 static U1                                       u1_s_locale_unit_fueco;
@@ -269,24 +269,12 @@ void  vd_g_LocaleComTxInit(void)
     U1  u1_t_unit_ch2;
 #if 0   /* BEV Rebase provisionally */
 #else   /* BEV Rebase provisionally */
-    U1  u1_t_nvm_sts;
-    U2  u2_t_nvmc_frmt;
-
     u1_s_locale_unit_dist    = (U1)U1_MAX;
     u1_s_locale_unit_speed   = (U1)U1_MAX;
     u1_s_locale_unit_fueco   = (U1)U1_MAX;
     u1_s_locale_unit_eleco   = (U1)U1_MAX;
     u1_s_locale_unit_ambtmp  = (U1)U1_MAX;
     u1_s_locale_lang         = (U1)U1_MAX;
-
-    u2_t_nvmc_frmt = (U2)0U;
-    u1_t_nvm_sts   = u1_g_Nvmc_ReadStrValU2withSts((U2)NVMCID_U2_DATESI_TIMEFMT, &u2_t_nvmc_frmt);
-    if((u1_t_nvm_sts == NVMC_STATUS_COMP) && (u2_t_nvmc_frmt <= (U2)U1_MAX)){
-        u1_s_locale_timfmt = (U1)u2_t_nvmc_frmt;
-    }
-    else{
-        u1_s_locale_timfmt = (U1)TIMEFMT_NUM_VAL;
-    }
 #endif   /* BEV Rebase provisionally */
 
     u1_t_unit_ch2   = (U1)LOCALE_UNIT_CH2_KM;
@@ -566,14 +554,7 @@ void    vd_g_LocaleCfgUnitPut(const U1 u1_a_UNITIDX, const U1 u1_a_VAL)
 /*===================================================================================================================================*/
 void    vd_g_LocaleCfgTfmPut(const U1 u1_a_FRMT)
 {
-#if 0   /* BEV Rebase provisionally */
-    vd_g_McstBfPut((U1)MCST_BFI_TIMEFMT, u1_a_FRMT);
-#else   /* BEV Rebase provisionally */
-    if(u1_a_FRMT != u1_s_locale_timfmt){
-        vd_g_Nvmc_WriteU2((U2)NVMCID_U2_DATESI_TIMEFMT, (U2)u1_a_FRMT);
-        u1_s_locale_timfmt = u1_a_FRMT;
-    }
-#endif   /* BEV Rebase provisionally */
+    vd_g_McstBfPut((U1)MCST_BFI_TIMEFMT, (U4)u1_a_FRMT);
 }
 
 /*===================================================================================================================================*/
@@ -584,11 +565,7 @@ void    vd_g_LocaleCfgTfmPut(const U1 u1_a_FRMT)
 /*===================================================================================================================================*/
 U1      u1_g_LocaleCfgTfm(void)
 {
-#if 0   /* BEV Rebase provisionally */
-    return(u1_g_McstBf((U1)MCST_BFI_TIMEFMT));
-#else   /* BEV Rebase provisionally */
-    return(u1_s_locale_timfmt);
-#endif   /* BEV Rebase provisionally */
+    return((U1)u4_g_McstBf((U1)MCST_BFI_TIMEFMT));
 }
 
 /*===================================================================================================================================*/
@@ -641,6 +618,7 @@ U1      u1_g_LocaleCfgUnitdef(const U1 u1_a_UNITIDX)
 /*  BEV-2    10/15/2025  SN       Configured for BEVstep3_Rebase                                                                     */
 /*  BEV-3    11/14/2025  SN       Change initial value                                                                               */
 /*  BEV-4    12/08/2025  TS       Change UNIT_CH2 table and units referenced when sending UNIT_CH2                                   */
+/*  BEV-5    02/05/2026  SN       Change B_PERMEM for BEV FF2. Change Mcst                                                           */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
 /*  * SF   = Seiya Fukutome, DensoTechno                                                                                             */

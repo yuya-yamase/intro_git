@@ -22,6 +22,8 @@
     -I../../src/PE1VM1/App/MET/HudApplication/Vom/HudDimmer/scc
     -I../../src/PE1VM1/App/MET/HudApplication/Vom/HudImgadj/config_met
     -I../../src/PE1VM1/App/MET/IpcApplication/Evc/Calibration/config
+    -I../../src/PE1VM1/App/MET/IpcApplication/Evc/Mcst/config
+    -I../../src/PE1VM1/App/MET/IpcApplication/Evc/Mcst/scc
     -I../../src/PE1VM1/App/MET/IpcApplication/Evc/Vardef/config/esopt_rx
     -I../../src/PE1VM1/App/MET/IpcApplication/Evc/Vardef/config
     -I../../src/PE1VM1/App/MET/IpcApplication/Evc/Vardef/config_met_common
@@ -71,7 +73,7 @@
     -I../../src/PE1VM1/App/MET/XSPI_MET/scc
 
 # ----------------------------------------------------------------------------------------------------------------------------------
-# ghsprj version 1-0-0
-# Date generated: 2026/01/16 19:28:48
+# ghsprj version 1-1-0
+# Date generated: 2026/02/10 18:53:29
 # ----------------------------------------------------------------------------------------------------------------------------------
 

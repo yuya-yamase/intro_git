@@ -51,6 +51,7 @@
 #include "sbltsync.h"
 #include "locale.h"
 #include "vardef.h"
+#include "mcst.h"
 #include "cantxapp.h"
 #include "hmiproxy.h"
 #include "hdimmgr.h"
@@ -86,6 +87,7 @@ void vd_g_22SSCallout_StaBonInit(void)
 {
     static const FP_VD_FVD             fp_sp_vd_ECU_M_CFG_BON_INIT[] = {
         &vd_g_VardefBonInit,
+        &vd_g_McstBonInit,
         &vd_g_LocaleBonInit,
         &vd_g_SoundCriMgrInitialize,
         &vd_g_DrectxBonInit,
@@ -149,6 +151,7 @@ void vd_g_22SSCallout_StaRstInit(void)
 {
     static const FP_VD_FVD             fp_sp_vd_ECU_M_CFG_RST_INIT[] = {
         &vd_g_VardefRstwkInit,
+        &vd_g_McstRstwkInit,
         &vd_g_LocaleRstWkupInit,
         &vd_g_SoundCriMgrInitialize,
         &vd_g_DrectxRstInit,
@@ -212,6 +215,7 @@ void vd_g_22SSCallout_StaWkupInit(void)
 {
     static const FP_VD_FVD             fp_sp_vd_ECU_M_CFG_WKUP_INIT[] = {
         &vd_g_VardefRstwkInit,
+        &vd_g_McstRstwkInit,
         &vd_g_LocaleRstWkupInit,
         &vd_g_SoundCriMgrInitialize,
         &vd_g_DrectxWkupInit,
