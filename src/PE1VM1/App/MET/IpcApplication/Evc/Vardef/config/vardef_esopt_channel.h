@@ -309,11 +309,7 @@
 #define VDF_ESO_CH_SYS_MSBBSW_DAC                (278U)
 #define VDF_ESO_CH_SYS_4WDSYS_DISCON             (279U)
 
-#if 0   /* BEV Rebase provisionally */
-#else   /* BEV Rebase provisionally */
 #define VDF_ESO_CH_GVIF2                         (65535U)
-#define VDF_ESO_CH_AISETH                        (65535U)
-#endif   /* BEV Rebase provisionally */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define VDF_ESO_NOW_AVA                          ((VDF_ESO_NUM_CH + 31U) >> 5U)
