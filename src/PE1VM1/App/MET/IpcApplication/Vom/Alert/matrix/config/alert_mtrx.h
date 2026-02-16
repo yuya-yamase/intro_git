@@ -167,7 +167,8 @@
 #define ALERT_CH_B_TURHAZ_R                      (148U)
 #define ALERT_CH_S_ADBZR_TCW                     (149U)
 #define ALERT_CH_O_FNCLIM                        (150U)
-#define ALERT_NUM_CH                             (151U)
+#define ALERT_CH_M_SECMSG                        (151U)
+#define ALERT_NUM_CH                             (152U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* ALERT_REQ_[SYS]_[VIEW]_XXXX                            */
@@ -614,6 +615,7 @@
 #define ALERT_REQ_S_ADBZR_TCW_CYCL               (0U)
 #define ALERT_REQ_O_FNCLIM_WRN_POW               (0U)
 #define ALERT_REQ_O_FNCLIM_WRN_TMP               (1U)
+#define ALERT_REQ_M_SECMSG_UNREGISTERED          (0U)
 
 /* ALERT_CH dummy define */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

@@ -73,6 +73,8 @@
 #define RIMID_U4_NVMC_DA_DTF_WRI_006             (0x8010U)
 #define RIMID_U4_NVMC_DA_DTF_WRI_007             (0x8011U)
 #define RIMID_U4_NVMC_DA_DTF_WRI_008             (0x8012U)
+#define RIMID_U4_OMAVRCHK_RESULT_01              (0x8013U)
+#define RIMID_U4_OMAVRCHK_RESULT_02              (0x8014U)
 /* END : ##TOOL_OUT#RIM_ID_MOD_3B_U4## */
 /* START : ##TOOL_OUT#RIM_ID_MOD_3B_OTR## */
 #define RIMID_OTR_SAMPLE_BBB_OTH                 (0xC000U)

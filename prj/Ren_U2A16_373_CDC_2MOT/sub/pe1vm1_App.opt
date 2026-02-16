@@ -44,6 +44,7 @@
     -I../../src/PE1VM1/App/MET/IpcApplication/Vom/Locale/scc
     -I../../src/PE1VM1/App/MET/IpcApplication/Vom/Odo/config
     -I../../src/PE1VM1/App/MET/IpcApplication/Vom/Odo/scc
+    -I../../src/PE1VM1/App/MET/IpcApplication/Vom/OmaVrChk/scc
     -I../../src/PE1VM1/App/MET/IpcApplication/Vom/RcmmUI/scc
     -I../../src/PE1VM1/App/MET/IpcApplication/Vom/Seatbelt/scc
     -I../../src/PE1VM1/App/MET/IpcApplication/Vom/Tripcom/app/scc
