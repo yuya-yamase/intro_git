@@ -210,7 +210,7 @@ void    vd_g_DrectxWkupInit(void)
     u1_t_rimsts = u1_g_Rim_ReadU1withStatus((U2)RIMID_U1_DREC_TX, &u1_t_br);
 
     if((u1_t_rimsts & (U1)RIM_RESULT_KIND_MASK) == (U1)RIM_RESULT_KIND_OK){
-        u1_t_tx = ((U1)u1_t_br & (U1)DREC_TX_SIG_MASK_2BIT);
+        u1_t_tx = (u1_t_br & (U1)DREC_TX_SIG_MASK_2BIT);
     }
     else{
         u1_t_tx = (U1)0U;
@@ -297,7 +297,7 @@ static void    vd_s_DrectxMsg_MET1D51(const U1  u1_a_BR)
         u4_tp_tx_data[u4_t_loop] = (U4)0U;
     }
 
-    u1_t_tx = ((U1)u1_a_BR & (U1)DREC_TX_SIG_MASK_2BIT);
+    u1_t_tx = (u1_a_BR & (U1)DREC_TX_SIG_MASK_2BIT);
     u4_tp_tx_data[DREC_TX_BUF0] |= (U4)u1_t_tx << DREC_TX_SHIFT_DATA_NM2;       /* DATA_NM2 */
 
     u1_t_tx = (u1_g_DimDrTxDninf() & (U1)DREC_TX_SIG_MASK_2BIT);
