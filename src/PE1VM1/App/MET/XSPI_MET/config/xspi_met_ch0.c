@@ -214,6 +214,7 @@ static inline void    vd_s_XSpiCfgTxPowerMd(       U4 * u4_ap_pdu_tx) {
     u4_ap_pdu_tx[0]   |= ((U4)u1_g_VehopemdIgnpOn() << 7);                              /* IGP_ON                                    */
     u4_ap_pdu_tx[0]   |= ((U4)u1_g_VehopemdBaOn() << 8);                                /* BA ON                                     */
     u4_ap_pdu_tx[0]   |= ((U4)u1_g_VehspdGetStopFlg() << 9);                            /* STOP_JDG_FLAG                             */
+    u4_ap_pdu_tx[0]   |= ((U4)u1_g_VehopemdApofrqOn() << 10);                           /* APOFRQ_ON                                 */
 }
 
 /*===================================================================================================================================*/
@@ -495,6 +496,7 @@ static inline void    vd_s_XSpiCfgTxOdo(           U4 * u4_ap_pdu_tx) {
     U1  u1_t_tripb_sts;
     U4  u4_t_odo_km_dat;                                                /* ODO_KM                                         */
     U1  u1_t_tmnt_reset_sts;
+    U4  u4_t_tmnt_reset_dat;
 
 
     u4_t_odo_dat       = (U4)0U;
@@ -508,6 +510,8 @@ static inline void    vd_s_XSpiCfgTxOdo(           U4 * u4_ap_pdu_tx) {
 
     /* TMNT */
     u1_t_tmnt_reset_sts = u1_g_OdoCfgGetOmRstSts();
+    u4_t_tmnt_reset_dat = (U4)0U;
+    vd_g_OdoCfgGetOmRstVal(&u4_t_tmnt_reset_dat);
 
     u4_ap_pdu_tx[0]   = u1_t_tmnt_reset_sts;                           /* TMNT_RESET_RESULT                              */
     u4_ap_pdu_tx[0]  |= ((U4)u1_t_odo_sts   << XSPI_STS_SHIFT);        /* ODO_STS                                        */
@@ -517,7 +521,7 @@ static inline void    vd_s_XSpiCfgTxOdo(           U4 * u4_ap_pdu_tx) {
     u4_ap_pdu_tx[4]   = ((U4)u1_t_tripb_sts << XSPI_STS_SHIFT);        /* TRIPB_STS                                      */
     u4_ap_pdu_tx[5]   = u4_t_tripb_dat;                                /* TRIP_B                                         */
     u4_ap_pdu_tx[6]   = u4_t_odo_km_dat;                               /* ODO_KM                                         */
-    u4_ap_pdu_tx[8]   = (U4)0U;                                        /* TMNT_RESET_ODO_VALUE  BEV Rebase provisionally */
+    u4_ap_pdu_tx[8]   = u4_t_tmnt_reset_dat;                           /* TMNT_RESET_ODO_VALUE                           */
 
 }
 
@@ -1185,7 +1189,10 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*  BEV-26    02/10/2026 JS       Change for BEV Full_Function2                                                                      */
 /*                                MET-M_SP-CSTD-1-03-A-C3                                                                            */
 /*                                Delete analog vehicle speed display notification processing                                        */
-/*  BEV-31    01/30/2026 YN       Change for BEV FF2.(MET-M_DESTVARI-CSTD-0-01)                                                      */
+/*  BEV-27    02/06/2026 TS       Change for BEV FF2.(MET-M_ONOFF-CSTD-1)                                                            */
+/*                                Add APOFRQ_ON storage process.                                                                     */
+/*  BEV-28    02/09/2026 MA       Add notification process of odo display value at reset                                             */
+/*  BEV-29    01/30/2026 YN       Change for BEV FF2.(MET-M_DESTVARI-CSTD-0-01)                                                      */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */

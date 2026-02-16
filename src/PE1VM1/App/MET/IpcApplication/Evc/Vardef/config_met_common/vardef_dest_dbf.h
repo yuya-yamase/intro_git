@@ -224,7 +224,6 @@
 #define u1_g_VardefTtEpbPkb()                          (u1_g_VardefDestLawDbfByPid((U1)VDF_DEST_LAW_DBF_TTEPBPKB))
 #define u1_g_VardefTtTailHead()                        (u1_g_VardefDestLawDbfByPid((U1)VDF_DEST_LAW_DBF_TTTAILHEAD))
 #define u1_g_VardefIndSpdBzr()                         (u1_g_VardefDestLawDbfByPid((U1)VDF_DEST_LAW_DBF_INDIASPDBZR))
-#define u1_g_VardefTmntOpt()                           (u1_g_VardefDestDbfByPid((U1)VDF_DEST_DBF_TMNT))
 #define u1_g_VardefStpInd()                            (u1_g_VardefDestDbfByPid((U1)VDF_DEST_DBF_STPIND))
 #define u1_g_VardefUnitAmbTmpByPid()                   (u1_g_VardefDestDbfByPid((U1)VDF_DEST_DBF_AMBTMP))
 
