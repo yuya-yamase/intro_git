@@ -212,6 +212,9 @@ void    vd_g_HdimmgrIfSetIllStepVal(const U1 u1_a_STEP)
         u1_t_updtdstep += (U1)HDIM_IF_STEP_IND_OFFSET;
         u1_s_hdimif_step_ind = u1_t_updtdstep;
     }
+    else{
+        u1_s_hdimif_step_ind = (U1)U1_MAX;
+    }
 
     u2_s_hdimif_timout = (U2)0;
 }
