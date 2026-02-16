@@ -63,6 +63,7 @@
 ../../src/PE1VM1/App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_FCM1S52.c
 ../../src/PE1VM1/App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_FCM1S70.c
 ../../src/PE1VM1/App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_FWD1S10.c
+../../src/PE1VM1/App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_GVIF.c
 ../../src/PE1VM1/App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_LVN1S01.c
 ../../src/PE1VM1/App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_PDS1S01.c
 ../../src/PE1VM1/App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_SCS1S11.c
