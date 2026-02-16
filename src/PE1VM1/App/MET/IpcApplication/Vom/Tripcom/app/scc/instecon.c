@@ -209,10 +209,18 @@ void            vd_g_InstEconUpdt(const ST_INSTECON_CNTT * stp_a_CNTT, const U1 
 
     switch (u1_a_TYPE) {
         case INSTECON_ENGYTYPE_FUEL:
+#if 0 /* Disable for build before BSW merge */
             u4_t_economy = u4_g_TripcomCalcFeKmpl(u4_t_odocnt, u4_t_usd);
+#else
+            u4_t_economy = (U4)0U;
+#endif
             break;
         case INSTECON_ENGYTYPE_HYDR:
+#if 0 /* Disable for build before BSW merge */
             u4_t_economy = u4_g_TripcomCalcHeKmpkg(u4_t_odocnt, u4_t_usd);
+#else
+            u4_t_economy = (U4)0U;
+#endif
             break;
         default:
             u4_t_economy = (U4)0U;
@@ -232,8 +240,13 @@ U2              u2_g_InstEconCalcTx(const ST_INSTECON_CNTT * stp_a_CNTT, const U
 {
     static  U1          (* const                fp_sp_TRIPCOM_CNVT[INSTECON_NUM_ENGYTYPE])
                                                         (U4 * u4p_a_kmpx_to, const U1 u1_a_UNIT, const U1 u1_a_USEAPRXVAL)      = {
+#if 0 /* Disable for build before BSW merge */
         &u1_g_TripcomCalcTxCnvtFE,
         &u1_g_TripcomCalcTxCnvtHE,
+#else
+        vdp_PTR_NA,
+        vdp_PTR_NA,
+#endif
         vdp_PTR_NA
     };
     U4          u4_t_xecon;

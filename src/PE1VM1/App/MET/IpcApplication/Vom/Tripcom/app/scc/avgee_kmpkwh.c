@@ -1,4 +1,4 @@
-/* 2.3.0 */
+/* 2.4.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define AVGEE_KMPKWH_C_MAJOR                      (2)
-#define AVGEE_KMPKWH_C_MINOR                      (3)
+#define AVGEE_KMPKWH_C_MINOR                      (4)
 #define AVGEE_KMPKWH_C_PATCH                      (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -245,7 +245,7 @@ U1            u1_g_AvgEeCalcTrnst(const U1 u1_a_CNTTID, const U2 * u2_ap_STSFIEL
 
     u1_t_update = (U1)FALSE;
 
-  if (u1_a_CNTTID < (U1)AVGEE_CALC_CNTTS_NUM) {
+    if (u1_a_CNTTID < (U1)AVGEE_CALC_CNTTS_NUM) {
         stp_t_CNTT = &st_sp_AVGEE_CNTTS_CFG[u1_a_CNTTID];
         stp_t_var = &st_sp_avgee_var[u1_a_CNTTID];
 
@@ -515,7 +515,7 @@ U2            u2_g_AvgEeCalcTx(const U1 u1_a_CNTTID, const U1 u1_a_UNIT)
             u2_t_txval = stp_t_CNTT->u2_cantx_fail;
         }
         else {
-            u2_t_txval = u2_g_AvgEconCalcTx(stp_t_CNTT, st_sp_avgee_var[u1_a_CNTTID].u1_rstterm, u1_a_UNIT, (U1)AVGECON_ENGYTYPE_ELPW);
+            u2_t_txval = u2_g_AvgEconCalcTx(stp_t_CNTT, st_sp_avgee_var[u1_a_CNTTID].u1_rstterm, u1_a_UNIT);
         }
     }
     else {
@@ -661,8 +661,9 @@ void            vd_g_AvgEePostTask(void)
 /*  2.0.3    02/25/2022  TA(M)    Delete call vd_g_AvgEeUpdt((U1)AVGEE_CNTT_TA) at vd_g_AvgEeInit                                    */
 /*  2.1.0    01/10/2024  TH       for 19PFv3  Add AvgGrph                                                                            */
 /*  2.2.0    02/18/2025  MaO(M)   Add privacy data delete/result API                                                                 */
-/*  2.2.1    04/22/2025  KM       Bug fix ： Change update timing of u1_s_avgee_econ_init_bk                                          */
+/*  2.2.1    04/22/2025  KM       Bug fix : Change update timing of u1_s_avgee_econ_init_bk                                          */
 /*  2.3.0    01/20/2026  DR       add AS_EVDT and AS_TOEC for BEV FF2                                                                */
+/*  2.4.0    02/13/2026  PG       Update for M_DM for BEV FF2                                                                        */
 /*                                                                                                                                   */
 /*  * YA   = Yuhei Aoyama, DensoTechno                                                                                               */
 /*  * TA(M)= Teruyuki Anjima, NTT Data MSE                                                                                           */
@@ -671,5 +672,6 @@ void            vd_g_AvgEePostTask(void)
 /*  * MaO(M) = Masayuki Okada, NTT Data MSE                                                                                          */
 /*  * KM   = Kazuma Miyazawa, Denso Techno                                                                                           */
 /*  * DR   = Dyan Reyes, DTPH                                                                                                        */
+/*  * PG   = Patrick Garcia, DTPH                                                                                                    */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
