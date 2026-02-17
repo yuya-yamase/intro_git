@@ -119,6 +119,7 @@
 ../../src/PE1VM1/App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_B_PEDPRO.c
 ../../src/PE1VM1/App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_B_RPWSEA.c
 ../../src/PE1VM1/App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_B_RSEREM.c
+../../src/PE1VM1/App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_B_SECBDC.c
 ../../src/PE1VM1/App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_B_SMASTA.c
 ../../src/PE1VM1/App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_B_SPAT.c
 ../../src/PE1VM1/App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_B_TBEAM12.c

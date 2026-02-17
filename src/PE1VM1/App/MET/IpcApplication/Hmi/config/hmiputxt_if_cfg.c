@@ -58,21 +58,13 @@ const ST_ALERT_REQBIT   st_gp_HMIPUTXTREQBIT[HMIPUTXTCFG_IF_NUM] = {
     /*  u2_src_ch                           u1_src_act                              u1_dst_idx   u4_dst_bit         */
     {    (U2)ALERT_CH_C_BRK_2,              (U1)ALERT_REQ_C_BRK_2_MALFUNC,          (U1)2U,     (U4)0x00000010U    },
     {    (U2)ALERT_CH_C_BRK_2,              (U1)ALERT_REQ_C_BRK_2_ON_MLFNC,         (U1)2U,     (U4)0x00000010U    },
-    {    (U2)ALERT_CH_C_BRK_2,              (U1)ALERT_REQ_C_BRK_2_MLFNC_RW,         (U1)2U,     (U4)0x00000010U    },
-    {    (U2)ALERT_CH_C_BRK_2,              (U1)ALERT_REQ_C_BRK_2_WRN,              (U1)2U,     (U4)0x00000010U    },
     {    (U2)ALERT_CH_C_BRLV_2_WRN,         (U1)ALERT_REQ_C_BRLV_2_WRN_MALFUNC,     (U1)2U,     (U4)0x00000020U    },
     {    (U2)ALERT_CH_C_ECB,                (U1)ALERT_REQ_C_ECB_FAILDISP,           (U1)2U,     (U4)0x00000040U    },
-    {    (U2)ALERT_CH_C_ECB,                (U1)ALERT_REQ_C_ECB_FDISP_RW,           (U1)2U,     (U4)0x00000040U    },
     {    (U2)ALERT_CH_C_ECB,                (U1)ALERT_REQ_C_ECB_TM_DISP,            (U1)2U,     (U4)0x00000040U    },
-    {    (U2)ALERT_CH_C_ECB,                (U1)ALERT_REQ_C_ECB_TM_DISP_RW,         (U1)2U,     (U4)0x00000040U    },
     {    (U2)ALERT_CH_C_ECB,                (U1)ALERT_REQ_C_ECB_LNG1_DISP,          (U1)2U,     (U4)0x00000040U    },
-    {    (U2)ALERT_CH_C_ECB,                (U1)ALERT_REQ_C_ECB_LNG1_DISP_RW,       (U1)2U,     (U4)0x00000040U    },
     {    (U2)ALERT_CH_C_ECB,                (U1)ALERT_REQ_C_ECB_LNG2_DISP,          (U1)2U,     (U4)0x00000040U    },
-    {    (U2)ALERT_CH_C_ECB,                (U1)ALERT_REQ_C_ECB_LNG2_DISP_RW,       (U1)2U,     (U4)0x00000040U    },
     {    (U2)ALERT_CH_C_ECB,                (U1)ALERT_REQ_C_ECB_MFNC_DISP,          (U1)2U,     (U4)0x00000040U    },
-    {    (U2)ALERT_CH_C_ECB,                (U1)ALERT_REQ_C_ECB_MFNC_DISP_RW,       (U1)2U,     (U4)0x00000040U    },
     {    (U2)ALERT_CH_C_ECB,                (U1)ALERT_REQ_C_ECB_UNABL_DISP,         (U1)2U,     (U4)0x00000040U    },
-    {    (U2)ALERT_CH_C_ECB,                (U1)ALERT_REQ_C_ECB_UNABL_DISP_RW,      (U1)2U,     (U4)0x00000040U    },
     {    (U2)ALERT_CH_H_PEXI,               (U1)ALERT_REQ_H_PEXI_MALFUNC,           (U1)3U,     (U4)0x00000400U    },
     {    (U2)ALERT_CH_B_TDOOR,              (U1)ALERT_REQ_B_TDOOR_RUN,              (U1)9U,     (U4)0x00010000U    },
     {    (U2)ALERT_CH_B_TDOOR,              (U1)ALERT_REQ_B_TDOOR_RUN_ON,           (U1)9U,     (U4)0x00010000U    },
@@ -138,7 +130,6 @@ const ST_ALERT_REQBIT   st_gp_HMIPUTXTREQBIT_SLOTB[HMIPUTXTCFG_IF_SLOTB_NUM] = {
     {    (U2)ALERT_CH_C_EPB_WRN_BAT,        (U1)ALERT_REQ_C_EPB_WRN_BAT_AUTOLOCK,   (U1)8U,     (U4)0x00000800U    },
     {    (U2)ALERT_CH_C_ABS_PD,             (U1)ALERT_REQ_C_ABS_PD_MALFUNC,         (U1)9U,     (U4)0x02000000U    },
     {    (U2)ALERT_CH_C_MCBW,               (U1)ALERT_REQ_C_MCBW_MALFUNC,           (U1)10U,    (U4)0x00000200U    },
-    {    (U2)ALERT_CH_C_MCBW,               (U1)ALERT_REQ_C_MCBW_MALFUNC_RW,        (U1)10U,    (U4)0x00000200U    },
     {    (U2)ALERT_CH_B_AIRBAG,             (U1)ALERT_REQ_B_AIRBAG_MALFUNC,         (U1)12U,    (U4)0x00000100U    },
     {    (U2)ALERT_CH_C_BRKHLD_WRN,         (U1)ALERT_REQ_C_BRKHLD_WRN_DEACT2,      (U1)13U,    (U4)0x00008000U    },
     {    (U2)ALERT_CH_C_BRKHLD_WRN,         (U1)ALERT_REQ_C_BRKHLD_WRN_MAINT1,      (U1)13U,    (U4)0x00020000U    },
@@ -166,7 +157,6 @@ const ST_ALERT_REQBIT   st_gp_HMIPUTXTREQBIT_SLOTB[HMIPUTXTCFG_IF_SLOTB_NUM] = {
     {    (U2)ALERT_CH_B_PEDPRO,             (U1)ALERT_REQ_B_PEDPRO_DIAGDTRMN,       (U1)32U,    (U4)0x00000002U    },
     {    (U2)ALERT_CH_B_PEDPRO,             (U1)ALERT_REQ_B_PEDPRO_PUHDVCACT,       (U1)32U,    (U4)0x00000004U    },
     {    (U2)ALERT_CH_C_DRS,                (U1)ALERT_REQ_C_DRS_TESTMODE,           (U1)34U,    (U4)0x00000080U    },
-    {    (U2)ALERT_CH_C_DRS,                (U1)ALERT_REQ_C_DRS_MALFUNC_RW,         (U1)36U,    (U4)0x08000000U    },
     {    (U2)ALERT_CH_C_DRS,                (U1)ALERT_REQ_C_DRS_MALFUNC,            (U1)36U,    (U4)0x08000000U    }
 };
 
@@ -210,7 +200,6 @@ const ST_ALERT_REQBIT   st_gp_HMIPUTXTREQBIT_SLOTC[HMIPUTXTCFG_IF_SLOTC_NUM] = {
     {    (U2)ALERT_CH_H_DRIPOW,             (U1)ALERT_REQ_H_DRIPOW_BATLOW,          (U1)12U,    (U4)0x00020000U    },
     {    (U2)ALERT_CH_H_DRIPOW,             (U1)ALERT_REQ_H_DRIPOW_OTHER,           (U1)12U,    (U4)0x00040000U    },
     {    (U2)ALERT_CH_H_TOWWAR,             (U1)ALERT_REQ_H_TOWWAR_MLFNC_HV,        (U1)12U,    (U4)0x00100000U    },
-    {    (U2)ALERT_CH_H_TOWWAR,             (U1)ALERT_REQ_H_TOWWAR_MLFNC_HV2,       (U1)12U,    (U4)0x00100000U    },
     {    (U2)ALERT_CH_H_BATINS_PD,          (U1)ALERT_REQ_H_BATINS_PD_EMERGENCY,    (U1)12U,    (U4)0x00800000U    },
     {    (U2)ALERT_CH_H_BATINS_PD,          (U1)ALERT_REQ_H_BATINS_PD_REQINSPECT,   (U1)12U,    (U4)0x10000000U    },
     {    (U2)ALERT_CH_H_REGBRA,             (U1)ALERT_REQ_H_REGBRA_MALFUNC,         (U1)25U,    (U4)0x00020000U    },
@@ -240,6 +229,7 @@ const ST_ALERT_REQBIT   st_gp_HMIPUTXTREQBIT_SLOTC[HMIPUTXTCFG_IF_SLOTC_NUM] = {
 
 const ST_ALERT_REQBIT   st_gp_HMIPUTXTREQBIT_SLOTD[HMIPUTXTCFG_IF_SLOTD_NUM] = {
     {    (U2)ALERT_CH_M_SECMSG,             (U1)ALERT_REQ_M_SECMSG_UNREGISTERED,    (U1)0U,     (U4)0x01000000U    },
+    {    (U2)ALERT_CH_B_SECBDC,             (U1)ALERT_REQ_B_SECBDC_UNREGISTERED,    (U1)0U,     (U4)0x01000000U    },
     {    (U2)ALERT_CH_O_CHAMAL,             (U1)ALERT_REQ_O_CHAMAL_MALFUNC,         (U1)2U,     (U4)0x00400000U    },
     {    (U2)ALERT_CH_O_CHAMAL,             (U1)ALERT_REQ_O_CHAMAL_MALFUNC_BZ,      (U1)2U,     (U4)0x00400000U    },
     {    (U2)ALERT_CH_D_SBW_PD_RIS,         (U1)ALERT_REQ_D_SBW_PD_RIS_MSG_12,      (U1)4U,     (U4)0x00000004U    },
@@ -275,8 +265,6 @@ const ST_ALERT_REQBIT   st_gp_HMIPUTXTREQBIT_SLOTD[HMIPUTXTCFG_IF_SLOTD_NUM] = {
     {    (U2)ALERT_CH_B_GRISHU,             (U1)ALERT_REQ_B_GRISHU_MALFUNC,         (U1)12U,    (U4)0x00000800U    },
     {    (U2)ALERT_CH_D_SBW_PD_SFML,        (U1)ALERT_REQ_D_SBW_PD_SFML_MSG_27,     (U1)12U,    (U4)0x00001000U    },
     {    (U2)ALERT_CH_D_SBW_PD_CHK,         (U1)ALERT_REQ_D_SBW_PD_CHK_MSG_06,      (U1)12U,    (U4)0x00002000U    },
-    {    (U2)ALERT_CH_D_SBW_PD_CHK,         (U1)ALERT_REQ_D_SBW_PD_CHK_MSG6_SBW8,   (U1)12U,    (U4)0x00002000U    },
-    {    (U2)ALERT_CH_D_SBW_PD_CHK,         (U1)ALERT_REQ_D_SBW_PD_CHK_MSG6_SBW9,   (U1)12U,    (U4)0x00002000U    },
     {    (U2)ALERT_CH_D_SBW_PD_RIS,         (U1)ALERT_REQ_D_SBW_PD_RIS_MSG_40,      (U1)24U,    (U4)0x00080000U    },
     {    (U2)ALERT_CH_D_SBW_PD_SILUA,       (U1)ALERT_REQ_D_SBW_PD_SILUA_MSG_41,    (U1)24U,    (U4)0x00100000U    },
     {    (U2)ALERT_CH_B_ESWUOC_PDB,         (U1)ALERT_REQ_B_ESWUOC_PDB_RHDSHOCK,    (U1)25U,    (U4)0x00000008U    },
@@ -354,6 +342,11 @@ U2 u2_g_HmiputxtSizeReqbit(void){
 /*  BEV-12   12/19/2025  KH       Update for BEV System_Consideration_ADAS.(B_PBDKS / H_LEAUNF)                                      */
 /*  BEV-13   01/07/2026  SN       Change for BEV FF2.(MET-O_FNCLIM-CSTD-0-00-A-C0)                                                   */
 /*  BEV-13   02/10/2026  KO       Change for BEV FF2.(MET-M_SECMSG-CSTD-0-01-A-C0)                                                   */
+/*  BEV-14   01/15/2026  HT       Change for Full_function2 (MET-M_REMWAR-CSTD-2-04-A-C0)                                            */
+/*                                Removed "ALERT_REQ" in order to transfer signal transmission control from the MCU to the SoC       */
+/*  BEV-15   02/06/2026  HY       Change config for BEV Full_Function_2.                                                             */
+/*                                MET-B_SECBDC-CSTD-0-00-A-C0                                                                        */
+/*                                Changed due to specification change from feature to legacy.                                        */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * TH   = Takahiro Hirano, Denso Techno                                                                                           */
@@ -368,5 +361,7 @@ U2 u2_g_HmiputxtSizeReqbit(void){
 /*  * KT   = Kenta Takaji,    Denso Techno                                                                                           */
 /*  * KH   = Kiko Huerte,     DTPH                                                                                                   */
 /*  * SN   = Shizuka Nakajima, KSE                                                                                                   */
+/*  * HT   = Hibiki Tanii, KSE                                                                                                       */
+/*  * YH   = Yuki Hatakeyama, KSE                                                                                                    */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

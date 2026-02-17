@@ -340,7 +340,6 @@ void    vd_g_wChimeCfgReqchk(U4 * u4p_a_reqbit)
         {  (U2)ALERT_CH_H_TOWWAR,           (U1)ALERT_REQ_H_TOWWAR_MLFNC_HV,       (U1)WCHIME_REQ_IN_TOWWAR             >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_IN_TOWWAR             & (U1)0x1FU)  }, /* MET-H_TOWWAR-CSTD-            */
         {  (U2)ALERT_CH_H_TOWWAR,           (U1)ALERT_REQ_H_TOWWAR_MLFNC_EV,       (U1)WCHIME_REQ_IN_TOWWAR             >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_IN_TOWWAR             & (U1)0x1FU)  }, /* MET-H_TOWWAR-CSTD-            */
         {  (U2)ALERT_CH_H_TOWWAR,           (U1)ALERT_REQ_H_TOWWAR_MLFNC_FCV,      (U1)WCHIME_REQ_IN_TOWWAR             >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_IN_TOWWAR             & (U1)0x1FU)  }, /* MET-H_TOWWAR-CSTD-            */
-        {  (U2)ALERT_CH_H_TOWWAR,           (U1)ALERT_REQ_H_TOWWAR_MLFNC_HV2,      (U1)WCHIME_REQ_IN_TOWWAR             >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_IN_TOWWAR             & (U1)0x1FU)  }, /* MET-H_TOWWAR-CSTD-            */
         {  (U2)ALERT_CH_H_TOWWAR,           (U1)ALERT_REQ_H_TOWWAR_MLFNC,          (U1)WCHIME_REQ_IN_TOWWAR             >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_IN_TOWWAR             & (U1)0x1FU)  }, /* MET-H_TOWWAR-CSTD-            */
         {  (U2)ALERT_CH_S_ADBZR_TMN,        (U1)ALERT_REQ_S_ADBZR_TMN_SINGLE,      (U1)WCHIME_REQ_SI_TMN_LVN            >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_SI_TMN_LVN            & (U1)0x1FU)  }, /* MET-S_ADBZR-CSTD-             */
         {  (U2)ALERT_CH_S_TMBZR_BC_AD,      (U1)ALERT_REQ_S_TMBZR_BC_AD_ANN_2,     (U1)WCHIME_REQ_SI_TMBZR_ANN_PRI2     >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_SI_TMBZR_ANN_PRI2     & (U1)0x1FU)  }, /* MET-S_TMBZR-CST0              */
@@ -861,7 +860,9 @@ static  void    vd_s_wChimeCfgReqDel(U4 * u4_ap_reqbit, const U1 u1_a_REQ_ID)
 /*                                MET-D_SFTPOS-CSTD-1-00-B-C0.                                                                       */
 /*                                Change Name from RJTB_DBL1 to RJTB_DBL                                                             */
 /*  BEV-10    01/30/2026 YN       Change config for BEV FF2.(MET-M_DESTVARI-CSTD-0-01)                                               */
-/*  BEV-11    02/02/2026 YH       Change config for BEV Full_Function_2.                                                             */
+/*  BEV-11    01/15/2026 HT       Change for Full_function2 (MET-M_REMWAR-CSTD-2-04-A-C0)                                            */
+/*                                Removed "ALERT_REQ" in order to transfer signal transmission control from the MCU to the SoC       */
+/*  BEV-12    02/02/2026 YH       Change config for BEV Full_Function_2.                                                             */
 /*                                MET-S_ADMID-CSTD-0-07-B-C0/MET-S_ADBZR-CSTD-0-06-A-C0                                              */
 /*                                Separate AUTOP function judgement into AP_RMT and AP_NORMT.                                        */
 /*                                                                                                                                   */
@@ -891,5 +892,6 @@ static  void    vd_s_wChimeCfgReqDel(U4 * u4_ap_reqbit, const U1 u1_a_REQ_ID)
 /*  * NI   = Naoki Inagaki, KSE                                                                                                      */
 /*  * YH   = Yuki Hatakeyama, KSE                                                                                                    */
 /*  * YN   = Yujiro Nagaya, Denso Techno                                                                                             */
+/*  * HT   = Hibiki Tanii, KSE                                                                                                       */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

@@ -112,16 +112,6 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define u1_SEATBELT_CALIB_RR_SEATSW             (u1_CALIB_MCUID0224_RR_SEATSW)
-#define u1_SEATBELT_CALIB_RC_SEATSW             (u1_CALIB_MCUID0225_RC_SEATSW)
-#define u1_SEATBELT_CALIB_RL_SEATSW             (u1_CALIB_MCUID0226_RL_SEATSW)
-#define u1_SEATBELT_CALIB_RR2_SEATSW            (u1_CALIB_MCUID0227_RR2_SEATSW)
-#define u1_SEATBELT_CALIB_RC2_SEATSW            (u1_CALIB_MCUID0228_RC2_SEATSW)
-#define u1_SEATBELT_CALIB_RL2_SEATSW            (u1_CALIB_MCUID0229_RL2_SEATSW)
-#define u1_SEATBELT_CALIB_RR3_SEATSW            (u1_CALIB_MCUID0230_RR3_SEATSW)
-#define u1_SEATBELT_CALIB_RC3_SEATSW            (u1_CALIB_MCUID0231_RC3_SEATSW)
-#define u1_SEATBELT_CALIB_RL3_SEATSW            (u1_CALIB_MCUID0232_RL3_SEATSW)
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

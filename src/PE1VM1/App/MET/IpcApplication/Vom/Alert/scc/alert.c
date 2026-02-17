@@ -1,4 +1,4 @@
-/* 5.6.0 */
+/* 5.7.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define ALERT_C_MAJOR                            (5)
-#define ALERT_C_MINOR                            (6)
+#define ALERT_C_MINOR                            (7)
 #define ALERT_C_PATCH                            (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -59,9 +59,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define ALERT_RMT_DI_TOUT                        (1500U)
 #define ALERT_TO_TM_MAX                          (0xfffffffeU)
-#define ALERT_ECOMODE3_JUDG_TBL_NUM              (16U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -80,9 +78,7 @@ typedef struct{
 static ST_ALERT_CH  st_sp_alert_ch[ALERT_NUM_CH];
 static U4           u4_s_alert_ign_tm_elpsd;
 static U4           u4_s_alert_bslp_tm_elpsd;
-static U2           u2_s_alert_rmtx_tm_elpsd;
 static U1           u1_s_alert_vom_chk;
-static U1           u1_s_alert_ne1_jdg_result_pre;
 
 static U2           u2_s_alert_task_idx;
 static U1           u1_s_alert_task_slot;
@@ -92,7 +88,6 @@ static U1           u1_s_alert_task_slot;
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static U1           u1_s_AlertVomchk(void);
 static U1           u1_s_AlertToutchk(void);
-static U1           u1_s_AlertJudgeStartEngine(void);
 static U1           u1_s_AlertPowerChk(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -113,10 +108,8 @@ void    vd_g_AlertInit(void)
 
     u4_s_alert_ign_tm_elpsd                = (U4)ALERT_IGN_TM_MAX;
     u4_s_alert_bslp_tm_elpsd               = (U4)U4_MAX;
-    u2_s_alert_rmtx_tm_elpsd               = (U2)U2_MAX;
 
     u1_s_alert_vom_chk                     = (U1)ALERT_VOM_BAT_AO;
-    u1_s_alert_ne1_jdg_result_pre          = (U1)FALSE;
 
     u2_s_alert_task_idx                    = (U2)U2_MAX;
     u1_s_alert_task_slot                   = (U1)U1_MAX;
@@ -319,7 +312,6 @@ static U1      u1_s_AlertVomchk(void)
 {
     U1                       u1_t_vom_chk;
     U1                       u1_t_ign_on;
-    U1                       u1_t_pts_on;
 
     if(u4_s_alert_ign_tm_elpsd >= (U4)U4_MAX){
         u4_s_alert_ign_tm_elpsd = (U4)0U;
@@ -331,137 +323,21 @@ static U1      u1_s_AlertVomchk(void)
         u4_s_alert_ign_tm_elpsd++;
     }
 
-    if(u2_s_alert_rmtx_tm_elpsd >= (U2)U2_MAX){
-        u2_s_alert_rmtx_tm_elpsd = (U2)0U;
-    }
-    else if(u2_s_alert_rmtx_tm_elpsd >= (U2)ALERT_RMT_DI_TOUT){
-        u2_s_alert_rmtx_tm_elpsd = (U2)ALERT_RMT_DI_TOUT;
-    }
-    else{
-        u2_s_alert_rmtx_tm_elpsd++;
-    }
-
     u1_t_vom_chk = u1_s_AlertPowerChk();
     u1_t_ign_on  = u1_t_vom_chk & (U1)ALERT_VOM_IGN_ON;
     if(u1_t_ign_on != (U1)0U){
 
         u4_s_alert_bslp_tm_elpsd = (U4)U4_MAX;
         u1_t_vom_chk            |= (U1)ALERT_VOM_BAT_WT;
-        u1_t_pts_on = u1_s_AlertJudgeStartEngine();
-
-        if(u1_t_pts_on != (U1)TRUE){
-            u2_s_alert_rmtx_tm_elpsd = (U2)U2_MAX;
-        }
-        else if(u2_s_alert_rmtx_tm_elpsd >= (U2)ALERT_RMT_DI_TOUT){
-            u1_t_vom_chk |= (U1)ALERT_VOM_RWT_EN;
-        }
-        else{
-            /* Nothing to do */
-        }
     }
     else{
 
-        u2_s_alert_rmtx_tm_elpsd = (U2)U2_MAX;
         u1_t_vom_chk            |= u1_s_AlertToutchk();
     }
 
     u1_s_alert_vom_chk = u1_t_vom_chk;
 
     return(u1_t_vom_chk);
-}
-/*===================================================================================================================================*/
-/*  static U1      u1_s_AlertJudgeStartEngine(void)                                                                                  */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static U1      u1_s_AlertJudgeStartEngine(void)
-{
-    static const U4 u4_s_ALERT_200RPM                = (U4)200U;
-    static const U4 u4_s_ALERT_400RPM                = (U4)400U;
-    static const U4 u4_s_ALERT_NE_RXCFNT             = (U4)50U;             /* 12800/256                                            */
-    static const U4 u4_s_ALERT_ROUND                 = (U4)32U;             /* 64 * 0.5 (For rounding off when divided by 64)       */
-    static const U4 u4_s_ALERT_LSR_CFCNT             = (U4)6U;              /* /64  (For right shft operation, instead of division) */
-                                                                            /* LSB:(12800/256/64)rpm -> 1rpm                        */
-    static const U1 u1_s_ALERT_ECOMODE3_SGNL_MSK     = (U1)0x0FU;
-    static const U1 u1_s_ALERT_ECOMODE3_JUDG_TBL[ALERT_ECOMODE3_JUDG_TBL_NUM] = {
-        (U1)FALSE, (U1)TRUE,  (U1)TRUE,  (U1)TRUE,  (U1)TRUE,  (U1)FALSE, (U1)FALSE, (U1)FALSE,
-        (U1)FALSE, (U1)FALSE, (U1)FALSE, (U1)FALSE, (U1)FALSE, (U1)FALSE, (U1)FALSE, (U1)FALSE
-    };
-
-    U1                             u1_t_eng1g90_msgsts;
-    U1                             u1_t_eng1g02_msgsts;
-    U1                             u1_t_eco1s90_msgsts;
-    U1                             u1_t_rdyind;
-    U1                             u1_t_rdyind_jdg_result;
-    U4                             u4_t_rpm;
-    U2                             u2_t_ne1;
-    S2                             s2_t_ne1;
-    U1                             u1_t_ne1_jdg_result;
-    U1                             u1_t_ecomode3;
-    U1                             u1_t_ecomode3_jdg_result;
-    U1                             u1_t_eng_start;
-
-    u1_t_rdyind              = (U1)FALSE;
-    u1_t_rdyind_jdg_result   = (U1)FALSE;
-    s2_t_ne1                 = (S2)0;
-    u2_t_ne1                 = (U2)0U;
-    u1_t_ne1_jdg_result      = (U1)FALSE;
-    u1_t_ecomode3            = (U1)0U;
-    u1_t_ecomode3_jdg_result = (U1)FALSE;
-    u1_t_eng_start           = (U1)FALSE;
-
-#if 0   /* BEV Rebase provisionally */
-    u1_t_eng1g90_msgsts = Com_GetIPDUStatus(MSG_ENG1G90_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
-    (void)Com_ReceiveSignal(ComConf_ComSignal_RDYIND, &u1_t_rdyind);
-
-    u1_t_eng1g02_msgsts = Com_GetIPDUStatus(MSG_ENG1G02_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
-    (void)Com_ReceiveSignal(ComConf_ComSignal_NE1, &s2_t_ne1);
-
-    u1_t_eco1s90_msgsts = Com_GetIPDUStatus(MSG_ECO1S90_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
-    (void)Com_ReceiveSignal(ComConf_ComSignal_ECOMODE3, &u1_t_ecomode3);
-#else   /* BEV Rebase provisionally */
-    u1_t_eng1g90_msgsts = (U1)COM_NO_RX;
-    u1_t_eng1g02_msgsts = (U1)COM_NO_RX;
-    u1_t_eco1s90_msgsts = (U1)COM_NO_RX;
-#endif   /* BEV Rebase provisionally */
-
-    if((u1_t_eng1g90_msgsts == (U1)0U  ) &&
-       (u1_t_rdyind         == (U1)TRUE)){
-        u1_t_rdyind_jdg_result = (U1)TRUE;
-    }
-
-    if(u1_t_eng1g02_msgsts  == (U1)0U){
-        if(s2_t_ne1         >  (S2)0){
-            u2_t_ne1 = (U2)s2_t_ne1;
-        }
-        u4_t_rpm = (U4)u2_t_ne1 * u4_s_ALERT_NE_RXCFNT;
-        u4_t_rpm = (u4_t_rpm + u4_s_ALERT_ROUND) >> u4_s_ALERT_LSR_CFCNT;
-
-        if(u4_t_rpm         > (U4)U2_MAX){
-            u1_t_ne1_jdg_result = (U1)TRUE;
-        }
-        else if(u4_t_rpm    >= u4_s_ALERT_400RPM){
-            u1_t_ne1_jdg_result = (U1)TRUE;
-        }
-        else if(u4_t_rpm    >= u4_s_ALERT_200RPM){
-            u1_t_ne1_jdg_result = u1_s_alert_ne1_jdg_result_pre;              /* keep last */
-        }
-        else{
-            /* Do Nothing */
-        }
-    }
-
-    if(u1_t_eco1s90_msgsts == (U1)0U){
-        u1_t_ecomode3            &= u1_s_ALERT_ECOMODE3_SGNL_MSK;
-        u1_t_ecomode3_jdg_result = u1_s_ALERT_ECOMODE3_JUDG_TBL[u1_t_ecomode3];
-    }
-
-    u1_t_eng_start = u1_t_rdyind_jdg_result | u1_t_ne1_jdg_result;
-    u1_t_eng_start |= u1_t_ecomode3_jdg_result;
-    u1_s_alert_ne1_jdg_result_pre = u1_t_ne1_jdg_result;
-
-    return(u1_t_eng_start);
 }
 /*===================================================================================================================================*/
 /*  static U1      u1_s_AlertToutchk(void)                                                                                           */
@@ -547,6 +423,8 @@ static U1      u1_s_AlertPowerChk(void)
 /*  5.4.0     9/20/2019  YI       u1_g_AlertReqByVehopemd was updated.                                                               */
 /*  5.5.0    10/31/2019  DS       u1_g_AlertReqByVehopemd was removed.                                                               */
 /*  5.6.0     6/30/2025  SF       BSW Update:u1_s_AlertToutchk was modified for Toyota BEVStep3.                                     */
+/*  5.7.0     1/28/2026  TH(K)    Change for BEV Full_function_2                               .                                     */
+/*                                Delete u1_s_AlertJudgeStartEngine                                                                  */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /*  19PFv3-1 08/06/2024  TH       Add function(u1_g_AlertGetReqSlot).                                                                */
@@ -562,5 +440,6 @@ static U1      u1_s_AlertPowerChk(void)
 /*  * SN   = Shimon Nambu, Denso Techno                                                                                              */
 /*  * SH   = Sae Hirose, Denso Techno                                                                                                */
 /*  * SF   = Seiya Fukutome, Denso Techno                                                                                            */
+/*  * TH(K)= Taisuke Hirakawa, KSE                                                                                                   */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

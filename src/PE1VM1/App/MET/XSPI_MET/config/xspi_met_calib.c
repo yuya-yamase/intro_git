@@ -38,9 +38,9 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define XSPI_CALIB_PAYLOAD_NUM                  (42U)
 
-#define XSPI_MCUID_U1_NUM                       (4U)
+#define XSPI_MCUID_U1_NUM                       (5U)
 #define XSPI_MCUID_U2_NUM                       (1U)
-#define XSPI_MCUID_OMSCHK_U1_NUM                (18U)
+#define XSPI_MCUID_OMSCHK_U1_NUM                (21U)
 #define XSPI_MCUID_OMSCHK_U2_NUM                (2U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -89,7 +89,8 @@ static const ST_XSPI_CALIB_U1 st_sp_XSPI_CALIB_U1[XSPI_MCUID_U1_NUM] = {
     {(U2) 1U,       (U1)XSPI_SHIFT_2BYTE,       &u1_CALIB_MCUID0219_G_GAUGE_MAX    },
     {(U2) 1U,       (U1)XSPI_SHIFT_3BYTE,       &u1_CALIB_MCUID0220_GTRAJECTORY2   },
     {(U2) 2U,       (U1)XSPI_SHIFT_NON,         &u1_CALIB_MCUID0221_G_DISP_MAX     },
-    {(U2)28U,       (U1)XSPI_SHIFT_NON,         &u1_CALIB_MCUID0430_RHEOSW         }
+    {(U2)28U,       (U1)XSPI_SHIFT_NON,         &u1_CALIB_MCUID0430_RHEOSW         },
+    {(U2)41U,       (U1)XSPI_SHIFT_2BYTE,       &u1_CALIB_MCUID1137_NEW_FMVSS208   }
 };
 
 static const ST_XSPI_CALIB_U2 st_sp_XSPI_CALIB_U2[XSPI_MCUID_U2_NUM] = {
@@ -116,7 +117,10 @@ static const ST_XSPI_CALIB_OMS_U1 st_sp_XSPI_CALIB_OMS_U1[XSPI_MCUID_OMSCHK_U1_N
     {(U2)40U,       (U1)XSPI_SHIFT_NON,         &u1_g_VardefOmusMCUID0215          },
     {(U2)40U,       (U1)XSPI_SHIFT_1BYTE,       &u1_g_VardefOmusMCUID0809          },
     {(U2)40U,       (U1)XSPI_SHIFT_2BYTE,       &u1_g_VardefOmusMCUID0810          },
-    {(U2)41U,       (U1)XSPI_SHIFT_NON,         &u1_g_VardefOmusMCUID0798          }
+    {(U2)40U,       (U1)XSPI_SHIFT_3BYTE,       &u1_g_VardefOmusMCUID3020          },
+    {(U2)41U,       (U1)XSPI_SHIFT_NON,         &u1_g_VardefOmusMCUID0798          },
+    {(U2)41U,       (U1)XSPI_SHIFT_1BYTE,       &u1_g_VardefOmusMCUID3025          },
+    {(U2)41U,       (U1)XSPI_SHIFT_3BYTE,       &u1_g_VardefOmusMCUID1138          }
 };
 
 static const ST_XSPI_CALIB_OMS_U2 st_sp_XSPI_CALIB_OMS_U2[XSPI_MCUID_OMSCHK_U2_NUM] = {

@@ -211,8 +211,6 @@ typedef struct{
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static inline U1    u1_s_VardefDestCfgCalibU1NumChk(const U1 u1_a_CALIBID, const U1 u1_a_NUM, const U1 u1_a_DEF);
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -768,32 +766,25 @@ U1      u1_g_VardefCfgBltDst(void)
 
         switch(u1_t_blt_const){
             case (U1)VDF_SEATBLT_MCUID1135:
-                u1_t_blt_calib = u1_s_VardefDestCfgCalibU1NumChk(u1_CALIB_MCUID1135_SBELT_USA, (U1)CALIB_SEATBELT_REGULATION_NUM,
-                                                                 (U1)CALIB_MCUID1135_DEF);
+                u1_t_blt_calib = u1_g_VardefOmusMCUID1135();
                 break;
             case (U1)VDF_SEATBLT_MCUID1136:
-                u1_t_blt_calib = u1_s_VardefDestCfgCalibU1NumChk(u1_CALIB_MCUID1136_SBELT_CAN, (U1)CALIB_SEATBELT_REGULATION_NUM,
-                                                                 (U1)CALIB_MCUID1136_DEF);
+                u1_t_blt_calib = u1_g_VardefOmusMCUID1136();
                 break;
             case (U1)VDF_SEATBLT_MCUID0604:
-                u1_t_blt_calib = u1_s_VardefDestCfgCalibU1NumChk(u1_CALIB_MCUID0604_SBELT_MEXICO, (U1)CALIB_SEATBELT_REGULATION_NUM,
-                                                                 (U1)CALIB_MCUID0604_DEF);
+                u1_t_blt_calib = u1_g_VardefOmusMCUID0604();
                 break;
             case (U1)VDF_SEATBLT_MCUID0605:
-                u1_t_blt_calib = u1_s_VardefDestCfgCalibU1NumChk(u1_CALIB_MCUID0605_SBELT_EU, (U1)CALIB_SEATBELT_REGULATION_NUM,
-                                                                 (U1)CALIB_MCUID0605_DEF);
+                u1_t_blt_calib = u1_g_VardefOmusMCUID0605();
                 break;
             case (U1)VDF_SEATBLT_MCUID0606:
-                u1_t_blt_calib = u1_s_VardefDestCfgCalibU1NumChk(u1_CALIB_MCUID0606_SBELT_KOREA, (U1)CALIB_SEATBELT_REGULATION_NUM,
-                                                                 (U1)CALIB_MCUID0606_DEF);
+                u1_t_blt_calib = u1_g_VardefOmusMCUID0606();
                 break;
             case (U1)VDF_SEATBLT_MCUID0607:
-                u1_t_blt_calib = u1_s_VardefDestCfgCalibU1NumChk(u1_CALIB_MCUID0607_SBELT_CHINA, (U1)CALIB_SEATBELT_REGULATION_NUM,
-                                                                 (U1)CALIB_MCUID0607_DEF);
+                u1_t_blt_calib = u1_g_VardefOmusMCUID0607();
                 break;
             default:
-                u1_t_blt_calib = u1_s_VardefDestCfgCalibU1NumChk(u1_CALIB_MCUID0605_SBELT_EU, (U1)CALIB_SEATBELT_REGULATION_NUM,
-                                                                 (U1)CALIB_MCUID0605_DEF);
+                u1_t_blt_calib = u1_g_VardefOmusMCUID0605();
                 break;
     }
         }
@@ -809,25 +800,6 @@ U1      u1_g_VardefCfgBltDst(void)
     u1_t_blt_dst = u1_s_BLTDST_TBL[u1_t_blt_calib];
 
     return(u1_t_blt_dst);
-}
-/*===================================================================================================================================*/
-/*  static inline U1    u1_s_VardefDestCfgCalibU1NumChk(const U1 u1_a_CALIBID, const U1 u1_a_NUM, const U1 u1_a_DEF)                 */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      const U1 u1_a_CALIBID                                                                                            */
-/*                  const U1 u1_a_NUM                                                                                                */
-/*                  const U1 u1_a_DEF                                                                                                */
-/*  Return:         U1 u1_t_ret                                                                                                      */
-/*===================================================================================================================================*/
-static inline U1    u1_s_VardefDestCfgCalibU1NumChk(const U1 u1_a_CALIBID, const U1 u1_a_NUM, const U1 u1_a_DEF)
-{
-    U1 u1_t_ret;
-
-    u1_t_ret = u1_a_CALIBID;
-    if(u1_t_ret >= u1_a_NUM){
-        u1_t_ret = u1_a_DEF;
-    }
-
-    return(u1_t_ret);
 }
 
 /*===================================================================================================================================*/

@@ -1,4 +1,4 @@
-/* 5.10.0 */
+/* 5.11.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define ALERT_D_SBW_C_MAJOR                      (5)
-#define ALERT_D_SBW_C_MINOR                      (10)
+#define ALERT_D_SBW_C_MINOR                      (11)
 #define ALERT_D_SBW_C_PATCH                      (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -39,7 +39,7 @@
 #define ALERT_D_SBW_PD_LBAT_NUM_DST              (16U)
 #define ALERT_D_SBW_PD_PSWF_NUM_DST              (16U)
 #define ALERT_D_SBW_PD_SBWF_NUM_DST              (16U)
-#define ALERT_D_SBW_PD_CHK_NUM_DST               (6U)
+#define ALERT_D_SBW_PD_CHK_NUM_DST               (2U)
 #define ALERT_D_SBW_PD_SFTF_NUM_DST              (8U)
 #define ALERT_D_SBW_PD_RIS_NUM_DST               (16U)
 #define ALERT_D_SBW_PD_NSFT_NUM_DST              (16U)
@@ -496,28 +496,16 @@ static const U1  u1_sp_ALERT_D_SBW_PD_SBWF_DST[ALERT_D_SBW_PD_SBWF_NUM_DST] = {
     (U1)ALERT_REQ_UNKNOWN                                                      /* 15 UNKNOWN                                         */
 };
 static const U4  u4_sp_ALERT_D_SBW_PD_CHK_CRIT[ALERT_D_SBW_PD_CHK_NUM_DST] = {
-    (U4)0x02000011U,                                                           /* 00 MSG6_SBW8                                       */
-    (U4)0x02000012U,                                                           /* 01 MSG6_SBW9                                       */
-    (U4)0x02000010U,                                                           /* 02 MSG_06                                          */
-    (U4)0x02000003U,                                                           /* 03 MSG_06                                          */
-    (U4)0x02000001U,                                                           /* 04 SBW8_ON                                         */
-    (U4)0x02000002U                                                            /* 05 SBW9_ON                                         */
+    (U4)0x02000010U,                                                           /* 00 MSG_06                                          */
+    (U4)0x02000003U                                                            /* 01 MSG_06                                          */
 };
 static const U4  u4_sp_ALERT_D_SBW_PD_CHK_MASK[ALERT_D_SBW_PD_CHK_NUM_DST] = {
-    (U4)0x0200007FU,                                                           /* 00 MSG6_SBW8                                       */
-    (U4)0x0200007FU,                                                           /* 01 MSG6_SBW9                                       */
-    (U4)0x02000070U,                                                           /* 02 MSG_06                                          */
-    (U4)0x0200000FU,                                                           /* 03 MSG_06                                          */
-    (U4)0x0200000FU,                                                           /* 04 SBW8_ON                                         */
-    (U4)0x0200000FU                                                            /* 05 SBW9_ON                                         */
+    (U4)0x02000070U,                                                           /* 00 MSG_06                                          */
+    (U4)0x0200000FU                                                            /* 01 MSG_06                                          */
 };
 static const U1  u1_sp_ALERT_D_SBW_PD_CHK_DST[ALERT_D_SBW_PD_CHK_NUM_DST] = {
-    (U1)ALERT_REQ_D_SBW_PD_CHK_MSG6_SBW8,                                      /* 00 MSG6_SBW8                                       */
-    (U1)ALERT_REQ_D_SBW_PD_CHK_MSG6_SBW9,                                      /* 01 MSG6_SBW9                                       */
-    (U1)ALERT_REQ_D_SBW_PD_CHK_MSG_06,                                         /* 02 MSG_06                                          */
-    (U1)ALERT_REQ_D_SBW_PD_CHK_MSG_06,                                         /* 03 MSG_06                                          */
-    (U1)ALERT_REQ_D_SBW_PD_CHK_SBW8_ON,                                        /* 04 SBW8_ON                                         */
-    (U1)ALERT_REQ_D_SBW_PD_CHK_SBW9_ON                                         /* 05 SBW9_ON                                         */
+    (U1)ALERT_REQ_D_SBW_PD_CHK_MSG_06,                                         /* 00 MSG_06                                          */
+    (U1)ALERT_REQ_D_SBW_PD_CHK_MSG_06                                          /* 01 MSG_06                                          */
 };
 static const U1  u1_sp_ALERT_D_SBW_PD_SFTF_DST[ALERT_D_SBW_PD_SFTF_NUM_DST] = {
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 00 UNKNOWN                                         */
@@ -1450,6 +1438,8 @@ static U4      u4_s_AlertD_sbwPdSfpfSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
 /*  5.8.0     1/15/2024  GM       Update for 19PFv3.                                                                                 */
 /*  5.9.0    11/ 4/2024  SHN      Change matrix table for PD_ACTF,sbwPdActfSrcchk function                                           */
 /*  5.10.0   11/19/2025  SH       Config BevStep3                                                                                    */
+/*  5.11.0    1/13/2026  HT       Change for Full_function2 (MET-M_REMWAR-CSTD-2-04-A-C0)                                            */
+/*                                Removed "ALERT_REQ" in order to transfer signal transmission control from the MCU to the SoC       */
 /*                                                                                                                                   */
 /*  * SN   = Shinichiro Naito, NTTD MSE                                                                                              */
 /*  * DS   = Daisuke Suzuki, NTTD MSE                                                                                                */
@@ -1462,5 +1452,6 @@ static U4      u4_s_AlertD_sbwPdSfpfSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
 /*  * GM   = Glen Monteposo, DTPH                                                                                                    */
 /*  * SHN  = Shimon nambu,Denso Techno                                                                                               */
 /*  * SH   = Sae Hirose, Denso Techno                                                                                                */
+/*  * HT   = Hibiki Tanii, KSE                                                                                                       */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
