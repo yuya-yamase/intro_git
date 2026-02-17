@@ -96,7 +96,7 @@ U1              u1_g_SbltwrnDestCfg(void)
     U1  u1_t_beltdest;
 
     u1_t_nfmvss = u1_s_SbltwrnCfgCalibU1NumChk(u1_CALIB_MCUID1137_NEW_FMVSS208, (U1)CALIB_MCUID1137_NUM, (U1)CALIB_MCUID1137_FMVSS208);
-    u1_t_brand = u1_s_SbltwrnCfgCalibU1NumChk(u1_CALIB_MCUID0024_BRAND, (U1)CALIB_MCUID0024_NUM, (U1)CALIB_MCUID0024_DEF);
+    u1_t_brand  = u1_g_VardefOmusMCUID0024();
     u1_t_dest = u1_g_VardefBltDstByPid();
     if(u1_t_dest >= (U1)VDF_NUM_SEATBLT_DEST){
         u1_t_dest = (U1)VDF_SEATBLT_DEST_USA;

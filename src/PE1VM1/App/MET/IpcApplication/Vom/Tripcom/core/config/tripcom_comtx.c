@@ -699,7 +699,7 @@ static  void    vd_s_TripcomCfgCanTxEC_SCL(void)
 /*  BEV3-02   02/11/2026 DT       Update TX can frame for BEV FF2 and delete not applied drive moni appli                            */
 /*  BEV3-03   02/12/2026 EA       Deleted/Deactivated other than BEV Powertrain processes                                            */
 /*  BEV3-04   01/30/2026 YN       Configured for BEVstep3_FF2.(MET-M_DESTVARI-CSTD-0-01)                                             */
-/*  BEV3-05   02/10/2026 SH       Change MCUID0250-0255 from Calibration to OMUSVIID                                                 */
+/*  BEV3-05   02/10/2026 SH       Change MCUID00255 from Calibration to OMUSVIID                                                     */
 /*                                                                                                                                   */
 /*  * HY   = Hidefumi Yoshida, Denso                                                                                                 */
 /*  * YA   = Yuhei Aoyama, DensoTechno                                                                                               */
