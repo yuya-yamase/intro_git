@@ -674,14 +674,11 @@ static inline void    vd_s_XSpiCfgTxHud(           U4 * u4_ap_pdu_tx) {
     u4_ap_pdu_tx[2] |= (U4)((U4)u1_g_HmiHudGetHudRot() & (U4)0x000000FFU) << 24;            /* HUD_ROT              */
     u4_ap_pdu_tx[3]  = (U4)u2_t_owduty;                                                     /* HUD_BLDUTY_OW        */
     u4_ap_pdu_tx[3] |= (U4)u2_g_HudImgAdjGetGvOwPos() << 16;                                /* HUD_VIPOS_POS_OW     */
-    u4_ap_pdu_tx[5]  = (U4)0U;
+    u4_ap_pdu_tx[4]  = (U4)u2_g_HudImgAdjGetMovReqPos();                                    /* HUD_VIPOS_REQPOS     */
+    u4_ap_pdu_tx[5]  = (U4)u1_g_HudImgAdjGetMovReqID();                                     /* HUD_VIPOS_REQID      */
     u4_ap_pdu_tx[5] |= (U4)((U4)u1_t_owdutyreq & (U4)0x00000001U) << 8;                     /* HUD_BLDUTY_OWREQ     */
     u4_ap_pdu_tx[5] |= (U4)((U4)u1_g_HudImgAdjGetGvOwReq() & (U4)0x00000001U) << 9;         /* HUD_VIPOS_POS_OWREQ  */
     u4_ap_pdu_tx[5] |= (U4)((U4)u1_g_HudImgAdjGetGvRtctlIniReq() & (U4)0x00000001U) << 10;  /* HUD_VIPOS_INIT_OWREQ */
-#if 0   /* BEV Rebase provisionally */
-    u4_ap_pdu_tx[1]  = (U4)u2_g_HudImgAdjGetMovReqPos();                                    /* HUD_VIPOS_REQPOS     */
-    u4_ap_pdu_tx[2]  = (U4)u1_g_HudImgAdjGetMovReqID();                                     /* HUD_VIPOS_REQID      */
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -1184,6 +1181,7 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*  BEV-36    02/03/2026 JS       Change config for BEV Full_Function_2                                                              */
 /*                                MET-B_MWBB-CSTD-0-02-A-C0                                                                          */
 /*                                Change storage for SYS_SW_MULTI_WEATHERLAMP value                                                  */
+/*  BEV-37    02/03/2026 SN(K)    Change for BEV FF2.(BEV3CDCMET-3779 Restore HUD display position save/notification processing.)    */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * KM   = Keisuke Mashita, Denso Techno                                                                                           */

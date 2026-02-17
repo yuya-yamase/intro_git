@@ -1,4 +1,4 @@
-/* 2.2.4 */
+/* 2.2.5 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define HUDIMGADJ_C_MAJOR                        (2)
 #define HUDIMGADJ_C_MINOR                        (2)
-#define HUDIMGADJ_C_PATCH                        (4)
+#define HUDIMGADJ_C_PATCH                        (5)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -275,7 +275,6 @@ static U1   u1_s_himgadj_dgrtinitreq;
 /*---------------------------------------------------------------------------*/
 static const U2 u2_sp_HUDIMGADJ_TBL_NVMCID_DRVPSDT[HUDIMGADJ_NUM_DRVPS_DT] =
 {
-#if 0   /* BEV Rebase provisionally */
     (U2)U2_MAX,                            /* Position Request None */
     (U2)NVMCID_U2_DRVPS_MRRPOS01,          /* User1 Memory No1      */
     (U2)NVMCID_U2_DRVPS_MRRPOS02,          /* User1 Memory No2      */
@@ -292,24 +291,6 @@ static const U2 u2_sp_HUDIMGADJ_TBL_NVMCID_DRVPSDT[HUDIMGADJ_NUM_DRVPS_DT] =
     (U2)NVMCID_U2_DRVPS_MRRPOS13,          /* Guest Memory No1      */
     (U2)NVMCID_U2_DRVPS_MRRPOS14,          /* Guest Memory No2      */
     (U2)NVMCID_U2_DRVPS_MRRPOS15           /* Guest Memory No3      */
-#else   /* BEV Rebase provisionally */
-    (U2)U2_MAX,
-    (U2)U2_MAX,
-    (U2)U2_MAX,
-    (U2)U2_MAX,
-    (U2)U2_MAX,
-    (U2)U2_MAX,
-    (U2)U2_MAX,
-    (U2)U2_MAX,
-    (U2)U2_MAX,
-    (U2)U2_MAX,
-    (U2)U2_MAX,
-    (U2)U2_MAX,
-    (U2)U2_MAX,
-    (U2)U2_MAX,
-    (U2)U2_MAX,
-    (U2)U2_MAX
-#endif   /* BEV Rebase provisionally */
 };
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -1077,11 +1058,7 @@ static U2 u2_s_HudImgAdjDrvPsReadData(const U1 u1_a_ID)
     u2_t_read_data = (U2)HUDIMGADJ_RDDTUNDEF;
     if(((U1)HUDIMGADJ_DRVPSDT_01 <= u1_a_ID                   ) &&
        (u1_a_ID                  <  (U1)HUDIMGADJ_NUM_DRVPS_DT)){
-#if 0   /* BEV Rebase provisionally */
         u1_t_nvmc_rsp = u1_g_Nvmc_ReadU2withSts(u2_sp_HUDIMGADJ_TBL_NVMCID_DRVPSDT[u1_a_ID], &u2_t_read_data);
-#else   /* BEV Rebase provisionally */
-        u1_t_nvmc_rsp = (U1)NVMC_STATUS_NG;
-#endif   /* BEV Rebase provisionally */
         if((u1_t_nvmc_rsp == (U1)NVMC_STATUS_COMP) ||
            (u1_t_nvmc_rsp == (U1)NVMC_STATUS_READING)){
             u2_t_data = u2_t_read_data;
@@ -1226,9 +1203,7 @@ static void vd_s_HudImgAdjDrvPsMemUpdt(const U4 u4_a_SGNL, const U1 u1_a_ID)
 
     if(u1_t_isvld == (U1)TRUE){
         u2_sp_himgadj_imgpos[u1_a_ID] = u2_t_imgpos;
-#if 0   /* BEV Rebase provisionally */
         vd_g_Nvmc_WriteU2(u2_sp_HUDIMGADJ_TBL_NVMCID_DRVPSDT[u1_a_ID], u2_t_imgpos);
-#endif   /* BEV Rebase provisionally */
     }
 }
 
@@ -1710,6 +1685,8 @@ U1      u1_g_HudImgAdjGetGvRtctlIniReq(void)
 /* 2.2.2              2024.08.06  His     Routine Control Result Value was revised.                                                  */
 /* 2.2.3              2024.09.13  His     DID 280C was revised. (u2_s_HudImgAdjowimgpos and u1_g_HudImgAdjReadDataImgPos)            */
 /* 2.2.4              2025.03.17  YuK     Removed the max and min limits for HUD position regeneration.                              */
+/* 2.2.5              2026.02.03  SN      Change for BEV FF2.(MET-B_DRVPOSMEM-CSTD-1-00-A-C0)                                        */
+/*                                        Restore the write and read processing in the Motor Position Memory Update Function.        */
 /*                                                                                                                                   */
 /*  Revision         Date        Author   Change Description                                                                         */
 /* ---------------   ----------  ------  ------------------------------------------------------------------------------------------- */
@@ -1719,6 +1696,7 @@ U1      u1_g_HudImgAdjGetGvRtctlIniReq(void)
 /*  * HiS = Hidenobu Suzuki, MSE                                                                                                     */
 /*  * HT  = Hideki Takagi,   MSE                                                                                                     */
 /*  * YuK = Yuki Koshimae,   MSE                                                                                                     */
+/*  * SN  = Shizuka Nakajima,KSE                                                                                                     */
 /*  * HH  = Hiroki Hara,     Denso Techno                                                                                            */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
