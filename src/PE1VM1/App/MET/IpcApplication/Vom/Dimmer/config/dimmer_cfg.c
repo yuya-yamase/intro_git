@@ -32,9 +32,11 @@
 #if 0   /* BEV Rebase provisionally */
 #include "iohw_adc_sh.h"
 #endif   /* BEV Rebase provisionally */
+#include "mcst.h"
 #include "hmiscreen.h"
 
 #include "calibration.h"
+#include "vardef.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -294,24 +296,25 @@ void    vd_g_DimUsadjbySwCfgNvmRead(U2 * u2_ap_lvl)
 {
     U1         u1_t_rheo_pos;
     U2         u2_t_lvl;
-    
-#if 0   /* BEV Rebase provisionally */
-    u2_t_lvl = (U2)u1_g_McstBf((U1)MCST_BFI_RHEO_DAY);
-#else   /* BEV Rebase provisionally */
-    u2_t_lvl = (U2)DIM_USADJ_BY_SW_NUM_LVL;
-#endif   /* BEV Rebase provisionally */
+    U4         u4_t_chk_value;
+
+    u4_t_chk_value = u4_g_McstBf((U1)MCST_BFI_RHEO_DAY);
+    if(u4_t_chk_value > (U4)U2_MAX){
+        u4_t_chk_value = (U4)U2_MAX;
+    }
+    u2_t_lvl = (U2)u4_t_chk_value;
     if(u2_t_lvl > (U2)DIM_USADJ_BY_SW_LVL_MAX){
         u2_ap_lvl[DIM_DAYNIGHT_LVL_DAY] = (U2)DIM_USADJ_BY_SW_LVL_MAX;
     }
     else{
         u2_ap_lvl[DIM_DAYNIGHT_LVL_DAY] = u2_t_lvl;
     }
-    
-#if 0   /* BEV Rebase provisionally */
-    u2_t_lvl = (U2)u1_g_McstBf((U1)MCST_BFI_RHEO_NIGHT);
-#else   /* BEV Rebase provisionally */
-    u2_t_lvl = (U2)DIM_USADJ_BY_SW_NUM_LVL;
-#endif   /* BEV Rebase provisionally */
+
+    u4_t_chk_value = u4_g_McstBf((U1)MCST_BFI_RHEO_NIGHT);
+    if(u4_t_chk_value > (U4)U2_MAX){
+        u4_t_chk_value = (U4)U2_MAX;
+    }
+    u2_t_lvl = (U2)u4_t_chk_value;
     if(u2_t_lvl > (U2)DIM_USADJ_BY_SW_LVL_MAX){
         u1_t_rheo_pos = u1_s_DimCfgCalibU1MaxChk(u1_CALIB_MCUID0340_RHEOPOS_NIGHT, (U1)CALIB_MCUID0340_MAX, (U1)CALIB_MCUID0340_DEF);
         u2_ap_lvl[DIM_DAYNIGHT_LVL_NIGHT] = (U2)u1_t_rheo_pos;
@@ -333,13 +336,11 @@ void    vd_g_DimUsadjbySwCfgNvmWrite(const U2 * u2_ap_LVL)
 #if 0   /* BEV Rebase provisionally */
     u1_t_esi_chk = u1_g_ESInspectMdBfield();
 #else   /* BEV Rebase provisionally */
-    u1_t_esi_chk = (U1)1U;
+    u1_t_esi_chk = (U1)0U;
 #endif   /* BEV Rebase provisionally */
     if(u1_t_esi_chk == (U1)0U){
-#if 0   /* BEV Rebase provisionally */
-        vd_g_McstBfPut((U1)MCST_BFI_RHEO_DAY,   (U1)u2_ap_LVL[DIM_DAYNIGHT_LVL_DAY]  );
-        vd_g_McstBfPut((U1)MCST_BFI_RHEO_NIGHT, (U1)u2_ap_LVL[DIM_DAYNIGHT_LVL_NIGHT]);
-#endif   /* BEV Rebase provisionally */
+        vd_g_McstBfPut((U1)MCST_BFI_RHEO_DAY,   (U4)u2_ap_LVL[DIM_DAYNIGHT_LVL_DAY]  );
+        vd_g_McstBfPut((U1)MCST_BFI_RHEO_NIGHT, (U4)u2_ap_LVL[DIM_DAYNIGHT_LVL_NIGHT]);
     }
 }
 /*===================================================================================================================================*/
@@ -353,9 +354,9 @@ U1      u1_g_DimUsadjbySwCfgComRxTAIL(U1 * u1p_a_tail)
     U1          u1_t_rx_chk;
     U1          u1_t_tail_sup;
 
-    u1_t_tail_sup = u1_CALIB_MCUID0341_TAIL;
+    u1_t_tail_sup = u1_g_VardefOmusMCUID0341();
 
-    if(u1_t_tail_sup == (U1)TRUE){
+    if(u1_t_tail_sup == (U1)CALIB_MCUID0341_ON){
         (void)Com_ReceiveSignal(ComConf_ComSignal_TAIL, u1p_a_tail);
         u1_t_rx_chk = Com_GetIPDUStatus(MSG_BDB1S03_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
     }
@@ -414,6 +415,7 @@ static inline U1    u1_s_DimCfgCalibU1MaxChk(const U1 u1_a_CALIBID, const U1 u1_
 /*  BEV-1    06/30/2025  SF       BSW Update:u1_g_DimDaynightCfgRxEnabled was modified                                               */
 /*  BEV-2    10/10/2025  KO       Configured for BEVstep3_Rebase                                                                     */
 /*  BEV-3    01/21/2026  KO       Change dimming judgment signal from ADIM to ADIM2 for FF2                                          */
+/*  BEV-4    02/10/2026  SH(DT)   Change MCUID0341 from Calibration to OMUSVIID                                                      */
 /*                                                                                                                                   */
 /*  * TN     = Takashi Nagai, DENSO                                                                                                  */
 /*  * SH     = Shota Higashide                                                                                                       */
@@ -424,5 +426,6 @@ static inline U1    u1_s_DimCfgCalibU1MaxChk(const U1 u1_a_CALIBID, const U1 u1_
 /*  * TN(DT) = Tetsushi Nakano, Denso Techno                                                                                         */
 /*  * SF     = Seiya Fukutome, Denso Techno                                                                                          */
 /*  * KO     = Kazuto Oishi,  Denso Techno                                                                                           */
+/*  * SH(DT) = Sae Hirose, Denso Techno                                                                                              */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

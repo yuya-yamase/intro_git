@@ -31,6 +31,8 @@
 
 /* Complex Device Driver */
 #include "sound_cri_mgr.h"
+/* Security              */
+#include "oxsec.h"
 /* MCAL                  */
 /* Memory                */
 #include "nvmc_mgr.h"
@@ -103,6 +105,7 @@ U1      u1_g_RunMCfghkShtdwnchk1st(void)
         &u1_g_oXDoCANShtdwnOk,
 #else
 #endif
+        &u1_g_oXSECShtdwnOk,
         &u1_g_Nvmc_IsShtdwnOk,
         &u1_g_SoundCriMgrShtdwnOk,
         &u1_g_HmiProxyShtdwnOK

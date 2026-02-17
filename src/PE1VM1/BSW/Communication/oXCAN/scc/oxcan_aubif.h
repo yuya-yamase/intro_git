@@ -43,6 +43,22 @@ void    Aubist_UsrSetWakeupEvent(const uint32 u4_a_SRC);
 void    vd_g_oXCANAubIfE2eInit(void);
 #endif /* #if ((OXCAN_E2E_NUM_REC > 0U) || (OXCAN_E2E_NUM_REC > 0U)) */
 
+#if (OXCAN_OMA_SEV_GEN == 1U)
+void    vd_g_oXCANAubIfOMAInit(void);
+#endif /* #if (OXCAN_OMA_SEV_GEN == 1U) */
+
+#if (BSW_BSWM_CS_FUNC_UPPERCDD1 == BSW_USE)
+void               BswM_CS_Cdd1UpTxConfirmation(PduIdType TxPduId, Std_ReturnType result);
+Std_ReturnType     BswM_CS_Cdd1UpTriggerTx(PduIdType TxPduId, PduInfoType* PduInfoPtr);
+void               BswM_CS_Cdd1UpRxIndication(PduIdType RxPduId, BswConstR PduInfoType* PduInfoPtr);
+BufReq_ReturnType  BswM_CS_Cdd1UpCopyTxData
+                   (PduIdType id, BswConstR PduInfoType* info, BswConstR RetryInfoType* retry, PduLengthType* availableDataPtr);
+void               BswM_CS_Cdd1UpTpTxConfirmation(PduIdType id, Std_ReturnType result);
+BufReq_ReturnType  BswM_CS_Cdd1UpStartOfReception
+                   (PduIdType id, BswConstR PduInfoType* info, PduLengthType TpSduLength, PduLengthType* bufferSizePtr) ;
+BufReq_ReturnType  BswM_CS_Cdd1UpCopyRxData(PduIdType id, BswConstR PduInfoType* info, PduLengthType* bufferSizePtr) ;
+void               BswM_CS_Cdd1UpTpRxIndication(PduIdType id, Std_ReturnType result);
+#endif /* (BSW_BSWM_CS_FUNC_UPPERCDD1 == BSW_USE) */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

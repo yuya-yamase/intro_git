@@ -1,4 +1,4 @@
-/* 2.2.1 */
+/* 3.1.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -9,9 +9,9 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define SBLTWRN_C_MAJOR                         (2)
-#define SBLTWRN_C_MINOR                         (2)
-#define SBLTWRN_C_PATCH                         (1)
+#define SBLTWRN_C_MAJOR                         (3)
+#define SBLTWRN_C_MINOR                         (1)
+#define SBLTWRN_C_PATCH                         (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -20,6 +20,7 @@
 #include "memfill_u1.h"
 #include "memfill_u2.h"
 #include "sbltwrn.h"
+#include "sbltwrn_private.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -36,22 +37,15 @@
 #error "sbltwrn.c and sbltwrn_cfg_private.h : source and header files are inconsistent!"
 #endif
 
+#if ((SBLTWRN_C_MAJOR != SBLTWRN_PRIVATE_H_MAJOR) || \
+     (SBLTWRN_C_MINOR != SBLTWRN_PRIVATE_H_MINOR) || \
+     (SBLTWRN_C_PATCH != SBLTWRN_PRIVATE_H_PATCH))
+#error "sbltwrn.c and sbltwrn_private.h : source and header files are inconsistent!"
+#endif
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define     SBLTWRN_NUM_SEATTYP                 (5U)            /* A number of seat type */
-#define     SBLTWRN_SEATTYP_UNDEF               (0U)            /* Undefined */
-#define     SBLTWRN_SEATTYP_DS                  (1U)            /* D-Seat */
-#define     SBLTWRN_SEATTYP_PS                  (2U)            /* P-Seat */
-#define     SBLTWRN_SEATTYP_RS_SNSR             (3U)            /* Rr-Seat (with occupant detection sensor) */
-#define     SBLTWRN_SEATTYP_RS_NOSN             (4U)            /* Rr-Seat (without occupant detection sensor) */
-
-#define     SBLTWRN_SEATTYPBIT_DS               (0x02U)
-#define     SBLTWRN_SEATTYPBIT_PS               (0x04U)
-#define     SBLTWRN_SEATTYPBIT_FR_ALL           (SBLTWRN_SEATTYPBIT_DS | SBLTWRN_SEATTYPBIT_PS)
-#define     SBLTWRN_SEATTYPBIT_RS_SNSR          (0x08U)
-#define     SBLTWRN_SEATTYPBIT_RS_NOSN          (0x10U)
-#define     SBLTWRN_SEATTYPBIT_RS_ALL           (SBLTWRN_SEATTYPBIT_RS_SNSR | SBLTWRN_SEATTYPBIT_RS_NOSN)
 
 #define     SBLTWRN_CHMFLG_CNT_LGLTMR           (0x01U)         /* Legal warn timer cnt-up    */
 #define     SBLTWRN_CHMFLG_CNT_GPTMR            (0x02U)         /* GP timer cnt-up    */
@@ -60,25 +54,6 @@
 #define     SBLTWRN_CHMFLG_SSPND_GPLV1          (0x10U)         /* GP_Lv1 suspend flag */
 #define     SBLTWRN_CHMFLG_SSPND_LV2            (0x20U)         /* Lv2 suspend flag    */
 #define     SBLTWRN_CHMFLG_GPTIM_CTL            (0x40U)         /* GP timer cnt-up flag    */
-
-#define     SBLTWRN_CTLOPT_NON                  (0x00000000U)   /* No ctlopt */
-#define     SBLTWRN_CTLOPT_PRKWRN               (0x00000001U)   /* Continue a seatbelt warning when the vehicle is parked */
-
-#define     SBLTWRN_CMNOPT_NON                  (0x00000000U)   /* No cmnopt */
-#define     SBLTWRN_CMNOPT_TTBKLEDG_ENA         (0x00000001U)   /* Rear TT turns on when other rear belt is buckled */
-#define     SBLTWRN_CMNOPT_SNSR_L2CMP_ON        (0x00000002U)   /* Rear TT turns on when rear warn state is L2CMP (w/i seatsnsr) */
-#define     SBLTWRN_CMNOPT_NOSN_L2CMP_ON        (0x00000004U)   /* Rear TT turns on when rear warn state is L2CMP (w/o seatsnsr) */
-
-#define     SBLTWRN_NUM_TIM                     (9U)            /* A number of definition of time */
-#define     SBLTWRN_TIM_LGLST                   (0U)
-#define     SBLTWRN_TIM_LGLTO                   (1U)
-#define     SBLTWRN_TIM_GP                      (2U)
-#define     SBLTWRN_TIM_LV1                     (3U)
-#define     SBLTWRN_TIM_LV2                     (4U)
-#define     SBLTWRN_TIM_IGON                    (5U)
-#define     SBLTWRN_TIM_DOOR                    (6U)
-#define     SBLTWRN_TIM_TTON                    (7U)
-#define     SBLTWRN_TIM_TTBKLEDG                (8U)
 
 #define     SBLTWRN_CHMOPT_MSK                  (0xFFFFFF00U)
 #define     SBLTWRN_CHMOPT_LGLTM_CNTUP          (0x00000100U)
@@ -138,45 +113,12 @@
 
 #define     SBLTWRN_TTSTCHK_OTHWRN              ((1U << SBLTWRN_TTSTS_RR_PARK) | (1U << SBLTWRN_TTSTS_RR_LWSP) | (1U << SBLTWRN_TTSTS_RR_LV1) | (1U << SBLTWRN_TTSTS_RR_LV2) | (1U << SBLTWRN_TTSTS_RR_L2CMP_ON))   /* Other seat warning is active */
 
-#define     SBLTWRN_TT_IGONTM_OFST              (500U/SBLTWRN_TICK)     /* Additional time to guarantee IG-ON Telltale keeps turning on 66 sec */
-
-#define     SBLTWRN_CHM_SYNCCND_CHK             (0x8000U)       /* Sync status with other seats (for chime)    */
-#define     SBLTWRN_TT_SYNCCND_CHK              (0x80000000U)   /* Sync status with other seats (for telltale) */
-
-#define     SBLTWRN_SBRBIT_IDX_ALL              (2U)
-#define     SBLTWRN_SBRBIT_IDX0                 (0U)
-#define     SBLTWRN_SBRBIT_IDX1                 (1U)
-
-#define     SBLTWRN_NUM_3ROWSEAT                (9U)
-#define     SBLTWRN_DRV_SEAT_BIT_IDX_ALL        (0xFFU)
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-/* 'Per-Seat' parameter */
-typedef struct {
-    U4          u4_ctlopt;  /* SBLTWRN_CTLOPT_xxx */
-    U2          u2p_tim[SBLTWRN_NUM_TIM];
-} ST_SBLTWRN_WRNPRM;
-
-/* Common parameter */
-typedef struct {
-    U4          u4_cmnopt;  /* SBLTWRN_CMNOPT_xxx */
-    U2          u2p_spd[SBLTWRN_NUM_SPD];
-} ST_SBLTWRN_VCLPRM;
-
-typedef struct {
-    const ST_SBLTWRN_WRNPRM     *stp_wrnprm;    /* WRNPRM array pointer (ordered by seattyp) */
-    const ST_SBLTWRN_VCLPRM     *stp_vclprm;    /* VCLPRM pointer */
-    U4                          u4_vclsts;      /* vehicle status (SBLTWRN_VCLSTS_xxx) */
-    U2                          u2_igontm;      /* the time after IG-ON */
-    U2                          u2_bkledgtmr;   /* the time after some rear seats are buckled */
-    U1                          u1p_bklsts[SBLTWRN_NUM_ALLSEAT]; /* buckle status (SBLTWRN_BKLSTS_xxx) */
-} ST_SBLTWRN_VCLST;
-
 typedef struct {
     U2  u2p_timer[SBLTWRN_NUM_CHMTIMER];   /* Elapsed Timer Counter */
     U1  u1_ctlsts;      /* Chime Status */
@@ -189,29 +131,6 @@ typedef struct {
     U1  u1_flg;
 } ST_SBLTWRN_TTST;
 
-typedef U4 ( * SBLTWRN_CHMTYP)(const U1 u1_a_SEATID, const U1 u1_a_SEATTYP, const ST_SBLTWRN_VCLST *stp_a_VCLSTS, const U2 u2_a_SYNC_TRGT);
-typedef U4 SBLTWRN_TTSTM(const U1 u1_a_SEATID, const U1 u1_a_SEATTYP, const ST_SBLTWRN_VCLST *stp_a_VCLSTS, const U4 u4_a_SYNC_TRGT);
-
-typedef struct {
-    const SBLTWRN_CHMTYP *      fp_u4_CHMTYP;     /* State Transition Judgement */
-    const U1                    u1_NUM_CHMTYP;
-} ST_SBLTWRN_CHMTYP;
-
-typedef struct {
-    const SBLTWRN_TTSTM *       fp_u4_STM;     /* State Transition Judgement */
-    const U1                    u1_TYPMSK;      /* Seattype Mask              */
-} ST_SBLTWRN_TT_STM;
-
-typedef struct {
-    const ST_SBLTWRN_TT_STM *   st_TTSTM;     /* State Transition Judgement */
-    const U1                    u1_NUM_TTTYP;
-} ST_SBLTWRN_TTTYP;
-
-typedef struct{
-    U1  u1_idx;
-    U1  u1_wrtbit;
-} ST_SBLTWRN_STSTBL;
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -222,25 +141,22 @@ static  U2                      u2_s_sbltwrn_bkledgtmr;
 static  U2                      u2_s_sbltwrn_unbklflg;
 static  U2                      u2_s_sbltwrn_failsts;
 static  U1                      u1_s_sbltwrn_precfg;
-static  U1                      u1_sp_sbltwrn_stvarcfg[SBLTWRN_NUM_ALLSEAT];
 static  U1                      u1_sp_sbltwrn_sbrbit[SBLTWRN_SBRBIT_IDX_ALL];
 static  U1                      u1_sp_sbltwrn_sbr_oldsts[SBLTWRN_NUM_3ROWSEAT];
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+static        void    vd_s_SbltwrnTrans(const U1 u1_a_DSTTYP);
 static        void    vd_s_SbltwrnVarChgChk(const U1 u1_a_DSTTYP);
 static        void    vd_s_SbltwrnBklEdgChk(ST_SBLTWRN_VCLST *stp_a_vclsts);
 static        void    vd_s_SbltwrnUnbkleFlgPostChk(void);
 static        void    vd_s_SbltwrnStm(const ST_SBLTWRN_VCLST *stp_a_VCLSTS);
 static        void    vd_s_SbltwrnChimeStm(const ST_SBLTWRN_VCLST *stp_a_VCLSTS);
-static        U1      u1_s_SbltwrnChmStmVldChk(const U1 u1_a_SEATID, const U1 u1_a_SEATTYP, const ST_SBLTWRN_VCLST *stp_a_VCLSTS);
 static        void    vd_s_SbltwrnTtStm(const ST_SBLTWRN_VCLST *stp_a_VCLSTS);
 static        U1      u1_s_SbltwrnTtStmVldChk(const U1 u1_a_SEATID, const U1 u1_a_SEATTYP, const ST_SBLTWRN_VCLST *stp_a_VCLSTS);
 static        void    vd_s_SbltwrnTtTimAct(ST_SBLTWRN_TTST *stp_a_ttsts, const U4 u4_a_VCLSTS, U4 u4_a_ttopt, const U1 u1_a_SEATTYP, const U1 u1_a_CNT_UP);
 static        U4      u4_s_SbltwrnChimeCnd(const U1 u1_a_SEATID, const U1 u1_a_SEATTYP, const ST_SBLTWRN_VCLST *stp_a_VCLSTS, const U2 u2_a_SYNC_TRGT);
-static        U1      u1_s_SbltwrnDrchk(const U4 u4_a_VCLSTS, const U1 u1_a_SEATTYP, const U1 u1_a_ANYDR);
-static        U1      u1_s_SbltwrnSeatTyp(const U1 u1_a_SEATID);
 static        void    vd_s_SbltwrnChimeFlgPreChk(const ST_SBLTWRN_VCLST *stp_a_VCLSTS, ST_SBLTWRN_CHMST *stp_a_chmsts, const U1 u1_a_SEATID);
 static        U4      u4_s_SbltwrnChimeFlgPostChk(const ST_SBLTWRN_VCLST *stp_a_VCLSTS, const U1 u1_a_SEATID, const U4 u4_a_CHMOPT, const U1 u1_a_GPFLG_PREV);
 static        void    vd_s_SbltwrnChimeTimAct(ST_SBLTWRN_CHMST *stp_a_chmsts, const U4 u4_a_CHMOPT, const U1 u1_a_CNT_UP);
@@ -324,455 +240,14 @@ static        U4      u4_s_SbltwrnTtTrns_condNStoP(const U1 u1_a_SEATID, const U
 static        U4      u4_s_SbltwrnTtTrns_condNStoQ(const U1 u1_a_SEATID, const U1 u1_a_SEATTYP, const ST_SBLTWRN_VCLST *stp_a_VCLSTS, const U4 u4_a_SYNC_TRGT);
 static        U1      u1_s_SbltwrnTtTrns_ChmStsChk(const U1 u1_a_SEATID, const U1 u1_a_CHK_ITEM);
 static        U4      u4_s_SbltwrnTtStmCnd(const U1 u1_a_SEATID, const U1 u1_a_SEATTYP, const ST_SBLTWRN_VCLST *stp_a_VCLSTS, const U4 u4_a_SYNC_TRGT);
-static        void    vd_s_SbltwrnSeatsts(const U4 u4_a_VCLSTS, const U1 *u1_ap_MSGSTS, U1 *u1_ap_bklsts);
-static        void    vd_s_SbltwrnMsgsts(const U1 u1_a_IGON, U1 *u1_ap_msgsts);
-static        U1      u1_s_SbltwrnMsgjdg(const U1 u1_a_MSGSTS);
 static        U1      u1_s_SbltwrnChmTrns_GptmChk(const U1 u1_a_SEATID, const U1 u1_a_SEATTYP, const ST_SBLTWRN_VCLST *stp_a_VCLSTS, const U2 u2_a_SYNC_TRGT);
 static        void    vd_s_SbltwrnInitChmsts(ST_SBLTWRN_CHMST *stp_a_chmsts);
 static        void    vd_s_SbltwrnInitTtsts(ST_SBLTWRN_TTST *stp_a_ttsts);
-static        void    vd_s_SbltwrnTmcnt(U2* u2p_a_timer);
-static        void    vd_s_SbltwrnGetCalibSupd(void);
-static        void    vd_s_SbltwrnGetCalibRear1(void);
-static        void    vd_s_SbltwrnGetCalibRear2(void);
-static        void    vd_s_SbltwrnGetCalibRear3(void);
 static        void    vd_s_SbltwrnSbrBzrChgDet(void);
-static inline U1      u1_s_SbltwrnCalibU1MaxChk(const U1 u1_a_CALIBID, const U1 u1_a_MAX, const U1 u1_a_DEF);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static  U1      (* const  fp_sp_SEATFUNC[SBLTWRN_NUM_SEAT_FUNC])(const U1* u1_ap_MSGSTS, const U4 u4_a_SEATID, const U4 u4_a_VCLSTS) = {
-    &u1_g_SbltDs,                                                                        /*  00 SBLTWRN_SEAT_DS                      */
-    &u1_g_SbltPs,                                                                        /*  01 SBLTWRN_SEAT_PS                      */
-    &u1_g_SbltFc,                                                                        /*  02 SBLTWRN_SEAT_FC                      */
-    &u1_g_SbltRsRxbklpdc,                                                                /*  03 SBLTWRN_SEAT_RS_RXBKLPDC             */
-    &u1_g_SbltRsRxbklpdc_Rxosw,                                                          /*  04 SBLTWRN_SEAT_RS_RXBKLPDC_RXOSW       */
-    &u1_g_SbltRsXrxbkl,                                                                  /*  05 SBLTWRN_SEAT_RS_XRXBKL               */
-    &u1_g_SbltRsXrxbkl_Rxxosw,                                                           /*  06 SBLTWRN_SEAT_RS_XRXBKL_RXXOSW        */
-};
-
-static const U1                 u1_sp_SBLTWRN_SEATTYP[SBLTWRN_NUM_SEAT_FUNC] = {
-    (U1)SBLTWRN_SEATTYP_DS,
-    (U1)SBLTWRN_SEATTYP_PS,
-    (U1)SBLTWRN_SEATTYP_PS,
-    (U1)SBLTWRN_SEATTYP_RS_NOSN,
-    (U1)SBLTWRN_SEATTYP_RS_SNSR,
-    (U1)SBLTWRN_SEATTYP_RS_NOSN,
-    (U1)SBLTWRN_SEATTYP_RS_SNSR
-};
-
-static const ST_SBLTWRN_WRNPRM  st_sp_SBLTWRN_US_SB_PRM[SBLTWRN_NUM_SEATTYP] = {
-    /* (Undefined) */
-    {
-        (U4)SBLTWRN_CTLOPT_NON,
-        {
-          (U2)(1800U / SBLTWRN_TICK),  (U2)(7800U / SBLTWRN_TICK),  (U2)(18000U / SBLTWRN_TICK), (U2)(6000U / SBLTWRN_TICK), (U2)(100000U / SBLTWRN_TICK),
-          (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(U2_MAX)
-        }
-    },
-    /* D-Seat */
-    {
-        (U4)SBLTWRN_CTLOPT_NON,
-        {
-          (U2)(1800U / SBLTWRN_TICK),  (U2)(7800U / SBLTWRN_TICK),  (U2)(18000U / SBLTWRN_TICK), (U2)(6000U / SBLTWRN_TICK), (U2)(100000U / SBLTWRN_TICK),
-          (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(U2_MAX)
-        }
-    },
-    /* P-Seat */
-    {
-        (U4)SBLTWRN_CTLOPT_NON,
-        {
-          (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(18000U / SBLTWRN_TICK), (U2)(6000U / SBLTWRN_TICK), (U2)(100000U / SBLTWRN_TICK),
-          (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(U2_MAX)
-        }
-    },
-    /* Rr-Seat (with occupant detection sensor) */
-    {
-        (U4)SBLTWRN_CTLOPT_NON,
-        {
-          (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(18000U / SBLTWRN_TICK), (U2)(6000U / SBLTWRN_TICK), (U2)(66000U / SBLTWRN_TICK),
-          (U2)(66000U / SBLTWRN_TICK), (U2)(66000U / SBLTWRN_TICK), (U2)(66000U / SBLTWRN_TICK), (U2)(U2_MAX)
-}
-    },
-    /* Rr-Seat (w/o  occupant detection sensor) */
-    {
-        (U4)SBLTWRN_CTLOPT_NON,
-        {
-          (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(18000U / SBLTWRN_TICK), (U2)(6000U / SBLTWRN_TICK), (U2)(66000U / SBLTWRN_TICK),
-          (U2)(66000U / SBLTWRN_TICK), (U2)(66000U / SBLTWRN_TICK), (U2)(66000U / SBLTWRN_TICK), (U2)(U2_MAX)
-        }
-    }
-};
-
-static const ST_SBLTWRN_WRNPRM  st_sp_SBLTWRN_EU_SB_PRM[SBLTWRN_NUM_SEATTYP] = {
-    /* (Undefined) */
-    {
-        (U4)SBLTWRN_CTLOPT_NON,
-        {
-          (U2)(1800U / SBLTWRN_TICK),  (U2)(7800U / SBLTWRN_TICK),  (U2)(18000U / SBLTWRN_TICK), (U2)(6000U / SBLTWRN_TICK), (U2)(100000U / SBLTWRN_TICK),
-          (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(U2_MAX)
-        }
-    },
-    /* D-Seat */
-    {
-        (U4)SBLTWRN_CTLOPT_PRKWRN,
-        {
-          (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(24000U / SBLTWRN_TICK), (U2)(100000U / SBLTWRN_TICK),
-          (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(U2_MAX)
-        }
-    },
-    /* P-Seat */
-    {
-        (U4)SBLTWRN_CTLOPT_PRKWRN,
-        {
-          (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(24000U / SBLTWRN_TICK), (U2)(100000U / SBLTWRN_TICK),
-          (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(U2_MAX)
-        }
-    },
-    /* Rr-Seat (with occupant detection sensor) */
-    {
-        (U4)SBLTWRN_CTLOPT_NON,
-        {
-          (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(24000U / SBLTWRN_TICK), (U2)(100000U / SBLTWRN_TICK),
-          (U2)(66000U / SBLTWRN_TICK), (U2)(66000U / SBLTWRN_TICK), (U2)(66000U / SBLTWRN_TICK), (U2)(U2_MAX)
-        }
-    },
-    /* Rr-Seat (w/o  occupant detection sensor) */
-    {
-        (U4)SBLTWRN_CTLOPT_NON,
-        {
-          (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(6000U / SBLTWRN_TICK), (U2)(60000U / SBLTWRN_TICK),
-          (U2)(66000U / SBLTWRN_TICK), (U2)(66000U / SBLTWRN_TICK), (U2)(66000U / SBLTWRN_TICK), (U2)(U2_MAX)
-        }
-    }
-};
-
-static const ST_SBLTWRN_WRNPRM  st_sp_SBLTWRN_CN_SB_PRM[SBLTWRN_NUM_SEATTYP] = {
-    /* (Undefined) */
-    {
-        (U4)SBLTWRN_CTLOPT_NON,
-        {
-          (U2)(1800U / SBLTWRN_TICK),  (U2)(7800U / SBLTWRN_TICK),  (U2)(18000U / SBLTWRN_TICK), (U2)(6000U / SBLTWRN_TICK), (U2)(100000U / SBLTWRN_TICK),
-          (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(U2_MAX)
-        }
-    },
-    /* D-Seat */
-    {
-        (U4)SBLTWRN_CTLOPT_NON,
-        {
-          (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(6000U / SBLTWRN_TICK), (U2)(100000U / SBLTWRN_TICK),
-          (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(U2_MAX)
-        }
-    },
-    /* P-Seat */
-    {
-        (U4)SBLTWRN_CTLOPT_NON,
-        {
-          (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(6000U / SBLTWRN_TICK), (U2)(100000U / SBLTWRN_TICK),
-          (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(U2_MAX)
-        }
-    },
-    /* Rr-Seat (with occupant detection sensor) */
-    {
-        (U4)SBLTWRN_CTLOPT_NON,
-        {
-          (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(6000U / SBLTWRN_TICK), (U2)(100000U / SBLTWRN_TICK),
-          (U2)(66000U / SBLTWRN_TICK), (U2)(66000U / SBLTWRN_TICK), (U2)(66000U / SBLTWRN_TICK), (U2)(U2_MAX)
-        }
-    },
-    /* Rr-Seat (w/o  occupant detection sensor) */
-    {
-        (U4)SBLTWRN_CTLOPT_NON,
-        {
-          (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(6000U / SBLTWRN_TICK), (U2)(60000U / SBLTWRN_TICK),
-          (U2)(66000U / SBLTWRN_TICK), (U2)(66000U / SBLTWRN_TICK), (U2)(66000U / SBLTWRN_TICK), (U2)(U2_MAX)
-        }
-    }
-};
-
-static const ST_SBLTWRN_WRNPRM  st_sp_SBLTWRN_US_LS_PRM[SBLTWRN_NUM_SEATTYP] = {
-    /* (Undefined) */
-    {
-        (U4)SBLTWRN_CTLOPT_NON,
-        {
-          (U2)(1800U / SBLTWRN_TICK),  (U2)(7800U / SBLTWRN_TICK),  (U2)(18000U / SBLTWRN_TICK), (U2)(6000U / SBLTWRN_TICK), (U2)(100800U / SBLTWRN_TICK),
-          (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(U2_MAX)
-        }
-    },
-    /* D-Seat */
-    {
-        (U4)SBLTWRN_CTLOPT_NON,
-        {
-          (U2)(1800U / SBLTWRN_TICK),  (U2)(7800U / SBLTWRN_TICK),  (U2)(18000U / SBLTWRN_TICK), (U2)(6000U / SBLTWRN_TICK), (U2)(100800U / SBLTWRN_TICK),
-          (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(U2_MAX)
-        }
-    },
-    /* P-Seat */
-    {
-        (U4)SBLTWRN_CTLOPT_NON,
-        {
-          (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(18000U / SBLTWRN_TICK), (U2)(6000U / SBLTWRN_TICK), (U2)(100800U / SBLTWRN_TICK),
-          (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(U2_MAX)
-        }
-    },
-    /* Rr-Seat (with occupant detection sensor) */
-    {
-        (U4)SBLTWRN_CTLOPT_NON,
-        {
-          (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(18000U / SBLTWRN_TICK), (U2)(6000U / SBLTWRN_TICK), (U2)(64800U / SBLTWRN_TICK),
-          (U2)(66000U / SBLTWRN_TICK), (U2)(66000U / SBLTWRN_TICK), (U2)(66000U / SBLTWRN_TICK), (U2)(U2_MAX)
-        }
-    },
-    /* Rr-Seat (w/o  occupant detection sensor) */
-    {
-        (U4)SBLTWRN_CTLOPT_NON,
-        {
-          (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(18000U / SBLTWRN_TICK), (U2)(6000U / SBLTWRN_TICK), (U2)(64800U / SBLTWRN_TICK),
-          (U2)(66000U / SBLTWRN_TICK), (U2)(66000U / SBLTWRN_TICK), (U2)(66000U / SBLTWRN_TICK), (U2)(U2_MAX)
-        }
-    }
-};
-
-static const ST_SBLTWRN_WRNPRM      st_sp_SBLTWRN_EU_LS_PRM[SBLTWRN_NUM_SEATTYP] = {
-    /* (Undefined) */
-    {
-        (U4)SBLTWRN_CTLOPT_NON,
-        {
-          (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(24000U / SBLTWRN_TICK), (U2)(100800U / SBLTWRN_TICK),
-          (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(U2_MAX)
-        }
-    },
-    /* D-Seat */
-    {
-        (U4)SBLTWRN_CTLOPT_PRKWRN,
-        {
-          (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(24000U / SBLTWRN_TICK), (U2)(100800U / SBLTWRN_TICK),
-          (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(U2_MAX)
-        }
-    },
-    /* P-Seat */
-    {
-        (U4)SBLTWRN_CTLOPT_PRKWRN,
-        {
-          (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(24000U / SBLTWRN_TICK), (U2)(100800U / SBLTWRN_TICK),
-          (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(U2_MAX)
-        }
-    },
-    /* Rr-Seat (with occupant detection sensor) */
-    {
-        (U4)SBLTWRN_CTLOPT_NON,
-        {
-          (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(24000U / SBLTWRN_TICK), (U2)(100800U / SBLTWRN_TICK),
-          (U2)(66000U / SBLTWRN_TICK), (U2)(66000U / SBLTWRN_TICK), (U2)(66000U / SBLTWRN_TICK), (U2)(U2_MAX)
-        }
-    },
-    /* Rr-Seat (w/o  occupant detection sensor) */
-    {
-        (U4)SBLTWRN_CTLOPT_NON,
-        {
-          (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(6000U / SBLTWRN_TICK),  (U2)(64800U / SBLTWRN_TICK),
-          (U2)(66000U / SBLTWRN_TICK), (U2)(66000U / SBLTWRN_TICK), (U2)(66000U / SBLTWRN_TICK), (U2)(U2_MAX)
-        }
-    }
-};
-
-static const ST_SBLTWRN_WRNPRM      st_sp_SBLTWRN_CN_LS_PRM[SBLTWRN_NUM_SEATTYP] = {
-    /* (Undefined) */
-    {
-        (U4)SBLTWRN_CTLOPT_NON,
-        {
-          (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(6000U / SBLTWRN_TICK), (U2)(100800U / SBLTWRN_TICK),
-          (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(U2_MAX)
-        }
-    },
-    /* D-Seat */
-    {
-        (U4)SBLTWRN_CTLOPT_NON,
-        {
-          (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(6000U / SBLTWRN_TICK), (U2)(100800U / SBLTWRN_TICK),
-          (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(U2_MAX)
-        }
-    },
-    /* P-Seat */
-    {
-        (U4)SBLTWRN_CTLOPT_NON,
-        {
-          (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(6000U / SBLTWRN_TICK), (U2)(100800U / SBLTWRN_TICK),
-          (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(U2_MAX)
-        }
-    },
-    /* Rr-Seat (with occupant detection sensor) */
-    {
-        (U4)SBLTWRN_CTLOPT_NON,
-        {
-          (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(6000U / SBLTWRN_TICK), (U2)(100800U / SBLTWRN_TICK),
-          (U2)(66000U / SBLTWRN_TICK), (U2)(66000U / SBLTWRN_TICK), (U2)(66000U / SBLTWRN_TICK), (U2)(U2_MAX)
-        }
-    },
-    /* Rr-Seat (w/o  occupant detection sensor) */
-    {
-        (U4)SBLTWRN_CTLOPT_NON,
-        {
-          (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(6000U / SBLTWRN_TICK),  (U2)(64800U / SBLTWRN_TICK),
-          (U2)(66000U / SBLTWRN_TICK), (U2)(66000U / SBLTWRN_TICK), (U2)(66000U / SBLTWRN_TICK), (U2)(U2_MAX)
-        }
-    }
-};
-
-static const ST_SBLTWRN_WRNPRM      st_sp_SBLTWRN_US_TS_PRM[SBLTWRN_NUM_SEATTYP] = {
-    /* (Undefined) */
-    {
-        (U4)SBLTWRN_CTLOPT_NON,
-        {
-          (U2)(1800U / SBLTWRN_TICK),  (U2)(7800U / SBLTWRN_TICK),  (U2)(18000U / SBLTWRN_TICK), (U2)(6000U / SBLTWRN_TICK), (U2)(100000U / SBLTWRN_TICK),
-          (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(U2_MAX)
-        }
-    },
-    /* D-Seat */
-    {
-        (U4)SBLTWRN_CTLOPT_NON,
-        {
-          (U2)(1800U / SBLTWRN_TICK),  (U2)(7800U / SBLTWRN_TICK),  (U2)(18000U / SBLTWRN_TICK), (U2)(6000U / SBLTWRN_TICK), (U2)(100000U / SBLTWRN_TICK),
-          (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(U2_MAX)
-        }
-    },
-    /* P-Seat */
-    {
-        (U4)SBLTWRN_CTLOPT_NON,
-        {
-          (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(18000U / SBLTWRN_TICK), (U2)(6000U / SBLTWRN_TICK), (U2)(100000U / SBLTWRN_TICK),
-          (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(U2_MAX)
-        }
-    },
-    /* Rr-Seat (with occupant detection sensor) */
-    {
-        (U4)SBLTWRN_CTLOPT_NON,
-        {
-          (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(18000U / SBLTWRN_TICK), (U2)(6000U / SBLTWRN_TICK), (U2)(66000U / SBLTWRN_TICK),
-          (U2)(66000U / SBLTWRN_TICK), (U2)(66000U / SBLTWRN_TICK), (U2)(66000U / SBLTWRN_TICK), (U2)(U2_MAX)
-}
-    },
-    /* Rr-Seat (w/o  occupant detection sensor) */
-    {
-        (U4)SBLTWRN_CTLOPT_NON,
-        {
-          (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(18000U / SBLTWRN_TICK), (U2)(6000U / SBLTWRN_TICK), (U2)(66000U / SBLTWRN_TICK),
-          (U2)(66000U / SBLTWRN_TICK), (U2)(66000U / SBLTWRN_TICK), (U2)(66000U / SBLTWRN_TICK), (U2)(U2_MAX)
-        }
-    }
-};
-
-static const ST_SBLTWRN_WRNPRM      st_sp_SBLTWRN_EU_TS_PRM[SBLTWRN_NUM_SEATTYP] = {
-    /* (Undefined) */
-    {
-        (U4)SBLTWRN_CTLOPT_NON,
-        {
-          (U2)(1800U / SBLTWRN_TICK),  (U2)(7800U / SBLTWRN_TICK),  (U2)(18000U / SBLTWRN_TICK), (U2)(6000U / SBLTWRN_TICK), (U2)(100000U / SBLTWRN_TICK),
-          (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(U2_MAX)
-        }
-    },
-    /* D-Seat */
-    {
-        (U4)SBLTWRN_CTLOPT_PRKWRN,
-        {
-          (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(24000U / SBLTWRN_TICK), (U2)(100000U / SBLTWRN_TICK),
-          (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(U2_MAX)
-        }
-    },
-    /* P-Seat */
-    {
-        (U4)SBLTWRN_CTLOPT_PRKWRN,
-        {
-          (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(24000U / SBLTWRN_TICK), (U2)(100000U / SBLTWRN_TICK),
-          (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(U2_MAX)
-        }
-    },
-    /* Rr-Seat (with occupant detection sensor) */
-    {
-        (U4)SBLTWRN_CTLOPT_NON,
-        {
-          (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(24000U / SBLTWRN_TICK), (U2)(100000U / SBLTWRN_TICK),
-          (U2)(66000U / SBLTWRN_TICK), (U2)(66000U / SBLTWRN_TICK), (U2)(66000U / SBLTWRN_TICK), (U2)(U2_MAX)
-        }
-    },
-    /* Rr-Seat (w/o  occupant detection sensor) */
-    {
-        (U4)SBLTWRN_CTLOPT_NON,
-        {
-          (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(6000U / SBLTWRN_TICK), (U2)(60000U / SBLTWRN_TICK),
-          (U2)(66000U / SBLTWRN_TICK), (U2)(66000U / SBLTWRN_TICK), (U2)(66000U / SBLTWRN_TICK), (U2)(U2_MAX)
-        }
-    }
-
-};
-
-static const ST_SBLTWRN_WRNPRM      st_sp_SBLTWRN_CN_TS_PRM[SBLTWRN_NUM_SEATTYP] = {
-    /* (Undefined) */
-    {
-        (U4)SBLTWRN_CTLOPT_NON,
-        {
-          (U2)(1800U / SBLTWRN_TICK),  (U2)(7800U / SBLTWRN_TICK),  (U2)(18000U / SBLTWRN_TICK), (U2)(6000U / SBLTWRN_TICK), (U2)(100000U / SBLTWRN_TICK),
-          (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(U2_MAX)
-        }
-    },
-    /* D-Seat */
-    {
-        (U4)SBLTWRN_CTLOPT_NON,
-        {
-          (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(6000U / SBLTWRN_TICK), (U2)(100000U / SBLTWRN_TICK),
-          (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(U2_MAX)
-        }
-    },
-    /* P-Seat */
-    {
-        (U4)SBLTWRN_CTLOPT_NON,
-        {
-          (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(6000U / SBLTWRN_TICK), (U2)(100000U / SBLTWRN_TICK),
-          (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(U2_MAX)
-        }
-    },
-    /* Rr-Seat (with occupant detection sensor) */
-    {
-        (U4)SBLTWRN_CTLOPT_NON,
-        {
-          (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(6000U / SBLTWRN_TICK), (U2)(100000U / SBLTWRN_TICK),
-          (U2)(66000U / SBLTWRN_TICK), (U2)(66000U / SBLTWRN_TICK), (U2)(66000U / SBLTWRN_TICK), (U2)(U2_MAX)
-        }
-    },
-    /* Rr-Seat (w/o  occupant detection sensor) */
-    {
-        (U4)SBLTWRN_CTLOPT_NON,
-        {
-          (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(0U / SBLTWRN_TICK),     (U2)(6000U / SBLTWRN_TICK), (U2)(60000U / SBLTWRN_TICK),
-          (U2)(66000U / SBLTWRN_TICK), (U2)(66000U / SBLTWRN_TICK), (U2)(66000U / SBLTWRN_TICK), (U2)(U2_MAX)
-        }
-    }
-};
-
-static const ST_SBLTWRN_WRNPRM * const st_sp_SBLTWRN_WRNPRM[SBLTWRN_NUM_DEST] = {
-    &st_sp_SBLTWRN_US_SB_PRM[0],
-    &st_sp_SBLTWRN_EU_SB_PRM[0],
-    &st_sp_SBLTWRN_CN_SB_PRM[0],
-    &st_sp_SBLTWRN_US_LS_PRM[0],
-    &st_sp_SBLTWRN_EU_LS_PRM[0],
-    &st_sp_SBLTWRN_CN_LS_PRM[0],
-    &st_sp_SBLTWRN_US_TS_PRM[0],
-    &st_sp_SBLTWRN_EU_TS_PRM[0],
-    &st_sp_SBLTWRN_CN_TS_PRM[0],
-};
-
-static const ST_SBLTWRN_VCLPRM      st_sp_SBLTWRN_VCLPRM[SBLTWRN_NUM_DEST] = {
-    { (U4)SBLTWRN_CMNOPT_SNSR_L2CMP_ON, { (U2) 500U, (U2)2000U, (U2)175U, (U2)500U, (U2)3500U } },
-    { (U4)SBLTWRN_CMNOPT_SNSR_L2CMP_ON, { (U2)1000U, (U2)2000U, (U2)175U, (U2)500U, (U2)3500U } },
-    { (U4)SBLTWRN_CMNOPT_SNSR_L2CMP_ON, { (U2) 500U, (U2) 500U, (U2)175U, (U2)500U, (U2)3500U } },
-    { (U4)SBLTWRN_CMNOPT_SNSR_L2CMP_ON, { (U2) 500U, (U2)2000U, (U2)175U, (U2)500U, (U2)3500U } },
-    { (U4)SBLTWRN_CMNOPT_SNSR_L2CMP_ON, { (U2)1000U, (U2)2000U, (U2)175U, (U2)500U, (U2)3500U } },
-    { (U4)SBLTWRN_CMNOPT_SNSR_L2CMP_ON, { (U2) 500U, (U2) 500U, (U2)175U, (U2)500U, (U2)3500U } },
-    { (U4)SBLTWRN_CMNOPT_SNSR_L2CMP_ON, { (U2) 500U, (U2)2000U, (U2)175U, (U2)500U, (U2)3500U } },
-    { (U4)SBLTWRN_CMNOPT_SNSR_L2CMP_ON, { (U2)1000U, (U2)2000U, (U2)175U, (U2)500U, (U2)3500U } },
-    { (U4)SBLTWRN_CMNOPT_SNSR_L2CMP_ON, { (U2) 500U, (U2) 500U, (U2)175U, (U2)500U, (U2)3500U } }
-};
-
 static const SBLTWRN_CHMTYP   fp_sp_u4_SBLTWRN_CHMSTM_CND_A[] = {
     &u4_s_SbltwrnChmTrns_condAB,
     &u4_s_SbltwrnChmTrns_condAI,
@@ -1007,18 +482,6 @@ static const ST_SBLTWRN_TTTYP st_sp_SBLTWRN_TTTYP[SBLTWRN_NUM_TTSTS] = {
     {&fp_sp_u4_SBLTWRN_TTSTM_CND_O[0],  sizeof(fp_sp_u4_SBLTWRN_TTSTM_CND_O) / sizeof(fp_sp_u4_SBLTWRN_TTSTM_CND_O[0])}
 };
 
-static const ST_SBLTWRN_STSTBL st_sp_SBLTWRN_SBR_STSTBL[SBLTWRN_NUM_3ROWSEAT] = {
-    { (U1)SBLTWRN_SBRBIT_IDX0,          (U1)SBLTWRN_DRV_SEAT_BIT_IDX0   },
-    { (U1)SBLTWRN_SBRBIT_IDX0,          (U1)SBLTWRN_FRC_SEAT_BIT_IDX0   },
-    { (U1)SBLTWRN_SBRBIT_IDX0,          (U1)SBLTWRN_PSG_SEAT_BIT_IDX0   },
-    { (U1)SBLTWRN_SBRBIT_IDX0,          (U1)SBLTWRN_R2L_SEAT_BIT_IDX0   },
-    { (U1)SBLTWRN_SBRBIT_IDX0,          (U1)SBLTWRN_R2C_SEAT_BIT_IDX0   },
-    { (U1)SBLTWRN_SBRBIT_IDX0,          (U1)SBLTWRN_R2R_SEAT_BIT_IDX0   },
-    { (U1)SBLTWRN_SBRBIT_IDX1,          (U1)SBLTWRN_R3L_SEAT_BIT_IDX1   },
-    { (U1)SBLTWRN_SBRBIT_IDX0,          (U1)SBLTWRN_R3C_SEAT_BIT_IDX0   },
-    { (U1)SBLTWRN_SBRBIT_IDX0,          (U1)SBLTWRN_R3R_SEAT_BIT_IDX0   }
-};
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -1051,9 +514,10 @@ void            vd_g_SbltwrnInit(void)
     u2_s_sbltwrn_failsts        = (U2)0U;
     u1_s_sbltwrn_precfg         = (U1)0U;
 
+    vd_g_SbltwrnInit_FM();
     vd_g_SbltVclstsInit();
     vd_g_SbltSeatInfoInit();
-    vd_s_SbltwrnGetCalibSupd();
+    vd_g_SbltwrnGetCalibSupd();
 }
 
 /*===================================================================================================================================*/
@@ -1064,6 +528,35 @@ void            vd_g_SbltwrnInit(void)
 /*===================================================================================================================================*/
 void            vd_g_SbltwrnMainTask(void)
 {
+    U1                  u1_t_dsttyp;
+
+    u1_t_dsttyp = u1_g_SbltwrnDestCfg();
+    if (u1_t_dsttyp >= (U1)SBLTWRN_NUM_DEST) {
+        u1_t_dsttyp = (U1)SBLTWRN_DEST_US_TS;
+    }
+    vd_s_SbltwrnVarChgChk(u1_t_dsttyp);
+    vd_g_SbltwrnGetCalibSupd();
+
+    switch (u1_t_dsttyp) {
+        case (U1)SBLTWRN_DEST_FM_SB:
+        case (U1)SBLTWRN_DEST_FM_LS:
+        case (U1)SBLTWRN_DEST_FM_TS:
+            vd_g_SbltwrnTrans_FM(u1_t_dsttyp);
+            break;
+        default:
+            vd_s_SbltwrnTrans(u1_t_dsttyp);
+            break;
+    }
+}
+
+/*===================================================================================================================================*/
+/* static  void            vd_s_SbltwrnTrans(const U1 u1_a_DSTTYP)                                                                   */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static  void            vd_s_SbltwrnTrans(const U1 u1_a_DSTTYP)
+{
     ST_SBLTWRN_VCLST    st_t_vclsts;
     U1                  u1_t_igon;
     U1                  u1_t_dsttyp;
@@ -1072,29 +565,24 @@ void            vd_g_SbltwrnMainTask(void)
     u1_t_igon = u1_g_VehopemdIgnOn();
     
     if (u1_t_igon == (U1)TRUE) {
-        vd_s_SbltwrnTmcnt(&u2_s_sbltwrn_igontm);
+        vd_g_SbltwrnTmcnt(&u2_s_sbltwrn_igontm);
     } else {
         u2_s_sbltwrn_igontm = (U2)0U;
     }
 
-    u1_t_dsttyp = u1_g_SbltwrnDestCfg();
-    if (u1_t_dsttyp >= (U1)SBLTWRN_NUM_DEST) {
-        u1_t_dsttyp = (U1)SBLTWRN_DEST_US_TS;
-    }
-    vd_s_SbltwrnVarChgChk(u1_t_dsttyp);
+    u1_t_dsttyp = u1_a_DSTTYP;
 
     vd_g_MemfillU1(&u1_tp_msgsts[0], (U1)SBLTWRN_UNKNOWN, (U4)SBLTWRN_NUM_MSG);
-    vd_s_SbltwrnMsgsts(u1_t_igon, &u1_tp_msgsts[0]);
+    vd_g_SbltwrnMsgsts(u1_t_igon, &u1_tp_msgsts[0]);
 
     st_t_vclsts.u2_igontm       = u2_s_sbltwrn_igontm;
     st_t_vclsts.u2_bkledgtmr    = u2_s_sbltwrn_bkledgtmr;
-    st_t_vclsts.stp_wrnprm      = st_sp_SBLTWRN_WRNPRM[u1_t_dsttyp];
-    st_t_vclsts.stp_vclprm      = &st_sp_SBLTWRN_VCLPRM[u1_t_dsttyp];
+    st_t_vclsts.stp_wrnprm      = st_gp_SBLTWRN_WRNPRM[u1_t_dsttyp];
+    st_t_vclsts.stp_vclprm      = &st_gp_SBLTWRN_VCLPRM[u1_t_dsttyp];
     st_t_vclsts.u4_vclsts       = u4_g_SbltVclsts(u2_s_sbltwrn_igontm, &u1_tp_msgsts[0], &st_t_vclsts.stp_vclprm->u2p_spd[0]);
 
-    vd_s_SbltwrnGetCalibSupd();
     vd_g_MemfillU1(&st_t_vclsts.u1p_bklsts[0], (U1)0U, (U4)SBLTWRN_NUM_ALLSEAT);
-    vd_s_SbltwrnSeatsts(st_t_vclsts.u4_vclsts, &u1_tp_msgsts[0], &st_t_vclsts.u1p_bklsts[0]);
+    vd_g_SbltwrnSeatsts(st_t_vclsts.u4_vclsts, &u1_tp_msgsts[0], &st_t_vclsts.u1p_bklsts[0]);
     vd_s_SbltwrnBklEdgChk(&st_t_vclsts);
 
     vd_s_SbltwrnStm(&st_t_vclsts);
@@ -1105,7 +593,7 @@ void            vd_g_SbltwrnMainTask(void)
 }
 
 /*===================================================================================================================================*/
-/* U2              u2_g_SbltwrnChmsts(void)                                                                                          */
+/* U1              u1_g_SbltwrnChmStsBySeat(const U1 u1_a_SEATID)                                                                    */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
@@ -1132,15 +620,40 @@ U1              u1_g_SbltwrnChmStsBySeat(const U1 u1_a_SEATID)
 U1              u1_g_SbltwrnDiagEvCapt(const U1 u1_a_ODO_UPDT, U4 * u4_ap_ss)
 {
     U1          u1_t_capt;
-    
+    U1          u1_t_dsttyp;
+    U1          u1_tp_sbrbit[SBLTWRN_SBRBIT_IDX_ALL];
+
+    u1_t_dsttyp = u1_g_SbltwrnDestCfg();
+    if (u1_t_dsttyp >= (U1)SBLTWRN_NUM_DEST) {
+        u1_t_dsttyp = (U1)SBLTWRN_DEST_US_SB;
+    }
+
     u1_t_capt = (U1)FALSE;
-    if ((u1_sp_sbltwrn_sbrbit[SBLTWRN_SBRBIT_IDX0] != (U1)0U) ||
-        (u1_sp_sbltwrn_sbrbit[SBLTWRN_SBRBIT_IDX1] != (U1)0U)) {
-        u4_ap_ss[SBLTWRN_SBRBIT_IDX0] = (U4)u1_sp_sbltwrn_sbrbit[SBLTWRN_SBRBIT_IDX0] & (U4)SBLTWRN_DRV_SEAT_BIT_IDX_ALL;
-        u4_ap_ss[SBLTWRN_SBRBIT_IDX1] = (U4)u1_sp_sbltwrn_sbrbit[SBLTWRN_SBRBIT_IDX1] & (U4)SBLTWRN_R3L_SEAT_BIT_IDX1;
-        u1_sp_sbltwrn_sbrbit[SBLTWRN_SBRBIT_IDX0] = (U1)0U;
-        u1_sp_sbltwrn_sbrbit[SBLTWRN_SBRBIT_IDX1] = (U1)0U;
-        u1_t_capt = (U1)TRUE;
+    switch (u1_t_dsttyp) {
+        case (U1)SBLTWRN_DEST_FM_SB:
+        case (U1)SBLTWRN_DEST_FM_LS:
+        case (U1)SBLTWRN_DEST_FM_TS:
+            vd_g_GetSbltwrnSbrbit(&u1_tp_sbrbit[0]); 
+            if ((u1_tp_sbrbit[SBLTWRN_SBRBIT_IDX0] != (U1)0U) ||
+                (u1_tp_sbrbit[SBLTWRN_SBRBIT_IDX1] != (U1)0U)) {
+                u4_ap_ss[SBLTWRN_SBRBIT_IDX0] = (U4)u1_tp_sbrbit[SBLTWRN_SBRBIT_IDX0] & (U4)SBLTWRN_DRV_SEAT_BIT_IDX_ALL;
+                u4_ap_ss[SBLTWRN_SBRBIT_IDX1] = (U4)u1_tp_sbrbit[SBLTWRN_SBRBIT_IDX1] & (U4)SBLTWRN_R3L_SEAT_BIT_IDX1;
+                u1_tp_sbrbit[SBLTWRN_SBRBIT_IDX0] = (U1)0U;
+                u1_tp_sbrbit[SBLTWRN_SBRBIT_IDX1] = (U1)0U;
+                vd_g_SetSbltwrnSbrbit(&u1_tp_sbrbit[0]); 
+                u1_t_capt = (U1)TRUE;
+            }
+            break;
+        default:
+            if ((u1_sp_sbltwrn_sbrbit[SBLTWRN_SBRBIT_IDX0] != (U1)0U) ||
+                (u1_sp_sbltwrn_sbrbit[SBLTWRN_SBRBIT_IDX1] != (U1)0U)) {
+                u4_ap_ss[SBLTWRN_SBRBIT_IDX0] = (U4)u1_sp_sbltwrn_sbrbit[SBLTWRN_SBRBIT_IDX0] & (U4)SBLTWRN_DRV_SEAT_BIT_IDX_ALL;
+                u4_ap_ss[SBLTWRN_SBRBIT_IDX1] = (U4)u1_sp_sbltwrn_sbrbit[SBLTWRN_SBRBIT_IDX1] & (U4)SBLTWRN_R3L_SEAT_BIT_IDX1;
+                u1_sp_sbltwrn_sbrbit[SBLTWRN_SBRBIT_IDX0] = (U1)0U;
+                u1_sp_sbltwrn_sbrbit[SBLTWRN_SBRBIT_IDX1] = (U1)0U;
+                u1_t_capt = (U1)TRUE;
+            }
+            break;
     }
     return(u1_t_capt);
 }
@@ -1193,6 +706,7 @@ static  void    vd_s_SbltwrnVarChgChk(const U1 u1_a_DSTTYP)
 {
     if (u1_a_DSTTYP != u1_s_sbltwrn_precfg) {
         vd_g_SbltwrnInit();
+        vd_g_SbltsyncInit();
     }
 
     u1_s_sbltwrn_precfg = u1_a_DSTTYP;
@@ -1211,13 +725,14 @@ static  void    vd_s_SbltwrnBklEdgChk(ST_SBLTWRN_VCLST *stp_a_vclsts)
     U1  u1_t_dropn;
 
     for (u4_t_loop = (U4)0U; u4_t_loop < (U4)SBLTWRN_NUM_ALLSEAT; u4_t_loop++) {
-        u1_t_seattyp = u1_s_SbltwrnSeatTyp((U1)u4_t_loop);
-        u1_t_dropn   = u1_s_SbltwrnDrchk(stp_a_vclsts->u4_vclsts, u1_t_seattyp, (U1)FALSE);
+        u1_t_seattyp = u1_g_SbltwrnSeatTyp((U1)u4_t_loop);
+        u1_t_dropn   = u1_g_SbltwrnDrchk(stp_a_vclsts->u4_vclsts, u1_t_seattyp, (U1)FALSE);
         if ((stp_a_vclsts->u1p_bklsts[u4_t_loop] & (U1)SBLTWRN_BKLSTS_UNBCKLEDG) != (U1)0U) {
             /* Set unbkleflg */
             u2_s_sbltwrn_unbklflg |= (U2)((U2)1U << u4_t_loop);
         }
-        if ((stp_a_vclsts->u2_igontm == (U2)0U) || (u1_t_dropn == (U1)TRUE) || ((stp_a_vclsts->u1p_bklsts[u4_t_loop] & (U1)SBLTWRN_BKLSTS_UNBCKL) == (U1)0U)) {
+        if ((stp_a_vclsts->u2_igontm == (U2)0U) || ((u1_t_dropn == (U1)TRUE) && ((stp_a_vclsts->u4_vclsts & (U4)SBLTWRN_VCLSTS_SPD_STP_OVER) == (U4)0U)) || 
+        ((stp_a_vclsts->u1p_bklsts[u4_t_loop] & (U1)SBLTWRN_BKLSTS_UNBCKL) == (U1)0U)) {
             /* Clear unbkleflg */
             u2_s_sbltwrn_unbklflg &= ((U2)U2_MAX ^ (U2)((U2)1U << u4_t_loop));
         }
@@ -1243,7 +758,7 @@ static  void    vd_s_SbltwrnBklEdgChk(ST_SBLTWRN_VCLST *stp_a_vclsts)
             u2_s_sbltwrn_failsts &= ((U2)U2_MAX ^ (U2)((U2)1U << u4_t_loop));
         }
     }
-    vd_s_SbltwrnTmcnt(&stp_a_vclsts->u2_bkledgtmr);
+    vd_g_SbltwrnTmcnt(&stp_a_vclsts->u2_bkledgtmr);
 }
 
 /*===================================================================================================================================*/
@@ -1295,8 +810,8 @@ static  void    vd_s_SbltwrnChimeStm(const ST_SBLTWRN_VCLST *stp_a_VCLSTS)
 
     u2_t_sync_trgt = (U2)SBLTWRN_CHM_SYNCCND_CHK;
     for (u4_t_seat = (U4)0U; u4_t_seat < (U4)SBLTWRN_NUM_ALLSEAT; u4_t_seat++) {
-        u1_t_seattyp = u1_s_SbltwrnSeatTyp((U1)u4_t_seat);
-        u1_tp_valid_chk[u4_t_seat] = u1_s_SbltwrnChmStmVldChk((U1)u4_t_seat, u1_t_seattyp, stp_a_VCLSTS);
+        u1_t_seattyp = u1_g_SbltwrnSeatTyp((U1)u4_t_seat);
+        u1_tp_valid_chk[u4_t_seat] = u1_g_SbltwrnChmStmVldChk((U1)u4_t_seat, u1_t_seattyp, stp_a_VCLSTS);
         if (u1_tp_valid_chk[u4_t_seat] == (U1)TRUE) {
             u4_t_chmopt = u4_s_SbltwrnChimeCnd((U1)u4_t_seat, u1_t_seattyp, stp_a_VCLSTS, (U2)0U);
             vd_s_SbltwrnChimeTimAct(&st_sp_sbltwrn_chmsts[u4_t_seat], u4_t_chmopt, (U1)FALSE);
@@ -1307,7 +822,7 @@ static  void    vd_s_SbltwrnChimeStm(const ST_SBLTWRN_VCLST *stp_a_VCLSTS)
     }
 
     for (u4_t_seat = (U4)0U; u4_t_seat < (U4)SBLTWRN_NUM_ALLSEAT; u4_t_seat++) {
-        u1_t_seattyp = u1_s_SbltwrnSeatTyp((U1)u4_t_seat);
+        u1_t_seattyp = u1_g_SbltwrnSeatTyp((U1)u4_t_seat);
         if (u1_tp_valid_chk[u4_t_seat] == (U1)TRUE) {
             u4_t_chmopt = u4_s_SbltwrnChimeCnd((U1)u4_t_seat, u1_t_seattyp, stp_a_VCLSTS, u2_t_sync_trgt);
             vd_s_SbltwrnChimeTimAct(&st_sp_sbltwrn_chmsts[u4_t_seat], u4_t_chmopt, (U1)TRUE);
@@ -1315,24 +830,6 @@ static  void    vd_s_SbltwrnChimeStm(const ST_SBLTWRN_VCLST *stp_a_VCLSTS)
     }
 }
 
-/*===================================================================================================================================*/
-/* static  U1      u1_s_SbltwrnChmStmVldChk(const U1 u1_a_SEATID, const U1 u1_a_SEATTYP, const ST_SBLTWRN_VCLST *stp_a_VCLSTS)       */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static  U1      u1_s_SbltwrnChmStmVldChk(const U1 u1_a_SEATID, const U1 u1_a_SEATTYP, const ST_SBLTWRN_VCLST *stp_a_VCLSTS)
-{
-    U1  u1_t_valid;
-
-    if ((stp_a_VCLSTS->u2_igontm > (U2)0U) && (u1_a_SEATTYP != (U1)SBLTWRN_SEATTYP_UNDEF) && ((stp_a_VCLSTS->u1p_bklsts[u1_a_SEATID] & (U1)SBLTWRN_BKLSTS_COMFAIL) == (U1)0U)) {
-        u1_t_valid = (U1)TRUE;
-    } else {
-        u1_t_valid = (U1)FALSE;
-    }
-
-    return (u1_t_valid);
-}
 
 /*===================================================================================================================================*/
 /* static  void    vd_s_SbltwrnTtStm(const ST_SBLTWRN_VCLST *stp_a_VCLSTS)                                                           */
@@ -1350,7 +847,7 @@ static  void    vd_s_SbltwrnTtStm(const ST_SBLTWRN_VCLST *stp_a_VCLSTS)
 
     u4_t_sync_trgt = (U4)SBLTWRN_TT_SYNCCND_CHK;
     for (u4_t_seat = (U4)0U; u4_t_seat < (U4)SBLTWRN_NUM_ALLSEAT; u4_t_seat++) {
-        u1_t_seattyp = u1_s_SbltwrnSeatTyp((U1)u4_t_seat);
+        u1_t_seattyp = u1_g_SbltwrnSeatTyp((U1)u4_t_seat);
         u1_tp_valid_chk[u4_t_seat] = u1_s_SbltwrnTtStmVldChk((U1)u4_t_seat, u1_t_seattyp, stp_a_VCLSTS);
         if (u1_tp_valid_chk[u4_t_seat] == (U1)TRUE) {
             u4_t_ttopt = u4_s_SbltwrnTtStmCnd((U1)u4_t_seat, u1_t_seattyp, stp_a_VCLSTS, (U4)0U);
@@ -1360,7 +857,7 @@ static  void    vd_s_SbltwrnTtStm(const ST_SBLTWRN_VCLST *stp_a_VCLSTS)
     }
 
     for (u4_t_seat = (U4)0U; u4_t_seat < (U4)SBLTWRN_NUM_ALLSEAT; u4_t_seat++) {
-        u1_t_seattyp = u1_s_SbltwrnSeatTyp((U1)u4_t_seat);
+        u1_t_seattyp = u1_g_SbltwrnSeatTyp((U1)u4_t_seat);
         if (u1_tp_valid_chk[u4_t_seat] == (U1)TRUE) {
             u4_t_ttopt = u4_s_SbltwrnTtStmCnd((U1)u4_t_seat, u1_t_seattyp, stp_a_VCLSTS, u4_t_sync_trgt);
             vd_s_SbltwrnTtTimAct(&st_sp_sbltwrn_ttsts[u4_t_seat], stp_a_VCLSTS->u4_vclsts, u4_t_ttopt, u1_t_seattyp, (U1)TRUE);
@@ -1447,7 +944,7 @@ static  void    vd_s_SbltwrnTtTimAct(ST_SBLTWRN_TTST *stp_a_ttsts, const U4 u4_a
     U4  u4_t_act_bit;
     U1  u1_t_dropn;
 
-    u1_t_dropn  = u1_s_SbltwrnDrchk(u4_a_VCLSTS, u1_a_SEATTYP, (U1)TRUE);
+    u1_t_dropn  = u1_g_SbltwrnDrchk(u4_a_VCLSTS, u1_a_SEATTYP, (U1)TRUE);
 
     if (u1_t_dropn == (U1)TRUE) {
         u4_a_ttopt |= (U4)SBLTWRN_TTOPT_DRTM_CNTCLR;
@@ -1478,7 +975,7 @@ static  void    vd_s_SbltwrnTtTimAct(ST_SBLTWRN_TTST *stp_a_ttsts, const U4 u4_a
         }
 
         if (((stp_a_ttsts->u1_flg & (U1)((U1)1U << u4_t_loop)) != (U1)0U) && (u1_a_CNT_UP == (U1)TRUE)) {
-            vd_s_SbltwrnTmcnt(&stp_a_ttsts->u2p_timer[u4_t_loop]);
+            vd_g_SbltwrnTmcnt(&stp_a_ttsts->u2p_timer[u4_t_loop]);
         }
     }
 }
@@ -1525,84 +1022,6 @@ static  U4      u4_s_SbltwrnChimeCnd(const U1 u1_a_SEATID, const U1 u1_a_SEATTYP
 }
 
 /*===================================================================================================================================*/
-/* static  U1      u1_s_SbltwrnDrchk(const U4 u4_a_VCLSTS, const U1 u1_a_SEATTYP, const U1 u1_a_ANYDR)                               */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static  U1      u1_s_SbltwrnDrchk(const U4 u4_a_VCLSTS, const U1 u1_a_SEATTYP, const U1 u1_a_ANYDR)
-{
-    static const U4     u4_sp_DROPN_CHK[SBLTWRN_NUM_SEATTYP << 3] = {
-        (U4)0x00000000U,            (U4)0x00000000U,                /* SBLTWRN_SEATTYP_UNDEF */
-        (U4)0x00000000U,            (U4)0x00000000U,                /* SBLTWRN_SEATTYP_UNDEF */
-        (U4)0x00000000U,            (U4)0x00000000U,                /* SBLTWRN_SEATTYP_UNDEF */
-        (U4)0x00000000U,            (U4)0x00000000U,                /* SBLTWRN_SEATTYP_UNDEF */
-        (U4)SBLTWRN_VCLSTS_D_DR_OP, (U4)SBLTWRN_VCLSTS_D_DR_OP,     /* SBLTWRN_SEATTYP_DS */
-        (U4)SBLTWRN_VCLSTS_D_DR_OP, (U4)SBLTWRN_VCLSTS_D_DR_OP,     /* SBLTWRN_SEATTYP_DS */
-        (U4)SBLTWRN_VCLSTS_D_DR_OP, (U4)SBLTWRN_VCLSTS_D_DR_OP,     /* SBLTWRN_SEATTYP_DS */
-        (U4)SBLTWRN_VCLSTS_D_DR_OP, (U4)SBLTWRN_VCLSTS_D_DR_OP,     /* SBLTWRN_SEATTYP_DS */
-        (U4)SBLTWRN_VCLSTS_P_DR_OP, (U4)SBLTWRN_VCLSTS_P_DR_OP,     /* SBLTWRN_SEATTYP_PS */
-        (U4)SBLTWRN_VCLSTS_P_DR_OP, (U4)SBLTWRN_VCLSTS_P_DR_OP,     /* SBLTWRN_SEATTYP_PS */
-        (U4)SBLTWRN_VCLSTS_P_DR_OP, (U4)SBLTWRN_VCLSTS_P_DR_OP,     /* SBLTWRN_SEATTYP_PS */
-        (U4)SBLTWRN_VCLSTS_P_DR_OP, (U4)SBLTWRN_VCLSTS_P_DR_OP,     /* SBLTWRN_SEATTYP_PS */
-        (U4)SBLTWRN_VCLSTS_DP_DR_OP,(U4)SBLTWRN_VCLSTS_DPB_DR_OP,   /* SBLTWRN_SEATTYP_RS_SNSR */
-        (U4)SBLTWRN_VCLSTS_R_DR_OP, (U4)SBLTWRN_VCLSTS_RB_DR_OP,    /* SBLTWRN_SEATTYP_RS_SNSR */
-        (U4)SBLTWRN_VCLSTS_DP_DR_OP,(U4)SBLTWRN_VCLSTS_PRB_DR_OP,   /* SBLTWRN_SEATTYP_RS_SNSR */
-        (U4)SBLTWRN_VCLSTS_R_DR_OP, (U4)SBLTWRN_VCLSTS_PRB_DR_OP,   /* SBLTWRN_SEATTYP_RS_SNSR */
-        (U4)SBLTWRN_VCLSTS_DP_DR_OP,(U4)SBLTWRN_VCLSTS_DPB_DR_OP,   /* SBLTWRN_SEATTYP_RS_NOSN */
-        (U4)SBLTWRN_VCLSTS_R_DR_OP, (U4)SBLTWRN_VCLSTS_RB_DR_OP,    /* SBLTWRN_SEATTYP_RS_NOSN */
-        (U4)SBLTWRN_VCLSTS_DP_DR_OP,(U4)SBLTWRN_VCLSTS_PRB_DR_OP,   /* SBLTWRN_SEATTYP_RS_NOSN */
-        (U4)SBLTWRN_VCLSTS_R_DR_OP, (U4)SBLTWRN_VCLSTS_PRB_DR_OP    /* SBLTWRN_SEATTYP_RS_NOSN */
-    };
-    U1  u1_t_rrdr;
-    U1  u1_t_wkth;
-    U1  u1_t_type;
-    U4  u4_t_dropn_bit;
-    U1  u1_t_dropn;
-
-    u1_t_rrdr = u1_s_SbltwrnCalibU1MaxChk(u1_CALIB_MCUID0233_RDOOR,       (U1)CALIB_MCUID0233_MAX, (U1)CALIB_MCUID0233_DEF);
-    u1_t_wkth = u1_s_SbltwrnCalibU1MaxChk(u1_CALIB_MCUID0234_WALKTHROUGH, (U1)CALIB_MCUID0234_MAX, (U1)CALIB_MCUID0234_DEF);
-    u1_t_type  = u1_a_ANYDR;
-    u1_t_type |= u1_t_rrdr    << 1;
-    u1_t_type |= u1_t_wkth    << 2;
-    u1_t_type |= u1_a_SEATTYP << 3;
-    if(u1_t_type < (U1)((U1)SBLTWRN_NUM_SEATTYP << 3)){
-        u4_t_dropn_bit = u4_a_VCLSTS & u4_sp_DROPN_CHK[u1_t_type];
-    }
-    else{
-        u4_t_dropn_bit = (U4)0U;
-    }
-
-    if (u4_t_dropn_bit != (U4)0U) {
-        u1_t_dropn = (U1)TRUE;
-    } else {
-        u1_t_dropn = (U1)FALSE;
-    }
-    return (u1_t_dropn);
-}
-
-/*===================================================================================================================================*/
-/* static  U1      u1_s_SbltwrnSeatTyp(const U1 u1_a_SEATID)                                                                         */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static  U1      u1_s_SbltwrnSeatTyp(const U1 u1_a_SEATID)
-{
-    U1  u1_t_seattyp;
-    U1  u1_t_seatfnc;
-
-    u1_t_seatfnc = u1_sp_sbltwrn_stvarcfg[u1_a_SEATID];
-    if (u1_t_seatfnc < (U1)SBLTWRN_NUM_SEAT_FUNC) {
-        u1_t_seattyp = u1_sp_SBLTWRN_SEATTYP[u1_t_seatfnc];
-    } else {
-        u1_t_seattyp = (U1)SBLTWRN_SEATTYP_UNDEF;
-    }
-
-    return (u1_t_seattyp);
-}
-
-/*===================================================================================================================================*/
 /* static  void    vd_s_SbltwrnChimeFlgPreChk(const ST_SBLTWRN_VCLST *stp_a_VCLSTS, ST_SBLTWRN_CHMST *stp_a_chmsts, const U1 u1_a_SEATID) */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
@@ -1625,10 +1044,13 @@ static  void    vd_s_SbltwrnChimeFlgPreChk(const ST_SBLTWRN_VCLST *stp_a_VCLSTS,
     U1  u1_t_cond;
     U1  u1_t_seattyp;
 
-    u1_t_seattyp = u1_s_SbltwrnSeatTyp(u1_a_SEATID);
-    u1_t_cond    = u1_s_SbltwrnDrchk(stp_a_VCLSTS->u4_vclsts, u1_t_seattyp, (U1)TRUE);
+    u1_t_seattyp = u1_g_SbltwrnSeatTyp(u1_a_SEATID);
+    u1_t_cond    = u1_g_SbltwrnDrchk(stp_a_VCLSTS->u4_vclsts, u1_t_seattyp, (U1)TRUE);
     u2_t_gp_tim  = stp_a_VCLSTS->stp_wrnprm[u1_t_seattyp].u2p_tim[SBLTWRN_TIM_GP];
 
+    if ((stp_a_VCLSTS->u4_vclsts & (U4)SBLTWRN_VCLSTS_SPD_STP_OVER) != (U4)0U) {
+        u1_t_cond = (U1)FALSE;
+    }
     if ((stp_a_VCLSTS->u1p_bklsts[u1_a_SEATID] & (U1)SBLTWRN_BKLSTS_UNBCKLFLG) != (U1)0U) {
         u1_t_cond |= u1_s_CND_UNBKL;
     }
@@ -1751,7 +1173,7 @@ static  void    vd_s_SbltwrnChimeTimAct(ST_SBLTWRN_CHMST *stp_a_chmsts, const U4
         }
 
         if (((stp_a_chmsts->u1_flg & (U1)((U1)1U << u4_t_loop)) != (U1)0U) && (u1_a_CNT_UP == (U1)TRUE)) {
-            vd_s_SbltwrnTmcnt(&stp_a_chmsts->u2p_timer[u4_t_loop]);
+            vd_g_SbltwrnTmcnt(&stp_a_chmsts->u2p_timer[u4_t_loop]);
         }
     }
 }
@@ -2307,7 +1729,7 @@ static  U1      u1_s_SbltwrnChmTrns_OffJdgCmn(const U1 u1_a_SEATID, const U1 u1_
     U1  u1_t_fac;
     U1  u1_t_dropn;
 
-    u1_t_dropn = u1_s_SbltwrnDrchk(stp_a_VCLSTS->u4_vclsts, u1_a_SEATTYP, (U1)TRUE);
+    u1_t_dropn = u1_g_SbltwrnDrchk(stp_a_VCLSTS->u4_vclsts, u1_a_SEATTYP, (U1)TRUE);
     u1_t_fac = (U1)SBLTWRN_WRNOFFJDG_NON;
 
     /* Factor Priority Order: DRBKL > PARK > SFTR */
@@ -2322,7 +1744,7 @@ static  U1      u1_s_SbltwrnChmTrns_OffJdgCmn(const U1 u1_a_SEATID, const U1 u1_
     }
     if (
         ((stp_a_VCLSTS->u1p_bklsts[u1_a_SEATID] & (U1)SBLTWRN_BKLSTS_UNBCKL) == (U1)0U) ||      /* buckled */
-        (u1_t_dropn == (U1)TRUE)                                                                /* the door is open */
+        ((u1_t_dropn == (U1)TRUE) && ((stp_a_VCLSTS->u4_vclsts & (U4)SBLTWRN_VCLSTS_SPD_STP_OVER) == (U4)0U))     /* the door is open */
         ) {
         u1_t_fac = (U1)SBLTWRN_WRNOFFJDG_BY_DRBKL;
     }
@@ -2573,7 +1995,7 @@ static  U4      u4_s_SbltwrnTtTrns_condXtoIJ(const U1 u1_a_SEATID, const U1 u1_a
 
     u1_t_sts    = (U1)FALSE;
     u4_t_prkwrn = (stp_a_VCLSTS->stp_wrnprm[u1_a_SEATTYP].u4_ctlopt & (U4)SBLTWRN_CTLOPT_PRKWRN);
-    u1_t_dropn  = u1_s_SbltwrnDrchk(stp_a_VCLSTS->u4_vclsts, u1_a_SEATTYP, (U1)FALSE);
+    u1_t_dropn  = u1_g_SbltwrnDrchk(stp_a_VCLSTS->u4_vclsts, u1_a_SEATTYP, (U1)FALSE);
     u4_t_park   = (stp_a_VCLSTS->u4_vclsts & (U4)SBLTWRN_VCLSTS_PARK);
 
     if ((stp_a_VCLSTS->u1p_bklsts[u1_a_SEATID] & (U1)SBLTWRN_BKLSTS_UNBCKLFLG) != (U1)0U) {
@@ -2589,7 +2011,11 @@ static  U4      u4_s_SbltwrnTtTrns_condXtoIJ(const U1 u1_a_SEATID, const U1 u1_a
         if (u4_t_park != (U4)0U) {
             u4_t_cond = (U4)SBLTWRN_TTSTS_FR_PARK;
         } else {
-            u4_t_cond = (U4)SBLTWRN_TTSTS_FR_LWSP;
+            if ((stp_a_VCLSTS->u4_vclsts & (U4)SBLTWRN_VCLSTS_SPD_STP_OVER) == (U4)0U) {
+                u4_t_cond = (U4)SBLTWRN_TTSTS_FR_LWSP;
+            } else {
+                u4_t_cond = (U4)SBLTWRN_TTSTS_KEEP;
+            }
         }
     } else {
         u4_t_cond = (U4)SBLTWRN_TTSTS_KEEP;
@@ -2609,14 +2035,18 @@ static  U4      u4_s_SbltwrnTtTrns_condHtoIJ(const U1 u1_a_SEATID, const U1 u1_a
     U4  u4_t_cond;
     U1  u1_t_dropn;
 
-    u1_t_dropn  = u1_s_SbltwrnDrchk(stp_a_VCLSTS->u4_vclsts, u1_a_SEATTYP, (U1)FALSE);
+    u1_t_dropn  = u1_g_SbltwrnDrchk(stp_a_VCLSTS->u4_vclsts, u1_a_SEATTYP, (U1)FALSE);
 
     if ((stp_a_VCLSTS->u1p_bklsts[u1_a_SEATID] & (U1)SBLTWRN_BKLSTS_UNBCKLFLG) != (U1)0U) {
         if (u1_t_dropn == (U1)TRUE) {
             if ((stp_a_VCLSTS->u4_vclsts & (U4)SBLTWRN_VCLSTS_PARK) != (U4)0U) {
                 u4_t_cond = (U4)SBLTWRN_TTSTS_FR_PARK;
             } else {
-                u4_t_cond = (U4)SBLTWRN_TTSTS_FR_LWSP;
+                if ((stp_a_VCLSTS->u4_vclsts & (U4)SBLTWRN_VCLSTS_SPD_STP_OVER) == (U4)0U) {
+                    u4_t_cond = (U4)SBLTWRN_TTSTS_FR_LWSP;
+                } else {
+                    u4_t_cond = (U4)SBLTWRN_TTSTS_KEEP;
+                }
             }
         } else {
             u4_t_cond = (U4)SBLTWRN_TTSTS_KEEP;
@@ -2685,10 +2115,11 @@ static  U4      u4_s_SbltwrnTtTrns_condAL(const U1 u1_a_SEATID, const U1 u1_a_SE
     U4  u4_t_cond;
     U1  u1_t_dropn;
 
-    u1_t_dropn  = u1_s_SbltwrnDrchk(stp_a_VCLSTS->u4_vclsts, u1_a_SEATTYP, (U1)TRUE);
+    u1_t_dropn  = u1_g_SbltwrnDrchk(stp_a_VCLSTS->u4_vclsts, u1_a_SEATTYP, (U1)TRUE);
 
     if (
         (u1_t_dropn == (U1)TRUE) &&                                                         /* some rear door(s) open */
+        ((stp_a_VCLSTS->u4_vclsts & (U4)SBLTWRN_VCLSTS_SPD_STP_OVER) == (U4)0U) &&
         ((stp_a_VCLSTS->u1p_bklsts[u1_a_SEATID] & (U1)SBLTWRN_BKLSTS_UNBCKL) != (U1)0U)     /* unbucked               */
         ) {
         u4_t_cond = (U4)(SBLTWRN_TTSTS_DOOR | SBLTWRN_TTOPT_DRTM_CNTCLR | SBLTWRN_TTOPT_DRTM_CNTUP);
@@ -2885,11 +2316,12 @@ static  U4      u4_s_SbltwrnTtTrns_condKL(const U1 u1_a_SEATID, const U1 u1_a_SE
     U4  u4_t_cond;
     U1  u1_t_dropn;
 
-    u1_t_dropn  = u1_s_SbltwrnDrchk(stp_a_VCLSTS->u4_vclsts, u1_a_SEATTYP, (U1)TRUE);
+    u1_t_dropn  = u1_g_SbltwrnDrchk(stp_a_VCLSTS->u4_vclsts, u1_a_SEATTYP, (U1)TRUE);
 
     if (
         ((stp_a_VCLSTS->u1p_bklsts[u1_a_SEATID] & (U1)SBLTWRN_BKLSTS_UNBCKL) != (U1)0U) &&
-        (u1_t_dropn == (U1)TRUE)) {
+        (u1_t_dropn == (U1)TRUE) &&
+        ((stp_a_VCLSTS->u4_vclsts & (U4)SBLTWRN_VCLSTS_SPD_STP_OVER) == (U4)0U)) {
         u4_t_cond = (U4)(SBLTWRN_TTSTS_DOOR | SBLTWRN_TTOPT_DRTM_CNTCLR | SBLTWRN_TTOPT_DRTM_CNTUP);
     } else {
         u4_t_cond = (U4)SBLTWRN_TTSTS_KEEP;
@@ -2962,7 +2394,7 @@ static  U4      u4_s_SbltwrnTtTrns_condLN(const U1 u1_a_SEATID, const U1 u1_a_SE
     U4  u4_t_prk_chk;
     U1  u1_t_dropn;
 
-    u1_t_dropn  = u1_s_SbltwrnDrchk(stp_a_VCLSTS->u4_vclsts, u1_a_SEATTYP, (U1)TRUE);
+    u1_t_dropn  = u1_g_SbltwrnDrchk(stp_a_VCLSTS->u4_vclsts, u1_a_SEATTYP, (U1)TRUE);
     if (u1_a_SEATTYP == (U1)SBLTWRN_SEATTYP_RS_SNSR) {
         u4_t_prk_chk = (U4)SBLTWRN_VCLSTS_PARK;
     } else {
@@ -2992,7 +2424,7 @@ static  U4      u4_s_SbltwrnTtTrns_condLO(const U1 u1_a_SEATID, const U1 u1_a_SE
     U4  u4_t_cond;
     U1  u1_t_dropn;
 
-    u1_t_dropn  = u1_s_SbltwrnDrchk(stp_a_VCLSTS->u4_vclsts, u1_a_SEATTYP, (U1)TRUE);
+    u1_t_dropn  = u1_g_SbltwrnDrchk(stp_a_VCLSTS->u4_vclsts, u1_a_SEATTYP, (U1)TRUE);
 
     if (
         ((stp_a_VCLSTS->u1p_bklsts[u1_a_SEATID] & (U1)SBLTWRN_BKLSTS_UNBCKL) != (U1)0U) &&
@@ -3067,7 +2499,7 @@ static  U4      u4_s_SbltwrnTtTrns_condLS(const U1 u1_a_SEATID, const U1 u1_a_SE
     U4  u4_t_prk_chk;
     U1  u1_t_dropn;
 
-    u1_t_dropn  = u1_s_SbltwrnDrchk(stp_a_VCLSTS->u4_vclsts, u1_a_SEATTYP, (U1)TRUE);
+    u1_t_dropn  = u1_g_SbltwrnDrchk(stp_a_VCLSTS->u4_vclsts, u1_a_SEATTYP, (U1)TRUE);
     if (u1_a_SEATTYP == (U1)SBLTWRN_SEATTYP_RS_SNSR) {
         u4_t_prk_chk_trgt = (U4)SBLTWRN_VCLSTS_PARK;
         u4_t_prk_chk = (U4)0U;
@@ -3127,9 +2559,11 @@ static  U4      u4_s_SbltwrnTtTrns_condNL(const U1 u1_a_SEATID, const U1 u1_a_SE
     U4  u4_t_cond;
     U1  u1_t_dropn;
 
-    u1_t_dropn  = u1_s_SbltwrnDrchk(stp_a_VCLSTS->u4_vclsts, u1_a_SEATTYP, (U1)TRUE);
+    u1_t_dropn  = u1_g_SbltwrnDrchk(stp_a_VCLSTS->u4_vclsts, u1_a_SEATTYP, (U1)TRUE);
 
-    if (((stp_a_VCLSTS->u1p_bklsts[u1_a_SEATID] & (U1)SBLTWRN_BKLSTS_UNBCKL) != (U1)0U) && (u1_t_dropn == (U1)TRUE)) {
+    if (((stp_a_VCLSTS->u1p_bklsts[u1_a_SEATID] & (U1)SBLTWRN_BKLSTS_UNBCKL) != (U1)0U) && 
+        (u1_t_dropn == (U1)TRUE) &&
+        ((stp_a_VCLSTS->u4_vclsts & (U4)SBLTWRN_VCLSTS_SPD_STP_OVER) == (U4)0U)) {
         u4_t_cond = (U4)(SBLTWRN_TTSTS_DOOR | SBLTWRN_TTOPT_UBTM_CNTCLR | SBLTWRN_TTOPT_UBTM_CNTSTP | SBLTWRN_TTOPT_DRTM_CNTCLR | SBLTWRN_TTOPT_DRTM_CNTUP);
     } else {
         u4_t_cond = (U4)SBLTWRN_TTSTS_KEEP;
@@ -3196,9 +2630,11 @@ static  U4      u4_s_SbltwrnTtTrns_condOL(const U1 u1_a_SEATID, const U1 u1_a_SE
     U4  u4_t_cond;
     U1  u1_t_dropn;
 
-    u1_t_dropn  = u1_s_SbltwrnDrchk(stp_a_VCLSTS->u4_vclsts, u1_a_SEATTYP, (U1)TRUE);
+    u1_t_dropn  = u1_g_SbltwrnDrchk(stp_a_VCLSTS->u4_vclsts, u1_a_SEATTYP, (U1)TRUE);
 
-    if (((stp_a_VCLSTS->u1p_bklsts[u1_a_SEATID] & (U1)SBLTWRN_BKLSTS_UNBCKL) != (U1)0U) && (u1_t_dropn == (U1)TRUE)) {
+    if (((stp_a_VCLSTS->u1p_bklsts[u1_a_SEATID] & (U1)SBLTWRN_BKLSTS_UNBCKL) != (U1)0U) &&  
+        (u1_t_dropn == (U1)TRUE) &&
+        ((stp_a_VCLSTS->u4_vclsts & (U4)SBLTWRN_VCLSTS_SPD_STP_OVER) == (U4)0U)) {
         u4_t_cond = (U4)(SBLTWRN_TTSTS_DOOR | SBLTWRN_TTOPT_DRTM_CNTCLR | SBLTWRN_TTOPT_DRTM_CNTUP);
     } else {
         u4_t_cond = (U4)SBLTWRN_TTSTS_KEEP;
@@ -3369,9 +2805,11 @@ static  U4      u4_s_SbltwrnTtTrns_condPL(const U1 u1_a_SEATID, const U1 u1_a_SE
     U4  u4_t_cond;
     U1  u1_t_dropn;
 
-    u1_t_dropn  = u1_s_SbltwrnDrchk(stp_a_VCLSTS->u4_vclsts, u1_a_SEATTYP, (U1)TRUE);
+    u1_t_dropn  = u1_g_SbltwrnDrchk(stp_a_VCLSTS->u4_vclsts, u1_a_SEATTYP, (U1)TRUE);
 
-    if (((stp_a_VCLSTS->u1p_bklsts[u1_a_SEATID] & (U1)SBLTWRN_BKLSTS_UNBCKL) != (U1)0U) && (u1_t_dropn == (U1)TRUE)) {
+    if (((stp_a_VCLSTS->u1p_bklsts[u1_a_SEATID] & (U1)SBLTWRN_BKLSTS_UNBCKL) != (U1)0U) && 
+        (u1_t_dropn == (U1)TRUE) &&
+        ((stp_a_VCLSTS->u4_vclsts & (U4)SBLTWRN_VCLSTS_SPD_STP_OVER) == (U4)0U)) {
         u4_t_cond = (U4)(SBLTWRN_TTSTS_DOOR | SBLTWRN_TTOPT_DRTM_CNTCLR | SBLTWRN_TTOPT_DRTM_CNTUP);
     } else {
         u4_t_cond = (U4)SBLTWRN_TTSTS_KEEP;
@@ -3458,10 +2896,11 @@ static  U4      u4_s_SbltwrnTtTrns_condQL(const U1 u1_a_SEATID, const U1 u1_a_SE
     U4  u4_t_cond;
     U1  u1_t_dropn;
 
-    u1_t_dropn  = u1_s_SbltwrnDrchk(stp_a_VCLSTS->u4_vclsts, u1_a_SEATTYP, (U1)TRUE);
+    u1_t_dropn  = u1_g_SbltwrnDrchk(stp_a_VCLSTS->u4_vclsts, u1_a_SEATTYP, (U1)TRUE);
 
     if (
         (u1_t_dropn == (U1)TRUE) &&
+        ((stp_a_VCLSTS->u4_vclsts & (U4)SBLTWRN_VCLSTS_SPD_STP_OVER) == (U4)0U) &&
         ((stp_a_VCLSTS->u1p_bklsts[u1_a_SEATID] & (U1)SBLTWRN_BKLSTS_UNBCKL) != (U1)0U) 
         ) {
         u4_t_cond = (U4)(SBLTWRN_TTSTS_DOOR | SBLTWRN_TTOPT_DRTM_CNTCLR | SBLTWRN_TTOPT_DRTM_CNTUP);
@@ -3562,9 +3001,11 @@ static  U4      u4_s_SbltwrnTtTrns_condRL(const U1 u1_a_SEATID, const U1 u1_a_SE
     U4  u4_t_cond;
     U1  u1_t_dropn;
 
-    u1_t_dropn  = u1_s_SbltwrnDrchk(stp_a_VCLSTS->u4_vclsts, u1_a_SEATTYP, (U1)TRUE);
+    u1_t_dropn  = u1_g_SbltwrnDrchk(stp_a_VCLSTS->u4_vclsts, u1_a_SEATTYP, (U1)TRUE);
 
-    if (((stp_a_VCLSTS->u1p_bklsts[u1_a_SEATID] & (U1)SBLTWRN_BKLSTS_UNBCKL) != (U1)0U) && (u1_t_dropn == (U1)TRUE)) {
+    if (((stp_a_VCLSTS->u1p_bklsts[u1_a_SEATID] & (U1)SBLTWRN_BKLSTS_UNBCKL) != (U1)0U) && 
+        (u1_t_dropn == (U1)TRUE) &&
+        ((stp_a_VCLSTS->u4_vclsts & (U4)SBLTWRN_VCLSTS_SPD_STP_OVER) == (U4)0U)) {
         u4_t_cond = (U4)(SBLTWRN_TTSTS_DOOR | SBLTWRN_TTOPT_DRTM_CNTCLR | SBLTWRN_TTOPT_DRTM_CNTUP);
     } else {
         u4_t_cond = (U4)SBLTWRN_TTSTS_KEEP;
@@ -3637,9 +3078,11 @@ static  U4      u4_s_SbltwrnTtTrns_condSL(const U1 u1_a_SEATID, const U1 u1_a_SE
     U4  u4_t_cond;
     U1  u1_t_dropn;
 
-    u1_t_dropn  = u1_s_SbltwrnDrchk(stp_a_VCLSTS->u4_vclsts, u1_a_SEATTYP, (U1)TRUE);
+    u1_t_dropn  = u1_g_SbltwrnDrchk(stp_a_VCLSTS->u4_vclsts, u1_a_SEATTYP, (U1)TRUE);
 
-    if (((stp_a_VCLSTS->u1p_bklsts[u1_a_SEATID] & (U1)SBLTWRN_BKLSTS_UNBCKL) != (U1)0U) && (u1_t_dropn == (U1)TRUE)) {
+    if (((stp_a_VCLSTS->u1p_bklsts[u1_a_SEATID] & (U1)SBLTWRN_BKLSTS_UNBCKL) != (U1)0U) && 
+        (u1_t_dropn == (U1)TRUE) &&
+        ((stp_a_VCLSTS->u4_vclsts & (U4)SBLTWRN_VCLSTS_SPD_STP_OVER) == (U4)0U)) {
         u4_t_cond = (U4)(SBLTWRN_TTSTS_DOOR | SBLTWRN_TTOPT_UBTM_CNTCLR | SBLTWRN_TTOPT_UBTM_CNTSTP | SBLTWRN_TTOPT_DRTM_CNTCLR | SBLTWRN_TTOPT_DRTM_CNTUP);
     } else {
         u4_t_cond = (U4)SBLTWRN_TTSTS_KEEP;
@@ -3768,74 +3211,6 @@ static  U1      u1_s_SbltwrnTtTrns_ChmStsChk(const U1 u1_a_SEATID, const U1 u1_a
 }
 
 /*===================================================================================================================================*/
-/* static  void    vd_s_SbltwrnSeatsts(const U4 u4_a_VCLSTS, const U1 *u1_ap_MSGSTS, U1 *u1_ap_bklsts)                               */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static  void    vd_s_SbltwrnSeatsts(const U4 u4_a_VCLSTS, const U1 *u1_ap_MSGSTS, U1 *u1_ap_bklsts)
-{
-    U4                  u4_t_loop;
-    const U1            *u1_tp_STVARCFG;
-
-    u1_tp_STVARCFG = &u1_sp_sbltwrn_stvarcfg[0];
-    for (u4_t_loop = (U4)0U; u4_t_loop < (U4)SBLTWRN_NUM_ALLSEAT; u4_t_loop++) {
-        if (u1_tp_STVARCFG[u4_t_loop] != (U1)SBLTWRN_SEAT_NOTUSED) {
-            u1_ap_bklsts[u4_t_loop] = (*fp_sp_SEATFUNC[u1_tp_STVARCFG[u4_t_loop]])(&u1_ap_MSGSTS[0], u4_t_loop, u4_a_VCLSTS);
-        } else {
-            u1_ap_bklsts[u4_t_loop] = (U1)SBLTWRN_BKLSTS_BCKL;
-        }
-    }
-}
-
-/*===================================================================================================================================*/
-/* static  void    vd_s_SbltwrnMsgsts(const U1 u1_a_IGON, U1 * u1_ap_msgsts)                                                         */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static  void    vd_s_SbltwrnMsgsts(const U1 u1_a_IGON, U1 *u1_ap_msgsts)
-{
-    U4                                          u4_t_msgindx;
-    U1                                          u1_t_csmsgsts;
-    U1                                          u1_t_sbltmsgsts;
-    const ST_SBLTWRN_MSGCFG                     *stp_t_MSGCOND;
-
-    for (u4_t_msgindx = (U4)0U; u4_t_msgindx < (U4)SBLTWRN_NUM_MSG; u4_t_msgindx++) {
-        stp_t_MSGCOND = &st_gp_SBLTWRN_MSGCOND_CFG[u4_t_msgindx];
-        u1_t_csmsgsts = u1_g_SbltwrnCanMsgstsCfg(stp_t_MSGCOND->u2_msgid);
-
-        u1_t_sbltmsgsts = (U1)SBLTWRN_UNKNOWN;
-        if ((stp_t_MSGCOND->u1_msgcond == (U1)SBLTWRN_MSGCOND_BATT) ||
-            ((stp_t_MSGCOND->u1_msgcond == (U1)SBLTWRN_MSGCOND_IGON) && (u1_a_IGON == (U1)TRUE))) {
-            u1_t_sbltmsgsts = u1_s_SbltwrnMsgjdg(u1_t_csmsgsts);
-        }
-        u1_ap_msgsts[u4_t_msgindx] = u1_t_sbltmsgsts;
-    }
-}
-
-/*===================================================================================================================================*/
-/* static  U1      u1_s_SbltwrnMsgjdg(const U1 u1_a_MSGSTS)                                                                          */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static  U1      u1_s_SbltwrnMsgjdg(const U1 u1_a_MSGSTS)
-{
-    U1          u1_t_msgsts;
-
-    if ((u1_a_MSGSTS & (U1)SBLTWRN_STSBIT_INVALID) != (U1)0U) {
-        u1_t_msgsts = (U1)SBLTWRN_INVALID;
-    } else if ((u1_a_MSGSTS & (U1)SBLTWRN_STSBIT_UNKNOWN) != (U1)0U) {
-        u1_t_msgsts = (U1)SBLTWRN_UNKNOWN;
-    } else {
-        u1_t_msgsts = (U1)SBLTWRN_VALID;
-    }
-
-    return (u1_t_msgsts);
-}
-
-/*===================================================================================================================================*/
 /* static  void    vd_s_SbltwrnInitChmsts(ST_SBLTWRN_CHMST *stp_a_chmsts)                                                            */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
@@ -3858,153 +3233,7 @@ static  void    vd_s_SbltwrnInitTtsts(ST_SBLTWRN_TTST *stp_a_ttsts)
 {
     stp_a_ttsts->u1_ctlsts      = (U1)SBLTWRN_TTSTS_OFF;
     stp_a_ttsts->u1_flg         = (U1)0U;
-    vd_g_MemfillU2(&stp_a_ttsts->u2p_timer[0], (U2)0U, (U4)SBLTWRN_NUM_CHMTIMER);
-}
-
-/*===================================================================================================================================*/
-/* static  void    vd_s_SbltwrnTmcnt(U2 * u2p_a_timer)                                                                               */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static  void    vd_s_SbltwrnTmcnt(U2* u2p_a_timer)
-{
-    if ((*u2p_a_timer) < (U2)U2_MAX) {
-        (*u2p_a_timer)++;
-    } else {
-        (*u2p_a_timer) = (U2)U2_MAX;
-    }
-}
-
-/*===================================================================================================================================*/
-/* static  void    vd_s_SbltwrnGetCalibSupd(void)                                                                                    */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static  void    vd_s_SbltwrnGetCalibSupd(void)
-{
-    u1_sp_sbltwrn_stvarcfg[SBLTWRN_DRV_SEAT] = (U1)SBLTWRN_SEAT_DS;
-    u1_sp_sbltwrn_stvarcfg[SBLTWRN_FRC_SEAT] = (U1)SBLTWRN_SEAT_FC;
-    u1_sp_sbltwrn_stvarcfg[SBLTWRN_PSG_SEAT] = (U1)SBLTWRN_SEAT_PS;
-
-    vd_s_SbltwrnGetCalibRear1();
-    vd_s_SbltwrnGetCalibRear2();
-    vd_s_SbltwrnGetCalibRear3();
-}
-
-/*===================================================================================================================================*/
-/* static  void    vd_s_SbltwrnGetCalibRear1(void)                                                                                   */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static  void    vd_s_SbltwrnGetCalibRear1(void)
-{
-    U1          u1_t_rl_seatsw;
-    U1          u1_t_rc_seatsw;
-    U1          u1_t_rr_seatsw;
-
-    u1_t_rl_seatsw = u1_SEATBELT_CALIB_RL_SEATSW;
-    u1_t_rc_seatsw = u1_SEATBELT_CALIB_RC_SEATSW;
-    u1_t_rr_seatsw = u1_SEATBELT_CALIB_RR_SEATSW;
-
-    if(u1_t_rl_seatsw == (U1)TRUE){
-        u1_sp_sbltwrn_stvarcfg[SBLTWRN_R2L_SEAT] = (U1)SBLTWRN_SEAT_RS_RXBKLPDC_RXOSW;
-    }
-    else{
-        u1_sp_sbltwrn_stvarcfg[SBLTWRN_R2L_SEAT] = (U1)SBLTWRN_SEAT_RS_RXBKLPDC;
-    }
-
-    if(u1_t_rc_seatsw == (U1)TRUE){
-        u1_sp_sbltwrn_stvarcfg[SBLTWRN_R2C_SEAT] = (U1)SBLTWRN_SEAT_RS_RXBKLPDC_RXOSW;
-    }
-    else{
-        u1_sp_sbltwrn_stvarcfg[SBLTWRN_R2C_SEAT] = (U1)SBLTWRN_SEAT_RS_RXBKLPDC;
-    }
-
-    if(u1_t_rr_seatsw == (U1)TRUE){
-        u1_sp_sbltwrn_stvarcfg[SBLTWRN_R2R_SEAT] = (U1)SBLTWRN_SEAT_RS_RXBKLPDC_RXOSW;
-    }
-    else{
-        u1_sp_sbltwrn_stvarcfg[SBLTWRN_R2R_SEAT] = (U1)SBLTWRN_SEAT_RS_RXBKLPDC;
-    }
-}
-
-/*===================================================================================================================================*/
-/* static  void    vd_s_SbltwrnGetCalibRear2(void)                                                                                   */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static  void    vd_s_SbltwrnGetCalibRear2(void)
-{
-    U1          u1_t_rl2_seatsw;
-    U1          u1_t_rc2_seatsw;
-    U1          u1_t_rr2_seatsw;
-
-    u1_t_rl2_seatsw = u1_SEATBELT_CALIB_RL2_SEATSW;
-    u1_t_rc2_seatsw = u1_SEATBELT_CALIB_RC2_SEATSW;
-    u1_t_rr2_seatsw = u1_SEATBELT_CALIB_RR2_SEATSW;
-
-    if(u1_t_rl2_seatsw == (U1)TRUE){
-        u1_sp_sbltwrn_stvarcfg[SBLTWRN_R3L_SEAT] = (U1)SBLTWRN_SEAT_RS_XRXBKL_RXXOSW;
-    }
-    else{
-        u1_sp_sbltwrn_stvarcfg[SBLTWRN_R3L_SEAT] = (U1)SBLTWRN_SEAT_RS_XRXBKL;
-    }
-
-    if(u1_t_rc2_seatsw == (U1)TRUE){
-        u1_sp_sbltwrn_stvarcfg[SBLTWRN_R3C_SEAT] = (U1)SBLTWRN_SEAT_RS_XRXBKL_RXXOSW;
-    }
-    else{
-        u1_sp_sbltwrn_stvarcfg[SBLTWRN_R3C_SEAT] = (U1)SBLTWRN_SEAT_RS_XRXBKL;
-    }
-
-    if(u1_t_rr2_seatsw == (U1)TRUE){
-        u1_sp_sbltwrn_stvarcfg[SBLTWRN_R3R_SEAT] = (U1)SBLTWRN_SEAT_RS_XRXBKL_RXXOSW;
-    }
-    else{
-        u1_sp_sbltwrn_stvarcfg[SBLTWRN_R3R_SEAT] = (U1)SBLTWRN_SEAT_RS_XRXBKL;
-    }
-}
-
-/*===================================================================================================================================*/
-/* static  void    vd_s_SbltwrnGetCalibRear3(void)                                                                                   */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static  void    vd_s_SbltwrnGetCalibRear3(void)
-{
-    U1          u1_t_rl3_seatsw;
-    U1          u1_t_rc3_seatsw;
-    U1          u1_t_rr3_seatsw;
-
-    u1_t_rl3_seatsw = u1_SEATBELT_CALIB_RL3_SEATSW;
-    u1_t_rc3_seatsw = u1_SEATBELT_CALIB_RC3_SEATSW;
-    u1_t_rr3_seatsw = u1_SEATBELT_CALIB_RR3_SEATSW;
-
-    if(u1_t_rl3_seatsw == (U1)TRUE){
-        u1_sp_sbltwrn_stvarcfg[SBLTWRN_R4L_SEAT] = (U1)SBLTWRN_SEAT_RS_XRXBKL_RXXOSW;
-    }
-    else{
-        u1_sp_sbltwrn_stvarcfg[SBLTWRN_R4L_SEAT] = (U1)SBLTWRN_SEAT_RS_XRXBKL;
-    }
-
-    if(u1_t_rc3_seatsw == (U1)TRUE){
-        u1_sp_sbltwrn_stvarcfg[SBLTWRN_R4C_SEAT] = (U1)SBLTWRN_SEAT_RS_XRXBKL_RXXOSW;
-    }
-    else{
-        u1_sp_sbltwrn_stvarcfg[SBLTWRN_R4C_SEAT] = (U1)SBLTWRN_SEAT_RS_XRXBKL;
-    }
-
-    if(u1_t_rr3_seatsw == (U1)TRUE){
-        u1_sp_sbltwrn_stvarcfg[SBLTWRN_R4R_SEAT] = (U1)SBLTWRN_SEAT_RS_XRXBKL_RXXOSW;
-    }
-    else{
-        u1_sp_sbltwrn_stvarcfg[SBLTWRN_R4R_SEAT] = (U1)SBLTWRN_SEAT_RS_XRXBKL;
-    }
+    vd_g_MemfillU2(&stp_a_ttsts->u2p_timer[0], (U2)0U, (U4)SBLTWRN_NUM_TTTIMER);
 }
 
 /*===================================================================================================================================*/
@@ -4037,28 +3266,10 @@ static  void    vd_s_SbltwrnSbrBzrChgDet(void)
             if ((st_sp_sbltwrn_chmsts[u4_t_lpcnt].u1_ctlsts == (U1)SBLTWRN_CHMSTS_UNBKNT) ||
                 (st_sp_sbltwrn_chmsts[u4_t_lpcnt].u1_ctlsts == (U1)SBLTWRN_CHMSTS_LV1   ) ||
                 (st_sp_sbltwrn_chmsts[u4_t_lpcnt].u1_ctlsts == (U1)SBLTWRN_CHMSTS_LV2   )) {
-                u1_sp_sbltwrn_sbrbit[st_sp_SBLTWRN_SBR_STSTBL[u4_t_lpcnt].u1_idx] |= st_sp_SBLTWRN_SBR_STSTBL[u4_t_lpcnt].u1_wrtbit;
+                u1_sp_sbltwrn_sbrbit[st_gp_SBLTWRN_SBR_STSTBL[u4_t_lpcnt].u1_idx] |= st_gp_SBLTWRN_SBR_STSTBL[u4_t_lpcnt].u1_wrtbit;
             }
         }
     }
-}
-
-/*===================================================================================================================================*/
-/* static  inline  U1  u1_s_SbltwrnCalibU1MaxChk(const U1 u1_a_CALIBID, const U1 u1_a_MAX, const U1 u1_a_DEF)                        */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static  inline  U1  u1_s_SbltwrnCalibU1MaxChk(const U1 u1_a_CALIBID, const U1 u1_a_MAX, const U1 u1_a_DEF)
-{
-    U1 u1_t_ret;
-
-    u1_t_ret = u1_a_CALIBID;
-    if(u1_t_ret > u1_a_MAX){
-        u1_t_ret = u1_a_DEF;
-    }
-
-    return(u1_t_ret);
 }
 
 /*===================================================================================================================================*/
@@ -4078,6 +3289,8 @@ static  inline  U1  u1_s_SbltwrnCalibU1MaxChk(const U1 u1_a_CALIBID, const U1 u1
 /*  2.1.3    04/05/2022  YI(M)    Delete unused define and process.                                                                  */
 /*  2.2.0    02/29/2024  TH       for 19PFv3                                                                                         */
 /*  2.2.1    03/20/2025  TH       Fix : Door Open Judge (Telltale al,kl,nl,ol,pl,ql,rl,sl,la,ln,lo,ls)                               */
+/*  3.0.0    09/16/2025  NA       New.  Legal compliance.(FMVSS208_2025 SBR regulations)                                             */
+/*  3.1.0    01/22/2026  NA       Change state transition condition in FMVSS operation (Buzzer BA, Telltale ba)                      */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /*  -------- ----------  -------  -------------------------------------------------------------------------------------------------- */
@@ -4096,5 +3309,6 @@ static  inline  U1  u1_s_SbltwrnCalibU1MaxChk(const U1 u1_a_CALIBID, const U1 u1
 /*  * SH     = Sae Hirose,       Denso Techno                                                                                        */
 /*  * TH     = Taisuke Hirakawa, KSE                                                                                                 */
 /*  * TN(DT) = Tetsushi Nakano, Denso Techno                                                                                         */
+/*  * NA     = Nazirul Afham,    PXT                                                                                                 */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

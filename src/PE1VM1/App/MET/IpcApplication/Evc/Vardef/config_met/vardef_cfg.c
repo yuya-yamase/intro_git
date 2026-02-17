@@ -1,4 +1,4 @@
-/* 2.4.0 */
+/* 3.0.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -19,6 +19,7 @@
 #include "vardef_cfg_private.h"
 #include "vardef_dest_cfg_private.h"
 #include "vardef_hcs_cfg_private.h"
+#include "vardef_omus_cfg_private.h"
 
 #include "oxcan.h"
 
@@ -90,6 +91,7 @@ void    vd_g_VardefCfgBonInit(void)
     vd_g_VardefDestBonInit();
 
     vd_g_VardefHcsBonInit();
+    vd_g_VardefOmusBonInit();
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_VardefCfgRstwkInit(void)                                                                                            */
@@ -103,6 +105,7 @@ void    vd_g_VardefCfgRstwkInit(void)
     vd_g_VardefDestRstwkInit();
 
     vd_g_VardefHcsRstwkInit();
+    vd_g_VardefOmusRstwkInit();
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_VardefCfgOpemdEvhk(const U2 u2_a_EOM)                                                                               */
@@ -128,6 +131,9 @@ void    vd_g_VardefCfgMainTask(const U2 u2_a_EOM, const U1 u1_a_TSLOT)
     if(u1_a_TSLOT == (U1)VDF_TSLOT_2){
         vd_g_VardefDestMainTask();                    /* vd_g_VardefDestMainTask shall be invoked every 100 milliseconds        */
         vd_g_VardefHcsMainTask(u2_a_EOM);
+    }
+    else if(u1_a_TSLOT == (U1)VDF_TSLOT_0){
+        vd_g_VardefOmusMainTask();
     }
     else{
         /* do nothing */
@@ -276,6 +282,7 @@ U1      u1_s_VardefCfgPowerChk(void)
 /*  BEV-1      2/06/2025 SF       Change for BEV System_Consideration_1.(MET-M_ONOFF-CSTD-1-02-A-C0)                                 */
 /*  BEV-2      4/04/2025 KO       Change for BEV System_Consideration_1.(MET-C_HCS-CSTD-0-00-A-C0)                                   */
 /*  BEV-3     10/15/2025 SN       Configured for BEVstep3_Rebase                                                                     */
+/*  BEV-4      2/10/2026 SH       Added vardef_omus for BEV Step3                                                                    */
 /*                                                                                                                                   */
 /*  * TN     = Takashi Nagai, Denso                                                                                                  */
 /*  * SF     = Seiya Fukutome, Denso Techno                                                                                          */

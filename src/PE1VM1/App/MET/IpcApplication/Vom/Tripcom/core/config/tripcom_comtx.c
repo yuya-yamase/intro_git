@@ -22,7 +22,6 @@
 #include "vardef.h"
 #include "veh_opemd.h"
 #include "locale.h"
-#include "calibration.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -367,7 +366,7 @@ static  void    vd_s_TripcomCfgCanTxUNIT6(const U1 u1_a_UNIT)
 
     u1_t_preunit = (U1)0U;
     u1_t_unitsndval  = u1_a_UNIT;
-    u1_t_unitdest = u1_g_VardefDestDbfByPid((U1)VDF_DEST_DBF_UNITSLCT_DEST);
+    u1_t_unitdest = u1_g_VardefUnitSlctDstByPid();
     
     (void)Com_ReceiveSignal(ComConf_ComSignal_UNIT_6, &u1_t_preunit);
     if ((u1_t_unitdest == (U1)VDF_UNIT_TYPE_UK) && 
@@ -643,7 +642,7 @@ static  void    vd_s_TripcomCfgCanTxEC_SCL(void)
 {
     U1          u1_t_sndval;
 
-    u1_t_sndval = u1_CALIB_MCUID0255_PE_EV;
+    u1_t_sndval = u1_g_VardefOmusMCUID0255();
     (void)Com_SendSignal(ComConf_ComSignal_EC_SCL, &u1_t_sndval);
     (void)Com_TriggerIPDUSend(MSG_MET1S38_TXCH0);
 }
@@ -699,6 +698,8 @@ static  void    vd_s_TripcomCfgCanTxEC_SCL(void)
 /*  BEV3-01   01/20/2026 DR       Added AS_EVDT and AS_TOEC for BEV FF2                                                              */
 /*  BEV3-02   02/11/2026 DT       Update TX can frame for BEV FF2 and delete not applied drive moni appli                            */
 /*  BEV3-03   02/12/2026 EA       Deleted/Deactivated other than BEV Powertrain processes                                            */
+/*  BEV3-04   01/30/2026 YN       Configured for BEVstep3_FF2.(MET-M_DESTVARI-CSTD-0-01)                                             */
+/*  BEV3-05   02/10/2026 SH       Change MCUID0250-0255 from Calibration to OMUSVIID                                                 */
 /*                                                                                                                                   */
 /*  * HY   = Hidefumi Yoshida, Denso                                                                                                 */
 /*  * YA   = Yuhei Aoyama, DensoTechno                                                                                               */
@@ -718,5 +719,7 @@ static  void    vd_s_TripcomCfgCanTxEC_SCL(void)
 /*  * DR   = Dyan Reyes, DTPH                                                                                                        */
 /*  * DT   = Dj Tutanes, DTPH                                                                                                        */
 /*  * EA   = Eunice Avelin, DTPH                                                                                                     */
+/*  * YN   = Yujiro Nagaya, Denso Techno                                                                                             */
+/*  * SH   = Sae Hirose, Denso Techno                                                                                                */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

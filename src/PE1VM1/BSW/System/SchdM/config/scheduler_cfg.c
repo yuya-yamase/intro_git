@@ -45,6 +45,7 @@
 #include "run_m.h"
 #include "nvmc_mgr.h"
 #include "oxcan.h"
+#include "oxsec.h"
 #include "ivdsh.h"
 #include "fwush.h"
 
@@ -79,6 +80,7 @@
 #include "hdimmgr.h"
 #include "himgadj.h"
 #include "datesi_met.h"
+#include "omavrchk.h"
 /*---------------------------------------------------------------------------*/
 /* Platform Header                                                           */
 /*---------------------------------------------------------------------------*/
@@ -256,6 +258,7 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     /*-------------------------------------------------------------------*/
     {&vd_g_iVDshMainReaTask,            (U4)SCHDLR_TASKBIT___5MS    },
     {&vd_g_XSpiMETPduRx,                (U4)SCHDLR_TASKBIT___5MS    },
+    {&vd_g_oXSECMainPreMid,             (U4)SCHDLR_TASKBIT___5MS    },
     {&vd_g_oXCANMainPreTask,            (U4)SCHDLR_TASKBIT___5MS    },
     {&vd_g_VehopemdMainTask,            (U4)SCHDLR_TASKBIT___5MS    }, /* In case of toyota product, vd_g_VehopemdMainTask shall be    */
                                                                        /* called after vd_g_IoHwDifltSmplgTask                         */ 
@@ -267,28 +270,6 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     /*  10ms A Non-Platform Task                                         */
     /*                                                                   */
     /*-------------------------------------------------------------------*/
-
-    /*-------------------------------------------------------------------*/
-    /*                                                                   */
-    /*  20ms B Task                                                      */
-    /*                                                                   */
-    /*-------------------------------------------------------------------*/
-    {&vd_g_Nvmc_PeriodicTask,           (U4)SCHDLR_TASKBIT__20MS_B  },
-
-    /*-------------------------------------------------------------------*/
-    /*                                                                   */
-    /*   5ms Platform Post Task                                          */
-    /*                                                                   */
-    /*-------------------------------------------------------------------*/
-    {&vd_g_oXCANMainPosTask,            (U4)SCHDLR_TASKBIT___5MS    },
-    {&vd_g_iVDshMainWriTask,            (U4)SCHDLR_TASKBIT___5MS    },
-
-    /*-------------------------------------------------------------------*/
-    /*                                                                   */
-    /*  10ms A Platform Post Task                                        */
-    /*                                                                   */
-    /*-------------------------------------------------------------------*/
-    {&vd_g_Rim_Task,                    (U4)SCHDLR_TASKBIT__10MS_A  },
     /*-------------------------------------------------------------------*/
     /*                                                                   */
     /*  Platform Pre Task                                                */
@@ -316,6 +297,7 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     {&vd_g_DimMainTask,                 (U4)SCHDLR_TASKBIT__20MS_A  },
     {&vd_g_VehspdMainTask,              (U4)SCHDLR_TASKBIT__20MS_A  },
     {&vd_g_VptranMainTask,              (U4)SCHDLR_TASKBIT__20MS_A  },
+    {&vd_g_OmaVrChkMainTask,            (U4)SCHDLR_TASKBIT__50MS_C  },
     {&vd_g_OdoMainTask,                 (U4)SCHDLR_TASKBIT__50MS_C  },
     {&vd_g_AlertMainTask,               (U4)SCHDLR_TASKBIT__10MS_A  },
     {&vd_g_SbltwrnMainTask,             (U4)SCHDLR_TASKBIT__50MS_C  },
@@ -353,11 +335,33 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     /*                                                                   */
     /*  Platform Post Task                                               */
     /*                                                                   */
-    /*  WARNING "DO NOT EXECUTE APPLICATION AT HERE"                     */
     /*-------------------------------------------------------------------*/
     {&vd_g_DrectxMainTask,              (U4)SCHDLR_TASKBIT__50MS_A  },
+
+    /*-------------------------------------------------------------------*/
+    /*                                                                   */
+    /*  20ms B Task                                                      */
+    /*                                                                   */
+    /*-------------------------------------------------------------------*/
+    {&vd_g_Nvmc_PeriodicTask,           (U4)SCHDLR_TASKBIT__20MS_B  },
+
+    /*-------------------------------------------------------------------*/
+    /*                                                                   */
+    /*   5ms Platform Post Task                                          */
+    /*                                                                   */
+    /*-------------------------------------------------------------------*/
+    {&vd_g_oXCANMainPosTask,            (U4)SCHDLR_TASKBIT___5MS    },
+    {&vd_g_oXSECMainPosMid,             (U4)SCHDLR_TASKBIT___5MS    },
     {&vd_g_XSpiMETPduTx,                (U4)SCHDLR_TASKBIT___5MS    },
     {&vd_g_XSpiCalibMainTask,           (U4)SCHDLR_TASKBIT_100MS_A  },      /* This task is not needed to be called before vd_g_XSpiMETPduTx  */
+    {&vd_g_iVDshMainWriTask,            (U4)SCHDLR_TASKBIT___5MS    },
+
+    /*-------------------------------------------------------------------*/
+    /*                                                                   */
+    /*  10ms A Platform Post Task                                        */
+    /*                                                                   */
+    /*-------------------------------------------------------------------*/
+    {&vd_g_Rim_Task,                    (U4)SCHDLR_TASKBIT__10MS_A  },
 
     /*-------------------------------------------------------------------*/
     /*  WARNING "DO NOT EXECUTE APPLICATION AT HERE"                     */
@@ -488,11 +492,13 @@ static void    vd_s_SchdlrCfgWdgTimRestart(void)
 /*  BEV-1    10/22/2025  TS       Change for BEV rebase.                                                                             */
 /*  BEV-2    11/13/2025  YN       Change for BEV rebase.(Add CanTxApp)                                                               */
 /*  BEV-3    01/30/2025  SN       Change for BEV B_PERMEM.(Add Mcst)                                                                 */
+/*  BEV-4    02/09/2026  KO       Change for BEV M_SECMSG.(Add OmaVrChk)                                                             */
 /*                                                                                                                                   */
 /*  * TN      = Takashi Nagai, Denso                                                                                                 */
 /*  * AM      = Akira Motomatsu, Denso Create                                                                                        */
 /*  * TS      = Takuo Suganuma, Denso Techno                                                                                         */
 /*  * YN      = Yujiro Nagaya, Denso Techno                                                                                          */
 /*  * SN      = Shimon Nambu, Denso Techno                                                                                           */
+/*  * KO      = Kazuto Oishi, Denso Techno                                                                                           */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
