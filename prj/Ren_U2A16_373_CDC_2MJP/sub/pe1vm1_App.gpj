@@ -151,6 +151,7 @@
 ../../src/PE1VM1/App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_C_TRCOFF.c
 ../../src/PE1VM1/App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_C_VSCOFF.c
 ../../src/PE1VM1/App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_D_SBW.c
+../../src/PE1VM1/App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_D_SECDDC.c
 ../../src/PE1VM1/App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_D_SFTPOS.c
 ../../src/PE1VM1/App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_H_ACCHOL.c
 ../../src/PE1VM1/App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_H_BATINS.c
