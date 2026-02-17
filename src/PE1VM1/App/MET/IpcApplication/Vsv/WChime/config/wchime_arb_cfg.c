@@ -705,7 +705,7 @@ static  void    vd_s_wChimeCfgAppDelchk(U4 * u4p_a_reqbit)
 {
     U1 u1_t_app;
 
-    u1_t_app = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_AUTOP);
+    u1_t_app  = u1_g_VardefAutopAva();
 
     if(u1_t_app == (U1)FALSE){
         vd_s_wChimeCfgReqDel(u4p_a_reqbit, (U1)WCHIME_REQ_SI_APP_DIS_ASSIST);
@@ -860,8 +860,11 @@ static  void    vd_s_wChimeCfgReqDel(U4 * u4_ap_reqbit, const U1 u1_a_REQ_ID)
 /*                                MET-D_SFTPOS-CSTD-1-00-B-C0.                                                                       */
 /*                                Change Name from RJTB_DBL1 to RJTB_DBL                                                             */
 /*  BEV-10    01/30/2026 YN       Change config for BEV FF2.(MET-M_DESTVARI-CSTD-0-01)                                               */
-/*  BEV-11     1/15/2026 HT       Change for Full_function2 (MET-M_REMWAR-CSTD-2-04-A-C0)                                            */
+/*  BEV-11    01/15/2026 HT       Change for Full_function2 (MET-M_REMWAR-CSTD-2-04-A-C0)                                            */
 /*                                Removed "ALERT_REQ" in order to transfer signal transmission control from the MCU to the SoC       */
+/*  BEV-12    02/02/2026 YH       Change config for BEV Full_Function_2.                                                             */
+/*                                MET-S_ADMID-CSTD-0-07-B-C0/MET-S_ADBZR-CSTD-0-06-A-C0                                              */
+/*                                Separate AUTOP function judgement into AP_RMT and AP_NORMT.                                        */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
 /*  * ToN  = Toshiharu Nagata, Denso Techno                                                                                          */
@@ -887,6 +890,7 @@ static  void    vd_s_wChimeCfgReqDel(U4 * u4_ap_reqbit, const U1 u1_a_REQ_ID)
 /*  * KH   = Kiko Huerte, DTPH                                                                                                       */
 /*  * JS   = Jun Sugiyama, KSE                                                                                                       */
 /*  * NI   = Naoki Inagaki, KSE                                                                                                      */
+/*  * YH   = Yuki Hatakeyama, KSE                                                                                                    */
 /*  * YN   = Yujiro Nagaya, Denso Techno                                                                                             */
 /*  * HT   = Hibiki Tanii, KSE                                                                                                       */
 /*                                                                                                                                   */
