@@ -241,8 +241,8 @@
 #define VDF_ESO_CH_SYS_NOT_USED_W6_18            (210U)
 #define VDF_ESO_CH_SYS_NOT_USED_W6_19            (211U)
 #define VDF_ESO_CH_SYS_NOT_USED_W6_20            (212U)
-#define VDF_ESO_CH_SYS_NOT_USED_W6_21            (213U)
-#define VDF_ESO_CH_SYS_NOT_USED_W6_22            (214U)
+#define VDF_ESO_CH_SW_MWL_FRONT_FOG              (213U)
+#define VDF_ESO_CH_SW_MWL_REAR_FOG               (214U)
 #define VDF_ESO_CH_EVMIL_RED                     (215U)
 #define VDF_ESO_CH_EVMIL_AMBER                   (216U)
 #define VDF_ESO_CH_SW_OMRBB                      (217U)
@@ -330,8 +330,8 @@
 #define VDF_ESO_NVM_W3                           (0x048C0000U)
 #define VDF_ESO_NVM_W4                           (0x10002000U)
 #define VDF_ESO_NVM_W5                           (0x0004076CU)
-#define VDF_ESO_NVM_W6                           (0x3F800000U)
-#define VDF_ESO_NVM_W7                           (0xBFEFFD80U)
+#define VDF_ESO_NVM_W6                           (0x3FE00000U)
+#define VDF_ESO_NVM_W7                           (0xBFFFFD80U)
 #define VDF_ESO_NVM_W8                           (0x00FFF715U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
