@@ -94,6 +94,29 @@
 #define VDF_OMUS_MCUID0255_NUM          (CALIB_MCUID0255_NUM)
 #define VDF_OMUS_MCUID3025_NUM          (CALIB_MCUID3025_NUM)
 
+#define VDF_OMUS_MCUID0262_120KM        (120U)                       /* 120km/h                                                      */
+#define VDF_OMUS_MCUID0262_140KM        (140U)                       /* 140km/h                                                      */
+#define VDF_OMUS_MCUID0262_160KM        (160U)                       /* 160km/h                                                      */
+#define VDF_OMUS_MCUID0262_170KM        (170U)                       /* 170km/h                                                      */
+#define VDF_OMUS_MCUID0262_180KM        (180U)                       /* 180km/h                                                      */
+#define VDF_OMUS_MCUID0262_200KM        (200U)                       /* 200km/h                                                      */
+#define VDF_OMUS_MCUID0262_220KM        (220U)                       /* 220km/h                                                      */
+#define VDF_OMUS_MCUID0262_240KM        (240U)                       /* 240km/h                                                      */
+#define VDF_OMUS_MCUID0262_260KM        (260U)                       /* 260km/h                                                      */
+#define VDF_OMUS_MCUID0262_280KM        (280U)                       /* 280km/h                                                      */
+#define VDF_OMUS_MCUID0262_360KM        (360U)                       /* 360km/h                                                      */
+#define VDF_OMUS_MCUID0263_120MPH       (120U)                       /* 120MPH                                                       */
+#define VDF_OMUS_MCUID0263_140MPH       (140U)                       /* 140MPH                                                       */
+#define VDF_OMUS_MCUID0263_160MPH       (160U)                       /* 160MPH                                                       */
+#define VDF_OMUS_MCUID0263_170MPH       (170U)                       /* 170MPH                                                       */
+#define VDF_OMUS_MCUID0263_180MPH       (180U)                       /* 180MPH                                                       */
+#define VDF_OMUS_MCUID0263_200MPH       (200U)                       /* 200MPH                                                       */
+#define VDF_OMUS_MCUID0263_220MPH       (220U)                       /* 220MPH                                                       */
+#define VDF_OMUS_MCUID0263_240MPH       (240U)                       /* 240MPH                                                       */
+#define VDF_OMUS_MCUID0263_260MPH       (260U)                       /* 260MPH                                                       */
+#define VDF_OMUS_MCUID0263_280MPH       (280U)                       /* 280MPH                                                       */
+#define VDF_OMUS_MCUID0263_360MPH       (360U)                       /* 360MPH                                                       */
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -1349,37 +1372,37 @@ static void         vd_s_VardefOmusCfgMCUID0262Jdg(const U1 u1_a_CANVAL)
 
     switch (u1_a_CANVAL){
         case (U1)VDF_OMUS_SPMKM_B_120:
-            u2_t_val = (U2)CALIB_MCUID0262_120KM;
+            u2_t_val = (U2)VDF_OMUS_MCUID0262_120KM;
             break;
         case (U1)VDF_OMUS_SPMKM_B_140:
-            u2_t_val = (U2)CALIB_MCUID0262_140KM;
+            u2_t_val = (U2)VDF_OMUS_MCUID0262_140KM;
             break;
         case (U1)VDF_OMUS_SPMKM_B_160:
-            u2_t_val = (U2)CALIB_MCUID0262_160KM;
+            u2_t_val = (U2)VDF_OMUS_MCUID0262_160KM;
             break;
         case (U1)VDF_OMUS_SPMKM_B_170:
-            u2_t_val = (U2)CALIB_MCUID0262_170KM;
+            u2_t_val = (U2)VDF_OMUS_MCUID0262_170KM;
             break;
         case (U1)VDF_OMUS_SPMKM_B_180:
-            u2_t_val = (U2)CALIB_MCUID0262_180KM;
+            u2_t_val = (U2)VDF_OMUS_MCUID0262_180KM;
             break;
         case (U1)VDF_OMUS_SPMKM_B_200:
-            u2_t_val = (U2)CALIB_MCUID0262_200KM;
+            u2_t_val = (U2)VDF_OMUS_MCUID0262_200KM;
             break;
         case (U1)VDF_OMUS_SPMKM_B_220:
-            u2_t_val = (U2)CALIB_MCUID0262_220KM;
+            u2_t_val = (U2)VDF_OMUS_MCUID0262_220KM;
             break;
         case (U1)VDF_OMUS_SPMKM_B_240:
-            u2_t_val = (U2)CALIB_MCUID0262_240KM;
+            u2_t_val = (U2)VDF_OMUS_MCUID0262_240KM;
             break;
         case (U1)VDF_OMUS_SPMKM_B_260:
-            u2_t_val = (U2)CALIB_MCUID0262_260KM;
+            u2_t_val = (U2)VDF_OMUS_MCUID0262_260KM;
             break;
         case (U1)VDF_OMUS_SPMKM_B_280:
-            u2_t_val = (U2)CALIB_MCUID0262_280KM;
+            u2_t_val = (U2)VDF_OMUS_MCUID0262_280KM;
             break;
         case (U1)VDF_OMUS_SPMKM_B_360:
-            u2_t_val = (U2)CALIB_MCUID0262_360KM;
+            u2_t_val = (U2)VDF_OMUS_MCUID0262_360KM;
             break;
         default: /* Ch~Eh:Reserved, Fh:Invalid */
             u2_t_val = u2_s_vdf_omus_mcuid0262;
@@ -1411,37 +1434,37 @@ static void         vd_s_VardefOmusCfgMCUID0263Jdg(const U1 u1_a_CANVAL)
 
     switch (u1_a_CANVAL){
         case (U1)VDF_OMUS_SPMKM_B_120:
-            u2_t_val = (U2)CALIB_MCUID0263_120MPH;
+            u2_t_val = (U2)VDF_OMUS_MCUID0263_120MPH;
             break;
         case (U1)VDF_OMUS_SPMKM_B_140:
-            u2_t_val = (U2)CALIB_MCUID0263_140MPH;
+            u2_t_val = (U2)VDF_OMUS_MCUID0263_140MPH;
             break;
         case (U1)VDF_OMUS_SPMKM_B_160:
-            u2_t_val = (U2)CALIB_MCUID0263_160MPH;
+            u2_t_val = (U2)VDF_OMUS_MCUID0263_160MPH;
             break;
         case (U1)VDF_OMUS_SPMKM_B_170:
-            u2_t_val = (U2)CALIB_MCUID0263_170MPH;
+            u2_t_val = (U2)VDF_OMUS_MCUID0263_170MPH;
             break;
         case (U1)VDF_OMUS_SPMKM_B_180:
-            u2_t_val = (U2)CALIB_MCUID0263_180MPH;
+            u2_t_val = (U2)VDF_OMUS_MCUID0263_180MPH;
             break;
         case (U1)VDF_OMUS_SPMKM_B_200:
-            u2_t_val = (U2)CALIB_MCUID0263_200MPH;
+            u2_t_val = (U2)VDF_OMUS_MCUID0263_200MPH;
             break;
         case (U1)VDF_OMUS_SPMKM_B_220:
-            u2_t_val = (U2)CALIB_MCUID0263_220MPH;
+            u2_t_val = (U2)VDF_OMUS_MCUID0263_220MPH;
             break;
         case (U1)VDF_OMUS_SPMKM_B_240:
-            u2_t_val = (U2)CALIB_MCUID0263_240MPH;
+            u2_t_val = (U2)VDF_OMUS_MCUID0263_240MPH;
             break;
         case (U1)VDF_OMUS_SPMKM_B_260:
-            u2_t_val = (U2)CALIB_MCUID0263_260MPH;
+            u2_t_val = (U2)VDF_OMUS_MCUID0263_260MPH;
             break;
         case (U1)VDF_OMUS_SPMKM_B_280:
-            u2_t_val = (U2)CALIB_MCUID0263_280MPH;
+            u2_t_val = (U2)VDF_OMUS_MCUID0263_280MPH;
             break;
         case (U1)VDF_OMUS_SPMKM_B_360:
-            u2_t_val = (U2)CALIB_MCUID0263_360MPH;
+            u2_t_val = (U2)VDF_OMUS_MCUID0263_360MPH;
             break;
         default: /* Ch~Eh:Reserved, Fh:Invalid */
             u2_t_val = u2_s_vdf_omus_mcuid0263;
