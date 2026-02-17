@@ -1,4 +1,4 @@
-/* 2.1.0 */
+/* 2.2.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -59,9 +59,6 @@ typedef struct {
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #if 0   /* BEV Rebase provisionally */
 #else   /* BEV Rebase provisionally */
-static U1                                       u1_s_locale_unit_dist;
-static U1                                       u1_s_locale_unit_speed;
-static U1                                       u1_s_locale_unit_eleco;
 static U1                                       u1_s_locale_unit_ambtmp;
 #endif   /* BEV Rebase provisionally */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -71,15 +68,12 @@ static U1                                       u1_s_locale_unit_ambtmp;
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static const ST_UNITIDX st_sp_LOCALE_UNITIDX[UNIT_NUM_IDX] = {
-#if 0   /* BEV Rebase provisionally */
     { (U1)MCST_BFI_DIST,   (U1)VDF_DEST_LAW_DBF_DEFUNIT_SPD    }, /*   UNIT_IDX_DIST                       (0U) */
     { (U1)MCST_BFI_SPEED,  (U1)VDF_DEST_LAW_DBF_DEFUNIT_SPD    }, /*   UNIT_IDX_SPEED                      (1U) */
     { (U1)MCST_BFI_ELECO,  (U1)VDF_DEST_LAW_DBF_DEFUNIT_ELECO  }, /*   UNIT_IDX_ELECO                      (2U) */
+#if 0   /* BEV Rebase provisionally */
     { (U1)MCST_BFI_AMBTMP, (U1)VDF_DEST_DBF_AMBTMP             }  /*   UNIT_IDX_AMBTMP                     (3U) */
 #else   /* BEV Rebase provisionally */
-    { (U1)U1_MAX,          (U1)VDF_DEST_LAW_DBF_DEFUNIT_SPD    }, /*   UNIT_IDX_DIST                       (0U) */
-    { (U1)U1_MAX,          (U1)VDF_DEST_LAW_DBF_DEFUNIT_SPD    }, /*   UNIT_IDX_SPEED                      (1U) */
-    { (U1)U1_MAX,          (U1)VDF_DEST_LAW_DBF_DEFUNIT_ELECO  }, /*   UNIT_IDX_ELECO                      (2U) */
     { (U1)U1_MAX,          (U1)VDF_DEST_DBF_AMBTMP             }  /*   UNIT_IDX_AMBTMP                     (3U) */
 #endif   /* BEV Rebase provisionally */
 };
@@ -105,9 +99,6 @@ void  vd_g_LocaleComTxInit(void)
     U1  u1_t_unit_ch2;
 #if 0   /* BEV Rebase provisionally */
 #else   /* BEV Rebase provisionally */
-    u1_s_locale_unit_dist    = (U1)U1_MAX;
-    u1_s_locale_unit_speed   = (U1)U1_MAX;
-    u1_s_locale_unit_eleco   = (U1)U1_MAX;
     u1_s_locale_unit_ambtmp  = (U1)U1_MAX;
 #endif   /* BEV Rebase provisionally */
 
@@ -194,29 +185,29 @@ U1      u1_g_LocaleCfgUnit(const U1 u1_a_UNITIDX)
 {
     U1  u1_t_idx;
     U1  u1_t_unit;
+    U4  u4_t_chk_value;
 
-    u1_t_idx   = st_sp_LOCALE_UNITIDX[u1_a_UNITIDX].u1_mcst_id;
-#if 0   /* BEV Rebase provisionally */
-    u1_t_unit  = u1_g_McstBf(u1_t_idx);
-#else   /* BEV Rebase provisionally */
     switch(u1_a_UNITIDX){
-    case  (U1)UNIT_IDX_DIST:
-        u1_t_unit  = u1_s_locale_unit_dist;
-        break;
+    case (U1)UNIT_IDX_DIST:
     case (U1)UNIT_IDX_SPEED:
-        u1_t_unit  = u1_s_locale_unit_speed;
-        break;
     case (U1)UNIT_IDX_ELECO:
-        u1_t_unit  = u1_s_locale_unit_eleco;
+        u1_t_idx   = st_sp_LOCALE_UNITIDX[u1_a_UNITIDX].u1_mcst_id;
+        u4_t_chk_value = u4_g_McstBf(u1_t_idx);
+        if(u4_t_chk_value > (U4)U1_MAX){
+            u4_t_chk_value = (U4)U1_MAX;
+        }
+        u1_t_unit  = (U1)u4_t_chk_value;
         break;
     case (U1)UNIT_IDX_AMBTMP:
+#if 0   /* BEV Rebase provisionally */
+#else   /* BEV Rebase provisionally */
         u1_t_unit  = u1_s_locale_unit_ambtmp;
+#endif   /* BEV Rebase provisionally */
         break;
     default:
         u1_t_unit  = (U1)U1_MAX;
         break;
     }
-#endif   /* BEV Rebase provisionally */
     return(u1_t_unit);
 }
 
@@ -229,28 +220,24 @@ U1      u1_g_LocaleCfgUnit(const U1 u1_a_UNITIDX)
 void    vd_g_LocaleCfgUnitPut(const U1 u1_a_UNITIDX, const U1 u1_a_VAL)
 {
     U1  u1_t_idx;
-    u1_t_idx   = st_sp_LOCALE_UNITIDX[u1_a_UNITIDX].u1_mcst_id;
-#if 0   /* BEV Rebase provisionally */
-    vd_g_McstBfPut(u1_t_idx , u1_a_VAL);
-#else   /* BEV Rebase provisionally */
+
     switch(u1_a_UNITIDX){
-    case  (U1)UNIT_IDX_DIST:
-        u1_s_locale_unit_dist   = u1_a_VAL;
-        break;
+    case (U1)UNIT_IDX_DIST:
     case (U1)UNIT_IDX_SPEED:
-        u1_s_locale_unit_speed  = u1_a_VAL;
-        break;
     case (U1)UNIT_IDX_ELECO:
-        u1_s_locale_unit_eleco  = u1_a_VAL;
+        u1_t_idx   = st_sp_LOCALE_UNITIDX[u1_a_UNITIDX].u1_mcst_id;
+        vd_g_McstBfPut(u1_t_idx , (U4)u1_a_VAL);
         break;
     case (U1)UNIT_IDX_AMBTMP:
+#if 0   /* BEV Rebase provisionally */
+#else   /* BEV Rebase provisionally */
         u1_s_locale_unit_ambtmp = u1_a_VAL;
+#endif   /* BEV Rebase provisionally */
         break;
     default:
         /* do nothing */
         break;
     }
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -272,7 +259,13 @@ void    vd_g_LocaleCfgTfmPut(const U1 u1_a_FRMT)
 /*===================================================================================================================================*/
 U1      u1_g_LocaleCfgTfm(void)
 {
-    return((U1)u4_g_McstBf((U1)MCST_BFI_TIMEFMT));
+    U4  u4_t_timfmt;
+
+    u4_t_timfmt = u4_g_McstBf((U1)MCST_BFI_TIMEFMT);
+    if(u4_t_timfmt > (U4)U1_MAX){
+        u4_t_timfmt = (U4)U1_MAX;
+    }
+    return((U1)u4_t_timfmt);
 }
 
 /*===================================================================================================================================*/

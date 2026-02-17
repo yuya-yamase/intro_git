@@ -110,9 +110,9 @@ void    vd_g_HmiLocaleMainTask(void)
     if (st_s_hmilocale_put.u1_unit_ambtmp <= (U1)HMILOCALE_AMBTMP){
         vd_g_UnitPut((U1)UNIT_IDX_AMBTMP, st_s_hmilocale_put.u1_unit_ambtmp);
     }
-/*    if (st_s_hmilocale_put.u1_timeformat <= (U1)HMILOCALE_TIMEFORMAT){ */
-/*        vd_g_TimeFormat12H24HPut(st_s_hmilocale_put.u1_timeformat); */
-/*    } */
+    if (st_s_hmilocale_put.u1_timeformat <= (U1)HMILOCALE_TIMEFORMAT){
+        vd_g_TimeFormat12H24HPut(st_s_hmilocale_put.u1_timeformat);
+    }
 }
 
 /*===================================================================================================================================*/
