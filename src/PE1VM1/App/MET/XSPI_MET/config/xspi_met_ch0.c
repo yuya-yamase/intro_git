@@ -227,6 +227,7 @@ static inline void    vd_s_XSpiCfgTxVariation(     U4 * u4_ap_pdu_tx) {
     U1  u1_t_subdigspd;
     U1  u1_t_sys_hcs;                                                         /*  SYS_HCS                                       */
     U1  u1_t_autop;                                                           /*  SYS_AUTOP                                     */
+    U1  u1_t_mwlmp;                                                           /*  SYS_SW_MULTI_WEATHERLAMP                      */
 
     u4_ap_pdu_tx[0] = (U4)u1_g_VardefDestinationByPid();                      /*  DESTINATION                                   */
 
@@ -271,7 +272,10 @@ static inline void    vd_s_XSpiCfgTxVariation(     U4 * u4_ap_pdu_tx) {
     u4_ap_pdu_tx[11] |= (U4)TRUE << 3;                                 /*  SYS_DMTOTM               */ /* BEV SV1 provisionally */
     u4_ap_pdu_tx[11] |= (U4)TRUE << 4;                                 /*  SYS_DMTOSP               */ /* BEV SV1 provisionally */
     u4_ap_pdu_tx[11] |= (U4)TRUE << 5;                                 /*  SYS_DMINEC               */ /* BEV SV1 provisionally */
-    u4_ap_pdu_tx[11] |= (U4)TRUE << 20;                                /*  SYS_SW_MULTI_WEATHERLAMP */ /* BEV SV1 provisionally */
+
+    u1_t_mwlmp        = u1_g_VardefMwbbAva();
+    u4_ap_pdu_tx[11] &= ((U4)U4_MAX ^ ((U4)0x01U << 20));
+    u4_ap_pdu_tx[11] |= ((U4)u1_t_mwlmp & (U4)0x01U) << 20;            /*  SYS_SW_MULTI_WEATHERLAMP                             */
 
     u4_ap_pdu_tx[12] |= (U4)TRUE << 5;                                 /*  SYS_DMEVRNGE             */ /* BEV SV1 provisionally */
     u4_ap_pdu_tx[12] |= (U4)TRUE << 6;                                 /*  SYS_DMTOEC               */ /* BEV SV1 provisionally */
@@ -1174,7 +1178,10 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*  BEV-35    02/02/2026 YH       Change config for BEV Full_Function_2.                                                             */
 /*                                MET-S_ADMID-CSTD-0-07-B-C0/MET-S_ADBZR-CSTD-0-06-A-C0                                              */
 /*                                Added processing to integrate AP_RMT and AP_NORMT results.                                         */
-/*  BEV-36    02/03/2026 SN(K)    Change for BEV FF2.(BEV3CDCMET-3779 Restore HUD display position save/notification processing.)    */
+/*  BEV-36    02/03/2026 JS       Change config for BEV Full_Function_2                                                              */
+/*                                MET-B_MWBB-CSTD-0-02-A-C0                                                                          */
+/*                                Change storage for SYS_SW_MULTI_WEATHERLAMP value                                                  */
+/*  BEV-37    02/03/2026 SN(K)    Change for BEV FF2.(BEV3CDCMET-3779 Restore HUD display position save/notification processing.)    */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * KM   = Keisuke Mashita, Denso Techno                                                                                           */
