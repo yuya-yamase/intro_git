@@ -1,4 +1,4 @@
-/* 2.1.0 */
+/* 2.2.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -13,7 +13,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define ODO_KM_CFG_H_MAJOR                       (2)
-#define ODO_KM_CFG_H_MINOR                       (1)
+#define ODO_KM_CFG_H_MINOR                       (2)
 #define ODO_KM_CFG_H_PATCH                       (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -23,6 +23,10 @@
 #include "unitconvrt.h"
 #include "locale.h"
 #include "odo_km.h"
+#include "veh_opemd.h"
+#include "nvmc_mgr.h"
+#include "oxcan.h"
+#include "omavrchk.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
@@ -70,6 +74,9 @@ U1      u1_g_OdoCfgKmNextToNvm(const U4 u4_a_0P001KM_NEXT, const U4 u4_a_0P001KM
 void    vd_g_OdoCfgTripMirrInit(const U1 u1_a_CH, const U1 u1_a_INIT);                   /* u1_a_INIT : ODO_TRIP_INIT_BY_XXXX       */
 void    vd_g_OdoCfgTripOmRstJdg(const U1 u1_a_CH);
 void    vd_g_OdoCfgTripMirrCpbk(void);
+
+U4      u4_g_OdoCfgGetOdoBecu(void);
+U1      u1_g_OdoCfgGetOdoBecuRxSts(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
