@@ -822,6 +822,8 @@ void vd_g_PwrCtrlSipOnReq( void )
     
     /* 計測点③Soc起動の検知状態をクリア */
     vd_g_PwrCtrlComTxClrBootLog((U1)PWRCTRL_COM_BOOTLOG_BONREQ);
+    /* 計測点⑮⑬Ethリンクアップ状態に未検知を設定 */
+    vd_g_PwrCtrlComEthLinkup((U1)PWRCTRL_COM_ETH_LINKUP_NODETECT);
 
     return;
 }
@@ -883,6 +885,8 @@ void vd_g_PwrCtrlSipOnPwrOnReq( void )
     
     /* 計測点③Soc起動の検知状態をクリア */
     vd_g_PwrCtrlComTxClrBootLog((U1)PWRCTRL_COM_BOOTLOG_BONREQ);
+    /* 計測点⑮⑬Ethリンクアップ状態に未検知を設定 */
+    vd_g_PwrCtrlComEthLinkup((U1)PWRCTRL_COM_ETH_LINKUP_NODETECT);
 
     return;
 }
@@ -921,6 +925,8 @@ void vd_g_PwrCtrlSipRsmReq( void )
     
     /* 計測点③'STRWakeの検知状態をクリア */
     vd_g_PwrCtrlComTxClrBootLog((U1)PWRCTRL_COM_BOOTLOG_STRREQ);
+    /* 計測点⑮⑬Ethリンクアップ状態に未検知を設定 */
+    vd_g_PwrCtrlComEthLinkup((U1)PWRCTRL_COM_ETH_LINKUP_NODETECT);
 
     return;
 }

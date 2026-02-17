@@ -961,6 +961,8 @@ static void vd_s_PwrCtrlMainWakeUpSeq( void )
                 u1_t_str = u1_g_PwrCtrlComGetSTRMode();
                 if(u1_t_str == (U1)PWRCTRL_COM_STR_ON){
                     /* 【todo】異常内容保存[ID0009]※STRがON時のみ記録 */
+                    /* SoC異常検知を通知 */
+                    vd_g_PwrCtrlSipSoCOnError();
                 }
                 /* +B-ONシーケンスのSIP通常起動から開始 */
                 vd_s_PwrCtrlMainBonDDconvOnReq();

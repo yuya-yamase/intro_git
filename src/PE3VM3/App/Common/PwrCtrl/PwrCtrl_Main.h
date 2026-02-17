@@ -61,6 +61,13 @@
 /* 端子モニタ取得処理 */
 #define u1_g_PwrCtrlMainGetPinInfo         (u1_g_PwrCtrl_PinMonitor_GetPinInfo)
 
+/* Ethリンクアップ状態通知処理 */
+#define vd_g_PwrCtrlMainBootLogEthLinkup   (vd_g_PwrCtrlComEthLinkup)
+
+/* Ethリンクアップ状態 */
+#define PWRCTRL_MAIN_ETH_LINKUP_NODETECT   (PWRCTRL_COM_ETH_LINKUP_NODETECT)
+#define PWRCTRL_MAIN_ETH_LINKUP_DETECT     (PWRCTRL_COM_ETH_LINKUP_DETECT)
+
 /*-------------------------------------------------------------------------------------------*/
 /* Function Prototypes                                                                       */
 /*-------------------------------------------------------------------------------------------*/

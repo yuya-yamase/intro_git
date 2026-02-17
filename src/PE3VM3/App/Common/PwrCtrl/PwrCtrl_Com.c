@@ -62,8 +62,10 @@
 #define PWRCTRL_COM_BOOTLOG_NON           (0x00000000) /* 全計測点クリア */
 #define PWRCTRL_COM_BOOTLOG_BON_SET       (0x00000001) /* 計測点③SoC起動時 */
 #define PWRCTRL_COM_BOOTLOG_STR_SET       (0x00000100) /* 計測点③'STRWake時 */
-#define PWRCTRL_COM_BOOTLOG_BON_RESET     (0x0000FF00) /* 計測点③SoC起動クリア */
-#define PWRCTRL_COM_BOOTLOG_STR_RESET     (0x000000FF) /* 計測点③'STRWakeクリア */
+#define PWRCTRL_COM_BOOTLOG_ETH_SET       (0x00010000) /* 計測点⑮⑬Ethリンクアップ時 */
+#define PWRCTRL_COM_BOOTLOG_BON_RESET     (0x00FFFF00) /* 計測点③SoC起動クリア */
+#define PWRCTRL_COM_BOOTLOG_STR_RESET     (0x00FF00FF) /* 計測点③'STRWakeクリア */
+#define PWRCTRL_COM_BOOTLOG_ETH_RESET     (0x0000FFFF) /* 計測点⑮⑬Ethリンクアップクリア */
 
 /* 共通 */
 #define PWRCTRL_COM_1BYTEMASK              (0x000000FF) /* 1Byte目マスク */
@@ -83,6 +85,7 @@ static void vd_s_PwrCtrlComRxVm2Stby( void );
 static void vd_s_PwrCtrlComRxForceSleep( void );
 static void vd_s_PwrCtrlComRxSoCSts( void );
 static void vd_s_PwrCtrlComRxSTR( void );
+static void vd_s_PwrCtrlComEthLinkupStsSet( void );
 
 /*--------------------------------------------------------------------------*/
 /* Data                                                                     */
@@ -98,6 +101,7 @@ static U4 u4_s_PwrCtrl_Com_Tx_PwrErr;        /* SIP異常検知通知 */
 static U4 u4_s_PwrCtrl_Com_Tx_SoCOnCount;    /* SoC起動回数カウンタ */
 static U4 u4_s_PwrCtrl_Com_Tx_SoCOnTime;     /* SoC起動回数カウンタ更新時の時間 */
 static U4 u4_s_PwrCtrl_Com_Tx_BootLog;       /* 起動ログ計測点通知 */
+static U1 u1_s_PwrCtrl_Com_Eth_LinkupSts;    /* Ethリンクアップ状態 */
 
 /*--------------------------------------------------------------------------*/
 /* Constants                                                                */
@@ -134,6 +138,7 @@ void vd_g_PwrCtrlComBonInit( void )
     vd_g_Rim_WriteU4((U2)RIMID_U4_PWCTR_SOC_ON_TIME, u4_s_PwrCtrl_Com_Tx_SoCOnTime); 
     
     vd_g_PwrCtrlComTxClrBootLog((U1)PWRCTRL_COM_BOOTLOG_INITREQ);       /* 起動ログ計測点をクリア */
+    u1_s_PwrCtrl_Com_Eth_LinkupSts = (U1)PWRCTRL_COM_ETH_LINKUP_NODETECT; /* Ethリンクアップ未検知を設定 */
 
     return;
 }
@@ -161,6 +166,7 @@ void vd_g_PwrCtrlComWkupInit( void )
     u4_s_PwrCtrl_Com_Tx_PwrOn = (U4)PWRCTRL_COM_PWRON_NOINFO;       /* SIP電源再起動通知 */
     u4_s_PwrCtrl_Com_Tx_PwrErr = (U4)PWRCTRL_COM_PWRERR_NOERR;      /* SIP異常検知通知 */
     vd_g_PwrCtrlComTxClrBootLog((U1)PWRCTRL_COM_BOOTLOG_INITREQ);   /* 起動ログ計測点をクリア */
+    u1_s_PwrCtrl_Com_Eth_LinkupSts = (U1)PWRCTRL_COM_ETH_LINKUP_NODETECT; /* Ethリンクアップ未検知を設定 */
 
     /* SoC起動回数カウンタ更新時の時間 */
     u4_t_soctime_buf = (U4)PWRCTRL_COM_SOCONTIME_INIT;
@@ -310,6 +316,7 @@ void vd_g_PwrCtrlComTxTask( void )
     vd_g_iVDshWribyDid((U2)PWRCTRL_COM_VMTXID_VM2_SOCONTIME, &u4_s_PwrCtrl_Com_Tx_SoCOnTime, (U2)PWRCTRL_COM_TIME_LEN);
 
     /* 起動ログ計測点検知データ */
+    vd_s_PwrCtrlComEthLinkupStsSet(); /* Ethリンクアップ状態更新処理 */
     vd_g_iVDshWribyDid((U2)PWRCTRL_COM_VMTXID_VM2_BOOTLOGINF, &u4_s_PwrCtrl_Com_Tx_BootLog, (U2)PWRCTRL_COM_BOOTLOG_LEN);
 
     return;
@@ -534,6 +541,25 @@ static void vd_s_PwrCtrlComRxSTR( void )
 }
 
 /*****************************************************************************
+  Function      : vd_g_PwrCtrlComEthLinkup
+  Description   : Ethリンクアップ状態通知処理
+  param[in/out] : [In] const U1 u1_a_det 起動ログ計測点設定要求
+  return        : none
+  Note          : none
+*****************************************************************************/
+void vd_g_PwrCtrlComEthLinkup( const U1 u1_a_det )
+{
+    /* 正常値が通知された場合のみ状態を更新する */
+    if((u1_a_det == (U1)PWRCTRL_COM_ETH_LINKUP_NODETECT) ||
+       (u1_a_det == (U1)PWRCTRL_COM_ETH_LINKUP_DETECT)){
+        /* Ethリンクアップ状態を更新 */
+        u1_s_PwrCtrl_Com_Eth_LinkupSts = u1_a_det;
+    }
+    
+    return;
+}
+
+/*****************************************************************************
   Function      : vd_g_PwrCtrlComTxSetBootLog
   Description   : 起動ログ計測点検知データ設定処理
   param[in/out] : [In] const U1 u1_a_req 起動ログ計測点設定要求
@@ -549,6 +575,10 @@ void vd_g_PwrCtrlComTxSetBootLog( const U1 u1_a_req )
     else if(u1_a_req == (U1)PWRCTRL_COM_BOOTLOG_STRREQ){
         /* STRWake時の計測点を検知 */
         u4_s_PwrCtrl_Com_Tx_BootLog |= (U4)PWRCTRL_COM_BOOTLOG_STR_SET;
+    }
+    else if(u1_a_req == (U1)PWRCTRL_COM_BOOTLOG_ETHREQ){
+        /* Ethリンクアップ時の計測点を検知 */
+        u4_s_PwrCtrl_Com_Tx_BootLog |= (U4)PWRCTRL_COM_BOOTLOG_ETH_SET;
     }
     else{
         /* 未定義の要求が通知された場合は何もしない */
@@ -577,6 +607,10 @@ void vd_g_PwrCtrlComTxClrBootLog( const U1 u1_a_req )
     else if(u1_a_req == (U1)PWRCTRL_COM_BOOTLOG_STRREQ){
         /* STRWakeを未検知にクリア */
         u4_s_PwrCtrl_Com_Tx_BootLog &= (U4)PWRCTRL_COM_BOOTLOG_STR_RESET;
+    }
+    else if(u1_a_req == (U1)PWRCTRL_COM_BOOTLOG_ETHREQ){
+        /* Ethリンクアップに未検知を設定 */
+        u4_s_PwrCtrl_Com_Tx_BootLog &= (U4)PWRCTRL_COM_BOOTLOG_ETH_RESET;
     }
     else{
         /* 未定義の要求が通知された場合は何もしない */
@@ -607,6 +641,33 @@ void vd_g_PwrCtrlComTxSetSoCOnStart( void )
     u4_s_PwrCtrl_Com_Tx_SoCOnTime = u4_g_Gpt_FrtGetUsElapsed(vdp_PTR_NA);
     vd_g_Rim_WriteU4((U2)RIMID_U4_PWCTR_SOC_ON_TIME, u4_s_PwrCtrl_Com_Tx_SoCOnTime); 
 
+    return;
+}
+
+/*****************************************************************************
+  Function      : vd_s_PwrCtrlComEthLinkupStsSet
+  Description   : Ethリンクアップ状態反映処理
+  param[in/out] : none
+  return        : none
+  Note          : none
+*****************************************************************************/
+static void vd_s_PwrCtrlComEthLinkupStsSet( void )
+{
+    /* Ethリンクアップ状態:検知の場合 */
+    if(u1_s_PwrCtrl_Com_Eth_LinkupSts == (U1)PWRCTRL_COM_ETH_LINKUP_DETECT){
+        /* 起動ログ計測点検知設定処理をコール */
+        vd_g_PwrCtrlComTxSetBootLog((U1)PWRCTRL_COM_BOOTLOG_ETHREQ);
+    }
+    /* Ethリンクアップ状態:未検知の場合 */
+    else if(u1_s_PwrCtrl_Com_Eth_LinkupSts == (U1)PWRCTRL_COM_ETH_LINKUP_NODETECT){
+        /* 起動ログ計測点未検知設定処理をコール */
+        vd_g_PwrCtrlComTxClrBootLog((U1)PWRCTRL_COM_BOOTLOG_ETHREQ);
+    }
+    /* Ethリンクアップ状態:異常値の場合 */
+    else{
+        /* 何もしない */
+    }
+    
     return;
 }
 
