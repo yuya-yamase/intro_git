@@ -223,22 +223,26 @@ static inline void    vd_s_XSpiCfgTxVariation(     U4 * u4_ap_pdu_tx) {
 
     U4  u4_t_loop;
     U1  u1_t_subdigspd;
-    U1  u1_t_sys_hcs;                                                  /*  SYS_HCS                                              */
+    U1  u1_t_sys_hcs;                                                         /*  SYS_HCS                                       */
 
-    u4_ap_pdu_tx[0] = (U4)u1_g_VardefDestinationByPid();               /*  DESTINATION                                          */
+    u4_ap_pdu_tx[0] = (U4)u1_g_VardefDestinationByPid();                      /*  DESTINATION                                   */
 
     /* Change for 970B/850B */
-    u4_ap_pdu_tx[1] = ((U4)u1_g_VardefTtTrcoff() & (U4)0x01U);         /*  VAR_TT_TRCOFF                                        */
+    u4_ap_pdu_tx[1] = ((U4)u1_g_VardefTtTrcoff() & (U4)0x01U);                /*  VAR_TT_TRCOFF                                 */
 
-    u4_ap_pdu_tx[1] |= ((U4)u1_g_VardefTtBrake() & (U4)0x01U) << 1;    /*  VAR_TT_BRAKE                                         */
+    u4_ap_pdu_tx[1] |= ((U4)u1_g_VardefTtBrake() & (U4)0x01U) << 1;           /*  VAR_TT_BRAKE                                  */
 
-    u4_ap_pdu_tx[1] |= ((U4)u1_g_VardefTtAbs() & (U4)0x01U) << 2;      /*  VAR_TT_ABS                                           */
+    u4_ap_pdu_tx[1] |= ((U4)u1_g_VardefTtAbs() & (U4)0x01U) << 2;             /*  VAR_TT_ABS                                    */
 
-    u4_ap_pdu_tx[1] |= ((U4)u1_g_VardefTtEpbPkb() & (U4)0x01U) << 3;   /*  VAR_TT_EPBPKB                                        */
+    u4_ap_pdu_tx[1] |= ((U4)u1_g_VardefTtEpbPkb() & (U4)0x01U) << 3;          /*  VAR_TT_EPBPKB                                 */
 
-    u4_ap_pdu_tx[1] |= ((U4)u1_g_VardefTtTailHead() & (U4)0x01U) << 4; /*  VAR_TT_TAILHEAD                                      */
+    u4_ap_pdu_tx[1] |= ((U4)u1_g_VardefTtTailHead() & (U4)0x01U) << 4;        /*  VAR_TT_TAILHEAD                               */
 
-    u4_ap_pdu_tx[1] |= ((U4)u1_g_VardefPtsRx() & (U4)0x1fU) << 16;     /*  VAR_PTSYS                                            */
+    u4_ap_pdu_tx[1] |= ((U4)u1_g_VardefPtsRx() & (U4)0x1fU) << 16;            /*  VAR_PTSYS                                     */
+
+    u4_ap_pdu_tx[1] |= ((U4)u1_g_VardefBltDstByPid() & (U4)0x03U) << 24;      /*  DEST_BELT_TT_TYPE                             */
+
+    u4_ap_pdu_tx[1] |= ((U4)u1_g_VardefUnitSlctDstByPid() & (U4)0x03U) << 26; /*  DEST_UNISLCT                                  */
 
     u1_t_subdigspd = u1_g_UnitSubSpd();
     u4_ap_pdu_tx[2]  = ((U4)u1_t_subdigspd & (U4)0x03U) << 11;         /*  SUBDIGSPD_DISP                                       */
@@ -315,8 +319,6 @@ static inline void vd_s_XSpiCfgEsopt(U4 * u4_ap_pdu_tx) {
 static inline void    vd_s_XSpiCfgTxLocale(        U4 * u4_ap_pdu_tx) {
 
     U1    u1_t_convert_eleco;
-
-    u4_ap_pdu_tx[0]  = (U4)u1_g_Language((U1)TRUE);                                 /* LANG         */
 
     u4_ap_pdu_tx[1]  = ((U4)u1_g_Unit((U1)UNIT_IDX_DIST)     & (U4)0x03U);          /* DISTANCE     */
     u4_ap_pdu_tx[1]  |= (((U4)u1_g_Unit((U1)UNIT_IDX_SPEED)  & (U4)0x03U)  << 2 );  /* SPEED        */
@@ -887,7 +889,6 @@ static inline void    vd_s_XSpiCfgRxLocale(     const U4 * u4_ap_PDU_RX) {
 
     u1_t_sts = u1_g_XSpiMETRxRdAccessSts((U1)XSPI_MET_XSPI_RX_AGLBE);
     if(u1_t_sts == (U1)XSPI_MET_XSPI_RX_READ_VALID){
-        st_t_hmilocale.u1_language    = (U1)u4_ap_PDU_RX[0];
         st_t_hmilocale.u1_unit_dist   = u1_XSPI_MET_READ__BIT(u4_ap_PDU_RX[1] , (U1) 0U , (U1)2U);
         st_t_hmilocale.u1_unit_speed  = u1_XSPI_MET_READ__BIT(u4_ap_PDU_RX[1] , (U1) 2U , (U1)2U);
         st_t_hmilocale.u1_unit_eleco  = u1_XSPI_MET_READ__BIT(u4_ap_PDU_RX[1] , (U1) 8U , (U1)4U);
@@ -1174,6 +1175,7 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*  BEV-30    02/02/2026 TS       Change for BEV FF2.(MET-M_HUDILL-CSTD-1)                                                           */
 /*  BEV-31    02/03/2026 TS       Change for BEV FF2.(MET-M_HUDONOFF-CSTD-1)                                                         */
 /*  BEV-32    02/12/2026 KN       Add HUD_ROT_SW_STS and HUD_ROT.                                                                    */
+/*  BEV-33    01/30/2026 YN       Change for BEV FF2.(MET-M_DESTVARI-CSTD-0-01)                                                      */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */

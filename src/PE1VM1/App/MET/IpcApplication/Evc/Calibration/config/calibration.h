@@ -55,7 +55,7 @@
 #define CALIB_MCUID0430_SOFTSW                      (3U)             /* SOFT SW                                                      */
 #define CALIB_MCUID0578_MIN                         (1U)             /* Deg_RTStep MIN                                               */
 #define CALIB_MCUID0578_MAX                         (U1_MAX)         /* Deg_RTStepl MAX                                              */
-#define CALIB_MCUID0604_TO_MCUID0607_NUM            (3U)             /* SeatBelt Regulation NUM                                      */
+#define CALIB_SEATBELT_REGULATION_NUM               (3U)             /* SeatBelt Regulation NUM MCUID0604-0607,1135,1136             */
 #define CALIB_MCUID0809_FMVSS                       (0U)             /* Mexico FMVSS                                                 */
 #define CALIB_MCUID0809_UNR                         (1U)             /* Mexico UN-R                                                  */
 #define CALIB_MCUID0810_FMVSS                       (0U)             /* Korea FMVSS                                                  */

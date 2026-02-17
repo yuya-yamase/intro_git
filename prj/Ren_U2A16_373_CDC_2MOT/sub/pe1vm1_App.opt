@@ -40,7 +40,6 @@
     -I../../src/PE1VM1/App/MET/IpcApplication/Vom/DateSI/scc
     -I../../src/PE1VM1/App/MET/IpcApplication/Vom/Dimmer/config
     -I../../src/PE1VM1/App/MET/IpcApplication/Vom/Dimmer/scc
-    -I../../src/PE1VM1/App/MET/IpcApplication/Vom/Locale/config
     -I../../src/PE1VM1/App/MET/IpcApplication/Vom/Locale/scc
     -I../../src/PE1VM1/App/MET/IpcApplication/Vom/Odo/config
     -I../../src/PE1VM1/App/MET/IpcApplication/Vom/Odo/scc

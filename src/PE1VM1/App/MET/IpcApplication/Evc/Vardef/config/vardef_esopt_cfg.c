@@ -58,18 +58,6 @@ U4                     u4_gp_vdf_eso_ava[VDF_ESO_NOW_AVA];                      
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 const ST_VDF_ESO_CH    st_gp_VDF_ESO_CH[VDF_ESO_NUM_RX] = {
     {
-        &u1_g_VdfEsoRx_INDSPDALT,               /* fp_u1_AVA_RX        */
-        (U2)VDF_ESO_CH_INDSPDALT,               /* u2_eso_ch           */
-        (U1)VDF_ESO_INPUT_TYPE_CAN,             /* u1_input_type       */
-        (U2)OXCAN_RXD_PDU_CAN_BDB1S08_CH0,      /* u2_msg_rx           */
-        (U2)0x0002U,                            /* u2_vom_act          */
-        ((U2)2100U / (U2)VDF_MAIN_TICK),        /* u2_rxc_peri         */
-        {
-            (U2)2U,                             /* u2_rxc_min[MIN_INA] */
-            (U2)2U                              /* u2_rxc_min[MIN_ACT] */
-        }
-    },
-    {
         &u1_g_VdfEsoRx_D_DPTZ,                  /* fp_u1_AVA_RX        */
         (U2)VDF_ESO_CH_D_DPTZ,                  /* u2_eso_ch           */
         (U1)VDF_ESO_INPUT_TYPE_CAN,             /* u1_input_type       */
@@ -1220,7 +1208,7 @@ const ST_VDF_ESO_AVA   st_gp_VDF_ESO_AVA[VDF_ESO_NOW_AVA] = {
         (U4)VDF_ESO_INI_W0,                        /* u4_ini */
         (U4)VDF_ESO_NVM_W0,                        /* u4_nvm */
         (U4)0x00000000U,                           /* u4_unk */
-        (U4)0xF7FFCE31U,                           /* u4_rx  */
+        (U4)0xF7FFCE30U,                           /* u4_rx  */
 
         (U2)NVMCID_U4_VDF_ESO_W0,                  /* u2_nid */
         (U2)RIMID_U4_VDF_ESO_W0                    /* u2_bid */
@@ -1452,6 +1440,7 @@ U1      u1_g_VardefEsOptCfgEthRxEvcnt(const U2 u2_a_MSG_ID)
 /*                                Add the judgement of EPS & EPSSBW function.                                                        */
 /*  BEV-34    02/09/2026  MA      Delete VDF_ESO_CH_AISETH                                                                           */
 /*  BEV-35    02/02/2026  TS      Change config for BEV FF2.(MET-M_HUDILL-CSTD-1)                                                    */
+/*  BEV-36    01/30/2026  YN      Change config for BEV FF2.(MET-M_DESTVARI-CSTD-0-01)                                               */
 /*                                                                                                                                   */
 /*  * YI     = Yoshiki Iwata, Denso                                                                                                  */
 /*  * TN     = Takashi Nagai, Denso                                                                                                  */
