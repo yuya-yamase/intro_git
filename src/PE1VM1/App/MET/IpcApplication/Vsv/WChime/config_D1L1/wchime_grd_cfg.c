@@ -20,6 +20,7 @@
 
 #include "oxcan.h"
 #include "hmiwchime.h"
+#include "hmimcst.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -63,11 +64,7 @@ static U1 u1_s_wchime_mwvc_pre;
 void    vd_g_wChimeGrdCfgInit(void)
 {
     u1_s_wchime_master_pre = (U1)HMIWCHIME_UNDEF;
-#if 0   /* BEV Rebase provisionally */
-    u1_s_wchime_mwvc_pre   = (U1)HMIMCST_MWVC_OPE_INIT;
-#else   /* BEV Rebase provisionally */
-    u1_s_wchime_mwvc_pre   = (U1)7U;
-#endif   /* BEV Rebase provisionally */
+    u1_s_wchime_mwvc_pre   = (U1)HMIMCST_MWVC_NO_OPE;
 }
 /*===================================================================================================================================*/
 /*  U1      u1_g_wChimeCfgRsaPermaReq(void)                                                                                          */
@@ -126,21 +123,12 @@ U1      u1_g_wChimeCfgMWVCReq(void)
     U1    u1_t_ope;
 
     u1_t_req = (U1)FALSE;
-#if 0   /* BEV Rebase provisionally */
     u1_t_ope = u1_g_HmiMcstGetMWVCOpe();
 
     if((u1_s_wchime_mwvc_pre != u1_t_ope    )&&
        (u1_t_ope <= (U1)HMIMCST_MWVC_OPE_MAX)){
             u1_t_req = (U1)TRUE;
     }
-#else   /* BEV Rebase provisionally */
-    u1_t_ope = u1_g_wchime_metcstmvol;
-
-    if((u1_s_wchime_mwvc_pre != u1_t_ope    )&&
-       (u1_t_ope <= (U1)2U)){
-            u1_t_req = (U1)TRUE;
-    }
-#endif   /* BEV Rebase provisionally */
     u1_s_wchime_mwvc_pre = u1_t_ope;
 
     return(u1_t_req);
@@ -170,6 +158,7 @@ U1      u1_g_wChimeCfgMWVCReq(void)
 /*  BEV-1    01/27/2026  RO       Change for BEV Full_Function_2.                                                                    */
 /*                                MET-M_CONTBUZZ2-CSTD-0009-C1                                                                       */
 /*                                Delete TSR_P/TSR_A buzzers and update to the master caution buzzer request                         */
+/*  BEV-2    02/02/2026  SN       Delete comment out                                                                                 */
 /*                                                                                                                                   */
 /*  * TN   = Toshiharu Nagata, Denso Techno                                                                                          */
 /*  * SK   = Sakae Kitamura, Denso Techno                                                                                            */
@@ -178,5 +167,6 @@ U1      u1_g_wChimeCfgMWVCReq(void)
 /*  * MG   = Mei Godo, KSE                                                                                                           */
 /*  * SI   = Shugo Ichinose, Denso Techno                                                                                            */
 /*  * RO   = Ryo Oohashi, KSE                                                                                                        */
+/*  * SN   = Shimon Nambu, Denso Techno                                                                                              */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

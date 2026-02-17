@@ -194,6 +194,7 @@ const ST_ALERT_TASK         st_gp_ALERT_TASK_CFG[]   = {
     {  &st_gp_ALERT_B_ESWUOC_MTRX[0],        (U2)ALERT_CH_B_ESWUOC_BCB,             (U1)ALERT_B_ESWUOC_CH_NUM,          (U1)3U  },
     {  &st_gp_ALERT_C_BRPADW_MTRX[0],        (U2)ALERT_CH_C_BRPADW,                 (U1)ALERT_C_BRPADW_CH_NUM,          (U1)3U  },
     {  &st_gp_ALERT_B_TURHAZ_MTRX[0],        (U2)ALERT_CH_B_TURHAZ_L,               (U1)ALERT_B_TURHAZ_CH_NUM,          (U1)3U  },
+    {  &st_gp_ALERT_M_SECMSG_MTRX[0],        (U2)ALERT_CH_M_SECMSG,                 (U1)ALERT_M_SECMSG_CH_NUM,          (U1)3U  },
     {  &st_gp_ALERT_S_ADBZR_ACC_MTRX[0],     (U2)ALERT_CH_S_ADBZR_ACC,              (U1)ALERT_S_ADBZR_ACC_CH_NUM,       (U1)4U  },
     {  &st_gp_ALERT_S_ADBZR_APP_MTRX[0],     (U2)ALERT_CH_S_ADBZR_APP,              (U1)ALERT_S_ADBZR_APP_CH_NUM,       (U1)4U  },
     {  &st_gp_ALERT_S_ADBZR_BSM_MTRX[0],     (U2)ALERT_CH_S_ADBZR_BSM,              (U1)ALERT_S_ADBZR_BSM_CH_NUM,       (U1)4U  },
@@ -324,7 +325,8 @@ void    vd_g_AlertMtrxInit(void)
 /*  BEV-26   01/23/2026  NI       Change for BEV Full_functioin2                                                                     */
 /*                                MET-D_SFTPOS-CSTD-1-00-B-C0,MET-H_SYSMAL-CSTD-2-00-C-C0                                            */
 /*                                Change Alert_REQ for SFTPOS AND Change Alert_CH for SYSMAL.                                        */
-/*  BEV-27   02/10/2026  SH       Change MCUID0209-0213 from Calibration to OMUSVIID                                                 */
+/*  BEV-27   02/10/2026  KO       Change for BEV FF2.(MET-M_SECMSG-CSTD-0-01-A-C0)                                                   */
+/*  BEV-28   02/10/2026  SH       Change MCUID0209-0213 from Calibration to OMUSVIID                                                 */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  * YI   = Yoshiki Iwata, Denso                                                                                                    */
