@@ -88,7 +88,6 @@ static U2   u2_s_SbltsyncChmSts_FM(void);
 static U1   u1_s_SbltsyncTtReqUpdt(const U1 u1_a_SEAT_STS, const U1 * u1_ap_SYNC, U2 * u2p_a_req);
 static U1   u1_s_SbltsyncTtReqUpdt_FM(const U1 * u1_ap_ALL_SEAT_STS, const U1 * u1_ap_SYNC, U2 * u2p_a_req, const U1 u1_a_SEATID);
 static U1   u1_s_SbltsyncRearTtChk_FM(const U1 * u1_ap_ALL_SEAT_STS, const U1 u1_a_SEATID);
-static  inline  U1  u1_s_SbltsyncGetCalibU1DataNumChk(const U1 u1_a_CALIBID, const U1 u1_a_NUM, const U1 u1_a_DEF);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
@@ -472,7 +471,7 @@ static void vd_s_SbltsyncChk(U1 * u1_ap_sync_tt, U1 * u1_ap_sync_chm, const U1 u
     U1                      u1_t_rtrg_trgt;
     U1                      u1_t_brand;
 
-    u1_t_brand = u1_s_SbltsyncGetCalibU1DataNumChk(u1_CALIB_MCUID0024_BRAND, (U1)CALIB_MCUID0024_NUM, (U1)CALIB_MCUID0024_DEF);
+    u1_t_brand = u1_g_VardefOmusMCUID0024();
 
     for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)SBLTSYNC_NUM_KND; u4_t_lpcnt++){
         u4_t_sync_tt_prd   = st_gp_SBLTSYNC_PRM[u1_t_brand][u4_t_lpcnt].u4_sync_tt_prd;
@@ -818,23 +817,6 @@ static U1   u1_s_SbltsyncTtReqUpdt_FM(const U1 * u1_ap_ALL_SEAT_STS, const U1 * 
     *u2p_a_req = u2_t_out;
 
     return(u1_t_act);
-}
-/*===================================================================================================================================*/
-/* U1              u1_s_SbltsyncGetCalibU1DataNumChk(const U1 u1_a_CALIBID, const U1 u1_a_NUM, const U1 u1_a_DEF)                    */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static inline  U1 u1_s_SbltsyncGetCalibU1DataNumChk(const U1 u1_a_CALIBID, const U1 u1_a_NUM, const U1 u1_a_DEF)
-{
-    U1 u1_t_ret;
-
-    u1_t_ret = u1_a_CALIBID;
-    if(u1_t_ret >= u1_a_NUM){
-        u1_t_ret = u1_a_DEF;
-    }
-
-    return(u1_t_ret);
 }
 /*==========================================================================================================================================*/
 /* static U1   u1_s_SbltsyncRearTtChk_FM(const U1 * u1_ap_ALL_SEAT_STS, const U1 u1_a_SEATID)                                               */

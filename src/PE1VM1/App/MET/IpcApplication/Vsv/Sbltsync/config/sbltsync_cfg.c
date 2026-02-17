@@ -169,7 +169,7 @@ U1  u1_g_SbltsyncCfgSelMidTyp_FM(void)
     U1  u1_t_belt_belt_type;
     U1  u1_t_judge;
 
-    u1_t_belt_belt_type = u1_CALIB_MCUID1138_SBR_TT_TYPE;
+    u1_t_belt_belt_type = u1_g_VardefOmusMCUID1138();
 
     switch(u1_t_belt_belt_type) {
         case (U1)CALIB_MCUID1138_FMVSS_1R:
