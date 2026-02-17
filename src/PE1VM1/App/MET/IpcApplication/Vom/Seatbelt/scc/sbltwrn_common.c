@@ -64,7 +64,6 @@ static        U1      u1_s_SbltwrnMsgjdg(const U1 u1_a_MSGSTS);
 static        void    vd_s_SbltwrnGetCalibRear1(void);
 static        void    vd_s_SbltwrnGetCalibRear2(void);
 static        void    vd_s_SbltwrnGetCalibRear3(void);
-static inline U1      u1_s_SbltwrnCalibU1MaxChk(const U1 u1_a_CALIBID, const U1 u1_a_MAX, const U1 u1_a_DEF);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
@@ -1020,24 +1019,6 @@ static  void    vd_s_SbltwrnGetCalibRear3(void)
     else{
         u1_sp_sbltwrn_stvarcfg[SBLTWRN_R4R_SEAT] = (U1)SBLTWRN_SEAT_RS_XRXBKL;
     }
-}
-
-/*===================================================================================================================================*/
-/* static  inline  U1  u1_s_SbltwrnCalibU1MaxChk(const U1 u1_a_CALIBID, const U1 u1_a_MAX, const U1 u1_a_DEF)                        */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static  inline  U1  u1_s_SbltwrnCalibU1MaxChk(const U1 u1_a_CALIBID, const U1 u1_a_MAX, const U1 u1_a_DEF)
-{
-    U1 u1_t_ret;
-
-    u1_t_ret = u1_a_CALIBID;
-    if(u1_t_ret > u1_a_MAX){
-        u1_t_ret = u1_a_DEF;
-    }
-
-    return(u1_t_ret);
 }
 
 /*===================================================================================================================================*/
