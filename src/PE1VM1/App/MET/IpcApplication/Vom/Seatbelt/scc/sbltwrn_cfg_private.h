@@ -1,4 +1,4 @@
-/* 2.2.1 */
+/* 3.1.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -12,9 +12,9 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define SBLTWRN_CFG_PRIVATE_H_MAJOR             (2)
-#define SBLTWRN_CFG_PRIVATE_H_MINOR             (2)
-#define SBLTWRN_CFG_PRIVATE_H_PATCH             (1)
+#define SBLTWRN_CFG_PRIVATE_H_MAJOR             (3)
+#define SBLTWRN_CFG_PRIVATE_H_MINOR             (1)
+#define SBLTWRN_CFG_PRIVATE_H_PATCH             (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -25,6 +25,7 @@
 #include "sblt_seat.h"
 #include "veh_opemd.h"
 #include "calibration.h"
+#include "sbltsync.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
@@ -62,7 +63,7 @@
 #define SBLTWRN_SEAT_RS_XRXBKL                  (5U)    /* Rear seat(2nd-) (w/o  seatsnsr)      */
 #define SBLTWRN_SEAT_RS_XRXBKL_RXXOSW           (6U)    /* Rear seat(2nd-) (with seatsnsr)      */
 
-#define SBLTWRN_NUM_DEST                        (9U)    /* A number of destination */
+#define SBLTWRN_NUM_DEST                        (12U)    /* A number of destination */
 #define SBLTWRN_DEST_US_SB                      (0U)    /* DEST: USA/GCC,       Sound: Subaru-Sound */
 #define SBLTWRN_DEST_EU_SB                      (1U)    /* DEST: EU/AUS/JPN,    Sound: Subaru-Sound */
 #define SBLTWRN_DEST_CN_SB                      (2U)    /* DEST: CHINA,         Sound: Subaru-Sound */
@@ -72,6 +73,9 @@
 #define SBLTWRN_DEST_US_TS                      (6U)    /* DEST: USA/GCC,       Sound: Toyota-Sound */
 #define SBLTWRN_DEST_EU_TS                      (7U)    /* DEST: EU/AUS/JPN,    Sound: Toyota-Sound */
 #define SBLTWRN_DEST_CN_TS                      (8U)    /* DEST: CHINA,         Sound: Toyota-Sound */
+#define SBLTWRN_DEST_FM_SB                      (9U)    /* DEST: FMVSS208,      Sound: Subaru-Sound */
+#define SBLTWRN_DEST_FM_LS                      (10U)   /* DEST: FMVSS208,      Sound: Lexus-Sound */
+#define SBLTWRN_DEST_FM_TS                      (11U)   /* DEST: FMVSS208,      Sound: Toyota-Sound */
 
 #define SBLTWRN_IGTIM_OVER500JDG                (500U/SBLTWRN_TICK)
 
@@ -81,15 +85,6 @@
 #define SBLTWRN_SPD_STP                         (2U)
 #define SBLTWRN_SPD_LOW                         (3U)
 #define SBLTWRN_SPD_HIGH                        (4U)
-
-#define SBLTWRN_BKLSTS_BCKL                     (0x00U)
-#define SBLTWRN_BKLSTS_UNBCKLFLG                (0x01U)
-#define SBLTWRN_BKLSTS_UNBCKL                   (0x02U)
-#define SBLTWRN_BKLSTS_UNBCKLEDG                (0x04U)
-#define SBLTWRN_BKLSTS_COMFAIL                  (0x08U)
-#define SBLTWRN_BKLSTS_FIXUNBKL                 (0x10U)
-#define SBLTWRN_BKLSTS_BCKLEDG                  (0x20U)
-#define SBLTWRN_BKLSTS_FAILRSTEDG               (0x40U)         /* Turned from COMFAIL to NORMAL edge*/
 
 #define SBLTWRN_VCLSTS_PARK                     (0x00000001U)
 #define SBLTWRN_VCLSTS_SHIFT_R                  (0x00000002U)
@@ -111,6 +106,8 @@
 #define SBLTWRN_VCLSTS_PARKEDG                  (0x00010000U)
 #define SBLTWRN_VCLSTS_UNPARKEDG                (0x00020000U)
 #define SBLTWRN_VCLSTS_IGTIM_OVER500            (0x00040000U)   /* 500ms elapsed after IG-ON */
+
+#define SBLTWRN_VCLSTS_SPD_STP_OVER             (0x00080000U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */

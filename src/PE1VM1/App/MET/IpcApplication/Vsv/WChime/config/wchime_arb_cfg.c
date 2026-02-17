@@ -340,7 +340,6 @@ void    vd_g_wChimeCfgReqchk(U4 * u4p_a_reqbit)
         {  (U2)ALERT_CH_H_TOWWAR,           (U1)ALERT_REQ_H_TOWWAR_MLFNC_HV,       (U1)WCHIME_REQ_IN_TOWWAR             >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_IN_TOWWAR             & (U1)0x1FU)  }, /* MET-H_TOWWAR-CSTD-            */
         {  (U2)ALERT_CH_H_TOWWAR,           (U1)ALERT_REQ_H_TOWWAR_MLFNC_EV,       (U1)WCHIME_REQ_IN_TOWWAR             >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_IN_TOWWAR             & (U1)0x1FU)  }, /* MET-H_TOWWAR-CSTD-            */
         {  (U2)ALERT_CH_H_TOWWAR,           (U1)ALERT_REQ_H_TOWWAR_MLFNC_FCV,      (U1)WCHIME_REQ_IN_TOWWAR             >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_IN_TOWWAR             & (U1)0x1FU)  }, /* MET-H_TOWWAR-CSTD-            */
-        {  (U2)ALERT_CH_H_TOWWAR,           (U1)ALERT_REQ_H_TOWWAR_MLFNC_HV2,      (U1)WCHIME_REQ_IN_TOWWAR             >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_IN_TOWWAR             & (U1)0x1FU)  }, /* MET-H_TOWWAR-CSTD-            */
         {  (U2)ALERT_CH_H_TOWWAR,           (U1)ALERT_REQ_H_TOWWAR_MLFNC,          (U1)WCHIME_REQ_IN_TOWWAR             >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_IN_TOWWAR             & (U1)0x1FU)  }, /* MET-H_TOWWAR-CSTD-            */
         {  (U2)ALERT_CH_S_ADBZR_TMN,        (U1)ALERT_REQ_S_ADBZR_TMN_SINGLE,      (U1)WCHIME_REQ_SI_TMN_LVN            >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_SI_TMN_LVN            & (U1)0x1FU)  }, /* MET-S_ADBZR-CSTD-             */
         {  (U2)ALERT_CH_S_TMBZR_BC_AD,      (U1)ALERT_REQ_S_TMBZR_BC_AD_ANN_2,     (U1)WCHIME_REQ_SI_TMBZR_ANN_PRI2     >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_SI_TMBZR_ANN_PRI2     & (U1)0x1FU)  }, /* MET-S_TMBZR-CST0              */
@@ -689,7 +688,7 @@ static  void    vd_s_wChimeCfgMindspDelchk(U4 * u4p_a_reqbit)
 {
     U1 u1_t_indsp;
 
-    u1_t_indsp = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_INDSPDALT);
+    u1_t_indsp = u1_g_VardefIndSpdBzr();
 
     if(u1_t_indsp == (U1)FALSE){
         vd_s_wChimeCfgReqDel(u4p_a_reqbit, (U1)WCHIME_REQ_SI_MINDSPWR_LV1);
@@ -860,6 +859,9 @@ static  void    vd_s_wChimeCfgReqDel(U4 * u4_ap_reqbit, const U1 u1_a_REQ_ID)
 /*  BEV-9     01/23/2026 NI       Change config for BEV Full_Function2                                                               */
 /*                                MET-D_SFTPOS-CSTD-1-00-B-C0.                                                                       */
 /*                                Change Name from RJTB_DBL1 to RJTB_DBL                                                             */
+/*  BEV-10    01/30/2026 YN       Change config for BEV FF2.(MET-M_DESTVARI-CSTD-0-01)                                               */
+/*  BEV-11     1/15/2026 HT       Change for Full_function2 (MET-M_REMWAR-CSTD-2-04-A-C0)                                            */
+/*                                Removed "ALERT_REQ" in order to transfer signal transmission control from the MCU to the SoC       */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
 /*  * ToN  = Toshiharu Nagata, Denso Techno                                                                                          */
@@ -885,5 +887,7 @@ static  void    vd_s_wChimeCfgReqDel(U4 * u4_ap_reqbit, const U1 u1_a_REQ_ID)
 /*  * KH   = Kiko Huerte, DTPH                                                                                                       */
 /*  * JS   = Jun Sugiyama, KSE                                                                                                       */
 /*  * NI   = Naoki Inagaki, KSE                                                                                                      */
+/*  * YN   = Yujiro Nagaya, Denso Techno                                                                                             */
+/*  * HT   = Hibiki Tanii, KSE                                                                                                       */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

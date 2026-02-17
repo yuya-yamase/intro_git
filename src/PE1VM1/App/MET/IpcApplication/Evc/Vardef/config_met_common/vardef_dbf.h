@@ -23,6 +23,7 @@
 #include "vardef_ptsrx.h"
 #include "vardef_dest.h"
 #include "vardef_hcs.h"
+#include "vardef_omus.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */

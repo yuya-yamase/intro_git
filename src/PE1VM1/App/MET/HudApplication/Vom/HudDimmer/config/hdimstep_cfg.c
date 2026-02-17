@@ -1,4 +1,4 @@
-/* 2.1.0 */
+/* 2.2.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -9,13 +9,15 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define HDIMSTEP_CFG_C_MAJOR           (2)
-#define HDIMSTEP_CFG_C_MINOR           (1)
+#define HDIMSTEP_CFG_C_MINOR           (2)
 #define HDIMSTEP_CFG_C_PATCH           (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "hdimmgr_cfg_private.h"
+
+#include "mcst.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -41,7 +43,6 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-U1   u1_g_hdimstep_hudill;   /* BEV Rebase provisionally */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Variable Definitions                                                                                                    */
@@ -64,11 +65,7 @@ U1      u1_g_HdimstepCfgReadStep(void)
 {
     U1      u1_t_step;
 
-#if 0   /* BEV Rebase provisionally */
-    u1_t_step = u1_g_McstBf((U1)MCST_BFI_HUDILL);
-#else   /* BEV Rebase provisionally */
-    u1_t_step = u1_g_hdimstep_hudill;
-#endif   /* BEV Rebase provisionally */
+    u1_t_step = (U1)u4_g_McstBf((U1)MCST_BFI_HUDILL);
 
     return(u1_t_step);
 }
@@ -83,29 +80,11 @@ U1      u1_g_HdimstepCfgWriteStep(const U1 u1_a_STEP)
 {
     U1      u1_t_isok;
 
-#if 0   /* BEV Rebase provisionally */
-    vd_g_McstBfPut((U1)MCST_BFI_HUDILL, u1_a_STEP);
-#else   /* BEV Rebase provisionally */
-    u1_g_hdimstep_hudill = u1_a_STEP;
-#endif   /* BEV Rebase provisionally */
+    vd_g_McstBfPut((U1)MCST_BFI_HUDILL, (U4)u1_a_STEP);
     u1_t_isok = (U1)TRUE;
     return(u1_t_isok);
 }
 
-/*===================================================================================================================================*/
-/*  void    vd_g_HdimstepCfgSwOprtIn(ST_HDIMSTEP_SWOP * st_ap_swop)                                                                  */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/* Arguments    -                                                                                                                    */
-/* Return       -                                                                                                                    */
-/*===================================================================================================================================*/
-void    vd_g_HdimstepCfgSwOprtIn(ST_HDIMSTEP_SWOP * st_ap_swop)
-{
-    if(st_ap_swop != vdp_PTR_NA){
-        st_ap_swop->u1_jdgenbl  = u1_g_HdimmgrIfGetIsHudOn();
-        st_ap_swop->u1_isupswon = u1_g_HdimmgrIfIsUpSwOn();
-        st_ap_swop->u1_isdwswon = u1_g_HdimmgrIfIsDwSwOn();
-    }
-}
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
@@ -116,8 +95,10 @@ void    vd_g_HdimstepCfgSwOprtIn(ST_HDIMSTEP_SWOP * st_ap_swop)
 /* ---------------   ----------  ------  --------------------------------------------------------------------------------------------*/
 /*  2.0.0            2020.02.20  MaO     New                                                                                         */
 /*  2.1.0            2024.02.14  HiS     HDIMSTEP_STEP_EXTRIN_SUP was revised. MM Dimmer was deleted.                                */
+/*  2.2.0            2026.02.02  TS      Change for BEV FF2.(MET-M_HUDILL-CSTD-1)                                                    */
 /*                                                                                                                                   */
 /*  * MaO = Masayuki Okada, DENSO                                                                                                    */
 /*  * HiS = Hidenobu Suzuki, ISB                                                                                                     */
+/*  * TS  = Takuo Suganuma, Denso Techno                                                                                             */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

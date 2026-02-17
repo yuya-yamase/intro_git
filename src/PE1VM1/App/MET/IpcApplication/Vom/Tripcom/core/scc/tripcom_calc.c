@@ -1,4 +1,4 @@
-/* 2.0.3 */
+/* 2.1.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,8 +10,8 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define TRIPCOM_CALC_C_MAJOR                    (2)
-#define TRIPCOM_CALC_C_MINOR                    (0)
-#define TRIPCOM_CALC_C_PATCH                    (3)
+#define TRIPCOM_CALC_C_MINOR                    (1)
+#define TRIPCOM_CALC_C_PATCH                    (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -97,99 +97,6 @@ U4              u4_g_TripcomCalcMuldiv(const U4 u4_a_MLTPLCND, const  U4 u4_a_NU
     }
 
     return (u4_t_val);
-}
-
-/*===================================================================================================================================*/
-/* U1              u1_g_TripcomCalcTxCnvtFE(U4 * u4p_a_kmpl_to, const U1 u1_a_UNIT, const U1 u1_a_USEAPRXVAL)                        */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1              u1_g_TripcomCalcTxCnvtFE(U4 * u4p_a_kmpl_to, const U1 u1_a_UNIT, const U1 u1_a_USEAPRXVAL)
-{
-    U4          u4_t_mul;
-    U4          u4_t_div;
-    U1          u1_t_status;
-
-
-    u1_t_status = (U1)TRIPCOM_STSBIT_VALID;
-    switch (u1_a_UNIT) {
-        case (U1)TRIPCOM_CALC_FEUNT_KMPL:
-            /* Do not have to convert */
-            break;
-        case (U1)TRIPCOM_CALC_FEUNT_LP100KM:
-            if ((*u4p_a_kmpl_to) == (U4)0U) {
-                if (u1_a_USEAPRXVAL == (U1)TRUE) {
-                    (*u4p_a_kmpl_to) = (U4)U4_MAX;
-                }
-            }
-            else {
-                (*u4p_a_kmpl_to) = (U4)TRIPCOM_CALC_KMPX_TO_XPKM / (*u4p_a_kmpl_to);
-            }
-            break;
-        case (U1)TRIPCOM_CALC_FEUNT_MPGUS:
-            u4_t_mul = (U4)(TRIPCOM_CALC_KM_TO_MI_MLT * TRIPCOM_CALC_LI_TO_GAUS_DIV);
-            u4_t_div = (U4)(TRIPCOM_CALC_KM_TO_MI_DIV * TRIPCOM_CALC_LI_TO_GAUS_MLT);
-            (*u4p_a_kmpl_to) = u4_g_TripcomCalcMuldiv(u4_t_mul, (*u4p_a_kmpl_to), u4_t_div, (U4)0U);
-            break;
-        case (U1)TRIPCOM_CALC_FEUNT_MPGUK:
-            u4_t_mul = (U4)(TRIPCOM_CALC_KM_TO_MI_MLT * TRIPCOM_CALC_LI_TO_GAUK_DIV);
-            u4_t_div = (U4)(TRIPCOM_CALC_KM_TO_MI_DIV * TRIPCOM_CALC_LI_TO_GAUK_MLT);
-            (*u4p_a_kmpl_to) = u4_g_TripcomCalcMuldiv(u4_t_mul, (*u4p_a_kmpl_to), u4_t_div, (U4)0U);
-            break;
-        case (U1)TRIPCOM_CALC_FEUNT_KMPG:
-            u4_t_mul = (U4)TRIPCOM_CALC_LI_TO_GAUK_DIV;
-            u4_t_div = (U4)TRIPCOM_CALC_LI_TO_GAUK_MLT;
-            (*u4p_a_kmpl_to) = u4_g_TripcomCalcMuldiv(u4_t_mul, (*u4p_a_kmpl_to), u4_t_div, (U4)0U);
-            break;
-     /* case TRIPCOM_CALC_FEUNT_KMPKG: */
-        default:
-            u1_t_status = (U1)TRIPCOM_STSBIT_INVALID;
-            break;
-    }
-
-    return (u1_t_status);
-}
-
-/*===================================================================================================================================*/
-/* U1              u1_g_TripcomCalcTxCnvtHE(U4 * u4p_a_kmpkg_to, const U1 u1_a_UNIT, const U1 u1_a_USEAPRXVAL)                       */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1              u1_g_TripcomCalcTxCnvtHE(U4 * u4p_a_kmpkg_to, const U1 u1_a_UNIT, const U1 u1_a_USEAPRXVAL)
-{
-    U4          u4_t_mul;
-    U4          u4_t_div;
-    U1          u1_t_status;
-
-
-    u1_t_status = (U1)TRIPCOM_STSBIT_VALID;
-    switch (u1_a_UNIT) {
-        case (U1)TRIPCOM_CALC_HEUNT_KMPKG:
-            /* Do not have to convert */
-            break;
-        case (U1)TRIPCOM_CALC_HEUNT_KGP100KM:
-            if ((*u4p_a_kmpkg_to) == (U4)0U) {
-                if (u1_a_USEAPRXVAL == (U1)TRUE) {
-                    (*u4p_a_kmpkg_to) = (U4)U4_MAX;
-                }
-            }
-            else {
-                (*u4p_a_kmpkg_to) = (U4)TRIPCOM_CALC_KMPX_TO_XPKM / (*u4p_a_kmpkg_to);
-            }
-            break;
-        case (U1)TRIPCOM_CALC_HEUNT_MPGE:
-            u4_t_mul = (U4)TRIPCOM_CALC_KM_TO_MI_MLT;
-            u4_t_div = (U4)TRIPCOM_CALC_KM_TO_MI_DIV;
-            (*u4p_a_kmpkg_to) = u4_g_TripcomCalcMuldiv(u4_t_mul, (*u4p_a_kmpkg_to), u4_t_div, (U4)0U);
-            break;
-        default:
-            u1_t_status = (U1)TRIPCOM_STSBIT_INVALID;
-            break;
-    }
-
-    return (u1_t_status);
 }
 
 /*===================================================================================================================================*/
@@ -491,9 +398,11 @@ U4       u4_g_TripcomCalcMulU4U4(const U4 u4_a_1ST, const U4 u4_a_2ND)
 /*  2.0.1    10/18/2021  TA(M)    Change the definition of the null pointer used.(BSW v115_r007)                                     */
 /*  2.0.2    10/27/2021  TK       QAC supported.                                                                                     */
 /*  2.0.3    12/13/2022  TA(M)    Change TRIPCOM_CALC_KM_TO_MI_MLT 25480 to 1000, TRIPCOM_CALC_KM_TO_MI_DIV 41000 to 1609            */
+/*  2.1.0    02/13/2026  PG       Deleted not unapplied parameter for BEV FF2                                                        */
 /*                                                                                                                                   */
 /*  * HY   = Hidefumi Yoshida, Denso                                                                                                 */
 /*  * TA(M)= Teruyuki Anjima, NTT Data MSE                                                                                           */
 /*  * TK   = Takanori Kuno, Denso Techno                                                                                             */
+/*  * PG   = Patrick Garcia, DTPH                                                                                                    */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

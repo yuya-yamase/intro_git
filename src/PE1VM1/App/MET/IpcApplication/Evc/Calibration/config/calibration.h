@@ -39,7 +39,6 @@
 #define CALIB_MCUID0025_GRMN                        (3U)             /* GRMN                                                         */
 #define CALIB_MCUID0025_FSPORT                      (4U)             /* F-SPORT                                                      */
 #define CALIB_MCUID0025_F                           (5U)             /* F                                                            */
-#define CALIB_MCUID0025_070D                        (6U)             /* 070D                                                         */
 #define CALIB_MCUID0233_MIN                         (0U)             /* Rear Seat Door MIN                                           */
 #define CALIB_MCUID0233_MAX                         (1U)             /* Rear Seat Door MAX                                           */
 #define CALIB_MCUID0234_MIN                         (0U)             /* Walkthrough MIN                                              */
@@ -55,12 +54,192 @@
 #define CALIB_MCUID0430_SOFTSW                      (3U)             /* SOFT SW                                                      */
 #define CALIB_MCUID0578_MIN                         (1U)             /* Deg_RTStep MIN                                               */
 #define CALIB_MCUID0578_MAX                         (U1_MAX)         /* Deg_RTStepl MAX                                              */
-#define CALIB_MCUID0604_TO_MCUID0607_NUM            (3U)             /* SeatBelt Regulation NUM                                      */
+#define CALIB_SEATBELT_REGULATION_NUM               (3U)             /* SeatBelt Regulation NUM MCUID0604-0607,1135,1136             */
+#define CALIB_MCUID0809_NUM                         (2U)             /* MCUID0809 Num                                                */
 #define CALIB_MCUID0809_FMVSS                       (0U)             /* Mexico FMVSS                                                 */
 #define CALIB_MCUID0809_UNR                         (1U)             /* Mexico UN-R                                                  */
+#define CALIB_MCUID0810_NUM                         (2U)             /* MCUID0810 Num                                                */
 #define CALIB_MCUID0810_FMVSS                       (0U)             /* Korea FMVSS                                                  */
 #define CALIB_MCUID0810_UNR                         (1U)             /* Korea UN-R                                                   */
 #define CALIB_MCUID0797_MIN                         (0U)             /* Constant write flag MIN                                      */
+#define CALIB_MCUID0798_NUM                         (2U)             /* MCUID0798 Num                                                */
+#define CALIB_MCUID0798_YL                          (0U)             /* Yellow                                                       */
+#define CALIB_MCUID0798_RD                          (1U)             /* Red                                                          */
+#define CALIB_MCUID0209_NUM                         (2U)             /* MCUID0209 Num                                                */
+#define CALIB_MCUID0209_OFF                         (0U)             /* Off                                                          */
+#define CALIB_MCUID0209_ON                          (1U)             /* On                                                           */
+#define CALIB_MCUID0210_NUM                         (2U)             /* MCUID0210 Num                                                */
+#define CALIB_MCUID0210_OFF                         (0U)             /* Off                                                          */
+#define CALIB_MCUID0210_ON                          (1U)             /* On                                                           */
+#define CALIB_MCUID0211_NUM                         (2U)             /* MCUID0211 Num                                                */
+#define CALIB_MCUID0211_OFF                         (0U)             /* B/D Off, Trunk On                                            */
+#define CALIB_MCUID0211_ON                          (1U)             /* B/D On, Trunk Off                                            */
+#define CALIB_MCUID0212_NUM                         (2U)             /* MCUID0212 Num                                                */
+#define CALIB_MCUID0212_OFF                         (0U)             /* B/D Off, Trunk On                                            */
+#define CALIB_MCUID0212_ON                          (1U)             /* B/D On, Trunk Off                                            */
+#define CALIB_MCUID0213_NUM                         (2U)             /* MCUID0213 Num                                                */
+#define CALIB_MCUID0213_OFF                         (0U)             /* Off                                                          */
+#define CALIB_MCUID0213_ON                          (1U)             /* On                                                           */
+#define CALIB_MCUID0214_NUM                         (2U)             /* MCUID0214 Num                                                */
+#define CALIB_MCUID0214_OFF                         (0U)             /* Off                                                          */
+#define CALIB_MCUID0214_ON                          (1U)             /* On                                                           */
+#define CALIB_MCUID0215_NUM                         (2U)             /* MCUID0215 Num                                                */
+#define CALIB_MCUID0215_OFF                         (0U)             /* Off                                                          */
+#define CALIB_MCUID0215_ON                          (1U)             /* On                                                           */
+#define CALIB_MCUID0233_NUM                         (2U)             /* MCUID0233 Num                                                */
+#define CALIB_MCUID0233_OFF                         (0U)             /* Off                                                          */
+#define CALIB_MCUID0233_ON                          (1U)             /* On                                                           */
+#define CALIB_MCUID0224_NUM                         (2U)             /* MCUID0224 Num                                                */
+#define CALIB_MCUID0224_OFF                         (0U)             /* Off                                                          */
+#define CALIB_MCUID0224_ON                          (1U)             /* On                                                           */
+#define CALIB_MCUID0225_NUM                         (2U)             /* MCUID0225 Num                                                */
+#define CALIB_MCUID0225_OFF                         (0U)             /* Off                                                          */
+#define CALIB_MCUID0225_ON                          (1U)             /* On                                                           */
+#define CALIB_MCUID0226_NUM                         (2U)             /* MCUID0226 Num                                                */
+#define CALIB_MCUID0226_OFF                         (0U)             /* Off                                                          */
+#define CALIB_MCUID0226_ON                          (1U)             /* On                                                           */
+#define CALIB_MCUID0227_NUM                         (2U)             /* MCUID0227 Num                                                */
+#define CALIB_MCUID0227_OFF                         (0U)             /* Off                                                          */
+#define CALIB_MCUID0227_ON                          (1U)             /* On                                                           */
+#define CALIB_MCUID0228_NUM                         (2)              /* MCUID0228 Num                                                */
+#define CALIB_MCUID0228_OFF                         (0)              /* Off                                                          */
+#define CALIB_MCUID0228_ON                          (1U)             /* On                                                           */
+#define CALIB_MCUID0229_NUM                         (2U)             /* MCUID0229 Num                                                */
+#define CALIB_MCUID0229_OFF                         (0U)             /* Off                                                          */
+#define CALIB_MCUID0229_ON                          (1U)             /* On                                                           */
+#define CALIB_MCUID0230_NUM                         (2U)             /* MCUID0230 Num                                                */
+#define CALIB_MCUID0230_OFF                         (0U)             /* Off                                                          */
+#define CALIB_MCUID0230_ON                          (1U)             /* On                                                           */
+#define CALIB_MCUID0231_NUM                         (2U)             /* MCUID0231 Num                                                */
+#define CALIB_MCUID0231_OFF                         (0U)             /* Off                                                          */
+#define CALIB_MCUID0231_ON                          (1U)             /* On                                                           */
+#define CALIB_MCUID0232_NUM                         (2U)             /* MCUID0232 Num                                                */
+#define CALIB_MCUID0232_OFF                         (0U)             /* Off                                                          */
+#define CALIB_MCUID0232_ON                          (1U)             /* On                                                           */
+#define CALIB_MCUID0234_NUM                         (2U)             /* MCUID0234 Num                                                */
+#define CALIB_MCUID0234_OFF                         (0U)             /* Off                                                          */
+#define CALIB_MCUID0234_ON                          (1U)             /* On                                                           */
+#define CALIB_MCUID1138_NUM                         (4U)             /* MCUID1138 Num                                                */
+#define CALIB_MCUID1138_FMVSS_2R                    (0U)             /* Rear 1st row + no center seat                                */
+#define CALIB_MCUID1138_FMVSS_2RC                   (1U)             /* Rear 1st row + center seat                                   */
+#define CALIB_MCUID1138_FMVSS_3R                    (2U)             /* Rear 2nd row                                                 */
+#define CALIB_MCUID1138_FMVSS_1R                    (3U)             /* No rear  seat                                                */
+#define CALIB_MCUID0590_NUM                         (3U)             /* MCUID0590 Num                                                */
+#define CALIB_MCUID0590_NON                         (0U)             /* None                                                         */
+#define CALIB_MCUID0590_RIGHT                       (1U)             /* Right                                                        */
+#define CALIB_MCUID0590_LEFT                        (2U)             /* Left                                                         */
+#define CALIB_MCUID0262_120KM                       (120U)           /* 120km/h                                                      */
+#define CALIB_MCUID0262_140KM                       (140U)           /* 140km/h                                                      */
+#define CALIB_MCUID0262_160KM                       (160U)           /* 160km/h                                                      */
+#define CALIB_MCUID0262_170KM                       (170U)           /* 170km/h                                                      */
+#define CALIB_MCUID0262_180KM                       (180U)           /* 180km/h                                                      */
+#define CALIB_MCUID0262_200KM                       (200U)           /* 200km/h                                                      */
+#define CALIB_MCUID0262_220KM                       (220U)           /* 220km/h                                                      */
+#define CALIB_MCUID0262_240KM                       (240U)           /* 240km/h                                                      */
+#define CALIB_MCUID0262_260KM                       (260U)           /* 260km/h                                                      */
+#define CALIB_MCUID0262_280KM                       (280U)           /* 280km/h                                                      */
+#define CALIB_MCUID0262_360KM                       (360U)           /* 360km/h                                                      */
+#define CALIB_MCUID0263_120MPH                      (120U)           /* 120MPH                                                       */
+#define CALIB_MCUID0263_140MPH                      (140)            /* 140MPH                                                       */
+#define CALIB_MCUID0263_160MPH                      (160U)           /* 160MPH                                                       */
+#define CALIB_MCUID0263_170MPH                      (170U)           /* 170MPH                                                       */
+#define CALIB_MCUID0263_180MPH                      (180U)           /* 180MPH                                                       */
+#define CALIB_MCUID0263_200MPH                      (200U)           /* 200MPH                                                       */
+#define CALIB_MCUID0263_220MPH                      (220U)           /* 220MPH                                                       */
+#define CALIB_MCUID0263_240MPH                      (240U)           /* 240MPH                                                       */
+#define CALIB_MCUID0263_260MPH                      (260U)           /* 260MPH                                                       */
+#define CALIB_MCUID0263_280MPH                      (280U)           /* 280MPH                                                       */
+#define CALIB_MCUID0263_360MPH                      (360U)           /* 360MPH                                                       */
+#define CALIB_MCUID0264_NUM                         (2U)             /* MCUID0264 Num                                                */
+#define CALIB_MCUID0264_NORMAL                      (0U)             /* Normal                                                       */
+#define CALIB_MCUID0264_FSPORT                      (1U)             /* F-Sport                                                      */
+#define CALIB_MCUID0341_NUM                         (2U)             /* MCUID0341 Num                                                */
+#define CALIB_MCUID0341_ON                          (1U)             /* ON                                                           */
+#define CALIB_MCUID0341_OFF                         (0U)             /* OFF                                                          */
+#define CALIB_MCUID1135_NUM                         (3U)             /* MCUID1135 Num                                                */
+#define CALIB_MCUID1135_FMVSS                       (0U)             /* FMVSS                                                        */
+#define CALIB_MCUID1135_UNR                         (1U)             /* UNR                                                          */
+#define CALIB_MCUID1135_CHN                         (2U)             /* CHN                                                          */
+#define CALIB_MCUID1136_NUM                         (3U)             /* MCUID1136 Num                                                */
+#define CALIB_MCUID1136_FMVSS                       (0U)             /* FMVSS                                                        */
+#define CALIB_MCUID1136_UNR                         (1U)             /* UNR                                                          */
+#define CALIB_MCUID1136_CHN                         (2U)             /* CHN                                                          */
+#define CALIB_MCUID0604_NUM                         (3U)             /* MCUID0604 Num                                                */
+#define CALIB_MCUID0604_FMVSS                       (0U)             /* FMVSS                                                        */
+#define CALIB_MCUID0604_UNR                         (1U)             /* UNR                                                          */
+#define CALIB_MCUID0604_CHN                         (2U)             /* CHN                                                          */
+#define CALIB_MCUID0605_NUM                         (3U)             /* MCUID0605 Num                                                */
+#define CALIB_MCUID0605_FMVSS                       (0U)             /* FMVSS                                                        */
+#define CALIB_MCUID0605_UNR                         (1U)             /* UNR                                                          */
+#define CALIB_MCUID0605_CHN                         (2U)             /* CHN                                                          */
+#define CALIB_MCUID0606_NUM                         (3U)             /* MCUID0606 Num                                                */
+#define CALIB_MCUID0606_FMVSS                       (0U)             /* FMVSS                                                        */
+#define CALIB_MCUID0606_UNR                         (1U)             /* UNR                                                          */
+#define CALIB_MCUID0606_CHN                         (2U)             /* CHN                                                          */
+#define CALIB_MCUID0607_NUM                         (3U)             /* MCUID0607 Num                                                */
+#define CALIB_MCUID0607_FMVSS                       (0U)             /* FMVSS                                                        */
+#define CALIB_MCUID0607_UNR                         (1U)             /* UNR                                                          */
+#define CALIB_MCUID0607_CHN                         (2U)             /* CHN                                                          */
+#define CALIB_MCUID3020_NUM                         (2U)             /* MCUID3020 Num                                                */
+#define CALIB_MCUID3020_FMVSS                       (0U)             /* FMVSS                                                        */
+#define CALIB_MCUID3020_UNR                         (1U)             /* UNR                                                          */
+#define CALIB_MCUID0235_NUM                         (9U)             /* MCUID0235 Num                                                */
+#define CALIB_MCUID0235_OTHER                       (0U)             /* Without Pickup Truck                                         */
+#define CALIB_MCUID0235_PICKUP_TRUCK                (8U)             /* Pickup Truck                                                 */
+#define CALIB_MCUID0250_MIN                         (1U)             /* MCUID0250 Min                                                */
+#define CALIB_MCUID0250_NO_1                        (1U)             /* CONV: Max No.1                                               */
+#define CALIB_MCUID0250_NO_2                        (2U)             /* CONV: Max No.2                                               */
+#define CALIB_MCUID0250_NO_3                        (3U)             /* CONV: Max No.3                                               */
+#define CALIB_MCUID0250_NO_4                        (4U)             /* CONV: Max No.4                                               */
+#define CALIB_MCUID0250_NO_5                        (5U)             /* CONV: Max No.5                                               */
+#define CALIB_MCUID0250_NO_6                        (6U)             /* CONV: Max No.6                                               */
+#define CALIB_MCUID0250_MAX                         (6U)             /* MCUID0250 Max                                                */
+#define CALIB_MCUID0251_MIN                         (1U)             /* MCUID0251 Min                                                */
+#define CALIB_MCUID0251_NO_1                        (1U)             /* HV: Max No.1                                                 */
+#define CALIB_MCUID0251_NO_2                        (2U)             /* HV: Max No.2                                                 */
+#define CALIB_MCUID0251_NO_3                        (3U)             /* HV: Max No.3                                                 */
+#define CALIB_MCUID0251_NO_4                        (4U)             /* HV: Max No.4                                                 */
+#define CALIB_MCUID0251_NO_5                        (5U)             /* HV: Max No.5                                                 */
+#define CALIB_MCUID0251_NO_6                        (6U)             /* HV: Max No.6                                                 */
+#define CALIB_MCUID0251_MAX                         (6U)             /* MCUID0251 Max                                                */
+#define CALIB_MCUID0252_MIN                         (1U)             /* MCUID0252 Min                                                */
+#define CALIB_MCUID0252_NO_1                        (1U)             /* PHV: Max No.1                                                */
+#define CALIB_MCUID0252_NO_2                        (2U)             /* PHV: Max No.2                                                */
+#define CALIB_MCUID0252_NO_3                        (3U)             /* PHV: Max No.3                                                */
+#define CALIB_MCUID0252_NO_4                        (4U)             /* PHV: Max No.4                                                */
+#define CALIB_MCUID0252_NO_5                        (5U)             /* PHV: Max No.5                                                */
+#define CALIB_MCUID0252_NO_6                        (6U)             /* PHV: Max No.6                                                */
+#define CALIB_MCUID0252_MAX                         (6U)             /* MCUID0252 Max                                                */
+#define CALIB_MCUID0253_MIN                         (1U)             /* MCUID0253 Min                                                */
+#define CALIB_MCUID0253_NO_1                        (1U)             /* FC: Max No.1                                                 */
+#define CALIB_MCUID0253_NO_2                        (2U)             /* FC: Max No.2                                                 */
+#define CALIB_MCUID0253_NO_3                        (3U)             /* FC: Max No.3                                                 */
+#define CALIB_MCUID0253_NO_4                        (4U)             /* FC: Max No.4                                                 */
+#define CALIB_MCUID0253_NO_5                        (5U)             /* FC: Max No.5                                                 */
+#define CALIB_MCUID0253_NO_6                        (6U)             /* FC: Max No.6                                                 */
+#define CALIB_MCUID0253_MAX                         (6U)             /* MCUID0253 Max                                                */
+#define CALIB_MCUID0254_MIN                         (1U)             /* MCUID0254 Min                                                */
+#define CALIB_MCUID0254_NO_1                        (1U)             /* PHV: Max No.1                                                */
+#define CALIB_MCUID0254_NO_2                        (2U)             /* PHV: Max No.2                                                */
+#define CALIB_MCUID0254_NO_3                        (3U)             /* PHV: Max No.3                                                */
+#define CALIB_MCUID0254_NO_4                        (4U)             /* PHV: Max No.4                                                */
+#define CALIB_MCUID0254_NO_5                        (5U)             /* PHV: Max No.5                                                */
+#define CALIB_MCUID0254_NO_6                        (6U)             /* PHV: Max No.6                                                */
+#define CALIB_MCUID0254_MAX                         (6U)             /* MCUID0254 Max                                                */
+#define CALIB_MCUID0255_MIN                         (1U)             /* MCUID0255 Min                                                */
+#define CALIB_MCUID0255_NO_1                        (1U)             /* EV: Max No.1                                                 */
+#define CALIB_MCUID0255_NO_2                        (2U)             /* EV: Max No.2                                                 */
+#define CALIB_MCUID0255_NO_3                        (3U)             /* EV: Max No.3                                                 */
+#define CALIB_MCUID0255_NO_4                        (4U)             /* EV: Max No.4                                                 */
+#define CALIB_MCUID0255_NO_5                        (5U)             /* EV: Max No.5                                                 */
+#define CALIB_MCUID0255_NO_6                        (6U)             /* EV: Max No.6                                                 */
+#define CALIB_MCUID0255_MAX                         (6U)             /* MCUID0255 Max                                                */
+#define CALIB_MCUID3025_NUM                         (2U)             /* MCUID3025 Num                                                */
+#define CALIB_MCUID3025_R_LIT_L_WIP                 (0U)             /* R:LIGHT L:WIPER                                              */
+#define CALIB_MCUID3025_R_WIP_L_LIT                 (1U)             /* R:WIPER L:LIGHT                                              */
+#define CALIB_MCUID1137_NUM                         (2U)             /* number of FMVSS208                                           */
+#define CALIB_MCUID1137_FMVSS208_OTHER              (0U)             /* New FMVSS208 not applied                                     */
+#define CALIB_MCUID1137_FMVSS208                    (1U)             /* New FMVSS208 applied                                         */
 #define CALIB_SOUND_PRESS_RATE_MIN                  (0U)             /* Sound Pressure Rate MIN MCUID0029-0039,0067-0208,0744-0753   */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -432,7 +611,7 @@ extern volatile const U1 u1_CALIB_MCUID1111_JUDG_RES_9;    /* Judgment result 9 
 extern volatile const U1 u1_CALIB_MCUID1112_JUDG_RES_10;   /* Judgment result 10                                                     */
 extern volatile const U1 u1_CALIB_MCUID1135_SBELT_USA;     /* SeatBelt Regulation USA                                                */
 extern volatile const U1 u1_CALIB_MCUID1136_SBELT_CAN;     /* SeatBelt Regulation CAN                                                */
-extern volatile const U1 u1_CALIB_MCUID1137_FMVSS;         /* New FMVSS applied or not                                               */
+extern volatile const U1 u1_CALIB_MCUID1137_NEW_FMVSS208;  /* New FMVSS applied or not                                               */
 extern volatile const U1 u1_CALIB_MCUID1138_SBR_TT_TYPE;   /* SeatBelt Reminder Telltale Type                                        */
 extern volatile const U1 u1_CALIB_MCUID0576_DEGCW;         /* DegCW                                                                  */
 extern volatile const U1 u1_CALIB_MCUID0577_DEGCCW;        /* DegCCW                                                                 */

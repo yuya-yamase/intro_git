@@ -1,4 +1,4 @@
-/* 2.2.2 */
+/* 2.3.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,8 +10,8 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define ILLUMI_COM_TX_C_MAJOR                   (2)
-#define ILLUMI_COM_TX_C_MINOR                   (2)
-#define ILLUMI_COM_TX_C_PATCH                   (2)
+#define ILLUMI_COM_TX_C_MINOR                   (3)
+#define ILLUMI_COM_TX_C_PATCH                   (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -876,6 +876,7 @@ static U1       u1_s_IllumiLoungeHysJdg(const U2 * u2_ap_DIM_LVL)
     U1                  u1_t_tx;
     U1                  u1_t_hys_lower;
     U1                  u1_t_hys_upper;
+    U1                  u1_t_daynight_tx_val;
     U2                  u2_t_daynight;
     U2                  u2_t_lvl;
 
@@ -884,7 +885,13 @@ static U1       u1_s_IllumiLoungeHysJdg(const U2 * u2_ap_DIM_LVL)
     u1_t_hys_lower = u1_CALIB_MCUID0336_ILLOF_LV;
     u1_t_hys_upper = u1_CALIB_MCUID0337_ILLOF_CAN_LV;
 
-    if(u2_t_daynight == (U2)DIM_DAYNIGHT_LVL_NIGHT){
+    if(u2_t_daynight == (U2)DIM_DAYNIGHT_LVL_UNKNWN){
+        u1_t_daynight_tx_val = (U1)ILLUMI_DIM_LVL_USADJ_NIGHT;
+    }
+    else{
+        u1_t_daynight_tx_val = (U1)u2_t_daynight;
+    }
+    if(u1_t_daynight_tx_val == (U1)ILLUMI_DIM_LVL_USADJ_NIGHT){
         if(u2_t_lvl <= (U2)u1_t_hys_lower){
             u1_t_tx = (U1)ILLUMI_LOUNGE_OFF;
         }
@@ -966,6 +973,7 @@ U1      u1_g_IllumiTftbkDrTxIllout(void)
 /*  2.2.0    01/11/2024  TH       for 19PFv3  Add RHEO_POS,TR2_DUTY,IR2_DUTY  etc                                                    */
 /*  2.2.1     9/18/2024  SM       Add u1_g_IllumiTcTxNmwk for NM Diag                                                                */
 /*  2.2.2    11/19/2024  TH       Fix : EventTx Timing                                                                               */
+/*  2.3.0     1/29/2026  KO       Change fail-safe process of ADIM2 signal for BEV FF2.                                              */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */

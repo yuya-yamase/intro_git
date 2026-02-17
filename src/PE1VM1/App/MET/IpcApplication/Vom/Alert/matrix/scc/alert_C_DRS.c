@@ -1,4 +1,4 @@
-/* 5.0.0 */
+/* 5.1.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define ALERT_C_DRS_C_MAJOR                      (5)
-#define ALERT_C_DRS_C_MINOR                      (0)
+#define ALERT_C_DRS_C_MINOR                      (1)
 #define ALERT_C_DRS_C_PATCH                      (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -55,7 +55,7 @@ static const U1  u1_sp_ALERT_C_DRS_DST[ALERT_C_DRS_NUM_DST] = {
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 00 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 01 UNKNOWN                                         */
     (U1)ALERT_REQ_C_DRS_TESTMODE,                                              /* 02 TESTMODE                                        */
-    (U1)ALERT_REQ_C_DRS_MALFUNC_RW,                                            /* 03 MALFUNC_RW                                      */
+    (U1)ALERT_REQ_C_DRS_MALFUNC,                                               /* 03 MALFUNC                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 04 UNKNOWN                                         */
     (U1)ALERT_REQ_C_DRS_MALFUNC,                                               /* 05 MALFUNC                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 06 UNKNOWN                                         */
@@ -68,22 +68,22 @@ static const U1  u1_sp_ALERT_C_DRS_DST[ALERT_C_DRS_NUM_DST] = {
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 13 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 14 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 15 UNKNOWN                                         */
-    (U1)ALERT_REQ_C_DRS_MALFUNC_RW,                                            /* 16 MALFUNC_RW                                      */
-    (U1)ALERT_REQ_C_DRS_MALFUNC_RW,                                            /* 17 MALFUNC_RW                                      */
-    (U1)ALERT_REQ_C_DRS_MALFUNC_RW,                                            /* 18 MALFUNC_RW                                      */
-    (U1)ALERT_REQ_C_DRS_MALFUNC_RW,                                            /* 19 MALFUNC_RW                                      */
-    (U1)ALERT_REQ_C_DRS_MALFUNC_RW,                                            /* 20 MALFUNC_RW                                      */
-    (U1)ALERT_REQ_C_DRS_MALFUNC_RW,                                            /* 21 MALFUNC_RW                                      */
-    (U1)ALERT_REQ_C_DRS_MALFUNC_RW,                                            /* 22 MALFUNC_RW                                      */
-    (U1)ALERT_REQ_C_DRS_MALFUNC_RW,                                            /* 23 MALFUNC_RW                                      */
-    (U1)ALERT_REQ_C_DRS_MALFUNC_RW,                                            /* 24 MALFUNC_RW                                      */
-    (U1)ALERT_REQ_C_DRS_MALFUNC_RW,                                            /* 25 MALFUNC_RW                                      */
-    (U1)ALERT_REQ_C_DRS_MALFUNC_RW,                                            /* 26 MALFUNC_RW                                      */
-    (U1)ALERT_REQ_C_DRS_MALFUNC_RW,                                            /* 27 MALFUNC_RW                                      */
-    (U1)ALERT_REQ_C_DRS_MALFUNC_RW,                                            /* 28 MALFUNC_RW                                      */
-    (U1)ALERT_REQ_C_DRS_MALFUNC_RW,                                            /* 29 MALFUNC_RW                                      */
-    (U1)ALERT_REQ_C_DRS_MALFUNC_RW,                                            /* 30 MALFUNC_RW                                      */
-    (U1)ALERT_REQ_C_DRS_MALFUNC_RW                                             /* 31 MALFUNC_RW                                      */
+    (U1)ALERT_REQ_C_DRS_MALFUNC,                                               /* 16 MALFUNC                                         */
+    (U1)ALERT_REQ_C_DRS_MALFUNC,                                               /* 17 MALFUNC                                         */
+    (U1)ALERT_REQ_C_DRS_MALFUNC,                                               /* 18 MALFUNC                                         */
+    (U1)ALERT_REQ_C_DRS_MALFUNC,                                               /* 19 MALFUNC                                         */
+    (U1)ALERT_REQ_C_DRS_MALFUNC,                                               /* 20 MALFUNC                                         */
+    (U1)ALERT_REQ_C_DRS_MALFUNC,                                               /* 21 MALFUNC                                         */
+    (U1)ALERT_REQ_C_DRS_MALFUNC,                                               /* 22 MALFUNC                                         */
+    (U1)ALERT_REQ_C_DRS_MALFUNC,                                               /* 23 MALFUNC                                         */
+    (U1)ALERT_REQ_C_DRS_MALFUNC,                                               /* 24 MALFUNC                                         */
+    (U1)ALERT_REQ_C_DRS_MALFUNC,                                               /* 25 MALFUNC                                         */
+    (U1)ALERT_REQ_C_DRS_MALFUNC,                                               /* 26 MALFUNC                                         */
+    (U1)ALERT_REQ_C_DRS_MALFUNC,                                               /* 27 MALFUNC                                         */
+    (U1)ALERT_REQ_C_DRS_MALFUNC,                                               /* 28 MALFUNC                                         */
+    (U1)ALERT_REQ_C_DRS_MALFUNC,                                               /* 29 MALFUNC                                         */
+    (U1)ALERT_REQ_C_DRS_MALFUNC,                                               /* 30 MALFUNC                                         */
+    (U1)ALERT_REQ_C_DRS_MALFUNC                                                /* 31 MALFUNC                                         */
 };
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -139,7 +139,10 @@ static U4      u4_s_AlertC_drsSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, co
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  5.0.0     3/18/2021  MO       New.                                                                                               */
+/*  5.1.0     1/13/2026  HT       Change for Full_function2 (MET-M_REMWAR-CSTD-2-04-A-C0)                                            */
+/*                                Removed "ALERT_REQ" in order to transfer signal transmission control from the MCU to the SoC       */
 /*                                                                                                                                   */
 /*  * MO   = Masayuki Oofuji, NTTD MSE                                                                                               */
+/*  * HT   = Hibiki Tanii, KSE                                                                                                       */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

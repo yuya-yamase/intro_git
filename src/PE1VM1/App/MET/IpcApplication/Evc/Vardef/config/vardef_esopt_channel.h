@@ -28,7 +28,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define VDF_ESO_NUM_CH                           (280U)
 
-#define VDF_ESO_CH_INDSPDALT                     (  0U)
+#define VDF_ESO_CH_SYS_NOT_USED_W0_00            (  0U)
 #define VDF_ESO_CH_SYS_NOT_USED_W0_01            (  1U)
 #define VDF_ESO_CH_SYS_NOT_USED_W0_02            (  2U)
 #define VDF_ESO_CH_SYS_NOT_USED_W0_03            (  3U)
@@ -93,7 +93,7 @@
 #define VDF_ESO_CH_SYS_NOT_USED_W1_30            ( 62U)
 #define VDF_ESO_CH_SYS_NOT_USED_W1_31            ( 63U)
 #define VDF_ESO_CH_SYS_NOT_USED_W2_00            ( 64U)
-#define VDF_ESO_CH_SYS_NOT_USED_W2_01            ( 65U)
+#define VDF_ESO_CH_MT_FMVSS208                   ( 65U)
 #define VDF_ESO_CH_SYS_NOT_USED_W2_02            ( 66U)
 #define VDF_ESO_CH_SYS_NOT_USED_W2_03            ( 67U)
 #define VDF_ESO_CH_SYS_NOT_USED_W2_04            ( 68U)
@@ -169,7 +169,7 @@
 #define VDF_ESO_CH_SYS_NOT_USED_W4_10            (138U)
 #define VDF_ESO_CH_SYS_NOT_USED_W4_11            (139U)
 #define VDF_ESO_CH_SYS_NOT_USED_W4_12            (140U)
-#define VDF_ESO_CH_SYS_NOT_USED_W4_13            (141U)
+#define VDF_ESO_CH_GVIF2                         (141U)
 #define VDF_ESO_CH_SYS_NOT_USED_W4_14            (142U)
 #define VDF_ESO_CH_SYS_NOT_USED_W4_15            (143U)
 #define VDF_ESO_CH_SYS_NOT_USED_W4_16            (144U)
@@ -309,16 +309,12 @@
 #define VDF_ESO_CH_SYS_MSBBSW_DAC                (278U)
 #define VDF_ESO_CH_SYS_4WDSYS_DISCON             (279U)
 
-#if 0   /* BEV Rebase provisionally */
-#else   /* BEV Rebase provisionally */
 #define VDF_ESO_CH_GVIF2                         (65535U)
-#define VDF_ESO_CH_AISETH                        (65535U)
-#endif   /* BEV Rebase provisionally */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define VDF_ESO_NOW_AVA                          ((VDF_ESO_NUM_CH + 31U) >> 5U)
 
-#define VDF_ESO_INI_W0                           (0x00000801U)
+#define VDF_ESO_INI_W0                           (0x00000800U)
 #define VDF_ESO_INI_W1                           (0x00000000U)
 #define VDF_ESO_INI_W2                           (0x00000000U)
 #define VDF_ESO_INI_W3                           (0x00000000U)
@@ -332,7 +328,7 @@
 #define VDF_ESO_NVM_W1                           (0x00000001U)
 #define VDF_ESO_NVM_W2                           (0x00000100U)
 #define VDF_ESO_NVM_W3                           (0x048C0000U)
-#define VDF_ESO_NVM_W4                           (0x10000000U)
+#define VDF_ESO_NVM_W4                           (0x10002000U)
 #define VDF_ESO_NVM_W5                           (0x0004076CU)
 #define VDF_ESO_NVM_W6                           (0x3F800000U)
 #define VDF_ESO_NVM_W7                           (0xBFEFFD80U)

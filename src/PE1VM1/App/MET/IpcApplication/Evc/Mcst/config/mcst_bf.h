@@ -28,8 +28,6 @@
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* Caution! MCST_NUM_WORD is limited to 31 or less */
-/* Used in "esi_nvmr_cfg.c"                        */
-#define MCST_NUM_RIM                             ( 1U)    /* Number of MCST IDs stored in RIM */
 
 #define MCST_BF_INI                              (0xFFFFFFFFU)
 
