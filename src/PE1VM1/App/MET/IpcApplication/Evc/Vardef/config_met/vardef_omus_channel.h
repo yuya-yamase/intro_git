@@ -1,35 +1,26 @@
-/* 2.3.0 */
+/* 1.0.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-/*  Variation Defines / Database Fields                                                                                              */
+/*  Variation Defines / Organized Master Unified System Vehicle Information                                                          */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
 
-#ifndef VARDEF_DBF_H
-#define VARDEF_DBF_H
+#ifndef VARDEF_OMUS_CHANNEL_H
+#define VARDEF_OMUS_CHANNEL_H
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define VARDEF_DBF_H_MAJOR                       (2)
-#define VARDEF_DBF_H_MINOR                       (3)
-#define VARDEF_DBF_H_PATCH                       (0)
+#define VARDEF_OMUS_CHANNEL_H_MAJOR                     (1)
+#define VARDEF_OMUS_CHANNEL_H_MINOR                     (0)
+#define VARDEF_OMUS_CHANNEL_H_PATCH                     (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#include "vardef_esopt.h"
-#include "vardef_ptsrx.h"
-#include "vardef_dest.h"
-#include "vardef_hcs.h"
-#include "vardef_omus.h"
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-/* Vehicle Define */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -43,14 +34,60 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Prototypes                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+U1      u1_g_VardefOmusMCUID0798(void);
+U1      u1_g_VardefOmusMCUID0209(void);
+U1      u1_g_VardefOmusMCUID0210(void);
+U1      u1_g_VardefOmusMCUID0211(void);
+U1      u1_g_VardefOmusMCUID0212(void);
+U1      u1_g_VardefOmusMCUID0213(void);
+U1      u1_g_VardefOmusMCUID0214(void);
+U1      u1_g_VardefOmusMCUID0215(void);
+U1      u1_g_VardefOmusMCUID0233(void);
+U1      u1_g_VardefOmusMCUID0224(void);
+U1      u1_g_VardefOmusMCUID0225(void);
+U1      u1_g_VardefOmusMCUID0226(void);
+U1      u1_g_VardefOmusMCUID0227(void);
+U1      u1_g_VardefOmusMCUID0228(void);
+U1      u1_g_VardefOmusMCUID0229(void);
+U1      u1_g_VardefOmusMCUID0230(void);
+U1      u1_g_VardefOmusMCUID0231(void);
+U1      u1_g_VardefOmusMCUID0232(void);
+U1      u1_g_VardefOmusMCUID0234(void);
+U1      u1_g_VardefOmusMCUID1138(void);
+U1      u1_g_VardefOmusMCUID0590(void);
+U1      u1_g_VardefOmusMCUID0268(void);
+U2      u2_g_VardefOmusMCUID0262(void);
+U2      u2_g_VardefOmusMCUID0263(void);
+U1      u1_g_VardefOmusMCUID0264(void);
+U1      u1_g_VardefOmusMCUID0341(void);
+U1      u1_g_VardefOmusMCUID1135(void);
+U1      u1_g_VardefOmusMCUID1136(void);
+U1      u1_g_VardefOmusMCUID0604(void);
+U1      u1_g_VardefOmusMCUID0605(void);
+U1      u1_g_VardefOmusMCUID0606(void);
+U1      u1_g_VardefOmusMCUID0607(void);
+U1      u1_g_VardefOmusMCUID0809(void);
+U1      u1_g_VardefOmusMCUID0810(void);
+U1      u1_g_VardefOmusMCUID3020(void);
+U1      u1_g_VardefOmusMCUID0024(void);
+U1      u1_g_VardefOmusMCUID0025(void);
+U1      u1_g_VardefOmusMCUID0235(void);
+U1      u1_g_VardefOmusMCUID0250(void);
+U1      u1_g_VardefOmusMCUID0251(void);
+U1      u1_g_VardefOmusMCUID0252(void);
+U1      u1_g_VardefOmusMCUID0253(void);
+U1      u1_g_VardefOmusMCUID0254(void);
+U1      u1_g_VardefOmusMCUID0255(void);
+U1      u1_g_VardefOmusMCUID3025(void);
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 
-#endif      /* VARDEF_DBF_H */
+#endif      /* VARDEF_OMUS_CHANNEL_H */
 
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
-/*  Change History  :  vardef_cfg.c                                                                                                  */
+/*  Change History  :  vardef_omus.c                                                                                                 */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

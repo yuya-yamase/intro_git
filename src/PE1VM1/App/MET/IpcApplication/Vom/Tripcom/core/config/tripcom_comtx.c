@@ -22,7 +22,6 @@
 #include "vardef.h"
 #include "veh_opemd.h"
 #include "locale.h"
-#include "calibration.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -643,7 +642,7 @@ static  void    vd_s_TripcomCfgCanTxEC_SCL(void)
 {
     U1          u1_t_sndval;
 
-    u1_t_sndval = u1_CALIB_MCUID0255_PE_EV;
+    u1_t_sndval = u1_g_VardefOmusMCUID0255();
     (void)Com_SendSignal(ComConf_ComSignal_EC_SCL, &u1_t_sndval);
     (void)Com_TriggerIPDUSend(MSG_MET1S38_TXCH0);
 }
@@ -700,6 +699,7 @@ static  void    vd_s_TripcomCfgCanTxEC_SCL(void)
 /*  BEV3-02   02/11/2026 DT       Update TX can frame for BEV FF2 and delete not applied drive moni appli                            */
 /*  BEV3-03   02/12/2026 EA       Deleted/Deactivated other than BEV Powertrain processes                                            */
 /*  BEV3-04   01/30/2026 YN       Configured for BEVstep3_FF2.(MET-M_DESTVARI-CSTD-0-01)                                             */
+/*  BEV3-05   02/10/2026 SH       Change MCUID0250-0255 from Calibration to OMUSVIID                                                 */
 /*                                                                                                                                   */
 /*  * HY   = Hidefumi Yoshida, Denso                                                                                                 */
 /*  * YA   = Yuhei Aoyama, DensoTechno                                                                                               */
@@ -720,5 +720,6 @@ static  void    vd_s_TripcomCfgCanTxEC_SCL(void)
 /*  * DT   = Dj Tutanes, DTPH                                                                                                        */
 /*  * EA   = Eunice Avelin, DTPH                                                                                                     */
 /*  * YN   = Yujiro Nagaya, Denso Techno                                                                                             */
+/*  * SH   = Sae Hirose, Denso Techno                                                                                                */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

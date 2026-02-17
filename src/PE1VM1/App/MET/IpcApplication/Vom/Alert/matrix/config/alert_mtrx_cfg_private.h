@@ -14,7 +14,6 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "vardef.h"
 #include "vehspd_kmph.h"
-#include "calibration.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
@@ -172,11 +171,11 @@
 #define u1_g_AlertCfgRFOGIsEnable()                                 ((U1)TRUE)
 #define u1_g_AlertCfgHEDLIsEnable()                                 ((U1)TRUE)
 
-#define u1_ALERT_CFG_B_TDOOR_RRCY                                   (u1_CALIB_MCUID0209_RRCYM)
-#define u1_ALERT_CFG_B_TDOOR_RLCY                                   (u1_CALIB_MCUID0210_RLCYM)
-#define u1_ALERT_CFG_B_TDOOR_BCTY                                   (u1_CALIB_MCUID0211_BCTYM)
-#define u1_ALERT_CFG_B_TDOOR_LGCY                                   (u1_CALIB_MCUID0212_LGCYM)
-#define u1_ALERT_CFG_B_TDOOR_HDCY_BDB                               (u1_CALIB_MCUID0213_HDCY_BDBM)
+#define u1_g_AlertOmusMCUID0209()                                   (u1_g_VardefOmusMCUID0209())
+#define u1_g_AlertOmusMCUID0210()                                   (u1_g_VardefOmusMCUID0210())
+#define u1_g_AlertOmusMCUID0211()                                   (u1_g_VardefOmusMCUID0211())
+#define u1_g_AlertOmusMCUID0212()                                   (u1_g_VardefOmusMCUID0212())
+#define u1_g_AlertOmusMCUID0213()                                   (u1_g_VardefOmusMCUID0213())
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */

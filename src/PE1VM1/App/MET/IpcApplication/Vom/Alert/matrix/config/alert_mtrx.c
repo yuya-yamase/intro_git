@@ -326,6 +326,7 @@ void    vd_g_AlertMtrxInit(void)
 /*                                MET-D_SFTPOS-CSTD-1-00-B-C0,MET-H_SYSMAL-CSTD-2-00-C-C0                                            */
 /*                                Change Alert_REQ for SFTPOS AND Change Alert_CH for SYSMAL.                                        */
 /*  BEV-27   02/10/2026  KO       Change for BEV FF2.(MET-M_SECMSG-CSTD-0-01-A-C0)                                                   */
+/*  BEV-28   02/10/2026  SH       Change MCUID0209-0213 from Calibration to OMUSVIID                                                 */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  * YI   = Yoshiki Iwata, Denso                                                                                                    */

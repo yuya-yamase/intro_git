@@ -26,6 +26,7 @@
     -I../../src/PE1VM1/App/MET/IpcApplication/Evc/Mcst/scc
     -I../../src/PE1VM1/App/MET/IpcApplication/Evc/Vardef/config/esopt_rx
     -I../../src/PE1VM1/App/MET/IpcApplication/Evc/Vardef/config
+    -I../../src/PE1VM1/App/MET/IpcApplication/Evc/Vardef/config_met
     -I../../src/PE1VM1/App/MET/IpcApplication/Evc/Vardef/config_met_common
     -I../../src/PE1VM1/App/MET/IpcApplication/Evc/Vardef/scc
     -I../../src/PE1VM1/App/MET/IpcApplication/Hmi/config

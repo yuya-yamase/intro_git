@@ -76,10 +76,13 @@
 ../../src/PE1VM1/App/MET/IpcApplication/Evc/Vardef/config/vardef_esopt_cfg.c
 ../../src/PE1VM1/App/MET/IpcApplication/Evc/Vardef/config_met/vardef_cfg.c
 ../../src/PE1VM1/App/MET/IpcApplication/Evc/Vardef/config_met/vardef_dest_cfg.c
+../../src/PE1VM1/App/MET/IpcApplication/Evc/Vardef/config_met/vardef_omus_can_cfg.c
+../../src/PE1VM1/App/MET/IpcApplication/Evc/Vardef/config_met/vardef_omus_mcuid_cfg.c
 ../../src/PE1VM1/App/MET/IpcApplication/Evc/Vardef/scc/vardef.c
 ../../src/PE1VM1/App/MET/IpcApplication/Evc/Vardef/scc/vardef_dest.c
 ../../src/PE1VM1/App/MET/IpcApplication/Evc/Vardef/scc/vardef_esopt.c
 ../../src/PE1VM1/App/MET/IpcApplication/Evc/Vardef/scc/vardef_hcs.c
+../../src/PE1VM1/App/MET/IpcApplication/Evc/Vardef/scc/vardef_omus.c
 ../../src/PE1VM1/App/MET/IpcApplication/Evc/Vardef/scc/vardef_ptsrx.c
 ../../src/PE1VM1/App/MET/IpcApplication/Hmi/config/hmiproxy_cfg.c
 ../../src/PE1VM1/App/MET/IpcApplication/Hmi/config/hmiputxt_cfg.c
@@ -304,10 +307,6 @@
 
 # ----------------------------------------------------------------------------------------------------------------------------------
 # ghsprj version 1-1-0
-<<<<<<< Updated upstream:prj/Ren_U2A16_373_CDC_2MJP/sub/pe1vm1_App.gpj
 # Date generated: 2026/02/10 18:53:29
-=======
-# Date generated: 2026/02/04 10:43:37
->>>>>>> Stashed changes:prj/Ren_U2A16_373_CDC_1MOT/sub/pe1vm1_App.gpj
 # ----------------------------------------------------------------------------------------------------------------------------------
 
