@@ -155,6 +155,7 @@ static void         vd_s_VardefOmusCfgRimReadU1(const U1 u1_a_DEF, U1 * u1_ap_mc
 static void         vd_s_VardefOmusCfgRimReadU2(const U2 u2_a_DEF, U2 * u2_ap_mcuiddata, const U2 u2_a_RIMID);
 static inline U1    u1_s_VardefOmusCfgCalibNumChk(const U1 u1_a_MCUIDDATA, const U1 u1_a_NUM, const U1 u1_a_DEF);
 static inline U1    u1_s_VardefOmusCfgCalibMinMaxChk(const U1 u1_a_MCUIDDATA, const U1 u1_a_MIN, const U1 u1_a_MAX, const U1 u1_a_DEF);
+static inline U1    u1_s_VardefOmusCfgCalibMCUID0235Chk(const U1 u1_a_MCUIDDATA, const U1 u1_a_DEF);
 
 static void         vd_s_VardefOmusCfgMCUID0798Jdg(const U1 u1_a_CANVAL);
 static void         vd_s_VardefOmusCfgMCUID0209Jdg(const U1 u1_a_CANVAL);
@@ -304,6 +305,25 @@ static  inline  U1  u1_s_VardefOmusCfgCalibMinMaxChk(const U1 u1_a_MCUIDDATA, co
     if((u1_t_ret < u1_a_MIN) ||
        (u1_t_ret > u1_a_MAX)){
         u1_t_ret = u1_a_DEF;
+    }
+
+    return(u1_t_ret);
+}
+
+/*===================================================================================================================================*/
+/*  static  inline  U1  u1_s_VardefOmusCfgCalibMCUID0235Chk(const U1 u1_a_MCUIDDATA, const U1 u1_a_DEF)                              */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static  inline  U1  u1_s_VardefOmusCfgCalibMCUID0235Chk(const U1 u1_a_MCUIDDATA, const U1 u1_a_DEF)
+{
+    U1 u1_t_ret;
+
+    u1_t_ret = u1_a_DEF;
+    if((u1_t_ret == (U1)CALIB_MCUID0235_OTHER) ||
+       (u1_t_ret == (U1)CALIB_MCUID0235_PICKUP_TRUCK)){
+        u1_t_ret = u1_a_MCUIDDATA;
     }
 
     return(u1_t_ret);
@@ -1972,7 +1992,7 @@ static void         vd_s_VardefOmusCfgMCUID0235Jdg(const U1 u1_a_CANVAL)
             u1_t_val = (U1)CALIB_MCUID0235_PICKUP_TRUCK;
             break;
         default: /* 2h~Eh:Reserved, Fh:Invalid */
-            u1_t_val = u1_s_VardefOmusCfgCalibNumChk(u1_s_vdf_omus_mcuid0235, (U1)VDF_OMUS_MCUID0235_NUM, u1_CALIB_MCUID0235_BODYSHAPE);
+            u1_t_val = u1_s_VardefOmusCfgCalibMCUID0235Chk(u1_s_vdf_omus_mcuid0235, u1_CALIB_MCUID0235_BODYSHAPE);
             break;
     }
     vd_s_VardefOmusCfgWriteU1(u1_t_val, &u1_s_vdf_omus_mcuid0235, (U2)RIMID_U1_VDF_MCUID0235);
@@ -1988,7 +2008,7 @@ U1      u1_g_VardefOmusMCUID0235(void)
 {
     U1 u1_t_mcuiddata;
 
-    u1_t_mcuiddata = u1_s_VardefOmusCfgCalibNumChk(u1_s_vdf_omus_mcuid0235, (U1)VDF_OMUS_MCUID0235_NUM, u1_CALIB_MCUID0235_BODYSHAPE);
+    u1_t_mcuiddata = u1_s_VardefOmusCfgCalibMCUID0235Chk(u1_s_vdf_omus_mcuid0235, u1_CALIB_MCUID0235_BODYSHAPE);
     return(u1_t_mcuiddata);
 }
 

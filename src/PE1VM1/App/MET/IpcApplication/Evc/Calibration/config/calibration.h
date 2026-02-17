@@ -32,7 +32,7 @@
 #define CALIB_MCUID0024_TOYOTA                      (0U)             /* TOYOTA                                                       */
 #define CALIB_MCUID0024_LEXUS                       (1U)             /* LEXUS                                                        */
 #define CALIB_MCUID0024_SUBARU                      (2U)             /* SUBARU                                                       */
-#define CALIB_MCUID0025_NUM                         (7U)             /* Sports Switching NUM                                         */
+#define CALIB_MCUID0025_NUM                         (6U)             /* Sports Switching NUM                                         */
 #define CALIB_MCUID0025_NON                         (0U)             /* Switch NON                                                   */
 #define CALIB_MCUID0025_GRS                         (1U)             /* GR-S                                                         */
 #define CALIB_MCUID0025_GR                          (2U)             /* GR                                                           */
