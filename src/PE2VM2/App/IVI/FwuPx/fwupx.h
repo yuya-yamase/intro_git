@@ -35,7 +35,7 @@
 
 #define FWUPX_WRI_HEAD_WORDS              (2U)
 #define FWUPX_WRI_DATA_ADR_WORDS          (1U)
-#define FWUPX_WRI_DATA_SIZE_MAX           (3500U)
+#define FWUPX_WRI_DATA_SIZE_MAX           (1024U)
 
 #define FWUPX_WRI_PREP_DATA_SIZE          (512U)
 #define FWUPX_WRI_PREP_DATA_START         (4U)
@@ -57,7 +57,7 @@
 void            vd_g_FwupxInit(void);
 void            vd_g_FwupxMainTask(void);
 U1              u1_g_FwupxResData(U1 * u1_ap_resdata, U1 u1_a_len);
-void            vd_s_FwupxPutReqData(const U1 * u1_ap_SUB4_ADD, const U2 u2_a_DTLEN);
+void            vd_g_FwupxPutReqData(const U1 * u1_ap_SUB4_ADD, const U2 u2_a_DTLEN);
 
 #endif /* FWUPX_H */
 /*===================================================================================================================================*/

@@ -181,7 +181,7 @@ static void            vd_s_XspiIviSub1MiscAna(const U1 * u1_ap_SUB1_ADD, const 
             break;
             case XSPI_IVI_MISC_REPRO:
                 /* Repro Data解析処理 */
-                vd_s_FwupxPutReqData(&u1_ap_SUB1_ADD[u2_t_data_id + 8U], u2_t_datasize);
+                vd_g_FwupxPutReqData(&u1_ap_SUB1_ADD[u2_t_data_id + 8U], u2_t_datasize);
             break;
             case XSPI_IVI_MISC_HDMI:
                 vd_g_XspiIviSub1HdmiAna(&u1_ap_SUB1_ADD[u2_t_data_id + 8U],u2_t_datasize);

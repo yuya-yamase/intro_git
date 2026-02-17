@@ -96,14 +96,14 @@ U1            u1_g_FwupxResData(U1 * u1_ap_resdata, U1 u1_a_len)
 }
 
 /*===================================================================================================================================*/
-/*  void            vd_s_FwupxPutReqData(const U1 * u1_ap_SUB4_ADD, const U2 u2_a_DTLEN)                                             */
+/*  void            vd_g_FwupxPutReqData(const U1 * u1_ap_SUB4_ADD, const U2 u2_a_DTLEN)                                             */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Description:    サブフレーム4 Repro Data 解析 送信処理                                                                             */
-/*  Arguments:      u1_ap_SUB4_ADD : サブフレーム4 Repro Data開始位置                                                                  */
+/*  Description:    サブフレーム1/4 Repro Data 解析 送信処理                                                                           */
+/*  Arguments:      u1_ap_SUB4_ADD : サブフレーム1/4 Repro Data開始位置                                                                */
 /*                  u2_a_DTLEN     : 有効データ長                                                                                     */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void            vd_s_FwupxPutReqData(const U1 * u1_ap_SUB4_ADD, const U2 u2_a_DTLEN)
+void            vd_g_FwupxPutReqData(const U1 * u1_ap_SUB4_ADD, const U2 u2_a_DTLEN)
 {
     U4          u4_tp_head[FWUPX_WRI_HEAD_WORDS];
     U4          u4_t_data_adr;

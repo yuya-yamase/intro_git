@@ -65,11 +65,6 @@ static void vd_s_FwuMemAccSwitchTask(void);
 /* CRC segmented task (WDG mitigation) */
 static void vd_s_FwuMemAccCrcCalc(void);
 
-/* Helper functions */
-static U1 u1_s_FwuMemAccValidateEraseParams(U4 u4_addr, U4 u4_len);
-static U1 u1_s_FwuMemAccValidateUpdateParams(U2 u2_offset, const U4* u4p_data);
-static U1 u1_s_FwuMemAccCheckOffsetSequence(U2 u2_expected, U2 u2_actual);
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions for CRC                                                                                                      */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -150,7 +145,7 @@ U1 u1_g_FwuMemAccEraseReq(U4 u4_a_start_adrs, U4 u4_a_length, U4 u4_a_expected_c
         u1_s_job_status == (U1)FWUMEMACC_JOB_STATUS_COMPLETED ||
         u1_s_job_status == (U1)FWUMEMACC_JOB_STATUS_ERROR) {
         /* Parameter validation */
-        if (u1_s_FwuMemAccValidateEraseParams(u4_a_start_adrs, u4_a_length) != (U1)FALSE) {
+        if ((u4_a_start_adrs != (U4)0U) && (u4_a_length != (U4)0U)) {
             /* Set job request */
             u1_s_job_type = (U1)FWUMEMACC_JOB_TYPE_ERASE;
             u1_s_job_status = (U1)FWUMEMACC_JOB_STATUS_IDLE;  /* task will start it */
@@ -183,9 +178,9 @@ U1 u1_g_FwuMemAccUpdateReq(U2 u2_a_block_offset, const U4* u4p_a_write_data)
         u1_s_job_status == (U1)FWUMEMACC_JOB_STATUS_COMPLETED ||
         u1_s_job_status == (U1)FWUMEMACC_JOB_STATUS_ERROR) {
         /* Parameter validation */
-        if (u1_s_FwuMemAccValidateUpdateParams(u2_a_block_offset, u4p_a_write_data) != (U1)FALSE) {
+        if (u4p_a_write_data != (U4 *)vdp_PTR_NA) {
             /* Check offset sequence */
-            if (u1_s_FwuMemAccCheckOffsetSequence(u2_s_block_counter, u2_a_block_offset) != (U1)FALSE) {
+            if (u2_s_block_counter == u2_a_block_offset) {
                 /* Set job request */
                 u1_s_job_type = (U1)FWUMEMACC_JOB_TYPE_UPDATE;
                 u1_s_job_status = (U1)FWUMEMACC_JOB_STATUS_IDLE;  /* task will start it */
@@ -275,9 +270,13 @@ U1 u1_g_FwuMemAccGetUpdateStatus(void)
 {
     U1 u1_t_status;
     U2 u2_t_max_blocks;
-    
-    u2_t_max_blocks = (U2)(u4_s_data_length / (U4)FWUMEMACC_WRITE_LENGTH);
-    
+
+    if (u4_s_data_length > (U4)FWUMEMACC_WRITE_LENGTH) {
+        u2_t_max_blocks = (U2)(u4_s_data_length / (U4)FWUMEMACC_WRITE_LENGTH) - (U2)1U;
+    } else {
+        u2_t_max_blocks = (U2)0U;
+    }
+
     if (u1_s_job_status == (U1)FWUMEMACC_JOB_STATUS_IDLE) {
         u1_t_status = (U1)FWUMEMACC_UPDT_STS_IDLE;
     } else if (u2_s_block_counter >= u2_t_max_blocks) {
@@ -442,7 +441,11 @@ static void vd_s_FwuMemAccUpdateTask(void)
                 }
 
                 /* All blocks completion check */
-                u2_t_max_blocks = (U2)(u4_s_data_length / (U4)FWUMEMACC_WRITE_LENGTH);
+                if (u4_s_data_length > (U4)FWUMEMACC_WRITE_LENGTH) {
+                    u2_t_max_blocks = (U2)(u4_s_data_length / (U4)FWUMEMACC_WRITE_LENGTH) - (U2)1U;
+                } else {
+                    u2_t_max_blocks = (U2)0U;
+                }
                 if (u2_s_block_counter >= u2_t_max_blocks) {
                     /* All blocks complete -> proceed to CRC verification */
                     u1_s_job_status = (U1)FWUMEMACC_JOB_STATUS_CRC_ACTIVE;
@@ -519,6 +522,8 @@ static void vd_s_FwuMemAccCrcCalc(void)
     if (u1_s_job_status == (U1)FWUMEMACC_JOB_STATUS_CRC_ACTIVE) {
         /* Calculate remaining size */
         u4_t_remaining_length = u4_s_data_length - ((U4)u2_s_crc_offset * (U4)FWUMEMACC_CRCCHK_LENGTH);
+        /* On the first call, u2_s_crc_offset = 0 so u4_t_remaining_length > 0                   */
+        /* subsequent calls are guarded against negative values by the maximum value guard below */
         
         if (u4_t_remaining_length > (U4)FWUMEMACC_CRCCHK_LENGTH) {
             u4_t_check_length = (U4)FWUMEMACC_CRCCHK_LENGTH;
@@ -555,65 +560,6 @@ static void vd_s_FwuMemAccCrcCalc(void)
 }
 
 /*===================================================================================================================================*/
-/*  Helper functions                                                                                                                 */
-/*===================================================================================================================================*/
-/*===================================================================================================================================*/
-/* static U1 u1_s_FwuMemAccValidateEraseParams(U4 u4_a_addr, U4 u4_a_len)                                                            */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      U4 u4_a_addr          : Address                                                                                  */
-/*                  U4 u4_a_len           : Length                                                                                   */
-/*  Return:         U1 : TRUE / FALSE                                                                                                */
-/*===================================================================================================================================*/
-static U1 u1_s_FwuMemAccValidateEraseParams(U4 u4_a_addr, U4 u4_a_len)
-{
-    U1 u1_t_ret;
-    if (u4_a_addr == (U4)0U || u4_a_len == (U4)0U) {
-        u1_t_ret = (U1)FALSE;
-    } else {
-        /* TODO Phase3: add address range and alignment checks */
-        u1_t_ret = (U1)TRUE;
-    }
-    return(u1_t_ret);
-}
-
-/*===================================================================================================================================*/
-/* static U1 u1_s_FwuMemAccValidateUpdateParams(U2 u2_a_offset, const U4* u4p_a_data)                                                */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      U2 u2_a_offset        : Block offset                                                                             */
-/*                  const U4* u4p_a_data  : Write data pointer                                                                       */
-/*  Return:         U1 : TRUE / FALSE                                                                                                */
-/*===================================================================================================================================*/
-static U1 u1_s_FwuMemAccValidateUpdateParams(U2 u2_a_offset, const U4* u4p_a_data)
-{
-    U1 u1_t_ret;
-    if (u4p_a_data == (U4 *)vdp_PTR_NA) {
-        u1_t_ret = (U1)FALSE;
-    } else {
-        /* TODO Phase3: add offset range check */
-        u1_t_ret = (U1)TRUE;
-    }
-    return(u1_t_ret);
-}
-
-/*===================================================================================================================================*/
-/* static U1 u1_s_FwuMemAccCheckOffsetSequence(U2 u2_a_expected, U2 u2_a_actual)                                                     */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      U2 u2_a_expected      : Expected offset                                                                          */
-/*                  U2 u2_a_actual        : Actual offset                                                                            */
-/*  Return:         U1 : TRUE / FALSE                                                                                                */
-/*===================================================================================================================================*/
-static U1 u1_s_FwuMemAccCheckOffsetSequence(U2 u2_a_expected, U2 u2_a_actual)
-{
-    U1 u1_t_ret;
-    if (u2_a_expected == u2_a_actual) {
-        u1_t_ret = (U1)TRUE;
-    } else {
-        u1_t_ret = (U1)FALSE;
-    }
-    return(u1_t_ret);
-}
-
-/*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
 /*                                                                                                                                   */
@@ -628,4 +574,4 @@ static U1 u1_s_FwuMemAccCheckOffsetSequence(U2 u2_a_expected, U2 u2_a_actual)
 /* * ST   = Syo Toyoda, KSE                                                                                                          */
 /* * KI   = Kanji Ito, Denso Techno                                                                                                  */
 /*                                                                                                                                   */
-
+/*===================================================================================================================================*/

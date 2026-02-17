@@ -65,7 +65,7 @@
 /* NOTE: After ACT completes, transition to ROLLBACK or reset->PREP_WAITING. */
 
 /* Event definitions (with CANCEL support) */
-#define FWUSH_EVENT_MAX                         (8U)
+#define FWUSH_EVENT_MAX                         (11U)
 #define FWUSH_EVENT_NONE                        (0U)           /* No event */
 #define FWUSH_EVENT_NEW_REQUEST                 (1U)           /* New request received */
 #define FWUSH_EVENT_SAME_REQUEST                (2U)           /* Same request received (continue) */
@@ -74,6 +74,9 @@
 #define FWUSH_EVENT_MEMACC_ERROR                (5U)           /* MemAcc job error */
 #define FWUSH_EVENT_INVALID_REQUEST             (6U)           /* Invalid request */
 #define FWUSH_EVENT_CANCEL                      (7U)           /* Cancel requested */
+#define FWUSH_EVENT_MEMACC_RUN_PARTIAL          (8U)           /* MemAcc run job partial success */
+#define FWUSH_EVENT_MEMACC_RUN_COMPLETE         (9U)           /* MemAcc run job complete */
+#define FWUSH_EVENT_MEMACC_ACT_ROLLBACK         (10U)          /* MemAcc activate job rollback */
 
 /* Request subtypes */
 #define FWUSH_REQ_SUBTYPE_NA                    (0xFFU)        /* Not Applicable */
