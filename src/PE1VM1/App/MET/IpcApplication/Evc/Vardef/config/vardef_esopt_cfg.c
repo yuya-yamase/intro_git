@@ -1495,6 +1495,9 @@ U1      u1_g_VardefEsOptCfgEthRxEvcnt(const U2 u2_a_MSG_ID)
 /*  BEV-38    02/13/2026  JS      Change config for BEV Full_Function_2.                                                             */
 /*                                MET-B_MWBB-CSTD-0-02-A-C0                                                                          */
 /*                                Add MULTI_WEATHERLAMP function                                                                     */
+/*  BEV-39    02/13/2026  JS      Change config for BEV Full_Function_2.                                                             */
+/*                                MET-H_SOLCHG-CSTD-1-03-B-C0                                                                        */
+/*                                Change memory retention from disabled to enabled                                                   */
 /*                                                                                                                                   */
 /*  * YI     = Yoshiki Iwata, Denso                                                                                                  */
 /*  * TN     = Takashi Nagai, Denso                                                                                                  */
