@@ -176,7 +176,6 @@ static inline void    vd_s_XSpiCfgTxHud(           U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxWrnmsg(        U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxMulmed(        U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxCalib(         U4 * u4_ap_pdu_tx);
-static inline void    vd_s_XSpiCfgTxMetcstm(       U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxAvgGrph(       U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxMetcstmMcst(   U4 * u4_ap_pdu_tx);
 
@@ -709,22 +708,13 @@ static inline void    vd_s_XSpiCfgTxMulmed(        U4 * u4_ap_pdu_tx) {
 }
 
 /*===================================================================================================================================*/
-/*  static void    vd_s_XSpiCfgTxMetcstm(U4 * u4_ap_pdu_tx)                                                                          */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static inline void    vd_s_XSpiCfgTxMetcstm(    U4 * u4_ap_pdu_tx) {
-    u4_ap_pdu_tx[0]  = (((U4)u1_g_McstReset((U1)FALSE) & (U4)XSPI_MSK_02BIT) << 22);           /* Customize Reset                */
-}
-
-/*===================================================================================================================================*/
-/*  static void    vd_s_XSpiCfgTxMetcstm(U4 * u4_ap_pdu_tx)                                                                          */
+/*  static void    vd_s_XSpiCfgTxMetcstmMcst(U4 * u4_ap_pdu_tx)                                                                      */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
 static inline void    vd_s_XSpiCfgTxMetcstmMcst(    U4 * u4_ap_pdu_tx) {
+    u4_ap_pdu_tx[0] = (((U4)u1_g_McstReset((U1)FALSE) & (U4)XSPI_MSK_02BIT) << 22);           /* Customize Reset                */
     u4_ap_pdu_tx[0] = ((u4_g_McstBf((U1)MCST_BFI_METWRNCSTM) & (U4)0x00000007U) << (U1)28);
 }
 
@@ -1064,10 +1054,8 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
     vd_s_XSpiCfgTxMulmed(        &u4_ap_pdu_tx[130]);      /* 130 - 138    : Multimedia                                    */
     vd_s_XSpiCfgTxTripcom(       &u4_ap_pdu_tx[139]);      /* 139 - 184    : Tripcom                                       */
     vd_s_XSpiCfgTxTelltale(      &u4_ap_pdu_tx[183]);      /* 183 - 230    : Telltale                                      */
-    vd_s_XSpiCfgTxMetcstm(       &u4_ap_pdu_tx[234]);      /* 231 - 238    : Meter Customize Reset                         */
-                                                           /* 239 - 299    : Diagnosis                                     */
     vd_s_XSpiCfgTxHud(           &u4_ap_pdu_tx[300]);      /* 300 - 305    : Hud                                           */
-    vd_s_XSpiCfgTxMetcstmMcst(   &u4_ap_pdu_tx[583]);      /* 566 - 584    : Meter Customize                               */
+    vd_s_XSpiCfgTxMetcstmMcst(   &u4_ap_pdu_tx[583]);      /* 583 - 584    : Meter Customize                               */
     vd_s_XSpiCfgTxCalib(         &u4_ap_pdu_tx[585]);      /* 585 - 625    : Calibration                                   */
 
     u4_ap_pdu_tx[482]  = u4_s_XSPI_LOCALCOMSPEC;           /* __LOCALCOMSPEC__                                             */
