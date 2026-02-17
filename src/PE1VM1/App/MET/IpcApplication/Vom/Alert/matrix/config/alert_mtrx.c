@@ -195,6 +195,7 @@ const ST_ALERT_TASK         st_gp_ALERT_TASK_CFG[]   = {
     {  &st_gp_ALERT_C_BRPADW_MTRX[0],        (U2)ALERT_CH_C_BRPADW,                 (U1)ALERT_C_BRPADW_CH_NUM,          (U1)3U  },
     {  &st_gp_ALERT_B_TURHAZ_MTRX[0],        (U2)ALERT_CH_B_TURHAZ_L,               (U1)ALERT_B_TURHAZ_CH_NUM,          (U1)3U  },
     {  &st_gp_ALERT_M_SECMSG_MTRX[0],        (U2)ALERT_CH_M_SECMSG,                 (U1)ALERT_M_SECMSG_CH_NUM,          (U1)3U  },
+    {  &st_gp_ALERT_B_SECBDC_MTRX[0],        (U2)ALERT_CH_B_SECBDC,                 (U1)ALERT_B_SECBDC_CH_NUM,          (U1)3U  },
     {  &st_gp_ALERT_S_ADBZR_ACC_MTRX[0],     (U2)ALERT_CH_S_ADBZR_ACC,              (U1)ALERT_S_ADBZR_ACC_CH_NUM,       (U1)4U  },
     {  &st_gp_ALERT_S_ADBZR_APP_MTRX[0],     (U2)ALERT_CH_S_ADBZR_APP,              (U1)ALERT_S_ADBZR_APP_CH_NUM,       (U1)4U  },
     {  &st_gp_ALERT_S_ADBZR_BSM_MTRX[0],     (U2)ALERT_CH_S_ADBZR_BSM,              (U1)ALERT_S_ADBZR_BSM_CH_NUM,       (U1)4U  },
@@ -276,7 +277,8 @@ void    vd_g_AlertMtrxInit(void)
         &vd_g_AlertH_battrwInit,
         &vd_g_AlertO_pdsmalInit,
         &vd_g_AlertB_turhazInit,
-        &vd_g_AlertO_fnclimInit
+        &vd_g_AlertO_fnclimInit,
+        &vd_g_AlertB_secbdcInit
     };
 
     vd_g_Fpcall_vd_Fvd(&fp_vd_ALERT_MTRX_INIT[0], u2_NC_VD_FVD(fp_vd_ALERT_MTRX_INIT));
@@ -327,6 +329,9 @@ void    vd_g_AlertMtrxInit(void)
 /*                                Change Alert_REQ for SFTPOS AND Change Alert_CH for SYSMAL.                                        */
 /*  BEV-27   02/10/2026  KO       Change for BEV FF2.(MET-M_SECMSG-CSTD-0-01-A-C0)                                                   */
 /*  BEV-28   02/10/2026  SH       Change MCUID0209-0213 from Calibration to OMUSVIID                                                 */
+/*  BEV-29   02/06/2026  HY       Change config for BEV Full_Function_2.                                                             */
+/*                                MET-B_SECBDC-CSTD-0-00-A-C0                                                                        */
+/*                                Changed due to specification change from feature to legacy.                                        */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  * YI   = Yoshiki Iwata, Denso                                                                                                    */
@@ -346,5 +351,6 @@ void    vd_g_AlertMtrxInit(void)
 /*  * SN   = Shizuka Nakajima,KSE                                                                                                    */
 /*  * KM   = Kane Malapo,     DTPH                                                                                                   */
 /*  * NI   = Naoki Inagaki,   KSE                                                                                                    */
+/*  * YH   = Yuki Hatakeyama, KSE                                                                                                    */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

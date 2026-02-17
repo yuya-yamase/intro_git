@@ -24,6 +24,7 @@
 #include "vardef_dest.h"
 #include "vardef_hcs.h"
 #include "vardef_omus.h"
+#include "vardef_autop.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */

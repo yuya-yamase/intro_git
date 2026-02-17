@@ -111,6 +111,8 @@ static U1       u1_s_illumi_tail_cn_tx;
 static U2       u2_s_illumi_comtx_b_p_dlycnt;
 static U2       u2_s_illumi_comtx_fade_tmelpsd;
 static U1       u1_s_illumi_comtx_il2sts;
+static U1       u1_s_illumi_comtx_rheoin;
+static U1       u1_s_illumi_comtx_illout;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
@@ -265,31 +267,21 @@ static volatile const U1 * u1p_sp_ILLUMI_BL_NGT[ILLUMI_DIM_LVL_NUM] = {
 /*===================================================================================================================================*/
 void    vd_g_IllumiComTxInit(void)
 {
-#if 0   /* BEV Rebase provisionally */
-    U1                   u1_t_tx;
-#endif   /* BEV Rebase provisionally */
-
-
     u2_s_illumi_tc_nmwk_tout   = (U2)U2_MAX;
     u2_s_illumi_rheo_nmwk_tout = (U2)U2_MAX;
     u2_s_illumi_rheo_evt_tout  = (U2)U2_MAX;
     u1_s_illumi_rheo_tx_ctrl   = (U1)ILLUMI_RHEO_EVTX_STS_FIN;
 
     u1_s_illumi_rheo_tx_pct = (U1)0U;
-#if 0   /* BEV Rebase provisionally */
-    u1_t_tx = (U1)U1_MAX;
-#endif   /* BEV Rebase provisionally */
 
     u1_s_illumi_tail_cn_tx     = (U1)ILLUMI_TAIL_CN_INACT;
     u1_s_illumi_rheo_tx_ack    = (U1)0U;
     u2_s_illumi_rheo_tx_tr     = (U2)0U;
     u2_s_illumi_rheo_tx_il     = (U2)0U;
     u1_s_illumi_rheo_tx_pos    = (U1)ILLUMI_RHEOPOS_TX_DEF;
+    u1_s_illumi_comtx_rheoin   = (U1)U1_MAX;
+    u1_s_illumi_comtx_illout   = (U1)U1_MAX;
 
-#if 0   /* BEV Rebase provisionally */
-    (void)Com_SendSignal(ComConf_ComSignal_ILL_OUT, &u1_t_tx);
-    (void)Com_SendSignal(ComConf_ComSignal_RHEO_IN, &u1_t_tx);
-#endif   /* BEV Rebase provisionally */
     (void)Com_SendSignal(ComConf_ComSignal_RHEOSTAT, &u1_s_illumi_rheo_tx_pct);
     (void)Com_SendSignal(ComConf_ComSignal_TR2_DUTY, &u2_s_illumi_rheo_tx_tr);
     (void)Com_SendSignal(ComConf_ComSignal_IL2_DUTY, &u2_s_illumi_rheo_tx_il);
@@ -686,13 +678,11 @@ static U2      u2_s_IllumiRheoTxCtrl(const U2 * u2_ap_DIM_LVL, U1 * u1_ap_RHEOPC
 
     U1                  u1_t_pct;
     U1                  u1_t_stschk;
-    U1                  u1_t_drtx;
 
     u2_t_lvl = u2_ap_DIM_LVL[ILLUMI_DIM_LVL_USADJ_NIGHT];
     if((u1_s_illumi_rheo_tx_ctrl < (U1)ILLUMI_RHEO_EVTX_NUM_STS) &&
        (u2_t_lvl                 < (U2)ILLUMI_DIM_LVL_NUM      )){
         u1_t_pct = *(u1p_sp_ILLUMI_RHEO_PCT[u2_t_lvl]);
-        u1_t_drtx    = u1_t_pct;
         u1_t_stschk = u1_s_illumi_rheo_tx_ack & (U1)ILLUMI_RHEO_CHK_TX_ACK;
 
         if(u1_t_pct != u1_s_illumi_rheo_tx_pct){
@@ -718,11 +708,10 @@ static U2      u2_s_IllumiRheoTxCtrl(const U2 * u2_ap_DIM_LVL, U1 * u1_ap_RHEOPC
     else{
         u2_t_act   = (U2)ILLUMI_RHEO_TX_ACT_INIT;
         u1_t_pct   = (U1)ILLUMI_RHEO_TX_MAX;
-        u1_t_drtx  = (U1)ILLUMI_RHEO_TX_MAX;
     }
 
     (*u1_ap_RHEOPCT)   = u1_t_pct;
-    (*u1_ap_RHEODRTX)  = u1_t_drtx;
+    (*u1_ap_RHEODRTX)  = (U1)U1_MAX;
 
     return(u2_t_act);
 }
@@ -770,9 +759,7 @@ static void    vd_s_IllumiRheoTxAct(const U2 u2_a_ACT, const U1 u1_a_RHEOPCT, co
             break;
     }
 
-#if 0   /* BEV Rebase provisionally */
-    (void)Com_SendSignal(ComConf_ComSignal_RHEO_IN, &u1_a_RHEODRTX);
-#endif   /* BEV Rebase provisionally */
+    u1_s_illumi_comtx_rheoin = u1_a_RHEODRTX;
 }
 /*===================================================================================================================================*/
 /*  static void    vd_s_IllumiLoungeTx(const U2 * u2_ap_DIM_LVL)                                                                     */
@@ -853,9 +840,7 @@ static void    vd_s_IllumiTftbkTx(const U2 * u2_ap_DIM_LVL)
         }
     }
 
-#if 0   /* BEV Rebase provisionally */
-    (void)Com_SendSignal(ComConf_ComSignal_ILL_OUT, &u1_t_tx);
-#endif   /* BEV Rebase provisionally */
+    u1_s_illumi_comtx_illout = u1_t_tx;
 }
 /*===================================================================================================================================*/
 /*  static void    vd_s_IllumiTailCancelTx(void)                                                                                     */
@@ -948,6 +933,26 @@ U1      u1_g_IllumiTcTxNmwk(const U2 u2_a_TOUT)
     return(u1_t_nmwk);
 }
 /*===================================================================================================================================*/
+/*  U1      u1_g_IllumiRheoDrTxRheoin(void)                                                                                          */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+U1      u1_g_IllumiRheoDrTxRheoin(void)
+{
+    return(u1_s_illumi_comtx_rheoin);
+}
+/*===================================================================================================================================*/
+/*  U1      u1_g_IllumiTftbkDrTxIllout(void)                                                                                         */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+U1      u1_g_IllumiTftbkDrTxIllout(void)
+{
+    return(u1_s_illumi_comtx_illout);
+}
+/*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
 /*                                                                                                                                   */
@@ -978,6 +983,7 @@ U1      u1_g_IllumiTcTxNmwk(const U2 u2_a_TOUT)
 /* 19PFv3-4   4/12/2024  SH       Add calibration guard                                                                              */
 /* 19PFv3-5   6/27/2024  TN(DT)   Delete Calibration Guard Process.                                                                  */
 /* BEV-1     10/29/2025  KO       Configured for BEVstep3_Rebase                                                                     */
+/* BEV-2     02/11/2026  YN       Configured for BEVstep3_FF2.(MET-M_DVRD-CSTD-2-02)                                                 */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  * TN     = Takashi Nagai, DENSO                                                                                                  */
@@ -989,5 +995,6 @@ U1      u1_g_IllumiTcTxNmwk(const U2 u2_a_TOUT)
 /*  * TH     = Taisuke Hirakawa, KSE                                                                                                 */
 /*  * TN(DT) = Tetsushi Nakano, Denso Techno                                                                                         */
 /*  * KO     = Kazuto Oishi,  Denso Techno                                                                                           */
+/*  * YN     = Yujiro Nagaya, Denso Techno                                                                                           */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

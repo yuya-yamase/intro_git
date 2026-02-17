@@ -64,7 +64,6 @@ static        U1      u1_s_SbltwrnMsgjdg(const U1 u1_a_MSGSTS);
 static        void    vd_s_SbltwrnGetCalibRear1(void);
 static        void    vd_s_SbltwrnGetCalibRear2(void);
 static        void    vd_s_SbltwrnGetCalibRear3(void);
-static inline U1      u1_s_SbltwrnCalibU1MaxChk(const U1 u1_a_CALIBID, const U1 u1_a_MAX, const U1 u1_a_DEF);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
@@ -766,8 +765,8 @@ U1      u1_g_SbltwrnDrchk(const U4 u4_a_VCLSTS, const U1 u1_a_SEATTYP, const U1 
     U4  u4_t_dropn_bit;
     U1  u1_t_dropn;
 
-    u1_t_rrdr = u1_s_SbltwrnCalibU1MaxChk(u1_CALIB_MCUID0233_RDOOR,       (U1)CALIB_MCUID0233_MAX, (U1)CALIB_MCUID0233_DEF);
-    u1_t_wkth = u1_s_SbltwrnCalibU1MaxChk(u1_CALIB_MCUID0234_WALKTHROUGH, (U1)CALIB_MCUID0234_MAX, (U1)CALIB_MCUID0234_DEF);
+    u1_t_rrdr = u1_g_VardefOmusMCUID0233();
+    u1_t_wkth = u1_g_VardefOmusMCUID0234();
     u1_t_type  = u1_a_ANYDR;
     u1_t_type |= u1_t_rrdr    << 1;
     u1_t_type |= u1_t_wkth    << 2;
@@ -920,25 +919,25 @@ static  void    vd_s_SbltwrnGetCalibRear1(void)
     U1          u1_t_rc_seatsw;
     U1          u1_t_rr_seatsw;
 
-    u1_t_rl_seatsw = u1_SEATBELT_CALIB_RL_SEATSW;
-    u1_t_rc_seatsw = u1_SEATBELT_CALIB_RC_SEATSW;
-    u1_t_rr_seatsw = u1_SEATBELT_CALIB_RR_SEATSW;
+    u1_t_rl_seatsw = u1_g_VardefOmusMCUID0226();
+    u1_t_rc_seatsw = u1_g_VardefOmusMCUID0225();
+    u1_t_rr_seatsw = u1_g_VardefOmusMCUID0224();
 
-    if(u1_t_rl_seatsw == (U1)TRUE){
+    if(u1_t_rl_seatsw == (U1)CALIB_MCUID0226_ON){
         u1_sp_sbltwrn_stvarcfg[SBLTWRN_R2L_SEAT] = (U1)SBLTWRN_SEAT_RS_RXBKLPDC_RXOSW;
     }
     else{
         u1_sp_sbltwrn_stvarcfg[SBLTWRN_R2L_SEAT] = (U1)SBLTWRN_SEAT_RS_RXBKLPDC;
     }
 
-    if(u1_t_rc_seatsw == (U1)TRUE){
+    if(u1_t_rc_seatsw == (U1)CALIB_MCUID0225_ON){
         u1_sp_sbltwrn_stvarcfg[SBLTWRN_R2C_SEAT] = (U1)SBLTWRN_SEAT_RS_RXBKLPDC_RXOSW;
     }
     else{
         u1_sp_sbltwrn_stvarcfg[SBLTWRN_R2C_SEAT] = (U1)SBLTWRN_SEAT_RS_RXBKLPDC;
     }
 
-    if(u1_t_rr_seatsw == (U1)TRUE){
+    if(u1_t_rr_seatsw == (U1)CALIB_MCUID0224_ON){
         u1_sp_sbltwrn_stvarcfg[SBLTWRN_R2R_SEAT] = (U1)SBLTWRN_SEAT_RS_RXBKLPDC_RXOSW;
     }
     else{
@@ -958,25 +957,25 @@ static  void    vd_s_SbltwrnGetCalibRear2(void)
     U1          u1_t_rc2_seatsw;
     U1          u1_t_rr2_seatsw;
 
-    u1_t_rl2_seatsw = u1_SEATBELT_CALIB_RL2_SEATSW;
-    u1_t_rc2_seatsw = u1_SEATBELT_CALIB_RC2_SEATSW;
-    u1_t_rr2_seatsw = u1_SEATBELT_CALIB_RR2_SEATSW;
+    u1_t_rl2_seatsw = u1_g_VardefOmusMCUID0229();
+    u1_t_rc2_seatsw = u1_g_VardefOmusMCUID0228();
+    u1_t_rr2_seatsw = u1_g_VardefOmusMCUID0227();
 
-    if(u1_t_rl2_seatsw == (U1)TRUE){
+    if(u1_t_rl2_seatsw == (U1)CALIB_MCUID0229_ON){
         u1_sp_sbltwrn_stvarcfg[SBLTWRN_R3L_SEAT] = (U1)SBLTWRN_SEAT_RS_XRXBKL_RXXOSW;
     }
     else{
         u1_sp_sbltwrn_stvarcfg[SBLTWRN_R3L_SEAT] = (U1)SBLTWRN_SEAT_RS_XRXBKL;
     }
 
-    if(u1_t_rc2_seatsw == (U1)TRUE){
+    if(u1_t_rc2_seatsw == (U1)CALIB_MCUID0228_ON){
         u1_sp_sbltwrn_stvarcfg[SBLTWRN_R3C_SEAT] = (U1)SBLTWRN_SEAT_RS_XRXBKL_RXXOSW;
     }
     else{
         u1_sp_sbltwrn_stvarcfg[SBLTWRN_R3C_SEAT] = (U1)SBLTWRN_SEAT_RS_XRXBKL;
     }
 
-    if(u1_t_rr2_seatsw == (U1)TRUE){
+    if(u1_t_rr2_seatsw == (U1)CALIB_MCUID0227_ON){
         u1_sp_sbltwrn_stvarcfg[SBLTWRN_R3R_SEAT] = (U1)SBLTWRN_SEAT_RS_XRXBKL_RXXOSW;
     }
     else{
@@ -996,48 +995,30 @@ static  void    vd_s_SbltwrnGetCalibRear3(void)
     U1          u1_t_rc3_seatsw;
     U1          u1_t_rr3_seatsw;
 
-    u1_t_rl3_seatsw = u1_SEATBELT_CALIB_RL3_SEATSW;
-    u1_t_rc3_seatsw = u1_SEATBELT_CALIB_RC3_SEATSW;
-    u1_t_rr3_seatsw = u1_SEATBELT_CALIB_RR3_SEATSW;
+    u1_t_rl3_seatsw = u1_g_VardefOmusMCUID0232();
+    u1_t_rc3_seatsw = u1_g_VardefOmusMCUID0231();
+    u1_t_rr3_seatsw = u1_g_VardefOmusMCUID0230();
 
-    if(u1_t_rl3_seatsw == (U1)TRUE){
+    if(u1_t_rl3_seatsw == (U1)CALIB_MCUID0232_ON){
         u1_sp_sbltwrn_stvarcfg[SBLTWRN_R4L_SEAT] = (U1)SBLTWRN_SEAT_RS_XRXBKL_RXXOSW;
     }
     else{
         u1_sp_sbltwrn_stvarcfg[SBLTWRN_R4L_SEAT] = (U1)SBLTWRN_SEAT_RS_XRXBKL;
     }
 
-    if(u1_t_rc3_seatsw == (U1)TRUE){
+    if(u1_t_rc3_seatsw == (U1)CALIB_MCUID0231_ON){
         u1_sp_sbltwrn_stvarcfg[SBLTWRN_R4C_SEAT] = (U1)SBLTWRN_SEAT_RS_XRXBKL_RXXOSW;
     }
     else{
         u1_sp_sbltwrn_stvarcfg[SBLTWRN_R4C_SEAT] = (U1)SBLTWRN_SEAT_RS_XRXBKL;
     }
 
-    if(u1_t_rr3_seatsw == (U1)TRUE){
+    if(u1_t_rr3_seatsw == (U1)CALIB_MCUID0230_ON){
         u1_sp_sbltwrn_stvarcfg[SBLTWRN_R4R_SEAT] = (U1)SBLTWRN_SEAT_RS_XRXBKL_RXXOSW;
     }
     else{
         u1_sp_sbltwrn_stvarcfg[SBLTWRN_R4R_SEAT] = (U1)SBLTWRN_SEAT_RS_XRXBKL;
     }
-}
-
-/*===================================================================================================================================*/
-/* static  inline  U1  u1_s_SbltwrnCalibU1MaxChk(const U1 u1_a_CALIBID, const U1 u1_a_MAX, const U1 u1_a_DEF)                        */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static  inline  U1  u1_s_SbltwrnCalibU1MaxChk(const U1 u1_a_CALIBID, const U1 u1_a_MAX, const U1 u1_a_DEF)
-{
-    U1 u1_t_ret;
-
-    u1_t_ret = u1_a_CALIBID;
-    if(u1_t_ret > u1_a_MAX){
-        u1_t_ret = u1_a_DEF;
-    }
-
-    return(u1_t_ret);
 }
 
 /*===================================================================================================================================*/

@@ -79,6 +79,7 @@
 ../../src/PE1VM1/App/MET/IpcApplication/Evc/Vardef/config_met/vardef_omus_can_cfg.c
 ../../src/PE1VM1/App/MET/IpcApplication/Evc/Vardef/config_met/vardef_omus_mcuid_cfg.c
 ../../src/PE1VM1/App/MET/IpcApplication/Evc/Vardef/scc/vardef.c
+../../src/PE1VM1/App/MET/IpcApplication/Evc/Vardef/scc/vardef_autop.c
 ../../src/PE1VM1/App/MET/IpcApplication/Evc/Vardef/scc/vardef_dest.c
 ../../src/PE1VM1/App/MET/IpcApplication/Evc/Vardef/scc/vardef_esopt.c
 ../../src/PE1VM1/App/MET/IpcApplication/Evc/Vardef/scc/vardef_hcs.c
@@ -118,6 +119,7 @@
 ../../src/PE1VM1/App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_B_PEDPRO.c
 ../../src/PE1VM1/App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_B_RPWSEA.c
 ../../src/PE1VM1/App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_B_RSEREM.c
+../../src/PE1VM1/App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_B_SECBDC.c
 ../../src/PE1VM1/App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_B_SMASTA.c
 ../../src/PE1VM1/App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_B_SPAT.c
 ../../src/PE1VM1/App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_B_TBEAM12.c
@@ -243,7 +245,6 @@
 ../../src/PE1VM1/App/MET/IpcApplication/Vom/Tripcom/app/scc/avggrph.c
 ../../src/PE1VM1/App/MET/IpcApplication/Vom/Tripcom/app/scc/avgvehspd_kmph.c
 ../../src/PE1VM1/App/MET/IpcApplication/Vom/Tripcom/app/scc/evdte_km.c
-../../src/PE1VM1/App/MET/IpcApplication/Vom/Tripcom/app/scc/instecon.c
 ../../src/PE1VM1/App/MET/IpcApplication/Vom/Tripcom/app/scc/instee_kmpkwh.c
 ../../src/PE1VM1/App/MET/IpcApplication/Vom/Tripcom/app/scc/ptsrundist_km.c
 ../../src/PE1VM1/App/MET/IpcApplication/Vom/Tripcom/app/scc/ptsruntm_hrs.c

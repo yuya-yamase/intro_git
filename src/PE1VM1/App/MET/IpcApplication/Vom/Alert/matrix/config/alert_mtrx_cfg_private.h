@@ -134,6 +134,7 @@
 #define ALERT_S_ADBZR_TCW_CH_NUM                 (1U)
 #define ALERT_O_FNCLIM_CH_NUM                    (1U)
 #define ALERT_M_SECMSG_CH_NUM                    (1U)
+#define ALERT_B_SECBDC_CH_NUM                    (1U)
 
 #define ALERT_SPD_STSBIT_VALID                   (VEHSPD_STSBIT_VALID)
 #define ALERT_SPD_STSBIT_UNKNOWN                 (VEHSPD_STSBIT_UNKNOWN)
@@ -219,6 +220,7 @@ void    vd_g_AlertH_battrwInit(void);
 void    vd_g_AlertO_pdsmalInit(void);
 void    vd_g_AlertB_turhazInit(void);
 void    vd_g_AlertO_fnclimInit(void);
+void    vd_g_AlertB_secbdcInit(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* Required  */
@@ -320,6 +322,7 @@ extern const ST_ALERT_MTRX         st_gp_ALERT_B_TURHAZ_MTRX[ALERT_B_TURHAZ_CH_N
 extern const ST_ALERT_MTRX         st_gp_ALERT_S_ADBZR_TCW_MTRX[ALERT_S_ADBZR_TCW_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_O_FNCLIM_MTRX[ALERT_O_FNCLIM_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_M_SECMSG_MTRX[ALERT_M_SECMSG_CH_NUM];
+extern const ST_ALERT_MTRX         st_gp_ALERT_B_SECBDC_MTRX[ALERT_B_SECBDC_CH_NUM];
 
 #endif      /* ALERT_MTRX_CFG_H */
 

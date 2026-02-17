@@ -641,10 +641,17 @@ static  void    vd_s_TripcomCfgCanTxASTM(const U2 u2_a_VALUE)
 static  void    vd_s_TripcomCfgCanTxEC_SCL(void)
 {
     U1          u1_t_sndval;
+    U1          u1_t_presndval;
+
+    u1_t_presndval = (U1)0U;
 
     u1_t_sndval = u1_g_VardefOmusMCUID0255();
-    (void)Com_SendSignal(ComConf_ComSignal_EC_SCL, &u1_t_sndval);
-    (void)Com_TriggerIPDUSend(MSG_MET1S38_TXCH0);
+    (void)Com_ReceiveSignal(ComConf_ComSignal_EC_SCL, &u1_t_presndval);
+    if (u1_t_presndval != u1_t_sndval) {
+        (void)Com_SendSignal(ComConf_ComSignal_EC_SCL, &u1_t_sndval);
+        (void)Com_TriggerIPDUSend(MSG_MET1S38_TXCH0);
+    }
+
 }
 
 /*===================================================================================================================================*/
@@ -699,7 +706,7 @@ static  void    vd_s_TripcomCfgCanTxEC_SCL(void)
 /*  BEV3-02   02/11/2026 DT       Update TX can frame for BEV FF2 and delete not applied drive moni appli                            */
 /*  BEV3-03   02/12/2026 EA       Deleted/Deactivated other than BEV Powertrain processes                                            */
 /*  BEV3-04   01/30/2026 YN       Configured for BEVstep3_FF2.(MET-M_DESTVARI-CSTD-0-01)                                             */
-/*  BEV3-05   02/10/2026 SH       Change MCUID0250-0255 from Calibration to OMUSVIID                                                 */
+/*  BEV3-05   02/10/2026 SH       Change MCUID00255 from Calibration to OMUSVIID                                                     */
 /*                                                                                                                                   */
 /*  * HY   = Hidefumi Yoshida, Denso                                                                                                 */
 /*  * YA   = Yuhei Aoyama, DensoTechno                                                                                               */

@@ -344,6 +344,9 @@ static void    vd_s_VardefDestLawDBIdxJdg(void)
     U1    u1_t_law_ccode_idx;
     U1    u1_t_law_destbdb_idx;
     U2    u2_t_dest_bdb_val;
+    U1    u1_t_mcuid0809;
+    U1    u1_t_mcuid0810;
+    U1    u1_t_mcuid3020;
 
     u2_t_dest_bdb_val = ((U2)u1_s_vdf_dst_dest_bdb | (U2)((U2)u1_s_vdf_dst_strg_whl << u1_s_VDF_DST_STRG_WHL_BIT));
 
@@ -369,12 +372,14 @@ static void    vd_s_VardefDestLawDBIdxJdg(void)
         }
     }
 
+    u1_t_mcuid0809 = u1_g_VardefOmusMCUID0809();
+    u1_t_mcuid0810 = u1_g_VardefOmusMCUID0810();
     if ((u1_t_law_ccode_idx == u1_g_VDF_DST_LAW_C_CODE_KOR) &&
-        (u1_CALIB_MCUID0810_KOREA_LOW == (U1)CALIB_MCUID0810_FMVSS)) {
+        (u1_t_mcuid0810     == (U1)CALIB_MCUID0810_FMVSS)) {
         u1_t_law_ccode_idx = u1_g_VDF_DST_LAW_KOR_FMVSS;
     }
     else if ((u1_t_law_ccode_idx == u1_g_VDF_DST_LAW_C_CODE_MEX) &&
-        (u1_CALIB_MCUID0809_MEXICO_LOW == (U1)CALIB_MCUID0809_FMVSS)) {
+             (u1_t_mcuid0809     == (U1)CALIB_MCUID0809_FMVSS)) {
         u1_t_law_ccode_idx = u1_g_VDF_DST_LAW_MEX_FMVSS;
     }
     else {
@@ -391,9 +396,10 @@ static void    vd_s_VardefDestLawDBIdxJdg(void)
         }
     }
 
+    u1_t_mcuid3020 = u1_g_VardefOmusMCUID3020();
     if (((u1_t_law_destbdb_idx == u1_g_VDF_DST_LAW_DEST_BDB_B_GNR_L) ||
          (u1_t_law_destbdb_idx == u1_g_VDF_DST_LAW_DEST_BDB_B_GNR_R)) &&
-         (u1_CALIB_MCUID3020_GEN_LOW == (U1)CALIB_MCUID3020_FMVSS)) {
+         (u1_t_mcuid3020       == (U1)CALIB_MCUID3020_FMVSS)) {
         u1_t_law_destbdb_idx = u1_g_VDF_DST_LAW_DEST_BDB_B_GNR_FMVSS;
     }
 

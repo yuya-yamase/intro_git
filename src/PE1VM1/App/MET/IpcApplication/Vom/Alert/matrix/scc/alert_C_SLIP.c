@@ -1,4 +1,4 @@
-/* 5.1.1 */
+/* 5.2.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,8 +10,8 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define ALERT_C_SLIP_C_MAJOR                     (5)
-#define ALERT_C_SLIP_C_MINOR                     (1)
-#define ALERT_C_SLIP_C_PATCH                     (1)
+#define ALERT_C_SLIP_C_MINOR                     (2)
+#define ALERT_C_SLIP_C_PATCH                     (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -68,22 +68,22 @@ static const U1  u1_sp_ALERT_C_SLIP_DST[ALERT_C_SLIP_NUM_DST] = {
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 13 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 14 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 15 UNKNOWN                                         */
-    (U1)ALERT_REQ_C_SLIP_MALFUNC_RW,                                           /* 16 MALFUNC_RW                                      */
-    (U1)ALERT_REQ_C_SLIP_MALFUNC_RW,                                           /* 17 MALFUNC_RW                                      */
-    (U1)ALERT_REQ_C_SLIP_MALFUNC_RW,                                           /* 18 MALFUNC_RW                                      */
-    (U1)ALERT_REQ_C_SLIP_MALFUNC_RW,                                           /* 19 MALFUNC_RW                                      */
-    (U1)ALERT_REQ_C_SLIP_MALFUNC_RW,                                           /* 20 MALFUNC_RW                                      */
-    (U1)ALERT_REQ_C_SLIP_MALFUNC_RW,                                           /* 21 MALFUNC_RW                                      */
-    (U1)ALERT_REQ_C_SLIP_MALFUNC_RW,                                           /* 22 MALFUNC_RW                                      */
-    (U1)ALERT_REQ_C_SLIP_MALFUNC_RW,                                           /* 23 MALFUNC_RW                                      */
-    (U1)ALERT_REQ_C_SLIP_MALFUNC_RW,                                           /* 24 MALFUNC_RW                                      */
-    (U1)ALERT_REQ_C_SLIP_MALFUNC_RW,                                           /* 25 MALFUNC_RW                                      */
-    (U1)ALERT_REQ_C_SLIP_MALFUNC_RW,                                           /* 26 MALFUNC_RW                                      */
-    (U1)ALERT_REQ_C_SLIP_MALFUNC_RW,                                           /* 27 MALFUNC_RW                                      */
-    (U1)ALERT_REQ_C_SLIP_MALFUNC_RW,                                           /* 28 MALFUNC_RW                                      */
-    (U1)ALERT_REQ_C_SLIP_MALFUNC_RW,                                           /* 29 MALFUNC_RW                                      */
-    (U1)ALERT_REQ_C_SLIP_MALFUNC_RW,                                           /* 30 MALFUNC_RW                                      */
-    (U1)ALERT_REQ_C_SLIP_MALFUNC_RW,                                           /* 31 MALFUNC_RW                                      */
+    (U1)ALERT_REQ_C_SLIP_MALFUNC,                                              /* 16 MALFUNC                                         */
+    (U1)ALERT_REQ_C_SLIP_MALFUNC,                                              /* 17 MALFUNC                                         */
+    (U1)ALERT_REQ_C_SLIP_MALFUNC,                                              /* 18 MALFUNC                                         */
+    (U1)ALERT_REQ_C_SLIP_MALFUNC,                                              /* 19 MALFUNC                                         */
+    (U1)ALERT_REQ_C_SLIP_MALFUNC,                                              /* 20 MALFUNC                                         */
+    (U1)ALERT_REQ_C_SLIP_MALFUNC,                                              /* 21 MALFUNC                                         */
+    (U1)ALERT_REQ_C_SLIP_MALFUNC,                                              /* 22 MALFUNC                                         */
+    (U1)ALERT_REQ_C_SLIP_MALFUNC,                                              /* 23 MALFUNC                                         */
+    (U1)ALERT_REQ_C_SLIP_MALFUNC,                                              /* 24 MALFUNC                                         */
+    (U1)ALERT_REQ_C_SLIP_MALFUNC,                                              /* 25 MALFUNC                                         */
+    (U1)ALERT_REQ_C_SLIP_MALFUNC,                                              /* 26 MALFUNC                                         */
+    (U1)ALERT_REQ_C_SLIP_MALFUNC,                                              /* 27 MALFUNC                                         */
+    (U1)ALERT_REQ_C_SLIP_MALFUNC,                                              /* 28 MALFUNC                                         */
+    (U1)ALERT_REQ_C_SLIP_MALFUNC,                                              /* 29 MALFUNC                                         */
+    (U1)ALERT_REQ_C_SLIP_MALFUNC,                                              /* 30 MALFUNC                                         */
+    (U1)ALERT_REQ_C_SLIP_MALFUNC,                                              /* 31 MALFUNC                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 32 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 33 UNKNOWN                                         */
     (U1)ALERT_REQ_C_SLIP_TESTMODE,                                             /* 34 TESTMODE                                        */
@@ -91,7 +91,7 @@ static const U1  u1_sp_ALERT_C_SLIP_DST[ALERT_C_SLIP_NUM_DST] = {
     (U1)ALERT_REQ_C_SLIP_OPERATING,                                            /* 36 OPERATING                                       */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 37 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 38 UNKNOWN                                         */
-    (U1)ALERT_REQ_C_SLIP_MALFUNC_RW,                                           /* 39 MALFUNC_RW                                      */
+    (U1)ALERT_REQ_C_SLIP_MALFUNC,                                              /* 39 MALFUNC                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 40 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 41 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 42 UNKNOWN                                         */
@@ -100,22 +100,22 @@ static const U1  u1_sp_ALERT_C_SLIP_DST[ALERT_C_SLIP_NUM_DST] = {
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 45 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 46 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 47 UNKNOWN                                         */
-    (U1)ALERT_REQ_C_SLIP_MALFUNC_RW,                                           /* 48 MALFUNC_RW                                      */
-    (U1)ALERT_REQ_C_SLIP_MALFUNC_RW,                                           /* 49 MALFUNC_RW                                      */
-    (U1)ALERT_REQ_C_SLIP_MALFUNC_RW,                                           /* 50 MALFUNC_RW                                      */
-    (U1)ALERT_REQ_C_SLIP_MALFUNC_RW,                                           /* 51 MALFUNC_RW                                      */
-    (U1)ALERT_REQ_C_SLIP_MALFUNC_RW,                                           /* 52 MALFUNC_RW                                      */
-    (U1)ALERT_REQ_C_SLIP_MALFUNC_RW,                                           /* 53 MALFUNC_RW                                      */
-    (U1)ALERT_REQ_C_SLIP_MALFUNC_RW,                                           /* 54 MALFUNC_RW                                      */
-    (U1)ALERT_REQ_C_SLIP_MALFUNC_RW,                                           /* 55 MALFUNC_RW                                      */
-    (U1)ALERT_REQ_C_SLIP_MALFUNC_RW,                                           /* 56 MALFUNC_RW                                      */
-    (U1)ALERT_REQ_C_SLIP_MALFUNC_RW,                                           /* 57 MALFUNC_RW                                      */
-    (U1)ALERT_REQ_C_SLIP_MALFUNC_RW,                                           /* 58 MALFUNC_RW                                      */
-    (U1)ALERT_REQ_C_SLIP_MALFUNC_RW,                                           /* 59 MALFUNC_RW                                      */
-    (U1)ALERT_REQ_C_SLIP_MALFUNC_RW,                                           /* 60 MALFUNC_RW                                      */
-    (U1)ALERT_REQ_C_SLIP_MALFUNC_RW,                                           /* 61 MALFUNC_RW                                      */
-    (U1)ALERT_REQ_C_SLIP_MALFUNC_RW,                                           /* 62 MALFUNC_RW                                      */
-    (U1)ALERT_REQ_C_SLIP_MALFUNC_RW                                            /* 63 MALFUNC_RW                                      */
+    (U1)ALERT_REQ_C_SLIP_MALFUNC,                                              /* 48 MALFUNC                                         */
+    (U1)ALERT_REQ_C_SLIP_MALFUNC,                                              /* 49 MALFUNC                                         */
+    (U1)ALERT_REQ_C_SLIP_MALFUNC,                                              /* 50 MALFUNC                                         */
+    (U1)ALERT_REQ_C_SLIP_MALFUNC,                                              /* 51 MALFUNC                                         */
+    (U1)ALERT_REQ_C_SLIP_MALFUNC,                                              /* 52 MALFUNC                                         */
+    (U1)ALERT_REQ_C_SLIP_MALFUNC,                                              /* 53 MALFUNC                                         */
+    (U1)ALERT_REQ_C_SLIP_MALFUNC,                                              /* 54 MALFUNC                                         */
+    (U1)ALERT_REQ_C_SLIP_MALFUNC,                                              /* 55 MALFUNC                                         */
+    (U1)ALERT_REQ_C_SLIP_MALFUNC,                                              /* 56 MALFUNC                                         */
+    (U1)ALERT_REQ_C_SLIP_MALFUNC,                                              /* 57 MALFUNC                                         */
+    (U1)ALERT_REQ_C_SLIP_MALFUNC,                                              /* 58 MALFUNC                                         */
+    (U1)ALERT_REQ_C_SLIP_MALFUNC,                                              /* 59 MALFUNC                                         */
+    (U1)ALERT_REQ_C_SLIP_MALFUNC,                                              /* 60 MALFUNC                                         */
+    (U1)ALERT_REQ_C_SLIP_MALFUNC,                                              /* 61 MALFUNC                                         */
+    (U1)ALERT_REQ_C_SLIP_MALFUNC,                                              /* 62 MALFUNC                                         */
+    (U1)ALERT_REQ_C_SLIP_MALFUNC                                               /* 63 MALFUNC                                         */
 };
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -179,9 +179,12 @@ static U4      u4_s_AlertC_slipSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, c
 /*  5.0.0     3/12/2020  SM       New.                                                                                               */
 /*  5.1.0     8/25/2020  RI       Remove Communication disruption Judgement of less than 10V.                                        */
 /*  5.1.1     7/ 1/2021  SO       Update for 050D CV(Version update).                                                                */
+/*  5.2.0     1/13/2026  HT       Change for Full_function2 (MET-M_REMWAR-CSTD-2-04-A-C0)                                            */
+/*                                Removed "ALERT_REQ" in order to transfer signal transmission control from the MCU to the SoC       */
 /*                                                                                                                                   */
 /*  * SM   = Shingo Miyamoto, NTTD MSE                                                                                               */
 /*  * RI   = Ren Ito, NTTD MSE                                                                                                       */
 /*  * SO   = Syuhei Ooshima, NTTD MSE                                                                                                */
+/*  * HT   = Hibiki Tanii, KSE                                                                                                       */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

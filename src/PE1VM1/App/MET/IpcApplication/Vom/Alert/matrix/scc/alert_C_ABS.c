@@ -1,4 +1,4 @@
-/* 5.1.0 */
+/* 5.2.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define ALERT_C_ABS_C_MAJOR                      (5)
-#define ALERT_C_ABS_C_MINOR                      (1)
+#define ALERT_C_ABS_C_MINOR                      (2)
 #define ALERT_C_ABS_C_PATCH                      (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -65,11 +65,11 @@ static const U1  u1_sp_ALERT_C_ABS_TT_DST[ALERT_C_ABS_TT_NUM_DST] = {
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 08 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 09 UNKNOWN                                         */
     (U1)ALERT_REQ_C_ABS_TT_FLASH_4HZ,                                          /* 10 FLASH_4HZ                                       */
-    (U1)ALERT_REQ_C_ABS_TT_ON_RW,                                              /* 11 ON_RW                                           */
+    (U1)ALERT_REQ_C_ABS_TT_ON,                                                 /* 11 ON                                              */
     (U1)ALERT_REQ_C_ABS_TT_FLASH_1HZ,                                          /* 12 FLASH_1HZ                                       */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 13 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 14 UNKNOWN                                         */
-    (U1)ALERT_REQ_C_ABS_TT_ON_RW,                                              /* 15 ON_RW                                           */
+    (U1)ALERT_REQ_C_ABS_TT_ON,                                                 /* 15 ON                                              */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 16 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 17 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 18 UNKNOWN                                         */
@@ -86,38 +86,38 @@ static const U1  u1_sp_ALERT_C_ABS_TT_DST[ALERT_C_ABS_TT_NUM_DST] = {
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 29 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 30 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 31 UNKNOWN                                         */
-    (U1)ALERT_REQ_C_ABS_TT_ON_RW,                                              /* 32 ON_RW                                           */
-    (U1)ALERT_REQ_C_ABS_TT_ON_RW,                                              /* 33 ON_RW                                           */
-    (U1)ALERT_REQ_C_ABS_TT_ON_RW,                                              /* 34 ON_RW                                           */
-    (U1)ALERT_REQ_C_ABS_TT_ON_RW,                                              /* 35 ON_RW                                           */
-    (U1)ALERT_REQ_C_ABS_TT_ON_RW,                                              /* 36 ON_RW                                           */
-    (U1)ALERT_REQ_C_ABS_TT_ON_RW,                                              /* 37 ON_RW                                           */
-    (U1)ALERT_REQ_C_ABS_TT_ON_RW,                                              /* 38 ON_RW                                           */
-    (U1)ALERT_REQ_C_ABS_TT_ON_RW,                                              /* 39 ON_RW                                           */
-    (U1)ALERT_REQ_C_ABS_TT_ON_RW,                                              /* 40 ON_RW                                           */
-    (U1)ALERT_REQ_C_ABS_TT_ON_RW,                                              /* 41 ON_RW                                           */
-    (U1)ALERT_REQ_C_ABS_TT_ON_RW,                                              /* 42 ON_RW                                           */
-    (U1)ALERT_REQ_C_ABS_TT_ON_RW,                                              /* 43 ON_RW                                           */
-    (U1)ALERT_REQ_C_ABS_TT_ON_RW,                                              /* 44 ON_RW                                           */
-    (U1)ALERT_REQ_C_ABS_TT_ON_RW,                                              /* 45 ON_RW                                           */
-    (U1)ALERT_REQ_C_ABS_TT_ON_RW,                                              /* 46 ON_RW                                           */
-    (U1)ALERT_REQ_C_ABS_TT_ON_RW,                                              /* 47 ON_RW                                           */
-    (U1)ALERT_REQ_C_ABS_TT_ON_RW,                                              /* 48 ON_RW                                           */
-    (U1)ALERT_REQ_C_ABS_TT_ON_RW,                                              /* 49 ON_RW                                           */
-    (U1)ALERT_REQ_C_ABS_TT_ON_RW,                                              /* 50 ON_RW                                           */
-    (U1)ALERT_REQ_C_ABS_TT_ON_RW,                                              /* 51 ON_RW                                           */
-    (U1)ALERT_REQ_C_ABS_TT_ON_RW,                                              /* 52 ON_RW                                           */
-    (U1)ALERT_REQ_C_ABS_TT_ON_RW,                                              /* 53 ON_RW                                           */
-    (U1)ALERT_REQ_C_ABS_TT_ON_RW,                                              /* 54 ON_RW                                           */
-    (U1)ALERT_REQ_C_ABS_TT_ON_RW,                                              /* 55 ON_RW                                           */
-    (U1)ALERT_REQ_C_ABS_TT_ON_RW,                                              /* 56 ON_RW                                           */
-    (U1)ALERT_REQ_C_ABS_TT_ON_RW,                                              /* 57 ON_RW                                           */
-    (U1)ALERT_REQ_C_ABS_TT_ON_RW,                                              /* 58 ON_RW                                           */
-    (U1)ALERT_REQ_C_ABS_TT_ON_RW,                                              /* 59 ON_RW                                           */
-    (U1)ALERT_REQ_C_ABS_TT_ON_RW,                                              /* 60 ON_RW                                           */
-    (U1)ALERT_REQ_C_ABS_TT_ON_RW,                                              /* 61 ON_RW                                           */
-    (U1)ALERT_REQ_C_ABS_TT_ON_RW,                                              /* 62 ON_RW                                           */
-    (U1)ALERT_REQ_C_ABS_TT_ON_RW                                               /* 63 ON_RW                                           */
+    (U1)ALERT_REQ_C_ABS_TT_ON,                                                 /* 32 ON                                              */
+    (U1)ALERT_REQ_C_ABS_TT_ON,                                                 /* 33 ON                                              */
+    (U1)ALERT_REQ_C_ABS_TT_ON,                                                 /* 34 ON                                              */
+    (U1)ALERT_REQ_C_ABS_TT_ON,                                                 /* 35 ON                                              */
+    (U1)ALERT_REQ_C_ABS_TT_ON,                                                 /* 36 ON                                              */
+    (U1)ALERT_REQ_C_ABS_TT_ON,                                                 /* 37 ON                                              */
+    (U1)ALERT_REQ_C_ABS_TT_ON,                                                 /* 38 ON                                              */
+    (U1)ALERT_REQ_C_ABS_TT_ON,                                                 /* 39 ON                                              */
+    (U1)ALERT_REQ_C_ABS_TT_ON,                                                 /* 40 ON                                              */
+    (U1)ALERT_REQ_C_ABS_TT_ON,                                                 /* 41 ON                                              */
+    (U1)ALERT_REQ_C_ABS_TT_ON,                                                 /* 42 ON                                              */
+    (U1)ALERT_REQ_C_ABS_TT_ON,                                                 /* 43 ON                                              */
+    (U1)ALERT_REQ_C_ABS_TT_ON,                                                 /* 44 ON                                              */
+    (U1)ALERT_REQ_C_ABS_TT_ON,                                                 /* 45 ON                                              */
+    (U1)ALERT_REQ_C_ABS_TT_ON,                                                 /* 46 ON                                              */
+    (U1)ALERT_REQ_C_ABS_TT_ON,                                                 /* 47 ON                                              */
+    (U1)ALERT_REQ_C_ABS_TT_ON,                                                 /* 48 ON                                              */
+    (U1)ALERT_REQ_C_ABS_TT_ON,                                                 /* 49 ON                                              */
+    (U1)ALERT_REQ_C_ABS_TT_ON,                                                 /* 50 ON                                              */
+    (U1)ALERT_REQ_C_ABS_TT_ON,                                                 /* 51 ON                                              */
+    (U1)ALERT_REQ_C_ABS_TT_ON,                                                 /* 52 ON                                              */
+    (U1)ALERT_REQ_C_ABS_TT_ON,                                                 /* 53 ON                                              */
+    (U1)ALERT_REQ_C_ABS_TT_ON,                                                 /* 54 ON                                              */
+    (U1)ALERT_REQ_C_ABS_TT_ON,                                                 /* 55 ON                                              */
+    (U1)ALERT_REQ_C_ABS_TT_ON,                                                 /* 56 ON                                              */
+    (U1)ALERT_REQ_C_ABS_TT_ON,                                                 /* 57 ON                                              */
+    (U1)ALERT_REQ_C_ABS_TT_ON,                                                 /* 58 ON                                              */
+    (U1)ALERT_REQ_C_ABS_TT_ON,                                                 /* 59 ON                                              */
+    (U1)ALERT_REQ_C_ABS_TT_ON,                                                 /* 60 ON                                              */
+    (U1)ALERT_REQ_C_ABS_TT_ON,                                                 /* 61 ON                                              */
+    (U1)ALERT_REQ_C_ABS_TT_ON,                                                 /* 62 ON                                              */
+    (U1)ALERT_REQ_C_ABS_TT_ON                                                  /* 63 ON                                              */
 };
 static const U1  u1_sp_ALERT_C_ABS_PD_DST[ALERT_C_ABS_PD_NUM_DST] = {
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 00 UNKNOWN                                         */
@@ -228,8 +228,11 @@ static U4      u4_s_AlertC_absPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  5.0.0     3/24/2020  MY       New.                                                                                               */
 /*  5.1.0     8/24/2020  TI       Delete Low-voltage Jugdment.                                                                       */
+/*  5.2.0     1/13/2026  HT       Change for Full_function2 (MET-M_REMWAR-CSTD-2-04-A-C0)                                            */
+/*                                Removed "ALERT_REQ" in order to transfer signal transmission control from the MCU to the SoC       */
 /*                                                                                                                                   */
 /*  * MY   = Masaki Yoshizawa, NTTD MSE                                                                                              */
 /*  * TI   = Takuro Iwanaga, NTTD MSE                                                                                                */
+/*  * HT   = Hibiki Tanii, KSE                                                                                                       */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
