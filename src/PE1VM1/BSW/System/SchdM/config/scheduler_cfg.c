@@ -80,6 +80,7 @@
 #include "hdimmgr.h"
 #include "himgadj.h"
 #include "datesi_met.h"
+#include "omavrchk.h"
 /*---------------------------------------------------------------------------*/
 /* Platform Header                                                           */
 /*---------------------------------------------------------------------------*/
@@ -296,6 +297,7 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     {&vd_g_DimMainTask,                 (U4)SCHDLR_TASKBIT__20MS_A  },
     {&vd_g_VehspdMainTask,              (U4)SCHDLR_TASKBIT__20MS_A  },
     {&vd_g_VptranMainTask,              (U4)SCHDLR_TASKBIT__20MS_A  },
+    {&vd_g_OmaVrChkMainTask,            (U4)SCHDLR_TASKBIT__50MS_C  },
     {&vd_g_OdoMainTask,                 (U4)SCHDLR_TASKBIT__50MS_C  },
     {&vd_g_AlertMainTask,               (U4)SCHDLR_TASKBIT__10MS_A  },
     {&vd_g_SbltwrnMainTask,             (U4)SCHDLR_TASKBIT__50MS_C  },
@@ -490,11 +492,13 @@ static void    vd_s_SchdlrCfgWdgTimRestart(void)
 /*  BEV-1    10/22/2025  TS       Change for BEV rebase.                                                                             */
 /*  BEV-2    11/13/2025  YN       Change for BEV rebase.(Add CanTxApp)                                                               */
 /*  BEV-3    01/30/2025  SN       Change for BEV B_PERMEM.(Add Mcst)                                                                 */
+/*  BEV-4    02/09/2026  KO       Change for BEV M_SECMSG.(Add OmaVrChk)                                                             */
 /*                                                                                                                                   */
 /*  * TN      = Takashi Nagai, Denso                                                                                                 */
 /*  * AM      = Akira Motomatsu, Denso Create                                                                                        */
 /*  * TS      = Takuo Suganuma, Denso Techno                                                                                         */
 /*  * YN      = Yujiro Nagaya, Denso Techno                                                                                          */
 /*  * SN      = Shimon Nambu, Denso Techno                                                                                           */
+/*  * KO      = Kazuto Oishi, Denso Techno                                                                                           */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

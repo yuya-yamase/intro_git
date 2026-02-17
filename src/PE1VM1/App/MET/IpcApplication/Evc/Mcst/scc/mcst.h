@@ -57,8 +57,6 @@ void    vd_g_McstMainTask(void);
 U4      u4_g_McstBf(const U1 u1_a_BFI);
 void    vd_g_McstBfPut(const U1 u1_a_BFI, const U4 u4_a_NEXT);
 
-void    vd_g_McstSetAllBf(U4 * u4_ap_bf);
-
 void    vd_g_McstBfPutPreUser(const U1 u1_a_BFI, const U4 u4_a_PRESET);
 
 U1      u1_g_McstReset(const U1 u1_a_RUN);                                           /* u1_a_RUN : TRUE/FALSE, Return : MCST_RES_XXX */

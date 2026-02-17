@@ -19,7 +19,7 @@
 #include "gagdst_nxmph_cfg_private.h"
 
 #include "vehspd_kmph.h"
-#include "calibration.h"
+#include "vardef.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -101,10 +101,10 @@ U2      u2_g_GagdstNxmphCfgDsplyMax(const U1 u1_a_UNIT)
 {
     U2  u2_t_max;
 
-    u2_t_max = u2_CALIB_MCUID0263_MAXSPEED_MPH;
+    u2_t_max = u2_g_VardefOmusMCUID0263();
 
     if(u1_a_UNIT == (U1)GAGDST_NXMPH_KMPH){
-        u2_t_max = u2_CALIB_MCUID0262_MAXSPEED_KM;
+        u2_t_max = u2_g_VardefOmusMCUID0262();
     }
     return(u2_t_max);
 }
@@ -136,6 +136,7 @@ void    vd_g_GagdstNxmphCfgComTx(const U2 u2_a_SRC_CHK, const U2 u2_a_KMPH , con
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  Phase2   09/04/2022  SK       Changed for Phase2 1A                                                                              */
 /* 19PFv3-1  09/21/2023  SN       Delete Tolerance Information Table                                                                 */
+/*  BEV-1    02/10/2026  SH       Change MCUID0262-0263 from Calibration to OMUSVIID                                                 */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
@@ -143,5 +144,6 @@ void    vd_g_GagdstNxmphCfgComTx(const U2 u2_a_SRC_CHK, const U2 u2_a_KMPH , con
 /*  * SK   = Shintaro Kano, Denso Techno                                                                                             */
 /*  * TA(M) = Teruyuki Anjima, NTT Data MSE                                                                                          */
 /*  * SN   = Shimon Nambu, DensoTechno                                                                                               */
+/*  * SH   = Sae Hirose, Denso Techno                                                                                                */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

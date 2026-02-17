@@ -21,6 +21,7 @@
 #include "oxcan.h"
 #include "vardef.h"
 #include "dimmer.h"
+#include "hmihud.h"
 #include "hmimcst.h"
 #include "mcst_bf.h"
 #include "calibration.h"
@@ -160,7 +161,7 @@ const U1                u1_g_MCST_BFI_HUD             = (U1)MCST_BFI_HUD;
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*===================================================================================================================================*/
-/* U1    u1_g_McstCfgRcvSgnlPSUN_D(U1 * u1p_a_sgnl)                                                                                 */
+/* U1    u1_g_McstCfgRcvSgnlPSUN_D(U1 * u1p_a_sgnl)                                                                                  */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
@@ -237,6 +238,8 @@ U4    u4_g_McstCfgInit(const U1 u1_a_BFI){
 void    vd_g_McstCfgUserChgHook(void){
 
     vd_g_DimMcstReadHook();
+    vd_g_HmiHudMcstHook();
+
 }
 
 /*===================================================================================================================================*/
@@ -246,7 +249,10 @@ void    vd_g_McstCfgUserChgHook(void){
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
 void    vd_g_McstCfgUserCstmInitHook(void){
+
     vd_g_DimMcstDataResetHook();
+    vd_g_HmiHudMcstHook();
+
 }
 
 /*===================================================================================================================================*/
@@ -256,7 +262,7 @@ void    vd_g_McstCfgUserCstmInitHook(void){
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
 void    vd_g_McstCfgCstmInitHook(void){
-
+    vd_g_HmiHudMcstHook();
 }
 
 /*===================================================================================================================================*/
@@ -321,6 +327,7 @@ static inline U1      u1_s_McstCfgCalibU1MaxChk(const U1 u1_a_CALIBID, const U1 
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  BEV-1    01/30/2026  SN       Change B_PERMEM for BEV                                                                            */
+/*  BEV-2    02/12/2026  KN       Add vd_g_HmiHudMcstHook to Mcst Hook function                                                      */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * TM   = Takuya Mitsui,   Denso Techno                                                                                           */
@@ -329,5 +336,6 @@ static inline U1      u1_s_McstCfgCalibU1MaxChk(const U1 u1_a_CALIBID, const U1 
 /*  * TN   = Tetsushi Nakano, Denso Techno                                                                                           */
 /*  * MaO(M) = Masayuki Okada, NTT Data MSE                                                                                          */
 /*  * SN   = Shimon Nambu, Denso Techno                                                                                              */
+/*  * KN   = Kazuo Nishigaki, Denso Techno                                                                                           */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

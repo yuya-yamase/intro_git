@@ -1,4 +1,4 @@
-/* 1.1.0 */
+/* 1.2.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define HMIHUD_C_MAJOR                         (1)
-#define HMIHUD_C_MINOR                         (1)
+#define HMIHUD_C_MINOR                         (2)
 #define HMIHUD_C_PATCH                         (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -18,12 +18,14 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "hmiproxy_cfg_private.h"
 #include "hmihud.h"
-#include "vardef.h"
 
+#include "mcst.h"
+#include "vardef.h"
+#include "veh_opemd.h"
 #include "himgadj.h"
 #include "hdimmgr_if.h"
+#include "calibration.h"
 
-#include "rim_ctl.h"
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -41,28 +43,50 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define HMIHUD_FIRST_DTA                       (0U)
 
-#define HMIHUD_DTA_NUM                         (7U)
+#define HMIHUD_DTA_NUM                         (5U)
+#define HMIHUD_SOC_DTA_NUM                     (1U)
+#define HMIHUD_GVIF_DTA_NUM                    (4U)
 
-#define HMIHUD_SIG_NUM                         (16U)
-#define HMIHUD_SIG_RESID                       (0U)
-#define HMIHUD_SIG_HUD_ST                      (1U)
-#define HMIHUD_SIG_VIPOS_UPSW                  (2U)
-#define HMIHUD_SIG_VIPOS_DNSW                  (3U)
-#define HMIHUD_SIG_VIPOS_UP                    (4U)
-#define HMIHUD_SIG_VIPOS_DN                    (5U)
-#define HMIHUD_SIG_ILL_UPSW                    (6U)
-#define HMIHUD_SIG_ILL_DNSW                    (7U)
-#define HMIHUD_SIG_BLDUTY_OUT                  (8U)
-#define HMIHUD_SIG_ADJMAXPOS                   (9U)
-#define HMIHUD_SIG_RESPOS                      (10U)
-#define HMIHUD_SIG_MOVPOS                      (11U)
-#define HMIHUD_SIG_ADJMINPOS                   (12U)
-#define HMIHUD_SIG_ADJTEPPOS                   (13U)
-#define HMIHUD_SIG_GBUS_STS                    (14U)
-#define HMIHUD_SIG_GVIF_STS                    (15U)
+#define HMIHUD_GVIF_DTA_OFFSET                 (HMIHUD_SOC_DTA_NUM)
 
-#define HMIHUD_STS_NORMAL                      (0U)
-#define HMIHUD_SW_OPE                          (1U)
+#define HMIHUD_SIG_NUM                         (7U)
+#define HMIHUD_SIG_HUD_ILL_STEP_IND            (0U)
+#define HMIHUD_SIG_CSTM_HUD_ONOFF_ACT          (1U)
+#define HMIHUD_SIG_HUD_ROT_SW                  (2U)
+#define HMIHUD_SIG_MOVPOS                      (3U)
+#define HMIHUD_SIG_ADJMINPOS                   (4U)
+#define HMIHUD_SIG_ADJTEPPOS                   (5U)
+#define HMIHUD_SIG_ADJMAXPOS                   (6U)
+
+#define HMIHUD_VAL_HUD_ONOFF_ACT_NON           (0U)
+#define HMIHUD_VAL_HUD_ONOFF_ACT_ON            (1U)
+#define HMIHUD_VAL_HUD_ONOFF_ACT_OFF           (2U)
+#define HMIHUD_VAL_HUD_ONOFF_ACT_UNDEF         (3U)
+
+#define HMIHUD_VAL_ROT_SW_NON                  (0U)
+#define HMIHUD_VAL_ROT_SW_CW                   (1U)
+#define HMIHUD_VAL_ROT_SW_CCW                  (2U)
+#define HMIHUD_VAL_ROT_SW_UNDEF                (3U)
+
+#define HMIHUD_VAL_ROT_STEP_UP                 (0U)
+#define HMIHUD_VAL_ROT_STEP_DOWN               (1U)
+
+#define HMIHUD_VAL_ROT_STEP_ONE                (1U)
+
+#define HMIHUD_VAL_ROT_STS_ENABLE              (0U)
+#define HMIHUD_VAL_ROT_STS_CW_DISABLE          (1U)
+#define HMIHUD_VAL_ROT_STS_CCW_DISABLE         (2U)
+#define HMIHUD_VAL_ROT_STS_UNDEF               (3U)
+
+#define HMIHUD_VAL_POS_STS_ENABLE              (0U)
+#define HMIHUD_VAL_POS_STS_UP_DISABLE          (1U)
+#define HMIHUD_VAL_POS_STS_DW_DISABLE          (2U)
+#define HMIHUD_VAL_POS_STS_UNDEF               (3U)
+
+#define HMIHUD_STS_POS_MOVPOS_UNK              (0xFFFFU)
+#define HMIHUD_STS_POS_ADJMINPOS_UNK           (0xFFFFU)
+#define HMIHUD_STS_POS_ADJMAXPOS_UNK           (0xFFFFU)
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -76,48 +100,37 @@ typedef struct{
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static U4   u4_sp_hmihud_dtabuf[HMIHUD_DTA_NUM];
-static U1   u1_s_hmihud_viposdn_sig;
-static U1   u1_s_hmihud_viposup_sig;
-static U1   u1_s_hmihud_illupsw_presig;
-static U1   u1_s_hmihud_illdnsw_presig;
+static U1   u1_s_hmihud_hud_onoff_act_pre;
+static U1   u1_s_hmihud_hud_rot_sw_pre;
+static S1   s1_s_hmihud_hud_rot;
+static S1   s1_s_hmihud_hud_rot_pre;
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static U4   u4_s_HmiHudReadSig(const U1 u1_a_SIG_IDX, const U4 * u4_ap_REQ);
 
-static void vd_s_HmiHudSetResid(void);
-static void vd_s_HmiHudSetHudst(void);
-static void vd_s_HmiHudSetHudbrns(void);
-static void vd_s_HmiHudSetViposSw(void);
-static void vd_s_HmiHudSetViposUpdn(void);
-static void vd_s_HmiHudSetIllSw(void);
-static void vd_s_HmiHudSetBldutyout(void);
-static void vd_s_HmiHudSetAdjmaxpos(void);
-static void vd_s_HmiHudSetRespos(void);
+static void vd_s_HmiHudSetIllStep(void);
+static void vd_s_HmiHudSetHudOnOffAct(void);
+static void vd_s_HmiHudSetHudRot(void);
+static void vd_s_HmiHudCalcHudRot(const U1 u1_a_DIRECTION);
+static void vd_s_HmiHudChkHudRotLimit(S1 * s1_ap_lmt_ccw, S1 * s1_ap_lmt_cw);
+static inline U1 u1_s_HmihudCalibU1MinChk(const U1 u1_a_CALIBID, const U1 u1_a_MIN, const U1 u1_a_DEF);
 static void vd_s_HmiHudSetMovpos(void);
 static void vd_s_HmiHudSetAdjminpos(void);
 static void vd_s_HmiHudSetAdjteppos(void);
+static void vd_s_HmiHudSetAdjmaxpos(void);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static const ST_HMIHUD_SIGCONVERT st_sp_HMIHUD_SIGCONVERT[HMIHUD_SIG_NUM] = {
-/*  u4_buf      u1_bitpos    u4_bitmask                            */
-    {(U4)6U,    (U1)0U,      (U4)0xFFU  },    /* HUD_VIPOS_RESID */
-    {(U4)6U,    (U1)8U,      (U4)0xFFU  },    /* HUD_VIPOS_HUD_ST */
-    {(U4)0U,    (U1)0U,      (U4)0x01U  },    /* HUD_VIPOS_UPSW */
-    {(U4)0U,    (U1)1U,      (U4)0x01U  },    /* HUD_VIPOS_DNSW */
-    {(U4)0U,    (U1)2U,      (U4)0x01U  },    /* HUD_L_VIPOS_UP */
-    {(U4)0U,    (U1)3U,      (U4)0x01U  },    /* HUD_L_VIPOS_DN */
-    {(U4)1U,    (U1)0U,      (U4)0x01U  },    /* HUD_ILL_UPSW */
-    {(U4)1U,    (U1)1U,      (U4)0x01U  },    /* HUD_ILL_DNSW */
-    {(U4)3U,    (U1)0U,      (U4)0xFFFFU},    /* HUD_BLDUTY_OUT */
-    {(U4)3U,    (U1)16U,     (U4)0xFFFFU},    /* HUD_VIPOS_ADJMAXPOS */
-    {(U4)4U,    (U1)0U,      (U4)0xFFFFU},    /* HUD_VIPOS_RESPOS */
-    {(U4)4U,    (U1)16U,     (U4)0xFFFFU},    /* HUD_VIPOS_MOVPOS */
-    {(U4)5U,    (U1)0U,      (U4)0xFFFFU},    /* HUD_VIPOS_ADJMINPOS */
-    {(U4)5U,    (U1)16U,     (U4)0xFFFFU},    /* HUD_VIPOS_ADJTEPPOS */
-    {(U4)1U,    (U1)24U,     (U4)0xFFU  },    /* HUD_GBUS_STS */
-    {(U4)2U,    (U1)24U,     (U4)0xFFU  }     /* HUD_GVIF_STS */
+/*  u4_buf      u1_bitpos    u4_bitmask                              */
+    {(U4)0U,    (U1)0U,      (U4)0xFFU  },    /* HUD_ILL_STEP_IND    */
+    {(U4)0U,    (U1)13U,     (U4)0x03U  },    /* CSTM_HUD_ONOFF_ACT  */
+    {(U4)0U,    (U1)8U,      (U4)0x03U  },    /* HUD_ROT_SW          */
+    {(U4)3U,    (U1)0U,      (U4)0xFFFFU},    /* HUD_VIPOS_MOVPOS    */
+    {(U4)3U,    (U1)16U,     (U4)0xFFFFU},    /* HUD_VIPOS_ADJMINPOS */
+    {(U4)4U,    (U1)0U,      (U4)0xFFFFU},    /* HUD_VIPOS_ADJTEPPOS */
+    {(U4)4U,    (U1)16U,     (U4)0xFFFFU}     /* HUD_VIPOS_ADJMAXPOS */
 };
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
@@ -131,15 +144,16 @@ static const ST_HMIHUD_SIGCONVERT st_sp_HMIHUD_SIGCONVERT[HMIHUD_SIG_NUM] = {
 void    vd_g_HmiHudInit(void)
 {
     U4  u4_t_loop;    /* loop counter */
-
-    u1_s_hmihud_viposdn_sig = (U1)0U;
-    u1_s_hmihud_viposup_sig = (U1)0U;
-    u1_s_hmihud_illupsw_presig = (U1)0U;
-    u1_s_hmihud_illdnsw_presig = (U1)0U;
+    U1  u1_t_hud_rot;
 
     for(u4_t_loop = (U4)0U ; u4_t_loop < (U4)HMIHUD_DTA_NUM ; u4_t_loop++){
-        u4_sp_hmihud_dtabuf[u4_t_loop] = (U4)0U;
+        u4_sp_hmihud_dtabuf[u4_t_loop] = (U4)0xFFFFFFFFU;
     }
+    u1_s_hmihud_hud_onoff_act_pre = (U1)HMIHUD_VAL_HUD_ONOFF_ACT_UNDEF;
+    u1_s_hmihud_hud_rot_sw_pre    = (U1)HMIHUD_VAL_ROT_SW_UNDEF;
+    u1_t_hud_rot                  = (U1)u4_g_McstBf((U1)MCST_BFI_HUD_ROT);
+    s1_s_hmihud_hud_rot           = (S1)u1_t_hud_rot;
+    s1_s_hmihud_hud_rot_pre       = s1_s_hmihud_hud_rot;
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_HmiHudMainTask(void)                                                                                                */
@@ -149,51 +163,60 @@ void    vd_g_HmiHudInit(void)
 /*===================================================================================================================================*/
 void    vd_g_HmiHudMainTask(void)
 {
-    U1 u1_t_gbus_sts;    /* HUD_GBUS_STS */
-    U1 u1_t_gvif_sts;    /* HUD_GVIF_STS */
-
-    u1_t_gbus_sts = (U1)u4_s_HmiHudReadSig((U1)HMIHUD_SIG_GBUS_STS, &u4_sp_hmihud_dtabuf[HMIHUD_FIRST_DTA]);
-    u1_t_gvif_sts = (U1)u4_s_HmiHudReadSig((U1)HMIHUD_SIG_GVIF_STS, &u4_sp_hmihud_dtabuf[HMIHUD_FIRST_DTA]);
-
-    if(u1_t_gbus_sts == (U1)HMIHUD_STS_NORMAL){
-        vd_s_HmiHudSetViposSw();
-        vd_s_HmiHudSetIllSw();
-    }
-
-    if(u1_t_gvif_sts == (U1)HMIHUD_STS_NORMAL){
-        vd_s_HmiHudSetResid();
-        vd_s_HmiHudSetHudst();
-        vd_s_HmiHudSetBldutyout();
-        vd_s_HmiHudSetAdjmaxpos();
-        vd_s_HmiHudSetRespos();
-        vd_s_HmiHudSetMovpos();
-        vd_s_HmiHudSetAdjminpos();
-        vd_s_HmiHudSetAdjteppos();
-    }
-
-    /* Ethernet */
-    vd_s_HmiHudSetViposUpdn();
-    vd_s_HmiHudSetHudbrns();
+    vd_s_HmiHudSetIllStep();
+    vd_s_HmiHudSetHudOnOffAct();
+    vd_s_HmiHudSetHudRot();
+    vd_s_HmiHudSetMovpos();
+    vd_s_HmiHudSetAdjminpos();
+    vd_s_HmiHudSetAdjteppos();
+    vd_s_HmiHudSetAdjmaxpos();
 }
-
 /*===================================================================================================================================*/
-/*  void    vd_g_HmiHudDataPut(U4 * u4_ap_REQ)                                                                                       */
+/*  void    vd_g_HmiHudSocDataPut(const U4 * u4_ap_REQ)                                                                              */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      u4_ap_REQ   : hud first address                                                                                  */
+/*  Arguments:      u4_ap_REQ   : soc first address                                                                                  */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_HmiHudDataPut(const U4 * u4_ap_REQ)
+void    vd_g_HmiHudSocDataPut(const U4 * u4_ap_REQ)
 {
     U4 u4_t_loop;    /* loop counter */
 
     if(u4_ap_REQ != vdp_PTR_NA) {
-
-        for(u4_t_loop = (U4)0U ; u4_t_loop < (U4)HMIHUD_DTA_NUM ; u4_t_loop++){
+        for(u4_t_loop = (U4)0U ; u4_t_loop < (U4)HMIHUD_SOC_DTA_NUM ; u4_t_loop++){
             u4_sp_hmihud_dtabuf[u4_t_loop] = u4_ap_REQ[u4_t_loop];
         }
     }
 }
+/*===================================================================================================================================*/
+/*  void    vd_g_HmiHudGvifDataPut(const U4 * u4_ap_REQ)                                                                             */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      u4_ap_REQ   : gvif first address                                                                                 */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void    vd_g_HmiHudGvifDataPut(const U4 * u4_ap_REQ)
+{
+    U4 u4_t_loop;    /* loop counter */
 
+    if(u4_ap_REQ != vdp_PTR_NA) {
+        for(u4_t_loop = (U4)0U ; u4_t_loop < (U4)HMIHUD_GVIF_DTA_NUM ; u4_t_loop++){
+            u4_sp_hmihud_dtabuf[u4_t_loop + (U4)HMIHUD_GVIF_DTA_OFFSET] = u4_ap_REQ[u4_t_loop];
+        }
+    }
+}
+/*===================================================================================================================================*/
+/* void    vd_g_HmiHudMcstHook(void)                                                                                                 */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void    vd_g_HmiHudMcstHook(void)
+{
+    U1  u1_t_hud_rot;
+
+    u1_t_hud_rot            = (U1)u4_g_McstBf((U1)MCST_BFI_HUD_ROT);
+    s1_s_hmihud_hud_rot     = (S1)u1_t_hud_rot;
+    s1_s_hmihud_hud_rot_pre = s1_s_hmihud_hud_rot;
+}
 /*===================================================================================================================================*/
 /*  static U4 u4_s_HmiHudReadSig(const U1 u1_a_SIG_IDX, const U4 * u4_ap_REQ)                                                        */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
@@ -217,205 +240,172 @@ static U4 u4_s_HmiHudReadSig(const U1 u1_a_SIG_IDX, const U4 * u4_ap_REQ)
     return(u4_t_sig);
 }
 /*===================================================================================================================================*/
-/*  static void    vd_s_HmiHudSetResid(void)                                                                                         */
+/*  static void    vd_s_HmiHudSetIllStep(void)                                                                                       */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-static void vd_s_HmiHudSetResid(void){
-    U1 u1_t_resid;    /* recieve signal */
+static void vd_s_HmiHudSetIllStep(void)
+{
+    U1 u1_t_step;
 
-    u1_t_resid = (U1)u4_s_HmiHudReadSig((U1)HMIHUD_SIG_RESID, &u4_sp_hmihud_dtabuf[HMIHUD_FIRST_DTA]);
+    u1_t_step = (U1)u4_s_HmiHudReadSig((U1)HMIHUD_SIG_HUD_ILL_STEP_IND, &u4_sp_hmihud_dtabuf[HMIHUD_FIRST_DTA]);
 
-    vd_g_HudImgAdjSet_GV_VIPOS_RESID(u1_t_resid);
+    vd_g_HdimmgrIfSetIllStepVal(u1_t_step);
 }
-
 /*===================================================================================================================================*/
-/*  static void    vd_s_HmiHudSetHudst(void)                                                                                         */
+/*  static void    vd_s_HmiHudSetHudOnOffAct(void)                                                                                   */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-static void vd_s_HmiHudSetHudst(void){
-    U1 u1_t_hudst;    /* recieve signal */
+static void vd_s_HmiHudSetHudOnOffAct(void)
+{
+    U1 u1_t_gvif;
+    U1 u1_t_igon;
+    U1 u1_t_act;
 
-    u1_t_hudst = (U1)u4_s_HmiHudReadSig((U1)HMIHUD_SIG_HUD_ST, &u4_sp_hmihud_dtabuf[HMIHUD_FIRST_DTA]);
+    u1_t_gvif = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_GVIF2);
+    u1_t_igon = u1_g_VehopemdIgnOn();
+    u1_t_act = (U1)u4_s_HmiHudReadSig((U1)HMIHUD_SIG_CSTM_HUD_ONOFF_ACT, &u4_sp_hmihud_dtabuf[HMIHUD_FIRST_DTA]);
 
-    vd_g_HudImgAdjSet_GV_VIPOS_HUD_ST(u1_t_hudst);
+    if((u1_t_gvif == (U1)TRUE) &&
+       (u1_t_igon == (U1)TRUE)) {
+        if(u1_t_act != u1_s_hmihud_hud_onoff_act_pre) {
+            if(u1_t_act == (U1)HMIHUD_VAL_HUD_ONOFF_ACT_ON) {
+                vd_g_McstBfPut((U1)MCST_BFI_HUD, (U4)MCST_HUD_ON);
+            }
+            else if(u1_t_act == (U1)HMIHUD_VAL_HUD_ONOFF_ACT_OFF) {
+                vd_g_McstBfPut((U1)MCST_BFI_HUD, (U4)MCST_HUD_OFF);
+            }
+            else{
+                /* Do Nothing */
+            }
+        }
+    }
+
+    u1_s_hmihud_hud_onoff_act_pre = u1_t_act;
 }
-
 /*===================================================================================================================================*/
-/*  static void    vd_s_HmiHudSetHudbrns(void)                                                                                       */
+/*  static void    vd_s_HmiHudSetHudRot(void)                                                                                        */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-static void vd_s_HmiHudSetHudbrns(void){
-    U1 u1_t_ill_upsw;   /* recieve signal */
-    U1 u1_t_ill_dnsw;   /* recieve signal */
-    
-    u1_t_ill_upsw = (U1)u4_s_HmiHudReadSig((U1)HMIHUD_SIG_ILL_UPSW, &u4_sp_hmihud_dtabuf[HMIHUD_FIRST_DTA]);
-    u1_t_ill_dnsw = (U1)u4_s_HmiHudReadSig((U1)HMIHUD_SIG_ILL_DNSW, &u4_sp_hmihud_dtabuf[HMIHUD_FIRST_DTA]);
+static void vd_s_HmiHudSetHudRot(void)
+{
+    U1 u1_t_gvif;
+    U1 u1_t_sw;
 
-    if((u1_t_ill_upsw == (U1)HMIHUD_SW_OPE) &&
-       (u1_t_ill_dnsw == (U1)HMIHUD_SW_OPE)) {
-        /* Do Nothing */
+    u1_t_gvif = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_GVIF2);
+    u1_t_sw   = (U1)u4_s_HmiHudReadSig((U1)HMIHUD_SIG_HUD_ROT_SW, &u4_sp_hmihud_dtabuf[HMIHUD_FIRST_DTA]);
+
+    if(u1_t_gvif == (U1)TRUE) {
+        if(u1_t_sw != u1_s_hmihud_hud_rot_sw_pre) {
+            if(u1_t_sw == (U1)HMIHUD_VAL_ROT_SW_CW) {
+                vd_s_HmiHudCalcHudRot((U1)HMIHUD_VAL_ROT_STEP_UP);
+            }
+            else if(u1_t_sw == (U1)HMIHUD_VAL_ROT_SW_CCW) {
+                vd_s_HmiHudCalcHudRot((U1)HMIHUD_VAL_ROT_STEP_DOWN);
+            }
+            else{
+                /* Do Nothing */
+            }
+        }
+    }
+
+    if(s1_s_hmihud_hud_rot != s1_s_hmihud_hud_rot_pre){
+        vd_g_McstBfPut((U1)MCST_BFI_HUD_ROT, (U4)((U1)s1_s_hmihud_hud_rot));
+    }
+
+    u1_s_hmihud_hud_rot_sw_pre = u1_t_sw;
+    s1_s_hmihud_hud_rot_pre    = s1_s_hmihud_hud_rot;
+}
+/*===================================================================================================================================*/
+/* static  void    vd_s_HmiHudCalcHudRot                                                                                             */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      u1_a_DIRECTION : step up/down                                                                                    */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void    vd_s_HmiHudCalcHudRot(const U1 u1_a_DIRECTION)
+{
+    S1  s1_t_lmt_ccw;
+    S1  s1_t_lmt_cw;
+    U1  u1_t_now;
+    S1  s1_t_now;
+
+    vd_s_HmiHudChkHudRotLimit(&s1_t_lmt_ccw, &s1_t_lmt_cw);
+
+    u1_t_now = (U1)u4_g_McstBf((U1)MCST_BFI_HUD_ROT);
+    s1_t_now = (S1)u1_t_now;
+
+    if (u1_a_DIRECTION == (U1)HMIHUD_VAL_ROT_STEP_DOWN){
+        if (s1_t_now > s1_t_lmt_ccw){
+            s1_s_hmihud_hud_rot = s1_t_now - (S1)HMIHUD_VAL_ROT_STEP_ONE;
+        }
     } else {
-#if 0   /* BEV Rebase provisionally */
-        vd_g_HmiDiagPut(u1_t_ill_upsw, (U1)HMIDIAG_DIM_UP);
-        vd_g_HmiDiagPut(u1_t_ill_dnsw, (U1)HMIDIAG_DIM_DOWN);
-#endif   /* BEV Rebase provisionally */
-    }
-}
-
-/*===================================================================================================================================*/
-/*  static void    vd_s_HmiHudSetViposSw(void)                                                                                       */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void vd_s_HmiHudSetViposSw(void){
-    U1 u1_t_vpos_upsw;    /* recieve signal */
-    U1 u1_t_vpos_dnsw;    /* recieve signal */
-
-    u1_t_vpos_upsw = (U1)u4_s_HmiHudReadSig((U1)HMIHUD_SIG_VIPOS_UPSW, &u4_sp_hmihud_dtabuf[HMIHUD_FIRST_DTA]);
-    u1_t_vpos_dnsw = (U1)u4_s_HmiHudReadSig((U1)HMIHUD_SIG_VIPOS_DNSW, &u4_sp_hmihud_dtabuf[HMIHUD_FIRST_DTA]);
-    
-    if((u1_t_vpos_upsw == (U1)HMIHUD_SW_OPE) &&
-       (u1_t_vpos_dnsw == (U1)HMIHUD_SW_OPE)) {
-        /* Do Nothing */
-    } else {
-#if 0   /* BEV Rebase provisionally */
-        vd_g_HmiDiagPut(u1_t_vpos_upsw, (U1)HMIDIAG_VIPOS_UP);
-        vd_g_HmiDiagPut(u1_t_vpos_dnsw, (U1)HMIDIAG_VIPOS_DN);
-#endif   /* BEV Rebase provisionally */
-    }
-
-    vd_g_HudImgAdjSetUpDwSw(u1_t_vpos_upsw, u1_t_vpos_dnsw);
-}
-
-/*===================================================================================================================================*/
-/*  static void    vd_s_HmiHudSetViposUpdn(void)                                                                                     */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void vd_s_HmiHudSetViposUpdn(void){
-    U1 u1_t_vpos_up;    /* recieve signal */
-    U1 u1_t_vpos_dn;    /* recieve signal */
-
-    u1_t_vpos_up = u1_s_hmihud_viposup_sig;
-    u1_t_vpos_dn = u1_s_hmihud_viposdn_sig;
-
-    vd_g_HudImgAdjSet_L_VIPOS_UPDW(u1_t_vpos_up, u1_t_vpos_dn);
-}
-
-/*===================================================================================================================================*/
-/*  static void    vd_s_HmiHudSetIllSw(void)                                                                                         */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void vd_s_HmiHudSetIllSw(void){
-    U1 u1_t_ill_upsw;    /* recieve signal */
-    U1 u1_t_ill_dnsw;    /* recieve signal */
-    U1 u1_t_sts;
-    U1 u1_t_kind;
-    U2 u2_t_swcnt;
-
-#if 0   /* BEV Rebase provisionally */
-    static const U2 u2_s_HMIHUD_ID_HUDDIM = (U2)RIMID_U2_DS_22_10A7_HUD_DIM;
-
-#else   /* BEV Rebase provisionally */
-    static const U2 u2_s_HMIHUD_ID_HUDDIM = (U2)U2_MAX;
-#endif   /* BEV Rebase provisionally */
-    u1_t_ill_upsw = (U1)u4_s_HmiHudReadSig((U1)HMIHUD_SIG_ILL_UPSW, &u4_sp_hmihud_dtabuf[HMIHUD_FIRST_DTA]);
-    u1_t_ill_dnsw = (U1)u4_s_HmiHudReadSig((U1)HMIHUD_SIG_ILL_DNSW, &u4_sp_hmihud_dtabuf[HMIHUD_FIRST_DTA]);
-    u2_t_swcnt    = (U2)0U;
-
-#if 0   /* BEV Rebase provisionally */
-    u1_t_sts  = u1_g_Rim_ReadU2withStatus(u2_s_HMIHUD_ID_HUDDIM , &u2_t_swcnt);
-#else   /* BEV Rebase provisionally */
-    u1_t_sts  = (U1)RIM_RESULT_KIND_NG;
-#endif   /* BEV Rebase provisionally */
-    u1_t_kind = u1_t_sts & (U1)RIM_RESULT_KIND_MASK;
-
-    if ((u1_t_kind == (U1)RIM_RESULT_KIND_OK) &&
-        (u2_t_swcnt < (U2)U2_MAX            ))  {
-        if((u1_t_ill_upsw == (U1)HMIHUD_SW_OPE) &&
-           (u1_t_ill_dnsw == (U1)HMIHUD_SW_OPE)) {
-            /* Do Nothing */
-        }
-        else if ((u1_t_ill_upsw != u1_s_hmihud_illupsw_presig) &&
-           (u1_t_ill_upsw == (U1)HMIHUD_SW_OPE         ))  {
-            u2_t_swcnt++;
-#if 0   /* BEV Rebase provisionally */
-            vd_g_Rim_WriteU2(u2_s_HMIHUD_ID_HUDDIM, u2_t_swcnt);
-#endif   /* BEV Rebase provisionally */
-        }
-        else if ((u1_t_ill_dnsw != u1_s_hmihud_illdnsw_presig) &&
-                 (u1_t_ill_dnsw == (U1)HMIHUD_SW_OPE         ))  {
-            u2_t_swcnt++;
-#if 0   /* BEV Rebase provisionally */
-            vd_g_Rim_WriteU2(u2_s_HMIHUD_ID_HUDDIM, u2_t_swcnt);
-#endif   /* BEV Rebase provisionally */
-        }
-        else {
-            /* Do Nothing */
+        if (s1_t_now < s1_t_lmt_cw){
+            s1_s_hmihud_hud_rot = s1_t_now + (S1)HMIHUD_VAL_ROT_STEP_ONE;
         }
     }
-    else {
-        /* Do Nothing */
+}
+/*===================================================================================================================================*/
+/* static  void    vd_s_HmiHudChkHudRotLimit                                                                                         */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      s1_ap_lmt_ccw : ccw limit                                                                                        */
+/*                  s1_ap_lmt_cw : cw limit                                                                                          */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void    vd_s_HmiHudChkHudRotLimit(S1 * s1_ap_lmt_ccw, S1 * s1_ap_lmt_cw)
+{
+    static const S2 s2_s_HMIHUD_HUDDEGSTEPLSB = (S2)10;
+
+    U1  u1_t_lsb;
+    S2  s2_t_lmt_tmp;
+
+    u1_t_lsb = u1_s_HmihudCalibU1MinChk(u1_CALIB_MCUID0578_DEG_RTSTEP, (U1)CALIB_MCUID0578_MIN, (U1)CALIB_MCUID0578_DEF);
+
+    if(s1_ap_lmt_ccw != vdp_PTR_NA) {
+        s2_t_lmt_tmp = (((S2)((U2)u1_CALIB_MCUID0577_DEGCCW) - (S2)((U2)U1_MAX)) * s2_s_HMIHUD_HUDDEGSTEPLSB) / (S2)((U2)u1_t_lsb);
+        /* ((Min:0 Max:255) - 255) * 10 / (Min:1 Max:255) */
+        if(s2_t_lmt_tmp < (S2)((S1)MCST_HUDROT_CCW_LMT)){
+            (*s1_ap_lmt_ccw) = (S1)MCST_HUDROT_CCW_LMT;
+        }
+        else{
+            (*s1_ap_lmt_ccw) = (S1)s2_t_lmt_tmp;
+        }
     }
 
-    u1_s_hmihud_illupsw_presig = u1_t_ill_upsw;
-    u1_s_hmihud_illdnsw_presig = u1_t_ill_dnsw;
-
-    vd_g_HdimmgrIfSetUpDwSw(u1_t_ill_upsw, u1_t_ill_dnsw);
+    if(s1_ap_lmt_cw != vdp_PTR_NA) {
+        s2_t_lmt_tmp = ((S2)((U2)u1_CALIB_MCUID0576_DEGCW) * s2_s_HMIHUD_HUDDEGSTEPLSB) / (S2)((U2)u1_t_lsb);
+        /* (Min:0 Max:255)         * 10 / (Min:1 Max:255) */
+        if(s2_t_lmt_tmp > (S2)MCST_HUDROT_CW_LMT){
+            (*s1_ap_lmt_cw)  = (S1)MCST_HUDROT_CW_LMT;
+        }
+        else{
+            (*s1_ap_lmt_cw)  = (S1)s2_t_lmt_tmp;
+        }
+    }
 }
-
 /*===================================================================================================================================*/
-/*  static void    vd_s_HmiHudSetBldutyout(void)                                                                                     */
+/*  static inline U1    u1_s_HmihudCalibU1MinChk(const U1 u1_a_CALIBID, const U1 u1_a_MIN, const U1 u1_a_DEF)                        */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
+/*  Arguments:      const U1 u1_a_CALIBID                                                                                            */
+/*                  const U1 u1_a_MIN                                                                                                */
+/*                  const U1 u1_a_DEF                                                                                                */
+/*  Return:         U1 u1_t_ret                                                                                                      */
 /*===================================================================================================================================*/
-static void vd_s_HmiHudSetBldutyout(void){
-    U2 u2_t_bldutyout;    /* recieve signal */
+static inline U1    u1_s_HmihudCalibU1MinChk(const U1 u1_a_CALIBID, const U1 u1_a_MIN, const U1 u1_a_DEF)
+{
+    U1 u1_t_ret;
 
-    u2_t_bldutyout = (U2)u4_s_HmiHudReadSig((U1)HMIHUD_SIG_BLDUTY_OUT, &u4_sp_hmihud_dtabuf[HMIHUD_FIRST_DTA]);
+    u1_t_ret = u1_a_CALIBID;
+    if(u1_t_ret < u1_a_MIN){
+        u1_t_ret = u1_a_DEF;
+    }
 
-    vd_g_HdimmgrIfSetOutduty(u2_t_bldutyout);
+    return(u1_t_ret);
 }
-
-/*===================================================================================================================================*/
-/*  static void    vd_s_HmiHudSetAdjmaxpos(void)                                                                                     */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void vd_s_HmiHudSetAdjmaxpos(void){
-    U2 u2_t_adjmaxpos;    /* recieve signal */
-
-    u2_t_adjmaxpos = (U2)u4_s_HmiHudReadSig((U1)HMIHUD_SIG_ADJMAXPOS, &u4_sp_hmihud_dtabuf[HMIHUD_FIRST_DTA]);
-
-    vd_g_HudImgAdjSet_GV_VIPOS_ADJMAXPOS(u2_t_adjmaxpos);
-}
-
-/*===================================================================================================================================*/
-/*  static void    vd_s_HmiHudSetRespos(void)                                                                                        */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void vd_s_HmiHudSetRespos(void){
-    U2 u2_t_respos;    /* recieve signal */
-
-    u2_t_respos = (U2)u4_s_HmiHudReadSig((U1)HMIHUD_SIG_RESPOS, &u4_sp_hmihud_dtabuf[HMIHUD_FIRST_DTA]);
-
-    vd_g_HudImgAdjSet_GV_VIPOS_RESPOS(u2_t_respos);
-}
-
 /*===================================================================================================================================*/
 /*  static void    vd_s_HmiHudSetMovpos(void)                                                                                        */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
@@ -423,13 +413,12 @@ static void vd_s_HmiHudSetRespos(void){
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
 static void vd_s_HmiHudSetMovpos(void){
-    U2 u2_t_movpos;    /* recieve signal */
+    U2 u2_t_movpos;
 
     u2_t_movpos = (U2)u4_s_HmiHudReadSig((U1)HMIHUD_SIG_MOVPOS, &u4_sp_hmihud_dtabuf[HMIHUD_FIRST_DTA]);
 
     vd_g_HudImgAdjSet_GV_VIPOS_MOVPOS(u2_t_movpos);
 }
-
 /*===================================================================================================================================*/
 /*  static void    vd_s_HmiHudSetAdjminpos(void)                                                                                     */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
@@ -437,13 +426,12 @@ static void vd_s_HmiHudSetMovpos(void){
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
 static void vd_s_HmiHudSetAdjminpos(void){
-    U2 u2_t_adjmaxpos;    /* recieve signal */
+    U2 u2_t_adjminpos;
 
-    u2_t_adjmaxpos = (U2)u4_s_HmiHudReadSig((U1)HMIHUD_SIG_ADJMINPOS, &u4_sp_hmihud_dtabuf[HMIHUD_FIRST_DTA]);
+    u2_t_adjminpos = (U2)u4_s_HmiHudReadSig((U1)HMIHUD_SIG_ADJMINPOS, &u4_sp_hmihud_dtabuf[HMIHUD_FIRST_DTA]);
 
-    vd_g_HudImgAdjSet_GV_VIPOS_ADJMINPOS(u2_t_adjmaxpos);
+    vd_g_HudImgAdjSet_GV_VIPOS_ADJMINPOS(u2_t_adjminpos);
 }
-
 /*===================================================================================================================================*/
 /*  static void    vd_s_HmiHudSetAdjteppos(void)                                                                                     */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
@@ -451,13 +439,118 @@ static void vd_s_HmiHudSetAdjminpos(void){
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
 static void vd_s_HmiHudSetAdjteppos(void){
-    U2 u2_t_adjteppos;    /* recieve signal */
+    U2 u2_t_adjteppos;
 
     u2_t_adjteppos = (U2)u4_s_HmiHudReadSig((U1)HMIHUD_SIG_ADJTEPPOS, &u4_sp_hmihud_dtabuf[HMIHUD_FIRST_DTA]);
 
     vd_g_HudImgAdjSet_GV_VIPOS_ADJTEPPOS(u2_t_adjteppos);
 }
+/*===================================================================================================================================*/
+/*  static void    vd_s_HmiHudSetAdjmaxpos(void)                                                                                     */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void vd_s_HmiHudSetAdjmaxpos(void){
+    U2 u2_t_adjmaxpos;
 
+    u2_t_adjmaxpos = (U2)u4_s_HmiHudReadSig((U1)HMIHUD_SIG_ADJMAXPOS, &u4_sp_hmihud_dtabuf[HMIHUD_FIRST_DTA]);
+
+    vd_g_HudImgAdjSet_GV_VIPOS_ADJMAXPOS(u2_t_adjmaxpos);
+}
+/*===================================================================================================================================*/
+/*  U1      u1_g_HmiHudGetHudOnoff(void)                                                                                             */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         u1_t_onoff    :  hud on/off                                                                                      */
+/*===================================================================================================================================*/
+U1      u1_g_HmiHudGetHudOnoff(void)
+{
+    U1 u1_t_onoff;
+
+    u1_t_onoff = (U1)u4_g_McstBf((U1)MCST_BFI_HUD);
+
+    return(u1_t_onoff);
+}
+/*===================================================================================================================================*/
+/*  U1      u1_g_HmiHudGetHudRot                                                                                                     */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         u1_t_hud_rot : hud rot                                                                                           */
+/*===================================================================================================================================*/
+U1      u1_g_HmiHudGetHudRot(void)
+{
+    U1 u1_t_hud_rot;
+
+    u1_t_hud_rot = (U1)u4_g_McstBf((U1)MCST_BFI_HUD_ROT);
+
+    return(u1_t_hud_rot);
+}
+/*===================================================================================================================================*/
+/*  U1      u1_g_HmiHudGetHudRotSwSts                                                                                                */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         u1_t_sw_sts : sw sts                                                                                             */
+/*===================================================================================================================================*/
+U1      u1_g_HmiHudGetHudRotSwSts(void)
+{
+    U1 u1_t_sw_sts;
+    S1 s1_t_lmt_ccw;
+    S1 s1_t_lmt_cw;
+    U1 u1_t_now;
+    S1 s1_t_now;
+
+    vd_s_HmiHudChkHudRotLimit(&s1_t_lmt_ccw, &s1_t_lmt_cw);
+
+    u1_t_now = (U1)u4_g_McstBf((U1)MCST_BFI_HUD_ROT);
+    s1_t_now = (S1)u1_t_now;
+
+    if(s1_t_now <= s1_t_lmt_ccw){
+        u1_t_sw_sts = (U1)HMIHUD_VAL_ROT_STS_CCW_DISABLE;
+    }
+    else if(s1_t_now >= s1_t_lmt_cw){
+        u1_t_sw_sts = (U1)HMIHUD_VAL_ROT_STS_CW_DISABLE;
+    }
+    else{
+        u1_t_sw_sts = (U1)HMIHUD_VAL_ROT_STS_ENABLE;
+    }
+
+    return(u1_t_sw_sts);
+}
+/*===================================================================================================================================*/
+/*  U1      u1_g_HmiHudGetHudViposSwSts                                                                                              */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         u1_t_sw_sts : sw sts                                                                                             */
+/*===================================================================================================================================*/
+U1      u1_g_HmiHudGetHudViposSwSts(void)
+{
+    U1 u1_t_sw_sts;
+    U2 u2_t_movpos;
+    U2 u2_t_adjminpos;
+    U2 u2_t_adjmaxpos;
+
+    u1_t_sw_sts    = (U1)HMIHUD_VAL_POS_STS_UNDEF;
+    u2_t_movpos    = (U2)u4_s_HmiHudReadSig((U1)HMIHUD_SIG_MOVPOS, &u4_sp_hmihud_dtabuf[HMIHUD_FIRST_DTA]);
+    u2_t_adjminpos = (U2)u4_s_HmiHudReadSig((U1)HMIHUD_SIG_ADJMINPOS, &u4_sp_hmihud_dtabuf[HMIHUD_FIRST_DTA]);
+    u2_t_adjmaxpos = (U2)u4_s_HmiHudReadSig((U1)HMIHUD_SIG_ADJMAXPOS, &u4_sp_hmihud_dtabuf[HMIHUD_FIRST_DTA]);
+
+    if((u2_t_movpos    != (U2)HMIHUD_STS_POS_MOVPOS_UNK)    &&
+       (u2_t_adjminpos != (U2)HMIHUD_STS_POS_ADJMINPOS_UNK) &&
+       (u2_t_adjmaxpos != (U2)HMIHUD_STS_POS_ADJMAXPOS_UNK)){
+        if(u2_t_movpos >= u2_t_adjmaxpos){
+            u1_t_sw_sts = (U1)HMIHUD_VAL_POS_STS_UP_DISABLE;
+        }
+        else if(u2_t_movpos <= u2_t_adjminpos){
+            u1_t_sw_sts = (U1)HMIHUD_VAL_POS_STS_DW_DISABLE;
+        }
+        else{
+            u1_t_sw_sts = (U1)HMIHUD_VAL_POS_STS_ENABLE;
+        }
+    }
+
+    return(u1_t_sw_sts);
+}
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
@@ -468,7 +561,18 @@ static void vd_s_HmiHudSetAdjteppos(void){
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  1.0.0    04/13/2020  TH       New.                                                                                               */
 /*  1.1.0    10/07/2020  TH       Fix HudSetViposUpdn.                                                                               */
+/*  1.2.0    02/02/2026  TS       Change for BEV FF2.(MET-M_HUDILL-CSTD-1)                                                           */
+/*                                                                                                                                   */
+/*                                                                                                                                   */
+/*  Revision Date        Author   Change Description                                                                                 */
+/* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
+/*  BEV-1    02/03/2026  TS       Change for BEV FF2.(MET-M_HUDONOFF-CSTD-1)                                                         */
+/*  BEV-2    02/12/2026  KN       Add function for HUD rotation.                                                                     */
+/*  BEV-3    02/13/2026  HH       Add function for HUD position.                                                                     */
 /*                                                                                                                                   */
 /*  * TH   = Takahiro Hirano, Denso Techno                                                                                           */
+/*  * TS   = Takuo Suganuma,  Denso Techno                                                                                           */
+/*  * KN   = Kazuo Nishigaki, Denso Techno                                                                                           */
+/*  * HH   = Hiroki Hara,     Denso Techno                                                                                           */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

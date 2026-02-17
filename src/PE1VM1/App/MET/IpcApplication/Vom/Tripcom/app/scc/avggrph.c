@@ -1,4 +1,4 @@
-/* 1.4.0 */
+/* 1.5.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define AVGGRPH_C_MAJOR                         (1)
-#define AVGGRPH_C_MINOR                         (4)
+#define AVGGRPH_C_MINOR                         (5)
 #define AVGGRPH_C_PATCH                         (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -67,24 +67,16 @@ typedef struct {
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static  U4    u4_s_avggrph_tafe_econ[AVGGRPH_SIZE_TA];
-static  U4    u4_s_avggrph_1mfe_econ[AVGGRPH_SIZE_1M];
 static  U4    u4_s_avggrph_taee_econ[AVGGRPH_SIZE_TA];
 static  U4    u4_s_avggrph_1mee_econ[AVGGRPH_SIZE_1M];
 
-static  U2    u2_s_avggrph_tafe_date[AVGGRPH_SIZE_TA];
 static  U2    u2_s_avggrph_taee_date[AVGGRPH_SIZE_TA];
 
-static  U1    u1_s_avggrph_tafe_latest;
-static  U1    u1_s_avggrph_1mfe_latest;
 static  U1    u1_s_avggrph_taee_latest;
 static  U1    u1_s_avggrph_1mee_latest;
 
-static  U4    u4_s_avggrph_tafe_max;
 static  U4    u4_s_avggrph_taee_max;
 
-static  U1    u1_s_avggrph_tafe_rslt;
-static  U1    u1_s_avggrph_1mfe_rslt;
 static  U1    u1_s_avggrph_taee_rslt;
 static  U1    u1_s_avggrph_1mee_rslt;
 
@@ -103,33 +95,7 @@ static  U1      u1_s_AvgGrphGetRslt(const U1 u1_a_CNTTID, const U1 u1_a_before);
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static const ST_AVGGRPH_CNTT            st_sp_AVGGRPH_CNTTS_CFG[AVGGRPH_NUM_CNTT]      = {
-    /*  #define AVGGRPH_CNTT_TAFE                       (0U)     */
-    {
-        (U1)AVGGRPH_SIZE_TA,
-        &u4_s_avggrph_tafe_econ[0],
-        &u2_s_avggrph_tafe_date[0],
-        &u1_s_avggrph_tafe_latest,
-        &u4_s_avggrph_tafe_max,
-        (U1)TRIPCOM_MS_ID_AVGGRPH_TAFE_FE00,
-        (U1)TRIPCOM_MS_ID_AVGGRPH_TAFE_DT00,
-        (U1)TRIPCOM_MS_ID_AVGGRPH_TAFE_LTST,
-        (U1)TRIPCOM_MS_ID_AVGGRPH_TAFE_MAX,
-        &u1_s_avggrph_tafe_rslt
-    },
-    /*  #define AVGGRPH_CNTT_1MFE                       (1U)     */
-    {
-        (U1)AVGGRPH_SIZE_1M,
-        &u4_s_avggrph_1mfe_econ[0],
-        vdp_PTR_NA,
-        &u1_s_avggrph_1mfe_latest,
-        vdp_PTR_NA,
-        (U1)TRIPCOM_MS_ID_AVGGRPH_1MFE_FE00,
-        (U1)U1_MAX,
-        (U1)TRIPCOM_MS_ID_AVGGRPH_1MFE_LTST,
-        (U1)U1_MAX,
-        &u1_s_avggrph_1mfe_rslt
-    },
-    /*  #define AVGGRPH_CNTT_TAEE                       (2U)     */
+    /*  #define AVGGRPH_CNTT_TAEE                       (0U)     */
     {
         (U1)AVGGRPH_SIZE_TA,
         &u4_s_avggrph_taee_econ[0],
@@ -142,7 +108,7 @@ static const ST_AVGGRPH_CNTT            st_sp_AVGGRPH_CNTTS_CFG[AVGGRPH_NUM_CNTT
         (U1)TRIPCOM_MS_ID_AVGGRPH_TAEE_MAX,
         &u1_s_avggrph_taee_rslt
     },
-    /*  #define AVGGRPH_CNTT_1MEE                       (3U)     */
+    /*  #define AVGGRPH_CNTT_1MEE                       (1U)     */
     {
         (U1)AVGGRPH_SIZE_1M,
         &u4_s_avggrph_1mee_econ[0],
@@ -547,14 +513,17 @@ void            vd_g_AvgGrphTimeCnt(void)
 /*  1.2.2    05/20/2025  KM       Add delay count for TRIPCOM_MS_NVMSTS_NON                                                          */
 /*  1.3.0    05/08/2025  MN       Change for BEV PreCV.                                                                              */
 /*  1.4.0    01/13/2025  MN       CHG: QAC countermeasure, "vd_g_AvgGrphUpdt" function was refactored into subroutines.              */
+/*  1.5.0    02/13/2026  PG       Changed for BEV FF2                                                                                */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /* BEV-1     05/08/2025  MN       Change for BEV PreCV.(MET-M_CLKCTL-CSTD-0-/MET-M_CAL-CSTD-0-)                                      */
+/* BEV-2     02/13/2026  PG       Deleted not applied parameters in FF2                                                              */
 /*                                                                                                                                   */
 /*  * TH   = Taisuke Hirakawa, KSE                                                                                                   */
 /*  * SN   = Shimon Nambu, Denso Techno                                                                                              */
 /*  * KM   = Keisuke Mashita, Denso Techno                                                                                           */
 /*  * MN   = Mikiya Negishi, KSE                                                                                                     */
+/*  * PG   = Patrick Garcia, DTPH                                                                                                    */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

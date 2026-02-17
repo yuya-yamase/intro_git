@@ -1,4 +1,4 @@
-/* 2.3.0 */
+/* 2.5.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define SBLTSYNC_CFG_C_MAJOR                     (2)
-#define SBLTSYNC_CFG_C_MINOR                     (3)
+#define SBLTSYNC_CFG_C_MINOR                     (5)
 #define SBLTSYNC_CFG_C_PATCH                     (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -111,9 +111,9 @@ U2      u2_g_SbltsyncCfgChmMask(void)
     U2  u2_t_chmmsk;
     U1  u1_t_is_china;
 
-    u1_t_is_china = u1_g_VardefChainaReq();
+    u1_t_is_china = u1_g_VardefBltDstByPid();
 
-    if (u1_t_is_china == (U1)TRUE) {
+    if (u1_t_is_china == (U1)VDF_SEATBLT_DEST_CHN) {
         /* No diag customization in China (for China SBR regulations). */
         u2_t_chmmsk = u2_s_BELT_CHM_DEF;
     } else {
@@ -133,6 +133,58 @@ U2      u2_g_SbltsyncCfgChmMask(void)
 #endif   /* BEV Rebase provisionally */
 }
 
+/*===================================================================================================================================*/
+/* U1   u1_g_SbltsyncCfgJdg_FM(void)                                                                                                 */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+U1   u1_g_SbltsyncCfgJdg_FM(void)
+{
+    U1  u1_t_judge;
+    U1  u1_t_nfmvss;
+    U1  u1_t_dest;
+
+    u1_t_nfmvss = u1_CALIB_MCUID1137_NEW_FMVSS208;
+    u1_t_dest   = u1_g_VardefBltDstByPid();
+
+    if(((u1_t_dest == (U1)VDF_SEATBLT_DEST_EU) || (u1_t_dest == (U1)VDF_SEATBLT_DEST_CHN)) ||
+        (u1_t_nfmvss == (U1)CALIB_MCUID1137_FMVSS208_OTHER)) {
+        u1_t_judge = (U1)SBLTSYNC_DEST_OTHER_FM;
+    } else {
+        /* FMVSS208_2025 SBR regulations. */
+        u1_t_judge = (U1)SBLTSYNC_DEST_FM;
+    }
+    
+    return(u1_t_judge);
+}
+/*===================================================================================================================================*/
+/* U1              u1_g_SbltsyncCfgSelMidTyp_FM(void)                                                                                */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+U1  u1_g_SbltsyncCfgSelMidTyp_FM(void)
+{
+    U1  u1_t_belt_belt_type;
+    U1  u1_t_judge;
+
+    u1_t_belt_belt_type = u1_g_VardefOmusMCUID1138();
+
+    switch(u1_t_belt_belt_type) {
+        case (U1)CALIB_MCUID1138_FMVSS_1R:
+            u1_t_judge = (U1)SBLTSYNC_MIDTYP_D_P;
+            break;
+        case (U1)CALIB_MCUID1138_FMVSS_2R:
+        case (U1)CALIB_MCUID1138_FMVSS_2RC:
+        case (U1)CALIB_MCUID1138_FMVSS_3R:
+        default:
+            u1_t_judge = (U1)SBLTSYNC_MIDTYP_D_P_REAR;
+            break;
+    }
+
+    return (u1_t_judge);
+}
 /*===================================================================================================================================*/
 /* void            vd_g_SbltsyncCfgTxRRTT(const U1 u1_a_SIG)                                                                         */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
@@ -290,7 +342,9 @@ void    vd_g_SbltsyncCfgTxCXMET1S02(void)
 /*  2.1.1    10/18/2021  TA(M)    Sbltsync v2.1.0 -> v2.1.1.                                                                         */
 /*  2.1.2    04/05/2022  YI(M)    Sbltsync v2.1.1 -> v2.1.2.                                                                         */
 /*  2.2.0    04/06/2022  YI(M)    Sbltsync v2.1.2 -> v2.2.0.                                                                         */
-/*  2.3.0    01/29/2024  TH       Sbltsync v2.2.0 -> v2.3.0     .                                                                    */
+/*  2.3.0    01/29/2024  TH       Sbltsync v2.2.0 -> v2.3.0.                                                                         */
+/*  2.4.0    09/08/2025  ST       Sbltsync v2.3.0 -> v2.4.0.                                                                         */
+/*  2.5.0    01/22/2026  ST       Sbltsync v2.4.0 -> v2.5.0.                                                                         */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  Revision       Date        Author   Change Description                                                                           */
@@ -306,5 +360,6 @@ void    vd_g_SbltsyncCfgTxCXMET1S02(void)
 /*  * MK   = Mitsuhiro Kato,   Denso Techno                                                                                          */
 /*  * TH   = Taisuke Hirakawa, KSE                                                                                                   */
 /*  * TS   = Takuo Suganuma,   Denso Techno                                                                                          */
+/*  * ST   = Shoma Taki,       PXT                                                                                                   */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

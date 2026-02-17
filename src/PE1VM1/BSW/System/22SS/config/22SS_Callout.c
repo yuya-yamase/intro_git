@@ -58,6 +58,7 @@
 #include "himgadj.h"
 #include "xspi_met.h"
 #include "datesi_met.h"
+#include "omavrchk.h"
 
 /*----------------------------------------------------------------------------
  *		置換シンボル定義
@@ -93,6 +94,7 @@ void vd_g_22SSCallout_StaBonInit(void)
         &vd_g_DrectxBonInit,
         &vd_g_DimInit,
         &vd_g_IllumiBonInit,
+        &vd_g_OmaVrChkInit,
         &vd_g_AlertInit,
         &vd_g_SbltwrnInit,
         &vd_g_ThblnkrBonInit,
@@ -157,6 +159,7 @@ void vd_g_22SSCallout_StaRstInit(void)
         &vd_g_DrectxRstInit,
         &vd_g_DimInit,
         &vd_g_IllumiRstInit,
+        &vd_g_OmaVrChkInit,
         &vd_g_AlertInit,
         &vd_g_SbltwrnInit,
         &vd_g_ThblnkrRstWkInit,
@@ -221,6 +224,7 @@ void vd_g_22SSCallout_StaWkupInit(void)
         &vd_g_DrectxWkupInit,
         &vd_g_DimInit,
         &vd_g_IllumiWkupInit,
+        &vd_g_OmaVrChkInit,
         &vd_g_AlertInit,
         &vd_g_SbltwrnInit,
         &vd_g_ThblnkrRstWkInit,

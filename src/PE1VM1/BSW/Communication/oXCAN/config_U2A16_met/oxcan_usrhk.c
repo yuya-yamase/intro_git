@@ -18,11 +18,13 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "aip_common.h"
 #include "oxcan.h"
+#include "oxcan_acex_def.h"
 #include "oxcan_usrhk.h"
 
 /* #include "can_rscf4_cfg.h" */      /* CAN_CFG_CONTROLLERNUM_MAX is defined in can_rscf4_cfg.h */
 
 #include "illumi_comtx.h"
+#include "omavrchk.h"
 #include "xspi_met_can.h"
 
 #if (BSW_CANIF_CFG_MPU_CONTROLLERNUM > 0U)
@@ -393,7 +395,45 @@ void    vd_g_oXCANUsrhkIPduRecAck(const U2 u2_a_IPDU_RX)
 /*===================================================================================================================================*/
 void    vd_g_oXCANUsrhkOmaRecRslt(const U2 u2_a_OMA_RX, const U1 u1_a_OMA_VR)
 {
-
+    switch (u2_a_OMA_RX) {
+        case (U2)OXCAN_OMA_RX_BDC1S13:
+            vd_g_OmaVrChkRxHookByOdo(u1_a_OMA_VR);
+            vd_g_OmaVrChkRxHook(u2_a_OMA_RX, u1_a_OMA_VR);
+            break;
+        case (U2)OXCAN_OMA_RX_BDC1SC1:
+        case (U2)OXCAN_OMA_RX_BDC1SC2:
+        case (U2)OXCAN_OMA_RX_BDC1SC3:
+        case (U2)OXCAN_OMA_RX_BDC1SC4:
+        case (U2)OXCAN_OMA_RX_BDC1SC5:
+        case (U2)OXCAN_OMA_RX_BDC1SC6:
+        case (U2)OXCAN_OMA_RX_BDC1SC7:
+        case (U2)OXCAN_OMA_RX_BDC1SC8:
+        case (U2)OXCAN_OMA_RX_BDC1SC9:
+        case (U2)OXCAN_OMA_RX_BDC1SD1:
+        case (U2)OXCAN_OMA_RX_BDC1SD2:
+        case (U2)OXCAN_OMA_RX_BDC1SD3:
+        case (U2)OXCAN_OMA_RX_BDC1SD4:
+        case (U2)OXCAN_OMA_RX_BDC1SD5:
+        case (U2)OXCAN_OMA_RX_BDC1SD6:
+        case (U2)OXCAN_OMA_RX_BDC1SD7:
+        case (U2)OXCAN_OMA_RX_BDC1SD8:
+        case (U2)OXCAN_OMA_RX_BDC1SD9:
+        case (U2)OXCAN_OMA_RX_BDC1SE1:
+        case (U2)OXCAN_OMA_RX_BDC1SE2:
+        case (U2)OXCAN_OMA_RX_BDC1SE3:
+        case (U2)OXCAN_OMA_RX_BDC1SE4:
+        case (U2)OXCAN_OMA_RX_BDC1SE5:
+        case (U2)OXCAN_OMA_RX_BDC1SE6:
+        case (U2)OXCAN_OMA_RX_BDC1SE7:
+        case (U2)OXCAN_OMA_RX_BDC1SH3:
+        case (U2)OXCAN_OMA_RX_BDC1SJ5:
+        case (U2)OXCAN_OMA_RX_PCN1S01:
+            vd_g_OmaVrChkRxHook(u2_a_OMA_RX, u1_a_OMA_VR);
+            break;
+        default:
+            /* Do nothing */
+            break;
+    }
 }
 
 /*===================================================================================================================================*/
@@ -409,8 +449,10 @@ void    vd_g_oXCANUsrhkOmaRecRslt(const U2 u2_a_OMA_RX, const U1 u1_a_OMA_VR)
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  BEV-1    10/22/2025  TS       Change for BEV rebase.                                                                             */
+/*  BEV-2     2/ 9/2026  KO       Add message authentication result retrieval via hook.                                              */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, DENSO                                                                                                    */
 /*  * TS   = Takuo Suganuma, Denso Techno                                                                                            */
+/*  * KO   = Kazuto Oishi,  Denso Techno                                                                                             */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
