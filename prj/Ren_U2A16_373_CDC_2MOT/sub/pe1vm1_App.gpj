@@ -198,6 +198,7 @@
 ../../src/PE1VM1/App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_S_ADBZR_TCHAR.c
 ../../src/PE1VM1/App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_S_ADBZR_TCW.c
 ../../src/PE1VM1/App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_S_ADBZR_TMN.c
+../../src/PE1VM1/App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_S_SECADC.c
 ../../src/PE1VM1/App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_S_TMBZR.c
 ../../src/PE1VM1/App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_S_TMTT.c
 ../../src/PE1VM1/App/MET/IpcApplication/Vom/Alert/scc/alert.c

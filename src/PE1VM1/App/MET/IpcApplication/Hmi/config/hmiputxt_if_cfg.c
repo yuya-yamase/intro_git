@@ -229,6 +229,7 @@ const ST_ALERT_REQBIT   st_gp_HMIPUTXTREQBIT_SLOTC[HMIPUTXTCFG_IF_SLOTC_NUM] = {
 
 const ST_ALERT_REQBIT   st_gp_HMIPUTXTREQBIT_SLOTD[HMIPUTXTCFG_IF_SLOTD_NUM] = {
     {    (U2)ALERT_CH_M_SECMSG,             (U1)ALERT_REQ_M_SECMSG_UNREGISTERED,    (U1)0U,     (U4)0x01000000U    },
+    {    (U2)ALERT_CH_S_SECADC,             (U1)ALERT_REQ_S_SECADC_UNREGISTERED,    (U1)0U,     (U4)0x01000000U    },
     {    (U2)ALERT_CH_B_SECBDC,             (U1)ALERT_REQ_B_SECBDC_UNREGISTERED,    (U1)0U,     (U4)0x01000000U    },
     {    (U2)ALERT_CH_D_SECDDC,             (U1)ALERT_REQ_D_SECDDC_UNREGISTERED,    (U1)0U,     (U4)0x01000000U    },
     {    (U2)ALERT_CH_O_CHAMAL,             (U1)ALERT_REQ_O_CHAMAL_MALFUNC,         (U1)2U,     (U4)0x00400000U    },
@@ -350,6 +351,9 @@ U2 u2_g_HmiputxtSizeReqbit(void){
 /*                                Changed due to specification change from feature to legacy.                                        */
 /*  BEV-17   02/06/2026  YH       Change config for BEV Full_Function_2.                                                             */
 /*                                MET-D_SECDDC-CSTD-0-00-A-C0                                                                        */
+/*                                Changed due to specification change from feature to legacy.                                        */
+/*  BEV-18   02/06/2026  YH       Change config for BEV Full_Function_2.                                                             */
+/*                                MET-S_SECADC-CSTD-0-00-A-C0                                                                        */
 /*                                Changed due to specification change from feature to legacy.                                        */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */

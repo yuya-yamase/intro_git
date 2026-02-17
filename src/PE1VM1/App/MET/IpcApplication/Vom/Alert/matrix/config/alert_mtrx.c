@@ -197,6 +197,7 @@ const ST_ALERT_TASK         st_gp_ALERT_TASK_CFG[]   = {
     {  &st_gp_ALERT_M_SECMSG_MTRX[0],        (U2)ALERT_CH_M_SECMSG,                 (U1)ALERT_M_SECMSG_CH_NUM,          (U1)3U  },
     {  &st_gp_ALERT_B_SECBDC_MTRX[0],        (U2)ALERT_CH_B_SECBDC,                 (U1)ALERT_B_SECBDC_CH_NUM,          (U1)3U  },
     {  &st_gp_ALERT_D_SECDDC_MTRX[0],        (U2)ALERT_CH_D_SECDDC,                 (U1)ALERT_D_SECDDC_CH_NUM,          (U1)3U  },
+    {  &st_gp_ALERT_S_SECADC_MTRX[0],        (U2)ALERT_CH_S_SECADC,                 (U1)ALERT_S_SECADC_CH_NUM,          (U1)3U  },
     {  &st_gp_ALERT_S_ADBZR_ACC_MTRX[0],     (U2)ALERT_CH_S_ADBZR_ACC,              (U1)ALERT_S_ADBZR_ACC_CH_NUM,       (U1)4U  },
     {  &st_gp_ALERT_S_ADBZR_APP_MTRX[0],     (U2)ALERT_CH_S_ADBZR_APP,              (U1)ALERT_S_ADBZR_APP_CH_NUM,       (U1)4U  },
     {  &st_gp_ALERT_S_ADBZR_BSM_MTRX[0],     (U2)ALERT_CH_S_ADBZR_BSM,              (U1)ALERT_S_ADBZR_BSM_CH_NUM,       (U1)4U  },
@@ -335,6 +336,9 @@ void    vd_g_AlertMtrxInit(void)
 /*                                Changed due to specification change from feature to legacy.                                        */
 /*  BEV-30   02/06/2026  YH       Change config for BEV Full_Function_2.                                                             */
 /*                                MET-D_SECDDC-CSTD-0-00-A-C0                                                                        */
+/*                                Changed due to specification change from feature to legacy.                                        */
+/*  BEV-31   02/09/2026  YH       Change config for BEV Full_Function_2.                                                             */
+/*                                MET-S_SECADC-CSTD-0-00-A-C0                                                                        */
 /*                                Changed due to specification change from feature to legacy.                                        */
 /*                                                                                                                                   */
 /*  * YI   = Yoshiki Iwata, Denso                                                                                                    */
