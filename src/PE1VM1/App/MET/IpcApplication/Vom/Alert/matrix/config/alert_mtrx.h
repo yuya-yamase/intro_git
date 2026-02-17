@@ -167,7 +167,8 @@
 #define ALERT_CH_S_ADBZR_TCW                     (148U)
 #define ALERT_CH_O_FNCLIM                        (149U)
 #define ALERT_CH_M_SECMSG                        (150U)
-#define ALERT_NUM_CH                             (151U)
+#define ALERT_CH_B_SECBDC                        (151U)
+#define ALERT_NUM_CH                             (152U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* ALERT_REQ_[SYS]_[VIEW]_XXXX                            */
@@ -593,6 +594,7 @@
 #define ALERT_REQ_O_FNCLIM_WRN_POW               (0U)
 #define ALERT_REQ_O_FNCLIM_WRN_TMP               (1U)
 #define ALERT_REQ_M_SECMSG_UNREGISTERED          (0U)
+#define ALERT_REQ_B_SECBDC_UNREGISTERED          (0U)
 
 /* ALERT_CH dummy define */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
