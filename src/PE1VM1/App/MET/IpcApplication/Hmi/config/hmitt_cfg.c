@@ -247,7 +247,6 @@ void    vd_g_HmiTtCfgAsilVarmask(U4 * u4_ap_varmask)
     static const ST_HMITT_ESOPT st_sp_HMITT_ASIL_ESOPT[] = {
     /* u1_idx     u1_strtpos   u2_esopt                       u2_chid                           u1_req                                       */
         {  (U1)0U,    (U1)4U,     (U2)VDF_ESO_CH_VSC,           (U2)ALERT_CH_C_SLIP,               (U1)ALERT_REQ_C_SLIP_MALFUNC                 },
-        {  (U1)0U,    (U1)4U,     (U2)VDF_ESO_CH_VSC,           (U2)ALERT_CH_C_SLIP,               (U1)ALERT_REQ_C_SLIP_MALFUNC_RW              },
         {  (U1)0U,    (U1)8U,     (U2)VDF_ESO_CH_PEDPRO,        (U2)ALERT_CH_B_PEDPRO,             (U1)ALERT_REQ_B_PEDPRO_DIAGDTRMN             },
         {  (U1)0U,    (U1)28U,    (U2)VDF_ESO_CH_BRPADW,        (U2)ALERT_CH_C_BRPADW,             (U1)ALERT_REQ_C_BRPADW_MALFUNC               },
         {  (U1)1U,    (U1)0U,     (U2)VDF_ESO_CH_SYS_ADDOT_TT,  (U2)ALERT_CH_S_TMTT,               (U1)ALERT_REQ_S_TMTT_ON                      },
@@ -338,6 +337,8 @@ void    vd_g_HmiTtCfgDestmask(U4* u4_ap_varmask)
 /*  BEV-5    02/10/2025  SF       Change for BEV System_Consideration_1.(MET-M_ONOFF-CSTD-1-02-A-C0)                                 */
 /*  BEV-6    06/23/2025  HY       Change for BEV System_Consideration_2.(MET-S_ADMID-CSTD-0-02-A-C0 / MET-S_ADTT-CSTD-0-02-A-C0)     */
 /*  BEV-7    02/10/2026  ED       Change for BEV FF2. (MET-B_SEAREM-CSTD-A0-07-B-C3)                                                 */
+/*  BEV-8    01/15/2026  HT       Change for Full_function2 (MET-M_REMWAR-CSTD-2-04-A-C0)                                            */
+/*                                Removed "ALERT_REQ" in order to transfer signal transmission control from the MCU to the SoC       */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * TH   = Takahiro Hirano, Denso Techno                                                                                           */
@@ -355,5 +356,6 @@ void    vd_g_HmiTtCfgDestmask(U4* u4_ap_varmask)
 /*  * HY   = Haruki Yagi, KSE                                                                                                        */
 /*  * ED   = Emoh Dagasdas, DTPH                                                                                                     */
 /*  * KI   = Kanji Ito,  Denso Techno                                                                                                */
+/*  * HT   = Hibiki Tanii, KSE                                                                                                       */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
