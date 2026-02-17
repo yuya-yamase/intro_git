@@ -367,7 +367,7 @@ static  void    vd_s_TripcomCfgCanTxUNIT6(const U1 u1_a_UNIT)
 
     u1_t_preunit = (U1)0U;
     u1_t_unitsndval  = u1_a_UNIT;
-    u1_t_unitdest = u1_g_VardefDestDbfByPid((U1)VDF_DEST_DBF_UNITSLCT_DEST);
+    u1_t_unitdest = u1_g_VardefUnitSlctDstByPid();
     
     (void)Com_ReceiveSignal(ComConf_ComSignal_UNIT_6, &u1_t_preunit);
     if ((u1_t_unitdest == (U1)VDF_UNIT_TYPE_UK) && 
@@ -699,6 +699,7 @@ static  void    vd_s_TripcomCfgCanTxEC_SCL(void)
 /*  BEV3-01   01/20/2026 DR       Added AS_EVDT and AS_TOEC for BEV FF2                                                              */
 /*  BEV3-02   02/11/2026 DT       Update TX can frame for BEV FF2 and delete not applied drive moni appli                            */
 /*  BEV3-03   02/12/2026 EA       Deleted/Deactivated other than BEV Powertrain processes                                            */
+/*  BEV3-04   01/30/2026 YN       Configured for BEVstep3_FF2.(MET-M_DESTVARI-CSTD-0-01)                                             */
 /*                                                                                                                                   */
 /*  * HY   = Hidefumi Yoshida, Denso                                                                                                 */
 /*  * YA   = Yuhei Aoyama, DensoTechno                                                                                               */
@@ -718,5 +719,6 @@ static  void    vd_s_TripcomCfgCanTxEC_SCL(void)
 /*  * DR   = Dyan Reyes, DTPH                                                                                                        */
 /*  * DT   = Dj Tutanes, DTPH                                                                                                        */
 /*  * EA   = Eunice Avelin, DTPH                                                                                                     */
+/*  * YN   = Yujiro Nagaya, Denso Techno                                                                                             */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
