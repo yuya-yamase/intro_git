@@ -641,10 +641,17 @@ static  void    vd_s_TripcomCfgCanTxASTM(const U2 u2_a_VALUE)
 static  void    vd_s_TripcomCfgCanTxEC_SCL(void)
 {
     U1          u1_t_sndval;
+    U1          u1_t_presndval;
+
+    u1_t_presndval = (U1)0U;
 
     u1_t_sndval = u1_g_VardefOmusMCUID0255();
-    (void)Com_SendSignal(ComConf_ComSignal_EC_SCL, &u1_t_sndval);
-    (void)Com_TriggerIPDUSend(MSG_MET1S38_TXCH0);
+    (void)Com_ReceiveSignal(ComConf_ComSignal_EC_SCL, &u1_t_presndval);
+    if (u1_t_presndval != u1_t_sndval) {
+        (void)Com_SendSignal(ComConf_ComSignal_EC_SCL, &u1_t_sndval);
+        (void)Com_TriggerIPDUSend(MSG_MET1S38_TXCH0);
+    }
+
 }
 
 /*===================================================================================================================================*/

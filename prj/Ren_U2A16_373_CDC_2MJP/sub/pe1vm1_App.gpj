@@ -245,7 +245,6 @@
 ../../src/PE1VM1/App/MET/IpcApplication/Vom/Tripcom/app/scc/avggrph.c
 ../../src/PE1VM1/App/MET/IpcApplication/Vom/Tripcom/app/scc/avgvehspd_kmph.c
 ../../src/PE1VM1/App/MET/IpcApplication/Vom/Tripcom/app/scc/evdte_km.c
-../../src/PE1VM1/App/MET/IpcApplication/Vom/Tripcom/app/scc/instecon.c
 ../../src/PE1VM1/App/MET/IpcApplication/Vom/Tripcom/app/scc/instee_kmpkwh.c
 ../../src/PE1VM1/App/MET/IpcApplication/Vom/Tripcom/app/scc/ptsrundist_km.c
 ../../src/PE1VM1/App/MET/IpcApplication/Vom/Tripcom/app/scc/ptsruntm_hrs.c
