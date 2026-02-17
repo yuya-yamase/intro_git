@@ -50,6 +50,10 @@
 #define PWRCTRL_COM_BOOTLOG_INITREQ         (0U)  /* 全データクリア要求 */
 #define PWRCTRL_COM_BOOTLOG_BONREQ          (1U)  /* Soc起動時要求 */
 #define PWRCTRL_COM_BOOTLOG_STRREQ          (2U)  /* STRWake時要求 */
+#define PWRCTRL_COM_BOOTLOG_ETHREQ          (3U)  /* Ethリンクアップ時要求 */
+
+#define PWRCTRL_COM_ETH_LINKUP_NODETECT     (0x00U)
+#define PWRCTRL_COM_ETH_LINKUP_DETECT       (0x01U)
 /*--------------------------------------------------------------------------*/
 /* Function Prototypes                                                      */
 /*--------------------------------------------------------------------------*/
@@ -74,6 +78,7 @@ void vd_g_PwrCtrlComTxSetPwrErr( const U1 u1_a_data );
 void vd_g_PwrCtrlComTxSetSoCOnStart( void );
 void vd_g_PwrCtrlComTxSetBootLog( const U1 u1_a_req );
 void vd_g_PwrCtrlComTxClrBootLog( const U1 u1_a_req );
+void vd_g_PwrCtrlComEthLinkup( const U1 u1_a_det );
 
 #endif /* PWRCTRL_COM_H */
 
