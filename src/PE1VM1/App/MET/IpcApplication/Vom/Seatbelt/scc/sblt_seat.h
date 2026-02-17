@@ -1,4 +1,4 @@
-/* 2.2.1 */
+/* 2.3.1 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -13,7 +13,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define SBLT_SEAT_H_MAJOR                       (2)
-#define SBLT_SEAT_H_MINOR                       (2)
+#define SBLT_SEAT_H_MINOR                       (3)
 #define SBLT_SEAT_H_PATCH                       (1)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -42,6 +42,7 @@ U1              u1_g_SbltRsRxbklpdc(const U1 * u1_ap_MSGSTS, const U4 u4_a_SEATI
 U1              u1_g_SbltRsRxbklpdc_Rxosw(const U1 * u1_ap_MSGSTS, const U4 u4_a_SEATID, const U4 u4_a_VCLSTS);
 U1              u1_g_SbltRsXrxbkl(const U1 * u1_ap_MSGSTS, const U4 u4_a_SEATID, const U4 u4_a_VCLSTS);
 U1              u1_g_SbltRsXrxbkl_Rxxosw(const U1 * u1_ap_MSGSTS, const U4 u4_a_SEATID, const U4 u4_a_VCLSTS);
+void            vd_g_SbltSeatSetBklSts(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */

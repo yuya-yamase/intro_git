@@ -19,6 +19,7 @@
 
 #include "himgadj.h"
 
+#include "mcst.h"
 #include "vardef.h"
 
 #include "oxcan.h"
@@ -83,19 +84,6 @@
 /*---------------------------------------------------------------------------*/
 #define HUDIMGADJ_CSTMZ_DRVPS_SWACT         (0x40U)
 #define HUDIMGADJ_CSTMZ_DRVPS_INITVAL       (HUDIMGADJ_CSTMZ_DRVPS_SWACT)
-
-/*---------------------------------------------------------------------------*/
-/*  USER_SWITCH_OPERATION                                                    */
-/*---------------------------------------------------------------------------*/
-#define HUDIMGADJ_SWSGNL_STRSW_UP           (0x08U)
-#define HUDIMGADJ_SWSGNL_STRSW_DN           (0x04U)
-#define HUDIMGADJ_SWSGNL_LVPS_UP            (0x02U)
-#define HUDIMGADJ_SWSGNL_LVPS_DN            (0x01U)
-#define HUDIMGADJ_SWSGNL_MAX                (0x10U)
-
-#define HUDIMGADJ_SWACT_DN                  (0U)
-#define HUDIMGADJ_SWACT_UP                  (1U)
-#define HUDIMGADJ_SWACT_MAX                 (2U)
 
 /*---------------------------------------------------------------------------*/
 /*  DRIVING_POSITION                                                         */
@@ -233,11 +221,6 @@
 /*---------------------------------------------------------------------------*/
 static U2   u2_s_himgadj_iftimout;
 
-static U1   u1_s_himgadj_upstrsw;
-static U1   u1_s_himgadj_dwstrsw;
-static U1   u1_s_himgadj_l_up_possw;
-static U1   u1_s_himgadj_l_dn_possw;
-
 static U2   u2_s_himgadj_gv_vipos_respos;
 static U2   u2_s_himgadj_gv_vipos_movpos;
 static U2   u2_s_himgadj_gv_vipos_minpos;
@@ -259,12 +242,6 @@ static U2   u2_s_himgadj_owstp_ow_pos;
 /*  DIAG_CUSTOMIZE(DID 2003)                                                 */
 /*---------------------------------------------------------------------------*/
 static U1   u1_s_himgadj_cstmz_drvps;
-
-/*---------------------------------------------------------------------------*/
-/*  USER_SWITCH_OPERATION                                                    */
-/*---------------------------------------------------------------------------*/
-static U1   u1_s_himgadj_is_upswon;
-static U1   u1_s_himgadj_is_dnswon;
 
 /*---------------------------------------------------------------------------*/
 /*  DRIVING_POSITION                                                         */
@@ -344,8 +321,6 @@ static const U2 u2_sp_HUDIMGADJ_TBL_NVMCID_DRVPSDT[HUDIMGADJ_NUM_DRVPS_DT] =
 static void vd_s_HudImgAdjIfInit(void);
 static void vd_s_HudImgAdjIfUpdt(void);
 static U1   u1_s_HudImgAdjGetHudSts(void);
-/* void        vd_g_HudImgAdjSetUpDwSw(const U1 u1_a_UPSW, const U1 u1_a_DWSW); */
-/* void        vd_g_HudImgAdjSet_L_VIPOS_UPDW(const U1 u1_a_UPSW, const U1 u1_a_DWSW); */
 /* void        vd_g_HudImgAdjSet_GV_VIPOS_RESPOS(const U2 u2_a_GV_VIPOS_RESPOS); */           /* GV_VIPOS_RESPOS    */
 /* void        vd_g_HudImgAdjSet_GV_VIPOS_MOVPOS(const U2 u2_a_GV_VIPOS_MOVPOS); */           /* GV_VIPOS_MOVPOS    */
 /* void        vd_g_HudImgAdjSet_GV_VIPOS_ADJMINPOS(const U2 u2_a_GV_VIPOS_ADJMINPOS); */     /* GV_VIPOS_ADJMINPOS */
@@ -373,14 +348,6 @@ static U2   u2_s_HudImgAdjowimgpos(const U1 u1_a_REQ);
 static void vd_s_HudImgAdjCustomDrvPsInit(void);
 static void vd_s_HudImgAdjUpdtCustomDrvPs(void);
 static U1   u1_s_HudImgAdjGetCustomDrvPs(const U1 u1_a_CUSTOMTYPE);
-
-/*---------------------------------------------------------------------------*/
-/*  USER_SWITCH_OPERATION                                                    */
-/*---------------------------------------------------------------------------*/
-static void vd_s_HudImgAdjSwInit(void);
-static void vd_s_HudImgAdjSwTask(void);
-/* U1          u1_g_HudImgAdjIsUpSwOn(void); */                                               /* GV_VIPOS_UPSW      */
-/* U1          u1_g_HudImgAdjIsDnSwOn(void); */                                               /* GV_VIPOS_DNSW      */
 
 /*---------------------------------------------------------------------------*/
 /*  DRIVING_POSITION                                                         */
@@ -434,11 +401,6 @@ void vd_g_HudImgAdjInit(void)
     vd_s_HudImgAdjCustomDrvPsInit();
 
     /*-----------------------------------------------------------------------*/
-    /*  USER_SWITCH_OPERATION                                                */
-    /*-----------------------------------------------------------------------*/
-    vd_s_HudImgAdjSwInit();
-
-    /*-----------------------------------------------------------------------*/
     /*  DRIVING_POSITION                                                     */
     /*-----------------------------------------------------------------------*/
     vd_s_HudImgAdjDrvPsInit();
@@ -477,11 +439,6 @@ void vd_g_HudImgAdjMainTask(void)
         vd_s_HudImgAdjUpdtCustomDrvPs();
 
         /*-----------------------------------------------------------------------*/
-        /*  USER_SWITCH_OPERATION                                                */
-        /*-----------------------------------------------------------------------*/
-        vd_s_HudImgAdjSwTask();
-
-        /*-----------------------------------------------------------------------*/
         /*  DRIVING_POSITION                                                     */
         /*-----------------------------------------------------------------------*/
         vd_s_HudImgAdjDrvPsUpdt();
@@ -506,11 +463,6 @@ void vd_g_HudImgAdjMainTask(void)
         /*  DIAG_CUSTOMIZE(DID 2003)                                             */
         /*-----------------------------------------------------------------------*/
         /* vd_s_HudImgAdjCustomDrvPsInit(); */
-
-        /*-----------------------------------------------------------------------*/
-        /*  USER_SWITCH_OPERATION                                                */
-        /*-----------------------------------------------------------------------*/
-        vd_s_HudImgAdjSwInit();
 
         /*-----------------------------------------------------------------------*/
         /*  DRIVING_POSITION                                                     */
@@ -547,11 +499,6 @@ static void vd_s_HudImgAdjIfInit(void)
 {
     u2_s_himgadj_iftimout = (U2)HUDIMGADJ_IF_TIMOUT_MAX;
 
-    u1_s_himgadj_upstrsw = (U1)FALSE;
-    u1_s_himgadj_dwstrsw = (U1)FALSE;
-    u1_s_himgadj_l_up_possw = (U1)FALSE;
-    u1_s_himgadj_l_dn_possw = (U1)FALSE;
-
     u2_s_himgadj_gv_vipos_respos = (U2)HUDIMGADJ_IMGPOSINVLD;
     u2_s_himgadj_gv_vipos_movpos = (U2)HUDIMGADJ_IMGPOSINVLD;
     u2_s_himgadj_gv_vipos_minpos = (U2)HUDIMGADJ_IMGPOSINVLD;
@@ -572,8 +519,6 @@ static void vd_s_HudImgAdjIfUpdt(void)
 {
     static const U2 u2_s_HUDIMGADJ_IF_TIMOUT = (U2)100U;      /* U2_MAX: hold, 1sec: LSB:10ms */
 
-    U1 u1_t_ig;
-
     if(u2_s_himgadj_iftimout < (U2)HUDIMGADJ_IF_TIMOUT_MAX){
         u2_s_himgadj_iftimout += (U2)1U;
     }
@@ -582,12 +527,6 @@ static void vd_s_HudImgAdjIfUpdt(void)
     }
     if(u2_s_himgadj_iftimout >= u2_s_HUDIMGADJ_IF_TIMOUT){
         vd_s_HudImgAdjIfInit();
-    }
-
-    u1_t_ig = u1_g_VehopemdIgnOn();
-    if(u1_t_ig != (U1)TRUE){
-        u1_s_himgadj_l_up_possw = (U1)FALSE;
-        u1_s_himgadj_l_dn_possw = (U1)FALSE;
     }
 }
 
@@ -603,42 +542,11 @@ static U1   u1_s_HudImgAdjGetHudSts(void)
     U1  u1_t_ishudon;
 
     u1_t_ishudon  = (U1)FALSE;
-#if 0   /* BEV Rebase provisionally */
-    u1_t_hudonoff = u1_g_McstBf((U1)MCST_BFI_HUD);
+    u1_t_hudonoff = (U1)u4_g_McstBf((U1)MCST_BFI_HUD);
     if(u1_t_hudonoff == (U1)MCST_HUD_ON){
-#else   /* BEV Rebase provisionally */
-    u1_t_hudonoff = (U1)1U;
-    if(u1_t_hudonoff == (U1)1U){
-#endif   /* BEV Rebase provisionally */
         u1_t_ishudon = (U1)TRUE;
     }
     return(u1_t_ishudon);
-}
-
-/*===================================================================================================================================*/
-/*  INTERFACE : void    vd_g_HudImgAdjSetUpDwSw(const U1 u1_a_UPSW, const U1 u1_a_DWSW)                                              */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void    vd_g_HudImgAdjSetUpDwSw(const U1 u1_a_UPSW, const U1 u1_a_DWSW)
-{
-    u1_s_himgadj_upstrsw = u1_a_UPSW;
-    u1_s_himgadj_dwstrsw = u1_a_DWSW;
-    u2_s_himgadj_iftimout = (U2)0U;
-}
-
-/*===================================================================================================================================*/
-/*  INTERFACE : void    vd_g_HudImgAdjSet_L_VIPOS_UPDW(const U1 u1_a_UPSW, const U1 u1_a_DWSW)                                       */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void    vd_g_HudImgAdjSet_L_VIPOS_UPDW(const U1 u1_a_UPSW, const U1 u1_a_DWSW)
-{
-    u1_s_himgadj_l_up_possw = u1_a_UPSW;
-    u1_s_himgadj_l_dn_possw = u1_a_DWSW;
-    u2_s_himgadj_iftimout = (U2)0U;
 }
 
 /*===================================================================================================================================*/
@@ -1078,110 +986,6 @@ static U1   u1_s_HudImgAdjGetCustomDrvPs(const U1 u1_a_CUSTOMTYPE)
     }
 
     return(u1_t_result);
-}
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-/*                                                                                                                                   */
-/*                                                                                                                                   */
-/*                                                                                                                                   */
-/*                                                                                                                                   */
-/*                                                                                                                                   */
-/*  USER_SWITCH_OPERATION Function Definitions                                                                                       */
-/*                                                                                                                                   */
-/*                                                                                                                                   */
-/*                                                                                                                                   */
-/*                                                                                                                                   */
-/*                                                                                                                                   */
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-/*===================================================================================================================================*/
-/*  USER_SWITCH_OPERATION : static void vd_s_HudImgAdjSwInit(void)                                                                   */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments    -                                                                                                                   */
-/*  Return       -                                                                                                                   */
-/*===================================================================================================================================*/
-static void vd_s_HudImgAdjSwInit(void)
-{
-    u1_s_himgadj_is_upswon = (U1)FALSE;
-    u1_s_himgadj_is_dnswon = (U1)FALSE;
-}
-
-/*===================================================================================================================================*/
-/*  USER_SWITCH_OPERATION : processing HUD Image Adjudt - User Switch Operation                                                      */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments    -                                                                                                                   */
-/*  Return       -                                                                                                                   */
-/*===================================================================================================================================*/
-static void vd_s_HudImgAdjSwTask(void)
-{
-    static const U1 u1_sp_HUDIMGADJ_SWACT[HUDIMGADJ_SWSGNL_MAX][HUDIMGADJ_SWACT_MAX] = {
-        /* HUDIMGADJ_SWACT_DN , HUDIMGADJ_SWACT_UP */   /* [STRSW_UP] [STRSW_DN] [LVPS_UP] [LVPS_DN] */
-        { (U1)FALSE,            (U1)FALSE },            /*          0          0         0         0 */
-        { (U1)TRUE,             (U1)FALSE },            /*          0          0         0         1 */
-        { (U1)FALSE,            (U1)TRUE  },            /*          0          0         1         0 */
-        { (U1)FALSE,            (U1)FALSE },            /*          0          0         1         1 */
-        { (U1)TRUE,             (U1)FALSE },            /*          0          1         0         0 */
-        { (U1)TRUE,             (U1)FALSE },            /*          0          1         0         1 */
-        { (U1)TRUE,             (U1)FALSE },            /*          0          1         1         0 */
-        { (U1)TRUE,             (U1)FALSE },            /*          0          1         1         1 */
-        { (U1)FALSE,            (U1)TRUE  },            /*          1          0         0         0 */
-        { (U1)FALSE,            (U1)TRUE  },            /*          1          0         0         1 */
-        { (U1)FALSE,            (U1)TRUE  },            /*          1          0         1         0 */
-        { (U1)FALSE,            (U1)TRUE  },            /*          1          0         1         1 */
-        { (U1)FALSE,            (U1)FALSE },            /*          1          1         0         0 */
-        { (U1)TRUE,             (U1)FALSE },            /*          1          1         0         1 */
-        { (U1)FALSE,            (U1)TRUE  },            /*          1          1         1         0 */
-        { (U1)FALSE,            (U1)FALSE }             /*          1          1         1         1 */
-    };
-
-    U1              u1_t_sw_evt;
-    U1              u1_t_strsw_up;
-    U1              u1_t_strsw_dn;
-    U1              u1_t_lvps_up;
-    U1              u1_t_lvps_dn;
-
-    u1_t_strsw_up = u1_s_himgadj_upstrsw;
-    u1_t_strsw_dn = u1_s_himgadj_dwstrsw;
-    u1_t_lvps_up = u1_s_himgadj_l_up_possw;
-    u1_t_lvps_dn = u1_s_himgadj_l_dn_possw;
-
-    u1_t_sw_evt = (U1)0U;
-    if(u1_t_strsw_up == (U1)TRUE){
-        u1_t_sw_evt = (U1)HUDIMGADJ_SWSGNL_STRSW_UP;
-    }
-    if(u1_t_strsw_dn == (U1)TRUE){
-        u1_t_sw_evt |= (U1)HUDIMGADJ_SWSGNL_STRSW_DN;
-    }
-    if(u1_t_lvps_up == (U1)TRUE){
-        u1_t_sw_evt |= (U1)HUDIMGADJ_SWSGNL_LVPS_UP;
-    }
-    if(u1_t_lvps_dn == (U1)TRUE){
-        u1_t_sw_evt |= (U1)HUDIMGADJ_SWSGNL_LVPS_DN;
-    }
-
-    u1_s_himgadj_is_upswon = u1_sp_HUDIMGADJ_SWACT[u1_t_sw_evt][HUDIMGADJ_SWACT_UP];
-    u1_s_himgadj_is_dnswon = u1_sp_HUDIMGADJ_SWACT[u1_t_sw_evt][HUDIMGADJ_SWACT_DN];
-}
-
-/*===================================================================================================================================*/
-/*  USER_SWITCH_OPERATION : U1      u1_g_HudImgAdjIsUpSwOn(void) GV_VIPOS_UPSW                                                       */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1      u1_g_HudImgAdjIsUpSwOn(void)
-{
-    return (u1_s_himgadj_is_upswon);
-}
-
-/*===================================================================================================================================*/
-/*  USER_SWITCH_OPERATION : U1      u1_g_HudImgAdjIsDnSwOn(void) GV_VIPOS_DNSW                                                       */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1      u1_g_HudImgAdjIsDnSwOn(void)
-{
-    return (u1_s_himgadj_is_dnswon);
 }
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -1907,9 +1711,14 @@ U1      u1_g_HudImgAdjGetGvRtctlIniReq(void)
 /* 2.2.3              2024.09.13  His     DID 280C was revised. (u2_s_HudImgAdjowimgpos and u1_g_HudImgAdjReadDataImgPos)            */
 /* 2.2.4              2025.03.17  YuK     Removed the max and min limits for HUD position regeneration.                              */
 /*                                                                                                                                   */
+/*  Revision         Date        Author   Change Description                                                                         */
+/* ---------------   ----------  ------  ------------------------------------------------------------------------------------------- */
+/*  BEV-1             02/13/2026  HH      Delete HUD position SW Process.                                                            */
+/*                                                                                                                                   */
 /*  * HS  = Hidenobu Suzuki, NCOS                                                                                                    */
 /*  * HiS = Hidenobu Suzuki, MSE                                                                                                     */
 /*  * HT  = Hideki Takagi,   MSE                                                                                                     */
 /*  * YuK = Yuki Koshimae,   MSE                                                                                                     */
+/*  * HH  = Hiroki Hara,     Denso Techno                                                                                            */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
