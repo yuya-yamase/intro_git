@@ -44,16 +44,14 @@ void    vd_g_HdimmgrIfUpdt(void);
 /* Sender */
 U2      u2_g_HdimmgrIfGetAdjduty(void);
 U1      u1_g_HdimmgrIfGetOwduty(U2 * u2_ap_owduty);
-U1      u1_g_HdimmgrIfGet_L_HUDBR_S(void);
+U1      u1_g_HdimmgrIfGetIllStepVal(void);
 
 /* Receiver */
 U2      u2_g_HdimmgrIfGetOutduty(void);
 void    vd_g_HdimmgrIfSetOutduty(const U2 u2_a_OUTDUTY);
-U1      u1_g_HdimmgrIfGetIsHudOn(void);
+void    vd_g_HdimmgrIfSetIllStepVal(const U1 u1_a_STEP);
 
-U1      u1_g_HdimmgrIfIsUpSwOn(void);
-U1      u1_g_HdimmgrIfIsDwSwOn(void);
-void    vd_g_HdimmgrIfSetUpDwSw(const U1 u1_a_UPSW, const U1 u1_a_DWSW);
+U1      u1_g_HdimmgrIfIsStepInd(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Externs                                                                                                                 */

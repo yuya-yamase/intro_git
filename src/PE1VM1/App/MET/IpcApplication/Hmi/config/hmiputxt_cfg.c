@@ -493,7 +493,7 @@ static void    vd_s_HmiPutTxtCfgAlertReq(U1 u1_a_slot)
 /*  * TN   = Tetsushi Nakano, Denso Techno                                                                                           */
 /*  * MA   = Misaki Aiki,  Denso Techno                                                                                              */
 /*  * RS   = Ryuki Sako,      Denso Techno                                                                                           */
-/*  * KO = Kazuto Oishi,  Denso Techno                                                                                               */
+/*  * KO   = Kazuto Oishi,  Denso Techno                                                                                             */
 /*  * MN   = Mikiya Negishi,  KSE                                                                                                    */
 /*  * HF   = Hinari Fukamachi,KSE                                                                                                    */
 /*  * HY   = Haruki Yagi, KSE                                                                                                        */

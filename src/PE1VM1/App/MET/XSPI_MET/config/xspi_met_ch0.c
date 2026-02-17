@@ -153,11 +153,7 @@ typedef struct{
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if 0   /* BEV Rebase provisionally */
-static U1           u1_s_xspi_vipos_disp;
-#endif   /* BEV Rebase provisionally */
 static U1           u1_s_xspi_dimsw;
-static U1           u1_s_xspi_gvifsts;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
@@ -652,25 +648,29 @@ static inline void    vd_s_XSpiCfgTxRcmmui(        U4 * u4_ap_pdu_tx) {
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
 static inline void    vd_s_XSpiCfgTxHud(           U4 * u4_ap_pdu_tx) {
-#if 0   /* BEV Rebase provisionally */
     U1 u1_t_owdutyreq;
     U2 u2_t_owduty;
 
     u2_t_owduty = (U2)0U;
     u1_t_owdutyreq = u1_g_HdimmgrIfGetOwduty(&u2_t_owduty);
 
-    u4_ap_pdu_tx[0]  = (U4)u2_t_owduty;                                                     /* HUD_BLDUTY_OW        */
-    u4_ap_pdu_tx[0] |= (U4)u2_g_HudImgAdjGetGvOwPos() << 16;                                /* HUD_VIPOS_POS_OW     */
+    u4_ap_pdu_tx[0]  = (U4)0U;
+    u4_ap_pdu_tx[0] |= (U4)u2_g_HdimmgrIfGetAdjduty() << 16;                                /* HUD_GV_DIM_ILLMN     */
+    u4_ap_pdu_tx[1]  = (U4)0U;
+    u4_ap_pdu_tx[1] |= (U4)((U4)u1_g_HmiHudGetHudOnoff() & (U4)0x00000001U) << 2;           /* HUD_ONOFF            */
+    u4_ap_pdu_tx[2]  = (U4)((U4)u1_g_HdimmgrIfGetIllStepVal() & (U4)0x0000000FU);           /* HUD_ILL_STEP         */
+    u4_ap_pdu_tx[2] |= (U4)((U4)u1_g_HmiHudGetHudRotSwSts() & (U4)0x00000003U) << 8;        /* HUD_ROT_SW_STS       */
+    u4_ap_pdu_tx[2] |= (U4)((U4)u1_g_HmiHudGetHudViposSwSts() & (U4)0x00000003U) << 10;     /* HUD_VIPOS_SW_STS     */
+    u4_ap_pdu_tx[2] |= (U4)((U4)u1_g_HmiHudGetHudRot() & (U4)0x000000FFU) << 24;            /* HUD_ROT              */
+    u4_ap_pdu_tx[3]  = (U4)u2_t_owduty;                                                     /* HUD_BLDUTY_OW        */
+    u4_ap_pdu_tx[3] |= (U4)u2_g_HudImgAdjGetGvOwPos() << 16;                                /* HUD_VIPOS_POS_OW     */
+    u4_ap_pdu_tx[5]  = (U4)0U;
+    u4_ap_pdu_tx[5] |= (U4)((U4)u1_t_owdutyreq & (U4)0x00000001U) << 8;                     /* HUD_BLDUTY_OWREQ     */
+    u4_ap_pdu_tx[5] |= (U4)((U4)u1_g_HudImgAdjGetGvOwReq() & (U4)0x00000001U) << 9;         /* HUD_VIPOS_POS_OWREQ  */
+    u4_ap_pdu_tx[5] |= (U4)((U4)u1_g_HudImgAdjGetGvRtctlIniReq() & (U4)0x00000001U) << 10;  /* HUD_VIPOS_INIT_OWREQ */
+#if 0   /* BEV Rebase provisionally */
     u4_ap_pdu_tx[1]  = (U4)u2_g_HudImgAdjGetMovReqPos();                                    /* HUD_VIPOS_REQPOS     */
-    u4_ap_pdu_tx[1] |= (U4)u2_g_HdimmgrIfGetAdjduty() << 16;                                /* HUD_DIM_ILLMN        */
     u4_ap_pdu_tx[2]  = (U4)u1_g_HudImgAdjGetMovReqID();                                     /* HUD_VIPOS_REQID      */
-    u4_ap_pdu_tx[2] |= (U4)((U4)u1_g_HdimmgrIfGet_L_HUDBR_S() & (U4)0x0000001FU) << 8;      /* HUD_L_HUDBR_S        */
-    u4_ap_pdu_tx[2] |= (U4)((U4)u1_t_owdutyreq & (U4)0x00000001U) << 13;                    /* HUD_BLDUTY_OWREQ     */
-    u4_ap_pdu_tx[2] |= (U4)((U4)u1_s_xspi_vipos_disp & (U4)0x00000001U) << 14;              /* GV_VIPOS_DISP        */
-    u4_ap_pdu_tx[2] |= (U4)((U4)u1_g_HudImgAdjGetGvOwReq() & (U4)0x00000001U) << 15;        /* HUD_VIPOS_POS_OWREQ  */
-    u4_ap_pdu_tx[2] |= (U4)((U4)u1_g_HudImgAdjGetGvRtctlIniReq() & (U4)0x00000001U) << 16;  /* HUD_VIPOS_INIT_OWREQ */
-    u4_ap_pdu_tx[2] |= (U4)((U4)u1_g_HudImgAdjIsUpSwOn() & (U4)0x00000001U) << 17;          /* HUD_VIPOS_UPSW       */
-    u4_ap_pdu_tx[2] |= (U4)((U4)u1_g_HudImgAdjIsDnSwOn() & (U4)0x01U) << 18;                /* HUD_VIPOS_DNSW       */
 #endif   /* BEV Rebase provisionally */
 }
 
@@ -973,34 +973,25 @@ static inline void    vd_s_XSpiCfgRxTripcom(    const U4 * u4_ap_PDU_RX) {
 /*===================================================================================================================================*/
 static inline void    vd_s_XSpiCfgRxHUD(        const U4 * u4_ap_PDU_RX) {
 
-    U1 u1_t_gvifsts;
-    U1 u1_t_rxdata;    /* Receive data */
+    U1 u1_t_rxdata;
+    U1 u1_t_aglbe_sts;
+    U1 u1_t_hudgvifctl_sts;
 
-    u1_t_gvifsts = u1_XSPI_MET_READ_BYTE(u4_ap_PDU_RX[2] , (U1)3U);
+    u1_t_aglbe_sts = u1_g_XSpiMETRxRdAccessSts((U1)XSPI_MET_XSPI_RX_AGLBE);
+    u1_t_hudgvifctl_sts = u1_g_XSpiMETRxRdAccessSts((U1)XSPI_MET_XSPI_RX_HUDGVIFCTL);
 
-    if (u1_t_gvifsts == (U1)0U) {
-#if 0   /* BEV Rebase provisionally */
-        u1_s_xspi_vipos_disp = u1_XSPI_MET_READ__BIT(u4_ap_PDU_RX[15] , (U1)0U , (U1)1U);
-#endif   /* BEV Rebase provisionally */
-
-        u1_t_rxdata = (U1)((u4_ap_PDU_RX[10] >> 2) & (U4)0x03U);
-        u1_s_xspi_gvifsts = u1_t_rxdata;
-    } else {
-#if 0   /* BEV Rebase provisionally */
-        u1_s_xspi_vipos_disp = (U1)0U;
-#endif   /* BEV Rebase provisionally */
-        u1_s_xspi_gvifsts = (U1)XSPI_GVIF_UNDEF2;
+    if (u1_t_aglbe_sts == (U1)XSPI_MET_XSPI_RX_READ_VALID) {
+        vd_g_HmiHudSocDataPut(&u4_ap_PDU_RX[0]);
     }
-}
 
-/*===================================================================================================================================*/
-/*  U1    u1_g_XSpiGvifSts(void)                                                                                                     */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         u1_s_xspi_gvifsts                                                                                                */
-/*===================================================================================================================================*/
-U1    u1_g_XSpiGvifSts(void) {
-    return(u1_s_xspi_gvifsts);
+    if (u1_t_hudgvifctl_sts == (U1)XSPI_MET_XSPI_RX_READ_VALID) {
+        vd_g_HmiHudGvifDataPut(&u4_ap_PDU_RX[1]);
+
+        u1_t_rxdata = (U1)((u4_ap_PDU_RX[2]) & (U4)0x03U);
+        vd_g_VdfEsoIn_Put_GVIF_HUD(u1_t_rxdata);
+    } else {
+        vd_g_VdfEsoIn_Put_GVIF_HUD((U1)VDF_ESO_GVIF_UNDEF2);
+    }
 }
 
 /*===================================================================================================================================*/
@@ -1026,11 +1017,7 @@ static inline void    vd_s_XSpiCfgRxAvgGrph(const U4 * u4_ap_PDU_RX) {
 /*===================================================================================================================================*/
 void    vd_g_XSpiCfgInitCh0(void)
 {
-#if 0   /* BEV Rebase provisionally */
-    u1_s_xspi_vipos_disp                      = (U1)0U;
-#endif   /* BEV Rebase provisionally */
     u1_s_xspi_dimsw                           = (U1)0U;
-    u1_s_xspi_gvifsts                         = (U1)XSPI_GVIF_UNDEF2;
 
 }
 
@@ -1049,7 +1036,7 @@ void    vd_g_XSpiCfgPduRxCh0(const U4 * u4_ap_PDU_RX)
     vd_s_XSpiCfgRxAvgGrph(    &u4_ap_PDU_RX[ 38]);
     vd_s_XSpiCfgRxOdo(        &u4_ap_PDU_RX[ 40]);
     vd_s_XSpiCfgRxTripcom(    &u4_ap_PDU_RX[ 44]);
-    vd_s_XSpiCfgRxHUD(        &u4_ap_PDU_RX[100]);
+    vd_s_XSpiCfgRxHUD(        &u4_ap_PDU_RX[ 57]);
     vd_s_XSpiCfgRxMetcstm(    &u4_ap_PDU_RX[212]);
 }
 
@@ -1081,7 +1068,7 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
     vd_s_XSpiCfgTxTelltale(      &u4_ap_pdu_tx[183]);      /* 183 - 230    : Telltale                                      */
     vd_s_XSpiCfgTxMetcstm(       &u4_ap_pdu_tx[231]);      /* 231 - 238    : Meter Customize Reset                         */
                                                            /* 239 - 299    : Diagnosis                                     */
-    vd_s_XSpiCfgTxHud(           &u4_ap_pdu_tx[300]);      /* 300 - 302    : Hud                                           */
+    vd_s_XSpiCfgTxHud(           &u4_ap_pdu_tx[300]);      /* 300 - 305    : Hud                                           */
     vd_s_XSpiCfgTxMetcstmMcst(   &u4_ap_pdu_tx[566]);      /* 566 - 584    : Meter Customize                               */
     vd_s_XSpiCfgTxCalib(         &u4_ap_pdu_tx[585]);      /* 585 - 625    : Calibration                                   */
 
@@ -1185,6 +1172,9 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*                                Add APOFRQ_ON storage process.                                                                     */
 /*  BEV-28    02/09/2026 MA       Add notification process of odo display value at reset                                             */
 /*  BEV-29    02/16/2026 EA       Deleted/deactivated the not applied process in BEV                                                 */
+/*  BEV-30    02/02/2026 TS       Change for BEV FF2.(MET-M_HUDILL-CSTD-1)                                                           */
+/*  BEV-31    02/03/2026 TS       Change for BEV FF2.(MET-M_HUDONOFF-CSTD-1)                                                         */
+/*  BEV-32    02/12/2026 KN       Add HUD_ROT_SW_STS and HUD_ROT.                                                                    */
 /*  BEV-33    01/30/2026 YN       Change for BEV FF2.(MET-M_DESTVARI-CSTD-0-01)                                                      */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
@@ -1215,5 +1205,7 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*  * MA = Misaki Aiki, Denso Techno                                                                                                 */
 /*  * HY   = Haruki Yagi, KSE                                                                                                        */
 /*  * EA   = Eunice Avelin, DTPH                                                                                                     */
+/*  * KN   = Kazuo Nishigaki, Denso Techno                                                                                           */
+/*  * HH   = Hiroki Hara, Denso Techno                                                                                               */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

@@ -1,4 +1,4 @@
-/* 2.2.1 */
+/* 2.3.1 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define SBLT_SEAT_C_MAJOR                       (2)
-#define SBLT_SEAT_C_MINOR                       (2)
+#define SBLT_SEAT_C_MINOR                       (3)
 #define SBLT_SEAT_C_PATCH                       (1)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -96,6 +96,7 @@ typedef struct {
     U1  u1_prvoswsig;   /* An occupant value of buckle signal           */
     U1  u1_prvsts;      /* A previous state                             */
     U1  u1_defined;     /* The flag a buckle state has determinated since IG-ON (for non-snsr seat) */
+    U1  u1_bklsts;      /* A Buckle state                               */
 } ST_SBLT_SEAT;
 
 typedef struct {
@@ -274,6 +275,7 @@ static void    vd_s_SbltSeatStsInit(ST_SBLT_SEAT *st_ap_sblt_seat)
     st_ap_sblt_seat->u1_prvoswsig = (U1)SBLTWRN_BKLSIG_UNKNOWN;
     st_ap_sblt_seat->u1_defined   = (U1)FALSE;
     st_ap_sblt_seat->u1_prvsts    = (U1)SBLTWRN_BKLSTS_BCKL;
+    st_ap_sblt_seat->u1_bklsts    = (U1)SBLTWRN_BKLSTS_BCKL;
 }
 
 /*===================================================================================================================================*/
@@ -664,6 +666,8 @@ static U1     u1_s_SbltRsBklstsJdg(const U4 u4_a_SEATID, const U1 u1_a_BKLINPT, 
     } else {                                            /* Occupant Detection not supported */
         if (u1_a_BKLINPT == (U1)SBLTWRN_BKLSIG_UNBUCKLED) {
             u1_t_bklsts = u1_s_SbltRsUnbkleFlg(u4_a_SEATID);
+        } else if (u1_a_BKLINPT == (U1)SBLTWRN_BKLSIG_COMFAIL){
+            u1_t_bklsts = (U1)SBLTWRN_BKLSTS_COMFAIL;
         } else {
             u1_t_bklsts = u1_s_SbltRsNosnBklEdg(u4_a_SEATID);
         }
@@ -825,6 +829,8 @@ static U1     u1_s_SbltRsXBklstsJdg(const U4 u4_a_SEATID, const U1 u1_a_BKLINPT,
     } else {                                            /* Occupant Detection not supported */
         if (u1_a_BKLINPT == (U1)SBLTWRN_BKLSIG_UNBUCKLED) {
             u1_t_bklsts = u1_s_SbltRsUnbkleFlg(u4_a_SEATID);
+        } else if (u1_a_BKLINPT == (U1)SBLTWRN_BKLSIG_COMFAIL){
+            u1_t_bklsts = (U1)SBLTWRN_BKLSTS_COMFAIL;
         } else {
             u1_t_bklsts = u1_s_SbltRsNosnBklEdg(u4_a_SEATID);
         }
@@ -973,6 +979,42 @@ static  void    vd_s_SbltInptDly(U1 *u1p_a_sgnl, U1 *u1p_a_prvsgnl, U2 *u2p_a_cn
 }
 
 /*===================================================================================================================================*/
+/* void    vd_g_SbltSeatSetBklSts(void)                                                                                              */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void    vd_g_SbltSeatSetBklSts(void)
+{
+    U4  u4_t_seat;
+
+    for (u4_t_seat = (U4)0U; u4_t_seat < (U4)SBLTWRN_NUM_ALLSEAT; u4_t_seat++) {
+        if ((st_sp_sblt_seat[u4_t_seat].u1_prvsts & (U1)SBLTWRN_BKLSTS_COMFAIL) == (U1)0U) {
+            st_sp_sblt_seat[u4_t_seat].u1_bklsts = st_sp_sblt_seat[u4_t_seat].u1_prvsts;
+        }
+    }
+}
+
+/*===================================================================================================================================*/
+/* U1    u1_g_SbltSeatBklStsBySeat(const U1 u1_a_SEATID)                                                                             */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+U1    u1_g_SbltSeatBklStsBySeat(const U1 u1_a_SEATID)
+{
+    U1  u1_t_bklsts;
+
+    if (u1_a_SEATID < (U1)SBLTWRN_NUM_ALLSEAT) {
+        u1_t_bklsts = st_sp_sblt_seat[u1_a_SEATID].u1_bklsts;
+    } else {
+        u1_t_bklsts = (U1)SBLTWRN_BKLSTS_BCKL;
+    }
+
+    return (u1_t_bklsts);
+}
+
+/*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
 /*                                                                                                                                   */
@@ -989,6 +1031,8 @@ static  void    vd_s_SbltInptDly(U1 *u1p_a_sgnl, U1 *u1p_a_prvsgnl, U2 *u2p_a_cn
 /*  2.1.2    06/13/2022  TK       Fixed 24FGM22-11011.                                                                               */
 /*  2.2.0    02/28/2024  TH       for 19PFv3                                                                                         */
 /*  2.2.1    06/02/2025  TH       Fixed : Keep State if Occupied SW signal = 11b                                                     */
+/*  2.3.0    09/16/2025  NA       New.  Legal compliance.(FMVSS208_2025 SBR regulations)                                             */
+/*  2.3.1    10/31/2025  HK       Fixed : Timeout detection Process for rear seat N buckle.                                          */
 /*                                                                                                                                   */
 /*  * HY   = Hidefumi Yoshida, Denso                                                                                                 */
 /*  * YI   = Yoshiki  Iwata,   Denso                                                                                                 */
@@ -997,5 +1041,7 @@ static  void    vd_s_SbltInptDly(U1 *u1p_a_sgnl, U1 *u1p_a_prvsgnl, U2 *u2p_a_cn
 /*  * TA(M)= Teruyuki Anjima, NTT Data MSE                                                                                           */
 /*  * TK   = Takanori Kuno,    Denso Techno                                                                                          */
 /*  * TH   = Taisuke Hirakawa, KSE                                                                                                   */
+/*  * NA   = Nazirul Afham,    PXT                                                                                                   */
+/*  * HK   = Hiroyuki Kato,    PXT                                                                                                   */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
