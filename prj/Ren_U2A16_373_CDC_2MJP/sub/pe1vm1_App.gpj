@@ -79,6 +79,7 @@
 ../../src/PE1VM1/App/MET/IpcApplication/Evc/Vardef/config_met/vardef_omus_can_cfg.c
 ../../src/PE1VM1/App/MET/IpcApplication/Evc/Vardef/config_met/vardef_omus_mcuid_cfg.c
 ../../src/PE1VM1/App/MET/IpcApplication/Evc/Vardef/scc/vardef.c
+../../src/PE1VM1/App/MET/IpcApplication/Evc/Vardef/scc/vardef_autop.c
 ../../src/PE1VM1/App/MET/IpcApplication/Evc/Vardef/scc/vardef_dest.c
 ../../src/PE1VM1/App/MET/IpcApplication/Evc/Vardef/scc/vardef_esopt.c
 ../../src/PE1VM1/App/MET/IpcApplication/Evc/Vardef/scc/vardef_hcs.c

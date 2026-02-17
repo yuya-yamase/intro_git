@@ -226,6 +226,7 @@ static inline void    vd_s_XSpiCfgTxVariation(     U4 * u4_ap_pdu_tx) {
     U4  u4_t_loop;
     U1  u1_t_subdigspd;
     U1  u1_t_sys_hcs;                                                         /*  SYS_HCS                                       */
+    U1  u1_t_autop;                                                           /*  SYS_AUTOP                                     */
 
     u4_ap_pdu_tx[0] = (U4)u1_g_VardefDestinationByPid();                      /*  DESTINATION                                   */
 
@@ -256,7 +257,10 @@ static inline void    vd_s_XSpiCfgTxVariation(     U4 * u4_ap_pdu_tx) {
 
     vd_s_XSpiCfgEsopt(&u4_ap_pdu_tx[4]);
 
-    u4_ap_pdu_tx[9] |= (U4)TRUE << 17;                                 /*  SYS_MOP                  */ /* BEV SV1 provisionally */
+    u1_t_autop        = u1_g_VardefAutopAva();
+    u4_ap_pdu_tx[5]  |= ((U4)u1_t_autop & (U4)0x01U) << 2;             /*  SYS_AUTOP                                            */
+
+    u4_ap_pdu_tx[9]  |= (U4)TRUE << 17;                                /*  SYS_MOP                  */ /* BEV SV1 provisionally */
 
     u4_ap_pdu_tx[10] |= (U4)TRUE << 30;                                /*  SYS_DMASSP               */ /* BEV SV1 provisionally */
     u4_ap_pdu_tx[10] |= (U4)TRUE << 31;                                /*  SYS_DMASEC               */ /* BEV SV1 provisionally */
@@ -1170,7 +1174,9 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*  BEV-32    02/03/2026 TS       Change for BEV FF2.(MET-M_HUDONOFF-CSTD-1)                                                         */
 /*  BEV-33    02/12/2026 KN       Add HUD_ROT_SW_STS and HUD_ROT.                                                                    */
 /*  BEV-34    01/30/2026 YN       Change for BEV FF2.(MET-M_DESTVARI-CSTD-0-01)                                                      */
-/*                                                                                                                                   */
+/*  BEV-35    02/02/2026 YH       Change config for BEV Full_Function_2.                                                             */
+/*                                MET-S_ADMID-CSTD-0-07-B-C0/MET-S_ADBZR-CSTD-0-06-A-C0                                              */
+/*                                Added processing to integrate AP_RMT and AP_NORMT results.                                         */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * KM   = Keisuke Mashita, Denso Techno                                                                                           */
@@ -1201,5 +1207,6 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*  * EA   = Eunice Avelin, DTPH                                                                                                     */
 /*  * KN   = Kazuo Nishigaki, Denso Techno                                                                                           */
 /*  * HH   = Hiroki Hara, Denso Techno                                                                                               */
+/*  * YH   = Yuki Hatakeyama, KSE                                                                                                    */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

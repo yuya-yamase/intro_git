@@ -1,38 +1,42 @@
-/* 2.6.0 */
+/* 1.0.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-/*  Toyota IPC/MET : Vadef Electrical System Option.                                                                                 */
+/*  Variation Defines / AUTOP                                                                                                        */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define VARDEF_ESOPT_BDC1SV1_C_MAJOR             (2)
-#define VARDEF_ESOPT_BDC1SV1_C_MINOR             (6)
-#define VARDEF_ESOPT_BDC1SV1_C_PATCH             (0)
+#define VARDEF_AUTOP_C_MAJOR                (1)
+#define VARDEF_AUTOP_C_MINOR                (0)
+#define VARDEF_AUTOP_C_PATCH                (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#include "vardef_esopt_cfg_private.h"
-#include "vardef_esopt_rx.h"
+#include "aip_common.h"
+#include "vardef.h"
+#include "vardef_autop_cfg_private.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if ((VARDEF_ESOPT_BDC1SV1_C_MAJOR != VARDEF_ESOPT_RX_H_MAJOR) || \
-     (VARDEF_ESOPT_BDC1SV1_C_MINOR != VARDEF_ESOPT_RX_H_MINOR) || \
-     (VARDEF_ESOPT_BDC1SV1_C_PATCH != VARDEF_ESOPT_RX_H_PATCH))
-#error "vardef_esopt_BDC1SV1.c and vardef_esopt_rx.h : source and header files are inconsistent!"
+#if ((VARDEF_AUTOP_C_MAJOR != VARDEF_AUTOP_H_MAJOR) || \
+     (VARDEF_AUTOP_C_MINOR != VARDEF_AUTOP_H_MINOR) || \
+     (VARDEF_AUTOP_C_PATCH != VARDEF_AUTOP_H_PATCH))
+#error "vardef_autop.c and vardef_autop.h : source and header files are inconsistent!"
+#endif
+
+#if ((VARDEF_AUTOP_C_MAJOR != VARDEF_AUTOP_CFG_H_MAJOR) || \
+     (VARDEF_AUTOP_C_MINOR != VARDEF_AUTOP_CFG_H_MINOR) || \
+     (VARDEF_AUTOP_C_PATCH != VARDEF_AUTOP_CFG_H_PATCH))
+#error "vardef_autop.c and vardef_autop_cfg_private.h : source and header files are inconsistent!"
 #endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define VDF_ESO_AP_NO_REMOTE                     (0x1U)
-#define VDF_ESO_AP_REMOTE                        (0x2U)
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -52,55 +56,19 @@
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*===================================================================================================================================*/
-/*  U1      u1_g_VdfEsoRx_AP_RMT(void)                                                                                               */
+/*  U1      u1_g_VardefAutopAva(void)                                                                                                */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
+/*  Return:         u1_t_sup                                                                                                         */
 /*===================================================================================================================================*/
-U1      u1_g_VdfEsoRx_AP_RMT(void)
+U1      u1_g_VardefAutopAva(void)
 {
-    U1                 u1_t_rx;
-    U1                 u1_t_ava_rx;
+    U1    u1_t_sup;
 
-    u1_t_rx = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_APINF_B, &u1_t_rx);
-    if(u1_t_rx == (U1)VDF_ESO_AP_NO_REMOTE){
-        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_UNK;
-    }
-    else if(u1_t_rx == (U1)VDF_ESO_AP_REMOTE){
-        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
-    }
-    else{
-        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_INA;
-    }
+    u1_t_sup  = u1_g_VardefEsOptAvaByCh(u2_g_VDF_AUTOP_CH_AP_RMT);
+    u1_t_sup |= u1_g_VardefEsOptAvaByCh(u2_g_VDF_AUTOP_CH_AP_NORMT);
 
-    return(u1_t_ava_rx);
-}
-
-/*===================================================================================================================================*/
-/*  U1      u1_g_VdfEsoRx_AP_NORMT(void)                                                                                             */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1      u1_g_VdfEsoRx_AP_NORMT(void)
-{
-    U1                 u1_t_rx;
-    U1                 u1_t_ava_rx;
-
-    u1_t_rx = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_APINF_B, &u1_t_rx);
-    if(u1_t_rx == (U1)VDF_ESO_AP_NO_REMOTE){
-        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
-    }
-    else if(u1_t_rx == (U1)VDF_ESO_AP_REMOTE){
-        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_UNK;
-    }
-    else{
-        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_INA;
-    }
-
-    return(u1_t_ava_rx);
+    return(u1_t_sup);
 }
 
 /*===================================================================================================================================*/
@@ -111,16 +79,10 @@ U1      u1_g_VdfEsoRx_AP_NORMT(void)
 /*                                                                                                                                   */
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  2.6.0    12/05/2025  TD       NEW!                                                                                               */
-/*                                                                                                                                   */
-/*  Revision Date        Author   Change Description                                                                                 */
-/* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  BEV      12/05/2025  ED       Copied from vardef_esopt_IPA1S05, change in logic                                                  */
-/*  BEV-2    02/02/2026  YH       Change config for BEV Full_Function_2.                                                             */
+/*  1.0.0     2/10/2026  YH       New(Change config for BEV Full_Function_2).                                                        */
 /*                                MET-S_ADMID-CSTD-0-07-B-C0/MET-S_ADBZR-CSTD-0-06-A-C0                                              */
-/*                                Separate AUTOP function judgement into AP_RMT and AP_NORMT.                                        */
+/*                                Added processing to integrate AP_RMT and AP_NORMT results.                                         */
 /*                                                                                                                                   */
-/*  * ED = Emoh Dagasdas, DTPH                                                                                                       */
-/*  * YH = Yuki Hatakeyama, KSE                                                                                                      */
+/*  * YH   = Yuki Hatakeyama, KSE                                                                                                    */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

@@ -706,7 +706,7 @@ static  void    vd_s_wChimeCfgAppDelchk(U4 * u4p_a_reqbit)
 {
     U1 u1_t_app;
 
-    u1_t_app = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_AUTOP);
+    u1_t_app  = u1_g_VardefAutopAva();
 
     if(u1_t_app == (U1)FALSE){
         vd_s_wChimeCfgReqDel(u4p_a_reqbit, (U1)WCHIME_REQ_SI_APP_DIS_ASSIST);
@@ -861,6 +861,9 @@ static  void    vd_s_wChimeCfgReqDel(U4 * u4_ap_reqbit, const U1 u1_a_REQ_ID)
 /*                                MET-D_SFTPOS-CSTD-1-00-B-C0.                                                                       */
 /*                                Change Name from RJTB_DBL1 to RJTB_DBL                                                             */
 /*  BEV-10    01/30/2026 YN       Change config for BEV FF2.(MET-M_DESTVARI-CSTD-0-01)                                               */
+/*  BEV-11    02/02/2026 YH       Change config for BEV Full_Function_2.                                                             */
+/*                                MET-S_ADMID-CSTD-0-07-B-C0/MET-S_ADBZR-CSTD-0-06-A-C0                                              */
+/*                                Separate AUTOP function judgement into AP_RMT and AP_NORMT.                                        */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
 /*  * ToN  = Toshiharu Nagata, Denso Techno                                                                                          */
@@ -886,6 +889,7 @@ static  void    vd_s_wChimeCfgReqDel(U4 * u4_ap_reqbit, const U1 u1_a_REQ_ID)
 /*  * KH   = Kiko Huerte, DTPH                                                                                                       */
 /*  * JS   = Jun Sugiyama, KSE                                                                                                       */
 /*  * NI   = Naoki Inagaki, KSE                                                                                                      */
+/*  * YH   = Yuki Hatakeyama, KSE                                                                                                    */
 /*  * YN   = Yujiro Nagaya, Denso Techno                                                                                             */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

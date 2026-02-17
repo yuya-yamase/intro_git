@@ -20,6 +20,7 @@
 #include "vardef_dest_cfg_private.h"
 #include "vardef_hcs_cfg_private.h"
 #include "vardef_omus_cfg_private.h"
+#include "vardef_autop_cfg_private.h"
 
 #include "oxcan.h"
 
@@ -73,6 +74,11 @@ const U2               u2_g_VDF_HCS_ASCEXT_RIM_U1  = (U2)RIMID_U1_VDF_HCS_ASCEXT
 const U1               u1_g_VDF_HCS_ASCEXT_RXC_INT = (U1)OXCAN_RXD_EVC_UNK;
 const U1               u1_g_VDF_HCS_ASCEXT_RXC_MAX = (U1)OXCAN_RXD_EVC_MAX;
 #endif /* #ifdef VARDEF_HCS_H */
+
+#ifdef VARDEF_AUTOP_H
+const U2               u2_g_VDF_AUTOP_CH_AP_RMT    = (U2)VDF_ESO_CH_AP_RMT;
+const U2               u2_g_VDF_AUTOP_CH_AP_NORMT  = (U2)VDF_ESO_CH_AP_NORMT;
+#endif /* #ifdef VARDEF_AUTOP_H */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 
@@ -283,6 +289,9 @@ U1      u1_s_VardefCfgPowerChk(void)
 /*  BEV-2      4/04/2025 KO       Change for BEV System_Consideration_1.(MET-C_HCS-CSTD-0-00-A-C0)                                   */
 /*  BEV-3     10/15/2025 SN       Configured for BEVstep3_Rebase                                                                     */
 /*  BEV-4      2/10/2026 SH       Added vardef_omus for BEV Step3                                                                    */
+/*  BEV-5      2/02/2026 YH       Change config for BEV Full_Function_2.                                                             */
+/*                                MET-S_ADMID-CSTD-0-07-B-C0/MET-S_ADBZR-CSTD-0-06-A-C0                                              */
+/*                                Added processing to integrate AP_RMT and AP_NORMT results.                                         */
 /*                                                                                                                                   */
 /*  * TN     = Takashi Nagai, Denso                                                                                                  */
 /*  * SF     = Seiya Fukutome, Denso Techno                                                                                          */
@@ -303,5 +312,6 @@ U1      u1_s_VardefCfgPowerChk(void)
 /*  * SF     = Shiro Furui, Denso Techno                                                                                             */
 /*  * KO     = Kazuto Oishi,  Denso Techno                                                                                           */
 /*  * SN     = Shimon Nambu, Denso Techno                                                                                            */
+/*  * YH     = Yuki Hatakeyama, KSE                                                                                                  */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
