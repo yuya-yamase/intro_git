@@ -26,6 +26,7 @@
 #include "veh_opemd.h"
 #include "calibration.h"
 #include "sbltsync.h"
+#include "vardef.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
