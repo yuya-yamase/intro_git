@@ -40,7 +40,8 @@
 #define DREC_TX_FNC_BIT_MAX                      (0x03U)
 #define DREC_TX_MAIN_TICK                        (50U)
 #define DREC_TX_CYC_TIME                         (1200U / DREC_TX_MAIN_TICK)
-#define DREC_TX_CYC_INIT                         (1U)
+#define DREC_TX_CYC_INIT                         (0U)
+#define DREC_TX_CYC_RESET                        (1U)
 #define DREC_TX_CNT_SIG                          (1U)
 
 #define DREC_TX_SHIFT_DATA_NM2                   (6U)
@@ -92,7 +93,7 @@ void    vd_g_DrectxBonInit(void)
     U4                  u4_tp_tx_data[DREC_TX_VM_2WORD];
     U1                  u1_t_tx;
 
-    u1_s_drec_com_cnt     = (U1)0U;
+    u1_s_drec_com_cnt     = (U1)DREC_TX_CYC_INIT;
     u1_s_drec_tx_datanm2  = (U1)0U;
 
     vd_g_Rim_WriteU1((U2)RIMID_U1_DREC_TX, u1_s_drec_tx_datanm2);
@@ -144,7 +145,7 @@ void    vd_g_DrectxRstInit(void)
     U1                  u1_t_rimsts;
     U1                  u1_t_tx;
 
-    u1_s_drec_com_cnt     = (U1)0U;
+    u1_s_drec_com_cnt     = (U1)DREC_TX_CYC_INIT;
     u1_s_drec_tx_datanm2  = (U1)0U;
 
     u1_t_br = (U1)0U;
@@ -204,7 +205,7 @@ void    vd_g_DrectxWkupInit(void)
     U1                  u1_t_rimsts;
     U1                  u1_t_tx;
 
-    u1_s_drec_com_cnt     = (U1)0U;
+    u1_s_drec_com_cnt     = (U1)DREC_TX_CYC_INIT;
     u1_s_drec_tx_datanm2  = (U1)0U;
 
     u1_t_br = (U1)0U;
@@ -265,7 +266,7 @@ void    vd_g_DrectxMainTask(void)
     if(u1_s_drec_com_cnt > (U1)DREC_TX_CYC_TIME){
         u1_s_drec_tx_datanm2 = (u1_s_drec_tx_datanm2 + (U1)DREC_TX_CNT_SIG) & (U1)DREC_TX_FNC_BIT_MAX;
         vd_g_Rim_WriteU1((U2)RIMID_U1_DREC_TX, u1_s_drec_tx_datanm2);
-        u1_s_drec_com_cnt = (U1)DREC_TX_CYC_INIT;
+        u1_s_drec_com_cnt = (U1)DREC_TX_CYC_RESET;
     }
 
     vd_s_DrectxMsg_MET1D51();
