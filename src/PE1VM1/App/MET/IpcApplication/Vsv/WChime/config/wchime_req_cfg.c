@@ -1253,7 +1253,7 @@ static U1   u1_s_wChimeCfgClesonVolGet(const U1 u1_a_REQ_SEL)
 /*  BEV-1     11/11/2025 SH       Configured for CONTBUZZ2-CSTD-0008                                                                 */
 /*  BEV-2     11/28/2025 HL       Add parameter of MET-S_TMBZR-CSTD-0-01-A-C0                                                        */
 /*  BEV-3     12/18/2025 ED       Change Macro name of MET-S_ADBZR-CSTD-0-06-A-C0                                                    */
-/*  BEV-4    02/05/2026  SN       Change B_PERMEM for BEV FF2. Change Mcst                                                           */
+/*  BEV-4     02/05/2026 SN       Change B_PERMEM for BEV FF2. Change Mcst                                                           */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
 /*  * ToN  = Toshiharu Nagata, Denso Techno                                                                                          */
