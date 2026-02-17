@@ -21,6 +21,7 @@
 #include "vardef_hcs_cfg_private.h"
 #include "vardef_omus_cfg_private.h"
 #include "vardef_autop_cfg_private.h"
+#include "vardef_mwbb_cfg_private.h"
 
 #include "oxcan.h"
 
@@ -79,6 +80,12 @@ const U1               u1_g_VDF_HCS_ASCEXT_RXC_MAX = (U1)OXCAN_RXD_EVC_MAX;
 const U2               u2_g_VDF_AUTOP_CH_AP_RMT    = (U2)VDF_ESO_CH_AP_RMT;
 const U2               u2_g_VDF_AUTOP_CH_AP_NORMT  = (U2)VDF_ESO_CH_AP_NORMT;
 #endif /* #ifdef VARDEF_AUTOP_H */
+
+#ifdef VARDEF_MWBB_H
+const U2               u2_g_VDF_MWBB_CH_SW_MWL_FRONT_FOG          = (U2)VDF_ESO_CH_SW_MWL_FRONT_FOG;
+const U2               u2_g_VDF_MWBB_CH_SW_MWL_REAR_FOG           = (U2)VDF_ESO_CH_SW_MWL_REAR_FOG;
+const U2               u2_g_VDF_MWBB_CH_SYS_SW_MULTI_WEATHERLAMP  = (U2)VDF_ESO_CH_SYS_SW_MULTI_WEATHERLAMP;
+#endif /* #ifdef VARDEF_MWBB_H */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 
@@ -292,6 +299,9 @@ U1      u1_s_VardefCfgPowerChk(void)
 /*  BEV-5      2/02/2026 YH       Change config for BEV Full_Function_2.                                                             */
 /*                                MET-S_ADMID-CSTD-0-07-B-C0/MET-S_ADBZR-CSTD-0-06-A-C0                                              */
 /*                                Added processing to integrate AP_RMT and AP_NORMT results.                                         */
+/*  BEV-6     02/03/2026 JS       Change config for BEV Full_Function_2.                                                             */
+/*                                MET-B_MWBB-CSTD-0-02-A-C0                                                                          */
+/*                                Added processing to summarize whether the three MWBB functions are enabled or disabled.            */
 /*                                                                                                                                   */
 /*  * TN     = Takashi Nagai, Denso                                                                                                  */
 /*  * SF     = Seiya Fukutome, Denso Techno                                                                                          */
@@ -313,5 +323,6 @@ U1      u1_s_VardefCfgPowerChk(void)
 /*  * KO     = Kazuto Oishi,  Denso Techno                                                                                           */
 /*  * SN     = Shimon Nambu, Denso Techno                                                                                            */
 /*  * YH     = Yuki Hatakeyama, KSE                                                                                                  */
+/*  * JS     = Jun Sugiyama, KSE                                                                                                     */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

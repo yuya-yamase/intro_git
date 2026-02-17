@@ -505,6 +505,52 @@ U1      u1_g_VdfEsoRx_SYS_SW_OBBPBD(void)
 }
 
 /*===================================================================================================================================*/
+/*  U1      u1_g_VdfEsoRx_SW_MWL_FRONT_FOG(void)                                                                                     */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         U1 u1_t_ava_rx  : signal status (active/inable)                                                                  */
+/*===================================================================================================================================*/
+U1      u1_g_VdfEsoRx_SW_MWL_FRONT_FOG(void)
+{
+    static const U1 u1_s_VDF_ESO_SW_FRONT_FOG = (U1)2U;
+    U1                 u1_t_rx;
+    U1                 u1_t_ava_rx;
+
+    u1_t_rx = (U1)0U;
+    (void)Com_ReceiveSignal(ComConf_ComSignal_FOG_FNC, &u1_t_rx);
+    if(u1_t_rx != u1_s_VDF_ESO_SW_FRONT_FOG){
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
+    }
+    else{
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_INA;
+    }
+
+    return(u1_t_ava_rx);
+}
+/*===================================================================================================================================*/
+/*  U1      u1_g_VdfEsoRx_SW_MWL_REAR_FOG(void)                                                                                      */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         U1 u1_t_ava_rx  : signal status (active/inable)                                                                  */
+/*===================================================================================================================================*/
+U1      u1_g_VdfEsoRx_SW_MWL_REAR_FOG(void)
+{
+    static const U1 u1_s_VDF_ESO_SW_REAR_FOG = (U1)2U;
+    U1                 u1_t_rx;
+    U1                 u1_t_ava_rx;
+
+    u1_t_rx = (U1)0U;
+    (void)Com_ReceiveSignal(ComConf_ComSignal_RFG_FNC, &u1_t_rx);
+    if(u1_t_rx != u1_s_VDF_ESO_SW_REAR_FOG){
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
+    }
+    else{
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_INA;
+    }
+
+    return(u1_t_ava_rx);
+}
+/*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
 /*                                                                                                                                   */
@@ -526,6 +572,9 @@ U1      u1_g_VdfEsoRx_SYS_SW_OBBPBD(void)
 /*  BEV-6    12/03/2025   KO      Added function for BEV System_Consideration_ADAS.(MET-B_OMRBB-CSTD-0-)                             */
 /*  BEV-7    12/03/2025   MA      SW_TITE Function presence judgment processing changed to bidirectional.(MET-B_TITEBB-CSTD-0-)      */
 /*  BEV-8    01/22/2026   MA      Added function for BEV FF2.(MET-B_PBDBB-CSTD-0-)                                                   */
+/*  BEV-9    02/03/2026   JS      Change config for BEV Full_Function_2                                                              */
+/*                                MET-B_MWBB-CSTD-0-02-A-C0                                                                          */
+/*                                Add MWL_FrFOG and MWL_RrFOG for use with the MULTI_WEATHERLAMP                                     */
 /*                                                                                                                                   */
 /*  * KT = Kenta Takaji, Denso Techno                                                                                                */
 /*  * HY = Haruki Yagi, KSE                                                                                                          */
@@ -534,4 +583,5 @@ U1      u1_g_VdfEsoRx_SYS_SW_OBBPBD(void)
 /*  * SN = Shizuka Nakajima, KSE                                                                                                     */
 /*  * KO = Kazuto Oishi, Denso Techno                                                                                                */
 /*  * MA = Misaki Aiki, Dendo Techno                                                                                                 */
+/*  * JS = Jun Sugiyama, KSE                                                                                                         */
 /*===================================================================================================================================*/
