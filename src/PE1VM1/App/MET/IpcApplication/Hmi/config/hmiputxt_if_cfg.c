@@ -230,6 +230,7 @@ const ST_ALERT_REQBIT   st_gp_HMIPUTXTREQBIT_SLOTC[HMIPUTXTCFG_IF_SLOTC_NUM] = {
 const ST_ALERT_REQBIT   st_gp_HMIPUTXTREQBIT_SLOTD[HMIPUTXTCFG_IF_SLOTD_NUM] = {
     {    (U2)ALERT_CH_M_SECMSG,             (U1)ALERT_REQ_M_SECMSG_UNREGISTERED,    (U1)0U,     (U4)0x01000000U    },
     {    (U2)ALERT_CH_B_SECBDC,             (U1)ALERT_REQ_B_SECBDC_UNREGISTERED,    (U1)0U,     (U4)0x01000000U    },
+    {    (U2)ALERT_CH_D_SECDDC,             (U1)ALERT_REQ_D_SECDDC_UNREGISTERED,    (U1)0U,     (U4)0x01000000U    },
     {    (U2)ALERT_CH_O_CHAMAL,             (U1)ALERT_REQ_O_CHAMAL_MALFUNC,         (U1)2U,     (U4)0x00400000U    },
     {    (U2)ALERT_CH_O_CHAMAL,             (U1)ALERT_REQ_O_CHAMAL_MALFUNC_BZ,      (U1)2U,     (U4)0x00400000U    },
     {    (U2)ALERT_CH_D_SBW_PD_RIS,         (U1)ALERT_REQ_D_SBW_PD_RIS_MSG_12,      (U1)4U,     (U4)0x00000004U    },
@@ -341,11 +342,14 @@ U2 u2_g_HmiputxtSizeReqbit(void){
 /*  BEV-11   12/05/2025  KH       Change for BEV System_Consideration_ADAS.(MET-C_STEER-CSTD-0-02-B-C0)                              */
 /*  BEV-12   12/19/2025  KH       Update for BEV System_Consideration_ADAS.(B_PBDKS / H_LEAUNF)                                      */
 /*  BEV-13   01/07/2026  SN       Change for BEV FF2.(MET-O_FNCLIM-CSTD-0-00-A-C0)                                                   */
-/*  BEV-13   02/10/2026  KO       Change for BEV FF2.(MET-M_SECMSG-CSTD-0-01-A-C0)                                                   */
-/*  BEV-14   01/15/2026  HT       Change for Full_function2 (MET-M_REMWAR-CSTD-2-04-A-C0)                                            */
+/*  BEV-14   02/10/2026  KO       Change for BEV FF2.(MET-M_SECMSG-CSTD-0-01-A-C0)                                                   */
+/*  BEV-15   01/15/2026  HT       Change for Full_function2 (MET-M_REMWAR-CSTD-2-04-A-C0)                                            */
 /*                                Removed "ALERT_REQ" in order to transfer signal transmission control from the MCU to the SoC       */
-/*  BEV-15   02/06/2026  HY       Change config for BEV Full_Function_2.                                                             */
+/*  BEV-16   02/06/2026  HY       Change config for BEV Full_Function_2.                                                             */
 /*                                MET-B_SECBDC-CSTD-0-00-A-C0                                                                        */
+/*                                Changed due to specification change from feature to legacy.                                        */
+/*  BEV-17   02/06/2026  YH       Change config for BEV Full_Function_2.                                                             */
+/*                                MET-D_SECDDC-CSTD-0-00-A-C0                                                                        */
 /*                                Changed due to specification change from feature to legacy.                                        */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
