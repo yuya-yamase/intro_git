@@ -309,8 +309,6 @@
 #define VDF_ESO_CH_SYS_MSBBSW_DAC                (278U)
 #define VDF_ESO_CH_SYS_4WDSYS_DISCON             (279U)
 
-#define VDF_ESO_CH_GVIF2                         (65535U)
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define VDF_ESO_NOW_AVA                          ((VDF_ESO_NUM_CH + 31U) >> 5U)
 
