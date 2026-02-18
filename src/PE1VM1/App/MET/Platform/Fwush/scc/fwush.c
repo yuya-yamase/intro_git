@@ -258,7 +258,7 @@ static const ST_FWUSH_TRANSITION_ENTRY stp_sp3_ST_TABLE[FWUSH_MAIN_STATE_MAX]
         /* FWUSH_SUB_STATE_WAITING                                                                               */
         {
             {(U1)FWUSH_MAIN_STATE_ROLLBACK, (U1)FWUSH_SUB_STATE_WAITING,    vdp_PTR_NA},                    /* FWUSH_EVENT_NONE            */
-            {(U1)FWUSH_MAIN_STATE_ROLLBACK, (U1)FWUSH_SUB_STATE_PROCESSING, &vd_s_FwushStartJob},     /* FWUSH_EVENT_NEW_REQUEST     */
+            {(U1)FWUSH_MAIN_STATE_ROLLBACK, (U1)FWUSH_SUB_STATE_PROCESSING, &vd_s_FwushStartJob},           /* FWUSH_EVENT_NEW_REQUEST     */
             {(U1)FWUSH_MAIN_STATE_ROLLBACK, (U1)FWUSH_SUB_STATE_WAITING,    vdp_PTR_NA},                    /* FWUSH_EVENT_SAME_REQUEST    */
             {(U1)FWUSH_MAIN_STATE_ROLLBACK, (U1)FWUSH_SUB_STATE_WAITING,    vdp_PTR_NA},                    /* FWUSH_EVENT_MEMACC_SUCCESS  */
             {(U1)FWUSH_MAIN_STATE_ROLLBACK, (U1)FWUSH_SUB_STATE_WAITING,    vdp_PTR_NA},                    /* FWUSH_EVENT_MEMACC_PROGRESS */
@@ -943,7 +943,6 @@ static void vd_s_FwushMakeResData(U1 u1_a_subtype, U1 u1_a_response)
         u4_tp_res_data[0] = (U4)0x07U | ((U4)u1_a_response << (U1)8U) | ((U4)0x01U << (U1)16U);
         u4_tp_res_data[1] = (U4)0x00U;
         vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_FWUPXRES, &u4_tp_res_data[0], (U2)FWUSH_RES_WORDS);
-        u1_sp_fwush_header[FWUSH_REQ_SUBTYPE_OFFSET] = FWUSH_REQ_SUBTYPE_NA;
         break;
         
     case (U1)FWUSH_REQ_SUBTYPE_RUN:
@@ -951,21 +950,18 @@ static void vd_s_FwushMakeResData(U1 u1_a_subtype, U1 u1_a_response)
                           | (U4)((u2_s_run_offset_prev & (U2)0xFF00U) << (U1)16U));
         u4_tp_res_data[1] = (U4)((u2_s_run_offset_prev & (U2)0x00FFU)) | ((U4)0x04U << (U1)8U) | ((U4)0x00U << (U1)16U);
         vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_FWUPXRES, &u4_tp_res_data[0], (U2)FWUSH_RES_WORDS);
-        u1_sp_fwush_header[FWUSH_REQ_SUBTYPE_OFFSET] = FWUSH_REQ_SUBTYPE_NA;
         break;
         
     case (U1)FWUSH_REQ_SUBTYPE_VERI:
         u4_tp_res_data[0] = (U4)0x19U | ((U4)u1_a_response << (U1)8U) | ((U4)0x01U << (U1)16U);
         u4_tp_res_data[1] = (U4)0x00U;
         vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_FWUPXRES, &u4_tp_res_data[0], (U2)FWUSH_RES_WORDS);
-        u1_sp_fwush_header[FWUSH_REQ_SUBTYPE_OFFSET] = FWUSH_REQ_SUBTYPE_NA;
         break;
         
     case (U1)FWUSH_REQ_SUBTYPE_ACT:
         u4_tp_res_data[0] = (U4)0x38U | ((U4)u1_a_response << (U1)8U);
         u4_tp_res_data[1] = (U4)0x00U;
         vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_FWUPXRES, &u4_tp_res_data[0], (U2)FWUSH_RES_WORDS);
-        u1_sp_fwush_header[FWUSH_REQ_SUBTYPE_OFFSET] = FWUSH_REQ_SUBTYPE_NA;
         break;
         
     default:

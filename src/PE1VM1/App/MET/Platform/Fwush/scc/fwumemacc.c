@@ -515,7 +515,6 @@ static void vd_s_FwuMemAccSwitchTask(void)
 static void vd_s_FwuMemAccCrcCalc(void)
 {
     U4  u4_t_remaining_length;
-    U4  u4_t_check_length;
     U1* u1p_t_check_start_ptr;
     U1  u1_t_is_final;
     
@@ -526,10 +525,8 @@ static void vd_s_FwuMemAccCrcCalc(void)
         /* subsequent calls are guarded against negative values by the maximum value guard below */
         
         if (u4_t_remaining_length > (U4)FWUMEMACC_CRCCHK_LENGTH) {
-            u4_t_check_length = (U4)FWUMEMACC_CRCCHK_LENGTH;
             u1_t_is_final = (U1)FALSE;
         } else {
-            u4_t_check_length = u4_t_remaining_length;
             u1_t_is_final = (U1)TRUE;
         }
         
@@ -537,7 +534,7 @@ static void vd_s_FwuMemAccCrcCalc(void)
         u1p_t_check_start_ptr = (U1*)(u4_s_start_address + ((U4)u2_s_crc_offset * (U4)FWUMEMACC_CRCCHK_LENGTH));
         u4_s_crc_result = u4_g_Crc32(u4_s_crc_result,
                                       u1p_t_check_start_ptr,
-                                      u4_t_check_length,
+                                      FWUMEMACC_CRCCHK_LENGTH,
                                       u1_t_is_final);
         
         u2_s_crc_offset++;

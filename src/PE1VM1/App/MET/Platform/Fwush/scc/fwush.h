@@ -84,7 +84,7 @@
 #define FWUSH_REQ_SUBTYPE_RUN                   (0x02U)        /* Run */
 #define FWUSH_REQ_SUBTYPE_VERI                  (0x18U)        /* Verify */
 #define FWUSH_REQ_SUBTYPE_ACT                   (0x37U)        /* Activate */
-#define FWUSH_REQ_SUBTYPE_CANCEL                (0xFFU)        /* Cancel (reserved for future) */
+#define FWUSH_REQ_SUBTYPE_CANCEL                (0xFEU)        /* Cancel (reserved for future) */
 
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
