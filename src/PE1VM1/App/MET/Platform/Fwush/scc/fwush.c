@@ -623,10 +623,6 @@ static U1 u1_s_FwushCheckMemAccJobEvent(void)
                 if (u1_s_rollback_trigger_flag == (U1)TRUE) {
                     /* If rollback is triggered, change event to ROLLBACK */
                     u1_t_event = (U1)FWUSH_EVENT_MEMACC_ACT_ROLLBACK;
-                } else {
-                    /* Normal completion -> system reset -> PREP_WAITING */
-                    /* Note: actual reset will be implemented in Phase3 (equivalent to vd_g_FwushInit) */
-                    vd_g_FwushInit();
                 }
             }
             break;
@@ -787,8 +783,9 @@ static void vd_s_FwushHandleJobSuccess(void)
     vd_s_FwushMakeResData(u1_sp_fwush_header[FWUSH_REQ_SUBTYPE_OFFSET], (U1)FWUSH_ACK_OK);
     
     /* When ROLLBACK completes: system reset -> PREP_WAITING */
-    if (u1_s_main_state == (U1)FWUSH_MAIN_STATE_PREP &&
-        u1_s_rollback_in_progress != (U1)FALSE) {
+    if ((u1_s_main_state == (U1)FWUSH_MAIN_STATE_PREP &&
+        u1_s_rollback_in_progress != (U1)FALSE) || 
+        (u1_s_main_state == (U1)FWUSH_MAIN_STATE_ACT)) {
         /* Initialization after rollback completion */
         vd_g_FwushInit();
     }

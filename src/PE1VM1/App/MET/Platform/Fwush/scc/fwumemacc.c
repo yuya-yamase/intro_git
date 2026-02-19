@@ -272,7 +272,7 @@ U1 u1_g_FwuMemAccGetUpdateStatus(void)
     U2 u2_t_max_blocks;
 
     if (u4_s_data_length > (U4)FWUMEMACC_WRITE_LENGTH) {
-        u2_t_max_blocks = (U2)(u4_s_data_length / (U4)FWUMEMACC_WRITE_LENGTH) - (U2)1U;
+        u2_t_max_blocks = (U2)(u4_s_data_length / (U4)FWUMEMACC_WRITE_LENGTH);
     } else {
         u2_t_max_blocks = (U2)0U;
     }
@@ -442,7 +442,7 @@ static void vd_s_FwuMemAccUpdateTask(void)
 
                 /* All blocks completion check */
                 if (u4_s_data_length > (U4)FWUMEMACC_WRITE_LENGTH) {
-                    u2_t_max_blocks = (U2)(u4_s_data_length / (U4)FWUMEMACC_WRITE_LENGTH) - (U2)1U;
+                    u2_t_max_blocks = (U2)(u4_s_data_length / (U4)FWUMEMACC_WRITE_LENGTH);
                 } else {
                     u2_t_max_blocks = (U2)0U;
                 }
