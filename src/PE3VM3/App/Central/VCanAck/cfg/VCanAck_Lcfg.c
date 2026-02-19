@@ -1,21 +1,18 @@
-/* ChipCom_h_v1_0_0                                                         */
+/* VCanAck_Lcfg_c_v1-0-0                                                    */
 /****************************************************************************/
 /* Copyright (C) 2025 Denso Co.,Ltd. All rights reserved.                   */
 /****************************************************************************/
 
 /****************************************************************************/
-/* Object Name  | ChipCom/HEADER                                            */
+/* Object Name  | VCanAck_Lcfg/CODE                                         */
 /*--------------------------------------------------------------------------*/
 /* Notes        |                                                           */
 /****************************************************************************/
 
-#ifndef CHIPCOM_CONFIG_H
-#define CHIPCOM_CONFIG_H
-
 /*--------------------------------------------------------------------------*/
 /* Include Files                                                            */
 /*--------------------------------------------------------------------------*/
-#include "ChipCom.h"
+#include "VCanAck_Lcfg.h"
 
 /*--------------------------------------------------------------------------*/
 /* Macros                                                                   */
@@ -32,11 +29,39 @@
 /*--------------------------------------------------------------------------*/
 /* Data                                                                     */
 /*--------------------------------------------------------------------------*/
+#define VCANACK_START_SEC_VAR_CLEARED_32
+#include <VCanAck_MemMap.h>
+#define VCANACK_STOP_SEC_VAR_CLEARED_32
+#include <VCanAck_MemMap.h>
 
 /*--------------------------------------------------------------------------*/
 /* Constants                                                                */
 /*--------------------------------------------------------------------------*/
+#define VCANACK_START_SEC_CONFIG_DATA_32
+#include <VCanAck_MemMap.h>
 
-#endif /* CHIPCOM_CONFIG_H */
+/* Number of Rx vcc channel */ 
+const uint16 cu2VCanAck_RxVccChNum = VCANACK_CFG_RX_VCC_CH_NUM;
+
+/* Rx vcc channels */
+const uint32 cu4VCanAck_RxVccChTbl[VCANACK_CFG_RX_VCC_CH_NUM] =
+	{
+		VCANACK_CFG_RX_VCC_CH0,
+		VCANACK_CFG_RX_VCC_CH1,
+		VCANACK_CFG_RX_VCC_CH2
+	};
+
+/* Tx vcc channel */
+const uint32 cu4VCanAck_TxVccCh = VCANACK_CFG_TX_VCC_CH;
+
+/* Rx limit */
+const uint16 cu2VCanAck_RxLimit = VCANACK_CFG_RX_LIMIT;
+
+#define VCANACK_STOP_SEC_CONFIG_DATA_32
+#include <VCanAck_MemMap.h>
+
+/*--------------------------------------------------------------------------*/
+/* Functions                                                                */
+/*--------------------------------------------------------------------------*/
 
 /**** End of File ***********************************************************/

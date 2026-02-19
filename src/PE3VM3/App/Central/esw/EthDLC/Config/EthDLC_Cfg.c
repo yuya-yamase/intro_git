@@ -7,7 +7,7 @@
 #include <VIS.h>
 #include <EthDLC.h>
 #include <EthDLC_STM.h>
-#include <chipcom.h>
+#include <ChipCom.h>
 /* -------------------------------------------------------------------------- */
 #define EthDLC_START_SEC_CODE
 #include <EthDLC_MemMap.h>

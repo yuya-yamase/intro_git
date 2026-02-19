@@ -17,7 +17,7 @@
 /*------------------------------*/
 /*	通信フレーム最大長			*/
 /*------------------------------*/
-#define XSPI_FRM_MAX				(1060UL)			/* フレーム最大長		*/
+#define XSPI_FRM_MAX				(1212UL)			/* フレーム最大長		*/
 #define XSPI_FRM_MAX_WORD			(XSPI_FRM_MAX / 4)	/* フレーム最大長（4byte単位） */
 #define XSPI_RCV_FRM_MAX			(XSPI_FRM_MAX_WORD)	/* 受信フレーム最大長	*/
 #define XSPI_SND_FRM_MAX			(XSPI_FRM_MAX_WORD)	/* 送信フレーム最大長	*/

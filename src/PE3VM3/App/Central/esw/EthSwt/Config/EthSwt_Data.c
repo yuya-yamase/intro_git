@@ -7,7 +7,7 @@
 #include <EthSwt_SWIC_Cfg.h>
 #include <EthSwt_SWIC.h>
 #include <LIB.h>
-#include <chipcom.h>
+#include <ChipCom.h>
 #include <EthSwt.h>
 #include <EthSwt_SWIC_MIB.h>
 /* -------------------------------------------------------------------------- */
