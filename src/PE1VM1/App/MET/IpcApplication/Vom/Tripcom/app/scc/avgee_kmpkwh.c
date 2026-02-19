@@ -1,4 +1,4 @@
-/* 2.2.1 */
+/* 2.4.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,13 +10,14 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define AVGEE_KMPKWH_C_MAJOR                      (2)
-#define AVGEE_KMPKWH_C_MINOR                      (2)
-#define AVGEE_KMPKWH_C_PATCH                      (1)
+#define AVGEE_KMPKWH_C_MINOR                      (4)
+#define AVGEE_KMPKWH_C_PATCH                      (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "avgee_kmpkwh_cfg_private.h"
+#include "locale.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -75,15 +76,19 @@ static  ST_AVGECON_VAR                            st_sp_avgee_var[AVGEE_NUM_CNTT
 static  U1                                        u1_s_avgee_applsts;
 static  U4                                        u4_s_avgee_econ_prev_rst;
 static  U1                                        u1_s_avgee_econ_init_bk;
+static  U4                                        u4_s_avgee_asevdt;
+static  S4                                        s4_s_avgee_astoec;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static U1          u1_s_AvgEeOvrfChk(const S4 s4_a_USD, const S4 s4_a_EPUSD);
+static U2          u2_s_AvgeeDtCalcTx(void);
+static U2          u2_s_AvgeeEcCalcTx(void);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static const ST_AVGECON_CNTT                    st_sp_AVGEE_CNTTS_CFG[AVGEE_NUM_CNTTS]      = {
+static const ST_AVGECON_CNTT                    st_sp_AVGEE_CNTTS_CFG[AVGEE_CALC_CNTTS_NUM]      = {
     /*  #define AVGEE_CNTT_TA                           (0)     */
     {
         (U2)0U,
@@ -176,7 +181,7 @@ void          vd_g_AvgEeInit(void)
 {
     U4          u4_t_loop;
 
-    for (u4_t_loop = (U4)0U; u4_t_loop < (U4)AVGEE_NUM_CNTTS; u4_t_loop++) {
+    for (u4_t_loop = (U4)0U; u4_t_loop < (U4)AVGEE_CALC_CNTTS_NUM; u4_t_loop++) {
         st_sp_avgee_var[u4_t_loop].u2_calctm     = (U2)U2_MAX;
         st_sp_avgee_var[u4_t_loop].u1_calcstsbit = (U1)AVGEE_CALCACT_ACT;
         st_sp_avgee_var[u4_t_loop].u1_initupdt   = (U1)FALSE;
@@ -187,6 +192,8 @@ void          vd_g_AvgEeInit(void)
     u1_s_avgee_applsts = (U1)TRIPCOM_STSBIT_UNKNOWN;
     u4_s_avgee_econ_prev_rst = (U4)0U;
     u1_s_avgee_econ_init_bk  = (U1)FALSE;
+    u4_s_avgee_asevdt        = (U4)0U;
+    s4_s_avgee_astoec        = (S4)0;
 }
 
 /*===================================================================================================================================*/
@@ -236,62 +243,64 @@ U1            u1_g_AvgEeCalcTrnst(const U1 u1_a_CNTTID, const U2 * u2_ap_STSFIEL
     U1                                          u1_t_evtbit;
     U1                                          u1_t_calcact;
 
-
-    stp_t_CNTT = &st_sp_AVGEE_CNTTS_CFG[u1_a_CNTTID];
-    stp_t_var  = &st_sp_avgee_var[u1_a_CNTTID];
-
-    if ((stp_t_var->u2_calctm < (U2)U2_MAX) &&
-        ((u2_ap_STSFIELD[TRIPCOM_STSFIELD_VSTS] & (U2)TRIPCOM_VEHSTS_DRVCYC) != (U2)0U)) {
-
-        stp_t_var->u2_calctm++;
-    }
-    else {
-        stp_t_var->u2_calctm = (U2)0U;
-    }
-
-    u1_t_evtbit = (U1)0U;
-    if (stp_t_var->u2_calctm >= stp_t_CNTT->u2_calc_intrvl) {
-        u1_t_evtbit  = (U1)AVGEE_EVTBIT_CALCTMEXPIRD;
-    }
-    if ((u2_ap_STSFIELD[TRIPCOM_STSFIELD_AUTO_RSTRQ] & stp_t_CNTT->u2_autoreset) != (U2)0U) {
-        u1_t_evtbit |= (U1)AVGEE_EVTBIT_RESET;
-    }
-    if ((u2_ap_STSFIELD[TRIPCOM_STSFIELD_MANUAL_RSTRQ] & stp_t_CNTT->u2_manualreset) != (U2)0U) {
-        u1_t_evtbit |= (U1)AVGEE_EVTBIT_RESET;
-    }
-
-    if ((u2_ap_STSFIELD[TRIPCOM_STSFIELD_OTHRQ] & stp_t_CNTT->u2_pause) != (U2)0U) {
-        u1_t_evtbit |= (U1)AVGEE_EVTBIT_PAUSE;
-    }
-
-    u1_t_calcact = (U1)AVGEE_CALCACT_INACT;
-    if (stp_t_var->u1_calcstsbit < (U1)AVGEE_NUM_CALCSTS) {
-        u1_t_calcact = u1_sp2_AVGEE_CALC_STM[u1_t_evtbit][stp_t_var->u1_calcstsbit];
-    }
-
     u1_t_update = (U1)FALSE;
-    if ((u1_t_calcact & (U1)AVGEE_ACT_UPDATE) != (U1)0U) {
-        stp_t_var->u2_calctm = (U2)0U;
-        u1_t_update = (U1)TRUE;
-        stp_t_var->u1_rstterm  = (U1)FALSE;
-    }
-    stp_t_var->u1_initupdt = (U1)FALSE;
-    if ((u1_t_calcact & (U1)AVGEE_ACT_VALINIT) != (U1)0U) {
-        stp_t_var->u1_initupdt = (U1)TRUE;
-        stp_t_var->u1_rstterm  = (U1)TRUE;
-    }
 
-    stp_t_var->u1_calcstsbit = u1_t_calcact & (U1)AVGEE_CALCSTS_ACT;
+    if (u1_a_CNTTID < (U1)AVGEE_CALC_CNTTS_NUM) {
+        stp_t_CNTT = &st_sp_AVGEE_CNTTS_CFG[u1_a_CNTTID];
+        stp_t_var = &st_sp_avgee_var[u1_a_CNTTID];
 
-    if((u1_a_CNTTID == (U1)AVGEE_CNTT_ONEM) && 
-       ((u2_ap_STSFIELD[TRIPCOM_STSFIELD_AUTO_RSTRQ] & (U2)TRIPCOM_RSTRQBIT_A_DRVCYC_OFF) !=(U2)0U)) {
-        stp_t_var->u1_initupdt   = (U1)TRUE;
-        stp_t_var->u2_calctm     = (U2)0U;
-        u1_t_update              = (U1)TRUE;
-    }
-    if((u1_a_CNTTID == (U1)AVGEE_CNTT_TA) &&
-       (stp_t_var->u1_initupdt == (U1)TRUE) && (u1_s_avgee_econ_init_bk == (U1)FALSE)) {
-        u4_s_avgee_econ_prev_rst = u4_g_TripcomMsGetAccmltVal(stp_t_CNTT->u1_ms_economy_id);
+        if ((stp_t_var->u2_calctm < (U2)U2_MAX) &&
+            ((u2_ap_STSFIELD[TRIPCOM_STSFIELD_VSTS] & (U2)TRIPCOM_VEHSTS_DRVCYC) != (U2)0U)) {
+
+            stp_t_var->u2_calctm++;
+        }
+        else {
+            stp_t_var->u2_calctm = (U2)0U;
+        }
+
+        u1_t_evtbit = (U1)0U;
+        if (stp_t_var->u2_calctm >= stp_t_CNTT->u2_calc_intrvl) {
+            u1_t_evtbit = (U1)AVGEE_EVTBIT_CALCTMEXPIRD;
+        }
+        if ((u2_ap_STSFIELD[TRIPCOM_STSFIELD_AUTO_RSTRQ] & stp_t_CNTT->u2_autoreset) != (U2)0U) {
+            u1_t_evtbit |= (U1)AVGEE_EVTBIT_RESET;
+        }
+        if ((u2_ap_STSFIELD[TRIPCOM_STSFIELD_MANUAL_RSTRQ] & stp_t_CNTT->u2_manualreset) != (U2)0U) {
+            u1_t_evtbit |= (U1)AVGEE_EVTBIT_RESET;
+        }
+
+        if ((u2_ap_STSFIELD[TRIPCOM_STSFIELD_OTHRQ] & stp_t_CNTT->u2_pause) != (U2)0U) {
+            u1_t_evtbit |= (U1)AVGEE_EVTBIT_PAUSE;
+        }
+
+        u1_t_calcact = (U1)AVGEE_CALCACT_INACT;
+        if (stp_t_var->u1_calcstsbit < (U1)AVGEE_NUM_CALCSTS) {
+            u1_t_calcact = u1_sp2_AVGEE_CALC_STM[u1_t_evtbit][stp_t_var->u1_calcstsbit];
+        }
+
+        if ((u1_t_calcact & (U1)AVGEE_ACT_UPDATE) != (U1)0U) {
+            stp_t_var->u2_calctm = (U2)0U;
+            u1_t_update = (U1)TRUE;
+            stp_t_var->u1_rstterm = (U1)FALSE;
+        }
+        stp_t_var->u1_initupdt = (U1)FALSE;
+        if ((u1_t_calcact & (U1)AVGEE_ACT_VALINIT) != (U1)0U) {
+            stp_t_var->u1_initupdt = (U1)TRUE;
+            stp_t_var->u1_rstterm = (U1)TRUE;
+        }
+
+        stp_t_var->u1_calcstsbit = u1_t_calcact & (U1)AVGEE_CALCSTS_ACT;
+
+        if ((u1_a_CNTTID == (U1)AVGEE_CNTT_ONEM) &&
+            ((u2_ap_STSFIELD[TRIPCOM_STSFIELD_AUTO_RSTRQ] & (U2)TRIPCOM_RSTRQBIT_A_DRVCYC_OFF) != (U2)0U)) {
+            stp_t_var->u1_initupdt   = (U1)TRUE;
+            stp_t_var->u2_calctm     = (U2)0U;
+            u1_t_update              = (U1)TRUE;
+        }
+        if ((u1_a_CNTTID == (U1)AVGEE_CNTT_TA) &&
+            (stp_t_var->u1_initupdt == (U1)TRUE) && (u1_s_avgee_econ_init_bk == (U1)FALSE)) {
+            u4_s_avgee_econ_prev_rst = u4_g_TripcomMsGetAccmltVal(stp_t_CNTT->u1_ms_economy_id);
+        }
     }
 
     return (u1_t_update);
@@ -315,7 +324,7 @@ void          vd_g_AvgEeAccmlt(const U1 u1_a_CNTTID, const U2 * u2_ap_STSFIELD, 
     U4                                          u4_t_sftval;
 
 
-    if (u1_a_CNTTID < (U1)AVGEE_NUM_CNTTS) {
+    if (u1_a_CNTTID < (U1)AVGEE_CALC_CNTTS_NUM) {
         stp_t_CNTT   = &st_sp_AVGEE_CNTTS_CFG[u1_a_CNTTID];
 
         s4_t_epusd   = (S4)u4_ap_DELTA[TRIPCOM_DELTA_DC_INSTEPUSD_PC];
@@ -367,11 +376,17 @@ void          vd_g_AvgEeUpdt(const U1 u1_a_CNTTID)
 
 
 
-    if (u1_a_CNTTID < (U1)AVGEE_NUM_CNTTS) {
+    if (u1_a_CNTTID < (U1)AVGEE_CALC_CNTTS_NUM) {
         stp_t_CNTT = &st_sp_AVGEE_CNTTS_CFG[u1_a_CNTTID];
 
         u4_t_usd    = u4_g_TripcomMsGetAccmltVal(stp_t_CNTT->u1_ms_used_id  );
         u4_t_odocnt = u4_g_TripcomMsGetAccmltVal(stp_t_CNTT->u1_ms_odocnt_id);
+
+        if (u1_a_CNTTID == (U1)AVGEE_CNTT_DC) {
+            s4_s_avgee_astoec = (S4)u4_t_usd;
+            u4_s_avgee_asevdt = u4_t_odocnt;
+        }
+ 
         
         if ((S4)u4_t_usd >= (S4)0) {
             u4_t_economy = u4_g_TripcomCalcAvgEeKmpkwh(u4_t_odocnt, u4_t_usd);
@@ -399,7 +414,7 @@ void          vd_g_AvgEeGrphUpdt(const U1 u1_a_CNTTID)
     const ST_AVGECON_CNTT *                     stp_t_CNTT;
     U4                                          u4_t_economy;
 
-    if (u1_a_CNTTID < (U1)AVGEE_NUM_CNTTS) {
+    if (u1_a_CNTTID < (U1)AVGEE_CALC_CNTTS_NUM) {
         stp_t_CNTT = &st_sp_AVGEE_CNTTS_CFG[u1_a_CNTTID];
         switch(u1_a_CNTTID){
             case (U1)AVGEE_CNTT_TA:
@@ -432,7 +447,7 @@ void            vd_g_AvgEeRstImmw(const U1 u1_a_ACTV, const U1 u1_a_CNTTID, cons
     const ST_AVGECON_CNTT *                     stp_t_CNTT;
     ST_AVGECON_VAR *                            stp_t_var;
 
-    if (u1_a_CNTTID < (U1)AVGEE_NUM_CNTTS) {
+    if (u1_a_CNTTID < (U1)AVGEE_CALC_CNTTS_NUM) {
         stp_t_CNTT = &st_sp_AVGEE_CNTTS_CFG[u1_a_CNTTID];
         stp_t_var  = &st_sp_avgee_var[u1_a_CNTTID];
         vd_g_AvgEconRstImmw(u1_a_ACTV, stp_t_CNTT, stp_t_var, u2_ap_STSFIELD);
@@ -451,7 +466,7 @@ U1            u1_g_AvgEeKmpkwh(const U1 u1_a_AVG_EE_CH, U4 * u4p_a_kmpkwh)
 
 
     u1_t_status = (U1)TRIPCOM_STSBIT_INVALID;
-    if (u1_a_AVG_EE_CH < (U1)AVGEE_NUM_CNTTS) {
+    if (u1_a_AVG_EE_CH < (U1)AVGEE_CALC_CNTTS_NUM) {
         if (u4p_a_kmpkwh != vdp_PTR_NA) {
             (*u4p_a_kmpkwh) = u4_g_TripcomMsGetAccmltVal(st_sp_AVGEE_CNTTS_CFG[u1_a_AVG_EE_CH].u1_ms_economy_id);
         }
@@ -472,7 +487,7 @@ U1              u1_g_AvgEeRstImmwRslt(const U1 u1_a_AVG_EE_CH)
     U1                                          u1_t_rslt;
 
     u1_t_rslt = (U1)TRIPCOM_RSTIMMW_UNK;
-    if (u1_a_AVG_EE_CH < (U1)AVGEE_NUM_CNTTS) {
+    if (u1_a_AVG_EE_CH < (U1)AVGEE_CALC_CNTTS_NUM) {
         u1_t_rslt = st_sp_avgee_var[u1_a_AVG_EE_CH].u1_rstimmw;
     }
 
@@ -493,17 +508,103 @@ U2            u2_g_AvgEeCalcTx(const U1 u1_a_CNTTID, const U1 u1_a_UNIT)
 
     u2_t_txval = (U2)TRIPCOM_CANTX_UNKNOWN;
 
-    if (u1_a_CNTTID < (U1)AVGFE_NUM_CNTTS) {
+    if (u1_a_CNTTID < (U1)AVGEE_CALC_CNTTS_NUM) {
         stp_t_CNTT = &st_sp_AVGEE_CNTTS_CFG[u1_a_CNTTID];
 
         if ((u1_s_avgee_applsts & (U1)TRIPCOM_STSBIT_INVALID) != (U1)0U) {
             u2_t_txval = stp_t_CNTT->u2_cantx_fail;
         }
         else {
-            u2_t_txval = u2_g_AvgEconCalcTx(stp_t_CNTT, st_sp_avgee_var[u1_a_CNTTID].u1_rstterm, u1_a_UNIT, (U1)AVGECON_ENGYTYPE_ELPW);
+            u2_t_txval = u2_g_AvgEconCalcTx(stp_t_CNTT, st_sp_avgee_var[u1_a_CNTTID].u1_rstterm, u1_a_UNIT);
         }
     }
+    else {
+        if (u1_a_CNTTID == (U1)AVGEE_CNTT_DC_DT) {
+            u2_t_txval = u2_s_AvgeeDtCalcTx();
+        }
+        else if (u1_a_CNTTID == (U1)AVGEE_CNTT_DC_EC) {
+            u2_t_txval = u2_s_AvgeeEcCalcTx();
+        }
+        else {
+            /* do nothing */
+        }
+    }
+    return (u2_t_txval);
+}
 
+/*===================================================================================================================================*/
+/* static U2       u2_s_AvgeeDtCalcTx(void)                                                                                          */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static U2     u2_s_AvgeeDtCalcTx(void)
+{
+    static const U2 u2_s_TRIPCOM_COMTX_EVDT_MAX     = (U2)0xFFFDU;
+    static const U2 u2_s_TRIPCOM_COMTX_EVDT_RESCONV = (U2)1000U;    /* [0.1m/km] / 0.1res */
+    
+    U4              u4_t_asevdt;
+    U2              u2_t_txval;
+    U1              u1_t_dt_unit;
+    U1              u1_t_cnvsts;
+    U1              u1_tp_unittype[TRIPCOM_NUM_CANTXUNIT];
+
+    u2_t_txval  = (U2)TRIPCOM_CANTX_UNKNOWN;
+    u4_t_asevdt = u4_s_avgee_asevdt;
+
+    vd_g_TripcomCfgGetUnit(&u1_tp_unittype[0]);
+    u1_t_dt_unit = u1_tp_unittype[TRIPCOM_CANTXUNIT_DIST];
+
+    if ((u1_s_avgee_applsts & (U1)TRIPCOM_STSBIT_INVALID) != (U1)0U) {
+        u2_t_txval = (U2)TRIPCOM_CANTX_TIMEOUT;
+    }
+    else {
+        u1_t_cnvsts = u1_g_TripcomCalcTxCnvtDist(&u4_t_asevdt, u1_t_dt_unit);
+        if (u1_t_cnvsts == (U1)TRIPCOM_STSBIT_VALID) {
+            u4_t_asevdt /= (U4)u2_s_TRIPCOM_COMTX_EVDT_RESCONV;
+            if (u4_t_asevdt < (U4)u2_s_TRIPCOM_COMTX_EVDT_MAX) {
+                u2_t_txval = (U2)u4_t_asevdt;
+            }
+            else {
+                u2_t_txval = u2_s_TRIPCOM_COMTX_EVDT_MAX;
+            }
+        }
+    }
+    return (u2_t_txval);
+}
+/*===================================================================================================================================*/
+/* static U2       u2_s_AvgeeEcCalcTx(void)                                                                                          */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static U2     u2_s_AvgeeEcCalcTx(void)
+{
+    static const U2 u2_s_TRIPCOM_COMTX_TOEC_MAX     = (U2)0xFFFDU;
+    static const U2 u2_s_TRIPCOM_COMTX_TOEC_RESCONV = (U2)10000U;    /* [0.01wh/kwh] / 0.1res */
+    U2              u2_t_txval;
+    S4              s4_t_astoec;
+
+    u2_t_txval  = (U2)TRIPCOM_CANTX_UNKNOWN;
+    s4_t_astoec = s4_s_avgee_astoec;
+
+    if ((u1_s_avgee_applsts & (U1)TRIPCOM_STSBIT_INVALID) != (U1)0U) {
+        u2_t_txval = (U2)TRIPCOM_CANTX_TIMEOUT;
+    }
+    else {
+        if (s4_t_astoec >= (S4)0) {
+            s4_t_astoec /= (S4)(U4)u2_s_TRIPCOM_COMTX_TOEC_RESCONV;
+            if (s4_t_astoec < (S4)(U4)u2_s_TRIPCOM_COMTX_TOEC_MAX) {
+                u2_t_txval = (U2)(U4)s4_t_astoec;
+            }
+            else {
+                u2_t_txval = u2_s_TRIPCOM_COMTX_TOEC_MAX;
+            }
+        }
+        else {
+            u2_t_txval = (U2)0U;
+        }
+    }
     return (u2_t_txval);
 }
 
@@ -560,7 +661,9 @@ void            vd_g_AvgEePostTask(void)
 /*  2.0.3    02/25/2022  TA(M)    Delete call vd_g_AvgEeUpdt((U1)AVGEE_CNTT_TA) at vd_g_AvgEeInit                                    */
 /*  2.1.0    01/10/2024  TH       for 19PFv3  Add AvgGrph                                                                            */
 /*  2.2.0    02/18/2025  MaO(M)   Add privacy data delete/result API                                                                 */
-/*  2.2.1    04/22/2025  KM       Bug fix ： Change update timing of u1_s_avgee_econ_init_bk                                          */
+/*  2.2.1    04/22/2025  KM       Bug fix : Change update timing of u1_s_avgee_econ_init_bk                                          */
+/*  2.3.0    01/20/2026  DR       add AS_EVDT and AS_TOEC for BEV FF2                                                                */
+/*  2.4.0    02/13/2026  PG       Update for M_DM for BEV FF2                                                                        */
 /*                                                                                                                                   */
 /*  * YA   = Yuhei Aoyama, DensoTechno                                                                                               */
 /*  * TA(M)= Teruyuki Anjima, NTT Data MSE                                                                                           */
@@ -568,5 +671,7 @@ void            vd_g_AvgEePostTask(void)
 /*  * TH   = Taisuke Hirakawa, KSE                                                                                                   */
 /*  * MaO(M) = Masayuki Okada, NTT Data MSE                                                                                          */
 /*  * KM   = Kazuma Miyazawa, Denso Techno                                                                                           */
+/*  * DR   = Dyan Reyes, DTPH                                                                                                        */
+/*  * PG   = Patrick Garcia, DTPH                                                                                                    */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

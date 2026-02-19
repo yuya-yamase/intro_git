@@ -1,4 +1,4 @@
-/* 2.1.0 */
+/* 2.2.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define ODO_KM_C_MAJOR                           (2)
-#define ODO_KM_C_MINOR                           (1)
+#define ODO_KM_C_MINOR                           (2)
 #define ODO_KM_C_PATCH                           (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -80,6 +80,34 @@
 #define ODO_NVM_REQ_ACT_SYN_LAST                 (4U)
 #define ODO_NVM_REQ_ACT_TO_SYN_INIT              (5U)
 
+#define ODO_NUM_INHERIT_STM                      (4U)
+#define ODO_INHERIT_STM_IGOFF                    (0U)
+#define ODO_INHERIT_STM_NORMAL                   (1U)
+#define ODO_INHERIT_STM_MAC_ERROR                (2U)
+#define ODO_INHERIT_STM_INHERIT                  (3U)
+
+#define ODO_BECU_MATCH_CNT                       (3U)
+
+#define ODO_INHERIT_COND_TO_INHERIT              (0U)
+#define ODO_INHERIT_COND_TO_NORMAL               (1U)
+#define ODO_INHERIT_COND_FALSE                   (2U)
+
+#define ODO_INHERIT_MAC_NG                       (0U)
+#define ODO_INHERIT_MAC_OK                       (1U)
+#define ODO_INHERIT_MAC_UNKNOWN                  (2U)
+#define ODO_INHERIT_MAC_DISCONNECT               (3U)
+
+#define ODO_INHERIT_COMPLETE                     (0U)
+#define ODO_INHERIT_INCOMPLETE                   (1U)
+
+#define ODO_INHERIT_NUM_CHK                      (576U)
+
+#define ODO_INHERIT_OFFSET_INHERIT_FLG           (288U)
+#define ODO_INHERIT_OFFSET_INHERIT_COND          (96U)
+#define ODO_INHERIT_OFFSET_INHERIT_FIN           (48U)
+#define ODO_INHERIT_OFFSET_MACAUTH_FIRST         (12U)
+#define ODO_INHERIT_OFFSET_MACAUTH_EACH          (4U)
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -107,6 +135,14 @@ static ST_ODO_KM * const stp_sp_ODO_KM_LAST[ODO_KM_NUM_LAST] = {
     &st_s_odo_km_nvm
 };
 
+static U1                 u1_s_odo_inherit_stm;
+static U1                 u1_s_odo_inherit_flg;
+static U1                 u1_s_odo_becu_match_cnt;
+static U4                 u4_s_odo_becu_pre;
+static U1                 u1_s_odo_bdc1s13_cnt_pre;
+static U1                 u1_s_odo_inherit_write_flg;
+static U4                 u4_s_odo_km_inherit_val;
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -120,6 +156,14 @@ static void    vd_s_OdoTripUnk(void);
 static void    vd_s_OdoTripUpdt(const ST_ODO_KM * stp_a_ODO_NEXT);
 static U4      u4_s_OdoTripDiM(const ST_ODO_KM * st_ap_ODO_KM, const ST_ODO_TRIP_KM * st_ap_TRIP_KM);
 static void    vd_s_OdoTripResetTOchk(const ST_ODO_KM * stp_a_ODO_NEXT);
+static void    vd_s_OdoInheritInit(void);
+static void    vd_s_OdoGetInheritflg(void);
+static void    vd_s_OdoInheritOdoVal(ST_ODO_KM * stp_a_km_next);
+static U1      u1_s_OdoInheritFinish(void);
+static U1      u1_s_OdoInheritJdg(const U1 u1_a_RXCNT, const U1 u1_a_MAC_RSLT);
+static void    vd_s_OdoInheritJdgSTM(ST_ODO_KM * stp_a_km_next);
+static U1      u1_s_OdoInheritMACChkFirstNRx(const U1 u1_a_STS);
+static U1      u1_s_OdoInheritMACChkEachRx(U1 * u1p_a_oma_cnt, const U1 u1_a_STS);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
@@ -136,6 +180,7 @@ static void    vd_s_OdoTripResetTOchk(const ST_ODO_KM * stp_a_ODO_NEXT);
 void    vd_g_OdoBonInit(void)
 {
     vd_s_OdoBraInit();
+    vd_s_OdoInheritInit();
     vd_g_OdoCfgBonInit(st_s_odo_km_bra_0.u4_ge_m);
 }
 /*===================================================================================================================================*/
@@ -201,7 +246,45 @@ void    vd_g_OdoRstwkInit(void)
         vd_s_OdoBraInit();
     }
 
+    vd_s_OdoInheritInit();
     vd_g_OdoCfgRstwkInit(st_s_odo_km_bra_0.u4_ge_m);
+}
+/*===================================================================================================================================*/
+/*  static void    vd_s_OdoInheritInit(void)                                                                                         */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void    vd_s_OdoInheritInit(void)
+{
+    u1_s_odo_inherit_stm        = (U1)ODO_INHERIT_STM_IGOFF;
+    u1_s_odo_becu_match_cnt     = (U1)0U;
+    u4_s_odo_becu_pre           = (U4)ODO_KM_UNK;
+    u1_s_odo_bdc1s13_cnt_pre    = (U1)0U;
+    u1_s_odo_inherit_write_flg  = (U1)FALSE;
+    u4_s_odo_km_inherit_val     = (U4)ODO_KM_UNK;
+    vd_s_OdoGetInheritflg();
+}
+/*===================================================================================================================================*/
+/*  static void      vd_s_OdoGetInheritflg(void)                                                                                     */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void      vd_s_OdoGetInheritflg(void){
+    U1         u1_t_nvm_chk;
+    U1         u1_t_recv;
+
+    u1_t_recv       = (U1)0U;
+    u1_t_nvm_chk    = u1_g_Nvmc_ReadU1withSts((U2)NVMCID_U1_ODO_INHERIT_FLG, &u1_t_recv);
+    if((u1_t_recv    <= (U1)TRUE              ) &&
+       (u1_t_nvm_chk == (U1)NVMC_STATUS_COMP  )){
+        u1_s_odo_inherit_flg    = u1_t_recv;
+    }
+    else{
+        u1_s_odo_inherit_flg    = (U1)FALSE;
+    }
+
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_OdoMainTask(void)                                                                                                   */
@@ -229,6 +312,10 @@ void    vd_g_OdoMainTask(void)
         u1_t_last     = u1_s_OdoLast(u1_t_last_chk, &st_t_km_next);
 
         vd_s_OdoNext(u4_t_inst_km, &st_t_km_next);
+
+        /* For Odo Inhrerit */
+        vd_s_OdoInheritJdgSTM(&st_t_km_next);
+
         vd_s_OdoBraUpdt(u1_t_last, &st_t_km_next);
         vd_s_OdoNvmReqCtrl(u1_t_last_chk,  &st_t_km_next);
     }
@@ -462,6 +549,7 @@ static void    vd_s_OdoNvmReqCtrl(const U1 u1_a_LAST_CHK, const ST_ODO_KM * stp_
 
     U1                   u1_t_nvm_chk;
     U1                   u1_t_act;
+    U1                   u1_t_accpt;
 
     if(u1_a_LAST_CHK < (U1)ODO_LAST_CHK_NVM_UNK){
         u1_t_nvm_chk = u1_g_OdoCfgKmNextToNvm(stp_a_KM_NEXT->u4_ge_m, st_s_odo_km_nvm.u4_ge_m) & (U1)ODO_NVM_CHK_WRI_NEXT;
@@ -483,7 +571,10 @@ static void    vd_s_OdoNvmReqCtrl(const U1 u1_a_LAST_CHK, const ST_ODO_KM * stp_
         case ODO_NVM_REQ_ACT_TO_WRI_NEXT:
             u1_s_odo_nvm_req_ctrl  = (U1)ODO_NVM_REQ_WRI_NEXT;
             u2_s_odo_nvm_req_tocnt = (U2)0U;
-            (void)u1_g_OdoNvmIfOdoRWRqst(stp_a_KM_NEXT);
+            u1_t_accpt             = u1_g_OdoNvmIfOdoRWRqst(stp_a_KM_NEXT);
+            if(u1_t_accpt == (U1)TRUE){
+                u1_s_odo_inherit_write_flg = (U1)FALSE;
+            }
             break;
         case ODO_NVM_REQ_ACT_WRI_NEXT:
             u1_s_odo_nvm_req_ctrl  = (U1)ODO_NVM_REQ_WRI_NEXT;
@@ -898,6 +989,453 @@ void    vd_g_OdoNvmIfCbkTripKm(const U1 u1_a_SYNC, const U1 u1_a_CH, const ST_OD
     }
 }
 /*===================================================================================================================================*/
+/*  static void    vd_s_OdoInheritOdoVal(ST_ODO_KM * stp_a_km_next)                                                                  */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void    vd_s_OdoInheritOdoVal(ST_ODO_KM * stp_a_km_next)
+{
+    U4                   u4_t_inherit_val;
+    
+    if(u1_s_odo_inherit_write_flg == (U1)FALSE){
+        u4_t_inherit_val       = u4_s_odo_km_inherit_val;
+        if(u4_t_inherit_val <= (U4)ODO_KM_MAX){
+
+            stp_a_km_next->u4_ge_m = u4_t_inherit_val;
+            stp_a_km_next->u4_lt_m = (U4)0U;
+
+        }
+        else{
+
+            stp_a_km_next->u4_ge_m = (U4)ODO_KM_MAX;
+            stp_a_km_next->u4_lt_m = (U4)0U;
+
+        }
+
+        vd_g_OdoNvmIfSetCrc32(stp_a_km_next);
+
+        u1_s_odo_inherit_write_flg = (U1)TRUE;
+    }
+}
+/*===================================================================================================================================*/
+/*  static U1      u1_s_OdoInheritFinish(void)                                                                                       */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static U1    u1_s_OdoInheritFinish(void)
+{
+
+    U1                   u1_t_inherit_sts;
+
+    if((u4_s_odo_km_inherit_val != (U4)ODO_KM_UNK) &&
+       (u4_s_odo_km_inherit_val == st_s_odo_km_nvm.u4_ge_m)){
+
+        u1_t_inherit_sts        = (U1)ODO_INHERIT_COMPLETE;
+        u4_s_odo_km_inherit_val = (U4)ODO_KM_UNK;
+
+    }
+    else{
+
+        u1_t_inherit_sts        = (U1)ODO_INHERIT_INCOMPLETE;
+
+    }
+
+    return(u1_t_inherit_sts);
+}
+/*===================================================================================================================================*/
+/*  static U1      u1_s_OdoInheritJdg(const U1 u1_a_RXCNT, const U1 u1_a_MAC_RSLT)                                                   */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static U1      u1_s_OdoInheritJdg(const U1 u1_a_RXCNT, const U1 u1_a_MAC_RSLT)
+{
+
+    U1                   u1_t_jdg_sts;
+    U4                   u4_t_odo_becu;
+
+    u4_t_odo_becu = u4_g_OdoCfgGetOdoBecu();
+
+    if((u1_a_RXCNT              !=  u1_s_odo_bdc1s13_cnt_pre) &&
+       (u1_s_odo_becu_match_cnt  <  (U1)ODO_BECU_MATCH_CNT  )){
+
+        if((u4_t_odo_becu == u4_s_odo_becu_pre     ) &&
+           (u4_t_odo_becu != (U4)ODO_KM_UNK        ) &&
+           (u1_a_MAC_RSLT == (U1)ODO_INHERIT_MAC_OK)){
+            u1_s_odo_becu_match_cnt++;
+        }
+        else{
+            u1_s_odo_becu_match_cnt = (U1)0U;
+        }
+        u4_s_odo_becu_pre = u4_t_odo_becu;
+
+    }
+
+    u1_s_odo_bdc1s13_cnt_pre = u1_a_RXCNT;
+
+    if(u1_s_odo_becu_match_cnt >= (U1)ODO_BECU_MATCH_CNT){
+        if(st_s_odo_km_bra_0.u4_ge_m < u4_t_odo_becu){
+            u1_t_jdg_sts            = (U1)ODO_INHERIT_COND_TO_INHERIT;
+            u4_s_odo_km_inherit_val = u4_t_odo_becu;
+        }
+        else{
+            u1_t_jdg_sts            = (U1)ODO_INHERIT_COND_TO_NORMAL;
+        }
+    }
+    else{
+        u1_t_jdg_sts = (U1)ODO_INHERIT_COND_FALSE;
+    }
+
+
+    return(u1_t_jdg_sts);
+
+}
+/*===================================================================================================================================*/
+/*  static U1      u1_s_OdoInheritMACChkFirstNRx(const U1 u1_a_STS)                                                                  */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static U1      u1_s_OdoInheritMACChkFirstNRx(const U1 u1_a_STS)
+{
+    U1                   u1_t_ret_mac;
+    U1                   u1_t_mac_rslt;
+
+    u1_t_ret_mac = (U1)ODO_INHERIT_MAC_UNKNOWN;
+
+    if(u1_a_STS == (U1)0U){
+        /* Get MAC Match */
+        u1_t_mac_rslt = u1_g_OmaVrChkResultFirstNRx();
+
+        if(u1_t_mac_rslt == (U1)OMAVRCHK_RESULT_OK){
+            u1_t_ret_mac = (U1)ODO_INHERIT_MAC_OK;
+        }
+        else if(u1_t_mac_rslt == (U1)OMAVRCHK_RESULT_NG){
+            u1_t_ret_mac = (U1)ODO_INHERIT_MAC_NG;
+        }
+        else{
+            /* u1_t_ret_mac = (U1)ODO_INHERIT_MAC_UNKNOWN; */
+        }
+    }
+    else if((u1_a_STS & (U1)COM_TIMEOUT) != (U1)0U){
+        u1_t_ret_mac     = (U1)ODO_INHERIT_MAC_DISCONNECT;
+    }
+    else{
+        /* u1_t_ret_mac  = (U1)ODO_INHERIT_MAC_UNKNOWN;  */
+    }
+
+    return(u1_t_ret_mac);
+
+}
+/*===================================================================================================================================*/
+/*  static U1      u1_s_OdoInheritMACChkEachRx(U1 * u1p_a_oma_cnt, const U1 u1_a_STS)                                                */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static U1      u1_s_OdoInheritMACChkEachRx(U1 * u1p_a_oma_cnt, const U1 u1_a_STS)
+{
+    U1                   u1_t_ret_mac;
+    U1                   u1_t_mac_rslt;
+
+    u1_t_ret_mac = (U1)ODO_INHERIT_MAC_UNKNOWN;
+
+    /* Get MAC Match */
+    u1_t_mac_rslt = u1_g_OmaVrChkResultEachRx(u1p_a_oma_cnt);
+
+    if(u1_a_STS == (U1)0U){
+
+        if(u1_t_mac_rslt == (U1)OMAVRCHK_RESULT_OK){
+            u1_t_ret_mac = (U1)ODO_INHERIT_MAC_OK;
+        }
+        else if(u1_t_mac_rslt == (U1)OMAVRCHK_RESULT_NG){
+            u1_t_ret_mac = (U1)ODO_INHERIT_MAC_NG;
+        }
+        else{
+            /* u1_t_ret_mac = (U1)ODO_INHERIT_MAC_UNKNOWN; */
+        }
+    }
+    else{
+        /* u1_t_ret_mac = (U1)ODO_INHERIT_MAC_UNKNOWN; */
+    }
+
+    return(u1_t_ret_mac);
+
+}
+/*===================================================================================================================================*/
+/*  static void    vd_s_OdoInheritJdgSTM(ST_ODO_KM * stp_a_km_next)                                                                  */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void    vd_s_OdoInheritJdgSTM(ST_ODO_KM * stp_a_km_next)
+{
+    static const U1           u1_sp_ODO_INHERIT_STM[] = {
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_INHERIT,   (U1)ODO_INHERIT_STM_NORMAL,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,
+        (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,
+        (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_INHERIT,   (U1)ODO_INHERIT_STM_NORMAL,
+        (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,
+        (U1)ODO_INHERIT_STM_IGOFF,     (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,
+        (U1)ODO_INHERIT_STM_IGOFF,     (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_INHERIT,   (U1)ODO_INHERIT_STM_NORMAL,
+        (U1)ODO_INHERIT_STM_IGOFF,     (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,
+        (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,
+        (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_INHERIT,   (U1)ODO_INHERIT_STM_NORMAL,
+        (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_INHERIT,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_INHERIT,   (U1)ODO_INHERIT_STM_INHERIT,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_INHERIT,
+        (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_INHERIT,
+        (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_INHERIT,   (U1)ODO_INHERIT_STM_INHERIT,
+        (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_INHERIT,
+        (U1)ODO_INHERIT_STM_IGOFF,     (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_INHERIT,
+        (U1)ODO_INHERIT_STM_IGOFF,     (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_INHERIT,   (U1)ODO_INHERIT_STM_INHERIT,
+        (U1)ODO_INHERIT_STM_IGOFF,     (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_INHERIT,
+        (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_INHERIT,
+        (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_INHERIT,   (U1)ODO_INHERIT_STM_INHERIT,
+        (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_INHERIT,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_NORMAL,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,
+        (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,
+        (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_NORMAL,
+        (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,
+        (U1)ODO_INHERIT_STM_IGOFF,     (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,
+        (U1)ODO_INHERIT_STM_IGOFF,     (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_NORMAL,
+        (U1)ODO_INHERIT_STM_IGOFF,     (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,
+        (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,
+        (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_NORMAL,
+        (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_INHERIT,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_INHERIT,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_INHERIT,
+        (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_INHERIT,
+        (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_INHERIT,
+        (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_INHERIT,
+        (U1)ODO_INHERIT_STM_IGOFF,     (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_INHERIT,
+        (U1)ODO_INHERIT_STM_IGOFF,     (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_INHERIT,
+        (U1)ODO_INHERIT_STM_IGOFF,     (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_INHERIT,
+        (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_INHERIT,
+        (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_INHERIT,
+        (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_INHERIT,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,
+        (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,
+        (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,
+        (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,
+        (U1)ODO_INHERIT_STM_IGOFF,     (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,
+        (U1)ODO_INHERIT_STM_IGOFF,     (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,
+        (U1)ODO_INHERIT_STM_IGOFF,     (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,
+        (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,
+        (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,
+        (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_INHERIT,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_INHERIT,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_INHERIT,
+        (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_INHERIT,
+        (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_INHERIT,
+        (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_INHERIT,
+        (U1)ODO_INHERIT_STM_IGOFF,     (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_INHERIT,
+        (U1)ODO_INHERIT_STM_IGOFF,     (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_INHERIT,
+        (U1)ODO_INHERIT_STM_IGOFF,     (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_INHERIT,
+        (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_INHERIT,
+        (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_INHERIT,
+        (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_INHERIT,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_INHERIT,   (U1)ODO_INHERIT_STM_NORMAL,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_INHERIT,   (U1)ODO_INHERIT_STM_NORMAL,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_INHERIT,   (U1)ODO_INHERIT_STM_NORMAL,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_INHERIT,   (U1)ODO_INHERIT_STM_NORMAL,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_INHERIT,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_INHERIT,   (U1)ODO_INHERIT_STM_INHERIT,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_INHERIT,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_INHERIT,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_INHERIT,   (U1)ODO_INHERIT_STM_INHERIT,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_INHERIT,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_INHERIT,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_INHERIT,   (U1)ODO_INHERIT_STM_INHERIT,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_INHERIT,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_INHERIT,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_INHERIT,   (U1)ODO_INHERIT_STM_INHERIT,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_INHERIT,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_NORMAL,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_NORMAL,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_NORMAL,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_NORMAL,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_INHERIT,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_INHERIT,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_INHERIT,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_INHERIT,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_INHERIT,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_INHERIT,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_INHERIT,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_INHERIT,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_INHERIT,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_INHERIT,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_INHERIT,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_INHERIT,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_INHERIT,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_INHERIT,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_INHERIT,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_INHERIT,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_INHERIT,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_INHERIT,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_INHERIT,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_INHERIT,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_INHERIT,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_INHERIT,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_INHERIT,
+        (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_NORMAL,    (U1)ODO_INHERIT_STM_MAC_ERROR, (U1)ODO_INHERIT_STM_INHERIT
+    };
+
+    U1                   u1_t_ign_on;
+    U1                   u1_t_mac_firstnrx;
+    U1                   u1_t_mac_eachrx;
+    U1                   u1_t_inherit_cond;
+    U1                   u1_t_inherit_fin;
+    U2                   u2_t_inherit_id;
+    U1                   u1_t_rx_cnt;
+    U1                   u1_t_rx_sts;
+
+    u1_t_rx_cnt = (U1)0U;
+
+    /* Cond : IG */
+    u1_t_ign_on = u1_g_VehopemdIgnOn();
+
+    if((u1_t_ign_on != (U1)TRUE) ||
+       (u1_s_odo_inherit_stm >= (U1)ODO_NUM_INHERIT_STM)){
+        u1_s_odo_inherit_stm = (U1)ODO_INHERIT_STM_IGOFF;
+    }
+    else{
+        /* Before Transition */
+        u2_t_inherit_id    = (U2)u1_s_odo_inherit_stm;
+
+        /* Get Odo Inherit Frame Status */
+        u1_t_rx_sts        = u1_g_OdoCfgGetOdoBecuRxSts();
+
+        /* Cond : MAC authorization CHK on First N Rx */
+        u1_t_mac_firstnrx  = u1_s_OdoInheritMACChkFirstNRx(u1_t_rx_sts);
+        if(u1_t_mac_firstnrx > (U1)ODO_INHERIT_MAC_DISCONNECT){
+            u1_t_mac_firstnrx = (U1)ODO_INHERIT_MAC_UNKNOWN;
+        }
+        u2_t_inherit_id    += (U2)u1_t_mac_firstnrx        * (U2)ODO_INHERIT_OFFSET_MACAUTH_FIRST;
+
+        /* Cond : MAC authorization CHK on Each Rx */
+        u1_t_mac_eachrx    = u1_s_OdoInheritMACChkEachRx(&u1_t_rx_cnt, u1_t_rx_sts);
+        if(u1_t_mac_eachrx > (U1)ODO_INHERIT_MAC_UNKNOWN){
+            u1_t_mac_eachrx = (U1)ODO_INHERIT_MAC_UNKNOWN;
+        }
+        u2_t_inherit_id    += (U2)u1_t_mac_eachrx          * (U2)ODO_INHERIT_OFFSET_MACAUTH_EACH;
+
+        /* Cond : Inherit Condition Judge */
+        u1_t_inherit_cond  = u1_s_OdoInheritJdg(u1_t_rx_cnt, u1_t_mac_eachrx);
+        if(u1_t_inherit_cond > (U1)ODO_INHERIT_COND_FALSE){
+            u1_t_inherit_cond = (U1)ODO_INHERIT_COND_FALSE;
+        }
+        u2_t_inherit_id    += (U2)u1_t_inherit_cond        * (U2)ODO_INHERIT_OFFSET_INHERIT_COND;
+
+        /* Cond : Inherit Finish */
+        u1_t_inherit_fin   = u1_s_OdoInheritFinish();
+        if(u1_t_inherit_fin > (U1)ODO_INHERIT_INCOMPLETE){
+            u1_t_inherit_fin = (U1)ODO_INHERIT_INCOMPLETE;
+        }
+        u2_t_inherit_id    += (U2)u1_t_inherit_fin         * (U2)ODO_INHERIT_OFFSET_INHERIT_FIN;
+
+        /* Cond : Inherit Flg */
+        if(u1_s_odo_inherit_flg > (U1)TRUE){
+            u1_s_odo_inherit_flg = (U1)FALSE;
+        }
+        u2_t_inherit_id    += (U2)u1_s_odo_inherit_flg     * (U2)ODO_INHERIT_OFFSET_INHERIT_FLG;
+
+        if(u2_t_inherit_id < (U2)ODO_INHERIT_NUM_CHK){
+            u1_s_odo_inherit_stm = u1_sp_ODO_INHERIT_STM[u2_t_inherit_id];
+        }
+        else{
+            u1_s_odo_inherit_stm = (U1)ODO_INHERIT_STM_IGOFF;
+        }
+    }
+
+    switch(u1_s_odo_inherit_stm){
+        case (U1)ODO_INHERIT_STM_NORMAL:
+            if(u1_s_odo_inherit_flg != (U1)FALSE){
+                u1_s_odo_inherit_flg = (U1)FALSE;
+                vd_g_Nvmc_WriteU1((U2)NVMCID_U1_ODO_INHERIT_FLG,    u1_s_odo_inherit_flg);
+            }
+            u1_s_odo_becu_match_cnt   = (U1)0U;
+            break;
+        case (U1)ODO_INHERIT_STM_MAC_ERROR:
+            if(u1_s_odo_inherit_flg != (U1)TRUE){
+                u1_s_odo_inherit_flg = (U1)TRUE;
+                vd_g_Nvmc_WriteU1((U2)NVMCID_U1_ODO_INHERIT_FLG,    u1_s_odo_inherit_flg);
+            }
+            break;
+        case (U1)ODO_INHERIT_STM_INHERIT:
+            vd_s_OdoInheritOdoVal(stp_a_km_next);
+            /* Trip Reset */
+            u1_s_odo_trip_manu_reset |= u1_g_ODO_TRIP_SYNC_RST_BY_CH;
+            u1_s_odo_becu_match_cnt   = (U1)0U;
+            break;
+        case (U1)ODO_INHERIT_STM_IGOFF:
+        default:
+            u1_s_odo_becu_match_cnt   = (U1)0U;
+            u1_s_odo_bdc1s13_cnt_pre  = (U1)0U;
+            break;
+    }
+
+}
+/*===================================================================================================================================*/
+/*  U1      u1_g_OdoGetInheritWriteflg(void)                                                                                         */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+U1      u1_g_OdoGetInheritWriteflg(void)
+{
+    U1         u1_t_ret;
+
+    if((u1_s_odo_inherit_write_flg == (U1)TRUE) &&
+       (u1_s_odo_inherit_stm == (U1)ODO_INHERIT_STM_INHERIT)){
+        u1_t_ret = (U1)TRUE;
+    }
+    else{
+        u1_t_ret = (U1)FALSE;
+    }
+
+    return(u1_t_ret);
+}
+
+/*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
 /*                                                                                                                                   */
@@ -916,6 +1454,7 @@ void    vd_g_OdoNvmIfCbkTripKm(const U1 u1_a_SYNC, const U1 u1_a_CH, const ST_OD
 /*  1.3.2    08/18/2020  YN       odo_nvmif_km.c v1.3.1 -> v1.3.2                                                                    */
 /*  2.0.1    10/18/2021  TA(M)    Change the definition of the null pointer used.(BSW v115_r007)                                     */
 /*  2.1.0    01/21/2025  RS       Change for BEV System_Consideration_1                                                              */
+/*  2.2.0    02/10/2026  RS       Add Odo Inherit function for BEV FF2                                                               */
 /*                                                                                                                                   */
 /*  * AK   = Aiko Kishino, Denso                                                                                                     */
 /*  * TN   = Takashi Nagai, DENSO                                                                                                    */

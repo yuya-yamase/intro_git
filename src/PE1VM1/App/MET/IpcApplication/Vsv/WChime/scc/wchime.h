@@ -42,11 +42,6 @@ void    vd_g_wChimeMainTask(void);
 U1      u1_g_wChimeReqSel(const U1 u1_a_WC_CH, U1 * u1p_a_reqvol);
 
 void    vd_g_wChimeMetBuzzInfo(U1 * u1p_a_level, U1 * u1p_a_length, U1 * u1p_a_emergency);
-#if 0   /* BEV Rebase provisionally */
-#else   /* BEV Rebase provisionally */
-void    vd_g_wChimePutMWVCope(U1 u1_a_mwvcope);
-U1      u1_g_wChimeGetMWVCope(void);
-#endif   /* BEV Rebase provisionally */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */

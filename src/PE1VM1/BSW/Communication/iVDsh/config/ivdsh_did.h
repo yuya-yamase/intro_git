@@ -45,7 +45,7 @@
 #define IVDSH_DID_WRI_FWUPXRES                   (13U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define IVDSH_NUM_DID_REA                        (18U)
+#define IVDSH_NUM_DID_REA                        (19U)
 
 /* Read from VM#2 */
 #define IVDSH_DID_REA_VM2TO1_TIMOFST             (14U)
@@ -67,6 +67,7 @@
 #define IVDSH_DID_REA_FWUPXREQ_D                 (30U)
 /* Read from VM#3 */
 #define IVDSH_DID_REA_VM3TO12_RESTART            (31U)
+#define IVDSH_DID_REA_VM3TO1_WHLINI_STA          (32U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define IVDSH_NUM_DID                            (IVDSH_NUM_DID_WRI + IVDSH_NUM_DID_REA)

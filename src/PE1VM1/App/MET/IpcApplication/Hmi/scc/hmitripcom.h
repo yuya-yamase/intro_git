@@ -30,14 +30,6 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* LC:Life Cycle , DC:Drive Cycle , RF: Refuel , TA:Total Average, ST:Stop Temporary */
 typedef struct{
-    U2                          u2_avg_vehspd_kmph_ta;
-    U4                          u4_avg_fe_kmpl_ta;
-    U4                          u4_avg_ee_kmpl_ta;
-    U4                          u4_avg_he_kmpkg_ta;
-    U4                          u4_ptsrun_dist_km_lc;
-    U4                          u4_ptsrun_time_hrs_lc;
-    U4                          u4_idlstp_time_hrs_lc;
-    U4                          u4_save_fs_ml_lc;
     U2                          u2_avg_vehspd_tr_a;
     U4                          u4_ptsruntm_tr_a;
     U4                          u4_dist_km_tr_a;

@@ -20,6 +20,7 @@
 
 #include "veh_opemd.h"
 #include "oxcan.h"
+#include "oxsec.h"
 #include "ivdsh.h"
 
 /* Memory               */
@@ -50,12 +51,14 @@
 #include "sbltsync.h"
 #include "locale.h"
 #include "vardef.h"
+#include "mcst.h"
 #include "cantxapp.h"
 #include "hmiproxy.h"
 #include "hdimmgr.h"
 #include "himgadj.h"
 #include "xspi_met.h"
 #include "datesi_met.h"
+#include "omavrchk.h"
 
 /*----------------------------------------------------------------------------
  *		置換シンボル定義
@@ -85,11 +88,13 @@ void vd_g_22SSCallout_StaBonInit(void)
 {
     static const FP_VD_FVD             fp_sp_vd_ECU_M_CFG_BON_INIT[] = {
         &vd_g_VardefBonInit,
+        &vd_g_McstBonInit,
         &vd_g_LocaleBonInit,
         &vd_g_SoundCriMgrInitialize,
         &vd_g_DrectxBonInit,
         &vd_g_DimInit,
         &vd_g_IllumiBonInit,
+        &vd_g_OmaVrChkInit,
         &vd_g_AlertInit,
         &vd_g_SbltwrnInit,
         &vd_g_ThblnkrBonInit,
@@ -123,6 +128,7 @@ void vd_g_22SSCallout_StaBonInit(void)
         u1_t_rslt = u1_g_Nvmc_BonRead();
     }while(u1_t_rslt != (U1)FALSE);
 
+    vd_g_oXSECInit();
     vd_g_oXCANRstInit();
     vd_g_VehopemdRstInit();
     vd_g_iVDshInit();
@@ -147,11 +153,13 @@ void vd_g_22SSCallout_StaRstInit(void)
 {
     static const FP_VD_FVD             fp_sp_vd_ECU_M_CFG_RST_INIT[] = {
         &vd_g_VardefRstwkInit,
+        &vd_g_McstRstwkInit,
         &vd_g_LocaleRstWkupInit,
         &vd_g_SoundCriMgrInitialize,
         &vd_g_DrectxRstInit,
         &vd_g_DimInit,
         &vd_g_IllumiRstInit,
+        &vd_g_OmaVrChkInit,
         &vd_g_AlertInit,
         &vd_g_SbltwrnInit,
         &vd_g_ThblnkrRstWkInit,
@@ -185,6 +193,7 @@ void vd_g_22SSCallout_StaRstInit(void)
         u1_t_rslt = u1_g_Nvmc_WkupRead();
     }while(u1_t_rslt != (U1)FALSE);
 
+    vd_g_oXSECInit();
     vd_g_oXCANRstInit();
     vd_g_VehopemdRstInit();
     vd_g_iVDshInit();
@@ -209,11 +218,13 @@ void vd_g_22SSCallout_StaWkupInit(void)
 {
     static const FP_VD_FVD             fp_sp_vd_ECU_M_CFG_WKUP_INIT[] = {
         &vd_g_VardefRstwkInit,
+        &vd_g_McstRstwkInit,
         &vd_g_LocaleRstWkupInit,
         &vd_g_SoundCriMgrInitialize,
         &vd_g_DrectxWkupInit,
         &vd_g_DimInit,
         &vd_g_IllumiWkupInit,
+        &vd_g_OmaVrChkInit,
         &vd_g_AlertInit,
         &vd_g_SbltwrnInit,
         &vd_g_ThblnkrRstWkInit,
@@ -247,6 +258,7 @@ void vd_g_22SSCallout_StaWkupInit(void)
         u1_t_rslt = u1_g_Nvmc_WkupRead();
     }while(u1_t_rslt != (U1)FALSE);
 
+    vd_g_oXSECInit();
     vd_g_oXCANWkupInit();
     vd_g_VehopemdWkupInit();
     vd_g_iVDshInit();

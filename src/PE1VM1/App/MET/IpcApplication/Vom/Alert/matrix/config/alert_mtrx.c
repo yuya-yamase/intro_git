@@ -1,4 +1,4 @@
-/* 5.3.0 */
+/* 5.4.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define ALERT_MTRX_C_MAJOR                       (5)
-#define ALERT_MTRX_C_MINOR                       (3)
+#define ALERT_MTRX_C_MINOR                       (4)
 #define ALERT_MTRX_C_PATCH                       (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -56,7 +56,6 @@ const ST_ALERT_TASK         st_gp_ALERT_TASK_CFG[]   = {
     {  &st_gp_ALERT_B_BLGT_MTRX[0],          (U2)ALERT_CH_B_BLGT,                   (U1)ALERT_B_BLGT_CH_NUM,            (U1)0U  },
     {  &st_gp_ALERT_B_BVOOPE_MTRX[0],        (U2)ALERT_CH_B_BVOOPE,                 (U1)ALERT_B_BVOOPE_CH_NUM,          (U1)0U  },
     {  &st_gp_ALERT_B_PBD_MTRX[0],           (U2)ALERT_CH_B_PBD,                    (U1)ALERT_B_PBD_CH_NUM,             (U1)0U  },
-    {  &st_gp_ALERT_B_PERSET_MTRX[0],        (U2)ALERT_CH_B_PERSET,                 (U1)ALERT_B_PERSET_CH_NUM,          (U1)0U  },
     {  &st_gp_ALERT_B_THEAD_MTRX[0],         (U2)ALERT_CH_B_THEAD,                  (U1)ALERT_B_THEAD_CH_NUM,           (U1)0U  },
     {  &st_gp_ALERT_B_TRFOG_MTRX[0],         (U2)ALERT_CH_B_TRFOG,                  (U1)ALERT_B_TRFOG_CH_NUM,           (U1)0U  },
     {  &st_gp_ALERT_B_TTAIL_MTRX[0],         (U2)ALERT_CH_B_TTAIL,                  (U1)ALERT_B_TTAIL_CH_NUM,           (U1)0U  },
@@ -79,7 +78,7 @@ const ST_ALERT_TASK         st_gp_ALERT_TASK_CFG[]   = {
     {  &st_gp_ALERT_C_BRLV_2_MTRX[0],        (U2)ALERT_CH_C_BRLV_2_WRN,             (U1)ALERT_C_BRLV_2_CH_NUM,          (U1)0U  },
     {  &st_gp_ALERT_C_ECB_MTRX[0],           (U2)ALERT_CH_C_ECB,                    (U1)ALERT_C_ECB_CH_NUM,             (U1)0U  },
     {  &st_gp_ALERT_H_MAICER_MTRX[0],        (U2)ALERT_CH_H_MAICER_PD1,             (U1)ALERT_H_MAICER_CH_NUM,          (U1)0U  },
-    {  &st_gp_ALERT_H_PEXI_MTRX[0],          (U2)ALERT_CH_H_PEXI_TT,                (U1)ALERT_H_PEXI_CH_NUM,            (U1)0U  },
+    {  &st_gp_ALERT_H_PEXI_MTRX[0],          (U2)ALERT_CH_H_PEXI,                   (U1)ALERT_H_PEXI_CH_NUM,            (U1)0U  },
     {  &st_gp_ALERT_O_EIGCON_MTRX[0],        (U2)ALERT_CH_O_EIGCON,                 (U1)ALERT_O_EIGCON_CH_NUM,          (U1)0U  },
     {  &st_gp_ALERT_S_ADBZR_CSR_MTRX[0],     (U2)ALERT_CH_S_ADBZR_CSR_BZ,           (U1)ALERT_S_ADBZR_CSR_CH_NUM,       (U1)0U  },
     {  &st_gp_ALERT_S_ADBZR_PMAR_MTRX[0],    (U2)ALERT_CH_S_ADBZR_PMAR,             (U1)ALERT_S_ADBZR_PMAR_CH_NUM,      (U1)0U  },
@@ -122,7 +121,7 @@ const ST_ALERT_TASK         st_gp_ALERT_TASK_CFG[]   = {
     {  &st_gp_ALERT_C_BRLV_2_MTRX[0],        (U2)ALERT_CH_C_BRLV_2_WRN,             (U1)ALERT_C_BRLV_2_CH_NUM,          (U1)1U  },
     {  &st_gp_ALERT_C_ECB_MTRX[0],           (U2)ALERT_CH_C_ECB,                    (U1)ALERT_C_ECB_CH_NUM,             (U1)1U  },
     {  &st_gp_ALERT_H_MAICER_MTRX[0],        (U2)ALERT_CH_H_MAICER_PD1,             (U1)ALERT_H_MAICER_CH_NUM,          (U1)1U  },
-    {  &st_gp_ALERT_H_PEXI_MTRX[0],          (U2)ALERT_CH_H_PEXI_TT,                (U1)ALERT_H_PEXI_CH_NUM,            (U1)1U  },
+    {  &st_gp_ALERT_H_PEXI_MTRX[0],          (U2)ALERT_CH_H_PEXI,                   (U1)ALERT_H_PEXI_CH_NUM,            (U1)1U  },
     {  &st_gp_ALERT_O_EIGCON_MTRX[0],        (U2)ALERT_CH_O_EIGCON,                 (U1)ALERT_O_EIGCON_CH_NUM,          (U1)1U  },
     {  &st_gp_ALERT_S_ADBZR_DMC_MTRX[0],     (U2)ALERT_CH_S_ADBZR_DMC,              (U1)ALERT_S_ADBZR_DMC_CH_NUM,       (U1)1U  },
     {  &st_gp_ALERT_S_ADBZR_FRRADA_MTRX[0],  (U2)ALERT_CH_S_ADBZR_FRRADA_CMP,       (U1)ALERT_S_ADBZR_FRRADA_CH_NUM,    (U1)1U  },
@@ -157,13 +156,14 @@ const ST_ALERT_TASK         st_gp_ALERT_TASK_CFG[]   = {
     {  &st_gp_ALERT_C_BRLV_2_MTRX[0],        (U2)ALERT_CH_C_BRLV_2_WRN,             (U1)ALERT_C_BRLV_2_CH_NUM,          (U1)2U  },
     {  &st_gp_ALERT_C_ECB_MTRX[0],           (U2)ALERT_CH_C_ECB,                    (U1)ALERT_C_ECB_CH_NUM,             (U1)2U  },
     {  &st_gp_ALERT_H_MAICER_MTRX[0],        (U2)ALERT_CH_H_MAICER_PD1,             (U1)ALERT_H_MAICER_CH_NUM,          (U1)2U  },
-    {  &st_gp_ALERT_H_PEXI_MTRX[0],          (U2)ALERT_CH_H_PEXI_TT,                (U1)ALERT_H_PEXI_CH_NUM,            (U1)2U  },
+    {  &st_gp_ALERT_H_PEXI_MTRX[0],          (U2)ALERT_CH_H_PEXI,                   (U1)ALERT_H_PEXI_CH_NUM,            (U1)2U  },
     {  &st_gp_ALERT_O_EIGCON_MTRX[0],        (U2)ALERT_CH_O_EIGCON,                 (U1)ALERT_O_EIGCON_CH_NUM,          (U1)2U  },
     {  &st_gp_ALERT_S_ADBZR_CSR_MTRX[0],     (U2)ALERT_CH_S_ADBZR_CSR_BZ,           (U1)ALERT_S_ADBZR_CSR_CH_NUM,       (U1)2U  },
     {  &st_gp_ALERT_S_ADBZR_PMAR_MTRX[0],    (U2)ALERT_CH_S_ADBZR_PMAR,             (U1)ALERT_S_ADBZR_PMAR_CH_NUM,      (U1)2U  },
     {  &st_gp_ALERT_S_ADBZR_SEA_MTRX[0],     (U2)ALERT_CH_S_ADBZR_SEA,              (U1)ALERT_S_ADBZR_SEA_CH_NUM,       (U1)2U  },
     {  &st_gp_ALERT_C_BRPADW_MTRX[0],        (U2)ALERT_CH_C_BRPADW,                 (U1)ALERT_C_BRPADW_CH_NUM,          (U1)2U  },
     {  &st_gp_ALERT_B_TURHAZ_MTRX[0],        (U2)ALERT_CH_B_TURHAZ_L,               (U1)ALERT_B_TURHAZ_CH_NUM,          (U1)2U  },
+    {  &st_gp_ALERT_O_FNCLIM_MTRX[0],        (U2)ALERT_CH_O_FNCLIM,                 (U1)ALERT_O_FNCLIM_CH_NUM,          (U1)2U  },
     {  &st_gp_ALERT_B_GRISHU_MTRX[0],        (U2)ALERT_CH_B_GRISHU,                 (U1)ALERT_B_GRISHU_CH_NUM,          (U1)3U  },
     {  &st_gp_ALERT_D_SBW_MTRX[0],           (U2)ALERT_CH_D_SBW_BZ_BSFT,            (U1)ALERT_D_SBW_CH_NUM,             (U1)3U  },
     {  &st_gp_ALERT_H_LEAUNF_MTRX[0],        (U2)ALERT_CH_H_LEAUNF,                 (U1)ALERT_H_LEAUNF_CH_NUM,          (U1)3U  },
@@ -184,7 +184,7 @@ const ST_ALERT_TASK         st_gp_ALERT_TASK_CFG[]   = {
     {  &st_gp_ALERT_C_BRLV_2_MTRX[0],        (U2)ALERT_CH_C_BRLV_2_WRN,             (U1)ALERT_C_BRLV_2_CH_NUM,          (U1)3U  },
     {  &st_gp_ALERT_C_ECB_MTRX[0],           (U2)ALERT_CH_C_ECB,                    (U1)ALERT_C_ECB_CH_NUM,             (U1)3U  },
     {  &st_gp_ALERT_H_MAICER_MTRX[0],        (U2)ALERT_CH_H_MAICER_PD1,             (U1)ALERT_H_MAICER_CH_NUM,          (U1)3U  },
-    {  &st_gp_ALERT_H_PEXI_MTRX[0],          (U2)ALERT_CH_H_PEXI_TT,                (U1)ALERT_H_PEXI_CH_NUM,            (U1)3U  },
+    {  &st_gp_ALERT_H_PEXI_MTRX[0],          (U2)ALERT_CH_H_PEXI,                   (U1)ALERT_H_PEXI_CH_NUM,            (U1)3U  },
     {  &st_gp_ALERT_O_EIGCON_MTRX[0],        (U2)ALERT_CH_O_EIGCON,                 (U1)ALERT_O_EIGCON_CH_NUM,          (U1)3U  },
     {  &st_gp_ALERT_S_ADBZR_CSR_MTRX[0],     (U2)ALERT_CH_S_ADBZR_CSR_BZ,           (U1)ALERT_S_ADBZR_CSR_CH_NUM,       (U1)3U  },
     {  &st_gp_ALERT_S_ADBZR_PMAR_MTRX[0],    (U2)ALERT_CH_S_ADBZR_PMAR,             (U1)ALERT_S_ADBZR_PMAR_CH_NUM,      (U1)3U  },
@@ -194,6 +194,10 @@ const ST_ALERT_TASK         st_gp_ALERT_TASK_CFG[]   = {
     {  &st_gp_ALERT_B_ESWUOC_MTRX[0],        (U2)ALERT_CH_B_ESWUOC_BCB,             (U1)ALERT_B_ESWUOC_CH_NUM,          (U1)3U  },
     {  &st_gp_ALERT_C_BRPADW_MTRX[0],        (U2)ALERT_CH_C_BRPADW,                 (U1)ALERT_C_BRPADW_CH_NUM,          (U1)3U  },
     {  &st_gp_ALERT_B_TURHAZ_MTRX[0],        (U2)ALERT_CH_B_TURHAZ_L,               (U1)ALERT_B_TURHAZ_CH_NUM,          (U1)3U  },
+    {  &st_gp_ALERT_M_SECMSG_MTRX[0],        (U2)ALERT_CH_M_SECMSG,                 (U1)ALERT_M_SECMSG_CH_NUM,          (U1)3U  },
+    {  &st_gp_ALERT_B_SECBDC_MTRX[0],        (U2)ALERT_CH_B_SECBDC,                 (U1)ALERT_B_SECBDC_CH_NUM,          (U1)3U  },
+    {  &st_gp_ALERT_D_SECDDC_MTRX[0],        (U2)ALERT_CH_D_SECDDC,                 (U1)ALERT_D_SECDDC_CH_NUM,          (U1)3U  },
+    {  &st_gp_ALERT_S_SECADC_MTRX[0],        (U2)ALERT_CH_S_SECADC,                 (U1)ALERT_S_SECADC_CH_NUM,          (U1)3U  },
     {  &st_gp_ALERT_S_ADBZR_ACC_MTRX[0],     (U2)ALERT_CH_S_ADBZR_ACC,              (U1)ALERT_S_ADBZR_ACC_CH_NUM,       (U1)4U  },
     {  &st_gp_ALERT_S_ADBZR_APP_MTRX[0],     (U2)ALERT_CH_S_ADBZR_APP,              (U1)ALERT_S_ADBZR_APP_CH_NUM,       (U1)4U  },
     {  &st_gp_ALERT_S_ADBZR_BSM_MTRX[0],     (U2)ALERT_CH_S_ADBZR_BSM,              (U1)ALERT_S_ADBZR_BSM_CH_NUM,       (U1)4U  },
@@ -221,7 +225,7 @@ const ST_ALERT_TASK         st_gp_ALERT_TASK_CFG[]   = {
     {  &st_gp_ALERT_C_BRLV_2_MTRX[0],        (U2)ALERT_CH_C_BRLV_2_WRN,             (U1)ALERT_C_BRLV_2_CH_NUM,          (U1)4U  },
     {  &st_gp_ALERT_C_ECB_MTRX[0],           (U2)ALERT_CH_C_ECB,                    (U1)ALERT_C_ECB_CH_NUM,             (U1)4U  },
     {  &st_gp_ALERT_H_MAICER_MTRX[0],        (U2)ALERT_CH_H_MAICER_PD1,             (U1)ALERT_H_MAICER_CH_NUM,          (U1)4U  },
-    {  &st_gp_ALERT_H_PEXI_MTRX[0],          (U2)ALERT_CH_H_PEXI_TT,                (U1)ALERT_H_PEXI_CH_NUM,            (U1)4U  },
+    {  &st_gp_ALERT_H_PEXI_MTRX[0],          (U2)ALERT_CH_H_PEXI,                   (U1)ALERT_H_PEXI_CH_NUM,            (U1)4U  },
     {  &st_gp_ALERT_O_EIGCON_MTRX[0],        (U2)ALERT_CH_O_EIGCON,                 (U1)ALERT_O_EIGCON_CH_NUM,          (U1)4U  },
     {  &st_gp_ALERT_S_ADBZR_CSR_MTRX[0],     (U2)ALERT_CH_S_ADBZR_CSR_BZ,           (U1)ALERT_S_ADBZR_CSR_CH_NUM,       (U1)4U  },
     {  &st_gp_ALERT_S_ADBZR_PMAR_MTRX[0],    (U2)ALERT_CH_S_ADBZR_PMAR,             (U1)ALERT_S_ADBZR_PMAR_CH_NUM,      (U1)4U  },
@@ -247,7 +251,6 @@ void    vd_g_AlertMtrxInit(void)
         &vd_g_AlertB_blgtInit,
         &vd_g_AlertB_bvoopeInit,
         &vd_g_AlertB_pbdInit,
-        &vd_g_AlertB_persetInit,
         &vd_g_AlertB_theadInit,
         &vd_g_AlertB_trfogInit,
         &vd_g_AlertB_ttailInit,
@@ -275,7 +278,9 @@ void    vd_g_AlertMtrxInit(void)
         &vd_g_AlertC_hcsInit,
         &vd_g_AlertH_battrwInit,
         &vd_g_AlertO_pdsmalInit,
-        &vd_g_AlertB_turhazInit
+        &vd_g_AlertB_turhazInit,
+        &vd_g_AlertO_fnclimInit,
+        &vd_g_AlertB_secbdcInit
     };
 
     vd_g_Fpcall_vd_Fvd(&fp_vd_ALERT_MTRX_INIT[0], u2_NC_VD_FVD(fp_vd_ALERT_MTRX_INIT));
@@ -292,6 +297,7 @@ void    vd_g_AlertMtrxInit(void)
 /*  5.1.0    10/15/2024  RS       Change for BEV System_Consideration_1                                                              */
 /*  5.2.0    06/25/2025  KO       Change for BEV System_Consideration_2                                                              */
 /*  5.3.0    11/27/2025  PG       Change for BEV System_Consideration_ADAS                                                           */
+/*  5.4.0    01/07/2026  SN       Change for BEV FF2                                                                                 */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
@@ -317,6 +323,23 @@ void    vd_g_AlertMtrxInit(void)
 /*  BEV-20   12/12/2025  ED       Change for BEV System_Consideration_ADAS SEA.(MET-S_ADBZR-CSTD-0-06-A-C0)                          */
 /*  BEV-21   12/18/2025  ED       Change for BEV System_Consideration_ADAS ADBZR.(MET-S_ADBZR-CSTD-0-06-A-C0)                        */
 /*  BEV-22   12/18/2025  KH       Update for BEV System_Consideration_ADAS. (B_PBDKS / C_TPMS / H_BATTRW / H_LEAUNF)                 */
+/*  BEV-23    1/14/2025  JS       Change for BEV System_Consideration_FF2.(MET-H_PEXI-CSTD-1-00-A-C0)                                */
+/*  BEV-24    1/16/2026  SN       Change for BEV FF2.(MET-O_FNCLIM-CSTD-0-00-A-C0)                                                   */
+/*  BEV-25   01/16/2026  KM       Update for BEV FF2. (B_PERSET)                                                                     */
+/*  BEV-26   01/23/2026  NI       Change for BEV Full_functioin2                                                                     */
+/*                                MET-D_SFTPOS-CSTD-1-00-B-C0,MET-H_SYSMAL-CSTD-2-00-C-C0                                            */
+/*                                Change Alert_REQ for SFTPOS AND Change Alert_CH for SYSMAL.                                        */
+/*  BEV-27   02/10/2026  KO       Change for BEV FF2.(MET-M_SECMSG-CSTD-0-01-A-C0)                                                   */
+/*  BEV-28   02/10/2026  SH       Change MCUID0209-0213 from Calibration to OMUSVIID                                                 */
+/*  BEV-29   02/06/2026  HY       Change config for BEV Full_Function_2.                                                             */
+/*                                MET-B_SECBDC-CSTD-0-00-A-C0                                                                        */
+/*                                Changed due to specification change from feature to legacy.                                        */
+/*  BEV-30   02/06/2026  YH       Change config for BEV Full_Function_2.                                                             */
+/*                                MET-D_SECDDC-CSTD-0-00-A-C0                                                                        */
+/*                                Changed due to specification change from feature to legacy.                                        */
+/*  BEV-31   02/09/2026  YH       Change config for BEV Full_Function_2.                                                             */
+/*                                MET-S_SECADC-CSTD-0-00-A-C0                                                                        */
+/*                                Changed due to specification change from feature to legacy.                                        */
 /*                                                                                                                                   */
 /*  * YI   = Yoshiki Iwata, Denso                                                                                                    */
 /*  * RS   = Ryuki Sako,      Denso Techno                                                                                           */
@@ -332,5 +355,9 @@ void    vd_g_AlertMtrxInit(void)
 /*  * EA   = Eunice Avelin,   DTPH                                                                                                   */
 /*  * DT   = Dj Tutanes,      DTPH                                                                                                   */
 /*  * ED   = Emoh Dagasdas,   DTPH                                                                                                   */
+/*  * SN   = Shizuka Nakajima,KSE                                                                                                    */
+/*  * KM   = Kane Malapo,     DTPH                                                                                                   */
+/*  * NI   = Naoki Inagaki,   KSE                                                                                                    */
+/*  * YH   = Yuki Hatakeyama, KSE                                                                                                    */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

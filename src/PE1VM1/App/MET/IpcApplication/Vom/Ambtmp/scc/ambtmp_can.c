@@ -1,8 +1,8 @@
-/* 2.3.0 */
+/* 2.4.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-/*  Ambient Temprature Celsius/Fahrenheit detected by CAN                                                                            */
+/*  Ambient Temperature Celsius/Fahrenheit detected by CAN                                                                           */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
 
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define AMBTMP_CAN_C_MAJOR                         (2)
-#define AMBTMP_CAN_C_MINOR                         (3)
+#define AMBTMP_CAN_C_MINOR                         (4)
 #define AMBTMP_CAN_C_PATCH                         (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -65,14 +65,14 @@ static U1   u1_s_AmbtmpCANNorm(const U1 u1_a_TMP, const U1 u1_a_AC_AMB05, U2 * u
 /*===================================================================================================================================*/
 U1   u1_g_AmbtmpCAN(U2 * u2p_a_cel)
 {
-    U1  u1_t_igon;
+    U1  u1_t_accon;
     U1  u1_t_msgsts;
     U1  u1_t_acn_tmp;
     U1  u1_t_ac_amb05;
     U1  u1_t_ambsts;
     
-    u1_t_igon = u1_g_VehopemdIgnOn();
-    if(u1_t_igon == (U1)TRUE){
+    u1_t_accon = u1_g_VehopemdAccOn();
+    if(u1_t_accon == (U1)TRUE){
         u1_t_acn_tmp  = (U1)0U;
         u1_t_ac_amb05 = (U1)0U;
         u1_t_msgsts   = u1_g_AmbtmpCANCfg(&u1_t_acn_tmp , &u1_t_ac_amb05);
@@ -156,10 +156,15 @@ static U1   u1_s_AmbtmpCANNorm(const U1 u1_a_TMP, const U1 u1_a_AC_AMB05, U2 * u
 /*  2.1.0    11/25/2021  TA(M)    ambtmp.c v2.0.1 -> v2.1.0.                                                                         */
 /*  2.2.1    06/28/2022  TA(M)    ambtmp.c v2.2.0 -> v2.2.1.                                                                         */
 /*  2.3.0    10/28/2025  SN       ambtmp.c v2.2.1 -> v2.3.0.                                                                         */
+/*  2.4.0     1/21/2026  JS       ambtmp.c v2.3.0 -> v2.4.0.                                                                         */
+/*                                Change config for BEV Full_function_2                                                              */
+/*                                MET-M_OSTEMP-CSTD-0-05-A-C1                                                                        */
+/*                                change function ACC power status check                                                             */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * YN   = Yasuhiro Nakamura, Denso Techno                                                                                         */
 /*  * TA(M)= Teruyuki Anjima, NTT Data MSE                                                                                           */
 /*  * SN   = Shimon Nambu, Denso Techno                                                                                              */
+/*  * JS   = Jun Sugiyama, KSE                                                                                                       */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

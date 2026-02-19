@@ -736,8 +736,8 @@ void vd_g_PictCtl_Init(void)
     u1_s_pict_cd_size = (U1)PICT_CD_SIZE_INVALID;
     u1_s_pict_cammodelog_flg = (U1)FALSE;
     u1_s_pict_dispsize = (U1)PICT_SIZE_140IN; /* ŽÔƒpƒ‰‘Î‰ž‚Ü‚Å‚ÌŽb’è */
-    u1_s_pict_mvdisp_exsit = (U1)FALSE; /* ŽÔƒpƒ‰‘Î‰ž‚Ü‚Å‚ÌŽb’è */
-    u1_s_pict_heacon = (U1)PICT_AIS_KIND_NOMAL; /* ŽÔƒpƒ‰‘Î‰ž‚Ü‚Å‚ÌŽb’è */
+    u1_s_pict_mvdisp_exsit = (U1)TRUE; /* ŽÔƒpƒ‰‘Î‰ž‚Ü‚Å‚ÌŽb’è */
+    u1_s_pict_heacon = (U1)PICT_AIS_KIND_HEACON; /* ŽÔƒpƒ‰‘Î‰ž‚Ü‚Å‚ÌŽb’è */
     
     st_sp_send.u1_CamKind = st_sp_Pict_BackUpInf.u1_CamKind;
     st_sp_send.u1_CenterCamSiz = st_sp_Pict_BackUpInf.u1_CenterCamSiz;

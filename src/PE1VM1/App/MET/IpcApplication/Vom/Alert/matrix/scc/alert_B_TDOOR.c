@@ -32,21 +32,6 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Configuration Check                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if !defined(u1_ALERT_CFG_B_TDOOR_RRCY)
-#error "alert_cfg_private.h : u1_ALERT_CFG_B_TDOOR_RRCY is undefined!"
-#endif
-#if !defined(u1_ALERT_CFG_B_TDOOR_RLCY)
-#error "alert_cfg_private.h : u1_ALERT_CFG_B_TDOOR_RLCY is undefined!"
-#endif
-#if !defined(u1_ALERT_CFG_B_TDOOR_BCTY)
-#error "alert_cfg_private.h : u1_ALERT_CFG_B_TDOOR_BCTY is undefined!"
-#endif
-#if !defined(u1_ALERT_CFG_B_TDOOR_LGCY)
-#error "alert_cfg_private.h : u1_ALERT_CFG_B_TDOOR_LGCY is undefined!"
-#endif
-#if !defined(u1_ALERT_CFG_B_TDOOR_HDCY_BDB)
-#error "alert_cfg_private.h : u1_ALERT_CFG_B_TDOOR_HDCY_BDB is undefined!"
-#endif
 #if !defined(ALERT_CFG_B_TDOOR_RPSDWARN)
 #error "alert_cfg_private.h : ALERT_CFG_B_TDOOR_RPSDWARN is undefined!"
 #endif
@@ -299,11 +284,11 @@ static U1      u1_s_AlertB_tdoorSgnl(const U1 u1_a_FACT)
 
     u1_t_retval        = (U1)0U;
 
-    u1_t_rrcy        = u1_ALERT_CFG_B_TDOOR_RRCY;
-    u1_t_rlcy        = u1_ALERT_CFG_B_TDOOR_RLCY;
-    u1_t_bcty        = u1_ALERT_CFG_B_TDOOR_BCTY;
-    u1_t_lgcy        = u1_ALERT_CFG_B_TDOOR_LGCY;
-    u1_t_hdcy_bdb    = u1_ALERT_CFG_B_TDOOR_HDCY_BDB;
+    u1_t_rrcy        = u1_g_AlertOmusMCUID0209();
+    u1_t_rlcy        = u1_g_AlertOmusMCUID0210();
+    u1_t_bcty        = u1_g_AlertOmusMCUID0211();
+    u1_t_lgcy        = u1_g_AlertOmusMCUID0212();
+    u1_t_hdcy_bdb    = u1_g_AlertOmusMCUID0213();
 
     if((u1_s_alert_b_tdoor_bdb1s01_sts & (U1)COM_NO_RX) == (U1)0U){
         (void)Com_ReceiveSignal(ComConf_ComSignal_DCTY, &u1_t_retval);

@@ -1,4 +1,4 @@
-/* 5.4.0 */
+/* 5.5.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define ALERT_C_BRK_2_C_MAJOR                    (5)
-#define ALERT_C_BRK_2_C_MINOR                    (4)
+#define ALERT_C_BRK_2_C_MINOR                    (5)
 #define ALERT_C_BRK_2_C_PATCH                    (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -61,13 +61,13 @@ static const U1  u1_sp_ALERT_C_BRK_2_DST[ALERT_C_BRK_2_NUM_DST] = {
     (U1)ALERT_REQ_C_BRK_2_ON,                                                  /* 06 ON                                              */
     (U1)ALERT_REQ_C_BRK_2_ON_MLFNC,                                            /* 07 ON_MLFNC                                        */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 08 UNKNOWN                                         */
-    (U1)ALERT_REQ_C_BRK_2_MLFNC_RW,                                            /* 09 MLFNC_RW                                        */
+    (U1)ALERT_REQ_C_BRK_2_MALFUNC,                                             /* 09 MALFUNC                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 10 UNKNOWN                                         */
-    (U1)ALERT_REQ_C_BRK_2_MLFNC_RW,                                            /* 11 MLFNC_RW                                        */
+    (U1)ALERT_REQ_C_BRK_2_MALFUNC,                                             /* 11 MALFUNC                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 12 UNKNOWN                                         */
-    (U1)ALERT_REQ_C_BRK_2_MLFNC_RW,                                            /* 13 MLFNC_RW                                        */
-    (U1)ALERT_REQ_C_BRK_2_ON_RW,                                               /* 14 ON_RW                                           */
-    (U1)ALERT_REQ_C_BRK_2_WRN,                                                 /* 15 WRN                                             */
+    (U1)ALERT_REQ_C_BRK_2_MALFUNC,                                             /* 13 MALFUNC                                         */
+    (U1)ALERT_REQ_C_BRK_2_ON,                                                  /* 14 ON                                              */
+    (U1)ALERT_REQ_C_BRK_2_ON_MLFNC,                                            /* 15 ON_MLFNC                                        */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 16 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 17 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 18 UNKNOWN                                         */
@@ -84,38 +84,38 @@ static const U1  u1_sp_ALERT_C_BRK_2_DST[ALERT_C_BRK_2_NUM_DST] = {
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 29 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 30 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 31 UNKNOWN                                         */
-    (U1)ALERT_REQ_C_BRK_2_WRN,                                                 /* 32 WRN                                             */
-    (U1)ALERT_REQ_C_BRK_2_WRN,                                                 /* 33 WRN                                             */
-    (U1)ALERT_REQ_C_BRK_2_WRN,                                                 /* 34 WRN                                             */
-    (U1)ALERT_REQ_C_BRK_2_WRN,                                                 /* 35 WRN                                             */
-    (U1)ALERT_REQ_C_BRK_2_WRN,                                                 /* 36 WRN                                             */
-    (U1)ALERT_REQ_C_BRK_2_WRN,                                                 /* 37 WRN                                             */
-    (U1)ALERT_REQ_C_BRK_2_WRN,                                                 /* 38 WRN                                             */
-    (U1)ALERT_REQ_C_BRK_2_WRN,                                                 /* 39 WRN                                             */
-    (U1)ALERT_REQ_C_BRK_2_WRN,                                                 /* 40 WRN                                             */
-    (U1)ALERT_REQ_C_BRK_2_WRN,                                                 /* 41 WRN                                             */
-    (U1)ALERT_REQ_C_BRK_2_WRN,                                                 /* 42 WRN                                             */
-    (U1)ALERT_REQ_C_BRK_2_WRN,                                                 /* 43 WRN                                             */
-    (U1)ALERT_REQ_C_BRK_2_WRN,                                                 /* 44 WRN                                             */
-    (U1)ALERT_REQ_C_BRK_2_WRN,                                                 /* 45 WRN                                             */
-    (U1)ALERT_REQ_C_BRK_2_WRN,                                                 /* 46 WRN                                             */
-    (U1)ALERT_REQ_C_BRK_2_WRN,                                                 /* 47 WRN                                             */
-    (U1)ALERT_REQ_C_BRK_2_WRN,                                                 /* 48 WRN                                             */
-    (U1)ALERT_REQ_C_BRK_2_WRN,                                                 /* 49 WRN                                             */
-    (U1)ALERT_REQ_C_BRK_2_WRN,                                                 /* 50 WRN                                             */
-    (U1)ALERT_REQ_C_BRK_2_WRN,                                                 /* 51 WRN                                             */
-    (U1)ALERT_REQ_C_BRK_2_WRN,                                                 /* 52 WRN                                             */
-    (U1)ALERT_REQ_C_BRK_2_WRN,                                                 /* 53 WRN                                             */
-    (U1)ALERT_REQ_C_BRK_2_WRN,                                                 /* 54 WRN                                             */
-    (U1)ALERT_REQ_C_BRK_2_WRN,                                                 /* 55 WRN                                             */
-    (U1)ALERT_REQ_C_BRK_2_WRN,                                                 /* 56 WRN                                             */
-    (U1)ALERT_REQ_C_BRK_2_WRN,                                                 /* 57 WRN                                             */
-    (U1)ALERT_REQ_C_BRK_2_WRN,                                                 /* 58 WRN                                             */
-    (U1)ALERT_REQ_C_BRK_2_WRN,                                                 /* 59 WRN                                             */
-    (U1)ALERT_REQ_C_BRK_2_WRN,                                                 /* 60 WRN                                             */
-    (U1)ALERT_REQ_C_BRK_2_WRN,                                                 /* 61 WRN                                             */
-    (U1)ALERT_REQ_C_BRK_2_WRN,                                                 /* 62 WRN                                             */
-    (U1)ALERT_REQ_C_BRK_2_WRN                                                  /* 63 WRN                                             */
+    (U1)ALERT_REQ_C_BRK_2_ON_MLFNC,                                            /* 32 ON_MLFNC                                        */
+    (U1)ALERT_REQ_C_BRK_2_ON_MLFNC,                                            /* 33 ON_MLFNC                                        */
+    (U1)ALERT_REQ_C_BRK_2_ON_MLFNC,                                            /* 34 ON_MLFNC                                        */
+    (U1)ALERT_REQ_C_BRK_2_ON_MLFNC,                                            /* 35 ON_MLFNC                                        */
+    (U1)ALERT_REQ_C_BRK_2_ON_MLFNC,                                            /* 36 ON_MLFNC                                        */
+    (U1)ALERT_REQ_C_BRK_2_ON_MLFNC,                                            /* 37 ON_MLFNC                                        */
+    (U1)ALERT_REQ_C_BRK_2_ON_MLFNC,                                            /* 38 ON_MLFNC                                        */
+    (U1)ALERT_REQ_C_BRK_2_ON_MLFNC,                                            /* 39 ON_MLFNC                                        */
+    (U1)ALERT_REQ_C_BRK_2_ON_MLFNC,                                            /* 40 ON_MLFNC                                        */
+    (U1)ALERT_REQ_C_BRK_2_ON_MLFNC,                                            /* 41 ON_MLFNC                                        */
+    (U1)ALERT_REQ_C_BRK_2_ON_MLFNC,                                            /* 42 ON_MLFNC                                        */
+    (U1)ALERT_REQ_C_BRK_2_ON_MLFNC,                                            /* 43 ON_MLFNC                                        */
+    (U1)ALERT_REQ_C_BRK_2_ON_MLFNC,                                            /* 44 ON_MLFNC                                        */
+    (U1)ALERT_REQ_C_BRK_2_ON_MLFNC,                                            /* 45 ON_MLFNC                                        */
+    (U1)ALERT_REQ_C_BRK_2_ON_MLFNC,                                            /* 46 ON_MLFNC                                        */
+    (U1)ALERT_REQ_C_BRK_2_ON_MLFNC,                                            /* 47 ON_MLFNC                                        */
+    (U1)ALERT_REQ_C_BRK_2_ON_MLFNC,                                            /* 48 ON_MLFNC                                        */
+    (U1)ALERT_REQ_C_BRK_2_ON_MLFNC,                                            /* 49 ON_MLFNC                                        */
+    (U1)ALERT_REQ_C_BRK_2_ON_MLFNC,                                            /* 50 ON_MLFNC                                        */
+    (U1)ALERT_REQ_C_BRK_2_ON_MLFNC,                                            /* 51 ON_MLFNC                                        */
+    (U1)ALERT_REQ_C_BRK_2_ON_MLFNC,                                            /* 52 ON_MLFNC                                        */
+    (U1)ALERT_REQ_C_BRK_2_ON_MLFNC,                                            /* 53 ON_MLFNC                                        */
+    (U1)ALERT_REQ_C_BRK_2_ON_MLFNC,                                            /* 54 ON_MLFNC                                        */
+    (U1)ALERT_REQ_C_BRK_2_ON_MLFNC,                                            /* 55 ON_MLFNC                                        */
+    (U1)ALERT_REQ_C_BRK_2_ON_MLFNC,                                            /* 56 ON_MLFNC                                        */
+    (U1)ALERT_REQ_C_BRK_2_ON_MLFNC,                                            /* 57 ON_MLFNC                                        */
+    (U1)ALERT_REQ_C_BRK_2_ON_MLFNC,                                            /* 58 ON_MLFNC                                        */
+    (U1)ALERT_REQ_C_BRK_2_ON_MLFNC,                                            /* 59 ON_MLFNC                                        */
+    (U1)ALERT_REQ_C_BRK_2_ON_MLFNC,                                            /* 60 ON_MLFNC                                        */
+    (U1)ALERT_REQ_C_BRK_2_ON_MLFNC,                                            /* 61 ON_MLFNC                                        */
+    (U1)ALERT_REQ_C_BRK_2_ON_MLFNC,                                            /* 62 ON_MLFNC                                        */
+    (U1)ALERT_REQ_C_BRK_2_ON_MLFNC                                             /* 63 ON_MLFNC                                        */
 };
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -189,11 +189,14 @@ static U4      u4_s_AlertC_brk_2Srcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
 /*  5.3.0    12/ 8/2020  ZS       Fix BRK_JDG bit shift logic.                                                                       */
 /*  5.3.1     3/26/2021  TN       Update for 840B CV(Version update).                                                                */
 /*  5.4.0     2/10/2025  HF       Change for BEV System_Consideration_1.(MET-C_BRK-CSTD-2-00-A-C0)                                   */
+/*  5.2.0     1/13/2026  HT       Change for Full_function2 (MET-M_REMWAR-CSTD-2-04-A-C0)                                            */
+/*                                Removed "ALERT_REQ" in order to transfer signal transmission control from the MCU to the SoC       */
 /*                                                                                                                                   */
 /*  * MY   = Masaki Yoshizawa, NTTD MSE                                                                                              */
 /*  * DS   = Daisuke Suzuki, NTTD MSE                                                                                                */
 /*  * ZS   = Zenjiro Shamoto, NTTD MSE                                                                                               */
 /*  * TN   = Toshiaki Nagashima, NTTD MSE                                                                                            */
 /*  * HF   = Hinari Fukamachi, KSE                                                                                                   */
+/*  * HT   = Hibiki Tanii, KSE                                                                                                       */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

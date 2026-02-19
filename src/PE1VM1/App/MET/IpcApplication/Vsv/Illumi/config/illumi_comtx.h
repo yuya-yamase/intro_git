@@ -1,4 +1,4 @@
-/* 2.2.2 */
+/* 2.3.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -13,8 +13,8 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define ILLUMI_COM_TX_H_MAJOR                   (2)
-#define ILLUMI_COM_TX_H_MINOR                   (2)
-#define ILLUMI_COM_TX_H_PATCH                   (2)
+#define ILLUMI_COM_TX_H_MINOR                   (3)
+#define ILLUMI_COM_TX_H_PATCH                   (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -47,6 +47,8 @@ void    vd_g_IllumiRheoTxAck(void);
 U1      u1_g_IllumiRheoTxNmwk(const U2 u2_a_TOUT);  /* Return : TRUE = Network Management Wakeup is being requested, FALSE = Not */
 U1      u1_g_IllumiTcTxNmwk(const U2 u2_a_TOUT);    /* Return : TRUE = Network Management Wakeup is being requested, FALSE = Not */
 
+U1      u1_g_IllumiRheoDrTxRheoin(void);
+U1      u1_g_IllumiTftbkDrTxIllout(void);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

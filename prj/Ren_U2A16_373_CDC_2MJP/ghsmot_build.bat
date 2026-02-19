@@ -1,13 +1,15 @@
 @echo OFF
 SETLOCAL ENABLEDELAYEDEXPANSION
 
+call build_cfg.bat
+
 rem ---------------------------------------------------------------------------------------------
 rem Target *.mot/x Definition
 rem ---------------------------------------------------------------------------------------------
 set GHS_MOT_OPB_TRGT=..\RFP\bin\bs3ckpt_opbt
 set GHS_MOT_TSW_TRGT=..\RFP\bin\bs3ckpt_2m_jpn_usr_tsw
 set GHS_MOT_OTA_TRGT=..\RFP\bin\bs3ckpt_2m_jpn_usr_ota
-set GHS_MOT_RFP_TRGT=..\RFP\bin\bs3ckpt_2m_jpn_usr_acbd
+set GHS_MOT_RFP_TRGT=..\RFP\bin\%MOT_FILE%
 set GHS_MOT_HSM_TRGT=..\RFP\bin\cychsm_v2716_rfp
 
 rem ---------------------------------------------------------------------------------------------
@@ -46,15 +48,26 @@ echo -- OPBT --                                                                 
 echo ------------------------------------------------------------------------------------- >> build.log
 rem ---------------------------------------------------------------------------------------------
 gbuild -top opbt.gpj -D__GMM_RH850_U2A16_OPBT_CFM_HSM__=0 -strict >> build.log 2>&1
-copy dst\opbt.mot %GHS_MOT_OPB_TRGT%_ac_wo_hsm.mot
+if %ERRORLEVEL% neq 0 ( 
+   goto GHS_MOT_ABT
+)
+copy dst\opbt.mot %GHS_MOT_OPB_TRGT%_ac_wo_hsm.mot                >> build.log 2>&1
 rmdir /s /q obj\opbt
 rmdir /s /q dst
+rem ---------------------------------------------------------------------------------------------
 gbuild -top opbt.gpj -D__GMM_RH850_U2A16_OPBT_CFM_HSM__=1 -strict >> build.log 2>&1
-copy dst\opbt.mot %GHS_MOT_OPB_TRGT%_ac_w__hsm.mot
+if %ERRORLEVEL% neq 0 ( 
+   goto GHS_MOT_ABT
+)
+copy dst\opbt.mot %GHS_MOT_OPB_TRGT%_ac_w__hsm.mot                >> build.log 2>&1
 rmdir /s /q obj\opbt
 rmdir /s /q dst
+rem ---------------------------------------------------------------------------------------------
 gbuild -top opbt.gpj -D__GMM_RH850_U2A16_OPBT_CFM_HSM__=2 -strict >> build.log 2>&1
-copy dst\opbt.mot %GHS_MOT_OPB_TRGT%_bd_wo_hsm.mot
+if %ERRORLEVEL% neq 0 ( 
+   goto GHS_MOT_ABT
+)
+copy dst\opbt.mot %GHS_MOT_OPB_TRGT%_bd_wo_hsm.mot                >> build.log 2>&1
 rmdir /s /q obj\opbt
 rmdir /s /q dst
 
@@ -65,6 +78,9 @@ echo -- EHVM --                                                                 
 echo ------------------------------------------------------------------------------------- >> build.log
 rem ---------------------------------------------------------------------------------------------
 gbuild -top ehvm.gpj %GHS_MOT_MACRO% -strict >> build.log 2>&1
+if %ERRORLEVEL% neq 0 ( 
+   goto GHS_MOT_ABT
+)
 
 rem ---------------------------------------------------------------------------------------------
 echo -- PE0VM0 -- 
@@ -73,6 +89,9 @@ echo -- PE0VM0 --                                                               
 echo ------------------------------------------------------------------------------------- >> build.log
 rem ---------------------------------------------------------------------------------------------
 gbuild -top pe0vm0.gpj %GHS_MOT_MACRO% -strict >> build.log 2>&1
+if %ERRORLEVEL% neq 0 ( 
+   goto GHS_MOT_ABT
+)
 
 rem ---------------------------------------------------------------------------------------------
 echo -- PE1VM1 --
@@ -81,6 +100,9 @@ echo -- PE1VM1 --                                                               
 echo ------------------------------------------------------------------------------------- >> build.log
 rem ---------------------------------------------------------------------------------------------
 gbuild -top pe1vm1.gpj %GHS_MOT_MACRO% -strict >> build.log 2>&1
+if %ERRORLEVEL% neq 0 ( 
+   goto GHS_MOT_ABT
+)
 
 rem ---------------------------------------------------------------------------------------------
 echo -- PE2VM2 --
@@ -89,6 +111,9 @@ echo -- PE2VM2 --                                                               
 echo ------------------------------------------------------------------------------------- >> build.log
 rem ---------------------------------------------------------------------------------------------
 gbuild -top pe2vm2.gpj %GHS_MOT_MACRO% -strict >> build.log 2>&1
+if %ERRORLEVEL% neq 0 ( 
+   goto GHS_MOT_ABT
+)
 
 rem ---------------------------------------------------------------------------------------------
 echo -- PE3VM3 --
@@ -97,6 +122,9 @@ echo -- PE3VM3 --                                                               
 echo ------------------------------------------------------------------------------------- >> build.log
 rem ---------------------------------------------------------------------------------------------
 gbuild -top pe3vm3.gpj %GHS_MOT_MACRO% -strict >> build.log 2>&1
+if %ERRORLEVEL% neq 0 ( 
+   goto GHS_MOT_ABT
+)
 
 rem ---------------------------------------------------------------------------------------------
 echo -- RpgCAN --
@@ -105,7 +133,23 @@ echo -- RpgCAN --                                                               
 echo ------------------------------------------------------------------------------------- >> build.log
 rem ---------------------------------------------------------------------------------------------
 gbuild -top ..\..\src\DevRRPG\ReprogAPL_Info\env\Multi_V800\default.gpj -strict >> build.log 2>&1
+if %ERRORLEVEL% neq 0 ( 
+   goto GHS_MOT_ABT
+)
+rem ---------------------------------------------------------------------------------------------
 gbuild -top ..\..\src\DevRRPG\ReprogProject\env\Multi\Multi_V800\default.gpj -strict >> build.log 2>&1
+if %ERRORLEVEL% neq 0 ( 
+   goto GHS_MOT_ABT
+)
+
+rem ---------------------------------------------------------------------------------------------
+echo -- %GHS_MOT_OTA_TRGT%.bin --
+echo ------------------------------------------------------------------------------------- >> build.log
+echo -- %GHS_MOT_OTA_TRGT%.bin --                                                          >> build.log
+echo ------------------------------------------------------------------------------------- >> build.log
+copy /b dst\pe1vm1.bin + dst\pe0vm0.bin + dst\ehvm.bin + dst\pe2vm2.bin + dst\pe3vm3.bin %GHS_MOT_OTA_TRGT%.bin >> build.log 2>&1
+copy /b %GHS_MOT_OTA_TRGT%.bin + ..\..\src\DevRRPG\ReprogAPL_Info\env\out\Info_Full.bin  %GHS_MOT_OTA_TRGT%.bin >> build.log 2>&1
+copy /b %GHS_MOT_OTA_TRGT%.bin + ..\..\src\DevRRPG\ReprogAPL_Info\env\out\FpSig.bin      %GHS_MOT_OTA_TRGT%.bin >> build.log 2>&1
 
 rem ---------------------------------------------------------------------------------------------
 echo -- RpgCAN : CRC Generation --
@@ -122,19 +166,11 @@ echo S0030000FC > dst\bs3ckpt_usr_tsw.mot
 %MOTTR_PY% ..\..\src\DevRRPG\ReprogAPL_Info\env\out\Info_Full.run dst\bs3ckpt_usr_tsw.mot
 echo S70500000000FA >> dst\bs3ckpt_usr_tsw.mot
 
-echo S0030000FC > dst\bs3ckpt_usr_ota.mot
-%MOTTR_PY% dst\bs3ckpt_usr_tsw.mot dst\bs3ckpt_usr_ota.mot
-%MOTTR_PY% ..\..\src\DevRRPG\ReprogAPL_Info\env\out\FpSig.run dst\bs3ckpt_usr_ota.mot
-echo S70500000000FA >> dst\bs3ckpt_usr_ota.mot
-
-copy dst\bs3ckpt_usr_tsw.mot ..\..\src\DevRRPG\Tool\Converter\bs3ckpt_usr_tsw.mot
-copy dst\bs3ckpt_usr_ota.mot ..\..\src\DevRRPG\Tool\Converter\bs3ckpt_usr_ota.mot
+copy dst\bs3ckpt_usr_tsw.mot ..\..\src\DevRRPG\Tool\Converter\bs3ckpt_usr_tsw.mot >> build.log
 pushd ..\..\src\DevRRPG\Tool\Converter
 python ReprogTargetConverter.py > convert.log 2>&1
 popd
 type ..\..\src\DevRRPG\Tool\Converter\convert.log >> build.log
-copy ..\..\src\DevRRPG\Tool\Converter\bs3ckpt_usr_ota.bin %GHS_MOT_OTA_TRGT%.bin
-copy ..\..\src\DevRRPG\Tool\Converter\bs3ckpt_usr_ota.crc %GHS_MOT_OTA_TRGT%.crc
 
 rem ---------------------------------------------------------------------------------------------
 echo -- %GHS_MOT_TSW_TRGT%.x --
@@ -155,7 +191,8 @@ echo ---------------------------------------------------------------------------
 echo S0030000FC > %GHS_MOT_RFP_TRGT%.mot
 %MOTTR_PY% ..\..\src\DevRRPG\ReprogProject\env\out\Reprog.run %GHS_MOT_RFP_TRGT%.mot
 %MOTTR_PY% ..\..\src\DevRRPG\ReprogAPL_Info\env\out\Keyword_OK.run %GHS_MOT_RFP_TRGT%.mot
-%MOTTR_PY% dst\bs3ckpt_usr_ota.mot %GHS_MOT_RFP_TRGT%.mot
+%MOTTR_PY% dst\bs3ckpt_usr_tsw.mot %GHS_MOT_RFP_TRGT%.mot
+%MOTTR_PY% ..\..\src\DevRRPG\ReprogAPL_Info\env\out\FpSig.run %GHS_MOT_RFP_TRGT%.mot
 
 %MOTTR_PY% ..\..\src\DevRRPG\ReprogProject\env\out\Reprog_B.run %GHS_MOT_RFP_TRGT%.mot
 %MOTTR_PY% ..\..\src\DevRRPG\ReprogAPL_Info\env\out\Keyword_OK_B.run %GHS_MOT_RFP_TRGT%.mot
@@ -169,11 +206,13 @@ echo S0030000FC > %GHS_MOT_RFP_TRGT%.mot
 echo S70500000000FA >> %GHS_MOT_RFP_TRGT%.mot
 
 if not exist %GHS_MOT_HSM_TRGT%_ac.hex ( 
-    copy ..\..\src\PE0VM0\BSW\Aubist\CycurHSM\ecy_hsm_RH850_GHS_D7_DM\bin\HSM.hex   %GHS_MOT_HSM_TRGT%_ac.hex
+    copy ..\..\src\PE0VM0\BSW\Aubist\CycurHSM\ecy_hsm_RH850_GHS_D7_DM\bin\HSM.hex   %GHS_MOT_HSM_TRGT%_ac.hex >> build.log 2>&1
 )
 if not exist %GHS_MOT_HSM_TRGT%_bd.hex ( 
-    copy ..\..\src\PE0VM0\BSW\Aubist\CycurHSM\ecy_hsm_RH850_GHS_D7_DM\bin\HSM_B.hex %GHS_MOT_HSM_TRGT%_bd.hex
+    copy ..\..\src\PE0VM0\BSW\Aubist\CycurHSM\ecy_hsm_RH850_GHS_D7_DM\bin\HSM_B.hex %GHS_MOT_HSM_TRGT%_bd.hex >> build.log 2>&1
 )
+
+call generate_USBRPG.bat %USB_REPROG_FILE%
 
 rem ---------------------------------------------------------------------------------------------
 @echo OFF
@@ -203,5 +242,24 @@ echo ---------------------------------------------------------------------------
 rem ---------------------------------------------------------------------------------------------
 
 pause
+exit /b 0
+
+rem ---------------------------------------------------------------------------------------------
+:GHS_MOT_ABT
+echo;
+echo ghsmot_build was aborted because of error. check build.log out.
+echo; 
+
+rem ---------------------------------------------------------------------------------------------
+echo -------------------------------------------------------------------------------------
+echo ghsmot build finish : %date%  %time%
+echo -------------------------------------------------------------------------------------
+echo ------------------------------------------------------------------------------------- >> build.log
+echo ghsmot build finish : %date%  %time%                                                  >> build.log
+echo ------------------------------------------------------------------------------------- >> build.log
+rem ---------------------------------------------------------------------------------------------
+
+pause
+exit /b 1
 
 ENDLOCAL
