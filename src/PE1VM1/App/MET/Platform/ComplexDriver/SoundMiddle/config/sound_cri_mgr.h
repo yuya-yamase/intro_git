@@ -25,6 +25,8 @@
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define SOUND_CRI_MNG_OW_UNLOCK                      (0x5e4d3c2bU)
+#define SOUND_IC_ERROR                               (1U)
+#define SOUND_IC_NORMAL                              (0U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -52,6 +54,8 @@ void    vd_g_SoundCriMgrOwAct(const U1 u1_a_SO_MDL_CH, const U1 u1_a_WAV_IDX);
 void    vd_g_SoundCriMgrOwDeAct(const U1 u1_a_SO_MDL_CH);
 
 U1      u1_g_SoundIcErrorStatus(void);
+void    vd_g_SoundIcClearErrorStatus(void);
+
 void    vd_g_SoundCriMgr_DeInit(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

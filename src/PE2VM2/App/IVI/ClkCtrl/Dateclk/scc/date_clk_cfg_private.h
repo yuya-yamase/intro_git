@@ -33,9 +33,6 @@
 #define DATE_CLK_MAIN_TICK                       (10U)         /* 10 milliseconds */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define DATE_CLK_TMRWK_NO_TOUT                   (DATE_CLK_ETM_UNK)
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* ST_DATE_CLK_LOG.u1_eas_chk */
 #define DATE_CLK_EAS_HHMMSS_BUE                  (0x01U)  /* backup error/hhmmss is out of range    */
 #define DATE_CLK_EAS_DAYCNT_BUE                  (0x02U)  /* backup error/daycnt is out of range    */
@@ -47,10 +44,6 @@
 #define DATE_CLK_EAS_BC_3_NE_4                   (0x40U)  /* backup compare 3rd is not equal to 4th */
 #define DATE_CLK_EAS_LSB_BC                      (4U)
 
-#define DATE_CLK_EAS_TMRWK_DI                    (0x80U)
-
-#define DATE_CLK_EAS_ERR_FIELDS                  (0x0fU)
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define DATE_CLK_LOG_IF_RTC_UNK                  (0xffU)       /* u1_g_DateclkIfRtcRead is not called.  Don't care about it  */
                                                                /* u1_g_DateclkIfRtcStart is not called. Don't care about it  */
@@ -59,29 +52,18 @@
 /* ST_DATE_CLK_LOG.u1_callpt */
 #define DATE_CLK_LOG_CP_BON                      (0U)          /* vd_g_DateclkBonInit     */
 #define DATE_CLK_LOG_CP_RST                      (1U)          /* vd_g_DateclkRstwkInit   */
-#define DATE_CLK_LOG_CP_IMM                      (2U)          /* vd_g_DateclkImmdShtInit */
-#define DATE_CLK_LOG_CP_TMR                      (3U)          /* vd_g_DateclkTmrwkInit   */
-#define DATE_CLK_LOG_CP_MAI                      (4U)          /* vd_g_DateclkMainTask    */
-#define DATE_CLK_LOG_CP_SET                      (5U)          /* vd_g_DateclkSet         */
+#define DATE_CLK_LOG_CP_MAI                      (2U)          /* vd_g_DateclkMainTask    */
+#define DATE_CLK_LOG_CP_SET                      (3U)          /* vd_g_DateclkSet         */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define __DATE_CLK_IF_RTC_WK_BY_IRQ__            (0U)
-#if (__DATE_CLK_IF_RTC_WK_BY_IRQ__ == 1U)
-#define vd_g_DateclkIfRtcwkEI()
-#define vd_g_DateclkIfRtcwkDI()
-#endif /* #if (__DATE_CLK_IF_RTC_WK_BY_IRQ__ == 1U) */
-
-#define u4_g_DateclkIfRtcwk()                    (u4_g_IntDrvWkEvt((U4)INT_DRV_WK_CHBIT_15, (U1)TRUE))
-
-#define u1_g_DateclkIfRtcRead(c, tp)             (u1_g_RtclkRead((c), (tp)))
-#define u1_g_DateclkIfRtcStart(t, c)             (u1_g_RtclkStart((t), (c), (U1)FALSE))
-#define vd_g_DateclkIfRtcStop()                  (vd_g_RtclkDeInit())
-#define DATE_CLK_IF_RTC_RUN                      (RTCLK_STSBIT_TMCNT_RUN)
-
-#define u4_g_DateclkIfGptFrt()                   (u4_g_Gpt_FrtGetUsElapsed(vdp_PTR_NA))
-#define DATE_CLK_GPT_1_MSEC                      (10000U)  /* GPT_FRT_1US (10U) */
+#define u1_g_DateclkIfRtcRead(tp, tc)            (u1_g_RtclkRead((tp), (tc)))
+#define u1_g_DateclkIfRtcStart(t, c)             (u1_g_RtclkStart((t), (c)))
+#define u1_g_DateclkIfRtcDayset(c)               (u1_g_RtclkDaySet((c)))
+#define DATE_CLK_IF_RTC_RUN                      (RTCLK_STSBIT_RTC_RUN)
+#define DATE_CLK_IF_I2C_ERR                      (RTCLK_STSBIT_I2C_ERROR)
+#define DATE_CLK_IF_TIM_NOREAD                   (RTCLK_STSBIT_TIM_NOREAD)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
@@ -93,8 +75,6 @@ typedef struct{
     U4      u4_hhmmss_aft;
     U4      u4_daycnt_aft;
 
-    U4      u4_sec_elpsd;    /* u4_hhmmss_aft - u4_hhmmss_bfr res. : second */
-
     U1      u1_rtc_rea;      /* Return of u1_g_DateclkIfRtcRead             */
     U1      u1_rtc_sta;      /* Return of u1_g_DateclkIfRtcStart            */
     U1      u1_eas_chk;      /* DATE_CLK_EAS_XXX                            */
@@ -104,28 +84,16 @@ typedef struct{
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-extern U4                  u4_gp_dateclk_etm_frt[];
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Prototypes                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 U4      u4_g_DateclkCfgHhmmss24hInit(void);
 U4      u4_g_DateclkCfgDaycntInit(void);
-S2      s2_g_DateclkCfgCalSubsecond(void);
-U4      u4_g_DateclkCfgTmrwkTimout(void);
 
 void    vd_g_DateclkCfgLogCapt(const ST_DATE_CLK_LOG * st_ap_LOG, const U1 u1_a_ADJ);
 U4      u4_g_DateclkCfgDayCntMinValJdg(void);
 
 void    vd_g_DateclkYymmdd_Commit(const U1 u1_a_state);
-
-/* void    vd_g_DateclkIfRtcwkEI(void);                                         */ /* invoked at u1_g_DateclkShtLpmToTmrwk */
-/* void    vd_g_DateclkIfRtcwkDI(void);                                         */ /* invoked at u1_g_DateclkShtLpmToTmrwk */
-                                                                                   /*        and vd_g_DateclkMainTask      */
-/* U4      u4_g_DateclkIfRtcwk(void);                                           */ /* invoked at u1_g_DateclkTmrwkchk      */
-/* U1      u1_g_DateclkIfRtcRead(const S2 s2_a_CAL_SUBSE, U4 * u4_ap_hhmmss_24h);     */
-/* U1      u1_g_DateclkIfRtcStart(const U4 u4_a_HHMMSS_24H, const S2 s2_a_CAL_SUBSE); */
-/* U1      vd_g_DateclkIfRtcStop(void);                                               */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
@@ -133,11 +101,7 @@ void    vd_g_DateclkYymmdd_Commit(const U1 u1_a_state);
 extern const U4            u4_g_DATE_CLK_DAYCNT_MIN;                             /* [days]          */
 extern const U4            u4_g_DATE_CLK_DAYCNT_MAX;                             /* [days]          */
 
-extern const U4            u4_g_DATE_CLK_RTC_SYNC_MAX;                           /* [seconds]       */
-
 extern const U2            u2_g_DATE_CLK_ADJ_TOUT;                               /* [DATE_CLK_TICK] */
-
-extern const U1            u1_g_DATE_CLK_ETM_NUM_CH;
 
 #endif      /* DATE_CLK_CFG_H */
 

@@ -1,4 +1,4 @@
-/* 2.2.1 */
+/* 3.1.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -9,16 +9,16 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define SBLTWRN_CFG_C_MAJOR                     (2)
-#define SBLTWRN_CFG_C_MINOR                     (2)
-#define SBLTWRN_CFG_C_PATCH                     (1)
+#define SBLTWRN_CFG_C_MAJOR                     (3)
+#define SBLTWRN_CFG_C_MINOR                     (1)
+#define SBLTWRN_CFG_C_PATCH                     (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "sbltwrn_cfg_private.h"
 
-#include "vardef_dest.h"
+#include "vardef.h"
 #include "oxcan.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -27,13 +27,13 @@
 #if ((SBLTWRN_CFG_C_MAJOR != SBLTWRN_H_MAJOR) || \
      (SBLTWRN_CFG_C_MINOR != SBLTWRN_H_MINOR) || \
      (SBLTWRN_CFG_C_PATCH != SBLTWRN_H_PATCH))
-#error "vptran_sel_cfg.c and vptran_sel.h : source and header files are inconsistent!"
+#error "sbltwrn_cfg.c and sbltwrn.h : source and header files are inconsistent!"
 #endif
 
 #if ((SBLTWRN_CFG_C_MAJOR != SBLTWRN_CFG_PRIVATE_H_MAJOR) || \
      (SBLTWRN_CFG_C_MINOR != SBLTWRN_CFG_PRIVATE_H_MINOR) || \
      (SBLTWRN_CFG_C_PATCH != SBLTWRN_CFG_PRIVATE_H_PATCH))
-#error "vptran_sel_cfg.c and vptran_sel_cfg_private.h : source and header files are inconsistent!"
+#error "sbltwrn_cfg.c and sbltwrn_cfg_private.h : source and header files are inconsistent!"
 #endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -56,7 +56,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 const   ST_SBLTWRN_MSGCFG                       st_gp_SBLTWRN_MSGCOND_CFG[SBLTWRN_NUM_MSG] = {
     {   (U1)SBLTWRN_MSGCOND_BATT,   (U2)MSG_BDB1S01_RXCH0  },      /* 01 SBLTWRN_MSG_BDB1S01 */ /* For R*OSW, POSW, ***Y, PKB_BDB      */
-    {   (U1)SBLTWRN_MSGCOND_IGON,   (U2)MSG_ECT1G01_RXCH0  },      /* 02 SBLTWRN_MSG_ECT1G01 */ /* For B_P, B_R                        */
+    {   (U1)SBLTWRN_MSGCOND_IGON,   (U2)MSG_ECT1G01_RXCH0  },      /* 02 SBLTWRN_MSG_ECT1G01 */ /* For B_P, B_R, B_N                   */
     {   (U1)SBLTWRN_MSGCOND_IGON,   (U2)MSG_ABG1S01_RXCH0  },      /* 03 SBLTWRN_MSG_ABG1S01 */ /* For *BKLAB                          */
     {   (U1)SBLTWRN_MSGCOND_IGON,   (U2)MSG_VSC1G13_RXCH0  },      /* 04 SBLTWRN_MSG_VSC1G13 */ /* For SP1                             */
     {   (U1)SBLTWRN_MSGCOND_BATT,   (U2)MSG_PDC1G02_RXCH0  },      /* 05 SBLTWRN_MSG_PDC1G02 */ /* For R*BKLPDC, PBKL_PDC              */
@@ -77,23 +77,32 @@ static inline  U1 u1_s_SbltwrnCfgCalibU1NumChk(const U1 u1_a_CALIBID, const U1 u
 /*===================================================================================================================================*/
 U1              u1_g_SbltwrnDestCfg(void)
 {
-    static const U1 u1_sp_SBLTWRN_DESTJDG[CALIB_MCUID0024_NUM][VDF_NUM_SEATBLT_DEST] = {
-        {(U1)SBLTWRN_DEST_US_TS,    (U1)SBLTWRN_DEST_EU_TS,     (U1)SBLTWRN_DEST_CN_TS      },
-        {(U1)SBLTWRN_DEST_US_LS,    (U1)SBLTWRN_DEST_EU_LS,     (U1)SBLTWRN_DEST_CN_LS      },
-        {(U1)SBLTWRN_DEST_US_SB,    (U1)SBLTWRN_DEST_EU_SB,     (U1)SBLTWRN_DEST_CN_SB      }
+    static const U1 u1_sp_SBLTWRN_DESTJDG[CALIB_MCUID1137_NUM][CALIB_MCUID0024_NUM][VDF_NUM_SEATBLT_DEST] = {
+        {
+            {(U1)SBLTWRN_DEST_US_TS,    (U1)SBLTWRN_DEST_EU_TS,     (U1)SBLTWRN_DEST_CN_TS      },
+            {(U1)SBLTWRN_DEST_US_LS,    (U1)SBLTWRN_DEST_EU_LS,     (U1)SBLTWRN_DEST_CN_LS      },
+            {(U1)SBLTWRN_DEST_US_SB,    (U1)SBLTWRN_DEST_EU_SB,     (U1)SBLTWRN_DEST_CN_SB      }
+        },
+        {
+            {(U1)SBLTWRN_DEST_FM_TS,    (U1)SBLTWRN_DEST_EU_TS,     (U1)SBLTWRN_DEST_CN_TS      },
+            {(U1)SBLTWRN_DEST_FM_LS,    (U1)SBLTWRN_DEST_EU_LS,     (U1)SBLTWRN_DEST_CN_LS      },
+            {(U1)SBLTWRN_DEST_FM_SB,    (U1)SBLTWRN_DEST_EU_SB,     (U1)SBLTWRN_DEST_CN_SB      }
+        }
     };
 
+    U1  u1_t_nfmvss;
     U1  u1_t_brand;
     U1  u1_t_dest;
     U1  u1_t_beltdest;
 
-    u1_t_brand = u1_s_SbltwrnCfgCalibU1NumChk(u1_CALIB_MCUID0024_BRAND, (U1)CALIB_MCUID0024_NUM, (U1)CALIB_MCUID0024_DEF);
+    u1_t_nfmvss = u1_s_SbltwrnCfgCalibU1NumChk(u1_CALIB_MCUID1137_NEW_FMVSS208, (U1)CALIB_MCUID1137_NUM, (U1)CALIB_MCUID1137_FMVSS208);
+    u1_t_brand  = u1_g_VardefOmusMCUID0024();
     u1_t_dest = u1_g_VardefBltDstByPid();
     if(u1_t_dest >= (U1)VDF_NUM_SEATBLT_DEST){
         u1_t_dest = (U1)VDF_SEATBLT_DEST_USA;
     }
 
-    u1_t_beltdest = u1_sp_SBLTWRN_DESTJDG[u1_t_brand][u1_t_dest];
+    u1_t_beltdest = u1_sp_SBLTWRN_DESTJDG[u1_t_nfmvss][u1_t_brand][u1_t_dest];
 
     return (u1_t_beltdest);
 }
@@ -147,6 +156,8 @@ static inline  U1 u1_s_SbltwrnCfgCalibU1NumChk(const U1 u1_a_CALIBID, const U1 u
 /*  2.1.3    04/05/2022  YI(M)    sbltwrn.c v2.1.2 -> v2.1.3.                                                                        */
 /*  2.2.0    02/29/2024  TH       sbltwrn.c v2.1.3 -> v2.2.0.                                                                        */
 /*  2.2.1    03/20/2025  TH       sbltwrn.c v2.2.0 -> v2.2.1.                                                                        */
+/*  3.0.0    09/16/2025  NA       sbltwrn.c v2.2.1 -> v3.0.0.                                                                        */
+/*  3.1.0    01/22/2026  NA       sbltwrn.c v3.0.0 -> v3.1.0.                                                                        */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  Revision     Date        Author   Change Description                                                                             */
@@ -168,5 +179,6 @@ static inline  U1 u1_s_SbltwrnCfgCalibU1NumChk(const U1 u1_a_CALIBID, const U1 u
 /*  * SH   = Sae Hirose,       Denso Techno                                                                                          */
 /*  * TH   = Taisuke Hirakawa, KSE                                                                                                   */
 /*  * YN   = Yujiro Nagaya,    Denso Techno                                                                                          */
+/*  * NA   = Nazirul Afham,    PXT                                                                                                   */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

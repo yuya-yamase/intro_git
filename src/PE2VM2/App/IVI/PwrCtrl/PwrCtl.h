@@ -11,6 +11,7 @@
 #include "Dio.h"
 #include "oxcan.h"
 #include "veh_opemd.h"
+#include "ExtSigCtrl.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
@@ -28,7 +29,7 @@
 #define POWER_IO_STS_LOW                            (STD_LOW)
 #define POWER_IO_STS_HIGH                           (STD_HIGH)
 
-#define u1_POWER_GET_BOOT()                         ((U1)Dio_ReadChannel((Dio_ChannelType)DIO_ID_PORT0_CH2))    /* 暫定 量産時削除 */
+#define u1_POWER_GET_BOOT()                         ((U1)ExtSigCtrl_GetSigSts(EXTSIGCTRL_KIND_BOOT))    /* 暫定 量産時削除 */
 
 #define vd_POWER_GET_VPSINFOS(x)                    ((void)Com_ReceiveSignal(ComConf_ComSignal_VPSINFOS, (x)))
 #define vd_POWER_GET_APOFRQ(x)                      ((void)Com_ReceiveSignal(ComConf_ComSignal_APOFRQ, (x)))

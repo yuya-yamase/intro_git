@@ -27,31 +27,25 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define VEH_OPEMD_MDBIT_ACC                      (0x00000002U)  /* BDC1S81.VPSINFOx =                 0x66 or 0x76 or 0x7e */
-#define VEH_OPEMD_MDBIT_IG_P                     (0x00000004U)  /* BDC1S81.VPSINFOx =                                 0x7e */
-#define VEH_OPEMD_MDBIT_PBA                      (0x00000008U)  /* BDC1S81.VPSINFOx = 0x22 or 0x62 or 0x66 or 0x76 or 0x7e */
-#define VEH_OPEMD_MDBIT_IG_R                     (0x00000010U)  /* BDC1S81.VPSINFOx =                         0x76 or 0x7e */
-#define VEH_OPEMD_MDBIT_IGCT                     (0x00000020U)  /* BDC1S81.VPSINFOx = 0x22 or 0x62                         */
-#define VEH_OPEMD_MDBIT_IGBD                     (0x00000040U)  /* BDC1S81.VPSINFOx =         0x62                         */
+#define VEH_OPEMD_MDBIT_ACC                      (0x00000002U)  /* BDC1S81.VPSINFOx =         0x06 or 0x16 or 0x1e */
+#define VEH_OPEMD_MDBIT_IG_P                     (0x00000004U)  /* BDC1S81.VPSINFOx =                         0x1e */
+#define VEH_OPEMD_MDBIT_PBA                      (0x00000008U)  /* BDC1S81.VPSINFOx = 0x02 or 0x06 or 0x16 or 0x1e */
+#define VEH_OPEMD_MDBIT_IG_R                     (0x00000010U)  /* BDC1S81.VPSINFOx =                 0x16 or 0x1e */
 
-#define VEH_OPEMD_MDBIT_FIELDS                   (0x0000007eU)
+#define VEH_OPEMD_MDBIT_FIELDS                   (0x0000001eU)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define VEH_OPEMD_EVBIT_ACC_TO_ON                (0x00000002U)
 #define VEH_OPEMD_EVBIT_IG_P_TO_ON               (0x00000004U)
 #define VEH_OPEMD_EVBIT_PBA_TO_ON                (0x00000008U)
 #define VEH_OPEMD_EVBIT_IG_R_TO_ON               (0x00000010U)
-#define VEH_OPEMD_EVBIT_IGCT_TO_ON               (0x00000020U)
-#define VEH_OPEMD_EVBIT_IGBD_TO_ON               (0x00000040U)
 
 #define VEH_OPEMD_EVBIT_ACC_TO_OFF               (0x00020000U)
 #define VEH_OPEMD_EVBIT_IG_P_TO_OFF              (0x00040000U)
 #define VEH_OPEMD_EVBIT_PBA_TO_OFF               (0x00080000U)
 #define VEH_OPEMD_EVBIT_IG_R_TO_OFF              (0x00100000U)
-#define VEH_OPEMD_EVBIT_IGCT_TO_OFF              (0x00200000U)
-#define VEH_OPEMD_EVBIT_IGBD_TO_OFF              (0x00400000U)
 
-#define VEH_OPEMD_EVBIT_FIELDS                   (0x007e007eU)
+#define VEH_OPEMD_EVBIT_FIELDS                   (0x001e001eU)
 
 #define VEH_OPEMD_PTS_INV_OFF                    (0U)
 #define VEH_OPEMD_PTS_INV_ON                     (1U)
@@ -75,6 +69,7 @@
 /*  Function Prototypes                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 U1      u1_g_VehopemdPtsOn(const U1 u1_a_INV);
+U1      u1_g_VehopemdApofrqOn(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */

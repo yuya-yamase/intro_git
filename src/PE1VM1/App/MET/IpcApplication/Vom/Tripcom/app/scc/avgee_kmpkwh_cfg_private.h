@@ -1,4 +1,4 @@
-/* 2.2.1 */
+/* 2.4.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -13,8 +13,8 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define AVGEE_KMPKWH_CFG_H_MAJOR                  (2)
-#define AVGEE_KMPKWH_CFG_H_MINOR                  (2)
-#define AVGEE_KMPKWH_CFG_H_PATCH                  (1)
+#define AVGEE_KMPKWH_CFG_H_MINOR                  (4)
+#define AVGEE_KMPKWH_CFG_H_PATCH                  (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -24,6 +24,7 @@
 #include "tripcom_ms.h"
 #include "tripcom_private.h"
 #include "tripcom_calc.h"
+#include "tripcom_cfg_private.h"
 #include "avgecon.h"
 #include "avggrph.h"
 #include "avgee_kmpkwh.h"

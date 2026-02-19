@@ -1,4 +1,4 @@
-/* 2.1.0 */
+/* 2.2.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define ODO_NVMIF_ODO_KM_C_MAJOR                 (2)
-#define ODO_NVMIF_ODO_KM_C_MINOR                 (1)
+#define ODO_NVMIF_ODO_KM_C_MINOR                 (2)
 #define ODO_NVMIF_ODO_KM_C_PATCH                 (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -919,6 +919,7 @@ static void    vd_s_OdoNvmIfOdoActToSynLast(void)
 /*  1.3.2    08/18/2020  YN       odo_nvmif_km.c v1.3.1 -> v1.3.2                                                                    */
 /*  2.0.1    10/18/2021  TA(M)    Change the definition of the null pointer used.(BSW v115_r007)                                     */
 /*  2.1.0    01/21/2025  RS       Change for BEV System_Consideration_1 (odo_km.c v2.0.1 -> v2.1.0)                                  */
+/*  2.2.0    02/10/2026  RS       Add Odo Inherit function for BEV FF2 (odo_km.c v2.1.0 -> v2.2.0)                                   */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
 /*  * YN   = Yasuhiro Nakamura, Denso Techno                                                                                         */

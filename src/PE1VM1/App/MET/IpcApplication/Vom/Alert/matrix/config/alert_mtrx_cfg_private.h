@@ -1,4 +1,4 @@
-/* 5.2.0 */
+/* 5.4.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -14,7 +14,6 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "vardef.h"
 #include "vehspd_kmph.h"
-#include "calibration.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
@@ -46,7 +45,6 @@
 #define ALERT_B_BLGT_CH_NUM                      (1U)
 #define ALERT_B_BVOOPE_CH_NUM                    (1U)
 #define ALERT_B_PBD_CH_NUM                       (1U)
-#define ALERT_B_PERSET_CH_NUM                    (1U)
 #define ALERT_B_THEAD_CH_NUM                     (1U)
 #define ALERT_B_TRFOG_CH_NUM                     (1U)
 #define ALERT_B_TTAIL_CH_NUM                     (1U)
@@ -68,7 +66,7 @@
 #define ALERT_C_BRLV_2_CH_NUM                    (2U)
 #define ALERT_C_ECB_CH_NUM                       (1U)
 #define ALERT_H_MAICER_CH_NUM                    (4U)
-#define ALERT_H_PEXI_CH_NUM                      (2U)
+#define ALERT_H_PEXI_CH_NUM                      (1U)
 #define ALERT_O_EIGCON_CH_NUM                    (1U)
 #define ALERT_S_ADBZR_CSR_CH_NUM                 (2U)
 #define ALERT_S_ADBZR_SEA_CH_NUM                 (1U)
@@ -134,6 +132,11 @@
 #define ALERT_S_TMBZR_CH_NUM                     (2U)
 #define ALERT_B_TURHAZ_CH_NUM                    (2U)
 #define ALERT_S_ADBZR_TCW_CH_NUM                 (1U)
+#define ALERT_O_FNCLIM_CH_NUM                    (1U)
+#define ALERT_M_SECMSG_CH_NUM                    (1U)
+#define ALERT_B_SECBDC_CH_NUM                    (1U)
+#define ALERT_D_SECDDC_CH_NUM                    (1U)
+#define ALERT_S_SECADC_CH_NUM                    (1U)
 
 #define ALERT_SPD_STSBIT_VALID                   (VEHSPD_STSBIT_VALID)
 #define ALERT_SPD_STSBIT_UNKNOWN                 (VEHSPD_STSBIT_UNKNOWN)
@@ -171,11 +174,11 @@
 #define u1_g_AlertCfgRFOGIsEnable()                                 ((U1)TRUE)
 #define u1_g_AlertCfgHEDLIsEnable()                                 ((U1)TRUE)
 
-#define u1_ALERT_CFG_B_TDOOR_RRCY                                   (u1_CALIB_MCUID0209_RRCYM)
-#define u1_ALERT_CFG_B_TDOOR_RLCY                                   (u1_CALIB_MCUID0210_RLCYM)
-#define u1_ALERT_CFG_B_TDOOR_BCTY                                   (u1_CALIB_MCUID0211_BCTYM)
-#define u1_ALERT_CFG_B_TDOOR_LGCY                                   (u1_CALIB_MCUID0212_LGCYM)
-#define u1_ALERT_CFG_B_TDOOR_HDCY_BDB                               (u1_CALIB_MCUID0213_HDCY_BDBM)
+#define u1_g_AlertOmusMCUID0209()                                   (u1_g_VardefOmusMCUID0209())
+#define u1_g_AlertOmusMCUID0210()                                   (u1_g_VardefOmusMCUID0210())
+#define u1_g_AlertOmusMCUID0211()                                   (u1_g_VardefOmusMCUID0211())
+#define u1_g_AlertOmusMCUID0212()                                   (u1_g_VardefOmusMCUID0212())
+#define u1_g_AlertOmusMCUID0213()                                   (u1_g_VardefOmusMCUID0213())
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
@@ -190,7 +193,6 @@
 void    vd_g_AlertB_blgtInit(void);
 void    vd_g_AlertB_bvoopeInit(void);
 void    vd_g_AlertB_pbdInit(void);
-void    vd_g_AlertB_persetInit(void);
 void    vd_g_AlertB_theadInit(void);
 void    vd_g_AlertB_trfogInit(void);
 void    vd_g_AlertB_ttailInit(void);
@@ -219,6 +221,8 @@ void    vd_g_AlertC_hcsInit(void);
 void    vd_g_AlertH_battrwInit(void);
 void    vd_g_AlertO_pdsmalInit(void);
 void    vd_g_AlertB_turhazInit(void);
+void    vd_g_AlertO_fnclimInit(void);
+void    vd_g_AlertB_secbdcInit(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* Required  */
@@ -231,7 +235,6 @@ extern const ST_ALERT_MTRX         st_gp_ALERT_B_AVAS_MTRX[ALERT_B_AVAS_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_B_BLGT_MTRX[ALERT_B_BLGT_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_B_BVOOPE_MTRX[ALERT_B_BVOOPE_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_B_PBD_MTRX[ALERT_B_PBD_CH_NUM];
-extern const ST_ALERT_MTRX         st_gp_ALERT_B_PERSET_MTRX[ALERT_B_PERSET_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_B_THEAD_MTRX[ALERT_B_THEAD_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_B_TRFOG_MTRX[ALERT_B_TRFOG_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_B_TTAIL_MTRX[ALERT_B_TTAIL_CH_NUM];
@@ -319,6 +322,11 @@ extern const ST_ALERT_MTRX         st_gp_ALERT_S_TMTT_MTRX[ALERT_S_TMTT_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_S_TMBZR_MTRX[ALERT_S_TMBZR_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_B_TURHAZ_MTRX[ALERT_B_TURHAZ_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_S_ADBZR_TCW_MTRX[ALERT_S_ADBZR_TCW_CH_NUM];
+extern const ST_ALERT_MTRX         st_gp_ALERT_O_FNCLIM_MTRX[ALERT_O_FNCLIM_CH_NUM];
+extern const ST_ALERT_MTRX         st_gp_ALERT_M_SECMSG_MTRX[ALERT_M_SECMSG_CH_NUM];
+extern const ST_ALERT_MTRX         st_gp_ALERT_B_SECBDC_MTRX[ALERT_B_SECBDC_CH_NUM];
+extern const ST_ALERT_MTRX         st_gp_ALERT_D_SECDDC_MTRX[ALERT_D_SECDDC_CH_NUM];
+extern const ST_ALERT_MTRX         st_gp_ALERT_S_SECADC_MTRX[ALERT_S_SECADC_CH_NUM];
 
 #endif      /* ALERT_MTRX_CFG_H */
 

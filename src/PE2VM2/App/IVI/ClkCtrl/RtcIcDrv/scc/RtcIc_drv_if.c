@@ -55,12 +55,12 @@
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*===================================================================================================================================*/
-/*  U1      u1_g_RtclkStart(const U4 u4_a_HHMMSS_24H, const S2 s2_a_CAL_SUBSE, const U1 u1_a_IRQ_ENA)                                */
+/*  U1      u1_g_RtclkStart(const U4 u4_a_hhmmss_24h, const U4 u4_a_daycnt)                                                          */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-U1      u1_g_RtclkStart(const U4 u4_a_HHMMSS_24H, const S2 s2_a_CAL_SUBSE, const U1 u1_a_IRQ_ENA)
+U1      u1_g_RtclkStart(const U4 u4_a_hhmmss_24h, const U4 u4_a_daycnt)
 {
     U4                 u4_t_bcd;
 
@@ -68,31 +68,36 @@ U1      u1_g_RtclkStart(const U4 u4_a_HHMMSS_24H, const S2 s2_a_CAL_SUBSE, const
     U1                 u1_t_frmt;
     U1                 u1_tp_time[HHMMSS_24H_TIME_SIZE];
 
-    volatile U1        u1_t_rdbk;
+    u1_t_stsbit = u1_g_RtcIc_RtclkStaProv();
 
-    u1_t_stsbit = (U1)0U;
-
-    u1_t_frmt = u1_g_HhmmssFrmtIs24h(u4_a_HHMMSS_24H, &u1_tp_time[0]);
+    u1_t_frmt = u1_g_HhmmssFrmtIs24h(u4_a_hhmmss_24h, &u1_tp_time[0]);
     if(u1_t_frmt != (U1)TRUE){
-        u1_t_stsbit = (U1)RTCLK_STSBIT_HHMMSS_INVLD;
+        u1_t_stsbit |= (U1)RTCLK_STSBIT_HHMMSS_INVLD;
     }
     else {
-        u4_t_bcd  = u4_g_IntToBcd((U4)u1_tp_time[HHMMSS_24H_TIME_HR])  << RTCLK_HHMMSS_LSB_HR;
-        u4_t_bcd |= (u4_g_IntToBcd((U4)u1_tp_time[HHMMSS_24H_TIME_MI]) << RTCLK_HHMMSS_LSB_MI);
-        u4_t_bcd |= u4_g_IntToBcd((U4)u1_tp_time[HHMMSS_24H_TIME_SE]);
+        if ((u4_a_daycnt >= (U4)DATE_CLK_DAYCNT_MIN) &&
+            (u4_a_daycnt <  (U4)DATE_CLK_DAYCNT_MAX)) {
 
-         vd_g_RtcIc_RtclkRtartReq(u4_t_bcd);
+            u4_t_bcd  = u4_g_IntToBcd((U4)u1_tp_time[HHMMSS_24H_TIME_HR]) << RTCLK_HHMMSS_LSB_HR;
+            u4_t_bcd |= u4_g_IntToBcd((U4)u1_tp_time[HHMMSS_24H_TIME_MI]) << RTCLK_HHMMSS_LSB_MI;
+            u4_t_bcd |= u4_g_IntToBcd((U4)u1_tp_time[HHMMSS_24H_TIME_SE]);
+
+            vd_g_RtcIc_RtclkRtartReq(u4_t_bcd, u4_a_daycnt);
+        }
+        else {
+            u1_t_stsbit |= (U1)RTCLK_STSBIT_YYMMDD_INVLD;
+        }
     }
 
     return(u1_t_stsbit);
 }
 /*===================================================================================================================================*/
-/*  U1      u1_g_RtclkRead(const S2 s2_a_CAL_SUBSE, U4 * u4_ap_hhmmss_24h)                                                           */
+/*  U1      u1_g_RtclkRead(U4 * u4_ap_hhmmss_24h, U4 * u4_ap_daycnt)                                                                 */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-U1      u1_g_RtclkRead(const S2 s2_a_CAL_SUBSE, U4 * u4_ap_hhmmss_24h)
+U1      u1_g_RtclkRead(U4 * u4_ap_hhmmss_24h, U4 * u4_ap_daycnt)
 {
 
     U4                 u4_t_hhmmss_rtclk;
@@ -100,74 +105,62 @@ U1      u1_g_RtclkRead(const S2 s2_a_CAL_SUBSE, U4 * u4_ap_hhmmss_24h)
     U4                 u4_t_mi;
     U4                 u4_t_hr;
     U4                 u4_t_hhmmss_24h;
+    U4                 u4_t_daycnt;
 
     U1                 u1_t_stsbit;
-    U1                 u1_t_state;
 
-    u1_t_stsbit = (U1)0U;
+    u1_t_stsbit = u1_g_RtcIc_RtclkStaProv();
 
-    u1_t_state = u1_g_RtcIc_RtclkStaProv();
+    vd_g_RtcIc_RtclkProv(&u4_t_hhmmss_rtclk, &u4_t_daycnt);
 
-    if (u1_t_state == (U1)RTCIC_I2C_ERROR) {
-        u1_t_stsbit = (U1)RTCLK_STSBIT_I2C_ERROR;
+    u4_t_se =  u4_t_hhmmss_rtclk & (U4)RTCLK_HHMMSS_BIT_SE;
+    u4_t_mi = (u4_t_hhmmss_rtclk & (U4)RTCLK_HHMMSS_BIT_MI) >> RTCLK_HHMMSS_LSB_MI;
+    u4_t_hr = (u4_t_hhmmss_rtclk & (U4)RTCLK_HHMMSS_BIT_HR) >> RTCLK_HHMMSS_LSB_HR;
 
+    u4_t_se = u4_g_BcdToInt(u4_t_se);
+    u4_t_mi = u4_g_BcdToInt(u4_t_mi);
+    u4_t_hr = u4_g_BcdToInt(u4_t_hr);
+
+    if((u4_t_se <= (U4)HHMMSS_SE_MAX    ) &&
+       (u4_t_mi <= (U4)HHMMSS_MI_MAX    ) &&
+       (u4_t_hr <= (U4)HHMMSS_24H_HR_MAX)){
+
+        u4_t_hhmmss_24h  = (u4_t_hr << HHMMSS_LSB_HR);
+        u4_t_hhmmss_24h |= (u4_t_mi << HHMMSS_LSB_MI);
+        u4_t_hhmmss_24h |= u4_t_se;
+
+        (*u4_ap_hhmmss_24h) = u4_t_hhmmss_24h;
+        (*u4_ap_daycnt)     = u4_t_daycnt;
     }
-    else if (u1_t_state == (U1)RTCIC_RTC_INITIAL) {
-        u1_t_stsbit = (U1)RTCLK_STSBIT_INITIAL;
-    }
-    else {
-        vd_g_RtcIc_RtclkProv(&u4_t_hhmmss_rtclk);
-
-        u4_t_se =  u4_t_hhmmss_rtclk & (U4)RTCLK_HHMMSS_BIT_SE;
-        u4_t_mi = (u4_t_hhmmss_rtclk & (U4)RTCLK_HHMMSS_BIT_MI) >> RTCLK_HHMMSS_LSB_MI;
-        u4_t_hr = (u4_t_hhmmss_rtclk & (U4)RTCLK_HHMMSS_BIT_HR) >> RTCLK_HHMMSS_LSB_HR;
-
-        u4_t_se = u4_g_BcdToInt(u4_t_se);
-        u4_t_mi = u4_g_BcdToInt(u4_t_mi);
-        u4_t_hr = u4_g_BcdToInt(u4_t_hr);
-
-        if((u4_t_se <= (U4)HHMMSS_SE_MAX    ) &&
-           (u4_t_mi <= (U4)HHMMSS_MI_MAX    ) &&
-           (u4_t_hr <= (U4)HHMMSS_24H_HR_MAX)){
-
-            u4_t_hhmmss_24h  = (u4_t_hr << HHMMSS_LSB_HR);
-            u4_t_hhmmss_24h |= (u4_t_mi << HHMMSS_LSB_MI);
-            u4_t_hhmmss_24h |= u4_t_se;
-            (*u4_ap_hhmmss_24h) = u4_t_hhmmss_24h;
-        }
-        else{
-            u1_t_stsbit = (U1)RTCLK_STSBIT_HHMMSS_INVLD;
-        }
+    else{
+        u1_t_stsbit |= (U1)RTCLK_STSBIT_HHMMSS_INVLD;
     }
 
     return(u1_t_stsbit);
 }
 /*===================================================================================================================================*/
-/*  U1      u1_g_RtclkSts(void)                                                                                                      */
+/*  U1      u1_g_RtclkDaySet(const U4 u4_a_daycnt)                                                                                   */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-U1      u1_g_RtclkSts(void)
+U1      u1_g_RtclkDaySet(const U4 u4_a_daycnt)
 {
-    U1                 u1_t_state;
     U1                 u1_t_stsbit;
 
-    u1_t_state = u1_g_RtcIc_RtclkStaProv();
+    u1_t_stsbit = u1_g_RtcIc_RtclkStaProv();
 
-    if (u1_t_state == (U1)RTCIC_I2C_ERROR) {
-        u1_t_stsbit = (U1)RTCLK_STSBIT_I2C_ERROR;
-
-    }
-    else if (u1_t_state == (U1)RTCIC_RTC_INITIAL) {
-        u1_t_stsbit = (U1)RTCLK_STSBIT_INITIAL;
+    if ((u4_a_daycnt >= (U4)DATE_CLK_DAYCNT_MIN) &&
+        (u4_a_daycnt <  (U4)DATE_CLK_DAYCNT_MAX)) {
+        vd_g_RtcIc_RtclkDaySet(u4_a_daycnt);
     }
     else {
-        u1_t_stsbit = (U1)RTCLK_STSBIT_TMCNT_RUN;
+        u1_t_stsbit |= (U1)RTCLK_STSBIT_YYMMDD_INVLD;
     }
 
     return(u1_t_stsbit);
 }
+
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
