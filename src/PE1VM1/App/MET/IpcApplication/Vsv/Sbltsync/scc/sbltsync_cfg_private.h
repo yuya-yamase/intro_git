@@ -25,9 +25,9 @@
 #include "oxcan.h"
 #endif   /* BEV Rebase provisionally */
 #include "calibration.h"
+#include "vardef.h"
 
 #include "sbltsync.h"
-#include "vardef.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
