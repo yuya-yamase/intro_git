@@ -1,4 +1,4 @@
-/* 1.4.1 */
+/* 1.5.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,8 +10,8 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define DIM_USADJ_BY_SW_C_MAJOR                  (1)
-#define DIM_USADJ_BY_SW_C_MINOR                  (4)
-#define DIM_USADJ_BY_SW_C_PATCH                  (1)
+#define DIM_USADJ_BY_SW_C_MINOR                  (5)
+#define DIM_USADJ_BY_SW_C_PATCH                  (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -92,6 +92,7 @@ static U2         u2_s_dim_usadjbysw_nvm_updt;
 static U2         u2_s_dim_usadjbysw_tmelpsd;
 static U1         u1_s_dim_usadjbysw_swchk;
 static U1         u1_s_dim_usadjbysw_vrupdn;
+static U1         u1_s_dim_usadjbysw_operable_sts;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
@@ -102,6 +103,7 @@ static        void    vd_s_DimUsadjbySwLvlUp(const U1 u1_a_TAIL_ON, const U1 u1_
 static        void    vd_s_DimUsadjbySwLvlDwn(const U1 u1_a_TAIL_ON, const U1 u1_a_DAYNIGHT, U2 * u2_ap_lvl);
 static        void    vd_s_DimUsadjbySwVrchk(const U1 u1_a_ADJBL, const U1 u1_a_TAIL_ON, const U1 u1_a_DAYNIGHT, U2 * u2_ap_lvl);
 static        U2      u2_s_DimUsadjbySwVrHysManualLv(const U2 u2_a_AD, const U2 u2_a_OLDSTEP);
+static        void    vd_s_DimUsadjbySwOperableStsUpd(const U1 u1_a_TAIL_ON, const U1 u1_a_DAYNIGHT, const U2 *u2_ap_lvl);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
@@ -117,11 +119,12 @@ static        U2      u2_s_DimUsadjbySwVrHysManualLv(const U2 u2_a_AD, const U2 
 /*===================================================================================================================================*/
 void    vd_g_DimUsadjbySwInit(void)
 {
-    u2_s_dim_usadjbysw_nvm_updt = (U2)U2_MAX;
+    u2_s_dim_usadjbysw_nvm_updt     = (U2)U2_MAX;
 
-    u2_s_dim_usadjbysw_tmelpsd  = (U2)U2_MAX;
-    u1_s_dim_usadjbysw_swchk    = (U1)DIM_USADJ_BY_SW_SWCHK_NO_PRS;
-    u1_s_dim_usadjbysw_vrupdn   = (U1)DIM_SW_VRNON;
+    u2_s_dim_usadjbysw_tmelpsd      = (U2)U2_MAX;
+    u1_s_dim_usadjbysw_swchk        = (U1)DIM_USADJ_BY_SW_SWCHK_NO_PRS;
+    u1_s_dim_usadjbysw_vrupdn       = (U1)DIM_SW_VRNON;
+    u1_s_dim_usadjbysw_operable_sts = (U1)DIM_USADJ_BY_SW_OP_ENABLE;
 
 }
 /*===================================================================================================================================*/
@@ -178,6 +181,7 @@ void    vd_g_DimUsadjbySwUpdt(const U1 u1_a_DAYNIGHT, U2 * u2_ap_lvl)
         else{
             vd_s_DimUsadjbySwVrchk(u1_t_adjbl, u1_t_tail_on, u1_a_DAYNIGHT, u2_ap_lvl);
         }
+        vd_s_DimUsadjbySwOperableStsUpd(u1_t_tail_on, u1_a_DAYNIGHT, u2_ap_lvl);
 
         if(u2_s_dim_usadjbysw_nvm_updt == u2_g_DIM_USADJ_BY_SW_NVM_UPDT){
             vd_g_DimUsadjbySwCfgNvmWrite(u2_ap_lvl);
@@ -186,6 +190,54 @@ void    vd_g_DimUsadjbySwUpdt(const U1 u1_a_DAYNIGHT, U2 * u2_ap_lvl)
     else{
         vd_g_DimUsadjbySwInit();
     }
+}
+/*===================================================================================================================================*/
+/*  static void    vd_s_DimUsadjbySwOperableStsUpd(const U1 u1_a_TAIL_ON, const U1 u1_a_DAYNIGHT, const U2 *u2_ap_lvl)               */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void    vd_s_DimUsadjbySwOperableStsUpd(const U1 u1_a_TAIL_ON, const U1 u1_a_DAYNIGHT, const U2 *u2_ap_lvl)
+{
+    U1               u1_t_operable;
+    U1               u1_t_daynight;
+
+    u1_t_daynight      = u1_a_DAYNIGHT;
+    u1_t_operable      = (U1)DIM_USADJ_BY_SW_OP_ENABLE;
+
+    if (u1_t_daynight == (U1)DIM_DAYNIGHT_LVL_UNKNWN) {
+        u1_t_daynight  = (U1)DIM_DAYNIGHT_LVL_NIGHT;
+    }
+
+    if ((u1_t_daynight < (U1)DIM_DAYNIGHT_NUM_LVL) &&
+        (u1_a_TAIL_ON <= (U1)DIM_USADJ_BY_SW_TAIL_ON) &&
+        (u2_ap_lvl[DIM_DAYNIGHT_LVL_DAY]   < (U2)DIM_USADJ_BY_SW_NUM_LVL) &&
+        (u2_ap_lvl[DIM_DAYNIGHT_LVL_NIGHT] < (U2)DIM_USADJ_BY_SW_NUM_LVL)) {
+
+        if ((u1_t_daynight == (U1)DIM_DAYNIGHT_LVL_DAY) && (u1_a_TAIL_ON == (U1)DIM_USADJ_BY_SW_TAIL_ON)) {
+            if ((u2_ap_lvl[DIM_DAYNIGHT_LVL_DAY]   == (U2)DIM_USADJ_BY_SW_LVL_MIN) && 
+                (u2_ap_lvl[DIM_DAYNIGHT_LVL_NIGHT] == (U2)DIM_USADJ_BY_SW_LVL_MIN)) {
+                u1_t_operable = (U1)DIM_USADJ_BY_SW_OP_DW_DISABLE;
+            } 
+            else if ((u2_ap_lvl[DIM_DAYNIGHT_LVL_DAY]   == (U2)DIM_USADJ_BY_SW_LVL_MAX) && 
+                     (u2_ap_lvl[DIM_DAYNIGHT_LVL_NIGHT] == (U2)DIM_USADJ_BY_SW_LVL_MAX)) {
+                u1_t_operable = (U1)DIM_USADJ_BY_SW_OP_UP_DISABLE;
+            } 
+            else {
+                u1_t_operable = (U1)DIM_USADJ_BY_SW_OP_ENABLE;
+            }
+        } 
+        else if (u2_ap_lvl[u1_t_daynight] == (U2)DIM_USADJ_BY_SW_LVL_MIN) {
+            u1_t_operable = (U1)DIM_USADJ_BY_SW_OP_DW_DISABLE;
+        } 
+        else if (u2_ap_lvl[u1_t_daynight] == (U2)DIM_USADJ_BY_SW_LVL_MAX) {
+            u1_t_operable = (U1)DIM_USADJ_BY_SW_OP_UP_DISABLE;
+        } 
+        else {
+            u1_t_operable = (U1)DIM_USADJ_BY_SW_OP_ENABLE;
+        }
+    } 
+    u1_s_dim_usadjbysw_operable_sts = u1_t_operable;
 }
 /*===================================================================================================================================*/
 /*  static U1      u1_s_DimUsadjbySwUpdwnchk(const U1 u1_a_ADJBL)                                                                    */
@@ -423,7 +475,6 @@ static U2  u2_s_DimUsadjbySwVrHysManualLv(const U2 u2_a_AD, const U2 u2_a_OLDSTE
 
     return(u2_t_newstep);
 }
-
 /*===================================================================================================================================*/
 /*  U1      u1_g_DimUsadjbySwVrUpDown(void)                                                                                          */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
@@ -434,7 +485,16 @@ U1      u1_g_DimUsadjbySwVrUpDown(void)
 {
     return(u1_s_dim_usadjbysw_vrupdn);
 }
-
+/*===================================================================================================================================*/
+/*  U1      u1_g_DimUsadjbySwOperableSts(void)                                                                                       */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+U1      u1_g_DimUsadjbySwOperableSts(void)
+{
+    return(u1_s_dim_usadjbysw_operable_sts);
+}
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
@@ -450,6 +510,7 @@ U1      u1_g_DimUsadjbySwVrUpDown(void)
 /*  1.3.1     1/26/2021  KM       Fixed QAC warning.(No.2013 No Comments in Else Case)                                               */
 /*  1.4.0     2/15/2024  TH       for 19PFv3                                                                                         */
 /*  1.4.1    11/19/2024  TH       Update HDSR v2.3.d (04-005)                                                                        */
+/*  1.5.0    02/19/2026  KO       Add process for SW operable status judgement.                                                      */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
@@ -462,5 +523,6 @@ U1      u1_g_DimUsadjbySwVrUpDown(void)
 /*  * TH     = Taisuke Hirakawa, KSE                                                                                                 */
 /*  * SH     = Sae Hirose, Denso Techno                                                                                              */
 /*  * TN(DT) = Tetsushi Nakano, Denso Techno                                                                                         */
+/*  * KO     = Kazuto Oishi,  Denso Techno                                                                                           */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
