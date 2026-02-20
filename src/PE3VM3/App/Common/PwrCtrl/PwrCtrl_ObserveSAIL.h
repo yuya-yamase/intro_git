@@ -2,81 +2,61 @@
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-/*  Inter-Vm Data SHaring Data-ID                                                                                                    */
-/*                                                                                                                                   */
-/*                                                                                                                                   */
-/*  WARNING :                                                                                                                        */
-/*  ivdsh_did.h is included in ivdsh.h                                                                                               */
-/*  DO NOT include this file in any file even though this configuration header is public.                                            */
-/*                                                                                                                                   */
-/*===================================================================================================================================*/
 
-#ifndef IVDSH_DID_H
-#define IVDSH_DID_H
+#ifndef PWRCTRL_OBSERVESAIL_H
+#define PWRCTRL_OBSERVESAIL_H
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define IVDSH_DID_H_MAJOR                        (1U)
-#define IVDSH_DID_H_MINOR                        (0U)
-#define IVDSH_DID_H_PATCH                        (0U)
+#define PWRCTRL_OBSERVESAIL_H_MAJOR              (1)
+#define PWRCTRL_OBSERVESAIL_H_MINOR              (0)
+#define PWRCTRL_OBSERVESAIL_H_PATCH              (0)
+
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*  Include Files                                                                                                                    */
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define IVDSH_NUM_DID_WRI                        (10U)
+#define PWRCTRL_OBSERVESAIL_REQ_OFF_ALL        (0U)
+#define PWRCTRL_OBSERVESAIL_REQ_BON            (1U)
+#define PWRCTRL_OBSERVESAIL_REQ_WAKEUP_SAIL    (2U)
+#define PWRCTRL_OBSERVESAIL_REQ_WAKEUP_UART    (3U)
+#define PWRCTRL_OBSERVESAIL_REQ_OFF_DETECT     (4U)
 
-/*-------------------------------------------------------------------------------*/
-/* CPREQ_XXX = "https://wiki.geniie.net/x/Wcq5pQ" numbering list (sample config) */
-/*-------------------------------------------------------------------------------*/
-#define IVDSH_DID_WRI_VM3TO2_SIPERR_INF          (0U)
-#define IVDSH_DID_WRI_VM3TO2_OTA_OFFSTS          (1U)
-#define IVDSH_DID_WRI_VM3TO2_BOOTLOG_INF         (2U)
-#define IVDSH_DID_WRI_VM3TO12_RESTART            (3U)
-#define IVDSH_DID_WRI_VM3TO2_BOOT_CNT            (4U)
-#define IVDSH_DID_WRI_VM3TO2_BOOT_TIME           (5U)
-#define IVDSH_DID_WRI_GPS_STS                    (6U)
-#define IVDSH_DID_WRI_VM3TO2_WHLINI_INF          (7U)
-#define IVDSH_DID_WRI_VM3TO1_WHLINI_STA          (8U)
-#define IVDSH_DID_WRI_VM3TO1_SOC_POW_STS         (9U)
+#define PWRCTRL_OBSERVESAIL_OK                 (0U)
+#define PWRCTRL_OBSERVESAIL_NG                 (1U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define IVDSH_NUM_DID_REA                        (11U)
-
-/* Read from VM#1 */
-#define IVDSH_DID_REA_VM1TO3_STBY                (10U)
-#define IVDSH_DID_REA_VM1TO3_SPI_FAIL            (11U)
-#define IVDSH_DID_REA_VM1TO23_FSLP               (12U)
-#define IVDSH_DID_REA_VM1TO3_WHLINI_INF          (13U)
-#define IVDSH_DID_REA_VM1TO3_NMDIAG              (14U)
-/* Read from VM#2 */
-#define IVDSH_DID_REA_VM2TO3_STBY                (15U)
-#define IVDSH_DID_REA_VM2TO3_WHLINI_INF          (16U)
-#define IVDSH_DID_REA_VM2TO3_STRMODE             (17U)
-#define IVDSH_DID_REA_VM2TO3_OPESTS              (18U)
-#define IVDSH_DID_REA_GPS_REQ                    (19U)
-#define IVDSH_DID_REA_VM2TO3_DIN2_STAT           (20U)
-
+/*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define IVDSH_NUM_DID                            (IVDSH_NUM_DID_WRI + IVDSH_NUM_DID_REA)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Prototypes                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+void vd_g_PwrCtrl_ObserveSAIL_ObserveReq( const U1 u1_a_req );
+U1 u1_g_PwrCtrl_ObserveSAIL_UartErrSts( void );
+U1 u1_g_PwrCtrl_ObserveSAIL_SailErrSts( void );
+void vd_g_PwrCtrl_ObserveSAIL_Init( void );
+void vd_g_PwrCtrl_ObserveSAIL_Main( void );
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 
-#endif      /* IVDSH_DID_H */
+#endif      /* PWRCTRL_OBSERVESAIL_H */
 
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
-/*  Change History  :  see  ivdsh_cfg.c                                                                                              */
+/*  Change History  :  PwrCtrl_ObserveSAIL.c                                                                                         */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
