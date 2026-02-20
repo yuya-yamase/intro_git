@@ -25,8 +25,8 @@
 #include "sblt_seat.h"
 #include "veh_opemd.h"
 #include "calibration.h"
-#include "sbltsync.h"
 #include "vardef.h"
+#include "sbltsync.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
