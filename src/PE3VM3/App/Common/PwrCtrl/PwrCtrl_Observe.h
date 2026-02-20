@@ -34,6 +34,16 @@
 #define PWRCTRL_OBSERVE_ERR_PGD_VB              (0x0200U)   /* 5-12-5. PGOOD_VB監視 異常検知  */
 #define PWRCTRL_OBSERVE_ERR_PGD_VSYS            (0x0400U)   /* 5-12-5. PGOOD_VSYS監視 異常検知  */
 
+/* リセット要求検知 */
+#define PWRCTRL_OBSERVE_RESET_NON               (0x0000U)   /* 異常なし */
+#define PWRCTRL_OBSERVE_RESET_SOCNORM           (0x0001U)   /* SoCリセット要求(正常) */
+#define PWRCTRL_OBSERVE_RESET_SOCERR            (0x0002U)   /* SoCリセット要求(異常) */
+#define PWRCTRL_OBSERVE_RESET_CDC               (0x0004U)   /* CDCリセット要求 */
+#define PWRCTRL_OBSERVE_RESET_NMDIAG            (0x0008U)   /* NMダイアグリセット */
+
+#define PWRCTRL_OBSERVE_SOCPOWER_OFF            (PWRCTRL_COM_SOCPOWER_OFF)   /* SoC停止 */
+#define PWRCTRL_OBSERVE_SOCPOWER_ON             (PWRCTRL_COM_SOCPOWER_ON)    /* SoC起動 */
+
 /*--------------------------------------------------------------------------*/
 /* Function Prototypes                                                      */
 /*--------------------------------------------------------------------------*/
@@ -53,6 +63,11 @@ void vd_g_PwrCtrlObservePgdDiodeReq( const U1 u1_a_req );
 void vd_g_PwrCtrlObservePgdVbReq( const U1 u1_a_req );
 void vd_g_PwrCtrlObservePgdVsysReq( const U1 u1_a_req );
 U2 u2_g_PwrCtrlObserveGetErrSts( void );
+/* リセット要求検知 */
+void vd_g_PwrCtrlObserveSoCResetErrReq( const U1 u1_a_req );
+U2 u2_g_PwrCtrlObserveGetResetSts(void);
+
+void vd_g_PwrCtrlObserveSetSocPower(const U1 u1_a_sts );
 
 #endif /* PWRCTRL_OBSERVE_H */
 
