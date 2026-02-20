@@ -78,6 +78,22 @@
 #define NVMCID_U2_DRVPS_MRRPOS13                 (0x0022U)
 #define NVMCID_U2_DRVPS_MRRPOS14                 (0x0023U)
 #define NVMCID_U2_DRVPS_MRRPOS15                 (0x0024U)
+#define NVMCID_U4_TOEC_OC                        (0x0025U)
+#define NVMCID_U4_TOEC_EU                        (0x0026U)
+#define NVMCID_U4_TOSP_OC                        (0x0027U)
+#define NVMCID_U4_TOSP_ET                        (0x0028U)
+#define NVMCID_U4_TOTM_ET                        (0x0029U)
+#define NVMCID_U4_TODT_OC                        (0x002AU)
+#define NVMCID_U4_TR_A_SP_OC                     (0x002BU)
+#define NVMCID_U4_TR_A_SP_ET                     (0x002CU)
+#define NVMCID_U4_TR_B_SP_OC                     (0x002DU)
+#define NVMCID_U4_TR_B_SP_ET                     (0x002EU)
+#define NVMCID_U4_TR_A_TM_ET                     (0x002FU)
+#define NVMCID_U4_TR_B_TM_ET                     (0x0030U)
+#define NVMCID_U4_TR_A_DT_OC                     (0x0031U)
+#define NVMCID_U4_TR_B_DT_OC                     (0x0032U)
+#define NVMCID_OTR_GRPH_TAEE_ECON                (0x0033U)
+#define NVMCID_OTR_GRPH_TAEE_DATE                (0x0034U)
 /* END : ##TOOL_OUT#NVMC_NVMCID## */
 
 /* START : ##TOOL_OUT#NVMC_BLOCKID## */
