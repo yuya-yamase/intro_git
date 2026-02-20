@@ -262,7 +262,10 @@ void    vd_g_McstCfgUserCstmInitHook(void){
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
 void    vd_g_McstCfgCstmInitHook(void){
+
+    vd_g_DimMcstDataResetHook();
     vd_g_HmiHudMcstHook();
+
 }
 
 /*===================================================================================================================================*/
@@ -328,6 +331,7 @@ static inline U1      u1_s_McstCfgCalibU1MaxChk(const U1 u1_a_CALIBID, const U1 
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  BEV-1    01/30/2026  SN       Change B_PERMEM for BEV                                                                            */
 /*  BEV-2    02/12/2026  KN       Add vd_g_HmiHudMcstHook to Mcst Hook function                                                      */
+/*  BEV-3    02/19/2026  SN       Change vd_g_McstCfgCstmInitHook                                                                    */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * TM   = Takuya Mitsui,   Denso Techno                                                                                           */
