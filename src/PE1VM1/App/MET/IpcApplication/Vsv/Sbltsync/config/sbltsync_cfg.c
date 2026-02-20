@@ -17,7 +17,6 @@
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "sbltsync_cfg_private.h"
-#include "vardef.h"
 #include "wchime.h"
 #if 0   /* BEV Rebase provisionally */
 #include "CxpiCdd_App.h"
