@@ -756,8 +756,8 @@ static void vd_s_PwrCtrlMainObserveFsJudge( void )
     else if( ((u2_t_observe_sts & (U2)PWRCTRL_OBSERVE_ERR_SPI) == (U2)PWRCTRL_OBSERVE_ERR_SPI)
           || ((u2_t_observe_sts & (U2)PWRCTRL_OBSERVE_ERR_SAILUART) == (U2)PWRCTRL_OBSERVE_ERR_SAILUART)
           || ((u2_t_resetreq_sts & (U2)PWRCTRL_OBSERVE_RESET_SOCNORM) == (U2)PWRCTRL_OBSERVE_RESET_SOCNORM)
-          || ((u2_t_resetreq_sts & (U2)PWRCTRL_OBSERVE_RESET_SOCNORM) == (U2)PWRCTRL_OBSERVE_RESET_SOCERR)
-          || ((u2_t_resetreq_sts & (U2)PWRCTRL_OBSERVE_RESET_SOCNORM) == (U2)PWRCTRL_OBSERVE_RESET_NMDIAG) )
+          || ((u2_t_resetreq_sts & (U2)PWRCTRL_OBSERVE_RESET_SOCERR) == (U2)PWRCTRL_OBSERVE_RESET_SOCERR)
+          || ((u2_t_resetreq_sts & (U2)PWRCTRL_OBSERVE_RESET_NMDIAG) == (U2)PWRCTRL_OBSERVE_RESET_NMDIAG) )
     {
         /* ìØéûÇ…àŸèÌÇåüímÇµÇΩèÍçá */
         /* SAIL UART Messageäƒéã àŸèÌåüím */
