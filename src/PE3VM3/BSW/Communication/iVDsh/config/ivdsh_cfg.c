@@ -44,11 +44,11 @@
 #define IVDSH_FQ_CH_WRI                          (2U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define IVDSH_WA_NWORD_WRI                       (9U)
-#define IVDSH_WA_NWORD_REA_0                     (16U)
+#define IVDSH_WA_NWORD_WRI                       (10U)
+#define IVDSH_WA_NWORD_REA_0                     (17U)
 #define IVDSH_WA_NWORD_REA_1                     (24U)
 
-#define IVDSH_WA_NWORD                           (89U)
+#define IVDSH_WA_NWORD                           (92U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -97,6 +97,7 @@ const ST_IVDSH_WA           st_gp_IVDSH_WA_BY_DID[IVDSH_NUM_DID] =
     {(U2)6U,        (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_GPS_STS           */
     {(U2)7U,        (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_VM3TO2_WHLINI_INF */
     {(U2)8U,        (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_VM3TO1_WHLINI_STA */
+    {(U2)9U,        (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_VM3TO1_SOC_POW_STS*/
     /*------------------------------------------------------------------*/
     /* Read from VM#1                                                   */
     /*------------------------------------------------------------------*/
@@ -104,6 +105,7 @@ const ST_IVDSH_WA           st_gp_IVDSH_WA_BY_DID[IVDSH_NUM_DID] =
     {(U2)6U,        (U2)1U,         (U2)IVDSH_FQ_CH_REA_0},     /* IVDSH_DID_REA_VM1TO3_SPI_FAIL   */
     {(U2)9U,        (U2)1U,         (U2)IVDSH_FQ_CH_REA_0},     /* IVDSH_DID_REA_VM1TO23_FSLP      */
     {(U2)11U,       (U2)1U,         (U2)IVDSH_FQ_CH_REA_0},     /* IVDSH_DID_REA_VM1TO3_WHLINI_INF */
+    {(U2)16U,       (U2)1U,         (U2)IVDSH_FQ_CH_REA_0},     /* IVDSH_DID_REA_VM1TO3_NMDIAG     */
     /*------------------------------------------------------------------*/
     /* Read from VM#2                                                   */
     /*------------------------------------------------------------------*/
