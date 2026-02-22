@@ -196,6 +196,7 @@
 /* END : ##TOOL_OUT#RIM_ID_MOD_3C_U2## */
 /* START : ##TOOL_OUT#RIM_ID_MOD_3C_U4## */
 #define RIMID_U4_NVMC_REQ_DTF0                   (0x8600U)
+#define RIMID_U4_NVMC_REQ_DTF1                   (0x8601U)
 /* END : ##TOOL_OUT#RIM_ID_MOD_3C_U4## */
 /* START : ##TOOL_OUT#RIM_ID_MOD_3C_OTR## */
 /* END : ##TOOL_OUT#RIM_ID_MOD_3C_OTR## */
