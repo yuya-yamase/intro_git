@@ -20,8 +20,6 @@
 
 #include "tripcom_private.h"
 #include "tripcom_ms.h"
-#include "tripcom_nvmif.h"
-#include "tripcom_nvmif_grph.h"
 #include "tripcom_calc.h"
 #include "fpcall_vd_fvd.h"
 
@@ -103,8 +101,6 @@ void            vd_g_TripcomBonInit(void)
 
     vd_g_TripcomMsBonInit();
     vd_g_TripcomMsInit();
-    vd_g_TripcomNvmIfInit((U1)TRUE);
-    vd_g_TripcomNvmIfGrphInit((U1)TRUE);
     vd_s_TripcomInit();
 
     u2_t_varbit = u2_g_TripcomCfgGetVariation();
@@ -130,8 +126,6 @@ void            vd_g_TripcomWkupInit(void)
     U2          u2_t_varbit;
 
     vd_g_TripcomMsInit();
-    vd_g_TripcomNvmIfInit((U1)FALSE);
-    vd_g_TripcomNvmIfGrphInit((U1)FALSE);
     vd_s_TripcomInit();
 
     u2_t_varbit = u2_g_TripcomCfgGetVariation();
@@ -254,6 +248,7 @@ void            vd_g_TripcomGrphRstRq(const U2 u2_a_RSTRQBIT)
     if((((u2_a_RSTRQBIT            & u2_gp_TRIPCOM_GRPH_RSTBIT[AVGGRPH_CNTT_1MEE]) != (U2)0U)
      && ((u2_s_tripcom_grphresetbk & u2_gp_TRIPCOM_GRPH_RSTBIT[AVGGRPH_CNTT_1MEE]) == (U2)0U))){
         vd_g_TripcomMsClrRimRslt();
+        vd_g_AvgGrphUpdtOneEconRslt((U1)AVGGRPH_CNTT_1MEE);
     }
     u2_s_tripcom_grphresetbk = u2_a_RSTRQBIT;
 }
@@ -523,6 +518,7 @@ static  void    vd_s_TripcomCanTx(const U2 u2_a_VARBIT)
 /*  19PFv3-1 04/03/2024  DR       Deleted engine type and info functions                                                             */
 /*  BEV-01   01/20/2026  DR       Added send data cntt ID for AS_EVDT and AS_TOEC for FF2                                            */
 /*  BEV-02   02/11/2026  DT       Deleted unit table of fuel for FF2 and deleted not applied drive moni appli                        */
+/*  BEV-03   02/23/2026  PG       Deleted memory app access initialization function                                                  */
 /*                                                                                                                                   */
 /*  * HY   = Hidefumi Yoshida, Denso                                                                                                 */
 /*  * YA   = Yuhei Aoyama, DensoTechno                                                                                               */
@@ -535,5 +531,6 @@ static  void    vd_s_TripcomCanTx(const U2 u2_a_VARBIT)
 /*  * KM   = Kazuma Miyazawa, Denso Techno                                                                                           */
 /*  * RS   = Ryuki Sako, Denso Techno                                                                                                */
 /*  * DT   = Dj Tutanes, DTPH                                                                                                        */
+/*  * PG   = Patrick Garcia, DTPH                                                                                                    */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
