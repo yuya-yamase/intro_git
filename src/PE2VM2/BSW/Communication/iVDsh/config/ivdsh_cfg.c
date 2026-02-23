@@ -48,9 +48,9 @@
 #define IVDSH_WA_NWORD_WRI                       (24U)
 #define IVDSH_WA_NWORD_REA_0                     (4U)
 #define IVDSH_WA_NWORD_REA_1                     (17U)
-#define IVDSH_WA_NWORD_REA_2                     (10U)
+#define IVDSH_WA_NWORD_REA_2                     (12U)
 
-#define IVDSH_WA_NWORD                           (86U)
+#define IVDSH_WA_NWORD                           (90U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -144,7 +144,9 @@ const ST_IVDSH_WA           st_gp_IVDSH_WA_BY_DID[IVDSH_NUM_DID] =
     {(U2)4U,        (U2)1U,         (U2)IVDSH_FQ_CH_REA_2},     /* IVDSH_DID_REA_VM3TO2_BOOT_CNT   */
     {(U2)5U,        (U2)1U,         (U2)IVDSH_FQ_CH_REA_2},     /* IVDSH_DID_REA_VM3TO2_BOOT_TIME  */
     {(U2)6U,        (U2)1U,         (U2)IVDSH_FQ_CH_REA_2},     /* IVDSH_DID_REA_GPS_STS           */
-    {(U2)7U,        (U2)1U,         (U2)IVDSH_FQ_CH_REA_2}      /* IVDSH_DID_REA_VM3TO2_WHLINI_INF */
+    {(U2)7U,        (U2)1U,         (U2)IVDSH_FQ_CH_REA_2},     /* IVDSH_DID_REA_VM3TO2_WHLINI_INF */
+    {(U2)10U,       (U2)1U,         (U2)IVDSH_FQ_CH_REA_2},     /* IVDSH_DID_REA_VM3TO2_WKUP_COND  */
+    {(U2)11U,       (U2)1U,         (U2)IVDSH_FQ_CH_REA_2}      /* IVDSH_DID_REA_VM3TO2_USRRST_MASK*/
 };
 const U2                    u2_g_IVDSH_NUM_DID = (U2)IVDSH_NUM_DID;
 
