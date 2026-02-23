@@ -7,12 +7,14 @@
 #include <EthSwt_SWIC.h>
 #include "EthDLC.h"
 #include <EthSwt_Data.h>
+#include <EthDebugLog.h>
 /* -------------------------------------------------------------------------- */
 void EthSW_StaBonInit(void)
 {
 	EthSwt_SWIC_Init(NULL_PTR);
 	EthSwt_Data_Init();
 	EthDLC_Init();
+	EthDebugLog_Init();
 
 	return;
 }
