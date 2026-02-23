@@ -257,8 +257,6 @@
 ../../src/PE1VM1/App/MET/IpcApplication/Vom/Tripcom/core/scc/tripcom.c
 ../../src/PE1VM1/App/MET/IpcApplication/Vom/Tripcom/core/scc/tripcom_calc.c
 ../../src/PE1VM1/App/MET/IpcApplication/Vom/Tripcom/core/scc/tripcom_ms.c
-../../src/PE1VM1/App/MET/IpcApplication/Vom/Tripcom/core/scc/tripcom_nvmif.c
-../../src/PE1VM1/App/MET/IpcApplication/Vom/Tripcom/core/scc/tripcom_nvmif_grph.c
 ../../src/PE1VM1/App/MET/IpcApplication/Vom/Tripcom/sensor/config/tripsnsr_cfg.c
 ../../src/PE1VM1/App/MET/IpcApplication/Vom/Tripcom/sensor/scc/tripsnsr.c
 ../../src/PE1VM1/App/MET/IpcApplication/Vom/Tripcom/sensor/scc/tripsnsr_avgee.c

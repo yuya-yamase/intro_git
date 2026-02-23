@@ -420,13 +420,13 @@ void          vd_g_AvgEeGrphUpdt(const U1 u1_a_CNTTID)
             case (U1)AVGEE_CNTT_TA:
                 if((st_sp_avgee_var[AVGEE_CNTT_TA].u1_initupdt == (U1)TRUE)
                 && (u1_s_avgee_econ_init_bk == (U1)FALSE)){
-                    vd_g_AvgGrphUpdt((U1)AVGGRPH_CNTT_TAEE, u4_s_avgee_econ_prev_rst, (U1)TRUE);
+                    vd_g_AvgGrphTaEconUpdt((U1)AVGGRPH_CNTT_TAEE, u4_s_avgee_econ_prev_rst);
                 }
                 break;
             case (U1)AVGEE_CNTT_ONEM:
                 u4_t_economy = u4_g_TripcomMsGetAccmltVal(stp_t_CNTT->u1_ms_economy_id);
                 if(st_sp_avgee_var[AVGEE_CNTT_ONEM].u1_initupdt == (U1)FALSE){
-                    vd_g_AvgGrphUpdt((U1)AVGGRPH_CNTT_1MEE, u4_t_economy, (U1)FALSE);
+                    vd_g_AvgGrphOneEconUpdt((U1)AVGGRPH_CNTT_1MEE, u4_t_economy);
                 }
                 break;
             default:
@@ -664,6 +664,10 @@ void            vd_g_AvgEePostTask(void)
 /*  2.2.1    04/22/2025  KM       Bug fix : Change update timing of u1_s_avgee_econ_init_bk                                          */
 /*  2.3.0    01/20/2026  DR       add AS_EVDT and AS_TOEC for BEV FF2                                                                */
 /*  2.4.0    02/13/2026  PG       Update for M_DM for BEV FF2                                                                        */
+/*                                                                                                                                   */
+/*  Revision Date        Author   Change Description                                                                                 */
+/* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
+/*  BEV-01   02/23/2026  DR       Update graph write flag in FF2                                                                    */
 /*                                                                                                                                   */
 /*  * YA   = Yuhei Aoyama, DensoTechno                                                                                               */
 /*  * TA(M)= Teruyuki Anjima, NTT Data MSE                                                                                           */
