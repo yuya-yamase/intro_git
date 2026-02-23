@@ -455,14 +455,17 @@ static inline void    vd_s_XSpiCfgTxDimming(       U4 * u4_ap_pdu_tx) {
     U1  u1_t_daynight;
     U2  u2_t_rheo_lvl;
     U1  u1_t_illumi_mask;
+    U1  u1_t_operable;
 
     u1_t_daynight    = u1_g_DimLvlDaynight() & (U1)0x03U;
     u4_ap_pdu_tx[0]  = (U4)u1_t_daynight;                           /* DAYNIGHT                                                 */
     u2_t_rheo_lvl    = u2_g_DimLvlUsadjust(u1_t_daynight);          /* RHEOSTAT                                                 */
     u4_ap_pdu_tx[1]  = ((U4)u2_t_rheo_lvl & (U4)0x000000FFU);
     u1_t_illumi_mask = u1_g_IllumiTftAlpha();
+    u1_t_operable    = u1_g_DimSwOperableSts();
 
     u4_ap_pdu_tx[1] |= ((U4)u1_t_illumi_mask << 10U);
+    u4_ap_pdu_tx[1] |= ((U4)u1_t_operable & (U4)0x00000003U) << 18U;
     u4_ap_pdu_tx[2]  = ((U4)u1_g_IllumiTftPct() << 16U);
 }
 
@@ -1170,6 +1173,7 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*                                MET-B_MWBB-CSTD-0-02-A-C0                                                                          */
 /*                                Change storage for SYS_SW_MULTI_WEATHERLAMP value                                                  */
 /*  BEV-37    02/03/2026 SN(K)    Change for BEV FF2.(BEV3CDCMET-3779 Restore HUD display position save/notification processing.)    */
+/*  BEV-38    02/19/2026 KO       Change for BEV FF2.(Add RHEO_SW_STS_Json)                                                          */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * KM   = Keisuke Mashita, Denso Techno                                                                                           */
@@ -1189,7 +1193,7 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*  * MN   = Mikiya Negishi, KSE                                                                                                     */
 /*  * SN(K)= Shizuka Nakajima, KSE                                                                                                   */
 /*  * JS   = Jun Sugiyama, KSE                                                                                                       */
-/*  * KO     = Kazuto Oishi,  Denso Techno                                                                                           */
+/*  * KO   = Kazuto Oishi,  Denso Techno                                                                                             */
 /*  * TS   = Takuo Suganuma,  Denso Techno                                                                                           */
 /*  * YN   = Yujiro Nagaya, Denso Techno                                                                                             */
 /*  * KI   = Kanji Ito,  Denso Techno                                                                                                */
