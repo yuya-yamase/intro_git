@@ -354,7 +354,7 @@ void            vd_g_AvgGrphOneEconData(const U1 u1_a_CNTTID, U4* u4_ap_data)
         st_tp_cfg = &st_sp_AVGGRPH_CNTTS_CFG[u1_a_CNTTID];
         if (*(st_tp_cfg->u1p_latest) < st_tp_cfg->u1_size) {
             u1_t_idx = *(st_tp_cfg->u1p_latest);
-            for (u4_t_loop = (U4)0U; u4_t_loop < st_tp_cfg->u1_size; u4_t_loop++) {
+            for (u4_t_loop = (U4)0U; u4_t_loop < (U4)st_tp_cfg->u1_size; u4_t_loop++) {
                 if (u1_t_idx < (st_tp_cfg->u1_size - (U1)1U)) {
                     u1_t_idx++;
                 } else {
