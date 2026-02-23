@@ -10,7 +10,7 @@
 #include <PwrCtrl_Main.h>
 /* -------------------------------------------------------------------------- */
 
-#define EthDebugLog_Nofity_SWICINIT()           vd_g_PwrCtrlMainBootLogEthLinkup(PWRCTRL_MAIN_ETH_LINKUP_NODETECT)
+#define EthDebugLog_Nofity_SWICINIT()           vd_g_PwrCtrlMainBootLogEthLinkup(PWRCTRL_MAIN_ETH_LINKUP_DETECT)
 
 /* -------------------------------------------------------------------------- */
 #endif/* ETHDEBUGLOG_STARTUP_CFG_H */
