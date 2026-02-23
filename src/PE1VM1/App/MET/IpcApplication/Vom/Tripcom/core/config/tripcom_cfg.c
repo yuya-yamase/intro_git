@@ -27,8 +27,6 @@
 #include "ptsruntm_hrs.h"
 #include "ptsrundist_km.h"
 
-#include "tripcom_nvmif.h"
-
 #include "oxcan.h"
 
 #include "alert.h"

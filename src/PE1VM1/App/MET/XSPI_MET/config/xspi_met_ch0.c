@@ -455,14 +455,17 @@ static inline void    vd_s_XSpiCfgTxDimming(       U4 * u4_ap_pdu_tx) {
     U1  u1_t_daynight;
     U2  u2_t_rheo_lvl;
     U1  u1_t_illumi_mask;
+    U1  u1_t_operable;
 
     u1_t_daynight    = u1_g_DimLvlDaynight() & (U1)0x03U;
     u4_ap_pdu_tx[0]  = (U4)u1_t_daynight;                           /* DAYNIGHT                                                 */
     u2_t_rheo_lvl    = u2_g_DimLvlUsadjust(u1_t_daynight);          /* RHEOSTAT                                                 */
     u4_ap_pdu_tx[1]  = ((U4)u2_t_rheo_lvl & (U4)0x000000FFU);
     u1_t_illumi_mask = u1_g_IllumiTftAlpha();
+    u1_t_operable    = u1_g_DimSwOperableSts();
 
     u4_ap_pdu_tx[1] |= ((U4)u1_t_illumi_mask << 10U);
+    u4_ap_pdu_tx[1] |= ((U4)u1_t_operable & (U4)0x00000003U) << 18U;
     u4_ap_pdu_tx[2]  = ((U4)u1_g_IllumiTftPct() << 16U);
 }
 
@@ -759,34 +762,32 @@ static inline void    vd_s_XSpiCfgTxAvgGrph(         U4 * u4_ap_pdu_tx)
         u1_t_eeday[u4_t_loop] = (U1)0U;
     }
 
-    (void)u4_g_AvgGrphData((U1)AVGGRPH_CNTT_1MEE, &u4_t_1meedata[0], vdp_PTR_NA, vdp_PTR_NA);
-    u4_t_eemax = u4_g_AvgGrphData((U1)AVGGRPH_CNTT_TAEE, &u4_t_taeedata[0], &u1_t_eemonth[0], &u1_t_eeday[0]);
+    vd_g_AvgGrphOneEconData((U1)AVGGRPH_CNTT_1MEE, &u4_t_1meedata[0]);
+    u4_t_eemax = u4_g_AvgGrphTaEconData((U1)AVGGRPH_CNTT_TAEE, &u4_t_taeedata[0], &u1_t_eemonth[0], &u1_t_eeday[0]);
 
     for(u4_t_loop = (U4)0U; u4_t_loop < (U4)AVGGRPH_SIZE_1M; u4_t_loop++) {
         *u4_tp_txdata = u4_t_1meedata[u4_t_loop];
         u4_tp_txdata++;
     }
-    u4_tp_txdata = &u4_ap_pdu_tx[36];
-    for(u4_t_loop = (U4)0U; u4_t_loop < (U4)AVGGRPH_SIZE_TA; u4_t_loop++) {
-        *u4_tp_txdata = u4_t_taeedata[u4_t_loop];
-        u4_tp_txdata++;
-    }
 
+    u4_ap_pdu_tx[37] = u4_t_taeedata[AVGGRPH_TAECON_HIST_5TH_LAST];
+    u4_ap_pdu_tx[38] = u4_t_taeedata[AVGGRPH_TAECON_HIST_4TH_LAST];
+    u4_ap_pdu_tx[39] = u4_t_taeedata[AVGGRPH_TAECON_HIST_3RD_LAST];
+    u4_ap_pdu_tx[40] = u4_t_taeedata[AVGGRPH_TAECON_HIST_2ND_LAST];
+    u4_ap_pdu_tx[41] = u4_t_taeedata[AVGGRPH_TAECON_HIST_1ST_LAST];
     u4_ap_pdu_tx[43] = u4_t_eemax;
 
-    u4_ap_pdu_tx[45]  = ((U4)u1_t_eemonth[0] << XSPI_SHIFT_2BYTE);
-    u4_ap_pdu_tx[45] |= ((U4)u1_t_eemonth[1] << XSPI_SHIFT_3BYTE);
-    u4_ap_pdu_tx[46]  =  (U4)u1_t_eemonth[2];
-    u4_ap_pdu_tx[46] |= ((U4)u1_t_eemonth[3] << XSPI_SHIFT_1BYTE);
-    u4_ap_pdu_tx[46] |= ((U4)u1_t_eemonth[4] << XSPI_SHIFT_2BYTE);
-    u4_ap_pdu_tx[46] |= ((U4)u1_t_eemonth[5] << XSPI_SHIFT_3BYTE);
+    u4_ap_pdu_tx[45]  = (U4)u1_t_eemonth[AVGGRPH_TAECON_HIST_5TH_LAST] << XSPI_SHIFT_3BYTE;
+    u4_ap_pdu_tx[46]  = (U4)u1_t_eemonth[AVGGRPH_TAECON_HIST_4TH_LAST];
+    u4_ap_pdu_tx[46] |= (U4)u1_t_eemonth[AVGGRPH_TAECON_HIST_3RD_LAST] << XSPI_SHIFT_1BYTE;
+    u4_ap_pdu_tx[46] |= (U4)u1_t_eemonth[AVGGRPH_TAECON_HIST_2ND_LAST] << XSPI_SHIFT_2BYTE;
+    u4_ap_pdu_tx[46] |= (U4)u1_t_eemonth[AVGGRPH_TAECON_HIST_1ST_LAST] << XSPI_SHIFT_3BYTE;
 
-    u4_ap_pdu_tx[48]  = ((U4)u1_t_eeday[0] << XSPI_SHIFT_2BYTE);
-    u4_ap_pdu_tx[48] |= ((U4)u1_t_eeday[1] << XSPI_SHIFT_3BYTE);
-    u4_ap_pdu_tx[49]  =  (U4)u1_t_eeday[2];
-    u4_ap_pdu_tx[49] |= ((U4)u1_t_eeday[3] << XSPI_SHIFT_1BYTE);
-    u4_ap_pdu_tx[49] |= ((U4)u1_t_eeday[4] << XSPI_SHIFT_2BYTE);
-    u4_ap_pdu_tx[49] |= ((U4)u1_t_eeday[5] << XSPI_SHIFT_3BYTE);
+    u4_ap_pdu_tx[48]  = (U4)u1_t_eeday[AVGGRPH_TAECON_HIST_5TH_LAST] << XSPI_SHIFT_3BYTE;
+    u4_ap_pdu_tx[49]  = (U4)u1_t_eeday[AVGGRPH_TAECON_HIST_4TH_LAST];
+    u4_ap_pdu_tx[49] |= (U4)u1_t_eeday[AVGGRPH_TAECON_HIST_3RD_LAST] << XSPI_SHIFT_1BYTE;
+    u4_ap_pdu_tx[49] |= (U4)u1_t_eeday[AVGGRPH_TAECON_HIST_2ND_LAST] << XSPI_SHIFT_2BYTE;
+    u4_ap_pdu_tx[49] |= (U4)u1_t_eeday[AVGGRPH_TAECON_HIST_1ST_LAST] << XSPI_SHIFT_3BYTE;
 
     u1_t_1meerslt = u1_g_AvgGrphRslt((U1)AVGGRPH_CNTT_1MEE);
     u1_t_taeerslt = u1_g_AvgGrphRslt((U1)AVGGRPH_CNTT_TAEE);
@@ -1170,6 +1171,8 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*                                MET-B_MWBB-CSTD-0-02-A-C0                                                                          */
 /*                                Change storage for SYS_SW_MULTI_WEATHERLAMP value                                                  */
 /*  BEV-37    02/03/2026 SN(K)    Change for BEV FF2.(BEV3CDCMET-3779 Restore HUD display position save/notification processing.)    */
+/*  BEV-38    02/19/2026 KO       Change for BEV FF2.(Add RHEO_SW_STS_Json)                                                          */
+/*  BEV-39    02/23/2026 DR       Updated graph write process                                                                        */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * KM   = Keisuke Mashita, Denso Techno                                                                                           */
@@ -1189,7 +1192,7 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*  * MN   = Mikiya Negishi, KSE                                                                                                     */
 /*  * SN(K)= Shizuka Nakajima, KSE                                                                                                   */
 /*  * JS   = Jun Sugiyama, KSE                                                                                                       */
-/*  * KO     = Kazuto Oishi,  Denso Techno                                                                                           */
+/*  * KO   = Kazuto Oishi,  Denso Techno                                                                                             */
 /*  * TS   = Takuo Suganuma,  Denso Techno                                                                                           */
 /*  * YN   = Yujiro Nagaya, Denso Techno                                                                                             */
 /*  * KI   = Kanji Ito,  Denso Techno                                                                                                */
