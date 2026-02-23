@@ -240,7 +240,7 @@ static const ST_FWUSH_TRANSITION_ENTRY stp_sp3_ST_TABLE[FWUSH_MAIN_STATE_MAX]
             {(U1)FWUSH_MAIN_STATE_ACT,       (U1)FWUSH_SUB_STATE_PROCESSING,  vdp_PTR_NA},                       /* FWUSH_EVENT_NONE            */
             {(U1)FWUSH_MAIN_STATE_ACT,       (U1)FWUSH_SUB_STATE_PROCESSING,  vdp_PTR_NA},                       /* FWUSH_EVENT_NEW_REQUEST     */
             {(U1)FWUSH_MAIN_STATE_ACT,       (U1)FWUSH_SUB_STATE_PROCESSING,  &vd_s_FwushMonitorJob},            /* FWUSH_EVENT_SAME_REQUEST    */
-            {(U1)FWUSH_MAIN_STATE_ACT,       (U1)FWUSH_SUB_STATE_WAITING,     &vd_s_FwushHandleJobSuccess},      /* FWUSH_EVENT_MEMACC_SUCCESS  */
+            {(U1)FWUSH_MAIN_STATE_ACT,       (U1)FWUSH_SUB_STATE_PROCESSING,  &vd_s_FwushHandleJobSuccess},      /* FWUSH_EVENT_MEMACC_SUCCESS  */
             {(U1)FWUSH_MAIN_STATE_ACT,       (U1)FWUSH_SUB_STATE_PROCESSING,  &vd_s_FwushHandleJobProgress},     /* FWUSH_EVENT_MEMACC_PROGRESS */
             {(U1)FWUSH_MAIN_STATE_ACT,       (U1)FWUSH_SUB_STATE_WAITING,     &vd_s_FwushHandleError},           /* FWUSH_EVENT_MEMACC_ERROR    */
             {(U1)FWUSH_MAIN_STATE_ACT,       (U1)FWUSH_SUB_STATE_PROCESSING,  vdp_PTR_NA},                       /* FWUSH_EVENT_INVALID_REQUEST */
@@ -512,12 +512,14 @@ static U1 u1_s_FwushDetectEventForProcessing(void)
     if (u1_t_current_req_subtype == (U1)FWUSH_REQ_SUBTYPE_CANCEL) {
         /* CANCEL request */
         u1_t_event = (U1)FWUSH_EVENT_CANCEL;
-    } else if (u1_t_current_req_subtype == u1_t_expected_subtype || u1_t_current_req_subtype == (U1)FWUSH_REQ_SUBTYPE_NA) {
+    } else if (u1_t_current_req_subtype == u1_t_expected_subtype) {
         /* Continue normally or no request -> Monitor MemAcc job status */
         u1_t_event = u1_s_FwushCheckMemAccJobEvent();
-    } else {
+    } else if (u1_t_current_req_subtype != (U1)FWUSH_REQ_SUBTYPE_NA) {
         /* Invalid request during processing (different subtype) -> Error */
         u1_t_event = (U1)FWUSH_EVENT_INVALID_REQUEST;
+    } else {
+        /* u1_t_event = (U1)FWUSH_EVENT_NONE; */
     }
 
     return(u1_t_event);
@@ -685,12 +687,12 @@ static void vd_s_FwushStartJob(void)
     U4 u4_t_length;
     U4 u4_t_crc;
     U2 u2_t_ofst;
+    U1 u1_t_result;
     
     switch (u1_s_main_state) {
         case (U1)FWUSH_MAIN_STATE_PREP:
             /* PREP: start job using data saved during WAITING */
             if (u1_s_prep_data_ready == (U1)TRUE) {
-                U1 u1_t_result;
                 u4_t_adr = (U4)0x1c000U;
                 u4_t_length = (U4)0x7A4000U;
                 u4_t_crc = u4_s_prep_data_crc;
@@ -714,7 +716,6 @@ static void vd_s_FwushStartJob(void)
             u1_t_read_ok = u1_s_FwushMakeRunData(&u4_t_adr, &u2_t_ofst);
             if (u2_t_ofst != u2_s_run_offset_prev) {
                 if (u1_t_read_ok == (U1)TRUE) {
-                    U1 u1_t_result;
                     u1_t_result = u1_g_FwuMemAccUpdateReq(u2_t_ofst, (const U4 *)u4_t_adr);
                     if (u1_t_result != (U1)FWUMEMACC_RET_OK) {
                         /* job start failed */
@@ -737,7 +738,6 @@ static void vd_s_FwushStartJob(void)
         case (U1)FWUSH_MAIN_STATE_ACT:
             /* Start ACT job */
             {
-                U1 u1_t_result;
                 u1_t_result = u1_g_FwuMemAccSwitchReq();
                 if (u1_t_result != (U1)FWUMEMACC_RET_OK) {
                     /* job start failed */
@@ -783,9 +783,8 @@ static void vd_s_FwushHandleJobSuccess(void)
     vd_s_FwushMakeResData(u1_sp_fwush_header[FWUSH_REQ_SUBTYPE_OFFSET], (U1)FWUSH_ACK_OK);
     
     /* When ROLLBACK completes: system reset -> PREP_WAITING */
-    if ((u1_s_main_state == (U1)FWUSH_MAIN_STATE_PREP &&
-        u1_s_rollback_in_progress != (U1)FALSE) || 
-        (u1_s_main_state == (U1)FWUSH_MAIN_STATE_ACT)) {
+    if (u1_s_main_state == (U1)FWUSH_MAIN_STATE_PREP &&
+        u1_s_rollback_in_progress != (U1)FALSE) {
         /* Initialization after rollback completion */
         vd_g_FwushInit();
     }
