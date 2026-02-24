@@ -16,8 +16,12 @@
 #include "VIS.h"
 #include "VIS_Can.h"
 #include "LIB.h"
+/* 26.2.16 doza Team-B edit sta */
+/*#include "chipcom.h"*/
+/*#include "chipcom_config.h"*/
 #include "ChipCom.h"
-#include "chipcom_config.h"
+#include "ChipCom_Cfg.h"
+/* 26.2.16 doza Team-B edit end */
 /* -------------------------------------------------------------------------- */
 
 /* -------------------------------------------------------------------------- */

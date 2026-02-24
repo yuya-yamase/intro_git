@@ -18,8 +18,12 @@
 #include "VIS_Pwr.h"
 #include "VIS_Pwrcfg.h"
 #include "LIB.h"
-#include "chipcom_config.h"
+/* 26.2.16 doza Team-B edit sta */
+/*#include "chipcom_config.h"*/
+/*#include "chipcom.h"*/
 #include "ChipCom.h"
+#include "ChipCom_Cfg.h"
+/* 26.2.16 doza Team-B edit end */
 #include "iohw_adc_sh.h"
 
 /*==============================================================================================*/
