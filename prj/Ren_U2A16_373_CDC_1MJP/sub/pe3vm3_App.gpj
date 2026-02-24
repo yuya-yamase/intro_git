@@ -12,6 +12,7 @@
 ../../src/PE3VM3/App/Central/ChipCom/cfg/ChipCom_Lcfg.c
 ../../src/PE3VM3/App/Central/ChipCom/src/ChipCom.c
 ../../src/PE3VM3/App/Central/ChipCom/src/ChipCom_Wrapper.c
+../../src/PE3VM3/App/Central/ChipCom/src/ChipCom_Test.c
 ../../src/PE3VM3/App/Central/esw/EthDLC/Config/EthDLC_Cfg.c
 ../../src/PE3VM3/App/Central/esw/EthDLC/Core/EthDLC_ACTL.c
 ../../src/PE3VM3/App/Central/esw/EthDLC/Core/EthDLC_STM.c

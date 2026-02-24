@@ -105,35 +105,6 @@ uint8 ChipCom_GetErrInfo( void );
 /*--------------------------------------------------------------------------*/
 #include "ChipCom_Wrapper.h"
 
-/*--------------------------------------------------------------------------*/
-/* Log Debug                                                                */
-/*--------------------------------------------------------------------------*/
-#if CHIPCOM_BSW == CHIPCOM_BSW_MICROSAR
-  #include "CDD_DebugLog.h"
-#endif
-
-/*++++++++++++++++*/
-/* Compile Switch */
-/*++++++++++++++++*/
-/* Test mode */
-#define CHIPCOM_TEST_MD_OFF                     (0U)
-#define CHIPCOM_TEST_MD_LOG                     (1U)
-#define CHIPCOM_TEST_MD_DRV                     (2U)
-#define CHIPCOM_TEST_MD                         CHIPCOM_TEST_MD_OFF
-
-/* Log level */
-#define CHIPCOM_LOG_ERROR                       DEBUGLOG_ERROR
-#define CHIPCOM_LOG_WARNING                     DEBUGLOG_WARNING
-#define CHIPCOM_LOG_INFO                        DEBUGLOG_INFO
-#define CHIPCOM_LOG_DEBUG                       DEBUGLOG_DEBUG
-
-/* Output log function */
-#if CHIPCOM_TEST_MD >= CHIPCOM_TEST_MD_LOG && CHIPCOM_BSW == CHIPCOM_BSW_MICROSAR
-  #define CHIPCOM_LOG_MSG DEBUGLOG_LOG
-#else
-  #define CHIPCOM_LOG_MSG( log_level, message, ... )
-#endif
-
 #endif /* CHIPCOM_H */
 
 /**** End of File ***********************************************************/

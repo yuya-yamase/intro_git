@@ -310,10 +310,9 @@ uint8 ChipCom_SendSignal( Com_SignalIdType t_u2SignalId, const void* t_pvdSignal
 
 		t_u1Rtn = (uint8)E_OK;
 	}
-#if CHIPCOM_TEST_MD == CHIPCOM_TEST_MD_DRV
-	/* Test */
-	CHIPCOM_LOG_MSG( CHIPCOM_LOG_DEBUG,"ChipCom_SendSignal: Rtn=[%u],SigID=[%u],SigAddr=[%08X],MsgBuffAddr=[%08X]\r\n", t_u1Rtn, t_u2SignalId, (uint32)t_pvdSignalDataPtr, (uint32)t_pu1MsgBuff );
-#endif
+
+//CHIPCOM_LOG_MSG( CHIPCOM_LOG_DEBUG,"ChipCom_SendSignal: Rtn=[%u],SigID=[%u],SigAddr=[%08X],MsgBuffAddr=[%08X]\r\n", t_u1Rtn, t_u2SignalId, (uint32)t_pvdSignalDataPtr, (uint32)t_pu1MsgBuff );
+
 	return t_u1Rtn;
 }
 
@@ -352,10 +351,9 @@ uint8 ChipCom_ReceiveSignal( Com_SignalIdType t_u2SignalId, void* t_pvdSignalDat
 
 		t_u1Rtn = (uint8)E_OK;
 	}
-#if CHIPCOM_TEST_MD == CHIPCOM_TEST_MD_DRV
-	/* Test */
-	CHIPCOM_LOG_MSG( CHIPCOM_LOG_DEBUG,"ChipCom_ReceiveSignal: Rtn=[%u],SigID=[%u],SigAddr=[%08X],MsgBuffAddr=[%08X]\r\n", t_u1Rtn, t_u2SignalId, (uint32)t_pvdSignalDataPtr, (uint32)t_pu1MsgBuff );
-#endif
+
+//CHIPCOM_LOG_MSG( CHIPCOM_LOG_DEBUG,"ChipCom_ReceiveSignal: Rtn=[%u],SigID=[%u],SigAddr=[%08X],MsgBuffAddr=[%08X]\r\n", t_u1Rtn, t_u2SignalId, (uint32)t_pvdSignalDataPtr, (uint32)t_pu1MsgBuff );
+
 	return t_u1Rtn;
 }
 
@@ -381,10 +379,8 @@ ChipCom_IpduStatusType ChipCom_GetSignalStatus( Com_SignalIdType t_u2SignalId )
 		t_u1Status = (ChipCom_IpduStatusType)ChipCom_u1MsgStatus[t_u2RxMsgId];
 	}
 
-#if CHIPCOM_TEST_MD == CHIPCOM_TEST_MD_DRV
-	/* Test */
-	CHIPCOM_LOG_MSG( CHIPCOM_LOG_DEBUG,"ChipCom_GetSignalStatus: SigID=[%u],MsgID=[%u],Sts=[%u]\r\n", t_u2SignalId, t_u2RxMsgId, t_u1Status );
-#endif
+//CHIPCOM_LOG_MSG( CHIPCOM_LOG_DEBUG,"ChipCom_GetSignalStatus: SigID=[%u],MsgID=[%u],Sts=[%u]\r\n", t_u2SignalId, t_u2RxMsgId, t_u1Status );
+
 	return t_u1Status;
 }
 
@@ -589,14 +585,8 @@ static void ChipCom_TransmitMsg( void )
 			if ( t_u1CoreId == ChipCom_cu1CoreIdMst )
 			{
 
-  if ( t_u2PktIdx == 1U )
-  {
-#if CHIPCOM_TEST_MD == CHIPCOM_TEST_MD_DRV
-	/* Test */
-    CHIPCOM_LOG_MSG( DEBUGLOG_INFO,"ChipCom_TransmitMsg: CoreId=[%u], PktIdx=[%u], SrvTick=[%u], PktTxReqTick=[%u], Elapsed=[%u]\r\n",
-        t_u1CoreId, t_u2PktIdx, ChipCom_u2SrvTick, ChipCom_u2PktTxReqTime[t_u2PktIdx], t_u2ElapsedTime );
-#endif
-  }
+//CHIPCOM_LOG_MSG( DEBUGLOG_INFO,"ChipCom_TransmitMsg: CoreId=[%u], PktIdx=[%u], SrvTick=[%u], PktTxReqTick=[%u], Elapsed=[%u]\r\n",
+//    t_u1CoreId, t_u2PktIdx, ChipCom_u2SrvTick, ChipCom_u2PktTxReqTime[t_u2PktIdx], t_u2ElapsedTime );
 
 				/* Request transmission */
 				ChipCom_RequestPktTransmission( t_u2PktId );
@@ -620,14 +610,8 @@ static void ChipCom_TransmitMsg( void )
 					/* Resume Interrupts */
 					ResumeOSInterrupts();
 
-  if ( t_u2PktIdx == 1U )
-  {
-#if CHIPCOM_TEST_MD == CHIPCOM_TEST_MD_DRV
-	/* Test */
-    CHIPCOM_LOG_MSG( DEBUGLOG_INFO,"ChipCom_TransmitMsg: CoreId=[%u], PktIdx=[%u], SrvTick=[%u], PktTxReqTick=[%u], Elapsed=[%u], MsgBuffAddr=[%08X], MsgBuffStlAddr=[%08X]\r\n",
-        t_u1CoreId, t_u2PktIdx, ChipCom_u2SrvTick, ChipCom_u2PktTxReqTime[t_u2PktIdx], t_u2ElapsedTime, (uint32)t_pu1MsgBuff, (uint32)t_pu1MsgBuffStl );
-#endif
-  }
+//CHIPCOM_LOG_MSG( DEBUGLOG_INFO,"ChipCom_TransmitMsg: CoreId=[%u], PktIdx=[%u], SrvTick=[%u], PktTxReqTick=[%u], Elapsed=[%u], MsgBuffAddr=[%08X], MsgBuffStlAddr=[%08X]\r\n",
+//    t_u1CoreId, t_u2PktIdx, ChipCom_u2SrvTick, ChipCom_u2PktTxReqTime[t_u2PktIdx], t_u2ElapsedTime, (uint32)t_pu1MsgBuff, (uint32)t_pu1MsgBuffStl );
 
 				}
 			}
@@ -682,14 +666,8 @@ static void ChipCom_RequestPktTransmission( uint16 t_u2PktId )
 	/* Resume Interrupts */
 	ResumeOSInterrupts();
 
-  if ( t_u2PktIdx == 1U )
-  {
-#if CHIPCOM_TEST_MD == CHIPCOM_TEST_MD_DRV
-	/* Test */
-    CHIPCOM_LOG_MSG( DEBUGLOG_INFO,"ChipCom_RequestPktTransmission: PktIdx=[%u], PktBank=[%u], MsgBuffAddr=[%08X], PktBuffAddr=[%08X]\r\n",
-        t_u2PktIdx, t_u1PktBank, (uint32)t_pu1MsgBuff, (uint32)t_pu1PktBuff );
-#endif
-  }
+//CHIPCOM_LOG_MSG( DEBUGLOG_INFO,"ChipCom_RequestPktTransmission: PktIdx=[%u], PktBank=[%u], MsgBuffAddr=[%08X], PktBuffAddr=[%08X]\r\n",
+//    t_u2PktIdx, t_u1PktBank, (uint32)t_pu1MsgBuff, (uint32)t_pu1PktBuff );
 
 	return;
 }
@@ -766,14 +744,8 @@ static void ChipCom_ReceiveMsg( void )
 					ChipCom_u2MsgRxTime[t_u2MsgIdx] = ChipCom_u2SrvTick;
 				}
 
-  if ( t_u2PktIdx == 1U )
-  {
-#if CHIPCOM_TEST_MD == CHIPCOM_TEST_MD_DRV
-	/* Test */
-    CHIPCOM_LOG_MSG( DEBUGLOG_INFO,"ChipCom_ReceiveMsg: CoreId=[%u], PktIdx=[%u], PktBank=[%u], MsgBuffAddr=[%08X], PktBuffAddr=[%08X]\r\n",
-        t_u1CoreId, t_u2PktIdx, t_u1PktBank, (uint32)t_pu1MsgBuff, (uint32)t_pu1PktBuff );
-#endif
-  }
+//CHIPCOM_LOG_MSG( DEBUGLOG_INFO,"ChipCom_ReceiveMsg: CoreId=[%u], PktIdx=[%u], PktBank=[%u], MsgBuffAddr=[%08X], PktBuffAddr=[%08X]\r\n",
+//    t_u1CoreId, t_u2PktIdx, t_u1PktBank, (uint32)t_pu1MsgBuff, (uint32)t_pu1PktBuff );
 
 			}
 			/* Satellite Core */
@@ -791,14 +763,9 @@ static void ChipCom_ReceiveMsg( void )
 				/* Resume Interrupts */
 				ResumeOSInterrupts();
 
-  if ( t_u2PktIdx == 1U )
-  {
-#if CHIPCOM_TEST_MD == CHIPCOM_TEST_MD_DRV
-	/* Test */
-    CHIPCOM_LOG_MSG( DEBUGLOG_INFO,"ChipCom_ReceiveMsg: CoreId=[%u], PktIdx=[%u], PktBank=[%u], MsgBuffAddr=[%08X], MsgBuffStlAddr=[%08X]\r\n",
-        t_u1CoreId, t_u2PktIdx, t_u1PktBank, (uint32)t_pu1MsgBuff, (uint32)t_pu1MsgBuffStl );
-#endif
-  }
+//CHIPCOM_LOG_MSG( DEBUGLOG_INFO,"ChipCom_ReceiveMsg: CoreId=[%u], PktIdx=[%u], PktBank=[%u], MsgBuffAddr=[%08X], MsgBuffStlAddr=[%08X]\r\n",
+//    t_u1CoreId, t_u2PktIdx, t_u1PktBank, (uint32)t_pu1MsgBuff, (uint32)t_pu1MsgBuffStl );
+
 			}
 		}
 
@@ -899,11 +866,12 @@ static void ChipCom_Transmit( void )
 		else
 		{
 			/* todo: Storing in DLT */
+CHIPCOM_LOG_MSG( DEBUGLOG_INFO,"ChipCom_Transmit: SpiRst=[%u]\r\n", t_u1SpiRst );
 		}
-#if CHIPCOM_TEST_MD == CHIPCOM_TEST_MD_DRV
-	/* Test */
-	CHIPCOM_LOG_MSG( DEBUGLOG_INFO,"ChipCom_Transmit: SpiCond=[%u], SpiRst=[%u], TxSize=[%u]\r\n", t_u1SpiCondition, t_u1SpiRst, t_u2TxSize );
-#endif
+	}
+	else
+	{
+CHIPCOM_LOG_MSG( DEBUGLOG_INFO,"ChipCom_Transmit: SpiCond=[%u]\r\n", t_u1SpiCondition );
 	}
 
 	return;
@@ -1011,14 +979,8 @@ static void ChipCom_WriteFla( void )
 			t_u2PktSeq++;
 		}
 
-  if ( t_u2PktIdx == 1U )
-  {
-#if CHIPCOM_TEST_MD == CHIPCOM_TEST_MD_DRV
-	/* Test */
-    CHIPCOM_LOG_MSG( DEBUGLOG_INFO,"ChipCom_WriteFla: PktIdx=[%u], PktSeq=[%u], PktBank=[%u], PktBuffAddr=[%08X], TxBuffAddr=[%08X]\r\n",
-        t_u2PktIdx, t_u2PktSeq, t_u1PktBank, (uint32)t_pu1PktBuff, (uint32)t_pu1TxBuff );
-#endif
-  }
+//CHIPCOM_LOG_MSG( DEBUGLOG_INFO,"ChipCom_WriteFla: PktIdx=[%u], PktSeq=[%u], PktBank=[%u], PktBuffAddr=[%08X], TxBuffAddr=[%08X]\r\n",
+//    t_u2PktIdx, t_u2PktSeq, t_u1PktBank, (uint32)t_pu1PktBuff, (uint32)t_pu1TxBuff );
 
 		/* Set packet buffer offset */
 		ChipCom_u2PktBuffOffs[t_u2PktId] = t_u2PktBuffOffs;
@@ -1065,11 +1027,9 @@ static void ChipCom_Receive( void )
 	else
 	{
 		/* todo: Storing in DLT when synchronizing with SPI receive processing */
+CHIPCOM_LOG_MSG( DEBUGLOG_INFO,"ChipCom_Receive: SpiRst=[%u]\r\n", t_u1SpiRst );
 	}
-#if CHIPCOM_TEST_MD == CHIPCOM_TEST_MD_DRV
-	/* Test */
-	CHIPCOM_LOG_MSG( DEBUGLOG_INFO,"ChipCom_Receive: SpiRst=[%u]\r\n", t_u1SpiRst );
-#endif
+
 	return;
 }
 
@@ -1116,14 +1076,8 @@ static void ChipCom_ReadFla( void )
 		/* Get received packet sequence number */
 		ChipCom_ConvertArrayTo2byte( &t_u2PktSeqRcv, t_pu1RxBuff );
 
-  if ( t_u2PktIdx == 1U )
-  {
-#if CHIPCOM_TEST_MD == CHIPCOM_TEST_MD_DRV
-	/* Test */
-    CHIPCOM_LOG_MSG( DEBUGLOG_INFO,"ChipCom_ReadFla: PktIdx=[%u], RxStatusPre=[%u], PktSeqPre=[%u], PktSeqRcv=[%u], PktBuffOffsPre=[%u], RxBuffAddr=[%08X]\r\n",
-        t_u2PktIdx, t_u1RxStatus, t_u2PktSeq, t_u2PktSeqRcv, t_u2PktBuffOffs, (uint32)t_pu1RxBuff );
-#endif
-  }
+//CHIPCOM_LOG_MSG( DEBUGLOG_INFO,"ChipCom_ReadFla: PktIdx=[%u], RxStatusPre=[%u], PktSeqPre=[%u], PktSeqRcv=[%u], PktBuffOffsPre=[%u], RxBuffAddr=[%08X]\r\n",
+//    t_u2PktIdx, t_u1RxStatus, t_u2PktSeq, t_u2PktSeqRcv, t_u2PktBuffOffs, (uint32)t_pu1RxBuff );
 
 		/* New? */
 		if ( t_u2PktSeqRcv == (uint16)0U )
@@ -1192,14 +1146,8 @@ static void ChipCom_ReadFla( void )
 					/* No processing */
 				}
 
-  if ( t_u2PktIdx == 1U )
-  {
-#if CHIPCOM_TEST_MD == CHIPCOM_TEST_MD_DRV
-	/* Test */
-    CHIPCOM_LOG_MSG( DEBUGLOG_INFO,"ChipCom_ReadFla: PktIdx=[%u], PktSeq=[%u], PktBankNext=[%u], RxStatus=[%u], RxHst=[%u], PktBuffOffs=[%u], RxBuffAddr=[%08X]\r\n",
-        t_u2PktIdx, t_u2PktSeq, t_u1PktBank, t_u1RxStatus, ChipCom_u1PktRxHst[t_u2PktIdx], t_u2PktBuffOffs, (uint32)t_pu1RxBuff );
-#endif
-  }
+//CHIPCOM_LOG_MSG( DEBUGLOG_INFO,"ChipCom_ReadFla: PktIdx=[%u], PktSeq=[%u], PktBankNext=[%u], RxStatus=[%u], RxHst=[%u], PktBuffOffs=[%u], RxBuffAddr=[%08X]\r\n",
+//    t_u2PktIdx, t_u2PktSeq, t_u1PktBank, t_u1RxStatus, ChipCom_u1PktRxHst[t_u2PktIdx], t_u2PktBuffOffs, (uint32)t_pu1RxBuff );
 
 			}
 		}
@@ -1369,8 +1317,6 @@ static Std_ReturnType ChipCom_ReadCanMsg( CanMsgType* t_pstCanMsg, uint8* t_pu1B
 
 	return t_u1Rtn;
 }
-
-
 
 /**---------------------------------------------------------------------------
  * [Description] Switch packet bank

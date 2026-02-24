@@ -96,7 +96,7 @@ Std_ReturnType ChipCom_GetPeriodicRxData( const uint8 periodic_id, uint16* recei
 	uint16 t_u2SignalId;
 	uint16 t_u2SignalIdSeq;
 	uint16 t_u2MsgId;
-	uint32 t_u2SeqNo;
+	uint32 t_u4SeqNo;
 
 	t_u2SignalId = (uint16)periodic_id;
 
@@ -107,10 +107,10 @@ Std_ReturnType ChipCom_GetPeriodicRxData( const uint8 periodic_id, uint16* recei
 		t_u2MsgId = ChipCom_cu2DataHdl2MsgHdlTbl[t_u2SignalId];
 		t_u2SignalIdSeq = ChipCom_cu2MsdId2SeqDataId[t_u2MsgId];
 
-		t_u1Rtn = ChipCom_ReceiveSignal( t_u2SignalIdSeq, (void*)&t_u2SeqNo );
+		t_u1Rtn = ChipCom_ReceiveSignal( t_u2SignalIdSeq, (void*)&t_u4SeqNo );
 	}
 
-	*((uint8*)receive_counter) = (uint8)t_u2SeqNo;
+	*receive_counter = t_u4SeqNo;
 
 	return t_u1Rtn;
 #endif

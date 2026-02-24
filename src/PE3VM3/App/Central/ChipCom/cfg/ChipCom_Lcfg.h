@@ -15,10 +15,40 @@
 /*--------------------------------------------------------------------------*/
 /* Include Files                                                            */
 /*--------------------------------------------------------------------------*/
+#if CHIPCOM_BSW == CHIPCOM_BSW_MICROSAR
+  #include "CDD_DebugLog.h"
+#endif
 
 /*--------------------------------------------------------------------------*/
 /* Macros                                                                   */
 /*--------------------------------------------------------------------------*/
+/*++++++++++++++++*/
+/* Debug          */
+/*++++++++++++++++*/
+/* Test mode */
+#define CHIPCOM_TEST_MD_OFF                     (0U)
+#define CHIPCOM_TEST_MD_LOG                     (1U)
+#define CHIPCOM_TEST_MD_DRV                     (2U)
+#define CHIPCOM_TEST_MD                         CHIPCOM_TEST_MD_OFF
+
+/* Log level */
+#define CHIPCOM_LOG_ERROR                       DEBUGLOG_ERROR
+#define CHIPCOM_LOG_WARNING                     DEBUGLOG_WARNING
+#define CHIPCOM_LOG_INFO                        DEBUGLOG_INFO
+#define CHIPCOM_LOG_DEBUG                       DEBUGLOG_DEBUG
+
+/* Output log function */
+#if CHIPCOM_TEST_MD >= CHIPCOM_TEST_MD_LOG && CHIPCOM_BSW == CHIPCOM_BSW_MICROSAR
+  #define CHIPCOM_LOG_MSG DEBUGLOG_LOG
+#else
+  #define CHIPCOM_LOG_MSG( log_level, message, ... )
+#endif
+
+#if CHIPCOM_TEST_MD == CHIPCOM_TEST_MD_DRV
+void ChipCom_MainFunctionTest( void );
+uint8 ChipCom_SendSignalDummy( Com_SignalIdType t_u2SignalId, const void* t_pvdSignalDataPtr );
+#endif
+
 /*++++++++++++++++*/
 /* Fixed Value    */
 /*++++++++++++++++*/
