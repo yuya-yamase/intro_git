@@ -68,7 +68,7 @@ const           ST_TRIPCOM_MS_MEM               st_gp_TRIPCOM_MS_MEM_CFG[TRIPCOM
     {   (U2)U2_MAX,                             (U1)0xFFU                   },                  /*  13 TRIPCOM_MS_ID_INSTEE_EU           */
     {   (U2)U2_MAX,                             (U1)0xFFU                   },                  /*  14 TRIPCOM_MS_ID_INSTEE_OC           */
     {   (U2)U2_MAX,                             (U1)0xFFU                   },                  /*  15 TRIPCOM_MS_ID_INSTEE_DV           */
-    {   (U2)RIMID_U4_TRIPCOM_EVDTE_OC,          (U1)TRIPCOM_MS_DEV_BR_Z     },                  /*  16 TRIPCOM_MS_ID_EVDTE_OC            */
+    {   (U2)U2_MAX,                             (U1)0xFFU                   },                  /*  16 TRIPCOM_MS_ID_EVDTE_OC            */
     {   (U2)U2_MAX,                             (U1)0xFFU                   },                  /*  17 TRIPCOM_MS_ID_EVDTE_PCT           */
     {   (U2)RIMID_U4_TRIPCOM_AVGVEHSPD_TA_SP,   (U1)TRIPCOM_MS_DEV_BR_Z     },                  /*  18 TRIPCOM_MS_ID_AVGVEHSPD_TA_SP     */
     {   (U2)NVMCID_U4_TOSP_OC,                  (U1)TRIPCOM_MS_DEV_NVM      },                  /*  19 TRIPCOM_MS_ID_AVGVEHSPD_TA_OC     */
@@ -86,7 +86,7 @@ const           ST_TRIPCOM_MS_MEM               st_gp_TRIPCOM_MS_MEM_CFG[TRIPCOM
     {   (U2)RIMID_U4_TRIPCOM_PTSRUNTM_DC_ET,    (U1)TRIPCOM_MS_DEV_BR_Z     },                  /*  31 TRIPCOM_MS_ID_PTSRUNTM_DC_ET      */
     {   (U2)NVMCID_U4_TR_A_TM_ET,               (U1)TRIPCOM_MS_DEV_NVM      },                  /*  32 TRIPCOM_MS_ID_PTSRUNTM_TR_A_ET    */
     {   (U2)NVMCID_U4_TR_B_TM_ET,               (U1)TRIPCOM_MS_DEV_NVM      },                  /*  33 TRIPCOM_MS_ID_PTSRUNTM_TR_B_ET    */
-    {   (U2)U2_MAX,                             (U1)0xFFU                   },                  /*  34 TRIPCOM_MS_ID_PTSRUNDIST_LC_OC    */
+    {   (U2)NVMCID_U4_TODT_OC,                  (U1)TRIPCOM_MS_DEV_NVM      },                  /*  34 TRIPCOM_MS_ID_PTSRUNDIST_LC_OC    */
     {   (U2)RIMID_U4_TRIPCOM_PTSRUNDIST_DC_OC,  (U1)TRIPCOM_MS_DEV_BR_Z     },                  /*  35 TRIPCOM_MS_ID_PTSRUNDIST_DC_OC    */
     {   (U2)NVMCID_U4_TR_A_DT_OC,               (U1)TRIPCOM_MS_DEV_NVM      },                  /*  36 TRIPCOM_MS_ID_PTSRUNDIST_TR_A_OC  */
     {   (U2)NVMCID_U4_TR_B_DT_OC,               (U1)TRIPCOM_MS_DEV_NVM      },                  /*  37 TRIPCOM_MS_ID_PTSRUNDIST_TR_B_OC  */
