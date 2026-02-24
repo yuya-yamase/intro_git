@@ -40,6 +40,7 @@
 
 /* Request frame offset */
 #define FWUSH_REQ_SUBTYPE_OFFSET                (0U)
+#define FWUSH_REQ_SEQCNT_OFFSET                 (7U)
 #define FWUSH_REQ_PREP_DATA_CRC_OFFSET          (0U)
 #define FWUSH_REQ_RUN_BLKOFS_OFFSET             (2U)
 #define FWUSH_REQ_RUN_LEN_OFFSET                (4U)
@@ -86,21 +87,21 @@
 #define FWUSH_REQ_SUBTYPE_ACT                   (0x37U)        /* Activate */
 #define FWUSH_REQ_SUBTYPE_CANCEL                (0xFEU)        /* Cancel (reserved for future) */
 
+/* Response subtypes */
+#define FWUSH_RESP_SUBTYPE_NA                    (0xFFU)        /* Not Applicable */
+#define FWUSH_RESP_SUBTYPE_PREP                  (0x07U)        /* Prepare */
+#define FWUSH_RESP_SUBTYPE_RUN                   (0x17U)        /* Run */
+#define FWUSH_RESP_SUBTYPE_VERI                  (0x19U)        /* Verify */
+#define FWUSH_RESP_SUBTYPE_ACT                   (0x38U)        /* Activate */
+
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Prototypes                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 
-/* Phase 2 main functions */
+/* main functions */
 void vd_g_FwushInit(void);
 void vd_g_FwushMainTask(void);
-
-/* Accept CANCEL request from external (reserved for future) */
-void vd_g_FwushRequestCancel(void);
-
-/* Debug: get current state */
-U1 u1_g_FwushGetMainState(void);
-U1 u1_g_FwushGetSubState(void);
 
 #endif /* FWUSH_H */
 /*===================================================================================================================================*/
