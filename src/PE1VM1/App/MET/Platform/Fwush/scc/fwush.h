@@ -31,9 +31,6 @@
 #define FWUSH_REQ_H_SIZE                        (FWUSH_REQ_H_WORDS * FWUSH_REQ_WORD_BYTE)
 #define FWUSH_RES_WORDS                         (2U)
 
-#define FWUSH_REQ_PREP_DATA_SIZE                (328U)
-#define FWUSH_REQ_RUN_DATA_SIZE                 (1024U)
-
 /* Response definition */
 #define FWUSH_ACK_OK                            (0x00U)
 #define FWUSH_ACK_NG                            (0x01U)
@@ -42,8 +39,7 @@
 #define FWUSH_REQ_SUBTYPE_OFFSET                (0U)
 #define FWUSH_REQ_SEQCNT_OFFSET                 (7U)
 #define FWUSH_REQ_PREP_DATA_CRC_OFFSET          (0U)
-#define FWUSH_REQ_RUN_BLKOFS_OFFSET             (2U)
-#define FWUSH_REQ_RUN_LEN_OFFSET                (4U)
+#define FWUSH_REQ_RUN_BLKOFS_OFFSET             (3U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions - Phase 2: State Machine                                                                                        */

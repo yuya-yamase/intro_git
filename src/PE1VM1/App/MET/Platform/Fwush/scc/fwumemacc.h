@@ -29,6 +29,11 @@
 #define FWUMEMACC_RET_NG                 (1U)            /* failure */
 
 #define FWUMEMACC_WRITE_LENGTH           (1024U)         /* write block size: 1KB */
+#if (FWUMEMACC_WRITE_LENGTH != 1024U)
+#error \
+    "FWUMEMACC_WRITE_LENGTH must be same with FWUPX_WRI_RUN_DATA_SIZE in PE2VM2 fwupx.h. " \
+    "Change with FWUPX_WRI_RUN_DATA_SIZE & this error check value"
+#endif
 #define FWUMEMACC_CRC_INIT_VAL           (0xFFFFFFFFU)   /* CRC initial value */
 #define FWUMEMACC_MAX_RETRY_COUNT        (3U)            /* max retry count */
 #define FWUMEMACC_ADRS_INV_OFFSET        (0x02000000U)   /* address conversion offset */

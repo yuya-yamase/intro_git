@@ -41,6 +41,11 @@
 #define FWUPX_WRI_PREP_DATA_START         (4U)
 
 #define FWUPX_WRI_RUN_DATA_SIZE           (1024U)
+#if (FWUPX_WRI_RUN_DATA_SIZE != 1024U)
+#error \
+    "FWUPX_WRI_RUN_DATA_SIZE must be same with FWUMEMACC_WRITE_LENGTH in PE1VM1 fwumemacc.h. " \
+    "Change with FWUMEMACC_WRITE_LENGTH & this error check value"
+#endif
 #define FWUPX_WRI_RUN_DATA_START          (6U)
 
 #define FWUPX_READ_WORDS                  (2U)

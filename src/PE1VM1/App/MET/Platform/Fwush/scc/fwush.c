@@ -59,7 +59,7 @@ static U1 u1_sp_fwush_header[FWUSH_REQ_H_SIZE];
 
 /* Request processing */
 static U1 u1_s_FwushReadHeader(U1 * u1_ap_ptr);
-static U1 u1_s_FwushReadData(U2 u2_a_length, U4* u4_ap_reqadr);
+static U1 u1_s_FwushReadData(U4* u4_ap_reqadr);
 
 /* Event detection */
 static U1 u1_s_FwushDetectEvent(void);
@@ -496,7 +496,7 @@ static void vd_s_FwushExecuteStateSpecificAction(U1 u1_a_event)
         switch (u1_s_fwush_state_main){
         case (U1)FWUSH_MAIN_STATE_PREP:
             /* PREP: read data & store CRC in context */
-            u1_t_read_ok = u1_s_FwushReadData((U2)FWUSH_REQ_D_WORDS, &u4_t_adr);
+            u1_t_read_ok = u1_s_FwushReadData(&u4_t_adr);
             if(u1_t_read_ok == (U1)TRUE){
                 u1_tp_adr = (U1 *)u4_t_adr;
                 u4_s_fwush_prep_data_crc =    (U4)u1_tp_adr[FWUSH_REQ_PREP_DATA_CRC_OFFSET]
@@ -827,13 +827,12 @@ static U1 u1_s_FwushReadHeader(U1 * u1_ap_ptr)
 }
 
 /*===================================================================================================================================*/
-/* static U1 u1_s_FwushReadData(U2 u2_a_length, U4* u4_ap_reqadr)                                                                    */
+/* static U1 u1_s_FwushReadData(U4* u4_ap_reqadr)                                                                                    */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      U2 u2_a_length : Read length (words)                                                                             */
-/*                  U4* u4_ap_reqadr : Pointer to store read address                                                                 */
+/*  Arguments:      U4* u4_ap_reqadr : Pointer to store read address                                                                 */
 /*  Return:         U1 : TRUE if data read successfully, FALSE otherwise                                                             */
 /*===================================================================================================================================*/
-static U1 u1_s_FwushReadData(U2 u2_a_length, U4* u4_ap_reqadr)
+static U1 u1_s_FwushReadData(U4* u4_ap_reqadr)
 {
     U1  u1_t_read_ok;
     U1  u1_t_ret;
@@ -872,6 +871,12 @@ static void vd_s_FwushMakeResData(U1 u1_a_state, U1 u1_a_response)
     };
     U4  u4_tp_res_data[FWUSH_RES_WORDS];
 
+    if(u1_s_fwupx_res_seqcnt < (U1)0xFFU){
+        u1_s_fwupx_res_seqcnt++;
+    }
+    else{
+        u1_s_fwupx_res_seqcnt = (U1)0U;
+    }
     vd_g_MemfillU4(&u4_tp_res_data[0], (U4)0U, (U4)FWUSH_RES_WORDS);
 
     u4_tp_res_data[0] = (U4)(u1_sp_FWUSH_EXPCT_SUBTYPE[u1_a_state] | ((U4)u1_a_response << (U1)8U) | ((U4)0x01U << (U1)16U)
@@ -879,13 +884,6 @@ static void vd_s_FwushMakeResData(U1 u1_a_state, U1 u1_a_response)
     u4_tp_res_data[1] = (U4)((u2_s_fwush_run_ofst & (U2)0x00FFU)) | ((U4)0x04U << (U1)8U) | ((U4)0x00U << (U1)16U)
                       | ((U4)u1_s_fwupx_res_seqcnt << (U1)24U);
     vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_FWUPXRES, &u4_tp_res_data[0], (U2)FWUSH_RES_WORDS);
-
-    if(u1_s_fwupx_res_seqcnt < (U1)0xFFU){
-        u1_s_fwupx_res_seqcnt++;
-    }
-    else{
-        u1_s_fwupx_res_seqcnt = (U1)0U;
-    }
 }
 /*===================================================================================================================================*/
 /* static U1 u1_s_FwushMakePrepData(U4 * u4_ap_adr, U4 * u4_ap_length, U4 * u4_ap_crc)                                               */
@@ -901,7 +899,7 @@ static U1 u1_s_FwushMakePrepData(U4 * u4_ap_adr, U4 * u4_ap_length, U4 * u4_ap_c
     U1 * u1_tp_adr;
     U1   u1_t_ret;
 
-    u1_t_ret  = u1_s_FwushReadData((U2)FWUSH_REQ_D_WORDS, &u4_t_adr);
+    u1_t_ret  = u1_s_FwushReadData(&u4_t_adr);
     u1_tp_adr = (U1 *)u4_t_adr;
 
     if(u1_t_ret == (U1)TRUE){
@@ -927,7 +925,7 @@ static U1 u1_s_FwushMakeRunData(U4 * u4_ap_adr, U2 * u2_ap_ofst)
 {
     U1   u1_t_ret;
 
-    u1_t_ret = u1_s_FwushReadData((U2)FWUSH_REQ_D_WORDS, u4_ap_adr);
+    u1_t_ret = u1_s_FwushReadData(u4_ap_adr);
     *u2_ap_ofst = ((U2)u1_sp_fwush_header[FWUSH_REQ_RUN_BLKOFS_OFFSET + 1]) | 
                   ((U2)u1_sp_fwush_header[FWUSH_REQ_RUN_BLKOFS_OFFSET] << (U2)8U);
     return(u1_t_ret);
