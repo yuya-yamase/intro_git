@@ -44,11 +44,11 @@
 #define IVDSH_FQ_CH_WRI                          (2U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define IVDSH_WA_NWORD_WRI                       (10U)
+#define IVDSH_WA_NWORD_WRI                       (12U)
 #define IVDSH_WA_NWORD_REA_0                     (17U)
 #define IVDSH_WA_NWORD_REA_1                     (24U)
 
-#define IVDSH_WA_NWORD                           (92U)
+#define IVDSH_WA_NWORD                           (94U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -98,6 +98,8 @@ const ST_IVDSH_WA           st_gp_IVDSH_WA_BY_DID[IVDSH_NUM_DID] =
     {(U2)7U,        (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_VM3TO2_WHLINI_INF */
     {(U2)8U,        (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_VM3TO1_WHLINI_STA */
     {(U2)9U,        (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_VM3TO1_SOC_POW_STS*/
+    {(U2)10U,       (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_VM3TO2_WKUP_COND  */
+    {(U2)11U,       (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_VM3TO2_USRRST_MASK*/
     /*------------------------------------------------------------------*/
     /* Read from VM#1                                                   */
     /*------------------------------------------------------------------*/

@@ -1,4 +1,4 @@
-/* 2.1.3 */
+/* 2.2.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -13,8 +13,8 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define TRIPCOM_MS_CFG_H_MAJOR                  (2)
-#define TRIPCOM_MS_CFG_H_MINOR                  (1)
-#define TRIPCOM_MS_CFG_H_PATCH                  (3)
+#define TRIPCOM_MS_CFG_H_MINOR                  (2)
+#define TRIPCOM_MS_CFG_H_PATCH                  (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -28,12 +28,13 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define TRIPCOM_MS_NUM_ID                       (181U)
+#define TRIPCOM_MS_NUM_ID                       (71U)
 
-#define TRIPCOM_MS_NUM_DEV                      (3U)
+#define TRIPCOM_MS_NUM_DEV                      (4U)
 #define TRIPCOM_MS_DEV_BR_Z                     (0U)
 #define TRIPCOM_MS_DEV_BR_M                     (1U)
 #define TRIPCOM_MS_DEV_NVM                      (2U)
+#define TRIPCOM_MS_DEV_NVM_O                    (3U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -46,7 +47,6 @@
 typedef struct {
     U2                                          u2_memoryid;
     U1                                          u1_devtype;
-    U1                                          u1_nvmifch;         /* u1_gp_TRIPCOM_MS_CH2ID */
 } ST_TRIPCOM_MS_MEM;
 
 typedef struct {
@@ -61,7 +61,6 @@ typedef struct {
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* U1           u1_g_TripcomMsIgnOn(void);                                                                                           */
 U1              u1_g_TripcomMsEsichk(void);
-void            vd_g_TripcomMsSyncUpdtImm(const U1 u1_a_CH);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
@@ -69,8 +68,6 @@ void            vd_g_TripcomMsSyncUpdtImm(const U1 u1_a_CH);
 extern  const   ST_TRIPCOM_MS_MEM               st_gp_TRIPCOM_MS_MEM_CFG[];
 extern  const   ST_TRIPCOM_MS_RDIF              st_gp_TRIPCOM_MS_RDIF[];
 extern  void    (* const                        fp_gp_TRIPCOM_MS_WRIF[])(const U2 u2_a_ID, const U4 u4_a_VALUE);
-extern  const   U1                              u1_gp_TRIPCOM_MS_CH2ID[];
-extern  const   U1                              u1_gp_TRIPCOM_MS_GRPH_CH2ID[];
 
 #endif      /* TRIPCOM_MS_CFG_H */
 

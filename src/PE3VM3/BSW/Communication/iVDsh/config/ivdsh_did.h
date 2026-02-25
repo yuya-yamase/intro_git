@@ -24,7 +24,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define IVDSH_NUM_DID_WRI                        (10U)
+#define IVDSH_NUM_DID_WRI                        (12U)
 
 /*-------------------------------------------------------------------------------*/
 /* CPREQ_XXX = "https://wiki.geniie.net/x/Wcq5pQ" numbering list (sample config) */
@@ -39,23 +39,25 @@
 #define IVDSH_DID_WRI_VM3TO2_WHLINI_INF          (7U)
 #define IVDSH_DID_WRI_VM3TO1_WHLINI_STA          (8U)
 #define IVDSH_DID_WRI_VM3TO1_SOC_POW_STS         (9U)
+#define IVDSH_DID_WRI_VM3TO2_WKUP_COND           (10U)
+#define IVDSH_DID_WRI_VM3TO2_USRRST_MASK         (11U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define IVDSH_NUM_DID_REA                        (11U)
 
 /* Read from VM#1 */
-#define IVDSH_DID_REA_VM1TO3_STBY                (10U)
-#define IVDSH_DID_REA_VM1TO3_SPI_FAIL            (11U)
-#define IVDSH_DID_REA_VM1TO23_FSLP               (12U)
-#define IVDSH_DID_REA_VM1TO3_WHLINI_INF          (13U)
-#define IVDSH_DID_REA_VM1TO3_NMDIAG              (14U)
+#define IVDSH_DID_REA_VM1TO3_STBY                (12U)
+#define IVDSH_DID_REA_VM1TO3_SPI_FAIL            (13U)
+#define IVDSH_DID_REA_VM1TO23_FSLP               (14U)
+#define IVDSH_DID_REA_VM1TO3_WHLINI_INF          (15U)
+#define IVDSH_DID_REA_VM1TO3_NMDIAG              (16U)
 /* Read from VM#2 */
-#define IVDSH_DID_REA_VM2TO3_STBY                (15U)
-#define IVDSH_DID_REA_VM2TO3_WHLINI_INF          (16U)
-#define IVDSH_DID_REA_VM2TO3_STRMODE             (17U)
-#define IVDSH_DID_REA_VM2TO3_OPESTS              (18U)
-#define IVDSH_DID_REA_GPS_REQ                    (19U)
-#define IVDSH_DID_REA_VM2TO3_DIN2_STAT           (20U)
+#define IVDSH_DID_REA_VM2TO3_STBY                (17U)
+#define IVDSH_DID_REA_VM2TO3_WHLINI_INF          (18U)
+#define IVDSH_DID_REA_VM2TO3_STRMODE             (19U)
+#define IVDSH_DID_REA_VM2TO3_OPESTS              (20U)
+#define IVDSH_DID_REA_GPS_REQ                    (21U)
+#define IVDSH_DID_REA_VM2TO3_DIN2_STAT           (22U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define IVDSH_NUM_DID                            (IVDSH_NUM_DID_WRI + IVDSH_NUM_DID_REA)

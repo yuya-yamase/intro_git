@@ -33,14 +33,16 @@
 /*  Defines                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* START : ##TOOL_OUT#NVMC_MODULE_NUM## */
-#define NVMC_MODULE_NUM                          (4U)
+#define NVMC_MODULE_NUM                          (6U)
 /* END : ##TOOL_OUT#NVMC_MODULE_NUM## */
 
 /* START : ##TOOL_OUT#NVMC_MODULE_ID## */
 #define NVMC_MODULE_U4_TRPL                      (0U)
 #define NVMC_MODULE_U2_LO_TRPL                   (1U)
 #define NVMC_MODULE_U1_P1_TRPL                   (2U)
-#define NVMC_MODULE_OTHDBL_SUM_SMLL_16           (3U)
+#define NVMC_MODULE_OTHDBL_SUM_SMLL_12           (3U)
+#define NVMC_MODULE_OTHDBL_SUM_SMLL_16           (4U)
+#define NVMC_MODULE_OTHDBL_SUM_SMLL_24           (5U)
 /* END : ##TOOL_OUT#NVMC_MODULE_ID## */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

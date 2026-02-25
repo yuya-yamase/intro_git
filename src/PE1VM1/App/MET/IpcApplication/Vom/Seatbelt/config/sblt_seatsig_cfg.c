@@ -19,7 +19,6 @@
 #include "sblt_seat_cfg_private.h"
 #include "oxcan.h"
 #include "vardef.h"
-#include "vardef_esopt.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */

@@ -72,7 +72,7 @@ void            vd_g_Ivi_PwrCtrl_Main_Bon_init(void)
     vd_g_XMTuner_Init();
     vd_g_Power_BonInit();
     vd_g_Str_Bon_Init();
-    vd_g_Pmic_Init();
+    vd_g_Pmic_BonInit();
 }
 
 /*===================================================================================================================================*/
