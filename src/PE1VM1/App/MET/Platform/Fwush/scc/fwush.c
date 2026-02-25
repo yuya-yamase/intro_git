@@ -59,7 +59,7 @@ static U1 u1_sp_fwush_header[FWUSH_REQ_H_SIZE];
 
 /* Request processing */
 static U1 u1_s_FwushReadHeader(U1 * u1_ap_ptr);
-static U1 u1_s_FwushReadData(U4* u4_ap_reqadr);
+static U1 u1_s_FwushReadData(U4* u4_ap_adr);
 
 /* Event detection */
 static U1 u1_s_FwushDetectEvent(void);
@@ -320,19 +320,19 @@ void vd_g_FwushInit(void)
 void vd_g_FwushMainTask(void)
 {
     const ST_FWUSH_TRANSITION_ENTRY*    stp_t_TRANSITION;
-    U1                                  u1_t_main_crnt;
-    U1                                  u1_t_sub_crnt;
+    U1                                  u1_t_state_main_crnt;
+    U1                                  u1_t_state_sub_crnt;
     U1                                  u1_t_event;
 
-    u1_t_main_crnt = u1_s_fwush_state_main;
-    u1_t_sub_crnt  = u1_s_fwush_state_sub;
+    u1_t_state_main_crnt = u1_s_fwush_state_main;
+    u1_t_state_sub_crnt  = u1_s_fwush_state_sub;
 
     /* 1. Event detection (reads header internally) */
     u1_t_event = u1_s_FwushDetectEvent();
     
     /* 2. Consult state transition table */
-    stp_t_TRANSITION = &stp_sp3_FWUSH_STM[u1_t_main_crnt]
-                                         [u1_t_sub_crnt ]
+    stp_t_TRANSITION = &stp_sp3_FWUSH_STM[u1_t_state_main_crnt]
+                                         [u1_t_state_sub_crnt ]
                                          [u1_t_event    ];
 
     /* 3. Execute Transition Event Handler */
@@ -346,7 +346,7 @@ void vd_g_FwushMainTask(void)
 
     /* 5. Error handling */
     if(u1_s_fwush_abort != (U1)FALSE){
-        vd_s_FwushMakeResData(u1_t_main_crnt, (U1)FWUSH_ACK_NG);
+        vd_s_FwushMakeResData(u1_t_state_main_crnt, (U1)FWUSH_ACK_NG);
         vd_g_FwushAbort();
     }
     
@@ -827,22 +827,22 @@ static U1 u1_s_FwushReadHeader(U1 * u1_ap_ptr)
 }
 
 /*===================================================================================================================================*/
-/* static U1 u1_s_FwushReadData(U4* u4_ap_reqadr)                                                                                    */
+/* static U1 u1_s_FwushReadData(U4* u4_ap_adr)                                                                                       */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      U4* u4_ap_reqadr : Pointer to store read address                                                                 */
+/*  Arguments:      U4* u4_ap_adr : Pointer to store read address                                                                    */
 /*  Return:         U1 : TRUE if data read successfully, FALSE otherwise                                                             */
 /*===================================================================================================================================*/
-static U1 u1_s_FwushReadData(U4* u4_ap_reqadr)
+static U1 u1_s_FwushReadData(U4* u4_ap_adr)
 {
     U1  u1_t_read_ok;
     U1  u1_t_ret;
 
     u1_t_ret = (U1)FALSE;
 
-    u1_t_read_ok = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_FWUPXREQ_D, u4_ap_reqadr, (U2)FWUSH_REQ_D_WORDS);
+    u1_t_read_ok = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_FWUPXREQ_D, u4_ap_adr, (U2)FWUSH_REQ_D_WORDS);
 
     if((u1_t_read_ok != (U1)IVDSH_NO_REA) &&
-       (u4_ap_reqadr != vdp_PTR_NA      )){
+       (u4_ap_adr != vdp_PTR_NA      )){
         u1_t_ret = (U1)TRUE;
     }
 
