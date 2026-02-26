@@ -163,6 +163,11 @@ MCOS_INLINE tcb_t * get_running (
 /*
  * call mcos_ds_userhook_enter_idle
  */
+extern void mcos_call_userhook_enter_idle_internal(mcos_uintptr_t param1, mcos_uintptr_t param2);
+
+/*
+ * call mcos_ds_userhook_enter_idle
+ */
 MCOS_INLINE void call_userhook_enter_idle(
     const tcb_t * const running,
     const tcb_t * const ready)
@@ -170,10 +175,12 @@ MCOS_INLINE void call_userhook_enter_idle(
 #if MCOS_CFG_DS_USERHOOK
     if ((running != MCOS_CLS_NULL) && (ready == MCOS_CLS_NULL))
     {
-        mcos_ds_userhook_enter_idle();
+        mcos_hwl_call_change_mk_stack((mcos_uintptr_t)0L, (mcos_uintptr_t)0U, &mcos_call_userhook_enter_idle_internal);
     }
 #endif
 }
+
+extern void mcos_call_userhook_leave_idle_internal(mcos_uintptr_t param1, mcos_uintptr_t param2);
 
 /*
  * call mcos_ds_userhook_leave_idle
@@ -185,7 +192,7 @@ MCOS_INLINE void call_userhook_leave_idle(
 #if MCOS_CFG_DS_USERHOOK
     if ((running == MCOS_CLS_NULL) && (ready != MCOS_CLS_NULL))
     {
-        mcos_ds_userhook_leave_idle(ready->tid);
+        mcos_hwl_call_change_mk_stack((mcos_uintptr_t)ready->tid, (mcos_uintptr_t)0U, &mcos_call_userhook_leave_idle_internal);
     }
 #endif
 }

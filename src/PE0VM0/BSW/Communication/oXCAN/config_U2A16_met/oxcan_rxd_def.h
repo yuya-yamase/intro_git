@@ -27,10 +27,12 @@
 #define OXCAN_RXD_GR_CAN                         (0U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define OXCAN_RXD_NUM_PDU                        (2U)
+#define OXCAN_RXD_NUM_PDU                        (4U)
 
-#define OXCAN_RXD_PDU_CAN_BDC1S81_CH0            (0U)
-#define OXCAN_RXD_PDU_CAN_BDC1S91_CH1            (1U)
+#define OXCAN_RXD_PDU_CAN_BDC1S52_CH0            (0U)
+#define OXCAN_RXD_PDU_CAN_BDC1S60_CH0            (1U)
+#define OXCAN_RXD_PDU_CAN_BDC1S81_CH0            (2U)
+#define OXCAN_RXD_PDU_CAN_BDC1S91_CH1            (3U)
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

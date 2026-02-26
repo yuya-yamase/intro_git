@@ -5,17 +5,16 @@
 /*==============================================================================================*/
 /*	include files																				*/
 /*==============================================================================================*/
-#include	"Os.h"
 
 /*==============================================================================================*/
 /*	DMA common configuration																	*/
 /*==============================================================================================*/
 /* Total number of channels using Dma */
-#define	DMA_UCFG_CHDATA_NUM				(7u)
+#define	DMA_UCFG_CHDATA_NUM				(10u)
 
 /* Uninterruptible/Uninterruptible */
-#define DMA_ENTER_CRITICAL_SECTION()			SuspendAllInterrupts()							/* Do not interrupt */
-#define DMA_EXIT_CRITICAL_SECTION()				ResumeAllInterrupts()							/* Allow interrupts */
+#define DMA_ENTER_CRITICAL_SECTION()											/* Do not interrupt */
+#define DMA_EXIT_CRITICAL_SECTION()												/* Allow interrupts */
 
 /* Register Check */
 #define	DMA_CFG_REG_CHK						(STD_OFF)
@@ -82,6 +81,27 @@
 #define	DMA_UCFG_CHDATA6_HWCH				(PIL_DMAC_CH10)						/* See DMA_UCFG_CHDATA0_HWCH for range			*/
 #define	DMA_UCFG_CHDATA6_PRILEVEL			(DMA_PRIORITY_NOUSE)				/* See DMA_UCFG_CHDATA0_PRILEVEL for range		*/
 #define	DMA_UCFG_CHDATA6_NOTIFICATION		(NULL_PTR)							/* See DMA_UCFG_CHDATA0_NOTIFICATION for range	*/
+
+/* [DMA_CH_DATA_ID_7] config */
+#define	DMA_UCFG_CHDATA7_TYPE				(DMA_DMAC0)							/* See DMA_UCFG_CHDATA0_TYPE			*/
+#define	DMA_UCFG_CHDATA7_REQ				(PIL_DMAC_GR0_INTTAUD1I0)			/* See DMA_UCFG_CHDATA0_REQ for range			*/
+#define	DMA_UCFG_CHDATA7_HWCH				(PIL_DMAC_CH6)						/* See DMA_UCFG_CHDATA0_HWCH for range			*/
+#define	DMA_UCFG_CHDATA7_PRILEVEL			(DMA_PRIORITY_NOUSE)				/* See DMA_UCFG_CHDATA0_PRILEVEL for range		*/
+#define	DMA_UCFG_CHDATA7_NOTIFICATION		(NULL_PTR)							/* See DMA_UCFG_CHDATA0_NOTIFICATION for range	*/
+
+/* [DMA_CH_DATA_ID_8] config */
+#define	DMA_UCFG_CHDATA8_TYPE				(DMA_DMAC0)							/* See DMA_UCFG_CHDATA0_TYPE			*/
+#define	DMA_UCFG_CHDATA8_REQ				(PIL_DMAC_GR0_INTTAUD1I0)			/* See DMA_UCFG_CHDATA0_REQ for range			*/
+#define	DMA_UCFG_CHDATA8_HWCH				(PIL_DMAC_CH7)						/* See DMA_UCFG_CHDATA0_HWCH for range			*/
+#define	DMA_UCFG_CHDATA8_PRILEVEL			(DMA_PRIORITY_NOUSE)				/* See DMA_UCFG_CHDATA0_PRILEVEL for range		*/
+#define	DMA_UCFG_CHDATA8_NOTIFICATION		(NULL_PTR)							/* See DMA_UCFG_CHDATA0_NOTIFICATION for range	*/
+
+/* [DMA_CH_DATA_ID_9] config */
+#define	DMA_UCFG_CHDATA9_TYPE				(DMA_DMAC0)							/* See DMA_UCFG_CHDATA0_TYPE			*/
+#define	DMA_UCFG_CHDATA9_REQ				(PIL_DMAC_GR0_INTTAUD1I0)			/* See DMA_UCFG_CHDATA0_REQ for range			*/
+#define	DMA_UCFG_CHDATA9_HWCH				(PIL_DMAC_CH8)						/* See DMA_UCFG_CHDATA0_HWCH for range			*/
+#define	DMA_UCFG_CHDATA9_PRILEVEL			(DMA_PRIORITY_NOUSE)				/* See DMA_UCFG_CHDATA0_PRILEVEL for range		*/
+#define	DMA_UCFG_CHDATA9_NOTIFICATION		(NULL_PTR)							/* See DMA_UCFG_CHDATA0_NOTIFICATION for range	*/
 
 
 /*-- End Of File -------------------------------------------------------------------------------*/

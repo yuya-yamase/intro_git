@@ -28,6 +28,9 @@
 #include "E2E.h"
 #endif /* #if ((OXCAN_E2E_NUM_TRA > 0U) || (OXCAN_E2E_NUM_REC > 0U)) */
 
+#if (OXCAN_OMA_SEV_GEN == 1U)
+#include "IdsM.h"
+#endif /* (OXCAN_OMA_SEV_GEN == 1U) */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -50,6 +53,15 @@
 #define OXCAN_E2E_MAX_DELTA_CNT                  (3U)
 #define OXCAN_E2E_LEN_BYT_TO_BIT                 (3U)
 
+#if (OXCAN_OMA_SEV_GEN == 1U)
+#define OXCAN_OMA_LEN_FV                         (7U)
+#define OXCAN_OMA_LEN_SEV_DATA                   (34U)
+#endif /* (OXCAN_OMA_SEV_GEN == 1U) */
+
+#if (OXCAN_OMA_REC_MIN > 0U)
+#define OXCAN_OMA_OFFSET_OMA_VR                  (4U)
+#endif /* #if (OXCAN_OMA_REC_MIN > 0U) */
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -67,6 +79,10 @@ static E2E_P05ProtectStateType            st_sp_oxcan_e2e_tra[OXCAN_E2E_NUM_TRA]
 static E2E_P05CheckStateType              st_sp_oxcan_e2e_rec[OXCAN_E2E_NUM_REC]; 
 #endif /* #if (OXCAN_E2E_NUM_REC > 0U) */
 
+#if (OXCAN_OMA_SEV_GEN == 1U)
+static U1                                 u1_sp_oxcan_oma_fv[OXCAN_OMA_NUM_REC][OXCAN_OMA_LEN_FV]; 
+#endif /* (OXCAN_OMA_SEV_GEN == 1U) */
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -76,6 +92,14 @@ static inline void    vd_s_oXCANAubIfE2ePrepTx(PduIdType PduId, PduInfoType* Pdu
 #if (OXCAN_E2E_NUM_REC > 0U)
 static inline U1      u1_s_oXCANAubIfE2eRxOk(PduIdType PduId, BswConstR PduInfoType* PduInfoPtr);
 #endif /* #if (OXCAN_E2E_NUM_REC > 0U) */
+
+#if (OXCAN_OMA_NUM_REC > 0U)
+static inline U1      u1_s_oXCANAubIfOMARxOk(PduIdType PduId, BswConstR PduInfoType* PduInfoPtr);
+#endif /* #if (OXCAN_OMA_NUM_REC > 0U) */
+
+#if (OXCAN_OMA_SEV_GEN == 1U)
+static inline void      vd_s_oXCANAubIfSEvGen(const U2 u2_a_OMA_RX, const U1 u1_a_OMA_VR, BswConstR PduInfoType* PduInfoPtr);
+#endif /* (OXCAN_OMA_SEV_GEN == 1U) */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
@@ -129,7 +153,7 @@ boolean Com_TxIpduCallout( PduIdType PduId, PduInfoType* PduInfoPtr )
 /*===================================================================================================================================*/
 void    Com_CbkTxReq(NetworkHandleType network, PduIdType PduId, Com_TxModeType TxMode)
 {
-    vd_g_oXCANUsrhkTraReq(network, PduId, TxMode);
+    vd_g_oXCANUsrhkIPduTraReq(network, PduId, TxMode);
 }
 /*===================================================================================================================================*/
 /*  void    Com_CbkTxAck(PduIdType PduId)                                                                                            */
@@ -142,7 +166,7 @@ void    Com_CbkTxReq(NetworkHandleType network, PduIdType PduId, Com_TxModeType 
 /*===================================================================================================================================*/
 void    Com_CbkTxAck(PduIdType PduId)
 {
-    vd_g_oXCANUsrhkTraAck(PduId);
+    vd_g_oXCANUsrhkIPduTraAck(PduId);
 }
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 
@@ -156,7 +180,7 @@ void    Com_CbkTxAck(PduIdType PduId)
 
 
 
-#if (OXCAN_E2E_NUM_REC > 0U)
+#if ((OXCAN_E2E_NUM_REC > 0U) || (OXCAN_OMA_NUM_REC > 0U))
 
 
 
@@ -176,9 +200,26 @@ void    Com_CbkTxAck(PduIdType PduId)
 /*===================================================================================================================================*/
 boolean Com_RxIpduCallout(PduIdType PduId, BswConstR PduInfoType* PduInfoPtr)
 {
-    return(u1_s_oXCANAubIfE2eRxOk(PduId, PduInfoPtr));
+    
+    boolean u1_t_ret;
+    
+    u1_t_ret = (boolean)TRUE;
+    
+    
+    #if (OXCAN_OMA_NUM_REC > 0U)
+    u1_t_ret = u1_s_oXCANAubIfOMARxOk(PduId, PduInfoPtr);
+    #endif /* #if (OXCAN_OMA_NUM_REC > 0U) */
+    
+    
+    #if (OXCAN_E2E_NUM_REC > 0U)
+    if(u1_t_ret == (boolean)TRUE){
+        u1_t_ret = u1_s_oXCANAubIfE2eRxOk(PduId, PduInfoPtr);
+    }
+    #endif /* #if (OXCAN_E2E_NUM_REC > 0U) */
+    
+    return(u1_t_ret);
 }
-#endif /* #if (OXCAN_E2E_NUM_REC > 0U) */
+#endif /* #if ((OXCAN_E2E_NUM_REC > 0U) || (OXCAN_OMA_NUM_REC > 0U)) */
 /*===================================================================================================================================*/
 /*  void    Com_CbkRxAck(PduIdType PduId)                                                                                            */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
@@ -190,15 +231,15 @@ boolean Com_RxIpduCallout(PduIdType PduId, BswConstR PduInfoType* PduInfoPtr)
 /*===================================================================================================================================*/
 void    Com_CbkRxAck(PduIdType PduId)
 {
-#if (OXCAN_LIB_CFG_EN_RXD == 1U)
+#if ((OXCAN_LIB_CFG_EN_RXD == 1U) || (OXCAN_LIB_CFG_EN_RXD == 2U))
     vd_g_oXCANRxdPduAck((U1)OXCAN_RXD_GR_CAN, PduId);
-#endif /* #if (OXCAN_LIB_CFG_EN_RXD == 1U) */
+#endif /* #if ((OXCAN_LIB_CFG_EN_RXD == 1U) || (OXCAN_LIB_CFG_EN_RXD == 2U)) */
 
 #ifdef OXDOCAN_AUBIF_MA_H
     vd_g_TyDoCANAubIfComKzkRx(PduId);
 #endif /* #ifdef OXDOCAN_AUBIF_MA_H */
 
-    vd_g_oXCANUsrhkRecAck(PduId);
+    vd_g_oXCANUsrhkIPduRecAck(PduId);
 }
 /*===================================================================================================================================*/
 
@@ -267,7 +308,7 @@ static inline void    vd_s_oXCANAubIfE2ePrepTx(PduIdType PduId, PduInfoType* Pdu
 #endif /* #if (OXCAN_E2E_TRA_MIN > 0U) */
  
         u2_t_offset = PduId - (U2)OXCAN_E2E_TRA_MIN;
-        u2_t_offset = u2_gp_OXCAN_E2E_TRA_BY_PDU[u2_t_offset];
+        u2_t_offset = u2_gp_OXCAN_E2E_TRA_BY_IPDU[u2_t_offset];
         if((u2_t_offset           <  (U2)OXCAN_E2E_NUM_TRA                   ) &&
            (PduInfoPtr->SduLength >= (U4)u1_gp_OXCAN_E2E_TRA_LEN[u2_t_offset])){
 
@@ -315,7 +356,7 @@ static inline U1      u1_s_oXCANAubIfE2eRxOk(PduIdType PduId, BswConstR PduInfoT
 #endif /* #if (OXCAN_E2E_REC_MIN > 0U) */
 
         u2_t_offset = PduId - (U2)OXCAN_E2E_REC_MIN;
-        u2_t_offset = u2_gp_OXCAN_E2E_REC_BY_PDU[u2_t_offset];
+        u2_t_offset = u2_gp_OXCAN_E2E_REC_BY_IPDU[u2_t_offset];
         if(u2_t_offset >= (U2)OXCAN_E2E_NUM_REC){
          /* u1_t_ok = (U1)TRUE; */
         }
@@ -349,6 +390,167 @@ static inline U1      u1_s_oXCANAubIfE2eRxOk(PduIdType PduId, BswConstR PduInfoT
     return(u1_t_ok);
 }
 #endif /* #if (OXCAN_E2E_NUM_REC > 0U) */
+
+
+#if (OXCAN_OMA_SEV_GEN == 1U)
+/*===================================================================================================================================*/
+/*  void    vd_g_oXCANAubIfOMAInit(void)                                                                                             */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  OMA = On-Board MAC Authentication                                                                                                */
+/*===================================================================================================================================*/
+void    vd_g_oXCANAubIfOMAInit(void)
+{
+    
+    U4                           u4_t_loop_cnt;
+    U4                           u4_t_loop_max;
+    U1 *                         st_tp_fv;
+    
+    u4_t_loop_max = (U4)(OXCAN_OMA_NUM_REC * OXCAN_OMA_LEN_FV);
+    st_tp_fv = (U1 *)&u1_sp_oxcan_oma_fv[0];
+    
+    for(u4_t_loop_cnt = (U4)0U; u4_t_loop_cnt < u4_t_loop_max; u4_t_loop_cnt++){
+        st_tp_fv[u4_t_loop_cnt] = (U4)0U;
+    }
+}
+#endif /* #if (OXCAN_OMA_SEV_GEN == 1U) */
+
+#if (OXCAN_OMA_NUM_REC > 0U)
+/*===================================================================================================================================*/
+/*  static inline U1      u1_s_oXCANAubIfOMARxOk(PduIdType PduId, BswConstR PduInfoType* PduInfoPtr)                                 */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  OMA = On-Board MAC Authentication                                                                                                */
+/*===================================================================================================================================*/
+static inline U1      u1_s_oXCANAubIfOMARxOk(PduIdType PduId, BswConstR PduInfoType* PduInfoPtr)
+{
+    
+    U4                           u4_t_sduLength;
+    U2                           u2_t_offset;
+    U1                           u1_t_oma_ret;
+    U1                           u1_t_ret;
+
+    u1_t_ret = (U1)TRUE;
+    
+    
+#if (OXCAN_OMA_REC_MIN > 0U)
+    if((PduId >= (U2)OXCAN_OMA_REC_MIN) &&
+       (PduId <= (U2)OXCAN_OMA_REC_MAX)){
+#else
+    if(PduId <= (U2)OXCAN_OMA_REC_MAX){
+#endif /* #if (OXCAN_OMA_REC_MIN > 0U) */
+
+        u2_t_offset = PduId - (U2)OXCAN_OMA_REC_MIN;
+        u2_t_offset = u2_gp_OXCAN_OMA_REC_BY_IPDU[u2_t_offset];
+        if(u2_t_offset >= (U2)OXCAN_OMA_NUM_REC){
+            /* u1_t_ret = (U1)TRUE; */
+        }
+        else if(PduInfoPtr->SduLength < (U4)u1_gp_OXCAN_OMA_REC_LEN[u2_t_offset]){
+            u1_t_ret = (U1)FALSE;
+        }
+        else{
+            u4_t_sduLength = PduInfoPtr->SduLength - (U4)OXCAN_OMA_OFFSET_OMA_VR;
+            u1_t_oma_ret = PduInfoPtr->SduDataPtr[u4_t_sduLength];
+            
+            /* #define SECOC_VERIFICATIONSUCCESS                ((SecOC_VerificationResultType)0x00)  */
+            /* #define SECOC_VERIFICATIONFAILURE                ((SecOC_VerificationResultType)0x01)  */
+            /* #define SECOC_FRESHNESSFAILURE                   ((SecOC_VerificationResultType)0x02)  */
+            /* #define SECOC_AUTHENTICATIONBUILDFAILURE         ((SecOC_VerificationResultType)0x03)  */
+            /* #define SECOC_NO_VERIFICATION                    ((SecOC_VerificationResultType)0x04)  */
+            /* #define SECOC_VERIFICATIONFAILURE_OVERWRITTEN    ((SecOC_VerificationResultType)0x05)  */
+            /* #define SECOC_AB_VERIFICATIONFAILURE_VERIFYSTART ((SecOC_VerificationResultType)0x40)  */
+            
+            if(u1_t_oma_ret != (U1)0x00U){
+                u1_t_ret = (U1)FALSE;
+            }
+            vd_g_oXCANUsrhkOmaRecRslt(u2_t_offset ,u1_t_oma_ret);
+#if (OXCAN_OMA_SEV_GEN == 1U)
+            vd_s_oXCANAubIfSEvGen(u2_t_offset, u1_t_oma_ret, PduInfoPtr);
+#endif /* #if (OXCAN_OMA_SEV_GEN == 1U) */
+        }
+    }
+    return(u1_t_ret);
+    
+}
+#endif /* #if (OXCAN_OMA_NUM_REC > 0U) */
+
+#if (OXCAN_OMA_SEV_GEN == 1U)
+/*===================================================================================================================================*/
+/*  static inline void      vd_s_oXCANAubIfSEvGen(const U2 u2_a_OMA_RX, const U1 u1_a_OMA_VR, BswConstR PduInfoType* PduInfoPtr)     */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  OMA = On-Board MAC Authentication                                                                                                */
+/*===================================================================================================================================*/
+static inline void      vd_s_oXCANAubIfSEvGen(const U2 u2_a_OMA_RX, const U1 u1_a_OMA_VR, BswConstR PduInfoType* PduInfoPtr)
+{
+    
+    U4                           u4_t_loop_cnt;
+    U4                           u4_t_msgid_pos;
+    U4                           u4_t_fv_pos;
+    U1*                          u1_tp_rx_fv;
+    U1                           u1_tp_data[OXCAN_OMA_LEN_SEV_DATA];
+    
+    
+    /* #define SECOC_VERIFICATIONSUCCESS                ((SecOC_VerificationResultType)0x00)  */
+    /* #define SECOC_VERIFICATIONFAILURE                ((SecOC_VerificationResultType)0x01)  */
+    /* #define SECOC_FRESHNESSFAILURE                   ((SecOC_VerificationResultType)0x02)  */
+    /* #define SECOC_AUTHENTICATIONBUILDFAILURE         ((SecOC_VerificationResultType)0x03)  */
+    /* #define SECOC_NO_VERIFICATION                    ((SecOC_VerificationResultType)0x04)  */
+    /* #define SECOC_VERIFICATIONFAILURE_OVERWRITTEN    ((SecOC_VerificationResultType)0x05)  */
+    /* #define SECOC_AB_VERIFICATIONFAILURE_VERIFYSTART ((SecOC_VerificationResultType)0x40)  */
+    if(u1_a_OMA_VR == (U1)0x00U){
+        u4_t_fv_pos = PduInfoPtr->SduLength - (U4)11U;
+        u1_tp_rx_fv = &PduInfoPtr->SduDataPtr[u4_t_fv_pos];
+        for(u4_t_loop_cnt = (U4)0U; u4_t_loop_cnt < (U4)OXCAN_OMA_LEN_FV; u4_t_loop_cnt++){
+            u1_sp_oxcan_oma_fv[u2_a_OMA_RX][u4_t_loop_cnt] = u1_tp_rx_fv[u4_t_loop_cnt];
+        }
+        
+    }else{
+        
+        /* TODO: Add Diag Mask */
+        
+        u1_tp_data[0] = (U1)0x01U;   /* Format Version: Fixed value 0x01 */
+        
+        /* TODO: Set the value of  Diagnostic Time information, UTC information, vehicle odometer information. */
+        /*       Temporarily set it to zero.                                                                   */
+        for(u4_t_loop_cnt = (U4)1U; u4_t_loop_cnt < (U4)18U; u4_t_loop_cnt++){
+            u1_tp_data[u4_t_loop_cnt] = (U1)0U;
+        }
+        
+        u4_t_msgid_pos = PduInfoPtr->SduLength - (U4)3U ;
+        u1_tp_data[18] = PduInfoPtr->SduDataPtr[u4_t_msgid_pos];     /* Message ID */
+        u1_tp_data[19] = PduInfoPtr->SduDataPtr[u4_t_msgid_pos +1];
+        
+        u4_t_fv_pos = PduInfoPtr->SduLength - (U4)11U;
+        u1_tp_data[20] = PduInfoPtr->SduDataPtr[u4_t_fv_pos];      /* Trip counter (latest value) */
+        u1_tp_data[21] = PduInfoPtr->SduDataPtr[u4_t_fv_pos + 1];
+        u1_tp_data[22] = PduInfoPtr->SduDataPtr[u4_t_fv_pos + 2];
+        u1_tp_data[23] = PduInfoPtr->SduDataPtr[u4_t_fv_pos + 3];  /* Message counter (latest value) */
+        u1_tp_data[24] = PduInfoPtr->SduDataPtr[u4_t_fv_pos + 4];
+        u1_tp_data[25] = PduInfoPtr->SduDataPtr[u4_t_fv_pos + 5];
+        u1_tp_data[26] = PduInfoPtr->SduDataPtr[u4_t_fv_pos + 6];
+        
+        u1_tp_data[27] = u1_sp_oxcan_oma_fv[u2_a_OMA_RX][0];  /* Trip counter (previously received value) */
+        u1_tp_data[28] = u1_sp_oxcan_oma_fv[u2_a_OMA_RX][1];
+        u1_tp_data[29] = u1_sp_oxcan_oma_fv[u2_a_OMA_RX][2];
+        u1_tp_data[30] = u1_sp_oxcan_oma_fv[u2_a_OMA_RX][3];  /* Message counter (previously received value) */
+        u1_tp_data[31] = u1_sp_oxcan_oma_fv[u2_a_OMA_RX][4];
+        u1_tp_data[32] = u1_sp_oxcan_oma_fv[u2_a_OMA_RX][5];
+        u1_tp_data[33] = u1_sp_oxcan_oma_fv[u2_a_OMA_RX][6];
+        
+        IdsM_SetSecurityEventWithContextData((U2)IdsMConf_IdsMEvent_Event_85A2, u1_tp_data, (U2)OXCAN_OMA_LEN_SEV_DATA);
+    }
+    
+    return;
+}
+#endif /* #if (OXCAN_OMA_SEV_GEN == 1U) */
+
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */

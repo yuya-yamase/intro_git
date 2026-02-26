@@ -65,6 +65,23 @@ extern hwlcb_t * const mcos_v850_hwlcb_table[];
 #define OS_STOP_SEC_CONST_UNSPECIFIED
 #include "Os_MemMap.h"
 
+#define OS_START_SEC_CONST_UNSPECIFIED
+#include "Os_MemMap.h"
+
+extern const uint32_t mcos_stack_check_int_entry;
+
+#define OS_STOP_SEC_CONST_UNSPECIFIED
+#include "Os_MemMap.h"
+
+#define OS_START_SEC_CONST_UNSPECIFIED
+#include "Os_MemMap.h"
+
+extern const uint32_t mcos_stack_check_switch_int;
+
+#define OS_STOP_SEC_CONST_UNSPECIFIED
+#include "Os_MemMap.h"
+
+
 MCOS_INLINE hwlcb_t * get_hwlcb(const mcos_id_t lcid);
 
 

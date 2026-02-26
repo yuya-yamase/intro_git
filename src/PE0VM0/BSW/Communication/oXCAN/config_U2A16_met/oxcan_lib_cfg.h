@@ -30,11 +30,13 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define OXCAN_LIB_CFG_EN_NMC                     (1U)                          /* oxcan_nmc   */
-#define OXCAN_LIB_CFG_EN_RXD                     (0U)                          /* oxcan_rxd   */
-#define OXCAN_LIB_CFG_EN_SEA                     (0U)                          /* oxcan_sysea */
-#define OXCAN_LIB_CFG_EN_VCT                     (1U)                          /* oxcan_vct   */
-#define OXCAN_LIB_CFG_EN_WRH                     (0U)                          /* oxcan_wrh   */
+#define OXCAN_LIB_CFG_EN_NMC                     (1U)         /* oxcan_nmc   : 1 = enabled,                            else disabled */
+#define OXCAN_LIB_CFG_EN_RXD                     (0U)         /* oxcan_rxd   : 2 = rx timeout enabled during NM in active            */
+                                                              /*             : 1 = rx timeout enabled during NM in active or passive */
+                                                              /*             :                                        else disabled  */
+#define OXCAN_LIB_CFG_EN_SEA                     (0U)         /* oxcan_sysea : 1 = enabled,                           else disabled  */
+#define OXCAN_LIB_CFG_EN_VCT                     (1U)         /* oxcan_vct   : 1 = enabled,                           else disabled  */
+#define OXCAN_LIB_CFG_EN_WRH                     (0U)         /* oxcan_wrh   : 1 = enabled,                           else disabled  */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */

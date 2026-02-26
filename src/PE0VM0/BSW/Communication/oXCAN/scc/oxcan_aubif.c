@@ -21,12 +21,6 @@
 
 #include "Os.h"
 
-#include "oxsec_aub_cfg.h"
-
-#if (OXSEC_AUB_EN_IDSM == 1U)
-#include "IdsM_Cbk.h"
-#endif /* (OXSEC_AUB_EN_IDSM == 1U) */
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #if ((defined(BSW_BSWM_CS_CFG_FUNC_CS   )  ) && \
      (defined(BSW_BSWM_CS_CFG_FUNC_SECOC)  ) && \
@@ -52,6 +46,7 @@
 #if ((defined(BSW_BSWM_CS_CFG_FUNC_DCM)  ) && \
      (BSW_BSWM_CS_CFG_FUNC_DCM == BSW_USE))
 
+#include "SchM_Dcm.h"
 
 #endif /* #if ((defined(BSW_BSWM_CS_CFG_FUNC_DCM)  ) && ... */
 
@@ -108,6 +103,11 @@ void    vd_g_oXCANAubIfInit(void)
 #if ((OXCAN_E2E_NUM_TRA > 0U) || (OXCAN_E2E_NUM_REC > 0U))
     vd_g_oXCANAubIfE2eInit();
 #endif /* #if ((OXCAN_E2E_NUM_REC > 0U) || (OXCAN_E2E_NUM_REC > 0U)) */
+
+#if (OXCAN_OMA_SEV_GEN == 1U)
+    vd_g_oXCANAubIfOMAInit();
+#endif /* #if (OXCAN_OMA_SEV_GEN == 1U) */
+
 }
 /*===================================================================================================================================*/
 /*  BswU4   bsw_cs_system_DI(void)                                                                                                   */
@@ -262,7 +262,7 @@ void    BswM_CS_CbkSecOCMainFunctionRx(void)
 /*===================================================================================================================================*/
 void    BswM_CS_CbkDcmMainFunction(void)
 {
-
+    Dcm_MainFunction();
 }
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 
@@ -315,92 +315,6 @@ void    BswM_CS_CbkPostMainFunctionHi(void)
     vd_g_CANLpRPhyTxPosHigh();
 }
 #endif /* #ifdef CAN_LPR_H */
-
-#if (BSW_BSWM_CS_FUNC_UPPERCDD1 == BSW_USE)
-/*===================================================================================================================================*/
-/*  void    BswM_CS_Cdd1UpTxConfirmation(PduIdType TxPduId, Std_ReturnType result)                                                   */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void    BswM_CS_Cdd1UpTxConfirmation(PduIdType TxPduId, Std_ReturnType result)
-{
-#if (OXSEC_AUB_EN_IDSM == 1U)
-    IdsM_TxConfirmation(TxPduId, result);
-#endif /* (OXSEC_AUB_EN_IDSM == 1U) */
-}
-/*===================================================================================================================================*/
-/*  Std_ReturnType  BswM_CS_Cdd1UpTriggerTx(PduIdType TxPduId, PduInfoType* PduInfoPtr)                                              */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-Std_ReturnType  BswM_CS_Cdd1UpTriggerTx(PduIdType TxPduId, PduInfoType* PduInfoPtr) 
-{
-    return((Std_ReturnType)E_OK);
-}
-/*===================================================================================================================================*/
-/*  void    BswM_CS_Cdd1UpRxIndication(PduIdType RxPduId, BswConstR PduInfoType* PduInfoPtr)                                         */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void    BswM_CS_Cdd1UpRxIndication(PduIdType RxPduId, BswConstR PduInfoType* PduInfoPtr)
-{
-}
-/*===================================================================================================================================*/
-/*  BufReq_ReturnType  BswM_CS_Cdd1UpCopyTxData                                                                                      */
-/*                     (PduIdType id, BswConstR PduInfoType* info, BswConstR RetryInfoType* retry, PduLengthType* availableDataPtr)  */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-BufReq_ReturnType  BswM_CS_Cdd1UpCopyTxData
-                   (PduIdType id, BswConstR PduInfoType* info, BswConstR RetryInfoType* retry, PduLengthType* availableDataPtr)
-{
-    return((BufReq_ReturnType)BUFREQ_OK);
-}
-/*===================================================================================================================================*/
-/*  void    BswM_CS_Cdd1UpTpTxConfirmation(PduIdType id, Std_ReturnType result)                                                      */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void    BswM_CS_Cdd1UpTpTxConfirmation(PduIdType id, Std_ReturnType result)
-{
-}
-/*===================================================================================================================================*/
-/*  BufReq_ReturnType  BswM_CS_Cdd1UpStartOfReception                                                                                */
-/*                     (PduIdType id, BswConstR PduInfoType* info, PduLengthType TpSduLength, PduLengthType* bufferSizePtr)          */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-BufReq_ReturnType  BswM_CS_Cdd1UpStartOfReception
-                   (PduIdType id, BswConstR PduInfoType* info, PduLengthType TpSduLength, PduLengthType* bufferSizePtr)
-{
-    return((BufReq_ReturnType)BUFREQ_OK);
-}
-/*===================================================================================================================================*/
-/* BufReq_ReturnType BswM_CS_Cdd1UpCopyRxData ( PduIdType id, BswConstR PduInfoType* info, PduLengthType* bufferSizePtr )            */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-BufReq_ReturnType  BswM_CS_Cdd1UpCopyRxData(PduIdType id, BswConstR PduInfoType* info, PduLengthType* bufferSizePtr)
-{
-    return((BufReq_ReturnType)BUFREQ_OK);
-}
-/*===================================================================================================================================*/
-/*  void    BswM_CS_Cdd1UpTpRxIndication(PduIdType id, Std_ReturnType result)                                                        */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void    BswM_CS_Cdd1UpTpRxIndication(PduIdType id, Std_ReturnType result)
-{
-}
-#endif /* (BSW_BSWM_CS_FUNC_UPPERCDD1 == BSW_USE) */
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */

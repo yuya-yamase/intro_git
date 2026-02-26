@@ -69,6 +69,7 @@ SECTIONS {
     .mcal_rom_top           align(4)                        : > .
     .DIO_TEXT_CODE          align(4)                        : > .
     .DMA_TEXT_CODE          align(4)                        : > .
+    .DMA_DESC_TEXT_CODE     align(4)                        : > .
     .GPT_TEXT_CODE          align(4)                        : > .
     .INTC_TEXT_CODE         align(4)                        : > .
     .I2C_TEXT_CODE          align(4)                        : > .
@@ -80,6 +81,7 @@ SECTIONS {
     .ADC_RODATA_CONST       align(4)                        : > .
     .DIO_RODATA_CONST       align(4)                        : > .
     .DMA_RODATA_CONST       align(4)                        : > .
+    .DMA_DESC_RODATA_CONST  align(4)                        : > .
     .GPT_RODATA_CONST       align(4)                        : > .
     .INTC_RODATA_CONST      align(4)                        : > .
     .I2C_RODATA_CONST       align(4)                        : > .
@@ -187,8 +189,12 @@ SECTIONS {
     _LOC_RAM_SIZE = . - ADDR(.MEM_SEC_STA_RAM_LOC_APPL);
 
 // MCAL Data
+    .mcal_ram_top                align(4)                  : > .
     .DMA_BSS_VAR_NO_INIT         align(4)                  : > .
+    .PORT_BSS_VAR_NO_INIT        align(4)                  : > .
     .SPI_BSS_VAR_NO_INIT         align(4)                  : > .
+    .mcal_ram_bottom             align(4)                  : > .
+    _MCAL_RAM_SIZE = . - ADDR(.mcal_ram_top);
 
 // IOHW Data
     .iohw_ram_top                align(4)                  : > .
@@ -220,11 +226,7 @@ SECTIONS {
 //1byte
 //2byte
 //4byte
-    .bss_SHARE_PORT_CONF        SHARE_PORT_CONF_ADDR        ABS    : > .
 //struct
-    .bss_SHARE_DMA_NOTICATION   SHARE_DMA_NOTICATION_ADDR   ABS    : > .
-    .bss_SHARE_SPI_MODEA_CHANNELDATA SHARE_SPI_MODEA_CHANNELDATA_ADDR ABS    : > .
-    .bss_SHARE_SPI_MODEC_CHANNELDATA SHARE_SPI_MODEC_CHANNELDATA_ADDR ABS    : > .
 
     .cluster2_share_ramend                                   : > ram_end_cluster2_share 
 
