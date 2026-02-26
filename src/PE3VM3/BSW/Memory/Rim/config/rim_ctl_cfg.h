@@ -29,6 +29,8 @@
 /* START : ##TOOL_OUT#RIM_ID_MOD_3B_U1## */
 #define RIMID_U1_PWCTR_SOC_WU_STAT1              (0x0000U)
 #define RIMID_U1_PWCTR_SOC_WU_STAT2              (0x0001U)
+#define RIMID_U1_PWCTR_SOC_WKUPCOND              (0x0002U)
+#define RIMID_U1_PWCTR_SOC_USRRSTMASK            (0x0003U)
 /* END : ##TOOL_OUT#RIM_ID_MOD_3B_U1## */
 /* START : ##TOOL_OUT#RIM_ID_MOD_3B_U2## */
 #define RIMID_U2_PWCTR_SOC_ON_COUNT              (0x4000U)

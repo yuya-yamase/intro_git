@@ -280,6 +280,26 @@ static void vd_s_PwrCtrlMainBonPwrOnReq( void )
 }
 
 /*****************************************************************************
+  Function      : vd_g_PwrCtrlMainSwResetReq
+  Description   : ソフトウェアリセットによる起動要求
+  param[in/out] : none
+  return        : none
+  Note          : none
+*****************************************************************************/
+void vd_g_PwrCtrlMainSwResetReq( void )
+{
+    /* +B-ONシーケンス実施要求 */
+    vd_g_PwrCtrlMainBonReq();
+    
+    /* SoC異常検知の設定 */
+    vd_g_PwrCtrlSipSoCOnError();
+    /* CDC異常リセットの設定 */
+    vd_g_PwrCtrlSipSetSoCWkupCond((U1)PWRCTRL_COM_SOCWKUP_CDCERR);
+
+    return;
+}
+
+/*****************************************************************************
   Function      : vd_g_PwrCtrlMainWakeupReq
   Description   : ウェイクアップシーケンス要求
   param[in/out] : none
@@ -349,6 +369,7 @@ static void vd_s_PwrCtrlMainSipOffMcuStandbyReq( void )
     vd_g_PwrCtrlNoRedunPwrOffStart();                                 /* 非冗長電源OFF要求 */
 
     vd_g_PwrCtrl_ObserveSAIL_ObserveReq((U1)PWRCTRL_OBSERVESAIL_REQ_OFF_ALL); /* UART監視/SAIL-ERR監視 停止要求 */
+    vd_g_PwrCtrlComTxSetSoCWkupCond((U1)PWRCTRL_COM_SOCWKUP_NON);     /* SoC起動条件通知をクリア */
 
 }
 
@@ -373,6 +394,7 @@ static void vd_s_PwrCtrlMainSipOffMcuStandbySysDevReq( void )
     vd_g_PwrCtrlNoRedunPwrOffStart();                                   /* 非冗長電源OFF要求 */
 
     vd_g_PwrCtrl_ObserveSAIL_ObserveReq((U1)PWRCTRL_OBSERVESAIL_REQ_OFF_ALL); /* UART監視/SAIL-ERR監視 停止要求 */
+    vd_g_PwrCtrlComTxSetSoCWkupCond((U1)PWRCTRL_COM_SOCWKUP_NON);     /* SoC起動条件通知をクリア */
 
 }
 
@@ -397,6 +419,7 @@ static void vd_s_PwrCtrlMainStandbyReq( void )
     vd_g_PwrCtrlNoRedunPwrOffStart();                                 /* 非冗長電源OFF要求 */
 
     vd_g_PwrCtrl_ObserveSAIL_ObserveReq((U1)PWRCTRL_OBSERVESAIL_REQ_OFF_ALL); /* UART監視/SAIL-ERR監視 停止要求 */
+    vd_g_PwrCtrlComTxSetSoCWkupCond((U1)PWRCTRL_COM_SOCWKUP_NON);     /* SoC起動条件通知をクリア */
 
 }
 
@@ -442,6 +465,7 @@ static void vd_s_PwrCtrlMainForcedOffReq( const U1 u1_s_evtype )
         vd_g_PwrCtrlObserveSetSocPower((U1)PWRCTRL_OBSERVE_SOCPOWER_OFF); /* SoC起動状態：SoC停止設定 */
         vd_g_PwrCtrlSipForcedOffSTEP1Req();                              /* SIP強制OFFシーケンス STEP1から開始 */
         vd_g_PwrCtrlComTxSetPwrErr((U1)PWRCTRL_COM_PWRERR_FOFF_SOCERR);  /* 異常検知(SIP電源強制OFF:SOC異常系) */
+        vd_g_PwrCtrlComTxSetSoCWkupCond((U1)PWRCTRL_COM_SOCWKUP_NON);    /* SoC起動条件通知をクリア */
         break;
 
        case (U1)PWRCTRL_MAIN_FORCEDOFF_STS_PMICERR:
@@ -454,6 +478,7 @@ static void vd_s_PwrCtrlMainForcedOffReq( const U1 u1_s_evtype )
         vd_g_PwrCtrlObserveSetSocPower((U1)PWRCTRL_OBSERVE_SOCPOWER_OFF); /* SoC起動状態：SoC停止設定 */
         vd_g_PwrCtrlSipForcedOffSTEP2Req();                              /* SIP強制OFFシーケンス STEP2から開始 */
         vd_g_PwrCtrlComTxSetPwrErr((U1)PWRCTRL_COM_PWRERR_FOFF_PMICERR); /* 異常検知(SIP電源強制OFF:SOC異常系) */
+        vd_g_PwrCtrlComTxSetSoCWkupCond((U1)PWRCTRL_COM_SOCWKUP_NON);    /* SoC起動条件通知をクリア */
         break;
 
        case (U1)PWRCTRL_MAIN_FORCEDOFF_STS_DDERR:
@@ -466,6 +491,7 @@ static void vd_s_PwrCtrlMainForcedOffReq( const U1 u1_s_evtype )
         vd_g_PwrCtrlObserveSetSocPower((U1)PWRCTRL_OBSERVE_SOCPOWER_OFF); /* SoC起動状態：SoC停止設定 */
         vd_g_PwrCtrlSipForcedOffSTEP4Req();                              /* SIP強制OFFシーケンス STEP4から開始 */
         vd_g_PwrCtrlComTxSetPwrErr((U1)PWRCTRL_COM_PWRERR_FOFF_DDERR);   /* 異常検知(SIP電源強制OFF:PMIC異常系/DDコンOFF) */
+        vd_g_PwrCtrlComTxSetSoCWkupCond((U1)PWRCTRL_COM_SOCWKUP_NON);    /* SoC起動条件通知をクリア */
         break;
 
        default:
@@ -708,12 +734,15 @@ static void vd_s_PwrCtrlMainObserveFsJudge( void )
         vd_g_PwrCtrlObservePsHoldReq((U1)PWRCTRL_OBSERVE_OFF);          /* PMA_PS_HOLD監視 終了 */
         vd_g_PwrCtrlObserveSoCResetErrReq((U1)PWRCTRL_OBSERVE_OFF);     /* SoCリセット要求(異常)検知 終了 */
         vd_g_PwrCtrlObserveSetSocPower((U1)PWRCTRL_OBSERVE_SOCPOWER_OFF); /* SoC起動状態：SoC停止設定 */
+        vd_g_PwrCtrlComTxSetSoCWkupCond((U1)PWRCTRL_COM_SOCWKUP_NON);    /* SoC起動条件通知をクリア */
 
         /* PM_PSAIL_ERR_N監視フェールセーフ要求 */
         vd_s_PwrCtrlMainPmPsailFsReq();
 
         /* 【todo】異常内容保存[ID0033] */
         vd_g_PwrCtrlSipSoCOnError();                                      /* SoC異常検知の設定 */
+        /* SoC異常起動(PMIC異常)の設定 */
+        vd_g_PwrCtrlSipSetSoCWkupCond((U1)PWRCTRL_COM_SOCWKUP_PMICERR);
         vd_g_PwrCtrlComTxSetPwrErr((U1)PWRCTRL_COM_PWRERR_PMPSAILERRN);   /* 異常検知(PM_PSAIL_ERR_N監視) */
     }
     /* PMA_PS_HOLD監視 異常検知の場合 */
@@ -727,6 +756,7 @@ static void vd_s_PwrCtrlMainObserveFsJudge( void )
         vd_g_PwrCtrlObservePsHoldReq((U1)PWRCTRL_OBSERVE_OFF);          /* PMA_PS_HOLD監視 終了 */
         vd_g_PwrCtrlObserveSoCResetErrReq((U1)PWRCTRL_OBSERVE_OFF);     /* SoCリセット要求(異常)検知 終了 */
         vd_g_PwrCtrlObserveSetSocPower((U1)PWRCTRL_OBSERVE_SOCPOWER_OFF); /* SoC起動状態：SoC停止設定 */
+        vd_g_PwrCtrlComTxSetSoCWkupCond((U1)PWRCTRL_COM_SOCWKUP_NON);    /* SoC起動条件通知をクリア */
 
         /* PMA_PS_HOLD監視フェールセーフ要求 */
         vd_s_PwrCtrlMainPmaPsFsReq();
@@ -742,6 +772,7 @@ static void vd_s_PwrCtrlMainObserveFsJudge( void )
         vd_g_PwrCtrlObservePsHoldReq((U1)PWRCTRL_OBSERVE_OFF);            /* PMA_PS_HOLD監視 終了 */
         vd_g_PwrCtrlObserveSoCResetErrReq((U1)PWRCTRL_OBSERVE_OFF);       /* SoCリセット要求(異常)検知 終了 */
         vd_g_PwrCtrlObserveSetSocPower((U1)PWRCTRL_OBSERVE_SOCPOWER_OFF); /* SoC起動状態：SoC停止設定 */
+        vd_g_PwrCtrlComTxSetSoCWkupCond((U1)PWRCTRL_COM_SOCWKUP_NON);    /* SoC起動条件通知をクリア */
 
         /* SAIL-ERR監視フェールセーフ要求 */
         vd_s_PwrCtrlMainSailErrFsReq();
@@ -765,18 +796,39 @@ static void vd_s_PwrCtrlMainObserveFsJudge( void )
         {
             /* 【todo】異常内容保存[ID0022/0023/0024] */
             vd_g_PwrCtrlSipSoCOnError();                                      /* SoC異常検知の設定 */
+            /* SoC異常起動(SAIL異常)の設定 */
+            vd_g_PwrCtrlSipSetSoCWkupCond((U1)PWRCTRL_COM_SOCWKUP_SAILERR);
         }
         /* SPI通信途絶監視 異常検知  */
         if((u2_t_observe_sts & (U2)PWRCTRL_OBSERVE_ERR_SPI) == (U2)PWRCTRL_OBSERVE_ERR_SPI)
         {
             /* 【todo】異常内容保存[ID0039] */
             vd_g_PwrCtrlSipSoCOnError();                                      /* SoC異常検知の設定 */
+            /* SoC異常起動(SoC異常)の設定 */
+            vd_g_PwrCtrlSipSetSoCWkupCond((U1)PWRCTRL_COM_SOCWKUP_SOCERR);
         }
-        /* SoCリセット要求(異常) または、NMダイアグリセット 検知 */
-        if( ((u2_t_resetreq_sts & (U2)PWRCTRL_OBSERVE_RESET_SOCERR) == (U2)PWRCTRL_OBSERVE_RESET_SOCERR)
-         || ((u2_t_resetreq_sts & (U2)PWRCTRL_OBSERVE_RESET_NMDIAG) == (U2)PWRCTRL_OBSERVE_RESET_NMDIAG))
+        /* SoCリセット要求(異常) 検知 */
+        if((u2_t_resetreq_sts & (U2)PWRCTRL_OBSERVE_RESET_SOCERR) == (U2)PWRCTRL_OBSERVE_RESET_SOCERR)
         {
             vd_g_PwrCtrlSipSoCOnError();                                      /* SoC異常検知の設定 */
+            /* 5-3.スタンバイシーケンス実施中の場合 */
+            if(u1_s_PwrCtrl_Main_Sts == (U1)PWRCTRL_MAIN_STANDBY_REQ)
+            {
+                /* SoC異常起動(SoC検知・サスペンド中)の設定 */
+                vd_g_PwrCtrlSipSetSoCWkupCond((U1)PWRCTRL_COM_SOCWKUP_SUSPENDERR);
+            }
+            else
+            {
+                /* SoC異常起動(SoC検知・レジューム中)の設定 */
+                vd_g_PwrCtrlSipSetSoCWkupCond((U1)PWRCTRL_COM_SOCWKUP_RESUMEERR);
+            }
+        }
+        /* NMダイアグリセット 検知 */
+        if((u2_t_resetreq_sts & (U2)PWRCTRL_OBSERVE_RESET_NMDIAG) == (U2)PWRCTRL_OBSERVE_RESET_NMDIAG)
+        {
+            vd_g_PwrCtrlSipSoCOnError();                                      /* SoC異常検知の設定 */
+            /* SoC異常起動(SoC異常)の設定 */
+            vd_g_PwrCtrlSipSetSoCWkupCond((U1)PWRCTRL_COM_SOCWKUP_SOCERR);
         }
 
         /* SIP監視制御を停止 */
@@ -785,6 +837,7 @@ static void vd_s_PwrCtrlMainObserveFsJudge( void )
         vd_g_PwrCtrlObservePsHoldReq((U1)PWRCTRL_OBSERVE_OFF);                    /* PMA_PS_HOLD監視 終了 */
         vd_g_PwrCtrlObserveSoCResetErrReq((U1)PWRCTRL_OBSERVE_OFF);               /* SoCリセット要求(異常)検知 終了 */
         vd_g_PwrCtrlObserveSetSocPower((U1)PWRCTRL_OBSERVE_SOCPOWER_OFF);         /* SoC起動状態：SoC停止設定 */
+        vd_g_PwrCtrlComTxSetSoCWkupCond((U1)PWRCTRL_COM_SOCWKUP_NON);             /* SoC起動条件通知をクリア */
 
         /* SIP電源強制OFFシーケンス要求(SIP電源強制OFF処理開始 SOC異常系) */
         vd_s_PwrCtrlMainForcedOffReq((U1)PWRCTRL_MAIN_FORCEDOFF_STS_SOCERR);
@@ -906,6 +959,7 @@ static void vd_s_PwrCtrlMainBonSeq( void )
     U1 u1_t_read_lv;                                                           /* MCU端子状態取得結果 */
     U1 u1_t_foff_req;                                                          /* SIP電源強制OFFシーケンス要求確認結果 */
     U1 u1_t_socrst;                                                            /* SoCリセット起動要因取得 */
+    U1 u1_t_socwkupcond;                                                       /* SoC起動条件通知取得 */
 
     u1_t_foff_req = (U1)PWRCTRL_MAIN_FORCEDOFF_STS_INIT;
 /* /BU-DET =Hi? */
@@ -972,6 +1026,17 @@ static void vd_s_PwrCtrlMainBonSeq( void )
             vd_g_VISPwrSocRstNotify(u1_t_socrst);
             /* VISドメインに通知後に状態をクリア */
             vd_g_PwrCtrlSipSoCRstClr();
+            /* IVIにSoC起動条件を通知 */
+            u1_t_socwkupcond = u1_g_PwrCtrlSipGetSoCWkupCond();
+            /* SoC起動条件通知が未設定の場合 */
+            if(u1_t_socwkupcond == (U1)PWRCTRL_COM_SOCWKUP_NON)
+            {
+                /* SoC正常起動の設定 */
+                u1_t_socwkupcond = (U1)PWRCTRL_COM_SOCWKUP_NORM;
+            }
+            vd_g_PwrCtrlComTxSetSoCWkupCond(u1_t_socwkupcond);
+            /* 通知データ確定後に内部の設定データをクリア */
+            vd_g_PwrCtrlSipClrSoCWkupCond();
         }
 
         else{
@@ -983,6 +1048,8 @@ static void vd_s_PwrCtrlMainBonSeq( void )
                 /* 【todo】異常内容の保存[ID0008] */
                 /* SoC異常検知を通知 */
                 vd_g_PwrCtrlSipSoCOnError();
+                /* SoC異常起動(SoC異常)の設定 */
+                vd_g_PwrCtrlSipSetSoCWkupCond((U1)PWRCTRL_COM_SOCWKUP_SOCERR);
             }
         
             else {
@@ -1029,6 +1096,7 @@ static void vd_s_PwrCtrlMainWakeUpSeq( void )
     U1 u1_t_sail_err1;                                                                                     /* SAIL-ERR[1]状態 */
     U1 u1_t_sail_err2;                                                                                     /* SAIL-ERR[2]状態 */
     U1 u1_t_socrst;                                                                                        /* SoCリセット起動要因取得 */
+    U1 u1_t_socwkupcond;                                                                                   /* SoC起動条件通知取得 */
 
     u1_t_foff_req = (U1)PWRCTRL_MAIN_FORCEDOFF_STS_INIT;
 /* /BU-DET =Hi? */
@@ -1075,6 +1143,8 @@ static void vd_s_PwrCtrlMainWakeUpSeq( void )
                     /* 【todo】異常内容保存[ID0009]※STRがON時のみ記録 */
                     /* SoC異常検知を通知 */
                     vd_g_PwrCtrlSipSoCOnError();
+                    /* SoC異常起動(SoC異常)の設定 */
+                    vd_g_PwrCtrlSipSetSoCWkupCond((U1)PWRCTRL_COM_SOCWKUP_SOCERR);
                 }
                 /* +B-ONシーケンスのSIP通常起動から開始 */
                 vd_s_PwrCtrlMainBonDDconvOnReq();
@@ -1123,6 +1193,8 @@ static void vd_s_PwrCtrlMainWakeUpSeq( void )
                 /* 【todo】異常内容の保存[ID0010] */
                 /* SoC異常検知を通知 */
                 vd_g_PwrCtrlSipSoCOnError();
+                /* SoC異常起動(SoC異常)の設定 */
+                vd_g_PwrCtrlSipSetSoCWkupCond((U1)PWRCTRL_COM_SOCWKUP_SOCERR);
             }
         
             else {
@@ -1144,9 +1216,9 @@ static void vd_s_PwrCtrlMainWakeUpSeq( void )
         if((u1_t_sail_err1 == (U1)MCU_DIO_HIGH) &&
            (u1_t_sail_err2 == (U1)MCU_DIO_LOW))
 #else
-        if((u1_t_sail_err1 == (U1)MCU_DIO_HIGH) &&
-           (u1_t_sail_err2 == (U1)MCU_DIO_LOW) ||
-           (u1_g_PwrCtrl_Main_DbgFailOffFlag == (U1)MCU_DIO_LOW))
+        if(((u1_t_sail_err1 == (U1)MCU_DIO_HIGH) &&
+            (u1_t_sail_err2 == (U1)MCU_DIO_LOW)) ||
+            (u1_g_PwrCtrl_Main_DbgFailOffFlag == (U1)MCU_DIO_LOW))
 #endif
         {
             vd_g_PwrCtrl_ObserveSAIL_ObserveReq((U1)PWRCTRL_OBSERVESAIL_REQ_WAKEUP_SAIL);           /* SAIL-ERR監視開始要求(ウェイクアップシーケンスから開始) */
@@ -1161,6 +1233,8 @@ static void vd_s_PwrCtrlMainWakeUpSeq( void )
                 /* 【todo】異常内容の保存[ID0011] */
                 /* SoC異常検知を通知 */
                 vd_g_PwrCtrlSipSoCOnError();
+                /* SoC異常起動(SAIL異常)の設定 */
+                vd_g_PwrCtrlSipSetSoCWkupCond((U1)PWRCTRL_COM_SOCWKUP_SAILERR);
             }
             else{
                 u4_s_PwrCtrl_Main_SailErr++;
@@ -1189,7 +1263,13 @@ static void vd_s_PwrCtrlMainWakeUpSeq( void )
             vd_g_VISPwrSocRstNotify(u1_t_socrst);
             /* VISドメインに通知後に状態をクリア */
             vd_g_PwrCtrlSipSoCRstClr();
-            
+            /* SoC正常起動(STR起動)の設定 */
+            vd_g_PwrCtrlSipSetSoCWkupCond((U1)PWRCTRL_COM_SOCWKUP_STR);
+            /* IVIにSoC起動条件を通知 */
+            u1_t_socwkupcond = u1_g_PwrCtrlSipGetSoCWkupCond();
+            vd_g_PwrCtrlComTxSetSoCWkupCond(u1_t_socwkupcond);
+            /* 通知データ確定後に内部の設定データをクリア */
+            vd_g_PwrCtrlSipClrSoCWkupCond();
         }
 
         else{
@@ -1201,6 +1281,8 @@ static void vd_s_PwrCtrlMainWakeUpSeq( void )
                 /* 【todo】異常内容の保存[ID0012] */
                 /* SoC異常検知を通知 */
                 vd_g_PwrCtrlSipSoCOnError();
+                /* SoC異常起動(SoC異常)の設定 */
+                vd_g_PwrCtrlSipSetSoCWkupCond((U1)PWRCTRL_COM_SOCWKUP_SOCERR);
             }
         
             else {
@@ -1469,6 +1551,8 @@ static void vd_s_PwrCtrlMainStandbySeq( void )
                (u1_t_step_chk == (U1)PWRCTRL_COMMON_PROCESS_STEP3)){
                 /* スタンバイ処理中の起動トリガ時シーケンス要求(SIP電源強制OFF処理開始) */
                 vd_s_PwrCtrlMainStbyCancelSt1Req();
+                /* SoC瞬断起動(サスペンド処置中にwkup)の設定 */
+                vd_g_PwrCtrlSipSetSoCWkupCond((U1)PWRCTRL_COM_SOCWKUP_SUSPENDCANCEL);
                 u1_t_stbycancel = (U1)TRUE;  /*以降の処理をキャンセル*/
             }
         }
@@ -1493,6 +1577,8 @@ static void vd_s_PwrCtrlMainStandbySeq( void )
             {
                 /* スタンバイ処理中の起動トリガ時シーケンス要求(SYS系電源ON、SIP電源ON) */
                 vd_s_PwrCtrlMainStbyCancelSt2Req((U1)PWRCTRL_MAIN_STBYCANCEL_OTHER);
+                /* SoC瞬断起動(サスペンド処置中にwkup)の設定 */
+                vd_g_PwrCtrlSipSetSoCWkupCond((U1)PWRCTRL_COM_SOCWKUP_SUSPENDCANCEL);
             }
             /* 起動トリガが無しの場合 */
             else

@@ -72,6 +72,25 @@
 #define PWRCTRL_COM_SOCPOWER_OFF            (0U)  /* SoC停止 */
 #define PWRCTRL_COM_SOCPOWER_ON             (1U)  /* SoC起動 */
 
+/* 起動条件通知 */
+#define PWRCTRL_COM_SOCWKUP_NON             (0U)  /* 未設定 */
+#define PWRCTRL_COM_SOCWKUP_NORM            (1U)  /* SoC正常起動 */
+#define PWRCTRL_COM_SOCWKUP_STR             (2U)  /* SoC正常起動(STR起動) */
+#define PWRCTRL_COM_SOCWKUP_FULLINIT        (3U)  /* SoC正常起動(完全初期化要因) */
+#define PWRCTRL_COM_SOCWKUP_SUSPENDCANCEL   (4U)  /* SoC瞬断起動(サスペンド処置中にwkup) */
+#define PWRCTRL_COM_SOCWKUP_SHUTDOWNCANCEL  (5U)  /* SoC瞬断起動(シャットダウン処置中にwkup) */
+#define PWRCTRL_COM_SOCWKUP_SOCERR          (6U)  /* SoC異常起動(SoC異常) */
+#define PWRCTRL_COM_SOCWKUP_PMICERR         (7U)  /* SoC異常起動(PMIC異常) */
+#define PWRCTRL_COM_SOCWKUP_SAILERR         (8U)  /* SoC異常起動(SAIL異常) */
+#define PWRCTRL_COM_SOCWKUP_CDCNORM         (9U)  /* CDC正常リセット */
+#define PWRCTRL_COM_SOCWKUP_CDCERR          (10U) /* CDC異常リセット */
+#define PWRCTRL_COM_SOCWKUP_SUSPENDERR      (11U) /* SoC異常起動(SoC検知・サスペンド中) */
+#define PWRCTRL_COM_SOCWKUP_RESUMEERR       (12U) /* SoC異常起動(SoC検知・レジューム中) */
+
+/* 起動条件通知 */
+#define PWRCTRL_COM_USRRSTMASK_OFF          (0U)  /* 未設定 */
+#define PWRCTRL_COM_USRRSTMASK_ON           (1U)  /* ユーザーリセット抑止区間 */
+
 /*--------------------------------------------------------------------------*/
 /* Function Prototypes                                                      */
 /*--------------------------------------------------------------------------*/
@@ -99,6 +118,8 @@ void vd_g_PwrCtrlComTxSetSoCOnStart( void );
 void vd_g_PwrCtrlComTxSetBootLog( const U1 u1_a_req );
 void vd_g_PwrCtrlComTxClrBootLog( const U1 u1_a_req );
 void vd_g_PwrCtrlComTxSetSoCPower( const U1 u1_a_data );
+void vd_g_PwrCtrlComTxSetSoCWkupCond( const U1 u1_a_data );
+void vd_g_PwrCtrlComTxSetUsrRstMask( const U1 u1_a_data );
 void vd_g_PwrCtrlComEthLinkup( const U1 u1_a_det );
 
 #endif /* PWRCTRL_COM_H */
