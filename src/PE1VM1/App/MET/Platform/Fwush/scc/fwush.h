@@ -35,6 +35,11 @@
 #define FWUSH_ACK_OK                            (0x00U)
 #define FWUSH_ACK_NG                            (0x01U)
 
+#define FWUSH_ACK_CANCEL_OK                     (0x00U)        /* Interrupt OK */
+#define FWUSH_ACK_CANCEL_ROLLBACK_OK            (0x01U)        /* Rollback OK */
+#define FWUSH_ACK_CANCEL_ROLLBACK_DONE          (0x02U)        /* Rollback complete */
+#define FWUSH_ACK_CANCEL_NG                     (0x03U)        /* Process NG (error code) */
+
 /* Request frame offset */
 #define FWUSH_REQ_SUBTYPE_OFFSET                (0U)
 #define FWUSH_REQ_SEQCNT_OFFSET                 (7U)
@@ -80,15 +85,16 @@
 #define FWUSH_REQ_SUBTYPE_PREP                  (0x01U)        /* Prepare */
 #define FWUSH_REQ_SUBTYPE_RUN                   (0x02U)        /* Run */
 #define FWUSH_REQ_SUBTYPE_VERI                  (0x18U)        /* Verify */
+#define FWUSH_REQ_SUBTYPE_CANCEL                (0x27U)        /* Cancel */
 #define FWUSH_REQ_SUBTYPE_ACT                   (0x37U)        /* Activate */
-#define FWUSH_REQ_SUBTYPE_CANCEL                (0xFEU)        /* Cancel (reserved for future) */
 
 /* Response subtypes */
-#define FWUSH_RESP_SUBTYPE_NA                    (0xFFU)        /* Not Applicable */
-#define FWUSH_RESP_SUBTYPE_PREP                  (0x07U)        /* Prepare */
-#define FWUSH_RESP_SUBTYPE_RUN                   (0x17U)        /* Run */
-#define FWUSH_RESP_SUBTYPE_VERI                  (0x19U)        /* Verify */
-#define FWUSH_RESP_SUBTYPE_ACT                   (0x38U)        /* Activate */
+#define FWUSH_RESP_SUBTYPE_NA                   (0xFFU)        /* Not Applicable */
+#define FWUSH_RESP_SUBTYPE_PREP                 (0x07U)        /* Prepare */
+#define FWUSH_RESP_SUBTYPE_RUN                  (0x17U)        /* Run */
+#define FWUSH_RESP_SUBTYPE_VERI                 (0x19U)        /* Verify */
+#define FWUSH_RESP_SUBTYPE_CANCEL               (0x28U)        /* Cancel */
+#define FWUSH_RESP_SUBTYPE_ACT                  (0x38U)        /* Activate */
 
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

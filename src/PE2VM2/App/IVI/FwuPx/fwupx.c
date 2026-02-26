@@ -125,10 +125,12 @@ void            vd_g_FwupxPutReqData(const U1 * u1_ap_SUB4_ADD, const U2 u2_a_DT
                 vd_g_iVDshWribyDid(IVDSH_DID_WRI_FWUPXREQ_H, &u4_tp_head[0], (U2)FWUPX_WRI_HEAD_WORDS);
                 vd_g_iVDshWribyDid(IVDSH_DID_WRI_FWUPXREQ_D, &u4_t_data_adr, (U2)FWUPX_WRI_DATA_ADR_WORDS);
             break;
-        default:  /* FWUPX_SUBTYPE_VERI,FWUPX_SUBTYPE_PHASE */
+        default:  /* FWUPX_SUBTYPE_VERI,FWUPX_SUBTYPE_PHASE,FWUPX_SUBTYPE_CANCEL */
                 /* Verification request */
                 u4_tp_head[0]  = (U4)u1_ap_SUB4_ADD[0];                   /* SubType */
-                u4_tp_head[0] |= (U4)(u1_ap_SUB4_ADD[1] << (U4)8U);       /* logical block */
+                if (u2_a_DTLEN > (U1)1U) {
+                    u4_tp_head[0] |= (U4)(u1_ap_SUB4_ADD[1] << (U4)8U);       /* logical block */
+                }
                 u4_tp_head[1]  = (U4)(u1_s_fwupx_req_seqcnt << (U4)24U);      /* SEQ_CNT */
                 vd_g_iVDshWribyDid(IVDSH_DID_WRI_FWUPXREQ_H, &u4_tp_head[0], (U2)FWUPX_WRI_HEAD_WORDS);
             break;
