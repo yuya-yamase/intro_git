@@ -1037,6 +1037,8 @@ static void vd_s_PwrCtrlMainBonSeq( void )
             vd_g_PwrCtrlComTxSetSoCWkupCond(u1_t_socwkupcond);
             /* 通知データ確定後に内部の設定データをクリア */
             vd_g_PwrCtrlSipClrSoCWkupCond();
+            /* ユーザーリセット抑止解除受付状態：有効 */
+            vd_g_PwrCtrlComSetURMaskOffSts((U1)PWRCTRL_COM_URMASKOFF_ENABLED);
         }
 
         else{
@@ -1270,6 +1272,8 @@ static void vd_s_PwrCtrlMainWakeUpSeq( void )
             vd_g_PwrCtrlComTxSetSoCWkupCond(u1_t_socwkupcond);
             /* 通知データ確定後に内部の設定データをクリア */
             vd_g_PwrCtrlSipClrSoCWkupCond();
+            /* ユーザーリセット抑止解除受付状態：有効 */
+            vd_g_PwrCtrlComSetURMaskOffSts((U1)PWRCTRL_COM_URMASKOFF_ENABLED);
         }
 
         else{

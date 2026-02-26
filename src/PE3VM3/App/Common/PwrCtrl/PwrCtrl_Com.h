@@ -87,9 +87,12 @@
 #define PWRCTRL_COM_SOCWKUP_SUSPENDERR      (11U) /* SoC異常起動(SoC検知・サスペンド中) */
 #define PWRCTRL_COM_SOCWKUP_RESUMEERR       (12U) /* SoC異常起動(SoC検知・レジューム中) */
 
-/* 起動条件通知 */
+/* ユーザーリセット抑止区間通知 */
 #define PWRCTRL_COM_USRRSTMASK_OFF          (0U)  /* 未設定 */
 #define PWRCTRL_COM_USRRSTMASK_ON           (1U)  /* ユーザーリセット抑止区間 */
+
+#define PWRCTRL_COM_URMASKOFF_DISABLED      (0U)  /* ユーザーリセット抑止解除受付：無効 */
+#define PWRCTRL_COM_URMASKOFF_ENABLED       (1U)  /* ユーザーリセット抑止解除受付：有効 */
 
 /*--------------------------------------------------------------------------*/
 /* Function Prototypes                                                      */
@@ -122,6 +125,7 @@ void vd_g_PwrCtrlComTxSetSoCWkupCond( const U1 u1_a_data );
 void vd_g_PwrCtrlComTxSetUsrRstMask( const U1 u1_a_data );
 void vd_g_PwrCtrlComEthLinkup( const U1 u1_a_det );
 
+void vd_g_PwrCtrlComSetURMaskOffSts( const U1 u1_a_req );
 #endif /* PWRCTRL_COM_H */
 
 /**** End of File ***********************************************************/

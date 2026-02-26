@@ -119,6 +119,7 @@ static U4 u4_s_PwrCtrl_Com_Tx_SoCPower;      /* SoC起動状態 */
 static U4 u4_s_PwrCtrl_Com_Tx_SoCWkupCond;   /* SoC起動条件通知 */
 static U4 u4_s_PwrCtrl_Com_Tx_UsrRstMask;    /* ユーザーリセット抑止区間通知 */
 static U1 u1_s_PwrCtrl_Com_Eth_LinkupSts;    /* Ethリンクアップ状態 */
+static U1 u1_s_PwrCtrl_Com_URMaskOffSts;     /* ユーザーリセット抑止解除受付状態 */
 
 /*--------------------------------------------------------------------------*/
 /* Constants                                                                */
@@ -584,8 +585,14 @@ static void vd_s_PwrCtrlComRxSoCSts( void )
     if(u1_s_PwrCtrl_Com_Rx_SoCSts == (U1)PWRCTRL_COM_SOCSTS_COMP){
         /* WAKEUP-STAT1更新要求 */
         vd_g_PwrCtrlSipSoCOnComp();
-        /* ユーザーリセット抑止区間通知：未設定 */
-        vd_g_PwrCtrlComTxSetUsrRstMask((U1)PWRCTRL_COM_USRRSTMASK_OFF);
+        /* ユーザーリセット抑止解除受付状態が有効の場合 */
+        if(u1_s_PwrCtrl_Com_URMaskOffSts == (U1)PWRCTRL_COM_URMASKOFF_ENABLED)
+        {
+            /* ユーザーリセット抑止区間通知：未設定 */
+            vd_g_PwrCtrlComTxSetUsrRstMask((U1)PWRCTRL_COM_USRRSTMASK_OFF);
+            /* ユーザーリセット抑止解除受付状態：無効 */
+            vd_g_PwrCtrlComSetURMaskOffSts((U1)PWRCTRL_COM_URMASKOFF_DISABLED);
+        }
     }
     return;
 }
@@ -860,6 +867,20 @@ static void vd_s_PwrCtrlComEthLinkupStsSet( void )
         /* 何もしない */
     }
     
+    return;
+}
+
+/*****************************************************************************
+  Function      : vd_g_PwrCtrlComSetURMaskOffSts
+  Description   : ユーザーリセット抑止解除受付状態設定処理
+  param[in/out] : [In] const U1 u1_a_req 受付状態
+  return        : none
+  Note          : none
+*****************************************************************************/
+void vd_g_PwrCtrlComSetURMaskOffSts( const U1 u1_a_req )
+{
+    u1_s_PwrCtrl_Com_URMaskOffSts = u1_a_req;
+
     return;
 }
 
