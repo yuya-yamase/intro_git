@@ -159,7 +159,7 @@ void vd_g_PwrCtrlComBonInit( void )
     vd_g_Rim_WriteU4((U2)RIMID_U4_PWCTR_SOC_ON_TIME, u4_s_PwrCtrl_Com_Tx_SoCOnTime); 
     
     u4_s_PwrCtrl_Com_Tx_UsrRstMask = (U4)PWRCTRL_COM_USRRSTMASK_OFF;    /* ユーザーリセット抑止区間通知 */
-    vd_g_Rim_WriteU4((U2)RIMID_U1_PWCTR_SOC_USRRSTMASK, u4_s_PwrCtrl_Com_Tx_UsrRstMask);
+    vd_g_Rim_WriteU4((U2)RIMID_U4_PWCTR_SOC_USRRSTMASK, u4_s_PwrCtrl_Com_Tx_UsrRstMask);
 
     vd_g_PwrCtrlComTxClrBootLog((U1)PWRCTRL_COM_BOOTLOG_INITREQ);       /* 起動ログ計測点をクリア */
     u1_s_PwrCtrl_Com_Eth_LinkupSts = (U1)PWRCTRL_COM_ETH_LINKUP_NODETECT; /* Ethリンクアップ未検知を設定 */
@@ -177,8 +177,8 @@ void vd_g_PwrCtrlComBonInit( void )
 void vd_g_PwrCtrlComWkupInit( void )
 {
     U4 u4_t_soctime_buf;
+    U4 u4_t_usrrstmask_buf;
     U2 u2_t_soccount_buf;
-    U2 u2_t_usrrstmask_buf;
     U1 u1_t_soctime_ret;
     U1 u1_t_soccount_ret;
     U1 u1_t_usrrstmask_ret;
@@ -223,11 +223,11 @@ void vd_g_PwrCtrlComWkupInit( void )
     }
 
     /* ユーザーリセット抑止区間通知 */
-    u2_t_usrrstmask_buf = (U2)PWRCTRL_COM_USRRSTMASK_OFF;
-    u1_t_usrrstmask_ret= u1_g_Rim_ReadU2withStatus((U2)RIMID_U1_PWCTR_SOC_USRRSTMASK, &u2_t_usrrstmask_buf);
+    u4_t_usrrstmask_buf = (U4)PWRCTRL_COM_USRRSTMASK_OFF;
+    u1_t_usrrstmask_ret= u1_g_Rim_ReadU4withStatus((U2)RIMID_U4_PWCTR_SOC_USRRSTMASK, &u4_t_usrrstmask_buf);
     if((u1_t_usrrstmask_ret & (U1)RIM_RESULT_KIND_MASK) == (U1)RIM_RESULT_KIND_OK)
     {
-        u4_s_PwrCtrl_Com_Tx_UsrRstMask = (U4)u2_t_usrrstmask_buf;
+        u4_s_PwrCtrl_Com_Tx_UsrRstMask = u4_t_usrrstmask_buf;
     }
     else
     {
@@ -831,7 +831,7 @@ void vd_g_PwrCtrlComTxSetSoCWkupCond( const U1 u1_a_data )
 void vd_g_PwrCtrlComTxSetUsrRstMask( const U1 u1_a_data )
 {
     u4_s_PwrCtrl_Com_Tx_UsrRstMask = (U4)u1_a_data;
-    vd_g_Rim_WriteU4((U2)RIMID_U1_PWCTR_SOC_USRRSTMASK, u4_s_PwrCtrl_Com_Tx_UsrRstMask);
+    vd_g_Rim_WriteU4((U2)RIMID_U4_PWCTR_SOC_USRRSTMASK, u4_s_PwrCtrl_Com_Tx_UsrRstMask);
 
     return;
 }
