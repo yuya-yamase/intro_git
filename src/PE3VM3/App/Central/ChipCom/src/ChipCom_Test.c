@@ -326,11 +326,11 @@ void ChipCom_MainFunctionTest( void )
 	{
 		t_u1XspiErrInfo = xspi_GetErrInfo( ChipCom_cu1XspiCh );
 
-		CHIPCOM_LOG_MSG( DEBUGLOG_INFO,"ChipCom: Tick=[%u], SpiInfo=[%u], MsgSts[0]=[%u], Msg[0]=[%u], MsgSts[6]=[%u], Msg[6]=[%u]\r\n",
-				ChipCom_u2SrvTick, t_u1XspiErrInfo,
-				ChipCom_u1MsgStatus[0U], ChipCom_u1MsgBuff[3U],
-				ChipCom_u1MsgStatus[6U], ChipCom_u1MsgBuff[18U]
-				);
+//		CHIPCOM_LOG_MSG( DEBUGLOG_INFO,"ChipCom: TestTick=[%u], SpiInfo=[%u], MsgSts[0]=[%u], Msg[0]=[%u], MsgSts[6]=[%u], Msg[6]=[%u]\r\n",
+//				u1TestTick, t_u1XspiErrInfo,
+//				ChipCom_u1MsgStatus[0U], ChipCom_u1MsgBuff[3U],
+//				ChipCom_u1MsgStatus[6U], ChipCom_u1MsgBuff[18U]
+//				);
 
 //		CHIPCOM_LOG_MSG( DEBUGLOG_INFO,"ChipCom: Tick=[%u], SpiInfo=[%u], MsgSts0=[%u], Msg0=[0x%02X%02X%02X%02X], MsgSts6=[%u], Msg6=[0x%02X%02X%02X%02X], TxBuf=[0x%08X %08X], RxBuf=[0x%08X %08X], TxVlaNum=[0x%02X%02X], TxCanId=[0x%02X%02X%02X%02X], TxCanLen=[0x%02X], RxVlaNum=[0x%02X%02X], RxCanId=[0x%02X%02X%02X%02X], RxCanLen=[0x%02X]\r\n",
 //			ChipCom_u2SrvTick, t_u1XspiErrInfo,

@@ -866,12 +866,12 @@ static void ChipCom_Transmit( void )
 		else
 		{
 			/* todo: Storing in DLT */
-CHIPCOM_LOG_MSG( DEBUGLOG_INFO,"ChipCom_Transmit: SpiRst=[%u]\r\n", t_u1SpiRst );
+//CHIPCOM_LOG_MSG( DEBUGLOG_INFO,"ChipCom_Transmit: SpiRst=[%u]\r\n", t_u1SpiRst );
 		}
 	}
 	else
 	{
-CHIPCOM_LOG_MSG( DEBUGLOG_INFO,"ChipCom_Transmit: SpiCond=[%u]\r\n", t_u1SpiCondition );
+//CHIPCOM_LOG_MSG( DEBUGLOG_INFO,"ChipCom_Transmit: SpiCond=[%u]\r\n", t_u1SpiCondition );
 	}
 
 	return;
@@ -1027,7 +1027,7 @@ static void ChipCom_Receive( void )
 	else
 	{
 		/* todo: Storing in DLT when synchronizing with SPI receive processing */
-CHIPCOM_LOG_MSG( DEBUGLOG_INFO,"ChipCom_Receive: SpiRst=[%u]\r\n", t_u1SpiRst );
+//CHIPCOM_LOG_MSG( DEBUGLOG_INFO,"ChipCom_Receive: SpiRst=[%u]\r\n", t_u1SpiRst );
 	}
 
 	return;
