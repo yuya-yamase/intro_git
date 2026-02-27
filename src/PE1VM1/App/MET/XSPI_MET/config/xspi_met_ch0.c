@@ -860,10 +860,14 @@ U1  u1_g_XSpiDimSw(void) {
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
 static inline void    vd_s_XSpiCfgRxWchime(     const U4 * u4_ap_PDU_RX) {
+    U1  u1_t_sts;
     U1  u1_t_wchimemstrreq;
 
-    u1_t_wchimemstrreq = u1_XSPI_MET_READ__BIT(u4_ap_PDU_RX[0] , (U1)0U , (U1)2U);          /* MASTER_BZ      */
-    vd_g_HmiWchimeMstrReqPut(u1_t_wchimemstrreq);
+    u1_t_sts = u1_g_XSpiMETRxRdAccessSts((U1)XSPI_MET_XSPI_RX_AGLBE);
+    if(u1_t_sts == (U1)XSPI_MET_XSPI_RX_READ_VALID){
+        u1_t_wchimemstrreq = u1_XSPI_MET_READ__BIT(u4_ap_PDU_RX[0] , (U1)0U , (U1)2U);          /* MASTER_BZ      */
+        vd_g_HmiWchimeMstrReqPut(u1_t_wchimemstrreq);
+    }
 }
 
 /*===================================================================================================================================*/
@@ -1173,6 +1177,9 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*  BEV-37    02/03/2026 SN(K)    Change for BEV FF2.(BEV3CDCMET-3779 Restore HUD display position save/notification processing.)    */
 /*  BEV-38    02/19/2026 KO       Change for BEV FF2.(Add RHEO_SW_STS_Json)                                                          */
 /*  BEV-39    02/23/2026 DR       Updated graph write process                                                                        */
+/*  BEV-40    02/26/2026 RO       Change for BEV Full_Function_2.                                                                    */
+/*                                MET-M_CONTBUZZ2-CSTD-0009-C1                                                                       */
+/*                                Restored the XSPI communication initialization guard logic that was mistakenly removed             */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * KM   = Keisuke Mashita, Denso Techno                                                                                           */
