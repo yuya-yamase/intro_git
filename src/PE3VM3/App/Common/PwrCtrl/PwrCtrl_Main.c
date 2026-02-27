@@ -420,7 +420,7 @@ static void vd_s_PwrCtrlMainStandbyReq( void )
 
     vd_g_PwrCtrl_ObserveSAIL_ObserveReq((U1)PWRCTRL_OBSERVESAIL_REQ_OFF_ALL); /* UART監視/SAIL-ERR監視 停止要求 */
     vd_g_PwrCtrlComTxSetSoCWkupCond((U1)PWRCTRL_COM_SOCWKUP_NON);     /* SoC起動条件通知をクリア */
-
+    vd_g_PwrCtrlComSetURMaskOffSts((U1)PWRCTRL_COM_URMASKOFF_DISABLED); /* ユーザーリセット抑止解除受付状態：無効 */
 }
 
 /*****************************************************************************
