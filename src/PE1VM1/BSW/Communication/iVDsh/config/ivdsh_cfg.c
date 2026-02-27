@@ -44,11 +44,11 @@
 #define IVDSH_FQ_CH_WRI                          (2U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define IVDSH_WA_NWORD_WRI                       (16U)
+#define IVDSH_WA_NWORD_WRI                       (17U)
 #define IVDSH_WA_NWORD_REA_0                     (24U)
-#define IVDSH_WA_NWORD_REA_1                     (9U)
+#define IVDSH_WA_NWORD_REA_1                     (12U)
 
-#define IVDSH_WA_NWORD                           (82U)
+#define IVDSH_WA_NWORD                           (89U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -102,6 +102,7 @@ const ST_IVDSH_WA           st_gp_IVDSH_WA_BY_DID[IVDSH_NUM_DID] =
     {(U2)11U,       (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_VM1TO3_WHLINI_INF */
     {(U2)12U,       (U2)2U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_VM1TO2_MET1D51    */
     {(U2)14U,       (U2)2U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_FWUPXRES          */
+    {(U2)16U,       (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_VM1TO3_NMDIAG     */
     /*------------------------------------------------------------------*/
     /* Read from VM#2                                                   */
     /*------------------------------------------------------------------*/
@@ -126,7 +127,8 @@ const ST_IVDSH_WA           st_gp_IVDSH_WA_BY_DID[IVDSH_NUM_DID] =
     /* Read from VM#3                                                   */
     /*------------------------------------------------------------------*/
     {(U2)3U,        (U2)1U,         (U2)IVDSH_FQ_CH_REA_1},     /* IVDSH_DID_REA_VM3TO12_RESTART   */
-    {(U2)8U,        (U2)1U,         (U2)IVDSH_FQ_CH_REA_1}      /* IVDSH_DID_REA_VM3TO1_WHLINI_STA */
+    {(U2)8U,        (U2)1U,         (U2)IVDSH_FQ_CH_REA_1},     /* IVDSH_DID_REA_VM3TO1_WHLINI_STA */
+    {(U2)9U,        (U2)1U,         (U2)IVDSH_FQ_CH_REA_1}      /* IVDSH_DID_REA_VM3TO1_SOC_POW_STS*/
 };
 const U2                    u2_g_IVDSH_NUM_DID = (U2)IVDSH_NUM_DID;
 

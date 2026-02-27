@@ -124,6 +124,7 @@ U1      u1_g_VdfEsoRx_PMAR(void)
 /*  * MG = Mei Godo, KSE                                                                                                             */
 /*  * SW = Shun Watanabe, Denso Techno                                                                                               */
 /*  * SN = Shimon Nambu, Denso Techno                                                                                                */
+/*  * KO = Kazuto Oishi,  Denso Techno                                                                                               */
 /*  * SN(K)= Shizuka Nakajima, KSE                                                                                                   */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

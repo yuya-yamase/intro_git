@@ -1,4 +1,4 @@
-/* 2.3.0 */
+/* 2.5.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -13,7 +13,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define SBLTSYNC_CFG_H_MAJOR                     (2)
-#define SBLTSYNC_CFG_H_MINOR                     (3)
+#define SBLTSYNC_CFG_H_MINOR                     (5)
 #define SBLTSYNC_CFG_H_PATCH                     (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -25,6 +25,7 @@
 #include "oxcan.h"
 #endif   /* BEV Rebase provisionally */
 #include "calibration.h"
+#include "vardef.h"
 
 #include "sbltsync.h"
 
@@ -37,6 +38,13 @@
 #define SBLTSYNC_KND_LGL                         (0U)
 #define SBLTSYNC_KND_LV2                         (1U)
 #define SBLTSYNC_KND_LV1                         (2U)
+
+#define SBLTSYNC_MIDTYP_REAR                     (0U)
+#define SBLTSYNC_MIDTYP_D_P_REAR                 (1U)
+#define SBLTSYNC_MIDTYP_D_P                      (2U)
+
+#define SBLTSYNC_DEST_OTHER_FM                   (0U)
+#define SBLTSYNC_DEST_FM                         (1U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -52,6 +60,8 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 U1      u1_g_SbltsyncCfgChmRingKnd(void);
 U2      u2_g_SbltsyncCfgChmMask(void);
+U1      u1_g_SbltsyncCfgJdg_FM(void);
+U1      u1_g_SbltsyncCfgSelMidTyp_FM(void);
 void    vd_g_SbltsyncCfgTxRRTT(const U1 u1_a_SIG);
 void    vd_g_SbltsyncCfgTxRCTT(const U1 u1_a_SIG);
 void    vd_g_SbltsyncCfgTxRLTT(const U1 u1_a_SIG);

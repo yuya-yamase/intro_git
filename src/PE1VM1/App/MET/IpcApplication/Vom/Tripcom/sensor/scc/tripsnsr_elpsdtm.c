@@ -39,7 +39,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define TRIPSNSR_ELPSDTM_NUM_TYPE               (3U)
+#define TRIPSNSR_ELPSDTM_NUM_TYPE               (2U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -66,8 +66,7 @@ static  U2      u2_s_tripsnsr_elpsd_snsrbit;
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static  const   ST_TRIPSNSR_ELPSDTM_TYPE        st_s_TRIPSNSR_ELPSDTM_TYPE[TRIPSNSR_ELPSDTM_NUM_TYPE] = {
     {   (U4)10000U,   (U2)(TRIPCOM_VEHSTS_DRVCYC                        ), (U1)TRIPCOM_DELTA_DC_ELPSD_10MS },
-    {   (U4)1000000U, (U2)(TRIPCOM_VEHSTS_DRVCYC                        ), (U1)TRIPCOM_DELTA_DC_ELPSD_SEC  },
-    {   (U4)1000000U, (U2)(TRIPCOM_VEHSTS_DRVCYC | TRIPCOM_VEHSTS_ECOSTP), (U1)TRIPCOM_DELTA_IDS_ELPSD_SEC }
+    {   (U4)1000000U, (U2)(TRIPCOM_VEHSTS_DRVCYC                        ), (U1)TRIPCOM_DELTA_DC_ELPSD_SEC  }
 };
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -168,11 +167,16 @@ U2              u2_g_TripsnsrElpsdtmGetDelta(U4 * u4_ap_delta)
 /*  2.1.1    08/08/2022  YI       See tripsnsr.c v2.1.1                                                                              */
 /*  2.2.0    06/23/2025  RS       Change for BEV System_Consideration_2.(tripsnsr_cfg.c v2.1.1 -> v2.2.0.)                           */
 /*                                                                                                                                   */
+/*  Revision Date        Author   Change Description                                                                                 */
+/* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
+/*  BEV-01   02/13/2026  PG       Deleted not unapplied parameter for BEV FF2                                                        */
+/*                                                                                                                                   */
 /*  * HY   = Hidefumi Yoshida, Denso                                                                                                 */
 /*  * YA   = Yuhei Aoyama, DensoTechno                                                                                               */
 /*  * TA(M)= Teruyuki Anjima, NTT Data MSE                                                                                           */
 /*  * TK   = Takanori Kuno, Denso Techno                                                                                             */
 /*  * YI   = Yoshiki Iwata, NTT Data MSE                                                                                             */
 /*  * RS   = Ryuki Sako, Denso Techno                                                                                                */
+/*  * PG   = Patrick Garcia, DTPH                                                                                                    */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

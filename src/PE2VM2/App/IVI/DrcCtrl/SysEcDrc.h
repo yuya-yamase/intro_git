@@ -19,6 +19,7 @@
 #define SYSECDRC_DREC_CAT_GYROACC       (5U)
 #define SYSECDRC_DREC_CAT_POWERIC       (6U)
 #define SYSECDRC_DREC_CAT_BOOTLOG       (7U)
+#define SYSECDRC_DREC_CAT_PWRCTRL       (8U)
 
 #define SYSECDRC_DREC_ID_1              (1U)
 #define SYSECDRC_DREC_ID_2              (2U)

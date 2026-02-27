@@ -1,4 +1,4 @@
-/* 2.1.3 */
+/* 2.2.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,14 +10,15 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define SBLT_VCLSIG_CFG_C_MAJOR                 (2)
-#define SBLT_VCLSIG_CFG_C_MINOR                 (1)
-#define SBLT_VCLSIG_CFG_C_PATCH                 (3)
+#define SBLT_VCLSIG_CFG_C_MINOR                 (2)
+#define SBLT_VCLSIG_CFG_C_PATCH                 (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "sblt_vclsts_cfg_private.h"
 #include "oxcan.h"
+#include "vardef.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -38,6 +39,7 @@
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define SBLT_VHCLSIG_NUM_SGNLCFG                (9U)
+#define SBLT_VHCLSIG_NUM_SGNLCFG_FM             (10U)
 #define SBLT_VHCLSIG_PKBBDB_IGONMSK             (500U/SBLTWRN_TICK)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -61,11 +63,12 @@ static  U1      u1_s_SbltVclstsCfgGetPCTY(void);
 static  U1      u1_s_SbltVclstsCfgGetRRCY(void);
 static  U1      u1_s_SbltVclstsCfgGetRLCY(void);
 static  U1      u1_s_SbltVclstsCfgGetBCTY(void);
+static  U1      u1_s_SbltVclstsCfgGetBN(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-const   ST_SBLT_VCLSIG_SGNLCFG                  st_gp_SBLT_VCLSIG_SGNLCFG[SBLT_VHCLSIG_NUM_SGNLCFG] = {
+const   ST_SBLT_VCLSIG_SGNLCFG                  st_gp_SBLT_VCLSIG_SGNLCFG[SBLT_VHCLSIG_NUM_SGNLCFG_FM] = {
     {   &u1_s_SbltVclstsCfgGetPKBBDB,   (U1)SBLTWRN_MSG_BDB1S01,    (U1)SBLT_VHCLSIG_PKBBDB_IGONMSK,    (U1)0x01U,  (U1)0x00U,  (U1)0x01U },
     {   &u1_s_SbltVclstsCfgGetBP,       (U1)SBLTWRN_MSG_ECT1G01,    (U1)0U,                             (U1)0x01U,  (U1)0x00U,  (U1)0x01U },
     {   &u1_s_SbltVclstsCfgGetBR,       (U1)SBLTWRN_MSG_ECT1G01,    (U1)0U,                             (U1)0x00U,  (U1)0x00U,  (U1)0x01U },
@@ -74,7 +77,8 @@ const   ST_SBLT_VCLSIG_SGNLCFG                  st_gp_SBLT_VCLSIG_SGNLCFG[SBLT_V
     {   &u1_s_SbltVclstsCfgGetPCTY,     (U1)SBLTWRN_MSG_BDB1S01,    (U1)0U,                             (U1)0x00U,  (U1)0x00U,  (U1)0x01U },
     {   &u1_s_SbltVclstsCfgGetRRCY,     (U1)SBLTWRN_MSG_BDB1S01,    (U1)0U,                             (U1)0x00U,  (U1)0x00U,  (U1)0x01U },
     {   &u1_s_SbltVclstsCfgGetRLCY,     (U1)SBLTWRN_MSG_BDB1S01,    (U1)0U,                             (U1)0x00U,  (U1)0x00U,  (U1)0x01U },
-    {   &u1_s_SbltVclstsCfgGetBCTY,     (U1)SBLTWRN_MSG_BDB1S01,    (U1)0U,                             (U1)0x00U,  (U1)0x00U,  (U1)0x01U }
+    {   &u1_s_SbltVclstsCfgGetBCTY,     (U1)SBLTWRN_MSG_BDB1S01,    (U1)0U,                             (U1)0x00U,  (U1)0x00U,  (U1)0x01U },
+    {   &u1_s_SbltVclstsCfgGetBN,       (U1)SBLTWRN_MSG_ECT1G01,    (U1)0U,                             (U1)0x00U,  (U1)0x00U,  (U1)0x01U }
 };
 
 const   U2                                      u2_sp_SBLT_VCLSIG_MSKCFG[SBLT_VCLSTS_NUM_APP] = {
@@ -90,8 +94,24 @@ const   U2                                      u2_sp_SBLT_VCLSIG_MSKCFG[SBLT_VC
     (U2)0x01E0U       /*  09 SBLTWRN_VCLSTS_PRB_DR_OP          */
 };
 
+const   U2                                      u2_sp_SBLT_VCLSIG_MSKCFG_FM[SBLT_VCLSTS_NUM_APP] = {
+    (U2)0x0203U,      /*  00 SBLTWRN_VCLSTS_PARK               */
+    (U2)0x000CU,      /*  01 SBLTWRN_VCLSTS_SHIFT_R            */
+    (U2)0x0010U,      /*  02 SBLTWRN_VCLSTS_D_DR_OP            */
+    (U2)0x0020U,      /*  03 SBLTWRN_VCLSTS_P_DR_OP            */
+    (U2)0x00C0U,      /*  04 SBLTWRN_VCLSTS_R_DR_OP            */
+    (U2)0x0100U,      /*  05 SBLTWRN_VCLSTS_B_DR_OP            */
+    (U2)0x00C0U,      /*  06 SBLTWRN_VCLSTS_RB_DR_OP           */
+    (U2)0x0030U,      /*  07 SBLTWRN_VCLSTS_DP_DR_OP           */
+    (U2)0x0030U,      /*  08 SBLTWRN_VCLSTS_DPB_DR_OP          */
+    (U2)0x00E0U       /*  09 SBLTWRN_VCLSTS_PRB_DR_OP          */
+};
+
 const   U1                                      u1_g_SBLT_VCLSTS_NUM_SGNL    = (U1)SBLT_VHCLSIG_NUM_SGNLCFG;
-const   U2                                      u2_g_SBLT_VCLSIG_PARKSTS_MSK = (U2)0x01F3U;
+const   U2                                      u2_g_SBLT_VCLSIG_PARKSTS_MSK = (U2)0x0003U;
+const   U1                                      u1_g_SBLT_VCLSTS_NUM_SGNL_FM = (U1)SBLT_VHCLSIG_NUM_SGNLCFG_FM;
+const   U2                                      u2_g_SBLT_VCLSIG_MT_MSK      = (U2)0x0001U;
+const   U2                                      u2_g_SBLT_VCLSIG_NOTMT_MSK   = (U2)0x0202U;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
@@ -232,6 +252,35 @@ static  U1      u1_s_SbltVclstsCfgGetBCTY(void)
 }
 
 /*===================================================================================================================================*/
+/* static  U1      u1_s_SbltVclstsCfgGetBN(void)                                                                                     */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static  U1      u1_s_SbltVclstsCfgGetBN(void)
+{
+    U1          u1_t_sgnl;
+
+    u1_t_sgnl = (U1)0U;
+    (void)Com_ReceiveSignal(ComConf_ComSignal_B_N, &u1_t_sgnl);
+    return (u1_t_sgnl);
+}
+
+/*===================================================================================================================================*/
+/* U1              u1_g_SbltVclstsCfgMT(void)                                                                                        */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+U1              u1_g_SbltVclstsCfgMT(void)
+{
+    U1          u1_t_mtsts;
+
+    u1_t_mtsts = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_MT_FMVSS208);
+    return (u1_t_mtsts);
+}
+
+/*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
 /*                                                                                                                                   */
@@ -245,6 +294,7 @@ static  U1      u1_s_SbltVclstsCfgGetBCTY(void)
 /*  2.1.1    10/18/2021  TA(M)    sblt_vclsts.c v2.0.0 -> v2.1.1.                                                                    */
 /*  2.1.2    10/25/2021  TK       sblt_vclsts.c v2.1.1 -> v2.1.2.                                                                    */
 /*  2.1.3    02/28/2024  TH       sblt_vclsts.c v2.1.2 -> v2.1.3                                                                     */
+/*  2.2.0    09/16/2025  NA       sblt_vclsts.c v2.1.3 -> v2.2.0                                                                     */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  Revision    Date        Author   Change Description                                                                              */
@@ -258,5 +308,6 @@ static  U1      u1_s_SbltVclstsCfgGetBCTY(void)
 /*  * TA(M)= Teruyuki Anjima, NTT Data MSE                                                                                           */
 /*  * TK   = Takanori Kuno, Denso Techno                                                                                             */
 /*  * TH   = Taisuke Hirakawa, KSE                                                                                                   */
+/*  * NA   = Nazirul Afham,    PXT                                                                                                   */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

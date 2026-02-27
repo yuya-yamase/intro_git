@@ -42,12 +42,19 @@ DEFAULTS {
 //1byte (0xFE430000 - 0xFE430100)
 //2byte (0xFE430100 - 0xFE430300)
 //4byte (0xFE430300 - 0xFE430700)
-    SHARE_PORT_CONF_ADDR        = 0xFE430300
 //Struct
     SHARE_DMA_NOTICATION_ADDR   = 0xFE431200
     SHARE_SPI_MODEA_CHANNELDATA_ADDR   = 0xFE431300
     SHARE_SPI_MODEC_CHANNELDATA_ADDR   = 0xFE431400
 
-//FIXED data for 0xFF padding when create reprogramming download data
-    FIXEDDATA_DUMMY_CONST_ADDR = 0x0001C000
+//MET Const Data
+    MEMORY_CONST_SIZE = 0x00004000                                 //LENGTH:16kbyte
+    MCUCONST_4B_SIZE  = 0x000000F0                                 //LENGTH:240B
+    MCUCONST_2B_SIZE  = 0x00000670                                 //LENGTH:1648B
+    MCUCONST_1B_SIZE  = 0x00000300                                 //LENGTH:768B
+    MEMORY_CONST_ADDR = 0x0001C000                                 //MET_PARAMETER_CONST start address
+    MCUCONST_4B_ADDR  = MEMORY_CONST_ADDR                          //4byte start address:0x0001C000
+    MCUCONST_2B_ADDR  = MCUCONST_4B_ADDR + MCUCONST_4B_SIZE        //2byte start address:0x0001C0F0
+    MCUCONST_1B_ADDR  = MCUCONST_2B_ADDR + MCUCONST_2B_SIZE        //1byte start address:0x0001C760
+    MCUCONST_CRC_ADDR = MEMORY_CONST_ADDR + MEMORY_CONST_SIZE - 1  //CRC   start address:0x0001FFFF
 }

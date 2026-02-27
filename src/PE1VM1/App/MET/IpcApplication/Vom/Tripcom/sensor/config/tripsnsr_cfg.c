@@ -70,53 +70,15 @@ static  U4      u4_sp_tripsnsr_elpsdtm_frt[GPT_FRT_USELPSD_NUM_PARAM];
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 const   ST_TRIPSNSR_CNTTS                       st_gp_TRIPSNSR_CNTTS_CFG[TRIPSNSR_NUM_SNSR]         = {
     {   &vd_g_TripsnsrElpsdtmInit,  &vd_g_TripsnsrElpsdtmSmplngTask,    &u2_g_TripsnsrElpsdtmGetDelta,  vdp_PTR_NA                   },
-    {   vdp_PTR_NA,                 vdp_PTR_NA,                         vdp_PTR_NA,                     vdp_PTR_NA                   },
-    {   vdp_PTR_NA,                 vdp_PTR_NA,                         vdp_PTR_NA,                     vdp_PTR_NA                   },
     {   &vd_g_TripsnsrOdocntInit,   &vd_g_TripsnsrOdocntSmplngTask,     &u2_g_TripsnsrOdocntGetDelta,   vdp_PTR_NA                   },
     {   &vd_g_TripsnsrAvgeeInit,    &vd_g_TripsnsrAvgeeSmplngTask,      &u2_g_TripsnsrAvgeeGetDelta,    vdp_PTR_NA                   },
-    {   &vd_g_TripsnsrInsteeInit,   &vd_g_TripsnsrInsteeSmplngTask,     &u2_g_TripsnsrInsteeGetDelta,   &u1_g_TripsnsrInsteeRxReset  },
-    {   vdp_PTR_NA,                 vdp_PTR_NA,                         vdp_PTR_NA,                     vdp_PTR_NA                   },
-    {   vdp_PTR_NA,                 vdp_PTR_NA,                         &u2_g_TripsnsrOdocntEmgfGetDelta,vdp_PTR_NA                  }
+    {   &vd_g_TripsnsrInsteeInit,   &vd_g_TripsnsrInsteeSmplngTask,     &u2_g_TripsnsrInsteeGetDelta,   &u1_g_TripsnsrInsteeRxReset  }
 };
 const   U4                                      u4_g_TRIPSNSR_ELPSDTM_FRT_1US                       = (U4)GPT_FRT_1US;  /*  1 [us]   */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-/*===================================================================================================================================*/
-/* U1              u1_g_TripsnsrCfgEcoMode(void)                                                                                     */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1              u1_g_TripsnsrCfgEcoMode(void)
-{
-    /* Exist eco-run mode or not from Variation */
-    return ((U1)FALSE);
-}
-
-/*===================================================================================================================================*/
-/* U1              u1_g_TripsnsrCfgGetECOMODE3(U1 * u1p_a_ecomode)                                                                   */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1              u1_g_TripsnsrCfgGetECOMODE3(U1 * u1p_a_ecomode)
-{
-#if 0   /* BEV Rebase provisionally */
-#if defined(ComConf_ComSignal_ECOMODE3)
-    (void)Com_ReceiveSignal(ComConf_ComSignal_ECOMODE3, u1p_a_ecomode);
-    return ((U1)Com_GetIPDUStatus(MSG_ECO1S90_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX));
-#else
-    (*u1p_a_ecomode) = (U1)0U;
-    return ((U1)TRIPCOM_STSBIT_INVALID);
-#endif
-#else   /* BEV Rebase provisionally */
-    (*u1p_a_ecomode) = (U1)0U;
-    return ((U1)TRIPCOM_STSBIT_INVALID);
-#endif   /* BEV Rebase provisionally */
-}
-
 /*===================================================================================================================================*/
 /* U1              u1_g_TripsnsrCfgGetPtsSts(void)                                                                                   */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
@@ -415,6 +377,7 @@ U1              u1_g_TripsnsrCfgGetEpUpdflg(U1 * u1p_a_epupdflg)
 /*  Revision Date        Author   Change Description                                                                                 */
 /*  19PFv3-1 02/12/2024  PG       Change  for MET-M_DMEVRNGE-CSTD-1-07-A-C1                                                          */
 /*  BEV-1    10/23/2025  SN       Configured for BEVstep3_Rebase                                                                     */
+/*  BEV-2    02/12/2026  DT       Deleted u1_g_TripsnsrCfgGetECOMODE3 for BEV FF2                                                    */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*                                                                                                                                   */
 /*  * HY   = Hidefumi Yoshida, Denso                                                                                                 */
@@ -425,5 +388,6 @@ U1              u1_g_TripsnsrCfgGetEpUpdflg(U1 * u1p_a_epupdflg)
 /*  * PG   = Patrick Garcia, DTPH                                                                                                    */
 /*  * RS   = Ryuki Sako, Denso Techno                                                                                                */
 /*  * SN   = Shimon Nambu, Denso Techno                                                                                              */
+/*  * DT   = Dj Tutanes, DTPH                                                                                                        */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

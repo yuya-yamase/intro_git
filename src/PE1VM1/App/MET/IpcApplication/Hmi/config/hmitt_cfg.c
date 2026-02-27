@@ -67,12 +67,17 @@
 #define HMITT_SBLT_R4C_DATPOS                     (23U)
 #define HMITT_SBLT_R4R_DATPOS                     (23U)
 #define HMITT_SBLT_FR_DATPOS                      (12U)
+#define HMITT_SBLT_D_DATPOS                       (25U)                /* SBLT_D Line Offset for LcomBitAssign                       */
+#define HMITT_SBLT_P_DATPOS                       (25U)                /* SBLT_P Line Offset for LcomBitAssign                       */
 #define HMITT_ICEWRN_DATPOS                       (9U)
 #define HMITT_REARBLT_DATPOS                      (10U)
+#define HMITT_SEATISO_DATPOS                      (25U)                /* ISO logo Line Offset for LcomBitAssign                     */
 #define HMITT_TURN_DATPOS                         (1U)
 #define HMITT_HEAD_DATPOS                         (12U)
 #define HMITT_TAIL_DATPOS                         (0U)
 
+#define HMITT_SBLT_D_SFT                          (0U)                 /* SBLT_D bit shift                                           */
+#define HMITT_SBLT_P_SFT                          (2U)                 /* SBLT_P bit shift                                           */
 #define HMITT_SBLT_R2L_SFT                        (3U)
 #define HMITT_SBLT_R2C_SFT                        (4U)
 #define HMITT_SBLT_R2R_SFT                        (5U)
@@ -82,7 +87,7 @@
 #define HMITT_SBLT_R4L_SFT                        (9U)
 #define HMITT_SBLT_R4C_SFT                        (10U)
 #define HMITT_SBLT_R4R_SFT                        (11U)
-#define HMITT_SBLT_FR_SFT                         (0U)
+#define HMITT_SBLT_FR_SFT                         (12U)                /* SBLT_FR bit shift                                          */
 
 #define HMITT_TURN_R_SFT                          (4U)
 #define HMITT_TURN_L_SFT                          (5U)
@@ -158,6 +163,7 @@ void    vd_g_HmiTtCfgReq(U4 * u4_ap_req)
     U2  u2_t_belt_tt;
     U1  u1_t_icewrn;
     U1  u1_t_rearbelt_tt;
+    U1  u1_t_seatiso_tt;                 /* ISO logo Display result                                                                  */
 
     for(u4_t_loop = (U4)0U ; u4_t_loop < (U4)HMITT_NUM ; u4_t_loop++){
         u4_ap_req[u4_t_loop] = (U4)0U;
@@ -192,10 +198,20 @@ void    vd_g_HmiTtCfgReq(U4 * u4_ap_req)
     u4_ap_req[HMITT_SBLT_R4R_DATPOS] |= (u4_t_onoff <<   HMITT_4BIT_SHIFT);
     u4_t_onoff    = (((U4)u2_t_belt_tt & (U4)SBLTSYNC_TT_REQ_FR) >> HMITT_SBLT_FR_SFT);
     u4_ap_req[HMITT_SBLT_FR_DATPOS] |= (u4_t_onoff <<  HMITT_20BIT_SHIFT);
+    u4_t_onoff    = (((U4)u2_t_belt_tt & (U4)SBLTSYNC_TT_REQ_D) >> HMITT_SBLT_D_SFT);         /* SBLT_D Light-up result acquisition  */
+    u4_ap_req[HMITT_SBLT_D_DATPOS] |= u4_t_onoff;                                             /* SBLT_D Light-up result transmission */
+    u4_t_onoff    = (((U4)u2_t_belt_tt & (U4)SBLTSYNC_TT_REQ_P) >> HMITT_SBLT_P_SFT);         /* SBLT_P Light-up result acquisition  */
+    u4_ap_req[HMITT_SBLT_P_DATPOS] |= (u4_t_onoff <<  HMITT_4BIT_SHIFT);                      /* SBLT_P Light-up result transmission */
 
     u1_t_rearbelt_tt = u1_g_SbltsyncActTt();
     if (u1_t_rearbelt_tt == (U1)TRUE) {
         u4_ap_req[HMITT_REARBLT_DATPOS] |= u4_HMITT_HB4(HMITT_BLINK_CO_ON_____100P);
+    }
+
+    /* ISO logo Display result get and transmission */
+    u1_t_seatiso_tt = u1_g_SbltsyncActFrTt();
+    if ((U1)TRUE == u1_t_seatiso_tt){
+        u4_ap_req[HMITT_SEATISO_DATPOS] |= u4_HMITT_HB2(HMITT_BLINK_CO_ON_____100P);
     }
 
     vd_s_HmiTtTurn(u4_ap_req);
@@ -231,7 +247,6 @@ void    vd_g_HmiTtCfgAsilVarmask(U4 * u4_ap_varmask)
     static const ST_HMITT_ESOPT st_sp_HMITT_ASIL_ESOPT[] = {
     /* u1_idx     u1_strtpos   u2_esopt                       u2_chid                           u1_req                                       */
         {  (U1)0U,    (U1)4U,     (U2)VDF_ESO_CH_VSC,           (U2)ALERT_CH_C_SLIP,               (U1)ALERT_REQ_C_SLIP_MALFUNC                 },
-        {  (U1)0U,    (U1)4U,     (U2)VDF_ESO_CH_VSC,           (U2)ALERT_CH_C_SLIP,               (U1)ALERT_REQ_C_SLIP_MALFUNC_RW              },
         {  (U1)0U,    (U1)8U,     (U2)VDF_ESO_CH_PEDPRO,        (U2)ALERT_CH_B_PEDPRO,             (U1)ALERT_REQ_B_PEDPRO_DIAGDTRMN             },
         {  (U1)0U,    (U1)28U,    (U2)VDF_ESO_CH_BRPADW,        (U2)ALERT_CH_C_BRPADW,             (U1)ALERT_REQ_C_BRPADW_MALFUNC               },
         {  (U1)1U,    (U1)0U,     (U2)VDF_ESO_CH_SYS_ADDOT_TT,  (U2)ALERT_CH_S_TMTT,               (U1)ALERT_REQ_S_TMTT_ON                      },
@@ -321,6 +336,9 @@ void    vd_g_HmiTtCfgDestmask(U4* u4_ap_varmask)
 /*  BEV-4    02/10/2025  RO       Change for BEV System_Consideration_1.(MET-S_ADTT-CSTD-0-)                                         */
 /*  BEV-5    02/10/2025  SF       Change for BEV System_Consideration_1.(MET-M_ONOFF-CSTD-1-02-A-C0)                                 */
 /*  BEV-6    06/23/2025  HY       Change for BEV System_Consideration_2.(MET-S_ADMID-CSTD-0-02-A-C0 / MET-S_ADTT-CSTD-0-02-A-C0)     */
+/*  BEV-7    02/10/2026  ED       Change for BEV FF2. (MET-B_SEAREM-CSTD-A0-07-B-C3)                                                 */
+/*  BEV-8    01/15/2026  HT       Change for Full_function2 (MET-M_REMWAR-CSTD-2-04-A-C0)                                            */
+/*                                Removed "ALERT_REQ" in order to transfer signal transmission control from the MCU to the SoC       */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * TH   = Takahiro Hirano, Denso Techno                                                                                           */
@@ -336,6 +354,8 @@ void    vd_g_HmiTtCfgDestmask(U4* u4_ap_varmask)
 /*  * RO   = Ryo Oohashi, KSE                                                                                                        */
 /*  * SF   = Shiro Furui, Denso Techno                                                                                               */
 /*  * HY   = Haruki Yagi, KSE                                                                                                        */
+/*  * ED   = Emoh Dagasdas, DTPH                                                                                                     */
 /*  * KI   = Kanji Ito,  Denso Techno                                                                                                */
+/*  * HT   = Hibiki Tanii, KSE                                                                                                       */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

@@ -113,28 +113,6 @@ void    vd_g_HmiTripcomMainTask(void)
 void  vd_g_HmiTripcomPut(const ST_HMITRIPCOM * stp_a_HMITRIPCOM)
 {
     u2_s_hmitripcom_to    = (U2)HMIPROXY_TOC_INI;
-    if(stp_a_HMITRIPCOM->u2_avg_vehspd_kmph_ta == (U2)0U){
-        u2_s_hmitripcom_rstbit |= (U2)TRIPCOM_RSTRQBIT_M_AVGVEHSPD_TA;          /*  AVG_SPD_KMPH_USRRST                 */
-    }
-    if(stp_a_HMITRIPCOM->u4_avg_ee_kmpl_ta == (U4)0U){
-        u2_s_hmitripcom_rstbit |= (U2)TRIPCOM_RSTRQBIT_M_AVGEE_TA;              /*  AVG_EE_KMPL_USRRST                  */
-    }
-    if(stp_a_HMITRIPCOM->u4_ptsrun_dist_km_lc == (U4)0U){
-        u2_s_hmitripcom_rstbit |= (U2)TRIPCOM_RSTRQBIT_M_PTSRUNDIST_LC;         /*  DIST_KM_USRRST                      */
-    }
-    if(stp_a_HMITRIPCOM->u4_ptsrun_time_hrs_lc== (U4)0U){
-        u2_s_hmitripcom_rstbit |= (U2)TRIPCOM_RSTRQBIT_M_PTSRUNTM_LC;           /* DRVTIME_HHHH_USRRST                  */
-                                                                                /* DRVTIME_MM_USRRST                    */
-                                                                                /* DRVTIME_SS_USRRST                    */
-    }
-    if(stp_a_HMITRIPCOM->u4_idlstp_time_hrs_lc == (U4)0U){
-        u2_s_hmitripcom_rstbit |= (U2)TRIPCOM_RSTRQBIT_M_ECOSTPTM_LC;           /* IDLSTP_HHHH_USRRST                   */
-                                                                                /* IDLSTP_MM_USRRST                     */
-                                                                                /* IDLSTP_SS_USRRST                     */
-    }
-    if(stp_a_HMITRIPCOM->u4_save_fs_ml_lc == (U4)0U){
-        u2_s_hmitripcom_rstbit |= (U2)TRIPCOM_RSTRQBIT_M_SAVEFS_LC;             /* FUELSAVE_ML_USRRST                   */
-    }
     if(stp_a_HMITRIPCOM->u2_avg_vehspd_tr_a == (U2)0U){
         u2_s_hmitripcom_rstbit |= (U2)TRIPCOM_RSTRQBIT_M_AVGVEHSPD_TR_A;        /* TRIPA_AVG_SPD_KMPH_USRRST            */
     }
@@ -265,6 +243,7 @@ static void    vd_s_HmiTripcomSWCount(const U2 u2_a_RIMID)
 /*  19PFv3-3 04/22/2025  KM       Bug fix : added additional reset of 1MIN_AVGFUEL and 1MIN_AVGEE when history clear is requested    */
 /*  BEV-1    10/31/2025  MA       Change for BEV rebase                                                                              */
 /*  BEV-2    01/26/2026  EA       Added reset request process for M_DMTOEC                                                           */
+/*  BEV-3    02/12/2026  EA       Deleted/Deactivated other than BEV Powertrain processes                                             */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * YK   = Yuta kusunoki, Denso Techno                                                                                             */

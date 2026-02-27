@@ -54,7 +54,7 @@
 #define IVDSH_DID_WRI_FWUPXREQ_D                 (22U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define IVDSH_NUM_DID_REA                        (23U)
+#define IVDSH_NUM_DID_REA                        (25U)
 
 /* Read from VM#0 */
 #define IVDSH_DID_REA_CANBUS_STS_2M1             (23U)
@@ -82,6 +82,8 @@
 #define IVDSH_DID_REA_VM3TO2_BOOT_TIME           (43U)
 #define IVDSH_DID_REA_GPS_STS                    (44U)
 #define IVDSH_DID_REA_VM3TO2_WHLINI_INF          (45U)
+#define IVDSH_DID_REA_VM3TO2_WKUP_COND           (46U)
+#define IVDSH_DID_REA_VM3TO2_USRRST_MASK         (47U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define IVDSH_NUM_DID                            (IVDSH_NUM_DID_WRI + IVDSH_NUM_DID_REA)

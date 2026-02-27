@@ -121,7 +121,7 @@ U1                   u1_dp_nvmc_recovery_retry[NVMC_DEVICE_TYPE_NUM];
 /*  Constant Variable Definitions                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* START : ##TOOL_OUT#NVMC_NVMC_SHTDWN_TO_MAX## */
-const U2 u2_d_NVMC_SHTDWN_TO_MAX    = (U2)2100U;      /* Resolution : 20 [ms] */
+const U2 u2_d_NVMC_SHTDWN_TO_MAX    = (U2)12082U;      /* Resolution : 20 [ms] */
 /* END : ##TOOL_OUT#NVMC_NVMC_SHTDWN_TO_MAX## */
 const U1 u1_d_NVMC_DEVICE_TYPE_NUM = (U1)NVMC_DEVICE_TYPE_NUM;
 const U1 u1_d_NVMC_APP_ACS_NUM = (U1)NVMC_APP_ACS_NUM;
@@ -224,7 +224,20 @@ const ST_NVMC_MODULE_CFG    st_dp_NVMC_MODULE_CFG[NVMC_MODULE_NUM] = {
     {&u1_d_NvmcMod_U4R3Al_RdnData,             &u1_d_NvmcMod_Lib_PreRdnData, &vd_d_NvmcMod_U4R3Al_WrData,             (U1)NVMC_SIZE_4BYTE, (U1)1U,  (U1)4U,   (U1)1U,     (U1)3U, (U1)0x01U}, 
     {&u1_d_NvmcMod_U2R3Lo_RdnData,             &u1_d_NvmcMod_Lib_PreRdnData, &vd_d_NvmcMod_U2R3Lo_WrData,             (U1)NVMC_SIZE_2BYTE, (U1)1U,  (U1)4U,   (U1)1U,     (U1)3U, (U1)0x01U}, 
     {&u1_d_NvmcMod_U1R3P1_RdnData,             &u1_d_NvmcMod_Lib_PreRdnData, &vd_d_NvmcMod_U1R3P1_WrData,             (U1)NVMC_SIZE_1BYTE, (U1)1U,  (U1)4U,   (U1)1U,     (U1)3U, (U1)0x01U}, 
-    {&u1_d_NvmcMod_ovr4bBlk16bSumDblSmll_RdnD, &u1_d_NvmcMod_Lib_PreRdnData, &vd_d_NvmcMod_ovr4bBlk16bSumDblSmll_WrD, (U1)16U,             (U1)1U,  (U1)20U,  (U1)5U,     (U1)2U, (U1)0x01U}  
+    {&u1_d_NvmcMod_U1R3P3_RdnData,             &u1_d_NvmcMod_Lib_PreRdnData, &vd_d_NvmcMod_U1R3P3_WrData,             (U1)NVMC_SIZE_1BYTE, (U1)1U,  (U1)4U,   (U1)1U,     (U1)3U, (U1)0x01U}, 
+    {&u1_d_NvmcMod_U4R1Al_RdnData,             vdp_PTR_NA,                   &vd_d_NvmcMod_U4R1Al_WrData,             (U1)NVMC_SIZE_4BYTE, (U1)1U,  (U1)4U,   (U1)1U,     (U1)1U, (U1)0x00U}, 
+    {&u1_d_NvmcMod_ovr4bBlk8bSgl_RdnD,         vdp_PTR_NA,                   &vd_d_NvmcMod_ovr4bBlkSgl_WrD,           (U1)8U,              (U1)1U,  (U1)8U,   (U1)2U,     (U1)1U, (U1)0x00U}, 
+    {&u1_d_NvmcMod_ovr4bBlk12bSgl_RdnD,        vdp_PTR_NA,                   &vd_d_NvmcMod_ovr4bBlkSgl_WrD,           (U1)12U,             (U1)1U,  (U1)12U,  (U1)3U,     (U1)1U, (U1)0x00U}, 
+    {&u1_d_NvmcMod_ovr4bBlk16bSgl_RdnD,        vdp_PTR_NA,                   &vd_d_NvmcMod_ovr4bBlkSgl_WrD,           (U1)16U,             (U1)1U,  (U1)16U,  (U1)4U,     (U1)1U, (U1)0x00U}, 
+    {&u1_d_NvmcMod_ovr4bBlk20bSgl_RdnD,        vdp_PTR_NA,                   &vd_d_NvmcMod_ovr4bBlkSgl_WrD,           (U1)20U,             (U1)1U,  (U1)20U,  (U1)5U,     (U1)1U, (U1)0x00U}, 
+    {&u1_d_NvmcMod_ovr4bBlk8bSumDblSmll_RdnD,  &u1_d_NvmcMod_Lib_PreRdnData, &vd_d_NvmcMod_ovr4bBlk8bSumDblSmll_WrD,  (U1)8U,              (U1)1U,  (U1)12U,  (U1)3U,     (U1)2U, (U1)0x01U}, 
+    {&u1_d_NvmcMod_ovr4bBlk12bSumDblSmll_RdnD, &u1_d_NvmcMod_Lib_PreRdnData, &vd_d_NvmcMod_ovr4bBlk12bSumDblSmll_WrD, (U1)12U,             (U1)1U,  (U1)16U,  (U1)4U,     (U1)2U, (U1)0x01U}, 
+    {&u1_d_NvmcMod_ovr4bBlk16bSumDblSmll_RdnD, &u1_d_NvmcMod_Lib_PreRdnData, &vd_d_NvmcMod_ovr4bBlk16bSumDblSmll_WrD, (U1)16U,             (U1)1U,  (U1)20U,  (U1)5U,     (U1)2U, (U1)0x01U}, 
+    {&u1_d_NvmcMod_ovr4bBlk24bSgl_RdnD,        vdp_PTR_NA,                   &vd_d_NvmcMod_ovr4bBlkSgl_WrD,           (U1)24U,             (U1)1U,  (U1)24U,  (U1)6U,     (U1)1U, (U1)0x00U}, 
+    {&u1_d_NvmcMod_ovr4bBlk28bSgl_RdnD,        vdp_PTR_NA,                   &vd_d_NvmcMod_ovr4bBlkSgl_WrD,           (U1)28U,             (U1)1U,  (U1)28U,  (U1)7U,     (U1)1U, (U1)0x00U}, 
+    {&u1_d_NvmcMod_ovr4bBlk32bSgl_RdnD,        vdp_PTR_NA,                   &vd_d_NvmcMod_ovr4bBlkSgl_WrD,           (U1)32U,             (U1)1U,  (U1)32U,  (U1)8U,     (U1)1U, (U1)0x00U}, 
+    {&u1_d_NvmcMod_ovr4bBlk24bDbl_RdnD,        &u1_d_NvmcMod_Lib_PreRdnData, &vd_d_NvmcMod_ovr4bBlkDbl_WrD,           (U1)24U,             (U1)1U,  (U1)24U,  (U1)6U,     (U1)2U, (U1)0x01U}, 
+    {&u1_d_NvmcMod_ovr4bBlk24bSumDblSmll_RdnD, &u1_d_NvmcMod_Lib_PreRdnData, &vd_d_NvmcMod_ovr4bBlk24bSumDblSmll_WrD, (U1)24U,             (U1)1U,  (U1)28U,  (U1)7U,     (U1)2U, (U1)0x01U}  
 /* END : ##TOOL_OUT#NVMC_MODULE_CFG## */
 };
 

@@ -755,6 +755,10 @@ void    vd_g_VardefEsOptIgoffEvhk(const U4 u4_a_MDBIT, const U4 u4_a_EVBIT)
 /*  2.5.0     8/26/2024  TN       QAC Fix : Delete u1_g_VardefEsOptAvaByAvn func.                                                    */
 /*  2.6.0     12/25/2024 KM       Updated write timing of DTF                                                                        */
 /*                                                                                                                                   */
+/*  Revision Date        Author   Change Description                                                                                 */
+/* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
+/*  BEV-1    02/02/2026  TS       Add include file to vardef_esopt.h.(MET-M_HUDILL-CSTD-1)                                           */
+/*                                                                                                                                   */
 /*  * YI   = Yoshiki Iwata, Denso                                                                                                    */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
 /*  * SF   = Seiya Fukutome, Denso Techno                                                                                            */

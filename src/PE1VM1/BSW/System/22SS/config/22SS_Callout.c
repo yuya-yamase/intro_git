@@ -20,6 +20,7 @@
 
 #include "veh_opemd.h"
 #include "oxcan.h"
+#include "oxsec.h"
 #include "ivdsh.h"
 
 /* Memory               */
@@ -57,6 +58,7 @@
 #include "himgadj.h"
 #include "xspi_met.h"
 #include "datesi_met.h"
+#include "omavrchk.h"
 
 /*----------------------------------------------------------------------------
  *		置換シンボル定義
@@ -92,6 +94,7 @@ void vd_g_22SSCallout_StaBonInit(void)
         &vd_g_DrectxBonInit,
         &vd_g_DimInit,
         &vd_g_IllumiBonInit,
+        &vd_g_OmaVrChkInit,
         &vd_g_AlertInit,
         &vd_g_SbltwrnInit,
         &vd_g_ThblnkrBonInit,
@@ -125,6 +128,7 @@ void vd_g_22SSCallout_StaBonInit(void)
         u1_t_rslt = u1_g_Nvmc_BonRead();
     }while(u1_t_rslt != (U1)FALSE);
 
+    vd_g_oXSECInit();
     vd_g_oXCANRstInit();
     vd_g_VehopemdRstInit();
     vd_g_iVDshInit();
@@ -155,6 +159,7 @@ void vd_g_22SSCallout_StaRstInit(void)
         &vd_g_DrectxRstInit,
         &vd_g_DimInit,
         &vd_g_IllumiRstInit,
+        &vd_g_OmaVrChkInit,
         &vd_g_AlertInit,
         &vd_g_SbltwrnInit,
         &vd_g_ThblnkrRstWkInit,
@@ -188,6 +193,7 @@ void vd_g_22SSCallout_StaRstInit(void)
         u1_t_rslt = u1_g_Nvmc_WkupRead();
     }while(u1_t_rslt != (U1)FALSE);
 
+    vd_g_oXSECInit();
     vd_g_oXCANRstInit();
     vd_g_VehopemdRstInit();
     vd_g_iVDshInit();
@@ -218,6 +224,7 @@ void vd_g_22SSCallout_StaWkupInit(void)
         &vd_g_DrectxWkupInit,
         &vd_g_DimInit,
         &vd_g_IllumiWkupInit,
+        &vd_g_OmaVrChkInit,
         &vd_g_AlertInit,
         &vd_g_SbltwrnInit,
         &vd_g_ThblnkrRstWkInit,
@@ -251,6 +258,7 @@ void vd_g_22SSCallout_StaWkupInit(void)
         u1_t_rslt = u1_g_Nvmc_WkupRead();
     }while(u1_t_rslt != (U1)FALSE);
 
+    vd_g_oXSECInit();
     vd_g_oXCANWkupInit();
     vd_g_VehopemdWkupInit();
     vd_g_iVDshInit();
