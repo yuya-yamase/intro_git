@@ -164,6 +164,7 @@ void vd_g_PwrCtrlComBonInit( void )
 
     vd_g_PwrCtrlComTxClrBootLog((U1)PWRCTRL_COM_BOOTLOG_INITREQ);       /* 起動ログ計測点をクリア */
     u1_s_PwrCtrl_Com_Eth_LinkupSts = (U1)PWRCTRL_COM_ETH_LINKUP_NODETECT; /* Ethリンクアップ未検知を設定 */
+    u1_s_PwrCtrl_Com_URMaskOffSts = (U1)PWRCTRL_COM_URMASKOFF_DISABLED; /* ユーザーリセット抑止解除受付状態 */
 
     return;
 }
@@ -198,6 +199,7 @@ void vd_g_PwrCtrlComWkupInit( void )
     u4_s_PwrCtrl_Com_Tx_SoCWkupCond = (U4)PWRCTRL_COM_SOCWKUP_NON;  /* SoC起動条件通知 */
     vd_g_PwrCtrlComTxClrBootLog((U1)PWRCTRL_COM_BOOTLOG_INITREQ);   /* 起動ログ計測点をクリア */
     u1_s_PwrCtrl_Com_Eth_LinkupSts = (U1)PWRCTRL_COM_ETH_LINKUP_NODETECT; /* Ethリンクアップ未検知を設定 */
+    u1_s_PwrCtrl_Com_URMaskOffSts = (U1)PWRCTRL_COM_URMASKOFF_DISABLED; /* ユーザーリセット抑止解除受付状態 */
 
     /* SoC起動回数カウンタ更新時の時間 */
     u4_t_soctime_buf = (U4)PWRCTRL_COM_SOCONTIME_INIT;
