@@ -9,7 +9,11 @@
 /*                                                                          */
 /****************************************************************************/
 #include "VSM.h"
-#include "chipcom.h"
+/* 26.2.16 doza Team-B edit sta */
+/*#include "chipcom.h"*/
+#include "ChipCom.h"
+#include "ChipCom_Cfg.h"
+/* 26.2.16 doza Team-B edit end */
 
 /****************************************************************/
 /* VARIABLE                                                     */

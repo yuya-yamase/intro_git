@@ -7,9 +7,12 @@
 # ----------------------------------------------------------------------------------------------------------------------------------
 # sources
 # ----------------------------------------------------------------------------------------------------------------------------------
+../../src/PE3VM3/App/Central/CanIfProxy/cfg/CanIfProxy_Lcfg.c
 ../../src/PE3VM3/App/Central/CanIfProxy/src/CanIfProxy.c
-../../src/PE3VM3/App/Central/chipcom/src/chipcom.c
-../../src/PE3VM3/App/Central/chipcom/src/chipcom_config.c
+../../src/PE3VM3/App/Central/ChipCom/cfg/ChipCom_Lcfg.c
+../../src/PE3VM3/App/Central/ChipCom/src/ChipCom.c
+../../src/PE3VM3/App/Central/ChipCom/src/ChipCom_Wrapper.c
+../../src/PE3VM3/App/Central/ChipCom/src/ChipCom_Test.c
 ../../src/PE3VM3/App/Central/esw/EthDLC/Config/EthDLC_Cfg.c
 ../../src/PE3VM3/App/Central/esw/EthDLC/Core/EthDLC_ACTL.c
 ../../src/PE3VM3/App/Central/esw/EthDLC/Core/EthDLC_STM.c
@@ -38,6 +41,9 @@
 ../../src/PE3VM3/App/Central/LIB/LIB_memcpy.c
 ../../src/PE3VM3/App/Central/LIB/LIB_memset.c
 ../../src/PE3VM3/App/Central/Pmic/src/Pmic_Pwr.c
+../../src/PE3VM3/App/Central/VCanAck/cfg/VCanAck_Lcfg.c
+../../src/PE3VM3/App/Central/VCanAck/src/VCanAck.c
+../../src/PE3VM3/App/Central/VCanAck/src/VCanAck_Connector.c
 ../../src/PE3VM3/App/Central/VIS/src/VIS_Can.c
 ../../src/PE3VM3/App/Central/VIS/src/VIS_Main.c
 ../../src/PE3VM3/App/Central/VIS/src/VIS_Pwr.c

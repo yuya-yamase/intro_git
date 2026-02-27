@@ -31,9 +31,10 @@
 #include "VIS.h"
 
 #include "PwrCtlSup.h"
-#include "chipcom.h"
+#include "ChipCom.h"
 #include "VSM.h"
 #include "CanIfProxy.h"
+#include "VCanAck.h"
 /*----------------------------------------------------------------------------
  *		置換シンボル定義
  *--------------------------------------------------------------------------*/
@@ -81,6 +82,7 @@ void vd_g_22SSCallout_StaBonInit(void)
     vd_g_VSM_SAILWrapper_Init();
     vd_g_PwrCtrlMainBonReq();
     EthSW_StaBonInit();
+    VCanAck_Init();
     ChipCom_Init();
     CanIfProxy_Init();
     vd_g_VISInit();
@@ -121,6 +123,7 @@ void vd_g_22SSCallout_StaRstInit(void)
     vd_g_VSM_SAILWrapper_Init();
     vd_g_PwrCtrlMainWakeupReq();
     EthSW_StaRstInit();
+    VCanAck_Init();
     ChipCom_Init();
     CanIfProxy_Init();
     vd_g_VISInit();
@@ -161,6 +164,7 @@ void vd_g_22SSCallout_StaWkupInit(void)
     vd_g_VSM_SAILWrapper_Init();
     vd_g_PwrCtrlMainWakeupReq();
     EthSW_StaWkupInit();
+    VCanAck_Init();
     ChipCom_Init();
     CanIfProxy_Init();
     vd_g_VISInit();
