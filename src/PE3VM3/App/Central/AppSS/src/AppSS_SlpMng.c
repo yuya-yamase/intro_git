@@ -51,7 +51,7 @@ void AppSS_SlpMng_Main(void)
             (void)ChipCom_SendSignal((Com_SignalIdType)SIGNAL_CHIPCOM_BUS_CSS1M01_CANWKUPSLP, &u1_t_slp_req_data);
             break;
         default:
-            /* Send Sleep state */
+            /* Send SleepOK state */
             u1_t_slp_req_data = (U1)APPSS_SLPMNG_RESULT_SLEEPOK;
             (void)ChipCom_SendSignal((Com_SignalIdType)SIGNAL_CHIPCOM_BUS_CSS1M01_CANWKUPSLP, &u1_t_slp_req_data);
             break;
