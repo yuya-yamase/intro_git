@@ -33,6 +33,7 @@
 #include "EthSW_Task.h"
 #include "ChipCom.h"
 #include "VCanAck.h"
+#include "CanIfProxy.h"
 
 #if (PROCESSING_LOAD_MEASURE_TIME > 0)
 #include "gpt_drv_frt.h"
@@ -102,6 +103,7 @@ TASK(eMCOS_TASK_High)
 
     BswM_CS_MainFunctionHigh();
     VCanAck_MainFunction();
+    CanIfProxy_MainFunction();
     ChipCom_MainFunctionPostRx();
     EthSW_HighTask();
     ChipCom_MainFunction();
