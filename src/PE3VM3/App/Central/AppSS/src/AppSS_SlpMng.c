@@ -8,8 +8,8 @@
 /* Include Files                                                            */
 /*--------------------------------------------------------------------------*/
 #include "oxcan.h"
-#include "ChipCom_Cfg.h"
 #include "ChipCom.h"
+#include "ChipCom_Cfg.h"
 #include "AppSS_SlpMng.h"
 
 /*--------------------------------------------------------------------------*/
