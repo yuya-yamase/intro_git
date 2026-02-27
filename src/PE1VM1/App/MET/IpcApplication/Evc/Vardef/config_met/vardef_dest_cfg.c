@@ -76,7 +76,7 @@
 #define VDF_VEH_SPD_UNIT_KMHMPH         (2U)
 #define VDF_VEH_SPD_UNIT_MPH            (3U)
 
-#define VDF_NUM_VEH_SPD_UNIT_MSSW       (4U)
+#define VDF_NUM_VEH_SPD_UNIT_MSSW       (2U)
 #define VDF_VEH_SPD_UNIT_MSSW_WITHOUT   (0U)
 #define VDF_VEH_SPD_UNIT_MSSW_WITH      (1U)
 
