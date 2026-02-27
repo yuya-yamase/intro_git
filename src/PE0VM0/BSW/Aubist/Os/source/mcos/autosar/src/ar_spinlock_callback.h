@@ -36,8 +36,8 @@
   Return    :
   Note  :   mcos_spinlock_get_enaint() should declare "extern" to call this function.
  ---------------------------------------------------------------------------*/
-AR_LOCAL_FORCE_INLINE void ar_spinlock_enaint(void);
-AR_LOCAL_FORCE_INLINE void ar_spinlock_enaint(void)
+LOCAL_INLINE void ar_spinlock_enaint(void);
+LOCAL_INLINE void ar_spinlock_enaint(void)
 {
     ar_critical_section_enaint();
 }

@@ -47,10 +47,10 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if ((OXCAN_LIB_CFG_EN_RXD == 1U) || (OXCAN_LIB_CFG_EN_RXD == 2U))
+#if (OXCAN_LIB_CFG_EN_RXD == 1U)
 #else
-#error "oxcan_rxd_cfg.c : OXCAN_LIB_CFG_EN_RXD shall be equal to 1U or 2U."
-#endif /* #if ((OXCAN_LIB_CFG_EN_RXD == 1U) || (OXCAN_LIB_CFG_EN_RXD == 2U)) */
+#error "oxcan_rxd_cfg.c : OXCAN_LIB_CFG_EN_RXD is NOT equal to 1U."
+#endif /* #if (OXCAN_LIB_CFG_EN_RXD == 1U) */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
@@ -67,8 +67,7 @@ U4                          u4_gp_oxcan_rxd_pom_elpsd[OXCAN_RXD_NUM_POM];
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-const U4                    u4_g_OXCAN_RXD_SYS_NET  = (U4)OXCAN_SYS_NET;                 /* OXCAN_SYS_NET defined in oxcan_sys_def.h */
-const U2                    u2_g_OXCAN_RXD_POM_TOUT = (U2)3000U / (U2)OXCAN_MAIN_TICK;   /* 3000 msec                                */
+const U2                    u2_g_OXCAN_RXD_POM_TOUT = (U2)3000U / (U2)OXCAN_MAIN_TICK;    /* 3000 msec    */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 const U4                    u4_gp_OXCAN_RXD_SYS_BY_POM[OXCAN_RXD_NUM_POM] = {
@@ -99,8 +98,6 @@ const U4                    u4_gp_OXCAN_RXD_SYS_BY_PDU[] = {
 /* #define OXCAN_SYS_PNC_43                         (0x00040000U) */
 /* #define OXCAN_SYS_PNC_44                         (0x00080000U) */
 
-    (U4)0x00090014U, /* IGR, IGP, ACC, PNC_16,                 PNC_44 */       /* OXCAN_RXD_PDU_CAN_BDC1S52_CH0 */
-    (U4)0x00090014U, /* IGR, IGP, ACC, PNC_16,                 PNC_44 */       /* OXCAN_RXD_PDU_CAN_BDC1S60_CH0 */
     (U4)0x00090016U, /* IGR, IGP, ACC, PNC_16,                 PNC_44 */       /* OXCAN_RXD_PDU_CAN_BDC1S81_CH0 */
     (U4)0x00090016U  /* IGR, IGP, ACC, PNC_16,                 PNC_44 */       /* OXCAN_RXD_PDU_CAN_BDC1S91_CH1 */
 };
@@ -108,8 +105,6 @@ const U2                    u2_g_OXCAN_RXD_NUM_PDU = (U2)OXCAN_RXD_NUM_PDU;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static const U2             u2_sp_OXCAN_RXD_BY_ACK[] = {
-    (U2)OXCAN_RXD_PDU_CAN_BDC1S52_CH0,                                                     /* MSG_BDC1S52_RXCH0             */
-    (U2)OXCAN_RXD_PDU_CAN_BDC1S60_CH0,                                                     /* MSG_BDC1S60_RXCH0             */
     (U2)OXCAN_RXD_PDU_CAN_BDC1S81_CH0,                                                     /* MSG_BDC1S81_RXCH0             */
     (U2)OXCAN_RXD_PDU_CAN_BDC1S91_CH1                                                      /* MSG_BDC1S91_RXCH1             */
 };
@@ -118,7 +113,7 @@ static const U2             u2_sp_OXCAN_RXD_BY_ACK[] = {
 const ST_OXCAN_RXD_ACK      st_gp_OXCAN_RXD_ACK_BY_GR[OXCAN_RXD_NUM_GR] = {
     {
         &u2_sp_OXCAN_RXD_BY_ACK[0],    /* u2p_RXD_BY_ACK */
-        (U2)MSG_BDC1S52_RXCH0,         /* u2_ack_min     */
+        (U2)MSG_BDC1S81_RXCH0,         /* u2_ack_min     */
         (U2)MSG_BDC1S91_RXCH1          /* u2_ack_max     */
     }
 };

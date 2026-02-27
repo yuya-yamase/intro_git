@@ -171,7 +171,7 @@
 #ifdef CRYPTO_82_HSM_START_SEC_VAR_CRYPTO_SHARED_NOINIT
     /* Enter here a #pragma command for opening the specified section */
     #pragma ghs startdata
-    #pragma ghs section bss=".bsw_crypto_hsm_shared_bss"
+    #pragma ghs section bss=".crypto_hsm_shared_bss"
     #undef CRYPTO_82_HSM_START_SEC_VAR_CRYPTO_SHARED_NOINIT
 #endif
 
@@ -186,7 +186,7 @@
 #ifdef CRYPTO_82_HSM_START_SEC_VAR_CRYPTO_SHARED_INIT
     /* Enter here a #pragma command for opening the specified section */
     #pragma ghs startdata
-    #pragma ghs section data=".bsw_crypto_hsm_shared_data"
+    #pragma ghs section data=".crypto_hsm_shared_data"
     #undef CRYPTO_82_HSM_START_SEC_VAR_CRYPTO_SHARED_INIT
 #endif
 

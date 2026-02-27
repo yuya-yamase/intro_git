@@ -35,6 +35,9 @@ void SYNC_stack_s_cstSpi_UcfgModeCChannelData_u4NotifId( const S4* t_pcs4Param )
 /* シングル転送、リロード機能1,2OFF、ディスティネーションアドレス増加、ソースアドレス固定 */
 #define	u1SPI_RECEIVE_DMA_MODE				((U1)(DMA_DMAMODE1))
 
+#define u1SPI_NO_ERROR						((U1)0U)
+#define u1SPI_DMA_ADDRESS_ALIGNMENT_ERROR	((U1)1U)
+
 /*==============================================================================================*/
 /*	constants																					*/
 /*==============================================================================================*/
@@ -63,15 +66,13 @@ U4	Spi_SyncTransmit_SingleFrame( U1 t_u1ModeAChannelID, U4 t_u4SendData )
 	const	Pil_Spi_ChannelConfigType*		t_pcstPilChannelConfig;
 	U4										t_u4ReceiveData;
 	U1										t_u1HwChannel;
-	U1										t_u1ComResult;
 
 	t_pcstChannelConfig = &cstSpi_UcfgModeAData.pstChannelConfig[t_u1ModeAChannelID];
 	t_u1HwChannel = t_pcstChannelConfig->u1HwChannel;
 	t_pcstPilChannelConfig = &t_pcstChannelConfig->stPilChannelConfig;
-	t_u1ComResult = (U1)OK;
 
 	Pil_Spi_SetFrameNumber( t_u1HwChannel , (U2)1U );
-	t_u4ReceiveData = Pil_Spi_SendReceiveData( t_u1HwChannel, t_u4SendData, t_pcstPilChannelConfig, &t_u1ComResult );
+	t_u4ReceiveData = Pil_Spi_SendReceiveData( t_u1HwChannel, t_u4SendData, t_pcstPilChannelConfig );
 
 	return ( t_u4ReceiveData );
 }
@@ -93,8 +94,6 @@ Std_ReturnType Spi_SyncTransmit ( Spi_SequenceType Sequence )
 	U1										t_u1ReturnValue;
 	const	Spi_DataBufferType*				t_pcu1SrcDataPtr;
 	Spi_DataBufferType*						t_pu1DesDataPtr;
-	U1										t_u1ComResult;
-	U1										t_u1SeqResult;
 
 	t_u1ModeAChannelID = cstSpi_UcfgModeAData.pstSeqConfig[Sequence];
 	t_pcstChannelConfig = &cstSpi_UcfgModeAData.pstChannelConfig[t_u1ModeAChannelID];
@@ -104,12 +103,15 @@ Std_ReturnType Spi_SyncTransmit ( Spi_SequenceType Sequence )
 	t_u2Length = stSpi_ModeA_ChannelData[t_u1ModeAChannelID].u2DataBufferLength;
 	t_pcu1SrcDataPtr = stSpi_ModeA_ChannelData[t_u1ModeAChannelID].pcu1SrcDataPtr;
 	t_pu1DesDataPtr = stSpi_ModeA_ChannelData[t_u1ModeAChannelID].pu1DesDataPtr;
-	t_u1ReturnValue = (Std_ReturnType)E_NOT_OK;
-	t_u1ComResult = (U1)OK;
-	t_u1SeqResult = (U1)OK;
 
-	if ( stSpi_ModeA_ChannelData[t_u1ModeAChannelID].enSeqResult != SPI_SEQ_PENDING )
+	if ( stSpi_ModeA_ChannelData[t_u1ModeAChannelID].enSeqResult == SPI_SEQ_PENDING )
 	{
+		t_u1ReturnValue = (Std_ReturnType)E_NOT_OK;
+	}
+	else
+	{
+		t_u1ReturnValue = (Std_ReturnType)E_OK;
+
 		/* Set sequence state to SPI_SEQ_PENDING */
 		stSpi_ModeA_ChannelData[t_u1ModeAChannelID].enSeqResult = SPI_SEQ_PENDING;
 
@@ -119,37 +121,25 @@ Std_ReturnType Spi_SyncTransmit ( Spi_SequenceType Sequence )
 		{
 			for ( i = (S4)0U; i < (S4)t_u2Length; i++ )
 			{
-				t_pu1DesDataPtr[i] = (U1)Pil_Spi_SendReceiveData( t_u1HwChannel, (U4)t_pcu1SrcDataPtr[i], t_pcstPilChannelConfig, &t_u1ComResult );
-				t_u1SeqResult |= t_u1ComResult;
+				t_pu1DesDataPtr[i] = (U1)Pil_Spi_SendReceiveData( t_u1HwChannel, (U4)t_pcu1SrcDataPtr[i], t_pcstPilChannelConfig );
 			}
 		}
 		else if ( t_u2DataSize == PIL_SPI_LENGTH_16BIT )
 		{
 			for ( i = (S4)0U; i < (S4)t_u2Length; i++ )
 			{
-				((U2*)t_pu1DesDataPtr)[i] = (U2)Pil_Spi_SendReceiveData( t_u1HwChannel, (U4)((const U2*)t_pcu1SrcDataPtr)[i], t_pcstPilChannelConfig, &t_u1ComResult );
-				t_u1SeqResult |= t_u1ComResult;
+				((U2*)t_pu1DesDataPtr)[i] = (U2)Pil_Spi_SendReceiveData( t_u1HwChannel, (U4)((const U2*)t_pcu1SrcDataPtr)[i], t_pcstPilChannelConfig );
 			}
 		}
 		else
 		{
 			for ( i = (S4)0U; i < (S4)t_u2Length; i++ )
 			{
-				((U4*)t_pu1DesDataPtr)[i] = Pil_Spi_SendReceiveData( t_u1HwChannel, (U4)((const U4*)t_pcu1SrcDataPtr)[i], t_pcstPilChannelConfig, &t_u1ComResult );
-				t_u1SeqResult |= t_u1ComResult;
+				((U4*)t_pu1DesDataPtr)[i] = Pil_Spi_SendReceiveData( t_u1HwChannel, (U4)((const U4*)t_pcu1SrcDataPtr)[i], t_pcstPilChannelConfig );
 			}
 		}
+		stSpi_ModeA_ChannelData[t_u1ModeAChannelID].enSeqResult = SPI_SEQ_OK;
 
-		/* If it hasn't timed out, set it to OK. */
-		if( t_u1SeqResult == (U1)OK )
-		{
-			stSpi_ModeA_ChannelData[t_u1ModeAChannelID].enSeqResult = SPI_SEQ_OK;
-			t_u1ReturnValue = (Std_ReturnType)E_OK;
-		}
-		else
-		{
-			stSpi_ModeA_ChannelData[t_u1ModeAChannelID].enSeqResult = SPI_SEQ_FAILED;
-		}
 	}
 
 	return( t_u1ReturnValue );
@@ -198,69 +188,6 @@ Std_ReturnType Spi_SetupEB ( Spi_ChannelType Channel,  const Spi_DataBufferType*
 	return( (Std_ReturnType)E_OK );
 }
 
-/*----------------------------------------------------------------------------------------------*/
-/*	RegChk Function																				*/
-/*	return		: Register Check Result															*/
-/*	parameters	: Channel, Mode																	*/
-/*----------------------------------------------------------------------------------------------*/
-Spi_RegChkResultType	Spi_CheckRegister( Spi_ChannelType Channel, Spi_RegChkModeType Mode )
-{
-	const	Spi_ModeA_ChannelConfigType*	t_pcstModeAChannelConfig;
-	const	Pil_Spi_ChannelConfigType*		t_pcstPilChannelConfig;
-	U1										t_u1HwChannel;
-	U1										t_u1RegError;
-	U1										t_u1UnitNo;
-	Spi_RegChkResultType					t_enResult;
-
-	t_enResult = SPI_REGCHK_NG;
-
-	if( Channel < cstSpi_UcfgModeAData.u1ChannelNum )
-	{
-		t_pcstModeAChannelConfig = &cstSpi_UcfgModeAData.pstChannelConfig[Channel];
-		t_u1HwChannel = t_pcstModeAChannelConfig->u1HwChannel;
-		t_pcstPilChannelConfig = &t_pcstModeAChannelConfig->stPilChannelConfig;
-
-		t_u1RegError = Pil_Spi_CheckComMode( t_u1HwChannel, t_pcstPilChannelConfig );
-
-		if( t_u1RegError == (U1)NG )
-		{
-			/* Refresh requirement check */
-			if( Mode == SPI_REGCHK_MODE_WITH_REFRESH )
-			{
-				/* BSW_CFG_GETSPINLOCK_SPI(); */	/* CheckRegisterとSyncTransmit同時実行は禁止のため、割り禁不要 */
-				/* DI_ALL(); */						/* GETSPINLOCK内でDI_ALL実施のためコメント化 */
-
-				/*  各レジスタはCTL0.EN=0のときのみ設定可能なため、EN=0とする */
-				Pil_Spi_DisableCommunication( t_u1HwChannel );
-				Pil_Spi_SetComMode( t_u1HwChannel, t_pcstPilChannelConfig );
-
-				t_u1UnitNo = Pil_Spi_GetUnitNo( t_u1HwChannel );				/* ユニット番号を取得する */
-				Pil_Spi_EnableUnit( t_u1UnitNo );								/* 対象のユニットを有効化する */
-
-				/* EI_ALL(); */		/* RELEASESPINLOCK内でEI_ALL実施のためコメント化 */
-				/* BSW_CFG_RELEASESPINLOCK_SPI(); */
-
-				/* recheck */
-				t_u1RegError = Pil_Spi_CheckComMode( t_u1HwChannel, t_pcstPilChannelConfig );
-
-				if( t_u1RegError == (U1)OK )
-				{
-					t_enResult = SPI_REGCHK_REFRESH_SUCCESS;
-				}
-				else
-				{
-					t_enResult = SPI_REGCHK_REFRESH_FAILED;
-				}
-			}
-		}
-		else
-		{
-			t_enResult = SPI_REGCHK_OK;
-		}
-	}
-
-	return ( t_enResult );
-}
 #endif
 
 #if ( SPI_CFG_MODEB_USE == ON )
@@ -290,11 +217,11 @@ U4	Spi_InterruptTransmit( U1 t_u1ModeBChannelID, U4 t_u4SendData )
 #if ( SPI_CFG_MODEC_USE == ON )
 /*----------------------------------------------------------------------------------------------*/
 /*	Asynchronous Transmit Function																*/
-/*	return		: Result( u1SPI_NO_ERROR / u1SPI_DMA_ADDRESS_ALIGNMENT_ERROR / u1SPI_DMA_TIMEOUT )	*/
+/*	return		: Result( No Error(==0) or Error(!=0) )											*/
 /*	parameters	: ModeCChannelID, SendDataBufferPointer(Async),									*/
 /*				: ReceiveDataBufferPointer(Async), SendReceiveDataTimes(1 Times = 1/2/4byte)	*/
 /*----------------------------------------------------------------------------------------------*/
-U1	Spi_AsyncTransmit( U1 t_u1ModeCChannelID, const Spi_ModeC_DataType* t_pcstSendData, const Spi_ModeC_DataType* t_pcstReceiveData, U2 t_u2Times )
+ZORN	Spi_AsyncTransmit( U1 t_u1ModeCChannelID, const Spi_ModeC_DataType* t_pcstSendData, const Spi_ModeC_DataType* t_pcstReceiveData, U2 t_u2Times )
 {
 	const	Spi_ModeC_ChannelConfigType*	t_pcstChannelConfig;
 	const	Pil_Spi_ChannelConfigType*		t_pcstPilChannelConfig;
@@ -305,7 +232,7 @@ U1	Spi_AsyncTransmit( U1 t_u1ModeCChannelID, const Spi_ModeC_DataType* t_pcstSen
 	U1										t_u1ChNo;
 	U1										t_u1MasterSlave;
 	U2										t_u2Data;
-	U1										t_u1Ret;
+	ZORN									t_udRet;
 	U4										t_u4AddressMask;
 #if ( SPI_CFG_SENDDMASTOP_TIMEOUT < PIL_SPI_WAIT_MAX ) || ( SPI_CFG_RECEIVEDMASTOP_TIMEOUT < PIL_SPI_WAIT_MAX ) || ( SPI_CFG_ASYNCDMASTART_TIMEOUT  < PIL_SPI_WAIT_MAX )
 	U4										t_u4CountVal;
@@ -313,7 +240,7 @@ U1	Spi_AsyncTransmit( U1 t_u1ModeCChannelID, const Spi_ModeC_DataType* t_pcstSen
 
 	t_pcstChannelConfig = &cstSpi_UcfgModeCData.pstChannelConfig[t_u1ModeCChannelID];
 	t_u4AddressMask = t_pcstChannelConfig->u4AddressMask;
-	t_u1Ret = u1SPI_NO_ERROR;
+	t_udRet = (ZORN)u1SPI_NO_ERROR;
 
 	if ( ( ( (U4)t_pcstSendData & t_u4AddressMask ) == 0 )
 	  && ( ( (U4)t_pcstReceiveData & t_u4AddressMask ) == 0 ) )
@@ -351,7 +278,6 @@ U1	Spi_AsyncTransmit( U1 t_u1ModeCChannelID, const Spi_ModeC_DataType* t_pcstSen
 			/* タイムアウト判定 */
 			if( t_u4CountVal >= (U4)SPI_CFG_SENDDMASTOP_TIMEOUT )
 			{
-				t_u1Ret = u1SPI_DMA_TIMEOUT;
 				break;
 			}
 			vd_g_Gpt_BusyWait( GPT_BUSY_WAIT_1_US );
@@ -380,7 +306,6 @@ U1	Spi_AsyncTransmit( U1 t_u1ModeCChannelID, const Spi_ModeC_DataType* t_pcstSen
 			/* タイムアウト判定 */
 			if( t_u4CountVal >= (U4)SPI_CFG_RECEIVEDMASTOP_TIMEOUT )
 			{
-				t_u1Ret = u1SPI_DMA_TIMEOUT;
 				break;
 			}
 			vd_g_Gpt_BusyWait( GPT_BUSY_WAIT_1_US );
@@ -417,7 +342,6 @@ U1	Spi_AsyncTransmit( U1 t_u1ModeCChannelID, const Spi_ModeC_DataType* t_pcstSen
 				/* タイムアウト判定 */
 				if( t_u4CountVal >= (U4)SPI_CFG_ASYNCDMASTART_TIMEOUT )
 				{
-					t_u1Ret = u1SPI_DMA_TIMEOUT;
 					break;
 				}
 				vd_g_Gpt_BusyWait( GPT_BUSY_WAIT_1_US );
@@ -431,10 +355,10 @@ U1	Spi_AsyncTransmit( U1 t_u1ModeCChannelID, const Spi_ModeC_DataType* t_pcstSen
 	}
 	else
 	{
-		t_u1Ret = u1SPI_DMA_ADDRESS_ALIGNMENT_ERROR;
+		t_udRet = (ZORN)u1SPI_DMA_ADDRESS_ALIGNMENT_ERROR;
 	}
 
-	return ( t_u1Ret );
+	return ( t_udRet );
 }
 
 /*----------------------------------------------------------------------------------------------*/
@@ -768,6 +692,97 @@ void	Spi_DeInit( void )/* 使用しているチャネルのみDeInit。 */
 		}
 
 		Pil_Spi_DisableCommunication( t_u1HwChannel );
+	}
+#endif
+}
+
+/*----------------------------------------------------------------------------------------------*/
+/*	Refresh Function																			*/
+/*	return		: none																			*/
+/*	parameters	: none																			*/
+/*----------------------------------------------------------------------------------------------*/
+void	Spi_Refresh( void )
+{
+#if ( SPI_CFG_MODEA_USE == ON )
+	const	Spi_ModeA_ChannelConfigType*	t_pcstModeAChannelConfig;
+#endif
+
+#if ( SPI_CFG_MODEB_USE == ON )
+	const	Spi_ModeB_ChannelConfigType*	t_pcstModeBChannelConfig;
+#endif
+
+#if ( ( SPI_CFG_MODEA_USE == ON ) || ( SPI_CFG_MODEB_USE == ON ) )
+	const	Pil_Spi_ChannelConfigType*		t_pcstPilChannelConfig;
+	S4										i;
+	U1										t_u1HwChannel;
+	U4										t_u4CoreId;
+	U1										t_u1RegError;
+	U1										t_u1UnitNo;
+#endif
+
+#if ( ( SPI_CFG_MODEA_USE == ON ) || ( SPI_CFG_MODEB_USE == ON ) )
+	t_u4CoreId = Bswlib_GetCoreId();
+#endif
+
+#if ( SPI_CFG_MODEA_USE == ON )
+	for( i = (S4)0; i < (S4)cstSpi_UcfgModeAData.u1ChannelNum; i++ )
+	{
+		t_pcstModeAChannelConfig = &cstSpi_UcfgModeAData.pstChannelConfig[i];
+		/* 自コアのHWCHのみリフレッシュ実施 */
+		if( t_pcstModeAChannelConfig->u4CoreId == t_u4CoreId )
+		{
+			t_u1HwChannel = t_pcstModeAChannelConfig->u1HwChannel;
+			t_pcstPilChannelConfig = &t_pcstModeAChannelConfig->stPilChannelConfig;
+
+			t_u1RegError = Pil_Spi_CheckComMode( t_u1HwChannel, t_pcstPilChannelConfig );
+
+			if( t_u1RegError == (U1)NG )
+			{
+				BSW_CFG_GETSPINLOCK_SPI();
+				/* DI_ALL(); */		/* GETSPINLOCK内でDI_ALL実施のためコメント化 */
+
+				/*  各レジスタはCTL0.EN=0のときのみ設定可能なため、EN=0とする */
+				Pil_Spi_DisableCommunication( t_u1HwChannel );
+				Pil_Spi_SetComMode( t_u1HwChannel, t_pcstPilChannelConfig );
+
+				t_u1UnitNo = Pil_Spi_GetUnitNo( t_u1HwChannel );				/* ユニット番号を取得する */
+				Pil_Spi_EnableUnit( t_u1UnitNo );								/* 対象のユニットを有効化する */
+
+				/* EI_ALL(); */		/* RELEASESPINLOCK内でEI_ALL実施のためコメント化 */
+				BSW_CFG_RELEASESPINLOCK_SPI();
+			}
+		}
+	}
+#endif
+
+#if ( SPI_CFG_MODEB_USE == ON )
+	for( i = (S4)0; i < (S4)cstSpi_UcfgModeBData.u1ChannelNum; i++ )
+	{
+		t_pcstModeBChannelConfig = &cstSpi_UcfgModeBData.pstChannelConfig[i];
+		/* 自コアのHWCHのみリフレッシュ実施 */
+		if( t_pcstModeBChannelConfig->u4CoreId == t_u4CoreId )
+		{
+			t_u1HwChannel = t_pcstModeBChannelConfig->u1HwChannel;
+			t_pcstPilChannelConfig = &t_pcstModeBChannelConfig->stPilChannelConfig;
+
+			t_u1RegError = Pil_Spi_CheckComMode( t_u1HwChannel, t_pcstPilChannelConfig );
+
+			if( t_u1RegError == (U1)NG )
+			{
+				BSW_CFG_GETSPINLOCK_SPI();
+				/* DI_ALL(); */		/* GETSPINLOCK内でDI_ALL実施のためコメント化 */
+
+				/*  各レジスタはCTL0.EN=0のときのみ設定可能なため、EN=0とする */
+				Pil_Spi_DisableCommunication( t_u1HwChannel );
+				Pil_Spi_SetComMode( t_u1HwChannel, t_pcstPilChannelConfig );
+
+				t_u1UnitNo = Pil_Spi_GetUnitNo( t_u1HwChannel );				/* ユニット番号を取得する */
+				Pil_Spi_EnableUnit( t_u1UnitNo );								/* 対象のユニットを有効化する */
+
+				/* EI_ALL(); */		/* RELEASESPINLOCK内でEI_ALL実施のためコメント化 */
+				BSW_CFG_RELEASESPINLOCK_SPI();
+			}
+		}
 	}
 #endif
 }

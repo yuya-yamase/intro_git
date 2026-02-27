@@ -29,6 +29,7 @@
 
 #include "bsw_com_st.h"           /* bsw_com_u4SysStatTbl[][] is defined in bsw_com_st.h          */
 #include "bsw_bswm_cs_status.h"   /* bsw_bswm_cs_st_u2CSStatus is defined in bsw_bswm_cs_status.h */
+#include "bsw_cannm_ch_config.h"  /* BSW_CANNM_NM_TYPE_USE(x) is defined in bsw_cannm_ch_config.h */
 
 #include "oxcan_aubif.h"
 
@@ -90,20 +91,12 @@ static volatile U1      u1_s_oxcan_br_chk                   __attribute__((secti
 
 static U4               u4_s_oxcan_sys_act;
 
-#if (BSW_CANNM_NM_TYPE_USE(Y) == BSW_USE)
-static U4               u4_s_oxcan_ecu_act;
-#endif /* #if (BSW_CANNM_NM_TYPE_USE(Y) == BSW_USE) */
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #if (OXCAN_BACK_NWORD > 0U)
 static void    vd_s_oXCANAubCsInit(void);
 #endif /* #if (OXCAN_BACK_NWORD > 0U) */
-
-#if (BSW_CANNM_NM_TYPE_USE(Y) == BSW_USE)
-static U4      u4_s_oXCANNetActvtd(U4 * u4_ap_ecu_act);
-#endif /* #if (BSW_CANNM_NM_TYPE_USE(Y) == BSW_USE) */
 
 static U2      u2_s_oXCANFatal(void);
 
@@ -123,19 +116,15 @@ void    vd_g_oXCANRstInit(void)
 {
     u4_s_oxcan_sys_act = (U4)0U;
 
-#if (BSW_CANNM_NM_TYPE_USE(Y) == BSW_USE)
-    u4_s_oxcan_ecu_act = (U4)0U;
-#endif /* #if (BSW_CANNM_NM_TYPE_USE(Y) == BSW_USE) */
-
     vd_g_oXCANAubIfInit();
 
 #if (OXCAN_LIB_CFG_EN_NMC == 1U)
     vd_g_oXCANNmcInit();
 #endif /* #if (OXCAN_LIB_CFG_EN_NMC == 1U) */
 
-#if ((OXCAN_LIB_CFG_EN_RXD == 1U) || (OXCAN_LIB_CFG_EN_RXD == 2U))
+#if (OXCAN_LIB_CFG_EN_RXD == 1U)
     vd_g_oXCANRxdInit();
-#endif /* #if ((OXCAN_LIB_CFG_EN_RXD == 1U) || (OXCAN_LIB_CFG_EN_RXD == 2U)) */
+#endif /* #if (OXCAN_LIB_CFG_EN_RXD == 1U) */
 
 #if (OXCAN_LIB_CFG_EN_SEA == 1U)
     vd_g_oXCANSysEaInit();
@@ -168,19 +157,15 @@ void    vd_g_oXCANWkupInit(void)
 {
     u4_s_oxcan_sys_act = (U4)0U;
 
-#if (BSW_CANNM_NM_TYPE_USE(Y) == BSW_USE)
-    u4_s_oxcan_ecu_act = (U4)0U;
-#endif /* #if (BSW_CANNM_NM_TYPE_USE(Y) == BSW_USE) */
-
     vd_g_oXCANAubIfInit();
 
 #if (OXCAN_LIB_CFG_EN_NMC == 1U)
     vd_g_oXCANNmcInit();
 #endif /* #if (OXCAN_LIB_CFG_EN_NMC == 1U) */
 
-#if ((OXCAN_LIB_CFG_EN_RXD == 1U) || (OXCAN_LIB_CFG_EN_RXD == 2U))
+#if (OXCAN_LIB_CFG_EN_RXD == 1U)
     vd_g_oXCANRxdInit();
-#endif /* #if ((OXCAN_LIB_CFG_EN_RXD == 1U) || (OXCAN_LIB_CFG_EN_RXD == 2U)) */
+#endif /* #if (OXCAN_LIB_CFG_EN_RXD == 1U) */
 
 #if (OXCAN_LIB_CFG_EN_SEA == 1U)
     vd_g_oXCANSysEaInit();
@@ -220,28 +205,8 @@ void    vd_g_oXCANVomEvhk(void)
     U4                  u4_t_next;
 
     u4_t_sys_last      = u4_s_oxcan_sys_act;
-    u4_t_sys_chk       = u4_g_oXCANCfgVomchk() & (U4)OXCAN_SYS_VOM;
-
-#if (BSW_CANNM_NM_TYPE_USE(Y) == BSW_USE)
-    u4_t_last          = u4_t_sys_last & ((U4)U4_MAX ^ (U4)OXCAN_SYS_VOM);
-    u4_t_sys_next      = u4_t_sys_chk | u4_t_last;
-
-    u4_t_last          = u4_s_oxcan_ecu_act & ((U4)U4_MAX ^ (U4)OXCAN_SYS_VOM);
-    u4_t_sys_chk       = u4_t_sys_chk | u4_t_last;
-    u4_s_oxcan_ecu_act = u4_t_sys_chk;
-#else
-    u4_t_sys_next      = u4_t_sys_chk;
-#endif /* #if (BSW_CANNM_NM_TYPE_USE(Y) == BSW_USE) */
-
+    u4_t_sys_next      = u4_g_oXCANCfgSyschk();
     u4_s_oxcan_sys_act = u4_t_sys_next;
-
-#if   (OXCAN_LIB_CFG_EN_RXD == 2U)
-    vd_g_oXCANRxdSysEvhk(u4_t_sys_next, u4_t_sys_chk);
-#elif (OXCAN_LIB_CFG_EN_RXD == 1U)
-    vd_g_oXCANRxdSysEvhk(u4_t_sys_next, u4_t_sys_next);
-#else
- /* do nothing */
-#endif /* #if   (OXCAN_LIB_CFG_EN_RXD == 2U) */
 
     /* ----------------------------------------------------------------------------------------------------- */
     /* Attention :                                                                                           */
@@ -261,6 +226,10 @@ void    vd_g_oXCANVomEvhk(void)
         }
     }
 
+#if (OXCAN_LIB_CFG_EN_RXD == 1U)
+    vd_g_oXCANRxdSysEvhk(u4_t_sys_next);
+#endif /* #if (OXCAN_LIB_CFG_EN_RXD == 1U) */
+
 #if (OXCAN_LIB_CFG_EN_SEA == 1U)
     vd_g_oXCANSysEaSysEvhk(u4_t_sys_next);
 #endif /* #if (OXCAN_LIB_CFG_EN_SEA == 1U) */
@@ -273,28 +242,16 @@ void    vd_g_oXCANVomEvhk(void)
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-#if (BSW_CANNM_NM_TYPE_USE(Y) == BSW_USE)
-/*===================================================================================================================================*/
 void    vd_g_oXCANMainPreTask(void)
 {
-    U4                  u4_t_vom_act;
     U4                  u4_t_sys_act;
-    U4                  u4_t_ecu_1st;
-    U4                  u4_t_ecu_2nd;
 
-    u4_t_vom_act = u4_g_oXCANCfgVomchk() & (U4)OXCAN_SYS_VOM;
-    u4_t_ecu_1st = u4_t_vom_act;
-    u4_t_sys_act = u4_s_oXCANNetActvtd(&u4_t_ecu_1st) | u4_t_vom_act;
-
+    u4_t_sys_act       = u4_g_oXCANCfgSyschk();
     u4_s_oxcan_sys_act = u4_t_sys_act;
 
-#if   (OXCAN_LIB_CFG_EN_RXD == 2U)
-    vd_g_oXCANRxdMainTask(u4_t_sys_act, u4_t_ecu_1st);
-#elif (OXCAN_LIB_CFG_EN_RXD == 1U)
-    vd_g_oXCANRxdMainTask(u4_t_sys_act, u4_t_sys_act);
-#else
- /* do nothing */
-#endif /* #if   (OXCAN_LIB_CFG_EN_RXD == 2U) */
+#if (OXCAN_LIB_CFG_EN_RXD == 1U)
+    vd_g_oXCANRxdMainTask(u4_t_sys_act);
+#endif
 
 #if (OXCAN_LIB_CFG_EN_SEA == 1U)
     vd_g_oXCANSysEaTimElpsd(u4_t_sys_act);
@@ -309,93 +266,33 @@ void    vd_g_oXCANMainPreTask(void)
 #endif /* #if (OXCAN_LIB_CFG_EN_WRH == 1U) */
 
     /* ----------------------------------------------------------------------------------------------------- */
-    BswM_CS_SetSystemStatus((U4)OXCAN_SYS_VOM, u4_t_sys_act);
+    BswM_CS_SetSystemStatus((U4)U4_MAX, u4_t_sys_act);
     BswM_CS_MainFunctionMiddle();
     /* ----------------------------------------------------------------------------------------------------- */
 
-    u4_t_ecu_2nd = u4_t_vom_act;
-    u4_t_sys_act = u4_s_oXCANNetActvtd(&u4_t_ecu_2nd) | u4_t_vom_act;
+#if (BSW_CANNM_NM_TYPE_USE(Y) == BSW_USE)
+    u4_t_sys_act = u4_g_oXCANCfgSyschk();
     if(u4_t_sys_act != u4_s_oxcan_sys_act){
-
-        u4_s_oxcan_sys_act = u4_t_sys_act;
-        u4_s_oxcan_ecu_act = u4_t_ecu_2nd;
-
-#if   (OXCAN_LIB_CFG_EN_RXD == 2U)
-        vd_g_oXCANRxdSysEvhk(u4_t_sys_act, u4_t_ecu_2nd);
-#elif (OXCAN_LIB_CFG_EN_RXD == 1U)
-        vd_g_oXCANRxdSysEvhk(u4_t_sys_act, u4_t_sys_act);
-#else
-     /* do nothing */
-#endif /* #if   (OXCAN_LIB_CFG_EN_RXD == 2U) */
-
+#if (OXCAN_LIB_CFG_EN_RXD == 1U)
+        vd_g_oXCANRxdSysEvhk(u4_t_sys_act);
+#endif /* #if (OXCAN_LIB_CFG_EN_RXD == 1U) */
 #if (OXCAN_LIB_CFG_EN_SEA == 1U)
         vd_g_oXCANSysEaSysEvhk(u4_t_sys_act);
 #endif /* #if (OXCAN_LIB_CFG_EN_SEA == 1U) */
+        u4_s_oxcan_sys_act = u4_t_sys_act;
     }
-    else if(u4_t_ecu_1st != u4_t_ecu_2nd){
-
-        u4_s_oxcan_ecu_act = u4_t_ecu_2nd;
-
-#if (OXCAN_LIB_CFG_EN_RXD == 2U)
-        vd_g_oXCANRxdSysEvhk(u4_t_sys_act, u4_t_ecu_2nd);
-#endif /* #if (OXCAN_LIB_CFG_EN_RXD == 2U) */
-    }
-    else{
-        /* do nothing */
-    }
-
-#if (OXCAN_LIB_CFG_EN_VCT == 1U)
-    vd_g_oXCANvCtMainTx(u4_t_sys_act);
-#endif /* #if (OXCAN_LIB_CFG_EN_VCT == 1U) */
-
-#if (OXCAN_LIB_CFG_EN_SEA == 1U)
-    vd_g_oXCANSysEaEvAct((U1)OXCAN_SYSEA_EAGR_1ST);
-#endif /* #if (OXCAN_LIB_CFG_EN_SEA == 1U) */
-
-    vd_g_oXCANCfgPreTask(u4_t_sys_act);
-}
-/*===================================================================================================================================*/
-#else /* #if (BSW_CANNM_NM_TYPE_USE(Y) == BSW_USE) */
-/*===================================================================================================================================*/
-void    vd_g_oXCANMainPreTask(void)
-{
-    U4                  u4_t_sys_act;
-
-    u4_t_sys_act       = u4_g_oXCANCfgVomchk() & (U4)OXCAN_SYS_VOM;
-    u4_s_oxcan_sys_act = u4_t_sys_act;
-
-#if ((OXCAN_LIB_CFG_EN_RXD == 1U) || (OXCAN_LIB_CFG_EN_RXD == 2U))
-    vd_g_oXCANRxdMainTask(u4_t_sys_act, u4_t_sys_act);
-#endif /* #if ((OXCAN_LIB_CFG_EN_RXD == 1U) || (OXCAN_LIB_CFG_EN_RXD == 2U)) */
-
-#if (OXCAN_LIB_CFG_EN_SEA == 1U)
-    vd_g_oXCANSysEaTimElpsd(u4_t_sys_act);
-#endif /* #if (OXCAN_LIB_CFG_EN_SEA == 1U) */
-
-#if (OXCAN_LIB_CFG_EN_VCT == 1U)
-    vd_g_oXCANvCtMainRx();
-#endif /* #if (OXCAN_LIB_CFG_EN_VCT == 1U) */
-
-#if (OXCAN_LIB_CFG_EN_WRH == 1U)
-    vd_g_oXCANWrhMainTask(u4_t_sys_act);
-#endif /* #if (OXCAN_LIB_CFG_EN_WRH == 1U) */
-
-    /* ----------------------------------------------------------------------------------------------------- */
-    BswM_CS_SetSystemStatus((U4)OXCAN_SYS_VOM, u4_t_sys_act);
-    BswM_CS_MainFunctionMiddle();
-    /* ----------------------------------------------------------------------------------------------------- */
-
-#if (OXCAN_LIB_CFG_EN_VCT == 1U)
-    vd_g_oXCANvCtMainTx(u4_t_sys_act);
-#endif /* #if (OXCAN_LIB_CFG_EN_VCT == 1U) */
-
-#if (OXCAN_LIB_CFG_EN_SEA == 1U)
-    vd_g_oXCANSysEaEvAct((U1)OXCAN_SYSEA_EAGR_1ST);
-#endif /* #if (OXCAN_LIB_CFG_EN_SEA == 1U) */
-
-    vd_g_oXCANCfgPreTask(u4_t_sys_act);
-}
 #endif /* #if (BSW_CANNM_NM_TYPE_USE(Y) == BSW_USE) */
+
+#if (OXCAN_LIB_CFG_EN_VCT == 1U)
+    vd_g_oXCANvCtMainTx(u4_t_sys_act);
+#endif /* #if (OXCAN_LIB_CFG_EN_VCT == 1U) */
+
+#if (OXCAN_LIB_CFG_EN_SEA == 1U)
+    vd_g_oXCANSysEaEvAct((U1)OXCAN_SYSEA_EAGR_1ST);
+#endif /* #if (OXCAN_LIB_CFG_EN_SEA == 1U) */
+
+    vd_g_oXCANCfgPreTask(u4_t_sys_act);
+}
 /*===================================================================================================================================*/
 /*  void    vd_g_oXCANMainPosTask(void)                                                                                              */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
@@ -477,20 +374,6 @@ U4      u4_g_oXCANSysActvtd(void)
     return(u4_s_oxcan_sys_act);
 }
 /*===================================================================================================================================*/
-/*  U4      u4_g_oXCANEcuActvtd(void)                                                                                                */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         OXCAN_SYS_XXX defined in oxcan_sys_def.h                                                                         */
-/*===================================================================================================================================*/
-U4      u4_g_oXCANEcuActvtd(void)
-{
-#if (BSW_CANNM_NM_TYPE_USE(Y) == BSW_USE)
-    return(u4_s_oxcan_ecu_act);
-#else
-    return(u4_s_oxcan_sys_act);
-#endif /* #if (BSW_CANNM_NM_TYPE_USE(Y) == BSW_USE) */
-}
-/*===================================================================================================================================*/
 
 #if (OXCAN_BACK_NWORD > 0U)
 
@@ -532,112 +415,6 @@ static void    vd_s_oXCANAubCsInit(void)
     }
 }
 #endif /* #if (OXCAN_BACK_NWORD > 0U) */
-/*===================================================================================================================================*/
-
-
-#if (BSW_CANNM_NM_TYPE_USE(Y) == BSW_USE)
-
-
-/*===================================================================================================================================*/
-/*  static U4      u4_s_oXCANNetActvtd(U4 * u4_ap_ecu_act)                                                                           */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static U4      u4_s_oXCANNetActvtd(U4 * u4_ap_ecu_act)
-{
-    U4                 u4_t_lpcnt;
-    U4                 u4_t_sys_chk;
-    U4                 u4_t_ecu_chk;
-    U4                 u4_t_bit;
-    U2                 u2_t_sts;
-    U1                 u1_t_mod;
-    U1                 u1_t_chk;
-
-    u4_t_sys_chk = (U4)0U;
-    u4_t_ecu_chk = (U4)0U;
-    for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)u1_g_OXCAN_NET_NUM_CH; u4_t_lpcnt++){
-
-        /* #define NM_STATE_BUS_SLEEP              (BSW_NM_STATE_BUS_SLEEP)                      */
-        /* #define NM_STATE_PREPARE_BUS_SLEEP      (BSW_NM_STATE_PREPARE_BUS_SLEEP)              */
-        /* #define NM_STATE_READY_SLEEP            (BSW_NM_STATE_READY_SLEEP)                    */
-        /* #define NM_STATE_NORMAL_OPERATION       (BSW_NM_STATE_NORMAL_OPERATION)               */
-        /* #define NM_STATE_REPEAT_MESSAGE         (BSW_NM_STATE_REPEAT_MESSAGE)                 */
-        /* #define NM_STATE_INVALID                (BSW_NM_STATE_INVALID)                        */
-        /* #define BSW_NM_STATE_BUS_SLEEP          (0x01FEU)                                     */
-        /* #define BSW_NM_STATE_PREPARE_BUS_SLEEP  (0x02FDU)                                     */
-        /* #define BSW_NM_STATE_READY_SLEEP        (0x03FCU)                                     */
-        /* #define BSW_NM_STATE_NORMAL_OPERATION   (0x04FBU)                                     */
-        /* #define BSW_NM_STATE_REPEAT_MESSAGE     (0x05FAU)                                     */
-        /* #define BSW_NM_STATE_INVALID            (0x00FFU)                                     */
-        /*                                                                                       */
-        /* Std_ReturnType Nm_GetState( NetworkHandleType nmNetworkHandle,                        */
-        /*                             Nm_StateType* nmStatePtr,                                 */
-        /*                             Nm_ModeType* nmModePtr             )                      */
-        /*                                                                                       */
-        /* comm/bsw_nm_public.h    71:typedef uint16              Bsw_Nm_StateType;              */
-        /* NmStack_Types.h         61:#define Nm_StateType        Bsw_Nm_StateType               */
-        /* comm/bsw_nm_public.h    71:typedef uint8               Bsw_Nm_ModeType;               */
-        /* NmStack_Types.h         62:#define Nm_ModeType         Bsw_Nm_ModeType                */
-        /* ComStack_Types.h        83:typedef uint8               NetworkHandleType;             */
-        /*                                                                                       */
-            
-        u2_t_sts = (U2)NM_STATE_INVALID;
-        (void)Nm_GetState((U1)st_gp_OXCAN_NET_BY_CH[u4_t_lpcnt].u2_cch, &u2_t_sts, &u1_t_mod);
-        if((u2_t_sts == (U2)NM_STATE_REPEAT_MESSAGE  ) ||
-           (u2_t_sts == (U2)NM_STATE_NORMAL_OPERATION)){
-            u4_t_bit     = st_gp_OXCAN_NET_BY_CH[u4_t_lpcnt].u4_sysbit;
-            u4_t_sys_chk |= u4_t_bit;
-            u4_t_ecu_chk |= u4_t_bit;
-        }
-        else if(u2_t_sts == (U2)NM_STATE_READY_SLEEP){
-            u4_t_sys_chk |= st_gp_OXCAN_NET_BY_CH[u4_t_lpcnt].u4_sysbit;
-        }
-        else{
-            /* do nothing */
-        }
-    }
-
-    for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)u1_g_OXCAN_NET_NUM_PN; u4_t_lpcnt++){
-
-        /* #define COMM_PNC_REQUESTED                      (BSW_COMM_PNC_REQUESTED)              */
-        /* #define COMM_PNC_READY_SLEEP                    (BSW_COMM_PNC_READY_SLEEP)            */
-        /* #define COMM_PNC_PREPARE_SLEEP                  (BSW_COMM_PNC_PREPARE_SLEEP)          */
-        /* #define COMM_PNC_NO_COMMUNICATION               (BSW_COMM_PNC_NO_COMMUNICATION)       */
-        /* #define BSW_COMM_PNC_REQUESTED                      (0U)                              */
-        /* #define BSW_COMM_PNC_READY_SLEEP                    (1U)                              */
-        /* #define BSW_COMM_PNC_PREPARE_SLEEP                  (2U)                              */
-        /* #define BSW_COMM_PNC_NO_COMMUNICATION               (3U)                              */
-        /*                                                                                       */
-        /* Std_ReturnType ComM_GetChPncMode( NetworkHandleType Channel, PNCHandleType PNC,       */
-        /*                                                     ComM_PncModeType* RequestedMode ) */
-        /*                                                                                       */
-        /* ComStack_Types.h        55:typedef uint8                PNCHandleType;                */
-        /* comm/bsw_comm_public.h 450:typedef uint8                Bsw_ComM_PncModeType;         */
-        /* ComM.h                 376:#define ComM_PncModeType     Bsw_ComM_PncModeType          */
-        /*                                                                                       */
-        u1_t_chk = (U1)COMM_PNC_NO_COMMUNICATION;
-        (void)ComM_GetChPncMode((U1)st_gp_OXCAN_NET_BY_PN[u4_t_lpcnt].u2_cch,
-                                (U1)st_gp_OXCAN_NET_BY_PN[u4_t_lpcnt].u2_pnc,
-                                &u1_t_chk);
-        if(u1_t_chk == (U1)COMM_PNC_REQUESTED){
-            u4_t_bit     = st_gp_OXCAN_NET_BY_PN[u4_t_lpcnt].u4_sysbit;
-            u4_t_sys_chk |= u4_t_bit;
-            u4_t_ecu_chk |= u4_t_bit;
-        }
-        else if(u1_t_chk == (U1)COMM_PNC_READY_SLEEP){
-            u4_t_sys_chk |= st_gp_OXCAN_NET_BY_PN[u4_t_lpcnt].u4_sysbit;
-        }
-        else{
-            /* do nothing */
-        }
-    }
-
-    (*u4_ap_ecu_act) |= u4_t_ecu_chk;
-
-    return(u4_t_sys_chk);
-}
-#endif /* #if (BSW_CANNM_NM_TYPE_USE(Y) == BSW_USE) */
 /*===================================================================================================================================*/
 /*  static U2      u2_s_oXCANFatal(void)                                                                                             */
 /* --------------------------------------------------------------------------------------------------------------------------------- */

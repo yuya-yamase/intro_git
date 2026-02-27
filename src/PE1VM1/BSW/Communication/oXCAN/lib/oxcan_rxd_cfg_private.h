@@ -57,7 +57,7 @@ extern U4                          u4_gp_oxcan_rxd_pom_elpsd[];
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-extern const U4                    u4_g_OXCAN_RXD_SYS_NET;            /* OXCAN_SYS_NET defined in oxcan_sys_def.h                    */
+extern const U4                    u4_g_OXCAN_RXD_SYS_CHK;            /* OXCAN_SYS_XXX defined in oxcan_sys_def.h                    */
 extern const U2                    u2_g_OXCAN_RXD_POM_TOUT;           /* Power-On Mask Timeout                                       */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

@@ -25,7 +25,7 @@
 #include "ar_kernel_impl.h"
 #include "ar_task.h"
 
-AR_LOCAL_FORCE_INLINE StatusType ar_set_event_current_core(clscb_t * const clscb, const EventMaskType event,
+LOCAL_INLINE StatusType ar_set_event_current_core(clscb_t * const clscb, const EventMaskType event,
     const tcb_t * const p_mtcb, ar_tcb_t * const p_atcb, const mcos_id_t tid,
     const ar_osap_config_t * const p_osapconfig);
 
@@ -42,7 +42,7 @@ AR_LOCAL_FORCE_INLINE StatusType ar_set_event_current_core(clscb_t * const clscb
   Return    :
   Note  :   called in exclusive area
  ---------------------------------------------------------------------------*/
-AR_LOCAL_FORCE_INLINE StatusType ar_set_event_current_core(
+LOCAL_INLINE StatusType ar_set_event_current_core(
     clscb_t * const clscb,
     const EventMaskType event,
     const tcb_t * const p_mtcb,
@@ -107,7 +107,7 @@ AR_LOCAL_FORCE_INLINE StatusType ar_set_event_current_core(
 
 #if (AR_OS_USE_MULTICORE == STD_ON)
 
-AR_LOCAL_FORCE_INLINE StatusType ar_set_event_internal_intercore(
+LOCAL_INLINE StatusType ar_set_event_internal_intercore(
     const TaskType task_id,
     const EventMaskType event,
     const ar_osap_config_t * const p_osapconfig);
@@ -122,7 +122,7 @@ AR_LOCAL_FORCE_INLINE StatusType ar_set_event_internal_intercore(
   Return    :
   Note  :   none
  ---------------------------------------------------------------------------*/
-AR_LOCAL_FORCE_INLINE StatusType ar_set_event_internal_intercore(
+LOCAL_INLINE StatusType ar_set_event_internal_intercore(
     const TaskType task_id,
     const EventMaskType event,
     const ar_osap_config_t * const p_osapconfig)
@@ -175,7 +175,7 @@ AR_LOCAL_FORCE_INLINE StatusType ar_set_event_internal_intercore(
 
 #else /* (AR_OS_USE_MULTICORE == STD_ON) */
 
-AR_LOCAL_FORCE_INLINE StatusType ar_set_event_internal_singlecore(
+LOCAL_INLINE StatusType ar_set_event_internal_singlecore(
     const TaskType task_id,
     const EventMaskType event,
     const ar_osap_config_t * const p_osapconfig);
@@ -190,7 +190,7 @@ AR_LOCAL_FORCE_INLINE StatusType ar_set_event_internal_singlecore(
   Return    :
   Note  :   none
  ---------------------------------------------------------------------------*/
-AR_LOCAL_FORCE_INLINE StatusType ar_set_event_internal_singlecore(
+LOCAL_INLINE StatusType ar_set_event_internal_singlecore(
     const TaskType task_id,
     const EventMaskType event,
     const ar_osap_config_t * const p_osapconfig)
@@ -215,7 +215,7 @@ AR_LOCAL_FORCE_INLINE StatusType ar_set_event_internal_singlecore(
 
 #endif /* (AR_OS_USE_MULTICORE == STD_ON) */
 
-AR_LOCAL_FORCE_INLINE void ar_set_event_call_errorhook(
+LOCAL_INLINE void ar_set_event_call_errorhook(
     StatusType  status,
     clscb_t     *clscb,
     TaskType task_id,
@@ -225,7 +225,7 @@ AR_LOCAL_FORCE_INLINE void ar_set_event_call_errorhook(
 /*
  * a part of SetEvent
  */
-AR_LOCAL_FORCE_INLINE void ar_set_event_call_errorhook(
+LOCAL_INLINE void ar_set_event_call_errorhook(
     StatusType  status,
     clscb_t     *clscb,
     TaskType task_id,

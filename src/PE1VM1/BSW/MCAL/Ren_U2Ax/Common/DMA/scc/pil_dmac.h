@@ -1,4 +1,4 @@
-/* pil_dmac-r04-3000-0200-b-v00 */
+/* pil_dmac-r04-3000-0100-a-v01 */
 /************************************************************************************************/
 /*																								*/
 /*		PIL sDMAC Driver																		*/
@@ -1852,32 +1852,6 @@ uint32		Pil_Dmac_CheckRCHSReg( void );
 /*	caveat			:	---																		*/
 /************************************************************************************************/
 void	Pil_Dmac_DisableTransAll( void );
-#endif
-
-#if (( DMA_CFG_DMA0_ACCESS == STD_ON ) || ( DMA_CFG_DMA1_ACCESS == STD_ON ))
-/************************************************************************************************/
-/*	Service name	:	SetSpidAllCh															*/
-/*	Reentrancy		:	Non Re-entrant															*/
-/*	Parameters (in)	:	none																	*/
-/*	Return value	:	none																	*/
-/*	caveat			:	Perform this function before turning on the DMA guard function			*/
-/*						 of functional safety.													*/
-/************************************************************************************************/
-void	Pil_Dmac_SetSpidAllCh(void);
-#endif
-
-#if (( DMA_CFG_DMA0_ACCESS == STD_ON ) || ( DMA_CFG_DMA1_ACCESS == STD_ON ))
-#if ( DMA_CFG_REG_CHK == STD_ON )
-/************************************************************************************************/
-/*	Service name	:	Checkregisters															*/
-/*	Reentrancy		:	Non Re-entrant 															*/
-/*	Parameters (in)	:	none																	*/
-/*	Return value	:	Diagnosis result														*/
-/*							(OK(=0) / NG(=1))													*/
-/*	caveat			:	None																	*/
-/************************************************************************************************/
-uint32	Pil_Dmac_CheckReg_ASIL(void);
-#endif
 #endif
 
 #endif /* PIL_DMAC_H */

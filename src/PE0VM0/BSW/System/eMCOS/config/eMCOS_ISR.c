@@ -35,6 +35,16 @@
 /*----------------------------------------------------------------------------
  *      Prototypes
  *--------------------------------------------------------------------------*/
+ISR(eMCOS_ISR_INTOSTM5TINT);
+ISR(eMCOS_ISR_INTTAUD0I14);
+ISR(eMCOS_ISR_INTRCAN3REC);
+ISR(eMCOS_ISR_INTRCAN3TRX);
+ISR(eMCOS_ISR_INTRCAN5REC);
+ISR(eMCOS_ISR_INTRCAN5TRX);
+ISR(eMCOS_ISR_INTRCAN7REC);
+ISR(eMCOS_ISR_INTRCAN7TRX);
+ISR(eMCOS_ISR_INTRCAN11REC);
+ISR(eMCOS_ISR_INTRCAN11TRX);
 
 /*----------------------------------------------------------------------------
  *		Codes

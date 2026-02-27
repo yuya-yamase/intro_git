@@ -24,7 +24,6 @@
 #include "oxcan.h"                /* BSW_COM_CFG_CHNUM is defined in Com_Cfg.h                    */
                                   /* Com_Cfg.h is included in CS_Can_Cfg.h                        */
                                   /* CS_Can_Cfg.h is included in oxcan.h                          */
-#include "bsw_cannm_ch_config.h"  /* BSW_CANNM_NM_TYPE_USE(x) is defined in bsw_cannm_ch_config.h */
 #include "oxcan_usrhk.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -42,12 +41,6 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-typedef struct{
-    U4      u4_sysbit;        /* OXCAN_SYS_###                      */
-    U2      u2_cch;           /* ComM Communication Channel         */
-    U2      u2_pnc;           /* Partial Network Cluster Identifier */
-}ST_OXCAN_NET;                /* Network                            */
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -61,21 +54,13 @@ void    vd_g_oXCANCfgPreTask(const U4 u4_a_SYS_ACT);
 void    vd_g_oXCANCfgPosTask(const U4 u4_a_SYS_ACT, const U2 u2_a_FATAL);                    /* u1_a_FATAL : OXCAN_FATAL_AUB_XXX */
 void    vd_g_oXCANCfgShtdwn(void);
 
-U4      u4_g_oXCANCfgVomchk(void);
+U4      u4_g_oXCANCfgSyschk(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 extern const U4                 u4_g_OXCAN_WKSRC_CHK;
 extern const U1                 u1_gp_OXCAN_CTRLR_BY_CH[BSW_COM_CFG_CHNUM];
-
-#if (BSW_CANNM_NM_TYPE_USE(Y) == BSW_USE)
-extern const ST_OXCAN_NET       st_gp_OXCAN_NET_BY_CH[];
-extern const U1                 u1_g_OXCAN_NET_NUM_CH;
-
-extern const ST_OXCAN_NET       st_gp_OXCAN_NET_BY_PN[];
-extern const U1                 u1_g_OXCAN_NET_NUM_PN;
-#endif /* #if (BSW_CANNM_NM_TYPE_USE(Y) == BSW_USE) */
 
 #endif /* OXCAN_CFG_H */
 

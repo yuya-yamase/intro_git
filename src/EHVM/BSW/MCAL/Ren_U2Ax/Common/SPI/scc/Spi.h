@@ -30,11 +30,6 @@
 #define		SPI_QM							(0)
 #define		SPI_ASIL						(1)
 
-/* SPI AsyncTransmit ERROR status */
-#define 	u1SPI_NO_ERROR						((U1)0U)
-#define 	u1SPI_DMA_ADDRESS_ALIGNMENT_ERROR	((U1)1U)
-#define 	u1SPI_DMA_TIMEOUT					((U1)2U)
-
 /* Spi SpinLockID */
 typedef	struct{
 	U2										u2SpinlockId;
@@ -60,28 +55,6 @@ typedef enum
   /* The last transmission of the Sequence has been canceled */
   SPI_SEQ_CANCELED
 } Spi_SeqResultType;
-
-/* Definition of Regsiter Check Result */
-typedef enum
-{
-	/* Check OK */
-	SPI_REGCHK_OK = 0,
-	/* Check NG, no refresh */
-	SPI_REGCHK_NG,
-	/* Check NG, rewrite OK */
-	SPI_REGCHK_REFRESH_SUCCESS,
-	/* Check NG, rewrite NG */
-	SPI_REGCHK_REFRESH_FAILED
-} Spi_RegChkResultType;
-
-/* Definition of Regsiter Check Mode */
-typedef enum
-{
-	/* Register check only */
-	SPI_REGCHK_MODE_NORMAL = 0,
-	/* Register check with refresh */
-	SPI_REGCHK_MODE_WITH_REFRESH
-} Spi_RegChkModeType;
 
 /* Spi Mode A Channel Config Type */
 typedef	struct{
@@ -172,14 +145,14 @@ U4		Spi_SyncTransmit_SingleFrame( U1 t_u1ModeAChannelID, U4 t_u4SendData );
 /************************************************************************************************/
 Std_ReturnType Spi_SyncTransmit ( Spi_SequenceType Sequence );
 
-/************************************************************************************************/
-/*  Service name	:   Spi_GetSequenceResult													*/
-/*  Reentrancy		:   Re-entrant																*/
-/*  Parameters(in)	:   Sequence - Sequence ID													*/
-/*  Return value	:   Spi_SeqResultType (SPI_SEQ_OK/SPI_SEQ_PENDING/SPI_SEQ_FAILED)			*/
-/*  Caveat			:   Call after Spi_PrePortInit().											*/
-/*					:   SPI_SEQ_CANCELED is not supported										*/
-/************************************************************************************************/
+/************************************************************************************/
+/*  Service name	:   Spi_GetSequenceResult										*/
+/*  Reentrancy		:   Re-entrant													*/
+/*  Parameters(in)	:   Sequence - Sequence ID										*/
+/*  Return value	:   Spi_SeqResultType (SPI_SEQ_OK/SPI_SEQ_PENDING)				*/
+/*  Caveat			:   Call after Spi_PrePortInit().								*/
+/*					:   SPI_SEQ_FAILED/SPI_SEQ_CANCELED is not supported			*/
+/************************************************************************************/
 Spi_SeqResultType Spi_GetSequenceResult ( Spi_SequenceType Sequence );
 
 /************************************************************************************/
@@ -193,16 +166,6 @@ Spi_SeqResultType Spi_GetSequenceResult ( Spi_SequenceType Sequence );
 /*  Caveat			:   Call after Spi_PrePortInit().								*/
 /************************************************************************************/
 Std_ReturnType Spi_SetupEB ( Spi_ChannelType Channel,  const Spi_DataBufferType* SrcDataBufferPtr, Spi_DataBufferType* DesDataBufferPtr, Spi_NumberOfDataType Length );
-
-/************************************************************************************************/
-/*  Service name	:   Spi_CheckRegister														*/
-/*	Reentrancy		:	Concurrency Safe for different unit numbers								*/
-/*	Parameters (in)	:	Channel - Channel ID													*/
-/*					:	Mode - RegChkMode														*/
-/*	Return value	:	Register Check Result													*/
-/*  Caveat			:   Call after Spi_PrePortInit().											*/
-/************************************************************************************************/
-Spi_RegChkResultType	Spi_CheckRegister( Spi_ChannelType Channel, Spi_RegChkModeType Mode );
 #endif
 
 #if ( SPI_CFG_MODEB_USE == ON )
@@ -227,7 +190,7 @@ U4		Spi_InterruptTransmit( U1 t_u1ModeBChannelID, U4 t_u4SendData );
 /*					:	SendData(Async) - Send Data Buffer Pointer								*/
 /*					:	Times - Send Receive Data Times (1 - 0xFFFF(1 times = 1/2/4byte))		*/
 /*	Parameters (out):	ReceiveData(Async) - Receive Data Buffer Pointer						*/
-/*	Return value	:	Result( u1SPI_NO_ERROR / u1SPI_DMA_ADDRESS_ALIGNMENT_ERROR / u1SPI_DMA_TIMEOUT ) */
+/*	Return value	:	Result( No Error(==0) or Error(!=0) )									*/
 /*	Caveat			:	・同一ハードユニットは全て同一コアで使用すること						*/
 /*					:	・通信中に再発行した場合は通信を強制停止し、							*/
 /*					:	  新しいデータを再セットして通信する。									*/
@@ -235,7 +198,7 @@ U4		Spi_InterruptTransmit( U1 t_u1ModeBChannelID, U4 t_u4SendData );
 /*					:	  本APIの発行禁止														*/
 /*					:	・DMAC/DTSの両方をサポート												*/
 /************************************************************************************************/
-U1	Spi_AsyncTransmit( U1 t_u1ModeCChannelID, const Spi_ModeC_DataType* t_pcstSendData, const Spi_ModeC_DataType* t_pcstReceiveData, U2 t_u2Times );
+ZORN	Spi_AsyncTransmit( U1 t_u1ModeCChannelID, const Spi_ModeC_DataType* t_pcstSendData, const Spi_ModeC_DataType* t_pcstReceiveData, U2 t_u2Times );
 
 /************************************************************************************************/
 /*	Service name	:	Transmit Status Get Function											*/
@@ -298,6 +261,15 @@ void	Spi_PrePortInit( void );
 /*	Caveat			:	none																	*/
 /************************************************************************************************/
 void	Spi_DeInit( void );
+
+/************************************************************************************************/
+/*	Function		:	Refresh																	*/
+/*	Schedule		:	Refresh																	*/
+/*	Parameters (in)	:	none																	*/
+/*	Relation Module	:	none																	*/
+/*	Caveat			:	・本APIは全コアのアイドルタスクよりコールすること						*/
+/************************************************************************************************/
+void	Spi_Refresh( void );
 
 #if ( SPI_CFG_MODEC_USE == ON )
 /************************************************************************************************/

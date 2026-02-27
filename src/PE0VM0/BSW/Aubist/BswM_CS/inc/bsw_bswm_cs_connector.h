@@ -143,8 +143,6 @@ void bsw_bswm_cs_EcuMSetWakeupEv_dummy( uint32 sources );
 /*--------------------------------------------------------------------------*/
 /* Constants                                                                */
 /*--------------------------------------------------------------------------*/
-extern  BswConst  Bsw_BswmCS_DcmComMFuncTblType  bsw_bswm_cs_cnct_Dcm_ComM_Func;
-extern  BswConst  Bsw_BswmCS_DcmPduRFuncTblType  bsw_bswm_cs_cnct_Dcm_PduR_Func;
 extern  BswConst  Bsw_BswmCS_DemFuncTblType      bsw_bswm_cs_cnct_Dem_Func;
 extern  BswConst  Bsw_BswmCS_BswMFuncTblType     bsw_bswm_cs_cnct_BswM_Func;
 extern  BswConst  Bsw_BswmCS_EcuMFuncTblType     bsw_bswm_cs_cnct_EcuM_Func;

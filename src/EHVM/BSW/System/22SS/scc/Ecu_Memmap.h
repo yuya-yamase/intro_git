@@ -71,10 +71,6 @@ extern uint32 __ghsbegin_bsw_n_rvar_top[];
 extern uint32 __ghsbegin_bsw_n_rvar_bottom[];
 extern uint32 BSW_N_RVAR_SIZE[];
 
-extern uint32 __ghsbegin_mcal_ram_top[];
-extern uint32 __ghsbegin_mcal_ram_bottom[];
-extern uint32 MCAL_RAM_SIZE[];
-
 extern uint32 __ghsbegin_cluster2_share_ramtop[];
 extern uint32 __ghsbegin_cluster2_share_ramend[];
 extern uint32 BSW_SHARE_DATA_SIZE[];

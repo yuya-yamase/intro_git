@@ -70,31 +70,31 @@ extern const ar_spinlock_config_t ** const ar_spinlock_nestcb_table[];
 
 #ifdef AR_SPINLOCK_LOCAL_ENABLE
 
-AR_LOCAL_FORCE_INLINE void ar_spinlock_get(
+LOCAL_INLINE void ar_spinlock_get(
     ar_spinlockcb_t * const p_spinlockcb,
     ar_spinlockcb_t ** const pp_wait_spinlockcb);
-AR_LOCAL_FORCE_INLINE void ar_spinlock_release(
+LOCAL_INLINE void ar_spinlock_release(
     ar_spinlockcb_t * const p_spinlockcb);
-AR_LOCAL_FORCE_INLINE boolean ar_spinlock_try_to_get(
+LOCAL_INLINE boolean ar_spinlock_try_to_get(
     ar_spinlockcb_t * const p_spinlockcb);
-AR_LOCAL_FORCE_INLINE boolean ar_check_nest_spn_order(
+LOCAL_INLINE boolean ar_check_nest_spn_order(
     const ar_spinlock_config_t * const p_get_spnconfig,
     const ar_spinlockcb_t * const p_last_spinlockcb);
-AR_LOCAL_FORCE_INLINE ar_context_spinlockcbs_t *ar_spinlock_get_contextcb(
+LOCAL_INLINE ar_context_spinlockcbs_t *ar_spinlock_get_contextcb(
     clscb_t * const clscb,
     ar_intcb_t * const ar_intcb,
     void ** const pp_ownercb);
-AR_LOCAL_FORCE_INLINE StatusType ar_spinlock_hold(
+LOCAL_INLINE StatusType ar_spinlock_hold(
     ar_spinlockcb_t * const p_spinlockcb,
     const ar_spinlock_config_t * const p_config,
     const mcos_id_t lcid,
     void * const p_ownercb,
     ar_spinlockcb_t ** const pp_last_spinlockcb);
-AR_LOCAL_FORCE_INLINE void ar_spinlock_pre_release(
+LOCAL_INLINE void ar_spinlock_pre_release(
     const ar_spinlock_config_t * const p_rel_spnconfig,
     const ar_spinlockcb_t * const p_last_spinlockcb);
 
-AR_LOCAL_FORCE_INLINE void ar_resume_interrupts(const ar_spinlock_config_t *p_config, clscb_t *clscb);
+LOCAL_INLINE void ar_resume_interrupts(const ar_spinlock_config_t *p_config, clscb_t *clscb);
 
 /*---------------------------------------------------------------------------
   ar_spinlock_get
@@ -105,7 +105,7 @@ AR_LOCAL_FORCE_INLINE void ar_resume_interrupts(const ar_spinlock_config_t *p_co
   Return    :   none
   Note  :   Called in the critical section.
  ---------------------------------------------------------------------------*/
-AR_LOCAL_FORCE_INLINE void ar_spinlock_get(
+LOCAL_INLINE void ar_spinlock_get(
     ar_spinlockcb_t * const p_spinlockcb,
     ar_spinlockcb_t ** const pp_wait_spinlockcb)
 {
@@ -132,7 +132,7 @@ AR_LOCAL_FORCE_INLINE void ar_spinlock_get(
   Return    :   none
   Note  :   none
  ---------------------------------------------------------------------------*/
-AR_LOCAL_FORCE_INLINE void ar_spinlock_release(
+LOCAL_INLINE void ar_spinlock_release(
     ar_spinlockcb_t * const p_spinlockcb)
 {
 #if (AR_OS_USE_MULTICORE == STD_ON)
@@ -150,7 +150,7 @@ AR_LOCAL_FORCE_INLINE void ar_spinlock_release(
   Return    :   none
   Note  :   none
  ---------------------------------------------------------------------------*/
-AR_LOCAL_FORCE_INLINE boolean ar_spinlock_try_to_get(
+LOCAL_INLINE boolean ar_spinlock_try_to_get(
     ar_spinlockcb_t * const p_spinlockcb)
 {
     boolean lock;
@@ -175,7 +175,7 @@ AR_LOCAL_FORCE_INLINE boolean ar_spinlock_try_to_get(
   Return    :
   Note  :   none
  ---------------------------------------------------------------------------*/
-AR_LOCAL_FORCE_INLINE boolean ar_check_nest_spn_order(
+LOCAL_INLINE boolean ar_check_nest_spn_order(
     const ar_spinlock_config_t * const p_get_spnconfig,
     const ar_spinlockcb_t * const p_last_spinlockcb)
 {
@@ -254,7 +254,7 @@ AR_LOCAL_FORCE_INLINE boolean ar_check_nest_spn_order(
 /*
  * a part of TryToGetSpinlock, GetSpinlock
  */
-AR_LOCAL_FORCE_INLINE ar_context_spinlockcbs_t *ar_spinlock_get_contextcb(
+LOCAL_INLINE ar_context_spinlockcbs_t *ar_spinlock_get_contextcb(
     clscb_t * const clscb,
     ar_intcb_t * const ar_intcb,
     void ** const pp_ownercb)
@@ -288,7 +288,7 @@ AR_LOCAL_FORCE_INLINE ar_context_spinlockcbs_t *ar_spinlock_get_contextcb(
 /*
  * a part of TryToGetSpinlock, GetSpinlock
  */
-AR_LOCAL_FORCE_INLINE StatusType ar_spinlock_hold(
+LOCAL_INLINE StatusType ar_spinlock_hold(
     ar_spinlockcb_t * const p_spinlockcb,
     const ar_spinlock_config_t * const p_config,
     const mcos_id_t lcid,
@@ -370,7 +370,7 @@ AR_LOCAL_FORCE_INLINE StatusType ar_spinlock_hold(
 /*
  * a part of ReleaseGetSpinlock, ar_spinlock_force_release
  */
-AR_LOCAL_FORCE_INLINE void ar_spinlock_pre_release(
+LOCAL_INLINE void ar_spinlock_pre_release(
     const ar_spinlock_config_t * const p_rel_spnconfig,
     const ar_spinlockcb_t * const p_last_spinlockcb)
 {
@@ -416,7 +416,7 @@ AR_LOCAL_FORCE_INLINE void ar_spinlock_pre_release(
 /*
  * a part of ReleaseGetSpinlock, ReleaseGetSpinlockSkipErrorChk
  */
-AR_LOCAL_FORCE_INLINE void ar_resume_interrupts(const ar_spinlock_config_t *p_config, clscb_t *clscb)
+LOCAL_INLINE void ar_resume_interrupts(const ar_spinlock_config_t *p_config, clscb_t *clscb)
 {
     ar_intcb_t      *ar_intcb;
 

@@ -239,7 +239,7 @@ void    vd_g_oXCANUsrhkTrcvToIna(const U1 u1_a_CH)
 #endif /* #if (BSW_CANIF_CFG_MPU_CONTROLLERNUM != 0U) */
 }
 /*===================================================================================================================================*/
-/*  void    vd_g_oXCANUsrhkIPduTraReq(const U1 u1_a_CH, const U2 u2_a_IPDU_TX, const U1 u1_a_TXMODE)                                 */
+/*  void    vd_g_oXCANUsrhkTraReq(const U1 u1_a_CH, const U2 u2_a_IPDU_TX, const U1 u1_a_TXMODE)                                     */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      --> u2_a_IPDU_TX     : u2_a_IPDU_TX is defined as MSG_[IPDU_NAME]_TXCH[n] in Aubist/Com/../Com_Cfg.h             */
 /*                  --> u1_a_CH          : Subnet Channel                                                                            */
@@ -248,24 +248,24 @@ void    vd_g_oXCANUsrhkTrcvToIna(const U1 u1_a_CH)
 /*                          COM_TX_MODE_PERIODIC                                                                                     */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_oXCANUsrhkIPduTraReq(const U1 u1_a_CH, const U2 u2_a_IPDU_TX, const U1 u1_a_TXMODE)
+void    vd_g_oXCANUsrhkTraReq(const U1 u1_a_CH, const U2 u2_a_IPDU_TX, const U1 u1_a_TXMODE)
 {
-    /* ------------------------------------------------------------------------------------------------------ */
-    /* WARNING :                                                                                              */
-    /* ------------------------------------------------------------------------------------------------------ */
-    /* 1. vd_g_oXCANUsrhkIPduTraReq notifies the timing when the transmission request of the message from COM */
-    /*    layer to the DRIVER layer.                                                                          */
-    /*                                                                                                        */
-    /* 2. vd_g_oXCANUsrhkIPduTraReq is called from BswM_CS_MainFunctionMiddle or BswM_CS_MainFunctionHigh     */
-    /*    depending on following configuration :                                                              */
-    /*                                                                                                        */
-    /*    BswM_CS\cfg\BswM_CS_Cfg.h                                                                           */
-    /*    #define BSW_BSWM_CS_CFG_MSGDELIVER                                                                  */
-    /*                                                                                                        */
-    /*    If BSW_BSWM_CS_CFG_MSGDELIVER is configured with BSWM_CS_MSGDELIVER_HIGH,                           */
-    /*    vd_g_oXCANUsrhkIPduTraReq could be called from interrupts service routine.                          */
-    /*    Therefore, user shall verify if RAM sharing issue will not be caused.                               */
-    /* ------------------------------------------------------------------------------------------------------ */
+    /* -------------------------------------------------------------------------------------------------- */
+    /* WARNING :                                                                                          */
+    /* -------------------------------------------------------------------------------------------------- */
+    /* 1. vd_g_oXCANUsrhkTraReq notifies the timing when the transmission request of the message from COM */
+    /*    layer to the DRIVER layer.                                                                      */
+    /*                                                                                                    */
+    /* 2. vd_g_oXCANUsrhkTraReq is called from BswM_CS_MainFunctionMiddle or BswM_CS_MainFunctionHigh     */
+    /*    depending on following configuration :                                                          */
+    /*                                                                                                    */
+    /*    BswM_CS\cfg\BswM_CS_Cfg.h                                                                       */
+    /*    #define BSW_BSWM_CS_CFG_MSGDELIVER                                                              */
+    /*                                                                                                    */
+    /*    If BSW_BSWM_CS_CFG_MSGDELIVER is configured with BSWM_CS_MSGDELIVER_HIGH,                       */
+    /*    vd_g_oXCANUsrhkTraReq could be called from interrupts service routine.                          */
+    /*    Therefore, user shall verify if RAM sharing issue will not be caused.                           */
+    /* -------------------------------------------------------------------------------------------------- */
 
     /* Users Configuration */
 
@@ -283,29 +283,29 @@ void    vd_g_oXCANUsrhkIPduTraReq(const U1 u1_a_CH, const U2 u2_a_IPDU_TX, const
 /*  }                                       */
 }
 /*===================================================================================================================================*/
-/*  void    vd_g_oXCANUsrhkIPduTraAck(const U2 u2_a_IPDU_TX)                                                                         */
+/*  void    vd_g_oXCANUsrhkTraAck(const U2 u2_a_IPDU_TX)                                                                             */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      --> u2_a_IPDU_TX     : u2_a_IPDU_TX is defined as MSG_[IPDU_NAME]_TXCH[n] in Aubist/Com/../Com_Cfg.h             */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_oXCANUsrhkIPduTraAck(const U2 u2_a_IPDU_TX)
+void    vd_g_oXCANUsrhkTraAck(const U2 u2_a_IPDU_TX)
 {
-    /* ------------------------------------------------------------------------------------------------------ */
-    /* WARNING :                                                                                              */
-    /* ------------------------------------------------------------------------------------------------------ */
-    /* 1. vd_g_oXCANUsrhkIPduTraAck notifies the timing when the transmission request of the message from     */
-    /*    the COM layer to the DRIVER layer.                                                                  */
-    /*                                                                                                        */
-    /* 2. vd_g_oXCANUsrhkIPduTraAck is called from BswM_CS_MainFunctionMiddle or BswM_CS_MainFunctionHigh     */
-    /*    depending on following configuration :                                                              */
-    /*                                                                                                        */
-    /*    BswM_CS\cfg\BswM_CS_Cfg.h                                                                           */
-    /*    #define BSW_BSWM_CS_CFG_MSGDELIVER                                                                  */
-    /*                                                                                                        */
-    /*    If BSW_BSWM_CS_CFG_MSGDELIVER is configured with BSWM_CS_MSGDELIVER_HIGH,                           */
-    /*    vd_g_oXCANUsrhkIPduTraAck could be called from interrupts service routine.                          */
-    /*    Therefore, user shall verify if RAM sharing issue will not be caused.                               */
-    /* ------------------------------------------------------------------------------------------------------ */
+    /* -------------------------------------------------------------------------------------------------- */
+    /* WARNING :                                                                                          */
+    /* -------------------------------------------------------------------------------------------------- */
+    /* 1. vd_g_oXCANUsrhkTraAck notifies the timing when the transmission request of the message from     */
+    /*    the COM layer to the DRIVER layer.                                                              */
+    /*                                                                                                    */
+    /* 2. vd_g_oXCANUsrhkTraAck is called from BswM_CS_MainFunctionMiddle or BswM_CS_MainFunctionHigh     */
+    /*    depending on following configuration :                                                          */
+    /*                                                                                                    */
+    /*    BswM_CS\cfg\BswM_CS_Cfg.h                                                                       */
+    /*    #define BSW_BSWM_CS_CFG_MSGDELIVER                                                              */
+    /*                                                                                                    */
+    /*    If BSW_BSWM_CS_CFG_MSGDELIVER is configured with BSWM_CS_MSGDELIVER_HIGH,                       */
+    /*    vd_g_oXCANUsrhkTraAck could be called from interrupts service routine.                          */
+    /*    Therefore, user shall verify if RAM sharing issue will not be caused.                           */
+    /* -------------------------------------------------------------------------------------------------- */
 
     /* Users Configuration */
 
@@ -323,26 +323,26 @@ void    vd_g_oXCANUsrhkIPduTraAck(const U2 u2_a_IPDU_TX)
 /*  }                                       */
 }
 /*===================================================================================================================================*/
-/*  void    vd_g_oXCANUsrhkIPduRecAck(const U2 u2_a_IPDU_RX)                                                                         */
+/*  void    vd_g_oXCANUsrhkRecAck(const U2 u2_a_IPDU_RX)                                                                             */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      --> u2_a_IPDU_RX     : u2_a_IPDU_RX is defined as MSG_[IPDU_NAME]_RXCH[n] in Aubist/Com/../Com_Cfg.h             */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_oXCANUsrhkIPduRecAck(const U2 u2_a_IPDU_RX)
+void    vd_g_oXCANUsrhkRecAck(const U2 u2_a_IPDU_RX)
 {
-    /* ------------------------------------------------------------------------------------------------------ */
-    /* WARNING :                                                                                              */
-    /* ------------------------------------------------------------------------------------------------------ */
-    /* vd_g_oXCANUsrhkIPduRecAck is called from BswM_CS_MainFunctionMiddle or BswM_CS_MainFunctionHigh        */
-    /* depending on following configuration :                                                                 */
-    /*                                                                                                        */
-    /* BswM_CS\cfg\BswM_CS_Cfg.h                                                                              */
-    /* #define BSW_BSWM_CS_CFG_MSGDELIVER                                                                     */
-    /*                                                                                                        */
-    /* If BSW_BSWM_CS_CFG_MSGDELIVER is configured with BSWM_CS_MSGDELIVER_HIGH, vd_g_oXCANUsrhkIPduRecAck    */
-    /* could be called from interrupts service routine. Therefore, user shall verify if RAM sharing issue     */
-    /* will not be caused.                                                                                    */
-    /* ------------------------------------------------------------------------------------------------------ */
+    /* ---------------------------------------------------------------------------------------------------- */
+    /* WARNING :                                                                                            */
+    /* ---------------------------------------------------------------------------------------------------- */
+    /* vd_g_oXCANUsrhkRecAck is called from BswM_CS_MainFunctionMiddle or BswM_CS_MainFunctionHigh          */
+    /* depending on following configuration :                                                               */
+    /*                                                                                                      */
+    /* BswM_CS\cfg\BswM_CS_Cfg.h                                                                            */
+    /* #define BSW_BSWM_CS_CFG_MSGDELIVER                                                                   */
+    /*                                                                                                      */
+    /* If BSW_BSWM_CS_CFG_MSGDELIVER is configured with BSWM_CS_MSGDELIVER_HIGH, vd_g_oXCANUsrhkRecAck      */
+    /* could be called from interrupts service routine. Therefore, user shall verify if RAM sharing issue   */
+    /* will not be caused.                                                                                  */
+    /* ---------------------------------------------------------------------------------------------------- */
 
     /* Users Configuration */
 
@@ -363,18 +363,6 @@ void    vd_g_oXCANUsrhkIPduRecAck(const U2 u2_a_IPDU_RX)
 /*      default:                                            */
 /*          break;                                          */
 /*  }                                                       */
-}
-
-/*===================================================================================================================================*/
-/*  void    vd_g_oXCANUsrhkOmaRecRslt(const U2 u2_a_OMA_RX, const U1 u1_a_OMA_VR)                                                    */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      --> u2_a_OMA_RX     : OMA(On-Board MAC Authentication) RX Identifier                                             */
-/*                  --> u1_a_OMA_VR     : u1_a_OMA_VR is SecOC_VerificationStatusType                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void    vd_g_oXCANUsrhkOmaRecRslt(const U2 u2_a_OMA_RX, const U1 u1_a_OMA_VR)
-{
-
 }
 
 /*===================================================================================================================================*/

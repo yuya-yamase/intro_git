@@ -72,7 +72,6 @@ typedef void (*TrustedFunctionRefType)(TrustedFunctionIndexType FunctionIndex,
 struct ar_tfn_config_st {
     TrustedFunctionRefType  tf_addr;    /* Trusted function address */
     const ar_osap_config_t *tf_osap;    /* Trusted function application */
-    uint32_t                stack_size; /* Stack usage */
 #if (AR_OS_USE_MULTICORE == STD_ON)
     mcos_id_t               tf_lcid;    /* Core to execute on */
 #endif /* (AR_OS_USE_MULTICORE == STD_ON) */
@@ -87,8 +86,7 @@ extern StatusType ar_get_application_state_impl(
         ApplicationType appl_id, ApplicationStateRefType p_state);
 
 extern void ar_sc3_tf_wrapper(boolean is_protected, uint32 option,
-                              TrustedFunctionRefType entry, TrustedFunctionIndexType FunctionIndex, TrustedFunctionParameterRefType FunctionParams,
-                              uint32 stack_size);
+                              TrustedFunctionRefType entry, TrustedFunctionIndexType FunctionIndex, TrustedFunctionParameterRefType FunctionParams);
 
 #define OS_STOP_SEC_CODE
 #include "Os_MemMap.h"

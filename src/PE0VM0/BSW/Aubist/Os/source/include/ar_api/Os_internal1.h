@@ -33,25 +33,6 @@
 #define OS_SW_PATCH_VERSION             (0U)
 
 #include "Std_Types.h"
-#if defined __ARMCC_VERSION
-#if defined __arm__
-#if __ARMCC_VERSION >= 6000000U
-#define AR_FORCE_INLINE                 inline __attribute__((always_inline))
-#define AR_LOCAL_FORCE_INLINE           static inline __attribute__((always_inline))
-
-#else /* #if __ARMCC_VERSION >= 6000000U */
-    #error This compiler is not supported.
-#endif /* #if __ARMCC_VERSION >= 6000000U */
-#else /* #if defined __arm__ */
-    #error This compiler is not supported.
-#endif /* #elif definede __arm__ */
-
-#else /* #if defined __ARMCC_VERSION */
-#define AR_FORCE_INLINE                 inline
-#define AR_LOCAL_FORCE_INLINE           static inline
-
-#endif /* #if defined __ARMCC_VERSION */
-
 
 /*
  * Data Types

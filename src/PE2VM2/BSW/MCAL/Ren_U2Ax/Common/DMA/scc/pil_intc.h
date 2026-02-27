@@ -70,7 +70,7 @@ typedef struct
 		}stBit;
 	}unEIC[INTC_CH_NUM];			/* 0 -31 is dummy definition: no access */	/* 0xFFF 80,000 - 0xFFF80800 *//* EI level interrupt control register */
 
-}Reg_Pil_Intc2_Type;
+}Reg_Intc2_Type;
 
 /* PINT */
 #define		INTC_PINT_REGNO_TCI0_31			(0)		/* PINT register CH0 */
@@ -106,7 +106,7 @@ typedef struct
 /*	struct address definition																	*/
 /*==============================================================================================*/
 #define		Reg_INTIF		(*(volatile Reg_Intif_Type*)(0xFF090000U))
-#define		Reg_PIL_INTC2		(*(volatile Reg_Pil_Intc2_Type*)(0xFFF80000U))	/* base address at 0xFFF 80,000 instead of 0xFFF80040 */
+#define		Reg_INTC2		(*(volatile Reg_Intc2_Type*)(0xFFF80000U))	/* base address at 0xFFF 80,000 instead of 0xFFF80040 */
 
 
 /*==============================================================================================*/

@@ -64,8 +64,7 @@
      *    80 |r31(lp)    |
      *    84 |r30(ep)    |     -notda
      *  (88) |r19        |     SC3 only
-     *  (92) |r18        |     SC3 only
-     *88(96) |r1         |     SC1 (SC3)
+     *88(92) |r1         |     SC1 (SC3)
      *       +-----------+
      */
 
@@ -225,11 +224,10 @@
 #define CLSCB_ST_OFFSET_3_DORMANT               12
 #define CLSCB_ST_OFFSET_4_NONEXIST              16
 #define CLSCB_ST_OFFSET_8_CTX                   28
-#define CLSCB_ST_OFFSET_X_AROSCB_CURRENT_OSAP   88
 #define CLSCB_ST_OFFSET_X_OSARCH_SP             (100)
 #define CLSCB_ST_OFFSET_X_OSARCH_CHK_SP_ADDR    (104)
 #define CLSCB_ST_OFFSET_X_OSARCH_CHK_SP_SIZE    (108)
-#define CLSCB_ST_OFFSET_X_OSARCH_INT_MNG_CNT    (112)
+#define CLSCB_ST_OFFSET_X_OSARCH_INT_MNG_CNT   (112)
 
 /* Offset of clscb.sp from mkcb */
 #define MKCB_CMN_OFFSET_X_CLSCB     (36)
@@ -242,8 +240,6 @@
     (MKCB_CMN_OFFSET_X_CLSCB + CLSCB_ST_OFFSET_X_OSARCH_CHK_SP_SIZE)
 #define MKCB_CMN_OFFSET_X_CLS_OSARCH_INT_MNG_CNT    \
     (MKCB_CMN_OFFSET_X_CLSCB + CLSCB_ST_OFFSET_X_OSARCH_INT_MNG_CNT)
-#define MKCB_CMN_OFFSET_X_AROSCB_CURRENT_OSAP   \
-    (MKCB_CMN_OFFSET_X_CLSCB + CLSCB_ST_OFFSET_X_AROSCB_CURRENT_OSAP)
 
 /*
     typedef struct tcb_st
@@ -285,44 +281,9 @@
 #define TCB_ST_OFFSET_1_TID_AF     (2)
 #define TCB_ST_OFFSET_2_STACK      (4)
 #define TCB_ST_OFFSET_2_NEXT       (8)
-#define TCB_ST_OFFSET_3_MIGRATABLE (12)
+#define TCB_ST_OFFSET_3_MIGRATABLE (36)
 #define TCB_ST_OFFSET_4_SP         (40)
 
-#define MIGRATABLE_ST_STKADDR      (12)
-#define MIGRATABLE_ST_STKSZ        (16)
-
-#define MKCB_CMN_OFFSET_X_CLS_0_RUNNING    \
-    (MKCB_CMN_OFFSET_X_CLSCB + CLSCB_ST_OFFSET_0_RUNNING)
-
-#define TCB_OFFSET_X_MIGRATABLE_STKADDR    \
-    (TCB_ST_OFFSET_3_MIGRATABLE + MIGRATABLE_ST_STKADDR)
-#define TCB_OFFSET_X_MIGRATABLE_STKSZ    \
-    (TCB_ST_OFFSET_3_MIGRATABLE + MIGRATABLE_ST_STKSZ)
-
-
-/*
-struct ar_osap_config_st {
-    4 osap_startup_hook_func_t    startup_hook;
-    4 osap_shutdown_hook_func_t   shutdown_hook;
-    4 osap_error_hook_func_t      error_hook;
-#if (AR_OS_USE_SCALABILITYCLASS_3_OR_4 == STD_ON)
-    4 ar_tcb_t        *p_restart_tcb;
-    4 uint32          osap_bitmask;
-    1 boolean         osap_trusted;
-    1 boolean         osap_protected;
-    1 boolean         osap_terminatable;
-    1 --
-#endif
-#if (AR_OS_USE_SCALABILITYCLASS_3_OR_4 == STD_ON) || (AR_OS_USE_MULTICORE == STD_ON)
-    4 ar_osapcb_t     *p_osapcb;
-#endif
-    1 ApplicationType osap_id;
-    1 --
-    2 mcos_id_t lcid;
-};
-*/
-
-#define OSAPCONFIG_OFFSET_OSAP_ID       28
 
 #define MCOS_V850_CONTEXT_SWITCH_OFF (0)
 #define MCOS_V850_CONTEXT_SWITCH_ON  (1)
@@ -441,125 +402,5 @@ struct ar_osap_config_st {
 #endif /* #if AR_OS_USE_SCALABILITYCLASS_3_OR_4 == STD_ON */
 .endm
 
-.macro SPCHK_EXC    Usage
-.macrolocal     L_chk, L_err, L_ok
-
-    /* r20 - r22 have already pushed */
-
-    /* r2 <- mkcb */
-    movhi   hi(_mcos_mkcb_ptr_table), r0, r20
-    movea   lo(_mcos_mkcb_ptr_table), r20, r20
-    stsr    0, r21, 2   /* Get PEID */
-    shl     2, r21
-    add     r21, r20
-    ld.w    0[r20], r2
-
-    /***********************************************************
-     * Stack Range Check
-     ***********************************************************/
-
-    ld.hu   MKCB_CMN_OFFSET_1_INEST[r2], r20                /* load inest */
-
-    /* r2 = mkcb, r20=inest */
-
-    cmp     0, r20
-    bne     1f
-
-    /** task stack **/
-    ld.w    MKCB_CMN_OFFSET_X_CLS_0_RUNNING[r2], r22        /* Get Running Task's TCB */
-    ld.w    TCB_OFFSET_X_MIGRATABLE_STKADDR[r22], r20       /* Get Stack Address */
-    ld.w    TCB_OFFSET_X_MIGRATABLE_STKSZ[r22], r21         /* Get Stack Size */
-    add     r20, r21                                        /* uppder limit */
-    br      L_chk
-
-1:
-    /* osap/system stack */
-
-    ld.w    MKCB_CMN_OFFSET_0_PSP[r2], r20                  /* Load current stack information */
-    addi    MKCB_CMN_OFFSET_X_CLS_SP, r2, r21               /* Load system sp address */
-
-    cmp     r20, r21
-    bne     2f
-
-    /** system stack **/
-    ld.w    MKCB_CMN_OFFSET_4_STKTOP[r2], r20          /* Get Stack Lower Address */
-    ld.w    MKCB_CMN_OFFSET_5_STKBTM[r2], r21          /* Get Stack Upper Address */
-    br      L_chk
-
-2:
-    /** osap stack **/
-    /* r20 = pointer to ar_osapcb_st.osap_sp */
-    ld.w    -4[r20], r22                                    /* r22 = ar_osapcb_t.p_config */
-    ld.bu   OSAPCONFIG_OFFSET_OSAP_ID[r22], r22             /* Get OSAP Id */
-    shl     3, r22                                          /* x8 */
-    movhi   hi(_ar_osap_stack_table), r0, r21
-    movea   lo(_ar_osap_stack_table), r21, r21
-    add     r21, r22
-    ld.w    0[r22], r20                                      /* Get Stack Lower Address */
-    ld.w    4[r22], r21                                      /* Get Stack Size */
-    add     r20, r21                                         /* uppder limit */
-
-L_chk:
-    /* r20: lower, r21: upper */
-    /* sp check */
-
-    movhi   hi(Usage), r0, r22
-    movea   lo(Usage), r22, r22
-    ld.w    0[r22], r22
-    add     r22, r20                                        /* lower limit */
-
-    addi    12, sp, r22                                     /* exclude pushed 3 registers */
-    cmp     r22, r20
-    bh      L_err       /* sp < r20 */
-    cmp     r22, r21                                         /* upper limit */
-    bnl     L_ok        /* sp <= r21 == not (sp > r21) */
-
-L_err:
-    jmp     _mcos_hwl_mk_sp_error [r0]
-
-L_ok:
-    popsp   r20 - r22                                       /* pushed genereated code */
-
-.endm
-
-
-.macro SPCHK_SWITCH_INT
-.macrolocal     L_err, L_ok
-
-    /***********************************************************
-     * Stack Range Check
-     ***********************************************************/
-
-    ld.hu   MKCB_CMN_OFFSET_1_INEST[r2], r18                /* load inest */
-
-    /* r2 = mkcb, r18=inest */
-
-    cmp     0, r18
-    bne     L_ok                                            /* from idle */
-
-    /** task stack **/
-    ld.w    MKCB_CMN_OFFSET_X_CLS_0_RUNNING[r2], r17        /* Get Running Task's TCB */
-    ld.w    TCB_OFFSET_X_MIGRATABLE_STKADDR[r17], r18       /* Get Stack Address */
-    ld.w    TCB_OFFSET_X_MIGRATABLE_STKSZ[r17], r19         /* Get Stack Size */
-    add     r18, r19                                        /* uppder limit */
-
-    movhi   hi(_mcos_stack_check_switch_int), r0, r17
-    movea   lo(_mcos_stack_check_switch_int), r17, r17
-    ld.w    0[r17], r17
-    add     r17, r18
-
-    /* r18: lower, r19: upper */
-    /* sp check */
-    cmp     sp, r18
-    bh      L_err       /* sp < r18 */
-    cmp     sp, r19                             /* upper limit */
-    bnl     L_ok        /* sp <= r19 == not (sp > r19) */
-
-L_err:
-    jmp     _mcos_hwl_mk_sp_error [r0]
-
-L_ok:
-
-.endm
 
 #endif /* #ifndef MCOS_V850_LOCAL_GHS_INC */

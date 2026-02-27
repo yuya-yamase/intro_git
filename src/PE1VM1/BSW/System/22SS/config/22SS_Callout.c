@@ -20,12 +20,14 @@
 
 #include "veh_opemd.h"
 #include "oxcan.h"
-#include "oxsec.h"
+#include "oxdocan.h"
 #include "ivdsh.h"
 
 /* Memory               */
 #include "rim_ctl.h"
 #include "nvmc_mgr.h"
+
+#include "vCryCl.h"
 
 /*----------------------------------------------------------------------------
  *		置換シンボル定義
@@ -65,10 +67,12 @@ void vd_g_22SSCallout_StaBonInit(void)
         u1_t_rslt = u1_g_Nvmc_BonRead();
     }while(u1_t_rslt != (U1)FALSE);
 
-    vd_g_oXSECInit();
+    vd_g_oXDoCANPreInit();      /* vd_g_oXDoCANPreInit shall be called before vd_g_oXCANRstInit */
     vd_g_oXCANRstInit();
+    vd_g_oXDoCANBonInit();
     vd_g_VehopemdRstInit();
     vd_g_iVDshInit();
+    vd_g_vCryCl_Init();
 
     /* vv User Hook start vv */
     /* ^^ User Hook end   ^^ */
@@ -98,10 +102,12 @@ void vd_g_22SSCallout_StaRstInit(void)
         u1_t_rslt = u1_g_Nvmc_WkupRead();
     }while(u1_t_rslt != (U1)FALSE);
 
-    vd_g_oXSECInit();
+    vd_g_oXDoCANPreInit();      /* vd_g_oXDoCANPreInit shall be called before vd_g_oXCANRstInit */
     vd_g_oXCANRstInit();
+    vd_g_oXDoCANRstInit();
     vd_g_VehopemdRstInit();
     vd_g_iVDshInit();
+    vd_g_vCryCl_Init();
 
     /* vv User Hook start vv */
     /* ^^ User Hook end   ^^ */
@@ -131,10 +137,12 @@ void vd_g_22SSCallout_StaWkupInit(void)
         u1_t_rslt = u1_g_Nvmc_WkupRead();
     }while(u1_t_rslt != (U1)FALSE);
 
-    vd_g_oXSECInit();
+    vd_g_oXDoCANPreInit();      /* vd_g_oXDoCANPreInit shall be called before vd_g_oXCANWkupInit */
     vd_g_oXCANWkupInit();
+    vd_g_oXDoCANWkupInit();
     vd_g_VehopemdWkupInit();
     vd_g_iVDshInit();
+    vd_g_vCryCl_Init();
 
     /* vv User Hook start vv */
     /* ^^ User Hook end   ^^ */

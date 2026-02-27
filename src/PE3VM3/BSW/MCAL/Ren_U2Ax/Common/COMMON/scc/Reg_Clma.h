@@ -93,18 +93,18 @@ typedef	struct {
 #endif	/* ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2B ) */
 } Reg_Clma4_Type;
 
-#if	( ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) || ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2B ) )
 /*------------------------------------------------------------------------------*/
 /* Clock Monitor Registers for CLMA5											*/
 /*------------------------------------------------------------------------------*/
 typedef	struct {
+#if	( ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) || ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2B ) )
 	uint8	u1CLMA5CTL;
 	uint8	u1Dummy1[7];
 	uint16	u2CLMA5CMPL;
 	uint8	u1Dummy2[2];
 	uint16	u2CLMA5CMPH;
-} Reg_Clma5_Type;
 #endif	/* ( ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) || ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2B ) ) */
+} Reg_Clma5_Type;
 
 /*------------------------------------------------------------------------------*/
 /* Clock Monitor Registers for CLMA6											*/
@@ -136,31 +136,37 @@ typedef	struct {
 #endif	/* ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2B ) */
 } Reg_Clma7_Type;
 
-#if	( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A )
-#if	( ( MCAL_PKG_U2A_TARGET == MCAL_PKG_U2A16_516PIN ) || ( MCAL_PKG_U2A_TARGET == MCAL_PKG_U2A16_373PIN ) || ( MCAL_PKG_U2A_TARGET == MCAL_PKG_U2A16_292PIN ) )
 /*------------------------------------------------------------------------------*/
 /* Clock Monitor Registers for CLMA8											*/
 /*------------------------------------------------------------------------------*/
 typedef	struct {
+#if	( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A )
+#if	( ( MCAL_PKG_U2A_TARGET == MCAL_PKG_U2A16_516PIN ) || ( MCAL_PKG_U2A_TARGET == MCAL_PKG_U2A16_373PIN ) )
 	uint8	u1CLMA8CTL;
 	uint8	u1Dummy1[7];
 	uint16	u2CLMA8CMPL;
 	uint8	u1Dummy2[2];
 	uint16	u2CLMA8CMPH;
+#endif	/* ( ( MCAL_PKG_U2A_TARGET == MCAL_PKG_U2A16_516PIN ) || ( MCAL_PKG_U2A_TARGET == MCAL_PKG_U2A16_373PIN ) ) */
+
+#endif	/* ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) */
 } Reg_Clma8_Type;
 
 /*------------------------------------------------------------------------------*/
 /* Clock Monitor Registers for CLMA9											*/
 /*------------------------------------------------------------------------------*/
 typedef	struct {
+#if	( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A )
+#if	( ( MCAL_PKG_U2A_TARGET == MCAL_PKG_U2A16_516PIN ) || ( MCAL_PKG_U2A_TARGET == MCAL_PKG_U2A16_373PIN ) )
 	uint8	u1CLMA9CTL;
 	uint8	u1Dummy1[7];
 	uint16	u2CLMA9CMPL;
 	uint8	u1Dummy2[2];
 	uint16	u2CLMA9CMPH;
-} Reg_Clma9_Type;
-#endif	/* ( ( MCAL_PKG_U2A_TARGET == MCAL_PKG_U2A16_516PIN ) || ( MCAL_PKG_U2A_TARGET == MCAL_PKG_U2A16_373PIN ) || ( MCAL_PKG_U2A_TARGET == MCAL_PKG_U2A16_292PIN ) ) */
+#endif	/* ( ( MCAL_PKG_U2A_TARGET == MCAL_PKG_U2A16_516PIN ) || ( MCAL_PKG_U2A_TARGET == MCAL_PKG_U2A16_373PIN ) ) */
+
 #endif	/* ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) */
+} Reg_Clma9_Type;
 
 #if	( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2B )
 /*------------------------------------------------------------------------------*/
@@ -388,10 +394,10 @@ typedef	struct
 #define	REG_CLMA7	(*(volatile Reg_Clma7_Type *)(0xFF981C00U))
 
 #if	( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A )
-#if	( ( MCAL_PKG_U2A_TARGET == MCAL_PKG_U2A16_516PIN ) || ( MCAL_PKG_U2A_TARGET == MCAL_PKG_U2A16_373PIN ) || ( MCAL_PKG_U2A_TARGET == MCAL_PKG_U2A16_292PIN ) )
+#if	( ( MCAL_PKG_U2A_TARGET == MCAL_PKG_U2A16_516PIN ) || ( MCAL_PKG_U2A_TARGET == MCAL_PKG_U2A16_373PIN ) )
 #define	REG_CLMA8	(*(volatile Reg_Clma8_Type *)(0xFF981D00U))
 #define	REG_CLMA9	(*(volatile Reg_Clma9_Type *)(0xFF981E00U))
-#endif	/* ( ( MCAL_PKG_U2A_TARGET == MCAL_PKG_U2A16_516PIN ) || ( MCAL_PKG_U2A_TARGET == MCAL_PKG_U2A16_373PIN ) || ( MCAL_PKG_U2A_TARGET == MCAL_PKG_U2A16_292PIN ) ) */
+#endif	/* ( ( MCAL_PKG_U2A_TARGET == MCAL_PKG_U2A16_516PIN ) || ( MCAL_PKG_U2A_TARGET == MCAL_PKG_U2A16_373PIN ) ) */
 #endif	/* ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) */
 
 #if	( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2B )

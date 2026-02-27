@@ -80,9 +80,9 @@ extern ar_alarmcb_t * const ar_alarmcb_ptr_table[];
 
 #ifdef AR_ALARM_LOCAL_ENABLE
 
-AR_LOCAL_FORCE_INLINE mcos_id_t ar_get_alarm_lcid(const AlarmType alarm_id);
+LOCAL_INLINE mcos_id_t ar_get_alarm_lcid(const AlarmType alarm_id);
 
-AR_LOCAL_FORCE_INLINE mcos_id_t ar_get_alarm_lcid(
+LOCAL_INLINE mcos_id_t ar_get_alarm_lcid(
     const AlarmType alarm_id)
 {
     mcos_id_t lcid;

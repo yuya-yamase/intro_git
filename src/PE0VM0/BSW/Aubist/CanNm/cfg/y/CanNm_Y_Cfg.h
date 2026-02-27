@@ -399,7 +399,7 @@
 #define BSW_CANNM_Y_CFG_WTSLPTIME_CH0                    (9000U)
 #define BSW_CANNM_Y_CFG_WTSLPTIME_CH1                    (9000U)
 #define BSW_CANNM_Y_CFG_WTSLPTIME_CH2                    (9000U)
-#define BSW_CANNM_Y_CFG_WTSLPTIME_CH3                    (13000U)
+#define BSW_CANNM_Y_CFG_WTSLPTIME_CH3                    (60000U)
 #define BSW_CANNM_Y_CFG_WTSLPTIME_CH4                    (20U)
 #define BSW_CANNM_Y_CFG_WTSLPTIME_CH5                    (20U)
 #define BSW_CANNM_Y_CFG_WTSLPTIME_CH6                    (20U)

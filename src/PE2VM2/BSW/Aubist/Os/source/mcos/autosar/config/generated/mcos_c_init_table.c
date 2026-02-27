@@ -33,7 +33,7 @@
 const text_section_info_t
 mcos_global_text_init_table[1] =
 {
-    { (const MemoryStartAddressType *)-1, (const MemoryStartAddressType *)-1, (const MemoryStartAddressType *)-1 } /* terminator */
+    { (MemoryStartAddressType *)-1, (MemoryStartAddressType *)-1, (MemoryStartAddressType *)-1 } /* terminator */
 };
 
 #define OS_STOP_SEC_CONST_UNSPECIFIED
@@ -48,7 +48,7 @@ mcos_global_text_init_table[1] =
 const data_section_info_t
 mcos_global_var_init_table[1] =
 {
-    { (const MemoryStartAddressType *)-1, (const MemoryStartAddressType *)-1, (const MemoryStartAddressType *)-1 } /* terminator */
+    { (MemoryStartAddressType *)-1, (MemoryStartAddressType *)-1, (MemoryStartAddressType *)-1 } /* terminator */
 };
 
 #define OS_STOP_SEC_CONST_UNSPECIFIED
@@ -63,7 +63,7 @@ mcos_global_var_init_table[1] =
 const bss_section_info_t
 mcos_global_var_cleared_table[1] =
 {
-    { (const MemoryStartAddressType *)-1, (const MemoryStartAddressType *)-1 } /* terminator */
+    { (MemoryStartAddressType *)-1, (MemoryStartAddressType *)-1 } /* terminator */
 };
 
 #define OS_STOP_SEC_CONST_UNSPECIFIED
@@ -78,7 +78,7 @@ mcos_global_var_cleared_table[1] =
 const text_section_info_t
 mcos_local_core01_text_init_table[1] =
 {
-    { (const MemoryStartAddressType *)-1, (const MemoryStartAddressType *)-1, (const MemoryStartAddressType *)-1 } /* terminator */
+    { (MemoryStartAddressType *)-1, (MemoryStartAddressType *)-1, (MemoryStartAddressType *)-1 } /* terminator */
 };
 
 #define OS_STOP_SEC_CONST_UNSPECIFIED
@@ -93,7 +93,7 @@ mcos_local_core01_text_init_table[1] =
 const data_section_info_t
 mcos_local_core01_var_init_table[1] =
 {
-    { (const MemoryStartAddressType *)-1, (const MemoryStartAddressType *)-1, (const MemoryStartAddressType *)-1 } /* terminator */
+    { (MemoryStartAddressType *)-1, (MemoryStartAddressType *)-1, (MemoryStartAddressType *)-1 } /* terminator */
 };
 
 #define OS_STOP_SEC_CONST_UNSPECIFIED
@@ -108,7 +108,7 @@ mcos_local_core01_var_init_table[1] =
 const bss_section_info_t
 mcos_local_core01_var_cleared_table[1] =
 {
-    { (const MemoryStartAddressType *)-1, (const MemoryStartAddressType *)-1 } /* terminator */
+    { (MemoryStartAddressType *)-1, (MemoryStartAddressType *)-1 } /* terminator */
 };
 
 #define OS_STOP_SEC_CONST_UNSPECIFIED
@@ -117,5 +117,5 @@ mcos_local_core01_var_cleared_table[1] =
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
 /*  Framework          :v2-1-0                                              */
-/*  BSW plug-in        :v2-1-0                                              */
+/*  BSW plug-in        :v2-0-0                                              */
 /****************************************************************************/

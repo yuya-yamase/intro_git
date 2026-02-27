@@ -43,9 +43,6 @@ void    Aubist_UsrSetWakeupEvent(const uint32 u4_a_SRC);
 void    vd_g_oXCANAubIfE2eInit(void);
 #endif /* #if ((OXCAN_E2E_NUM_REC > 0U) || (OXCAN_E2E_NUM_REC > 0U)) */
 
-#if (OXCAN_OMA_SEV_GEN == 1U)
-void    vd_g_oXCANAubIfOMAInit(void);
-#endif /* #if (OXCAN_OMA_SEV_GEN == 1U) */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

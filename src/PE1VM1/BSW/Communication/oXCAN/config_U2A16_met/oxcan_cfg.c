@@ -104,24 +104,6 @@ static const U2    u2_sp_OXCAN_IRQ_CH[OXCAN_CFG_NUM_IRQ_EN] = {
 #endif /* (OXCAN_CFG_NUM_IRQ_EN != 0U) */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if (BSW_CANNM_NM_TYPE_USE(Y) == BSW_USE)
-const ST_OXCAN_NET       st_gp_OXCAN_NET_BY_CH[] = {
-    /*   u4_sysbit                      u2_cch,  u2_pnc */
-    {(U4)OXCAN_SYS_VIR_0,           (U2)0U,  (U2)0U }      /* u2_cch = ComMConf_ComMChannel_CDC_VCAN_BUS (0U) */
-};
-const U1                 u1_g_OXCAN_NET_NUM_CH = (U1)(sizeof(st_gp_OXCAN_NET_BY_CH) / sizeof(ST_OXCAN_NET));
-
-const ST_OXCAN_NET       st_gp_OXCAN_NET_BY_PN[] = {
-    /*   u4_sysbit                      u2_cch,  u2_pnc */
-    {(U4)OXCAN_SYS_PNC_16,          (U2)0U,  (U2)16U},     /* u2_cch = ComMConf_ComMChannel_CDC_VCAN_BUS (0U) */
-    {(U4)OXCAN_SYS_PNC_40,          (U2)0U,  (U2)40U},
-    {(U4)OXCAN_SYS_PNC_43,          (U2)0U,  (U2)43U},
-    {(U4)OXCAN_SYS_PNC_44,          (U2)0U,  (U2)44U}
-};
-const U1                 u1_g_OXCAN_NET_NUM_PN = (U1)(sizeof(st_gp_OXCAN_NET_BY_PN) / sizeof(ST_OXCAN_NET));
-#endif /* #if (BSW_CANNM_NM_TYPE_USE(Y) == BSW_USE) */
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*===================================================================================================================================*/
@@ -227,12 +209,12 @@ void    vd_g_oXCANCfgShtdwn(void)
 #endif /* (OXCAN_CFG_NUM_IRQ_EN != 0U) */
 }
 /*===================================================================================================================================*/
-/*  U4      u4_g_oXCANCfgVomchk(void)                                                                                                */
+/*  U4      u4_g_oXCANCfgSyschk(void)                                                                                                */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-U4      u4_g_oXCANCfgVomchk(void)
+U4      u4_g_oXCANCfgSyschk(void)
 {
 #if ((OXCAN_SYS_ACC != VEH_OPEMD_MDBIT_ACC ) || \
      (OXCAN_SYS_IGP != VEH_OPEMD_MDBIT_IG_P) || \
@@ -241,15 +223,83 @@ U4      u4_g_oXCANCfgVomchk(void)
 #error "oxcan_cfg.c : OXCAN_SYS_XXX shall be equal to VEH_OPEMD_MDBIT_XXX."    
     return((U4)0U);
 #else
+    /* #define ComMConf_ComMChannel_CDC_VCAN_BUS                   (0U) */
+    const U1           u1_sp_OXCAN_CFG_PNC[OXCAN_SYS_NUM_PNC] = {
+        (U1)16,
+        (U1)40,
+        (U1)43,
+        (U1)44
+    };
 
-    U4                 u4_t_vom_chk;
+    U4                 u4_t_sys_chk;
+    U4                 u4_t_bit;
+    U4                 u4_t_lpcnt;
+    U1                 u1_t_net_chk;
+    U1                 u1_t_pnc_chk;
 
-    u4_t_vom_chk = u4_g_VehopemdMdfield() & ((U4)OXCAN_SYS_ACC |
+    u4_t_sys_chk = u4_g_VehopemdMdfield() & ((U4)OXCAN_SYS_ACC |
                                              (U4)OXCAN_SYS_IGP |
                                              (U4)OXCAN_SYS_PBA |
                                              (U4)OXCAN_SYS_IGR);
 
-    return(u4_t_vom_chk | (U4)OXCAN_SYS_BAT);
+    /* #define COMM_NO_COM_NO_PENDING_REQUEST          (BSW_COMM_NO_COM_NO_PENDING_REQUEST)  */
+    /* #define COMM_NO_COM_REQUEST_PENDING             (BSW_COMM_NO_COM_REQUEST_PENDING)     */
+    /* #define COMM_FULL_COM_NETWORK_REQUESTED         (BSW_COMM_FULL_COM_NETWORK_REQUESTED) */
+    /* #define COMM_FULL_COM_READY_SLEEP               (BSW_COMM_FULL_COM_READY_SLEEP)       */
+    /* #define COMM_SILENT_COM                         (BSW_COMM_SILENT_COM)                 */
+    /* #define COMM_INVALID_COM                        (BSW_COMM_INVALID_COM)                */
+    /* #define BSW_COMM_NO_COM_NO_PENDING_REQUEST      (0U)                                  */
+    /* #define BSW_COMM_NO_COM_REQUEST_PENDING         (1U)                                  */
+    /* #define BSW_COMM_FULL_COM_NETWORK_REQUESTED     (2U)                                  */
+    /* #define BSW_COMM_FULL_COM_READY_SLEEP           (3U)                                  */
+    /* #define BSW_COMM_SILENT_COM                     (4U)                                  */
+    /* #define BSW_COMM_INVALID_COM                    (5U)                                  */
+    /*                                                                                       */
+    /* Std_ReturnType ComM_GetState(NetworkHandleType Channel, ComM_StateType* State )       */
+    /*                                                                                       */
+    /* comm/bsw_comm_public.h 446:typedef uint8               Bsw_ComM_StateType;            */
+    /* ComM.h                 369:#define ComM_StateType      Bsw_ComM_StateType             */
+    /* ComStack_Types.h        83:typedef uint8               NetworkHandleType;             */
+    /*                                                                                       */
+    u1_t_net_chk = (U1)BSW_COMM_INVALID_COM;
+    (void)ComM_GetState((U1)0U, &u1_t_net_chk);
+    if((u1_t_net_chk == (U1)COMM_FULL_COM_NETWORK_REQUESTED) ||
+       (u1_t_net_chk == (U1)COMM_FULL_COM_READY_SLEEP      )){
+
+       u4_t_sys_chk |= (U4)OXCAN_SYS_VIR_0;
+    }
+
+    /* #define COMM_PNC_REQUESTED                      (BSW_COMM_PNC_REQUESTED)              */
+    /* #define COMM_PNC_READY_SLEEP                    (BSW_COMM_PNC_READY_SLEEP)            */
+    /* #define COMM_PNC_PREPARE_SLEEP                  (BSW_COMM_PNC_PREPARE_SLEEP)          */
+    /* #define COMM_PNC_NO_COMMUNICATION               (BSW_COMM_PNC_NO_COMMUNICATION)       */
+    /* #define BSW_COMM_PNC_REQUESTED                      (0U)                              */
+    /* #define BSW_COMM_PNC_READY_SLEEP                    (1U)                              */
+    /* #define BSW_COMM_PNC_PREPARE_SLEEP                  (2U)                              */
+    /* #define BSW_COMM_PNC_NO_COMMUNICATION               (3U)                              */
+    /*                                                                                       */
+    /* Std_ReturnType ComM_GetChPncMode( NetworkHandleType Channel, PNCHandleType PNC,       */
+    /*                                                     ComM_PncModeType* RequestedMode ) */
+    /*                                                                                       */
+    /* ComStack_Types.h        55:typedef uint8                PNCHandleType;                */
+    /* comm/bsw_comm_public.h 450:typedef uint8                Bsw_ComM_PncModeType;         */
+    /* ComM.h                 376:#define ComM_PncModeType     Bsw_ComM_PncModeType          */
+    /*                                                                                       */
+    u4_t_bit = (U4)OXCAN_SYS_PNC_16;
+    for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)OXCAN_SYS_NUM_PNC; u4_t_lpcnt++){
+
+        u1_t_pnc_chk = (U1)COMM_PNC_NO_COMMUNICATION;
+        (void)ComM_GetChPncMode((U1)ComMConf_ComMChannel_CDC_VCAN_BUS,
+                                u1_sp_OXCAN_CFG_PNC[u4_t_lpcnt], &u1_t_pnc_chk);
+        if((u1_t_pnc_chk == (U1)COMM_PNC_REQUESTED  ) ||
+           (u1_t_pnc_chk == (U1)COMM_PNC_READY_SLEEP)){
+
+            u4_t_sys_chk |= u4_t_bit;
+        }
+        u4_t_bit <<= 1U;
+    }
+
+    return(u4_t_sys_chk | (U4)OXCAN_SYS_BAT);
 #endif
 }
 #if (OXCAN_CFG_NUM_IRQ_EN != 0U)

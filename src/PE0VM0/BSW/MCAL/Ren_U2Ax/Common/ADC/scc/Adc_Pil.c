@@ -411,7 +411,7 @@ FUNC(void, ADC_CODE) Adc_Pil_Init(void)
 		if (s_cu1HWUnitUseTbl[t_udHWUnit]==(uint8)STD_ON) {
 			cpstReg_Adc[t_udHWUnit]->stMODULE.u1ADCR1	= Adc_cstUserConfig.cpstHWConfig->cu1ADCR1[t_udHWUnit];
 			cpstReg_Adc[t_udHWUnit]->stMODULE.u1ADCR2	= Adc_cstUserConfig.cpstHWConfig->cu1ADCR2[t_udHWUnit];
-			cpstReg_Adc[t_udHWUnit]->stMODULE.u1SFTCR  &= (uint8)(~ADC_SFTCR_RDCLRE);										/* READ & CLEAR : Disable	*/
+			cpstReg_Adc[t_udHWUnit]->stMODULE.u1SFTCR  &= ~ADC_SFTCR_RDCLRE;										/* READ & CLEAR : Disable	*/
 			cpstReg_Adc[t_udHWUnit]->stMODULE.u4SMPCR	= Adc_cstUserConfig.cpstHWConfig->cu4SMPCR[t_udHWUnit];
 			#if (MCAL_SPAL_TARGET==MCAL_TARGET_RH850U2A)
 			if (t_udHWUnit<ADC_HWUNIT_WTH_NUM) {
@@ -607,7 +607,7 @@ FUNC(void, ADC_CODE) Adc_Pil_SetCnvEndIntrpt(
 			t_u1SGCR	|= (uint8)(ADC_SGCR_ADIE);
 		} else {
 			/* interrupt disable		*/
-			t_u1SGCR	&= (uint8)(~ADC_SGCR_ADIE);
+			t_u1SGCR	&= ~((uint8)ADC_SGCR_ADIE);
 		}
 	}
 	cpstReg_Adc[t_cudHWUnit]->stMODULE.stSG[t_cudSG].u1SGCR = t_u1SGCR;
@@ -705,8 +705,7 @@ FUNC(void, ADC_CODE) Adc_Pil_SetHardwareTrigger(
 	CONST(boolean,			ADC_CONST)	t_cblisHWTriggerOn
 )
 {
-				VAR(uint8, ADC_VAR_NO_INIT)		t_u1HWTrg;
-	volatile	VAR(uint8, ADC_VAR_NO_INIT)		t_u1Dummy;
+	VAR(uint8, ADC_VAR_NO_INIT)				t_u1HWTrg;
 
 	t_u1HWTrg = (uint8)ADC_TRGMD_DISABLE;
 	if (t_cblisHWTriggerOn==TRUE) {
@@ -714,12 +713,6 @@ FUNC(void, ADC_CODE) Adc_Pil_SetHardwareTrigger(
 	}
 	cpstReg_Adc[t_cudHWUnit]->stMODULE.stSG[t_cudSG].u1SGCR =
 		(cpstReg_Adc[t_cudHWUnit]->stMODULE.stSG[t_cudSG].u1SGCR & ADC_TRGMD_MASK)+t_u1HWTrg;
-
-	/* Dummy Read	*/
-	t_u1Dummy = cpstReg_Adc[t_cudHWUnit]->stMODULE.stSG[t_cudSG].u1SGCR;
-	
-	/* Synchronization	*/
-	mcalcommon_syncp_func();
 }
 #endif
 
@@ -948,18 +941,11 @@ FUNC(void, ADC_CODE) Adc_Pil_StopAllTrackHold(void)
 #ifdef ADC_USE_TH
 FUNC(void, ADC_CODE) Adc_Pil_DisableAllTHOperation(void)
 {
-				VAR(Adc_HWUnitType,	ADC_VAR_NO_INIT)	t_udHWUnit;
-	volatile	VAR(uint8,			ADC_VAR_NO_INIT)	t_u1Dummy;
+	VAR(Adc_HWUnitType, ADC_VAR_NO_INIT)	t_udHWUnit;
 
 	for ( t_udHWUnit=ADC_HWUNIT0;t_udHWUnit<(Adc_HWUnitType)ADC_HWUNIT_WTH_NUM; t_udHWUnit++) {
 		if (s_cu1HWUnitUseTbl[t_udHWUnit]==(uint8)STD_ON) {
 			cpstReg_Adc[t_udHWUnit]->stMODULE.u1THER = ADC_TH_DISABLE;
-
-			/* Dummy Read	*/
-			t_u1Dummy = cpstReg_Adc[t_udHWUnit]->stMODULE.u1THER;
-
-			/* Synchronization	*/
-			mcalcommon_syncp_func();
 		}
 	}
 }
@@ -979,18 +965,10 @@ FUNC(void, ADC_CODE) Adc_Pil_DisableAllTHOperation(void)
 #if (ADC_CFG_DEINIT_API==STD_ON)
 FUNC(void, ADC_CODE) Adc_Pil_ForcedTermination(void)
 {
-				VAR(Adc_HWUnitType,	ADC_VAR_NO_INIT)	t_udHWUnit;
-	volatile	VAR(uint8,			ADC_VAR_NO_INIT)	t_u1Dummy;
-
+	VAR(Adc_HWUnitType, ADC_VAR_NO_INIT)	t_udHWUnit;
 	for (t_udHWUnit=ADC_HWUNIT0;t_udHWUnit<(Adc_HWUnitType)ADC_HWUNIT_NUM;t_udHWUnit++) {
 		if (s_cu1HWUnitUseTbl[t_udHWUnit]==(uint8)STD_ON) {
 			cpstReg_Adc[t_udHWUnit]->stMODULE.u1ADHALTR = ADC_HALT;
-
-			/* Dummy Read	*/
-			t_u1Dummy = cpstReg_Adc[t_udHWUnit]->stMODULE.u1ADCR1;
-
-			/* Synchronization	*/
-			mcalcommon_syncp_func();
 		}
 	}
 }
@@ -1271,7 +1249,7 @@ static FUNC(uint32, ADC_CODE) Adc_Pil_RegchkPreFixSFTCR(
 	if (t_cudHWUnit<ADC_HWUNIT_NUM) {
 		/* t_u4ChkResult is updated in ADC_RegValueCheckByHWUnit	*/
 		t_u1ExpectedValue = (uint8)(ADC_SFTCR_RDCLRE_DR_NOCLR * ADC_SFTCR_RDCLRE);
-		ADC_RegValueCheckByHWUnit(uint8, cpstReg_Adc[t_cudHWUnit]->stMODULE.u1SFTCR, t_u1ExpectedValue, ADC_SFTCR_RDCLRE, t_cudHWUnit);
+		ADC_RegValueCheckByHWUnit(uint8, cpstReg_Adc[t_cudHWUnit]->stMODULE.u1SFTCR, t_u1ExpectedValue, ADC_SFTCR_DEFBIT, t_cudHWUnit);
 	}
 	return(t_u4ChkResult);
 }
@@ -1379,7 +1357,7 @@ static FUNC(uint32, ADC_CODE) Adc_Pil_RegchkPreFixTHER(
 		t_u1RegValue		= cpstReg_Adc[t_cudHWUnit]->stMODULE.u1THER  & (uint8)ADC_THER_DEFBIT;
 		if (t_u1RegValue!=t_u1ExpectedValue) {
 			#if (ADC_CFG_REG_REFRESH==STD_ON)
-			t_b1isRunning	= Adc_IsHWUnitRunning(t_cudHWUnit);
+			t_b1isRunning	= Adc_IsTHinHWUnitRunning(t_cudHWUnit);
 			if (t_b1isRunning==TRUE) {
 				t_u4ChkResult |= ADC_REGCHK_REFRESH_IMPOSSIBLE;
 			} else {
@@ -1456,14 +1434,13 @@ static FUNC(uint32, ADC_CODE) Adc_Pil_RegchkPostFix(
 
 	t_u4ChkResult = ADC_REGCHK_OK;
 	if( t_cudHWUnit<ADC_HWUNIT_NUM) {
+		/* t_u4ChkResult is updated in ADC_RegValueCheckByScanGroup	*/
 		#if	(MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A )
 		t_udTriggerSource = Adc_GetTriggerSource(t_cudGrp);
 		if ((t_cudHWUnit==ADC_SPECIFIC_HWUNIT) && (t_udTriggerSource==ADC_TRIGG_SRC_HW))  {
-			/* t_u4ChkResult is updated in ADC_RegValueCheckByHWUnit	*/
-			ADC_RegValueCheckByHWUnit(uint32, cpstReg_SELB_Adc[ADC_ZERO]->u4SGTSEL[t_cudSG], t_u4SGTSEL[t_cudSG], ADC_SGTSEL_DEFBIT, t_cudHWUnit);
+			ADC_RegValueCheckByScanGroup(uint32, cpstReg_SELB_Adc[ADC_ZERO]->u4SGTSEL[t_cudSG], t_u4SGTSEL[t_cudSG], ADC_SGTSEL_DEFBIT);
 		}
 		#endif
-		/* t_u4ChkResult is updated in ADC_RegValueCheckByScanGroup	*/
 		ADC_RegValueCheckByScanGroup(uint16, cpstReg_Adc[t_cudHWUnit]->stMODULE.stSG[t_cudSG].u2SGVCPR, t_u2SGVCPR[t_cudHWUnit][t_cudSG], ADC_SGVCPR_DEFBIT);
 		/* VCR	*/
 		t_u2Start	= t_u2SGVCPR[t_cudHWUnit][t_cudSG] & (uint16)ADC_SGVCPR_VCSP;
@@ -1563,7 +1540,7 @@ static FUNC(uint32, ADC_CODE) Adc_Pil_RegchkDynamicSGCR(
 	if (t_cudGrp<ADC_CFG_GRP_SIZE) {
 		t_u1ExpectedValue = Adc_cstUserConfig.cpstHWConfig->cu1SGCR[t_cudGrp] & ADC_SGCR_DEFBIT;
 		ADC_ENTER_CRITICAL_SECTION(ADC_CODE);
-		t_udStatus			= Adc_GetGrpStatus(t_cudGrp);
+		t_udStatus			= Adc_GetGroupStatus(t_cudGrp);
 		t_u1RegValue		= cpstReg_Adc[t_cudHWUnit]->stMODULE.stSG[t_cudSG].u1SGCR & ADC_SGCR_DEFBIT;
 
 		if (t_udStatus==ADC_IDLE) {
@@ -1657,7 +1634,7 @@ static FUNC(uint32, ADC_CODE) Adc_Pil_RegchkDynamicTHxCR(
 		#endif
 		t_b1isRunning = Adc_IsHWUnitRunning(t_cudHWUnit);
 		if (t_b1isRunning==TRUE) {
-			t_udStatus = Adc_GetGrpStatus(t_cudGrp);
+			t_udStatus = Adc_GetGroupStatus(t_cudGrp);
 			if (t_udStatus!=ADC_IDLE) {									\
 				t_u1ExpectedValue  |= ADC_TH_HOLD_TRG_ENABLE;
 			}
