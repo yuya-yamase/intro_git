@@ -35,6 +35,7 @@
 #include "VSM.h"
 #include "CanIfProxy.h"
 #include "VCanAck.h"
+#include "AppSS.h"
 /*----------------------------------------------------------------------------
  *		置換シンボル定義
  *--------------------------------------------------------------------------*/
@@ -78,6 +79,7 @@ void vd_g_22SSCallout_StaBonInit(void)
     vd_g_iVDshInit();
 
     /* vv User Hook start vv */
+    AppSS_Init();
     vd_g_VSM_Init();
     vd_g_VSM_SAILWrapper_Init();
     vd_g_PwrCtrlMainBonReq();
