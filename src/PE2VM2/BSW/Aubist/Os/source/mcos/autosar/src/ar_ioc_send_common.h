@@ -25,7 +25,7 @@
 #include "ar_kernel_impl.h"
 #include "ar_ioc_local.h"
 
-AR_LOCAL_FORCE_INLINE void ar_ioc_push_data(const ar_ioc_config_t * const p_config,
+LOCAL_INLINE void ar_ioc_push_data(const ar_ioc_config_t * const p_config,
     const ar_ioc_receiver_config_t * const p_receiver_config, ar_ioccb_t * const p_ioccb,
     const void * const in);
 
@@ -40,7 +40,7 @@ AR_LOCAL_FORCE_INLINE void ar_ioc_push_data(const ar_ioc_config_t * const p_conf
   Return    :
   Note  :   none
  ---------------------------------------------------------------------------*/
-AR_LOCAL_FORCE_INLINE void ar_ioc_push_data(
+LOCAL_INLINE void ar_ioc_push_data(
     const ar_ioc_config_t * const p_config,
     const ar_ioc_receiver_config_t * const p_receiver_config,
     ar_ioccb_t * const p_ioccb,

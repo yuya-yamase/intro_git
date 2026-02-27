@@ -60,6 +60,7 @@ static CONST(uint16, PIC2_CONST)	s_u2EDGSELBitPostbl[PIC2_ADC_SG_NUM] = {
 
 #if (ADC_CFG_REG_CHK==STD_ON)
 static FUNC(uint32, ADC_CODE) Pic2_Pil_RegchkPreFix(
+	CONST(Adc_GroupType,				PIC2_CONST)				t_cudGrp,
 	CONST(Adc_HWUnitType,				PIC2_CONST)				t_cudHWUnit,
 	CONST(Adc_SGType,					PIC2_CONST)				t_cudSG
 );
@@ -145,14 +146,12 @@ FUNC(void, PIC2_CODE) Pic2_Pil_Init(void)
 	t_u4TSEL = PIC2_ZERO;
 	for (t_udGrp=ADC_GRP00;t_udGrp<(Adc_GroupType)ADC_CFG_GRP_SIZE;t_udGrp++) {
 		t_udHWUnit	= Adc_GetHWUnitID(t_udGrp);
-		if (t_udHWUnit<(Adc_HWUnitType)PIC2_HWUNIT_WPIC2_SIZE) {
-			t_udSG		= Adc_GetSGID(t_udGrp);
-			/* ADC Trigger Selection (Not select)			*/
-			cpstReg_Pic20[PIC2_REG_ARRAY_ID0]->stADCXnTSELj[t_udHWUnit].u4TSEL[t_udSG] = t_u4TSEL;
-			#if (MCAL_SPAL_TARGET==MCAL_TARGET_RH850U2B)
-			cpstReg_Pic21[PIC2_REG_ARRAY_ID0]->stADCXnTSELj[t_udHWUnit].u4TSEL[t_udSG] = t_u4TSEL;
-			#endif
-		}
+		t_udSG		= Adc_GetSGID(t_udGrp);
+		/* ADC Trigger Selection (Not select)			*/
+		cpstReg_Pic20[PIC2_REG_ARRAY_ID0]->stADCXnTSELj[t_udHWUnit].u4TSEL[t_udSG] = t_u4TSEL;
+		#if (MCAL_SPAL_TARGET==MCAL_TARGET_RH850U2B)
+		cpstReg_Pic21[PIC2_REG_ARRAY_ID0]->stADCXnTSELj[t_udHWUnit].u4TSEL[t_udSG] = t_u4TSEL;
+		#endif
 	}
 }
 
@@ -180,20 +179,10 @@ FUNC(void, PIC2_CODE) Pic2_Pil_SetHardwareTrigger(
 	#endif
 )
 {
-	volatile	VAR(uint32, ADC_VAR_NO_INIT)		t_u4Dummy;
-
-	if (t_cudHWUnit<(Adc_HWUnitType)PIC2_HWUNIT_WPIC2_SIZE) {
-		cpstReg_Pic20[PIC2_REG_ARRAY_ID0]->stADCXnTSELj[t_cudHWUnit].u4TSEL[t_cudSG] = t_cu4Pi20TSEL;
-		#if (MCAL_SPAL_TARGET==MCAL_TARGET_RH850U2B)
-		cpstReg_Pic21[PIC2_REG_ARRAY_ID0]->stADCXnTSELj[t_cudHWUnit].u4TSEL[t_cudSG] = t_cu4Pi21TSEL;
-		#endif
-
-		/* Dummy Read	*/
-		t_u4Dummy = cpstReg_Pic20[PIC2_REG_ARRAY_ID0]->stADCXnTSELj[t_cudHWUnit].u4TSEL[t_cudSG];
-		
-		/* Synchronization	*/
-		mcalcommon_syncp_func();
-	}
+	cpstReg_Pic20[PIC2_REG_ARRAY_ID0]->stADCXnTSELj[t_cudHWUnit].u4TSEL[t_cudSG] = t_cu4Pi20TSEL;
+	#if (MCAL_SPAL_TARGET==MCAL_TARGET_RH850U2B)
+	cpstReg_Pic21[PIC2_REG_ARRAY_ID0]->stADCXnTSELj[t_cudHWUnit].u4TSEL[t_cudSG] = t_cu4Pi21TSEL;
+	#endif
 }
 #endif
 
@@ -238,7 +227,7 @@ FUNC(uint32, ADC_CODE) Pic2_Pil_Regchk_All(void)
 	for (t_udGrp=ADC_GRP00;t_udGrp<(Adc_GroupType)ADC_CFG_GRP_SIZE;t_udGrp++ ) {
 		t_udHWUnit		= Adc_GetHWUnitID(t_udGrp);
 		t_udSG			= Adc_GetSGID(t_udGrp);
-		t_u4ChkResult  |= Pic2_Pil_RegchkPreFix(t_udHWUnit,t_udSG);
+		t_u4ChkResult  |= Pic2_Pil_RegchkPreFix(t_udGrp,t_udHWUnit,t_udSG);
 		t_u4ChkResult  |= Pic2_Pil_RegchkPostFix(t_udHWUnit,t_udSG,
 												 &t_u2Pic20EDGSEL[0]
 												 #if (MCAL_SPAL_TARGET==MCAL_TARGET_RH850U2B)
@@ -287,7 +276,7 @@ FUNC(uint32, ADC_CODE) Pic2_Pil_Regchk_Grp(
 		,&t_u2Pic21EDGSEL[0]
 		#endif
 	);
-	t_u4ChkResult   = Pic2_Pil_RegchkPreFix(t_udHWUnit,t_udSG);
+	t_u4ChkResult   = Pic2_Pil_RegchkPreFix(t_cudGrp,t_udHWUnit,t_udSG);
 	t_u4ChkResult  |= Pic2_Pil_RegchkPostFix(t_udHWUnit,t_udSG,
 											 &t_u2Pic20EDGSEL[0]
 											 #if (MCAL_SPAL_TARGET==MCAL_TARGET_RH850U2B)
@@ -305,6 +294,7 @@ FUNC(uint32, ADC_CODE) Pic2_Pil_Regchk_Grp(
 /* Sync/Async			: Synchronous															*/
 /* Reentrancy			: Non Reentrant															*/
 /* Parameters (in)		: 																		*/
+/*		Group			: Numeric ID of requested ADC channel group.							*/
 /* 		Adc_HWUnitType	: HW Unit Number														*/
 /* 		Adc_SGType		: Scan Group Number														*/
 /* Parameters (inout)	: None																	*/
@@ -319,6 +309,7 @@ FUNC(uint32, ADC_CODE) Pic2_Pil_Regchk_Grp(
 /* Description			: Check registers deceided by a configuration							*/
 /************************************************************************************************/
 static FUNC(uint32, ADC_CODE) Pic2_Pil_RegchkPreFix(
+	CONST(Adc_GroupType,				PIC2_CONST)				t_cudGrp,		/* 	used in ADC_RegValueCheckByScanGroup */
 	CONST(Adc_HWUnitType,				PIC2_CONST)				t_cudHWUnit,
 	CONST(Adc_SGType,					PIC2_CONST)				t_cudSG
 )
@@ -326,16 +317,14 @@ static FUNC(uint32, ADC_CODE) Pic2_Pil_RegchkPreFix(
 	VAR(uint32,			ADC_VAR_NO_INIT)	t_u4ChkResult;
 
 	t_u4ChkResult	= ADC_REGCHK_OK;
-	if (t_cudHWUnit<(Adc_HWUnitType)PIC2_HWUNIT_WPIC2_SIZE) {
-		/* Trigger Output */
-		/* t_u4ChkResult is updated in PIC2_RegValueCheckBySG	*/
-		PIC2_RegValueCheckBySG(uint16, cpstReg_Pic20[PIC2_REG_ARRAY_ID0]->stADTEN4nj[PIC2_ADCTEN40j].stTrgCH[t_cudSG].u2Data, Adc_cstUserConfig.cpstPIC2Confg->cpu2Pic20ADTEN40[t_cudSG], t_cudSG);
-		PIC2_RegValueCheckBySG(uint16, cpstReg_Pic20[PIC2_REG_ARRAY_ID0]->stADTEN4nj[PIC2_ADCTEN41j].stTrgCH[t_cudSG].u2Data, Adc_cstUserConfig.cpstPIC2Confg->cpu2Pic20ADTEN41[t_cudSG], t_cudSG);
-		#if (MCAL_SPAL_TARGET==MCAL_TARGET_RH850U2B)
-		PIC2_RegValueCheckBySG(uint16, cpstReg_Pic21[PIC2_REG_ARRAY_ID0]->stADTEN4nj[PIC2_ADCTEN40j].stTrgCH[t_cudSG].u2Data, Adc_cstUserConfig.cpstPIC2Confg->cpu2Pic21ADTEN40[t_cudSG], t_cudSG);
-		PIC2_RegValueCheckBySG(uint16, cpstReg_Pic21[PIC2_REG_ARRAY_ID0]->stADTEN4nj[PIC2_ADCTEN41j].stTrgCH[t_cudSG].u2Data, Adc_cstUserConfig.cpstPIC2Confg->cpu2Pic21ADTEN41[t_cudSG], t_cudSG);
-		#endif
-	}
+	/* Trigger Output */
+	/* t_u4ChkResult is updated in ADC_RegValueCheckBySGwoMask	*/
+	ADC_RegValueCheckBySGwoMask(uint16, cpstReg_Pic20[PIC2_REG_ARRAY_ID0]->stADTEN4nj[PIC2_ADCTEN40j].stTrgCH[t_cudSG].u2Data, Adc_cstUserConfig.cpstPIC2Confg->cpu2Pic20ADTEN40[t_cudSG]);
+	ADC_RegValueCheckBySGwoMask(uint16, cpstReg_Pic20[PIC2_REG_ARRAY_ID0]->stADTEN4nj[PIC2_ADCTEN41j].stTrgCH[t_cudSG].u2Data, Adc_cstUserConfig.cpstPIC2Confg->cpu2Pic20ADTEN41[t_cudSG]);
+	#if (MCAL_SPAL_TARGET==MCAL_TARGET_RH850U2B)
+	ADC_RegValueCheckBySGwoMask(uint16, cpstReg_Pic21[PIC2_REG_ARRAY_ID0]->stADTEN4nj[PIC2_ADCTEN40j].stTrgCH[t_cudSG].u2Data, Adc_cstUserConfig.cpstPIC2Confg->cpu2Pic21ADTEN40[t_cudSG]);
+	ADC_RegValueCheckBySGwoMask(uint16, cpstReg_Pic21[PIC2_REG_ARRAY_ID0]->stADTEN4nj[PIC2_ADCTEN41j].stTrgCH[t_cudSG].u2Data, Adc_cstUserConfig.cpstPIC2Confg->cpu2Pic21ADTEN41[t_cudSG]);
+	#endif
 
 	return(t_u4ChkResult);
 }
@@ -371,7 +360,7 @@ static FUNC(uint32, ADC_CODE) Pic2_Pil_RegchkPostFix(
 	VAR(uint32,			ADC_VAR_NO_INIT)	t_u4ChkResult;
 
 	t_u4ChkResult	= ADC_REGCHK_OK;
-	if (t_cudHWUnit<(Adc_HWUnitType)PIC2_HWUNIT_WPIC2_SIZE) {
+	if (t_cudHWUnit<PIC2_HWUNIT_WPIC2_SIZE) {
 		/* t_u4ChkResult is updated in ADC_RegValueCheckByHWUnit	*/
 		/* ADC Trigger Edge Direction			*/
 		ADC_RegValueCheckByHWUnit(uint16, cpstReg_Pic20[PIC2_REG_ARRAY_ID0]->stADCXnTSELj[t_cudHWUnit].u2EDGSEL, t_pu2Pic20EDGSEL[t_cudHWUnit], PIC2_EDGSEL_DEFBIT,t_cudHWUnit); 
@@ -413,70 +402,68 @@ static FUNC(uint32, ADC_CODE) Pic2_Pil_RegchkDynamic(
 	VAR(uint32,			ADC_VAR_NO_INIT)	t_u4ExpectedValue;
 
 	t_u4ChkResult	= ADC_REGCHK_OK;
-	if (t_cudHWUnit<(Adc_HWUnitType)PIC2_HWUNIT_WPIC2_SIZE) {
-		ADC_ENTER_CRITICAL_SECTION(ADC_CODE);
-		t_udStatus		= Adc_GetGrpStatus(t_cudGrp);
-		t_u4RegValue	= cpstReg_Pic20[PIC2_REG_ARRAY_ID0]->stADCXnTSELj[t_cudHWUnit].u4TSEL[t_cudSG] & PIC2_20TSEL_DEFBIT;
-		if (t_udStatus==ADC_IDLE) {
-			t_u4ExpectedValue	= (uint32)PIC2_ZERO & PIC2_20TSEL_DEFBIT;
-			if (t_u4RegValue!=t_u4ExpectedValue) {
-				#if (ADC_CFG_REG_REFRESH==STD_ON)
-				cpstReg_Pic20[PIC2_REG_ARRAY_ID0]->stADCXnTSELj[t_cudHWUnit].u4TSEL[t_cudSG] = t_u4ExpectedValue;
-				t_u4RegValue = cpstReg_Pic20[PIC2_REG_ARRAY_ID0]->stADCXnTSELj[t_cudHWUnit].u4TSEL[t_cudSG] & PIC2_20TSEL_DEFBIT;
-				if (t_u4RegValue==t_u4ExpectedValue) {
-					t_u4ChkResult |= ADC_REGCHK_REFRESH_SUCCESS;
-				} else {
-					t_u4ChkResult |= ADC_REGCHK_REFRESH_FAILED;
-				}
-				#else
-				t_u4ChkResult  |= ADC_REGCHK_NG;
-				#endif
+	ADC_ENTER_CRITICAL_SECTION(ADC_CODE);
+	t_udStatus		= Adc_GetGroupStatus(t_cudGrp);
+	t_u4RegValue	= cpstReg_Pic20[PIC2_REG_ARRAY_ID0]->stADCXnTSELj[t_cudHWUnit].u4TSEL[t_cudSG] & PIC2_20TSEL_DEFBIT;
+	if (t_udStatus==ADC_IDLE) {
+		t_u4ExpectedValue	= (uint32)PIC2_ZERO & PIC2_20TSEL_DEFBIT;
+		if (t_u4RegValue!=t_u4ExpectedValue) {
+			#if (ADC_CFG_REG_REFRESH==STD_ON)
+			cpstReg_Pic20[PIC2_REG_ARRAY_ID0]->stADCXnTSELj[t_cudHWUnit].u4TSEL[t_cudSG] = t_u4ExpectedValue;
+			t_u4RegValue = cpstReg_Pic20[PIC2_REG_ARRAY_ID0]->stADCXnTSELj[t_cudHWUnit].u4TSEL[t_cudSG] & PIC2_20TSEL_DEFBIT;
+			if (t_u4RegValue==t_u4ExpectedValue) {
+				t_u4ChkResult |= ADC_REGCHK_REFRESH_SUCCESS;
+			} else {
+				t_u4ChkResult |= ADC_REGCHK_REFRESH_FAILED;
 			}
-		} else {
-			t_u4ExpectedValue	= Adc_cstUserConfig.cpstPIC2Confg->cpu4Pic20TSEL[t_cudGrp] & PIC2_20TSEL_DEFBIT;
-			if (t_u4RegValue!=t_u4ExpectedValue) {
-				#if (ADC_CFG_REG_REFRESH==STD_ON)
-				t_u4ChkResult |= ADC_REGCHK_REFRESH_IMPOSSIBLE;
-				#else
-				t_u4ChkResult  |= ADC_REGCHK_NG;
-				#endif
-			}
+			#else
+			t_u4ChkResult  |= ADC_REGCHK_NG;
+			#endif
 		}
-		ADC_EXIT_CRITICAL_SECTION(ADC_CODE);
-
-		#if (MCAL_SPAL_TARGET==MCAL_TARGET_RH850U2B)
-		ADC_ENTER_CRITICAL_SECTION(ADC_CODE);
-		t_u4RegValue		= cpstReg_Pic21[PIC2_REG_ARRAY_ID0]->stADCXnTSELj[t_cudHWUnit].u4TSEL[t_cudSG] & PIC2_21TSEL_DEFBIT;
-		t_udStatus		= Adc_GetGrpStatus(t_cudGrp);
-		if (t_udStatus==ADC_IDLE) {
-			t_u4RegValue		= cpstReg_Pic21[PIC2_REG_ARRAY_ID0]->stADCXnTSELj[t_cudHWUnit].u4TSEL[t_cudSG] & PIC2_21TSEL_DEFBIT;
-			t_u4ExpectedValue	= (uint32)PIC2_ZERO & PIC2_21TSEL_DEFBIT;
-			if (t_u4RegValue!=t_u4ExpectedValue) {
-				#if (ADC_CFG_REG_REFRESH==STD_ON)
-				cpstReg_Pic21[PIC2_REG_ARRAY_ID0]->stADCXnTSELj[t_cudHWUnit].u4TSEL[t_cudSG] = t_u4ExpectedValue;
-				t_u4RegValue = cpstReg_Pic21[PIC2_REG_ARRAY_ID0]->stADCXnTSELj[t_cudHWUnit].u4TSEL[t_cudSG] & PIC2_21TSEL_DEFBIT;
-				if (t_u4RegValue==t_u4ExpectedValue) {
-					t_u4ChkResult |= ADC_REGCHK_REFRESH_SUCCESS;
-				} else {
-					t_u4ChkResult |= ADC_REGCHK_REFRESH_FAILED;
-				}
-				#else
-				t_u4ChkResult  |= ADC_REGCHK_NG;
-				#endif
-			}
-		} else {
-			t_u4ExpectedValue	= Adc_cstUserConfig.cpstPIC2Confg->cpu4Pic21TSEL[t_cudGrp] & PIC2_21TSEL_DEFBIT;
-			if (t_u4RegValue!=t_u4ExpectedValue) {
-				#if (ADC_CFG_REG_REFRESH==STD_ON)
-				t_u4ChkResult |= ADC_REGCHK_REFRESH_IMPOSSIBLE;
-				#else
-				t_u4ChkResult  |= ADC_REGCHK_NG;
-				#endif
-			}
+	} else {
+		t_u4ExpectedValue	= Adc_cstUserConfig.cpstPIC2Confg->cpu4Pic20TSEL[t_cudGrp] & PIC2_20TSEL_DEFBIT;
+		if (t_u4RegValue!=t_u4ExpectedValue) {
+			#if (ADC_CFG_REG_REFRESH==STD_ON)
+			t_u4ChkResult |= ADC_REGCHK_REFRESH_IMPOSSIBLE;
+			#else
+			t_u4ChkResult  |= ADC_REGCHK_NG;
+			#endif
 		}
-		ADC_EXIT_CRITICAL_SECTION(ADC_CODE);
-		#endif
 	}
+	ADC_EXIT_CRITICAL_SECTION(ADC_CODE);
+
+	#if (MCAL_SPAL_TARGET==MCAL_TARGET_RH850U2B)
+	ADC_ENTER_CRITICAL_SECTION(ADC_CODE);
+	t_u4RegValue		= cpstReg_Pic21[PIC2_REG_ARRAY_ID0]->stADCXnTSELj[t_cudHWUnit].u4TSEL[t_cudSG] & PIC2_21TSEL_DEFBIT;
+	t_udStatus		= Adc_GetGroupStatus(t_cudGrp);
+	if (t_udStatus==ADC_IDLE) {
+		t_u4RegValue		= cpstReg_Pic21[PIC2_REG_ARRAY_ID0]->stADCXnTSELj[t_cudHWUnit].u4TSEL[t_cudSG] & PIC2_21TSEL_DEFBIT;
+		t_u4ExpectedValue	= (uint32)PIC2_ZERO & PIC2_21TSEL_DEFBIT;
+		if (t_u4RegValue!=t_u4ExpectedValue) {
+			#if (ADC_CFG_REG_REFRESH==STD_ON)
+			cpstReg_Pic21[PIC2_REG_ARRAY_ID0]->stADCXnTSELj[t_cudHWUnit].u4TSEL[t_cudSG] = t_u4ExpectedValue;
+			t_u4RegValue = cpstReg_Pic21[PIC2_REG_ARRAY_ID0]->stADCXnTSELj[t_cudHWUnit].u4TSEL[t_cudSG] & PIC2_21TSEL_DEFBIT;
+			if (t_u4RegValue==t_u4ExpectedValue) {
+				t_u4ChkResult |= ADC_REGCHK_REFRESH_SUCCESS;
+			} else {
+				t_u4ChkResult |= ADC_REGCHK_REFRESH_FAILED;
+			}
+			#else
+			t_u4ChkResult  |= ADC_REGCHK_NG;
+			#endif
+		}
+	} else {
+		t_u4ExpectedValue	= Adc_cstUserConfig.cpstPIC2Confg->cpu4Pic21TSEL[t_cudGrp] & PIC2_21TSEL_DEFBIT;
+		if (t_u4RegValue!=t_u4ExpectedValue) {
+			#if (ADC_CFG_REG_REFRESH==STD_ON)
+			t_u4ChkResult |= ADC_REGCHK_REFRESH_IMPOSSIBLE;
+			#else
+			t_u4ChkResult  |= ADC_REGCHK_NG;
+			#endif
+		}
+	}
+	ADC_EXIT_CRITICAL_SECTION(ADC_CODE);
+	#endif
 
 	return(t_u4ChkResult);
 }

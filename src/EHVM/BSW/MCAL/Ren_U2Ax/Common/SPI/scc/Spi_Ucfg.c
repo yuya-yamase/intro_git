@@ -274,25 +274,25 @@
 /*==============================================================================================*/
 /*	variables																					*/
 /*==============================================================================================*/
-#pragma ghs section bss=".SPI_BSS_VAR_NO_INIT"
+// #pragma ghs section bss=".SPI_BSS_VAR_NO_INIT"
 
 #if (SPI_CFG_MODEC_USE == ON)
 #if (SPI_UCFG_MODEC_CHANNEL_NUM > 0)
-Spi_ModeC_ChannelDataType		stSpi_ModeC_ChannelData[SPI_UCFG_MODEC_CHANNEL_NUM];
+Spi_ModeC_ChannelDataType		stSpi_ModeC_ChannelData[SPI_UCFG_MODEC_CHANNEL_NUM]          __attribute__((section(".bss_SHARE_SPI_MODEC_CHANNELDATA")));
 #else
-Spi_ModeC_ChannelDataType		stSpi_ModeC_ChannelData[1];
+Spi_ModeC_ChannelDataType		stSpi_ModeC_ChannelData[1]          						 __attribute__((section(".bss_SHARE_SPI_MODEC_CHANNELDATA")));
 #endif
 #endif
 
 #if (SPI_CFG_MODEA_USE == ON)
 #if (SPI_UCFG_MODEA_CHANNEL_NUM > 0)
-Spi_ModeA_ChannelDataType		stSpi_ModeA_ChannelData[SPI_UCFG_MODEA_CHANNEL_NUM];			/* Channel buffer information */
+Spi_ModeA_ChannelDataType		stSpi_ModeA_ChannelData[SPI_UCFG_MODEA_CHANNEL_NUM]          __attribute__((section(".bss_SHARE_SPI_MODEA_CHANNELDATA")));			/* Channel buffer information */
 #else
-Spi_ModeA_ChannelDataType		stSpi_ModeA_ChannelData[1];
+Spi_ModeA_ChannelDataType		stSpi_ModeA_ChannelData[1]							         __attribute__((section(".bss_SHARE_SPI_MODEA_CHANNELDATA")));
 #endif
 #endif
 
-#pragma ghs section bss=default
+// #pragma ghs section bss=default
 
 /*==============================================================================================*/
 /*	constants																					*/

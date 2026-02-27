@@ -72,51 +72,6 @@
     -I../../src/PE0VM0/BSW/Aubist/CycurHSM/ecy_hsm/Host_Proxy/api
     -I../../src/PE0VM0/BSW/Aubist/CycurHSM/ecy_hsm_RH850_GHS_D7_DM/api
 ###    -I../../src/PE0VM0/BSW/Aubist/CycurHSM/ecy_hsm_RH850_GHS_D7_DM/bin
-    -I../../src/PE0VM0/BSW/Aubist/Dcm/Dsd/cfg
-###    -I../../src/PE0VM0/BSW/Aubist/Dcm/Dsd/inc
-###    -I../../src/PE0VM0/BSW/Aubist/Dcm/Dsl/cfg
-###    -I../../src/PE0VM0/BSW/Aubist/Dcm/Dsl/inc
-###    -I../../src/PE0VM0/BSW/Aubist/Dcm/Dsl/usr
-    -I../../src/PE0VM0/BSW/Aubist/Dcm/Dsp/cfg
-###    -I../../src/PE0VM0/BSW/Aubist/Dcm/Dsp/inc
-###    -I../../src/PE0VM0/BSW/Aubist/Dcm/Dsp/usr
-###    -I../../src/PE0VM0/BSW/Aubist/Dcm/Main/cfg
-###    -I../../src/PE0VM0/BSW/Aubist/Dcm/Main/inc
-    -I../../src/PE0VM0/BSW/Aubist/Dem/cfg
-###    -I../../src/PE0VM0/BSW/Aubist/Dem/inc
-###    -I../../src/PE0VM0/BSW/Aubist/Dem/src/CmnReq/AsyncReq
-###    -I../../src/PE0VM0/BSW/Aubist/Dem/src/CmnReq/ConfigInfo
-###    -I../../src/PE0VM0/BSW/Aubist/Dem/src/CmnReq/Control
-###    -I../../src/PE0VM0/BSW/Aubist/Dem/src/CmnReq/DataCtl
-###    -I../../src/PE0VM0/BSW/Aubist/Dem/src/CmnReq/Ind
-###    -I../../src/PE0VM0/BSW/Aubist/Dem/src/CmnReq/OpCycle
-###    -I../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/Control
-###    -I../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/DataCtl
-###    -I../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/DTC
-###    -I../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/DTC/PFC
-###    -I../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/DTR
-###    -I../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/EDR
-###    -I../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/Ind/MI
-###    -I../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/IUMPR
-###    -I../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/Misfire
-###    -I../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/MonSts
-###    -I../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/OccrDTC
-###    -I../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/PID
-###    -I../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/PreFFD
-###    -I../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlReq/Similar
-###    -I../../src/PE0VM0/BSW/Aubist/Dem/src/CtrlUserDefMem/DataCtl
-###    -I../../src/PE0VM0/BSW/Aubist/Dem/src/DataMng/ClrInfoMng
-###    -I../../src/PE0VM0/BSW/Aubist/Dem/src/DataMng/DataMng
-###    -I../../src/PE0VM0/BSW/Aubist/Dem/src/DataMng/DataMng/MisfireMng
-###    -I../../src/PE0VM0/BSW/Aubist/Dem/src/DataMng/DataMng/SimilarMng
-###    -I../../src/PE0VM0/BSW/Aubist/Dem/src/DataMng/IUMPRMng
-###    -I../../src/PE0VM0/BSW/Aubist/Dem/src/DataMng/OccrDTCMng
-###    -I../../src/PE0VM0/BSW/Aubist/Dem/src/DataMng/OrderList
-###    -I../../src/PE0VM0/BSW/Aubist/Dem/src/DataMng/PIDMng
-###    -I../../src/PE0VM0/BSW/Aubist/Dem/src/DataMng/UserDefMemMng
-###    -I../../src/PE0VM0/BSW/Aubist/Dem/src/MemSync/MemSync
-###    -I../../src/PE0VM0/BSW/Aubist/Dem/src/MemSync/MM
-    -I../../src/PE0VM0/BSW/Aubist/Dem/usr
 ###    -I../../src/PE0VM0/BSW/Aubist/E2E/inc
 ###    -I../../src/PE0VM0/BSW/Aubist/Fee/cfg
 ###    -I../../src/PE0VM0/BSW/Aubist/Fee/inc
@@ -124,6 +79,9 @@
 ###    -I../../src/PE0VM0/BSW/Aubist/Fls/cfg
 ###    -I../../src/PE0VM0/BSW/Aubist/Fls/inc
 ###    -I../../src/PE0VM0/BSW/Aubist/Fls/usr
+    -I../../src/PE0VM0/BSW/Aubist/IdsM/cfg
+    -I../../src/PE0VM0/BSW/Aubist/IdsM/inc
+    -I../../src/PE0VM0/BSW/Aubist/IdsM/usr
 ###    -I../../src/PE0VM0/BSW/Aubist/inc                    should be defined as first in order to reduce compilation time
 ###    -I../../src/PE0VM0/BSW/Aubist/inc/bswm_can
 ###    -I../../src/PE0VM0/BSW/Aubist/inc/bswm_cs
@@ -140,8 +98,6 @@
 ###    -I../../src/PE0VM0/BSW/Aubist/inc/comm
 ###    -I../../src/PE0VM0/BSW/Aubist/inc/Compiler
 ###    -I../../src/PE0VM0/BSW/Aubist/inc/cs
-    -I../../src/PE0VM0/BSW/Aubist/inc/Dcm
-    -I../../src/PE0VM0/BSW/Aubist/inc/Dem
 ###    -I../../src/PE0VM0/BSW/Aubist/inc/ipdum
 ###    -I../../src/PE0VM0/BSW/Aubist/inc/ldcom
 ###    -I../../src/PE0VM0/BSW/Aubist/inc/nm
@@ -203,10 +159,10 @@
     -I../../src/PE0VM0/BSW/Aubist/Os/source/mcos/mk/sys/arch/v850
 ###    -I../../src/PE0VM0/BSW/Aubist/PduR/cfg
 ###    -I../../src/PE0VM0/BSW/Aubist/PduR/inc
-    -I../../src/PE0VM0/BSW/Aubist/SecOC/cfg
-    -I../../src/PE0VM0/BSW/Aubist/SecOC/inc
-    -I../../src/PE0VM0/BSW/Aubist/SecOC/usr
-    -I../../src/PE0VM0/BSW/Aubist/SecOC_CD_FV/inc
+###    -I../../src/PE0VM0/BSW/Aubist/SecOC/cfg
+###    -I../../src/PE0VM0/BSW/Aubist/SecOC/inc
+###    -I../../src/PE0VM0/BSW/Aubist/SecOC/usr
+###    -I../../src/PE0VM0/BSW/Aubist/SecOC_CD_FV/inc
     -I../../src/PE0VM0/BSW/Aubist/VCan/cfg
     -I../../src/PE0VM0/BSW/Aubist/VCan/inc
     -I../../src/PE0VM0/BSW/Communication/CANLpR/config
@@ -220,8 +176,6 @@
     -I../../src/PE0VM0/BSW/Communication/oXCAN/scc
     -I../../src/PE0VM0/BSW/ComplexDriver/Vehopemd/config_tybev3
     -I../../src/PE0VM0/BSW/ComplexDriver/Vehopemd/scc
-    -I../../src/PE0VM0/BSW/Diagnosis/oXDoCAN/lib/config
-    -I../../src/PE0VM0/BSW/Diagnosis/oXDoCAN/lib/scc
     -I../../src/PE0VM0/BSW/ehvm_if/include/ehvm
 ###    -I../../src/PE0VM0/BSW/IoHwAbstract/iohw_adc/config_CDC_JP
     -I../../src/PE0VM0/BSW/IoHwAbstract/iohw_adc/config_CDC_OT
@@ -273,9 +227,9 @@
     -I../../src/PE0VM0/BSW/Memory/Rim/scc
     -I../../src/PE0VM0/BSW/Security/oXSEC/config
     -I../../src/PE0VM0/BSW/Security/oXSEC/scc
+    -I../../src/PE0VM0/BSW/Security/vCryPx/scc
     -I../../src/PE0VM0/BSW/System/22SS/config
     -I../../src/PE0VM0/BSW/System/22SS/scc
-    -I../../src/PE0VM0/BSW/System/RprgIf/config
     -I../../src/PE0VM0/BSW/System/RunM/scc
     -I../../src/PE0VM0/BSW/System/SchdM/config
     -I../../src/PE0VM0/BSW/System/SchdM/scc
@@ -285,7 +239,7 @@
     -I../../src/PE0VM0/LIB/Ren_G4MH/scc
 
 # ----------------------------------------------------------------------------------------------------------------------------------
-# ghsprj version 1-1-0
-# Date generated: 2026/02/26 15:33:34
+# ghsprj version 1-0-0
+# Date generated: 2025/11/27 07:51:42
 # ----------------------------------------------------------------------------------------------------------------------------------
 

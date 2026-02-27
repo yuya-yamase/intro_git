@@ -110,44 +110,44 @@ extern const uint32 ar_mpu_region_usage;
 #include "Os_MemMap.h"
 
 
-AR_LOCAL_FORCE_INLINE uint32 xmcos_ar_get_memprotect_group_id(ApplicationType osap_id);
-AR_LOCAL_FORCE_INLINE void xmcos_ar_set_mpu_regions(ApplicationType osap_id);
+LOCAL_INLINE uint32 xmcos_ar_get_memprotect_group_id(ApplicationType osap_id);
+LOCAL_INLINE void xmcos_ar_set_mpu_regions(ApplicationType osap_id);
 
 #if (AR_ENABLE_CHECK_TASK_MEMORY_ACCESS != 0U) || (AR_ENABLE_CHECK_ISR_MEMORY_ACCESS != 0U)
 
-AR_LOCAL_FORCE_INLINE AccessType xmcos_ar_get_memory_permissions(
+LOCAL_INLINE AccessType xmcos_ar_get_memory_permissions(
     boolean         can_fullaccess,
     const ar_osap_config_t *p_osapconfig,
     ConstMemoryStartAddressType start, MemorySizeType size,
     ConstMemoryStartAddressType stack_lower, MemorySizeType stack_size);
-AR_LOCAL_FORCE_INLINE AccessType xmcos_convert_permissions(uint32 mpat, boolean is_supervisor);
+LOCAL_INLINE AccessType xmcos_convert_permissions(uint32 mpat, boolean is_supervisor);
 
-AR_LOCAL_FORCE_INLINE boolean xmcos_ar_spacea_contains_spaceb(
+LOCAL_INLINE boolean xmcos_ar_spacea_contains_spaceb(
     ConstMemoryStartAddressType lower_addr_a,
     MemorySizeType         size_a,
     ConstMemoryStartAddressType lower_addr_b,
     MemorySizeType         size_b);
 
-AR_LOCAL_FORCE_INLINE boolean xmcos_is_contained_in_stack_space(
+LOCAL_INLINE boolean xmcos_is_contained_in_stack_space(
     ConstMemoryStartAddressType stack_lower_addr,
     MemorySizeType         stack_size,
     ConstMemoryStartAddressType check_lower_addr,
     MemorySizeType         check_size);
-AR_LOCAL_FORCE_INLINE boolean xmcos_is_contained_in_os_rgn1(
+LOCAL_INLINE boolean xmcos_is_contained_in_os_rgn1(
     ConstMemoryStartAddressType check_lower_addr,
     MemorySizeType         check_size);
-AR_LOCAL_FORCE_INLINE boolean xmcos_is_contained_in_os_rgn2(
+LOCAL_INLINE boolean xmcos_is_contained_in_os_rgn2(
     ConstMemoryStartAddressType check_lower_addr,
     MemorySizeType         check_size,
     CoreIdType             coreid);
 
 #endif /* #if (AR_ENABLE_CHECK_TASK_MEMORY_ACCESS != 0U) || (AR_ENABLE_CHECK_ISR_MEMORY_ACCESS != 0U) */
 
-AR_LOCAL_FORCE_INLINE boolean xmcos_ar_can_call_fnc_service(void);
+LOCAL_INLINE boolean xmcos_ar_can_call_fnc_service(void);
 #endif /* (AR_OS_USE_SCALABILITYCLASS_3_OR_4 == STD_ON) */
 
 #if (AR_OS_USE_ERRORHOOK == STD_ON)
-AR_LOCAL_FORCE_INLINE boolean xmcos_ar_can_call_errorhook(void);
+LOCAL_INLINE boolean xmcos_ar_can_call_errorhook(void);
 #endif  /* (AR_OS_USE_ERRORHOOK == STD_ON) */
 
 #if (AR_OS_USE_SCALABILITYCLASS_3_OR_4 == STD_ON)
@@ -189,7 +189,7 @@ extern void xmcos_ar_application_changed(ApplicationType osap_id);
   Return    :   prs pattern
   Note  :   none
  ---------------------------------------------------------------------------*/
-AR_LOCAL_FORCE_INLINE uint32
+LOCAL_INLINE uint32
 xmcos_ar_get_memprotect_group_id(ApplicationType osap_id)
 {
     return ar_appid_mode_table[osap_id];
@@ -203,7 +203,7 @@ xmcos_ar_get_memprotect_group_id(ApplicationType osap_id)
   Return    :   none
   Note  :   none
  ---------------------------------------------------------------------------*/
-AR_LOCAL_FORCE_INLINE void
+LOCAL_INLINE void
 xmcos_ar_set_mpu_regions(ApplicationType osap_id)
 {
     sint32  lock;
@@ -224,7 +224,7 @@ xmcos_ar_set_mpu_regions(ApplicationType osap_id)
   Return    :   access
   Note  :   none
  ---------------------------------------------------------------------------*/
-AR_LOCAL_FORCE_INLINE AccessType
+LOCAL_INLINE AccessType
 xmcos_convert_permissions(uint32 mpat, boolean is_supervisor)
 {
     AccessType  access;
@@ -304,7 +304,7 @@ xmcos_convert_permissions(uint32 mpat, boolean is_supervisor)
   Return    :   none
   Note  :   none
  ---------------------------------------------------------------------------*/
-AR_LOCAL_FORCE_INLINE boolean
+LOCAL_INLINE boolean
 xmcos_ar_spacea_contains_spaceb(
     ConstMemoryStartAddressType lower_addr_a,
     MemorySizeType         size_a,
@@ -332,7 +332,7 @@ xmcos_ar_spacea_contains_spaceb(
     return ret;
 }
 
-AR_LOCAL_FORCE_INLINE boolean xmcos_is_contained_in_stack_space(
+LOCAL_INLINE boolean xmcos_is_contained_in_stack_space(
     ConstMemoryStartAddressType stack_lower_addr,
     MemorySizeType         stack_size,
     ConstMemoryStartAddressType check_lower_addr,
@@ -345,7 +345,7 @@ AR_LOCAL_FORCE_INLINE boolean xmcos_is_contained_in_stack_space(
         check_size);
 }
 
-AR_LOCAL_FORCE_INLINE boolean xmcos_is_contained_in_os_rgn1(
+LOCAL_INLINE boolean xmcos_is_contained_in_os_rgn1(
     ConstMemoryStartAddressType check_lower_addr,
     MemorySizeType         check_size)
 {
@@ -364,7 +364,7 @@ AR_LOCAL_FORCE_INLINE boolean xmcos_is_contained_in_os_rgn1(
         check_size);
 }
 
-AR_LOCAL_FORCE_INLINE boolean xmcos_is_contained_in_os_rgn2(
+LOCAL_INLINE boolean xmcos_is_contained_in_os_rgn2(
     ConstMemoryStartAddressType check_lower_addr,
     MemorySizeType         check_size,
     CoreIdType             coreid)
@@ -403,7 +403,7 @@ AR_LOCAL_FORCE_INLINE boolean xmcos_is_contained_in_os_rgn2(
   Return    :   mask of the access attributes (None or Read or Write or eXecute)
   Note  :   none
  ---------------------------------------------------------------------------*/
-AR_LOCAL_FORCE_INLINE AccessType
+LOCAL_INLINE AccessType
 xmcos_ar_get_memory_permissions(
     boolean         can_fullaccess,
     const ar_osap_config_t *p_osapconfig,
@@ -503,7 +503,7 @@ xmcos_ar_get_memory_permissions(
                 directly or SVC exception
   Note  :  -
  ---------------------------------------------------------------------------*/
-AR_LOCAL_FORCE_INLINE boolean
+LOCAL_INLINE boolean
 xmcos_ar_can_call_fnc_service(void)
 {
     return FALSE;
@@ -520,7 +520,7 @@ xmcos_ar_can_call_fnc_service(void)
   Return    :   Whether or not ErrorHook can be called
   Note  :   This function can only be called from a specific context
  ---------------------------------------------------------------------------*/
-AR_LOCAL_FORCE_INLINE boolean
+LOCAL_INLINE boolean
 xmcos_ar_can_call_errorhook(void)
 {
     return FALSE;

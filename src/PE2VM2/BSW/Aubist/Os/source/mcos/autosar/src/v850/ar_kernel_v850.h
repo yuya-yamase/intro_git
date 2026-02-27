@@ -115,7 +115,7 @@ MCOS_INLINE ar_kmode_state_t ar_enter_kernel(void)
     upper = lower + clscb->aroscb.osarchcb.check_stack_size;
     lower += USER_CFG_MCOS_CFG_AR_SYSCALL_STACKSIZE();
     sp = (uint32)mcos_hwl_get_sp();
-    if ( (lower > sp) || (sp > upper) )
+    if ( (lower >= sp) || (sp > upper) )
     {
         mcos_hwl_mk_sp_error();
         /* NEVER RETURN */
@@ -189,8 +189,7 @@ typedef struct
 
 #ifdef OS_CFG_H
 
-#if (AR_OS_EXIST_IOC == STD_ON)
-#if (AR_OS_USE_MULTICORE == STD_ON)
+#if ((AR_OS_USE_MULTICORE == STD_ON) && (AR_OS_EXIST_IOC == STD_ON))
 
 #define OS_START_SEC_VAR_SPINLOCK_GLOBAL_NO_INIT_256
 #include "Os_MemMap.h"
@@ -200,20 +199,7 @@ extern ar_ioc_lock_t                    ar_ioc_lock[AR_OS_NUM_IOC_COMMUNICATIONS
 #define OS_STOP_SEC_VAR_SPINLOCK_GLOBAL_NO_INIT_256
 #include "Os_MemMap.h"
 
-#else /* #if (AR_OS_USE_MULTICORE == STD_ON) */
-
-#define NUM_AR_IOC_LOCK_1  1U
-
-#define OS_START_SEC_VAR_SPINLOCK_GLOBAL_NO_INIT_256
-#include "Os_MemMap.h"
-
-extern ar_ioc_lock_t                    ar_ioc_lock[NUM_AR_IOC_LOCK_1];
-
-#define OS_STOP_SEC_VAR_SPINLOCK_GLOBAL_NO_INIT_256
-#include "Os_MemMap.h"
-
-#endif /* #if (AR_OS_USE_MULTICORE == STD_ON) */
-#endif /* #if (AR_OS_EXIST_IOC == STD_ON) */
+#endif /* #if ((AR_OS_USE_MULTICORE == STD_ON) && (AR_OS_EXIST_IOC == STD_ON)) */
 
 #else /* #ifdef OS_CFG_H */
 

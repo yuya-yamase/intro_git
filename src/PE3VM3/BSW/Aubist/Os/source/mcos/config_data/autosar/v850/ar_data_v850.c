@@ -207,6 +207,8 @@ ar_ioc_lock_t ar_ioc_lock[AR_OS_NUM_IOC_COMMUNICATIONS];
 
 #else /* #if (AR_OS_USE_MULTICORE == STD_ON) */
 
+#define NUM_AR_IOC_LOCK_1  1U
+
 #define OS_START_SEC_VAR_SPINLOCK_GLOBAL_NO_INIT_256
 #include "Os_MemMap.h"
 

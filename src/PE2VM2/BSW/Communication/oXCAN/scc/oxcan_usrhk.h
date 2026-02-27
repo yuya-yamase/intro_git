@@ -42,11 +42,9 @@ U4      u4_g_oXCANUsrhkWRQst(const U1 u1_a_CTRLR, const U1 u1_a_W_CLR);   /* cal
 void    vd_g_oXCANUsrhkTrcvToAct(const U1 u1_a_CH);                       /* called from libbswcs.a via syshook.c                */
 void    vd_g_oXCANUsrhkTrcvToIna(const U1 u1_a_CH);                       /* called from libbswcs.a via syshook.c                */
 
-void    vd_g_oXCANUsrhkIPduTraReq(const U1 u1_a_CH, const U2 u2_a_IPDU_TX, const U1 u1_a_TXMODE);
-void    vd_g_oXCANUsrhkIPduTraAck(const U2 u2_a_IPDU_TX);                     /* called from libbswcs.a via syshook.c            */
-void    vd_g_oXCANUsrhkIPduRecAck(const U2 u2_a_IPDU_RX);                     /* called from libbswcs.a via syshook.c            */
-
-void    vd_g_oXCANUsrhkOmaRecRslt(const U2 u2_a_OMA_RX, const U1 u1_a_OMA_VR);  /*called from oxcan_aubif_com.c :: Com_RxIpduCallout */
+void    vd_g_oXCANUsrhkTraReq(const U1 u1_a_CH, const U2 u2_a_IPDU_TX, const U1 u1_a_TXMODE);
+void    vd_g_oXCANUsrhkTraAck(const U2 u2_a_IPDU_TX);                     /* called from libbswcs.a via syshook.c                */
+void    vd_g_oXCANUsrhkRecAck(const U2 u2_a_IPDU_RX);                     /* called from libbswcs.a via syshook.c                */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */

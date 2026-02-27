@@ -85,9 +85,9 @@ extern const CounterType ar_system_counter_list[];
 
 #ifdef AR_COUNTER_LOCAL_ENABLE
 
-AR_LOCAL_FORCE_INLINE mcos_id_t ar_get_counter_lcid(const CounterType counter_id);
+LOCAL_INLINE mcos_id_t ar_get_counter_lcid(const CounterType counter_id);
 
-AR_LOCAL_FORCE_INLINE mcos_id_t ar_get_counter_lcid(
+LOCAL_INLINE mcos_id_t ar_get_counter_lcid(
     const CounterType counter_id)
 {
     mcos_id_t lcid;

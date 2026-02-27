@@ -1,4 +1,4 @@
-/* pil_dmac-r04-3000-0200-b-v00 */
+/* pil_dmac-r04-3000-0100-a-v01 */
 /************************************************************************************************/
 /*																								*/
 /*		PIL sDMAC Driver																		*/
@@ -367,7 +367,7 @@ void	Pil_Dmac_SetTransModeTwoStepReload( uint8 t_u1ChannelID, uint8 t_u1DmaType,
 	uint16		t_u2DesCnt;			/* Descriptor counters */
 
 	t_pstRegDmac = (volatile Reg_Dma_Type*)cstPil_Dmac_Reg[t_u1DmaType];
-	t_pstRegDmacDesRAM = (volatile Reg_Dram_Type*)cstPil_DmacDesRAM_Reg[t_u1DmaType];		/* Descriptor RAM */
+	t_pstRegDmacDesRAM = (volatile Reg_Dram_Type*)cstPil_DmacDesRAM_Reg[t_u1DmaType];		/* Discriptor RAM */
 
 	/* DI_ALL()";" */ /* No interrupts are required because there is no use case for calling Enable, SetInterrupt, this function */
 	                /* from a high-priority task during SetTransMode for the same DMAC channel.								   */
@@ -454,6 +454,17 @@ void	Pil_Dmac_SetTransModeTwoStepReload( uint8 t_u1ChannelID, uint8 t_u1DmaType,
 																				(uint16)DMA_CHCR_DPB	*	(uint16)DMA_CHCR_DPB_REGISTER_SET	+  	/* Start DMA transfer by register setting */
 																				(uint16)DMA_CHCR_CAEE	*	(uint16)DMA_CHCR_CAEE_DISABLE		+	/* Channel address error notification disabled */
 																				(uint16)DMA_CHCR_CAIE	*	(uint16)DMA_CHCR_CAIE_DISABLE ));		/* Channel address error interrupt disabled */
+	}
+	else
+	{
+		/* DMA transfer completion interrupt is enabled except for transfer mode 3, and descriptor end interrupt is disabled. */
+		/* In order to retain settings other than the specified bit, it is kept temporarily by taking AND with the inverted value. (Intended cast, never negative) */
+		t_u2Chcr = ( t_pstRegDmac->stDMAC_CH[t_u1ChannelID].unCHCR.u2Data & ( (uint16)~( (uint16)DMA_CHCR_DSIE + (uint16)DMA_CHCR_IE + (uint16)DMA_CHCR_DPE + (uint16)DMA_CHCR_CAEE + (uint16)DMA_CHCR_CAIE ) ) );
+		t_pstRegDmac->stDMAC_CH[t_u1ChannelID].unCHCR.u2Data = (uint16)( t_u2Chcr|(uint16)(	(uint16)DMA_CHCR_DSIE	* (uint16)DMA_CHCR_DSIE_DISABLE		+		/* Descriptor End Interrupt Disabled */
+																				(uint16)DMA_CHCR_IE		* (uint16)DMA_CHCR_IE_ENABLE		+			/* DMA transfer completion interrupt enabled */
+																				(uint16)DMA_CHCR_DPE	* (uint16)DMA_CHCR_DPE_DISABLE 		+		/* Descriptor operation disabled */
+																				(uint16)DMA_CHCR_CAEE	* (uint16)DMA_CHCR_CAEE_DISABLE		+		/* Channel address error notification disabled */
+																				(uint16)DMA_CHCR_CAIE	* (uint16)DMA_CHCR_CAIE_DISABLE ));			/* Channel address error interrupt disabled */
 	}
 
 	/* EI_ALL()";" */
@@ -867,78 +878,6 @@ uint32		Pil_Dmac_CheckRCHSReg( void )
 	/*Reg_DMAC0.unCM[t_u1ChannelID].u4Data = ( (uint32)DMA_CM_SPID_0 * u4PIL_DMAC0_SPIDNUM ) + ( (uint32)DMA_CM_UM * DMA_CM_UM_USER )";"*/
 	/*Reg_DMAC1.unCM[t_u1ChannelID].u4Data = ( (uint32)DMA_CM_SPID_0 * u4PIL_DMAC1_SPIDNUM ) + ( (uint32)DMA_CM_UM * DMA_CM_UM_USER )";"*/
 /*}*/
-
-#if (( DMA_CFG_DMA0_ACCESS == STD_ON ) || ( DMA_CFG_DMA1_ACCESS == STD_ON ))
-/*----------------------------------------------------------------------------------------------*/
-/*	sDMAC  Set SPID for all Channels															*/
-/*	return		: none																			*/
-/*	parameters	: none																			*/
-/*----------------------------------------------------------------------------------------------*/
-void	Pil_Dmac_SetSpidAllCh(void)
-{
-	sint32		i;
-
-	/* Set configured SPID value for all the channels */
-	for( i = (sint32)0; i < (sint32)DMA_DMAC_CH_NUM; i++ )
-	{
-#if ( DMA_CFG_DMA0_ACCESS == STD_ON )
-		Reg_DMAC0.unCM[i].u4Data = (uint32)( (uint32)DMA_CM_SPID_0 * (uint32)cu1Pil_Dma_Ucfg_Dmac0_ChSpidTable[i] ); /* justification for QAC warning 3383: it is not wrap-around within a configuration range */ /* EDET_INT30 */
-#endif
-
-#if ( DMA_CFG_DMA1_ACCESS == STD_ON )
-		#if ((MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A) || ((MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2B) && (MCAL_PKG_TARGET != MCAL_PKG_U2B6_292PIN)))
-		Reg_DMAC1.unCM[i].u4Data = (uint32)( (uint32)DMA_CM_SPID_0 * (uint32)cu1Pil_Dma_Ucfg_Dmac1_ChSpidTable[i] ); /* justification for QAC warning 3383: it is not wrap-around within a configuration range */ /* EDET_INT30 */
-		#endif
-#endif
-	}
-}
-#endif
-
-#if (( DMA_CFG_DMA0_ACCESS == STD_ON ) || ( DMA_CFG_DMA1_ACCESS == STD_ON ))
-#if ( DMA_CFG_REG_CHK == STD_ON )
-/*----------------------------------------------------------------------------------------------*/
-/*	DMAC ASIL Register Check Function															*/
-/*	return		: Diagnosis result																*/
-/*	parameters	: none																			*/
-/*----------------------------------------------------------------------------------------------*/
-uint32	Pil_Dmac_CheckReg_ASIL(void)
-{
-	sint32		i;
-	uint32  	t_u4SpidMask;
-	uint32		t_u4Ret;
-
-	t_u4Ret = DMA_REGCHK_OK;
-
-	/* Set configured SPID value for all the channels */
-	for( i = (sint32)0; i < (sint32)DMA_DMAC_CH_NUM; i++ )
-	{
-#if ( DMA_CFG_DMA0_ACCESS == STD_ON )
-		t_u4SpidMask = (uint32)((uint32)DMA_CM_SPID_0 * (uint32)cu1Pil_Dma_Ucfg_Dmac0_ChSpidTable[i]); /* justification for QAC warning 3383: it is not wrap-around within a configuration range */ /* EDET_INT30 */
-
-		if ( t_u4SpidMask != (uint32)(Reg_DMAC0.unCM[i].u4Data & (uint32)DMA_CM_SPID ) )
-		{
-			t_u4Ret = DMA_REGCHK_NG;
-			break;
-		}
-#endif
-
-#if ( DMA_CFG_DMA1_ACCESS == STD_ON )
-	#if ((MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A) || ((MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2B) && (MCAL_PKG_TARGET != MCAL_PKG_U2B6_292PIN)))
-		t_u4SpidMask = (uint32)((uint32)DMA_CM_SPID_0 * (uint32)cu1Pil_Dma_Ucfg_Dmac1_ChSpidTable[i]); /* justification for QAC warning 3383: it is not wrap-around within a configuration range */ /* EDET_INT30 */
-
-		if ( t_u4SpidMask != (uint32)(Reg_DMAC1.unCM[i].u4Data & (uint32)DMA_CM_SPID ) )
-		{
-			t_u4Ret = DMA_REGCHK_NG;
-			break;
-		}
-	#endif
-#endif
-	}
-
-	return (t_u4Ret);
-}
-#endif
-#endif
 
 #if (( DMA_CFG_DMA0_ACCESS == STD_ON ) || ( DMA_CFG_DMA1_ACCESS == STD_ON ))
 /*----------------------------------------------------------------------------------------------*/

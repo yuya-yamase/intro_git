@@ -84,7 +84,7 @@ uint8	Pil_Intc2_GetInterrupt( uint16 t_u2IntcChannel )
 	uint16			t_u2IntEimk;
 	uint8			t_u1Result;
 
-	t_u2IntEimk = (uint16)(Reg_PIL_INTC2.unEIC[ t_u2IntcChannel ].u2Data & (uint16)INTC_EIC_EIMK);
+	t_u2IntEimk = (uint16)(Reg_INTC2.unEIC[ t_u2IntcChannel ].u2Data & (uint16)INTC_EIC_EIMK);
 
 	if( t_u2IntEimk == (uint16)INTC_EIC_EIMK_ENABLE )
 	{
@@ -115,14 +115,14 @@ static	void	Pil_Intc_SetEimk( uint16 t_u2IntcIntNo, uint8 t_u1IntMask)
 
 	DMA_ENTER_CRITICAL_SECTION();
 
-	t_u1EIC = Reg_PIL_INTC2.unEIC[ t_u2IntcIntNo ].u1Data[0];				/* Get EIC byte 0 (0-7bit) */
+	t_u1EIC = Reg_INTC2.unEIC[ t_u2IntcIntNo ].u1Data[0];				/* Get EIC byte 0 (0-7bit) */
 
 	if( (t_u1EIC & (uint8)INTC_EIC_EIMK) != t_u1IntMask )					/* Request and EIMK have different values */
 	{
 		t_u1EIC = ((t_u1EIC & (uint8)~(uint8)INTC_EIC_EIMK) | t_u1IntMask);	/* Set t_u1IntMask to EIMK (position 7th bit) */
 	
-		Reg_PIL_INTC2.unEIC[ t_u2IntcIntNo ].u1Data[0] = t_u1EIC;
-		Bswlib_Sync_Pipeline_2( Reg_PIL_INTC2.unEIC[ t_u2IntcIntNo ].u2Data );
+		Reg_INTC2.unEIC[ t_u2IntcIntNo ].u1Data[0] = t_u1EIC;
+		Bswlib_Sync_Pipeline_2( Reg_INTC2.unEIC[ t_u2IntcIntNo ].u2Data );
 	}
 	
 	DMA_EXIT_CRITICAL_SECTION();

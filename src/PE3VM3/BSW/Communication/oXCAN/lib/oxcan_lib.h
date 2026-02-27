@@ -41,9 +41,9 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "oxcan_lib_cfg.h"
 
-#if ((OXCAN_LIB_CFG_EN_RXD == 1U) || (OXCAN_LIB_CFG_EN_RXD == 2U))
+#if (OXCAN_LIB_CFG_EN_RXD == 1U)
 #include "oxcan_rxd_def.h"
-#endif /* #if ((OXCAN_LIB_CFG_EN_RXD == 1U) || (OXCAN_LIB_CFG_EN_RXD == 2U)) */
+#endif /* #if (OXCAN_LIB_CFG_EN_RXD == 1U) */
 
 #if (OXCAN_LIB_CFG_EN_WRH == 1U)
 #include "oxcan_wrh_rqh.h"
@@ -69,14 +69,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* ./inc/Com.h:54:#define COM_NO_RX                       (0x01U) */
 /* ./inc/Com.h:53:#define COM_TIMEOUT                     (0x02U) */
-#if (COM_NO_RX != 0x01U)
-#error "oxcan_lib.h : COM_NO_RX shall be equal to 0x01."
-#endif
-#if (COM_TIMEOUT != 0x02U)
-#error "oxcan_lib.h : COM_TIMEOUT shall be equal to 0x02."
-#endif
-
-#define OXCAN_RXD_TOM_EN                         (0x04U)           /* TimeOut Monitoring is ENabled                            */
+#define OXCAN_RXD_TOC_EN                         (0x10U)           /* TimeOut Count is ENabled    */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define OXCAN_SYSEA_EAGR_1ST                     (0U)              /* Event Action Group 1st executed at vd_g_oXCANMainPreTask */
@@ -97,7 +90,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Prototypes                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if ((OXCAN_LIB_CFG_EN_RXD == 1U) || (OXCAN_LIB_CFG_EN_RXD == 2U))
+#if (OXCAN_LIB_CFG_EN_RXD == 1U)
 
 U1      u1_g_oXCANRxdStat(const U2 u2_a_RXD, const U4 u4_a_SYS_CHK, const U2 u2_a_RXTO_THRSH);
                                                              /* u2_a_RXD : OXCAN_RXD_PDU_XXX defined in oxcan_rxd_pdu.h              */
@@ -105,7 +98,7 @@ U1      u1_g_oXCANRxdStat(const U2 u2_a_RXD, const U4 u4_a_SYS_CHK, const U2 u2_
 U1      u1_g_oXCANRxdEvcnt(const U2 u2_a_RXD);
                                                              /* u2_a_RXD : OXCAN_RXD_PDU_XXX defined in oxcan_rxd_pdu.h              */
 
-#endif /* #if ((OXCAN_LIB_CFG_EN_RXD == 1U) || (OXCAN_LIB_CFG_EN_RXD == 2U)) */
+#endif /* #if (OXCAN_LIB_CFG_EN_RXD == 1U) */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #if (OXCAN_LIB_CFG_EN_VCT == 1U)
@@ -118,7 +111,7 @@ U4      u4_g_oXCANvCtWrqRx(void);                            /* Return : OXCAN_S
 #if (OXCAN_LIB_CFG_EN_WRH == 1U)
 
 void    vd_g_oXCANWrhReqHch(const U1 u1_a_HCH, const U4 u4_a_REQ);           /* u4_a_REQ : see oxcan_sys_def.h OXCAN_SYS_NET         */
-U4      u4_g_oXCANWrhWRQstd(void);                                           /* Return   : see oxcan_wrh_rqh.h OXCAN_WRH_RQBIT_XXX   */
+U4      u4_g_oXCANWrhWrqAct(void);                                           /* Return   : see oxcan_wrh_rqh.h OXCAN_WRH_RQBIT_XXX   */
 
 #endif /* #if (OXCAN_LIB_CFG_EN_WRH == 1U) */
 
@@ -142,14 +135,14 @@ void    vd_g_oXCANNmcCoord(void);
 #endif /* #if (OXCAN_LIB_CFG_EN_NMC == 1) */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if ((OXCAN_LIB_CFG_EN_RXD == 1U) || (OXCAN_LIB_CFG_EN_RXD == 2U))
+#if (OXCAN_LIB_CFG_EN_RXD == 1U)
 
 void    vd_g_oXCANRxdInit(void);
-void    vd_g_oXCANRxdSysEvhk(const U4 u4_a_SYS_ACT, const U4 u4_a_ECU_ACT);
-void    vd_g_oXCANRxdMainTask(const U4 u4_a_SYS_ACT, const U4 u4_a_ECU_ACT);
+void    vd_g_oXCANRxdSysEvhk(const U4 u4_a_SYS_ACT);
+void    vd_g_oXCANRxdMainTask(const U4 u4_a_SYS_ACT);
 void    vd_g_oXCANRxdPduAck(const U1 u1_a_GR, const U2 u2_a_PDU_ACK);
 
-#endif /* #if ((OXCAN_LIB_CFG_EN_RXD == 1U) || (OXCAN_LIB_CFG_EN_RXD == 2U)) */
+#endif /* #if (OXCAN_LIB_CFG_EN_RXD == 1) */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #if (OXCAN_LIB_CFG_EN_SEA == 1)

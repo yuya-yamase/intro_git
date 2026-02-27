@@ -15,8 +15,8 @@
 /*--------------------------------------------------------------------------*/
 #include <Csm_Cfg_Fixed.h>
 #include <Crypto_82_Hsm_Custom_Algorithms.h>
+#include <Csm_User.h>
 #include <SecOC_Cbk.h>
-#include <oxsec_aubif_csm.h>
 /*--------------------------------------------------------------------------*/
 /* Macros                                                                   */
 /*--------------------------------------------------------------------------*/
@@ -1147,7 +1147,7 @@ static CONST(Csm_Cfg_JobSubConfigType, CSM_CONFIG_DATA) Csm_Cfg_stJobSubConfig[C
       NULL_PTR,                    /* ptJobRedirectionInfo */
       &Csm_Cfg_u4KeyConfig[0],           /* ptJobKey */
       &Csm_Cfg_stQueueConfig[0],         /* ptJobQueue */
-      &vd_g_oXSECAubIfCsmAck,           /* ptJobPrimitiveCallbackFunc */
+      &CsmCallback_General,           /* ptJobPrimitiveCallbackFunc */
       0U,                    /* u2QueuePriorityIndex */
       0U                                /* u2Dummy */
     },
@@ -1155,7 +1155,7 @@ static CONST(Csm_Cfg_JobSubConfigType, CSM_CONFIG_DATA) Csm_Cfg_stJobSubConfig[C
       NULL_PTR,                    /* ptJobRedirectionInfo */
       &Csm_Cfg_u4KeyConfig[1],           /* ptJobKey */
       &Csm_Cfg_stQueueConfig[0],         /* ptJobQueue */
-      &vd_g_oXSECAubIfCsmKeySetAck,           /* ptJobPrimitiveCallbackFunc */
+      &CsmCallback_KeySetValid,           /* ptJobPrimitiveCallbackFunc */
       0U,                    /* u2QueuePriorityIndex */
       0U                                /* u2Dummy */
     },
@@ -1163,7 +1163,7 @@ static CONST(Csm_Cfg_JobSubConfigType, CSM_CONFIG_DATA) Csm_Cfg_stJobSubConfig[C
       NULL_PTR,                    /* ptJobRedirectionInfo */
       &Csm_Cfg_u4KeyConfig[0],           /* ptJobKey */
       &Csm_Cfg_stQueueConfig[0],         /* ptJobQueue */
-      &vd_g_oXSECAubIfCsmKeySetAck,           /* ptJobPrimitiveCallbackFunc */
+      &CsmCallback_KeySetValid,           /* ptJobPrimitiveCallbackFunc */
       0U,                    /* u2QueuePriorityIndex */
       0U                                /* u2Dummy */
     },
@@ -1171,7 +1171,7 @@ static CONST(Csm_Cfg_JobSubConfigType, CSM_CONFIG_DATA) Csm_Cfg_stJobSubConfig[C
       NULL_PTR,                    /* ptJobRedirectionInfo */
       &Csm_Cfg_u4KeyConfig[0],           /* ptJobKey */
       &Csm_Cfg_stQueueConfig[0],         /* ptJobQueue */
-      &vd_g_oXSECAubIfCsmAck,           /* ptJobPrimitiveCallbackFunc */
+      &CsmCallback_General,           /* ptJobPrimitiveCallbackFunc */
       0U,                    /* u2QueuePriorityIndex */
       0U                                /* u2Dummy */
     }
@@ -1188,7 +1188,7 @@ CONST(Csm_Cfg_JobConfigAccessType, CSM_CONFIG_DATA) Csm_Cfg_stJob =
 
 static CONST(AB_83_ConstV Csm_ErrorCalloutType, CSM_CONFIG_DATA) Csm_Cfg_ptErrorCalloutFunc[CSM_CFG_ERROR_CALLOUT_MAX] =
 {
-    &vd_g_oXSECAubIfCsmErrAck
+    &WrapCrypto_ErrorCallout
 };
 
 CONST(AB_83_ConstV Csm_Cfg_ErrorCalloutConfigAccessType, CSM_CONFIG_DATA) Csm_Cfg_stErrorCallout = 
@@ -1199,7 +1199,7 @@ CONST(AB_83_ConstV Csm_Cfg_ErrorCalloutConfigAccessType, CSM_CONFIG_DATA) Csm_Cf
 
 static CONST(AB_83_ConstV Csm_TimeOutCalloutType, CSM_CONFIG_DATA) Csm_Cfg_ptTimeOutCalloutFunc[CSM_CFG_TIMEOUT_CALLOUT_MAX] =
 {
-    &vd_g_oXSECAubIfCsmTimeoutAck
+    &WrapCrypto_TimeoutCallout
 };
 
 CONST(AB_83_ConstV Csm_Cfg_TimeOutCalloutConfigAccessType, CSM_CONFIG_DATA) Csm_Cfg_stTimeOutCallout = 

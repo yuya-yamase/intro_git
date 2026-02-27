@@ -99,7 +99,7 @@ const U1                           u1_g_VCAN_TXA_NUM_CCH = (U1)2U;
 const U1                           u1_gp_VCAN_TXA_NRMB_BY_CTRLR[] = {
     (U1)10U                                     /* Number of Rx Message Box for Controller#0 */
 };
-static const U4                    u4_s_VCAN_TXA_RSP_M0_31       = (U4)0x00000020U;
+static const U4                    u4_s_VCAN_TXA_RSP_M0_31       = (U4)0x00000000U;
 const U4 * const                   u4p_gp_VCAN_TXA_RSP_BY_RX[]   = {
     &u4_s_VCAN_TXA_RSP_M0_31
 };

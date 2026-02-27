@@ -144,16 +144,16 @@ extern StatusType ar_get_event_impl(
 #define OS_STOP_SEC_CODE
 #include "Os_MemMap.h"
 
-AR_LOCAL_FORCE_INLINE void ar_dispatch_task_core(clscb_t * const clscb, tcb_t * const running);
-AR_LOCAL_FORCE_INLINE void ar_dispatch_task_core_noreturn(const clscb_t * const clscb, const tcb_t * const running);
-AR_LOCAL_FORCE_INLINE void ar_do_dispatch_task(clscb_t * const clscb);
-AR_LOCAL_FORCE_INLINE void ar_dispatch_task(void);
-AR_LOCAL_FORCE_INLINE mcos_id_t ar_get_tid_by_task_id(const TaskType task_id);
-AR_LOCAL_FORCE_INLINE TaskType ar_get_task_id_by_ar_tcb(const ar_tcb_t * const p_atcb);
-AR_LOCAL_FORCE_INLINE tcb_t* ar_get_mcos_tcb(const TaskType task_id);
+LOCAL_INLINE void ar_dispatch_task_core(clscb_t * const clscb, tcb_t * const running);
+LOCAL_INLINE void ar_dispatch_task_core_noreturn(const clscb_t * const clscb, const tcb_t * const running);
+LOCAL_INLINE void ar_do_dispatch_task(clscb_t * const clscb);
+LOCAL_INLINE void ar_dispatch_task(void);
+LOCAL_INLINE mcos_id_t ar_get_tid_by_task_id(const TaskType task_id);
+LOCAL_INLINE TaskType ar_get_task_id_by_ar_tcb(const ar_tcb_t * const p_atcb);
+LOCAL_INLINE tcb_t* ar_get_mcos_tcb(const TaskType task_id);
 
 
-AR_LOCAL_FORCE_INLINE void ar_dispatch_task_core(
+LOCAL_INLINE void ar_dispatch_task_core(
     clscb_t * const clscb,
     tcb_t * const running)
 {
@@ -161,7 +161,7 @@ AR_LOCAL_FORCE_INLINE void ar_dispatch_task_core(
     mcos_dispatch_context(clscb, running);
 }
 
-AR_LOCAL_FORCE_INLINE void ar_dispatch_task_core_noreturn(
+LOCAL_INLINE void ar_dispatch_task_core_noreturn(
     const clscb_t * const clscb,
     const tcb_t * const running)
 {
@@ -169,7 +169,7 @@ AR_LOCAL_FORCE_INLINE void ar_dispatch_task_core_noreturn(
     mcos_dispatch_context_noreturn(clscb, running);
 }
 
-AR_LOCAL_FORCE_INLINE void ar_do_dispatch_task(
+LOCAL_INLINE void ar_do_dispatch_task(
     clscb_t * const clscb)
 {
     tcb_t           *running;
@@ -185,7 +185,7 @@ AR_LOCAL_FORCE_INLINE void ar_do_dispatch_task(
     }
 }
 
-AR_LOCAL_FORCE_INLINE void ar_dispatch_task(void)
+LOCAL_INLINE void ar_dispatch_task(void)
 {
     const mkcb_t    *mkcb;
     clscb_t         *clscb;
@@ -204,19 +204,19 @@ AR_LOCAL_FORCE_INLINE void ar_dispatch_task(void)
 }
 
 
-AR_LOCAL_FORCE_INLINE mcos_id_t ar_get_tid_by_task_id(
+LOCAL_INLINE mcos_id_t ar_get_tid_by_task_id(
     const TaskType task_id)
 {
     return ar_task2thread_table[task_id];
 }
 
-AR_LOCAL_FORCE_INLINE TaskType ar_get_task_id_by_ar_tcb(
+LOCAL_INLINE TaskType ar_get_task_id_by_ar_tcb(
     const ar_tcb_t * const p_atcb)
 {
     return (TaskType)(((uint32_t)((p_atcb)->p_config) - (uint32_t)ar_task_configs) / sizeof(ar_task_config_t));
 }
 
-AR_LOCAL_FORCE_INLINE tcb_t* ar_get_mcos_tcb(
+LOCAL_INLINE tcb_t* ar_get_mcos_tcb(
     const TaskType task_id)
 {
     return (ar_tcb_ptr_table[task_id]->p_mcos_tcb);

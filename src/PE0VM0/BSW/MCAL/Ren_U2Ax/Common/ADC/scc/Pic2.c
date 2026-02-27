@@ -149,44 +149,7 @@ FUNC(uint32, PIC2_CODE) Pic2_Regchk_Grp(
 	t_u4ChkResult  = Pic2_Pil_Regchk_Grp(t_cudGrp);
 	return(t_u4ChkResult);
 }
-
-#if (ADC_CFG_REG_REFRESH==STD_ON)
-/************************************************************************************************/
-/* Service name			: Pic2_IsSGRunning														*/
-/* Sync/Async			: Synchronous															*/
-/* Reentrancy			: Non Reentrant															*/
-/* Parameters (in)		: 																		*/
-/* 		Pic2_SGType		: Scan Group Number														*/
-/* Parameters (inout)	: None																	*/
-/* Parameters (out)		: None																	*/
-/* Return value			: 																		*/
-/*		Adc status		: TRUE: some conversion is active, FALSE:no conversion is active		*/
-/* Description			: Return the conversion status of a specific scan group					*/
-/*						  in all HW Units that share the PIC2 registers.						*/
-/************************************************************************************************/
-FUNC(boolean, PIC2_CODE) Pic2_IsSGRunning(
-	CONST(Pic2_SGType,	PIC2_CONST)	t_cudSG
-)
-{
-	VAR(boolean,		ADC_VAR_NO_INIT)	t_b1isRunning;
-	VAR(Adc_GroupType,  ADC_VAR_NO_INIT)	t_udGrp;
-
-	t_b1isRunning = FALSE;
-
-	for (t_udGrp=ADC_GRP00;t_udGrp<(Adc_GroupType)ADC_CFG_GRP_SIZE;t_udGrp++) {
-		if (Adc_GetHWUnitID(t_udGrp)<(Adc_HWUnitType)PIC2_HWUNIT_WPIC2_SIZE) {
-			if (Adc_GetSGID(t_udGrp)==t_cudSG) {
-				if (Adc_GetGrpStatus(t_udGrp)!=ADC_IDLE) {
-					t_b1isRunning = TRUE;
-					break;
-				}
-			}
-		}
-	}
-	return(t_b1isRunning);
-}
-#endif	/* if (ADC_CFG_REG_REFRESH==STD_ON)	*/
-#endif	/* if (ADC_CFG_REG_CHK==STD_ON)	*/
+#endif
 
 #define ADC_STOP_SEC_CODE_GLOBAL
 #include "Adc_MemMap.h"

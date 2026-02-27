@@ -34,11 +34,6 @@
 #error MP_CONTROL_CORE_COUNT exceeds the upper limit.
 #endif
 
-/* [reg(4 * 22)] = 88 */
-#define MCOS_STACK_CHECK_INT_ENTRY      88U
-
-#define MCOS_SPCHK_SZ_SWITCH_INT        84U
-
 /****************************************************************************
  * configuration value check
 ****************************************************************************/
@@ -245,15 +240,15 @@ static mcos_stack_t mk_sysstack_core3[MCOS_STACK_SIZE(MCOS_CFG_SYS_STACKSIZE)];
 /* mcos_mksysstack_bottom_addr_table[] */
 const void * const mcos_mksysstack_bottom_addr_table[MP_CONTROL_CORE_COUNT] =
 {
-    (void *)&mk_sysstack_core0[MCOS_STACK_SIZE(MCOS_CFG_SYS_STACKSIZE)],
+    (void *)((mcos_uintptr_t)mk_sysstack_core0 + MCOS_STACK_SIZE_IN_BYTES(MCOS_CFG_SYS_STACKSIZE)),
 #if (MP_CONTROL_CORE_COUNT >= 2U)
-    (void *)&mk_sysstack_core1[MCOS_STACK_SIZE(MCOS_CFG_SYS_STACKSIZE)],
+    (void *)((mcos_uintptr_t)mk_sysstack_core1 + MCOS_STACK_SIZE_IN_BYTES(MCOS_CFG_SYS_STACKSIZE)),
 #endif  /* #if (MP_CONTROL_CORE_COUNT >= 2U) */
 #if (MP_CONTROL_CORE_COUNT >= 3U)
-    (void *)&mk_sysstack_core2[MCOS_STACK_SIZE(MCOS_CFG_SYS_STACKSIZE)],
+    (void *)((mcos_uintptr_t)mk_sysstack_core2 + MCOS_STACK_SIZE_IN_BYTES(MCOS_CFG_SYS_STACKSIZE)),
 #endif  /* #if (MP_CONTROL_CORE_COUNT >= 3U) */
 #if (MP_CONTROL_CORE_COUNT >= 4U)
-    (void *)&mk_sysstack_core3[MCOS_STACK_SIZE(MCOS_CFG_SYS_STACKSIZE)],
+    (void *)((mcos_uintptr_t)mk_sysstack_core3 + MCOS_STACK_SIZE_IN_BYTES(MCOS_CFG_SYS_STACKSIZE)),
 #endif  /* #if (MP_CONTROL_CORE_COUNT >= 4U) */
 };
 
@@ -277,22 +272,6 @@ const void * const mcos_mksysstack_top_addr_table[MP_CONTROL_CORE_COUNT] =
     (void *)mk_sysstack_core3,
 #endif  /* #if (MP_CONTROL_CORE_COUNT >= 4U) */
 };
-
-#define OS_STOP_SEC_CONST_UNSPECIFIED
-#include "Os_MemMap.h"
-
-#define OS_START_SEC_CONST_UNSPECIFIED
-#include "Os_MemMap.h"
-
-const uint32_t mcos_stack_check_int_entry = MCOS_STACK_CHECK_INT_ENTRY;
-
-#define OS_STOP_SEC_CONST_UNSPECIFIED
-#include "Os_MemMap.h"
-
-#define OS_START_SEC_CONST_UNSPECIFIED
-#include "Os_MemMap.h"
-
-const uint32_t mcos_stack_check_switch_int = MCOS_SPCHK_SZ_SWITCH_INT;
 
 #define OS_STOP_SEC_CONST_UNSPECIFIED
 #include "Os_MemMap.h"

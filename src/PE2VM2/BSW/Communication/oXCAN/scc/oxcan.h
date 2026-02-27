@@ -40,16 +40,13 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 void    vd_g_oXCANRstInit(void);
 void    vd_g_oXCANWkupInit(void);
-void    vd_g_oXCANVomEvhk(void);                      /* Vom = Vehicle Operational Mode                           */
+void    vd_g_oXCANVomEvhk(void);           /* Vom = Vehicle Operational Mode */
 void    vd_g_oXCANMainPreTask(void);
 void    vd_g_oXCANMainPosTask(void);
 void    vd_g_oXCANShtdwn(void);
 
 U1      u1_g_oXCANShtdwnOk(void);
-U4      u4_g_oXCANSysActvtd(void);                    /* Return : OXCAN_SYS_### defined in oxcan_sys_def.h        */
-                                                      /*          Network Management State == Active or Passive.  */
-U4      u4_g_oXCANEcuActvtd(void);                    /* Return : OXCAN_SYS_### defined in oxcan_sys_def.h        */
-                                                      /*          Network Management State == Active              */
+U4      u4_g_oXCANSysActvtd(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */

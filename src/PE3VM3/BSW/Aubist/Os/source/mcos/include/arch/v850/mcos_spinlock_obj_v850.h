@@ -20,13 +20,6 @@
 #ifndef MCOS_SPINLOCK_OBJ_V850_H
 #define MCOS_SPINLOCK_OBJ_V850_H
 
-/* Spinlock configuration */
-#define AR_SPINLOCK_PADDING1_N      7U
-#define AR_SPINLOCK_PADDING2_N      7U
-#define AR_IOC_SPINLOCK_PADDING1_N  7U
-#define AR_IOC_SPINLOCK_PADDING2_N  7U
-
-
 /* Spinlock type for the ticket algorithm */
 typedef struct
 {

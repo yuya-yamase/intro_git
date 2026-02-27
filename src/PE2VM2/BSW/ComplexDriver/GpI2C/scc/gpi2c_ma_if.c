@@ -77,28 +77,24 @@ static const U4    u4_sp_GP_I2C_MA_IRQ_CRIT[] = {
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*===================================================================================================================================*/
-/*  void    vd_g_GpI2cMaIfEnaCh(const ST_GP_I2C_MA_CH * st_ap_CH, const U1 u1_a_RES_EN)                                              */
+/*  void    vd_g_GpI2cMaIfEnaCh(const ST_GP_I2C_MA_CH * st_ap_CH, const U1 u1_a_PIN_ACT)                                             */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_GpI2cMaIfEnaCh(const ST_GP_I2C_MA_CH * st_ap_CH, const U1 u1_a_RES_EN)
+void    vd_g_GpI2cMaIfEnaCh(const ST_GP_I2C_MA_CH * st_ap_CH, const U1 u1_a_PIN_ACT)
 {
     const ST_GP_I2C_MA_PIN *      st_tp_PIN;
 
-    if(u1_a_RES_EN == (U1)TRUE){
+    st_tp_PIN = st_ap_CH->stp_PIN;
+    if((u1_a_PIN_ACT != (U1)FALSE ) &&
+       (st_tp_PIN    != vdp_PTR_NA)){
 
-        st_tp_PIN = st_ap_CH->stp_PIN;
-        if(st_tp_PIN != vdp_PTR_NA){
+        Port_SetPinMode(st_tp_PIN->u2_scl_pin, st_tp_PIN->u4_scl_ina);
+        Port_SetPinMode(st_tp_PIN->u2_sda_pin, st_tp_PIN->u4_sda_ina);
 
-            Port_SetPinMode(st_tp_PIN->u2_scl_pin, st_tp_PIN->u4_scl_ina);
-            Port_SetPinMode(st_tp_PIN->u2_sda_pin, st_tp_PIN->u4_sda_ina);
-
-            Port_SetPinMode(st_tp_PIN->u2_scl_pin, st_tp_PIN->u4_scl_act);
-            Port_SetPinMode(st_tp_PIN->u2_sda_pin, st_tp_PIN->u4_sda_act);
-        }
-
-        vd_g_I2cMasReset(st_ap_CH->u1_i2c_ch);
+        Port_SetPinMode(st_tp_PIN->u2_scl_pin, st_tp_PIN->u4_scl_act);
+        Port_SetPinMode(st_tp_PIN->u2_sda_pin, st_tp_PIN->u4_sda_act);
     }
 
 #if ((GP_I2C_MA_RWC_DMA_WRI >= 2U) || (GP_I2C_MA_RWC_DMA_REA >= 4U))
@@ -142,6 +138,8 @@ void    vd_g_GpI2cMaIfDisCh(const ST_GP_I2C_MA_CH * st_ap_CH)
 /*===================================================================================================================================*/
 void    vd_g_GpI2cMaIfResbyFrT(const ST_GP_I2C_MA_CH * st_ap_CH)
 {
+    static const U1               u1_s_GP_I2C_MA_CLO_MAX = (U1)18U;    /* 18 bits, 2 bytes TRx             */
+
     const ST_GP_I2C_MA_PIN *      st_tp_PIN;
 
     vd_g_I2cDI(st_ap_CH->u1_i2c_ch);
@@ -151,6 +149,15 @@ void    vd_g_GpI2cMaIfResbyFrT(const ST_GP_I2C_MA_CH * st_ap_CH)
         Dma_DisableTrans(st_ap_CH->u1_dma_ch);
     }
 #endif /* #if ((GP_I2C_MA_RWC_DMA_WRI >= 2U) || (GP_I2C_MA_RWC_DMA_REA >= 4U)) */
+
+    /* ------------------------------------------------------------------------------------- */
+    /* Attention :                                                                           */
+    /* ------------------------------------------------------------------------------------- */
+    /* u1_g_I2cMasSynLost shall be always invoked pior to vd_g_I2cStart since I2C controller */
+    /* reset is performed in vd_g_I2cStart and SCL synchronization lost can not be detected  */
+    /* in u1_g_I2cMasSynLost.                                                                */
+    /* ------------------------------------------------------------------------------------- */
+    (void)u1_g_I2cMasSynLost(st_ap_CH->u1_i2c_ch, u1_s_GP_I2C_MA_CLO_MAX);
 
     st_tp_PIN = st_ap_CH->stp_PIN;
     if(st_tp_PIN != vdp_PTR_NA){
@@ -162,7 +169,6 @@ void    vd_g_GpI2cMaIfResbyFrT(const ST_GP_I2C_MA_CH * st_ap_CH)
         Port_SetPinMode(st_tp_PIN->u2_sda_pin, st_tp_PIN->u4_sda_act);
     }
 
-    vd_g_I2cMasReset(st_ap_CH->u1_i2c_ch);
     vd_g_I2cStart(st_ap_CH->u1_i2c_ch, (U4)I2C_RXA_ACKBT_BIT__ACK);
 }
 /*===================================================================================================================================*/

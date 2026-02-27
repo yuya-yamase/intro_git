@@ -427,7 +427,7 @@ typedef	struct {
 
 #define	MSR_RSCFD_2_RESERVED_BIT	( 0x1U )	/* RSCFD_2 value after reset */
 #define	MSR_FLXA_1_RESERVED_BIT		( 0x1U )	/* FLXA_1 value after reset */
-#define	MSR_ETN_2_RESERVED_BIT		( 0x1U )	/* ETN_2 value after reset */
+#define	MSR_ETN_4_RESERVED_BIT		( 0x1U )	/* ETN_4 value after reset */
 #define	MSR_PSI5_4_RESERVED_BIT		( 0x1U )	/* PSI5_4 value after reset */
 #define	MSR_OSTM_6_RESERVED_BIT		( 0x1U )	/* OSTM_6 value after reset */
 #define	MSR_OSTM_7_RESERVED_BIT		( 0x1U )	/* OSTM_6 value after reset */

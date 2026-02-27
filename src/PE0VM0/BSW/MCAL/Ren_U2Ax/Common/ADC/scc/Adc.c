@@ -32,6 +32,8 @@
 #define	ADC_DMA_TRANSACTION_SIZE			(u1DMA_TRANSSIZE_2)				/* DR register size						*/
 #define	ADC_DMA_MODE_SINGLE					((uint8)DMA_DMAMODE3)			/* mode=3 : single transfer wo reload	*/
 #define	ADC_DMA_MODE_STREAMING				((uint8)DMA_DMAMODE5)			/* mode=5 : block transfer with Reload	*/
+#define	ADC_DMA_TRANS_STATUS_IDLE			(u1DMA_TRANS_STATUS_IDLE)		/* trans status	: idle					*/
+#define	ADC_DMA_TRANS_STATUS_BUSY			(u1DMA_TRANS_STATUS_BUSY)		/* trans status : busy	 				*/
 #endif
 
 /*--------------------------------------------------------------------------*/
@@ -85,6 +87,9 @@ static 	VAR(Adc_GrpInfoType, ADC_VAR_NO_INIT) s_stAdcGrpInfo[ADC_CFG_GRP_SIZE];
 /* always available															*/
 /*--------------------------------------------------------------------------*/
 static FUNC(void, ADC_CODE) Adc_DataInit(void);
+static FUNC(Adc_StatusType, ADC_CODE) Adc_GetGrpStatus(
+	CONST(Adc_GroupType,	ADC_CONST)	t_cudGrp
+);
 static FUNC(void, ADC_CODE) Adc_SetGrpStatus(
 	CONST(Adc_GroupType,	ADC_CONST)	t_cudGrp,
 	CONST(Adc_StatusType,	ADC_CONST)	t_cudCrntStatus,
@@ -330,7 +335,6 @@ FUNC(void, ADC_CODE) Adc_StartGroupConversion(
 				VAR(Adc_StatusType,						ADC_VAR_NO_INIT)		t_udCrntStatus;
 				VAR(Adc_StatusType,						ADC_VAR_NO_INIT)		t_udNextStatus;
 				VAR(Adc_TriggerSourceType,				ADC_VAR_NO_INIT)		t_udTrgMode;
-				VAR(Adc_GroupConvModeType,				ADC_VAR_NO_INIT)		t_udCnvMode;
 				VAR(uint8,								ADC_VAR_NO_INIT)		t_u1DMAOn;
 				VAR(uint8,								ADC_VAR_NO_INIT)		t_u1IntrptUse;
 				VAR(uint8,								ADC_VAR_NO_INIT)		t_u1StreamingAcces;
@@ -348,10 +352,8 @@ FUNC(void, ADC_CODE) Adc_StartGroupConversion(
 	t_udCrntStatus			= Adc_GetGrpStatus(Group);
 	t_udNextStatus			= t_udCrntStatus;
 	t_udTrgMode				= Adc_GetTriggerSource(Group);
-	t_udCnvMode				= Adc_GetGrpCnvMode(Group);
 	if (t_udTrgMode==ADC_TRIGG_SRC_SW) {
-		if ((t_udCrntStatus==ADC_IDLE) ||
-		 ((t_udCnvMode==ADC_ONESHOT_MODE) && (t_udCrntStatus==ADC_STREAM_COMPLETED))) {
+		if ((t_udCrntStatus==ADC_IDLE) || (t_udCrntStatus==ADC_STREAM_COMPLETED)) {
 			t_udHWUnit		= Adc_GetHWUnitID(Group);
 			t_udSG			= Adc_GetSGID(Group);
 			t_u1IntrptUse	= Adc_GetIntrptUse(Group);
@@ -510,7 +512,7 @@ FUNC(Std_ReturnType, ADC_CODE) Adc_ReadGroup(
 			Adc_ReportRunTimeError(ADC_AID_READ_GROUP,ADC_E_IDLE);		/* SWS_Adc_00388	*/
 			break;
 		case ADC_BUSY:
-			if (t_udCnvMode==ADC_CONTINUOUS_MODE) {
+			if (t_udCnvMode==ADC_CONV_MODE_CONTINUOUS) {
 				t_udResult = E_OK;
 			}
 			break;
@@ -519,11 +521,11 @@ FUNC(Std_ReturnType, ADC_CODE) Adc_ReadGroup(
 			break;
 		case ADC_STREAM_COMPLETED:
 			if (t_udTrigger==ADC_TRIGG_SRC_SW) {
-				if (t_udCnvMode==ADC_ONESHOT_MODE) {
+				if (t_udCnvMode==ADC_CONV_MODE_ONESHOT) {
 					Adc_CnvEndIntrptDisable(Group);
 					t_udNextStatus = ADC_IDLE;	/* [SWS_Adc_00330] 	*/
 				} else {
-					/* ADC_CONTINUOUS_MODE	*/
+					/* ADC_CONV_MODE_CONTINUOUS	*/
 					t_udNextStatus = ADC_BUSY;	/* [SWS_Adc_00329]	*/
 				}
 			} else {
@@ -830,24 +832,52 @@ FUNC(Adc_StatusType, ADC_CODE) Adc_GetGroupStatus(
 	VAR(Adc_StatusType, 			ADC_VAR_NO_INIT)	t_udCrntStatus;
 	VAR(Adc_StatusType, 			ADC_VAR_NO_INIT)	t_udNextStatus;
 	VAR(boolean,					ADC_VAR_NO_INIT)	t_blisComplete;
-
-	/* This API can be called only when ADC_CFG_GRP#x_USE_CNV_INT is STD_OFF and						*/
-	/* ADC_CFG_GRP#x_ACCESS_MODE is ADC_ACCESS_MODE_SINGLE.												*/
-	/* The implementation does not consider that this API will be called under any other conditions.	*/
+	#ifdef ADC_USE_DMA
+	VAR(uint8,						ADC_VAR_NO_INIT)	t_u1isDMAOn;
+	VAR(uint8,						ADC_VAR_NO_INIT)	t_u1DMAID;
+	VAR(uint8,						ADC_VAR_NO_INIT)	t_u1DMAStatus;
+	#endif
+	#ifdef ADC_USE_STREAMING_ACCESS
+	VAR(Adc_GroupAccessModeType,	ADC_VAR_NO_INIT)	t_udAccessMode;
+	#endif
 
 	ADC_ENTER_CRITICAL_SECTION(ADC_CODE);
 	/* get crnt info	*/
 	t_udCrntStatus		= Adc_GetGrpStatus(Group);
 	t_udNextStatus		= t_udCrntStatus;
+	#ifdef ADC_USE_STREAMING_ACCESS
+	t_udAccessMode		= Adc_GetGrpAccessMode(Group);
+	#endif
 
 	/* state transition */
 	if (t_udCrntStatus==ADC_BUSY) {
-		t_udHWUnit			= Adc_GetHWUnitID(Group);
-		t_udSG				= Adc_GetSGID(Group);
-		t_blisComplete	= Adc_Pil_IsCnvCompleted(t_udHWUnit,t_udSG);
-		if (t_blisComplete==(boolean)TRUE) {
-			t_udNextStatus = ADC_STREAM_COMPLETED;
+		#ifdef ADC_USE_STREAMING_ACCESS
+		if (t_udAccessMode==ADC_ACCESS_MODE_SINGLE) {
+		#endif
+			/* single access	*/
+			t_udHWUnit			= Adc_GetHWUnitID(Group);
+			t_udSG				= Adc_GetSGID(Group);
+			#ifdef ADC_USE_DMA
+			t_u1isDMAOn			= Adc_IsDMAOn(Group);
+			if (t_u1isDMAOn==STD_ON) {
+				t_blisComplete	= (boolean)FALSE;
+				t_u1DMAID		= Adc_GetDMAID(Group);
+				t_u1DMAStatus	= Dma_GetTransStatus(t_u1DMAID);
+				if (t_u1DMAStatus==ADC_DMA_TRANS_STATUS_IDLE) {
+					t_blisComplete = (boolean)TRUE;
+				}
+			} else {
+			#endif
+				t_blisComplete	= Adc_Pil_IsCnvCompleted(t_udHWUnit,t_udSG);
+			#ifdef ADC_USE_DMA
+			}
+			#endif
+			if (t_blisComplete==(boolean)TRUE) {
+				t_udNextStatus = ADC_STREAM_COMPLETED;
+			}
+		#ifdef ADC_USE_STREAMING_ACCESS
 		}
+		#endif
 	}
 	/* update status 	*/
 	Adc_SetGrpStatus( Group, t_udCrntStatus, t_udNextStatus );
@@ -1117,6 +1147,25 @@ static FUNC(void, ADC_CODE) Adc_SetGrpStatus(
 	if (t_cudCrntStatus!=t_cudNextStatus) {
 		s_stAdcGrpInfo[t_cudGrp].udStatus = t_cudNextStatus;
 	}
+}
+
+/************************************************************************************************/
+/* Service name			: Adc_GetGrpStatus														*/
+/* Sync/Async			: Synchronous															*/
+/* Reentrancy			: Non Reentrant															*/
+/* Parameters (in)		: 																		*/
+/*		Group			: Numeric ID of requested ADC channel group.							*/
+/* Parameters (inout)	: None																	*/
+/* Parameters (out)		: None																	*/
+/* Return value			: 																		*/
+/*		Adc_StatusType	: Group conversion status												*/
+/* Description			: return the group conversion status									*/
+/************************************************************************************************/
+static FUNC(Adc_StatusType, ADC_CODE) Adc_GetGrpStatus(
+	CONST(Adc_GroupType, ADC_CONST) t_cudGrp
+)
+{
+	return(s_stAdcGrpInfo[t_cudGrp].udStatus);
 }
 
 /************************************************************************************************/
@@ -1949,25 +1998,6 @@ static FUNC(Adc_StreamNumSampleType, ADC_CODE) Adc_GetCurrentStreamingNum(
 /*----------------------------------------------------------------------------------------------*/
 /* Private API (public API in ADC module) 														*/
 /*----------------------------------------------------------------------------------------------*/
-/************************************************************************************************/
-/* Service name			: Adc_GetGrpStatus														*/
-/* Sync/Async			: Synchronous															*/
-/* Reentrancy			: Non Reentrant															*/
-/* Parameters (in)		: 																		*/
-/*		Group			: Numeric ID of requested ADC channel group.							*/
-/* Parameters (inout)	: None																	*/
-/* Parameters (out)		: None																	*/
-/* Return value			: 																		*/
-/*		Adc_StatusType	: Group conversion status												*/
-/* Description			: return the group conversion status									*/
-/************************************************************************************************/
-FUNC(Adc_StatusType, ADC_CODE) Adc_GetGrpStatus(
-	CONST(Adc_GroupType, ADC_CONST) t_cudGrp
-)
-{
-	return(s_stAdcGrpInfo[t_cudGrp].udStatus);
-}
-
 #if ((ADC_CFG_DEINIT_API==STD_ON)||((ADC_CFG_REG_CHK==STD_ON)&&(ADC_CFG_REG_REFRESH==STD_ON)&&(MCAL_SPAL_TARGET==MCAL_TARGET_RH850U2B)))
 /************************************************************************************************/
 /* Service name			: Adc_IsRunning															*/
@@ -2023,6 +2053,49 @@ FUNC(boolean, ADC_CODE) Adc_IsHWUnitRunning(
 				t_b1isRunning = TRUE;
 				break;
 			}
+		}
+	}
+	return(t_b1isRunning);
+}
+#endif
+
+/************************************************************************************************/
+/* Service name			: Adc_IsTHinHWUnitRunning												*/
+/* Sync/Async			: Synchronous															*/
+/* Reentrancy			: Non Reentrant															*/
+/* Parameters (in)		: 																		*/
+/* 		Adc_HWUnitType	: HW Unit Number														*/
+/* Parameters (inout)	: None																	*/
+/* Parameters (out)		: None																	*/
+/* Return value			: 																		*/
+/*		Adc status		: TRUE: some conversion is active, FALSE:no conversion is active		*/
+/* Description			: return the T&H conversion status in the designated HW Unit			*/
+/************************************************************************************************/
+#if ((ADC_CFG_REG_CHK==STD_ON)&&(ADC_CFG_REG_REFRESH==STD_ON))
+FUNC(boolean, ADC_CODE) Adc_IsTHinHWUnitRunning(
+	CONST(Adc_HWUnitType,	ADC_CONST)	t_cudHWUnit
+)
+{
+	VAR(boolean,				ADC_VAR_NO_INIT)	t_b1isRunning;
+	VAR(Adc_GroupType,			ADC_VAR_NO_INIT)	t_udGrp;
+	#if (defined(ADC_USE_TH))
+	VAR(Adc_TrackHoldGroupType,	ADC_VAR_NO_INIT)	t_udTHGrp;
+	#endif
+
+	t_b1isRunning = FALSE;
+	for (t_udGrp=ADC_GRP00;t_udGrp<(Adc_GroupType)ADC_CFG_GRP_SIZE;t_udGrp++) {
+		if (t_cudHWUnit==Adc_GetHWUnitID(t_udGrp)) {
+			#if (defined(ADC_USE_TH))
+			t_udTHGrp = Adc_GetTHGrp(t_udGrp);
+			if (t_udTHGrp!=ADC_TH_GRP_NONE) {
+			#endif
+				if (Adc_GetGrpStatus(t_udGrp)!=ADC_IDLE) {
+					t_b1isRunning = TRUE;
+					break;
+				}
+			#if (defined(ADC_USE_TH))
+			}
+			#endif
 		}
 	}
 	return(t_b1isRunning);

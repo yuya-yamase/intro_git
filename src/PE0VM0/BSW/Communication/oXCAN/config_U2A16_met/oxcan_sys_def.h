@@ -36,19 +36,21 @@
 #define OXCAN_SYS_VOM                            (0x0000007fU)    /* Vehicle Operational Mode                                     */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#define OXCAN_SYS_NUM_NET                        (5U)
 #define OXCAN_SYS_G2M_1                          (0x01000000U)
 #define OXCAN_SYS_G2M_2                          (0x02000000U)
 #define OXCAN_SYS_VIR_0                          (0x04000000U)
 #define OXCAN_SYS_LOCA                           (0x08000000U)
-/* #define OXCAN_SYS_G5M                            (0x00000000U) */
+#define OXCAN_SYS_G5M                            (0x10000000U)
 
+#define OXCAN_SYS_NUM_PNC                        (5U)
 #define OXCAN_SYS_PNC_16                         (0x00010000U)    /* All ECUs         */
 #define OXCAN_SYS_PNC_40                         (0x00020000U)    /* Cockpit, Dynamic */
 #define OXCAN_SYS_PNC_43                         (0x00040000U)    /* Cockpit, ADAS    */
 #define OXCAN_SYS_PNC_44                         (0x00080000U)    /* Cockpit, Body    */
 #define OXCAN_SYS_PNC_60                         (0x00100000U)    /* Local CAN        */
 
-#define OXCAN_SYS_NET                            (0x0f1f0000U)
+#define OXCAN_SYS_NET                            (0x1f0f0000U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */

@@ -1,4 +1,4 @@
-/* pil_dts-r04-3000-0200-b-v00 */
+/* pil_dts-r04-3000-0100-a-v01 */
 /************************************************************************************************/
 /*																								*/
 /*		PIL DTS Driver																			*/
@@ -214,6 +214,17 @@ void	Pil_Dts_SetTransMode( uint8 t_u1ChannelID, uint8 t_u1TransSize, uint8 t_u1D
 			/*	(uint32)DMA_DTTCT_CHNE_0	* (uint32)DMA_DTTCT_CHNE_DISABLE	+	""*/		/* Chain function disabled */
 				(uint32)DMA_DTTCT_DS_0		* t_u1TransSize);							/* Transfer data size setting */	/* justification for QAC warning 3383: it is not wrap-around within a configuration range */ /* EDET_INT30 */
 	Reg_DTS.stDTS_CH[t_u1ChannelID].unDTTCT.u4Data = t_u4Dttct;
+
+	/* When Reload Function 1 is ON	*/
+	if( (t_u4Dttct & (uint32)DMA_DTTCT_RLD1M) != (uint32)( (uint32)DMA_DTTCT_RLD1M_0 * (uint32)DMA_DTTCT_RLD1M_DISABLE ) )
+	{
+		Reg_DTS.stDTS_CH[t_u1ChannelID].u4DTRSA = (uint32)((volatile const uint32*)t_pcvdSrcAdr); 	/* Set reload source address  */
+		Reg_DTS.stDTS_CH[t_u1ChannelID].u4DTRDA = (uint32)((volatile const uint32*)t_pcvdDestAdr);	/* Set reload destination address */
+		Reg_DTS.stDTS_CH[t_u1ChannelID].unDTRTC.u4Data = (uint32)t_u2TransNum;
+				/*	The following processing is commented out (QAC compatible) because the calculation result is fixed at the value of t_u2TransNum. */
+				/*	(uint32)DMA_DTRTC_RARC_0	* (uint32)DMA_DTRTC_RARC_NOUSE	+ "" */			/* Reload Address reload count: 0 */
+				/*	(uint32)DMA_DTRTC_RTRC_0	* t_u2TransNum ";" 			  */			/* Reload/Setting the number of transfers */
+	}
 
 	/* EI_ALL()";" */
 }
@@ -628,11 +639,11 @@ void	Pil_Dts_SetMasterCh( void )
 {
 	sint32		i;
 
-	/* Set the configured SPID values */
+	/* Set the same SPID as the default to 29. */
 	/* Reconfigure because the option byte sets 0. */
 	for( i = (sint32)0; i < (sint32)DMA_DTS_CH_NUM; i++ )
 	{
-		Reg_DTS.unDTSCM[i].u4Data = (uint32)( ( (uint32)DMA_DTSCM_SPID_0 * cu1Pil_Dma_Ucfg_Dts_ChSpidTable[i] ) ); /* justification for QAC warning 3383: it is not wrap-around within a configuration range */ /* EDET_INT30 */
+		Reg_DTS.unDTSCM[i].u4Data = (uint32)( ( (uint32)DMA_DTSCM_SPID_0 * u4PIL_DTS_SPIDNUM ) );
 	}
 }
 #endif
@@ -687,38 +698,6 @@ void	Pil_Dts_DisableTransAll( void )
 		Reg_DTS.stDTS_CH[i].unDTFSL.u4Data = (uint32)DMA_DTFSL_REQEN * (uint32)DMA_DTFSL_REQEN_TRANS_DISABLE;	/* DMA transfer request disabled */
 	}
 }
-#endif
-
-#if ( DMA_CFG_GLOBAL_REG_CONTROL == STD_ON )
-#if ( DMA_CFG_REG_CHK == STD_ON )
-/*----------------------------------------------------------------------------------------------*/
-/*	DTS ASIL Register Check Function															*/
-/*	return		: Diagnosis result																*/
-/*	parameters	: none																			*/
-/*----------------------------------------------------------------------------------------------*/
-uint32	Pil_Dts_CheckReg_ASIL( void )
-{
-	sint32		i;
-	uint32 		t_u4SpidMask;
-	uint32		t_u4Ret;
-
-	t_u4Ret = DMA_REGCHK_OK;
-
-	/* Check DTS SPID */
-	for( i = (sint32)0; i < (sint32)DMA_DTS_CH_NUM; i++ )
-	{
-		t_u4SpidMask = (uint32)((uint32)DMA_DTSCM_SPID_0 * (uint32)cu1Pil_Dma_Ucfg_Dts_ChSpidTable[i]); /* justification for QAC warning 3383: it is not wrap-around within a configuration range */ /* EDET_INT30 */
-
-		if ( t_u4SpidMask != (uint32)(Reg_DTS.unDTSCM[i].u4Data & (uint32)DMA_DTSCM_SPID ))
-		{
-			t_u4Ret = DMA_REGCHK_NG;
-			break;
-		}
-	}
-
-	return (t_u4Ret);
-}
-#endif
 #endif
 
 /*==============================================================================================*/

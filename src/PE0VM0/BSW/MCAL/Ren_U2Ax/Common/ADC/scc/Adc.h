@@ -30,35 +30,6 @@
 /*--------------------------------------------------------------------------*/
 /* defines - compile SW														*/
 /*--------------------------------------------------------------------------*/
-/* conversion mode	*/
-#define ADC_CONV_MODE_ONESHOT				(0U)
-#define ADC_CONV_MODE_CONTINUOUS			(1U)
-
-/* suspend method	*/
-#define ADC_SUSPEND_METHOD_ASYNC			(0U)
-#define ADC_SUSPEND_METHOD_SYNC				(1U)
-
-/* result format	*/
-#define ADC_FORMAT_SIGNED_FIXED_POINT		(0U)
-#define ADC_FORMAT_SIGNED_INTEGER			(1U)
-#define ADC_FORMAT_UNSIGNED_FIXED_POINT		(2U)
-#define ADC_FORMAT_UNSIGNED_INTEGER			(3U)
-
-/* result alignment	*/
-#define ADC_ALIGN_LEFT						(0U)
-#define ADC_ALIGN_RIGHT						(1U)
-
-/* resolution		*/
-#define	ADC_RESOLUTION_10BIT				(0U)
-#define	ADC_RESOLUTION_12BIT				(1U)
-
-/* Sampling period	*/
-#define ADC_SAMPLING_PERIOD_18STATES		(0U)
-#define ADC_SAMPLING_PERIOD_99STATES		(1U)
-#define ADC_SAMPLING_PERIOD_102STATES		(2U)
-#define ADC_SAMPLING_PERIOD_204STATES		(3U)
-#define ADC_SAMPLING_PERIOD_252STATES		(4U)
-
 /* Streaming Access Mode Use	*/
 #if (  ((ADC_CFG_GRP00_STREAMING_NUM>1U) && (ADC_CFG_GRP_SIZE>= 1U))		\
 	|| ((ADC_CFG_GRP01_STREAMING_NUM>1U) && (ADC_CFG_GRP_SIZE>= 2U))		\
@@ -848,7 +819,7 @@
 	t_uxRegValue		= (reg);									\
 	t_uxRegValuewMask	= t_uxRegValue & t_uxMask;					\
 	if (t_uxRegValuewMask!=t_uxExpectedValue) {						\
-		t_udStatus	= Adc_GetGrpStatus(t_cudGrp);					\
+		t_udStatus	= Adc_GetGroupStatus(t_cudGrp);					\
 		if (t_udStatus==ADC_IDLE) {									\
 			(reg) = ((t_uxRegValue&(~t_uxMask))|t_uxExpectedValue);	\
 			t_uxRegValue		= (reg);							\
@@ -872,6 +843,46 @@
 																	\
 	t_uxRegValue		= (reg)  & (size)(mask);					\
 	t_uxExpectedValue	= (expt) & (size)(mask);					\
+	if (t_uxRegValue!=t_uxExpectedValue) {							\
+		t_u4ChkResult  |= ADC_REGCHK_NG;							\
+	}																\
+}
+#endif
+#if (ADC_CFG_REG_REFRESH==STD_ON)
+/* check by SG wo Mask	*/
+#define	ADC_RegValueCheckBySGwoMask(size,reg,expt)					\
+{																	\
+	VAR(size,			ADC_VAR_NO_INIT)	t_uxRegValue;			\
+	VAR(size,			ADC_VAR_NO_INIT)	t_uxExpectedValue;		\
+	VAR(Adc_StatusType,	ADC_VAR_NO_INIT)	t_udStatus;				\
+																	\
+	t_uxRegValue		= (reg);									\
+	t_uxExpectedValue	= (expt);									\
+	if (t_uxRegValue!=t_uxExpectedValue) {							\
+		ADC_ENTER_CRITICAL_SECTION(ADC_CODE);						\
+		t_udStatus	= Adc_GetGroupStatus(t_cudGrp);					\
+		if (t_udStatus==ADC_IDLE) {									\
+			(reg) = (expt);											\
+			t_uxRegValue = (reg);									\
+			if (t_uxRegValue==t_uxExpectedValue) {					\
+				t_u4ChkResult	|= ADC_REGCHK_REFRESH_SUCCESS;		\
+			} else {												\
+				t_u4ChkResult	|= ADC_REGCHK_REFRESH_FAILED;		\
+			}														\
+		} else {													\
+			t_u4ChkResult |= ADC_REGCHK_REFRESH_IMPOSSIBLE;			\
+		}															\
+		ADC_EXIT_CRITICAL_SECTION(ADC_CODE);						\
+	}																\
+}
+#else
+#define	ADC_RegValueCheckBySGwoMask(size,reg,expt)					\
+{																	\
+	VAR(size,	ADC_VAR_NO_INIT)	t_uxRegValue;					\
+	VAR(size,	ADC_VAR_NO_INIT)	t_uxExpectedValue;				\
+																	\
+	t_uxRegValue		= (reg);									\
+	t_uxExpectedValue	= (expt);									\
 	if (t_uxRegValue!=t_uxExpectedValue) {							\
 		t_u4ChkResult  |= ADC_REGCHK_NG;							\
 	}																\
@@ -1034,6 +1045,11 @@ typedef	uint8	Adc_GroupType;
 /*  Type for reading the converted values of a channel group : SWS_Adc_00508						*/
 typedef sint16	Adc_ValueGroupType;		
 
+/* Type of channel resolution in number of bits. : SWS_Adc_00512									*/
+typedef uint8	Adc_ResolutionType;
+	#define	ADC_RESOLUTION_10BIT	((uint8)0U)
+	#define	ADC_RESOLUTION_12BIT	((uint8)1U)
+
 /* Type for configuring the number of group conversions in streaming access mode : SWS_Adc_00518	*/
 typedef uint8	Adc_StreamNumSampleType;
 
@@ -1047,7 +1063,7 @@ typedef uint8	Adc_TrackHoldGroupType;	/* Track & Hold Group	*/
 /*--------------------------------------------------------------------------*/
 /* enum - defined by AUTOSAR												*/
 /*--------------------------------------------------------------------------*/
-/* Current status of the conversion of the requested ADC Channel group.	: SWS_Adc_00513				*/
+/* Current status of the conversion of the requested ADC Channel group.	: SWS_Adc_00513	*/
 typedef enum {
 	ADC_IDLE,
 	ADC_BUSY,
@@ -1055,25 +1071,58 @@ typedef enum {
 	ADC_STREAM_COMPLETED
 } Adc_StatusType;
 
-/* Type for configuring the trigger source for an ADC Channel group.	: SWS_Adc_00514				*/
+/* Type for configuring the trigger source for an ADC Channel group.	: SWS_Adc_00514	*/
 typedef enum {
 	ADC_TRIGG_SRC_SW,
 	ADC_TRIGG_SRC_HW
 } Adc_TriggerSourceType;
 
-/* Type for configuring the conversion mode of an ADC Channel group.	: SWS_Adc_00515				*/
-/* The name of each enumerator is different from what is specified in the AUTOSAR specification		*/
-/* to avoid naming conflict with the macro definition used in the #if directive.					*/
+/* Type for configuring the conversion mode of an ADC Channel group.	: SWS_Adc_00515	*/
 typedef enum {
-	ADC_ONESHOT_MODE,
-	ADC_CONTINUOUS_MODE
+	ADC_CONV_MODE_ONESHOT,
+	ADC_CONV_MODE_CONTINUOUS
 } Adc_GroupConvModeType;
 
-/* Type for configuring the access mode to group conversion results.	: SWS_Adc_00528				*/
+/* Type for alignment of ADC raw results in ADC result buffer			: SWS_Adc_00525	*/
+typedef enum {
+	ADC_ALIGN_LEFT,
+	ADC_ALIGN_RIGHT
+} Adc_ResultAlignmentType;
+
+/* Type for configuring the access mode to group conversion results.	: SWS_Adc_00528	*/
 typedef enum {
 	ADC_ACCESS_MODE_SINGLE,
 	ADC_ACCESS_MODE_STREAMING
 } Adc_GroupAccessModeType;
+
+/*--------------------------------------------------------------------------*/
+/* enum - original															*/
+/*--------------------------------------------------------------------------*/
+/* suspend method	*/
+typedef enum {
+	ADC_SUSPEND_METHOD_ASYNC,
+	ADC_SUSPEND_METHOD_SYNC
+} Adc_SuspendMethodType;
+
+/* result format	*/
+typedef enum {
+	ADC_FORMAT_SIGNED_FIXED_POINT,
+	ADC_FORMAT_SIGNED_INTEGER,
+	ADC_FORMAT_UNSIGNED_FIXED_POINT,
+	ADC_FORMAT_UNSIGNED_INTEGER
+} Adc_ResultFormatType;
+
+/* Sampling period	*/
+typedef enum {
+	ADC_SAMPLING_PERIOD_18STATES,
+	#if (MCAL_SPAL_TARGET==MCAL_TARGET_RH850U2A)
+	ADC_SAMPLING_PERIOD_99STATES,
+	#elif (MCAL_SPAL_TARGET==MCAL_TARGET_RH850U2B) 
+	ADC_SAMPLING_PERIOD_102STATES,
+	#endif
+	ADC_SAMPLING_PERIOD_204STATES,
+	ADC_SAMPLING_PERIOD_252STATES
+} Adc_SamplingPeriodType;
 
 /*--------------------------------------------------------------------------*/
 /* structs																	*/
@@ -1534,22 +1583,6 @@ FUNC(uint32, ADC_CODE) Adc_Regchk_Grp(
 /*----------------------------------------------------------------------------------------------*/
 /* Private API (public API in ADC module) 														*/
 /*----------------------------------------------------------------------------------------------*/
-/************************************************************************************************/
-/* Service name			: Adc_GetGrpStatus														*/
-/* Sync/Async			: Synchronous															*/
-/* Reentrancy			: Non Reentrant															*/
-/* Parameters (in)		: 																		*/
-/*		Group			: Numeric ID of requested ADC channel group.							*/
-/* Parameters (inout)	: None																	*/
-/* Parameters (out)		: None																	*/
-/* Return value			: 																		*/
-/*		Adc_StatusType	: Group conversion status												*/
-/* Description			: return the group conversion status									*/
-/************************************************************************************************/
-FUNC(Adc_StatusType, ADC_CODE) Adc_GetGrpStatus(
-	CONST(Adc_GroupType, ADC_CONST) t_cudGrp
-);
-
 #if ((ADC_CFG_DEINIT_API==STD_ON)||((ADC_CFG_REG_CHK==STD_ON)&&(ADC_CFG_REG_REFRESH==STD_ON)&&(MCAL_SPAL_TARGET==MCAL_TARGET_RH850U2B)))
 /************************************************************************************************/
 /* Service name			: Adc_IsRunning															*/
@@ -1579,6 +1612,23 @@ FUNC(boolean, ADC_CODE) Adc_IsRunning(void);
 /************************************************************************************************/
 #if ((ADC_CFG_REG_CHK==STD_ON)&&((ADC_CFG_REG_REFRESH==STD_ON)||(defined(ADC_USE_TH))))
 FUNC(boolean, ADC_CODE) Adc_IsHWUnitRunning(
+	CONST(Adc_HWUnitType,	ADC_CONST)	t_cudHWUnit
+);
+#endif
+/************************************************************************************************/
+/* Service name			: Adc_IsTHinHWUnitRunning												*/
+/* Sync/Async			: Synchronous															*/
+/* Reentrancy			: Non Reentrant															*/
+/* Parameters (in)		: 																		*/
+/* 		Adc_HWUnitType	: HW Unit Number														*/
+/* Parameters (inout)	: None																	*/
+/* Parameters (out)		: None																	*/
+/* Return value			: 																		*/
+/*		Adc status		: TRUE: some conversion is active, FALSE:no conversion is active		*/
+/* Description			: return the T&H in the designated HW Unit conversion status			*/
+/************************************************************************************************/
+#if ((ADC_CFG_REG_CHK==STD_ON)&&(ADC_CFG_REG_REFRESH==STD_ON))
+FUNC(boolean, ADC_CODE) Adc_IsTHinHWUnitRunning(
 	CONST(Adc_HWUnitType,	ADC_CONST)	t_cudHWUnit
 );
 #endif

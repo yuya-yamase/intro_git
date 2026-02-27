@@ -1,4 +1,4 @@
-/* pil_dts-r04-3000-0200-b-v00 */
+/* pil_dts-r04-3000-0100-a-v01 */
 /************************************************************************************************/
 /*																								*/
 /*		PIL DTS Driver																			*/
@@ -1617,20 +1617,6 @@ void	Pil_Dts_SetPriority( uint8 t_u1ChannelID, uint8 t_u1PriLevel );
 /*	caveat			:	---																		*/
 /************************************************************************************************/
 void	Pil_Dts_DisableTransAll( void );
-#endif
-
-#if ( DMA_CFG_GLOBAL_REG_CONTROL == STD_ON )
-#if ( DMA_CFG_REG_CHK == STD_ON )
-/************************************************************************************************/
-/*	Service name	:	Checkregisters															*/
-/*	Reentrancy		:	Non Re-entrant 															*/
-/*	Parameters (in)	:	none																	*/
-/*	Return value	:	Diagnosis result														*/
-/*							(OK(=0) / NG(=1))													*/
-/*	caveat			:	None																	*/
-/************************************************************************************************/
-uint32	Pil_Dts_CheckReg_ASIL( void );
-#endif
 #endif
 
 #endif /* PIL_DTS_H */

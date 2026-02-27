@@ -13,6 +13,8 @@
 /*==============================================================================================*/
 /* defines																						*/
 /*==============================================================================================*/
+#define REGSPACE /* Used for pointers to registers */
+
 #define ADCDIAG_CODE /* Used for code */
 #define ADCDIAG_CODE_FAST /* Used for code entering fast code memory segments */
 

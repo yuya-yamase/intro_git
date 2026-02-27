@@ -27,7 +27,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* START : ##TOOL_OUT#NVMC_DTF_ID_NUM## */
 #define NVMC_DTF_INAPP_NUM                       (1U)
-#define NVMC_DTF_INNVM_NUM                       (5U)
+#define NVMC_DTF_INNVM_NUM                       (73U)
 /* END : ##TOOL_OUT#NVMC_DTF_ID_NUM## */
 
 #define NVMC_DTF_ID_NUM                          (NVMC_DTF_INAPP_NUM + NVMC_DTF_INNVM_NUM)
@@ -38,7 +38,7 @@
 /* END : ##TOOL_OUT#NVMC_DTF_READ_BUFFER_SIZE## */
 
 /* START : ##TOOL_OUT#NVMC_RECOVERY_DTF_ID## */
-#define NVMC_RECOVERY_DTF_ID                     (5U)
+#define NVMC_RECOVERY_DTF_ID                     (73U)
 /* END : ##TOOL_OUT#NVMC_RECOVERY_DTF_ID## */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
