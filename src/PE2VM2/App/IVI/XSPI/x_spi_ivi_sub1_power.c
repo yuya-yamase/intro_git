@@ -30,6 +30,7 @@
 #include    "x_spi_ivi_sub2.h"
 #include    "x_spi_ivi_sub4.h"
 #include    "PictCtl.h"
+#include    "PictMuteCtl.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -942,6 +943,7 @@ void            vd_g_XspiIviSub1PowerAna(const U1 * u1_ap_XSPI_ADD, const U2 u2_
         break;
     case XSPI_IVI_POWER_VMRST_REC:
         vd_s_XspiIviSub1PowerVMResetRec();
+        vd_g_PictMute_SoCResetReq(u1_ap_XSPI_ADD[1]);
         break;
     case XSPI_IVI_POWER_STRMODE_REC:
         vd_s_XspiIviSub1PowerSTRmodeRec(&u1_ap_XSPI_ADD[0]);
