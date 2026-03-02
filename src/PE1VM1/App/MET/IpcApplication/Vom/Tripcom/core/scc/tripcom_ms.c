@@ -157,6 +157,9 @@ void            vd_g_TripcomMsInit(void)
                         vd_g_MemfillU2(&u2_sp_tripcom_graph_date_val[0], (U2)U2_MAX, (U4)TRIPCOM_MS_GRAPH_DATE_NUM);
                     }
                 }
+                else {
+                    /* do nothing */
+                }
             }
         }
         if (u1_t_readsts == (U1)TRIPCOM_STSBIT_VALID) {
