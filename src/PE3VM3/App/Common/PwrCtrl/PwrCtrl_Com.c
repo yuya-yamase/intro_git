@@ -215,7 +215,7 @@ void vd_g_PwrCtrlComWkupInit( void )
 
     /* SoC起動回数カウンタ */
     u2_t_soccount_buf = (U2)PWRCTRL_COM_SOCONCOUNT_INIT;
-    u1_t_soccount_ret= u1_g_Rim_ReadU2withStatus((U2)RIMID_U2_PWCTR_SOC_ON_COUNT, &u2_t_soccount_buf);
+    u1_t_soccount_ret = u1_g_Rim_ReadU2withStatus((U2)RIMID_U2_PWCTR_SOC_ON_COUNT, &u2_t_soccount_buf);
     if((u1_t_soccount_ret & (U1)RIM_RESULT_KIND_MASK) == (U1)RIM_RESULT_KIND_OK)
     {
         u4_s_PwrCtrl_Com_Tx_SoCOnCount = (U4)u2_t_soccount_buf;
@@ -227,7 +227,7 @@ void vd_g_PwrCtrlComWkupInit( void )
 
     /* ユーザーリセット抑止区間通知 */
     u4_t_usrrstmask_buf = (U4)PWRCTRL_COM_USRRSTMASK_OFF;
-    u1_t_usrrstmask_ret= u1_g_Rim_ReadU4withStatus((U2)RIMID_U4_PWCTR_SOC_USRRSTMASK, &u4_t_usrrstmask_buf);
+    u1_t_usrrstmask_ret = u1_g_Rim_ReadU4withStatus((U2)RIMID_U4_PWCTR_SOC_USRRSTMASK, &u4_t_usrrstmask_buf);
     if((u1_t_usrrstmask_ret & (U1)RIM_RESULT_KIND_MASK) == (U1)RIM_RESULT_KIND_OK)
     {
         u4_s_PwrCtrl_Com_Tx_UsrRstMask = u4_t_usrrstmask_buf;
