@@ -33,6 +33,8 @@
 #include    "PictMuteCtl.h"
 #include    "datesi_com.h"
 #include    "PictCtl.h"
+#include    "PncreqCtl.h"
+#include    "DtcCtl.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -1068,6 +1070,8 @@ static void            vd_s_XspiIviSub1PowerVMResetRec(void)
     vd_g_XspiIviSub0VMResetInit();
     vd_g_DateSIComVMResetInit();
     vd_g_PictCtl_VmResetReq();
+    vd_g_PncReqctl_ResetReq((U1)PNCREQCTL_RESETKIND_VM);
+    vd_g_DtcCtl_ResetReq((U1)DTCCTL_RESETKIND_VM);
 }
 
 /*===================================================================================================================================*/
@@ -1085,6 +1089,8 @@ static void            vd_s_XspiIviSub1PowerSoCResetRec(void)
     vd_g_XspiIviSub0SoCResetInit();
     vd_g_DateSIComSoCResetInit();
     vd_g_PictCtl_SocResetReq();
+    vd_g_PncReqctl_ResetReq((U1)PNCREQCTL_RESETKIND_SOC);
+    vd_g_DtcCtl_ResetReq((U1)DTCCTL_RESETKIND_SOC);
 }
 
 /*===================================================================================================================================*/
@@ -1099,6 +1105,8 @@ static void            vd_s_XspiIviSub1PowerCDCResetRec(void)
     /*各アプリのCDCリセット関数登録*/
     vd_g_XspiIviSub0CDCResetInit();
     vd_g_PictCtl_CdcResetReq();
+    vd_g_PncReqctl_ResetReq((U1)PNCREQCTL_RESETKIND_CDC);
+    vd_g_DtcCtl_ResetReq((U1)DTCCTL_RESETKIND_SOC);
 }
 
 /*===================================================================================================================================*/

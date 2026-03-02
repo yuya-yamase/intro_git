@@ -18,6 +18,7 @@
 #define ROBCTL_CNT_1S           (100U)  /* LSB:10ms */
 
 #define ROBCTL_REQ_INI          (0xFFU)
+#define ROBCTL_REQ_EXST         (0x01U)
 
 #define ROBCTL_DTCCODE_KIND     (2U)
 #define ROBCTL_DTCCODE_CTG      (0U)
@@ -35,15 +36,14 @@
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 typedef struct {
-    U1  u1_category_code;
-    U1  u1_diag_code;
-} ST_ROBCTL_DTCCODE;
+    U1  u1_robsts;
+    U1  u1_timecnt_10ms;
+} ST_ROBCTL_DTCSTS;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static U1                   u1_s_robctl_timecnt_10ms[ROBCTL_ROBID_NUM];
-static ST_ROBCTL_DTCCODE    st_s_robctl_robreq[ROBCTL_ROBID_NUM];
+static ST_ROBCTL_DTCSTS     st_s_robctl_robsts[ROBCTL_ROBID_NUM];
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
@@ -72,9 +72,8 @@ void    vd_g_RobCtl_Init(void)
     U1 u1_t_cnt;
 
     for(u1_t_cnt = (U1)0U; u1_t_cnt < (U1)ROBCTL_ROBID_NUM; u1_t_cnt++){
-        st_s_robctl_robreq[u1_t_cnt].u1_category_code = (U1)ROBCTL_REQ_INI;
-        st_s_robctl_robreq[u1_t_cnt].u1_diag_code = (U1)ROBCTL_REQ_INI;
-        u1_s_robctl_timecnt_10ms[u1_t_cnt] = (U1)ROBCTL_CNT_INI;
+        st_s_robctl_robsts[u1_t_cnt].u1_robsts = (U1)ROBCTL_REQ_INI;
+        st_s_robctl_robsts[u1_t_cnt].u1_timecnt_10ms = (U1)ROBCTL_CNT_INI;
     }
 }
 
@@ -89,8 +88,8 @@ void    vd_g_RobCtl_MainTask(void)
     U1 u1_t_cnt;
 
     for(u1_t_cnt = (U1)0U; u1_t_cnt < (U1)ROBCTL_ROBID_NUM; u1_t_cnt++){
-        if(u1_s_robctl_timecnt_10ms[u1_t_cnt] < (U1)U1_MAX){
-            u1_s_robctl_timecnt_10ms[u1_t_cnt]++;
+        if(st_s_robctl_robsts[u1_t_cnt].u1_timecnt_10ms < (U1)U1_MAX){
+            st_s_robctl_robsts[u1_t_cnt].u1_timecnt_10ms++;
         }
     }
     vd_s_RobCtl_ChkSend();
@@ -107,11 +106,11 @@ static void    vd_s_RobCtl_ChkSend(void)
     U1 u1_t_cnt;
 
     for(u1_t_cnt = (U1)0U; u1_t_cnt < (U1)ROBCTL_ROBID_NUM; u1_t_cnt++){
-        if((u1_s_robctl_timecnt_10ms[u1_t_cnt] != (U1)ROBCTL_CNT_INI) &&
-           (u1_s_robctl_timecnt_10ms[u1_t_cnt] >= (U1)ROBCTL_CNT_1S)){
-            vd_g_XspiIviSub1_DiagRobrecSend(st_s_robctl_robreq[u1_t_cnt].u1_category_code,
-                                            st_s_robctl_robreq[u1_t_cnt].u1_diag_code);
-            u1_s_robctl_timecnt_10ms[u1_t_cnt] = (U1)ROBCTL_CNT_STA;
+        if((st_s_robctl_robsts[u1_t_cnt].u1_timecnt_10ms != (U1)ROBCTL_CNT_INI) &&
+           (st_s_robctl_robsts[u1_t_cnt].u1_timecnt_10ms >= (U1)ROBCTL_CNT_1S)){
+            vd_g_XspiIviSub1_DiagRobrecSend(u1_s_ROBCTL_DTCLIST[u1_t_cnt][ROBCTL_DTCCODE_CTG],
+                                            u1_s_ROBCTL_DTCLIST[u1_t_cnt][ROBCTL_DTCCODE_DIAG]);
+            st_s_robctl_robsts[u1_t_cnt].u1_timecnt_10ms = (U1)ROBCTL_CNT_STA;
             break;
         }
     }
@@ -125,9 +124,8 @@ static void    vd_s_RobCtl_ChkSend(void)
 /*===================================================================================================================================*/
 void    vd_g_RobCtl_SetRobId(const U1 u1_a_DTCID)
 {
-    st_s_robctl_robreq[u1_a_DTCID].u1_category_code = u1_s_ROBCTL_DTCLIST[u1_a_DTCID][ROBCTL_DTCCODE_CTG];
-    st_s_robctl_robreq[u1_a_DTCID].u1_diag_code = u1_s_ROBCTL_DTCLIST[u1_a_DTCID][ROBCTL_DTCCODE_DIAG];
-    u1_s_robctl_timecnt_10ms[u1_a_DTCID] = (U1)ROBCTL_CNT_1S;
+	st_s_robctl_robsts[u1_a_DTCID].u1_robsts = (U1)ROBCTL_REQ_EXST;
+    st_s_robctl_robsts[u1_a_DTCID].u1_timecnt_10ms = (U1)ROBCTL_CNT_1S;
 }
 
 /*===================================================================================================================================*/
@@ -143,13 +141,28 @@ void    vd_g_RobCtl_RecRob(const U1 u1_a_ROB1, const U1 u1_a_ROB2)
     U1 u1_t_cnt;
 
     for(u1_t_cnt = (U1)0U; u1_t_cnt < (U1)ROBCTL_ROBID_NUM; u1_t_cnt++){
-        u1_t_ctgcode = st_s_robctl_robreq[u1_t_cnt].u1_category_code;
-        u1_t_diagcode = st_s_robctl_robreq[u1_t_cnt].u1_diag_code;
+        u1_t_ctgcode = u1_s_ROBCTL_DTCLIST[u1_t_cnt][ROBCTL_DTCCODE_CTG];
+        u1_t_diagcode = u1_s_ROBCTL_DTCLIST[u1_t_cnt][ROBCTL_DTCCODE_DIAG];
         if((u1_t_ctgcode == u1_a_ROB1) && (u1_t_diagcode == u1_a_ROB2)){
-            st_s_robctl_robreq[u1_t_cnt].u1_category_code = (U1)ROBCTL_REQ_INI;
-            st_s_robctl_robreq[u1_t_cnt].u1_diag_code = (U1)ROBCTL_REQ_INI;
-            u1_s_robctl_timecnt_10ms[u1_t_cnt] = (U1)ROBCTL_CNT_INI;
-        break;
+            st_s_robctl_robsts[u1_t_cnt].u1_timecnt_10ms = (U1)ROBCTL_CNT_INI;
+            break;
+        }
+    }
+}
+
+/*===================================================================================================================================*/
+/*  void    vd_g_RobCtl_Restart(void)                                                                                                */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void    vd_g_RobCtl_Restart(void)
+{
+    U1 u1_t_cnt;
+
+    for(u1_t_cnt = (U1)0U; u1_t_cnt < (U1)ROBCTL_ROBID_NUM; u1_t_cnt++){
+        if(st_s_robctl_robsts[u1_t_cnt].u1_robsts != (U1)ROBCTL_REQ_INI){
+            st_s_robctl_robsts[u1_t_cnt].u1_timecnt_10ms = (U1)ROBCTL_CNT_1S;
         }
     }
 }
