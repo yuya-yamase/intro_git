@@ -1106,7 +1106,6 @@ static void            vd_s_XspiIviSub1PowerCDCResetRec(void)
     vd_g_XspiIviSub0CDCResetInit();
     vd_g_PictCtl_CdcResetReq();
     vd_g_PncReqctl_ResetReq((U1)PNCREQCTL_RESETKIND_CDC);
-    vd_g_DtcCtl_ResetReq((U1)DTCCTL_RESETKIND_SOC);
 }
 
 /*===================================================================================================================================*/

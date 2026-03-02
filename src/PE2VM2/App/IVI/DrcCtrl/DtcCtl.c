@@ -186,12 +186,6 @@ void    vd_g_DtcCtl_ResetReq(const U1 u1_a_KIND)
     if(u1_a_KIND == (U1)DTCCTL_RESETKIND_VM){
         vd_g_XspiIviSub1PowerVMResetComp((U1)XSPI_IVI_POWER_RESET_COMP_DTCROB);
     }
-    else if(u1_a_KIND == (U1)DTCCTL_RESETKIND_CDC){
-        vd_g_XspiIviSub1PowerCDCResetComp((U1)XSPI_IVI_POWER_RESET_COMP_DTCROB);
-    }
-    else{
-        /* do nothing */
-    }
 }
 
 /*===================================================================================================================================*/
