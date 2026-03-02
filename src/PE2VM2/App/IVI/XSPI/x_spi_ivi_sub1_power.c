@@ -31,6 +31,7 @@
 #include    "x_spi_ivi_sub4.h"
 #include    "PictCtl.h"
 #include    "PictMuteCtl.h"
+#include    "datesi_com.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -1064,6 +1065,7 @@ static void            vd_s_XspiIviSub1PowerVMResetRec(void)
     vd_g_XspiIviSub4VMResetInit();
     vd_g_XspiIviSub2VMResetInit();
     vd_g_XspiIviSub0VMResetInit();
+    vd_g_DateSIComVMResetInit();
 }
 
 /*===================================================================================================================================*/
@@ -1079,6 +1081,7 @@ static void            vd_s_XspiIviSub1PowerSoCResetRec(void)
     vd_g_XspiIviSub4SoCResetInit();
     vd_g_XspiIviSub2SoCResetInit();
     vd_g_XspiIviSub0SoCResetInit();
+    vd_g_DateSIComSoCResetInit();
 }
 
 /*===================================================================================================================================*/
