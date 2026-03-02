@@ -32,6 +32,7 @@
 #include    "PictCtl.h"
 #include    "PictMuteCtl.h"
 #include    "datesi_com.h"
+#include    "PictCtl.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -1066,6 +1067,7 @@ static void            vd_s_XspiIviSub1PowerVMResetRec(void)
     vd_g_XspiIviSub2VMResetInit();
     vd_g_XspiIviSub0VMResetInit();
     vd_g_DateSIComVMResetInit();
+    vd_g_PictCtl_VmResetReq();
 }
 
 /*===================================================================================================================================*/
@@ -1082,6 +1084,7 @@ static void            vd_s_XspiIviSub1PowerSoCResetRec(void)
     vd_g_XspiIviSub2SoCResetInit();
     vd_g_XspiIviSub0SoCResetInit();
     vd_g_DateSIComSoCResetInit();
+    vd_g_PictCtl_SocResetReq();
 }
 
 /*===================================================================================================================================*/
@@ -1095,6 +1098,7 @@ static void            vd_s_XspiIviSub1PowerCDCResetRec(void)
 {
     /*各アプリのCDCリセット関数登録*/
     vd_g_XspiIviSub0CDCResetInit();
+    vd_g_PictCtl_CdcResetReq();
 }
 
 /*===================================================================================================================================*/
