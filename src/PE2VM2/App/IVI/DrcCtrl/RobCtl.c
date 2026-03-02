@@ -124,7 +124,7 @@ static void    vd_s_RobCtl_ChkSend(void)
 /*===================================================================================================================================*/
 void    vd_g_RobCtl_SetRobId(const U1 u1_a_DTCID)
 {
-	st_s_robctl_robsts[u1_a_DTCID].u1_robsts = (U1)ROBCTL_REQ_EXST;
+    st_s_robctl_robsts[u1_a_DTCID].u1_robsts = (U1)ROBCTL_REQ_EXST;
     st_s_robctl_robsts[u1_a_DTCID].u1_timecnt_10ms = (U1)ROBCTL_CNT_1S;
 }
 

@@ -2339,7 +2339,7 @@ void    vd_g_Gvif3RxStby3StsSet(U1 u1_a_stby3sts)
 /*===================================================================================================================================*/
 U1      u1_g_Gvif3RxMipiOutputSts(void)
 {
-	return(u1_s_gvif3rxmipitx_send);
+    return(u1_s_gvif3rxmipitx_send);
 }
 
 /*===================================================================================================================================*/
@@ -2616,7 +2616,7 @@ static U1     u1_s_Gvif3SipFailTask(void)
         case GVIF3RX_SIPERR_STEP2:
             u1_t_sts = u1_s_Gvif3RxSiPErrMipiSetReq();
             if(u1_t_sts == (U1)TRUE){
-            	u1_s_gvif3rxmipitx_send = (U1)GVIF3RX_MIPIOUTPUT_OFF;
+                u1_s_gvif3rxmipitx_send = (U1)GVIF3RX_MIPIOUTPUT_OFF;
                 u1_t_return = (U1)TRUE;
                 u1_s_gvif3rxsipfailflg = (U1)GVIF3RX_SIPERR_COMP;
                 u1_s_gvif3siperr_step = (U1)GVIF3RX_SIPERR_STEP1;
