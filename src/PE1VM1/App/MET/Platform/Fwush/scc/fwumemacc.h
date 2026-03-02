@@ -136,6 +136,7 @@ U1 u1_g_FwuMemAccIsJobActive(void);
 
 /* Cancel API (to be implemented in Phase3) */
 void vd_g_FwuMemAccCancelJob(void);
+U1 u1_g_FwuMemAccRollbackSwitch(void);
 
 #endif /* FWUMEMACC_H */
 /*===================================================================================================================================*/

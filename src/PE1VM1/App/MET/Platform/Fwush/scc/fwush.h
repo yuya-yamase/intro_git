@@ -51,12 +51,13 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 
 /* Main states */
-#define FWUSH_MAIN_STATE_MAX                    (5U)
+#define FWUSH_MAIN_STATE_MAX                    (6U)
 #define FWUSH_MAIN_STATE_PREP                   (0U)           /* Prepare phase */
 #define FWUSH_MAIN_STATE_RUN                    (1U)           /* Run phase */
 #define FWUSH_MAIN_STATE_VERI                   (2U)           /* Verify phase */
 #define FWUSH_MAIN_STATE_ACT                    (3U)           /* Activate phase */
-#define FWUSH_MAIN_STATE_ROLLBACK               (4U)           /* Rollback phase (when special flag present) */
+#define FWUSH_MAIN_STATE_VALID                  (4U)           /* Validate phase */
+#define FWUSH_MAIN_STATE_FIN                    (5U)           /* Finalize phase */
 
 /* Sub states */
 #define FWUSH_SUB_STATE_MAX                     (2U)
@@ -78,7 +79,15 @@
 #define FWUSH_EVENT_CANCEL                      (7U)           /* Cancel requested */
 #define FWUSH_EVENT_MEMACC_RUN_PARTIAL          (8U)           /* MemAcc run job partial success */
 #define FWUSH_EVENT_MEMACC_RUN_COMPLETE         (9U)           /* MemAcc run job complete */
-#define FWUSH_EVENT_MEMACC_ACT_ROLLBACK         (10U)          /* MemAcc activate job rollback */
+#define FWUSH_EVENT_MEMACC_ROLLBACK             (10U)          /* MemAcc activate job rollback */
+
+/* job progress */
+#define FWUSH_PROGRESS_INIT                     (0x00U)        /* Before reprog start */
+#define FWUSH_PROGRESS_ACT_DONE                 (0x01U)        /* Activate complete */
+#define FWUSH_PROGRESS_VALIDATE_DONE            (0x02U)        /* Validate complete */
+#define FWUSH_PROGRESS_FINALIZE_DONE            (0x04U)        /* Finalize complete */
+#define FWUSH_PROGRESS_CANCEL_DONE              (0x08U)        /* Cancel complete */
+#define FWUSH_PROGRESS_ROLLBACK_DONE            (0x10U)        /* Rollback complete */
 
 /* Request subtypes */
 #define FWUSH_REQ_SUBTYPE_NA                    (0xFFU)        /* Not Applicable */
@@ -87,6 +96,8 @@
 #define FWUSH_REQ_SUBTYPE_VERI                  (0x18U)        /* Verify */
 #define FWUSH_REQ_SUBTYPE_CANCEL                (0x27U)        /* Cancel */
 #define FWUSH_REQ_SUBTYPE_ACT                   (0x37U)        /* Activate */
+#define FWUSH_REQ_SUBTYPE_VALID                 (0x47U)        /* Validate */
+#define FWUSH_REQ_SUBTYPE_FIN                   (0x57U)        /* Finalize */
 
 /* Response subtypes */
 #define FWUSH_RESP_SUBTYPE_NA                   (0xFFU)        /* Not Applicable */
@@ -95,6 +106,16 @@
 #define FWUSH_RESP_SUBTYPE_VERI                 (0x19U)        /* Verify */
 #define FWUSH_RESP_SUBTYPE_CANCEL               (0x28U)        /* Cancel */
 #define FWUSH_RESP_SUBTYPE_ACT                  (0x38U)        /* Activate */
+#define FWUSH_RESP_SUBTYPE_VALID                (0x48U)        /* Validate */
+#define FWUSH_RESP_SUBTYPE_FIN                  (0x58U)        /* Finalize */
+
+/* Flash status values */
+#define FWUSH_FSWA_STS_AREA0                    (0x00000000U)    /* Area 0 Active */
+#define FWUSH_FSWA_STS_AREA1                    (0x00000001U)    /* Area 1 Active */
+#define FWUSH_FSWA_STS_INIT                     (0xFFFFFFFFU)    /* read error */
+#define FWUSH_FSWA_READ_POS                     (0x00000003U)    /* Read Position */
+#define FWUSH_SWAS_VALID                        (0x00U)          /* Valid */
+#define FWUSH_SWAS_DIRTY                        (0x00U)          /* Dirty */
 
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

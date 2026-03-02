@@ -224,6 +224,35 @@ U1 u1_g_FwuMemAccSwitchReq(void)
 }
 
 /*===================================================================================================================================*/
+/* U1 u1_g_FwuMemAccRollbackSwitch(void)                                                                                             */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+U1 u1_g_FwuMemAccRollbackSwitch(void)
+{
+    U1 u1_t_switch_result;
+    U1 u1_t_job_status;
+    U1 u1_t_data_dummy;
+    U4 u4_t_length_dummy;
+    
+    u1_t_data_dummy = (U1)0U;
+    u4_t_length_dummy = (U4)0U;
+    /* Check MemAcc job status */
+    u1_t_job_status = (U1)MemAcc_GetJobStatus((U2)MEMACC_ADDRAREA_1);
+    if (u1_t_job_status == (U1)MEMACC_JOB_IDLE) {
+        /* Execute MemAcc HwSpecificService (SWITCHVALIDAREA) */
+        u1_t_switch_result = (U1)MemAcc_HwSpecificService(
+            (U2)MEMACC_ADDRAREA_1,
+            (U4)MEMACC_HWID_CODEFLASH,
+            (U4)MEMACC_SRV_ID_SWITCHVALIDAREA,
+            &u1_t_data_dummy,
+            &u4_t_length_dummy);
+    }
+    return (u1_t_switch_result);
+}
+
+/*===================================================================================================================================*/
 /*  void vd_g_FwuMemAccGetStatus(U1* u1p_a_job_type, U1* u1p_a_main_status)                                                          */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      U1* u1p_a_job_type    : Job type output pointer                                                                  */
