@@ -40,6 +40,7 @@
 /*  Function Prototypes                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 void            vd_g_XspiIviSub1Init(void);
+void            vd_g_XspiIviSub1BonInit(void);
 void            vd_g_XspiIviSub1Ana(const U1 * u1_ap_XSPI_ADD);
 void            vd_g_XspiIviSub1Send(U1 * u1_ap_xspi_add);
 void            vd_g_XspiIviSub1Routine(void);

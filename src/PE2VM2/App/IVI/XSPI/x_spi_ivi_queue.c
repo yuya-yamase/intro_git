@@ -132,6 +132,28 @@ void            vd_g_XspiIviQueueInit(void)
 }
 
 /*===================================================================================================================================*/
+/* void            vd_g_XspiIviQueueSoCResetInit(void)                                                                               */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    SoCリセット初期化用IF                                                                                             */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void            vd_g_XspiIviQueueSoCResetInit(void)
+{
+    vd_g_MemfillU1(&u1_sp_xspi_ivi_queue_diagcandata[0], (U1)0U, (U4)MAX_DIAGCANDATA_QUEUE_SIZE);
+    vd_g_MemfillU1(&u1_sp_xspi_ivi_queue_diagcandatasize[0], (U1)0U, (U4)MAX_DIAGCANSIZE_QUEUE_SIZE);
+    vd_g_MemfillU1(&u1_sp_xspi_ivi_queue_diagcansid[0], (U1)0U, (U4)MAX_DIAGCAN_QUEUE_SIZE);
+    vd_g_MemfillU1(&u1_sp_xspi_ivi_queue_diagcanid[0], (U1)0U, (U4)MAX_DIAGCAN_QUEUE_SIZE);
+    vd_g_MemfillU1(&u1_sp_xspi_ivi_queue_diagcannum[0], (U1)0U, (U4)MAX_DIAGCANSIZE_QUEUE_SIZE);
+
+    vd_s_XspiIviQueueBufferInit(&st_sp_XSPI_IVI_QUEUE_DIAGCANDATA, u1_sp_xspi_ivi_queue_diagcandata, (U2)MAX_DIAGCANDATA_QUEUE_SIZE);
+    vd_s_XspiIviQueueBufferInit(&st_sp_XSPI_IVI_QUEUE_DIAGCANDATASIZE, u1_sp_xspi_ivi_queue_diagcandatasize, (U2)MAX_DIAGCANSIZE_QUEUE_SIZE);
+    vd_s_XspiIviQueueBufferInit(&st_sp_XSPI_IVI_QUEUE_DIAGCANSID, u1_sp_xspi_ivi_queue_diagcansid, (U2)MAX_DIAGCAN_QUEUE_SIZE);
+    vd_s_XspiIviQueueBufferInit(&st_sp_XSPI_IVI_QUEUE_DIAGCANID, u1_sp_xspi_ivi_queue_diagcanid, (U2)MAX_DIAGCAN_QUEUE_SIZE);
+    vd_s_XspiIviQueueBufferInit(&st_sp_XSPI_IVI_QUEUE_DIAGCANNUM, u1_sp_xspi_ivi_queue_diagcannum, (U2)MAX_DIAGCANSIZE_QUEUE_SIZE);
+}
+
+/*===================================================================================================================================*/
 /* U1              u1_g_XspiIviQueueWriCms(U1 * u1_ap_value)                                                                         */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Description:    CMS書込み処理                                                                                                     */
@@ -439,17 +461,19 @@ void            vd_g_XspiIviQueueGetDiagCANdataSize(U2 * u2_ap_buf)
 }
 
 /*===================================================================================================================================*/
-/* void              vd_g_XspiIviQueueGetDiagCANDataSID(U1 * u1_ap_buf)                                                              */
+/* U1                u1_g_XspiIviQueueGetDiagCANDataSID(U1 * u1_ap_buf)                                                              */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Description:    MISCデータサイズ読出し,格納処理                                                                                    */
 /*  Arguments:      u1_ap_buf   : MISCデータサイズ読み出し用のバッファ                                                                  */
 /*  Return:         u1_t_return : 成功(TRUE)/失敗(FALSE)                                                                              */
 /*===================================================================================================================================*/
-void              vd_g_XspiIviQueueGetDiagCANDataSID(U1 * u1_ap_buf)
+U1              u1_g_XspiIviQueueGetDiagCANDataSID(U1 * u1_ap_buf)
 {
     static const U2 u2_s_XSPI_IVI_QUEUE_DIAGCAN_SID_SIZE_VALUE   = (U2)1U;
+    U1  u1_t_rslt;
 
-    (void)u1_s_XspiIviQueueDequeue(&st_sp_XSPI_IVI_QUEUE_DIAGCANSID, u1_ap_buf, u2_s_XSPI_IVI_QUEUE_DIAGCAN_SID_SIZE_VALUE);
+    u1_t_rslt = u1_s_XspiIviQueueDequeue(&st_sp_XSPI_IVI_QUEUE_DIAGCANSID, u1_ap_buf, u2_s_XSPI_IVI_QUEUE_DIAGCAN_SID_SIZE_VALUE);
+    return(u1_t_rslt);
 }
 
 /*===================================================================================================================================*/
