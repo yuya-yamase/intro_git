@@ -25,35 +25,6 @@
 #ifndef OS_CFG_INTERNAL_H
 #define OS_CFG_INTERNAL_H
 
-/*
- * Function Prototypes
- */
-#define OS_START_SEC_CODE_GLOBAL
-#include "Os_MemMap.h"
-extern TASK(eMCOS_TASK_High);
-extern TASK(eMCOS_TASK_Idle);
-extern TASK(eMCOS_TASK_Medium);
-#define OS_STOP_SEC_CODE_GLOBAL
-#include "Os_MemMap.h"
-
-
-#define OS_START_SEC_CODE_GLOBAL
-#include "Os_MemMap.h"
-extern ISR(eMCOS_ISR_INTOSTM1TINT);
-extern ISR(eMCOS_ISR_INTP38);
-extern ISR(eMCOS_ISR_INTOSTM8TINT);
-extern ISR(eMCOS_ISR_INTRIIC0EE);
-extern ISR(eMCOS_ISR_INTRIIC0RI);
-extern ISR(eMCOS_ISR_INTRIIC0TI);
-extern ISR(eMCOS_ISR_INTRIIC0TEI);
-extern ISR(eMCOS_ISR_INTRIIC1EE);
-extern ISR(eMCOS_ISR_INTRIIC1RI);
-extern ISR(eMCOS_ISR_INTRIIC1TI);
-extern ISR(eMCOS_ISR_INTRIIC1TEI);
-#define OS_STOP_SEC_CODE_GLOBAL
-#include "Os_MemMap.h"
-
-
 
 /*
  * Category 2 ISR control blocks
@@ -165,5 +136,5 @@ extern ar_isrcb_t ar_isrcb_eMCOS_ISR_INTRIIC1TEI;
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
 /*  Framework          :v2-1-0                                              */
-/*  BSW plug-in        :v2-0-0                                              */
+/*  BSW plug-in        :v2-1-0                                              */
 /****************************************************************************/

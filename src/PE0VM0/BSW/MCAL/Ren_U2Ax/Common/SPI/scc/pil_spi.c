@@ -144,6 +144,11 @@ U1	Pil_Spi_CheckComMode( U1 t_u1HwChannelID, const Pil_Spi_ChannelConfigType* t_
 	t_u1UnitNo = Pil_Spi_GetUnitNo( t_u1HwChannelID );
 	t_u1ChNo = Pil_Spi_GetSpiChNo( t_u1HwChannelID );
 
+	if ( cpstReg_Mspi[t_u1UnitNo]->unCTL0.u1Data != (U1)((U1)MSPI_CTL0_EN * (U1)MSPI_CTL0_EN_ENABLE ) )
+	{
+		t_u1RegError = (U1)NG;
+	}
+
 	t_u4BitPos = (U4)MSPI_CTL1_CSP_0 << (U4)t_u1CsID;
 	t_u1CsActiveLevel = t_pcstPilChannelConfig->u1CsActiveLevel;
 
@@ -262,8 +267,9 @@ void	Pil_Spi_SetFrameNumber( U1 t_u1HwChannelID, U2 t_u2Length )
 /*				:				( * : Unit No( 0 - 9 ) , # : Channel No( 0 - 7 ) )				*/
 /*				: TxData - Send Data															*/
 /*				: PilChannelConfig(Sync)														*/
+/*				: Result - Send and Receive Result( OK/NG )										*/
 /*----------------------------------------------------------------------------------------------*/
-U4		Pil_Spi_SendReceiveData( U1 t_u1HwChannelID, U4 t_u4TxData, const Pil_Spi_ChannelConfigType* t_pcstPilChannelConfig )
+U4		Pil_Spi_SendReceiveData( U1 t_u1HwChannelID, U4 t_u4TxData, const Pil_Spi_ChannelConfigType* t_pcstPilChannelConfig, U1* t_pu1Result )
 {
 	U4									t_u4ReceiveData;
 	U1									t_u1UnitNo;
@@ -273,6 +279,7 @@ U4		Pil_Spi_SendReceiveData( U1 t_u1HwChannelID, U4 t_u4TxData, const Pil_Spi_Ch
 #endif
 
 
+	*t_pu1Result = (U1)OK;
 	t_u1UnitNo = Pil_Spi_GetUnitNo( t_u1HwChannelID );
 	t_u1ChNo = Pil_Spi_GetSpiChNo( t_u1HwChannelID );
 
@@ -317,6 +324,7 @@ U4		Pil_Spi_SendReceiveData( U1 t_u1HwChannelID, U4 t_u4TxData, const Pil_Spi_Ch
 		/* タイムアウト判定 */
 		if( t_u4CountVal >= (U4)SPI_CFG_SYNCSEND_TIMEOUT )
 		{
+			*t_pu1Result = (U1)NG;
 			break;
 		}
 		vd_g_Gpt_BusyWait( GPT_BUSY_WAIT_1_US );
@@ -337,6 +345,7 @@ U4		Pil_Spi_SendReceiveData( U1 t_u1HwChannelID, U4 t_u4TxData, const Pil_Spi_Ch
 		/* タイムアウト判定 */
 		if( t_u4CountVal >= (U4)SPI_CFG_SYNCRECEIVE_TIMEOUT )
 		{
+			*t_pu1Result = (U1)NG;
 			break;
 		}
 		vd_g_Gpt_BusyWait( GPT_BUSY_WAIT_1_US );

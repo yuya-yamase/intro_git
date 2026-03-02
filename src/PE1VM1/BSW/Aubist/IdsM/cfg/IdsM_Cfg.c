@@ -22,13 +22,13 @@
 /*--------------------------------------------------------------------------*/
 /* Macros                                                                   */
 /*--------------------------------------------------------------------------*/
-#define IDSM_CFG_EVEBUF_NUM         (45U)
-#define IDSM_CFG_IDSM_EVENT_NUM     (4U)
-#define IDSM_CFG_FILTER_CHAIN_NUM   (1U)
-#define IDSM_CFG_AGGRE_DATA_NUM     (3U)
+#define IDSM_CFG_EVEBUF_NUM         (67U)
+#define IDSM_CFG_IDSM_EVENT_NUM     (10U)
+#define IDSM_CFG_FILTER_CHAIN_NUM   (4U)
+#define IDSM_CFG_AGGRE_DATA_NUM     (9U)
 #define IDSM_CFG_CTX_BOX_NUM        (1U)
 #define IDSM_CFG_00000_CTX_BUF_SIZE (56U)
-#define IDSM_CFG_00000_CTX_BUF_NUM  (45U)
+#define IDSM_CFG_00000_CTX_BUF_NUM  (67U)
 
 #define IDSM_CFG_CTXDATA_MAXSIZE        (IDSM_CFG_00000_CTX_BUF_SIZE)
 
@@ -167,8 +167,14 @@ static CONST(AB_83_ConstV IdsMEventType, IDSM_CONFIG_DATA) IdsM_Cfg_Event[ IDSM_
 {
     { 0xC500U, IDSM_REPORTING_MODE_DETAILED, 0U, FALSE, TRUE, IDSM_INVALID_INDEX, IDSM_INVALID_INDEX, IDSM_INVALID_INDEX, IDSM_INVALID_INDEX, 0U },     /* [0] */
     { 0x85A2U, IDSM_REPORTING_MODE_DETAILED, 0U, FALSE, TRUE, 0U, 0U, IDSM_INVALID_INDEX, IDSM_INVALID_INDEX, 0U },     /* [1] */
-    { 0x002EU, IDSM_REPORTING_MODE_DETAILED, 0U, FALSE, TRUE, 0U, 1U, IDSM_INVALID_INDEX, IDSM_INVALID_INDEX, 0U },     /* [2] */
-    { 0x002FU, IDSM_REPORTING_MODE_DETAILED, 0U, FALSE, TRUE, 0U, 2U, IDSM_INVALID_INDEX, IDSM_INVALID_INDEX, 0U }     /* [3] */
+    { 0x002EU, IDSM_REPORTING_MODE_DETAILED, 0U, FALSE, TRUE, 3U, 1U, IDSM_INVALID_INDEX, IDSM_INVALID_INDEX, 0U },     /* [2] */
+    { 0x002FU, IDSM_REPORTING_MODE_DETAILED, 0U, FALSE, TRUE, 3U, 2U, IDSM_INVALID_INDEX, IDSM_INVALID_INDEX, 0U },     /* [3] */
+    { 0xC5D0U, IDSM_REPORTING_MODE_DETAILED, 0U, FALSE, TRUE, 1U, 3U, IDSM_INVALID_INDEX, IDSM_INVALID_INDEX, 0U },     /* [4] */
+    { 0x85D0U, IDSM_REPORTING_MODE_DETAILED, 0U, FALSE, TRUE, 2U, 4U, IDSM_INVALID_INDEX, IDSM_INVALID_INDEX, 0U },     /* [5] */
+    { 0xC5A4U, IDSM_REPORTING_MODE_DETAILED, 0U, FALSE, TRUE, 1U, 5U, IDSM_INVALID_INDEX, IDSM_INVALID_INDEX, 0U },     /* [6] */
+    { 0x85A4U, IDSM_REPORTING_MODE_DETAILED, 0U, FALSE, TRUE, 2U, 6U, IDSM_INVALID_INDEX, IDSM_INVALID_INDEX, 0U },     /* [7] */
+    { 0xC5C1U, IDSM_REPORTING_MODE_DETAILED, 0U, FALSE, TRUE, 1U, 7U, IDSM_INVALID_INDEX, IDSM_INVALID_INDEX, 0U },     /* [8] */
+    { 0x85C1U, IDSM_REPORTING_MODE_DETAILED, 0U, FALSE, TRUE, 1U, 8U, IDSM_INVALID_INDEX, IDSM_INVALID_INDEX, 0U }     /* [9] */
 };
 
 CONST(AB_83_ConstV IdsMEventAcssType, IDSM_CONFIG_DATA) IdsM_Cfg_EventAcss = 
@@ -180,7 +186,10 @@ CONST(AB_83_ConstV IdsMEventAcssType, IDSM_CONFIG_DATA) IdsM_Cfg_EventAcss =
 
 static CONST(AB_83_ConstV IdsMFilterChainType, IDSM_CONFIG_DATA) IdsM_Cfg_FilterChain[ IDSM_CFG_FILTER_CHAIN_NUM ] =
 {
-    { { IDSM_FILTERS_CTX_USE_FIRST, 0U, 0U, 0U, 60U } } /* [0] */
+    { { IDSM_FILTERS_CTX_USE_FIRST, 0U, 0U, 0U, 60U } }, /* [0] */
+    { { IDSM_FILTERS_CTX_USE_FIRST, 0U, 0U, 0U, 202U } }, /* [1] */
+    { { IDSM_FILTERS_CTX_USE_FIRST, 0U, 0U, 0U, 102U } }, /* [2] */
+    { { IDSM_FILTERS_CTX_USE_FIRST, 0U, 0U, 0U, 1994U } } /* [3] */
 };
 
 CONST(AB_83_ConstV IdsMFilterChainAcssType, IDSM_CONFIG_DATA) IdsM_Cfg_FilterChainAcss = 
@@ -192,7 +201,10 @@ CONST(AB_83_ConstV IdsMFilterChainAcssType, IDSM_CONFIG_DATA) IdsM_Cfg_FilterCha
 
 static CONST(AB_83_ConstV IdsMFilChainFuncTblType, IDSM_CONFIG_DATA) IdsM_Cfg_FilChainFuncTbl[ IDSM_CFG_FILTER_CHAIN_NUM ] =
 {
-    {{ NULL_PTR, NULL_PTR, &IdsM_Filter_AggreSetBuff, NULL_PTR }} /* [0] */
+    {{ NULL_PTR, NULL_PTR, &IdsM_Filter_AggreSetBuff, NULL_PTR }}, /* [0] */
+    {{ NULL_PTR, NULL_PTR, &IdsM_Filter_AggreSetBuff, NULL_PTR }}, /* [1] */
+    {{ NULL_PTR, NULL_PTR, &IdsM_Filter_AggreSetBuff, NULL_PTR }}, /* [2] */
+    {{ NULL_PTR, NULL_PTR, &IdsM_Filter_AggreSetBuff, NULL_PTR }} /* [3] */
 };
 
 CONST(AB_83_ConstV IdsMFilChainFuncTblAcssType, IDSM_CONFIG_DATA) IdsM_Cfg_FilChainFuncTblAcss = 

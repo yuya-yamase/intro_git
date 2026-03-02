@@ -43,7 +43,7 @@ extern "C" {
 
 #if MCOS_CFG_DS_TRACE_LOG_API
 #define AR_SVC_ENTITY(name) name ## Entity
-#define AR_SVC_FUNC LOCAL_INLINE
+#define AR_SVC_FUNC AR_LOCAL_FORCE_INLINE
 #else /* MCOS_CFG_DS_TRACE_LOG_API */
 #define AR_SVC_ENTITY(name) name
 #define AR_SVC_FUNC
@@ -490,15 +490,15 @@ extern ObjectAccessType ar_CheckSpinlockAccess(ApplicationType ApplID, SpinlockI
 #define AR_INTSTS_SUSPENDOSINTERRUPTS  ((uint32) 0x8000U)
 #define AR_INTSTS_MASK                 ((uint32) 0xf000U)
 
-LOCAL_INLINE void AR_CALL_LEVEL_ENTER(clscb_t * const clscb, uint32 bit);
-LOCAL_INLINE void AR_CALL_LEVEL_ENTER(clscb_t * const clscb, uint32 bit)
+AR_LOCAL_FORCE_INLINE void AR_CALL_LEVEL_ENTER(clscb_t * const clscb, uint32 bit);
+AR_LOCAL_FORCE_INLINE void AR_CALL_LEVEL_ENTER(clscb_t * const clscb, uint32 bit)
 {
     clscb_t * const clscb_tmp = (clscb);
     (clscb_tmp)->aroscb.call_level = (uint16)((uint32)((clscb_tmp)->aroscb.call_level) | (uint32)(bit));
 }
 
-LOCAL_INLINE void AR_CALL_LEVEL_EXIT(clscb_t * const clscb, uint32 bit);
-LOCAL_INLINE void AR_CALL_LEVEL_EXIT(clscb_t * const clscb, uint32 bit)
+AR_LOCAL_FORCE_INLINE void AR_CALL_LEVEL_EXIT(clscb_t * const clscb, uint32 bit);
+AR_LOCAL_FORCE_INLINE void AR_CALL_LEVEL_EXIT(clscb_t * const clscb, uint32 bit)
 {
     clscb_t * const clscb_tmp = (clscb);
     (clscb_tmp)->aroscb.call_level = (uint16)((uint32)((clscb_tmp)->aroscb.call_level) &  ~(uint32)(bit));
@@ -635,57 +635,57 @@ LOCAL_INLINE void AR_CALL_LEVEL_EXIT(clscb_t * const clscb, uint32 bit)
 
 #if (AR_OS_USE_SCALABILITYCLASS_3_OR_4 == STD_ON)
 
-LOCAL_INLINE void AR_CHECK_MEMREADWRITE_TICKTYPE(TickRefType pointer);
-LOCAL_INLINE void AR_CHECK_MEMREADWRITE_TICKTYPE(TickRefType pointer)
+AR_LOCAL_FORCE_INLINE void AR_CHECK_MEMREADWRITE_TICKTYPE(TickRefType pointer);
+AR_LOCAL_FORCE_INLINE void AR_CHECK_MEMREADWRITE_TICKTYPE(TickRefType pointer)
 {
     volatile TickType v = *pointer;
     *(volatile TickType *)pointer = v;
 }
 
-LOCAL_INLINE void AR_CHECK_MEMWRITE_TICKTYPE(TickRefType pointer);
-LOCAL_INLINE void AR_CHECK_MEMWRITE_TICKTYPE(TickRefType pointer)
+AR_LOCAL_FORCE_INLINE void AR_CHECK_MEMWRITE_TICKTYPE(TickRefType pointer);
+AR_LOCAL_FORCE_INLINE void AR_CHECK_MEMWRITE_TICKTYPE(TickRefType pointer)
 {
     *(volatile TickType *)pointer = (TickType)0;
 }
 
-LOCAL_INLINE void AR_CHECK_MEMWRITE_APLSTATETYPE(ApplicationStateRefType pointer);
-LOCAL_INLINE void AR_CHECK_MEMWRITE_APLSTATETYPE(ApplicationStateRefType pointer)
+AR_LOCAL_FORCE_INLINE void AR_CHECK_MEMWRITE_APLSTATETYPE(ApplicationStateRefType pointer);
+AR_LOCAL_FORCE_INLINE void AR_CHECK_MEMWRITE_APLSTATETYPE(ApplicationStateRefType pointer)
 {
     *(volatile ApplicationStateType *)pointer = (ApplicationStateType)0;
 }
 
-LOCAL_INLINE void AR_CHECK_MEMWRITE_TASKSTATETYPE(TaskStateRefType pointer);
-LOCAL_INLINE void AR_CHECK_MEMWRITE_TASKSTATETYPE(TaskStateRefType pointer)
+AR_LOCAL_FORCE_INLINE void AR_CHECK_MEMWRITE_TASKSTATETYPE(TaskStateRefType pointer);
+AR_LOCAL_FORCE_INLINE void AR_CHECK_MEMWRITE_TASKSTATETYPE(TaskStateRefType pointer)
 {
     *(volatile TaskStateType *)pointer = (TaskStateType)0;
 }
 
-LOCAL_INLINE void AR_CHECK_MEMWRITE_EVENTMASKTYPE(EventMaskRefType pointer);
-LOCAL_INLINE void AR_CHECK_MEMWRITE_EVENTMASKTYPE(EventMaskRefType pointer)
+AR_LOCAL_FORCE_INLINE void AR_CHECK_MEMWRITE_EVENTMASKTYPE(EventMaskRefType pointer);
+AR_LOCAL_FORCE_INLINE void AR_CHECK_MEMWRITE_EVENTMASKTYPE(EventMaskRefType pointer)
 {
     *(volatile EventMaskType *)pointer = (EventMaskType)0;
 }
 
-LOCAL_INLINE void AR_CHECK_MEMWRITE_TRYTOGETSTYPE(TryToGetSpinlockType *pointer);
-LOCAL_INLINE void AR_CHECK_MEMWRITE_TRYTOGETSTYPE(TryToGetSpinlockType *pointer)
+AR_LOCAL_FORCE_INLINE void AR_CHECK_MEMWRITE_TRYTOGETSTYPE(TryToGetSpinlockType *pointer);
+AR_LOCAL_FORCE_INLINE void AR_CHECK_MEMWRITE_TRYTOGETSTYPE(TryToGetSpinlockType *pointer)
 {
     *(volatile TryToGetSpinlockType *)pointer = (TryToGetSpinlockType)0;
 }
 
-LOCAL_INLINE void AR_CHECK_MEMWRITE_UINT8(uint8 *pointer);
-LOCAL_INLINE void AR_CHECK_MEMWRITE_UINT8(uint8 *pointer)
+AR_LOCAL_FORCE_INLINE void AR_CHECK_MEMWRITE_UINT8(uint8 *pointer);
+AR_LOCAL_FORCE_INLINE void AR_CHECK_MEMWRITE_UINT8(uint8 *pointer)
 {
     *(volatile uint8 *)pointer = (uint8)0;
 }
 
-LOCAL_INLINE void AR_CHECK_MEMWRITE_UINT16(uint16 *pointer);
-LOCAL_INLINE void AR_CHECK_MEMWRITE_UINT16(uint16 *pointer)
+AR_LOCAL_FORCE_INLINE void AR_CHECK_MEMWRITE_UINT16(uint16 *pointer);
+AR_LOCAL_FORCE_INLINE void AR_CHECK_MEMWRITE_UINT16(uint16 *pointer)
 {
     *(volatile uint16 *)pointer = (uint16)0;
 }
 
-LOCAL_INLINE void AR_CHECK_MEMWRITE_UINT32(uint32 *pointer);
-LOCAL_INLINE void AR_CHECK_MEMWRITE_UINT32(uint32 *pointer)
+AR_LOCAL_FORCE_INLINE void AR_CHECK_MEMWRITE_UINT32(uint32 *pointer);
+AR_LOCAL_FORCE_INLINE void AR_CHECK_MEMWRITE_UINT32(uint32 *pointer)
 {
     *(volatile uint32 *)pointer = (uint32)0;
 }
@@ -836,6 +836,7 @@ extern void ar_call_pretaskhook(void);
 extern void ar_call_posttaskhook(void);
 #endif /* (AR_OS_USE_POSTTASKHOOK == STD_ON) */
 extern void ar_system_call_errorhook(const mkcb_t *mkcb, clscb_t *clscb, StatusType status);
+extern void mcos_call_userhook_ar_target_exit_internal(mcos_uintptr_t param1, mcos_uintptr_t param2);
 
 #if ((AR_OS_USE_SCALABILITYCLASS_3_OR_4 == STD_ON) || (AR_OS_USE_STACKMONITORING == STD_ON))
 extern void ar_stack_overflow(void);
@@ -846,20 +847,20 @@ extern void ar_stack_overflow(void);
 
 #define AR_CRITICAL_SECTION_NUM_0   (0)
 
-LOCAL_INLINE ar_critical_section_t ar_get_critical_section(void);
-LOCAL_INLINE ar_critical_section_t ar_critical_section_enter_core(clscb_t * const clscb);
-LOCAL_INLINE ar_critical_section_t ar_critical_section_enter(void);
-LOCAL_INLINE void ar_critical_section_leave_core(clscb_t * const clscb, const ar_critical_section_t cs);
-LOCAL_INLINE void ar_critical_section_leave(const ar_critical_section_t cs);
-LOCAL_INLINE void ar_critical_section_enaint(void);
+AR_LOCAL_FORCE_INLINE ar_critical_section_t ar_get_critical_section(void);
+AR_LOCAL_FORCE_INLINE ar_critical_section_t ar_critical_section_enter_core(clscb_t * const clscb);
+AR_LOCAL_FORCE_INLINE ar_critical_section_t ar_critical_section_enter(void);
+AR_LOCAL_FORCE_INLINE void ar_critical_section_leave_core(clscb_t * const clscb, const ar_critical_section_t cs);
+AR_LOCAL_FORCE_INLINE void ar_critical_section_leave(const ar_critical_section_t cs);
+AR_LOCAL_FORCE_INLINE void ar_critical_section_enaint(void);
 
 
-LOCAL_INLINE ar_critical_section_t ar_get_critical_section(void)
+AR_LOCAL_FORCE_INLINE ar_critical_section_t ar_get_critical_section(void)
 {
     return (ar_critical_section_t)AR_CRITICAL_SECTION_NUM_0;
 }
 
-LOCAL_INLINE ar_critical_section_t ar_critical_section_enter_core(
+AR_LOCAL_FORCE_INLINE ar_critical_section_t ar_critical_section_enter_core(
     clscb_t * const clscb)
 {
     uint8           nest;
@@ -887,7 +888,7 @@ LOCAL_INLINE ar_critical_section_t ar_critical_section_enter_core(
     return (ar_critical_section_t)AR_CRITICAL_SECTION_NUM_0;
 }
 
-LOCAL_INLINE ar_critical_section_t ar_critical_section_enter(void)
+AR_LOCAL_FORCE_INLINE ar_critical_section_t ar_critical_section_enter(void)
 {
     const mkcb_t    *mkcb;
     clscb_t         *clscb;
@@ -898,7 +899,7 @@ LOCAL_INLINE ar_critical_section_t ar_critical_section_enter(void)
     return ar_critical_section_enter_core(clscb);
 }
 
-LOCAL_INLINE void ar_critical_section_leave_core(
+AR_LOCAL_FORCE_INLINE void ar_critical_section_leave_core(
     clscb_t * const clscb,
     const ar_critical_section_t cs)
 {
@@ -925,7 +926,7 @@ LOCAL_INLINE void ar_critical_section_leave_core(
     }
 }
 
-LOCAL_INLINE void ar_critical_section_leave(
+AR_LOCAL_FORCE_INLINE void ar_critical_section_leave(
     const ar_critical_section_t cs)
 {
     const mkcb_t    *mkcb;
@@ -937,7 +938,7 @@ LOCAL_INLINE void ar_critical_section_leave(
     ar_critical_section_leave_core(clscb, cs);
 }
 
-LOCAL_INLINE void ar_critical_section_enaint(void)
+AR_LOCAL_FORCE_INLINE void ar_critical_section_enaint(void)
 {
     const mkcb_t    *mkcb;
     clscb_t         *clscb;

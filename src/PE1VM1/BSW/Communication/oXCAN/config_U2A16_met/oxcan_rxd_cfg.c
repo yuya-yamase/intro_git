@@ -47,10 +47,10 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if (OXCAN_LIB_CFG_EN_RXD == 1U)
+#if ((OXCAN_LIB_CFG_EN_RXD == 1U) || (OXCAN_LIB_CFG_EN_RXD == 2U))
 #else
-#error "oxcan_rxd_cfg.c : OXCAN_LIB_CFG_EN_RXD is NOT equal to 1U."
-#endif /* #if (OXCAN_LIB_CFG_EN_RXD == 1U) */
+#error "oxcan_rxd_cfg.c : OXCAN_LIB_CFG_EN_RXD shall be equal to 1U or 2U."
+#endif /* #if ((OXCAN_LIB_CFG_EN_RXD == 1U) || (OXCAN_LIB_CFG_EN_RXD == 2U)) */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
@@ -67,7 +67,8 @@ U4                          u4_gp_oxcan_rxd_pom_elpsd[OXCAN_RXD_NUM_POM];
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-const U2                    u2_g_OXCAN_RXD_POM_TOUT = (U2)3000U / (U2)OXCAN_MAIN_TICK;    /* 3000 msec    */
+const U4                    u4_g_OXCAN_RXD_SYS_NET  = (U4)OXCAN_SYS_NET;                 /* OXCAN_SYS_NET defined in oxcan_sys_def.h */
+const U2                    u2_g_OXCAN_RXD_POM_TOUT = (U2)3000U / (U2)OXCAN_MAIN_TICK;   /* 3000 msec                                */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 const U4                    u4_gp_OXCAN_RXD_SYS_BY_POM[OXCAN_RXD_NUM_POM] = {

@@ -240,7 +240,7 @@ extern void ar_sync_cores(const uint8 phase, const boolean check_shutdown);
 #define OS_STOP_SEC_CODE
 #include "Os_MemMap.h"
 
-LOCAL_INLINE void ar_dispatch_request_send_self(void);
+AR_LOCAL_FORCE_INLINE void ar_dispatch_request_send_self(void);
 
 /*---------------------------------------------------------------------------
   ar_dispatch_request_self
@@ -250,34 +250,34 @@ LOCAL_INLINE void ar_dispatch_request_send_self(void);
   Return    :   none
   Note  :   none
  ---------------------------------------------------------------------------*/
-LOCAL_INLINE void ar_dispatch_request_send_self(void)
+AR_LOCAL_FORCE_INLINE void ar_dispatch_request_send_self(void)
 {
     mcos_mkmsg_request_raise(mcos_get_lcid());
     return ;
 }
 #if (AR_ENABLE_CHAIN_TASK != 0U)
-LOCAL_INLINE StatusType ar_api_call_chain(
+AR_LOCAL_FORCE_INLINE StatusType ar_api_call_chain(
     clscb_t *clscb,
     const mcos_id_t dest_lcid,
     const ar_api_request_t * const p_req, ar_api_return_t * const p_ret);
 #endif /* #if (AR_ENABLE_CHAIN_TASK != 0U) */
 
-LOCAL_INLINE StatusType ar_api_call(
+AR_LOCAL_FORCE_INLINE StatusType ar_api_call(
     clscb_t *clscb,
     const mcos_id_t dest_lcid,
     const ar_api_request_t * const p_req, ar_api_return_t * const p_ret);
-LOCAL_INLINE StatusType ar_api_call_async(
+AR_LOCAL_FORCE_INLINE StatusType ar_api_call_async(
     const mcos_id_t dest_lcid,
     const ar_api_request_t * const p_req);
-LOCAL_INLINE boolean ar_is_master_core(void);
-LOCAL_INLINE CoreIdType ar_get_core_id(void);
-LOCAL_INLINE boolean ar_start_core(const CoreIdType core_id);
-LOCAL_INLINE boolean ar_is_core_deactivated(const CoreIdType core_id);
+AR_LOCAL_FORCE_INLINE boolean ar_is_master_core(void);
+AR_LOCAL_FORCE_INLINE CoreIdType ar_get_core_id(void);
+AR_LOCAL_FORCE_INLINE boolean ar_start_core(const CoreIdType core_id);
+AR_LOCAL_FORCE_INLINE boolean ar_is_core_deactivated(const CoreIdType core_id);
 
-LOCAL_INLINE void ar_get_message_buffers_on(mcos_id_t lcid, clscb_t const *clscb, ar_api_request_t **p_req, ar_api_return_t **p_ret);
-LOCAL_INLINE void ar_release_message_buffers_on(mcos_id_t lcid, clscb_t const *clscb, ar_api_request_t const *p_req, ar_api_return_t const *p_ret);
+AR_LOCAL_FORCE_INLINE void ar_get_message_buffers_on(mcos_id_t lcid, clscb_t const *clscb, ar_api_request_t **p_req, ar_api_return_t **p_ret);
+AR_LOCAL_FORCE_INLINE void ar_release_message_buffers_on(mcos_id_t lcid, clscb_t const *clscb, ar_api_request_t const *p_req, ar_api_return_t const *p_ret);
 
-LOCAL_INLINE void ar_get_message_buffers_on(mcos_id_t lcid, clscb_t const *clscb,
+AR_LOCAL_FORCE_INLINE void ar_get_message_buffers_on(mcos_id_t lcid, clscb_t const *clscb,
     ar_api_request_t **p_req, ar_api_return_t **p_ret)
 {
     /* [PRQA_4393] Countermeasure for PRQA warning. */
@@ -298,7 +298,7 @@ LOCAL_INLINE void ar_get_message_buffers_on(mcos_id_t lcid, clscb_t const *clscb
     }
 }
 
-LOCAL_INLINE void ar_release_message_buffers_on(mcos_id_t lcid, clscb_t const *clscb,
+AR_LOCAL_FORCE_INLINE void ar_release_message_buffers_on(mcos_id_t lcid, clscb_t const *clscb,
     ar_api_request_t const *p_req, ar_api_return_t const *p_ret)
 {
     /* Nothing to do */
@@ -313,7 +313,7 @@ LOCAL_INLINE void ar_release_message_buffers_on(mcos_id_t lcid, clscb_t const *c
  * This function is special version of ar_api_call() for ChainTask.
  * - The reply is given priority over requests.
  */
-LOCAL_INLINE StatusType ar_api_call_chain(
+AR_LOCAL_FORCE_INLINE StatusType ar_api_call_chain(
     clscb_t *clscb,
     const mcos_id_t dest_lcid,
     const ar_api_request_t * const p_req,
@@ -361,7 +361,7 @@ LOCAL_INLINE StatusType ar_api_call_chain(
  * ar_api_call
  *  called in critical sction
  */
-LOCAL_INLINE StatusType ar_api_call(
+AR_LOCAL_FORCE_INLINE StatusType ar_api_call(
     clscb_t *clscb,
     const mcos_id_t dest_lcid,
     const ar_api_request_t * const p_req,
@@ -413,7 +413,7 @@ LOCAL_INLINE StatusType ar_api_call(
  * ar_api_call_async
  *  called in critical sction
  */
-LOCAL_INLINE StatusType ar_api_call_async(
+AR_LOCAL_FORCE_INLINE StatusType ar_api_call_async(
     const mcos_id_t dest_lcid,
     const ar_api_request_t * const p_req)
 {
@@ -436,14 +436,14 @@ LOCAL_INLINE StatusType ar_api_call_async(
     return status;
 }
 
-LOCAL_INLINE boolean ar_is_master_core(void)
+AR_LOCAL_FORCE_INLINE boolean ar_is_master_core(void)
 {
     const mcos_id_t core_id = mcos_get_lcid();
     return (boolean)(((int32_t)core_id == BOOT_CORE_LCID) ? TRUE : FALSE);
 }
 
 
-LOCAL_INLINE CoreIdType ar_get_core_id(void)
+AR_LOCAL_FORCE_INLINE CoreIdType ar_get_core_id(void)
 {
     int32_t target_cpuno = LCID2CPUNO(mcos_get_lcid());
     CoreIdType target_coreid = (CoreIdType)target_cpuno;
@@ -451,7 +451,7 @@ LOCAL_INLINE CoreIdType ar_get_core_id(void)
     return target_coreid;
 }
 
-LOCAL_INLINE boolean ar_start_core(
+AR_LOCAL_FORCE_INLINE boolean ar_start_core(
     const CoreIdType core_id)
 {
     boolean valid_core;
@@ -469,7 +469,7 @@ LOCAL_INLINE boolean ar_start_core(
     return valid_core;
 }
 
-LOCAL_INLINE boolean ar_is_core_deactivated(
+AR_LOCAL_FORCE_INLINE boolean ar_is_core_deactivated(
     const CoreIdType core_id)
 {
     return (boolean)((ar_core_state_table[core_id] == (uint32)0U) ? TRUE : FALSE);

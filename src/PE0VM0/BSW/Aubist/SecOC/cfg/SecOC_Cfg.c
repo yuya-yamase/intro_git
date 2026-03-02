@@ -139,30 +139,6 @@ CONST(SecOC_Ab_BusCollectionType, SECOC_CONST_CONFIG) SecOC_Ab_BusCollection[SEC
       1U, /* Ab_FvTypeIndex */
       16U, /* Ab_DataIdLength */
       0U /* dummy2 */
-    },
-    {
-      2U, /* Ab_BusID */
-      SECOC_AB_PROTOCOL_CAN, /* Ab_Protocol */
-      0U, /* Ab_VerifyStartCount */
-      47U, /* Ab_FreshnessValueID */
-      15U, /* Ab_ClearAcceptanceWindow */
-      0U, /* dummy1 */
-      SECOC_AB_FV_FULL, /* Ab_FvType */
-      2U, /* Ab_FvTypeIndex */
-      16U, /* Ab_DataIdLength */
-      0U /* dummy2 */
-    },
-    {
-      3U, /* Ab_BusID */
-      SECOC_AB_PROTOCOL_CAN, /* Ab_Protocol */
-      0U, /* Ab_VerifyStartCount */
-      48U, /* Ab_FreshnessValueID */
-      15U, /* Ab_ClearAcceptanceWindow */
-      0U, /* dummy1 */
-      SECOC_AB_FV_FULL, /* Ab_FvType */
-      3U, /* Ab_FvTypeIndex */
-      16U, /* Ab_DataIdLength */
-      0U /* dummy2 */
     }
 };
 
@@ -1983,7 +1959,7 @@ CONST(SecOC_TxPduProcessingType, SECOC_CONST_CONFIG) SecOC_TxPduProcessing[SECOC
     {
         128U, /* Ab_AuthInfoLength */
         32U, /* AuthInfoTruncLength */
-        2U, /* Ab_BusIndex */
+        1U, /* Ab_BusIndex */
         11U, /* Ab_TxSecurityDataSize */
         1U, /* AuthenticationBuildAttempts */
         SECOC_AB_FV_CFUNC, /* Ab_QueryFreshnessValue */
@@ -2106,113 +2082,9 @@ CONST(SecOC_Ab_BusId2SecuredMsgIdxType, SECOC_CONST_CONFIG) SecOC_Ab_BusId2Secur
             0U,
             0U
         },
-        0U, /* Ab_TxSecuredMsgCount */
-        {    /* Ab_TxSecuredMsgIdxList */
-            0U,
-            0U,
-            0U,
-            0U,
-            0U,
-            0U,
-            0U,
-            0U,
-            0U,
-            0U,
-            0U,
-            0U,
-            0U,
-            0U,
-            0U
-        }
-    },
-    {        /* Bus[2] */
-        0U, /* Ab_RxSecuredMsgCount */
-        {    /* Ab_RxSecuredMsgIdxList */
-            0U,
-            0U,
-            0U,
-            0U,
-            0U,
-            0U,
-            0U,
-            0U,
-            0U,
-            0U,
-            0U,
-            0U,
-            0U,
-            0U,
-            0U,
-            0U,
-            0U,
-            0U,
-            0U,
-            0U,
-            0U,
-            0U,
-            0U,
-            0U,
-            0U,
-            0U,
-            0U,
-            0U,
-            0U
-        },
         1U, /* Ab_TxSecuredMsgCount */
         {    /* Ab_TxSecuredMsgIdxList */
             15U,
-            0U,
-            0U,
-            0U,
-            0U,
-            0U,
-            0U,
-            0U,
-            0U,
-            0U,
-            0U,
-            0U,
-            0U,
-            0U,
-            0U
-        }
-    },
-    {        /* Bus[3] */
-        0U, /* Ab_RxSecuredMsgCount */
-        {    /* Ab_RxSecuredMsgIdxList */
-            0U,
-            0U,
-            0U,
-            0U,
-            0U,
-            0U,
-            0U,
-            0U,
-            0U,
-            0U,
-            0U,
-            0U,
-            0U,
-            0U,
-            0U,
-            0U,
-            0U,
-            0U,
-            0U,
-            0U,
-            0U,
-            0U,
-            0U,
-            0U,
-            0U,
-            0U,
-            0U,
-            0U,
-            0U
-        },
-        0U, /* Ab_TxSecuredMsgCount */
-        {    /* Ab_TxSecuredMsgIdxList */
-            0U,
             0U,
             0U,
             0U,
