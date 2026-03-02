@@ -23,6 +23,7 @@
 
 #define    CANCTLTC_2BIT_MAX       (3U)
 
+#define    CANCTLTC_2BIT_SHIFT     (2U)
 #define    CANCTLTC_4BIT_SHIFT     (4U)
 #define    CANCTLTC_5BIT_SHIFT     (5U)
 
