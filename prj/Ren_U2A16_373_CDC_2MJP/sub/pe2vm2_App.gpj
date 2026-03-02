@@ -82,6 +82,7 @@
 ../../src/PE2VM2/App/IVI/PwrCtrl/PMIC.c
 ../../src/PE2VM2/App/IVI/PwrCtrl/PwrCtl.c
 ../../src/PE2VM2/App/IVI/PwrCtrl/STRCtl.c
+../../src/PE2VM2/App/IVI/PwrCtrl/WhlIni.c
 ../../src/PE2VM2/App/IVI/PwrCtrl/XMTunerCtl.c
 ../../src/PE2VM2/App/IVI/XSPI/x_spi_ivi.c
 ../../src/PE2VM2/App/IVI/XSPI/x_spi_ivi_queue.c
