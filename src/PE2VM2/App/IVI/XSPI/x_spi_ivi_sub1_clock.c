@@ -19,7 +19,6 @@
 #include    "x_spi_ivi_sub1_private.h"
 #include    "x_spi_ivi_sub1_clock.h"
 #include    "datesi_com.h"
-/*#include    "datesi_com.h"*/
 #include    "x_spi_ivi_sub4_private.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

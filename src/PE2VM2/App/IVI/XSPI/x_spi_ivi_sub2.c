@@ -19,6 +19,7 @@
 #include    "x_spi_ivi_sub2_private.h"
 #include    "x_spi_ivi_private.h"
 #include    "GyroDevCtl.h"
+#include    "x_spi_ivi_sub1_power.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -243,6 +244,7 @@ static void     vd_s_XspiIviSub2PeriBufSet(void);
 static void     vd_s_XspiIviSub21stBufSet(void);
 static void     vd_s_XspiIviSub2ForceBufSet(void);
 static void     vd_s_XspiIviSub2BufClear(void);
+static void     vd_s_XspiIviSub2ResetInit(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
@@ -305,7 +307,7 @@ void            vd_g_XspiIviSub2Init(void)
     u1_s_xspi_ivi_clock_freq_tmp = (U1)0U;
     u4_s_xspi_ivi_pulse_count_tmp = (U4)0U;
 
-	u1_s_xspi_ivi_com_start_flg  = (U1)FALSE;                   /*通信開始フラグ初期化*/
+    u1_s_xspi_ivi_com_start_flg  = (U1)FALSE;                   /*通信開始フラグ初期化*/
     u1_s_xspi_ivi_com_start_response_flg = (U1)FALSE;
     u1_s_xspi_ivi_ini_send_flg   = (U1)FALSE;                   /*初回送信開始フラグ初期化*/
     u1_s_xspi_ivi_comp_com_start = (U1)FALSE;                   /*通信開始応答完了フラグ初期化*/
@@ -329,6 +331,52 @@ void            vd_g_XspiIviSub2Init(void)
     u1_s_xspi_ivi_gyroint_get_response_flg = (U1)FALSE;
     u1_s_xspi_ivi_gyroint_output_response_flg = (U1)FALSE;
 }
+
+/*===================================================================================================================================*/
+/*  void            vd_g_XspiIviSub2VMResetInit(void)                                                                                */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    VMリセット時初期化処理                                                                                             */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void            vd_g_XspiIviSub2VMResetInit(void)
+{
+    vd_s_XspiIviSub2ResetInit();
+    vd_g_XspiIviSub1PowerVMResetComp((U1)XSPI_IVI_POWER_RESET_COMP_GYRO);
+}
+
+/*===================================================================================================================================*/
+/*  void            vd_g_XspiIviSub2SoCResetInit(void)                                                                                */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    VMリセット時初期化処理                                                                                             */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void            vd_g_XspiIviSub2SoCResetInit(void)
+{
+    vd_s_XspiIviSub2ResetInit();
+}
+
+/*===================================================================================================================================*/
+/*  static void            vd_s_XspiIviSub2ResetInit(void)                                                                           */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    VMリセット時初期化処理                                                                                             */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void            vd_s_XspiIviSub2ResetInit(void)
+{
+    vd_g_MemfillU1(&u1_sp_xspi_ivi_gyro_init_data[0], (U1)0U, (U4)XSPI_IVI_INIT_DATA_LENGTH);
+    vd_g_MemfillU1(&u1_sp_xspi_ivi_gyro_data[0], (U1)0U, (U4)XSPI_IVI_DATA_LENGTH);
+    u1_s_xspi_ivi_com_start_flg  = (U1)FALSE;                   /*通信開始フラグ初期化*/
+    u1_s_xspi_ivi_com_start_response_flg = (U1)FALSE;
+    u1_s_xspi_ivi_ini_send_flg   = (U1)FALSE;                   /*初回送信開始フラグ初期化*/
+    u1_s_xspi_ivi_comp_com_start = (U1)FALSE;                   /*通信開始応答完了フラグ初期化*/
+    u2_s_xspi_ivi_ini_buf_cnt = (U2)0U;                         /*分割送信フレーム番号初期化*/
+    u1_s_xspi_ivi_tmp_gyro_ini_cnt = (U1)0U;                    /*初回送信データ数初期化*/
+    u1_s_xspi_ivi_tmp_gyro_ini_cnt_buf = (U1)0U;                /*初回送信データのリングバッファ格納箇所初期化*/
+}
+
 /*===================================================================================================================================*/
 /*  static void            vd_s_XspiIviSub2BufClear(void)                                                                            */
 /* --------------------------------------------------------------------------------------------------------------------------------- */

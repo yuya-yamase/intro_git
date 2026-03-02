@@ -106,6 +106,8 @@ void            vd_g_XspiIviSub2PulseWidDataPut(const ST_XSPI_IVI_PULSE_WID_DATA
 void            vd_g_XspiIviSub2GyroIntSetSend(const U1 u1_a_DATA);
 void            vd_g_XspiIviSub2GyroIntGetSend(const ST_XSPI_IVI_GYRO_INT_DATA st_a_DATA);
 void            vd_g_XspiIviSub2GyroIntOutSend(const U1 u1_a_DATA);
+void            vd_g_XspiIviSub2VMResetInit(void);
+void            vd_g_XspiIviSub2SoCResetInit(void);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
