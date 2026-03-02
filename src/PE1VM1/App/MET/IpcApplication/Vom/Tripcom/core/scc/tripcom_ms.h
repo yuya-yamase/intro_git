@@ -121,6 +121,7 @@
 void            vd_g_TripcomMsBonInit(void);
 void            vd_g_TripcomMsInit(void);
 void            vd_g_TripcomMsMainTask(void);
+
 U4              u4_g_TripcomMsGetAccmltVal(const U1 u1_a_ID);
 void            vd_g_TripcomMsSetAccmltVal(const U1 u1_a_ID, const U4 u4_a_VAL);
 
@@ -130,8 +131,11 @@ void            vd_g_TripcomMsGetGrphMaxVal(const U1 u1_a_ID, U4* u4_ap_max);
 void            vd_g_TripcomMsSetGrphMaxVal(const U1 u1_a_ID, const U4 u4_a_MAX);
 void            vd_g_TripcomMsGetGrphDateVal(const U1 u1_a_ID, U2* u2_ap_date, const U1 u1_a_SIZE);
 void            vd_g_TripcomMsSetGrphDateVal(const U1 u1_a_ID, U2* u2_ap_date, const U1 u1_a_SIZE);
+
 void            vd_g_TripcomMsSetNvmRqst(const U1 u1_a_ID);
+
 void            vd_g_TripcomMsClrRimRslt(void);
+void            vd_g_TripcomMsClrNvmRslt(void);
 U1              u1_g_TripcomMsGetNvmRslt(const U1 u1_a_ID);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

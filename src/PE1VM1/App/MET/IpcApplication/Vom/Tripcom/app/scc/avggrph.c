@@ -161,7 +161,7 @@ void            vd_g_AvgGrphDataSync(void)
     st_tp_cfg = &st_sp_AVGGRPH_CNTTS_CFG[AVGGRPH_CNTT_TAEE];
     vd_g_TripcomMsGetGrphEconVal(st_tp_cfg->u1_msid_econ, &st_tp_cfg->u4p_econ[0], st_tp_cfg->u1_size);
     vd_g_TripcomMsGetGrphMaxVal(st_tp_cfg->u1_msid_econ, st_tp_cfg->u4p_max);
-    vd_g_TripcomMsGetGrphDateVal(st_tp_cfg->u1_msid_date, &st_tp_cfg->u2p_date[0], st_tp_cfg->u1_size);
+    vd_g_TripcomMsGetGrphDateVal(st_tp_cfg->u1_msid_date, &st_tp_cfg->u2p_date[0], (U1)AVGGRPH_SIZE_TA_DATE);
 }
 
 /*===================================================================================================================================*/
@@ -196,7 +196,7 @@ void            vd_g_AvgGrphTaEconUpdt(const U1 u1_a_CNTTID, const U4 u4_a_data)
 
         /* max value */
         if ( (*(st_tp_cfg->u4p_max) <  u4_t_current_data) ||
-             (*(st_tp_cfg->u4p_max) == (U4)U4_MAX       )    ) {
+             (*(st_tp_cfg->u4p_max) == (U4)U4_MAX       )) {
             *(st_tp_cfg->u4p_max) = u4_t_current_data;
         }
 
@@ -211,13 +211,14 @@ void            vd_g_AvgGrphTaEconUpdt(const U1 u1_a_CNTTID, const U4 u4_a_data)
             u4_t_yymmddwk = (U4)0U;
         }
 
-        st_tp_cfg->u2p_date[AVGGRPH_TAECON_HIST_5TH_LAST] = st_tp_cfg->u2p_date[AVGGRPH_TAECON_HIST_4TH_LAST];
-        st_tp_cfg->u2p_date[AVGGRPH_TAECON_HIST_4TH_LAST] = st_tp_cfg->u2p_date[AVGGRPH_TAECON_HIST_3RD_LAST];
-        st_tp_cfg->u2p_date[AVGGRPH_TAECON_HIST_3RD_LAST] = st_tp_cfg->u2p_date[AVGGRPH_TAECON_HIST_2ND_LAST];
-        st_tp_cfg->u2p_date[AVGGRPH_TAECON_HIST_2ND_LAST] = st_tp_cfg->u2p_date[AVGGRPH_TAECON_HIST_1ST_LAST];
-        st_tp_cfg->u2p_date[AVGGRPH_TAECON_HIST_1ST_LAST] = (U2)((u4_t_yymmddwk & (U4)((U4)YYMMDDWK_BIT_DA | (U4)YYMMDDWK_BIT_MO)) >> YYMMDDWK_LSB_DA);
+        st_tp_cfg->u2p_date[AVGGRPH_TAECON_UPD_DATE_6TH_LAST] = st_tp_cfg->u2p_date[AVGGRPH_TAECON_UPD_DATE_5TH_LAST];
+        st_tp_cfg->u2p_date[AVGGRPH_TAECON_UPD_DATE_5TH_LAST] = st_tp_cfg->u2p_date[AVGGRPH_TAECON_UPD_DATE_4TH_LAST];
+        st_tp_cfg->u2p_date[AVGGRPH_TAECON_UPD_DATE_4TH_LAST] = st_tp_cfg->u2p_date[AVGGRPH_TAECON_UPD_DATE_3RD_LAST];
+        st_tp_cfg->u2p_date[AVGGRPH_TAECON_UPD_DATE_3RD_LAST] = st_tp_cfg->u2p_date[AVGGRPH_TAECON_UPD_DATE_2ND_LAST];
+        st_tp_cfg->u2p_date[AVGGRPH_TAECON_UPD_DATE_2ND_LAST] = st_tp_cfg->u2p_date[AVGGRPH_TAECON_UPD_DATE_1ST_LAST];
+        st_tp_cfg->u2p_date[AVGGRPH_TAECON_UPD_DATE_1ST_LAST] = (U2)((u4_t_yymmddwk & (U4)((U4)YYMMDDWK_BIT_DA | (U4)YYMMDDWK_BIT_MO)) >> YYMMDDWK_LSB_DA);
 
-        vd_g_TripcomMsSetGrphDateVal(st_tp_cfg->u1_msid_date, &st_tp_cfg->u2p_date[0], st_tp_cfg->u1_size);
+        vd_g_TripcomMsSetGrphDateVal(st_tp_cfg->u1_msid_date, &st_tp_cfg->u2p_date[0], (U1)AVGGRPH_SIZE_TA_DATE);
         vd_g_TripcomMsSetNvmRqst(st_tp_cfg->u1_msid_date);
 
         vd_g_AvgGrphUpdtTaEconRslt(u1_a_CNTTID);
@@ -238,16 +239,17 @@ void            vd_g_AvgGrphOneEconUpdt(const U1 u1_a_CNTTID, const U4 u4_a_data
 
     if(u1_a_CNTTID == (U1)AVGGRPH_CNTT_1MEE){
         st_tp_cfg = &st_sp_AVGGRPH_CNTTS_CFG[u1_a_CNTTID];
-        if((*(st_tp_cfg->u1p_latest) + (U1)1U) < st_tp_cfg->u1_size){
+        if ((*(st_tp_cfg->u1p_latest) + (U1)1U) < st_tp_cfg->u1_size) {
             u1_t_next = *(st_tp_cfg->u1p_latest) + (U1)1U;
-        } else {
+        }
+        else {
             u1_t_next = (U1)0U;
         }
 
         if (u4_a_data > (U4)AVGGRPH_ECON_MAX) {
             st_tp_cfg->u4p_econ[u1_t_next] = (U4)AVGGRPH_ECON_MAX;
         }
-        else{
+        else {
             st_tp_cfg->u4p_econ[u1_t_next] = u4_a_data;
         }
 
@@ -287,17 +289,22 @@ void            vd_g_AvgGrphReset(const U1 u1_a_CNTTID)
     }
     else if (u1_a_CNTTID == (U1)AVGGRPH_CNTT_TAEE) {
         st_tp_cfg = &st_sp_AVGGRPH_CNTTS_CFG[u1_a_CNTTID];
+        /* economy history reset */
         for (u4_t_loop = (U4)0U; u4_t_loop < (U4)st_tp_cfg->u1_size; u4_t_loop++) {
             st_tp_cfg->u4p_econ[u4_t_loop] = (U4)U4_MAX;
+        }
+        /* date history reset */
+        for (u4_t_loop = (U4)0U; u4_t_loop < (U4)AVGGRPH_SIZE_TA_DATE; u4_t_loop++) {
             st_tp_cfg->u2p_date[u4_t_loop] = (U2)U2_MAX;
         }
+        /* max value reset */
         *(st_tp_cfg->u4p_max) = (U4)U4_MAX;
 
         vd_g_TripcomMsSetGrphEconVal(st_tp_cfg->u1_msid_econ, &st_tp_cfg->u4p_econ[0], st_tp_cfg->u1_size);
         vd_g_TripcomMsSetGrphMaxVal(st_tp_cfg->u1_msid_econ, *(st_tp_cfg->u4p_max));
         vd_g_TripcomMsSetNvmRqst(st_tp_cfg->u1_msid_econ);
 
-        vd_g_TripcomMsSetGrphDateVal(st_tp_cfg->u1_msid_date, &st_tp_cfg->u2p_date[0], st_tp_cfg->u1_size);
+        vd_g_TripcomMsSetGrphDateVal(st_tp_cfg->u1_msid_date, &st_tp_cfg->u2p_date[0], (U1)AVGGRPH_SIZE_TA_DATE);
         vd_g_TripcomMsSetNvmRqst(st_tp_cfg->u1_msid_date);
 
         vd_g_AvgGrphUpdtTaEconRslt(u1_a_CNTTID);
@@ -322,10 +329,14 @@ U4              u4_g_AvgGrphTaEconData(const U1 u1_a_CNTTID, U4* u4_ap_data, U1*
     u4_t_max = (U4)U4_MAX;
     if (u1_a_CNTTID == (U1)AVGGRPH_CNTT_TAEE) {
         st_tp_cfg = &st_sp_AVGGRPH_CNTTS_CFG[u1_a_CNTTID];
+        /* economy history */
         for (u4_t_loop = (U4)0U; u4_t_loop < (U4)st_tp_cfg->u1_size; u4_t_loop++) {
             if (u4_ap_data != vdp_PTR_NA) {
                 u4_ap_data[u4_t_loop] = st_tp_cfg->u4p_econ[u4_t_loop];
             }
+        }
+        /* date history */
+        for (u4_t_loop = (U4)0U; u4_t_loop < (U4)AVGGRPH_SIZE_TA_DATE; u4_t_loop++) {
             if (u1_ap_month != vdp_PTR_NA) {
                 u1_ap_month[u4_t_loop] = (U1)((st_tp_cfg->u2p_date[u4_t_loop] & (U2)((U2)AVGGRPH_1BYTE_MSK << AVGGRPH_1BYTE_LSB)) >> AVGGRPH_1BYTE_LSB);
             }
@@ -333,6 +344,7 @@ U4              u4_g_AvgGrphTaEconData(const U1 u1_a_CNTTID, U4* u4_ap_data, U1*
                 u1_ap_day[u4_t_loop] = (U1)(st_tp_cfg->u2p_date[u4_t_loop] & (U2)AVGGRPH_1BYTE_MSK);
             }
         }
+        /* max value */
         u4_t_max = *(st_tp_cfg->u4p_max);
     }
     return(u4_t_max);

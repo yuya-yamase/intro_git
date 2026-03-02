@@ -27,6 +27,8 @@
 #define AVGGRPH_CNTT_1MEE                       (1U)
 
 #define AVGGRPH_SIZE_TA                         (5U)
+#define AVGGRPH_SIZE_TA_DATE                    (AVGGRPH_SIZE_TA + 1U)
+
 #define AVGGRPH_SIZE_1M                         (30U)
 
 #define AVGGRPH_TAECON_HIST_1ST_LAST            (0U)
@@ -34,6 +36,13 @@
 #define AVGGRPH_TAECON_HIST_3RD_LAST            (2U)
 #define AVGGRPH_TAECON_HIST_4TH_LAST            (3U)
 #define AVGGRPH_TAECON_HIST_5TH_LAST            (4U)
+
+#define AVGGRPH_TAECON_UPD_DATE_1ST_LAST        (0U)
+#define AVGGRPH_TAECON_UPD_DATE_2ND_LAST        (1U)
+#define AVGGRPH_TAECON_UPD_DATE_3RD_LAST        (2U)
+#define AVGGRPH_TAECON_UPD_DATE_4TH_LAST        (3U)
+#define AVGGRPH_TAECON_UPD_DATE_5TH_LAST        (4U)
+#define AVGGRPH_TAECON_UPD_DATE_6TH_LAST        (5U)
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
