@@ -325,7 +325,8 @@ U1      u1_g_LocaleCfgUnitdef(const U1 u1_a_UNITIDX)
 /*  BEV-2    10/15/2025  SN       Configured for BEVstep3_Rebase                                                                     */
 /*  BEV-3    11/14/2025  SN       Change initial value                                                                               */
 /*  BEV-4    12/08/2025  TS       Change UNIT_CH2 table and units referenced when sending UNIT_CH2                                   */
-/*  BEV-5    02/09/2026  SN(K)    Delete the u1_s_locale_unit_fueco definition and related handling.(BEV3CDCMET-3860)                */
+/*  BEV-5    02/05/2026  SN       Change B_PERMEM for BEV FF2. Change Mcst                                                           */
+/*  BEV-6    02/09/2026  SN(K)    Delete the u1_s_locale_unit_fueco definition and related handling.(BEV3CDCMET-3860)                */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
 /*  * SF   = Seiya Fukutome, DensoTechno                                                                                             */
