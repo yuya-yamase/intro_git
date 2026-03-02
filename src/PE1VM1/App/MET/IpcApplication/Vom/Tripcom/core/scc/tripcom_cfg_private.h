@@ -89,8 +89,9 @@ U1              u1_g_TripcomCfgGetPIEVSTS(U1 * u1p_a_pievsts);
 
 void            vd_g_TripcomCfgSmoothingTask(void);
 
-void            vd_g_TripcomNvmIfGrphSyncCmplt(void);
 void            vd_s_TripomCfgPostAppTask(void);
+
+void            vd_g_TripcomCfgNvmSyncCmplt(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */

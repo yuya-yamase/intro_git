@@ -136,20 +136,6 @@ U1              u1_g_AvgEeRstImmwRslt(const U1 u1_a_AVG_EE_CH);        /* called
 void            vd_g_TripcomRstRq(const U2 u2_a_RSTRQBIT);
 void            vd_g_TripcomRstRqImmWr(const U2 u2_a_RSTRQBIT);        /* called by Diagnosis */
 void            vd_g_TripcomGrphRstRq(const U2 u2_a_RSTRQBIT);
-U1              u1_g_TripcomNvmClear(const U1 u1_a_REQ, const U1 u1_a_RUN);
-
-void            vd_g_TripcomNvmIfRWTask(void);                         /* called by nvmc_mgr_cfg : st_NVMC_APP_FUNC_TABLE[].fp_p_vd_acs_func */
-void            vd_g_TripcomNvmIfRWFinhk(const U2 u2_a_BLOCKID,        /* called by nvmc_mgr_cfg : st_NVMC_APP_FUNC_TABLE[].fp_p_vd_hook     */
-                                         const U1 u1_a_REQUEST_TYPE,
-                                         const U1 u1_a_RESULT,
-                                         const U1 * const u1_ap_DATA,
-                                         const U2 u2_a_SIZE);
-void            vd_g_TripcomNvmIfGrphRWTask(void);                     /* called by nvmc_mgr_cfg : st_NVMC_APP_FUNC_TABLE[].fp_p_vd_acs_func */
-void            vd_g_TripcomNvmIfGrphRWFinhk(const U2 u2_a_BLOCKID,    /* called by nvmc_mgr_cfg : st_NVMC_APP_FUNC_TABLE[].fp_p_vd_hook     */
-                                             const U1 u1_a_REQUEST_TYPE,
-                                             const U1 u1_a_RESULT,
-                                             const U1 * const u1_ap_DATA,
-                                             const U2 u2_a_SIZE);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */

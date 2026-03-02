@@ -101,6 +101,7 @@ void            vd_g_TripcomBonInit(void)
 
     vd_g_TripcomMsBonInit();
     vd_g_TripcomMsInit();
+    vd_g_TripcomCfgNvmSyncCmplt();
     vd_s_TripcomInit();
 
     u2_t_varbit = u2_g_TripcomCfgGetVariation();
@@ -148,7 +149,6 @@ void            vd_g_TripcomWkupInit(void)
 /*===================================================================================================================================*/
 void            vd_g_TripcomMainTask(void)
 {
-    U1          u1_t_jdg;
     U2          u2_t_vehmode;
     U2          u2_t_varbit;
 
@@ -261,8 +261,6 @@ void            vd_g_TripcomGrphRstRq(const U2 u2_a_RSTRQBIT)
 /*===================================================================================================================================*/
 static  void    vd_s_TripcomInit(void)
 {
-    U1                  u1_t_rst_cnt;
-
     u2_s_tripcom_prvvehsyssts           = (U2)0U;
     u2_s_tripcom_dmreset                = (U2)0U;
     u2_s_tripcom_immw_dmreset           = (U2)0U;

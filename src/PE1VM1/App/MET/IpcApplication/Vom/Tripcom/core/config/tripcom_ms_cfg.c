@@ -51,7 +51,7 @@ static U1   u1_s_TripcomMsNvmcRead(const U2 u2_a_NVMCID, U4 * u4p_a_value);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-const           ST_TRIPCOM_MS_MEM               st_gp_TRIPCOM_MS_MEM_CFG[TRIPCOM_MS_NUM_ID]     = {
+const           ST_TRIPCOM_MS_MEM               st_gp_TRIPCOM_MS_MEM_CFG[TRIPCOM_MS_NUM_ID] = {
     {   (U2)RIMID_U4_TRIPCOM_AVGEE_TA_EE,       (U1)TRIPCOM_MS_DEV_BR_Z     },                  /*  00 TRIPCOM_MS_ID_AVGEE_TA_EE         */
     {   (U2)NVMCID_U4_TOEC_EU,                  (U1)TRIPCOM_MS_DEV_NVM      },                  /*  01 TRIPCOM_MS_ID_AVGEE_TA_EU         */
     {   (U2)NVMCID_U4_TOEC_OC,                  (U1)TRIPCOM_MS_DEV_NVM      },                  /*  02 TRIPCOM_MS_ID_AVGEE_TA_OC         */

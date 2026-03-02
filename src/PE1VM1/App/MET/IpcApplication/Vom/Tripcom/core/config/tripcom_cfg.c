@@ -216,30 +216,19 @@ void            vd_g_TripcomCfgSmoothingTask(void)
 }
 
 /*===================================================================================================================================*/
-/* void            vd_g_TripcomNvmIfSyncCmplt(void)                                                                                  */
+/* void            vd_g_TripcomCfgNvmSyncCmplt(void)                                                                                 */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void            vd_g_TripcomNvmIfSyncCmplt(void)
+void            vd_g_TripcomCfgNvmSyncCmplt(void)
 {
     vd_g_AvgEeUpdt((U1)AVGEE_CNTT_TA);
     vd_g_AvgVehspdUpdt((U1)AVGVEHSPD_CNTT_TA);
     vd_g_AvgVehspdUpdt((U1)AVGVEHSPD_CNTT_TR_A);
     vd_g_AvgVehspdUpdt((U1)AVGVEHSPD_CNTT_TR_B);
-    vd_g_AvgGrphDataSync();
 }
 
-/*===================================================================================================================================*/
-/* void            vd_g_TripcomNvmIfGrphSyncCmplt(void)                                                                              */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void            vd_g_TripcomNvmIfGrphSyncCmplt(void)
-{
-    vd_g_AvgGrphDataSync();
-}
 /*===================================================================================================================================*/
 /* U1              u1_g_TripcomEvDteKmIgOffAcOn(U4 * u4p_a_km)                                                                       */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
@@ -426,6 +415,7 @@ void             vd_s_TripomCfgPostAppTask(void)
 /*  BEV-02    01/22/2026  DR       Added CNTTID for AS_EVDT and AS_TOEC                                                              */
 /*  BEV-03    02/12/2026  DT       Deleted unapplied parameter for BEV FF2                                                           */
 /*  BEV-04    02/12/2026  EA       Deleted/Deactivated other than BEV Powertrain processes                                           */
+/*  BEV-05    02/23/2026  PG       Deleted memory app access initialization function                                                 */
 /*                                                                                                                                   */
 /*  * HY   = Hidefumi Yoshida, Denso                                                                                                 */
 /*  * YA   = Yuhei Aoyama, DensoTechno                                                                                               */
