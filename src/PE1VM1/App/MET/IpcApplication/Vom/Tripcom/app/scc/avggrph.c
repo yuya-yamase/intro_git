@@ -393,7 +393,7 @@ void            vd_g_AvgGrphUpdtTaEconRslt(const U1 u1_a_CNTTID)
 
     u1_t_rslt_ta_econ = (U1)TRIPCOM_MS_NVMSTS_SUC;
     u1_t_rslt_ta_date = (U1)TRIPCOM_MS_NVMSTS_SUC;
-    if (u1_a_CNTTID == (U4)AVGGRPH_CNTT_TAEE) {
+    if (u1_a_CNTTID == (U1)AVGGRPH_CNTT_TAEE) {
         st_tp_cfg     = &st_sp_AVGGRPH_CNTTS_CFG[u1_a_CNTTID];
         u1_t_rslt_ta_econ = u1_s_AvgGrphGetRslt(st_tp_cfg->u1_msid_econ, u1_t_rslt_ta_econ);
         u1_t_rslt_ta_date = u1_s_AvgGrphGetRslt(st_tp_cfg->u1_msid_date, u1_t_rslt_ta_date);
@@ -432,7 +432,7 @@ void            vd_g_AvgGrphUpdtOneEconRslt(const U1 u1_a_CNTTID)
     U1                          u1_t_rslt;
 
     u1_t_rslt = (U1)TRIPCOM_MS_NVMSTS_SUC;
-    if (u1_a_CNTTID == (U4)AVGGRPH_CNTT_1MEE) {
+    if (u1_a_CNTTID == (U1)AVGGRPH_CNTT_1MEE) {
         st_tp_cfg = &st_sp_AVGGRPH_CNTTS_CFG[u1_a_CNTTID];
         for (u4_t_loop = (U4)0U; u4_t_loop < (U4)st_tp_cfg->u1_size; u4_t_loop++) {
             u1_t_msid = st_tp_cfg->u1_msid_econ + (U1)u4_t_loop;
