@@ -26,6 +26,9 @@
 #define PWRCTRL_SIP_STS_STANDBY           (4U)
 #define PWRCTRL_SIP_STS_BUDET             (5U)
 #define PWRCTRL_SIP_STS_FORCEDOFF         (6U)
+#define PWRCTRL_SIP_STS_PMPSAIL_FS        (7U)
+#define PWRCTRL_SIP_STS_PMAPS_FS          (8U)
+#define PWRCTRL_SIP_STS_SAILERR_FS        (9U)
 
 /* PWM制御 */
 #define     PWRCTRL_SIP_PWM_PERIOD_OFF    (0U)
@@ -63,6 +66,9 @@ void vd_g_PwrCtrlSipForcedOffSTEP2Req( void );
 void vd_g_PwrCtrlSipForcedOffSTEP4Req( void );
 void vd_g_PwrCtrlSipStandbyCancelSTEP1Req( void );
 void vd_g_PwrCtrlSipSetDDConvOff( const U1 u1_a_ddconv );
+void vd_g_PwrCtrlSipSailErrFsReq( void );
+void vd_g_PwrCtrlSipPmPsailFsReq( void );
+void vd_g_PwrCtrlSipPmaPsFsReq( void );
 
 /* 定期処理 */
 void vd_g_PwrCtrlSipMainFunc( void );
@@ -88,6 +94,13 @@ void vd_g_PwrCtrlSipSoCOnError( void );
 U1 u1_g_PwrCtrlSipSoCRstSts( void );
 /* SoCリセット起動要因クリア関数 */
 void vd_g_PwrCtrlSipSoCRstClr( void );
+
+/* SoC起動条件通知設定関数 */
+void vd_g_PwrCtrlSipSetSoCWkupCond( const U1 u1_a_socwkupcond );
+/* SoC起動条件通知取得関数 */
+U1 u1_g_PwrCtrlSipGetSoCWkupCond( void );
+/* SoC起動条件通知クリア関数 */
+void vd_g_PwrCtrlSipClrSoCWkupCond( void );
 
 #endif /* PWRCTRL_SIP_H */
 

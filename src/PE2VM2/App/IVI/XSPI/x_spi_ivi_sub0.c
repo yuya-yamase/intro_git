@@ -22,6 +22,7 @@
 #include    "x_spi_ivi_sub0_SID22.h"
 #include    "x_spi_ivi_sub0_SID2E.h"
 #include    "x_spi_ivi_sub0_SID31.h"
+#include    "x_spi_ivi_sub1_power.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -85,6 +86,8 @@ static  U1          u1_s_XspiIviSub0ResponseDeleteFlg;
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static void         vd_s_XspiIviSub0DataInit(void);
+static void         vd_s_XspiIviSub0ResetInit(void);
+static void         vd_s_XspiIviSub0SoCResetNrcResponse(void);
 static void         vd_s_XspiIviSub0DiagCANAna(const U1 * u1_ap_SUB1_ADD, const U2 u2_a_DTLEN);
 static void         vd_s_XspiIviSub0SendDiagCANData(U2 * u2_ap_datalen, U1 *u1_ap_canid, U1 * u1_ap_xspi_add);
 
@@ -130,6 +133,116 @@ static void         vd_s_XspiIviSub0DataInit(void)
     st_s_XspiIviSub0DiagCanData.u2_data_len = (U2)0U;
     st_s_XspiIviSub0DiagCanData.u1_canid = (U2)DIAGAPP_REQUESTID_UNKNOWN;
     st_s_XspiIviSub0DiagCanData.u1_sid = (U1)0U;
+}
+
+/*===================================================================================================================================*/
+/*  void            vd_g_XspiIviSub0VMResetInit(void)                                                                                */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    初期化処理                                                                                                        */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void            vd_g_XspiIviSub0VMResetInit(void)
+{
+    vd_s_XspiIviSub0ResetInit();
+    vd_g_XspiIviSub1PowerVMResetComp((U1)XSPI_IVI_POWER_RESET_COMP_DIAGCAN);
+}
+
+/*===================================================================================================================================*/
+/*  void            vd_g_XspiIviSub0SoCResetInit(void)                                                                               */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    初期化処理                                                                                                        */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void            vd_g_XspiIviSub0SoCResetInit(void)
+{
+    vd_s_XspiIviSub0ResetInit();
+}
+
+/*===================================================================================================================================*/
+/*  void            vd_g_XspiIviSub0CDCResetInit(void)                                                                               */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    初期化処理                                                                                                        */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void            vd_g_XspiIviSub0CDCResetInit(void)
+{
+    vd_s_XspiIviSub0SoCResetNrcResponse();
+    vd_g_XspiIviSub1PowerCDCResetComp((U1)XSPI_IVI_POWER_RESET_COMP_DIAGCAN);
+}
+
+/*===================================================================================================================================*/
+/*  static void            vd_s_XspiIviSub0ResetInit(void)                                                                           */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    初期化処理                                                                                                        */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void            vd_s_XspiIviSub0ResetInit(void)
+{
+    vd_s_XspiIviSub0SoCResetNrcResponse();
+    vd_g_XspiIviQueueSoCResetInit();
+    vd_g_DiagAppSID10SoCResetInit();
+
+    u2_s_XspiIviSub0DiagResSize = (U2)0U;
+    u1_s_XspiIviSub0OsComBridgeChk = (U1)FALSE;
+    u1_s_XspiIviSub0SendFlg = (U1)FALSE;
+    u1_s_XspiIviSub0ResponseFlg = (U1)XSPI_IVI_DIAG_RES_COMP;
+    u1_s_XspiIviSub0ResponseDeleteFlg = (U1)XSPI_IVI_DIAG_RES_NODEL;
+}
+
+/*===================================================================================================================================*/
+/*  static void            vd_s_XspiIviSub0SoCResetNrcResponse(void)                                                                 */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    SoCリセット時の否定応答処理                                                                                          */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void         vd_s_XspiIviSub0SoCResetNrcResponse(void)
+{
+    U1  u1_t_result;
+    U1  u1_t_sid;
+    U1  u1_t_sid_tmp;
+    U1  u1_t_response_flg;
+
+    u1_t_result = (U1)TRUE;
+    u1_t_sid = (U1)0U;
+    u1_t_response_flg = (U1)FALSE;
+    if(u1_s_XspiIviSub0ResponseFlg == (U1)XSPI_IVI_DIAG_RES_WAIT) {
+        u1_t_sid = st_s_XspiIviSub0DiagCanData.u1_sid;
+        u1_t_response_flg = (U1)TRUE;
+    }
+
+    while(u1_t_result == (U1)TRUE) {
+        u1_t_result = u1_g_XspiIviQueueGetDiagCANDataSID(&u1_t_sid_tmp);
+        if((u1_t_sid_tmp == (U1)XSPI_IVI_SID14) ||
+           (u1_t_sid_tmp == (U1)XSPI_IVI_SID19) ||
+           (u1_t_sid_tmp == (U1)XSPI_IVI_SID22) ||
+           (u1_t_sid_tmp == (U1)XSPI_IVI_SID2E) ||
+           (u1_t_sid_tmp == (U1)XSPI_IVI_SID31)) {
+            u1_t_sid = u1_t_sid_tmp;
+            u1_t_response_flg = (U1)TRUE;
+        }
+    }
+
+    if(u1_t_response_flg == (U1)TRUE) {
+        switch(u1_t_sid) {
+            case XSPI_IVI_SID14:
+            case XSPI_IVI_SID22:
+            case XSPI_IVI_SID2E:
+            case XSPI_IVI_SID31:
+                vd_g_DiagAppAnsTxNRC((U1)OXDC_SAL_PROC_NR_22);
+                break;
+            case XSPI_IVI_SID19:
+                vd_g_DiagAppAnsTxNRC((U1)OXDC_SAL_PROC_NR_31);
+                break;
+            default:
+                break;
+        }
+    }
+
 }
 
 /*===================================================================================================================================*/
@@ -247,7 +360,7 @@ void            vd_g_XspiIviSub0Send(U1 * u1_ap_xspi_add)
     if(u1_s_XspiIviSub0SendFlg == (U1)FALSE){
         /*リングバッファからデータ取り出し*/
         vd_g_XspiIviQueueGetDiagCANdataSize(&st_s_XspiIviSub0DiagCanData.u2_data_len);
-        vd_g_XspiIviQueueGetDiagCANDataSID(&st_s_XspiIviSub0DiagCanData.u1_sid);
+        (void)u1_g_XspiIviQueueGetDiagCANDataSID(&st_s_XspiIviSub0DiagCanData.u1_sid);
         vd_g_XspiIviQueueGetDiagCANDataID(&st_s_XspiIviSub0DiagCanData.u1_canid);
         vd_g_XspiIviQueueGetDiagCANDataNum(&st_s_XspiIviSub0DiagCanData.u2_frame_num);
         if((st_s_XspiIviSub0DiagCanData.u2_data_len >  (U2)0U) &&

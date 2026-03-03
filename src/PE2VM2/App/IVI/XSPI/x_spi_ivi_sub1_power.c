@@ -25,6 +25,16 @@
 #include    "BootLogCtl.h"
 #include    "veh_opemd.h"
 #include    "ivdsh.h"
+#include    "ExtSigCtrl.h"
+#include    "x_spi_ivi_sub0.h"
+#include    "x_spi_ivi_sub2.h"
+#include    "x_spi_ivi_sub4.h"
+#include    "PictCtl.h"
+#include    "PictMuteCtl.h"
+#include    "datesi_com.h"
+#include    "PictCtl.h"
+#include    "PncreqCtl.h"
+#include    "DtcCtl.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -51,8 +61,12 @@
 #define    XSPI_IVI_POWER_STATE_TRANS_REC       (0x03U)
 #define    XSPI_IVI_POWER_STATE_TRANS_SEND      (0x04U)
 #define    XSPI_IVI_POWER_BMONIVOL_SEND         (0x05U)
+#define    XSPI_IVI_POWER_SOCBOOT_REC           (0x07U)
+#define    XSPI_IVI_POWER_SOCBOOT_SEN           (0x08U)
 #define    XSPI_IVI_POWER_OPESTS_REC            (0x21U)
 #define    XSPI_IVI_POWER_OPESTS_SEND           (0x22U)
+#define    XSPI_IVI_POWER_VMRST_REC             (0x23U)
+#define    XSPI_IVI_POWER_VMRST_SEND            (0x24U)
 #define    XSPI_IVI_POWER_STRMODE_REC           (0x43U)
 #define    XSPI_IVI_POWER_STRMODE_SEND          (0x44U)
 #define    XSPI_IVI_POWER_BOOTLOG_REQ           (0x61U)
@@ -63,7 +77,9 @@
 #define    XSPI_IVI_POWER_STATE_SIZE            (7U)
 #define    XSPI_IVI_POWER_TRANS_SIZE            (6U)
 #define    XSPI_IVI_POWER_BMONI_SIZE            (7U)
+#define    XSPI_IVI_POWER_SOCBOOT_SIZE          (3U)
 #define    XSPI_IVI_POWER_OPESTS_SIZE           (8U)
+#define    XSPI_IVI_POWER_VMRESET_RES_SIZE      (1U)
 #define    XSPI_IVI_POWER_STRMODE_SIZE          (2U)
 
 #define    XSPI_IVI_POWER_BOOTLOG_SIZE          (36U)
@@ -112,11 +128,76 @@
 #define    XSPI_IVI_POWER_DEV_INI_EDS           (0x00480FFFU) /*デバイス初期化監視対象(縮退走行)*/
 #endif
 
+/*Reset Macro*/
+#define    XSPI_IVI_POWER_OPESTS_SOC_BOOT       (1U)
+#define    XSPI_IVI_POWER_OPESTS_SOC_RESUME     (2U)
+#define    XSPI_IVI_POWER_OPESTS_SOC_SUSPEND    (3U)
+#define    XSPI_IVI_POWER_OPESTS_SOC_BOOT_COMP  (4U)
+#define    XSPI_IVI_POWER_OPESTS_SOC_VMRESET    (5U)
+#define    XSPI_IVI_POWER_OPESTS_SOCRST_NML     (1U)
+#define    XSPI_IVI_POWER_OPESTS_SOCRST_FAIL    (2U)
+#define    XSPI_IVI_POWER_OPESTS_CDCRST         (3U)
+#define    XSPI_IVI_POWER_VMRESET_COMP          (0x7FU)
+#define    XSPI_IVI_POWER_CDCRESET_COMP         (0x43U)
+#define    XSPI_IVI_POWER_USRRESET_PORT         (DIO_ID_PORT20_CH12)
+#define    XSPI_IVI_POWER_CDCRST_REQ_DEL_MASK   (0xFFFF00FFU)
+
+#define    XSPI_IVI_POWER_SIP_ERR_NORMAL        (0U)
+#define    XSPI_IVI_POWER_SIP_ERR_MAXNUM        (7U)
+
+#define    XSPI_IVI_POWER_RESTART_NORMAL        (0U)
+#define    XSPI_IVI_POWER_RESTART_CANCEL_START  (1U)
+#define    XSPI_IVI_POWER_RESTART_CANCEL_TO_ON  (2U)
+#define    XSPI_IVI_POWER_RESTART_FRCOFF_TO_ON  (3U)
+#define    XSPI_IVI_POWER_RESTART_PMAHOLD_TO_ON (4U)
+#define    XSPI_IVI_POWER_RESTART_SAILERR_TO_ON (5U)
+
+#define    XSPI_IVI_POWER_USRRESET_UNLOCK       (0U)
+#define    XSPI_IVI_POWER_USRRESET_LOCK         (1U)
+
+/*SoC Boot Conditions*/
+#define    XSPI_IVI_POWER_BOOT_RESERVE_VM3      (0U)
+#define    XSPI_IVI_POWER_BOOT_NML_VM3          (1U)
+#define    XSPI_IVI_POWER_BOOT_NML_STR_VM3      (2U)
+#define    XSPI_IVI_POWER_BOOT_NML_WHLINI_VM3   (3U)
+#define    XSPI_IVI_POWER_BOOT_SUSPEND_WKUP_VM3 (4U)
+#define    XSPI_IVI_POWER_BOOT_SHTDWN_WKUP_VM3  (5U)
+#define    XSPI_IVI_POWER_BOOT_FAIL_SOC_VM3     (6U)
+#define    XSPI_IVI_POWER_BOOT_FAIL_PMIC_VM3    (7U)
+#define    XSPI_IVI_POWER_BOOT_FAIL_SAIL_VM3    (8U)
+#define    XSPI_IVI_POWER_BOOT_CDCRST_NML_VM3   (9U)
+#define    XSPI_IVI_POWER_BOOT_CDCRST_ABNML_VM3 (10U)
+#define    XSPI_IVI_POWER_BOOT_FAIL_SUSPEND_VM3 (11U)
+#define    XSPI_IVI_POWER_BOOT_FAIL_RESUME_VM3  (12U)
+
+#define    XSPI_IVI_POWER_BOOT_RESERVE          (0x00U)
+#define    XSPI_IVI_POWER_BOOT_NML              (0x01U)
+#define    XSPI_IVI_POWER_BOOT_SLP_DUR_WKUP     (0x02U)
+#define    XSPI_IVI_POWER_BOOT_SOCRST_TOSOC     (0x03U)
+#define    XSPI_IVI_POWER_BOOT_SOCRST_TOMCU     (0x04U)
+#define    XSPI_IVI_POWER_BOOT_CDCRST_NML       (0x05U)
+#define    XSPI_IVI_POWER_BOOT_CDCRST_ABNML     (0x06U)
+
+#define    XSPI_IVI_POWER_BOOT_COLDBOOT         (0x11U)
+#define    XSPI_IVI_POWER_BOOT_STR              (0x12U)
+#define    XSPI_IVI_POWER_BOOT_WHLINI           (0x13U)
+#define    XSPI_IVI_POWER_BOOT_SHTDWN           (0x21U)
+#define    XSPI_IVI_POWER_BOOT_SUSPEND          (0x22U)
+#define    XSPI_IVI_POWER_BOOT_FAIL_SUSPEND     (0x31U)
+#define    XSPI_IVI_POWER_BOOT_FAIL_RESUME      (0x32U)
+#define    XSPI_IVI_POWER_BOOT_FAIL_SOC         (0x41U)
+#define    XSPI_IVI_POWER_BOOT_FAIL_PMIC        (0x42U)
+#define    XSPI_IVI_POWER_BOOT_FAIL_SAIL        (0x43U)
+
 /*GPS-RST端子 Lo→Hiからのカウント*/
 #define    XSPI_IVI_POWER_GPSRST_INI_TASK       (400U / XSPI_IVI_TASK_TIME)
 
 /*B-MON電圧端子のポーリング周期*/
 #define    XSPI_IVI_POWER_BMONVOL_TASK          (100U / XSPI_IVI_TASK_TIME)
+
+/*PWR-SW*/
+#define    XSPI_IVI_POWER_PWRSW_ON_TASK         (3000U / XSPI_IVI_TASK_TIME)
+#define    XSPI_IVI_POWER_USRRST_ON_TASK        (20000U / XSPI_IVI_TASK_TIME)
 
 /*デバイス初期化確認Pin*/
 /* SYS電源制御 Port設定 */
@@ -210,6 +291,16 @@ static U2 u2_s_xspi_ivi_power_bmonivol2_data;
 static U2 u2_s_xspi_ivi_power_bmonivol3_data;
 static U1 u1_s_xspi_ivi_power_bmoni_1stsend_flg;
 
+/*Reset*/
+static U4 u4_s_xspi_ivi_power_opests_to_vm3;
+static U1 u1_s_xspi_ivi_power_vmreset_comp;
+static U1 u1_s_xspi_ivi_power_cdcreset_comp;
+static U1 u1_s_xspi_ivi_power_usrreset_port;
+static U1 u1_s_xspi_ivi_power_usrrst_bonmask;
+static U4 u4_s_xspi_ivi_power_siperr_pre;
+static U4 u4_s_xspi_ivi_power_restart_pre;
+static U1 u1_s_xspi_ivi_socbootrec_flg;
+
 /*電源状態でのデバイス初期化確認*/
 static U4 u4_sp_xspi_ivi_power_dev_init[POWER_MODE_STATE_NUM] = {
     XSPI_IVI_POWER_DEV_INI_PARK,
@@ -298,6 +389,14 @@ static void            vd_s_XspiIviSub1PowerSTRmodeSend(const U1 u1_a_DATA);
 static U1              u1_s_XspiIviSub1PowerDataEventJdg(const U1* u1_ap_DATA,const U1* u1_ap_DATA_PRE,const U1 u1_a_SIZE);
 static void            vd_s_XspiIviSub1PowerDataToQueue(const U2 u2_a_size,const U1* u1_ap_XSPI_ADD);
 static U1              u1_s_XspiIviSub1PowerDevInitCompChk(void);
+static void            vd_s_XspiIviSub1PowerOperationStsToVM3(void);
+static void            vd_s_XspiIviSub1PowerVMResetRec(void);
+static void            vd_s_XspiIviSub1PowerSoCResetRec(void);
+static void            vd_s_XspiIviSub1PowerCDCResetRec(void);
+static void            vd_s_XspiIviSub1PowerVMResetSend(void);
+static U1              u1_s_XspiIviSub1PowerSoCBootCondRecChk(U4 * u4_a_socbootcond);
+static void            vd_s_XspiIviSub1PowerSoCBootCondSend(const U4 u4_a_DATA);
+
 /*===================================================================================================================================*/
 /*  void            vd_g_XspiIviSub1POWERInit(void)                                                                                */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
@@ -342,6 +441,26 @@ void            vd_g_XspiIviSub1PowerInit(void)
     u1_s_xspi_ivi_power_bmoni_1stsend_flg = (U1)FALSE;
 
     u4_s_xspi_ivi_task_cnt[XSPI_TASK_CNT_POWER_BMONI] = (U4)XSPI_IVI_POWER_BMONVOL_TASK;
+
+    u4_s_xspi_ivi_power_opests_to_vm3 = (U4)0U;
+    u1_s_xspi_ivi_power_vmreset_comp = (U4)0U;
+    u1_s_xspi_ivi_power_cdcreset_comp = (U4)0U;
+    u1_s_xspi_ivi_power_usrreset_port = (U1)STD_LOW;
+    u4_s_xspi_ivi_power_siperr_pre = (U4)0U;
+    u4_s_xspi_ivi_power_restart_pre = (U4)0U;
+    u1_s_xspi_ivi_socbootrec_flg = (U1)FALSE;
+}
+
+/*===================================================================================================================================*/
+/*  void            vd_g_XspiIviSub1PowerBonInit(void)                                                                               */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    B-on Initial                                                                                                     */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void            vd_g_XspiIviSub1PowerBonInit(void)
+{
+    u1_s_xspi_ivi_power_usrrst_bonmask = (U1)XSPI_IVI_POWER_USRRESET_LOCK;
 }
 
 /*===================================================================================================================================*/
@@ -490,8 +609,8 @@ void            vd_g_XspiIviSub1PowerGetSts(U1* u1_ap_data)
 
     /* シス検暫定対応 */
     /* BOOT入力値取得処理 */
-    u1_t_boot = Dio_ReadChannel(DIO_ID_PORT0_CH2);
-    if(u1_t_boot == (U1)STD_HIGH){   /* BOOT=Hiを検知した場合、どの状態でも下記状態に上書き */
+    u1_t_boot = ExtSigCtrl_GetSigSts(EXTSIGCTRL_KIND_BOOT);
+    if(u1_t_boot == (U1)U1_EXTSIGCTRL_SIG_STS_ON){   /* BOOT=Hiを検知した場合、どの状態でも下記状態に上書き */
         u1_ap_data[XSPI_IVI_POWER_01_BYTE2] = (U1)XSPI_IVI_POWER_STATE_POWERON;   /* 基本ステート：POWERON通常 */
         u1_ap_data[XSPI_IVI_POWER_01_BYTE3] = (U1)XSPI_IVI_POWER_STATE_OFF;       /* 特殊ステート：未設定 */
         u1_ap_data[XSPI_IVI_POWER_01_BYTE4] = (U1)0U;                             /* OTAステート ：未設定 */
@@ -500,6 +619,84 @@ void            vd_g_XspiIviSub1PowerGetSts(U1* u1_ap_data)
         u1_ap_data[XSPI_IVI_POWER_01_BYTE7] = (U1)XSPI_IVI_POWER_DC_NONE;         /* 途絶状態：途絶なし */
     }
     /* シス検暫定ここまで */
+}
+
+/*===================================================================================================================================*/
+/*  void            vd_g_XspiIviSub1PowerResetRoutine(void)                                                                          */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    リセット処理用定期タスク                                                                                           */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void            vd_g_XspiIviSub1PowerResetRoutine(void)
+{
+    U4  u4_t_siperr;
+    U1  u1_t_vm_ret;
+    U1  u1_t_pwr;
+    U4  u4_t_restart;
+    U4  u4_t_usrreset;
+    U1  u1_t_socboot_chk;
+    U4  u4_t_socbootcond;
+
+    u4_t_usrreset = (U4)XSPI_IVI_POWER_USRRESET_UNLOCK;
+    u4_t_socbootcond = (U4)XSPI_IVI_POWER_BOOT_RESERVE_VM3;
+
+    /*SoC起動条件通知*/
+    u1_t_socboot_chk = u1_s_XspiIviSub1PowerSoCBootCondRecChk(&u4_t_socbootcond);
+    if((u1_s_xspi_ivi_socbootrec_flg == (U1)TRUE) &&
+       (u1_t_socboot_chk == (U1)TRUE)) {
+        vd_s_XspiIviSub1PowerSoCBootCondSend(u4_t_socbootcond);
+        u1_s_xspi_ivi_socbootrec_flg = (U1)FALSE;
+      }
+
+    /*MCU監視のSoC異常処理*/
+    u1_t_vm_ret = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_VM3TO2_SIPERR_INF, &u4_t_siperr, (U2)XSPI_IVI_POWER_VMTRA_LEN);
+    if(u1_t_vm_ret != (U1)IVDSH_NO_REA) {
+        if((u4_t_siperr != (U4)XSPI_IVI_POWER_SIP_ERR_NORMAL) &&
+           (u4_t_siperr != u4_s_xspi_ivi_power_siperr_pre)) {
+            vd_s_XspiIviSub1PowerSoCResetRec();
+        }
+        u4_s_xspi_ivi_power_siperr_pre = u4_t_siperr;
+    }
+
+    /*スタンバイ処理中のウェイクアップ*/
+    u1_t_vm_ret = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_VM3TO12_RESTART, &u4_t_restart, (U2)XSPI_IVI_POWER_VMTRA_LEN);
+    if(u1_t_vm_ret != (U1)IVDSH_NO_REA) {
+        if((u4_t_restart == (U4)XSPI_IVI_POWER_RESTART_CANCEL_START) &&
+           (u4_t_restart != u4_s_xspi_ivi_power_restart_pre)) {
+            vd_s_XspiIviSub1PowerSoCResetRec();
+        }
+        u4_s_xspi_ivi_power_restart_pre = u4_t_restart;
+    }
+
+    /*ユーザーリセット処理*/
+    u1_t_vm_ret = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_VM3TO2_USRRST_MASK, &u4_t_usrreset, (U2)XSPI_IVI_POWER_VMTRA_LEN);
+
+    if(u1_t_vm_ret != (U1)IVDSH_NO_REA) {
+        if((u4_t_usrreset == (U4)XSPI_IVI_POWER_USRRESET_UNLOCK) &&
+           (u1_s_xspi_ivi_power_usrrst_bonmask == (U1)XSPI_IVI_POWER_USRRESET_UNLOCK)) {
+            u1_t_pwr = ExtSigCtrl_GetSigSts(EXTSIGCTRL_KIND_EXT_PWR_SW);
+            if(u1_t_pwr == (U1)U1_EXTSIGCTRL_SIG_STS_ON){
+                if((u4_s_xspi_ivi_task_cnt[XSPI_TASK_CNT_PWRSW_ON_TIME] >= (U4)XSPI_IVI_POWER_PWRSW_ON_TASK) &&
+                (u1_s_xspi_ivi_power_usrreset_port == (U1)STD_LOW)){
+                    /*ユーザリセット*/
+                    Dio_WriteChannel((Dio_ChannelType)XSPI_IVI_POWER_USRRESET_PORT, (Dio_LevelType)STD_HIGH);
+                    u4_s_xspi_ivi_task_cnt[XSPI_TASK_CNT_RESET_PORT_OFF_TIME] = (U4)0U;
+                    u1_s_xspi_ivi_power_usrreset_port = (U1)STD_HIGH;
+                }
+            } else {
+                u4_s_xspi_ivi_task_cnt[XSPI_TASK_CNT_PWRSW_ON_TIME] = (U4)0U;
+            }
+        } else {
+            u4_s_xspi_ivi_task_cnt[XSPI_TASK_CNT_PWRSW_ON_TIME] = (U4)0U;
+        }
+    }
+
+    if((u1_s_xspi_ivi_power_usrreset_port == (U1)STD_HIGH) &&
+       (u4_s_xspi_ivi_task_cnt[XSPI_TASK_CNT_RESET_PORT_OFF_TIME] >= (U4)XSPI_IVI_POWER_USRRST_ON_TASK)) {
+        Dio_WriteChannel((Dio_ChannelType)XSPI_IVI_POWER_USRRESET_PORT, (Dio_LevelType)STD_LOW);
+        u1_s_xspi_ivi_power_usrreset_port = (U1)STD_LOW;
+    }
 }
 
 /*===================================================================================================================================*/
@@ -592,6 +789,117 @@ static void            vd_s_XspiIviSub1PowerOperationStsSend(const U1 u1_a_DATA)
 }
 
 /*===================================================================================================================================*/
+/*  static void            vd_s_XspiIviSub1PowerSoCBootCondSend(const U4 u4_a_DATA)                                                  */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    SubFlame1(MISC) Data Analysis                                                                                    */
+/*  Arguments:      u4_a_DATA : SoC Boot Condition                                                                                   */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void            vd_s_XspiIviSub1PowerSoCBootCondSend(const U4 u4_a_DATA)
+{
+    U1 u1_tp_data[XSPI_IVI_POWER_SOCBOOT_SIZE];
+
+    u1_tp_data[0] = (U1)XSPI_IVI_POWER_SOCBOOT_SEN;
+
+    switch(u4_a_DATA) {
+        case XSPI_IVI_POWER_BOOT_NML_VM3:
+            u1_tp_data[1] = (U1)XSPI_IVI_POWER_BOOT_NML;
+            u1_tp_data[2] = (U1)XSPI_IVI_POWER_BOOT_COLDBOOT;
+            break;
+        case XSPI_IVI_POWER_BOOT_NML_STR_VM3:
+            u1_tp_data[1] = (U1)XSPI_IVI_POWER_BOOT_NML;
+            u1_tp_data[2] = (U1)XSPI_IVI_POWER_BOOT_STR;
+            break;
+        case XSPI_IVI_POWER_BOOT_NML_WHLINI_VM3:
+            u1_tp_data[1] = (U1)XSPI_IVI_POWER_BOOT_NML;
+            u1_tp_data[2] = (U1)XSPI_IVI_POWER_BOOT_WHLINI;
+            break;
+        case XSPI_IVI_POWER_BOOT_SUSPEND_WKUP_VM3:
+            u1_tp_data[1] = (U1)XSPI_IVI_POWER_BOOT_SLP_DUR_WKUP;
+            u1_tp_data[2] = (U1)XSPI_IVI_POWER_BOOT_SUSPEND;
+            break;
+        case XSPI_IVI_POWER_BOOT_SHTDWN_WKUP_VM3:
+            u1_tp_data[1] = (U1)XSPI_IVI_POWER_BOOT_SLP_DUR_WKUP;
+            u1_tp_data[2] = (U1)XSPI_IVI_POWER_BOOT_SHTDWN;
+            break;
+        case XSPI_IVI_POWER_BOOT_FAIL_SOC_VM3:
+            u1_tp_data[1] = (U1)XSPI_IVI_POWER_BOOT_SOCRST_TOMCU;
+            u1_tp_data[2] = (U1)XSPI_IVI_POWER_BOOT_FAIL_SOC;
+            break;
+        case XSPI_IVI_POWER_BOOT_FAIL_PMIC_VM3:
+            u1_tp_data[1] = (U1)XSPI_IVI_POWER_BOOT_SOCRST_TOMCU;
+            u1_tp_data[2] = (U1)XSPI_IVI_POWER_BOOT_FAIL_PMIC;
+            break;
+        case XSPI_IVI_POWER_BOOT_FAIL_SAIL_VM3:
+            u1_tp_data[1] = (U1)XSPI_IVI_POWER_BOOT_SOCRST_TOMCU;
+            u1_tp_data[2] = (U1)XSPI_IVI_POWER_BOOT_FAIL_SAIL;
+            break;
+        case XSPI_IVI_POWER_BOOT_CDCRST_NML_VM3:
+            u1_tp_data[1] = (U1)XSPI_IVI_POWER_BOOT_CDCRST_NML_VM3;
+            u1_tp_data[2] = (U1)XSPI_IVI_POWER_BOOT_RESERVE;
+            break;
+        case XSPI_IVI_POWER_BOOT_CDCRST_ABNML_VM3:
+            u1_tp_data[1] = (U1)XSPI_IVI_POWER_BOOT_CDCRST_ABNML;
+            u1_tp_data[2] = (U1)XSPI_IVI_POWER_BOOT_RESERVE;
+            break;
+        case XSPI_IVI_POWER_BOOT_FAIL_SUSPEND_VM3:
+            u1_tp_data[1] = (U1)XSPI_IVI_POWER_BOOT_SOCRST_TOSOC;
+            u1_tp_data[2] = (U1)XSPI_IVI_POWER_BOOT_FAIL_SUSPEND;
+            break;
+        case XSPI_IVI_POWER_BOOT_FAIL_RESUME_VM3:
+            u1_tp_data[1] = (U1)XSPI_IVI_POWER_BOOT_SOCRST_TOSOC;
+            u1_tp_data[2] = (U1)XSPI_IVI_POWER_BOOT_FAIL_RESUME;
+            break;
+        default:
+            u1_tp_data[1] = (U1)0U;
+            u1_tp_data[2] = (U1)0U;
+            break;
+    }
+
+    vd_s_XspiIviSub1PowerDataToQueue((U2)XSPI_IVI_POWER_SOCBOOT_SIZE,u1_tp_data);
+}
+
+/*===================================================================================================================================*/
+/*  U1            u1_s_XspiIviSub1PowerSoCBootCondRecChk(U4 * u4_a_socbootcond)                                                      */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    SubFlame1(MISC) Data Analysis                                                                                    */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static U1            u1_s_XspiIviSub1PowerSoCBootCondRecChk(U4 * u4_a_socbootcond)
+{
+    U1 u1_t_ret;
+    U1 u1_t_vm_ret;
+
+    u1_t_ret = (U1)XSPI_IVI_POWER_BOOT_RESERVE_VM3;
+
+    u1_t_vm_ret = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_VM3TO2_WKUP_COND, u4_a_socbootcond, (U2)XSPI_IVI_POWER_VMTRA_LEN);
+    if(u1_t_vm_ret != (U1)IVDSH_NO_REA) {
+        if(*u4_a_socbootcond != (U4)XSPI_IVI_POWER_BOOT_RESERVE_VM3) {
+            u1_t_ret = (U1)TRUE;
+        }
+    }
+
+    return(u1_t_ret); 
+}
+
+/*===================================================================================================================================*/
+/*  static void            vd_s_XspiIviSub1PowerVMResetSend(void)                                                                    */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    SubFlame1(MISC) Data Analysis                                                                                    */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void            vd_s_XspiIviSub1PowerVMResetSend(void)
+{ 
+    U1 u1_tp_data[XSPI_IVI_POWER_VMRESET_RES_SIZE];
+
+    u1_tp_data[0] = (U1)XSPI_IVI_POWER_VMRST_SEND;
+
+    vd_s_XspiIviSub1PowerDataToQueue((U2)XSPI_IVI_POWER_VMRESET_RES_SIZE,u1_tp_data);
+}
+
+/*===================================================================================================================================*/
 /*  void            vd_s_XspiIviSub1PowerSTRmodeSend(const U1 u1_a_DATA)                                                             */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Description:    SubFlame1(MISC) Data Analysis                                                                                    */
@@ -631,8 +939,15 @@ void            vd_g_XspiIviSub1PowerAna(const U1 * u1_ap_XSPI_ADD, const U2 u2_
     case XSPI_IVI_POWER_STATE_TRANS_REC:
         vd_s_XspiIviSub1_PowerStateTransRec(&u1_ap_XSPI_ADD[0],u2_a_data_size);
         break;
+    case XSPI_IVI_POWER_SOCBOOT_REC:
+        vd_g_XspiIviSub1PowerSoCBootRec();
+        break;
     case XSPI_IVI_POWER_OPESTS_REC:
         vd_s_XspiIviSub1PowerOperationStsRec(&u1_ap_XSPI_ADD[0]);
+        break;
+    case XSPI_IVI_POWER_VMRST_REC:
+        vd_s_XspiIviSub1PowerVMResetRec();
+        vd_g_PictMute_SoCResetReq(u1_ap_XSPI_ADD[1]);
         break;
     case XSPI_IVI_POWER_STRMODE_REC:
         vd_s_XspiIviSub1PowerSTRmodeRec(&u1_ap_XSPI_ADD[0]);
@@ -667,6 +982,19 @@ static void            vd_s_XspiIviSub1_PowerStateTransRec(const U1 * u1_ap_XSPI
 }
 
 /*===================================================================================================================================*/
+/*  void            vd_g_XspiIviSub1PowerSoCBootRec(void)                                                                            */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    SubFlame1(MISC) Data Analysis                                                                                    */
+/*  Arguments:      u1_ap_XSPI_ADD : SubFlame1 Start Buffer                                                                          */
+/*                  u2_a_data_size : Data Size                                                                                       */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void            vd_g_XspiIviSub1PowerSoCBootRec(void)
+{
+    u1_s_xspi_ivi_socbootrec_flg = (U1)TRUE;
+}
+
+/*===================================================================================================================================*/
 /*  void            vd_s_XspiIviSub1PowerOperationStsRec(const U1 * u1_ap_XSPI_ADD)                                                  */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Description:    SubFlame1(MISC) Data Analysis                                                                                    */
@@ -675,16 +1003,144 @@ static void            vd_s_XspiIviSub1_PowerStateTransRec(const U1 * u1_ap_XSPI
 /*===================================================================================================================================*/
 static void            vd_s_XspiIviSub1PowerOperationStsRec(const U1 * u1_ap_XSPI_ADD)
 {
+    U1 u1_t_camera_mode;
+
     /*動作ステータス通知*/
-    U4  u4_t_data;
-    /*VM3に通知*/
-    u4_t_data = (U4)u1_ap_XSPI_ADD[1];
-    u4_t_data |= (U4)((u1_ap_XSPI_ADD[2] << XSPI_IVI_SFT_08) & 0x0000FF00U);
-    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM2TO3_OPESTS, &u4_t_data, (U2)XSPI_IVI_POWER_VMTRA_LEN);
+    u4_s_xspi_ivi_power_opests_to_vm3 = (U4)u1_ap_XSPI_ADD[1];
+    u4_s_xspi_ivi_power_opests_to_vm3 |= (U4)((u1_ap_XSPI_ADD[2] << XSPI_IVI_SFT_08) & 0x0000FF00U);
 
     vd_s_XspiIviSub1PowerOperationStsSend(u1_ap_XSPI_ADD[1]);
 
-    /*暫定:Skip SoCからのリセット要求*/
+    switch(u1_ap_XSPI_ADD[1]) {
+        case XSPI_IVI_POWER_OPESTS_SOC_BOOT_COMP:
+            u1_s_xspi_ivi_power_usrrst_bonmask = (U1)XSPI_IVI_POWER_USRRESET_UNLOCK;
+            break;
+        case XSPI_IVI_POWER_OPESTS_SOC_VMRESET:
+            if(u1_s_xspi_ivi_power_usrreset_port == (U1)STD_HIGH) {
+                Dio_WriteChannel((Dio_ChannelType)XSPI_IVI_POWER_USRRESET_PORT, (Dio_LevelType)STD_LOW);
+                u1_s_xspi_ivi_power_usrreset_port = (U1)STD_LOW;
+            }
+            break;
+        default: 
+            break;
+    }
+
+    if((u1_ap_XSPI_ADD[2] == (U1)XSPI_IVI_POWER_OPESTS_SOCRST_NML) ||
+       (u1_ap_XSPI_ADD[2] == (U1)XSPI_IVI_POWER_OPESTS_SOCRST_FAIL)) {
+        vd_s_XspiIviSub1PowerSoCResetRec();
+        vd_s_XspiIviSub1PowerOperationStsToVM3();
+    } else if(u1_ap_XSPI_ADD[2] == (U1)XSPI_IVI_POWER_OPESTS_CDCRST) {
+        u1_t_camera_mode = u1_g_PictCtl_CdcRstCancelSts();
+        if(u1_t_camera_mode == (U1)FALSE) {
+            vd_s_XspiIviSub1PowerCDCResetRec();
+        } else {
+            u4_s_xspi_ivi_power_opests_to_vm3 &= (U4)XSPI_IVI_POWER_CDCRST_REQ_DEL_MASK;
+            vd_s_XspiIviSub1PowerOperationStsToVM3();
+        }
+        
+    } else {
+        vd_s_XspiIviSub1PowerOperationStsToVM3();
+    }
+}
+
+/*===================================================================================================================================*/
+/*  void            vd_s_XspiIviSub1PowerOperationStsRec(const U1 * u1_ap_XSPI_ADD)                                                  */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    SubFlame1(MISC) Data Analysis                                                                                    */
+/*  Arguments:      u1_ap_XSPI_ADD : SubFlame1 Start Buffer                                                                          */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void            vd_s_XspiIviSub1PowerOperationStsToVM3(void)
+{
+    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM2TO3_OPESTS, &u4_s_xspi_ivi_power_opests_to_vm3, (U2)XSPI_IVI_POWER_VMTRA_LEN);
+}
+
+/*===================================================================================================================================*/
+/*  static void            vd_s_XspiIviSub1PowerVMResetRec(void)                                                                     */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    VM Reset Initial Component                                                                                       */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void            vd_s_XspiIviSub1PowerVMResetRec(void)
+{
+    /*各アプリのVMリセット関数登録*/
+    vd_g_XspiIviSub4VMResetInit();
+    vd_g_XspiIviSub2VMResetInit();
+    vd_g_XspiIviSub0VMResetInit();
+    vd_g_DateSIComVMResetInit();
+    vd_g_PictCtl_VmResetReq();
+    vd_g_PncReqctl_ResetReq((U1)PNCREQCTL_RESETKIND_VM);
+    vd_g_DtcCtl_ResetReq((U1)DTCCTL_RESETKIND_VM);
+}
+
+/*===================================================================================================================================*/
+/*  static void            vd_s_XspiIviSub1PowerSoCResetRec(void)                                                                    */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    SoC Reset Initial Component                                                                                      */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void            vd_s_XspiIviSub1PowerSoCResetRec(void)
+{
+    /*各アプリのSoCリセット関数登録*/
+    vd_g_XspiIviSub4SoCResetInit();
+    vd_g_XspiIviSub2SoCResetInit();
+    vd_g_XspiIviSub0SoCResetInit();
+    vd_g_DateSIComSoCResetInit();
+    vd_g_PictCtl_SocResetReq();
+    vd_g_PncReqctl_ResetReq((U1)PNCREQCTL_RESETKIND_SOC);
+    vd_g_DtcCtl_ResetReq((U1)DTCCTL_RESETKIND_SOC);
+}
+
+/*===================================================================================================================================*/
+/*  static void            vd_s_XspiIviSub1PowerCDCResetRec(void)                                                                    */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    CDC Reset Initial Component                                                                                      */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void            vd_s_XspiIviSub1PowerCDCResetRec(void)
+{
+    /*各アプリのCDCリセット関数登録*/
+    vd_g_XspiIviSub0CDCResetInit();
+    vd_g_PictCtl_CdcResetReq();
+    vd_g_PncReqctl_ResetReq((U1)PNCREQCTL_RESETKIND_CDC);
+}
+
+/*===================================================================================================================================*/
+/*  void            vd_g_XspiIviSub1PowerVMResetComp(const U1 u1_a_ID)                                                               */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    SubFlame1(MISC) Data Analysis                                                                                    */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void            vd_g_XspiIviSub1PowerVMResetComp(const U1 u1_a_ID)
+{
+    /*VMリセット完了*/
+    u1_s_xspi_ivi_power_vmreset_comp |= u1_a_ID;
+    if(u1_s_xspi_ivi_power_vmreset_comp == (U1)XSPI_IVI_POWER_VMRESET_COMP) {
+        /*準備応答*/
+        vd_s_XspiIviSub1PowerVMResetSend();
+        u1_s_xspi_ivi_power_vmreset_comp = (U4)0U;
+    }
+}
+
+/*===================================================================================================================================*/
+/*  void            vd_g_XspiIviSub1PowerCDCResetComp(const U1 u1_a_ID)                                                              */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    SubFlame1(MISC) Data Analysis                                                                                    */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void            vd_g_XspiIviSub1PowerCDCResetComp(const U1 u1_a_ID)
+{
+    /*SoCリセット完了*/
+    u1_s_xspi_ivi_power_cdcreset_comp |= u1_a_ID;
+    if(u1_s_xspi_ivi_power_cdcreset_comp == (U1)XSPI_IVI_POWER_CDCRESET_COMP) {
+        vd_s_XspiIviSub1PowerOperationStsToVM3();
+        u1_s_xspi_ivi_power_cdcreset_comp = (U4)0U;
+    }
 }
 
 /*===================================================================================================================================*/

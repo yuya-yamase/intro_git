@@ -19,6 +19,7 @@
 #include "date_clk_cfg_private.h"
 
 #include "trpl_rdndnt.h"
+#include "datesi_com.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -66,6 +67,11 @@
 #define DATE_CLK_DAYCNT_RDN_2ND                  (1U)
 #define DATE_CLK_DAYCNT_RDN_3RD                  (2U)
 
+#define DATE_CLK_DATESIREQ_NON                   (0U)
+#define DATE_CLK_DATESIREQ_REQ                   (1U)
+#define DATE_CLK_DATESIREQ_WAIT                  (2U)
+#define DATE_CLK_DATESIREQ_EXC                   (3U)
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #if ((DATE_CLK_ADJ_HHMMSS != 0x01U) || (DATE_CLK_ADJ_YYMMDD != 0x02U))
 #error "date_clk.c : DATE_CLK_ADJ_NUM_TOUT shall be greater than DATE_CLK_ADJ_HHMMSS and DATE_CLK_ADJ_YYMMDD."
@@ -101,14 +107,10 @@ typedef struct{
 /* distributed to make RAM anomalies less likely.                                      */
 /* ----------------------------------------------------------------------------------- */
 static U4                  u4_s_dateclk_daycnt_min_val1          __attribute__((section(".bss_BACK")));
-static U4                  u4_s_dateclk_tmrwk_tout               __attribute__((section(".bss_BACK")));
-static S2                  s2_s_dateclk_calsubsecond             __attribute__((section(".bss_BACK")));
 
 static ST_DATE_CLK_BK      st_sp_dateclk_back[DATE_CLK_NUM_BACK] __attribute__((section(".bss_BACK")));
 static U4                  u4_s_dateclk_daycnt_min_val2          __attribute__((section(".bss_BACK")));
 
-static U4                  u4_s_dateclk_frt_elpsd                __attribute__((section(".bss_BACK")));
-static U4                  u4_s_dateclk_rtc_elpsd                __attribute__((section(".bss_BACK")));
 static U4                  u4_s_dateclk_daycnt_min_val3          __attribute__((section(".bss_BACK")));
 
 /* ----------------------------------------------------------------------------------- */
@@ -117,16 +119,16 @@ static U4                  u4_s_dateclk_daycnt_min_val3          __attribute__((
 /* The variables, which are located on section ".bss_BSW", are intialized with zero at */
 /* MCAL/startup.                                                                       */
 /* ----------------------------------------------------------------------------------- */
-static U4                  u4_s_dateclk_gpt_frt                  __attribute__((section(".bss_BACK_BSW")));
 static U4                  u4_s_dateclk_ope_run                  __attribute__((section(".bss_BACK_BSW")));
 
 static U4                  u4_s_dateclk_adj_yymmddwk;
 static U4                  u4_s_dateclk_adj_daycnt;
 static U4                  u4_s_dateclk_adj_hhmmss_24h;
 
-static U2                  u2_s_dateclk_swot_elpsd;
 static U2                  u2_sp_dateclk_adjtocnt[DATE_CLK_ADJ_NUM_TOUT];
 static U1                  u1_s_dateclk_adj_rqbit;
+static U1                  u1_s_dateclk_adj_hhmmss_ans;
+static U1                  u1_s_dateclk_adj_yymmddwk_ans;
 
 static U1                  u1_s_dateclk_yymmdd_commit;
 static U1                  u1_s_dateclk_bon_state;
@@ -160,14 +162,8 @@ static void    vd_s_DateclkAdjInit(const ST_DATE_CLK_LOG * st_ap_LOG);
 static void    vd_s_DateclkSyncUpdt(ST_DATE_CLK_LOG * st_ap_log, const U1 u1_a_ADJ);
 static U1      u1_s_DateclkBackLast(ST_DATE_CLK_LOG * st_ap_log);
 static void    vd_s_DateclkBackUpdt(const U1 u1_a_BEGIN, const U1 u1_a_END, const ST_DATE_CLK_LOG * st_ap_LOG);
-static U4      u4_s_DateclkSecElpsd(const U4 u4_a_LAST, const U4 u4_a_NEXT);
-static U4      u4_s_DateclkSyncFrt(const U4 u4_a_SEC_ELPSD, const U1 u1_a_RTC_STA);
-static void    vd_s_DateclkEtmUpdt(const U4 u4_a_FRT);
 
 static void    vd_s_DateclkAdjUpdt(const ST_DATE_CLK_LOG * st_ap_LOG);
-static void    vd_s_DateclkSWOTchk(const ST_DATE_CLK_LOG * st_ap_LOG);
-
-static U4      u4_s_DateclkDayIncrmnt(const U4 u4_a_HHMMSS_LATEST, const U4 u4_a_HHMMSS_NEXT);
 
 static inline void    vd_s_DateclkSyncHhmmssUpdt(const U1 u1_a_ACT, ST_DATE_CLK_LOG * st_ap_log);
 static inline void    vd_s_DateclkSyncDaycntUpdt(const U1 u1_a_ACT, ST_DATE_CLK_LOG * st_ap_log);
@@ -175,74 +171,12 @@ static inline void    vd_s_DateclkSyncDaycntUpdt(const U1 u1_a_ACT, ST_DATE_CLK_
 static void    vd_s_DateclkSetDayCntMinVal(const U4 u4_a_VAL);
 static U4      u4_s_DateclkGetDayCntMinVal(void);
 
+static void    u4_s_DateclkDateSiAns(const U1 u1_a_rtc_rea);
+
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-/*===================================================================================================================================*/
-/*  U1      u1_g_DateclkTmrwkRqst(void)                                                                                              */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-#if 0
-U1      u1_g_DateclkTmrwkRqst(void)
-{
-    U4                          u4_t_rtcwk;
-    U1                          u1_t_rqst;
-
-    u4_t_rtcwk = u4_g_DateclkIfRtcwk();
-    if(u4_t_rtcwk != (U4)0U){
-        u1_t_rqst = (U1)TRUE;
-    }
-    else{
-        u1_t_rqst = (U1)FALSE;
-    }
-
-    return(u1_t_rqst);
-}
-#endif
-/*===================================================================================================================================*/
-/*  void    vd_g_DateclkTmrwkInit(void)                                                                                              */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void    vd_g_DateclkTmrwkInit(void)
-{
-    ST_DATE_CLK_LOG             st_t_log;
-    U4                          u4_t_tout;
-    U4                          u4_t_frt;
-    U4                          u4_t_daycntmin;
-
-    u4_t_tout = u4_s_dateclk_tmrwk_tout;
-    u4_t_frt  = u4_gp_dateclk_etm_frt[DATE_CLK_ETM_CH_TMRWK];
-
-    /* Only vd_g_DateclkTmrwkInit, get the day count minimum value from the redundant RAM. */
-    u4_t_daycntmin = u4_s_DateclkGetDayCntMinVal();
-    vd_s_DateclkSetDayCntMinVal(u4_t_daycntmin);
-    if((u4_t_tout >  (U4)DATE_CLK_ETM_MAX) ||
-       (u4_t_frt  <= (U4)DATE_CLK_FRT_MAX)){
-
-        st_t_log.u4_hhmmss_bfr = (U4)HHMMSS_UNKNWN;
-        st_t_log.u4_daycnt_bfr = (U4)YYMMDDWK_DAYCNT_UNKNWN;
-        st_t_log.u4_hhmmss_aft = (U4)HHMMSS_UNKNWN;
-        st_t_log.u4_daycnt_aft = (U4)YYMMDDWK_DAYCNT_UNKNWN;
-        st_t_log.u4_sec_elpsd  = (U4)0U;
-        st_t_log.u1_rtc_rea    = (U1)DATE_CLK_LOG_IF_RTC_UNK;
-        st_t_log.u1_rtc_sta    = (U1)DATE_CLK_LOG_IF_RTC_UNK;
-        st_t_log.u1_eas_chk    = (U1)0U;
-        st_t_log.u1_callpt     = (U1)DATE_CLK_LOG_CP_TMR;
-
-        vd_s_DateclkSyncUpdt(&st_t_log, (U1)0U);
-
-        u4_t_frt = u4_s_DateclkSyncFrt(st_t_log.u4_sec_elpsd, st_t_log.u1_rtc_sta);
-        vd_s_DateclkEtmUpdt(u4_t_frt);
-
-        if(st_t_log.u1_eas_chk != (U1)0U){
-            vd_g_DateclkCfgLogCapt(&st_t_log, (U1)0U);
-        }
-    }
-}
 /*===================================================================================================================================*/
 /*  void    vd_g_DateclkBonInit(void)                                                                                                */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
@@ -257,25 +191,21 @@ void    vd_g_DateclkBonInit(void)
     u1_s_dateclk_yymmdd_commit = (U1)FALSE;
     u1_s_dateclk_bon_state     = (U1)TRUE;
 
-    st_t_log.u4_hhmmss_bfr = (U4)HHMMSS_UNKNWN;
-    st_t_log.u4_daycnt_bfr = (U4)YYMMDDWK_DAYCNT_UNKNWN;
-    st_t_log.u4_hhmmss_aft = u4_g_DateclkCfgHhmmss24hInit();
-    st_t_log.u4_daycnt_aft = u4_g_DateclkCfgDaycntInit();
-    st_t_log.u4_sec_elpsd  = (U4)0U;
-    st_t_log.u1_rtc_rea    = (U1)DATE_CLK_LOG_IF_RTC_UNK;
-    st_t_log.u1_rtc_sta    = (U1)DATE_CLK_LOG_IF_RTC_UNK;
-    st_t_log.u1_eas_chk    = (U1)0U;
-    st_t_log.u1_callpt     = (U1)DATE_CLK_LOG_CP_BON;
-
-    u4_s_dateclk_tmrwk_tout   = u4_g_DateclkCfgTmrwkTimout();
-    s2_s_dateclk_calsubsecond = s2_g_DateclkCfgCalSubsecond();
+    st_t_log.u4_hhmmss_bfr     = (U4)HHMMSS_UNKNWN;
+    st_t_log.u4_daycnt_bfr     = (U4)YYMMDDWK_DAYCNT_UNKNWN;
+    st_t_log.u4_hhmmss_aft     = u4_g_DateclkCfgHhmmss24hInit();
+    st_t_log.u4_daycnt_aft     = u4_g_DateclkCfgDaycntInit();
+    st_t_log.u1_rtc_rea        = (U1)DATE_CLK_LOG_IF_RTC_UNK;
+    st_t_log.u1_rtc_sta        = (U1)DATE_CLK_LOG_IF_RTC_UNK;
+    st_t_log.u1_eas_chk        = (U1)0U;
+    st_t_log.u1_callpt         = (U1)DATE_CLK_LOG_CP_BON;
 
     vd_s_DateclkRtcInit(&st_t_log);
     vd_s_DateclkAdjInit(&st_t_log);
 
-    u4_s_dateclk_ope_run = (U4)DATE_CLK_OPE_RUN;
+    u4_s_dateclk_ope_run       = (U4)DATE_CLK_OPE_RUN;
 
-    u4_t_daycntmin = u4_g_DateclkCfgDayCntMinValJdg();
+    u4_t_daycntmin             = u4_g_DateclkCfgDayCntMinValJdg();
     vd_s_DateclkSetDayCntMinVal(u4_t_daycntmin);
 
     if(st_t_log.u1_rtc_sta != (U1)DATE_CLK_IF_RTC_RUN){
@@ -291,149 +221,35 @@ void    vd_g_DateclkBonInit(void)
 void    vd_g_DateclkRstwkInit(void)
 {
     ST_DATE_CLK_LOG             st_t_log;
-    U4                          u4_t_tout;
-    U4                          u4_t_frt;
     U4                          u4_t_daycntmin;
 
     u1_s_dateclk_yymmdd_commit = (U1)FALSE;
     u1_s_dateclk_bon_state     = (U1)FALSE;
 
-    st_t_log.u4_hhmmss_bfr = (U4)HHMMSS_UNKNWN;
-    st_t_log.u4_daycnt_bfr = (U4)YYMMDDWK_DAYCNT_UNKNWN;
-    st_t_log.u4_hhmmss_aft = u4_g_DateclkCfgHhmmss24hInit();
-    st_t_log.u4_daycnt_aft = u4_g_DateclkCfgDaycntInit();
-    st_t_log.u4_sec_elpsd  = (U4)0U;
-    st_t_log.u1_rtc_rea    = (U1)DATE_CLK_LOG_IF_RTC_UNK;
-    st_t_log.u1_rtc_sta    = (U1)DATE_CLK_LOG_IF_RTC_UNK;
-    st_t_log.u1_eas_chk    = (U1)0U;
-    st_t_log.u1_callpt     = (U1)DATE_CLK_LOG_CP_RST;
+    st_t_log.u4_hhmmss_bfr     = (U4)HHMMSS_UNKNWN;
+    st_t_log.u4_daycnt_bfr     = (U4)YYMMDDWK_DAYCNT_UNKNWN;
+    st_t_log.u4_hhmmss_aft     = u4_g_DateclkCfgHhmmss24hInit();
+    st_t_log.u4_daycnt_aft     = u4_g_DateclkCfgDaycntInit();
+    st_t_log.u1_rtc_rea        = (U1)DATE_CLK_LOG_IF_RTC_UNK;
+    st_t_log.u1_rtc_sta        = (U1)DATE_CLK_LOG_IF_RTC_UNK;
+    st_t_log.u1_eas_chk        = (U1)0U;
+    st_t_log.u1_callpt         = (U1)DATE_CLK_LOG_CP_RST;
 
-    u4_t_daycntmin = u4_g_DateclkCfgDayCntMinValJdg();
+    u4_t_daycntmin             = u4_g_DateclkCfgDayCntMinValJdg();
     vd_s_DateclkSetDayCntMinVal(u4_t_daycntmin);
 
-    u4_t_tout                 = u4_g_DateclkCfgTmrwkTimout();
-    u4_s_dateclk_tmrwk_tout   = u4_t_tout;
-    s2_s_dateclk_calsubsecond = s2_g_DateclkCfgCalSubsecond();
+    st_sp_dateclk_back[DATE_CLK_BACK_INI].u4_hhmmss_24h = st_t_log.u4_hhmmss_aft;
+    st_sp_dateclk_back[DATE_CLK_BACK_INI].u4_daycnt     = st_t_log.u4_daycnt_aft;
 
-    u4_t_frt = u4_gp_dateclk_etm_frt[DATE_CLK_ETM_CH_TMRWK];
-    if((u4_t_tout >  (U4)DATE_CLK_ETM_MAX) ||
-       (u4_t_frt  <= (U4)DATE_CLK_FRT_MAX)){
-
-#if (__DATE_CLK_IF_RTC_WK_BY_IRQ__ == 1U)
-        vd_g_DateclkIfRtcwkDI();
-#endif /* #if (__DATE_CLK_IF_RTC_WK_BY_IRQ__ == 1U) */
-
-        st_sp_dateclk_back[DATE_CLK_BACK_INI].u4_hhmmss_24h = st_t_log.u4_hhmmss_aft;
-        st_sp_dateclk_back[DATE_CLK_BACK_INI].u4_daycnt     = st_t_log.u4_daycnt_aft;
-
-        vd_s_DateclkSyncUpdt(&st_t_log, (U1)0U);
-
-        u4_s_dateclk_gpt_frt = u4_g_DateclkIfGptFrt();
-        u4_t_frt = u4_s_DateclkSyncFrt(st_t_log.u4_sec_elpsd, st_t_log.u1_rtc_sta);
-        vd_s_DateclkEtmUpdt(u4_t_frt);
-    }
-    else{
-
-        vd_s_DateclkRtcInit(&st_t_log);
-        st_t_log.u1_eas_chk = (U1)DATE_CLK_EAS_TMRWK_DI;
-    }
+    vd_s_DateclkSyncUpdt(&st_t_log, (U1)0U);
 
     vd_s_DateclkAdjInit(&st_t_log);
 
-    u4_s_dateclk_ope_run = (U4)DATE_CLK_OPE_RUN;
+    u4_s_dateclk_ope_run       = (U4)DATE_CLK_OPE_RUN;
 
     if(st_t_log.u1_eas_chk != (U1)0U){
         vd_g_DateclkCfgLogCapt(&st_t_log, (U1)0U);
     }
-}
-/*===================================================================================================================================*/
-/*  void    vd_g_DateclkImmdShtInit(void)                                                                                            */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void    vd_g_DateclkImmdShtInit(void)
-{
-    /* ----------------------------------------------------------------------------------- */
-    /* Warning :                                                                           */
-    /* ----------------------------------------------------------------------------------- */
-    /* DO NOT CLEAR RTC IRQs IN vd_g_DateclkImmdShtInit if RTC is in RUN and no errror is  */
-    /* detected. Otherwise, it might cause unexpected delay in elapsed time count.         */
-    /* ----------------------------------------------------------------------------------- */
-
-    ST_DATE_CLK_LOG             st_t_log;
-    U4                          u4_t_tout;
-    U4                          u4_t_frt;
-    U4                          u4_t_daycntmin;
-
-    u4_t_tout = u4_s_dateclk_tmrwk_tout;
-    u4_t_frt  = u4_gp_dateclk_etm_frt[DATE_CLK_ETM_CH_TMRWK];
-
-    u4_t_daycntmin = u4_g_DateclkCfgDayCntMinValJdg();
-    vd_s_DateclkSetDayCntMinVal(u4_t_daycntmin);
-
-    if((u4_t_tout >  (U4)DATE_CLK_ETM_MAX) ||
-       (u4_t_frt  <= (U4)DATE_CLK_FRT_MAX)){
-
-        st_t_log.u4_hhmmss_bfr = (U4)HHMMSS_UNKNWN;
-        st_t_log.u4_daycnt_bfr = (U4)YYMMDDWK_DAYCNT_UNKNWN;
-        st_t_log.u4_hhmmss_aft = (U4)HHMMSS_UNKNWN;
-        st_t_log.u4_daycnt_aft = (U4)YYMMDDWK_DAYCNT_UNKNWN;
-        st_t_log.u4_sec_elpsd  = (U4)0U;
-        st_t_log.u1_rtc_rea    = (U1)DATE_CLK_LOG_IF_RTC_UNK;
-        st_t_log.u1_rtc_sta    = (U1)DATE_CLK_LOG_IF_RTC_UNK;
-        st_t_log.u1_eas_chk    = (U1)0U;
-        st_t_log.u1_callpt     = (U1)DATE_CLK_LOG_CP_IMM;
-
-        vd_s_DateclkSyncUpdt(&st_t_log, (U1)0U);
-
-        u4_t_frt = u4_s_DateclkSyncFrt(st_t_log.u4_sec_elpsd, st_t_log.u1_rtc_sta);
-        vd_s_DateclkEtmUpdt(u4_t_frt);
-
-        if(st_t_log.u1_eas_chk != (U1)0U){
-            vd_g_DateclkCfgLogCapt(&st_t_log, (U1)0U);
-        }
-    }
-}
-/*===================================================================================================================================*/
-/*  U1      u1_g_DateclkShtLpmToTmrwk(void)                                                                                          */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1      u1_g_DateclkShtLpmToTmrwk(void)
-{
-    /* ----------------------------------------------------------------------------------- */
-    /* Warning :                                                                           */
-    /* ----------------------------------------------------------------------------------- */
-    /* DO NOT CLEAR RTC IRQs if u4_gp_dateclk_etm_frt[DATE_CLK_ETM_CH_TMRWK] is less     */
-    /* than u4_s_dateclk_tmrwk_tout. Otherwise, it might cause unexpected delay in elapsed */
-    /* time count.                                                                         */
-    /* ----------------------------------------------------------------------------------- */
-
-    U4                          u4_t_tout;
-    U4                          u4_t_frt;
-    U1                          u1_t_tmrwk;
-
-    u4_t_tout = u4_s_dateclk_tmrwk_tout;
-    u4_t_frt  = u4_gp_dateclk_etm_frt[DATE_CLK_ETM_CH_TMRWK];
-    if((u4_t_tout >  (U4)DATE_CLK_ETM_MAX) ||
-       (u4_t_frt  <= (U4)DATE_CLK_FRT_MAX)){
-
-#if (__DATE_CLK_IF_RTC_WK_BY_IRQ__ == 1U)
-        vd_g_DateclkIfRtcwkEI();
-#endif /* #if (__DATE_CLK_IF_RTC_WK_BY_IRQ__ == 1U) */
-
-        u1_t_tmrwk = (U1)TRUE;
-    }
-    else{
-
-//        vd_g_DateclkIfRtcStop();
-
-        u1_t_tmrwk = (U1)FALSE;
-    }
-
-    return(u1_t_tmrwk);
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_DateclkMainTask(void)                                                                                               */
@@ -444,18 +260,12 @@ U1      u1_g_DateclkShtLpmToTmrwk(void)
 void    vd_g_DateclkMainTask(void)
 {
     ST_DATE_CLK_LOG             st_t_log;
-    U4                          u4_t_frt;
     U4                          u4_t_daycntmin;
-
-#if (__DATE_CLK_IF_RTC_WK_BY_IRQ__ == 1U)
-    vd_g_DateclkIfRtcwkDI();
-#endif /* #if (__DATE_CLK_IF_RTC_WK_BY_IRQ__ == 1U) */
 
     st_t_log.u4_hhmmss_bfr = (U4)HHMMSS_UNKNWN;
     st_t_log.u4_daycnt_bfr = (U4)YYMMDDWK_DAYCNT_UNKNWN;
     st_t_log.u4_hhmmss_aft = u4_g_DateclkCfgHhmmss24hInit();
     st_t_log.u4_daycnt_aft = u4_g_DateclkCfgDaycntInit();
-    st_t_log.u4_sec_elpsd  = (U4)0U;
     st_t_log.u1_rtc_rea    = (U1)DATE_CLK_LOG_IF_RTC_UNK;
     st_t_log.u1_rtc_sta    = (U1)DATE_CLK_LOG_IF_RTC_UNK;
     st_t_log.u1_eas_chk    = (U1)0U;
@@ -464,19 +274,12 @@ void    vd_g_DateclkMainTask(void)
     u4_t_daycntmin = u4_g_DateclkCfgDayCntMinValJdg();
     vd_s_DateclkSetDayCntMinVal(u4_t_daycntmin);
 
-    u4_s_dateclk_tmrwk_tout   = u4_g_DateclkCfgTmrwkTimout();
-    s2_s_dateclk_calsubsecond = s2_g_DateclkCfgCalSubsecond();
-
     st_sp_dateclk_back[DATE_CLK_BACK_INI].u4_hhmmss_24h = st_t_log.u4_hhmmss_aft;
     st_sp_dateclk_back[DATE_CLK_BACK_INI].u4_daycnt     = st_t_log.u4_daycnt_aft;
 
     vd_s_DateclkSyncUpdt(&st_t_log, (U1)0U);
 
-    u4_t_frt = u4_s_DateclkSyncFrt(st_t_log.u4_sec_elpsd, st_t_log.u1_rtc_sta);
-    vd_s_DateclkEtmUpdt(u4_t_frt);
-
     vd_s_DateclkAdjUpdt(&st_t_log);
-    vd_s_DateclkSWOTchk(&st_t_log);
 
     u4_s_dateclk_ope_run = (U4)DATE_CLK_OPE_RUN;
 
@@ -492,29 +295,9 @@ void    vd_g_DateclkMainTask(void)
 /*===================================================================================================================================*/
 U1      u1_g_DateclkShtdwnOk(void)
 {
-    static const U2             u2_s_DATE_CLK_SWOT_MIN = (U2)900U  / (U2)DATE_CLK_MAIN_TICK;  /*  900 ms */
-    static const U2             u2_s_DATE_CLK_SWOT_MAX = (U2)1100U / (U2)DATE_CLK_MAIN_TICK;  /* 1100 ms */
-
-    U4                          u4_t_tout;
-    U4                          u4_t_frt;
-    U4                          u4_t_rtcwk;
     U1                          u1_t_ok;
 
-    u4_t_tout  = u4_s_dateclk_tmrwk_tout;
-    u4_t_frt   = u4_gp_dateclk_etm_frt[DATE_CLK_ETM_CH_TMRWK];
-    u4_t_rtcwk = (U4)0; //u4_g_DateclkIfRtcwk();
-    if((u4_t_tout <= (U4)DATE_CLK_ETM_MAX) &&
-       (u4_t_frt  >  (U4)DATE_CLK_FRT_MAX)){
-
-        u1_t_ok = (U1)TRUE;
-    }
-    else if((u2_s_dateclk_swot_elpsd >= u2_s_DATE_CLK_SWOT_MIN) &&
-            (u2_s_dateclk_swot_elpsd <  u2_s_DATE_CLK_SWOT_MAX)){
-
-        u1_t_ok = (U1)FALSE;
-    }
-    else if((u4_t_rtcwk                                  != (U4)0U                   ) ||
-            (u2_sp_dateclk_adjtocnt[DATE_CLK_ADJ_FRTSYN] <= u2_s_DATE_CLK_FRTSYN_TOUT)){
+    if(u2_sp_dateclk_adjtocnt[DATE_CLK_ADJ_FRTSYN] <= u2_s_DATE_CLK_FRTSYN_TOUT){
 
         u1_t_ok = (U1)FALSE;
     }
@@ -524,29 +307,6 @@ U1      u1_g_DateclkShtdwnOk(void)
     }
 
     return(u1_t_ok);
-}
-/*===================================================================================================================================*/
-/*  U1      u1_g_DateclkHhmmssSWOT(void)                                                                                             */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1      u1_g_DateclkHhmmssSWOT(void)
-{
-    static const U2             u2_s_DATE_CLK_SWOT_DUTY_HI = (U2)500U / (U2)DATE_CLK_MAIN_TICK; /* 500 ms */
-    U1                          u1_t_swot;
-
-    if(u4_s_dateclk_ope_run != (U4)DATE_CLK_OPE_RUN){
-        u1_t_swot = (U1)DATE_CLK_HHMMSS_SWOT_LO;
-    }
-    else if(u2_s_dateclk_swot_elpsd >= u2_s_DATE_CLK_SWOT_DUTY_HI){
-        u1_t_swot = (U1)DATE_CLK_HHMMSS_SWOT_LO;
-    }
-    else{
-        u1_t_swot = (U1)DATE_CLK_HHMMSS_SWOT_HI;
-    }
-
-    return(u1_t_swot);
 }
 /*===================================================================================================================================*/
 /*  U4      u4_g_DateclkHhmmss24h(void)                                                                                              */
@@ -694,6 +454,7 @@ U1      u1_g_DateclkAdjHhmmss24h(const U4 u4_a_HHMMSS_24H)
         if(u1_t_adj == (U1)TRUE){
             u4_s_dateclk_adj_hhmmss_24h  = u4_a_HHMMSS_24H;
             u1_s_dateclk_adj_rqbit      |= (U1)DATE_CLK_ADJ_HHMMSS;
+            u1_s_dateclk_adj_hhmmss_ans  = (U1)DATE_CLK_DATESIREQ_REQ;
         }
     }
 
@@ -723,13 +484,14 @@ U1      u1_g_DateclkAdjYymmdd(const U4 u4_a_YYMMDD)
 
         u4_t_daycntmin = u4_s_DateclkGetDayCntMinVal();
         u4_t_daycnt = u4_g_YymmddToDaycnt(u4_a_YYMMDD);
-        if((u4_t_daycnt >= u4_t_daycntmin) &&
-           (u4_t_daycnt <= u4_g_DATE_CLK_DAYCNT_MAX)){
+        if((u4_t_daycnt > u4_t_daycntmin) &&
+           (u4_t_daycnt < u4_g_DATE_CLK_DAYCNT_MAX)){
 
-            u4_s_dateclk_adj_daycnt    = u4_t_daycnt;
-            u4_s_dateclk_adj_yymmddwk  = u4_a_YYMMDD & ((U4)U4_MAX ^ (U4)YYMMDDWK_BIT_WK);
-            u4_s_dateclk_adj_yymmddwk |= (U4)u1_g_DayOfWeek(u4_t_daycnt);
-            u1_s_dateclk_adj_rqbit    |= (U1)DATE_CLK_ADJ_YYMMDD;
+            u4_s_dateclk_adj_daycnt       = u4_t_daycnt;
+            u4_s_dateclk_adj_yymmddwk     = u4_a_YYMMDD & ((U4)U4_MAX ^ (U4)YYMMDDWK_BIT_WK);
+            u4_s_dateclk_adj_yymmddwk    |= (U4)u1_g_DayOfWeek(u4_t_daycnt);
+            u1_s_dateclk_adj_rqbit       |= (U1)DATE_CLK_ADJ_YYMMDD;
+            u1_s_dateclk_adj_yymmddwk_ans = (U1)DATE_CLK_DATESIREQ_REQ;
 
             u1_t_adj = (U1)TRUE;
         }
@@ -764,7 +526,6 @@ void    vd_g_DateclkSet(void)
             st_t_log.u4_daycnt_bfr = (U4)YYMMDDWK_DAYCNT_UNKNWN;
             st_t_log.u4_hhmmss_aft = (U4)HHMMSS_UNKNWN;
             st_t_log.u4_daycnt_aft = (U4)YYMMDDWK_DAYCNT_UNKNWN;
-            st_t_log.u4_sec_elpsd  = (U4)0U;
             st_t_log.u1_rtc_rea    = (U1)DATE_CLK_LOG_IF_RTC_UNK;
             st_t_log.u1_rtc_sta    = (U1)DATE_CLK_LOG_IF_RTC_UNK;
             st_t_log.u1_eas_chk    = (U1)0U;
@@ -775,93 +536,25 @@ void    vd_g_DateclkSet(void)
             if(u1_t_adj == (U1)DATE_CLK_ADJ_HHMMSS){
 
                 st_t_log.u4_hhmmss_aft = u4_s_dateclk_adj_hhmmss_24h;
-                st_t_log.u1_rtc_sta    = u1_g_DateclkIfRtcStart(st_t_log.u4_hhmmss_aft, s2_s_dateclk_calsubsecond);
+                st_t_log.u1_rtc_sta    = u1_g_DateclkIfRtcStart(st_t_log.u4_hhmmss_aft, st_t_log.u4_daycnt_aft);
             }
             else if(u1_t_adj == (U1)DATE_CLK_ADJ_YYMMDD){
 
                 st_t_log.u4_daycnt_aft = u4_s_dateclk_adj_daycnt;
+                st_t_log.u1_rtc_sta    = u1_g_DateclkIfRtcDayset(st_t_log.u4_daycnt_aft);
             }
             /* if(u1_t_adj == ((U1)DATE_CLK_ADJ_YYMMDD | (U1)DATE_CLK_ADJ_HHMMSS)) */
             else{
 
                 st_t_log.u4_hhmmss_aft = u4_s_dateclk_adj_hhmmss_24h;
                 st_t_log.u4_daycnt_aft = u4_s_dateclk_adj_daycnt;
-                st_t_log.u1_rtc_sta    = u1_g_DateclkIfRtcStart(st_t_log.u4_hhmmss_aft, s2_s_dateclk_calsubsecond);
+                st_t_log.u1_rtc_sta    = u1_g_DateclkIfRtcStart(st_t_log.u4_hhmmss_aft, st_t_log.u4_daycnt_aft);
             }
-            (void)u4_s_DateclkSyncFrt((U4)0U, st_t_log.u1_rtc_sta);
             vd_s_DateclkBackUpdt((U1)DATE_CLK_BACK_1ST, (U1)DATE_CLK_BACK_4TH, &st_t_log);
-            vd_s_DateclkSWOTchk(&st_t_log);
 
             vd_g_DateclkCfgLogCapt(&st_t_log, u1_t_adj);
         }
     }
-}
-/*===================================================================================================================================*/
-/*  U4      u4_g_DateclkFrt(void)                                                                                                    */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U4      u4_g_DateclkFrt(void)
-{
-    return(u4_s_DateclkSyncFrt((U4)0U, (U1)DATE_CLK_LOG_IF_RTC_UNK) & (U4)DATE_CLK_FRT_MAX);
-}
-/*===================================================================================================================================*/
-/*  void    vd_g_DateclkEtmStart(const U1 u1_a_ETM_CH, const U4 u4_a_OFFSET)                                                         */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void    vd_g_DateclkEtmStart(const U1 u1_a_ETM_CH, const U4 u4_a_OFFSET)
-{
-    U4                          u4_t_frt;
-
-    if((u1_a_ETM_CH <  u1_g_DATE_CLK_ETM_NUM_CH) &&
-       (u4_a_OFFSET <= (U4)DATE_CLK_ETM_MAX    )){
-
-        u4_t_frt = (u4_s_DateclkSyncFrt((U4)0U, (U1)DATE_CLK_LOG_IF_RTC_UNK) - u4_a_OFFSET) & (U4)DATE_CLK_FRT_MAX;
-        u4_gp_dateclk_etm_frt[u1_a_ETM_CH] = u4_t_frt;
-    }
-}
-/*===================================================================================================================================*/
-/*  U4      u4_g_DateclkEtmElapsed(const U1 u1_a_ETM_CH)                                                                             */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U4      u4_g_DateclkEtmElapsed(const U1 u1_a_ETM_CH)
-{
-    U4                          u4_t_elpsd;
-    U4                          u4_t_frt;
-
-    u4_t_elpsd = (U4)DATE_CLK_ETM_UNK;
-    if(u1_a_ETM_CH < u1_g_DATE_CLK_ETM_NUM_CH){
-
-        u4_t_frt = u4_gp_dateclk_etm_frt[u1_a_ETM_CH];
-        if(u4_t_frt <= (U4)DATE_CLK_FRT_MAX){
-
-            /* Intentional wrap-around */
-            u4_t_frt = (u4_s_DateclkSyncFrt((U4)0U, (U1)DATE_CLK_LOG_IF_RTC_UNK) - u4_t_frt) & (U4)DATE_CLK_FRT_MAX;
-            if(u4_t_frt > (U4)DATE_CLK_ETM_MAX){
-                u4_gp_dateclk_etm_frt[u1_a_ETM_CH] = (U4)DATE_CLK_FRT_UNK;
-            }
-            else{
-                u4_t_elpsd = u4_t_frt;
-            }
-        }
-    }
-
-    return(u4_t_elpsd);
-}
-/*===================================================================================================================================*/
-/*  U1      u1_g_DateclkRtcSts(void)                                                                                                 */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1      u1_g_DateclkRtcSts(void)
-{
-    return((U1)TRUE);
 }
 /*===================================================================================================================================*/
 /*  static void    vd_s_DateclkRtcInit(ST_DATE_CLK_LOG * st_ap_log)                                                                  */
@@ -875,13 +568,7 @@ static void    vd_s_DateclkRtcInit(ST_DATE_CLK_LOG * st_ap_log)
  /* st_sp_dateclk_back[DATE_CLK_BACK_INI].u4_daycnt     = st_t_log.u4_daycnt_aft; */
     vd_s_DateclkBackUpdt((U1)DATE_CLK_BACK_INI, (U1)DATE_CLK_BACK_4TH, st_ap_log);
 
-    u4_s_dateclk_frt_elpsd = (U4)0U;
-    u4_s_dateclk_rtc_elpsd = (U4)0U;
-
-    st_ap_log->u1_rtc_sta  = u1_g_DateclkIfRtcStart(st_ap_log->u4_hhmmss_aft, s2_s_dateclk_calsubsecond);
-    u4_s_dateclk_gpt_frt   = u4_g_DateclkIfGptFrt();
-
-    vd_s_DateclkEtmUpdt((U4)DATE_CLK_FRT_UNK);
+    st_ap_log->u1_rtc_sta  = u1_g_DateclkIfRtcStart(st_ap_log->u4_hhmmss_aft, st_ap_log->u4_daycnt_aft);
 }
 /*===================================================================================================================================*/
 /*  static void    vd_s_DateclkAdjInit(const ST_DATE_CLK_LOG * st_ap_LOG)                                                            */
@@ -895,12 +582,12 @@ static void    vd_s_DateclkAdjInit(const ST_DATE_CLK_LOG * st_ap_LOG)
     u4_s_dateclk_adj_daycnt     = st_ap_LOG->u4_daycnt_aft;
     u4_s_dateclk_adj_yymmddwk   = u4_g_DaycntToYymmddwk(st_ap_LOG->u4_daycnt_aft);
 
-    u2_s_dateclk_swot_elpsd     = (U2)U2_MAX;
-
     u2_sp_dateclk_adjtocnt[DATE_CLK_ADJ_FRTSYN] = (U2)0U;
     u2_sp_dateclk_adjtocnt[DATE_CLK_ADJ_HHMMSS] = (U2)U2_MAX;
     u2_sp_dateclk_adjtocnt[DATE_CLK_ADJ_YYMMDD] = (U2)U2_MAX;
     u1_s_dateclk_adj_rqbit                      = (U1)0U;
+    u1_s_dateclk_adj_hhmmss_ans                 = (U1)DATE_CLK_DATESIREQ_NON;
+    u1_s_dateclk_adj_yymmddwk_ans               = (U1)DATE_CLK_DATESIREQ_NON;
 }
 /*===================================================================================================================================*/
 /*  static void    vd_s_DateclkSyncUpdt(ST_DATE_CLK_LOG * st_ap_log, const U1 u1_a_ADJ)                                              */
@@ -911,8 +598,8 @@ static void    vd_s_DateclkAdjInit(const ST_DATE_CLK_LOG * st_ap_LOG)
 static void    vd_s_DateclkSyncUpdt(ST_DATE_CLK_LOG * st_ap_log, const U1 u1_a_ADJ)
 {
     static const U1             u1_sp_DATE_CLK_SYNC_ACT[] = {
-        (U1)0x01U, (U1)0x05U, (U1)0x09U, (U1)0x09U, (U1)0x16U, (U1)0x27U, (U1)0x1BU, (U1)0x2BU,
-        (U1)0x16U, (U1)0x2BU, (U1)0x1BU, (U1)0x2BU, (U1)0x2BU, (U1)0x2BU, (U1)0x2BU, (U1)0x2BU
+        (U1)0x01U, (U1)0x01U, (U1)0x01U, (U1)0x01U, (U1)0x16U, (U1)0x27U, (U1)0x1BU, (U1)0x2BU,
+        (U1)0x16U, (U1)0x27U, (U1)0x1BU, (U1)0x2BU, (U1)0x14U, (U1)0x25U, (U1)0x19U, (U1)0x29U
     };
 
     const ST_DATE_CLK_BK_UPDT * st_tp_BU;
@@ -933,22 +620,21 @@ static void    vd_s_DateclkSyncUpdt(ST_DATE_CLK_LOG * st_ap_log, const U1 u1_a_A
     }
 
     u4_t_daycntmin = u4_s_DateclkGetDayCntMinVal();
-    if((st_ap_log->u4_daycnt_bfr < u4_t_daycntmin) ||
-       (st_ap_log->u4_daycnt_bfr > u4_g_DATE_CLK_DAYCNT_MAX)){
+    if((st_ap_log->u4_daycnt_bfr <= u4_t_daycntmin) ||
+       (st_ap_log->u4_daycnt_bfr >= u4_g_DATE_CLK_DAYCNT_MAX)){
 
         u1_t_er_chk |= (U1)DATE_CLK_EAS_DAYCNT_BUE;
     }
 
-    st_ap_log->u1_rtc_rea = u1_g_DateclkIfRtcRead(s2_s_dateclk_calsubsecond, &(st_ap_log->u4_hhmmss_aft));
+    st_ap_log->u1_rtc_rea  = u1_g_DateclkIfRtcRead(&(st_ap_log->u4_hhmmss_aft),&(st_ap_log->u4_daycnt_aft));
+    u4_s_DateclkDateSiAns(st_ap_log->u1_rtc_rea);
+    st_ap_log->u1_rtc_rea &= (U1)RTCLK_STSBIT_CLKDAY_SET_MASK;
     if(st_ap_log->u1_rtc_rea != (U1)DATE_CLK_IF_RTC_RUN){
 
         u1_t_er_chk |= (U1)DATE_CLK_EAS_RTC_TC_UNE;
-    }
-    else if(u1_t_frmt == (U1)TRUE){
 
-        st_ap_log->u4_sec_elpsd = u4_s_DateclkSecElpsd(st_ap_log->u4_hhmmss_bfr, st_ap_log->u4_hhmmss_aft);
-        if(st_ap_log->u4_sec_elpsd > u4_g_DATE_CLK_RTC_SYNC_MAX){
-
+        if((st_ap_log->u1_rtc_rea == (U1)DATE_CLK_IF_I2C_ERR)||
+           (st_ap_log->u1_rtc_rea == (U1)DATE_CLK_IF_TIM_NOREAD)){
             u1_t_er_chk |= (U1)DATE_CLK_EAS_RTC_BU_NSE;
         }
     }
@@ -979,7 +665,7 @@ static void    vd_s_DateclkSyncUpdt(ST_DATE_CLK_LOG * st_ap_log, const U1 u1_a_A
 #endif /* #if (DATE_CLK_SYNC_ACT_RTC_RES == DATE_CLK_ADJ_HHMMSS) */
     u1_t_bit = (u1_t_act & (U1)DATE_CLK_SYNC_ACT_RTC_RES) | (u1_a_ADJ & (U1)DATE_CLK_ADJ_HHMMSS);
     if(u1_t_bit == (U1)DATE_CLK_SYNC_ACT_RTC_RES){
-        st_ap_log->u1_rtc_sta = u1_g_DateclkIfRtcStart(st_ap_log->u4_hhmmss_aft, s2_s_dateclk_calsubsecond);
+        st_ap_log->u1_rtc_sta = u1_g_DateclkIfRtcStart(st_ap_log->u4_hhmmss_aft, st_ap_log->u4_daycnt_aft);
     }
 }
 /*===================================================================================================================================*/
@@ -1054,34 +740,6 @@ static void    vd_s_DateclkBackUpdt(const U1 u1_a_BEGIN, const U1 u1_a_END, cons
     }
 }
 /*===================================================================================================================================*/
-/*  static U4      u4_s_DateclkSecElpsd(const U4 u4_a_LAST, const U4 u4_a_NEXT)                                                      */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static U4      u4_s_DateclkSecElpsd(const U4 u4_a_LAST, const U4 u4_a_NEXT)
-{
-    U4                          u4_t_sec_last;
-    U4                          u4_t_sec_next;
-    U4                          u4_t_sec_elpsd;
-
-    u4_t_sec_last = u4_g_HhmmssToSeconds(u4_a_LAST);
-    u4_t_sec_next = u4_g_HhmmssToSeconds(u4_a_NEXT);
-
-    if((u4_t_sec_last >= (U4)HHMMSS_24HR_TO_SE) ||
-       (u4_t_sec_next >= (U4)HHMMSS_24HR_TO_SE)){
-        u4_t_sec_elpsd = (U4)U4_MAX;
-    }
-    else if(u4_t_sec_last <= u4_t_sec_next){
-        u4_t_sec_elpsd = u4_t_sec_next - u4_t_sec_last;
-    }
-    else{
-        u4_t_sec_elpsd = ((U4)HHMMSS_24HR_TO_SE + u4_t_sec_next) - u4_t_sec_last;
-    }
-
-    return(u4_t_sec_elpsd);
-}
-/*===================================================================================================================================*/
 /*  static void    vd_s_DateclkAdjUpdt(const ST_DATE_CLK_LOG * st_ap_LOG)                                                            */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
@@ -1115,52 +773,6 @@ static void    vd_s_DateclkAdjUpdt(const ST_DATE_CLK_LOG * st_ap_LOG)
     }
 
     u1_s_dateclk_adj_rqbit &= u1_t_rqbit;
-}
-/*===================================================================================================================================*/
-/*  static U4      u4_s_DateclkDayIncrmnt(const U4 u4_a_HHMMSS_LATEST, const U4 u4_a_HHMMSS_NEXT)                                    */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static U4      u4_s_DateclkDayIncrmnt(const U4 u4_a_HHMMSS_LATEST, const U4 u4_a_HHMMSS_NEXT)
-{
-    U4                          u4_t_hr_latest;
-    U4                          u4_t_hr_next;
-    U4                          u4_t_daycnt_next;
-
-    u4_t_hr_latest = (u4_a_HHMMSS_LATEST & (U4)HHMMSS_BIT_HR) >> HHMMSS_LSB_HR;
-    u4_t_hr_next   = (u4_a_HHMMSS_NEXT   & (U4)HHMMSS_BIT_HR) >> HHMMSS_LSB_HR;
-
-    if(u4_t_hr_next < u4_t_hr_latest){
-        u4_t_daycnt_next = (U4)1U;
-    }
-    else{
-        u4_t_daycnt_next = (U4)0U;
-    }
-
-    return(u4_t_daycnt_next);
-}
-/*===================================================================================================================================*/
-/*  static void    vd_s_DateclkSWOTchk(const ST_DATE_CLK_LOG * st_ap_LOG)                                                            */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void    vd_s_DateclkSWOTchk(const ST_DATE_CLK_LOG * st_ap_LOG)
-{
-    if((st_ap_LOG->u1_rtc_sta   == (U1)DATE_CLK_IF_RTC_RUN) ||
-       (st_ap_LOG->u4_sec_elpsd >  (U4)0U                 )){
-
-        u2_s_dateclk_swot_elpsd = (U2)0U;
-    }
-    else if((st_ap_LOG->u1_callpt    == (U1)DATE_CLK_LOG_CP_MAI) &&
-            (u2_s_dateclk_swot_elpsd <  (U2)U2_MAX             )){
-
-        u2_s_dateclk_swot_elpsd++;
-    }
-    else{
-        /* do nothing */
-    }
 }
 /*===================================================================================================================================*/
 /*  static inline void    vd_s_DateclkSyncHhmmssUpdt(const U1 u1_a_ACT, ST_DATE_CLK_LOG * st_ap_log)                                 */
@@ -1210,14 +822,6 @@ static inline void    vd_s_DateclkSyncDaycntUpdt(const U1 u1_a_ACT, ST_DATE_CLK_
     u1_t_act = u1_a_ACT & (U1)DATE_CLK_SYNC_ACT_BIT_DAYC;
     switch(u1_t_act){
         case DATE_CLK_SYNC_ACT_DAYC_INC:
-            st_ap_log->u4_daycnt_aft  = u4_s_DateclkDayIncrmnt(st_ap_log->u4_hhmmss_bfr, st_ap_log->u4_hhmmss_aft);
-            if(st_ap_log->u4_daycnt_bfr < u4_g_DATE_CLK_DAYCNT_MAX){
-                /* Intentional wrap-around */
-                st_ap_log->u4_daycnt_aft += st_ap_log->u4_daycnt_bfr;
-            }
-            else{
-                st_ap_log->u4_daycnt_aft  = u4_g_DATE_CLK_DAYCNT_MAX;
-            }
             break;
         case DATE_CLK_SYNC_ACT_DAYC_LAS:
             st_ap_log->u4_daycnt_aft = st_ap_log->u4_daycnt_bfr;
@@ -1226,178 +830,14 @@ static inline void    vd_s_DateclkSyncDaycntUpdt(const U1 u1_a_ACT, ST_DATE_CLK_
         default:
             u4_t_daycntmin = u4_s_DateclkGetDayCntMinVal();
             u4_t_daycnt = st_sp_dateclk_back[DATE_CLK_BACK_INI].u4_daycnt;
-            if((u4_t_daycnt >= u4_t_daycntmin) &&
-               (u4_t_daycnt <= u4_g_DATE_CLK_DAYCNT_MAX)){
+            if((u4_t_daycnt > u4_t_daycntmin) &&
+               (u4_t_daycnt < u4_g_DATE_CLK_DAYCNT_MAX)){
                 st_ap_log->u4_daycnt_aft = u4_t_daycnt;
             }
             else{
                 st_ap_log->u4_daycnt_aft = u4_t_daycntmin;
             }
             break;
-    }
-}
-/*===================================================================================================================================*/
-/*  static U4      u4_s_DateclkSyncFrt(const U4 u4_a_SEC_ELPSD, const U1 u1_a_RTC_STA)                                               */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static U4      u4_s_DateclkSyncFrt(const U4 u4_a_SEC_ELPSD, const U1 u1_a_RTC_STA)
-{
-    /* ----------------------------------------------------------------------------------- */
-    /* Warning :                                                                           */
-    /* ----------------------------------------------------------------------------------- */
-    /* u4_s_dateclk_gpt_frt and u4_s_dateclk_ope_run shall be intialized with zero at      */
-    /* MCAL/startup.                                                                       */
-    /* ----------------------------------------------------------------------------------- */
-
-    static const U4             u4_s_DATE_CLK_FRT_RTC_UNK = ((U4)DATE_CLK_MAIN_TICK * 2U) + (U4)DATE_CLK_ETM_SEC;
-
-    U4                          u4_t_frt_last;
-    U4                          u4_t_frt_next;
-    U4                          u4_t_frt_max;
-
-    U4                          u4_t_rtc_next;
-    U4                          u4_t_rtc_unk;
-
-    U4                          u4_t_gpt_next;
-    U4                          u4_t_gpt_elpsd;
-
-    u4_t_frt_last = u4_s_dateclk_frt_elpsd;
-    if(u4_s_dateclk_ope_run == (U4)DATE_CLK_OPE_RUN){
-
-        u4_t_gpt_next   = u4_g_DateclkIfGptFrt();
-        u4_t_gpt_elpsd  = u4_t_gpt_next - u4_s_dateclk_gpt_frt;
-        u4_t_frt_next   = u4_t_gpt_elpsd / (U4)DATE_CLK_GPT_1_MSEC;
-        u4_t_gpt_elpsd -= (u4_t_gpt_elpsd % (U4)DATE_CLK_GPT_1_MSEC);
-
-        /* Intentional wrap-around */
-        u4_t_frt_next  += u4_t_frt_last;
-    }
-    else{
-
-        u4_t_gpt_next   = u4_s_dateclk_gpt_frt;
-        u4_t_gpt_elpsd  = (U4)0U;
-        u4_t_frt_next   = u4_t_frt_last;
-    }
-
-    u4_t_rtc_next = u4_s_dateclk_rtc_elpsd;
-    if(u1_a_RTC_STA == (U1)DATE_CLK_IF_RTC_RUN){
-
-        /* Intentional wrap-around */
-        u4_t_gpt_next = u4_s_dateclk_gpt_frt + u4_t_gpt_elpsd;
-        u4_t_rtc_next = u4_t_frt_next & (U4)DATE_CLK_FRT_MAX;
-        u4_t_frt_next = u4_t_rtc_next;
-    }
-    else if(u4_a_SEC_ELPSD == (U4)0U){
-
-        u4_t_gpt_next = u4_s_dateclk_gpt_frt + u4_t_gpt_elpsd;
-        u4_t_rtc_unk  = u4_t_rtc_next + u4_s_DATE_CLK_FRT_RTC_UNK;
-
-        /* Intentional wrap-around */
-        u4_t_frt_max  = u4_t_rtc_next + (U4)DATE_CLK_ETM_SEC;
-        if(u4_t_rtc_next > (U4)DATE_CLK_FRT_MAX){
-
-            u4_t_frt_next &= (U4)DATE_CLK_FRT_MAX;
-        }
-        else if(u4_t_frt_next >= u4_t_rtc_unk){
-
-            u4_t_frt_next &= (U4)DATE_CLK_FRT_MAX;
-            u4_t_rtc_next  = (U4)DATE_CLK_FRT_UNK;
-        }
-        else if(u4_t_frt_next > u4_t_frt_max){
-
-            u4_t_frt_next  = u4_t_frt_last;
-            u4_t_gpt_next  = u4_s_dateclk_gpt_frt;
-        }
-        else{
-            /* do nothing */
-        }
-    }
-    else if(u4_t_rtc_next > (U4)DATE_CLK_FRT_MAX){
-
-        u4_t_gpt_next = u4_s_dateclk_gpt_frt + u4_t_gpt_elpsd;
-        u4_t_rtc_next = u4_t_frt_next & (U4)DATE_CLK_FRT_MAX;
-        u4_t_frt_next = u4_t_rtc_next;
-    }
-    else{
-
-     /* u4_t_gpt_next = u4_g_DateclkIfGptFrt() or 0U; */
-
-        /* Intentional wrap-around */
-        u4_t_rtc_next += (u4_a_SEC_ELPSD * (U4)DATE_CLK_ETM_SEC);
-        if(u4_t_rtc_next >= u4_t_frt_last){
-
-            u4_t_frt_next = u4_t_rtc_next & (U4)DATE_CLK_FRT_MAX;
-            u4_t_rtc_next = u4_t_frt_next;
-        }
-        else{
-
-            u4_t_rtc_next = u4_t_frt_next & (U4)DATE_CLK_FRT_MAX;
-            u4_t_frt_next = u4_t_rtc_next;
-        }
-    }
-
-    u4_s_dateclk_frt_elpsd = u4_t_frt_next;
-    u4_s_dateclk_rtc_elpsd = u4_t_rtc_next;
-    u4_s_dateclk_gpt_frt   = u4_t_gpt_next;
-
-    return(u4_t_frt_next);
-}
-/*===================================================================================================================================*/
-/*  static void    vd_s_DateclkEtmUpdt(const U4 u4_a_FRT)                                                                            */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void    vd_s_DateclkEtmUpdt(const U4 u4_a_FRT)
-{
-    U4                          u4_t_ch;
-    U4                          u4_t_tout;
-    U4                          u4_t_frt;
-    U4                          u4_t_elpsd;
-
-    if(u4_a_FRT >= (U4)DATE_CLK_FRT_UNK){
-
-        for(u4_t_ch = (U4)0; u4_t_ch < (U4)u1_g_DATE_CLK_ETM_NUM_CH; u4_t_ch++){
-            u4_gp_dateclk_etm_frt[u4_t_ch] = (U4)DATE_CLK_FRT_UNK;
-        }
-    }
-    else{
-
-        u4_t_tout = u4_s_dateclk_tmrwk_tout;
-        if(u4_t_tout <= (U4)DATE_CLK_ETM_MAX){
-
-            u4_t_frt   = u4_gp_dateclk_etm_frt[DATE_CLK_ETM_CH_TMRWK];
-
-            /* Intentional wrap-around */
-            u4_t_elpsd = (u4_a_FRT - u4_t_frt) & (U4)DATE_CLK_FRT_MAX;
-            if((u4_t_frt   <= (U4)DATE_CLK_FRT_MAX) &&
-               (u4_t_elpsd >= u4_t_tout           )){
-
-                u4_gp_dateclk_etm_frt[DATE_CLK_ETM_CH_TMRWK] = (U4)DATE_CLK_FRT_UNK;
-            }
-
-            u4_t_ch = (U4)1U;
-        }
-        else{
-            u4_t_ch = (U4)0U;
-        }
-
-        while(u4_t_ch < (U4)u1_g_DATE_CLK_ETM_NUM_CH){
-
-            u4_t_frt   = u4_gp_dateclk_etm_frt[u4_t_ch];
-
-            /* Intentional wrap-around */
-            u4_t_elpsd = (u4_a_FRT - u4_t_frt) & (U4)DATE_CLK_FRT_MAX;
-            if((u4_t_frt   <= (U4)DATE_CLK_FRT_MAX) &&
-               (u4_t_elpsd >  (U4)DATE_CLK_ETM_MAX)){
-
-                u4_gp_dateclk_etm_frt[u4_t_ch] = (U4)DATE_CLK_FRT_UNK;
-            }
-
-            u4_t_ch++;
-        }
     }
 }
 /*===================================================================================================================================*/
@@ -1439,6 +879,65 @@ static U4    u4_s_DateclkGetDayCntMinVal(void)
 
     return u4_t_ret;
 }
+/*===================================================================================================================================*/
+/*  static void  u4_s_DateclkDateSiAns(const U1 u1_a_rtc_rea)                                                                        */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void  u4_s_DateclkDateSiAns(const U1 u1_a_rtc_rea)
+{
+    U1  u1_t_tim;
+    U1  u1_t_cal;
+
+    u1_t_tim = (U1)FALSE;
+    u1_t_cal = (U1)FALSE;
+
+    if (u1_s_dateclk_adj_hhmmss_ans == (U1)DATE_CLK_DATESIREQ_REQ) {
+        if ((u1_a_rtc_rea & (U1)RTCLK_STSBIT_CLKDAY_SET) == (U1)RTCLK_STSBIT_CLKDAY_SET) {
+           u1_s_dateclk_adj_hhmmss_ans = (U1)DATE_CLK_DATESIREQ_WAIT;
+           if (u1_s_dateclk_adj_yymmddwk_ans == (U1)DATE_CLK_DATESIREQ_REQ) {
+               u1_s_dateclk_adj_yymmddwk_ans = (U1)DATE_CLK_DATESIREQ_EXC;
+           }
+        }
+    }
+    else if (u1_s_dateclk_adj_hhmmss_ans == (U1)DATE_CLK_DATESIREQ_WAIT) {
+        if ((u1_a_rtc_rea & (U1)RTCLK_STSBIT_CLKDAY_SET) != (U1)RTCLK_STSBIT_CLKDAY_SET) {
+           u1_t_tim = (U1)TRUE;
+           u1_s_dateclk_adj_hhmmss_ans = (U1)DATE_CLK_DATESIREQ_NON;
+           if (u1_s_dateclk_adj_yymmddwk_ans == (U1)DATE_CLK_DATESIREQ_EXC) {
+               u1_t_cal = (U1)TRUE;
+               u1_s_dateclk_adj_yymmddwk_ans = (U1)DATE_CLK_DATESIREQ_NON;
+           }
+        }
+    }
+    else {
+        u1_s_dateclk_adj_hhmmss_ans = (U1)DATE_CLK_DATESIREQ_NON;
+    }
+
+    if (u1_s_dateclk_adj_yymmddwk_ans == (U1)DATE_CLK_DATESIREQ_REQ) {
+        if ((u1_a_rtc_rea & (U1)RTCLK_STSBIT_DAY_SET) == (U1)RTCLK_STSBIT_DAY_SET) {
+           u1_s_dateclk_adj_yymmddwk_ans = (U1)DATE_CLK_DATESIREQ_WAIT;
+        }
+    }
+    else if (u1_s_dateclk_adj_yymmddwk_ans == (U1)DATE_CLK_DATESIREQ_WAIT) {
+        if ((u1_a_rtc_rea & (U1)RTCLK_STSBIT_DAY_SET) != (U1)RTCLK_STSBIT_DAY_SET) {
+           u1_t_cal = (U1)TRUE;
+           u1_s_dateclk_adj_yymmddwk_ans = (U1)DATE_CLK_DATESIREQ_NON;
+        }
+    }
+    else if (u1_s_dateclk_adj_yymmddwk_ans != (U1)DATE_CLK_DATESIREQ_EXC) {
+        u1_s_dateclk_adj_yymmddwk_ans = (U1)DATE_CLK_DATESIREQ_NON;
+    }
+    else {
+        /* do nothing */
+    }
+
+    if ((u1_t_tim ==(U1)TRUE) || (u1_t_cal == (U1)TRUE)) {
+        vd_g_DateSIComSetRtcCmp(u1_t_tim, u1_t_cal);
+    }
+}
+
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */

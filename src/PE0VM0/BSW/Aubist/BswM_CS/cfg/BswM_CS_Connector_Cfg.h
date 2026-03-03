@@ -46,14 +46,14 @@
 
 
 /* CDD Upper(PduR) API Name */
-#define BSW_BSWM_CS_CFG_FN_CDD1UP_TRGT        (BswM_CS_Cdd1UpTriggerTx)
-#define BSW_BSWM_CS_CFG_FN_CDD1UP_TC          (BswM_CS_Cdd1UpTxConfirmation)
-#define BSW_BSWM_CS_CFG_FN_CDD1UP_RI          (BswM_CS_Cdd1UpRxIndication)
-#define BSW_BSWM_CS_CFG_FN_CDD1UP_SOR         (BswM_CS_Cdd1UpStartOfReception)
-#define BSW_BSWM_CS_CFG_FN_CDD1UP_CPRX        (BswM_CS_Cdd1UpCopyRxData)
-#define BSW_BSWM_CS_CFG_FN_CDD1UP_CPTX        (BswM_CS_Cdd1UpCopyTxData)
-#define BSW_BSWM_CS_CFG_FN_CDD1UP_TPRI        (BswM_CS_Cdd1UpTpRxIndication)
-#define BSW_BSWM_CS_CFG_FN_CDD1UP_TPTC        (BswM_CS_Cdd1UpTpTxConfirmation)
+#define BSW_BSWM_CS_CFG_FN_CDD1UP_TRGT
+#define BSW_BSWM_CS_CFG_FN_CDD1UP_TC
+#define BSW_BSWM_CS_CFG_FN_CDD1UP_RI
+#define BSW_BSWM_CS_CFG_FN_CDD1UP_SOR
+#define BSW_BSWM_CS_CFG_FN_CDD1UP_CPRX
+#define BSW_BSWM_CS_CFG_FN_CDD1UP_CPTX
+#define BSW_BSWM_CS_CFG_FN_CDD1UP_TPRI
+#define BSW_BSWM_CS_CFG_FN_CDD1UP_TPTC
 #define BSW_BSWM_CS_CFG_FN_CDD2UP_TRGT
 #define BSW_BSWM_CS_CFG_FN_CDD2UP_TC
 #define BSW_BSWM_CS_CFG_FN_CDD2UP_RI

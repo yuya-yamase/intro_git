@@ -1,4 +1,4 @@
-/* 5.3.0 */
+/* 5.4.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define ALERT_H_TOWWAR_C_MAJOR                   (5)
-#define ALERT_H_TOWWAR_C_MINOR                   (3)
+#define ALERT_H_TOWWAR_C_MINOR                   (4)
 #define ALERT_H_TOWWAR_C_PATCH                   (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -52,7 +52,7 @@ static U4      u4_s_AlertH_towwarSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static const U4  u4_sp_ALERT_H_TOWWAR_CRIT[ALERT_H_TOWWAR_NUM_DST] = {
-    (U4)0x00000001U,                                                           /* 00 MLFNC_HV2                                       */
+    (U4)0x00000001U,                                                           /* 00 MLFNC_HV                                        */
     (U4)0x00000031U,                                                           /* 01 MLFNC_HV                                        */
     (U4)0x00000041U,                                                           /* 02 MLFNC_HV                                        */
     (U4)0x00000051U,                                                           /* 03 MLFNC_EV                                        */
@@ -61,7 +61,7 @@ static const U4  u4_sp_ALERT_H_TOWWAR_CRIT[ALERT_H_TOWWAR_NUM_DST] = {
     (U4)0x00000001U                                                            /* 06 MLFNC                                           */
 };
 static const U4  u4_sp_ALERT_H_TOWWAR_MASK[ALERT_H_TOWWAR_NUM_DST] = {
-    (U4)0x000001FFU,                                                           /* 00 MLFNC_HV2                                       */
+    (U4)0x000001FFU,                                                           /* 00 MLFNC_HV                                        */
     (U4)0x000001FFU,                                                           /* 01 MLFNC_HV                                        */
     (U4)0x000001DFU,                                                           /* 02 MLFNC_HV                                        */
     (U4)0x000001FFU,                                                           /* 03 MLFNC_EV                                        */
@@ -70,7 +70,7 @@ static const U4  u4_sp_ALERT_H_TOWWAR_MASK[ALERT_H_TOWWAR_NUM_DST] = {
     (U4)0x0000000FU                                                            /* 06 MLFNC                                           */
 };
 static const U1  u1_sp_ALERT_H_TOWWAR_DST[ALERT_H_TOWWAR_NUM_DST] = {
-    (U1)ALERT_REQ_H_TOWWAR_MLFNC_HV2,                                          /* 00 MLFNC_HV2                                       */
+    (U1)ALERT_REQ_H_TOWWAR_MLFNC_HV,                                           /* 00 MLFNC_HV                                        */
     (U1)ALERT_REQ_H_TOWWAR_MLFNC_HV,                                           /* 01 MLFNC_HV                                        */
     (U1)ALERT_REQ_H_TOWWAR_MLFNC_HV,                                           /* 02 MLFNC_HV                                        */
     (U1)ALERT_REQ_H_TOWWAR_MLFNC_EV,                                           /* 03 MLFNC_EV                                        */
@@ -147,11 +147,14 @@ static U4      u4_s_AlertH_towwarSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
 /*  5.2.2     5/14/2021  TN       Fix 800B Bug.                                                                                      */
 /*  5.2.3     6/30/2021  KT       Update for 050D CV(Version update).                                                                */
 /*  5.3.0     5/13/2022  SAO      Fix 050D Bug(RW).                                                                                  */
+/*  5.4.0     1/13/2026  HT       Change for Full_function2 (MET-M_REMWAR-CSTD-2-04-A-C0)                                            */
+/*                                Removed "ALERT_REQ" in order to transfer signal transmission control from the MCU to the SoC       */
 /*                                                                                                                                   */
 /*  * SK   = Satoshi Kasai, NTTD MSE                                                                                                 */
 /*  * MO   = Masaya Ozawa, NTTD MSE                                                                                                  */
 /*  * TN   = Toshiaki Nagashima, NTTD MSE                                                                                            */
 /*  * KT   = Kenichi Takahashi, NTTD MSE                                                                                             */
 /*  * SAO  = Sachiko Oono, NTTD MSE                                                                                                  */
+/*  * HT   = Hibiki Tanii, KSE                                                                                                       */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

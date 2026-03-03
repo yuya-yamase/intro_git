@@ -158,7 +158,7 @@ void    vd_g_vCANTxAckRxInd(const uint8 u1_a_CTRLR, const uint8 u1_a_MBOX, const
 
     u1_t_ctrlr = u1_VCAN_TXA_CTRLR(u1_a_CTRLR);
     if((u1_t_ctrlr < u1_g_VCAN_TXA_NUM_CTRLR                 ) &&
-       (u1_a_MBOX  < u1_gp_VCAN_TXA_NRMB_BY_CTRLR[u1_a_CTRLR])){
+       (u1_a_MBOX  < u1_gp_VCAN_TXA_NRMB_BY_CTRLR[u1_t_ctrlr])){
 
         u4_tp_RSP  = u4p_gp_VCAN_TXA_RSP_BY_RX[u1_t_ctrlr];
         u1_t_wai   = u1_VCAN_TXA_RSP_WAI(u1_a_MBOX); 

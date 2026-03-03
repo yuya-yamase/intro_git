@@ -36,7 +36,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define TRIPSNSR_VEH_STOP_THSLD                 (175U)          /* 1.75 * VEHSPD_1_KMPH                                              */
 
-#define TRIPSNSR_NUM_SNSR                       (8U)
+#define TRIPSNSR_NUM_SNSR                       (4U)
 
 #define TRIPSNSR_EVDTE_VALID                    (0x00U)
 #define TRIPSNSR_EVDTE_UNKNOWN                  (0x01U)
@@ -72,8 +72,6 @@ typedef struct {
 /* U1           u1_g_TripsnsrPtsOn(void);                                                                                            */
 /* U1           u1_g_TripsnsrVspKmph(U2 * u2_ap_kmph);                                                                               */
 
-U1              u1_g_TripsnsrCfgEcoMode(void);
-U1              u1_g_TripsnsrCfgGetECOMODE3(U1 * u1p_a_ecomode);
 
 void            vd_g_TripsnsrCfgElpsdtmInit(void);
 U4              u4_g_TripsnsrCfgElpsdtmGetDlt(void);

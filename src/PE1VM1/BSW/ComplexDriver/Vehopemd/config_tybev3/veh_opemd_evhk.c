@@ -25,6 +25,8 @@
 #include "alert.h"
 #include "gauge.h"
 #include "vardef.h"
+#include "datesi_met.h"
+#include "omavrchk.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -38,7 +40,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define VEH_OPEMD_NUM_EVHK                      (4U)
+#define VEH_OPEMD_NUM_EVHK                      (6U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -74,11 +76,14 @@ void    vd_g_VehopemdCfgEvhk(const U4 u4_a_MDBIT, const U4 u4_a_EVBIT)
 #if (VEH_OPEMD_NUM_EVHK > 0U)
     static const ST_VEH_OPEMD_EVHK   st_sp_VEH_OPEMD_EVHK[VEH_OPEMD_NUM_EVHK] = {
         {&vd_g_VehspdOpemdEvhk,         (U4)VEH_OPEMD_EVBIT_IG_R_TO_ON    },
+        {&vd_g_OmaVrChkInitIgOnEvhk,    (U4)VEH_OPEMD_EVBIT_IG_R_TO_ON    },
         {&vd_g_AlertOpemdEvhk,          ((U4)VEH_OPEMD_EVBIT_IG_R_TO_ON  |
                                          (U4)VEH_OPEMD_EVBIT_IG_R_TO_OFF) },
         {&vd_g_GaugeOpemdEvhk,          ((U4)VEH_OPEMD_EVBIT_IG_R_TO_ON  |
                                          (U4)VEH_OPEMD_EVBIT_IG_R_TO_OFF) },
-        {&vd_g_VardefEsOptIgoffEvhk,    (U4)VEH_OPEMD_EVBIT_IG_R_TO_OFF   }
+        {&vd_g_VardefEsOptIgoffEvhk,    (U4)VEH_OPEMD_EVBIT_IG_R_TO_OFF   },
+        {&vd_g_DateSIOpemdEvhk,         ((U4)VEH_OPEMD_EVBIT_IG_R_TO_ON  |
+                                         (U4)VEH_OPEMD_EVBIT_IG_R_TO_OFF) }
     };
 
     U4                                u4_t_cnt;
@@ -119,10 +124,16 @@ void    vd_g_VehopemdCfgEvhk(const U4 u4_a_MDBIT, const U4 u4_a_EVBIT)
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  BEV-1    10/22/2025  TS       Change for BEV rebase.                                                                             */
+/*  BEV-2    01/06/2026  MN       Change for BEV Full_Function_2.                                                                    */
+/*                                MET-M_CLKCTL-CSTD-0-06-A-C1                                                                        */
+/*                                CHG: Change to store DTF date information only when both IG changes and the date changes.          */
+/*  BEV-2     2/ 9/2026  KO       Add IG-ON init for message authentication result.                                                  */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
 /*  * HU   = Hayato Usui, Denso Create                                                                                               */
 /*  * ST   = Satoshi Tanaka, Denso Create                                                                                            */
 /*  * TS   = Takuo Suganuma, Denso Techno                                                                                            */
+/*  * MN   = Mikiya Negishi, KSE                                                                                                     */
+/*  * KO   = Kazuto Oishi, Denso Techno                                                                                              */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

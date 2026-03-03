@@ -11,7 +11,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define XSPI_IVI_PRIVATE_H_MAJOR                (0)
+#define XSPI_IVI_PRIVATE_H_MAJOR                (1)
 #define XSPI_IVI_PRIVATE_H_MINOR                (0)
 #define XSPI_IVI_PRIVATE_H_PATCH                (0)
 
@@ -40,7 +40,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define XSPI_IVI_HEADER                     (8U)
 
-#define XSPI_TASK_CNT_NUM                   (14U)
+#define XSPI_TASK_CNT_NUM                   (16U)
 #define XSPI_TASK_CNT_CAMERA                ( 0U)
 #define XSPI_TASK_CNT_CAMERA_SYNC           ( 1U)
 #define XSPI_TASK_CNT_POWER_STS             ( 2U)
@@ -55,6 +55,8 @@
 #define XSPI_TASK_CNT_POWER_BMONI           (11U)
 #define XSPI_TASK_CNT_CLOCK_UTC             (12U)
 #define XSPI_TASK_CNT_DIAG_TOUT             (13U)
+#define XSPI_TASK_CNT_PWRSW_ON_TIME         (14U)
+#define XSPI_TASK_CNT_RESET_PORT_OFF_TIME   (15U)
 
 #define XSPI_IVI_TASK_TIME                  (1U)     
 

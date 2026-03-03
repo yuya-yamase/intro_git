@@ -1,4 +1,4 @@
-/* 2.1.0 */
+/* 2.2.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define PTSRUNTM_HRS_C_MAJOR                    (2)
-#define PTSRUNTM_HRS_C_MINOR                    (1)
+#define PTSRUNTM_HRS_C_MINOR                    (2)
 #define PTSRUNTM_HRS_C_PATCH                    (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -125,42 +125,6 @@ static const ST_PTSRUNTM_CNTT                   st_sp_PTSRUNTM_CNTTS_CFG[PTSRUNT
         (U1)TRUE,                           /* u1_isrollcnt       */
 
         (U1)TRIPCOM_MS_ID_PTSRUNTM_TR_B_ET  /* u1_ms_ptsruntm_id  */
-    },
-    /*  #define ECOSTPTM_CNTT_LC                        (2)         */
-    {
-        (U2)TRIPCOM_RSTRQBIT_M_ECOSTPTM_LC, /* u2_manualreset     */
-        (U2)0U,                             /* u2_autoreset       */
-        (U2)TRIPCOM_VEHSTS_ECORUNUNK,       /* u2_unknownvsts     */
-        (U2)TRIPCOM_VEHSTS_ECORUNINV,       /* u2_invalidvsts     */
-        (U1)TRIPCOM_DELTA_IDS_ELPSD_SEC,    /* u1_srcch           */
-        (U4)PTSRUNTM_HRS_99H59M59S,         /* u4_max             */
-        (U1)FALSE,                          /* u1_isrollcnt       */
-
-        (U1)TRIPCOM_MS_ID_ECOSTPTM_LC_ET    /* u1_ms_ptsruntm_id  */
-    },
-    /*  #define ECOSTPTM_CNTT_DC                        (3)         */
-    {
-        (U2)0U,                             /* u2_manualreset     */
-        (U2)TRIPCOM_RSTRQBIT_A_DRVCYC,      /* u2_autoreset       */
-        (U2)TRIPCOM_VEHSTS_ECORUNUNK,       /* u2_unknownvsts     */
-        (U2)TRIPCOM_VEHSTS_ECORUNINV,       /* u2_invalidvsts     */
-        (U1)TRIPCOM_DELTA_IDS_ELPSD_SEC,    /* u1_srcch           */
-        (U4)PTSRUNTM_HRS_99H59M59S,         /* u4_max             */
-        (U1)FALSE,                          /* u1_isrollcnt       */
-
-        (U1)TRIPCOM_MS_ID_ECOSTPTM_DC_ET    /* u1_ms_ptsruntm_id  */
-    },
-    /*  #define ECOSTPTM_CNTT_ST                        (4)         */
-    {
-        (U2)0U,                             /* u2_manualreset     */
-        (U2)TRIPCOM_RSTRQBIT_A_ECOSTP,      /* u2_autoreset       */
-        (U2)TRIPCOM_VEHSTS_ECORUNUNK,       /* u2_unknownvsts     */
-        (U2)TRIPCOM_VEHSTS_ECORUNINV,       /* u2_invalidvsts     */
-        (U1)TRIPCOM_DELTA_IDS_ELPSD_SEC,    /* u1_srcch           */
-        (U4)PTSRUNTM_HRS_99H59M59S,         /* u4_max             */
-        (U1)TRUE,                           /* u1_isrollcnt       */
-
-        (U1)TRIPCOM_MS_ID_ECOSTPTM_ST_ET    /* u1_ms_ptsruntm_id  */
     }
 };
 
@@ -488,11 +452,13 @@ static U1       u1_s_PtsRunTmHrsImmwRunAct(const ST_PTSRUNTM_CNTT * stp_a_CNTT, 
 /*  2.0.2    10/25/2021  TA(M)    Supports TripA and TripB.                                                                          */
 /*  2.0.3    10/27/2021  TK       QAC supported.                                                                                     */
 /*  2.1.0    02/18/2025  MaO(M)   Add privacy data delete/result API                                                                 */
+/*  2.2.0    02/12/2026  EA       Deleted/Deactivated other than BEV Powertrain processes                                            */
 /*                                                                                                                                   */
 /*  * HY   = Hidefumi Yoshida, Denso                                                                                                 */
 /*  * YA   = Yuhei Aoyama, DensoTechno                                                                                               */
 /*  * TA(M)= Teruyuki Anjima, NTT Data MSE                                                                                           */
 /*  * TK   = Takanori Kuno, Denso Techno                                                                                             */
 /*  * MaO(M) = Masayuki Okada, NTT Data MSE                                                                                          */
+/*  * EA     = Eunice Avelin, DTPH                                                                                                   */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

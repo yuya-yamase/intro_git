@@ -255,7 +255,7 @@ void    vd_g_wChimeCfgReqchk(U4 * u4p_a_reqbit)
         {  (U2)ALERT_CH_S_ADBZR_ACC,        (U1)ALERT_REQ_S_ADBZR_ACC_REQ_BRK,     (U1)WCHIME_REQ_IN_ACC_BRKREQ         >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_IN_ACC_BRKREQ         & (U1)0x1FU)  }, /* MET-S_ADBZR-CSTD-             */
         {  (U2)ALERT_CH_D_SBW_BZ_BSFT,      (U1)ALERT_REQ_D_SBW_BZ_BSFT_DOUBLE,    (U1)WCHIME_REQ_SI_SBW_RJCT           >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_SI_SBW_RJCT           & (U1)0x1FU)  }, /* MET-D_SBW-CSTD-               */
         {  (U2)ALERT_CH_H_ONACCN,           (U1)ALERT_REQ_H_ONACCN_MALFUNC,        (U1)WCHIME_REQ_CO_NACCON             >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_CO_NACCON             & (U1)0x1FU)  }, /* MET-H_ONACCN-CSTD-            */
-        {  (U2)ALERT_CH_H_PEXI_WARN,        (U1)ALERT_REQ_H_PEXI_WARN_MALFUNC,     (U1)WCHIME_REQ_CO_PEXI_HV_NDBW       >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_CO_PEXI_HV_NDBW       & (U1)0x1FU)  }, /* MET-H_PEXI-CSTD-              */
+        {  (U2)ALERT_CH_H_PEXI,             (U1)ALERT_REQ_H_PEXI_MALFUNC,          (U1)WCHIME_REQ_CO_PEXI_HV_NDBW       >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_CO_PEXI_HV_NDBW       & (U1)0x1FU)  }, /* MET-H_PEXI-CSTD-              */
         {  (U2)ALERT_CH_H_ACCHOL,           (U1)ALERT_REQ_H_ACCHOL_MALFUNC,        (U1)WCHIME_REQ_CO_ACCHOL             >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_CO_ACCHOL             & (U1)0x1FU)  }, /* MET-H_ACCHOL-CSTD-            */
         {  (U2)ALERT_CH_H_ACCHOL,           (U1)ALERT_REQ_H_ACCHOL_HVSYSOVHT,      (U1)WCHIME_REQ_CO_ACCHOL             >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_CO_ACCHOL             & (U1)0x1FU)  }, /* MET-H_ACCHOL-CSTD-            */
         {  (U2)ALERT_CH_H_ACCHOL,           (U1)ALERT_REQ_H_ACCHOL_EVSYSOVHT,      (U1)WCHIME_REQ_CO_ACCHOL             >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_CO_ACCHOL             & (U1)0x1FU)  }, /* MET-H_ACCHOL-CSTD-            */
@@ -340,7 +340,6 @@ void    vd_g_wChimeCfgReqchk(U4 * u4p_a_reqbit)
         {  (U2)ALERT_CH_H_TOWWAR,           (U1)ALERT_REQ_H_TOWWAR_MLFNC_HV,       (U1)WCHIME_REQ_IN_TOWWAR             >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_IN_TOWWAR             & (U1)0x1FU)  }, /* MET-H_TOWWAR-CSTD-            */
         {  (U2)ALERT_CH_H_TOWWAR,           (U1)ALERT_REQ_H_TOWWAR_MLFNC_EV,       (U1)WCHIME_REQ_IN_TOWWAR             >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_IN_TOWWAR             & (U1)0x1FU)  }, /* MET-H_TOWWAR-CSTD-            */
         {  (U2)ALERT_CH_H_TOWWAR,           (U1)ALERT_REQ_H_TOWWAR_MLFNC_FCV,      (U1)WCHIME_REQ_IN_TOWWAR             >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_IN_TOWWAR             & (U1)0x1FU)  }, /* MET-H_TOWWAR-CSTD-            */
-        {  (U2)ALERT_CH_H_TOWWAR,           (U1)ALERT_REQ_H_TOWWAR_MLFNC_HV2,      (U1)WCHIME_REQ_IN_TOWWAR             >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_IN_TOWWAR             & (U1)0x1FU)  }, /* MET-H_TOWWAR-CSTD-            */
         {  (U2)ALERT_CH_H_TOWWAR,           (U1)ALERT_REQ_H_TOWWAR_MLFNC,          (U1)WCHIME_REQ_IN_TOWWAR             >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_IN_TOWWAR             & (U1)0x1FU)  }, /* MET-H_TOWWAR-CSTD-            */
         {  (U2)ALERT_CH_S_ADBZR_TMN,        (U1)ALERT_REQ_S_ADBZR_TMN_SINGLE,      (U1)WCHIME_REQ_SI_TMN_LVN            >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_SI_TMN_LVN            & (U1)0x1FU)  }, /* MET-S_ADBZR-CSTD-             */
         {  (U2)ALERT_CH_S_TMBZR_BC_AD,      (U1)ALERT_REQ_S_TMBZR_BC_AD_ANN_2,     (U1)WCHIME_REQ_SI_TMBZR_ANN_PRI2     >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_SI_TMBZR_ANN_PRI2     & (U1)0x1FU)  }, /* MET-S_TMBZR-CST0              */
@@ -485,7 +484,7 @@ static  void    vd_s_wChimeCfgSftposRjctReqchk(U4* u4p_a_reqbit)
     u1_t_edge_jdg = u1_s_wchime_sftpos_si_last ^ u1_t_sftpos_rjct_req;
 
     if(u1_t_edge_jdg != (U1)0U){
-        if(u1_t_sftpos_rjct_req == (U1)ALERT_REQ_D_SFTPOS_B_RJTB_DBL1){
+        if(u1_t_sftpos_rjct_req == (U1)ALERT_REQ_D_SFTPOS_B_RJTB_DBL){
             vd_s_wChimeCfgReqOn(u4p_a_reqbit, (U1)WCHIME_REQ_SI_SFTPOS_NML);
         }
     }
@@ -689,7 +688,7 @@ static  void    vd_s_wChimeCfgMindspDelchk(U4 * u4p_a_reqbit)
 {
     U1 u1_t_indsp;
 
-    u1_t_indsp = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_INDSPDALT);
+    u1_t_indsp = u1_g_VardefIndSpdBzr();
 
     if(u1_t_indsp == (U1)FALSE){
         vd_s_wChimeCfgReqDel(u4p_a_reqbit, (U1)WCHIME_REQ_SI_MINDSPWR_LV1);
@@ -706,7 +705,7 @@ static  void    vd_s_wChimeCfgAppDelchk(U4 * u4p_a_reqbit)
 {
     U1 u1_t_app;
 
-    u1_t_app = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_AUTOP);
+    u1_t_app  = u1_g_VardefAutopAva();
 
     if(u1_t_app == (U1)FALSE){
         vd_s_wChimeCfgReqDel(u4p_a_reqbit, (U1)WCHIME_REQ_SI_APP_DIS_ASSIST);
@@ -856,6 +855,16 @@ static  void    vd_s_wChimeCfgReqDel(U4 * u4_ap_reqbit, const U1 u1_a_REQ_ID)
 /*  BEV-5     12/12/2025 ED       Deleted function process request for WCHIME_REQ_SI_APP_CMPLT                                       */
 /*  BEV-6     12/18/2025 ED       Change Macro name of MET-S_ADBZR-CSTD-0-06-A-C0                                                    */
 /*  BEV-7     12/19/2025 KH       Update for BEV System_Consideration_ADAS.(C_TPMS / H_BATTRW)                                       */
+/*  BEV-8      1/14/2025 JS       Change for BEV3CDCMET-2608                                                                         */
+/*  BEV-9     01/23/2026 NI       Change config for BEV Full_Function2                                                               */
+/*                                MET-D_SFTPOS-CSTD-1-00-B-C0.                                                                       */
+/*                                Change Name from RJTB_DBL1 to RJTB_DBL                                                             */
+/*  BEV-10    01/30/2026 YN       Change config for BEV FF2.(MET-M_DESTVARI-CSTD-0-01)                                               */
+/*  BEV-11    01/15/2026 HT       Change for Full_function2 (MET-M_REMWAR-CSTD-2-04-A-C0)                                            */
+/*                                Removed "ALERT_REQ" in order to transfer signal transmission control from the MCU to the SoC       */
+/*  BEV-12    02/02/2026 YH       Change config for BEV Full_Function_2.                                                             */
+/*                                MET-S_ADMID-CSTD-0-07-B-C0/MET-S_ADBZR-CSTD-0-06-A-C0                                              */
+/*                                Separate AUTOP function judgement into AP_RMT and AP_NORMT.                                        */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
 /*  * ToN  = Toshiharu Nagata, Denso Techno                                                                                          */
@@ -879,5 +888,10 @@ static  void    vd_s_wChimeCfgReqDel(U4 * u4_ap_reqbit, const U1 u1_a_REQ_ID)
 /*  * DT   = Dj Tutanes, DTPH                                                                                                        */
 /*  * ED   = Emoh Dagasdas, DTPH                                                                                                     */
 /*  * KH   = Kiko Huerte, DTPH                                                                                                       */
+/*  * JS   = Jun Sugiyama, KSE                                                                                                       */
+/*  * NI   = Naoki Inagaki, KSE                                                                                                      */
+/*  * YH   = Yuki Hatakeyama, KSE                                                                                                    */
+/*  * YN   = Yujiro Nagaya, Denso Techno                                                                                             */
+/*  * HT   = Hibiki Tanii, KSE                                                                                                       */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

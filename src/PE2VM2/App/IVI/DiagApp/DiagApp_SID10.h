@@ -37,6 +37,7 @@
 /*  Function Prototypes                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 void            vd_g_DiagAppSID10Init(void);
+void            vd_g_DiagAppSID10SoCResetInit(void);
 void            vd_g_DiagAppSID10Respons(const U1 * u1_ap_DATA);
 void            vd_g_DiagAppSID10Request(const U1 u1_a_SES, const U1 u1_a_SES_BEF);
 U1              u1_g_DiagAppSID10SesCtrlChk(const U1 u1_a_SES);

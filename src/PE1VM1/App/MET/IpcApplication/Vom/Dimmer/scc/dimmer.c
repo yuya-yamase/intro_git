@@ -1,4 +1,4 @@
-/* 1.5.0 */
+/* 1.7.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,13 +10,15 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define DIMMER_C_MAJOR                           (1)
-#define DIMMER_C_MINOR                           (5)
+#define DIMMER_C_MINOR                           (7)
 #define DIMMER_C_PATCH                           (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "dimmer_cfg_private.h"
+
+#include "mcst.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -151,15 +153,11 @@ U2      u2_g_DimLvlUsadjust(const U1 u1_a_DAYNIGHT)
 void    vd_g_DimMcstReadHook(void)
 {
     if(u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_LVL_DAY] < (U2)DIM_USADJ_BY_SW_NUM_LVL){
-#if 0   /* BEV Rebase provisionally */
         vd_g_McstBfPutPreUser((U1)MCST_BFI_RHEO_DAY, (U4)u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_LVL_DAY]);
-#endif   /* BEV Rebase provisionally */
     }
 
     if(u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_LVL_NIGHT] < (U2)DIM_USADJ_BY_SW_NUM_LVL){
-#if 0   /* BEV Rebase provisionally */
         vd_g_McstBfPutPreUser((U1)MCST_BFI_RHEO_NIGHT, (U4)u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_LVL_NIGHT]);
-#endif   /* BEV Rebase provisionally */
     }
 
     vd_g_DimUsadjbySwCfgNvmRead(&u2_sp_dim_lvl_usadjust[0]);
@@ -175,7 +173,7 @@ void    vd_g_DimMcstDataResetHook(void)
     vd_g_DimUsadjbySwCfgNvmRead(&u2_sp_dim_lvl_usadjust[0]);
 }
 /*===================================================================================================================================*/
-/*  U1      u1_g_DimSwVrUpDown(void)                                                                                          */
+/*  U1      u1_g_DimSwVrUpDown(void)                                                                                                 */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
@@ -183,6 +181,26 @@ void    vd_g_DimMcstDataResetHook(void)
 U1      u1_g_DimSwVrUpDown(void)
 {
     return(u1_g_DimUsadjbySwVrUpDown());
+}
+/*===================================================================================================================================*/
+/*  U1      u1_g_DimSwOperableSts(void)                                                                                              */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+U1      u1_g_DimSwOperableSts(void)
+{
+    return(u1_g_DimUsadjbySwOperableSts());
+}
+/*===================================================================================================================================*/
+/*  U1      u1_g_DimDrTxDninf(void)                                                                                                  */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+U1      u1_g_DimDrTxDninf(void)
+{
+    return(u1_g_DimDaynightCfgDrTxDninf());
 }
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
@@ -200,9 +218,13 @@ U1      u1_g_DimSwVrUpDown(void)
 /*  1.4.0     1/12/2021  KM       Add customize Data Reset Hook Function                                                             */
 /*  1.4.1     1/26/2021  KM       dimmer_cfg v1.4.0 -> v1.4.1.                                                                       */
 /*  1.5.0     2/08/2021  KM       dimmer_cfg v1.4.1 -> v1.5.0.                                                                       */
+/*  1.6.0     2/12/2026  YN       dimmer_cfg v1.5.0 -> v1.6.0.                                                                       */
+/*  1.7.0    02/19/2026  KO       Add process for SW operable status judgement.                                                      */
 /*                                                                                                                                   */
 /*  * TN = Takashi Nagai, DENSO                                                                                                      */
 /*  * SH = Shota Higashide                                                                                                           */
 /*  * KM = Kota Matoba                                                                                                               */
+/*  * YN = Yujiro Nagaya, Denso Techno                                                                                               */
+/*  * KO = Kazuto Oishi,  Denso Techno                                                                                               */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

@@ -1,4 +1,4 @@
-/* 1.3.0 */
+/* 1.4.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define HMIMAINT_C_MAJOR                         (1)
-#define HMIMAINT_C_MINOR                         (3)
+#define HMIMAINT_C_MINOR                         (4)
 #define HMIMAINT_C_PATCH                         (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -20,7 +20,6 @@
 #include "odo_om_rst_if.h"
 
 #include "hmimaint.h"
-#include "vardef.h"
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -80,28 +79,16 @@ void    vd_g_HmiMaintMainTask(void)
 {
     static const U2 u2_s_HMIMAINT_TO = (U2)1000U / (U2)50U;
     U1              u1_t_to;
-    U1              u1_t_exist;
 
     u1_t_to = u1_g_HmiProxyToc(&u2_s_hmimaint_to, u2_s_HMIMAINT_TO);
-    u1_t_exist = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_AISETH);
 
-    if (u1_t_exist == (U1)TRUE){
-        if((u1_s_hmimaint_rstreq == (U1)HMIMAINT_RST) &&
-           (u1_s_hmimaint_rstreq != u1_s_hmimaint_rstreq_pre)){
-            vd_g_OdoOmReset((U1)TRUE);
-        }
-        else{
-            vd_g_OdoOmReset((U1)FALSE);
-        }
-    } else {
-        if((u1_t_to              == (U1)FALSE)        &&
-           (u1_s_hmimaint_rstreq == (U1)HMIMAINT_RST) &&
-           (u1_s_hmimaint_rstreq != u1_s_hmimaint_rstreq_pre)){
-            vd_g_OdoOmReset((U1)TRUE);
-        }
-        else{
-            vd_g_OdoOmReset((U1)FALSE);
-        }
+    if((u1_t_to              == (U1)FALSE)        &&
+       (u1_s_hmimaint_rstreq == (U1)HMIMAINT_RST) &&
+       (u1_s_hmimaint_rstreq != u1_s_hmimaint_rstreq_pre)){
+        vd_g_OdoOmReset((U1)TRUE);
+    }
+    else{
+        vd_g_OdoOmReset((U1)FALSE);
     }
     u1_s_hmimaint_rstreq_pre = u1_s_hmimaint_rstreq;
 }
@@ -114,17 +101,10 @@ void    vd_g_HmiMaintMainTask(void)
 /*===================================================================================================================================*/
 void    vd_g_HmiMaintMetCstmPut(const U4 * u4_ap_REQ)
 {
-    U1 u1_t_exist;
-
-    u1_t_exist = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_AISETH);
-    if(u1_t_exist == (U1)TRUE){
-        /* Ais Do Not Application */
-    }else{
-        if(u4_ap_REQ != vdp_PTR_NA) {
-            u1_s_hmimaint_rstreq = (U1)(u4_ap_REQ[0] & (U4)HMIMAINT_BITMASK);
-        }
-        u2_s_hmimaint_to   = (U2)HMIPROXY_TOC_INI;
+    if(u4_ap_REQ != vdp_PTR_NA) {
+        u1_s_hmimaint_rstreq = (U1)(u4_ap_REQ[0] & (U4)HMIMAINT_BITMASK);
     }
+    u2_s_hmimaint_to = (U2)HMIPROXY_TOC_INI;
 }
 
 /*===================================================================================================================================*/
@@ -139,6 +119,7 @@ void    vd_g_HmiMaintMetCstmPut(const U4 * u4_ap_REQ)
 /*  1.1.0    03/18/2020  TH       Setting for 800B CV.                                                                               */
 /*  1.2.0    01/06/2021  TH       Follow 775B 1A.                                                                                    */
 /*  1.3.0    06/15/2021  TH       Add to Meter Custmize.                                                                             */
+/*  1.4.0    02/09/2026  MA       Delete separate process of AisMM application                                                       */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */

@@ -149,7 +149,7 @@ void    vd_g_Power_Routine(void)
     u1_t_boot = u1_POWER_GET_BOOT();
 
     /* Event Check */
-    if(u1_t_boot == (U1)POWER_IO_STS_HIGH){         /* BOOT = H *//* 暫定 量産時削除 */
+    if(u1_t_boot == (U1)U1_EXTSIGCTRL_SIG_STS_ON){         /* BOOT = H *//* 暫定 量産時削除 */
         u1_t_evt  = (U1)POWER_MODE_EVENT_BOOT_H;
     }
     else if(u1_t_vpsinfos == (U1)POWER_VPSINFOS_OTA){

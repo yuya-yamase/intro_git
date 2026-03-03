@@ -32,13 +32,21 @@
 #define    XSPI_IVI_POWER_GYRO_INI              (3U)
 #define    XSPI_IVI_POWER_POWER_INI             (4U)
 
-#define    XSPI_IVI_POWER_01_BUFSIZ             (6U)    /* ìdåπèÛë‘í ím ÉoÉbÉtÉ@ÉTÉCÉY */
-#define    XSPI_IVI_POWER_01_BYTE2              (0U)    /* äÓñ{ÉXÉeÅ[Ég */
-#define    XSPI_IVI_POWER_01_BYTE3              (1U)    /* ì¡éÍÉXÉeÅ[Ég */
-#define    XSPI_IVI_POWER_01_BYTE4              (2U)    /* OTAì¡éÍÉXÉeÅ[Ég */
-#define    XSPI_IVI_POWER_01_BYTE5              (3U)    /* å©ÇΩñ⁄èÛë‘ */
-#define    XSPI_IVI_POWER_01_BYTE6              (4U)    /* é‘óºìdåπ(ì¡éÍ)ÉXÉeÅ[ÉgëJà⁄íÜÉtÉâÉO */
-#define    XSPI_IVI_POWER_01_BYTE7              (5U)    /* ìrê‚èÛë‘ */
+#define     XSPI_IVI_POWER_RESET_COMP_CAMERA    (0x01U)
+#define     XSPI_IVI_POWER_RESET_COMP_DIAGCAN   (0x02U)
+#define     XSPI_IVI_POWER_RESET_COMP_GYRO      (0x04U)
+#define     XSPI_IVI_POWER_RESET_COMP_CAN       (0x08U)
+#define     XSPI_IVI_POWER_RESET_COMP_CLOCK     (0x10U)
+#define     XSPI_IVI_POWER_RESET_COMP_DTCROB    (0x20U)
+#define     XSPI_IVI_POWER_RESET_COMP_RARNM     (0x40U)
+
+#define    XSPI_IVI_POWER_01_BUFSIZ             (6U)    /* ÈõªÊ∫êÁä∂ÊÖãÈÄöÁü• „Éê„ÉÉ„Éï„Ç°„Çµ„Ç§„Ç∫ */
+#define    XSPI_IVI_POWER_01_BYTE2              (0U)    /* Âü∫Êú¨„Çπ„ÉÜ„Éº„Éà */
+#define    XSPI_IVI_POWER_01_BYTE3              (1U)    /* ÁâπÊÆä„Çπ„ÉÜ„Éº„Éà */
+#define    XSPI_IVI_POWER_01_BYTE4              (2U)    /* OTAÁâπÊÆä„Çπ„ÉÜ„Éº„Éà */
+#define    XSPI_IVI_POWER_01_BYTE5              (3U)    /* Ë¶ã„ÅüÁõÆÁä∂ÊÖã */
+#define    XSPI_IVI_POWER_01_BYTE6              (4U)    /* Ëªä‰∏°ÈõªÊ∫ê(ÁâπÊÆä)„Çπ„ÉÜ„Éº„ÉàÈÅ∑Áßª‰∏≠„Éï„É©„Ç∞ */
+#define    XSPI_IVI_POWER_01_BYTE7              (5U)    /* ÈÄîÁµ∂Áä∂ÊÖã */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
@@ -50,7 +58,9 @@
 /*  Function Prototypes                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 void            vd_g_XspiIviSub1PowerInit(void);
+void            vd_g_XspiIviSub1PowerBonInit(void);
 void            vd_g_XspiIviSub1PowerMainTask(void);
+void            vd_g_XspiIviSub1PowerResetRoutine(void);
 void            vd_g_XspiIviSub1PowerGetSts(U1* u1_ap_data);
 void            vd_g_XspiIviSub1PowerAna(const U1 * u1_ap_XSPI_ADD, const U2 u2_a_data_size);
 void            vd_g_XspiIviSub1_PowerState1stSend(void);
@@ -58,6 +68,9 @@ void            vd_g_XspiIviSub1DevInitFinish(void);
 void            vd_g_XspiIviSub1PowerDevInitCmpApp(const U1 u1_a_ID);
 void            vd_g_XspiIviSub1PowerBmoniVolSend(void);
 void            vd_g_XspiIviSub1PowerBootLogResSend(const U1 * u1_ap_DATA);
+void            vd_g_XspiIviSub1PowerVMResetComp(const U1 u1_a_ID);
+void            vd_g_XspiIviSub1PowerCDCResetComp(const U1 u1_a_ID);
+void            vd_g_XspiIviSub1PowerSoCBootRec(void);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

@@ -1,4 +1,4 @@
-/* 2.5.0 */
+/* 2.6.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define TRIPCOM_C_MAJOR                         (2)
-#define TRIPCOM_C_MINOR                         (5)
+#define TRIPCOM_C_MINOR                         (6)
 #define TRIPCOM_C_PATCH                         (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -20,8 +20,6 @@
 
 #include "tripcom_private.h"
 #include "tripcom_ms.h"
-#include "tripcom_nvmif.h"
-#include "tripcom_nvmif_grph.h"
 #include "tripcom_calc.h"
 #include "fpcall_vd_fvd.h"
 
@@ -53,21 +51,6 @@
 #define TRIPCOM_RSTRQ_DEACT                     (0x02U)
 #define TRIPCOM_RSTRQ_MSK                       (0x03U)
 
-#define TRIPCOM_MANRSTRQ_RSTRQ_NUM              (5U)
-#define TRIPCOM_MANRSTRQ_TOFCRST                (0U)
-#define TRIPCOM_MANRSTRQ_TOFCRT2                (1U)
-#define TRIPCOM_MANRSTRQ_M1FCRST                (2U)
-#define TRIPCOM_MANRSTRQ_TOECRST                (3U)
-#define TRIPCOM_MANRSTRQ_M1ECRST                (4U)
-
-#define TRIPCOM_AUTRSTRQ_REFUEL_NUM             (3U)
-#define TRIPCOM_AUTRSTRQ_REFUEL_FE              (0U)
-#define TRIPCOM_AUTRSTRQ_REFUEL_DTE             (1U)
-#define TRIPCOM_AUTRSTRQ_FRCREFUEL              (2U)
-
-#define TRIPCOM_RSTRQ_DTE_SFT                   (1U)
-#define TRIPCOM_PREVSTS_SFT                     (1U)
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -87,11 +70,6 @@ static  U2                                      u2_s_tripcom_dmreset;
 static  U2                                      u2_s_tripcom_immw_dmreset;
 static  U2                                      u2_s_tripcom_grphreset;
 static  U2                                      u2_s_tripcom_grphresetbk;
-static  U1                                      u1_sp_tripcom_manrstrq[TRIPCOM_MANRSTRQ_RSTRQ_NUM];
-static  U1                                      u1_sp_tripcom_autrstrq[TRIPCOM_AUTRSTRQ_REFUEL_NUM];
-static  U1                                      u1_s_tripcom_refuel_actbit;
-static  U1                                      u1_s_tripcom_frcrefuel_actbit;
-static  U1                                      u1_s_tripcom_immr_frcrefuel_actbit;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
@@ -102,7 +80,6 @@ static  void    vd_s_TripcomCnttsTask(const U2 u2_a_VARBIT, const U4 * u4_ap_DEL
 static  U2      u2_s_TripcomManRstRqbitChk(void);
 static  U2      u2_s_TripcomAutRstRqbitChk(const U2 u2_a_VEHSYSSTS);
 static  U2      u2_s_TripcomOtherRqbitChk(void);
-static  U2      u2_s_TripcomAutImmwRstRqbitChk(const U2 u2_a_STSFIELD);
 static  U2      u2_s_TripcomManImmwRstRqbitChk(void);
 static  void    vd_s_TripcomCanTx(const U2 u2_a_VARBIT);
 
@@ -124,8 +101,7 @@ void            vd_g_TripcomBonInit(void)
 
     vd_g_TripcomMsBonInit();
     vd_g_TripcomMsInit();
-    vd_g_TripcomNvmIfInit((U1)TRUE);
-    vd_g_TripcomNvmIfGrphInit((U1)TRUE);
+    vd_g_TripcomCfgNvmSyncCmplt();
     vd_s_TripcomInit();
 
     u2_t_varbit = u2_g_TripcomCfgGetVariation();
@@ -151,8 +127,6 @@ void            vd_g_TripcomWkupInit(void)
     U2          u2_t_varbit;
 
     vd_g_TripcomMsInit();
-    vd_g_TripcomNvmIfInit((U1)FALSE);
-    vd_g_TripcomNvmIfGrphInit((U1)FALSE);
     vd_s_TripcomInit();
 
     u2_t_varbit = u2_g_TripcomCfgGetVariation();
@@ -175,7 +149,6 @@ void            vd_g_TripcomWkupInit(void)
 /*===================================================================================================================================*/
 void            vd_g_TripcomMainTask(void)
 {
-    U1          u1_t_jdg;
     U2          u2_t_vehmode;
     U2          u2_t_varbit;
 
@@ -186,11 +159,6 @@ void            vd_g_TripcomMainTask(void)
     vd_s_TripcomCalcTask(u2_t_vehmode, u2_t_varbit);
     vd_s_TripcomCanTx(u2_t_varbit);
 
-    u1_t_jdg = u1_g_TripcomCfgJdgRefuelEnd();
-    if (u1_t_jdg == (U1)TRUE) {
-        u1_s_tripcom_refuel_actbit = (U1)0U;
-    }
-    u1_s_tripcom_frcrefuel_actbit = (U1)0U;
     u2_s_tripcom_prvvehsyssts = u2_t_vehmode;
 
     vd_g_TripcomMsMainTask();
@@ -246,41 +214,6 @@ U1              u1_g_TripcomGetPIEVSTS(U1 * u1p_a_pievsts)
 }
 
 /*===================================================================================================================================*/
-/* void            vd_g_TripcomActRefuelEvHk(const U2 u2_a_DELTA, const U1 u1_a_VTM)                                                 */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void            vd_g_TripcomActRefuelEvHk(const U2 u2_a_DELTA, const U1 u1_a_VTM)
-{
-    u1_s_tripcom_refuel_actbit |= (U1)TRIPCOM_RSTRQ_ACT;
-    u1_s_tripcom_refuel_actbit |= (U1)((U4)TRIPCOM_RSTRQ_ACT << TRIPCOM_RSTRQ_DTE_SFT);
-}
-
-/*===================================================================================================================================*/
-/* void            vd_g_TripcomFrcRefuelEvHk(void)                                                                                   */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void            vd_g_TripcomFrcRefuelEvHk(void)
-{
-    u1_s_tripcom_frcrefuel_actbit = (U1)TRIPCOM_RSTRQ_ACT;
-}
-
-/*===================================================================================================================================*/
-/* void            vd_g_TripcomFrcRefuelEvImmWr(void)                                                                                */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void            vd_g_TripcomFrcRefuelEvImmWr(void)
-{
-    u1_s_tripcom_frcrefuel_actbit      = (U1)TRIPCOM_RSTRQ_ACT;
-    u1_s_tripcom_immr_frcrefuel_actbit = (U1)TRIPCOM_RSTRQ_ACT;
-}
-
-/*===================================================================================================================================*/
 /* void            vd_g_TripcomRstRq(const U2 u2_a_RSTRQBIT)                                                                         */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
@@ -312,11 +245,10 @@ void            vd_g_TripcomRstRqImmWr(const U2 u2_a_RSTRQBIT)
 void            vd_g_TripcomGrphRstRq(const U2 u2_a_RSTRQBIT)
 {
     u2_s_tripcom_grphreset |= (u2_a_RSTRQBIT ^ u2_s_tripcom_grphresetbk) & u2_a_RSTRQBIT;
-    if((((u2_a_RSTRQBIT            & u2_gp_TRIPCOM_GRPH_RSTBIT[AVGGRPH_CNTT_1MFE]) != (U2)0U)
-     && ((u2_s_tripcom_grphresetbk & u2_gp_TRIPCOM_GRPH_RSTBIT[AVGGRPH_CNTT_1MFE]) == (U2)0U))
-    || (((u2_a_RSTRQBIT            & u2_gp_TRIPCOM_GRPH_RSTBIT[AVGGRPH_CNTT_1MEE]) != (U2)0U)
+    if((((u2_a_RSTRQBIT            & u2_gp_TRIPCOM_GRPH_RSTBIT[AVGGRPH_CNTT_1MEE]) != (U2)0U)
      && ((u2_s_tripcom_grphresetbk & u2_gp_TRIPCOM_GRPH_RSTBIT[AVGGRPH_CNTT_1MEE]) == (U2)0U))){
         vd_g_TripcomMsClrRimRslt();
+        vd_g_AvgGrphUpdtOneEconRslt((U1)AVGGRPH_CNTT_1MEE);
     }
     u2_s_tripcom_grphresetbk = u2_a_RSTRQBIT;
 }
@@ -329,24 +261,11 @@ void            vd_g_TripcomGrphRstRq(const U2 u2_a_RSTRQBIT)
 /*===================================================================================================================================*/
 static  void    vd_s_TripcomInit(void)
 {
-    U1                  u1_t_rst_cnt;
-
     u2_s_tripcom_prvvehsyssts           = (U2)0U;
-    u1_s_tripcom_refuel_actbit          = (U1)0U;
-    u1_s_tripcom_frcrefuel_actbit       = (U1)0U;
-    u1_s_tripcom_immr_frcrefuel_actbit  = (U1)0U;
     u2_s_tripcom_dmreset                = (U2)0U;
     u2_s_tripcom_immw_dmreset           = (U2)0U;
     u2_s_tripcom_grphreset              = (U2)0U;
     u2_s_tripcom_grphresetbk            = (U2)0U;
-
-    for (u1_t_rst_cnt = (U1)0U; u1_t_rst_cnt < (U1)TRIPCOM_MANRSTRQ_RSTRQ_NUM; u1_t_rst_cnt++) {
-        u1_sp_tripcom_manrstrq[u1_t_rst_cnt] = (U1)0U;
-    }
-
-    for (u1_t_rst_cnt = (U1)0U; u1_t_rst_cnt < (U1)TRIPCOM_AUTRSTRQ_REFUEL_NUM; u1_t_rst_cnt++) {
-        u1_sp_tripcom_autrstrq[u1_t_rst_cnt] = (U1)0U;
-    }
 
     vd_g_TripcomCfgApplInit();
 
@@ -372,7 +291,6 @@ static  void    vd_s_TripcomCalcTask(const U2 u2_a_VEHSYSSTS, const U2 u2_a_VARB
     u2_tp_stsfield[TRIPCOM_STSFIELD_AUTO_RSTRQ]   = u2_s_TripcomAutRstRqbitChk(u2_a_VEHSYSSTS);
     u2_tp_stsfield[TRIPCOM_STSFIELD_MANUAL_RSTRQ] = u2_s_TripcomManRstRqbitChk();
     u2_tp_stsfield[TRIPCOM_STSFIELD_OTHRQ]        = u2_s_TripcomOtherRqbitChk();
-    u2_tp_stsfield[TRIPCOM_STSFIELD_AURST_IMMW]   = u2_s_TripcomAutImmwRstRqbitChk(u2_tp_stsfield[TRIPCOM_STSFIELD_AUTO_RSTRQ]);
     u2_tp_stsfield[TRIPCOM_STSFIELD_MARST_IMMW]   = u2_s_TripcomManImmwRstRqbitChk();
 
     for(u4_t_loop = (U4)0U ; u4_t_loop < (U4)u1_g_TRIPCOM_NUM_CALC_APPL_TASK ; u4_t_loop++){
@@ -451,35 +369,11 @@ static  void    vd_s_TripcomCnttsTask(const U2 u2_a_VARBIT, const U4 * u4_ap_DEL
 /*===================================================================================================================================*/
 static  U2      u2_s_TripcomManRstRqbitChk(void)
 {
-    static  const   ST_TRIPCOM_MANRSTRQ         st_sp_TRIPCOM_MANRSTRQ[TRIPCOM_MANRSTRQ_RSTRQ_NUM]       = {
-        /*  fp_u1_GETSIGNAL,                    u2_rstrqbit                         */
-        {   &u1_g_TripcomCfgGetTOFCRST,         (U2)(TRIPCOM_RSTRQBIT_M_AVGFEHE_TA  | TRIPCOM_RSTRQBIT_M_AVGVEHSPD_TA | TRIPCOM_RSTRQBIT_M_PTSRUNTM_LC) },
-        {   &u1_g_TripcomCfgGetTOFCRT2,         (U2)(TRIPCOM_RSTRQBIT_M_AVGFEHE_TA  | TRIPCOM_RSTRQBIT_M_AVGVEHSPD_TA | TRIPCOM_RSTRQBIT_M_PTSRUNTM_LC) },
-        {   &u1_g_TripcomCfgGetM1FCRST,         (U2)TRIPCOM_RSTRQBIT_M_AVGFEHE_ONEM                                                                     },
-        {   &u1_g_TripcomCfgGetTOECRST,         (U2)(TRIPCOM_RSTRQBIT_M_AVGEE_TA    | TRIPCOM_RSTRQBIT_M_AVGVEHSPD_TA | TRIPCOM_RSTRQBIT_M_PTSRUNTM_LC) },
-        {   &u1_g_TripcomCfgGetM1ECRST,         (U2)TRIPCOM_RSTRQBIT_M_AVGEE_ONEM                                                                       }
-    };
-
     U2                                          u2_t_rstrqbit;
-    U1                                          u1_t_val;
-    U1                                          u1_t_sts;
-    U1                                          u1_t_rst_cnt;
 
     u2_t_rstrqbit = (U2)0U;
 
-    for (u1_t_rst_cnt = (U1)0U; u1_t_rst_cnt < (U1)TRIPCOM_MANRSTRQ_RSTRQ_NUM; u1_t_rst_cnt++) {
-        u1_t_val = (U1)0U;
-        u1_t_sts = st_sp_TRIPCOM_MANRSTRQ[u1_t_rst_cnt].fp_u1_GETSIGNAL(&u1_t_val);
-        if (u1_t_sts == (U1)TRIPCOM_STSBIT_VALID) {
-            u1_sp_tripcom_manrstrq[u1_t_rst_cnt] |= (u1_t_val & (U1)TRIPCOM_RSTRQ_ACT);
-            if (u1_sp_tripcom_manrstrq[u1_t_rst_cnt] == (U1)TRIPCOM_RSTRQ_ACT) {
-                u2_t_rstrqbit |= st_sp_TRIPCOM_MANRSTRQ[u1_t_rst_cnt].u2_rstrqbit;
-            }
-            u1_sp_tripcom_manrstrq[u1_t_rst_cnt] = (U1)(u1_sp_tripcom_manrstrq[u1_t_rst_cnt] << TRIPCOM_PREVSTS_SFT) & (U1)TRIPCOM_RSTRQ_MSK;
-        }
-    }
-
-    u2_t_rstrqbit        |= u2_s_tripcom_dmreset;
+    u2_t_rstrqbit         = u2_s_tripcom_dmreset;
     u2_s_tripcom_dmreset  = (U2)0U;
     return (u2_t_rstrqbit);
 }
@@ -492,16 +386,8 @@ static  U2      u2_s_TripcomManRstRqbitChk(void)
 /*===================================================================================================================================*/
 static  U2      u2_s_TripcomAutRstRqbitChk(const U2 u2_a_VEHSYSSTS)
 {
-    static  const   U2                          u2_s_ECOCHK = (U2)(TRIPCOM_VEHSTS_ECORUNUNK | TRIPCOM_VEHSTS_ECORUNINV | TRIPCOM_VEHSTS_ECOSTP);
-    static  const   U2                          u2_sp_AUTREQBIT[TRIPCOM_AUTRSTRQ_REFUEL_NUM] = {
-        (U2)TRIPCOM_RSTRQBIT_A_FE_RECHRG,
-        (U2)TRIPCOM_RSTRQBIT_A_DTE_RECHRG,
-        (U2)TRIPCOM_RSTRQBIT_A_FRCRECHRG
-    };
-
     U2                                          u2_t_rstrqbit;
     U1                                          u1_t_rxrst;
-    U1                                          u1_t_rst_cnt;
 
     u2_t_rstrqbit = (U2)0U;
 
@@ -519,31 +405,8 @@ static  U2      u2_s_TripcomAutRstRqbitChk(const U2 u2_a_VEHSYSSTS)
         u2_t_rstrqbit |= (U2)TRIPCOM_RSTRQBIT_A_DRVCYC_OFF;
     }
 
-    /* Reset triggered by Eco idling stop */
-    if ((( u2_a_VEHSYSSTS            & (U2)TRIPCOM_VEHSTS_DRVCYC) == (U2)0U                   )  ||
-        (((u2_a_VEHSYSSTS            & (U2)TRIPCOM_VEHSTS_DRVCYC) != (U2)0U                   )  &&
-         ((u2_s_tripcom_prvvehsyssts & u2_s_ECOCHK              ) == (U2)0U                   )  &&
-         ((u2_a_VEHSYSSTS            & u2_s_ECOCHK              ) == (U2)TRIPCOM_VEHSTS_ECOSTP))) {
-
-        u2_t_rstrqbit |= (U2)TRIPCOM_RSTRQBIT_A_ECOSTP;
-    }
-
-    u1_sp_tripcom_autrstrq[TRIPCOM_AUTRSTRQ_REFUEL_FE]  |= (u1_s_tripcom_refuel_actbit & (U1)TRIPCOM_RSTRQ_ACT);
-    u1_sp_tripcom_autrstrq[TRIPCOM_AUTRSTRQ_REFUEL_DTE] |= ((U1)(u1_s_tripcom_refuel_actbit >> TRIPCOM_RSTRQ_DTE_SFT) & (U1)TRIPCOM_RSTRQ_ACT);
-    u1_sp_tripcom_autrstrq[TRIPCOM_AUTRSTRQ_FRCREFUEL]  |= u1_s_tripcom_frcrefuel_actbit;
-
-    for (u1_t_rst_cnt = (U1)0U; u1_t_rst_cnt < (U1)TRIPCOM_AUTRSTRQ_REFUEL_NUM; u1_t_rst_cnt++) {
-        if (u1_sp_tripcom_autrstrq[u1_t_rst_cnt] == (U1)TRIPCOM_RSTRQ_DEACT) {
-            u2_t_rstrqbit |= u2_sp_AUTREQBIT[u1_t_rst_cnt];
-        }
-        u1_sp_tripcom_autrstrq[u1_t_rst_cnt] = (U1)(u1_sp_tripcom_autrstrq[u1_t_rst_cnt] << TRIPCOM_PREVSTS_SFT) & (U1)TRIPCOM_RSTRQ_MSK;
-    }
-
-    /* Reset triggered by Rx fuel/hydrogen/electric-power signal */
+    /* Reset triggered by Rx electric-power signal */
     u1_t_rxrst = u1_g_TripsnsrResetChk();
-    if ((u1_t_rxrst & (U1)TRIPCOM_INSTFEHE_UPD) != (U1)0U) {
-        u2_t_rstrqbit |= (U2)TRIPCOM_RSTRQBIT_A_UPDTFEHUSD;
-    }
     
     if ((u1_t_rxrst & (U1)TRIPCOM_INSTEE_UPD) != (U1)0U) {
         u2_t_rstrqbit |= (U2)TRIPCOM_RSTRQBIT_A_UPDTEEUSD;
@@ -562,54 +425,10 @@ static  U2      u2_s_TripcomAutRstRqbitChk(const U2 u2_a_VEHSYSSTS)
 static  U2      u2_s_TripcomOtherRqbitChk(void)
 {
     U2          u2_t_othrqbit;
-    U1          u1_t_checkmsk;
-    U1          u1_t_jdg;
 
     u2_t_othrqbit = (U2)0U;
 
-    /* Pause triggered by Refuel for FE */
-    u1_t_checkmsk = (U1)TRIPCOM_RSTRQ_ACT;
-    if ((u1_s_tripcom_refuel_actbit & u1_t_checkmsk) != (U1)0U) {
-        u2_t_othrqbit = (U2)TRIPCOM_PSRQBIT_A_FE_RECHRG;
-    }
-
-    /* Pause triggered by Refuel for DTE */
-    u1_t_checkmsk <<= TRIPCOM_RSTRQ_DTE_SFT;
-    if ((u1_s_tripcom_refuel_actbit & u1_t_checkmsk) != (U1)0U) {
-        u2_t_othrqbit |= (U2)TRIPCOM_PSRQBIT_A_DTE_RECHRG;
-    }
-
-    /* Pause triggered by Force Refuel */
-    if (u1_s_tripcom_frcrefuel_actbit == (U1)TRIPCOM_RSTRQ_ACT) {
-        u2_t_othrqbit |= (U2)TRIPCOM_PSRQBIT_A_FRCRECHRG;
-    }
-
-     /* Pause triggered by EV Run Mode  */
-    u1_t_jdg = u1_g_TripcomCfgGetEVRunSts();
-    if (u1_t_jdg == (U1)TRUE) {
-        u2_t_othrqbit |= (U2)TRIPCOM_PSRQBIT_A_EVRUN;
-    }
-
     return (u2_t_othrqbit);
-}
-
-/*===================================================================================================================================*/
-/* static  U2      u2_s_TripcomAutImmwRstRqbitChk(const U2 u2_a_STSFIELD)                                                            */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static  U2      u2_s_TripcomAutImmwRstRqbitChk(const U2 u2_a_STSFIELD)
-{
-    U2                                          u2_t_rstrqbit;
-
-    u2_t_rstrqbit = (U2)0U;
-    if (u1_s_tripcom_immr_frcrefuel_actbit == (U1)TRIPCOM_RSTRQ_DEACT) {
-        u2_t_rstrqbit  = (U2)TRIPCOM_RSTRQBIT_A_FRCRECHRG;
-        u2_t_rstrqbit &= u2_a_STSFIELD;
-    }
-    u1_s_tripcom_immr_frcrefuel_actbit = (U1)(u1_s_tripcom_immr_frcrefuel_actbit << TRIPCOM_PREVSTS_SFT) & (U1)TRIPCOM_RSTRQ_MSK;
-    return(u2_t_rstrqbit);
 }
 
 /*===================================================================================================================================*/
@@ -690,10 +509,14 @@ static  void    vd_s_TripcomCanTx(const U2 u2_a_VARBIT)
 /*  2.4.0    02/18/2025  MaO(M)   Add write process immediately                                                                      */
 /*  2.4.1    04/22/2025  KM       Add posttask for tripcom application                                                               */
 /*  2.5.0    06/23/2025  RS       tripcom_comtx.c v2.4.1 -> v2.5.0.(Change for BEV System_Consideration_2)                           */
+/*  2.6.0    02/11/2026  DT       Change for BEV FF2                                                                                 */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  19PFv3-1 04/03/2024  DR       Deleted engine type and info functions                                                             */
+/*  BEV-01   01/20/2026  DR       Added send data cntt ID for AS_EVDT and AS_TOEC for FF2                                            */
+/*  BEV-02   02/11/2026  DT       Deleted unit table of fuel for FF2 and deleted not applied drive moni appli                        */
+/*  BEV-03   02/23/2026  PG       Deleted memory app access initialization function                                                  */
 /*                                                                                                                                   */
 /*  * HY   = Hidefumi Yoshida, Denso                                                                                                 */
 /*  * YA   = Yuhei Aoyama, DensoTechno                                                                                               */
@@ -705,5 +528,7 @@ static  void    vd_s_TripcomCanTx(const U2 u2_a_VARBIT)
 /*  * MaO(M) = Masayuki Okada, NTT Data MSE                                                                                          */
 /*  * KM   = Kazuma Miyazawa, Denso Techno                                                                                           */
 /*  * RS   = Ryuki Sako, Denso Techno                                                                                                */
+/*  * DT   = Dj Tutanes, DTPH                                                                                                        */
+/*  * PG   = Patrick Garcia, DTPH                                                                                                    */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

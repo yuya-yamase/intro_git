@@ -25,6 +25,10 @@
 #define PWRCTRL_MAIN_FORCEDOFF_REQ         (0x05U) /* SIP電源強制OFFシーケンス要求           */
 #define PWRCTRL_MAIN_STBYCANCELST1_REQ     (0x06U) /* スタンバイ処理中の起動トリガ時シーケンス要求(SIP電源強制OFF処理開始) */
 #define PWRCTRL_MAIN_STBYCANCELST2_REQ     (0x07U) /* スタンバイ処理中の起動トリガ時シーケンス要求(SYS系電源ON、SIP電源ON) */
+#define PWRCTRL_MAIN_PMPSAIL_FS_REQ        (0x08U) /* PM_PSAIL_ERR_N監視(フェールセーフ)要求 */
+#define PWRCTRL_MAIN_PMAPS_FS_REQ          (0x09U) /* PMA_PS_HOLD監視(フェールセーフ)要求    */
+#define PWRCTRL_MAIN_SAILERR_FS_REQ        (0x0AU) /* SAIL-ERR監視(フェールセーフ)要求       */
+
 #define PWRCTRL_MAIN_NO_REQ                (0xFFU) /* 要求無し(処理完了)                     */
 
 #define PWRCTRL_MAIN_PROHIBITSLEEP_OFF     (0x00U)  /* スリープ許可 */
@@ -42,6 +46,13 @@
 #define PWRCTRL_MAIN_PINID_DBG_FAIL        (PWRCTRL_CFG_PRIVATE_KIND_DBG_FAIL_OFF)         /* DBG_FAIL_OFF        */
 #define PWRCTRL_MAIN_PINID_SAIL_ERR1       (PWRCTRL_CFG_PRIVATE_KIND_SAIL_ERR1)            /* SAIL-ERR1           */
 #define PWRCTRL_MAIN_PINID_SAIL_ERR2       (PWRCTRL_CFG_PRIVATE_KIND_SAIL_ERR2)            /* SAIL-ERR2           */
+#define PWRCTRL_MAIN_PINID_PM_PSAIL        (PWRCTRL_CFG_PRIVATE_KIND_PM_PSAIL_ERR_N)       /* PM_PSAIL_ERR_N      */
+#define PWRCTRL_MAIN_PINID_PG_ASIL_VB      (PWRCTRL_CFG_PRIVATE_KIND_PGOOD_ASIL_VB)        /* PGOOD_ASIL_VB       */
+#define PWRCTRL_MAIN_PINID_PG_ASIL_VSYS    (PWRCTRL_CFG_PRIVATE_KIND_PGOOD_ASIL_VSYS)      /* PGOOD_ASIL_VSYS     */
+#define PWRCTRL_MAIN_PINID_PG_ASIL_VSV11   (PWRCTRL_CFG_PRIVATE_KIND_PGOOD_ASIL_VSYS_V11)  /* PGOOD_ASIL_VSYS(V11) */
+#define PWRCTRL_MAIN_PINID_PG_DIODE        (PWRCTRL_CFG_PRIVATE_KIND_PGOOD_DIODE)          /* PGOOD_DIODE         */
+#define PWRCTRL_MAIN_PINID_PG_VB           (PWRCTRL_CFG_PRIVATE_KIND_PGOOD_VB)             /* PGOOD_VB            */
+#define PWRCTRL_MAIN_PINID_PG_VSYS         (PWRCTRL_CFG_PRIVATE_KIND_PGOOD_VSYS)           /* PGOOD_VSYS          */
 
 /* 端子モニタ取得値 */
 #define PWRCTRL_MAIN_PIN_LOW               (STD_LOW)
@@ -51,16 +62,25 @@
 /* 端子モニタ取得処理 */
 #define u1_g_PwrCtrlMainGetPinInfo         (u1_g_PwrCtrl_PinMonitor_GetPinInfo)
 
+/* Ethリンクアップ状態通知処理 */
+#define vd_g_PwrCtrlMainBootLogEthLinkup   (vd_g_PwrCtrlComEthLinkup)
+
+/* Ethリンクアップ状態 */
+#define PWRCTRL_MAIN_ETH_LINKUP_NODETECT   (PWRCTRL_COM_ETH_LINKUP_NODETECT)
+#define PWRCTRL_MAIN_ETH_LINKUP_DETECT     (PWRCTRL_COM_ETH_LINKUP_DETECT)
+
 /*-------------------------------------------------------------------------------------------*/
 /* Function Prototypes                                                                       */
 /*-------------------------------------------------------------------------------------------*/
 void vd_g_PwrCtrlMainBonReq( void );
+void vd_g_PwrCtrlMainSwResetReq( void );
 void vd_g_PwrCtrlMainWakeupReq( void );
 void vd_g_PwrCtrlMainBuDetReq( void );
 void vd_g_PwrCtrlMainTask( void );
 
 U1 u1_g_PwrCtrlMainShtdwnOk( void );
 U1 u1_g_PwrCtrlWakeUpInfo( void );
+U1 u1_g_PwrCtrlMainSysPwrInfo( void );
 
 void vd_g_PwrCtrlMainProhibitSleep( const U1 u1_a_ProhibitSleep );
 

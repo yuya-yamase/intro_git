@@ -22,6 +22,7 @@
 #include    "PictCtl.h"
 #include    "DtcCtl.h"
 #include    "RobCtl.h"
+#include    "WhlIni.h"
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -50,6 +51,8 @@
 #define    XSPI_IVI_DIAG_DATA_RES           (0x13U)
 #define    XSPI_IVI_DIAG_REC_NOTIFY         (0x14U)
 #define    XSPI_IVI_DIAG_MODE               (0x30U)
+#define    XSPI_IVI_DIAG_WHLINI_RQST        (0x31U)
+#define    XSPI_IVI_DIAG_WHLINI_RES         (0x32U)
 #define    XSPI_IVI_DIAG_DTCREC_SEND        (0x41U)
 #define    XSPI_IVI_DIAG_DTCREC_RECV        (0x42U)
 #define    XSPI_IVI_DIAG_ROBREC_SEND        (0x43U)
@@ -65,7 +68,7 @@
 
 #define    XSPI_IVI_DIAG_DTCREC_SEND_SIZE   (4U)
 #define    XSPI_IVI_DIAG_ROBREC_SEND_SIZE   (3U)
-
+#define    XSPI_IVI_DIAG_WHLINI_RES_SIZE    (3U)
 
 #define    XSPI_IVI_DIAG_LOGDATA_MAXSIZE    (1080U)
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -145,6 +148,9 @@ void            vd_g_XspiIviSub1DiagAna(const U1 * u1_ap_XSPI_ADD, const U2 u2_a
         break;
     case XSPI_IVI_DIAG_MODE:
         vd_g_PictCtl_RcvDiagModInd(u1_ap_XSPI_ADD[1]);
+        break;
+    case XSPI_IVI_DIAG_WHLINI_RQST:
+        vd_g_WhlIni_SoCReq(u1_ap_XSPI_ADD[1]);
         break;
     case XSPI_IVI_DIAG_DTCREC_RECV:
         vd_g_DtcCtl_RecDtc(u1_ap_XSPI_ADD[1],u1_ap_XSPI_ADD[2],u1_ap_XSPI_ADD[3]);
@@ -301,6 +307,25 @@ static void            vd_s_XspiIviSub1_DiagLogDataRespons(U2 u2_a_OFFSET_DATA)
     vd_g_MemcpyU1(&u1_tp_data[5], &u1_sp_xspi_ivi_diagdata[u4_t_data_buf], (U4)u1_t_data_size);
 
     vd_s_XspiIviSub1_DiagDataToQueue(&u1_tp_data[0],(U1)XSPI_IVI_DIAG_SIZE);
+}
+/*===================================================================================================================================*/
+/*  void            vd_g_XspiIviSub1_DiagWhliniRespons(const U1 u1_a_KIND, const U1 u1_a_RESULT)                                     */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    SubFlame1(MISC) Data Analysis                                                                                    */
+/*  Arguments:      u1_a_KIND       :  種別                                                                                          */
+/*                  u1_a_RESULT     :  結果                                                                                          */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void            vd_g_XspiIviSub1_DiagWhliniRespons(const U1 u1_a_KIND, const U1 u1_a_RESULT)
+{
+    U1     u1_s_DTCSIZE = (U1)XSPI_IVI_DIAG_WHLINI_RES_SIZE;
+    U1     u1_tp_data[XSPI_IVI_DIAG_WHLINI_RES_SIZE];
+
+    u1_tp_data[0] = (U1)XSPI_IVI_DIAG_WHLINI_RES;
+    u1_tp_data[1] = u1_a_KIND;
+    u1_tp_data[2] = u1_a_RESULT;
+
+    vd_s_XspiIviSub1_DiagDataToQueue(&u1_tp_data[0],u1_s_DTCSIZE);
 }
 
 /*===================================================================================================================================*/

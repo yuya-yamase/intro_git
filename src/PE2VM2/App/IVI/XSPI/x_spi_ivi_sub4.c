@@ -10,13 +10,14 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define XSPI_IVI_SUB4_C_MAJOR                   (1)
-#define XSPI_IVI_SUB4_C_MINOR                   (10)
+#define XSPI_IVI_SUB4_C_MINOR                   (11)
 #define XSPI_IVI_SUB4_C_PATCH                   (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include    "x_spi_ivi_sub4_private.h"
+#include    "x_spi_ivi_sub1_power.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -95,6 +96,10 @@
 /* Provisional (CANSignal To VM1) */
 #define XSPI_IVI_IVDSH_NWORD                (1U)
 /* Provisional (CANSignal To VM1) */
+
+/*Reset Signal Mask Value*/
+#define XSPI_IVI_CAN_CDSIZE_MASK            (0x0FU)
+#define XSPI_IVI_CAN_PVMREQ_MASK            (0x03U)
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -150,6 +155,7 @@ static U4       u4_s_XspiIviBinarySearch(U4 canid);
 static void     vd_s_XspiIviCANCommandStuckBuff(const U1 u1_a_ID,const U2 u2_a_SIZE);
 static U1       u1_s_XspiIviClockUTCDataEventJdg(const U1* u1_ap_DATA,const U1* u1_ap_DATA_PRE,const U1 u1_a_SIZE);
 static void     vd_s_XspiIviClockUTCStuckBuff(const U1 u1_a_ID,const U2 u2_a_SIZE);
+static void     vd_s_XspiIviSub4ResetInit(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
@@ -194,8 +200,70 @@ void            vd_g_XspiIviSub4Init(void)
     vd_g_MemfillU1(&u1_sp_Xspi_Ivi_MET1S62_Data[0], (U1)0U, (U4)XSPI_IVI_CAN_DLC_08);
     vd_g_MemfillU1(&u1_sp_Xspi_Ivi_MET1S70_Data[0], (U1)0U, (U4)XSPI_IVI_CAN_DLC_32);
     /* Provisional (CANSignal To VM1) */
-	
-	u1_s_Xspi_Ivi_DataNm2_Sgnl_pre = (U1)U1_MAX;
+
+    u1_s_Xspi_Ivi_DataNm2_Sgnl_pre = (U1)U1_MAX;
+}
+
+/*===================================================================================================================================*/
+/*  void            vd_g_XspiIviSub4VMResetInit(void)                                                                                */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    VMリセット時の初期化処理                                                                                          */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void            vd_g_XspiIviSub4VMResetInit(void)
+{
+    /*vd_s_XspiIviSub4ResetInit();*/
+    vd_g_XspiIviSub1PowerVMResetComp((U1)XSPI_IVI_POWER_RESET_COMP_CAN);
+}
+
+/*===================================================================================================================================*/
+/*  void            vd_g_XspiIviSub4SoCResetInit(void)                                                                                */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    VMリセット時の初期化処理                                                                                          */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void            vd_g_XspiIviSub4SoCResetInit(void)
+{
+    /*vd_s_XspiIviSub4ResetInit();*/
+}
+
+/*===================================================================================================================================*/
+/*  static void            vd_s_XspiIviSub4ResetInit(void)                                                                           */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    リセット時の初期化処理                                                                                          */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void            vd_s_XspiIviSub4ResetInit(void)
+{
+    U1  u1_t_sgnl_cdsize;
+    U1  u1_t_sgnl_pvmreq;
+    U1  u1_tp_candata_AVN1S73[8];
+    U1  u1_tp_candata_AVN1SF7[32];
+    U4  u4_t_lpcnt;
+
+    vd_g_MemfillU1(&u1_tp_candata_AVN1S73[0], (U1)0U, (U4)XSPI_IVI_CAN_DLC_08);
+    vd_g_MemfillU1(&u1_tp_candata_AVN1SF7[0], (U1)0U, (U4)XSPI_IVI_CAN_DLC_32);
+
+    (void)Com_ReceiveSignal(ComConf_ComSignal_CD_SIZE, &u1_t_sgnl_cdsize);
+    (void)Com_ReceiveSignal(ComConf_ComSignal_PVM_REQ, &u1_t_sgnl_pvmreq);
+
+
+    for(u4_t_lpcnt = (U4)MSG_AVN1S01_TXCH0; u4_t_lpcnt <= (U4)MSG_MET1S33_TXCH0; u4_t_lpcnt++){
+        if(u4_t_lpcnt == (U4)MSG_AVN1S73_TXCH0) {
+            u1_tp_candata_AVN1S73[6] |= (u1_t_sgnl_cdsize & (U1)XSPI_IVI_CAN_CDSIZE_MASK) << (U1)XSPI_IVI_SFT_04;
+            (void)Com_SendIPDU((PduIdType)MSG_AVN1S73_TXCH0, &u1_tp_candata_AVN1S73[0] );
+        } else if(u4_t_lpcnt == (U4)MSG_AVN1SF7_TXCH0) {
+            u1_tp_candata_AVN1SF7[27] |= u1_t_sgnl_pvmreq & (U1)XSPI_IVI_CAN_PVMREQ_MASK;
+            (void)Com_SendIPDU((PduIdType)MSG_AVN1SF7_TXCH0, &u1_tp_candata_AVN1SF7[0] );
+        } else if(u4_t_lpcnt == (U4)MSG_MET1S33_TXCH0) {
+            /*Do Nothing*/
+        } else {
+            (void)Com_InitIPDU((PduIdType)u4_t_lpcnt);
+        }
+    }
 }
 
 /*===================================================================================================================================*/
@@ -754,374 +822,377 @@ void            vd_g_XspiIviCANGWPushPDU(const U2 u2_a_MSG)
     static const U2 u2_s_XSPI_IVI_CANGW_MAX      = (U2)MSG_ZN21S72_RXCH0;
 
     static const ST_XSPI_IVI_MSG2POSLEN st_sp_LCOM_SPI_MSG2POSLEN[] = {
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x4AC00000},       /*      0:MSG_ABG1D50_RXCH0    (102U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x4BC00000},       /*      1:MSG_ABG1D51_RXCH0    (103U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x3B100000},       /*      2:MSG_ABG1S01_RXCH0    (104U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x1D800000},       /*      3:MSG_ABG1S04_RXCH0    (105U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x1D600000},       /*      4:MSG_ABG1S09_RXCH0    (106U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x4B800000},       /*      5:MSG_ACN1D50_RXCH0    (107U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x3A100000},       /*      6:MSG_ACN1S03_RXCH0    (108U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x38100000},       /*      7:MSG_ACN1S04_RXCH0    (109U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x38200000},       /*      8:MSG_ACN1S05_RXCH0    (110U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x3B000000},       /*      9:MSG_ACN1S07_RXCH0    (111U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x40700000},       /*     10:MSG_ACN1S15_RXCH0    (112U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x40800000},       /*     11:MSG_ACN1S16_RXCH0    (113U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x35400000},       /*     12:MSG_ACN1S22_RXCH0    (114U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x25500000},       /*     13:MSG_ACN1S25_RXCH0    (115U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x50600000},       /*     14:MSG_ACN1S29_RXCH0    (116U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x59400000},       /*     15:MSG_ADC1S06_RXCH0    (117U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x20700000},       /*     16:MSG_ADC1S13_RXCH0    (118U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x20800000},       /*     17:MSG_ADC1S14_RXCH0    (119U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x20900000},       /*     18:MSG_ADC1S15_RXCH0    (120U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x20A00000},       /*     19:MSG_ADC1S17_RXCH0    (121U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x61300000},       /*     20:MSG_ADC1S19_RXCH0    (122U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x1C700000},       /*     21:MSG_ADC1S20_RXCH0    (123U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x20B00000},       /*     22:MSG_ADC1S23_RXCH0    (124U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x14400000},       /*     23:MSG_ADC1S27_RXCH0    (125U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x34900000},       /*     24:MSG_ADC1S30_RXCH0    (126U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x1C000000},       /*     25:MSG_ADC1S31_RXCH0    (127U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x24700000},       /*     26:MSG_ADU1S02_RXCH0    (128U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x1F500000},       /*     27:MSG_ADU1S03_RXCH0    (129U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x1F000000},       /*     28:MSG_ADU1S05_RXCH0    (130U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x22E00000},       /*     29:MSG_ADU1S06_RXCH0    (131U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x20E00000},       /*     30:MSG_ADU1S07_RXCH0    (132U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x16100000},       /*     31:MSG_ADU1S18_RXCH0    (133U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x16200000},       /*     32:MSG_ADU1S19_RXCH0    (134U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x16300000},       /*     33:MSG_ADU1S20_RXCH0    (135U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x16600000},       /*     34:MSG_ADU1S21_RXCH0    (136U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x16700000},       /*     35:MSG_ADU1S22_RXCH0    (137U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x16800000},       /*     36:MSG_ADU1S23_RXCH0    (138U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x16900000},       /*     37:MSG_ADU1S24_RXCH0    (139U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x16A00000},       /*     38:MSG_ADU1S25_RXCH0    (140U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x16B00000},       /*     39:MSG_ADU1S26_RXCH0    (141U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x16C00000},       /*     40:MSG_ADU1S27_RXCH0    (142U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x16D00000},       /*     41:MSG_ADU1S28_RXCH0    (143U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x07200000},       /*     42:MSG_ARS1S01_RXCH0    (144U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x1DD00000},       /*     43:MSG_ARS1S90_RXCH0    (145U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x21400000},       /*     44:MSG_BAT1E41_RXCH0    (146U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x16E00000},       /*     45:MSG_BAT1E45_RXCH0    (147U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x26E00000},       /*     46:MSG_BAT1ED1_RXCH0    (148U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x1BA00000},       /*     47:MSG_BAT1ED5_RXCH0    (149U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x1EF00000},       /*     48:MSG_BAT1EDA_RXCH0    (150U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x27200000},       /*     49:MSG_BAT1EDB_RXCH0    (151U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x3E500000},       /*     50:MSG_BAT1S01_RXCH0    (152U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x12400000},       /*     51:MSG_BAT1S08_RXCH0    (153U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x15500000},       /*     52:MSG_BAT1S11_RXCH0    (154U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x27900000},       /*     53:MSG_BAT2ED2_RXCH0    (155U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x37900000},       /*     54:MSG_BCC1S05_RXCH0    (156U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x3F300000},       /*     55:MSG_BCC1S06_RXCH0    (157U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x38B00000},       /*     56:MSG_BDB1F01_RXCH0    (158U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x38D00000},       /*     57:MSG_BDB1F02_RXCH0    (159U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x1F400000},       /*     58:MSG_BDB1F03_RXCH0    (160U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x1CF00000},       /*     59:MSG_BDB1S01_RXCH0    (161U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x62100000},       /*     60:MSG_BDB1S02_RXCH0    (162U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x62200000},       /*     61:MSG_BDB1S03_RXCH0    (163U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x62300000},       /*     62:MSG_BDB1S04_RXCH0    (164U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x38000000},       /*     63:MSG_BDB1S05_RXCH0    (165U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x62400000},       /*     64:MSG_BDB1S08_RXCH0    (166U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x62600000},       /*     65:MSG_BDB1S10_RXCH0    (167U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x62C00000},       /*     66:MSG_BDB1S13_RXCH0    (168U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x3FC00000},       /*     67:MSG_BDB1S19_RXCH0    (169U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x30600000},       /*     68:MSG_BDB1S25_RXCH0    (170U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x30500000},       /*     69:MSG_BDB1S26_RXCH0    (171U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x62900000},       /*     70:MSG_BDB1S27_RXCH0    (172U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x62A00000},       /*     71:MSG_BDB1S28_RXCH0    (173U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x39700000},       /*     72:MSG_BDB1S29_RXCH0    (174U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x3B500000},       /*     73:MSG_BDB1S35_RXCH0    (175U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x3B800000},       /*     74:MSG_BDB1S36_RXCH0    (176U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x4B900000},       /*     75:MSG_BDC1D00_RXCH0    (177U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x4BA00000},       /*     76:MSG_BDC1D01_RXCH0    (178U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x31200000},       /*     77:MSG_BDC1S13_RXCH0    (179U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x32000000},       /*     78:MSG_BDC1S14_RXCH0    (180U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x32A00000},       /*     79:MSG_BDC1S16_RXCH0    (181U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x18600000},       /*     80:MSG_BDC1S30_RXCH0    (182U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x1D200000},       /*     81:MSG_BDC1S33_RXCH0    (183U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x09C00000},       /*     82:MSG_BDC1S40_RXCH0    (184U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x14800000},       /*     83:MSG_BDC1S41_RXCH0    (185U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x1D300000},       /*     84:MSG_BDC1S46_RXCH0    (186U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x33700000},       /*     85:MSG_BDC1S48_RXCH0    (187U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x01300000},       /*     86:MSG_BDC1S52_RXCH0    (188U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x01B00000},       /*     87:MSG_BDC1S60_RXCH0    (189U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x1E300000},       /*     88:MSG_BDC1S81_RXCH0    (190U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x15000000},       /*     89:MSG_BDC1S82_RXCH0    (191U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x36700000},       /*     90:MSG_BDC1S83_RXCH0    (192U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x1A000000},       /*     91:MSG_BDC1S87_RXCH0    (193U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x36C00000},       /*     92:MSG_BDC1S89_RXCH0    (194U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x1E400000},       /*     93:MSG_BDC1S91_RXCH0    (195U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x35500000},       /*     94:MSG_BDC1S97_RXCH0    (196U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x35800000},       /*     95:MSG_BDC1S98_RXCH0    (197U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x35D00000},       /*     96:MSG_BDC1S99_RXCH0    (198U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x1A400000},       /*     97:MSG_BDC1SA0_RXCH0    (199U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x35F00000},       /*     98:MSG_BDC1SA1_RXCH0    (200U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x39300000},       /*     99:MSG_BDC1SC1_RXCH0    (201U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x39500000},       /*    100:MSG_BDC1SC2_RXCH0    (202U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x39600000},       /*    101:MSG_BDC1SC3_RXCH0    (203U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x39A00000},       /*    102:MSG_BDC1SC4_RXCH0    (204U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x39B00000},       /*    103:MSG_BDC1SC5_RXCH0    (205U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x39D00000},       /*    104:MSG_BDC1SC6_RXCH0    (206U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x39E00000},       /*    105:MSG_BDC1SC7_RXCH0    (207U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x39F00000},       /*    106:MSG_BDC1SC8_RXCH0    (208U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x3A500000},       /*    107:MSG_BDC1SC9_RXCH0    (209U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x3AC00000},       /*    108:MSG_BDC1SD1_RXCH0    (210U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x3AE00000},       /*    109:MSG_BDC1SD2_RXCH0    (211U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x3B200000},       /*    110:MSG_BDC1SD3_RXCH0    (212U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x3B300000},       /*    111:MSG_BDC1SD4_RXCH0    (213U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x3B900000},       /*    112:MSG_BDC1SD5_RXCH0    (214U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x3BC00000},       /*    113:MSG_BDC1SD6_RXCH0    (215U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x3C600000},       /*    114:MSG_BDC1SD7_RXCH0    (216U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x3C700000},       /*    115:MSG_BDC1SD8_RXCH0    (217U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x3CD00000},       /*    116:MSG_BDC1SD9_RXCH0    (218U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x3D300000},       /*    117:MSG_BDC1SE1_RXCH0    (219U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x3D600000},       /*    118:MSG_BDC1SE2_RXCH0    (220U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x3DD00000},       /*    119:MSG_BDC1SE3_RXCH0    (221U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x3E100000},       /*    120:MSG_BDC1SE4_RXCH0    (222U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x3EB00000},       /*    121:MSG_BDC1SE5_RXCH0    (223U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x3EF00000},       /*    122:MSG_BDC1SE6_RXCH0    (224U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x3F500000},       /*    123:MSG_BDC1SE7_RXCH0    (225U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x42300000},       /*    124:MSG_BDC1SE8_RXCH0    (226U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x42900000},       /*    125:MSG_BDC1SE9_RXCH0    (227U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x43000000},       /*    126:MSG_BDC1SF1_RXCH0    (228U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x48000000},       /*    127:MSG_BDC1SF2_RXCH0    (229U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x48400000},       /*    128:MSG_BDC1SF3_RXCH0    (230U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x49100000},       /*    129:MSG_BDC1SF4_RXCH0    (231U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x34E00000},       /*    130:MSG_BDC1SF5_RXCH0    (232U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x49700000},       /*    131:MSG_BDC1SF6_RXCH0    (233U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x52600000},       /*    132:MSG_BDC1SG4_RXCH0    (234U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x52B00000},       /*    133:MSG_BDC1SG6_RXCH0    (235U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x52C00000},       /*    134:MSG_BDC1SG7_RXCH0    (236U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x53000000},       /*    135:MSG_BDC1SG8_RXCH0    (237U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x53100000},       /*    136:MSG_BDC1SG9_RXCH0    (238U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x53400000},       /*    137:MSG_BDC1SH3_RXCH0    (239U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x53500000},       /*    138:MSG_BDC1SH4_RXCH0    (240U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x53700000},       /*    139:MSG_BDC1SH5_RXCH0    (241U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x53800000},       /*    140:MSG_BDC1SH6_RXCH0    (242U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x2B300000},       /*    141:MSG_BDC1SH8_RXCH0    (243U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x3CE00000},       /*    142:MSG_BDC1SI0_RXCH0    (244U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x3E800000},       /*    143:MSG_BDC1SI1_RXCH0    (245U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x3E900000},       /*    144:MSG_BDC1SI2_RXCH0    (246U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x3F400000},       /*    145:MSG_BDC1SI3_RXCH0    (247U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x31E00000},       /*    146:MSG_BDC1SI4_RXCH0    (248U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x31F00000},       /*    147:MSG_BDC1SI5_RXCH0    (249U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x32100000},       /*    148:MSG_BDC1SI6_RXCH0    (250U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x50800000},       /*    149:MSG_BDC1SI7_RXCH0    (251U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x50B00000},       /*    150:MSG_BDC1SI8_RXCH0    (252U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x50C00000},       /*    151:MSG_BDC1SI9_RXCH0    (253U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x50E00000},       /*    152:MSG_BDC1SJ0_RXCH0    (254U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x48500000},       /*    153:MSG_BDC1SJ1_RXCH0    (255U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x50D00000},       /*    154:MSG_BDC1SJ2_RXCH0    (256U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x53600000},       /*    155:MSG_BDC1SJ3_RXCH0    (257U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x36100000},       /*    156:MSG_BDC1SJ4_RXCH0    (258U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x37800000},       /*    157:MSG_BDC1SJ5_RXCH0    (259U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x3C300000},       /*    158:MSG_BDC1SJ6_RXCH0    (260U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x3F200000},       /*    159:MSG_BDC1SJ7_RXCH0    (261U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x43C00000},       /*    160:MSG_BDC1SJ8_RXCH0    (262U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x61000000},       /*    161:MSG_BDC1SV1_RXCH0    (263U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x60200000},       /*    162:MSG_BDC1SV2_RXCH0    (264U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x59600000},       /*    163:MSG_BDC1SV3_RXCH0    (265U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x37B00000},       /*    164:MSG_BDF3S01_RXCH0    (266U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x18D00000},       /*    165:MSG_BDF3S02_RXCH0    (267U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x19A00000},       /*    166:MSG_BDR3S02_RXCH0    (268U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x3CB00000},       /*    167:MSG_BKD1S01_RXCH0    (269U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x3AB00000},       /*    168:MSG_BKD1S02_RXCH0    (270U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x3F600000},       /*    169:MSG_BSR1S01_RXCH0    (271U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x23500000},       /*    170:MSG_BSR1S02_RXCH0    (272U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x2AF00000},       /*    171:MSG_BSR1S03_RXCH0    (273U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x33300000},       /*    172:MSG_CDC1S01_RXCH0    (274U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x1D900000},       /*    173:MSG_CMB1S03_RXCH0    (275U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x2F300000},       /*    174:MSG_CMB1S04_RXCH0    (276U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x0A900000},       /*    175:MSG_CSR1G10_RXCH0    (277U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x43A00000},       /*    176:MSG_CSR1S04_RXCH0    (278U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x3DB00000},       /*    177:MSG_CSR1S07_RXCH0    (279U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x3DC00000},       /*    178:MSG_CSR1S08_RXCH0    (280U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x43800000},       /*    179:MSG_DCM1S01_RXCH0    (281U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x34F00000},       /*    180:MSG_DCM1S03_RXCH0    (282U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x36300000},       /*    181:MSG_DCM1S04_RXCH0    (283U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x34800000},       /*    182:MSG_DCM1S08_RXCH0    (284U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x27D00000},       /*    183:MSG_DDM1S00_RXCH0    (285U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x12B00000},       /*    184:MSG_DDM1S09_RXCH0    (286U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x0B800000},       /*    185:MSG_DDM1S12_RXCH0    (287U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x2EE00000},       /*    186:MSG_DDM1S16_RXCH0    (288U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x1D700000},       /*    187:MSG_DDM1S17_RXCH0    (289U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x2DA00000},       /*    188:MSG_DDM1S20_RXCH0    (290U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x21900000},       /*    189:MSG_DDM1S32_RXCH0    (291U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x2E500000},       /*    190:MSG_DDM1S35_RXCH0    (292U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x15800000},       /*    191:MSG_DDM1S77_RXCH0    (293U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x28200000},       /*    192:MSG_DDM1SFH_RXCH0    (294U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x52800000},       /*    193:MSG_DKY1S26_RXCH0    (295U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x3BE00000},       /*    194:MSG_DRL1S03_RXCH0    (296U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x3AF00000},       /*    195:MSG_DRR1S03_RXCH0    (297U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x28500000},       /*    196:MSG_DS11S27_RXCH0    (298U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x31700000},       /*    197:MSG_DS11S37_RXCH0    (299U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x60800000},       /*    198:MSG_DS11S40_RXCH0    (300U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x41100000},       /*    199:MSG_DS12F02_RXCH0    (301U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x41200000},       /*    200:MSG_DS12F03_RXCH0    (302U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x3F000000},       /*    201:MSG_DST1S02_RXCH0    (303U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x4A000000},       /*    202:MSG_EBU1D01_RXCH0    (304U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x3BF00000},       /*    203:MSG_ECT1G01_RXCH0    (305U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x2A100000},       /*    204:MSG_ECT1G92_RXCH0    (306U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x40100000},       /*    205:MSG_ECT1S93_RXCH0    (307U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x1BC00000},       /*    206:MSG_EHV1E96_RXCH0    (308U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x07E00000},       /*    207:MSG_EHV1F02_RXCH0    (309U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x0A500000},       /*    208:MSG_EHV1F04_RXCH0    (310U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x12800000},       /*    209:MSG_EHV1G30_RXCH0    (311U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x2A700000},       /*    210:MSG_EHV1G70_RXCH0    (312U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x2A800000},       /*    211:MSG_EHV1G71_RXCH0    (313U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x1D000000},       /*    212:MSG_EHV1S23_RXCH0    (314U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x42F00000},       /*    213:MSG_EHV1S26_RXCH0    (315U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x32500000},       /*    214:MSG_EHV1S31_RXCH0    (316U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x3B600000},       /*    215:MSG_EHV1S90_RXCH0    (317U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x42100000},       /*    216:MSG_EHV1S94_RXCH0    (318U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x40B00000},       /*    217:MSG_EHV1S95_RXCH0    (319U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x1FA00000},       /*    218:MSG_EHV1S96_RXCH0    (320U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x42B00000},       /*    219:MSG_EHV1S97_RXCH0    (321U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x2DE00000},       /*    220:MSG_EHV1S99_RXCH0    (322U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x2EB00000},       /*    221:MSG_EHV1SL2_RXCH0    (323U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x0A600000},       /*    222:MSG_EHV2G02_RXCH0    (324U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x07500000},       /*    223:MSG_EHV2G10_RXCH0    (325U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x0A100000},       /*    224:MSG_EHV2G20_RXCH0    (326U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x33500000},       /*    225:MSG_EIM1S01_RXCH0    (327U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x5F300000},       /*    226:MSG_ENG1C01_RXCH0    (328U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x5F400000},       /*    227:MSG_ENG1C02_RXCH0    (329U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x49900000},       /*    228:MSG_ENG1D51_RXCH0    (330U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x49A00000},       /*    229:MSG_ENG1D52_RXCH0    (331U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x49B00000},       /*    230:MSG_ENG1D53_RXCH0    (332U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x49D00000},       /*    231:MSG_ENG1D55_RXCH0    (333U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x4A800000},       /*    232:MSG_ENG1D56_RXCH0    (334U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x4AE00000},       /*    233:MSG_ENG1D59_RXCH0    (335U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x4AF00000},       /*    234:MSG_ENG1D60_RXCH0    (336U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x0A400000},       /*    235:MSG_ENG1G03_RXCH0    (337U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x1C500000},       /*    236:MSG_ENG1G13_RXCH0    (338U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x51E00000},       /*    237:MSG_ENG1G90_RXCH0    (339U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x0FC00000},       /*    238:MSG_ENG1G92_RXCH0    (340U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x59200000},       /*    239:MSG_ENG1S51_RXCH0    (341U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x58900000},       /*    240:MSG_ENG1S60_RXCH0    (342U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x58300000},       /*    241:MSG_ENG1S99_RXCH0    (343U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x4A300000},       /*    242:MSG_EPS1D50_RXCH0    (344U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x06200000},       /*    243:MSG_EPS1S11_RXCH0    (345U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x1CA00000},       /*    244:MSG_EPS1S90_RXCH0    (346U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x5F600000},       /*    245:MSG_FCM1C01_RXCH0    (347U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x5F100000},       /*    246:MSG_FCM1C03_RXCH0    (348U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x48900000},       /*    247:MSG_FCM1S10_RXCH0    (349U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x48B00000},       /*    248:MSG_FCM1S12_RXCH0    (350U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x25100000},       /*    249:MSG_FCM1S39_RXCH0    (351U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x25200000},       /*    250:MSG_FCM1S40_RXCH0    (352U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x26100000},       /*    251:MSG_FCM1S41_RXCH0    (353U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x27400000},       /*    252:MSG_FCM1S49_RXCH0    (354U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x27500000},       /*    253:MSG_FCM1S51_RXCH0    (355U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x27600000},       /*    254:MSG_FCM1S52_RXCH0    (356U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x27C00000},       /*    255:MSG_FCM1S58_RXCH0    (357U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x28A00000},       /*    256:MSG_FCM1S66_RXCH0    (358U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x25A00000},       /*    257:MSG_FCM1S70_RXCH0    (359U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x15900000},       /*    258:MSG_FCM1S76_RXCH0    (360U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x15A00000},       /*    259:MSG_FCM1S78_RXCH0    (361U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x10000000},       /*    260:MSG_FCM1S79_RXCH0    (362U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x20F00000},       /*    261:MSG_FCM1S88_RXCH0    (363U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x1B200000},       /*    262:MSG_FCM1S90_RXCH0    (364U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x25900000},       /*    263:MSG_FCM1S92_RXCH0    (365U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x0A800000},       /*    264:MSG_FCM1S95_RXCH0    (366U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x11500000},       /*    265:MSG_FWD1S10_RXCH0    (367U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x63300000},       /*    266:MSG_IDT1S02_RXCH0    (368U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x3FB00000},       /*    267:MSG_IDT1S07_RXCH0    (369U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x14B00000},       /*    268:MSG_IDT1S08_RXCH0    (370U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x53200000},       /*    269:MSG_IDT1S15_RXCH0    (371U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x5AD00000},       /*    270:MSG_IMS1S01_RXCH0    (372U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x43B00000},       /*    271:MSG_IPA1S05_RXCH0    (373U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x36B00000},       /*    272:MSG_ITS1S01_RXCH0    (374U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x3DE00000},       /*    273:MSG_ITS1S04_RXCH0    (375U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x31400000},       /*    274:MSG_ITS1S05_RXCH0    (376U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x27B00000},       /*    275:MSG_ITS1S08_RXCH0    (377U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x49400000},       /*    276:MSG_LVN1S01_RXCH0    (378U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x61100000},       /*    277:MSG_MET1S02_RXCH0    (379U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x52400000},       /*    278:MSG_MET1S38_RXCH0    (380U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x1DC00000},       /*    279:MSG_MET1S47_RXCH0    (381U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x1F700000},       /*    280:MSG_MET1S55_RXCH0    (382U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x04900000},       /*    281:MSG_MGC1F13_RXCH0    (383U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x1CC00000},       /*    282:MSG_PDC1G01_RXCH0    (384U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x50700000},       /*    283:MSG_PDC1G02_RXCH0    (385U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x2F400000},       /*    284:MSG_PDS1S01_RXCH0    (386U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x29500000},       /*    285:MSG_PLG1G15_RXCH0    (387U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x29600000},       /*    286:MSG_PLG1G16_RXCH0    (388U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x42200000},       /*    287:MSG_PLG1S01_RXCH0    (389U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x43200000},       /*    288:MSG_PLG1S06_RXCH0    (390U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x2A600000},       /*    289:MSG_PLG1S20_RXCH0    (391U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x20400000},       /*    290:MSG_PLG1S21_RXCH0    (392U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x1D100000},       /*    291:MSG_PMN1G03_RXCH0    (393U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x40300000},       /*    292:MSG_PST1S01_RXCH0    (394U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x40500000},       /*    293:MSG_PST1S02_RXCH0    (395U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x14D00000},       /*    294:MSG_RCP1S01_RXCH0    (396U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x23000000},       /*    295:MSG_RCP1S02_RXCH0    (397U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x14F00000},       /*    296:MSG_RCP1S03_RXCH0    (398U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x2C600000},       /*    297:MSG_RCP1S04_RXCH0    (399U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x2C700000},       /*    298:MSG_RCP1S05_RXCH0    (400U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x2C800000},       /*    299:MSG_RCP1S06_RXCH0    (401U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x3CA00000},       /*    300:MSG_RSE1G20_RXCH0    (402U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x32F00000},       /*    301:MSG_RSE1G24_RXCH0    (403U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x33600000},       /*    302:MSG_RSE1G25_RXCH0    (404U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x34D00000},       /*    303:MSG_RSE1G26_RXCH0    (405U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x3C800000},       /*    304:MSG_RSE1S02_RXCH0    (406U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x32800000},       /*    305:MSG_RST1S03_RXCH0    (407U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x1DB00000},       /*    306:MSG_SBW1G02_RXCH0    (408U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x43900000},       /*    307:MSG_SCN1S01_RXCH0    (409U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x37500000},       /*    308:MSG_SCN1S02_RXCH0    (410U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x4A900000},       /*    309:MSG_SCS1D50_RXCH0    (411U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x10B00000},       /*    310:MSG_SCS1S10_RXCH0    (412U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x2FD00000},       /*    311:MSG_SCS1S11_RXCH0    (413U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x2FE00000},       /*    312:MSG_SCS1S14_RXCH0    (414U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x40C00000},       /*    313:MSG_SOL1S02_RXCH0    (415U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x40D00000},       /*    314:MSG_SOL1S03_RXCH0    (416U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x1EB00000},       /*    315:MSG_SOL1S04_RXCH0    (417U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x1EA00000},       /*    316:MSG_SOL1S05_RXCH0    (418U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x1BB00000},       /*    317:MSG_SOL1S06_RXCH0    (419U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x49500000},       /*    318:MSG_TPM1S02_RXCH0    (420U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x49600000},       /*    319:MSG_TPM1S03_RXCH0    (421U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x34700000},       /*    320:MSG_TPM1S04_RXCH0    (422U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x34C00000},       /*    321:MSG_TPM1S05_RXCH0    (423U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x41700000},       /*    322:MSG_TPM1S06_RXCH0    (424U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x36F00000},       /*    323:MSG_TPM1S07_RXCH0    (425U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x41800000},       /*    324:MSG_TPM1S08_RXCH0    (426U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x42600000},       /*    325:MSG_TPM1S09_RXCH0    (427U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x42800000},       /*    326:MSG_TPM1S10_RXCH0    (428U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x42A00000},       /*    327:MSG_TPM1S11_RXCH0    (429U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x42C00000},       /*    328:MSG_TPM1S12_RXCH0    (430U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x2A000000},       /*    329:MSG_TRA1S01_RXCH0    (431U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x0A000000},       /*    330:MSG_TRA1S02_RXCH0    (432U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x3E700000},       /*    331:MSG_UCB1S01_RXCH0    (433U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x31800000},       /*    332:MSG_VAS1S01_RXCH0    (434U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x4A400000},       /*    333:MSG_VGR1D50_RXCH0    (435U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x4A100000},       /*    334:MSG_VSC1D51_RXCH0    (436U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x06A00000},       /*    335:MSG_VSC1F01_RXCH0    (437U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x06900000},       /*    336:MSG_VSC1G12_RXCH0    (438U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x09E00000},       /*    337:MSG_VSC1G13_RXCH0    (439U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x0B700000},       /*    338:MSG_VSC1G14_RXCH0    (440U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x26200000},       /*    339:MSG_VSC1G96_RXCH0    (441U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x60100000},       /*    340:MSG_VUM1S01_RXCH0    (442U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x2F900000},       /*    341:MSG_WIP1S01_RXCH0    (443U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x27E00000},       /*    342:MSG_YGW1S01_RXCH0    (444U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x37F00000},       /*    343:MSG_ZN11S02_RXCH0    (445U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x38A00000},       /*    344:MSG_ZN11S03_RXCH0    (445U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x08600000},       /*    345:MSG_ZN11S08_RXCH0    (445U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x1DE00000},       /*    346:MSG_ZN11S14_RXCH0    (445U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x1DF00000},       /*    347:MSG_ZN11S17_RXCH0    (445U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x36800000},       /*    348:MSG_ZN11S19_RXCH0    (445U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x39800000},       /*    349:MSG_ZN11S25_RXCH0    (445U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x36A00000},       /*    350:MSG_ZN11S26_RXCH0    (445U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x39C00000},       /*    351:MSG_ZN11S32_RXCH0    (445U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x50000000},       /*    352:MSG_ZN11S38_RXCH0    (445U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x36E00000},       /*    353:MSG_ZN11S60_RXCH0    (445U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x33F00000},       /*    354:MSG_ZN11S63_RXCH0    (445U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x3D200000},       /*    355:MSG_ZN11S64_RXCH0    (445U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x3F900000},       /*    356:MSG_ZN11S65_RXCH0    (445U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x40000000},       /*    357:MSG_ZN11S66_RXCH0    (445U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x40400000},       /*    358:MSG_ZN11S67_RXCH0    (445U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x35000000},       /*    359:MSG_ZN11SF6_RXCH0    (445U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x35200000},       /*    360:MSG_ZN11SF7_RXCH0    (445U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x35300000},       /*    361:MSG_ZN11SF8_RXCH0    (445U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x3BB00000},       /*    362:MSG_ZN11SF9_RXCH0    (445U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x1E100000},       /*    363:MSG_ZN21S05_RXCH0    (445U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x39000000},       /*    364:MSG_ZN21S13_RXCH0    (445U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x1BE00000},       /*    365:MSG_ZN21S28_RXCH0    (445U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x1CE00000},       /*    366:MSG_ZN21S52_RXCH0    (445U) */
-        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x3A900000}        /*    367:MSG_ZN21S72_RXCH0    (445U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x4AC00000},       /*      0:MSG_ABG1D50_RXCH0    (103U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x4BC00000},       /*      1:MSG_ABG1D51_RXCH0    (104U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x3B100000},       /*      2:MSG_ABG1S01_RXCH0    (105U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x1D800000},       /*      3:MSG_ABG1S04_RXCH0    (106U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x1D600000},       /*      4:MSG_ABG1S09_RXCH0    (107U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x4B800000},       /*      5:MSG_ACN1D50_RXCH0    (108U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x3A100000},       /*      6:MSG_ACN1S03_RXCH0    (109U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x38100000},       /*      7:MSG_ACN1S04_RXCH0    (110U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x38200000},       /*      8:MSG_ACN1S05_RXCH0    (111U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x3B000000},       /*      9:MSG_ACN1S07_RXCH0    (112U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x40700000},       /*     10:MSG_ACN1S15_RXCH0    (113U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x40800000},       /*     11:MSG_ACN1S16_RXCH0    (114U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x35400000},       /*     12:MSG_ACN1S22_RXCH0    (115U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x25500000},       /*     13:MSG_ACN1S25_RXCH0    (116U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x50600000},       /*     14:MSG_ACN1S29_RXCH0    (117U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x59400000},       /*     15:MSG_ADC1S06_RXCH0    (118U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x20700000},       /*     16:MSG_ADC1S13_RXCH0    (119U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x20800000},       /*     17:MSG_ADC1S14_RXCH0    (120U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x20900000},       /*     18:MSG_ADC1S15_RXCH0    (121U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x20A00000},       /*     19:MSG_ADC1S17_RXCH0    (122U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x61300000},       /*     20:MSG_ADC1S19_RXCH0    (123U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x1C700000},       /*     21:MSG_ADC1S20_RXCH0    (124U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x20B00000},       /*     22:MSG_ADC1S23_RXCH0    (125U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x14400000},       /*     23:MSG_ADC1S27_RXCH0    (126U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x34900000},       /*     24:MSG_ADC1S30_RXCH0    (127U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x1C000000},       /*     25:MSG_ADC1S31_RXCH0    (128U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x24700000},       /*     26:MSG_ADU1S02_RXCH0    (129U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x1F500000},       /*     27:MSG_ADU1S03_RXCH0    (130U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x1F000000},       /*     28:MSG_ADU1S05_RXCH0    (131U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x22E00000},       /*     29:MSG_ADU1S06_RXCH0    (132U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x20E00000},       /*     30:MSG_ADU1S07_RXCH0    (133U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x16100000},       /*     31:MSG_ADU1S18_RXCH0    (134U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x16200000},       /*     32:MSG_ADU1S19_RXCH0    (135U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x16300000},       /*     33:MSG_ADU1S20_RXCH0    (136U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x16600000},       /*     34:MSG_ADU1S21_RXCH0    (137U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x16700000},       /*     35:MSG_ADU1S22_RXCH0    (138U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x16800000},       /*     36:MSG_ADU1S23_RXCH0    (139U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x16900000},       /*     37:MSG_ADU1S24_RXCH0    (140U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x16A00000},       /*     38:MSG_ADU1S25_RXCH0    (141U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x16B00000},       /*     39:MSG_ADU1S26_RXCH0    (142U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x16C00000},       /*     40:MSG_ADU1S27_RXCH0    (143U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x16D00000},       /*     41:MSG_ADU1S28_RXCH0    (144U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x07200000},       /*     42:MSG_ARS1S01_RXCH0    (145U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x1DD00000},       /*     43:MSG_ARS1S90_RXCH0    (146U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x21400000},       /*     44:MSG_BAT1E41_RXCH0    (147U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x16E00000},       /*     45:MSG_BAT1E45_RXCH0    (148U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x26E00000},       /*     46:MSG_BAT1ED1_RXCH0    (149U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x1BA00000},       /*     47:MSG_BAT1ED5_RXCH0    (150U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x1EF00000},       /*     48:MSG_BAT1EDA_RXCH0    (151U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x27200000},       /*     49:MSG_BAT1EDB_RXCH0    (152U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x3E500000},       /*     50:MSG_BAT1S01_RXCH0    (153U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x12400000},       /*     51:MSG_BAT1S08_RXCH0    (154U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x15500000},       /*     52:MSG_BAT1S11_RXCH0    (155U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x27900000},       /*     53:MSG_BAT2ED2_RXCH0    (156U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x37900000},       /*     54:MSG_BCC1S05_RXCH0    (157U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x3F300000},       /*     55:MSG_BCC1S06_RXCH0    (158U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x38B00000},       /*     56:MSG_BDB1F01_RXCH0    (159U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x38D00000},       /*     57:MSG_BDB1F02_RXCH0    (160U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x1F400000},       /*     58:MSG_BDB1F03_RXCH0    (161U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x1CF00000},       /*     59:MSG_BDB1S01_RXCH0    (162U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x62100000},       /*     60:MSG_BDB1S02_RXCH0    (163U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x62200000},       /*     61:MSG_BDB1S03_RXCH0    (164U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x62300000},       /*     62:MSG_BDB1S04_RXCH0    (165U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x38000000},       /*     63:MSG_BDB1S05_RXCH0    (166U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x62400000},       /*     64:MSG_BDB1S08_RXCH0    (167U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x62600000},       /*     65:MSG_BDB1S10_RXCH0    (168U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x62C00000},       /*     66:MSG_BDB1S13_RXCH0    (169U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x3FC00000},       /*     67:MSG_BDB1S19_RXCH0    (170U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x30600000},       /*     68:MSG_BDB1S25_RXCH0    (171U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x30500000},       /*     69:MSG_BDB1S26_RXCH0    (172U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x62900000},       /*     70:MSG_BDB1S27_RXCH0    (173U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x62A00000},       /*     71:MSG_BDB1S28_RXCH0    (174U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x39700000},       /*     72:MSG_BDB1S29_RXCH0    (175U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x3B500000},       /*     73:MSG_BDB1S35_RXCH0    (176U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x3B800000},       /*     74:MSG_BDB1S36_RXCH0    (177U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x4B900000},       /*     75:MSG_BDC1D00_RXCH0    (178U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x4BA00000},       /*     76:MSG_BDC1D01_RXCH0    (179U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x31200000},       /*     77:MSG_BDC1S13_RXCH0    (180U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x32000000},       /*     78:MSG_BDC1S14_RXCH0    (181U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x32A00000},       /*     79:MSG_BDC1S16_RXCH0    (182U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x18600000},       /*     80:MSG_BDC1S30_RXCH0    (183U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x1D200000},       /*     81:MSG_BDC1S33_RXCH0    (184U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x09C00000},       /*     82:MSG_BDC1S40_RXCH0    (185U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x14800000},       /*     83:MSG_BDC1S41_RXCH0    (186U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x1D300000},       /*     84:MSG_BDC1S46_RXCH0    (187U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x33700000},       /*     85:MSG_BDC1S48_RXCH0    (188U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x01300000},       /*     86:MSG_BDC1S52_RXCH0    (189U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x01B00000},       /*     87:MSG_BDC1S60_RXCH0    (190U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x34100000},       /*     88:MSG_BDC1S74_RXCH0    (191U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x1E300000},       /*     89:MSG_BDC1S81_RXCH0    (192U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x15000000},       /*     90:MSG_BDC1S82_RXCH0    (193U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x36700000},       /*     91:MSG_BDC1S83_RXCH0    (194U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x1A000000},       /*     92:MSG_BDC1S87_RXCH0    (195U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x36C00000},       /*     93:MSG_BDC1S89_RXCH0    (196U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x1E400000},       /*     94:MSG_BDC1S91_RXCH0    (197U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x35500000},       /*     95:MSG_BDC1S97_RXCH0    (198U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x35800000},       /*     96:MSG_BDC1S98_RXCH0    (199U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x35D00000},       /*     97:MSG_BDC1S99_RXCH0    (200U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x1A400000},       /*     98:MSG_BDC1SA0_RXCH0    (201U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x35F00000},       /*     99:MSG_BDC1SA1_RXCH0    (202U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x39300000},       /*    100:MSG_BDC1SC1_RXCH0    (203U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x39500000},       /*    101:MSG_BDC1SC2_RXCH0    (204U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x39600000},       /*    102:MSG_BDC1SC3_RXCH0    (205U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x39A00000},       /*    103:MSG_BDC1SC4_RXCH0    (206U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x39B00000},       /*    104:MSG_BDC1SC5_RXCH0    (207U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x39D00000},       /*    105:MSG_BDC1SC6_RXCH0    (208U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x39E00000},       /*    106:MSG_BDC1SC7_RXCH0    (209U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x39F00000},       /*    107:MSG_BDC1SC8_RXCH0    (210U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x3A500000},       /*    108:MSG_BDC1SC9_RXCH0    (211U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x3AC00000},       /*    109:MSG_BDC1SD1_RXCH0    (212U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x3AE00000},       /*    110:MSG_BDC1SD2_RXCH0    (213U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x3B200000},       /*    111:MSG_BDC1SD3_RXCH0    (214U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x3B300000},       /*    112:MSG_BDC1SD4_RXCH0    (215U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x3B900000},       /*    113:MSG_BDC1SD5_RXCH0    (216U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x3BC00000},       /*    114:MSG_BDC1SD6_RXCH0    (217U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x3C600000},       /*    115:MSG_BDC1SD7_RXCH0    (218U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x3C700000},       /*    116:MSG_BDC1SD8_RXCH0    (219U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x3CD00000},       /*    117:MSG_BDC1SD9_RXCH0    (220U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x3D300000},       /*    118:MSG_BDC1SE1_RXCH0    (221U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x3D600000},       /*    119:MSG_BDC1SE2_RXCH0    (222U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x3DD00000},       /*    120:MSG_BDC1SE3_RXCH0    (223U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x3E100000},       /*    121:MSG_BDC1SE4_RXCH0    (224U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x3EB00000},       /*    122:MSG_BDC1SE5_RXCH0    (225U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x3EF00000},       /*    123:MSG_BDC1SE6_RXCH0    (226U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x3F500000},       /*    124:MSG_BDC1SE7_RXCH0    (227U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x42300000},       /*    125:MSG_BDC1SE8_RXCH0    (228U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x42900000},       /*    126:MSG_BDC1SE9_RXCH0    (229U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x43000000},       /*    127:MSG_BDC1SF1_RXCH0    (230U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x48000000},       /*    128:MSG_BDC1SF2_RXCH0    (231U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x48400000},       /*    129:MSG_BDC1SF3_RXCH0    (232U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x49100000},       /*    130:MSG_BDC1SF4_RXCH0    (233U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x34E00000},       /*    131:MSG_BDC1SF5_RXCH0    (234U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x49700000},       /*    132:MSG_BDC1SF6_RXCH0    (235U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x52600000},       /*    133:MSG_BDC1SG4_RXCH0    (236U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x52B00000},       /*    134:MSG_BDC1SG6_RXCH0    (237U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x52C00000},       /*    135:MSG_BDC1SG7_RXCH0    (238U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x53000000},       /*    136:MSG_BDC1SG8_RXCH0    (239U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x53100000},       /*    137:MSG_BDC1SG9_RXCH0    (240U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x53400000},       /*    138:MSG_BDC1SH3_RXCH0    (241U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x53500000},       /*    139:MSG_BDC1SH4_RXCH0    (242U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x53700000},       /*    140:MSG_BDC1SH5_RXCH0    (243U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x53800000},       /*    141:MSG_BDC1SH6_RXCH0    (244U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x2B300000},       /*    142:MSG_BDC1SH8_RXCH0    (245U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x3CE00000},       /*    143:MSG_BDC1SI0_RXCH0    (246U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x3E800000},       /*    144:MSG_BDC1SI1_RXCH0    (247U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x3E900000},       /*    145:MSG_BDC1SI2_RXCH0    (248U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x3F400000},       /*    146:MSG_BDC1SI3_RXCH0    (249U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x31E00000},       /*    147:MSG_BDC1SI4_RXCH0    (250U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x31F00000},       /*    148:MSG_BDC1SI5_RXCH0    (251U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x32100000},       /*    149:MSG_BDC1SI6_RXCH0    (252U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x50800000},       /*    150:MSG_BDC1SI7_RXCH0    (253U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x50B00000},       /*    151:MSG_BDC1SI8_RXCH0    (254U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x50C00000},       /*    152:MSG_BDC1SI9_RXCH0    (255U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x50E00000},       /*    153:MSG_BDC1SJ0_RXCH0    (256U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x48500000},       /*    154:MSG_BDC1SJ1_RXCH0    (257U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x50D00000},       /*    155:MSG_BDC1SJ2_RXCH0    (258U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x53600000},       /*    156:MSG_BDC1SJ3_RXCH0    (259U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x36100000},       /*    157:MSG_BDC1SJ4_RXCH0    (260U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x37800000},       /*    158:MSG_BDC1SJ5_RXCH0    (261U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x3C300000},       /*    159:MSG_BDC1SJ6_RXCH0    (262U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x3F200000},       /*    160:MSG_BDC1SJ7_RXCH0    (263U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x43C00000},       /*    161:MSG_BDC1SJ8_RXCH0    (264U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x61000000},       /*    162:MSG_BDC1SV1_RXCH0    (265U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x60200000},       /*    163:MSG_BDC1SV2_RXCH0    (266U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x59600000},       /*    164:MSG_BDC1SV3_RXCH0    (267U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x37B00000},       /*    165:MSG_BDF3S01_RXCH0    (268U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x18D00000},       /*    166:MSG_BDF3S02_RXCH0    (269U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x19A00000},       /*    167:MSG_BDR3S02_RXCH0    (270U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x3CB00000},       /*    168:MSG_BKD1S01_RXCH0    (271U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x3AB00000},       /*    169:MSG_BKD1S02_RXCH0    (272U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x3F600000},       /*    170:MSG_BSR1S01_RXCH0    (273U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x23500000},       /*    171:MSG_BSR1S02_RXCH0    (274U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x2AF00000},       /*    172:MSG_BSR1S03_RXCH0    (275U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x33300000},       /*    173:MSG_CDC1S01_RXCH0    (276U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x1D900000},       /*    174:MSG_CMB1S03_RXCH0    (277U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x2F300000},       /*    175:MSG_CMB1S04_RXCH0    (278U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x0A900000},       /*    176:MSG_CSR1G10_RXCH0    (279U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x43A00000},       /*    177:MSG_CSR1S04_RXCH0    (280U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x3DB00000},       /*    178:MSG_CSR1S07_RXCH0    (281U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x3DC00000},       /*    179:MSG_CSR1S08_RXCH0    (282U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x43800000},       /*    180:MSG_DCM1S01_RXCH0    (283U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x34F00000},       /*    181:MSG_DCM1S03_RXCH0    (284U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x36300000},       /*    182:MSG_DCM1S04_RXCH0    (285U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x34800000},       /*    183:MSG_DCM1S08_RXCH0    (286U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x27D00000},       /*    184:MSG_DDM1S00_RXCH0    (287U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x12B00000},       /*    185:MSG_DDM1S09_RXCH0    (288U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x0B800000},       /*    186:MSG_DDM1S12_RXCH0    (289U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x2EE00000},       /*    187:MSG_DDM1S16_RXCH0    (290U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x1D700000},       /*    188:MSG_DDM1S17_RXCH0    (291U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x2DA00000},       /*    189:MSG_DDM1S20_RXCH0    (292U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x21900000},       /*    190:MSG_DDM1S32_RXCH0    (293U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x2E500000},       /*    191:MSG_DDM1S35_RXCH0    (294U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x15800000},       /*    192:MSG_DDM1S77_RXCH0    (295U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x28200000},       /*    193:MSG_DDM1SFH_RXCH0    (296U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x52800000},       /*    194:MSG_DKY1S26_RXCH0    (297U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x3BE00000},       /*    195:MSG_DRL1S03_RXCH0    (298U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x3AF00000},       /*    196:MSG_DRR1S03_RXCH0    (299U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x28500000},       /*    197:MSG_DS11S27_RXCH0    (300U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x31700000},       /*    198:MSG_DS11S37_RXCH0    (301U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x60800000},       /*    199:MSG_DS11S40_RXCH0    (302U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x41100000},       /*    200:MSG_DS12F02_RXCH0    (303U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x41200000},       /*    201:MSG_DS12F03_RXCH0    (304U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x3F000000},       /*    202:MSG_DST1S02_RXCH0    (305U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x4A000000},       /*    203:MSG_EBU1D01_RXCH0    (306U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x3BF00000},       /*    204:MSG_ECT1G01_RXCH0    (307U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x2A100000},       /*    205:MSG_ECT1G92_RXCH0    (308U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x40100000},       /*    206:MSG_ECT1S93_RXCH0    (309U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x1BC00000},       /*    207:MSG_EHV1E96_RXCH0    (310U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x07E00000},       /*    208:MSG_EHV1F02_RXCH0    (311U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x0A500000},       /*    209:MSG_EHV1F04_RXCH0    (312U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x12800000},       /*    210:MSG_EHV1G30_RXCH0    (313U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x2A700000},       /*    211:MSG_EHV1G70_RXCH0    (314U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x2A800000},       /*    212:MSG_EHV1G71_RXCH0    (315U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x1D000000},       /*    213:MSG_EHV1S23_RXCH0    (316U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x42F00000},       /*    214:MSG_EHV1S26_RXCH0    (317U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x32500000},       /*    215:MSG_EHV1S31_RXCH0    (318U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x3B600000},       /*    216:MSG_EHV1S90_RXCH0    (319U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x42100000},       /*    217:MSG_EHV1S94_RXCH0    (320U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x40B00000},       /*    218:MSG_EHV1S95_RXCH0    (321U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x1FA00000},       /*    219:MSG_EHV1S96_RXCH0    (322U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x42B00000},       /*    220:MSG_EHV1S97_RXCH0    (323U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x2DE00000},       /*    221:MSG_EHV1S99_RXCH0    (324U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x2EB00000},       /*    222:MSG_EHV1SL2_RXCH0    (325U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x0A600000},       /*    223:MSG_EHV2G02_RXCH0    (326U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x07500000},       /*    224:MSG_EHV2G10_RXCH0    (327U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x0A100000},       /*    225:MSG_EHV2G20_RXCH0    (328U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x20200000},       /*    226:MSG_EHV2G70_RXCH0    (329U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x33500000},       /*    227:MSG_EIM1S01_RXCH0    (330U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x5F300000},       /*    228:MSG_ENG1C01_RXCH0    (331U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x5F400000},       /*    229:MSG_ENG1C02_RXCH0    (332U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x49900000},       /*    230:MSG_ENG1D51_RXCH0    (333U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x49A00000},       /*    231:MSG_ENG1D52_RXCH0    (334U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x49B00000},       /*    232:MSG_ENG1D53_RXCH0    (335U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x49D00000},       /*    233:MSG_ENG1D55_RXCH0    (336U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x4A800000},       /*    234:MSG_ENG1D56_RXCH0    (337U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x4AE00000},       /*    235:MSG_ENG1D59_RXCH0    (338U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x4AF00000},       /*    236:MSG_ENG1D60_RXCH0    (339U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x0A400000},       /*    237:MSG_ENG1G03_RXCH0    (340U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x1C500000},       /*    238:MSG_ENG1G13_RXCH0    (341U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x51E00000},       /*    239:MSG_ENG1G90_RXCH0    (342U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x0FC00000},       /*    240:MSG_ENG1G92_RXCH0    (343U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x59200000},       /*    241:MSG_ENG1S51_RXCH0    (344U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x58900000},       /*    242:MSG_ENG1S60_RXCH0    (345U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x58300000},       /*    243:MSG_ENG1S99_RXCH0    (346U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x4A300000},       /*    244:MSG_EPS1D50_RXCH0    (347U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x06200000},       /*    245:MSG_EPS1S11_RXCH0    (348U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x1CA00000},       /*    246:MSG_EPS1S90_RXCH0    (349U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x5F600000},       /*    247:MSG_FCM1C01_RXCH0    (350U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x5F100000},       /*    248:MSG_FCM1C03_RXCH0    (351U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x48900000},       /*    249:MSG_FCM1S10_RXCH0    (352U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x48B00000},       /*    250:MSG_FCM1S12_RXCH0    (353U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x25100000},       /*    251:MSG_FCM1S39_RXCH0    (354U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x25200000},       /*    252:MSG_FCM1S40_RXCH0    (355U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x26100000},       /*    253:MSG_FCM1S41_RXCH0    (356U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x27400000},       /*    254:MSG_FCM1S49_RXCH0    (357U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x27500000},       /*    255:MSG_FCM1S51_RXCH0    (358U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x27600000},       /*    256:MSG_FCM1S52_RXCH0    (359U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x27C00000},       /*    257:MSG_FCM1S58_RXCH0    (360U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x28A00000},       /*    258:MSG_FCM1S66_RXCH0    (361U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x25A00000},       /*    259:MSG_FCM1S70_RXCH0    (362U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x15900000},       /*    260:MSG_FCM1S76_RXCH0    (363U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x15A00000},       /*    261:MSG_FCM1S78_RXCH0    (364U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x10000000},       /*    262:MSG_FCM1S79_RXCH0    (365U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x20F00000},       /*    263:MSG_FCM1S88_RXCH0    (366U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x1B200000},       /*    264:MSG_FCM1S90_RXCH0    (367U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x25900000},       /*    265:MSG_FCM1S92_RXCH0    (368U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x0A800000},       /*    266:MSG_FCM1S95_RXCH0    (369U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x11500000},       /*    267:MSG_FWD1S10_RXCH0    (370U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x63300000},       /*    268:MSG_IDT1S02_RXCH0    (371U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x3FB00000},       /*    269:MSG_IDT1S07_RXCH0    (372U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x14B00000},       /*    270:MSG_IDT1S08_RXCH0    (373U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x53200000},       /*    271:MSG_IDT1S15_RXCH0    (374U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x5AD00000},       /*    272:MSG_IMS1S01_RXCH0    (375U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x43B00000},       /*    273:MSG_IPA1S05_RXCH0    (376U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x36B00000},       /*    274:MSG_ITS1S01_RXCH0    (377U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x3DE00000},       /*    275:MSG_ITS1S04_RXCH0    (378U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x31400000},       /*    276:MSG_ITS1S05_RXCH0    (379U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x27B00000},       /*    277:MSG_ITS1S08_RXCH0    (380U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x49400000},       /*    278:MSG_LVN1S01_RXCH0    (381U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x61100000},       /*    279:MSG_MET1S02_RXCH0    (382U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x52400000},       /*    280:MSG_MET1S38_RXCH0    (383U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x1DC00000},       /*    281:MSG_MET1S47_RXCH0    (384U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x1F700000},       /*    282:MSG_MET1S55_RXCH0    (385U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x04900000},       /*    283:MSG_MGC1F13_RXCH0    (386U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x3BD00000},       /*    284:MSG_PCN1S01_RXCH0    (387U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x1CC00000},       /*    285:MSG_PDC1G01_RXCH0    (388U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x50700000},       /*    286:MSG_PDC1G02_RXCH0    (389U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x2F400000},       /*    287:MSG_PDS1S01_RXCH0    (390U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x29500000},       /*    288:MSG_PLG1G15_RXCH0    (391U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x29600000},       /*    289:MSG_PLG1G16_RXCH0    (392U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x42200000},       /*    290:MSG_PLG1S01_RXCH0    (393U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x43200000},       /*    291:MSG_PLG1S06_RXCH0    (394U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x2A600000},       /*    292:MSG_PLG1S20_RXCH0    (395U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x20400000},       /*    293:MSG_PLG1S21_RXCH0    (396U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x1D100000},       /*    294:MSG_PMN1G03_RXCH0    (397U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x40300000},       /*    295:MSG_PST1S01_RXCH0    (398U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x40500000},       /*    296:MSG_PST1S02_RXCH0    (399U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x14D00000},       /*    297:MSG_RCP1S01_RXCH0    (400U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x23000000},       /*    298:MSG_RCP1S02_RXCH0    (401U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x14F00000},       /*    299:MSG_RCP1S03_RXCH0    (402U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x2C600000},       /*    300:MSG_RCP1S04_RXCH0    (403U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x2C700000},       /*    301:MSG_RCP1S05_RXCH0    (404U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x2C800000},       /*    302:MSG_RCP1S06_RXCH0    (405U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x3CA00000},       /*    303:MSG_RSE1G20_RXCH0    (406U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x32F00000},       /*    304:MSG_RSE1G24_RXCH0    (407U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x33600000},       /*    305:MSG_RSE1G25_RXCH0    (408U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x34D00000},       /*    306:MSG_RSE1G26_RXCH0    (409U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x3C800000},       /*    307:MSG_RSE1S02_RXCH0    (410U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x32800000},       /*    308:MSG_RST1S03_RXCH0    (411U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x1DB00000},       /*    309:MSG_SBW1G02_RXCH0    (412U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x43900000},       /*    310:MSG_SCN1S01_RXCH0    (413U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x37500000},       /*    311:MSG_SCN1S02_RXCH0    (414U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x4A900000},       /*    312:MSG_SCS1D50_RXCH0    (415U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x10B00000},       /*    313:MSG_SCS1S10_RXCH0    (416U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x2FD00000},       /*    314:MSG_SCS1S11_RXCH0    (417U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x2FE00000},       /*    315:MSG_SCS1S14_RXCH0    (418U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x40C00000},       /*    316:MSG_SOL1S02_RXCH0    (419U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x40D00000},       /*    317:MSG_SOL1S03_RXCH0    (420U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x1EB00000},       /*    318:MSG_SOL1S04_RXCH0    (421U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x1EA00000},       /*    319:MSG_SOL1S05_RXCH0    (422U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x1BB00000},       /*    320:MSG_SOL1S06_RXCH0    (423U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x49500000},       /*    321:MSG_TPM1S02_RXCH0    (424U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x49600000},       /*    322:MSG_TPM1S03_RXCH0    (425U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x34700000},       /*    323:MSG_TPM1S04_RXCH0    (426U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x34C00000},       /*    324:MSG_TPM1S05_RXCH0    (427U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x41700000},       /*    325:MSG_TPM1S06_RXCH0    (428U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x36F00000},       /*    326:MSG_TPM1S07_RXCH0    (429U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x41800000},       /*    327:MSG_TPM1S08_RXCH0    (430U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x42600000},       /*    328:MSG_TPM1S09_RXCH0    (431U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x42800000},       /*    329:MSG_TPM1S10_RXCH0    (432U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x42A00000},       /*    330:MSG_TPM1S11_RXCH0    (433U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x42C00000},       /*    331:MSG_TPM1S12_RXCH0    (434U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x2A000000},       /*    332:MSG_TRA1S01_RXCH0    (435U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x0A000000},       /*    333:MSG_TRA1S02_RXCH0    (436U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x3E700000},       /*    334:MSG_UCB1S01_RXCH0    (437U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x31800000},       /*    335:MSG_VAS1S01_RXCH0    (438U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x4A400000},       /*    336:MSG_VGR1D50_RXCH0    (439U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x4A100000},       /*    337:MSG_VSC1D51_RXCH0    (440U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x06A00000},       /*    338:MSG_VSC1F01_RXCH0    (441U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x06900000},       /*    339:MSG_VSC1G12_RXCH0    (442U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x09E00000},       /*    340:MSG_VSC1G13_RXCH0    (443U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x0B700000},       /*    341:MSG_VSC1G14_RXCH0    (444U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x26200000},       /*    342:MSG_VSC1G96_RXCH0    (445U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x60100000},       /*    343:MSG_VUM1S01_RXCH0    (446U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x2F900000},       /*    344:MSG_WIP1S01_RXCH0    (447U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x27E00000},       /*    345:MSG_YGW1S01_RXCH0    (448U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x37F00000},       /*    346:MSG_ZN11S02_RXCH0    (449U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x38A00000},       /*    347:MSG_ZN11S03_RXCH0    (450U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x08600000},       /*    348:MSG_ZN11S08_RXCH0    (451U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x1DE00000},       /*    349:MSG_ZN11S14_RXCH0    (452U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x1DF00000},       /*    350:MSG_ZN11S17_RXCH0    (453U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x36800000},       /*    351:MSG_ZN11S19_RXCH0    (454U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x39800000},       /*    352:MSG_ZN11S25_RXCH0    (455U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x36A00000},       /*    353:MSG_ZN11S26_RXCH0    (456U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x39C00000},       /*    354:MSG_ZN11S32_RXCH0    (457U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x50000000},       /*    355:MSG_ZN11S38_RXCH0    (458U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x36E00000},       /*    356:MSG_ZN11S60_RXCH0    (459U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x33F00000},       /*    357:MSG_ZN11S63_RXCH0    (460U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x3D200000},       /*    358:MSG_ZN11S64_RXCH0    (461U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x3F900000},       /*    359:MSG_ZN11S65_RXCH0    (462U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x40000000},       /*    360:MSG_ZN11S66_RXCH0    (463U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x40400000},       /*    361:MSG_ZN11S67_RXCH0    (464U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x35000000},       /*    362:MSG_ZN11SF6_RXCH0    (465U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x35200000},       /*    363:MSG_ZN11SF7_RXCH0    (466U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x35300000},       /*    364:MSG_ZN11SF8_RXCH0    (467U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x3BB00000},       /*    365:MSG_ZN11SF9_RXCH0    (468U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x1E100000},       /*    366:MSG_ZN21S05_RXCH0    (469U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x39000000},       /*    367:MSG_ZN21S13_RXCH0    (470U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x1BE00000},       /*    368:MSG_ZN21S28_RXCH0    (471U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x1CE00000},       /*    369:MSG_ZN21S52_RXCH0    (472U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x3A900000}        /*    370:MSG_ZN21S72_RXCH0    (473U) */
     };
 
     U1  u1_t_act;
@@ -1692,6 +1763,7 @@ static void            vd_s_XspiIviClockUTCStuckBuff(const U1 u1_a_ID,const U2 u
 /*  1.8.0    07/21/2025  TN       Added GW processing for signals excluded in Comm. Spec. V7.30.                                     */
 /*  1.9.0    08/19/2025  TN       Added gateway for QSEv.                                                                            */
 /*  1.10.0   10/06/2025  TN       Update Gateway Process: BEVstep3-Cockpit_CanVmRouting_v7.30.xlsx Revision 12104                    */
+/*  1.11.0   02/02/2025  KT       Fixed Gateway Process: BEVstep3-Cockpit_CanVmRouting_v7.30.xlsx BEVS3CDC-26407                     */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  * TN   = Tetsu Naruse, Denso Techno                                                                                              */
