@@ -1187,7 +1187,7 @@ static void vd_s_FwushResetSeqProgress(void)
 static U1 u1_s_FwushGetFswaStat(void)
 {
     /* Same Address with CODEFLS_U4_REGADD_FSWASTAT_0 in CodeFls_Reg.h */
-    return((U1)((*(volatile uint32 *)((uint32)0xFFA10000UL + 0x0A8UL) & (U4)FWUSH_FSWA_READ_POS)));
+    return((U1)((*(volatile uint32 *)((uint32)0xFFA10000UL + 0x0A8UL) & (U1)FWUSH_FSWA_READ_POS)));
 }
 
 /*===================================================================================================================================*/
