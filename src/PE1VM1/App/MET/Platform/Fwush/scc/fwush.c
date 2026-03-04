@@ -70,7 +70,7 @@ static U1 u1_s_FwushDetectEvent(void);
 static U1 u1_s_FwushDetectEventForWaiting(void);
 static U1 u1_s_FwushDetectEventForProcessing(void);
 static U1 u1_s_FwushCheckMemAccJobEvent(void);
-/* State-to-event mapping helper (Phase2 unified) */
+/* State-to-event mapping helper */
 static U1 u1_s_FwushMapMainStatusToEvent(U1 u1_a_main_status);
 static void vd_s_FwushExecuteStateSpecificAction(U1 event);
 
@@ -98,11 +98,10 @@ static void vd_s_FwushHandleCancelDuringJob(void);
 
 /* Data generation */
 static void vd_s_FwushMakeResData(U1 u1_a_subtype_res, U1 u1_a_response);
-static U1   u1_s_FwushMakePrepData(U4 * u4_ap_adr, U4 * u4_ap_length, U4 * u4_ap_crc);
 static U1   u1_s_FwushMakeRunData(U4 * u4_ap_adr, U2 * u2_ap_ofst);
 
 /* Abort handling */
-static void vd_g_FwushAbort(void);
+static void vd_s_FwushAbort(void);
 
 /* for FWUSH_SEQ_PROGRESS */
 static void vd_s_FwushUpdateSeqProgress(U1 u1_a_progress_bit);
@@ -408,7 +407,7 @@ void vd_g_FwushMainTask(void)
 
     /* 5. Error handling */
     if(u1_s_fwush_abort != (U1)FALSE){
-        vd_g_FwushAbort();
+        vd_s_FwushAbort();
     }
     
     /* 6. Execute MemAcc task */
@@ -607,7 +606,6 @@ static U1 u1_s_FwushCheckMemAccJobEvent(void)
     U1 u1_t_update_status;
 
     u1_t_event = (U1)FWUSH_EVENT_NONE;
-    /* Get status from Phase2 unified GetStatus */
     vd_g_FwuMemAccGetStatus(&u1_t_job_type, &u1_t_main_status);
     u1_t_event = u1_s_FwushMapMainStatusToEvent(u1_t_main_status);
 
@@ -1071,34 +1069,6 @@ static void vd_s_FwushMakeResData(U1 u1_a_subtype, U1 u1_a_response)
                       | ((U4)u1_s_fwupx_res_seqcnt << (U1)24U);
     vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_FWUPXRES, &u4_tp_res_data[0], (U2)FWUSH_RES_WORDS);
 }
-/*===================================================================================================================================*/
-/* static U1 u1_s_FwushMakePrepData(U4 * u4_ap_adr, U4 * u4_ap_length, U4 * u4_ap_crc)                                               */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      U4 * u4_ap_adr    : Pointer to store address                                                                     */
-/*                  U4 * u4_ap_length  : Pointer to store length                                                                     */
-/*                  U4 * u4_ap_crc     : Pointer to store CRC                                                                        */
-/*  Return:         U1 : TRUE if data created successfully, FALSE otherwise                                                          */
-/*===================================================================================================================================*/
-static U1 u1_s_FwushMakePrepData(U4 * u4_ap_adr, U4 * u4_ap_length, U4 * u4_ap_crc)
-{
-    U4   u4_t_adr;
-    U1 * u1_tp_adr;
-    U1   u1_t_ret;
-
-    u1_t_ret  = u1_s_FwushReadData(&u4_t_adr);
-    u1_tp_adr = (U1 *)u4_t_adr;
-
-    if(u1_t_ret == (U1)TRUE){
-        *u4_ap_adr    = (U4)0x1c000U;
-        *u4_ap_length = (U4)0x7A4000U;
-        *u4_ap_crc    = (U4)u1_tp_adr[FWUSH_REQ_PREP_DATA_CRC_OFFSET]
-                      | ((U4)u1_tp_adr[FWUSH_REQ_PREP_DATA_CRC_OFFSET + 1] << (U4)8U)
-                      | ((U4)u1_tp_adr[FWUSH_REQ_PREP_DATA_CRC_OFFSET + 2] << (U4)16U)
-                      | ((U4)u1_tp_adr[FWUSH_REQ_PREP_DATA_CRC_OFFSET + 3] << (U4)24U);
-    }
-
-    return(u1_t_ret);
-}
 
 /*===================================================================================================================================*/
 /* static U1 u1_s_FwushMakeRunData(U4 * u4_ap_adr, U2 * u2_ap_ofst)                                                                  */
@@ -1117,12 +1087,12 @@ static U1 u1_s_FwushMakeRunData(U4 * u4_ap_adr, U2 * u2_ap_ofst)
     return(u1_t_ret);
 }
 /*===================================================================================================================================*/
-/* static void vd_g_FwushAbort(void)                                                                                                 */
+/* static void vd_s_FwushAbort(void)                                                                                                 */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-static void vd_g_FwushAbort(void)
+static void vd_s_FwushAbort(void)
 {
     /* Initialize state variables */
     u1_s_fwush_state_main       = (U1)FWUSH_MAIN_STATE_PREP;
