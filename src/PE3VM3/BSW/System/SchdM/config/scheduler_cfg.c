@@ -59,6 +59,7 @@
 #include "PwrCtlSup.h"
 #include "VSM.h"
 #include "CanIfProxy.h"
+#include "AppSS.h"
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -166,6 +167,7 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     {&EthSW_MediumTask,                 (U4)SCHDLR_TASKBIT___5MS    },
     {&vd_g_VISMidCycle	,               (U4)SCHDLR_TASKBIT___5MS    },
 /*  {&CanIfProxy_MainFunction,          (U4)SCHDLR_TASKBIT___5MS    }, */
+    {&AppSS_Main,                       (U4)SCHDLR_TASKBIT___5MS    },
     {&ChipCom_MainFunctionPostApp,      (U4)SCHDLR_TASKBIT___5MS    },
 
     /*-------------------------------------------------------------------*/

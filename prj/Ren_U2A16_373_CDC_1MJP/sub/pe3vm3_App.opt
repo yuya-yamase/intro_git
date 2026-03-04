@@ -15,10 +15,11 @@
 # ----------------------------------------------------------------------------------------------------------------------------------
 # includes
 # ----------------------------------------------------------------------------------------------------------------------------------
-    -I../../src/PE3VM3/App/Central/CanIfProxy/inc
+    -I../../src/PE3VM3/App/Central/AppSS/inc
     -I../../src/PE3VM3/App/Central/CanIfProxy/cfg
-    -I../../src/PE3VM3/App/Central/ChipCom/inc
+    -I../../src/PE3VM3/App/Central/CanIfProxy/inc
     -I../../src/PE3VM3/App/Central/ChipCom/cfg
+    -I../../src/PE3VM3/App/Central/ChipCom/inc
     -I../../src/PE3VM3/App/Central/esw/EthDLC/Config
     -I../../src/PE3VM3/App/Central/esw/EthDLC/Core
     -I../../src/PE3VM3/App/Central/esw/EthDLC
@@ -28,8 +29,8 @@
     -I../../src/PE3VM3/App/Central/esw/EthSwt
     -I../../src/PE3VM3/App/Central/esw/EthSwt/Register
     -I../../src/PE3VM3/App/Central/inc
-    -I../../src/PE3VM3/App/Central/VCanAck/inc
     -I../../src/PE3VM3/App/Central/VCanAck/cfg
+    -I../../src/PE3VM3/App/Central/VCanAck/inc
     -I../../src/PE3VM3/App/Central/VIS/inc
     -I../../src/PE3VM3/App/Central/VSM/inc
     -I../../src/PE3VM3/App/Common/PwrCtrl
@@ -37,6 +38,6 @@
 
 # ----------------------------------------------------------------------------------------------------------------------------------
 # ghsprj version 1-0-0
-# Date generated: 2025/11/27 15:24:34
+# Date generated: 2026/02/27 10:21:34
 # ----------------------------------------------------------------------------------------------------------------------------------
 
