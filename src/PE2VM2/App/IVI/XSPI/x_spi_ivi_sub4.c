@@ -17,6 +17,7 @@
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include    "x_spi_ivi_sub4_private.h"
+#include    "x_spi_ivi_sub1_power.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -95,6 +96,10 @@
 /* Provisional (CANSignal To VM1) */
 #define XSPI_IVI_IVDSH_NWORD                (1U)
 /* Provisional (CANSignal To VM1) */
+
+/*Reset Signal Mask Value*/
+#define XSPI_IVI_CAN_CDSIZE_MASK            (0x0FU)
+#define XSPI_IVI_CAN_PVMREQ_MASK            (0x03U)
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -150,6 +155,7 @@ static U4       u4_s_XspiIviBinarySearch(U4 canid);
 static void     vd_s_XspiIviCANCommandStuckBuff(const U1 u1_a_ID,const U2 u2_a_SIZE);
 static U1       u1_s_XspiIviClockUTCDataEventJdg(const U1* u1_ap_DATA,const U1* u1_ap_DATA_PRE,const U1 u1_a_SIZE);
 static void     vd_s_XspiIviClockUTCStuckBuff(const U1 u1_a_ID,const U2 u2_a_SIZE);
+static void     vd_s_XspiIviSub4ResetInit(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
@@ -194,8 +200,70 @@ void            vd_g_XspiIviSub4Init(void)
     vd_g_MemfillU1(&u1_sp_Xspi_Ivi_MET1S62_Data[0], (U1)0U, (U4)XSPI_IVI_CAN_DLC_08);
     vd_g_MemfillU1(&u1_sp_Xspi_Ivi_MET1S70_Data[0], (U1)0U, (U4)XSPI_IVI_CAN_DLC_32);
     /* Provisional (CANSignal To VM1) */
-	
-	u1_s_Xspi_Ivi_DataNm2_Sgnl_pre = (U1)U1_MAX;
+
+    u1_s_Xspi_Ivi_DataNm2_Sgnl_pre = (U1)U1_MAX;
+}
+
+/*===================================================================================================================================*/
+/*  void            vd_g_XspiIviSub4VMResetInit(void)                                                                                */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    VMリセット時の初期化処理                                                                                          */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void            vd_g_XspiIviSub4VMResetInit(void)
+{
+    /*vd_s_XspiIviSub4ResetInit();*/
+    vd_g_XspiIviSub1PowerVMResetComp((U1)XSPI_IVI_POWER_RESET_COMP_CAN);
+}
+
+/*===================================================================================================================================*/
+/*  void            vd_g_XspiIviSub4SoCResetInit(void)                                                                                */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    VMリセット時の初期化処理                                                                                          */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void            vd_g_XspiIviSub4SoCResetInit(void)
+{
+    /*vd_s_XspiIviSub4ResetInit();*/
+}
+
+/*===================================================================================================================================*/
+/*  static void            vd_s_XspiIviSub4ResetInit(void)                                                                           */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    リセット時の初期化処理                                                                                          */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void            vd_s_XspiIviSub4ResetInit(void)
+{
+    U1  u1_t_sgnl_cdsize;
+    U1  u1_t_sgnl_pvmreq;
+    U1  u1_tp_candata_AVN1S73[8];
+    U1  u1_tp_candata_AVN1SF7[32];
+    U4  u4_t_lpcnt;
+
+    vd_g_MemfillU1(&u1_tp_candata_AVN1S73[0], (U1)0U, (U4)XSPI_IVI_CAN_DLC_08);
+    vd_g_MemfillU1(&u1_tp_candata_AVN1SF7[0], (U1)0U, (U4)XSPI_IVI_CAN_DLC_32);
+
+    (void)Com_ReceiveSignal(ComConf_ComSignal_CD_SIZE, &u1_t_sgnl_cdsize);
+    (void)Com_ReceiveSignal(ComConf_ComSignal_PVM_REQ, &u1_t_sgnl_pvmreq);
+
+
+    for(u4_t_lpcnt = (U4)MSG_AVN1S01_TXCH0; u4_t_lpcnt <= (U4)MSG_MET1S33_TXCH0; u4_t_lpcnt++){
+        if(u4_t_lpcnt == (U4)MSG_AVN1S73_TXCH0) {
+            u1_tp_candata_AVN1S73[6] |= (u1_t_sgnl_cdsize & (U1)XSPI_IVI_CAN_CDSIZE_MASK) << (U1)XSPI_IVI_SFT_04;
+            (void)Com_SendIPDU((PduIdType)MSG_AVN1S73_TXCH0, &u1_tp_candata_AVN1S73[0] );
+        } else if(u4_t_lpcnt == (U4)MSG_AVN1SF7_TXCH0) {
+            u1_tp_candata_AVN1SF7[27] |= u1_t_sgnl_pvmreq & (U1)XSPI_IVI_CAN_PVMREQ_MASK;
+            (void)Com_SendIPDU((PduIdType)MSG_AVN1SF7_TXCH0, &u1_tp_candata_AVN1SF7[0] );
+        } else if(u4_t_lpcnt == (U4)MSG_MET1S33_TXCH0) {
+            /*Do Nothing*/
+        } else {
+            (void)Com_InitIPDU((PduIdType)u4_t_lpcnt);
+        }
+    }
 }
 
 /*===================================================================================================================================*/

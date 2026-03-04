@@ -9,8 +9,14 @@
 #include <Port_Cfg.h>
 #include <Port.h>
 #include <VIS.h>
+#include <LIB.h>
 #include <EthSwt_SWIC_PWR.h>
 #include <PwrCtrl_Main.h>
+#include <ivdsh.h>
+#include "EthSwt_SWIC_Define.h"
+/* -------------------------------------------------------------------------- */
+#define D_ETHSWT_SWIC_CFG_MCUPMIC_ON        (1U)
+#define D_ETHSWT_SWIC_CFG_DIN2STAT_SIZE     (1U)
 /* -------------------------------------------------------------------------- */
 /* Common */
 const Eth_ModeType G_ETHSWT_SWIC_PORT_DEFINE[D_ETHSWT_SWIC_PORT_NUM] =
@@ -84,12 +90,15 @@ Std_ReturnType EthSwt_SWIC_Cfg_CheckPowerCond(void)
 Std_ReturnType EthSwt_SWIC_Cfg_CheckSuplyState(void)
 {
     Std_ReturnType  ret = STD_OFF;
-    Std_ReturnType  din2_stat = STD_OFF;
+    uint8           readResult;
+    uint32          din2_stat;
 
-    din2_stat = STD_ON;                  /* 暫定 のちに他APIに変更 */
+    readResult = u1_g_iVDshReabyDid(IVDSH_DID_REA_VM2TO3_DIN2_STAT, &din2_stat, (uint16)D_ETHSWT_SWIC_CFG_DIN2STAT_SIZE);
 
-    if (din2_stat == STD_ON) {
-        ret = STD_ON;
+    if(readResult != IVDSH_NO_REA) {    /* DIN2_STAT情報取得の条件確認 */
+        if (din2_stat == (uint32)D_ETHSWT_SWIC_CFG_MCUPMIC_ON) {
+            ret = STD_ON;
+        }
     }
 
     return ret;
@@ -214,26 +223,27 @@ Std_ReturnType EthSwt_SWIC_Cfg_AllowSetRegister(void)
 /* -------------------------------------------------------------------------- */
 /* Config for EthSwt_SWIC_RstDtct.c                                           */
 /* -------------------------------------------------------------------------- */
-#include "EthSwt_SWIC_Define.h"
 Std_ReturnType EthSwt_SWIC_RstDtct_IsNeedDtct()
 {
-    Std_ReturnType result = E_NOT_OK;
-    Std_ReturnType ether_pwr_en =           Dio_ReadChannel(DIO_ID_PORT8_CH8);
-    uint8 sail_resout_n =                   u1_g_PwrCtrlMainGetPinInfo(PWRCTRL_MAIN_PINID_SAIL_RES);
-    uint8 aoss_sleep_entry_exit =           u1_g_PwrCtrlMainGetPinInfo(PWRCTRL_MAIN_PINID_AOSS_SLP);
+    Std_ReturnType  ret = E_NOT_OK;
+    uint8           readResult;
+    uint32          din2_stat;
+    uint8           sail_resout_n;
+    uint8           aoss_sleep_entry_exit;
+    
+    LIB_DI();
+    readResult  = u1_g_iVDshReabyDid(IVDSH_DID_REA_VM2TO3_DIN2_STAT, &din2_stat, (uint16)D_ETHSWT_SWIC_CFG_DIN2STAT_SIZE);
+    LIB_EI();
+    sail_resout_n = u1_g_PwrCtrlMainGetPinInfo(PWRCTRL_MAIN_PINID_SAIL_RES);
+    aoss_sleep_entry_exit = u1_g_PwrCtrlMainGetPinInfo(PWRCTRL_MAIN_PINID_AOSS_SLP);
 
-
-    if (STD_HIGH == ether_pwr_en)
-    {
-        if (STD_HIGH == sail_resout_n)
-        {
-            if (STD_LOW == aoss_sleep_entry_exit)
-            {
-                // リセット検出確認要求あり
-                result = E_OK;
-            }
+    if(readResult != IVDSH_NO_REA) {    /* DIN2_STAT情報取得の条件確認 */
+        if (din2_stat == D_ETHSWT_SWIC_CFG_MCUPMIC_ON
+            && sail_resout_n == STD_HIGH
+            && aoss_sleep_entry_exit == STD_LOW) {
+            ret = E_OK;
         }
     }
 
-    return result;
+    return ret;
 }

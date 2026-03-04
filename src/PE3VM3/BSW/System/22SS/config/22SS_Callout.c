@@ -123,7 +123,7 @@ void vd_g_22SSCallout_StaRstInit(void)
     /* vv User Hook start vv */
     vd_g_VSM_Init();
     vd_g_VSM_SAILWrapper_Init();
-    vd_g_PwrCtrlMainWakeupReq();
+    vd_g_PwrCtrlMainSwResetReq();
     EthSW_StaRstInit();
     VCanAck_Init();
     ChipCom_Init();

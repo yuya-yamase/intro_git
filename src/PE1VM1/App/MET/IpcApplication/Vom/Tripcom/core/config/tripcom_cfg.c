@@ -1,4 +1,4 @@
-/* 2.5.0 */
+/* 2.6.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define TRIPCOM_CFG_C_MAJOR                     (2)
-#define TRIPCOM_CFG_C_MINOR                     (5)
+#define TRIPCOM_CFG_C_MINOR                     (6)
 #define TRIPCOM_CFG_C_PATCH                     (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -27,10 +27,7 @@
 #include "ptsruntm_hrs.h"
 #include "ptsrundist_km.h"
 
-#include "tripcom_nvmif.h"
-
 #include "oxcan.h"
-#include "vardef.h"
 
 #include "alert.h"
 #include "alert_mtrx.h"
@@ -76,8 +73,6 @@
 #define TRIPCOM_CFG_STSBIT_EVDTE_PIEVDXX_UNK    (TRIPCOM_STSBIT_UNKNOWN)
 #define TRIPCOM_CFG_STSBIT_EVDTE_PIEVDXX_INV    (TRIPCOM_STSBIT_INVALID)
 
-#define TRIPCOM_PHVMDIND_EVMODE                 (1U)
-#define TRIPCOM_PHVMDIND_EVAUTOMODE             (10U)
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -103,59 +98,31 @@ void                (* const                    fp_gp_TRIPCOM_CALC_APPL_TASK[])(
 };
 const U1     u1_g_TRIPCOM_NUM_CALC_APPL_TASK = sizeof(fp_gp_TRIPCOM_CALC_APPL_TASK) / sizeof(fp_gp_TRIPCOM_CALC_APPL_TASK[0]);
 const           ST_TRIPCOM_IF                   st_gp_TRIPCOM_IF_CFG[TRIPCOM_NUM_APPL]                      = {
-    {   vdp_PTR_NA,              vdp_PTR_NA,                vdp_PTR_NA,             vdp_PTR_NA,             vdp_PTR_NA,           vdp_PTR_NA             }, /* 00 Average Fuel Economy           */
-    {   vdp_PTR_NA,              vdp_PTR_NA,                vdp_PTR_NA,             vdp_PTR_NA,             vdp_PTR_NA,           vdp_PTR_NA             }, /* 01 Average Hydrogen Economy       */
-    {   vdp_PTR_NA,              &u1_g_AvgEeCalcTrnst,      &vd_g_AvgEeAccmlt,      &vd_g_AvgEeUpdt,        &vd_g_AvgEeGrphUpdt,  &vd_g_AvgEeRstImmw     }, /* 02 Average Electric Economy       */
-    {   vdp_PTR_NA,              vdp_PTR_NA,                vdp_PTR_NA,             vdp_PTR_NA,             vdp_PTR_NA,           vdp_PTR_NA             }, /* 03 Inst. Fuel Economy             */
-    {   vdp_PTR_NA,              vdp_PTR_NA,                vdp_PTR_NA,             vdp_PTR_NA,             vdp_PTR_NA,           vdp_PTR_NA             }, /* 04 Inst. Fuel Economy for IN_FC_C */
-    {   vdp_PTR_NA,              vdp_PTR_NA,                vdp_PTR_NA,             vdp_PTR_NA,             vdp_PTR_NA,           vdp_PTR_NA             }, /* 05 Inst. Hydrogen Economy         */
-    {   vdp_PTR_NA,              &u1_g_InstEeCalcTrnst,     &vd_g_InstEeAccmlt,     &vd_g_InstEeUpdt,       vdp_PTR_NA,           vdp_PTR_NA             }, /* 06 Inst. Electric Economy         */
-    {   vdp_PTR_NA,              vdp_PTR_NA,                vdp_PTR_NA,             vdp_PTR_NA,             vdp_PTR_NA,           vdp_PTR_NA             }, /* 07 Distance To Empty for tau      */
-    {   vdp_PTR_NA,              &u1_g_EvDteCalcTrnst,      vdp_PTR_NA,             &vd_g_EvDteUpdt,        vdp_PTR_NA,           vdp_PTR_NA             }, /* 08 EV Distance To Empty           */
-    {   vdp_PTR_NA,              &u1_g_AvgVehspdCalcTrnst,  &vd_g_AvgVehspdAccmlt,  &vd_g_AvgVehspdUpdt,    vdp_PTR_NA,           &vd_g_AvgVehspdRstImmw }, /* 09 Average Vehicle Speed          */
-    {   &vd_g_PtsRunTmCondChk,   &u1_g_PtsRunTmCalcTrnst,   &vd_g_PtsRunTmAccmlt,   vdp_PTR_NA,             vdp_PTR_NA,           &vd_g_PtsRunTmRstImmw  }, /* 10 Powertrain System Run Time     */
-    {   vdp_PTR_NA,              vdp_PTR_NA,                vdp_PTR_NA,             vdp_PTR_NA,             vdp_PTR_NA,           vdp_PTR_NA             }, /* 11 Saved Fuel Supply              */
-    {   vdp_PTR_NA,              &u1_g_PtsRunDistCalcTrnst, &vd_g_PtsRunDistAccmlt, vdp_PTR_NA,             vdp_PTR_NA,           vdp_PTR_NA             }, /* 12 Powertrain System Run Distance */
-    {   vdp_PTR_NA,              vdp_PTR_NA,                vdp_PTR_NA,             vdp_PTR_NA,             vdp_PTR_NA,           vdp_PTR_NA             }, /* 13 EV Ratio                       */
-    {   vdp_PTR_NA,              vdp_PTR_NA,                vdp_PTR_NA,             vdp_PTR_NA,             vdp_PTR_NA,           vdp_PTR_NA             }  /* 14 Distance To Empty for ED       */
+    {   vdp_PTR_NA,              &u1_g_AvgEeCalcTrnst,      &vd_g_AvgEeAccmlt,      &vd_g_AvgEeUpdt,        &vd_g_AvgEeGrphUpdt,  &vd_g_AvgEeRstImmw     }, /* 00 Average Electric Economy             */
+    {   vdp_PTR_NA,              &u1_g_InstEeCalcTrnst,     &vd_g_InstEeAccmlt,     &vd_g_InstEeUpdt,       vdp_PTR_NA,           vdp_PTR_NA             }, /* 01 Inst. Electric Economy               */
+    {   vdp_PTR_NA,              &u1_g_EvDteCalcTrnst,      vdp_PTR_NA,             &vd_g_EvDteUpdt,        vdp_PTR_NA,           vdp_PTR_NA             }, /* 02 EV Distance To Empty                 */
+    {   vdp_PTR_NA,              &u1_g_AvgVehspdCalcTrnst,  &vd_g_AvgVehspdAccmlt,  &vd_g_AvgVehspdUpdt,    vdp_PTR_NA,           &vd_g_AvgVehspdRstImmw }, /* 03 Average Vehicle Speed                */
+    {   &vd_g_PtsRunTmCondChk,   &u1_g_PtsRunTmCalcTrnst,   &vd_g_PtsRunTmAccmlt,   vdp_PTR_NA,             vdp_PTR_NA,           &vd_g_PtsRunTmRstImmw  }, /* 04 Powertrain System Run Time           */
+    {   vdp_PTR_NA,              &u1_g_PtsRunDistCalcTrnst, &vd_g_PtsRunDistAccmlt, vdp_PTR_NA,             vdp_PTR_NA,           vdp_PTR_NA             }, /* 05 Powertrain System Run Distance       */
+    {   vdp_PTR_NA,              vdp_PTR_NA,                vdp_PTR_NA,             vdp_PTR_NA,             vdp_PTR_NA,           vdp_PTR_NA             }  /* 06 Distance To Empty for ED             */
 };
 const           ST_TRIPCOM_CALCTX               st_gp_TRIPCOM_CALCTX_CFG[TRIPCOM_NUM_APPL]                  = {
-    {   vdp_PTR_NA,                     (U1)U1_MAX                              },  /*  00 Average Fuel Economy                      */
-    {   vdp_PTR_NA,                     (U1)U1_MAX                              },  /*  01 Average Hydrogen Economy                  */
-    {   &u2_g_AvgEeCalcTx,              (U1)TRIPCOM_CANTXUNIT_EECON             },  /*  02 Average Electric Economy                  */
-    {   vdp_PTR_NA,                     (U1)U1_MAX                              },  /*  03 Inst. Fuel Economy                        */
-    {   vdp_PTR_NA,                     (U1)U1_MAX                              },  /*  04 Inst. Fuel Economy for IN_FC_C            */
-    {   vdp_PTR_NA,                     (U1)U1_MAX                              },  /*  05 Inst. Hydrogen Economy                    */
-    {   &u2_g_InstEeCalcTx,             (U1)TRIPCOM_CANTXUNIT_EECON             },  /*  06 Inst. Electric Economy                    */
-    {   vdp_PTR_NA,                     (U1)U1_MAX                              },  /*  07 Distance To Empty for tau                 */
-    {   &u2_g_EvDteCalcTx,              (U1)TRIPCOM_CANTXUNIT_DIST              },  /*  08 EV Distance To Empty                      */
-    {   &u2_g_AvgVehspdCalcTx,          (U1)TRIPCOM_CANTXUNIT_SPEED             },  /*  09 Average Vehicle Speed                     */
-    {   &u2_g_PtsRunTmCalcTx,           (U1)U1_MAX                              },  /*  10 Powertrain System Run Time                */
-    {   vdp_PTR_NA,                     (U1)U1_MAX                              },  /*  11 Saved Fuel Supply                         */
-    {   &u2_g_PtsRunDistCalcTx,         (U1)TRIPCOM_CANTXUNIT_DIST              },  /*  12 Powertrain System Run Distance            */
-    {   vdp_PTR_NA,                     (U1)U1_MAX                              },  /*  13 EV Ratio                                  */
-    {   vdp_PTR_NA,                     (U1)U1_MAX                              }   /*  14 Distance To Empty for ED                  */
+    {   &u2_g_AvgEeCalcTx,              (U1)TRIPCOM_CANTXUNIT_EECON             },  /*  00 Average Electric Economy                  */
+    {   &u2_g_InstEeCalcTx,             (U1)TRIPCOM_CANTXUNIT_EECON             },  /*  01 Inst. Electric Economy                    */
+    {   &u2_g_EvDteCalcTx,              (U1)TRIPCOM_CANTXUNIT_DIST              },  /*  02 EV Distance To Empty                      */
+    {   &u2_g_AvgVehspdCalcTx,          (U1)TRIPCOM_CANTXUNIT_SPEED             },  /*  03 Average Vehicle Speed                     */
+    {   &u2_g_PtsRunTmCalcTx,           (U1)U1_MAX                              },  /*  04 Powertrain System Run Time                */
+    {   &u2_g_PtsRunDistCalcTx,         (U1)TRIPCOM_CANTXUNIT_DIST              },  /*  05 Powertrain System Run Distance            */
+    {   vdp_PTR_NA,                     (U1)U1_MAX                              }   /*  06 Distance To Empty for ED                  */
 };
 const           ST_TRIPCOM_CNTT                 st_gp_TRIPCOM_CNTTS_CFG[TRIPCOM_NUM_CNTTS]                  = {
-    {   (U1)TRIPCOM_APPL_AVGFE,         (U1)AVGFE_CNTT_TA,         (U2)0x0000U     },  /*  Total Average                                */
-    {   (U1)TRIPCOM_APPL_AVGFE,         (U1)AVGFE_CNTT_DC,         (U2)0x0000U     },  /*  Driving Cycle                                */
-    {   (U1)TRIPCOM_APPL_AVGFE,         (U1)AVGFE_CNTT_RF,         (U2)0x0000U     },  /*  Refuel Cycle                                 */
-    {   (U1)TRIPCOM_APPL_AVGFE,         (U1)AVGFE_CNTT_ONEM,       (U2)0x0000U     },  /*  One min Cycle                                */
-    {   (U1)TRIPCOM_APPL_AVGHE,         (U1)AVGHE_CNTT_TA,         (U2)0x0000U     },  /*  Total Average                                */
-    {   (U1)TRIPCOM_APPL_AVGHE,         (U1)AVGHE_CNTT_DC,         (U2)0x0000U     },  /*  Driving Cycle                                */
-    {   (U1)TRIPCOM_APPL_AVGHE,         (U1)AVGHE_CNTT_RF,         (U2)0x0000U     },  /*  Refuel Cycle                                 */
     {   (U1)TRIPCOM_APPL_AVGEE,         (U1)AVGEE_CNTT_TA,         (U2)0x0100U     },  /*  Total Average                                */
     {   (U1)TRIPCOM_APPL_AVGEE,         (U1)AVGEE_CNTT_DC,         (U2)0x0100U     },  /*  Driving Cycle                                */
     {   (U1)TRIPCOM_APPL_AVGEE,         (U1)AVGEE_CNTT_ONEM,       (U2)0x0100U     },  /*  One min Cycle                                */
     {   (U1)TRIPCOM_APPL_AVGEE,         (U1)AVGEE_CNTT_FIVEM,      (U2)0x0000U     },  /*  Five mins Cycle                              */
     {   (U1)TRIPCOM_APPL_AVGEE,         (U1)AVGEE_CNTT_DC_DT,      (U2)0x0100U     },  /*  Driving Cycle                                */
     {   (U1)TRIPCOM_APPL_AVGEE,         (U1)AVGEE_CNTT_DC_EC,      (U2)0x0100U     },  /*  Driving Cycle                                */
-    {   (U1)TRIPCOM_APPL_INSTFE,        (U1)INSTFE_CNTT_RX,        (U2)0x0000U     },  /*  Rx Signal Cycle                              */
-    {   (U1)TRIPCOM_APPL_INSTFEC,       (U1)INSTFEC_CNTT_RX,       (U2)0x0000U     },  /*  Rx Signal Cycle                              */
-    {   (U1)TRIPCOM_APPL_INSTHE,        (U1)INSTHE_CNTT_RX,        (U2)0x0000U     },  /*  Rx Signal Cycle                              */
     {   (U1)TRIPCOM_APPL_INSTEE,        (U1)INSTEE_CNTT_RX,        (U2)0x0200U     },  /*  Rx Signal Cycle                              */
-    /*  DTE(Fuel) depends on AvgFe (Refuel Cycle)  */
-    {   (U1)TRIPCOM_APPL_DTE_TAU,       (U1)DTE_CNTT_FU,           (U2)0x0000U     },  /*  Fuel                                         */
     {   (U1)TRIPCOM_APPL_EVDTE,         (U1)EVDTE_CNTT_EP,         (U2)0x0400U     },  /*  Electric Power                               */
     {   (U1)TRIPCOM_APPL_AVGVEHSPD,     (U1)AVGVEHSPD_CNTT_TA,     (U2)0x8000U     },  /*  Total Average                                */
     {   (U1)TRIPCOM_APPL_AVGVEHSPD,     (U1)AVGVEHSPD_CNTT_DC,     (U2)0x8000U     },  /*  Driving Cycle                                */
@@ -165,22 +132,13 @@ const           ST_TRIPCOM_CNTT                 st_gp_TRIPCOM_CNTTS_CFG[TRIPCOM_
     {   (U1)TRIPCOM_APPL_PTSRUNTM,      (U1)PTSRUNTM_CNTT_DC,      (U2)0x8000U     },  /*  Driving Cycle                                */
     {   (U1)TRIPCOM_APPL_PTSRUNTM,      (U1)PTSRUNTM_CNTT_TR_A,    (U2)0x8000U     },  /*  Trip A                                       */
     {   (U1)TRIPCOM_APPL_PTSRUNTM,      (U1)PTSRUNTM_CNTT_TR_B,    (U2)0x8000U     },  /*  Trip B                                       */
-    {   (U1)TRIPCOM_APPL_PTSRUNTM,      (U1)ECOSTPTM_CNTT_LC,      (U2)0x0000U     },  /*  Life Cycle                                   */
-    {   (U1)TRIPCOM_APPL_PTSRUNTM,      (U1)ECOSTPTM_CNTT_DC,      (U2)0x0000U     },  /*  Driving Cycle                                */
-    {   (U1)TRIPCOM_APPL_PTSRUNTM,      (U1)ECOSTPTM_CNTT_ST,      (U2)0x0000U     },  /*  Short Term                                   */
-    /*  SaveFs depends on PtsRunTm  */
-    {   (U1)TRIPCOM_APPL_SAVEFS,        (U1)SAVEFS_CNTT_LC,        (U2)0x0000U     },  /*  Life Cycle                                   */
-    {   (U1)TRIPCOM_APPL_SAVEFS,        (U1)SAVEFS_CNTT_DC,        (U2)0x0000U     },  /*  Driving Cycle                                */
     {   (U1)TRIPCOM_APPL_PTSRUNDIST,    (U1)PTSRUNDIST_CNTT_LC,    (U2)0x8000U     },  /*  Life Cycle                                   */
     {   (U1)TRIPCOM_APPL_PTSRUNDIST,    (U1)PTSRUNDIST_CNTT_DC,    (U2)0x8000U     },  /*  Driving Cycle                                */
     {   (U1)TRIPCOM_APPL_PTSRUNDIST,    (U1)PTSRUNDIST_CNTT_TR_A,  (U2)0x8000U     },  /*  Trip A                                       */
     {   (U1)TRIPCOM_APPL_PTSRUNDIST,    (U1)PTSRUNDIST_CNTT_TR_B,  (U2)0x8000U     },  /*  Trip B                                       */
-    {   (U1)TRIPCOM_APPL_EVRATIO,       (U1)EVRATIO_CNTT_DC,       (U2)0x0000U     },  /*  Driving Cycle                                */
     {   (U1)TRIPCOM_APPL_DTE_ED,        (U1)DTE_ED_CNTT_FU,        (U2)0x0000U     }   /*  Fuel                                         */
 };
 const           U2                              u2_gp_TRIPCOM_GRPH_RSTBIT[AVGGRPH_NUM_CNTT]                 = {
-    (U2)TRIPCOM_RSTRQBIT_M_AVGFEHE_TA,
-    (U2)TRIPCOM_RSTRQBIT_M_AVGFEHE_ONEM,
     (U2)TRIPCOM_RSTRQBIT_M_AVGEE_TA,
     (U2)TRIPCOM_RSTRQBIT_M_AVGEE_ONEM
 };
@@ -218,199 +176,8 @@ void            vd_g_TripcomCfgApplInit(void)
 /*===================================================================================================================================*/
 U2              u2_g_TripcomCfgGetVariation(void)
 {
-    static const U2 u2_s_TRIPCOM_PTSYS_VAR[TRIPCOM_NUM_PTSYS] = {
-        (U2)0x8007U,
-        (U2)0x8007U,
-        (U2)0x8007U,
-        (U2)0x8007U,
-        (U2)0x8707U,
-        (U2)0x8700U,
-        (U2)0x8007U,
-        (U2)0x8030U,
-        (U2)0x8007U,
-        (U2)0x8007U,
-        (U2)0x8007U,
-        (U2)0x8007U,
-        (U2)0x8007U,
-        (U2)0x8007U,
-        (U2)0x8007U,
-        (U2)0x8007U
-    };
-    static const U2 u2_s_TRIPCOM_VARBIT_EVRATIO = (U2)0x0800U;
-    U1  u1_t_ptsys;
-    U2  u2_t_var;
-#if 0   /* BEV Rebase provisionally */
-    U1  u1_t_mcuid0026_val;
-#endif   /* BEV Rebase provisionally */
-
-#if 0   /* BEV Rebase provisionally */
-    u1_t_mcuid0026_val = u1_CALIB_MCUID0026_1MOTHV;
-#endif   /* BEV Rebase provisionally */
-
-    u1_t_ptsys = u1_g_VardefPtsRx();
-    if(u1_t_ptsys >= (U1)TRIPCOM_NUM_PTSYS){
-        u1_t_ptsys = (U1)VDF_PTS_RX_03_HYB;
-    }
-    u2_t_var = u2_s_TRIPCOM_PTSYS_VAR[u1_t_ptsys];
-
-    switch(u1_t_ptsys){
-        case (U1)VDF_PTS_RX_03_HYB:
-        case (U1)VDF_PTS_RX_04_HYB_PLU:
-            u2_t_var |= u2_s_TRIPCOM_VARBIT_EVRATIO;
-            break;
-        case (U1)VDF_PTS_RX_06_HYB_MOT:
-#if 0   /* BEV Rebase provisionally */
-            if(u1_t_mcuid0026_val == (U1)CALIB_MCUID0026_1MOT_HV_FF){
-                u2_t_var |= u2_s_TRIPCOM_VARBIT_EVRATIO;
-            }
-#endif   /* BEV Rebase provisionally */
-            break;
-        default:
-            /* Do Nothing */
-            break;
-    }
-
-    return (u2_t_var);
-}
-
-/*===================================================================================================================================*/
-/* U1              u1_g_TripcomCfgGetTOFCRST(U1 * u1p_a_rst)                                                                         */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1              u1_g_TripcomCfgGetTOFCRST(U1 * u1p_a_rst)
-{
-#if 0   /* BEV Rebase provisionally */
-    (void)Com_ReceiveSignal(ComConf_ComSignal_TOFC_RST, u1p_a_rst);
-    return ((U1)Com_GetIPDUStatus(MSG_AVN1S07_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX));
-#else   /* BEV Rebase provisionally */
-    return ((U1)COM_NO_RX);
-#endif   /* BEV Rebase provisionally */
-}
-
-/*===================================================================================================================================*/
-/* U1              u1_g_TripcomCfgGetTOFCRT2(U1 * u1p_a_rst)                                                                         */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1              u1_g_TripcomCfgGetTOFCRT2(U1 * u1p_a_rst)
-{
-#if 0   /* BEV Rebase provisionally */
-    /* (void)Com_ReceiveSignal(ComConf_ComSignal_TOFC_RT2, u1p_a_rst); */
-    /* return ((U1)Com_GetIPDUStatus(MSG_DMS1S05_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX)); */
-#endif   /* BEV Rebase provisionally */
-    return ((U1)COM_NO_RX);
-}
-
-/*===================================================================================================================================*/
-/* U1              u1_g_TripcomCfgGetM1FCRST(U1 * u1p_a_rst)                                                                         */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1              u1_g_TripcomCfgGetM1FCRST(U1 * u1p_a_rst)
-{
-#if 0   /* BEV Rebase provisionally */
-    (void)Com_ReceiveSignal(ComConf_ComSignal_M1FC_RST, u1p_a_rst);
-    return ((U1)Com_GetIPDUStatus(MSG_AVN1S07_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX));
-#else   /* BEV Rebase provisionally */
-    return ((U1)COM_NO_RX);
-#endif   /* BEV Rebase provisionally */
-}
-
-/*===================================================================================================================================*/
-/* U1              u1_g_TripcomCfgGetTOECRST(U1 * u1p_a_rst)                                                                         */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1              u1_g_TripcomCfgGetTOECRST(U1 * u1p_a_rst)
-{
-    return ((U1)COM_NO_RX);
-}
-
-/*===================================================================================================================================*/
-/* U1              u1_g_TripcomCfgGetM1ECRST(U1 * u1p_a_rst)                                                                         */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1              u1_g_TripcomCfgGetM1ECRST(U1 * u1p_a_rst)
-{
-#if 0   /* BEV Rebase provisionally */
-    (void)Com_ReceiveSignal(ComConf_ComSignal_M1EC_RST, u1p_a_rst);
-    return ((U1)Com_GetIPDUStatus(MSG_AVN1S07_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX));
-#else   /* BEV Rebase provisionally */
-    return ((U1)COM_NO_RX);
-#endif   /* BEV Rebase provisionally */
-}
-
-/*===================================================================================================================================*/
-/* U1              u1_g_TripcomCfgGetPHVMDIND(U1 * u1p_a_phvmdind)                                                                   */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1              u1_g_TripcomCfgGetPHVMDIND(U1 * u1p_a_phvmdind)
-{
-    U1          u1_t_msgsts;
-    U1          u1_t_ptsys;
-
-    (*u1p_a_phvmdind) = (U1)0U;
-    u1_t_msgsts       = (U1)TRIPCOM_STSBIT_VALID;
-    u1_t_ptsys        = u1_g_VardefPtsRx();
-    if(u1_t_ptsys == (U1)VDF_PTS_RX_04_HYB_PLU){
-#if 0   /* BEV Rebase provisionally */
-        u1_t_msgsts = ((U1)Com_GetIPDUStatus((PduIdType)MSG_EHV1S31_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX));
-        (void)Com_ReceiveSignal(ComConf_ComSignal_PHVMDIND, u1p_a_phvmdind);
-#else   /* BEV Rebase provisionally */
-        u1_t_msgsts = (U1)COM_NO_RX;
-#endif   /* BEV Rebase provisionally */
-    }
-
-    return (u1_t_msgsts);
-}
-
-/*===================================================================================================================================*/
-/* U1              u1_g_TripcomCfgGetEVRunSts(void)                                                                                  */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1              u1_g_TripcomCfgGetEVRunSts(void)
-{
-    U1          u1_t_ret;
-    U1          u1_t_sts;
-    U1          u1_t_phvmdind;
-    U1          u1_t_pievsts;
-
-
-    u1_t_ret      = (U1)FALSE;
-    u1_t_phvmdind = (U1)0U;
-    u1_t_pievsts  = (U1)0U;
-
-    u1_t_sts  = u1_g_TripcomCfgGetPHVMDIND(&u1_t_phvmdind);
-    u1_t_sts |= u1_g_TripcomCfgGetPIEVSTS(&u1_t_pievsts);
-
-    if (u1_t_sts == (U1)TRIPCOM_STSBIT_VALID) {
-        if ((u1_t_phvmdind == (U1)TRIPCOM_PHVMDIND_EVMODE    ) ||
-            (u1_t_phvmdind == (U1)TRIPCOM_PHVMDIND_EVAUTOMODE)) {
-
-            if (u1_t_pievsts == (U1)TRUE) {
-                u1_t_ret = (U1)TRUE;
-            }
-        }
-    }
-    else if ((u1_t_sts & (U1)TRIPCOM_STSBIT_INVALID) != (U1)0U) {
-        u1_t_ret = (U1)TRUE;
-    }
-    else {
-        /* Do Nothing */
-    }
-
-    return (u1_t_ret);
+    static  const   U2   u2_s_TRIPCOM_VAR = (U2)0x8700U;
+    return (u2_s_TRIPCOM_VAR);
 }
 
 /*===================================================================================================================================*/
@@ -422,64 +189,15 @@ U1              u1_g_TripcomCfgGetEVRunSts(void)
 U1              u1_g_TripcomCfgGetPIEVSTS(U1 * u1p_a_pievsts)
 {
     U1          u1_t_msgsts;
-    U1          u1_t_ptsys;
 
     (*u1p_a_pievsts) = (U1)0U;
     u1_t_msgsts      = (U1)TRIPCOM_STSBIT_VALID;
-    u1_t_ptsys       = u1_g_VardefPtsRx();
-    if((u1_t_ptsys == (U1)VDF_PTS_RX_04_HYB_PLU)
-    || (u1_t_ptsys == (U1)VDF_PTS_RX_05_ELE_BAT)){
-        u1_t_msgsts = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_EHV1S94_CH0,
-                                       (U4)OXCAN_SYS_IGP,
-                                       (U2)TRIPCOM_EHV1S94_FAILTIM) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
-        (void)Com_ReceiveSignal(ComConf_ComSignal_PIEVSTS, u1p_a_pievsts);
-    }
+    u1_t_msgsts      = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_EHV1S94_CH0,
+                                        (U4)OXCAN_SYS_IGP,
+                                        (U2)TRIPCOM_EHV1S94_FAILTIM) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+    (void)Com_ReceiveSignal(ComConf_ComSignal_PIEVSTS, u1p_a_pievsts);
 
     return (u1_t_msgsts);
-}
-
-/*===================================================================================================================================*/
-/* U1              u1_g_TripcomCfgGetEMGF(U1 * u1p_a_emgf)                                                                           */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1              u1_g_TripcomCfgGetEMGF(U1 * u1p_a_emgf)
-{
-    U1          u1_t_msgsts;
-    U1          u1_t_ptsys;
-
-    (*u1p_a_emgf) = (U1)0U;
-    u1_t_msgsts   = (U1)TRIPCOM_STSBIT_VALID;
-    u1_t_ptsys    = u1_g_VardefPtsRx();
-    if(u1_t_ptsys == (U1)VDF_PTS_RX_04_HYB_PLU){
-#if 0   /* BEV Rebase provisionally */
-        u1_t_msgsts = ((U1)Com_GetIPDUStatus((PduIdType)MSG_EHV1S94_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX));
-        (void)Com_ReceiveSignal(ComConf_ComSignal_EMGF, u1p_a_emgf);
-#endif   /* BEV Rebase provisionally */
-    }
-
-    return (u1_t_msgsts);
-}
-
-/*===================================================================================================================================*/
-/* U1              u1_g_TripcomCfgJdgRefuelEnd(void)                                                                                 */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1              u1_g_TripcomCfgJdgRefuelEnd(void)
-{
-    U1     u1_t_ret;
-
-
-#if 0   /* BEV Rebase provisionally */
-    u1_t_ret = u1_g_FuelvolTauEasAct((U1)FUEL_TAU_EAS_ID_VEU_GFI, (U1)FUEL_TAU_EAS_EDG_OFF);
-#else   /* BEV Rebase provisionally */
-    u1_t_ret = (U1)FALSE;
-#endif   /* BEV Rebase provisionally */
-
-    return (u1_t_ret);
 }
 
 /*===================================================================================================================================*/
@@ -498,30 +216,19 @@ void            vd_g_TripcomCfgSmoothingTask(void)
 }
 
 /*===================================================================================================================================*/
-/* void            vd_g_TripcomNvmIfSyncCmplt(void)                                                                                  */
+/* void            vd_g_TripcomCfgNvmSyncCmplt(void)                                                                                 */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void            vd_g_TripcomNvmIfSyncCmplt(void)
+void            vd_g_TripcomCfgNvmSyncCmplt(void)
 {
     vd_g_AvgEeUpdt((U1)AVGEE_CNTT_TA);
     vd_g_AvgVehspdUpdt((U1)AVGVEHSPD_CNTT_TA);
     vd_g_AvgVehspdUpdt((U1)AVGVEHSPD_CNTT_TR_A);
     vd_g_AvgVehspdUpdt((U1)AVGVEHSPD_CNTT_TR_B);
-    vd_g_AvgGrphDataSync();
 }
 
-/*===================================================================================================================================*/
-/* void            vd_g_TripcomNvmIfGrphSyncCmplt(void)                                                                              */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void            vd_g_TripcomNvmIfGrphSyncCmplt(void)
-{
-    vd_g_AvgGrphDataSync();
-}
 /*===================================================================================================================================*/
 /* U1              u1_g_TripcomEvDteKmIgOffAcOn(U4 * u4p_a_km)                                                                       */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
@@ -678,6 +385,7 @@ void             vd_s_TripomCfgPostAppTask(void)
 /*  2.4.0     02/18/2025  MaO(M)   tripcom.c v2.3.1 -> v2.4.0.                                                                       */
 /*  2.4.1     04/22/2025  KM       tripcom.c v2.4.0 -> v2.4.1.                                                                       */
 /*  2.5.0     06/23/2025  RS       tripcom_comtx.c v2.4.1 -> v2.5.0.(Change for BEV System_Consideration_2)                          */
+/*  2.6.0     02/11/2026  DT       tripcom_comtx.c v2.5.0 -> v2.6.0.(Change for BEV FF2)                                             */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  Revision  Date        Author   Change Description                                                                                */
@@ -705,6 +413,9 @@ void             vd_s_TripomCfgPostAppTask(void)
 /*  19PFv3-15 04/21/2025  SN       Changed u1_g_TripcomCfgGetEVRunSts                                                                */
 /*  BEV-01    01/13/2026  PG       Delete Compile switch for u1_g_TripcomCfgGetTOECRST                                               */
 /*  BEV-02    01/22/2026  DR       Added CNTTID for AS_EVDT and AS_TOEC                                                              */
+/*  BEV-03    02/12/2026  DT       Deleted unapplied parameter for BEV FF2                                                           */
+/*  BEV-04    02/12/2026  EA       Deleted/Deactivated other than BEV Powertrain processes                                           */
+/*  BEV-05    02/23/2026  PG       Deleted memory app access initialization function                                                 */
 /*                                                                                                                                   */
 /*  * HY   = Hidefumi Yoshida, Denso                                                                                                 */
 /*  * YA   = Yuhei Aoyama, DensoTechno                                                                                               */
@@ -727,5 +438,7 @@ void             vd_s_TripomCfgPostAppTask(void)
 /*  * KM   = Kazuma Miyazawa, Denso Techno                                                                                           */
 /*  * SN   = Shimon Nambu, Denso Techno                                                                                              */
 /*  * RS   = Ryuki Sako, Denso Techno                                                                                                */
+/*  * DT   = Dj Tutanes, DTPH                                                                                                        */
+/*  * EA   = Eunice Avelin, DTPH                                                                                                     */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

@@ -1,4 +1,4 @@
-/* 2.2.0 */
+/* 3.0.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -12,8 +12,8 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define VARDEF_DEST_CFG_H_MAJOR                 (2)
-#define VARDEF_DEST_CFG_H_MINOR                 (2)
+#define VARDEF_DEST_CFG_H_MAJOR                 (3)
+#define VARDEF_DEST_CFG_H_MINOR                 (0)
 #define VARDEF_DEST_CFG_H_PATCH                 (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -39,10 +39,21 @@ typedef struct{
     U2          u2_dest_bdb_mask;
 }ST_VDF_DST_DEST_BDB_JDGIDX;
 
+typedef struct{
+    U2          u2_dest_bdb_val;
+    U2          u2_dest_bdb_mask;
+    U1          u1_t_dest_bdb_idx;
+}ST_VDF_DST_LAW_DEST_BDB_JDGIDX;
+
 typedef struct {
     U2          u2_t_c_code;
     U1          u1_t_c_code_idx;
-}ST_VDF_DST_C_CODE;
+}ST_VDF_DST_LAW_C_CODE;
+
+typedef struct {
+    volatile const U2          *u2p_t_C_CODE;
+    volatile const U1          *u1p_t_C_CODE_IDX;
+}ST_VDF_DST_SPEC_C_CODE;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Externs                                                                                                                 */
@@ -56,40 +67,55 @@ void    vd_g_VardefDestMainTask(void);
 
 U1      u1_g_VardefDestCfg(U2 * u2p_a_c_code, U1 * u1p_a_dest_bdb, U1 * u1p_a_strg_whl);
 U1      u1_g_VardefDestCfgDBSup(const U1 u1_a_DBF, const U1 u1_a_C_CODE_IDX, const U1 u1_a_DEST_BDB_IDX);
-U1      u1_g_VardefLangDestCfgDBSup(const U1 u1_a_DBF, const U1 u1_a_C_CODE_IDX, const U1 u1_a_DEST_BDB_IDX);
+U1      u1_g_VardefDestSpecCfgDBSup(const U1 u1_a_LAW_DBF, const U1 u1_a_SPEC_C_CODE_IDX);
+U1      u1_g_VardefDestLawCfgDBSup(const U1 u1_a_LAW_DBF, const U1 u1_a_SPEC_C_CODE_IDX, const U1 u1_a_LAW_C_CODE_IDX, const U1 u1_a_LAW_DEST_BDB_IDX);
+U1      u1_g_VardefDestLawCfgBdbDefJdg(void);
+U1      u1_g_VardefLawIdx(void);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-extern const U2                            u2_g_VDF_DST_C_CODE_RIM_U2;
-extern const U2                            u2_g_VDF_DST_DEST_BDB_RIM_U1;
-extern const U2                            u2_g_VDF_DST_STRG_WHL_RIM_U1;
-extern const U2                            u2_g_VDF_DST_IDX_RIM_U1;
-extern const U2                            u2_g_VDF_LANG_DST_IDX_RIM_U1;
+extern const U2                                u2_g_VDF_DST_C_CODE_RIM_U2;
+extern const U2                                u2_g_VDF_DST_DEST_BDB_RIM_U1;
+extern const U2                                u2_g_VDF_DST_STRG_WHL_RIM_U1;
+extern const U2                                u2_g_VDF_DST_IDX_RIM_U1;
+extern const U2                                u2_g_VDF_DST_LAW_IDX_RIM_U1;
 
-extern const U1                            u1_g_VDF_DST_RXEV_CNT_INIT;
+extern const U1                                u1_g_VDF_DST_RXEV_CNT_INIT;
 
-extern const U1                            u1_g_VDF_DST_C_CODE_IDX_DEF;
-extern const U1                            u1_g_VDF_DST_DEST_BDB_IDX_DEF;
-extern const U1                            u1_g_VDF_LANG_DST_IDX_DEF;
-extern const U1                            u1_g_VDF_DST_IDX_DEF;
+extern const U1                                u1_g_VDF_DST_C_CODE_IDX_DEF;
+extern const U1                                u1_g_VDF_DST_DEST_BDB_IDX_DEF;
+extern const U1                                u1_g_VDF_DST_IDX_DEF;
 
-extern const U1                            u1_g_VDF_DST_HDSIDE_DEF;
+extern const U1                                u1_g_VDF_DST_HDSIDE_DEF;
 
-extern const U1                            u1_g_VDF_DST_NUM_C_CODE;
-extern const U1                            u1_g_VDF_DST_NUM_DEST_BDB;
-extern const ST_VDF_DST_C_CODE             st_gp_VDF_DST_C_CODE[];
-extern const ST_VDF_DST_DEST_BDB_JDGIDX    st_gp_VDF_DST_DEST_BDB_JDGIDX[];
-extern const U1                            u1_g_VDF_LANG_DST_NUM_C_CODE;
-extern const U1                            u1_g_VDF_LANG_DST_NUM_DEST_BDB;
-extern const U2                            u2_gp_VDF_LANG_DST_C_CODE[];
-extern const ST_VDF_DST_DEST_BDB_JDGIDX    st_gp_VDF_LANG_DST_DEST_BDB_JDGIDX[];
+extern const U1                                u1_g_VDF_DST_NUM_C_CODE;
+extern const U1                                u1_g_VDF_DST_NUM_DEST_BDB;
+extern const U2                                u2_gp_VDF_DST_C_CODE[];
+extern const ST_VDF_DST_DEST_BDB_JDGIDX        st_gp_VDF_DST_DEST_BDB_JDGIDX[];
 
-extern const U1                            u1_g_VDF_DST_NUM_C_CODE_REG;
-extern const U1                            u1_g_VDF_DST_C_CODE_KOR;
-extern const U1                            u1_g_VDF_DST_C_CODE_MEX;
-extern const U1                            u1_g_VDF_DST_C_CODE_KOR_FMVSS;
-extern const U1                            u1_g_VDF_DST_C_CODE_MEX_FMVSS;
+extern const U1                                u1_g_VDF_DST_LAW_C_CODE_IDX_DEF;
+extern const U1                                u1_g_VDF_DST_LAW_IDX_DEF;
 
+extern const U1                                u1_g_VDF_DST_LAW_NUM_C_CODE;
+extern const U1                                u1_g_VDF_DST_LAW_NUM_DEST_BDB;
+extern const ST_VDF_DST_LAW_C_CODE             st_gp_VDF_DST_LAW_C_CODE[];
+extern const ST_VDF_DST_LAW_DEST_BDB_JDGIDX    st_gp_VDF_DST_LAW_DEST_BDB_JDGIDX[];
+
+extern const U1                                u1_g_VDF_DST_LAW_NUM_C_CODE_REG;
+extern const U1                                u1_g_VDF_DST_LAW_C_CODE_KOR;
+extern const U1                                u1_g_VDF_DST_LAW_C_CODE_MEX;
+extern const U1                                u1_g_VDF_DST_LAW_KOR_FMVSS;
+extern const U1                                u1_g_VDF_DST_LAW_MEX_FMVSS;
+
+extern const ST_VDF_DST_SPEC_C_CODE            st_gp_VDF_DST_SPEC_C_CODE[];
+/* sepcial contry judge */
+extern const U1                                u1_g_VDF_DST_SPEC_NUM_C_CODE;
+extern const U1                                u1_g_VDF_DST_LAW_SPEC_IDX_DEF;
+
+extern const U1                                u1_g_VDF_DST_LAW_NUM_DEST_BDB_REG;
+extern const U1                                u1_g_VDF_DST_LAW_DEST_BDB_B_GNR_L;
+extern const U1                                u1_g_VDF_DST_LAW_DEST_BDB_B_GNR_R;
+extern const U1                                u1_g_VDF_DST_LAW_DEST_BDB_B_GNR_FMVSS;
 #endif /* VARDEF_DEST_CFG_H */
 
 /*===================================================================================================================================*/

@@ -36,7 +36,10 @@
 static U1 u1_s_PwrCtrlObserveJdgVm3Stby( void );
 static void vd_s_PwrCtrlObserveOnOffTriggerDetect( void );
 /* ˆÙíŠÄ‹ */
+static U2 u2_g_PwrCtrlObserveSailUartSeq( void );
+static U2 u2_g_PwrCtrlObserveSailErrSeq( void );
 static U2 u2_s_PwrCtrlObservePsailSeq( void );
+static U2 u2_g_PwrCtrlObserveSpiFailSeq( void );
 static U2 u2_s_PwrCtrlObservePsHoldSeq( void );
 static U2 u2_s_PwrCtrlObservePgdAsilVbSeq( void );
 static U2 u2_s_PwrCtrlObservePgdAsilVsysSeq( void );
@@ -44,6 +47,9 @@ static U2 u2_s_PwrCtrlObservePgdAsilVsysV11Seq( void );
 static U2 u2_s_PwrCtrlObservePgdDiodeSeq( void );
 static U2 u2_s_PwrCtrlObservePgdVbSeq( void );
 static U2 u2_s_PwrCtrlObservePgdVsysSeq( void );
+/* ƒŠƒZƒbƒg—v‹ŒŸ’m */
+static U2 u2_s_PwrCtrlObserveSoCResetReqSeq( void );
+static U2 u2_s_PwrCtrlObserveNMDiagResetSeq( void );
 
 /*--------------------------------------------------------------------------*/
 /* Data                                                                     */
@@ -62,7 +68,14 @@ static U1 u1_s_PwrCtrl_Observe_PgdAsilVsysV11_Sts;  /* PGOOD_ASIL_VSYS(V11)ŠÄ‹
 static U1 u1_s_PwrCtrl_Observe_PgdDiode_Sts;        /* PGOOD_DIODEŠÄ‹ó‘Ô */
 static U1 u1_s_PwrCtrl_Observe_PgdVb_Sts;           /* PGOOD_VBŠÄ‹ó‘Ô */
 static U1 u1_s_PwrCtrl_Observe_PgdVsys_Sts;         /* PGOOD_VSYSŠÄ‹ó‘Ô */
+static U1 u1_s_PwrCtrl_Observe_SocPower_Sts;        /* SoC‹N“®ó‘Ô */
 static U2 u2_s_PwrCtrl_Observe_Err_Sts;             /* ŠÄ‹ˆÙí”­¶“à—e */
+/* ƒŠƒZƒbƒg—v‹ŒŸ’m */
+static U1 u1_s_PwrCtrl_Observe_SoCResetErr_Sts;     /* SoCƒŠƒZƒbƒg—v‹(ˆÙí)ŠÄ‹ó‘Ô */
+static U1 u1_s_PwrCtrl_Observe_PreSoCResetReq;      /* SoCƒŠƒZƒbƒg—v‹‘O‰ñ’l */
+static U1 u1_s_PwrCtrl_Observe_PreNMDiagReset;      /* NMƒ_ƒCƒAƒOƒŠƒZƒbƒg‘O‰ñ’l */
+static U2 u2_s_PwrCtrl_Observe_Reset_Sts;           /* ƒŠƒZƒbƒg—v‹“à—e */
+
 #if (PWRCTRL_CFG_PRIVATE_ERR_CHK == PWRCTRL_CFG_PRIVATE_ERR_CHK_ENABLE)
 U2 u2_g_PwrCtrl_Observe_Err_Sts_debug;              /* ŠÄ‹ˆÙí”­¶“à—e(ƒfƒoƒbƒO—p) */
 #endif
@@ -91,6 +104,7 @@ void vd_g_PwrCtrlObserveInit( void )
     u1_s_PwrCtrl_Observe_Vm3StbyInfo = (U1)PWRCTRL_MAIN_PROHIBITSLEEP_OFF;
     u4_s_PwrCtrl_Observe_SleepTime = (U4)PWRCTRL_OBSERVE_SLEEP_CLR;
     /* ˆÙíŠÄ‹ */
+    vd_g_PwrCtrl_ObserveSAIL_Init();
     u2_s_PwrCtrl_Observe_Err_Sts = (U2)PWRCTRL_OBSERVE_ERR_NON;
     u1_s_PwrCtrl_Observe_Psail_Sts = (U1)PWRCTRL_OBSERVE_OFF;
     u1_s_PwrCtrl_Observe_PsHold_Sts = (U1)PWRCTRL_OBSERVE_OFF;
@@ -101,9 +115,15 @@ void vd_g_PwrCtrlObserveInit( void )
     u1_s_PwrCtrl_Observe_PgdDiode_Sts = (U1)PWRCTRL_OBSERVE_OFF;
     u1_s_PwrCtrl_Observe_PgdVb_Sts = (U1)PWRCTRL_OBSERVE_OFF;
     u1_s_PwrCtrl_Observe_PgdVsys_Sts = (U1)PWRCTRL_OBSERVE_OFF;
+    u1_s_PwrCtrl_Observe_SocPower_Sts = (U1)PWRCTRL_OBSERVE_SOCPOWER_OFF;
 #if (PWRCTRL_CFG_PRIVATE_ERR_CHK == PWRCTRL_CFG_PRIVATE_ERR_CHK_ENABLE)
     u2_g_PwrCtrl_Observe_Err_Sts_debug = (U2)PWRCTRL_OBSERVE_ERR_NON;
 #endif
+    /* ƒŠƒZƒbƒg—v‹ŒŸ’m */
+    u2_s_PwrCtrl_Observe_Reset_Sts = (U2)PWRCTRL_OBSERVE_RESET_NON;
+    u1_s_PwrCtrl_Observe_SoCResetErr_Sts = (U1)PWRCTRL_OBSERVE_OFF;
+    u1_s_PwrCtrl_Observe_PreSoCResetReq = (U1)PWRCTRL_COM_SOCRESET_NON;
+    u1_s_PwrCtrl_Observe_PreNMDiagReset = (U1)PWRCTRL_COM_NMDIAGRESET_NON;
     return;
 }
 
@@ -117,19 +137,27 @@ void vd_g_PwrCtrlObserveInit( void )
 void vd_g_PwrCtrlObserveMainFunc( void )
 {
     U2 u2_t_obserr;
+    U2 u2_t_resetreq;
 
     u2_t_obserr = (U2)PWRCTRL_OBSERVE_ERR_NON;
+    u2_t_resetreq = (U2)PWRCTRL_OBSERVE_RESET_NON;
 
     /* ‹N“®ŒŸ’m/ƒXƒ^ƒ“ƒoƒC—v‹ŒŸ’m */
     vd_s_PwrCtrlObserveOnOffTriggerDetect();                /* ‹N“®ŒŸ’m/ƒXƒ^ƒ“ƒoƒC—v‹ŒŸ’mˆ— */
+
+    /* SAIL UART MessageŠÄ‹/SAIL-ERRŠÄ‹’èŠúˆ— */
+    vd_g_PwrCtrl_ObserveSAIL_Main();
 
     /* ˆÙíŠÄ‹ */
 #ifdef PWRCTRL_CFG_PRIVATE_DBG_FAIL_OFF
     if(u1_g_PwrCtrl_Main_DbgFailOffFlag == (U1)MCU_DIO_HIGH)
     {
 #endif
+        u2_t_obserr |= u2_g_PwrCtrlObserveSailUartSeq();    /* SAIL UART MessageŠÄ‹ */
+        u2_t_obserr |= u2_g_PwrCtrlObserveSailErrSeq();     /* SAIL-ERRŠÄ‹ */
         u2_t_obserr |= u2_s_PwrCtrlObservePsailSeq();       /* PM_PSAIL_ERR_NŠÄ‹ */
         u2_t_obserr |= u2_s_PwrCtrlObservePsHoldSeq();      /* PMA_PS_HOLDŠÄ‹ */
+        u2_t_obserr |= u2_g_PwrCtrlObserveSpiFailSeq();     /* SPI’ÊM“râŠÄ‹ */
 #ifdef PWRCTRL_CFG_PRIVATE_DBG_FAIL_OFF
     }
 #endif
@@ -140,10 +168,15 @@ void vd_g_PwrCtrlObserveMainFunc( void )
     u2_t_obserr |= u2_s_PwrCtrlObservePgdVbSeq();           /* PGOOD_VBŠÄ‹ */
     u2_t_obserr |= u2_s_PwrCtrlObservePgdVsysSeq();         /* PGOOD_VSYSŠÄ‹ */
 
+    /* ƒŠƒZƒbƒg—v‹ŒŸ’m */
+    u2_t_resetreq |= u2_s_PwrCtrlObserveSoCResetReqSeq();   /* SoCƒŠƒZƒbƒg—v‹ŠÄ‹ */
+    u2_t_resetreq |= u2_s_PwrCtrlObserveNMDiagResetSeq();   /* NMƒ_ƒCƒAƒOƒŠƒZƒbƒgŠÄ‹ */
+
     u2_s_PwrCtrl_Observe_Err_Sts = u2_t_obserr;             /* ŠÄ‹ˆÙí”­¶“à—e‚ğXV */
 #if (PWRCTRL_CFG_PRIVATE_ERR_CHK == PWRCTRL_CFG_PRIVATE_ERR_CHK_ENABLE)
     u2_g_PwrCtrl_Observe_Err_Sts_debug |= u2_t_obserr;      /* ŠÄ‹ˆÙí”­¶“à—e(ƒfƒoƒbƒO—p)‚ğXV(‹N“®’†•Û) */
 #endif
+    u2_s_PwrCtrl_Observe_Reset_Sts = u2_t_resetreq;         /* ƒŠƒZƒbƒg—v‹“à—e‚ğXV */
     return;
 }
 
@@ -363,6 +396,20 @@ void vd_g_PwrCtrlObservePgdVsysReq(const U1 u1_a_req )
 }
 
 /*****************************************************************************
+  Function      : vd_g_PwrCtrlObserveSoCResetErrReq
+  Description   : SoCƒŠƒZƒbƒg—v‹(ˆÙí)ŒŸ’mŠJn/I—¹—v‹’Ê’mˆ—
+  param[in/out] :[ in ] u1_a_req:ŠJn/I—¹—v‹
+  return        : none
+  Note          : none
+*****************************************************************************/
+void vd_g_PwrCtrlObserveSoCResetErrReq(const U1 u1_a_req )
+{
+    u1_s_PwrCtrl_Observe_SoCResetErr_Sts = u1_a_req;
+
+    return;
+}
+
+/*****************************************************************************
   Function      : u2_g_PwrCtrlObserveGetErrSts
   Description   : ŠÄ‹ˆÙí”­¶“à—eæ“¾ˆ—
   param[in/out] : none
@@ -372,6 +419,33 @@ void vd_g_PwrCtrlObservePgdVsysReq(const U1 u1_a_req )
 U2 u2_g_PwrCtrlObserveGetErrSts(void)
 {
     return(u2_s_PwrCtrl_Observe_Err_Sts);
+}
+
+/*****************************************************************************
+  Function      : u2_g_PwrCtrlObserveGetResetSts
+  Description   : ƒŠƒZƒbƒg—v‹“à—eæ“¾ˆ—
+  param[in/out] : none
+  return        : ƒŠƒZƒbƒg—v‹“à—e
+  Note          : none
+*****************************************************************************/
+U2 u2_g_PwrCtrlObserveGetResetSts(void)
+{
+    return(u2_s_PwrCtrl_Observe_Reset_Sts);
+}
+
+/*****************************************************************************
+  Function      : vd_g_PwrCtrlObserveSetSocPower
+  Description   : SoC‹N“®ó‘Ôİ’èˆ—
+  param[in/out] :[ in ] u1_a_sts:SoC‹N“®ó‘Ô
+  return        : none
+  Note          : none
+*****************************************************************************/
+void vd_g_PwrCtrlObserveSetSocPower(const U1 u1_a_sts )
+{
+    u1_s_PwrCtrl_Observe_SocPower_Sts = u1_a_sts;  /* ŠÄ‹§Œä—p‚Éİ’è“à—e•Û‘¶ */
+    vd_g_PwrCtrlComTxSetSoCPower(u1_a_sts);        /* VMŠÔ’ÊM‘—Mİ’è */
+    
+    return;
 }
 
 /*****************************************************************************
@@ -395,6 +469,60 @@ static U1 u1_s_PwrCtrlObserveJdgVm3Stby( void )
     }
 
     return(u1_t_stbyinfo);
+}
+
+/*****************************************************************************
+  Function      : u2_g_PwrCtrlObserveSailUartSeq
+  Description   : SAIL UART MessageŠÄ‹ˆ—
+  param[in/out] : none
+  return        : none
+  Note          : none
+*****************************************************************************/
+static U2 u2_g_PwrCtrlObserveSailUartSeq( void )
+{
+    U2 u2_t_ret;
+    U1 u1_t_sailuart;
+
+    u2_t_ret = (U2)PWRCTRL_OBSERVE_ERR_NON;
+
+    /* SAIL UART MessageŠÄ‹Œ‹‰Ê‚ğæ“¾ */
+    u1_t_sailuart = u1_g_PwrCtrl_ObserveSAIL_UartErrSts();
+
+    /* SAIL UART MessageŠÄ‹Œ‹‰Ê‚ªˆÙí‚Ìê‡ */
+    if(u1_t_sailuart == (U1)PWRCTRL_OBSERVESAIL_NG)
+    {
+        /* SAIL UART MessageŠÄ‹‹ˆÙí”­¶‚ğ•Ô‹p */
+        u2_t_ret = (U2)PWRCTRL_OBSERVE_ERR_SAILUART;
+    }
+
+    return(u2_t_ret);
+}
+
+/*****************************************************************************
+  Function      : u2_g_PwrCtrlObserveSailErrSeq
+  Description   : SAIL-ERRŠÄ‹ˆ—
+  param[in/out] : none
+  return        : none
+  Note          : none
+*****************************************************************************/
+static U2 u2_g_PwrCtrlObserveSailErrSeq( void )
+{
+    U2 u2_t_ret;
+    U1 u1_t_sailerr;
+
+    u2_t_ret = (U2)PWRCTRL_OBSERVE_ERR_NON;
+
+    /* SAIL-ERRŠÄ‹Œ‹‰Ê‚ğæ“¾ */
+    u1_t_sailerr = u1_g_PwrCtrl_ObserveSAIL_SailErrSts();
+
+    /* SAIL-ERRŠÄ‹Œ‹‰Ê‚ªˆÙí‚Ìê‡ */
+    if(u1_t_sailerr == (U1)PWRCTRL_OBSERVESAIL_NG)
+    {
+        /* SAIL-ERRŠÄ‹ˆÙí”­¶‚ğ•Ô‹p */
+        u2_t_ret = (U2)PWRCTRL_OBSERVE_ERR_SAILERR;
+    }
+
+    return(u2_t_ret);
 }
 
 /*****************************************************************************
@@ -453,6 +581,37 @@ static U2 u2_s_PwrCtrlObservePsHoldSeq( void )
         {
             /* PMA_PS_HOLDŠÄ‹ˆÙí”­¶‚ğ•Ô‹p */
             u2_t_ret = (U2)PWRCTRL_OBSERVE_ERR_PMAPS;
+        }
+    }
+
+    return(u2_t_ret);
+}
+
+/*****************************************************************************
+  Function      : u2_g_PwrCtrlObserveSpiFailSeq
+  Description   : SPI’ÊM“râŠÄ‹ˆ—
+  param[in/out] : none
+  return        : none
+  Note          : none
+*****************************************************************************/
+static U2 u2_g_PwrCtrlObserveSpiFailSeq( void )
+{
+    U2 u2_t_ret;
+    U1 u1_t_spifail;
+
+    u2_t_ret = (U2)PWRCTRL_OBSERVE_ERR_NON;
+
+    /* SoC‹N“®ó‘Ô‚Ìê‡ */
+    if(u1_s_PwrCtrl_Observe_SocPower_Sts == (U1)PWRCTRL_OBSERVE_SOCPOWER_ON)
+    {
+        /* SPI’ÊM“râŒ‹‰Ê‚ğæ“¾ */
+        u1_t_spifail = u1_g_PwrCtrlComGetSpiFail();
+
+        /* SPI’ÊM“râŒ‹‰Ê‚ªˆÙí‚Ìê‡ */
+        if(u1_t_spifail == (U1)PWRCTRL_COM_SPIFAIL_NG)
+        {
+            /* SPI’ÊM“râˆÙí”­¶‚ğ•Ô‹p */
+            u2_t_ret = (U2)PWRCTRL_OBSERVE_ERR_SPI;
         }
     }
 
@@ -642,6 +801,85 @@ static U2 u2_s_PwrCtrlObservePgdVsysSeq( void )
             u2_t_ret = (U2)PWRCTRL_OBSERVE_ERR_PGD_VSYS;
         }
     }
+
+    return(u2_t_ret);
+}
+
+/*****************************************************************************
+  Function      : u2_s_PwrCtrlObserveSoCResetReqSeq
+  Description   : SoCƒŠƒZƒbƒg—v‹ŒŸ’mˆ—
+  param[in/out] : none
+  return        : none
+  Note          : none
+*****************************************************************************/
+static U2 u2_s_PwrCtrlObserveSoCResetReqSeq( void )
+{
+    U2 u2_t_ret;
+    U1 u1_t_read_req;
+
+    u2_t_ret = (U2)PWRCTRL_OBSERVE_ERR_NON;
+
+    /* SoCƒŠƒZƒbƒg—v‹‚ğæ“¾ */
+    u1_t_read_req = u1_g_PwrCtrlComGetSoCResetReq();
+
+    /* æ“¾“à—e‚ªSoCƒŠƒZƒbƒg—v‹(³í)‚Ìê‡ */
+    if(u1_t_read_req == (U1)PWRCTRL_COM_SOCRESET_SOCNORM)
+    {
+        /* SoC‹N“®ó‘Ô ‚©‚Â ‘O‰ñ’l‚ªSoCƒŠƒZƒbƒg—v‹(³í)ˆÈŠO‚Ìê‡ */
+        if((u1_s_PwrCtrl_Observe_SocPower_Sts == (U1)PWRCTRL_OBSERVE_SOCPOWER_ON)
+        && (u1_s_PwrCtrl_Observe_PreSoCResetReq != (U1)PWRCTRL_COM_SOCRESET_SOCNORM))
+        {
+            u2_t_ret = (U2)PWRCTRL_OBSERVE_RESET_SOCNORM;
+        }
+    }
+
+    /* æ“¾“à—e‚ªSoCƒŠƒZƒbƒg—v‹(ˆÙí)‚Ìê‡ */
+    if(u1_t_read_req == (U1)PWRCTRL_COM_SOCRESET_SOCERR)
+    {
+        /* SoCƒŠƒZƒbƒg—v‹(ˆÙí)ŒŸ’mÀsó‘Ô ‚©‚Â ‘O‰ñ’l‚ªSoCƒŠƒZƒbƒg—v‹(ˆÙí)ˆÈŠO‚Ìê‡ */
+        if((u1_s_PwrCtrl_Observe_SoCResetErr_Sts == (U1)PWRCTRL_OBSERVE_ON)
+        && (u1_s_PwrCtrl_Observe_PreSoCResetReq != (U1)PWRCTRL_OBSERVE_RESET_SOCERR))
+        {
+            u2_t_ret = (U2)PWRCTRL_OBSERVE_RESET_SOCERR;
+        }
+    }
+
+    /* SoCƒŠƒZƒbƒg—v‹‚Ì‘O‰ñ’l‚ğXV */
+    u1_s_PwrCtrl_Observe_PreSoCResetReq = u1_t_read_req;
+
+    return(u2_t_ret);
+}
+
+/*****************************************************************************
+  Function      : u2_s_PwrCtrlObserveNMDiagResetSeq
+  Description   : NMƒ_ƒCƒAƒOƒŠƒZƒbƒgŒŸ’mˆ—
+  param[in/out] : none
+  return        : none
+  Note          : none
+*****************************************************************************/
+static U2 u2_s_PwrCtrlObserveNMDiagResetSeq( void )
+{
+    U2 u2_t_ret;
+    U1 u1_t_read_req;
+
+    u2_t_ret = (U2)PWRCTRL_OBSERVE_ERR_NON;
+
+    /* NMƒ_ƒCƒAƒOƒŠƒZƒbƒg‚ğæ“¾ */
+    u1_t_read_req = u1_g_PwrCtrlComGetNMDiagReset();
+    
+    /* æ“¾“à—e‚ªNMƒ_ƒCƒAƒOƒŠƒZƒbƒg—v‹‚Ìê‡ */
+    if(u1_t_read_req == (U1)PWRCTRL_COM_NMDIAGRESET_REQ)
+    {
+        /* SoC‹N“®ó‘Ô ‚©‚Â ‘O‰ñ’l‚ªNMƒ_ƒCƒAƒOƒŠƒZƒbƒg—v‹ˆÈŠO‚Ìê‡ */
+        if((u1_s_PwrCtrl_Observe_SocPower_Sts == (U1)PWRCTRL_OBSERVE_SOCPOWER_ON)
+        && (u1_s_PwrCtrl_Observe_PreNMDiagReset != (U1)PWRCTRL_COM_NMDIAGRESET_REQ))
+        {
+            u2_t_ret = (U2)PWRCTRL_OBSERVE_RESET_NMDIAG;
+        }
+    }
+
+    /* NMƒ_ƒCƒAƒOƒŠƒZƒbƒg‚Ì‘O‰ñ’l‚ğXV */
+    u1_s_PwrCtrl_Observe_PreNMDiagReset = u1_t_read_req;
 
     return(u2_t_ret);
 }

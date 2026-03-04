@@ -25,6 +25,7 @@
 #include "Mcu_Sys_Pwr_Gyr.h"
 #include "x_spi_ivi_sub1_power.h"
 #include "x_spi_ivi_sub1_version.h"
+#include "SysEcDrc.h"
 /* BSW */
 #include "Dio.h"
 /* LIB */
@@ -188,6 +189,9 @@
 #define GYRO_READDAT_BIT5                       (0x20U) /* 読出しデータマスク：Bit5 */
 #define GYRO_READDAT_BIT6                       (0x40U) /* 読出しデータマスク：Bit6 */
 #define GYRO_READDAT_BIT7                       (0x80U) /* 読出しデータマスク：Bit7 */
+
+#define GYRO_ST_FAIL_TGT_GYRO                   (1U)    /* ダイレコ記憶要因(Gyro) */
+#define GYRO_ST_FAIL_TGT_ACC                    (2U)    /* ダイレコ記憶要因(Gセンサ) */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -386,7 +390,6 @@ typedef struct
     U4                  u4_upload_addr; /* configファイル書込みデータ部の先頭アドレス */
 }ST_GYRO_CFGMNG;
 
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -476,7 +479,7 @@ static void     vd_s_GyroDevSeqIdle(void);
 static void     vd_s_GyroDevSeqStaUp1(void);
 static U1       u1_s_GyroDevSeqGyrSelfTest(void);
 static U1       u1_s_GyroDevSeqAccSelfTest(void);
-static void     vd_s_GyroDevSeqSelfTestErr(void);
+static void     vd_s_GyroDevSeqSelfTestErr(const U1 u1_a_fail_tgt);
 static U1       u1_s_GyroDevSeqAccCfgUpload(void);
 static U1       u1_s_GyroGetDatInfo(ST_GYRO_DATAINFO * st_a_datainfo);
 static U1       u1_s_GyroGetStsChk(void);
@@ -1745,14 +1748,14 @@ static void     vd_s_GyroDevSeqStaUp1(void)
             /* ToDo：I2C失敗時処理導入の検討 */
 
             vd_s_GyroDevSeqSet((U1)GYRO_SEQ_IDLE);
-            vd_s_GyroDevSeqSelfTestErr();
+            vd_s_GyroDevSeqSelfTestErr((U1)GYRO_ST_FAIL_TGT_GYRO);
         }
         else if(u1_t_sts == (U1)GYRO_RET_NG){
             /* テスト結果NG フェール処理 */
             /* 起動フロー(1)を終了、シーケンスアイドルに設定 */
             vd_s_GyroDevSeqSet((U1)GYRO_SEQ_IDLE);
             /* Self Test 失敗処理 */
-            vd_s_GyroDevSeqSelfTestErr();
+            vd_s_GyroDevSeqSelfTestErr((U1)GYRO_ST_FAIL_TGT_GYRO);
         }
         else{
             /* Self Test (Gyro)実施中 */
@@ -1793,14 +1796,14 @@ static void     vd_s_GyroDevSeqStaUp1(void)
             /* ToDo：I2C失敗時処理導入の検討 */
 
             vd_s_GyroDevSeqSet((U1)GYRO_SEQ_IDLE);
-            vd_s_GyroDevSeqSelfTestErr();
+            vd_s_GyroDevSeqSelfTestErr((U1)GYRO_ST_FAIL_TGT_ACC);
         }
         else if(u1_t_sts == (U1)GYRO_RET_NG){
             /* テスト結果NG フェール処理 */
             /* 起動フロー(1)を終了、シーケンスアイドルに設定 */
             vd_s_GyroDevSeqSet((U1)GYRO_SEQ_IDLE);
             /* Self Test 失敗処理 */
-            vd_s_GyroDevSeqSelfTestErr();
+            vd_s_GyroDevSeqSelfTestErr((U1)GYRO_ST_FAIL_TGT_ACC);
         }
         else{
             /* Self Test (Gセンサ)実施中 */
@@ -1827,7 +1830,7 @@ static void     vd_s_GyroDevSeqStaUp1(void)
         else if(u1_t_sts == (U1)GYRO_RET_NG){
             /* 実施結果NG */
             /* ダイレコ記録 */
-            /* ToDo：ダイレコ記録用IFを刺す */
+            vd_g_SysEcDrc_Drec((U1)SYSECDRC_DREC_CAT_GYROACC, (U1)SYSECDRC_DREC_ID_6, (U1)0x00U, (U1)0x00U);
             /* 起動フロー(1)を終了、シーケンスアイドルに設定 */
             vd_s_GyroDevSeqSet((U1)GYRO_SEQ_IDLE);
             /* GYRO状態管理の イベント・ハンドラを呼び出し */
@@ -2193,7 +2196,7 @@ static U1       u1_s_GyroDevSeqAccSelfTest(void)
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-static void     vd_s_GyroDevSeqSelfTestErr(void)
+static void     vd_s_GyroDevSeqSelfTestErr(const U1 u1_a_fail_tgt)
 {
     /* Self-Testエラーカウントl(6_1)をチェック	 */
     if(u1_s_errcnt_l < (U1)GYRO_CNT_SELFTEST_RTRY_MAX){
@@ -2209,7 +2212,7 @@ static void     vd_s_GyroDevSeqSelfTestErr(void)
         u1_s_errcnt_j   = (U1)0U;
 
         /* ダイレコ記録 */
-        /* ToDo：必要に応じてダイレコ記憶IF挿入 */
+        vd_g_SysEcDrc_Drec((U1)SYSECDRC_DREC_CAT_GYROACC, (U1)SYSECDRC_DREC_ID_1, u1_a_fail_tgt, (U1)0x00U);
 
         /* GYRO状態管理の イベント・ハンドラを呼び出し */
         vd_g_GyroDevEventGo((U1)GYRO_EVENT_STUP_ERR);
@@ -2830,6 +2833,7 @@ static void     vd_s_GyroDevSeqGyrShutDn1(void)
             u1_s_cnt_shutdn             = (U1)0U;
 
             /* ダイレコ記録 */
+            vd_g_SysEcDrc_Drec((U1)SYSECDRC_DREC_CAT_GYROACC, (U1)SYSECDRC_DREC_ID_7, (U1)0x00U, (U1)0x00U);
 
             /* シーケンスアイドルに設定 */
             vd_s_GyroDevSeqSet((U1)GYRO_SEQ_IDLE);

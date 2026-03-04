@@ -1,4 +1,4 @@
-/* 2.2.4 */
+/* 2.2.5 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -12,7 +12,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define HUDIMGADJ_H_MAJOR                      (2)
 #define HUDIMGADJ_H_MINOR                      (2)
-#define HUDIMGADJ_H_PATCH                      (4)
+#define HUDIMGADJ_H_PATCH                      (5)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
@@ -40,9 +40,6 @@ void    vd_g_HudImgAdjMainTask(void);
 /*---------------------------------------------------------------------------*/
 /*  Interface                                                                */
 /*---------------------------------------------------------------------------*/
-void    vd_g_HudImgAdjSetUpDwSw(const U1 u1_a_UPSW, const U1 u1_a_DWSW);
-void    vd_g_HudImgAdjSet_L_VIPOS_UPDW(const U1 u1_a_UPSW, const U1 u1_a_DWSW);
-
 void    vd_g_HudImgAdjSet_GV_VIPOS_RESPOS(const U2 u2_a_GV_VIPOS_RESPOS);           /* GV_VIPOS_RESPOS    */
 void    vd_g_HudImgAdjSet_GV_VIPOS_MOVPOS(const U2 u2_a_GV_VIPOS_MOVPOS);           /* GV_VIPOS_MOVPOS    */
 void    vd_g_HudImgAdjSet_GV_VIPOS_ADJMINPOS(const U2 u2_a_GV_VIPOS_ADJMINPOS);     /* GV_VIPOS_ADJMINPOS */
@@ -60,12 +57,6 @@ void    vd_g_HudImgAdjowstpOwDeAct(void);
 U1      u1_g_HudImgAdjGetGvOwReq(void);         /* GV_DG_VIPOS_REQ  */
 U2      u2_g_HudImgAdjGetGvOwPos(void);         /* GV_DG_VIPOS_POS  */
 U1      u1_g_HudImgAdjReadDataImgPos(U1 * u1_ap_pos);
-
-/*---------------------------------------------------------------------------*/
-/*  USER_SWITCH_OPERATION                                                    */
-/*---------------------------------------------------------------------------*/
-U1      u1_g_HudImgAdjIsUpSwOn(void);                                               /* GV_VIPOS_UPSW      */
-U1      u1_g_HudImgAdjIsDnSwOn(void);                                               /* GV_VIPOS_DNSW      */
 
 /*---------------------------------------------------------------------------*/
 /*  DRIVING_POSITION                                                         */

@@ -11,16 +11,6 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-/* 電源起動状態(暫定) */
-#define PICT_NOREDUN_STATE_OFF                          (0U)    /* OFF */
-#define PICT_NOREDUN_STATE_PARK                         (1U)    /* 駐車中起動 */
-#define PICT_NOREDUN_STATE_APPOFF                       (2U)    /* 見た目オフ起動 */
-#define PICT_NOREDUN_STATE_APPON                        (3U)    /* 見た目オン起動 */
-
-/* SIP異常情報(暫定) */
-#define PICT_SIP_ERR_OFF                                (0U)
-#define PICT_SIP_ERR_ON                                 (1U)
-
 /* カメラ有効領域 */
 #define PICT_CAN_CAM_SIZE_NONE                          (0x00U) /* 未確定 */
 #define PICT_CAN_CAM_SIZE_1920X1080                     (0x01U) /* 1920 x 1080 */
@@ -84,16 +74,20 @@ U1      u1_g_PictCtl_CamSyncSts(void);
 U1      u1_g_PictCtl_RcvQualModeRevFlgSts(void);
 U1      u1_g_PictCtl_RcvQualModeRevDate(void);
 void    vd_g_PictCtl_RcvDiagModInd(const U1 u1_a_MODE);
-/* 暫定 */
-U1      u1_s_PictCtl_SiPErrstsInfo(void);
 U1      u1_g_PictCtl_CdsizeSnd(void);
+void    vd_g_PictCtl_VmResetReq(void);
+void    vd_g_PictCtl_SocResetReq(void);
+void    vd_g_PictCtl_CdcResetReq(void);
+U1      u1_g_PictCtl_MmresetSnd(void);
+U1      u1_g_PictCtl_CdcRstCancelSts(void);
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 
-#endif      /* MCU_SYS_PWR_POWERIC_H */
+#endif      /* PICTCTL_H */
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
-/*  Change History  :  Mcu_Sys_Pwr_PowerIc.c                                                                                         */
+/*  Change History  :  PictCtl.c                                                                                                     */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

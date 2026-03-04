@@ -5,6 +5,7 @@
 #define ETHSWT_SWIC_CFG_H
 /* -------------------------------------------------------------------------- */
 #include <Std_Types.h>
+#include <EthDebugLog.h>
 /* -------------------------------------------------------------------------- */
 /* Common */
 #include <EthSwt_BSW_define.h>								/* BSWに合わせてヘッダファイル変更 */
@@ -17,7 +18,7 @@ void EthSwt_SWIC_Cfg_Init(void);
 /* Config for EthSwt_SWIC_PWR.c                                               */
 /* -------------------------------------------------------------------------- */
 #define D_ETHSWT_SWIC_PWR_CYCLE                     (5U)
-#define D_ETHSWT_SWIC_PWR_ON_WAIT                   (155U)  /* 35ms(T8) + 60ms(T9) + PwrCtrlがEthSwtよりも先にコールされる + (タスク・CPUクロック誤差考慮) */ /* 暫定 */
+#define D_ETHSWT_SWIC_PWR_ON_WAIT                   (105U)  /* 35ms(T8) + 60ms(T9) + 5ms(PwrCtrlがEthSwtよりも先にコールされる) + 5ms(タスク・CPUクロック誤差考慮) */
 #define D_ETHSWT_SWIC_PWR_ASSERT_WAIT               (10U)    /* 1ms(T1) + (タスク・CPUクロック誤差) */
 #define D_ETHSWT_SWIC_PWR_DEASSERT_WAIT             (20U)   /* 15ms(T2) + (タスク・CPUクロック誤差) */
 
@@ -37,6 +38,13 @@ void EthSwt_SWIC_Cfg_SetResetDeassert(void);
 /* -------------------------------------------------------------------------- */
 /* Config for EthSwt_SWIC_STM.c                                               */
 /* -------------------------------------------------------------------------- */
+#define ETHSWT_SWIC_UNINIT_START()
+#define ETHSWT_SWIC_INIT_START()
+#define ETHSWT_SWIC_PORT_INIT_COMPLETED_START()
+#define ETHSWT_SWIC_SET_RELAY_ON_START()
+#define ETHSWT_SWIC_ACTIVE_START()					EthDebugLog_Notify(E_ETHDEBUGLOG_EV_LINKUPREADY)
+#define ETHSWT_SWIC_SET_RELAY_OFF_START()
+
 Std_ReturnType EthSwt_SWIC_Cfg_AllowRelay(void);
 
 /* -------------------------------------------------------------------------- */

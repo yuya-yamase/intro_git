@@ -244,32 +244,6 @@ void    vd_g_wChimeMetBuzzInfo(U1 * u1p_a_level, U1 * u1p_a_length, U1 * u1p_a_e
     *u1p_a_length    = u1_s_wchime_longtone;
     *u1p_a_emergency = u1_s_wchime_emg;
 }
-#if 0   /* BEV Rebase provisionally */
-#else   /* BEV Rebase provisionally */
-/*===================================================================================================================================*/
-/*  void    vd_g_wChimePutMWVCope(U1 u1_a_mwvcope)                                                                                   */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      u1_a_mwvcope : Meter warning volume Cstm value                                                                   */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void    vd_g_wChimePutMWVCope(U1 u1_a_mwvcope)
-{
-    if(u1_a_mwvcope <= (U1)2U)
-    {
-        u1_g_wchime_metcstmvol = u1_a_mwvcope;
-    }
-}
-/*===================================================================================================================================*/
-/*  void    u1_g_wChimeGetMWVCope(void)                                                                                              */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         u1_g_wchime_metcstmvol : Meter warning volume Cstm value                                                         */
-/*===================================================================================================================================*/
-U1      u1_g_wChimeGetMWVCope(void)
-{
-    return(u1_g_wchime_metcstmvol);
-}
-#endif   /* BEV Rebase provisionally */
 /*===================================================================================================================================*/
 /*  static void    vd_s_wChimeReqmaskClr(const U4 * u4_ap_REQBIT, const U1 u1_a_CYC_CHK, const U1 u1_a_REQ_SEL,                      */
 /*                                       const U4 * u4_ap_CHBIT)                                                                     */

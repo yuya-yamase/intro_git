@@ -1,4 +1,4 @@
-/* 2.0.3 */
+/* 2.1.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -13,8 +13,8 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define TRIPCOM_CALC_CFG_H_MAJOR                (2)
-#define TRIPCOM_CALC_CFG_H_MINOR                (0)
-#define TRIPCOM_CALC_CFG_H_PATCH                (3)
+#define TRIPCOM_CALC_CFG_H_MINOR                (1)
+#define TRIPCOM_CALC_CFG_H_PATCH                (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -30,12 +30,6 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define TRIPCOM_CALC_KM_TO_MI_MLT               (1000U)          /*  1 mile = 1.609 km (for using SP1P)      */
 #define TRIPCOM_CALC_KM_TO_MI_DIV               (1609U)
-
-#define TRIPCOM_CALC_LI_TO_GAUS_MLT             (10000U)         /*  1 gallon = 3.785 liter                  */
-#define TRIPCOM_CALC_LI_TO_GAUS_DIV             (37850U)
-
-#define TRIPCOM_CALC_LI_TO_GAUK_MLT             (10000U)         /*  1 gallon = 4.546 liter                  */
-#define TRIPCOM_CALC_LI_TO_GAUK_DIV             (45460U)
 
 #define TRIPCOM_CALC_EVRUN_KM_TO_MI_MLT         (1000U)          /*  1 mile = 1.609 km (for NOT using SP1P)  */
 #define TRIPCOM_CALC_EVRUN_KM_TO_MI_DIV         (1609U)

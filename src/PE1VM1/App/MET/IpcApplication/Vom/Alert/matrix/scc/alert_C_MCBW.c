@@ -1,4 +1,4 @@
-/* 5.2.1 */
+/* 5.3.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,8 +10,8 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define ALERT_C_MCBW_C_MAJOR                     (5)
-#define ALERT_C_MCBW_C_MINOR                     (2)
-#define ALERT_C_MCBW_C_PATCH                     (1)
+#define ALERT_C_MCBW_C_MINOR                     (3)
+#define ALERT_C_MCBW_C_PATCH                     (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -63,7 +63,7 @@ static const U1  u1_sp_ALERT_C_MCBW_DST[ALERT_C_MCBW_NUM_DST] = {
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 08 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 09 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 10 UNKNOWN                                         */
-    (U1)ALERT_REQ_C_MCBW_MALFUNC_RW,                                           /* 11 MALFUNC_RW                                      */
+    (U1)ALERT_REQ_C_MCBW_MALFUNC,                                              /* 11 MALFUNC                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 12 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 13 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 14 UNKNOWN                                         */
@@ -71,7 +71,7 @@ static const U1  u1_sp_ALERT_C_MCBW_DST[ALERT_C_MCBW_NUM_DST] = {
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 16 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 17 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 18 UNKNOWN                                         */
-    (U1)ALERT_REQ_C_MCBW_MALFUNC_RW,                                           /* 19 MALFUNC_RW                                      */
+    (U1)ALERT_REQ_C_MCBW_MALFUNC,                                              /* 19 MALFUNC                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 20 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 21 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 22 UNKNOWN                                         */
@@ -79,7 +79,7 @@ static const U1  u1_sp_ALERT_C_MCBW_DST[ALERT_C_MCBW_NUM_DST] = {
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 24 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 25 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 26 UNKNOWN                                         */
-    (U1)ALERT_REQ_C_MCBW_MALFUNC_RW,                                           /* 27 MALFUNC_RW                                      */
+    (U1)ALERT_REQ_C_MCBW_MALFUNC,                                              /* 27 MALFUNC                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 28 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 29 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 30 UNKNOWN                                         */
@@ -146,10 +146,13 @@ static U4      u4_s_AlertC_mcbwSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, c
 /*  5.1.0    12/ 8/2020  TN       Update for 800B 1A(Version update).                                                                */
 /*  5.2.0     2/16/2020  TM       Fix Matrix table.                                                                                  */
 /*  5.2.1     3/25/2021  RI       Update for 840B CV(Version update).                                                                */
+/*  5.3.0     1/13/2026  HT       Change for Full_function2 (MET-M_REMWAR-CSTD-2-04-A-C0)                                            */
+/*                                Removed "ALERT_REQ" in order to transfer signal transmission control from the MCU to the SoC       */
 /*                                                                                                                                   */
 /*  * SM   = Shingo Miyamoto, NTTD MSE                                                                                               */
 /*  * TN   = Toshiaki Nagashima, NTTD MSE                                                                                            */
 /*  * TM   = Tatsuya Mori, NTTD MSE                                                                                                  */
 /*  * RI   = Ren Ito, NTTD MSE                                                                                                       */
+/*  * HT   = Hibiki Tanii, KSE                                                                                                       */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

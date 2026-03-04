@@ -46,9 +46,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if 0   /* BEV Rebase provisionally */
 #pragma ghs section rodata  = ".calibration_area_1B"
-#endif   /* BEV Rebase provisionally */
 volatile const U1 u1_CALIB_MCUID0001_MCUID1        = (U1)56U;       /* MCU Software version No.1                                     */
 volatile const U1 u1_CALIB_MCUID0002_MCUID2        = (U1)65U;       /* MCU Software version No.2                                     */
 volatile const U1 u1_CALIB_MCUID0003_MCUID3        = (U1)52U;       /* MCU Software version No.3                                     */
@@ -407,7 +405,7 @@ volatile const U1 u1_CALIB_MCUID1111_JUDG_RES_9    = (U1)0U;        /* Judgment 
 volatile const U1 u1_CALIB_MCUID1112_JUDG_RES_10   = (U1)0U;        /* Judgment result 10                                            */
 volatile const U1 u1_CALIB_MCUID1135_SBELT_USA     = (U1)0U;        /* SeatBelt Regulation USA                                       */
 volatile const U1 u1_CALIB_MCUID1136_SBELT_CAN     = (U1)0U;        /* SeatBelt Regulation CAN                                       */
-volatile const U1 u1_CALIB_MCUID1137_FMVSS         = (U1)0U;        /* New FMVSS applied or not                                      */
+volatile const U1 u1_CALIB_MCUID1137_NEW_FMVSS208  = (U1)0U;        /* New FMVSS applied or not                                      */
 volatile const U1 u1_CALIB_MCUID1138_SBR_TT_TYPE   = (U1)1U;        /* SeatBelt Reminder Telltale Type                               */
 volatile const U1 u1_CALIB_MCUID0576_DEGCW         = (U1)24U;       /* DegCW                                                         */
 volatile const U1 u1_CALIB_MCUID0577_DEGCCW        = (U1)231U;      /* DegCCW                                                        */
@@ -807,9 +805,7 @@ volatile const U1 u1_CALIB_MCUID_RSV_1B_0755       = (U1)0U;        /* Reserve_1
 volatile const U1 u1_CALIB_MCUID_RSV_1B_0756       = (U1)0U;        /* Reserve_1B-0756                                               */
 volatile const U1 u1_CALIB_MCUID0797_CNST_WRITEFLG = (U1)1U;        /* Constant write flag                                           */
 
-#if 0   /* BEV Rebase provisionally */
 #pragma ghs section rodata  = ".calibration_area_2B"
-#endif   /* BEV Rebase provisionally */
 volatile const U2 u2_CALIB_MCUID3002_ANUNC_MID     = (U2)400U;      /* Basic 7 Tones Reporting Tone Medium                           */
 volatile const U2 u2_CALIB_MCUID3003_ANUNC_SP_MID  = (U2)400U;      /* Basic 7 Tones Reporting Tone (Special) Medium                 */
 volatile const U2 u2_CALIB_MCUID3004_RECEP_MID     = (U2)400U;      /* Basic 7 tones Reception tone Medium                           */
@@ -1630,9 +1626,7 @@ volatile const U2 u2_CALIB_MCUID_RSV_2B_0817       = (U2)0U;        /* Reserve_2
 volatile const U2 u2_CALIB_MCUID_RSV_2B_0818       = (U2)0U;        /* Reserve_2B-0818                                               */
 volatile const U2 u2_CALIB_MCUID_RSV_2B_0819       = (U2)0U;        /* Reserve_2B-0819                                               */
 
-#if 0   /* BEV Rebase provisionally */
 #pragma ghs section rodata  = ".calibration_area_4B"
-#endif   /* BEV Rebase provisionally */
 volatile const U4 u4_CALIB_MCUID_RSV_4B_0001       = (U4)0U;        /* Reserve_4B-0001                                               */
 volatile const U4 u4_CALIB_MCUID_RSV_4B_0002       = (U4)0U;        /* Reserve_4B-0002                                               */
 volatile const U4 u4_CALIB_MCUID_RSV_4B_0003       = (U4)0U;        /* Reserve_4B-0003                                               */
@@ -1694,9 +1688,7 @@ volatile const U4 u4_CALIB_MCUID_RSV_4B_0058       = (U4)0U;        /* Reserve_4
 volatile const U4 u4_CALIB_MCUID_RSV_4B_0059       = (U4)0U;        /* Reserve_4B-0059                                               */
 volatile const U4 u4_CALIB_MCUID_RSV_4B_0060       = (U4)0U;        /* Reserve_4B-0060                                               */
 
-#if 0   /* BEV Rebase provisionally */
 #pragma ghs section rodata  = default
-#endif   /* BEV Rebase provisionally */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
