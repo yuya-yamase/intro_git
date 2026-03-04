@@ -134,8 +134,5 @@ U1 u1_g_FwuMemAccGetUpdateStatus(void);
 /* Debug APIs */
 U1 u1_g_FwuMemAccIsJobActive(void);
 
-/* Cancel API */
-U1 u1_g_FwuMemAccRollbackSwitch(void);
-
 #endif /* FWUMEMACC_H */
 /*===================================================================================================================================*/

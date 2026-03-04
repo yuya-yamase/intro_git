@@ -67,8 +67,8 @@
 /* NOTE: ERROR condition is managed via abort_active flag. */
 /* NOTE: After ACT completes, transition to ROLLBACK or reset->PREP_WAITING. */
 
-/* Event definitions (with CANCEL support) */
-#define FWUSH_EVENT_MAX                         (11U)
+/* Event definitions */
+#define FWUSH_EVENT_MAX                         (12U)
 #define FWUSH_EVENT_NONE                        (0U)           /* No event */
 #define FWUSH_EVENT_NEW_REQUEST                 (1U)           /* New request received */
 #define FWUSH_EVENT_SAME_REQUEST                (2U)           /* Same request received (continue) */
@@ -79,7 +79,8 @@
 #define FWUSH_EVENT_CANCEL                      (7U)           /* Cancel requested */
 #define FWUSH_EVENT_MEMACC_RUN_PARTIAL          (8U)           /* MemAcc run job partial success */
 #define FWUSH_EVENT_MEMACC_RUN_COMPLETE         (9U)           /* MemAcc run job complete */
-#define FWUSH_EVENT_MEMACC_ROLLBACK             (10U)          /* MemAcc activate job rollback */
+#define FWUSH_EVENT_ROLLBACK                    (10U)          /* Activate job rollback */
+#define FWUSH_EVENT_SWITCH_DETECT               (11U)          /* Active area switch detected */
 
 /* job progress */
 #define FWUSH_PROGRESS_INIT                     (0x00U)        /* Before reprog start */
@@ -113,7 +114,7 @@
 #define FWUSH_FSWA_STS_AREA0                    (0x00000000U)    /* Area 0 Active */
 #define FWUSH_FSWA_STS_AREA1                    (0x00000001U)    /* Area 1 Active */
 #define FWUSH_FSWA_STS_INIT                     (0xFFFFFFFFU)    /* read error */
-#define FWUSH_FSWA_READ_POS                     (0x00000003U)    /* Read Position */
+#define FWUSH_FSWA_READ_POS                     (0x000000FFU)    /* Read Position */
 #define FWUSH_SWAS_VALID                        (0x00U)          /* Valid */
 #define FWUSH_SWAS_DIRTY                        (0x00U)          /* Dirty */
 
