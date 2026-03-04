@@ -231,9 +231,9 @@ boolean Com_RxIpduCallout(PduIdType PduId, BswConstR PduInfoType* PduInfoPtr)
 /*===================================================================================================================================*/
 void    Com_CbkRxAck(PduIdType PduId)
 {
-#if (OXCAN_LIB_CFG_EN_RXD == 1U)
+#if ((OXCAN_LIB_CFG_EN_RXD == 1U) || (OXCAN_LIB_CFG_EN_RXD == 2U))
     vd_g_oXCANRxdPduAck((U1)OXCAN_RXD_GR_CAN, PduId);
-#endif /* #if (OXCAN_LIB_CFG_EN_RXD == 1U) */
+#endif /* #if ((OXCAN_LIB_CFG_EN_RXD == 1U) || (OXCAN_LIB_CFG_EN_RXD == 2U)) */
 
 #ifdef OXDOCAN_AUBIF_MA_H
     vd_g_TyDoCANAubIfComKzkRx(PduId);

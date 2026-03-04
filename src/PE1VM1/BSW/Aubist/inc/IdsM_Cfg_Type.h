@@ -24,6 +24,12 @@
 #define IdsMConf_IdsMEvent_Event_85A2 (1U)
 #define IdsMConf_IdsMEvent_Event_002E (2U)
 #define IdsMConf_IdsMEvent_Event_002F (3U)
+#define IdsMConf_IdsMEvent_Event_C5D0 (4U)
+#define IdsMConf_IdsMEvent_Event_85D0 (5U)
+#define IdsMConf_IdsMEvent_Event_C5A4 (6U)
+#define IdsMConf_IdsMEvent_Event_85A4 (7U)
+#define IdsMConf_IdsMEvent_Event_C5C1 (8U)
+#define IdsMConf_IdsMEvent_Event_85C1 (9U)
 
 
 #define IdsMConf_IdsMIfTxPdu_IdsMIfTxPdu (0U)

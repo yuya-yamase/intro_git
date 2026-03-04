@@ -3,8 +3,11 @@
 rmdir /s /q dst
 rmdir /s /q obj
 
+del ..\RFP\bin\bs3ckpt_2m_oth_usr*.*
+del ..\RFP\bin\bs3ckpt_opbt*.mot
 del .\*.log
 del Section_Size_*.xlsx
+del ..\..\tool\MemAnalysis\*_component.json
 
 rmdir /s /q ..\..\src\DevRRPG\ReprogAPL_Info\env\out\obj
 rmdir /s /q ..\..\src\DevRRPG\ReprogProject\bsw\EAL\CanIf\obj

@@ -20,8 +20,8 @@
 #include "gpt_drv_frt.h"
 #include "Port.h"
 #include "typort.h"
-#include "Spi.h"
 #include "Dma.h"
+#include "Spi.h"
 #include "icu_drv_wk.h"
 #include "ErrH.h"
 
@@ -176,6 +176,7 @@ void SS_Pm_postClockUpCallout(SS_BootType u4_BootSource)
         (void)SS_Memory_set(__ghsbegin_ecu_n_nvarCR0_top, 0UL, (uint32)ECU_N_NVAR_CR0_SIZE);
         (void)SS_Memory_set(__ghsbegin_ecu_n_nvarCR1_top, 0UL, (uint32)ECU_N_NVAR_CR1_SIZE);
 
+        (void)SS_Memory_set(__ghsbegin_mcal_ram_top, 0UL, (uint32)MCAL_RAM_SIZE);
         (void)SS_Memory_set(__ghsbegin_cluster2_share_ramtop, 0UL, (uint32)BSW_SHARE_DATA_SIZE);
 
         Spi_PrePortInit();
@@ -199,9 +200,9 @@ void SS_Pm_postClockUpCallout(SS_BootType u4_BootSource)
 
         vd_g_22SSCallout_BattLowInit();
 
-        Spi_Init1();
-
         Dma_Init();
+
+        Spi_Init1();
 
         ErrH_Init_1();
     }
