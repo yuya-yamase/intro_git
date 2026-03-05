@@ -18,8 +18,8 @@
 #include "VIS_Pwr.h"
 #include "VIS_Pwrcfg.h"
 #include "LIB.h"
-#include "chipcom_config.h"
-#include "chipcom.h"
+#include "ChipCom_Cfg.h"
+#include "ChipCom.h"
 #include "iohw_adc_sh.h"
 
 /*==============================================================================================*/
