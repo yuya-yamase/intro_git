@@ -4,7 +4,6 @@
 #include <Std_Types.h>
 #include "EthDLC_Cfg.h"
 /* -------------------------------------------------------------------------- */
-#include <VIS.h>
 #include <EthDLC.h>
 #include <EthDLC_STM.h>
 /* 26.2.16 doza Team-B edit sta */
@@ -17,24 +16,6 @@
 #include <EthDLC_MemMap.h>
 /* -------------------------------------------------------------------------- */
 /* Config for EthDLC_STM.c                                                    */
-/* -------------------------------------------------------------------------- */
-Std_ReturnType EthDLC_Power_GetState (void)
-{
-	/* TMC C-DC VISから車両電源基本ステートを取得して判断する	*/
-	Std_ReturnType	ret = STD_OFF;
-	uint8			getResult;
-	uint8			basicState;
-
-	getResult = u1_g_VISPwrGetBasicState(&basicState);
-
-	if (getResult == VIS_COMMUNICATION_OK) {
-		if (basicState == VIS_BASICSTATE_RIDING || basicState == VIS_BASICSTATE_POWERON_NORMAL || basicState == VIS_BASICSTATE_POWERON_EMERGENCY) {
-			ret = STD_ON;
-		}
-	}
-
-	return ret;
-}
 /* -------------------------------------------------------------------------- */
 Std_ReturnType EthDLC_Port_GetState (void)
 {
