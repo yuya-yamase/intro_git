@@ -54,6 +54,8 @@ void            vd_g_XspiIviSub1CameraMainTask(void);
 void            vd_g_XspiIviSub1CameraAna(const U1 * u1_ap_XSPI_ADD, const U2 u2_a_data_size);
 void            vd_g_XspiIviSub1CameraDataSend(const ST_XSPI_IVI_MISC_CAMERA_DATA  st_a_CAMERA_DATA);
 void            vd_g_XspiIviSub1CameraSyncPassDataSend(const ST_XSPI_IVI_MISC_CAMERA_SYNC_PASS_DATA  st_a_CAMERA_SYNC_DATA);
+void            vd_g_XspiIviSub1CameraLogDataSend(const U1 * u1_ap_DATA);
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
