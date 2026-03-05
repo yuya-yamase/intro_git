@@ -62,7 +62,7 @@ void vd_g_SoundCriDrvDmacInterrupt(void);
 #define	DMA_UCFG_CHDATA3_REQ				(PIL_DMAC_GR0_INTTAUD1I0)			/* See DMA_UCFG_CHDATA0_REQ for range			*/
 #define	DMA_UCFG_CHDATA3_HWCH				(PIL_DMAC_CH7)						/* See DMA_UCFG_CHDATA0_HWCH for range			*/
 #define	DMA_UCFG_CHDATA3_PRILEVEL			(DMA_PRIORITY_NOUSE)				/* See DMA_UCFG_CHDATA0_PRILEVEL for range		*/
-#define	DMA_UCFG_CHDATA3_NOTIFICATION		(NULL_PTR)							/* See DMA_UCFG_CHDATA0_NOTIFICATION for range	*/
+#define	DMA_UCFG_CHDATA3_NOTIFICATION		(ADX_INTR_PTR)						/* See DMA_UCFG_CHDATA0_NOTIFICATION for range	*/
 
 /* [DMA_CH_DATA_ID_4] config */
 #define	DMA_UCFG_CHDATA4_TYPE				(DMA_DMAC0)							/* See DMA_UCFG_CHDATA0_TYPE			*/
@@ -70,11 +70,6 @@ void vd_g_SoundCriDrvDmacInterrupt(void);
 #define	DMA_UCFG_CHDATA4_HWCH				(PIL_DMAC_CH8)						/* See DMA_UCFG_CHDATA0_HWCH for range			*/
 #define	DMA_UCFG_CHDATA4_PRILEVEL			(DMA_PRIORITY_NOUSE)				/* See DMA_UCFG_CHDATA0_PRILEVEL for range		*/
 #define	DMA_UCFG_CHDATA4_NOTIFICATION		(NULL_PTR)							/* See DMA_UCFG_CHDATA0_NOTIFICATION for range	*/
-#warning "BEVCDCFD-2514"
-#if 0 /* BEVCDCFD-2514 */
-#define	DMA_UCFG_CHDATA8_NOTIFICATION		(ADX_INTR_PTR)						/* See DMA_UCFG_CHDATA0_NOTIFICATION for range	*/
-#else /* BEVCDCFD-2514 */
-#endif /* BEVCDCFD-2514 */
 
 
 /*-- End Of File -------------------------------------------------------------------------------*/
