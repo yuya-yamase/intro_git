@@ -34,6 +34,7 @@
 /* Response definition */
 #define FWUSH_ACK_OK                            (0x00U)
 #define FWUSH_ACK_NG                            (0x01U)
+#define FWUSH_ACK_PROCESSING                    (0x80U)
 
 #define FWUSH_ACK_CANCEL_OK                     (0x00U)        /* Interrupt OK */
 #define FWUSH_ACK_CANCEL_ROLLBACK_OK            (0x01U)        /* Rollback OK */
