@@ -109,7 +109,8 @@ Std_ReturnType ChipCom_GetPeriodicRxData( const uint8 periodic_id, uint16* recei
 
 		t_u1Rtn = ChipCom_ReceiveSignal( t_u2SignalIdSeq, (void*)&t_u4SeqNo );
 	}
-
+	
+	*receive_len = ChipCom_cstDataInfoTbl[t_u2SignalId].u2DataLen;
 	*receive_counter = t_u4SeqNo;
 
 	return t_u1Rtn;
