@@ -47,6 +47,10 @@
 #define VIS_SOCRST_ABNORMAL                                 ((U1)0x02U)     /* SoCリセット起動要因：強制リセット起動 */
 #define VIS_SOCRST_FAIL                                     ((U1)0xFFU)     /* SoCリセット起動要因：異常値 */
 
+#define VIS_SAILCOMPINIT_NORESPONSE                         ((U1)0x00U)     /* SAIL完全初期化応答：未受信 */
+#define VIS_SAILCOMPINIT_OK                                 ((U1)0x01U)     /* SAIL完全初期化応答：成功 */
+#define VIS_SAILCOMPINIT_NG                                 ((U1)0x02U)     /* SAIL完全初期化応答：失敗 */
+
 #define VIS_VIN_MAX_NM                                      ((U1)17U)       /* VIN情報要素数 */
 #define VIS_VIN_INIT_VAL                                    ((U1)0x3FU)     /* VIN初期値 */
 #define VIS_NORESPONSE                                      ((U1)0x00U)     /* CAN受信状態：未受信 */
@@ -75,5 +79,7 @@ U1 u1_g_VISPwrGetSpecialState (U1 * const u1_a_SPECIALSTATE);
 U1 u1_g_VISPwrGetEthChPwr (void);
 U1 u1_g_VISPwrGetApofrq (void);
 void vd_g_VISPwrSocRstNotify (U1 const u1_a_SOCRST_TYPE);
+void vd_g_VISPwrSailCompInitReqNotify (U1 const u1_a_SAILCOMPINITREQ);
+U1 u1_g_VISPwrGetSailCompInitRes(void);
 /* -------------------------------------------------------------------------- */
 #endif/*VIS_H*/
