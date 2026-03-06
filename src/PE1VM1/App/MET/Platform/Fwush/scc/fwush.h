@@ -69,7 +69,7 @@
 /* NOTE: After ACT completes, transition to ROLLBACK or reset->PREP_WAITING. */
 
 /* Event definitions */
-#define FWUSH_EVENT_MAX                         (12U)
+#define FWUSH_EVENT_MAX                         (17U)
 #define FWUSH_EVENT_NONE                        (0U)           /* No event */
 #define FWUSH_EVENT_NEW_REQUEST                 (1U)           /* New request received */
 #define FWUSH_EVENT_SAME_REQUEST                (2U)           /* Same request received (continue) */
@@ -82,6 +82,11 @@
 #define FWUSH_EVENT_MEMACC_RUN_COMPLETE         (9U)           /* MemAcc run job complete */
 #define FWUSH_EVENT_ROLLBACK                    (10U)          /* Activate job rollback */
 #define FWUSH_EVENT_SWITCH_DETECT               (11U)          /* Active area switch detected */
+#define FWUSH_EVENT_PREP_ACCEPT                 (12U)          /* Prepare accept event */
+#define FWUSH_EVENT_ACT_ACCEPT                  (13U)          /* Activate accept event (ACT/VALI OK response, stay waiting) */
+#define FWUSH_EVENT_RESUME_ACT                  (14U)          /* Resume from Activate (MCU reset with Verify done) */
+#define FWUSH_EVENT_VALID_ACCEPT                (15U)          /* Resume from Validate (Fin waiting, rollback not done) */
+#define FWUSH_EVENT_RESUME_FIN                  (16U)          /* Resume from Finalize (Prep to Validate completed) */
 
 /* job progress */
 #define FWUSH_PROGRESS_INIT                     (0x00U)        /* Before reprog start */
@@ -117,7 +122,7 @@
 #define FWUSH_FSWA_STS_INIT                     (0xFFFFFFFFU)    /* read error */
 #define FWUSH_FSWA_READ_POS                     (0x000000FFU)    /* Read Position */
 #define FWUSH_SWAS_VALID                        (0x00U)          /* Valid */
-#define FWUSH_SWAS_DIRTY                        (0x00U)          /* Dirty */
+#define FWUSH_SWAS_DIRTY                        (0x01U)          /* Dirty */
 
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
