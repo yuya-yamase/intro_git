@@ -392,7 +392,7 @@ static void    vd_s_SoundCriMgrStartup(void)
     u1_t_brand           = u1_g_VardefOmusMCUID0024();
 
     __DI();
-    Dma_SetInterrupt( (U1)DMA_CH_DATA_ID_2, (U1)OFF, (U1)ON );
+    Dma_SetInterrupt( (U1)DMA_CH_DATA_ID_3, (U1)OFF, (U1)ON );
     __EI();
 
 #if (SOUND_CRI_DEBUGMODE == TRUE)
