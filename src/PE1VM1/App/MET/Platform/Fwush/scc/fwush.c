@@ -495,12 +495,7 @@ void vd_g_FwushMainTask(void)
     u1_s_fwush_state_main = stp_t_TRANSITION->u1_next_main_state;
     u1_s_fwush_state_sub  = stp_t_TRANSITION->u1_next_sub_state;
 
-    /* 5. Error handling */
-    if(u1_s_fwush_abort != (U1)FALSE){
-        vd_s_FwushAbort();
-    }
-    
-    /* 6. Execute MemAcc task */
+    /* 5. Execute MemAcc task */
     vd_g_FwuMemAccMainTask();
 }
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -537,6 +532,10 @@ static U1 u1_s_FwushDetectEvent(void)
         }
         else{
             u1_t_event = u1_s_FwushDetectEventForProcessing();
+        }
+
+        if(u1_s_fwush_abort != (U1)FALSE){
+            u1_t_event = (U1)FWUSH_EVENT_MEMACC_ERROR;
         }
     }
     else{
@@ -855,7 +854,6 @@ static void vd_s_FwushHandleEraseReq(void)
 
         u1_t_result = u1_g_FwuMemAccEraseReq(u4_t_adr, u4_t_length, u4_s_fwush_prep_data_crc);
         if(u1_t_result != (U1)FWUMEMACC_RET_OK){
-            vd_s_FwushMakeResData(FWUSH_RESP_SUBTYPE_PREP, (U1)FWUSH_ACK_NG);
             u1_s_fwush_abort = (U1)TRUE;
         }
         else if(u2_s_fwush_veri_stat == (U2)FWUSH_VERI_LBN_COMP_INIT){
@@ -866,7 +864,6 @@ static void vd_s_FwushHandleEraseReq(void)
         }
     }
     else{
-        vd_s_FwushMakeResData(FWUSH_RESP_SUBTYPE_PREP, (U1)FWUSH_ACK_NG);
         u1_s_fwush_abort = (U1)TRUE;
     }
 }
@@ -886,12 +883,10 @@ static void vd_s_FwushHandleRunReq(void)
     if(u1_t_read_ok == (U1)TRUE){
         u1_t_result = u1_g_FwuMemAccUpdateReq(u2_s_fwush_run_ofst, (const U4 *)u4_t_adr);
         if(u1_t_result != (U1)FWUMEMACC_RET_OK){
-            vd_s_FwushMakeResData(FWUSH_RESP_SUBTYPE_RUN, (U1)FWUSH_ACK_NG);
             u1_s_fwush_abort = (U1)TRUE;
         }
     }
     else{
-        vd_s_FwushMakeResData(FWUSH_RESP_SUBTYPE_RUN, (U1)FWUSH_ACK_NG);
         u1_s_fwush_abort = (U1)TRUE;
     }
 }
@@ -916,7 +911,6 @@ static void vd_s_FwushHandleActivateReq(void)
 
     u1_t_result = u1_g_FwuMemAccSwitchReq();
     if(u1_t_result != (U1)FWUMEMACC_RET_OK){
-        vd_s_FwushMakeResData(FWUSH_RESP_SUBTYPE_ACT, (U1)FWUSH_ACK_NG);
         u1_s_fwush_abort = (U1)TRUE;
     }
 }
@@ -964,13 +958,11 @@ static void vd_s_FwushHandleRollbackReq(void)
 
     /* Request rollback */
     if(u1_t_dirty_flag != (U1)FWUSH_SWAS_VALID){
-        vd_s_FwushMakeResData(FWUSH_RESP_SUBTYPE_CANCEL, (U1)FWUSH_ACK_CANCEL_NG);
         u1_s_fwush_abort = (U1)TRUE;
     }
     else if((u1_t_swva_curr  != u1_t_swva_prev)){
         u1_t_result = u1_g_FwuMemAccSwitchReq();
         if(u1_t_result != (U1)FWUMEMACC_RET_OK){
-            vd_s_FwushMakeResData(FWUSH_RESP_SUBTYPE_CANCEL, (U1)FWUSH_ACK_CANCEL_NG);
             u1_s_fwush_abort = (U1)TRUE;
         }
     }
@@ -1084,7 +1076,7 @@ static void vd_s_FwushHandleFinalizeSuccess(void)
 static void vd_s_FwushHandleRollbackSuccess(void)
 {
     /* State transition already applied by table */
-    u1_s_fwush_abort = (U1)TRUE;
+    vd_s_FwushAbort();
     vd_s_FwushResetVeriStat();
     vd_s_FwushUpdateSeqProgress((U1)FWUSH_PROGRESS_ROLLBACK_DONE);
     /* Send ACK */
@@ -1151,8 +1143,7 @@ static void vd_s_FwushHandleProcessing(void)
 static void vd_s_FwushHandleEraseAbort(void)
 {
     vd_s_FwushMakeResData(FWUSH_RESP_SUBTYPE_PREP, (U1)FWUSH_ACK_NG);
-    /* set error flag */
-    u1_s_fwush_abort = (U1)TRUE;
+    vd_s_FwushAbort();
 }
 
 /*===================================================================================================================================*/
@@ -1164,8 +1155,7 @@ static void vd_s_FwushHandleEraseAbort(void)
 static void vd_s_FwushHandleRunAbort(void)
 {
     vd_s_FwushMakeResData(FWUSH_RESP_SUBTYPE_RUN, (U1)FWUSH_ACK_NG);
-    /* set error flag */
-    u1_s_fwush_abort = (U1)TRUE;
+    vd_s_FwushAbort();
 }
 
 /*===================================================================================================================================*/
@@ -1177,8 +1167,7 @@ static void vd_s_FwushHandleRunAbort(void)
 static void vd_s_FwushHandleVerifyAbort(void)
 {
     vd_s_FwushMakeResData(FWUSH_RESP_SUBTYPE_VERI, (U1)FWUSH_ACK_NG);
-    /* set error flag */
-    u1_s_fwush_abort = (U1)TRUE;
+    vd_s_FwushAbort();
 }
 
 /*===================================================================================================================================*/
@@ -1190,8 +1179,7 @@ static void vd_s_FwushHandleVerifyAbort(void)
 static void vd_s_FwushHandleActivateAbort(void)
 {
     vd_s_FwushMakeResData(FWUSH_RESP_SUBTYPE_ACT, (U1)FWUSH_ACK_NG);
-    /* set error flag */
-    u1_s_fwush_abort = (U1)TRUE;
+    vd_s_FwushAbort();
 }
 
 /*===================================================================================================================================*/
@@ -1203,8 +1191,7 @@ static void vd_s_FwushHandleActivateAbort(void)
 static void vd_s_FwushHandleValidateAbort(void)
 {
     vd_s_FwushMakeResData(FWUSH_RESP_SUBTYPE_VALID, (U1)FWUSH_ACK_NG);
-    /* set error flag */
-    u1_s_fwush_abort = (U1)TRUE;
+    vd_s_FwushAbort();
 }
 
 /*===================================================================================================================================*/
@@ -1216,8 +1203,7 @@ static void vd_s_FwushHandleValidateAbort(void)
 static void vd_s_FwushHandleFinalizeAbort(void)
 {
     vd_s_FwushMakeResData(FWUSH_RESP_SUBTYPE_FIN, (U1)FWUSH_ACK_NG);
-    /* set error flag */
-    u1_s_fwush_abort = (U1)TRUE;
+    vd_s_FwushAbort();
 }
 
 /*===================================================================================================================================*/
@@ -1229,8 +1215,7 @@ static void vd_s_FwushHandleFinalizeAbort(void)
 static void vd_s_FwushHandleRollbackAbort(void)
 {
     vd_s_FwushMakeResData(FWUSH_RESP_SUBTYPE_CANCEL, (U1)FWUSH_ACK_NG);
-    /* set error flag */
-    u1_s_fwush_abort = (U1)TRUE;
+    vd_s_FwushAbort();
 }
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -1248,7 +1233,7 @@ static void vd_s_FwushHandleCancel(void)
     vd_s_FwushResetVeriStat();
     vd_s_FwushUpdateSeqProgress((U1)FWUSH_PROGRESS_CANCEL_DONE);
     vd_s_FwushMakeResData((U1)FWUSH_RESP_SUBTYPE_CANCEL, (U1)FWUSH_ACK_CANCEL_OK);
-    u1_s_fwush_abort = (U1)TRUE;
+    vd_s_FwushAbort();
 }
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
