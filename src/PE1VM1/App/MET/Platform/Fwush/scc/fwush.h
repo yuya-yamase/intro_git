@@ -123,6 +123,9 @@
 #define FWUSH_FSWA_READ_POS                     (0x000000FFU)    /* Read Position */
 #define FWUSH_SWAS_VALID                        (0x00U)          /* Valid */
 #define FWUSH_SWAS_DIRTY                        (0x01U)          /* Dirty */
+#define FWUSH_VERI_LBN_COMP_INIT                (0x0000U)        /* LB Init */
+#define FWUSH_VERI_LB1_COMP                     (0x0001U)        /* LB1 Complete */
+#define FWUSH_VERI_TARGET_LB1                   (0x0100U)        /* Rewriting Target LB1 */
 
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
