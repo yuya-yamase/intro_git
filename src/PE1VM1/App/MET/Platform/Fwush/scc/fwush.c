@@ -569,7 +569,8 @@ static U1 u1_s_FwushDetectResumeEvent(void)
             /* Change state to Validate */
             u1_t_event = (U1)FWUSH_EVENT_SWITCH_DETECT;
         }
-        else if(u1_t_veri_target == u1_t_veri_comp){
+        else if((u1_t_veri_target == u1_t_veri_comp) &&
+                (u2_s_fwush_veri_stat != (U2)FWUSH_VERI_LBN_COMP_INIT)){
                 u1_t_event = (U1)FWUSH_EVENT_RESUME_ACT;
         }
         else if((u1_s_fwush_seq_progress & u1_s_FWUSH_PROG_MASK) == u1_s_FWUSH_PROG_VALID_CRIT){
