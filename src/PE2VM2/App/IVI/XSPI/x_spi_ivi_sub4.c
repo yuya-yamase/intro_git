@@ -508,7 +508,7 @@ static U4              u4_s_XspiIviBinarySearch(U4 u4_a_CANID) {
         {0x000003E6,    MSG_AVN1S11_TXCH0},
         {0x000003F1,    MSG_AVN1SA8_TXCH0},
         {0x000003FD,    MSG_AVN1S77_TXCH0},
-        {0x0000040E,    MSG_AVN1SB1_TXCH0},
+        /* {0x0000040E,    MSG_AVN1SB1_TXCH0}, */ /* TODO ビルドを通すための暫定処置 */
         {0x0000042E,    MSG_AVN1S33_TXCH0},
         {0x00000434,    MSG_AVN1S20_TXCH0},
         {0x00000435,    MSG_AVN1S21_TXCH0},

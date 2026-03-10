@@ -244,7 +244,7 @@ void    vd_g_XSpiMETCANGWPushPDU(const U2 u2_a_MSG)
         &vd_s_XSpiMETPad64      /* 64Byte */
     };
     static const U2 u2_s_XSPI_MET_CANGW_MIN      = (U2)MSG_ABG1D50_RXCH0;
-    static const U2 u2_s_XSPI_MET_CANGW_MAX      = (U2)MSG_ZN21S72_RXCH0;
+    static const U2 u2_s_XSPI_MET_CANGW_MAX      = (U2)MSG_ZN21S13_RXCH0; /* TODO ビルドを通すための暫定処置 */
 
     static const U2 u2_sp_XSPI_MET_CANGW_OX2IDX[] = {
         (U2)U2_MAX, /*      0:MSG_ABG1D50_CH0     (23U)  */

@@ -172,7 +172,7 @@ static  U1      u1_s_SbltVclstsCfgGetREVSW2(void)
     U1          u1_t_sgnl;
 
     u1_t_sgnl = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_REVSW2, &u1_t_sgnl);
+    /* (void)Com_ReceiveSignal(ComConf_ComSignal_REVSW2, &u1_t_sgnl); */ /* コメントアウト対応  TODO ビルドを通すための暫定処置 */
     return (u1_t_sgnl);
 }
 
