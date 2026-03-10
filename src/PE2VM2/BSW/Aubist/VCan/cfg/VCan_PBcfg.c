@@ -90,32 +90,6 @@ BswConst BswU1 bsw_vcan_stVirtualHohTbl[ BSW_VCAN_VHOHNUM ] =
     ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [25] */
     ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [26] */
     ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [27] */
-    ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [28] */
-    ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [29] */
-    ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [30] */
-    ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [31] */
-    ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [32] */
-    ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [33] */
-    ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [34] */
-    ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [35] */
-    ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [36] */
-    ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [37] */
-    ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [38] */
-    ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [39] */
-    ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [40] */
-    ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [41] */
-    ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [42] */
-    ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [43] */
-    ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [44] */
-    ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [45] */
-    ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [46] */
-    ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [47] */
-    ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [48] */
-    ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [49] */
-    ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [50] */
-    ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [51] */
-    ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [52] */
-    ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [53] */
 };
 
 /************************************************/
@@ -285,34 +259,8 @@ BswConst BswU1 bsw_vcan_u1TxMBoxTbl_VControl0[ BSW_VCAN_TX_VMBOXNUM_0 ] =
    ,(BswU1)(BSW_VCAN_POLLING   | BSW_VCAN_KIND_TRANSMIT )   /* [13] */
    ,(BswU1)(BSW_VCAN_POLLING   | BSW_VCAN_KIND_TRANSMIT )   /* [14] */
    ,(BswU1)(BSW_VCAN_POLLING   | BSW_VCAN_KIND_TRANSMIT )   /* [15] */
-   ,(BswU1)(BSW_VCAN_POLLING   | BSW_VCAN_KIND_TRANSMIT )   /* [16] */
+   ,(BswU1)(BSW_VCAN_INTERRUPT | BSW_VCAN_KIND_TRANSMIT )   /* [16] */
    ,(BswU1)(BSW_VCAN_POLLING   | BSW_VCAN_KIND_TRANSMIT )   /* [17] */
-   ,(BswU1)(BSW_VCAN_POLLING   | BSW_VCAN_KIND_TRANSMIT )   /* [18] */
-   ,(BswU1)(BSW_VCAN_POLLING   | BSW_VCAN_KIND_TRANSMIT )   /* [19] */
-   ,(BswU1)(BSW_VCAN_POLLING   | BSW_VCAN_KIND_TRANSMIT )   /* [20] */
-   ,(BswU1)(BSW_VCAN_POLLING   | BSW_VCAN_KIND_TRANSMIT )   /* [21] */
-   ,(BswU1)(BSW_VCAN_POLLING   | BSW_VCAN_KIND_TRANSMIT )   /* [22] */
-   ,(BswU1)(BSW_VCAN_POLLING   | BSW_VCAN_KIND_TRANSMIT )   /* [23] */
-   ,(BswU1)(BSW_VCAN_POLLING   | BSW_VCAN_KIND_TRANSMIT )   /* [24] */
-   ,(BswU1)(BSW_VCAN_POLLING   | BSW_VCAN_KIND_TRANSMIT )   /* [25] */
-   ,(BswU1)(BSW_VCAN_POLLING   | BSW_VCAN_KIND_TRANSMIT )   /* [26] */
-   ,(BswU1)(BSW_VCAN_POLLING   | BSW_VCAN_KIND_TRANSMIT )   /* [27] */
-   ,(BswU1)(BSW_VCAN_POLLING   | BSW_VCAN_KIND_TRANSMIT )   /* [28] */
-   ,(BswU1)(BSW_VCAN_POLLING   | BSW_VCAN_KIND_TRANSMIT )   /* [29] */
-   ,(BswU1)(BSW_VCAN_POLLING   | BSW_VCAN_KIND_TRANSMIT )   /* [30] */
-   ,(BswU1)(BSW_VCAN_POLLING   | BSW_VCAN_KIND_TRANSMIT )   /* [31] */
-   ,(BswU1)(BSW_VCAN_POLLING   | BSW_VCAN_KIND_TRANSMIT )   /* [32] */
-   ,(BswU1)(BSW_VCAN_POLLING   | BSW_VCAN_KIND_TRANSMIT )   /* [33] */
-   ,(BswU1)(BSW_VCAN_POLLING   | BSW_VCAN_KIND_TRANSMIT )   /* [34] */
-   ,(BswU1)(BSW_VCAN_POLLING   | BSW_VCAN_KIND_TRANSMIT )   /* [35] */
-   ,(BswU1)(BSW_VCAN_POLLING   | BSW_VCAN_KIND_TRANSMIT )   /* [36] */
-   ,(BswU1)(BSW_VCAN_POLLING   | BSW_VCAN_KIND_TRANSMIT )   /* [37] */
-   ,(BswU1)(BSW_VCAN_POLLING   | BSW_VCAN_KIND_TRANSMIT )   /* [38] */
-   ,(BswU1)(BSW_VCAN_POLLING   | BSW_VCAN_KIND_TRANSMIT )   /* [39] */
-   ,(BswU1)(BSW_VCAN_POLLING   | BSW_VCAN_KIND_TRANSMIT )   /* [40] */
-   ,(BswU1)(BSW_VCAN_POLLING   | BSW_VCAN_KIND_TRANSMIT )   /* [41] */
-   ,(BswU1)(BSW_VCAN_INTERRUPT | BSW_VCAN_KIND_TRANSMIT )   /* [42] */
-   ,(BswU1)(BSW_VCAN_POLLING   | BSW_VCAN_KIND_TRANSMIT )   /* [43] */
 };
 
 #endif /* ( BSW_VCAN_TX_VMBOXNUM_0 != 0U ) */

@@ -32,10 +32,11 @@
 #define CAN_LPR_PHY_CTRLR_LOCA                   (11U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define CAN_LPR_NUM_PHY_CH                       (3U)
+#define CAN_LPR_NUM_PHY_CH                       (4U)
 #define CAN_LPR_PHY_CH_G2M1                      (0U)
 #define CAN_LPR_PHY_CH_G5M                       (1U)
 #define CAN_LPR_PHY_CH_LOCA                      (2U)
+#define CAN_LPR_PHY_CH_G2M2                      (3U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -59,6 +60,7 @@ static U4          u4_sp_can_lpr_phy_tx_log_9[CAN_LPR_PHY_TX_LOG_NWORD] __attrib
 static U4          u4_sp_can_lpr_phy_tx_log_10[CAN_LPR_PHY_TX_LOG_NWORD] __attribute__((section(".bss_CAN_LPR_PHY_TX")));
 static U4          u4_sp_can_lpr_phy_tx_log_11[CAN_LPR_PHY_TX_LOG_NWORD] __attribute__((section(".bss_CAN_LPR_PHY_TX")));
 static U4          u4_sp_can_lpr_phy_tx_log_12[CAN_LPR_PHY_TX_LOG_NWORD] __attribute__((section(".bss_CAN_LPR_PHY_TX")));
+static U4          u4_sp_can_lpr_phy_tx_log_13[CAN_LPR_PHY_TX_LOG_NWORD] __attribute__((section(".bss_CAN_LPR_PHY_TX")));
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Prototypes                                                                                                              */
@@ -175,9 +177,18 @@ const ST_CAN_LPR_PHY_TX         st_gp_CAN_LPR_PHY_TX[]   = {
         (U4)CAN_LPR_REGR_EN_PHY_FQ_LOCA,                   /* u4_regr_en   */
         (U2)CAN_LPFQ_CH_PHY_TX_LOCA_P0,                    /* u2_que_ch    */
         (U2)CAN_LPR_PHY_TX_VACK_DI                         /* u2_vack      */
+    },
+    /* CAN_LPR_REGR_EN_PHY_TX_G2M2 */
+    {
+        &vd_g_CANLpFqResCh,                                /* fp_vd_RES_CH */
+        &u1_g_CANLpFqDeqCh,                                /* fp_u1_DEQ_CH */
+        &u4_sp_can_lpr_phy_tx_log_13[0U],                  /* u4p_log      */
+        (U4)CAN_LPR_REGR_EN_PHY_FQ_G2M2,                   /* u4_regr_en   */
+        (U2)CAN_LPFQ_CH_PHY_TX_G2M2_P0,                    /* u2_que_ch    */
+        (U2)CAN_LPR_PHY_TX_VACK_DI                         /* u2_vack      */
     }
 };
-const U2                        u2_g_CAN_LPR_NUM_PHY_TX = (U2)13U;
+const U2                        u2_g_CAN_LPR_NUM_PHY_TX = (U2)14U;
 
 const ST_CAN_LPR_PHY_CH         st_gp_CAN_LPR_PHY_CH[CAN_LPR_NUM_PHY_CH] = {
     /* CAN_LPR_REGR_EN_PHY_TX_G2M1 */
@@ -200,6 +211,13 @@ const ST_CAN_LPR_PHY_CH         st_gp_CAN_LPR_PHY_CH[CAN_LPR_NUM_PHY_CH] = {
         (U4)CAN_LPR_REGR_EN_PHY_TX_LOCA,                   /* u4_regr_en */
         (U2)1U,                                            /* u2_nphy_tx */
         (U2)CAN_LPR_PHY_CTRLR_LOCA                         /* u2_ctrlr   */
+    },
+    /* CAN_LPR_REGR_EN_PHY_TX_G2M2 */
+    {
+        &st_gp_CAN_LPR_PHY_TX[13U],                         /* stp_PHY_TX */
+        (U4)CAN_LPR_REGR_EN_PHY_TX_G2M2,                   /* u4_regr_en */
+        (U2)1U,                                            /* u2_nphy_tx */
+        (U2)CAN_LPR_PHY_CTRLR_G2M2,                        /* u2_ctrlr   */
     }
 };
 const U1                        u1_g_CAN_LPR_NUM_PHY_CH = (U1)CAN_LPR_NUM_PHY_CH;
@@ -208,7 +226,7 @@ const ST_CAN_LPR_PHY_CH * const stp_gp_CAN_LPR_PHY_CH_BY_CTRLR[CAN_LPR_NUM_PHY_C
     NULL_PTR,                                              /* controller               0   */
     NULL_PTR,                                              /* controller               1   */
     NULL_PTR,                                              /* controller               2   */
-    NULL_PTR,                                              /* CAN_LPR_PHY_CTRLR_G2M2  (3U) */
+    &st_gp_CAN_LPR_PHY_CH[CAN_LPR_PHY_CH_G2M2],            /* CAN_LPR_PHY_CTRLR_G2M2  (3U) */
     NULL_PTR,                                              /* controller               4   */
     &st_gp_CAN_LPR_PHY_CH[CAN_LPR_PHY_CH_G2M1],            /* CAN_LPR_PHY_CTRLR_G2M1  (5U) */
     NULL_PTR,                                              /* controller               6   */

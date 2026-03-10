@@ -17,7 +17,7 @@
 /* Macros                                                                   */
 /*--------------------------------------------------------------------------*/
 #define BSW_COM_CFG_CHNUM                  (5U)
-#define BSW_COM_CFG_HANDLE_NUM             (47U)
+#define BSW_COM_CFG_HANDLE_NUM             (43U)
 #define BSW_COM_CFG_MSGBUF_SIZE            (198U)
 #define BSW_COM_CFG_TX_MSGBUF_SIZE         (0U)
 #define BSW_COM_CFG_FAILSAFE_SIZE          (0U)
@@ -657,9 +657,7 @@
 #define DAT_OFS_VPSINFOS_0                      ((MSG_OFS_BDC1S81_RXCH0) + (4U))
 #define DAT_OFS_VPSCNG_0                        ((MSG_OFS_BDC1S81_RXCH0) + (5U))
 #define DAT_OFS_VPSISOTA_0                      ((MSG_OFS_BDC1S81_RXCH0) + (6U))
-#define DAT_OFS_D01476_0                        ((MSG_OFS_BDC1S81_RXCH0) + (7U))
 #define DAT_OFS_APOFRQ_0                        ((MSG_OFS_BDC1S81_RXCH0) + (8U))
-#define DAT_OFS_D01477_0                        ((MSG_OFS_BDC1S81_RXCH0) + (9U))
 #define DAT_OFS_FV1E3_D_0                       ((MSG_OFS_BDC1S81_RXCH0) + (21U))
 #define DAT_OFS_KZK1E3_D_0                      ((MSG_OFS_BDC1S81_RXCH0) + (28U))
 #define DAT_OFS_E_CRC1E4_2                      ((MSG_OFS_BDC1S91_RXCH1) + (0U))
@@ -672,9 +670,7 @@
 #define DAT_OFS_VPSINF2S_2                      ((MSG_OFS_BDC1S91_RXCH1) + (3U))
 #define DAT_OFS_VPSINF1S_2                      ((MSG_OFS_BDC1S91_RXCH1) + (3U))
 #define DAT_OFS_VPSINFSS_2                      ((MSG_OFS_BDC1S91_RXCH1) + (4U))
-#define DAT_OFS_D01587_2                        ((MSG_OFS_BDC1S91_RXCH1) + (5U))
 #define DAT_OFS_VPSOTAS_2                       ((MSG_OFS_BDC1S91_RXCH1) + (6U))
-#define DAT_OFS_D01589_2                        ((MSG_OFS_BDC1S91_RXCH1) + (7U))
 #define DAT_OFS_APOFRQS_2                       ((MSG_OFS_BDC1S91_RXCH1) + (8U))
 #define DAT_OFS_FV1E4_D_2                       ((MSG_OFS_BDC1S91_RXCH1) + (21U))
 #define DAT_OFS_KZK1E4_D_2                      ((MSG_OFS_BDC1S91_RXCH1) + (28U))
@@ -705,27 +701,23 @@
 #define ComConf_ComSignal_VPSINFOS_0            (23U)           /* Bus:CANFD_G2M_1_BUS(Ch:0), Msg:BDC1S81_RXCH0(Rx), Data:VPSINFOS_0,Sign:U, Len(bit):8, Pos:5.0, Ev:-, Endian:BIG */
 #define ComConf_ComSignal_VPSCNG_0              (24U)           /* Bus:CANFD_G2M_1_BUS(Ch:0), Msg:BDC1S81_RXCH0(Rx), Data:VPSCNG_0, Sign:U, Len(bit):8, Pos:6.0, Ev:-, Endian:BIG */
 #define ComConf_ComSignal_VPSISOTA_0            (25U)           /* Bus:CANFD_G2M_1_BUS(Ch:0), Msg:BDC1S81_RXCH0(Rx), Data:VPSISOTA_0,Sign:U, Len(bit):8, Pos:7.0, Ev:-, Endian:BIG */
-#define ComConf_ComSignal_D01476_0              (26U)           /* Bus:CANFD_G2M_1_BUS(Ch:0), Msg:BDC1S81_RXCH0(Rx), Data:D01476_0, Sign:U, Len(bit):5, Pos:8.0, Ev:-, Endian:BIG */
-#define ComConf_ComSignal_APOFRQ_0              (27U)           /* Bus:CANFD_G2M_1_BUS(Ch:0), Msg:BDC1S81_RXCH0(Rx), Data:APOFRQ_0, Sign:U, Len(bit):1, Pos:9.0, Ev:-, Endian:BIG */
-#define ComConf_ComSignal_D01477_0              (28U)           /* Bus:CANFD_G2M_1_BUS(Ch:0), Msg:BDC1S81_RXCH0(Rx), Data:D01477_0, Sign:U, Len(bit):2, Pos:10.0, Ev:-, Endian:BIG */
-#define ComConf_ComSignal_FV1E3_D_0             (29U)           /* Bus:CANFD_G2M_1_BUS(Ch:0), Msg:BDC1S81_RXCH0(Rx), Data:FV1E3_D_0,Sign:U, Len(bit):56, Pos:22.0, Ev:-, Endian:- */
-#define ComConf_ComSignal_KZK1E3_D_0            (30U)           /* Bus:CANFD_G2M_1_BUS(Ch:0), Msg:BDC1S81_RXCH0(Rx), Data:KZK1E3_D_0,Sign:U, Len(bit):32, Pos:32.0, Ev:-, Endian:BIG */
-#define ComConf_ComSignal_E_CRC1E4_2            (31U)           /* Bus:CANFD_G2M_2_BUS(Ch:1), Msg:BDC1S91_RXCH1(Rx), Data:E_CRC1E4_2,Sign:U, Len(bit):16, Pos:2.0, Ev:-, Endian:BIG */
-#define ComConf_ComSignal_E_CNT1E4_2            (32U)           /* Bus:CANFD_G2M_2_BUS(Ch:1), Msg:BDC1S91_RXCH1(Rx), Data:E_CNT1E4_2,Sign:U, Len(bit):8, Pos:3.0, Ev:-, Endian:BIG */
-#define ComConf_ComSignal_VPSINF7S_2            (33U)           /* Bus:CANFD_G2M_2_BUS(Ch:1), Msg:BDC1S91_RXCH1(Rx), Data:VPSINF7S_2,Sign:U, Len(bit):1, Pos:4.6, Ev:-, Endian:BIG */
-#define ComConf_ComSignal_VPSINF6S_2            (34U)           /* Bus:CANFD_G2M_2_BUS(Ch:1), Msg:BDC1S91_RXCH1(Rx), Data:VPSINF6S_2,Sign:U, Len(bit):1, Pos:4.5, Ev:-, Endian:BIG */
-#define ComConf_ComSignal_VPSINF5S_2            (35U)           /* Bus:CANFD_G2M_2_BUS(Ch:1), Msg:BDC1S91_RXCH1(Rx), Data:VPSINF5S_2,Sign:U, Len(bit):1, Pos:4.4, Ev:-, Endian:BIG */
-#define ComConf_ComSignal_VPSINF4S_2            (36U)           /* Bus:CANFD_G2M_2_BUS(Ch:1), Msg:BDC1S91_RXCH1(Rx), Data:VPSINF4S_2,Sign:U, Len(bit):1, Pos:4.3, Ev:-, Endian:BIG */
-#define ComConf_ComSignal_VPSINF3S_2            (37U)           /* Bus:CANFD_G2M_2_BUS(Ch:1), Msg:BDC1S91_RXCH1(Rx), Data:VPSINF3S_2,Sign:U, Len(bit):1, Pos:4.2, Ev:-, Endian:BIG */
-#define ComConf_ComSignal_VPSINF2S_2            (38U)           /* Bus:CANFD_G2M_2_BUS(Ch:1), Msg:BDC1S91_RXCH1(Rx), Data:VPSINF2S_2,Sign:U, Len(bit):1, Pos:4.1, Ev:-, Endian:BIG */
-#define ComConf_ComSignal_VPSINF1S_2            (39U)           /* Bus:CANFD_G2M_2_BUS(Ch:1), Msg:BDC1S91_RXCH1(Rx), Data:VPSINF1S_2,Sign:U, Len(bit):1, Pos:4.0, Ev:-, Endian:BIG */
-#define ComConf_ComSignal_VPSINFSS_2            (40U)           /* Bus:CANFD_G2M_2_BUS(Ch:1), Msg:BDC1S91_RXCH1(Rx), Data:VPSINFSS_2,Sign:U, Len(bit):8, Pos:5.0, Ev:-, Endian:BIG */
-#define ComConf_ComSignal_D01587_2              (41U)           /* Bus:CANFD_G2M_2_BUS(Ch:1), Msg:BDC1S91_RXCH1(Rx), Data:D01587_2, Sign:U, Len(bit):8, Pos:6.0, Ev:-, Endian:BIG */
-#define ComConf_ComSignal_VPSOTAS_2             (42U)           /* Bus:CANFD_G2M_2_BUS(Ch:1), Msg:BDC1S91_RXCH1(Rx), Data:VPSOTAS_2,Sign:U, Len(bit):8, Pos:7.0, Ev:-, Endian:BIG */
-#define ComConf_ComSignal_D01589_2              (43U)           /* Bus:CANFD_G2M_2_BUS(Ch:1), Msg:BDC1S91_RXCH1(Rx), Data:D01589_2, Sign:U, Len(bit):5, Pos:8.0, Ev:-, Endian:BIG */
-#define ComConf_ComSignal_APOFRQS_2             (44U)           /* Bus:CANFD_G2M_2_BUS(Ch:1), Msg:BDC1S91_RXCH1(Rx), Data:APOFRQS_2,Sign:U, Len(bit):1, Pos:9.0, Ev:-, Endian:BIG */
-#define ComConf_ComSignal_FV1E4_D_2             (45U)           /* Bus:CANFD_G2M_2_BUS(Ch:1), Msg:BDC1S91_RXCH1(Rx), Data:FV1E4_D_2,Sign:U, Len(bit):56, Pos:22.0, Ev:-, Endian:- */
-#define ComConf_ComSignal_KZK1E4_D_2            (46U)           /* Bus:CANFD_G2M_2_BUS(Ch:1), Msg:BDC1S91_RXCH1(Rx), Data:KZK1E4_D_2,Sign:U, Len(bit):32, Pos:32.0, Ev:-, Endian:BIG */
+#define ComConf_ComSignal_APOFRQ_0              (26U)           /* Bus:CANFD_G2M_1_BUS(Ch:0), Msg:BDC1S81_RXCH0(Rx), Data:APOFRQ_0, Sign:U, Len(bit):1, Pos:9.0, Ev:-, Endian:BIG */
+#define ComConf_ComSignal_FV1E3_D_0             (27U)           /* Bus:CANFD_G2M_1_BUS(Ch:0), Msg:BDC1S81_RXCH0(Rx), Data:FV1E3_D_0,Sign:U, Len(bit):56, Pos:22.0, Ev:-, Endian:- */
+#define ComConf_ComSignal_KZK1E3_D_0            (28U)           /* Bus:CANFD_G2M_1_BUS(Ch:0), Msg:BDC1S81_RXCH0(Rx), Data:KZK1E3_D_0,Sign:U, Len(bit):32, Pos:32.0, Ev:-, Endian:BIG */
+#define ComConf_ComSignal_E_CRC1E4_2            (29U)           /* Bus:CANFD_G2M_2_BUS(Ch:1), Msg:BDC1S91_RXCH1(Rx), Data:E_CRC1E4_2,Sign:U, Len(bit):16, Pos:2.0, Ev:-, Endian:BIG */
+#define ComConf_ComSignal_E_CNT1E4_2            (30U)           /* Bus:CANFD_G2M_2_BUS(Ch:1), Msg:BDC1S91_RXCH1(Rx), Data:E_CNT1E4_2,Sign:U, Len(bit):8, Pos:3.0, Ev:-, Endian:BIG */
+#define ComConf_ComSignal_VPSINF7S_2            (31U)           /* Bus:CANFD_G2M_2_BUS(Ch:1), Msg:BDC1S91_RXCH1(Rx), Data:VPSINF7S_2,Sign:U, Len(bit):1, Pos:4.6, Ev:-, Endian:BIG */
+#define ComConf_ComSignal_VPSINF6S_2            (32U)           /* Bus:CANFD_G2M_2_BUS(Ch:1), Msg:BDC1S91_RXCH1(Rx), Data:VPSINF6S_2,Sign:U, Len(bit):1, Pos:4.5, Ev:-, Endian:BIG */
+#define ComConf_ComSignal_VPSINF5S_2            (33U)           /* Bus:CANFD_G2M_2_BUS(Ch:1), Msg:BDC1S91_RXCH1(Rx), Data:VPSINF5S_2,Sign:U, Len(bit):1, Pos:4.4, Ev:-, Endian:BIG */
+#define ComConf_ComSignal_VPSINF4S_2            (34U)           /* Bus:CANFD_G2M_2_BUS(Ch:1), Msg:BDC1S91_RXCH1(Rx), Data:VPSINF4S_2,Sign:U, Len(bit):1, Pos:4.3, Ev:-, Endian:BIG */
+#define ComConf_ComSignal_VPSINF3S_2            (35U)           /* Bus:CANFD_G2M_2_BUS(Ch:1), Msg:BDC1S91_RXCH1(Rx), Data:VPSINF3S_2,Sign:U, Len(bit):1, Pos:4.2, Ev:-, Endian:BIG */
+#define ComConf_ComSignal_VPSINF2S_2            (36U)           /* Bus:CANFD_G2M_2_BUS(Ch:1), Msg:BDC1S91_RXCH1(Rx), Data:VPSINF2S_2,Sign:U, Len(bit):1, Pos:4.1, Ev:-, Endian:BIG */
+#define ComConf_ComSignal_VPSINF1S_2            (37U)           /* Bus:CANFD_G2M_2_BUS(Ch:1), Msg:BDC1S91_RXCH1(Rx), Data:VPSINF1S_2,Sign:U, Len(bit):1, Pos:4.0, Ev:-, Endian:BIG */
+#define ComConf_ComSignal_VPSINFSS_2            (38U)           /* Bus:CANFD_G2M_2_BUS(Ch:1), Msg:BDC1S91_RXCH1(Rx), Data:VPSINFSS_2,Sign:U, Len(bit):8, Pos:5.0, Ev:-, Endian:BIG */
+#define ComConf_ComSignal_VPSOTAS_2             (39U)           /* Bus:CANFD_G2M_2_BUS(Ch:1), Msg:BDC1S91_RXCH1(Rx), Data:VPSOTAS_2,Sign:U, Len(bit):8, Pos:7.0, Ev:-, Endian:BIG */
+#define ComConf_ComSignal_APOFRQS_2             (40U)           /* Bus:CANFD_G2M_2_BUS(Ch:1), Msg:BDC1S91_RXCH1(Rx), Data:APOFRQS_2,Sign:U, Len(bit):1, Pos:9.0, Ev:-, Endian:BIG */
+#define ComConf_ComSignal_FV1E4_D_2             (41U)           /* Bus:CANFD_G2M_2_BUS(Ch:1), Msg:BDC1S91_RXCH1(Rx), Data:FV1E4_D_2,Sign:U, Len(bit):56, Pos:22.0, Ev:-, Endian:- */
+#define ComConf_ComSignal_KZK1E4_D_2            (42U)           /* Bus:CANFD_G2M_2_BUS(Ch:1), Msg:BDC1S91_RXCH1(Rx), Data:KZK1E4_D_2,Sign:U, Len(bit):32, Pos:32.0, Ev:-, Endian:BIG */
 
 /*      0        1         2         3  */
 /*      1234567890123456789012345678901 */
@@ -767,9 +759,7 @@
 #define bsw_com_UD_W_ComConf_ComSignal_VPSINFOS_0(z)           Com_SendSignalB          (((BswU2)ComConf_ComSignal_VPSINFOS_0), ((BswU2)DAT_OFS_VPSINFOS_0), (BswU1) 8U, (BswU1) 0U, (z))
 #define bsw_com_UD_W_ComConf_ComSignal_VPSCNG_0(z)             Com_SendSignalB          (((BswU2)ComConf_ComSignal_VPSCNG_0), ((BswU2)DAT_OFS_VPSCNG_0), (BswU1) 8U, (BswU1) 0U, (z))
 #define bsw_com_UD_W_ComConf_ComSignal_VPSISOTA_0(z)           Com_SendSignalB          (((BswU2)ComConf_ComSignal_VPSISOTA_0), ((BswU2)DAT_OFS_VPSISOTA_0), (BswU1) 8U, (BswU1) 0U, (z))
-#define bsw_com_UD_W_ComConf_ComSignal_D01476_0(z)             Com_SendSignalB          (((BswU2)ComConf_ComSignal_D01476_0), ((BswU2)DAT_OFS_D01476_0), (BswU1) 5U, (BswU1) 0U, (z))
 #define bsw_com_UD_W_ComConf_ComSignal_APOFRQ_0(z)             Com_SendSignalB          (((BswU2)ComConf_ComSignal_APOFRQ_0), ((BswU2)DAT_OFS_APOFRQ_0), (BswU1) 1U, (BswU1) 0U, (z))
-#define bsw_com_UD_W_ComConf_ComSignal_D01477_0(z)             Com_SendSignalB          (((BswU2)ComConf_ComSignal_D01477_0), ((BswU2)DAT_OFS_D01477_0), (BswU1) 2U, (BswU1) 0U, (z))
 #define bsw_com_UD_WA_ComConf_ComSignal_FV1E3_D_0(z)           Com_SndSgnlGrpArry       (((BswU2)ComConf_ComSignal_FV1E3_D_0), ((BswU2)DAT_OFS_FV1E3_D_0), (BswU2)   7U, (z))
 #define bsw_com_UD_W_ComConf_ComSignal_FV1E3_D_0(z)            Com_SndSgnlGrpArry       (((BswU2)ComConf_ComSignal_FV1E3_D_0), ((BswU2)DAT_OFS_FV1E3_D_0), (BswU2)   7U, (z))
 #define bsw_com_UD_W_ComConf_ComSignal_KZK1E3_D_0(z)           Com_SendSignalB          (((BswU2)ComConf_ComSignal_KZK1E3_D_0), ((BswU2)DAT_OFS_KZK1E3_D_0), (BswU1)32U, (BswU1) 0U, (z))
@@ -783,9 +773,7 @@
 #define bsw_com_UD_W_ComConf_ComSignal_VPSINF2S_2(z)           Com_SendSignalB          (((BswU2)ComConf_ComSignal_VPSINF2S_2), ((BswU2)DAT_OFS_VPSINF2S_2), (BswU1) 1U, (BswU1) 1U, (z))
 #define bsw_com_UD_W_ComConf_ComSignal_VPSINF1S_2(z)           Com_SendSignalB          (((BswU2)ComConf_ComSignal_VPSINF1S_2), ((BswU2)DAT_OFS_VPSINF1S_2), (BswU1) 1U, (BswU1) 0U, (z))
 #define bsw_com_UD_W_ComConf_ComSignal_VPSINFSS_2(z)           Com_SendSignalB          (((BswU2)ComConf_ComSignal_VPSINFSS_2), ((BswU2)DAT_OFS_VPSINFSS_2), (BswU1) 8U, (BswU1) 0U, (z))
-#define bsw_com_UD_W_ComConf_ComSignal_D01587_2(z)             Com_SendSignalB          (((BswU2)ComConf_ComSignal_D01587_2), ((BswU2)DAT_OFS_D01587_2), (BswU1) 8U, (BswU1) 0U, (z))
 #define bsw_com_UD_W_ComConf_ComSignal_VPSOTAS_2(z)            Com_SendSignalB          (((BswU2)ComConf_ComSignal_VPSOTAS_2), ((BswU2)DAT_OFS_VPSOTAS_2), (BswU1) 8U, (BswU1) 0U, (z))
-#define bsw_com_UD_W_ComConf_ComSignal_D01589_2(z)             Com_SendSignalB          (((BswU2)ComConf_ComSignal_D01589_2), ((BswU2)DAT_OFS_D01589_2), (BswU1) 5U, (BswU1) 0U, (z))
 #define bsw_com_UD_W_ComConf_ComSignal_APOFRQS_2(z)            Com_SendSignalB          (((BswU2)ComConf_ComSignal_APOFRQS_2), ((BswU2)DAT_OFS_APOFRQS_2), (BswU1) 1U, (BswU1) 0U, (z))
 #define bsw_com_UD_WA_ComConf_ComSignal_FV1E4_D_2(z)           Com_SndSgnlGrpArry       (((BswU2)ComConf_ComSignal_FV1E4_D_2), ((BswU2)DAT_OFS_FV1E4_D_2), (BswU2)   7U, (z))
 #define bsw_com_UD_W_ComConf_ComSignal_FV1E4_D_2(z)            Com_SndSgnlGrpArry       (((BswU2)ComConf_ComSignal_FV1E4_D_2), ((BswU2)DAT_OFS_FV1E4_D_2), (BswU2)   7U, (z))
@@ -831,9 +819,7 @@
 #define bsw_com_UD_R_ComConf_ComSignal_VPSINFOS_0(z)           Com_ReceiveSignalB       (((BswU2)ComConf_ComSignal_VPSINFOS_0), ((BswU2)DAT_OFS_VPSINFOS_0), (BswU1) 8U, (BswU1) 0U, (BswU1)BSW_COM_DATATYPE_U, (z))
 #define bsw_com_UD_R_ComConf_ComSignal_VPSCNG_0(z)             Com_ReceiveSignalB       (((BswU2)ComConf_ComSignal_VPSCNG_0), ((BswU2)DAT_OFS_VPSCNG_0), (BswU1) 8U, (BswU1) 0U, (BswU1)BSW_COM_DATATYPE_U, (z))
 #define bsw_com_UD_R_ComConf_ComSignal_VPSISOTA_0(z)           Com_ReceiveSignalB       (((BswU2)ComConf_ComSignal_VPSISOTA_0), ((BswU2)DAT_OFS_VPSISOTA_0), (BswU1) 8U, (BswU1) 0U, (BswU1)BSW_COM_DATATYPE_U, (z))
-#define bsw_com_UD_R_ComConf_ComSignal_D01476_0(z)             Com_ReceiveSignalB       (((BswU2)ComConf_ComSignal_D01476_0), ((BswU2)DAT_OFS_D01476_0), (BswU1) 5U, (BswU1) 0U, (BswU1)BSW_COM_DATATYPE_U, (z))
 #define bsw_com_UD_R_ComConf_ComSignal_APOFRQ_0(z)             Com_ReceiveSignalB       (((BswU2)ComConf_ComSignal_APOFRQ_0), ((BswU2)DAT_OFS_APOFRQ_0), (BswU1) 1U, (BswU1) 0U, (BswU1)BSW_COM_DATATYPE_U, (z))
-#define bsw_com_UD_R_ComConf_ComSignal_D01477_0(z)             Com_ReceiveSignalB       (((BswU2)ComConf_ComSignal_D01477_0), ((BswU2)DAT_OFS_D01477_0), (BswU1) 2U, (BswU1) 0U, (BswU1)BSW_COM_DATATYPE_U, (z))
 #define bsw_com_UD_RA_ComConf_ComSignal_FV1E3_D_0(z)           Com_RcvSgnlGrpArry       (((BswU2)ComConf_ComSignal_FV1E3_D_0), ((BswU2)DAT_OFS_FV1E3_D_0), (BswU2)   7U, (z))
 #define bsw_com_UD_R_ComConf_ComSignal_FV1E3_D_0(z)            Com_RcvSgnlGrpArry       (((BswU2)ComConf_ComSignal_FV1E3_D_0), ((BswU2)DAT_OFS_FV1E3_D_0), (BswU2)   7U, (z))
 #define bsw_com_UD_R_ComConf_ComSignal_KZK1E3_D_0(z)           Com_ReceiveSignalB       (((BswU2)ComConf_ComSignal_KZK1E3_D_0), ((BswU2)DAT_OFS_KZK1E3_D_0), (BswU1)32U, (BswU1) 0U, (BswU1)BSW_COM_DATATYPE_U, (z))
@@ -847,9 +833,7 @@
 #define bsw_com_UD_R_ComConf_ComSignal_VPSINF2S_2(z)           Com_ReceiveSignalB       (((BswU2)ComConf_ComSignal_VPSINF2S_2), ((BswU2)DAT_OFS_VPSINF2S_2), (BswU1) 1U, (BswU1) 1U, (BswU1)BSW_COM_DATATYPE_U, (z))
 #define bsw_com_UD_R_ComConf_ComSignal_VPSINF1S_2(z)           Com_ReceiveSignalB       (((BswU2)ComConf_ComSignal_VPSINF1S_2), ((BswU2)DAT_OFS_VPSINF1S_2), (BswU1) 1U, (BswU1) 0U, (BswU1)BSW_COM_DATATYPE_U, (z))
 #define bsw_com_UD_R_ComConf_ComSignal_VPSINFSS_2(z)           Com_ReceiveSignalB       (((BswU2)ComConf_ComSignal_VPSINFSS_2), ((BswU2)DAT_OFS_VPSINFSS_2), (BswU1) 8U, (BswU1) 0U, (BswU1)BSW_COM_DATATYPE_U, (z))
-#define bsw_com_UD_R_ComConf_ComSignal_D01587_2(z)             Com_ReceiveSignalB       (((BswU2)ComConf_ComSignal_D01587_2), ((BswU2)DAT_OFS_D01587_2), (BswU1) 8U, (BswU1) 0U, (BswU1)BSW_COM_DATATYPE_U, (z))
 #define bsw_com_UD_R_ComConf_ComSignal_VPSOTAS_2(z)            Com_ReceiveSignalB       (((BswU2)ComConf_ComSignal_VPSOTAS_2), ((BswU2)DAT_OFS_VPSOTAS_2), (BswU1) 8U, (BswU1) 0U, (BswU1)BSW_COM_DATATYPE_U, (z))
-#define bsw_com_UD_R_ComConf_ComSignal_D01589_2(z)             Com_ReceiveSignalB       (((BswU2)ComConf_ComSignal_D01589_2), ((BswU2)DAT_OFS_D01589_2), (BswU1) 5U, (BswU1) 0U, (BswU1)BSW_COM_DATATYPE_U, (z))
 #define bsw_com_UD_R_ComConf_ComSignal_APOFRQS_2(z)            Com_ReceiveSignalB       (((BswU2)ComConf_ComSignal_APOFRQS_2), ((BswU2)DAT_OFS_APOFRQS_2), (BswU1) 1U, (BswU1) 0U, (BswU1)BSW_COM_DATATYPE_U, (z))
 #define bsw_com_UD_RA_ComConf_ComSignal_FV1E4_D_2(z)           Com_RcvSgnlGrpArry       (((BswU2)ComConf_ComSignal_FV1E4_D_2), ((BswU2)DAT_OFS_FV1E4_D_2), (BswU2)   7U, (z))
 #define bsw_com_UD_R_ComConf_ComSignal_FV1E4_D_2(z)            Com_RcvSgnlGrpArry       (((BswU2)ComConf_ComSignal_FV1E4_D_2), ((BswU2)DAT_OFS_FV1E4_D_2), (BswU2)   7U, (z))
