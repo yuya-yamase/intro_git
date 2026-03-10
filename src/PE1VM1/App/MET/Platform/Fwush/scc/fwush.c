@@ -554,9 +554,9 @@ static U1 u1_s_FwushDetectEvent(void)
 /*===================================================================================================================================*/
 static U1 u1_s_FwushDetectResumeEvent(void)
 {
-    static U1 u1_s_FWUSH_PROG_MASK = (U1)(FWUSH_PROGRESS_ACT_DONE | FWUSH_PROGRESS_VALIDATE_DONE | FWUSH_PROGRESS_ROLLBACK_DONE);
-    static U1 u1_s_FWUSH_PROG_ACT_CRIT = (U1)FWUSH_PROGRESS_ACT_DONE;
-    static U1 u1_s_FWUSH_PROG_VALID_CRIT = (U1)(FWUSH_PROGRESS_ACT_DONE | FWUSH_PROGRESS_VALIDATE_DONE);
+    static const U1 u1_s_FWUSH_PROG_MASK = (U1)(FWUSH_PROGRESS_ACT_DONE | FWUSH_PROGRESS_VALIDATE_DONE | FWUSH_PROGRESS_ROLLBACK_DONE);
+    static const U1 u1_s_FWUSH_PROG_ACT_CRIT = (U1)FWUSH_PROGRESS_ACT_DONE;
+    static const U1 u1_s_FWUSH_PROG_VALID_CRIT = (U1)(FWUSH_PROGRESS_ACT_DONE | FWUSH_PROGRESS_VALIDATE_DONE);
     U1 u1_t_event;
     U1 u1_t_veri_target;
     U1 u1_t_veri_comp;
@@ -601,6 +601,8 @@ static U1 u1_s_FwushDetectEventForWaiting(void)
         (U1)FWUSH_REQ_SUBTYPE_VALID,                     /* FWUSH_MAIN_STATE_VALID    (4U) */
         (U1)FWUSH_REQ_SUBTYPE_FIN                        /* FWUSH_MAIN_STATE_FIN      (5U) */
     };
+    static const U1 u1_s_FWUSH_PROG_MASK_WAITING = (U1)(FWUSH_PROGRESS_ACT_DONE | FWUSH_PROGRESS_FINALIZE_DONE);
+    static const U1 u1_s_FWUSH_PROG_ACT_CRIT_WAITING = (U1)FWUSH_PROGRESS_ACT_DONE;
     U1 u1_t_event;
     U1 u1_t_current_req_subtype;
     U1 u1_t_expected_subtype;
@@ -624,8 +626,7 @@ static U1 u1_s_FwushDetectEventForWaiting(void)
             u1_t_event = (U1)FWUSH_EVENT_NEW_REQUEST;
         }
         else if(u1_t_current_req_subtype == (U1)FWUSH_REQ_SUBTYPE_CANCEL){
-            if(((u1_s_fwush_seq_progress & ((U1)FWUSH_PROGRESS_ACT_DONE | (U1)FWUSH_PROGRESS_VALIDATE_DONE)) != (U1)0U) &&
-               ((u1_s_fwush_seq_progress & (U1)FWUSH_PROGRESS_FINALIZE_DONE) == (U1)0U)){
+            if((u1_s_fwush_seq_progress & u1_s_FWUSH_PROG_MASK_WAITING) == u1_s_FWUSH_PROG_ACT_CRIT_WAITING){
                 u1_t_event = (U1)FWUSH_EVENT_ROLLBACK;
             }
             else{
@@ -791,11 +792,10 @@ static U1 u1_s_FwushCheckMemAccJobEvent(void)
             break;
         case (U1)FWUSH_MAIN_STATE_PREP:
         case (U1)FWUSH_MAIN_STATE_ACT:
-        case (U1)FWUSH_MAIN_STATE_VALID:
-        case (U1)FWUSH_MAIN_STATE_FIN:
+        case (U1)FWUSH_MAIN_STATE_FIN:  /* for Rollback Memacc */
             /* u1_t_event = u1_s_FwushMapMainStatusToEvent(u1_t_main_status); */
             break;
-        default:
+        default:  /* FWUSH_MAIN_STATE_VALID */
             u1_t_event = (U1)FWUSH_EVENT_NONE;
             break;
     }
