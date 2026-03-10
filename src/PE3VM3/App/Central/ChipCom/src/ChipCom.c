@@ -605,7 +605,7 @@ static void ChipCom_TransmitMsg( void )
 					SuspendOSInterrupts();
 
 					/* Copy data from packet buffer to message buffer */
-					ChipCom_Memcpy( t_pu1MsgBuff, t_pu1MsgBuffStl, t_pstPktInfo->u2TotalDataLen );
+//					ChipCom_Memcpy( t_pu1MsgBuff, t_pu1MsgBuffStl, t_pstPktInfo->u2TotalDataLen );
 
 					/* Resume Interrupts */
 					ResumeOSInterrupts();
@@ -963,7 +963,7 @@ static void ChipCom_WriteFla( void )
 					/* Copy data from packet buffer to transmit buffer */
 					ChipCom_Memcpy( t_pu1TxBuff, t_pu1PktBuff, t_pstPktInfo->u2LastTxLen );
 					t_u2RemainPayloadLen = t_pstPktInfo->u2Payload - t_pstPktInfo->u2LastTxLen;
-					ChipCom_Memset( t_pu1TxBuff, ChipCom_cu1XspiDataInit, t_u2RemainPayloadLen );
+					ChipCom_Memset( &t_pu1TxBuff[t_pstPktInfo->u2LastTxLen], ChipCom_cu1XspiDataInit, t_u2RemainPayloadLen );
 				}
 			}
 			else
@@ -1307,7 +1307,7 @@ static Std_ReturnType ChipCom_ReadCanMsg( CanMsgType* t_pstCanMsg, uint8* t_pu1B
 	t_pstCanMsg->u1Length = t_pu1Buff[CHIPCOM_VLA_MSG_LEN_POS];
 
 	/* Check receive data length */
-	if ( t_pstCanMsg->u1Length <= (uint8)CHIPCOM_CAN_DATA_LEN_MAX )
+	if ( t_pstCanMsg->u1Length < (uint8)CHIPCOM_CAN_DATA_LEN_MAX )
 	{
 		/* Read data */
 		ChipCom_Memcpy( &(t_pstCanMsg->ptData[0U]), &t_pu1Buff[CHIPCOM_VLA_MSG_HEADER_SIZE], (uint16)t_pstCanMsg->u1Length );
