@@ -24,6 +24,10 @@
 #define DTCCTL_DTCID_PWR_UNCN_RBD       (8U)
 #define DTCCTL_DTCID_PWR_UNCN_LBD       (9U)
 
+#define DTCCTL_RESETKIND_VM             (0U)
+#define DTCCTL_RESETKIND_SOC            (1U)
+#define DTCCTL_RESETKIND_CDC            (2U)
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -40,6 +44,8 @@ void    vd_g_DtcCtl_Init(void);
 void    vd_g_DtcCtl_MainTask(void);
 void    vd_g_DtcCtl_SetDtcId(const U1 u1_a_DTCID, const U1 u1_a_STATUS);
 void    vd_g_DtcCtl_RecDtc(const U1 u1_a_DTC1, const U1 u1_a_DTC2, const U1 u1_a_STATUS);
+void    vd_g_DtcCtl_ResetReq(const U1 u1_a_KIND);
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

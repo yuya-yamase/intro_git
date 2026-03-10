@@ -47,7 +47,7 @@
 /* START : ##TOOL_OUT#RIM_MOD_3C_SIZE## */
 #define RIM_MOD_3CRAM_U1_ID_NUM                  (1U)
 #define RIM_MOD_3CRAM_U2_ID_NUM                  (2U)
-#define RIM_MOD_3CRAM_U4_ID_NUM                  (2U)
+#define RIM_MOD_3CRAM_U4_ID_NUM                  (20U)
 #define RIM_MOD_3CRAM_OTHER_ID_NUM               (0U)
 /* END : ##TOOL_OUT#RIM_MOD_3C_SIZE## */
 /* START : ##TOOL_OUT#RIM_MOD_3C_OTR_TBL_SIZE## */
