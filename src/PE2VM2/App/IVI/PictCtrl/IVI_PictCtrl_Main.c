@@ -25,6 +25,7 @@
 #include    "ML86294Ctl.h"
 #include    "CXD4937Ctl.h"
 #include    "PictMuteCtl.h"
+#include    "PictLogCtl.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -77,6 +78,7 @@ void            vd_g_Ivi_PictCtrl_Main_Bon_init(void)
     vd_g_Pict_Ml86294_Init();
     vd_g_Pict_GvifSndrInit();
     vd_g_PictMute_Init();
+    vd_g_PictLogCtl_Init();
 }
 
 /*===================================================================================================================================*/
@@ -97,6 +99,7 @@ void            vd_g_Ivi_PictCtrl_Main_Wkup_init(void)
     vd_g_Pict_Ml86294_Init();
     vd_g_Pict_GvifSndrInit();
     vd_g_PictMute_Init();
+    vd_g_PictLogCtl_Init();
 }
 
 /*===================================================================================================================================*/
@@ -117,6 +120,7 @@ void            vd_g_Ivi_PictCtrl_Main_Rst_init(void)
     vd_g_Pict_Ml86294_Init();
     vd_g_Pict_GvifSndrInit();
     vd_g_PictMute_Init();
+    vd_g_PictLogCtl_Init();
 }
 
 /*===================================================================================================================================*/
