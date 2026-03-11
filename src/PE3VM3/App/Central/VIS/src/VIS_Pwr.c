@@ -637,6 +637,8 @@ void vd_g_VISPwrSocRstNotify (U1 const u1_a_SOCRST_TYPE)
 /************************************************************************************************/
 void vd_g_VISPwrSailCompInitReqNotify (U1 const u1_a_SAILCOMPINITREQ)
 {
+    /* 引数不正(未定義値)の場合は前回値とする */
+
     if (((U1)STD_ON == u1_a_SAILCOMPINITREQ) || ((U1)STD_OFF == u1_a_SAILCOMPINITREQ)) {
         u1_s_vispwr_sailcompinitreq = u1_a_SAILCOMPINITREQ;
     }
