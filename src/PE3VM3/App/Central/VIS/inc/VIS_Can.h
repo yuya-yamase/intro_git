@@ -34,7 +34,9 @@
 #define VIS_CAN_UTC_HOURMAX                     ((U1)0x23U)         /* UTC時刻情報時最大値 */
 #define VIS_CAN_UTC_MINMAX                      ((U1)0x59U)         /* UTC時刻情報分最大値 */
 #define VIS_CAN_UTC_SECMAX                      ((U1)0x59U)         /* UTC時刻情報秒最大値 */
+#define VIS_CAN_UTC_DECIMALMAX                  ((U1)9U)            /* BCDフォーマット最大値 */
 #define VIS_CAN_UTC_FAIL                        ((U1)0xFFU)         /* UTC時刻情報Fail値 */
+#define VIS_CAN_UTC_SHIFT_4BIT                  ((U1)4U)            /* ビットシフト：4bit */
 
 /* オドメータ */
 #define VIS_CAN_ODO_RX_NBYTE                    ((U1)8U)            /* CAN受信：MET1S02バイト数 */
@@ -49,9 +51,9 @@
 #define VIS_CAN_ODO_UNIT_MILE                   ((U1)2U)            /* オド単位Mile */
 #define VIS_CAN_ODO_UNIT_NON                    ((U1)3U)            /* オド単位情報なし */
 #define VIS_CAN_ODO_LSB                         ((U4)10U)           /* LSB変換(1km→0.1km) */
-#define VIS_CAN_ODO_MILE_TO_KM                  ((U4)161U)          /* Mile→km変換値 */
-#define VIS_CAN_ODO_MAX_KM                      ((U4)999999U)       /* オドメータ情報最大値(km) */
-#define VIS_CAN_ODO_MAX_MILE                    ((U4)621117U)       /* オドメータ情報最大値(mile) */
+#define VIS_CAN_ODO_MILE_TO_KM                  ((U4)1609U)         /* Mile→km変換値(1mile = 1.609km) */
+#define VIS_CAN_ODO_MILE_LSB                    ((U4)100U)          /* LSB変換(1m→0.1km) */
+#define VIS_CAN_ODO_MAX                         ((U4)999999U)       /* オドメータ情報最大値 */
 #define VIS_CAN_ODO_FAIL                        ((U4)0x00000000U)   /* オドメータ情報Fail値 */
 
 /* 車速 */
@@ -122,6 +124,7 @@
 #define VIS_CAN_4BYTEMASK_4BYTE                 ((U4)0xFF000000U)
 #define VIS_CAN_2BYTEMASK_LOW                   ((U2)0x00FFU)
 #define VIS_CAN_2BYTEMASK_HIGH                  ((U2)0xFF00U)
+#define VIS_CAN_1BYTEMASK_LOW                   ((U1)0x0FU)
 
 #define VIS_CAN_COM_IPDUST_OK                   ((U1)0U)            /* CANメッセージ受信状態：正常受信 */
 /* ----------------------------------------------------------------------------------------------------------- */
