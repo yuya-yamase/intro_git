@@ -75,6 +75,7 @@
 ../../src/PE2VM2/App/IVI/PictCtrl/ML86294Ctl.c
 ../../src/PE2VM2/App/IVI/PictCtrl/PictCtl.c
 ../../src/PE2VM2/App/IVI/PictCtrl/pictic.c
+../../src/PE2VM2/App/IVI/PictCtrl/PictLogCtl.c
 ../../src/PE2VM2/App/IVI/PictCtrl/PictMuteCtl.c
 ../../src/PE2VM2/App/IVI/PwrCtrl/DDFreq/IVI_PwrCtrl_DDFreq.c
 ../../src/PE2VM2/App/IVI/PwrCtrl/GNSSCtl.c
@@ -82,6 +83,7 @@
 ../../src/PE2VM2/App/IVI/PwrCtrl/PMIC.c
 ../../src/PE2VM2/App/IVI/PwrCtrl/PwrCtl.c
 ../../src/PE2VM2/App/IVI/PwrCtrl/STRCtl.c
+../../src/PE2VM2/App/IVI/PwrCtrl/WhlIni.c
 ../../src/PE2VM2/App/IVI/PwrCtrl/XMTunerCtl.c
 ../../src/PE2VM2/App/IVI/XSPI/x_spi_ivi.c
 ../../src/PE2VM2/App/IVI/XSPI/x_spi_ivi_queue.c

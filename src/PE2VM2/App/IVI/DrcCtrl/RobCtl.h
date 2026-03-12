@@ -31,6 +31,8 @@ void    vd_g_RobCtl_Init(void);
 void    vd_g_RobCtl_MainTask(void);
 void    vd_g_RobCtl_SetRobId(const U1 u1_a_DTCID);
 void    vd_g_RobCtl_RecRob(const U1 u1_a_ROB1, const U1 u1_a_ROB2);
+void    vd_g_RobCtl_Restart(void);
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

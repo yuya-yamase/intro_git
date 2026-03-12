@@ -44,8 +44,10 @@
 void    vd_g_PictMute_Init(void);
 void    vd_g_PictMute_Routine(void);
 void    vd_g_PictMute_CamMuteReq(const U1 u1_a_req_sts);
-void    vd_g_PictMute_SipErrorReq(const U1 u1_a_req_sts);
-void    vd_g_PictMute_OtaResetReq(const U1 u1_a_req_sts);
+void    vd_g_PictMute_SipResetReq(const U1 u1_a_req_sts);
+void    vd_g_PictMute_CdcResetReq(const U1 u1_a_req_sts);
+void    vd_g_PictMute_VmResetReq(const U1 u1_a_req_sts);
+void    vd_g_PictMute_SoCResetReq(U1 u1_a_socreq);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */

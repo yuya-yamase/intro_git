@@ -40,6 +40,7 @@
 /*  Function Prototypes                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 void            vd_g_XspiIviQueueInit(void);
+void            vd_g_XspiIviQueueSoCResetInit(void);
 U1              u1_g_XspiIviQueueWriCms(U1 * u1_ap_value);
 void            vd_g_XspiIviQueueWriCandata(U1 * u1_ap_value, const U2 u2_a_NUM_VALUES);
 U1              u1_g_XspiIviQueueGetCms(U1 * u1_ap_buf);
@@ -64,7 +65,7 @@ void            vd_g_XspiIviQueueWriDiagCANdataID(U1  u1_a_value);
 void            vd_g_XspiIviQueueWriDiagCANdataNum(U2  u2_a_value);
 U1              u1_g_XspiIviQueueGetDiagCANdata(U1 * u1_ap_buf, const U2 u2_a_NUM_VALUES);
 void            vd_g_XspiIviQueueGetDiagCANdataSize(U2 * u2_ap_buf);
-void            vd_g_XspiIviQueueGetDiagCANDataSID(U1 * u1_ap_buf);
+U1              u1_g_XspiIviQueueGetDiagCANDataSID(U1 * u1_ap_buf);
 void            vd_g_XspiIviQueueGetDiagCANDataID(U1 * u1_ap_buf);
 void            vd_g_XspiIviQueueGetDiagCANDataNum(U2 * u2_ap_buf);
 U1              u1_g_XspiIviQueueWriChkDiagCAN(const U2 u2_a_NUM);
