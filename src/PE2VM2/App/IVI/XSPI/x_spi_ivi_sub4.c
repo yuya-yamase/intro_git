@@ -65,6 +65,19 @@
 #define XSPI_IVI_CAN_COMMAND_BUF_MAX        (128U)
 #define XSPI_IVI_CAN_COMMAND_SIZE_MAX       (256U)
 
+#define XSPI_IVI_UPPER_NIBBLE_MASK          (0xF0U)
+#define XSPI_IVI_LOWER_NIBBLE_MASK          (0x0FU)
+
+#define XSPI_IVI_CAN_BUF_0                  (0U)
+#define XSPI_IVI_CAN_BUF_1                  (1U)
+#define XSPI_IVI_CAN_BUF_2                  (2U)
+#define XSPI_IVI_CAN_BUF_3                  (3U)
+#define XSPI_IVI_CAN_BUF_4                  (4U)
+#define XSPI_IVI_CAN_BUF_5                  (5U)
+#define XSPI_IVI_CAN_BUF_6                  (6U)
+#define XSPI_IVI_CAN_BUF_7                  (7U)
+#define XSPI_IVI_CAN_BUF_8                  (8U)
+
 /* CANバスステータス通知 バッファ位置 */
 #define XSPI_IVI_CANBUS_POS_TOTAL           (4U)
 #define XSPI_IVI_CANBUS_POS_REGSTUCK        (0U)
@@ -84,6 +97,10 @@
 #define XSPI_IVI_CLOCKUTC_DATA_SIZE         (9U)
 #define XSPI_IVI_WEEK_SUNDAY_RTC            (7U)
 #define XSPI_IVI_WEEK_SUNDAY_UTC            (0U)
+#define XSPI_IVI_YEAR_OFFSET                (100U)
+#define XSPI_IVI_UTC_STATUS_VARID           (1U)
+#define XSPI_IVI_BCD_HUNDREDS               (100U)
+#define XSPI_IVI_BCD_TENS                   (10U)
 
 /*PartialNM*/
 #define XSPI_IVI_PARTIALNM_DATASIZE         (7U)
@@ -1607,44 +1624,46 @@ static void            vd_s_XspiIviCANCommandStuckBuff(const U1 u1_a_ID,const U2
 /*===================================================================================================================================*/
 void            vd_g_XspiIviClockUTCPut(const U1* u1_ap_DATA)
 {
-    U1 u1_t_year_hi;
-    U1 u1_t_year_lo;
+    U2 u2_t_year_hi;
+    U2 u2_t_year_lo;
     U1 u1_t_week;
+    U2 u2_t_year;
 
     /*BCDデータで格納*/
     /*second*/
-    u1_sp_Xspi_Ivi_ClockUtcdata[0] = (u1_ap_DATA[5] % (U1)10U) & 0x0FU;
-    u1_sp_Xspi_Ivi_ClockUtcdata[0] |= ((u1_ap_DATA[5] / (U1)10U) << XSPI_IVI_SFT_04) & 0xF0U;
+    u1_sp_Xspi_Ivi_ClockUtcdata[XSPI_IVI_CAN_BUF_0] = (u1_ap_DATA[XSPI_IVI_CAN_BUF_5] % (U1)XSPI_IVI_BCD_TENS) & (U1)XSPI_IVI_LOWER_NIBBLE_MASK;
+    u1_sp_Xspi_Ivi_ClockUtcdata[XSPI_IVI_CAN_BUF_0] |= ((u1_ap_DATA[XSPI_IVI_CAN_BUF_5] / (U1)XSPI_IVI_BCD_TENS) << XSPI_IVI_SFT_04) & (U1)XSPI_IVI_UPPER_NIBBLE_MASK;
     /*minute*/
-    u1_sp_Xspi_Ivi_ClockUtcdata[1] = (u1_ap_DATA[4] % (U1)10U) & 0x0FU;
-    u1_sp_Xspi_Ivi_ClockUtcdata[1] |= ((u1_ap_DATA[4] / (U1)10U) << XSPI_IVI_SFT_04) & 0xF0U;
+    u1_sp_Xspi_Ivi_ClockUtcdata[XSPI_IVI_CAN_BUF_1] = (u1_ap_DATA[XSPI_IVI_CAN_BUF_4] % (U1)XSPI_IVI_BCD_TENS) & (U1)XSPI_IVI_LOWER_NIBBLE_MASK;
+    u1_sp_Xspi_Ivi_ClockUtcdata[XSPI_IVI_CAN_BUF_1] |= ((u1_ap_DATA[XSPI_IVI_CAN_BUF_4] / (U1)XSPI_IVI_BCD_TENS) << XSPI_IVI_SFT_04) & (U1)XSPI_IVI_UPPER_NIBBLE_MASK;
     /*hour*/
-    u1_sp_Xspi_Ivi_ClockUtcdata[2] = (u1_ap_DATA[3] % (U1)10U) & 0x0FU;
-    u1_sp_Xspi_Ivi_ClockUtcdata[2] |= ((u1_ap_DATA[3] / (U1)10U) << XSPI_IVI_SFT_04) & 0xF0U;
+    u1_sp_Xspi_Ivi_ClockUtcdata[XSPI_IVI_CAN_BUF_2] = (u1_ap_DATA[XSPI_IVI_CAN_BUF_3] % (U1)XSPI_IVI_BCD_TENS) & (U1)XSPI_IVI_LOWER_NIBBLE_MASK;
+    u1_sp_Xspi_Ivi_ClockUtcdata[XSPI_IVI_CAN_BUF_2] |= ((u1_ap_DATA[XSPI_IVI_CAN_BUF_3] / (U1)XSPI_IVI_BCD_TENS) << XSPI_IVI_SFT_04) & (U1)XSPI_IVI_UPPER_NIBBLE_MASK;
     /*day*/
-    u1_sp_Xspi_Ivi_ClockUtcdata[3] = (u1_ap_DATA[2] % (U1)10U) & 0x0FU;
-    u1_sp_Xspi_Ivi_ClockUtcdata[3] |= ((u1_ap_DATA[2] / (U1)10U) << XSPI_IVI_SFT_04) & 0xF0U;
+    u1_sp_Xspi_Ivi_ClockUtcdata[XSPI_IVI_CAN_BUF_3] = (u1_ap_DATA[XSPI_IVI_CAN_BUF_2] % (U1)XSPI_IVI_BCD_TENS) & (U1)XSPI_IVI_LOWER_NIBBLE_MASK;
+    u1_sp_Xspi_Ivi_ClockUtcdata[XSPI_IVI_CAN_BUF_3] |= ((u1_ap_DATA[XSPI_IVI_CAN_BUF_2] / (U1)XSPI_IVI_BCD_TENS) << XSPI_IVI_SFT_04) & (U1)XSPI_IVI_UPPER_NIBBLE_MASK;
     /*month*/
-    u1_sp_Xspi_Ivi_ClockUtcdata[4] = (u1_ap_DATA[1] % (U1)10U) & 0x0FU;
-    u1_sp_Xspi_Ivi_ClockUtcdata[4] |= ((u1_ap_DATA[1] / (U1)10U) << XSPI_IVI_SFT_04) & 0xF0U;
+    u1_sp_Xspi_Ivi_ClockUtcdata[XSPI_IVI_CAN_BUF_4] = (u1_ap_DATA[XSPI_IVI_CAN_BUF_1] % (U1)XSPI_IVI_BCD_TENS) & (U1)XSPI_IVI_LOWER_NIBBLE_MASK;
+    u1_sp_Xspi_Ivi_ClockUtcdata[XSPI_IVI_CAN_BUF_4] |= ((u1_ap_DATA[XSPI_IVI_CAN_BUF_1] / (U1)XSPI_IVI_BCD_TENS) << XSPI_IVI_SFT_04) & (U1)XSPI_IVI_UPPER_NIBBLE_MASK;
     /*year*/
-    u1_t_year_hi = u1_ap_DATA[0] / (U1)100U;
-    u1_t_year_lo = u1_ap_DATA[0] % (U1)100U;
-    u1_sp_Xspi_Ivi_ClockUtcdata[5] = (u1_t_year_hi % (U1)10U) & 0x0FU;
-    u1_sp_Xspi_Ivi_ClockUtcdata[5] |= ((u1_t_year_hi / (U1)10U) << XSPI_IVI_SFT_04) & 0xF0U;
-    u1_sp_Xspi_Ivi_ClockUtcdata[6] = (u1_t_year_lo % (U1)10U) & 0x0FU;
-    u1_sp_Xspi_Ivi_ClockUtcdata[6] |= ((u1_t_year_lo / (U1)10U) << XSPI_IVI_SFT_04) & 0xF0U;
+    u2_t_year = (U2)(u1_ap_DATA[XSPI_IVI_CAN_BUF_0] + (U1)XSPI_IVI_YEAR_OFFSET);
+    u2_t_year_hi = u2_t_year / (U2)XSPI_IVI_BCD_HUNDREDS;
+    u2_t_year_lo = u2_t_year % (U2)XSPI_IVI_BCD_HUNDREDS;
+    u1_sp_Xspi_Ivi_ClockUtcdata[XSPI_IVI_CAN_BUF_5] =  (U1)((u2_t_year_hi % (U2)XSPI_IVI_BCD_TENS) & (U2)XSPI_IVI_LOWER_NIBBLE_MASK);
+    u1_sp_Xspi_Ivi_ClockUtcdata[XSPI_IVI_CAN_BUF_5] |= (U1)(((u2_t_year_hi / (U2)XSPI_IVI_BCD_TENS) << XSPI_IVI_SFT_04) & (U2)XSPI_IVI_UPPER_NIBBLE_MASK);
+    u1_sp_Xspi_Ivi_ClockUtcdata[XSPI_IVI_CAN_BUF_6] =  (U1)((u2_t_year_lo % (U2)XSPI_IVI_BCD_TENS) & (U2)XSPI_IVI_LOWER_NIBBLE_MASK);
+    u1_sp_Xspi_Ivi_ClockUtcdata[XSPI_IVI_CAN_BUF_6] |= (U1)(((u2_t_year_lo / (U2)XSPI_IVI_BCD_TENS) << XSPI_IVI_SFT_04) & (U2)XSPI_IVI_UPPER_NIBBLE_MASK);
     /*week*/
-    u1_t_week = u1_ap_DATA[6];
+    u1_t_week = u1_ap_DATA[XSPI_IVI_CAN_BUF_6];
     if(u1_t_week == (U1)XSPI_IVI_WEEK_SUNDAY_RTC) {
         u1_t_week = (U1)XSPI_IVI_WEEK_SUNDAY_UTC;
     }
-    u1_sp_Xspi_Ivi_ClockUtcdata[7] = (u1_t_week % (U1)10U) & 0x0FU;
-    u1_sp_Xspi_Ivi_ClockUtcdata[7] |= ((u1_t_week / (U1)10U) << XSPI_IVI_SFT_04) & 0xF0U;
+    u1_sp_Xspi_Ivi_ClockUtcdata[XSPI_IVI_CAN_BUF_7] = (u1_t_week % (U1)XSPI_IVI_BCD_TENS) & (U1)XSPI_IVI_LOWER_NIBBLE_MASK;
+    u1_sp_Xspi_Ivi_ClockUtcdata[XSPI_IVI_CAN_BUF_7] |= ((u1_t_week / (U1)XSPI_IVI_BCD_TENS) << XSPI_IVI_SFT_04) & (U1)XSPI_IVI_UPPER_NIBBLE_MASK;
     /*sts*/
-    u1_sp_Xspi_Ivi_ClockUtcdata[8] = u1_ap_DATA[7];
+    u1_sp_Xspi_Ivi_ClockUtcdata[XSPI_IVI_CAN_BUF_8] = u1_ap_DATA[XSPI_IVI_CAN_BUF_7];
 
-    if(u1_sp_Xspi_Ivi_ClockUtcdata[8] == (U1)1U) {
+    if(u1_sp_Xspi_Ivi_ClockUtcdata[XSPI_IVI_CAN_BUF_8] == (U1)XSPI_IVI_UTC_STATUS_VARID) {
         u1_s_Xspi_Ivi_ClockUtc_recflg = (U1)TRUE;
     } else {
         u1_s_Xspi_Ivi_ClockUtc_recflg = (U1)FALSE;
