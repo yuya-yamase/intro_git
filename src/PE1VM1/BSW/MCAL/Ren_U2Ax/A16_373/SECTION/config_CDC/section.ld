@@ -14,7 +14,7 @@ SECTIONS {
     .calibration_area_4B    align(4)   MCUCONST_4B_ADDR     ABS    : > .                 // MCUCONST 4byte Data (not allowed to move)
     .calibration_area_2B    align(4)   MCUCONST_2B_ADDR     ABS    : > .                 // MCUCONST 2byte Data (not allowed to move)
     .calibration_area_1B    align(4)   MCUCONST_1B_ADDR     ABS    : > .                 // MCUCONST 1byte Data (not allowed to move)
-    .calibration_area_CRC              MCUCONST_CRC_ADDR    ABS    : > .                 // MCUCONST CRC   Data (not allowed to move)
+    .calibration_area_CRC   align(4)   MCUCONST_CRC_ADDR    ABS    : > .                 // MCUCONST CRC   Data (not allowed to move)
 
 // Vector
     .vectortable_fe0                                        : > vector_core     // OS起動前ベクタ領域(FE用)トップ

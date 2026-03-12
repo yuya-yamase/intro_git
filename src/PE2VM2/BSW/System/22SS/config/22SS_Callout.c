@@ -96,7 +96,7 @@ void vd_g_22SSCallout_StaBonInit(void)
 
     /* IVI */
     Mcu_Dev_I2c_Ctrl_Init();
-    vd_g_XspiIviInit();
+    vd_g_XspiIviBonInit();
     vd_g_Ivi_PwrCtrl_Main_Bon_init();
     vd_g_Ivi_ExtSigCtrl_Main_Bon_init();
     vd_g_Ivi_PictCtrl_Main_Bon_init();
@@ -149,7 +149,7 @@ void vd_g_22SSCallout_StaRstInit(void)
 
     /* IVI */
     Mcu_Dev_I2c_Ctrl_Init();
-    vd_g_XspiIviInit();
+    vd_g_XspiIviRstInit();
     vd_g_Ivi_PwrCtrl_Main_Rst_init();
     vd_g_Ivi_ExtSigCtrl_Main_Rst_init();
     vd_g_Ivi_PictCtrl_Main_Rst_init();
@@ -203,7 +203,7 @@ void vd_g_22SSCallout_StaWkupInit(void)
 
     /* IVI */
     Mcu_Dev_I2c_Ctrl_Init();
-    vd_g_XspiIviInit();
+    vd_g_XspiIviWkupInit();
     vd_g_Ivi_PwrCtrl_Main_Wkup_init();
     vd_g_Ivi_ExtSigCtrl_Main_Wkup_init();
     vd_g_Ivi_PictCtrl_Main_Wkup_init();

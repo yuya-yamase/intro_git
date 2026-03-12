@@ -46,9 +46,13 @@
 #define    XSPI_IVI_CAMERA_TYPE_SEND      (0x02U)
 #define    XSPI_IVI_CAMERA_SYNC_SEND      (0x03U)
 #define    XSPI_IVI_CAMERA_MODE_REC       (0x04U)
+#define    XSPI_IVI_CAMERA_LOG_SEND       (0x05U)
 
 #define    XSPI_IVI_CAMERA_TASK           (3000U / XSPI_IVI_TASK_TIME)
 #define    XSPI_IVI_CAMERA_DATA_SIZE      (6U)
+
+#define    XSPI_IVI_CAMERALOG_DATA_SIZE   (36U)
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -289,6 +293,24 @@ static U1            u1_s_XspiIviSub1CameraDataEventJdg(const U1* u1_ap_DATA,con
     }
 
     return(u1_t_judge);
+}
+
+/*===================================================================================================================================*/
+/*  void            vd_g_XspiIviSub1CameraLogDataSend(const U1 * u1_ap_DATA)                                                         */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    SubFlame1(MISC) Data Analysis                                                                                    */
+/*  Arguments:      u1_ap_DATA : Camera Log Data                                                                                     */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void            vd_g_XspiIviSub1CameraLogDataSend(const U1 * u1_ap_DATA)
+{
+    U1  u1_tp_data[XSPI_IVI_CAMERALOG_DATA_SIZE];
+    U1  u1_t_size;
+
+    u1_t_size = (U1)XSPI_IVI_CAMERALOG_DATA_SIZE - (U1)1U;
+    u1_tp_data[0] = (U1)XSPI_IVI_CAMERA_LOG_SEND;
+    vd_g_MemcpyU1(&u1_tp_data[1],&u1_ap_DATA[0],u1_t_size);
+    vd_s_XspiIviSub1CameraDataToQueue((U2)XSPI_IVI_CAMERALOG_DATA_SIZE,u1_tp_data);
 }
 
 /*===================================================================================================================================*/
