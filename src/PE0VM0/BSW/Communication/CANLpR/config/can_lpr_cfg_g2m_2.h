@@ -56,8 +56,8 @@ static const ST_CAN_LPR_RR     st_sp_CAN_LPR_RR_G2M_2[] = {
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static const ST_CAN_LPR_RRMB   st_sp_CAN_LPR_RRMB_G2M_2[] = {
     /*   u2_rr_begin,     u2_num_rr                          */
-	{(U2)1U,	          (U2)1U},	  /* MBOX = 2 / 0x000005d0 : Rx Mask = NOUSE */
-	{(U2)0U,	          (U2)1U} 	  /* MBOX = 3 / 0x000001e4 : Rx Mask = NOUSE */
+	{(U2)1U,	          (U2)1U},	  /* MBOX = 3 / 0x000005d0 : Rx Mask = NOUSE */
+	{(U2)0U,	          (U2)1U} 	  /* MBOX = 4 / 0x000001e4 : Rx Mask = NOUSE */
 };
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -77,8 +77,8 @@ static const ST_CAN_LPR_ING    st_s_CAN_LPR_ING_G2M_2 = {
     &u2_sp_CAN_LPR_EPDU_G2M_2[0U],                                         /* u2p_EPDU_ID */
     (U4)CAN_LPR_REGR_EN_PHY_RX_G2M2,                                       /* u4_ifrx_en  */
     (U2)2U,                                                                /* u2_num_rr   */
-    (U2)2U,                                                                /* u2_mb_min   */
-    (U2)3U,                                                                /* u2_mb_max   */
+    (U2)3U,                                                                /* u2_mb_min   */
+    (U2)4U,                                                                /* u2_mb_max   */
     (U2)1U                                                                 /* u2_num_egr  */
 };
 

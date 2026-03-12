@@ -310,11 +310,11 @@ const U2                           u2_gp_OXCAN_OMA_REC_BY_IPDU[] = {
     (U2)24U,                            /* #define MSG_BDC1SE6_RXCH0                       (110U) */
     (U2)25U,                            /* #define MSG_BDC1SE7_RXCH0                       (111U) */
     (U2)26U,                            /* #define MSG_BDC1SH3_RXCH0                       (112U) */
-    (U2)U2_MAX,                         /* #define MSG_BDC1SI1_RXCH0                       (113U) */
-    (U2)U2_MAX,                         /* #define MSG_BDC1SI2_RXCH0                       (114U) */
-    (U2)U2_MAX,                         /* #define MSG_BDC1SI3_RXCH0                       (115U) */
-    (U2)U2_MAX,                         /* #define MSG_BDC1SI4_RXCH0                       (116U) */
-    (U2)U2_MAX,                         /* #define MSG_BDC1SH8_RXCH0                       (117U) */
+    (U2)U2_MAX,                         /* #define MSG_BDC1SH8_RXCH0                       (113U) */
+    (U2)U2_MAX,                         /* #define MSG_BDC1SI1_RXCH0                       (114U) */
+    (U2)U2_MAX,                         /* #define MSG_BDC1SI2_RXCH0                       (115U) */
+    (U2)U2_MAX,                         /* #define MSG_BDC1SI3_RXCH0                       (116U) */
+    (U2)U2_MAX,                         /* #define MSG_BDC1SI4_RXCH0                       (117U) */
     (U2)U2_MAX,                         /* #define MSG_BDC1SI5_RXCH0                       (118U) */
     (U2)U2_MAX,                         /* #define MSG_BDC1SI6_RXCH0                       (119U) */
     (U2)U2_MAX,                         /* #define MSG_BDC1SI7_RXCH0                       (120U) */
