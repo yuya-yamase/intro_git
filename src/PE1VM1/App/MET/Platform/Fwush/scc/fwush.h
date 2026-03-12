@@ -69,7 +69,7 @@
 /* NOTE: After ACT completes, transition to ROLLBACK or reset->PREP_WAITING. */
 
 /* Event definitions */
-#define FWUSH_EVENT_MAX                         (17U)
+#define FWUSH_EVENT_MAX                         (18U)
 #define FWUSH_EVENT_NONE                        (0U)           /* No event */
 #define FWUSH_EVENT_NEW_REQUEST                 (1U)           /* New request received */
 #define FWUSH_EVENT_SAME_REQUEST                (2U)           /* Same request received (continue) */
@@ -87,6 +87,7 @@
 #define FWUSH_EVENT_RESUME_ACT                  (14U)          /* Resume from Activate (MCU reset with Verify done) */
 #define FWUSH_EVENT_VALID_ACCEPT                (15U)          /* Resume from Validate (Fin waiting, rollback not done) */
 #define FWUSH_EVENT_RESUME_FIN                  (16U)          /* Resume from Finalize (Prep to Validate completed) */
+#define FWUSH_EVENT_FIN_ACCEPT                  (17U)          /* Finalize accept event */
 
 /* job progress */
 #define FWUSH_PROGRESS_INIT                     (0x00U)        /* Before reprog start */
@@ -125,6 +126,10 @@
 #define FWUSH_VERI_LBN_COMP_INIT                (0x0000U)        /* LB Init */
 #define FWUSH_VERI_LB1_COMP                     (0x0001U)        /* LB1 Complete */
 #define FWUSH_VERI_TARGET_LB1                   (0x0100U)        /* Rewriting Target LB1 */
+
+#define FWUSH_CHECK_PHA_MATCH                   (0x00U)          /* Check phase match */
+#define FWUSH_CHECK_PHA_UNMATCH                 (0x01U)          /* Check phase unmatch */
+#define FWUSH_CHECK_PHA_ERROR                   (0xFFU)          /* Check phase error */
 
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
