@@ -53,6 +53,9 @@
 #define    XSPI_IVI_DIAG_MODE               (0x30U)
 #define    XSPI_IVI_DIAG_WHLINI_RQST        (0x31U)
 #define    XSPI_IVI_DIAG_WHLINI_RES         (0x32U)
+#define    XSPI_IVI_DIAG_PINFOINI_START_RES (0x33U)
+#define    XSPI_IVI_DIAG_PINFOINI_FIN_RES   (0x34U)
+#define    XSPI_IVI_DIAG_PINFOINI_RQST      (0x36U)
 #define    XSPI_IVI_DIAG_DTCREC_SEND        (0x41U)
 #define    XSPI_IVI_DIAG_DTCREC_RECV        (0x42U)
 #define    XSPI_IVI_DIAG_ROBREC_SEND        (0x43U)
@@ -69,7 +72,8 @@
 #define    XSPI_IVI_DIAG_DTCREC_SEND_SIZE   (4U)
 #define    XSPI_IVI_DIAG_ROBREC_SEND_SIZE   (3U)
 #define    XSPI_IVI_DIAG_WHLINI_RES_SIZE    (3U)
-
+#define    XSPI_IVI_PINFOINI_START_SIZE     (2U)
+#define    XSPI_IVI_PINFOINI_FIN_SIZE       (3U)
 #define    XSPI_IVI_DIAG_LOGDATA_MAXSIZE    (1080U)
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
@@ -87,6 +91,9 @@ static void            vd_s_XspiIviSub1_DiagSizeReq(const U1 * u1_ap_XSPI_ADD, c
 static void            vd_s_XspiIviSub1_DiagSizeRespons(void);
 static void            vd_s_XspiIviSub1_DiagLogReadReq(const U1 * u1_ap_XSPI_ADD, const U2 u2_a_DATA_SIZE);
 static void            vd_s_XspiIviSub1_DiagLogRecieveNotify(const U1 * u1_ap_XSPI_ADD, const U2 u2_a_DATA_SIZE);
+static void            vd_s_XspiIviSub1_DiagPinfoIniReq(void);
+static void            vd_s_XspiIviSub1_DiagPinfoIniStartRespons(void);
+static void            vd_s_XspiIviSub1_DiagPinfoIniFinRespons(void);
 static void            vd_s_XspiIviSub1_DiagLogDataRespons(U2 u2_a_OFFSET_DATA);
 static void            vd_s_XspiIviSub1_DiagDataToQueue(const U1* u1_ap_XSPI_ADD, const U1 u1_a_SIZE);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -152,6 +159,9 @@ void            vd_g_XspiIviSub1DiagAna(const U1 * u1_ap_XSPI_ADD, const U2 u2_a
     case XSPI_IVI_DIAG_WHLINI_RQST:
         vd_g_WhlIni_SoCReq(u1_ap_XSPI_ADD[1]);
         break;
+    case XSPI_IVI_DIAG_PINFOINI_RQST:
+        vd_s_XspiIviSub1_DiagPinfoIniReq();
+        break;
     case XSPI_IVI_DIAG_DTCREC_RECV:
         vd_g_DtcCtl_RecDtc(u1_ap_XSPI_ADD[1],u1_ap_XSPI_ADD[2],u1_ap_XSPI_ADD[3]);
         break;
@@ -189,7 +199,7 @@ static void            vd_s_XspiIviSub1_DiagSizeRespons(void)
     U1     u1_s_LOGSIZE = (U1)XSPI_IVI_DIAG_LOG_SIZE;
     U1     u1_tp_data[XSPI_IVI_DIAG_LOG_SIZE];
 
-    /*ダイレコログサイズを取得*/
+    /* ダイレコログサイズを取得 */
     vd_g_SysEcDrc_SendDateSet(&u4_s_xspi_ivi_diagdatasize, &u1_sp_xspi_ivi_diagdata[0], (U4)XSPI_IVI_DIAG_LOGDATA_MAXSIZE);
 
     u2_s_xspi_ivi_diagdatanum = (U2)((u4_s_xspi_ivi_diagdatasize + (U4)242U) / (U4)XSPI_IVI_DIAG_LOGDATA_SIZE);
@@ -326,6 +336,55 @@ void            vd_g_XspiIviSub1_DiagWhliniRespons(const U1 u1_a_KIND, const U1 
     u1_tp_data[2] = u1_a_RESULT;
 
     vd_s_XspiIviSub1_DiagDataToQueue(&u1_tp_data[0],u1_s_DTCSIZE);
+}
+/*===================================================================================================================================*/
+/*  void            vd_s_XspiIviSub1_DiagPinfoIniReq(void)                                                                           */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    SubFlame1(MISC) Data Analysis                                                                                    */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void            vd_s_XspiIviSub1_DiagPinfoIniReq(void)
+{
+    vd_s_XspiIviSub1_DiagPinfoIniStartRespons();
+    vd_s_XspiIviSub1_DiagPinfoIniFinRespons();
+}
+
+/*===================================================================================================================================*/
+/*  void            vd_s_XspiIviSub1_DiagPinfoIniStartRespons(void)                                                                  */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    SubFlame1(MISC) Data Analysis                                                                                    */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void            vd_s_XspiIviSub1_DiagPinfoIniStartRespons(void)
+{
+    U1     u1_s_PISSIZE = (U1)XSPI_IVI_PINFOINI_START_SIZE;
+    U1     u1_tp_data[XSPI_IVI_PINFOINI_START_SIZE];
+
+    u1_tp_data[0] = (U1)XSPI_IVI_DIAG_PINFOINI_START_RES;
+    u1_tp_data[1] = (U1)0x00;                             /* 0x00 MCU */
+
+    vd_s_XspiIviSub1_DiagDataToQueue(&u1_tp_data[0],u1_s_PISSIZE);
+}
+
+/*===================================================================================================================================*/
+/*  void            vd_s_XspiIviSub1_DiagPinfoIniFinRespons(void)                                                                    */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    SubFlame1(MISC) Data Analysis                                                                                    */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void            vd_s_XspiIviSub1_DiagPinfoIniFinRespons(void)
+{
+    U1     u1_s_PIFSIZE = (U1)XSPI_IVI_PINFOINI_FIN_SIZE;
+    U1     u1_tp_data[XSPI_IVI_PINFOINI_FIN_SIZE];
+
+    u1_tp_data[0] = (U1)XSPI_IVI_DIAG_PINFOINI_FIN_RES;
+    u1_tp_data[1] = (U1)0x00;                             /* 0x00 MCU */
+    u1_tp_data[2] = (U1)0x00;                             /* 0x00 初期化成功(初期化対象が無いため) */
+
+    vd_s_XspiIviSub1_DiagDataToQueue(&u1_tp_data[0],u1_s_PIFSIZE);
 }
 
 /*===================================================================================================================================*/
