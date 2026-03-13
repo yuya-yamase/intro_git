@@ -31,10 +31,11 @@
 #define DEM_ASYNCREQ_INITILIZE_EVENT_STATUS         ((Dem_u08_AsyncReqTableIndexType)2U)
 #define DEM_ASYNCREQ_AGING_EVENT_STATUS             ((Dem_u08_AsyncReqTableIndexType)3U)
 #define DEM_ASYNCREQ_NORMALIZE_EVENT_STATUS         ((Dem_u08_AsyncReqTableIndexType)4U)
-#define DEM_ASYNCREQ_ACTIVEFAULT_EVENT_STATUS       ((Dem_u08_AsyncReqTableIndexType)5U)
+#define DEM_ASYNCREQ_EVENT_FOR_USERDEFINEDMEMORY    ((Dem_u08_AsyncReqTableIndexType)5U)
+#define DEM_ASYNCREQ_ACTIVEFAULT_EVENT_STATUS       ((Dem_u08_AsyncReqTableIndexType)6U)
 
 /* Async Request Table Num */
-#define DEM_ASYNCREQ_NUM                            ((Dem_u08_AsyncReqTableIndexType)6U)
+#define DEM_ASYNCREQ_NUM                            ((Dem_u08_AsyncReqTableIndexType)7U)
 
 
 /* Data Queue Item Size Max */

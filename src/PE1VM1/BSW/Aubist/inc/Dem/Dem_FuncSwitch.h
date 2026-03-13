@@ -38,7 +38,7 @@
 #define DEM_COMBINEDEVENT_ONRETRIEVAL_SUPPORT           (STD_OFF)    /* DemEventCombinationSupport */
 #define DEM_COMBINEDEVENT_ONRETRIEVAL_FILDTC_SUPPORT    (STD_OFF)    /* DemEventCombinationOnRetrievalPattern */
 
-#define DEM_USERDEFINEDMEMORY_SUPPORT                   (STD_OFF)    /* Use DemUserDefinedMemory */
+#define DEM_USERDEFINEDMEMORY_SUPPORT                   (STD_ON)     /* Use DemUserDefinedMemory */
 
 #define DEM_FFD_RECORDUPDATE_AT_TESTFAILED_SUPPORT      (STD_OFF)    /* At least one DemFreezeFrameRecordUpdate is set to DEM_UPDATE_RECORD_AT_TEST_FAILED */
 
@@ -66,7 +66,7 @@
 #define DEM_FFD_OUTPUT_JUDGE_SUPPORT                    (STD_OFF)    /* DemUseFreezeFrameDataOutputJudge */
 #define DEM_FF_CHECKSUM_SUPPORT                         (STD_OFF)    /* DemFreezeFrameChecksumSupport */
 #define DEM_EVENT_DISPLACEMENT_SUPPORT                  (STD_OFF)    /* DemEventDisplacementStrategy */
-#define DEM_EVENT_DISPLACEMENT_CALLOUT_SUPPORT          (STD_OFF)    /* DemEventDisplacementStrategy */
+#define DEM_EVENT_DISPLACEMENT_CALLOUT_SUPPORT          (STD_ON)     /* DemEventDisplacementStrategy */
 #define DEM_EVENT_DISPLACEMENT_BY_DTCSTATUS_SUPPORT     (STD_OFF)    /* DemEventDisplacementStrategy and DemEventDisplacementByDTCStatus */
 #define DEM_EVENT_DISPLACEMENT_BY_CDTC_NONOBDONLY_SUPPORT    (STD_OFF)    /* DemEventDisplacementByDTCStatusTarget */
 #define DEM_MAX_NUM_OF_FREEZE_FRAME_TRIGGER_SUPPORT     (STD_OFF)    /* Parameters in the DemMaxNumberOfFreezeFrameTriggerClass */

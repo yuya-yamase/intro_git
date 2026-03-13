@@ -89,6 +89,7 @@ BswConst BswU1 bsw_vcan_stVirtualHohTbl[ BSW_VCAN_VHOHNUM ] =
     ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [24] */
     ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [25] */
     ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [26] */
+    ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [27] */
 };
 
 /************************************************/
@@ -258,7 +259,8 @@ BswConst BswU1 bsw_vcan_u1TxMBoxTbl_VControl0[ BSW_VCAN_TX_VMBOXNUM_0 ] =
    ,(BswU1)(BSW_VCAN_POLLING   | BSW_VCAN_KIND_TRANSMIT )   /* [17] */
    ,(BswU1)(BSW_VCAN_POLLING   | BSW_VCAN_KIND_TRANSMIT )   /* [18] */
    ,(BswU1)(BSW_VCAN_POLLING   | BSW_VCAN_KIND_TRANSMIT )   /* [19] */
-   ,(BswU1)(BSW_VCAN_POLLING   | BSW_VCAN_KIND_TRANSMIT )   /* [20] */
+   ,(BswU1)(BSW_VCAN_INTERRUPT | BSW_VCAN_KIND_TRANSMIT )   /* [20] */
+   ,(BswU1)(BSW_VCAN_POLLING   | BSW_VCAN_KIND_TRANSMIT )   /* [21] */
 };
 
 #endif /* ( BSW_VCAN_TX_VMBOXNUM_0 != 0U ) */

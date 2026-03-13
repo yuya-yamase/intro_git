@@ -20,6 +20,7 @@
 #include <Dem/Dem_Common.h>
 #include "../cfg/Dem_NvM_Cfg.h"
 #include "oxdocan_aubif.h"
+#include "oxdocan_aubif_cfg.h"
 
 /*--------------------------------------------------------------------------*/
 /* Macros                                                                   */
@@ -32,7 +33,7 @@
 #define DEM_MAIN_CONTROL_DIVIDE_CYCLE_COUNT             ((Dem_u08_ControlProcCycleCounterType)1U)    /* DemControlTaskTime */
 
 /* Dem_EventQueue */
-#define DEM_EVENT_QUEUE_SIZE                            ((Dem_u16_EventQueueIndexType)21U)    /* DemEventQueueSize                  */
+#define DEM_EVENT_QUEUE_SIZE                            ((Dem_u16_EventQueueIndexType)52U)    /* DemEventQueueSize                  */
 
 /* DemGeneral */
 #define DEM_AGING_REQUIRES_NOT_FAILED_CYCLE             ((boolean)FALSE)                      /* DemAgingRequiresNotFailedCycle     */
@@ -42,12 +43,12 @@
 #define DEM_MAX_NUM_OF_DTC_TO_STORE_FREEZE_FRAME             ((Dem_u08_MaxNumberOfDTCToStoreFreezeFrameType)0xFFU)        /* DemMaxNumberOfDTCToStoreFreezeFrame */
 
 /* Dem_Control */
-#define DEM_CTL_SET_EVENT_NUM                           ((Dem_u16_EventQueueIndexType)21U)    /* DemEventNumForSet                  */
+#define DEM_CTL_SET_EVENT_NUM                           ((Dem_u16_EventQueueIndexType)52U)    /* DemEventNumForSet                  */
 /* Dem_DTC */
 #define DEM_FILDTC_SEARCH_LOOP_NUM_BY_CYCLE             ((Dem_u16_FilDTCSearchNumType)65535U)     /* DemFilteredDTCSearchLoopNumByCycle */
 
 /* Dem_Control */
-#define DEM_CTL_CLEAR_RAM_EVENT_NUM_BY_CYCLE            ((Dem_u16_AdjustCntByEventNumType)22U)    /* DemEventNumForClearRAMData */
+#define DEM_CTL_CLEAR_RAM_EVENT_NUM_BY_CYCLE            ((Dem_u16_AdjustCntByEventNumType)53U)    /* DemEventNumForClearRAMData */
 /* Dem_FFD */
 #define DEM_FILFFD_SEARCH_LOOP_NUM_BY_CYCLE             ((Dem_u16_FilFFDSearchNumType)65535U)     /* DemFilteredFFDSearchLoopNumByCycle */
 
@@ -56,10 +57,11 @@
 
 /* Dem_Control */
 #define DEM_CTL_NOTIFY_CONTROL_DTC_SETTING_AT_ONCE      ((Dem_u16_AdjustCntByEventNumType)22U)    /* DemEventNumForNotification */
-#define DEM_CTL_INIT_THIS_OPCYCLE_BIT_BY_CYCLE          ((Dem_u16_EventPosType)22U)    /* DemEventNumForOperationCycleStart */
+#define DEM_CTL_INIT_THIS_OPCYCLE_BIT_BY_CYCLE          ((Dem_u16_EventPosType)53U)    /* DemEventNumForOperationCycleStart */
 
 /* DemAdjustVerifyProcess */
 #define  DEM_EVENT_NUM_FOR_VERIFY_BY_CYCLE              ((Dem_u16_EventStrgIndexType)0xFFFFU)                /* DemEventNumForVerifyProcess */
+#define  DEM_UDMEVENT_NUM_FOR_VERIFY_BY_CYCLE           ((Dem_u16_UdmEventIndexType)0xFFFFU)             /* DemUserDefinedEventNumForVerifyProcess */
 
 #define  DEM_RECORD_NUM_FOR_VERIFY_BY_CYCLE             ((Dem_u32_TotalRecordNumType)0xFFFFFFFFU)        /* DemRecordNumForVerifyProcess */
 
@@ -86,6 +88,22 @@ typedef struct {
     Dem_u16_FFDStoredIndexType  LastEventStrgIndexUpper;
     Dem_u16_FFDStoredIndexType  LastEventStrgIndexLower;
 } Dem_FreezeFrameDataPosType;
+
+typedef struct {
+    Dem_u16_FFDStoredIndexType  FirstCID;
+    Dem_u16_FFDStoredIndexType  FirstUdmEventIndexUpper;
+    Dem_u16_FFDStoredIndexType  FirstUdmEventIndexLower;
+    Dem_u16_FFDStoredIndexType  CidUdmFreezeFrameRecords;
+    Dem_u16_FFDStoredIndexType  OccurrenceOrderUpper;
+    Dem_u16_FFDStoredIndexType  OccurrenceOrderMiddle;
+    Dem_u16_FFDStoredIndexType  OccurrenceOrderLower;
+    Dem_u16_FFDStoredIndexType  OffsetOfTSFFListIndex;
+    Dem_u16_FFDStoredIndexType  RecordStatus;
+    Dem_u16_FFDStoredIndexType  DataStart;
+    Dem_u16_FFDStoredIndexType  LastCID;
+    Dem_u16_FFDStoredIndexType  LastUdmEventIndexUpper;
+    Dem_u16_FFDStoredIndexType  LastUdmEventIndexLower;
+} Dem_UdmFreezeFrameDataPosType;
 
 /*--------------------------------------------------------------------------*/
 /* Function Prototypes                                                      */
@@ -130,6 +148,7 @@ extern CONST( AB_83_ConstV Dem_u16_EventStrgIndexType         ,DEM_CONFIG_DATA )
 
 /* DemAdjustVerifyProcess */
 extern CONST( AB_83_ConstV Dem_u16_EventStrgIndexType         ,DEM_CONFIG_DATA) Dem_EventNumForVerifyByCycle;
+extern CONST( AB_83_ConstV Dem_u16_UdmEventIndexType          ,DEM_CONFIG_DATA) Dem_UdmEventNumForVerifyByCycle;
 
 extern CONST( AB_83_ConstV Dem_u32_TotalRecordNumType         ,DEM_CONFIG_DATA) Dem_RecordNumForVerifyByCycle;
 
@@ -161,12 +180,19 @@ extern CONST( AB_83_ConstV Dem_u08_GroupOfDTCIndexType        ,DEM_CONFIG_DATA )
 extern CONST( AB_83_ConstV Dem_GroupOfDTCType                 ,DEM_CONFIG_DATA )  Dem_GroupOfDTCTable[DEM_GROUP_OF_DTC_NUM];
 
 extern CONST( AB_83_ConstV Dem_FreezeFrameDataPosType           ,DEM_CONFIG_DATA )  Dem_NonObdFreezeFrameDataPosTable;
+extern CONST( AB_83_ConstV Dem_UdmFreezeFrameDataPosType        ,DEM_CONFIG_DATA )  Dem_UdmFreezeFrameDataPosTable[ DEM_USER_DEFINED_MEMORY_NUM ];
 
 
 /* OperationCycle Record */
 extern CONST( AB_83_ConstV Dem_u08_OpCycleIndexType           ,DEM_CONFIG_DATA )  Dem_OperationCycleRecordStateNum;
 
+/* ClrInfo Record */
+extern CONST( AB_83_ConstV Dem_u16_UdmDemMemKindIndexType           ,DEM_CONFIG_DATA )  Dem_UserDefinedMemoryNum;
+extern CONST( AB_83_ConstV Dem_u08_UdmMemoryInfoTableIndexType      ,DEM_CONFIG_DATA )  Dem_UserDefinedMemoryInfoNum;
+extern CONST( AB_83_ConstV Dem_u08_UdmMemoryInfoTableIndexType      ,DEM_CONFIG_DATA )  Dem_UserDefinedMemoryInternalInfoNum;
+
 extern CONST( AB_83_ConstV Dem_u16_PaddingIndexType           ,DEM_CONFIG_DATA )  Dem_ClrInfoRecordBlockPaddingSize;
+extern CONST( AB_83_ConstV Dem_u16_PaddingIndexType           ,DEM_CONFIG_DATA )  Dem_UdmFaultRecordBlockPaddingSize;
 
 extern CONST( AB_83_ConstV Dem_u16_BlockSizeType              ,DEM_CONFIG_DATA )  Dem_FFDRecordNvBlockSize;
 

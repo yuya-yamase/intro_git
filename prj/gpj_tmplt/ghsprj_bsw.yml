@@ -13,6 +13,10 @@ lal_ext: ['.a', '.lib', '.ld']
 gpj:
   - name: ehvm
     type: program
+    sub:  
+      - sub/ehvm_bsw
+  - name: ehvm_bsw
+    type: subproject
     root: 
       - ../../src/EHVM
   - name: pe0vm0

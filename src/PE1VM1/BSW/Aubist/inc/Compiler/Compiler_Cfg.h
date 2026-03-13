@@ -27,6 +27,7 @@
 #include "./Compiler_Crc_Cfg.h"
 #include "./Compiler_E2E_Cfg.h"
 #include "./Compiler_SchM_Cfg.h"
+#include "./Compiler_IdsM_Cfg.h"
 
 #include "./Compiler_ExtDefs.h" /* SWS_COMPILER_00050 */
 

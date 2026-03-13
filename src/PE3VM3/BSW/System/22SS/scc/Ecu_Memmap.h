@@ -91,6 +91,10 @@ extern uint32 __ghsbegin_ecu_n_bvar_top[];
 extern uint32 __ghsbegin_bsw_ecu_n_bvar_bottom[];
 extern uint32 ECU_N_BVAR_SIZE[];
 
+extern uint32 __ghsbegin_mcal_ram_top[];
+extern uint32 __ghsbegin_mcal_ram_bottom[];
+extern uint32 MCAL_RAM_SIZE[];
+
 extern uint32 __ghsbegin_iohw_ram_top[];
 extern uint32 __ghsbegin_iohw_ram_bottom[];
 extern uint32 IOHW_RAM_SIZE[];

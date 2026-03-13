@@ -96,8 +96,8 @@
 #define TYDC_RID_D903_US_BLO                     (0x00U)
 #define TYDC_RID_D903_US_MAC                     (0x01U)
 
-#define TYDC_SEC_MACGEN_JOBID                    (CsmConf_CsmJob_MacGenerate_UseByKeyVerify)
-#define TYDC_SEC_ENCRYPTO_JOBID                  (CsmConf_CsmJob_Encrypt_UseByKeyVerify)
+#define TYDC_SEC_MACGEN_JOBID                    (CsmConf_CsmJob_Job45_MacGenerate_UseByKeyVerify)
+#define TYDC_SEC_ENCRYPTO_JOBID                  (CsmConf_CsmJob_Job48_Encrypt_UseByKeyVerify)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define TYDC_M1_KEY_ID_POS                       (15U)    /* The position of the KEYID(SHE-ID and Auth-ID) in the M1 data */
@@ -111,8 +111,8 @@
 #define TYDC_KEY_DATASIZE                        (64U)
 #define TYDC_KEY_NUM                             (2U)
 
-#define TYDC_CSM_JOBID_MASTER_ECU_KEY            (CsmConf_CsmJob_KeySetValid_MasterEcuKey)
-#define TYDC_CSM_JOBID_MAC_KEY                   (CsmConf_CsmJob_KeySetValid_MacKey)
+#define TYDC_CSM_JOBID_MASTER_ECU_KEY            (CsmConf_CsmJob_Job46_KeySetValid_MasterEcuKey)
+#define TYDC_CSM_JOBID_MAC_KEY                   (CsmConf_CsmJob_Job47_KeySetValid_MacKey)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -361,6 +361,26 @@ void    vd_g_TyDoCANXidMaMainTask(const ST_OXDC_REQ * st_ap_REQ)
             (* fp_sp_vd_TYDC_MAK_UV_ACT[u2_t_act])();
         }
     }
+}
+/*===================================================================================================================================*/
+/*  U1      u1_g_oXDoCANDtcTrchk_U13A0(const U2 u2_a_ELPSD)                                                                          */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+U1      u1_g_oXDoCANDtcTrchk_U13A0(const U2 u2_a_ELPSD)
+{
+    U1                            u1_t_dtc_act;
+    Dem_UdsStatusByteType         u1_t_uds_sts;
+
+    u1_t_uds_sts = (Dem_UdsStatusByteType)0U;
+    u1_t_dtc_act = u1_s_tydc_mak_kvf_chk;
+    (void)Dem_GetEventUdsStatus(DemConf_DemEventParameter_DemEventDTC_U13A0, &u1_t_uds_sts);
+    if((U1)(u1_t_uds_sts & DEM_UDS_STATUS_TF) == (U1)0x01U){
+        u1_s_tydc_mak_kvf_chk = (U1)OXDC_DTC_TR_UNK;
+    }
+ 
+    return(u1_t_dtc_act);
 }
 /*===================================================================================================================================*/
 /*  U1      u1_g_oXDoCANRebyId_A901(U1 * u1_ap_ans, const U2 u2_a_ELPSD)                                                             */

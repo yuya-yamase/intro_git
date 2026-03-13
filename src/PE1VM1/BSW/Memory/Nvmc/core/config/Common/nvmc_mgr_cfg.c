@@ -223,11 +223,11 @@ const ST_NVMC_MODULE_CFG    st_dp_NVMC_MODULE_CFG[NVMC_MODULE_NUM] = {
     {&u1_d_NvmcMod_U4R3Al_RdnData,             &u1_d_NvmcMod_Lib_PreRdnData, &vd_d_NvmcMod_U4R3Al_WrData,             (U1)NVMC_SIZE_4BYTE, (U1)1U,  (U1)4U,   (U1)1U,     (U1)3U, (U1)0x01U}, 
     {&u1_d_NvmcMod_U2R3Lo_RdnData,             &u1_d_NvmcMod_Lib_PreRdnData, &vd_d_NvmcMod_U2R3Lo_WrData,             (U1)NVMC_SIZE_2BYTE, (U1)1U,  (U1)4U,   (U1)1U,     (U1)3U, (U1)0x01U}, 
     {&u1_d_NvmcMod_U1R3P1_RdnData,             &u1_d_NvmcMod_Lib_PreRdnData, &vd_d_NvmcMod_U1R3P1_WrData,             (U1)NVMC_SIZE_1BYTE, (U1)1U,  (U1)4U,   (U1)1U,     (U1)3U, (U1)0x01U}, 
+    {&u1_d_NvmcMod_U4R1Al_RdnData,             vdp_PTR_NA,                   &vd_d_NvmcMod_U4R1Al_WrData,             (U1)NVMC_SIZE_4BYTE, (U1)1U,  (U1)4U,   (U1)1U,     (U1)1U, (U1)0x00U}, 
     {&u1_d_NvmcMod_ovr4bBlk8bSgl_RdnD,         vdp_PTR_NA,                   &vd_d_NvmcMod_ovr4bBlkSgl_WrD,           (U1)8U,              (U1)1U,  (U1)8U,   (U1)2U,     (U1)1U, (U1)0x00U}, 
     {&u1_d_NvmcMod_ovr4bBlk12bSgl_RdnD,        vdp_PTR_NA,                   &vd_d_NvmcMod_ovr4bBlkSgl_WrD,           (U1)12U,             (U1)1U,  (U1)12U,  (U1)3U,     (U1)1U, (U1)0x00U}, 
     {&u1_d_NvmcMod_ovr4bBlk32bSgl_RdnD,        vdp_PTR_NA,                   &vd_d_NvmcMod_ovr4bBlkSgl_WrD,           (U1)32U,             (U1)1U,  (U1)32U,  (U1)8U,     (U1)1U, (U1)0x00U}, 
     {&u1_d_NvmcMod_ovr4bBlk32bDbl_RdnD,        &u1_d_NvmcMod_Lib_PreRdnData, &vd_d_NvmcMod_ovr4bBlkDbl_WrD,           (U1)32U,             (U1)1U,  (U1)32U,  (U1)8U,     (U1)2U, (U1)0x01U}, 
-    {&u1_d_NvmcMod_ovr4bBlk28bSumSglSmll_RdnD, vdp_PTR_NA,                   &vd_d_NvmcMod_ovr4bBlk28bSumSglSmll_WrD, (U1)28U,             (U1)1U,  (U1)32U,  (U1)8U,     (U1)1U, (U1)0x00U}, 
     {&u1_d_NvmcMod_ovr4bBlk28bSumDblSmll_RdnD, &u1_d_NvmcMod_Lib_PreRdnData, &vd_d_NvmcMod_ovr4bBlk28bSumDblSmll_WrD, (U1)28U,             (U1)1U,  (U1)32U,  (U1)8U,     (U1)2U, (U1)0x01U}  
 /* END : ##TOOL_OUT#NVMC_MODULE_CFG## */
 };

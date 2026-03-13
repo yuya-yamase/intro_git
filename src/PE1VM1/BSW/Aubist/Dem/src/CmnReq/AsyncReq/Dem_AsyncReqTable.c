@@ -55,6 +55,7 @@ CONST( AB_83_ConstV Dem_AsyncReqTableType        , DEM_CONFIG_DATA ) Dem_ExecAsy
     {   &Dem_Control_InitializeEventStatus,                         DEM_CTL_STS_INIT_INITIALIZING,      ( DEM_FNCATTR_ATR_NONEED_ORDERLIST  | DEM_FNCATTR_CHK_EVTAVAILABLE  | DEM_FNCATTR_CHK_DTCSETTING  | DEM_FNCATTR_EXE_CLRDTC  | DEM_FNCATTR_NOT_UDMCLRDTC  | DEM_FNCATTR_EXE_CLRDTCEVT  | DEM_FNCATTR_EXE_UPDMONSTS ),  DEM_ASYNCDATAQUETABLEINDEX_INVALID    },  /* Dem_InitializeEventStatus        */
     {   &Dem_Control_AgingEventStatus,                              DEM_CTL_STS_INIT_INITIALIZING,      ( DEM_FNCATTR_ATR_NONEED_ORDERLIST  | DEM_FNCATTR_CHK_EVTAVAILABLE  | DEM_FNCATTR_CHK_DTCSETTING  | DEM_FNCATTR_EXE_CLRDTC  | DEM_FNCATTR_NOT_UDMCLRDTC  | DEM_FNCATTR_EXE_CLRDTCEVT  | DEM_FNCATTR_EXE_UPDMONSTS ),  DEM_ASYNCDATAQUETABLEINDEX_INVALID    },  /* Dem_AgingEventStatus             */
     {   &Dem_Control_NormalizeEventStatus,                          DEM_CTL_STS_INIT_INITIALIZING,      ( DEM_FNCATTR_ATR_NONEED_ORDERLIST  | DEM_FNCATTR_CHK_EVTAVAILABLE  | DEM_FNCATTR_CHK_DTCSETTING  | DEM_FNCATTR_EXE_CLRDTC  | DEM_FNCATTR_NOT_UDMCLRDTC  | DEM_FNCATTR_EXE_CLRDTCEVT  | DEM_FNCATTR_EXE_UPDMONSTS ),  DEM_ASYNCDATAQUETABLEINDEX_INVALID    },  /* Dem_NormalizeEventStatus         */
+    {   &Dem_Control_SetEventStatusForUserDefinedMemoryProcess,     DEM_CTL_STS_INIT_PREINIT_COMPLETE,  ( DEM_FNCATTR_ATR_NONEED_ORDERLIST  | DEM_FNCATTR_CHK_EVTAVAILABLE  | DEM_FNCATTR_NOT_DTCSETTING  | DEM_FNCATTR_NOT_CLRDTC  | DEM_FNCATTR_EXE_UDMCLRDTC  | DEM_FNCATTR_EXE_CLRDTCEVT  | DEM_FNCATTR_NOT_UPDMONSTS ),  DEM_ASYNCDATAQUETABLEINDEX_INVALID    },  /* Dem_SetEventStatus(UserDefinedMemory) */
     {   &Dem_Control_ActiveFaultEventStatus,                        DEM_CTL_STS_INIT_INITIALIZING,      ( DEM_FNCATTR_ATR_MSTFIX_ORDERLIST  | DEM_FNCATTR_CHK_EVTAVAILABLE  | DEM_FNCATTR_CHK_DTCSETTING  | DEM_FNCATTR_EXE_CLRDTC  | DEM_FNCATTR_NOT_UDMCLRDTC  | DEM_FNCATTR_EXE_CLRDTCEVT  | DEM_FNCATTR_EXE_UPDMONSTS ),  DEM_ASYNCDATAQUETABLEINDEX_INVALID    }   /* Dem_ActiveFaultEventStatus       */
 };
 
@@ -117,6 +118,7 @@ FUNC( Dem_u08_AsyncExecReturnType, DEM_CODE ) Dem_AsyncReqFnc_ForStack
     requestGenOrderListFlg = Dem_Control_InitializeEventStatus( Index, Status, DataBuffPtr );
     requestGenOrderListFlg = Dem_Control_AgingEventStatus( Index, Status, DataBuffPtr );
     requestGenOrderListFlg = Dem_Control_NormalizeEventStatus( Index, Status, DataBuffPtr );
+    requestGenOrderListFlg = Dem_Control_SetEventStatusForUserDefinedMemoryProcess( Index, Status, DataBuffPtr );
     requestGenOrderListFlg = Dem_Control_ActiveFaultEventStatus( Index, Status, DataBuffPtr );
 
     return requestGenOrderListFlg;

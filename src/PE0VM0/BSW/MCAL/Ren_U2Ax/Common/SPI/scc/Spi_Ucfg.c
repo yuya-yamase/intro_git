@@ -278,17 +278,17 @@
 
 #if (SPI_CFG_MODEC_USE == ON)
 #if (SPI_UCFG_MODEC_CHANNEL_NUM > 0)
-//Spi_ModeC_ChannelDataType		stSpi_ModeC_ChannelData[SPI_UCFG_MODEC_CHANNEL_NUM];
+Spi_ModeC_ChannelDataType		stSpi_ModeC_ChannelData[SPI_UCFG_MODEC_CHANNEL_NUM];
 #else
-//Spi_ModeC_ChannelDataType		stSpi_ModeC_ChannelData[1];
+Spi_ModeC_ChannelDataType		stSpi_ModeC_ChannelData[1];
 #endif
 #endif
 
 #if (SPI_CFG_MODEA_USE == ON)
 #if (SPI_UCFG_MODEA_CHANNEL_NUM > 0)
-//Spi_ModeA_ChannelDataType		stSpi_ModeA_ChannelData[SPI_UCFG_MODEA_CHANNEL_NUM];			/* Channel buffer information */
+Spi_ModeA_ChannelDataType		stSpi_ModeA_ChannelData[SPI_UCFG_MODEA_CHANNEL_NUM];			/* Channel buffer information */
 #else
-//Spi_ModeA_ChannelDataType		stSpi_ModeA_ChannelData[1];
+Spi_ModeA_ChannelDataType		stSpi_ModeA_ChannelData[1];
 #endif
 #endif
 

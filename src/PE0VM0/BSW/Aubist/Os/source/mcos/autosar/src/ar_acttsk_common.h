@@ -25,7 +25,7 @@
 #include "ar_kernel_impl.h"
 #include "ar_task.h"
 
-LOCAL_INLINE StatusType
+AR_LOCAL_FORCE_INLINE StatusType
 ar_activate_task_current_core(clscb_t * const clscb, const TaskType task_id,
     const mcos_id_t tid, const ar_osap_config_t * const p_osapconfig);
 
@@ -39,7 +39,7 @@ ar_activate_task_current_core(clscb_t * const clscb, const TaskType task_id,
   Return    :
   Note  :   none
  ---------------------------------------------------------------------------*/
-LOCAL_INLINE StatusType ar_activate_task_current_core(
+AR_LOCAL_FORCE_INLINE StatusType ar_activate_task_current_core(
     clscb_t * const clscb,
     const TaskType task_id,
     const mcos_id_t tid,
@@ -95,7 +95,7 @@ LOCAL_INLINE StatusType ar_activate_task_current_core(
 
 #if (AR_OS_USE_MULTICORE == STD_ON)
 
-LOCAL_INLINE StatusType ar_activate_task_internal_intercore(
+AR_LOCAL_FORCE_INLINE StatusType ar_activate_task_internal_intercore(
     const mkcb_t * const mkcb,
     clscb_t * const clscb,
     const TaskType task_id,
@@ -111,7 +111,7 @@ LOCAL_INLINE StatusType ar_activate_task_internal_intercore(
   Return    :
   Note  :   none
  ---------------------------------------------------------------------------*/
-LOCAL_INLINE StatusType ar_activate_task_internal_intercore(
+AR_LOCAL_FORCE_INLINE StatusType ar_activate_task_internal_intercore(
     const mkcb_t * const mkcb,
     clscb_t * const clscb,
     const TaskType task_id,
@@ -165,7 +165,7 @@ LOCAL_INLINE StatusType ar_activate_task_internal_intercore(
 
 #else
 
-LOCAL_INLINE StatusType ar_activate_task_internal_singlecore(
+AR_LOCAL_FORCE_INLINE StatusType ar_activate_task_internal_singlecore(
     const mkcb_t * const mkcb,
     clscb_t * const clscb,
     const TaskType task_id,
@@ -181,7 +181,7 @@ LOCAL_INLINE StatusType ar_activate_task_internal_singlecore(
   Return    :
   Note  :   none
  ---------------------------------------------------------------------------*/
-LOCAL_INLINE StatusType ar_activate_task_internal_singlecore(
+AR_LOCAL_FORCE_INLINE StatusType ar_activate_task_internal_singlecore(
     const mkcb_t * const mkcb,
     clscb_t * const clscb,
     const TaskType task_id,
@@ -211,7 +211,7 @@ LOCAL_INLINE StatusType ar_activate_task_internal_singlecore(
 #endif /* (AR_OS_USE_MULTICORE == STD_ON) */
 
 
-LOCAL_INLINE void ar_activate_task_call_errorhook(
+AR_LOCAL_FORCE_INLINE void ar_activate_task_call_errorhook(
     StatusType  status,
     clscb_t     *clscb,
     TaskType    TaskID,
@@ -220,7 +220,7 @@ LOCAL_INLINE void ar_activate_task_call_errorhook(
 /*
  * a part of ActivateTask
  */
-LOCAL_INLINE void ar_activate_task_call_errorhook(
+AR_LOCAL_FORCE_INLINE void ar_activate_task_call_errorhook(
     StatusType  status,
     clscb_t     *clscb,
     TaskType    TaskID,

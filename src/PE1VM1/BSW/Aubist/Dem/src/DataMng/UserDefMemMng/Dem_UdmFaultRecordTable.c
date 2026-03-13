@@ -38,6 +38,63 @@
 /*--------------------------------------------------------------------------*/
 /* Data                                                                     */
 /*--------------------------------------------------------------------------*/
+#define DEM_START_SEC_VAR_SAVED_ZONE
+#include <Dem_MemMap.h>
+
+VAR( Dem_UdmFaultRecordType                        ,DEM_VAR_SAVED_ZONE ) Dem_Udm_RkDemUDM_Occurrence1_FaultRecordList[ DEM_UDM_RKDEMUDM_OCCURRENCE1_FAULT_RECORD_NUM ];
+VAR( Dem_UdmFaultRecordType                        ,DEM_VAR_SAVED_ZONE ) Dem_Udm_RkDemUDM_Occurrence2_FaultRecordList[ DEM_UDM_RKDEMUDM_OCCURRENCE2_FAULT_RECORD_NUM ];
+VAR( Dem_UdmFaultRecordType                        ,DEM_VAR_SAVED_ZONE ) Dem_Udm_RkDemUDM_Occurrence2_NM_FaultRecordList[ DEM_UDM_RKDEMUDM_OCCURRENCE2_NM_FAULT_RECORD_NUM ];
+VAR( Dem_UdmFaultRecordType                        ,DEM_VAR_SAVED_ZONE ) Dem_Udm_RkDemUDM_Occurrence3_NM_FaultRecordList[ DEM_UDM_RKDEMUDM_OCCURRENCE3_NM_FAULT_RECORD_NUM ];
+VAR( Dem_UdmFaultRecordType                        ,DEM_VAR_SAVED_ZONE ) Dem_Udm_RkDemUDM_Occurrence7_NM_FaultRecordList[ DEM_UDM_RKDEMUDM_OCCURRENCE7_NM_FAULT_RECORD_NUM ];
+VAR( Dem_UdmFaultRecordType                        ,DEM_VAR_SAVED_ZONE ) Dem_Udm_RkDemUDM_Maintenance1_FaultRecordList[ DEM_UDM_RKDEMUDM_MAINTENANCE1_FAULT_RECORD_NUM ];
+VAR( Dem_UdmFaultRecordType                        ,DEM_VAR_SAVED_ZONE ) Dem_Udm_RkDemUDM_SystemOperation2_FaultRecordList[ DEM_UDM_RKDEMUDM_SYSTEMOPERATION2_FAULT_RECORD_NUM ];
+
+#define DEM_STOP_SEC_VAR_SAVED_ZONE
+#include <Dem_MemMap.h>
+
+#define DEM_START_SEC_VAR_NO_INIT
+#include <Dem_MemMap.h>
+
+VAR( Dem_u08_RecMngMtxStsType, DEM_VAR_NO_INIT ) Dem_Udm_RkDemUDM_Occurrence1_FaultNvMStatus[ DEM_UDM_RKDEMUDM_OCCURRENCE1_FAULT_RECORD_NUM ];
+VAR( Dem_u08_RecMngMtxStsType, DEM_VAR_NO_INIT ) Dem_Udm_RkDemUDM_Occurrence2_FaultNvMStatus[ DEM_UDM_RKDEMUDM_OCCURRENCE2_FAULT_RECORD_NUM ];
+VAR( Dem_u08_RecMngMtxStsType, DEM_VAR_NO_INIT ) Dem_Udm_RkDemUDM_Occurrence2_NM_FaultNvMStatus[ DEM_UDM_RKDEMUDM_OCCURRENCE2_NM_FAULT_RECORD_NUM ];
+VAR( Dem_u08_RecMngMtxStsType, DEM_VAR_NO_INIT ) Dem_Udm_RkDemUDM_Occurrence3_NM_FaultNvMStatus[ DEM_UDM_RKDEMUDM_OCCURRENCE3_NM_FAULT_RECORD_NUM ];
+VAR( Dem_u08_RecMngMtxStsType, DEM_VAR_NO_INIT ) Dem_Udm_RkDemUDM_Occurrence7_NM_FaultNvMStatus[ DEM_UDM_RKDEMUDM_OCCURRENCE7_NM_FAULT_RECORD_NUM ];
+VAR( Dem_u08_RecMngMtxStsType, DEM_VAR_NO_INIT ) Dem_Udm_RkDemUDM_Maintenance1_FaultNvMStatus[ DEM_UDM_RKDEMUDM_MAINTENANCE1_FAULT_RECORD_NUM ];
+VAR( Dem_u08_RecMngMtxStsType, DEM_VAR_NO_INIT ) Dem_Udm_RkDemUDM_SystemOperation2_FaultNvMStatus[ DEM_UDM_RKDEMUDM_SYSTEMOPERATION2_FAULT_RECORD_NUM ];
+
+#define DEM_STOP_SEC_VAR_NO_INIT
+#include <Dem_MemMap.h>
+
+#define DEM_START_SEC_CONST_CONFIG
+#include <Dem_MemMap.h>
+
+CONST( AB_83_ConstV Dem_UdmFaultRecordAccessType      ,DEM_CONFIG_DATA ) Dem_UdmFaultRecordTable[ DEM_USER_DEFINED_MEMORY_NUM ] =
+{
+    /*  DemFaultRecordListStartPtr    DemFaultRecordNum  */
+    {   &Dem_Udm_RkDemUDM_Occurrence1_FaultRecordList[0], DEM_UDM_RKDEMUDM_OCCURRENCE1_FAULT_RECORD_NUM   },
+    {   &Dem_Udm_RkDemUDM_Occurrence2_FaultRecordList[0], DEM_UDM_RKDEMUDM_OCCURRENCE2_FAULT_RECORD_NUM   },
+    {   &Dem_Udm_RkDemUDM_Occurrence2_NM_FaultRecordList[0], DEM_UDM_RKDEMUDM_OCCURRENCE2_NM_FAULT_RECORD_NUM   },
+    {   &Dem_Udm_RkDemUDM_Occurrence3_NM_FaultRecordList[0], DEM_UDM_RKDEMUDM_OCCURRENCE3_NM_FAULT_RECORD_NUM   },
+    {   &Dem_Udm_RkDemUDM_Occurrence7_NM_FaultRecordList[0], DEM_UDM_RKDEMUDM_OCCURRENCE7_NM_FAULT_RECORD_NUM   },
+    {   &Dem_Udm_RkDemUDM_Maintenance1_FaultRecordList[0], DEM_UDM_RKDEMUDM_MAINTENANCE1_FAULT_RECORD_NUM   },
+    {   &Dem_Udm_RkDemUDM_SystemOperation2_FaultRecordList[0], DEM_UDM_RKDEMUDM_SYSTEMOPERATION2_FAULT_RECORD_NUM   }
+};
+
+CONST( AB_83_ConstV Dem_UdmFaultNvMStatusType      ,DEM_CONFIG_DATA ) Dem_UdmFaultNvMStatus[ DEM_USER_DEFINED_MEMORY_NUM ] =
+{
+    /*  DemUdmFaultNvMStatusPtr DemRecMngCmnKindUdmFault  */
+    {   &Dem_Udm_RkDemUDM_Occurrence1_FaultNvMStatus[0], DEM_RECMNGCMN_KIND_UDM_RKDEMUDM_OCCURRENCE1_FAULT   },
+    {   &Dem_Udm_RkDemUDM_Occurrence2_FaultNvMStatus[0], DEM_RECMNGCMN_KIND_UDM_RKDEMUDM_OCCURRENCE2_FAULT   },
+    {   &Dem_Udm_RkDemUDM_Occurrence2_NM_FaultNvMStatus[0], DEM_RECMNGCMN_KIND_UDM_RKDEMUDM_OCCURRENCE2_NM_FAULT   },
+    {   &Dem_Udm_RkDemUDM_Occurrence3_NM_FaultNvMStatus[0], DEM_RECMNGCMN_KIND_UDM_RKDEMUDM_OCCURRENCE3_NM_FAULT   },
+    {   &Dem_Udm_RkDemUDM_Occurrence7_NM_FaultNvMStatus[0], DEM_RECMNGCMN_KIND_UDM_RKDEMUDM_OCCURRENCE7_NM_FAULT   },
+    {   &Dem_Udm_RkDemUDM_Maintenance1_FaultNvMStatus[0], DEM_RECMNGCMN_KIND_UDM_RKDEMUDM_MAINTENANCE1_FAULT   },
+    {   &Dem_Udm_RkDemUDM_SystemOperation2_FaultNvMStatus[0], DEM_RECMNGCMN_KIND_UDM_RKDEMUDM_SYSTEMOPERATION2_FAULT   }
+};
+
+#define DEM_STOP_SEC_CONST_CONFIG
+#include <Dem_MemMap.h>
 
 /*--------------------------------------------------------------------------*/
 /* Constants                                                                */

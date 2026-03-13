@@ -1517,7 +1517,7 @@ typedef struct
 #define		ADC_SFTCR_TOCEIE				(BIT6)			/* Trigger overlap check error interrupt enabled */
 	#define		ADC_SFTCR_TOCEIE_DISABLE		(0U)		/* Forbidden */
 	#define		ADC_SFTCR_TOCEIE_ENABLE			(1U)		/* Allowed */
-#define		ADC_SFTCR_RDCLRE				(BIT4)			/* LEAD & CLEAR ENABLE */
+#define		ADC_SFTCR_RDCLRE				(BIT4)			/* READ & CLEAR ENABLE */
 	#define		ADC_SFTCR_RDCLRE_DR_NOCLR		(0U)		/* ADCBmDRn or ADCBmDIRn leads and ADCBmDRn leads via IFC do not clear ADCBmDRn and ADCBmDIRn */
 	#define		ADC_SFTCR_RDCLRE_DR_CLR			(1U)		/* Clear ADCBmDRn and ADCBmDIRn with ADCBmDRn or ADCBmDIRn leads and ADCBmDRn leads via IFC */
 #define		ADC_SFTCR_OWEIE					(BIT2)			/* Overwrite error interrupt enable */

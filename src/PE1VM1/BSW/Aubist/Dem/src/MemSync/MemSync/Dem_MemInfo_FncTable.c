@@ -14,6 +14,7 @@
 /* Include Files                                                            */
 /*--------------------------------------------------------------------------*/
 #include "Dem_MemInfo_FncTable.h"
+#include "../../../../Dem/cfg/Dem_UserDefMem_Cfg.h"
 
 
 /*--------------------------------------------------------------------------*/
@@ -48,7 +49,28 @@ CONST( AB_83_ConstV Dem_MemInfoRecordDataType, DEM_CONFIG_DATA ) Dem_MemBlockRec
     {   &Dem_EventMng_GetEventIdFromRecordData                                        },
     {   &Dem_FaultMng_GetEventIdFromRecordData                                        },
     {   &Dem_FFDMng_GetEventIdFromRecordData                                          },
-    {   &Dem_ClrInfoMng_GetEventIdFromRecordData                                      }
+    {   &Dem_ClrInfoMng_GetEventIdFromRecordData                                      },
+    {   &Dem_UdmEventMng_GetEventIdFromRecordData                                     },
+    {   &Dem_UdmEventMng_GetEventIdFromRecordData                                     },
+    {   &Dem_UdmEventMng_GetEventIdFromRecordData                                     },
+    {   &Dem_UdmEventMng_GetEventIdFromRecordData                                     },
+    {   &Dem_UdmEventMng_GetEventIdFromRecordData                                     },
+    {   &Dem_UdmEventMng_GetEventIdFromRecordData                                     },
+    {   &Dem_UdmEventMng_GetEventIdFromRecordData                                     },
+    {   &Dem_UdmFaultMng_GetEventIdFromRecordData                                     },
+    {   &Dem_UdmFaultMng_GetEventIdFromRecordData                                     },
+    {   &Dem_UdmFaultMng_GetEventIdFromRecordData                                     },
+    {   &Dem_UdmFaultMng_GetEventIdFromRecordData                                     },
+    {   &Dem_UdmFaultMng_GetEventIdFromRecordData                                     },
+    {   &Dem_UdmFaultMng_GetEventIdFromRecordData                                     },
+    {   &Dem_UdmFaultMng_GetEventIdFromRecordData                                     },
+    {   &Dem_UdmFFDMng_GetEventIdFromRecordData                                       },
+    {   &Dem_UdmFFDMng_GetEventIdFromRecordData                                       },
+    {   &Dem_UdmFFDMng_GetEventIdFromRecordData                                       },
+    {   &Dem_UdmFFDMng_GetEventIdFromRecordData                                       },
+    {   &Dem_UdmFFDMng_GetEventIdFromRecordData                                       },
+    {   &Dem_UdmFFDMng_GetEventIdFromRecordData                                       },
+    {   &Dem_UdmFFDMng_GetEventIdFromRecordData                                       }
 };
 
 CONST( AB_83_ConstV Dem_u16_RecordFieldIndexType  ,DEM_CONFIG_DATA )  Dem_RecordFieldIndexTableForMemBlockRecordInfoFunc[ DEM_MM_NVM_REC_KIND_NUM ] =
@@ -56,7 +78,28 @@ CONST( AB_83_ConstV Dem_u16_RecordFieldIndexType  ,DEM_CONFIG_DATA )  Dem_Record
     DEM_RECORD_ONE_FIELD,
     DEM_RECORD_ONE_FIELD,
     DEM_RECORD_ONE_FIELD,
-    DEM_RECORD_ONE_FIELD
+    DEM_RECORD_ONE_FIELD,
+    DEM_UDM_RKDEMUDM_OCCURRENCE1_KIND_INDEX,
+    DEM_UDM_RKDEMUDM_OCCURRENCE2_KIND_INDEX,
+    DEM_UDM_RKDEMUDM_OCCURRENCE2_NM_KIND_INDEX,
+    DEM_UDM_RKDEMUDM_OCCURRENCE3_NM_KIND_INDEX,
+    DEM_UDM_RKDEMUDM_OCCURRENCE7_NM_KIND_INDEX,
+    DEM_UDM_RKDEMUDM_MAINTENANCE1_KIND_INDEX,
+    DEM_UDM_RKDEMUDM_SYSTEMOPERATION2_KIND_INDEX,
+    DEM_UDM_RKDEMUDM_OCCURRENCE1_KIND_INDEX,
+    DEM_UDM_RKDEMUDM_OCCURRENCE2_KIND_INDEX,
+    DEM_UDM_RKDEMUDM_OCCURRENCE2_NM_KIND_INDEX,
+    DEM_UDM_RKDEMUDM_OCCURRENCE3_NM_KIND_INDEX,
+    DEM_UDM_RKDEMUDM_OCCURRENCE7_NM_KIND_INDEX,
+    DEM_UDM_RKDEMUDM_MAINTENANCE1_KIND_INDEX,
+    DEM_UDM_RKDEMUDM_SYSTEMOPERATION2_KIND_INDEX,
+    DEM_UDM_RKDEMUDM_OCCURRENCE1_KIND_INDEX,
+    DEM_UDM_RKDEMUDM_OCCURRENCE2_KIND_INDEX,
+    DEM_UDM_RKDEMUDM_OCCURRENCE2_NM_KIND_INDEX,
+    DEM_UDM_RKDEMUDM_OCCURRENCE3_NM_KIND_INDEX,
+    DEM_UDM_RKDEMUDM_OCCURRENCE7_NM_KIND_INDEX,
+    DEM_UDM_RKDEMUDM_MAINTENANCE1_KIND_INDEX,
+    DEM_UDM_RKDEMUDM_SYSTEMOPERATION2_KIND_INDEX
 };
 
 #define DEM_STOP_SEC_CONST_CONFIG
@@ -95,6 +138,27 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_GetEventIdFromRecordDataFnc_For
     retVal = Dem_FaultMng_GetEventIdFromRecordData( RecordFieldIndex, RecordIndex, EventIdPtr );
     retVal = Dem_FFDMng_GetEventIdFromRecordData( RecordFieldIndex, RecordIndex, EventIdPtr );
     retVal = Dem_ClrInfoMng_GetEventIdFromRecordData( RecordFieldIndex, RecordIndex, EventIdPtr );
+    retVal = Dem_UdmEventMng_GetEventIdFromRecordData( RecordFieldIndex, RecordIndex, EventIdPtr );
+    retVal = Dem_UdmEventMng_GetEventIdFromRecordData( RecordFieldIndex, RecordIndex, EventIdPtr );
+    retVal = Dem_UdmEventMng_GetEventIdFromRecordData( RecordFieldIndex, RecordIndex, EventIdPtr );
+    retVal = Dem_UdmEventMng_GetEventIdFromRecordData( RecordFieldIndex, RecordIndex, EventIdPtr );
+    retVal = Dem_UdmEventMng_GetEventIdFromRecordData( RecordFieldIndex, RecordIndex, EventIdPtr );
+    retVal = Dem_UdmEventMng_GetEventIdFromRecordData( RecordFieldIndex, RecordIndex, EventIdPtr );
+    retVal = Dem_UdmEventMng_GetEventIdFromRecordData( RecordFieldIndex, RecordIndex, EventIdPtr );
+    retVal = Dem_UdmFaultMng_GetEventIdFromRecordData( RecordFieldIndex, RecordIndex, EventIdPtr );
+    retVal = Dem_UdmFaultMng_GetEventIdFromRecordData( RecordFieldIndex, RecordIndex, EventIdPtr );
+    retVal = Dem_UdmFaultMng_GetEventIdFromRecordData( RecordFieldIndex, RecordIndex, EventIdPtr );
+    retVal = Dem_UdmFaultMng_GetEventIdFromRecordData( RecordFieldIndex, RecordIndex, EventIdPtr );
+    retVal = Dem_UdmFaultMng_GetEventIdFromRecordData( RecordFieldIndex, RecordIndex, EventIdPtr );
+    retVal = Dem_UdmFaultMng_GetEventIdFromRecordData( RecordFieldIndex, RecordIndex, EventIdPtr );
+    retVal = Dem_UdmFaultMng_GetEventIdFromRecordData( RecordFieldIndex, RecordIndex, EventIdPtr );
+    retVal = Dem_UdmFFDMng_GetEventIdFromRecordData( RecordFieldIndex, RecordIndex, EventIdPtr );
+    retVal = Dem_UdmFFDMng_GetEventIdFromRecordData( RecordFieldIndex, RecordIndex, EventIdPtr );
+    retVal = Dem_UdmFFDMng_GetEventIdFromRecordData( RecordFieldIndex, RecordIndex, EventIdPtr );
+    retVal = Dem_UdmFFDMng_GetEventIdFromRecordData( RecordFieldIndex, RecordIndex, EventIdPtr );
+    retVal = Dem_UdmFFDMng_GetEventIdFromRecordData( RecordFieldIndex, RecordIndex, EventIdPtr );
+    retVal = Dem_UdmFFDMng_GetEventIdFromRecordData( RecordFieldIndex, RecordIndex, EventIdPtr );
+    retVal = Dem_UdmFFDMng_GetEventIdFromRecordData( RecordFieldIndex, RecordIndex, EventIdPtr );
 
     return retVal;
 }

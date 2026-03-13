@@ -25,29 +25,6 @@
 #ifndef OS_CFG_INTERNAL_H
 #define OS_CFG_INTERNAL_H
 
-/*
- * Function Prototypes
- */
-#define OS_START_SEC_CODE_GLOBAL
-#include "Os_MemMap.h"
-extern TASK(eMCOS_TASK_High);
-extern TASK(eMCOS_TASK_Idle);
-extern TASK(eMCOS_TASK_Medium);
-#define OS_STOP_SEC_CODE_GLOBAL
-#include "Os_MemMap.h"
-
-
-#define OS_START_SEC_CODE_GLOBAL
-#include "Os_MemMap.h"
-extern ISR(eMCOS_ISR_INTSDMAC1CH0);
-extern ISR(eMCOS_ISR_INTOSTM0TINT);
-extern ISR(eMCOS_ISR_INTOSTM6TINT);
-extern ISR(eMCOS_ISR_INTSDMAC1CH1);
-extern ISR(eMCOS_ISR_INTSDMAC1CH2);
-#define OS_STOP_SEC_CODE_GLOBAL
-#include "Os_MemMap.h"
-
-
 
 /*
  * Category 2 ISR control blocks
@@ -57,7 +34,7 @@ extern ISR(eMCOS_ISR_INTSDMAC1CH2);
 #define OS_START_SEC_VAR_LOCAL0_NO_INIT_32
 #include "Os_MemMap.h"
 
-extern ar_isrcb_t ar_isrcb_eMCOS_ISR_INTSDMAC1CH0;
+extern ar_isrcb_t ar_isrcb_eMCOS_ISR_INTSDMAC0CH7;
 
 #define OS_STOP_SEC_VAR_LOCAL0_NO_INIT_32
 #include "Os_MemMap.h"
@@ -81,29 +58,11 @@ extern ar_isrcb_t ar_isrcb_eMCOS_ISR_INTOSTM6TINT;
 #include "Os_MemMap.h"
 
 
-#define OS_START_SEC_VAR_LOCAL0_NO_INIT_32
-#include "Os_MemMap.h"
-
-extern ar_isrcb_t ar_isrcb_eMCOS_ISR_INTSDMAC1CH1;
-
-#define OS_STOP_SEC_VAR_LOCAL0_NO_INIT_32
-#include "Os_MemMap.h"
-
-
-#define OS_START_SEC_VAR_LOCAL0_NO_INIT_32
-#include "Os_MemMap.h"
-
-extern ar_isrcb_t ar_isrcb_eMCOS_ISR_INTSDMAC1CH2;
-
-#define OS_STOP_SEC_VAR_LOCAL0_NO_INIT_32
-#include "Os_MemMap.h"
-
-
 
 
 #endif /* OS_CFG_INTERNAL_H */
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
 /*  Framework          :v2-1-0                                              */
-/*  BSW plug-in        :v2-0-0                                              */
+/*  BSW plug-in        :v2-1-0                                              */
 /****************************************************************************/

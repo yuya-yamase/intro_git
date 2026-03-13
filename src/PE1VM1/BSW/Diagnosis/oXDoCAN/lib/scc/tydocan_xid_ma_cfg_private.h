@@ -74,6 +74,7 @@ typedef struct{
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 void    vd_g_TyDoCANXidMaInit(void);
 void    vd_g_TyDoCANXidMaMainTask(const ST_OXDC_REQ * st_ap_REQ);
+U1      u1_g_oXDoCANDtcTrchk_U13A0(const U2 u2_a_ELPSD);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 U1      u1_g_oXDoCANRebyId_A901(U1 * u1_ap_ans, const U2 u2_a_ELPSD);         /* Safe Key Number */

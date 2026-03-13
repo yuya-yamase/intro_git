@@ -38,6 +38,9 @@ MCOS_INLINE void mcos_spinlock_init_inline(
 MCOS_INLINE void mcos_spinlock_get_enaint_inline(
     mcos_spinlock_obj_t * const lockobj);
 
+MCOS_INLINE void mcos_spinlock_get_inline(
+    mcos_spinlock_obj_t * const lockobj);
+
 MCOS_INLINE void mcos_spinlock_release_inline(
     mcos_spinlock_obj_t * const lockobj);
 MCOS_INLINE mcos_bool_t mcos_spinlock_try_to_get_inline(
@@ -127,6 +130,71 @@ mcos_spinlock_get_enaint_inline(
 
                 /* enable interrupt */
                 ar_spinlock_enaint();
+
+                if( CHECK_BIT((uint32_t)(lockobj->ticket.tickets.next_ticket), my_coreno) == (uint32_t)0)
+                {
+                    /* continue RETRY loop; */
+                    retry = (mcos_bool_t)mcos_true;
+                }
+                else
+                {
+                    /* Nothing to do */
+                }
+            }
+        }
+    } while(retry != (mcos_bool_t)mcos_false);
+}
+
+
+ /*---------------------------------------------------------------------------
+  mcos_spinlock_get_inline
+
+  Input     :   lockobj    pointer to lock object
+  Output    :   none
+  Return    :   none
+  Note  :   none
+ ---------------------------------------------------------------------------*/
+
+MCOS_INLINE void
+mcos_spinlock_get_inline(
+    mcos_spinlock_obj_t * const lockobj)
+{
+    uint32_t    my_coreno;
+    uint32_t    read_spinlock;
+    mcos_spinlock_ticket_t cur_ticket;
+    mcos_bool_t  retry;
+
+    my_coreno = (uint32_t)(hal_cpu_getCoreNumber());
+
+    /* RETRY loop */
+    do {
+        retry = (mcos_bool_t)mcos_false;
+
+        /* set my ticket */
+        read_spinlock = mcos_spinlock_atomic_bitset(&lockobj->ticket, (uint32_t)((uint32_t)1U << (my_coreno + BITOFFSET_NEXT_TICKET)));
+
+        if (read_spinlock == (uint32_t)0)
+        {
+         /* Now my core locks this spinlock. */
+            mcos_spinlock_atomic_write_now_serving(&lockobj->ticket, (uint32_t)CPUNO2LCID(my_coreno));
+        }
+        else
+        {
+            /* spin-wait */
+            while(retry == (mcos_bool_t)mcos_false)
+            {
+                mcos_hwl_memory_barrier();
+
+                cur_ticket.spinlock = lockobj->ticket.spinlock;
+
+                if ((uint32_t)(cur_ticket.tickets.now_serving) == (uint32_t)CPUNO2LCID(my_coreno))
+                {
+                    break;
+                }
+                else
+                {
+                    /* Nothing to do */
+                }
 
                 if( CHECK_BIT((uint32_t)(lockobj->ticket.tickets.next_ticket), my_coreno) == (uint32_t)0)
                 {

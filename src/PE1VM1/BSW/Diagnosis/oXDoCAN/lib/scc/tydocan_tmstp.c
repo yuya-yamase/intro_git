@@ -46,7 +46,7 @@
 #define OXDC_TMSTP_BR_UNK                       (0x0000U)
 #define OXDC_TMSTP_BR_LAS                       (0x5aa5U)
 
-#define OXDC_TMSTP_NVM_SIZE                     (28U)
+#define OXDC_TMSTP_NVM_SIZE                     (8U)
 #define OXDC_TMSTP_NVM_TRIC_IDX_2ND             (0U)
 #define OXDC_TMSTP_NVM_TRIC_IDX_1ST             (1U)
 #define OXDC_TMSTP_NVM_TIMC_IDX_4TH             (2U)

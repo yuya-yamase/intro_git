@@ -317,6 +317,38 @@ U1      u1_g_oXDoCANDtcTrchk_B1511(const U2 u2_a_ELPSD);
 U1      u1_g_oXDoCANDtcTrchk_B1518(const U2 u2_a_ELPSD);
 U1      u1_g_oXDoCANDtcTrchk_B1519(const U2 u2_a_ELPSD);
 U1      u1_g_oXDoCANDtcTrchk_B151A(const U2 u2_a_ELPSD);
+U1      u1_g_oXDoCANDtcTrchk_U2A00(const U2 u2_a_ELPSD);
+U1      u1_g_oXDoCANDtcTrchk_U2A01(const U2 u2_a_ELPSD);
+U1      u1_g_oXDoCANDtcTrchk_U2A16(const U2 u2_a_ELPSD);
+U1      u1_g_oXDoCANDtcTrchk_U2A17(const U2 u2_a_ELPSD);
+U1      u1_g_oXDoCANDtcTrchk_U2A12(const U2 u2_a_ELPSD);
+U1      u1_g_oXDoCANDtcTrchk_U2A13(const U2 u2_a_ELPSD);
+U1      u1_g_oXDoCANDtcTrchk_U2303(const U2 u2_a_ELPSD);
+U1      u1_g_oXDoCANDtcTrchk_U2302(const U2 u2_a_ELPSD);
+U1      u1_g_oXDoCANDtcTrchk_U13A0(const U2 u2_a_ELPSD);
+U1      u1_g_oXDoCANDtcTrchk_U2300(const U2 u2_a_ELPSD);
+U1      u1_g_oXDoCANDtcTrchk_U2301(const U2 u2_a_ELPSD);
+U1      u1_g_oXDoCANDtcTrchk_B2E01(const U2 u2_a_ELPSD);
+U1      u1_g_oXDoCANDtcTrchk_B2E02(const U2 u2_a_ELPSD);
+U1      u1_g_oXDoCANDtcTrchk_B2E03(const U2 u2_a_ELPSD);
+U1      u1_g_oXDoCANDtcTrchk_B2E04(const U2 u2_a_ELPSD);
+U1      u1_g_oXDoCANDtcTrchk_B2E05(const U2 u2_a_ELPSD);
+U1      u1_g_oXDoCANDtcTrchk_B2E06(const U2 u2_a_ELPSD);
+U1      u1_g_oXDoCANDtcTrchk_B2E07(const U2 u2_a_ELPSD);
+U1      u1_g_oXDoCANDtcTrchk_B2E08(const U2 u2_a_ELPSD);
+U1      u1_g_oXDoCANDtcTrchk_B2E12(const U2 u2_a_ELPSD);
+U1      u1_g_oXDoCANDtcTrchk_B2E15(const U2 u2_a_ELPSD);
+U1      u1_g_oXDoCANDtcTrchk_B2E20(const U2 u2_a_ELPSD);
+U1      u1_g_oXDoCANDtcTrchk_B2E22(const U2 u2_a_ELPSD);
+U1      u1_g_oXDoCANDtcTrchk_B2E23(const U2 u2_a_ELPSD);
+U1      u1_g_oXDoCANDtcTrchk_B2E24(const U2 u2_a_ELPSD);
+U1      u1_g_oXDoCANDtcTrchk_B2E25(const U2 u2_a_ELPSD);
+U1      u1_g_oXDoCANDtcTrchk_B2E26(const U2 u2_a_ELPSD);
+U1      u1_g_oXDoCANDtcTrchk_B2E27(const U2 u2_a_ELPSD);
+U1      u1_g_oXDoCANDtcTrchk_B2E28(const U2 u2_a_ELPSD);
+U1      u1_g_oXDoCANDtcTrchk_B2E29(const U2 u2_a_ELPSD);
+U1      u1_g_oXDoCANDtcTrchk_B2E30(const U2 u2_a_ELPSD);
+
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  oxdocan_xid_cfg.c / st_gp_OXDC_DATA_XID[].fp_u1_SUP                                                                              */

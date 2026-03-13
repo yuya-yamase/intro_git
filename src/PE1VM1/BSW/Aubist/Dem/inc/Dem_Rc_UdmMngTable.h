@@ -36,6 +36,28 @@
 /*--------------------------------------------------------------------------*/
 /* Data                                                                     */
 /*--------------------------------------------------------------------------*/
+#define DEM_START_SEC_CONST_CONFIG
+#include <Dem_MemMap.h>
+
+extern CONST( AB_83_ConstV Dem_UdmExcFncType           ,DEM_CONFIG_DATA )  Dem_UdmExcFncTable[ DEM_USER_DEFINED_MEMORY_NUM ];
+
+#define DEM_STOP_SEC_CONST_CONFIG
+#include <Dem_MemMap.h>
+
+
+#define DEM_START_SEC_CODE
+#include <Dem_MemMap.h>
+
+#ifndef JGXSTACK
+#else /* JGXSTACK */
+FUNC( void, DEM_CODE ) Dem_UdmExcEnterFnc_ForStack
+( void );
+FUNC( void, DEM_CODE ) Dem_UdmExcExitFnc_ForStack
+( void );
+#endif /* JGXSTACK */
+
+#define DEM_STOP_SEC_CODE
+#include <Dem_MemMap.h>
 
 
 #endif /* DEM_RC_UDMMNGTABLE_H */

@@ -37,6 +37,28 @@
 /*--------------------------------------------------------------------------*/
 /* Data                                                                     */
 /*--------------------------------------------------------------------------*/
+#define DEM_START_SEC_VAR_NO_INIT
+#include <Dem_MemMap.h>
+
+extern VAR( Dem_u08_RecMngMtxStsType                         ,DEM_VAR_NO_INIT ) Dem_Udm_RkDemUDM_Occurrence1_EventNvMStatus[ DEM_UDM_RKDEMUDM_OCCURRENCE1_EVENT_RECORD_NUM ];
+extern VAR( Dem_u08_RecMngMtxStsType                         ,DEM_VAR_NO_INIT ) Dem_Udm_RkDemUDM_Occurrence2_EventNvMStatus[ DEM_UDM_RKDEMUDM_OCCURRENCE2_EVENT_RECORD_NUM ];
+extern VAR( Dem_u08_RecMngMtxStsType                         ,DEM_VAR_NO_INIT ) Dem_Udm_RkDemUDM_Occurrence2_NM_EventNvMStatus[ DEM_UDM_RKDEMUDM_OCCURRENCE2_NM_EVENT_RECORD_NUM ];
+extern VAR( Dem_u08_RecMngMtxStsType                         ,DEM_VAR_NO_INIT ) Dem_Udm_RkDemUDM_Occurrence3_NM_EventNvMStatus[ DEM_UDM_RKDEMUDM_OCCURRENCE3_NM_EVENT_RECORD_NUM ];
+extern VAR( Dem_u08_RecMngMtxStsType                         ,DEM_VAR_NO_INIT ) Dem_Udm_RkDemUDM_Occurrence7_NM_EventNvMStatus[ DEM_UDM_RKDEMUDM_OCCURRENCE7_NM_EVENT_RECORD_NUM ];
+extern VAR( Dem_u08_RecMngMtxStsType                         ,DEM_VAR_NO_INIT ) Dem_Udm_RkDemUDM_Maintenance1_EventNvMStatus[ DEM_UDM_RKDEMUDM_MAINTENANCE1_EVENT_RECORD_NUM ];
+extern VAR( Dem_u08_RecMngMtxStsType                         ,DEM_VAR_NO_INIT ) Dem_Udm_RkDemUDM_SystemOperation2_EventNvMStatus[ DEM_UDM_RKDEMUDM_SYSTEMOPERATION2_EVENT_RECORD_NUM ];
+
+#define DEM_STOP_SEC_VAR_NO_INIT
+#include <Dem_MemMap.h>
+
+#define DEM_START_SEC_CONST_CONFIG
+#include <Dem_MemMap.h>
+
+extern CONST( AB_83_ConstV Dem_UdmEventRecordAccessType      ,DEM_CONFIG_DATA ) Dem_UdmEventRecordTable[ DEM_USER_DEFINED_MEMORY_NUM ];
+extern CONST( AB_83_ConstV Dem_UdmEventNvMStatusType         ,DEM_CONFIG_DATA ) Dem_UdmEventNvMStatus[ DEM_USER_DEFINED_MEMORY_NUM ];
+
+#define DEM_STOP_SEC_CONST_CONFIG
+#include <Dem_MemMap.h>
 
 #endif /* DEM_RC_UDMEVENTRECORDTABLE_H */
 

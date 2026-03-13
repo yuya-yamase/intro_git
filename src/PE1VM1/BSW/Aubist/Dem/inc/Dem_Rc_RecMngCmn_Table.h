@@ -30,10 +30,32 @@
 #define DEM_RECMNGCMN_KIND_FFD              ((Dem_u16_RecordKindIndexType)1U)
 #define DEM_RECMNGCMN_KIND_FAULT            ((Dem_u16_RecordKindIndexType)2U)
 #define DEM_RECMNGCMN_KIND_EVENT            ((Dem_u16_RecordKindIndexType)3U)
+#define DEM_RECMNGCMN_KIND_UDM_RKDEMUDM_OCCURRENCE1_FFD         ((Dem_u16_RecordKindIndexType)4U)
+#define DEM_RECMNGCMN_KIND_UDM_RKDEMUDM_OCCURRENCE2_FFD         ((Dem_u16_RecordKindIndexType)5U)
+#define DEM_RECMNGCMN_KIND_UDM_RKDEMUDM_OCCURRENCE2_NM_FFD         ((Dem_u16_RecordKindIndexType)6U)
+#define DEM_RECMNGCMN_KIND_UDM_RKDEMUDM_OCCURRENCE3_NM_FFD         ((Dem_u16_RecordKindIndexType)7U)
+#define DEM_RECMNGCMN_KIND_UDM_RKDEMUDM_OCCURRENCE7_NM_FFD         ((Dem_u16_RecordKindIndexType)8U)
+#define DEM_RECMNGCMN_KIND_UDM_RKDEMUDM_MAINTENANCE1_FFD         ((Dem_u16_RecordKindIndexType)9U)
+#define DEM_RECMNGCMN_KIND_UDM_RKDEMUDM_SYSTEMOPERATION2_FFD         ((Dem_u16_RecordKindIndexType)10U)
+#define DEM_RECMNGCMN_KIND_UDM_RKDEMUDM_OCCURRENCE1_FAULT       ((Dem_u16_RecordKindIndexType)11U)
+#define DEM_RECMNGCMN_KIND_UDM_RKDEMUDM_OCCURRENCE2_FAULT       ((Dem_u16_RecordKindIndexType)12U)
+#define DEM_RECMNGCMN_KIND_UDM_RKDEMUDM_OCCURRENCE2_NM_FAULT       ((Dem_u16_RecordKindIndexType)13U)
+#define DEM_RECMNGCMN_KIND_UDM_RKDEMUDM_OCCURRENCE3_NM_FAULT       ((Dem_u16_RecordKindIndexType)14U)
+#define DEM_RECMNGCMN_KIND_UDM_RKDEMUDM_OCCURRENCE7_NM_FAULT       ((Dem_u16_RecordKindIndexType)15U)
+#define DEM_RECMNGCMN_KIND_UDM_RKDEMUDM_MAINTENANCE1_FAULT       ((Dem_u16_RecordKindIndexType)16U)
+#define DEM_RECMNGCMN_KIND_UDM_RKDEMUDM_SYSTEMOPERATION2_FAULT       ((Dem_u16_RecordKindIndexType)17U)
+#define DEM_RECMNGCMN_KIND_UDM_RKDEMUDM_OCCURRENCE1_EVENT       ((Dem_u16_RecordKindIndexType)18U)
+#define DEM_RECMNGCMN_KIND_UDM_RKDEMUDM_OCCURRENCE2_EVENT       ((Dem_u16_RecordKindIndexType)19U)
+#define DEM_RECMNGCMN_KIND_UDM_RKDEMUDM_OCCURRENCE2_NM_EVENT       ((Dem_u16_RecordKindIndexType)20U)
+#define DEM_RECMNGCMN_KIND_UDM_RKDEMUDM_OCCURRENCE3_NM_EVENT       ((Dem_u16_RecordKindIndexType)21U)
+#define DEM_RECMNGCMN_KIND_UDM_RKDEMUDM_OCCURRENCE7_NM_EVENT       ((Dem_u16_RecordKindIndexType)22U)
+#define DEM_RECMNGCMN_KIND_UDM_RKDEMUDM_MAINTENANCE1_EVENT       ((Dem_u16_RecordKindIndexType)23U)
+#define DEM_RECMNGCMN_KIND_UDM_RKDEMUDM_SYSTEMOPERATION2_EVENT       ((Dem_u16_RecordKindIndexType)24U)
 
-#define DEM_RECMNGCMN_KIND_MAX              ((Dem_u16_RecordKindIndexType)4U)
+#define DEM_RECMNGCMN_KIND_MAX              ((Dem_u16_RecordKindIndexType)25U)
 
 #define DEM_RECMNGCMN_CLRRECKIND_NUM        ((Dem_u16_RecordKindIndexType)3U)
+#define DEM_UDMRECMNGCMN_CLRRECKIND_NUM     ((Dem_u16_RecordKindIndexType)21U)
 
 
 /*--------------------------------------------------------------------------*/
@@ -82,6 +104,13 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_RecMngClrNotVerifiedRecordFunc_
     P2VAR( Dem_u16_RecordIndexType, AUTOMATIC, AUTOMATIC ) ClearRecordIndexPtr,
     P2VAR( Dem_u32_TotalRecordNumType, AUTOMATIC, AUTOMATIC ) RestOfProcessableNumPtr
 );
+
+FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmRecMngClrNotVerifiedRecordFunc_ForStack
+(
+    VAR( Dem_u16_RecordFieldIndexType, AUTOMATIC ) RecordFieldIndex,
+    P2VAR( Dem_u16_RecordIndexType, AUTOMATIC, AUTOMATIC ) ClearRecordIndexPtr,
+    P2VAR( Dem_u32_TotalRecordNumType, AUTOMATIC, AUTOMATIC ) RestOfProcessableNumPtr
+);
 #endif /* JGXSTACK */
 
 #define DEM_STOP_SEC_CODE
@@ -102,6 +131,7 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_RecMngClrNotVerifiedRecordFunc_
 extern CONST( AB_83_ConstV Dem_RecordInitInfoType         ,DEM_CONFIG_DATA )  Dem_RecordInitFuncTable[DEM_RECMNGCMN_KIND_MAX];
 extern CONST( AB_83_ConstV Dem_NvMWriteInfoType           ,DEM_CONFIG_DATA )  Dem_NvMWriteInfo[DEM_RECMNGCMN_KIND_MAX];
 extern CONST( AB_83_ConstV Dem_u16_RecordFieldIndexType   ,DEM_CONFIG_DATA )  Dem_RecordFieldIndexTableForMemSyncFunc[ DEM_RECMNGCMN_KIND_MAX ];
+extern CONST( AB_83_ConstV Dem_u16_RecordFieldIndexType   ,DEM_CONFIG_DATA )  Dem_RecordFieldIndexTableForUdmClrNotVerifiedRecordFunc[ DEM_UDMRECMNGCMN_CLRRECKIND_NUM ];
 
 extern CONST( AB_83_ConstV Dem_u16_RecordKindIndexType    ,DEM_CONFIG_DATA )  Dem_RecMngCmnKindClrInfo;
 extern CONST( AB_83_ConstV Dem_u16_RecordKindIndexType    ,DEM_CONFIG_DATA )  Dem_RecMngCmnKindFFD;
@@ -111,8 +141,10 @@ extern CONST( AB_83_ConstV Dem_u16_RecordKindIndexType    ,DEM_CONFIG_DATA )  De
 extern CONST( AB_83_ConstV Dem_u16_RecordKindIndexType    ,DEM_CONFIG_DATA )  Dem_RecMngCmnKindMax;
 
 extern CONST( AB_83_ConstV DemClrNotVerifiedRecordFuncPtr    ,DEM_CONFIG_DATA ) Dem_ClrNotVerifiedRecordFuncTable[ DEM_RECMNGCMN_CLRRECKIND_NUM ];
+extern CONST( AB_83_ConstV DemUdmClrNotVerifiedRecordFuncPtr ,DEM_CONFIG_DATA ) Dem_UdmClrNotVerifiedRecordFuncTable[ DEM_UDMRECMNGCMN_CLRRECKIND_NUM ];
 
 extern CONST( AB_83_ConstV Dem_u16_RecordKindIndexType       ,DEM_CONFIG_DATA ) Dem_RecMngCmnClrRecKindNum;
+extern CONST( AB_83_ConstV Dem_u16_RecordKindIndexType       ,DEM_CONFIG_DATA ) Dem_UdmRecMngCmnClrRecKindNum;
 
 #define DEM_STOP_SEC_CONST_CONFIG
 #include <Dem_MemMap.h>

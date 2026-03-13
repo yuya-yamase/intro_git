@@ -79,9 +79,6 @@
 ###    -I../../src/PE0VM0/BSW/Aubist/Fls/cfg
 ###    -I../../src/PE0VM0/BSW/Aubist/Fls/inc
 ###    -I../../src/PE0VM0/BSW/Aubist/Fls/usr
-    -I../../src/PE0VM0/BSW/Aubist/IdsM/cfg
-    -I../../src/PE0VM0/BSW/Aubist/IdsM/inc
-    -I../../src/PE0VM0/BSW/Aubist/IdsM/usr
 ###    -I../../src/PE0VM0/BSW/Aubist/inc                    should be defined as first in order to reduce compilation time
 ###    -I../../src/PE0VM0/BSW/Aubist/inc/bswm_can
 ###    -I../../src/PE0VM0/BSW/Aubist/inc/bswm_cs
@@ -159,10 +156,10 @@
     -I../../src/PE0VM0/BSW/Aubist/Os/source/mcos/mk/sys/arch/v850
 ###    -I../../src/PE0VM0/BSW/Aubist/PduR/cfg
 ###    -I../../src/PE0VM0/BSW/Aubist/PduR/inc
-###    -I../../src/PE0VM0/BSW/Aubist/SecOC/cfg
-###    -I../../src/PE0VM0/BSW/Aubist/SecOC/inc
-###    -I../../src/PE0VM0/BSW/Aubist/SecOC/usr
-###    -I../../src/PE0VM0/BSW/Aubist/SecOC_CD_FV/inc
+    -I../../src/PE0VM0/BSW/Aubist/SecOC/cfg
+    -I../../src/PE0VM0/BSW/Aubist/SecOC/inc
+    -I../../src/PE0VM0/BSW/Aubist/SecOC/usr
+    -I../../src/PE0VM0/BSW/Aubist/SecOC_CD_FV/inc
     -I../../src/PE0VM0/BSW/Aubist/VCan/cfg
     -I../../src/PE0VM0/BSW/Aubist/VCan/inc
     -I../../src/PE0VM0/BSW/Communication/CANLpR/config
@@ -239,7 +236,7 @@
     -I../../src/PE0VM0/LIB/Ren_G4MH/scc
 
 # ----------------------------------------------------------------------------------------------------------------------------------
-# ghsprj version 1-0-0
-# Date generated: 2025/11/27 07:51:42
+# ghsprj version 1-1-0
+# Date generated: 2026/01/22 23:22:22
 # ----------------------------------------------------------------------------------------------------------------------------------
 

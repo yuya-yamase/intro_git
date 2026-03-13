@@ -1,4 +1,4 @@
-/* Dma-r04-3000-0100-a-v01 */
+/* Dma-r04-3000-0200-b-v00 */
 /************************************************************************************************/
 /*																								*/
 /*		MCAL DMA Driver																			*/
@@ -604,7 +604,9 @@ void	Dma_DeInit( void )
 
 }
 
-#if ( DMA_CFG_GLOBAL_REG_CONTROL == STD_ON )
+#if ( ( DMA_CFG_GLOBAL_REG_CONTROL == STD_ON ) \
+  ||  ( DMA_CFG_DMA0_ACCESS == STD_ON ) \
+  ||  ( DMA_CFG_DMA1_ACCESS == STD_ON ) )
 #if ( DMA_CFG_REG_CHK == STD_ON )
 /*----------------------------------------------------------------------------------------------*/
 /*	Regchk Function																				*/
@@ -613,23 +615,26 @@ void	Dma_DeInit( void )
 /*----------------------------------------------------------------------------------------------*/
 uint32	Dma_Regchk_All( void )
 {
+#if ( DMA_CFG_GLOBAL_REG_CONTROL == STD_ON )
 	const	Dma_ChDataDefType*	t_pcstChDataConfig;
 	sint32		i;
 	uint8		t_u1DmaType;				/* DMA Type */
 	uint8		t_u1ChDataNum;				/* Number of DMA logical CH numbers */
+#endif
 	uint32		t_u4RegError; 				/* Register error status */
 
+	t_u4RegError = DMA_REGCHK_OK + DMA_REGCHK_RESULT_DUMMY_BIT;
+
+#if ( DMA_CFG_GLOBAL_REG_CONTROL == STD_ON )
 	t_u1ChDataNum = cstDma_UcfgData.u1ChDataNum;			/* Number of DMA logical CH numbers */
 
 #if (MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2B)
 	/* Check DMAC Redundant Channel Select Register */ 
-	t_u4RegError = Pil_Dmac_CheckRCHSReg();
-
+	t_u4RegError |= Pil_Dmac_CheckRCHSReg();
+#endif
 	/* Check DTS INTC Register for interrupt enabling */ 
 	t_u4RegError |= Pil_Dts_CheckIntcReg();	
-#else
-	t_u4RegError = Pil_Dts_CheckIntcReg();	
-#endif
+
 	for( i = (sint32)0; (i < (sint32)t_u1ChDataNum); i++ )
 	{
 		/* Get CH information from DMA logic CH */
@@ -646,6 +651,16 @@ uint32	Dma_Regchk_All( void )
 			t_u4RegError |= Pil_Dmac_CheckTransReqGroup( t_pcstChDataConfig->u2DmaReq, t_u1DmaType );
 		}
 	}
+	/* Check DTS SPID */
+	t_u4RegError |= Pil_Dts_CheckReg_ASIL();
+#endif
+
+#if (( DMA_CFG_DMA0_ACCESS == STD_ON ) || ( DMA_CFG_DMA1_ACCESS == STD_ON ))
+	/* Check DMAC SPID */ 
+	t_u4RegError |= Pil_Dmac_CheckReg_ASIL();
+#endif
+
+	t_u4RegError &= ~DMA_REGCHK_RESULT_DUMMY_BIT;
 
 	return(t_u4RegError);
 }
@@ -670,7 +685,9 @@ void	Dma_Interrupt( uint8 t_u1ChDataID )
 	}
 }
 
-#if ( DMA_CFG_GLOBAL_REG_CONTROL == STD_ON )
+#if ( ( DMA_CFG_GLOBAL_REG_CONTROL == STD_ON ) \
+  ||  ( DMA_CFG_DMA0_ACCESS == STD_ON ) \
+  ||  ( DMA_CFG_DMA1_ACCESS == STD_ON ) )
 /*----------------------------------------------------------------------------------------------*/
 /*	DMA Set Master Channel Function																*/
 /*	return		: none																			*/
@@ -679,7 +696,13 @@ void	Dma_Interrupt( uint8 t_u1ChDataID )
 void	Dma_SetMasterCh( void )
 {
 	/* Set SPID on all channels with the idea of functional safety. */
+#if ( DMA_CFG_GLOBAL_REG_CONTROL == STD_ON )
 	Pil_Dts_SetMasterCh();	/* DTS Master CH Settings */
+#endif
+
+#if (( DMA_CFG_DMA0_ACCESS == STD_ON ) || ( DMA_CFG_DMA1_ACCESS == STD_ON ))
+	Pil_Dmac_SetSpidAllCh();  /* To set SPIDs for DMAC channels */
+#endif
 }
 #endif
 
