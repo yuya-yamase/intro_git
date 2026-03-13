@@ -88,9 +88,9 @@ uint8 ChipCom_SendSignalDummy( Com_SignalIdType t_u2SignalId, const void* t_pvdS
 #define CHIPCOM_CFG_PKT06_MSG_NUM               (2U)        /* PKT06 */
 
 /* Size of received buffer */
-#define CHIPCOM_CFG_RX_BUFF_SIZE                (1212U)
+#define CHIPCOM_CFG_RX_BUFF_SIZE                (1512U)
 /* Size of transmit buffer */
-#define CHIPCOM_CFG_TX_BUFF_SIZE                (1212U)
+#define CHIPCOM_CFG_TX_BUFF_SIZE                (1512U)
 /* Size of received buffer for interger array (lsb=4byte) */
 #define CHIPCOM_CFG_RX_BUFF_SIZE_INT            (CHIPCOM_CFG_RX_BUFF_SIZE/4U)
 /* Size of transmit buffer for interger array (lsb=4byte) */
@@ -126,25 +126,24 @@ uint8 ChipCom_SendSignalDummy( Com_SignalIdType t_u2SignalId, const void* t_pvdS
 #define CHIPCOM_CFG_TX_PKT_TOP                  (3U)
 
 /* Size of received fixed-length area buffer */
-#define CHIPCOM_CFG_RX_BUFF_FLA_SIZE            (16U)
+#define CHIPCOM_CFG_RX_BUFF_FLA_SIZE            (24U)
 /* Size of received Variable-length area buffer */
-#define CHIPCOM_CFG_RX_BUFF_VLA_SIZE            (1184U)
+#define CHIPCOM_CFG_RX_BUFF_VLA_SIZE            (1476U)
 /* Address offset of received Variable-length area buffer */
-#define CHIPCOM_CFG_RX_BUFF_VLA_OFFS            (24U)
+#define CHIPCOM_CFG_RX_BUFF_VLA_OFFS            (32U)
 /* Size of transmit fixed-length area buffer */
-#define CHIPCOM_CFG_TX_BUFF_FLA_SIZE            (204U)
+#define CHIPCOM_CFG_TX_BUFF_FLA_SIZE            (396U)
 /* Size of transmit Variable-length area buffer */
-#define CHIPCOM_CFG_TX_BUFF_VLA_SIZE            (996U)
+#define CHIPCOM_CFG_TX_BUFF_VLA_SIZE            (1104U)
 /* Address offset of transmit Variable-length area buffer */
-#define CHIPCOM_CFG_TX_BUFF_VLA_OFFS            (212U)
+#define CHIPCOM_CFG_TX_BUFF_VLA_OFFS            (404U)
 
 #else /* CHIPCOM_BSW == CHIPCOM_BSW_MICROSAR */
 
 /* Core ID */
 #define CHIPCOM_CORE_ID_MASTER                  (2U)
-#define CHIPCOM_CORE_ID_SATELLITE1              (1U)
 /* Number of satellite */
-#define CHIPCOM_SATELLITE_NUM                   (1U)
+#define CHIPCOM_SATELLITE_NUM                   (0U)
 
 /* Number of receive message */
 #define CHIPCOM_CFG_RX_MSG_NUM                  (10U)
@@ -165,17 +164,17 @@ uint8 ChipCom_SendSignalDummy( Com_SignalIdType t_u2SignalId, const void* t_pvdS
 #define CHIPCOM_CFG_TX_PKT_TOP                  (0U)
 
 /* Size of received fixed-length area buffer */
-#define CHIPCOM_CFG_RX_BUFF_FLA_SIZE            (204U)
+#define CHIPCOM_CFG_RX_BUFF_FLA_SIZE            (396U)
 /* Size of received Variable-length area buffer */
-#define CHIPCOM_CFG_RX_BUFF_VLA_SIZE            (996U)
+#define CHIPCOM_CFG_RX_BUFF_VLA_SIZE            (1104U)
 /* Address offset of received Variable-length area buffer */
-#define CHIPCOM_CFG_RX_BUFF_VLA_OFFS            (212U)
+#define CHIPCOM_CFG_RX_BUFF_VLA_OFFS            (404U)
 /* Size of transmit fixed-length area buffer */
-#define CHIPCOM_CFG_TX_BUFF_FLA_SIZE            (16U)
+#define CHIPCOM_CFG_TX_BUFF_FLA_SIZE            (24U)
 /* Size of transmit Variable-length area buffer */
-#define CHIPCOM_CFG_TX_BUFF_VLA_SIZE            (1184U)
+#define CHIPCOM_CFG_TX_BUFF_VLA_SIZE            (1476U)
 /* Address offset of transmit Variable-length area buffer */
-#define CHIPCOM_CFG_TX_BUFF_VLA_OFFS            (24U)
+#define CHIPCOM_CFG_TX_BUFF_VLA_OFFS            (32U)
 
 #endif
 
@@ -186,22 +185,23 @@ uint8 ChipCom_SendSignalDummy( Com_SignalIdType t_u2SignalId, const void* t_pvdS
 typedef struct {
 	uint8 u1TxCoreId;
 	uint8 u1StlId;
-	const uint16*	pu2MsgTbl;
-	uint16	u2Period;
-	uint16	u2MsgNum;
-	uint16	u2TotalDataLen;
-	uint16	u2MsgBuffOffs;
-	uint16	u2SeqMax;
-	uint16	u2Payload;
-	uint16	u2LastTxLen;
-	uint16	u2TxRxBuffOffs;
+	const uint16* pu2MsgTbl;
+	uint16 u2Period;
+	uint16 u2MsgNum;
+	uint16 u2TotalDataLen;
+	uint16 u2MsgBuffOffs;
+	uint16 u2SeqMax;
+	uint16 u2Payload;
+	uint16 u2LastTxLen;
+	uint16 u2TxRxBuffOffs;
 } ChipCom_PktInfoType;
 
 /* Data infomation type */
 typedef struct {
-	uint16	u2DataLen;
-	uint16	u2MsgBuffOffs;
-	uint8	u1DataType;
+	uint16 u2DataLen;
+	uint16 u2MsgBuffOffs;
+	uint8 u1DataType;
+	uint8 u1StlId;
 } ChipCom_DataInfoType;
 
 /* CanIf received indication function type */

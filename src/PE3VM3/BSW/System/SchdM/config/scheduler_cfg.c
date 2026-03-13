@@ -157,6 +157,7 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     /*   5ms Task                                                        */
     /*                                                                   */
     /*-------------------------------------------------------------------*/
+    {&ChipCom_MainFunctionPostRx,       (U4)SCHDLR_TASKBIT___5MS    },
     {&ChipCom_MainFunctionPreApp,       (U4)SCHDLR_TASKBIT___5MS    },
     {&vd_g_VSM_SAILWrapper,             (U4)SCHDLR_TASKBIT___5MS    },
     {&App_VSM_Main,                     (U4)SCHDLR_TASKBIT___5MS    },
@@ -167,7 +168,9 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     {&EthSW_MediumTask,                 (U4)SCHDLR_TASKBIT___5MS    },
     {&vd_g_VISMidCycle	,               (U4)SCHDLR_TASKBIT___5MS    },
     {&AppSS_Main,                       (U4)SCHDLR_TASKBIT___5MS    },
+    {&ChipCom_MainFunction,             (U4)SCHDLR_TASKBIT___5MS    },
     {&ChipCom_MainFunctionPostApp,      (U4)SCHDLR_TASKBIT___5MS    },
+    {&ChipCom_MainFunctionPreTx,        (U4)SCHDLR_TASKBIT___5MS    },
 
     /*-------------------------------------------------------------------*/
     /*                                                                   */

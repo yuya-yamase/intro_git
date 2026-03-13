@@ -232,12 +232,25 @@ void ChipCom_MainFunctionPreApp( void )
  *--------------------------------------------------------------------------*/
 void ChipCom_MainFunctionPreTx( void )
 {
+	uint8 t_u1ComTick;
+	t_u1ComTick = ChipCom_u1ComTick;
+
 	/* Judge communication cycle */
-	if ( ChipCom_u1ComTick == (uint8)0U )
+	if ( t_u1ComTick == (uint8)0U )
 	{
 		/* Transmit */
 		ChipCom_Transmit();
 	}
+
+	/* Update communication cycle */
+	t_u1ComTick++;
+
+	if ( t_u1ComTick >= ChipCom_cu1ComTickDivRatio )
+	{
+		t_u1ComTick = (uint8)0U;
+	}
+
+	ChipCom_u1ComTick = t_u1ComTick;
 
 	return;
 }
@@ -250,24 +263,8 @@ void ChipCom_MainFunctionPreTx( void )
  *--------------------------------------------------------------------------*/
 void ChipCom_MainFunctionPostRx( void )
 {
-	uint8 t_u1ComTick;
-
-	t_u1ComTick = ChipCom_u1ComTick;
-
-	/* Judge communication cycle */
-	if ( t_u1ComTick == (uint8)0U )
-	{
-		/* Receive */
-		ChipCom_Receive();
-	}
-
-	/* Update communication cycle */
-	t_u1ComTick++;
-	if ( t_u1ComTick >= ChipCom_cu1ComTickDivRatio )
-	{
-		t_u1ComTick = (uint8)0U;
-	}
-	ChipCom_u1ComTick = t_u1ComTick;
+	/* Receive */
+	ChipCom_Receive();
 
 	return;
 }
@@ -289,6 +286,7 @@ uint8 ChipCom_SendSignal( Com_SignalIdType t_u2SignalId, const void* t_pvdSignal
 	uint8 t_pu1DataArray[CHIPCOM_DATA_LEN_MAX];
 	const ChipCom_DataInfoType* t_pstDataInfo;
 	uint8 t_u1Rtn;
+	uint8 t_u1CoreId;
 
 	t_u1Rtn = (uint8)E_NOT_OK;
 
@@ -301,10 +299,19 @@ uint8 ChipCom_SendSignal( Com_SignalIdType t_u2SignalId, const void* t_pvdSignal
 
 		/* Convert variable type */
 		ChipCom_ConvertTypeToArray( &t_pu1DataArray[0U], (void*)t_pvdSignalDataPtr, t_pstDataInfo->u2DataLen, t_pstDataInfo->u1DataType );	/* MISRA DEVIATION: Not referenced before assignment by callee */
-
-		/* Get buffer */
-		t_pu1MsgBuff = &ChipCom_u1MsgBuff[t_pstDataInfo->u2MsgBuffOffs];
-
+		
+		/* Get Core ID */
+		t_u1CoreId = (uint8)(ChipCom_pfcGetCoreId)();
+		if ( t_u1CoreId == ChipCom_cu1CoreIdMst )
+		{
+			/* Get buffer */
+			t_pu1MsgBuff = &ChipCom_u1MsgBuff[t_pstDataInfo->u2MsgBuffOffs];
+		}
+		else
+		{
+			/* Get message buffer of satellite */
+			t_pu1MsgBuff = &ChipCom_u1MsgBuffStl[t_pstDataInfo->u1StlId][t_pstDataInfo->u2MsgBuffOffs];
+		}
 		/* Copy data */
 		ChipCom_Memcpy( t_pu1MsgBuff, &t_pu1DataArray[0U], t_pstDataInfo->u2DataLen );
 
@@ -330,6 +337,7 @@ uint8 ChipCom_ReceiveSignal( Com_SignalIdType t_u2SignalId, void* t_pvdSignalDat
 	uint8 t_pu1DataArray[CHIPCOM_DATA_LEN_MAX];
 	const ChipCom_DataInfoType* t_pstDataInfo;
 	uint8 t_u1Rtn;
+	uint8 t_u1CoreId;
 
 	t_u1Rtn = (uint8)E_NOT_OK;
 
@@ -340,9 +348,19 @@ uint8 ChipCom_ReceiveSignal( Com_SignalIdType t_u2SignalId, void* t_pvdSignalDat
 		/* Get data information */
 		t_pstDataInfo = &ChipCom_cstDataInfoTbl[t_u2SignalId];
 
-		/* Get buffer */
-		t_pu1MsgBuff = &ChipCom_u1MsgBuff[t_pstDataInfo->u2MsgBuffOffs];
-
+		/* Get Core ID */
+		t_u1CoreId = (uint8)(ChipCom_pfcGetCoreId)();
+		if ( t_u1CoreId == ChipCom_cu1CoreIdMst )
+		{
+			/* Get buffer */
+			t_pu1MsgBuff = &ChipCom_u1MsgBuff[t_pstDataInfo->u2MsgBuffOffs];
+		}
+		else
+		{
+			/* Get message buffer of satellite */
+			t_pu1MsgBuff = &ChipCom_u1MsgBuffStl[t_pstDataInfo->u1StlId][t_pstDataInfo->u2MsgBuffOffs];
+		}
+		
 		/* Copy data */
 		ChipCom_Memcpy( &t_pu1DataArray[0U], t_pu1MsgBuff, t_pstDataInfo->u2DataLen );	/* MISRA DEVIATION: Not referenced before assignment by callee */
 
@@ -605,7 +623,7 @@ static void ChipCom_TransmitMsg( void )
 					SuspendOSInterrupts();
 
 					/* Copy data from packet buffer to message buffer */
-//					ChipCom_Memcpy( t_pu1MsgBuff, t_pu1MsgBuffStl, t_pstPktInfo->u2TotalDataLen );
+					ChipCom_Memcpy( t_pu1MsgBuff, t_pu1MsgBuffStl, t_pstPktInfo->u2TotalDataLen );
 
 					/* Resume Interrupts */
 					ResumeOSInterrupts();
