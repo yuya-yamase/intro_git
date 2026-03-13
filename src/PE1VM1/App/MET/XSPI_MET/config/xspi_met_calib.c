@@ -144,21 +144,21 @@ void    vd_g_XSpiCalibInit(void)
 
     for (u4_t_loop = (U4)0U; u4_t_loop < (U4)XSPI_MCUID_U1_NUM; u4_t_loop++) {
         if (st_sp_XSPI_CALIB_U1[u4_t_loop].u1p_mcuid != vdp_PTR_NA) {
-                u4_t_calib_val = (U4) *(st_sp_XSPI_CALIB_U1[u4_t_loop].u1p_mcuid);
+            u4_t_calib_val = (U4) *(st_sp_XSPI_CALIB_U1[u4_t_loop].u1p_mcuid);
 
-                u4_sp_calib_buf[st_sp_XSPI_CALIB_U1[u4_t_loop].u2_xspiid] |=
-                    ((u4_t_calib_val & (U4)XSPI_MSK_08BIT)
-                    << st_sp_XSPI_CALIB_U1[u4_t_loop].u1_bitpos);
+            u4_sp_calib_buf[st_sp_XSPI_CALIB_U1[u4_t_loop].u2_xspiid] |=
+                ((u4_t_calib_val & (U4)XSPI_MSK_08BIT)
+                << st_sp_XSPI_CALIB_U1[u4_t_loop].u1_bitpos);
         }
     }
 
     for (u4_t_loop = (U4)0U; u4_t_loop < (U4)XSPI_MCUID_U2_NUM; u4_t_loop++) {
         if (st_sp_XSPI_CALIB_U2[u4_t_loop].u2p_mcuid != vdp_PTR_NA) {
-                u4_t_calib_val = (U4) *(st_sp_XSPI_CALIB_U2[u4_t_loop].u2p_mcuid);
+            u4_t_calib_val = (U4) *(st_sp_XSPI_CALIB_U2[u4_t_loop].u2p_mcuid);
 
-                u4_sp_calib_buf[st_sp_XSPI_CALIB_U2[u4_t_loop].u2_xspiid] |=
-                    ((u4_t_calib_val & (U4)XSPI_MSK_08BIT)
-                    << st_sp_XSPI_CALIB_U2[u4_t_loop].u1_bitpos);
+            u4_sp_calib_buf[st_sp_XSPI_CALIB_U2[u4_t_loop].u2_xspiid] |=
+                ((u4_t_calib_val & (U4)XSPI_MSK_16BIT)
+                << st_sp_XSPI_CALIB_U2[u4_t_loop].u1_bitpos);
         }
     }
 
@@ -167,8 +167,8 @@ void    vd_g_XSpiCalibInit(void)
             u4_t_calib_val = (U4)(st_sp_XSPI_CALIB_OMS_U1[u4_t_loop].fp_u1_CALIB_OMS());
 
             u4_sp_calib_buf[st_sp_XSPI_CALIB_OMS_U1[u4_t_loop].u2_xspiid] |=
-                ((u4_t_calib_val & (U4)XSPI_MSK_16BIT)
-                << st_sp_XSPI_CALIB_OMS_U2[u4_t_loop].u1_bitpos);
+                ((u4_t_calib_val & (U4)XSPI_MSK_08BIT)
+                << st_sp_XSPI_CALIB_OMS_U1[u4_t_loop].u1_bitpos);
         }
     }
 
@@ -214,10 +214,10 @@ void    vd_g_XSpiCalibMainTask(void)
             u4_t_calib_val = (U4) *(st_sp_XSPI_CALIB_U2[u4_t_loop].u2p_mcuid);
             /* Reset target byte */
             u4_sp_calib_buf[st_sp_XSPI_CALIB_U2[u4_t_loop].u2_xspiid] &=
-                ~((U4)XSPI_MSK_08BIT << st_sp_XSPI_CALIB_U2[u4_t_loop].u1_bitpos);
+                ~((U4)XSPI_MSK_16BIT << st_sp_XSPI_CALIB_U2[u4_t_loop].u1_bitpos);
             /* Set target byte   */
             u4_sp_calib_buf[st_sp_XSPI_CALIB_U2[u4_t_loop].u2_xspiid] |=
-                ((u4_t_calib_val & (U4)XSPI_MSK_08BIT)
+                ((u4_t_calib_val & (U4)XSPI_MSK_16BIT)
                 << st_sp_XSPI_CALIB_U2[u4_t_loop].u1_bitpos);
         }
     }
@@ -227,10 +227,10 @@ void    vd_g_XSpiCalibMainTask(void)
 
             /* Reset target byte */
             u4_sp_calib_buf[st_sp_XSPI_CALIB_OMS_U1[u4_t_loop].u2_xspiid] &=
-                ~((U4)XSPI_MSK_16BIT << st_sp_XSPI_CALIB_OMS_U1[u4_t_loop].u1_bitpos);
+                ~((U4)XSPI_MSK_08BIT << st_sp_XSPI_CALIB_OMS_U1[u4_t_loop].u1_bitpos);
             /* Set target byte   */
             u4_sp_calib_buf[st_sp_XSPI_CALIB_OMS_U1[u4_t_loop].u2_xspiid] |=
-                ((u4_t_calib_val & (U4)XSPI_MSK_16BIT)
+                ((u4_t_calib_val & (U4)XSPI_MSK_08BIT)
                 << st_sp_XSPI_CALIB_OMS_U1[u4_t_loop].u1_bitpos);
         }
     }

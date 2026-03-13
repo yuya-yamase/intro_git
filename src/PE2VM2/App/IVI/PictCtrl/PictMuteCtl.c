@@ -13,16 +13,19 @@
 #define PICTMUTE_MUTEHI_SIPERR               (0x02U)
 #define PICTMUTE_MUTEHI_CAMERA               (0x04U)
 #define PICTMUTE_MUTEHI_OTARST               (0x08U)
+#define PICTMUTE_MUTEHI_VMRST                (0x10U)
 #define PICTMUTE_MUTELO_VICRST               (~(PICTMUTE_MUTEHI_VEHPOW | PICTMUTE_MUTEHI_SIPERR | PICTMUTE_MUTEHI_CAMERA | PICTMUTE_MUTEHI_OTARST))
 #define PICTMUTE_MUTELO_PMAPSHOLD            (~PICTMUTE_MUTEHI_SIPERR)
 #define PICTMUTE_MUTELO_CAMERA               (~PICTMUTE_MUTEHI_CAMERA)
-#define PICTMUTE_MUTESET_MASK                (PICTMUTE_MUTEHI_VEHPOW | PICTMUTE_MUTEHI_SIPERR | PICTMUTE_MUTEHI_CAMERA | PICTMUTE_MUTEHI_OTARST)
+#define PICTMUTE_MUTELO_VMRST                (~PICTMUTE_MUTEHI_VMRST)
+#define PICTMUTE_MUTESET_MASK                (PICTMUTE_MUTEHI_VEHPOW | PICTMUTE_MUTEHI_SIPERR | PICTMUTE_MUTEHI_CAMERA | PICTMUTE_MUTEHI_OTARST | PICTMUTE_MUTEHI_VMRST)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define PICTMUTE_TASK_TIME                   (1U)
-
+#define PICTMUTE_OSCMD_SOC_BOOT_COMPLETE     (0x04U) /* SoC boot completed */
+#define PICTMUTE_OSCMD_SOC_VM_RESET          (0x05U) /* SoC VM resetting */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -34,6 +37,7 @@ static U2 u2_s_pictmute_cycchk_timer;                       /* PictMute Cycle Ch
 
 static U1 u1_s_pictmute_mute_signal;                        /* MUTE ON/OFF Setting Signal */
 static U1 u1_s_pictmute_pmapshold_pre_sts;                  /* Previous PMA_PS_HOLD Status */
+static U1 u1_s_pictmute_pre_soc_ope_sts;                    /* Previous SoC Operation Reqest Status */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
@@ -55,6 +59,7 @@ void    vd_g_PictMute_Init(void)
     u2_s_pictmute_cycchk_timer = (U2)0U;
     u1_s_pictmute_mute_signal = (U1)0x00U;
     u1_s_pictmute_pmapshold_pre_sts = (U1)PICTMUTE_IO_STS_LOW;
+    u1_s_pictmute_pre_soc_ope_sts = (U1)0x00U;
 }
 
 /*===================================================================================================================================*/
@@ -151,12 +156,12 @@ void    vd_g_PictMute_CamMuteReq(const U1 u1_a_req_sts)
 }
 
 /*===================================================================================================================================*/
-/*  void    vd_g_PictMute_SipErrorReq(const U1 u1_a_req_sts)                                                                         */
+/*  void    vd_g_PictMute_SipResetReq(const U1 u1_a_req_sts)                                                                         */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      u1_a_req_sts  :  MUTE_OFF(FALSE) /  MUTE_ON(TRUE)                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_PictMute_SipErrorReq(const U1 u1_a_req_sts)
+void    vd_g_PictMute_SipResetReq(const U1 u1_a_req_sts)
 {
     if(u1_a_req_sts == (U1)TRUE){
         u1_s_pictmute_mute_signal |= (U1)PICTMUTE_MUTEHI_SIPERR;
@@ -164,14 +169,43 @@ void    vd_g_PictMute_SipErrorReq(const U1 u1_a_req_sts)
 }
 
 /*===================================================================================================================================*/
-/*  void    vd_g_PictMute_OtaResetReq(const U1 u1_a_req_sts)                                                                         */
+/*  void    vd_g_PictMute_CdcResetReq(const U1 u1_a_req_sts)                                                                         */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      u1_a_req_sts  :  MUTE_OFF(FALSE) /  MUTE_ON(TRUE)                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_PictMute_OtaResetReq(const U1 u1_a_req_sts)
+void    vd_g_PictMute_CdcResetReq(const U1 u1_a_req_sts)
 {
     if(u1_a_req_sts == (U1)TRUE){
         u1_s_pictmute_mute_signal |= (U1)PICTMUTE_MUTEHI_OTARST;
     }
+}
+/*===================================================================================================================================*/
+/*  void    vd_g_PictMute_VmResetReq(const U1 u1_a_req_sts)                                                                          */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      u1_a_req_sts  :  MUTE_OFF(FALSE) /  MUTE_ON(TRUE)                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void    vd_g_PictMute_VmResetReq(const U1 u1_a_req_sts)
+{
+    if(u1_a_req_sts == (U1)TRUE){
+        u1_s_pictmute_mute_signal |= (U1)PICTMUTE_MUTEHI_VMRST;
+    }
+}
+/*===================================================================================================================================*/
+/*  void    vd_g_PictMute_SoCResetReq    ( U1 u1_a_req_sts)                                                                          */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      u1_a_socreq  :                                                                                                   */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void    vd_g_PictMute_SoCResetReq(U1 u1_a_socreq)
+{
+    /* Trigger only on transition: "SoC VM resetting" -> "SoC boot completed" */
+    if ((u1_s_pictmute_pre_soc_ope_sts == PICTMUTE_OSCMD_SOC_VM_RESET) &&
+        (u1_a_socreq                   == PICTMUTE_OSCMD_SOC_BOOT_COMPLETE))
+    {
+        u1_s_pictmute_mute_signal &= (U1)PICTMUTE_MUTELO_VMRST;
+    }
+    /* Update previous state for edge detection */
+    u1_s_pictmute_pre_soc_ope_sts = u1_a_socreq;
 }

@@ -29,6 +29,7 @@
 #define MCU_STEP_GNSS_FIN               (6U)
 #define MCU_STEP_GNSS_WAIT              (7U)
 #define MCU_STEP_GNSS_RESTART           (8U)
+#define MCU_STEP_GNSS_HIB_MIG           (9U)
 
 #define PWRCTRL_WAIT_GNSS_400MS         (400U / PWRCTRL_CFG_TASK_TIME)
 #define PWRCTRL_WAIT_GNSS_550MS         (550U / PWRCTRL_CFG_TASK_TIME)
@@ -158,6 +159,7 @@ static U1 u1_s_PwrCtrl_Sys_PgdDiode_ObsFlg;
 static uint8    Mcu_OnStep_GNSS;                /* 4制御シーケンス */
 static uint32   Mcu_GNSS_LinkTimer;             /* GNSS Wati処理用タイマ */
 static U4 u4_s_PwrCtrl_Sys_Gnss_Ope;
+static uint8    Mcu_OnCnt_GNSS;
 
 static uint16  Mcu_Gvif_LinkTimer;    /* CDC起動からのタイマ→本来はもっと別の場所で管理？ */
 /* ジャイロ・加速度センサ制御仕様 */
@@ -370,6 +372,7 @@ void vd_g_PwrCtrlSysInit( void )
     Mcu_OnStep_GNSS             = (uint8)MCU_STEP_GNSS_PRE;
     Mcu_GNSS_LinkTimer          = (uint32)0U;
     u4_s_PwrCtrl_Sys_Gnss_Ope   = (U4)PWRCTRL_GPSREQ_NON;
+    Mcu_OnCnt_GNSS              = (uint8)0U;
 
     u1_s_PwrCtrl_PowerIc_OVRALL = (U1)PWRCTRL_COMMON_PROCESS_STEP1;
     Mcu_PowerIc_OffTime         = (uint16)0U;
@@ -1403,14 +1406,18 @@ static void     vd_s_McuDev_Pwron_PowerIc(const U1 u1_a_PWR)
 *****************************************************************************/
 void    Mcu_Dev_Pwron_GNSS( void ){
     static const uint32 MCU_PWRON_TIME_GNSS_T8  =   (uint32)(100U * GPT_FRT_1US);     /* typ 100ms /GPS-RSTのリセット時間幅 */
+    static const uint32 MCU_PWRON_TIME_GNSS_T12 =   (uint32)(100000U * GPT_FRT_1US);  /* typ 100ms Hibernate移行状態ﾁｪｯｸ待ちおよび繰り返し時間 */
+    static const uint8  MCU_PWRON_POLING_MAX    =   (uint8)45U;                       /* max 4500ms GPS-PCTL　=L指示後、Hibernate遷移終了時間 */
 
     uint8   mcu_dio_ret;
+    uint8   mcu_dio_ret2;
     uint32  mcu_frt_elpsd;
     U1      u1_t_sts;
     U4      u4_t_pwrCtrl_sys_gnss_sts;  /* VM Communication Send Data "GPS Request" */
 
     mcu_frt_elpsd   = (uint32)0U;
     mcu_dio_ret     = (uint8)STD_HIGH;
+    mcu_dio_ret2     = (uint8)STD_HIGH;
 
     switch (Mcu_OnStep_GNSS) {
         case MCU_STEP_GNSS_PRE:
@@ -1441,11 +1448,17 @@ void    Mcu_Dev_Pwron_GNSS( void ){
             vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_GPS_STS, &u4_t_pwrCtrl_sys_gnss_sts, (U2)GNSS_CFG_VM_1WORD);
             mcu_dio_ret =   Dio_ReadChannel(Mcu_Dio_PortId[PWRCTRL_CFG_PRIVATE_PORT_V33_PERI]);    /* t3はmin0msのため、wait処理をせずに次処理を実施 */
             if(mcu_dio_ret == (uint8)STD_HIGH){
-                /* 初期化前チェックの内容不明のためskip */
-                //if(初期化前チェック=OK){
+                mcu_dio_ret2 = Dio_ReadChannel(Mcu_Dio_PortId[MCU_PORT_GPS_PMONI]);
+                if(mcu_dio_ret2 == (uint8)STD_LOW){
                     vd_g_McuDevPwronSetPort(MCU_PORT_GPS_PCTL , MCU_DIO_HIGH);
                     Mcu_OnStep_GNSS = (uint8)MCU_STEP_GNSS_POSTCHK;         /* 次状態に遷移 */
-                //}
+                }
+                else{
+                    /* PMONI=H(Normal) → 4.3へ */
+                    Mcu_OnCnt_GNSS = (uint8)0U;
+                    Mcu_frt_stamp[GPT_FRT_USELPSD_BASE] = u4_g_Gpt_FrtGetUsElapsed(vdp_PTR_NA); /* 100ms周期判定の基準 */
+                    Mcu_OnStep_GNSS = (uint8)MCU_STEP_GNSS_HIB_MIG;
+                }
             }
             break;
         case MCU_STEP_GNSS_POSTCHK:
@@ -1516,6 +1529,40 @@ void    Mcu_Dev_Pwron_GNSS( void ){
             if(mcu_frt_elpsd > MCU_PWRON_TIME_GNSS_T8){
                 vd_g_McuDevPwronSetPort(MCU_PORT_GPS_RST , MCU_DIO_HIGH);
                 Mcu_OnStep_GNSS = MCU_STEP_GNSS_INI_CHK;        /* 次状態に遷移 */
+            }
+            break;
+        case MCU_STEP_GNSS_HIB_MIG:
+            /* 100ms周期でPMONI確認 */
+            mcu_frt_elpsd = u4_g_Gpt_FrtGetUsElapsed(Mcu_frt_stamp);
+            if(mcu_frt_elpsd >= MCU_PWRON_TIME_GNSS_T12){
+                /* 次の100ms用に基準更新 */
+                Mcu_frt_stamp[GPT_FRT_USELPSD_BASE] = u4_g_Gpt_FrtGetUsElapsed(vdp_PTR_NA);
+
+                mcu_dio_ret = Dio_ReadChannel(Mcu_Dio_PortId[MCU_PORT_GPS_PMONI]);
+
+                if(mcu_dio_ret == (uint8)STD_LOW){
+                    /* L検知 → 起動後チェックへ */
+                    vd_g_McuDevPwronSetPort(MCU_PORT_GPS_PCTL , MCU_DIO_HIGH);
+                    Mcu_OnStep_GNSS = (uint8)MCU_STEP_GNSS_POSTCHK;
+                }
+                else{
+                    /* リトライ継続 */
+                    if(Mcu_OnCnt_GNSS < (uint8)U1_MAX){
+                        Mcu_OnCnt_GNSS++;
+                    }
+
+                    if(Mcu_OnCnt_GNSS >= MCU_PWRON_POLING_MAX){ /* 45回=4500ms */
+                        /* フェールセーフ：/GPS-RST=H⇒L PMONI⇒L */
+                        vd_g_McuDevPwronSetPort(MCU_PORT_GPS_RST , MCU_DIO_LOW);
+                        vd_g_McuDevPwronSetPort(MCU_PORT_GPS_PCTL, MCU_DIO_LOW);
+
+                        u4_t_pwrCtrl_sys_gnss_sts = (U4)PWRCTRL_GPSSTS_FAIL;
+                        vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_GPS_STS, &u4_t_pwrCtrl_sys_gnss_sts, (U2)GNSS_CFG_VM_1WORD);
+
+                        Mcu_OnCnt_GNSS = (uint8)0U;
+                        Mcu_OnStep_GNSS = (uint8)MCU_STEP_GNSS_FIN;
+                    }
+                }
             }
             break;
         default:

@@ -121,7 +121,7 @@ void    vd_g_VardefDestBonInit(void)
     u1_s_vdf_dst_law_c_code_idx    = u1_g_VDF_DST_LAW_C_CODE_IDX_DEF;
     u1_s_vdf_dst_law_dest_bdb_idx  = u1_g_VardefDestLawCfgBdbDefJdg();
 
-    u1_s_vdf_dst_law_idx            = u1_g_VDF_DST_IDX_DEF;
+    u1_s_vdf_dst_law_idx            = u1_g_VDF_DST_LAW_IDX_DEF;
     vd_g_Rim_WriteU1(u2_g_VDF_DST_LAW_IDX_RIM_U1, u1_s_vdf_dst_law_idx);
 
     u1_s_vdf_dst_idx               = u1_g_VDF_DST_IDX_DEF;

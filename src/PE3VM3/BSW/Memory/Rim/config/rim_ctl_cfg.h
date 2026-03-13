@@ -29,12 +29,14 @@
 /* START : ##TOOL_OUT#RIM_ID_MOD_3B_U1## */
 #define RIMID_U1_PWCTR_SOC_WU_STAT1              (0x0000U)
 #define RIMID_U1_PWCTR_SOC_WU_STAT2              (0x0001U)
+#define RIMID_U1_PWCTR_SOC_WKUPCOND              (0x0002U)
 /* END : ##TOOL_OUT#RIM_ID_MOD_3B_U1## */
 /* START : ##TOOL_OUT#RIM_ID_MOD_3B_U2## */
 #define RIMID_U2_PWCTR_SOC_ON_COUNT              (0x4000U)
 /* END : ##TOOL_OUT#RIM_ID_MOD_3B_U2## */
 /* START : ##TOOL_OUT#RIM_ID_MOD_3B_U4## */
 #define RIMID_U4_PWCTR_SOC_ON_TIME               (0x8000U)
+#define RIMID_U4_PWCTR_SOC_USRRSTMASK            (0x8001U)
 /* END : ##TOOL_OUT#RIM_ID_MOD_3B_U4## */
 /* START : ##TOOL_OUT#RIM_ID_MOD_3B_OTR## */
 /* END : ##TOOL_OUT#RIM_ID_MOD_3B_OTR## */

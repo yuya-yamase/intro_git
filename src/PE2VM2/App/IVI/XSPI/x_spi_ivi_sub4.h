@@ -39,6 +39,8 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 void            vd_g_XspiIviCANGWPushPDU(const U2 u2_a_MSG);
 void            vd_g_XspiIviQSEvGWPushPDU(const U4 * const u4_ap_QSEV_RX);
+void            vd_g_XspiIviSub4VMResetInit(void);
+void            vd_g_XspiIviSub4SoCResetInit(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */

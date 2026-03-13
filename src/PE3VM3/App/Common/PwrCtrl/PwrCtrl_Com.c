@@ -48,6 +48,8 @@
 #define PWRCTRL_COM_VMTXID_VM2_SOCONTIME   (IVDSH_DID_WRI_VM3TO2_BOOT_TIME)   /* Soc起動回数カウンタ更新時間 */
 #define PWRCTRL_COM_VMTXID_VM2_BOOTLOGINF  (IVDSH_DID_WRI_VM3TO2_BOOTLOG_INF) /* 起動ログ計測点検知データ */
 #define PWRCTRL_COM_VMTXID_VM1_SOCPOWER    (IVDSH_DID_WRI_VM3TO1_SOC_POW_STS) /* SoC起動状態 */
+#define PWRCTRL_COM_VMTXID_VM1_SOCWKUPCOND (IVDSH_DID_WRI_VM3TO2_WKUP_COND)   /* SoC起動条件通知 */
+#define PWRCTRL_COM_VMTXID_VM1_USRRSTMASK  (IVDSH_DID_WRI_VM3TO2_USRRST_MASK) /* ユーザーリセット抑止区間通知 */
 
 /* データ長(word) */
 #define PWRCTRL_COM_PWRON_LEN              (1U)         /* SIP電源再起動通知データ長 */
@@ -56,6 +58,8 @@
 #define PWRCTRL_COM_TIME_LEN               (1U)         /* SoC起動回数カウンタ更新時間データ長 */
 #define PWRCTRL_COM_BOOTLOG_LEN            (1U)         /* 起動ログ計測点通知情報データ長 */
 #define PWRCTRL_COM_SOCPOWER_LEN           (1U)         /* SoC起動状態データ長 */
+#define PWRCTRL_COM_SOCWKUPCOND_LEN        (1U)         /* SoC起動条件通知データ長 */
+#define PWRCTRL_COM_USRRSTMASK_LEN         (1U)         /* ユーザーリセット抑止区間通知データ長 */
 
 /* SoC起動回数カウンタ */
 #define PWRCTRL_COM_SOCONCOUNT_MAX         (0xFFFFU)    /* 最大値 */
@@ -112,7 +116,10 @@ static U4 u4_s_PwrCtrl_Com_Tx_SoCOnCount;    /* SoC起動回数カウンタ */
 static U4 u4_s_PwrCtrl_Com_Tx_SoCOnTime;     /* SoC起動回数カウンタ更新時の時間 */
 static U4 u4_s_PwrCtrl_Com_Tx_BootLog;       /* 起動ログ計測点通知 */
 static U4 u4_s_PwrCtrl_Com_Tx_SoCPower;      /* SoC起動状態 */
+static U4 u4_s_PwrCtrl_Com_Tx_SoCWkupCond;   /* SoC起動条件通知 */
+static U4 u4_s_PwrCtrl_Com_Tx_UsrRstMask;    /* ユーザーリセット抑止区間通知 */
 static U1 u1_s_PwrCtrl_Com_Eth_LinkupSts;    /* Ethリンクアップ状態 */
+static U1 u1_s_PwrCtrl_Com_URMaskOffSts;     /* ユーザーリセット抑止解除受付状態 */
 
 /*--------------------------------------------------------------------------*/
 /* Constants                                                                */
@@ -146,13 +153,18 @@ void vd_g_PwrCtrlComBonInit( void )
     u4_s_PwrCtrl_Com_Tx_PwrErr = (U4)PWRCTRL_COM_PWRERR_NOERR;      /* SIP異常検知通知 */
     u4_s_PwrCtrl_Com_Tx_SoCOnCount = (U4)PWRCTRL_COM_SOCONCOUNT_INIT;   /* SoC起動回数カウンタ */
     u4_s_PwrCtrl_Com_Tx_SoCPower = (U4)PWRCTRL_COM_SOCPOWER_OFF;    /* SoC起動状態 */
+    u4_s_PwrCtrl_Com_Tx_SoCWkupCond = (U4)PWRCTRL_COM_SOCWKUP_NON;  /* SoC起動条件通知 */
     vd_g_Rim_WriteU2((U2)RIMID_U2_PWCTR_SOC_ON_COUNT, (U2)(u4_s_PwrCtrl_Com_Tx_SoCOnCount & (U4)PWRCTRL_COM_LOW2BMASK));
 
     u4_s_PwrCtrl_Com_Tx_SoCOnTime = (U4)PWRCTRL_COM_SOCONTIME_INIT;     /* SoC起動回数カウンタ更新時の時間 */
     vd_g_Rim_WriteU4((U2)RIMID_U4_PWCTR_SOC_ON_TIME, u4_s_PwrCtrl_Com_Tx_SoCOnTime); 
     
+    u4_s_PwrCtrl_Com_Tx_UsrRstMask = (U4)PWRCTRL_COM_USRRSTMASK_OFF;    /* ユーザーリセット抑止区間通知 */
+    vd_g_Rim_WriteU4((U2)RIMID_U4_PWCTR_SOC_USRRSTMASK, u4_s_PwrCtrl_Com_Tx_UsrRstMask);
+
     vd_g_PwrCtrlComTxClrBootLog((U1)PWRCTRL_COM_BOOTLOG_INITREQ);       /* 起動ログ計測点をクリア */
     u1_s_PwrCtrl_Com_Eth_LinkupSts = (U1)PWRCTRL_COM_ETH_LINKUP_NODETECT; /* Ethリンクアップ未検知を設定 */
+    u1_s_PwrCtrl_Com_URMaskOffSts = (U1)PWRCTRL_COM_URMASKOFF_DISABLED; /* ユーザーリセット抑止解除受付状態 */
 
     return;
 }
@@ -167,9 +179,11 @@ void vd_g_PwrCtrlComBonInit( void )
 void vd_g_PwrCtrlComWkupInit( void )
 {
     U4 u4_t_soctime_buf;
+    U4 u4_t_usrrstmask_buf;
     U2 u2_t_soccount_buf;
     U1 u1_t_soctime_ret;
     U1 u1_t_soccount_ret;
+    U1 u1_t_usrrstmask_ret;
     
     u1_s_PwrCtrl_Com_Rx_Vm1StbyInfo = (U1)PWRCTRL_COM_STBY_OK;      /* VM1スタンバイ条件成立有無 */
     u1_s_PwrCtrl_Com_Rx_Vm2StbyInfo = (U1)PWRCTRL_COM_STBY_OK;      /* VM2スタンバイ条件成立有無 */
@@ -182,8 +196,10 @@ void vd_g_PwrCtrlComWkupInit( void )
     u4_s_PwrCtrl_Com_Tx_PwrOn = (U4)PWRCTRL_COM_PWRON_NOINFO;       /* SIP電源再起動通知 */
     u4_s_PwrCtrl_Com_Tx_PwrErr = (U4)PWRCTRL_COM_PWRERR_NOERR;      /* SIP異常検知通知 */
     u4_s_PwrCtrl_Com_Tx_SoCPower = (U4)PWRCTRL_COM_SOCPOWER_OFF;    /* SoC起動状態 */
+    u4_s_PwrCtrl_Com_Tx_SoCWkupCond = (U4)PWRCTRL_COM_SOCWKUP_NON;  /* SoC起動条件通知 */
     vd_g_PwrCtrlComTxClrBootLog((U1)PWRCTRL_COM_BOOTLOG_INITREQ);   /* 起動ログ計測点をクリア */
     u1_s_PwrCtrl_Com_Eth_LinkupSts = (U1)PWRCTRL_COM_ETH_LINKUP_NODETECT; /* Ethリンクアップ未検知を設定 */
+    u1_s_PwrCtrl_Com_URMaskOffSts = (U1)PWRCTRL_COM_URMASKOFF_DISABLED; /* ユーザーリセット抑止解除受付状態 */
 
     /* SoC起動回数カウンタ更新時の時間 */
     u4_t_soctime_buf = (U4)PWRCTRL_COM_SOCONTIME_INIT;
@@ -199,7 +215,7 @@ void vd_g_PwrCtrlComWkupInit( void )
 
     /* SoC起動回数カウンタ */
     u2_t_soccount_buf = (U2)PWRCTRL_COM_SOCONCOUNT_INIT;
-    u1_t_soccount_ret= u1_g_Rim_ReadU2withStatus((U2)RIMID_U2_PWCTR_SOC_ON_COUNT, &u2_t_soccount_buf);
+    u1_t_soccount_ret = u1_g_Rim_ReadU2withStatus((U2)RIMID_U2_PWCTR_SOC_ON_COUNT, &u2_t_soccount_buf);
     if((u1_t_soccount_ret & (U1)RIM_RESULT_KIND_MASK) == (U1)RIM_RESULT_KIND_OK)
     {
         u4_s_PwrCtrl_Com_Tx_SoCOnCount = (U4)u2_t_soccount_buf;
@@ -207,6 +223,18 @@ void vd_g_PwrCtrlComWkupInit( void )
     else
     {
         u4_s_PwrCtrl_Com_Tx_SoCOnCount = (U4)PWRCTRL_COM_SOCONCOUNT_INIT;
+    }
+
+    /* ユーザーリセット抑止区間通知 */
+    u4_t_usrrstmask_buf = (U4)PWRCTRL_COM_USRRSTMASK_OFF;
+    u1_t_usrrstmask_ret = u1_g_Rim_ReadU4withStatus((U2)RIMID_U4_PWCTR_SOC_USRRSTMASK, &u4_t_usrrstmask_buf);
+    if((u1_t_usrrstmask_ret & (U1)RIM_RESULT_KIND_MASK) == (U1)RIM_RESULT_KIND_OK)
+    {
+        u4_s_PwrCtrl_Com_Tx_UsrRstMask = u4_t_usrrstmask_buf;
+    }
+    else
+    {
+        u4_s_PwrCtrl_Com_Tx_UsrRstMask = (U4)PWRCTRL_COM_USRRSTMASK_OFF;
     }
 
     return;
@@ -368,6 +396,12 @@ void vd_g_PwrCtrlComTxTask( void )
 
     /* SoC起動状態 */
     vd_g_iVDshWribyDid((U2)PWRCTRL_COM_VMTXID_VM1_SOCPOWER, &u4_s_PwrCtrl_Com_Tx_SoCPower, (U2)PWRCTRL_COM_SOCPOWER_LEN);
+
+    /* SoC起動条件通知 */
+    vd_g_iVDshWribyDid((U2)PWRCTRL_COM_VMTXID_VM1_SOCWKUPCOND, &u4_s_PwrCtrl_Com_Tx_SoCWkupCond, (U2)PWRCTRL_COM_SOCWKUPCOND_LEN);
+
+    /* ユーザーリセット抑止区間通知 */
+    vd_g_iVDshWribyDid((U2)PWRCTRL_COM_VMTXID_VM1_USRRSTMASK, &u4_s_PwrCtrl_Com_Tx_UsrRstMask, (U2)PWRCTRL_COM_USRRSTMASK_LEN);
 
     return;
 }
@@ -553,6 +587,14 @@ static void vd_s_PwrCtrlComRxSoCSts( void )
     if(u1_s_PwrCtrl_Com_Rx_SoCSts == (U1)PWRCTRL_COM_SOCSTS_COMP){
         /* WAKEUP-STAT1更新要求 */
         vd_g_PwrCtrlSipSoCOnComp();
+        /* ユーザーリセット抑止解除受付状態が有効の場合 */
+        if(u1_s_PwrCtrl_Com_URMaskOffSts == (U1)PWRCTRL_COM_URMASKOFF_ENABLED)
+        {
+            /* ユーザーリセット抑止区間通知：未設定 */
+            vd_g_PwrCtrlComTxSetUsrRstMask((U1)PWRCTRL_COM_USRRSTMASK_OFF);
+            /* ユーザーリセット抑止解除受付状態：無効 */
+            vd_g_PwrCtrlComSetURMaskOffSts((U1)PWRCTRL_COM_URMASKOFF_DISABLED);
+        }
     }
     return;
 }
@@ -775,6 +817,35 @@ void vd_g_PwrCtrlComTxSetSoCPower( const U1 u1_a_data )
 }
 
 /*****************************************************************************
+  Function      : vd_g_PwrCtrlComTxSetSoCWkupCond
+  Description   : 起動条件通知データ設定処理
+  param[in/out] : [In] const U1 u1_a_data SoC起動条件通知データ
+  return        : none
+  Note          : none
+*****************************************************************************/
+void vd_g_PwrCtrlComTxSetSoCWkupCond( const U1 u1_a_data )
+{
+    u4_s_PwrCtrl_Com_Tx_SoCWkupCond = (U4)u1_a_data;
+
+    return;
+}
+
+/*****************************************************************************
+  Function      : vd_g_PwrCtrlComTxSetUsrRstMask
+  Description   : ユーザーリセット抑止区間通知データ設定処理
+  param[in/out] : [In] const U1 u1_a_data ユーザーリセット抑止区間通知データ
+  return        : none
+  Note          : none
+*****************************************************************************/
+void vd_g_PwrCtrlComTxSetUsrRstMask( const U1 u1_a_data )
+{
+    u4_s_PwrCtrl_Com_Tx_UsrRstMask = (U4)u1_a_data;
+    vd_g_Rim_WriteU4((U2)RIMID_U4_PWCTR_SOC_USRRSTMASK, u4_s_PwrCtrl_Com_Tx_UsrRstMask);
+
+    return;
+}
+
+/*****************************************************************************
   Function      : vd_s_PwrCtrlComEthLinkupStsSet
   Description   : Ethリンクアップ状態反映処理
   param[in/out] : none
@@ -798,6 +869,20 @@ static void vd_s_PwrCtrlComEthLinkupStsSet( void )
         /* 何もしない */
     }
     
+    return;
+}
+
+/*****************************************************************************
+  Function      : vd_g_PwrCtrlComSetURMaskOffSts
+  Description   : ユーザーリセット抑止解除受付状態設定処理
+  param[in/out] : [In] const U1 u1_a_req 受付状態
+  return        : none
+  Note          : none
+*****************************************************************************/
+void vd_g_PwrCtrlComSetURMaskOffSts( const U1 u1_a_req )
+{
+    u1_s_PwrCtrl_Com_URMaskOffSts = u1_a_req;
+
     return;
 }
 

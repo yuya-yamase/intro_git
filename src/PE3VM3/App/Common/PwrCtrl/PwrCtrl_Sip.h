@@ -95,6 +95,13 @@ U1 u1_g_PwrCtrlSipSoCRstSts( void );
 /* SoCリセット起動要因クリア関数 */
 void vd_g_PwrCtrlSipSoCRstClr( void );
 
+/* SoC起動条件通知設定関数 */
+void vd_g_PwrCtrlSipSetSoCWkupCond( const U1 u1_a_socwkupcond );
+/* SoC起動条件通知取得関数 */
+U1 u1_g_PwrCtrlSipGetSoCWkupCond( void );
+/* SoC起動条件通知クリア関数 */
+void vd_g_PwrCtrlSipClrSoCWkupCond( void );
+
 #endif /* PWRCTRL_SIP_H */
 
 /**** End of File ***********************************************************/

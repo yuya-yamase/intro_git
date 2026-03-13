@@ -40,6 +40,9 @@
 void    vd_g_XspiIviSub0Request(const U2 u2_a_DATALEN, const U1 u1_a_CANID, const U1 * u1_ap_XSPI_ADD, const U1 u1_a_SID);
 
 U1      u1_g_XspiIviSub0OSComBridge(void);
+void    vd_g_XspiIviSub0VMResetInit(void);
+void    vd_g_XspiIviSub0SoCResetInit(void);
+void    vd_g_XspiIviSub0CDCResetInit(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
