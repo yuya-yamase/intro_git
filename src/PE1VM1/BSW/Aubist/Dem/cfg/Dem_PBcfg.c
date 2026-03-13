@@ -63,7 +63,38 @@ CONST( AB_83_ConstV Dem_PB_EventAttributeType ,DEM_CONST_PBCONFIG_DIRECTLY_EVENT
     ( DEM_PB_EVTATTR_OBD_NONOBD | DEM_PB_EVTATTR_AVAILABLE_DISABLE ),                /* DemConf_DemEventParameter_DemEventDTC_B1511 */
     ( DEM_PB_EVTATTR_OBD_NONOBD | DEM_PB_EVTATTR_AVAILABLE_DISABLE ),                /* DemConf_DemEventParameter_DemEventDTC_B1518 */
     ( DEM_PB_EVTATTR_OBD_NONOBD | DEM_PB_EVTATTR_AVAILABLE_DISABLE ),                /* DemConf_DemEventParameter_DemEventDTC_B1519 */
-    ( DEM_PB_EVTATTR_OBD_NONOBD | DEM_PB_EVTATTR_AVAILABLE_DISABLE )                 /* DemConf_DemEventParameter_DemEventDTC_B151A */
+    ( DEM_PB_EVTATTR_OBD_NONOBD | DEM_PB_EVTATTR_AVAILABLE_DISABLE ),                /* DemConf_DemEventParameter_DemEventDTC_B151A */
+    ( DEM_PB_EVTATTR_OBD_NONOBD | DEM_PB_EVTATTR_AVAILABLE_DISABLE ),                /* DemConf_DemEventParameter_DemEventDTC_U2A00 */
+    ( DEM_PB_EVTATTR_OBD_NONOBD | DEM_PB_EVTATTR_AVAILABLE_DISABLE ),                /* DemConf_DemEventParameter_DemEventDTC_U2A01 */
+    ( DEM_PB_EVTATTR_OBD_NONOBD | DEM_PB_EVTATTR_AVAILABLE_DISABLE ),                /* DemConf_DemEventParameter_DemEventDTC_U2A16 */
+    ( DEM_PB_EVTATTR_OBD_NONOBD | DEM_PB_EVTATTR_AVAILABLE_DISABLE ),                /* DemConf_DemEventParameter_DemEventDTC_U2A17 */
+    ( DEM_PB_EVTATTR_OBD_NONOBD | DEM_PB_EVTATTR_AVAILABLE_DISABLE ),                /* DemConf_DemEventParameter_DemEventDTC_U2A12 */
+    ( DEM_PB_EVTATTR_OBD_NONOBD | DEM_PB_EVTATTR_AVAILABLE_DISABLE ),                /* DemConf_DemEventParameter_DemEventDTC_U2A13 */
+    ( DEM_PB_EVTATTR_OBD_NONOBD | DEM_PB_EVTATTR_AVAILABLE_DISABLE ),                /* DemConf_DemEventParameter_DemEventDTC_U2303 */
+    ( DEM_PB_EVTATTR_OBD_NONOBD | DEM_PB_EVTATTR_AVAILABLE_DISABLE ),                /* DemConf_DemEventParameter_DemEventDTC_U2302 */
+    ( DEM_PB_EVTATTR_OBD_NONOBD | DEM_PB_EVTATTR_AVAILABLE_DISABLE ),                /* DemConf_DemEventParameter_DemEventDTC_U13A0 */
+    ( DEM_PB_EVTATTR_OBD_NONOBD | DEM_PB_EVTATTR_AVAILABLE_DISABLE ),                /* DemConf_DemEventParameter_DemEventDTC_U2300 */
+    ( DEM_PB_EVTATTR_OBD_NONOBD | DEM_PB_EVTATTR_AVAILABLE_DISABLE ),                /* DemConf_DemEventParameter_DemEventDTC_U2301 */
+    ( DEM_PB_EVTATTR_OBD_NONOBD | DEM_PB_EVTATTR_AVAILABLE_DISABLE ),                /* DemConf_DemEventParameter_DemEventDTC_B2E01 */
+    ( DEM_PB_EVTATTR_OBD_NONOBD | DEM_PB_EVTATTR_AVAILABLE_DISABLE ),                /* DemConf_DemEventParameter_DemEventDTC_B2E02 */
+    ( DEM_PB_EVTATTR_OBD_NONOBD | DEM_PB_EVTATTR_AVAILABLE_DISABLE ),                /* DemConf_DemEventParameter_DemEventDTC_B2E03 */
+    ( DEM_PB_EVTATTR_OBD_NONOBD | DEM_PB_EVTATTR_AVAILABLE_DISABLE ),                /* DemConf_DemEventParameter_DemEventDTC_B2E04 */
+    ( DEM_PB_EVTATTR_OBD_NONOBD | DEM_PB_EVTATTR_AVAILABLE_DISABLE ),                /* DemConf_DemEventParameter_DemEventDTC_B2E05 */
+    ( DEM_PB_EVTATTR_OBD_NONOBD | DEM_PB_EVTATTR_AVAILABLE_DISABLE ),                /* DemConf_DemEventParameter_DemEventDTC_B2E06 */
+    ( DEM_PB_EVTATTR_OBD_NONOBD | DEM_PB_EVTATTR_AVAILABLE_DISABLE ),                /* DemConf_DemEventParameter_DemEventDTC_B2E07 */
+    ( DEM_PB_EVTATTR_OBD_NONOBD | DEM_PB_EVTATTR_AVAILABLE_DISABLE ),                /* DemConf_DemEventParameter_DemEventDTC_B2E08 */
+    ( DEM_PB_EVTATTR_OBD_NONOBD | DEM_PB_EVTATTR_AVAILABLE_DISABLE ),                /* DemConf_DemEventParameter_DemEventDTC_B2E12 */
+    ( DEM_PB_EVTATTR_OBD_NONOBD | DEM_PB_EVTATTR_AVAILABLE_DISABLE ),                /* DemConf_DemEventParameter_DemEventDTC_B2E15 */
+    ( DEM_PB_EVTATTR_OBD_NONOBD | DEM_PB_EVTATTR_AVAILABLE_DISABLE ),                /* DemConf_DemEventParameter_DemEventDTC_B2E20 */
+    ( DEM_PB_EVTATTR_OBD_NONOBD | DEM_PB_EVTATTR_AVAILABLE_DISABLE ),                /* DemConf_DemEventParameter_DemEventDTC_B2E22 */
+    ( DEM_PB_EVTATTR_OBD_NONOBD | DEM_PB_EVTATTR_AVAILABLE_DISABLE ),                /* DemConf_DemEventParameter_DemEventDTC_B2E23 */
+    ( DEM_PB_EVTATTR_OBD_NONOBD | DEM_PB_EVTATTR_AVAILABLE_DISABLE ),                /* DemConf_DemEventParameter_DemEventDTC_B2E24 */
+    ( DEM_PB_EVTATTR_OBD_NONOBD | DEM_PB_EVTATTR_AVAILABLE_DISABLE ),                /* DemConf_DemEventParameter_DemEventDTC_B2E25 */
+    ( DEM_PB_EVTATTR_OBD_NONOBD | DEM_PB_EVTATTR_AVAILABLE_DISABLE ),                /* DemConf_DemEventParameter_DemEventDTC_B2E26 */
+    ( DEM_PB_EVTATTR_OBD_NONOBD | DEM_PB_EVTATTR_AVAILABLE_DISABLE ),                /* DemConf_DemEventParameter_DemEventDTC_B2E27 */
+    ( DEM_PB_EVTATTR_OBD_NONOBD | DEM_PB_EVTATTR_AVAILABLE_DISABLE ),                /* DemConf_DemEventParameter_DemEventDTC_B2E28 */
+    ( DEM_PB_EVTATTR_OBD_NONOBD | DEM_PB_EVTATTR_AVAILABLE_DISABLE ),                /* DemConf_DemEventParameter_DemEventDTC_B2E29 */
+    ( DEM_PB_EVTATTR_OBD_NONOBD | DEM_PB_EVTATTR_AVAILABLE_DISABLE )                 /* DemConf_DemEventParameter_DemEventDTC_B2E30 */
 };
 
 #define DEM_STOP_SEC_CONST_PBCONFIG_DIRECTLY_EVENTPARAMETERATTRIBUTE
@@ -94,7 +125,38 @@ CONST( AB_83_ConstV Dem_FailureCycleCounterThresholdType ,DEM_CONST_PBCONFIG_DIR
     1U,             /* DemConf_DemEventParameter_DemEventDTC_B1511 */
     1U,             /* DemConf_DemEventParameter_DemEventDTC_B1518 */
     1U,             /* DemConf_DemEventParameter_DemEventDTC_B1519 */
-    1U              /* DemConf_DemEventParameter_DemEventDTC_B151A */
+    1U,             /* DemConf_DemEventParameter_DemEventDTC_B151A */
+    1U,             /* DemConf_DemEventParameter_DemEventDTC_U2A00 */
+    1U,             /* DemConf_DemEventParameter_DemEventDTC_U2A01 */
+    1U,             /* DemConf_DemEventParameter_DemEventDTC_U2A16 */
+    1U,             /* DemConf_DemEventParameter_DemEventDTC_U2A17 */
+    1U,             /* DemConf_DemEventParameter_DemEventDTC_U2A12 */
+    1U,             /* DemConf_DemEventParameter_DemEventDTC_U2A13 */
+    1U,             /* DemConf_DemEventParameter_DemEventDTC_U2303 */
+    1U,             /* DemConf_DemEventParameter_DemEventDTC_U2302 */
+    1U,             /* DemConf_DemEventParameter_DemEventDTC_U13A0 */
+    1U,             /* DemConf_DemEventParameter_DemEventDTC_U2300 */
+    1U,             /* DemConf_DemEventParameter_DemEventDTC_U2301 */
+    1U,             /* DemConf_DemEventParameter_DemEventDTC_B2E01 */
+    1U,             /* DemConf_DemEventParameter_DemEventDTC_B2E02 */
+    1U,             /* DemConf_DemEventParameter_DemEventDTC_B2E03 */
+    1U,             /* DemConf_DemEventParameter_DemEventDTC_B2E04 */
+    1U,             /* DemConf_DemEventParameter_DemEventDTC_B2E05 */
+    1U,             /* DemConf_DemEventParameter_DemEventDTC_B2E06 */
+    1U,             /* DemConf_DemEventParameter_DemEventDTC_B2E07 */
+    1U,             /* DemConf_DemEventParameter_DemEventDTC_B2E08 */
+    1U,             /* DemConf_DemEventParameter_DemEventDTC_B2E12 */
+    1U,             /* DemConf_DemEventParameter_DemEventDTC_B2E15 */
+    1U,             /* DemConf_DemEventParameter_DemEventDTC_B2E20 */
+    1U,             /* DemConf_DemEventParameter_DemEventDTC_B2E22 */
+    1U,             /* DemConf_DemEventParameter_DemEventDTC_B2E23 */
+    1U,             /* DemConf_DemEventParameter_DemEventDTC_B2E24 */
+    1U,             /* DemConf_DemEventParameter_DemEventDTC_B2E25 */
+    1U,             /* DemConf_DemEventParameter_DemEventDTC_B2E26 */
+    1U,             /* DemConf_DemEventParameter_DemEventDTC_B2E27 */
+    1U,             /* DemConf_DemEventParameter_DemEventDTC_B2E28 */
+    1U,             /* DemConf_DemEventParameter_DemEventDTC_B2E29 */
+    1U              /* DemConf_DemEventParameter_DemEventDTC_B2E30 */
 };
 
 #define DEM_STOP_SEC_CONST_PBCONFIG_DIRECTLY_FAILURECYCLECOUNTERTHRESHOLD

@@ -77,6 +77,32 @@ FUNC(void, SCHM_CODE_CALLOUT) SchM_Exit_Dem_WIRStatusAccess(void);
 FUNC(void, SCHM_CODE_CALLOUT) SchM_Enter_Dem_NvMRecordAccess(void);
 FUNC(void, SCHM_CODE_CALLOUT) SchM_Exit_Dem_NvMRecordAccess(void);
 
+FUNC(void, SCHM_CODE_CALLOUT) SchM_Enter_Dem_Udm_RkDemUDM_Occurrence1_EventMemory(void);
+FUNC(void, SCHM_CODE_CALLOUT) SchM_Exit_Dem_Udm_RkDemUDM_Occurrence1_EventMemory(void);
+
+FUNC(void, SCHM_CODE_CALLOUT) SchM_Enter_Dem_Udm_RkDemUDM_Occurrence2_EventMemory(void);
+FUNC(void, SCHM_CODE_CALLOUT) SchM_Exit_Dem_Udm_RkDemUDM_Occurrence2_EventMemory(void);
+
+FUNC(void, SCHM_CODE_CALLOUT) SchM_Enter_Dem_Udm_RkDemUDM_Occurrence2_NM_EventMemory(void);
+FUNC(void, SCHM_CODE_CALLOUT) SchM_Exit_Dem_Udm_RkDemUDM_Occurrence2_NM_EventMemory(void);
+
+FUNC(void, SCHM_CODE_CALLOUT) SchM_Enter_Dem_Udm_RkDemUDM_Occurrence3_NM_EventMemory(void);
+FUNC(void, SCHM_CODE_CALLOUT) SchM_Exit_Dem_Udm_RkDemUDM_Occurrence3_NM_EventMemory(void);
+
+FUNC(void, SCHM_CODE_CALLOUT) SchM_Enter_Dem_Udm_RkDemUDM_Occurrence7_NM_EventMemory(void);
+FUNC(void, SCHM_CODE_CALLOUT) SchM_Exit_Dem_Udm_RkDemUDM_Occurrence7_NM_EventMemory(void);
+
+FUNC(void, SCHM_CODE_CALLOUT) SchM_Enter_Dem_Udm_RkDemUDM_Maintenance1_EventMemory(void);
+FUNC(void, SCHM_CODE_CALLOUT) SchM_Exit_Dem_Udm_RkDemUDM_Maintenance1_EventMemory(void);
+
+FUNC(void, SCHM_CODE_CALLOUT) SchM_Enter_Dem_Udm_RkDemUDM_SystemOperation2_EventMemory(void);
+FUNC(void, SCHM_CODE_CALLOUT) SchM_Exit_Dem_Udm_RkDemUDM_SystemOperation2_EventMemory(void);
+
+FUNC(void, SCHM_CODE_CALLOUT) SchM_Enter_Dem_SyncEventMemoryAccess(void);
+FUNC(void, SCHM_CODE_CALLOUT) SchM_Exit_Dem_SyncEventMemoryAccess(void);
+
+FUNC(void, SCHM_CODE_CALLOUT) SchM_Enter_Dem_UdmGetEventMemory(void);
+FUNC(void, SCHM_CODE_CALLOUT) SchM_Exit_Dem_UdmGetEventMemory(void);
 #define SCHM_STOP_SEC_CODE_CALLOUT
 #include <SchM_MemMap.h>
 

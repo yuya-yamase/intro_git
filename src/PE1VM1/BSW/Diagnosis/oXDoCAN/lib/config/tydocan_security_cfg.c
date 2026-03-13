@@ -116,7 +116,7 @@ U1   u1_g_TyDoCANSecurityCfgGetSeed(const U1 u1_a_ID, const Dcm_OpStatusType OpS
     case DCM_INITIAL:
         if((u1_a_ID >= (U1)OXDC_SECURITY_ID01) &&
            (u1_a_ID <= (U1)OXDC_SECURITY_ID02)){
-            u1_t_ret = (U1)E_OK;
+            u1_t_ret = (U1)DCM_E_PENDING;
         }
         else{
             u1_t_ret = (U1)E_NOT_OK;

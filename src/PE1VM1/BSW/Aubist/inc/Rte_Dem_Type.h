@@ -69,6 +69,34 @@ extern "C" {
 #define DEM_DTC_ORIGIN_USERDEFINED_MEMORY ((Dem_DTCOriginType)0x0100U)
 #endif /* DEM_DTC_ORIGIN_USERDEFINED_MEMORY */
 
+#ifndef DEM_DTC_ORIGIN_USERDEFINED_MEMORY_RkDemUDM_Occurrence1
+#define DEM_DTC_ORIGIN_USERDEFINED_MEMORY_RkDemUDM_Occurrence1 ((Dem_DTCOriginType)0x0111U)
+#endif /* DEM_DTC_ORIGIN_USERDEFINED_MEMORY_RkDemUDM_Occurrence1 */
+
+#ifndef DEM_DTC_ORIGIN_USERDEFINED_MEMORY_RkDemUDM_Occurrence2
+#define DEM_DTC_ORIGIN_USERDEFINED_MEMORY_RkDemUDM_Occurrence2 ((Dem_DTCOriginType)0x0111U)
+#endif /* DEM_DTC_ORIGIN_USERDEFINED_MEMORY_RkDemUDM_Occurrence2 */
+
+#ifndef DEM_DTC_ORIGIN_USERDEFINED_MEMORY_RkDemUDM_Occurrence2_NM
+#define DEM_DTC_ORIGIN_USERDEFINED_MEMORY_RkDemUDM_Occurrence2_NM ((Dem_DTCOriginType)0x0111U)
+#endif /* DEM_DTC_ORIGIN_USERDEFINED_MEMORY_RkDemUDM_Occurrence2_NM */
+
+#ifndef DEM_DTC_ORIGIN_USERDEFINED_MEMORY_RkDemUDM_Occurrence3_NM
+#define DEM_DTC_ORIGIN_USERDEFINED_MEMORY_RkDemUDM_Occurrence3_NM ((Dem_DTCOriginType)0x0111U)
+#endif /* DEM_DTC_ORIGIN_USERDEFINED_MEMORY_RkDemUDM_Occurrence3_NM */
+
+#ifndef DEM_DTC_ORIGIN_USERDEFINED_MEMORY_RkDemUDM_Occurrence7_NM
+#define DEM_DTC_ORIGIN_USERDEFINED_MEMORY_RkDemUDM_Occurrence7_NM ((Dem_DTCOriginType)0x0111U)
+#endif /* DEM_DTC_ORIGIN_USERDEFINED_MEMORY_RkDemUDM_Occurrence7_NM */
+
+#ifndef DEM_DTC_ORIGIN_USERDEFINED_MEMORY_RkDemUDM_Maintenance1
+#define DEM_DTC_ORIGIN_USERDEFINED_MEMORY_RkDemUDM_Maintenance1 ((Dem_DTCOriginType)0x0112U)
+#endif /* DEM_DTC_ORIGIN_USERDEFINED_MEMORY_RkDemUDM_Maintenance1 */
+
+#ifndef DEM_DTC_ORIGIN_USERDEFINED_MEMORY_RkDemUDM_SystemOperation2
+#define DEM_DTC_ORIGIN_USERDEFINED_MEMORY_RkDemUDM_SystemOperation2 ((Dem_DTCOriginType)0x0113U)
+#endif /* DEM_DTC_ORIGIN_USERDEFINED_MEMORY_RkDemUDM_SystemOperation2 */
+
 
 #ifndef DEM_FIRST_FAILED_DTC
 #define DEM_FIRST_FAILED_DTC ((Dem_DTCRequestType)0x01U)
@@ -448,8 +476,92 @@ extern "C" {
 #define DEM_RECORDKIND_CLRINFO ((Dem_RecordKindType)3U)
 #endif /* DEM_RECORDKIND_CLRINFO */
 
+#ifndef DEM_RECORDKIND_USRDEFMEM_EVENT_RkDemUDM_Occurrence1
+#define DEM_RECORDKIND_USRDEFMEM_EVENT_RkDemUDM_Occurrence1 ((Dem_RecordKindType)4U)
+#endif /* DEM_RECORDKIND_USRDEFMEM_EVENT_RkDemUDM_Occurrence1 */
+
+#ifndef DEM_RECORDKIND_USRDEFMEM_EVENT_RkDemUDM_Occurrence2
+#define DEM_RECORDKIND_USRDEFMEM_EVENT_RkDemUDM_Occurrence2 ((Dem_RecordKindType)5U)
+#endif /* DEM_RECORDKIND_USRDEFMEM_EVENT_RkDemUDM_Occurrence2 */
+
+#ifndef DEM_RECORDKIND_USRDEFMEM_EVENT_RkDemUDM_Occurrence2_NM
+#define DEM_RECORDKIND_USRDEFMEM_EVENT_RkDemUDM_Occurrence2_NM ((Dem_RecordKindType)6U)
+#endif /* DEM_RECORDKIND_USRDEFMEM_EVENT_RkDemUDM_Occurrence2_NM */
+
+#ifndef DEM_RECORDKIND_USRDEFMEM_EVENT_RkDemUDM_Occurrence3_NM
+#define DEM_RECORDKIND_USRDEFMEM_EVENT_RkDemUDM_Occurrence3_NM ((Dem_RecordKindType)7U)
+#endif /* DEM_RECORDKIND_USRDEFMEM_EVENT_RkDemUDM_Occurrence3_NM */
+
+#ifndef DEM_RECORDKIND_USRDEFMEM_EVENT_RkDemUDM_Occurrence7_NM
+#define DEM_RECORDKIND_USRDEFMEM_EVENT_RkDemUDM_Occurrence7_NM ((Dem_RecordKindType)8U)
+#endif /* DEM_RECORDKIND_USRDEFMEM_EVENT_RkDemUDM_Occurrence7_NM */
+
+#ifndef DEM_RECORDKIND_USRDEFMEM_EVENT_RkDemUDM_Maintenance1
+#define DEM_RECORDKIND_USRDEFMEM_EVENT_RkDemUDM_Maintenance1 ((Dem_RecordKindType)9U)
+#endif /* DEM_RECORDKIND_USRDEFMEM_EVENT_RkDemUDM_Maintenance1 */
+
+#ifndef DEM_RECORDKIND_USRDEFMEM_EVENT_RkDemUDM_SystemOperation2
+#define DEM_RECORDKIND_USRDEFMEM_EVENT_RkDemUDM_SystemOperation2 ((Dem_RecordKindType)10U)
+#endif /* DEM_RECORDKIND_USRDEFMEM_EVENT_RkDemUDM_SystemOperation2 */
+
+#ifndef DEM_RECORDKIND_USRDEFMEM_FAULT_RkDemUDM_Occurrence1
+#define DEM_RECORDKIND_USRDEFMEM_FAULT_RkDemUDM_Occurrence1 ((Dem_RecordKindType)11U)
+#endif /* DEM_RECORDKIND_USRDEFMEM_FAULT_RkDemUDM_Occurrence1 */
+
+#ifndef DEM_RECORDKIND_USRDEFMEM_FAULT_RkDemUDM_Occurrence2
+#define DEM_RECORDKIND_USRDEFMEM_FAULT_RkDemUDM_Occurrence2 ((Dem_RecordKindType)12U)
+#endif /* DEM_RECORDKIND_USRDEFMEM_FAULT_RkDemUDM_Occurrence2 */
+
+#ifndef DEM_RECORDKIND_USRDEFMEM_FAULT_RkDemUDM_Occurrence2_NM
+#define DEM_RECORDKIND_USRDEFMEM_FAULT_RkDemUDM_Occurrence2_NM ((Dem_RecordKindType)13U)
+#endif /* DEM_RECORDKIND_USRDEFMEM_FAULT_RkDemUDM_Occurrence2_NM */
+
+#ifndef DEM_RECORDKIND_USRDEFMEM_FAULT_RkDemUDM_Occurrence3_NM
+#define DEM_RECORDKIND_USRDEFMEM_FAULT_RkDemUDM_Occurrence3_NM ((Dem_RecordKindType)14U)
+#endif /* DEM_RECORDKIND_USRDEFMEM_FAULT_RkDemUDM_Occurrence3_NM */
+
+#ifndef DEM_RECORDKIND_USRDEFMEM_FAULT_RkDemUDM_Occurrence7_NM
+#define DEM_RECORDKIND_USRDEFMEM_FAULT_RkDemUDM_Occurrence7_NM ((Dem_RecordKindType)15U)
+#endif /* DEM_RECORDKIND_USRDEFMEM_FAULT_RkDemUDM_Occurrence7_NM */
+
+#ifndef DEM_RECORDKIND_USRDEFMEM_FAULT_RkDemUDM_Maintenance1
+#define DEM_RECORDKIND_USRDEFMEM_FAULT_RkDemUDM_Maintenance1 ((Dem_RecordKindType)16U)
+#endif /* DEM_RECORDKIND_USRDEFMEM_FAULT_RkDemUDM_Maintenance1 */
+
+#ifndef DEM_RECORDKIND_USRDEFMEM_FAULT_RkDemUDM_SystemOperation2
+#define DEM_RECORDKIND_USRDEFMEM_FAULT_RkDemUDM_SystemOperation2 ((Dem_RecordKindType)17U)
+#endif /* DEM_RECORDKIND_USRDEFMEM_FAULT_RkDemUDM_SystemOperation2 */
+
+#ifndef DEM_RECORDKIND_USRDEFMEM_FFD_RkDemUDM_Occurrence1
+#define DEM_RECORDKIND_USRDEFMEM_FFD_RkDemUDM_Occurrence1 ((Dem_RecordKindType)18U)
+#endif /* DEM_RECORDKIND_USRDEFMEM_FFD_RkDemUDM_Occurrence1 */
+
+#ifndef DEM_RECORDKIND_USRDEFMEM_FFD_RkDemUDM_Occurrence2
+#define DEM_RECORDKIND_USRDEFMEM_FFD_RkDemUDM_Occurrence2 ((Dem_RecordKindType)19U)
+#endif /* DEM_RECORDKIND_USRDEFMEM_FFD_RkDemUDM_Occurrence2 */
+
+#ifndef DEM_RECORDKIND_USRDEFMEM_FFD_RkDemUDM_Occurrence2_NM
+#define DEM_RECORDKIND_USRDEFMEM_FFD_RkDemUDM_Occurrence2_NM ((Dem_RecordKindType)20U)
+#endif /* DEM_RECORDKIND_USRDEFMEM_FFD_RkDemUDM_Occurrence2_NM */
+
+#ifndef DEM_RECORDKIND_USRDEFMEM_FFD_RkDemUDM_Occurrence3_NM
+#define DEM_RECORDKIND_USRDEFMEM_FFD_RkDemUDM_Occurrence3_NM ((Dem_RecordKindType)21U)
+#endif /* DEM_RECORDKIND_USRDEFMEM_FFD_RkDemUDM_Occurrence3_NM */
+
+#ifndef DEM_RECORDKIND_USRDEFMEM_FFD_RkDemUDM_Occurrence7_NM
+#define DEM_RECORDKIND_USRDEFMEM_FFD_RkDemUDM_Occurrence7_NM ((Dem_RecordKindType)22U)
+#endif /* DEM_RECORDKIND_USRDEFMEM_FFD_RkDemUDM_Occurrence7_NM */
+
+#ifndef DEM_RECORDKIND_USRDEFMEM_FFD_RkDemUDM_Maintenance1
+#define DEM_RECORDKIND_USRDEFMEM_FFD_RkDemUDM_Maintenance1 ((Dem_RecordKindType)23U)
+#endif /* DEM_RECORDKIND_USRDEFMEM_FFD_RkDemUDM_Maintenance1 */
+
+#ifndef DEM_RECORDKIND_USRDEFMEM_FFD_RkDemUDM_SystemOperation2
+#define DEM_RECORDKIND_USRDEFMEM_FFD_RkDemUDM_SystemOperation2 ((Dem_RecordKindType)24U)
+#endif /* DEM_RECORDKIND_USRDEFMEM_FFD_RkDemUDM_SystemOperation2 */
+
 #ifndef DEM_RECORDKIND_TOTALNUM
-#define DEM_RECORDKIND_TOTALNUM ((Dem_RecordKindType)4U)
+#define DEM_RECORDKIND_TOTALNUM ((Dem_RecordKindType)25U)
 #endif /* DEM_RECORDKIND_TOTALNUM */
 
 
@@ -829,7 +941,7 @@ extern "C" {
 /****************************************************************************/
 /* AUBIST definition for Array                                              */
 /****************************************************************************/
-#define DEM_MAX_DATA_ARRAY_SIZE                ((uint16)17U)
+#define DEM_MAX_DATA_ARRAY_SIZE                ((uint16)197U)
 #define DEM_MAX_PID_DATA_ARRAY_SIZE            ((uint16)1U)
 #define DEM_MAX_PFC_DATA_ARRAY_SIZE            ((uint16)1U)
 

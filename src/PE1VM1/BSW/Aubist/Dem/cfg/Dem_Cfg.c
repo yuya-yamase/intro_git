@@ -70,6 +70,7 @@ CONST( AB_83_ConstV Dem_u16_EventStrgIndexType         ,DEM_CONFIG_DATA )  Dem_F
 
 /* DemAdjustVerifyProcess */
 CONST( AB_83_ConstV Dem_u16_EventStrgIndexType         ,DEM_CONFIG_DATA) Dem_EventNumForVerifyByCycle                  = DEM_EVENT_NUM_FOR_VERIFY_BY_CYCLE;
+CONST( AB_83_ConstV Dem_u16_UdmEventIndexType          ,DEM_CONFIG_DATA) Dem_UdmEventNumForVerifyByCycle               = DEM_UDMEVENT_NUM_FOR_VERIFY_BY_CYCLE;
 
 CONST( AB_83_ConstV Dem_u32_TotalRecordNumType         ,DEM_CONFIG_DATA) Dem_RecordNumForVerifyByCycle                 = DEM_RECORD_NUM_FOR_VERIFY_BY_CYCLE;
 
@@ -116,11 +117,30 @@ CONST( AB_83_ConstV Dem_FreezeFrameDataPosType           ,DEM_CONFIG_DATA )  Dem
     31U        /* LastEventStrgIndexLower */
 };
 
+CONST( AB_83_ConstV Dem_UdmFreezeFrameDataPosType        ,DEM_CONFIG_DATA )  Dem_UdmFreezeFrameDataPosTable[ DEM_USER_DEFINED_MEMORY_NUM ] =
+{
+    /*  FirstCID FirstUdmEventIndexUpper FirstUdmEventIndexLower CidUdmFreezeFrameRecords OccurrenceOrderUpper OccurrenceOrderMiddle OccurrenceOrderLower OffsetOfTSFFListIndex RecordStatus DataStart  */
+        /*  LastCID LastUdmEventIndexUpper LastUdmEventIndexLower  */
+    {        0U,       1U,       2U,       3U,       4U,       5U,       6U,       7U,       8U,       9U,    29U,    30U,    31U   },
+    {        0U,       1U,       2U,       3U,       4U,       5U,       6U,       7U,       8U,       9U,    61U,    62U,    63U   },
+    {        0U,       1U,       2U,       3U,       4U,       5U,       6U,       7U,       8U,       9U,    61U,    62U,    63U   },
+    {        0U,       1U,       2U,       3U,       4U,       5U,       6U,       7U,       8U,       9U,    93U,    94U,    95U   },
+    {        0U,       1U,       2U,       3U,       4U,       5U,       6U,       7U,       8U,       9U,   221U,   222U,   223U   },
+    {        0U,       1U,       2U,       3U,       4U,       5U,       6U,       7U,       8U,       9U,    29U,    30U,    31U   },
+    {        0U,       1U,       2U,       3U,       4U,       5U,       6U,       7U,       8U,       9U,    61U,    62U,    63U   }
+};
+
 
 /* OperationCycle Record */
 CONST( AB_83_ConstV Dem_u08_OpCycleIndexType           ,DEM_CONFIG_DATA )  Dem_OperationCycleRecordStateNum     = DEM_OPERATION_CYCLE_RECORD_STATE_NUM;
 
+/* ClrInfo Record */
+CONST( AB_83_ConstV Dem_u16_UdmDemMemKindIndexType           ,DEM_CONFIG_DATA )  Dem_UserDefinedMemoryNum              = DEM_USER_DEFINED_MEMORY_NUM;
+CONST( AB_83_ConstV Dem_u08_UdmMemoryInfoTableIndexType      ,DEM_CONFIG_DATA )  Dem_UserDefinedMemoryInfoNum          = DEM_USER_DEFINED_MEMORY_INFO_NUM;
+CONST( AB_83_ConstV Dem_u08_UdmMemoryInfoTableIndexType      ,DEM_CONFIG_DATA )  Dem_UserDefinedMemoryInternalInfoNum  = DEM_USER_DEFINED_MEMORY_INTERNAL_INFO_NUM;
+
 CONST( AB_83_ConstV Dem_u16_PaddingIndexType           ,DEM_CONFIG_DATA )  Dem_ClrInfoRecordBlockPaddingSize      = DEM_CLRINFO_RECORD_PADDINGSIZE_TO_BLOCKSIZE;
+CONST( AB_83_ConstV Dem_u16_PaddingIndexType           ,DEM_CONFIG_DATA )  Dem_UdmFaultRecordBlockPaddingSize     = DEM_UDMFAULT_RECORD_PADDINGSIZE_TO_BLOCKSIZE;
 
 CONST( AB_83_ConstV Dem_u16_BlockSizeType              ,DEM_CONFIG_DATA )  Dem_FFDRecordNvBlockSize               = DEM_FFD_RECORD_NVBLOCK_SIZE;
 

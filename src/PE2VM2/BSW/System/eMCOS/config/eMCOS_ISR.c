@@ -33,17 +33,6 @@
 /*----------------------------------------------------------------------------
  *      Prototypes
  *--------------------------------------------------------------------------*/
-ISR(eMCOS_ISR_INTOSTM8TINT);
-ISR(eMCOS_ISR_INTRIIC0EE);
-ISR(eMCOS_ISR_INTRIIC0RI);
-ISR(eMCOS_ISR_INTRIIC0TI);
-ISR(eMCOS_ISR_INTRIIC0TEI);
-ISR(eMCOS_ISR_INTRIIC1EE);
-ISR(eMCOS_ISR_INTRIIC1RI);
-ISR(eMCOS_ISR_INTRIIC1TI);
-ISR(eMCOS_ISR_INTRIIC1TEI);
-ISR(eMCOS_ISR_INTOSTM1TINT);
-ISR(eMCOS_ISR_INTP38);
 
 /*----------------------------------------------------------------------------
  *		Codes

@@ -187,7 +187,6 @@ uint8   u1_g_oXDoCANAubIfEcuWkf(uint8 * u1_ap_wkf, Dem_MonitorDataType u4_a_mon)
 uint8   u1_g_oXDoCANAubIfEcuSngf(uint8 * u1_ap_sngf, Dem_MonitorDataType u4_a_mon);
 uint8   u1_g_oXDoCANAubIfNmGblWkf(uint8 * u1_ap_wkf, Dem_MonitorDataType u4_a_mon);
 uint8   u1_g_oXDoCANAubIfNmGblSngf(uint8 * u1_ap_sngf, Dem_MonitorDataType u4_a_mon);
-uint8   u1_g_oXDoCANAubIfMaCanId(uint8 * u1_ap_canid, Dem_MonitorDataType u4_a_mon);
 #else
 uint8   u1_g_oXDoCANAubIfTripcnt(uint8 * u1_ap_tripcnt);
 uint8   u1_g_oXDoCANAubIfOdo(uint8 * u1_ap_odo);

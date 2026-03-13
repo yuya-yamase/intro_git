@@ -754,19 +754,24 @@ U1      u1_g_oXDoCANCfgDidSessionBitChk(const U1 u1_a_CUR_SES, const U2 u2_a_CON
 U1      u1_g_oXDoCANIocReqLenChk(const ST_OXDC_REQ * st_ap_REQ)
 {
     U4                       u4_t_req_nbyte;
+    U4                       u4_t_ans_nbyte;
     U1                       u1_t_prm;
     U1                       u1_t_proc;
 
-    /* st_gp_TYDC_DATA_XID_ML[].u2_req_nbyte = length of ControlState */
+    /* st_gp_OXDC_DATA_XID_ML[].u2_req_nbyte = length of ControlState and length of ControlMask */
+    /* st_gp_OXDC_DATA_XID_ML[].u2_ans_nbyte = length of ControlState                           */
+    u4_t_req_nbyte = (U4)st_gp_OXDC_DATA_XID_ML[u2_g_oxdc_ioc_xid].u2_req_nbyte + (U4)OXDC_IOC_CSM;
+    u4_t_ans_nbyte = (U4)st_gp_OXDC_DATA_XID_ML[u2_g_oxdc_ioc_xid].u2_ans_nbyte;
     u1_t_prm      = st_ap_REQ->u1p_RX[OXDC_IOC_PRM];
-    if(u1_t_prm == (U1)OXDC_IOC_PRM_CTE){
-        u4_t_req_nbyte = (U4)OXDC_IOC_CSM;
+    if((u1_t_prm       == (U1)OXDC_IOC_PRM_CTE) &&
+       (u4_t_req_nbyte >= u4_t_ans_nbyte      )){
+        u4_t_req_nbyte -= u4_t_ans_nbyte;   /* length of ControlMask */
     }
-    else if(u1_t_prm == (U1)OXDC_IOC_PRM_STA){
-        u4_t_req_nbyte = (U4)st_gp_OXDC_DATA_XID_ML[u2_g_oxdc_ioc_xid].u2_req_nbyte + (U4)OXDC_IOC_CSM;
+    else if(u1_t_prm != (U1)OXDC_IOC_PRM_STA){
+        u4_t_req_nbyte = (U4)0U;
     }
     else{
-        u4_t_req_nbyte = (U4)0U;
+        /* Do Nothing */
     }
 
     if(st_ap_REQ->u4_nbyte == u4_t_req_nbyte){

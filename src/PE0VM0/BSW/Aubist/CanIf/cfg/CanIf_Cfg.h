@@ -1174,9 +1174,9 @@
 #define BSW_CANIF_CFG_COMP_HOH511               (BSW_CANIF_COMP_BIT_NONE )
 
 /* Send-HOH Channel Number */
-#define BSW_CANIF_CFG_0_HTHNUM                  (2U)
+#define BSW_CANIF_CFG_0_HTHNUM                  (1U)
 #define BSW_CANIF_CFG_1_HTHNUM                  (1U)
-#define BSW_CANIF_CFG_2_HTHNUM                  (2U)
+#define BSW_CANIF_CFG_2_HTHNUM                  (1U)
 #define BSW_CANIF_CFG_3_HTHNUM                  (1U)
 #define BSW_CANIF_CFG_4_HTHNUM                  (0U)
 #define BSW_CANIF_CFG_5_HTHNUM                  (0U)
@@ -2290,7 +2290,7 @@
 /* Transmission */
 #define BSW_CANIF_CFG_0_TXPDURPDUNUM            (0U)
 #define BSW_CANIF_CFG_1_TXPDURPDUNUM            (0U)
-#define BSW_CANIF_CFG_2_TXPDURPDUNUM            (1U)
+#define BSW_CANIF_CFG_2_TXPDURPDUNUM            (0U)
 #define BSW_CANIF_CFG_3_TXPDURPDUNUM            (0U)
 #define BSW_CANIF_CFG_4_TXPDURPDUNUM            (0U)
 #define BSW_CANIF_CFG_5_TXPDURPDUNUM            (0U)
@@ -3062,15 +3062,14 @@
 #define BSW_CANIF_CFG_METADATA_USE              (BSW_CANIF_NOUSE)
 
 /* PDU ID for Tx L-PDU */
-#define PDUID_QSEV_Tx_CANFD_VCC_1_BUS           (BSW_PDUR_LOCOMP_CANIF | 0x0000U)
 #define PDUID_CDC1N01_Tx_CANFD_G2M_1_BUS        (BSW_PDUR_LOCOMP_CANNM | 0x0000U)
 #define PDUID_CDC1N01_Tx_CANFD_G2M_2_BUS        (BSW_PDUR_LOCOMP_CANNM | 0x0001U)
 #define PDUID_CDC1N01_Tx_CDC_VCAN_BUS           (BSW_PDUR_LOCOMP_CANNM | 0x0002U)
 #define PDUID_CDCMN01_Tx_MM_SUB_BUS             (BSW_PDUR_LOCOMP_CANNM | 0x0003U)
 
 /* PDU ID for Rx L-PDU */
-#define PDUID_BDC1S81_Rx_CANFD_G2M_1_BUS        (BSW_PDUR_LOCOMP_CANIF | 0x0001U)
-#define PDUID_BDC1S91_Rx_CANFD_G2M_2_BUS        (BSW_PDUR_LOCOMP_CANIF | 0x0002U)
+#define PDUID_BDC1S81_Rx_CANFD_G2M_1_BUS        (BSW_PDUR_LOCOMP_CANIF | 0x0000U)
+#define PDUID_BDC1S91_Rx_CANFD_G2M_2_BUS        (BSW_PDUR_LOCOMP_CANIF | 0x0001U)
 #define PDUID_NM_Rx_CANFD_G2M_1_BUS             (BSW_PDUR_LOCOMP_CANNM | 0x0004U)
 #define PDUID_NM_Rx_CANFD_G2M_2_BUS             (BSW_PDUR_LOCOMP_CANNM | 0x0005U)
 #define PDUID_VME1N99_Rx_CDC_VCAN_BUS           (BSW_PDUR_LOCOMP_CANNM | 0x0006U)
@@ -3079,11 +3078,10 @@
 #define PDUID_MCDMN01_Rx_MM_SUB_BUS             (BSW_PDUR_LOCOMP_CANNM | 0x0009U)
 
 /* HOH Number for Tx L-PDU */
-#define HOH_QSEV_Tx_CANFD_VCC_1_BUS             (BSW_CANIF_HOH_VIRTUAL | 0x0008U)
 #define HOH_CDC1N01_Tx_CANFD_G2M_1_BUS          (0x00F8U)
 #define HOH_CDC1N01_Tx_CANFD_G2M_2_BUS          (0x00F7U)
 #define HOH_CDC1N01_Tx_CDC_VCAN_BUS             (BSW_CANIF_HOH_VIRTUAL | 0x0007U)
-#define HOH_CDCMN01_Tx_MM_SUB_BUS               (0x00FAU)
+#define HOH_CDCMN01_Tx_MM_SUB_BUS               (0x00F9U)
 
 /* HOH Number for Rx L-PDU */
 #define HOH_BDC1S81_Rx_CANFD_G2M_1_BUS          (0x0034U)

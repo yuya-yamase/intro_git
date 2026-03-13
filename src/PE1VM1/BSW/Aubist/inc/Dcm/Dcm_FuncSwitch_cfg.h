@@ -40,7 +40,7 @@
 #define DCM_PERIODIC_DDDID_USE               (STD_OFF)   /* Use DynamicallyDefineDataIdentifier for Periodic Sending */
 #define DCM_AUTHENTICATION_USE               (STD_OFF)   /* Use Authentication */
 #define DCM_NVM_AUTHENTICATION_USE           (STD_OFF)   /* Use NvM for Authentication */
-#define DCM_SID14_MEMORYSELECTION_USE        (STD_OFF)   /* Use SID14 MemorySelection */
+#define DCM_SID14_MEMORYSELECTION_USE        (STD_ON)    /* Use SID14 MemorySelection */
 #define DCM_SID86_ROE_USE                    (STD_ON)    /* Use SID86 ROE */
 #define DCM_SEC_PECULIAR_TYPE_WHITE          (STD_OFF)   /* Use SID27 Security Type White */
 #define DCM_SEC_PECULIAR_TYPE_BLACK          (STD_ON)    /* Use SID27 Security Type Black */

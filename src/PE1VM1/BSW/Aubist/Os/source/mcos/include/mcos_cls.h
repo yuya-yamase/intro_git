@@ -579,9 +579,9 @@ MCOS_INLINE mcos_bool_t mcos_cls_is_running(const mkcb_t * const mkcb, const tcb
 
 #if MCOS_AUTOSAR
 MCOS_INLINE ar_intcb_t * mcos_cls_get_arintcb(clscb_t * const clscb);
-static INLINE ar_tcb_t* ar_get_ar_tcb(const tcb_t * const p_mtcb);
-static INLINE void ar_task_pre_exit(clscb_t * const clscb, const tcb_t * const p_mtcb);
-static INLINE void ar_task_post_start_mksp(clscb_t * const clscb, tcb_t * const tcb);
+static AR_FORCE_INLINE ar_tcb_t* ar_get_ar_tcb(const tcb_t * const p_mtcb);
+static AR_FORCE_INLINE void ar_task_pre_exit(clscb_t * const clscb, const tcb_t * const p_mtcb);
+static AR_FORCE_INLINE void ar_task_post_start_mksp(clscb_t * const clscb, tcb_t * const tcb);
 #endif /* #if MCOS_AUTOSAR */
 
 #if MCOS_AUTOSAR
@@ -961,13 +961,13 @@ MCOS_INLINE ar_intcb_t * mcos_cls_get_arintcb (
     return &clscb->arintcb;
 }
 
-static INLINE ar_tcb_t* ar_get_ar_tcb(
+static AR_FORCE_INLINE ar_tcb_t* ar_get_ar_tcb(
     const tcb_t * const p_mtcb)
 {
     return (ar_tcb_t *)p_mtcb->migratable.exinf;
 }
 
-static INLINE void ar_task_pre_exit(
+static AR_FORCE_INLINE void ar_task_pre_exit(
     clscb_t * const clscb,
     const tcb_t * const p_mtcb)
 {
@@ -1006,7 +1006,7 @@ static INLINE void ar_task_pre_exit(
     }
 }
 
-static INLINE void ar_task_post_start_mksp(
+static AR_FORCE_INLINE void ar_task_post_start_mksp(
     clscb_t * const clscb,
     tcb_t * const tcb)
 {

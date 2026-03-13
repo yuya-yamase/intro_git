@@ -103,6 +103,11 @@ void    vd_g_oXCANAubIfInit(void)
 #if ((OXCAN_E2E_NUM_TRA > 0U) || (OXCAN_E2E_NUM_REC > 0U))
     vd_g_oXCANAubIfE2eInit();
 #endif /* #if ((OXCAN_E2E_NUM_REC > 0U) || (OXCAN_E2E_NUM_REC > 0U)) */
+
+#if (OXCAN_OMA_SEV_GEN == 1U)
+    vd_g_oXCANAubIfOMAInit();
+#endif /* #if (OXCAN_OMA_SEV_GEN == 1U) */
+
 }
 /*===================================================================================================================================*/
 /*  BswU4   bsw_cs_system_DI(void)                                                                                                   */

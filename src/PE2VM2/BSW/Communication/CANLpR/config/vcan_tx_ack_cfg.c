@@ -36,6 +36,7 @@
 #define CAN_LPR_UDS_RD_TEST                      (0U) /* 0:Product configuration  1:Remote Diag Communication Test configuration     */
                                                       /* If this configuration is modified, you must also update the following file: */  
                                                       /*   PE0VM0/BSW/Communication/CANLpR/config/can_lpr_cfg_uds_trx.h              */  
+                                                      /*   PE1VM1\BSW\Communication\CANLpR\config\vcan_tx_ack_cfg.c                  */
                                                       /* to maintain configuration consistency.                                      */  
 #if (CAN_LPR_UDS_RD_TEST == 1U)
 #warning "vcan_tx_ack_cfg.c : This build uses a configuration for the Remote Diagnostics Communication Test. Do not use for production."
@@ -99,7 +100,7 @@ const U1                           u1_g_VCAN_TXA_NUM_CCH = (U1)2U;
 const U1                           u1_gp_VCAN_TXA_NRMB_BY_CTRLR[] = {
     (U1)10U                                     /* Number of Rx Message Box for Controller#0 */
 };
-static const U4                    u4_s_VCAN_TXA_RSP_M0_31       = (U4)0x00000000U;
+static const U4                    u4_s_VCAN_TXA_RSP_M0_31       = (U4)0x00000020U;
 const U4 * const                   u4p_gp_VCAN_TXA_RSP_BY_RX[]   = {
     &u4_s_VCAN_TXA_RSP_M0_31
 };

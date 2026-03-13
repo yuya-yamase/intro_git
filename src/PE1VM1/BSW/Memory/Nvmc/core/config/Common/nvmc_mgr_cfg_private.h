@@ -40,11 +40,11 @@
 #define NVMC_MODULE_U4_TRPL                      (0U)
 #define NVMC_MODULE_U2_LO_TRPL                   (1U)
 #define NVMC_MODULE_U1_P1_TRPL                   (2U)
-#define NVMC_MODULE_OTHSNGL_8                    (3U)
-#define NVMC_MODULE_OTHSNGL_12                   (4U)
-#define NVMC_MODULE_OTHSNGL_32                   (5U)
-#define NVMC_MODULE_OTHDBL_32                    (6U)
-#define NVMC_MODULE_OTHSNGL_SUM_SMLL_28          (7U)
+#define NVMC_MODULE_U4_SNGL                      (3U)
+#define NVMC_MODULE_OTHSNGL_8                    (4U)
+#define NVMC_MODULE_OTHSNGL_12                   (5U)
+#define NVMC_MODULE_OTHSNGL_32                   (6U)
+#define NVMC_MODULE_OTHDBL_32                    (7U)
 #define NVMC_MODULE_OTHDBL_SUM_SMLL_28           (8U)
 /* END : ##TOOL_OUT#NVMC_MODULE_ID## */
 

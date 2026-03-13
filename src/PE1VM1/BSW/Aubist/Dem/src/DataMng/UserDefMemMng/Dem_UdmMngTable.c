@@ -34,6 +34,88 @@
 /*--------------------------------------------------------------------------*/
 /* Data                                                                     */
 /*--------------------------------------------------------------------------*/
+#define DEM_START_SEC_CONST_CONFIG
+#include <Dem_MemMap.h>
+
+CONST( AB_83_ConstV Dem_UdmExcFncType           ,DEM_CONFIG_DATA )  Dem_UdmExcFncTable[ DEM_USER_DEFINED_MEMORY_NUM ] =
+{
+    {   &SchM_Enter_Dem_Udm_RkDemUDM_Occurrence1_EventMemory, &SchM_Exit_Dem_Udm_RkDemUDM_Occurrence1_EventMemory   },
+    {   &SchM_Enter_Dem_Udm_RkDemUDM_Occurrence2_EventMemory, &SchM_Exit_Dem_Udm_RkDemUDM_Occurrence2_EventMemory   },
+    {   &SchM_Enter_Dem_Udm_RkDemUDM_Occurrence2_NM_EventMemory, &SchM_Exit_Dem_Udm_RkDemUDM_Occurrence2_NM_EventMemory   },
+    {   &SchM_Enter_Dem_Udm_RkDemUDM_Occurrence3_NM_EventMemory, &SchM_Exit_Dem_Udm_RkDemUDM_Occurrence3_NM_EventMemory   },
+    {   &SchM_Enter_Dem_Udm_RkDemUDM_Occurrence7_NM_EventMemory, &SchM_Exit_Dem_Udm_RkDemUDM_Occurrence7_NM_EventMemory   },
+    {   &SchM_Enter_Dem_Udm_RkDemUDM_Maintenance1_EventMemory, &SchM_Exit_Dem_Udm_RkDemUDM_Maintenance1_EventMemory   },
+    {   &SchM_Enter_Dem_Udm_RkDemUDM_SystemOperation2_EventMemory, &SchM_Exit_Dem_Udm_RkDemUDM_SystemOperation2_EventMemory   }
+};
+
+#define DEM_STOP_SEC_CONST_CONFIG
+#include <Dem_MemMap.h>
+
+
+#define DEM_START_SEC_CODE
+#include <Dem_MemMap.h>
+
+/****************************************************************************/
+/* External Functions                                                       */
+/****************************************************************************/
+
+#ifndef JGXSTACK
+#else /* JGXSTACK */
+/****************************************************************************/
+/* Function Name | Dem_UdmExcEnterFnc_ForStack                              */
+/* Description   | Dem_UdmExcEnterFnc for measuring stack size.             */
+/* Preconditions | none                                                     */
+/* Parameters    | none                                                     */
+/* Return Value  | none                                                     */
+/* Notes         | none                                                     */
+/****************************************************************************/
+FUNC( void, DEM_CODE ) Dem_UdmExcEnterFnc_ForStack
+(
+    void
+)
+{
+    SchM_Enter_Dem_Udm_RkDemUDM_Occurrence1_EventMemory();
+    SchM_Enter_Dem_Udm_RkDemUDM_Occurrence2_EventMemory();
+    SchM_Enter_Dem_Udm_RkDemUDM_Occurrence2_NM_EventMemory();
+    SchM_Enter_Dem_Udm_RkDemUDM_Occurrence3_NM_EventMemory();
+    SchM_Enter_Dem_Udm_RkDemUDM_Occurrence7_NM_EventMemory();
+    SchM_Enter_Dem_Udm_RkDemUDM_Maintenance1_EventMemory();
+    SchM_Enter_Dem_Udm_RkDemUDM_SystemOperation2_EventMemory();
+
+    return;
+}
+
+/****************************************************************************/
+/* Function Name | Dem_UdmExcExitFnc_ForStack                               */
+/* Description   | Dem_UdmExcExitFnc for measuring stack size.              */
+/* Preconditions | none                                                     */
+/* Parameters    | none                                                     */
+/* Return Value  | none                                                     */
+/* Notes         | none                                                     */
+/****************************************************************************/
+FUNC( void, DEM_CODE ) Dem_UdmExcExitFnc_ForStack
+(
+    void
+)
+{
+    SchM_Exit_Dem_Udm_RkDemUDM_Occurrence1_EventMemory();
+    SchM_Exit_Dem_Udm_RkDemUDM_Occurrence2_EventMemory();
+    SchM_Exit_Dem_Udm_RkDemUDM_Occurrence2_NM_EventMemory();
+    SchM_Exit_Dem_Udm_RkDemUDM_Occurrence3_NM_EventMemory();
+    SchM_Exit_Dem_Udm_RkDemUDM_Occurrence7_NM_EventMemory();
+    SchM_Exit_Dem_Udm_RkDemUDM_Maintenance1_EventMemory();
+    SchM_Exit_Dem_Udm_RkDemUDM_SystemOperation2_EventMemory();
+
+    return;
+}
+#endif /* JGXSTACK */
+
+/****************************************************************************/
+/* Internal Functions                                                       */
+/****************************************************************************/
+
+#define DEM_STOP_SEC_CODE
+#include <Dem_MemMap.h>
 
 
 /****************************************************************************/

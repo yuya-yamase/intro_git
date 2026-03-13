@@ -14,6 +14,10 @@
 /* Include Files                                                            */
 /*--------------------------------------------------------------------------*/
 #include "../../../inc/Dem_Rc_RecMngCmn_Table.h"
+#include "../../../cfg/Dem_UserDefMem_Cfg.h"
+#include "../../../inc/Dem_Rc_UdmEventRecordTable.h"
+#include "../../../inc/Dem_Rc_UdmFaultRecordTable.h"
+#include "../../../inc/Dem_Rc_UdmFFRecordTable.h"
 
 
 /*--------------------------------------------------------------------------*/
@@ -47,7 +51,28 @@ CONST( AB_83_ConstV Dem_RecordInitInfoType         ,DEM_CONFIG_DATA )  Dem_Recor
     {  &Dem_ClrInfoMng_Init,     &Dem_ClrInfoMng_InitSavedZone,     &Dem_ClrInfoMng_DataVerify      },
     {  &Dem_FFDMng_Init,         &Dem_FFDMng_InitSavedZone,         &Dem_FFDMng_DataVerify          },
     {  &Dem_FaultMng_Init,       &Dem_FaultMng_InitSavedZone,       &Dem_FaultMng_DataVerify        },
-    {  &Dem_EventMng_Init,       &Dem_EventMng_InitSavedZone,       &Dem_EventMng_DataVerify        }
+    {  &Dem_EventMng_Init,       &Dem_EventMng_InitSavedZone,       &Dem_EventMng_DataVerify        },
+    {  &Dem_UdmFFDMng_Init,      &Dem_UdmFFDMng_InitSavedZone,      &Dem_UdmFFDMng_DataVerify       },
+    {  &Dem_UdmFFDMng_Init,      &Dem_UdmFFDMng_InitSavedZone,      &Dem_UdmFFDMng_DataVerify       },
+    {  &Dem_UdmFFDMng_Init,      &Dem_UdmFFDMng_InitSavedZone,      &Dem_UdmFFDMng_DataVerify       },
+    {  &Dem_UdmFFDMng_Init,      &Dem_UdmFFDMng_InitSavedZone,      &Dem_UdmFFDMng_DataVerify       },
+    {  &Dem_UdmFFDMng_Init,      &Dem_UdmFFDMng_InitSavedZone,      &Dem_UdmFFDMng_DataVerify       },
+    {  &Dem_UdmFFDMng_Init,      &Dem_UdmFFDMng_InitSavedZone,      &Dem_UdmFFDMng_DataVerify       },
+    {  &Dem_UdmFFDMng_Init,      &Dem_UdmFFDMng_InitSavedZone,      &Dem_UdmFFDMng_DataVerify       },
+    {  &Dem_UdmFaultMng_Init,    &Dem_UdmFaultMng_InitSavedZone,    &Dem_UdmFaultMng_DataVerify     },
+    {  &Dem_UdmFaultMng_Init,    &Dem_UdmFaultMng_InitSavedZone,    &Dem_UdmFaultMng_DataVerify     },
+    {  &Dem_UdmFaultMng_Init,    &Dem_UdmFaultMng_InitSavedZone,    &Dem_UdmFaultMng_DataVerify     },
+    {  &Dem_UdmFaultMng_Init,    &Dem_UdmFaultMng_InitSavedZone,    &Dem_UdmFaultMng_DataVerify     },
+    {  &Dem_UdmFaultMng_Init,    &Dem_UdmFaultMng_InitSavedZone,    &Dem_UdmFaultMng_DataVerify     },
+    {  &Dem_UdmFaultMng_Init,    &Dem_UdmFaultMng_InitSavedZone,    &Dem_UdmFaultMng_DataVerify     },
+    {  &Dem_UdmFaultMng_Init,    &Dem_UdmFaultMng_InitSavedZone,    &Dem_UdmFaultMng_DataVerify     },
+    {  &Dem_UdmEventMng_Init,    &Dem_UdmEventMng_InitSavedZone,    &Dem_UdmEventMng_DataVerify     },
+    {  &Dem_UdmEventMng_Init,    &Dem_UdmEventMng_InitSavedZone,    &Dem_UdmEventMng_DataVerify     },
+    {  &Dem_UdmEventMng_Init,    &Dem_UdmEventMng_InitSavedZone,    &Dem_UdmEventMng_DataVerify     },
+    {  &Dem_UdmEventMng_Init,    &Dem_UdmEventMng_InitSavedZone,    &Dem_UdmEventMng_DataVerify     },
+    {  &Dem_UdmEventMng_Init,    &Dem_UdmEventMng_InitSavedZone,    &Dem_UdmEventMng_DataVerify     },
+    {  &Dem_UdmEventMng_Init,    &Dem_UdmEventMng_InitSavedZone,    &Dem_UdmEventMng_DataVerify     },
+    {  &Dem_UdmEventMng_Init,    &Dem_UdmEventMng_InitSavedZone,    &Dem_UdmEventMng_DataVerify     }
 };
 
 /* Data type processing function table */
@@ -56,7 +81,28 @@ CONST( AB_83_ConstV Dem_NvMWriteInfoType           ,DEM_CONFIG_DATA )  Dem_NvMWr
     {    &Dem_ClrInfoMng_SetRecordMirror,           &Dem_RecMngCmn_ExclusiveDummy,       &Dem_RecMngCmn_ExclusiveDummy,      &Dem_ClrInfoNvMStatus,       1U,                          DEM_CLRINFO_RECORD_NVBLOCK_SIZE,  1U,                                  DEM_MM_NVM_REC_KIND_CLRINFO     },
     {    &Dem_FFDMng_SetRecordMirror,               &Dem_RecMngCmn_ExclusiveDummy,       &Dem_RecMngCmn_ExclusiveDummy,      &Dem_FFDNvMStatus[0],        DEM_FFD_RECORD_LIST_NUM,     DEM_FFD_RECORD_NVBLOCK_SIZE,      DEM_FREEZE_FRAME_DATA_BLOCK_NUM,     DEM_MM_NVM_REC_KIND_FFD         },
     {    &Dem_FaultMng_SetRecordMirror,             &Dem_RecMngCmn_ExclusiveDummy,       &Dem_RecMngCmn_ExclusiveDummy,      &Dem_FaultNvMStatus[0],      DEM_FAIL_RECORD_LIST_NUM,    DEM_FAIL_RECORD_NVBLOCK_SIZE,     1U,                                  DEM_MM_NVM_REC_KIND_FLT         },
-    {    &Dem_EventMng_SetRecordMirror,             &Dem_RecMngCmn_ExclusiveDummy,       &Dem_RecMngCmn_ExclusiveDummy,      &Dem_EventNvMStatus[0],      DEM_EVENT_RECORD_LIST_NUM,   DEM_EVENT_RECORD_NVBLOCK_SIZE,    1U,                                  DEM_MM_NVM_REC_KIND_EVT         }
+    {    &Dem_EventMng_SetRecordMirror,             &Dem_RecMngCmn_ExclusiveDummy,       &Dem_RecMngCmn_ExclusiveDummy,      &Dem_EventNvMStatus[0],      DEM_EVENT_RECORD_LIST_NUM,   DEM_EVENT_RECORD_NVBLOCK_SIZE,    1U,                                  DEM_MM_NVM_REC_KIND_EVT         },
+    {    &Dem_UdmFFDMng_SetRecordMirror,            &Dem_RecMngCmn_ExclusiveDummy,       &Dem_RecMngCmn_ExclusiveDummy,      &Dem_Udm_RkDemUDM_Occurrence1_FFDNvMStatus[0],   DEM_UDM_RKDEMUDM_OCCURRENCE1_FFD_RECORD_NUM,  DEM_UDM_RKDEMUDM_OCCURRENCE1_FFD_RECORD_NVBLOCK_SIZE,   DEM_UDM_RKDEMUDM_OCCURRENCE1_FFD_BLOCK_NUM,        DEM_MM_NVM_REC_KIND_UDM_RKDEMUDM_OCCURRENCE1_FFD    },
+    {    &Dem_UdmFFDMng_SetRecordMirror,            &Dem_RecMngCmn_ExclusiveDummy,       &Dem_RecMngCmn_ExclusiveDummy,      &Dem_Udm_RkDemUDM_Occurrence2_FFDNvMStatus[0],   DEM_UDM_RKDEMUDM_OCCURRENCE2_FFD_RECORD_NUM,  DEM_UDM_RKDEMUDM_OCCURRENCE2_FFD_RECORD_NVBLOCK_SIZE,   DEM_UDM_RKDEMUDM_OCCURRENCE2_FFD_BLOCK_NUM,        DEM_MM_NVM_REC_KIND_UDM_RKDEMUDM_OCCURRENCE2_FFD    },
+    {    &Dem_UdmFFDMng_SetRecordMirror,            &Dem_RecMngCmn_ExclusiveDummy,       &Dem_RecMngCmn_ExclusiveDummy,      &Dem_Udm_RkDemUDM_Occurrence2_NM_FFDNvMStatus[0],   DEM_UDM_RKDEMUDM_OCCURRENCE2_NM_FFD_RECORD_NUM,  DEM_UDM_RKDEMUDM_OCCURRENCE2_NM_FFD_RECORD_NVBLOCK_SIZE,   DEM_UDM_RKDEMUDM_OCCURRENCE2_NM_FFD_BLOCK_NUM,        DEM_MM_NVM_REC_KIND_UDM_RKDEMUDM_OCCURRENCE2_NM_FFD    },
+    {    &Dem_UdmFFDMng_SetRecordMirror,            &Dem_RecMngCmn_ExclusiveDummy,       &Dem_RecMngCmn_ExclusiveDummy,      &Dem_Udm_RkDemUDM_Occurrence3_NM_FFDNvMStatus[0],   DEM_UDM_RKDEMUDM_OCCURRENCE3_NM_FFD_RECORD_NUM,  DEM_UDM_RKDEMUDM_OCCURRENCE3_NM_FFD_RECORD_NVBLOCK_SIZE,   DEM_UDM_RKDEMUDM_OCCURRENCE3_NM_FFD_BLOCK_NUM,        DEM_MM_NVM_REC_KIND_UDM_RKDEMUDM_OCCURRENCE3_NM_FFD    },
+    {    &Dem_UdmFFDMng_SetRecordMirror,            &Dem_RecMngCmn_ExclusiveDummy,       &Dem_RecMngCmn_ExclusiveDummy,      &Dem_Udm_RkDemUDM_Occurrence7_NM_FFDNvMStatus[0],   DEM_UDM_RKDEMUDM_OCCURRENCE7_NM_FFD_RECORD_NUM,  DEM_UDM_RKDEMUDM_OCCURRENCE7_NM_FFD_RECORD_NVBLOCK_SIZE,   DEM_UDM_RKDEMUDM_OCCURRENCE7_NM_FFD_BLOCK_NUM,        DEM_MM_NVM_REC_KIND_UDM_RKDEMUDM_OCCURRENCE7_NM_FFD    },
+    {    &Dem_UdmFFDMng_SetRecordMirror,            &Dem_RecMngCmn_ExclusiveDummy,       &Dem_RecMngCmn_ExclusiveDummy,      &Dem_Udm_RkDemUDM_Maintenance1_FFDNvMStatus[0],   DEM_UDM_RKDEMUDM_MAINTENANCE1_FFD_RECORD_NUM,  DEM_UDM_RKDEMUDM_MAINTENANCE1_FFD_RECORD_NVBLOCK_SIZE,   DEM_UDM_RKDEMUDM_MAINTENANCE1_FFD_BLOCK_NUM,        DEM_MM_NVM_REC_KIND_UDM_RKDEMUDM_MAINTENANCE1_FFD    },
+    {    &Dem_UdmFFDMng_SetRecordMirror,            &Dem_RecMngCmn_ExclusiveDummy,       &Dem_RecMngCmn_ExclusiveDummy,      &Dem_Udm_RkDemUDM_SystemOperation2_FFDNvMStatus[0],   DEM_UDM_RKDEMUDM_SYSTEMOPERATION2_FFD_RECORD_NUM,  DEM_UDM_RKDEMUDM_SYSTEMOPERATION2_FFD_RECORD_NVBLOCK_SIZE,   DEM_UDM_RKDEMUDM_SYSTEMOPERATION2_FFD_BLOCK_NUM,        DEM_MM_NVM_REC_KIND_UDM_RKDEMUDM_SYSTEMOPERATION2_FFD    },
+    {    &Dem_UdmFaultMng_SetRecordMirror,          &Dem_RecMngCmn_ExclusiveDummy,       &Dem_RecMngCmn_ExclusiveDummy,      &Dem_Udm_RkDemUDM_Occurrence1_FaultNvMStatus[0], DEM_UDM_RKDEMUDM_OCCURRENCE1_FAULT_RECORD_NUM, DEM_UDMFAULT_RECORD_NVBLOCK_SIZE,  1U,                             DEM_MM_NVM_REC_KIND_UDM_RKDEMUDM_OCCURRENCE1_FLT    },
+    {    &Dem_UdmFaultMng_SetRecordMirror,          &Dem_RecMngCmn_ExclusiveDummy,       &Dem_RecMngCmn_ExclusiveDummy,      &Dem_Udm_RkDemUDM_Occurrence2_FaultNvMStatus[0], DEM_UDM_RKDEMUDM_OCCURRENCE2_FAULT_RECORD_NUM, DEM_UDMFAULT_RECORD_NVBLOCK_SIZE,  1U,                             DEM_MM_NVM_REC_KIND_UDM_RKDEMUDM_OCCURRENCE2_FLT    },
+    {    &Dem_UdmFaultMng_SetRecordMirror,          &Dem_RecMngCmn_ExclusiveDummy,       &Dem_RecMngCmn_ExclusiveDummy,      &Dem_Udm_RkDemUDM_Occurrence2_NM_FaultNvMStatus[0], DEM_UDM_RKDEMUDM_OCCURRENCE2_NM_FAULT_RECORD_NUM, DEM_UDMFAULT_RECORD_NVBLOCK_SIZE,  1U,                             DEM_MM_NVM_REC_KIND_UDM_RKDEMUDM_OCCURRENCE2_NM_FLT    },
+    {    &Dem_UdmFaultMng_SetRecordMirror,          &Dem_RecMngCmn_ExclusiveDummy,       &Dem_RecMngCmn_ExclusiveDummy,      &Dem_Udm_RkDemUDM_Occurrence3_NM_FaultNvMStatus[0], DEM_UDM_RKDEMUDM_OCCURRENCE3_NM_FAULT_RECORD_NUM, DEM_UDMFAULT_RECORD_NVBLOCK_SIZE,  1U,                             DEM_MM_NVM_REC_KIND_UDM_RKDEMUDM_OCCURRENCE3_NM_FLT    },
+    {    &Dem_UdmFaultMng_SetRecordMirror,          &Dem_RecMngCmn_ExclusiveDummy,       &Dem_RecMngCmn_ExclusiveDummy,      &Dem_Udm_RkDemUDM_Occurrence7_NM_FaultNvMStatus[0], DEM_UDM_RKDEMUDM_OCCURRENCE7_NM_FAULT_RECORD_NUM, DEM_UDMFAULT_RECORD_NVBLOCK_SIZE,  1U,                             DEM_MM_NVM_REC_KIND_UDM_RKDEMUDM_OCCURRENCE7_NM_FLT    },
+    {    &Dem_UdmFaultMng_SetRecordMirror,          &Dem_RecMngCmn_ExclusiveDummy,       &Dem_RecMngCmn_ExclusiveDummy,      &Dem_Udm_RkDemUDM_Maintenance1_FaultNvMStatus[0], DEM_UDM_RKDEMUDM_MAINTENANCE1_FAULT_RECORD_NUM, DEM_UDMFAULT_RECORD_NVBLOCK_SIZE,  1U,                             DEM_MM_NVM_REC_KIND_UDM_RKDEMUDM_MAINTENANCE1_FLT    },
+    {    &Dem_UdmFaultMng_SetRecordMirror,          &Dem_RecMngCmn_ExclusiveDummy,       &Dem_RecMngCmn_ExclusiveDummy,      &Dem_Udm_RkDemUDM_SystemOperation2_FaultNvMStatus[0], DEM_UDM_RKDEMUDM_SYSTEMOPERATION2_FAULT_RECORD_NUM, DEM_UDMFAULT_RECORD_NVBLOCK_SIZE,  1U,                             DEM_MM_NVM_REC_KIND_UDM_RKDEMUDM_SYSTEMOPERATION2_FLT    },
+    {    &Dem_UdmEventMng_SetRecordMirror,          &Dem_RecMngCmn_ExclusiveDummy,       &Dem_RecMngCmn_ExclusiveDummy,      &Dem_Udm_RkDemUDM_Occurrence1_EventNvMStatus[0], DEM_UDM_RKDEMUDM_OCCURRENCE1_EVENT_RECORD_NUM, DEM_UDMEVENT_RECORD_NVBLOCK_SIZE,  1U,                             DEM_MM_NVM_REC_KIND_UDM_RKDEMUDM_OCCURRENCE1_EVT    },
+    {    &Dem_UdmEventMng_SetRecordMirror,          &Dem_RecMngCmn_ExclusiveDummy,       &Dem_RecMngCmn_ExclusiveDummy,      &Dem_Udm_RkDemUDM_Occurrence2_EventNvMStatus[0], DEM_UDM_RKDEMUDM_OCCURRENCE2_EVENT_RECORD_NUM, DEM_UDMEVENT_RECORD_NVBLOCK_SIZE,  1U,                             DEM_MM_NVM_REC_KIND_UDM_RKDEMUDM_OCCURRENCE2_EVT    },
+    {    &Dem_UdmEventMng_SetRecordMirror,          &Dem_RecMngCmn_ExclusiveDummy,       &Dem_RecMngCmn_ExclusiveDummy,      &Dem_Udm_RkDemUDM_Occurrence2_NM_EventNvMStatus[0], DEM_UDM_RKDEMUDM_OCCURRENCE2_NM_EVENT_RECORD_NUM, DEM_UDMEVENT_RECORD_NVBLOCK_SIZE,  1U,                             DEM_MM_NVM_REC_KIND_UDM_RKDEMUDM_OCCURRENCE2_NM_EVT    },
+    {    &Dem_UdmEventMng_SetRecordMirror,          &Dem_RecMngCmn_ExclusiveDummy,       &Dem_RecMngCmn_ExclusiveDummy,      &Dem_Udm_RkDemUDM_Occurrence3_NM_EventNvMStatus[0], DEM_UDM_RKDEMUDM_OCCURRENCE3_NM_EVENT_RECORD_NUM, DEM_UDMEVENT_RECORD_NVBLOCK_SIZE,  1U,                             DEM_MM_NVM_REC_KIND_UDM_RKDEMUDM_OCCURRENCE3_NM_EVT    },
+    {    &Dem_UdmEventMng_SetRecordMirror,          &Dem_RecMngCmn_ExclusiveDummy,       &Dem_RecMngCmn_ExclusiveDummy,      &Dem_Udm_RkDemUDM_Occurrence7_NM_EventNvMStatus[0], DEM_UDM_RKDEMUDM_OCCURRENCE7_NM_EVENT_RECORD_NUM, DEM_UDMEVENT_RECORD_NVBLOCK_SIZE,  1U,                             DEM_MM_NVM_REC_KIND_UDM_RKDEMUDM_OCCURRENCE7_NM_EVT    },
+    {    &Dem_UdmEventMng_SetRecordMirror,          &Dem_RecMngCmn_ExclusiveDummy,       &Dem_RecMngCmn_ExclusiveDummy,      &Dem_Udm_RkDemUDM_Maintenance1_EventNvMStatus[0], DEM_UDM_RKDEMUDM_MAINTENANCE1_EVENT_RECORD_NUM, DEM_UDMEVENT_RECORD_NVBLOCK_SIZE,  1U,                             DEM_MM_NVM_REC_KIND_UDM_RKDEMUDM_MAINTENANCE1_EVT    },
+    {    &Dem_UdmEventMng_SetRecordMirror,          &Dem_RecMngCmn_ExclusiveDummy,       &Dem_RecMngCmn_ExclusiveDummy,      &Dem_Udm_RkDemUDM_SystemOperation2_EventNvMStatus[0], DEM_UDM_RKDEMUDM_SYSTEMOPERATION2_EVENT_RECORD_NUM, DEM_UDMEVENT_RECORD_NVBLOCK_SIZE,  1U,                             DEM_MM_NVM_REC_KIND_UDM_RKDEMUDM_SYSTEMOPERATION2_EVT    }
 };
 
 CONST( AB_83_ConstV Dem_u16_RecordFieldIndexType   ,DEM_CONFIG_DATA )  Dem_RecordFieldIndexTableForMemSyncFunc[ DEM_RECMNGCMN_KIND_MAX ] =
@@ -64,7 +110,53 @@ CONST( AB_83_ConstV Dem_u16_RecordFieldIndexType   ,DEM_CONFIG_DATA )  Dem_Recor
     DEM_RECORD_ONE_FIELD,
     DEM_RECORD_ONE_FIELD,
     DEM_RECORD_ONE_FIELD,
-    DEM_RECORD_ONE_FIELD
+    DEM_RECORD_ONE_FIELD,
+    DEM_UDM_RKDEMUDM_OCCURRENCE1_KIND_INDEX,
+    DEM_UDM_RKDEMUDM_OCCURRENCE2_KIND_INDEX,
+    DEM_UDM_RKDEMUDM_OCCURRENCE2_NM_KIND_INDEX,
+    DEM_UDM_RKDEMUDM_OCCURRENCE3_NM_KIND_INDEX,
+    DEM_UDM_RKDEMUDM_OCCURRENCE7_NM_KIND_INDEX,
+    DEM_UDM_RKDEMUDM_MAINTENANCE1_KIND_INDEX,
+    DEM_UDM_RKDEMUDM_SYSTEMOPERATION2_KIND_INDEX,
+    DEM_UDM_RKDEMUDM_OCCURRENCE1_KIND_INDEX,
+    DEM_UDM_RKDEMUDM_OCCURRENCE2_KIND_INDEX,
+    DEM_UDM_RKDEMUDM_OCCURRENCE2_NM_KIND_INDEX,
+    DEM_UDM_RKDEMUDM_OCCURRENCE3_NM_KIND_INDEX,
+    DEM_UDM_RKDEMUDM_OCCURRENCE7_NM_KIND_INDEX,
+    DEM_UDM_RKDEMUDM_MAINTENANCE1_KIND_INDEX,
+    DEM_UDM_RKDEMUDM_SYSTEMOPERATION2_KIND_INDEX,
+    DEM_UDM_RKDEMUDM_OCCURRENCE1_KIND_INDEX,
+    DEM_UDM_RKDEMUDM_OCCURRENCE2_KIND_INDEX,
+    DEM_UDM_RKDEMUDM_OCCURRENCE2_NM_KIND_INDEX,
+    DEM_UDM_RKDEMUDM_OCCURRENCE3_NM_KIND_INDEX,
+    DEM_UDM_RKDEMUDM_OCCURRENCE7_NM_KIND_INDEX,
+    DEM_UDM_RKDEMUDM_MAINTENANCE1_KIND_INDEX,
+    DEM_UDM_RKDEMUDM_SYSTEMOPERATION2_KIND_INDEX
+};
+
+CONST( AB_83_ConstV Dem_u16_RecordFieldIndexType   ,DEM_CONFIG_DATA )  Dem_RecordFieldIndexTableForUdmClrNotVerifiedRecordFunc[ DEM_UDMRECMNGCMN_CLRRECKIND_NUM ] =
+{
+    DEM_UDM_RKDEMUDM_OCCURRENCE1_KIND_INDEX,
+    DEM_UDM_RKDEMUDM_OCCURRENCE2_KIND_INDEX,
+    DEM_UDM_RKDEMUDM_OCCURRENCE2_NM_KIND_INDEX,
+    DEM_UDM_RKDEMUDM_OCCURRENCE3_NM_KIND_INDEX,
+    DEM_UDM_RKDEMUDM_OCCURRENCE7_NM_KIND_INDEX,
+    DEM_UDM_RKDEMUDM_MAINTENANCE1_KIND_INDEX,
+    DEM_UDM_RKDEMUDM_SYSTEMOPERATION2_KIND_INDEX,
+    DEM_UDM_RKDEMUDM_OCCURRENCE1_KIND_INDEX,
+    DEM_UDM_RKDEMUDM_OCCURRENCE2_KIND_INDEX,
+    DEM_UDM_RKDEMUDM_OCCURRENCE2_NM_KIND_INDEX,
+    DEM_UDM_RKDEMUDM_OCCURRENCE3_NM_KIND_INDEX,
+    DEM_UDM_RKDEMUDM_OCCURRENCE7_NM_KIND_INDEX,
+    DEM_UDM_RKDEMUDM_MAINTENANCE1_KIND_INDEX,
+    DEM_UDM_RKDEMUDM_SYSTEMOPERATION2_KIND_INDEX,
+    DEM_UDM_RKDEMUDM_OCCURRENCE1_KIND_INDEX,
+    DEM_UDM_RKDEMUDM_OCCURRENCE2_KIND_INDEX,
+    DEM_UDM_RKDEMUDM_OCCURRENCE2_NM_KIND_INDEX,
+    DEM_UDM_RKDEMUDM_OCCURRENCE3_NM_KIND_INDEX,
+    DEM_UDM_RKDEMUDM_OCCURRENCE7_NM_KIND_INDEX,
+    DEM_UDM_RKDEMUDM_MAINTENANCE1_KIND_INDEX,
+    DEM_UDM_RKDEMUDM_SYSTEMOPERATION2_KIND_INDEX
 };
 
 CONST( AB_83_ConstV Dem_u16_RecordKindIndexType    ,DEM_CONFIG_DATA )  Dem_RecMngCmnKindClrInfo = DEM_RECMNGCMN_KIND_CLRINFO;
@@ -81,7 +173,33 @@ CONST( AB_83_ConstV DemClrNotVerifiedRecordFuncPtr    ,DEM_CONFIG_DATA ) Dem_Clr
     &Dem_EventMng_ClearAllNotVerifiedRecord
 };
 
+CONST( AB_83_ConstV DemUdmClrNotVerifiedRecordFuncPtr ,DEM_CONFIG_DATA ) Dem_UdmClrNotVerifiedRecordFuncTable[ DEM_UDMRECMNGCMN_CLRRECKIND_NUM ] =
+{
+    &Dem_UdmFFDMng_ClearAllNotVerifiedRecord,
+    &Dem_UdmFFDMng_ClearAllNotVerifiedRecord,
+    &Dem_UdmFFDMng_ClearAllNotVerifiedRecord,
+    &Dem_UdmFFDMng_ClearAllNotVerifiedRecord,
+    &Dem_UdmFFDMng_ClearAllNotVerifiedRecord,
+    &Dem_UdmFFDMng_ClearAllNotVerifiedRecord,
+    &Dem_UdmFFDMng_ClearAllNotVerifiedRecord,
+    &Dem_UdmFaultMng_ClearAllNotVerifiedRecord,
+    &Dem_UdmFaultMng_ClearAllNotVerifiedRecord,
+    &Dem_UdmFaultMng_ClearAllNotVerifiedRecord,
+    &Dem_UdmFaultMng_ClearAllNotVerifiedRecord,
+    &Dem_UdmFaultMng_ClearAllNotVerifiedRecord,
+    &Dem_UdmFaultMng_ClearAllNotVerifiedRecord,
+    &Dem_UdmFaultMng_ClearAllNotVerifiedRecord,
+    &Dem_UdmEventMng_ClearAllNotVerifiedRecord,
+    &Dem_UdmEventMng_ClearAllNotVerifiedRecord,
+    &Dem_UdmEventMng_ClearAllNotVerifiedRecord,
+    &Dem_UdmEventMng_ClearAllNotVerifiedRecord,
+    &Dem_UdmEventMng_ClearAllNotVerifiedRecord,
+    &Dem_UdmEventMng_ClearAllNotVerifiedRecord,
+    &Dem_UdmEventMng_ClearAllNotVerifiedRecord
+};
+
 CONST( AB_83_ConstV Dem_u16_RecordKindIndexType       ,DEM_CONFIG_DATA ) Dem_RecMngCmnClrRecKindNum    = DEM_RECMNGCMN_CLRRECKIND_NUM;
+CONST( AB_83_ConstV Dem_u16_RecordKindIndexType       ,DEM_CONFIG_DATA ) Dem_UdmRecMngCmnClrRecKindNum = DEM_UDMRECMNGCMN_CLRRECKIND_NUM;
 
 #define DEM_STOP_SEC_CONST_CONFIG
 #include <Dem_MemMap.h>
@@ -113,6 +231,27 @@ FUNC( void, DEM_CODE ) Dem_RecMngCmnInitFnc_ForStack
     Dem_FFDMng_Init( RecordFieldIndex );
     Dem_FaultMng_Init( RecordFieldIndex );
     Dem_EventMng_Init( RecordFieldIndex );
+    Dem_UdmFFDMng_Init( RecordFieldIndex );
+    Dem_UdmFFDMng_Init( RecordFieldIndex );
+    Dem_UdmFFDMng_Init( RecordFieldIndex );
+    Dem_UdmFFDMng_Init( RecordFieldIndex );
+    Dem_UdmFFDMng_Init( RecordFieldIndex );
+    Dem_UdmFFDMng_Init( RecordFieldIndex );
+    Dem_UdmFFDMng_Init( RecordFieldIndex );
+    Dem_UdmFaultMng_Init( RecordFieldIndex );
+    Dem_UdmFaultMng_Init( RecordFieldIndex );
+    Dem_UdmFaultMng_Init( RecordFieldIndex );
+    Dem_UdmFaultMng_Init( RecordFieldIndex );
+    Dem_UdmFaultMng_Init( RecordFieldIndex );
+    Dem_UdmFaultMng_Init( RecordFieldIndex );
+    Dem_UdmFaultMng_Init( RecordFieldIndex );
+    Dem_UdmEventMng_Init( RecordFieldIndex );
+    Dem_UdmEventMng_Init( RecordFieldIndex );
+    Dem_UdmEventMng_Init( RecordFieldIndex );
+    Dem_UdmEventMng_Init( RecordFieldIndex );
+    Dem_UdmEventMng_Init( RecordFieldIndex );
+    Dem_UdmEventMng_Init( RecordFieldIndex );
+    Dem_UdmEventMng_Init( RecordFieldIndex );
 
     return;
 }
@@ -136,6 +275,27 @@ FUNC( void, DEM_CODE ) Dem_RecMngCmnInitSavedZoneFnc_ForStack
     Dem_FFDMng_InitSavedZone( RecordFieldIndex, InitType );
     Dem_FaultMng_InitSavedZone( RecordFieldIndex, InitType );
     Dem_EventMng_InitSavedZone( RecordFieldIndex, InitType );
+    Dem_UdmFFDMng_InitSavedZone( RecordFieldIndex, InitType );
+    Dem_UdmFFDMng_InitSavedZone( RecordFieldIndex, InitType );
+    Dem_UdmFFDMng_InitSavedZone( RecordFieldIndex, InitType );
+    Dem_UdmFFDMng_InitSavedZone( RecordFieldIndex, InitType );
+    Dem_UdmFFDMng_InitSavedZone( RecordFieldIndex, InitType );
+    Dem_UdmFFDMng_InitSavedZone( RecordFieldIndex, InitType );
+    Dem_UdmFFDMng_InitSavedZone( RecordFieldIndex, InitType );
+    Dem_UdmFaultMng_InitSavedZone( RecordFieldIndex, InitType );
+    Dem_UdmFaultMng_InitSavedZone( RecordFieldIndex, InitType );
+    Dem_UdmFaultMng_InitSavedZone( RecordFieldIndex, InitType );
+    Dem_UdmFaultMng_InitSavedZone( RecordFieldIndex, InitType );
+    Dem_UdmFaultMng_InitSavedZone( RecordFieldIndex, InitType );
+    Dem_UdmFaultMng_InitSavedZone( RecordFieldIndex, InitType );
+    Dem_UdmFaultMng_InitSavedZone( RecordFieldIndex, InitType );
+    Dem_UdmEventMng_InitSavedZone( RecordFieldIndex, InitType );
+    Dem_UdmEventMng_InitSavedZone( RecordFieldIndex, InitType );
+    Dem_UdmEventMng_InitSavedZone( RecordFieldIndex, InitType );
+    Dem_UdmEventMng_InitSavedZone( RecordFieldIndex, InitType );
+    Dem_UdmEventMng_InitSavedZone( RecordFieldIndex, InitType );
+    Dem_UdmEventMng_InitSavedZone( RecordFieldIndex, InitType );
+    Dem_UdmEventMng_InitSavedZone( RecordFieldIndex, InitType );
 
     return;
 }
@@ -160,6 +320,27 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_RecMngCmnDataVerifyFnc_ForStack
     retVal = Dem_FFDMng_DataVerify( RecordFieldIndex );
     retVal = Dem_FaultMng_DataVerify( RecordFieldIndex );
     retVal = Dem_EventMng_DataVerify( RecordFieldIndex );
+    retVal = Dem_UdmFFDMng_DataVerify( RecordFieldIndex );
+    retVal = Dem_UdmFFDMng_DataVerify( RecordFieldIndex );
+    retVal = Dem_UdmFFDMng_DataVerify( RecordFieldIndex );
+    retVal = Dem_UdmFFDMng_DataVerify( RecordFieldIndex );
+    retVal = Dem_UdmFFDMng_DataVerify( RecordFieldIndex );
+    retVal = Dem_UdmFFDMng_DataVerify( RecordFieldIndex );
+    retVal = Dem_UdmFFDMng_DataVerify( RecordFieldIndex );
+    retVal = Dem_UdmFaultMng_DataVerify( RecordFieldIndex );
+    retVal = Dem_UdmFaultMng_DataVerify( RecordFieldIndex );
+    retVal = Dem_UdmFaultMng_DataVerify( RecordFieldIndex );
+    retVal = Dem_UdmFaultMng_DataVerify( RecordFieldIndex );
+    retVal = Dem_UdmFaultMng_DataVerify( RecordFieldIndex );
+    retVal = Dem_UdmFaultMng_DataVerify( RecordFieldIndex );
+    retVal = Dem_UdmFaultMng_DataVerify( RecordFieldIndex );
+    retVal = Dem_UdmEventMng_DataVerify( RecordFieldIndex );
+    retVal = Dem_UdmEventMng_DataVerify( RecordFieldIndex );
+    retVal = Dem_UdmEventMng_DataVerify( RecordFieldIndex );
+    retVal = Dem_UdmEventMng_DataVerify( RecordFieldIndex );
+    retVal = Dem_UdmEventMng_DataVerify( RecordFieldIndex );
+    retVal = Dem_UdmEventMng_DataVerify( RecordFieldIndex );
+    retVal = Dem_UdmEventMng_DataVerify( RecordFieldIndex );
 
     return retVal;
 }
@@ -184,6 +365,27 @@ FUNC( void, DEM_CODE ) Dem_RecMngCmnSetMirrorDataFnc_ForStack
     Dem_FFDMng_SetRecordMirror( RecordFieldIndex, BlockMirrorPtr );
     Dem_FaultMng_SetRecordMirror( RecordFieldIndex, BlockMirrorPtr );
     Dem_EventMng_SetRecordMirror( RecordFieldIndex, BlockMirrorPtr );
+    Dem_UdmFFDMng_SetRecordMirror( RecordFieldIndex, BlockMirrorPtr );
+    Dem_UdmFFDMng_SetRecordMirror( RecordFieldIndex, BlockMirrorPtr );
+    Dem_UdmFFDMng_SetRecordMirror( RecordFieldIndex, BlockMirrorPtr );
+    Dem_UdmFFDMng_SetRecordMirror( RecordFieldIndex, BlockMirrorPtr );
+    Dem_UdmFFDMng_SetRecordMirror( RecordFieldIndex, BlockMirrorPtr );
+    Dem_UdmFFDMng_SetRecordMirror( RecordFieldIndex, BlockMirrorPtr );
+    Dem_UdmFFDMng_SetRecordMirror( RecordFieldIndex, BlockMirrorPtr );
+    Dem_UdmFaultMng_SetRecordMirror( RecordFieldIndex, BlockMirrorPtr );
+    Dem_UdmFaultMng_SetRecordMirror( RecordFieldIndex, BlockMirrorPtr );
+    Dem_UdmFaultMng_SetRecordMirror( RecordFieldIndex, BlockMirrorPtr );
+    Dem_UdmFaultMng_SetRecordMirror( RecordFieldIndex, BlockMirrorPtr );
+    Dem_UdmFaultMng_SetRecordMirror( RecordFieldIndex, BlockMirrorPtr );
+    Dem_UdmFaultMng_SetRecordMirror( RecordFieldIndex, BlockMirrorPtr );
+    Dem_UdmFaultMng_SetRecordMirror( RecordFieldIndex, BlockMirrorPtr );
+    Dem_UdmEventMng_SetRecordMirror( RecordFieldIndex, BlockMirrorPtr );
+    Dem_UdmEventMng_SetRecordMirror( RecordFieldIndex, BlockMirrorPtr );
+    Dem_UdmEventMng_SetRecordMirror( RecordFieldIndex, BlockMirrorPtr );
+    Dem_UdmEventMng_SetRecordMirror( RecordFieldIndex, BlockMirrorPtr );
+    Dem_UdmEventMng_SetRecordMirror( RecordFieldIndex, BlockMirrorPtr );
+    Dem_UdmEventMng_SetRecordMirror( RecordFieldIndex, BlockMirrorPtr );
+    Dem_UdmEventMng_SetRecordMirror( RecordFieldIndex, BlockMirrorPtr );
 
     return;
 }
@@ -205,6 +407,27 @@ FUNC( void, DEM_CODE ) Dem_RecMngCmnExcEnterFnc_ForStack
     Dem_RecMngCmn_ExclusiveDummy();
     Dem_RecMngCmn_ExclusiveDummy();
     Dem_RecMngCmn_ExclusiveDummy();
+    Dem_RecMngCmn_ExclusiveDummy();
+    Dem_RecMngCmn_ExclusiveDummy();
+    Dem_RecMngCmn_ExclusiveDummy();
+    Dem_RecMngCmn_ExclusiveDummy();
+    Dem_RecMngCmn_ExclusiveDummy();
+    Dem_RecMngCmn_ExclusiveDummy();
+    Dem_RecMngCmn_ExclusiveDummy();
+    Dem_RecMngCmn_ExclusiveDummy();
+    Dem_RecMngCmn_ExclusiveDummy();
+    Dem_RecMngCmn_ExclusiveDummy();
+    Dem_RecMngCmn_ExclusiveDummy();
+    Dem_RecMngCmn_ExclusiveDummy();
+    Dem_RecMngCmn_ExclusiveDummy();
+    Dem_RecMngCmn_ExclusiveDummy();
+    Dem_RecMngCmn_ExclusiveDummy();
+    Dem_RecMngCmn_ExclusiveDummy();
+    Dem_RecMngCmn_ExclusiveDummy();
+    Dem_RecMngCmn_ExclusiveDummy();
+    Dem_RecMngCmn_ExclusiveDummy();
+    Dem_RecMngCmn_ExclusiveDummy();
+    Dem_RecMngCmn_ExclusiveDummy();
 
     return;
 }
@@ -222,6 +445,27 @@ FUNC( void, DEM_CODE ) Dem_RecMngCmnExcExitFnc_ForStack
     void
 )
 {
+    Dem_RecMngCmn_ExclusiveDummy();
+    Dem_RecMngCmn_ExclusiveDummy();
+    Dem_RecMngCmn_ExclusiveDummy();
+    Dem_RecMngCmn_ExclusiveDummy();
+    Dem_RecMngCmn_ExclusiveDummy();
+    Dem_RecMngCmn_ExclusiveDummy();
+    Dem_RecMngCmn_ExclusiveDummy();
+    Dem_RecMngCmn_ExclusiveDummy();
+    Dem_RecMngCmn_ExclusiveDummy();
+    Dem_RecMngCmn_ExclusiveDummy();
+    Dem_RecMngCmn_ExclusiveDummy();
+    Dem_RecMngCmn_ExclusiveDummy();
+    Dem_RecMngCmn_ExclusiveDummy();
+    Dem_RecMngCmn_ExclusiveDummy();
+    Dem_RecMngCmn_ExclusiveDummy();
+    Dem_RecMngCmn_ExclusiveDummy();
+    Dem_RecMngCmn_ExclusiveDummy();
+    Dem_RecMngCmn_ExclusiveDummy();
+    Dem_RecMngCmn_ExclusiveDummy();
+    Dem_RecMngCmn_ExclusiveDummy();
+    Dem_RecMngCmn_ExclusiveDummy();
     Dem_RecMngCmn_ExclusiveDummy();
     Dem_RecMngCmn_ExclusiveDummy();
     Dem_RecMngCmn_ExclusiveDummy();
@@ -254,6 +498,49 @@ FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_RecMngClrNotVerifiedRecordFunc_
     return retVal;
 }
 
+/****************************************************************************/
+/* Function Name | Dem_UdmRecMngClrNotVerifiedRecordFunc_ForStack           */
+/* Description   | -                                                        */
+/* Preconditions | none                                                     */
+/* Parameters    | [in] RecordFieldIndex                                    */
+/*               | [in] ClearRecordIndexPtr                                 */
+/*               | [out] RestOfProcessableNumPtr                            */
+/* Return Value  | DEM_IRT_OK                                               */
+/* Notes         | none                                                     */
+/****************************************************************************/
+FUNC( Dem_u08_InternalReturnType, DEM_CODE ) Dem_UdmRecMngClrNotVerifiedRecordFunc_ForStack
+(
+    VAR( Dem_u16_RecordFieldIndexType, AUTOMATIC ) RecordFieldIndex,
+    P2VAR( Dem_u16_RecordIndexType, AUTOMATIC, AUTOMATIC ) ClearRecordIndexPtr,
+    P2VAR( Dem_u32_TotalRecordNumType, AUTOMATIC, AUTOMATIC ) RestOfProcessableNumPtr
+)
+{
+    VAR( Dem_u08_InternalReturnType, AUTOMATIC ) retVal;
+
+    retVal = Dem_UdmFFDMng_ClearAllNotVerifiedRecord( RecordFieldIndex, ClearRecordIndexPtr, RestOfProcessableNumPtr );
+    retVal = Dem_UdmFFDMng_ClearAllNotVerifiedRecord( RecordFieldIndex, ClearRecordIndexPtr, RestOfProcessableNumPtr );
+    retVal = Dem_UdmFFDMng_ClearAllNotVerifiedRecord( RecordFieldIndex, ClearRecordIndexPtr, RestOfProcessableNumPtr );
+    retVal = Dem_UdmFFDMng_ClearAllNotVerifiedRecord( RecordFieldIndex, ClearRecordIndexPtr, RestOfProcessableNumPtr );
+    retVal = Dem_UdmFFDMng_ClearAllNotVerifiedRecord( RecordFieldIndex, ClearRecordIndexPtr, RestOfProcessableNumPtr );
+    retVal = Dem_UdmFFDMng_ClearAllNotVerifiedRecord( RecordFieldIndex, ClearRecordIndexPtr, RestOfProcessableNumPtr );
+    retVal = Dem_UdmFFDMng_ClearAllNotVerifiedRecord( RecordFieldIndex, ClearRecordIndexPtr, RestOfProcessableNumPtr );
+    retVal = Dem_UdmFaultMng_ClearAllNotVerifiedRecord( RecordFieldIndex, ClearRecordIndexPtr, RestOfProcessableNumPtr );
+    retVal = Dem_UdmFaultMng_ClearAllNotVerifiedRecord( RecordFieldIndex, ClearRecordIndexPtr, RestOfProcessableNumPtr );
+    retVal = Dem_UdmFaultMng_ClearAllNotVerifiedRecord( RecordFieldIndex, ClearRecordIndexPtr, RestOfProcessableNumPtr );
+    retVal = Dem_UdmFaultMng_ClearAllNotVerifiedRecord( RecordFieldIndex, ClearRecordIndexPtr, RestOfProcessableNumPtr );
+    retVal = Dem_UdmFaultMng_ClearAllNotVerifiedRecord( RecordFieldIndex, ClearRecordIndexPtr, RestOfProcessableNumPtr );
+    retVal = Dem_UdmFaultMng_ClearAllNotVerifiedRecord( RecordFieldIndex, ClearRecordIndexPtr, RestOfProcessableNumPtr );
+    retVal = Dem_UdmFaultMng_ClearAllNotVerifiedRecord( RecordFieldIndex, ClearRecordIndexPtr, RestOfProcessableNumPtr );
+    retVal = Dem_UdmEventMng_ClearAllNotVerifiedRecord( RecordFieldIndex, ClearRecordIndexPtr, RestOfProcessableNumPtr );
+    retVal = Dem_UdmEventMng_ClearAllNotVerifiedRecord( RecordFieldIndex, ClearRecordIndexPtr, RestOfProcessableNumPtr );
+    retVal = Dem_UdmEventMng_ClearAllNotVerifiedRecord( RecordFieldIndex, ClearRecordIndexPtr, RestOfProcessableNumPtr );
+    retVal = Dem_UdmEventMng_ClearAllNotVerifiedRecord( RecordFieldIndex, ClearRecordIndexPtr, RestOfProcessableNumPtr );
+    retVal = Dem_UdmEventMng_ClearAllNotVerifiedRecord( RecordFieldIndex, ClearRecordIndexPtr, RestOfProcessableNumPtr );
+    retVal = Dem_UdmEventMng_ClearAllNotVerifiedRecord( RecordFieldIndex, ClearRecordIndexPtr, RestOfProcessableNumPtr );
+    retVal = Dem_UdmEventMng_ClearAllNotVerifiedRecord( RecordFieldIndex, ClearRecordIndexPtr, RestOfProcessableNumPtr );
+
+    return retVal;
+}
 #endif /* JGXSTACK */
 
 /****************************************************************************/

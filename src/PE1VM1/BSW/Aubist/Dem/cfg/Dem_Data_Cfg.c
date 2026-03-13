@@ -49,7 +49,21 @@ CONST( AB_83_ConstV Dem_DataElementClassType,DEM_CONFIG_DATA) Dem_DataElementCla
           /*  DemDataElementReadFnc   */
     {   7U, &u1_g_oXDoCANAubIfTripcnt  },
     {   4U, &u1_g_oXDoCANAubIfOdo  },
-    {   6U, &u1_g_oXDoCANAubIfGmt  }
+    {   6U, &u1_g_oXDoCANAubIfGmt  },
+    {   1U, &u1_g_oXDoCANAubIfSpeed  },
+    {   1U, &u1_g_oXDoCANAubIfEcuPower  },
+    {   1U, &u1_g_oXDoCANAubIfAirTemp  },
+    {   1U, &u1_g_oXDoCANAubIfPowertrainSts  },
+    {   20U, &u1_g_oXDoCANAubIfNmWkf  },
+    {   20U, &u1_g_oXDoCANAubIfNmSngf  },
+    {   180U, &u1_g_oXDoCANAubIfNmGblWkf  },
+    {   60U, &u1_g_oXDoCANAubIfNmGblSngf  },
+    {   20U, &u1_g_oXDoCANAubIfEcuWkf  },
+    {   20U, &u1_g_oXDoCANAubIfEcuSngf  },
+    {   5U, &u1_g_oXDoCANAubIfMacUVHst  },
+    {   5U, &u1_g_oXDoCANAubIfEncUVHst  },
+    {   1U, &u1_g_oXDoCANAubIfSocTemp  },
+    {   1U, &u1_g_oXDoCANAubIfIvtCoolTemp  }
 };
 
 CONST( AB_83_ConstV Dem_DidClassType                ,DEM_CONFIG_DATA )  Dem_DIDClassTable[ DEM_DID_NUM ] =
@@ -57,14 +71,37 @@ CONST( AB_83_ConstV Dem_DidClassType                ,DEM_CONFIG_DATA )  Dem_DIDC
     /*  DemDidIdentifier DemDidDataSize  */
         /*  DemDataElementClassNum DemDataElementClassRef  */
     {   0xA800U, 7U, 1U, {    0U  }  },
+    {   0xA003U, 4U, 1U, {    1U  }  },
     {   0xA002U, 6U, 1U, {    2U  }  },
-    {   0xA003U, 4U, 1U, {    1U  }  }
+    {   0xA007U, 1U, 1U, {    3U  }  },
+    {   0xA008U, 1U, 1U, {    4U  }  },
+    {   0xA009U, 1U, 1U, {    5U  }  },
+    {   0xA00AU, 1U, 1U, {    6U  }  },
+    {   0xAC00U, 20U, 1U, {    7U  }  },
+    {   0xAC01U, 20U, 1U, {    8U  }  },
+    {   0xAC04U, 180U, 1U, {    9U  }  },
+    {   0xAC05U, 60U, 1U, {    10U  }  },
+    {   0xAC20U, 20U, 1U, {    11U  }  },
+    {   0xAC21U, 20U, 1U, {    12U  }  },
+    {   0xA905U, 5U, 1U, {    13U  }  },
+    {   0xA907U, 5U, 1U, {    14U  }  },
+    {   0x10B7U, 1U, 1U, {    15U  }  },
+    {   0x1242U, 1U, 1U, {    16U  }  }
 };
 
 CONST( AB_83_ConstV Dem_FreezeFrameClassType        ,DEM_CONFIG_DATA )  Dem_FreezeFrameClassTable[ DEM_DTC_FFR_CLASS_CONFIGURE_NUM ] =
 {
     /*  DemFreezeFrameReadFnc DemDidClassRef DemDidClassNum DemDidClassSize  */
-    {   NULL_PTR, {   0U, 1U, 2U  }, 3U, 17U  }
+    {   NULL_PTR, {   0U, 2U, 1U, 3U, 4U, 6U, DEM_DIDCLASSINDEX_INVALID, DEM_DIDCLASSINDEX_INVALID, DEM_DIDCLASSINDEX_INVALID  }, 6U, 20U  },
+    {   NULL_PTR, {   0U, 2U, 1U, 7U, DEM_DIDCLASSINDEX_INVALID, DEM_DIDCLASSINDEX_INVALID, DEM_DIDCLASSINDEX_INVALID, DEM_DIDCLASSINDEX_INVALID, DEM_DIDCLASSINDEX_INVALID  }, 4U, 37U  },
+    {   NULL_PTR, {   0U, 2U, 1U, 8U, DEM_DIDCLASSINDEX_INVALID, DEM_DIDCLASSINDEX_INVALID, DEM_DIDCLASSINDEX_INVALID, DEM_DIDCLASSINDEX_INVALID, DEM_DIDCLASSINDEX_INVALID  }, 4U, 37U  },
+    {   NULL_PTR, {   0U, 2U, 1U, 9U, DEM_DIDCLASSINDEX_INVALID, DEM_DIDCLASSINDEX_INVALID, DEM_DIDCLASSINDEX_INVALID, DEM_DIDCLASSINDEX_INVALID, DEM_DIDCLASSINDEX_INVALID  }, 4U, 197U  },
+    {   NULL_PTR, {   0U, 2U, 1U, 10U, DEM_DIDCLASSINDEX_INVALID, DEM_DIDCLASSINDEX_INVALID, DEM_DIDCLASSINDEX_INVALID, DEM_DIDCLASSINDEX_INVALID, DEM_DIDCLASSINDEX_INVALID  }, 4U, 77U  },
+    {   NULL_PTR, {   0U, 2U, 1U, 11U, DEM_DIDCLASSINDEX_INVALID, DEM_DIDCLASSINDEX_INVALID, DEM_DIDCLASSINDEX_INVALID, DEM_DIDCLASSINDEX_INVALID, DEM_DIDCLASSINDEX_INVALID  }, 4U, 37U  },
+    {   NULL_PTR, {   0U, 2U, 1U, 12U, DEM_DIDCLASSINDEX_INVALID, DEM_DIDCLASSINDEX_INVALID, DEM_DIDCLASSINDEX_INVALID, DEM_DIDCLASSINDEX_INVALID, DEM_DIDCLASSINDEX_INVALID  }, 4U, 37U  },
+    {   NULL_PTR, {   0U, 1U, 2U, 13U, 14U, DEM_DIDCLASSINDEX_INVALID, DEM_DIDCLASSINDEX_INVALID, DEM_DIDCLASSINDEX_INVALID, DEM_DIDCLASSINDEX_INVALID  }, 5U, 27U  },
+    {   NULL_PTR, {   0U, 2U, 1U, 3U, 4U, 6U, DEM_DIDCLASSINDEX_INVALID, DEM_DIDCLASSINDEX_INVALID, DEM_DIDCLASSINDEX_INVALID  }, 6U, 20U  },
+    {   NULL_PTR, {   0U, 2U, 1U, 3U, 4U, 6U, 5U, 15U, 16U  }, 9U, 23U  }
 };
 
 CONST( AB_83_ConstV Dem_DTCAttributeType            ,DEM_CONFIG_DATA )  Dem_DTCAttributeTable[ DEM_DTC_ATT_CONFIGURE_NUM + (uint16)1U ] =
@@ -173,6 +210,7 @@ CONST( AB_83_ConstV Dem_u08_FFListIndexType            ,DEM_CONFIG_DATA )  Dem_F
 CONST( AB_83_ConstV Dem_u16_EventStrgIndexType         ,DEM_CONFIG_DATA )  Dem_ObdEventNum                          = DEM_OBD_EVENT_CONFIGURE_NUM;
 
 CONST( AB_83_ConstV Dem_u16_FFDStoredIndexType         ,DEM_CONFIG_DATA )  Dem_FFRMaxLength                         = DEM_FFR_MAX_LENGTH;
+CONST( AB_83_ConstV Dem_u16_FFDStoredIndexType         ,DEM_CONFIG_DATA )  Dem_UdmFFDMaxLength                      = DEM_UDMFFD_MAX_LENGTH;
 
 CONST( AB_83_ConstV Dem_u08_FFDIndexType               ,DEM_CONFIG_DATA )  Dem_ObdFFDRecordNum                      = DEM_OBD_FFD_RECORD_NUM;
 CONST( AB_83_ConstV Dem_u08_FFDIndexType               ,DEM_CONFIG_DATA )  Dem_NonObdFFDRecordNum                   = DEM_NON_OBD_FFD_RECORD_NUM;

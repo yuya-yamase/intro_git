@@ -816,10 +816,10 @@ static U1      u1_s_TydcDtcPduRx(const ST_TYDC_DTC_COM_RX * st_ap_COM_RX, const 
         u2_t_rx_tout = st_tp_PDU_RX->u2_rx_tout;
         u1_t_rx_stat = u1_g_oXCANRxdStat(st_tp_PDU_RX->u2_pdu_idx, st_tp_PDU_RX->u4_sys_chk, u2_t_rx_tout);
         if((u2_a_ELPSD   < u2_t_rx_tout         ) ||
-           (u1_t_rx_stat < (U1)OXCAN_RXD_TOC_EN)){
+           (u1_t_rx_stat < (U1)OXCAN_RXD_TOM_EN)){
             u4_t_unk_chk  |= u4_t_log_bit;
         }
-        else if(u1_t_rx_stat >= ((U1)OXCAN_RXD_TOC_EN | (U1)COM_TIMEOUT)){
+        else if(u1_t_rx_stat >= ((U1)OXCAN_RXD_TOM_EN | (U1)COM_TIMEOUT)){
             u4_t_rxto_chk |= u4_t_log_bit;
         }
         else{

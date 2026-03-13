@@ -26,14 +26,14 @@
 /* Macros                                                                   */
 /*--------------------------------------------------------------------------*/
 #define DEM_DTC_ATT_CONFIGURE_NUM           ((Dem_u16_DTCAttrIndexType)21U)             /* Number of DemDTCAttribute           */
-#define DEM_DTC_FFR_CLASS_CONFIGURE_NUM     ((Dem_u16_FFClassIndexType)1U)             /* Number of DemFreezeFrameClass       */
-#define DEM_DID_NUM                         ((Dem_u32_DIDClassIndexType)3U)            /* Number of Dem_DIDClassTable         */
-#define DEM_DATAELEMENT_NUM                 ((Dem_u16_DataElementClassIndexType)3U)    /* Number of DemDataElementClass       */
+#define DEM_DTC_FFR_CLASS_CONFIGURE_NUM     ((Dem_u16_FFClassIndexType)10U)             /* Number of DemFreezeFrameClass       */
+#define DEM_DID_NUM                         ((Dem_u32_DIDClassIndexType)17U)            /* Number of Dem_DIDClassTable         */
+#define DEM_DATAELEMENT_NUM                 ((Dem_u16_DataElementClassIndexType)17U)    /* Number of DemDataElementClass       */
 #define DEM_FFR_REC_NUM_CLASS_CONFIGURE_NUM ((Dem_u16_FFRecNumClassIndexType)1U)        /* Number of DemFreezeFrameRecNumClass */
 #define DEM_FFR_RECORD_CLASS_CONFIGURE_NUM  ((Dem_u08_FFRecordClassIndexType)1U)        /* Number of DemFreezeFrameRecordClass */
 
 #define DEM_FF_RECORD_CLASS_REF_MAX_NUM     ((Dem_u08_FFListIndexType)1U)               /* Max Number of DemFreezeFrameRecordClassRef for all DemFreezeFrameRecNumClass */
-#define DEM_DID_NUM_PER_FRAME_MAX_NUM       ((Dem_u16_DIDClassPerFFIndexType)3U)        /* Max Number of DemDidClass in DemFreezeFrameClass in all DemFreezeFrameClass  */
+#define DEM_DID_NUM_PER_FRAME_MAX_NUM       ((Dem_u16_DIDClassPerFFIndexType)9U)        /* Max Number of DemDidClass in DemFreezeFrameClass in all DemFreezeFrameClass  */
 #define DEM_DATAELEMENT_NUM_PER_DID_MAX_NUM ((Dem_u08_DtElNumPerDIDIndexType)1U)        /* Max Number of DemDataElementClass in DemDidClass in all DemDidClass          */
 
 #define DEM_OBD_EVENT_CONFIGURE_NUM         ((Dem_u16_EventStrgIndexType)0U)              /* Number of OBD DemEventParameter */
@@ -41,7 +41,16 @@
 /* FreezeFrameData size definition */
 #define DEM_OBD_FFD_SIZE                    ((Dem_u16_FFDStoredIndexType)0U)
 
-#define DEM_FFR_MAX_LENGTH                  ((Dem_u16_FFDStoredIndexType)17U)
+#define DEM_FFR_MAX_LENGTH                  ((Dem_u16_FFDStoredIndexType)20U)
+#define DEM_UDMFFD_MAX_LENGTH               ((Dem_u16_FFDStoredIndexType)197U)
+
+#define DEM_UDM_RKDEMUDM_OCCURRENCE1_FFD_MAX_LENGTH             ((Dem_u16_FFDStoredIndexType)20U)
+#define DEM_UDM_RKDEMUDM_OCCURRENCE2_FFD_MAX_LENGTH             ((Dem_u16_FFDStoredIndexType)23U)
+#define DEM_UDM_RKDEMUDM_OCCURRENCE2_NM_FFD_MAX_LENGTH             ((Dem_u16_FFDStoredIndexType)37U)
+#define DEM_UDM_RKDEMUDM_OCCURRENCE3_NM_FFD_MAX_LENGTH             ((Dem_u16_FFDStoredIndexType)77U)
+#define DEM_UDM_RKDEMUDM_OCCURRENCE7_NM_FFD_MAX_LENGTH             ((Dem_u16_FFDStoredIndexType)197U)
+#define DEM_UDM_RKDEMUDM_MAINTENANCE1_FFD_MAX_LENGTH             ((Dem_u16_FFDStoredIndexType)20U)
+#define DEM_UDM_RKDEMUDM_SYSTEMOPERATION2_FFD_MAX_LENGTH             ((Dem_u16_FFDStoredIndexType)27U)
 
 #define DEM_OBD_FFD_RECORD_NUM                 ((Dem_u08_FFDIndexType)0U)
 #define DEM_NON_OBD_FFD_RECORD_NUM             ((Dem_u08_FFDIndexType)21U)
@@ -172,6 +181,7 @@ extern CONST( AB_83_ConstV Dem_u08_FFListIndexType            ,DEM_CONFIG_DATA )
 extern CONST( AB_83_ConstV Dem_u16_EventStrgIndexType         ,DEM_CONFIG_DATA )  Dem_ObdEventNum;
 
 extern CONST( AB_83_ConstV Dem_u16_FFDStoredIndexType         ,DEM_CONFIG_DATA )  Dem_FFRMaxLength;
+extern CONST( AB_83_ConstV Dem_u16_FFDStoredIndexType         ,DEM_CONFIG_DATA )  Dem_UdmFFDMaxLength;
 
 extern CONST( AB_83_ConstV Dem_u08_FFDIndexType               ,DEM_CONFIG_DATA )  Dem_ObdFFDRecordNum;
 extern CONST( AB_83_ConstV Dem_u08_FFDIndexType               ,DEM_CONFIG_DATA )  Dem_NonObdFFDRecordNum;

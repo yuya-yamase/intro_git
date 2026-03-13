@@ -47,6 +47,7 @@
 #include <Dem_MemMap.h>
 
 extern CONST( AB_83_ConstV Dem_EventIdType                       ,DEM_CONFIG_DATA ) Dem_EventCtrlIndexToEventIdTable[ DEM_PRIMEM_EVENT_NUM ];
+extern CONST( AB_83_ConstV Dem_EventIdType                       ,DEM_CONFIG_DATA ) Dem_UdmEventIndexToEventIdTable[ DEM_USRDEFMEM_TOTAL_EVENT_NUM ];
 extern CONST( AB_83_ConstV Dem_u16_EventCtrlIndexType            ,DEM_CONFIG_DATA ) Dem_EventParameterIndexOrderTable[ DEM_TOTAL_EVENT_NUM ];
 
 #define DEM_STOP_SEC_CONST_CONFIG
