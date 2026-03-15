@@ -23,9 +23,9 @@
 
 #include "mcos/v850/xmcos_v850.h"
 
-LOCAL_INLINE void SYSTEM_COUNTER_ISR(CounterType counter_id);
+AR_LOCAL_FORCE_INLINE void SYSTEM_COUNTER_ISR(CounterType counter_id);
 
-LOCAL_INLINE void SYSTEM_COUNTER_ISR(CounterType counter_id)
+AR_LOCAL_FORCE_INLINE void SYSTEM_COUNTER_ISR(CounterType counter_id)
 {
     xmcos_v850_timer_isr();
     /* [SCR_161001] This return value is being ignored due to the design */

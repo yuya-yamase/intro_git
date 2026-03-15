@@ -287,10 +287,11 @@ void	Pil_Spi_SetFrameNumber( U1 t_u1HwChannelID, U2 t_u2Length );
 /*					:				( * : Unit No( 0 - 9 ) , # : Channel No( 0 - 7 ) )			*/
 /*					:	TxData - Send Data(32bit)												*/
 /*					:	PilChannelConfig - Channel Configuration(Sync)							*/
+/*	Parameters (out):	Result - Send and Receive Result( OK/NG )								*/
 /*	Return value	:	Receive Data(32bit)														*/
 /*	Caveat			:	・同一ハードユニットは全て同一コアで使用すること						*/
 /************************************************************************************************/
-U4		Pil_Spi_SendReceiveData( U1 t_u1HwChannelID, U4 t_u4TxData, const Pil_Spi_ChannelConfigType* t_pcstPilChannelConfig );
+U4		Pil_Spi_SendReceiveData( U1 t_u1HwChannelID, U4 t_u4TxData, const Pil_Spi_ChannelConfigType* t_pcstPilChannelConfig, U1* t_pu1Result );
 #endif
 
 #if (SPI_CFG_MODEC_USE == ON)

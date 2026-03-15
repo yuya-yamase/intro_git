@@ -32,6 +32,7 @@ typedef unsigned int                        mcos_stack_t;
 #define MCOS_STACK_SIZE_IN_BYTES(nbytes)        ( (MCOS_STACK_SIZE(nbytes)) * sizeof(mcos_stack_t) )
 #define MCOS_STACK_SIZE_WORDS_TO_BYTES(nwords)  ( (nwords) * sizeof(mcos_stack_t) )
 #define MCOS_STACK_BOTTOM_PADDING               ( 0U )
+#define MCOS_STACK_CUSHION_FOR_MPU              ( 48U )
 #define MCOS_HEAP_ALIGN MCOS_HEAP_ALIGN4
 
 /* highest BIOS cpu priority */
@@ -42,13 +43,6 @@ typedef unsigned int                        mcos_stack_t;
 #define MCOS_INTM_BPRI_SHIFT    0x0U
 
 #if MCOS_AUTOSAR
-
-/* Spinlock configuration */
-#define AR_SPINLOCK_PADDING1_N      7U
-#define AR_SPINLOCK_PADDING2_N      7U
-#define AR_IOC_SPINLOCK_PADDING1_N  7U
-#define AR_IOC_SPINLOCK_PADDING2_N  7U
-
 
 /* mkmsg sync request size (bytes) */
 #define MCOS_MKMSG_SYNC_REQUEST_SIZE    sizeof(ar_api_request_t)
