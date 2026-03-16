@@ -1122,7 +1122,7 @@ static void vd_s_FwushHandleFinalizeSuccess(void)
     /* State transition already applied by table */
     vd_s_FwushUpdateSeqProgress((U1)FWUSH_PROGRESS_FINALIZE_DONE);
     /* Send ACK */
-    vd_s_FwushMakeResData((U1)FWUSH_RESP_SUBTYPE_FIN, (U1)FWUSH_ACK_CANCEL_ROLLBACK_DONE);
+    vd_s_FwushMakeResData((U1)FWUSH_RESP_SUBTYPE_FIN, (U1)FWUSH_ACK_OK);
 
     vd_s_FwushAbort();
 }
