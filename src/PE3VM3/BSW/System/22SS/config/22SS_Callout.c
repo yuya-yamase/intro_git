@@ -121,6 +121,7 @@ void vd_g_22SSCallout_StaRstInit(void)
     vd_g_iVDshInit();
 
     /* vv User Hook start vv */
+    AppSS_Init();
     vd_g_VSM_Init();
     vd_g_VSM_SAILWrapper_Init();
     vd_g_PwrCtrlMainSwResetReq();
@@ -162,6 +163,7 @@ void vd_g_22SSCallout_StaWkupInit(void)
     vd_g_iVDshInit();
 
     /* vv User Hook start vv */
+    AppSS_Init();
     vd_g_VSM_Init();
     vd_g_VSM_SAILWrapper_Init();
     vd_g_PwrCtrlMainWakeupReq();
