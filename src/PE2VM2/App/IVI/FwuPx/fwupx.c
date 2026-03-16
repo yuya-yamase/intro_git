@@ -122,7 +122,7 @@ void            vd_g_FwupxPutReqData(const U1 * u1_ap_SUB4_ADD, const U2 u2_a_DT
                 vd_g_iVDshWribyDid(IVDSH_DID_WRI_FWUPXREQ_H, &u4_tp_head[0], (U2)FWUPX_WRI_HEAD_WORDS);
                 vd_g_iVDshWribyDid(IVDSH_DID_WRI_FWUPXREQ_D, &u4_t_data_adr, (U2)FWUPX_WRI_DATA_ADR_WORDS);
             break;
-        default:  /* FWUPX_SUBTYPE_REQ_VERI,FWUPX_SUBTYPE_REQ_PHASE,FWUPX_SUBTYPE_REQ_CANCEL */
+        default:  /* Other requests */
                 /* Verification request */
                 u4_tp_head[0]  = (U4)u1_ap_SUB4_ADD[0];                   /* SubType */
                 if (u2_a_DTLEN > (U1)1U) {
