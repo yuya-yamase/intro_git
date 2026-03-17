@@ -55,7 +55,7 @@
 #include "PwrCtrl_NoRedun.h"    /* for VM2 PowerControl */
 #include "VIS.h"
 
-#include "chipcom.h"
+#include "ChipCom.h"
 #include "PwrCtlSup.h"
 #include "VSM.h"
 #include "CanIfProxy.h"
@@ -156,6 +156,8 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     /*   5ms Task                                                        */
     /*                                                                   */
     /*-------------------------------------------------------------------*/
+    {&ChipCom_MainFunctionPostRx,       (U4)SCHDLR_TASKBIT___5MS    },
+    {&ChipCom_MainFunctionPreApp,       (U4)SCHDLR_TASKBIT___5MS    },
     {&vd_g_VSM_SAILWrapper,             (U4)SCHDLR_TASKBIT___5MS    },
     {&App_VSM_Main,                     (U4)SCHDLR_TASKBIT___5MS    },
     {&vd_g_PowerSup_Routine,            (U4)SCHDLR_TASKBIT___5MS    },
@@ -163,10 +165,10 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     {&vd_g_McuDev_Pwron,                (U4)SCHDLR_TASKBIT___5MS    },
     {&vd_g_McuDev_Pwroff,               (U4)SCHDLR_TASKBIT___5MS    },
     {&EthSW_MediumTask,                 (U4)SCHDLR_TASKBIT___5MS    },
-    {&ChipCom_MainRx,                   (U4)SCHDLR_TASKBIT___5MS    },
     {&vd_g_VISMidCycle	,               (U4)SCHDLR_TASKBIT___5MS    },
-    {&CanIfProxy_Main,                  (U4)SCHDLR_TASKBIT___5MS    },
-    {&ChipCom_MainTx,                   (U4)SCHDLR_TASKBIT___5MS    },
+    {&ChipCom_MainFunction,             (U4)SCHDLR_TASKBIT___5MS    },
+    {&ChipCom_MainFunctionPostApp,      (U4)SCHDLR_TASKBIT___5MS    },
+    {&ChipCom_MainFunctionPreTx,        (U4)SCHDLR_TASKBIT___5MS    },
 
     /*-------------------------------------------------------------------*/
     /*                                                                   */

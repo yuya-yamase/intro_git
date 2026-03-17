@@ -7,7 +7,10 @@
 #include <VIS.h>
 #include <EthDLC.h>
 #include <EthDLC_STM.h>
-#include <chipcom.h>
+/* 26.2.16 doza Team-B edit sta */
+#include <ChipCom.h>
+#include <ChipCom_Cfg.h>
+/* 26.2.16 doza Team-B edit end */
 /* -------------------------------------------------------------------------- */
 #define EthDLC_START_SEC_CODE
 #include <EthDLC_MemMap.h>
