@@ -61,7 +61,10 @@ Std_ReturnType EthSwt_SWIC_Cfg_AllowSetRegister(void);
 								/* クロック2(20MHz)で1要求(6byte+10ns)=2410ns */
 								/* ※クロックは10MHzなので倍になる */
 								/* ※実測値の5倍程度になる */
- 
+
+
+#define D_ETHSWT_SWIC_NS_PER_INSTRUCTION			(50U)		/* 1命令にかかる時間(ns), MCUは20MHz */
+void EthSwt_SWIC_Cfg_WaitUS(const uint32 waitUSTime);
 
 /* -------------------------------------------------------------------------- */
 /* Config for EthSwt_SWIC_Link.c                                              */
