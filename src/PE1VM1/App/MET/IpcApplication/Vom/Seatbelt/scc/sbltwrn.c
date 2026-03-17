@@ -946,7 +946,7 @@ static  void    vd_s_SbltwrnTtTimAct(ST_SBLTWRN_TTST *stp_a_ttsts, const U4 u4_a
 
     u1_t_dropn  = u1_g_SbltwrnDrchk(u4_a_VCLSTS, u1_a_SEATTYP, (U1)TRUE);
 
-    if (u1_t_dropn == (U1)TRUE) {
+    if ((u1_t_dropn == (U1)TRUE) || ((u4_a_VCLSTS & (U4)SBLTWRN_VCLSTS_D_DR_OP) != (U4)0U) || ((u4_a_VCLSTS & (U4)SBLTWRN_VCLSTS_P_DR_OP) != (U4)0U)) {
         u4_a_ttopt |= (U4)SBLTWRN_TTOPT_DRTM_CNTCLR;
     }
 
@@ -2118,7 +2118,9 @@ static  U4      u4_s_SbltwrnTtTrns_condAL(const U1 u1_a_SEATID, const U1 u1_a_SE
     u1_t_dropn  = u1_g_SbltwrnDrchk(stp_a_VCLSTS->u4_vclsts, u1_a_SEATTYP, (U1)TRUE);
 
     if (
-        (u1_t_dropn == (U1)TRUE) &&                                                         /* some rear door(s) open */
+        ((u1_t_dropn == (U1)TRUE) ||
+        ((stp_a_VCLSTS->u4_vclsts & (U4)SBLTWRN_VCLSTS_D_DR_OP) != (U4)0U) ||
+        ((stp_a_VCLSTS->u4_vclsts & (U4)SBLTWRN_VCLSTS_P_DR_OP) != (U4)0U)) &&  /* some rear door(s) or D door or P door open */
         ((stp_a_VCLSTS->u4_vclsts & (U4)SBLTWRN_VCLSTS_SPD_STP_OVER) == (U4)0U) &&
         ((stp_a_VCLSTS->u1p_bklsts[u1_a_SEATID] & (U1)SBLTWRN_BKLSTS_UNBCKL) != (U1)0U)     /* unbucked               */
         ) {
@@ -3298,6 +3300,8 @@ static  void    vd_s_SbltwrnSbrBzrChgDet(void)
 /*  19PFv3-2 02/12/2024  SH       Add vd_s_SbltwrnGetCalibRear1(), vd_s_SbltwrnGetCalibRear2() and vd_s_SbltwrnGetCalibRear3()       */
 /*  19PFv3-3 04/12/2024  SH       Add calibration guard                                                                              */
 /*  19PFv3-4 07/05/2024  TN(DT)   Delete Calibration Guard Process except for out of array references.                               */
+/*  BEV-1    03/11/2026  ED       Change for BEV FF2. (MET-B_SEAREM-CSTD-A0-09-A-C3).                                                */
+/*                                Changed Telltale al judgment and Condition l timer                                                 */
 /*                                                                                                                                   */
 /*  * HY     = Hidefumi Yoshida, Denso                                                                                               */
 /*  * YI     = Yoshiki  Iwata,   Denso                                                                                               */
@@ -3310,5 +3314,6 @@ static  void    vd_s_SbltwrnSbrBzrChgDet(void)
 /*  * TH     = Taisuke Hirakawa, KSE                                                                                                 */
 /*  * TN(DT) = Tetsushi Nakano, Denso Techno                                                                                         */
 /*  * NA     = Nazirul Afham,    PXT                                                                                                 */
+/*  * ED     = Emoh Dagasdas,    DTPH                                                                                                */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
