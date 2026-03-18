@@ -669,7 +669,7 @@ static void CanIfProxy_TransmitRequest( void )
 			/* Transmit FF */
 			t_u1Ret = CanIfProxy_TransmitFF();
 
-			if ( t_u1Ret == (Std_ReturnType)E_OK )
+			if ( t_u1Ret == (uint8)u1CANIFPROXY_E_OK )
 			{
 				/* Update status */
 				t_u1ReqCtrlStatus = (uint8)CANIFPROXY_REQ_CTRL_STS_RX_FC;
@@ -839,8 +839,8 @@ static uint8 CanIfProxy_TransmitFF( void )
 	uint16 t_u2Head;
 	CanMsgType t_stMsg;
 
-	t_u1Ret = u1CANIFPROXY_E_OK;
-
+	t_u1Ret = u1CANIFPROXY_E_NOT_OK;
+	
 	/* Get head */
 	t_u2Head = CanIfProxy_stMfReqStatus.u2Head;
 
@@ -864,10 +864,13 @@ static uint8 CanIfProxy_TransmitFF( void )
 		/* Set Timer */
 		CanIfProxy_stMfReqStatus.u2Timeout = (uint16)CanIfProxy_cu2NAs + (uint16)CanIfProxy_cu2NBs;
 		CanIfProxy_stMfReqStatus.u2Timer = (uint8)0;
+		
+		/* Change Status */
+		t_u1Ret = u1CANIFPROXY_E_OK;
 	}
 	else
 	{
-		t_u1Ret = u1CANIFPROXY_E_NOT_OK;
+		/* No Action */
 	}
 
 	return t_u1Ret;
