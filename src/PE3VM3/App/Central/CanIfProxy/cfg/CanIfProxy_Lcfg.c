@@ -84,9 +84,9 @@ const uint16 CanIfProxy_cu2ResCanIdRangeNum = (uint16)CANIFPROXY_CFG_RES_CANID_R
 /* Response CAN ID table */
 const CanIfProxy_U4RangeType CanIfProxy_cu4ResCanIdTble[CANIFPROXY_CFG_RES_CANID_RANGE_NUM] = {
 	{ (uint32)0xD8DAE100, (uint32)0xD8DAE1FF },
-	{ (uint32)0x58DAE100, (uint32)0x58DAE1FF },
+	{ (uint32)0x98DAE100, (uint32)0x98DAE1FF },
 	{ (uint32)0xD8DB33F1, (uint32)0xD8DB33F1 },
-	{ (uint32)0x58DB33F1, (uint32)0x58DB33F1 },
+	{ (uint32)0x98DB33F1, (uint32)0x98DB33F1 },
 	{ (uint32)0x00000708, (uint32)0x0000070F },
 	{ (uint32)0x000007DF, (uint32)0x000007DF }
 };

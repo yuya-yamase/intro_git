@@ -93,6 +93,17 @@
 #define CANIFPROXY_DF_MASK_FS					(0x0FU)
 #define CANIFPROXY_DF_MASK_FFDL_BYTE1			(0x00000F00U)
 #define CANIFPROXY_DF_MASK_FFDL_BYTE0			(0x000000FFU)
+
+/* 29bit CAN-ID mask */
+#define CANIFPROXY_CANID_MASK_29BIT				((uint32)0x1FFFFFFFU)
+/* UDS physical addressing base ID (29bit) */
+#define CANIFPROXY_CANID_BASE_UDS_PHYS			((uint32)0x18DA0000U)
+/* UDS physical addressing mask (29bit) */
+#define CANIFPROXY_CANID_MASK_UDS_PHYS			((uint32)0x1FFF0000U)
+/* UDS TA byte offset */
+#define CANIFPROXY_CANID_OFFS_UDS_TA			((uint8)8U)
+/* UDS SA byte offset */
+#define CANIFPROXY_CANID_OFFS_UDS_SA			((uint8)0U)
 		
 /* Request controll status */
 #define CANIFPROXY_REQ_CTRL_STS_IDLE			(0U)
@@ -146,6 +157,7 @@ static void CanIfProxy_SetSfToReqBuff( const CanMsgType* t_pstMsg );
 static void CanIfProxy_SetMfToReqBuff( const CanMsgType* t_pstMsg );
 static void CanIfProxy_ReceiveResponse( const CanMsgType* t_pstMsg );
 static void CanIfProxy_DecrementFrameCounterInTx( Can_IdType t_u4CanId );
+static uint8 CanIfProxy_IsExpectedFcCanId( uint32 t_u4CanId );
 static void CanIfProxy_TransmitRequest( void );
 static uint8 CanIfProxy_TransmitSF( void );
 static uint8 CanIfProxy_TransmitFF( void );
@@ -274,6 +286,7 @@ void CanIfProxy_RxIndication( const CanMsgType* t_pstMsg )
 	/* Check argument */
 	if (   ( t_pstMsg != NULL_PTR )
 		&& ( t_pstMsg->ptData != NULL_PTR )
+		&& ( t_pstMsg->u1Length > (uint8)0U )
 		&& ( t_pstMsg->u1Length <= (uint8)CANIFPROXY_CAN_FD_DATA_LEN_MAX ) )
 		/* todo: Check CAN ID */
 	{
@@ -300,6 +313,7 @@ uint8 VCan_URxIndication( uint8 t_u1Controller, uint8 t_u1MsgBuffer, const CanMs
 	/* Check argument */
 	if (   ( t_pstMsg != NULL_PTR )
 		&& ( t_pstMsg->ptData != NULL_PTR )
+		&& ( t_pstMsg->u1Length > (uint8)0U )
 		&& ( t_pstMsg->u1Length <= (uint8)CANIFPROXY_CAN_FD_DATA_LEN_MAX ) )
 		/* todo: Check CAN ID */
 	{
@@ -523,7 +537,9 @@ static void CanIfProxy_SetMfToReqBuff( const CanMsgType* t_pstMsg )
 *****************************************************************************/
 static void CanIfProxy_ReceiveResponse( const CanMsgType* t_pstMsg )
 {
+	Std_ReturnType t_u1Ret;
 	uint8 t_u1NPduType;
+	uint8 t_u1IsExpectedFcCanId;
 
 	/* Get N_PDUtype from CAN message */
 	t_u1NPduType = CanIfProxy_GetNPduType( t_pstMsg );
@@ -532,17 +548,28 @@ static void CanIfProxy_ReceiveResponse( const CanMsgType* t_pstMsg )
 	{
 		if ( t_u1NPduType == (uint8)CANIFPROXY_NPDUTYPE_FC )
 		{
-			/* Read N_PCI */
-			CanIfProxy_ReadFcNpci( t_pstMsg->ptData );
+			t_u1IsExpectedFcCanId = CanIfProxy_IsExpectedFcCanId( t_pstMsg->u4Id );
 
-			/* Memory received FF */
-			CanIfProxy_stMfReqStatus.u1IsRcvFc = (uint8)TRUE;
+			if (   ( CanIfProxy_u1ReqCtrlStatus == (uint8)CANIFPROXY_REQ_CTRL_STS_RX_FC )
+				&& ( t_u1IsExpectedFcCanId == (uint8)TRUE )
+				&& ( t_pstMsg->u1Length >= (uint8)CANIFPROXY_NPCI_LEN_FC ) )
+			{
+				/* Read N_PCI */
+				CanIfProxy_ReadFcNpci( t_pstMsg->ptData );
+
+				/* Memory received FC */
+				CanIfProxy_stMfReqStatus.u1IsRcvFc = (uint8)TRUE;
+			}
 
 			/* todo: If FS is CTS, tampering with BS and STmin */
 		}
 
 		/* Transmit to ChipCom */
-		(void)ChipCom_CanTransmit( t_pstMsg );
+		t_u1Ret = ChipCom_CanTransmit( t_pstMsg );
+		if ( t_u1Ret != (Std_ReturnType)E_OK )
+		{
+			/* nop */
+		}
 	}
 
 	return;
@@ -570,6 +597,43 @@ static void CanIfProxy_DecrementFrameCounterInTx( Can_IdType t_u4CanId )
 	}
 
 	return;
+}
+
+/*****************************************************************************
+  Function		: 
+  Description	: 
+  param[in/out] : 
+  return		: None
+  Note			: None
+*****************************************************************************/
+static uint8 CanIfProxy_IsExpectedFcCanId( uint32 t_u4CanId )
+{
+	uint8 t_u1Ret;
+	uint32 t_u4ReqCanId29;
+	uint32 t_u4ResCanId29;
+	uint32 t_u4ReqCanIdSwapped;
+	uint32 t_u4Ta;
+	uint32 t_u4Sa;
+
+	t_u1Ret = (uint8)TRUE;
+	t_u4ReqCanId29 = CanIfProxy_u4MfReqBuffCanId & (uint32)CANIFPROXY_CANID_MASK_29BIT;
+	t_u4ResCanId29 = t_u4CanId & (uint32)CANIFPROXY_CANID_MASK_29BIT;
+
+	if ( ( t_u4ReqCanId29 & (uint32)CANIFPROXY_CANID_MASK_UDS_PHYS ) == (uint32)CANIFPROXY_CANID_BASE_UDS_PHYS )
+	{
+		t_u4Ta = ( t_u4ReqCanId29 >> (uint8)CANIFPROXY_CANID_OFFS_UDS_TA ) & (uint32)0xFFU;
+		t_u4Sa = ( t_u4ReqCanId29 >> (uint8)CANIFPROXY_CANID_OFFS_UDS_SA ) & (uint32)0xFFU;
+		t_u4ReqCanIdSwapped = ( t_u4ReqCanId29 & (uint32)CANIFPROXY_CANID_MASK_UDS_PHYS )
+			| ( t_u4Sa << (uint8)CANIFPROXY_CANID_OFFS_UDS_TA )
+			| ( t_u4Ta << (uint8)CANIFPROXY_CANID_OFFS_UDS_SA );
+
+		if ( t_u4ResCanId29 != t_u4ReqCanIdSwapped )
+		{
+			t_u1Ret = (uint8)FALSE;
+		}
+	}
+
+	return t_u1Ret;
 }
 
 /*****************************************************************************
@@ -631,6 +695,9 @@ static void CanIfProxy_TransmitRequest( void )
 	/* Status is Receive FC */
 	if ( t_u1ReqCtrlStatus == (uint8)CANIFPROXY_REQ_CTRL_STS_RX_FC )
 	{
+		/* Count up timer */
+		CanIfProxy_stMfReqStatus.u2Timer++;
+
 		/* Judge timeout */
 		if ( CanIfProxy_stMfReqStatus.u2Timer >= CanIfProxy_stMfReqStatus.u2Timeout )
 		{
@@ -654,7 +721,8 @@ static void CanIfProxy_TransmitRequest( void )
 				{
 					/* Set timer */
 					CanIfProxy_CalcCfThroughput();
-					CanIfProxy_stMfReqStatus.u2Timer = (uint8)0;
+					CanIfProxy_stMfReqStatus.u2Timeout = (uint16)CanIfProxy_cu2NAs + (uint16)CanIfProxy_cu2NBs;
+					CanIfProxy_stMfReqStatus.u2Timer = (uint16)0U;
 
 					/* Update status */
 					t_u1ReqCtrlStatus = (uint8)CANIFPROXY_REQ_CTRL_STS_TX_CF;
@@ -687,7 +755,7 @@ static void CanIfProxy_TransmitRequest( void )
 		{
 			/* Set Timer */
 			CanIfProxy_stMfReqStatus.u2Timeout = (uint16)CanIfProxy_cu2NAs + (uint16)CanIfProxy_cu2NBs;
-			CanIfProxy_stMfReqStatus.u2Timer = (uint8)0;
+			CanIfProxy_stMfReqStatus.u2Timer = (uint16)0U;
 
 			/* Update status */
 			t_u1ReqCtrlStatus = (uint8)CANIFPROXY_REQ_CTRL_STS_RX_FC;
@@ -815,6 +883,7 @@ static uint8 CanIfProxy_TransmitFF( void )
 static uint8 CanIfProxy_TransmitCF( void )
 {
 	uint8 t_u1Ret;
+	uint8 t_u1IsTx;
 	uint8 t_u1IsPowerOn;
 	uint8 t_u1CfPeriod;
 	uint8 t_u1CfTxNum;
@@ -830,6 +899,7 @@ static uint8 CanIfProxy_TransmitCF( void )
 	uint32 t_u4FfDl;
 
 	t_u1Ret = u1CANIFPROXY_E_OK;
+	t_u1IsTx = (uint8)FALSE;
 
 	/* Get Cf period and Nunber of transmit */
 	t_u1IsPowerOn = CanIfProxy_IsPowerOn();
@@ -867,7 +937,7 @@ static uint8 CanIfProxy_TransmitCF( void )
 		for ( t_u1TxCnt = (uint8)0U; t_u1TxCnt < t_u1CfTxNum; t_u1TxCnt++ )
 		{
 			if ( ( t_u2Head < t_u2Tail )
-				&& ( t_u1FrameCntInTx <= CanIfProxy_cu1TxLimit ) )
+				&& ( t_u1FrameCntInTx < CanIfProxy_cu1TxLimit ) )
 			{
 				/* Make message */
 				t_stMsg.u4Id = CanIfProxy_u4MfReqBuffCanId;
@@ -879,6 +949,8 @@ static uint8 CanIfProxy_TransmitCF( void )
 
 				if ( t_u1VcanRet == (uint8)CAN_PROC_OK )
 				{
+					t_u1IsTx = (uint8)TRUE;
+
 					/* Increment head */
 					t_u2Head++;
 
@@ -892,7 +964,7 @@ static uint8 CanIfProxy_TransmitCF( void )
 					t_u1TxBlock++;
 
 					/* Judge done */
-					if ( t_u4TxNDataLen == t_u4FfDl )
+					if ( t_u4TxNDataLen >= t_u4FfDl )
 					{
 						t_u1Ret = u1CANIFPROXY_E_DONE;
 						break;
@@ -913,12 +985,19 @@ static uint8 CanIfProxy_TransmitCF( void )
 			}
 			else
 			{
+				if ( t_u2Head >= t_u2Tail )
+				{
+					t_u1Ret = u1CANIFPROXY_E_NOT_OK;
+				}
 				break;
 			}
 		}
 
-		/* Clear t_u2Timer */
-		t_u2Timer = (uint8)0U;
+		if ( t_u1IsTx == (uint8)TRUE )
+		{
+			/* Clear t_u2Timer */
+			t_u2Timer = (uint16)0U;
+		}
 
 		/* Get the counter of frame in transit */
 		CanIfProxy_stMfReqStatus.u1FrameCntInTx = t_u1FrameCntInTx;
@@ -965,7 +1044,7 @@ static uint8 CanIfProxy_ReceiveFC( void )
 		{
 			/* Set Timer */
 			CanIfProxy_stMfReqStatus.u2Timeout = (uint16)CanIfProxy_cu2NBs;
-			CanIfProxy_stMfReqStatus.u2Timer = (uint8)0;
+			CanIfProxy_stMfReqStatus.u2Timer = (uint16)0U;
 			t_u1Ret = u1CANIFPROXY_E_WAIT;
 		}
 		else
@@ -1175,13 +1254,20 @@ static uint8 CanIfProxy_IsResFrame( uint32 t_u4CanId )
 {
 	uint8 t_u1Ret;
 	uint16 t_u2i;
+	uint32 t_u4CanId29;
+	uint32 t_u4Min29;
+	uint32 t_u4Max29;
 
 	t_u1Ret = (uint8)FALSE;
+	t_u4CanId29 = t_u4CanId & (uint32)CANIFPROXY_CANID_MASK_29BIT;
 
 	for ( t_u2i = (uint16)0U; t_u2i < CanIfProxy_cu2ResCanIdRangeNum; t_u2i++ )
 	{
-		if ( ( t_u4CanId >= CanIfProxy_cu4ResCanIdTble[t_u2i].u4Min )
-			&& ( t_u4CanId <= CanIfProxy_cu4ResCanIdTble[t_u2i].u4Max ) )
+		t_u4Min29 = CanIfProxy_cu4ResCanIdTble[t_u2i].u4Min & (uint32)CANIFPROXY_CANID_MASK_29BIT;
+		t_u4Max29 = CanIfProxy_cu4ResCanIdTble[t_u2i].u4Max & (uint32)CANIFPROXY_CANID_MASK_29BIT;
+
+		if ( ( t_u4CanId29 >= t_u4Min29 )
+			&& ( t_u4CanId29 <= t_u4Max29 ) )
 		{
 			t_u1Ret = (uint8)TRUE;
 			break;
