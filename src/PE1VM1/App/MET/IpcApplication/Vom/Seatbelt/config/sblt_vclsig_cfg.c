@@ -169,11 +169,7 @@ static  U1      u1_s_SbltVclstsCfgGetBR(void)
 /*===================================================================================================================================*/
 static  U1      u1_s_SbltVclstsCfgGetREVSW2(void)
 {
-    U1          u1_t_sgnl;
-
-    u1_t_sgnl = (U1)0U;
-    /* (void)Com_ReceiveSignal(ComConf_ComSignal_REVSW2, &u1_t_sgnl); */ /* コメントアウト対応  TODO ビルドを通すための暫定処置 */
-    return (u1_t_sgnl);
+    return ((U1)0U); /* the signal of ComConf_ComSignal_REVSW2 does not exist in the current ComSpec */
 }
 
 /*===================================================================================================================================*/
@@ -300,6 +296,7 @@ U1              u1_g_SbltVclstsCfgMT(void)
 /*  Revision    Date        Author   Change Description                                                                              */
 /* ------------ ----------  -------  ----------------------------------------------------------------------------------------------- */
 /*  893B178D-1  11/05/2021  TN       893B178D/19PF Correspondence                                                                    */
+/*  BEV-1       03/17/2026  RS       Change for BEV Full_Function_2.(BSW update for CAN BA v26.02.13.0)                              */
 /*                                                                                                                                   */
 /*  * HY   = Hidefumi Yoshida, Denso                                                                                                 */
 /*  * YI   = Yoshiki  Iwata,   Denso                                                                                                 */
@@ -309,5 +306,6 @@ U1              u1_g_SbltVclstsCfgMT(void)
 /*  * TK   = Takanori Kuno, Denso Techno                                                                                             */
 /*  * TH   = Taisuke Hirakawa, KSE                                                                                                   */
 /*  * NA   = Nazirul Afham,    PXT                                                                                                   */
+/*  * RS   = Ryuki Sako,       Denso Techno                                                                                          */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
