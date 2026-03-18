@@ -65,6 +65,9 @@ static void vd_s_FwuMemAccSwitchTask(void);
 /* CRC segmented task (WDG mitigation) */
 static void vd_s_FwuMemAccCrcCalc(void);
 
+/* Start error classification helper */
+static void vd_s_FwuMemAccSetStartError(void);
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions for CRC                                                                                                      */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -362,13 +365,7 @@ static void vd_s_FwuMemAccEraseTask(void)
         } else {
             /* Erase start failed */
             u1_s_job_status = (U1)FWUMEMACC_JOB_STATUS_ERROR;
-            /* Check MemAcc job status */
-            u1_t_job_status = (U1)MemAcc_GetJobStatus((U2)MEMACC_ADDRAREA_1);
-            if (u1_t_job_status == (U1)MEMACC_JOB_PENDING) {
-                u1_s_last_error = (U1)FWUMEMACC_ERROR_PRECONDITION_ERR;
-            } else {
-                u1_s_last_error = (U1)FWUMEMACC_ERROR_START_ERR;
-            }
+            vd_s_FwuMemAccSetStartError();
         }
     } else if (u1_s_job_status == (U1)FWUMEMACC_JOB_STATUS_ERASE_ACTIVE) {
         /* Check MemAcc job status */
@@ -423,13 +420,7 @@ static void vd_s_FwuMemAccUpdateTask(void)
         } else {
             /* Write start failed */
             u1_s_job_status = (U1)FWUMEMACC_JOB_STATUS_ERROR;
-            /* Check MemAcc job status */
-            u1_t_job_status = (U1)MemAcc_GetJobStatus((U2)MEMACC_ADDRAREA_1);
-            if (u1_t_job_status == (U1)MEMACC_JOB_PENDING) {
-                u1_s_last_error = (U1)FWUMEMACC_ERROR_PRECONDITION_ERR;
-            } else {
-                u1_s_last_error = (U1)FWUMEMACC_ERROR_START_ERR;
-            }
+            vd_s_FwuMemAccSetStartError();
         }
     } else if (u1_s_job_status == (U1)FWUMEMACC_JOB_STATUS_WRITE_ACTIVE) {
         /* Check MemAcc job status */
@@ -506,13 +497,7 @@ static void vd_s_FwuMemAccSwitchTask(void)
         } else {
             /* Switch start failed */
             u1_s_job_status = (U1)FWUMEMACC_JOB_STATUS_ERROR;
-            /* Check MemAcc job status */
-            u1_t_job_status = (U1)MemAcc_GetJobStatus((U2)MEMACC_ADDRAREA_1);
-            if (u1_t_job_status == (U1)MEMACC_JOB_PENDING) {
-                u1_s_last_error = (U1)FWUMEMACC_ERROR_PRECONDITION_ERR;
-            } else {
-                u1_s_last_error = (U1)FWUMEMACC_ERROR_START_ERR;
-            }
+            vd_s_FwuMemAccSetStartError();
         }
     } else if (u1_s_job_status == (U1)FWUMEMACC_JOB_STATUS_SWITCH_ACTIVE) {
         /* Check MemAcc job status */
@@ -583,6 +568,25 @@ static void vd_s_FwuMemAccCrcCalc(void)
             }
         }
         /* If remaining chunks exist, continue in next MainTask() call */
+    }
+}
+
+/*===================================================================================================================================*/
+/* static void vd_s_FwuMemAccSetStartError(void)                                                                                     */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void vd_s_FwuMemAccSetStartError(void)
+{
+    U1 u1_t_job_status;
+
+    /* Check MemAcc job status */
+    u1_t_job_status = (U1)MemAcc_GetJobStatus((U2)MEMACC_ADDRAREA_1);
+    if (u1_t_job_status == (U1)MEMACC_JOB_PENDING) {
+        u1_s_last_error = (U1)FWUMEMACC_ERROR_PRECONDITION_ERR;
+    } else {
+        u1_s_last_error = (U1)FWUMEMACC_ERROR_START_ERR;
     }
 }
 
