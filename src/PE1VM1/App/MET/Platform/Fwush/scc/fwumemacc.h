@@ -70,12 +70,12 @@
 /* Error codes */
 #define FWUMEMACC_ERROR_MAX              (7U)
 #define FWUMEMACC_ERROR_NONE             (0U)
-#define FWUMEMACC_ERROR_INVALID_PARAM    (1U)    /* invalid parameter */
-#define FWUMEMACC_ERROR_OFFSET_MISMATCH  (2U)    /* offset mismatch */
-#define FWUMEMACC_ERROR_MEMACC_FAILED    (3U)    /* MemAcc API failed */
-#define FWUMEMACC_ERROR_CRC_MISMATCH     (4U)    /* CRC mismatch */
-#define FWUMEMACC_ERROR_BUSY             (5U)    /* other job active */
-#define FWUMEMACC_ERROR_TIMEOUT          (6U)    /* timeout */
+#define FWUMEMACC_ERROR_PRECONDITION_ERR (1U)    /* precondition error */
+#define FWUMEMACC_ERROR_OFFSET_JUMP      (2U)    /* offset jump */
+#define FWUMEMACC_ERROR_OFFSET_UNCHANGED (3U)    /* offset unchanged */
+#define FWUMEMACC_ERROR_OFFSET_SUBTRACT  (4U)    /* offset subtract */
+#define FWUMEMACC_ERROR_MEMACC_FAILED    (5U)    /* MemAcc API failed */
+#define FWUMEMACC_ERROR_START_ERR        (6U)    /* start error */
 
 /* Update status values */
 #define FWUMEMACC_UPDT_STS_IDLE         (0U)    /* No update in progress */
