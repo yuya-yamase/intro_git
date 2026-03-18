@@ -16,6 +16,7 @@
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "x_spi_ivi_sub1_repro.h"
+#include "fwupx.h"
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -23,13 +24,6 @@
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define    XSPI_IVI_REPRO_TYPE_ID            (0x38U)
-#define    XSPI_IVI_REPRO_SUBTYPE_PREP_RES   (0x07U)
-#define    XSPI_IVI_REPRO_SUBTYPE_RUN_RES    (0x17U)
-#define    XSPI_IVI_REPRO_SUBTYPE_VERI_RES   (0x19U)
-#define    XSPI_IVI_REPRO_SUBTYPE_CANCEL_RES (0x27U)
-#define    XSPI_IVI_REPRO_SUBTYPE_ACT_RES    (0x38U)
-#define    XSPI_IVI_REPRO_SUBTYPE_VALID_RES  (0x48U)
-#define    XSPI_IVI_REPRO_SUBTYPE_FIN_RES    (0x58U)
 #define    XSPI_IVI_REPRO_DATA_SIZE          (8U)
 #define    XSPI_IVI_REPRO_PREP_ACK_SIZE      (3U)
 #define    XSPI_IVI_REPRO_RUN_ACK_SIZE       (7U)
@@ -87,25 +81,25 @@ void vd_g_XspiIviSub1ReproMainTask(void)
         if (u1_t_seqcnt_curr != u1_s_xspi_ivi_sub1_repro_seq_cnt_prev) {
             u1_s_xspi_ivi_sub1_repro_seq_cnt_prev = u1_t_seqcnt_curr;
             switch (u1_tp_read[0]) {
-                case XSPI_IVI_REPRO_SUBTYPE_PREP_RES:
+                case FWUPX_SUBTYPE_RES_PREP:
                     vd_s_XspiIviSub1ReproDataToQueue((U2)XSPI_IVI_REPRO_PREP_ACK_SIZE, &u1_tp_read[0]);
                     break;
-                case XSPI_IVI_REPRO_SUBTYPE_RUN_RES:
+                case FWUPX_SUBTYPE_RES_RUN:
                     vd_s_XspiIviSub1ReproDataToQueue((U2)XSPI_IVI_REPRO_RUN_ACK_SIZE, &u1_tp_read[0]);
                     break;
-                case XSPI_IVI_REPRO_SUBTYPE_VERI_RES:
+                case FWUPX_SUBTYPE_RES_VERI:
                     vd_s_XspiIviSub1ReproDataToQueue((U2)XSPI_IVI_REPRO_VERI_ACK_SIZE, &u1_tp_read[0]);
                     break;
-                case XSPI_IVI_REPRO_SUBTYPE_CANCEL_RES:
+                case FWUPX_SUBTYPE_RES_CANCEL:
                     vd_s_XspiIviSub1ReproDataToQueue((U2)XSPI_IVI_REPRO_CANCEL_ACK_SIZE, &u1_tp_read[0]);
                     break;
-                case XSPI_IVI_REPRO_SUBTYPE_ACT_RES:
+                case FWUPX_SUBTYPE_RES_ACT:
                     vd_s_XspiIviSub1ReproDataToQueue((U2)XSPI_IVI_REPRO_ACT_ACK_SIZE, &u1_tp_read[0]);
                     break;
-                case XSPI_IVI_REPRO_SUBTYPE_VALID_RES:
+                case FWUPX_SUBTYPE_RES_VALID:
                     vd_s_XspiIviSub1ReproDataToQueue((U2)XSPI_IVI_REPRO_VALID_ACK_SIZE, &u1_tp_read[0]);
                     break;
-                case XSPI_IVI_REPRO_SUBTYPE_FIN_RES:
+                case FWUPX_SUBTYPE_RES_FIN:
                     vd_s_XspiIviSub1ReproDataToQueue((U2)XSPI_IVI_REPRO_FIN_ACK_SIZE, &u1_tp_read[0]);
                     break;
                 default:
