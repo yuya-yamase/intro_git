@@ -63,7 +63,7 @@ Std_ReturnType EthSwt_SWIC_Cfg_AllowSetRegister(void);
 								/* ※実測値の5倍程度になる */
 
 
-#define D_ETHSWT_SWIC_CPU_CLK						(400000000U)	/* 400MHz*/
+#define D_ETHSWT_SWIC_CLOCK_PER_US					(400U)			/* 1usあたりのクロック数 */
 void EthSwt_SWIC_Cfg_WaitUS(const uint32 waitUSTime);
 
 /* -------------------------------------------------------------------------- */

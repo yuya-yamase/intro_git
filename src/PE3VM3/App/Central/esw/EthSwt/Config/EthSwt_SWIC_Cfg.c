@@ -199,13 +199,13 @@ Std_ReturnType EthSwt_SWIC_Cfg_AllowRelay(void)
 /* -------------------------------------------------------------------------- */
 /* Config for EthSwt_SWIC_Reg.c                                               */
 /* -------------------------------------------------------------------------- */
-void EthSwt_SWIC_Cfg_WaitUS(const uint32 waitUSTime)			                                /* ループガードの設定関係上、引数waitUSTimeは上限2,147,483だが、値域は1~999にする。 */
+void EthSwt_SWIC_Cfg_WaitUS(const uint32 waitUSTime)			                                /* waitUSの値域はD_ETHSWT_SWIC_CLOCK_PER_USによる。今回は0~10,737,418 */
 {
 	const uint32	startTime = LIB_GetFreeRunCount1us();
 	uint32			i;
 
-	for (i = 0U; i < (D_ETHSWT_SWIC_CPU_CLK / 1000U); i++) {                                    /* 1ループ1クロック以上かかることを前提に、1ms以上のガードをかけておく */
-		const uint32	nowTime = LIB_GetFreeRunCount1us();                                     /* (D_ETHSWT_SWIC_CPU_CLK / 1000U)は、1ms間のクロック数 */
+	for (i = 0U; i < (waitUSTime * D_ETHSWT_SWIC_CLOCK_PER_US); i++) {                          /* 1ループ1クロック前提（実際はそれ以上のクロックがある）にガード実装 */
+		const uint32	nowTime = LIB_GetFreeRunCount1us();
 		if ((nowTime - startTime) > waitUSTime)	{ break; }                                      /* ラップアラウンドはC規格上問題なし */
 	}
 
