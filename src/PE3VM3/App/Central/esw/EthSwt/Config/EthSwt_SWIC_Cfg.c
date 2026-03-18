@@ -202,10 +202,10 @@ Std_ReturnType EthSwt_SWIC_Cfg_AllowRelay(void)
 void EthSwt_SWIC_Cfg_WaitUS(const uint32 waitUSTime)			                                /* ループガードの設定関係上、引数waitUSTimeは上限2,147,483だが、値域は1~999にする。 */
 {
 	const uint32	startTime = LIB_GetFreeRunCount1us();
-	sint32			i;                                                                          /* sintにしているのは、forループでiがマイナスになっても抜け出せるため */
+	uint32			i;
 
-	for (i = ((waitUSTime * 1000U) / (D_ETHSWT_SWIC_NS_PER_INSTRUCTION * 7U)); i > 0U; i--) {   /* 1ループで7命令以上あることを確認済み。命令数が多い分にはガードを掛けるうえで問題なし。 */
-		const uint32	nowTime = LIB_GetFreeRunCount1us();
+	for (i = 0U; i < (D_ETHSWT_SWIC_CPU_CLK / 1000U); i++) {                                    /* 1ループ1クロック以上かかることを前提に、1ms以上のガードをかけておく */
+		const uint32	nowTime = LIB_GetFreeRunCount1us();                                     /* (D_ETHSWT_SWIC_CPU_CLK / 1000U)は、1ms間のクロック数 */
 		if ((nowTime - startTime) > waitUSTime)	{ break; }                                      /* ラップアラウンドはC規格上問題なし */
 	}
 

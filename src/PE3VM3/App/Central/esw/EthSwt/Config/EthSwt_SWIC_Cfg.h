@@ -63,7 +63,7 @@ Std_ReturnType EthSwt_SWIC_Cfg_AllowSetRegister(void);
 								/* Å¶é¿ë™ílÇÃ5î{íˆìxÇ…Ç»ÇÈ */
 
 
-#define D_ETHSWT_SWIC_NS_PER_INSTRUCTION			(50U)		/* 1ñΩóﬂÇ…Ç©Ç©ÇÈéûä‘(ns), MCUÇÕ20MHz */
+#define D_ETHSWT_SWIC_CPU_CLK						(400000000U)	/* 400MHz*/
 void EthSwt_SWIC_Cfg_WaitUS(const uint32 waitUSTime);
 
 /* -------------------------------------------------------------------------- */
