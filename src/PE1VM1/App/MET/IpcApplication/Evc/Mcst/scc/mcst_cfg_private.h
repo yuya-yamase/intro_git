@@ -1,4 +1,4 @@
-/* 3.0.0 */
+/* 3.0.1 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -14,7 +14,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define MCST_CFG_H_MAJOR                         (3)
 #define MCST_CFG_H_MINOR                         (0)
-#define MCST_CFG_H_PATCH                         (0)
+#define MCST_CFG_H_PATCH                         (1)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -34,8 +34,13 @@
 #define MCST_USR_NON                             (U1_MAX)
 
 #define MCST_PSEU_NON                            (0U)
-#define MCST_PSUND_NUM                           (8U)
+#define MCST_PSEU_USR_GUEST                      (7U)
+#define MCST_PSEU_USR_USER1                      (1U)
+#define MCST_PSEU_USR_USER2                      (2U)
+#define MCST_PSEU_USR_USER3                      (3U)
 #define MCST_PSEU_NUM                            (8U)
+
+#define MCST_PSUND_NUM                           (8U)
 
 #define MCST_NUM_4BYTE                           (4U)
 #define MCST_USERINIT_SIZE                       (8U) /*initial target of user area*/
