@@ -645,7 +645,7 @@ static uint8 CanIfProxy_IsExpectedFcCanId( uint32 t_u4CanId )
 *****************************************************************************/
 static void CanIfProxy_TransmitRequest( void )
 {
-	Std_ReturnType t_u1Ret;
+	uint8 t_u1Ret;
 	uint8 t_u1ReqCtrlStatus;
 
 	/* Get message status */
