@@ -83,7 +83,7 @@
 #define VDF_OMUS_MCUID0809_NUM          (CALIB_MCUID0809_NUM)
 #define VDF_OMUS_MCUID0810_NUM          (CALIB_MCUID0810_NUM)
 #define VDF_OMUS_MCUID3020_NUM          (CALIB_MCUID3020_NUM)
-#define VDF_OMUS_MCUID0024_NUM          (2U)
+#define VDF_OMUS_MCUID0024_NUM          (CALIB_MCUID0024_NUM)
 #define VDF_OMUS_MCUID0025_NUM          (CALIB_MCUID0025_NUM)
 #define VDF_OMUS_MCUID0235_NUM          (CALIB_MCUID0235_NUM)
 #define VDF_OMUS_MCUID0250_NUM          (CALIB_MCUID0250_NUM)
@@ -1928,7 +1928,10 @@ static void         vd_s_VardefOmusCfgMCUID0024Jdg(const U1 u1_a_CANVAL)
         case (U1)VDF_OMUS_BRAND_B_LEXUS:
             u1_t_val = (U1)CALIB_MCUID0024_LEXUS;
             break;
-        default: /* 7h(SUBARU), 4h~6h,8h~Eh:Reserved, Fh:Invalid */
+        case (U1)VDF_OMUS_BRAND_B_SUBARU:
+            u1_t_val = (U1)CALIB_MCUID0024_SUBARU;
+            break;
+        default: /* 4h~6h,8h~Eh:Reserved, Fh:Invalid */
             u1_t_val = u1_s_VardefOmusCfgCalibNumChk(u1_s_vdf_omus_mcuid0024, (U1)VDF_OMUS_MCUID0024_NUM, u1_CALIB_MCUID0024_BRAND);
             break;
     }
@@ -2382,7 +2385,9 @@ U1      u1_g_VardefOmusMCUID3025(void)
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  BEV-1     1/22/2026  SH       New.                                                                                               */
+/*  BEV-2     3/17/2026  HL       Change for Subaru Condition in vd_s_VardefOmusCfgMCUID0024Jdg function                             */
 /*                                                                                                                                   */
 /*  * SH   = Sae Hirose, Denso Techno                                                                                                */
+/*  * HL   = Harry Lapiceros, DTPH                                                                                                   */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
