@@ -2119,8 +2119,8 @@ static  U4      u4_s_SbltwrnTtTrns_condAL(const U1 u1_a_SEATID, const U1 u1_a_SE
 
     if (
         ((u1_t_dropn == (U1)TRUE) ||
-        ((stp_a_VCLSTS->u4_vclsts & (U4)SBLTWRN_VCLSTS_D_DR_OP) != (U4)0U) ||
-        ((stp_a_VCLSTS->u4_vclsts & (U4)SBLTWRN_VCLSTS_P_DR_OP) != (U4)0U)) &&  /* some rear door(s) or D door or P door open */
+            ((stp_a_VCLSTS->u4_vclsts & (U4)SBLTWRN_VCLSTS_D_DR_OP) != (U4)0U) ||
+            ((stp_a_VCLSTS->u4_vclsts & (U4)SBLTWRN_VCLSTS_P_DR_OP) != (U4)0U)) &&  /* some rear door(s) or D door or P door open */
         ((stp_a_VCLSTS->u4_vclsts & (U4)SBLTWRN_VCLSTS_SPD_STP_OVER) == (U4)0U) &&
         ((stp_a_VCLSTS->u1p_bklsts[u1_a_SEATID] & (U1)SBLTWRN_BKLSTS_UNBCKL) != (U1)0U)     /* unbucked               */
         ) {
