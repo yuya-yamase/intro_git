@@ -34,10 +34,10 @@
 #define MCST_USR_NON                             (U1_MAX)
 
 #define MCST_PSEU_NON                            (0U)
-#define MCST_PSEU_USR_GUEST                      (7U)
 #define MCST_PSEU_USR_USER1                      (1U)
 #define MCST_PSEU_USR_USER2                      (2U)
 #define MCST_PSEU_USR_USER3                      (3U)
+#define MCST_PSEU_USR_GUEST                      (7U)
 #define MCST_PSEU_NUM                            (8U)
 
 #define MCST_PSUND_NUM                           (8U)
