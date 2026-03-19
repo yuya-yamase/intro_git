@@ -40,7 +40,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define XSPI_IVI_HEADER                     (8U)
 
-#define XSPI_TASK_CNT_NUM                   (16U)
+#define XSPI_TASK_CNT_NUM                   (17U)
 #define XSPI_TASK_CNT_CAMERA                ( 0U)
 #define XSPI_TASK_CNT_CAMERA_SYNC           ( 1U)
 #define XSPI_TASK_CNT_POWER_STS             ( 2U)
@@ -57,6 +57,7 @@
 #define XSPI_TASK_CNT_DIAG_TOUT             (13U)
 #define XSPI_TASK_CNT_PWRSW_ON_TIME         (14U)
 #define XSPI_TASK_CNT_RESET_PORT_OFF_TIME   (15U)
+#define XSPI_TASK_CNT_SYSTEM_TMUTE          (16U)
 
 #define XSPI_IVI_TASK_TIME                  (1U)     
 
