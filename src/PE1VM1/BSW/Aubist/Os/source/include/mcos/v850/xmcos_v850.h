@@ -35,7 +35,7 @@ void xmcos_v850_mkmsg_send(const uint32_t target_pcid);
 void xmcos_v850_ici_init(const uint32_t pcid);
 void xmcos_v850_ici_send(const uint32_t target_pcid);
 void xmcos_v850_mkmsg_init(const uint32_t pcid);
-
+void xmcos_v850_mkmsg_clear_int(void);
 
 #define OS_STOP_SEC_CODE
 #include "Os_MemMap.h"

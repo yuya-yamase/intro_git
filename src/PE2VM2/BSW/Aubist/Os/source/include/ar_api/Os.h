@@ -40,9 +40,9 @@
 
 #if (AR_OS_USE_PARAMETERACCESS == STD_ON)
 
-LOCAL_INLINE ar_errhk_param_t ar_get_errhk_param_wrapper(uint8 par_num);
+AR_LOCAL_FORCE_INLINE ar_errhk_param_t ar_get_errhk_param_wrapper(uint8 par_num);
 
-LOCAL_INLINE ar_errhk_param_t ar_get_errhk_param_wrapper(uint8 par_num)
+AR_LOCAL_FORCE_INLINE ar_errhk_param_t ar_get_errhk_param_wrapper(uint8 par_num)
 {
     ar_errhk_param_t retval;
     retval.d_uint32 = ar_get_errhk_param(par_num);

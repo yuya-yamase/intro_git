@@ -46,6 +46,26 @@ extern ar_isrcb_t * const           ar_isrcb_ptr_table[AR_OS_NUM_C2ISRS];
 #define OS_STOP_SEC_CONST_32
 #include "Os_MemMap.h"
 
+#else  /* #if (AR_OS_EXIST_C2ISR == STD_ON) */
+
+#define OS_START_SEC_CONST_32
+#include "Os_MemMap.h"
+extern const ar_int_config_t        ar_int_configs[1];
+#define OS_STOP_SEC_CONST_32
+#include "Os_MemMap.h"
+
+#define OS_START_SEC_CONST_32
+#include "Os_MemMap.h"
+extern const ar_isr_config_t        ar_isr_configs[1];
+#define OS_STOP_SEC_CONST_32
+#include "Os_MemMap.h"
+
+#define OS_START_SEC_CONST_32
+#include "Os_MemMap.h"
+extern ar_isrcb_t * const           ar_isrcb_ptr_table[1];
+#define OS_STOP_SEC_CONST_32
+#include "Os_MemMap.h"
+
 #endif /* #if (AR_OS_EXIST_C2ISR == STD_ON) */
 
 #if (AR_OS_EXIST_C1ISR == STD_ON)

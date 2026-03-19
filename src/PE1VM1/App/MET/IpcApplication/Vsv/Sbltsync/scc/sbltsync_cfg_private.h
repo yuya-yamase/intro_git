@@ -21,9 +21,6 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "aip_common.h"
 #include "sbltwrn.h"
-#if 0   /* BEV Rebase provisionally */
-#include "oxcan.h"
-#endif   /* BEV Rebase provisionally */
 #include "calibration.h"
 #include "vardef.h"
 
@@ -73,10 +70,6 @@ void    vd_g_SbltsyncCfgTxRC3TT(const U1 u1_a_SIG);
 void    vd_g_SbltsyncCfgTxRL3TT(const U1 u1_a_SIG);
 void    vd_g_SbltsyncCfgTxREARINDI(const U1 u1_a_SIG);
 void    vd_g_SbltsyncCfgTxCXMET1S02(void);
-
-/* U2   u2_g_SbltwrnChmsts(void);                       */
-/* U2   u2_g_SbltwrnTtsts(void);                        */
-/* U1   u1_g_SbltwrnTtstsBySeat(const U1 u1_a_SEATID);  */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */

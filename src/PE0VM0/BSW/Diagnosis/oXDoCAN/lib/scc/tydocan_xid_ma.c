@@ -97,8 +97,8 @@
 #define TYDC_RID_D903_US_BLO                     (0x00U)
 #define TYDC_RID_D903_US_MAC                     (0x01U)
 
-#define TYDC_SEC_MACGEN_JOBID                    (CsmConf_CsmJob_MacGenerate_UseByKeyVerify)
-#define TYDC_SEC_ENCRYPTO_JOBID                  (CsmConf_CsmJob_Encrypt_UseByKeyVerify)
+#define TYDC_SEC_MACGEN_JOBID                    (CsmConf_CsmJob_Job45_MacGenerate_UseByKeyVerify)
+#define TYDC_SEC_ENCRYPTO_JOBID                  (CsmConf_CsmJob_Job48_Encrypt_UseByKeyVerify)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define TYDC_M1_KEY_ID_POS                       (15U)    /* The position of the KEYID(SHE-ID and Auth-ID) in the M1 data */
@@ -114,8 +114,8 @@
 #define TYDC_KEY_DATASIZE                        (64U)
 #define TYDC_KEY_NUM                             (2U)
 
-#define TYDC_CSM_JOBID_MASTER_ECU_KEY            (CsmConf_CsmJob_KeySetValid_MasterEcuKey)
-#define TYDC_CSM_JOBID_MAC_KEY                   (CsmConf_CsmJob_KeySetValid_MacKey)
+#define TYDC_CSM_JOBID_MASTER_ECU_KEY            (CsmConf_CsmJob_Job46_KeySetValid_MasterEcuKey)
+#define TYDC_CSM_JOBID_MAC_KEY                   (CsmConf_CsmJob_Job47_KeySetValid_MacKey)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */

@@ -838,7 +838,8 @@ static U1    u1_s_VardefOmusCfgBRAND_B(U1 * u1p_a_canrx)
     u1_t_ret = (U1)FALSE;
     (void)Com_ReceiveSignal(ComConf_ComSignal_BRAND_B, &u1_t_sig);
     if((u1_t_sig >= (U1)VDF_OMUS_BRAND_B_TOYOTA) &&
-       (u1_t_sig <= (U1)VDF_OMUS_BRAND_B_GR)){
+       (u1_t_sig <= (U1)VDF_OMUS_BRAND_B_GR    ) ||
+       (u1_t_sig == (U1)VDF_OMUS_BRAND_B_SUBARU)){
         u1_t_ret = (U1)TRUE;
     }
     *u1p_a_canrx = u1_t_sig;
@@ -967,7 +968,9 @@ static U1    u1_s_VardefOmusCfgCSWPOS_B(U1 * u1p_a_canrx)
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  BEV-1     1/22/2026  SH       New.                                                                                               */
+/*  BEV-2     3/17/2026  HL       Change for Subaru Condition in u1_s_VardefOmusCfgBRAND_B function                                  */
 /*                                                                                                                                   */
 /*  * SH   = Sae Hirose, Denso Techno                                                                                                */
+/*  * HL   = Harry Lapiceros, DTPH                                                                                                   */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

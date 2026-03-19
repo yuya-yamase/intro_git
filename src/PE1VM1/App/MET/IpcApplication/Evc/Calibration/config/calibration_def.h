@@ -1,4 +1,4 @@
-/* 1.4.0 */
+/* 1.5.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -13,7 +13,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define CALIBRATION_DEF_H_MAJOR                     (1)
-#define CALIBRATION_DEF_H_MINOR                     (4)
+#define CALIBRATION_DEF_H_MINOR                     (5)
 #define CALIBRATION_DEF_H_PATCH                     (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -385,7 +385,7 @@
 #define CALIB_MCUID1112_DEF                         (0U)             /* Judgment result 10                                           */
 #define CALIB_MCUID1135_DEF                         (0U)             /* SeatBelt Regulation USA                                      */
 #define CALIB_MCUID1136_DEF                         (0U)             /* SeatBelt Regulation CAN                                      */
-#define CALIB_MCUID1137_DEF                         (0U)             /* New FMVSS applied or not                                     */
+#define CALIB_MCUID1137_DEF                         (0U)             /* New FMVSS applied or not                                     */
 #define CALIB_MCUID1138_DEF                         (1U)             /* SeatBelt Reminder Telltale Type                              */
 #define CALIB_MCUID0576_DEF                         (24U)            /* DegCW                                                        */
 #define CALIB_MCUID0577_DEF                         (231U)           /* DegCCW                                                       */
@@ -398,7 +398,7 @@
 #define CALIB_MCUID0584_DEF                         (8U)             /* ATss_UpAveCnt                                                */
 #define CALIB_MCUID0585_DEF                         (2U)             /* ATss_DnAveCnt                                                */
 #define CALIB_MCUID0586_DEF                         (32U)            /* HUDLm_AveCnt                                                 */
-#define CALIB_MCUID_RSV_1B_0372_DEF                 (0U)             /* Reserve_1B-0372                                              */
+#define CALIB_MCUID0023_DEF                         (5U)             /* Display type                                                 */
 #define CALIB_MCUID_RSV_1B_0373_DEF                 (0U)             /* Reserve_1B-0373                                              */
 #define CALIB_MCUID_RSV_1B_0374_DEF                 (0U)             /* Reserve_1B-0374                                              */
 #define CALIB_MCUID_RSV_1B_0375_DEF                 (0U)             /* Reserve_1B-0375                                              */

@@ -59,10 +59,6 @@ struct bss_section_info_st
 };
 typedef struct bss_section_info_st bss_section_info_t;
 
-/*
- * Prototype declarations of variables defined in linker script
- *
- */
 
 /*
  * text sections on master core
@@ -134,5 +130,5 @@ extern const bss_section_info_t mcos_local_core01_var_cleared_table[1];
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
 /*  Framework          :v2-1-0                                              */
-/*  BSW plug-in        :v2-0-0                                              */
+/*  BSW plug-in        :v2-1-0                                              */
 /****************************************************************************/

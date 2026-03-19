@@ -113,23 +113,23 @@ extern void ar_system_counter_stop(void);
 #define AR_NXTVAL(info) (((ar_counter_expire_info_t *)(info))->expire_tick)
 #define AR_EXPPRI(info) (((ar_counter_expire_info_t *)(info))->expire_pri)
 
-LOCAL_INLINE void ar_counter_insert(ar_counter_expire_info_t * const p_counter_info, const ar_countercb_t * const p_countercb);
-LOCAL_INLINE TickType ar_sum_ticks(const TickType tick1,
+AR_LOCAL_FORCE_INLINE void ar_counter_insert(ar_counter_expire_info_t * const p_counter_info, const ar_countercb_t * const p_countercb);
+AR_LOCAL_FORCE_INLINE TickType ar_sum_ticks(const TickType tick1,
     const TickType tick2, const TickType limit);
-LOCAL_INLINE TickType ar_sub_ticks(const TickType tick1,
+AR_LOCAL_FORCE_INLINE TickType ar_sub_ticks(const TickType tick1,
     const TickType tick2, const TickType limit);
-LOCAL_INLINE TickType ar_get_curval(
+AR_LOCAL_FORCE_INLINE TickType ar_get_curval(
     const ar_countercb_t * const p_countercb);
 
-LOCAL_INLINE void ar_counter_queue_init(ar_counter_expire_info_t * const info);
-LOCAL_INLINE ar_counter_expire_info_t * ar_counter_queue_next(ar_counter_expire_info_t const * const info);
-LOCAL_INLINE sint32 ar_counter_queue_size(ar_counter_expire_info_t const * const info);
-LOCAL_INLINE void ar_counter_queue_insert(
+AR_LOCAL_FORCE_INLINE void ar_counter_queue_init(ar_counter_expire_info_t * const info);
+AR_LOCAL_FORCE_INLINE ar_counter_expire_info_t * ar_counter_queue_next(ar_counter_expire_info_t const * const info);
+AR_LOCAL_FORCE_INLINE sint32 ar_counter_queue_size(ar_counter_expire_info_t const * const info);
+AR_LOCAL_FORCE_INLINE void ar_counter_queue_insert(
     ar_counter_expire_info_t * const ins,
     ar_counter_expire_info_t * const next);
-LOCAL_INLINE void ar_counter_queue_remove(ar_counter_expire_info_t * const unlink);
+AR_LOCAL_FORCE_INLINE void ar_counter_queue_remove(ar_counter_expire_info_t * const unlink);
 
-LOCAL_INLINE void ar_counter_insert(
+AR_LOCAL_FORCE_INLINE void ar_counter_insert(
     ar_counter_expire_info_t * const p_counter_info,
     const ar_countercb_t * const p_countercb)
 {
@@ -188,7 +188,7 @@ LOCAL_INLINE void ar_counter_insert(
     ar_counter_queue_insert(p_counter_info, next);
 }
 
-LOCAL_INLINE TickType ar_sum_ticks(
+AR_LOCAL_FORCE_INLINE TickType ar_sum_ticks(
     const TickType tick1,
     const TickType tick2,
     const TickType limit)
@@ -206,7 +206,7 @@ LOCAL_INLINE TickType ar_sum_ticks(
     return result;
 }
 
-LOCAL_INLINE TickType ar_sub_ticks(
+AR_LOCAL_FORCE_INLINE TickType ar_sub_ticks(
     const TickType tick1,
     const TickType tick2,
     const TickType limit)
@@ -225,7 +225,7 @@ LOCAL_INLINE TickType ar_sub_ticks(
     return result;
 }
 
-LOCAL_INLINE TickType ar_get_curval(
+AR_LOCAL_FORCE_INLINE TickType ar_get_curval(
     const ar_countercb_t * const p_countercb)
 {
     TickType curval;
@@ -237,18 +237,18 @@ LOCAL_INLINE TickType ar_get_curval(
 
 
 
-LOCAL_INLINE void ar_counter_queue_init(ar_counter_expire_info_t * const info)
+AR_LOCAL_FORCE_INLINE void ar_counter_queue_init(ar_counter_expire_info_t * const info)
 {
     info->p_next = info;
     info->p_prev = info;
 }
 
-LOCAL_INLINE ar_counter_expire_info_t * ar_counter_queue_next(ar_counter_expire_info_t const * const info)
+AR_LOCAL_FORCE_INLINE ar_counter_expire_info_t * ar_counter_queue_next(ar_counter_expire_info_t const * const info)
 {
     return info->p_next;
 }
 
-LOCAL_INLINE sint32 ar_counter_queue_size(ar_counter_expire_info_t const * const info)
+AR_LOCAL_FORCE_INLINE sint32 ar_counter_queue_size(ar_counter_expire_info_t const * const info)
 {
     sint32 count;
     ar_counter_expire_info_t const *ptr;
@@ -264,7 +264,7 @@ LOCAL_INLINE sint32 ar_counter_queue_size(ar_counter_expire_info_t const * const
     return count;
 }
 
-LOCAL_INLINE void ar_counter_queue_insert(
+AR_LOCAL_FORCE_INLINE void ar_counter_queue_insert(
     ar_counter_expire_info_t * const ins,
     ar_counter_expire_info_t * const next)
 {
@@ -274,7 +274,7 @@ LOCAL_INLINE void ar_counter_queue_insert(
     next->p_prev = ins;
 }
 
-LOCAL_INLINE void ar_counter_queue_remove(ar_counter_expire_info_t * const unlink)
+AR_LOCAL_FORCE_INLINE void ar_counter_queue_remove(ar_counter_expire_info_t * const unlink)
 {
     unlink->p_prev->p_next = unlink->p_next;
     unlink->p_next->p_prev = unlink->p_prev;

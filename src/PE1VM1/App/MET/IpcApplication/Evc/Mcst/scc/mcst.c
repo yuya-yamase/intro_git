@@ -1,4 +1,4 @@
-/* 3.0.0 */
+/* 3.0.1 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -11,7 +11,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define MCST_C_MAJOR                             (3)
 #define MCST_C_MINOR                             (0)
-#define MCST_C_PATCH                             (0)
+#define MCST_C_PATCH                             (1)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -588,10 +588,10 @@ static void vd_s_McstInitUser(void)
 
     if(u1_t_igon == (U1)TRUE){
         if((u1_s_mcst_pseu != u1_t_pseu        ) &&
-           ((u1_t_pseu == (U1)MCST_USR_USER1) ||
-            (u1_t_pseu == (U1)MCST_USR_USER2) ||
-            (u1_t_pseu == (U1)MCST_USR_USER3) ||
-            (u1_t_pseu == (U1)MCST_USR_GUEST))){
+           ((u1_t_pseu == (U1)MCST_PSEU_USER1) ||
+            (u1_t_pseu == (U1)MCST_PSEU_USER2) ||
+            (u1_t_pseu == (U1)MCST_PSEU_USER3) ||
+            (u1_t_pseu == (U1)MCST_PSEU_GUEST))){
             u1_t_init_jdg = (U1)TRUE;
             u1_t_del_user = u1_gp_MCST_PSEU_TABLE[u1_t_pseu];
         }
@@ -926,6 +926,7 @@ static U1 u1_s_McstDtfUsrInit(const U2 u2_a_nvmid)
 /*  2.5.2    05/09/2025  SK       Change Initial Area for User2(Merter Initialization)                                               */
 /*  2.6.0    05/26/2025  SW       B_PERMEM bug fix(add update GUEST setting when user changed to unknown)                            */
 /*  3.0.0    01/30/2026  SN       Change B_PERMEM for BEV                                                                            */
+/*  3.0.1    03/17/2026  SN       Change vd_s_McstInitUser                                                                           */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
