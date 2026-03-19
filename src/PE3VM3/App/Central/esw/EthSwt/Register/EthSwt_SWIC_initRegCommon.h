@@ -10,6 +10,7 @@
 #define REG_CTRL_READ		((uint8)1)	/* READ処理 */
 #define REG_CTRL_WRITE_MASK	((uint8)2)	/* Write処理(保存した値に対してMASK計算して書き込み) */
 #define REG_CTRL_READ_TMP	((uint8)3)	/* READ処理(値保持) */
+#define REG_CTRL_WAIT		((uint8)4)	/* us待ち */
 
 // 監視フラグ定義:E_SURVEILLANCE
 #define SURVEILLANCE_OFF	((uint8)0)	/* 監視OFF */
