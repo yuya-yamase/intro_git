@@ -144,6 +144,8 @@ U1 u1_g_FwuMemAccEraseReq(U4 u4_a_start_adrs, U4 u4_a_length, U4 u4_a_expected_c
 
     /* Only proceed when not busy */
     u1_t_ret = (U1)FWUMEMACC_RET_NG;
+    u1_s_job_status = (U1)FWUMEMACC_JOB_STATUS_ERROR;
+    u1_s_last_error = (U1)FWUMEMACC_ERROR_PRECONDITION_ERR;
     if (u1_s_job_status == (U1)FWUMEMACC_JOB_STATUS_IDLE ||
         u1_s_job_status == (U1)FWUMEMACC_JOB_STATUS_COMPLETED ||
         u1_s_job_status == (U1)FWUMEMACC_JOB_STATUS_ERROR) {
@@ -215,8 +217,6 @@ U1 u1_g_FwuMemAccSwitchReq(void)
 {
     U1 u1_t_ret;
 
-    /* Only proceed when not busy */
-    u1_t_ret = (U1)FWUMEMACC_RET_NG;
     if (u1_s_job_status == (U1)FWUMEMACC_JOB_STATUS_IDLE ||
         u1_s_job_status == (U1)FWUMEMACC_JOB_STATUS_COMPLETED ||
         u1_s_job_status == (U1)FWUMEMACC_JOB_STATUS_ERROR) {
@@ -225,6 +225,12 @@ U1 u1_g_FwuMemAccSwitchReq(void)
         u1_s_job_status = (U1)FWUMEMACC_JOB_STATUS_IDLE;  /* task will start it */
         u1_s_last_error = (U1)FWUMEMACC_ERROR_NONE;
         u1_t_ret = (U1)FWUMEMACC_RET_OK;
+    }
+    else {
+        /* Only proceed when not busy */
+        u1_t_ret = (U1)FWUMEMACC_RET_NG;
+        u1_s_job_status = (U1)FWUMEMACC_JOB_STATUS_ERROR;  /* task will start it */
+        u1_s_last_error = (U1)FWUMEMACC_ERROR_PRECONDITION_ERR;
     }
 
     return(u1_t_ret);
