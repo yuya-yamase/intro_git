@@ -47,10 +47,10 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define IVDSH_WA_NWORD_WRI                       (24U)
 #define IVDSH_WA_NWORD_REA_0                     (4U)
-#define IVDSH_WA_NWORD_REA_1                     (17U)
+#define IVDSH_WA_NWORD_REA_1                     (19U)
 #define IVDSH_WA_NWORD_REA_2                     (12U)
 
-#define IVDSH_WA_NWORD                           (90U)
+#define IVDSH_WA_NWORD                           (94U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -97,7 +97,7 @@ const ST_IVDSH_WA           st_gp_IVDSH_WA_BY_DID[IVDSH_NUM_DID] =
     {(U2)4U,        (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_VM2TO1_DSPCAL     */
     {(U2)5U,        (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_VM2TO1_CAL        */
     {(U2)6U,        (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_VM2TO1_CAM_DIAP   */
-    {(U2)7U,        (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_VM2TO3_WHLINI_REQ */
+    {(U2)7U,        (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_VM2TO3_WHLINI_INF */
     {(U2)8U,        (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_VM2TO3_STRMODE    */
     {(U2)9U,        (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_VM2TO3_OPESTS     */
     {(U2)10U,       (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_GPS_REQ           */
