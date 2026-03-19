@@ -64,7 +64,7 @@ Std_ReturnType EthSwt_SWIC_Cfg_AllowSetRegister(void);
 
 
 #define D_ETHSWT_SWIC_CLOCK_PER_US					(400U)			/* 1usÇ†ÇΩÇËÇÃÉNÉçÉbÉNêî */
-void EthSwt_SWIC_Cfg_WaitUS(const uint32 waitUSTime);
+void EthSwt_SWIC_Cfg_WaitUS(const uint16 waitUSTime);
 
 /* -------------------------------------------------------------------------- */
 /* Config for EthSwt_SWIC_Link.c                                              */
