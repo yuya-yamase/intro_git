@@ -19,7 +19,7 @@
 /* -------------------------------------------------------------------------- */
 /* Config for EthDLC_STM.c                                                    */
 /* -------------------------------------------------------------------------- */
-Std_ReturnType EthDLC_Power_GetState(void);
+#define EthDLC_Power_GetState()             (STD_ON)
 Std_ReturnType EthDLC_Port_GetState(void);
 #define EthDLC_Port_Active()                (void)EthSwt_SWIC_SetSwitchPortMode(D_ETH_SWITCH_DLC, D_ETH_PORT_DLC, ETH_MODE_ACTIVE)
 #define EthDLC_Port_Down()                  (void)EthSwt_SWIC_SetSwitchPortMode(D_ETH_SWITCH_DLC, D_ETH_PORT_DLC, ETH_MODE_DOWN)
