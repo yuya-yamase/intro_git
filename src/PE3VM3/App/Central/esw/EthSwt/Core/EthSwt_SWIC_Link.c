@@ -128,21 +128,25 @@ static Std_ReturnType ethswt_swic_link_read(uint32 * const errFactor)
 /* -------------------------------------------------------------------------- */
 static Std_ReturnType ethswt_swic_link_readPerPort(const uint8 SwitchPortIdx, uint32 * const errFactor)
 {
-    Std_ReturnType	        result;
+    Std_ReturnType	        result = E_NOT_OK;
     EthTrcv_LinkStateType   state;
 	uint32			        val = 0uL;
 
-    result = EthSwt_SWIC_Reg_SetTbl(G_ETHSWT_SWIC_GET_LINK_TABLE[SwitchPortIdx].tbl, G_ETHSWT_SWIC_GET_LINK_TABLE[SwitchPortIdx].num, &val, errFactor);
+    do {
+        if((sizeof(G_ETHSWT_SWIC_GET_LINK_TABLE)/sizeof(G_ETHSWT_SWIC_GET_LINK_TABLE[0])) < SwitchPortIdx)  { break; }
+        if(G_ETHSWT_SWIC_GET_LINK_TABLE[SwitchPortIdx].tbl == NULL_PTR)                                     { break; }
 
-    if (result == E_OK) {
-        state = ((val & G_ETHSWT_SWIC_GET_LINK_TABLE[SwitchPortIdx].msk) == G_ETHSWT_SWIC_GET_LINK_TABLE[SwitchPortIdx].dat) ? ETHTRCV_LINK_STATE_ACTIVE : ETHTRCV_LINK_STATE_DOWN;
-        LIB_DI();
-        S_ETHSWT_SWIC_LINK[SwitchPortIdx].getLinkResult = result;
-        S_ETHSWT_SWIC_LINK[SwitchPortIdx].linkState = state;
-        LIB_EI();
+        result = EthSwt_SWIC_Reg_SetTbl(G_ETHSWT_SWIC_GET_LINK_TABLE[SwitchPortIdx].tbl, G_ETHSWT_SWIC_GET_LINK_TABLE[SwitchPortIdx].num, &val, errFactor);
 
-        ETHSWT_SWIC_LINK_NOTIFY(SwitchPortIdx, result, state);
-    }   /* E_NOT_OK時は、状態遷移時にRAMをリセットする */
+        if (result == E_OK) {
+            state = ((val & G_ETHSWT_SWIC_GET_LINK_TABLE[SwitchPortIdx].msk) == G_ETHSWT_SWIC_GET_LINK_TABLE[SwitchPortIdx].dat) ? ETHTRCV_LINK_STATE_ACTIVE : ETHTRCV_LINK_STATE_DOWN;
+            LIB_DI();
+            S_ETHSWT_SWIC_LINK[SwitchPortIdx].getLinkResult = result;
+            S_ETHSWT_SWIC_LINK[SwitchPortIdx].linkState = state;
+            LIB_EI();
 
+            ETHSWT_SWIC_LINK_NOTIFY(SwitchPortIdx, result, state);
+        }   /* E_NOT_OK時は、状態遷移時にRAMをリセットする */
+    } while(0);
 	return result;
 }
