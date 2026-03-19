@@ -86,9 +86,7 @@ const CanIfProxy_U4RangeType CanIfProxy_cu4ResCanIdTble[CANIFPROXY_CFG_RES_CANID
 	{ (uint32)0xD8DAE100, (uint32)0xD8DAE1FF },
 	{ (uint32)0x98DAE100, (uint32)0x98DAE1FF },
 	{ (uint32)0xD8DB33F1, (uint32)0xD8DB33F1 },
-	{ (uint32)0x98DB33F1, (uint32)0x98DB33F1 },
-	{ (uint32)0x00000708, (uint32)0x0000070F },
-	{ (uint32)0x000007DF, (uint32)0x000007DF }
+	{ (uint32)0x98DB33F1, (uint32)0x98DB33F1 }
 };
 
 #define CANIFPROXY_STOP_SEC_CONFIG_DATA_32

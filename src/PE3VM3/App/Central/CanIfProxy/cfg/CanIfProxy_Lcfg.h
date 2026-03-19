@@ -49,7 +49,7 @@
 /* Limit number of messages in transit */
 #define CANIFPROXY_CFG_TX_LIMIT						(8U)
 /* Number of Response CAN ID range */
-#define CANIFPROXY_CFG_RES_CANID_RANGE_NUM			(6U)
+#define CANIFPROXY_CFG_RES_CANID_RANGE_NUM			(4U)
 
 /*--------------------------------------------------------------------------*/
 /* Types                                                                    */

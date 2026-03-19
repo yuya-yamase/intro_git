@@ -449,8 +449,11 @@ static void CanIfProxy_ReceiveRequest( const CanMsgType* t_pstMsg )
 		{
 			if( t_u1NPduType == (uint8)CANIFPROXY_NPDUTYPE_FF )
 			{
-				/* Initialize request */
-				CanIfProxy_InitMfRequest();
+				/* Initialize request only when no MF transfer is buffered */
+				if ( CanIfProxy_stMfReqStatus.u2Head == CanIfProxy_stMfReqStatus.u2Tail )
+				{
+					CanIfProxy_InitMfRequest();
+				}
 
 				/* Memory received FF */
 				CanIfProxy_stMfReqStatus.u1IsRcvFf = (uint8)TRUE;
@@ -739,7 +742,7 @@ static void CanIfProxy_TransmitRequest( void )
 	}
 
 	/* Status is transmit CF */
-	if ( t_u1ReqCtrlStatus == (uint8)CANIFPROXY_REQ_CTRL_STS_TX_CF )
+	else if ( t_u1ReqCtrlStatus == (uint8)CANIFPROXY_REQ_CTRL_STS_TX_CF )
 	{
 		/* Transmit CF */
 		t_u1Ret = CanIfProxy_TransmitCF();
@@ -794,7 +797,7 @@ static uint8 CanIfProxy_TransmitSF( void )
 	uint16 t_u2Head;
 	CanMsgType t_stMsg;
 
-	t_u1Ret = u1CANIFPROXY_E_OK;
+	t_u1Ret = u1CANIFPROXY_E_NOT_OK;
 
 	t_u1IsEmpty = CanIfProxy_IsEmptyTxSfBuff();
 	if ( t_u1IsEmpty == (uint8)FALSE )
@@ -812,7 +815,7 @@ static uint8 CanIfProxy_TransmitSF( void )
 
 		if ( t_u1VcanRet != (uint8)CAN_PROC_OK )
 		{
-			t_u1Ret = u1CANIFPROXY_E_NOT_OK;
+			t_u1Ret = u1CANIFPROXY_E_OK;
 		}
 		else
 		{
@@ -982,7 +985,7 @@ static uint8 CanIfProxy_TransmitCF( void )
 				}
 				else
 				{
-					t_u1Ret = u1CANIFPROXY_E_NOT_OK;
+					/* Try Transmit at next cycle */
 					break;
 				}
 			}
@@ -990,7 +993,7 @@ static uint8 CanIfProxy_TransmitCF( void )
 			{
 				if ( t_u2Head >= t_u2Tail )
 				{
-					t_u1Ret = u1CANIFPROXY_E_NOT_OK;
+					/* Wait for next CF data reception */
 				}
 				break;
 			}
@@ -1032,12 +1035,17 @@ static uint8 CanIfProxy_ReceiveFC( void )
 	uint8 t_u1Fs;
 	uint8 t_u1WtCnt;
 
-	t_u1Ret = u1CANIFPROXY_E_OK;
+	t_u1Ret = u1CANIFPROXY_E_NOT_OK;
 
 	t_u1Fs = CanIfProxy_stMfReqStatus.u1Fs;
 	t_u1WtCnt = CanIfProxy_stMfReqStatus.u1WtCnt;
 
-	if ( t_u1Fs == (uint8)CANIFPROXY_FS_WT )
+	if ( t_u1Fs == (uint8)CANIFPROXY_FS_CTS )
+	{
+		CanIfProxy_stMfReqStatus.u1WtCnt = (uint8)0U;
+		t_u1Ret = u1CANIFPROXY_E_OK;
+	}
+	else if ( t_u1Fs == (uint8)CANIFPROXY_FS_WT )
 	{
 		t_u1WtCnt++;
 		
@@ -1052,16 +1060,16 @@ static uint8 CanIfProxy_ReceiveFC( void )
 		}
 		else
 		{
-			t_u1Ret = u1CANIFPROXY_E_NOT_OK;
+			/* No Action */
 		}
 	}
 	else if ( t_u1Fs == (uint8)CANIFPROXY_FS_OVFLW )
 	{
-		t_u1Ret = u1CANIFPROXY_E_NOT_OK;
+		/* No Action */
 	}
 	else
 	{
-		/* nop */
+		/* No Action */
 	}
 
 	return t_u1Ret;
