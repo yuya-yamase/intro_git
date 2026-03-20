@@ -113,7 +113,7 @@ static void vd_s_FwushHandleFinalizeAbort(void);
 static void vd_s_FwushHandleRollbackAbort(void);
 static void vd_s_FwushHandleInvalidReq(void);
 
-static U1 u1_s_FwushCheckActivePhase(void);
+static U1 u1_s_FwushCheckValidArea(void);
 
 /* CANCEL handlers */
 static void vd_s_FwushHandleCancel(void);
@@ -1024,7 +1024,7 @@ static void vd_s_FwushHandleValidateReq(void)
 {
     U1 u1_t_chk_result;
 
-    u1_t_chk_result = u1_s_FwushCheckActivePhase();
+    u1_t_chk_result = u1_s_FwushCheckValidArea();
     /* Request rollback */
     if(u1_t_chk_result == (U1)FWUSH_CHECK_VA_UNMATCH){
         /* Validate OK */
@@ -1057,7 +1057,7 @@ static void vd_s_FwushHandleRollbackReq(void)
     U1 u1_t_result;
     U1 u1_t_chk_result;
 
-    u1_t_chk_result = u1_s_FwushCheckActivePhase();
+    u1_t_chk_result = u1_s_FwushCheckValidArea();
     switch (u1_t_chk_result)
     {
     case (U1)FWUSH_CHECK_VA_ERROR:
@@ -1078,12 +1078,12 @@ static void vd_s_FwushHandleRollbackReq(void)
 }
 
 /*===================================================================================================================================*/
-/* static U1 u1_s_FwushCheckActivePhase(void)                                                                                        */
+/* static U1 u1_s_FwushCheckValidArea(void)                                                                                          */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         U1 : 0x00=FWUSH_CHECK_VA_MATCH, 0x01=FWUSH_CHECK_VA_UNMATCH, 0xFF=FWUSH_CHECK_VA_ERROR                           */
 /*===================================================================================================================================*/
-static U1 u1_s_FwushCheckActivePhase(void)
+static U1 u1_s_FwushCheckValidArea(void)
 {
     static const U1 u1_s_FWUSH_SWVA_MASK = (U1)0x01U;
     static const U1 u1_s_FWUSH_SWAS_MASK = (U1)0x02U;
