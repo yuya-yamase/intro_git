@@ -27,7 +27,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define CAN_LPFQ_NUM_CH                          (13U)
+#define CAN_LPFQ_NUM_CH                          (14U)
 
 #define CAN_LPFQ_CH_PHY_TX_G2M1_P0               (0U)
 #define CAN_LPFQ_CH_PHY_TX_G2M1_P1               (1U)
@@ -42,6 +42,7 @@
 #define CAN_LPFQ_CH_PHY_TX_G5M__P2               (10U)
 #define CAN_LPFQ_CH_PHY_TX_G5M__P3               (11U)
 #define CAN_LPFQ_CH_PHY_TX_LOCA_P0               (12U)
+#define CAN_LPFQ_CH_PHY_TX_G2M2_P0               (13U)
 
 /* #define CAN_LPFQ_CH_SECOC_TX                     (9U) */
 /* #define CAN_LPFQ_CH_IPDU_TX_ACK                  (10U) */

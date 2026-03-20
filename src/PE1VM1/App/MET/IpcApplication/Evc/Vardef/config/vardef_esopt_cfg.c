@@ -1237,7 +1237,7 @@ const ST_VDF_ESO_CH    st_gp_VDF_ESO_CH[VDF_ESO_NUM_RX] = {
         &u1_g_VdfEsoRx_SYS_4WDSYS_DISCON,       /* fp_u1_AVA_RX        */
         (U2)VDF_ESO_CH_SYS_4WDSYS_DISCON,       /* u2_eso_ch           */
         (U1)VDF_ESO_INPUT_TYPE_CAN,             /* u1_input_type       */
-        (U2)U2_MAX,                             /* u2_msg_rx           */
+        (U2)OXCAN_RXD_PDU_CAN_BDC1SV3_CH0,      /* u2_msg_rx           */
         (U2)0x0002U,                            /* u2_vom_act          */
         ((U2)2100U / (U2)VDF_MAIN_TICK),        /* u2_rxc_peri         */
         {
@@ -1498,6 +1498,9 @@ U1      u1_g_VardefEsOptCfgEthRxEvcnt(const U2 u2_a_MSG_ID)
 /*  BEV-39    02/13/2026  JS      Change config for BEV Full_Function_2.                                                             */
 /*                                MET-H_SOLCHG-CSTD-1-03-B-C0                                                                        */
 /*                                Change memory retention from disabled to enabled                                                   */
+/*  BEV-40    03/17/2026  RS      Change config for BEV Full_Function_2.                                                             */
+/*                                MET-D_4WDSYS-CSTD-2-02-A-C1                                                                        */
+/*                                Add BDC1SV3 Frame for 4WDSYS_DISCON                                                                */
 /*                                                                                                                                   */
 /*  * YI     = Yoshiki Iwata, Denso                                                                                                  */
 /*  * TN     = Takashi Nagai, Denso                                                                                                  */
@@ -1534,5 +1537,6 @@ U1      u1_g_VardefEsOptCfgEthRxEvcnt(const U2 u2_a_MSG_ID)
 /*  * YN   = Yujiro Nagaya, Denso Techno                                                                                             */
 /*  * KEM  = Kane Edward Malapo, DTPH                                                                                                */
 /*  * YH   = Yuki Hatakeyama, KSE                                                                                                    */
+/*  * RS   = Ryuki Sako, Denso Techno                                                                                                */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

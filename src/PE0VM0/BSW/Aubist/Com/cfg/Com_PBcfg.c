@@ -125,27 +125,23 @@ BswConst Bsw_Com_DataInfoType bsw_com_stDataInfoTbl[BSW_COM_HANDLE_NUM] = {
     ,BSW_COM_u1EVCOND_NONE                                                                                       /* [23] ComConf_ComSignal_VPSINFOS_0 */
     ,BSW_COM_u1EVCOND_NONE                                                                                       /* [24] ComConf_ComSignal_VPSCNG_0 */
     ,BSW_COM_u1EVCOND_NONE                                                                                       /* [25] ComConf_ComSignal_VPSISOTA_0 */
-    ,BSW_COM_u1EVCOND_NONE                                                                                       /* [26] ComConf_ComSignal_D01476_0 */
-    ,BSW_COM_u1EVCOND_NONE                                                                                       /* [27] ComConf_ComSignal_APOFRQ_0 */
-    ,BSW_COM_u1EVCOND_NONE                                                                                       /* [28] ComConf_ComSignal_D01477_0 */
-    ,BSW_COM_u1EVCOND_NONE                                                                                       /* [29] ComConf_ComSignal_FV1E3_D_0 */
-    ,BSW_COM_u1EVCOND_NONE                                                                                       /* [30] ComConf_ComSignal_KZK1E3_D_0 */
-    ,BSW_COM_u1EVCOND_NONE                                                                                       /* [31] ComConf_ComSignal_E_CRC1E4_2 */
-    ,BSW_COM_u1EVCOND_NONE                                                                                       /* [32] ComConf_ComSignal_E_CNT1E4_2 */
-    ,BSW_COM_u1EVCOND_NONE                                                                                       /* [33] ComConf_ComSignal_VPSINF7S_2 */
-    ,BSW_COM_u1EVCOND_NONE                                                                                       /* [34] ComConf_ComSignal_VPSINF6S_2 */
-    ,BSW_COM_u1EVCOND_NONE                                                                                       /* [35] ComConf_ComSignal_VPSINF5S_2 */
-    ,BSW_COM_u1EVCOND_NONE                                                                                       /* [36] ComConf_ComSignal_VPSINF4S_2 */
-    ,BSW_COM_u1EVCOND_NONE                                                                                       /* [37] ComConf_ComSignal_VPSINF3S_2 */
-    ,BSW_COM_u1EVCOND_NONE                                                                                       /* [38] ComConf_ComSignal_VPSINF2S_2 */
-    ,BSW_COM_u1EVCOND_NONE                                                                                       /* [39] ComConf_ComSignal_VPSINF1S_2 */
-    ,BSW_COM_u1EVCOND_NONE                                                                                       /* [40] ComConf_ComSignal_VPSINFSS_2 */
-    ,BSW_COM_u1EVCOND_NONE                                                                                       /* [41] ComConf_ComSignal_D01587_2 */
-    ,BSW_COM_u1EVCOND_NONE                                                                                       /* [42] ComConf_ComSignal_VPSOTAS_2 */
-    ,BSW_COM_u1EVCOND_NONE                                                                                       /* [43] ComConf_ComSignal_D01589_2 */
-    ,BSW_COM_u1EVCOND_NONE                                                                                       /* [44] ComConf_ComSignal_APOFRQS_2 */
-    ,BSW_COM_u1EVCOND_NONE                                                                                       /* [45] ComConf_ComSignal_FV1E4_D_2 */
-    ,BSW_COM_u1EVCOND_NONE                                                                                       /* [46] ComConf_ComSignal_KZK1E4_D_2 */
+    ,BSW_COM_u1EVCOND_NONE                                                                                       /* [26] ComConf_ComSignal_APOFRQ_0 */
+    ,BSW_COM_u1EVCOND_NONE                                                                                       /* [27] ComConf_ComSignal_FV1E3_D_0 */
+    ,BSW_COM_u1EVCOND_NONE                                                                                       /* [28] ComConf_ComSignal_KZK1E3_D_0 */
+    ,BSW_COM_u1EVCOND_NONE                                                                                       /* [29] ComConf_ComSignal_E_CRC1E4_2 */
+    ,BSW_COM_u1EVCOND_NONE                                                                                       /* [30] ComConf_ComSignal_E_CNT1E4_2 */
+    ,BSW_COM_u1EVCOND_NONE                                                                                       /* [31] ComConf_ComSignal_VPSINF7S_2 */
+    ,BSW_COM_u1EVCOND_NONE                                                                                       /* [32] ComConf_ComSignal_VPSINF6S_2 */
+    ,BSW_COM_u1EVCOND_NONE                                                                                       /* [33] ComConf_ComSignal_VPSINF5S_2 */
+    ,BSW_COM_u1EVCOND_NONE                                                                                       /* [34] ComConf_ComSignal_VPSINF4S_2 */
+    ,BSW_COM_u1EVCOND_NONE                                                                                       /* [35] ComConf_ComSignal_VPSINF3S_2 */
+    ,BSW_COM_u1EVCOND_NONE                                                                                       /* [36] ComConf_ComSignal_VPSINF2S_2 */
+    ,BSW_COM_u1EVCOND_NONE                                                                                       /* [37] ComConf_ComSignal_VPSINF1S_2 */
+    ,BSW_COM_u1EVCOND_NONE                                                                                       /* [38] ComConf_ComSignal_VPSINFSS_2 */
+    ,BSW_COM_u1EVCOND_NONE                                                                                       /* [39] ComConf_ComSignal_VPSOTAS_2 */
+    ,BSW_COM_u1EVCOND_NONE                                                                                       /* [40] ComConf_ComSignal_APOFRQS_2 */
+    ,BSW_COM_u1EVCOND_NONE                                                                                       /* [41] ComConf_ComSignal_FV1E4_D_2 */
+    ,BSW_COM_u1EVCOND_NONE                                                                                       /* [42] ComConf_ComSignal_KZK1E4_D_2 */
 };
 
 BswConst PduIdType bsw_com_u2DataHdl2MsgHdl[BSW_COM_HANDLE_NUM] = {
@@ -175,27 +171,23 @@ BswConst PduIdType bsw_com_u2DataHdl2MsgHdl[BSW_COM_HANDLE_NUM] = {
     ,(BswU2)2U                                                                                                   /* [23] ComConf_ComSignal_VPSINFOS_0 */
     ,(BswU2)2U                                                                                                   /* [24] ComConf_ComSignal_VPSCNG_0 */
     ,(BswU2)2U                                                                                                   /* [25] ComConf_ComSignal_VPSISOTA_0 */
-    ,(BswU2)2U                                                                                                   /* [26] ComConf_ComSignal_D01476_0 */
-    ,(BswU2)2U                                                                                                   /* [27] ComConf_ComSignal_APOFRQ_0 */
-    ,(BswU2)2U                                                                                                   /* [28] ComConf_ComSignal_D01477_0 */
-    ,(BswU2)2U                                                                                                   /* [29] ComConf_ComSignal_FV1E3_D_0 */
-    ,(BswU2)2U                                                                                                   /* [30] ComConf_ComSignal_KZK1E3_D_0 */
-    ,(BswU2)3U                                                                                                   /* [31] ComConf_ComSignal_E_CRC1E4_2 */
-    ,(BswU2)3U                                                                                                   /* [32] ComConf_ComSignal_E_CNT1E4_2 */
-    ,(BswU2)3U                                                                                                   /* [33] ComConf_ComSignal_VPSINF7S_2 */
-    ,(BswU2)3U                                                                                                   /* [34] ComConf_ComSignal_VPSINF6S_2 */
-    ,(BswU2)3U                                                                                                   /* [35] ComConf_ComSignal_VPSINF5S_2 */
-    ,(BswU2)3U                                                                                                   /* [36] ComConf_ComSignal_VPSINF4S_2 */
-    ,(BswU2)3U                                                                                                   /* [37] ComConf_ComSignal_VPSINF3S_2 */
-    ,(BswU2)3U                                                                                                   /* [38] ComConf_ComSignal_VPSINF2S_2 */
-    ,(BswU2)3U                                                                                                   /* [39] ComConf_ComSignal_VPSINF1S_2 */
-    ,(BswU2)3U                                                                                                   /* [40] ComConf_ComSignal_VPSINFSS_2 */
-    ,(BswU2)3U                                                                                                   /* [41] ComConf_ComSignal_D01587_2 */
-    ,(BswU2)3U                                                                                                   /* [42] ComConf_ComSignal_VPSOTAS_2 */
-    ,(BswU2)3U                                                                                                   /* [43] ComConf_ComSignal_D01589_2 */
-    ,(BswU2)3U                                                                                                   /* [44] ComConf_ComSignal_APOFRQS_2 */
-    ,(BswU2)3U                                                                                                   /* [45] ComConf_ComSignal_FV1E4_D_2 */
-    ,(BswU2)3U                                                                                                   /* [46] ComConf_ComSignal_KZK1E4_D_2 */
+    ,(BswU2)2U                                                                                                   /* [26] ComConf_ComSignal_APOFRQ_0 */
+    ,(BswU2)2U                                                                                                   /* [27] ComConf_ComSignal_FV1E3_D_0 */
+    ,(BswU2)2U                                                                                                   /* [28] ComConf_ComSignal_KZK1E3_D_0 */
+    ,(BswU2)3U                                                                                                   /* [29] ComConf_ComSignal_E_CRC1E4_2 */
+    ,(BswU2)3U                                                                                                   /* [30] ComConf_ComSignal_E_CNT1E4_2 */
+    ,(BswU2)3U                                                                                                   /* [31] ComConf_ComSignal_VPSINF7S_2 */
+    ,(BswU2)3U                                                                                                   /* [32] ComConf_ComSignal_VPSINF6S_2 */
+    ,(BswU2)3U                                                                                                   /* [33] ComConf_ComSignal_VPSINF5S_2 */
+    ,(BswU2)3U                                                                                                   /* [34] ComConf_ComSignal_VPSINF4S_2 */
+    ,(BswU2)3U                                                                                                   /* [35] ComConf_ComSignal_VPSINF3S_2 */
+    ,(BswU2)3U                                                                                                   /* [36] ComConf_ComSignal_VPSINF2S_2 */
+    ,(BswU2)3U                                                                                                   /* [37] ComConf_ComSignal_VPSINF1S_2 */
+    ,(BswU2)3U                                                                                                   /* [38] ComConf_ComSignal_VPSINFSS_2 */
+    ,(BswU2)3U                                                                                                   /* [39] ComConf_ComSignal_VPSOTAS_2 */
+    ,(BswU2)3U                                                                                                   /* [40] ComConf_ComSignal_APOFRQS_2 */
+    ,(BswU2)3U                                                                                                   /* [41] ComConf_ComSignal_FV1E4_D_2 */
+    ,(BswU2)3U                                                                                                   /* [42] ComConf_ComSignal_KZK1E4_D_2 */
 };
 
 BswConst Bsw_Com_MsgInfoType bsw_com_stMsgInfoTbl[BSW_COM_MSG_NUM] = {

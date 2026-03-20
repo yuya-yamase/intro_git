@@ -44,6 +44,7 @@
 #define CAN_LPFQ_QUE_NWORD_10           (756U)    /* 10 = PHY_TX_G5M__P2 : # of message = 42 / data length max = 64 */
 #define CAN_LPFQ_QUE_NWORD_11           (180U)    /* 11 = PHY_TX_G5M__P3 : # of message = 18 / data length max = 32 */
 #define CAN_LPFQ_QUE_NWORD_12           (12U)     /* 12 = PHY_TX_LOCA_P0 : # of message =  3 / data length max =  8 */
+#define CAN_LPFQ_QUE_NWORD_13           (12U)	  /* 13 = PHY_TX_G2M2_P0 : # of message =  3 / data length max =  8 */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -70,6 +71,7 @@ static U4                 u4_sp_can_lpfq_que_9[CAN_LPFQ_QUE_NWORD_9];
 static U4                 u4_sp_can_lpfq_que_10[CAN_LPFQ_QUE_NWORD_10];
 static U4                 u4_sp_can_lpfq_que_11[CAN_LPFQ_QUE_NWORD_11];
 static U4                 u4_sp_can_lpfq_que_12[CAN_LPFQ_QUE_NWORD_12];
+static U4                 u4_sp_can_lpfq_que_13[CAN_LPFQ_QUE_NWORD_13];
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
@@ -93,7 +95,9 @@ const ST_CAN_LPFQ_CH      st_gp_CAN_LPFQ_CH[CAN_LPFQ_NUM_CH] = {
     {&u4_sp_can_lpfq_que_10[0U], (U2)CAN_LPFQ_QUE_NWORD_10, (U2)CAN_LPFQ_OVWR_EN},  /* CAN_LPFQ_CH_PHY_TX_G5M__P10 (10U) */
     {&u4_sp_can_lpfq_que_11[0U], (U2)CAN_LPFQ_QUE_NWORD_11, (U2)CAN_LPFQ_OVWR_EN},  /* CAN_LPFQ_CH_PHY_TX_G5M__P11 (11U) */
 
-    {&u4_sp_can_lpfq_que_12[0U], (U2)CAN_LPFQ_QUE_NWORD_12, (U2)CAN_LPFQ_OVWR_EN}   /* CAN_LPFQ_CH_PHY_TX_LOCA_P12 (12U) */
+    {&u4_sp_can_lpfq_que_12[0U], (U2)CAN_LPFQ_QUE_NWORD_12, (U2)CAN_LPFQ_OVWR_EN},   /* CAN_LPFQ_CH_PHY_TX_LOCA_P12 (12U) */
+
+    {&u4_sp_can_lpfq_que_13[0U], (U2)CAN_LPFQ_QUE_NWORD_13, (U2)CAN_LPFQ_OVWR_EN}   /* CAN_LPFQ_CH_PHY_TX_G2M2_P0  (13U) */
 };
 const U2                  u2_g_CAN_LPFQ_NUM_CH = (U2)CAN_LPFQ_NUM_CH;
 

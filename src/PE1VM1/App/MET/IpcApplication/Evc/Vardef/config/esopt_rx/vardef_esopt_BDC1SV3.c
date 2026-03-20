@@ -63,9 +63,7 @@ U1      u1_g_VdfEsoRx_SYS_4WDSYS_DISCON(void)
     U1                 u1_t_ava_rx;
 
     u1_t_rx = (U1)0U;
-#if 0    /* provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_ATDCDF_B, &u1_t_rx);
-#endif   /* provisionally */
     if(u1_t_rx == u1_s_VDF_ESO_4WD_ACT_ATDCDF_B){
         u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
     }
@@ -88,7 +86,11 @@ U1      u1_g_VdfEsoRx_SYS_4WDSYS_DISCON(void)
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
+/*  BEV-1     03/17/2026  RS      Change config for BEV Full_Function_2.                                                             */
+/*                                MET-D_4WDSYS-CSTD-2-02-A-C1                                                                        */
+/*                                Enable ATDCDF_B signal receive processing                                                          */
 /*                                                                                                                                   */
 /*  * YN = Yujiro Nagaya, Denso Techno                                                                                               */
+/*  * RS = Ryuki Sako,    Denso Techno                                                                                               */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
