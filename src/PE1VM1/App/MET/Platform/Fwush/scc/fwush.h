@@ -36,7 +36,7 @@
 #define FWUSH_ACK_ROLLBACK_DONE                 (0x01U)
 /* Negative response definition */
 #define FWUSH_ACK_PROCESSING                    (0x80U)
-#define FWUSH_ACK_SEC_ERR                       (0x81U)
+#define FWUSH_ACK_SEQ_ERR                       (0x81U)
 #define FWUSH_ACK_PRECONDITION_ERR              (0x82U)
 #define FWUSH_ACK_PROC_START_ERR                (0x83U)
 #define FWUSH_ACK_PROC_NG                       (0x84U)
@@ -136,9 +136,9 @@
 #define FWUSH_VERI_LB1_COMP                     (0x0001U)        /* LB1 Complete */
 #define FWUSH_VERI_TARGET_LB1                   (0x0100U)        /* Rewriting Target LB1 */
 
-#define FWUSH_CHECK_PHA_MATCH                   (0x00U)          /* Check phase match */
-#define FWUSH_CHECK_PHA_UNMATCH                 (0x01U)          /* Check phase unmatch */
-#define FWUSH_CHECK_PHA_ERROR                   (0xFFU)          /* Check phase error */
+#define FWUSH_CHECK_VA_MATCH                    (0x00U)          /* Valid Area match */
+#define FWUSH_CHECK_VA_UNMATCH                  (0x01U)          /* Valid Area unmatch */
+#define FWUSH_CHECK_VA_ERROR                    (0xFFU)          /* Valid Area read error */
 
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

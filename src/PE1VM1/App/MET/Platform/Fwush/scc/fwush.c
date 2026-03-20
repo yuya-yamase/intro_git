@@ -459,7 +459,7 @@ void vd_g_FwushInit(void)
     u1_s_fwupx_req_seqcnt_pre   = (U1)0x00U;
     u1_s_fwupx_res_seqcnt       = (U1)0x00U;
     u1_s_fwush_abort            = (U1)FALSE;
-    u1_s_fwush_error_log        = (U1)0x00U;
+    u1_s_fwush_error_log        = (U1)FWUSH_ACK_OK;
     u4_s_fwush_prep_data_crc    = (U4)0U;
     u2_s_fwush_run_ofst         = (U2)0xFFFFU;
     u1_t_nvm_chk = u1_g_Nvmc_ReadU1withSts((U2)NVMCID_U1_FWUSH_SEQ_PROGRESS, &u1_s_fwush_seq_progress);
@@ -661,7 +661,7 @@ static U1 u1_s_FwushDetectEventForWaiting(void)
         }
         else if(u1_t_current_req_subtype != (U1)FWUSH_REQ_SUBTYPE_NA){
             u1_t_event = (U1)FWUSH_EVENT_INVALID_REQUEST;
-            u1_s_fwush_error_log = (U1)FWUSH_ACK_SEC_ERR;
+            u1_s_fwush_error_log = (U1)FWUSH_ACK_SEQ_ERR;
         }
         else{
             /* Do Nothing */
@@ -730,7 +730,7 @@ static U1 u1_s_FwushDetectresponseEvent(U1 u1_a_req_subtype)
                 else{
                     /* ROLLBACK_DONE bit is 1 -> INVALID_REQUEST */
                     u1_t_event = (U1)FWUSH_EVENT_INVALID_REQUEST;
-                    u1_s_fwush_error_log = (U1)FWUSH_ACK_SEC_ERR;
+                    u1_s_fwush_error_log = (U1)FWUSH_ACK_SEQ_ERR;
                 }
             }
             break;
@@ -1026,7 +1026,7 @@ static void vd_s_FwushHandleValidateReq(void)
 
     u1_t_chk_result = u1_s_FwushCheckActivePhase();
     /* Request rollback */
-    if(u1_t_chk_result == (U1)FWUSH_CHECK_PHA_UNMATCH){
+    if(u1_t_chk_result == (U1)FWUSH_CHECK_VA_UNMATCH){
         /* Validate OK */
         u1_s_fwush_abort = (U1)FALSE;
     }
@@ -1060,11 +1060,11 @@ static void vd_s_FwushHandleRollbackReq(void)
     u1_t_chk_result = u1_s_FwushCheckActivePhase();
     switch (u1_t_chk_result)
     {
-    case (U1)FWUSH_CHECK_PHA_ERROR:
+    case (U1)FWUSH_CHECK_VA_ERROR:
         u1_s_fwush_abort     = (U1)TRUE;
         u1_s_fwush_error_log = (U1)FWUSH_ACK_ROLLBACK_START_ERR;
         break;
-    case (U1)FWUSH_CHECK_PHA_UNMATCH:
+    case (U1)FWUSH_CHECK_VA_UNMATCH:
         u1_t_result = u1_g_FwuMemAccSwitchReq();
         if(u1_t_result != (U1)FWUMEMACC_RET_OK){
             u1_s_fwush_abort     = (U1)TRUE;
@@ -1081,7 +1081,7 @@ static void vd_s_FwushHandleRollbackReq(void)
 /* static U1 u1_s_FwushCheckActivePhase(void)                                                                                        */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
-/*  Return:         U1 : 0x00=FWUSH_CHECK_PHA_MATCH, 0x01=FWUSH_CHECK_PHA_UNMATCH, 0xFF=FWUSH_CHECK_PHA_ERROR                        */
+/*  Return:         U1 : 0x00=FWUSH_CHECK_VA_MATCH, 0x01=FWUSH_CHECK_VA_UNMATCH, 0xFF=FWUSH_CHECK_VA_ERROR                           */
 /*===================================================================================================================================*/
 static U1 u1_s_FwushCheckActivePhase(void)
 {
@@ -1102,13 +1102,13 @@ static U1 u1_s_FwushCheckActivePhase(void)
     u1_t_dirty_flag = u1_t_swas_curr | u1_t_swas_prev;
 
     if(u1_t_dirty_flag != (U1)FWUSH_SWAS_VALID){
-        u1_t_ret = (U1)FWUSH_CHECK_PHA_ERROR;
+        u1_t_ret = (U1)FWUSH_CHECK_VA_ERROR;
     }
     else if(u1_t_swva_curr != u1_t_swva_prev){
-        u1_t_ret = (U1)FWUSH_CHECK_PHA_UNMATCH;
+        u1_t_ret = (U1)FWUSH_CHECK_VA_UNMATCH;
     }
     else{
-        u1_t_ret = (U1)FWUSH_CHECK_PHA_MATCH;
+        u1_t_ret = (U1)FWUSH_CHECK_VA_MATCH;
     }
     return (u1_t_ret);
 }
