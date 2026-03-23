@@ -18,6 +18,9 @@
 #include "PowerIcCtl.h"
 
 #include "poweric.h"
+/* temporary: Used to stop cyclic processing outside apparent-ON/OFF states due to no HexagonDSP MUTE notification from SoC. */
+#include "PwrCtl.h"
+/* temporary */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -541,6 +544,17 @@ void    vd_g_PowerIc_WkupInit(void)
 /*===================================================================================================================================*/
 void    vd_g_PowerIc_Routine(void)
 {
+    /* temporary: Stop cyclic processing outside apparent-ON/OFF states due to no HexagonDSP MUTE notification from SoC. */
+    U1  u1_t_pwr;
+
+    u1_t_pwr = u1_g_Power_ModeState();
+    if((u1_s_poweric_state == (U1)POWERIC_SEQ_CYC) && 
+       (u1_t_pwr != (U1)POWER_MODE_STATE_APPOFF) && (u1_t_pwr != (U1)POWER_MODE_STATE_APPON)){
+        /* P-IC Standby */
+        vd_g_PowerIc_SeqCycEnd();
+    }
+    /* temporary */
+
     switch (u1_s_poweric_state){
         case POWERIC_SEQ_IDLE:                                                      /* IDLE */
             /* Timer Clear */
@@ -1719,6 +1733,25 @@ void            vd_g_PowerIc_SeqCycStrt(void)
 {
     /* State Update */
     u1_s_poweric_state  = (U1)POWERIC_SEQ_CYC;
+}
+/*===================================================================================================================================*/
+/*  U1              vd_g_PowerIc_SeqCycEnd(void)                                                                                     */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+U1              vd_g_PowerIc_SeqCycEnd(void)
+{
+    U1             u1_t_ret;
+
+    u1_t_ret = (U1)FALSE;
+
+    if((u1_s_poweric_i2c_regaccess_exe_flag == (U1)FALSE) && (u1_s_poweric_state != (U1)POWERIC_SEQ_FAIL_SAFE)){
+        /* State Update */
+        u1_s_poweric_state  = (U1)POWERIC_SEQ_IDLE;
+        u1_t_ret = (U1)TRUE;
+    }
+    return(u1_t_ret);
 }
 
 /*===================================================================================================================================*/

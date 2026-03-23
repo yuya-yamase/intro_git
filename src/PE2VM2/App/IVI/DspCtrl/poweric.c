@@ -1,5 +1,5 @@
 /* メインタスクコードに移管するまでの仮置き */
-/* 0.5.0 */
+/* 0.6.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define POWERIC_MAIN_C_MAJOR                 (0)
-#define POWERIC_MAIN_C_MINOR                 (5)
+#define POWERIC_MAIN_C_MINOR                 (6)
 #define POWERIC_MAIN_C_PATCH                 (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -76,8 +76,8 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-/* デバイス起動用カウンタ */
-static U4       u4_t_PowerIc_Polling;
+static U1       u1_s_PowerIc_PicPoffEdge;       /* PIC-POFF Lo→Hi edge detection flag */
+static U1       u1_s_PowerIc_PicPoffPrev;       /* PIC-POFF previous value */
 
 /* Power-IC Wati処理用タイマ */
 static U4       u4_s_PowerIc_LinkTimer;
@@ -97,8 +97,9 @@ static U2       u2_s_PowerIc_BetWaitTime;       /* レジスタアクセス間Wa
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static void     vd_s_PowerIcLocalInit(void);
-static void     vd_s_PowerIcPollingPon(void);
+static void     vd_s_PowerIcLocalOnInit(void);
+static void     vd_s_PowerIcLocalOffInit(void);
+static void     vd_s_PowerIcEdgeDetPicPoff(void);
 static void     vd_s_PowerIcFlow(void);
 static U1       u1_s_PowerIcTimChk(const U4 u4_a_CNT, const U4 u4_a_JDG);
 static void     vd_s_PowerIcOnFlow(void);
@@ -110,38 +111,49 @@ static void     vd_s_PowerIcOffFlow(void);
 /*===================================================================================================================================*/
 /*  void            vd_g_PowerIcInit(void)                                                                                           */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Description:    PowerIC 初期化処理                                                                                                */
+/*  Description:    PowerIC Initialization.                                                                                          */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
 void            vd_g_PowerIcInit(void)
 {
-    u4_t_PowerIc_Polling            = (U4)0U;
+    u1_s_PowerIc_PicPoffEdge        = (U1)FALSE;
+    u1_s_PowerIc_PicPoffPrev        = (U1)POWERIC_DIO_LOW;
     u1_s_PowerIc_MUTE_Hook          = (U1)FALSE;
     
-    vd_s_PowerIcLocalInit();
-}
-
-/*===================================================================================================================================*/
-/*  static void     vd_s_PowerIcLocalInit(void)                                                                                      */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Description:    PowerIC 初期化処理                                                                                                */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void     vd_s_PowerIcLocalInit(void)
-{
     u4_s_PowerIc_LinkTimer          = (U4)0U;
-
-    u1_s_PowerIc_OnStep_OverAll     = (U1)POWERIC_ONSTEP_OVERALL_1;
-
-    u1_s_PowerIc_OffStep_OverAll    = (U1)POWERIC_OFFSTEP_OVERALL_1;
-
     u2_s_PowerIc_RegStep            = (U2)0U;
     u2_s_PowerIc_BetWaitTime        = (U2)0xFFFFU;
     u4_s_PowerIc_AckTime            = (U4)0U;
-
     Mcu_Sys_Pwr_PowerIc_Init();
+
+    vd_s_PowerIcLocalOnInit();
+    vd_s_PowerIcLocalOffInit();
+}
+
+/*===================================================================================================================================*/
+/*  static void     vd_s_PowerIcLocalOnInit(void)                                                                                    */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    PowerIC Initialization for normal startup process.                                                               */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void     vd_s_PowerIcLocalOnInit(void)
+{
+    u1_s_PowerIc_OnStep_OverAll     = (U1)POWERIC_ONSTEP_OVERALL_1;
+    u1_s_PowerIc_PicPoffEdge        = (U1)FALSE;                    /* Clear Lo→Hi edge detection flag */
+}
+
+/*===================================================================================================================================*/
+/*  static void     vd_s_PowerIcLocalOffInit(void)                                                                                   */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    PowerIC Initialization for shutdown process.                                                                     */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void     vd_s_PowerIcLocalOffInit(void)
+{
+    u1_s_PowerIc_OffStep_OverAll    = (U1)POWERIC_OFFSTEP_OVERALL_1;
 }
 
 /*===================================================================================================================================*/
@@ -153,33 +165,31 @@ static void     vd_s_PowerIcLocalInit(void)
 /*===================================================================================================================================*/
 void            vd_g_PowerIcMainTask(void)
 {
-    /* [Power-IC通常起動処理 レジスタ書込み]開始条件監視用ポーリング */
-    vd_s_PowerIcPollingPon();
+    /* PIC-POFF Lo→Hi edge detection */
+    vd_s_PowerIcEdgeDetPicPoff();
 
     /* 通常起動/終了 全体フロー処理 */
     vd_s_PowerIcFlow();
 }
 
 /*===================================================================================================================================*/
-/*  void            vd_s_PowerIcPollingPon(void)                                                                                     */
+/*  void            vd_s_PowerIcEdgeDetPicPoff(void)                                                                                 */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Description:    P-ON端子監視                                                                                                      */
+/*  Description:    PIC-POFF Lo→Hi edge detection                                                                                    */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-static void     vd_s_PowerIcPollingPon(void)
+static void     vd_s_PowerIcEdgeDetPicPoff(void)
 {
     U1  u1_t_dio;
 
-    u1_t_dio =   Dio_ReadChannel(POWERIC_PORT_PIC_POFF);
+    u1_t_dio = Dio_ReadChannel(POWERIC_PORT_PIC_POFF);
 
-    if((u1_t_dio  ==  (U1)POWERIC_DIO_HIGH) &&
-       (u4_t_PowerIc_Polling < (U4)POWERIC_COUNTTIME_FIN)){
-        u4_t_PowerIc_Polling++;
+    if((u1_s_PowerIc_PicPoffPrev == (U1)POWERIC_DIO_LOW) &&
+       (u1_t_dio                 == (U1)POWERIC_DIO_HIGH)){
+        u1_s_PowerIc_PicPoffEdge = (U1)TRUE;    /* Lo→Hi edge detected */
     }
-    else{
-        u4_t_PowerIc_Polling = (U4)0U;
-    }
+    u1_s_PowerIc_PicPoffPrev = u1_t_dio;
 }
 
 /*===================================================================================================================================*/
@@ -191,21 +201,24 @@ static void     vd_s_PowerIcPollingPon(void)
 /*===================================================================================================================================*/
 static void     vd_s_PowerIcFlow(void)
 {
-    U1  u1_t_timechk;
-
-    u1_t_timechk    = u1_s_PowerIcTimChk(u4_t_PowerIc_Polling, (U4)POWERIC_WAIT_ON);
+    U1  u1_t_sts;
 
     if(u1_s_PowerIc_MUTE_Hook == (U1)TRUE){
-        /* 通常終了処理 */
-        vd_s_PowerIcOffFlow();
+        u1_t_sts        = vd_g_PowerIc_SeqCycEnd();
+        if(u1_t_sts == (U1)TRUE){
+            /* Shutdown process. */
+            vd_s_PowerIcOffFlow();
+            vd_s_PowerIcLocalOnInit();     /* Initialize normal startup process state */
+        }
     }
-    else if(u1_t_timechk == (U1)TRUE){
-        /* 通常起動処理 */
+    else if(u1_s_PowerIc_PicPoffEdge == (U1)TRUE){
+        /* Startup process */
         vd_s_PowerIcOnFlow();
+        vd_s_PowerIcLocalOffInit();    /* Initialize normal shutdown process state */
     }
     else{
         /* 起動/終了処理の実施条件未成立 */
-        vd_s_PowerIcLocalInit();
+        /* do nothing */
     }
 }
 
@@ -337,7 +350,7 @@ static void     vd_s_PowerIcOnFlow(void)
             break;
 
         case POWERIC_ONSTEP_OVERALL_FIN:
-            /* 正常起動時は何もしない */
+            vd_g_PowerIc_SeqCycStrt();
             break;
 
         default:
@@ -492,11 +505,12 @@ static void     vd_s_PowerIcOffFlow(void)
             }
             break;
 #else
+            u1_s_PowerIc_MUTE_Hook          = (U1)FALSE;                                /* Clear normal shutdown process activation hook */
             u1_s_PowerIc_OffStep_OverAll    = (U1)POWERIC_OFFSTEP_OVERALL_FIN;
             break;
 #endif
         case POWERIC_OFFSTEP_OVERALL_FIN:
-            /* do nothing */
+            u1_s_PowerIc_MUTE_Hook          = (U1)FALSE;                                /* Clear normal shutdown process activation hook */
             break;
 
         default:
@@ -533,6 +547,7 @@ void            vd_g_PowerIcMuteHook(void)
 /*                                Enable normal shutdown flow.                                                                       */
 /*  0.4.0    06/23/2025  TN       Change power information to IVI common power control interface.                                    */
 /*  0.5.0    07/31/2025  TN       Modification of periodic monitoring start conditions.                                              */
+/*  0.6.0    03/23/2026  TN       The start conditions for the startup and shutdown processing have been modified.                   */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  * TN   = Tetsu Naruse, Denso Techno                                                                                              */
