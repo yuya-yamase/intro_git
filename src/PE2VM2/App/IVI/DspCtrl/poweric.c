@@ -195,7 +195,7 @@ static void     vd_s_PowerIcEdgeDetPicPoff(void)
 /*===================================================================================================================================*/
 /*  static void     vd_s_PowerIcFlow(void)                                                                                           */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Description:    PowerIC 起動終了処理実行管理                                                                                       */
+/*  Description:    PowerIC Startup/Shutdown process management                                                                      */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
@@ -217,7 +217,7 @@ static void     vd_s_PowerIcFlow(void)
         vd_s_PowerIcLocalOffInit();    /* Initialize normal shutdown process state */
     }
     else{
-        /* 起動/終了処理の実施条件未成立 */
+        /* Startup/Shutdown process conditions not met */
         /* do nothing */
     }
 }
