@@ -231,7 +231,7 @@ static const ST_XSPI_MET_MSG2POSLEN st_sp_XSPI_MET_MSG2POSLEN[] = {
         { (U2)518U, (U2)MSG_BDC1S98_RXCH0,     (U1)XSPI_MET_CAN_DLC_32, (U2)123},/* Index122 */
         { (U2)526U, (U2)MSG_BDC1S99_RXCH0,     (U1)XSPI_MET_CAN_DLC_32, (U2)124},/* Index123 */
         { (U2)534U, (U2)MSG_BDC1SV1_RXCH0,     (U1)XSPI_MET_CAN_DLC_32, (U2)125},/* Index124 */
-        { (U2)542U, (U2)MSG_BDB1S08_RXCH0,     (U1)XSPI_MET_CAN_DLC_32, (U2)126},/* Index125 */
+        { (U2)542U, (U2)MSG_BDB1S08_RXCH0,     (U1)XSPI_MET_CAN_DLC_32, (U2)126} /* Index125 */
 };
 static const ST_XSPI_MET_OXCANMSG2POSLEN st_sp_XSPI_MET_OXCANMSG2POSLEN[XSPI_MET_OXCANCFG_NUM] = {
        /* u2_stspos     u2_oxcanid                           u2_timenout                           u2_syschk                             */
@@ -540,7 +540,7 @@ void    vd_g_XSpiMETCANGWPushPDU(const U2 u2_a_MSG)
         (U2)U2_MAX, /*    264:MSG_ZN11S66_CH0     (287U) */
         (U2)U2_MAX, /*    265:MSG_ZN11S67_CH0     (288U) */
         (U2)U2_MAX, /*    266:MSG_ZN21S05_CH0     (289U) */
-        (U2)118U,   /*    267:MSG_ZN21S13_CH0     (290U) */
+        (U2)118U    /*    267:MSG_ZN21S13_CH0     (290U) */
     };
 
     U2  u2_t_idx;

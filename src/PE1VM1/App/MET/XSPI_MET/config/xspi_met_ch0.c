@@ -1191,7 +1191,7 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*  BEV-41    03/17/2026 RS       Change for BEV Full_Function_2.                                                                    */
 /*                                MET-D_4WDSYS-CSTD-2-02-A-C1                                                                        */
 /*                                Remove process that sets SYS_4WDSYS_DISCON to TRUE                                                 */
-/*  BEV-41    03/17/2026 RS       Change for BEV Full_Function_2. (Add SYS_CPBBSW_CUSTOM_P and DISTEMPTY_EV_KM_DIFF)                 */
+/*  BEV-41    03/17/2026 SH       Change for BEV Full_Function_2. (Add SYS_CPBBSW_CUSTOM_P and DISTEMPTY_EV_KM_DIFF)                 */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * KM   = Keisuke Mashita, Denso Techno                                                                                           */
