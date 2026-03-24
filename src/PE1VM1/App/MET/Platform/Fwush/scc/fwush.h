@@ -53,6 +53,8 @@
 /* Request frame offset */
 #define FWUSH_REQ_SUBTYPE_OFFSET                (0U)
 #define FWUSH_REQ_SEQCNT_OFFSET                 (7U)
+#define FWUSH_REQ_PREP_CUR_TARGET_OFFSET        (1U)
+#define FWUSH_REQ_PREP_ALL_TARGET_OFFSET        (2U)
 #define FWUSH_REQ_PREP_DATA_CRC_OFFSET          (0U)
 #define FWUSH_REQ_RUN_BLKOFS_OFFSET             (3U)
 
@@ -132,9 +134,10 @@
 #define FWUSH_FSWA_STS_INIT                     (0xFFFFFFFFU)    /* read error */
 #define FWUSH_FSWA_READ_POS                     (0x000000FFU)    /* Read Position */
 #define FWUSH_SWAS_VALID                        (0x00U)          /* Valid */
-#define FWUSH_VERI_LBN_COMP_INIT                (0x0000U)        /* LB Init */
-#define FWUSH_VERI_LB1_COMP                     (0x0001U)        /* LB1 Complete */
-#define FWUSH_VERI_TARGET_LB1                   (0x0100U)        /* Rewriting Target LB1 */
+#define FWUSH_VERI_LB_STAT_INIT                 (0x0000U)        /* LB Init */
+#define FWUSH_VERI_LB_NONE                      (0x00U)          /* LB none */
+#define FWUSH_VERI_LB1                          (0x01U)          /* LB1 define bit */
+#define FWUSH_VERI_LB2                          (0x02U)          /* LB2 define bit */
 
 #define FWUSH_CHECK_VA_MATCH                    (0x00U)          /* Valid Area match */
 #define FWUSH_CHECK_VA_UNMATCH                  (0x01U)          /* Valid Area unmatch */
