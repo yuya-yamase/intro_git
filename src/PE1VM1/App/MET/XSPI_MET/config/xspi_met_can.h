@@ -21,8 +21,10 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define XSPIMETCANGW_NUM_BLOCK  (1U)
-#define XSPIMETCANGW_BLOCK      (0U)
+#define XSPIMETCANGW_NUM_BLOCK        (1U)
+#define XSPIMETCANGW_BLOCK            (0U)
+#define XSPIMETCANGW_OXCANNUM_BLOCK   (1U) /* Number of OXCAN gateway communication blocks */
+#define XSPIMETCANGW_OXCAN_BLOCK      (0U) /* Index definition of OXCAN gateway block      */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -37,6 +39,11 @@ typedef struct{
     U2  u2_pdu_end;
 }ST_XSPIMET_CAN_TXCFG;
 
+typedef struct{
+    U2  u2_sts_sta; /* OXCAN Status Frame Buffer Starting Offset    */
+    U2  u2_sts_end; /* OXCAN status Frame Buffer End Offset         */
+}ST_XSPIMET_CAN_OXCANTXCFG;
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -47,6 +54,8 @@ void    vd_g_XSpiMETCANGWInit(void);
 void    vd_g_XSpiMETCANGWPushPDU(const U2 u2_a_MSG);
 void    vd_g_XSpiMETPduTxCAN(U4 * u4_ap_TX_HEAD, const ST_XSPIMET_CAN_TXCFG * const stp_a_TX_CFG);
 void    vd_g_XSpiMETTxSCL(U4 * u4_ap_pdu_tx);
+void    vd_g_XSpiMETPduTxoXCANSts(U4 * u4_ap_TX_HEAD, const ST_XSPIMET_CAN_OXCANTXCFG * const stp_a_TX_CFG);
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

@@ -136,6 +136,14 @@ void    vd_g_XSpiMETPduTx(void)
             (U2)564U    /* BUFFER POS 1234   */
         }
     };
+
+    static const ST_XSPIMET_CAN_OXCANTXCFG st_sp_XSPIMET_CAN_OXCANTXCFG[XSPIMETCANGW_OXCANNUM_BLOCK] = {
+        {
+            (U2)0U,     /* BUFFER POS 666  */
+            (U2)1U,     /* BUFFER POS 667  */
+        }
+    };
+
     static const U4 u4_s_XSPI_MET_READ_ACCESS_STS = ((U4)XSPI_MET_MCU_STS            ) |
                                                     ((U4)XSPI_MET_AGLBE_STS      << 2) |
                                                     ((U4)XSPI_MET_HUDGVIFCTL_STS << 4) |
@@ -152,6 +160,7 @@ void    vd_g_XSpiMETPduTx(void)
 
     vd_g_XSpiCfgPduTxCh0(&u4_sp_xspi_met_db_tra[0]);
     vd_g_XSpiMETTxSCL(&u4_sp_xspi_met_db_tra[660]);
+    vd_g_XSpiMETPduTxoXCANSts(&u4_sp_xspi_met_db_tra[666], &st_sp_XSPIMET_CAN_OXCANTXCFG[XSPIMETCANGW_OXCAN_BLOCK]);
     vd_g_XSpiMETPduTxCAN(&u4_sp_xspi_met_db_tra[670], &st_sp_XSPIMET_CAN_TXCFG[XSPIMETCANGW_BLOCK]);
 
     /* Set the data for Header */
@@ -202,9 +211,11 @@ U1    u1_g_XSpiMETRxRdAccessSts(const U1 u1_a_KIND)
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
+/*  BEV-1    03/23/2026  SH       SCS1S11_IG_STATUS have been changed from using the aubist -> OXCAN                                 */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  * KT   = Kenta Takaji, Denso Techno                                                                                              */
 /*  * TN   = Tetsushi Nakano, Denso Techno                                                                                           */
+/*  * SH   = Sae Hirose, Denso Techno                                                                                                */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
