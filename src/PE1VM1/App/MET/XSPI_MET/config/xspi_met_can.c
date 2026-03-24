@@ -104,7 +104,6 @@ static const ST_XSPI_MET_CANGW_OXCANSTA st_sp_XSPI_MET_CANGW_BUF_OXCSTA[XSPIMETC
         {(U2)0U,    (U2)1U  }
 };
 
-
 static const ST_XSPI_MET_MSG2POSLEN st_sp_XSPI_MET_MSG2POSLEN[] = {
         {   (U2)0U, (U2)MSG_ABG1S01_RXCH0,     (U1)XSPI_MET_CAN_DLC_08,   (U2)0},/* Index  0 */
         {   (U2)2U, (U2)MSG_ACN1S04_RXCH0,     (U1)XSPI_MET_CAN_DLC_32,   (U2)1},/* Index  1 */

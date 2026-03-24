@@ -250,7 +250,7 @@ static inline void    vd_s_XSpiCfgTxVariation(     U4 * u4_ap_pdu_tx) {
     u1_t_subdigspd = u1_g_UnitSubSpd();
     u4_ap_pdu_tx[2]  = ((U4)u1_t_subdigspd & (U4)0x03U) << 11;         /*  SUBDIGSPD_DISP                                       */
 
-    u4_ap_pdu_tx[2] |= (U4)TRUE << 31;                                 /*  SYS_CPBBSW_CUSTOM_P      */ /* BEV SV1 provisionally */
+    u4_ap_pdu_tx[2] |= (U4)TRUE << 31;                                 /*  SYS_CPBBSW_CUSTOM_P      */ /* BEV FF2 provisionally */
 
     for(u4_t_loop = (U4)0U ; u4_t_loop < (U4)XSPI_VDF_AREA_SIZE; u4_t_loop++){
         u4_ap_pdu_tx[4U + u4_t_loop] = (U4)0x00U;
