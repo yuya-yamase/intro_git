@@ -61,7 +61,10 @@ Std_ReturnType EthSwt_SWIC_Cfg_AllowSetRegister(void);
 								/* クロック2(20MHz)で1要求(6byte+10ns)=2410ns */
 								/* ※クロックは10MHzなので倍になる */
 								/* ※実測値の5倍程度になる */
- 
+
+
+#define D_ETHSWT_SWIC_CLOCK_PER_US					(400U)			/* 1usあたりのクロック数 */
+void EthSwt_SWIC_Cfg_WaitUS(const uint16 waitUSTime);
 
 /* -------------------------------------------------------------------------- */
 /* Config for EthSwt_SWIC_Link.c                                              */

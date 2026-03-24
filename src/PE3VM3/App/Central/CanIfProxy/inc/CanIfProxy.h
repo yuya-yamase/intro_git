@@ -1,20 +1,22 @@
-/* v0-2-1 */
-/*===================================================================================================================================*/
-/*  Copyright DENSO Corporation                                                                                                      */
-/*===================================================================================================================================*/
-/*  CanIfProxy.h                                                                                                                     */
-/*                                                                                                                                   */
-/*===================================================================================================================================*/
+/* CanIfProxy_h_v3-0-0                                                      */
+/****************************************************************************/
+/* Copyright (C) 2023 Denso Co.,Ltd. All rights reserved.                   */
+/****************************************************************************/
+
+/****************************************************************************/
+/* Object Name  | CanIfProxy/HEADER                                         */
+/*--------------------------------------------------------------------------*/
+/* Notes        |                                                           */
+/****************************************************************************/
 
 #ifndef CANIFPROXY_H
 #define CANIFPROXY_H
 
-#include "Std_Types.h"
+/*--------------------------------------------------------------------------*/
+/* Include Files                                                            */
+/*--------------------------------------------------------------------------*/
 #include "CanIf.h"
-#include "Com.h"
-#include "Com_Cfg.h"
-#include "../../../../BSW/Aubist/VCan/inc/bsw_vcan_vcc.h"
-#include "../../../../BSW/Aubist/inc/VCan.h"
+#include "ChipCom.h"
 
 /*--------------------------------------------------------------------------*/
 /* Macros                                                                   */
@@ -27,19 +29,28 @@
 /*--------------------------------------------------------------------------*/
 /* Function Prototypes                                                      */
 /*--------------------------------------------------------------------------*/
+#define CANIFPROXY_START_SEC_CODE
+#include <CanIfProxy_MemMap.h>
+
+/* Scheduled Functions */
 void CanIfProxy_Init( void );
-void CanIfProxy_Main( void );
-void CanIfProxy_Transmit(const uint16 receive_len, const uint8* const receive_data);
-void CanIfProxy_CancelTransmit(const uint16 receive_len, const uint8* const receive_data);
+void CanIfProxy_MainFunction( void );
 
-void CanIfProxy_TpTxConfirmation(PduIdType TxPduId, Std_ReturnType result);
+/* Callback Functions and Notifications */
+void CanIfProxy_RxIndication( const CanMsgType* t_pstMsg );
+void CanIfProxy_AckIndication( Can_IdType t_u4CanId );
 
-/*void CanIfProxy_RxIndication(uint8 u1Controller, uint8 u1MsgBuffer, CanConstR CanMsgType* ptMsg);*/
-// BufReq_ReturnType CanIfProxy_RxIndication(PduIdType RxPduId, const PduInfoType* PduInfoPtr);
+#define CANIFPROXY_STOP_SEC_CODE
+#include <CanIfProxy_MemMap.h>
 
 /*--------------------------------------------------------------------------*/
 /* Data                                                                     */
 /*--------------------------------------------------------------------------*/
 
-#endif  /* CANIFPROXY_H */
+/*--------------------------------------------------------------------------*/
+/* Constants                                                                */
+/*--------------------------------------------------------------------------*/
+
+#endif /* CANIFPROXY_H */
+
 /**** End of File ***********************************************************/

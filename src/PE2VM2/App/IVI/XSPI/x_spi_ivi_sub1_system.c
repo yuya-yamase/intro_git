@@ -84,6 +84,7 @@
 #define    XSPI_IIV_SYSTEM_TEST_SAMPL_TASK (100U / XSPI_IVI_TASK_TIME)
 #define    XSPI_IIV_SYSTEM_VEHSPDCNT_TASK  (240U / XSPI_IVI_TASK_TIME)
 #define    XSPI_IIV_SYSTEM_USBPOWSUP_TASK  (500U / XSPI_IVI_TASK_TIME)
+#define    XSPI_IIV_SYSTEM_TMUTESTS_TASK   (3000U / XSPI_IVI_TASK_TIME)
 
 #define    XSPI_IVI_TESTTERM_UNKNOWN       (0U)
 #define    XSPI_IVI_TESTTERM_OFF           (1U)
@@ -271,6 +272,14 @@ void            vd_g_XspiIviSub1SystemMainTask(void)
         u4_t_task = u4_s_xspi_ivi_task_cnt[XSPI_TASK_CNT_SYSTEM_USB];
         if(u4_t_task >= (U4)XSPI_IIV_SYSTEM_USBPOWSUP_TASK) {
             vd_s_XspiIviSub1USBPowSupSend();
+        }
+    }
+
+    /*Periodic Transmission: T-MUTE State*/
+    if(u1_s_xspi_ivi_system_tmute_1stsend_flg == (U1)TRUE) {
+        u4_t_task = u4_s_xspi_ivi_task_cnt[XSPI_TASK_CNT_SYSTEM_TMUTE];
+        if(u4_t_task >= (U4)XSPI_IIV_SYSTEM_TMUTESTS_TASK) {
+            vd_g_XspiIviSub1TmuteSend();
         }
     }
 }
@@ -669,6 +678,7 @@ void            vd_g_XspiIviSub1TmuteSend(void)
     if(u1_s_xspi_ivi_system_tmute_1stsend_flg == (U1)FALSE) {
         u1_s_xspi_ivi_system_tmute_1stsend_flg = (U1)TRUE;
     }
+    u4_s_xspi_ivi_task_cnt[XSPI_TASK_CNT_SYSTEM_TMUTE] = (U4)0U;
 }
 
 /*===================================================================================================================================*/

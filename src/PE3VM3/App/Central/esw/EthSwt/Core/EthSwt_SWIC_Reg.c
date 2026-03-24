@@ -37,6 +37,9 @@ Std_ReturnType EthSwt_SWIC_Reg_SetTbl(const swic_reg_data_t tbl[], const uint32 
 		case ((uint16)REG_CTRL_READ << 8) | SURVEILLANCE_OFF:									/* レジスタ読出し(監視なし)*/
 			result = swic_Reg_SetTblReadOFF(tbl, cnt, idx, dat, errFactor);
 			break;
+		case ((uint16)REG_CTRL_WAIT << 8) | SURVEILLANCE_OFF:									/* WAIT処理 */
+			EthSwt_SWIC_Cfg_WaitUS(tbl[idx].value);
+			break;
 		default:
 			result = E_NOT_OK;										/* レジスタアクセス制御にない要求場合 */
 			*errFactor = D_ETHSWT_SWIC_ERR_NOPROC;
