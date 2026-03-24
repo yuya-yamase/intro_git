@@ -243,6 +243,8 @@ static inline void    vd_s_XSpiCfgTxVariation(     U4 * u4_ap_pdu_tx) {
 
     u4_ap_pdu_tx[1] |= ((U4)u1_g_VardefPtsRx() & (U4)0x1fU) << 16;            /*  VAR_PTSYS                                     */
 
+    u4_ap_pdu_tx[1] |= ((U4)u1_g_VardefChainaReq() & (U4)0x01U) << 23;        /*  DEST_CHINA_GB                                 */
+
     u4_ap_pdu_tx[1] |= ((U4)u1_g_VardefBltDstByPid() & (U4)0x03U) << 24;      /*  DEST_BELT_TT_TYPE                             */
 
     u4_ap_pdu_tx[1] |= ((U4)u1_g_VardefUnitSlctDstByPid() & (U4)0x03U) << 26; /*  DEST_UNISLCT                                  */
