@@ -43,7 +43,7 @@
 #define IVDSH_DID_WRI_VM3TO2_USRRST_MASK         (11U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define IVDSH_NUM_DID_REA                        (11U)
+#define IVDSH_NUM_DID_REA                        (12U)
 
 /* Read from VM#1 */
 #define IVDSH_DID_REA_VM1TO3_STBY                (12U)
@@ -51,13 +51,14 @@
 #define IVDSH_DID_REA_VM1TO23_FSLP               (14U)
 #define IVDSH_DID_REA_VM1TO3_WHLINI_INF          (15U)
 #define IVDSH_DID_REA_VM1TO3_NMDIAG              (16U)
+#define IVDSH_DID_REA_VM1TO3_MAC_ADDRESS         (17U)
 /* Read from VM#2 */
-#define IVDSH_DID_REA_VM2TO3_STBY                (17U)
-#define IVDSH_DID_REA_VM2TO3_WHLINI_INF          (18U)
-#define IVDSH_DID_REA_VM2TO3_STRMODE             (19U)
-#define IVDSH_DID_REA_VM2TO3_OPESTS              (20U)
-#define IVDSH_DID_REA_GPS_REQ                    (21U)
-#define IVDSH_DID_REA_VM2TO3_DIN2_STAT           (22U)
+#define IVDSH_DID_REA_VM2TO3_STBY                (18U)
+#define IVDSH_DID_REA_VM2TO3_WHLINI_INF          (19U)
+#define IVDSH_DID_REA_VM2TO3_STRMODE             (20U)
+#define IVDSH_DID_REA_VM2TO3_OPESTS              (21U)
+#define IVDSH_DID_REA_GPS_REQ                    (22U)
+#define IVDSH_DID_REA_VM2TO3_DIN2_STAT           (23U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define IVDSH_NUM_DID                            (IVDSH_NUM_DID_WRI + IVDSH_NUM_DID_REA)
