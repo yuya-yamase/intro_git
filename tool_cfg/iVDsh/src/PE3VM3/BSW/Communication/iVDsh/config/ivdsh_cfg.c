@@ -45,10 +45,10 @@
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define IVDSH_WA_NWORD_WRI                       (12U)
-#define IVDSH_WA_NWORD_REA_0                     (17U)
+#define IVDSH_WA_NWORD_REA_0                     (19U)
 #define IVDSH_WA_NWORD_REA_1                     (24U)
 
-#define IVDSH_WA_NWORD                           (94U)
+#define IVDSH_WA_NWORD                           (98U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -108,11 +108,12 @@ const ST_IVDSH_WA           st_gp_IVDSH_WA_BY_DID[IVDSH_NUM_DID] =
     {(U2)9U,        (U2)1U,         (U2)IVDSH_FQ_CH_REA_0},     /* IVDSH_DID_REA_VM1TO23_FSLP      */
     {(U2)11U,       (U2)1U,         (U2)IVDSH_FQ_CH_REA_0},     /* IVDSH_DID_REA_VM1TO3_WHLINI_INF */
     {(U2)16U,       (U2)1U,         (U2)IVDSH_FQ_CH_REA_0},     /* IVDSH_DID_REA_VM1TO3_NMDIAG     */
+    {(U2)17U,       (U2)2U,         (U2)IVDSH_FQ_CH_REA_0},     /* IVDSH_DID_REA_VM1TO3_MAC_ADDRESS*/
     /*------------------------------------------------------------------*/
     /* Read from VM#2                                                   */
     /*------------------------------------------------------------------*/
     {(U2)0U,        (U2)1U,         (U2)IVDSH_FQ_CH_REA_1},     /* IVDSH_DID_REA_VM2TO3_STBY       */
-    {(U2)7U,        (U2)1U,         (U2)IVDSH_FQ_CH_REA_1},     /* IVDSH_DID_REA_VM2TO3_WHLINI_REQ */
+    {(U2)7U,        (U2)1U,         (U2)IVDSH_FQ_CH_REA_1},     /* IVDSH_DID_REA_VM2TO3_WHLINI_INF */
     {(U2)8U,        (U2)1U,         (U2)IVDSH_FQ_CH_REA_1},     /* IVDSH_DID_REA_VM2TO3_STRMODE    */
     {(U2)9U,        (U2)1U,         (U2)IVDSH_FQ_CH_REA_1},     /* IVDSH_DID_REA_VM2TO3_OPESTS     */
     {(U2)10U,       (U2)1U,         (U2)IVDSH_FQ_CH_REA_1},     /* IVDSH_DID_REA_GPS_REQ           */

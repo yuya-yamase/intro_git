@@ -1,4 +1,4 @@
-/* 1.4.0 */
+/* 1.5.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define CALIBRATION_C_MAJOR                     (1)
-#define CALIBRATION_C_MINOR                     (4)
+#define CALIBRATION_C_MINOR                     (5)
 #define CALIBRATION_C_PATCH                     (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -418,7 +418,7 @@ volatile const U1 u1_CALIB_MCUID0583_ATSSAORNA     = (U1)1U;        /* ATss_AorN
 volatile const U1 u1_CALIB_MCUID0584_ATSSUPAVECNT  = (U1)8U;        /* ATss_UpAveCnt                                                 */
 volatile const U1 u1_CALIB_MCUID0585_ATSSDNAVECNT  = (U1)2U;        /* ATss_DnAveCnt                                                 */
 volatile const U1 u1_CALIB_MCUID0586_HUDLMAVECNT   = (U1)32U;       /* HUDLm_AveCnt                                                  */
-volatile const U1 u1_CALIB_MCUID_RSV_1B_0372       = (U1)0U;        /* Reserve_1B-0372                                               */
+volatile const U1 u1_CALIB_MCUID0023_DISPTYPE      = (U1)5U;        /* Display type                                                  */
 volatile const U1 u1_CALIB_MCUID_RSV_1B_0373       = (U1)0U;        /* Reserve_1B-0373                                               */
 volatile const U1 u1_CALIB_MCUID_RSV_1B_0374       = (U1)0U;        /* Reserve_1B-0374                                               */
 volatile const U1 u1_CALIB_MCUID_RSV_1B_0375       = (U1)0U;        /* Reserve_1B-0375                                               */
@@ -1707,8 +1707,10 @@ volatile const U4 u4_CALIB_MCUID_RSV_4B_0060       = (U4)0U;        /* Reserve_4
 /*  1.2.0    10/23/2024  TN       Update for MET-M_MCUCONST-CSTD-A0-019-XXXD-XX.                                                     */
 /*  1.3.0    04/07/2025  SH       Update for MET-M_MCUCONST-CSTD-A0-023-A-XX-XXXX-X.                                                 */
 /*  1.4.0    10/15/2025  SH       Update for MET-M_MCUCONST-CSTD-0-005-XXXX-XX.                                                      */
+/*  1.5.0    03/11/2026  EA       Update for MET-M_MCUCONST-CSTD-0-007-XXXX-XX.                                                      */
 /*                                                                                                                                   */
 /*  * SH   = Sae Hirose, Denso Techno                                                                                                */
 /*  * TN   = Testsushi Nakano, Denso Techno                                                                                          */
+/*  * EA   = Eunice Avelin, DTPH                                                                                                     */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

@@ -18,7 +18,7 @@ struct swic_reg_tbl {								/* レジスタテーブル */
 	const uint32			num;
 };
 
-static const struct swic_reg_tbl G_ETHSWT_SWIC_MIB_TABLE_LIST[]
+static const struct swic_reg_tbl G_ETHSWT_SWIC_QCI_TABLE_LIST[]
 = {	{g_regListSeqGetStreamFilterData_ID0, SWIC_TBL_NUM(g_regListSeqGetStreamFilterData_ID0)}
 ,	{g_regListSeqGetStreamFilterData_ID1, SWIC_TBL_NUM(g_regListSeqGetStreamFilterData_ID1)}
 ,	{g_regListSeqGetStreamFilterData_ID2, SWIC_TBL_NUM(g_regListSeqGetStreamFilterData_ID2)}

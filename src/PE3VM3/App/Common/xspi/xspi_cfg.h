@@ -33,7 +33,7 @@
 /*------------------------------------------*/
 /*	有効フレームサイズ						*/
 /*------------------------------------------*/
-#define XSPI_FRAME_SIZE			(1060UL)
+#define XSPI_FRAME_SIZE			(1512UL)
 
 /*----------------------------------------------*/
 /*	送受信データバッファ方式					*/
@@ -65,11 +65,11 @@
 
 /*----------------------------------------------*/
 /*	通信周期（ms）								*/
-/*	5ms：XSPI_COMM_CYCLE_5ms					*/
+/*	2ms：XSPI_COMM_CYCLE_2ms					*/
 /*	10ms：XSPI_COMM_CYCLE_10ms					*/
 /*----------------------------------------------*/
 #define XSPI_COMM_CYCLE_10ms	(0)
-#define XSPI_COMM_CYCLE_5ms		(1)
-#define XSPI_COMM_CYCLE			(XSPI_COMM_CYCLE_5ms)		/* 通信周期：5ms */
+#define XSPI_COMM_CYCLE_2ms		(1)
+#define XSPI_COMM_CYCLE			(XSPI_COMM_CYCLE_2ms)		/* 通信周期：2ms */
 
 #endif	/* XSPICFG_H */
