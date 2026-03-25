@@ -149,7 +149,9 @@ static Std_ReturnType swic_Reg_SetTblReadOFF(const swic_reg_data_t tbl[], const 
 		}
 	}
 
-	if (result == E_NOT_OK && checkPwr == E_OK) {
+	if (result == E_NOT_OK &&
+		*errFactor != D_ETHSWT_SWIC_ERR_WRONGVALUE &&
+		*errFactor != D_ETHSWT_SWIC_ERR_POWEROFF) {
 		*errFactor = D_ETHSWT_SWIC_ERR_CRC;	/* CRCÉGÉâÅ[Ç™òAë±INIT_SEQ_RETRY_CNTë±Ç¢ÇΩÇ∆Ç´ */
 	}
 
