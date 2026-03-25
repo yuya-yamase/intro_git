@@ -1,4 +1,4 @@
-/* 2.5.0 */
+/* 2.6.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define SBLTSYNC_C_MAJOR                         (2)
-#define SBLTSYNC_C_MINOR                         (5)
+#define SBLTSYNC_C_MINOR                         (6)
 #define SBLTSYNC_C_PATCH                         (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -51,13 +51,6 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-typedef struct {
-    U4              u4_sync_tt_prd;
-    U4              u4_sync_tt_cng;
-    U4              u4_sync_chm_prd;
-    U4              u4_sync_chm_cng;
-} ST_SBLTSYNC_PRM;
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -92,6 +85,25 @@ static U1   u1_s_SbltsyncRearTtChk_FM(const U1 * u1_ap_ALL_SEAT_STS, const U1 u1
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+    const ST_SBLTSYNC_PRM st_gp_SBLTSYNC_PRM[CALIB_MCUID0024_NUM][SBLTSYNC_NUM_KND] = {
+            /* u4_sync_tt_prd               u4_sync_tt_cng               u4_sync_chm_prd              u4_sync_chm_cng */
+    {
+        {  (U4)(1200U / SBLTSYNC_TICK), (U4)( 600U / SBLTSYNC_TICK), (U4)(1200U / SBLTSYNC_TICK), (U4)( 600U / SBLTSYNC_TICK)  },
+        {  (U4)( 400U / SBLTSYNC_TICK), (U4)( 200U / SBLTSYNC_TICK), (U4)( 400U / SBLTSYNC_TICK), (U4)( 200U / SBLTSYNC_TICK)  },
+        {  (U4)(1200U / SBLTSYNC_TICK), (U4)( 600U / SBLTSYNC_TICK), (U4)(1200U / SBLTSYNC_TICK), (U4)( 600U / SBLTSYNC_TICK)  }
+    },
+    {
+        {  (U4)(1000U / SBLTSYNC_TICK), (U4)( 500U / SBLTSYNC_TICK), (U4)(2000U / SBLTSYNC_TICK), (U4)(1000U / SBLTSYNC_TICK)  },
+        {  (U4)( 360U / SBLTSYNC_TICK), (U4)( 180U / SBLTSYNC_TICK), (U4)(1440U / SBLTSYNC_TICK), (U4)( 720U / SBLTSYNC_TICK)  },
+        {  (U4)(1000U / SBLTSYNC_TICK), (U4)( 500U / SBLTSYNC_TICK), (U4)(2000U / SBLTSYNC_TICK), (U4)(1000U / SBLTSYNC_TICK)  }
+    },
+    {
+        {  (U4)(1000U / SBLTSYNC_TICK), (U4)( 500U / SBLTSYNC_TICK), (U4)(1000U / SBLTSYNC_TICK), (U4)( 500U / SBLTSYNC_TICK)  },
+        {  (U4)(1000U / SBLTSYNC_TICK), (U4)( 500U / SBLTSYNC_TICK), (U4)(1000U / SBLTSYNC_TICK), (U4)( 500U / SBLTSYNC_TICK)  },
+        {  (U4)(1000U / SBLTSYNC_TICK), (U4)( 500U / SBLTSYNC_TICK), (U4)(1000U / SBLTSYNC_TICK), (U4)( 500U / SBLTSYNC_TICK)  }
+    }
+};
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -113,6 +125,8 @@ void        vd_g_SbltsyncInit(void)
     u2_s_sbltsync_chm_prev    = (U2)0U;
     u1_s_sbltsync_req_chm     = (U1)0U;
     u1_s_sbltsync_lv2cmp_chm  = (U1)FALSE;
+
+    vd_g_SbltsyncCfgInit();
 }
 /*===================================================================================================================================*/
 /*  void        vd_g_SbltsyncMainTask(void)                                                                                          */
@@ -130,6 +144,8 @@ void        vd_g_SbltsyncMainTask(void)
     } else {
         vd_s_Sbltsync_FM();
     }
+
+    vd_g_SbltsyncCfgPostTask();
 }
 /*===================================================================================================================================*/
 /* static void vd_s_Sbltsync(void)                                                                                                   */
@@ -435,24 +451,6 @@ static U1   u1_s_SbltsyncTrgt_FM(const U4 u4_a_TT_STS, const U2 u2_a_CHM_STS)
 /*===================================================================================================================================*/
 static void vd_s_SbltsyncChk(U1 * u1_ap_sync_tt, U1 * u1_ap_sync_chm, const U1 u1_a_SYNCBIT)
 {
-    static const ST_SBLTSYNC_PRM st_gp_SBLTSYNC_PRM[CALIB_MCUID0024_NUM][SBLTSYNC_NUM_KND] = {
-            /* u4_sync_tt_prd               u4_sync_tt_cng               u4_sync_chm_prd              u4_sync_chm_cng */
-        {
-            {  (U4)(1200U / SBLTSYNC_TICK), (U4)( 600U / SBLTSYNC_TICK), (U4)(1200U / SBLTSYNC_TICK), (U4)( 600U / SBLTSYNC_TICK)  },
-            {  (U4)( 400U / SBLTSYNC_TICK), (U4)( 200U / SBLTSYNC_TICK), (U4)( 400U / SBLTSYNC_TICK), (U4)( 200U / SBLTSYNC_TICK)  },
-            {  (U4)(1200U / SBLTSYNC_TICK), (U4)( 600U / SBLTSYNC_TICK), (U4)(1200U / SBLTSYNC_TICK), (U4)( 600U / SBLTSYNC_TICK)  }
-        },
-        {
-            {  (U4)(1000U / SBLTSYNC_TICK), (U4)( 500U / SBLTSYNC_TICK), (U4)(2000U / SBLTSYNC_TICK), (U4)(1000U / SBLTSYNC_TICK)  },
-            {  (U4)( 360U / SBLTSYNC_TICK), (U4)( 180U / SBLTSYNC_TICK), (U4)(1440U / SBLTSYNC_TICK), (U4)( 720U / SBLTSYNC_TICK)  },
-            {  (U4)(1000U / SBLTSYNC_TICK), (U4)( 500U / SBLTSYNC_TICK), (U4)(2000U / SBLTSYNC_TICK), (U4)(1000U / SBLTSYNC_TICK)  }
-        },
-        {
-            {  (U4)(1000U / SBLTSYNC_TICK), (U4)( 500U / SBLTSYNC_TICK), (U4)(1000U / SBLTSYNC_TICK), (U4)( 500U / SBLTSYNC_TICK)  },
-            {  (U4)(1000U / SBLTSYNC_TICK), (U4)( 500U / SBLTSYNC_TICK), (U4)(1000U / SBLTSYNC_TICK), (U4)( 500U / SBLTSYNC_TICK)  },
-            {  (U4)(1000U / SBLTSYNC_TICK), (U4)( 500U / SBLTSYNC_TICK), (U4)(1000U / SBLTSYNC_TICK), (U4)( 500U / SBLTSYNC_TICK)  }
-        }
-    };
     static  U4 * const u4_sp_SBLTSYNC_TM_ELPSD[SBLTSYNC_NUM_KND] = {
         &u4_s_sbltsync_lgltm_elpsd,
         &u4_s_sbltsync_lv2tm_elpsd,
@@ -862,6 +860,10 @@ static U1   u1_s_SbltsyncRearTtChk_FM(const U1 * u1_ap_ALL_SEAT_STS, const U1 u1
 /*  2.3.0    01/29/2024  TH       for 19PFv3                    .                                                                    */
 /*  2.4.0    09/08/2025  ST       Legal compliance.(FMVSS208_2025 SBR regulations)                                                   */
 /*  2.5.0    01/22/2026  ST       Delete buzzer deterrence process in FMVSS operation                                                */
+/*  2.6.0    03/23/2026  SN       Change config for BEV Full_Function_2.                                                             */
+/*                                MET-B_OPTMON-CSTD-0-00-A-C0                                                                        */
+/*                                Add an interface to switch the OPTMON TT request (steady/blink) using seatbelt Lv1 TT timing.      */
+/*                                Expose the blink/buzzer period table externally.                                                   */
 /*                                                                                                                                   */
 /*  * YI   = Yoshiki Iwata, Denso                                                                                                    */
 /*  * KK   = Kohei Kato,    Denso Techno                                                                                             */
@@ -870,5 +872,6 @@ static U1   u1_s_SbltsyncRearTtChk_FM(const U1 * u1_ap_ALL_SEAT_STS, const U1 u1
 /*  * YI(M)= Yoshiki Iwata, NTT Data MSE                                                                                             */
 /*  * TH   = Taisuke Hirakawa, KSE                                                                                                   */
 /*  * ST   = Shoma Taki,    PXT                                                                                                      */
+/*  * SN   = Shizuka Nakajima, KSE                                                                                                   */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

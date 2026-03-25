@@ -23,6 +23,7 @@
 #include "thblnkr.h"
 #include "ambtmp.h"
 #include "sbltsync.h"
+#include "sbltsync_optmon.h"
 
 #include "vardef.h"
 #include "vardef_dest_dbf.h"
@@ -75,6 +76,7 @@
 #define HMITT_TURN_DATPOS                         (1U)
 #define HMITT_HEAD_DATPOS                         (12U)
 #define HMITT_TAIL_DATPOS                         (0U)
+#define HMITT_OPTMON_DATPOS                       (25U)                /* OPTMON Line Offset for LcomBitAssign                       */
 
 #define HMITT_SBLT_D_SFT                          (0U)                 /* SBLT_D bit shift                                           */
 #define HMITT_SBLT_P_SFT                          (2U)                 /* SBLT_P bit shift                                           */
@@ -164,6 +166,7 @@ void    vd_g_HmiTtCfgReq(U4 * u4_ap_req)
     U1  u1_t_icewrn;
     U1  u1_t_rearbelt_tt;
     U1  u1_t_seatiso_tt;                 /* ISO logo Display result                                                                  */
+    U1  u1_t_optmon_tt;
 
     for(u4_t_loop = (U4)0U ; u4_t_loop < (U4)HMITT_NUM ; u4_t_loop++){
         u4_ap_req[u4_t_loop] = (U4)0U;
@@ -215,6 +218,12 @@ void    vd_g_HmiTtCfgReq(U4 * u4_ap_req)
     }
 
     vd_s_HmiTtTurn(u4_ap_req);
+
+    /* TT_RED_OPTMON result get request */
+    u1_t_optmon_tt = u1_g_SbltsyncOptmonReq();
+    if (u1_t_optmon_tt == (U1)TRUE){
+        u4_ap_req[HMITT_OPTMON_DATPOS] |= u4_HMITT_HB3(HMITT_BLINK_CO_ON_____100P);
+    }
 }
 
 /*===================================================================================================================================*/
@@ -339,6 +348,9 @@ void    vd_g_HmiTtCfgDestmask(U4* u4_ap_varmask)
 /*  BEV-7    02/10/2026  ED       Change for BEV FF2. (MET-B_SEAREM-CSTD-A0-07-B-C3)                                                 */
 /*  BEV-8    01/15/2026  HT       Change for Full_function2 (MET-M_REMWAR-CSTD-2-04-A-C0)                                            */
 /*                                Removed "ALERT_REQ" in order to transfer signal transmission control from the MCU to the SoC       */
+/*  BEV-9    03/17/2026  SN       Change for Full_function2                                                                          */
+/*                                MET-B_OPTMON-CSTD-0-00-A-C0                                                                        */
+/*                                Retrieve the TT request for B_OPTMON and notify on/off                                             */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * TH   = Takahiro Hirano, Denso Techno                                                                                           */
@@ -357,5 +369,6 @@ void    vd_g_HmiTtCfgDestmask(U4* u4_ap_varmask)
 /*  * ED   = Emoh Dagasdas, DTPH                                                                                                     */
 /*  * KI   = Kanji Ito,  Denso Techno                                                                                                */
 /*  * HT   = Hibiki Tanii, KSE                                                                                                       */
+/*  * SN   = Shizuka Nakajima, KSE                                                                                                   */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
