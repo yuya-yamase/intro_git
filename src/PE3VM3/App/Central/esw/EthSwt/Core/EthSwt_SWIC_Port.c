@@ -43,12 +43,14 @@ Std_ReturnType EthSwt_SWIC_Port_RelayOn(uint32 * const errFactor)
 	uint32			val;
 
 	do {
+		/* 中継開始設定 + デフォルトポート設定(PHY ON) */
 		for (idx=0U ; idx < SWIC_TBL_NUM(G_ETHSWT_SWIC_RELAY_ON_TABLE) ; idx++) {
 			result = EthSwt_SWIC_Reg_SetTbl(G_ETHSWT_SWIC_RELAY_ON_TABLE[idx].tbl, G_ETHSWT_SWIC_RELAY_ON_TABLE[idx].num, &val , errFactor);
 			if (result == E_NOT_OK) { break; }
 		}
 		if (result == E_NOT_OK) { break; }
 
+		/* SWICハードリセット時にデフォルトポート状態と異なる場合のポート設定(PHY OFF/ON) */
 		for (idx=0U ; idx < D_ETHSWT_SWIC_PORT_NUM ; idx++) {
 			result = EthSwt_SWIC_Port_ResetSwitchPortMode(idx, errFactor);
 			if (result == E_NOT_OK) { break; }
