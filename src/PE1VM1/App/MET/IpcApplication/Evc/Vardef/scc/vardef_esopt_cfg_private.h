@@ -88,7 +88,6 @@ extern U4                     u4_gp_vdf_eso_ava[];                   /* The size
 void    vd_g_VardefEsOptCfgInit(void);
 
 U1      u1_g_VardefEsOptCfgCanRxEvcnt(const U2 u2_a_MSG_ID);
-U1      u1_g_VardefEsOptCfgEthRxEvcnt(const U2 u2_a_MSG_ID);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
