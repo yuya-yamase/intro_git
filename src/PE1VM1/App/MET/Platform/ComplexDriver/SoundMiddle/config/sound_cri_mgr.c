@@ -718,6 +718,7 @@ static  U1      u1_s_SoundCriMgrWavNext(void)
         (U2)CRI_CUESHEET_0_TYT_TAN_MET_CBZ_BASE_NOTICE1_0_01,                                 /* WCHIME_REQ_SI_APP_CMPLT               */
         (U2)CRI_CUESHEET_0_TYT_2REN_MET_CBZ_BASE_REJECT_0_01,                                 /* WCHIME_REQ_SI_DCLDSP_OPERJCT          */
         (U2)CRI_CUESHEET_0_TYT_TAN_MET_CBZ_BASE_ACCEPT_0_01,                                  /* WCHIME_REQ_SI_LCS_ACK                 */
+        (U2)CRI_CUESHEET_0_TYT_2REN_MET_CBZ_BASE_REJECT_0_01,                                 /* WCHIME_REQ_SI_BSTMOD_RJCT             */
         (U2)CRI_CUESHEET_0_TYT_2REN_MET_CBZ_BASE_REJECT_0_01,                                 /* WCHIME_REQ_SI_DOA_RJCT                */
         (U2)CRI_CUESHEET_0_TYT_TAN_MET_CBZ_BASE_NOTICE1_0_01,                                 /* WCHIME_REQ_SI_MET_WRN_VOL_CSTM        */
         (U2)CRI_CUESHEET_0_TYT_TAN_MET_CBZ_BASE_NOTICE1_0_01,                                 /* WCHIME_REQ_SI_SBW_SPL_STATE           */
@@ -897,6 +898,7 @@ static  U1      u1_s_SoundCriMgrWavNext(void)
         (U2)CRI_CUESHEET_0_LEX_TAN_MET_CBZ_BASE_NOTICE1_0_01,                                 /* WCHIME_REQ_SI_APP_CMPLT               */
         (U2)CRI_CUESHEET_0_LEX_2REN_MET_CBZ_BASE_REJECT_0_01,                                 /* WCHIME_REQ_SI_DCLDSP_OPERJCT          */
         (U2)CRI_CUESHEET_0_LEX_TAN_MET_CBZ_BASE_ACCEPT_0_01,                                  /* WCHIME_REQ_SI_LCS_ACK                 */
+        (U2)CRI_CUESHEET_0_LEX_2REN_MET_CBZ_BASE_REJECT_0_01,                                 /* WCHIME_REQ_SI_BSTMOD_RJCT             */
         (U2)CRI_CUESHEET_0_LEX_2REN_MET_CBZ_BASE_REJECT_0_01,                                 /* WCHIME_REQ_SI_DOA_RJCT                */
         (U2)CRI_CUESHEET_0_LEX_TAN_MET_CBZ_BASE_NOTICE1_0_01,                                 /* WCHIME_REQ_SI_MET_WRN_VOL_CSTM        */
         (U2)CRI_CUESHEET_0_LEX_TAN_MET_CBZ_BASE_NOTICE1_0_01,                                 /* WCHIME_REQ_SI_SBW_SPL_STATE           */
@@ -1103,7 +1105,7 @@ static  U1      u1_s_SoundCriMgrUpdtNext(const U1 u1_a_GRP_NO, const U1 u1_a_REQ
 
     u1_t_updtdreq = u1_a_REQIDX;
 
-    /* Bredge the clearance sonar Rr buzzer to CH5 */
+    /* Bridge the clearance sonar Rr buzzer to CH5 */
     if(u1_a_GRP_NO == (U1)SOUND_GROUP3){
         u1_s_sound_csrbz_reqbrg = (U1)U1_MAX;
         u1_s_sound_csrbz_volbrg = (U1)U1_MAX;
@@ -2307,11 +2309,14 @@ void  vd_g_SoundCriMgr_DeInit(void)
 /*  BEV-2     6/17/2025  JS       Change for BEV System_Consideration_2.(MET-C_BRKBZ-CSTD-2-00-B-C0)                                 */
 /*  BEV-3     6/20/2025  KO       Change for BEV System_Consideration_2.(MET-O_PDSMAL-CSTD-0-00-A-C0)                                */
 /*  BEV-4     6/24/2025  RO       Change for BEV System_Consideration_2.(MET-S_ADBZR-CSTD-0-02-A-C0)                                 */
-/*  BEV-5     6/24/2025  RO       Change for BEV System_Consideration_2.(MMET-M_CONTBUZZ2-CSTD-0004-C1)                              */
+/*  BEV-5     6/24/2025  RO       Change for BEV System_Consideration_2.(MET-M_CONTBUZZ2-CSTD-0004-C1)                               */
 /*  BEV-6    11/11/2025  SH       Configured for CONTBUZZ2-CSTD-0008                                                                 */
 /*  BEV-7    11/28/2025  HL       Change for BEV System_Consideration_ADAS.(MET-S_TMBZR-CSTD-0-01-A-C0)                              */
 /*  BEV-8    12/10/2025  HY       Change sound file(CUE_ID) for RCTA buzzer                                                          */
 /*  BEV-9    02/10/2026  SH       Change MCUID0024 from Calibration to OMUSVIID                                                      */
+/*  BEV-10   03/10/2026  YH       Change config for BEV Full_Function_2.                                                             */
+/*                                MET-P_BSTMOD-CSTD-0-00-A-C0                                                                        */
+/*                                Add BOOST MODE reject buzzer request                                                               */
 /*                                                                                                                                   */
 /*  * YK       = Yuuki Kato, Denso Techno                                                                                            */
 /*  * TN       = Toshiharu Nagata, Denso Techno                                                                                      */
@@ -2333,5 +2338,6 @@ void  vd_g_SoundCriMgr_DeInit(void)
 /*  * KO       = Kazuto Oishi, Denso Techno                                                                                          */
 /*  * HL       = Harry Lapiceros,  DTPH                                                                                              */
 /*  * HY       = Hiroki You, Denso Techno                                                                                            */
+/*  * YH       = Yuki Hatakeyama, KSE                                                                                                */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
