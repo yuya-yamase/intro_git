@@ -891,7 +891,8 @@ static U1 u1_s_FwushMapMemAccErrorToAckForRollback(void)
         (U1)FWUSH_ACK_OFFSET_UNCHANGED,       /* FWUMEMACC_ERROR_OFFSET_UNCHANGED (3U) */
         (U1)FWUSH_ACK_OFFSET_SUBTRACT,        /* FWUMEMACC_ERROR_OFFSET_SUBTRACT  (4U) */
         (U1)FWUSH_ACK_ROLLBACK_NG,            /* FWUMEMACC_ERROR_MEMACC_FAILED    (5U) */
-        (U1)FWUSH_ACK_ROLLBACK_START_ERR      /* FWUMEMACC_ERROR_START_ERR        (6U) */
+        (U1)FWUSH_ACK_ROLLBACK_START_ERR,     /* FWUMEMACC_ERROR_START_ERR        (6U) */
+        (U1)FWUSH_ACK_LB_ERR                  /* FWUMEMACC_ERROR_LB_INFO_ERR      (7U) */
     };
     U1 u1_t_error;
     u1_t_error = u1_g_FwuMemAccGetError();
@@ -933,7 +934,6 @@ static void vd_s_FwushHandleEraseReq(void)
     U1 u1_t_error;
     U1 *u1_tp_adr;
     U4 u4_t_adr;
-    U4 u4_t_length;
 
     U1 u1_t_result;
 
@@ -945,12 +945,10 @@ static void vd_s_FwushHandleEraseReq(void)
                                     | ((U4)u1_tp_adr[FWUSH_REQ_PREP_DATA_CRC_OFFSET + 1] << (U4)8U)
                                     | ((U4)u1_tp_adr[FWUSH_REQ_PREP_DATA_CRC_OFFSET + 2] << (U4)16U)
                                     | ((U4)u1_tp_adr[FWUSH_REQ_PREP_DATA_CRC_OFFSET + 3] << (U4)24U);
-        u4_t_adr    = (U4)0x1c000U;
-        u4_t_length = (U4)0x7A4000U;
         vd_s_FwushResetSeqProgress();
         vd_s_FwushUpdateFswaStat();
 
-        u1_t_result = u1_g_FwuMemAccEraseReq(u4_t_adr, u4_t_length, u4_s_fwush_prep_data_crc);
+        u1_t_result = u1_g_FwuMemAccEraseReq(u1_sp_fwush_header[FWUSH_REQ_PREP_CUR_TARGET_OFFSET], u4_s_fwush_prep_data_crc);
         if(u1_t_result != (U1)FWUMEMACC_RET_OK){
             u1_s_fwush_abort     = (U1)TRUE;
             u1_s_fwush_error_log = u1_s_FwushMapMemAccErrorToAck();

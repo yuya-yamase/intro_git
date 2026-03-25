@@ -68,7 +68,7 @@
 #define FWUMEMACC_JOB_STATUS_ERROR           (6U)
 
 /* Error codes */
-#define FWUMEMACC_ERROR_MAX              (7U)
+#define FWUMEMACC_ERROR_MAX              (8U)
 #define FWUMEMACC_ERROR_NONE             (0U)
 #define FWUMEMACC_ERROR_PRECONDITION_ERR (1U)    /* precondition error */
 #define FWUMEMACC_ERROR_OFFSET_JUMP      (2U)    /* offset jump */
@@ -76,6 +76,7 @@
 #define FWUMEMACC_ERROR_OFFSET_SUBTRACT  (4U)    /* offset subtract */
 #define FWUMEMACC_ERROR_MEMACC_FAILED    (5U)    /* MemAcc API failed */
 #define FWUMEMACC_ERROR_START_ERR        (6U)    /* start error */
+#define FWUMEMACC_ERROR_LB_ERR           (7U)    /* LB info error */
 
 /* Update status values */
 #define FWUMEMACC_UPDT_STS_IDLE         (0U)    /* No update in progress */
@@ -119,7 +120,7 @@ void vd_g_FwuMemAccInit(void);
 void vd_g_FwuMemAccMainTask(void);
 
 /* Job request APIs (backward compatible) */
-U1 u1_g_FwuMemAccEraseReq(U4 u4_a_start_adrs, U4 u4_a_length, U4 u4_a_expected_crc);
+U1 u1_g_FwuMemAccEraseReq(U1 u1_a_lb_id, U4 u4_a_expected_crc);
 U1 u1_g_FwuMemAccUpdateReq(U2 u2_a_block_offset, const U4* u4p_a_write_data);
 U1 u1_g_FwuMemAccSwitchReq(void);
 

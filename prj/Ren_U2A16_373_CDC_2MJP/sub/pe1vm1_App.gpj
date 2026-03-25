@@ -288,6 +288,7 @@
 ../../src/PE1VM1/App/MET/Platform/ComplexDriver/DrecTx/config/drec_tx.c
 ../../src/PE1VM1/App/MET/Platform/ComplexDriver/SoundMiddle/config/sound_cri_mgr.c
 ../../src/PE1VM1/App/MET/Platform/ComplexDriver/SoundMiddle/scc/sound_cri_drv.c
+../../src/PE1VM1/App/MET/Platform/Fwush/config/fwumemacc_cfg.c
 ../../src/PE1VM1/App/MET/Platform/Fwush/scc/fwumemacc.c
 ../../src/PE1VM1/App/MET/Platform/Fwush/scc/fwush.c
 ../../src/PE1VM1/App/MET/XSPI_MET/config/xspi_met_calib.c
@@ -309,6 +310,6 @@
 
 # ----------------------------------------------------------------------------------------------------------------------------------
 # ghsprj version 1-1-0
-# Date generated: 2026/02/10 18:53:29
+# Date generated: 2026/03/25 11:42:05
 # ----------------------------------------------------------------------------------------------------------------------------------
 
