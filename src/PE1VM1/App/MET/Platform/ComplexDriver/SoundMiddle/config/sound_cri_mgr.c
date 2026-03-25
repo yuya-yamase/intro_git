@@ -752,6 +752,7 @@ static  U1      u1_s_SoundCriMgrWavNext(void)
         (U2)CRI_CUESHEET_0_TYT_DAN_MET_CBZ_BASE_INTWARNL_0_01,                                /* WCHIME_REQ_IN_TMBZR_TEN_PRI4          */
         (U2)CRI_CUESHEET_0_TYT_TAN_MET_CBZ_BASE_NOTICE1_0_01,                                 /* WCHIME_REQ_SI_MINDSPWR_LV1            */
         (U2)CRI_CUESHEET_0_TYT_DAN_MET_TBZ_SEAREM_LV1_24_01,                                  /* WCHIME_REQ_IN_SBLT_LV1                */
+        (U2)CRI_CUESHEET_0_TYT_DAN_MET_TBZ_SEAREM_LV1_24_01,                                  /* WCHIME_REQ_IN_SBLT_MISUSE             */
         (U2)CRI_CUESHEET_0_TYT_TAN_MET_TBZ_SEAREM_LV1_24_01,                                  /* WCHIME_REQ_SI_SBLT                    */
         (U2)CRI_CUESHEET_0_TYT_TAN_MET_CBZ_BASE_NOTICE1_0_01,                                 /* WCHIME_REQ_SI_RSA_SIGN_CTN1           */
         (U2)CRI_CUESHEET_0_TYT_TAN_MET_CBZ_BASE_NOTICE1_0_01,                                 /* WCHIME_REQ_SI_DMC_LV1                 */
@@ -932,6 +933,7 @@ static  U1      u1_s_SoundCriMgrWavNext(void)
         (U2)CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNL_0_01,                                /* WCHIME_REQ_IN_TMBZR_TEN_PRI4          */
         (U2)CRI_CUESHEET_0_LEX_TAN_MET_CBZ_BASE_NOTICE1_0_01,                                 /* WCHIME_REQ_SI_MINDSPWR_LV1            */
         (U2)CRI_CUESHEET_0_LEX_DAN_MET_LBZ_SEAREM_LV1_24_02,                                  /* WCHIME_REQ_IN_SBLT_LV1                */
+        (U2)CRI_CUESHEET_0_LEX_DAN_MET_LBZ_SEAREM_LV1_24_02,                                  /* WCHIME_REQ_IN_SBLT_MISUSE             */
         (U2)CRI_CUESHEET_0_LEX_TAN_MET_LBZ_SEAREM_LV1_24_02,                                  /* WCHIME_REQ_SI_SBLT                    */
         (U2)CRI_CUESHEET_0_LEX_TAN_MET_CBZ_BASE_NOTICE1_0_01,                                 /* WCHIME_REQ_SI_RSA_SIGN_CTN1           */
         (U2)CRI_CUESHEET_0_LEX_TAN_MET_CBZ_BASE_NOTICE1_0_01,                                 /* WCHIME_REQ_SI_DMC_LV1                 */
@@ -2317,6 +2319,9 @@ void  vd_g_SoundCriMgr_DeInit(void)
 /*  BEV-10   03/10/2026  YH       Change config for BEV Full_Function_2.                                                             */
 /*                                MET-P_BSTMOD-CSTD-0-00-A-C0                                                                        */
 /*                                Add BOOST MODE reject buzzer request                                                               */
+/*  BEV-11   03/17/2026  SN       Change for BEV Full_Function_2.                                                                    */
+/*                                MET-B_OPTMON-CSTD-0-00-A-C0                                                                        */
+/*                                Added Buzzer request for OPTMON                                                                    */
 /*                                                                                                                                   */
 /*  * YK       = Yuuki Kato, Denso Techno                                                                                            */
 /*  * TN       = Toshiharu Nagata, Denso Techno                                                                                      */
@@ -2339,5 +2344,6 @@ void  vd_g_SoundCriMgr_DeInit(void)
 /*  * HL       = Harry Lapiceros,  DTPH                                                                                              */
 /*  * HY       = Hiroki You, Denso Techno                                                                                            */
 /*  * YH       = Yuki Hatakeyama, KSE                                                                                                */
+/*  * SN       = Shizuka Nakajima, KSE                                                                                               */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

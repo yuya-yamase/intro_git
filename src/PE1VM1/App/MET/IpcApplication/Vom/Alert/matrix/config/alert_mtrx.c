@@ -165,6 +165,7 @@ const ST_ALERT_TASK         st_gp_ALERT_TASK_CFG[]   = {
     {  &st_gp_ALERT_B_TURHAZ_MTRX[0],        (U2)ALERT_CH_B_TURHAZ_L,               (U1)ALERT_B_TURHAZ_CH_NUM,          (U1)2U  },
     {  &st_gp_ALERT_O_FNCLIM_MTRX[0],        (U2)ALERT_CH_O_FNCLIM,                 (U1)ALERT_O_FNCLIM_CH_NUM,          (U1)2U  },
     {  &st_gp_ALERT_P_BSTMOD_MTRX[0],        (U2)ALERT_CH_P_BSTMOD,                 (U1)ALERT_P_BSTMOD_CH_NUM,          (U1)2U  },
+    {  &st_gp_ALERT_B_OPTMON_MTRX[0],        (U2)ALERT_CH_B_OPTMON_TT,              (U1)ALERT_B_OPTMON_CH_NUM,          (U1)2U  },
     {  &st_gp_ALERT_B_GRISHU_MTRX[0],        (U2)ALERT_CH_B_GRISHU,                 (U1)ALERT_B_GRISHU_CH_NUM,          (U1)3U  },
     {  &st_gp_ALERT_D_SBW_MTRX[0],           (U2)ALERT_CH_D_SBW_BZ_BSFT,            (U1)ALERT_D_SBW_CH_NUM,             (U1)3U  },
     {  &st_gp_ALERT_H_LEAUNF_MTRX[0],        (U2)ALERT_CH_H_LEAUNF,                 (U1)ALERT_H_LEAUNF_CH_NUM,          (U1)3U  },
@@ -350,6 +351,9 @@ void    vd_g_AlertMtrxInit(void)
 /*  BEV-34   03/10/2026  YH       Change config for BEV Full_Function_2.                                                             */
 /*                                MET-P_BSTMOD-CSTD-0-00-A-C0                                                                        */
 /*                                Add BOOST MODE reject buzzer request                                                               */
+/*  BEV-35   03/12/2026  SN       Change config for BEV Full_Function_2.                                                             */
+/*                                MET-B_OPTMON-CSTD-0-00-A-C0                                                                        */
+/*                                Add Alert_REQ for OPTMON.                                                                          */
 /*                                                                                                                                   */
 /*  * YI   = Yoshiki Iwata, Denso                                                                                                    */
 /*  * RS   = Ryuki Sako,      Denso Techno                                                                                           */

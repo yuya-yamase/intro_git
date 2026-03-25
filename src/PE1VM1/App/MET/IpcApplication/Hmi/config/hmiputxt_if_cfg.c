@@ -155,6 +155,8 @@ const ST_ALERT_REQBIT   st_gp_HMIPUTXTREQBIT_SLOTB[HMIPUTXTCFG_IF_SLOTB_NUM] = {
 };
 
 const ST_ALERT_REQBIT   st_gp_HMIPUTXTREQBIT_SLOTC[HMIPUTXTCFG_IF_SLOTC_NUM] = {
+    {    (U2)ALERT_CH_B_OPTMON_PD,          (U1)ALERT_REQ_B_OPTMON_PD_WAIT,         (U1)0U,     (U4)0x00000020U    },
+    {    (U2)ALERT_CH_B_OPTMON_PD,          (U1)ALERT_REQ_B_OPTMON_PD_UNVLB,        (U1)0U,     (U4)0x00000040U    },
     {    (U2)ALERT_CH_O_FNCLIM,             (U1)ALERT_REQ_O_FNCLIM_WRN_POW,         (U1)0U,     (U4)0x00000100U    },
     {    (U2)ALERT_CH_O_FNCLIM,             (U1)ALERT_REQ_O_FNCLIM_WRN_TMP,         (U1)0U,     (U4)0x00000200U    },
     {    (U2)ALERT_CH_H_BATINS_PD,          (U1)ALERT_REQ_H_BATINS_PD_DIAGNOSIS,    (U1)0U,     (U4)0x08000000U    },
@@ -352,6 +354,9 @@ U2 u2_g_HmiputxtSizeReqbit(void){
 /*  BEV-19   03/16/2026  NI       Change config for BEV Full_Function_2.                                                             */
 /*                                MET-C_BRK-CSTD-2-00-C-C0,MET-C_ECB-CSTD-1-00-C-C0                                                  */
 /*                                Changed split TT and PD, and rename/delete the definitions accordingly.                            */
+/*  BEV-20   03/12/2026  SN       Change config for BEV Full_Function_2.                                                             */
+/*                                MET-B_OPTMON-CSTD-0-00-A-C0                                                                        */
+/*                                Added config for B_OPTMON MID.                                                                     */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * TH   = Takahiro Hirano, Denso Techno                                                                                           */

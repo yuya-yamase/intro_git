@@ -107,9 +107,9 @@ static const U4              u4_sp_WCHIME_REQBIT_CH_0[WCHIME_REQBIT_NUM_WORD] = 
     (U4)0xF8FC0FFFU,
     (U4)0xFFFFBC7FU,
     (U4)0xFFDFFFFFU,
-    (U4)0xFFFF9FFFU,
+    (U4)0xFFFF1FFFU,
     (U4)0xFFFFFFFFU,
-    (U4)0x0001F03FU
+    (U4)0x0003E07FU
 };
 
 static const U4              u4_sp_WCHIME_REQBIT_CH_1[WCHIME_REQBIT_NUM_WORD] = {
@@ -118,7 +118,7 @@ static const U4              u4_sp_WCHIME_REQBIT_CH_1[WCHIME_REQBIT_NUM_WORD] = 
     (U4)0x00000000U,
     (U4)0x00000000U,
     (U4)0x00000000U,
-    (U4)0x00000FC0U
+    (U4)0x00001F80U
 };
 
 static const U4              u4_sp_WCHIME_REQBIT_CH_2[WCHIME_REQBIT_NUM_WORD] = {
@@ -134,7 +134,7 @@ static const U4              u4_sp_WCHIME_REQBIT_CH_3[WCHIME_REQBIT_NUM_WORD] = 
     (U4)0x00000000U,
     (U4)0x00004000U,
     (U4)0x00200000U,
-    (U4)0x00006000U,
+    (U4)0x0000E000U,
     (U4)0x00000000U,
     (U4)0x00000000U
 };
@@ -317,6 +317,7 @@ void    vd_g_wChimeCfgReqchk(U4 * u4p_a_reqbit)
         {  (U2)ALERT_CH_S_TMBZR_BC_AD,      (U1)ALERT_REQ_S_TMBZR_BC_AD_CONT_4,    (U1)WCHIME_REQ_CO_TMBZR_CONT_PRI4    >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_CO_TMBZR_CONT_PRI4    & (U1)0x1FU)  }, /* MET-S_TMBZR-CST0              */
         {  (U2)ALERT_CH_S_TMBZR_BC_AD,      (U1)ALERT_REQ_S_TMBZR_BC_AD_TEN_4,     (U1)WCHIME_REQ_IN_TMBZR_TEN_PRI4     >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_IN_TMBZR_TEN_PRI4     & (U1)0x1FU)  }, /* MET-S_TMBZR-CST0              */
         {  (U2)ALERT_CH_M_MINDSPWR,         (U1)ALERT_REQ_M_MINDSPWR_SINGLE,       (U1)WCHIME_REQ_SI_MINDSPWR_LV1       >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_SI_MINDSPWR_LV1       & (U1)0x1FU)  }, /* MET-M_MINDSPWR-CSTD-          */
+        {  (U2)ALERT_CH_B_OPTMON_BC,        (U1)ALERT_REQ_B_OPTMON_BC_BLOW,        (U1)WCHIME_REQ_IN_SBLT_MISUSE        >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_IN_SBLT_MISUSE        & (U1)0x1FU)  }, /* MET-B_OPTMON-CSTD-            */
         {  (U2)ALERT_CH_S_ADBZR_RSA_SGN,    (U1)ALERT_REQ_S_ADBZR_RSA_SGN_SPDLMT,  (U1)WCHIME_REQ_SI_RSA_SIGN_CTN1      >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_SI_RSA_SIGN_CTN1      & (U1)0x1FU)  }, /* MET-S_ADBZR-CSTD-             */
         {  (U2)ALERT_CH_S_ADBZR_DMC,        (U1)ALERT_REQ_S_ADBZR_DMC_SINGLE,      (U1)WCHIME_REQ_SI_DMC_LV1            >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_SI_DMC_LV1            & (U1)0x1FU)  }, /* MET-S_ADBZR-CSTD-             */
         {  (U2)ALERT_CH_H_SYSMAL_BC,        (U1)ALERT_REQ_H_SYSMAL_BC_SINGLE,      (U1)WCHIME_REQ_SI_SYSMAL_FAIL        >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_SI_SYSMAL_FAIL        & (U1)0x1FU)  }, /* MET-H_SYSMAL-CSTD-            */
@@ -869,6 +870,9 @@ static  void    vd_s_wChimeCfgReqDel(U4 * u4_ap_reqbit, const U1 u1_a_REQ_ID)
 /*  BEV-13    03/10/2026 YH       Change config for BEV Full_Function_2.                                                             */
 /*                                MET-P_BSTMOD-CSTD-0-00-A-C0                                                                        */
 /*                                Add BOOST MODE reject buzzer request                                                               */
+/*  BEV-14    03/12/2026 SN       Change config for BEV Full_Function_2.                                                             */
+/*                                MET-B_OPTMON-CSTD-0-00-A-C0                                                                        */
+/*                                Add Bconfig for OPTMON.                                                                            */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
 /*  * ToN  = Toshiharu Nagata, Denso Techno                                                                                          */
@@ -897,5 +901,6 @@ static  void    vd_s_wChimeCfgReqDel(U4 * u4_ap_reqbit, const U1 u1_a_REQ_ID)
 /*  * YH   = Yuki Hatakeyama, KSE                                                                                                    */
 /*  * YN   = Yujiro Nagaya, Denso Techno                                                                                             */
 /*  * HT   = Hibiki Tanii, KSE                                                                                                       */
+/*  * SN   = Shizuka Nakajima, KSE                                                                                                   */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
