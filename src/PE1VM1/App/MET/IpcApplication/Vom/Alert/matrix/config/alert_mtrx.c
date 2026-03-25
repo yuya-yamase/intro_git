@@ -345,7 +345,7 @@ void    vd_g_AlertMtrxInit(void)
 /*                                Changed split TT and PD, and rename the definitions accordingly.                                   */
 /*  BEV-33   03/13/2026  HT       Change config for BEV Full_Function_2.                                                             */
 /*                                BEV3CDCMET-3786                                                                                    */
-/*                                Delete Hardware Input.                                                                             */
+/*                                Delete Hardware Input of Washer Level.                                                             */
 /*                                                                                                                                   */
 /*  * YI   = Yoshiki Iwata, Denso                                                                                                    */
 /*  * RS   = Ryuki Sako,      Denso Techno                                                                                           */
