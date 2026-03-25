@@ -15,19 +15,10 @@
 #include "ChipCom_Cfg.h"
 /* 26.2.16 doza Team-B edit end */
 
-/* Debug Code */
-#define ARRAY_SIZE  (200U)
-#define INVLID_DATA (0xFFU)
-/* Debug Code */
-
 /****************************************************************/
 /* VARIABLE                                                     */
 /****************************************************************/
 static U1   u1_s_vsm_sailsleepsts;      /* SAILスリープ可否情報 */
-/* Debug Code */
-static volatile U1   u1_s_vsm_sailsleepsts_array[ARRAY_SIZE];
-static U1   u1_s_vsm_cnt;
-/* Debug Code */
 
 /****************************************************************/
 /* 関数宣言                                                     */
@@ -39,13 +30,7 @@ static U1   u1_s_vsm_cnt;
 void vd_g_VSM_SAILWrapper_Init(void)
 {
     u1_s_vsm_sailsleepsts = (U1)VSM_SLEEPOK;
-    /* Debug Code */
-    for(U1 i = 0; i < ARRAY_SIZE; i++){
-        u1_s_vsm_sailsleepsts_array[i] = INVLID_DATA;
-    }
-    u1_s_vsm_cnt = 0U;
-    /* Debug Code */
-
+    
     return;
 }
 
@@ -74,17 +59,6 @@ void vd_g_VSM_SAILWrapper(void)
     }
     
     PutCnSleepNG_SAIL(u1_s_vsm_sailsleepsts);
-
-    /* Debug Code */
-    if (u1_s_vsm_cnt < ARRAY_SIZE) {
-        u1_s_vsm_sailsleepsts_array[u1_s_vsm_cnt] = u1_s_vsm_sailsleepsts;
-        u1_s_vsm_cnt++;
-    }
-
-    if (u1_s_vsm_cnt == ARRAY_SIZE) {
-        u1_s_vsm_cnt = 0U;
-    }
-    /* Debug Code */
 
     return;
 }
