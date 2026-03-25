@@ -64,9 +64,7 @@ static Std_ReturnType ethswt_swic_rstdtct_checkRstReg(uint32 * const errFactor)
 		}
 	}
 
-
-	// ƒŠƒZƒbƒgˆ—‚Ìê‡
-	if (E_NOT_OK == result)
+	if (E_NOT_OK == result && *errFactor == D_ETHSWT_SWIC_ERR_WRONGVALUE)
 	{
 		*errFactor = D_ETHSWT_SWIC_ERR_RESET;
 	}
