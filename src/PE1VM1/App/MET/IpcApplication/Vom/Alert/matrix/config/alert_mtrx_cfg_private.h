@@ -25,8 +25,6 @@
 #define ALERT_CAN_SYS_PNC_ALL                    ((U4)OXCAN_SYS_PNC_44 | (U4)OXCAN_SYS_PNC_43 | (U4)OXCAN_SYS_PNC_40 | (U4)OXCAN_SYS_PNC_16)
 #define ALERT_CAN_SYS_ALL                        (ALERT_CAN_SYS_PNC_ALL | (U4)OXCAN_SYS_PBA | (U4)OXCAN_SYS_ACC | (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP)
 
-#define ALERT_HW_ID_B_WASLEV_WLVL                (U2_MAX)
-
 #define ALERT_CFG_B_BDOOR_RRCY                   (TRUE)
 #define ALERT_CFG_B_BDOOR_RLCY                   (TRUE)
 #define ALERT_CFG_B_BDOOR_BCTY                   (TRUE)
