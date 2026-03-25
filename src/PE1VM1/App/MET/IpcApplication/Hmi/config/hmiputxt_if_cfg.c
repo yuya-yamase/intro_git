@@ -56,15 +56,9 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 const ST_ALERT_REQBIT   st_gp_HMIPUTXTREQBIT[HMIPUTXTCFG_IF_NUM] = {
     /*  u2_src_ch                           u1_src_act                              u1_dst_idx   u4_dst_bit         */
-    {    (U2)ALERT_CH_C_BRK_2,              (U1)ALERT_REQ_C_BRK_2_MALFUNC,          (U1)2U,     (U4)0x00000010U    },
-    {    (U2)ALERT_CH_C_BRK_2,              (U1)ALERT_REQ_C_BRK_2_ON_MLFNC,         (U1)2U,     (U4)0x00000010U    },
+    {    (U2)ALERT_CH_C_BRK_2_PD,           (U1)ALERT_REQ_C_BRK_2_PD_MALFUNC,       (U1)2U,     (U4)0x00000010U    },
     {    (U2)ALERT_CH_C_BRLV_2_WRN,         (U1)ALERT_REQ_C_BRLV_2_WRN_MALFUNC,     (U1)2U,     (U4)0x00000020U    },
-    {    (U2)ALERT_CH_C_ECB,                (U1)ALERT_REQ_C_ECB_FAILDISP,           (U1)2U,     (U4)0x00000040U    },
-    {    (U2)ALERT_CH_C_ECB,                (U1)ALERT_REQ_C_ECB_TM_DISP,            (U1)2U,     (U4)0x00000040U    },
-    {    (U2)ALERT_CH_C_ECB,                (U1)ALERT_REQ_C_ECB_LNG1_DISP,          (U1)2U,     (U4)0x00000040U    },
-    {    (U2)ALERT_CH_C_ECB,                (U1)ALERT_REQ_C_ECB_LNG2_DISP,          (U1)2U,     (U4)0x00000040U    },
-    {    (U2)ALERT_CH_C_ECB,                (U1)ALERT_REQ_C_ECB_MFNC_DISP,          (U1)2U,     (U4)0x00000040U    },
-    {    (U2)ALERT_CH_C_ECB,                (U1)ALERT_REQ_C_ECB_UNABL_DISP,         (U1)2U,     (U4)0x00000040U    },
+    {    (U2)ALERT_CH_C_ECB_PD,             (U1)ALERT_REQ_C_ECB_PD_FAILDISP,        (U1)2U,     (U4)0x00000040U    },
     {    (U2)ALERT_CH_H_PEXI,               (U1)ALERT_REQ_H_PEXI_MALFUNC,           (U1)3U,     (U4)0x00000400U    },
     {    (U2)ALERT_CH_B_TDOOR,              (U1)ALERT_REQ_B_TDOOR_RUN,              (U1)9U,     (U4)0x00010000U    },
     {    (U2)ALERT_CH_B_TDOOR,              (U1)ALERT_REQ_B_TDOOR_RUN_ON,           (U1)9U,     (U4)0x00010000U    },
@@ -355,6 +349,9 @@ U2 u2_g_HmiputxtSizeReqbit(void){
 /*  BEV-18   02/06/2026  YH       Change config for BEV Full_Function_2.                                                             */
 /*                                MET-S_SECADC-CSTD-0-00-A-C0                                                                        */
 /*                                Changed due to specification change from feature to legacy.                                        */
+/*  BEV-19   03/16/2026  NI       Change config for BEV Full_Function_2.                                                             */
+/*                                MET-C_BRK-CSTD-2-00-C-C0,MET-C_ECB-CSTD-1-00-C-C0                                                  */
+/*                                Changed split TT and PD, and rename/delete the definitions accordingly.                            */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * TH   = Takahiro Hirano, Denso Techno                                                                                           */
@@ -371,5 +368,6 @@ U2 u2_g_HmiputxtSizeReqbit(void){
 /*  * SN   = Shizuka Nakajima, KSE                                                                                                   */
 /*  * HT   = Hibiki Tanii, KSE                                                                                                       */
 /*  * YH   = Yuki Hatakeyama, KSE                                                                                                    */
+/*  * NI   = Naoki Inagaki, KSE                                                                                                      */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
