@@ -135,6 +135,7 @@
 #define ALERT_B_SECBDC_CH_NUM                    (1U)
 #define ALERT_D_SECDDC_CH_NUM                    (1U)
 #define ALERT_S_SECADC_CH_NUM                    (1U)
+#define ALERT_P_BSTMOD_CH_NUM                    (1U)
 
 #define ALERT_SPD_STSBIT_VALID                   (VEHSPD_STSBIT_VALID)
 #define ALERT_SPD_STSBIT_UNKNOWN                 (VEHSPD_STSBIT_UNKNOWN)
@@ -325,6 +326,7 @@ extern const ST_ALERT_MTRX         st_gp_ALERT_M_SECMSG_MTRX[ALERT_M_SECMSG_CH_N
 extern const ST_ALERT_MTRX         st_gp_ALERT_B_SECBDC_MTRX[ALERT_B_SECBDC_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_D_SECDDC_MTRX[ALERT_D_SECDDC_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_S_SECADC_MTRX[ALERT_S_SECADC_CH_NUM];
+extern const ST_ALERT_MTRX         st_gp_ALERT_P_BSTMOD_MTRX[ALERT_P_BSTMOD_CH_NUM];
 
 #endif      /* ALERT_MTRX_CFG_H */
 

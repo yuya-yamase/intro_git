@@ -172,7 +172,8 @@
 #define ALERT_CH_B_SECBDC                        (153U)
 #define ALERT_CH_D_SECDDC                        (154U)
 #define ALERT_CH_S_SECADC                        (155U)
-#define ALERT_NUM_CH                             (156U)
+#define ALERT_CH_P_BSTMOD                        (156U)
+#define ALERT_NUM_CH                             (157U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* ALERT_REQ_[SYS]_[VIEW]_XXXX                            */
@@ -595,6 +596,7 @@
 #define ALERT_REQ_B_SECBDC_UNREGISTERED          (0U)
 #define ALERT_REQ_D_SECDDC_UNREGISTERED          (0U)
 #define ALERT_REQ_S_SECADC_UNREGISTERED          (0U)
+#define ALERT_REQ_P_BSTMOD_REJECT                (0U)
 
 /* ALERT_CH dummy define */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
