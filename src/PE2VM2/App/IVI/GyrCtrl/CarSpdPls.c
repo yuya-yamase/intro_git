@@ -57,6 +57,9 @@
 #define CARSPDPLS_WAIT_PLSCHK       (100U)      /* ƒpƒ‹ƒXŒŸ’m‘Ò‚¿ŠÔ 100ms */
 #define CARSPDPLS_NOCLR             (0x00U)
 
+#define CARSPDPLS_GET_NG           (0U)
+#define CARSPDPLS_GET_OK           (1U)
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -100,6 +103,7 @@ static  U2 u2_s_carspdpls_10mslifplsdat;                        /* 10ms‚Ì¶ŠUƒpƒ
 static  U1 u1_s_carspdpls_carspdchkflg;                         /* Ô‘¬ƒpƒ‹ƒXŒŸ’mŠJnƒtƒ‰ƒO     */
 
 static  U1 u1_s_carspdpls_carspdchkcnt;
+static  U1 u1_s_carspdpls_get_flg;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
@@ -158,6 +162,7 @@ void    vd_g_CarSpdPls_Init(void)
     }
     u2_s_carspdpls_10mslifplsdat = 0x00U;
     u1_s_carspdpls_carspdchkcnt = (U1)0x00U;
+    u1_s_carspdpls_get_flg = (U1)CARSPDPLS_GET_NG;
     /* Ô‘¬ƒpƒ‹ƒXŒŸ’mŠJnƒtƒ‰ƒOOFF */
     u1_s_carspdpls_carspdchkflg = (U1)FALSE;
 }
@@ -351,18 +356,21 @@ static void    vd_s_CarSpdPls_SndDataCal(U2 u2_a_IPTPLSCNT, U1 u1_a_CAL)
 
     u4_t_caldat = ((U4)u2_a_IPTPLSCNT + ((U4)u1_s_carspdpls_ovfcnt * (U4)0xFFFFU) + (U4)1);
     
-    /* i‚ñ‚¾ƒ`ƒƒƒlƒ‹ƒJƒEƒ“ƒg•ª“¯‚¶ƒf[ƒ^‚ğæ“¾‚·‚é */
-    for(u1_t_cnt = (U1)0U; u1_t_cnt < u1_a_CAL; u1_t_cnt++){
-        /* ƒI[ƒo[ƒtƒ[•ÛŒì */
-        if(u1_s_carspdpls_plscnt<(U1)CARSPDPLS_PLS_CHK_MAX){
-            u4_s_carspdpls_plsdata[u1_s_carspdpls_plscnt] = u4_t_caldat;
-            u1_s_carspdpls_plscnt++;
+    if(u1_s_carspdpls_get_flg == (U1)CARSPDPLS_GET_OK){
+        /* i‚ñ‚¾ƒ`ƒƒƒlƒ‹ƒJƒEƒ“ƒg•ª“¯‚¶ƒf[ƒ^‚ğæ“¾‚·‚é */
+        for(u1_t_cnt = (U1)0U; u1_t_cnt < u1_a_CAL; u1_t_cnt++){
+            /* ƒI[ƒo[ƒtƒ[•ÛŒì */
+            if(u1_s_carspdpls_plscnt<(U1)CARSPDPLS_PLS_CHK_MAX){
+                u4_s_carspdpls_plsdata[u1_s_carspdpls_plscnt] = u4_t_caldat;
+                u1_s_carspdpls_plscnt++;
+            }
+            else{
+                break;
+            }
         }
-        else{
-            break;
-        }
+        u4_s_carspdpls_lastpls = u4_t_caldat;
     }
-    u4_s_carspdpls_lastpls = u4_t_caldat;
+    u1_s_carspdpls_get_flg = (U1)CARSPDPLS_GET_OK;
 
     /* ƒI[ƒo[ƒtƒ[ƒJƒEƒ“ƒ^ƒŠƒZƒbƒg */
     u1_s_carspdpls_ovfcnt = (U1)0x00U;
