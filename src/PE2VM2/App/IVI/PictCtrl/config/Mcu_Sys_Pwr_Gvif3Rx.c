@@ -1158,110 +1158,118 @@ const ST_GP_I2C_MA_REQ st_sp_MCU_SYS_PWR_GVIF3RX_REG_INIT[MCU_SYS_PWR_GVIF3RX_RE
 const ST_GP_I2C_MA_REQ st_sp_MCU_SYS_PWR_GVIF3RX_REG_CAMNON[MCU_SYS_PWR_GVIF3RX_REG_CAMKIND_NUM] = {
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_BANK0[0],
-        (U4)0x215C0003U
-    },
-    {
-        (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_UNLD0_2_CAMNON[0],
         (U4)0x21600003U
     },
     {
-        (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_UNLD1_2_CAMNON[0],
+        (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_UNLD_COMMON2[0],
         (U4)0x21640003U
     },
     {
-        (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_BANK2[0],
+        (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_UNLD0_2_CAMNON[0],
         (U4)0x21680003U
     },
     {
-        (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_UNLD2_2_CAMNON[0],
+        (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_UNLD1_2_CAMNON[0],
         (U4)0x216C0003U
     },
     {
-        (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_UNLD3_2_CAMNON[0],
+        (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_BANK2[0],
         (U4)0x21700003U
     },
     {
-        (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_BANK3[0],
+        (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_UNLD2_2_CAMNON[0],
         (U4)0x21740003U
     },
     {
-        (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_UNLD4_2_CAMNON[0],
+        (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_UNLD3_2_CAMNON[0],
         (U4)0x21780003U
     },
     {
-        (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_UNLD5_2_CAMNON[0],
+        (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_BANK3[0],
         (U4)0x217C0003U
     },
     {
-        (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_BANK0[0],
+        (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_UNLD4_2_CAMNON[0],
         (U4)0x21800003U
     },
     {
-        (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_GPIO3_CAMNON[0],
+        (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_UNLD5_2_CAMNON[0],
         (U4)0x21840003U
     },
     {
-        (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_ERRCLR_SET[0],
+        (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_BANK0[0],
         (U4)0x21880003U
     },
     {
-        (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_ERRCLE_RLS[0],
+        (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_GPIO3_CAMNON[0],
         (U4)0x218C0003U
+    },
+    {
+        (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_ERRCLR_SET[0],
+        (U4)0x21900003U
+    },
+    {
+        (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_ERRCLE_RLS[0],
+        (U4)0x21940003U
     }
 };
 
 const ST_GP_I2C_MA_REQ st_sp_MCU_SYS_PWR_GVIF3RX_REG_DOMCON[MCU_SYS_PWR_GVIF3RX_REG_CAMKIND_NUM] = {
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_BANK0[0],
-        (U4)0x21900003U
-    },
-    {
-        (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_UNLD0_2_DOMCON[0],
-        (U4)0x21940003U
-    },
-    {
-        (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_UNLD1_2_DOMCON[0],
         (U4)0x21980003U
     },
     {
-        (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_BANK2[0],
+        (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_UNLD_COMMON2[0],
         (U4)0x219C0003U
     },
     {
-        (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_UNLD2_2_DOMCON[0],
+        (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_UNLD0_2_DOMCON[0],
         (U4)0x21A00003U
     },
     {
-        (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_UNLD3_2_DOMCON[0],
+        (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_UNLD1_2_DOMCON[0],
         (U4)0x21A40003U
     },
     {
-        (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_BANK3[0],
+        (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_BANK2[0],
         (U4)0x21A80003U
     },
     {
-        (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_UNLD4_2_DOMCON[0],
+        (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_UNLD2_2_DOMCON[0],
         (U4)0x21AC0003U
     },
     {
-        (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_UNLD5_2_DOMCON[0],
+        (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_UNLD3_2_DOMCON[0],
         (U4)0x21B00003U
     },
     {
-        (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_BANK0[0],
+        (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_BANK3[0],
         (U4)0x21B40003U
     },
     {
-        (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_GPIO3_DOMCON[0],
+        (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_UNLD4_2_DOMCON[0],
         (U4)0x21B80003U
     },
     {
-        (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_ERRCLR_SET[0],
+        (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_UNLD5_2_DOMCON[0],
         (U4)0x21BC0003U
     },
     {
-        (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_ERRCLE_RLS[0],
+        (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_BANK0[0],
         (U4)0x21C00003U
+    },
+    {
+        (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_GPIO3_DOMCON[0],
+        (U4)0x21C40003U
+    },
+    {
+        (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_ERRCLR_SET[0],
+        (U4)0x21C80003U
+    },
+    {
+        (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_ERRCLE_RLS[0],
+        (U4)0x21CC0003U
     }
 };
 
