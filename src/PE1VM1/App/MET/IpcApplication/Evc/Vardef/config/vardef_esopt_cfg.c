@@ -1372,24 +1372,6 @@ U1      u1_g_VardefEsOptCfgCanRxEvcnt(const U2 u2_a_MSG_ID)
     return(u1_t_rxev_cnt);
 }
 /*===================================================================================================================================*/
-/*  U1      u1_g_VardefEsOptCfgEthRxEvcnt(const U2 u2_a_MSG_ID)                                                                      */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1      u1_g_VardefEsOptCfgEthRxEvcnt(const U2 u2_a_MSG_ID)
-{
-    U1    u1_t_rxev_cnt;
-
-#if 0   /* BEV Rebase provisionally */
-    u1_t_rxev_cnt = u1_g_HmiVardefRcvCnt((U1)u2_a_MSG_ID);
-#else   /* BEV Rebase provisionally */
-    u1_t_rxev_cnt = (U1)0U;
-#endif   /* BEV Rebase provisionally */
-
-    return(u1_t_rxev_cnt);
-}
-/*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
 /*                                                                                                                                   */
@@ -1501,6 +1483,9 @@ U1      u1_g_VardefEsOptCfgEthRxEvcnt(const U2 u2_a_MSG_ID)
 /*  BEV-40    03/17/2026  RS      Change config for BEV Full_Function_2.                                                             */
 /*                                MET-D_4WDSYS-CSTD-2-02-A-C1                                                                        */
 /*                                Add BDC1SV3 Frame for 4WDSYS_DISCON                                                                */
+/*  BEV-41    03/18/2026  YH      Change config for BEV Full_Function_2.                                                             */
+/*                                BEV3CDCMET-3781                                                                                    */
+/*                                Remove unused function(u1_g_VardefEsOptCfgEthRxEvcnt), and modify related prosess.                 */
 /*                                                                                                                                   */
 /*  * YI     = Yoshiki Iwata, Denso                                                                                                  */
 /*  * TN     = Takashi Nagai, Denso                                                                                                  */

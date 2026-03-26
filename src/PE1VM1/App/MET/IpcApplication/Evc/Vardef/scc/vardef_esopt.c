@@ -705,9 +705,6 @@ static U1      u1_s_VdfEsoGetRxevCnt(const U1 u1_a_INPUT_TYPE, const U2 u2_a_MSG
     U1    u1_t_rxev_cnt;
 
     switch(u1_a_INPUT_TYPE){
-        case (U1)VDF_ESO_INPUT_TYPE_ETH:
-            u1_t_rxev_cnt = u1_g_VardefEsOptCfgEthRxEvcnt(u2_a_MSG);
-            break;
         case (U1)VDF_ESO_INPUT_TYPE_OTHER:
             u1_t_rxev_cnt = (U1)0U;
             break;
@@ -758,6 +755,9 @@ void    vd_g_VardefEsOptIgoffEvhk(const U4 u4_a_MDBIT, const U4 u4_a_EVBIT)
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  BEV-1    02/02/2026  TS       Add include file to vardef_esopt.h.(MET-M_HUDILL-CSTD-1)                                           */
+/*  BEV-2    03/18/2026  YH       Change config for BEV Full_Function_2.                                                             */
+/*                                BEV3CDCMET-3781                                                                                    */
+/*                                Remove unused function(u1_g_VardefEsOptCfgEthRxEvcnt), and modify related prosess.                 */
 /*                                                                                                                                   */
 /*  * YI   = Yoshiki Iwata, Denso                                                                                                    */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
@@ -765,5 +765,6 @@ void    vd_g_VardefEsOptIgoffEvhk(const U4 u4_a_MDBIT, const U4 u4_a_EVBIT)
 /*  * RO   = Reiya Okuda, KSE                                                                                                        */
 /*  * TN   = Tetsushi Nakanao, Denso Techno                                                                                          */
 /*  * KM   = Kazuma Miyazawa, Denso Techno                                                                                           */
+/*  * YH   = Yuki Hatakeyama, KSE                                                                                                    */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

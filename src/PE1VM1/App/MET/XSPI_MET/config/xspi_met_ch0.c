@@ -243,6 +243,8 @@ static inline void    vd_s_XSpiCfgTxVariation(     U4 * u4_ap_pdu_tx) {
 
     u4_ap_pdu_tx[1] |= ((U4)u1_g_VardefPtsRx() & (U4)0x1fU) << 16;            /*  VAR_PTSYS                                     */
 
+    u4_ap_pdu_tx[1] |= ((U4)u1_g_VardefChainaReq() & (U4)0x01U) << 23;        /*  DEST_CHINA_GB                                 */
+
     u4_ap_pdu_tx[1] |= ((U4)u1_g_VardefBltDstByPid() & (U4)0x03U) << 24;      /*  DEST_BELT_TT_TYPE                             */
 
     u4_ap_pdu_tx[1] |= ((U4)u1_g_VardefUnitSlctDstByPid() & (U4)0x03U) << 26; /*  DEST_UNISLCT                                  */
@@ -250,6 +252,7 @@ static inline void    vd_s_XSpiCfgTxVariation(     U4 * u4_ap_pdu_tx) {
     u1_t_subdigspd = u1_g_UnitSubSpd();
     u4_ap_pdu_tx[2]  = ((U4)u1_t_subdigspd & (U4)0x03U) << 11;         /*  SUBDIGSPD_DISP                                       */
 
+    u4_ap_pdu_tx[2] |= (U4)TRUE << 31;                                 /*  SYS_CPBBSW_CUSTOM_P      */ /* BEV FF2 provisionally */
 
     for(u4_t_loop = (U4)0U ; u4_t_loop < (U4)XSPI_VDF_AREA_SIZE; u4_t_loop++){
         u4_ap_pdu_tx[4U + u4_t_loop] = (U4)0x00U;
@@ -563,6 +566,9 @@ static inline void    vd_s_XSpiCfgTxTripcom(       U4 * u4_ap_pdu_tx) {
     u1_t_sts          = u1_g_TripcomEvDteKmIgOffAcOn(&u4_t_data);
     u4_ap_pdu_tx[ 8] |= ((U4)u1_t_sts << (XSPI_EV_KM_ACON_STS_SHIFT));              /* DISTTOEMPTY_EV_KM_ACON_STS           */
     u4_ap_pdu_tx[11]  = u4_t_data;                                                  /* DISTTOEMPTY_EV_KM_ACON               */
+
+    u2_t_data         = u2_g_EvDteKmDiff();
+    u4_ap_pdu_tx[ 9]  = (U4)u2_t_data;                                              /* DISTEMPTY_EV_KM_DIFF                 */
 
     u4_t_data         = (U4)0U;
     u1_t_sts          = u1_g_PtsRunDistKm((U1)PTSRUNDIST_CNTT_TR_A, &u4_t_data);
@@ -1187,6 +1193,7 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*  BEV-41    03/17/2026 RS       Change for BEV Full_Function_2.                                                                    */
 /*                                MET-D_4WDSYS-CSTD-2-02-A-C1                                                                        */
 /*                                Remove process that sets SYS_4WDSYS_DISCON to TRUE                                                 */
+/*  BEV-41    03/17/2026 SH       Change for BEV Full_Function_2. (Add SYS_CPBBSW_CUSTOM_P and DISTEMPTY_EV_KM_DIFF)                 */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * KM   = Keisuke Mashita, Denso Techno                                                                                           */
@@ -1218,5 +1225,6 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*  * KN   = Kazuo Nishigaki, Denso Techno                                                                                           */
 /*  * HH   = Hiroki Hara, Denso Techno                                                                                               */
 /*  * YH   = Yuki Hatakeyama, KSE                                                                                                    */
+/*  * SH   = Sae Hirose, Denso Techno                                                                                                */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

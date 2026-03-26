@@ -6,15 +6,15 @@
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
 
-#ifndef SBLTSYNC_H
-#define SBLTSYNC_H
+#ifndef SBLTSYNC_OPTMON_H
+#define SBLTSYNC_OPTMON_H
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define SBLTSYNC_H_MAJOR                         (2)
-#define SBLTSYNC_H_MINOR                         (6)
-#define SBLTSYNC_H_PATCH                         (0)
+#define SBLTSYNC_OPTMON_H_MAJOR                 (2)
+#define SBLTSYNC_OPTMON_H_MINOR                 (6)
+#define SBLTSYNC_OPTMON_H_PATCH                 (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -22,27 +22,6 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define SBLTSYNC_NUM_CHM                         (4U)
-#define SBLTSYNC_CHM_REQ_LGL                     (0x01U)
-#define SBLTSYNC_CHM_REQ_LV2                     (0x02U)
-#define SBLTSYNC_CHM_REQ_LV1                     (0x04U)
-#define SBLTSYNC_CHM_REQ_UNBKL                   (0x08U)
-
-#define SBLTSYNC_NUM_TT                          (13U)
-#define SBLTSYNC_TT_REQ_D                        (0x0001U)
-#define SBLTSYNC_TT_REQ_FC                       (0x0002U)
-#define SBLTSYNC_TT_REQ_P                        (0x0004U)
-#define SBLTSYNC_TT_REQ_R2L                      (0x0008U)
-#define SBLTSYNC_TT_REQ_R2C                      (0x0010U)
-#define SBLTSYNC_TT_REQ_R2R                      (0x0020U)
-#define SBLTSYNC_TT_REQ_R3L                      (0x0040U)
-#define SBLTSYNC_TT_REQ_R3C                      (0x0080U)
-#define SBLTSYNC_TT_REQ_R3R                      (0x0100U)
-#define SBLTSYNC_TT_REQ_R4L                      (0x0200U)
-#define SBLTSYNC_TT_REQ_R4C                      (0x0400U)
-#define SBLTSYNC_TT_REQ_R4R                      (0x0800U)
-#define SBLTSYNC_TT_REQ_FR                       (0x1000U)
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -55,23 +34,19 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Prototypes                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-void        vd_g_SbltsyncInit(void);
-void        vd_g_SbltsyncMainTask(void);
+void        vd_g_SbltsyncOptmonInit(void);
+void        vd_g_SbltsyncOptmonMainTask(void);
 
-U1          u1_g_SbltsyncReqChm(void);
-U2          u2_g_SbltsyncReqTt(void);
-U1          u1_g_SbltsyncActTt(void);
-U1          u1_g_SbltsyncActFrTt(void);
-U1          u1_g_SbltsyncLv2Cmp(void);
+U1          u1_g_SbltsyncOptmonReq(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 
-#endif      /* SBLTSYNC_H */
+#endif      /* SBLTSYNC_OPTMON_H */
 
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
-/*  Change History  :  sbltsync.c                                                                                                    */
+/*  Change History  :  sbltsync_optmon.c                                                                                            */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

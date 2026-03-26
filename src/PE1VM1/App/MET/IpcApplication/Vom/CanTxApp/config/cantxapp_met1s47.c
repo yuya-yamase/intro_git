@@ -1,199 +1,124 @@
-/* 0.5.0 */
+/* 0.0.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-/*  Local Communication SPI                                                                                                          */
+/*  Can Tx Application                                                                                                               */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define XSPI_MET_C_MAJOR                     (0U)
-#define XSPI_MET_C_MINOR                     (5U)
-#define XSPI_MET_C_PATCH                     (0U)
+#define CANTXAPP_MET1S47_C_MAJOR                     (0)
+#define CANTXAPP_MET1S47_C_MINOR                     (0)
+#define CANTXAPP_MET1S47_C_PATCH                     (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#include "xspi_met.h"
-#include "xspi_met_can.h"
-#include "xspi_met_ch0.h"
-#include "xspi_met_ch1.h"
-#include "xspi_met_calib.h"
+#include "cantxapp_cfg_signal.h"
+#include "cantxapp_mettx.h"
+
+#include "oxcan.h"
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if ((XSPI_MET_C_MAJOR != XSPI_MET_H_MAJOR) || \
-     (XSPI_MET_C_MINOR != XSPI_MET_H_MINOR) || \
-     (XSPI_MET_C_PATCH != XSPI_MET_H_PATCH))
-#error "xspi_met.c and xspi_met.h : source and header files are inconsistent!"
+#if ((CANTXAPP_MET1S47_C_MAJOR != CANTXAPP_CFG_SIGNAL_H_MAJOR) || \
+     (CANTXAPP_MET1S47_C_MINOR != CANTXAPP_CFG_SIGNAL_H_MINOR) || \
+     (CANTXAPP_MET1S47_C_PATCH != CANTXAPP_CFG_SIGNAL_H_PATCH))
+#error "cantxapp_met1s47.c and cantxapp_cfg_signal.h : source and header files are inconsistent!"
 #endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define XSPI_MET_PDU_NBYTE                   (5620U)
-#define XSPI_MET_PDU_NWORD                   ((XSPI_MET_PDU_NBYTE + 3U) >> 2)
-#define XSPI_MET_SUBFRAME_NUM                (2U)
-
-#define XSPI_MET_MCU_STS                     (1U)    /* VALID   */
-#define XSPI_MET_AGLBE_STS                   (3U)    /* INVALID */
-#define XSPI_MET_HUDGVIFCTL_STS              (3U)    /* INVALID */
-#define XSPI_MET_QNXBE_STS                   (3U)    /* INVALID */
-#define XSPI_MET_DAE_STS                     (3U)    /* INVALID */
-
-#define XSPI_MET_XSPI_RX_READ_STS_MASK       (3U)
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#define u1_CANTXAPP_MET_READ_BIT(u4_buf , u1_pos , u1_len) ((U1)((U1)((u4_buf)  >> (u1_pos)) & (U1)((1U << (u1_len)) - 1U)))
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-static U4                u4_sp_xspi_met_db_tra[XSPI_MET_PDU_NWORD];
-static U4                u4_s_xspi_met_rx_rd_access_sts;
+static U4    u4_sp_cantxapp_met1s47data[CANTXAPP_NBYTE_PAYLOAD2];
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+static void    vd_s_CanTxAppSend_BLT_MUTE(void);
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*===================================================================================================================================*/
-/*  void    vd_g_XSpiMETInit(void)                                                                                                   */
+/*  void    vd_g_CanTxAppMET1S47_Init(void)                                                                                          */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_XSpiMETInit(void)
+void    vd_g_CanTxAppMET1S47_Init(void)
 {
-    /* ------------------------------------------------------------------------------------------- */
-    /* Attention :                                                                                 */
-    /* ------------------------------------------------------------------------------------------- */
-    /* vd_g_XSpiMETInit is being invoked at end of vd_g_XSpiInit.                                  */
-    /* ------------------------------------------------------------------------------------------- */
+    U4                 u4_t_loop;
 
-    U4                      u4_t_lpcnt;
-
-    /* Transmmit Recieve buff Init */
-    for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)XSPI_MET_PDU_NWORD ; u4_t_lpcnt++){
-        u4_sp_xspi_met_db_tra[u4_t_lpcnt] = (U4)U4_MAX;
-    }
-    /* ALL Status INVALID */
-    u4_s_xspi_met_rx_rd_access_sts = (U4)0U;
-
-    vd_g_XSpiMETCANGWInit();
-    vd_g_XSpiCfgInitCh0();
-    vd_g_XSpiCfgInitCh1();
-    vd_g_XSpiCalibInit();
-}
-/*===================================================================================================================================*/
-/*  void    vd_g_XSpiMETPduRx(void)                                                                                                  */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void    vd_g_XSpiMETPduRx(void)
-{
-
-    U1      u1_t_read_sts;
-    U4      u4p_t_data[XSPI_FRM_MAX_WORD];
-
-    u1_t_read_sts = xspi_Read((U1)XSPI_CH_02, &u4p_t_data[0],(U4)XSPI_FRM_MAX_WORD);
-    if((u1_t_read_sts == (U1)XSPI_OK) && (u4p_t_data != vdp_PTR_NA)) {
-        u4_s_xspi_met_rx_rd_access_sts = u4p_t_data[2];
-        vd_g_XSpiCfgPduRxCh0(&u4p_t_data[0]);
-        vd_g_XSpiCfgPduRxCh1(&u4p_t_data[700]);
-    }
-    else{
-        /* ALL Status INVALID */
-        u4_s_xspi_met_rx_rd_access_sts = (U4)0U;
+    for(u4_t_loop = (U4)0U; u4_t_loop < (U4)CANTXAPP_NBYTE_PAYLOAD2; u4_t_loop++){
+        u4_sp_cantxapp_met1s47data[u4_t_loop] = (U4)0U;
     }
 }
-
 /*===================================================================================================================================*/
-/*  void    vd_g_XSpiMETPduTx(void)                                                                                                  */
+/*  void    vd_g_CanTxAppMET1S47_Send(void)                                                                                          */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_XSpiMETPduTx(void)
+void    vd_g_CanTxAppMET1S47_Send(void)
 {
-    static const ST_XSPIMET_CAN_TXCFG st_sp_XSPIMET_CAN_TXCFG[XSPIMETCANGW_NUM_BLOCK] = {
-        {
-            (U2)0U,     /* BUFFER POS 670    */
-            (U2)9U,     /* BUFFER POS 679    */
-            (U2)15U,    /* BUFFER POS 685    */
-            (U2)564U    /* BUFFER POS 1234   */
+    vd_s_CanTxAppSend_BLT_MUTE();
+}
+/*===================================================================================================================================*/
+/*  void    vd_g_CanTxAppMET1S47_Put(const U4 * u4_ap_pck_rx, const U1 u1_a_BUFSIZE)                                                 */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      u4_ap_pck_rx: xspi buffer                                                                                        */
+/*                  u1_a_BUFSIZE: buffer size                                                                                        */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void    vd_g_CanTxAppMET1S47_Put(const U4 * u4_ap_pck_rx, const U1 u1_a_BUFSIZE)
+{
+    U4                 u4_t_loop;
+
+    for(u4_t_loop = (U4)0U; u4_t_loop < (U4)u1_a_BUFSIZE; u4_t_loop++){
+        if(u1_a_BUFSIZE <= (U1)CANTXAPP_NBYTE_PAYLOAD2){
+            u4_sp_cantxapp_met1s47data[u4_t_loop] = u4_ap_pck_rx[u4_t_loop];
         }
-    };
-
-    static const ST_XSPIMET_CAN_OXCANTXCFG st_sp_XSPIMET_CAN_OXCANTXCFG[XSPIMETCANGW_OXCANNUM_BLOCK] = {
-        {
-            (U2)0U,     /* BUFFER POS 666  */
-            (U2)1U,     /* BUFFER POS 667  */
-        }
-    };
-
-    static const U4 u4_s_XSPI_MET_READ_ACCESS_STS = ((U4)XSPI_MET_MCU_STS            ) |
-                                                    ((U4)XSPI_MET_AGLBE_STS      << 2) |
-                                                    ((U4)XSPI_MET_HUDGVIFCTL_STS << 4) |
-                                                    ((U4)XSPI_MET_QNXBE_STS      << 6) |
-                                                    ((U4)XSPI_MET_DAE_STS        << 8);
-
-    U1      u1_t_xspi_condition;
-    U1      u1_t_write_sts;
-    U4      u4_t_lpcnt;
-
-    u1_t_write_sts = (U1)XSPI_NG;
-
-    u1_t_xspi_condition = xspi_GetCondition((U1)XSPI_CH_02);
-
-    vd_g_XSpiCfgPduTxCh0(&u4_sp_xspi_met_db_tra[0]);
-    vd_g_XSpiMETTxSCL(&u4_sp_xspi_met_db_tra[660]);
-    vd_g_XSpiMETPduTxoXCANSts(&u4_sp_xspi_met_db_tra[666], &st_sp_XSPIMET_CAN_OXCANTXCFG[XSPIMETCANGW_OXCAN_BLOCK]);
-    vd_g_XSpiMETPduTxCAN(&u4_sp_xspi_met_db_tra[670], &st_sp_XSPIMET_CAN_TXCFG[XSPIMETCANGW_BLOCK]);
-
-    /* Set the data for Header */
-    for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)XSPI_MET_SUBFRAME_NUM; u4_t_lpcnt++){
-        u4_sp_xspi_met_db_tra[u4_t_lpcnt] = (U4)0U;
     }
-    /* Set read access permission status */
-    u4_sp_xspi_met_db_tra[2] = u4_s_XSPI_MET_READ_ACCESS_STS;
-
-    if((u1_t_xspi_condition == (U1)XSPI_DCOND_IDLE) || (u1_t_xspi_condition == (U1)XSPI_DCOND_TRANSMIT)) {
-        u1_t_write_sts = xspi_Write((U1)XSPI_CH_02, &u4_sp_xspi_met_db_tra[0], (U4)XSPI_MET_PDU_NWORD);
-    }
-
 }
-
 /*===================================================================================================================================*/
-/*  U1    u1_g_XSpiMETRxRdAccessSts(const U1 u1_a_KIND)                                                                              */
+/*  static void    vd_s_CanTxAppSend_BLT_MUTE(void)                                                                                  */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
+/*                                                                                                                                   */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-U1    u1_g_XSpiMETRxRdAccessSts(const U1 u1_a_KIND)
+static void    vd_s_CanTxAppSend_BLT_MUTE(void)
 {
-    U1    u1_t_sts;
-    
-    /* ALL Status INVALID */
-    u1_t_sts = (U1)0U;
-    if(u1_a_KIND < (U1)XSPI_MET_XSPI_RX_READ_STS_NUM){ 
-        u1_t_sts = (U1)(u4_s_xspi_met_rx_rd_access_sts >> (U4)(u1_a_KIND << 1)) & (U1)XSPI_MET_XSPI_RX_READ_STS_MASK;
-    }
-    return (u1_t_sts);
-}   
+    U1                 u1_t_tx;
+    U1                 u1_t_pre_tx;
 
+    u1_t_tx = u1_CANTXAPP_MET_READ_BIT(u4_sp_cantxapp_met1s47data[0], (U1)CANTXAPP_POS_1_0, (U1)CANTXAPP_LEN_2);
+    u1_t_pre_tx = (U1)0U;
+
+    (void)Com_ReceiveSignal(ComConf_ComSignal_BLT_MUTE, &u1_t_pre_tx);
+    (void)Com_SendSignal(ComConf_ComSignal_BLT_MUTE, &u1_t_tx);
+
+    if(u1_t_pre_tx != u1_t_tx){
+        (void)Com_TriggerIPDUSend(MSG_MET1S47_TXCH0);
+    }
+}
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
@@ -202,20 +127,12 @@ U1    u1_g_XSpiMETRxRdAccessSts(const U1 u1_a_KIND)
 /*                                                                                                                                   */
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  0.0.0    12/18/2024  KT       New.                                                                                               */
-/*  0.1.0    06/09/2025  KT       Change for xspi IF.(1byte -> 4byte)                                                                */
-/*  0.2.0    07/07/2025  KT       Change for BEV System_Consideration_1.(CAN V7.3)                                                   */
-/*  0.3.0    10/02/2025  TN       Fix header issue (BEV3CDCMET-971).                                                                 */
-/*  0.4.0    12/09/2025  TN       Fix initial value issue (BEV3CDCMET-2503).                                                         */
-/*  0.5.0    01/30/2026  TN       Fix initial value issue (BEV3CDCMET-3693).                                                         */
+/*  0.0.0    03/11/2026  SN       New.                                                                                               */
+/*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  BEV-1    03/23/2026  SH       SCS1S11_IG_STATUS have been changed from using the aubist -> OXCAN                                 */
 /*                                                                                                                                   */
-/*                                                                                                                                   */
-/*  * KT   = Kenta Takaji, Denso Techno                                                                                              */
-/*  * TN   = Tetsushi Nakano, Denso Techno                                                                                           */
-/*  * SH   = Sae Hirose, Denso Techno                                                                                                */
+/*  * SN   = Shizuka Nakajima, KSE                                                                                                   */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

@@ -115,6 +115,7 @@
 #define SOUND_DRV_MODESET_END_TIM              (3U)
 #define SOUND_DRV_ERRCHECK_WAIT_TIM            (55U)
 
+#define SOUND_DRV_INITIAL_MATCH_NUM            (4U)
 #define SOUND_DRV_INITIAL                      (0x00U)
 #define SOUND_DRV_INITIAL_END                  (0xFFU)
 
@@ -177,46 +178,42 @@ typedef struct{
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static U1                   u1_s_sound_drv_active_time_val1;
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if (SOUND_CRI_DEBUGMODE == TRUE)
-static CriSint32            s4_s_initialize_size;                                          /* Size of work-space for library initialization              */
-static CriSint32            s4_s_acfdata_size;                                             /* Size of work-space for on-memory ACF data registration     */
-static CriSint32            s4_s_awbdata_size;                                             /* Size of work-space for on-memory AWB handle creation       */
-static CriSint32            s4_s_acbdata_size;                                             /* Size of work-space for on-memory ACB data loading          */
-static CriSint32            s4_s_voicepooladxdata_size;                                    /* Size of work-space for ADX voice-pool creation             */
-static CriSint32            s4_s_player_size;                                              /* Size of work-space for AtomEx player creation              */
-#endif /* SOUND_CRI_DEBUGMODE */
+static CriSint32            s4_s_initialize_size;                                                                       /* Size of work-space for library initialization              */
+static CriSint32            s4_s_acfdata_size;                                                                          /* Size of work-space for on-memory ACF data registration     */
+static CriSint32            s4_s_awbdata_size;                                                                          /* Size of work-space for on-memory AWB handle creation       */
+static CriSint32            s4_s_acbdata_size;                                                                          /* Size of work-space for on-memory ACB data loading          */
+static CriSint32            s4_s_voicepooladxdata_size;                                                                 /* Size of work-space for ADX voice-pool creation             */
+static CriSint32            s4_s_player_size;                                                                           /* Size of work-space for AtomEx player creation              */
 
-static CriChar8             s1_sp_sound_cri_init_work[SOUND_CRI_INIT_WORK_SIZE];           /* Work-space for library initialization                      */
+static CriChar8             s1_sp_sound_cri_init_work[SOUND_CRI_INIT_WORK_SIZE]            __attribute__((aligned(4))); /* Work-space for library initialization                      */
 
-static U1                   u1_sp_sound_acfdata_alloc[SOUND_ACFDATA_SIZE];                 /* Work-space for on-memory ACF data registration             */
-static U1                   u1_sp_sound_awbdata_alloc[SOUND_AWBDATA_SIZE];                 /* Work-space for on-memory AWB handle creation               */
-static U1                   u1_sp_sound_acbdata_alloc[SOUND_ACBDATA_SIZE];                 /* Work-space for on-memory ACB data loading                  */
-static U1                   u1_sp_sound_voicepooladx_alloc[SOUND_VOICEPOOLADXDATA_SIZE];   /* Work-space for ADX voice-pool creation                     */
-static U1                   u1_sp2_sound_player_alloc[SOUND_GROUP_NUM][SOUND_PLAYER_SIZE]; /* Work-space for AtomEx player creation                      */
+static U1                   u1_sp_sound_acfdata_alloc[SOUND_ACFDATA_SIZE]                  __attribute__((aligned(4))); /* Work-space for on-memory ACF data registration             */
+static U1                   u1_sp_sound_awbdata_alloc[SOUND_AWBDATA_SIZE]                  __attribute__((aligned(4))); /* Work-space for on-memory AWB handle creation               */
+static U1                   u1_sp_sound_acbdata_alloc[SOUND_ACBDATA_SIZE]                  __attribute__((aligned(4))); /* Work-space for on-memory ACB data loading                  */
+static U1                   u1_sp_sound_voicepooladx_alloc[SOUND_VOICEPOOLADXDATA_SIZE]    __attribute__((aligned(4))); /* Work-space for ADX voice-pool creation                     */
+static U1                   u1_sp2_sound_player_alloc[SOUND_GROUP_NUM][SOUND_PLAYER_SIZE]  __attribute__((aligned(4))); /* Work-space for AtomEx player creation                      */
 
-static CriAtomAwbHn         stp_s_sound_awb_hn;                                            /* On-memory AWB handle                                       */
-static CriAtomExAcbHn       stp_s_sound_acb_hn;                                            /* On-memory ACB handle                                       */
-static CriAtomExVoicePoolHn stp_s_sound_voicepooladx_hn;                                   /* ADX voice-pool handle                                      */
-static CriAtomExPlayerHn    stp_sp_sound_player_hn_gp[SOUND_GROUP_NUM];                    /* AtomEx player handle                                       */
+static CriAtomAwbHn         stp_s_sound_awb_hn;                                                                         /* On-memory AWB handle                                       */
+static CriAtomExAcbHn       stp_s_sound_acb_hn;                                                                         /* On-memory ACB handle                                       */
+static CriAtomExVoicePoolHn stp_s_sound_voicepooladx_hn;                                                                /* ADX voice-pool handle                                      */
+static CriAtomExPlayerHn    stp_sp_sound_player_hn_gp[SOUND_GROUP_NUM];                                                 /* AtomEx player handle                                       */
 
-static U1                   u1_sp_sound_pre_reqidx[SOUND_GROUP_NUM];                       /* Index of requested sound in previous task-cycle            */
-static U1                   u1_sp_sound_pre_reqvol[SOUND_GROUP_NUM];                       /* Index of requested volume in previous task-cycle           */
+static U1                   u1_sp_sound_pre_reqidx[SOUND_GROUP_NUM];                                                    /* Index of requested sound in previous task-cycle            */
+static U1                   u1_sp_sound_pre_reqvol[SOUND_GROUP_NUM];                                                    /* Index of requested volume in previous task-cycle           */
 
-static U2                   u2_sp_sound_cur_cycletim[SOUND_GROUP_NUM];                     /* Sound cycle of current sounding buzzer                     */
-static U2                   u2_sp_sound_cycle_cnt[SOUND_GROUP_NUM];                        /* Counter of sound cycle                                     */
+static U2                   u2_sp_sound_cur_cycletim[SOUND_GROUP_NUM];                                                  /* Sound cycle of current sounding buzzer                     */
+static U2                   u2_sp_sound_cycle_cnt[SOUND_GROUP_NUM];                                                     /* Counter of sound cycle                                     */
 
-static U1                   u1_s_sound_csrbz_reqbrg;                                       /* Request bridge ch3 to ch5 for Clearance sonar Fr+Rr buzzer */
-static U1                   u1_s_sound_csrbz_volbrg;                                       /* Volume bridge ch3 to ch5 for Clearance sonar Fr+Rr buzzer  */
+static U1                   u1_s_sound_csrbz_reqbrg;                                                                    /* Request bridge ch3 to ch5 for Clearance sonar Fr+Rr buzzer */
+static U1                   u1_s_sound_csrbz_volbrg;                                                                    /* Volume bridge ch3 to ch5 for Clearance sonar Fr+Rr buzzer  */
 
-static U4                   u4_s_sound_ow_unlock;                                          /* Active test unlock key                                     */
-static U1                   u1_s_sound_ow_reqid;                                           /* Active test request ID                                     */
-static ST_SOUND_OW_CTRL     st_sp_sound_ow_ctrl[SOUND_GROUP_NUM];                          /* Active test control data                                   */
+static U4                   u4_s_sound_ow_unlock;                                                                       /* Active test unlock key                                     */
+static U1                   u1_s_sound_ow_reqid;                                                                        /* Active test request ID                                     */
+static ST_SOUND_OW_CTRL     st_sp_sound_ow_ctrl[SOUND_GROUP_NUM];                                                       /* Active test control data                                   */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static U1                   u1_s_sound_drv_active_time_val2;
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static U1                   u1_s_sound_drv_initial;
-
 static U1                   u1_s_sound_ic_fltb_befor;
 static U1                   u1_s_sound_ic_fltb_count;
 static U1                   u1_s_sound_ic_fltb_initial;
@@ -251,6 +248,7 @@ static        void    vd_s_SoundCriMgrErrorCallback(const CriChar8 * s1p_a_ERRID
 static        void    vd_s_SoundCriMgrStartup(void);
 static        U1      u1_s_SoundDiagnosis(void);
 static        U1      u1_s_SoundGetActiveTime(void);
+static        U1      u1_s_SoundCriMgr_InitialCheck(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
@@ -358,7 +356,6 @@ static const U2 u2_sp_SOUND_WAV_CYCLETIME_LEX[CRI_CUESHEET_0_LEX_CUENUM_ADX] = {
 /*===================================================================================================================================*/
 void    vd_g_SoundCriMgrInitialize(void)
 {
-    u1_s_sound_drv_initial          = (U1)SOUND_DRV_INITIAL;
     u1_s_sound_drv_active_time_val1 = (U1)0U;
     u1_s_sound_drv_active_time_val2 = (U1)0U;
     u1_s_sound_drv_active_time_val3 = (U1)0U;
@@ -367,6 +364,13 @@ void    vd_g_SoundCriMgrInitialize(void)
     u1_s_sound_ic_fltb_count        = (U1)0U;
     u1_s_sound_ic_fltb_initial      = (U1)SOUND_DRV_INITIAL;
     u1_s_sound_ic_error             = (U1)SOUND_IC_NORMAL;
+
+    s4_s_initialize_size            = (CriSint32)0;
+    s4_s_acfdata_size               = (CriSint32)0;
+    s4_s_awbdata_size               = (CriSint32)0;
+    s4_s_acbdata_size               = (CriSint32)0;
+    s4_s_voicepooladxdata_size      = (CriSint32)0;
+    s4_s_player_size                = (CriSint32)0;
 
     Dio_WriteChannel((U1)DIO_ID_PORT20_CH1, (U1)STD_HIGH);
     Dio_WriteChannel((U1)DIO_ID_PORT20_CH2, (U1)STD_HIGH);
@@ -424,6 +428,8 @@ static void    vd_s_SoundCriMgrStartup(void)
 #if (SOUND_CRI_DEBUGMODE == TRUE)
     s4_s_initialize_size = (CriSint32)criAtomEx_CalculateWorkSize_Rh850u2a(&st_t_config_rh850u2a);
     s4_s_initialize_size = s4_s_initialize_size;                          /* QAC countermeasure */
+#else
+    s4_s_initialize_size = (CriSint32)SOUND_CRI_INIT_WORK_SIZE;
 #endif /* SOUND_CRI_DEBUGMODE */
 
     /* Library initialization */
@@ -441,6 +447,8 @@ static void    vd_s_SoundCriMgrStartup(void)
 #if (SOUND_CRI_DEBUGMODE == TRUE)
     s4_s_player_size = (CriSint32)criAtomExPlayer_CalculateWorkSize(&st_t_sound_player_config);
     s4_s_player_size = s4_s_player_size;                                  /* QAC countermeasure */
+#else
+    s4_s_player_size = (CriSint32)SOUND_PLAYER_SIZE;
 #endif /* SOUND_CRI_DEBUGMODE */
 
     for(u1_t_grp_no = (U1)SOUND_GROUP1; u1_t_grp_no < (U1)SOUND_GROUP_NUM; u1_t_grp_no++){
@@ -480,6 +488,8 @@ static  void    vd_s_SoundCriMgrTYTSetUp(void)
 #if (SOUND_CRI_DEBUGMODE == TRUE)
     s4_s_acfdata_size = (CriSint32)criAtomEx_CalculateWorkSizeForRegisterAcfDataAt((void *)u4_sp_SOUND_ACF_DATA_TYT, s4_s_SOUND_ACF_DATA_SIZE_TYT);
     s4_s_acfdata_size = s4_s_acfdata_size;                                /* QAC countermeasure */
+#else
+    s4_s_acfdata_size = (CriSint32)SOUND_ACFDATA_SIZE;
 #endif /* SOUND_CRI_DEBUGMODE */
     /* On-memory ACF data registration */
     criAtomEx_RegisterAcfDataAt((void *)u4_sp_SOUND_ACF_DATA_TYT,
@@ -490,6 +500,8 @@ static  void    vd_s_SoundCriMgrTYTSetUp(void)
 #if (SOUND_CRI_DEBUGMODE == TRUE)
     s4_s_awbdata_size = (CriSint32)CRIATOMAWB_WORKSIZE_FOR_LOADFROMMEMORYAT;
     s4_s_awbdata_size = s4_s_awbdata_size;                                /* QAC countermeasure */
+#else
+    s4_s_awbdata_size = (CriSint32)SOUND_AWBDATA_SIZE;
 #endif /* SOUND_CRI_DEBUGMODE */
     /* On-memory AWB handle creation */
     stp_s_sound_awb_hn = criAtomAwb_LoadFromMemoryAt(u4_sp_SOUND_AWB_DATA_TYT,
@@ -500,6 +512,8 @@ static  void    vd_s_SoundCriMgrTYTSetUp(void)
 #if (SOUND_CRI_DEBUGMODE == TRUE)
     s4_s_acbdata_size = (CriSint32)criAtomExAcb_CalculateWorkSizeForLoadAcbDataWithAwbHnAt((void *)u4_sp_SOUND_ACB_DATA_TYT, s4_s_SOUND_ACB_DATA_SIZE_TYT, stp_s_sound_awb_hn);
     s4_s_acbdata_size = s4_s_acbdata_size;                                /* QAC countermeasure */
+#else
+    s4_s_acbdata_size = (CriSint32)SOUND_ACBDATA_SIZE;
 #endif /* SOUND_CRI_DEBUGMODE */
     /* On-memory ACB data loading */
     stp_s_sound_acb_hn = criAtomExAcb_LoadAcbDataWithAwbHnAt((void *)u4_sp_SOUND_ACB_DATA_TYT,
@@ -514,6 +528,8 @@ static  void    vd_s_SoundCriMgrTYTSetUp(void)
 #if (SOUND_CRI_DEBUGMODE == TRUE)
     s4_s_voicepooladxdata_size = (CriSint32)criAtomExVoicePool_CalculateWorkSizeForAdxVoicePool(&st_t_sound_voice_pool_config_adx);
     s4_s_voicepooladxdata_size = s4_s_voicepooladxdata_size;              /* QAC countermeasure */
+#else
+    s4_s_voicepooladxdata_size = (CriSint32)SOUND_VOICEPOOLADXDATA_SIZE;
 #endif /* SOUND_CRI_DEBUGMODE */
     /* ADX voice-pool creation */
     stp_s_sound_voicepooladx_hn = criAtomExVoicePool_AllocateAdxVoicePool(&st_t_sound_voice_pool_config_adx,
@@ -534,6 +550,8 @@ static        void    vd_s_SoundCriMgrLEXSetUp(void)
 #if (SOUND_CRI_DEBUGMODE == TRUE)
     s4_s_acfdata_size = (CriSint32)criAtomEx_CalculateWorkSizeForRegisterAcfDataAt((void *)u4_sp_SOUND_ACF_DATA_LEX, s4_s_SOUND_ACF_DATA_SIZE_LEX);
     s4_s_acfdata_size = s4_s_acfdata_size;                                /* QAC countermeasure */
+#else
+    s4_s_acfdata_size = (CriSint32)SOUND_ACFDATA_SIZE;
 #endif /* SOUND_CRI_DEBUGMODE */
     /* On-memory ACF data registration */
     criAtomEx_RegisterAcfDataAt((void *)u4_sp_SOUND_ACF_DATA_LEX,
@@ -544,6 +562,8 @@ static        void    vd_s_SoundCriMgrLEXSetUp(void)
 #if (SOUND_CRI_DEBUGMODE == TRUE)
     s4_s_awbdata_size = (CriSint32)CRIATOMAWB_WORKSIZE_FOR_LOADFROMMEMORYAT;
     s4_s_awbdata_size = s4_s_awbdata_size;                                /* QAC countermeasure */
+#else
+    s4_s_awbdata_size = (CriSint32)SOUND_AWBDATA_SIZE;
 #endif /* SOUND_CRI_DEBUGMODE */
     /* On-memory AWB handle creation */
     stp_s_sound_awb_hn = criAtomAwb_LoadFromMemoryAt(u4_sp_SOUND_AWB_DATA_LEX,
@@ -554,6 +574,8 @@ static        void    vd_s_SoundCriMgrLEXSetUp(void)
 #if (SOUND_CRI_DEBUGMODE == TRUE)
     s4_s_acbdata_size = (CriSint32)criAtomExAcb_CalculateWorkSizeForLoadAcbDataWithAwbHnAt((void *)u4_sp_SOUND_ACB_DATA_LEX, s4_s_SOUND_ACB_DATA_SIZE_LEX, stp_s_sound_awb_hn);
     s4_s_acbdata_size = s4_s_acbdata_size;                                /* QAC countermeasure */
+#else
+    s4_s_acbdata_size = (CriSint32)SOUND_ACBDATA_SIZE;
 #endif /* SOUND_CRI_DEBUGMODE */
     /* On-memory ACB data loading */
     stp_s_sound_acb_hn = criAtomExAcb_LoadAcbDataWithAwbHnAt((void *)u4_sp_SOUND_ACB_DATA_LEX,
@@ -568,6 +590,8 @@ static        void    vd_s_SoundCriMgrLEXSetUp(void)
 #if (SOUND_CRI_DEBUGMODE == TRUE)
     s4_s_voicepooladxdata_size = (CriSint32)criAtomExVoicePool_CalculateWorkSizeForAdxVoicePool(&st_t_sound_voice_pool_config_adx);
     s4_s_voicepooladxdata_size = s4_s_voicepooladxdata_size;              /* QAC countermeasure */
+#else
+    s4_s_voicepooladxdata_size = (CriSint32)SOUND_VOICEPOOLADXDATA_SIZE;
 #endif /* SOUND_CRI_DEBUGMODE */
     /* ADX voice-pool creation */
     stp_s_sound_voicepooladx_hn = criAtomExVoicePool_AllocateAdxVoicePool(&st_t_sound_voice_pool_config_adx,
@@ -594,6 +618,13 @@ void    vd_g_SoundCriMgrFinalize(void)
     criAtomAwb_Release(stp_s_sound_awb_hn);
     criAtomEx_UnregisterAcf();
     criAtomEx_Finalize_Rh850u2a();
+
+    s4_s_initialize_size       = (CriSint32)0;
+    s4_s_acfdata_size          = (CriSint32)0;
+    s4_s_awbdata_size          = (CriSint32)0;
+    s4_s_acbdata_size          = (CriSint32)0;
+    s4_s_voicepooladxdata_size = (CriSint32)0;
+    s4_s_player_size           = (CriSint32)0;
 }
 
 /*===================================================================================================================================*/
@@ -607,21 +638,25 @@ void    vd_g_SoundCriMgrMainTask(void)
     U1          u1_t_playnum;                                                               /* Number of playing sound groups        */
     U1          u1_t_errsts;
     U1          u1_t_mode;
+    U1          u1_t_initstate;
 
     u1_t_mode = u1_s_SoundDiagnosis();
 
     if (u1_t_mode != (U1)SOUND_DRV_MODESET) {
-        if (u1_s_sound_drv_initial != (U1)SOUND_DRV_INITIAL_END) {
+        u1_t_initstate = u1_s_SoundCriMgr_InitialCheck();
+        if (u1_t_initstate != (U1)SOUND_DRV_INITIAL_END) {
             vd_s_SoundCriMgrStartup();
-            u1_s_sound_drv_initial = (U1)SOUND_DRV_INITIAL_END;
         }
         else {
-#if 0   /* BEV BSW provisionally */
-            u1_t_errsts = (U1)Dma_CheckDmaError((U1)SOUND_CRI_DRV_DMA_CH) & (U1)DMA_DTSER_DTSER;
-#else
-            u1_t_errsts = (U1)0U;
-#endif
+            u1_t_errsts  = (U1)Dma_CheckDmaError((U1)DMA_CH_DATA_ID_2);
+            u1_t_errsts |= (U1)Dma_CheckDmaError((U1)DMA_CH_DATA_ID_3);
+            u1_t_errsts |= (U1)Dma_CheckDmaError((U1)DMA_CH_DATA_ID_4);
+
             if(u1_t_errsts == (U1)DMA_DTSER_DTSER_ERR){
+                Dma_ClearDmaError((U1)DMA_CH_DATA_ID_2);
+                Dma_ClearDmaError((U1)DMA_CH_DATA_ID_3);
+                Dma_ClearDmaError((U1)DMA_CH_DATA_ID_4);
+
                 vd_g_SoundCriMgrFinalize();
                 vd_s_SoundCriMgrStartup();
             }
@@ -718,6 +753,7 @@ static  U1      u1_s_SoundCriMgrWavNext(void)
         (U2)CRI_CUESHEET_0_TYT_TAN_MET_CBZ_BASE_NOTICE1_0_01,                                 /* WCHIME_REQ_SI_APP_CMPLT               */
         (U2)CRI_CUESHEET_0_TYT_2REN_MET_CBZ_BASE_REJECT_0_01,                                 /* WCHIME_REQ_SI_DCLDSP_OPERJCT          */
         (U2)CRI_CUESHEET_0_TYT_TAN_MET_CBZ_BASE_ACCEPT_0_01,                                  /* WCHIME_REQ_SI_LCS_ACK                 */
+        (U2)CRI_CUESHEET_0_TYT_2REN_MET_CBZ_BASE_REJECT_0_01,                                 /* WCHIME_REQ_SI_BSTMOD_RJCT             */
         (U2)CRI_CUESHEET_0_TYT_2REN_MET_CBZ_BASE_REJECT_0_01,                                 /* WCHIME_REQ_SI_DOA_RJCT                */
         (U2)CRI_CUESHEET_0_TYT_TAN_MET_CBZ_BASE_NOTICE1_0_01,                                 /* WCHIME_REQ_SI_MET_WRN_VOL_CSTM        */
         (U2)CRI_CUESHEET_0_TYT_TAN_MET_CBZ_BASE_NOTICE1_0_01,                                 /* WCHIME_REQ_SI_SBW_SPL_STATE           */
@@ -751,6 +787,7 @@ static  U1      u1_s_SoundCriMgrWavNext(void)
         (U2)CRI_CUESHEET_0_TYT_DAN_MET_CBZ_BASE_INTWARNL_0_01,                                /* WCHIME_REQ_IN_TMBZR_TEN_PRI4          */
         (U2)CRI_CUESHEET_0_TYT_TAN_MET_CBZ_BASE_NOTICE1_0_01,                                 /* WCHIME_REQ_SI_MINDSPWR_LV1            */
         (U2)CRI_CUESHEET_0_TYT_DAN_MET_TBZ_SEAREM_LV1_24_01,                                  /* WCHIME_REQ_IN_SBLT_LV1                */
+        (U2)CRI_CUESHEET_0_TYT_DAN_MET_TBZ_SEAREM_LV1_24_01,                                  /* WCHIME_REQ_IN_SBLT_MISUSE             */
         (U2)CRI_CUESHEET_0_TYT_TAN_MET_TBZ_SEAREM_LV1_24_01,                                  /* WCHIME_REQ_SI_SBLT                    */
         (U2)CRI_CUESHEET_0_TYT_TAN_MET_CBZ_BASE_NOTICE1_0_01,                                 /* WCHIME_REQ_SI_RSA_SIGN_CTN1           */
         (U2)CRI_CUESHEET_0_TYT_TAN_MET_CBZ_BASE_NOTICE1_0_01,                                 /* WCHIME_REQ_SI_DMC_LV1                 */
@@ -897,6 +934,7 @@ static  U1      u1_s_SoundCriMgrWavNext(void)
         (U2)CRI_CUESHEET_0_LEX_TAN_MET_CBZ_BASE_NOTICE1_0_01,                                 /* WCHIME_REQ_SI_APP_CMPLT               */
         (U2)CRI_CUESHEET_0_LEX_2REN_MET_CBZ_BASE_REJECT_0_01,                                 /* WCHIME_REQ_SI_DCLDSP_OPERJCT          */
         (U2)CRI_CUESHEET_0_LEX_TAN_MET_CBZ_BASE_ACCEPT_0_01,                                  /* WCHIME_REQ_SI_LCS_ACK                 */
+        (U2)CRI_CUESHEET_0_LEX_2REN_MET_CBZ_BASE_REJECT_0_01,                                 /* WCHIME_REQ_SI_BSTMOD_RJCT             */
         (U2)CRI_CUESHEET_0_LEX_2REN_MET_CBZ_BASE_REJECT_0_01,                                 /* WCHIME_REQ_SI_DOA_RJCT                */
         (U2)CRI_CUESHEET_0_LEX_TAN_MET_CBZ_BASE_NOTICE1_0_01,                                 /* WCHIME_REQ_SI_MET_WRN_VOL_CSTM        */
         (U2)CRI_CUESHEET_0_LEX_TAN_MET_CBZ_BASE_NOTICE1_0_01,                                 /* WCHIME_REQ_SI_SBW_SPL_STATE           */
@@ -930,6 +968,7 @@ static  U1      u1_s_SoundCriMgrWavNext(void)
         (U2)CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNL_0_01,                                /* WCHIME_REQ_IN_TMBZR_TEN_PRI4          */
         (U2)CRI_CUESHEET_0_LEX_TAN_MET_CBZ_BASE_NOTICE1_0_01,                                 /* WCHIME_REQ_SI_MINDSPWR_LV1            */
         (U2)CRI_CUESHEET_0_LEX_DAN_MET_LBZ_SEAREM_LV1_24_02,                                  /* WCHIME_REQ_IN_SBLT_LV1                */
+        (U2)CRI_CUESHEET_0_LEX_DAN_MET_LBZ_SEAREM_LV1_24_02,                                  /* WCHIME_REQ_IN_SBLT_MISUSE             */
         (U2)CRI_CUESHEET_0_LEX_TAN_MET_LBZ_SEAREM_LV1_24_02,                                  /* WCHIME_REQ_SI_SBLT                    */
         (U2)CRI_CUESHEET_0_LEX_TAN_MET_CBZ_BASE_NOTICE1_0_01,                                 /* WCHIME_REQ_SI_RSA_SIGN_CTN1           */
         (U2)CRI_CUESHEET_0_LEX_TAN_MET_CBZ_BASE_NOTICE1_0_01,                                 /* WCHIME_REQ_SI_DMC_LV1                 */
@@ -1103,7 +1142,7 @@ static  U1      u1_s_SoundCriMgrUpdtNext(const U1 u1_a_GRP_NO, const U1 u1_a_REQ
 
     u1_t_updtdreq = u1_a_REQIDX;
 
-    /* Bredge the clearance sonar Rr buzzer to CH5 */
+    /* Bridge the clearance sonar Rr buzzer to CH5 */
     if(u1_a_GRP_NO == (U1)SOUND_GROUP3){
         u1_s_sound_csrbz_reqbrg = (U1)U1_MAX;
         u1_s_sound_csrbz_volbrg = (U1)U1_MAX;
@@ -2132,7 +2171,9 @@ static  U1  u1_s_SoundDiagnosis(void)
         Dio_WriteChannel((U1)DIO_ID_PORT20_CH1, (U1)STD_LOW);
         Dio_WriteChannel((U1)DIO_ID_PORT20_CH2, (U1)STD_LOW);
         u1_t_ret = (U1)SOUND_DRV_ERRCHECK_WAIT;
-
+#if (SOUND_CRI_DEBUGMODE == TRUE)
+        vd_s_SoundCriMgrStartup();
+#endif /* SOUND_CRI_DEBUGMODE */
     }
     else if (u1_t_time <= (U1)SOUND_DRV_ERRCHECK_WAIT_TIM) {
         u1_t_ret = (U1)SOUND_DRV_ERRCHECK_WAIT;
@@ -2176,6 +2217,7 @@ static U1    u1_s_SoundGetActiveTime(void)
     U1 u1_t_chk;
     U4 u4_tp_time_val[SOUND_ACTIVE_TIME_RDN_NUM];
     U4 u4_t_rdnrslt;
+    U1 u1_t_initstate;
 
     u4_tp_time_val[SOUND_ACTIVE_TIME_RDN_1ST] = (U4)u1_s_sound_drv_active_time_val1;
     u4_tp_time_val[SOUND_ACTIVE_TIME_RDN_2ND] = (U4)u1_s_sound_drv_active_time_val2;
@@ -2184,8 +2226,10 @@ static U1    u1_s_SoundGetActiveTime(void)
     if (u1_t_chk == (U1)0U) {
         /* Redundant data is all incorrect. */
         u4_t_rdnrslt = (U4)SOUND_ACTIVE_TIME_DEF;
-        vd_g_SoundCriMgrFinalize();
-        u1_s_sound_drv_initial = (U1)SOUND_DRV_INITIAL;
+        u1_t_initstate = u1_s_SoundCriMgr_InitialCheck();
+        if (u1_t_initstate == (U1)SOUND_DRV_INITIAL_END) {
+            vd_g_SoundCriMgrFinalize();
+        }
     }
 
     if (u4_t_rdnrslt < (U4)U1_MAX) {
@@ -2200,6 +2244,63 @@ static U1    u1_s_SoundGetActiveTime(void)
     u1_s_sound_drv_active_time_val3 = (U1)u4_t_rdnrslt;
 
     return ((U1)u4_t_rdnrslt);
+}
+
+/*===================================================================================================================================*/
+/*  u1      u1_s_SoundCriMgr_InitialCheck(void)                                                                                      */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static U1      u1_s_SoundCriMgr_InitialCheck(void)
+{
+#if (SOUND_CRI_DEBUGMODE != TRUE)
+    U1      u1_t_match_count;
+    U1      u1_t_ret;
+
+    u1_t_match_count = (U1)0U;
+
+    if (s4_s_initialize_size == (CriSint32)SOUND_CRI_INIT_WORK_SIZE) {
+        u1_t_match_count++;
+    }
+
+    if (s4_s_acfdata_size == (CriSint32)SOUND_ACFDATA_SIZE) {
+        u1_t_match_count++;
+    }
+
+    if (s4_s_awbdata_size == (CriSint32)SOUND_AWBDATA_SIZE) {
+        u1_t_match_count++;
+    }
+
+    if (s4_s_acbdata_size == (CriSint32)SOUND_ACBDATA_SIZE) {
+        u1_t_match_count++;
+    }
+
+    if (s4_s_voicepooladxdata_size == (CriSint32)SOUND_VOICEPOOLADXDATA_SIZE) {
+        u1_t_match_count++;
+    }
+
+    if (s4_s_player_size == (CriSint32)SOUND_PLAYER_SIZE) {
+        u1_t_match_count++;
+    }
+
+    if (u1_t_match_count >= (U1)SOUND_DRV_INITIAL_MATCH_NUM) {
+        u1_t_ret = (U1)SOUND_DRV_INITIAL_END;
+        s4_s_initialize_size       = (CriSint32)SOUND_CRI_INIT_WORK_SIZE;
+        s4_s_acfdata_size          = (CriSint32)SOUND_ACFDATA_SIZE;
+        s4_s_awbdata_size          = (CriSint32)SOUND_AWBDATA_SIZE;
+        s4_s_acbdata_size          = (CriSint32)SOUND_ACBDATA_SIZE;
+        s4_s_voicepooladxdata_size = (CriSint32)SOUND_VOICEPOOLADXDATA_SIZE;
+        s4_s_player_size           = (CriSint32)SOUND_PLAYER_SIZE;
+    }
+    else {
+        u1_t_ret = (U1)SOUND_DRV_INITIAL;
+    }
+
+    return(u1_t_ret);
+#else
+    return((U1)SOUND_DRV_INITIAL_END); /* vd_s_SoundCriMgrStartup is processed in u1_s_SoundDiagnosis */
+#endif /* SOUND_CRI_DEBUGMODE */
 }
 
 /*===================================================================================================================================*/
@@ -2307,11 +2408,17 @@ void  vd_g_SoundCriMgr_DeInit(void)
 /*  BEV-2     6/17/2025  JS       Change for BEV System_Consideration_2.(MET-C_BRKBZ-CSTD-2-00-B-C0)                                 */
 /*  BEV-3     6/20/2025  KO       Change for BEV System_Consideration_2.(MET-O_PDSMAL-CSTD-0-00-A-C0)                                */
 /*  BEV-4     6/24/2025  RO       Change for BEV System_Consideration_2.(MET-S_ADBZR-CSTD-0-02-A-C0)                                 */
-/*  BEV-5     6/24/2025  RO       Change for BEV System_Consideration_2.(MMET-M_CONTBUZZ2-CSTD-0004-C1)                              */
+/*  BEV-5     6/24/2025  RO       Change for BEV System_Consideration_2.(MET-M_CONTBUZZ2-CSTD-0004-C1)                               */
 /*  BEV-6    11/11/2025  SH       Configured for CONTBUZZ2-CSTD-0008                                                                 */
 /*  BEV-7    11/28/2025  HL       Change for BEV System_Consideration_ADAS.(MET-S_TMBZR-CSTD-0-01-A-C0)                              */
 /*  BEV-8    12/10/2025  HY       Change sound file(CUE_ID) for RCTA buzzer                                                          */
 /*  BEV-9    02/10/2026  SH       Change MCUID0024 from Calibration to OMUSVIID                                                      */
+/*  BEV-10   03/10/2026  YH       Change config for BEV Full_Function_2.                                                             */
+/*                                MET-P_BSTMOD-CSTD-0-00-A-C0                                                                        */
+/*                                Add BOOST MODE reject buzzer request                                                               */
+/*  BEV-11   03/17/2026  SN       Change for BEV Full_Function_2.                                                                    */
+/*                                MET-B_OPTMON-CSTD-0-00-A-C0                                                                        */
+/*                                Added Buzzer request for OPTMON                                                                    */
 /*                                                                                                                                   */
 /*  * YK       = Yuuki Kato, Denso Techno                                                                                            */
 /*  * TN       = Toshiharu Nagata, Denso Techno                                                                                      */
@@ -2333,5 +2440,7 @@ void  vd_g_SoundCriMgr_DeInit(void)
 /*  * KO       = Kazuto Oishi, Denso Techno                                                                                          */
 /*  * HL       = Harry Lapiceros,  DTPH                                                                                              */
 /*  * HY       = Hiroki You, Denso Techno                                                                                            */
+/*  * YH       = Yuki Hatakeyama, KSE                                                                                                */
+/*  * SN       = Shizuka Nakajima, KSE                                                                                               */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

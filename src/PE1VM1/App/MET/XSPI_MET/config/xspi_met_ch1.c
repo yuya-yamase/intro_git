@@ -58,6 +58,7 @@ static inline void    vd_s_XSpiCanTx_MET1S02(const U4* u4_ap_tx_data);
 static inline void    vd_s_XSpiCanTx_MET1S27(const U4* u4_ap_tx_data);
 static inline void    vd_s_XSpiCanTx_MET1S29(const U4* u4_ap_tx_data);
 static inline void    vd_s_XSpiCanTx_MET1S30(const U4* u4_ap_tx_data);
+static inline void    vd_s_XSpiCanTx_MET1S47(const U4* u4_ap_tx_data);
 static inline void    vd_s_XSpiCanTx_MET1S62(const U4* u4_ap_tx_data);
 static inline void    vd_s_XSpiCanTx_MET1S70(const U4* u4_ap_tx_data);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -89,6 +90,7 @@ void    vd_g_XSpiCfgPduRxCh1(const U4 * u4_ap_PDU_RX)
     vd_s_XSpiCanTx_MET1S27(&u4_ap_PDU_RX[21]);
     vd_s_XSpiCanTx_MET1S29(&u4_ap_PDU_RX[23]);
     vd_s_XSpiCanTx_MET1S30(&u4_ap_PDU_RX[91]);
+    vd_s_XSpiCanTx_MET1S47(&u4_ap_PDU_RX[35]);
     vd_s_XSpiCanTx_MET1S62(&u4_ap_PDU_RX[37]);
     vd_s_XSpiCanTx_MET1S70(&u4_ap_PDU_RX[39]);
 }
@@ -185,6 +187,22 @@ static inline void    vd_s_XSpiCanTx_MET1S30(const U4 * u4_ap_tx_data)
     }
 }
 /*===================================================================================================================================*/
+/*  static inline void    vd_s_XSpiCanTx_MET1S47(const U4 * u4_ap_tx_data)                                                           */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:     u4_ap_tx_data                                                                                                     */
+/*  Return:                                                                                                                          */
+/*===================================================================================================================================*/
+static inline void    vd_s_XSpiCanTx_MET1S47(const U4 * u4_ap_tx_data)
+{
+    U1 u1_t_txsts;
+
+    u1_t_txsts = u1_g_XSpiMETRxRdAccessSts((U1)XSPI_MET_XSPI_RX_AGLBE);
+
+    if (u1_t_txsts == (U1)XSPI_MET_XSPI_RX_READ_VALID) {
+        vd_g_CanTxAppMET1S47_Put(&u4_ap_tx_data[0], (U1)XSPI_CANTX_BUFSIZE2);
+    }
+}
+/*===================================================================================================================================*/
 /*  static inline void    vd_s_XSpiCanTx_MET1S62(const U4 * u4_ap_tx_data)                                                           */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:     u4_ap_tx_data                                                                                                     */
@@ -273,6 +291,9 @@ static inline void    vd_s_XSpiCanTx_MET1S70(const U4 * u4_ap_tx_data)
 /*           11/13/2025  YN       Change for BEV rebase.(Add CanTxApp)                                                               */
 /*           12/08/2025  YN       Change for BEV rebase.(Add CanTxApp_2)                                                             */
 /*           01/30/2026  TN       Fix initial value issue (BEV3CDCMET-3693).                                                         */
+/*           03/11/2026  SN(K)    Change config for BEV Full_Function_2.                                                             */
+/*                                MET-B_OPTMON-CSTD-0-00-A-C0                                                                        */
+/*                                Add the interface vd_s_XSpiCanTx_MET1S47 to notify CanTxApp of MET1S47 information.                */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * KM   = Keisuke Mashita, Denso Techno                                                                                           */
