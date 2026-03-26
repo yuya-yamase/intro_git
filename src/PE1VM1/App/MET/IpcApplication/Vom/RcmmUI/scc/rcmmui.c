@@ -1,4 +1,4 @@
-/* 1.4.0 */
+/* 1.4.1 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -11,7 +11,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define RCMMUI_C_MAJOR                          (1)
 #define RCMMUI_C_MINOR                          (4)
-#define RCMMUI_C_PATCH                          (0)
+#define RCMMUI_C_PATCH                          (1)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -229,13 +229,6 @@ void            vd_g_RcmmUIUserAct(const U1 u1_a_CID, const U1 u1_a_USRACT)
         if(u1_a_CID == u1_s_rcmmui_reqid    ){
             u1_s_rcmmui_usract = u1_a_USRACT;
         }
-        else if((u1_a_CID          == (U1)RCMMUI_STREQ_3_1) &&
-                (u1_s_rcmmui_reqid == (U1)RCMMUI_STREQ_4_1)){
-            u1_s_rcmmui_usract = u1_a_USRACT;
-        }
-        else{
-            /* Do Nothing */
-        }
     }
 
     if((u1_a_USRACT == (U1)RCMMUI_USRACT_YES                                       ) &&
@@ -320,6 +313,9 @@ void            vd_s_RcmmUICheckPowSts(void)
 /*                                "TOP" button removed from all messages by parameter.                                               */
 /*                                Bugfix(BEVCDCMON-258)                                                                              */
 /*                                Display is hidden by mask processing when not in operating power state.                            */
+/*  1.4.1    03/17/2026  HY(K)    Change for BEV Full_Function_2.                                                                    */
+/*                                MET-B_PROSRV-CSTD-1-02-A-C0 Bugfix(BEV3CDCMET-4550)                                                */
+/*                                Delete exception-handling branching in vd_g_RcmmUIUserAct function.                                */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
@@ -332,5 +328,6 @@ void            vd_s_RcmmUICheckPowSts(void)
 /*  * YR   = Yhana Regalario, DTPH                                                                                                   */
 /*  * KO   = Kazuto Oishi,  Denso Techno                                                                                             */
 /*  * SN   = Shizuka Nakajima,  KSE                                                                                                  */
+/*  * HY(K)= Haruki Yagi,  KSE                                                                                                       */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

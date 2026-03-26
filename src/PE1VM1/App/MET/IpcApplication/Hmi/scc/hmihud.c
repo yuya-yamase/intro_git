@@ -43,13 +43,13 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define HMIHUD_FIRST_DTA                       (0U)
 
-#define HMIHUD_DTA_NUM                         (5U)
+#define HMIHUD_DTA_NUM                         (6U)
 #define HMIHUD_SOC_DTA_NUM                     (1U)
-#define HMIHUD_GVIF_DTA_NUM                    (4U)
+#define HMIHUD_GVIF_DTA_NUM                    (5U)
 
 #define HMIHUD_GVIF_DTA_OFFSET                 (HMIHUD_SOC_DTA_NUM)
 
-#define HMIHUD_SIG_NUM                         (7U)
+#define HMIHUD_SIG_NUM                         (10U)
 #define HMIHUD_SIG_HUD_ILL_STEP_IND            (0U)
 #define HMIHUD_SIG_CSTM_HUD_ONOFF_ACT          (1U)
 #define HMIHUD_SIG_HUD_ROT_SW                  (2U)
@@ -57,6 +57,9 @@
 #define HMIHUD_SIG_ADJMINPOS                   (4U)
 #define HMIHUD_SIG_ADJTEPPOS                   (5U)
 #define HMIHUD_SIG_ADJMAXPOS                   (6U)
+#define HMIHUD_SIG_RESPOS                      (7U)
+#define HMIHUD_SIG_RESID                       (8U)
+#define HMIHUD_SIG_HUD_ST                      (9U)
 
 #define HMIHUD_VAL_HUD_ONOFF_ACT_NON           (0U)
 #define HMIHUD_VAL_HUD_ONOFF_ACT_ON            (1U)
@@ -119,6 +122,9 @@ static void vd_s_HmiHudSetMovpos(void);
 static void vd_s_HmiHudSetAdjminpos(void);
 static void vd_s_HmiHudSetAdjteppos(void);
 static void vd_s_HmiHudSetAdjmaxpos(void);
+static void vd_s_HmiHudSetRespos(void);
+static void vd_s_HmiHudSetResid(void);
+static void vd_s_HmiHudSetHudst(void);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -130,7 +136,10 @@ static const ST_HMIHUD_SIGCONVERT st_sp_HMIHUD_SIGCONVERT[HMIHUD_SIG_NUM] = {
     {(U4)3U,    (U1)0U,      (U4)0xFFFFU},    /* HUD_VIPOS_MOVPOS    */
     {(U4)3U,    (U1)16U,     (U4)0xFFFFU},    /* HUD_VIPOS_ADJMINPOS */
     {(U4)4U,    (U1)0U,      (U4)0xFFFFU},    /* HUD_VIPOS_ADJTEPPOS */
-    {(U4)4U,    (U1)16U,     (U4)0xFFFFU}     /* HUD_VIPOS_ADJMAXPOS */
+    {(U4)4U,    (U1)16U,     (U4)0xFFFFU},    /* HUD_VIPOS_ADJMAXPOS */
+    {(U4)5U,    (U1)0U,      (U4)0xFFFFU},    /* HUD_VIPOS_RESPOS    */
+    {(U4)5U,    (U1)16U,     (U4)0xFFU  },    /* HUD_VIPOS_RESID     */
+    {(U4)5U,    (U1)24U,     (U4)0xFFU  }     /* HUD_VIPOS_HUD_ST    */
 };
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
@@ -170,6 +179,9 @@ void    vd_g_HmiHudMainTask(void)
     vd_s_HmiHudSetAdjminpos();
     vd_s_HmiHudSetAdjteppos();
     vd_s_HmiHudSetAdjmaxpos();
+    vd_s_HmiHudSetRespos();
+    vd_s_HmiHudSetResid();
+    vd_s_HmiHudSetHudst();
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_HmiHudSocDataPut(const U4 * u4_ap_REQ)                                                                              */
@@ -459,6 +471,45 @@ static void vd_s_HmiHudSetAdjmaxpos(void){
     vd_g_HudImgAdjSet_GV_VIPOS_ADJMAXPOS(u2_t_adjmaxpos);
 }
 /*===================================================================================================================================*/
+/*  static void    vd_s_HmiHudSetRespos(void)                                                                                        */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void vd_s_HmiHudSetRespos(void){
+    U2 u2_t_respos;
+
+    u2_t_respos = (U2)u4_s_HmiHudReadSig((U1)HMIHUD_SIG_RESPOS, &u4_sp_hmihud_dtabuf[HMIHUD_FIRST_DTA]);
+
+    vd_g_HudImgAdjSet_GV_VIPOS_RESPOS(u2_t_respos);
+}
+/*===================================================================================================================================*/
+/*  static void    vd_s_HmiHudSetResid(void)                                                                                         */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void vd_s_HmiHudSetResid(void){
+    U1 u1_t_resid;
+
+    u1_t_resid = (U1)u4_s_HmiHudReadSig((U1)HMIHUD_SIG_RESID, &u4_sp_hmihud_dtabuf[HMIHUD_FIRST_DTA]);
+
+    vd_g_HudImgAdjSet_GV_VIPOS_RESID(u1_t_resid);
+}
+/*===================================================================================================================================*/
+/*  static void    vd_s_HmiHudSetHudst(void)                                                                                         */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void vd_s_HmiHudSetHudst(void){
+    U1 u1_t_hudst;
+
+    u1_t_hudst = (U1)u4_s_HmiHudReadSig((U1)HMIHUD_SIG_HUD_ST, &u4_sp_hmihud_dtabuf[HMIHUD_FIRST_DTA]);
+
+    vd_g_HudImgAdjSet_GV_VIPOS_HUD_ST(u1_t_hudst);
+}
+/*===================================================================================================================================*/
 /*  U1      u1_g_HmiHudGetHudOnoff(void)                                                                                             */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
@@ -569,10 +620,13 @@ U1      u1_g_HmiHudGetHudViposSwSts(void)
 /*  BEV-1    02/03/2026  TS       Change for BEV FF2.(MET-M_HUDONOFF-CSTD-1)                                                         */
 /*  BEV-2    02/12/2026  KN       Add function for HUD rotation.                                                                     */
 /*  BEV-3    02/13/2026  HH       Add function for HUD position.                                                                     */
+/*  BEV-4    03/12/2026  HY       Change for BEV FF2.(MET-B_DRVPOSMEM-CSTD-1-00-A-C0)                                                */
+/*                                Add the areas and functions for RESPOS, RESID, HUD_ST.                                             */
 /*                                                                                                                                   */
 /*  * TH   = Takahiro Hirano, Denso Techno                                                                                           */
 /*  * TS   = Takuo Suganuma,  Denso Techno                                                                                           */
 /*  * KN   = Kazuo Nishigaki, Denso Techno                                                                                           */
 /*  * HH   = Hiroki Hara,     Denso Techno                                                                                           */
+/*  * HY   = Haruki Yagi,     KSE                                                                                                    */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

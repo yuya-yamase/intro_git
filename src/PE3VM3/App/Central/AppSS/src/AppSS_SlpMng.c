@@ -21,11 +21,6 @@
 
 #define APPSS_SLPMNG_TRANSREQ_LENGTH	(1U)	/* chipcom：data length(1byte) */
 
-/* Debug Code */
-static U1 AppSS_SlpMng_TestTimer = 0U;
-static U1 AppSS_SlpMng_Flag = 0U;
-/* Debug Code */
-
 /*--------------------------------------------------------------------------*/
 /* External Functions                                                       */
 /*--------------------------------------------------------------------------*/
@@ -41,18 +36,7 @@ void AppSS_SlpMng_Main(void)
     U1 u1_t_slp_req_data = (U1)APPSS_SLPMNG_RESULT_SLEEPOK;
 
     /*  CAN Bus SleepOK/NG Check*/
-    //u1_t_sht_ok = u1_g_oXCANShtdwnOk();
-    /* Debug Code */
-    if(AppSS_SlpMng_TestTimer >= 20U){
-		if (AppSS_SlpMng_Flag == 0U) {
-			u1_t_sht_ok = (U1)TRUE;
-		} else {
-			u1_t_sht_ok = (U1)FALSE;
-		}
-		AppSS_SlpMng_TestTimer = 0U;
-		AppSS_SlpMng_Flag = ~AppSS_SlpMng_Flag;
-	}
-    /* Debug Code */
+    u1_t_sht_ok = u1_g_oXCANShtdwnOk();
 
     /* Send Sleep state */
     switch (u1_t_sht_ok) {

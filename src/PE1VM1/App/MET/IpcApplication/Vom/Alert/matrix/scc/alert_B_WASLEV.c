@@ -1,4 +1,4 @@
-/* 5.5.1 */
+/* 5.6.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,8 +10,8 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define ALERT_B_WASLEV_C_MAJOR                   (5)
-#define ALERT_B_WASLEV_C_MINOR                   (5)
-#define ALERT_B_WASLEV_C_PATCH                   (1)
+#define ALERT_B_WASLEV_C_MINOR                   (6)
+#define ALERT_B_WASLEV_C_PATCH                   (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -31,7 +31,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define ALERT_B_WASLEV_NUM_DST                   (32U)
+#define ALERT_B_WASLEV_NUM_DST                   (16U)
 
 #define ALERT_B_WASLEV_WASHLVSW_SGNL_LOW         (0x00U)
 #define ALERT_B_WASLEV_WASHLVSW_SGNL_HI          (0x01U)
@@ -51,18 +51,14 @@
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static U4      u4_s_alert_b_waslev_dlycnt;
-static U4      u4_s_alert_waslev_wlvl_dlycnt;
 static U1      u1_s_alert_b_waslev_washlvsw_lst;
-static U1      u1_s_alert_b_waslev_wlvl_lst;
 static U1      u1_s_alert_b_waslev_can_jdg_lst;
-static U1      u1_s_alert_b_waslev_hw_jdg_lst;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static U4      u4_s_AlertB_waslevSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS);
 static U1      u1_s_AlertB_waslevCanJdg(const U1 u1_a_VOM);
-static U1      u1_s_AlertB_waslevHwJdg (const U1 u1_a_VOM);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
@@ -83,23 +79,7 @@ static const U1  u1_sp_ALERT_B_WASLEV_DST[ALERT_B_WASLEV_NUM_DST] = {
     (U1)ALERT_REQ_B_WASLEV_TT_PD_ON,                                           /* 12 TT_PD_ON                                        */
     (U1)ALERT_REQ_B_WASLEV_TT_PD_ON,                                           /* 13 TT_PD_ON                                        */
     (U1)ALERT_REQ_B_WASLEV_TT_PD_ON,                                           /* 14 TT_PD_ON                                        */
-    (U1)ALERT_REQ_B_WASLEV_TT_PD_ON,                                           /* 15 TT_PD_ON                                        */
-    (U1)ALERT_REQ_B_WASLEV_TT_PD_ON,                                           /* 16 TT_PD_ON                                        */
-    (U1)ALERT_REQ_B_WASLEV_TT_PD_ON,                                           /* 17 TT_PD_ON                                        */
-    (U1)ALERT_REQ_B_WASLEV_TT_PD_ON,                                           /* 18 TT_PD_ON                                        */
-    (U1)ALERT_REQ_B_WASLEV_TT_PD_ON,                                           /* 19 TT_PD_ON                                        */
-    (U1)ALERT_REQ_B_WASLEV_TT_PD_ON,                                           /* 20 TT_PD_ON                                        */
-    (U1)ALERT_REQ_B_WASLEV_TT_PD_ON,                                           /* 21 TT_PD_ON                                        */
-    (U1)ALERT_REQ_B_WASLEV_TT_PD_ON,                                           /* 22 TT_PD_ON                                        */
-    (U1)ALERT_REQ_B_WASLEV_TT_PD_ON,                                           /* 23 TT_PD_ON                                        */
-    (U1)ALERT_REQ_B_WASLEV_TT_PD_ON,                                           /* 24 TT_PD_ON                                        */
-    (U1)ALERT_REQ_B_WASLEV_TT_PD_ON,                                           /* 25 TT_PD_ON                                        */
-    (U1)ALERT_REQ_B_WASLEV_TT_PD_ON,                                           /* 26 TT_PD_ON                                        */
-    (U1)ALERT_REQ_B_WASLEV_TT_PD_ON,                                           /* 27 TT_PD_ON                                        */
-    (U1)ALERT_REQ_B_WASLEV_TT_PD_ON,                                           /* 28 TT_PD_ON                                        */
-    (U1)ALERT_REQ_B_WASLEV_TT_PD_ON,                                           /* 29 TT_PD_ON                                        */
-    (U1)ALERT_REQ_B_WASLEV_TT_PD_ON,                                           /* 30 TT_PD_ON                                        */
-    (U1)ALERT_REQ_B_WASLEV_TT_PD_ON                                            /* 31 TT_PD_ON                                        */
+    (U1)ALERT_REQ_B_WASLEV_TT_PD_ON                                            /* 15 TT_PD_ON                                        */
 };
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -129,15 +109,8 @@ const ST_ALERT_MTRX st_gp_ALERT_B_WASLEV_MTRX[1] = {
 void    vd_g_AlertB_waslevInit(void)
 {
     u4_s_alert_b_waslev_dlycnt       = (U4)ALERT_B_WASLEV_DLY_CNT_INIT;
-    u4_s_alert_waslev_wlvl_dlycnt    = (U4)ALERT_B_WASLEV_DLY_CNT_INIT;
     u1_s_alert_b_waslev_washlvsw_lst = (U1)ALERT_B_WASLEV_WASHLVSW_SGNL_HI;
-#if 0   /* BEV Rebase provisionally */
-    u1_s_alert_b_waslev_wlvl_lst     = (U1)IOHW_DIFLT_SWITCH_UNKNWN;
-#else   /* BEV Rebase provisionally */
-    u1_s_alert_b_waslev_wlvl_lst     = (U1)2U;
-#endif   /* BEV Rebase provisionally */
     u1_s_alert_b_waslev_can_jdg_lst  = (U1)ALERT_B_WASLEV_JDG_OFF;
-    u1_s_alert_b_waslev_hw_jdg_lst   = (U1)ALERT_B_WASLEV_JDG_OFF;
 }
 
 /*===================================================================================================================================*/
@@ -154,16 +127,11 @@ static U4      u4_s_AlertB_waslevSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
     static const U4 u4_s_ALERT_B_WASLEV_MASK_LAS     = (U4)0x00000003U;
     static const U1 u1_s_ALERT_B_WASLEV_LSB_LAS_REQ  = (U1)1U;
     static const U1 u1_s_ALERT_B_WASLEV_LSB_CAN_JDG  = (U1)3U;
-    static const U1 u1_s_ALERT_B_WASLEV_LSB_HW_JDG   = (U1)4U;
     U4              u4_t_src_chk;
     U1              u1_t_can_jdg;
-    U1              u1_t_hw_jdg;
 
     u1_t_can_jdg  = u1_s_AlertB_waslevCanJdg(u1_a_VOM);
     u4_t_src_chk  = (U4)((U4)u1_t_can_jdg << u1_s_ALERT_B_WASLEV_LSB_CAN_JDG);
-
-    u1_t_hw_jdg   = u1_s_AlertB_waslevHwJdg(u1_a_VOM);
-    u4_t_src_chk |= (U4)((U4)u1_t_hw_jdg  << u1_s_ALERT_B_WASLEV_LSB_HW_JDG);
 
     if((u1_a_VOM & (U1)ALERT_VOM_IGN_ON) != (U1)0U){
         if(u4_a_IGN_TM < u4_s_ALERT_B_WASLEV_TIM_PRMRYCHK){
@@ -241,56 +209,6 @@ static U1      u1_s_AlertB_waslevCanJdg(const U1 u1_a_VOM)
 }
 
 /*===================================================================================================================================*/
-/*  static U1      u1_s_AlertB_waslevHwJdg(const U1 u1_a_VOM)                                                                        */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static U1      u1_s_AlertB_waslevHwJdg(const U1 u1_a_VOM)
-{
-    static const U4 u4_s_ALERT_B_WASLEV_HW_TIM_DLY = ((U4)10000U / (U4)ALERT_CH_TICK);
-    U1              u1_t_difltsw;
-    U1              u1_t_wlvl;
-    U1              u1_t_retval;
-
-    u1_t_retval                    = (U1)ALERT_B_WASLEV_JDG_OFF;
-    u1_t_wlvl                      = (U1)ALERT_B_WASLEV_JDG_OFF;
-
-    if((u1_a_VOM & (U1)ALERT_VOM_IGN_ON) != (U1)0U){
-#if 0   /* BEV Rebase provisionally */
-        u1_t_difltsw                  = u1_g_IoHwDifltSwitch((U2)ALERT_HW_ID_B_WASLEV_WLVL);
-        if(u1_t_difltsw == (U1)IOHW_DIFLT_SWITCH_ACT){
-            u1_t_wlvl                     = (U1)ALERT_B_WASLEV_JDG_ON;
-        }
-#endif   /* BEV Rebase provisionally */
-
-        if(u1_t_wlvl                          != u1_s_alert_b_waslev_wlvl_lst){
-            u4_s_alert_waslev_wlvl_dlycnt = (U4)ALERT_B_WASLEV_DLY_CNT_RESET;
-        }
-        else if(u4_s_alert_waslev_wlvl_dlycnt >= u4_s_ALERT_B_WASLEV_HW_TIM_DLY){
-            u4_s_alert_waslev_wlvl_dlycnt = u4_s_ALERT_B_WASLEV_HW_TIM_DLY;
-        }
-        else{
-            u4_s_alert_waslev_wlvl_dlycnt++;
-        }
-
-        if(u4_s_alert_waslev_wlvl_dlycnt >= u4_s_ALERT_B_WASLEV_HW_TIM_DLY){
-            u1_t_retval = u1_t_wlvl;
-        }
-        else{
-            u1_t_retval = u1_s_alert_b_waslev_hw_jdg_lst;
-        }
-    }
-    else{
-        u4_s_alert_waslev_wlvl_dlycnt = (U4)ALERT_B_WASLEV_DLY_CNT_INIT;
-    }
-    u1_s_alert_b_waslev_wlvl_lst   = u1_t_wlvl;
-    u1_s_alert_b_waslev_hw_jdg_lst = u1_t_retval;
-
-    return(u1_t_retval);
-}
-
-/*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
 /*                                                                                                                                   */
@@ -305,9 +223,13 @@ static U1      u1_s_AlertB_waslevHwJdg(const U1 u1_a_VOM)
 /*  5.4.0    12/21/2020  ZS       No ReceiveSignal when msgsts is COM_NO_RX.                                                         */
 /*  5.5.0    11/04/2021  KT       Add WLVL control.                                                                                  */
 /*  5.5.1     8/05/2022  RN       Update for 840B#2 1A(Version update).                                                              */
+/*  5.6.0     3/13/2026  HT       Change config for BEV Full_Function_2.                                                             */
+/*                                BEV3CDCMET-3786                                                                                    */
+/*                                Delete Hardware Input.                                                                             */
 /*                                                                                                                                   */
 /*  * ZS   = Zenjiro Shamoto, NTTD MSE                                                                                               */
 /*  * KT   = Kenichi Takahashi, NTTD MSE                                                                                             */
 /*  * RN   = Ryuga Nakanishi, NTTD MSE                                                                                               */
+/*  * HT   = Hibiki tanii, KSE                                                                                                       */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

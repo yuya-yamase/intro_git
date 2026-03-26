@@ -48,10 +48,12 @@
 #define CAN_LPR_REGR_EN_SECOC_TX                 (0x00000001U)
 #define CAN_LPR_REGR_EN_SECOC_RX                 (0x00000002U)
 #define CAN_LPR_REGR_EN_PHY_FQ_G2M1              (0x00000004U)
+#define CAN_LPR_REGR_EN_PHY_FQ_G2M2              (0x00004000U)
 #define CAN_LPR_REGR_EN_PHY_FQ_G5M               (0x00000008U)
 #define CAN_LPR_REGR_EN_PHY_FQ_LOCA              (0x00000010U)
 #define CAN_LPR_REGR_EN_UDS_FQ_G2M1              (0x00000020U)
 #define CAN_LPR_REGR_EN_PHY_TX_G2M1              (0x00000040U)
+#define CAN_LPR_REGR_EN_PHY_TX_G2M2              (0x00008000U)
 #define CAN_LPR_REGR_EN_PHY_TX_G5M               (0x00000080U)
 #define CAN_LPR_REGR_EN_PHY_TX_LOCA              (0x00000100U)
 #define CAN_LPR_REGR_EN_VIR_TX_0                 (0x00000200U)
@@ -60,7 +62,7 @@
 #define CAN_LPR_REGR_EN_PHY_RX_G2M2              (0x00001000U)
 #define CAN_LPR_REGR_EN_PHY_RX_LOCA              (0x00002000U)
 
-#define CAN_LPR_REGR_EN_BIT_PORT                 (0x00001fffU)
+#define CAN_LPR_REGR_EN_BIT_PORT                 (0x0000ffffU)
 #define CAN_LPR_REGR_EN_BIT_DS28                 (0x00001ff3U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

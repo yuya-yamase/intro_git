@@ -108,8 +108,10 @@ const U4                        u4_gp_CAN_LPR_REGR_EN_BY_NET[CAN_LPR_NUM_NET * C
 
     /* ComMConf_ComMChannel_CANFD_G2M_2_BUS (1U)    */
     /*   CAN_LPR_REGR_EN_PHY_RX_G2M2  (0x00001000U) */
-    (U4)0x00001000U,                     /* FUL_EEE */
-    (U4)0x00001000U,                     /* FUL_DEE */
+    /*   CAN_LPR_REGR_EN_PHY_FQ_G2M2  (0x00004000U) */
+    /*   CAN_LPR_REGR_EN_PHY_TX_G2M2  (0x00008000U) */
+    (U4)0x0000d000U,                     /* FUL_EEE */
+    (U4)0x00005000U,                     /* FUL_DEE */
     (U4)0x00001000U,                     /* SIL_DDE */
 
     /* ComMConf_ComMChannel_VCAN_VCC_1_BUS  (2U)    */

@@ -301,8 +301,8 @@
 #define BSW_CANIF_CFG_0_SIZE_SNDQUE249          (0U)
 
 /* Send-Queue HOH */
-#define BSW_CANIF_CFG_0_HOH_SNDQUE000           (0x00F8U)
-#define BSW_CANIF_CFG_0_HOH_SNDQUE001           (0x00F9U)
+#define BSW_CANIF_CFG_0_HOH_SNDQUE000           (0x00EAU)
+#define BSW_CANIF_CFG_0_HOH_SNDQUE001           (0x00EBU)
 #define BSW_CANIF_CFG_0_HOH_SNDQUE002           (BSW_CANIF_HOH_NOUSE)
 #define BSW_CANIF_CFG_0_HOH_SNDQUE003           (BSW_CANIF_HOH_NOUSE)
 #define BSW_CANIF_CFG_0_HOH_SNDQUE004           (BSW_CANIF_HOH_NOUSE)
@@ -1065,7 +1065,7 @@
 /******************************************/
 /******************************************/
 /* Receive-Queue Size */
-#define BSW_CANIF_CFG_0_SIZE_RCVQUE             (1960U)
+#define BSW_CANIF_CFG_0_SIZE_RCVQUE             (2640U)
 
 
 /******************************************/

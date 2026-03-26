@@ -1,4 +1,4 @@
-/* 5.6.0 */
+/* 5.7.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define ALERT_C_ECB_C_MAJOR                      (5)
-#define ALERT_C_ECB_C_MINOR                      (6)
+#define ALERT_C_ECB_C_MINOR                      (7)
 #define ALERT_C_ECB_C_PATCH                      (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -31,7 +31,8 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define ALERT_C_ECB_NUM_DST                      (24U)
+#define ALERT_C_ECB_TT_NUM_DST                   (32U)
+#define ALERT_C_ECB_PD_NUM_DST                   (8U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -46,101 +47,79 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static U4      u4_s_AlertC_ecbSrcchk      (const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS);
+static U4      u4_s_AlertC_ecbTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS);
+static U4      u4_s_AlertC_ecbPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static const U1  u1_sp_ALERT_C_ECB_DST[ALERT_C_ECB_NUM_DST] = {
-    (U1)ALERT_REQ_C_ECB_FAILDISP,                                              /* 00 FAILDISP                                        */
-    (U1)ALERT_REQ_C_ECB_FAILDISP,                                              /* 01 FAILDISP                                        */
-    (U1)ALERT_REQ_C_ECB_TESTMODE,                                              /* 02 TESTMODE                                        */
-    (U1)ALERT_REQ_C_ECB_TM_DISP,                                               /* 03 TM_DISP                                         */
-    (U1)ALERT_REQ_C_ECB_TM_DISP,                                               /* 04 TM_DISP                                         */
-    (U1)ALERT_REQ_C_ECB_LERNING1,                                              /* 05 LERNING1                                        */
-    (U1)ALERT_REQ_C_ECB_LNG1_DISP,                                             /* 06 LNG1_DISP                                       */
-    (U1)ALERT_REQ_C_ECB_LNG1_DISP,                                             /* 07 LNG1_DISP                                       */
-    (U1)ALERT_REQ_C_ECB_LERNING2,                                              /* 08 LERNING2                                        */
-    (U1)ALERT_REQ_C_ECB_LNG2_DISP,                                             /* 09 LNG2_DISP                                       */
-    (U1)ALERT_REQ_C_ECB_LNG2_DISP,                                             /* 10 LNG2_DISP                                       */
-    (U1)ALERT_REQ_C_ECB_FAILDISP,                                              /* 11 FAILDISP                                        */
-    (U1)ALERT_REQ_C_ECB_FAILDISP,                                              /* 12 FAILDISP                                        */
-    (U1)ALERT_REQ_C_ECB_FAILDISP,                                              /* 13 FAILDISP                                        */
-    (U1)ALERT_REQ_C_ECB_FAILDISP,                                              /* 14 FAILDISP                                        */
-    (U1)ALERT_REQ_C_ECB_MALFUNC,                                               /* 15 MALFUNC                                         */
-    (U1)ALERT_REQ_C_ECB_MALFUNC,                                               /* 16 MALFUNC                                         */
-    (U1)ALERT_REQ_C_ECB_MFNC_DISP,                                             /* 17 MFNC_DISP                                       */
-    (U1)ALERT_REQ_C_ECB_MFNC_DISP,                                             /* 18 MFNC_DISP                                       */
-    (U1)ALERT_REQ_C_ECB_UNAVAILABL,                                            /* 19 UNAVAILABL                                      */
-    (U1)ALERT_REQ_C_ECB_UNAVAILABL,                                            /* 20 UNAVAILABL                                      */
-    (U1)ALERT_REQ_C_ECB_UNABL_DISP,                                            /* 21 UNABL_DISP                                      */
-    (U1)ALERT_REQ_C_ECB_UNABL_DISP,                                            /* 22 UNABL_DISP                                      */
-    (U1)ALERT_REQ_C_ECB_MFNC_DISP                                              /* 23 MFNC_DISP                                       */
+static const U1  u1_sp_ALERT_C_ECB_TT_DST[ALERT_C_ECB_TT_NUM_DST] = {
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 00 UNKNOWN                                         */
+    (U1)ALERT_REQ_C_ECB_TT_TESTMODE,                                           /* 01 TESTMODE                                        */
+    (U1)ALERT_REQ_C_ECB_TT_LEARNING1,                                          /* 02 LEARNING1                                       */
+    (U1)ALERT_REQ_C_ECB_TT_LEARNING2,                                          /* 03 LEARNING2                                       */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 04 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 05 UNKNOWN                                         */
+    (U1)ALERT_REQ_C_ECB_TT_MALFUNC,                                            /* 06 MALFUNC                                         */
+    (U1)ALERT_REQ_C_ECB_TT_UNAVAILABLE,                                        /* 07 UNAVAILABLE                                     */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 08 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 09 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 10 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 11 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 12 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 13 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 14 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 15 UNKNOWN                                         */
+    (U1)ALERT_REQ_C_ECB_TT_MALFUNC,                                            /* 16 MALFUNC                                         */
+    (U1)ALERT_REQ_C_ECB_TT_MALFUNC,                                            /* 17 MALFUNC                                         */
+    (U1)ALERT_REQ_C_ECB_TT_MALFUNC,                                            /* 18 MALFUNC                                         */
+    (U1)ALERT_REQ_C_ECB_TT_MALFUNC,                                            /* 19 MALFUNC                                         */
+    (U1)ALERT_REQ_C_ECB_TT_MALFUNC,                                            /* 20 MALFUNC                                         */
+    (U1)ALERT_REQ_C_ECB_TT_MALFUNC,                                            /* 21 MALFUNC                                         */
+    (U1)ALERT_REQ_C_ECB_TT_MALFUNC,                                            /* 22 MALFUNC                                         */
+    (U1)ALERT_REQ_C_ECB_TT_MALFUNC,                                            /* 23 MALFUNC                                         */
+    (U1)ALERT_REQ_C_ECB_TT_MALFUNC,                                            /* 24 MALFUNC                                         */
+    (U1)ALERT_REQ_C_ECB_TT_MALFUNC,                                            /* 25 MALFUNC                                         */
+    (U1)ALERT_REQ_C_ECB_TT_MALFUNC,                                            /* 26 MALFUNC                                         */
+    (U1)ALERT_REQ_C_ECB_TT_MALFUNC,                                            /* 27 MALFUNC                                         */
+    (U1)ALERT_REQ_C_ECB_TT_MALFUNC,                                            /* 28 MALFUNC                                         */
+    (U1)ALERT_REQ_C_ECB_TT_MALFUNC,                                            /* 29 MALFUNC                                         */
+    (U1)ALERT_REQ_C_ECB_TT_MALFUNC,                                            /* 30 MALFUNC                                         */
+    (U1)ALERT_REQ_C_ECB_TT_MALFUNC                                             /* 31 MALFUNC                                         */
 };
-static const U4  u4_sp_ALERT_C_ECB_CRIT[ALERT_C_ECB_NUM_DST] = {
-    (U4)0x00000002U,                                                           /* 00 FAILDISP                                        */
-    (U4)0x00000003U,                                                           /* 01 FAILDISP                                        */
-    (U4)0x00000004U,                                                           /* 02 TESTMODE                                        */
-    (U4)0x00000006U,                                                           /* 03 TM_DISP                                         */
-    (U4)0x00000007U,                                                           /* 04 TM_DISP                                         */
-    (U4)0x00000008U,                                                           /* 05 LERNING1                                        */
-    (U4)0x0000000AU,                                                           /* 06 LNG1_DISP                                       */
-    (U4)0x0000000BU,                                                           /* 07 LNG1_DISP                                       */
-    (U4)0x0000000CU,                                                           /* 08 LERNING2                                        */
-    (U4)0x0000000EU,                                                           /* 09 LNG2_DISP                                       */
-    (U4)0x0000000FU,                                                           /* 10 LNG2_DISP                                       */
-    (U4)0x00000012U,                                                           /* 11 FAILDISP                                        */
-    (U4)0x00000013U,                                                           /* 12 FAILDISP                                        */
-    (U4)0x00000016U,                                                           /* 13 FAILDISP                                        */
-    (U4)0x00000017U,                                                           /* 14 FAILDISP                                        */
-    (U4)0x00000018U,                                                           /* 15 MALFUNC                                         */
-    (U4)0x00000019U,                                                           /* 16 MALFUNC                                         */
-    (U4)0x0000001AU,                                                           /* 17 MFNC_DISP                                       */
-    (U4)0x0000001BU,                                                           /* 18 MFNC_DISP                                       */
-    (U4)0x0000001CU,                                                           /* 19 UNAVAILABL                                      */
-    (U4)0x0000001DU,                                                           /* 20 UNAVAILABL                                      */
-    (U4)0x0000001EU,                                                           /* 21 UNABL_DISP                                      */
-    (U4)0x0000001FU,                                                           /* 22 UNABL_DISP                                      */
-    (U4)0x00000040U                                                            /* 23 MFNC_DISP                                       */
-};
-static const U4  u4_sp_ALERT_C_ECB_MASK[ALERT_C_ECB_NUM_DST] = {
-    (U4)0x0000007FU,                                                           /* 00 FAILDISP                                        */
-    (U4)0x0000007FU,                                                           /* 01 FAILDISP                                        */
-    (U4)0x0000007EU,                                                           /* 02 TESTMODE                                        */
-    (U4)0x0000007FU,                                                           /* 03 TM_DISP                                         */
-    (U4)0x0000007FU,                                                           /* 04 TM_DISP                                         */
-    (U4)0x0000007EU,                                                           /* 05 LERNING1                                        */
-    (U4)0x0000007FU,                                                           /* 06 LNG1_DISP                                       */
-    (U4)0x0000007FU,                                                           /* 07 LNG1_DISP                                       */
-    (U4)0x0000007EU,                                                           /* 08 LERNING2                                        */
-    (U4)0x0000007FU,                                                           /* 09 LNG2_DISP                                       */
-    (U4)0x0000007FU,                                                           /* 10 LNG2_DISP                                       */
-    (U4)0x0000007FU,                                                           /* 11 FAILDISP                                        */
-    (U4)0x0000007FU,                                                           /* 12 FAILDISP                                        */
-    (U4)0x0000007FU,                                                           /* 13 FAILDISP                                        */
-    (U4)0x0000007FU,                                                           /* 14 FAILDISP                                        */
-    (U4)0x0000007FU,                                                           /* 15 MALFUNC                                         */
-    (U4)0x0000007FU,                                                           /* 16 MALFUNC                                         */
-    (U4)0x0000007FU,                                                           /* 17 MFNC_DISP                                       */
-    (U4)0x0000007FU,                                                           /* 18 MFNC_DISP                                       */
-    (U4)0x0000007FU,                                                           /* 19 UNAVAILABL                                      */
-    (U4)0x0000007FU,                                                           /* 20 UNAVAILABL                                      */
-    (U4)0x0000007FU,                                                           /* 21 UNABL_DISP                                      */
-    (U4)0x0000007FU,                                                           /* 22 UNABL_DISP                                      */
-    (U4)0x00000040U                                                            /* 23 MFNC_DISP                                       */
+static const U1  u1_sp_ALERT_C_ECB_PD_DST[ALERT_C_ECB_PD_NUM_DST] = {
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 00 UNKNOWN                                         */
+    (U1)ALERT_REQ_C_ECB_PD_FAILDISP,                                           /* 01 FAILDISP                                        */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 02 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 03 UNKNOWN                                         */
+    (U1)ALERT_REQ_C_ECB_PD_FAILDISP,                                           /* 04 FAILDISP                                        */
+    (U1)ALERT_REQ_C_ECB_PD_FAILDISP,                                           /* 05 FAILDISP                                        */
+    (U1)ALERT_REQ_C_ECB_PD_FAILDISP,                                           /* 06 FAILDISP                                        */
+    (U1)ALERT_REQ_C_ECB_PD_FAILDISP                                            /* 07 FAILDISP                                        */
 };
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-const ST_ALERT_MTRX st_gp_ALERT_C_ECB_MTRX[1] = {
+const ST_ALERT_MTRX st_gp_ALERT_C_ECB_MTRX[2] = {
     {
-        &u4_s_AlertC_ecbSrcchk,                                                /* fp_u4_SRC_CHK                                      */
+        &u4_s_AlertC_ecbTtSrcchk,                                              /* fp_u4_SRC_CHK                                      */
         vdp_PTR_NA,                                                            /* fp_vd_XDST                                         */
 
-        &u4_sp_ALERT_C_ECB_MASK[0],                                            /* u4p_MASK                                           */
-        &u4_sp_ALERT_C_ECB_CRIT[0],                                            /* u4p_CRIT                                           */
+        (const U4 *)vdp_PTR_NA,                                                /* u4p_MASK                                           */
+        (const U4 *)vdp_PTR_NA,                                                /* u4p_CRIT                                           */
 
-        &u1_sp_ALERT_C_ECB_DST[0],                                             /* u1p_DST                                            */
-        (U2)ALERT_C_ECB_NUM_DST,                                               /* u2_num_srch                                        */
+        &u1_sp_ALERT_C_ECB_TT_DST[0],                                          /* u1p_DST                                            */
+        (U2)ALERT_C_ECB_TT_NUM_DST,                                            /* u2_num_srch                                        */
+        (U1)ALERT_VOM_IGN_ON                                                   /* u1_vom_act                                         */
+    },
+    {
+        &u4_s_AlertC_ecbPdSrcchk,                                              /* fp_u4_SRC_CHK                                      */
+        vdp_PTR_NA,                                                            /* fp_vd_XDST                                         */
+
+        (const U4 *)vdp_PTR_NA,                                                /* u4p_MASK                                           */
+        (const U4 *)vdp_PTR_NA,                                                /* u4p_CRIT                                           */
+
+        &u1_sp_ALERT_C_ECB_PD_DST[0],                                          /* u1p_DST                                            */
+        (U2)ALERT_C_ECB_PD_NUM_DST,                                            /* u2_num_srch                                        */
         (U1)ALERT_VOM_IGN_ON                                                   /* u1_vom_act                                         */
     }
 };
@@ -149,38 +128,61 @@ const ST_ALERT_MTRX st_gp_ALERT_C_ECB_MTRX[1] = {
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*===================================================================================================================================*/
-/*  static U4      u4_s_AlertC_ecbSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)                                 */
+/*  static U4      u4_s_AlertC_ecbTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)                               */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
+/*  Arguments:      u1_a_VOM                                                                                                         */
+/*                  u4_a_IGN_TM                                                                                                      */
+/*                  u1_a_LAS                                                                                                         */
+/*  Return:         u4_t_src_chk                                                                                                     */
 /*===================================================================================================================================*/
-static U4      u4_s_AlertC_ecbSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
+static U4      u4_s_AlertC_ecbTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
-    static const U2 u2_s_ALERT_C_ECB_TO_THRESH   = ((U2)1000U / (U2)OXCAN_MAIN_TICK);
-    static const U1 u1_s_ALERT_C_ECB_LSB_EBW_MID  = (U1)1U;
-    static const U1 u1_s_ALERT_C_ECB_LSB_B_EBW   = (U1)2U;
-    static const U1 u1_s_ALERT_C_ECB_LSB_DDM1S17    = (U1)5U;
+    static const U2 u2_s_ALERT_C_ECB_TT_TO_THRESH   = ((U2)1000U / (U2)OXCAN_MAIN_TICK);
+    static const U1 u1_s_ALERT_C_ECB_TT_LSB_B_EBW   = (U1)3U;
+
     U1              u1_t_msgsts;
-    U1              u1_t_sgnl_ddrtwv;
-    U1              u1_t_sgnl_ebw_mid;
-    U1              u1_t_sgnl_b_ebw;
+    U1              u1_t_sgnl;
+    U4              u4_t_src_chk;
+
+    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_DDM1S17_CH0,
+                                    (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP,
+                                    u2_s_ALERT_C_ECB_TT_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+
+    u1_t_sgnl     = (U1)0U;
+    (void)Com_ReceiveSignal(ComConf_ComSignal_B_EBW, &u1_t_sgnl);
+    u4_t_src_chk  = (U4)u1_t_sgnl;
+
+    u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_C_ECB_TT_LSB_B_EBW);
+
+    return(u4_t_src_chk);
+}
+
+/*===================================================================================================================================*/
+/*  static U4      u4_s_AlertC_ecbPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)                               */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      u1_a_VOM                                                                                                         */
+/*                  u4_a_IGN_TM                                                                                                      */
+/*                  u1_a_LAS                                                                                                         */
+/*  Return:         u4_t_src_chk                                                                                                     */
+/*===================================================================================================================================*/
+static U4      u4_s_AlertC_ecbPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
+{
+    static const U2 u2_s_ALERT_C_ECB_PD_TO_THRESH    = ((U2)1000U / (U2)OXCAN_MAIN_TICK);
+    static const U1 u1_s_ALERT_C_ECB_PD_LSB_EBW_MID  = (U1)1U;
+
+    U1              u1_t_msgsts;
+    U1              u1_t_sgnl;
     U4              u4_t_src_chk;
 
     u1_t_msgsts = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_DDM1S17_CH0,
                                     (U4)OXCAN_SYS_IGR | (U4)OXCAN_SYS_IGP,
-                                    u2_s_ALERT_C_ECB_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+                                    u2_s_ALERT_C_ECB_PD_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
-    u1_t_sgnl_ddrtwv     = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_DDRTWV, &u1_t_sgnl_ddrtwv);
+    u1_t_sgnl     = (U1)0U;
+    (void)Com_ReceiveSignal(ComConf_ComSignal_EBW_MID, &u1_t_sgnl);
+    u4_t_src_chk  = (U4)u1_t_sgnl;
 
-    u1_t_sgnl_ebw_mid    = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_EBW_MID, &u1_t_sgnl_ebw_mid);
-
-    u1_t_sgnl_b_ebw      = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_B_EBW, &u1_t_sgnl_b_ebw);
-
-    u4_t_src_chk         = (((U4)u1_t_msgsts        <<  u1_s_ALERT_C_ECB_LSB_DDM1S17)  |  ((U4)u1_t_sgnl_b_ebw  <<  u1_s_ALERT_C_ECB_LSB_B_EBW) |
-                            ((U4)u1_t_sgnl_ebw_mid  <<  u1_s_ALERT_C_ECB_LSB_EBW_MID)  |  u1_t_sgnl_ddrtwv);
+    u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_C_ECB_PD_LSB_EBW_MID);
 
     return(u4_t_src_chk);
 }
@@ -203,6 +205,9 @@ static U4      u4_s_AlertC_ecbSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, co
 /*  5.5.0     11/25/2024 KO       Change for BEV System_Consideration_1.                                                             */
 /*  5.6.0     1/13/2026  HT       Change for Full_function2 (MET-M_REMWAR-CSTD-2-04-A-C0)                                            */
 /*                                Removed "ALERT_REQ" in order to transfer signal transmission control from the MCU to the SoC       */
+/*  5.7.0     3/16/2026  NI       Change for BEV Full_Function_2.                                                                    */
+/*                                MET-C_ECB-CSTD-1-00-C-C0                                                                           */
+/*                                Changed split TT and PD, and rename the definitions accordingly.                                   */
 /*                                                                                                                                   */
 /*  * ZS   = Zenjiro Shamoto, NTTD MSE                                                                                               */
 /*  * KT   = Kenichi Takahashi, NTTD MSE                                                                                             */
@@ -210,5 +215,6 @@ static U4      u4_s_AlertC_ecbSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, co
 /*  * HU   = Hidekazu Usui, NTTD MSE                                                                                                 */
 /*  * KO   = Kazuto Oishi,  Denso Techno                                                                                             */
 /*  * HT   = Hibiki Tanii, KSE                                                                                                       */
+/*  * NI   = Naoki Inagaki, KSE                                                                                                      */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
