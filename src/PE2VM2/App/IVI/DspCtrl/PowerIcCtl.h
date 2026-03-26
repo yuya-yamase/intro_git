@@ -112,6 +112,7 @@ void    vd_g_PowerIc_Routine(void);
 void    vd_g_PowerIc_TrunOnDiag_Req(void);
 void    vd_g_PowerIc_SoftMuteSet(const U1 u1_a_softmute_sts);
 void    vd_g_PowerIc_SeqCycStrt(void);
+U1      vd_g_PowerIc_SeqCycEnd(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
