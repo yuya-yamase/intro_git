@@ -441,6 +441,7 @@ static void    vd_s_OdoComTxInit(const U4 u4_a_0P001KM)
     (void)Com_SendSignal(ComConf_ComSignal_TRIP_B,   &u4_sp_odo_dist_tx[ODO_DIST_TX_TRIP_B]);   /* MET1S11 */
     (void)Com_SendSignal(ComConf_ComSignal_ODO_UNI2, &u1_t_odo_unit_tx);                        /* MET1S52 */
     (void)Com_SendSignal(ComConf_ComSignal_ODO_01,   &u4_sp_odo_dist_tx[ODO_DIST_TX_ODO_01]);   /* MET1S52 */
+    (void)Com_SendSignal(ComConf_ComSignal_ODO_MET,  &u4_sp_odo_dist_tx[ODO_DIST_TX_ODO_MET]);  /* CDC1S01 */
 }
 /*===================================================================================================================================*/
 /*  static void    vd_s_OdoComTxUpdtOdo(const U4 u4_a_0P001KM)                                                                       */

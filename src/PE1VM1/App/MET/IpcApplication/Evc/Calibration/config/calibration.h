@@ -1,4 +1,4 @@
-/* 1.4.0 */
+/* 1.5.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -13,7 +13,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define CALIBRATION_H_MAJOR                        (1)
-#define CALIBRATION_H_MINOR                        (4)
+#define CALIBRATION_H_MINOR                        (5)
 #define CALIBRATION_H_PATCH                        (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -602,7 +602,7 @@ extern volatile const U1 u1_CALIB_MCUID0583_ATSSAORNA;     /* ATss_AorNA        
 extern volatile const U1 u1_CALIB_MCUID0584_ATSSUPAVECNT;  /* ATss_UpAveCnt                                                          */
 extern volatile const U1 u1_CALIB_MCUID0585_ATSSDNAVECNT;  /* ATss_DnAveCnt                                                          */
 extern volatile const U1 u1_CALIB_MCUID0586_HUDLMAVECNT;   /* HUDLm_AveCnt                                                           */
-extern volatile const U1 u1_CALIB_MCUID_RSV_1B_0372;       /* Reserve_1B-0372                                                        */
+extern volatile const U1 u1_CALIB_MCUID0023_DISPTYPE;      /* Display type                                                           */
 extern volatile const U1 u1_CALIB_MCUID_RSV_1B_0373;       /* Reserve_1B-0373                                                        */
 extern volatile const U1 u1_CALIB_MCUID_RSV_1B_0374;       /* Reserve_1B-0374                                                        */
 extern volatile const U1 u1_CALIB_MCUID_RSV_1B_0375;       /* Reserve_1B-0375                                                        */

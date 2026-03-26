@@ -193,108 +193,82 @@ void	Pil_Dmac_SetTransModeDoubleBufferReload( U1 t_u1ChannelID, U1 t_u1DmaType, 
 	/* DMAC Resource Selection Register(DMAjRS_n), When using hardware transfer request mode */
 	t_u4Rs = t_pstRegDmac->stDMAC_CH[t_u1ChannelID].unRS.u4Data;
 	t_u4Rs &= (U4)( ~( (U4)DMA_RS_TC + (U4)DMA_RS_TL + (U4)DMA_RS_PLE + (U4)DMA_RS_DRQI + (U4)DMA_RS_RS ) );
-	if ( (t_u1DescMode == (U1)DMA_DESCMODE0) || (t_u1DescMode == (U1)DMA_DESCMODE1) || (t_u1DescMode == (U1)DMA_DESCMODE2) )
-	{	/* On single transfer */
-		t_u4Rs |= ( ( (U4)DMA_RS_TC_0		*	(U4)1U )						+		/* TC=1: Transfers per hardware request */
-					( (U4)DMA_RS_TL_0		*	(U4)DMA_RS_TL_STS )				+		/* TL=000: DMAjTMR_n.STS x DMAjRS_n.Transfer size specified by TC  */
-					( (U4)DMA_RS_PLE		*	(U4)DMA_RS_PLE_DISABLE )		+		/* PRT= Preload function not disabled so no setting required */
-					( (U4)DMA_RS_DRQI		*	(U4)DMA_RS_DRQI_DISABLE )		+		/* PLE=0: Disabled */
-					(U4)t_u1DmaReqNum  );												/* Hardware factor number */
-					/*( (U4)DMA_RS_RS_0		*	(U4)t_u1DmaReqNum ) );		*/			/* Hardware factor number */
-	}
-	else
-	{	/* On block transfer */
-		t_u4Rs |= ( ( (U4)DMA_RS_TL_0		*	(U4)DMA_RS_TL_TSR )				+		/* TL=010: DMAjTSR_ n.Transfer size specified by TSR  */
-					( (U4)DMA_RS_PLE		*	(U4)DMA_RS_PLE_DISABLE )		+		/* PRT= Preload function not disabled so no setting required */
-					( (U4)DMA_RS_DRQI		*	(U4)DMA_RS_DRQI_DISABLE )		+		/* PLE=0: Disabled */
-					(U4)t_u1DmaReqNum );												/* Hardware factor number */
-					/* ( (U4)DMA_RS_RS_0		*	(U4)t_u1DmaReqNum ) );	*/			/* Hardware factor number */
-	}
+	t_u4Rs |= ( ( (U4)DMA_RS_TC_0		*	(U4)1U )						+		/* TC=1: Transfers per hardware request */
+				( (U4)DMA_RS_TL_0		*	(U4)DMA_RS_TL_STS )				+		/* TL=000: DMAjTMR_n.STS x DMAjRS_n.Transfer size specified by TC  */
+				( (U4)DMA_RS_PLE		*	(U4)DMA_RS_PLE_DISABLE )		+		/* PRT= Preload function not disabled so no setting required */
+				( (U4)DMA_RS_DRQI		*	(U4)DMA_RS_DRQI_DISABLE )		+		/* PLE=0: Disabled */
+				(U4)t_u1DmaReqNum  );												/* Hardware factor number */
+				/*( (U4)DMA_RS_RS_0		*	(U4)t_u1DmaReqNum ) );		*/			/* Hardware factor number */
+
 	t_pstRegDmac->stDMAC_CH[t_u1ChannelID].unRS.u4Data = t_u4Rs;
 
-	if ( (t_u1DescMode == (U1)DMA_DESCMODE0) || (t_u1DescMode == (U1)DMA_DESCMODE1) || (t_u1DescMode == (U1)DMA_DESCMODE2) )
+	/* Descriptor Settings */
+	t_u4Dpcr = ( t_pstRegDmac->stDMAC_CH[t_u1ChannelID].unDPCR.u4Data & ( (U4)~( (U4)DMA_DPCR_UPF ) ) );		        /* Clear the settings of UPF 0 to UPF 10, which are valid bits */
+	t_pstRegDmac->stDMAC_CH[t_u1ChannelID].unDPCR.u4Data =  (U4)( t_u4Dpcr |
+															(U4)( (U4)DMA_DPCR_UPF_0 * (U4)DMA_DPCR_UPF_SAR_ENABLE +	/* Source address register update flag */
+															(U4)DMA_DPCR_UPF_1       * (U4)DMA_DPCR_UPF_DAR_ENABLE +	/* Destination address register update flag */
+															(U4)DMA_DPCR_UPF_2       * (U4)DMA_DPCR_UPF_TSR_ENABLE +	/* Transfer size register update flag */
+															(U4)DMA_DPCR_UPF_3       * (U4)DMA_DPCR_UPF_TMR_ENABLE ) );	/* Transfer mode register update flag */
+
+	t_u2DesCnt=cu2PIL_DMAC_DESC_DescriptorAdrrpNum[t_u1ChannelID];			/* Initializing the descriptor counter */
+
+	if (t_u1DescMode == DMA_DESCMODE1)
 	{
-		/* Only transfer mode 0, 1 and 2 are supported */
-
-		/* Descriptor Settings */
-		t_u4Dpcr = ( t_pstRegDmac->stDMAC_CH[t_u1ChannelID].unDPCR.u4Data & ( (U4)~( (U4)DMA_DPCR_UPF ) ) );		        /* Clear the settings of UPF 0 to UPF 10, which are valid bits */
-		t_pstRegDmac->stDMAC_CH[t_u1ChannelID].unDPCR.u4Data =  (U4)( t_u4Dpcr |
-																(U4)( (U4)DMA_DPCR_UPF_0 * (U4)DMA_DPCR_UPF_SAR_ENABLE +	/* Source address register update flag */
-																(U4)DMA_DPCR_UPF_1       * (U4)DMA_DPCR_UPF_DAR_ENABLE +	/* Destination address register update flag */
-																(U4)DMA_DPCR_UPF_2       * (U4)DMA_DPCR_UPF_TSR_ENABLE +	/* Transfer size register update flag */
-																(U4)DMA_DPCR_UPF_3       * (U4)DMA_DPCR_UPF_TMR_ENABLE ) );	/* Transfer mode register update flag */
-
-		t_u2DesCnt=cu2PIL_DMAC_DESC_DescriptorAdrrpNum[t_u1ChannelID];			/* Initializing the descriptor counter */
-
-		if (t_u1DescMode == DMA_DESCMODE1)
-		{
-			t_u2DesIntFlg = (U2)DMA_DPPTR_DIE_ENABLE;
-		}
-		else
-		{
-			t_u2DesIntFlg = (U2)DMA_DPPTR_DIE_DISABLE;
-		}
-
-		t_u4Dpptr = ( t_pstRegDmac->stDMAC_CH[t_u1ChannelID].unDPPTR.u4Data & ( (U4)~( (U4)DMA_DPPTR_DIE + (U4)DMA_DPPTR_PTR + (U4)DMA_DPPTR_CF ) ) );
-		t_pstRegDmac->stDMAC_CH[t_u1ChannelID].unDPPTR.u4Data = (U4)( t_u4Dpptr | /* Descriptor pointer register */
-						(U4)( (U4)DMA_DPPTR_DIE	*	t_u2DesIntFlg	+			  /* Descriptor End Interrupt Enabled */     /* justification for QAC warning 3383: it is not wrap-around within a configuration range */
-						(U4)DMA_DPPTR_PTR_0     *	t_u2ReloadPtr	+				  /* Address pointer of next descriptor */   /* justification for QAC warning 3384: it is not wrap-around within a configuration range */
-						(U4)DMA_DPPTR_CF	    *	(U4)DMA_DPPTR_CF_ENABLE ) );	  /* Descriptor continuation flag */
-
-		/* 1st Descriptor Memory Settings */
-		t_pstRegDmacDesRAM->u4DesRAM[t_u2DesCnt] = (U4)((volatile const U4*)t_pcvdSrcAdr);	/* DMAC source address register */
-		t_u2DesCnt++;    /* justification for QAC warning 3383: it is not wrap-around within a configuration range */
-		t_pstRegDmacDesRAM->u4DesRAM[t_u2DesCnt] = (U4)((volatile const U4*)t_pcvdDestAdr);	/* DMAC destination address register */
-		t_u2DesCnt++;    /* justification for QAC warning 3383: it is not wrap-around within a configuration range */
-		t_pstRegDmacDesRAM->u4DesRAM[t_u2DesCnt] = (U4)( (U4)cu1PIL_DMAC_DESC_TransSize[t_u1TransSize] * (U4)t_u2TransNum );	/* DMAC transfer size register */	/* justification for QAC warning 3384: it is not wrap-around within a configuration range */
-		t_u2DesCnt++;	/* justification for QAC warning 3383: it is not wrap-around within a configuration range */
-		t_pstRegDmacDesRAM->u4DesRAM[t_u2DesCnt] = t_pstRegDmac->stDMAC_CH[t_u1ChannelID].unTMR.u4Data;				/* DMAC transfer mode register */
-		t_u2DesCnt++;	/* justification for QAC warning 3383: it is not wrap-around within a configuration range */
-		t_u4Dpptr = ( t_pstRegDmac->stDMAC_CH[t_u1ChannelID].unDPPTR.u4Data & ( (U4)~( (U4)DMA_DPPTR_DIE + (U4)DMA_DPPTR_PTR + (U4)DMA_DPPTR_CF ) ) );
-		t_u4Dpptr |=	(U4)( (U4)DMA_DPPTR_DIE	  *	t_u2DesIntFlg	   +		  /* Descriptor End Interrupt Enabled */    /* justification for QAC warning 3383: it is not wrap-around within a configuration range */
-						      (U4)DMA_DPPTR_PTR_0 *	( t_u2DesCnt + 1 ) +          /* Address pointer of next descriptor */  /* justification for QAC warning 3384: it is not wrap-around within a configuration range */
-						      (U4)DMA_DPPTR_CF	  *	(U4)DMA_DPPTR_CF_ENABLE );	  /* Descriptor continuation flag */
-		t_pstRegDmacDesRAM->u4DesRAM[t_u2DesCnt] = t_u4Dpptr;					  /* Address pointer of descriptor */
-		t_u2DesCnt++;
-
-		/* 2nd Descriptor Memory Settings */
-		t_pstRegDmacDesRAM->u4DesRAM[t_u2DesCnt] = (U4)((volatile const U4*)t_pcvdSrcAdr);	/* DMAC source address register */
-		t_u2DesCnt++;    /* justification for QAC warning 3383: it is not wrap-around within a configuration range */
-		t_pstRegDmacDesRAM->u4DesRAM[t_u2DesCnt] = (U4)((volatile const U4*)t_pcvdDestAdr);	/* DMAC destination address register */
-		t_u2DesCnt++;    /* justification for QAC warning 3383: it is not wrap-around within a configuration range */
-		t_pstRegDmacDesRAM->u4DesRAM[t_u2DesCnt] = (U4)( (U4)cu1PIL_DMAC_DESC_TransSize[t_u1TransSize] * (U4)t_u2TransNum );	/* DMAC transfer size register */	/* justification for QAC warning 3384: it is not wrap-around within a configuration range */
-		t_u2DesCnt++;	/* justification for QAC warning 3383: it is not wrap-around within a configuration range */
-		t_pstRegDmacDesRAM->u4DesRAM[t_u2DesCnt] = t_pstRegDmac->stDMAC_CH[t_u1ChannelID].unTMR.u4Data;				            /* DMAC transfer mode register */
-		t_u2DesCnt++;	/* justification for QAC warning 3383: it is not wrap-around within a configuration range */
-		t_u4Dpptr = ( t_pstRegDmac->stDMAC_CH[t_u1ChannelID].unDPPTR.u4Data & ( (U4)~( (U4)DMA_DPPTR_DIE    + (U4)DMA_DPPTR_PTR + (U4)DMA_DPPTR_CF ) ) );
-		t_u4Dpptr |=	(U4)( (U4)DMA_DPPTR_DIE	  *	t_u2DesIntFlg	                                        +		/* Descriptor End Interrupt Enabled */   /* justification for QAC warning 3383: it is not wrap-around within a configuration range */
-						      (U4)DMA_DPPTR_PTR_0 *	( cu2PIL_DMAC_DESC_DescriptorAdrrpNum[t_u1ChannelID])	+		/* Address pointer of next descriptor */ /* justification for QAC warning 3384: it is not wrap-around within a configuration range */
-						      (U4)DMA_DPPTR_CF	  *	(U4)DMA_DPPTR_CF_ENABLE );										/* Descriptor continuation flag */
-		t_pstRegDmacDesRAM->u4DesRAM[t_u2DesCnt] = t_u4Dpptr;													    /* Address pointer of descriptor */
-
-		/* Setting the start of a descriptor */
-		/* Transfer mode 1 disables the DMA transfer completion interrupt and enables the descriptor end interrupt. */
-		/* Transfer modes 0 and 2 disable both the DMA transfer completion interrupt and the descriptor end interrupt.*/
-		/* The AND with the inverted value is temporarily held to hold settings other than the specified bit.(It is an intended cast and can never be negative.) */
-		t_u2Chcr = ( t_pstRegDmac->stDMAC_CH[t_u1ChannelID].unCHCR.u2Data & ( (U2)~( (U2)DMA_CHCR_DPE + (U2)DMA_CHCR_DSIE + (U2)DMA_CHCR_IE + (U2)DMA_CHCR_DPB + (U2)DMA_CHCR_CAEE + (U2)DMA_CHCR_CAIE ) ) );
-		t_pstRegDmac->stDMAC_CH[t_u1ChannelID].unCHCR.u2Data = (U2)( t_u2Chcr |(U2) ( (U2)DMA_CHCR_DPE	* (U2)DMA_CHCR_DPE_ENABLE	+	/* Descriptor Action Enabled */
-																				      (U2)DMA_CHCR_DSIE	* t_u2DesIntFlg				+	/* Descriptor End Interrupt Enabled */
-																				      (U2)DMA_CHCR_IE	* (U2)DMA_CHCR_IE_DISABLE	+	/* DMA Transfer Completion Interrupt Disabled */
-																				      (U2)DMA_CHCR_DPB	* (U2)DMA_CHCR_DPB_AFTER_CH	+	/* Start DMA transfer after the channel configuration is copied from the descriptor memory. */
-																				      (U2)DMA_CHCR_CAEE	* (U2)DMA_CHCR_CAEE_DISABLE	+	/* Channel address error notification disabled */
-																				      (U2)DMA_CHCR_CAIE	* (U2)DMA_CHCR_CAIE_DISABLE ));	/* Channel address error interrupt disabled */
-	}        
+		t_u2DesIntFlg = (U2)DMA_DPPTR_DIE_ENABLE;
+	}
 	else
 	{
-		/* DMA transfer completion interrupt is enabled , and descriptor end interrupt is disabled. */
-		/* In order to retain settings other than the specified bit, it is kept temporarily by taking AND with the inverted value. (Intended cast, never negative) */
-		t_u2Chcr = ( t_pstRegDmac->stDMAC_CH[t_u1ChannelID].unCHCR.u2Data & ( (U2)~( (U2)DMA_CHCR_DSIE + (U2)DMA_CHCR_IE + (U2)DMA_CHCR_DPE + (U2)DMA_CHCR_CAEE + (U2)DMA_CHCR_CAIE ) ) );
-		t_pstRegDmac->stDMAC_CH[t_u1ChannelID].unCHCR.u2Data = (U2)( t_u2Chcr|(U2)(	(U2)DMA_CHCR_DSIE	* (U2)DMA_CHCR_DSIE_DISABLE		+		/* Descriptor End Interrupt Disabled */
-																				    (U2)DMA_CHCR_IE		* (U2)DMA_CHCR_IE_ENABLE		+	    /* DMA transfer completion interrupt enabled */
-																				    (U2)DMA_CHCR_DPE	* (U2)DMA_CHCR_DPE_DISABLE 		+		/* Descriptor operation disabled */
-																				    (U2)DMA_CHCR_CAEE	* (U2)DMA_CHCR_CAEE_DISABLE		+		/* Channel address error notification disabled */
-																				    (U2)DMA_CHCR_CAIE	* (U2)DMA_CHCR_CAIE_DISABLE ));			/* Channel address error interrupt disabled */
+		t_u2DesIntFlg = (U2)DMA_DPPTR_DIE_DISABLE;
 	}
+
+	t_u4Dpptr = ( t_pstRegDmac->stDMAC_CH[t_u1ChannelID].unDPPTR.u4Data & ( (U4)~( (U4)DMA_DPPTR_DIE + (U4)DMA_DPPTR_PTR + (U4)DMA_DPPTR_CF ) ) );
+	t_pstRegDmac->stDMAC_CH[t_u1ChannelID].unDPPTR.u4Data = (U4)( t_u4Dpptr | /* Descriptor pointer register */
+					(U4)( (U4)DMA_DPPTR_DIE	*	t_u2DesIntFlg	+			  /* Descriptor End Interrupt Enabled */     /* justification for QAC warning 3383: it is not wrap-around within a configuration range */
+					(U4)DMA_DPPTR_PTR_0     *	t_u2ReloadPtr	+				  /* Address pointer of next descriptor */   /* justification for QAC warning 3384: it is not wrap-around within a configuration range */
+					(U4)DMA_DPPTR_CF	    *	(U4)DMA_DPPTR_CF_ENABLE ) );	  /* Descriptor continuation flag */
+
+	/* 1st Descriptor Memory Settings */
+	t_pstRegDmacDesRAM->u4DesRAM[t_u2DesCnt] = (U4)((volatile const U4*)t_pcvdSrcAdr);	/* DMAC source address register */
+	t_u2DesCnt++;    /* justification for QAC warning 3383: it is not wrap-around within a configuration range */
+	t_pstRegDmacDesRAM->u4DesRAM[t_u2DesCnt] = (U4)((volatile const U4*)t_pcvdDestAdr);	/* DMAC destination address register */
+	t_u2DesCnt++;    /* justification for QAC warning 3383: it is not wrap-around within a configuration range */
+	t_pstRegDmacDesRAM->u4DesRAM[t_u2DesCnt] = (U4)( (U4)cu1PIL_DMAC_DESC_TransSize[t_u1TransSize] * (U4)t_u2TransNum );	/* DMAC transfer size register */	/* justification for QAC warning 3384: it is not wrap-around within a configuration range */
+	t_u2DesCnt++;	/* justification for QAC warning 3383: it is not wrap-around within a configuration range */
+	t_pstRegDmacDesRAM->u4DesRAM[t_u2DesCnt] = t_pstRegDmac->stDMAC_CH[t_u1ChannelID].unTMR.u4Data;				/* DMAC transfer mode register */
+	t_u2DesCnt++;	/* justification for QAC warning 3383: it is not wrap-around within a configuration range */
+	t_u4Dpptr = ( t_pstRegDmac->stDMAC_CH[t_u1ChannelID].unDPPTR.u4Data & ( (U4)~( (U4)DMA_DPPTR_DIE + (U4)DMA_DPPTR_PTR + (U4)DMA_DPPTR_CF ) ) );
+	t_u4Dpptr |=	(U4)( (U4)DMA_DPPTR_DIE	  *	t_u2DesIntFlg	   +		  /* Descriptor End Interrupt Enabled */    /* justification for QAC warning 3383: it is not wrap-around within a configuration range */
+					      (U4)DMA_DPPTR_PTR_0 *	( t_u2DesCnt + 1 ) +          /* Address pointer of next descriptor */  /* justification for QAC warning 3384: it is not wrap-around within a configuration range */
+					      (U4)DMA_DPPTR_CF	  *	(U4)DMA_DPPTR_CF_ENABLE );	  /* Descriptor continuation flag */
+	t_pstRegDmacDesRAM->u4DesRAM[t_u2DesCnt] = t_u4Dpptr;					  /* Address pointer of descriptor */
+	t_u2DesCnt++;
+
+	/* 2nd Descriptor Memory Settings */
+	t_pstRegDmacDesRAM->u4DesRAM[t_u2DesCnt] = (U4)((volatile const U4*)t_pcvdSrcAdr);	/* DMAC source address register */
+	t_u2DesCnt++;    /* justification for QAC warning 3383: it is not wrap-around within a configuration range */
+	t_pstRegDmacDesRAM->u4DesRAM[t_u2DesCnt] = (U4)((volatile const U4*)t_pcvdDestAdr);	/* DMAC destination address register */
+	t_u2DesCnt++;    /* justification for QAC warning 3383: it is not wrap-around within a configuration range */
+	t_pstRegDmacDesRAM->u4DesRAM[t_u2DesCnt] = (U4)( (U4)cu1PIL_DMAC_DESC_TransSize[t_u1TransSize] * (U4)t_u2TransNum );	/* DMAC transfer size register */	/* justification for QAC warning 3384: it is not wrap-around within a configuration range */
+	t_u2DesCnt++;	/* justification for QAC warning 3383: it is not wrap-around within a configuration range */
+	t_pstRegDmacDesRAM->u4DesRAM[t_u2DesCnt] = t_pstRegDmac->stDMAC_CH[t_u1ChannelID].unTMR.u4Data;				            /* DMAC transfer mode register */
+	t_u2DesCnt++;	/* justification for QAC warning 3383: it is not wrap-around within a configuration range */
+	t_u4Dpptr = ( t_pstRegDmac->stDMAC_CH[t_u1ChannelID].unDPPTR.u4Data & ( (U4)~( (U4)DMA_DPPTR_DIE    + (U4)DMA_DPPTR_PTR + (U4)DMA_DPPTR_CF ) ) );
+	t_u4Dpptr |=	(U4)( (U4)DMA_DPPTR_DIE	  *	t_u2DesIntFlg	                                        +		/* Descriptor End Interrupt Enabled */   /* justification for QAC warning 3383: it is not wrap-around within a configuration range */
+					      (U4)DMA_DPPTR_PTR_0 *	( cu2PIL_DMAC_DESC_DescriptorAdrrpNum[t_u1ChannelID])	+		/* Address pointer of next descriptor */ /* justification for QAC warning 3384: it is not wrap-around within a configuration range */
+					      (U4)DMA_DPPTR_CF	  *	(U4)DMA_DPPTR_CF_ENABLE );										/* Descriptor continuation flag */
+	t_pstRegDmacDesRAM->u4DesRAM[t_u2DesCnt] = t_u4Dpptr;													    /* Address pointer of descriptor */
+
+	/* Setting the start of a descriptor */
+	/* Transfer mode 1 disables the DMA transfer completion interrupt and enables the descriptor end interrupt. */
+	/* Transfer modes 0 and 2 disable both the DMA transfer completion interrupt and the descriptor end interrupt.*/
+	/* The AND with the inverted value is temporarily held to hold settings other than the specified bit.(It is an intended cast and can never be negative.) */
+	t_u2Chcr = ( t_pstRegDmac->stDMAC_CH[t_u1ChannelID].unCHCR.u2Data & ( (U2)~( (U2)DMA_CHCR_DPE + (U2)DMA_CHCR_DSIE + (U2)DMA_CHCR_IE + (U2)DMA_CHCR_DPB + (U2)DMA_CHCR_CAEE + (U2)DMA_CHCR_CAIE ) ) );
+	t_pstRegDmac->stDMAC_CH[t_u1ChannelID].unCHCR.u2Data = (U2)( t_u2Chcr |(U2) ( (U2)DMA_CHCR_DPE	* (U2)DMA_CHCR_DPE_ENABLE	+	/* Descriptor Action Enabled */
+																			      (U2)DMA_CHCR_DSIE	* t_u2DesIntFlg				+	/* Descriptor End Interrupt Enabled */
+																			      (U2)DMA_CHCR_IE	* (U2)DMA_CHCR_IE_DISABLE	+	/* DMA Transfer Completion Interrupt Disabled */
+																			      (U2)DMA_CHCR_DPB	* (U2)DMA_CHCR_DPB_AFTER_CH	+	/* Start DMA transfer after the channel configuration is copied from the descriptor memory. */
+																			      (U2)DMA_CHCR_CAEE	* (U2)DMA_CHCR_CAEE_DISABLE	+	/* Channel address error notification disabled */
+																			      (U2)DMA_CHCR_CAIE	* (U2)DMA_CHCR_CAIE_DISABLE ));	/* Channel address error interrupt disabled */
 
 	/* EI_ALL()";" */
 }

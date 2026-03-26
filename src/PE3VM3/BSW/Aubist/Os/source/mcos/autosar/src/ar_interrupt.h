@@ -80,19 +80,19 @@ extern const ar_isr_config_t *ar_get_isr_config(
 #define OS_STOP_SEC_CODE
 #include "Os_MemMap.h"
 
-LOCAL_INLINE void ar_suspend_all_interrupt_impl(clscb_t * const clscb,
+AR_LOCAL_FORCE_INLINE void ar_suspend_all_interrupt_impl(clscb_t * const clscb,
     ar_intcb_t * const ar_intcb);
-LOCAL_INLINE void ar_resume_all_interrupt_impl(clscb_t * const clscb,
+AR_LOCAL_FORCE_INLINE void ar_resume_all_interrupt_impl(clscb_t * const clscb,
     ar_intcb_t * const ar_intcb);
-LOCAL_INLINE void ar_resume_all_interrupt_spinlock_impl(clscb_t * const clscb,
+AR_LOCAL_FORCE_INLINE void ar_resume_all_interrupt_spinlock_impl(clscb_t * const clscb,
     ar_intcb_t * const ar_intcb);
-LOCAL_INLINE void ar_suspend_os_interrupt_impl(clscb_t * const clscb,
+AR_LOCAL_FORCE_INLINE void ar_suspend_os_interrupt_impl(clscb_t * const clscb,
     ar_intcb_t * const ar_intcb);
-LOCAL_INLINE void ar_suspend_os_interrupt_spinlock_impl(clscb_t * const clscb,
+AR_LOCAL_FORCE_INLINE void ar_suspend_os_interrupt_spinlock_impl(clscb_t * const clscb,
     ar_intcb_t * const ar_intcb);
-LOCAL_INLINE void ar_resume_os_interrupt_impl(clscb_t * const clscb,
+AR_LOCAL_FORCE_INLINE void ar_resume_os_interrupt_impl(clscb_t * const clscb,
     ar_intcb_t * const ar_intcb);
-LOCAL_INLINE void ar_resume_os_interrupt_spinlock_impl(clscb_t * const clscb,
+AR_LOCAL_FORCE_INLINE void ar_resume_os_interrupt_spinlock_impl(clscb_t * const clscb,
     ar_intcb_t * const ar_intcb);
 
 /*
@@ -100,7 +100,7 @@ LOCAL_INLINE void ar_resume_os_interrupt_spinlock_impl(clscb_t * const clscb,
  *   - SuspendAllInterrupts API (not in CS)
  *   - Get/TryToGetSpinlock with LOCK_ALL_INTERRUPTS (in CS)
  */
-LOCAL_INLINE void ar_suspend_all_interrupt_impl(
+AR_LOCAL_FORCE_INLINE void ar_suspend_all_interrupt_impl(
     clscb_t * const clscb,
     ar_intcb_t * const ar_intcb)
 {
@@ -129,7 +129,7 @@ LOCAL_INLINE void ar_suspend_all_interrupt_impl(
  * called from,
  *  - ResumeAllInterrupts API (not in CS)
  */
-LOCAL_INLINE void ar_resume_all_interrupt_impl(
+AR_LOCAL_FORCE_INLINE void ar_resume_all_interrupt_impl(
     clscb_t * const clscb,
     ar_intcb_t * const ar_intcb)
 {
@@ -218,7 +218,7 @@ LOCAL_INLINE void ar_resume_all_interrupt_impl(
  *  - ReleaseSpinlock with LOCK_ALL_INTERRUPTS (in CS)
  *  - ar_spinlock_force_release with LOCK_ALL_INTERRUPTS (in CS)
  */
-LOCAL_INLINE void ar_resume_all_interrupt_spinlock_impl(
+AR_LOCAL_FORCE_INLINE void ar_resume_all_interrupt_spinlock_impl(
     clscb_t * const clscb,
     ar_intcb_t * const ar_intcb)
 {
@@ -248,7 +248,7 @@ LOCAL_INLINE void ar_resume_all_interrupt_spinlock_impl(
  * called from,
  *  - SuspendOSInterrupts API (not in CS)
  */
-LOCAL_INLINE void ar_suspend_os_interrupt_impl(
+AR_LOCAL_FORCE_INLINE void ar_suspend_os_interrupt_impl(
     clscb_t * const clscb,
     ar_intcb_t * const ar_intcb)
 {
@@ -300,7 +300,7 @@ LOCAL_INLINE void ar_suspend_os_interrupt_impl(
  * called from,
  *   - Get/TryToGetSpinlock with LOCK_CAT2_INTERRUPTS (in CS, no C1ISR)
  */
-LOCAL_INLINE void ar_suspend_os_interrupt_spinlock_impl(
+AR_LOCAL_FORCE_INLINE void ar_suspend_os_interrupt_spinlock_impl(
     clscb_t * const clscb,
     ar_intcb_t * const ar_intcb)
 {
@@ -362,7 +362,7 @@ LOCAL_INLINE void ar_suspend_os_interrupt_spinlock_impl(
  * called from,
  *  - ResumeOSInterrupts API (not in CS)
  */
-LOCAL_INLINE void ar_resume_os_interrupt_impl(
+AR_LOCAL_FORCE_INLINE void ar_resume_os_interrupt_impl(
     clscb_t * const clscb,
     ar_intcb_t * const ar_intcb)
 {
@@ -447,7 +447,7 @@ LOCAL_INLINE void ar_resume_os_interrupt_impl(
  *   - ReleaseSpinlock with LOCK_CAT2_INTERRUPTS (in CS, no C1ISR)
  *   - ar_spinlock_force_release with LOCK_CAT2_INTERRUPTS (in CS, no C1ISR)
  */
-LOCAL_INLINE void ar_resume_os_interrupt_spinlock_impl(
+AR_LOCAL_FORCE_INLINE void ar_resume_os_interrupt_spinlock_impl(
     clscb_t * const clscb,
     ar_intcb_t * const ar_intcb)
 {

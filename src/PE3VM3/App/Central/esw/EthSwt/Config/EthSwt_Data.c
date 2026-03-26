@@ -14,8 +14,6 @@
 #include <EthSwt.h>
 #include <EthSwt_SWIC_MIB.h>
 /* -------------------------------------------------------------------------- */
-#define D_ETHSWT_SWIC_ID                            ETHSWT_SWIC_IDX
-
 #define D_ETHSWT_DATA_FAILED                        (0xFF)                      /* 未使用ポート用 */
 
 #define D_ETHSWT_DATA_UPDATE_ADC                    (1U << 0U)                  /* 0b00000001：A-DCポート更新ビット     */
@@ -92,9 +90,6 @@ static const S_ETHSWT_DATA_FOR_UPDATE S_ETHSWT_DATA_SQI_ID_TABLE[D_ETHSWT_SWIC_P
 };
 
 /* -------------------------------------------------------------------------- */
-/* 以下、暫定 */
-static EthSwt_StateType         G_ETHSWT_DATA_STATE[181];
-/* 以上、暫定 */
 static S_ETHSWT_DATA_LINK       G_ETHSWT_DATA_LINK;
 static S_ETHSWT_DATA_MIB        G_ETHSWT_DATA_MIB;
 static S_ETHSWT_DATA_SQI        G_ETHSWT_DATA_SQI;
@@ -114,7 +109,6 @@ static uint8                    G_ETHSWT_DATA_SQI_UPDATE;
 static uint8                    G_ETHSWT_DATA_QCI_UPDATE;
 
 /* -------------------------------------------------------------------------- */
-static void ethswt_data_setEthSwtStateData(void);
 static void ethswt_data_checkLinkUpdate(void);
 static void ethswt_data_checkMIBUpdate(void);
 static void ethswt_data_checkSQIUpdate(void);
@@ -127,7 +121,6 @@ void EthSwt_Data_Init(void)
 {
     uint8   idx;
 
-    LIB_memset((uint8*)&G_ETHSWT_DATA_STATE, 0, sizeof(G_ETHSWT_DATA_STATE));
     LIB_memset((uint8*)&G_ETHSWT_DATA_LINK, 0, sizeof(G_ETHSWT_DATA_LINK));
     LIB_memset((uint8*)&G_ETHSWT_DATA_MIB, 0, sizeof(G_ETHSWT_DATA_MIB));
     LIB_memset((uint8*)&G_ETHSWT_DATA_SQI, 0, sizeof(G_ETHSWT_DATA_SQI));
@@ -253,7 +246,6 @@ void EthSwt_Data_NotifySWICReset(void)
 /* -------------------------------------------------------------------------- */
 void EthSwt_Data_LoProc(void)
 {
-    ethswt_data_setEthSwtStateData();
     ethswt_data_checkLinkUpdate();
     ethswt_data_checkMIBUpdate();
     ethswt_data_checkSQIUpdate();
@@ -321,15 +313,6 @@ static void ethswt_data_checkRegAccessUpdate(void)
 static void ethswt_data_checkSWICReset(void)
 {
     (void)ChipCom_SetPeriodicTxData(CHIPCOM_PERIODICID_ETHERSWT_SWIC_RESETRESTART, sizeof(G_ETHSWT_DATA_SWICRESET_COUNT), (uint8*)&G_ETHSWT_DATA_SWICRESET_COUNT);
-
-    return;
-}
-/* -------------------------------------------------------------------------- */
-static void ethswt_data_setEthSwtStateData(void)
-{
-    G_ETHSWT_DATA_STATE[0] = EthSwt_SWIC_GetEthSwtState(D_ETHSWT_SWIC_ID);
-
-    (void)ChipCom_SetPeriodicTxData(CHIPCOM_PERIODICID_ETHERSWT_MCUINFO, sizeof(G_ETHSWT_DATA_STATE), (uint8*)&G_ETHSWT_DATA_STATE);
 
     return;
 }

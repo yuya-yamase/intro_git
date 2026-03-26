@@ -191,34 +191,27 @@ static void vd_s_VISCanGetOdo(void)
                     ((U4)u1_tp_rx[VIS_CAN_ODO_RX_POS2] << VIS_CAN_SHIFT_2BYTE) |
                     ((U4)u1_tp_rx[VIS_CAN_ODO_RX_POS3] << VIS_CAN_SHIFT_1BYTE) |
                      (U4)u1_tp_rx[VIS_CAN_ODO_RX_POS4]);
-        
-        /* オド単位がkmの場合 */
-        if(u1_t_odounit == VIS_CAN_ODO_UNIT_KM){
-            /* 最大値を超える場合 */
-            if(u4_t_odo > VIS_CAN_ODO_MAX_KM){
-                u4_s_vis_can_ododata = VIS_CAN_ODO_FAIL;
-            }
-            /* 最大値以下の場合 */
-            else{
-                /* LSB変換 */
-                u4_s_vis_can_ododata = u4_t_odo * VIS_CAN_ODO_LSB;
-            }
-        }
-        /* オド単位がMileの場合 */
-        else if(u1_t_odounit == VIS_CAN_ODO_UNIT_MILE){
-            /* 最大値を超える場合 */
-            if(u4_t_odo > VIS_CAN_ODO_MAX_MILE){
-                u4_s_vis_can_ododata = VIS_CAN_ODO_FAIL;
-            }
-            /* 最大値以下の場合 */
-            else{
-                /* 単位変換(1mile =1.61km) LSB変換 */
-                u4_s_vis_can_ododata = (u4_t_odo * VIS_CAN_ODO_MILE_TO_KM) / VIS_CAN_ODO_LSB;
-            }
-        }
-        /* オド単位が異常の場合 */
-        else{
+
+        /* 最大値を超える場合 */
+        if(u4_t_odo > VIS_CAN_ODO_MAX){
+            /* Fail値を設定 */
             u4_s_vis_can_ododata = VIS_CAN_ODO_FAIL;
+        }
+        else{
+            /* オド単位がkmの場合 */
+            if(u1_t_odounit == VIS_CAN_ODO_UNIT_KM){
+               /* LSB変換 */
+               u4_s_vis_can_ododata = u4_t_odo * VIS_CAN_ODO_LSB;
+            }
+            /* オド単位がMileの場合 */
+            else if(u1_t_odounit == VIS_CAN_ODO_UNIT_MILE){
+               /* 単位変換(1mile =1.609km)+LSB変換 */
+               u4_s_vis_can_ododata = (u4_t_odo * VIS_CAN_ODO_MILE_TO_KM) / VIS_CAN_ODO_MILE_LSB;
+            }
+            /* オド単位が異常の場合 */
+            else{
+                u4_s_vis_can_ododata = VIS_CAN_ODO_FAIL;
+            }
         }
     }
     /* MET1S02 正常受信していない場合 */
@@ -527,9 +520,16 @@ static void vd_s_VISCanGetCrlyof(void)
 static U1 u1_s_VISCanUtcCheckLimit(const U1 u1_a_DATA, const U1 u1_a_MIN, const U1 u1_a_MAX)
 {
     U1 u1_t_ret= (U1)E_OK;    /* 範囲チェック */
+    U1 u1_t_highnibble;       /* BCDフォーマットチェック(上位4bit) */
+    U1 u1_t_lownibble;        /* BCDフォーマットチェック(下位4bit) */
+    
+    u1_t_highnibble = (u1_a_DATA >> VIS_CAN_UTC_SHIFT_4BIT);
+    u1_t_lownibble  = (u1_a_DATA & VIS_CAN_1BYTEMASK_LOW);
     
     if (u1_a_DATA < u1_a_MIN) { u1_t_ret = (U1)E_NOT_OK; }
     if (u1_a_DATA > u1_a_MAX) { u1_t_ret = (U1)E_NOT_OK; }
+    if (u1_t_highnibble > VIS_CAN_UTC_DECIMALMAX) { u1_t_ret = (U1)E_NOT_OK; }
+    if (u1_t_lownibble > VIS_CAN_UTC_DECIMALMAX) { u1_t_ret = (U1)E_NOT_OK; }
     
     return u1_t_ret;
 }

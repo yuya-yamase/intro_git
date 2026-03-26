@@ -36,7 +36,7 @@
 #define IVDSH_DID_WRI_VM2TO1_DSPCAL              (4U)
 #define IVDSH_DID_WRI_VM2TO1_CAL                 (5U)
 #define IVDSH_DID_WRI_VM2TO1_CAM_DIAP            (6U)
-#define IVDSH_DID_WRI_VM2TO3_WHLINI_REQ          (7U)
+#define IVDSH_DID_WRI_VM2TO3_WHLINI_INF          (7U)
 #define IVDSH_DID_WRI_VM2TO3_STRMODE             (8U)
 #define IVDSH_DID_WRI_VM2TO3_OPESTS              (9U)
 #define IVDSH_DID_WRI_GPS_REQ                    (10U)

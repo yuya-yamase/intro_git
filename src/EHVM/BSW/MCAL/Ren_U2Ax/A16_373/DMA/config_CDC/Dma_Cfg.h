@@ -5,7 +5,6 @@
 /*==============================================================================================*/
 /*	include files																				*/
 /*==============================================================================================*/
-#include	"Os.h"
 
 /*==============================================================================================*/
 /*	DMA common configuration																	*/
@@ -14,8 +13,8 @@
 #define	DMA_UCFG_CHDATA_NUM				(10u)
 
 /* Uninterruptible/Uninterruptible */
-#define DMA_ENTER_CRITICAL_SECTION()			SuspendAllInterrupts()							/* Do not interrupt */
-#define DMA_EXIT_CRITICAL_SECTION()				ResumeAllInterrupts()							/* Allow interrupts */
+#define DMA_ENTER_CRITICAL_SECTION()											/* Do not interrupt */
+#define DMA_EXIT_CRITICAL_SECTION()												/* Allow interrupts */
 
 /* Register Check */
 #define	DMA_CFG_REG_CHK						(STD_OFF)

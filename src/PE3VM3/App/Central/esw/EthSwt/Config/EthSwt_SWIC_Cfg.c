@@ -197,6 +197,23 @@ Std_ReturnType EthSwt_SWIC_Cfg_AllowRelay(void)
 }
 
 /* -------------------------------------------------------------------------- */
+/* Config for EthSwt_SWIC_Reg.c                                               */
+/* -------------------------------------------------------------------------- */
+void EthSwt_SWIC_Cfg_WaitUS(const uint16 waitUSTime)
+{
+	const uint32	startTime = LIB_GetFreeRunCount1us();
+	uint32			i;
+
+	for (i = 0U; i < ((uint32)waitUSTime * D_ETHSWT_SWIC_CLOCK_PER_US); i++) {      /* 1ループ1クロック前提（実際はそれ以上のクロックがある）にガード実装 */
+		const uint32	nowTime = LIB_GetFreeRunCount1us();
+		if ((nowTime - startTime) > (uint32)waitUSTime)	{ break; }                  /* ラップアラウンドはC規格上問題なし */
+	}
+
+	return;
+}
+
+
+/* -------------------------------------------------------------------------- */
 /* Config for EthSwt_SWIC_STM.c                                               */
 /* Config for EthSwt_SWIC_Reg.c                                               */
 /* -------------------------------------------------------------------------- */

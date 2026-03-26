@@ -13,5 +13,5 @@ void EthSwt_SWIC_LoProc(void);
 void EthSwt_SWIC_BackgroundTask(void);
 void EthSwt_SWIC_PowerOn(void);
 void EthSwt_SWIC_PowerOff(void);
-EthSwt_StateType EthSwt_SWIC_GetEthSwtState(const uint8 SwitchIdx);
+Std_ReturnType EthSwt_SWIC_GetEthSwtState(const uint8 SwitchIdx, EthSwt_StateType * const State);
 #endif /*ETHSWT_SWIC_H*/
