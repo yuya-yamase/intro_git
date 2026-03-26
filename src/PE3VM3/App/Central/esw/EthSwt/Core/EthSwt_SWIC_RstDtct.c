@@ -57,14 +57,11 @@ static Std_ReturnType ethswt_swic_rstdtct_checkRstReg(uint32 * const errFactor)
 	for (uint32 i = 0; i < G_ETHSWT_SWIC_RSTDTCT_TABLE_NUM; i++)
 	{
 		result = EthSwt_SWIC_Reg_SetTbl(G_ETHSWT_SWIC_RSTDTCT_TABLE[i].tbl, G_ETHSWT_SWIC_RSTDTCT_TABLE[i].num, NULL_PTR, errFactor);
-		/* 全て異常値でない場合(1つでも正常である場合) */
-		if (E_OK == result)
-		{
-			break;
-		}
+		if (E_NOT_OK == result && *errFactor != D_ETHSWT_SWIC_ERR_WRONGVALUE) { break; }	/* 異常値読み出しではなく、レジスタアクセスが失敗した場合は、異常中断 */
+		if (E_OK == result) { break; }														/* 1つでも正常である場合は、正常中断 */
 	}
 
-	if (E_NOT_OK == result && *errFactor == D_ETHSWT_SWIC_ERR_WRONGVALUE)
+	if (E_NOT_OK == result && *errFactor == D_ETHSWT_SWIC_ERR_WRONGVALUE)					/* 異常値読み出しで失敗の場合、エラー要因をSWICリセット検出に上書き */
 	{
 		*errFactor = D_ETHSWT_SWIC_ERR_RESET;
 	}

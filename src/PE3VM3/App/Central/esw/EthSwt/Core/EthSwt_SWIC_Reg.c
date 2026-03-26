@@ -152,7 +152,7 @@ static Std_ReturnType swic_Reg_SetTblReadOFF(const swic_reg_data_t tbl[], const 
 	if (result == E_NOT_OK &&
 		*errFactor != D_ETHSWT_SWIC_ERR_WRONGVALUE &&
 		*errFactor != D_ETHSWT_SWIC_ERR_POWEROFF) {
-		*errFactor = D_ETHSWT_SWIC_ERR_CRC;	/* CRCエラーが連続INIT_SEQ_RETRY_CNT続いたとき */
+		*errFactor = D_ETHSWT_SWIC_ERR_CRC;					/* 異常値が読み出しでもなく、電源状態が正常な場合で失敗した場合は、CRC異常で確定 */
 	}
 
 	return result;
