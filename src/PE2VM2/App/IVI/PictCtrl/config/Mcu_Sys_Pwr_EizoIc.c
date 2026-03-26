@@ -1119,43 +1119,43 @@ const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU182[MCU_SYS_PWR_EIZOIC_RWC_BY
 const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU183[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0xFFU,    /* Write Address */
-    (U1)0x48U     /* Write Data */
+    (U1)0x40U     /* Write Data */
 };
 
 const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU184[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x00U,    /* Write Address */
-    (U1)0x01U     /* Write Data */
+    (U1)0xBCU     /* Write Data */
 };
 
 const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU185[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0xFFU,    /* Write Address */
-    (U1)0x40U     /* Write Data */
+    (U1)0x01U,    /* Write Address */
+    (U1)0xFFU     /* Write Data */
 };
 
 const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU186[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x02U,    /* Write Address */
+    (U1)0x07U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU187[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x20U,    /* Write Address */
     (U1)0x0DU     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU187[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU188[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x21U,    /* Write Address */
     (U1)0x01U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU188[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU189[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x80U,    /* Write Address */
     (U1)0x12U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU189[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x92U,    /* Write Address */
-    (U1)0x20U     /* Write Data */
 };
 
 const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU190[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
@@ -1196,1811 +1196,1733 @@ const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU195[MCU_SYS_PWR_EIZOIC_RWC_BY
 
 const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU196[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x21U,    /* Write Address */
-    (U1)0x04U     /* Write Data */
+    (U1)0xFFU,    /* Write Address */
+    (U1)0x40U     /* Write Data */
 };
 
 const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU197[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x22U,    /* Write Address */
-    (U1)0x05U     /* Write Data */
+    (U1)0x04U,    /* Write Address */
+    (U1)0xFEU     /* Write Data */
 };
 
 const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU198[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x23U,    /* Write Address */
-    (U1)0x06U     /* Write Data */
+    (U1)0x05U,    /* Write Address */
+    (U1)0xFFU     /* Write Data */
 };
 
 const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU199[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x24U,    /* Write Address */
-    (U1)0x07U     /* Write Data */
+    (U1)0x06U,    /* Write Address */
+    (U1)0xFFU     /* Write Data */
 };
 
 const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU200[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x25U,    /* Write Address */
-    (U1)0x14U     /* Write Data */
+    (U1)0xFFU,    /* Write Address */
+    (U1)0x50U     /* Write Data */
 };
 
 const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU201[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x26U,    /* Write Address */
-    (U1)0x15U     /* Write Data */
+    (U1)0x1DU,    /* Write Address */
+    (U1)0x05U     /* Write Data */
 };
 
 const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU202[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x27U,    /* Write Address */
-    (U1)0x16U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU203[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x28U,    /* Write Address */
-    (U1)0x16U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU204[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x29U,    /* Write Address */
-    (U1)0x24U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU205[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x2AU,    /* Write Address */
-    (U1)0x25U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU206[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x2BU,    /* Write Address */
-    (U1)0x25U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU207[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x2CU,    /* Write Address */
-    (U1)0x25U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU208[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x2DU,    /* Write Address */
-    (U1)0x34U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU209[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x2EU,    /* Write Address */
-    (U1)0x34U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU210[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x2FU,    /* Write Address */
-    (U1)0x34U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU211[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x30U,    /* Write Address */
-    (U1)0x34U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU212[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x31U,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU213[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x32U,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU214[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x33U,    /* Write Address */
-    (U1)0x04U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU215[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0xFFU,    /* Write Address */
     (U1)0x70U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU216[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU203[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x00U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU217[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU204[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x01U,    /* Write Address */
     (U1)0xFFU     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU218[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU205[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x02U,    /* Write Address */
     (U1)0xFFU     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU219[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU206[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x03U,    /* Write Address */
     (U1)0xFFU     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU220[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU207[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x04U,    /* Write Address */
     (U1)0xFFU     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU221[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU208[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x05U,    /* Write Address */
     (U1)0xFFU     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU222[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU209[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x06U,    /* Write Address */
     (U1)0xFFU     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU223[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU210[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x07U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU224[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU211[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x08U,    /* Write Address */
     (U1)0x1AU     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU225[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU212[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x09U,    /* Write Address */
     (U1)0x8CU     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU226[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU213[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x0AU,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU227[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU214[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x0BU,    /* Write Address */
     (U1)0x26U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU228[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU215[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x0CU,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU229[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU216[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x0DU,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU230[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU217[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x0EU,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU231[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU218[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x0FU,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU232[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU219[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x10U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU233[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU220[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x11U,    /* Write Address */
     (U1)0x24U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU234[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU221[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x12U,    /* Write Address */
     (U1)0x01U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU235[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU222[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x13U,    /* Write Address */
     (U1)0x04U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU236[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU223[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x14U,    /* Write Address */
     (U1)0x80U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU237[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU224[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x15U,    /* Write Address */
     (U1)0x1AU     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU238[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU225[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x16U,    /* Write Address */
     (U1)0x0FU     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU239[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU226[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x17U,    /* Write Address */
     (U1)0x78U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU240[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU227[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x18U,    /* Write Address */
     (U1)0x0AU     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU241[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU228[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x19U,    /* Write Address */
     (U1)0x0DU     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU242[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU229[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x1AU,    /* Write Address */
     (U1)0xC9U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU243[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU230[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x1BU,    /* Write Address */
     (U1)0xA0U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU244[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU231[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x1CU,    /* Write Address */
     (U1)0x57U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU245[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU232[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x1DU,    /* Write Address */
     (U1)0x47U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU246[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU233[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x1EU,    /* Write Address */
     (U1)0x98U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU247[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU234[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x1FU,    /* Write Address */
     (U1)0x27U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU248[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU235[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x20U,    /* Write Address */
     (U1)0x12U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU249[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU236[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x21U,    /* Write Address */
     (U1)0x48U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU250[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU237[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x22U,    /* Write Address */
     (U1)0x4CU     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU251[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU238[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x23U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU252[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU239[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x24U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU253[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU240[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x25U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU254[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU241[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x26U,    /* Write Address */
+    (U1)0x01U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU242[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x27U,    /* Write Address */
+    (U1)0x01U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU243[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x28U,    /* Write Address */
+    (U1)0x01U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU244[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x29U,    /* Write Address */
+    (U1)0x01U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU245[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x2AU,    /* Write Address */
+    (U1)0x01U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU246[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x2BU,    /* Write Address */
+    (U1)0x01U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU247[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x2CU,    /* Write Address */
+    (U1)0x01U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU248[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x2DU,    /* Write Address */
+    (U1)0x01U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU249[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x2EU,    /* Write Address */
+    (U1)0x01U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU250[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x2FU,    /* Write Address */
+    (U1)0x01U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU251[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x30U,    /* Write Address */
+    (U1)0x01U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU252[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x31U,    /* Write Address */
+    (U1)0x01U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU253[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x32U,    /* Write Address */
+    (U1)0x01U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU254[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x33U,    /* Write Address */
     (U1)0x01U     /* Write Data */
 };
 
 const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU255[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x27U,    /* Write Address */
+    (U1)0x34U,    /* Write Address */
     (U1)0x01U     /* Write Data */
 };
 
 const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU256[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x28U,    /* Write Address */
+    (U1)0x35U,    /* Write Address */
     (U1)0x01U     /* Write Data */
 };
 
 const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU257[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x29U,    /* Write Address */
-    (U1)0x01U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU258[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x2AU,    /* Write Address */
-    (U1)0x01U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU259[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x2BU,    /* Write Address */
-    (U1)0x01U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU260[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x2CU,    /* Write Address */
-    (U1)0x01U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU261[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x2DU,    /* Write Address */
-    (U1)0x01U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU262[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x2EU,    /* Write Address */
-    (U1)0x01U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU263[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x2FU,    /* Write Address */
-    (U1)0x01U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU264[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x30U,    /* Write Address */
-    (U1)0x01U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU265[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x31U,    /* Write Address */
-    (U1)0x01U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU266[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x32U,    /* Write Address */
-    (U1)0x01U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU267[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x33U,    /* Write Address */
-    (U1)0x01U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU268[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x34U,    /* Write Address */
-    (U1)0x01U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU269[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x35U,    /* Write Address */
-    (U1)0x01U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU270[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x36U,    /* Write Address */
     (U1)0x21U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU271[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU258[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x37U,    /* Write Address */
     (U1)0x5EU     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU272[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU259[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x38U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU273[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU260[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x39U,    /* Write Address */
     (U1)0xA0U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU274[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU261[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x3AU,    /* Write Address */
     (U1)0xA0U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU275[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU262[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x3BU,    /* Write Address */
     (U1)0xA0U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU276[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU263[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x3CU,    /* Write Address */
     (U1)0x26U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU277[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU264[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x3DU,    /* Write Address */
     (U1)0x50U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU278[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU265[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x3EU,    /* Write Address */
     (U1)0x30U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU279[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU266[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x3FU,    /* Write Address */
     (U1)0x20U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU280[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU267[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x40U,    /* Write Address */
     (U1)0x45U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU281[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU268[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x41U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU282[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU269[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x42U,    /* Write Address */
     (U1)0x0FU     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU283[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU270[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x43U,    /* Write Address */
     (U1)0x48U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU284[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU271[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x44U,    /* Write Address */
     (U1)0x42U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU285[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU272[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x45U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU273[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x46U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU274[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x47U,    /* Write Address */
+    (U1)0x18U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU275[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x48U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU276[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x49U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU277[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x4AU,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU278[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x4BU,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU279[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x4CU,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU280[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x4DU,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU281[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x4EU,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU282[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x4FU,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU283[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x50U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU284[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x51U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU285[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x52U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
 const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU286[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x46U,    /* Write Address */
+    (U1)0x53U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
 const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU287[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x47U,    /* Write Address */
-    (U1)0x18U     /* Write Data */
+    (U1)0x54U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
 };
 
 const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU288[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x48U,    /* Write Address */
+    (U1)0x55U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
 const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU289[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x49U,    /* Write Address */
+    (U1)0x56U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
 const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU290[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x4AU,    /* Write Address */
+    (U1)0x57U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
 const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU291[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x4BU,    /* Write Address */
+    (U1)0x58U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
 const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU292[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x4CU,    /* Write Address */
+    (U1)0x59U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
 const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU293[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x4DU,    /* Write Address */
+    (U1)0x5AU,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
 const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU294[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x4EU,    /* Write Address */
+    (U1)0x5BU,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
 const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU295[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x4FU,    /* Write Address */
+    (U1)0x5CU,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
 const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU296[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x50U,    /* Write Address */
-    (U1)0x00U     /* Write Data */
+    (U1)0x5DU,    /* Write Address */
+    (U1)0xFCU     /* Write Data */
 };
 
 const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU297[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x51U,    /* Write Address */
+    (U1)0x5EU,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
 const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU298[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x52U,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU299[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x53U,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU300[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x54U,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU301[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x55U,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU302[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x56U,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU303[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x57U,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU304[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x58U,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU305[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x59U,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU306[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x5AU,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU307[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x5BU,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU308[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x5CU,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU309[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x5DU,    /* Write Address */
-    (U1)0xFCU     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU310[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x5EU,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU311[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x5FU,    /* Write Address */
     (U1)0x43U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU312[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU299[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x60U,    /* Write Address */
     (U1)0x61U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU313[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU300[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x61U,    /* Write Address */
     (U1)0x72U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU314[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU301[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x62U,    /* Write Address */
     (U1)0x20U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU315[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU302[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x63U,    /* Write Address */
     (U1)0x41U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU316[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU303[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x64U,    /* Write Address */
     (U1)0x75U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU317[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU304[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x65U,    /* Write Address */
     (U1)0x64U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU318[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU305[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x66U,    /* Write Address */
     (U1)0x69U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU319[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU306[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x67U,    /* Write Address */
     (U1)0x6FU     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU320[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU307[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x68U,    /* Write Address */
     (U1)0x0AU     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU321[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU308[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x69U,    /* Write Address */
     (U1)0x20U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU322[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU309[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x6AU,    /* Write Address */
     (U1)0x20U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU323[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU310[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x6BU,    /* Write Address */
     (U1)0x20U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU324[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU311[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x6CU,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU325[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU312[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x6DU,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU326[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU313[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x6EU,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU327[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU314[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x6FU,    /* Write Address */
     (U1)0xFDU     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU328[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU315[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x70U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU329[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU316[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x71U,    /* Write Address */
     (U1)0x3BU     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU330[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU317[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x72U,    /* Write Address */
     (U1)0x3DU     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU331[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU318[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x73U,    /* Write Address */
     (U1)0x1FU     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU332[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU319[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x74U,    /* Write Address */
     (U1)0x2EU     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU333[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU320[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x75U,    /* Write Address */
     (U1)0x08U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU334[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU321[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x76U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU335[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU322[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x77U,    /* Write Address */
     (U1)0x0AU     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU336[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU323[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x78U,    /* Write Address */
     (U1)0x20U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU337[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU324[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x79U,    /* Write Address */
     (U1)0x20U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU338[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU325[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x7AU,    /* Write Address */
     (U1)0x20U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU339[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU326[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x7BU,    /* Write Address */
     (U1)0x20U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU340[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU327[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x7CU,    /* Write Address */
     (U1)0x20U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU341[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU328[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x7DU,    /* Write Address */
     (U1)0x20U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU342[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU329[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x7EU,    /* Write Address */
     (U1)0x01U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU343[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU330[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x7FU,    /* Write Address */
     (U1)0x1FU     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU344[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU331[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0xFFU,    /* Write Address */
     (U1)0x78U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU345[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU332[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x00U,    /* Write Address */
     (U1)0x02U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU346[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU333[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x01U,    /* Write Address */
     (U1)0x04U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU347[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU334[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x02U,    /* Write Address */
     (U1)0x18U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU348[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU335[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x03U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU349[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU336[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x04U,    /* Write Address */
     (U1)0x45U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU350[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU337[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x05U,    /* Write Address */
     (U1)0x04U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU351[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU338[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x06U,    /* Write Address */
     (U1)0x05U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU352[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU339[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x07U,    /* Write Address */
     (U1)0x02U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU353[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU340[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x08U,    /* Write Address */
     (U1)0x03U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU354[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU341[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x09U,    /* Write Address */
     (U1)0x01U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU355[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU342[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x0AU,    /* Write Address */
     (U1)0x23U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU356[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU343[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x0BU,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU357[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU344[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x0CU,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU358[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU345[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x0DU,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU359[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU346[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x0EU,    /* Write Address */
     (U1)0x83U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU360[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU347[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x0FU,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU361[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU348[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x10U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU362[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU349[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x11U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU363[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU350[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x12U,    /* Write Address */
     (U1)0x65U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU364[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU351[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x13U,    /* Write Address */
     (U1)0x03U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU365[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU352[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x14U,    /* Write Address */
     (U1)0x0CU     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU366[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU353[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x15U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU367[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU354[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x16U,    /* Write Address */
     (U1)0x10U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU368[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU355[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x17U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU369[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU356[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x18U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU370[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU357[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x19U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU371[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU358[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x1AU,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU372[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU359[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x1BU,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU373[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU360[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x1CU,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU374[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU361[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x1DU,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU375[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU362[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x1EU,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU376[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU363[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x1FU,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU377[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU364[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x20U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU378[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU365[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x21U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU379[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU366[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x22U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU380[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU367[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x23U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU381[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU368[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x24U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU382[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU369[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x25U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU383[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU370[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x26U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU384[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU371[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x27U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU385[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU372[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x28U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU386[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU373[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x29U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU387[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU374[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x2AU,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU388[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU375[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x2BU,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU389[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU376[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x2CU,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU390[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU377[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x2DU,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU391[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU378[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x2EU,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU392[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU379[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x2FU,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU393[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU380[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x30U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU394[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU381[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x31U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU395[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU382[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x32U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU396[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU383[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x33U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU397[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU384[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x34U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU398[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU385[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x35U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU399[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU386[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x36U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU400[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU387[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x37U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU401[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU388[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x38U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU402[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU389[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x39U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU403[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU390[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x3AU,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU404[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU391[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x3BU,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU405[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU392[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x3CU,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU406[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU393[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x3DU,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU407[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU394[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x3EU,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU408[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU395[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x3FU,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU409[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU396[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x40U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU410[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU397[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x41U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU411[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU398[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x42U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU412[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU399[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x43U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU413[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU400[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x44U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU414[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU401[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x45U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU415[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU402[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x46U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU416[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU403[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x47U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU417[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU404[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x48U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU418[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU405[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x49U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU419[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU406[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x4AU,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU420[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU407[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x4BU,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU421[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU408[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x4CU,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU422[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU409[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x4DU,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU423[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU410[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x4EU,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU424[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU411[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x4FU,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU425[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU412[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x50U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU426[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU413[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x51U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU427[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU414[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x52U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU428[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU415[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x53U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU429[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU416[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x54U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU430[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU417[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x55U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU431[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU418[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x56U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU432[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU419[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x57U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU433[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU420[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x58U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU434[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU421[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x59U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU435[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU422[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x5AU,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU436[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU423[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x5BU,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU437[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU424[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x5CU,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU438[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU425[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x5DU,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU439[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU426[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x5EU,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU440[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU427[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x5FU,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU441[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU428[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x60U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU442[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU429[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x61U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU443[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU430[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x62U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU444[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU431[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x63U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU445[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU432[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x64U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU446[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU433[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x65U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU447[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU434[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x66U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU448[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU435[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x67U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU449[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU436[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x68U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU450[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU437[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x69U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU451[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU438[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x6AU,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU452[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU439[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x6BU,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU453[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU440[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x6CU,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU454[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU441[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x6DU,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU455[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU442[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x6EU,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU456[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU443[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x6FU,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU457[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU444[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x70U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU458[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU445[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x71U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU459[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU446[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x72U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU460[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU447[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x73U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU461[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU448[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x74U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU462[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU449[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x75U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU463[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU450[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x76U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU464[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU451[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x77U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU465[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU452[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x78U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU466[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU453[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x79U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU467[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU454[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x7AU,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU468[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU455[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x7BU,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU469[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU456[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x7CU,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU470[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU457[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x7DU,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU471[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU458[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x7EU,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU472[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU459[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x7FU,    /* Write Address */
     (U1)0x64U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU473[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU460[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0xFFU,    /* Write Address */
     (U1)0xB0U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU474[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU461[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x00U,    /* Write Address */
-    (U1)0x59U     /* Write Data */
+    (U1)0x50U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU475[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU462[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x01U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU476[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU463[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x02U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU477[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU464[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x03U,    /* Write Address */
     (U1)0x40U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU478[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU465[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x04U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU479[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU466[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x05U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU480[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU467[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x06U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU481[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU468[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x07U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU482[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU469[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x08U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU483[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU470[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x12U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU484[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU471[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x16U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU485[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU472[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x19U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU486[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU473[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x1AU,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU487[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU474[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x1BU,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU488[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU475[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x1CU,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU489[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU476[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x1DU,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU490[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU477[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x1EU,    /* Write Address */
     (U1)0x08U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU491[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU478[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x1FU,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU492[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU479[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x20U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU493[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU480[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x32U,    /* Write Address */
     (U1)0x80U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU494[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU481[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x46U,    /* Write Address */
     (U1)0x02U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU495[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU482[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x47U,    /* Write Address */
     (U1)0x01U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU496[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU483[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x48U,    /* Write Address */
     (U1)0x64U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU497[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU484[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x49U,    /* Write Address */
     (U1)0x01U     /* Write Data */
@@ -3944,803 +3866,851 @@ const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU9[MCU_SYS_PWR_EIZOIC_R
 
 const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU10[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0xF0U,    /* Write Address */
+    (U1)0xCFU,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
 const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU11[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0xF1U,    /* Write Address */
+    (U1)0xD0U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
 const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU12[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0xF2U,    /* Write Address */
+    (U1)0xD1U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
 const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU13[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0xF3U,    /* Write Address */
+    (U1)0xD2U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
 const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU14[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0xF4U,    /* Write Address */
+    (U1)0xD3U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
 const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU15[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0xF5U,    /* Write Address */
+    (U1)0xD4U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
 const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU16[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0xFFU,    /* Write Address */
-    (U1)0x08U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU17[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x1EU,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU18[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x1FU,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU19[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x20U,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU20[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x21U,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU21[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x22U,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU22[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x23U,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU23[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x24U,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU24[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x25U,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU25[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x37U,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU26[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x38U,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU27[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x39U,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU28[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x3AU,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU29[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x3BU,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU30[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x3CU,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU31[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x3DU,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU32[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x3EU,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU33[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0xFFU,    /* Write Address */
-    (U1)0x58U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU34[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0xD0U,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU35[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0xD1U,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU36[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0xD2U,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU37[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0xD3U,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU38[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0xD4U,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU39[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0xD5U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU40[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU17[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0xD6U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU41[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU18[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0xD7U,    /* Write Address */
+    (U1)0xF0U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU42[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU19[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0xF1U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU20[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0xF2U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU21[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0xF3U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU22[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0xF4U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU23[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0xF5U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU24[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0xFFU,    /* Write Address */
-    (U1)0x60U     /* Write Data */
+    (U1)0x08U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU43[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x00U,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU44[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x01U,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU45[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x02U,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU46[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x03U,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU47[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x04U,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU48[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x05U,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU49[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x06U,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU50[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x07U,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU51[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x08U,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU52[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x09U,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU53[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x0AU,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU54[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x0BU,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU55[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x0CU,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU56[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x0DU,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU57[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x0EU,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU58[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x0FU,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU59[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x10U,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU60[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x11U,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU61[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x12U,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU62[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x13U,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU63[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x14U,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU64[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x15U,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU65[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x16U,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU66[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x17U,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU67[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x18U,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU68[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x19U,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU69[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x1AU,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU70[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x1BU,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU71[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x1CU,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU72[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x1DU,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU73[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU25[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x1EU,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU74[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU26[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x1FU,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU75[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU27[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x20U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU28[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x21U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU29[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x22U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU30[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x23U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU76[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU31[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x24U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU77[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU32[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x26U,    /* Write Address */
+    (U1)0x25U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU78[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU33[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x60U,    /* Write Address */
+    (U1)0x37U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU79[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU34[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x61U,    /* Write Address */
+    (U1)0x38U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU80[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU35[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x62U,    /* Write Address */
+    (U1)0x39U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU81[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU36[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x63U,    /* Write Address */
+    (U1)0x3AU,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU82[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU37[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x64U,    /* Write Address */
+    (U1)0x3BU,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU83[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU38[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x65U,    /* Write Address */
+    (U1)0x3CU,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU84[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU39[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x66U,    /* Write Address */
+    (U1)0x3DU,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU85[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU40[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x67U,    /* Write Address */
+    (U1)0x3EU,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU86[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x68U,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU87[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x69U,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU88[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x6AU,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU89[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x6BU,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU90[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x6CU,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU91[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x6DU,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU92[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x6EU,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU93[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x6FU,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU94[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x70U,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU95[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x71U,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU96[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x72U,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU97[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x73U,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU98[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x74U,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU99[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x75U,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU100[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x76U,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU101[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x77U,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU102[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x78U,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU103[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x79U,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU104[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x7AU,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU105[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x7BU,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU106[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x7CU,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU107[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x7DU,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU108[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x7EU,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU109[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x7FU,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU110[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x83U,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU111[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x84U,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU112[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x86U,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU113[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU41[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0xFFU,    /* Write Address */
-    (U1)0x78U     /* Write Data */
+    (U1)0x58U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU114[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU42[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0xA6U,    /* Write Address */
+    (U1)0xD0U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU115[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU43[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0xA7U,    /* Write Address */
+    (U1)0xD1U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU116[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU44[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0xD2U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU45[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0xD3U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU46[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0xD4U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU47[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0xD5U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU48[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0xD6U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU49[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0xD7U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU50[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0xFFU,    /* Write Address */
-    (U1)0xB0U     /* Write Data */
+    (U1)0x60U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU117[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU51[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x00U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU52[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x01U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU53[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x02U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU54[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x03U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU55[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x04U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU56[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x05U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU57[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x06U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU58[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x07U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU59[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x08U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU60[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x09U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU118[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU61[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x0AU,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU119[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU62[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x0BU,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU120[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU63[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x0CU,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU64[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x0DU,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU65[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x0EU,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU66[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x0FU,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU67[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x10U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU68[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x11U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU69[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x12U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU70[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x13U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU71[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x14U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU72[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x15U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU73[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x16U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU74[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x17U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU75[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x18U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU76[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x19U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU77[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x1AU,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU78[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x1BU,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU79[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x1CU,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU80[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x1DU,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU81[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x1EU,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU82[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x1FU,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU83[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x23U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU84[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x24U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU85[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x26U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU86[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x60U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU87[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x61U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU88[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x62U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU89[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x63U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU90[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x64U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU91[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x65U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU92[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x66U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU93[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x67U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU94[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x68U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU95[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x69U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU96[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x6AU,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU97[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x6BU,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU98[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x6CU,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU99[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x6DU,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU100[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x6EU,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU101[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x6FU,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU102[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x70U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU103[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x71U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU104[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x72U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU105[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x73U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU106[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x74U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU107[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x75U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU108[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x76U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU109[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x77U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU110[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x78U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU111[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x79U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU112[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x7AU,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU113[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x7BU,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU114[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x7CU,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU115[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x7DU,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU116[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x7EU,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU117[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x7FU,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU118[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x83U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU119[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x84U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU120[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x86U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
 const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU121[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0xFFU,    /* Write Address */
-    (U1)0xC8U     /* Write Data */
+    (U1)0x78U     /* Write Data */
 };
 
 const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU122[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x00U,    /* Write Address */
+    (U1)0xA6U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
 const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU123[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x01U,    /* Write Address */
+    (U1)0xA7U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
 const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU124[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x02U,    /* Write Address */
-    (U1)0x00U     /* Write Data */
+    (U1)0xFFU,    /* Write Address */
+    (U1)0xB0U     /* Write Data */
 };
 
 const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU125[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x03U,    /* Write Address */
+    (U1)0x09U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
 const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU126[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x04U,    /* Write Address */
+    (U1)0x0AU,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
 const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU127[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x05U,    /* Write Address */
+    (U1)0x0BU,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
 const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU128[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x06U,    /* Write Address */
+    (U1)0x0CU,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
 const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU129[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x07U,    /* Write Address */
-    (U1)0x00U     /* Write Data */
+    (U1)0xFFU,    /* Write Address */
+    (U1)0xC8U     /* Write Data */
 };
 
 const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU130[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x23U,    /* Write Address */
+    (U1)0x00U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
 const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU131[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x24U,    /* Write Address */
+    (U1)0x01U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
 const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU132[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x26U,    /* Write Address */
+    (U1)0x02U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
 const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU133[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x60U,    /* Write Address */
+    (U1)0x03U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
 const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU134[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x61U,    /* Write Address */
+    (U1)0x04U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
 const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU135[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x62U,    /* Write Address */
+    (U1)0x05U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
 const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU136[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x63U,    /* Write Address */
+    (U1)0x06U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
 const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU137[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x64U,    /* Write Address */
+    (U1)0x07U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
 const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU138[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x65U,    /* Write Address */
+    (U1)0x23U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
 const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU139[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x66U,    /* Write Address */
+    (U1)0x24U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
 const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU140[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x67U,    /* Write Address */
+    (U1)0x26U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
 const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU141[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x83U,    /* Write Address */
+    (U1)0x60U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
 const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU142[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x84U,    /* Write Address */
+    (U1)0x61U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
 const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU143[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x62U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU144[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x63U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU145[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x64U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU146[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x65U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU147[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x66U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU148[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x67U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU149[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x83U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU150[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x84U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU151[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x86U,    /* Write Address */
     (U1)0x00U     /* Write Data */
@@ -6706,1246 +6676,1226 @@ const ST_GP_I2C_MA_REQ st_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT[MCU_SYS_PWR_EIZOIC
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU484[0],
         (U4)0x17900003U
-    },
-    {
-        (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU485[0],
-        (U4)0x17940003U
-    },
-    {
-        (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU486[0],
-        (U4)0x17980003U
-    },
-    {
-        (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU487[0],
-        (U4)0x179C0003U
-    },
-    {
-        (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU488[0],
-        (U4)0x17A00003U
-    },
-    {
-        (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU489[0],
-        (U4)0x17A40003U
-    },
-    {
-        (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU490[0],
-        (U4)0x17A80003U
-    },
-    {
-        (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU491[0],
-        (U4)0x17AC0003U
-    },
-    {
-        (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU492[0],
-        (U4)0x17B00003U
-    },
-    {
-        (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU493[0],
-        (U4)0x17B40003U
-    },
-    {
-        (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU494[0],
-        (U4)0x17B80003U
-    },
-    {
-        (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU495[0],
-        (U4)0x17BC0003U
-    },
-    {
-        (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU496[0],
-        (U4)0x17C00003U
-    },
-    {
-        (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU497[0],
-        (U4)0x17C40003U
     }
 };
 
 const ST_GP_I2C_MA_REQ st_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_SIP[MCU_SYS_PWR_EIZOIC_MlSETREG_SIP_NUM] = {
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_SIP_PDU1[0],
-        (U4)0x17C80003U
+        (U4)0x17940003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_SIP_PDU2[0],
-        (U4)0x17CC0003U
+        (U4)0x17980003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_SIP_PDU3[0],
-        (U4)0x17D00003U
+        (U4)0x179C0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_SIP_PDU4[0],
-        (U4)0x17D40003U
+        (U4)0x17A00003U
     }
 };
 
 const ST_GP_I2C_MA_REQ st_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080[MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_NUM] = {
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU1[0],
-        (U4)0x17D80003U
+        (U4)0x17A40003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU2[0],
-        (U4)0x17DC0003U
+        (U4)0x17A80003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU3[0],
-        (U4)0x17E00003U
+        (U4)0x17AC0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU4[0],
-        (U4)0x17E40003U
+        (U4)0x17B00003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU5[0],
-        (U4)0x17E80003U
+        (U4)0x17B40003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU6[0],
-        (U4)0x17EC0003U
+        (U4)0x17B80003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU7[0],
-        (U4)0x17F00003U
+        (U4)0x17BC0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU8[0],
-        (U4)0x17F40003U
+        (U4)0x17C00003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU9[0],
-        (U4)0x17F80003U
+        (U4)0x17C40003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU10[0],
-        (U4)0x17FC0003U
+        (U4)0x17C80003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU11[0],
-        (U4)0x18000003U
+        (U4)0x17CC0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU12[0],
-        (U4)0x18040003U
+        (U4)0x17D00003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU13[0],
-        (U4)0x18080003U
+        (U4)0x17D40003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU14[0],
-        (U4)0x180C0003U
+        (U4)0x17D80003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU15[0],
-        (U4)0x18100003U
+        (U4)0x17DC0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU16[0],
-        (U4)0x18140003U
+        (U4)0x17E00003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU17[0],
-        (U4)0x18180003U
+        (U4)0x17E40003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU18[0],
-        (U4)0x181C0003U
+        (U4)0x17E80003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU19[0],
-        (U4)0x18200003U
+        (U4)0x17EC0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU20[0],
-        (U4)0x18240003U
+        (U4)0x17F00003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU21[0],
-        (U4)0x18280003U
+        (U4)0x17F40003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU22[0],
-        (U4)0x182C0003U
+        (U4)0x17F80003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU23[0],
-        (U4)0x18300003U
+        (U4)0x17FC0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU24[0],
-        (U4)0x18340003U
+        (U4)0x18000003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU25[0],
-        (U4)0x18380003U
+        (U4)0x18040003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU26[0],
-        (U4)0x183C0003U
+        (U4)0x18080003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU27[0],
-        (U4)0x18400003U
+        (U4)0x180C0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU28[0],
-        (U4)0x18440003U
+        (U4)0x18100003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU29[0],
-        (U4)0x18480003U
+        (U4)0x18140003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU30[0],
-        (U4)0x184C0003U
+        (U4)0x18180003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU31[0],
-        (U4)0x18500003U
+        (U4)0x181C0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU32[0],
-        (U4)0x18540003U
+        (U4)0x18200003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU33[0],
-        (U4)0x18580003U
+        (U4)0x18240003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU34[0],
-        (U4)0x185C0003U
+        (U4)0x18280003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU35[0],
-        (U4)0x18600003U
+        (U4)0x182C0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU36[0],
-        (U4)0x18640003U
+        (U4)0x18300003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU37[0],
-        (U4)0x18680003U
+        (U4)0x18340003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU38[0],
-        (U4)0x186C0003U
+        (U4)0x18380003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU39[0],
-        (U4)0x18700003U
+        (U4)0x183C0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU40[0],
-        (U4)0x18740003U
+        (U4)0x18400003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU41[0],
-        (U4)0x18780003U
+        (U4)0x18440003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU42[0],
-        (U4)0x187C0003U
+        (U4)0x18480003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU43[0],
-        (U4)0x18800003U
+        (U4)0x184C0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU44[0],
-        (U4)0x18840003U
+        (U4)0x18500003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU45[0],
-        (U4)0x18880003U
+        (U4)0x18540003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU46[0],
-        (U4)0x188C0003U
+        (U4)0x18580003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU47[0],
-        (U4)0x18900003U
+        (U4)0x185C0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU48[0],
-        (U4)0x18940003U
+        (U4)0x18600003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU49[0],
-        (U4)0x18980003U
+        (U4)0x18640003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU50[0],
-        (U4)0x189C0003U
+        (U4)0x18680003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU51[0],
-        (U4)0x18A00003U
+        (U4)0x186C0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU52[0],
-        (U4)0x18A40003U
+        (U4)0x18700003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU53[0],
-        (U4)0x18A80003U
+        (U4)0x18740003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU54[0],
-        (U4)0x18AC0003U
+        (U4)0x18780003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU55[0],
-        (U4)0x18B00003U
+        (U4)0x187C0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU56[0],
-        (U4)0x18B40003U
+        (U4)0x18800003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU57[0],
-        (U4)0x18B80003U
+        (U4)0x18840003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU58[0],
-        (U4)0x18BC0003U
+        (U4)0x18880003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU59[0],
-        (U4)0x18C00003U
+        (U4)0x188C0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU60[0],
-        (U4)0x18C40003U
+        (U4)0x18900003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU61[0],
-        (U4)0x18C80003U
+        (U4)0x18940003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU62[0],
-        (U4)0x18CC0003U
+        (U4)0x18980003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU63[0],
-        (U4)0x18D00003U
+        (U4)0x189C0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU64[0],
-        (U4)0x18D40003U
+        (U4)0x18A00003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU65[0],
-        (U4)0x18D80003U
+        (U4)0x18A40003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU66[0],
-        (U4)0x18DC0003U
+        (U4)0x18A80003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU67[0],
-        (U4)0x18E00003U
+        (U4)0x18AC0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU68[0],
-        (U4)0x18E40003U
+        (U4)0x18B00003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU69[0],
-        (U4)0x18E80003U
+        (U4)0x18B40003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU70[0],
-        (U4)0x18EC0003U
+        (U4)0x18B80003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU71[0],
-        (U4)0x18F00003U
+        (U4)0x18BC0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU72[0],
-        (U4)0x18F40003U
+        (U4)0x18C00003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU73[0],
-        (U4)0x18F80003U
+        (U4)0x18C40003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU74[0],
-        (U4)0x18FC0003U
+        (U4)0x18C80003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU75[0],
-        (U4)0x19000003U
+        (U4)0x18CC0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU76[0],
-        (U4)0x19040003U
+        (U4)0x18D00003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU77[0],
-        (U4)0x19080003U
+        (U4)0x18D40003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU78[0],
-        (U4)0x190C0003U
+        (U4)0x18D80003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU79[0],
-        (U4)0x19100003U
+        (U4)0x18DC0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU80[0],
-        (U4)0x19140003U
+        (U4)0x18E00003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU81[0],
-        (U4)0x19180003U
+        (U4)0x18E40003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU82[0],
-        (U4)0x191C0003U
+        (U4)0x18E80003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU83[0],
-        (U4)0x19200003U
+        (U4)0x18EC0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU84[0],
-        (U4)0x19240003U
+        (U4)0x18F00003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU85[0],
-        (U4)0x19280003U
+        (U4)0x18F40003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU86[0],
-        (U4)0x192C0003U
+        (U4)0x18F80003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU87[0],
-        (U4)0x19300003U
+        (U4)0x18FC0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU88[0],
-        (U4)0x19340003U
+        (U4)0x19000003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU89[0],
-        (U4)0x19380003U
+        (U4)0x19040003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU90[0],
-        (U4)0x193C0003U
+        (U4)0x19080003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU91[0],
-        (U4)0x19400003U
+        (U4)0x190C0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU92[0],
-        (U4)0x19440003U
+        (U4)0x19100003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU93[0],
-        (U4)0x19480003U
+        (U4)0x19140003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU94[0],
-        (U4)0x194C0003U
+        (U4)0x19180003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU95[0],
-        (U4)0x19500003U
+        (U4)0x191C0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU96[0],
-        (U4)0x19540003U
+        (U4)0x19200003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU97[0],
-        (U4)0x19580003U
+        (U4)0x19240003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU98[0],
-        (U4)0x195C0003U
+        (U4)0x19280003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU99[0],
-        (U4)0x19600003U
+        (U4)0x192C0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU100[0],
-        (U4)0x19640003U
+        (U4)0x19300003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU101[0],
-        (U4)0x19680003U
+        (U4)0x19340003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU102[0],
-        (U4)0x196C0003U
+        (U4)0x19380003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU103[0],
-        (U4)0x19700003U
+        (U4)0x193C0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU104[0],
-        (U4)0x19740003U
+        (U4)0x19400003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU105[0],
-        (U4)0x19780003U
+        (U4)0x19440003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU106[0],
-        (U4)0x197C0003U
+        (U4)0x19480003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU107[0],
-        (U4)0x19800003U
+        (U4)0x194C0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU108[0],
-        (U4)0x19840003U
+        (U4)0x19500003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU109[0],
-        (U4)0x19880003U
+        (U4)0x19540003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU110[0],
-        (U4)0x198C0003U
+        (U4)0x19580003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU111[0],
-        (U4)0x19900003U
+        (U4)0x195C0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU112[0],
-        (U4)0x19940003U
+        (U4)0x19600003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU113[0],
-        (U4)0x19980003U
+        (U4)0x19640003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU114[0],
-        (U4)0x199C0003U
+        (U4)0x19680003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU115[0],
-        (U4)0x19A00003U
+        (U4)0x196C0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU116[0],
-        (U4)0x19A40003U
+        (U4)0x19700003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU117[0],
-        (U4)0x19A80003U
+        (U4)0x19740003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU118[0],
-        (U4)0x19AC0003U
+        (U4)0x19780003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU119[0],
-        (U4)0x19B00003U
+        (U4)0x197C0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU120[0],
-        (U4)0x19B40003U
+        (U4)0x19800003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU121[0],
-        (U4)0x19B80003U
+        (U4)0x19840003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU122[0],
-        (U4)0x19BC0003U
+        (U4)0x19880003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU123[0],
-        (U4)0x19C00003U
+        (U4)0x198C0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU124[0],
-        (U4)0x19C40003U
+        (U4)0x19900003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU125[0],
-        (U4)0x19C80003U
+        (U4)0x19940003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU126[0],
-        (U4)0x19CC0003U
+        (U4)0x19980003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU127[0],
-        (U4)0x19D00003U
+        (U4)0x199C0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU128[0],
-        (U4)0x19D40003U
+        (U4)0x19A00003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU129[0],
-        (U4)0x19D80003U
+        (U4)0x19A40003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU130[0],
-        (U4)0x19DC0003U
+        (U4)0x19A80003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU131[0],
-        (U4)0x19E00003U
+        (U4)0x19AC0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU132[0],
-        (U4)0x19E40003U
+        (U4)0x19B00003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU133[0],
-        (U4)0x19E80003U
+        (U4)0x19B40003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU134[0],
-        (U4)0x19EC0003U
+        (U4)0x19B80003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU135[0],
-        (U4)0x19F00003U
+        (U4)0x19BC0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU136[0],
-        (U4)0x19F40003U
+        (U4)0x19C00003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU137[0],
-        (U4)0x19F80003U
+        (U4)0x19C40003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU138[0],
-        (U4)0x19FC0003U
+        (U4)0x19C80003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU139[0],
-        (U4)0x1A000003U
+        (U4)0x19CC0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU140[0],
-        (U4)0x1A040003U
+        (U4)0x19D00003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU141[0],
-        (U4)0x1A080003U
+        (U4)0x19D40003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU142[0],
-        (U4)0x1A0C0003U
+        (U4)0x19D80003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_PDU143[0],
-        (U4)0x1A100003U
+        (U4)0x19DC0003U
     }
 };
 
 const ST_GP_I2C_MA_REQ st_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON[MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_NUM] = {
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU1[0],
-        (U4)0x1A140003U
+        (U4)0x19E00003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU2[0],
-        (U4)0x1A180003U
+        (U4)0x19E40003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU3[0],
-        (U4)0x1A1C0003U
+        (U4)0x19E80003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU4[0],
-        (U4)0x1A200003U
+        (U4)0x19EC0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU5[0],
-        (U4)0x1A240003U
+        (U4)0x19F00003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU6[0],
-        (U4)0x1A280003U
+        (U4)0x19F40003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU7[0],
-        (U4)0x1A2C0003U
+        (U4)0x19F80003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU8[0],
-        (U4)0x1A300003U
+        (U4)0x19FC0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU9[0],
-        (U4)0x1A340003U
+        (U4)0x1A000003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU10[0],
-        (U4)0x1A380003U
+        (U4)0x1A040003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU11[0],
-        (U4)0x1A3C0003U
+        (U4)0x1A080003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU12[0],
-        (U4)0x1A400003U
+        (U4)0x1A0C0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU13[0],
-        (U4)0x1A440003U
+        (U4)0x1A100003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU14[0],
-        (U4)0x1A480003U
+        (U4)0x1A140003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU15[0],
-        (U4)0x1A4C0003U
+        (U4)0x1A180003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU16[0],
-        (U4)0x1A500003U
+        (U4)0x1A1C0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU17[0],
-        (U4)0x1A540003U
+        (U4)0x1A200003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU18[0],
-        (U4)0x1A580003U
+        (U4)0x1A240003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU19[0],
-        (U4)0x1A5C0003U
+        (U4)0x1A280003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU20[0],
-        (U4)0x1A600003U
+        (U4)0x1A2C0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU21[0],
-        (U4)0x1A640003U
+        (U4)0x1A300003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU22[0],
-        (U4)0x1A680003U
+        (U4)0x1A340003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU23[0],
-        (U4)0x1A6C0003U
+        (U4)0x1A380003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU24[0],
-        (U4)0x1A700003U
+        (U4)0x1A3C0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU25[0],
-        (U4)0x1A740003U
+        (U4)0x1A400003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU26[0],
-        (U4)0x1A780003U
+        (U4)0x1A440003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU27[0],
-        (U4)0x1A7C0003U
+        (U4)0x1A480003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU28[0],
-        (U4)0x1A800003U
+        (U4)0x1A4C0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU29[0],
-        (U4)0x1A840003U
+        (U4)0x1A500003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU30[0],
-        (U4)0x1A880003U
+        (U4)0x1A540003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU31[0],
-        (U4)0x1A8C0003U
+        (U4)0x1A580003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU32[0],
-        (U4)0x1A900003U
+        (U4)0x1A5C0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU33[0],
-        (U4)0x1A940003U
+        (U4)0x1A600003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU34[0],
-        (U4)0x1A980003U
+        (U4)0x1A640003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU35[0],
-        (U4)0x1A9C0003U
+        (U4)0x1A680003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU36[0],
-        (U4)0x1AA00003U
+        (U4)0x1A6C0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU37[0],
-        (U4)0x1AA40003U
+        (U4)0x1A700003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU38[0],
-        (U4)0x1AA80003U
+        (U4)0x1A740003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU39[0],
-        (U4)0x1AAC0003U
+        (U4)0x1A780003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU40[0],
-        (U4)0x1AB00003U
+        (U4)0x1A7C0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU41[0],
-        (U4)0x1AB40003U
+        (U4)0x1A800003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU42[0],
-        (U4)0x1AB80003U
+        (U4)0x1A840003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU43[0],
-        (U4)0x1ABC0003U
+        (U4)0x1A880003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU44[0],
-        (U4)0x1AC00003U
+        (U4)0x1A8C0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU45[0],
-        (U4)0x1AC40003U
+        (U4)0x1A900003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU46[0],
-        (U4)0x1AC80003U
+        (U4)0x1A940003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU47[0],
-        (U4)0x1ACC0003U
+        (U4)0x1A980003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU48[0],
-        (U4)0x1AD00003U
+        (U4)0x1A9C0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU49[0],
-        (U4)0x1AD40003U
+        (U4)0x1AA00003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU50[0],
-        (U4)0x1AD80003U
+        (U4)0x1AA40003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU51[0],
-        (U4)0x1ADC0003U
+        (U4)0x1AA80003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU52[0],
-        (U4)0x1AE00003U
+        (U4)0x1AAC0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU53[0],
-        (U4)0x1AE40003U
+        (U4)0x1AB00003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU54[0],
-        (U4)0x1AE80003U
+        (U4)0x1AB40003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU55[0],
-        (U4)0x1AEC0003U
+        (U4)0x1AB80003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU56[0],
-        (U4)0x1AF00003U
+        (U4)0x1ABC0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU57[0],
-        (U4)0x1AF40003U
+        (U4)0x1AC00003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU58[0],
-        (U4)0x1AF80003U
+        (U4)0x1AC40003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU59[0],
-        (U4)0x1AFC0003U
+        (U4)0x1AC80003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU60[0],
-        (U4)0x1B000003U
+        (U4)0x1ACC0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU61[0],
-        (U4)0x1B040003U
+        (U4)0x1AD00003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU62[0],
-        (U4)0x1B080003U
+        (U4)0x1AD40003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU63[0],
-        (U4)0x1B0C0003U
+        (U4)0x1AD80003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU64[0],
-        (U4)0x1B100003U
+        (U4)0x1ADC0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU65[0],
-        (U4)0x1B140003U
+        (U4)0x1AE00003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU66[0],
-        (U4)0x1B180003U
+        (U4)0x1AE40003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU67[0],
-        (U4)0x1B1C0003U
+        (U4)0x1AE80003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU68[0],
-        (U4)0x1B200003U
+        (U4)0x1AEC0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU69[0],
-        (U4)0x1B240003U
+        (U4)0x1AF00003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU70[0],
-        (U4)0x1B280003U
+        (U4)0x1AF40003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU71[0],
-        (U4)0x1B2C0003U
+        (U4)0x1AF80003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU72[0],
-        (U4)0x1B300003U
+        (U4)0x1AFC0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU73[0],
-        (U4)0x1B340003U
+        (U4)0x1B000003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU74[0],
-        (U4)0x1B380003U
+        (U4)0x1B040003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU75[0],
-        (U4)0x1B3C0003U
+        (U4)0x1B080003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU76[0],
-        (U4)0x1B400003U
+        (U4)0x1B0C0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU77[0],
-        (U4)0x1B440003U
+        (U4)0x1B100003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU78[0],
-        (U4)0x1B480003U
+        (U4)0x1B140003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU79[0],
-        (U4)0x1B4C0003U
+        (U4)0x1B180003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU80[0],
-        (U4)0x1B500003U
+        (U4)0x1B1C0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU81[0],
-        (U4)0x1B540003U
+        (U4)0x1B200003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU82[0],
-        (U4)0x1B580003U
+        (U4)0x1B240003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU83[0],
-        (U4)0x1B5C0003U
+        (U4)0x1B280003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU84[0],
-        (U4)0x1B600003U
+        (U4)0x1B2C0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU85[0],
-        (U4)0x1B640003U
+        (U4)0x1B300003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU86[0],
-        (U4)0x1B680003U
+        (U4)0x1B340003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU87[0],
-        (U4)0x1B6C0003U
+        (U4)0x1B380003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU88[0],
-        (U4)0x1B700003U
+        (U4)0x1B3C0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU89[0],
-        (U4)0x1B740003U
+        (U4)0x1B400003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU90[0],
-        (U4)0x1B780003U
+        (U4)0x1B440003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU91[0],
-        (U4)0x1B7C0003U
+        (U4)0x1B480003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU92[0],
-        (U4)0x1B800003U
+        (U4)0x1B4C0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU93[0],
-        (U4)0x1B840003U
+        (U4)0x1B500003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU94[0],
-        (U4)0x1B880003U
+        (U4)0x1B540003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU95[0],
-        (U4)0x1B8C0003U
+        (U4)0x1B580003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU96[0],
-        (U4)0x1B900003U
+        (U4)0x1B5C0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU97[0],
-        (U4)0x1B940003U
+        (U4)0x1B600003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU98[0],
-        (U4)0x1B980003U
+        (U4)0x1B640003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU99[0],
-        (U4)0x1B9C0003U
+        (U4)0x1B680003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU100[0],
-        (U4)0x1BA00003U
+        (U4)0x1B6C0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU101[0],
-        (U4)0x1BA40003U
+        (U4)0x1B700003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU102[0],
-        (U4)0x1BA80003U
+        (U4)0x1B740003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU103[0],
-        (U4)0x1BAC0003U
+        (U4)0x1B780003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU104[0],
-        (U4)0x1BB00003U
+        (U4)0x1B7C0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU105[0],
-        (U4)0x1BB40003U
+        (U4)0x1B800003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU106[0],
-        (U4)0x1BB80003U
+        (U4)0x1B840003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU107[0],
-        (U4)0x1BBC0003U
+        (U4)0x1B880003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU108[0],
-        (U4)0x1BC00003U
+        (U4)0x1B8C0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU109[0],
-        (U4)0x1BC40003U
+        (U4)0x1B900003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU110[0],
-        (U4)0x1BC80003U
+        (U4)0x1B940003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU111[0],
-        (U4)0x1BCC0003U
+        (U4)0x1B980003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU112[0],
-        (U4)0x1BD00003U
+        (U4)0x1B9C0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU113[0],
-        (U4)0x1BD40003U
+        (U4)0x1BA00003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU114[0],
-        (U4)0x1BD80003U
+        (U4)0x1BA40003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU115[0],
-        (U4)0x1BDC0003U
+        (U4)0x1BA80003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU116[0],
-        (U4)0x1BE00003U
+        (U4)0x1BAC0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU117[0],
-        (U4)0x1BE40003U
+        (U4)0x1BB00003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU118[0],
-        (U4)0x1BE80003U
+        (U4)0x1BB40003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU119[0],
-        (U4)0x1BEC0003U
+        (U4)0x1BB80003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU120[0],
-        (U4)0x1BF00003U
+        (U4)0x1BBC0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU121[0],
-        (U4)0x1BF40003U
+        (U4)0x1BC00003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU122[0],
-        (U4)0x1BF80003U
+        (U4)0x1BC40003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU123[0],
-        (U4)0x1BFC0003U
+        (U4)0x1BC80003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU124[0],
-        (U4)0x1C000003U
+        (U4)0x1BCC0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU125[0],
-        (U4)0x1C040003U
+        (U4)0x1BD00003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU126[0],
-        (U4)0x1C080003U
+        (U4)0x1BD40003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU127[0],
-        (U4)0x1C0C0003U
+        (U4)0x1BD80003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU128[0],
-        (U4)0x1C100003U
+        (U4)0x1BDC0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU129[0],
-        (U4)0x1C140003U
+        (U4)0x1BE00003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU130[0],
-        (U4)0x1C180003U
+        (U4)0x1BE40003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU131[0],
-        (U4)0x1C1C0003U
+        (U4)0x1BE80003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU132[0],
-        (U4)0x1C200003U
+        (U4)0x1BEC0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU133[0],
-        (U4)0x1C240003U
+        (U4)0x1BF00003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU134[0],
-        (U4)0x1C280003U
+        (U4)0x1BF40003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU135[0],
-        (U4)0x1C2C0003U
+        (U4)0x1BF80003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU136[0],
-        (U4)0x1C300003U
+        (U4)0x1BFC0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU137[0],
-        (U4)0x1C340003U
+        (U4)0x1C000003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU138[0],
-        (U4)0x1C380003U
+        (U4)0x1C040003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU139[0],
-        (U4)0x1C3C0003U
+        (U4)0x1C080003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU140[0],
-        (U4)0x1C400003U
+        (U4)0x1C0C0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU141[0],
-        (U4)0x1C440003U
+        (U4)0x1C100003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU142[0],
-        (U4)0x1C480003U
+        (U4)0x1C140003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU143[0],
-        (U4)0x1C4C0003U
+        (U4)0x1C180003U
+    },
+    {
+        (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU144[0],
+        (U4)0x1C1C0003U
+    },
+    {
+        (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU145[0],
+        (U4)0x1C200003U
+    },
+    {
+        (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU146[0],
+        (U4)0x1C240003U
+    },
+    {
+        (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU147[0],
+        (U4)0x1C280003U
+    },
+    {
+        (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU148[0],
+        (U4)0x1C2C0003U
+    },
+    {
+        (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU149[0],
+        (U4)0x1C300003U
+    },
+    {
+        (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU150[0],
+        (U4)0x1C340003U
+    },
+    {
+        (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_PDU151[0],
+        (U4)0x1C380003U
     }
 };
 
 const ST_GP_I2C_MA_REQ st_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CENTERDISP_ON[MCU_SYS_PWR_EIZOIC_MlSETREG_CENTERDISP_ON_NUM] = {
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CENTERDISP_ON_PDU1[0],
-        (U4)0x1C500003U
+        (U4)0x1C3C0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CENTERDISP_ON_PDU2[0],
-        (U4)0x1C540003U
+        (U4)0x1C400003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CENTERDISP_ON_PDU3[0],
-        (U4)0x1C580003U
+        (U4)0x1C440003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CENTERDISP_ON_PDU4[0],
-        (U4)0x1C5C0003U
+        (U4)0x1C480003U
     }
 };
 

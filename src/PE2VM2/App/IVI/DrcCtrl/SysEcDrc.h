@@ -31,6 +31,7 @@
 #define SYSECDRC_DREC_ID_8              (8U)
 #define SYSECDRC_DREC_ID_9              (9U)
 #define SYSECDRC_DREC_ID_10             (10U)
+#define SYSECDRC_DREC_ID_11             (11U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
