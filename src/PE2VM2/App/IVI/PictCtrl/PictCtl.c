@@ -1668,23 +1668,11 @@ static void vd_s_PictCtl_CamPathChg(void)
 /*===================================================================================================================================*/
 static void vd_s_PictCtl_CamChgUpDate(void)
 {
-    U1 u1_t_pmspshold;
-    
-    u1_t_pmspshold = (U1)Dio_ReadChannel(PICT_PORT_PMA_PS_HOLD);
     /* DISP-REQ-GPIO0 = Hの場合 */
     if(bfg_Pict_StsMng.u1_DispReqGpio0Sts == (U1)PICT_POLLPORT_ON){
         vd_g_SysEcDrc_Drec((U1)SYSECDRC_DREC_CAT_CAMCTL, (U1)PICT_DRCID_GPIO0_EDG, (U1)PICT_DRCID_GPIO0_HI, (U1)0x00U);
         vd_g_PictLogCtl_LogReq((U1)PICTLOGCTL_POINT_GPIO0_HI);
-        /* PMA_PS_HOLD状態に従って、CAMERA-MODE1を制御 */
-        if(u1_t_pmspshold == (U1)TRUE){
-            /* CAMERA-MODE1 = H */
-            Dio_WriteChannel(PICT_PORT_CAMERA_MODE1, (Dio_LevelType)TRUE);
-        }
-        else{
-            /* CAMERA-MODE1 = L */
-            Dio_WriteChannel(PICT_PORT_CAMERA_MODE1, (Dio_LevelType)FALSE);
-        }
-
+        Dio_WriteChannel(PICT_PORT_CAMERA_MODE1, (Dio_LevelType)TRUE);
         /* カメラ切替制御 */
         if(bfg_Pict_StsMng.u1_DiagMode != (U1)PICT_DIAG_MOD_OFF){
             /* カメラダイアグモード⇔カメラモード間の遷移は顧客仕様にて禁止されている */
@@ -3617,20 +3605,10 @@ static void vd_s_PictCtl_PmsPsHoldstsChk(void)
     
     if(u1_t_pmspshold != u1_s_pict_pmspsh){
         if(u1_t_pmspshold == (U1)PICT_POLLPORT_ON){
-            if(bfg_Pict_StsMng.u1_DispReqGpio0Sts == (U1)PICT_POLLPORT_ON){
-                /* CAMERA-MODE1 = H */
-                Dio_WriteChannel(PICT_PORT_CAMERA_MODE1, (Dio_LevelType)TRUE);
-            } 
-            else{
-                /* CAMERA-MODE1 = L */
-                Dio_WriteChannel(PICT_PORT_CAMERA_MODE1, (Dio_LevelType)FALSE);
-            }
             /* MIPI MUTE端子 Lo設定 */
             Dio_WriteChannel(PICT_PORT_MIPI_MUTE, (Dio_LevelType)FALSE);
         }
         else{
-            /* CAMERA-MODE1 = L */
-            Dio_WriteChannel(PICT_PORT_CAMERA_MODE1, (Dio_LevelType)FALSE);
             if(u1_t_vicrset == (U1)TRUE){
                 /* MIPI MUTE端子 Hi設定 */
                 Dio_WriteChannel(PICT_PORT_MIPI_MUTE, (Dio_LevelType)TRUE);
