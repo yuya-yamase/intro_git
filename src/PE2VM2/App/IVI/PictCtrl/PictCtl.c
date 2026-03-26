@@ -4348,7 +4348,13 @@ static U1 u1_s_PictCtl_CenterCamSizValidChk(U1 u1_a_CenterCamSiz)
         case PICT_CAN_CAM_SIZE_1280x621:
         case PICT_CAN_CAM_SIZE_1696X954:
         case PICT_CAN_CAM_SIZE_1104X621:
-        u1_t_valid = (U1)TRUE;      /*有効値*/
+        case PICT_CAN_CAM_SIZE_1672x720:
+        case PICT_CAN_CAM_SIZE_RESERVE1:
+        case PICT_CAN_CAM_SIZE_RESERVE2:
+        case PICT_CAN_CAM_SIZE_RESERVE3:
+        case PICT_CAN_CAM_SIZE_RESERVE4:
+        case PICT_CAN_CAM_SIZE_RESERVE5:
+            u1_t_valid = (U1)TRUE;      /*有効値*/
             break;
 
         case PICT_CAN_CAM_SIZE_NONE:
