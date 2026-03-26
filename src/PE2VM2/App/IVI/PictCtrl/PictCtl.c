@@ -21,6 +21,7 @@
 #include "PictLogCtl.h"
 #include "PwrCtl.h"
 #include "veh_opemd.h"
+#include "ivdsh.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
@@ -272,7 +273,7 @@
 #define PICT_PORT_PM_V_MUTE                             (DIO_ID_PORT24_CH9)
 #define PICT_PORT_V_IC_STATUS                           (DIO_ID_PORT3_CH2)
 #define PICT_PORT_GVIF_CAM_RST                          (DIO_ID_PORT10_CH6)
-#define PICT_PORT_STR_WAKE                              (DIO_ID_PORT22_CH0)
+#define PICT_PORT_MM_OFF_REQ                            (DIO_ID_PORT17_CH2)
 
 #define PICT_MIPITIMECNT_INIT                           (U1_MAX)
 #define PICT_MIPITIMECNT_START                          (0U)
@@ -302,6 +303,17 @@
 #define PICT_MONI_DISABLE                               (0U)
 #define PICT_MONI_ENABLE                                (1U)
 #define PICT_MONI_DETECT                                (2U)
+
+#define PICT_VM_1WORD                                   (1U)
+
+#define PICT_MASK_1BYTE                                 (0x000000FFU)
+#define PICT_MASK_2BYTE                                 (0x0000FF00U)
+#define PICT_MASK_3BYTE                                 (0x00FF0000U)
+#define PICT_MASK_4BYTE                                 (0xFF000000U)
+
+#define PICT_SHIF_1BYTE                                 (8U)
+#define PICT_SHIF_2BYTE                                 (16U)
+#define PICT_SHIF_3BYTE                                 (24U)
 
 #define PICT_CD_SIZE_TBLNUM                             (16U)
 
@@ -656,6 +668,8 @@ static void vd_s_PictCtl_CamSyncJdg(void);
 static void vd_s_PictCtl_SiPErrChk(void);
 static U1   u1_s_PictCtl_SiPErrstsChk(void);
 static void vd_s_PictCtl_SiPErrGetSts(void);
+static void vd_s_PictCtl_SiPErrReadReq(void);
+static void vd_s_PictCtl_SiPErrReadMoni(void);
 static U1   u1_s_PictCtl_AutoSiPOffChk(void);
 static U1   u1_s_PictCtl_AutoSiPOffjdg(const U1 u1_a_ENSTS, const U1 u1_a_POL_PRE, const U1 u1_a_POL_NOW, const U1 u1_a_RAW_PRE, const U1 u1_a_RAW_NOW);
 static U1   u1_s_PictCtl_McuSiPOffChk(void);
@@ -1328,6 +1342,8 @@ static void vd_s_PictCtl_StsMng(void)
     /* 見た目オン起動状態チェック(暫定) */
     vd_s_PictCtl_IgStsChk();
     
+    vd_s_PictCtl_PollStsChk();
+    
     vd_s_PictCtl_SiPErrChk();
     
     /* DCAMERA-CAP-STBY2状態チェック */
@@ -1346,8 +1362,6 @@ static void vd_s_PictCtl_StsMng(void)
     vd_s_PictCtl_PmsPsHoldstsChk();
     
     vd_s_PictCtl_VIcRstChk();
-
-    vd_s_PictCtl_PollStsChk();
 }
 
 /*===================================================================================================================================*/
@@ -2688,6 +2702,10 @@ static void vd_s_PictCtl_PollStsChk(void)
         if(u1_s_pict_poll_act[PICT_POLLFACT_LOWPOWERON] != (U1)FALSE){
             vd_s_PictCtl_PollMngStop((U1)PICT_POLLTRG_LOWPOWERON);
             u1_s_pict_poll_act[PICT_POLLFACT_LOWPOWERON] = (U1)FALSE;
+            bfg_Pict_StsMng.u1_pmapshold_raw_sts = (U1)PICT_POLLPORT_UNFIX;
+            bfg_Pict_StsMng.u1_pmapshold_pol_sts = (U1)PICT_POLLPORT_UNFIX;
+            bfg_Pict_StsMng.u1_pmpsholderr_raw_sts = (U1)PICT_POLLPORT_UNFIX;
+            bfg_Pict_StsMng.u1_pmpsholderr_pol_sts = (U1)PICT_POLLPORT_UNFIX;
         }
     }
     else{
@@ -3229,11 +3247,13 @@ static void vd_s_PictCtl_SiPErrChk(void)
     U1 u1_t_vicrset;
     U1 u1_t_gvifrset;
     U1 u1_t_sts;
+    U4 u4_t_comp;
 
     u1_t_mode = u1_g_PictCtl_CamStsGet();
     u1_t_vicrset = (U1)Dio_ReadChannel((U1)PICT_PORT_V_IC_RST);
     u1_t_gvifrset = (U1)Dio_ReadChannel((U1)PICT_PORT_GVIF_CAM_RST);
     u1_t_sts = (U1)FALSE;
+    u4_t_comp = (U4)FALSE;
     
     u1_s_pict_siperr = u1_s_PictCtl_SiPErrstsChk();
     if((u1_s_pict_siperr == (U1)PICT_SIP_ERR_ON) && (u1_s_pict_siperr_old == (U1)PICT_SIP_ERR_OFF)){
@@ -3290,6 +3310,8 @@ static void vd_s_PictCtl_SiPErrChk(void)
        (u1_s_pict_mipitimeoutcnt != (U1)PICT_MIPITIMECNT_INIT)){
         if(u1_s_pict_pwrnext_req == (U1)TRUE){
             /* (暫定)VM3の制御再開要求 */
+            u4_t_comp = (U4)TRUE;
+            vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM2TO3_SIPERRCMP, &u4_t_comp, (U2)PICT_VM_1WORD);
             u1_s_pict_pwrnext_req = (U1)FALSE;
         }
         if((u1_t_mode == (U1)TRUE) && (u1_t_vicrset == (U1)TRUE)){
@@ -3356,9 +3378,8 @@ static void vd_s_PictCtl_SiPErrGetSts(void)
     st_sp_siperr_sts[PICT_SIPERR_PMAPSHOLD_RAW].u1_pre = st_sp_siperr_sts[PICT_SIPERR_PMAPSHOLD_RAW].u1_now;
     st_sp_siperr_sts[PICT_SIPERR_PGOOD_POL].u1_pre = st_sp_siperr_sts[PICT_SIPERR_PGOOD_POL].u1_now;
     
-    st_sp_siperr_sts[PICT_SIPERR_PMRESIN].u1_now = (U1)0U; /* 暫定 */
-    st_sp_siperr_sts[PICT_SIPERR_PMICFAST].u1_now = (U1)0U; /* 暫定 */
-    st_sp_siperr_sts[PICT_SIPERR_OTA_ACT].u1_now = (U1)0U; /* 暫定 */
+    vd_s_PictCtl_SiPErrReadReq();
+    vd_s_PictCtl_SiPErrReadMoni();
     
     if(bfg_Pict_StsMng.u1_pmpsholderr_pol_sts == (U1)PICT_POLLPORT_OFF){
         st_sp_siperr_sts[PICT_SIPERR_PMPSAIL_POL].u1_now = (U1)PICT_SIP_ERR_ON;
@@ -3393,6 +3414,76 @@ static void vd_s_PictCtl_SiPErrGetSts(void)
 }
 
 /*===================================================================================================================================*/
+/*  static void vd_s_PictCtl_SiPErrReadReq(void)                                                                                     */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void vd_s_PictCtl_SiPErrReadReq(void)
+{
+    U4 u4_t_read;
+    U1 u1_t_sts;
+    U1 u1_t_req;
+
+    u4_t_read = (U4)0U;
+    u1_t_sts = (U1)0U;
+    u1_t_sts = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_VM3TO2_SIPERR_INF, &u4_t_read, (U2)PICT_VM_1WORD);
+    if(u1_t_sts != (U1)IVDSH_NO_REA){
+        u1_t_req = (U1)(u4_t_read & (U4)PICT_MASK_1BYTE);
+        if(u1_t_req == (U1)PICT_SIPERRREQ_SOC_ERR){
+            st_sp_siperr_sts[PICT_SIPERR_PMICFAST].u1_now = (U1)PICT_SIP_ERR_ON;
+        }
+        else if(u1_t_req == (U1)PICT_SIPERRREQ_PMIC_ERR){
+            st_sp_siperr_sts[PICT_SIPERR_PMRESIN].u1_now = (U1)PICT_SIP_ERR_ON;
+        }
+        else{
+            st_sp_siperr_sts[PICT_SIPERR_PMRESIN].u1_now = (U1)PICT_SIP_ERR_OFF;
+            st_sp_siperr_sts[PICT_SIPERR_PMICFAST].u1_now = (U1)PICT_SIP_ERR_OFF;
+        }
+    }
+    
+    u1_t_sts = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_VM3TO2_OTA_OFFSTS, &u4_t_read, (U2)PICT_VM_1WORD);
+    if(u1_t_sts != (U1)IVDSH_NO_REA){
+        u1_t_req = (U1)(u4_t_read & (U4)PICT_MASK_1BYTE);
+        if(u1_t_req == (U1)PICT_SIPERRREQ_OTA_ACT){
+            st_sp_siperr_sts[PICT_SIPERR_OTA_ACT].u1_now = (U1)PICT_SIP_ERR_ON;
+        }
+        else{
+            st_sp_siperr_sts[PICT_SIPERR_OTA_ACT].u1_now = (U1)PICT_SIP_ERR_OFF;
+        }
+    }
+}
+
+/*===================================================================================================================================*/
+/*  static void vd_s_PictCtl_SiPErrReadMoni(void)                                                                                    */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void vd_s_PictCtl_SiPErrReadMoni(void)
+{
+    U4 u4_t_read;
+    U1 u1_t_sts;
+    U1 u1_t_moni_pmpsail;
+    U1 u1_t_moni_pmapshold;
+
+    u4_t_read = (U4)0U;
+    u1_t_sts = (U1)0U;
+    u1_t_sts = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_VM3TO2_MONI_INF, &u4_t_read, (U2)PICT_VM_1WORD);
+    
+    if(u1_t_sts != (U1)IVDSH_NO_REA){
+        u1_t_moni_pmpsail = (U1)(u4_t_read & (U4)PICT_MASK_1BYTE);
+        if(u1_t_moni_pmpsail <= (U1)PICT_MONI_DETECT){
+            u1_s_pict_siperrmoni_ensts[PICT_MONIENSTS_PMPSAILERRN] = u1_t_moni_pmpsail;
+        }
+        u1_t_moni_pmapshold = (U1)((u4_t_read & (U4)PICT_MASK_2BYTE) >> PICT_SHIF_1BYTE);
+        if(u1_t_moni_pmapshold <= (U1)PICT_MONI_DETECT){
+            u1_s_pict_siperrmoni_ensts[PICT_MONIENSTS_PMAPSHOLD] = u1_t_moni_pmapshold;
+        }
+    }
+}
+
+/*===================================================================================================================================*/
 /*  static U1 u1_s_PictCtl_AutoSiPOffChk(void)                                                                                       */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
@@ -3401,6 +3492,8 @@ static void vd_s_PictCtl_SiPErrGetSts(void)
 static U1 u1_s_PictCtl_AutoSiPOffChk(void)
 {
     U1 u1_t_sts;
+    U1 u1_t_enable;
+    U1 u1_t_port;
     
     u1_t_sts = (U1)PICT_SIP_ERR_OFF;
 
@@ -3408,7 +3501,14 @@ static U1 u1_s_PictCtl_AutoSiPOffChk(void)
                                             st_sp_siperr_sts[PICT_SIPERR_PMPSAIL_POL].u1_pre, st_sp_siperr_sts[PICT_SIPERR_PMPSAIL_POL].u1_now,
                                             st_sp_siperr_sts[PICT_SIPERR_PMPSAIL_RAW].u1_pre, st_sp_siperr_sts[PICT_SIPERR_PMPSAIL_RAW].u1_now);
     
-    u1_t_sts |= u1_s_PictCtl_AutoSiPOffjdg(u1_s_pict_siperrmoni_ensts[PICT_MONIENSTS_PMAPSHOLD],
+    u1_t_port = (U1)Dio_ReadChannel((U1)PICT_PORT_MM_OFF_REQ);
+    if(u1_t_port == (U1)FALSE){
+        u1_t_enable = u1_s_pict_siperrmoni_ensts[PICT_MONIENSTS_PMAPSHOLD];
+    }
+    else{
+        u1_t_enable = (U1)PICT_MONI_DISABLE;
+    }
+    u1_t_sts |= u1_s_PictCtl_AutoSiPOffjdg(u1_t_enable,
                                             st_sp_siperr_sts[PICT_SIPERR_PMAPSHOLD_POL].u1_pre, st_sp_siperr_sts[PICT_SIPERR_PMAPSHOLD_POL].u1_now,
                                             st_sp_siperr_sts[PICT_SIPERR_PMAPSHOLD_RAW].u1_pre, st_sp_siperr_sts[PICT_SIPERR_PMAPSHOLD_RAW].u1_now);
     
@@ -3570,8 +3670,10 @@ static void vd_s_PictCtl_FalsePositiveChk(void)
 static void vd_s_PictCtl_SiPErrClearChk(void)
 {
     U1 u1_t_bypass_flg;
+    U4 u4_t_comp;
     
     u1_t_bypass_flg = u1_s_pict_campass_chg_flg & (U1)PICT_CAM_PATH_SIPERR;
+    u4_t_comp = (U4)FALSE;
     
     if((st_sp_siperr_sts[PICT_SIPERR_PMRESIN].u1_now != (U1)PICT_SIP_ERR_ON) &&
        (st_sp_siperr_sts[PICT_SIPERR_PMICFAST].u1_now != (U1)PICT_SIP_ERR_ON) &&
@@ -3586,6 +3688,7 @@ static void vd_s_PictCtl_SiPErrClearChk(void)
         u1_s_pict_siperrfailsafe_flg = (U1)PICT_SIP_ERR_OFF;
         u1_s_pict_siperrmute_flg = (U1)FALSE;
         u1_s_pict_siperrchk_step = (U1)PICT_SEQ_SIPERRCHK_STEP_NON;
+        vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM2TO3_SIPERRCMP, &u4_t_comp, (U2)PICT_VM_1WORD);
     }
 }
 
