@@ -295,6 +295,12 @@
 #define PICT_SIPERRMUTE_OTA                             (0U)
 #define PICT_SIPERRMUTE_MCU                             (1U)
 
+#define PICT_SIPERRREQ_NON                              (0U)
+#define PICT_SIPERRREQ_SOC_ERR                          (1U)
+#define PICT_SIPERRREQ_PMIC_ERR                         (2U)
+
+#define PICT_SIPERRREQ_OTA_ACT                          (1U)
+
 #define PICT_MONIENSTS_NUM                              (3U)
 #define PICT_MONIENSTS_PMPSAILERRN                      (0U)
 #define PICT_MONIENSTS_PMAPSHOLD                        (1U)
