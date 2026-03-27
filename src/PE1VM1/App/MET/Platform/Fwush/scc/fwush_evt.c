@@ -176,7 +176,7 @@ static U1 u1_g_FwushDetectEventForWaiting(void)
         u1_g_fwupx_req_seqcnt_pre = u1_t_seqcnt;
     }
     else{
-        u1_t_event = (U1)FWUSH_EVENT_SAME_REQUEST;
+        u1_t_event = (U1)FWUSH_EVENT_NONE;
     }
 
     return(u1_t_event);
@@ -214,25 +214,25 @@ static U1 u1_s_FwushDetectresponseEvent(U1 u1_a_req_subtype)
             }
             else if((u1_a_req_subtype == (U1)FWUSH_REQ_SUBTYPE_ACT) &&
                     (u1_g_fwush_seq_progress & (U1)FWUSH_PROGRESS_ACT_DONE) != (U1)0U){
-                /* ACT + ACT_DONE bit set -> ACT_ACCEPT (priority over NEW_REQUEST) */
-                u1_t_event = (U1)FWUSH_EVENT_ACT_ACCEPT;
+                /* ACT + ACT_DONE bit set -> RES_OK (priority over NEW_REQUEST) */
+                u1_t_event = (U1)FWUSH_EVENT_RES_OK;
             }
             else{
                 /* Do Nothing */
             }
             break;
         case (U1)FWUSH_MAIN_STATE_VALID:
-            /* VALID + ACT -> ACT_ACCEPT */
+            /* VALID + ACT -> RES_OK */
             if(u1_a_req_subtype == (U1)FWUSH_REQ_SUBTYPE_ACT){
-                u1_t_event = (U1)FWUSH_EVENT_ACT_ACCEPT;
+                u1_t_event = (U1)FWUSH_EVENT_RES_OK;
             }
             break;
         case (U1)FWUSH_MAIN_STATE_FIN:
             /* FIN + VALID -> depends on ROLLBACK_DONE bit */
             if(u1_a_req_subtype == (U1)FWUSH_REQ_SUBTYPE_VALID){
                 if((u1_g_fwush_seq_progress & (U1)FWUSH_PROGRESS_ROLLBACK_DONE) == (U1)0U){
-                    /* ROLLBACK_DONE bit is 0 -> VALID_ACCEPT */
-                    u1_t_event = (U1)FWUSH_EVENT_VALID_ACCEPT;
+                    /* ROLLBACK_DONE bit is 0 -> RES_OK */
+                    u1_t_event = (U1)FWUSH_EVENT_RES_OK;
                 }
                 else{
                     /* ROLLBACK_DONE bit is 1 -> INVALID_REQUEST */
@@ -314,13 +314,13 @@ static U1 u1_s_FwushCheckMemAccJobEvent(void)
             if(u1_t_main_status == (U1)FWUMEMACC_MAIN_STATUS_COMPLETED){
                 u1_t_update_status = u1_g_FwuMemAccGetUpdateStatus();
                 if(u1_t_update_status == (U1)FWUMEMACC_UPDT_STS_ALL_COMP){
-                    u1_t_event = (U1)FWUSH_EVENT_MEMACC_RUN_COMPLETE;
+                    u1_t_event = (U1)FWUSH_EVENT_MEMACC_SUCCESS;
                 }
                 else if(u1_t_update_status == (U1)FWUMEMACC_UPDT_STS_IN_PROGRESS){
                     u1_t_event = (U1)FWUSH_EVENT_MEMACC_RUN_PARTIAL;
                 }
-                else {
-                    /* FWUMEMACC_UPDT_STS_IDLE (Do Nothing) */
+                else{
+                    /* IDLE: keep FWUSH_EVENT_MEMACC_SUCCESS from mapping */
                 }
             }
             break;
@@ -351,8 +351,8 @@ static U1 u1_s_FwushMapMainStatusToEvent(U1 u1_a_main_status)
     static const U1 u1_sp_FWUMEMACC_STATUS_TO_EVENT[FWUMEMACC_MAIN_STATUS_MAX] =
     {
         (U1)FWUSH_EVENT_NONE,            /* FWUMEMACC_MAIN_STATUS_IDLE      (0U) */
-        (U1)FWUSH_EVENT_MEMACC_PROGRESS, /* FWUMEMACC_MAIN_STATUS_REQUESTED (1U) */
-        (U1)FWUSH_EVENT_MEMACC_PROGRESS, /* FWUMEMACC_MAIN_STATUS_ACTIVE    (2U) */
+        (U1)FWUSH_EVENT_NONE,            /* FWUMEMACC_MAIN_STATUS_REQUESTED (1U) */
+        (U1)FWUSH_EVENT_NONE,            /* FWUMEMACC_MAIN_STATUS_ACTIVE    (2U) */
         (U1)FWUSH_EVENT_MEMACC_SUCCESS,  /* FWUMEMACC_MAIN_STATUS_COMPLETED (3U) */
         (U1)FWUSH_EVENT_MEMACC_ERROR     /* FWUMEMACC_MAIN_STATUS_ERROR     (4U) */
     };
