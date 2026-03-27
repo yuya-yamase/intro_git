@@ -1,7 +1,7 @@
-/* Dcm_Dsp_Main_Cfg_c(v5-3-0)                                               */
+/* Dcm_Dsp_Main_Cfg_c(v5-6-0)                                               */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -86,26 +86,6 @@ CONST( AB_83_ConstV uint8, DCM_CONFIG_DATA ) Dcm_Dsp_Main_u1PreWriteAll_Fnc_Num 
 #define DCM_START_SEC_CODE
 #include <Dcm_MemMap.h>
 
-/****************************************************************************/
-/* Function Name | Dcm_ClearSecurityHist                                    */
-/* Description   | Clear SID27 history                                      */
-/* Preconditions | None                                                     */
-/* Parameters    | None                                                     */
-/* Return Value  | Std_ReturnType                                           */
-/*               |        E_OK : this value is always returned.             */
-/* Notes         | None                                                     */
-/****************************************************************************/
-FUNC( Std_ReturnType, DCM_CODE ) Dcm_ClearSecurityHist
-( void )
-{
-    Std_ReturnType      u1_RetVal;
-
-    u1_RetVal   = E_OK;
-
-    return u1_RetVal;
-}
-
-
 
 /****************************************************************************/
 /* Internal Functions                                                       */
@@ -124,11 +104,12 @@ FUNC( Std_ReturnType, DCM_CODE ) Dcm_ClearSecurityHist
 /*  v5-0-0         :2022-03-29                                              */
 /*  v5-1-0         :2022-07-27                                              */
 /*  v5-3-0         :2023-03-29                                              */
+/*  v5-6-0         :2024-02-27                                              */
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
 /*  Framework          :v2-1-0                                              */
-/*  BSW plug-in        :v5-5-1                                              */
+/*  BSW plug-in        :v5-10-0                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

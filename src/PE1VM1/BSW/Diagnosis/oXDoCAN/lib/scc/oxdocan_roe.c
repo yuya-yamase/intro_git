@@ -122,8 +122,6 @@ void    vd_g_oXDoCANRoePreInit(const U1 u1_a_BON_INIT)
     U2          u2_t_nvmc_id;
     U1          u1_t_evt_idx;
     U1          u1_t_nvmc_sts;
-    U1          u1_t_sum;
-    U1          u1_t_res;
 
     for(u1_t_evt_idx = (U1)0U; u1_t_evt_idx < u1_g_OXDC_ROE_EVENT_NUM; u1_t_evt_idx++){
 
@@ -296,7 +294,7 @@ uint8   u1_g_oXDoCANAubIfRoeChkDidSup(const uint8 *u1_ap_DID)
     u2_t_did  = (U2)u1_ap_DID[OXDC_ROE_DID_HI] << OXDC_ROE_LSB_DID_HI;
     u2_t_did |= (U2)u1_ap_DID[OXDC_ROE_DID_LO];
     
-    u2_t_did_idx = u2_g_oXDoCANXidSearchDid(u2_t_did, &st_gp_OXDC_DATA_XID[0], u2_g_OXDC_DATA_NUM_XID);
+    u2_t_did_idx = u2_g_oXDoCANXidSearchXid(u2_t_did, &st_gp_OXDC_DATA_XID[0], u2_g_OXDC_DATA_NUM_XID);
 
     if((u2_t_did_idx < u2_g_OXDC_DATA_NUM_XID) &&
        (st_gp_OXDC_DATA_XID_ML[u2_t_did_idx].u2_ans_nbyte <= (U2)OXDC_ROE_DID_READ_NB_MAX)){
@@ -348,7 +346,7 @@ uint8   u1_g_oXDoCANAubIfRoeChkServToRes(Dcm_NegativeResponseCodeType *u1_ap_Err
         for(u4_t_cnt = (U4)0U; u4_t_cnt < u4_t_did_num; u4_t_cnt++){
             u2_t_did  = (U2)st_t_req.u1p_RX[u4_t_idx++] << OXDC_ROE_LSB_DID_HI;
             u2_t_did |= (U2)st_t_req.u1p_RX[u4_t_idx++];
-            u2_t_did_idx = u2_g_oXDoCANXidSearchDid(u2_t_did, &st_gp_OXDC_DATA_XID[0], u2_g_OXDC_DATA_NUM_XID);
+            u2_t_did_idx = u2_g_oXDoCANXidSearchXid(u2_t_did, &st_gp_OXDC_DATA_XID[0], u2_g_OXDC_DATA_NUM_XID);
 
             if(u2_t_did_idx < u2_g_OXDC_DATA_NUM_XID){
                 u1_t_did_ena = u1_s_oXdcRoeChkDidEnable((U1)U1_MAX, u2_t_did_idx, (U1)DCM_DEFAULT_SESSION);
@@ -385,7 +383,7 @@ static void    vd_s_oXdcRoeEvReqCtrl(const U1 u1_a_ROE_EV_ID, const U1 u1_a_ROE_
 
     if(u1_t_read_req == (U1)TRUE){
         u2_t_did = st_gp_OXDC_ROE_DID[u1_a_ROE_EV_ID].u2_did;
-        u2_t_did_idx = u2_g_oXDoCANXidSearchDid(u2_t_did, &st_gp_OXDC_DATA_XID[0], u2_g_OXDC_DATA_NUM_XID);
+        u2_t_did_idx = u2_g_oXDoCANXidSearchXid(u2_t_did, &st_gp_OXDC_DATA_XID[0], u2_g_OXDC_DATA_NUM_XID);
 
         if(u2_t_did_idx < u2_g_OXDC_DATA_NUM_XID){
             u1_t_did_ena = u1_s_oXdcRoeChkDidEnable(u1_a_ROE_EV_ID, u2_t_did_idx, u1_a_CUR_SES);

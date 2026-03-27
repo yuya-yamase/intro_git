@@ -1,7 +1,7 @@
-/* Dcm_Dsp_SID27_h(v5-3-0)                                                  */
+/* Dcm_Dsp_SID27_h(v5-6-0)                                                  */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -76,6 +76,14 @@ FUNC(void, DCM_CODE) Dcm_Dsp_SID27_ClearSeed
     const Dcm_SesCtrlType u1SesCtrlTypeOld,
     const Dcm_SesCtrlType u1SesCtrlTypeNew
 );
+#if ( DCM_SEC_PECULIAR_TYPE_GREEN == STD_ON )
+FUNC(Std_ReturnType, DCM_CODE) Dcm_Dsp_SID27_GetSecDelayTimerFactor
+(
+    const Dcm_SecLevelType u1SecLevel,
+    P2VAR( boolean, AUTOMATIC, DCM_APPL_DATA ) ptDelayTimerActive,
+    P2VAR( Dcm_DelayTimerFactorType, AUTOMATIC, DCM_APPL_DATA ) ptDelayTimerFactor
+);
+#endif /* DCM_SEC_PECULIAR_TYPE_GREEN == STD_ON */
 FUNC(Std_ReturnType, DCM_CODE) Dcm_Dsp_SID27_RequestSeed
 (
     const uint8 u1SubFncId,
@@ -136,6 +144,7 @@ FUNC( void, DCM_CODE) Dcm_Dsp_SID27_ReadConfirmation
 /*  v3-2-0         :2020-10-28                                              */
 /*  v5-0-0         :2022-03-29                                              */
 /*  v5-3-0         :2023-03-29                                              */
+/*  v5-6-0         :2024-02-27                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

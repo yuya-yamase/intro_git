@@ -306,10 +306,8 @@ uint8   u1_g_CANLpRIngCANRx(const uint8 u1_a_ING_CAN_RX, const uint8 u1_a_MBOX, 
     if(u2_t_sdl_rx > u2_t_sdl_max){
         u1_t_canif_rx = (U1)CAN_PROC_NG;
     }
-    else if(u1_a_ING_CAN_RX >= u1_g_CAN_LPR_NUM_ING){
-        u1_t_canif_rx = (U1)CAN_PROC_OK;
-    }
-    else if(stp_gp_CAN_LPR_ING[u1_a_ING_CAN_RX] == NULL_PTR){
+    else if((u1_a_ING_CAN_RX >= u1_g_CAN_LPR_NUM_ING        ) ||
+            (stp_gp_CAN_LPR_ING[u1_a_ING_CAN_RX] == NULL_PTR)){
         u1_t_canif_rx = (U1)CAN_PROC_OK;
     }
     else{

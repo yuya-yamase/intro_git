@@ -1,7 +1,7 @@
-/* Dcm_Dsp_SID2F_Cfg.c(v5-3-0)                                              */
+/* Dcm_Dsp_SID2F_Cfg.c(v5-8-0)                                              */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -51,7 +51,7 @@
 #define DCM_START_SEC_CONST_CONFIG
 #include <Dcm_MemMap.h>
 
-CONST ( AB_83_ConstV boolean, DCM_CONFIG_DATA ) Dcm_Dsp_Sid2F_bReportControlStateOnlyIOCP03 = (boolean)FALSE;
+CONST ( AB_83_ConstV uint8, DCM_CONFIG_DATA ) Dcm_Dsp_Sid2F_u1SetReportControlState = DCM_DSP_SID2F_CONTROLSTATE_ALLSET;
 
 #define DCM_STOP_SEC_CONST_CONFIG
 #include <Dcm_MemMap.h>
@@ -74,11 +74,12 @@ CONST ( AB_83_ConstV boolean, DCM_CONFIG_DATA ) Dcm_Dsp_Sid2F_bReportControlStat
 /* History                                                                  */
 /*  Version        :Date                                                    */
 /*  v5-3-0         :2023-03-29                                              */
+/*  v5-8-0         :2024-10-29                                              */
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
 /*  Framework          :v2-1-0                                              */
-/*  BSW plug-in        :v5-5-1                                              */
+/*  BSW plug-in        :v5-10-0                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

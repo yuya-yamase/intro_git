@@ -65,17 +65,7 @@
 /*               |   E_OK                                                                               */
 /*               |   E_NOT_OK                                                                           */
 /* ---------------------------------------------------------------------------------------------------- */
-#if (DEM_READFUNC_MONITORDATA_SUPPORT == STD_ON)
-/* uint8   u1_g_oXDoCANAubIfxxxx(uint8 * u1_ap_xxxx, Dem_MonitorDataType u4_a_mon); */
-uint8   u1_g_oXDoCANAubIfSpeed(uint8 * u1_ap_speed, Dem_MonitorDataType u4_a_mon);
-uint8   u1_g_oXDoCANAubIfEcuPower(uint8 * u1_ap_ecupower, Dem_MonitorDataType u4_a_mon);
-uint8   u1_g_oXDoCANAubIfAirTemp(uint8 * u1_ap_temp, Dem_MonitorDataType u4_a_mon);
-uint8   u1_g_oXDoCANAubIfPowertrainSts(uint8 * u1_ap_ptsts, Dem_MonitorDataType u4_a_mon);
-uint8   u1_g_oXDoCANAubIfMacUVHst(uint8 * u1_ap_hst, Dem_MonitorDataType u4_a_mon);
-uint8   u1_g_oXDoCANAubIfEncUVHst(uint8 * u1_ap_hst, Dem_MonitorDataType u4_a_mon);
-uint8   u1_g_oXDoCANAubIfSocTemp(uint8 * u1_ap_temp, Dem_MonitorDataType u4_a_mon);
-uint8   u1_g_oXDoCANAubIfIvtCoolTemp(uint8 * u1_ap_temp, Dem_MonitorDataType u4_a_mon);
-#else
+
 uint8   u1_g_oXDoCANAubIfSpeed(uint8 * u1_ap_speed);
 uint8   u1_g_oXDoCANAubIfEcuPower(uint8 * u1_ap_ecupower);
 uint8   u1_g_oXDoCANAubIfAirTemp(uint8 * u1_ap_temp);
@@ -84,7 +74,7 @@ uint8   u1_g_oXDoCANAubIfMacUVHst(uint8 * u1_ap_hst);
 uint8   u1_g_oXDoCANAubIfEncUVHst(uint8 * u1_ap_hst);
 uint8   u1_g_oXDoCANAubIfSocTemp(uint8 * u1_ap_temp);
 uint8   u1_g_oXDoCANAubIfIvtCoolTemp(uint8 * u1_ap_temp);
-#endif
+
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */

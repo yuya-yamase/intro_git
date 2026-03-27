@@ -32,16 +32,9 @@ typedef struct{
     U1   ( * const          fp_u1_SUP)(void);                                              /* Return : OXDC_XID_SUP_XXX          */
     U2                      u2_xid;
     U2                      u2_rd_ses;                                                     /* Read  Session                      */
-    U1   ( * const          fp_u1_RDSEC_CHK)(const U1 u1_a_LVL);                           /* Return : OXDC_SAL_PROC_XXX         */
+    U2                      u2_rd_sec;                                                     /* Read Security Level                */
     U2                      u2_wr_ses;                                                     /* Write Session                      */
-    U1   ( * const          fp_u1_WRSEC_CHK)(const U1 u1_a_LVL);                           /* Return : OXDC_SAL_PROC_XXX         */
-}ST_OXDC_DID;
-
-typedef struct{
-    U1   ( * const          fp_u1_SUP)(void);                                              /* Return : OXDC_XID_SUP_XXX          */
-    U2                      u2_xid;
-    U2                      u2_ses;
-    U1   ( * const          fp_u1_SEC_CHK)(const U1 u1_a_LVL);                             /* Return : OXDC_SAL_PROC_XXX         */
+    U2                      u2_wr_sec;                                                     /* Write Security Level               */
 }ST_OXDC_XID;
 
 typedef struct{
@@ -59,7 +52,7 @@ typedef struct{
     U1   ( * const          fp_u1_CSM_CHK)(const U1 u1_a_PRM, const U1 * u1_ap_CSM);       /* Return : OXDC_SAL_PROC_RUN or Not  */
     void ( * const          fp_vd_ACT)(void);
     void ( * const          fp_vd_DEACT)(void);
-    U1   ( * const          fp_u1_SEC_CHK)(const U1 u1_a_LVL);                             /* Return : OXDC_SAL_PROC_XXX         */
+    U2                      u2_sec;                                                        /* Security Level                     */
 }ST_OXDC_IOC_IF;
 
 typedef struct{
@@ -84,23 +77,18 @@ extern U1                   u1_g_oxdc_rebyid_xidcnt;
 
 extern U2                   u2_g_oxdc_rout_xid;
 
-#if(OXDC_SID2F_USE == OXDC_USE)
 extern U2                   u2_g_oxdc_ioc_xid;
-#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Prototypes                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-U2      u2_g_oXDoCANXidSearchDid(const U2 u2_a_DID, const ST_OXDC_DID st_ap_CFG[], const U2 u2_a_NUM_CFG);
-U2      u2_g_oXDoCANXidSearchRid(const U2 u2_a_RID, const ST_OXDC_XID st_ap_CFG[], const U2 u2_a_NUM_CFG);
+U2      u2_g_oXDoCANXidSearchXid(const U2 u2_a_XID, const ST_OXDC_XID st_ap_CFG[], const U2 u2_a_NUM_CFG);
 
 void    vd_g_oXDoCANXidSupInit(const U2 u2_a_LP_BEGIN, U1 * u1_ap_sup);
 void    vd_g_oXDoCANDidSupInit(const U2 u2_a_LP_BEGIN, U1 * u1_ap_sup);
 void    vd_g_oXDoCANRidSupInit(const U2 u2_a_LP_BEGIN, U1 * u1_ap_sup);
-U1      u1_g_oXDoCANXidSupchk(const ST_OXDC_DID * st_ap_DID, const U2 u2_a_NUM_DID, U1 * u1_ap_sup);
-U1      u1_g_oXDoCANRidSupchk(const ST_OXDC_XID * st_ap_RID, const U2 u2_a_NUM_RID, U1 * u1_ap_sup);
-U1      u1_g_oXDoCANXgrSupchk(const ST_OXDC_DID * st_ap_DID, const U2 u2_a_NUM_XID, U1 * u1_ap_sup);
-U1      u1_g_oXDoCANRgrSupchk(const ST_OXDC_XID * st_ap_RID, const U2 u2_a_NUM_XID, U1 * u1_ap_sup);
+U1      u1_g_oXDoCANXidSupchk(const ST_OXDC_XID * st_ap_XID, const U2 u2_a_NUM_XID, U1 * u1_ap_sup);
+U1      u1_g_oXDoCANXgrSupchk(const ST_OXDC_XID * st_ap_XID, const U2 u2_a_NUM_XID, U1 * u1_ap_sup);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
@@ -110,8 +98,7 @@ extern const U2                        u2_g_OXDC_IOC_RDBK_DLY_MAX;
 
 extern const ST_OXDC_IOC_IF            st_gp_OXDC_IOC_IF[];
 extern const U2                        u2_g_OXDC_NUM_IOC;
-
-extern const ST_OXDC_DID               st_gp_OXDC_DATA_XID[];
+extern const ST_OXDC_XID               st_gp_OXDC_DATA_XID[];
 extern const ST_OXDC_XID_ML            st_gp_OXDC_DATA_XID_ML[];
 extern const ST_OXDC_DATA_IF           st_gp_OXDC_DATA_CFG[];
 extern const U2                        u2_g_OXDC_DATA_NUM_XID;

@@ -64,9 +64,6 @@ static U1      u1_s_oXdcWrbyIdXidchk(const ST_OXDC_REQ * st_ap_REQ);
 static U1      u1_s_oXdcWrbyIdSessionchk(const ST_OXDC_REQ * st_ap_REQ);
 static U1      u1_s_oXdcWrbyIdReqLenchk(const ST_OXDC_REQ * st_ap_REQ);
 static U1      u1_s_oXdcWrbyIdSecuritychk(const ST_OXDC_REQ * st_ap_REQ);
-#if(OXDC_SID2E_NR_22_USE == OXDC_USE)
-static U1      u1_s_oXdcWrbyIdConditionchk(const ST_OXDC_REQ * st_ap_REQ);
-#endif
 static void    vd_s_oXdcWrbyIdProcRun(const ST_OXDC_REQ * st_ap_REQ, ST_OXDC_ANS * st_ap_ans);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -126,9 +123,6 @@ static void    vd_s_oXdcWrbyIdReqchk(const ST_OXDC_REQ * st_ap_REQ)
         &u1_s_oXdcWrbyIdSessionchk,
         &u1_s_oXdcWrbyIdReqLenchk,
         &u1_s_oXdcWrbyIdSecuritychk,
-#if(OXDC_SID2E_NR_22_USE == OXDC_USE)
-        &u1_s_oXdcWrbyIdConditionchk,
-#endif
         vdp_PTR_NA
     };
 
@@ -166,7 +160,7 @@ static U1      u1_s_oXdcWrbyIdXidchk(const ST_OXDC_REQ * st_ap_REQ)
 
         u2_t_xid  = (U2)st_ap_REQ->u1p_RX[OXDC_WRBYID_DID_HI] << OXDC_WRBYID_LSB_ID_HI;
         u2_t_xid |= (U2)st_ap_REQ->u1p_RX[OXDC_WRBYID_DID_LO];
-        u2_t_xid  = u2_g_oXDoCANXidSearchDid(u2_t_xid, &st_gp_OXDC_DATA_XID[0], u2_g_OXDC_DATA_NUM_XID);
+        u2_t_xid  = u2_g_oXDoCANXidSearchXid(u2_t_xid, &st_gp_OXDC_DATA_XID[0], u2_g_OXDC_DATA_NUM_XID);
 
         u2_s_oxdc_wrbyid_xid = u2_t_xid;
 
@@ -249,43 +243,13 @@ static U1      u1_s_oXdcWrbyIdReqLenchk(const ST_OXDC_REQ * st_ap_REQ)
 static U1      u1_s_oXdcWrbyIdSecuritychk(const ST_OXDC_REQ * st_ap_REQ)
 {
     U1                       u1_t_proc;
-    U1                       u1_t_sec;
+    U2                       u2_t_sec;
 
-    if(st_gp_OXDC_DATA_XID[u2_s_oxdc_wrbyid_xid].fp_u1_WRSEC_CHK == vdp_PTR_NA){
-        u1_t_proc = (U1)OXDC_SAL_PROC_RUN;
-    }
-    else{
-        u1_t_sec = DCM_SEC_LEV_LOCKED;
-        (void)Dcm_GetSecurityLevel(&u1_t_sec);
-        u1_t_proc = (*st_gp_OXDC_DATA_XID[u2_s_oxdc_wrbyid_xid].fp_u1_WRSEC_CHK)(u1_t_sec);
-    }
+    u2_t_sec = st_gp_OXDC_DATA_XID[u2_s_oxdc_wrbyid_xid].u2_wr_sec;
+    u1_t_proc = u1_g_oXDoCANCfgSecurityBitChk(u2_t_sec);
 
     return(u1_t_proc);
 }
-#if(OXDC_SID2E_NR_22_USE == OXDC_USE)
-/*===================================================================================================================================*/
-/*  static U1      u1_s_oXdcWrbyIdConditionchk(const ST_OXDC_REQ * st_ap_REQ)                                                        */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:                                                                                                                       */
-/*  Return:                                                                                                                          */
-/*===================================================================================================================================*/
-static U1      u1_s_oXdcWrbyIdConditionchk(const ST_OXDC_REQ * st_ap_REQ)
-{
-    U1                       u1_t_proc;
-    U1                       u1_t_result;
-
-    u1_t_result = u1_g_oXDoCANCWriteByIdChk();
-    if(u1_t_result == (U1)E_OK){
-        u1_t_proc = (U1)OXDC_SAL_PROC_RUN;
-    }
-    else{
-        u1_t_proc = (U1)OXDC_SAL_PROC_NR_22;
-
-    }
-
-    return(u1_t_proc);
-}
-#endif
 /*===================================================================================================================================*/
 /*  static void    vd_s_oXdcWrbyIdProcRun(const ST_OXDC_REQ * st_ap_REQ, ST_OXDC_ANS * st_ap_ans)                                    */
 /* --------------------------------------------------------------------------------------------------------------------------------- */

@@ -86,7 +86,6 @@
 #define TYDC_DTC_NVM_BLK_MAX_SIZE                (32U)
 #define TYDC_DEMEVT_IDX_STSDTC                   (1U)   /* index of StatusOfDTC in Dem_EventRecordType    */
                                                         /* index of StatusOfDTC in Dem_UdmEventRecordType */
-#define TYDC_DEMEVT_MSK_STSDTC                   (DEM_DTCSTATUS_PRODUCT_SUPPORT_BIT)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -347,20 +346,17 @@ void    vd_g_TyDoCANDtcLogRxReset(void)
 /*===================================================================================================================================*/
 uint8   u1_g_oXDoCANAubIfDtcUdmDel(const uint16 DTCOrigin)
 {
-#ifdef OXDOCAN_NMDIAG_ECUSLP
     U4      u4_t_lpcnt;
-#endif
     U1      u1_t_result;
     U1      u1_t_ret;
 
     u1_t_result = (U1)OXDC_DTC_UDM_DEL_OK;
-#ifdef OXDOCAN_NMDIAG_ECUSLP    
+ 
     for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)u1_g_TYDC_DTC_NUM_UDM_DEL; u4_t_lpcnt++){
         if(st_gp_TYDC_DTC_UDM_DEL[u4_t_lpcnt].u2_mem_slct == DTCOrigin){
             u1_t_result |= st_gp_TYDC_DTC_UDM_DEL[u4_t_lpcnt].fp_u1_UDM_DEL();
         }
-    }
-#endif    
+    }   
 
     if((U1)(u1_t_result & (U1)OXDC_DTC_UDM_DEL_NG) == (U1)OXDC_DTC_UDM_DEL_NG){
         u1_t_ret = DEM_CALLOUT_NG;
@@ -450,11 +446,7 @@ U1      u1_g_oXDoCANRebyId_A006(U1 * u1_ap_ans, const U2 u2_a_ELPSD)
     u1_t_mem_slct = (U1)0U;
     u4_t_dtc = (U4)0U;
     if(u2_t_udm_last_ev_id != (U2)U2_MAX){
-#if ( DEM_USERDEFINEDMEMORY_SUPPORT == STD_ON )
         u1_t_ret = Dem_GetUserDefinedMemoryIdentifier(u2_t_udm_last_ev_id, &u1_t_mem_slct);
-#else
-        u1_t_ret = (U1)E_NOT_OK;
-#endif /* (DEM_USERDEFINEDMEMORY_SUPPORT == STD_ON) */
         if(u1_t_ret != (U1)E_OK){
             u1_t_mem_slct = (U1)0U;
             u4_t_dtc = (U4)0U;

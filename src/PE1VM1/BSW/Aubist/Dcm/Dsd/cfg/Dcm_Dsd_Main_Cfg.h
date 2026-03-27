@@ -34,7 +34,7 @@
 #define DCM_D_SPLRCONFNOTIFY_NUM            (0U)
 
 /* Multiplicity of ServiceTable */
-#define DCM_D_SERVICETABLE_NUM              (6U)
+#define DCM_D_SERVICETABLE_NUM              (8U)
 
 /* NUM of all services  */
 #define DCM_D_SERVICE_NUM                   (15U)

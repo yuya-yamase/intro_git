@@ -1,7 +1,7 @@
-/* Dcm_FuncSwitchRpg_cfg_h(v5-3-0)                                          */
+/* Dcm_FuncSwitchRpg_cfg_h(v5-9-0)                                          */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -24,6 +24,7 @@
 /*--------------------------------------------------------------------------*/
 #define DCM_ULDL_SERVICE_USE                 (STD_OFF)   /* Use Upload Download Services */
 #define DCM_UL_PROCESS_USE                   (STD_OFF)   /* Use Upload Process           */
+#define DCM_NO_TRANSIT_TO_NONE               (STD_OFF)   /* No Transit From DLFin To None After Transmission Complete */
 #define DCM_SUPPORT_SID34                    (STD_OFF)   /* Use SID34                    */
 #define DCM_SUPPORT_SID35                    (STD_OFF)   /* Use SID35                    */
 #define DCM_SUPPORT_SID36                    (STD_OFF)   /* Use SID36                    */
@@ -55,11 +56,12 @@
 /* History                                                                  */
 /*  Version        :Date                                                    */
 /*  v5-3-0         :2023-03-29                                              */
+/*  v5-9-0         :2025-02-26                                              */
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
 /*  Framework          :v2-1-0                                              */
-/*  BSW plug-in        :v5-5-1                                              */
+/*  BSW plug-in        :v5-10-0                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

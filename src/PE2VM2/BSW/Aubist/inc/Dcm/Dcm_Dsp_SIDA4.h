@@ -1,7 +1,7 @@
-/* Dcm_Dsp_SIDA4_h(v5-3-0)                                                  */
+/* Dcm_Dsp_SIDA4_h(v5-8-0)                                                  */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -47,6 +47,10 @@ FUNC(void, DCM_CODE) Dcm_Dsp_SIDA4_Cbk
 (
     const uint8 u1EventId
 );
+FUNC(void, DCM_CODE) Dcm_Dsp_SIDA4_ClearCheckCbk
+(
+    const uint8 u1EventId
+);
 
 #define DCM_STOP_SEC_CODE
 #include <Dcm_MemMap.h>
@@ -83,5 +87,7 @@ FUNC(void, DCM_CODE) Dcm_Dsp_SIDA4_Cbk
 /*  Version        :Date                                                    */
 /*  v3-0-0         :2019-07-29                                              */
 /*  v5-3-0         :2023-03-29                                              */
+/*  v5-8-0         :2024-10-29                                              */
 /****************************************************************************/
 
+/**** End of File ***********************************************************/

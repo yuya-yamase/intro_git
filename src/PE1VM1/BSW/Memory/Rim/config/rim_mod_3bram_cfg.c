@@ -45,18 +45,18 @@
 /*  Defines                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* START : ##TOOL_OUT#RIM_MOD_3B_SIZE## */
-#define RIM_MOD_3BRAM_U1_ID_NUM                  (12U)
-#define RIM_MOD_3BRAM_U2_ID_NUM                  (4U)
-#define RIM_MOD_3BRAM_U4_ID_NUM                  (5U)
-#define RIM_MOD_3BRAM_OTHER_ID_NUM               (5U)
+#define RIM_MOD_3BRAM_U1_ID_NUM                  (2U)
+#define RIM_MOD_3BRAM_U2_ID_NUM                  (1U)
+#define RIM_MOD_3BRAM_U4_ID_NUM                  (2U)
+#define RIM_MOD_3BRAM_OTHER_ID_NUM               (0U)
 /* END : ##TOOL_OUT#RIM_MOD_3B_SIZE## */
 /* START : ##TOOL_OUT#RIM_MOD_3B_OTR_TBL_SIZE## */
-#define RIM_MOD_3BRAM_OTHER_BUF_NUM              (31U)
+#define RIM_MOD_3BRAM_OTHER_BUF_NUM              (0U)
 /* END : ##TOOL_OUT#RIM_MOD_3B_OTR_TBL_SIZE## */
 
 /* Set st_d_RIM_MOD_3BRAM_OTR_SZ_CFG's max size */
 /* START : ##TOOL_OUT#RIM_MOD_3B_OTR_SIZE_MAX## */
-#define RIM_MOD_3BRAM_OTHER_ID_CFGMAX            (32U)
+#define RIM_MOD_3BRAM_OTHER_ID_CFGMAX            (0U)
 /* END : ##TOOL_OUT#RIM_MOD_3B_OTR_SIZE_MAX## */
 
 #if (__RIM_MOD_3BRAM_OTHER_USE__ == TRUE)
@@ -123,11 +123,6 @@ const U2 u2_d_RIM_MOD_3BRAM_OTR_ID_NUM = (U2)RIM_MOD_3BRAM_OTHER_ID_NUM;
 const ST_RIM_MOD_3BRAM_SIZE st_d_RIM_MOD_3BRAM_OTR_SZ_CFG[RIM_MOD_3BRAM_OTHER_ID_NUM] = {
 /*  index           size    */
 /* START : ##TOOL_OUT#RIM_MOD_3B_OTR_TABLE## */
-    {(U2)0U,        (U2)4U      },      /* 0    : RIMID_OTR_SAMPLE_BBB_OTH */
-    {(U2)1U,        (U2)32U     },      /* 1    : RIMID_OTR_NVMC_DA_DTF_WRI_003 */
-    {(U2)9U,        (U2)32U     },      /* 2    : RIMID_OTR_NVMC_DA_DTF_REA_003 */
-    {(U2)17U,       (U2)28U     },      /* 3    : RIMID_OTR_NVMC_DA_DTF_WRI_004 */
-    {(U2)24U,       (U2)28U     }       /* 4    : RIMID_OTR_NVMC_DA_DTF_REA_004 */
 /* END : ##TOOL_OUT#RIM_MOD_3B_OTR_TABLE## */
 };
 

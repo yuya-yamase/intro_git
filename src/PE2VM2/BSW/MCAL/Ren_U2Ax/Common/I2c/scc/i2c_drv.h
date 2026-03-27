@@ -1,4 +1,4 @@
-/* 1.3.0 */
+/* 1.4.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -13,7 +13,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define I2C_DRV_H_MAJOR                          (1)
-#define I2C_DRV_H_MINOR                          (3)
+#define I2C_DRV_H_MINOR                          (4)
 #define I2C_DRV_H_PATCH                          (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -25,7 +25,7 @@
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-/*  U1      u1_g_I2cMaReqSrscTx(const U1 u1_a_I2C_CH,const U1 u1_a_REQ)                                                              */
+/*  U1      u1_g_I2cMasReqSrscTx(const U1 u1_a_I2C_CH, const U1 u1_a_REQ)                                                            */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define I2C_MA_REQ_SRSC_STAR                     (0U)                       /* Master/Start Condition Tx                             */
 #define I2C_MA_REQ_SRSC_REST                     (1U)                       /* Master/Restart Condition Tx                           */
@@ -116,17 +116,30 @@ U4      u4_g_I2cIRQenabled(const U1 u1_a_I2C_CH);
 void    vd_g_I2cEI(const U1 u1_a_I2C_CH, const U4 u4_a_IRQEN);
 void    vd_g_I2cDI(const U1 u1_a_I2C_CH);
 
+/* ------------------------------------------------------------------------------------*/
+/* Attention :                                                                         */
+/* ------------------------------------------------------------------------------------*/
+/* Master Start/Restart/Stop Condition Transmission                                    */
+/*                                                                                     */
+/* ------------------------------------------------------------------------------------*/
 U1      u1_g_I2cMasReqSrscTx(const U1 u1_a_I2C_CH, const U1 u1_a_REQ);         /* Return = TRUE/FALSE                      */
 
 /* ------------------------------------------------------------------------------------*/
 /* Attention :                                                                         */
 /* ------------------------------------------------------------------------------------*/
-/* If the return value of u1_g_I2cMaSynLost is equal to "TRUE", I2C controller reset   */
-/* is being performed in it. Therefore, vd_g_I2cStart shall be invoked to restart I2C  */
-/* TRx after u1_g_I2cMaSynLost.                                                        */
+/* RH850/U2A-EVA Group UserÅfs Manual:                                                  */
+/* Hardware Renesas microcontroller RH850 Family Rev.1.40 Aug. 2023                    */
+/*                                                                                     */
+/* 22.4.10.2 Extra SCL Clock Cycle Output Function                                     */
+/*                                                                                     */
+/* This function is mainly used in master mode to release the SDA line of the slave    */
+/* device from the state of being fixed to the low level by including extra cycles of  */
+/* SCL output from the RIIC with single cycles of the SCL (clock) signal as the unit   */
+/* in the case of a bus error where the RIIC cannot issue a stop condition because the */
+/* slave device is holding the SDA line at the low level.                              */
+/*                                                                                     */
 /* ------------------------------------------------------------------------------------*/
-U1      u1_g_I2cMasSynLost(const U1 u1_a_I2C_CH, const U1 u1_a_CLO_MAX);       /* Return = TRUE/FALSE                      */
-                                                                               /* TRUE : SCL Synchronization Lost else Not */
+void    vd_g_I2cMasReset(const U1 u1_a_I2C_CH);
 
 /* ------------------------------------------------------------------------------------*/
 /* Attention :                                                                         */

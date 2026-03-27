@@ -21,10 +21,10 @@
 #include "oxcan.h"
 #include "oxsec.h"
 #include "ivdsh.h"
+#include "vCryPx.h"
 
 /* Memory               */
 #include "rim_ctl.h"
-/* #include "nvmc_mgr.h" */
 
 /*----------------------------------------------------------------------------
  *		置換シンボル定義
@@ -55,21 +55,17 @@ void vd_g_22SSCallout_StaBonInit(void)
 /*    U1    u1_t_rslt;     */
 
     /*****************************************************/
-    /* Rim, Nvmc Init Function should be called at first */
+    /* Rim Init Function should be called at first       */
     /*****************************************************/
     vd_g_Rim_BonInit();
-
-/*    vd_g_Nvmc_BonInit(); */
-/*    do{  */
-/*        u1_t_rslt = u1_g_Nvmc_BonRead(); */
-/*    }while(u1_t_rslt != (U1)FALSE); */
 
     vd_g_oXSECInit();
     vd_g_oXSECBonKeyInit();
     vd_g_oXCANRstInit();
     vd_g_VehopemdRstInit();
     vd_g_iVDshInit();
-
+    vd_g_vCryPx_Init();
+    
     /* vv User Hook start vv */
     /* ^^ User Hook end   ^^ */
 
@@ -89,20 +85,16 @@ void vd_g_22SSCallout_StaRstInit(void)
 /*    U1    u1_t_rslt;     */
 
     /*****************************************************/
-    /* Rim, Nvmc Init Function should be called at first */
+    /* Rim Init Function should be called at first       */
     /*****************************************************/
     vd_g_Rim_WkupInit();
-
-/*    vd_g_Nvmc_WkupInit(); */
-/*    do{  */
-/*        u1_t_rslt = u1_g_Nvmc_WkupRead(); */
-/*    }while(u1_t_rslt != (U1)FALSE); */
 
     vd_g_oXSECInit();
     vd_g_oXCANRstInit();
     vd_g_VehopemdRstInit();
     vd_g_iVDshInit();
-
+    vd_g_vCryPx_Init();
+    
     /* vv User Hook start vv */
     /* ^^ User Hook end   ^^ */
 
@@ -122,20 +114,16 @@ void vd_g_22SSCallout_StaWkupInit(void)
 /*    U1    u1_t_rslt;     */
 
     /*****************************************************/
-    /* Rim, Nvmc Init Function should be called at first */
+    /* Rim Init Function should be called at first       */
     /*****************************************************/
     vd_g_Rim_WkupInit();
-
-/*    vd_g_Nvmc_WkupInit(); */
-/*    do{  */
-/*        u1_t_rslt = u1_g_Nvmc_WkupRead(); */
-/*    }while(u1_t_rslt != (U1)FALSE); */
 
     vd_g_oXSECInit();
     vd_g_oXCANWkupInit();
     vd_g_VehopemdWkupInit();
     vd_g_iVDshInit();
-
+    vd_g_vCryPx_Init();
+    
     /* vv User Hook start vv */
     /* ^^ User Hook end   ^^ */
 

@@ -497,7 +497,19 @@ static CONST(AB_83_ConstV uint16, DCM_CONFIG_DATA) Dcm_Dsd_PduId0006_ServiceInde
     (uint8)0x0009U,
     (uint8)0x000AU
 };
-static CONST(AB_83_ConstV uint16, DCM_CONFIG_DATA) Dcm_Dsd_PduId0007_ServiceIndex[11] = 
+static CONST(AB_83_ConstV uint16, DCM_CONFIG_DATA) Dcm_Dsd_PduId0007_ServiceIndex[8] = 
+{
+    /* Index of Dcm_Dsd_stService */
+    (uint8)0x000CU,
+    (uint8)0x000DU,
+    (uint8)0x0003U,
+    (uint8)0x0005U,
+    (uint8)0x0008U,
+    (uint8)0x000EU,
+    (uint8)0x0009U,
+    (uint8)0x000AU
+};
+static CONST(AB_83_ConstV uint16, DCM_CONFIG_DATA) Dcm_Dsd_PduId0008_ServiceIndex[11] = 
 {
     /* Index of Dcm_Dsd_stService */
     (uint8)0x0000U,
@@ -512,7 +524,7 @@ static CONST(AB_83_ConstV uint16, DCM_CONFIG_DATA) Dcm_Dsd_PduId0007_ServiceInde
     (uint8)0x0009U,
     (uint8)0x000AU
 };
-static CONST(AB_83_ConstV uint16, DCM_CONFIG_DATA) Dcm_Dsd_PduId0008_ServiceIndex[11] = 
+static CONST(AB_83_ConstV uint16, DCM_CONFIG_DATA) Dcm_Dsd_PduId0009_ServiceIndex[11] = 
 {
     /* Index of Dcm_Dsd_stService */
     (uint8)0x000BU,
@@ -527,7 +539,19 @@ static CONST(AB_83_ConstV uint16, DCM_CONFIG_DATA) Dcm_Dsd_PduId0008_ServiceInde
     (uint8)0x0009U,
     (uint8)0x000AU
 };
-static CONST(AB_83_ConstV uint16, DCM_CONFIG_DATA) Dcm_Dsd_PduId0009_ServiceIndex[8] = 
+static CONST(AB_83_ConstV uint16, DCM_CONFIG_DATA) Dcm_Dsd_PduId000A_ServiceIndex[8] = 
+{
+    /* Index of Dcm_Dsd_stService */
+    (uint8)0x000BU,
+    (uint8)0x000DU,
+    (uint8)0x0003U,
+    (uint8)0x0005U,
+    (uint8)0x0008U,
+    (uint8)0x000EU,
+    (uint8)0x0009U,
+    (uint8)0x000AU
+};
+static CONST(AB_83_ConstV uint16, DCM_CONFIG_DATA) Dcm_Dsd_PduId000B_ServiceIndex[8] = 
 {
     /* Index of Dcm_Dsd_stService */
     (uint8)0x000BU,
@@ -550,9 +574,11 @@ CONST(AB_83_ConstV Dcm_DsdType, DCM_CONFIG_DATA) Dcm_Dsd_stConfigSet =
         {  (uint16)0x0004U, (uint8)11U,           Dcm_Dsd_PduId0004_ServiceIndex },
         {  (uint16)0x0005U, (uint8)11U,           Dcm_Dsd_PduId0005_ServiceIndex },
         {  (uint16)0x0006U, (uint8)8U,            Dcm_Dsd_PduId0006_ServiceIndex },
-        {  (uint16)0x0007U, (uint8)11U,           Dcm_Dsd_PduId0007_ServiceIndex },
+        {  (uint16)0x0007U, (uint8)8U,            Dcm_Dsd_PduId0007_ServiceIndex },
         {  (uint16)0x0008U, (uint8)11U,           Dcm_Dsd_PduId0008_ServiceIndex },
-        {  (uint16)0x0009U, (uint8)8U,            Dcm_Dsd_PduId0009_ServiceIndex }
+        {  (uint16)0x0009U, (uint8)11U,           Dcm_Dsd_PduId0009_ServiceIndex },
+        {  (uint16)0x000AU, (uint8)8U,            Dcm_Dsd_PduId000A_ServiceIndex },
+        {  (uint16)0x000BU, (uint8)8U,            Dcm_Dsd_PduId000B_ServiceIndex }
     }
 };
 

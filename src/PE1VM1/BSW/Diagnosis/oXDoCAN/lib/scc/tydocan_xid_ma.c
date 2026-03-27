@@ -45,7 +45,6 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-/*      1234567890123456789012345678901 */
 #define TYDC_MAK_UV_EAS_CHK_SES                  (0x01U)  /* Session Transition Event */
 #define TYDC_MAK_UV_EAS_CHK_TOUT                 (0x02U)
 
@@ -370,17 +369,15 @@ void    vd_g_TyDoCANXidMaMainTask(const ST_OXDC_REQ * st_ap_REQ)
 /*===================================================================================================================================*/
 U1      u1_g_oXDoCANDtcTrchk_U13A0(const U2 u2_a_ELPSD)
 {
-    U1                            u1_t_dtc_act;
     Dem_UdsStatusByteType         u1_t_uds_sts;
 
-    u1_t_uds_sts = (Dem_UdsStatusByteType)0U;
-    u1_t_dtc_act = u1_s_tydc_mak_kvf_chk;
+    u1_t_uds_sts = (Dem_UdsStatusByteType)0U; 
     (void)Dem_GetEventUdsStatus(DemConf_DemEventParameter_DemEventDTC_U13A0, &u1_t_uds_sts);
     if((U1)(u1_t_uds_sts & DEM_UDS_STATUS_TF) == (U1)0x01U){
         u1_s_tydc_mak_kvf_chk = (U1)OXDC_DTC_TR_UNK;
     }
  
-    return(u1_t_dtc_act);
+    return(u1_s_tydc_mak_kvf_chk);
 }
 /*===================================================================================================================================*/
 /*  U1      u1_g_oXDoCANRebyId_A901(U1 * u1_ap_ans, const U2 u2_a_ELPSD)                                                             */
@@ -889,16 +886,16 @@ static void    vd_s_TydcXidMaUpdtStart(void)
 
         if(u1_t_keyid == st_sp_TYDC_KEY_IF_CFG[u4_t_loop_cnt].u1_she_keyid){
             if((u1_s_tydc_mak_uv_rid == (U1)TYDC_MAK_UV_RID_D904) || ((u1_s_tydc_mak_uv_rid == (U1)TYDC_MAK_UV_RID_D902) && (u1_t_keyid == (U1)TYDC_SHE_MAC_KEY))){
-            vd_g_vCryCl_KeyUpdate(st_sp_TYDC_KEY_IF_CFG[u4_t_loop_cnt].u4_csm_keyid,
+                vd_g_vCryCl_KeyUpdate(st_sp_TYDC_KEY_IF_CFG[u4_t_loop_cnt].u4_csm_keyid,
                                         u1_tp_MX,
                                         st_sp_TYDC_KEY_IF_CFG[u4_t_loop_cnt].u4_keylength,
                                         st_sp_TYDC_KEY_IF_CFG[u4_t_loop_cnt].u4_jobid,
                                             (U1 *)&(st_s_tydc_vcry_io.u4p_rsl[0]),
                                             st_s_tydc_vcry_io.u4p_rsl_nbyte);
                 u1_s_tydc_mak_uv_ctrl = (U1)TYDC_MAK_UV_CTRL_RUN;
-            break;
+                break;
+            }
         }
-    }
     }
 }
 /*===================================================================================================================================*/

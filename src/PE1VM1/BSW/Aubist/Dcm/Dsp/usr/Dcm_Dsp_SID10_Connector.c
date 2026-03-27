@@ -80,7 +80,9 @@ FUNC( Std_ReturnType, DCM_CODE ) Dcm_Dsp_SID10_Cnct_Sw_EcuReset
 )
 {
     if(u1Mode == RTE_MODE_DcmEcuReset_EXECUTE){
+#if ( OXDC_FUNC_RPG_RESET == OXDC_USE )        
         vd_g_oXDoCANAubIfRpgSwReset();
+#endif /* ( OXDC_FUNC_RPG_RESET == OXDC_USE ) */        
     }
 
     return (Std_ReturnType)E_OK;

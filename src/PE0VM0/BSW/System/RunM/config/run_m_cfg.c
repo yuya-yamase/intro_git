@@ -32,7 +32,6 @@
 #include "icu_drv_wk.h"
 
 /* Memory                */
-/* #include "nvmc_mgr.h" */
 
 /* Application           */
 
@@ -90,7 +89,6 @@ U1      u1_g_RunMCfghkShtdwnchk1st(void)
     static const FP_U1_AND    fp_sp_u1_RUN_M_SHTDWN_CHK[] = {
         &u1_g_oXCANShtdwnOk,
         &u1_g_oXSECShtdwnOk
-        /*& u1_g_Nvmc_IsShtdwnOk */
     };
 
     U1                        u1_t_1st;

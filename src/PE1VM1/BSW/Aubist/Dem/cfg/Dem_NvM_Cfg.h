@@ -99,6 +99,7 @@
 #define DEM_USER_DEFINED_MEMORY_INTERNAL_INFO_NUM     ((Dem_u08_UdmMemoryInfoTableIndexType)3U)        /* Number of DTC Origin Except External Memory */
 
 /* Padding size for adjusting record size to block size */
+#define DEM_EVENT_RECORD_PADDINGSIZE_TO_BLOCKSIZE     ((Dem_u16_PaddingIndexType)1U)
 #define DEM_CLRINFO_RECORD_PADDINGSIZE_TO_BLOCKSIZE   ((Dem_u16_PaddingIndexType)3U)
 #define DEM_UDMFAULT_RECORD_PADDINGSIZE_TO_BLOCKSIZE  ((Dem_u16_PaddingIndexType)1U)
 
@@ -110,11 +111,11 @@ typedef struct
     Dem_u08_FaultIndexType       FaultIndex;
     Dem_UdsStatusByteType        StatusOfDTC;
     Dem_u08_FailureCounterType   FailureCounter;
-    Dem_u08_EventOccurrenceCounterType    OccurrenceCounter;
     Dem_u08_ConsistencyIdType    ConsistencyCounterForFault;
     Dem_u08_ClearIdType          ClearID;
     Dem_u08_DTCStatusExType      ExtendStatusOfDTC;
     Dem_u08_DTCStatusEx2Type     ExtendStatusOfDTC2;
+    uint8                        Reserve[DEM_EVENT_RECORD_PADDINGSIZE_TO_BLOCKSIZE];
 } Dem_EventRecordType;
 
 typedef struct

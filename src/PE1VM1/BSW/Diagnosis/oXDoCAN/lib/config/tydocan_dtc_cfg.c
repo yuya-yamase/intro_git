@@ -28,11 +28,6 @@
 /* #include "rim_ctl.h"              rim_ctl.h is included in tydocan_dtc_cfg_private.h           */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-/* Application Headers */
-#ifdef TYDOCAN_DTC_MA_CFG_H
-#include "tydocan_evlog_cfg_private.h"
-#include "stub.h"           /* Use stubs instead of odo_km.h */
-#endif /* #ifdef TYDOCAN_DTC_MA_CFG_H */
 #include "veh_opemd.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -55,15 +50,6 @@
 #define TYDC_DTC_NUM_PDU_RX                      (15U)
 #define TYDC_DTC_NOW_LOG_RX                      (1U)
 
-#ifdef TYDOCAN_DTC_MM_CFG_H
-#define TYDC_DTC_MM_NUM_PDU_RX                   (1U)
-#endif /* #ifdef TYDOCAN_DTC_MM_CFG_H */
-#ifdef TYDOCAN_DTC_MA_CFG_H
-#define TYDC_DTC_MA_SYN_TOUT                     (310U)                  /* 3.1 seconds                           */
-#define TYDC_DTC_MA_ODO_MIN                      (1000U)                 /* LSB:0.001km = 1.000km                 */
-#define TYDC_DTC_MA_ODO_MAX                      (999999999U)            /* LSB:0.001km = 999999.999km            */
-#endif /* #ifdef TYDOCAN_DTC_MA_CFG_H */
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -81,11 +67,6 @@ ST_TYDC_DTC_LOG_RX      st_gp_tydc_dtc_log_rx[TYDC_DTC_NOW_LOG_RX];
 U2                      u2_gp_tydc_dtc_rxc_st[TYDC_DTC_NUM_PDU_RX];
 U1                      u1_gp_tydc_dtc_rx_cnt[TYDC_DTC_NUM_PDU_RX];
 
-#ifdef TYDOCAN_DTC_MM_CFG_H
-U2                      u2_gp_tydc_dtc_mm_rxc_st[TYDC_DTC_MM_NUM_PDU_RX];
-U1                      u1_gp_tydc_dtc_mm_rx_cnt[TYDC_DTC_MM_NUM_PDU_RX];
-#endif /* #ifdef TYDOCAN_DTC_MM_CFG_H */
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -100,21 +81,21 @@ const U1                    u1_g_TYDC_DTC_NOW_TR_ACT = (U1)TYDC_DTC_NOW_TR_ACT;
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 const ST_TYDC_DTC_PDU_RX    st_gp_TYDC_DTC_PDU_RX[] = {
 /*   u2_pdu_idx,                    u4_sys_chk,   u2_rx_tout,                   u2_rxc_cyc,                         u2_rxc_min */
-    {(U2)OXCAN_RXD_PDU_CAN_BAT1S01_CH0,  (U4)0x00000010U,  u2_OXCAN_RXTO_THRSH(5000U),   (U2)3004U  / (U2)OXDC_MAIN_TICK,    (U2)2U},
-    {(U2)OXCAN_RXD_PDU_CAN_TPM1S02_CH0,  (U4)0x00000010U,  u2_OXCAN_RXTO_THRSH(5000U),   (U2)3004U  / (U2)OXDC_MAIN_TICK,    (U2)2U},
-    {(U2)OXCAN_RXD_PDU_CAN_VSC1G13_CH0,  (U4)0x00000010U,  u2_OXCAN_RXTO_THRSH(3600U),   (U2)64U    / (U2)OXDC_MAIN_TICK,    (U2)2U},
-    {(U2)OXCAN_RXD_PDU_CAN_EPS1S90_CH0,  (U4)0x00000010U,  u2_OXCAN_RXTO_THRSH(3600U),   (U2)904U   / (U2)OXDC_MAIN_TICK,    (U2)2U},
-    {(U2)OXCAN_RXD_PDU_CAN_SCS1S11_CH0,  (U4)0x00000010U,  u2_OXCAN_RXTO_THRSH(10000U),  (U2)6004U  / (U2)OXDC_MAIN_TICK,    (U2)2U},
-    {(U2)OXCAN_RXD_PDU_CAN_ARS1S90_CH0,  (U4)0x00000010U,  u2_OXCAN_RXTO_THRSH(3600U),   (U2)904U   / (U2)OXDC_MAIN_TICK,    (U2)2U},
-    {(U2)OXCAN_RXD_PDU_CAN_PDS1S01_CH0,  (U4)0x00000010U,  u2_OXCAN_RXTO_THRSH(5000U),   (U2)3004U  / (U2)OXDC_MAIN_TICK,    (U2)2U},
-    {(U2)OXCAN_RXD_PDU_CAN_ITS1S01_CH0,  (U4)0x00000010U,  u2_OXCAN_RXTO_THRSH(5000U),   (U2)3004U  / (U2)OXDC_MAIN_TICK,    (U2)2U},
-    {(U2)OXCAN_RXD_PDU_CAN_SOL1S02_CH0,  (U4)0x00000010U,  u2_OXCAN_RXTO_THRSH(5000U),   (U2)3004U  / (U2)OXDC_MAIN_TICK,    (U2)2U},
-    {(U2)OXCAN_RXD_PDU_CAN_BDC1S97_CH0,  (U4)0x00000010U,  u2_OXCAN_RXTO_THRSH(5000U),   (U2)3004U  / (U2)OXDC_MAIN_TICK,    (U2)2U},
-    {(U2)OXCAN_RXD_PDU_CAN_BDC1S98_CH0,  (U4)0x00000010U,  u2_OXCAN_RXTO_THRSH(5000U),   (U2)3004U  / (U2)OXDC_MAIN_TICK,    (U2)2U},
-    {(U2)OXCAN_RXD_PDU_CAN_ADU1S07_CH0,  (U4)0x00000010U,  u2_OXCAN_RXTO_THRSH(5000U),   (U2)3004U  / (U2)OXDC_MAIN_TICK,    (U2)2U},
-    {(U2)OXCAN_RXD_PDU_CAN_FCM1S52_CH0,  (U4)0x00000010U,  u2_OXCAN_RXTO_THRSH(5000U),   (U2)3004U  / (U2)OXDC_MAIN_TICK,    (U2)2U},
-    {(U2)OXCAN_RXD_PDU_CAN_ENG1G90_CH0,  (U4)0x00000010U,  u2_OXCAN_RXTO_THRSH(5000U),   (U2)3004U  / (U2)OXDC_MAIN_TICK,    (U2)2U},
-    {(U2)OXCAN_RXD_PDU_CAN_EHV1S99_CH0,  (U4)0x00000010U,  u2_OXCAN_RXTO_THRSH(5000U),   (U2)3004U  / (U2)OXDC_MAIN_TICK,    (U2)2U}
+    {(U2)OXCAN_RXD_PDU_CAN_BAT1S01_CH0,  (U4)OXCAN_SYS_DIC,  u2_OXCAN_RXTO_THRSH(5000U),   (U2)3004U  / (U2)OXDC_MAIN_TICK,    (U2)2U},
+    {(U2)OXCAN_RXD_PDU_CAN_TPM1S02_CH0,  (U4)OXCAN_SYS_DIC,  u2_OXCAN_RXTO_THRSH(5000U),   (U2)3004U  / (U2)OXDC_MAIN_TICK,    (U2)2U},
+    {(U2)OXCAN_RXD_PDU_CAN_VSC1G13_CH0,  (U4)OXCAN_SYS_DIC,  u2_OXCAN_RXTO_THRSH(3600U),   (U2)64U    / (U2)OXDC_MAIN_TICK,    (U2)2U},
+    {(U2)OXCAN_RXD_PDU_CAN_EPS1S90_CH0,  (U4)OXCAN_SYS_DIC,  u2_OXCAN_RXTO_THRSH(3600U),   (U2)904U   / (U2)OXDC_MAIN_TICK,    (U2)2U},
+    {(U2)OXCAN_RXD_PDU_CAN_SCS1S11_CH0,  (U4)OXCAN_SYS_DIC,  u2_OXCAN_RXTO_THRSH(10000U),  (U2)6004U  / (U2)OXDC_MAIN_TICK,    (U2)2U},
+    {(U2)OXCAN_RXD_PDU_CAN_ARS1S90_CH0,  (U4)OXCAN_SYS_DIC,  u2_OXCAN_RXTO_THRSH(3600U),   (U2)904U   / (U2)OXDC_MAIN_TICK,    (U2)2U},
+    {(U2)OXCAN_RXD_PDU_CAN_PDS1S01_CH0,  (U4)OXCAN_SYS_DIC,  u2_OXCAN_RXTO_THRSH(5000U),   (U2)3004U  / (U2)OXDC_MAIN_TICK,    (U2)2U},
+    {(U2)OXCAN_RXD_PDU_CAN_ITS1S01_CH0,  (U4)OXCAN_SYS_DIC,  u2_OXCAN_RXTO_THRSH(5000U),   (U2)3004U  / (U2)OXDC_MAIN_TICK,    (U2)2U},
+    {(U2)OXCAN_RXD_PDU_CAN_SOL1S02_CH0,  (U4)OXCAN_SYS_DIC,  u2_OXCAN_RXTO_THRSH(5000U),   (U2)3004U  / (U2)OXDC_MAIN_TICK,    (U2)2U},
+    {(U2)OXCAN_RXD_PDU_CAN_BDC1S97_CH0,  (U4)OXCAN_SYS_DIC,  u2_OXCAN_RXTO_THRSH(5000U),   (U2)3004U  / (U2)OXDC_MAIN_TICK,    (U2)2U},
+    {(U2)OXCAN_RXD_PDU_CAN_BDC1S98_CH0,  (U4)OXCAN_SYS_DIC,  u2_OXCAN_RXTO_THRSH(5000U),   (U2)3004U  / (U2)OXDC_MAIN_TICK,    (U2)2U},
+    {(U2)OXCAN_RXD_PDU_CAN_ADU1S07_CH0,  (U4)OXCAN_SYS_DIC,  u2_OXCAN_RXTO_THRSH(5000U),   (U2)3004U  / (U2)OXDC_MAIN_TICK,    (U2)2U},
+    {(U2)OXCAN_RXD_PDU_CAN_FCM1S52_CH0,  (U4)OXCAN_SYS_DIC,  u2_OXCAN_RXTO_THRSH(5000U),   (U2)3004U  / (U2)OXDC_MAIN_TICK,    (U2)2U},
+    {(U2)OXCAN_RXD_PDU_CAN_ENG1G90_CH0,  (U4)OXCAN_SYS_DIC,  u2_OXCAN_RXTO_THRSH(5000U),   (U2)3004U  / (U2)OXDC_MAIN_TICK,    (U2)2U},
+    {(U2)OXCAN_RXD_PDU_CAN_EHV1S99_CH0,  (U4)OXCAN_SYS_DIC,  u2_OXCAN_RXTO_THRSH(5000U),   (U2)3004U  / (U2)OXDC_MAIN_TICK,    (U2)2U}
 };
 const U1                    u1_g_TYDC_DTC_NUM_PDU_RX = (U1)TYDC_DTC_NUM_PDU_RX;
 
@@ -189,18 +170,12 @@ const ST_TYDC_DTC_TR_CHK    st_gp_TYDC_DTC_TR_CHK[] = {
 const U1                    u1_g_TYDC_DTC_NUM_TR_CHK = (U1)(sizeof(st_gp_TYDC_DTC_TR_CHK) / sizeof(ST_TYDC_DTC_TR_CHK));
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#ifdef OXDOCAN_NMDIAG_ECUSLP
 const ST_TYDC_DTC_UDM_DEL   st_gp_TYDC_DTC_UDM_DEL[] = {
 /*   u2_mem_slct,                                           fp_u1_UDM_DEL              */
-    {(U2)(DEM_DTC_ORIGIN_USERDEFINED_MEMORY | (U2)0x11U),   &u1_g_oXDoCANDtcUdmDelNmwk},
-    {(U2)(DEM_DTC_ORIGIN_USERDEFINED_MEMORY | (U2)0x11U),   &u1_g_oXDoCANDtcUdmDelNmGbl},
-    {(U2)(DEM_DTC_ORIGIN_USERDEFINED_MEMORY | (U2)0x11U),   &u1_g_oXDoCANDtcUdmDelEcuSlp}
+    {(U2)0xFFFFU,   vdp_PTR_NA}
 };
 
-const U1                    u1_g_TYDC_DTC_NUM_UDM_DEL = (U1)(sizeof(st_gp_TYDC_DTC_UDM_DEL) / sizeof(ST_TYDC_DTC_UDM_DEL));
-#endif
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
+const U1                    u1_g_TYDC_DTC_NUM_UDM_DEL = (U1)(0U);
 const U2                    u2_gp_TYDC_DTC_NVMC_BLOCK[DEM_NVM_USE_NVBLOCK_NUM] = {
     (U2)NVMCID_OTR_OXDC_DTC_EVENT001,
     (U2)NVMCID_OTR_OXDC_DTC_EVENT002,
@@ -466,113 +441,8 @@ const U2                    u2_g_TYDC_DTC_S14_TOUT = ((U2)200U / (U2)OXDC_MAIN_T
 /*===================================================================================================================================*/
 void    vd_g_TyDoCANDtcCfgEvmFinish(const U1 u1_a_S14)
 {
-#ifdef TYDOCAN_DTC_MM_CFG_H
-    vd_g_TyDoCANDtcMMInit(u1_a_S14);
-#endif /* #ifdef TYDOCAN_DTC_MM_CFG_H */
+
 }
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-
-#ifdef TYDOCAN_DTC_MM_CFG_H
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-/*  Constant Definitions                                                                                                             */
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-const ST_TYDC_DTC_PDU_RX    st_gp_TYDC_DTC_MM_PDU_RX[TYDC_DTC_MM_NUM_PDU_RX] = {
-/*                                                                                                  */
-/*   Attention :                                                                                    */
-/*   u2_sys_chk shall be equal to (OXCAN_RX_SYS_NRX_VDC | OXCAN_RX_SYS_TOE_VDC)                     */
-/*                                                                                                  */
-/*   u2_pdu_idx,                    u2_sys_chk,   u2_rx_tout,                   u2_rxc_cyc,                         u2_rxc_min */
-    {(U2)OXCAN_PDU_RX_CAN_AVNMS49,  (U2)0x4040U,  u2_OXCAN_RXTO_THRSH(30000U),  (U2)1009U  / (U2)OXDC_MAIN_TICK,    (U2)3U}
-};
-#if (TYDC_DTC_MM_NUM_PDU_RX > TYDC_DTC_MM_PDU_MAX)
-#error "tydocan_dtc_cfg.c : TYDC_DTC_MM_NUM_PDU_RX shall be equal or less than TYDC_DTC_MM_PDU_MAX."
-#endif
-const U1                    u1_g_TYDC_DTC_MM_NUM_PDU_RX = (U1)TYDC_DTC_MM_NUM_PDU_RX;
-
-const ST_TYDC_DTC_COM_RX    st_gp_TYDC_DTC_MM_RX[TYDC_DTC_MM_NUM_RX] = {
-/*   fp_u1_SUP,                     u2_smpl_tslot,  u2_dtc_id,            u1_pdu_begin, u1_num_pdu, u1_log_bit, u1_log_idx */
-    {vdp_PTR_NA,                    (U2)0x0002U,    (U2)U2_MAX,           (U1)0U,       (U1)1U,     (U1)0U,     (U1)0U}     /* B1321 */
-};
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-const U2                    u2_gp_TYDC_DTC_MM_AOM_TOUT[TYDC_DTC_MM_NUM_RX] = {
-    (U2)10000U / (U2)OXDC_MAIN_TICK          /* B1321 : 10000 milliseconds */
-};
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-/*  Function Definitions                                                                                                             */
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-/*===================================================================================================================================*/
-/*  U1      u1_g_TyDoCANDtcMMCfgAccOn(const U1 u1_a_EOM)                                                                             */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1      u1_g_TyDoCANDtcMMCfgAccOn(const U1 u1_a_EOM)
-{
-    /* --------------------------------------------------------------- */
-    /* WARNING                                                         */
-    /* --------------------------------------------------------------- */
-    /* u1_g_VehopemdAccOn() is tentatively implemented because ACC-ON  */
-    /* signal is NOT defined in Multi-Media Sys. relevant specs.       */
-    /* --------------------------------------------------------------- */
-/*#warning "tydocan_dtc_cfg.c : u1_g_VehopemdAccOn() is tentatively implemented. Find how ACC-ON is determined for Multi-Media System."*/
-    return(u1_g_VehopemdAccOn());
-}
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-
-#endif /* #ifdef TYDOCAN_DTC_MM_CFG_H */
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-
-#ifdef TYDOCAN_DTC_MA_CFG_H  /* tydocan_dtc_ma_cfg_private.h */
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-/*  Constant Definitions                                                                                                             */
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-const U2                    u2_g_TYDC_DTC_MA_SYN_TOUT = TYDC_DTC_MA_SYN_TOUT;
-
-const U2                    u2_g_TYDC_DTC_MA_RFC_MAX = (U2)1U;
-const U2                    u2_gp_TYDC_DTC_MA_RF_TOUT[TYDC_DTC_MA_RF_NUM_CHK] = {
-    (U2)0U,                           /* TYDC_DTC_MA_RF_CHK_INA (0U) */
-    (U2)3000U / (U2)OXDC_MAIN_TICK,   /* TYDC_DTC_MA_RF_CHK_STA (1U) */ /* IG-ON Mask    3 seconds */
-    (U2)1000U / (U2)OXDC_MAIN_TICK    /* TYDC_DTC_MA_RF_CHK_RUN (2U) */ /* MacFilCntTerm 1 second  */
-};
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-/*  Function Definitions                                                                                                             */
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-/*===================================================================================================================================*/
-/*  U1      u1_g_TyDoCANDtcMaCfgRfcOdochk(void)                                                                                      */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1      u1_g_TyDoCANDtcMaCfgRfcOdochk(void)
-{
-    U4                      u4_t_odo_0p001km;
-    U1                      u1_t_odo_stat;
-    U1                      u1_t_odo_chk;
-
-    u4_t_odo_0p001km = (U4)0U;
-    u1_t_odo_stat    = u1_g_OdoKm(&u4_t_odo_0p001km);    /* [0.001km] */
-
-    if((u1_t_odo_stat    == (U1)ODO_STSBIT_VALID   ) &&
-       (u4_t_odo_0p001km >= (U4)TYDC_DTC_MA_ODO_MIN) &&
-       (u4_t_odo_0p001km <= (U4)TYDC_DTC_MA_ODO_MAX)){
-        u1_t_odo_chk = (U1)TRUE;
-    }
-    else{
-        u1_t_odo_chk = (U1)FALSE;
-    }
-
-    return(u1_t_odo_chk);
-}
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-
-#endif /* #ifdef TYDOCAN_DTC_MA_CFG_H */
 
 /*===================================================================================================================================*/
 /*                                                                                                                                   */

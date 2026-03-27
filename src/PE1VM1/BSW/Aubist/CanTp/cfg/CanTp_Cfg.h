@@ -35,7 +35,7 @@
 
 #define BSW_CANTP_CFG_CANCEL_TX             (BSW_CANTP_FALSE)                   /* Cancel transmit                      */
 #define BSW_CANTP_CFG_NEWRX_IN_LASTTX       (BSW_CANTP_TX_INCOMPLETE)           /* New Msg Rx Handling In Last Msg Tx   */
-#define BSW_CANTP_CFG_NEXTRX_IN_TX          (BSW_CANTP_TX_REGARD_OK)            /* Next Msg Rx Handling In Msg Tx       */
+#define BSW_CANTP_CFG_NEXTRX_IN_TX          (BSW_CANTP_TX_INCOMPLETE)           /* Next Msg Rx Handling In Msg Tx       */
 
 #define BSW_CANTP_CFG_FCWAIT_TXPDTIME       (0U)                                /* FC.WAIT Tx Period time               */
 #define BSW_CANTP_CFG_FC_TXTIMEOUT          (1000U)                             /* FC Tx wait timeout time              */
@@ -45,7 +45,7 @@
 #define BSW_CANTP_CFG_TXPARAMPTNNUM         (0U)                                /* Tx Parameter pattern num             */
 
 /* The number of Connection Channels */
-#define BSW_CANTP_CFG_CHNUM                 (6U)
+#define BSW_CANTP_CFG_CHNUM                 (8U)
 
 /* Minimum NSdu Id */
 #define BSW_CANTP_CFG_MIN_RXNSDUID          (BSW_PDUR_LOCOMP_CANTP | 0x0004U)
@@ -96,8 +96,8 @@
 #define BSW_CANTP_CFG_RXNSDUNUM_CH03        (1U)
 #define BSW_CANTP_CFG_RXNSDUNUM_CH04        (1U)
 #define BSW_CANTP_CFG_RXNSDUNUM_CH05        (1U)
-#define BSW_CANTP_CFG_RXNSDUNUM_CH06        (0U)
-#define BSW_CANTP_CFG_RXNSDUNUM_CH07        (0U)
+#define BSW_CANTP_CFG_RXNSDUNUM_CH06        (1U)
+#define BSW_CANTP_CFG_RXNSDUNUM_CH07        (1U)
 #define BSW_CANTP_CFG_RXNSDUNUM_CH08        (0U)
 #define BSW_CANTP_CFG_RXNSDUNUM_CH09        (0U)
 #define BSW_CANTP_CFG_RXNSDUNUM_CH10        (0U)
@@ -127,10 +127,10 @@
 #define BSW_CANTP_CFG_TXNSDUNUM_CH00        (1U)
 #define BSW_CANTP_CFG_TXNSDUNUM_CH01        (0U)
 #define BSW_CANTP_CFG_TXNSDUNUM_CH02        (1U)
-#define BSW_CANTP_CFG_TXNSDUNUM_CH03        (1U)
-#define BSW_CANTP_CFG_TXNSDUNUM_CH04        (0U)
-#define BSW_CANTP_CFG_TXNSDUNUM_CH05        (1U)
-#define BSW_CANTP_CFG_TXNSDUNUM_CH06        (0U)
+#define BSW_CANTP_CFG_TXNSDUNUM_CH03        (0U)
+#define BSW_CANTP_CFG_TXNSDUNUM_CH04        (1U)
+#define BSW_CANTP_CFG_TXNSDUNUM_CH05        (0U)
+#define BSW_CANTP_CFG_TXNSDUNUM_CH06        (1U)
 #define BSW_CANTP_CFG_TXNSDUNUM_CH07        (0U)
 #define BSW_CANTP_CFG_TXNSDUNUM_CH08        (0U)
 #define BSW_CANTP_CFG_TXNSDUNUM_CH09        (0U)
@@ -164,8 +164,8 @@
 #define BSW_CANTP_CFG_RXNPDUNUM_CH03        (1U)
 #define BSW_CANTP_CFG_RXNPDUNUM_CH04        (1U)
 #define BSW_CANTP_CFG_RXNPDUNUM_CH05        (1U)
-#define BSW_CANTP_CFG_RXNPDUNUM_CH06        (0U)
-#define BSW_CANTP_CFG_RXNPDUNUM_CH07        (0U)
+#define BSW_CANTP_CFG_RXNPDUNUM_CH06        (1U)
+#define BSW_CANTP_CFG_RXNPDUNUM_CH07        (1U)
 #define BSW_CANTP_CFG_RXNPDUNUM_CH08        (0U)
 #define BSW_CANTP_CFG_RXNPDUNUM_CH09        (0U)
 #define BSW_CANTP_CFG_RXNPDUNUM_CH10        (0U)
@@ -195,10 +195,10 @@
 #define BSW_CANTP_CFG_TXNPDUNUM_CH00        (1U)
 #define BSW_CANTP_CFG_TXNPDUNUM_CH01        (0U)
 #define BSW_CANTP_CFG_TXNPDUNUM_CH02        (1U)
-#define BSW_CANTP_CFG_TXNPDUNUM_CH03        (1U)
-#define BSW_CANTP_CFG_TXNPDUNUM_CH04        (0U)
-#define BSW_CANTP_CFG_TXNPDUNUM_CH05        (1U)
-#define BSW_CANTP_CFG_TXNPDUNUM_CH06        (0U)
+#define BSW_CANTP_CFG_TXNPDUNUM_CH03        (0U)
+#define BSW_CANTP_CFG_TXNPDUNUM_CH04        (1U)
+#define BSW_CANTP_CFG_TXNPDUNUM_CH05        (0U)
+#define BSW_CANTP_CFG_TXNPDUNUM_CH06        (1U)
 #define BSW_CANTP_CFG_TXNPDUNUM_CH07        (0U)
 #define BSW_CANTP_CFG_TXNPDUNUM_CH08        (0U)
 #define BSW_CANTP_CFG_TXNPDUNUM_CH09        (0U)
