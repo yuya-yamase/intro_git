@@ -931,15 +931,15 @@ static U1 u1_s_FwushMapMemAccErrorToAckForOth(void)
 /*===================================================================================================================================*/
 static void vd_s_FwushHandleEraseReq(void)
 {
-    U1 u1_t_error;
+    U1 u1_t_ack;
     U1 *u1_tp_adr;
     U4 u4_t_adr;
 
     U1 u1_t_result;
 
     /* read data & store CRC in context */
-    u1_t_error = u1_s_FwushCheckPrepTarget(&u4_t_adr);
-    if(u1_t_error == (U1)FWUSH_ACK_OK){
+    u1_t_ack = u1_s_FwushCheckPrepTarget(&u4_t_adr);
+    if(u1_t_ack == (U1)FWUSH_ACK_OK){
         u1_tp_adr = (U1 *)u4_t_adr;
         u4_s_fwush_prep_data_crc =    (U4)u1_tp_adr[FWUSH_REQ_PREP_DATA_CRC_OFFSET]
                                     | ((U4)u1_tp_adr[FWUSH_REQ_PREP_DATA_CRC_OFFSET + 1] << (U4)8U)
@@ -957,12 +957,12 @@ static void vd_s_FwushHandleEraseReq(void)
             u1_s_fwush_veri_target = u1_sp_fwush_header[FWUSH_REQ_PREP_CUR_TARGET_OFFSET];
             vd_s_FwushUpdateVeriStat(u1_sp_fwush_header[FWUSH_REQ_PREP_ALL_TARGET_OFFSET], (U1)FWUSH_VERI_LB_NONE);
         }else{
-            /* Don nothing */
+            u1_s_fwush_veri_target = u1_sp_fwush_header[FWUSH_REQ_PREP_CUR_TARGET_OFFSET];
         }
     }
     else{
         u1_s_fwush_abort     = (U1)TRUE;
-        u1_s_fwush_error_log = (U1)u1_t_error;
+        u1_s_fwush_error_log = (U1)u1_t_ack;
     }
 }
 /*===================================================================================================================================*/
@@ -1126,30 +1126,30 @@ static U1 u1_s_FwushCheckPrepTarget(U4 *u4_ap_adr)
     U1 u1_t_read_ok;
     U1 u1_t_cur_target;
     U1 u1_t_all_target;
-    U1 u1_t_result;
+    U1 u1_t_ack;
 
     u1_t_read_ok = u1_s_FwushReadData(u4_ap_adr);
     if(u1_t_read_ok == (U1)FALSE){
-        u1_t_result = (U1)FWUSH_ACK_PRECONDITION_ERR;
+        u1_t_ack = (U1)FWUSH_ACK_PRECONDITION_ERR;
     }
     else{
         u1_t_cur_target = u1_sp_fwush_header[FWUSH_REQ_PREP_CUR_TARGET_OFFSET];
         u1_t_all_target = u1_sp_fwush_header[FWUSH_REQ_PREP_ALL_TARGET_OFFSET];
 
         if(u1_t_all_target == (U1)FWUSH_VERI_LB_NONE){
-            u1_t_result = (U1)FWUSH_ACK_NO_REPRO_TARGET;
+            u1_t_ack = (U1)FWUSH_ACK_NO_REPRO_TARGET;
         }
         else if(((u1_t_cur_target & u1_t_all_target) != u1_t_cur_target) ||
                 ((u1_t_cur_target & u1_s_FWUSH_LB_VALID_MASK) != u1_t_cur_target) ||
                 ((u1_t_all_target & u1_s_FWUSH_LB_VALID_MASK) != u1_t_all_target)){
-            u1_t_result = (U1)FWUSH_ACK_LB_ERR;
+            u1_t_ack = (U1)FWUSH_ACK_LB_ERR;
         }
         else{
-            u1_t_result = (U1)FWUSH_ACK_OK;
+            u1_t_ack = (U1)FWUSH_ACK_OK;
         }
     }
 
-    return(u1_t_result);
+    return(u1_t_ack);
 }
 
 /*===================================================================================================================================*/
