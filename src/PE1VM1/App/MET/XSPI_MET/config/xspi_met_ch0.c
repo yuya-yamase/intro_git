@@ -742,8 +742,8 @@ static inline void    vd_s_XSpiCfgTxAvgGrph(         U4 * u4_ap_pdu_tx)
 {
     U4          u4_t_1meedata[AVGGRPH_SIZE_1M];
     U4          u4_t_taeedata[AVGGRPH_SIZE_TA];
-    U1          u1_t_eemonth[AVGGRPH_SIZE_TA];
-    U1          u1_t_eeday[AVGGRPH_SIZE_TA];
+    U1          u1_t_eemonth[AVGGRPH_SIZE_TA_DATE];
+    U1          u1_t_eeday[AVGGRPH_SIZE_TA_DATE];
     U4          u4_t_eemax;
     U4 *        u4_tp_txdata;
     U4          u4_t_loop;
@@ -758,6 +758,9 @@ static inline void    vd_s_XSpiCfgTxAvgGrph(         U4 * u4_ap_pdu_tx)
 
     for (u4_t_loop = (U4)0U; u4_t_loop < (U4)AVGGRPH_SIZE_TA; u4_t_loop++) {
         u4_t_taeedata[u4_t_loop] = (U4)0U;
+    }
+
+    for (u4_t_loop = (U4)0U; u4_t_loop < (U4)AVGGRPH_SIZE_TA_DATE; u4_t_loop++) {
         u1_t_eemonth[u4_t_loop] = (U1)0U;
         u1_t_eeday[u4_t_loop] = (U1)0U;
     }
@@ -777,17 +780,19 @@ static inline void    vd_s_XSpiCfgTxAvgGrph(         U4 * u4_ap_pdu_tx)
     u4_ap_pdu_tx[41] = u4_t_taeedata[AVGGRPH_TAECON_HIST_1ST_LAST];
     u4_ap_pdu_tx[43] = u4_t_eemax;
 
-    u4_ap_pdu_tx[45]  = (U4)u1_t_eemonth[AVGGRPH_TAECON_HIST_5TH_LAST] << XSPI_SHIFT_3BYTE;
-    u4_ap_pdu_tx[46]  = (U4)u1_t_eemonth[AVGGRPH_TAECON_HIST_4TH_LAST];
-    u4_ap_pdu_tx[46] |= (U4)u1_t_eemonth[AVGGRPH_TAECON_HIST_3RD_LAST] << XSPI_SHIFT_1BYTE;
-    u4_ap_pdu_tx[46] |= (U4)u1_t_eemonth[AVGGRPH_TAECON_HIST_2ND_LAST] << XSPI_SHIFT_2BYTE;
-    u4_ap_pdu_tx[46] |= (U4)u1_t_eemonth[AVGGRPH_TAECON_HIST_1ST_LAST] << XSPI_SHIFT_3BYTE;
+    u4_ap_pdu_tx[45]  = (U4)u1_t_eemonth[AVGGRPH_TAECON_UPD_DATE_6TH_LAST] << XSPI_SHIFT_2BYTE;
+    u4_ap_pdu_tx[45] |= ((U4)u1_t_eemonth[AVGGRPH_TAECON_UPD_DATE_5TH_LAST] << XSPI_SHIFT_3BYTE);
+    u4_ap_pdu_tx[46]  = (U4)u1_t_eemonth[AVGGRPH_TAECON_UPD_DATE_4TH_LAST];
+    u4_ap_pdu_tx[46] |= ((U4)u1_t_eemonth[AVGGRPH_TAECON_UPD_DATE_3RD_LAST] << XSPI_SHIFT_1BYTE);
+    u4_ap_pdu_tx[46] |= ((U4)u1_t_eemonth[AVGGRPH_TAECON_UPD_DATE_2ND_LAST] << XSPI_SHIFT_2BYTE);
+    u4_ap_pdu_tx[46] |= ((U4)u1_t_eemonth[AVGGRPH_TAECON_UPD_DATE_1ST_LAST] << XSPI_SHIFT_3BYTE);
 
-    u4_ap_pdu_tx[48]  = (U4)u1_t_eeday[AVGGRPH_TAECON_HIST_5TH_LAST] << XSPI_SHIFT_3BYTE;
-    u4_ap_pdu_tx[49]  = (U4)u1_t_eeday[AVGGRPH_TAECON_HIST_4TH_LAST];
-    u4_ap_pdu_tx[49] |= (U4)u1_t_eeday[AVGGRPH_TAECON_HIST_3RD_LAST] << XSPI_SHIFT_1BYTE;
-    u4_ap_pdu_tx[49] |= (U4)u1_t_eeday[AVGGRPH_TAECON_HIST_2ND_LAST] << XSPI_SHIFT_2BYTE;
-    u4_ap_pdu_tx[49] |= (U4)u1_t_eeday[AVGGRPH_TAECON_HIST_1ST_LAST] << XSPI_SHIFT_3BYTE;
+    u4_ap_pdu_tx[48]  = (U4)u1_t_eeday[AVGGRPH_TAECON_UPD_DATE_6TH_LAST] << XSPI_SHIFT_2BYTE;
+    u4_ap_pdu_tx[48] |= ((U4)u1_t_eeday[AVGGRPH_TAECON_UPD_DATE_5TH_LAST] << XSPI_SHIFT_3BYTE);
+    u4_ap_pdu_tx[49]  = (U4)u1_t_eeday[AVGGRPH_TAECON_UPD_DATE_4TH_LAST];
+    u4_ap_pdu_tx[49] |= ((U4)u1_t_eeday[AVGGRPH_TAECON_UPD_DATE_3RD_LAST] << XSPI_SHIFT_1BYTE);
+    u4_ap_pdu_tx[49] |= ((U4)u1_t_eeday[AVGGRPH_TAECON_UPD_DATE_2ND_LAST] << XSPI_SHIFT_2BYTE);
+    u4_ap_pdu_tx[49] |= ((U4)u1_t_eeday[AVGGRPH_TAECON_UPD_DATE_1ST_LAST] << XSPI_SHIFT_3BYTE);
 
     u1_t_1meerslt = u1_g_AvgGrphRslt((U1)AVGGRPH_CNTT_1MEE);
     u1_t_taeerslt = u1_g_AvgGrphRslt((U1)AVGGRPH_CNTT_TAEE);

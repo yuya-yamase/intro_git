@@ -120,10 +120,10 @@ extern ar_ioccb_t * const               ar_ioccb_ptr_table[];
 
 #ifdef AR_IOC_LOCAL_ENABLE
 
-LOCAL_INLINE mcos_id_t ar_get_ioc_receiver_core_id(
+AR_LOCAL_FORCE_INLINE mcos_id_t ar_get_ioc_receiver_core_id(
     const ar_ioc_receiver_config_t * const p_receiver_config);
 
-LOCAL_INLINE mcos_id_t ar_get_ioc_receiver_core_id(
+AR_LOCAL_FORCE_INLINE mcos_id_t ar_get_ioc_receiver_core_id(
     const ar_ioc_receiver_config_t * const p_receiver_config)
 {
     return p_receiver_config->p_osapconfig->lcid;
@@ -131,10 +131,10 @@ LOCAL_INLINE mcos_id_t ar_get_ioc_receiver_core_id(
 
 
 #if (AR_OS_USE_SCALABILITYCLASS_3_OR_4 == STD_ON)
-LOCAL_INLINE void ar_ioc_call_pullcb_main(
+AR_LOCAL_FORCE_INLINE void ar_ioc_call_pullcb_main(
     const mkcb_t * const mkcb,
     const ar_ioc_receiver_config_t  *p_receiver_config);
-LOCAL_INLINE void ar_ioc_call_pullcb_main(
+AR_LOCAL_FORCE_INLINE void ar_ioc_call_pullcb_main(
     const mkcb_t * const mkcb,
     const ar_ioc_receiver_config_t  *p_receiver_config)
 {
@@ -170,10 +170,10 @@ LOCAL_INLINE void ar_ioc_call_pullcb_main(
 #endif /* (AR_OS_USE_SCALABILITYCLASS_3_OR_4 == STD_ON) */
 
 
-LOCAL_INLINE void ar_ioc_call_pullcb(
+AR_LOCAL_FORCE_INLINE void ar_ioc_call_pullcb(
     const mkcb_t * const mkcb,
     const IocType receiver_id);
-LOCAL_INLINE void ar_ioc_call_pullcb(
+AR_LOCAL_FORCE_INLINE void ar_ioc_call_pullcb(
     const mkcb_t * const mkcb,
     const IocType receiver_id)
 {
@@ -220,9 +220,9 @@ LOCAL_INLINE void ar_ioc_call_pullcb(
     }
 }
 
-LOCAL_INLINE IocType ar_get_ioc_id_by_ar_ioc_config(
+AR_LOCAL_FORCE_INLINE IocType ar_get_ioc_id_by_ar_ioc_config(
     const ar_ioc_config_t *p_config);
-LOCAL_INLINE IocType ar_get_ioc_id_by_ar_ioc_config(
+AR_LOCAL_FORCE_INLINE IocType ar_get_ioc_id_by_ar_ioc_config(
     const ar_ioc_config_t *p_config)
 {
     return (IocType)(((uint32_t)p_config - (uint32_t)ar_ioc_configs) / sizeof(ar_ioc_config_t));

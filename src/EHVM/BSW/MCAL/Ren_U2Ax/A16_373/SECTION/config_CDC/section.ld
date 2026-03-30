@@ -357,9 +357,6 @@ SECTIONS {
 //2byte
 //4byte
 //struct
-    .bss_SHARE_DMA_NOTICATION   SHARE_DMA_NOTICATION_ADDR   ABS    : > .
-    .bss_SHARE_SPI_MODEA_CHANNELDATA SHARE_SPI_MODEA_CHANNELDATA_ADDR ABS    : > .
-    .bss_SHARE_SPI_MODEC_CHANNELDATA SHARE_SPI_MODEC_CHANNELDATA_ADDR ABS    : > .
 
     .cluster2_share_ramend                                   : > ram_end_cluster2_share 
     _BSW_SHARE_DATA_SIZE = . - ADDR(.cluster2_share_ramtop);

@@ -62,7 +62,7 @@ Std_ReturnType EthSwt_SWIC_Qci_ReadDiscard (uint32 * const errFactor)
 
     do {
         for (idx = 0u; idx < D_ETHSWT_SWIC_QCI_ID_NUM; idx++) {
-            result = EthSwt_SWIC_Reg_SetTbl(G_ETHSWT_SWIC_MIB_TABLE_LIST[idx].tbl, G_ETHSWT_SWIC_MIB_TABLE_LIST[idx].num, &val, errFactor);
+            result = EthSwt_SWIC_Reg_SetTbl(G_ETHSWT_SWIC_QCI_TABLE_LIST[idx].tbl, G_ETHSWT_SWIC_QCI_TABLE_LIST[idx].num, &val, errFactor);
             if (result != E_OK) {break;}
         }
     } while (0);
@@ -96,7 +96,7 @@ static Std_ReturnType ethswt_swic_qci_read (uint32 * const errFactor)
     uint32          val = 0uL;
 
     for (idx = 0u; idx < D_ETHSWT_SWIC_QCI_ID_NUM; idx++) {
-        result = EthSwt_SWIC_Reg_SetTbl(G_ETHSWT_SWIC_MIB_TABLE_LIST[idx].tbl, G_ETHSWT_SWIC_MIB_TABLE_LIST[idx].num, &val, errFactor);
+        result = EthSwt_SWIC_Reg_SetTbl(G_ETHSWT_SWIC_QCI_TABLE_LIST[idx].tbl, G_ETHSWT_SWIC_QCI_TABLE_LIST[idx].num, &val, errFactor);
         if (result != E_OK) {break;}
         
         ETHSWT_SWIC_QCI_NOTIFY(idx, val);

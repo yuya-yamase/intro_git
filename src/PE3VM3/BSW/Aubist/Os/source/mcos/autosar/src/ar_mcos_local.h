@@ -75,7 +75,7 @@ typedef struct ar_alarmcb_st ar_alarmcb_t;
 typedef struct ar_tfn_config_st ar_tfn_config_t;
 #endif  /* #if (AR_OS_USE_SCALABILITYCLASS_3_OR_4 == STD_ON) */
 
-LOCAL_INLINE void ar_memcpy(void * const dst, const void * const src, const uint32 sz);
+AR_LOCAL_FORCE_INLINE void ar_memcpy(void * const dst, const void * const src, const uint32 sz);
 
 /*---------------------------------------------------------------------------
   ar_memcpy
@@ -87,7 +87,7 @@ LOCAL_INLINE void ar_memcpy(void * const dst, const void * const src, const uint
   Return    :   none
   Note  :   none
  ---------------------------------------------------------------------------*/
-LOCAL_INLINE void ar_memcpy(
+AR_LOCAL_FORCE_INLINE void ar_memcpy(
     void * const dst,
     const void * const src,
     const uint32 sz)

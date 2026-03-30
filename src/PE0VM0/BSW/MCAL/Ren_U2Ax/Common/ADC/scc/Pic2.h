@@ -64,6 +64,52 @@
 #define Pic2_GetPic21TSEL(gID)		(Adc_cstUserConfig.cpstPIC2Confg->cpu4Pic21TSEL[gID])
 #endif
 
+/*--------------------------------------------------------------------------*/
+/* defines - register check													*/
+/*--------------------------------------------------------------------------*/
+#if (ADC_CFG_REG_CHK==STD_ON)
+#if (ADC_CFG_REG_REFRESH==STD_ON)
+/* check by SG for PIC2	*/
+#define	PIC2_RegValueCheckBySG(size,reg,expt,sg)					\
+{																	\
+	VAR(size,			ADC_VAR_NO_INIT)	t_uxRegValue;			\
+	VAR(size,			ADC_VAR_NO_INIT)	t_uxExpectedValue;		\
+	VAR(boolean,		ADC_VAR_NO_INIT)	t_b1isRunning;			\
+																	\
+	t_uxRegValue		= (reg);									\
+	t_uxExpectedValue	= (expt);									\
+	if (t_uxRegValue!=t_uxExpectedValue) {							\
+		ADC_ENTER_CRITICAL_SECTION(ADC_CODE);						\
+		t_b1isRunning	= Pic2_IsSGRunning(sg);						\
+		if (t_b1isRunning==FALSE) {									\
+			(reg) = (expt);											\
+			t_uxRegValue = (reg);									\
+			if (t_uxRegValue==t_uxExpectedValue) {					\
+				t_u4ChkResult	|= ADC_REGCHK_REFRESH_SUCCESS;		\
+			} else {												\
+				t_u4ChkResult	|= ADC_REGCHK_REFRESH_FAILED;		\
+			}														\
+		} else {													\
+			t_u4ChkResult |= ADC_REGCHK_REFRESH_IMPOSSIBLE;			\
+		}															\
+		ADC_EXIT_CRITICAL_SECTION(ADC_CODE);						\
+	}																\
+}
+#else
+#define	PIC2_RegValueCheckBySG(size,reg,expt,sg)					\
+{																	\
+	VAR(size,	ADC_VAR_NO_INIT)	t_uxRegValue;					\
+	VAR(size,	ADC_VAR_NO_INIT)	t_uxExpectedValue;				\
+																	\
+	t_uxRegValue		= (reg);									\
+	t_uxExpectedValue	= (expt);									\
+	if (t_uxRegValue!=t_uxExpectedValue) {							\
+		t_u4ChkResult  |= ADC_REGCHK_NG;							\
+	}																\
+}
+#endif	/* if (ADC_CFG_REG_REFRESH==STD_ON)	*/
+#endif	/* if (ADC_CFG_REG_CHK==STD_ON)	*/
+
 /*==============================================================================================*/
 /* data types / structs / unions / macros														*/
 /*==============================================================================================*/
@@ -74,6 +120,7 @@
 /* data types - original													*/
 /*--------------------------------------------------------------------------*/
 typedef	uint8	Pic2_GroupType;
+typedef	uint8	Pic2_SGType;
 /*--------------------------------------------------------------------------*/
 /* enum - defined by AUTOSAR												*/
 /*--------------------------------------------------------------------------*/
@@ -192,7 +239,26 @@ FUNC(uint32, PIC2_CODE) Pic2_Regchk_All(void);
 FUNC(uint32, PIC2_CODE) Pic2_Regchk_Grp(
 	CONST(Pic2_GroupType,	PIC2_CONST)	t_cudGrp
 );
-#endif
+
+#if (ADC_CFG_REG_REFRESH==STD_ON)
+/************************************************************************************************/
+/* Service name			: Pic2_IsSGRunning														*/
+/* Sync/Async			: Synchronous															*/
+/* Reentrancy			: Non Reentrant															*/
+/* Parameters (in)		: 																		*/
+/* 		Pic2_SGType		: Scan Group Number														*/
+/* Parameters (inout)	: None																	*/
+/* Parameters (out)		: None																	*/
+/* Return value			: 																		*/
+/*		Adc status		: TRUE: some conversion is active, FALSE:no conversion is active		*/
+/* Description			: Return the conversion status of a specific scan group					*/
+/*						  in all HW Units that share the PIC2 registers.						*/
+/************************************************************************************************/
+FUNC(boolean, PIC2_CODE) Pic2_IsSGRunning(
+	CONST(Pic2_SGType,	PIC2_CONST)	t_cudSG
+);
+#endif	/* if (ADC_CFG_REG_REFRESH==STD_ON)	*/
+#endif	/* if (ADC_CFG_REG_CHK==STD_ON)	*/
 
 #define ADC_STOP_SEC_CODE_GLOBAL
 #include "Adc_MemMap.h"

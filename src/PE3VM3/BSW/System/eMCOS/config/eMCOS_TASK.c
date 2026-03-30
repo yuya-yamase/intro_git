@@ -31,6 +31,8 @@
 #include <Ecu_Memmap_SdaDisableE_env.h>
 
 #include "EthSW_Task.h"
+#include "VCanAck.h"
+#include "CanIfProxy.h"
 
 #if (PROCESSING_LOAD_MEASURE_TIME > 0)
 #include "gpt_drv_frt.h"
@@ -42,10 +44,6 @@
 /*----------------------------------------------------------------------------
  *		ProtoTypes
  *--------------------------------------------------------------------------*/
-TASK(eMCOS_TASK_Idle);
-TASK(eMCOS_TASK_High);
-TASK(eMCOS_TASK_Medium);
-TASK(eMCOS_TASK_Low);
 
 /*----------------------------------------------------------------------------
  *		Symbols
@@ -99,6 +97,8 @@ TASK(eMCOS_TASK_High)
 /* Task hook start */
 
     BswM_CS_MainFunctionHigh();
+    VCanAck_MainFunction();
+    CanIfProxy_MainFunction();
     EthSW_HighTask();
 
 /* Task hook end */

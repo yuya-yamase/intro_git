@@ -126,6 +126,7 @@ void            vd_s_XspiIviSub1_ControlOSWake(const U1 * u1_ap_XSPI_ADD, const 
 {
     /*OS起動通知をトリガーに動くIFを登録*/
     vd_s_XspiIviSub1_ControlOsWakeToQueue(u1_ap_XSPI_ADD[1]);
+    vd_g_XspiIviSub1PowerSoCBootRec();
     vd_g_XspiIviSub1_PowerState1stSend();
     vd_g_XspiIviCANBusSend();
     vd_g_XspiIviSub1GpsStsSend();

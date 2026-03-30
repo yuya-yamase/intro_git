@@ -11,6 +11,7 @@
 #include    "PncreqCtl.h"
 #include    "memfill_u1.h"
 #include    "oxcan.h"
+#include    "x_spi_ivi_sub1_power.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
@@ -235,6 +236,31 @@ static void     vd_s_PncReqctl_PartialNMSetReq(const U1* u1_ap_PNCREQDATA)
         }
     }
     vd_g_oXCANWrhReqHch((U1)OXCAN_WRH_HCH_0, u4_t_req);
+}
+
+/*===================================================================================================================================*/
+/*  void            vd_g_PncReqctl_ResetReq(const U1 u1_a_KIND)                                                                      */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void            vd_g_PncReqctl_ResetReq(const U1 u1_a_KIND)
+{
+    u2_s_pncreqctl_timeoutcnt = (U2)PNCREQCTL_TIMECNTINIT;
+    u1_s_pncreqctl_txcnt  = (U1)PNCREQCTL_TXCNTINIT;
+    u1_s_pncreqctl_actsts = (U1)PNCREQCTL_STOP;
+    vd_g_MemfillU1(&u1_s_pncreqctl_req[PNCREQCTL_PNCID_16], (U1)PNCREQCTL_REQ_OFF, (U4)PNCREQCTL_PNCID_REQNUM);
+    vd_s_PncReqctl_PartialNMSetReq(&u1_s_pncreqctl_req[PNCREQCTL_PNCID_16]);
+    
+    if(u1_a_KIND == (U1)PNCREQCTL_RESETKIND_VM){
+        vd_g_XspiIviSub1PowerVMResetComp((U1)XSPI_IVI_POWER_RESET_COMP_RARNM);
+    }
+    else if(u1_a_KIND == (U1)PNCREQCTL_RESETKIND_CDC){
+        vd_g_XspiIviSub1PowerCDCResetComp((U1)XSPI_IVI_POWER_RESET_COMP_RARNM);
+    }
+    else{
+        /* do nothing */
+    }
 }
 
 /*===================================================================================================================================*/

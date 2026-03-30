@@ -116,17 +116,15 @@ U4      u4_g_I2cIRQenabled(const U1 u1_a_I2C_CH);
 void    vd_g_I2cEI(const U1 u1_a_I2C_CH, const U4 u4_a_IRQEN);
 void    vd_g_I2cDI(const U1 u1_a_I2C_CH);
 
+U1      u1_g_I2cMasReqSrscTx(const U1 u1_a_I2C_CH, const U1 u1_a_REQ);         /* Return = TRUE/FALSE                      */
+
 /* ------------------------------------------------------------------------------------*/
 /* Attention :                                                                         */
 /* ------------------------------------------------------------------------------------*/
-/* u1_g_I2cMaSynLost shall NOT be invoked/used ONLY IF I2C TRx timeout/bus lock is     */
-/* detected.                                                                           */
-/*                                                                                     */
 /* If the return value of u1_g_I2cMaSynLost is equal to "TRUE", I2C controller reset   */
 /* is being performed in it. Therefore, vd_g_I2cStart shall be invoked to restart I2C  */
-/* TRx.                                                                                */
+/* TRx after u1_g_I2cMaSynLost.                                                        */
 /* ------------------------------------------------------------------------------------*/
-U1      u1_g_I2cMasReqSrscTx(const U1 u1_a_I2C_CH, const U1 u1_a_REQ);         /* Return = TRUE/FALSE                      */
 U1      u1_g_I2cMasSynLost(const U1 u1_a_I2C_CH, const U1 u1_a_CLO_MAX);       /* Return = TRUE/FALSE                      */
                                                                                /* TRUE : SCL Synchronization Lost else Not */
 

@@ -1,4 +1,4 @@
-/* 0.0.1 */
+/* 0.1.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -13,8 +13,8 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define DATESI_COM_H_MAJOR                      (0)
-#define DATESI_COM_H_MINOR                      (0)
-#define DATESI_COM_H_PATCH                      (1)
+#define DATESI_COM_H_MINOR                      (1)
+#define DATESI_COM_H_PATCH                      (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -88,6 +88,8 @@ typedef struct{
 void                         vd_g_DateSIComBonInit(void);
 void                         vd_g_DateSIComRstWkupInit(void);
 void                         vd_g_DateSIComInit(void);
+void                         vd_g_DateSIComVMResetInit(void);
+void                         vd_g_DateSIComSoCResetInit(void);
 void                         vd_g_DateSIComCommandRx(const ST_DATESI_COMMAND_DATA st_a_DATA);
 void                         vd_g_DateSIComClockDispUpdate(const U1 u1_a_VAL, const U1 u1_a_SIGN, const U1 u1_a_EVENT_EI);
 void                         vd_g_DateSIComCommandTx(void);

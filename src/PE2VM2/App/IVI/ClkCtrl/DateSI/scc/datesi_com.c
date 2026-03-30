@@ -1,4 +1,4 @@
-/* 0.0.1 */
+/* 0.1.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,8 +10,8 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define DATESI_COM_C_MAJOR                      (0)
-#define DATESI_COM_C_MINOR                      (0)
-#define DATESI_COM_C_PATCH                      (1)
+#define DATESI_COM_C_MINOR                      (1)
+#define DATESI_COM_C_PATCH                      (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -22,6 +22,7 @@
 #include "date_clk.h"
 #include "datesi_cfg_private.h"
 #include "rim_ctl.h"
+#include "x_spi_ivi_sub1_power.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -116,6 +117,7 @@ static U1                             u1_s_datesi_com_rtc_sts;
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+static void                           vd_s_DateSIComResetInit(void);
 static ST_XSPI_IVI_CLOCK_RTC_DATA     st_s_DateSIComRtcSet(void);
 static U1                             u1_s_DateSIComSetCmpChk(void);
 
@@ -211,6 +213,65 @@ void           vd_g_DateSIComInit(void)
     }
 }
 
+/*===================================================================================================================================*/
+/* void            vd_g_DateSIComVMResetInit(void)                                                                                   */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void            vd_g_DateSIComVMResetInit(void)
+{
+    vd_s_DateSIComResetInit();
+    vd_g_XspiIviSub1PowerVMResetComp((U1)XSPI_IVI_POWER_RESET_COMP_CLOCK);
+}
+
+/*===================================================================================================================================*/
+/* void            vd_g_DateSIComSoCResetInit(void)                                                                                  */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void            vd_g_DateSIComSoCResetInit(void)
+{
+    vd_s_DateSIComResetInit();
+}
+
+/*===================================================================================================================================*/
+/* static void     vd_s_DateSIComResetInit(void)                                                                                     */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void     vd_s_DateSIComResetInit(void)
+{
+    /*Command Data Initial value set*/
+    st_s_command_data.u1_clk_year              = (U1)DATESI_COM_CLK_YEAR_INI;
+    st_s_command_data.u1_clk_mont              = (U1)DATESI_COM_CLK_MONT_INI;
+    st_s_command_data.u1_clk_day               = (U1)DATESI_COM_CLK_DAY_INI;
+    st_s_command_data.u1_clk_hour              = (U1)DATESI_COM_CLK_HOUR_INI;
+    st_s_command_data.u1_clk_min               = (U1)DATESI_COM_CLK_MIN_INI;
+    st_s_command_data.u1_clk_sec               = (U1)DATESI_COM_CLK_SEC_INI;
+    st_s_command_data.u1_gps_st                = (U1)DATESI_COM_GPS_ST_INI;
+    st_s_command_data.u1_gps_crct              = (U1)DATESI_COM_GPS_CRCT_INI;
+    st_s_command_data.u1_tz                    = (U1)DATESI_COM_TZ_INI;
+    st_s_command_data.u1_tz_sign               = (U1)DATESI_COM_TZ_SIGN;
+    st_s_command_data.u1_dst_s30               = (U1)DATESI_COM_DST_S30;
+    st_s_command_data.u1_hour_usw              = (U1)DATESI_COM_SW_OFF;
+    st_s_command_data.u1_hour_dsw              = (U1)DATESI_COM_SW_OFF;
+    st_s_command_data.u1_min_usw               = (U1)DATESI_COM_SW_OFF;
+    st_s_command_data.u1_min_dsw               = (U1)DATESI_COM_SW_OFF;
+    st_s_command_data.u1_oset_usw              = (U1)DATESI_COM_SW_OFF;
+    st_s_command_data.u1_oset_dsw              = (U1)DATESI_COM_SW_OFF;
+    st_s_command_data.u1_clkfmtsw              = (U1)DATESI_COM_SW_OFF;
+    st_s_command_data.u1_m_rst_sw              = (U1)DATESI_COM_SW_OFF;
+    st_s_command_data.u1_clk_year_updt         = (U1)DATESI_COM_CLK_YEAR_INI;
+    st_s_command_data.u1_clk_mont_updt         = (U1)DATESI_COM_CLK_MONT_INI;
+    st_s_command_data.u1_clk_day_updt          = (U1)DATESI_COM_CLK_DAY_INI;
+    u1_s_datesi_com_req_act                    = (U1)FALSE;
+    
+    /*Reset long-press detection (SW)*/
+    vd_g_DateSITimCanRxHk();
+}
 
 /*===================================================================================================================================*/
 /* void            vd_g_DateSIComCommandRx(void)                                                                                     */
@@ -501,11 +562,9 @@ void            vd_g_DateSIComSetRtcCmp(const U1 u1_a_TIM, const U1 u1_a_CAL)
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  0.0.0    04/23/2025  MN       New.                                                                                               */
-/*  0.0.1    12/18/2025  MN       Change for BEV Pre_CV                                                                              */
+/*  0.0.1    12/18/2025  MN       Addressing issues.                                                                                 */
+/*  0.1.0    02/23/2026  MN       Add reset/initialization processing.                                                               */
 /*                                                                                                                                   */
-/*  Revision Date        Author   Change Description                                                                                 */
-/* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  BEV-1    12/18/2025  MN       Addressing issues.                                                                                 */
 /*                                                                                                                                   */
 /*  * MN   = Mikiya Negishi, KSE                                                                                                     */
 /*                                                                                                                                   */

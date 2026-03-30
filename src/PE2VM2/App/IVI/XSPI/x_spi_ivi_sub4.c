@@ -17,6 +17,7 @@
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include    "x_spi_ivi_sub4_private.h"
+#include    "x_spi_ivi_sub1_power.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -64,6 +65,19 @@
 #define XSPI_IVI_CAN_COMMAND_BUF_MAX        (128U)
 #define XSPI_IVI_CAN_COMMAND_SIZE_MAX       (256U)
 
+#define XSPI_IVI_UPPER_NIBBLE_MASK          (0xF0U)
+#define XSPI_IVI_LOWER_NIBBLE_MASK          (0x0FU)
+
+#define XSPI_IVI_CAN_BUF_0                  (0U)
+#define XSPI_IVI_CAN_BUF_1                  (1U)
+#define XSPI_IVI_CAN_BUF_2                  (2U)
+#define XSPI_IVI_CAN_BUF_3                  (3U)
+#define XSPI_IVI_CAN_BUF_4                  (4U)
+#define XSPI_IVI_CAN_BUF_5                  (5U)
+#define XSPI_IVI_CAN_BUF_6                  (6U)
+#define XSPI_IVI_CAN_BUF_7                  (7U)
+#define XSPI_IVI_CAN_BUF_8                  (8U)
+
 /* CANバスステータス通知 バッファ位置 */
 #define XSPI_IVI_CANBUS_POS_TOTAL           (4U)
 #define XSPI_IVI_CANBUS_POS_REGSTUCK        (0U)
@@ -83,6 +97,10 @@
 #define XSPI_IVI_CLOCKUTC_DATA_SIZE         (9U)
 #define XSPI_IVI_WEEK_SUNDAY_RTC            (7U)
 #define XSPI_IVI_WEEK_SUNDAY_UTC            (0U)
+#define XSPI_IVI_YEAR_OFFSET                (100U)
+#define XSPI_IVI_UTC_STATUS_VARID           (1U)
+#define XSPI_IVI_BCD_HUNDREDS               (100U)
+#define XSPI_IVI_BCD_TENS                   (10U)
 
 /*PartialNM*/
 #define XSPI_IVI_PARTIALNM_DATASIZE         (7U)
@@ -95,6 +113,10 @@
 /* Provisional (CANSignal To VM1) */
 #define XSPI_IVI_IVDSH_NWORD                (1U)
 /* Provisional (CANSignal To VM1) */
+
+/*Reset Signal Mask Value*/
+#define XSPI_IVI_CAN_CDSIZE_MASK            (0x0FU)
+#define XSPI_IVI_CAN_PVMREQ_MASK            (0x03U)
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -150,6 +172,7 @@ static U4       u4_s_XspiIviBinarySearch(U4 canid);
 static void     vd_s_XspiIviCANCommandStuckBuff(const U1 u1_a_ID,const U2 u2_a_SIZE);
 static U1       u1_s_XspiIviClockUTCDataEventJdg(const U1* u1_ap_DATA,const U1* u1_ap_DATA_PRE,const U1 u1_a_SIZE);
 static void     vd_s_XspiIviClockUTCStuckBuff(const U1 u1_a_ID,const U2 u2_a_SIZE);
+static void     vd_s_XspiIviSub4ResetInit(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
@@ -194,8 +217,70 @@ void            vd_g_XspiIviSub4Init(void)
     vd_g_MemfillU1(&u1_sp_Xspi_Ivi_MET1S62_Data[0], (U1)0U, (U4)XSPI_IVI_CAN_DLC_08);
     vd_g_MemfillU1(&u1_sp_Xspi_Ivi_MET1S70_Data[0], (U1)0U, (U4)XSPI_IVI_CAN_DLC_32);
     /* Provisional (CANSignal To VM1) */
-	
-	u1_s_Xspi_Ivi_DataNm2_Sgnl_pre = (U1)U1_MAX;
+
+    u1_s_Xspi_Ivi_DataNm2_Sgnl_pre = (U1)U1_MAX;
+}
+
+/*===================================================================================================================================*/
+/*  void            vd_g_XspiIviSub4VMResetInit(void)                                                                                */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    VMリセット時の初期化処理                                                                                           */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void            vd_g_XspiIviSub4VMResetInit(void)
+{
+    vd_s_XspiIviSub4ResetInit();
+    vd_g_XspiIviSub1PowerVMResetComp((U1)XSPI_IVI_POWER_RESET_COMP_CAN);
+}
+
+/*===================================================================================================================================*/
+/*  void            vd_g_XspiIviSub4SoCResetInit(void)                                                                               */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    SoCリセット時の初期化処理                                                                                          */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void            vd_g_XspiIviSub4SoCResetInit(void)
+{
+    vd_s_XspiIviSub4ResetInit();
+}
+
+/*===================================================================================================================================*/
+/*  static void            vd_s_XspiIviSub4ResetInit(void)                                                                           */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    リセット時の初期化処理                                                                                          */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void            vd_s_XspiIviSub4ResetInit(void)
+{
+    U1  u1_t_sgnl_cdsize;
+    U1  u1_t_sgnl_pvmreq;
+    U1  u1_tp_candata_AVN1S73[8];
+    U1  u1_tp_candata_AVN1SF7[32];
+    U4  u4_t_lpcnt;
+
+    vd_g_MemfillU1(&u1_tp_candata_AVN1S73[0], (U1)0U, (U4)XSPI_IVI_CAN_DLC_08);
+    vd_g_MemfillU1(&u1_tp_candata_AVN1SF7[0], (U1)0U, (U4)XSPI_IVI_CAN_DLC_32);
+
+    (void)Com_ReceiveSignal(ComConf_ComSignal_CD_SIZE, &u1_t_sgnl_cdsize);
+    (void)Com_ReceiveSignal(ComConf_ComSignal_PVM_REQ, &u1_t_sgnl_pvmreq);
+
+
+    for(u4_t_lpcnt = (U4)MSG_AVN1S01_TXCH0; u4_t_lpcnt <= (U4)MSG_MET1S33_TXCH0; u4_t_lpcnt++){
+        if(u4_t_lpcnt == (U4)MSG_AVN1S73_TXCH0) {
+            u1_tp_candata_AVN1S73[6] |= (u1_t_sgnl_cdsize & (U1)XSPI_IVI_CAN_CDSIZE_MASK) << (U1)XSPI_IVI_SFT_04;
+            (void)Com_SendIPDU((PduIdType)MSG_AVN1S73_TXCH0, &u1_tp_candata_AVN1S73[0] );
+        } else if(u4_t_lpcnt == (U4)MSG_AVN1SF7_TXCH0) {
+            u1_tp_candata_AVN1SF7[27] |= u1_t_sgnl_pvmreq & (U1)XSPI_IVI_CAN_PVMREQ_MASK;
+            (void)Com_SendIPDU((PduIdType)MSG_AVN1SF7_TXCH0, &u1_tp_candata_AVN1SF7[0] );
+        } else if(u4_t_lpcnt == (U4)MSG_MET1S33_TXCH0) {
+            /*Do Nothing*/
+        } else {
+            (void)Com_InitIPDU((PduIdType)u4_t_lpcnt);
+        }
+    }
 }
 
 /*===================================================================================================================================*/
@@ -1539,44 +1624,46 @@ static void            vd_s_XspiIviCANCommandStuckBuff(const U1 u1_a_ID,const U2
 /*===================================================================================================================================*/
 void            vd_g_XspiIviClockUTCPut(const U1* u1_ap_DATA)
 {
-    U1 u1_t_year_hi;
-    U1 u1_t_year_lo;
+    U2 u2_t_year_hi;
+    U2 u2_t_year_lo;
     U1 u1_t_week;
+    U2 u2_t_year;
 
     /*BCDデータで格納*/
     /*second*/
-    u1_sp_Xspi_Ivi_ClockUtcdata[0] = (u1_ap_DATA[5] % (U1)10U) & 0x0FU;
-    u1_sp_Xspi_Ivi_ClockUtcdata[0] |= ((u1_ap_DATA[5] / (U1)10U) << XSPI_IVI_SFT_04) & 0xF0U;
+    u1_sp_Xspi_Ivi_ClockUtcdata[XSPI_IVI_CAN_BUF_0] = (u1_ap_DATA[XSPI_IVI_CAN_BUF_5] % (U1)XSPI_IVI_BCD_TENS) & (U1)XSPI_IVI_LOWER_NIBBLE_MASK;
+    u1_sp_Xspi_Ivi_ClockUtcdata[XSPI_IVI_CAN_BUF_0] |= ((u1_ap_DATA[XSPI_IVI_CAN_BUF_5] / (U1)XSPI_IVI_BCD_TENS) << XSPI_IVI_SFT_04) & (U1)XSPI_IVI_UPPER_NIBBLE_MASK;
     /*minute*/
-    u1_sp_Xspi_Ivi_ClockUtcdata[1] = (u1_ap_DATA[4] % (U1)10U) & 0x0FU;
-    u1_sp_Xspi_Ivi_ClockUtcdata[1] |= ((u1_ap_DATA[4] / (U1)10U) << XSPI_IVI_SFT_04) & 0xF0U;
+    u1_sp_Xspi_Ivi_ClockUtcdata[XSPI_IVI_CAN_BUF_1] = (u1_ap_DATA[XSPI_IVI_CAN_BUF_4] % (U1)XSPI_IVI_BCD_TENS) & (U1)XSPI_IVI_LOWER_NIBBLE_MASK;
+    u1_sp_Xspi_Ivi_ClockUtcdata[XSPI_IVI_CAN_BUF_1] |= ((u1_ap_DATA[XSPI_IVI_CAN_BUF_4] / (U1)XSPI_IVI_BCD_TENS) << XSPI_IVI_SFT_04) & (U1)XSPI_IVI_UPPER_NIBBLE_MASK;
     /*hour*/
-    u1_sp_Xspi_Ivi_ClockUtcdata[2] = (u1_ap_DATA[3] % (U1)10U) & 0x0FU;
-    u1_sp_Xspi_Ivi_ClockUtcdata[2] |= ((u1_ap_DATA[3] / (U1)10U) << XSPI_IVI_SFT_04) & 0xF0U;
+    u1_sp_Xspi_Ivi_ClockUtcdata[XSPI_IVI_CAN_BUF_2] = (u1_ap_DATA[XSPI_IVI_CAN_BUF_3] % (U1)XSPI_IVI_BCD_TENS) & (U1)XSPI_IVI_LOWER_NIBBLE_MASK;
+    u1_sp_Xspi_Ivi_ClockUtcdata[XSPI_IVI_CAN_BUF_2] |= ((u1_ap_DATA[XSPI_IVI_CAN_BUF_3] / (U1)XSPI_IVI_BCD_TENS) << XSPI_IVI_SFT_04) & (U1)XSPI_IVI_UPPER_NIBBLE_MASK;
     /*day*/
-    u1_sp_Xspi_Ivi_ClockUtcdata[3] = (u1_ap_DATA[2] % (U1)10U) & 0x0FU;
-    u1_sp_Xspi_Ivi_ClockUtcdata[3] |= ((u1_ap_DATA[2] / (U1)10U) << XSPI_IVI_SFT_04) & 0xF0U;
+    u1_sp_Xspi_Ivi_ClockUtcdata[XSPI_IVI_CAN_BUF_3] = (u1_ap_DATA[XSPI_IVI_CAN_BUF_2] % (U1)XSPI_IVI_BCD_TENS) & (U1)XSPI_IVI_LOWER_NIBBLE_MASK;
+    u1_sp_Xspi_Ivi_ClockUtcdata[XSPI_IVI_CAN_BUF_3] |= ((u1_ap_DATA[XSPI_IVI_CAN_BUF_2] / (U1)XSPI_IVI_BCD_TENS) << XSPI_IVI_SFT_04) & (U1)XSPI_IVI_UPPER_NIBBLE_MASK;
     /*month*/
-    u1_sp_Xspi_Ivi_ClockUtcdata[4] = (u1_ap_DATA[1] % (U1)10U) & 0x0FU;
-    u1_sp_Xspi_Ivi_ClockUtcdata[4] |= ((u1_ap_DATA[1] / (U1)10U) << XSPI_IVI_SFT_04) & 0xF0U;
+    u1_sp_Xspi_Ivi_ClockUtcdata[XSPI_IVI_CAN_BUF_4] = (u1_ap_DATA[XSPI_IVI_CAN_BUF_1] % (U1)XSPI_IVI_BCD_TENS) & (U1)XSPI_IVI_LOWER_NIBBLE_MASK;
+    u1_sp_Xspi_Ivi_ClockUtcdata[XSPI_IVI_CAN_BUF_4] |= ((u1_ap_DATA[XSPI_IVI_CAN_BUF_1] / (U1)XSPI_IVI_BCD_TENS) << XSPI_IVI_SFT_04) & (U1)XSPI_IVI_UPPER_NIBBLE_MASK;
     /*year*/
-    u1_t_year_hi = u1_ap_DATA[0] / (U1)100U;
-    u1_t_year_lo = u1_ap_DATA[0] % (U1)100U;
-    u1_sp_Xspi_Ivi_ClockUtcdata[5] = (u1_t_year_hi % (U1)10U) & 0x0FU;
-    u1_sp_Xspi_Ivi_ClockUtcdata[5] |= ((u1_t_year_hi / (U1)10U) << XSPI_IVI_SFT_04) & 0xF0U;
-    u1_sp_Xspi_Ivi_ClockUtcdata[6] = (u1_t_year_lo % (U1)10U) & 0x0FU;
-    u1_sp_Xspi_Ivi_ClockUtcdata[6] |= ((u1_t_year_lo / (U1)10U) << XSPI_IVI_SFT_04) & 0xF0U;
+    u2_t_year = (U2)(u1_ap_DATA[XSPI_IVI_CAN_BUF_0] + (U1)XSPI_IVI_YEAR_OFFSET);
+    u2_t_year_hi = u2_t_year / (U2)XSPI_IVI_BCD_HUNDREDS;
+    u2_t_year_lo = u2_t_year % (U2)XSPI_IVI_BCD_HUNDREDS;
+    u1_sp_Xspi_Ivi_ClockUtcdata[XSPI_IVI_CAN_BUF_5] =  (U1)((u2_t_year_hi % (U2)XSPI_IVI_BCD_TENS) & (U2)XSPI_IVI_LOWER_NIBBLE_MASK);
+    u1_sp_Xspi_Ivi_ClockUtcdata[XSPI_IVI_CAN_BUF_5] |= (U1)(((u2_t_year_hi / (U2)XSPI_IVI_BCD_TENS) << XSPI_IVI_SFT_04) & (U2)XSPI_IVI_UPPER_NIBBLE_MASK);
+    u1_sp_Xspi_Ivi_ClockUtcdata[XSPI_IVI_CAN_BUF_6] =  (U1)((u2_t_year_lo % (U2)XSPI_IVI_BCD_TENS) & (U2)XSPI_IVI_LOWER_NIBBLE_MASK);
+    u1_sp_Xspi_Ivi_ClockUtcdata[XSPI_IVI_CAN_BUF_6] |= (U1)(((u2_t_year_lo / (U2)XSPI_IVI_BCD_TENS) << XSPI_IVI_SFT_04) & (U2)XSPI_IVI_UPPER_NIBBLE_MASK);
     /*week*/
-    u1_t_week = u1_ap_DATA[6];
+    u1_t_week = u1_ap_DATA[XSPI_IVI_CAN_BUF_6];
     if(u1_t_week == (U1)XSPI_IVI_WEEK_SUNDAY_RTC) {
         u1_t_week = (U1)XSPI_IVI_WEEK_SUNDAY_UTC;
     }
-    u1_sp_Xspi_Ivi_ClockUtcdata[7] = (u1_t_week % (U1)10U) & 0x0FU;
-    u1_sp_Xspi_Ivi_ClockUtcdata[7] |= ((u1_t_week / (U1)10U) << XSPI_IVI_SFT_04) & 0xF0U;
+    u1_sp_Xspi_Ivi_ClockUtcdata[XSPI_IVI_CAN_BUF_7] = (u1_t_week % (U1)XSPI_IVI_BCD_TENS) & (U1)XSPI_IVI_LOWER_NIBBLE_MASK;
+    u1_sp_Xspi_Ivi_ClockUtcdata[XSPI_IVI_CAN_BUF_7] |= ((u1_t_week / (U1)XSPI_IVI_BCD_TENS) << XSPI_IVI_SFT_04) & (U1)XSPI_IVI_UPPER_NIBBLE_MASK;
     /*sts*/
-    u1_sp_Xspi_Ivi_ClockUtcdata[8] = u1_ap_DATA[7];
+    u1_sp_Xspi_Ivi_ClockUtcdata[XSPI_IVI_CAN_BUF_8] = u1_ap_DATA[XSPI_IVI_CAN_BUF_7];
 
-    if(u1_sp_Xspi_Ivi_ClockUtcdata[8] == (U1)1U) {
+    if(u1_sp_Xspi_Ivi_ClockUtcdata[XSPI_IVI_CAN_BUF_8] == (U1)XSPI_IVI_UTC_STATUS_VARID) {
         u1_s_Xspi_Ivi_ClockUtc_recflg = (U1)TRUE;
     } else {
         u1_s_Xspi_Ivi_ClockUtc_recflg = (U1)FALSE;

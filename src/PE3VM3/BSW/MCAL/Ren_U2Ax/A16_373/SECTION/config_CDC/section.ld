@@ -190,9 +190,12 @@ SECTIONS {
     _LOC_RAM_SIZE = . - ADDR(.MEM_SEC_STA_RAM_LOC_APPL);
 
 // MCAL Data
+    .mcal_ram_top                align(4)                  : > .
     .DMA_BSS_VAR_NO_INIT         align(4)                  : > .
     .PORT_BSS_VAR_NO_INIT        align(4)                  : > .
     .SPI_BSS_VAR_NO_INIT         align(4)                  : > .
+    .mcal_ram_bottom             align(4)                  : > .
+    _MCAL_RAM_SIZE = . - ADDR(.mcal_ram_top);
 
 // IOHW Data
     .iohw_ram_top                align(4)                  : > .
@@ -225,9 +228,6 @@ SECTIONS {
 //2byte
 //4byte
 //struct
-    .bss_SHARE_DMA_NOTICATION   SHARE_DMA_NOTICATION_ADDR   ABS    : > .
-    .bss_SHARE_SPI_MODEA_CHANNELDATA SHARE_SPI_MODEA_CHANNELDATA_ADDR ABS    : > .
-    .bss_SHARE_SPI_MODEC_CHANNELDATA SHARE_SPI_MODEC_CHANNELDATA_ADDR ABS    : > .
 
     .cluster2_share_ramend                                   : > ram_end_cluster2_share 
 

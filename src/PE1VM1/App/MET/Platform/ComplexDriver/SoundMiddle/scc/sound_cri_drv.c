@@ -172,13 +172,13 @@ void vd_g_SoundCriDrvDmacStart(const CriUint32 src_addr_tbl[CRISFRDRVDMACH_NUM],
     descriptor_ptr_P = get_descriptor_ptr_from_id(descriptor_id_tbl[CRISFRDRVDMACH_P]);
     descriptor_ptr_N = get_descriptor_ptr_from_id(descriptor_id_tbl[CRISFRDRVDMACH_N]);
 
-    Dma_SetTransModeDoubleBufferReload( DMA_CH_DATA_ID_7, u1DMA_TRANSSIZE_2, DMA_DESCMODE0, src_addr_P, (volatile const void*)HW_TAUD_CH_SLAVE_P_CDR_ADDR , (U2)transfer_count, descriptor_ptr_P );
-    Dma_SetTransModeDoubleBufferReload( DMA_CH_DATA_ID_8, u1DMA_TRANSSIZE_2, DMA_DESCMODE1, src_addr_N, (volatile const void*)HW_TAUD_CH_SLAVE_N_CDR_ADDR, (U2)transfer_count, descriptor_ptr_N );
-    Dma_SetTransModeDoubleBufferReload( DMA_CH_DATA_ID_9, u1DMA_TRANSSIZE_2, DMA_DESCMODE2, src_addr_Master, (volatile const void*)HW_TAUD_RDT_ADDR, (U2)HW_DMAC_CH_MASTER_TRNSFR_BYTE_SIZE, u2_DMAC_DESC_PTR_BUZ_M_0 );
+    Dma_SetTransModeDoubleBufferReload( DMA_CH_DATA_ID_2, u1DMA_TRANSSIZE_2, DMA_DESCMODE0, src_addr_P, (volatile const void*)HW_TAUD_CH_SLAVE_P_CDR_ADDR , (U2)transfer_count, descriptor_ptr_P );
+    Dma_SetTransModeDoubleBufferReload( DMA_CH_DATA_ID_3, u1DMA_TRANSSIZE_2, DMA_DESCMODE1, src_addr_N, (volatile const void*)HW_TAUD_CH_SLAVE_N_CDR_ADDR, (U2)transfer_count, descriptor_ptr_N );
+    Dma_SetTransModeDoubleBufferReload( DMA_CH_DATA_ID_4, u1DMA_TRANSSIZE_2, DMA_DESCMODE2, src_addr_Master, (volatile const void*)HW_TAUD_RDT_ADDR, (U2)HW_DMAC_CH_MASTER_TRNSFR_BYTE_SIZE, u2_DMAC_DESC_PTR_BUZ_M_0 );
 
-    Dma_EnableTrans(DMA_CH_DATA_ID_7);
-    Dma_EnableTrans(DMA_CH_DATA_ID_8);
-    Dma_EnableTrans(DMA_CH_DATA_ID_9);
+    Dma_EnableTrans(DMA_CH_DATA_ID_2);
+    Dma_EnableTrans(DMA_CH_DATA_ID_3);
+    Dma_EnableTrans(DMA_CH_DATA_ID_4);
 
 }
 
@@ -201,8 +201,8 @@ void vd_g_SoundCriDrvDmacIntr(const CriUint32 reload_src_addr_tbl[CRISFRDRVDMACH
     descriptor_ptr_P = get_descriptor_ptr_from_id(descriptor_id_tbl[CRISFRDRVDMACH_P]);
     descriptor_ptr_N = get_descriptor_ptr_from_id(descriptor_id_tbl[CRISFRDRVDMACH_N]);
 
-    Dma_ReloadDataUpdate(DMA_CH_DATA_ID_7, u1DMA_TRANSSIZE_2, reload_src_addr_P, (volatile const void*)HW_TAUD_CH_SLAVE_P_CDR_ADDR , (U2)transfer_count, descriptor_ptr_P);
-    Dma_ReloadDataUpdate(DMA_CH_DATA_ID_8, u1DMA_TRANSSIZE_2, reload_src_addr_N, (volatile const void*)HW_TAUD_CH_SLAVE_N_CDR_ADDR, (U2)transfer_count, descriptor_ptr_N);
+    Dma_ReloadDataUpdate(DMA_CH_DATA_ID_2, u1DMA_TRANSSIZE_2, reload_src_addr_P, (volatile const void*)HW_TAUD_CH_SLAVE_P_CDR_ADDR , (U2)transfer_count, descriptor_ptr_P);
+    Dma_ReloadDataUpdate(DMA_CH_DATA_ID_3, u1DMA_TRANSSIZE_2, reload_src_addr_N, (volatile const void*)HW_TAUD_CH_SLAVE_N_CDR_ADDR, (U2)transfer_count, descriptor_ptr_N);
 }
 
 /*===================================================================================================================================*/
@@ -214,9 +214,9 @@ void vd_g_SoundCriDrvDmacIntr(const CriUint32 reload_src_addr_tbl[CRISFRDRVDMACH
 /* void RsrcDrv_DmacStop(void)                                                                                                       */
 void vd_g_SoundCriDrvDmacStop(void)
 {
-    Dma_DisableTrans(DMA_CH_DATA_ID_7);
-    Dma_DisableTrans(DMA_CH_DATA_ID_8);
-    Dma_DisableTrans(DMA_CH_DATA_ID_9);
+    Dma_DisableTrans(DMA_CH_DATA_ID_2);
+    Dma_DisableTrans(DMA_CH_DATA_ID_3);
+    Dma_DisableTrans(DMA_CH_DATA_ID_4);
 }
 
 /*===================================================================================================================================*/

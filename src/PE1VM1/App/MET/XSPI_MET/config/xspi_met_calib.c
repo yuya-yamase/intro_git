@@ -38,7 +38,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define XSPI_CALIB_PAYLOAD_NUM                  (42U)
 
-#define XSPI_MCUID_U1_NUM                       (5U)
+#define XSPI_MCUID_U1_NUM                       (6U)
 #define XSPI_MCUID_U2_NUM                       (1U)
 #define XSPI_MCUID_OMSCHK_U1_NUM                (21U)
 #define XSPI_MCUID_OMSCHK_U2_NUM                (2U)
@@ -86,6 +86,7 @@ static U4                u4_sp_calib_buf[XSPI_CALIB_PAYLOAD_NUM]    __attribute_
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static const ST_XSPI_CALIB_U1 st_sp_XSPI_CALIB_U1[XSPI_MCUID_U1_NUM] = {
 /*  u2_xspiid ,     u1_bitpos ,                 u1p_mcuid                          */
+    {(U2) 0U,       (U1)XSPI_SHIFT_NON,         &u1_CALIB_MCUID0023_DISPTYPE       },
     {(U2) 1U,       (U1)XSPI_SHIFT_2BYTE,       &u1_CALIB_MCUID0219_G_GAUGE_MAX    },
     {(U2) 1U,       (U1)XSPI_SHIFT_3BYTE,       &u1_CALIB_MCUID0220_GTRAJECTORY2   },
     {(U2) 2U,       (U1)XSPI_SHIFT_NON,         &u1_CALIB_MCUID0221_G_DISP_MAX     },
@@ -144,21 +145,21 @@ void    vd_g_XSpiCalibInit(void)
 
     for (u4_t_loop = (U4)0U; u4_t_loop < (U4)XSPI_MCUID_U1_NUM; u4_t_loop++) {
         if (st_sp_XSPI_CALIB_U1[u4_t_loop].u1p_mcuid != vdp_PTR_NA) {
-                u4_t_calib_val = (U4) *(st_sp_XSPI_CALIB_U1[u4_t_loop].u1p_mcuid);
+            u4_t_calib_val = (U4) *(st_sp_XSPI_CALIB_U1[u4_t_loop].u1p_mcuid);
 
-                u4_sp_calib_buf[st_sp_XSPI_CALIB_U1[u4_t_loop].u2_xspiid] |=
-                    ((u4_t_calib_val & (U4)XSPI_MSK_08BIT)
-                    << st_sp_XSPI_CALIB_U1[u4_t_loop].u1_bitpos);
+            u4_sp_calib_buf[st_sp_XSPI_CALIB_U1[u4_t_loop].u2_xspiid] |=
+                ((u4_t_calib_val & (U4)XSPI_MSK_08BIT)
+                << st_sp_XSPI_CALIB_U1[u4_t_loop].u1_bitpos);
         }
     }
 
     for (u4_t_loop = (U4)0U; u4_t_loop < (U4)XSPI_MCUID_U2_NUM; u4_t_loop++) {
         if (st_sp_XSPI_CALIB_U2[u4_t_loop].u2p_mcuid != vdp_PTR_NA) {
-                u4_t_calib_val = (U4) *(st_sp_XSPI_CALIB_U2[u4_t_loop].u2p_mcuid);
+            u4_t_calib_val = (U4) *(st_sp_XSPI_CALIB_U2[u4_t_loop].u2p_mcuid);
 
-                u4_sp_calib_buf[st_sp_XSPI_CALIB_U2[u4_t_loop].u2_xspiid] |=
-                    ((u4_t_calib_val & (U4)XSPI_MSK_08BIT)
-                    << st_sp_XSPI_CALIB_U2[u4_t_loop].u1_bitpos);
+            u4_sp_calib_buf[st_sp_XSPI_CALIB_U2[u4_t_loop].u2_xspiid] |=
+                ((u4_t_calib_val & (U4)XSPI_MSK_16BIT)
+                << st_sp_XSPI_CALIB_U2[u4_t_loop].u1_bitpos);
         }
     }
 
@@ -167,8 +168,8 @@ void    vd_g_XSpiCalibInit(void)
             u4_t_calib_val = (U4)(st_sp_XSPI_CALIB_OMS_U1[u4_t_loop].fp_u1_CALIB_OMS());
 
             u4_sp_calib_buf[st_sp_XSPI_CALIB_OMS_U1[u4_t_loop].u2_xspiid] |=
-                ((u4_t_calib_val & (U4)XSPI_MSK_16BIT)
-                << st_sp_XSPI_CALIB_OMS_U2[u4_t_loop].u1_bitpos);
+                ((u4_t_calib_val & (U4)XSPI_MSK_08BIT)
+                << st_sp_XSPI_CALIB_OMS_U1[u4_t_loop].u1_bitpos);
         }
     }
 
@@ -214,10 +215,10 @@ void    vd_g_XSpiCalibMainTask(void)
             u4_t_calib_val = (U4) *(st_sp_XSPI_CALIB_U2[u4_t_loop].u2p_mcuid);
             /* Reset target byte */
             u4_sp_calib_buf[st_sp_XSPI_CALIB_U2[u4_t_loop].u2_xspiid] &=
-                ~((U4)XSPI_MSK_08BIT << st_sp_XSPI_CALIB_U2[u4_t_loop].u1_bitpos);
+                ~((U4)XSPI_MSK_16BIT << st_sp_XSPI_CALIB_U2[u4_t_loop].u1_bitpos);
             /* Set target byte   */
             u4_sp_calib_buf[st_sp_XSPI_CALIB_U2[u4_t_loop].u2_xspiid] |=
-                ((u4_t_calib_val & (U4)XSPI_MSK_08BIT)
+                ((u4_t_calib_val & (U4)XSPI_MSK_16BIT)
                 << st_sp_XSPI_CALIB_U2[u4_t_loop].u1_bitpos);
         }
     }
@@ -227,10 +228,10 @@ void    vd_g_XSpiCalibMainTask(void)
 
             /* Reset target byte */
             u4_sp_calib_buf[st_sp_XSPI_CALIB_OMS_U1[u4_t_loop].u2_xspiid] &=
-                ~((U4)XSPI_MSK_16BIT << st_sp_XSPI_CALIB_OMS_U1[u4_t_loop].u1_bitpos);
+                ~((U4)XSPI_MSK_08BIT << st_sp_XSPI_CALIB_OMS_U1[u4_t_loop].u1_bitpos);
             /* Set target byte   */
             u4_sp_calib_buf[st_sp_XSPI_CALIB_OMS_U1[u4_t_loop].u2_xspiid] |=
-                ((u4_t_calib_val & (U4)XSPI_MSK_16BIT)
+                ((u4_t_calib_val & (U4)XSPI_MSK_08BIT)
                 << st_sp_XSPI_CALIB_OMS_U1[u4_t_loop].u1_bitpos);
         }
     }
@@ -277,10 +278,12 @@ void    vd_g_XSpiCalibGetData(         U4 * u4_ap_pdu_tx)
 /*  19PFv3-3 04/07/2025  SH       Update for MET-M_MCUCONST-CSTD-A0-023-A-XX-XXXX-X.                                                 */
 /*  19PFv3-4 04/15/2025  PG       Update for MET-P_GRTFOLP-CSTD-A0-02-A-C1.                                                          */
 /*  BEV-1    02/10/2026  SH       Change MCUID from Calibration to OMUSVIID and Separate MCUID tables by data size                   */
+/*  BEV-2    03/11/2026  EA       Add MCUID0023 to st_sp_XSPI_CALIB_U1 table                                                         */
 /*                                                                                                                                   */
 /*  * KM   = Keisuke Mashita, DENSO-TECHNO                                                                                           */
 /*  * TN   = Tetsushi Nakano, DENSO-TECHNO                                                                                           */
 /*  * SH   = Sae Hirose, DENSO-TECHNO                                                                                                */
 /*  * PG   = Patrick Garcia, DTPH                                                                                                    */
+/*  * EA   = Eunice Avelin, DTPH                                                                                                     */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

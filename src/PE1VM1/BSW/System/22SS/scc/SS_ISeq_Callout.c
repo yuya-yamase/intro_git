@@ -20,6 +20,8 @@
 
 /* MCAL */
 #include "gpt_drv_ost.h"
+#include "Dma.h"
+#include "Spi.h"
 #include "wdg_drv.h"
 #include "Port.h"
 
@@ -167,6 +169,7 @@ void SS_Pm_postClockUpCallout(SS_BootType u4_BootSource)
     (void)SS_Memory_copy(__ghsbegin_app_n_nvarCR1_withval, __ghsbegin_app_n_nvarCR1_ival, (uint32)APP_N_NVARCR1_WITHVAL_SIZE);
     (void)SS_Memory_set(__ghsbegin_ecu_n_nvarCR1_top, 0UL, (uint32)ECU_N_NVAR_CR1_SIZE);
 
+    (void)SS_Memory_set(__ghsbegin_mcal_ram_top, 0UL, (uint32)MCAL_RAM_SIZE);
     (void)SS_Memory_set(__ghsbegin_iohw_ram_top, 0UL, (uint32)IOHW_RAM_SIZE);
 
     if (u4_BootSource == SS_PM_BOOT_SUP)
@@ -179,6 +182,9 @@ void SS_Pm_postClockUpCallout(SS_BootType u4_BootSource)
     Port_SetConfigPtr( &cstPort_Config[0] );
 
     vd_g_Gpt_OstInit();    /* call in each VM that use OSTM */
+
+    Dma_Init();
+    Spi_Init1();
 
     vd_g_IoHwAdcShInit();
     vd_g_IoHwDifltInit();
@@ -352,6 +358,7 @@ void SS_Pm_shutdownCallout(void)
     vd_g_oXCANShtdwn();
     vd_g_Nvmc_DeInit();
     vd_g_Rim_DeInit();
+    Spi_DeInit();
     vd_g_Gpt_OstDeInit();
 
     (void)ClearPendingInterrupt((ISRType)eMCOS_ISR_INTOSTM6TINT);

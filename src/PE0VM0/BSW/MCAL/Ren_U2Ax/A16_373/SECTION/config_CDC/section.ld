@@ -306,9 +306,6 @@ SECTIONS {
 //2byte
 //4byte
 //struct
-    .bss_SHARE_DMA_NOTICATION   SHARE_DMA_NOTICATION_ADDR   ABS    : > .
-    .bss_SHARE_SPI_MODEA_CHANNELDATA SHARE_SPI_MODEA_CHANNELDATA_ADDR ABS    : > .
-    .bss_SHARE_SPI_MODEC_CHANNELDATA SHARE_SPI_MODEC_CHANNELDATA_ADDR ABS    : > .
 
     .cluster2_share_ramend                                   : > ram_end_cluster2_share 
 
@@ -382,7 +379,7 @@ SECTIONS {
         .bsw_secoc_var_no_init_gram     align(4)                      : > .
 
         // CryptoDriver, CycurHSM Bss (HSM共有)
-        .crypto_hsm_shared_bss          align(4)                      : > .   // CryptoDriver: must allocate in QM section area(zero clear section)
+        .bsw_crypto_hsm_shared_bss      align(4)                      : > .   // CryptoDriver: must allocate in QM section area(zero clear section)
         .hsm_shared.bss                 align(4)                      : > .   // CycurHSM: must allocate in QM section area(zero clear section)
     .bsw_sec_hsm_nvar_bottom          align(4)                        : > .
     _BSW_SEC_HSM_NVAR_SIZE = . - ADDR(.bsw_sec_hsm_nvar_top);

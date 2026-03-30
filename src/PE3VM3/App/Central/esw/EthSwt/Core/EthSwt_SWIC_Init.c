@@ -4,7 +4,7 @@
 #include <Std_Types.h>
 /* -------------------------------------------------------------------------- */
 #include <EthSwt_SWIC_Cfg.h>
-#include <EthSwt_SWIC_init_Cfg.h>
+#include <EthSwt_SWIC_Init_Cfg.h>
 #include "EthSwt_SWIC_Init.h"
 #include "EthSwt_SWIC_Reg.h"
 #include "EthSwt_SWIC_Define.h"

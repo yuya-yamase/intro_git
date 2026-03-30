@@ -173,6 +173,9 @@ static U1 u1_s_PwrCtrl_Sip_WAKEUP_STAT3;
 /* SoCリセット起動要因 */
 static U1 u1_s_PwrCtrl_Sip_Soc_Rst;
 
+/* SoC起動条件通知 */
+static U1 u1_s_PwrCtrl_Sip_SoCWkupCond;
+
 static U1 u1_s_PwrCtrl_Sip_On_Step;
 static U4 u4_s_PwrCtrl_Sip_On_VB33SIPON_Tim;
 static U4 u4_s_PwrCtrl_Sip_On_LOPWON_S1_Tim;
@@ -516,6 +519,10 @@ void vd_g_PwrCtrlSipBonInit( void )
     
     /* SoCリセット起動要因の初期化 */
     u1_s_PwrCtrl_Sip_Soc_Rst                          = PWRCTRL_SIP_SOCRST_NORMAL;
+    
+    /* SoC起動条件通知の初期化 */
+    u1_s_PwrCtrl_Sip_SoCWkupCond                      = PWRCTRL_COM_SOCWKUP_NON;
+    vd_g_Rim_WriteU1((U2)RIMID_U1_PWCTR_SOC_WKUPCOND, u1_s_PwrCtrl_Sip_SoCWkupCond);
 
     /* 待機時間測定用RAMの初期化 */
     /* SiP通常起動 */
@@ -640,6 +647,8 @@ void vd_g_PwrCtrlSipWkupInit( void )
     U1 u1_t_wust2_buf;
     U1 u1_t_wust1_ret;
     U1 u1_t_wust2_ret;
+    U1 u1_t_socwkupcond_buf;
+    U1 u1_t_socwkupcond_ret;
 
     u1_s_PwrCtrl_Sip_LOW_POWER_ON_Sts                 = (U1)FALSE;
     u1_s_PwrCtrl_Sip_Pwr_Sts                          = (U1)PWRCTRL_SIP_STS_NON;
@@ -696,6 +705,19 @@ void vd_g_PwrCtrlSipWkupInit( void )
     {
         /* SoCリセット起動要因：通常起動を設定 */
         u1_s_PwrCtrl_Sip_Soc_Rst = PWRCTRL_SIP_SOCRST_NORMAL;
+    }
+    
+    /* SoC起動条件通知の初期化 */
+    u1_t_socwkupcond_buf = (U1)PWRCTRL_COM_SOCWKUP_NON;
+    u1_t_socwkupcond_ret = u1_g_Rim_ReadU1withStatus((U2)RIMID_U1_PWCTR_SOC_WKUPCOND, &u1_t_socwkupcond_buf);
+    /* RIMからデータの読み出し成功の場合 */
+    if((u1_t_socwkupcond_ret & (U1)RIM_RESULT_KIND_MASK) == (U1)RIM_RESULT_KIND_OK)
+    {
+        u1_s_PwrCtrl_Sip_SoCWkupCond = u1_t_socwkupcond_buf;
+    }
+    else
+    {
+        u1_s_PwrCtrl_Sip_SoCWkupCond = (U1)PWRCTRL_COM_SOCWKUP_NON;
     }
 
     /* 待機時間測定用RAMの初期化 */
@@ -1321,6 +1343,52 @@ void vd_g_PwrCtrlSipSoCRstClr( void )
 {
     /* SoCリセット起動要因に通常起動を設定 */
     u1_s_PwrCtrl_Sip_Soc_Rst = PWRCTRL_SIP_SOCRST_NORMAL;
+
+    return;
+}
+
+/*****************************************************************************
+  Function      : vd_g_PwrCtrlSipSetSoCWkupCond
+  Description   : SIP共通 SoC起動条件通知の設定関数
+  param[in/out] : [in] u1_a_socwkupcond: SoC起動条件通知
+  return        : -
+  Note          : 設定対象：SoC起動条件通知
+*****************************************************************************/
+void vd_g_PwrCtrlSipSetSoCWkupCond( const U1 u1_a_socwkupcond )
+{
+    /* SoC起動条件通知を設定 */
+    u1_s_PwrCtrl_Sip_SoCWkupCond = u1_a_socwkupcond;
+    vd_g_Rim_WriteU1((U2)RIMID_U1_PWCTR_SOC_WKUPCOND, u1_s_PwrCtrl_Sip_SoCWkupCond);
+
+    return;
+}
+
+/*****************************************************************************
+  Function      : u1_g_PwrCtrlSipGetSoCWkupCond
+  Description   : SIP共通 SoC起動条件通知の取得関数
+  param[in/out] : -
+  return        : SoC起動条件通知
+  Note          : 取得対象：SoC起動条件通知
+*****************************************************************************/
+U1 u1_g_PwrCtrlSipGetSoCWkupCond( void )
+{
+    return(u1_s_PwrCtrl_Sip_SoCWkupCond);
+}
+
+/*****************************************************************************
+  Function      : vd_g_PwrCtrlSipClrSoCWkupCond
+  Description   : SIP共通 SoC起動条件通知クリア関数
+  param[in/out] : -
+  return        : -
+  Note          : none
+*****************************************************************************/
+void vd_g_PwrCtrlSipClrSoCWkupCond( void )
+{
+    /* SoC起動条件通知に未設定を設定 */
+    u1_s_PwrCtrl_Sip_SoCWkupCond = (U1)PWRCTRL_COM_SOCWKUP_NON;
+    vd_g_Rim_WriteU1((U2)RIMID_U1_PWCTR_SOC_WKUPCOND, u1_s_PwrCtrl_Sip_SoCWkupCond);
+
+    return;
 }
 
 /*****************************************************************************
@@ -1602,6 +1670,8 @@ static void vd_s_PwrCtrlSipOnStep2( void )
                 /* 【todo】異常内容の保存[ID0001/0002] */
                 /* SoC異常検知の設定 */
                 vd_g_PwrCtrlSipSoCOnError();
+                /* SoC異常起動(SoC異常)の設定 */
+                vd_g_PwrCtrlSipSetSoCWkupCond((U1)PWRCTRL_COM_SOCWKUP_SOCERR);
             }
         }
     }
@@ -1702,6 +1772,8 @@ static void vd_s_PwrCtrlSipOnStep4( void )
                 /* 【todo】異常内容の保存[ID0003] */
                 /* SoC異常検知の設定 */
                 vd_g_PwrCtrlSipSoCOnError();
+                /* SoC異常起動(SoC異常)の設定 */
+                vd_g_PwrCtrlSipSetSoCWkupCond((U1)PWRCTRL_COM_SOCWKUP_SOCERR);
             }
         }
 
@@ -1756,6 +1828,8 @@ static void vd_s_PwrCtrlSipOnStep5( void )
                 /* 【todo】異常内容の保存[ID0004] */
                 /* SoC異常検知の設定 */
                 vd_g_PwrCtrlSipSoCOnError();
+                /* SoC異常起動(SoC異常)の設定 */
+                vd_g_PwrCtrlSipSetSoCWkupCond((U1)PWRCTRL_COM_SOCWKUP_SOCERR);
             }
         }
     }
@@ -1821,6 +1895,8 @@ static void vd_s_PwrCtrlSipOnStep6( void )
                 /* 【todo】異常内容の保存[ID0005/0006] */
                 /* SoC異常検知の設定 */
                 vd_g_PwrCtrlSipSoCOnError();
+                /* SoC異常起動(SoC異常)の設定 */
+                vd_g_PwrCtrlSipSetSoCWkupCond((U1)PWRCTRL_COM_SOCWKUP_SOCERR);
             }
         }
     }
@@ -1879,6 +1955,8 @@ static void vd_s_PwrCtrlSipOnStep7( void )
                 /* 【todo】異常内容の保存[ID0007] */
                 /* SoC異常検知の設定 */
                 vd_g_PwrCtrlSipSoCOnError();
+                /* SoC異常起動(SoC異常)の設定 */
+                vd_g_PwrCtrlSipSetSoCWkupCond((U1)PWRCTRL_COM_SOCWKUP_SOCERR);
             }
         }
     }
@@ -1986,6 +2064,8 @@ static void vd_s_PwrCtrlSipRsmMainFunc( void )
             vd_g_PwrCtrlComTxSetBootLog((U1)PWRCTRL_COM_BOOTLOG_STRREQ);
             /* SoCリセット要求(異常)検知 開始 */
             vd_g_PwrCtrlObserveSoCResetErrReq((U1)PWRCTRL_OBSERVE_ON);
+            /* ユーザーリセット抑止区間通知：ユーザーリセット抑止区間 */
+            vd_g_PwrCtrlComTxSetUsrRstMask((U1)PWRCTRL_COM_USRRSTMASK_ON);
         }
     }
     
@@ -2080,6 +2160,8 @@ static void vd_s_PwrCtrlSipOffStep2( void )
                 /* 【todo】異常内容の保存[ID0015] */
                 /* SoC異常検知の設定 */
                 vd_g_PwrCtrlSipSoCOnError();
+                /* SoC異常起動(SoC異常)の設定 */
+                vd_g_PwrCtrlSipSetSoCWkupCond((U1)PWRCTRL_COM_SOCWKUP_SOCERR);
             }
         }
     }
@@ -2130,6 +2212,8 @@ static void vd_s_PwrCtrlSipOffStep3( void )
                 /* 【todo】異常内容の保存[ID0016] */
                 /* SoC異常検知の設定 */
                 vd_g_PwrCtrlSipSoCOnError();
+                /* SoC異常起動(SoC異常)の設定 */
+                vd_g_PwrCtrlSipSetSoCWkupCond((U1)PWRCTRL_COM_SOCWKUP_SOCERR);
             }
         }
     }
@@ -2212,6 +2296,8 @@ static void vd_s_PwrCtrlSipOffStep4( void )
                 /* 【todo】異常内容の保存[ID0017/0018/0019] */
                 /* SoC異常検知の設定 */
                 vd_g_PwrCtrlSipSoCOnError();
+                /* SoC異常起動(SoC異常)の設定 */
+                vd_g_PwrCtrlSipSetSoCWkupCond((U1)PWRCTRL_COM_SOCWKUP_SOCERR);
                 
                 /* SAIL_RESOUT_N & SoC_RESOUT_N =Loチェックを行う */
                 u1_t_socres_lv  = u1_g_PwrCtrl_PinMonitor_GetPinInfo((U1)PWRCTRL_CFG_PRIVATE_KIND_SOC_RESOUT_N);
@@ -2237,6 +2323,8 @@ static void vd_s_PwrCtrlSipOffStep4( void )
                     /* 【todo】異常内容の保存[ID0017/0018/0019] */
                     /* SoC異常検知の設定 */
                     vd_g_PwrCtrlSipSoCOnError();
+                    /* SoC異常起動(SoC異常)の設定 */
+                    vd_g_PwrCtrlSipSetSoCWkupCond((U1)PWRCTRL_COM_SOCWKUP_SOCERR);
                     
                     /* SAIL_RESOUT_N & SoC_RESOUT_N =Loチェックを行う */
                     u1_t_socres_lv  = u1_g_PwrCtrl_PinMonitor_GetPinInfo((U1)PWRCTRL_CFG_PRIVATE_KIND_SOC_RESOUT_N);
@@ -2387,6 +2475,8 @@ static void vd_s_PwrCtrlSipStbyMainFunc( void )
         if((u4_s_PwrCtrl_Sip_Stby_MM_SUSPEND_REQ_N_Tim == (U4)PWRCTRL_SIP_TIME_INVALID) &&
            (u4_s_PwrCtrl_Sip_Stby_STR_WAKE_Tim == (U4)PWRCTRL_SIP_TIME_INVALID)){
             u1_s_PwrCtrl_Sip_Stby_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP2;
+            /* ユーザーリセット抑止区間通知：ユーザーリセット抑止区間 */
+            vd_g_PwrCtrlComTxSetUsrRstMask((U1)PWRCTRL_COM_USRRSTMASK_ON);
         }
     }
 
@@ -2425,6 +2515,8 @@ static void vd_s_PwrCtrlSipStbyMainFunc( void )
                 /* 【todo】異常内容の保存[ID0013] */
                 /* SoC異常検知の設定 */
                 vd_g_PwrCtrlSipSoCOnError();
+                /* SoC異常起動(SoC異常)の設定 */
+                vd_g_PwrCtrlSipSetSoCWkupCond((U1)PWRCTRL_COM_SOCWKUP_SOCERR);
             }
         }
     }
@@ -2450,6 +2542,8 @@ static void vd_s_PwrCtrlSipStbyMainFunc( void )
             vd_g_PwrCtrlObservePsHoldReq((U1)PWRCTRL_OBSERVE_OFF);
             /* SoCリセット要求(異常)検知 終了 */
             vd_g_PwrCtrlObserveSoCResetErrReq((U1)PWRCTRL_OBSERVE_OFF);
+            /* ユーザーリセット抑止区間通知：未設定 */
+            vd_g_PwrCtrlComTxSetUsrRstMask((U1)PWRCTRL_COM_USRRSTMASK_OFF);
 
             u1_s_PwrCtrl_Sip_Stby_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP4;
         }
@@ -2463,6 +2557,8 @@ static void vd_s_PwrCtrlSipStbyMainFunc( void )
                 /* 【todo】異常内容の保存[ID0014] */
                 /* SoC異常検知の設定 */
                 vd_g_PwrCtrlSipSoCOnError();
+                /* SoC異常起動(SoC異常)の設定 */
+                vd_g_PwrCtrlSipSetSoCWkupCond((U1)PWRCTRL_COM_SOCWKUP_SOCERR);
             }
 #else
             if(u1_g_PwrCtrl_Main_DbgFailOffFlag == (U1)MCU_DIO_HIGH){
@@ -2473,6 +2569,8 @@ static void vd_s_PwrCtrlSipStbyMainFunc( void )
                     /* 【todo】異常内容の保存[ID0014] */
                     /* SoC異常検知の設定 */
                     vd_g_PwrCtrlSipSoCOnError();
+                    /* SoC異常起動(SoC異常)の設定 */
+                    vd_g_PwrCtrlSipSetSoCWkupCond((U1)PWRCTRL_COM_SOCWKUP_SOCERR);
                 }
             }
 #endif
@@ -2577,6 +2675,8 @@ static void vd_s_PwrCtrlSipForcedOffStep1( void )
                 /* 【todo】異常内容の保存[ID0020] */
                 /* SoC異常検知の設定 */
                 vd_g_PwrCtrlSipSoCOnError();
+                /* SoC異常起動(SoC異常)の設定 */
+                vd_g_PwrCtrlSipSetSoCWkupCond((U1)PWRCTRL_COM_SOCWKUP_SOCERR);
             }
         }
     }
@@ -2648,6 +2748,8 @@ static void vd_s_PwrCtrlSipForcedOffStep3( void )
                 /* 【todo】異常内容の保存[ID0021] */
                 /* SoC異常検知の設定 */
                 vd_g_PwrCtrlSipSoCOnError();
+                /* SoC異常起動(SoC異常)の設定 */
+                vd_g_PwrCtrlSipSetSoCWkupCond((U1)PWRCTRL_COM_SOCWKUP_SOCERR);
             }
         }
     }
@@ -2794,6 +2896,8 @@ static void vd_s_PwrCtrlSipSailErrFsMainFunc( void )
             u1_s_PwrCtrl_Sip_SailErrFs_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP2;
             /* 【todo】異常内容の保存[ID0025] */
             vd_g_PwrCtrlSipSoCOnError();                /* SoC異常検知の設定 */
+            /* SoC異常起動(SAIL異常)の設定 */
+            vd_g_PwrCtrlSipSetSoCWkupCond((U1)PWRCTRL_COM_SOCWKUP_SAILERR);
         }
         else
         {
@@ -2807,6 +2911,8 @@ static void vd_s_PwrCtrlSipSailErrFsMainFunc( void )
                 /* 【todo】異常内容の保存[ID0025] */
                 /* 【todo】異常内容の保存[ID0026] */
                 vd_g_PwrCtrlSipSoCOnError();                /* SoC異常検知の設定 */
+                /* SoC異常起動(SAIL異常)の設定 */
+                vd_g_PwrCtrlSipSetSoCWkupCond((U1)PWRCTRL_COM_SOCWKUP_SAILERR);
             }
         }
     }
@@ -2839,6 +2945,8 @@ static void vd_s_PwrCtrlSipSailErrFsMainFunc( void )
 
                 /* 【todo】異常内容の保存[ID0027/0028] */
                 vd_g_PwrCtrlSipSoCOnError();            /* SoC異常検知の設定 */
+                /* SoC異常起動(SAIL異常)の設定 */
+                vd_g_PwrCtrlSipSetSoCWkupCond((U1)PWRCTRL_COM_SOCWKUP_SAILERR);
             }
         }
     }
@@ -2865,6 +2973,8 @@ static void vd_s_PwrCtrlSipSailErrFsMainFunc( void )
 
                 /* 【todo】異常内容保存[ID0029] */
                 vd_g_PwrCtrlSipSoCOnError();            /* SoC異常検知の設定 */
+                /* SoC異常起動(SAIL異常)の設定 */
+                vd_g_PwrCtrlSipSetSoCWkupCond((U1)PWRCTRL_COM_SOCWKUP_SAILERR);
             }
         }
     }
@@ -2913,6 +3023,8 @@ static void vd_s_PwrCtrlSipPmPsailFsMainFunc( void )
                 /* 【todo】異常内容保存[ID0034] */
                 /* SoC異常検知の設定 */
                 vd_g_PwrCtrlSipSoCOnError();
+                /* SoC異常起動(PMIC異常)の設定 */
+                vd_g_PwrCtrlSipSetSoCWkupCond((U1)PWRCTRL_COM_SOCWKUP_PMICERR);
             }
         }
     }
@@ -2956,6 +3068,8 @@ static void vd_s_PwrCtrlSipPmaPsFsMainFunc( void )
 
                 /* 【todo】異常内容の保存[ID0036/0037] */
                 vd_g_PwrCtrlSipSoCOnError();            /* SoC異常検知の設定 */
+                /* SoC異常起動(SoC異常)の設定 */
+                vd_g_PwrCtrlSipSetSoCWkupCond((U1)PWRCTRL_COM_SOCWKUP_SOCERR);
             }
         }
     }
@@ -2974,6 +3088,8 @@ static void vd_s_PwrCtrlSipPmaPsFsMainFunc( void )
 
             /* 【todo】異常内容の保存[ID0035] */
             vd_g_PwrCtrlSipSoCOnError();            /* SoC異常検知の設定 */
+            /* SoC異常起動(SoC異常)の設定 */
+            vd_g_PwrCtrlSipSetSoCWkupCond((U1)PWRCTRL_COM_SOCWKUP_SOCERR);
         }
         else
         {
@@ -2985,6 +3101,8 @@ static void vd_s_PwrCtrlSipPmaPsFsMainFunc( void )
 
                 /* 【todo】異常内容保存[ID0034] */
                 vd_g_PwrCtrlSipSoCOnError();            /* SoC異常検知の設定 */
+                /* SoC異常起動(SoC異常)の設定 */
+                vd_g_PwrCtrlSipSetSoCWkupCond((U1)PWRCTRL_COM_SOCWKUP_SOCERR);
             }
         }
     }

@@ -155,7 +155,7 @@ void vd_g_PwrCtrlObserveMainFunc( void )
 #endif
         u2_t_obserr |= u2_g_PwrCtrlObserveSailUartSeq();    /* SAIL UART MessageŠÄ‹ */
         u2_t_obserr |= u2_g_PwrCtrlObserveSailErrSeq();     /* SAIL-ERRŠÄ‹ */
-        u2_t_obserr |= u2_s_PwrCtrlObservePsailSeq();       /* PM_PSAIL_ERR_NŠÄ‹ */
+        /* u2_t_obserr |= u2_s_PwrCtrlObservePsailSeq(); */ /* PM_PSAIL_ERR_NŠÄ‹ */
         u2_t_obserr |= u2_s_PwrCtrlObservePsHoldSeq();      /* PMA_PS_HOLDŠÄ‹ */
         u2_t_obserr |= u2_g_PwrCtrlObserveSpiFailSeq();     /* SPI’ÊM“râŠÄ‹ */
 #ifdef PWRCTRL_CFG_PRIVATE_DBG_FAIL_OFF
