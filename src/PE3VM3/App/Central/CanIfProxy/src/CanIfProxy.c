@@ -18,6 +18,7 @@
 #include "ChipCom_Cfg.h"
 #include "CanIfProxy.h"
 #include "CanIfProxy_Lcfg.h"
+#include "Os.h"
 
 /*--------------------------------------------------------------------------*/
 /* Macros																	*/
@@ -388,6 +389,9 @@ static void CanIfProxy_InitSfRequest( void )
 *****************************************************************************/
 static void CanIfProxy_InitMfRequest( void )
 {
+	/* Suspend Interrupts */
+	SuspendOSInterrupts();
+	
 	CanIfProxy_stMfReqStatus.u2Head = (uint16)0U;
 	CanIfProxy_stMfReqStatus.u2Tail = (uint16)0U;
 	CanIfProxy_stMfReqStatus.u2Timer = (uint16)0U;
@@ -397,6 +401,9 @@ static void CanIfProxy_InitMfRequest( void )
 	CanIfProxy_stMfReqStatus.u1IsRcvFc = (uint8)0U;
 	CanIfProxy_stMfReqStatus.u1WtCnt = (uint8)0U;
 	CanIfProxy_stMfReqStatus.u1FrameCntInTx = (uint8)0U;
+
+	/* Resume Interrupts */
+	ResumeOSInterrupts();
 
 //	CanIfProxy_stMfReqStatus.u4FfDl = (uint32)0U;
 //	CanIfProxy_stMfReqStatus.u1Fs = (uint8)0U;
@@ -454,14 +461,12 @@ static void CanIfProxy_ReceiveRequest( const CanMsgType* t_pstMsg )
 				{
 					CanIfProxy_InitMfRequest();
 				}
-
 				/* Memory received FF */
 				CanIfProxy_stMfReqStatus.u1IsRcvFf = (uint8)TRUE;
-
+				
 				/* Read N_PCI */
 				CanIfProxy_ReadFfNpci( t_pstMsg->ptData );
 			}
-
 			/* Set MF request buffer */
 			CanIfProxy_SetMfToReqBuff( t_pstMsg );
 		}
@@ -510,11 +515,13 @@ static void CanIfProxy_SetSfToReqBuff( const CanMsgType* t_pstMsg )
 static void CanIfProxy_SetMfToReqBuff( const CanMsgType* t_pstMsg )
 {
 	uint16 t_u2Tail;
+	uint16 t_u2TailPre;
 	uint16 t_u2TailNext;
 
 	/* todo: Suspend Interrupts */
 
 	t_u2Tail = CanIfProxy_stMfReqStatus.u2Tail;
+	t_u2TailPre = t_u2Tail;
 	t_u2TailNext = t_u2Tail + (uint16)1U;
 
 	if ( t_u2TailNext < CanIfProxy_cu2MfReqFrameNum )
@@ -523,7 +530,15 @@ static void CanIfProxy_SetMfToReqBuff( const CanMsgType* t_pstMsg )
 		CanIfProxy_u4MfReqBuffCanId = t_pstMsg->u4Id;
 		CanIfProxy_u1MfReqBuffDataLength[t_u2Tail] = t_pstMsg->u1Length;
 		CanIfProxy_Memcpy( &CanIfProxy_u1MfReqBuffData[t_u2Tail][0U], t_pstMsg->ptData, t_pstMsg->u1Length );
-		CanIfProxy_stMfReqStatus.u2Tail = t_u2TailNext;
+		
+		/* Suspend Interrupts */
+		SuspendOSInterrupts();
+		
+		/* Update tail index (critical section) */
+		CanIfProxy_stMfReqStatus.u2Tail += t_u2TailNext - t_u2TailPre;
+		
+		/* Resume Interrupts */
+		ResumeOSInterrupts();
 	}
 
 	/* todo: Resume Interrupts */
@@ -569,6 +584,7 @@ static void CanIfProxy_ReceiveResponse( const CanMsgType* t_pstMsg )
 
 		/* Transmit to ChipCom */
 		t_u1Ret = ChipCom_CanTransmit( t_pstMsg );
+		
 		if ( t_u1Ret != (Std_ReturnType)E_OK )
 		{
 			/* nop */
@@ -689,7 +705,7 @@ static void CanIfProxy_TransmitRequest( void )
 		{
 			/* Transmit SF */
 			(void)CanIfProxy_TransmitSF();
-
+			
 			/* Update status */
 			/* t_u1ReqCtrlStatus = (uint8)CANIFPROXY_REQ_CTRL_STS_IDLE; */
 		}
@@ -900,6 +916,7 @@ static uint8 CanIfProxy_TransmitCF( void )
 	uint32 t_u4TxNDataLen;
 	uint8 t_u1TxCnt;
 	uint8 t_u1FrameCntInTx;
+	uint8 t_u1FrameCntInTxPre;
 	uint8 t_u1VcanRet;
 	CanMsgType t_stMsg;
 	uint32 t_u4FfDl;
@@ -929,14 +946,23 @@ static uint8 CanIfProxy_TransmitCF( void )
 	{
 		/* Get head */
 		t_u2Head = CanIfProxy_stMfReqStatus.u2Head;
-		/* Get tail */
+		
+		/* Suspend Interrupts */
+		SuspendOSInterrupts();
+		
+		/* Get tail (critical section) */
 		t_u2Tail  = CanIfProxy_stMfReqStatus.u2Tail;
+		
+		/* Resume Interrupts */
+		ResumeOSInterrupts();
+		
 		/* Get transmitted block */
 		t_u1TxBlock = CanIfProxy_stMfReqStatus.u1TxBlock;
 		/* Get N data length */
 		t_u4TxNDataLen = CanIfProxy_stMfReqStatus.u4TxNDataLen;
 		/* Get the counter of frame in transit */
 		t_u1FrameCntInTx = CanIfProxy_stMfReqStatus.u1FrameCntInTx;
+		t_u1FrameCntInTxPre = t_u1FrameCntInTx;
 		
 		t_u4FfDl = CanIfProxy_stMfReqStatus.u4FfDl;
 
@@ -959,16 +985,34 @@ static uint8 CanIfProxy_TransmitCF( void )
 
 					/* Increment head */
 					t_u2Head++;
-
+					
 					/* Increment the counter of frame in transit */
 					t_u1FrameCntInTx++;
-
+					
 					/* Update N data len */
 					t_u4TxNDataLen += (uint32)CanIfProxy_GetNDataLen( &t_stMsg );
-
-					/* Count up block */
-					t_u1TxBlock++;
-
+					
+					/* Check BS */
+					if ( CanIfProxy_stMfReqStatus.u1Bs == 0x00U )
+					{
+						/* Consecutively transmit CF */
+						
+						/* Clear Tx block */
+						t_u1TxBlock = 0x00U;
+					}
+					else
+					{
+						/* Judge wait */
+						if ( t_u1TxBlock == CanIfProxy_stMfReqStatus.u1Bs )
+						{
+							t_u1Ret = u1CANIFPROXY_E_WAIT;
+							break;
+						}
+						
+						/* Count up block */
+						t_u1TxBlock++;
+					}
+					
 					/* Judge done */
 					if ( t_u4TxNDataLen >= t_u4FfDl )
 					{
@@ -976,12 +1020,6 @@ static uint8 CanIfProxy_TransmitCF( void )
 						break;
 					}
 
-					/* Judge wait */
-					if ( t_u1TxBlock == CanIfProxy_stMfReqStatus.u1Bs )
-					{
-						t_u1Ret = u1CANIFPROXY_E_WAIT;
-						break;
-					}
 				}
 				else
 				{
@@ -1005,8 +1043,15 @@ static uint8 CanIfProxy_TransmitCF( void )
 			t_u2Timer = (uint16)0U;
 		}
 
+		/* Suspend Interrupts */
+		SuspendOSInterrupts();
+		
 		/* Get the counter of frame in transit */
-		CanIfProxy_stMfReqStatus.u1FrameCntInTx = t_u1FrameCntInTx;
+		CanIfProxy_stMfReqStatus.u1FrameCntInTx += t_u1FrameCntInTx - t_u1FrameCntInTxPre;
+		
+		/* Resume Interrupts */
+		ResumeOSInterrupts();
+		
 		/* Update N data length */
 		CanIfProxy_stMfReqStatus.u4TxNDataLen = t_u4TxNDataLen;
 		/* Update transmitted block */
@@ -1018,6 +1063,13 @@ static uint8 CanIfProxy_TransmitCF( void )
 
 	/* Update timer */
 	CanIfProxy_stMfReqStatus.u2Timer = t_u2Timer;
+	
+	/* Judge timeout while transmitting CF */
+	if (   ( t_u1Ret == u1CANIFPROXY_E_OK )
+		&& ( CanIfProxy_stMfReqStatus.u2Timer >= CanIfProxy_stMfReqStatus.u2Timeout ) )
+	{
+		t_u1Ret = u1CANIFPROXY_E_NOT_OK;
+	}
 
 	return t_u1Ret;
 }
@@ -1039,7 +1091,7 @@ static uint8 CanIfProxy_ReceiveFC( void )
 
 	t_u1Fs = CanIfProxy_stMfReqStatus.u1Fs;
 	t_u1WtCnt = CanIfProxy_stMfReqStatus.u1WtCnt;
-
+	
 	if ( t_u1Fs == (uint8)CANIFPROXY_FS_CTS )
 	{
 		CanIfProxy_stMfReqStatus.u1WtCnt = (uint8)0U;
