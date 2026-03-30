@@ -155,17 +155,20 @@ U1 u1_g_FwuMemAccEraseReq(U1 u1_a_lb_id, U4 u4_a_expected_crc)
 
     /* Only proceed when not busy */
     u1_t_ret = (U1)FWUMEMACC_RET_NG;
-        /* Get LB info from configuration */
-        u1_t_result = u1_g_FwuMemAccCfgGetLbInfo(u1_a_lb_id, &u4_t_start_address, &u4_t_length);
+    /* Get LB info from configuration */
+    u1_t_result = u1_g_FwuMemAccCfgGetLbInfo(u1_a_lb_id, &u4_t_start_address, &u4_t_length);
     if ((u1_a_lb_id & u1_s_lb_erase_flag) != (U1)0x00U) {
         /* LB already erased */
         u1_s_job_type = (U1)FWUMEMACC_JOB_TYPE_ERASE;
         u1_s_job_status = (U1)FWUMEMACC_JOB_STATUS_COMPLETED;
-        u4_s_expected_crc = u4_a_expected_crc;  /* for verification in switch req */
+        u4_s_start_address = u4_t_start_address + (U4)FWUMEMACC_ADRS_INV_OFFSET;
+        u4_s_data_length = u4_t_length;
+        u4_s_expected_crc = u4_a_expected_crc;
         u1_s_last_error = (U1)FWUMEMACC_ERROR_NONE;
+
         u1_t_ret = (U1)FWUMEMACC_RET_OK;
-        u2_s_block_counter = (U2)0U;
         u1_s_target_lb_id = u1_a_lb_id;
+        u2_s_block_counter = (U2)0U;
     }
     else if (u1_s_job_status == (U1)FWUMEMACC_JOB_STATUS_IDLE ||
         u1_s_job_status == (U1)FWUMEMACC_JOB_STATUS_COMPLETED ||
