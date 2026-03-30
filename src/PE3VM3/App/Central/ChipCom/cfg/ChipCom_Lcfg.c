@@ -165,13 +165,13 @@ const uint16 ChipCom_cu2Pkt06MsgTbl[CHIPCOM_CFG_PKT06_MSG_NUM] = {
 /* Packet information table */
 const ChipCom_PktInfoType ChipCom_cstPktInfoTbl[CHIPCOM_CFG_PKT_NUM] = {
 	/* u1TxCoreId, u1StlId,   pu2MsgTbl,                   u2Period,            u2MsgNum,      u2TotalDataLen, u2MsgBuffOffs, u2SeqMax,      u2Payload,     u2LastTxLen,   u2TxRxBuffOffs */
-	{ (uint8)1U,   (uint8)0U, &ChipCom_cu2Pkt00MsgTbl[0U], (uint16)(    5U/5U), (uint16)   2U, (uint16)    5U, (uint16)   0U, (uint16)   0U, (uint16)   5U, (uint16)   5U, (uint16)    0U }, /* [PKT00] */
-	{ (uint8)2U,   (uint8)0U, &ChipCom_cu2Pkt01MsgTbl[0U], (uint16)(    5U/5U), (uint16)   2U, (uint16)    5U, (uint16)   5U, (uint16)   0U, (uint16)   5U, (uint16)   5U, (uint16)    7U }, /* [PKT01] */
-	{ (uint8)1U,   (uint8)0U, &ChipCom_cu2Pkt02MsgTbl[0U], (uint16)(  100U/5U), (uint16)   2U, (uint16)    5U, (uint16)  10U, (uint16)   0U, (uint16)   5U, (uint16)   5U, (uint16)   14U }, /* [PKT02] */
-	{ (uint8)3U,   (uint8)0U, &ChipCom_cu2Pkt03MsgTbl[0U], (uint16)(    5U/5U), (uint16)   2U, (uint16)    5U, (uint16)  15U, (uint16)   0U, (uint16)   5U, (uint16)   5U, (uint16)    0U }, /* [PKT03] */
-	{ (uint8)3U,   (uint8)0U, &ChipCom_cu2Pkt04MsgTbl[0U], (uint16)(    5U/5U), (uint16)   4U, (uint16)  368U, (uint16)  20U, (uint16)   0U, (uint16) 368U, (uint16) 368U, (uint16)    7U }, /* [PKT04] */
-	{ (uint8)3U,   (uint8)0U, &ChipCom_cu2Pkt05MsgTbl[0U], (uint16)(   20U/5U), (uint16)   2U, (uint16)    8U, (uint16) 388U, (uint16)   0U, (uint16)   8U, (uint16)   8U, (uint16)  377U }, /* [PKT05] */
-	{ (uint8)3U,   (uint8)0U, &ChipCom_cu2Pkt06MsgTbl[0U], (uint16)(  100U/5U), (uint16)   2U, (uint16)    5U, (uint16) 396U, (uint16)   0U, (uint16)   5U, (uint16)   5U, (uint16)  387U }  /* [PKT06] */
+	{ (uint8)1U,   (uint8)0U, &ChipCom_cu2Pkt00MsgTbl[0U], (uint16)(    5U/5U), (uint16)   2U, (uint16)    5U, (uint16)   0U, (uint16)   0U, (uint16)   5U, (uint16)   5U, (uint16)    2U }, /* [PKT00] */
+	{ (uint8)2U,   (uint8)0U, &ChipCom_cu2Pkt01MsgTbl[0U], (uint16)(    5U/5U), (uint16)   2U, (uint16)    5U, (uint16)   5U, (uint16)   0U, (uint16)   5U, (uint16)   5U, (uint16)    9U }, /* [PKT01] */
+	{ (uint8)1U,   (uint8)0U, &ChipCom_cu2Pkt02MsgTbl[0U], (uint16)(  100U/5U), (uint16)   2U, (uint16)    5U, (uint16)  10U, (uint16)   0U, (uint16)   5U, (uint16)   5U, (uint16)   16U }, /* [PKT02] */
+	{ (uint8)3U,   (uint8)0U, &ChipCom_cu2Pkt03MsgTbl[0U], (uint16)(    5U/5U), (uint16)   2U, (uint16)    5U, (uint16)  15U, (uint16)   0U, (uint16)   5U, (uint16)   5U, (uint16)    2U }, /* [PKT03] */
+	{ (uint8)3U,   (uint8)0U, &ChipCom_cu2Pkt04MsgTbl[0U], (uint16)(    5U/5U), (uint16)   4U, (uint16)  368U, (uint16)  20U, (uint16)   0U, (uint16) 368U, (uint16) 368U, (uint16)    9U }, /* [PKT04] */
+	{ (uint8)3U,   (uint8)0U, &ChipCom_cu2Pkt05MsgTbl[0U], (uint16)(   20U/5U), (uint16)   2U, (uint16)    8U, (uint16) 388U, (uint16)   0U, (uint16)   8U, (uint16)   8U, (uint16)  379U }, /* [PKT05] */
+	{ (uint8)3U,   (uint8)0U, &ChipCom_cu2Pkt06MsgTbl[0U], (uint16)(  100U/5U), (uint16)   2U, (uint16)    5U, (uint16) 396U, (uint16)   0U, (uint16)   5U, (uint16)   5U, (uint16)  389U }  /* [PKT06] */
 };
 
 /* Packet ID to Packet index table */

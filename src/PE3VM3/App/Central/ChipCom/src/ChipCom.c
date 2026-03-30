@@ -468,6 +468,7 @@ static void ChipCom_InitFlaRelatedData( void )
 
 	/* Initialize header */
 	ChipCom_Memcpy( (uint8*)&ChipCom_u4TxBuff[0U], (uint8*)&ChipCom_cu1XspiHeaderInit[0U], ChipCom_cu2XspiHeaderSize );
+	ChipCom_Convert2byteToArray( &ChipCom_pu1TxBuffFla[0U], ChipCom_cu2TxPktNum );
 
 	/* Initialize data of fixed-length area */
 /*	ChipCom_Memset( (uint8*)&ChipCom_pu1TxBuffFla[0U], ChipCom_cu1XspiDataInit, ChipCom_cu2TxBuffFlaSize );*/
@@ -874,7 +875,10 @@ static void ChipCom_Transmit( void )
 		/* Calculate transmit data size */
 /*		t_u2TxSize = ChipCom_cu2XspiHeaderSize + ChipCom_cu2TxBuffFlaSize + ChipCom_u2VlaTxSize;*/
 /*		t_u2TxSize = ChipCom_ConvertSizeByte2Int(t_u2TxSize);*/
-
+		
+		/* Suspend Interrupts */
+		SuspendOSInterrupts();
+		
 		/* Write to SPI Buffer */
 /*		t_u1SpiRst = xspi_Write( ChipCom_cu1XspiCh, (const uint32*)&ChipCom_u4TxBuff[0U], t_u2TxSize );*/
 		t_u1SpiRst = xspi_Write( ChipCom_cu1XspiCh, (const uint32*)&ChipCom_u4TxBuff[0U], ChipCom_cu2TxBuffSizeInt );
@@ -889,6 +893,8 @@ static void ChipCom_Transmit( void )
 			/* todo: Storing in DLT */
 //CHIPCOM_LOG_MSG( DEBUGLOG_INFO,"ChipCom_Transmit: SpiRst=[%u]\r\n", t_u1SpiRst );
 		}
+		/* Resume Interrupts */
+		ResumeOSInterrupts();
 	}
 	else
 	{
@@ -1029,26 +1035,38 @@ static void ChipCom_Receive( void )
 {
 	uint8 t_u1SpiRst;
 
-	/* Read from SPI Buffer */
-	t_u1SpiRst = xspi_Read( ChipCom_cu1XspiCh,  &ChipCom_u4RxBuff[0U], ChipCom_cu2RxBuffSizeInt );
-	/* todo: Setting the actual data size to be transmit reduces the processing load. */
-
-	/* Check SPI result */
-	if ( t_u1SpiRst == (uint8)XSPI_OK )
+	while(1)
 	{
-		/* Read FLA (fixed-length area) */
-		ChipCom_ReadFla();
-
-		/* Read VLA (variable-length area) */
-		ChipCom_ReadVla();
-
-		/* Initialize of reception related data */
-		ChipCom_InitVlaRxRelatedData();
-	}
-	else
-	{
-		/* todo: Storing in DLT when synchronizing with SPI receive processing */
-//CHIPCOM_LOG_MSG( DEBUGLOG_INFO,"ChipCom_Receive: SpiRst=[%u]\r\n", t_u1SpiRst );
+		/* Suspend Interrupts */
+		SuspendOSInterrupts();
+		
+		/* Read from SPI Buffer */
+		t_u1SpiRst = xspi_Read( ChipCom_cu1XspiCh,  &ChipCom_u4RxBuff[0U], ChipCom_cu2RxBuffSizeInt );
+		
+		/* todo: Setting the actual data size to be transmit reduces the processing load. */
+		/* Resume Interrupts */
+		ResumeOSInterrupts();
+		
+	
+		/* Check SPI result */
+		if ( t_u1SpiRst == (uint8)XSPI_OK )
+		{
+			
+			/* Read FLA (fixed-length area) */
+			ChipCom_ReadFla();
+	
+			/* Read VLA (variable-length area) */
+			ChipCom_ReadVla();
+	
+			/* Initialize of reception related data */
+			ChipCom_InitVlaRxRelatedData();
+		}
+		else
+		{
+			/* todo: Storing in DLT when synchronizing with SPI receive processing */
+	//CHIPCOM_LOG_MSG( DEBUGLOG_INFO,"ChipCom_Receive: SpiRst=[%u]\r\n", t_u1SpiRst );
+			break;
+		}
 	}
 
 	return;
@@ -1065,6 +1083,7 @@ static void ChipCom_ReadFla( void )
 	const ChipCom_PktInfoType* t_pstPktInfo;
 	uint8* t_pu1RxBuff;
 	uint8* t_pu1PktBuff;
+	uint16 t_u2PktNum;
 	uint16 t_u2PktId;
 	uint16 t_u2PktIdx;
 	uint16 t_u2PktSeq;
@@ -1073,117 +1092,125 @@ static void ChipCom_ReadFla( void )
 	uint8 t_u1RxStatus;
 	uint8 t_u1PktBank;
 
-	/* Get packet ID top */
-	t_u2PktId = ChipCom_cu2RxPktIdTop;
+	/* Get number of packet */
+	ChipCom_ConvertArrayTo2byte( &t_u2PktNum, &ChipCom_pu1RxBuffFla[0U] );
 
-	/* Repeat the following processing for each reception packet */
-	for ( t_u2PktIdx = (uint16)0U; t_u2PktIdx < ChipCom_cu2RxPktNum; t_u2PktIdx++ )
+	/* Packets exist? */
+	if ( t_u2PktNum == ChipCom_cu2RxPktNum )
 	{
-		/* Get reception status */
-		t_u1RxStatus = ChipCom_u1RxStatus[t_u2PktIdx];
+		/* Get packet ID top */
+		t_u2PktId = ChipCom_cu2RxPktIdTop;
 
-		/* Get Previous packet sequence number */
-		t_u2PktSeq = ChipCom_u2PktSeq[t_u2PktId];
+		/* Repeat the following processing for each reception packet */
+		for ( t_u2PktIdx = (uint16)0U; t_u2PktIdx < ChipCom_cu2RxPktNum; t_u2PktIdx++ )
+		{
+			/* Get reception status */
+			t_u1RxStatus = ChipCom_u1RxStatus[t_u2PktIdx];
 
-		/* Get packet buffer offset */
-		t_u2PktBuffOffs = ChipCom_u2PktBuffOffs[t_u2PktId];
+			/* Get Previous packet sequence number */
+			t_u2PktSeq = ChipCom_u2PktSeq[t_u2PktId];
 
-		/* Get packet information */
-		t_pstPktInfo = &ChipCom_cstPktInfoTbl[t_u2PktId];
+			/* Get packet buffer offset */
+			t_u2PktBuffOffs = ChipCom_u2PktBuffOffs[t_u2PktId];
 
-		/* Get receive buffer */
-		t_pu1RxBuff = (uint8*)&ChipCom_pu1RxBuffFla[t_pstPktInfo->u2TxRxBuffOffs];
+			/* Get packet information */
+			t_pstPktInfo = &ChipCom_cstPktInfoTbl[t_u2PktId];
 
-		/* Get received packet sequence number */
-		ChipCom_ConvertArrayTo2byte( &t_u2PktSeqRcv, t_pu1RxBuff );
+			/* Get receive buffer */
+			t_pu1RxBuff = (uint8*)&ChipCom_pu1RxBuffFla[t_pstPktInfo->u2TxRxBuffOffs];
+
+			/* Get received packet sequence number */
+			ChipCom_ConvertArrayTo2byte( &t_u2PktSeqRcv, t_pu1RxBuff );
 
 //CHIPCOM_LOG_MSG( DEBUGLOG_INFO,"ChipCom_ReadFla: PktIdx=[%u], RxStatusPre=[%u], PktSeqPre=[%u], PktSeqRcv=[%u], PktBuffOffsPre=[%u], RxBuffAddr=[%08X]\r\n",
 //    t_u2PktIdx, t_u1RxStatus, t_u2PktSeq, t_u2PktSeqRcv, t_u2PktBuffOffs, (uint32)t_pu1RxBuff );
 
-		/* New? */
-		if ( t_u2PktSeqRcv == (uint16)0U )
-		{
-			/* Initilize packet sequence number */
-			t_u2PktSeq = (uint16)0U;
-			/* Initilize packet buffer offset */
-			t_u2PktBuffOffs = t_pstPktInfo->u2MsgBuffOffs;
-			/* reception transmit status */
-			t_u1RxStatus = (uint8)STD_ACTIVE;
-		}
-		/* Continued? */
-		else
-		{
-			t_u2PktSeq++;
-			/* Check sequential number */
-			if ( t_u2PktSeqRcv != t_u2PktSeq )
+			/* New? */
+			if ( t_u2PktSeqRcv == (uint16)0U )
 			{
 				/* Initilize packet sequence number */
 				t_u2PktSeq = (uint16)0U;
 				/* Initilize packet buffer offset */
 				t_u2PktBuffOffs = t_pstPktInfo->u2MsgBuffOffs;
-				/* Reception transmit status */
-				t_u1RxStatus = (uint8)STD_IDLE;
+				/* reception transmit status */
+				t_u1RxStatus = (uint8)STD_ACTIVE;
 			}
-		}
-
-		/* Read */
-		if ( t_u1RxStatus == (uint8)STD_ACTIVE )
-		{
-			if ( t_u2PktSeq <= t_pstPktInfo->u2SeqMax )
+			/* Continued? */
+			else
 			{
-				/* Get packet buffer */
-				t_u1PktBank = ChipCom_GetNextPktBuffBank( t_u2PktId );
-				t_pu1PktBuff = &ChipCom_u1PktBuff[t_u1PktBank][t_u2PktBuffOffs];
-
-				/* Get transmit buffer of data part */
-				t_pu1RxBuff = &t_pu1RxBuff[CHIPCOM_PKT_SEQ_SIZE];
-
-				if ( t_u2PktSeq < t_pstPktInfo->u2SeqMax )
+				t_u2PktSeq++;
+				/* Check sequential number */
+				if ( t_u2PktSeqRcv != t_u2PktSeq )
 				{
-					/* Copy data from receive buffer to packet buffer */
-					ChipCom_Memcpy( t_pu1PktBuff, t_pu1RxBuff, t_pstPktInfo->u2Payload );
-					/* Update packet buffer offset */
-					t_u2PktBuffOffs += t_pstPktInfo->u2Payload;
-				}
-				else if ( t_u2PktSeq == t_pstPktInfo->u2SeqMax )
-				{
-					/* Copy data from receive buffer to packet buffer */
-					ChipCom_Memcpy( t_pu1PktBuff, t_pu1RxBuff, t_pstPktInfo->u2LastTxLen );
-
-					/* Switch Bank */
-					ChipCom_SwitchPktBuffBank( t_u2PktId );
-					/* Set receive history */
-					ChipCom_u1PktRxHst[t_u2PktIdx] = (uint8)STD_ON;
-
 					/* Initilize packet sequence number */
 					t_u2PktSeq = (uint16)0U;
 					/* Initilize packet buffer offset */
 					t_u2PktBuffOffs = t_pstPktInfo->u2MsgBuffOffs;
-					/* reception transmit status */
+					/* Reception transmit status */
 					t_u1RxStatus = (uint8)STD_IDLE;
 				}
-				else
+			}
+
+			/* Read */
+			if ( t_u1RxStatus == (uint8)STD_ACTIVE )
+			{
+				if ( t_u2PktSeq <= t_pstPktInfo->u2SeqMax )
 				{
-					/* No processing */
-				}
+					/* Get packet buffer */
+					t_u1PktBank = ChipCom_GetNextPktBuffBank( t_u2PktId );
+					t_pu1PktBuff = &ChipCom_u1PktBuff[t_u1PktBank][t_u2PktBuffOffs];
+
+					/* Get transmit buffer of data part */
+					t_pu1RxBuff = &t_pu1RxBuff[CHIPCOM_PKT_SEQ_SIZE];
+
+					if ( t_u2PktSeq < t_pstPktInfo->u2SeqMax )
+					{
+						/* Copy data from receive buffer to packet buffer */
+						ChipCom_Memcpy( t_pu1PktBuff, t_pu1RxBuff, t_pstPktInfo->u2Payload );
+						/* Update packet buffer offset */
+						t_u2PktBuffOffs += t_pstPktInfo->u2Payload;
+					}
+					else if ( t_u2PktSeq == t_pstPktInfo->u2SeqMax )
+					{
+						/* Copy data from receive buffer to packet buffer */
+						ChipCom_Memcpy( t_pu1PktBuff, t_pu1RxBuff, t_pstPktInfo->u2LastTxLen );
+
+						/* Switch Bank */
+						ChipCom_SwitchPktBuffBank( t_u2PktId );
+						/* Set receive history */
+						ChipCom_u1PktRxHst[t_u2PktIdx] = (uint8)STD_ON;
+
+						/* Initilize packet sequence number */
+						t_u2PktSeq = (uint16)0U;
+						/* Initilize packet buffer offset */
+						t_u2PktBuffOffs = t_pstPktInfo->u2MsgBuffOffs;
+						/* reception transmit status */
+						t_u1RxStatus = (uint8)STD_IDLE;
+					}
+					else
+					{
+						/* No processing */
+					}
 
 //CHIPCOM_LOG_MSG( DEBUGLOG_INFO,"ChipCom_ReadFla: PktIdx=[%u], PktSeq=[%u], PktBankNext=[%u], RxStatus=[%u], RxHst=[%u], PktBuffOffs=[%u], RxBuffAddr=[%08X]\r\n",
 //    t_u2PktIdx, t_u2PktSeq, t_u1PktBank, t_u1RxStatus, ChipCom_u1PktRxHst[t_u2PktIdx], t_u2PktBuffOffs, (uint32)t_pu1RxBuff );
 
+				}
 			}
+
+			/* Set packet buffer offset */
+			ChipCom_u2PktBuffOffs[t_u2PktId] = t_u2PktBuffOffs;
+
+			/* Set packet sequence number */
+			ChipCom_u2PktSeq[t_u2PktId] = t_u2PktSeq;
+
+			/* Set reception status */
+			ChipCom_u1RxStatus[t_u2PktIdx] = t_u1RxStatus;
+
+			/* Count-up packet ID */
+			t_u2PktId++;
 		}
 
-		/* Set packet buffer offset */
-		ChipCom_u2PktBuffOffs[t_u2PktId] = t_u2PktBuffOffs;
-
-		/* Set packet sequence number */
-		ChipCom_u2PktSeq[t_u2PktId] = t_u2PktSeq;
-
-		/* Set reception status */
-		ChipCom_u1RxStatus[t_u2PktIdx] = t_u1RxStatus;
-
-		/* Count-up packet ID */
-		t_u2PktId++;
 	}
 
 	return;

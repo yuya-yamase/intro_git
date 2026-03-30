@@ -95,13 +95,11 @@ void            vd_g_PncReqctl_Init(void)
 /*===================================================================================================================================*/
 void            vd_g_PncReqctl_MainTask(void)
 {
-    U1    u1_t_reqdata[PNCREQCTL_PNCID_REQNUM];
-
     if(u1_s_pncreqctl_actsts == (U1)PNCREQCTL_OPERATE){
         if((u2_s_pncreqctl_timeoutcnt >= (U2)PNCREQCTL_TIMEOUT) &&
            (u2_s_pncreqctl_timeoutcnt != (U2)PNCREQCTL_TIMECNTINIT)){
-            vd_g_MemfillU1(&u1_t_reqdata[PNCREQCTL_PNCID_16], (U1)PNCREQCTL_REQ_OFF, (U4)PNCREQCTL_PNCID_REQNUM);
-            vd_s_PncReqctl_PartialNMSetReq(&u1_t_reqdata[PNCREQCTL_PNCID_16]);
+            vd_g_MemfillU1(&u1_s_pncreqctl_req[PNCREQCTL_PNCID_16], (U1)PNCREQCTL_REQ_OFF, (U4)PNCREQCTL_PNCID_REQNUM);
+            vd_s_PncReqctl_PartialNMSetReq(&u1_s_pncreqctl_req[PNCREQCTL_PNCID_16]);
             u2_s_pncreqctl_timeoutcnt = (U2)PNCREQCTL_TIMECNTINIT;
             u1_s_pncreqctl_txcnt = (U1)PNCREQCTL_TXCNTINIT;
         }
@@ -146,10 +144,8 @@ void            vd_g_PncReqctl_PartialNMSendReq(const U1 * u1_ap_PNCREQDATA)
 /*===================================================================================================================================*/
 void            vd_g_PncReqctl_PartialNMGetSts(const U1 u1_a_STS)
 {
-    U1    u1_t_reqdata[PNCREQCTL_PNCID_REQNUM];
-    
     if(u1_a_STS == (U1)PNCREQCTL_OPERATE){
-        if(u1_s_pncreqctl_actsts == (U1)PNCREQCTL_STOP){
+        if(u1_s_pncreqctl_actsts != (U1)PNCREQCTL_OPERATE){
             u2_s_pncreqctl_timeoutcnt = (U2)0U;
             u1_s_pncreqctl_alvcnt = (U1)U1_MAX;
             vd_g_MemfillU1(&u1_s_pncreqctl_req[PNCREQCTL_PNCID_16], (U1)PNCREQCTL_REQ_OFF, (U4)PNCREQCTL_PNCID_REQNUM);
@@ -157,10 +153,12 @@ void            vd_g_PncReqctl_PartialNMGetSts(const U1 u1_a_STS)
         u1_s_pncreqctl_actsts = u1_a_STS;
     }
     else if(u1_a_STS == (U1)PNCREQCTL_STOP){
-        u2_s_pncreqctl_timeoutcnt = (U2)PNCREQCTL_TIMECNTINIT;
-        u1_s_pncreqctl_txcnt  = (U1)PNCREQCTL_TXCNTINIT;
-        vd_g_MemfillU1(&u1_t_reqdata[PNCREQCTL_PNCID_16], (U1)PNCREQCTL_REQ_OFF, (U4)PNCREQCTL_PNCID_REQNUM);
-        vd_s_PncReqctl_PartialNMSetReq(&u1_t_reqdata[PNCREQCTL_PNCID_16]);
+        if(u1_s_pncreqctl_actsts != (U1)PNCREQCTL_STOP){
+            u2_s_pncreqctl_timeoutcnt = (U2)PNCREQCTL_TIMECNTINIT;
+            u1_s_pncreqctl_txcnt  = (U1)PNCREQCTL_TXCNTINIT;
+            vd_g_MemfillU1(&u1_s_pncreqctl_req[PNCREQCTL_PNCID_16], (U1)PNCREQCTL_REQ_OFF, (U4)PNCREQCTL_PNCID_REQNUM);
+            vd_s_PncReqctl_PartialNMSetReq(&u1_s_pncreqctl_req[PNCREQCTL_PNCID_16]);
+        }
         u1_s_pncreqctl_actsts = u1_a_STS;
     }
     else{

@@ -22,6 +22,12 @@
 #define PICT_CAN_CAM_SIZE_1280x621                      (0x07U) /* 1280 x 621 */
 #define PICT_CAN_CAM_SIZE_1696X954                      (0x08U) /* 1696 x 954 */
 #define PICT_CAN_CAM_SIZE_1104X621                      (0x09U) /* 1104 x 621 */
+#define PICT_CAN_CAM_SIZE_1672x720                      (0x0AU) /* 1672 x 720 */
+#define PICT_CAN_CAM_SIZE_RESERVE1                      (0x0BU) /* RESERVE    */
+#define PICT_CAN_CAM_SIZE_RESERVE2                      (0x0CU) /* RESERVE    */
+#define PICT_CAN_CAM_SIZE_RESERVE3                      (0x0DU) /* RESERVE    */
+#define PICT_CAN_CAM_SIZE_RESERVE4                      (0x0EU) /* RESERVE    */
+#define PICT_CAN_CAM_SIZE_RESERVE5                      (0x0FU) /* RESERVE    */
 
 /* カメラシステム種別(ADAS/変換BOX) */
 #define PICT_GVIFIF_NONE                                (0x00U) /* GVIF IF 無し */
@@ -64,12 +70,12 @@
 void    vd_g_PictCtl_Init(void);
 void    vd_g_PictCtl_MainTask(void);
 void    vd_g_PictCtl_RcvBCC1S05(void);
-void    vd_g_PictCtl_DispICFail(void);
 void    vd_g_PictCtl_DispQualPraChk(U1 u1_a_MODE);
 U1      u1_g_PictCtl_CamStsGet(void);
 U1      u1_g_PictCtl_GetCamDiagMode(void);
 U1      u1_g_PictCtl_CamSizeSts(void);
 U1      u1_g_PictCtl_CamKindSts(void);
+U1      u1_g_PictCtl_GvifCamKindSts(void);
 U1      u1_g_PictCtl_CamSyncSts(void);
 U1      u1_g_PictCtl_RcvQualModeRevFlgSts(void);
 U1      u1_g_PictCtl_RcvQualModeRevDate(void);

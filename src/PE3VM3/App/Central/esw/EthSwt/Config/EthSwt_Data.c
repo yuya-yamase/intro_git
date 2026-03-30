@@ -7,10 +7,8 @@
 #include <EthSwt_SWIC_Cfg.h>
 #include <EthSwt_SWIC.h>
 #include <LIB.h>
-/* 26.2.16 doza Team-B edit sta */
 #include <ChipCom.h>
 #include <ChipCom_Cfg.h>
-/* 26.2.16 doza Team-B edit end */
 #include <EthSwt.h>
 #include <EthSwt_SWIC_MIB.h>
 /* -------------------------------------------------------------------------- */

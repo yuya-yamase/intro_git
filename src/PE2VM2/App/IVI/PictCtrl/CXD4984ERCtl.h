@@ -32,7 +32,6 @@ void    vd_g_Gvif3RxMainTask(void);
 void    vd_g_Gvif3RxStby3StsSet(U1 u1_a_stby3sts);
 U1      u1_g_Gvif3RxMipiOutputSts(void);
 U1      u1_g_Gvif3SipFail(void);
-void    vd_g_Gvif3RxCamKindPut(U1 u1_a_CAMEXSIT);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
